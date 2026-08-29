@@ -45,6 +45,12 @@ Humanize2 delegates authentication to the backend CLI. Configure Codex separatel
 `codex login`; never put credentials in this repository. `codex login status` can confirm the
 method without displaying a credential.
 
+The live commands start an authenticated Codex backend. Codex receives the prompt and may read
+the repository files named by that prompt (plus `AGENTS.md` and compiler/test output). Obtain
+authorization for that transfer before running them on non-public or sensitive material. These
+baseline prompts deliberately scope edits to the disposable experiment files; do not add secrets
+or unpublished mathematical content to them.
+
 For unattended runs, the upstream project asks the user to choose whether crash telemetry is
 enabled. Set `HUMANIZE_SENTRY=off` to make the baseline noninteractive and send no reports:
 
@@ -80,7 +86,7 @@ rounds.
 ```bash
 experiments/humanize2_baseline/scripts/reset_lean_demo.sh
 experiments/humanize2_baseline/scripts/run_lean_repair.sh
-experiments/humanize2_baseline/scripts/verify_lean.sh
+experiments/humanize2_baseline/scripts/verify_lean_add_zero.sh
 ```
 
 The prompt requires Codex to run the failing Lean command before editing, preserve the theorem
@@ -95,12 +101,23 @@ Reset only the actor-reviewer fixture if the first Lean theorem should remain co
 cp experiments/humanize2_baseline/fixtures/lean/ActorReviewerTest.lean.initial \
   experiments/humanize2_baseline/lean_demo/ActorReviewerTest.lean
 experiments/humanize2_baseline/scripts/run_lean_rlar.sh
+experiments/humanize2_baseline/scripts/verify_lean_actor_reviewer.sh
 experiments/humanize2_baseline/scripts/verify_lean.sh
 ```
 
-`official/rlar` takes two Codex agents. The actor has `workspace-write`; the independent fresh
-reviewer has `read-only`. The reviewer is required to inspect the repository state, run Lean,
-check for placeholders and theorem weakening, and reject unrelated changes. Its structured
+The runner prepares the official flowverse under the isolated alias
+`humanize2-baseline-flowverse` and detaches it at the pinned commit above before invoking its
+`rlar` flow. This avoids silently following the flowverse's moving default branch. Set
+`HUMANIZE_HOME` to an isolated, non-repository directory so the fetched flow and run state remain
+machine-local:
+
+```bash
+export HUMANIZE_HOME=/tmp/humanize2-baseline-state
+```
+
+The upstream RLAR flow takes two Codex agents. The actor has `workspace-write`; the independent
+fresh reviewer has `read-only`. The reviewer is required to inspect the repository state, run
+Lean, check for placeholders and theorem weakening, and reject unrelated changes. Its structured
 review ends the flow only when `done` is true; otherwise `notes` are passed to the actor as the
 next prompt verbatim.
 
@@ -114,4 +131,3 @@ export HUMANIZE2_AGENT_EFFORT=high
 ```
 
 Use model identifiers and effort levels supported by the installed Codex CLI and account.
-
