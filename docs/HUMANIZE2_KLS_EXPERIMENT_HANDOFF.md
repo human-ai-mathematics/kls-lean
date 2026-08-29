@@ -17,7 +17,7 @@ This is a calibration of the KLS autoformalization pipeline, not a new KLS theor
 - Base commit: `fe217458ba76941353474433d23f9d298791dd2f`
 - Infrastructure handoff: `docs/HUMANIZE2_LEAN_BASELINE_HANDOFF.md`
 - Experiment directory: `experiments/humanize2_kls_statement_fidelity/`
-- Current experiment status: **READY / NOT YET RUN**
+- Current experiment status: **RUN 2 PASS**
 
 The branch was created in the independent worktree
 `/private/tmp/numina-humanize2-kls-autoformalization`. That path is machine-local and is not part of
@@ -59,6 +59,7 @@ Those artifacts provide a trusted oracle. This experiment does not alter or rece
 The actor may read the frozen input plus `Basic.lean` and `Poincare.lean`. It must not read the
 project certificate, solution certificate, dossier, ledger statement, knowledge summary, prior
 semantic reviews, or experiment oracle. It edits one candidate file and must compile it.
+It must perform that role directly without spawning or delegating to another agent.
 
 The fresh reviewer is read-only and may inspect the full oracle. It checks all binders, the two
 conjuncts, forbidden extra assumptions, existing-API reuse, Lean compilation, placeholder absence,
@@ -103,13 +104,9 @@ A live run is a PASS only if:
 Compilation without semantic acceptance is FAIL, not PARTIAL success. A passing experiment changes
 no ledger or proof certification status.
 
-## 8. Current validation
+## 8. Validation and live result
 
-At handoff creation, only local scaffold validation is authorized. The expected pre-run state is a
-compiling sentinel and therefore `verify_candidate.sh` must refuse it. The live Humanize2/Codex run
-has not yet occurred and no outcome is claimed.
-
-The following local checks passed on 2026-08-29:
+The following scaffold checks passed on 2026-08-29 before the authenticated run:
 
 - `verify_scaffold.sh`: reset fixture matched, all four oracle hashes matched, and the sentinel
   type-checked with the pinned Lean toolchain;
@@ -126,21 +123,52 @@ The following local checks passed on 2026-08-29:
 - all baseline and experiment shell scripts passed `bash -n`; and
 - a scoped credential-pattern scan found no secrets.
 
+Two authenticated attempts then ran against fresh external Humanize state:
+
+1. **Run 1: functional success / blind-validity failure.** It produced a faithful compiling
+   candidate and the official reviewer accepted it, but the actor parent spawned its own
+   oracle-backed reviewer child. The child generator had already finished and the candidate was not
+   edited afterward, yet the actor lane crossed the declared oracle boundary. The run is invalid
+   under the acceptance criteria. The prompt was hardened and the candidate reset.
+2. **Run 2: PASS.** The fresh actor used four direct tool calls: it read only `AGENTS.md`, the frozen
+   input, `Basic.lean`, `Poincare.lean`, and the candidate; edited only the candidate; ran the exact
+   Lean command; and inspected its diff/status. It spawned no child and made no collaboration call.
+   The separate read-only reviewer verified all four pins, compared every rubric item, compiled the
+   candidate, audited placeholders and Git scope, and returned structured `done: true`.
+
+Independent post-run verification confirmed:
+
+- candidate SHA-256
+  `fe594274d55934a6152a8be813c549682a930adac6952720583ae9ed6137990d`;
+- `verify_candidate.sh` passed;
+- the exact Lean command exited 0 without diagnostics;
+- all ten semantic items passed, including dimension zero and both conjuncts;
+- the sentinel and proof placeholders were absent; and
+- only `candidate/CandidateStatement.lean` changed.
+
+The accepted output is a proposition definition only. It proves no theorem and changes no ledger,
+manuscript, dossier, review certification, or mathematical status. The concise decisions are
+`research/decisions/2026-08-29-humanize2-kls-actor-lane-isolation.md` and
+`research/decisions/2026-08-29-humanize2-kls-statement-fidelity-run.md`. Raw sessions and Humanize
+state were not committed.
+
 ## 9. Authorization boundary
 
-The previous authorization covered disposable baseline fixtures, not KLS-facing source material.
-Before executing `run_statement_rlar.sh`, obtain explicit authorization to send the frozen informal
-specification, allowed Lean API files, candidate contents/diff, Git metadata, Lean compiler output,
-and reviewer findings to OpenAI. Credentials remain managed by the Codex CLI and must never be
-placed in prompts or repository files.
+On 2026-08-29 the user explicitly authorized sending the frozen KLS linear-test specification,
+allowed `Basic.lean`/`Poincare.lean` API material, candidate contents and diff, Git metadata, Lean
+compiler output, and semantic-reviewer results to OpenAI for this experiment. Both recorded attempts
+stayed within that content boundary. Credentials remained managed by the Codex CLI and were not
+placed in prompts or repository files. A future experiment with different KLS content requires a
+fresh authorization decision.
 
-## 10. What remains after the run
+## 10. Recommended next experiment
 
-Persist a concise result record, not a raw transcript. Record actor files read, candidate diff,
-compiler outcomes, reviewer rounds and notes, final structured decision, independent verification,
-and any semantic failure. If the statement calibration passes, the next experiment may replace the
-`Prop` definition with a theorem and exercise proof generation/repair. If it fails, keep the failed
-candidate and reviewer diagnosis as benchmark evidence without touching mathematical status.
+Move from statement generation to a theorem/proof-generation calibration only after defining a
+separate proof target and acceptance rubric. Preserve the accepted `Prop` candidate as the statement
+fidelity result. Harden the next actor further with an oracle-free filesystem snapshot so blindness
+does not depend only on prompt compliance and trace audit. Any future proof attempt must follow the
+repository's proof workflow and cannot self-certify or change ledger status merely because Lean
+compiles it.
 
 ## 11. Files to read first
 

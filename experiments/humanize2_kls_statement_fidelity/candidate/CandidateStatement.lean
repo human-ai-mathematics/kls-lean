@@ -16,6 +16,11 @@ namespace Experiments.Humanize2KLS
 def candidateLinearTestLowerStatement {D : ℕ}
     (μ : Measure (EuclideanSpace ℝ (Fin D))) [IsProbabilityMeasure μ]
     (_hμ : MemLp (id : EuclideanSpace ℝ (Fin D) → EuclideanSpace ℝ (Fin D)) 2 μ) : Prop :=
-  True -- HUMANIZE2_UNATTEMPTED
+  (∀ f : EuclideanSpace ℝ (Fin D) → ℝ,
+      FunctionalInequalities.IsAdmissible μ f →
+        FunctionalInequalities.poincareRayleighQuotient μ f ≤
+          FunctionalInequalities.optimalPoincareConstant μ) ∧
+    FunctionalInequalities.lambdaMaxCovariance μ ≤
+      FunctionalInequalities.optimalPoincareConstant μ
 
 end Experiments.Humanize2KLS

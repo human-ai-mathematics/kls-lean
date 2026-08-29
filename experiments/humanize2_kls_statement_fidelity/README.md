@@ -13,16 +13,21 @@ pipeline calibration, not a new KLS theorem and not a new proof of the node.
 
 ## Current status
 
-**READY / NOT YET RUN.** The input, candidate sentinel, semantic rubric, oracle hashes, RLAR prompt,
-and verification scripts are committed. The live authenticated run requires explicit authorization
-to send the frozen KLS-facing specification, allowed Lean API files, candidate diff, and compiler
-output to OpenAI. No mathematical status changes when this experiment runs.
+**RUN 2 PASS.** The first authenticated run produced the correct compiling proposition but was
+invalid as a blinded benchmark because the actor session delegated an oracle-backed review. The
+prompt was hardened, the candidate was reset, and a fresh second run passed every acceptance gate:
+the actor session tree contained no delegation or oracle access, the official reviewer returned
+`done: true`, and independent verification accepted the candidate. No mathematical status changed.
+
+The accepted candidate is committed as benchmark output. It is a `Prop` definition, not a theorem
+or proof.
 
 ## Protocol
 
 1. `reset_candidate.sh` restores a compiling `True` sentinel marked `HUMANIZE2_UNATTEMPTED`.
 2. The RLAR actor may read the frozen input and lower-level Lean API, but is instructed not to read
    the oracle, existing certificate, dossier, ledger statement, or prior semantic reviews.
+   It must perform the actor role directly without delegating or spawning a subagent.
 3. The actor replaces only `candidate/CandidateStatement.lean` with a definition whose value is the
    proposed Lean `Prop`, and invokes the pinned Lean compiler.
 4. A fresh read-only reviewer may read the pinned oracle sources and semantic rubric. It compiles
@@ -34,6 +39,10 @@ output to OpenAI. No mathematical status changes when this experiment runs.
 The blindness boundary is prompt-enforced, not cryptographic: actor and reviewer share a repository
 and the Codex read sandbox can technically read the oracle paths. Tool traces must therefore be
 audited after the run. A later hardened experiment should give the actor an oracle-free snapshot.
+
+The concise run record is in
+`../../research/decisions/2026-08-29-humanize2-kls-statement-fidelity-run.md`. Raw Humanize/Codex
+sessions remain outside the repository.
 
 ## Setup and commands
 
