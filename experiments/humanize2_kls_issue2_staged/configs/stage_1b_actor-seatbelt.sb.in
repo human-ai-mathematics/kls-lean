@@ -1,0 +1,63 @@
+(version 1)
+(deny default)
+(import "system.sb")
+
+(allow process*)
+(allow sysctl-read)
+(allow mach-lookup)
+(allow ipc-posix-shm)
+; Only the Codex app-server needs the OpenAI service. Descendant shell and Lean processes inherit
+; this profile but fail the process-path filter, so actor-directed network access is physically
+; denied as well as rejected by config, source verification, and complete-session trace audit.
+(allow network-outbound
+  (process-path "__CODEX_EXECUTABLE__"))
+
+; Realpath needs metadata on ancestors. File contents at these ancestors remain denied.
+(allow file-read-metadata
+  (literal "/private")
+  (literal "/private/tmp")
+  (literal "__STATE_PARENT__")
+  (literal "__STATE_ROOT__")
+  (literal "/Users")
+  (literal "__USER_HOME__")
+  (literal "__USER_HOME__/.elan")
+  (literal "__USER_HOME__/.elan/toolchains")
+__UPSTREAM_METADATA_RULES__)
+
+(allow file-read*
+  (subpath "/System")
+  (subpath "/usr")
+  (subpath "/bin")
+  (subpath "/sbin")
+  (subpath "/Library")
+  (subpath "/private/etc")
+  (subpath "/dev")
+  (subpath "__CODEX_APP_ROOT__")
+  (subpath "__ACTOR_ROOT__")
+  (subpath "__LEAN_TOOLCHAIN_ROOT__")
+__UPSTREAM_READ_RULES__)
+
+; Actor tools may mutate only the existing candidate. The actor directory is also mode 0555;
+; every other actor-visible file is mode 0444, preventing replacement or deletion independently
+; of prompt compliance.
+(allow file-write*
+  (literal "__CANDIDATE__")
+  (literal "/dev/null"))
+
+; Only the Codex executable may read or mutate its client state. Descendant shell/Lean processes
+; inherit this profile but fail the process-path filter.
+(allow file-read*
+  (require-all
+    (subpath "__ACTOR_CODEX_HOME__")
+    (process-path "__CODEX_EXECUTABLE__"))
+  (require-all
+    (subpath "__ACTOR_RUNTIME_TMP__")
+    (process-path "__CODEX_EXECUTABLE__")))
+
+(allow file-write*
+  (require-all
+    (subpath "__ACTOR_CODEX_HOME__")
+    (process-path "__CODEX_EXECUTABLE__"))
+  (require-all
+    (subpath "__ACTOR_RUNTIME_TMP__")
+    (process-path "__CODEX_EXECUTABLE__")))

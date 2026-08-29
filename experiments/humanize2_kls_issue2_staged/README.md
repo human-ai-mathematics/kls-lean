@@ -5,8 +5,9 @@
 The first subscription-authenticated Stage 1A actor run produced a compiling candidate and passed
 the candidate, oracle-pin, and repaired complete-session trace gates. The user accepted the sole
 remaining API question—the explicit function binder in `HasPoincare`—so Stage 1A is now a
-human-accepted experimental dependency. The Stage 1B specification and actor prompt are drafted;
-its fixture, verifier, rubric, runner, and model run have not started.
+human-accepted experimental dependency. The dedicated Stage 1B isolated harness has passed its
+model-free reset, compilation, provenance, isolation, verifier, trace-policy, and deterministic
+rerun tests. No Stage 1B model run has started.
 
 This experiment reconstructs the already certified Issue 2 linear-test development through a
 blind Humanize2/Codex actor. The existing Lean implementation, natural-language solution,
@@ -169,33 +170,78 @@ universal function binder in `HasPoincare` as an intentional experimental API di
 byte-identical copy is pinned at `accepted/AcceptedStage1A.lean`; this acceptance permits only its
 use as the input to Stage 1B.
 
-## Frozen Stage 1B prompt
+## Model-free Stage 1B isolated harness
 
 The next actor-facing specification and prompt are:
 
 - `inputs/issue2_stage_1b_foundational_lemmas.md`;
 - `prompts/issue2_stage_1b_actor.md`.
 
-The immediately executable repository-work prompt is
-`prompts/issue2_stage_1b_harness_setup.md`; it builds and validates the isolated harness without a
-model call.
-
 Stage 1B covers only energy nonnegativity, derivative/gradient compatibility, fixed-constant
 accessors and monotonicity, the extended optimal constant, and its finite-versus-`⊤` boundary. Its
-future external workspace must contain exactly `AGENTS.md`, `TASK.md`, `AcceptedStage1A.lean`, a
-pinned toolchain-matched `AcceptedStage1A.olean`, and `CandidateStage1B.lean`. The accepted source
-and compiled dependency are read-only.
+external workspace contains exactly, and in no other entry:
 
-The Stage 1B prompt is not yet runnable: no reset fixture, sentinel candidate, human checklist,
-oracle pin, verifier, runner, or Stage 1B pinset has been built. Do not paste it into an existing
-desktop task. The next repository task is to build and validate that dedicated five-entry harness
-without making a model call.
+```text
+AGENTS.md
+TASK.md
+AcceptedStage1A.lean
+AcceptedStage1A.olean
+CandidateStage1B.lean
+```
+
+`stage_1b_reset_actor_workspace.sh` copies the accepted source byte-for-byte, recompiles its
+`.olean` in a separate external build directory with pinned Lean 4.33.0 and upstream Mathlib only,
+checks hashes `9bb81dd6…` and `212cd1f5…`, copies both artifacts into the actor workspace, and makes
+them mode `0444`. The actor directory is mode `0555`; the existing candidate alone is mode `0644`.
+The rendered deny-default Seatbelt independently grants write access only to the literal candidate
+path and outbound network access only to the Codex executable; descendant shell and Lean processes
+fail that `process-path` filter. Reset always restores the compiler-failing Stage 1B sentinel and
+writes a baseline hash/mode manifest outside the actor lane.
+
+`stage_1b_verify_candidate.sh` enforces the sole `AcceptedStage1A` import, exact experimental and
+nested namespaces, the thirteen requested declaration names and kinds, absence of extra public
+surface and escape hatches, immutable accepted-artifact hashes/modes, and upstream-only Lean
+compilation. It compiles a disposable candidate module outside the actor lane and imports it from
+`verifier/issue2_stage_1b_surface.lean`, which checks every requested theorem type, the absence of a
+measurable-space assumption from the derivative theorem, and the definitional optimal-constant
+formula. The hidden known-good verifier fixture is test-only and denied to the actor.
+
+`oracle/stage_1b_reference.sha256` independently pins only the thirteen relevant declaration
+blocks extracted from existing `Basic.lean`; it does not pin the unrelated remainder of that
+module. `review/issue2_stage_1b_human_checklist.md` is the human-only semantic/proof gate and is
+outside the actor lane. `pins/stage_1b.sha256` freezes the source, prompt, checklist, accepted
+dependency hashes, Lean/Lake metadata, fixture, configs, flow, patch, verifier surface, hidden test
+fixture, reset/runner/auditor scripts, and tests.
+
+The complete-session auditor requires one actor-root session, one turn, zero descendants, a sole
+workspace root, the external-sandbox marker, only local execution/patch tools, no
+collaboration/reviewer/browser/web/MCP/network/client-state/environment access, no forbidden path
+or output, and a post-run mutation set exactly equal to `CandidateStage1B.lean`. It also rechecks
+both accepted hashes and the candidate-only Seatbelt rule. Raw sessions and Codex/Humanize state
+remain below the dedicated external state root.
+
+Model-free reproduction uses a Stage 1B root separate from the historical Stage 1A state:
+
+```bash
+export H2_ISSUE2_STAGE1B_STATE_ROOT=/private/tmp/humanize2-kls-issue2-stage1b
+experiments/humanize2_kls_issue2_staged/scripts/stage_1b_reset_run_state.sh
+experiments/humanize2_kls_issue2_staged/scripts/stage_1b_verify_scaffold.sh
+experiments/humanize2_kls_issue2_staged/scripts/stage_1b_model_free_tests.sh
+```
+
+The runner exits `2` before any live action unless
+`H2_ISSUE2_STAGE1B_LIVE_RUN_ACK=issue2-stage1b-human-review` is present. Even with that
+acknowledgement, it exits `2` unless this new Stage 1B actor home reports `Logged in using ChatGPT`;
+the Stage 1A login is not reused. Do not copy global credentials or paste the actor prompt into an
+existing desktop task. After the actor stops, the runner performs candidate, oracle, immutable
+artifact, complete-trace, and candidate-only mutation checks and then stops for the human
+checklist. No model reviewer exists.
 
 ## Acceptance and mathematical status
 
 Lean exit zero is necessary but insufficient. The human checklist in
 `review/issue2_stage_1a_human_checklist.md` was the Stage 1A semantic acceptance gate; the accepted
-artifact remains only an experimental dependency. It is not a production proof or ledger event.
-Promotion into `formalization/`, creation of a solution dossier, review certification, and
-ledger/manuscript updates require their normal repository workflows and separate explicit
-decisions.
+artifact remains only an experimental dependency. The Stage 1B harness has not made a model call
+or a proof attempt. It is not a production proof or ledger event. Promotion into `formalization/`,
+creation of a solution dossier, review certification, and ledger/manuscript updates require their
+normal repository workflows and separate explicit decisions.
