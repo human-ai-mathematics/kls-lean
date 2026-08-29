@@ -265,8 +265,8 @@ human review. This authorization is limited to Issue 2. It does not cover anothe
 automatic production promotion, a model reviewer, or access to the existing Issue 2 answer.
 
 The experiment plan is in `experiments/humanize2_kls_issue2_staged/`. Its current status is
-**STAGE 1A HUMAN-ACCEPTED EXPERIMENTAL DEPENDENCY / STAGE 1B PROMPT DRAFTED / STAGE 1B HARNESS AND
-MODEL RUN NOT STARTED**.
+**STAGE 1A HUMAN-ACCEPTED EXPERIMENTAL DEPENDENCY / STAGE 1B ISOLATED HARNESS MODEL-FREE PASS /
+STAGE 1B MODEL RUN NOT STARTED**.
 
 ### Why Issue 2 is a reconstruction benchmark
 
@@ -365,44 +365,120 @@ function binder (`∀ f`) may intentionally differ from the hidden implementatio
 is stored at `experiments/humanize2_kls_issue2_staged/accepted/AcceptedStage1A.lean` with the same
 SHA-256. This is only a stage-transition dependency, not production promotion or certification.
 
-### Frozen Stage 1B prompt and next harness gate
+### Stage 1B isolated harness: model-free pass
 
 The next actor-facing files are now drafted:
 
 - `inputs/issue2_stage_1b_foundational_lemmas.md` freezes the mathematical declaration surface;
 - `prompts/issue2_stage_1b_actor.md` freezes the single-session compiler-feedback instructions.
 
-The next repository task should use `prompts/issue2_stage_1b_harness_setup.md`. That prompt builds
-and validates the Stage 1B physical harness model-free, reports the guarded live-run command, and
-stops before making a subscription model call.
-
 Stage 1B is limited to Dirichlet-energy nonnegativity, Fréchet derivative/gradient compatibility,
 fixed-constant accessors and monotonicity, the `ENNReal` optimal constant, and its
 finite-versus-`⊤` boundary. It excludes linear tests, Rayleigh quotients, covariance, spectral
 claims, final Issue 2 assembly, and every other KLS target.
 
-The prompt is not yet executable. Before any model call, build a separate Stage 1B reset fixture,
-sentinel candidate, verifier, oracle pin, human proof/semantic checklist, trace pinset, and runner.
-The external actor workspace must contain exactly:
+The completed reset uses a Stage 1B-specific external state root and reconstructs exactly these
+actor-visible entries:
 
 ```text
 AGENTS.md
+TASK.md
 AcceptedStage1A.lean
 AcceptedStage1A.olean
 CandidateStage1B.lean
-TASK.md
 ```
 
-The accepted `.lean` and deterministically toolchain-compiled `.olean` are read-only. The actor may
-edit only `CandidateStage1B.lean`. A disposable upstream-Mathlib-only compilation confirmed that
-the frozen declaration surface is implementable with the accepted explicit binder; that local
-proof check was deleted and is not an experiment result. Do not paste the Stage 1B actor prompt
-into an existing desktop task, and do not run it until the new physical isolation gates pass.
+`AcceptedStage1A.lean` is copied byte-for-byte from the human-accepted source and retains the
+explicit `∀ f` binder. Its SHA-256 is
+`9bb81dd659453cfb7bcc514cc5d20693209ca985e049edd46f0da8f9de1395e6`. The reset compiles
+`AcceptedStage1A.olean` in a separate external build directory with pinned Lean 4.33.0 and an
+upstream-Mathlib-only `LEAN_PATH`; deterministic reruns produce SHA-256
+`212cd1f5a0c20d2f3974c5948ea4c26550409a5b3b7b47a4b65e1e9cdf65a3a0`. Both artifacts are mode
+`0444`, the fixture text is mode `0444`, the actor directory is mode `0555`, and only the existing
+`CandidateStage1B.lean` is owner-writable. The rendered Seatbelt independently allowlists writes
+only to that literal candidate path and outbound network access only to the Codex executable;
+descendant shell and Lean tools fail that `process-path` filter. A hash/mode baseline outside the
+actor lane supports post-run mutation verification.
+
+The sentinel imports only `AcceptedStage1A` and fails on `stage1BImplementationRequired`. The
+candidate verifier rejects the sentinel; enforces the sole import, exact namespace nesting,
+thirteen names and declaration kinds, and forbidden escape/public-surface forms; rechecks both
+accepted hashes and physical modes; compiles the candidate outside the actor lane against the
+accepted `.olean` plus upstream Mathlib only; and imports a hidden exact-surface checker covering
+all thirteen requested theorem types and the definitional infimum formula. The checker also proves
+that `norm_fderiv_eq_norm_gradient` needs no measurable-space instance. The known-good verifier
+fixture is model-free test material, not an actor input.
+
+`oracle/stage_1b_reference.sha256` is independent of the accepted dependency and hashes only the
+thirteen relevant existing declaration blocks extracted from `Basic.lean`, not the rest of the
+module. `review/issue2_stage_1b_human_checklist.md` remains outside the actor lane and is the only
+semantic/proof acceptance gate. `pins/stage_1b.sha256` freezes the specification, actor prompt,
+human checklist, accepted artifacts and hashes, Lean/Lake metadata, fixture, isolation/config
+files, Humanize2 adapter, flow, verifier surface, hidden test fixture, runner, auditor, and tests.
+
+The single-session flow constructs one actor at the external root and has no reviewer. The runner
+refuses before a live call unless the exact acknowledgement
+`H2_ISSUE2_STAGE1B_LIVE_RUN_ACK=issue2-stage1b-human-review` is present and a new Stage 1B-specific
+`CODEX_HOME` reports `Logged in using ChatGPT`. It does not reuse or reset the stopped external
+Stage 1A candidate or actor home. The same actor must edit the candidate and repeatedly use exactly
+`lean CandidateStage1B.lean`; compiler diagnostics are the only feedback loop.
+
+The complete-session auditor reads every JSONL session record in the dedicated actor home and
+requires one actor-root session, one turn, zero descendants, one workspace root, and the
+external-sandbox marker. It allows only local execution/patch tools and rejects collaboration,
+reviewer, browser, web, MCP, computer-use, network/model/client-state/environment access,
+parent traversal, forbidden paths or outputs, sandbox denials, or Seatbelt drift. It compares the
+post-run workspace with the external baseline and requires the mutation set to be exactly
+`CandidateStage1B.lean`, then rechecks both accepted artifact hashes.
+
+Model-free commands and observed exit codes on 2026-08-29:
+
+```text
+experiments/humanize2_kls_issue2_staged/scripts/verify_candidate.sh /private/tmp/humanize2-kls-issue2-stage1a/actor-workspace
+  exit 0
+experiments/humanize2_kls_issue2_staged/scripts/stage_1b_model_free_tests.sh
+  exit 0
+shasum -a 256 -c experiments/humanize2_kls_issue2_staged/pins/stage_1b.sha256
+  exit 0
+experiments/humanize2_kls_issue2_staged/scripts/stage_1b_run.sh  # acknowledgement absent
+  exit 2
+H2_ISSUE2_STAGE1B_LIVE_RUN_ACK=issue2-stage1b-human-review experiments/humanize2_kls_issue2_staged/scripts/stage_1b_run.sh  # fresh dedicated home not logged in
+  exit 2
+cd formalization && lake build
+  exit 0; 2,946 jobs
+uv run --with pyyaml python research/check_ledger.py
+  exit 0; 2 ledgers, 195 nodes, 675 labels, 0 structural errors
+git diff --check
+  exit 0
+```
+
+After separately authenticating the new Stage 1B actor home through the user's ChatGPT
+subscription, the exact future live-run command is:
+
+```bash
+export H2_ISSUE2_STAGE1B_STATE_ROOT=/private/tmp/humanize2-kls-issue2-stage1b
+CODEX_HOME="$H2_ISSUE2_STAGE1B_STATE_ROOT/actor-codex-home" codex login
+export H2_ISSUE2_STAGE1B_LIVE_RUN_ACK=issue2-stage1b-human-review
+experiments/humanize2_kls_issue2_staged/scripts/stage_1b_run.sh
+```
+
+This command was not executed. The authorization remains limited to the frozen Issue 2 Stage 1B
+specification, accepted Stage 1A dependency, candidate contents, and actual Lean diagnostics in one
+human-stopped actor session. It does not authorize exposing the existing Issue 2 answer, using a
+model reviewer, promoting output, continuing to Stage 2A, or working on another KLS target.
+
+The validated harness implementation commit is
+`666fff6983b4364419132f1356eaac00e6771aa6`. This handoff update is the immediately following
+documentation commit. Its final checked worktree state is clean on branch
+`humanize2-kls-autoformalization-experiment`, with `git status --short --branch` printing only the
+branch header. Raw transcripts, credentials, tokens, Codex/Humanize state, machine-private
+configuration, and the generated `.olean` are not committed. Do not paste the Stage 1B actor prompt
+into an existing desktop task.
 
 The completed Stage 1A actor used one dedicated subscription-authenticated `CODEX_HOME`; there was
 no model reviewer. Its human acceptance is only an experimental stage gate: it creates no dossier,
-certification, ledger/manuscript change, or mathematical status change. Stage 1B must use a new
-dedicated state root and stop at the same human boundary.
+certification, ledger/manuscript change, or mathematical status change. Stage 1B has a new
+dedicated state root and stops at the same human boundary.
 
 The harness rationale and the canonical-path defect/fix are recorded append-only in
 `research/decisions/2026-08-29-humanize2-kls-issue2-stage1a-dedicated-runner.md`. The live attempt
@@ -411,3 +487,9 @@ and trace-parser repair are recorded append-only in
 `research/decisions/2026-08-29-humanize2-kls-issue2-stage1a-trace-json-escaping.md`. The human
 acceptance and Stage 1B prompt boundary are recorded in
 `research/decisions/2026-08-29-humanize2-kls-issue2-stage1a-acceptance-stage1b-prompt.md`.
+
+The Stage 1B harness rationale and model-free validation are recorded append-only in
+`research/decisions/2026-08-29-humanize2-kls-issue2-stage1b-isolated-harness.md`. No Stage 1B model
+run or model proof attempt occurred, so no exploration was created. This harness work changed no
+production Lean, solution, review, ledger, manuscript, proof certification, or mathematical
+status.
