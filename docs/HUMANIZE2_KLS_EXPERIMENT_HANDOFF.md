@@ -266,7 +266,7 @@ automatic production promotion, a model reviewer, or access to the existing Issu
 
 The experiment plan is in `experiments/humanize2_kls_issue2_staged/`. Its current status is
 **STAGE 1A HUMAN-ACCEPTED EXPERIMENTAL DEPENDENCY / STAGE 1B RUN 1 EXACT-SURFACE FAIL /
-RUN 2 FIVE-SIGNATURE HARDENING AUTHORIZED / RUN 2 MODEL NOT STARTED / STAGE 2A NOT STARTED**.
+RUN 2 MECHANICAL PASS / RUN 2 HUMAN REVIEW PENDING / STAGE 2A NOT STARTED**.
 
 ### Why Issue 2 is a reconstruction benchmark
 
@@ -535,6 +535,42 @@ dependency, oracle, human checklist, Seatbelt profile, compiler-feedback loop, t
 model, and effort remain unchanged. The rationale is recorded append-only in
 `research/decisions/2026-08-30-humanize2-kls-issue2-stage1b-run2-signature-hardening.md`.
 
+### Authenticated Stage 1B Run 2 result
+
+Run 2 started from preparation commit `b62f18f` and used the new external state root
+`/private/tmp/humanize2-kls-issue2-stage1b-run2`. Its dedicated `CODEX_HOME` was authenticated
+directly through the user's ChatGPT subscription; no Run 1, Stage 1A, or global credential file was
+copied. Deterministic reset restored the five-entry fixture and preserved only that dedicated
+authentication. Every pin, sentinel, immutable-dependency, physical-isolation, forbidden-read,
+client-state, compiler, and app-server preflight passed before the model call.
+
+The actor used exactly one session and one turn, with zero descendants and no collaboration or
+reviewer. It read only `AGENTS.md`, `TASK.md`, `AcceptedStage1A.lean`, and its candidate, edited only
+`CandidateStage1B.lean`, and invoked the required Lean compiler. The first pass exposed one
+Mathlib namespace qualification error for the Riesz isometry. One compiler-feedback repair made
+the second pass succeed. Candidate SHA-256:
+
+```text
+3778490dcbd79f4632795f9b541a281b9032596c4cfe415e81b627a4c48e6c4e
+```
+
+The runner and an independent post-run verifier both passed the exact thirteen-declaration surface
+and upstream-Mathlib-only compilation. The separately pinned hidden `Basic.lean` surface and the
+complete Stage 1B pinset matched. The complete trace audit returned `ok: true`: one session, one
+turn, zero descendants, six local `exec` calls, no forbidden access/tool/path/output or Seatbelt
+denial, and only candidate mutation. Compact trace-audit SHA-256:
+
+```text
+f3519b985381ba083e85b422273a782943f572bc08daa6683fa0ad2f5829731f
+```
+
+The guarded runner exited zero and stopped for the human-only thirteen-item semantic/proof
+checklist. Stage 1B is therefore mechanically successful but not yet accepted as the Stage 2A
+dependency. Do not reset or rerun the stopped Run 2 root. Raw transcripts, authentication, tokens,
+Humanize/Codex state, machine-private configuration, and generated `.olean` files remain external
+and uncommitted. The append-only attempt record is
+`research/explorations/2026-08-30-humanize2-kls-issue2-stage1b-run2.md`.
+
 The validated harness implementation commit is
 `666fff6983b4364419132f1356eaac00e6771aa6`; its original handoff commit is `e5f12b2`. Raw
 transcripts, credentials, tokens, Codex/Humanize state, machine-private configuration, and the
@@ -562,6 +598,10 @@ audit repair is recorded in
 `research/decisions/2026-08-29-humanize2-kls-issue2-stage1b-trace-subtype-delimiter.md`. Run 1
 changed no production Lean, solution, review, ledger, manuscript, proof certification, or
 mathematical status.
+
+Run 2 likewise changed no production Lean, solution, persisted review, ledger, manuscript, proof
+certification, or mathematical status. Human acceptance and any Stage 2A authorization remain
+separate future decisions.
 
 The runner-entry clarification and fresh-`CODEX_HOME` reset requirement are recorded append-only in
 `research/decisions/2026-08-29-humanize2-kls-issue2-stage1b-runner-entry.md`.

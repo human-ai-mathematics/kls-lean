@@ -10,7 +10,8 @@ model-free reset, compilation, provenance, isolation, verifier, trace-policy, an
 rerun tests. Authenticated Stage 1B Run 1 produced a locally compiling candidate and a clean
 repaired trace, but the exact-surface verifier rejected five optimal-constant theorem APIs. Stage
 1B is not accepted. The user authorized Run 2 with only those five theorem headers hardened and a
-fresh isolated session; Run 2 has not yet started.
+fresh isolated session. Run 2 passed all mechanical gates and is stopped for human semantic/proof
+review.
 
 This experiment reconstructs the already certified Issue 2 linear-test development through a
 blind Humanize2/Codex actor. The existing Lean implementation, natural-language solution,
@@ -305,6 +306,35 @@ experiments/humanize2_kls_issue2_staged/scripts/stage_1b_run.sh
 
 The login must be performed directly for the new dedicated home; no `auth.json` is copied from Run
 1 or Stage 1A.
+
+## Authenticated Stage 1B Run 2: mechanical pass, human review pending
+
+Run 2 started from preparation commit `b62f18f` in the fresh external root
+`/private/tmp/humanize2-kls-issue2-stage1b-run2`. The new dedicated actor home was authenticated
+directly through the user's ChatGPT subscription. The runner deterministically reset the fixture,
+preserved only that home's authentication, and passed the pin, sentinel, isolation, immutable
+dependency, forbidden-read, client-state, compiler, and app-server preflights before the model call.
+
+The actor used one session and one turn with zero descendants. It read only the four permitted text
+files, edited only `CandidateStage1B.lean`, and used the required Lean command. Its first compiler
+pass found one Riesz-isometry namespace qualification error; one compiler-feedback repair produced
+an exit-zero candidate. Candidate SHA-256:
+
+```text
+3778490dcbd79f4632795f9b541a281b9032596c4cfe415e81b627a4c48e6c4e
+```
+
+The independent candidate verifier passed the exact thirteen-declaration surface and upstream-only
+compilation. The oracle pin and complete harness pinset passed. The complete trace audit returned
+`ok: true`: one session, one turn, zero descendants, six local `exec` calls, no forbidden access or
+tool use, and only candidate mutation. The compact audit JSON SHA-256 is
+`f3519b985381ba083e85b422273a782943f572bc08daa6683fa0ad2f5829731f`.
+
+The runner stopped before acceptance. Do not rerun or reset this Run 2 root while it awaits the
+pinned thirteen-item human checklist. Mechanical PASS does not permit Stage 2A, production
+promotion, a dossier, certification, ledger/manuscript edits, or any mathematical status change.
+The full attempt record is
+`research/explorations/2026-08-30-humanize2-kls-issue2-stage1b-run2.md`.
 
 ## Acceptance and mathematical status
 
