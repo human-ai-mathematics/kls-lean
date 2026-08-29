@@ -115,6 +115,9 @@ The following local checks passed on 2026-08-29:
   type-checked with the pinned Lean toolchain;
 - `verify_candidate.sh`: exited `2` with `candidate is still the unattempted sentinel`, the expected
   pre-run refusal;
+- the verifier's success path was separately exercised with a temporary known-faithful proposition:
+  oracle pins and Lean compilation passed, after which `reset_candidate.sh` restored the committed
+  sentinel and a clean tree. This validates verifier mechanics, not model performance;
 - `cd formalization && lake build`: 2,946 jobs completed successfully;
 - the inherited Python baseline: 2 tests passed;
 - the inherited two-file Lean baseline: both files compiled;
