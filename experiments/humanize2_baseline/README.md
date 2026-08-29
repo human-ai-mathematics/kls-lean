@@ -56,7 +56,13 @@ enabled. Set `HUMANIZE_SENTRY=off` to make the baseline noninteractive and send 
 
 ```bash
 export HUMANIZE_SENTRY=off
+export HUMANIZE2_STATE_ROOT=/tmp/humanize2-baseline-state
 ```
+
+`HUMANIZE2_STATE_ROOT` must be an absolute directory outside the repository. Each runner derives
+a different `HUMANIZE_HOME` below it. This matters because resumable state is keyed by flow and
+workspace: the Python and Lean tests both use `ralph_loop` and would otherwise pick up one
+another's rounds and token budget.
 
 If `hmz` is not on `PATH`, point the scripts at it without modifying them:
 
@@ -107,12 +113,12 @@ experiments/humanize2_baseline/scripts/verify_lean.sh
 
 The runner prepares the official flowverse under the isolated alias
 `humanize2-baseline-flowverse` and detaches it at the pinned commit above before invoking its
-`rlar` flow. This avoids silently following the flowverse's moving default branch. Set
-`HUMANIZE_HOME` to an isolated, non-repository directory so the fetched flow and run state remain
-machine-local:
+`rlar` flow. This avoids silently following the flowverse's moving default branch. The fetched
+flow and run state remain machine-local under the RLAR-specific directory below
+`HUMANIZE2_STATE_ROOT`.
 
 ```bash
-export HUMANIZE_HOME=/tmp/humanize2-baseline-state
+export HUMANIZE2_STATE_ROOT=/tmp/humanize2-baseline-state
 ```
 
 The upstream RLAR flow takes two Codex agents. The actor has `workspace-write`; the independent

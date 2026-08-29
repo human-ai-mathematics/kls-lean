@@ -8,6 +8,13 @@ h2_effort="${HUMANIZE2_AGENT_EFFORT:-high}"
 h2_prompt_file="$h2_repo_root/experiments/humanize2_baseline/prompts/lean_actor_reviewer.md"
 h2_prepare="$h2_repo_root/experiments/humanize2_baseline/scripts/prepare_flowverse.sh"
 h2_flowverse_name="humanize2-baseline-flowverse"
+h2_state_root="${HUMANIZE2_STATE_ROOT:?Set HUMANIZE2_STATE_ROOT to an absolute directory outside the repository}"
+
+if [[ "$h2_state_root" != /* || "$h2_state_root/" == "$h2_repo_root/"* ]]; then
+  echo "HUMANIZE2_STATE_ROOT must be absolute and outside the repository" >&2
+  exit 1
+fi
+export HUMANIZE_HOME="$h2_state_root/lean-rlar"
 
 cd "$h2_repo_root"
 "$h2_prepare"
