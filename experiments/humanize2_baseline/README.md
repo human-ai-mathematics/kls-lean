@@ -137,3 +137,24 @@ export HUMANIZE2_AGENT_EFFORT=high
 ```
 
 Use model identifiers and effort levels supported by the installed Codex CLI and account.
+
+## Verified result (2026-08-29)
+
+The final isolated replay passed all four live checks with Codex `gpt-5.6-sol` at `high` effort:
+
+| Check | Result |
+| --- | --- |
+| `chat`, read-only Python diagnosis | PASS; correct worktree, bug, and assertions; no mutation |
+| `ralph_loop`, Python edit | PASS in one round; two tests passed; clean final tree |
+| `ralph_loop`, Lean repair | PASS in one round; real failing and passing Lean invocations |
+| Pinned upstream `rlar` | PASS on first official review; structured `done: true` |
+
+Independent verification passed with:
+
+```bash
+experiments/humanize2_baseline/scripts/verify_python.sh
+experiments/humanize2_baseline/scripts/verify_lean.sh
+```
+
+The full environment, observed failures, architecture notes, and continuation boundary are in
+`../../docs/HUMANIZE2_LEAN_BASELINE_HANDOFF.md`.
