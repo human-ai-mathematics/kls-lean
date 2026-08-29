@@ -28,6 +28,8 @@ Edit only `CandidateStage1B.lean`. It must:
 - import only `AcceptedStage1A`;
 - extend namespace `Issue2Autoformalization.Stage1A` without redeclaring its accepted definitions;
 - implement exactly the declarations and theorem statements listed in `TASK.md`;
+- copy the five frozen optimal-constant theorem headers from `TASK.md` literally, including every
+  implicit binder and the universal-negation form of `optimalPoincareConstant_eq_top_iff`;
 - retain the accepted Stage 1A assumptions and explicit `HasPoincare` binder;
 - add no unrequested public mathematical declaration; and
 - compile successfully with `lean CandidateStage1B.lean`.
@@ -48,6 +50,8 @@ Do not report success based on inspection alone.
   hatch.
 - Do not add stronger assumptions, alter accepted Stage 1A declarations, or formalize a later
   stage.
+- Do not replace any of the five frozen theorem types with a merely logically equivalent type or
+  change an implicit binder to an explicit positional argument.
 - Do not create a proof dossier or claim review/certification.
 
 ## Final response

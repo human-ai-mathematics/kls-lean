@@ -265,8 +265,8 @@ human review. This authorization is limited to Issue 2. It does not cover anothe
 automatic production promotion, a model reviewer, or access to the existing Issue 2 answer.
 
 The experiment plan is in `experiments/humanize2_kls_issue2_staged/`. Its current status is
-**STAGE 1A HUMAN-ACCEPTED EXPERIMENTAL DEPENDENCY / STAGE 1B RUN 1 TRACE PASS AND EXACT-SURFACE
-FAIL / STAGE 1B NOT ACCEPTED / STAGE 2A NOT STARTED**.
+**STAGE 1A HUMAN-ACCEPTED EXPERIMENTAL DEPENDENCY / STAGE 1B RUN 1 EXACT-SURFACE FAIL /
+RUN 2 FIVE-SIGNATURE HARDENING AUTHORIZED / RUN 2 MODEL NOT STARTED / STAGE 2A NOT STARTED**.
 
 ### Why Issue 2 is a reconstruction benchmark
 
@@ -517,6 +517,23 @@ stage_1b_audit_actor_trace.py  # original parser
 stage_1b_audit_actor_trace.py  # repaired parser, same session
   exit 0; no errors
 ```
+
+### Authorized Stage 1B Run 2 boundary
+
+On 2026-08-30 the user explicitly approved a fresh Stage 1B Run 2 with only the five exact Lean
+signatures hardened. The actor-facing specification now prints the complete theorem headers for
+`optimalPoincareConstant_le`, `le_optimalPoincareConstant`,
+`optimalPoincareConstant_eq_top_of_no_finite`,
+`optimalPoincareConstant_ne_top_of_hasPoincare`, and
+`optimalPoincareConstant_eq_top_iff`. These headers reveal no proof text or strategy and leave the
+precommitted surface checker unchanged.
+
+Run 2 must use the new external root
+`/private/tmp/humanize2-kls-issue2-stage1b-run2` and a newly authenticated dedicated `CODEX_HOME`.
+It must not reset or reuse the stopped Run 1 state. The other eight declarations, accepted Stage 1A
+dependency, oracle, human checklist, Seatbelt profile, compiler-feedback loop, trace requirements,
+model, and effort remain unchanged. The rationale is recorded append-only in
+`research/decisions/2026-08-30-humanize2-kls-issue2-stage1b-run2-signature-hardening.md`.
 
 The validated harness implementation commit is
 `666fff6983b4364419132f1356eaac00e6771aa6`; its original handoff commit is `e5f12b2`. Raw

@@ -9,7 +9,8 @@ human-accepted experimental dependency. The dedicated Stage 1B isolated harness 
 model-free reset, compilation, provenance, isolation, verifier, trace-policy, and deterministic
 rerun tests. Authenticated Stage 1B Run 1 produced a locally compiling candidate and a clean
 repaired trace, but the exact-surface verifier rejected five optimal-constant theorem APIs. Stage
-1B is not accepted; a fresh bounded repair run requires an explicit human decision.
+1B is not accepted. The user authorized Run 2 with only those five theorem headers hardened and a
+fresh isolated session; Run 2 has not yet started.
 
 This experiment reconstructs the already certified Issue 2 linear-test development through a
 blind Humanize2/Codex actor. The existing Lean implementation, natural-language solution,
@@ -281,6 +282,29 @@ rerun. See:
 
 - `research/explorations/2026-08-29-humanize2-kls-issue2-stage1b-live-run.md`;
 - `research/decisions/2026-08-29-humanize2-kls-issue2-stage1b-trace-subtype-delimiter.md`.
+
+## Authorized Stage 1B Run 2 boundary
+
+The user approved a fresh Run 2 with one and only one actor-facing repair: the exact Lean headers
+for the five optimal-constant theorems are now written literally in `TASK.md`. The headers expose
+the already frozen implicit binders and universal-negation result type, but provide no proof text or
+strategy. The other eight declarations, accepted dependency, verifier, oracle, checklist,
+isolation, compiler loop, and model settings are unchanged.
+
+Run 2 must use `/private/tmp/humanize2-kls-issue2-stage1b-run2`; it must not reset, reuse, or reveal
+the Run 1 state. After the Run 2 preparation commit and model-free gates pass, the guarded sequence
+is:
+
+```bash
+export H2_ISSUE2_STAGE1B_STATE_ROOT=/private/tmp/humanize2-kls-issue2-stage1b-run2
+experiments/humanize2_kls_issue2_staged/scripts/stage_1b_reset_run_state.sh
+CODEX_HOME="$H2_ISSUE2_STAGE1B_STATE_ROOT/actor-codex-home" codex login
+export H2_ISSUE2_STAGE1B_LIVE_RUN_ACK=issue2-stage1b-human-review
+experiments/humanize2_kls_issue2_staged/scripts/stage_1b_run.sh
+```
+
+The login must be performed directly for the new dedicated home; no `auth.json` is copied from Run
+1 or Stage 1A.
 
 ## Acceptance and mathematical status
 
