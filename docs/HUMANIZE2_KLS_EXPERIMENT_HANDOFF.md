@@ -255,3 +255,62 @@ requires `H2_PROOF_LIVE_RUN_ACK=disposable-only` and separate actor/reviewer Cod
 Replacing the disposable fixture with any KLS statement, theorem, proof context, compiler output,
 or review still requires fresh explicit user authorization. No mathematical conclusion or status
 change was produced.
+
+## 13. Authorized staged Issue 2 autoformalization
+
+On 2026-08-29 the user supplied the next authorization: use the existing Issue 2 linear-test
+development as the first real-model KLS autoformalization domain, authenticate the actor through
+the user's ChatGPT subscription, proceed in small dependency layers, and stop after each layer for
+human review. This authorization is limited to Issue 2. It does not cover another KLS target,
+automatic production promotion, a model reviewer, or access to the existing Issue 2 answer.
+
+The experiment plan is in `experiments/humanize2_kls_issue2_staged/`. Its current status is
+**STAGE 1A SPEC/PROMPT FROZEN / RUNTIME HARNESS NOT YET BUILT / MODEL RUN NOT STARTED**.
+
+### Why Issue 2 is a reconstruction benchmark
+
+Issue 2 already has a compiled, reviewed Lean implementation in the repository. The purpose of the
+new experiment is not to obtain a previously unknown proof. It is to measure whether an isolated
+actor can reconstruct the development from frozen mathematical specifications and compiler
+feedback. The existing `Basic.lean`, `Poincare.lean`, project certificate, solution, semantic
+reviews, and ledger binding are hidden human-oracle material. They must never be mounted in the
+actor filesystem or included in actor feedback.
+
+### Layer hierarchy
+
+1. Stage 1A: admissible-test, Dirichlet-energy, and fixed-constant Poincaré definitions only.
+2. Stage 1B: foundational lemmas and the extended optimal constant.
+3. Stage 2A: linear-test geometry.
+4. Stage 2B: linear-test analysis and the fixed-constant bound.
+5. Stage 3: extended Rayleigh quotient and optimal-constant comparison.
+6. Stage 4: covariance and finite-dimensional spectral bridge.
+7. Stage 5: abstract, Euclidean, and node-specific Issue 2 certificates.
+
+An earlier stage becomes visible to the next actor only after explicit human acceptance. A human
+rejection ends that actor session; a repair request starts a fresh isolated run. No hidden proof or
+reviewer reasoning is returned as compiler feedback.
+
+### Frozen Stage 1A artifacts
+
+- `inputs/issue2_stage_1a_basic_vocabulary.md` is the complete actor-facing mathematical source.
+- `prompts/issue2_stage_1a_actor.md` is the next actor prompt.
+- `review/issue2_stage_1a_human_checklist.md` is human-only and must remain outside the actor lane.
+- `pins/stage_1a.sha256` freezes all three artifacts.
+
+Stage 1A asks for exactly three public declarations in the experimental namespace
+`Issue2Autoformalization.Stage1A`: `IsAdmissible`, `dirichletEnergy`, and `HasPoincare`. It excludes
+all lemmas, the optimal constant, linear tests, Rayleigh quotients, covariance, and the final lower
+bound.
+
+### Next operational step
+
+Do not send the prompt yet. First build a Stage 1A-specific external three-file workspace and
+deterministic reset. Its Seatbelt profile may read the pinned Lean toolchain and compiled upstream
+Mathlib artifacts, but not any compiled or source `FunctionalInequalities` module. Add a candidate
+verifier and reuse or extend the complete-session trace audit. Run adversarial oracle, repository,
+solution, review, ledger, and certificate read probes before authenticating the model call.
+
+The actor uses one dedicated subscription-authenticated `CODEX_HOME`; there is no model reviewer.
+After compilation and trace verification, stop and hand `CandidateStage1A.lean`, its diff, compiler
+result, and compact trace summary to a human. Human acceptance is only an experimental stage gate:
+it creates no dossier, certification, ledger/manuscript change, or mathematical status change.
