@@ -2,10 +2,11 @@
 
 ## Status
 
-The staged plan and complete Stage 1A actor-only runner are implemented. The first
-subscription-authenticated actor run produced a compiling candidate and passed the candidate,
-oracle-pin, and repaired complete-session trace gates. Human semantic review is pending, so Stage 1A
-is not accepted and Stage 1B has not started.
+The first subscription-authenticated Stage 1A actor run produced a compiling candidate and passed
+the candidate, oracle-pin, and repaired complete-session trace gates. The user accepted the sole
+remaining API question—the explicit function binder in `HasPoincare`—so Stage 1A is now a
+human-accepted experimental dependency. The Stage 1B specification and actor prompt are drafted;
+its fixture, verifier, rubric, runner, and model run have not started.
 
 This experiment reconstructs the already certified Issue 2 linear-test development through a
 blind Humanize2/Codex actor. The existing Lean implementation, natural-language solution,
@@ -64,9 +65,9 @@ or certificate, `solutions/`, `research/reviews/`, either ledger, the statement-
 or artifacts from later stages. No model reviewer is used. The human reviewer may inspect the full
 repository after the actor has stopped.
 
-## Frozen next step
+## Frozen Stage 1A harness
 
-The next prompt is `prompts/issue2_stage_1a_actor.md`, grounded only in
+The Stage 1A prompt is `prompts/issue2_stage_1a_actor.md`, grounded only in
 `inputs/issue2_stage_1a_basic_vocabulary.md`. Stage 1A outputs an isolated
 `CandidateStage1A.lean`; it must not edit production Lean files.
 `pins/stage_1a.sha256` freezes that specification, prompt, human checklist, three-file fixture,
@@ -108,10 +109,10 @@ transcripts. Apps, plugins, browser/computer use, multi-agent features, skills, 
 generation, the network proxy, and web search are disabled. OpenAI service traffic remains
 available to the Codex app-server; shell network commands invalidate the trace.
 
-## Start the first real model run
+## Historical Stage 1A run procedure
 
-From the experiment checkout, first authenticate the dedicated actor home through the user's
-ChatGPT subscription. This is the only remaining start gate:
+The authenticated Stage 1A run has completed. These commands are retained only as provenance; do
+not rerun them or reset the accepted external candidate when preparing Stage 1B:
 
 ```bash
 export H2_ISSUE2_STAGE1A_STATE_ROOT=/private/tmp/humanize2-kls-issue2-stage1a
@@ -120,7 +121,7 @@ CODEX_HOME="$H2_ISSUE2_STAGE1A_STATE_ROOT/actor-codex-home" codex login
 ```
 
 Do not copy a global `auth.json`, credential, transcript, or full Codex home into the state root.
-After login, run exactly:
+The historical live invocation was:
 
 ```bash
 export H2_ISSUE2_STAGE1A_LIVE_RUN_ACK=issue2-stage1a-human-review
@@ -163,15 +164,38 @@ no errors. The model was not rerun. The decision and attempt records are:
 - `research/decisions/2026-08-29-humanize2-kls-issue2-stage1a-trace-json-escaping.md`;
 - `research/explorations/2026-08-29-humanize2-kls-issue2-stage1a-live-run.md`.
 
-The candidate matches the requested formulas mechanically. One human-review question remains: its
-universal function binder in `HasPoincare` is explicit, while the hidden implementation uses an
-implicit binder. The propositions are logically the same, but only a human may decide whether that
-API difference is acceptable for promotion to Stage 1B.
+The candidate matches the requested formulas mechanically. The user accepted its explicit
+universal function binder in `HasPoincare` as an intentional experimental API difference. A
+byte-identical copy is pinned at `accepted/AcceptedStage1A.lean`; this acceptance permits only its
+use as the input to Stage 1B.
+
+## Frozen Stage 1B prompt
+
+The next actor-facing specification and prompt are:
+
+- `inputs/issue2_stage_1b_foundational_lemmas.md`;
+- `prompts/issue2_stage_1b_actor.md`.
+
+The immediately executable repository-work prompt is
+`prompts/issue2_stage_1b_harness_setup.md`; it builds and validates the isolated harness without a
+model call.
+
+Stage 1B covers only energy nonnegativity, derivative/gradient compatibility, fixed-constant
+accessors and monotonicity, the extended optimal constant, and its finite-versus-`⊤` boundary. Its
+future external workspace must contain exactly `AGENTS.md`, `TASK.md`, `AcceptedStage1A.lean`, a
+pinned toolchain-matched `AcceptedStage1A.olean`, and `CandidateStage1B.lean`. The accepted source
+and compiled dependency are read-only.
+
+The Stage 1B prompt is not yet runnable: no reset fixture, sentinel candidate, human checklist,
+oracle pin, verifier, runner, or Stage 1B pinset has been built. Do not paste it into an existing
+desktop task. The next repository task is to build and validate that dedicated five-entry harness
+without making a model call.
 
 ## Acceptance and mathematical status
 
 Lean exit zero is necessary but insufficient. The human checklist in
-`review/issue2_stage_1a_human_checklist.md` is the only semantic acceptance gate. An accepted
-experimental candidate is still not a production proof or ledger event. Promotion into
-`formalization/`, creation of a solution dossier, review certification, and ledger/manuscript
-updates require their normal repository workflows and separate explicit decisions.
+`review/issue2_stage_1a_human_checklist.md` was the Stage 1A semantic acceptance gate; the accepted
+artifact remains only an experimental dependency. It is not a production proof or ledger event.
+Promotion into `formalization/`, creation of a solution dossier, review certification, and
+ledger/manuscript updates require their normal repository workflows and separate explicit
+decisions.

@@ -265,7 +265,8 @@ human review. This authorization is limited to Issue 2. It does not cover anothe
 automatic production promotion, a model reviewer, or access to the existing Issue 2 answer.
 
 The experiment plan is in `experiments/humanize2_kls_issue2_staged/`. Its current status is
-**STAGE 1A AUTHENTICATED MECHANICAL PASS / HUMAN SEMANTIC REVIEW PENDING / STAGE 1B NOT STARTED**.
+**STAGE 1A HUMAN-ACCEPTED EXPERIMENTAL DEPENDENCY / STAGE 1B PROMPT DRAFTED / STAGE 1B HARNESS AND
+MODEL RUN NOT STARTED**.
 
 ### Why Issue 2 is a reconstruction benchmark
 
@@ -293,7 +294,7 @@ reviewer reasoning is returned as compiler feedback.
 ### Frozen Stage 1A artifacts
 
 - `inputs/issue2_stage_1a_basic_vocabulary.md` is the complete actor-facing mathematical source.
-- `prompts/issue2_stage_1a_actor.md` is the next actor prompt.
+- `prompts/issue2_stage_1a_actor.md` is the Stage 1A actor prompt.
 - `review/issue2_stage_1a_human_checklist.md` is human-only and must remain outside the actor lane.
 - `fixtures/actor_workspace/` contains the committed `AGENTS.md`, byte-identical `TASK.md`, and
   compiler-failing `CandidateStage1A.lean.initial`.
@@ -358,18 +359,55 @@ candidate, Seatbelt, compiler environment, or session. Re-auditing that same tra
 `ok: true`: one session, one turn, zero descendants, six local `exec` calls, and no errors. The model
 was not rerun.
 
-The candidate is ready for the pinned human checklist. The only identified review question is that
-its `HasPoincare` function binder is explicit (`∀ f`) while the hidden implementation's binder is
-implicit (`∀ ⦃f⦄`). The logical proposition is the same, but the API ergonomics differ. Do not start
-Stage 1B until a human explicitly accepts or rejects this point and all eleven checklist items.
+The user accepted the only identified review question: the candidate's explicit `HasPoincare`
+function binder (`∀ f`) may intentionally differ from the hidden implementation's implicit binder
+(`∀ ⦃f⦄`). All eleven Stage 1A checklist items are therefore closed. A byte-identical accepted copy
+is stored at `experiments/humanize2_kls_issue2_staged/accepted/AcceptedStage1A.lean` with the same
+SHA-256. This is only a stage-transition dependency, not production promotion or certification.
 
-The actor uses one dedicated subscription-authenticated `CODEX_HOME`; there is no model reviewer.
-After compilation and trace verification, stop and hand `CandidateStage1A.lean`, its diff, compiler
-result, and compact trace summary to a human. Human acceptance is only an experimental stage gate:
-it creates no dossier, certification, ledger/manuscript change, or mathematical status change.
+### Frozen Stage 1B prompt and next harness gate
+
+The next actor-facing files are now drafted:
+
+- `inputs/issue2_stage_1b_foundational_lemmas.md` freezes the mathematical declaration surface;
+- `prompts/issue2_stage_1b_actor.md` freezes the single-session compiler-feedback instructions.
+
+The next repository task should use `prompts/issue2_stage_1b_harness_setup.md`. That prompt builds
+and validates the Stage 1B physical harness model-free, reports the guarded live-run command, and
+stops before making a subscription model call.
+
+Stage 1B is limited to Dirichlet-energy nonnegativity, Fréchet derivative/gradient compatibility,
+fixed-constant accessors and monotonicity, the `ENNReal` optimal constant, and its
+finite-versus-`⊤` boundary. It excludes linear tests, Rayleigh quotients, covariance, spectral
+claims, final Issue 2 assembly, and every other KLS target.
+
+The prompt is not yet executable. Before any model call, build a separate Stage 1B reset fixture,
+sentinel candidate, verifier, oracle pin, human proof/semantic checklist, trace pinset, and runner.
+The external actor workspace must contain exactly:
+
+```text
+AGENTS.md
+AcceptedStage1A.lean
+AcceptedStage1A.olean
+CandidateStage1B.lean
+TASK.md
+```
+
+The accepted `.lean` and deterministically toolchain-compiled `.olean` are read-only. The actor may
+edit only `CandidateStage1B.lean`. A disposable upstream-Mathlib-only compilation confirmed that
+the frozen declaration surface is implementable with the accepted explicit binder; that local
+proof check was deleted and is not an experiment result. Do not paste the Stage 1B actor prompt
+into an existing desktop task, and do not run it until the new physical isolation gates pass.
+
+The completed Stage 1A actor used one dedicated subscription-authenticated `CODEX_HOME`; there was
+no model reviewer. Its human acceptance is only an experimental stage gate: it creates no dossier,
+certification, ledger/manuscript change, or mathematical status change. Stage 1B must use a new
+dedicated state root and stop at the same human boundary.
 
 The harness rationale and the canonical-path defect/fix are recorded append-only in
 `research/decisions/2026-08-29-humanize2-kls-issue2-stage1a-dedicated-runner.md`. The live attempt
 and trace-parser repair are recorded append-only in
 `research/explorations/2026-08-29-humanize2-kls-issue2-stage1a-live-run.md` and
-`research/decisions/2026-08-29-humanize2-kls-issue2-stage1a-trace-json-escaping.md`.
+`research/decisions/2026-08-29-humanize2-kls-issue2-stage1a-trace-json-escaping.md`. The human
+acceptance and Stage 1B prompt boundary are recorded in
+`research/decisions/2026-08-29-humanize2-kls-issue2-stage1a-acceptance-stage1b-prompt.md`.
