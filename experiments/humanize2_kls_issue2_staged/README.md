@@ -2,11 +2,10 @@
 
 ## Status
 
-The staged plan and the complete Stage 1A actor-only runner are implemented. Deterministic reset,
-canonical-path import filtering, deny-default Seatbelt isolation, Codex-client-state protection,
-compiler/verifier paths, adversarial forbidden-read probes, pinned Humanize2 integration, and the
-complete-session trace auditor pass model-free validation. The dedicated actor `CODEX_HOME` is not
-yet signed in, so no authenticated model run has started.
+The staged plan and complete Stage 1A actor-only runner are implemented. The first
+subscription-authenticated actor run produced a compiling candidate and passed the candidate,
+oracle-pin, and repaired complete-session trace gates. Human semantic review is pending, so Stage 1A
+is not accepted and Stage 1B has not started.
 
 This experiment reconstructs the already certified Issue 2 linear-test development through a
 blind Humanize2/Codex actor. The existing Lean implementation, natural-language solution,
@@ -139,6 +138,35 @@ rejects descendants, collaboration/subagent sources, MCP/browser/web/computer to
 workspace roots, client/environment inspection, model/client launches, network commands,
 parent-directory traversal, forbidden path references or outputs, sandbox denials, and Seatbelt
 drift. Human review then applies the pinned eleven-item checklist; no reviewer model is used.
+
+## First authenticated run
+
+The first live run started from repository commit `83c37f2`. It used one actor session and one turn,
+with no descendants or collaboration calls. The actor invoked Lean three times, repaired the
+infinite-order notation from compiler diagnostics, and stopped with a compiling candidate at:
+
+```text
+/private/tmp/humanize2-kls-issue2-stage1a/actor-workspace/CandidateStage1A.lean
+```
+
+Candidate SHA-256:
+
+```text
+9bb81dd659453cfb7bcc514cc5d20693209ca985e049edd46f0da8f9de1395e6
+```
+
+The initial post-run audit failed closed because its path scanner consumed JSON escape backslashes
+after legal actor-root paths. The parser was repaired and given a regression test; the same session
+trace then passed with exactly one session, one turn, zero descendants, six local `exec` calls, and
+no errors. The model was not rerun. The decision and attempt records are:
+
+- `research/decisions/2026-08-29-humanize2-kls-issue2-stage1a-trace-json-escaping.md`;
+- `research/explorations/2026-08-29-humanize2-kls-issue2-stage1a-live-run.md`.
+
+The candidate matches the requested formulas mechanically. One human-review question remains: its
+universal function binder in `HasPoincare` is explicit, while the hidden implementation uses an
+implicit binder. The propositions are logically the same, but only a human may decide whether that
+API difference is acceptable for promotion to Stage 1B.
 
 ## Acceptance and mathematical status
 

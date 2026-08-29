@@ -265,7 +265,7 @@ human review. This authorization is limited to Issue 2. It does not cover anothe
 automatic production promotion, a model reviewer, or access to the existing Issue 2 answer.
 
 The experiment plan is in `experiments/humanize2_kls_issue2_staged/`. Its current status is
-**STAGE 1A DEDICATED RUNNER MODEL-FREE PASS / SUBSCRIPTION LOGIN REQUIRED / MODEL RUN NOT STARTED**.
+**STAGE 1A AUTHENTICATED MECHANICAL PASS / HUMAN SEMANTIC REVIEW PENDING / STAGE 1B NOT STARTED**.
 
 ### Why Issue 2 is a reconstruction benchmark
 
@@ -341,22 +341,27 @@ freezes the human checklist as semantic rubric plus the fixture, prompt, toolcha
 flow, isolation profile, Humanize2 patch, verifier, runner, auditor, and tests. Human review is the
 only acceptance gate.
 
-### Exact next command
+### Authenticated Stage 1A result
 
-The dedicated home currently has no subscription login, and the live runner stops with exit `2`
-before any model request. Authenticate it without copying global credentials:
+The dedicated actor home was authenticated directly through the user's ChatGPT subscription; no
+global credential file was copied. The first live run started from commit `83c37f2`, after every
+reset, pin, isolation, forbidden-read, compiler, and app-server preflight passed.
 
-```bash
-export H2_ISSUE2_STAGE1A_STATE_ROOT=/private/tmp/humanize2-kls-issue2-stage1a
-experiments/humanize2_kls_issue2_staged/scripts/reset_run_state.sh
-CODEX_HOME="$H2_ISSUE2_STAGE1A_STATE_ROOT/actor-codex-home" codex login
-export H2_ISSUE2_STAGE1A_LIVE_RUN_ACK=issue2-stage1a-human-review
-experiments/humanize2_kls_issue2_staged/scripts/run_stage_1a.sh
-```
+The actor used one session and one turn, invoked Lean three times, repaired an infinite-order
+notation error from compiler diagnostics, and produced a compiling candidate with SHA-256
+`9bb81dd659453cfb7bcc514cc5d20693209ca985e049edd46f0da8f9de1395e6`. Candidate and hidden-oracle
+pin verification passed.
 
-The first real model proof/formalization activity starts only in the final command, after the runner
-repeats every isolation gate. Stage 1A defines vocabulary and proves no theorem; the word “proof”
-does not apply to its mathematical output.
+The first trace audit failed closed only because its scanner included JSON escape backslashes after
+legal actor-root paths. The parser fix added a regression test and did not alter the prompt,
+candidate, Seatbelt, compiler environment, or session. Re-auditing that same trace returned
+`ok: true`: one session, one turn, zero descendants, six local `exec` calls, and no errors. The model
+was not rerun.
+
+The candidate is ready for the pinned human checklist. The only identified review question is that
+its `HasPoincare` function binder is explicit (`∀ f`) while the hidden implementation's binder is
+implicit (`∀ ⦃f⦄`). The logical proposition is the same, but the API ergonomics differ. Do not start
+Stage 1B until a human explicitly accepts or rejects this point and all eleven checklist items.
 
 The actor uses one dedicated subscription-authenticated `CODEX_HOME`; there is no model reviewer.
 After compilation and trace verification, stop and hand `CandidateStage1A.lean`, its diff, compiler
@@ -364,5 +369,7 @@ result, and compact trace summary to a human. Human acceptance is only an experi
 it creates no dossier, certification, ledger/manuscript change, or mathematical status change.
 
 The harness rationale and the canonical-path defect/fix are recorded append-only in
-`research/decisions/2026-08-29-humanize2-kls-issue2-stage1a-dedicated-runner.md`. No exploration was
-created because no mathematical attempt, including a failed one, has run.
+`research/decisions/2026-08-29-humanize2-kls-issue2-stage1a-dedicated-runner.md`. The live attempt
+and trace-parser repair are recorded append-only in
+`research/explorations/2026-08-29-humanize2-kls-issue2-stage1a-live-run.md` and
+`research/decisions/2026-08-29-humanize2-kls-issue2-stage1a-trace-json-escaping.md`.

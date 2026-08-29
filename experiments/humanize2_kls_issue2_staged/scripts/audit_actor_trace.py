@@ -57,7 +57,7 @@ CODEX_COMMAND = re.compile(
     r"(?:^|[\s;&|/\"'])(?:codex|hmz|humanize2?)(?:[\s\"']|$)", flags=re.IGNORECASE
 )
 PATH_PATTERN = re.compile(
-    r"(?:/(?![-*])[^\s\"'`;,(){}\[\]]+|(?:AGENTS|TASK)\.md|CandidateStage1A\.lean)"
+    r"(?:/(?![-*])[^\s\\\"'`;,(){}\[\]]+|(?:AGENTS|TASK)\.md|CandidateStage1A\.lean)"
 )
 
 

@@ -78,6 +78,24 @@ class AuditActorTraceTest(unittest.TestCase):
             summary = MODULE.audit(codex_home, actor, [str(root / "reviewer")], profile)
             self.assertTrue(summary["ok"], summary["errors"])
 
+    def test_accepts_json_encoded_tool_input_paths(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            actor = str(root / "actor")
+            codex_home = root / "codex-home"
+            codex_home.mkdir()
+            encoded = json.dumps(
+                {
+                    "cmd": "lean CandidateStage1A.lean",
+                    "cwd": actor,
+                    "patch": f"*** Update File: {actor}/CandidateStage1A.lean\n@@\n",
+                }
+            )
+            _write_session(codex_home, _actor_records(actor, tool_input=encoded))
+            profile = self._seatbelt(root, actor, codex_home)
+            summary = MODULE.audit(codex_home, actor, [], profile)
+            self.assertTrue(summary["ok"], summary["errors"])
+
     def test_rejects_collaboration_tool(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
