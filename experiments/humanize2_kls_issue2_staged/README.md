@@ -237,6 +237,20 @@ existing desktop task. After the actor stops, the runner performs candidate, ora
 artifact, complete-trace, and candidate-only mutation checks and then stops for the human
 checklist. No model reviewer exists.
 
+The setup prompt is historical now that the harness exists. The actor prompt is runner-internal and
+must never be pasted into a repository task. The self-contained guarded live entry is:
+
+```bash
+export H2_ISSUE2_STAGE1B_STATE_ROOT=/private/tmp/humanize2-kls-issue2-stage1b
+experiments/humanize2_kls_issue2_staged/scripts/stage_1b_reset_run_state.sh
+CODEX_HOME="$H2_ISSUE2_STAGE1B_STATE_ROOT/actor-codex-home" codex login
+export H2_ISSUE2_STAGE1B_LIVE_RUN_ACK=issue2-stage1b-human-review
+experiments/humanize2_kls_issue2_staged/scripts/stage_1b_run.sh
+```
+
+The explicit reset before `codex login` is required when the dedicated state root does not yet
+exist. The runner resets again while preserving only that experiment-specific `auth.json`.
+
 ## Acceptance and mathematical status
 
 Lean exit zero is necessary but insufficient. The human checklist in

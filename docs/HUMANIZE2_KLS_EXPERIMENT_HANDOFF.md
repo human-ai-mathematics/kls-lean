@@ -452,15 +452,20 @@ git diff --check
   exit 0
 ```
 
-After separately authenticating the new Stage 1B actor home through the user's ChatGPT
-subscription, the exact future live-run command is:
+The exact self-contained Stage 1B authentication and future live-run sequence is:
 
 ```bash
 export H2_ISSUE2_STAGE1B_STATE_ROOT=/private/tmp/humanize2-kls-issue2-stage1b
+experiments/humanize2_kls_issue2_staged/scripts/stage_1b_reset_run_state.sh
 CODEX_HOME="$H2_ISSUE2_STAGE1B_STATE_ROOT/actor-codex-home" codex login
 export H2_ISSUE2_STAGE1B_LIVE_RUN_ACK=issue2-stage1b-human-review
 experiments/humanize2_kls_issue2_staged/scripts/stage_1b_run.sh
 ```
+
+The reset before `codex login` is mandatory on a fresh machine or after deleting the Stage 1B
+state root: Codex rejects a `CODEX_HOME` path that does not exist. The runner performs another
+deterministic reset and preserves only the dedicated `auth.json`. The actor prompt is an internal
+runner input, not a prompt to paste into this or any other repository task.
 
 This command was not executed. The authorization remains limited to the frozen Issue 2 Stage 1B
 specification, accepted Stage 1A dependency, candidate contents, and actual Lean diagnostics in one
@@ -493,3 +498,6 @@ The Stage 1B harness rationale and model-free validation are recorded append-onl
 run or model proof attempt occurred, so no exploration was created. This harness work changed no
 production Lean, solution, review, ledger, manuscript, proof certification, or mathematical
 status.
+
+The runner-entry clarification and fresh-`CODEX_HOME` reset requirement are recorded append-only in
+`research/decisions/2026-08-29-humanize2-kls-issue2-stage1b-runner-entry.md`.

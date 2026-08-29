@@ -1,5 +1,10 @@
 # Next repository task: build the Issue 2 Stage 1B isolated harness
 
+> **Completed prompt.** Commit `666fff6` built this harness and commit `e5f12b2` recorded its
+> handoff. Do not paste or execute this setup prompt again at either commit or any descendant that
+> retains the harness. Do not paste the Stage 1B actor prompt into a repository task. The current
+> entry point is the guarded `scripts/stage_1b_run.sh` procedure documented in the main handoff.
+
 Work in `/private/tmp/numina-humanize2-kls-autoformalization` on branch
 `humanize2-kls-autoformalization-experiment`.
 
