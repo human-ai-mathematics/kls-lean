@@ -1,0 +1,57 @@
+(version 1)
+(deny default)
+(import "system.sb")
+
+(allow process*)
+(allow sysctl-read)
+(allow mach-lookup)
+(allow ipc-posix-shm)
+; The Codex app-server needs the OpenAI service. Actor-directed network tools are disabled in
+; config and rejected by the complete-session trace audit.
+(allow network-outbound)
+
+; Realpath needs metadata on ancestors. File contents at these ancestors remain denied.
+(allow file-read-metadata
+  (literal "/private")
+  (literal "/private/tmp")
+  (literal "__STATE_PARENT__")
+  (literal "__STATE_ROOT__")
+  (literal "/Users")
+  (literal "__USER_HOME__")
+  (literal "__USER_HOME__/.elan")
+  (literal "__USER_HOME__/.elan/toolchains")
+__UPSTREAM_METADATA_RULES__)
+
+(allow file-read*
+  (subpath "/System")
+  (subpath "/usr")
+  (subpath "/bin")
+  (subpath "/sbin")
+  (subpath "/Library")
+  (subpath "/private/etc")
+  (subpath "/dev")
+  (subpath "__CODEX_APP_ROOT__")
+  (subpath "__ACTOR_ROOT__")
+  (subpath "__LEAN_TOOLCHAIN_ROOT__")
+__UPSTREAM_READ_RULES__)
+
+; Only the Codex executable may read or mutate its client state. Descendant shell/Lean processes
+; inherit this profile but fail the process-path filter, so auth.json and transcripts are not an
+; actor-tool-readable filesystem surface.
+(allow file-read*
+  (require-all
+    (subpath "__ACTOR_CODEX_HOME__")
+    (process-path "__CODEX_EXECUTABLE__"))
+  (require-all
+    (subpath "__ACTOR_RUNTIME_TMP__")
+    (process-path "__CODEX_EXECUTABLE__")))
+
+(allow file-write*
+  (subpath "__ACTOR_ROOT__")
+  (literal "/dev/null")
+  (require-all
+    (subpath "__ACTOR_CODEX_HOME__")
+    (process-path "__CODEX_EXECUTABLE__"))
+  (require-all
+    (subpath "__ACTOR_RUNTIME_TMP__")
+    (process-path "__CODEX_EXECUTABLE__")))

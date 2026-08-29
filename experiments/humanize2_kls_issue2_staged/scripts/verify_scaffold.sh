@@ -10,6 +10,7 @@ h2_fixture="$h2_issue2_experiment_root/fixtures/actor_workspace/CandidateStage1A
 
 cd "$h2_issue2_repo_root"
 shasum -a 256 -c experiments/humanize2_kls_issue2_staged/pins/stage_1a.sha256
+"$h2_issue2_script_dir/verify_oracle_pins.sh"
 "$h2_issue2_script_dir/verify_actor_workspace.sh" "$h2_actor_root"
 cmp "$h2_fixture" "$h2_candidate"
 rg -Fq 'HUMANIZE2_UNATTEMPTED_STAGE_1A' "$h2_candidate"

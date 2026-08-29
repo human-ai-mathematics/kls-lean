@@ -2,10 +2,11 @@
 
 ## Status
 
-The staged plan, Stage 1A specification, actor prompt, human-review checklist, committed fixture,
-deterministic reset, and compiler/verifier preflight are implemented. The deny-default Seatbelt
-profile, trace integration, and live runner are not yet built. No authenticated model run has
-started.
+The staged plan and the complete Stage 1A actor-only runner are implemented. Deterministic reset,
+canonical-path import filtering, deny-default Seatbelt isolation, Codex-client-state protection,
+compiler/verifier paths, adversarial forbidden-read probes, pinned Humanize2 integration, and the
+complete-session trace auditor pass model-free validation. The dedicated actor `CODEX_HOME` is not
+yet signed in, so no authenticated model run has started.
 
 This experiment reconstructs the already certified Issue 2 linear-test development through a
 blind Humanize2/Codex actor. The existing Lean implementation, natural-language solution,
@@ -69,8 +70,10 @@ repository after the actor has stopped.
 The next prompt is `prompts/issue2_stage_1a_actor.md`, grounded only in
 `inputs/issue2_stage_1a_basic_vocabulary.md`. Stage 1A outputs an isolated
 `CandidateStage1A.lean`; it must not edit production Lean files.
-`pins/stage_1a.sha256` freezes that specification, prompt, human checklist, three-file fixture, and
-reset/verifier scripts together.
+`pins/stage_1a.sha256` freezes that specification, prompt, human checklist, three-file fixture,
+Lean/Mathlib dependency metadata, isolation configuration, Humanize2 patch, actor-only flow,
+reset/verifier/runner scripts, and trace-auditor tests together. The hidden human reference is
+separately frozen by `oracle/stage_1a_reference.sha256` and is never mounted in the actor lane.
 
 The committed fixture is under `fixtures/actor_workspace/`. Rebuild and verify it with:
 
@@ -87,10 +90,55 @@ fields, escape hatches, extra actor files, and any Lean environment that exposes
 compiled `FunctionalInequalities` library. Its model-free success path has also compiled with the
 upstream Mathlib-only `LEAN_PATH`.
 
-Before a model run, the harness must still add the deny-default Seatbelt profile, dedicated actor
-`CODEX_HOME`, complete-session trace integration, and adversarial forbidden-read probes. The actor
-home should then sign in with the user's ChatGPT subscription. Do not send the prompt before those
-remaining isolation gates pass.
+The actor session is not this Codex desktop task. Pasting the actor prompt into an existing KLS task
+will correctly fail to find the external fixture and would not be blind. `run_stage_1a.sh` starts a
+new Humanize2-managed Codex app-server whose process and turn both use the external actor workspace
+as the sole current directory and workspace root.
+
+The rendered macOS Seatbelt profile denies file data by default. It permits the actor root, the
+pinned Lean toolchain, and only upstream Mathlib package build roots. In particular, the canonical
+path of `formalization/.lake/build/lib/lean` is removed: this checkout's build path resolves into
+the baseline checkout and contains compiled `FunctionalInequalities`, so string comparison before
+`realpath` would be unsafe. A direct probe now requires both the baseline source and
+`FunctionalInequalities/Basic.olean` to be unreadable.
+
+The dedicated actor `CODEX_HOME` and runtime directory are readable/writable only when the current
+executable is the installed Codex binary. Descendant shell and Lean processes inherit Seatbelt but
+fail that `process-path` filter, preventing actor tools from reading `auth.json`, configuration, or
+transcripts. Apps, plugins, browser/computer use, multi-agent features, skills, goals, hooks, image
+generation, the network proxy, and web search are disabled. OpenAI service traffic remains
+available to the Codex app-server; shell network commands invalidate the trace.
+
+## Start the first real model run
+
+From the experiment checkout, first authenticate the dedicated actor home through the user's
+ChatGPT subscription. This is the only remaining start gate:
+
+```bash
+export H2_ISSUE2_STAGE1A_STATE_ROOT=/private/tmp/humanize2-kls-issue2-stage1a
+experiments/humanize2_kls_issue2_staged/scripts/reset_run_state.sh
+CODEX_HOME="$H2_ISSUE2_STAGE1A_STATE_ROOT/actor-codex-home" codex login
+```
+
+Do not copy a global `auth.json`, credential, transcript, or full Codex home into the state root.
+After login, run exactly:
+
+```bash
+export H2_ISSUE2_STAGE1A_LIVE_RUN_ACK=issue2-stage1a-human-review
+experiments/humanize2_kls_issue2_staged/scripts/run_stage_1a.sh
+```
+
+The runner resets to the pinned sentinel, rechecks the fixture/oracle pins, runs the isolation
+battery, prepares pinned Humanize2, verifies subscription login, and starts exactly one actor. The
+prompt requires the same actor turn to edit only `CandidateStage1A.lean` and repeatedly run
+`lean CandidateStage1A.lean` until exit zero. After the turn, the runner executes the candidate
+verifier and trace audit, writes only a compact audit JSON outside Git, and stops for human review.
+
+The auditor requires exactly one session, one actor-root turn, and exactly one workspace root. It
+rejects descendants, collaboration/subagent sources, MCP/browser/web/computer tools, additional
+workspace roots, client/environment inspection, model/client launches, network commands,
+parent-directory traversal, forbidden path references or outputs, sandbox denials, and Seatbelt
+drift. Human review then applies the pinned eleven-item checklist; no reviewer model is used.
 
 ## Acceptance and mathematical status
 

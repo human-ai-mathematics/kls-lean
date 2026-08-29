@@ -1,0 +1,53 @@
+diff --git a/src/hmz/agents/codex.py b/src/hmz/agents/codex.py
+index 54c1acd..f2f24ce 100644
+--- a/src/hmz/agents/codex.py
++++ b/src/hmz/agents/codex.py
+@@ -112,4 +112,13 @@ def unattended(permission: str, service_tier: str = "default") -> dict[str, Any]
+       The settings to send with the turn, and with the thread it runs on.
+     """
+     service = "priority" if service_tier == "fast" else "default"
++    # Seatbelt cannot be nested. This actor's app-server and every descendant command already
++    # inherit an outer deny-default profile, so Codex must not try to apply a second profile.
++    seatbelt = os.environ.get("HUMANIZE2_CODEX_ACTOR_SEATBELT", "").strip()
++    if permission == "workspace-write" and seatbelt:
++        return {
++            "serviceTier": service,
++            "approvalPolicy": "never",
++            "sandbox": "danger-full-access",
++        }
+     return {"serviceTier": service} | _PERMITTED.get(permission, _PERMITTED["bypass"])
+@@ -1245,12 +1254,33 @@ def server(self) -> _AppServer:
+                         "-c",
+                         f"mcp_servers.humanize.args={json.dumps(held[1:])}",
+                     ]
++                environment = self._environ()
++                actor_home = os.environ.get("HUMANIZE2_CODEX_ACTOR_HOME", "").strip()
++                actor_tmp = os.environ.get("HUMANIZE2_CODEX_ACTOR_TMP", "").strip()
++                reviewer_home = os.environ.get("HUMANIZE2_CODEX_REVIEWER_HOME", "").strip()
++                reviewer_tmp = os.environ.get("HUMANIZE2_CODEX_REVIEWER_TMP", "").strip()
++                seatbelt = os.environ.get("HUMANIZE2_CODEX_ACTOR_SEATBELT", "").strip()
++                if self.config.permission == "workspace-write" and seatbelt:
++                    if not actor_home:
++                        raise RuntimeError(
++                            "HUMANIZE2_CODEX_ACTOR_HOME is required with actor Seatbelt"
++                        )
++                    argv = ["sandbox-exec", "-f", seatbelt, *argv]
++                    environment = dict(environment) if environment else dict(os.environ)
++                    environment["CODEX_HOME"] = actor_home
++                    if actor_tmp:
++                        environment["TMPDIR"] = actor_tmp
++                elif self.config.permission == "read-only" and reviewer_home:
++                    environment = dict(environment) if environment else dict(os.environ)
++                    environment["CODEX_HOME"] = reviewer_home
++                    if reviewer_tmp:
++                        environment["TMPDIR"] = reviewer_tmp
+                 # Read before the environment is built out of it: a fallback landing
+                 # between the two reads would name the account this server is *not* signed
+                 # into, and a server that believes it is already elsewhere is one nothing ever
+                 # starts again.
+                 account = self.node().name
+-                self._server = _AppServer(self.spawned(argv), self._environ())
++                self._server = _AppServer(self.spawned(argv), environment)
+                 self._server_as, self._server_tools = account, offering
+                 self._server._held.append(weakref.ref(self))
+                 # Held by the finalizer alone, which is what takes the server down: when the

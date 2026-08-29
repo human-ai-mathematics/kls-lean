@@ -265,8 +265,7 @@ human review. This authorization is limited to Issue 2. It does not cover anothe
 automatic production promotion, a model reviewer, or access to the existing Issue 2 answer.
 
 The experiment plan is in `experiments/humanize2_kls_issue2_staged/`. Its current status is
-**STAGE 1A FIXTURE/RESET/COMPILER PREFLIGHT PASS / SEATBELT+TRACE RUNNER PENDING / MODEL RUN NOT
-STARTED**.
+**STAGE 1A DEDICATED RUNNER MODEL-FREE PASS / SUBSCRIPTION LOGIN REQUIRED / MODEL RUN NOT STARTED**.
 
 ### Why Issue 2 is a reconstruction benchmark
 
@@ -306,21 +305,64 @@ Stage 1A asks for exactly three public declarations in the experimental namespac
 all lemmas, the optimal constant, linear tests, Rayleigh quotients, covariance, and the final lower
 bound.
 
-### Next operational step
+### Dedicated runner and corrected workspace entry
 
-The committed reset now rebuilds a Stage 1A-specific external workspace with exactly `AGENTS.md`,
+The committed reset rebuilds a Stage 1A-specific external workspace with exactly `AGENTS.md`,
 `TASK.md`, and `CandidateStage1A.lean`. The scaffold verifier requires the pinned sentinel and its
 expected nonzero Lean diagnostic. The candidate verifier checks the exact import list, namespace,
 three requested declarations, structure fields, forbidden escapes, and compilation under an
-upstream Mathlib-only `LEAN_PATH` that excludes the repository's compiled KLS library. Both the
-expected failing reset path and a model-free valid-definition path passed locally.
+upstream Mathlib-only `LEAN_PATH`.
 
-Do not send the prompt yet. Next render and test the deny-default Seatbelt profile, add a dedicated
-actor `CODEX_HOME`, integrate the complete-session trace auditor, and run adversarial oracle,
-repository, solution, review, ledger, and certificate read probes. Only upstream Mathlib artifacts
-and the Lean toolchain may be added to the actor allowlist.
+The repeated `TASK.md`/`CandidateStage1A.lean` absence message came from running the actor prompt in
+an existing Codex desktop task whose declared roots are the main KLS workspace and a visualization
+directory. The fixture was present at
+`/private/tmp/humanize2-kls-issue2-stage1a/actor-workspace`; it was intentionally not mounted in that
+task. Do not copy the fixture into the main workspace and do not paste the prompt into an existing
+KLS task. `scripts/run_stage_1a.sh` now starts the correct new Humanize2-managed app-server session,
+with the external fixture as both process `cwd` and the sole turn workspace root.
+
+The rendered deny-default Seatbelt profile allows file data only for the actor root, macOS/Codex
+runtime, pinned Lean toolchain, and compiled upstream Mathlib packages. Canonical-path validation
+removes the checkout build root even though its symlink resolves into the baseline checkout, and a
+direct probe denies the existing compiled `FunctionalInequalities/Basic.olean`. Repository source,
+all three KLS checkouts, solutions, reviews, ledgers, statement-fidelity oracle, and the hidden
+Stage 1A reference also fail direct read probes.
+
+Actor Codex client state is stored in a dedicated external home. Seatbelt grants that home and its
+runtime directory only when the current executable is Codex, so descendant shell/Lean tools cannot
+read authentication or transcripts. The isolated config disables apps, plugins, browser/computer
+use, multi-agent features, skills, goals, hooks, image generation, network proxy, and web search.
+The complete-session auditor requires exactly one session, no descendant, one turn, and exactly one
+workspace root; it also rejects collaboration, forbidden tools/paths/outputs, environment/client
+inspection, model launches, network commands, traversal, denials, and profile drift.
+
+`oracle/stage_1a_reference.sha256` pins the hidden `Basic.lean` reference. The main Stage 1A pinset
+freezes the human checklist as semantic rubric plus the fixture, prompt, toolchain/Lake metadata,
+flow, isolation profile, Humanize2 patch, verifier, runner, auditor, and tests. Human review is the
+only acceptance gate.
+
+### Exact next command
+
+The dedicated home currently has no subscription login, and the live runner stops with exit `2`
+before any model request. Authenticate it without copying global credentials:
+
+```bash
+export H2_ISSUE2_STAGE1A_STATE_ROOT=/private/tmp/humanize2-kls-issue2-stage1a
+experiments/humanize2_kls_issue2_staged/scripts/reset_run_state.sh
+CODEX_HOME="$H2_ISSUE2_STAGE1A_STATE_ROOT/actor-codex-home" codex login
+export H2_ISSUE2_STAGE1A_LIVE_RUN_ACK=issue2-stage1a-human-review
+experiments/humanize2_kls_issue2_staged/scripts/run_stage_1a.sh
+```
+
+The first real model proof/formalization activity starts only in the final command, after the runner
+repeats every isolation gate. Stage 1A defines vocabulary and proves no theorem; the word “proof”
+does not apply to its mathematical output.
 
 The actor uses one dedicated subscription-authenticated `CODEX_HOME`; there is no model reviewer.
 After compilation and trace verification, stop and hand `CandidateStage1A.lean`, its diff, compiler
 result, and compact trace summary to a human. Human acceptance is only an experimental stage gate:
 it creates no dossier, certification, ledger/manuscript change, or mathematical status change.
+
+The harness rationale and the canonical-path defect/fix are recorded append-only in
+`research/decisions/2026-08-29-humanize2-kls-issue2-stage1a-dedicated-runner.md`. No exploration was
+created because no mathematical attempt, including a failed one, has run.
