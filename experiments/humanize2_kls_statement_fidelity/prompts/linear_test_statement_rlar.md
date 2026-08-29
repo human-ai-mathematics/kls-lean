@@ -1,6 +1,11 @@
 Run the first KLS-facing statement-fidelity calibration. This task generates and reviews a Lean
 proposition only; it does not prove a theorem or change any mathematical status.
 
+RLAR assigns the current session exactly one role. Do not combine the actor and reviewer roles,
+delegate any part of the task, spawn a subagent, or use a collaboration tool. In particular, the
+actor must not conduct an oracle-backed review or ask another agent to conduct one. The actor stops
+after completing the actor instructions; the separate RLAR reviewer performs the review.
+
 Actor instructions:
 
 1. Read `AGENTS.md` and
