@@ -182,3 +182,76 @@ compiles it.
 
 Do not modify KLS ledgers, manuscript claims, proof dossiers, or existing reviews as part of this
 calibration.
+
+## 12. Proof-generation and compiler-repair successor scaffold
+
+The next-stage local scaffold now lives at `experiments/humanize2_kls_proof_repair/`. Its status is
+**MODEL-FREE ISOLATION PASS / AUTHENTICATED RUN NOT STARTED**. It leaves the accepted
+statement-fidelity candidate and all existing KLS mathematical assets unchanged.
+
+### Target and non-targets
+
+The only target is a disposable theorem, `humanize2_isolated_add_zero`, whose initial proof is
+deliberately ill-typed. The experiment tests whether an actor can use real Lean 4.33.0 diagnostics
+to repair it and pass an independent semantic/process reviewer. It does not prove or restate a KLS
+claim, create a dossier, certify a proof, change a ledger/manuscript, or establish general
+autoformalization ability.
+
+### Physical separation and actual actor visibility
+
+The actor runs in an external three-file workspace:
+
+```text
+AGENTS.md
+CandidateProof.lean
+TASK.md
+```
+
+A rendered macOS Seatbelt profile uses `deny default` and allowlists file data only for that
+workspace, the macOS runtime, installed Codex app, pinned Lean toolchain, actor-only Codex home, and
+actor-only temporary directory. Ancestors receive metadata-only access. The repository and a
+separate reviewer Codex home are not readable. The reviewer runs as a separate read-only Codex
+app-server in the full repository and may read the oracle. Separate homes prevent reviewer
+transcripts from entering actor-visible state.
+
+Humanize2 is still pinned to
+`e8bcede84d4b3365378e04f9c80d0fd397903c30`. The model-free preparer clones it outside Git and
+applies the pinned `humanize2-codex-seatbelt.patch`. The patch wraps only the workspace-write actor
+app-server in Seatbelt and gives actor/reviewer their separate homes. Since Seatbelt cannot nest,
+the actor turn's internal sandbox field is the external-sandbox marker; the reviewer retains the
+upstream read-only mode.
+
+### Reset, compiler loop, verifier, trace, and oracle
+
+`reset_run_state.sh` clears only known paths below a dedicated `/private/tmp` state root, preserves
+lane authentication files, recreates the exact actor fixture, clears both session trees, and
+renders the Seatbelt profile. `verify_scaffold.sh` requires the expected Lean type mismatch before
+a run. The actor must repeatedly execute `lean CandidateProof.lean` and cannot finish before exit
+zero.
+
+`verify_candidate.sh` enforces exact statement preservation, a single theorem, no
+`sorry`/`admit`/`axiom`/`unsafe`, the exact visible file set, and Lean success. The custom Humanize2
+flow holds the actor for at most three rounds and uses a fresh reviewer each time. Reviewer prose is
+not returned to the actor; closed finding codes map to deterministic, non-oracular feedback.
+
+`audit_actor_trace.py` audits every actor-home JSONL record and requires exactly one actor-root
+session, rejecting any other session or descendant, collaboration, unexpected tools or roots,
+shell network/client-state access, forbidden path references, missing
+external-sandbox markers, Seatbelt drift, and denials. It outputs only a compact summary outside
+the repository. `oracle/reference.sha256` pins the reference, ten-item rubric, actor fixtures,
+prompt, isolation and flow configs, flow implementation, trace auditor, candidate/workspace
+verifiers and their shared helper, and Humanize2 patch.
+
+### Validation and authorization state
+
+Model-free validation passed for deterministic reset, the expected failing compiler path, the
+disposable success path, trace-auditor unit tests, oracle/ledger/reviewer-state read denial,
+actor-local writes, Lean execution, Codex app-server startup inside Seatbelt, and the patched
+Humanize2 adapter. Raw
+transcripts, credentials, tokens, and Humanize/Codex state remain external.
+
+No authenticated model run was performed for this successor scaffold. Its disposable live runner
+requires `H2_PROOF_LIVE_RUN_ACK=disposable-only` and separate actor/reviewer Codex authentication.
+Replacing the disposable fixture with any KLS statement, theorem, proof context, compiler output,
+or review still requires fresh explicit user authorization. No mathematical conclusion or status
+change was produced.

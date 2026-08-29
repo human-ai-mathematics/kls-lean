@@ -1,0 +1,40 @@
+(version 1)
+(deny default)
+(import "system.sb")
+
+(allow process*)
+(allow sysctl-read)
+(allow mach-lookup)
+(allow ipc-posix-shm)
+(allow network-outbound)
+
+; Realpath needs metadata on ancestors, but not their file contents.
+(allow file-read-metadata
+  (literal "/private")
+  (literal "/private/tmp")
+  (literal "__STATE_PARENT__")
+  (literal "__STATE_ROOT__")
+  (literal "/Users")
+  (literal "__USER_HOME__")
+  (literal "__USER_HOME__/.elan")
+  (literal "__USER_HOME__/.elan/toolchains"))
+
+(allow file-read*
+  (subpath "/System")
+  (subpath "/usr")
+  (subpath "/bin")
+  (subpath "/sbin")
+  (subpath "/Library")
+  (subpath "/private/etc")
+  (subpath "/dev")
+  (subpath "__CODEX_APP_ROOT__")
+  (subpath "__ACTOR_ROOT__")
+  (subpath "__LEAN_TOOLCHAIN_ROOT__")
+  (subpath "__ACTOR_CODEX_HOME__")
+  (subpath "__ACTOR_RUNTIME_TMP__"))
+
+(allow file-write*
+  (subpath "__ACTOR_ROOT__")
+  (subpath "__ACTOR_CODEX_HOME__")
+  (subpath "__ACTOR_RUNTIME_TMP__")
+  (literal "/dev/null"))

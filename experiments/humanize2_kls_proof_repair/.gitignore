@@ -1,0 +1,14 @@
+# All live state must remain outside the repository. These are defense-in-depth exclusions.
+actor-workspace/
+audit/
+*-codex-home/
+humanize-home/
+*-runtime-tmp/
+actor-seatbelt.sb
+tooling/
+*.jsonl
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal
+__pycache__/
+*.pyc
