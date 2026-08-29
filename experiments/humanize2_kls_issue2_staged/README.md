@@ -7,7 +7,9 @@ the candidate, oracle-pin, and repaired complete-session trace gates. The user a
 remaining API question—the explicit function binder in `HasPoincare`—so Stage 1A is now a
 human-accepted experimental dependency. The dedicated Stage 1B isolated harness has passed its
 model-free reset, compilation, provenance, isolation, verifier, trace-policy, and deterministic
-rerun tests. No Stage 1B model run has started.
+rerun tests. Authenticated Stage 1B Run 1 produced a locally compiling candidate and a clean
+repaired trace, but the exact-surface verifier rejected five optimal-constant theorem APIs. Stage
+1B is not accepted; a fresh bounded repair run requires an explicit human decision.
 
 This experiment reconstructs the already certified Issue 2 linear-test development through a
 blind Humanize2/Codex actor. The existing Lean implementation, natural-language solution,
@@ -238,7 +240,7 @@ artifact, complete-trace, and candidate-only mutation checks and then stops for 
 checklist. No model reviewer exists.
 
 The setup prompt is historical now that the harness exists. The actor prompt is runner-internal and
-must never be pasted into a repository task. The self-contained guarded live entry is:
+must never be pasted into a repository task. Run 1 used this guarded live entry:
 
 ```bash
 export H2_ISSUE2_STAGE1B_STATE_ROOT=/private/tmp/humanize2-kls-issue2-stage1b
@@ -251,11 +253,41 @@ experiments/humanize2_kls_issue2_staged/scripts/stage_1b_run.sh
 The explicit reset before `codex login` is required when the dedicated state root does not yet
 exist. The runner resets again while preserving only that experiment-specific `auth.json`.
 
+Do not execute that sequence again yet: it would reset the stopped Run 1 candidate. A retry must
+first harden and repin the actor-facing theorem signatures, then start a fresh isolated session
+only after explicit human authorization.
+
+## First authenticated Stage 1B run
+
+Run 1 started from commit `23e0cd3`. The actor used one session and one turn, had zero descendants,
+read only the four permitted text files, edited only `CandidateStage1B.lean`, and ran Lean once.
+Its first implementation compiled without a repair iteration. Candidate SHA-256:
+
+```text
+cfde84ba4de0fe4230331979b586fee5da43b4f20aae2bc27dbfdfd5ac9e2df9
+```
+
+The independent verifier recompiled the file but rejected the exact theorem surface. Five
+optimal-constant theorems used explicit positional `μ` and, where applicable, `C` or `L` arguments
+where the frozen API requires implicit parameters. `optimalPoincareConstant_eq_top_iff` used the
+logically equivalent `¬ ∃ C, HasPoincare μ C` form instead of the frozen `∀ C, ¬ HasPoincare μ C`
+type. Human checklist item 4 therefore failed before semantic/proof review.
+
+The runner stopped before its final trace command. The first manual trace audit then misclassified
+the legal Lean subtype delimiter `//` as an external path. After a parser-only repair and regression
+test, re-auditing the same session returned `ok: true`: one session, one turn, zero descendants,
+four local `exec` calls, accepted hashes unchanged, and only candidate mutation. The model was not
+rerun. See:
+
+- `research/explorations/2026-08-29-humanize2-kls-issue2-stage1b-live-run.md`;
+- `research/decisions/2026-08-29-humanize2-kls-issue2-stage1b-trace-subtype-delimiter.md`.
+
 ## Acceptance and mathematical status
 
 Lean exit zero is necessary but insufficient. The human checklist in
 `review/issue2_stage_1a_human_checklist.md` was the Stage 1A semantic acceptance gate; the accepted
-artifact remains only an experimental dependency. The Stage 1B harness has not made a model call
-or a proof attempt. It is not a production proof or ledger event. Promotion into `formalization/`,
-creation of a solution dossier, review certification, and ledger/manuscript updates require their
-normal repository workflows and separate explicit decisions.
+artifact remains only an experimental dependency. Stage 1B Run 1 is a failed experimental
+proof-generation attempt. Its compiling candidate is not accepted, certified, or a ledger event.
+Promotion into `formalization/`, creation of a solution dossier, review certification, and
+ledger/manuscript updates require their normal repository workflows and separate explicit
+decisions.

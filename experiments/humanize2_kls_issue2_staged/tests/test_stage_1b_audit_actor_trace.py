@@ -150,6 +150,21 @@ class AuditActorTraceTest(unittest.TestCase):
             )
             self.assertTrue(summary["ok"], summary["errors"])
 
+    def test_accepts_lean_subtype_delimiter(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            actor, manifest = self._workspace(root)
+            tool_input = {
+                "cmd": "lean CandidateStage1B.lean",
+                "workdir": str(actor),
+                "patch": "def c := ⨅ C : {C : NNReal // HasPoincare μ (C : ℝ)}, C.1",
+            }
+            summary = self._audit(
+                root, actor, manifest, records=_actor_records(str(actor), tool_input=tool_input)
+            )
+            self.assertTrue(summary["ok"], summary["errors"])
+            self.assertNotIn("//", summary["trace_referenced_paths"])
+
     def test_rejects_immutable_mutation_and_extra_file(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)

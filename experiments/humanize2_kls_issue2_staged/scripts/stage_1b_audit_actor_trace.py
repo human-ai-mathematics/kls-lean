@@ -88,7 +88,7 @@ NETWORK_CODE_MARKERS = (
     "urllib.",
 )
 PATH_PATTERN = re.compile(
-    r"(?:/(?![-*])[^\s\\\"'`;,(){}\[\]]+|"
+    r"(?:/(?![-*/])[^\s\\\"'`;,(){}\[\]]+|"
     r"(?:AGENTS|TASK)\.md|AcceptedStage1A\.(?:lean|olean)|CandidateStage1B\.lean)"
 )
 

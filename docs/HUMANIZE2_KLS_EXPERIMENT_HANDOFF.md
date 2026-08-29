@@ -265,8 +265,8 @@ human review. This authorization is limited to Issue 2. It does not cover anothe
 automatic production promotion, a model reviewer, or access to the existing Issue 2 answer.
 
 The experiment plan is in `experiments/humanize2_kls_issue2_staged/`. Its current status is
-**STAGE 1A HUMAN-ACCEPTED EXPERIMENTAL DEPENDENCY / STAGE 1B ISOLATED HARNESS MODEL-FREE PASS /
-STAGE 1B MODEL RUN NOT STARTED**.
+**STAGE 1A HUMAN-ACCEPTED EXPERIMENTAL DEPENDENCY / STAGE 1B RUN 1 TRACE PASS AND EXACT-SURFACE
+FAIL / STAGE 1B NOT ACCEPTED / STAGE 2A NOT STARTED**.
 
 ### Why Issue 2 is a reconstruction benchmark
 
@@ -452,7 +452,7 @@ git diff --check
   exit 0
 ```
 
-The exact self-contained Stage 1B authentication and future live-run sequence is:
+Authenticated Stage 1B Run 1 used this self-contained sequence:
 
 ```bash
 export H2_ISSUE2_STAGE1B_STATE_ROOT=/private/tmp/humanize2-kls-issue2-stage1b
@@ -467,18 +467,62 @@ state root: Codex rejects a `CODEX_HOME` path that does not exist. The runner pe
 deterministic reset and preserves only the dedicated `auth.json`. The actor prompt is an internal
 runner input, not a prompt to paste into this or any other repository task.
 
-This command was not executed. The authorization remains limited to the frozen Issue 2 Stage 1B
-specification, accepted Stage 1A dependency, candidate contents, and actual Lean diagnostics in one
-human-stopped actor session. It does not authorize exposing the existing Issue 2 answer, using a
-model reviewer, promoting output, continuing to Stage 2A, or working on another KLS target.
+Do not execute that sequence again yet: the runner would reset the stopped Run 1 candidate. The
+authorization remains limited to the frozen Issue 2 Stage 1B specification, accepted Stage 1A
+dependency, candidate contents, and actual Lean diagnostics in one human-stopped actor session. It
+does not authorize exposing the existing Issue 2 answer, using a model reviewer, promoting output,
+continuing to Stage 2A, or working on another KLS target.
+
+### Authenticated Stage 1B Run 1: exact-surface failure
+
+Run 1 started from commit `23e0cd3`. Every preflight passed before the subscription model call. The
+actor used one session and one turn, spawned no descendants, read only the permitted text files,
+edited only `CandidateStage1B.lean`, and ran Lean once. Its first implementation compiled with no
+repair iteration. Candidate SHA-256:
+
+```text
+cfde84ba4de0fe4230331979b586fee5da43b4f20aae2bc27dbfdfd5ac9e2df9
+```
+
+The independent verifier recompiled the candidate but rejected its exact API. Five
+optimal-constant theorems exposed `μ`, and where applicable `C` or `L`, as explicit positional
+arguments rather than the frozen implicit parameters. `optimalPoincareConstant_eq_top_iff` used
+the logically equivalent `¬ ∃ C, HasPoincare μ C` proposition rather than the frozen
+`∀ C, ¬ HasPoincare μ C` Lean type. Human checklist item 4 failed, so no semantic/proof acceptance
+review began.
+
+The runner stopped at that verifier and did not reach its final trace command. A manual trace audit
+initially misclassified the legal Lean subtype delimiter `//` in the candidate patch as an external
+path. The parser fix excludes doubled slashes from absolute-path tokens and adds a regression test.
+Re-auditing the same session, without rerunning the model, returned `ok: true`: one root session,
+one turn, zero descendants, four local `exec` calls, accepted hashes unchanged, and only candidate
+mutation.
+
+The actor-facing prose specified the correct mathematics but did not give the full Lean signatures
+of the five exact-surface theorems. Any retry must first harden and repin those signatures, then use
+a fresh isolated actor session after an explicit human repair decision. Do not weaken the checker
+to accept Run 1.
+
+Observed Run 1 and post-run exit codes:
+
+```text
+experiments/humanize2_kls_issue2_staged/scripts/stage_1b_run.sh
+  exit 1 at stage_1b_verify_candidate.sh
+lean CandidateStage1B.lean  # actor lane and independent post-run check
+  exit 0
+experiments/humanize2_kls_issue2_staged/scripts/stage_1b_verify_candidate.sh <actor-root>
+  exit 1; five exact-surface errors
+stage_1b_audit_actor_trace.py  # original parser
+  exit 1; false path token //
+stage_1b_audit_actor_trace.py  # repaired parser, same session
+  exit 0; no errors
+```
 
 The validated harness implementation commit is
-`666fff6983b4364419132f1356eaac00e6771aa6`. This handoff update is the immediately following
-documentation commit. Its final checked worktree state is clean on branch
-`humanize2-kls-autoformalization-experiment`, with `git status --short --branch` printing only the
-branch header. Raw transcripts, credentials, tokens, Codex/Humanize state, machine-private
-configuration, and the generated `.olean` are not committed. Do not paste the Stage 1B actor prompt
-into an existing desktop task.
+`666fff6983b4364419132f1356eaac00e6771aa6`; its original handoff commit is `e5f12b2`. Raw
+transcripts, credentials, tokens, Codex/Humanize state, machine-private configuration, and the
+generated `.olean` are not committed. Do not paste the Stage 1B actor prompt into an existing
+desktop task.
 
 The completed Stage 1A actor used one dedicated subscription-authenticated `CODEX_HOME`; there was
 no model reviewer. Its human acceptance is only an experimental stage gate: it creates no dossier,
@@ -494,10 +538,13 @@ acceptance and Stage 1B prompt boundary are recorded in
 `research/decisions/2026-08-29-humanize2-kls-issue2-stage1a-acceptance-stage1b-prompt.md`.
 
 The Stage 1B harness rationale and model-free validation are recorded append-only in
-`research/decisions/2026-08-29-humanize2-kls-issue2-stage1b-isolated-harness.md`. No Stage 1B model
-run or model proof attempt occurred, so no exploration was created. This harness work changed no
-production Lean, solution, review, ledger, manuscript, proof certification, or mathematical
-status.
+`research/decisions/2026-08-29-humanize2-kls-issue2-stage1b-isolated-harness.md`. The authenticated
+failed attempt is recorded in
+`research/explorations/2026-08-29-humanize2-kls-issue2-stage1b-live-run.md`; the subtype-delimiter
+audit repair is recorded in
+`research/decisions/2026-08-29-humanize2-kls-issue2-stage1b-trace-subtype-delimiter.md`. Run 1
+changed no production Lean, solution, review, ledger, manuscript, proof certification, or
+mathematical status.
 
 The runner-entry clarification and fresh-`CODEX_HOME` reset requirement are recorded append-only in
 `research/decisions/2026-08-29-humanize2-kls-issue2-stage1b-runner-entry.md`.
