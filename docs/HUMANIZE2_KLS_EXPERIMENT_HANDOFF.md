@@ -265,7 +265,8 @@ human review. This authorization is limited to Issue 2. It does not cover anothe
 automatic production promotion, a model reviewer, or access to the existing Issue 2 answer.
 
 The experiment plan is in `experiments/humanize2_kls_issue2_staged/`. Its current status is
-**STAGE 1A SPEC/PROMPT FROZEN / RUNTIME HARNESS NOT YET BUILT / MODEL RUN NOT STARTED**.
+**STAGE 1A FIXTURE/RESET/COMPILER PREFLIGHT PASS / SEATBELT+TRACE RUNNER PENDING / MODEL RUN NOT
+STARTED**.
 
 ### Why Issue 2 is a reconstruction benchmark
 
@@ -295,7 +296,10 @@ reviewer reasoning is returned as compiler feedback.
 - `inputs/issue2_stage_1a_basic_vocabulary.md` is the complete actor-facing mathematical source.
 - `prompts/issue2_stage_1a_actor.md` is the next actor prompt.
 - `review/issue2_stage_1a_human_checklist.md` is human-only and must remain outside the actor lane.
-- `pins/stage_1a.sha256` freezes all three artifacts.
+- `fixtures/actor_workspace/` contains the committed `AGENTS.md`, byte-identical `TASK.md`, and
+  compiler-failing `CandidateStage1A.lean.initial`.
+- `pins/stage_1a.sha256` freezes the specification, prompt, checklist, fixture, and reset/verifier
+  scripts.
 
 Stage 1A asks for exactly three public declarations in the experimental namespace
 `Issue2Autoformalization.Stage1A`: `IsAdmissible`, `dirichletEnergy`, and `HasPoincare`. It excludes
@@ -304,11 +308,17 @@ bound.
 
 ### Next operational step
 
-Do not send the prompt yet. First build a Stage 1A-specific external three-file workspace and
-deterministic reset. Its Seatbelt profile may read the pinned Lean toolchain and compiled upstream
-Mathlib artifacts, but not any compiled or source `FunctionalInequalities` module. Add a candidate
-verifier and reuse or extend the complete-session trace audit. Run adversarial oracle, repository,
-solution, review, ledger, and certificate read probes before authenticating the model call.
+The committed reset now rebuilds a Stage 1A-specific external workspace with exactly `AGENTS.md`,
+`TASK.md`, and `CandidateStage1A.lean`. The scaffold verifier requires the pinned sentinel and its
+expected nonzero Lean diagnostic. The candidate verifier checks the exact import list, namespace,
+three requested declarations, structure fields, forbidden escapes, and compilation under an
+upstream Mathlib-only `LEAN_PATH` that excludes the repository's compiled KLS library. Both the
+expected failing reset path and a model-free valid-definition path passed locally.
+
+Do not send the prompt yet. Next render and test the deny-default Seatbelt profile, add a dedicated
+actor `CODEX_HOME`, integrate the complete-session trace auditor, and run adversarial oracle,
+repository, solution, review, ledger, and certificate read probes. Only upstream Mathlib artifacts
+and the Lean toolchain may be added to the actor allowlist.
 
 The actor uses one dedicated subscription-authenticated `CODEX_HOME`; there is no model reviewer.
 After compilation and trace verification, stop and hand `CandidateStage1A.lean`, its diff, compiler

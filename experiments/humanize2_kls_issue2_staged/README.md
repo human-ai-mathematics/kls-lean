@@ -2,8 +2,10 @@
 
 ## Status
 
-The staged plan, Stage 1A specification, actor prompt, and human-review checklist are frozen.
-No Stage 1A actor workspace has been built and no authenticated model run has started.
+The staged plan, Stage 1A specification, actor prompt, human-review checklist, committed fixture,
+deterministic reset, and compiler/verifier preflight are implemented. The deny-default Seatbelt
+profile, trace integration, and live runner are not yet built. No authenticated model run has
+started.
 
 This experiment reconstructs the already certified Issue 2 linear-test development through a
 blind Humanize2/Codex actor. The existing Lean implementation, natural-language solution,
@@ -67,13 +69,28 @@ repository after the actor has stopped.
 The next prompt is `prompts/issue2_stage_1a_actor.md`, grounded only in
 `inputs/issue2_stage_1a_basic_vocabulary.md`. Stage 1A outputs an isolated
 `CandidateStage1A.lean`; it must not edit production Lean files.
-`pins/stage_1a.sha256` freezes that specification, prompt, and human checklist together.
+`pins/stage_1a.sha256` freezes that specification, prompt, human checklist, three-file fixture, and
+reset/verifier scripts together.
 
-Before running it, the harness must add a Stage 1A-specific external workspace, deterministic
-reset, Mathlib-only import path, deny-default Seatbelt profile, candidate verifier, and trace
-auditor. A dedicated actor `CODEX_HOME` should sign in with the user's ChatGPT subscription.
-Building and validating that run harness is the next repository task; this prompt freeze alone
-does not authorize bypassing the isolation gate.
+The committed fixture is under `fixtures/actor_workspace/`. Rebuild and verify it with:
+
+```bash
+export H2_ISSUE2_STAGE1A_STATE_ROOT=/private/tmp/humanize2-kls-issue2-stage1a
+experiments/humanize2_kls_issue2_staged/scripts/reset_actor_workspace.sh
+experiments/humanize2_kls_issue2_staged/scripts/verify_scaffold.sh
+```
+
+The reset produces exactly `AGENTS.md`, `TASK.md`, and `CandidateStage1A.lean`. The initial
+candidate has the three pinned Mathlib imports and a compiler-failing sentinel. The candidate
+verifier rejects an unchanged sentinel, import/namespace/declaration drift, missing structure
+fields, escape hatches, extra actor files, and any Lean environment that exposes the repository's
+compiled `FunctionalInequalities` library. Its model-free success path has also compiled with the
+upstream Mathlib-only `LEAN_PATH`.
+
+Before a model run, the harness must still add the deny-default Seatbelt profile, dedicated actor
+`CODEX_HOME`, complete-session trace integration, and adversarial forbidden-read probes. The actor
+home should then sign in with the user's ChatGPT subscription. Do not send the prompt before those
+remaining isolation gates pass.
 
 ## Acceptance and mathematical status
 

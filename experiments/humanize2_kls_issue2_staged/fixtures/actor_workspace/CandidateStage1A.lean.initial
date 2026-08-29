@@ -1,0 +1,18 @@
+import Mathlib.Analysis.Calculus.ContDiff.Basic
+import Mathlib.Analysis.Calculus.Gradient.Basic
+import Mathlib.Probability.Moments.Variance
+
+noncomputable section
+
+open MeasureTheory ProbabilityTheory
+
+namespace Issue2Autoformalization.Stage1A
+
+variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+  [CompleteSpace E] [MeasurableSpace E]
+
+-- HUMANIZE2_UNATTEMPTED_STAGE_1A: replace this compiler-failing sentinel with the three frozen
+-- definitions from TASK.md.
+#check stage1AImplementationRequired
+
+end Issue2Autoformalization.Stage1A
