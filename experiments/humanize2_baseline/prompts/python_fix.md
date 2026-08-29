@@ -16,4 +16,3 @@ Requirements:
 
 Do the work with shell/file tools; do not merely describe a patch. If the function is already
 correct because this is a later Ralph round, rerun the tests and leave the files unchanged.
-

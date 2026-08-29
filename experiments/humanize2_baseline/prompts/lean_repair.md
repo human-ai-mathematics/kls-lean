@@ -18,4 +18,3 @@ Required sequence:
 
 Do the work with shell/file tools and include the failing and passing compiler outcomes in the
 final response.
-

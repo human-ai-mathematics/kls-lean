@@ -26,4 +26,3 @@ Reviewer acceptance criteria:
 
 Set `done` to false and give concrete repair instructions if any criterion fails. Set `done` to
 true only after all five checks pass, and name the commands used in the final notes.
-

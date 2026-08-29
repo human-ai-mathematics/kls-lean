@@ -8,4 +8,3 @@ cp \
 cp \
   "$h2_repo_root/experiments/humanize2_baseline/fixtures/lean/ActorReviewerTest.lean.initial" \
   "$h2_repo_root/experiments/humanize2_baseline/lean_demo/ActorReviewerTest.lean"
-

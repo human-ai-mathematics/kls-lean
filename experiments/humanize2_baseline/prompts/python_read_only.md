@@ -10,4 +10,3 @@ Work only as a read-only inspector in this repository.
 Do not modify, create, delete, rename, or format any file. Do not run a command that writes
 build or cache artifacts. Your final response must state the repository root and the two files
 you inspected so the harness context is auditable.
-

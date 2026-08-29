@@ -6,4 +6,3 @@ cd "$h2_repo_root"
 python3 -m unittest discover \
   -s experiments/humanize2_baseline/python_demo \
   -p 'test_*.py'
-
