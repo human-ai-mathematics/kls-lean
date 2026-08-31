@@ -15,10 +15,12 @@ and one-session, one-turn, zero-descendant trace gates all passed. On 2026-09-01
 the sixteen-item review by authorizing Stage 2B. The byte-identical accepted copy is
 `accepted/AcceptedStage2A.lean`; this changes no production declaration or mathematical status.
 
-Stage 2B is specified and Run 1 is authorized. It contains exactly the linear-test energy,
-admissibility from `MemLp (id : E → E) 2 μ`, and the fixed-constant variance bound. Its actor sees
-exactly nine files: the task and candidate, `AGENTS.md`, and the three accepted source/compiled
-pairs. Rayleigh, covariance, spectral, and final Issue 2 results are excluded.
+Stage 2B Run 1 is now a zero-diagnostic `mechanical-pass`. It contains exactly the linear-test
+energy, admissibility from `MemLp (id : E → E) 2 μ`, and the fixed-constant variance bound. The
+actor saw exactly nine files and used one session, one turn, zero descendants, six local `exec`
+calls, and one compiler-feedback repair iteration. The exact surface, immutable dependencies,
+hidden oracle, isolation, and candidate-only trace gates passed. Rayleigh, covariance, spectral,
+and final Issue 2 results remain excluded, and human review is still required.
 
 The exact rejected Run 2 output remains published and pinned at
 `review/pending/CandidateStage1BRun2.lean`; `review/STAGE_1B_RUN2_REVIEW.md` records its historical
@@ -401,7 +403,7 @@ The optional `prompts/issue2_stage_2a_claude5_fable_interactive_review.md` suppo
 phase-by-phase Claude walkthrough after the actor stop; it cannot make or record the human
 decision.
 
-## Authorized Stage 2B Run 1
+## Stage 2B Run 1
 
 The frozen Stage 2B actor surface is in
 `inputs/issue2_stage_2b_linear_test_analysis.md`; the actor prompt is
@@ -410,7 +412,8 @@ The frozen Stage 2B actor surface is in
 dependency pairs, nine-entry fixture, exact three-theorem verifier, hidden production-surface
 hash, Seatbelt policy, one-turn flow, trace auditor, and model-free tests.
 
-Run 1 uses a fresh state root and fresh direct ChatGPT-subscription authentication:
+Run 1 used a fresh state root and fresh direct ChatGPT-subscription authentication. These commands
+are retained as provenance; do not rerun or reset the stopped actor:
 
 ```bash
 export H2_ISSUE2_STAGE2B_STATE_ROOT=/private/tmp/humanize2-kls-issue2-stage2b-run1
@@ -420,9 +423,15 @@ export H2_ISSUE2_STAGE2B_LIVE_RUN_ACK=issue2-stage2b-run1-human-review
 experiments/humanize2_kls_issue2_staged/scripts/stage_2b_run.sh
 ```
 
-The runner will reset the candidate, reproduce all dependencies, rerun the model-free and
-isolation gates, execute exactly one actor turn, verify the stopped output and complete trace, and
-then stop for human review. Authentication and state from Stage 2A are not reused.
+Valid Run 1 started from preparation commit `46601c2`. The actor's second exact compiler call
+exited zero with empty output after one repair iteration. Candidate SHA-256 is
+`69c2eead467fbc0516c191e034cedd1c8593bdaac50c1681912a429337b5dffc`; compact trace-audit
+SHA-256 is `69baf3ad061c0139692e6d3bbdaf66e6bfa3d376246d5d6becbf37f070cad74f`.
+
+The stopped source is `review/pending/CandidateStage2BRun1.lean`. Follow
+`review/STAGE_2B_RUN1_REVIEW.md`; do not edit or rerun the actor. Run 1 changes no production or
+mathematical status and cannot become a Stage 3 dependency until a human records all sixteen
+checklist results and explicitly accepts it.
 
 ## Acceptance and mathematical status
 
@@ -433,4 +442,5 @@ artifacts remain experimental dependencies only. Stage 1B Run 1 failed the exact
 updates require their normal repository workflows and separate explicit decisions. The wrong-cwd
 Codex task is recorded as an invalid pre-run and is not a Stage 2A candidate or attempt result.
 Valid Stage 2A Run 1 is human-accepted only for staged experimental dependency use. Stage 2B is
-authorized but cannot be accepted until its stopped output passes its own sixteen-item human gate.
+a mechanical pass but cannot be accepted until its stopped output passes its own sixteen-item
+human gate.

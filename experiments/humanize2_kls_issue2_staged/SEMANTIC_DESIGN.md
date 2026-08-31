@@ -242,7 +242,10 @@ Stage 2B actor, but remains an experimental dependency rather than production or
 
 ## Stage 2B: linear-test analysis
 
-- **Status:** `specified`; Run 1 authorized, not yet executed
+- **Status:** Run 1 `mechanical-pass`; human review pending
+- **Stopped candidate:**
+  [review/pending/CandidateStage2BRun1.lean](review/pending/CandidateStage2BRun1.lean)
+- **SHA-256:** `69c2eead467fbc0516c191e034cedd1c8593bdaac50c1681912a429337b5dffc`
 - **Frozen specification:**
   [inputs/issue2_stage_2b_linear_test_analysis.md](inputs/issue2_stage_2b_linear_test_analysis.md)
 - **Actor prompt:** [prompts/issue2_stage_2b_actor.md](prompts/issue2_stage_2b_actor.md)
@@ -270,6 +273,13 @@ Stage 2B actor, but remains an experimental dependency rather than production or
   constants, covariance, spectral arguments, and final Issue 2 assembly remain later stages.
 - The nine-entry actor fixture contains the three accepted source/compiled pairs and the current
   task/candidate pair. Compilation must be silent and only the candidate may mutate.
+
+Run 1 compiled silently after one compiler-feedback repair iteration. The exact three-theorem
+surface, hidden production pin, immutable dependencies, one-session/one-turn/zero-descendant
+trace, and candidate-only mutation gates all passed. A post-stop comparison found no semantic or
+API difference; direct use of `InnerProductSpace.toDual.contDiff`, `MemLp.const_inner`, and an
+explicit energy rewrite is proof-only. The candidate remains stopped for all sixteen human-review
+items and is not an accepted Stage 3 dependency.
 
 ## Planned later layers
 
