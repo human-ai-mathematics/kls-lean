@@ -654,5 +654,17 @@ Humanize2 adapter, one actor turn, and a complete-session trace audit. Model-fre
 the exact fixture, deterministic accepted builds, silent known-good surface, escape-hatch
 rejections, physical read/write isolation, Codex app-server probe, trace-auditor tests, and closed
 acknowledgement/login gates. The dedicated actor home still needs direct ChatGPT-subscription
-authentication before the valid model call. Stage 2B and all later mathematics remain out of
-scope.
+authentication before the valid model call.
+
+That valid Run 1 has now completed from pushed commit `4a20147`. The actor used one session, one
+turn, zero descendants, and four local `exec` calls; it read only the five permitted text files,
+edited only `CandidateStage2A.lean`, and silently compiled its first implementation with zero
+repair iterations. The exact five-declaration surface, both accepted dependency pairs, hidden
+oracle surface, physical isolation, and complete trace all passed. Candidate SHA-256 is
+`83847c7ef06cd6045a1d5d5a8595f3fb645be28e8af4c71d3e577187fb0ad586`; compact trace-audit
+SHA-256 is `0be977e90fea1cf5019028c71e3faf90563b2ac990b55cf038396603a61828e1`.
+
+The byte-identical candidate is stopped at
+`experiments/humanize2_kls_issue2_staged/review/pending/CandidateStage2ARun1.lean`; the human guide
+is `review/STAGE_2A_RUN1_REVIEW.md`. No acceptance or mathematical status is automatic. Stage 2B
+and all later mathematics remain blocked pending the sixteen-item human decision.

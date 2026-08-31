@@ -193,7 +193,10 @@ The rejected Run 2 remains separate historical evidence at
 
 ## Stage 2A: linear-test geometry
 
-- **Status:** `specified`; live Run 1 authorized and model-free gates pass, no valid actor run has started
+- **Status:** Run 1 `mechanical-pass`; human review pending
+- **Stopped candidate:**
+  [review/pending/CandidateStage2ARun1.lean](review/pending/CandidateStage2ARun1.lean)
+- **SHA-256:** `83847c7ef06cd6045a1d5d5a8595f3fb645be28e8af4c71d3e577187fb0ad586`
 - **Frozen specification:**
   [inputs/issue2_stage_2a_linear_test_geometry.md](inputs/issue2_stage_2a_linear_test_geometry.md)
 - **Actor prompt:**
@@ -229,9 +232,11 @@ The hidden production comparison fixes only the relevant five-declaration surfac
 actor input and supplies no proof hint. `pins/stage_2a.sha256` locks the specification, prompt,
 rubric, accepted source/hash records, Lean/Lake metadata, seven-entry fixture, surface checker,
 known-good test fixture, isolated runner, Seatbelt policy, one-turn flow, complete-trace auditor,
-and model-free scripts. The user separately authorized one live Run 1, and the runner is complete;
-the fresh dedicated actor home must still be authenticated directly before the call. `specified`
-is not a mechanical or human pass.
+and model-free scripts. Run 1 compiled the exact five-declaration surface silently on its first
+attempt, with one session, one turn, zero descendants, and only candidate mutation. A post-stop
+comparison found no semantic or API difference from the frozen surface; the alternative direct
+`toDual` derivative proof is proof-only. `mechanical-pass` is not `human-accepted`, so no Stage 2B
+actor may consume this candidate yet.
 
 ## Planned later layers
 

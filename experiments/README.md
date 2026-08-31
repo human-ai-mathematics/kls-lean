@@ -18,11 +18,13 @@ Stage 1A and zero-warning Stage 1B Run 3 are human-accepted experimental depende
 Run 2 remains a mechanically successful but human-rejected historical output because it emitted
 one `unnecessarySimpa` linter diagnostic. The Stage 2A linear-test-geometry specification, exact
 five-declaration surface, actor prompt, seven-entry fixture, human checklist, isolated live runner,
-and complete-trace policy are frozen. The user authorized Run 1 and every model-free gate passed;
-the new dedicated actor home still requires direct ChatGPT-subscription authentication before the
-first valid model call.
+and complete-trace policy are frozen. Authorized Run 1 produced a zero-diagnostic exact-surface
+candidate in one actor turn with zero descendants, and every mechanical and trace gate passed. It
+is stopped for human semantic/proof review; Stage 2B has not started.
 
-The Stage 2A actor prompt is
+The Stage 2A candidate and review guide are
+`humanize2_kls_issue2_staged/review/pending/CandidateStage2ARun1.lean` and
+`humanize2_kls_issue2_staged/review/STAGE_2A_RUN1_REVIEW.md`. The actor prompt is
 `humanize2_kls_issue2_staged/prompts/issue2_stage_2a_actor.md`; its complete mathematical input is
 `humanize2_kls_issue2_staged/inputs/issue2_stage_2a_linear_test_geometry.md`. Run 2 and the stopped
 Run 3 output remain immutable historical records; the accepted Run 3 copy is pinned separately.
