@@ -17,6 +17,10 @@ The exact stopped Run 2 output is published, without changing its status, at
 `review/pending/CandidateStage1BRun2.lean`. Follow `review/STAGE_1B_RUN2_REVIEW.md` for the
 independent reproduction and human decision procedure.
 
+The living semantic map is `SEMANTIC_DESIGN.md`. It records the mathematical meaning, Lean
+encoding, intentional differences from production, downstream consequences, and acceptance state
+of every layer without replacing the append-only decision history.
+
 This experiment reconstructs the already certified Issue 2 linear-test development through a
 blind Humanize2/Codex actor. The existing Lean implementation, natural-language solution,
 certificates, reviews, ledger, and statement-fidelity oracle are hidden references for the human
