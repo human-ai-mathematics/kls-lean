@@ -66,6 +66,15 @@ remaining differences are proof-only:
 
 These observations assist review but do not complete the human checklist.
 
+## Optional Claude-assisted interactive walkthrough
+
+The user may use
+`../prompts/issue2_stage_2b_claude5_fable_interactive_review.md` with Claude 5 Fable for a
+read-only, phased walkthrough. Use it as an ordinary interactive conversation, not `/goal`.
+Claude may reproduce evidence and recommend checklist outcomes, but the human user retains the
+accept/reject decision. This optional post-stop review does not resume or provide feedback to the
+actor.
+
 ## Human outcome
 
 There are three valid next actions:

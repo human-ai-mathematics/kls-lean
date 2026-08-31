@@ -431,7 +431,9 @@ SHA-256 is `69baf3ad061c0139692e6d3bbdaf66e6bfa3d376246d5d6becbf37f070cad74f`.
 The stopped source is `review/pending/CandidateStage2BRun1.lean`. Follow
 `review/STAGE_2B_RUN1_REVIEW.md`; do not edit or rerun the actor. Run 1 changes no production or
 mathematical status and cannot become a Stage 3 dependency until a human records all sixteen
-checklist results and explicitly accepts it.
+checklist results and explicitly accepts it. The optional
+`prompts/issue2_stage_2b_claude5_fable_interactive_review.md` provides a read-only, phased Claude
+walkthrough; Claude may recommend an outcome, but only the user may record acceptance.
 
 ## Acceptance and mathematical status
 
