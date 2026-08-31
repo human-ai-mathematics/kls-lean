@@ -1,5 +1,13 @@
 # Humanize2 KLS statement-fidelity experiment handoff
 
+> **Migration note (2026-08-31).** The canonical published copy now lives in
+> `https://github.com/numina-functional-inequalities/kls-lean` on
+> `autoformalization-experiments`. Historical repository, branch, and commit identifiers below
+> describe the original runs and are retained as provenance. The Stage 1B Run 2 output is now
+> pinned at
+> `experiments/humanize2_kls_issue2_staged/review/pending/CandidateStage1BRun2.lean` for human
+> review; it is not an accepted dependency.
+
 ## 1. Purpose
 
 This branch starts the first KLS-facing experiment after the verified Humanize2 → Codex → Lean

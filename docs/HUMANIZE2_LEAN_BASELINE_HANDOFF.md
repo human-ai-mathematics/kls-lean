@@ -1,5 +1,10 @@
 # Humanize2 → Codex → Lean baseline handoff
 
+> **Migration note (2026-08-31).** The canonical published copy now lives in
+> `https://github.com/numina-functional-inequalities/kls-lean` on
+> `autoformalization-experiments`. Historical repository, branch, and commit identifiers below
+> describe the original run and are retained as provenance.
+
 ## 1. Objective
 
 This branch evaluates HumanFIA Humanize2 as a harness（执行框架）for Lean/KLS

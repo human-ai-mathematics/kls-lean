@@ -13,6 +13,10 @@ repaired trace, but the exact-surface verifier rejected five optimal-constant th
 fresh isolated session. Run 2 passed all mechanical gates and is stopped for human semantic/proof
 review.
 
+The exact stopped Run 2 output is published, without changing its status, at
+`review/pending/CandidateStage1BRun2.lean`. Follow `review/STAGE_1B_RUN2_REVIEW.md` for the
+independent reproduction and human decision procedure.
+
 This experiment reconstructs the already certified Issue 2 linear-test development through a
 blind Humanize2/Codex actor. The existing Lean implementation, natural-language solution,
 certificates, reviews, ledger, and statement-fidelity oracle are hidden references for the human
