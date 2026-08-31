@@ -642,8 +642,17 @@ only, restored the seven-entry workspace twice with identical hashes, rejected t
 rejected an added axiom and linter suppression, and silently compiled the known-good exact
 five-declaration surface.
 
-No authenticated Stage 2A model call, actor trace, or candidate exists yet. The current artifacts
-prepare and verify the prompt boundary only. A later live run needs explicit user authorization,
-a fresh external state root and dedicated authentication, and the full isolated runner/trace
-auditor before the prompt is sent to a model. Stage 2B and all later mathematics remain out of
+No valid authenticated Stage 2A model call, actor trace, or candidate exists yet. A user-created
+Codex task started in `/Users/lyuyuwei/Documents/ChatGPT/KLS`, found none of the six fixture files
+besides that checkout's unrelated `AGENTS.md`, changed nothing, and stopped after three audits.
+This wrong-workspace task is invalid pre-run evidence and must not be resumed.
+
+The user then explicitly authorized one isolated Stage 2A Run 1. The completed runner uses the
+fresh root `/private/tmp/humanize2-kls-issue2-stage2a-run1`, the exact acknowledgement
+`issue2-stage2a-run1-human-review`, a deny-default candidate-only Seatbelt profile, the pinned
+Humanize2 adapter, one actor turn, and a complete-session trace audit. Model-free validation passed
+the exact fixture, deterministic accepted builds, silent known-good surface, escape-hatch
+rejections, physical read/write isolation, Codex app-server probe, trace-auditor tests, and closed
+acknowledgement/login gates. The dedicated actor home still needs direct ChatGPT-subscription
+authentication before the valid model call. Stage 2B and all later mathematics remain out of
 scope.

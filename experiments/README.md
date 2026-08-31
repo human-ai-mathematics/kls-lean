@@ -17,8 +17,10 @@ root `README.md` remains the minimal project README inherited from `main`.
 Stage 1A and zero-warning Stage 1B Run 3 are human-accepted experimental dependencies. Stage 1B
 Run 2 remains a mechanically successful but human-rejected historical output because it emitted
 one `unnecessarySimpa` linter diagnostic. The Stage 2A linear-test-geometry specification, exact
-five-declaration surface, actor prompt, seven-entry fixture, human checklist, and deterministic
-model-free gates are frozen. No Stage 2A model call has started.
+five-declaration surface, actor prompt, seven-entry fixture, human checklist, isolated live runner,
+and complete-trace policy are frozen. The user authorized Run 1 and every model-free gate passed;
+the new dedicated actor home still requires direct ChatGPT-subscription authentication before the
+first valid model call.
 
 The Stage 2A actor prompt is
 `humanize2_kls_issue2_staged/prompts/issue2_stage_2a_actor.md`; its complete mathematical input is

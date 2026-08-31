@@ -193,7 +193,7 @@ The rejected Run 2 remains separate historical evidence at
 
 ## Stage 2A: linear-test geometry
 
-- **Status:** `specified`; model-free gates pass, no actor run has started
+- **Status:** `specified`; live Run 1 authorized and model-free gates pass, no valid actor run has started
 - **Frozen specification:**
   [inputs/issue2_stage_2a_linear_test_geometry.md](inputs/issue2_stage_2a_linear_test_geometry.md)
 - **Actor prompt:**
@@ -228,8 +228,10 @@ The rejected Run 2 remains separate historical evidence at
 The hidden production comparison fixes only the relevant five-declaration surface. It is not an
 actor input and supplies no proof hint. `pins/stage_2a.sha256` locks the specification, prompt,
 rubric, accepted source/hash records, Lean/Lake metadata, seven-entry fixture, surface checker,
-known-good test fixture, and model-free scripts. A live model call requires a later explicit
-authorization and a completed isolated runner; `specified` is not a mechanical or human pass.
+known-good test fixture, isolated runner, Seatbelt policy, one-turn flow, complete-trace auditor,
+and model-free scripts. The user separately authorized one live Run 1, and the runner is complete;
+the fresh dedicated actor home must still be authenticated directly before the call. `specified`
+is not a mechanical or human pass.
 
 ## Planned later layers
 

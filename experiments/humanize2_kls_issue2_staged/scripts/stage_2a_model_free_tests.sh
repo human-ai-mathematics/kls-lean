@@ -84,6 +84,28 @@ if "$h2_stage2a_script_dir/stage_2a_verify_candidate.sh" "$h2_actor_root" \
   exit 1
 fi
 
+"$h2_stage2a_script_dir/stage_2a_verify_isolation.sh" >/dev/null
+python3 -m unittest "$h2_stage2a_experiment_root/tests/test_stage_2a_audit_actor_trace.py" \
+  >/dev/null 2>&1
+
+set +e
+env -u H2_ISSUE2_STAGE2A_LIVE_RUN_ACK \
+  H2_ISSUE2_STAGE2A_STATE_ROOT="$h2_state_root" \
+  "$h2_stage2a_script_dir/stage_2a_run.sh" >"$h2_test_root/no-ack.out" 2>&1
+h2_no_ack_status=$?
+H2_ISSUE2_STAGE2A_STATE_ROOT="$h2_state_root" \
+H2_ISSUE2_STAGE2A_LIVE_RUN_ACK=issue2-stage2a-run1-human-review \
+  "$h2_stage2a_script_dir/stage_2a_run.sh" >"$h2_test_root/no-login.out" 2>&1
+h2_no_login_status=$?
+set -e
+if [[ "$h2_no_ack_status" -ne 2 || "$h2_no_login_status" -ne 2 ]]; then
+  echo "Stage 2A runner did not fail closed on acknowledgement/login gates" >&2
+  exit 1
+fi
+rg -Fq 'acknowledge the authorized Issue 2 Stage 2A Run 1 model call' \
+  "$h2_test_root/no-ack.out"
+rg -Fq 'authenticate the dedicated Stage 2A actor home' "$h2_test_root/no-login.out"
+
 "$h2_stage2a_script_dir/stage_2a_reset_actor_workspace.sh" >/dev/null
 "$h2_stage2a_script_dir/stage_2a_verify_scaffold.sh" >/dev/null
-echo "Stage 2A model-free tests passed: deterministic accepted dependency rebuild, exact seven-entry reset, sentinel rejection, silent known-good surface, adversarial axiom rejection, and diagnostic-suppression rejection"
+echo "Stage 2A model-free tests passed: deterministic accepted dependency rebuild, exact seven-entry reset, sentinel rejection, silent known-good surface, adversarial axiom and diagnostic-suppression rejection, candidate-only Seatbelt isolation, complete trace policy, and closed acknowledgement/login gates"

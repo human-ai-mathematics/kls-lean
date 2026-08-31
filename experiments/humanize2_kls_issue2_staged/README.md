@@ -9,10 +9,12 @@ silent Lean compilation, exact surface, isolation, immutable-dependency, oracle-
 trace checks, and the user accepted all fourteen human-review items. Its byte-identical accepted
 copy is `accepted/AcceptedStage1B.lean`.
 
-Stage 2A is now `specified`: its natural-language semantics, exact five-declaration API, actor
-prompt, human checklist, seven-entry external fixture, dependency rebuild, oracle surface, and
-model-free tests are frozen and passing. No subscription-authenticated Stage 2A model call has
-started. Preparing these artifacts changes no production declaration or mathematical status.
+Stage 2A is now `specified` and live-run authorized: its natural-language semantics, exact
+five-declaration API, actor prompt, human checklist, seven-entry external fixture, dependency
+rebuild, oracle surface, candidate-only Seatbelt profile, one-turn flow, fail-closed runner, and
+complete-trace audit are frozen. All model-free gates pass. No valid subscription-authenticated
+Stage 2A model call has started; the fresh dedicated actor home still needs direct authentication.
+Preparing these artifacts changes no production declaration or mathematical status.
 
 The exact rejected Run 2 output remains published and pinned at
 `review/pending/CandidateStage1BRun2.lean`; `review/STAGE_1B_RUN2_REVIEW.md` records its historical
@@ -372,8 +374,12 @@ The human-only rubric is `review/issue2_stage_2a_human_checklist.md`, and
 rebuilds both accepted `.olean` dependencies from pinned source using upstream Mathlib only,
 restores exactly seven actor-visible entries, rejects the failing sentinel and forbidden escape
 hatches, and compiles a hidden known-good five-declaration surface with empty compiler output.
-This is a pre-model gate only; a live Stage 2A actor run still requires an explicit authorization
-and a separately completed isolated runner.
+The user supplied the separate live-run authorization on 2026-08-31. The complete runner now
+requires `H2_ISSUE2_STAGE2A_LIVE_RUN_ACK=issue2-stage2a-run1-human-review`, a fresh dedicated root
+at `/private/tmp/humanize2-kls-issue2-stage2a-run1`, and direct ChatGPT-subscription authentication
+for that root's `actor-codex-home`. Model-free validation additionally proves the deny-default
+Seatbelt read/write boundary, Codex app-server availability, Humanize2 adapter pin, one-session
+trace policy, and closed acknowledgement/login gates. No valid Run 1 model call has occurred yet.
 
 ## Acceptance and mathematical status
 
@@ -381,4 +387,5 @@ Lean exit zero is necessary but insufficient. The accepted Stage 1A and Stage 1B
 experimental dependencies only. Stage 1B Run 1 failed the exact surface and Run 2 was rejected on
 style; neither is accepted, certified, or a ledger event. Stage 2A has not run. Promotion into
 `formalization/`, creation of a solution dossier, review certification, and ledger/manuscript
-updates require their normal repository workflows and separate explicit decisions.
+updates require their normal repository workflows and separate explicit decisions. The wrong-cwd
+Codex task is recorded as an invalid pre-run and is not a Stage 2A candidate or attempt result.

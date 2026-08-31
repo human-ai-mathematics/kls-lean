@@ -3,6 +3,7 @@
 h2_stage2a_script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 h2_stage2a_experiment_root="$(cd "$h2_stage2a_script_dir/.." && pwd)"
 h2_stage2a_repo_root="$(git -C "$h2_stage2a_experiment_root" rev-parse --show-toplevel)"
+h2_stage2a_humanize_commit="e8bcede84d4b3365378e04f9c80d0fd397903c30"
 h2_stage2a_stage1a_source_sha256="9bb81dd659453cfb7bcc514cc5d20693209ca985e049edd46f0da8f9de1395e6"
 h2_stage2a_stage1a_olean_sha256="212cd1f5a0c20d2f3974c5948ea4c26550409a5b3b7b47a4b65e1e9cdf65a3a0"
 h2_stage2a_stage1b_source_sha256="027e69674f78eb735b380b18beaf43e55779e0634d7222f46681f1bae30b752d"
@@ -57,6 +58,21 @@ h2_stage2a_kls_build_root() {
   h2_stage2a_realpath "$h2_stage2a_repo_root/formalization/.lake/build/lib/lean"
 }
 
+h2_stage2a_baseline_formalization_root() {
+  local h2_build_root
+  h2_build_root="$(h2_stage2a_kls_build_root)"
+  cd "$h2_build_root/../../../.." && pwd
+}
+
+h2_stage2a_main_checkout() {
+  local h2_checkout="${H2_ISSUE2_MAIN_CHECKOUT:-}"
+  if [[ -z "$h2_checkout" ]]; then
+    h2_checkout="$(git -C "$h2_stage2a_repo_root" worktree list --porcelain | \
+      awk '/^worktree / { sub(/^worktree /, ""); print; exit }')"
+  fi
+  h2_stage2a_realpath "$h2_checkout"
+}
+
 h2_stage2a_mathlib_lean_path() {
   local h2_full_path
   local h2_kls_build
@@ -96,6 +112,18 @@ h2_stage2a_mathlib_lean_path() {
 h2_stage2a_actor_lean_path() {
   local h2_actor_root="${1:?actor root required}"
   printf '%s:%s\n' "$h2_actor_root" "$(h2_stage2a_mathlib_lean_path)"
+}
+
+h2_stage2a_lean_path_components() {
+  local h2_lean_path
+  local h2_component
+  local -a h2_components=()
+  h2_lean_path="$(h2_stage2a_mathlib_lean_path)"
+  IFS=: read -r -a h2_components <<<"$h2_lean_path"
+  for h2_component in "${h2_components[@]}"; do
+    [[ -n "$h2_component" ]] || continue
+    printf '%s\n' "$h2_component"
+  done
 }
 
 h2_stage2a_sha256() {
