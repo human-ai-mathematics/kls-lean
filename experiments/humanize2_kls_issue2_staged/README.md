@@ -82,8 +82,9 @@ The actor may see only:
 
 It must not see the repository worktree, existing `FunctionalInequalities` sources, Issue 2 proof
 or certificate, `solutions/`, `research/reviews/`, either ledger, the statement-fidelity oracle,
-or artifacts from later stages. No model reviewer is used. The human reviewer may inspect the full
-repository after the actor has stopped.
+or artifacts from later stages. No model reviewer participates in the actor harness. After the
+actor has stopped, the human reviewer may inspect the full repository and may use a separately
+authorized interactive review assistant without returning its findings to that actor.
 
 ## Frozen Stage 1A harness
 
@@ -376,7 +377,7 @@ rebuilds both accepted `.olean` dependencies from pinned source using upstream M
 restores exactly seven actor-visible entries, rejects the failing sentinel and forbidden escape
 hatches, and compiles a hidden known-good five-declaration surface with empty compiler output.
 The user supplied the separate live-run authorization on 2026-08-31. The complete runner required
-requires `H2_ISSUE2_STAGE2A_LIVE_RUN_ACK=issue2-stage2a-run1-human-review`, a fresh dedicated root
+`H2_ISSUE2_STAGE2A_LIVE_RUN_ACK=issue2-stage2a-run1-human-review`, a fresh dedicated root
 at `/private/tmp/humanize2-kls-issue2-stage2a-run1`, and direct ChatGPT-subscription authentication
 for that root's `actor-codex-home`. Model-free validation additionally proves the deny-default
 Seatbelt read/write boundary, Codex app-server availability, Humanize2 adapter pin, one-session
@@ -392,12 +393,16 @@ SHA-256 is `0be977e90fea1cf5019028c71e3faf90563b2ac990b55cf038396603a61828e1`.
 The stopped source is `review/pending/CandidateStage2ARun1.lean`. Follow
 `review/STAGE_2A_RUN1_REVIEW.md`; do not edit or rerun the actor. Stage 2B remains blocked until a
 human records all sixteen checklist results and explicitly accepts, rejects, or requests repair.
+The optional `prompts/issue2_stage_2a_claude5_fable_interactive_review.md` supports a read-only,
+phase-by-phase Claude walkthrough after the actor stop; it cannot make or record the human
+decision.
 
 ## Acceptance and mathematical status
 
 Lean exit zero is necessary but insufficient. The accepted Stage 1A and Stage 1B artifacts remain
 experimental dependencies only. Stage 1B Run 1 failed the exact surface and Run 2 was rejected on
-style; neither is accepted, certified, or a ledger event. Stage 2A has not run. Promotion into
+style; neither is accepted, certified, or a ledger event. Stage 2A Run 1 is a mechanical pass but
+is not human-accepted. Promotion into
 `formalization/`, creation of a solution dossier, review certification, and ledger/manuscript
 updates require their normal repository workflows and separate explicit decisions. The wrong-cwd
 Codex task is recorded as an invalid pre-run and is not a Stage 2A candidate or attempt result.
