@@ -23,6 +23,11 @@ srcDir = "../accepted"
 roots = ["AcceptedStage2A"]
 
 [[lean_lib]]
+name = "Stage2BAccepted"
+srcDir = "../accepted"
+roots = ["AcceptedStage2B"]
+
+[[lean_lib]]
 name = "Stage1BRun2Review"
 srcDir = "pending"
 roots = ["CandidateStage1BRun2"]
@@ -41,3 +46,8 @@ roots = ["CandidateStage2ARun1"]
 name = "Stage2BRun1Review"
 srcDir = "pending"
 roots = ["CandidateStage2BRun1"]
+
+[[lean_lib]]
+name = "Stage3Run1Review"
+srcDir = "pending"
+roots = ["CandidateStage3Run1"]

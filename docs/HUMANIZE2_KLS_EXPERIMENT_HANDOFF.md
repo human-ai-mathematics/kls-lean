@@ -690,3 +690,16 @@ isolation, trace-policy, and fail-closed live gates. One fresh subscription-auth
 `gpt-5.6-sol` Run 1 at high effort is authorized under
 `/private/tmp/humanize2-kls-issue2-stage3-run1`; it must stop at `mechanical-pass` for a separate
 human decision.
+
+Valid Run 1 started from pushed preparation commit `ab32dba`. The single high-effort actor session
+used one turn, zero descendants, six local `exec` calls, and exactly the eleven permitted files.
+After three compiler-feedback repair iterations, its fourth exact Lean call exited zero with empty
+output. Candidate SHA-256 is
+`4b4a6950fa80b4bd13ea291ff25955b9dca075de52c92e1900783066ce8a0583`; compact trace-audit
+SHA-256 is `cfbb822a10d60d1175fb2a5178f0a64aa56bbc6ba62521ff706dd9695995f8cd`.
+
+The exact five-declaration verifier, hidden oracle, immutable dependencies, candidate-only
+mutation, physical isolation, and complete trace gates all passed. The stopped source is
+`experiments/humanize2_kls_issue2_staged/review/pending/CandidateStage3Run1.lean`; it remains only
+`mechanical-pass` pending the sixteen-item human review and an explicit accept/reject/repair
+decision.

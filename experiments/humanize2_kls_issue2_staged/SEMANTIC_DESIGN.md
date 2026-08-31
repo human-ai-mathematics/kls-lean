@@ -287,7 +287,10 @@ dossier, ledger, manuscript, or mathematical status.
 
 ## Stage 3: extended Rayleigh quotient
 
-- **Status:** `specified`; authorized Run 1 not yet started
+- **Status:** Run 1 `mechanical-pass`; human review pending
+- **Stopped candidate:**
+  [review/pending/CandidateStage3Run1.lean](review/pending/CandidateStage3Run1.lean)
+- **SHA-256:** `4b4a6950fa80b4bd13ea291ff25955b9dca075de52c92e1900783066ce8a0583`
 - **Frozen specification:**
   [inputs/issue2_stage_3_rayleigh_quotient.md](inputs/issue2_stage_3_rayleigh_quotient.md)
 - **Actor prompt:** [prompts/issue2_stage_3_actor.md](prompts/issue2_stage_3_actor.md)
@@ -321,8 +324,16 @@ dossier, ledger, manuscript, or mathematical status.
 `pins/stage_3.sha256` freezes the specification, actor prompt, human rubric, four accepted
 dependency pairs, Lean/Lake metadata, eleven-entry fixture, hidden five-declaration production
 surface hash, exact-surface verifier, known-good fixture, isolation policy, one-turn flow, runner,
-complete-trace auditor, and model-free tests. No model call or mechanical result is implied by this
-`specified` status.
+complete-trace auditor, and model-free tests. Run 1 compiled silently after three
+compiler-feedback repair iterations. The exact surface, hidden oracle, immutable dependencies,
+one-session/one-turn/zero-descendant trace, and candidate-only mutation gates all passed.
+
+A post-stop comparison found no semantic or new API difference. The global bound's explicit
+zero/positive-energy split, symmetric application of `ENNReal.ofReal_div_of_pos`, and named
+positive-numerator witness for `ENNReal.div_zero` are proof-only. The pre-accepted namespace
+remains an API difference from production, and missing docstrings are documentation-only. The
+candidate remains stopped for all sixteen human-review items and is not an accepted Stage 4
+dependency.
 
 ## Planned later layers
 

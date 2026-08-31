@@ -20,10 +20,12 @@ linear-test energy, admissibility from `MemLp (id : E → E) 2 μ`, and the fixe
 bound. A Claude 5 Fable interactive review independently reproduced the mechanical evidence and
 returned all sixteen items `PASS`; the accepted source is byte-identical to the stopped candidate.
 
-Stage 3 is `specified` and authorized for one isolated Run 1. Its five declarations define the
+Stage 3 Run 1 is now a zero-diagnostic `mechanical-pass`. Its five declarations define the
 extended Poincaré Rayleigh quotient and compare it with the extended optimal constant, including
-positive-energy, zero-energy, and no-finite-constant cases. The full eleven-entry harness and
-model-free suite are frozen by `pins/stage_3.sha256`; no live result or acceptance is automatic.
+positive-energy, zero-energy, and no-finite-constant cases. The actor used one session, one turn,
+zero descendants, six local `exec` calls, and three compiler-feedback repair iterations. The exact
+surface, hidden oracle, immutable dependencies, isolation, and candidate-only trace gates passed;
+human review is still required.
 
 The exact rejected Run 2 output remains published and pinned at
 `review/pending/CandidateStage1BRun2.lean`; `review/STAGE_1B_RUN2_REVIEW.md` records its historical
@@ -458,6 +460,17 @@ sentinel, silent known-good surface, axiom and diagnostic-suppression rejection,
 Seatbelt isolation, one-session/one-turn/zero-descendant trace policy, and fail-closed live gates.
 The append-only acceptance and authorization record is
 `research/decisions/2026-09-01-humanize2-kls-issue2-stage2b-acceptance-stage3-authorization.md`.
+
+Valid Run 1 started from pushed preparation commit `ab32dba` and the fresh dedicated state root
+`/private/tmp/humanize2-kls-issue2-stage3-run1`. Its fourth exact compiler call exited zero with
+empty output after three repair iterations. Candidate SHA-256 is
+`4b4a6950fa80b4bd13ea291ff25955b9dca075de52c92e1900783066ce8a0583`; compact trace-audit
+SHA-256 is `cfbb822a10d60d1175fb2a5178f0a64aa56bbc6ba62521ff706dd9695995f8cd`.
+
+The stopped source is `review/pending/CandidateStage3Run1.lean`. Follow
+`review/STAGE_3_RUN1_REVIEW.md`; do not edit or rerun the actor. A post-stop comparison found no
+semantic or new API difference, only proof-construction variants. Run 1 is not an accepted Stage 4
+dependency until a human completes and records all sixteen checklist items.
 
 ## Acceptance and mathematical status
 
