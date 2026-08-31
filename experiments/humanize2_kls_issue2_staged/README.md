@@ -2,24 +2,23 @@
 
 ## Status
 
-The first subscription-authenticated Stage 1A actor run produced a compiling candidate and passed
-the candidate, oracle-pin, and repaired complete-session trace gates. The user accepted the sole
-remaining API question—the explicit function binder in `HasPoincare`—so Stage 1A is now a
-human-accepted experimental dependency. The dedicated Stage 1B isolated harness has passed its
-model-free reset, compilation, provenance, isolation, verifier, trace-policy, and deterministic
-rerun tests. Authenticated Stage 1B Run 1 produced a locally compiling candidate and a clean
-repaired trace, but the exact-surface verifier rejected five optimal-constant theorem APIs. Stage
-1B is not accepted. Run 2 passed its original mechanical gates, but the user rejected its one
-`unnecessarySimpa` linter diagnostic and authorized a fresh Run 3 whose exact Lean command must
-exit zero with empty output. Run 3 passed that stricter mechanical gate, the exact surface,
-isolation, immutable-dependency, oracle-pin, and complete-trace checks. It is stopped for human
-semantic/proof review and changes no declaration or mathematical requirement.
+Stage 1A and zero-warning Stage 1B Run 3 are human-accepted experimental dependencies. Stage 1B
+Run 1 failed its exact theorem surface; Run 2 passed its original mechanical gates but was
+human-rejected because it emitted one `unnecessarySimpa` linter diagnostic. Fresh Run 3 passed
+silent Lean compilation, exact surface, isolation, immutable-dependency, oracle-pin, and complete
+trace checks, and the user accepted all fourteen human-review items. Its byte-identical accepted
+copy is `accepted/AcceptedStage1B.lean`.
+
+Stage 2A is now `specified`: its natural-language semantics, exact five-declaration API, actor
+prompt, human checklist, seven-entry external fixture, dependency rebuild, oracle surface, and
+model-free tests are frozen and passing. No subscription-authenticated Stage 2A model call has
+started. Preparing these artifacts changes no production declaration or mathematical status.
 
 The exact rejected Run 2 output remains published and pinned at
 `review/pending/CandidateStage1BRun2.lean`; `review/STAGE_1B_RUN2_REVIEW.md` records its historical
-review path. The current zero-warning candidate is
-`review/pending/CandidateStage1BRun3.lean`; follow `review/STAGE_1B_RUN3_REVIEW.md` for independent
-reproduction and human review. Do not edit either stopped actor output.
+review path. The accepted zero-warning source remains preserved at
+`review/pending/CandidateStage1BRun3.lean`; `review/STAGE_1B_RUN3_REVIEW.md` records its independent
+reproduction and acceptance outcome. Do not edit either stopped actor output or the accepted copy.
 
 The living semantic map is `SEMANTIC_DESIGN.md`. It records the mathematical meaning, Lean
 encoding, intentional differences from production, downstream consequences, and acceptance state
@@ -41,7 +40,8 @@ after a human accepts its statement, assumptions, namespace, and compiled Lean o
    Nonnegativity, derivative/gradient compatibility, monotonicity, the extended optimal constant,
    and the finite-versus-`⊤` boundary.
 3. **Stage 2A — linear-test geometry**
-   The linear test, its evaluation rule, gradient, and elementary Hilbert-space identities.
+   The linear test, its evaluation rule and function equality, a pointwise gradient witness, and
+   the gradient formula.
 4. **Stage 2B — linear-test analysis**
    Energy, admissibility from a second moment, and the fixed-constant variance bound.
 5. **Stage 3 — extended Rayleigh layer**
@@ -319,7 +319,7 @@ experiments/humanize2_kls_issue2_staged/scripts/stage_1b_run.sh
 The login must be performed directly for the new dedicated home; no `auth.json` is copied from Run
 1 or Stage 1A.
 
-## Authenticated Stage 1B Run 2: mechanical pass, human review pending
+## Authenticated Stage 1B Run 2: mechanical pass, human style rejection
 
 Run 2 started from preparation commit `b62f18f` in the fresh external root
 `/private/tmp/humanize2-kls-issue2-stage1b-run2`. The new dedicated actor home was authenticated
@@ -342,18 +342,43 @@ compilation. The oracle pin and complete harness pinset passed. The complete tra
 tool use, and only candidate mutation. The compact audit JSON SHA-256 is
 `f3519b985381ba083e85b422273a782943f572bc08daa6683fa0ad2f5829731f`.
 
-The runner stopped before acceptance. Do not rerun or reset this Run 2 root while it awaits the
-pinned thirteen-item human checklist. Mechanical PASS does not permit Stage 2A, production
+The runner stopped before acceptance. The later zero-diagnostics policy rejected this candidate;
+do not rerun or reset its historical root. Its original mechanical PASS did not permit production
 promotion, a dossier, certification, ledger/manuscript edits, or any mathematical status change.
 The full attempt record is
 `research/explorations/2026-08-30-humanize2-kls-issue2-stage1b-run2.md`.
 
+## Stage 1B Run 3 acceptance and frozen Stage 2A prompt
+
+Fresh Run 3 produced the silent candidate with SHA-256
+`027e69674f78eb735b380b18beaf43e55779e0634d7222f46681f1bae30b752d`. The exact compiler command
+emitted no output, all thirteen declaration surfaces matched, the accepted Stage 1A dependency
+remained immutable, and the complete trace contained one session, one turn, zero descendants, and
+only candidate mutation. The user accepted every human-review item and authorized Stage 2A prompt
+preparation. The append-only decision is
+`research/decisions/2026-08-31-humanize2-kls-issue2-stage1b-run3-acceptance-stage2a-prompt.md`.
+
+Stage 2A contains exactly `linearTest`, `linearTest_apply`, `linearTest_eq_inner`,
+`hasGradientAt_linearTest`, and `gradient_linearTest`. It freezes `inner ℝ v x` in that order,
+requires completeness only for the two gradient declarations, remains valid in dimension zero,
+and introduces no measurable-space or measure hypothesis. Its actor-facing files are:
+
+- `inputs/issue2_stage_2a_linear_test_geometry.md`;
+- `prompts/issue2_stage_2a_actor.md`; and
+- `fixtures/stage_2a_actor_workspace/`.
+
+The human-only rubric is `review/issue2_stage_2a_human_checklist.md`, and
+`pins/stage_2a.sha256` freezes the prompt lane and toolchain metadata. Model-free validation
+rebuilds both accepted `.olean` dependencies from pinned source using upstream Mathlib only,
+restores exactly seven actor-visible entries, rejects the failing sentinel and forbidden escape
+hatches, and compiles a hidden known-good five-declaration surface with empty compiler output.
+This is a pre-model gate only; a live Stage 2A actor run still requires an explicit authorization
+and a separately completed isolated runner.
+
 ## Acceptance and mathematical status
 
-Lean exit zero is necessary but insufficient. The human checklist in
-`review/issue2_stage_1a_human_checklist.md` was the Stage 1A semantic acceptance gate; the accepted
-artifact remains only an experimental dependency. Stage 1B Run 1 is a failed experimental
-proof-generation attempt. Its compiling candidate is not accepted, certified, or a ledger event.
-Promotion into `formalization/`, creation of a solution dossier, review certification, and
-ledger/manuscript updates require their normal repository workflows and separate explicit
-decisions.
+Lean exit zero is necessary but insufficient. The accepted Stage 1A and Stage 1B artifacts remain
+experimental dependencies only. Stage 1B Run 1 failed the exact surface and Run 2 was rejected on
+style; neither is accepted, certified, or a ledger event. Stage 2A has not run. Promotion into
+`formalization/`, creation of a solution dossier, review certification, and ledger/manuscript
+updates require their normal repository workflows and separate explicit decisions.

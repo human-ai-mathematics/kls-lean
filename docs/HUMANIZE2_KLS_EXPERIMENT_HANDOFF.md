@@ -275,7 +275,7 @@ automatic production promotion, a model reviewer, or access to the existing Issu
 The experiment plan is in `experiments/humanize2_kls_issue2_staged/`. Its current status is
 **STAGE 1A HUMAN-ACCEPTED EXPERIMENTAL DEPENDENCY / STAGE 1B RUN 1 EXACT-SURFACE FAIL /
 RUN 2 ORIGINAL MECHANICAL PASS BUT HUMAN STYLE REJECT / ZERO-WARNING RUN 3 MECHANICAL PASS AND
-HUMAN REVIEW PENDING / STAGE 2A NOT STARTED**.
+HUMAN ACCEPTED / STAGE 2A PROMPT AND MODEL-FREE FIXTURE FROZEN / STAGE 2A MODEL NOT RUN**.
 
 ### Why Issue 2 is a reconstruction benchmark
 
@@ -476,11 +476,12 @@ state root: Codex rejects a `CODEX_HOME` path that does not exist. The runner pe
 deterministic reset and preserves only the dedicated `auth.json`. The actor prompt is an internal
 runner input, not a prompt to paste into this or any other repository task.
 
-Do not execute that sequence again yet: the runner would reset the stopped Run 1 candidate. The
-authorization remains limited to the frozen Issue 2 Stage 1B specification, accepted Stage 1A
-dependency, candidate contents, and actual Lean diagnostics in one human-stopped actor session. It
-does not authorize exposing the existing Issue 2 answer, using a model reviewer, promoting output,
-continuing to Stage 2A, or working on another KLS target.
+Do not execute that historical sequence again: the runner would reset the stopped Run 1 candidate.
+That run's authorization was limited to the frozen Issue 2 Stage 1B specification, accepted Stage
+1A dependency, candidate contents, and actual Lean diagnostics in one human-stopped actor session.
+At that point it did not authorize exposing the existing Issue 2 answer, using a model reviewer,
+promoting output, continuing to Stage 2A, or working on another KLS target. The later Stage 2A
+prompt-preparation boundary is recorded in Section 14.
 
 ### Authenticated Stage 1B Run 1: exact-surface failure
 
@@ -609,8 +610,40 @@ changed no production Lean, solution, review, ledger, manuscript, proof certific
 mathematical status.
 
 Run 2 likewise changed no production Lean, solution, persisted review, ledger, manuscript, proof
-certification, or mathematical status. Human acceptance and any Stage 2A authorization remain
-separate future decisions.
+certification, or mathematical status. The later Stage 1B Run 3 acceptance and Stage 2A prompt
+boundary are recorded separately below.
 
 The runner-entry clarification and fresh-`CODEX_HOME` reset requirement are recorded append-only in
 `research/decisions/2026-08-29-humanize2-kls-issue2-stage1b-runner-entry.md`.
+
+## 14. Stage 1B Run 3 acceptance and Stage 2A prompt freeze
+
+On 2026-08-31 the user accepted zero-warning Stage 1B Run 3 as an experimental dependency. The
+accepted source is byte-identical to the stopped candidate and has SHA-256
+`027e69674f78eb735b380b18beaf43e55779e0634d7222f46681f1bae30b752d`. It is pinned at
+`experiments/humanize2_kls_issue2_staged/accepted/AcceptedStage1B.lean`. All fourteen review items,
+including silent Lean compilation and the no-suppression policy, are recorded in
+`research/decisions/2026-08-31-humanize2-kls-issue2-stage1b-run3-acceptance-stage2a-prompt.md`.
+
+Stage 2A is now a frozen pre-model package. It asks for exactly five declarations:
+`linearTest`, `linearTest_apply`, `linearTest_eq_inner`, `hasGradientAt_linearTest`, and
+`gradient_linearTest`. The function is exactly $x \mapsto \langle v,x\rangle_{\mathbb R}$,
+encoded as `inner ℝ v x`. Only the two gradient declarations add `CompleteSpace E`; the stage has
+no measurable-space, measure, probability, moment, finite-dimensionality, or nontriviality
+assumption and remains valid in dimension zero.
+
+The actor prompt is
+`experiments/humanize2_kls_issue2_staged/prompts/issue2_stage_2a_actor.md`; the frozen mathematical
+source is `inputs/issue2_stage_2a_linear_test_geometry.md`, and the human-only review gate is
+`review/issue2_stage_2a_human_checklist.md`. The external fixture contains exactly `AGENTS.md`,
+`TASK.md`, both accepted source/compiled pairs, and `CandidateStage2A.lean`. Deterministic
+model-free validation rebuilt both accepted `.olean` files with Lean 4.33.0 and upstream Mathlib
+only, restored the seven-entry workspace twice with identical hashes, rejected the sentinel,
+rejected an added axiom and linter suppression, and silently compiled the known-good exact
+five-declaration surface.
+
+No authenticated Stage 2A model call, actor trace, or candidate exists yet. The current artifacts
+prepare and verify the prompt boundary only. A later live run needs explicit user authorization,
+a fresh external state root and dedicated authentication, and the full isolated runner/trace
+auditor before the prompt is sent to a model. Stage 2B and all later mathematics remain out of
+scope.

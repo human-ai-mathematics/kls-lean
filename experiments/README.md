@@ -14,12 +14,13 @@ root `README.md` remains the minimal project README inherited from `main`.
 
 ## Current Issue 2 gate
 
-Stage 1A is a human-accepted experimental dependency. Stage 1B Run 2 passed its original
-compilation, exact-surface, immutable-dependency, and trace gates, but the user rejected its one
-`unnecessarySimpa` linter diagnostic. Fresh zero-warning Run 3 passed the silent compiler,
-exact-surface, immutable-dependency, isolation, and complete-trace gates. It is stopped for human
-semantic/proof review; Stage 2A has not started.
+Stage 1A and zero-warning Stage 1B Run 3 are human-accepted experimental dependencies. Stage 1B
+Run 2 remains a mechanically successful but human-rejected historical output because it emitted
+one `unnecessarySimpa` linter diagnostic. The Stage 2A linear-test-geometry specification, exact
+five-declaration surface, actor prompt, seven-entry fixture, human checklist, and deterministic
+model-free gates are frozen. No Stage 2A model call has started.
 
-Review the Run 3 candidate using
-`humanize2_kls_issue2_staged/review/STAGE_1B_RUN3_REVIEW.md`. Run 2 remains immutable historical
-output.
+The Stage 2A actor prompt is
+`humanize2_kls_issue2_staged/prompts/issue2_stage_2a_actor.md`; its complete mathematical input is
+`humanize2_kls_issue2_staged/inputs/issue2_stage_2a_linear_test_geometry.md`. Run 2 and the stopped
+Run 3 output remain immutable historical records; the accepted Run 3 copy is pinned separately.

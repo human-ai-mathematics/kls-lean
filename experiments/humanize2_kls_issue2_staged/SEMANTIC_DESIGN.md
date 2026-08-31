@@ -126,8 +126,10 @@ The acceptance decision is
 
 ## Stage 1B: foundational lemmas and optimal constant
 
-- **Status:** Run 2 human-rejected on style; zero-warning Run 3 mechanical pass, human review pending
-- **Stopped candidate:**
+- **Status:** `human-accepted` experimental dependency; Run 2 remains human-rejected on style
+- **Accepted source:**
+  [accepted/AcceptedStage1B.lean](accepted/AcceptedStage1B.lean)
+- **Stopped source retained for provenance:**
   [review/pending/CandidateStage1BRun3.lean](review/pending/CandidateStage1BRun3.lean)
 - **SHA-256:** `027e69674f78eb735b380b18beaf43e55779e0634d7222f46681f1bae30b752d`
 - **Frozen specification:**
@@ -178,24 +180,56 @@ The Run 3 record is
 and the reproduction guide is
 [review/STAGE_1B_RUN3_REVIEW.md](review/STAGE_1B_RUN3_REVIEW.md).
 
-### Run 3 decision still required
+### Run 3 human decision
 
-A human must now decide whether the following Run 3 design choices faithfully represent the
-intended layer:
-
-1. nonnegativity may be stated without an integrability hypothesis because the energy definition
-   is total, while later mathematical use remains restricted by admissibility;
-2. the Riesz norm bridge is the intended real-Hilbert identification;
-3. the Stage 1A explicit binder is acceptable throughout the accessor API;
-4. an infimum over finite nonnegative valid constants is the intended extended optimal constant;
-5. the empty-family value `⊤` and the universal-negation equivalence are the intended boundary;
-6. no theorem implicitly claims equivalence with a Sobolev-closed Poincaré constant; and
-7. Stage 1B remains an experimental dependency rather than production code; and
-8. the exact compiler command is silent without any diagnostic suppression.
-
-Until a human Run 3 decision is recorded, Stage 1B must not be copied into `accepted/` or exposed
-to a Stage 2A actor. The rejected Run 2 remains separate historical evidence at
+On 2026-08-31 the user accepted the totalized-energy interpretation, the real-Hilbert Riesz norm
+bridge, the accepted Stage 1A binder convention, the finite-constant `ENNReal` infimum, the empty
+family value `⊤`, the absence of a Sobolev-closure claim, the experimental-only status boundary,
+and the exact silent-compiler requirement. The Run 3 source was copied byte-for-byte into
+`accepted/AcceptedStage1B.lean` and may now be exposed to Stage 2A. The acceptance decision is
+[2026-08-31-humanize2-kls-issue2-stage1b-run3-acceptance-stage2a-prompt.md](../../research/decisions/2026-08-31-humanize2-kls-issue2-stage1b-run3-acceptance-stage2a-prompt.md).
+The rejected Run 2 remains separate historical evidence at
 [2026-08-30-humanize2-kls-issue2-stage1b-run2.md](../../research/explorations/2026-08-30-humanize2-kls-issue2-stage1b-run2.md).
+
+## Stage 2A: linear-test geometry
+
+- **Status:** `specified`; model-free gates pass, no actor run has started
+- **Frozen specification:**
+  [inputs/issue2_stage_2a_linear_test_geometry.md](inputs/issue2_stage_2a_linear_test_geometry.md)
+- **Actor prompt:**
+  [prompts/issue2_stage_2a_actor.md](prompts/issue2_stage_2a_actor.md)
+- **Human rubric:**
+  [review/issue2_stage_2a_human_checklist.md](review/issue2_stage_2a_human_checklist.md)
+
+### Frozen declaration semantics
+
+| Declaration | Informal meaning | Lean encoding and reason | Downstream contract |
+| --- | --- | --- | --- |
+| `linearTest v` | The real linear observable in direction $v$, $x \mapsto \langle v,x\rangle$ | `fun x ↦ inner ℝ v x`. The order `v, x` is frozen because reversing it is an API and convention change even though real inner products are symmetric. | Stage 2B may use exactly this function for energy, admissibility, and variance. |
+| `linearTest_apply` | Pointwise evaluation unfolds the linear test | Exact equality `linearTest v x = inner ℝ v x`, with `@[simp]`. | Rewriting later integrands and moments must use this orientation. |
+| `linearTest_eq_inner` | The definition also has an explicit function-equality interface | Exact equality with `fun x ↦ inner ℝ v x`; no alternate continuous-linear-map expression replaces it. | Provides extensional rewriting without changing the public function representation. |
+| `hasGradientAt_linearTest` | At every point, the gradient of $x \mapsto \langle v,x\rangle$ is $v$ | `HasGradientAt (linearTest v) v x` under `CompleteSpace E`, using Mathlib's real-Hilbert Riesz identification. | Supplies the proof witness for the pointwise formula and later energy computation. |
+| `gradient_linearTest` | The canonical gradient is pointwise constant | Exact equality `gradient (linearTest v) x = v`, with `@[simp]`. | Stage 2B may reduce the energy integrand to the constant $\lVert v\rVert^2$. |
+
+### Design choices and boundaries
+
+- The first three declarations require only `NormedAddCommGroup E` and
+  `InnerProductSpace ℝ E`; completeness is added only for the two gradient declarations.
+- The scalar and codomain are exactly `ℝ`. No complex-conjugation convention is in scope.
+- No `MeasurableSpace`, measure, probability, moment, finite-dimensionality, or `Nontrivial E`
+  assumption is allowed. Consequently, the surface remains meaningful in dimension zero.
+- The experimental namespace remains `Issue2Autoformalization.Stage1A` so the new declarations
+  extend the already accepted module without creating a parallel public namespace.
+- The two `@[simp]` attributes are intentional API choices. Every other attribute, option override,
+  or linter suppression is excluded.
+- Stage 2A proves only elementary geometry. Energy, admissibility, variance, and all analytic
+  consequences begin at Stage 2B.
+
+The hidden production comparison fixes only the relevant five-declaration surface. It is not an
+actor input and supplies no proof hint. `pins/stage_2a.sha256` locks the specification, prompt,
+rubric, accepted source/hash records, Lean/Lake metadata, seven-entry fixture, surface checker,
+known-good test fixture, and model-free scripts. A live model call requires a later explicit
+authorization and a completed isolated runner; `specified` is not a mechanical or human pass.
 
 ## Planned later layers
 
@@ -203,7 +237,6 @@ These entries record design questions, not accepted semantics.
 
 | Stage | Status | Planned content | Semantic questions that must be frozen before a run |
 | --- | --- | --- | --- |
-| 2A | `planned` | Linear test, evaluation, gradient, Hilbert identities | Inner-product argument order, real scalar convention, exact gradient statement, and dimension-zero behavior |
 | 2B | `planned` | Linear-test energy, admissibility from second moments, fixed-constant variance bound | Exact `MemLp id 2 μ` hypothesis, centering convention, and which integrability facts are derived rather than assumed |
 | 3 | `planned` | Extended Rayleigh quotient and optimal-constant comparison | `ENNReal` coercions, positive-energy division, zero-energy cases, and the intended `0 / 0` convention |
 | 4 | `planned` | Centered covariance and finite-dimensional spectral bridge | Centered versus Mathlib's uncentered operator, positivity, supremum indexing, eigenvalue existence, and the zero-dimensional convention |

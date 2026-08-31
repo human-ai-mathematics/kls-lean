@@ -1,11 +1,19 @@
 # Stage 1B Run 3 human review
 
+## Recorded outcome
+
+On 2026-08-31 the user accepted all fourteen checklist items and authorized preparation of the
+Stage 2A prompt lane. A byte-identical copy is pinned at `../accepted/AcceptedStage1B.lean`; this
+pending file remains immutable run provenance. The append-only acceptance record is
+`research/decisions/2026-08-31-humanize2-kls-issue2-stage1b-run3-acceptance-stage2a-prompt.md`.
+Acceptance makes Run 3 an experimental dependency only and changes no production or mathematical
+status.
+
 ## Decision boundary
 
-Run 3 is a stopped, zero-diagnostic mechanical pass. It is deliberately stored under
-`review/pending/`, not `accepted/`. A human must complete every item in
-`issue2_stage_1b_human_checklist.md` before the candidate may become the experimental Stage 2A
-dependency. Do not send review findings or hidden reference proof text back to the stopped actor.
+Run 3 is a stopped, zero-diagnostic mechanical pass. Its original actor output remains under
+`review/pending/`; the accepted dependency is the pinned byte-identical copy under `accepted/`.
+Do not send review findings or hidden reference proof text back to the stopped actor.
 
 ## Frozen files and hashes
 
@@ -65,16 +73,16 @@ experimental namespace. The remaining differences are proof-only:
 - the infimum bounds use standard complete-lattice lemmas; and
 - the finite-versus-`⊤` proof derives a contradiction from `ENNReal.coe_lt_top` without `simpa`.
 
-These observations assist review but do not complete the human checklist.
+These observations supported the completed human checklist but did not replace it.
 
 ## Human outcome
 
-There are three valid next actions:
+The review has taken the first of these three valid actions:
 
-- **Accept:** record all fourteen checklist results in a new append-only decision, copy the
-  candidate byte-for-byte to `accepted/AcceptedStage1B.lean`, and pin it before preparing Stage 2A.
+- **Accept (selected):** all fourteen results were recorded, the candidate was copied byte-for-byte
+  to `accepted/AcceptedStage1B.lean`, and it was pinned before Stage 2A preparation.
 - **Reject:** record the failed checklist item(s) and preserve this candidate unchanged.
 - **Request repair:** freeze only non-oracular feedback and authorize another fresh isolated run.
 
-No outcome promotes production Lean or changes a theorem, dossier, ledger, manuscript, or
+This outcome does not promote production Lean or change a theorem, dossier, ledger, manuscript, or
 mathematical status.

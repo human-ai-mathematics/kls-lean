@@ -1,0 +1,13 @@
+import AcceptedStage1B
+
+noncomputable section
+
+open MeasureTheory ProbabilityTheory
+
+namespace Issue2Autoformalization.Stage1A
+
+-- HUMANIZE2_UNATTEMPTED_STAGE_2A: replace this compiler-failing sentinel with the five frozen
+-- declarations from TASK.md.
+#check stage2AImplementationRequired
+
+end Issue2Autoformalization.Stage1A

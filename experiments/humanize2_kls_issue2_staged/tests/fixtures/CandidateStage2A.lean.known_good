@@ -1,0 +1,30 @@
+import AcceptedStage1B
+
+noncomputable section
+
+open MeasureTheory ProbabilityTheory
+
+namespace Issue2Autoformalization.Stage1A
+
+variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+
+def linearTest (v : E) : E → ℝ := fun x ↦ inner ℝ v x
+
+@[simp]
+theorem linearTest_apply (v x : E) : linearTest v x = inner ℝ v x :=
+  rfl
+
+theorem linearTest_eq_inner (v : E) : linearTest v = fun x ↦ inner ℝ v x :=
+  rfl
+
+variable [CompleteSpace E]
+
+theorem hasGradientAt_linearTest (v x : E) : HasGradientAt (linearTest v) v x := by
+  change HasFDerivAt (linearTest v) (InnerProductSpace.toDual ℝ E v) x
+  convert (innerSL ℝ v).hasFDerivAt using 1 <;> ext <;> rfl
+
+@[simp]
+theorem gradient_linearTest (v x : E) : gradient (linearTest v) x = v :=
+  (hasGradientAt_linearTest v x).gradient
+
+end Issue2Autoformalization.Stage1A
