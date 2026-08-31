@@ -19,6 +19,19 @@ stopped actor session.
 
 All paths in commands below are relative to the repository root.
 
+## Cursor setup
+
+Open `Stage1BRun2Review.code-workspace` in Cursor, rather than opening the pending Lean file as a
+loose file or using the repository root. The workspace selects this `review/` directory, which is
+a small reviewer-only Lake project pinned to Lean/Mathlib 4.33.0. Its two targets point to the
+immutable accepted Stage 1A source and the pending Run 2 candidate without copying or editing
+either file.
+
+Cursor is configured here to build imported dependencies automatically. On the first checkout it
+may download the pinned Mathlib packages; afterward the InfoView should elaborate
+`pending/CandidateStage1BRun2.lean` normally. The project adds no actor-visible file and does not
+change the candidate's pending status.
+
 ## 1. Recheck provenance
 
 From the repository root:
