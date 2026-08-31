@@ -36,6 +36,13 @@ this document must be corrected without rewriting the historical record.
 `mechanical-pass` never implies `human-accepted`. `human-accepted` never implies `production`, a
 proof dossier, or a change to a KLS mathematical claim.
 
+### Diagnostic cleanliness
+
+An accepted generated Lean layer must compile with the pinned command at exit zero and with empty
+standard output and standard error. Warnings and linter suggestions are acceptance blockers. They
+must be repaired in the source; disabling or suppressing a diagnostic is not an acceptable fix.
+Historical actor outputs remain byte-identical even when this policy rejects them.
+
 ## Cross-stage semantic conventions
 
 ### Ambient space and measurability
@@ -119,7 +126,7 @@ The acceptance decision is
 
 ## Stage 1B: foundational lemmas and optimal constant
 
-- **Status:** `mechanical-pass`; human semantic/proof review pending
+- **Status:** Run 2 human-rejected on style; zero-warning Run 3 authorized and not yet run
 - **Stopped candidate:**
   [review/pending/CandidateStage1BRun2.lean](review/pending/CandidateStage1BRun2.lean)
 - **SHA-256:** `3778490dcbd79f4632795f9b541a281b9032596c4cfe415e81b627a4c48e6c4e`
@@ -142,7 +149,7 @@ The acceptance decision is
 | `optimalPoincareConstant_le` and `le_optimalPoincareConstant` | The infimum is below every finite valid constant and above every common lower bound. | Exact theorem types agree. Candidate uses alternative standard infimum lemmas. Proof-only difference. |
 | Three finite-versus-`⊤` theorems | No finite valid constant implies `⊤`; one finite valid constant implies not `⊤`; together these give the exact equivalence. | Exact Run 2 theorem types agree. Proof terms differ but compile without additional assumptions. Proof-only difference. |
 
-### Mechanical evidence already closed
+### Run 2 mechanical evidence and human rejection
 
 - one isolated actor session and one turn, zero descendants, no reviewer or forbidden access;
 - exactly the accepted Stage 1A source/compiled dependency plus the three actor fixture files;
@@ -150,14 +157,16 @@ The acceptance decision is
 - pinned Lean/Mathlib compilation;
 - exact thirteen-declaration surface and hidden reference-surface match;
 - no `sorry`, `admit`, axiom, `unsafe`, extra import, or later-stage declaration; and
-- independent reviewer-project build of 2,928 jobs.
+- independent reviewer-project build of 2,928 jobs under the original exit-zero gate.
 
-The only compiler output after success is a non-failing `unnecessarySimpa` linter suggestion. The
-candidate is intentionally left byte-identical while human review is pending.
+The command emitted one `unnecessarySimpa` linter suggestion. On 2026-08-31 the user made zero
+diagnostics an acceptance requirement and rejected Run 2 as the Stage 2A dependency. The candidate
+is intentionally left byte-identical as historical output.
 
-### Human decision still required
+### Run 3 decision still required
 
-A human must decide whether the following design choices faithfully represent the intended layer:
+After a fresh isolated zero-warning Run 3, a human must decide whether the following design choices
+faithfully represent the intended layer:
 
 1. nonnegativity may be stated without an integrability hypothesis because the energy definition
    is total, while later mathematical use remains restricted by admissibility;
@@ -166,10 +175,11 @@ A human must decide whether the following design choices faithfully represent th
 4. an infimum over finite nonnegative valid constants is the intended extended optimal constant;
 5. the empty-family value `⊤` and the universal-negation equivalence are the intended boundary;
 6. no theorem implicitly claims equivalence with a Sobolev-closed Poincaré constant; and
-7. Stage 1B remains an experimental dependency rather than production code.
+7. Stage 1B remains an experimental dependency rather than production code; and
+8. the exact compiler command is silent without any diagnostic suppression.
 
-Until that decision is recorded, Stage 1B must not be copied into `accepted/` or exposed to a
-Stage 2A actor. The Run 2 attempt record is
+Until a Run 3 decision is recorded, Stage 1B must not be copied into `accepted/` or exposed to a
+Stage 2A actor. The rejected Run 2 attempt record is
 [2026-08-30-humanize2-kls-issue2-stage1b-run2.md](../../research/explorations/2026-08-30-humanize2-kls-issue2-stage1b-run2.md).
 
 ## Planned later layers
@@ -193,11 +203,12 @@ For every future layer:
 1. add the proposed semantics and unresolved questions here before freezing the actor source;
 2. link the frozen specification without copying hidden reviewer material into it;
 3. after a run, record the candidate hash and mechanical status without calling it accepted;
-4. compare candidate, specification, and production oracle only after the isolated actor stops;
-5. classify every difference as semantic, API, proof-only, or documentation-only;
-6. write the human accept/reject/repair decision to a new append-only file under
+4. require the exact compiler command to exit zero with no output and no diagnostic suppression;
+5. compare candidate, specification, and production oracle only after the isolated actor stops;
+6. classify every difference as semantic, API, proof-only, or documentation-only;
+7. write the human accept/reject/repair decision to a new append-only file under
    `research/decisions/`; and
-7. update this document's current status only after that decision exists.
+8. update this document's current status only after that decision exists.
 
 The production-wide architecture remains documented separately in
 [LEAN_DESIGN.md](../../LEAN_DESIGN.md).

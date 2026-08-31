@@ -1,10 +1,17 @@
 # Stage 1B Run 2 human review
 
+## Recorded outcome
+
+On 2026-08-31 the user rejected Run 2 as the Stage 2A dependency because its exact Lean command
+emits one `unnecessarySimpa` linter diagnostic. The candidate remains byte-identical historical
+actor output. The current verifier is intentionally stricter and must reject it; do not edit,
+accept, or promote this file.
+
 ## Decision boundary
 
-The checked-in candidate is a stopped, mechanically verified actor output. It is deliberately
-stored under `review/pending/`, not `accepted/`. Only a human may decide whether it becomes the
-Stage 2A dependency. Do not send checklist findings or hidden reference proof text back to the
+The checked-in candidate is a stopped actor output that passed the original Run 2 mechanical
+gates. It is stored under its original `review/pending/` path for link stability, not as a statement
+of current status. Do not send checklist findings or hidden reference proof text back to the
 stopped actor session.
 
 ## Files
@@ -62,8 +69,9 @@ experiments/humanize2_kls_issue2_staged/scripts/stage_1b_verify_candidate.sh \
   "$H2_ISSUE2_STAGE1B_STATE_ROOT/actor-workspace"
 ```
 
-The last command must exit zero and report that the exact thirteen-declaration surface compiles
-against immutable Stage 1A plus upstream Mathlib only.
+Under the zero-warning verifier, the last command must fail and display the preserved
+`unnecessarySimpa` diagnostic. That failure reproduces the human rejection rather than invalidating
+the original Run 2 record.
 
 ## 3. Perform the semantic/proof review
 
@@ -84,17 +92,10 @@ side by side. Record PASS or FAIL, with a short reason, for every item in
 Any failed item rejects this candidate. A repair must use a fresh isolated actor run; do not edit
 the actor output in place and then call it accepted.
 
-## 4. Record the human decision
+## 4. Recorded human decision
 
-There are three valid outcomes:
-
-- **Accept:** record the reviewer, date, candidate hash, and all thirteen PASS results in a new
-  append-only decision. Copy the candidate byte-for-byte to `accepted/AcceptedStage1B.lean`, add
-  its pin, and only then prepare Stage 2A.
-- **Reject:** append a decision naming the failed checklist items. Preserve this pending candidate
-  and run record unchanged.
-- **Fresh repair run:** first freeze the permitted non-oracular feedback and authorize a new
-  isolated state root. Do not reuse Run 2 authentication state, workspace, or transcript.
+Run 2 is rejected and preserved. The user authorized a fresh Run 3 with only the zero-diagnostic
+requirement added. Run 3 must not reuse Run 2 authentication state, workspace, or transcript.
 
 Acceptance is only an experimental dependency transition. It does not promote the declarations to
 production Lean or change a theorem, dossier, ledger, manuscript, or proof-certification status.

@@ -274,7 +274,8 @@ automatic production promotion, a model reviewer, or access to the existing Issu
 
 The experiment plan is in `experiments/humanize2_kls_issue2_staged/`. Its current status is
 **STAGE 1A HUMAN-ACCEPTED EXPERIMENTAL DEPENDENCY / STAGE 1B RUN 1 EXACT-SURFACE FAIL /
-RUN 2 MECHANICAL PASS / RUN 2 HUMAN REVIEW PENDING / STAGE 2A NOT STARTED**.
+RUN 2 ORIGINAL MECHANICAL PASS BUT HUMAN STYLE REJECT / ZERO-WARNING RUN 3 AUTHORIZED AND NOT
+STARTED / STAGE 2A NOT STARTED**.
 
 ### Why Issue 2 is a reconstruction benchmark
 

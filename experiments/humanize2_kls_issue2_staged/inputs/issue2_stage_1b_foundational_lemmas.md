@@ -113,6 +113,15 @@ theorem optimalPoincareConstant_eq_top_iff {μ : Measure E} :
 The comments are placeholders, not proof hints. Replace them with proofs without changing any
 displayed binder, type, or theorem header.
 
+## Run 3 diagnostic-cleanliness requirement
+
+The final command `lean CandidateStage1B.lean` must exit zero and emit no compiler or linter
+diagnostic on standard output or standard error. A warning or style suggestion is a failed result
+even when Lean exits zero. Repair the underlying term or proof until the command is silent.
+
+Do not suppress diagnostics with `set_option`, `attribute`, a linter-disable directive, or another
+configuration escape. This requirement changes no mathematical declaration or theorem type.
+
 ## Required names and output boundary
 
 The candidate must import `AcceptedStage1A` and add exactly these requested public declarations in

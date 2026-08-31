@@ -16,6 +16,8 @@ h2_stage1b_require_state_root() {
   local h2_state_root="${H2_ISSUE2_STAGE1B_STATE_ROOT:?Set H2_ISSUE2_STAGE1B_STATE_ROOT to a dedicated absolute path below /private/tmp}"
   local h2_stage1a_root="${H2_ISSUE2_STAGE1A_STATE_ROOT:-/private/tmp/humanize2-kls-issue2-stage1a}"
   local h2_historical_stage1a_root="/private/tmp/humanize2-kls-issue2-stage1a"
+  local h2_historical_stage1b_run1_root="/private/tmp/humanize2-kls-issue2-stage1b"
+  local h2_historical_stage1b_run2_root="/private/tmp/humanize2-kls-issue2-stage1b-run2"
   if [[ "$h2_state_root" != /* ]]; then
     echo "H2_ISSUE2_STAGE1B_STATE_ROOT must be absolute" >&2
     return 1
@@ -23,6 +25,8 @@ h2_stage1b_require_state_root() {
   h2_state_root="$(h2_stage1b_realpath "$h2_state_root")"
   h2_stage1a_root="$(h2_stage1b_realpath "$h2_stage1a_root")"
   h2_historical_stage1a_root="$(h2_stage1b_realpath "$h2_historical_stage1a_root")"
+  h2_historical_stage1b_run1_root="$(h2_stage1b_realpath "$h2_historical_stage1b_run1_root")"
+  h2_historical_stage1b_run2_root="$(h2_stage1b_realpath "$h2_historical_stage1b_run2_root")"
   if [[ "$h2_state_root" == "/" ||
         "$h2_state_root" == "/tmp" ||
         "$h2_state_root" == "/private/tmp" ||
@@ -32,8 +36,10 @@ h2_stage1b_require_state_root() {
     return 1
   fi
   if [[ "$h2_state_root" == "$h2_stage1a_root" ||
-        "$h2_state_root" == "$h2_historical_stage1a_root" ]]; then
-    echo "Stage 1B state root must be separate from the Stage 1A state root" >&2
+        "$h2_state_root" == "$h2_historical_stage1a_root" ||
+        "$h2_state_root" == "$h2_historical_stage1b_run1_root" ||
+        "$h2_state_root" == "$h2_historical_stage1b_run2_root" ]]; then
+    echo "Stage 1B Run 3 state root must be separate from every historical Stage 1A/1B root" >&2
     return 1
   fi
   if [[ "$(uname -s)" != "Darwin" || "$h2_state_root/" != "/private/tmp/"* ]]; then

@@ -24,10 +24,10 @@ h2_forbidden_compiled="$(h2_stage1b_kls_build_root)/FunctionalInequalities/Basic
 h2_forbidden_main="$h2_main_checkout/formalization/FunctionalInequalities/Basic.lean"
 h2_forbidden_later="$h2_stage1b_repo_root/formalization/FunctionalInequalities/Poincare.lean"
 h2_forbidden_certificate="$h2_stage1b_repo_root/solutions/LemLinearTestLower.lean"
-h2_forbidden_solution="$h2_stage1b_repo_root/solutions/glm-linear-baselines.tex"
-h2_forbidden_review="$h2_stage1b_repo_root/research/reviews/2026-08-29-lean-linear-test-independent-semantic-audit.md"
-h2_forbidden_ledger="$h2_stage1b_repo_root/research/a-series/ledger.yaml"
-h2_forbidden_manuscript="$h2_stage1b_repo_root/modules/02-results-toolkit.tex"
+h2_forbidden_design="$h2_stage1b_repo_root/LEAN_DESIGN.md"
+h2_forbidden_review="$h2_stage1b_repo_root/research/reviews/2026-08-29-lean-linear-test-semantic-followup.md"
+h2_forbidden_knowledge="$h2_stage1b_repo_root/research/knowledge/lemmas.md"
+h2_forbidden_handoff="$h2_stage1b_repo_root/docs/HUMANIZE2_LEAN_BASELINE_HANDOFF.md"
 h2_forbidden_checklist="$h2_stage1b_experiment_root/review/issue2_stage_1b_human_checklist.md"
 h2_forbidden_oracle="$h2_stage1b_experiment_root/oracle/stage_1b_reference.sha256"
 
@@ -38,10 +38,10 @@ for h2_forbidden in \
   "$h2_forbidden_main" \
   "$h2_forbidden_later" \
   "$h2_forbidden_certificate" \
-  "$h2_forbidden_solution" \
+  "$h2_forbidden_design" \
   "$h2_forbidden_review" \
-  "$h2_forbidden_ledger" \
-  "$h2_forbidden_manuscript" \
+  "$h2_forbidden_knowledge" \
+  "$h2_forbidden_handoff" \
   "$h2_forbidden_checklist" \
   "$h2_forbidden_oracle"; do
   if [[ ! -f "$h2_forbidden" ]]; then
@@ -58,10 +58,10 @@ done
   H2_FORBIDDEN_MAIN="$h2_forbidden_main" \
   H2_FORBIDDEN_LATER="$h2_forbidden_later" \
   H2_FORBIDDEN_CERTIFICATE="$h2_forbidden_certificate" \
-  H2_FORBIDDEN_SOLUTION="$h2_forbidden_solution" \
+  H2_FORBIDDEN_DESIGN="$h2_forbidden_design" \
   H2_FORBIDDEN_REVIEW="$h2_forbidden_review" \
-  H2_FORBIDDEN_LEDGER="$h2_forbidden_ledger" \
-  H2_FORBIDDEN_MANUSCRIPT="$h2_forbidden_manuscript" \
+  H2_FORBIDDEN_KNOWLEDGE="$h2_forbidden_knowledge" \
+  H2_FORBIDDEN_HANDOFF="$h2_forbidden_handoff" \
   H2_FORBIDDEN_CHECKLIST="$h2_forbidden_checklist" \
   H2_FORBIDDEN_ORACLE="$h2_forbidden_oracle" \
   H2_ACTOR_CODEX_HOME="$h2_actor_codex_home" \
@@ -80,10 +80,10 @@ done
         "$H2_FORBIDDEN_MAIN" \
         "$H2_FORBIDDEN_LATER" \
         "$H2_FORBIDDEN_CERTIFICATE" \
-        "$H2_FORBIDDEN_SOLUTION" \
+        "$H2_FORBIDDEN_DESIGN" \
         "$H2_FORBIDDEN_REVIEW" \
-        "$H2_FORBIDDEN_LEDGER" \
-        "$H2_FORBIDDEN_MANUSCRIPT" \
+        "$H2_FORBIDDEN_KNOWLEDGE" \
+        "$H2_FORBIDDEN_HANDOFF" \
         "$H2_FORBIDDEN_CHECKLIST" \
         "$H2_FORBIDDEN_ORACLE" \
         "$H2_ACTOR_CODEX_HOME/config.toml"; do
@@ -163,4 +163,4 @@ process.terminate()
 PY
 
 python3 -m unittest "$h2_stage1b_experiment_root/tests/test_stage_1b_audit_actor_trace.py" >/dev/null
-echo "Stage 1B isolation passed: exact five-entry fixture visible; accepted artifacts immutable; hidden KLS/oracle/review/ledger/manuscript/client state denied; candidate-only writes, accepted dependency, upstream Lean, and Codex available"
+echo "Stage 1B isolation passed: exact five-entry fixture visible; accepted artifacts immutable; hidden KLS/oracle/design/review/knowledge/handoff/client state denied; candidate-only writes, accepted dependency, upstream Lean, and Codex available"

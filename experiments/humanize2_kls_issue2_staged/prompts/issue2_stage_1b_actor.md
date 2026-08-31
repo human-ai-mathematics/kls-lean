@@ -32,11 +32,13 @@ Edit only `CandidateStage1B.lean`. It must:
   implicit binder and the universal-negation form of `optimalPoincareConstant_eq_top_iff`;
 - retain the accepted Stage 1A assumptions and explicit `HasPoincare` binder;
 - add no unrequested public mathematical declaration; and
-- compile successfully with `lean CandidateStage1B.lean`.
+- compile successfully with `lean CandidateStage1B.lean`, with no compiler or linter diagnostic on
+  standard output or standard error.
 
 After every edit, run exactly `lean CandidateStage1B.lean`. Use only actual Lean diagnostics to
-repair imports, namespaces, types, binders, coercions, or proof terms until that command exits zero.
-Do not report success based on inspection alone.
+repair imports, namespaces, types, binders, coercions, proof terms, or style findings until that
+command exits zero and its output is empty. A warning or linter suggestion is a failed attempt even
+when the exit code is zero. Do not report success based on inspection alone.
 
 ## Boundaries
 
@@ -50,15 +52,18 @@ Do not report success based on inspection alone.
   hatch.
 - Do not add stronger assumptions, alter accepted Stage 1A declarations, or formalize a later
   stage.
+- Do not suppress a warning or linter with `set_option`, `attribute`, or another configuration
+  escape; repair the underlying code.
 - Do not replace any of the five frozen theorem types with a merely logically equivalent type or
   change an implicit binder to an explicit positional argument.
 - Do not create a proof dossier or claim review/certification.
 
 ## Final response
 
-When Lean exits zero, inspect `CandidateStage1B.lean` once more. Report only:
+When Lean exits zero with no diagnostic output, inspect `CandidateStage1B.lean` once more. Report
+only:
 
-1. that `lean CandidateStage1B.lean` exited zero;
+1. that `lean CandidateStage1B.lean` exited zero and emitted no diagnostics;
 2. the requested definition and theorem names produced;
 3. whether you added any assumption beyond `TASK.md` (the required answer is no);
 4. the number of compiler-feedback repair iterations; and

@@ -3,8 +3,8 @@ set -euo pipefail
 
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/stage_1b_common.sh"
 
-if [[ "${H2_ISSUE2_STAGE1B_LIVE_RUN_ACK:-}" != "issue2-stage1b-human-review" ]]; then
-  echo "Set H2_ISSUE2_STAGE1B_LIVE_RUN_ACK=issue2-stage1b-human-review to acknowledge the authorized Issue 2 Stage 1B model run" >&2
+if [[ "${H2_ISSUE2_STAGE1B_LIVE_RUN_ACK:-}" != "issue2-stage1b-run3-zero-warning-human-review" ]]; then
+  echo "Set H2_ISSUE2_STAGE1B_LIVE_RUN_ACK=issue2-stage1b-run3-zero-warning-human-review to acknowledge the authorized Issue 2 Stage 1B Run 3 zero-warning model run" >&2
   exit 2
 fi
 
@@ -67,7 +67,7 @@ python3 "$h2_stage1b_script_dir/stage_1b_audit_actor_trace.py" \
   --baseline-manifest "$h2_baseline_manifest" \
   >"$h2_state_root/audit/stage1b-trace-audit.json"
 
-echo "Stage 1B candidate compiled and its complete actor trace passed the mechanical gates"
+echo "Stage 1B candidate compiled with zero diagnostics and its complete actor trace passed the mechanical gates"
 echo "candidate: $h2_actor_root/CandidateStage1B.lean"
 echo "trace summary: $h2_state_root/audit/stage1b-trace-audit.json"
 echo "STOP: a human must apply review/issue2_stage_1b_human_checklist.md; no acceptance or mathematical status change is automatic"

@@ -9,13 +9,13 @@ human-accepted experimental dependency. The dedicated Stage 1B isolated harness 
 model-free reset, compilation, provenance, isolation, verifier, trace-policy, and deterministic
 rerun tests. Authenticated Stage 1B Run 1 produced a locally compiling candidate and a clean
 repaired trace, but the exact-surface verifier rejected five optimal-constant theorem APIs. Stage
-1B is not accepted. The user authorized Run 2 with only those five theorem headers hardened and a
-fresh isolated session. Run 2 passed all mechanical gates and is stopped for human semantic/proof
-review.
+1B is not accepted. Run 2 passed its original mechanical gates, but the user rejected its one
+`unnecessarySimpa` linter diagnostic and authorized a fresh Run 3 whose exact Lean command must
+exit zero with empty output. Run 3 changes no declaration or mathematical requirement.
 
-The exact stopped Run 2 output is published, without changing its status, at
-`review/pending/CandidateStage1BRun2.lean`. Follow `review/STAGE_1B_RUN2_REVIEW.md` for the
-independent reproduction and human decision procedure.
+The exact rejected Run 2 output remains published and pinned at
+`review/pending/CandidateStage1BRun2.lean`; `review/STAGE_1B_RUN2_REVIEW.md` records its historical
+review path. Do not edit or promote it.
 
 The living semantic map is `SEMANTIC_DESIGN.md`. It records the mathematical meaning, Lean
 encoding, intentional differences from production, downstream consequences, and acceptance state

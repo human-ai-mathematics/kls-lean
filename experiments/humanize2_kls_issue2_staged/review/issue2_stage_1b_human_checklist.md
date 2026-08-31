@@ -34,7 +34,10 @@ A stopped candidate may be accepted for use as the input to Stage 2A only if eve
     without assuming existence in the empty case.
 12. No theorem uses `sorry`, `admit`, an axiom, `unsafe`, `opaque`, `external`, a custom unsound
     escape hatch, an extra import, a stronger ambient hypothesis, or later-stage material.
-13. The candidate is only a human-reviewed experimental dependency. Lean compilation and this
+13. The exact compiler command exits zero with empty standard output and standard error. No Lean
+    warning or linter suggestion remains, and no `set_option`, `attribute`, or other diagnostic
+    suppression is used.
+14. The candidate is only a human-reviewed experimental dependency. Lean compilation and this
     checklist do not promote production code, certify a dossier, or change a ledger/manuscript or
     mathematical status.
 

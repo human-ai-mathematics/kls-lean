@@ -66,6 +66,31 @@ Path(sys.argv[2]).write_bytes(Path(sys.argv[1]).read_bytes())
 PY
 "$h2_stage1b_script_dir/stage_1b_verify_candidate.sh" "$h2_actor_root" >/dev/null
 
+python3 - \
+  "$h2_stage1b_experiment_root/review/pending/CandidateStage1BRun2.lean" \
+  "$h2_actor_root/CandidateStage1B.lean" <<'PY'
+from pathlib import Path
+import sys
+
+Path(sys.argv[2]).write_bytes(Path(sys.argv[1]).read_bytes())
+PY
+if "$h2_stage1b_script_dir/stage_1b_verify_candidate.sh" "$h2_actor_root" \
+  >"$h2_test_root/warning-verifier.out" 2>&1; then
+  echo "Stage 1B verifier accepted a candidate with a linter diagnostic" >&2
+  exit 1
+fi
+rg -Fq 'unnecessarySimpa' "$h2_test_root/warning-verifier.out"
+rg -Fq 'emitted forbidden compiler or linter diagnostics' "$h2_test_root/warning-verifier.out"
+
+python3 - \
+  "$h2_stage1b_experiment_root/tests/fixtures/CandidateStage1B.lean.known_good" \
+  "$h2_actor_root/CandidateStage1B.lean" <<'PY'
+from pathlib import Path
+import sys
+
+Path(sys.argv[2]).write_bytes(Path(sys.argv[1]).read_bytes())
+PY
+
 python3 - "$h2_actor_root/CandidateStage1B.lean" <<'PY'
 from pathlib import Path
 import sys
@@ -88,7 +113,7 @@ env -u H2_ISSUE2_STAGE1B_LIVE_RUN_ACK \
   "$h2_stage1b_script_dir/stage_1b_run.sh" >"$h2_test_root/no-ack.out" 2>&1
 h2_no_ack_status=$?
 H2_ISSUE2_STAGE1B_STATE_ROOT="$h2_state_root" \
-H2_ISSUE2_STAGE1B_LIVE_RUN_ACK=issue2-stage1b-human-review \
+H2_ISSUE2_STAGE1B_LIVE_RUN_ACK=issue2-stage1b-run3-zero-warning-human-review \
   "$h2_stage1b_script_dir/stage_1b_run.sh" >"$h2_test_root/no-login.out" 2>&1
 h2_no_login_status=$?
 set -e
@@ -96,9 +121,10 @@ if [[ "$h2_no_ack_status" -ne 2 || "$h2_no_login_status" -ne 2 ]]; then
   echo "Stage 1B runner did not fail closed on acknowledgement/login gates" >&2
   exit 1
 fi
-rg -Fq 'acknowledge the authorized Issue 2 Stage 1B model run' "$h2_test_root/no-ack.out"
+rg -Fq 'acknowledge the authorized Issue 2 Stage 1B Run 3 zero-warning model run' \
+  "$h2_test_root/no-ack.out"
 rg -Fq 'authenticate the dedicated Stage 1B actor home' "$h2_test_root/no-login.out"
 
 "$h2_stage1b_script_dir/stage_1b_reset_run_state.sh" >/dev/null
 "$h2_stage1b_script_dir/stage_1b_verify_scaffold.sh" >/dev/null
-echo "Stage 1B model-free tests passed: deterministic reset/rerun, immutable accepted artifacts, deterministic upstream-only compiled provenance, sentinel rejection, known-good and adversarial verifier paths, read/write isolation, and complete trace policy"
+echo "Stage 1B model-free tests passed: deterministic reset/rerun, immutable accepted artifacts, deterministic upstream-only compiled provenance, sentinel rejection, warning-free success, warning and adversarial rejection, read/write isolation, and complete trace policy"

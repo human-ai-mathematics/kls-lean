@@ -103,6 +103,8 @@ if re.search(r"(^|\W)(sorry|admit|unsafe|external|sorryAx)(\W|$)", code):
     raise SystemExit("candidate contains a forbidden escape hatch")
 if re.search(r"^\s*(?:syntax|macro|notation|scoped\s+notation|elab|attribute)\b", code, re.MULTILINE):
     raise SystemExit("candidate contains unrequested syntax, macro, notation, elaborator, or attribute")
+if re.search(r"^\s*set_option\b", code, re.MULTILINE):
+    raise SystemExit("candidate contains a forbidden option override")
 if re.search(r"^\s*#\w+\b", code, re.MULTILINE):
     raise SystemExit("candidate contains an unrequested command")
 if re.search(
@@ -127,11 +129,32 @@ chmod u+rw "$h2_verify_root"/*
 
 (
   cd "$h2_verify_root"
-  LEAN_PATH="$(h2_stage1b_actor_lean_path "$h2_verify_root")" \
-    "$(h2_stage1b_lean_bin)" -o CandidateStage1B.olean CandidateStage1B.lean
-  LEAN_PATH="$(h2_stage1b_actor_lean_path "$h2_verify_root")" \
-    "$(h2_stage1b_lean_bin)" Stage1BSurfaceCheck.lean
+  h2_candidate_log="$h2_verify_root/CandidateStage1B.log"
+  h2_surface_log="$h2_verify_root/Stage1BSurfaceCheck.log"
+  if ! LEAN_PATH="$(h2_stage1b_actor_lean_path "$h2_verify_root")" \
+      "$(h2_stage1b_lean_bin)" -o CandidateStage1B.olean CandidateStage1B.lean \
+      >"$h2_candidate_log" 2>&1; then
+    cat "$h2_candidate_log" >&2
+    echo "Stage 1B candidate failed Lean compilation" >&2
+    exit 1
+  fi
+  if [[ -s "$h2_candidate_log" ]]; then
+    cat "$h2_candidate_log" >&2
+    echo "Stage 1B candidate emitted forbidden compiler or linter diagnostics" >&2
+    exit 1
+  fi
+  if ! LEAN_PATH="$(h2_stage1b_actor_lean_path "$h2_verify_root")" \
+      "$(h2_stage1b_lean_bin)" Stage1BSurfaceCheck.lean >"$h2_surface_log" 2>&1; then
+    cat "$h2_surface_log" >&2
+    echo "Stage 1B exact-surface checker failed Lean compilation" >&2
+    exit 1
+  fi
+  if [[ -s "$h2_surface_log" ]]; then
+    cat "$h2_surface_log" >&2
+    echo "Stage 1B exact-surface checker emitted forbidden diagnostics" >&2
+    exit 1
+  fi
 )
 
 "$h2_stage1b_script_dir/stage_1b_verify_actor_workspace.sh" "$h2_actor_root" >/dev/null
-echo "Stage 1B candidate has the exact thirteen-declaration surface and compiles against the immutable accepted dependency plus upstream Mathlib only"
+echo "Stage 1B candidate has the exact thirteen-declaration surface and compiles silently against the immutable accepted dependency plus upstream Mathlib only"
