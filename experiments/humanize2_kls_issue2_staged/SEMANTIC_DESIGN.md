@@ -126,16 +126,16 @@ The acceptance decision is
 
 ## Stage 1B: foundational lemmas and optimal constant
 
-- **Status:** Run 2 human-rejected on style; zero-warning Run 3 authorized and not yet run
+- **Status:** Run 2 human-rejected on style; zero-warning Run 3 mechanical pass, human review pending
 - **Stopped candidate:**
-  [review/pending/CandidateStage1BRun2.lean](review/pending/CandidateStage1BRun2.lean)
-- **SHA-256:** `3778490dcbd79f4632795f9b541a281b9032596c4cfe415e81b627a4c48e6c4e`
+  [review/pending/CandidateStage1BRun3.lean](review/pending/CandidateStage1BRun3.lean)
+- **SHA-256:** `027e69674f78eb735b380b18beaf43e55779e0634d7222f46681f1bae30b752d`
 - **Frozen specification:**
   [inputs/issue2_stage_1b_foundational_lemmas.md](inputs/issue2_stage_1b_foundational_lemmas.md)
 - **Human rubric:**
   [review/issue2_stage_1b_human_checklist.md](review/issue2_stage_1b_human_checklist.md)
 - **Cursor project:**
-  [review/Stage1BRun2Review.code-workspace](review/Stage1BRun2Review.code-workspace)
+  [review/Stage1BRun3Review.code-workspace](review/Stage1BRun3Review.code-workspace)
 
 ### Declaration semantics
 
@@ -143,11 +143,11 @@ The acceptance decision is
 | --- | --- | --- |
 | `dirichletEnergy_nonneg` | Squared gradient norms are pointwise nonnegative, so their real integral is nonnegative. No integrability assumption is needed for Mathlib's totalized integral nonnegativity theorem. | Declaration type agrees; candidate and production use equivalent pointwise proofs. Proof-only difference. |
 | `norm_fderiv_eq_norm_gradient` | Real-Hilbert Riesz duality identifies the operator norm of `fderiv ℝ f x` with the norm of `gradient f x`. It must not require `MeasurableSpace E`. | Declaration type agrees. The candidate unfolds `gradient` and uses the inverse Riesz isometry; production rewrites through `toDual_gradient`. Proof-only difference. |
-| `dirichletEnergy_eq_fderiv` | The canonical-gradient energy equals the integral of squared Fréchet-derivative operator norm, without admissibility. | Declaration type agrees. Candidate rewrites under the integral with `simp_rw`; production uses pointwise almost-everywhere integral congruence. Proof-only difference. |
-| Four `HasPoincare` declarations | Expose probability normalization, constant nonnegativity, and the accepted inequality; prove monotonicity in the constant using energy nonnegativity. | Candidate uses tuple projections because Stage 1A has an explicit function binder. Production uses namespaced accessors and an implicit binder. Same propositions, with the inherited API difference. |
+| `dirichletEnergy_eq_fderiv` | The canonical-gradient energy equals the integral of squared Fréchet-derivative operator norm, without admissibility. | Declaration type agrees. Candidate and production both use almost-everywhere integral congruence, with proof-term-level differences. |
+| Four `HasPoincare` declarations | Expose probability normalization, constant nonnegativity, and the accepted inequality; prove monotonicity in the constant using energy nonnegativity. | Exact declaration types agree with the accepted explicit-binder Stage 1A API. Candidate accessors project the structure fields and monotonicity calls those accessors. Production is propositionally the same under its implicit binder. |
 | `optimalPoincareConstant` | The `ENNReal` infimum of all `C : NNReal` whose real coercion satisfies the accepted fixed-constant predicate. Empty subtype means `⊤`. | Definition is textually the same apart from namespace. |
 | `optimalPoincareConstant_le` and `le_optimalPoincareConstant` | The infimum is below every finite valid constant and above every common lower bound. | Exact theorem types agree. Candidate uses alternative standard infimum lemmas. Proof-only difference. |
-| Three finite-versus-`⊤` theorems | No finite valid constant implies `⊤`; one finite valid constant implies not `⊤`; together these give the exact equivalence. | Exact Run 2 theorem types agree. Proof terms differ but compile without additional assumptions. Proof-only difference. |
+| Three finite-versus-`⊤` theorems | No finite valid constant implies `⊤`; one finite valid constant implies not `⊤`; together these give the exact equivalence. | Exact theorem types agree. Run 3 removes the Run 2 `simpa` diagnostic by an explicit `rw` and contradiction with `ENNReal.coe_lt_top`; no assumption changes. Proof-only difference. |
 
 ### Run 2 mechanical evidence and human rejection
 
@@ -163,10 +163,25 @@ The command emitted one `unnecessarySimpa` linter suggestion. On 2026-08-31 the 
 diagnostics an acceptance requirement and rejected Run 2 as the Stage 2A dependency. The candidate
 is intentionally left byte-identical as historical output.
 
+### Run 3 mechanical evidence
+
+- fresh directly authenticated Run 3 root, with no Run 2 candidate, transcript, or feedback;
+- one actor session and one turn, zero descendants, and only ten local `exec` calls;
+- exactly the five permitted actor-visible files and only `CandidateStage1B.lean` mutated;
+- exact compiler command at exit zero with empty standard output and standard error;
+- no diagnostic suppression, escape hatch, extra import, or later-stage declaration;
+- exact thirteen-declaration surface, hidden reference-surface pin, and immutable dependency; and
+- independent reviewer project pinned to Lean/Mathlib 4.33.0.
+
+The Run 3 record is
+[2026-08-31-humanize2-kls-issue2-stage1b-run3.md](../../research/explorations/2026-08-31-humanize2-kls-issue2-stage1b-run3.md),
+and the reproduction guide is
+[review/STAGE_1B_RUN3_REVIEW.md](review/STAGE_1B_RUN3_REVIEW.md).
+
 ### Run 3 decision still required
 
-After a fresh isolated zero-warning Run 3, a human must decide whether the following design choices
-faithfully represent the intended layer:
+A human must now decide whether the following Run 3 design choices faithfully represent the
+intended layer:
 
 1. nonnegativity may be stated without an integrability hypothesis because the energy definition
    is total, while later mathematical use remains restricted by admissibility;
@@ -178,8 +193,8 @@ faithfully represent the intended layer:
 7. Stage 1B remains an experimental dependency rather than production code; and
 8. the exact compiler command is silent without any diagnostic suppression.
 
-Until a Run 3 decision is recorded, Stage 1B must not be copied into `accepted/` or exposed to a
-Stage 2A actor. The rejected Run 2 attempt record is
+Until a human Run 3 decision is recorded, Stage 1B must not be copied into `accepted/` or exposed
+to a Stage 2A actor. The rejected Run 2 remains separate historical evidence at
 [2026-08-30-humanize2-kls-issue2-stage1b-run2.md](../../research/explorations/2026-08-30-humanize2-kls-issue2-stage1b-run2.md).
 
 ## Planned later layers

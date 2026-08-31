@@ -1,6 +1,6 @@
 name = "issue2-stage1b-review"
 version = "0.1.0"
-defaultTargets = ["Stage1BRun2Review"]
+defaultTargets = ["Stage1BRun3Review"]
 
 [[require]]
 name = "mathlib"
@@ -16,3 +16,8 @@ roots = ["AcceptedStage1A"]
 name = "Stage1BRun2Review"
 srcDir = "pending"
 roots = ["CandidateStage1BRun2"]
+
+[[lean_lib]]
+name = "Stage1BRun3Review"
+srcDir = "pending"
+roots = ["CandidateStage1BRun3"]

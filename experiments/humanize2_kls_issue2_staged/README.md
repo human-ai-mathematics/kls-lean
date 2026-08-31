@@ -11,11 +11,15 @@ rerun tests. Authenticated Stage 1B Run 1 produced a locally compiling candidate
 repaired trace, but the exact-surface verifier rejected five optimal-constant theorem APIs. Stage
 1B is not accepted. Run 2 passed its original mechanical gates, but the user rejected its one
 `unnecessarySimpa` linter diagnostic and authorized a fresh Run 3 whose exact Lean command must
-exit zero with empty output. Run 3 changes no declaration or mathematical requirement.
+exit zero with empty output. Run 3 passed that stricter mechanical gate, the exact surface,
+isolation, immutable-dependency, oracle-pin, and complete-trace checks. It is stopped for human
+semantic/proof review and changes no declaration or mathematical requirement.
 
 The exact rejected Run 2 output remains published and pinned at
 `review/pending/CandidateStage1BRun2.lean`; `review/STAGE_1B_RUN2_REVIEW.md` records its historical
-review path. Do not edit or promote it.
+review path. The current zero-warning candidate is
+`review/pending/CandidateStage1BRun3.lean`; follow `review/STAGE_1B_RUN3_REVIEW.md` for independent
+reproduction and human review. Do not edit either stopped actor output.
 
 The living semantic map is `SEMANTIC_DESIGN.md`. It records the mathematical meaning, Lean
 encoding, intentional differences from production, downstream consequences, and acceptance state
