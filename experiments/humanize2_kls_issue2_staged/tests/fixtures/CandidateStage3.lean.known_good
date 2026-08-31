@@ -1,0 +1,43 @@
+import AcceptedStage2B
+
+noncomputable section
+
+open MeasureTheory ProbabilityTheory
+
+namespace Issue2Autoformalization.Stage1A
+
+variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
+  [MeasurableSpace E]
+
+def poincareRayleighQuotient (μ : Measure E) (f : E → ℝ) : ENNReal :=
+  ENNReal.ofReal (variance f μ) / ENNReal.ofReal (dirichletEnergy μ f)
+
+theorem poincareRayleighQuotient_le_optimal {μ : Measure E} {f : E → ℝ}
+    (hf : IsAdmissible μ f) :
+    poincareRayleighQuotient μ f ≤ optimalPoincareConstant μ := by
+  apply le_optimalPoincareConstant
+  intro C hC
+  apply ENNReal.div_le_of_le_mul
+  rw [← ENNReal.ofReal_coe_nnreal, ← ENNReal.ofReal_mul (NNReal.zero_le_coe)]
+  exact ENNReal.ofReal_le_ofReal (hC.variance_le hf)
+
+theorem poincareRayleighQuotient_eq_of_pos {μ : Measure E} {f : E → ℝ}
+    (henergy : 0 < dirichletEnergy μ f) :
+    poincareRayleighQuotient μ f =
+      ENNReal.ofReal (variance f μ / dirichletEnergy μ f) := by
+  rw [poincareRayleighQuotient, ENNReal.ofReal_div_of_pos henergy]
+
+theorem poincareRayleighQuotient_eq_top_of_energy_eq_zero {μ : Measure E} {f : E → ℝ}
+    (hvariance : 0 < variance f μ) (henergy : dirichletEnergy μ f = 0) :
+    poincareRayleighQuotient μ f = ⊤ := by
+  rw [poincareRayleighQuotient, henergy, ENNReal.ofReal_zero]
+  exact ENNReal.div_zero (ne_of_gt (ENNReal.ofReal_pos.mpr hvariance))
+
+theorem admissibleRayleighQuotient_le_optimal {μ : Measure E} {f : E → ℝ}
+    (hf : IsAdmissible μ f) (henergy : 0 < dirichletEnergy μ f) :
+    ENNReal.ofReal (variance f μ / dirichletEnergy μ f) ≤
+      optimalPoincareConstant μ := by
+  rw [← poincareRayleighQuotient_eq_of_pos henergy]
+  exact poincareRayleighQuotient_le_optimal hf
+
+end Issue2Autoformalization.Stage1A

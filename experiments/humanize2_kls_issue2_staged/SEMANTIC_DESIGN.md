@@ -242,7 +242,8 @@ Stage 2B actor, but remains an experimental dependency rather than production or
 
 ## Stage 2B: linear-test analysis
 
-- **Status:** Run 1 `mechanical-pass`; human review pending
+- **Status:** `human-accepted` experimental dependency
+- **Accepted source:** [accepted/AcceptedStage2B.lean](accepted/AcceptedStage2B.lean)
 - **Stopped candidate:**
   [review/pending/CandidateStage2BRun1.lean](review/pending/CandidateStage2BRun1.lean)
 - **SHA-256:** `69c2eead467fbc0516c191e034cedd1c8593bdaac50c1681912a429337b5dffc`
@@ -278,8 +279,50 @@ Run 1 compiled silently after one compiler-feedback repair iteration. The exact 
 surface, hidden production pin, immutable dependencies, one-session/one-turn/zero-descendant
 trace, and candidate-only mutation gates all passed. A post-stop comparison found no semantic or
 API difference; direct use of `InnerProductSpace.toDual.contDiff`, `MemLp.const_inner`, and an
-explicit energy rewrite is proof-only. The candidate remains stopped for all sixteen human-review
-items and is not an accepted Stage 3 dependency.
+explicit energy rewrite is proof-only. On 2026-09-01 a Claude 5 Fable interactive review
+independently reproduced the mechanical evidence and returned all sixteen human-review items
+`PASS`; the user then accepted Run 1 as the Stage 3 experimental dependency. The accepted source
+is byte-identical to the stopped candidate. This acceptance changes no production declaration,
+dossier, ledger, manuscript, or mathematical status.
+
+## Stage 3: extended Rayleigh quotient
+
+- **Status:** `specified`; authorized Run 1 not yet started
+- **Frozen specification:**
+  [inputs/issue2_stage_3_rayleigh_quotient.md](inputs/issue2_stage_3_rayleigh_quotient.md)
+- **Actor prompt:** [prompts/issue2_stage_3_actor.md](prompts/issue2_stage_3_actor.md)
+- **Human rubric:**
+  [review/issue2_stage_3_human_checklist.md](review/issue2_stage_3_human_checklist.md)
+
+### Frozen declaration semantics
+
+| Declaration | Informal meaning | Lean encoding and reason | Downstream contract |
+| --- | --- | --- | --- |
+| `poincareRayleighQuotient` | The variance-to-energy ratio with explicit extended-value boundary semantics | `ENNReal.ofReal` is applied separately to variance and energy before division in `ENNReal`. Thus positive variance over zero energy is `⊤`, while `0 / 0 = 0`. The definition has no probability or admissibility hypothesis. | Later layers may use a total quotient without choosing a real division-by-zero convention. |
+| `poincareRayleighQuotient_le_optimal` | Every admissible test has extended quotient at most the extended optimal Poincaré constant | The theorem compares against every finite valid `NNReal` constant through `le_optimalPoincareConstant`; it remains valid at zero energy and when the finite-constant subtype is empty. | Subsequent lower-bound arguments may pass from a concrete admissible test directly to the optimal constant. |
+| `poincareRayleighQuotient_eq_of_pos` | At positive energy, extended division agrees with `ENNReal.ofReal` of the ordinary real quotient | Strict positivity of energy justifies moving `ENNReal.ofReal` across division. | Positive-energy applications may use the manuscript's real-quotient notation. |
+| `poincareRayleighQuotient_eq_top_of_energy_eq_zero` | Positive variance with zero energy forces an infinite quotient | Positive variance makes the `ENNReal.ofReal` numerator nonzero, and division by zero is `⊤`. | Any admissible zero-energy witness with positive variance exposes the no-finite-constant boundary explicitly. |
+| `admissibleRayleighQuotient_le_optimal` | Positive-energy real-quotient specialization of the extended comparison | Rewrites the preceding positive-energy equality into the extended bound without changing coercion placement. | Later proofs may cite the exact real quotient used in the manuscript while retaining an `ENNReal` conclusion. |
+
+### Design choices and boundaries
+
+- Division occurs only after separate `ENNReal.ofReal` coercions. No real division-by-zero
+  convention is imported or inferred.
+- The ambient assumptions remain exactly a complete real inner-product space with an abstract
+  measurable structure. No probability, `BorelSpace`, finite-dimensionality, nontriviality,
+  separability, or centered-moment assumption is added, and dimension zero remains included.
+- Stage 3 adds exactly one definition and four theorems in the existing experimental namespace,
+  importing only the accepted Stage 2B layer.
+- Centered covariance, spectral or eigenvalue arguments, Euclidean specialization, final Issue 2
+  assembly, and every other KLS target remain excluded.
+- The eleven-entry actor fixture contains the four accepted source/compiled pairs and the current
+  task/candidate pair. Compilation must be silent and only the candidate may mutate.
+
+`pins/stage_3.sha256` freezes the specification, actor prompt, human rubric, four accepted
+dependency pairs, Lean/Lake metadata, eleven-entry fixture, hidden five-declaration production
+surface hash, exact-surface verifier, known-good fixture, isolation policy, one-turn flow, runner,
+complete-trace auditor, and model-free tests. No model call or mechanical result is implied by this
+`specified` status.
 
 ## Planned later layers
 
@@ -287,7 +330,6 @@ These entries record design questions, not accepted semantics.
 
 | Stage | Status | Planned content | Semantic questions that must be frozen before a run |
 | --- | --- | --- | --- |
-| 3 | `planned` | Extended Rayleigh quotient and optimal-constant comparison | `ENNReal` coercions, positive-energy division, zero-energy cases, and the intended `0 / 0` convention |
 | 4 | `planned` | Centered covariance and finite-dimensional spectral bridge | Centered versus Mathlib's uncentered operator, positivity, supremum indexing, eigenvalue existence, and the zero-dimensional convention |
 | 5 | `planned` | Abstract, Euclidean, and node-specific Issue 2 assembly | Exact specialization boundary, statement fidelity, and separation between reusable theorem and thin certificate |
 

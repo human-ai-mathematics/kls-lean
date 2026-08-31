@@ -15,12 +15,15 @@ and one-session, one-turn, zero-descendant trace gates all passed. On 2026-09-01
 the sixteen-item review by authorizing Stage 2B. The byte-identical accepted copy is
 `accepted/AcceptedStage2A.lean`; this changes no production declaration or mathematical status.
 
-Stage 2B Run 1 is now a zero-diagnostic `mechanical-pass`. It contains exactly the linear-test
-energy, admissibility from `MemLp (id : E → E) 2 μ`, and the fixed-constant variance bound. The
-actor saw exactly nine files and used one session, one turn, zero descendants, six local `exec`
-calls, and one compiler-feedback repair iteration. The exact surface, immutable dependencies,
-hidden oracle, isolation, and candidate-only trace gates passed. Rayleigh, covariance, spectral,
-and final Issue 2 results remain excluded, and human review is still required.
+Stage 2B Run 1 is now a human-accepted experimental dependency. It contains exactly the
+linear-test energy, admissibility from `MemLp (id : E → E) 2 μ`, and the fixed-constant variance
+bound. A Claude 5 Fable interactive review independently reproduced the mechanical evidence and
+returned all sixteen items `PASS`; the accepted source is byte-identical to the stopped candidate.
+
+Stage 3 is `specified` and authorized for one isolated Run 1. Its five declarations define the
+extended Poincaré Rayleigh quotient and compare it with the extended optimal constant, including
+positive-energy, zero-energy, and no-finite-constant cases. The full eleven-entry harness and
+model-free suite are frozen by `pins/stage_3.sha256`; no live result or acceptance is automatic.
 
 The exact rejected Run 2 output remains published and pinned at
 `review/pending/CandidateStage1BRun2.lean`; `review/STAGE_1B_RUN2_REVIEW.md` records its historical
@@ -428,21 +431,42 @@ exited zero with empty output after one repair iteration. Candidate SHA-256 is
 `69c2eead467fbc0516c191e034cedd1c8593bdaac50c1681912a429337b5dffc`; compact trace-audit
 SHA-256 is `69baf3ad061c0139692e6d3bbdaf66e6bfa3d376246d5d6becbf37f070cad74f`.
 
-The stopped source is `review/pending/CandidateStage2BRun1.lean`. Follow
-`review/STAGE_2B_RUN1_REVIEW.md`; do not edit or rerun the actor. Run 1 changes no production or
-mathematical status and cannot become a Stage 3 dependency until a human records all sixteen
-checklist results and explicitly accepts it. The optional
+The stopped source is `review/pending/CandidateStage2BRun1.lean`. The user accepted all sixteen
+items after the independent review; its byte-identical accepted copy and source/compiled pins are
+under `accepted/`. This changes no production or mathematical status. The optional
 `prompts/issue2_stage_2b_claude5_fable_interactive_review.md` provides a read-only, phased Claude
-walkthrough; Claude may recommend an outcome, but only the user may record acceptance.
+walkthrough and records the review protocol; only the user made the acceptance decision.
+
+## Stage 3 Run 1 preparation
+
+The frozen mathematical surface is `inputs/issue2_stage_3_rayleigh_quotient.md`; the actor prompt
+is `prompts/issue2_stage_3_actor.md`, and the human-only gate is
+`review/issue2_stage_3_human_checklist.md`. The candidate imports only `AcceptedStage2B` and adds
+exactly `poincareRayleighQuotient`, `poincareRayleighQuotient_le_optimal`,
+`poincareRayleighQuotient_eq_of_pos`,
+`poincareRayleighQuotient_eq_top_of_energy_eq_zero`, and
+`admissibleRayleighQuotient_le_optimal`.
+
+The quotient divides in `ENNReal` after separate `ENNReal.ofReal` coercions, so positive variance
+over zero energy is `⊤` while `0 / 0 = 0`. No probability, Borel, finite-dimensional,
+nontriviality, separability, or centered-moment assumption is added, and dimension zero remains
+included. The eleven-entry actor fixture exposes the four accepted source/compiled pairs plus
+`AGENTS.md`, `TASK.md`, and the candidate; only the candidate is mutable.
+
+The model-free suite passes deterministic four-layer rebuilds, exact fixture restoration, failing
+sentinel, silent known-good surface, axiom and diagnostic-suppression rejection, deny-default
+Seatbelt isolation, one-session/one-turn/zero-descendant trace policy, and fail-closed live gates.
+The append-only acceptance and authorization record is
+`research/decisions/2026-09-01-humanize2-kls-issue2-stage2b-acceptance-stage3-authorization.md`.
 
 ## Acceptance and mathematical status
 
-Lean exit zero is necessary but insufficient. The accepted Stage 1A, Stage 1B, and Stage 2A
+Lean exit zero is necessary but insufficient. The accepted Stage 1A, Stage 1B, Stage 2A, and Stage 2B
 artifacts remain experimental dependencies only. Stage 1B Run 1 failed the exact surface and Run
 2 was rejected on style; neither is accepted, certified, or a ledger event. Promotion into
 `formalization/`, creation of a solution dossier, review certification, and ledger/manuscript
 updates require their normal repository workflows and separate explicit decisions. The wrong-cwd
 Codex task is recorded as an invalid pre-run and is not a Stage 2A candidate or attempt result.
-Valid Stage 2A Run 1 is human-accepted only for staged experimental dependency use. Stage 2B is
-a mechanical pass but cannot be accepted until its stopped output passes its own sixteen-item
-human gate.
+Valid Stage 2A and Stage 2B Run 1 are human-accepted only for staged experimental dependency use.
+Stage 3 may stop only at `mechanical-pass`; it cannot become a Stage 4 dependency until its own
+sixteen-item human gate is completed and explicitly accepted.

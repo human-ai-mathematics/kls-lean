@@ -14,17 +14,16 @@ root `README.md` remains the minimal project README inherited from `main`.
 
 ## Current Issue 2 gate
 
-Stage 1A and zero-warning Stage 1B Run 3 are human-accepted experimental dependencies. Stage 1B
-Run 2 remains a mechanically successful but human-rejected historical output because it emitted
-one `unnecessarySimpa` linter diagnostic. The Stage 2A linear-test-geometry specification, exact
-five-declaration surface, actor prompt, seven-entry fixture, human checklist, isolated live runner,
-and complete-trace policy are frozen. Authorized Run 1 produced a zero-diagnostic exact-surface
-candidate in one actor turn with zero descendants, and every mechanical and trace gate passed. It
-is stopped for human semantic/proof review; Stage 2B has not started.
+Stages 1A, 1B Run 3, 2A Run 1, and 2B Run 1 are human-accepted experimental dependencies. The
+Stage 2B candidate is accepted byte-for-byte after an independent Claude 5 Fable walkthrough
+returned all sixteen review items `PASS`. Stage 3 is frozen to the five-declaration extended
+Rayleigh surface with an eleven-entry actor fixture, exact verifier, hidden production pin,
+deny-default isolation, complete-trace policy, and a model-free preflight suite that passes in
+full. One fresh subscription-authenticated `gpt-5.6-sol` Run 1 at high effort is authorized; it
+must stop at `mechanical-pass` for a new human decision.
 
-The Stage 2A candidate and review guide are
-`humanize2_kls_issue2_staged/review/pending/CandidateStage2ARun1.lean` and
-`humanize2_kls_issue2_staged/review/STAGE_2A_RUN1_REVIEW.md`. The actor prompt is
-`humanize2_kls_issue2_staged/prompts/issue2_stage_2a_actor.md`; its complete mathematical input is
-`humanize2_kls_issue2_staged/inputs/issue2_stage_2a_linear_test_geometry.md`. Run 2 and the stopped
-Run 3 output remain immutable historical records; the accepted Run 3 copy is pinned separately.
+The Stage 3 mathematical input and actor prompt are
+`humanize2_kls_issue2_staged/inputs/issue2_stage_3_rayleigh_quotient.md` and
+`humanize2_kls_issue2_staged/prompts/issue2_stage_3_actor.md`. The accepted Stage 2B source is
+`humanize2_kls_issue2_staged/accepted/AcceptedStage2B.lean`. Earlier stopped and rejected outputs
+remain immutable historical records.

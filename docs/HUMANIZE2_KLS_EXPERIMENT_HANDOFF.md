@@ -668,3 +668,25 @@ The byte-identical candidate is stopped at
 `experiments/humanize2_kls_issue2_staged/review/pending/CandidateStage2ARun1.lean`; the human guide
 is `review/STAGE_2A_RUN1_REVIEW.md`. No acceptance or mathematical status is automatic. Stage 2B
 and all later mathematics remain blocked pending the sixteen-item human decision.
+
+## 15. Stage 2B acceptance and Stage 3 prompt freeze
+
+On 2026-09-01 the user accepted Stage 2B Run 1 after a Claude 5 Fable interactive review
+independently reproduced the candidate pin, silent independent build, both verification scripts,
+hidden oracle, and compact trace, then returned all sixteen review items `PASS`. The byte-identical
+accepted source is `experiments/humanize2_kls_issue2_staged/accepted/AcceptedStage2B.lean` with
+SHA-256 `69c2eead467fbc0516c191e034cedd1c8593bdaac50c1681912a429337b5dffc`.
+
+Stage 3 is frozen to one definition and four theorems for the extended Poincaré Rayleigh quotient.
+Division occurs in `ENNReal` after separate `ENNReal.ofReal` coercions, preserving positive-over-zero
+as `⊤` and `0 / 0 = 0`. The surface adds no probability, Borel, dimensional, nontriviality,
+separability, or centered-moment hypothesis and remains valid in dimension zero.
+
+`pins/stage_3.sha256` freezes the exact specification, actor prompt, sixteen-item human checklist,
+four accepted source/compiled pairs, eleven-entry fixture, hidden five-declaration production
+surface pin, exact verifier, deny-default candidate-only runner, and complete-trace auditor. The
+model-free suite passes deterministic rebuild, sentinel, known-good, axiom/suppression rejection,
+isolation, trace-policy, and fail-closed live gates. One fresh subscription-authenticated
+`gpt-5.6-sol` Run 1 at high effort is authorized under
+`/private/tmp/humanize2-kls-issue2-stage3-run1`; it must stop at `mechanical-pass` for a separate
+human decision.
