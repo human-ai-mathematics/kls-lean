@@ -216,3 +216,12 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Local operating-system and editor state
+.DS_Store
+.idea/
+.vscode/
+
+# Lean build output
+formalization/.lake/
+formalization/build/
