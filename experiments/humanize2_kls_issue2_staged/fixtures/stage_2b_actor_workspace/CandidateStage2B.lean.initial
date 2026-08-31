@@ -1,0 +1,13 @@
+import AcceptedStage2A
+
+noncomputable section
+
+open MeasureTheory ProbabilityTheory
+
+namespace Issue2Autoformalization.Stage1A
+
+-- HUMANIZE2_UNATTEMPTED_STAGE_2B: replace this compiler-failing sentinel with the three frozen
+-- theorems from TASK.md.
+#check stage2BImplementationRequired
+
+end Issue2Autoformalization.Stage1A

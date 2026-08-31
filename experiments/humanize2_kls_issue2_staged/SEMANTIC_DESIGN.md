@@ -193,7 +193,8 @@ The rejected Run 2 remains separate historical evidence at
 
 ## Stage 2A: linear-test geometry
 
-- **Status:** Run 1 `mechanical-pass`; human review pending
+- **Status:** `human-accepted` experimental dependency
+- **Accepted source:** [accepted/AcceptedStage2A.lean](accepted/AcceptedStage2A.lean)
 - **Stopped candidate:**
   [review/pending/CandidateStage2ARun1.lean](review/pending/CandidateStage2ARun1.lean)
 - **SHA-256:** `83847c7ef06cd6045a1d5d5a8595f3fb645be28e8af4c71d3e577187fb0ad586`
@@ -235,8 +236,40 @@ known-good test fixture, isolated runner, Seatbelt policy, one-turn flow, comple
 and model-free scripts. Run 1 compiled the exact five-declaration surface silently on its first
 attempt, with one session, one turn, zero descendants, and only candidate mutation. A post-stop
 comparison found no semantic or API difference from the frozen surface; the alternative direct
-`toDual` derivative proof is proof-only. `mechanical-pass` is not `human-accepted`, so no Stage 2B
-actor may consume this candidate yet.
+`toDual` derivative proof is proof-only. On 2026-09-01 the user accepted all sixteen checklist
+items by authorizing Stage 2B. The byte-identical accepted copy may therefore be exposed to the
+Stage 2B actor, but remains an experimental dependency rather than production or certification.
+
+## Stage 2B: linear-test analysis
+
+- **Status:** `specified`; Run 1 authorized, not yet executed
+- **Frozen specification:**
+  [inputs/issue2_stage_2b_linear_test_analysis.md](inputs/issue2_stage_2b_linear_test_analysis.md)
+- **Actor prompt:** [prompts/issue2_stage_2b_actor.md](prompts/issue2_stage_2b_actor.md)
+- **Human rubric:**
+  [review/issue2_stage_2b_human_checklist.md](review/issue2_stage_2b_human_checklist.md)
+
+### Frozen declaration semantics
+
+| Declaration | Informal meaning | Lean encoding and reason | Downstream contract |
+| --- | --- | --- | --- |
+| `dirichletEnergy_linearTest` | Under probability normalization, the energy of $x \mapsto \langle v,x\rangle$ is $\lVert v\rVert^2$ | The accepted gradient is constant, so the energy integrand is constant; `IsProbabilityMeasure μ` makes its integral equal that constant. | Stage 3 may replace the denominator of the linear-test Rayleigh quotient by exactly `‖v‖ ^ 2`. |
+| `isAdmissible_linearTest` | A finite second moment of the identity makes every scalar linear projection an admissible test | The hypothesis is exactly `MemLp (id : E → E) 2 μ`; smoothness comes from `innerSL`, scalar `MemLp` from continuous-linear-map composition, and energy integrability from the constant gradient plus probability normalization. | Later inequalities may instantiate `HasPoincare` with the accepted linear test without a stronger Borel or dimensional assumption. |
+| `variance_linearTest_le` | A fixed Poincaré constant bounds every linear-test variance by $C\lVert v\rVert^2$ | Instantiate `HasPoincare.variance_le` using the preceding admissibility theorem and rewrite the accepted energy identity. | This is the last fixed-real-constant fact before Stage 3 introduces extended quotients and the optimal constant. |
+
+### Design choices and boundaries
+
+- The ambient assumptions are exactly a complete real inner-product space and an abstract
+  measurable structure. No `BorelSpace`, finite-dimensionality, nontriviality, or separability is
+  introduced.
+- The moment assumption remains the coordinate-free `MemLp (id : E → E) 2 μ`; it is neither
+  centered nor replaced by a stronger norm-integrability hypothesis.
+- The explicit probability witness in `isAdmissible_linearTest` is used to discharge constant
+  energy integrability. It is not inferred from `MemLp`.
+- Stage 2B contains no attribute or auxiliary public declaration. Rayleigh quotients, optimal
+  constants, covariance, spectral arguments, and final Issue 2 assembly remain later stages.
+- The nine-entry actor fixture contains the three accepted source/compiled pairs and the current
+  task/candidate pair. Compilation must be silent and only the candidate may mutate.
 
 ## Planned later layers
 
@@ -244,7 +277,6 @@ These entries record design questions, not accepted semantics.
 
 | Stage | Status | Planned content | Semantic questions that must be frozen before a run |
 | --- | --- | --- | --- |
-| 2B | `planned` | Linear-test energy, admissibility from second moments, fixed-constant variance bound | Exact `MemLp id 2 μ` hypothesis, centering convention, and which integrability facts are derived rather than assumed |
 | 3 | `planned` | Extended Rayleigh quotient and optimal-constant comparison | `ENNReal` coercions, positive-energy division, zero-energy cases, and the intended `0 / 0` convention |
 | 4 | `planned` | Centered covariance and finite-dimensional spectral bridge | Centered versus Mathlib's uncentered operator, positivity, supremum indexing, eigenvalue existence, and the zero-dimensional convention |
 | 5 | `planned` | Abstract, Euclidean, and node-specific Issue 2 assembly | Exact specialization boundary, statement fidelity, and separation between reusable theorem and thin certificate |

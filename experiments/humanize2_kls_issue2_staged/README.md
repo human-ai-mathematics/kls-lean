@@ -9,13 +9,16 @@ silent Lean compilation, exact surface, isolation, immutable-dependency, oracle-
 trace checks, and the user accepted all fourteen human-review items. Its byte-identical accepted
 copy is `accepted/AcceptedStage1B.lean`.
 
-Stage 2A Run 1 is now a zero-diagnostic `mechanical-pass`: its natural-language semantics, exact
-five-declaration API, actor prompt, human checklist, seven-entry external fixture, dependency
-rebuild, oracle surface, candidate-only Seatbelt profile, one-turn flow, fail-closed runner, and
-complete-trace audit are frozen. The actor compiled its first implementation silently with zero
-repair iterations; the exact surface, immutable dependencies, isolation, oracle, and one-session,
-one-turn, zero-descendant trace gates all passed. It is stopped for the sixteen-item human review
-and changes no production declaration or mathematical status.
+Stage 2A Run 1 is now a human-accepted experimental dependency. Its first implementation compiled
+silently with zero repair iterations; exact surface, immutable dependencies, isolation, oracle,
+and one-session, one-turn, zero-descendant trace gates all passed. On 2026-09-01 the user accepted
+the sixteen-item review by authorizing Stage 2B. The byte-identical accepted copy is
+`accepted/AcceptedStage2A.lean`; this changes no production declaration or mathematical status.
+
+Stage 2B is specified and Run 1 is authorized. It contains exactly the linear-test energy,
+admissibility from `MemLp (id : E → E) 2 μ`, and the fixed-constant variance bound. Its actor sees
+exactly nine files: the task and candidate, `AGENTS.md`, and the three accepted source/compiled
+pairs. Rayleigh, covariance, spectral, and final Issue 2 results are excluded.
 
 The exact rejected Run 2 output remains published and pinned at
 `review/pending/CandidateStage1BRun2.lean`; `review/STAGE_1B_RUN2_REVIEW.md` records its historical
@@ -391,19 +394,43 @@ is `83847c7ef06cd6045a1d5d5a8595f3fb645be28e8af4c71d3e577187fb0ad586`; compact t
 SHA-256 is `0be977e90fea1cf5019028c71e3faf90563b2ac990b55cf038396603a61828e1`.
 
 The stopped source is `review/pending/CandidateStage2ARun1.lean`. Follow
-`review/STAGE_2A_RUN1_REVIEW.md`; do not edit or rerun the actor. Stage 2B remains blocked until a
-human records all sixteen checklist results and explicitly accepts, rejects, or requests repair.
+`review/STAGE_2A_RUN1_REVIEW.md`; do not edit or rerun the actor. The user accepted all sixteen
+items on 2026-09-01 and authorized one isolated Stage 2B Run 1. The accepted copy and its source
+and compiled hashes are under `accepted/`.
 The optional `prompts/issue2_stage_2a_claude5_fable_interactive_review.md` supports a read-only,
 phase-by-phase Claude walkthrough after the actor stop; it cannot make or record the human
 decision.
 
+## Authorized Stage 2B Run 1
+
+The frozen Stage 2B actor surface is in
+`inputs/issue2_stage_2b_linear_test_analysis.md`; the actor prompt is
+`prompts/issue2_stage_2b_actor.md`, and the human-only gate is
+`review/issue2_stage_2b_human_checklist.md`. `pins/stage_2b.sha256` locks the three accepted
+dependency pairs, nine-entry fixture, exact three-theorem verifier, hidden production-surface
+hash, Seatbelt policy, one-turn flow, trace auditor, and model-free tests.
+
+Run 1 uses a fresh state root and fresh direct ChatGPT-subscription authentication:
+
+```bash
+export H2_ISSUE2_STAGE2B_STATE_ROOT=/private/tmp/humanize2-kls-issue2-stage2b-run1
+experiments/humanize2_kls_issue2_staged/scripts/stage_2b_reset_run_state.sh
+CODEX_HOME="$H2_ISSUE2_STAGE2B_STATE_ROOT/actor-codex-home" codex login
+export H2_ISSUE2_STAGE2B_LIVE_RUN_ACK=issue2-stage2b-run1-human-review
+experiments/humanize2_kls_issue2_staged/scripts/stage_2b_run.sh
+```
+
+The runner will reset the candidate, reproduce all dependencies, rerun the model-free and
+isolation gates, execute exactly one actor turn, verify the stopped output and complete trace, and
+then stop for human review. Authentication and state from Stage 2A are not reused.
+
 ## Acceptance and mathematical status
 
-Lean exit zero is necessary but insufficient. The accepted Stage 1A and Stage 1B artifacts remain
-experimental dependencies only. Stage 1B Run 1 failed the exact surface and Run 2 was rejected on
-style; neither is accepted, certified, or a ledger event. Stage 2A Run 1 is a mechanical pass but
-is not human-accepted. Promotion into
+Lean exit zero is necessary but insufficient. The accepted Stage 1A, Stage 1B, and Stage 2A
+artifacts remain experimental dependencies only. Stage 1B Run 1 failed the exact surface and Run
+2 was rejected on style; neither is accepted, certified, or a ledger event. Promotion into
 `formalization/`, creation of a solution dossier, review certification, and ledger/manuscript
 updates require their normal repository workflows and separate explicit decisions. The wrong-cwd
 Codex task is recorded as an invalid pre-run and is not a Stage 2A candidate or attempt result.
-Valid Stage 2A Run 1 is mechanically successful but is not yet human-accepted.
+Valid Stage 2A Run 1 is human-accepted only for staged experimental dependency use. Stage 2B is
+authorized but cannot be accepted until its stopped output passes its own sixteen-item human gate.
