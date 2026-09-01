@@ -68,6 +68,15 @@ Give particular attention to:
 - the direct `ENNReal.ofReal` proof of `lambdaMaxCovariance_ne_top`, which is valid but does not
   route through the operator-norm theorem as production does.
 
+## Optional Claude-assisted interactive walkthrough
+
+The user may use
+`../prompts/issue2_stage_4b_claude5_fable_interactive_review.md` with Claude 5 Fable for a
+read-only phased walkthrough. Use it as an ordinary interactive conversation, not `/goal`.
+Claude must inspect the eigenvalue theorem and both Poincaré bounds at high attention and may read
+only the compact external trace summary. It may recommend an outcome, but only the user may accept
+or reject the candidate.
+
 ## Human outcome
 
 There are three valid next actions:

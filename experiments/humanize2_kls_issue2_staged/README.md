@@ -37,7 +37,9 @@ one session, one turn, zero descendants, five local `exec` calls, and two exact 
 feedback-driven repair preceded the silent final call. The exact single import, fifteen-entry
 fixture, six immutable accepted pairs, local instance placements, eight declarations, hidden
 production pin, and complete trace passed. The candidate is preserved under `review/pending/` and
-must stop for a separate sixteen-item human decision.
+must stop for a separate sixteen-item human decision. The optional
+`prompts/issue2_stage_4b_claude5_fable_interactive_review.md` provides a read-only phased
+walkthrough with the eigenvalue theorem and both Poincaré bounds as high-attention declarations.
 
 The exact rejected Run 2 output remains published and pinned at
 `review/pending/CandidateStage1BRun2.lean`; `review/STAGE_1B_RUN2_REVIEW.md` records its historical
