@@ -521,7 +521,7 @@ certificate, ledger, manuscript, or mathematical status.
 
 ## Stage 5: final assembly
 
-- **Status:** `specified`; Run 1 authorized, not started
+- **Status:** Run 1 `mechanical-pass`; human decision pending
 - **Accepted dependency:** [accepted/AcceptedStage4B.lean](accepted/AcceptedStage4B.lean)
 - **Frozen specification:**
   [inputs/issue2_stage_5_final_assembly.md](inputs/issue2_stage_5_final_assembly.md)
@@ -567,6 +567,31 @@ The run must stop at `mechanical-pass` pending a separate explicit human decisio
 formula, KLS target, thin node-certificate binding, ledger or manuscript edit, production
 promotion, dossier certification, or mathematical-status change is part of Stage 5. Acceptance,
 if later granted, completes only the staged reconstruction; wrap-up remains a separate decision.
+
+### Run 1 history
+
+The isolated subscription-authenticated `gpt-5.6-sol` Run 1 at `high` effort used one session,
+one turn, zero descendants, five local `exec` calls, and two exact Lean calls. Its initial compact
+certificate proof mishandled the strict-implicit argument order; one feedback-driven proof repair
+left the public binder unchanged, and the second compiler call exited zero with empty output.
+
+The candidate has SHA-256
+`b0ca9554c137307d16161cd6ccd57e46eadb4e6691e09c64d8c314c80acbfd6b`. Independent verification
+accepted the exact three-theorem surface and hidden production pin. The 2,948-job review build was
+silent. The compact trace audit has SHA-256
+`318a2bbdf10bb1ef67d403f728ca169cc47e1bf2b8da6d0cbce1601cb24be5f0` and records the exact
+seventeen-file fixture, seven immutable source/compiled pairs, candidate-only mutation, one
+session, one turn, zero descendants, and five `exec` calls.
+
+Post-stop comparison found no semantic or new declaration-API difference. The accepted namespace
+remains the API difference; missing production docstrings are documentation-only. The use of
+`by exact` wrappers for the first and third production proof terms is proof-only, while the
+certificate constructor proof follows production. The frozen redundant hypotheses and strict-
+implicit binder match exactly, and the Euclidean theorem keeps the canonical `D = 0` boundary.
+
+Run 1 remains only `mechanical-pass`. It is preserved at
+[review/pending/CandidateStage5Run1.lean](review/pending/CandidateStage5Run1.lean) and awaits the
+separate sixteen-item human decision.
 
 ## Update protocol
 

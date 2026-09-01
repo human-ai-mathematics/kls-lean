@@ -43,11 +43,13 @@ candidate. The optional
 `prompts/issue2_stage_4b_claude5_fable_interactive_review.md` provides a read-only phased
 walkthrough with the eigenvalue theorem and both Poincaré bounds as high-attention declarations.
 
-Stage 5 Run 1 is authorized but has not started. The frozen exact three-theorem surface packages
-the abstract lower bound, the certificate conjunction with strict-implicit `⦃f⦄`, and the
-Euclidean specialization including `D = 0`. Its finite-dimensional and probability hypotheses
-are deliberate statement-fidelity redundancy. The full model-free preflight passed, and exactly
-one fresh isolated high-effort actor run must stop at `mechanical-pass` for separate human review.
+Stage 5 Run 1 is now a zero-diagnostic `mechanical-pass`. The isolated `gpt-5.6-sol` actor used
+one session, one turn, zero descendants, five local `exec` calls, and two exact Lean calls; one
+feedback-driven repair made the strict-implicit proof binder explicit before the silent final
+call. The exact single import, seventeen-entry fixture, seven immutable accepted pairs, deliberate
+hypotheses, strict-implicit statement, three declarations, hidden production pin, and complete
+trace passed. The candidate is preserved under `review/pending/` and must stop for a separate
+sixteen-item human decision.
 
 The exact rejected Run 2 output remains published and pinned at
 `review/pending/CandidateStage1BRun2.lean`; `review/STAGE_1B_RUN2_REVIEW.md` records its historical
@@ -553,6 +555,17 @@ failing sentinel, silent known-good surface, fail-closed import/surface/strict-i
 deliberate-hypothesis/no-attribute controls, soundness and suppression rejection, deny-default
 isolation, complete-trace tests, and closed live gates. The append-only authorization record is
 `research/decisions/2026-09-01-humanize2-kls-issue2-stage5-run1-authorization.md`.
+
+Valid Run 1 started from authorization commit `f3d8909` and the fresh dedicated state root
+`/private/tmp/humanize2-kls-issue2-stage5-run1`. Its second exact compiler call exited zero with
+empty output after one repair iteration. Candidate SHA-256 is
+`b0ca9554c137307d16161cd6ccd57e46eadb4e6691e09c64d8c314c80acbfd6b`; compact trace-audit
+SHA-256 is `318a2bbdf10bb1ef67d403f728ca169cc47e1bf2b8da6d0cbce1601cb24be5f0`.
+
+The stopped source is `review/pending/CandidateStage5Run1.lean`. Follow
+`review/STAGE_5_RUN1_REVIEW.md`; do not edit or rerun the actor. Post-stop comparison found no
+semantic or new declaration-API difference: the accepted namespace remains the API difference,
+missing docstrings are documentation-only, and all remaining differences are proof-only.
 
 ## Acceptance and mathematical status
 
