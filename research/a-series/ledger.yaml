@@ -1,0 +1,17 @@
+{
+  "meta": {
+    "program": "a-series",
+    "scope": "Issue #2 Lean certification"
+  },
+  "nodes": [
+    {
+      "id": "lem:linear-test-lower",
+      "kind": "lemma",
+      "status": "proved",
+      "source": "KLS.pdf, Remark 3.8 (linear-test lower bound)",
+      "statement": "For a probability measure on R^D with finite second moment, D >= 0, every smooth L2 finite-energy test satisfies the extended Rayleigh bound R_mu(f) <= C_P(mu), with 0/0 = 0 and a/0 = +infinity for a > 0; hence lambdaMax(Cov_mu) <= C_P(mu), with the empty D = 0 Rayleigh supremum defined as 0.",
+      "lean_solution": "solutions/LemLinearTestLower.lean",
+      "checked_by": "lean"
+    }
+  ]
+}
