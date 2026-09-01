@@ -287,7 +287,8 @@ dossier, ledger, manuscript, or mathematical status.
 
 ## Stage 3: extended Rayleigh quotient
 
-- **Status:** Run 1 `mechanical-pass`; human review pending
+- **Status:** `human-accepted` experimental dependency
+- **Accepted source:** [accepted/AcceptedStage3.lean](accepted/AcceptedStage3.lean)
 - **Stopped candidate:**
   [review/pending/CandidateStage3Run1.lean](review/pending/CandidateStage3Run1.lean)
 - **SHA-256:** `4b4a6950fa80b4bd13ea291ff25955b9dca075de52c92e1900783066ce8a0583`
@@ -331,20 +332,90 @@ one-session/one-turn/zero-descendant trace, and candidate-only mutation gates al
 A post-stop comparison found no semantic or new API difference. The global bound's explicit
 zero/positive-energy split, symmetric application of `ENNReal.ofReal_div_of_pos`, and named
 positive-numerator witness for `ENNReal.div_zero` are proof-only. The pre-accepted namespace
-remains an API difference from production, and missing docstrings are documentation-only. The
-candidate remains stopped for all sixteen human-review items and is not an accepted Stage 4
-dependency.
+remains an API difference from production, and missing docstrings are documentation-only.
+
+On 2026-09-01 a Claude 5 Fable interactive review independently reproduced the candidate pin,
+silent 2,931-job review build, both verification scripts, hidden production pin, and compact trace
+audit, then returned all sixteen human-review items `PASS` with recommendation to accept. The
+user accepted Run 1 as the experimental Stage 4A dependency. The accepted source is byte-identical
+to the stopped candidate. This changes no production declaration, dossier, certificate, ledger,
+manuscript, theorem status, or mathematical claim.
+
+## Stage 4 split: centered covariance
+
+Stage 4 is split as a harness decision because the production `CenteredCovariance` section has
+sixteen declarations, beyond the established three-to-five-declaration one-turn cadence. Stage
+4A contains the centered covariance operator and real Rayleigh maximum; Stage 4B contains the
+spectral bridge and extended `lambdaMaxCovariance` bounds. The two frozen name lists concatenate
+to exactly the sixteen production declarations in production order.
+
+The split follows Lean file order, which is already a topological order of the declaration
+dependency graph: a declaration may use only declarations already available earlier in the
+environment. Consequently Stage 4B may depend on Stage 4A and earlier accepted layers, while no
+Stage 4A declaration can depend on a Stage 4B declaration. A fail-closed grep of the frozen Stage
+4A exact surface for every Stage 4B name returned zero matches before the input was frozen.
+
+This split changes no mathematical content or status. Each half requires its own hidden oracle
+pin, sixteen-item human checklist, full isolated one-turn protocol, and explicit human acceptance
+gate. Stage 4B is not authorized by the Stage 4A run decision.
+
+## Stage 4A: centered covariance operator and real Rayleigh maximum
+
+- **Status:** `specified`; one isolated Run 1 authorized
+- **Frozen specification:**
+  [inputs/issue2_stage_4a_centered_covariance.md](inputs/issue2_stage_4a_centered_covariance.md)
+- **Actor prompt:** [prompts/issue2_stage_4a_actor.md](prompts/issue2_stage_4a_actor.md)
+- **Human rubric:**
+  [review/issue2_stage_4a_human_checklist.md](review/issue2_stage_4a_human_checklist.md)
+
+### Frozen declaration semantics
+
+| Declaration | Informal meaning | Lean encoding and reason | Downstream contract |
+| --- | --- | --- | --- |
+| `centeredCovarianceOperator` | The Riesz operator representing the centered covariance bilinear form | `InnerProductSpace.continuousLinearMapOfBilin (covarianceBilin μ)`; it deliberately uses Mathlib's centered form rather than its uncentered covariance operator. | Stage 4B may use this exact bounded self-adjoint positive-semidefinite operator. |
+| `centeredCovarianceOperator_inner` | The operator represents `covarianceBilin` under the real inner product | Exact pointwise equality with the sole frozen `@[simp]` attribute. | Later quadratic-form and symmetry arguments may rewrite through this interface. |
+| `centeredCovarianceOperator_isSymmetric` | The centered covariance operator is symmetric | Transfers `covarianceBilin_comm` through the representation identity. | Stage 4B may apply the finite-dimensional symmetric-operator spectral theorem. |
+| `centeredCovarianceOperator_self_nonneg` | The covariance quadratic form is nonnegative | Rewrites to `covarianceBilin_self_nonneg`. | The real Rayleigh supremum is nonnegative. |
+| `centeredCovarianceOperator_self_eq_variance` | The quadratic form equals variance of the accepted linear test | Under `[IsFiniteMeasure μ]` and `MemLp (id : E → E) 2 μ`, combines `covarianceBilin_self` with `linearTest_eq_inner`. | Later Poincaré comparisons may move between covariance and accepted linear-test variance. |
+| `covarianceRayleighMax` | The real supremum of operator Rayleigh quotients | An `iSup` over `{x : E // x ≠ 0}` with no global nontriviality assumption. | Stage 4B may package the value in `ENNReal` and, with finite-dimensional nontriviality, identify an eigenvalue. |
+| `covarianceRayleighMax_eq_iSup_covariance_sphere` | Unit-sphere form of the same supremum | Uses the radius-one Rayleigh-quotient theorem and the represented covariance form. | Matches the natural-language unit-vector variational formula. |
+| `covarianceRayleighMax_nonneg` | The real supremum is nonnegative in every dimension | Uses a nonzero witness and a norm bound in the nontrivial case; uses `Real.iSup_of_isEmpty` in the subsingleton case. | Stage 4B may apply `ENNReal.ofReal` and recover the real value with the zero-dimensional convention intact. |
+
+### Import and ambient boundary
+
+The import list is exactly, in order:
+
+```lean
+import AcceptedStage3
+import Mathlib.Probability.Moments.CovarianceBilin
+```
+
+`covarianceBilin` is not transitively reachable through `AcceptedStage3`. Production
+`Poincare.lean` imports the same pinned upstream Mathlib module, and adding it retroactively to the
+immutable byte-accepted Stage 3 source is forbidden. The second import is therefore a harness/
+API-surface adjustment with no semantic content. A third import, omission, replacement, or
+reordering is a failed result.
+
+The ambient assumptions are exactly a complete real inner-product space with `MeasurableSpace E`
+and `BorelSpace E`. There is no global finite-dimensionality, nontriviality, separability,
+probability, or stronger moment assumption. The Borel requirement and the zero-dimensional case
+are both fail-closed verifier controls.
+
+The exact Stage 4A surface has no occurrence of any Stage 4B declaration name. The hidden
+production oracle SHA-256 is
+`d395edf875f5adf73ed6a4edf27f31ee997cf1e879ee10fc216ed6d0566d3e97`.
+`pins/stage_4a.sha256` freezes the 44-file actor-facing harness, including the exact ordered import
+check, eight-declaration verifier, Borel negative control, thirteen-entry fixture, five accepted
+source/compiled pairs, deny-default isolation, complete trace audit, runner, and model-free tests.
 
 ## Planned later layers
 
-These entries record design questions, not accepted semantics.
-
 | Stage | Status | Planned content | Semantic questions that must be frozen before a run |
 | --- | --- | --- | --- |
-| 4 | `planned` | Centered covariance and finite-dimensional spectral bridge | Centered versus Mathlib's uncentered operator, positivity, supremum indexing, eigenvalue existence, and the zero-dimensional convention |
+| 4B | `planned` | Spectral bridge and extended `lambdaMaxCovariance` bounds | Eigenvalue existence under finite-dimensional nontriviality, `ENNReal` packaging, finiteness, operator-norm control, fixed-Poincaré and optimal-Poincaré comparisons, and the zero-dimensional convention |
 | 5 | `planned` | Abstract, Euclidean, and node-specific Issue 2 assembly | Exact specialization boundary, statement fidelity, and separation between reusable theorem and thin certificate |
 
-No later-layer row authorizes a run or asserts that its listed design has been proved.
+No planned row authorizes a run or asserts that its listed design has been proved.
 
 ## Update protocol
 

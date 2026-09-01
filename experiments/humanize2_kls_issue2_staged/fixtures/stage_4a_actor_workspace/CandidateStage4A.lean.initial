@@ -1,0 +1,14 @@
+import AcceptedStage3
+import Mathlib.Probability.Moments.CovarianceBilin
+
+noncomputable section
+
+open MeasureTheory ProbabilityTheory
+
+namespace Issue2Autoformalization.Stage1A
+
+-- HUMANIZE2_UNATTEMPTED_STAGE_4A: replace this compiler-failing sentinel with the eight frozen
+-- declarations from TASK.md.
+#check stage4aImplementationRequired
+
+end Issue2Autoformalization.Stage1A

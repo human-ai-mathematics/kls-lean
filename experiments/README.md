@@ -14,19 +14,14 @@ root `README.md` remains the minimal project README inherited from `main`.
 
 ## Current Issue 2 gate
 
-Stages 1A, 1B Run 3, 2A Run 1, and 2B Run 1 are human-accepted experimental dependencies. The
-Stage 2B candidate is accepted byte-for-byte after an independent Claude 5 Fable walkthrough
-returned all sixteen review items `PASS`. Stage 3 is frozen to the five-declaration extended
-Rayleigh surface with an eleven-entry actor fixture, exact verifier, hidden production pin,
-deny-default isolation, complete-trace policy, and a model-free preflight suite that passes in
-full. The authorized fresh `gpt-5.6-sol` Run 1 at high effort produced a zero-diagnostic exact-
-surface candidate after three compiler-feedback repair iterations. One actor session, one turn,
-zero descendants, eleven visible files, candidate-only mutation, and all mechanical/trace gates
-passed. The result is stopped at `mechanical-pass` for a new human decision.
+Stages 1A, 1B Run 3, 2A Run 1, 2B Run 1, and Stage 3 Run 1 are human-accepted experimental
+dependencies. A Claude 5 Fable interactive review independently reproduced the Stage 3 hash,
+silent build, both verification scripts, hidden oracle, and compact trace, then returned all
+sixteen items `PASS`. The byte-identical accepted source is `accepted/AcceptedStage3.lean`.
 
-The Stage 3 mathematical input and actor prompt are
-`humanize2_kls_issue2_staged/inputs/issue2_stage_3_rayleigh_quotient.md` and
-`humanize2_kls_issue2_staged/prompts/issue2_stage_3_actor.md`. The accepted Stage 2B source is
-`humanize2_kls_issue2_staged/accepted/AcceptedStage2B.lean`; the stopped Stage 3 source is
-`humanize2_kls_issue2_staged/review/pending/CandidateStage3Run1.lean`. Earlier stopped and rejected
-outputs remain immutable historical records.
+The sixteen-declaration production covariance section is split at its dependency-ordered midpoint.
+Stage 4A is now `specified` and authorized for one isolated Run 1; Stage 4B remains planned and
+unauthorized. Stage 4A freezes eight centered-operator and real-Rayleigh declarations, an exact
+ordered two-import surface, a thirteen-entry fixture, exact import/declaration/Borel controls,
+hidden production pin, deny-default isolation, complete-trace policy, and a model-free suite that
+passes in full. No Stage 4A candidate or acceptance is automatic.

@@ -1,0 +1,77 @@
+import AcceptedStage3
+import Mathlib.Probability.Moments.CovarianceBilin
+
+noncomputable section
+
+open MeasureTheory ProbabilityTheory
+
+namespace Issue2Autoformalization.Stage1A
+
+variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
+  [MeasurableSpace E] [BorelSpace E]
+
+def centeredCovarianceOperator (μ : Measure E) : E →L[ℝ] E :=
+  InnerProductSpace.continuousLinearMapOfBilin (covarianceBilin μ)
+
+@[simp]
+theorem centeredCovarianceOperator_inner (μ : Measure E) (x y : E) :
+    inner ℝ (centeredCovarianceOperator μ x) y = covarianceBilin μ x y := by
+  exact InnerProductSpace.continuousLinearMapOfBilin_apply (covarianceBilin μ) x y
+
+theorem centeredCovarianceOperator_isSymmetric (μ : Measure E) :
+    (centeredCovarianceOperator μ).toLinearMap.IsSymmetric := by
+  intro x y
+  calc
+    inner ℝ (centeredCovarianceOperator μ x) y = covarianceBilin μ x y :=
+      centeredCovarianceOperator_inner μ x y
+    _ = covarianceBilin μ y x := covarianceBilin_comm x y
+    _ = inner ℝ (centeredCovarianceOperator μ y) x :=
+      (centeredCovarianceOperator_inner μ y x).symm
+    _ = inner ℝ x (centeredCovarianceOperator μ y) := real_inner_comm _ _
+
+theorem centeredCovarianceOperator_self_nonneg (μ : Measure E) (x : E) :
+    0 ≤ inner ℝ (centeredCovarianceOperator μ x) x := by
+  rw [centeredCovarianceOperator_inner]
+  exact covarianceBilin_self_nonneg x
+
+theorem centeredCovarianceOperator_self_eq_variance {μ : Measure E} [IsFiniteMeasure μ]
+    (hμ : MemLp (id : E → E) 2 μ) (x : E) :
+    inner ℝ (centeredCovarianceOperator μ x) x = variance (linearTest x) μ := by
+  rw [centeredCovarianceOperator_inner, covarianceBilin_self hμ, linearTest_eq_inner]
+
+def covarianceRayleighMax (μ : Measure E) : ℝ :=
+  ⨆ x : {x : E // x ≠ 0},
+    (centeredCovarianceOperator μ).rayleighQuotient x
+
+theorem covarianceRayleighMax_eq_iSup_covariance_sphere (μ : Measure E) :
+    covarianceRayleighMax μ =
+      ⨆ v : Metric.sphere (0 : E) 1, covarianceBilin μ v v := by
+  rw [covarianceRayleighMax,
+    (centeredCovarianceOperator μ).iSup_rayleigh_eq_iSup_rayleigh_sphere zero_lt_one]
+  congr 1
+  funext v
+  have hvnorm : ‖(v : E)‖ = 1 := mem_sphere_zero_iff_norm.mp v.property
+  simp [ContinuousLinearMap.rayleighQuotient,
+    ContinuousLinearMap.reApplyInnerSelf_apply, centeredCovarianceOperator_inner, hvnorm]
+
+theorem covarianceRayleighMax_nonneg (μ : Measure E) :
+    0 ≤ covarianceRayleighMax μ := by
+  by_cases hE : Nontrivial E
+  · let _ := hE
+    obtain ⟨x, hx⟩ := exists_ne (0 : E)
+    have hbdd : BddAbove
+        (Set.range fun x : {x : E // x ≠ 0} ↦
+          (centeredCovarianceOperator μ).rayleighQuotient x) := by
+      refine ⟨‖centeredCovarianceOperator μ‖, ?_⟩
+      rintro y ⟨v, rfl⟩
+      exact (le_abs_self _).trans
+        ((centeredCovarianceOperator μ).rayleighQuotient_le_norm v)
+    apply le_ciSup_of_le hbdd ⟨x, hx⟩
+    change 0 ≤ inner ℝ (centeredCovarianceOperator μ x) x / ‖x‖ ^ 2
+    exact div_nonneg (centeredCovarianceOperator_self_nonneg μ x) (sq_nonneg _)
+  · have _ : Subsingleton E := not_nontrivial_iff_subsingleton.mp hE
+    let _ : IsEmpty {x : E // x ≠ 0} :=
+      ⟨fun x ↦ x.property (Subsingleton.elim _ _)⟩
+    rw [covarianceRayleighMax, Real.iSup_of_isEmpty]
+
+end Issue2Autoformalization.Stage1A

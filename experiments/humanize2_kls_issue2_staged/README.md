@@ -20,12 +20,18 @@ linear-test energy, admissibility from `MemLp (id : E → E) 2 μ`, and the fixe
 bound. A Claude 5 Fable interactive review independently reproduced the mechanical evidence and
 returned all sixteen items `PASS`; the accepted source is byte-identical to the stopped candidate.
 
-Stage 3 Run 1 is now a zero-diagnostic `mechanical-pass`. Its five declarations define the
+Stage 3 Run 1 is now a human-accepted experimental dependency. Its five declarations define the
 extended Poincaré Rayleigh quotient and compare it with the extended optimal constant, including
-positive-energy, zero-energy, and no-finite-constant cases. The actor used one session, one turn,
-zero descendants, six local `exec` calls, and three compiler-feedback repair iterations. The exact
-surface, hidden oracle, immutable dependencies, isolation, and candidate-only trace gates passed;
-human review is still required.
+positive-energy, zero-energy, and no-finite-constant cases. A Claude 5 Fable review reproduced the
+mechanical evidence and returned all sixteen items `PASS`; `accepted/AcceptedStage3.lean` is
+byte-identical to the stopped candidate.
+
+Stage 4 is split into dependency-ordered halves. Stage 4A is `specified` and authorized for one
+isolated Run 1 over the eight centered-operator and real-Rayleigh declarations. Stage 4B contains
+the eight spectral and extended-`lambdaMaxCovariance` declarations and is not authorized. The
+Stage 4A candidate must import exactly `AcceptedStage3` and then
+`Mathlib.Probability.Moments.CovarianceBilin`; this harness/API adjustment is required because the
+immutable accepted chain does not expose `covarianceBilin` transitively and changes no semantics.
 
 The exact rejected Run 2 output remains published and pinned at
 `review/pending/CandidateStage1BRun2.lean`; `review/STAGE_1B_RUN2_REVIEW.md` records its historical
@@ -60,10 +66,12 @@ after a human accepts its statement, assumptions, namespace, and compiled Lean o
 5. **Stage 3 — extended Rayleigh layer**
    The Poincaré Rayleigh quotient, positive- and zero-energy cases, and comparison with the optimal
    Poincaré constant.
-6. **Stage 4 — covariance and spectral layer**
-   The centered covariance operator, positivity and variance identities, maximal Rayleigh value,
-   and the finite-dimensional eigenvalue bridge.
-7. **Stage 5 — Issue 2 assembly**
+6. **Stage 4A — centered covariance and real Rayleigh layer**
+   The centered covariance operator, representation, symmetry, positivity and variance identity,
+   real maximal Rayleigh value, unit-sphere form, and zero-dimensional nonnegativity.
+7. **Stage 4B — spectral and extended covariance layer**
+   The finite-dimensional eigenvalue bridge and extended `lambdaMaxCovariance` bounds.
+8. **Stage 5 — Issue 2 assembly**
    The abstract lower bound, the Euclidean specialization, and the thin node certificate.
 
 This decomposition is an experimental schedule, not a new mathematical statement. It does not
@@ -467,19 +475,39 @@ empty output after three repair iterations. Candidate SHA-256 is
 `4b4a6950fa80b4bd13ea291ff25955b9dca075de52c92e1900783066ce8a0583`; compact trace-audit
 SHA-256 is `cfbb822a10d60d1175fb2a5178f0a64aa56bbc6ba62521ff706dd9695995f8cd`.
 
-The stopped source is `review/pending/CandidateStage3Run1.lean`. Follow
-`review/STAGE_3_RUN1_REVIEW.md`; do not edit or rerun the actor. A post-stop comparison found no
-semantic or new API difference, only proof-construction variants. Run 1 is not an accepted Stage 4
-dependency until a human completes and records all sixteen checklist items.
+The stopped source is `review/pending/CandidateStage3Run1.lean`. The user accepted all sixteen
+items after the independent review; its byte-identical accepted copy and source/compiled pins are
+under `accepted/`. This changes no production or mathematical status.
+
+## Stage 4A Run 1 preparation
+
+The frozen mathematical surface is `inputs/issue2_stage_4a_centered_covariance.md`; the actor
+prompt is `prompts/issue2_stage_4a_actor.md`, and the human-only gate is
+`review/issue2_stage_4a_human_checklist.md`. The candidate imports exactly, in order,
+`AcceptedStage3` and `Mathlib.Probability.Moments.CovarianceBilin`, then adds the eight Stage 4A
+declarations through `covarianceRayleighMax_nonneg`.
+
+The production-order split leaves all eight eigenvalue and extended-`lambdaMaxCovariance`
+declarations for Stage 4B. A mechanical grep of the frozen Stage 4A surface found zero Stage 4B
+names. The thirteen-entry actor fixture exposes the five accepted source/compiled pairs plus
+`AGENTS.md`, `TASK.md`, and the candidate; only the candidate is mutable.
+
+The model-free suite passes deterministic five-layer rebuilds, exact fixture restoration, failing
+sentinel, silent known-good surface, third-import/reversed-import/missing-Borel negative controls,
+axiom and diagnostic-suppression rejection, deny-default Seatbelt isolation, one-session/one-turn/
+zero-descendant trace policy, and fail-closed live gates. The append-only acceptance and
+authorization record is
+`research/decisions/2026-09-01-humanize2-kls-issue2-stage3-acceptance-stage4a-authorization.md`.
 
 ## Acceptance and mathematical status
 
-Lean exit zero is necessary but insufficient. The accepted Stage 1A, Stage 1B, Stage 2A, and Stage 2B
-artifacts remain experimental dependencies only. Stage 1B Run 1 failed the exact surface and Run
-2 was rejected on style; neither is accepted, certified, or a ledger event. Promotion into
+Lean exit zero is necessary but insufficient. The accepted Stage 1A, Stage 1B, Stage 2A, Stage 2B,
+and Stage 3 artifacts remain experimental dependencies only. Stage 1B Run 1 failed the exact
+surface and Run 2 was rejected on style; neither is accepted, certified, or a ledger event.
+Promotion into
 `formalization/`, creation of a solution dossier, review certification, and ledger/manuscript
 updates require their normal repository workflows and separate explicit decisions. The wrong-cwd
 Codex task is recorded as an invalid pre-run and is not a Stage 2A candidate or attempt result.
-Valid Stage 2A and Stage 2B Run 1 are human-accepted only for staged experimental dependency use.
-Stage 3 may stop only at `mechanical-pass`; it cannot become a Stage 4 dependency until its own
-sixteen-item human gate is completed and explicitly accepted.
+Valid Stage 2A, Stage 2B, and Stage 3 Run 1 are human-accepted only for staged experimental
+dependency use. Stage 4A may stop only at `mechanical-pass`; it cannot become a Stage 4B
+dependency until its own sixteen-item human gate is completed and explicitly accepted.
