@@ -80,6 +80,16 @@ made eight exact Lean calls: the initial attempt failed, seven feedback-driven r
 and the eighth call was silent. Its final response labeled the repair count as eight by including
 the initial implementation in that count.
 
+## Optional Claude-assisted interactive walkthrough
+
+The user may use
+`../prompts/issue2_stage_4a_claude5_fable_interactive_review.md` with Claude 5 Fable for a
+read-only, phased walkthrough. Use it as an ordinary interactive conversation, not `/goal`.
+Claude is required to inspect the expanded variance and sphere-normalization proofs in separate
+phases. It may reproduce evidence and recommend checklist outcomes, but the human user retains the
+accept/reject decision. This optional post-stop review does not resume or provide feedback to the
+actor.
+
 ## Human outcome
 
 There are three valid next actions:

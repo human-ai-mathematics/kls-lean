@@ -38,6 +38,10 @@ zero descendants, nineteen local `exec` calls, and eight exact compiler calls; s
 post-failure repairs preceded the silent final call. The exact ordered imports, ambient block,
 eight declarations, hidden oracle, immutable dependencies, isolation, and candidate-only trace
 gates passed. Human review is still required, and Stage 4B remains unauthorized.
+The optional `prompts/issue2_stage_4a_claude5_fable_interactive_review.md` provides a read-only,
+seven-phase Claude walkthrough with separate semantic audits of the expanded variance proof and
+explicit sphere-normalization proof. Claude may recommend an outcome, but only the user may record
+acceptance or authorize Stage 4B.
 
 The exact rejected Run 2 output remains published and pinned at
 `review/pending/CandidateStage1BRun2.lean`; `review/STAGE_1B_RUN2_REVIEW.md` records its historical
