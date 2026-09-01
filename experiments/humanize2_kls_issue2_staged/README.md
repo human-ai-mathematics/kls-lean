@@ -32,13 +32,12 @@ post-failure repairs preceded the silent final call. A Claude 5 Fable review rep
 silent 2,946-job build, both verifiers, hidden oracle, and compact trace and returned all sixteen
 items `PASS`; `accepted/AcceptedStage4A.lean` is byte-identical to the stopped candidate.
 
-Stage 4B is `specified` and authorized for one isolated `gpt-5.6-sol` Run 1 at high effort. It
-freezes the remaining eight spectral and extended-`lambdaMaxCovariance` declarations. A pre-freeze
-known-good compilation established that the exact import surface is only `AcceptedStage4A`; no
-extra Mathlib import is required. The fifteen-entry fixture, six immutable accepted source/
-compiled pairs, hidden production pin, exact import/declaration/instance controls, deny-default
-isolation, complete-trace policy, and fail-closed live gates passed the full model-free preflight.
-Any live result must stop at `mechanical-pass` for a separate sixteen-item human decision.
+Stage 4B Run 1 is now a zero-diagnostic `mechanical-pass`. The isolated `gpt-5.6-sol` actor used
+one session, one turn, zero descendants, five local `exec` calls, and two exact Lean calls; one
+feedback-driven repair preceded the silent final call. The exact single import, fifteen-entry
+fixture, six immutable accepted pairs, local instance placements, eight declarations, hidden
+production pin, and complete trace passed. The candidate is preserved under `review/pending/` and
+must stop for a separate sixteen-item human decision.
 
 The exact rejected Run 2 output remains published and pinned at
 `review/pending/CandidateStage1BRun2.lean`; `review/STAGE_1B_RUN2_REVIEW.md` records its historical

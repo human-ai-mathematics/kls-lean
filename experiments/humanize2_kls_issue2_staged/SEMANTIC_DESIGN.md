@@ -437,7 +437,10 @@ production code or change a proof, ledger, manuscript, or mathematical status.
 
 ## Stage 4B: spectral bridge and extended covariance bounds
 
-- **Status:** `specified`; Run 1 authorized, not yet started
+- **Status:** Run 1 `mechanical-pass`; human review pending
+- **Stopped candidate:**
+  [review/pending/CandidateStage4BRun1.lean](review/pending/CandidateStage4BRun1.lean)
+- **SHA-256:** `610e9006ffe2e03beb83ec6ec811cfb58ae67621867e191c371264b2066a3188`
 - **Accepted dependency:** [accepted/AcceptedStage4A.lean](accepted/AcceptedStage4A.lean)
 - **Frozen specification:**
   [inputs/issue2_stage_4b_spectral_bridge.md](inputs/issue2_stage_4b_spectral_bridge.md)
@@ -478,11 +481,24 @@ The full model-free suite passed deterministic six-layer rebuild, failing sentin
 good surface, exact import/ambient/declaration controls, soundness and suppression rejection,
 deny-default isolation, complete-trace tests, and fail-closed live gates.
 
-One isolated subscription-authenticated `gpt-5.6-sol` Run 1 at `high` effort is authorized under
-`/private/tmp/humanize2-kls-issue2-stage4b-run1`. It must stop at `mechanical-pass`; no run result
-is human-accepted automatically. This stage completes the abstract extended-value form of Remark
-3.8's linear-test lower bound. Euclidean/Gaussian specialization and final Issue 2 assembly remain
-Stage 5 or out of scope.
+The isolated subscription-authenticated `gpt-5.6-sol` Run 1 at `high` effort used one session, one
+turn, zero descendants, five local `exec` calls, and two exact Lean calls. One compiler-feedback
+repair iteration preceded the silent final call. The exact single import, ambient block, local
+instance placements, sole attribute, eight declaration names and types, hidden oracle, immutable
+dependencies, fifteen visible files, and candidate-only mutation all passed.
+
+Independent `lake build Stage4BRun1Review` completed 2,947 jobs without a Lean warning or linter
+diagnostic. Post-stop comparison found no semantic or declaration-API difference. The accepted
+experimental namespace remains an API difference; missing docstrings are documentation-only. The
+nonempty-subtype case splits, simplification choices, and direct `ENNReal.ofReal` proof of
+`lambdaMaxCovariance_ne_top` are proof-only. The direct finiteness proof does not route through the
+operator-norm theorem as production does and is an explicit human-review attention point.
+
+The candidate remains stopped for all sixteen human-review items. `mechanical-pass` is not human
+acceptance. This stage represents the abstract extended-value form of Remark 3.8's linear-test
+lower bound; Euclidean/Gaussian specialization and final Issue 2 assembly remain Stage 5 or out
+of scope. The run record is
+[2026-09-01-humanize2-kls-issue2-stage4b-run1.md](../../research/explorations/2026-09-01-humanize2-kls-issue2-stage4b-run1.md).
 
 ## Planned later layers
 

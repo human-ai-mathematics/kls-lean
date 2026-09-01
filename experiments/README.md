@@ -19,8 +19,8 @@ experimental dependencies. The accepted Stage 4A source is byte-identical to its
 candidate after a Claude 5 Fable review reproduced all mechanical evidence, checked the two long
 proofs line by line, and returned all sixteen items `PASS`.
 
-Stage 4B is now frozen and authorized for one isolated `gpt-5.6-sol` Run 1 at high effort. Its
-remaining eight centered-covariance declarations compile in the known-good fixture with the
-single import `AcceptedStage4A`. The full model-free preflight passed the six-layer rebuild,
-fifteen-entry fixture, exact surface, hidden oracle, soundness, isolation, trace-policy, and live-
-gate controls. A live candidate remains a mechanical result until a separate human decision.
+Stage 4B Run 1 is now a zero-diagnostic `mechanical-pass`. One isolated high-effort
+`gpt-5.6-sol` turn produced the exact single-import/eight-declaration surface on its second Lean
+call after one repair iteration. The fifteen-entry fixture, six immutable accepted pairs, hidden
+oracle, exact surface and instance controls, candidate-only mutation, and complete trace passed.
+The stopped candidate awaits a separate sixteen-item human decision.
