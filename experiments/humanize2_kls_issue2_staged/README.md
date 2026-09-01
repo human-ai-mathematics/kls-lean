@@ -33,6 +33,12 @@ Stage 4A candidate must import exactly `AcceptedStage3` and then
 `Mathlib.Probability.Moments.CovarianceBilin`; this harness/API adjustment is required because the
 immutable accepted chain does not expose `covarianceBilin` transitively and changes no semantics.
 
+Stage 4A Run 1 is now a zero-diagnostic `mechanical-pass`. The actor used one session, one turn,
+zero descendants, nineteen local `exec` calls, and eight exact compiler calls; seven
+post-failure repairs preceded the silent final call. The exact ordered imports, ambient block,
+eight declarations, hidden oracle, immutable dependencies, isolation, and candidate-only trace
+gates passed. Human review is still required, and Stage 4B remains unauthorized.
+
 The exact rejected Run 2 output remains published and pinned at
 `review/pending/CandidateStage1BRun2.lean`; `review/STAGE_1B_RUN2_REVIEW.md` records its historical
 review path. The accepted zero-warning source remains preserved at
@@ -498,6 +504,18 @@ axiom and diagnostic-suppression rejection, deny-default Seatbelt isolation, one
 zero-descendant trace policy, and fail-closed live gates. The append-only acceptance and
 authorization record is
 `research/decisions/2026-09-01-humanize2-kls-issue2-stage3-acceptance-stage4a-authorization.md`.
+
+Valid Run 1 started from local preparation commit `57dea88` and the fresh dedicated state root
+`/private/tmp/humanize2-kls-issue2-stage4a-run1`. Its eighth exact compiler call exited zero with
+empty output. Candidate SHA-256 is
+`233e0297d99e52467e4ef7533af76f2310b23400ed720228361d540ffa36a90d`; compact trace-audit
+SHA-256 is `4619e0b269f591ffa7d4206aa06664bd4691a044161688e73116f7dfcffd90bc`.
+
+The stopped source is `review/pending/CandidateStage4ARun1.lean`. Follow
+`review/STAGE_4A_RUN1_REVIEW.md`; do not edit or rerun the actor. The post-stop comparison found no
+semantic or new declaration-API difference, only the pre-authorized import/namespace differences
+and proof-construction variants. Run 1 cannot become a Stage 4B dependency until a human completes
+and records all sixteen checklist items.
 
 ## Acceptance and mathematical status
 

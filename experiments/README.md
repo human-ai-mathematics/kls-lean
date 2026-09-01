@@ -20,8 +20,9 @@ silent build, both verification scripts, hidden oracle, and compact trace, then 
 sixteen items `PASS`. The byte-identical accepted source is `accepted/AcceptedStage3.lean`.
 
 The sixteen-declaration production covariance section is split at its dependency-ordered midpoint.
-Stage 4A is now `specified` and authorized for one isolated Run 1; Stage 4B remains planned and
-unauthorized. Stage 4A freezes eight centered-operator and real-Rayleigh declarations, an exact
-ordered two-import surface, a thirteen-entry fixture, exact import/declaration/Borel controls,
-hidden production pin, deny-default isolation, complete-trace policy, and a model-free suite that
-passes in full. No Stage 4A candidate or acceptance is automatic.
+Stage 4A Run 1 is now a zero-diagnostic `mechanical-pass`; Stage 4B remains planned and
+unauthorized. The single actor turn produced the exact ordered two-import/eight-declaration
+surface on its eighth compiler call after seven post-failure repairs. One session, zero
+descendants, thirteen visible files, candidate-only mutation, the hidden production pin, exact
+import/declaration/Borel controls, and complete-trace gates passed. The candidate remains stopped
+for a separate sixteen-item human decision.

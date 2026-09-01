@@ -361,7 +361,10 @@ gate. Stage 4B is not authorized by the Stage 4A run decision.
 
 ## Stage 4A: centered covariance operator and real Rayleigh maximum
 
-- **Status:** `specified`; one isolated Run 1 authorized
+- **Status:** Run 1 `mechanical-pass`; human review pending
+- **Stopped candidate:**
+  [review/pending/CandidateStage4ARun1.lean](review/pending/CandidateStage4ARun1.lean)
+- **SHA-256:** `233e0297d99e52467e4ef7533af76f2310b23400ed720228361d540ffa36a90d`
 - **Frozen specification:**
   [inputs/issue2_stage_4a_centered_covariance.md](inputs/issue2_stage_4a_centered_covariance.md)
 - **Actor prompt:** [prompts/issue2_stage_4a_actor.md](prompts/issue2_stage_4a_actor.md)
@@ -407,6 +410,21 @@ production oracle SHA-256 is
 `pins/stage_4a.sha256` freezes the 44-file actor-facing harness, including the exact ordered import
 check, eight-declaration verifier, Borel negative control, thirteen-entry fixture, five accepted
 source/compiled pairs, deny-default isolation, complete trace audit, runner, and model-free tests.
+
+Run 1 used one actor session and one turn with zero descendants. The eighth exact compiler call
+exited zero with empty output after seven post-failure repair iterations; the actor's final report
+counted the initial implementation and labeled the total as eight repairs. The exact ordered
+imports, ambient block, sole attribute, eight declaration names and types, hidden oracle,
+immutable dependencies, nineteen local `exec` calls, thirteen visible files, and candidate-only
+mutation all passed their mechanical and trace gates. Independent `lake build
+Stage4ARun1Review` completed 2,946 jobs without a Lean warning or linter diagnostic.
+
+The candidate has no semantic or new declaration-API difference from the frozen or production
+surface. The experimental namespace and pre-authorized second import remain API/harness-surface
+differences. Its simplification proof of the representation identity, explicit coercion arguments,
+expanded Bochner-integral variance proof, range-normalization sphere proof, and nonempty-subtype
+case split are proof-only. Missing production docstrings are documentation-only. The candidate is
+stopped for all sixteen human-review items and is not an accepted Stage 4B dependency.
 
 ## Planned later layers
 

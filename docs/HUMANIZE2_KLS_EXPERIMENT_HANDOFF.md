@@ -703,3 +703,43 @@ mutation, physical isolation, and complete trace gates all passed. The stopped s
 `experiments/humanize2_kls_issue2_staged/review/pending/CandidateStage3Run1.lean`; it remains only
 `mechanical-pass` pending the sixteen-item human review and an explicit accept/reject/repair
 decision.
+
+## 16. Stage 3 acceptance, Stage 4 split, and Stage 4A Run 1
+
+On 2026-09-01 the user accepted Stage 3 Run 1 after a Claude 5 Fable interactive review
+reproduced the source pin, silent 2,931-job build, both verification scripts, hidden oracle, and
+compact trace, then returned all sixteen items `PASS`. The byte-identical accepted source is
+`experiments/humanize2_kls_issue2_staged/accepted/AcceptedStage3.lean` with SHA-256
+`4b4a6950fa80b4bd13ea291ff25955b9dca075de52c92e1900783066ce8a0583`.
+
+The sixteen production centered-covariance declarations are split in production/dependency order.
+Stage 4A contains the first eight declarations through `covarianceRayleighMax_nonneg`; Stage 4B
+contains the eigenvalue bridge and seven extended-`lambdaMaxCovariance` declarations. A mechanical
+grep of the frozen Stage 4A surface found zero Stage 4B names. The split is a harness decision and
+changes no mathematical status; Stage 4B remains unauthorized.
+
+Stage 4A's exact import surface is `AcceptedStage3` followed by
+`Mathlib.Probability.Moments.CovarianceBilin`, with no third import. The direct Mathlib import is a
+harness/API adjustment because `covarianceBilin` is not transitively exposed through the immutable
+accepted chain and production imports the same pinned upstream module. The verifier rejects any
+omission, replacement, reordering, third import, or missing `BorelSpace` ambient assumption.
+
+`pins/stage_4a.sha256` freezes the 44-file harness, five accepted source/compiled pairs,
+thirteen-entry actor fixture, hidden eight-declaration production pin, exact import/declaration/
+Borel checks, deny-default isolation, runner, and complete-trace auditor. The model-free suite
+passed before the actor call.
+
+Valid Run 1 started from local preparation commit `57dea88` in the fresh root
+`/private/tmp/humanize2-kls-issue2-stage4a-run1`, with direct ChatGPT-subscription authentication.
+The single high-effort actor session used one turn, zero descendants, nineteen local `exec` calls,
+and exactly the thirteen permitted files. Its eighth exact Lean call exited zero with empty output
+after seven post-failure repairs. Candidate SHA-256 is
+`233e0297d99e52467e4ef7533af76f2310b23400ed720228361d540ffa36a90d`; compact trace-audit
+SHA-256 is `4619e0b269f591ffa7d4206aa06664bd4691a044161688e73116f7dfcffd90bc`.
+
+The independent 2,946-job review build, exact ordered-import/eight-declaration verifier, hidden
+oracle, immutable dependencies, candidate-only mutation, physical isolation, and complete trace
+all passed. The exact stopped output is
+`experiments/humanize2_kls_issue2_staged/review/pending/CandidateStage4ARun1.lean`; the human guide
+is `review/STAGE_4A_RUN1_REVIEW.md`. It remains only `mechanical-pass` pending the sixteen-item
+human decision, and no Stage 4B run or acceptance is automatic.
