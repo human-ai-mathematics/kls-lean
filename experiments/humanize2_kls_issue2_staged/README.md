@@ -43,13 +43,14 @@ candidate. The optional
 `prompts/issue2_stage_4b_claude5_fable_interactive_review.md` provides a read-only phased
 walkthrough with the eigenvalue theorem and both Poincaré bounds as high-attention declarations.
 
-Stage 5 Run 1 is now a zero-diagnostic `mechanical-pass`. The isolated `gpt-5.6-sol` actor used
+Stage 5 Run 1 is now the final human-accepted experimental layer. The isolated `gpt-5.6-sol` actor used
 one session, one turn, zero descendants, five local `exec` calls, and two exact Lean calls; one
 feedback-driven repair made the strict-implicit proof binder explicit before the silent final
 call. The exact single import, seventeen-entry fixture, seven immutable accepted pairs, deliberate
 hypotheses, strict-implicit statement, three declarations, hidden production pin, and complete
-trace passed. The candidate is preserved under `review/pending/` and must stop for a separate
-sixteen-item human decision. The optional
+trace passed. An overall statement-level audit found no semantic or unrequested declaration-API
+difference and returned all sixteen items `PASS`; `accepted/AcceptedStage5.lean` is byte-identical
+to the stopped candidate. The optional
 `prompts/issue2_stage_5_claude5_fable_interactive_review.md` provides a read-only phased
 walkthrough with the deliberate hypothesis redundancy and strict-implicit binder as dedicated
 review checks.
@@ -565,21 +566,23 @@ empty output after one repair iteration. Candidate SHA-256 is
 `b0ca9554c137307d16161cd6ccd57e46eadb4e6691e09c64d8c314c80acbfd6b`; compact trace-audit
 SHA-256 is `318a2bbdf10bb1ef67d403f728ca169cc47e1bf2b8da6d0cbce1601cb24be5f0`.
 
-The stopped source is `review/pending/CandidateStage5Run1.lean`. Follow
-`review/STAGE_5_RUN1_REVIEW.md`; do not edit or rerun the actor. Post-stop comparison found no
-semantic or new declaration-API difference: the accepted namespace remains the API difference,
-missing docstrings are documentation-only, and all remaining differences are proof-only.
+The stopped source remains at `review/pending/CandidateStage5Run1.lean`; do not edit or rerun the
+actor. Post-stop comparison found no semantic or new declaration-API difference: the accepted
+namespace remains the API difference, missing docstrings are documentation-only, and all
+remaining differences are proof-only. The user accepted all sixteen checklist items after an
+overall semantic-alignment audit. Its byte-identical accepted copy is
+`accepted/AcceptedStage5.lean`; the append-only acceptance decision is
+`research/decisions/2026-09-01-humanize2-kls-issue2-stage5-run1-acceptance.md`.
 
 ## Acceptance and mathematical status
 
 Lean exit zero is necessary but insufficient. The accepted Stage 1A, Stage 1B, Stage 2A, Stage 2B,
-Stage 3, Stage 4A, and Stage 4B artifacts remain experimental dependencies only. Stage 1B Run 1 failed the exact
+Stage 3, Stage 4A, Stage 4B, and Stage 5 artifacts remain experimental artifacts only. Stage 1B Run 1 failed the exact
 surface and Run 2 was rejected on style; neither is accepted, certified, or a ledger event.
 Promotion into
 `formalization/`, creation of a solution dossier, review certification, and ledger/manuscript
 updates require their normal repository workflows and separate explicit decisions. The wrong-cwd
 Codex task is recorded as an invalid pre-run and is not a Stage 2A candidate or attempt result.
-Valid Stage 2A through Stage 4B runs are human-accepted only for staged experimental dependency
-use. Stage 5 may stop only at `mechanical-pass`; it cannot become an accepted final experimental
-layer until its own sixteen-item human gate is completed and explicitly accepted. A later
-experiment wrap-up remains a separate decision.
+Valid Stage 2A through Stage 5 runs are human-accepted only inside this staged experiment. Stage 5
+completes the reconstruction but does not create the separate experiment wrap-up, promote
+production code, certify a dossier, or change a ledger, manuscript, or mathematical status.

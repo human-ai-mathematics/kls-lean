@@ -23,9 +23,11 @@ Stage 4B Run 1 is now a human-accepted experimental dependency under the standin
 alignment ruling. The accepted source is byte-identical to the stopped candidate, and all sixteen
 review items pass.
 
-Stage 5 Run 1 is now a zero-diagnostic `mechanical-pass`. One isolated high-effort
-`gpt-5.6-sol` turn produced the exact single-import, three-theorem final-assembly surface on its
-second Lean call after one repair iteration. The seventeen-entry fixture, seven immutable
-accepted pairs, hidden oracle, strict-implicit and deliberate-hypothesis controls, candidate-only
-mutation, and complete trace passed. The stopped candidate awaits a separate sixteen-item human
-decision; no experiment wrap-up is automatic.
+Stage 5 Run 1 is now the final human-accepted experimental layer. An overall statement-level
+audit found the three frozen theorem signatures exactly aligned with the production reference,
+including the deliberate finite-dimensional/probability redundancy, strict-implicit certificate
+binder, and `D = 0` Euclidean boundary. All sixteen review items pass, and the accepted source is
+byte-identical to the stopped candidate.
+
+The staged Issue 2 reconstruction is complete. The separate experiment wrap-up or synthesis has
+not started, and no production, dossier, ledger, manuscript, or mathematical status changed.

@@ -521,7 +521,11 @@ certificate, ledger, manuscript, or mathematical status.
 
 ## Stage 5: final assembly
 
-- **Status:** Run 1 `mechanical-pass`; human decision pending
+- **Status:** `human-accepted` final experimental layer
+- **Accepted source:** [accepted/AcceptedStage5.lean](accepted/AcceptedStage5.lean)
+- **Stopped candidate retained for provenance:**
+  [review/pending/CandidateStage5Run1.lean](review/pending/CandidateStage5Run1.lean)
+- **SHA-256:** `b0ca9554c137307d16161cd6ccd57e46eadb4e6691e09c64d8c314c80acbfd6b`
 - **Accepted dependency:** [accepted/AcceptedStage4B.lean](accepted/AcceptedStage4B.lean)
 - **Frozen specification:**
   [inputs/issue2_stage_5_final_assembly.md](inputs/issue2_stage_5_final_assembly.md)
@@ -563,10 +567,10 @@ and the soundness boundary are binding; proof construction is otherwise unconstr
 finite-dimensional and probability instances on the first two theorems must not be rejected as
 smuggled assumptions, and the strict-implicit binder is a dedicated surface check.
 
-The run must stop at `mechanical-pass` pending a separate explicit human decision. No Gaussian
+Run 1 was required to stop at `mechanical-pass` pending a separate explicit human decision. No Gaussian
 formula, KLS target, thin node-certificate binding, ledger or manuscript edit, production
 promotion, dossier certification, or mathematical-status change is part of Stage 5. Acceptance,
-if later granted, completes only the staged reconstruction; wrap-up remains a separate decision.
+now granted, completes only the staged reconstruction; wrap-up remains a separate decision.
 
 ### Run 1 history
 
@@ -589,9 +593,23 @@ remains the API difference; missing production docstrings are documentation-only
 certificate constructor proof follows production. The frozen redundant hypotheses and strict-
 implicit binder match exactly, and the Euclidean theorem keeps the canonical `D = 0` boundary.
 
-Run 1 remains only `mechanical-pass`. It is preserved at
-[review/pending/CandidateStage5Run1.lean](review/pending/CandidateStage5Run1.lean) and awaits the
-separate sixteen-item human decision.
+An overall read-only semantic-alignment audit normalized the three theorem statements and found
+zero difference among the frozen specification, stopped candidate, and production reference. It
+separately confirmed the deliberate finite-dimensional/probability redundancy, exact strict-
+implicit certificate binder, canonical Euclidean instances, and `D = 0` boundary. Proof and
+soundness review found only the accepted dependency chain, no added premise or manual instance,
+and no escape hatch. All sixteen checklist items pass.
+
+The user accepted Run 1. [accepted/AcceptedStage5.lean](accepted/AcceptedStage5.lean) is byte-
+identical to the stopped candidate and reproduces its SHA-256. The acceptance decision is
+[2026-09-01-humanize2-kls-issue2-stage5-run1-acceptance.md](../../research/decisions/2026-09-01-humanize2-kls-issue2-stage5-run1-acceptance.md);
+the append-only run record remains unchanged at
+[2026-09-01-humanize2-kls-issue2-stage5-run1.md](../../research/explorations/2026-09-01-humanize2-kls-issue2-stage5-run1.md).
+
+This acceptance completes the staged reconstruction inside the experiment. The separate
+experiment wrap-up or synthesis has not started and requires a later human decision. Acceptance
+promotes no production code, certifies no dossier, and changes no solution, ledger, manuscript,
+theorem status, or mathematical claim.
 
 ## Update protocol
 
