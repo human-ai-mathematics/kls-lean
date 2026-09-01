@@ -14,15 +14,13 @@ root `README.md` remains the minimal project README inherited from `main`.
 
 ## Current Issue 2 gate
 
-Stages 1A, 1B Run 3, 2A Run 1, 2B Run 1, and Stage 3 Run 1 are human-accepted experimental
-dependencies. A Claude 5 Fable interactive review independently reproduced the Stage 3 hash,
-silent build, both verification scripts, hidden oracle, and compact trace, then returned all
-sixteen items `PASS`. The byte-identical accepted source is `accepted/AcceptedStage3.lean`.
+Stages 1A, 1B Run 3, 2A Run 1, 2B Run 1, Stage 3 Run 1, and Stage 4A Run 1 are human-accepted
+experimental dependencies. The accepted Stage 4A source is byte-identical to its stopped
+candidate after a Claude 5 Fable review reproduced all mechanical evidence, checked the two long
+proofs line by line, and returned all sixteen items `PASS`.
 
-The sixteen-declaration production covariance section is split at its dependency-ordered midpoint.
-Stage 4A Run 1 is now a zero-diagnostic `mechanical-pass`; Stage 4B remains planned and
-unauthorized. The single actor turn produced the exact ordered two-import/eight-declaration
-surface on its eighth compiler call after seven post-failure repairs. One session, zero
-descendants, thirteen visible files, candidate-only mutation, the hidden production pin, exact
-import/declaration/Borel controls, and complete-trace gates passed. The candidate remains stopped
-for a separate sixteen-item human decision.
+Stage 4B is now frozen and authorized for one isolated `gpt-5.6-sol` Run 1 at high effort. Its
+remaining eight centered-covariance declarations compile in the known-good fixture with the
+single import `AcceptedStage4A`. The full model-free preflight passed the six-layer rebuild,
+fifteen-entry fixture, exact surface, hidden oracle, soundness, isolation, trace-policy, and live-
+gate controls. A live candidate remains a mechanical result until a separate human decision.

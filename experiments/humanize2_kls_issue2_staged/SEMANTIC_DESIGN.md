@@ -361,8 +361,9 @@ gate. Stage 4B is not authorized by the Stage 4A run decision.
 
 ## Stage 4A: centered covariance operator and real Rayleigh maximum
 
-- **Status:** Run 1 `mechanical-pass`; human review pending
-- **Stopped candidate:**
+- **Status:** `human-accepted` experimental dependency
+- **Accepted source:** [accepted/AcceptedStage4A.lean](accepted/AcceptedStage4A.lean)
+- **Stopped candidate retained for provenance:**
   [review/pending/CandidateStage4ARun1.lean](review/pending/CandidateStage4ARun1.lean)
 - **SHA-256:** `233e0297d99e52467e4ef7533af76f2310b23400ed720228361d540ffa36a90d`
 - **Frozen specification:**
@@ -424,13 +425,69 @@ surface. The experimental namespace and pre-authorized second import remain API/
 differences. Its simplification proof of the representation identity, explicit coercion arguments,
 expanded Bochner-integral variance proof, range-normalization sphere proof, and nonempty-subtype
 case split are proof-only. Missing production docstrings are documentation-only. The candidate is
-stopped for all sixteen human-review items and is not an accepted Stage 4B dependency.
+byte-identical to `accepted/AcceptedStage4A.lean`.
+
+On 2026-09-01 the user accepted all sixteen human-review items after a Claude 5 Fable interactive
+review independently reproduced the hash, silent 2,946-job review build, both verifiers, hidden
+oracle pin, and compact trace audit and checked the two longer proofs line by line. The acceptance
+decision is
+[2026-09-01-humanize2-kls-issue2-stage4a-acceptance-stage4b-authorization.md](../../research/decisions/2026-09-01-humanize2-kls-issue2-stage4a-acceptance-stage4b-authorization.md).
+Acceptance exposes this file only as the Stage 4B experimental dependency; it does not promote
+production code or change a proof, ledger, manuscript, or mathematical status.
+
+## Stage 4B: spectral bridge and extended covariance bounds
+
+- **Status:** `specified`; Run 1 authorized, not yet started
+- **Accepted dependency:** [accepted/AcceptedStage4A.lean](accepted/AcceptedStage4A.lean)
+- **Frozen specification:**
+  [inputs/issue2_stage_4b_spectral_bridge.md](inputs/issue2_stage_4b_spectral_bridge.md)
+- **Actor prompt:** [prompts/issue2_stage_4b_actor.md](prompts/issue2_stage_4b_actor.md)
+- **Human rubric:**
+  [review/issue2_stage_4b_human_checklist.md](review/issue2_stage_4b_human_checklist.md)
+
+### Frozen declaration semantics
+
+| Declaration | Informal meaning | Lean encoding and boundary |
+| --- | --- | --- |
+| `centeredCovarianceOperator_hasEigenvalue_iSup` | In a nontrivial finite-dimensional space, the accepted real covariance Rayleigh maximum is an actual eigenvalue. | Uses exactly local `[FiniteDimensional ℝ E] [Nontrivial E]` instances and the accepted symmetric operator; neither instance enters the ambient block. |
+| `lambdaMaxCovariance` | The largest centered-covariance value in the extended nonnegative reals. | Exactly `ENNReal.ofReal (covarianceRayleighMax μ)`, with no measure hypothesis; accepted nonnegativity preserves zero dimension and prevents `⊤`. |
+| `lambdaMaxCovariance_toReal` | Converting the extended value back to `ℝ` recovers the accepted real supremum. | The sole Stage 4B `@[simp]` theorem and an application of accepted nonnegativity. |
+| `lambdaMaxCovariance_eq_zero_of_subsingleton` | The zero-dimensional extended value is `0`. | The only local `[Subsingleton E]` instance on the public surface; it transports the accepted empty-supremum convention. |
+| `lambdaMaxCovariance_le_operatorNorm` | The extended Rayleigh maximum is controlled by the centered operator norm. | Covers both the nontrivial and subsingleton branches without a measure or dimensional ambient hypothesis. |
+| `lambdaMaxCovariance_ne_top` | The extended covariance maximum is finite. | Follows from the operator-norm bound and `ENNReal.ofReal_ne_top`. |
+| `lambdaMaxCovariance_le` | Every fixed Poincaré constant dominates the largest covariance value. | Uses exactly `HasPoincare μ C` and `MemLp (id : E → E) 2 μ`; probability comes only from `HasPoincare`. |
+| `lambdaMaxCovariance_le_optimal` | The extended optimal Poincaré constant dominates the largest covariance value. | Uses exactly the second-moment hypothesis and the accepted universal lower-bound interface. |
+
+### Import, fixture, and status boundary
+
+The hidden known-good surface compiled silently with exactly:
+
+```lean
+import AcceptedStage4A
+```
+
+No additional Mathlib import is needed: the accepted Stage 4A chain transitively exposes the
+finite-dimensional symmetric-operator eigenvalue theorem. An extra or replacement import fails
+closed. The hidden production surface pin is
+`7500c5f90a481f81aecc994173b049a013e51f8b62a1641ee885d69ae9526551`.
+
+The ambient block remains exactly the complete real Hilbert, measurable, and Borel setting. The
+fifteen-entry fixture contains `AGENTS.md`, `TASK.md`, six accepted source/compiled pairs, and only
+`CandidateStage4B.lean` as writable. `pins/stage_4b.sha256` freezes 47 actor-facing harness files.
+The full model-free suite passed deterministic six-layer rebuild, failing sentinel, silent known-
+good surface, exact import/ambient/declaration controls, soundness and suppression rejection,
+deny-default isolation, complete-trace tests, and fail-closed live gates.
+
+One isolated subscription-authenticated `gpt-5.6-sol` Run 1 at `high` effort is authorized under
+`/private/tmp/humanize2-kls-issue2-stage4b-run1`. It must stop at `mechanical-pass`; no run result
+is human-accepted automatically. This stage completes the abstract extended-value form of Remark
+3.8's linear-test lower bound. Euclidean/Gaussian specialization and final Issue 2 assembly remain
+Stage 5 or out of scope.
 
 ## Planned later layers
 
 | Stage | Status | Planned content | Semantic questions that must be frozen before a run |
 | --- | --- | --- | --- |
-| 4B | `planned` | Spectral bridge and extended `lambdaMaxCovariance` bounds | Eigenvalue existence under finite-dimensional nontriviality, `ENNReal` packaging, finiteness, operator-norm control, fixed-Poincaré and optimal-Poincaré comparisons, and the zero-dimensional convention |
 | 5 | `planned` | Abstract, Euclidean, and node-specific Issue 2 assembly | Exact specialization boundary, statement fidelity, and separation between reusable theorem and thin certificate |
 
 No planned row authorizes a run or asserts that its listed design has been proved.

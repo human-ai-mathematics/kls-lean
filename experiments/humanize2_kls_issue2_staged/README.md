@@ -26,22 +26,19 @@ positive-energy, zero-energy, and no-finite-constant cases. A Claude 5 Fable rev
 mechanical evidence and returned all sixteen items `PASS`; `accepted/AcceptedStage3.lean` is
 byte-identical to the stopped candidate.
 
-Stage 4 is split into dependency-ordered halves. Stage 4A is `specified` and authorized for one
-isolated Run 1 over the eight centered-operator and real-Rayleigh declarations. Stage 4B contains
-the eight spectral and extended-`lambdaMaxCovariance` declarations and is not authorized. The
-Stage 4A candidate must import exactly `AcceptedStage3` and then
-`Mathlib.Probability.Moments.CovarianceBilin`; this harness/API adjustment is required because the
-immutable accepted chain does not expose `covarianceBilin` transitively and changes no semantics.
+Stage 4A Run 1 is now a human-accepted experimental dependency. The actor used one session, one
+turn, zero descendants, nineteen local `exec` calls, and eight exact compiler calls; seven
+post-failure repairs preceded the silent final call. A Claude 5 Fable review reproduced the hash,
+silent 2,946-job build, both verifiers, hidden oracle, and compact trace and returned all sixteen
+items `PASS`; `accepted/AcceptedStage4A.lean` is byte-identical to the stopped candidate.
 
-Stage 4A Run 1 is now a zero-diagnostic `mechanical-pass`. The actor used one session, one turn,
-zero descendants, nineteen local `exec` calls, and eight exact compiler calls; seven
-post-failure repairs preceded the silent final call. The exact ordered imports, ambient block,
-eight declarations, hidden oracle, immutable dependencies, isolation, and candidate-only trace
-gates passed. Human review is still required, and Stage 4B remains unauthorized.
-The optional `prompts/issue2_stage_4a_claude5_fable_interactive_review.md` provides a read-only,
-seven-phase Claude walkthrough with separate semantic audits of the expanded variance proof and
-explicit sphere-normalization proof. Claude may recommend an outcome, but only the user may record
-acceptance or authorize Stage 4B.
+Stage 4B is `specified` and authorized for one isolated `gpt-5.6-sol` Run 1 at high effort. It
+freezes the remaining eight spectral and extended-`lambdaMaxCovariance` declarations. A pre-freeze
+known-good compilation established that the exact import surface is only `AcceptedStage4A`; no
+extra Mathlib import is required. The fifteen-entry fixture, six immutable accepted source/
+compiled pairs, hidden production pin, exact import/declaration/instance controls, deny-default
+isolation, complete-trace policy, and fail-closed live gates passed the full model-free preflight.
+Any live result must stop at `mechanical-pass` for a separate sixteen-item human decision.
 
 The exact rejected Run 2 output remains published and pinned at
 `review/pending/CandidateStage1BRun2.lean`; `review/STAGE_1B_RUN2_REVIEW.md` records its historical

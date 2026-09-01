@@ -1,0 +1,16 @@
+import AcceptedStage4A
+
+noncomputable section
+
+open MeasureTheory ProbabilityTheory
+
+namespace Issue2Autoformalization.Stage1A
+
+variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
+  [MeasurableSpace E] [BorelSpace E]
+
+-- HUMANIZE2_UNATTEMPTED_STAGE_4B: replace this compiler-failing sentinel with the eight frozen
+-- declarations from TASK.md.
+#check stage4bImplementationRequired
+
+end Issue2Autoformalization.Stage1A

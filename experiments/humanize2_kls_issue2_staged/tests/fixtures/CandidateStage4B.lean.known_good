@@ -1,0 +1,94 @@
+import AcceptedStage4A
+
+noncomputable section
+
+open MeasureTheory ProbabilityTheory
+
+namespace Issue2Autoformalization.Stage1A
+
+variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
+  [MeasurableSpace E] [BorelSpace E]
+
+/-- In a nontrivial finite-dimensional space, `covarianceRayleighMax` is an actual eigenvalue of
+the centered covariance operator. -/
+theorem centeredCovarianceOperator_hasEigenvalue_iSup
+    [FiniteDimensional ℝ E] [Nontrivial E] (μ : Measure E) :
+    Module.End.HasEigenvalue (centeredCovarianceOperator μ).toLinearMap
+      (covarianceRayleighMax μ) := by
+  exact (centeredCovarianceOperator_isSymmetric μ).hasEigenvalue_iSup_of_finiteDimensional
+
+/-- The largest centered-covariance Rayleigh value, represented in `ENNReal`.
+
+On a nontrivial finite-dimensional space the real value inside `ENNReal.ofReal` is the usual
+largest covariance eigenvalue by the Rayleigh--Ritz theorem above.  If `E` is zero-dimensional,
+the indexing type of nonzero vectors is empty and this value is `0`. -/
+def lambdaMaxCovariance (μ : Measure E) : ENNReal :=
+  ENNReal.ofReal (covarianceRayleighMax μ)
+
+@[simp]
+theorem lambdaMaxCovariance_toReal (μ : Measure E) :
+    (lambdaMaxCovariance μ).toReal = covarianceRayleighMax μ := by
+  simp [lambdaMaxCovariance, covarianceRayleighMax_nonneg μ]
+
+theorem lambdaMaxCovariance_eq_zero_of_subsingleton [Subsingleton E] (μ : Measure E) :
+    lambdaMaxCovariance μ = 0 := by
+  let _ : IsEmpty {x : E // x ≠ 0} :=
+    ⟨fun x ↦ x.property (Subsingleton.elim _ _)⟩
+  rw [lambdaMaxCovariance, covarianceRayleighMax, Real.iSup_of_isEmpty]
+  exact ENNReal.ofReal_zero
+
+/-- The Rayleigh maximum is finite because the centered covariance form has a bounded Riesz
+operator. -/
+theorem lambdaMaxCovariance_le_operatorNorm (μ : Measure E) :
+    lambdaMaxCovariance μ ≤ ENNReal.ofReal ‖centeredCovarianceOperator μ‖ := by
+  apply ENNReal.ofReal_le_ofReal
+  by_cases hE : Nontrivial E
+  · let _ := hE
+    obtain ⟨x, hx⟩ := exists_ne (0 : E)
+    let _ : Nonempty {x : E // x ≠ 0} := ⟨⟨x, hx⟩⟩
+    refine ciSup_le fun x ↦ ?_
+    exact (le_abs_self _).trans
+      ((centeredCovarianceOperator μ).rayleighQuotient_le_norm x)
+  · have _ : Subsingleton E := not_nontrivial_iff_subsingleton.mp hE
+    let _ : IsEmpty {x : E // x ≠ 0} :=
+      ⟨fun x ↦ x.property (Subsingleton.elim _ _)⟩
+    rw [covarianceRayleighMax, Real.iSup_of_isEmpty]
+    exact norm_nonneg _
+
+theorem lambdaMaxCovariance_ne_top (μ : Measure E) :
+    lambdaMaxCovariance μ ≠ ⊤ :=
+  ne_top_of_le_ne_top ENNReal.ofReal_ne_top (lambdaMaxCovariance_le_operatorNorm μ)
+
+/-- A fixed Poincaré constant bounds the largest covariance Rayleigh value. -/
+theorem lambdaMaxCovariance_le {μ : Measure E} {C : ℝ}
+    (hP : HasPoincare μ C) (hμ : MemLp (id : E → E) 2 μ) :
+    lambdaMaxCovariance μ ≤ ENNReal.ofReal C := by
+  let _ := hP.isProbabilityMeasure
+  apply ENNReal.ofReal_le_ofReal
+  by_cases hE : Nontrivial E
+  · let _ := hE
+    obtain ⟨x, hx⟩ := exists_ne (0 : E)
+    let _ : Nonempty {x : E // x ≠ 0} := ⟨⟨x, hx⟩⟩
+    refine ciSup_le fun v ↦ ?_
+    have hv := variance_linearTest_le hP hμ (v : E)
+    have hvnorm : 0 < ‖(v : E)‖ ^ 2 := sq_pos_of_pos (norm_pos_iff.mpr v.property)
+    apply (div_le_iff₀ hvnorm).2
+    change inner ℝ (centeredCovarianceOperator μ (v : E)) v ≤ C * ‖(v : E)‖ ^ 2
+    rw [centeredCovarianceOperator_self_eq_variance hμ]
+    simpa only [mul_comm] using hv
+  · have _ : Subsingleton E := not_nontrivial_iff_subsingleton.mp hE
+    let _ : IsEmpty {x : E // x ≠ 0} :=
+      ⟨fun x ↦ x.property (Subsingleton.elim _ _)⟩
+    rw [covarianceRayleighMax, Real.iSup_of_isEmpty]
+    exact hP.constant_nonneg
+
+/-- The linear-test lower bound for the extended optimal Poincaré constant. -/
+theorem lambdaMaxCovariance_le_optimal {μ : Measure E}
+    (hμ : MemLp (id : E → E) 2 μ) :
+    lambdaMaxCovariance μ ≤ optimalPoincareConstant μ := by
+  apply le_optimalPoincareConstant
+  intro C hC
+  simpa only [ENNReal.ofReal_coe_nnreal] using lambdaMaxCovariance_le hC hμ
+
+
+end Issue2Autoformalization.Stage1A
