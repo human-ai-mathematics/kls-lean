@@ -437,8 +437,9 @@ production code or change a proof, ledger, manuscript, or mathematical status.
 
 ## Stage 4B: spectral bridge and extended covariance bounds
 
-- **Status:** Run 1 `mechanical-pass`; human review pending
-- **Stopped candidate:**
+- **Status:** `human-accepted` experimental dependency
+- **Accepted source:** [accepted/AcceptedStage4B.lean](accepted/AcceptedStage4B.lean)
+- **Stopped candidate retained for provenance:**
   [review/pending/CandidateStage4BRun1.lean](review/pending/CandidateStage4BRun1.lean)
 - **SHA-256:** `610e9006ffe2e03beb83ec6ec811cfb58ae67621867e191c371264b2066a3188`
 - **Accepted dependency:** [accepted/AcceptedStage4A.lean](accepted/AcceptedStage4A.lean)
@@ -494,11 +495,31 @@ nonempty-subtype case splits, simplification choices, and direct `ENNReal.ofReal
 `lambdaMaxCovariance_ne_top` are proof-only. The direct finiteness proof does not route through the
 operator-norm theorem as production does and is an explicit human-review attention point.
 
-The candidate remains stopped for all sixteen human-review items. `mechanical-pass` is not human
-acceptance. This stage represents the abstract extended-value form of Remark 3.8's linear-test
-lower bound; Euclidean/Gaussian specialization and final Issue 2 assembly remain Stage 5 or out
-of scope. The run record is
+On 2026-09-01 a Claude 5 Fable interactive review reproduced the candidate pin, silent 2,947-job
+review build, both verification scripts, hidden production pin, and compact trace audit. It
+verified the eigenvalue theorem against the pinned Rayleigh--Ritz source and both Poincaré bounds
+through the accepted Stage 2B/4A chain, returning fifteen unconditional passes and referring item
+11 for a human policy decision.
+
+The user ruled that statement-level semantic alignment is binding in this staged experiment while
+kernel-valid, assumption-preserving, silent, escape-hatch-free proof construction is
+unconstrained. Checklist mechanism phrases describe production routes rather than requiring proof
+correspondence. Item 11 therefore passes: `lambdaMaxCovariance_ne_top` has the exact frozen
+statement, and its direct proof through `ENNReal.ofReal_ne_top` satisfies the standing standard.
+Future checklists must mark mechanism descriptions as descriptive or omit them.
+
+All sixteen items pass. The user accepted Run 1, and `accepted/AcceptedStage4B.lean` is
+byte-identical to the stopped candidate. The acceptance decision is
+[2026-09-01-humanize2-kls-issue2-stage4b-acceptance-statement-level-ruling.md](../../research/decisions/2026-09-01-humanize2-kls-issue2-stage4b-acceptance-statement-level-ruling.md).
+The run record remains unchanged at
 [2026-09-01-humanize2-kls-issue2-stage4b-run1.md](../../research/explorations/2026-09-01-humanize2-kls-issue2-stage4b-run1.md).
+
+This accepted chain formalizes Remark 3.8's linear-test lower bound
+$C_P \ge \lambda_{\max}(\operatorname{Cov}_P)$ end to end at the extended-value level through
+`lambdaMaxCovariance_le_optimal`. Acceptance changes no production declaration, dossier,
+certificate, ledger, manuscript, or mathematical status. Euclidean/Gaussian specialization and
+final Issue 2 assembly remain an unstarted Stage 5 or out of scope and require a separate future
+decision.
 
 ## Planned later layers
 
