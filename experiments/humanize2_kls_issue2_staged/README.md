@@ -32,14 +32,22 @@ post-failure repairs preceded the silent final call. A Claude 5 Fable review rep
 silent 2,946-job build, both verifiers, hidden oracle, and compact trace and returned all sixteen
 items `PASS`; `accepted/AcceptedStage4A.lean` is byte-identical to the stopped candidate.
 
-Stage 4B Run 1 is now a zero-diagnostic `mechanical-pass`. The isolated `gpt-5.6-sol` actor used
+Stage 4B Run 1 is now a human-accepted experimental dependency. The isolated `gpt-5.6-sol` actor used
 one session, one turn, zero descendants, five local `exec` calls, and two exact Lean calls; one
 feedback-driven repair preceded the silent final call. The exact single import, fifteen-entry
 fixture, six immutable accepted pairs, local instance placements, eight declarations, hidden
-production pin, and complete trace passed. The candidate is preserved under `review/pending/` and
-must stop for a separate sixteen-item human decision. The optional
+production pin, and complete trace passed. A Claude 5 Fable review returned fifteen passes and
+referred the direct finiteness proof for a policy ruling; under the user's standing statement-
+level alignment ruling item 11 also passes. The accepted source is byte-identical to the stopped
+candidate. The optional
 `prompts/issue2_stage_4b_claude5_fable_interactive_review.md` provides a read-only phased
 walkthrough with the eigenvalue theorem and both Poincaré bounds as high-attention declarations.
+
+Stage 5 Run 1 is authorized but has not started. The frozen exact three-theorem surface packages
+the abstract lower bound, the certificate conjunction with strict-implicit `⦃f⦄`, and the
+Euclidean specialization including `D = 0`. Its finite-dimensional and probability hypotheses
+are deliberate statement-fidelity redundancy. The full model-free preflight passed, and exactly
+one fresh isolated high-effort actor run must stop at `mechanical-pass` for separate human review.
 
 The exact rejected Run 2 output remains published and pinned at
 `review/pending/CandidateStage1BRun2.lean`; `review/STAGE_1B_RUN2_REVIEW.md` records its historical
@@ -519,15 +527,43 @@ semantic or new declaration-API difference, only the pre-authorized import/names
 and proof-construction variants. Run 1 cannot become a Stage 4B dependency until a human completes
 and records all sixteen checklist items.
 
+## Stage 5 Run 1 preparation
+
+The frozen final-assembly surface is `inputs/issue2_stage_5_final_assembly.md`; the actor prompt is
+`prompts/issue2_stage_5_actor.md`, and the human-only gate is
+`review/issue2_stage_5_human_checklist.md`. The candidate imports exactly `AcceptedStage4B` and
+adds, in production order, only `linearTestLower`, `linearTestLowerCertificate`, and
+`euclideanLinearTestLower`.
+
+The first two statements deliberately retain local finite-dimensional and probability instances
+for statement fidelity even though accepted dependencies need fewer hypotheses. The certificate
+keeps the strict-implicit binder `⦃f : E → ℝ⦄`. The Euclidean specialization uses only canonical
+Mathlib instances and includes `D = 0`. No attribute, definition, Gaussian formula, KLS target,
+ledger binding, solution artifact, certificate metadata, or production change is in scope.
+
+A hidden known-good compile established that `EuclideanSpace` is transitively available from
+`AcceptedStage4B`, so no second import was required. The seventeen-entry actor fixture exposes
+seven immutable accepted source/compiled pairs plus `AGENTS.md`, `TASK.md`, and the candidate;
+only the candidate is writable. `pins/stage_5.sha256` freezes the complete fifty-file harness,
+and the hidden three-declaration production surface pin is
+`08583f55632c3a199dcb71b33828539602d922b4cdcfc8cf1913eebd99bd17f9`.
+
+The full model-free suite passed deterministic seven-layer rebuild, exact fixture restoration,
+failing sentinel, silent known-good surface, fail-closed import/surface/strict-implicit/
+deliberate-hypothesis/no-attribute controls, soundness and suppression rejection, deny-default
+isolation, complete-trace tests, and closed live gates. The append-only authorization record is
+`research/decisions/2026-09-01-humanize2-kls-issue2-stage5-run1-authorization.md`.
+
 ## Acceptance and mathematical status
 
 Lean exit zero is necessary but insufficient. The accepted Stage 1A, Stage 1B, Stage 2A, Stage 2B,
-and Stage 3 artifacts remain experimental dependencies only. Stage 1B Run 1 failed the exact
+Stage 3, Stage 4A, and Stage 4B artifacts remain experimental dependencies only. Stage 1B Run 1 failed the exact
 surface and Run 2 was rejected on style; neither is accepted, certified, or a ledger event.
 Promotion into
 `formalization/`, creation of a solution dossier, review certification, and ledger/manuscript
 updates require their normal repository workflows and separate explicit decisions. The wrong-cwd
 Codex task is recorded as an invalid pre-run and is not a Stage 2A candidate or attempt result.
-Valid Stage 2A, Stage 2B, and Stage 3 Run 1 are human-accepted only for staged experimental
-dependency use. Stage 4A may stop only at `mechanical-pass`; it cannot become a Stage 4B
-dependency until its own sixteen-item human gate is completed and explicitly accepted.
+Valid Stage 2A through Stage 4B runs are human-accepted only for staged experimental dependency
+use. Stage 5 may stop only at `mechanical-pass`; it cannot become an accepted final experimental
+layer until its own sixteen-item human gate is completed and explicitly accepted. A later
+experiment wrap-up remains a separate decision.

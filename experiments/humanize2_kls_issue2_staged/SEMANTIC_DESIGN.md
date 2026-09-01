@@ -517,17 +517,56 @@ The run record remains unchanged at
 This accepted chain formalizes Remark 3.8's linear-test lower bound
 $C_P \ge \lambda_{\max}(\operatorname{Cov}_P)$ end to end at the extended-value level through
 `lambdaMaxCovariance_le_optimal`. Acceptance changes no production declaration, dossier,
-certificate, ledger, manuscript, or mathematical status. Euclidean/Gaussian specialization and
-final Issue 2 assembly remain an unstarted Stage 5 or out of scope and require a separate future
-decision.
+certificate, ledger, manuscript, or mathematical status.
 
-## Planned later layers
+## Stage 5: final assembly
 
-| Stage | Status | Planned content | Semantic questions that must be frozen before a run |
-| --- | --- | --- | --- |
-| 5 | `planned` | Abstract, Euclidean, and node-specific Issue 2 assembly | Exact specialization boundary, statement fidelity, and separation between reusable theorem and thin certificate |
+- **Status:** `specified`; Run 1 authorized, not started
+- **Accepted dependency:** [accepted/AcceptedStage4B.lean](accepted/AcceptedStage4B.lean)
+- **Frozen specification:**
+  [inputs/issue2_stage_5_final_assembly.md](inputs/issue2_stage_5_final_assembly.md)
+- **Actor prompt:** [prompts/issue2_stage_5_actor.md](prompts/issue2_stage_5_actor.md)
+- **Human rubric:**
+  [review/issue2_stage_5_human_checklist.md](review/issue2_stage_5_human_checklist.md)
 
-No planned row authorizes a run or asserts that its listed design has been proved.
+### Frozen declaration semantics
+
+| Declaration | Informal meaning | Lean encoding and boundary |
+| --- | --- | --- |
+| `linearTestLower` | The largest extended centered-covariance value is bounded by the extended optimal Poincaré constant. | Packages the accepted `lambdaMaxCovariance_le_optimal`; local finite-dimensional and probability instances are deliberately redundant for statement fidelity. |
+| `linearTestLowerCertificate` | The final certificate exposes both the universal admissible-test Rayleigh bound and the covariance lower bound. | Preserves the exact conjunction and strict-implicit binder `⦃f : E → ℝ⦄`; it carries the same deliberate hypothesis redundancy. |
+| `euclideanLinearTestLower` | The abstract lower bound specializes to Euclidean space in every natural dimension. | Uses free `{D : ℕ}` and only canonical Mathlib instances, including the `D = 0` case and its accepted zero covariance value. |
+
+### Import, harness, and authorization boundary
+
+The hidden known-good surface compiled silently with exactly:
+
+```lean
+import AcceptedStage4B
+```
+
+`EuclideanSpace` is transitively reachable through the accepted chain, so no extra Mathlib import
+or harness/API-surface adjustment is needed. The exact production three-declaration surface is
+pinned at `08583f55632c3a199dcb71b33828539602d922b4cdcfc8cf1913eebd99bd17f9`.
+
+The seventeen-entry fixture contains `AGENTS.md`, `TASK.md`, seven accepted source/compiled pairs,
+and only `CandidateStage5.lean` as writable. `pins/stage_5.sha256` freezes the complete fifty-file
+actor-facing harness. The model-free suite passed deterministic seven-layer rebuild, exact
+fixture reset, failing sentinel, silent known-good compilation, fail-closed import, ambient,
+declaration, strict-implicit, deliberate-hypothesis, and no-attribute controls, soundness and
+suppression rejection, deny-default isolation, complete-trace tests, and closed live gates.
+
+Exactly one fresh subscription-authenticated `gpt-5.6-sol` Run 1 at `high` effort is authorized
+under `/private/tmp/humanize2-kls-issue2-stage5-run1`. The standing statement-level alignment
+ruling governs review: exact statements and hypotheses, kernel validity, diagnostic cleanliness,
+and the soundness boundary are binding; proof construction is otherwise unconstrained. The
+finite-dimensional and probability instances on the first two theorems must not be rejected as
+smuggled assumptions, and the strict-implicit binder is a dedicated surface check.
+
+The run must stop at `mechanical-pass` pending a separate explicit human decision. No Gaussian
+formula, KLS target, thin node-certificate binding, ledger or manuscript edit, production
+promotion, dossier certification, or mathematical-status change is part of Stage 5. Acceptance,
+if later granted, completes only the staged reconstruction; wrap-up remains a separate decision.
 
 ## Update protocol
 
