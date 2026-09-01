@@ -49,7 +49,10 @@ feedback-driven repair made the strict-implicit proof binder explicit before the
 call. The exact single import, seventeen-entry fixture, seven immutable accepted pairs, deliberate
 hypotheses, strict-implicit statement, three declarations, hidden production pin, and complete
 trace passed. The candidate is preserved under `review/pending/` and must stop for a separate
-sixteen-item human decision.
+sixteen-item human decision. The optional
+`prompts/issue2_stage_5_claude5_fable_interactive_review.md` provides a read-only phased
+walkthrough with the deliberate hypothesis redundancy and strict-implicit binder as dedicated
+review checks.
 
 The exact rejected Run 2 output remains published and pinned at
 `review/pending/CandidateStage1BRun2.lean`; `review/STAGE_1B_RUN2_REVIEW.md` records its historical
