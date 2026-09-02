@@ -20,8 +20,11 @@ lake build
 
 Lake downloads the pinned Mathlib dependency on the first build. The local `.lake/` directory is
 ignored, while `lake-manifest.json` is committed as the dependency lock file. The default build
-compiles both the reusable library and the repository-root certificate. This is also the command
-CI should run from a clean checkout.
+compiles both the reusable library and the repository-root certificate.
+
+`../.github/workflows/lean.yml` runs the ledger checker, its standard-library Python tests, and
+this default build on pushes and pull requests. The official `leanprover/lean-action@v1` reads
+the pinned toolchain in this directory and runs `lake exe cache get` before `lake build`.
 
 ## Updating dependencies
 

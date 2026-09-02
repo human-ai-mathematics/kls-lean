@@ -129,3 +129,8 @@ python3 -m unittest discover -s research/tests -p 'test_*.py'
 
 The checker establishes repository structure and provenance; `lake build` performs compilation,
 and semantic agreement with the reference remains a separate review obligation.
+
+`.github/workflows/lean.yml` runs these two Python commands and the default Lean build on every
+push and pull request. It uses Python 3.12 without third-party packages and the official
+`leanprover/lean-action@v1`, with `lake-package-directory: formalization`, an explicit build, and
+`use-mathlib-cache: 'true'` (the action runs `lake exe cache get` before building).
