@@ -134,3 +134,10 @@ and semantic agreement with the reference remains a separate review obligation.
 push and pull request. It uses Python 3.12 without third-party packages and the official
 `leanprover/lean-action@v1`, with `lake-package-directory: formalization`, an explicit build, and
 `use-mathlib-cache: 'true'` (the action runs `lake exe cache get` before building).
+
+## Contribution workflow (2026-09-03)
+
+Work directly on `main`. Keep unfinished follow-up work as local, uncommitted changes and push
+completed work directly to `origin/main` after its acceptance checks pass. Do not create feature
+branches or pull requests for this workflow. Human statement review and the statement/proof role
+separation still apply before proof work begins.
