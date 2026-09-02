@@ -1,7 +1,7 @@
 {
   "meta": {
     "program": "a-series",
-    "scope": "Issue #2 Lean certification"
+    "scope": "Issue #2 certification and drafted Poincare tensorization statements"
   },
   "nodes": [
     {
@@ -12,6 +12,15 @@
       "statement": "For a probability measure on R^D with finite second moment, D >= 0, every smooth L2 finite-energy test satisfies the extended Rayleigh bound R_mu(f) <= C_P(mu), with 0/0 = 0 and a/0 = +infinity for a > 0; hence lambdaMax(Cov_mu) <= C_P(mu), with the empty D = 0 Rayleigh supremum defined as 0.",
       "lean_solution": "solutions/LemLinearTestLower.lean",
       "checked_by": "lean"
+    },
+    {
+      "id": "lem:poincare-tensorization",
+      "kind": "lemma",
+      "status": "drafted",
+      "source": "Poincare tensorization work package; normalization from KLS.pdf, Definition 2.1",
+      "statement": "Let E and F be real separable Hilbert spaces (complete real inner product spaces with second-countable norm topologies), each equipped with its Borel sigma algebra. For measures mu on E and nu on F, define rho = (mu.prod nu).map (WithLp.toLp 2), a measure on the Hilbert product WithLp 2 (E x F). For all real C and C', Poincare.Holds mu C and Poincare.Holds nu C' imply Poincare.Holds rho (max C C'). Holds includes probability normalization, nonnegativity of its constant, and Var(f) <= C integral ||gradient f||^2 for every globally smooth real-valued L2 test with integrable squared canonical gradient. Moreover, for every pair of Borel probability measures mu and nu, Poincare.constant rho <= max (Poincare.constant mu) (Poincare.constant nu) in ENNReal, including infinite optimal constants. No second-moment, density, positive-dimension, or finite-optimal-constant assumption is imposed.",
+      "lean_solution": "solutions/LemPoincareTensorization.lean",
+      "checked_by": null
     }
   ]
 }

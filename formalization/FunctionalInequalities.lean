@@ -1,5 +1,6 @@
 import FunctionalInequalities.Basic
 import FunctionalInequalities.Poincare
+import FunctionalInequalities.Tensorization
 import FunctionalInequalities.Project.LinearTestLower
 import Mathlib.Analysis.InnerProductSpace.Rayleigh
 import Mathlib.Probability.Moments.CovarianceBilin

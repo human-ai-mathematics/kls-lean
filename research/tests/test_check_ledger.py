@@ -1,4 +1,4 @@
-"""Regression tests for the minimal Issue #2 ledger checker."""
+"""Regression tests for statement lifecycle and Lean certification checks."""
 from __future__ import annotations
 
 import importlib.util
@@ -89,9 +89,52 @@ class LedgerCheckerTests(LedgerFixture):
         self.assertIn("required Issue #2 node is missing", "\n".join(self.errors()))
 
     def test_checked_by_lean_requires_proved_status(self) -> None:
-        self.document["nodes"][0]["status"] = "conditional"
+        for status in ("drafted", "frozen", "conditional"):
+            with self.subTest(status=status):
+                self.document["nodes"][0]["status"] = status
+                self.write_ledger()
+                self.assertIn("checked_by lean requires 'proved'", "\n".join(self.errors()))
+
+    def test_only_lifecycle_statuses_are_accepted(self) -> None:
+        for status in ("conditional", "draft", "", None, [], {}):
+            with self.subTest(status=status):
+                self.document["nodes"][0].update(status=status, checked_by=None)
+                self.write_ledger()
+                self.assertIn("must be 'drafted', 'frozen', or 'proved'", "\n".join(self.errors()))
+
+    def test_drafted_and_frozen_allow_sorry_without_certification(self) -> None:
+        self.certificate.write_text(
+            "/-! statement for `lem:linear-test-lower` -/\n"
+            "theorem certificate : True := sorry\n",
+            encoding="utf-8",
+        )
+        for status in ("drafted", "frozen"):
+            with self.subTest(status=status):
+                self.document["nodes"][0].update(status=status, checked_by=None)
+                self.write_ledger()
+                self.assertEqual(self.errors(), [])
+
+    def test_unproved_nodes_require_null_checked_by(self) -> None:
+        for status in ("drafted", "frozen"):
+            for checked_by in ("manual", "", False):
+                with self.subTest(status=status, checked_by=checked_by):
+                    self.document["nodes"][0].update(status=status, checked_by=checked_by)
+                    self.write_ledger()
+                    self.assertIn("drafted/frozen nodes require null", "\n".join(self.errors()))
+
+    def test_proved_requires_lean_certification(self) -> None:
+        for checked_by in (None, "manual", "", False):
+            with self.subTest(checked_by=checked_by):
+                self.document["nodes"][0]["checked_by"] = checked_by
+                self.write_ledger()
+                self.assertIn("proved nodes require 'lean'", "\n".join(self.errors()))
+
+    def test_checked_by_field_remains_required_for_drafts(self) -> None:
+        node = self.document["nodes"][0]
+        node["status"] = "drafted"
+        del node["checked_by"]
         self.write_ledger()
-        self.assertIn("checked_by lean requires 'proved'", "\n".join(self.errors()))
+        self.assertIn("missing field: checked_by", "\n".join(self.errors()))
 
     def test_certificate_must_exist(self) -> None:
         self.certificate.unlink()
@@ -118,11 +161,77 @@ class LedgerCheckerTests(LedgerFixture):
         self.assertIn("certificate header does not name", "\n".join(self.errors()))
 
     def test_certificate_rejects_lean_escape_tokens(self) -> None:
+        for token in ("sorry", "admit", "native_decide", "axiom", "unsafe"):
+            with self.subTest(token=token):
+                self.certificate.write_text(
+                    "/-! certificate for `lem:linear-test-lower` -/\n"
+                    f"theorem certificate : True := by {token}\n",
+                    encoding="utf-8",
+                )
+                self.assertIn("forbidden Lean escape token", "\n".join(self.errors()))
+
+    def test_proved_guard_follows_local_imports(self) -> None:
         self.certificate.write_text(
-            "/-! certificate for `lem:linear-test-lower` -/\n"
-            "theorem certificate : True := by sorry\n",
+            "import Support\n/-! certificate for `lem:linear-test-lower` -/\n",
             encoding="utf-8",
         )
+        (self.root / "formalization/Support.lean").write_text(
+            "theorem pending : True := sorry\n", encoding="utf-8"
+        )
+        errors = "\n".join(self.errors())
+        self.assertIn("forbidden Lean escape token", errors)
+        self.assertIn("formalization/Support.lean", errors)
+
+    def test_unrelated_draft_does_not_invalidate_proved_node(self) -> None:
+        (self.root / "formalization/Unrelated.lean").write_text(
+            "theorem pending : True := sorry\n", encoding="utf-8"
+        )
+        self.assertEqual(self.errors(), [])
+
+    def test_proved_guard_follows_transitive_and_same_line_imports(self) -> None:
+        self.certificate.write_text(
+            "import First Second\n/-! certificate for `lem:linear-test-lower` -/\n",
+            encoding="utf-8",
+        )
+        (self.root / "formalization/First.lean").write_text("", encoding="utf-8")
+        (self.root / "formalization/Second.lean").write_text("import Pending\n", encoding="utf-8")
+        (self.root / "formalization/Pending.lean").write_text(
+            "import Second\ntheorem pending : True := sorry\n", encoding="utf-8"
+        )
+        errors = "\n".join(self.errors())
+        self.assertIn("formalization/Pending.lean", errors)
+        self.assertIn("forbidden Lean escape token", errors)
+
+    def test_unproved_nodes_still_require_structure(self) -> None:
+        for status in ("drafted", "frozen"):
+            with self.subTest(status=status):
+                self.document["nodes"][0].update(status=status, checked_by=None)
+                self.write_ledger()
+                self.certificate.write_text("theorem pending : True := sorry\n", encoding="utf-8")
+                self.assertIn("certificate header does not name", "\n".join(self.errors()))
+                self.certificate.unlink()
+                self.assertIn("artifact does not exist", "\n".join(self.errors()))
+
+    def test_unproved_nodes_must_be_in_default_build(self) -> None:
+        (self.root / "formalization/lakefile.toml").write_text(
+            'name = "fixture"\ndefaultTargets = []\n', encoding="utf-8"
+        )
+        for status in ("drafted", "frozen"):
+            with self.subTest(status=status):
+                self.document["nodes"][0].update(status=status, checked_by=None)
+                self.write_ledger()
+                self.assertIn("not a root of a default Lake target", "\n".join(self.errors()))
+
+    def test_promotion_to_proved_rejects_remaining_placeholder(self) -> None:
+        self.certificate.write_text(
+            "/-! statement for `lem:linear-test-lower` -/\n"
+            "theorem certificate : True := sorry\n", encoding="utf-8"
+        )
+        self.document["nodes"][0].update(status="frozen", checked_by=None)
+        self.write_ledger()
+        self.assertEqual(self.errors(), [])
+        self.document["nodes"][0].update(status="proved", checked_by="lean")
+        self.write_ledger()
         self.assertIn("forbidden Lean escape token", "\n".join(self.errors()))
 
     def test_certificate_must_be_in_default_lake_build(self) -> None:
