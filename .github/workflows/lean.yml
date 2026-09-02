@@ -1,0 +1,28 @@
+name: Lean certification
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  certify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Check the certification ledger
+        run: python3 research/check_ledger.py
+      - name: Test the ledger checker
+        run: python3 -m unittest discover -s research/tests -p 'test_*.py'
+      - name: Build Lean library and certificates
+        uses: leanprover/lean-action@v1
+        with:
+          lake-package-directory: formalization
+          auto-config: 'false'
+          use-mathlib-cache: 'true'
+          build: 'true'
