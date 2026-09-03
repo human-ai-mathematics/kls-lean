@@ -1,7 +1,8 @@
 # Lean design: Poincaré certificates
 
 This document records the implemented Lean architecture and semantic contracts for the Issue #2
-linear-test lower bound and the Issue #6 two-factor Poincaré tensorization bound. Gaussian
+linear-test lower bound, Issue #6 two-factor Poincaré tensorization, and Issue #7 finite-product
+tensorization with optimal-constant equality. Gaussian
 Poincaré inequalities, log-Sobolev inequalities, Bakry--Émery, Otto--Villani, mode-indicator tests,
 and the KLS conjecture itself remain outside the certified scope.
 
@@ -77,8 +78,9 @@ contract. In particular, this theorem concerns globally smooth real-valued L2 te
 gradient energy. It does not identify that test class with a closed Dirichlet domain, a Sobolev
 space, or all locally Lipschitz tests for arbitrary Borel measures. The source comparison with
 BGL Proposition 4.3.1 and the use in the manuscript's `prop:products` are recorded in
-`research/explorations/2026-09-03-tensorization-source-alignment.md`. Finite products and the
-further inputs to the product-case KLS result remain follow-up work.
+`research/explorations/2026-09-03-tensorization-source-alignment.md`. The finite-product extension
+is described below as an accepted Lean certificate; the further inputs to the product-case
+KLS result remain follow-up work.
 
 The initial encoding audit and statement/proof ownership decision remain in
 `research/decisions/2026-09-03-hilbert-product-tensorization.md` and
@@ -96,9 +98,10 @@ cd formalization
 lake build
 ```
 
-The default targets compile the reusable `FunctionalInequalities` library and both root-level
-certificates, `solutions/LemLinearTestLower.lean` and `solutions/LemPoincareTensorization.lean`,
-through the `Issue2Solutions` library.
+The default targets compile the reusable `FunctionalInequalities` library and the three
+root-level certificates: `solutions/LemLinearTestLower.lean`,
+`solutions/LemPoincareTensorization.lean`, and
+`solutions/LemPoincareFiniteTensorization.lean`.
 
 ## Formalized statement
 
@@ -122,7 +125,7 @@ the linear-test variance and energy identities, and finite-dimensional Rayleigh-
 
 ## Semantic contract
 
-`FunctionalInequalities.Basic` implements the manuscript normalization
+`FunctionalInequalities.Poincare.Basic` implements the manuscript normalization
 
 $$
 \operatorname{Var}_\mu(f)\le C\int \lVert\nabla f\rVert^2\,d\mu.
@@ -169,44 +172,57 @@ nonzero vectors. The formal API proves that:
 4. `Covariance.lambdaMax μ : ℝ≥0∞` is `ENNReal.ofReal (Covariance.rayleighMax μ)`, with `toReal`
    equal to `Covariance.rayleighMax μ`.
 
-The name `lambdaMax` follows the manuscript's notation without asserting that the supremum is an
-eigenvalue in every ambient space. In infinite dimension it need not be attained. In dimension
-zero there are no nonzero vectors or eigenvectors; the empty Rayleigh supremum and `lambdaMax` are
-defined to be `0`. This makes the certificate uniform in `D : ℕ`, including `D = 0`.
+The name `lambdaMax` follows the manuscript's notation. The current Lean eigenvalue theorem is
+limited to nontrivial finite-dimensional spaces; the infinite-dimensional covariance compactness
+argument has not been formalized. Mathematically, finite second moment makes a Hilbert probability's
+centered covariance positive and trace-class: apply
+[Blanchard--Bousquet--Zwald, Theorem 2.1](https://doc.ml.tu-berlin.de/publications/publications/BlaBouZwa06.pdf#page=8)
+to the centered random vector. Compact self-adjoint spectral theory then gives attainment of its
+Rayleigh maximum on any nontrivial Hilbert space, including when the covariance is zero.
+In dimension zero there are no nonzero vectors or eigenvectors; the empty Rayleigh supremum and
+`lambdaMax` are defined to be `0`. This makes the certificate uniform in `D : ℕ`, including `D = 0`.
 
 On a finite-dimensional Euclidean space, `MemLp id 2 μ` is the coordinate-free assumption of a
 finite second moment that makes the centered covariance matrix finite.
 
 ## Proof and module boundary
 
-- `formalization/FunctionalInequalities/Basic.lean`: admissibility, energy, fixed constants, and
+- `formalization/FunctionalInequalities/Poincare/Basic.lean`: admissibility, energy, fixed constants, and
   the optimal extended Poincaré constant.
-- `formalization/FunctionalInequalities/Poincare.lean`: linear tests, extended Rayleigh quotients,
+- `formalization/FunctionalInequalities/Poincare/LinearTest.lean`: linear tests, extended Rayleigh quotients,
   centered covariance, the finite-dimensional eigenvalue bridge, and the fixed/optimal bounds.
-- `formalization/FunctionalInequalities/Project/LinearTestLower.lean`: the project-level Issue #2
-  theorem.
-- `solutions/LemLinearTestLower.lean`: the thin node-specific certificate.
-- `formalization/FunctionalInequalities/ProductGeometry.lean`: transported product law and proved
+- `solutions/LemLinearTestLower.lean`: the sole Issue #2 certificate, directly combining the
+  reusable Rayleigh and covariance lower bounds.
+- `formalization/FunctionalInequalities/Poincare/Product/Geometry.lean`: transported product law and proved
   smoothness/gradient identities.
-- `formalization/FunctionalInequalities/ProductVariance.lean`: L2/Fubini variance decomposition
+- `formalization/FunctionalInequalities/Poincare/Product/Variance.lean`: L2/Fubini variance decomposition
   and the two-factor variance inequality.
-- `formalization/FunctionalInequalities/ProductAdmissible.lean`: finite-energy bounds and a.e.
+- `formalization/FunctionalInequalities/Poincare/Product/Admissible.lean`: finite-energy bounds and a.e.
   admissibility of sections.
-- `formalization/FunctionalInequalities/Tensorization.lean`: the two proved public theorems.
-- `formalization/FunctionalInequalities/Project/PoincareTensorization.lean`: the project-level
-  tensorization certificate and finite-dimensional Euclidean specializations, including zero.
-- `solutions/LemPoincareTensorization.lean`: the thin node-specific certificate covering both
-  public tensorization conclusions.
+- `formalization/FunctionalInequalities/Poincare/Product/Tensorization.lean`: the two proved public theorems.
+- `solutions/LemPoincareTensorization.lean`: the sole Issue #6 certificate, directly combining
+  both product bounds, with a typed Euclidean application check including dimension zero.
+- `formalization/FunctionalInequalities/Poincare/Transport.lean`: measure-preserving coordinate
+  lifts and exact transport under real linear isometry equivalences.
+- `formalization/FunctionalInequalities/Poincare/Product/Reverse.lean`: binary coordinate reverse
+  bounds and optimal-constant equality.
+- `formalization/FunctionalInequalities/Poincare/FiniteProduct/Geometry.lean`: the dependent
+  `PiLp 2` product law, coordinate projections, reindexing, and Option splitting.
+- `formalization/FunctionalInequalities/Poincare/FiniteProduct/Tensorization.lean`: finite
+  fixed-constant tensorization, reverse bounds, optimal equality, and boundary consequences.
+- `solutions/LemPoincareFiniteTensorization.lean`: the sole Issue #7 certificate, retaining the
+  45 public interface checks plus eight Euclidean families and six boundary applications.
 
-Compilation is enforced by `lake build`, whose default targets include both root-level
+Compilation is enforced by `lake build`, whose default targets include all three root-level
 certificates. The linear-test certificate covers the two lower-bound conclusions above; the
-tensorization certificate covers the binary product upper bound. Neither proves Gaussian
+two tensorization certificates cover the binary and finite product results. None proves Gaussian
 equality or the nonlinear parts of Remark 3.8.
 
 ## Repository certification
 
-`research/a-series/ledger.yaml` connects `lem:linear-test-lower` and
-`lem:poincare-tensorization` to their respective files under `solutions/`, both with
+`research/a-series/ledger.yaml` connects `lem:linear-test-lower`,
+`lem:poincare-tensorization`, and `lem:poincare-finite-tensorization` to their respective files
+under `solutions/`, all with
 `status: proved` and `checked_by: lean`. The dependency-free command
 
 ```bash
@@ -241,3 +257,60 @@ Work directly on `main`. Keep unfinished follow-up work as local, uncommitted ch
 completed work directly to `origin/main` after its acceptance checks pass. Do not create feature
 branches or pull requests for this workflow. Human statement review and the statement/proof role
 separation still apply before proof work begins.
+
+## Finite tensorization acceptance (2026-09-03; Issue #7)
+
+The node `lem:poincare-finite-tensorization` is **proved** with `checked_by: lean`; the two
+existing nodes retain their proved status and certificate signatures. Issue #7 adds
+binary coordinate reverse bounds and optimal equality, dependent finite-product upper bounds,
+and `constant (piMeasure μ) = ⨆ i, constant (μ i)` in `ENNReal`.
+
+The finite Hilbert carrier is `PiLp 2 E`; its law is
+`piMeasure μ := (Measure.pi μ).map (WithLp.toLp 2)`. Every factor is a Borel probability on a
+complete real inner product space with second-countable topology. The finite fixed-constant
+interface uses `C : ι → NNReal` and casts `Finset.univ.sup C` to `ℝ` for `Holds`. There is no
+index nonempty assumption: empty products have fixed and optimal constant zero. Singleton
+families, zero-dimensional factors and infinite optimal constants are included, without moment,
+density, positive-dimension, finite-constant or attainment assumptions. Binary reverse bounds
+explicitly assume probability of each factor separately.
+
+The accepted modules are `Poincare/Transport`, `Poincare/Product/Reverse`,
+`Poincare/FiniteProduct/Geometry`, and `Poincare/FiniteProduct/Tensorization`.
+Their 45 retained public declarations have library implementations, recorded in
+`research/explorations/2026-09-03-finite-tensorization-proofs.md`.
+`solutions/LemPoincareFiniteTensorization.lean` contains the sole node certificate in the existing
+`Issue2Solutions` default target. It also prints the 45 reusable public signatures and checks
+eight Euclidean statement families and six concrete boundary applications through typed uses of
+the general API. The eight former specialization wrappers and their duplicate obligations remain
+removed. No proof placeholders remain in the current default build.
+
+The `Project/` layer has been removed. Each proved node has one certificate directly combining
+library results; Euclidean specializations are checked without another named forwarding theorem.
+The reusable mathematics, frozen binary signatures, both retained certificate signatures, and
+ledger statements remain unchanged. See `formalization/README.md` for the current source map.
+
+The accepted signatures are preserved in
+`research/decisions/2026-09-03-finite-tensorization-freeze.md`; final semantic and structural
+acceptance is recorded in
+`research/explorations/2026-09-03-finite-tensorization-acceptance.md`. The earlier review package is
+`research/explorations/2026-09-03-certificate-deduplication.md`, including all 45 public
+signatures and the full Euclidean check source. The original 53-name candidate remains in
+`research/decisions/2026-09-03-finite-tensorization-candidate.md` as history. The source/API audit
+and proof route remain in `research/explorations/2026-09-03-finite-tensorization-design.md`.
+BGL supplies the upper-bound source correspondence and its finite iteration; coordinate lifting
+independently supplies the reverse direction. No Dirichlet or Sobolev domain equivalence is
+claimed. The publication commit and matching CI result are tracked in Issue #7 rather than
+inferred from earlier local or remote runs.
+
+The root `FunctionalInequalities.lean` aggregate imports the accepted
+`Poincare/Product/Reverse` and `Poincare/FiniteProduct/Tensorization` modules. This finite-product
+certificate is one component of the product-case KLS path; a one-dimensional log-concave bound
+and Cheeger--Poincaré comparison remain separate obligations.
+
+## Proposed next independent node
+
+The next suggested task is the sharp one-dimensional Gaussian statement
+`Poincare.constant (gaussianReal m v) = (v : ENNReal)`. Before opening or proving that node,
+review the exact `Admissible` test class, Mathlib's `gaussianReal` variance parameter convention,
+available Gaussian integration APIs, and a proof route for the upper bound, then obtain a human
+freeze. This document does not claim that such an issue or proof already exists.

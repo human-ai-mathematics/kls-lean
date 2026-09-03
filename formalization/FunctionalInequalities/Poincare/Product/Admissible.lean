@@ -1,11 +1,22 @@
-import FunctionalInequalities.ProductGeometry
-import FunctionalInequalities.ProductVariance
+import FunctionalInequalities.Poincare.Product.Geometry
+import FunctionalInequalities.Poincare.Product.Variance
 
 /-!
 # Almost-everywhere admissibility of Hilbert-product sections
 
 The smooth L2 finite-energy test class restricts to admissible sections almost everywhere.
 The squared component gradients are integrable and sum to the full product energy.
+
+Source: local Fubini and gradient-energy helpers for the repository's `Admissible` class.
+BGL Lemma 4.3.2, used in Proposition 4.3.1 on
+[printed pp. 186–187](https://www.hse.ru/data/2016/11/24/1113029204/bok%253A978-3-319-00227-9.pdf#page=202),
+has a Dirichlet-domain hypothesis on every section. Here smoothness holds for every section,
+whereas L² and finite-energy membership follow only almost everywhere. These are different
+statements; no equality of their test domains is claimed for arbitrary Borel measures.
+The Mathlib sources at the pinned v4.33.0 commit are
+[product integrals and a.e. sections](https://github.com/leanprover-community/mathlib4/blob/db584cd6d46c92f209a44c0f1c829460d327499d/Mathlib/MeasureTheory/Integral/Prod.lean),
+[L² transport](https://github.com/leanprover-community/mathlib4/blob/db584cd6d46c92f209a44c0f1c829460d327499d/Mathlib/MeasureTheory/Function/LpSeminorm/Basic.lean),
+and [integrability under equivalences](https://github.com/leanprover-community/mathlib4/blob/db584cd6d46c92f209a44c0f1c829460d327499d/Mathlib/MeasureTheory/Function/L1Space/Integrable.lean).
 -/
 
 noncomputable section
@@ -24,6 +35,8 @@ variable {E F : Type*}
 
 omit [BorelSpace E] [SecondCountableTopology E] [BorelSpace F] [SecondCountableTopology F]
   [IsProbabilityMeasure μ] [IsProbabilityMeasure ν] in
+/-- Source: local transport helper from Mathlib's `memLp_map_measure_iff` and
+`MeasurableEquiv.toLp`, applied to `Admissible.memLp_two`. -/
 theorem Admissible.memLp_uncurry (hf : Admissible (prodMeasure μ ν) f) :
     MemLp (fun p : E × F ↦ f (WithLp.toLp 2 p)) 2 (μ.prod ν) := by
   have h := hf.memLp_two
@@ -52,6 +65,8 @@ private theorem Admissible.continuous_gradient (hf : Admissible (prodMeasure μ 
   exact (InnerProductSpace.toDual ℝ (WithLp 2 (E × F))).symm.continuous.comp hfd
 
 omit [SecondCountableTopology E] [IsProbabilityMeasure μ] [IsProbabilityMeasure ν] in
+/-- Source: local finite-energy helper using Mathlib's `Integrable.mono'` and
+`WithLp.prod_norm_sq_eq_of_L2` to dominate the left component by the full squared gradient. -/
 theorem Admissible.integrable_gradient_fst (hf : Admissible (prodMeasure μ ν) f) :
     Integrable (fun p : E × F ↦ ‖(gradient f (WithLp.toLp 2 p)).fst‖ ^ 2) (μ.prod ν) := by
   have hcont : Continuous (fun p : E × F ↦ ‖(gradient f (WithLp.toLp 2 p)).fst‖ ^ 2) := by
@@ -68,6 +83,8 @@ theorem Admissible.integrable_gradient_fst (hf : Admissible (prodMeasure μ ν) 
   linarith
 
 omit [SecondCountableTopology E] [IsProbabilityMeasure μ] [IsProbabilityMeasure ν] in
+/-- Source: local finite-energy helper using Mathlib's `Integrable.mono'` and
+`WithLp.prod_norm_sq_eq_of_L2` to dominate the right component by the full squared gradient. -/
 theorem Admissible.integrable_gradient_snd (hf : Admissible (prodMeasure μ ν) f) :
     Integrable (fun p : E × F ↦ ‖(gradient f (WithLp.toLp 2 p)).snd‖ ^ 2) (μ.prod ν) := by
   have hcont : Continuous (fun p : E × F ↦ ‖(gradient f (WithLp.toLp 2 p)).snd‖ ^ 2) := by
@@ -83,6 +100,9 @@ theorem Admissible.integrable_gradient_snd (hf : Admissible (prodMeasure μ ν) 
   have hsq := sq_nonneg ‖(gradient f (WithLp.toLp 2 p)).fst‖
   linarith
 
+/-- Source: local a.e. consequence of `ProductVariance.memLp_left_ae`,
+`Integrable.prod_left_ae`, and the left-section calculus helpers. Only an a.e. claim is made;
+BGL Lemma 4.3.2 instead assumes every section belongs to its Dirichlet domain. -/
 theorem Admissible.section_left_ae (hf : Admissible (prodMeasure μ ν) f) :
     ∀ᵐ y ∂ν, Admissible μ (fun x ↦ f (WithLp.toLp 2 (x, y))) := by
   have hdiff : Differentiable ℝ f := hf.smooth'.differentiable (by simp)
@@ -94,6 +114,9 @@ theorem Admissible.section_left_ae (hf : Admissible (prodMeasure μ ν) f) :
       = ‖gradient (fun x ↦ f (WithLp.toLp 2 (x, y))) x‖ ^ 2
   rw [gradient_section_left (hdiff _)]
 
+/-- Source: local a.e. consequence of `ProductVariance.memLp_right_ae`,
+`Integrable.prod_right_ae`, and the right-section calculus helpers. Only an a.e. claim is made;
+BGL Lemma 4.3.2 instead assumes every section belongs to its Dirichlet domain. -/
 theorem Admissible.section_right_ae (hf : Admissible (prodMeasure μ ν) f) :
     ∀ᵐ x ∂μ, Admissible ν (fun y ↦ f (WithLp.toLp 2 (x, y))) := by
   have hdiff : Differentiable ℝ f := hf.smooth'.differentiable (by simp)
@@ -106,6 +129,9 @@ theorem Admissible.section_right_ae (hf : Admissible (prodMeasure μ ν) f) :
   rw [gradient_section_right (hdiff _)]
 
 omit [SecondCountableTopology E] [IsProbabilityMeasure μ] [IsProbabilityMeasure ν] in
+/-- Source: local realization of the binary product-energy sum using
+`Admissible.integrable_gradient_fst`, `Admissible.integrable_gradient_snd`, Mathlib's
+`integral_map_equiv`, and `WithLp.prod_norm_sq_eq_of_L2`; both real integrals are integrable. -/
 theorem energy_prod_eq (hf : Admissible (prodMeasure μ ν) f) :
     energy (prodMeasure μ ν) f =
       (∫ p : E × F, ‖(gradient f (WithLp.toLp 2 p)).fst‖ ^ 2 ∂μ.prod ν) +

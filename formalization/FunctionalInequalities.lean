@@ -1,18 +1,19 @@
-import FunctionalInequalities.Basic
-import FunctionalInequalities.Poincare
-import FunctionalInequalities.Tensorization
-import FunctionalInequalities.Project.LinearTestLower
-import FunctionalInequalities.Project.PoincareTensorization
-import Mathlib.Analysis.InnerProductSpace.Rayleigh
-import Mathlib.Probability.Moments.CovarianceBilin
+import FunctionalInequalities.Poincare.Basic
+import FunctionalInequalities.Poincare.LinearTest
+import FunctionalInequalities.Poincare.Product.Tensorization
+import FunctionalInequalities.Poincare.Product.Reverse
+import FunctionalInequalities.Poincare.FiniteProduct.Tensorization
 
 /-!
 # Functional inequalities
 
-Root module for the reusable Lean formalization, the project-level linear-test Poincaré lower
-bound, and the two-factor Hilbert-product Poincaré tensorization bound.
+Root module for the proved Poincaré definitions, linear-test lower bounds, binary tensorization,
+and finite Hilbert-product optimal-constant equality. Node certificates are compiled separately
+from `solutions/`.
+
+The imported modules record their sources beside the declarations: manuscript Definition 2.1
+for the normalization, Remark 3.8 for the linear-test lower bound, and BGL (2014), Proposition
+4.3.1 for the binary fixed-constant upper bound, and manuscript Theorem 3.4 for the finite product
+identity. Their comments also identify the local test-domain specifications, extended-real
+conventions, and auxiliary results.
 -/
-
-namespace FunctionalInequalities
-
-end FunctionalInequalities

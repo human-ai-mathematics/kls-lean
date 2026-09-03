@@ -6,8 +6,8 @@ YAML 1.2), so the checker requires only Python 3.11 or newer and its standard li
 The top-level object contains `meta.program` (exactly `a-series`), `meta.scope` (nonempty prose),
 and `nodes` (an array of unique nodes). Every node contains `id`, `kind` (currently `lemma`),
 `status`, `statement`, `lean_solution`, and `checked_by`. `source` is optional provenance prose.
-The existing `lem:linear-test-lower` node remains required. Both it and
-`lem:poincare-tensorization` are currently recorded as `proved` with `checked_by: lean`.
+The existing `lem:linear-test-lower` node remains required. It, `lem:poincare-tensorization`,
+and `lem:poincare-finite-tensorization` are recorded as `proved` with `checked_by: lean`.
 
 ## Lifecycle
 
@@ -50,6 +50,8 @@ For every status, the artifact must exist under `solutions/`, have the `.lean` s
 exact node id in its header, and be a root of a default Lake target. A draft artifact can import
 the reusable declaration modules and name their public signatures with `#check`; it is a
 statement entry point rather than a proof certificate. The default build compiles its imports.
+Each proved node uses one named certificate directly referencing the reusable library; concrete
+specializations can be checked by typed applications without additional public wrapper theorems.
 
 For `proved` nodes only, the conservative static guard rejects `sorry`, `admit`, `native_decide`,
 `axiom`, and `unsafe`. It scans the entry point and recursively follows literal local Lean
@@ -67,3 +69,19 @@ cd formalization && lake build
 
 The checker validates structure and provenance; `lake build` checks elaboration and compilation.
 Neither command replaces mathematical review or the proof-phase inspection of theorem axioms.
+
+## Finite tensorization acceptance (2026-09-03)
+
+Node `lem:poincare-finite-tensorization` for Issue #7 uses
+`lean_solution: solutions/LemPoincareFiniteTensorization.lean`, with `status: proved` and
+`checked_by: lean` after human ratification and proof acceptance. Its sole named certificate
+packages the binary, finite-product, and boundary conclusions. The same default-build file
+retains the 45 supporting public-interface checks, eight Euclidean statement families and six
+concrete boundary applications. No schema or checker exemption is needed.
+
+The current approval and exact statement snapshot are in
+`decisions/2026-09-03-finite-tensorization-freeze.md`; semantic, machine, and publication gates
+are recorded in `explorations/2026-09-03-finite-tensorization-acceptance.md` and Issue #7.
+The earlier candidate and wrapper-removal records retain their historical draft status and
+placeholder counts. Both earlier proved nodes preserve their mathematical statements and
+retained certificate signatures.

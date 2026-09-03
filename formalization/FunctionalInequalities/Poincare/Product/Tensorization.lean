@@ -1,4 +1,4 @@
-import FunctionalInequalities.ProductAdmissible
+import FunctionalInequalities.Poincare.Product.Admissible
 
 /-!
 # Poincaré tensorization on Hilbert products
@@ -6,6 +6,13 @@ import FunctionalInequalities.ProductAdmissible
 Node: `lem:poincare-tensorization`. The product law lives on `WithLp 2 (E × F)` and uses the
 manuscript normalization `Var(f) ≤ C ∫ ‖gradient f‖²` for `Poincare.Admissible` tests. The fixed
 and extended optimal-constant bounds below are packaged by the node-specific certificate.
+
+Source: Bakry--Gentil--Ledoux (2014),
+[Proposition 4.3.1, pp. 185--187](https://www.hse.ru/data/2016/11/24/1113029204/bok%253A978-3-319-00227-9.pdf#page=201).
+The proposition gives the larger factor constant for a product of Markov triples. This module
+proves the corresponding bound for the local smooth finite-energy test class on Borel Hilbert
+probabilities; it does not identify that class with BGL's Dirichlet domain. The passage to an
+`ENNReal` infimum is a local consequence, beyond the proposition's fixed-constant statement.
 -/
 
 noncomputable section
@@ -21,7 +28,11 @@ variable {E F : Type*}
   [MeasurableSpace F] [BorelSpace F] [SecondCountableTopology F]
 
 /-- Fixed-constant tensorization inequality on the Hilbert product.
-The assumptions `Holds μ C` and `Holds ν C'` include probability and nonnegativity. -/
+The assumptions `Holds μ C` and `Holds ν C'` include probability and nonnegativity.
+
+Source: BGL Proposition 4.3.1, linked above, gives the same `max C C'` bound in its Markov-triple
+framework. The present theorem independently realizes that bound for `Admissible`; its Borel
+Hilbert hypotheses and a.e. section argument are stated and proved locally. -/
 theorem Holds.prod
     {μ : Measure E} {ν : Measure F} {C C' : ℝ}
     (hμ : Holds μ C) (hν : Holds ν C') :
@@ -106,7 +117,11 @@ theorem Holds.prod
     _ = max C C' * (A + B) := (mul_add _ _ _).symm
     _ = max C C' * energy (prodMeasure μ ν) g := by rw [energy_prod_eq hg]
 
-/-- Bound for the extended optimal constants, including infinite constants. -/
+/-- Bound for the extended optimal constants, including infinite constants.
+
+Source: local consequence of `Holds.prod` and the infimum definition of `constant`.
+BGL Proposition 4.3.1 supplies the fixed-constant input; the `ENNReal` conclusion and finite
+approximant argument are local, with no assumed attaining constant. -/
 theorem constant_prod_le
     {μ : Measure E} {ν : Measure F}
     [IsProbabilityMeasure μ] [IsProbabilityMeasure ν] :

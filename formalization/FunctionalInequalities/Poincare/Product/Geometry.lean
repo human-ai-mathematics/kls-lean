@@ -1,4 +1,4 @@
-import FunctionalInequalities.Basic
+import FunctionalInequalities.Poincare.Basic
 import Mathlib.Analysis.InnerProductSpace.ProdL2
 import Mathlib.Analysis.Normed.Lp.MeasurableSpace
 import Mathlib.Analysis.Calculus.ContDiff.Operations
@@ -11,6 +11,16 @@ The product norm is the L2 norm on `WithLp 2 (E × F)`. Integrability of section
 almost everywhere, as required by Fubini.
 The coordinate inclusions preserve smoothness, and their gradients are the corresponding
 components of the full Hilbert-product gradient.
+
+Source: local Hilbert-product encoding and calculus helpers. The sum of coordinate energies
+corresponds to the product energy in BGL Proposition 4.3.1, proof on
+[printed pp. 186–187](https://www.hse.ru/data/2016/11/24/1113029204/bok%253A978-3-319-00227-9.pdf#page=202).
+BGL does not state these `WithLp` interfaces or identify the present arbitrary-Borel smooth
+test domain with its Dirichlet domain. Mathlib's pinned v4.33.0 sources are
+[the Hilbert product](https://github.com/leanprover-community/mathlib4/blob/db584cd6d46c92f209a44c0f1c829460d327499d/Mathlib/Analysis/InnerProductSpace/ProdL2.lean),
+[the L² product norm and linear equivalence](https://github.com/leanprover-community/mathlib4/blob/db584cd6d46c92f209a44c0f1c829460d327499d/Mathlib/Analysis/Normed/Lp/ProdLp.lean),
+[the transported measurable structure](https://github.com/leanprover-community/mathlib4/blob/db584cd6d46c92f209a44c0f1c829460d327499d/Mathlib/Analysis/Normed/Lp/MeasurableSpace.lean),
+and [gradient calculus](https://github.com/leanprover-community/mathlib4/blob/db584cd6d46c92f209a44c0f1c829460d327499d/Mathlib/Analysis/Calculus/Gradient/Basic.lean).
 -/
 
 noncomputable section
@@ -19,11 +29,14 @@ open MeasureTheory ProbabilityTheory
 
 namespace FunctionalInequalities.Poincare
 
-/-- The product law transported to the Hilbert product. -/
+/-- The product law transported to the Hilbert product.
+Source: local encoding of Mathlib's `Measure.prod` through `WithLp.toLp 2`. -/
 def prodMeasure {E F : Type*} [MeasurableSpace E] [MeasurableSpace F]
     (μ : Measure E) (ν : Measure F) : Measure (WithLp 2 (E × F)) :=
   (μ.prod ν).map (WithLp.toLp 2)
 
+/-- Source: local helper from Mathlib's product probability instance,
+`WithLp.measurable_toLp`, and `Measure.isProbabilityMeasure_map`. -/
 instance prodMeasure_isProbabilityMeasure {E F : Type*} [MeasurableSpace E] [MeasurableSpace F]
     (μ : Measure E) (ν : Measure F) [IsProbabilityMeasure μ] [IsProbabilityMeasure ν] :
     IsProbabilityMeasure (prodMeasure μ ν) := by
@@ -37,6 +50,8 @@ variable {E F : Type*}
   [NormedAddCommGroup F] [InnerProductSpace ℝ F] [CompleteSpace F]
 
 omit [CompleteSpace E] [CompleteSpace F] in
+/-- Every left section is smooth. Source: local helper from Mathlib's `ContDiff.comp`,
+`WithLp.prodContinuousLinearEquiv`, and `contDiff_prodMk_left`; no section L² claim is made. -/
 theorem contDiff_section_left {f : WithLp 2 (E × F) → ℝ}
     (hf : ContDiff ℝ ⊤ f) (y : F) :
     ContDiff ℝ ⊤ (fun x ↦ f (WithLp.toLp 2 (x, y))) :=
@@ -44,12 +59,16 @@ theorem contDiff_section_left {f : WithLp 2 (E × F) → ℝ}
     ((WithLp.prodContinuousLinearEquiv 2 ℝ E F).symm.contDiff.comp (contDiff_prodMk_left y))
 
 omit [CompleteSpace E] [CompleteSpace F] in
+/-- Every right section is smooth. Source: local helper from Mathlib's `ContDiff.comp`,
+`WithLp.prodContinuousLinearEquiv`, and `contDiff_prodMk_right`; no section L² claim is made. -/
 theorem contDiff_section_right {f : WithLp 2 (E × F) → ℝ}
     (hf : ContDiff ℝ ⊤ f) (x : E) :
     ContDiff ℝ ⊤ (fun y ↦ f (WithLp.toLp 2 (x, y))) :=
   hf.comp
     ((WithLp.prodContinuousLinearEquiv 2 ℝ E F).symm.contDiff.comp (contDiff_prodMk_right x))
 
+/-- Source: local chain-rule helper using Mathlib's `HasFDerivAt.comp`, `toDual_gradient`,
+and `WithLp.prod_inner_apply` to identify the left partial gradient. -/
 theorem gradient_section_left {f : WithLp 2 (E × F) → ℝ} {x : E} {y : F}
     (hf : DifferentiableAt ℝ f (WithLp.toLp 2 (x, y))) :
     gradient (fun x ↦ f (WithLp.toLp 2 (x, y))) x =
@@ -83,6 +102,8 @@ theorem gradient_section_left {f : WithLp 2 (E × F) → ℝ} {x : E} {y : F}
     exact hcomp
   exact hgrad.gradient
 
+/-- Source: local chain-rule helper using Mathlib's `HasFDerivAt.comp`, `toDual_gradient`,
+and `WithLp.prod_inner_apply` to identify the right partial gradient. -/
 theorem gradient_section_right {f : WithLp 2 (E × F) → ℝ} {x : E} {y : F}
     (hf : DifferentiableAt ℝ f (WithLp.toLp 2 (x, y))) :
     gradient (fun y ↦ f (WithLp.toLp 2 (x, y))) y =
@@ -116,7 +137,9 @@ theorem gradient_section_right {f : WithLp 2 (E × F) → ℝ} {x : E} {y : F}
     exact hcomp
   exact hgrad.gradient
 
-/-- The exact sum of squared partial gradients for the Hilbert product norm. -/
+/-- The exact sum of squared partial gradients for the Hilbert product norm.
+Source: local consequence of `gradient_section_left`, `gradient_section_right`, and Mathlib's
+`WithLp.prod_norm_sq_eq_of_L2`, realizing the product-energy sum described above. -/
 theorem norm_gradient_sq_prod {f : WithLp 2 (E × F) → ℝ} {x : E} {y : F}
     (hf : DifferentiableAt ℝ f (WithLp.toLp 2 (x, y))) :
     ‖gradient f (WithLp.toLp 2 (x, y))‖ ^ 2 =

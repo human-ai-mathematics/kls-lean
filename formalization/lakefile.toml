@@ -13,4 +13,4 @@ name = "FunctionalInequalities"
 [[lean_lib]]
 name = "Issue2Solutions"
 srcDir = ".."
-roots = ["solutions.LemLinearTestLower", "solutions.LemPoincareTensorization"]
+roots = ["solutions.LemLinearTestLower", "solutions.LemPoincareTensorization", "solutions.LemPoincareFiniteTensorization"]
