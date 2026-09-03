@@ -248,8 +248,12 @@ separately because the metadata checker validates the current state rather than 
 
 `.github/workflows/lean.yml` runs these two Python commands and the default Lean build on every
 push and pull request. It uses Python 3.12 without third-party packages and the official
-`leanprover/lean-action@v1`, with `lake-package-directory: formalization`, an explicit build, and
-`use-mathlib-cache: 'true'` (the action runs `lake exe cache get` before building).
+`leanprover/lean-action@v1` to set up Lean in `formalization`. CI then enumerates the local
+library and solution files' direct Mathlib imports, downloads those modules and their upstream
+dependencies with `lake exe cache get`, and runs the complete default `lake build`. The action's
+whole-`.lake` GitHub cache and unrestricted Mathlib fetch are disabled to avoid exhausting runner
+disk space. `MATHLIB_NO_CACHE_ON_UPDATE=1` also prevents the dependency-update hook from fetching
+all of Mathlib. This changes cache scope, not the compiled targets or proof checks.
 
 ## Contribution workflow (2026-09-03)
 

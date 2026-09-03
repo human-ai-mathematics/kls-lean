@@ -119,8 +119,10 @@ tokens; Lean compilation and transitive axiom inspection verify the proofs separ
 
 Lake downloads the pinned dependency on the first build. `.lake/` is ignored and
 `lake-manifest.json` is committed. The repository's `.github/workflows/lean.yml` runs the two
-Python checks and the default Lean build, using the official `leanprover/lean-action@v1` and
-Mathlib cache.
+Python checks and the default Lean build. The official `leanprover/lean-action@v1` sets up Lean;
+CI fetches only the local library and solution files' directly imported Mathlib modules and
+their upstream dependencies, then runs the complete default `lake build`. Whole-`.lake` GitHub
+caching and automatic full-Mathlib downloads are disabled to limit runner disk usage.
 
 The final publication SHA and CI result for that same commit are tracked in
 [Issue #7](https://github.com/numina-functional-inequalities/kls-lean/issues/7); earlier build or

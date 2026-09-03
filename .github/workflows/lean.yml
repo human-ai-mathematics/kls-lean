@@ -10,6 +10,8 @@ permissions:
 jobs:
   certify:
     runs-on: ubuntu-latest
+    env:
+      MATHLIB_NO_CACHE_ON_UPDATE: '1'
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -19,10 +21,33 @@ jobs:
         run: python3 research/check_ledger.py
       - name: Test the ledger checker
         run: python3 -m unittest discover -s research/tests -p 'test_*.py'
-      - name: Build Lean library and certificates
+      - name: Set up Lean
         uses: leanprover/lean-action@v1
         with:
           lake-package-directory: formalization
           auto-config: 'false'
-          use-mathlib-cache: 'true'
-          build: 'true'
+          use-github-cache: 'false'
+          use-mathlib-cache: 'false'
+          build: 'false'
+      - name: Cache imported Mathlib modules
+        working-directory: formalization
+        run: |
+          python3 - <<'PY'
+          import re
+          import subprocess
+          from pathlib import Path
+
+          sources = [Path('FunctionalInequalities.lean')]
+          sources += list(Path('FunctionalInequalities').rglob('*.lean'))
+          sources += list(Path('../solutions').rglob('*.lean'))
+          modules = set()
+          for source in sources:
+              for imports in re.findall(r'(?m)^(?:public )?import ([\w. ]+)', source.read_text()):
+                  modules.update(name for name in imports.split() if name.startswith('Mathlib.'))
+          if not modules:
+              raise SystemExit('No Mathlib imports found; refusing an unbounded cache download')
+          subprocess.run(['lake', 'exe', 'cache', 'get', *sorted(modules)], check=True)
+          PY
+      - name: Build Lean library and certificates
+        working-directory: formalization
+        run: lake build
