@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
-"""Validate the minimal Issue #2 certification ledger.
+"""Validate the statement lifecycle and Lean certification ledger.
 
 The committed ``ledger.yaml`` uses the JSON subset of YAML 1.2, allowing this
 checker to run with the Python standard library.  Exit 0 means that the ledger
-is structurally valid and every ``checked_by: lean`` node names a safe,
-node-specific Lean certificate included in the default Lake build.
+is structurally valid and every node names a Lean artifact in the default
+Lake build. Drafted/frozen statements may contain placeholders; only proved
+nodes can claim ``checked_by: lean`` and must pass the escape-token checks.
 
 This structural check does not replace ``lake build`` or semantic review.
 """
@@ -40,7 +41,44 @@ REQUIRED_NODE_FIELDS = {
     "lean_solution",
     "checked_by",
 }
-FORBIDDEN_LEAN_TOKENS = re.compile(r"\b(?:sorry|admit|axiom|unsafe)\b")
+NODE_STATUSES = {"drafted", "frozen", "proved"}
+FORBIDDEN_LEAN_TOKENS = re.compile(r"\b(?:sorry|admit|native_decide|axiom|unsafe)\b")
+LEAN_IMPORTS = re.compile(
+    r"^[ \t]*(?:public[ \t]+)?import[ \t]+([\w.]+(?:[ \t]+[\w.]+)*)", re.MULTILINE
+)
+
+
+def _check_proved_sources(root: Path, artifact: Path, context: str, errors: list[str]) -> None:
+    """Apply the conservative token guard to the artifact and its local imports.
+
+    Third-party libraries are outside this structural check; compilation and
+    a proof-phase axiom audit remain separate obligations.
+    """
+    pending = [artifact]
+    visited: set[Path] = set()
+    while pending:
+        source = pending.pop()
+        if source in visited:
+            continue
+        visited.add(source)
+        try:
+            text = source.read_text(encoding="utf-8")
+        except (OSError, UnicodeError) as exc:
+            errors.append(f"{context}: cannot read Lean source {source}: {exc}")
+            continue
+        forbidden = sorted(set(FORBIDDEN_LEAN_TOKENS.findall(text)))
+        if forbidden:
+            errors.append(
+                f"{context}: forbidden Lean escape token(s) in "
+                f"{source.relative_to(root)}: {', '.join(forbidden)}"
+            )
+        for module in (module for imports in LEAN_IMPORTS.findall(text) for module in imports.split()):
+            relative = Path(*module.split(".")).with_suffix(".lean")
+            for base in (root / "formalization", root):
+                dependency = (base / relative).resolve()
+                if dependency.is_relative_to(root) and dependency.is_file():
+                    pending.append(dependency)
+                    break
 
 
 def _mentions_token(text: str, token: str) -> bool:
@@ -104,6 +142,8 @@ def _validate_lean_certificate(
     reference: Any,
     default_modules: set[str],
     errors: list[str],
+    *,
+    proved: bool,
 ) -> None:
     context = f"{node_id}.lean_solution"
     if not isinstance(reference, str) or not reference.strip():
@@ -137,9 +177,8 @@ def _validate_lean_certificate(
 
     if not _mentions_token(text[:2500], node_id):
         errors.append(f"{context}: certificate header does not name {node_id}")
-    forbidden = sorted(set(FORBIDDEN_LEAN_TOKENS.findall(text)))
-    if forbidden:
-        errors.append(f"{context}: forbidden Lean escape token(s): {', '.join(forbidden)}")
+    if proved:
+        _check_proved_sources(root, artifact, context, errors)
 
     module = ".".join(relative.with_suffix("").parts)
     if module not in default_modules:
@@ -205,18 +244,23 @@ def check_ledger(
         if not isinstance(statement, str) or not statement.strip():
             errors.append(f"{node_id}.statement: must be a non-empty string")
 
+        status = node.get("status")
+        if not isinstance(status, str) or status not in NODE_STATUSES:
+            errors.append(f"{node_id}.status: must be 'drafted', 'frozen', or 'proved'")
         checked_by = node.get("checked_by")
-        if checked_by != "lean":
-            errors.append(f"{node_id}.checked_by: this ledger requires 'lean'")
-            continue
-        if node.get("status") != "proved":
+        if checked_by == "lean" and status != "proved":
             errors.append(f"{node_id}.status: checked_by lean requires 'proved'")
+        if status == "proved" and checked_by != "lean":
+            errors.append(f"{node_id}.checked_by: proved nodes require 'lean'")
+        if status in ("drafted", "frozen") and checked_by is not None:
+            errors.append(f"{node_id}.checked_by: drafted/frozen nodes require null")
         _validate_lean_certificate(
             root,
             node_id,
             node.get("lean_solution"),
             default_modules,
             errors,
+            proved=status == "proved",
         )
 
     if "lem:linear-test-lower" not in seen:

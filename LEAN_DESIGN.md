@@ -1,10 +1,89 @@
-# Lean design: Poincaré linear-test certificate
+# Lean design: Poincaré certificates
 
-This document records the implemented Lean architecture for Issue #2 and the semantic contract
-behind its linear-test lower bound. The machine proof is intentionally limited to this elementary
-lower bound; Gaussian Poincaré inequalities, tensorization, log-Sobolev inequalities,
-Bakry--Émery, Otto--Villani, mode-indicator tests, and the KLS conjecture itself remain outside its
-scope.
+This document records the implemented Lean architecture and semantic contracts for the Issue #2
+linear-test lower bound and the Issue #6 two-factor Poincaré tensorization bound. Gaussian
+Poincaré inequalities, log-Sobolev inequalities, Bakry--Émery, Otto--Villani, mode-indicator tests,
+and the KLS conjecture itself remain outside the certified scope.
+
+## Tensorization design and accepted statements (2026-09-03)
+
+The tensorization proofs are complete, and the node is recorded as **proved** with
+`checked_by: lean`. The user's acceptance, complete public signatures, and ledger statement are
+recorded in `research/decisions/2026-09-03-tensorization-freeze.md`. Source correspondence,
+semantic review, and validation evidence are recorded in
+`research/explorations/2026-09-03-tensorization-acceptance.md`. That record distinguishes local
+verification from CI for the final published commit.
+
+The binary Hilbert product is `WithLp 2 (E × F)`, using Mathlib's
+`Analysis.InnerProductSpace.ProdL2`. Ordinary `E × F` has the maximum norm, which is not the
+Hilbert product norm. No global or local replacement of its norm/inner-product instances is
+permitted. The measurable structure is Mathlib's transported structure from
+`Analysis.Normed.Lp.MeasurableSpace`.
+
+Define `Poincare.prodMeasure μ ν := (μ.prod ν).map (WithLp.toLp 2)`. This is the same product
+probability law expressed on the Hilbert product, not a change of normalization. Use the
+measurable equivalence `MeasurableEquiv.toLp 2 (E × F)` to transport integrability, variance,
+and integrals. Its continuous linear counterpart is `WithLp.prodContinuousLinearEquiv`.
+
+The public results apply under these ambient assumptions: real separable Hilbert spaces with
+their Borel sigma algebras, including finite-dimensional Euclidean factors of any natural-number
+dimension. Their use has the following form; the complete elaborated signatures are in the
+freeze record:
+
+```lean
+variable {E F : Type*}
+  [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
+  [MeasurableSpace E] [BorelSpace E] [SecondCountableTopology E]
+  [NormedAddCommGroup F] [InnerProductSpace ℝ F] [CompleteSpace F]
+  [MeasurableSpace F] [BorelSpace F] [SecondCountableTopology F]
+
+example
+    {μ : Measure E} {ν : Measure F} {C C' : ℝ}
+    (hμ : Poincare.Holds μ C) (hν : Poincare.Holds ν C') :
+    Poincare.Holds (Poincare.prodMeasure μ ν) (max C C') :=
+  Poincare.Holds.prod hμ hν
+
+example
+    {μ : Measure E} {ν : Measure F}
+    [IsProbabilityMeasure μ] [IsProbabilityMeasure ν] :
+    Poincare.constant (Poincare.prodMeasure μ ν) ≤
+      max (Poincare.constant μ) (Poincare.constant ν) :=
+  Poincare.constant_prod_le
+```
+
+`Holds` already carries probability normalization and nonnegative constants. The accepted ledger
+statement is: for Borel probability measures on real separable Hilbert spaces, if the smooth
+L2 finite-energy Poincaré inequalities hold with constants C and C', the Hilbert product law
+satisfies the same inequality with max(C,C'); consequently its extended optimal constant is at
+most max(C_P(mu),C_P(nu)), including infinite constants. The normalization remains
+`Var(f) ≤ C ∫ ‖gradient f‖²`.
+
+The proof architecture does not differentiate an integral. Smoothness restricts to every
+section, but the L2 and finite-energy fields restrict only to almost every section. For example,
+with `ν = δ₀` and `f(x,y) = y² exp(x²)`, the product test and its gradient vanish on the support,
+whereas a section at `y ≠ 0` need not be L2 for a Gaussian first factor. Thus the section lemmas
+are a.e. statements. Neither `Admissible` nor either tensorization theorem requires every section
+to be admissible.
+
+The proof establishes the gradient projections and their squared-norm sum, then a.e.
+admissibility of sections. It assembles the bound through the two-factor variance inequality
+`Var(f) ≤ ∫ Var(f(·,y)) dν + ∫ Var(f(x,·)) dμ`, using Fubini and L2 estimates. Every use of a real
+integral retains explicit integrability evidence. The optimal-constant argument uses finite
+valid constants strictly below a hypothetical counterexample to the infimum bound in `ENNReal`;
+no attainment or finiteness of the optimal constants is assumed.
+
+The existing `Admissible`, `energy`, `Holds`, and `constant` definitions remain the semantic
+contract. In particular, this theorem concerns globally smooth real-valued L2 tests with finite
+gradient energy. It does not identify that test class with a closed Dirichlet domain, a Sobolev
+space, or all locally Lipschitz tests for arbitrary Borel measures. The source comparison with
+BGL Proposition 4.3.1 and the use in the manuscript's `prop:products` are recorded in
+`research/explorations/2026-09-03-tensorization-source-alignment.md`. Finite products and the
+further inputs to the product-case KLS result remain follow-up work.
+
+The initial encoding audit and statement/proof ownership decision remain in
+`research/decisions/2026-09-03-hilbert-product-tensorization.md` and
+`research/decisions/2026-09-03-statement-proof-separation.md`. Those historical records describe
+the earlier draft stage; the freeze and acceptance records document the current state.
 
 ## Reproducible project
 
@@ -17,8 +96,9 @@ cd formalization
 lake build
 ```
 
-The default targets compile the reusable `FunctionalInequalities` library and the root-level
-certificate `solutions/LemLinearTestLower.lean` through the `Issue2Solutions` library.
+The default targets compile the reusable `FunctionalInequalities` library and both root-level
+certificates, `solutions/LemLinearTestLower.lean` and `solutions/LemPoincareTensorization.lean`,
+through the `Issue2Solutions` library.
 
 ## Formalized statement
 
@@ -106,22 +186,36 @@ finite second moment that makes the centered covariance matrix finite.
 - `formalization/FunctionalInequalities/Project/LinearTestLower.lean`: the project-level Issue #2
   theorem.
 - `solutions/LemLinearTestLower.lean`: the thin node-specific certificate.
+- `formalization/FunctionalInequalities/ProductGeometry.lean`: transported product law and proved
+  smoothness/gradient identities.
+- `formalization/FunctionalInequalities/ProductVariance.lean`: L2/Fubini variance decomposition
+  and the two-factor variance inequality.
+- `formalization/FunctionalInequalities/ProductAdmissible.lean`: finite-energy bounds and a.e.
+  admissibility of sections.
+- `formalization/FunctionalInequalities/Tensorization.lean`: the two proved public theorems.
+- `formalization/FunctionalInequalities/Project/PoincareTensorization.lean`: the project-level
+  tensorization certificate and finite-dimensional Euclidean specializations, including zero.
+- `solutions/LemPoincareTensorization.lean`: the thin node-specific certificate covering both
+  public tensorization conclusions.
 
-Compilation is enforced by `lake build`, whose default targets include the root-level certificate.
-The certificate proves only the two lower-bound conclusions above and makes no claim about a
-Poincaré upper bound, Gaussian equality, or the nonlinear parts of Remark 3.8.
+Compilation is enforced by `lake build`, whose default targets include both root-level
+certificates. The linear-test certificate covers the two lower-bound conclusions above; the
+tensorization certificate covers the binary product upper bound. Neither proves Gaussian
+equality or the nonlinear parts of Remark 3.8.
 
 ## Repository certification
 
-`research/a-series/ledger.yaml` connects `lem:linear-test-lower` to
-`solutions/LemLinearTestLower.lean` with `checked_by: lean`. The dependency-free command
+`research/a-series/ledger.yaml` connects `lem:linear-test-lower` and
+`lem:poincare-tensorization` to their respective files under `solutions/`, both with
+`status: proved` and `checked_by: lean`. The dependency-free command
 
 ```bash
 python3 research/check_ledger.py
 ```
 
-checks that the certificate exists below `solutions/`, names the node, contains no Lean escape
-tokens, and belongs to a default Lake target. Its focused regression tests run with:
+checks that each certificate exists below `solutions/`, names its node, contains no Lean escape
+tokens in itself or its local imports, and belongs to a default Lake target. Its focused
+regression tests run with:
 
 ```bash
 python3 -m unittest discover -s research/tests -p 'test_*.py'
@@ -129,6 +223,12 @@ python3 -m unittest discover -s research/tests -p 'test_*.py'
 
 The checker establishes repository structure and provenance; `lake build` performs compilation,
 and semantic agreement with the reference remains a separate review obligation.
+
+The lifecycle and checker rules are specified in `research/ledger-schema.md`. Future
+drafted/frozen declarations may contain placeholders and must still compile in the default
+build. Only proved nodes may claim `checked_by: lean`; their entry points and local imports
+undergo the static escape-token check. Human review and signature preservation are documented
+separately because the metadata checker validates the current state rather than approval history.
 
 `.github/workflows/lean.yml` runs these two Python commands and the default Lean build on every
 push and pull request. It uses Python 3.12 without third-party packages and the official

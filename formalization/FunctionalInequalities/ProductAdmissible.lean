@@ -1,0 +1,120 @@
+import FunctionalInequalities.ProductGeometry
+import FunctionalInequalities.ProductVariance
+
+/-!
+# Almost-everywhere admissibility of Hilbert-product sections
+
+The smooth L2 finite-energy test class restricts to admissible sections almost everywhere.
+The squared component gradients are integrable and sum to the full product energy.
+-/
+
+noncomputable section
+
+open MeasureTheory ProbabilityTheory
+
+namespace FunctionalInequalities.Poincare
+
+variable {E F : Type*}
+  [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
+  [MeasurableSpace E] [BorelSpace E] [SecondCountableTopology E]
+  [NormedAddCommGroup F] [InnerProductSpace ℝ F] [CompleteSpace F]
+  [MeasurableSpace F] [BorelSpace F] [SecondCountableTopology F]
+  {μ : Measure E} {ν : Measure F} [IsProbabilityMeasure μ] [IsProbabilityMeasure ν]
+  {f : WithLp 2 (E × F) → ℝ}
+
+omit [BorelSpace E] [SecondCountableTopology E] [BorelSpace F] [SecondCountableTopology F]
+  [IsProbabilityMeasure μ] [IsProbabilityMeasure ν] in
+theorem Admissible.memLp_uncurry (hf : Admissible (prodMeasure μ ν) f) :
+    MemLp (fun p : E × F ↦ f (WithLp.toLp 2 p)) 2 (μ.prod ν) := by
+  have h := hf.memLp_two
+  rw [prodMeasure, ← MeasurableEquiv.coe_toLp] at h
+  exact (memLp_map_measure_iff h.aestronglyMeasurable
+    (MeasurableEquiv.toLp 2 (E × F)).measurable.aemeasurable).mp h
+
+omit [BorelSpace E] [SecondCountableTopology E] [BorelSpace F] [SecondCountableTopology F]
+  [IsProbabilityMeasure μ] [IsProbabilityMeasure ν] in
+private theorem Admissible.integrable_gradient_norm_sq (hf : Admissible (prodMeasure μ ν) f) :
+    Integrable (fun p : E × F ↦ ‖gradient f (WithLp.toLp 2 p)‖ ^ 2) (μ.prod ν) := by
+  have h := hf.energy_integrable
+  rw [prodMeasure, ← MeasurableEquiv.coe_toLp] at h
+  exact (integrable_map_equiv (MeasurableEquiv.toLp 2 (E × F)) _).mp h
+
+omit [BorelSpace E] [SecondCountableTopology E] [BorelSpace F] [SecondCountableTopology F]
+  [IsProbabilityMeasure μ] [IsProbabilityMeasure ν] in
+private theorem Admissible.continuous_gradient (hf : Admissible (prodMeasure μ ν) f) :
+    Continuous (fun q : WithLp 2 (E × F) ↦ gradient f q) := by
+  have hfd : Continuous (fderiv ℝ f) := hf.smooth'.continuous_fderiv (by simp)
+  have heq : (fun q : WithLp 2 (E × F) ↦ gradient f q)
+      = fun q ↦ (InnerProductSpace.toDual ℝ (WithLp 2 (E × F))).symm (fderiv ℝ f q) := by
+    funext q
+    rw [← toDual_gradient, LinearIsometryEquiv.symm_apply_apply]
+  rw [heq]
+  exact (InnerProductSpace.toDual ℝ (WithLp 2 (E × F))).symm.continuous.comp hfd
+
+omit [SecondCountableTopology E] [IsProbabilityMeasure μ] [IsProbabilityMeasure ν] in
+theorem Admissible.integrable_gradient_fst (hf : Admissible (prodMeasure μ ν) f) :
+    Integrable (fun p : E × F ↦ ‖(gradient f (WithLp.toLp 2 p)).fst‖ ^ 2) (μ.prod ν) := by
+  have hcont : Continuous (fun p : E × F ↦ ‖(gradient f (WithLp.toLp 2 p)).fst‖ ^ 2) := by
+    have htoLp : Continuous (fun p : E × F ↦ (WithLp.toLp 2 p : WithLp 2 (E × F))) :=
+      (WithLp.prodContinuousLinearEquiv 2 ℝ E F).symm.continuous
+    have hfst : Continuous (fun q : WithLp 2 (E × F) ↦ q.fst) :=
+      continuous_fst.comp (WithLp.prodContinuousLinearEquiv 2 ℝ E F).continuous
+    exact ((hfst.comp (hf.continuous_gradient.comp htoLp)).norm.pow 2)
+  refine hf.integrable_gradient_norm_sq.mono' hcont.aestronglyMeasurable
+    (Filter.Eventually.of_forall fun p ↦ ?_)
+  rw [Real.norm_of_nonneg (sq_nonneg _)]
+  have hsum := WithLp.prod_norm_sq_eq_of_L2 (gradient f (WithLp.toLp 2 p))
+  have hsq := sq_nonneg ‖(gradient f (WithLp.toLp 2 p)).snd‖
+  linarith
+
+omit [SecondCountableTopology E] [IsProbabilityMeasure μ] [IsProbabilityMeasure ν] in
+theorem Admissible.integrable_gradient_snd (hf : Admissible (prodMeasure μ ν) f) :
+    Integrable (fun p : E × F ↦ ‖(gradient f (WithLp.toLp 2 p)).snd‖ ^ 2) (μ.prod ν) := by
+  have hcont : Continuous (fun p : E × F ↦ ‖(gradient f (WithLp.toLp 2 p)).snd‖ ^ 2) := by
+    have htoLp : Continuous (fun p : E × F ↦ (WithLp.toLp 2 p : WithLp 2 (E × F))) :=
+      (WithLp.prodContinuousLinearEquiv 2 ℝ E F).symm.continuous
+    have hsnd : Continuous (fun q : WithLp 2 (E × F) ↦ q.snd) :=
+      continuous_snd.comp (WithLp.prodContinuousLinearEquiv 2 ℝ E F).continuous
+    exact ((hsnd.comp (hf.continuous_gradient.comp htoLp)).norm.pow 2)
+  refine hf.integrable_gradient_norm_sq.mono' hcont.aestronglyMeasurable
+    (Filter.Eventually.of_forall fun p ↦ ?_)
+  rw [Real.norm_of_nonneg (sq_nonneg _)]
+  have hsum := WithLp.prod_norm_sq_eq_of_L2 (gradient f (WithLp.toLp 2 p))
+  have hsq := sq_nonneg ‖(gradient f (WithLp.toLp 2 p)).fst‖
+  linarith
+
+theorem Admissible.section_left_ae (hf : Admissible (prodMeasure μ ν) f) :
+    ∀ᵐ y ∂ν, Admissible μ (fun x ↦ f (WithLp.toLp 2 (x, y))) := by
+  have hdiff : Differentiable ℝ f := hf.smooth'.differentiable (by simp)
+  filter_upwards [ProductVariance.memLp_left_ae hf.memLp_uncurry,
+    hf.integrable_gradient_fst.prod_left_ae] with y hL2 hEn
+  refine ⟨contDiff_section_left hf.smooth' y, hL2, ?_⟩
+  refine hEn.congr (Filter.Eventually.of_forall fun x ↦ ?_)
+  show ‖(gradient f (WithLp.toLp 2 (x, y))).fst‖ ^ 2
+      = ‖gradient (fun x ↦ f (WithLp.toLp 2 (x, y))) x‖ ^ 2
+  rw [gradient_section_left (hdiff _)]
+
+theorem Admissible.section_right_ae (hf : Admissible (prodMeasure μ ν) f) :
+    ∀ᵐ x ∂μ, Admissible ν (fun y ↦ f (WithLp.toLp 2 (x, y))) := by
+  have hdiff : Differentiable ℝ f := hf.smooth'.differentiable (by simp)
+  filter_upwards [ProductVariance.memLp_right_ae hf.memLp_uncurry,
+    hf.integrable_gradient_snd.prod_right_ae] with x hL2 hEn
+  refine ⟨contDiff_section_right hf.smooth' x, hL2, ?_⟩
+  refine hEn.congr (Filter.Eventually.of_forall fun y ↦ ?_)
+  show ‖(gradient f (WithLp.toLp 2 (x, y))).snd‖ ^ 2
+      = ‖gradient (fun y ↦ f (WithLp.toLp 2 (x, y))) y‖ ^ 2
+  rw [gradient_section_right (hdiff _)]
+
+omit [SecondCountableTopology E] [IsProbabilityMeasure μ] [IsProbabilityMeasure ν] in
+theorem energy_prod_eq (hf : Admissible (prodMeasure μ ν) f) :
+    energy (prodMeasure μ ν) f =
+      (∫ p : E × F, ‖(gradient f (WithLp.toLp 2 p)).fst‖ ^ 2 ∂μ.prod ν) +
+      (∫ p : E × F, ‖(gradient f (WithLp.toLp 2 p)).snd‖ ^ 2 ∂μ.prod ν) := by
+  have htrans : energy (prodMeasure μ ν) f
+      = ∫ p : E × F, ‖gradient f (WithLp.toLp 2 p)‖ ^ 2 ∂μ.prod ν := by
+    rw [energy, prodMeasure, ← MeasurableEquiv.coe_toLp, integral_map_equiv]
+  rw [htrans, ← integral_add hf.integrable_gradient_fst hf.integrable_gradient_snd]
+  exact integral_congr_ae
+    (Filter.Eventually.of_forall fun p ↦ WithLp.prod_norm_sq_eq_of_L2 _)
+
+end FunctionalInequalities.Poincare
