@@ -1,10 +1,67 @@
 # Lean design: Poincaré certificates
 
 This document records the implemented Lean architecture and semantic contracts for the Issue #2
-linear-test lower bound, Issue #6 two-factor Poincaré tensorization, and Issue #7 finite-product
-tensorization with optimal-constant equality. Gaussian
-Poincaré inequalities, log-Sobolev inequalities, Bakry--Émery, Otto--Villani, mode-indicator tests,
-and the KLS conjecture itself remain outside the certified scope.
+linear-test lower bound, Issue #6 two-factor Poincaré tensorization, Issue #7 finite-product
+tensorization with optimal-constant equality, and the sharp one-dimensional Gaussian Poincaré
+constant. Multivariate Gaussian and log-Sobolev inequalities, Bakry--Émery, Otto--Villani,
+mode-indicator tests, and the KLS conjecture itself remain outside the certified scope.
+
+## Layered `L²` and energy foundation (2026-09-04)
+
+Downstream applications and smoke tests may import `FunctionalInequalities.Poincare.Foundation`;
+reusable library modules import only their exact direct dependencies. The accepted smooth-test API
+below remains available for its existing certificates, but it is no longer the architectural base
+for future KLS layers. No theorem currently identifies the two optimal constants.
+
+The new dependency direction is:
+
+```text
+ProbabilityMeasure + intrinsic real L² variance + affine support coordinates
+  → extended energy and its finite domain
+  → concrete pre-energy + quadratic law + dense realization
+  → sequential relaxation + l.s.c. + recovery + closed-quadratic structure
+  → optional core-agreement / contraction / Dirichlet properties
+  → finite-valued TestFamily on that domain
+  → ENNReal Rayleigh supremum and Poincaré constant.
+```
+
+`Poincare.TestFamily.constant` is the supremum of extended Rayleigh quotients. Its checked boundary
+semantics are `0 / 0 = 0`, positive variance divided by zero energy equals `⊤`, and a single such
+test forces the optimal constant to be `⊤`. `Poincare.constantOfL2Energy` applies this optimizer to
+the finite domain of `Q : Lp ℝ 2 μ → ENNReal`; `finiteValue` requires a proof that `Q f ≠ ⊤`, so
+infinite energy is never silently converted to zero.
+
+`Energy.Euclidean.smoothGradientRelaxation` realizes globally `C∞`, square-integrable,
+finite-gradient tests in `L²` and sequentially relaxes their `NNReal` gradient integral on a
+finite-dimensional real Hilbert space with Borel, second-countable measurable topology. In
+Mathlib v4.33, ordinary infinite differentiability is `ContDiff ℝ ∞`; `ContDiff ℝ ⊤` means the
+strictly stronger analytic regularity and is not used by either live smooth-test frontend.
+
+The following statements are now proved rather than assumed:
+
+- compactly supported `C∞` tests give a dense realization;
+- the concrete gradient pre-energy is quadratic;
+- sequential relaxation is lower semicontinuous in every pseudometric ambient space and has
+  recovery sequences at finite points, or at all points under dense realization;
+- relaxation preserves the full extended parallelogram identity and nonzero quadratic
+  homogeneity, hence the smooth-gradient relaxation is a densely defined `ClosedQuadratic`;
+- continuous transformations satisfying the explicit test-level relaxed contraction bound
+  contract the relaxation;
+- the affine span of the support is the smallest closed affine subspace of full measure, and the
+  original and intrinsic-coordinate real `L²` spaces are linearly isometrically equivalent;
+  the intrinsic-affine smooth relaxation is therefore also `ClosedQuadratic`.
+
+These theorems do not identify either relaxation with Cheeger energy `2 Ch`, prove the concrete
+normal-contraction estimate required for `Dirichlet`, or show `AgreesOnTests`. For singular
+measures, raw ambient gradients need not be constant on an `L²` fiber (`0` and `x ↦ x` already
+differ under `δ₀`). This obstructs a raw-test core theorem, but it does not obstruct the closed
+quadratic relaxation itself. The intrinsic affine reduction removes normal directions and gives
+a canonical coordinate presentation; it does not by itself prove raw-test agreement for atomic
+or other singular laws. Anisotropic energies will carry their metric/operator parameter
+explicitly and will not reuse the unqualified canonical-energy name.
+
+The complete current tree, quantified interface, nonclaims, build command, and migration order are
+in [`formalization/FunctionalInequalities/Poincare/README.md`](formalization/FunctionalInequalities/Poincare/README.md).
 
 ## Tensorization design and accepted statements (2026-09-03)
 
@@ -98,10 +155,12 @@ cd formalization
 lake build
 ```
 
-The default targets compile the reusable `FunctionalInequalities` library and the three
+The default targets compile the reusable `FunctionalInequalities` library and the four
 root-level certificates: `solutions/LemLinearTestLower.lean`,
-`solutions/LemPoincareTensorization.lean`, and
-`solutions/LemPoincareFiniteTensorization.lean`.
+`solutions/LemPoincareTensorization.lean`,
+`solutions/LemPoincareFiniteTensorization.lean`, and
+`solutions/LemPoincareGaussianOneDimensional.lean`. The certificate entry points belong to the
+`Solutions` default target, together with `solutions/GaussianAxiomAudit.lean`.
 
 ## Formalized statement
 
@@ -212,17 +271,28 @@ finite second moment that makes the centered covariance matrix finite.
   fixed-constant tensorization, reverse bounds, optimal equality, and boundary consequences.
 - `solutions/LemPoincareFiniteTensorization.lean`: the sole Issue #7 certificate, retaining the
   45 public interface checks plus eight Euclidean families and six boundary applications.
+- `formalization/FunctionalInequalities/Poincare/Gaussian/Density.lean`: real Gaussian density
+  differentiation, tail identities, and the density/integrability bridge.
+- `formalization/FunctionalInequalities/Poincare/Gaussian/Hardy.lean`: finite-interval
+  FTC--Cauchy, Tonelli rearrangements, and the left/right Gaussian energy estimates.
+- `formalization/FunctionalInequalities/Poincare/Gaussian/Real.lean`: the valid Gaussian
+  Poincaré constant, the identity-test lower bound, and sharp optimal equality.
+- `solutions/LemPoincareGaussianOneDimensional.lean`: the sole Gaussian node certificate,
+  retaining all 20 public interface checks and seven typed boundary/normalization applications.
+- `solutions/GaussianAxiomAudit.lean`: a default-build `#guard_msgs` check fixing the Gaussian
+  certificate's transitive axiom set to `propext`, `Classical.choice`, and `Quot.sound`.
 
-Compilation is enforced by `lake build`, whose default targets include all three root-level
+Compilation is enforced by `lake build`, whose default targets include all four root-level
 certificates. The linear-test certificate covers the two lower-bound conclusions above; the
-two tensorization certificates cover the binary and finite product results. None proves Gaussian
-equality or the nonlinear parts of Remark 3.8.
+two tensorization certificates cover the binary and finite product results; the Gaussian
+certificate covers its fixed and optimal real-line constants. None proves the nonlinear parts of
+Remark 3.8 or a multivariate Gaussian theorem.
 
 ## Repository certification
 
 `research/a-series/ledger.yaml` connects `lem:linear-test-lower`,
-`lem:poincare-tensorization`, and `lem:poincare-finite-tensorization` to their respective files
-under `solutions/`, all with
+`lem:poincare-tensorization`, `lem:poincare-finite-tensorization`, and
+`lem:poincare-gaussian-one-dimensional` to their respective files under `solutions/`, all with
 `status: proved` and `checked_by: lean`. The dependency-free command
 
 ```bash
@@ -282,11 +352,11 @@ The accepted modules are `Poincare/Transport`, `Poincare/Product/Reverse`,
 `Poincare/FiniteProduct/Geometry`, and `Poincare/FiniteProduct/Tensorization`.
 Their 45 retained public declarations have library implementations, recorded in
 `research/explorations/2026-09-03-finite-tensorization-proofs.md`.
-`solutions/LemPoincareFiniteTensorization.lean` contains the sole node certificate in the existing
-`Issue2Solutions` default target. It also prints the 45 reusable public signatures and checks
+`solutions/LemPoincareFiniteTensorization.lean` contains the sole node certificate in the
+`Solutions` default target. It also prints the 45 reusable public signatures and checks
 eight Euclidean statement families and six concrete boundary applications through typed uses of
 the general API. The eight former specialization wrappers and their duplicate obligations remain
-removed. No proof placeholders remain in the current default build.
+removed. No proof placeholders remain in the accepted finite-product modules or certificate.
 
 The `Project/` layer has been removed. Each proved node has one certificate directly combining
 library results; Euclidean specializations are checked without another named forwarding theorem.
@@ -307,14 +377,63 @@ claimed. The publication commit and matching CI result are tracked in Issue #7 r
 inferred from earlier local or remote runs.
 
 The root `FunctionalInequalities.lean` aggregate imports the accepted
-`Poincare/Product/Reverse` and `Poincare/FiniteProduct/Tensorization` modules. This finite-product
+`Poincare/Product/Reverse`, `Poincare/FiniteProduct/Tensorization`, and
+`Poincare/Gaussian/Real` modules. This finite-product
 certificate is one component of the product-case KLS path; a one-dimensional log-concave bound
 and Cheeger--Poincaré comparison remain separate obligations.
 
-## Proposed next independent node
+## Gaussian proof and acceptance (2026-09-04)
 
-The next suggested task is the sharp one-dimensional Gaussian statement
-`Poincare.constant (gaussianReal m v) = (v : ENNReal)`. Before opening or proving that node,
-review the exact `Admissible` test class, Mathlib's `gaussianReal` variance parameter convention,
-available Gaussian integration APIs, and a proof route for the upper bound, then obtain a human
-freeze. This document does not claim that such an issue or proof already exists.
+The node `lem:poincare-gaussian-one-dimensional` is **proved** with `checked_by: lean` after
+human semantic and mathematical review. The two main interfaces assert, for every `m : ℝ` and
+`v : NNReal`,
+`Poincare.Holds (gaussianReal m v) (v : ℝ)` and
+`Poincare.constant (gaussianReal m v) = (v : ENNReal)`. The test-domain definitions above are
+used unchanged. The variance parameter v is the constant; v = 0 is the Dirac law at m.
+
+The 20 declarations are all proved and split by responsibility. `Poincare/Gaussian/Density.lean`
+contains 7 Mathlib-based density/calculus and integrability interfaces;
+`Poincare/Gaussian/Hardy.lean` contains 9 interval, Tonelli and half-line energy interfaces; and
+`Poincare/Gaussian/Real.lean` contains 4 fixed-upper-bound, identity-test-lower-bound and
+sharp-constant interfaces. The right and left tail weights are v times the density, and the
+half-line energy bounds add without an extra factor. Explicit density-weighted integrability
+prevents real-integral totalization from replacing a necessary hypothesis. No global Lebesgue L²
+condition on f′, test-function decay, or infimum-attainment assumption is added.
+The two first-moment tail identities now quantify over every endpoint `t`; their former
+endpoint-order premises were unused. Downstream half-line arguments obtain the required order
+facts from their integration regions, so this is a strict API generalization rather than a
+change of claim.
+
+The manuscript's Gaussian covariance family supplies the positive centered one-dimensional
+Poincaré claim. Arbitrary means, zero variance, the exact smooth finite-energy domain, and
+the direct density route are local specifications; the source itself proves its upper bound
+through Bakry–Émery and LSI. See the [source/API audit](research/explorations/2026-09-04-gaussian-poincare-design.md).
+
+The proof first minimizes variance against the fixed center `f m`, applies FTC and
+Cauchy--Schwarz on each finite interval, and uses nonnegative Tonelli plus the Gaussian
+first-moment tails on the two half-lines. This yields the upper bound for positive variance;
+the zero-variance case is proved separately from the Dirac-law identity. The identity test has
+variance v and energy one and supplies the matching lower bound. Thus the result has neither a
+missing factor nor an unstated positivity or boundary assumption.
+
+The [reading guide](formalization/FunctionalInequalities/Poincare/Gaussian/README.md) gives the
+mathematical meaning, proof flow, examples and file map. The earlier
+[candidate package](research/decisions/2026-09-04-gaussian-poincare-candidate.md) and
+[signature snapshot](research/explorations/2026-09-04-gaussian-poincare-signatures.txt) remain
+append-only records of human statement review and do not override the current proved status.
+`solutions/LemPoincareGaussianOneDimensional.lean` contains the single certificate
+`Solutions.LemPoincareGaussianOneDimensional.certificate`, prints all 20 interfaces and checks
+seven typed applications. It is compiled by the `Solutions` default target, and the root proved
+aggregate exports `Poincare/Gaussian/Real`. The same default target compiles
+`solutions/GaussianAxiomAudit.lean`, whose guarded output fixes the certificate's transitive
+axiom set to `propext`, `Classical.choice`, and `Quot.sound`.
+
+The review confirmed the exact source normalization and scope: arbitrary mean and zero variance
+are local extensions, while the theorem concerns the existing globally smooth Gaussian-L²,
+finite-gradient-energy domain only. It does not establish a closed Sobolev/spectral-gap domain
+equivalence. The [Gaussian freeze](research/decisions/2026-09-04-gaussian-poincare-freeze.md)
+records the approved contract; the
+[acceptance record](research/explorations/2026-09-04-gaussian-poincare-acceptance.md) records the
+proof closeout, final architecture and validation gates. Local certification is complete;
+publication and remote CI status must still be reported from the actual final commit rather than
+inferred from this review.

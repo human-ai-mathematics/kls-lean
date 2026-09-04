@@ -1,4 +1,4 @@
-# Codex 后续工作上下文：有限张量化验收之后
+# Codex 后续工作上下文：canonical Poincaré foundation 与下一阶段
 
 > 本文件记录当前交付状态与后续边界，替代已完成的 CI、ledger 生命周期和张量化骨架工作包。
 > 早期阶段的决定与验证结果保留在 `research/decisions/` 和 `research/explorations/` 的
@@ -7,6 +7,14 @@
 ## 1. 仓库现状
 
 - 仓库：`numina-functional-inequalities/kls-lean`；伞形 Issue #1。
+- Gaussian 节点 `lem:poincare-gaussian-one-dimensional` 已完成 20 项声明的 Lean 证明、
+  人工语义／数学复核和单一节点证书，状态为 `proved` / `checked_by: lean`。唯一证书为
+  `Solutions.LemPoincareGaussianOneDimensional.certificate`。当前说明见
+  `formalization/FunctionalInequalities/Poincare/Gaussian/README.md`；
+  `research/decisions/2026-09-04-gaussian-poincare-candidate.md` 保留为候选阶段的历史快照，
+  不再代表当前状态。批准契约与最终验收分别见
+  `research/decisions/2026-09-04-gaussian-poincare-freeze.md` 和
+  `research/explorations/2026-09-04-gaussian-poincare-acceptance.md`。
 - Issue #2 已完成，节点 `lem:linear-test-lower` 为 `proved` / `checked_by: lean`。
   其证书同时覆盖可容许测试函数的 Rayleigh 下界与有限第二矩下的
   $C_P(\mu) \ge \lambda_{\max}(\operatorname{Cov}_\mu)$，包括零维约定。
@@ -28,6 +36,13 @@
   build，并使用 Mathlib cache。无需重复创建 CI。
 - Lean 工程在 `formalization/`，Lean/Mathlib 固定为 `v4.33.0`；必须先阅读
   `LEAN_DESIGN.md`。
+- 新的 canonical Poincaré foundation 已通过 `Poincare/Foundation.lean` 导出：实 `L²`
+  内在方差、扩展能量、sequential relaxation、recovery、concrete quadratic
+  pre-energy、完整 relaxed parallelogram、闭二次型、连续 contraction transfer、
+  `C∞` smooth-gradient realization 的稠密性，以及 affine-support 内在坐标。直接与内在
+  affine 两个 smooth-gradient relaxation 都已有 `ClosedQuadratic` witness。
+- Mathlib v4.33 的普通无限可微写作 `ContDiff ℝ ∞`；`ContDiff ℝ ⊤` 表示更强的解析正则性。
+  新 foundation 和既有 Poincaré/Gaussian/product 链均已迁移到真正的 `C∞`，定理名保持不变。
 
 ## 2. 已交付的二因子与有限张量化接口
 
@@ -75,7 +90,8 @@ Issue #7 进一步交付：
 
 ## 3. 必须保留的语义契约
 
-- `Poincare.Admissible μ f` 是**全局光滑、L²、平方梯度可积**的实值测试函数类。
+- `Poincare.Admissible μ f` 是**全局 `C∞`、L²、平方梯度可积**的实值测试函数类；其
+  Lean 字段是 `ContDiff ℝ ∞ f`，不是表示解析性的 `ContDiff ℝ ⊤ f`。
   本轮没有证明它与闭 Dirichlet 域、Sobolev 域或全部局部 Lipschitz 测试类的等价性。
 - `Poincare.energy μ f` 使用 Mathlib 的 canonical gradient，论文归一化为
   $\operatorname{Var}_\mu(f) \le C\int\lVert\nabla f\rVert^2\,d\mu$。
@@ -102,8 +118,10 @@ python3 -m unittest discover -s research/tests -p 'test_*.py'
 cd formalization && lake build
 ```
 
-三项已证节点都必须通过证书及其本地 imports 的禁用 token 检查。机器编译之外，还要
+四项已证节点都必须通过证书及其本地 imports 的禁用 token 检查。机器编译之外，还要
 检查公开定理和证书的传递公理依赖，并核对签名与 ledger 陈述是否符合人工批准快照。
+`solutions/GaussianAxiomAudit.lean` 通过默认构建中的 `#guard_msgs` 将 Gaussian certificate
+的传递公理集合固定为 `propext`、`Classical.choice`、`Quot.sound`；集合变化会直接使构建失败。
 结构 checker 只验证当前元数据，不证明历史审批或数学语义。
 
 工作直接在 `main` 上进行，遵循 `research/explorations/2026-09-03-main-only-workflow.md`。
@@ -116,10 +134,18 @@ branch 或 PR。不得用较早 commit 的 CI 结果代替最终发布 commit �
 
 ## 5. 后续独立任务
 
-建议下一独立任务是**一维 Gaussian Poincaré 锐常数**，目标候选为
-`Poincare.constant (gaussianReal m v) = (v : ENNReal)`。先审查本仓库精确测试类、
-`gaussianReal` 的方差参数约定、Mathlib API 与上界证明路线，再由人类冻结陈述；下界可
-考虑复用已有线性测试结论。本文件没有声称该后续 Issue 已创建或证明已经开始。
+一维 Gaussian Poincaré 锐常数的 statement、证明和验收阶段已经完成。两个主入口为
+`Poincare.holds_gaussianReal` 与 `Poincare.constant_gaussianReal`，覆盖任意均值及全部
+非负方差。20 项证明完备的声明按职责分为 `Gaussian/Density.lean` 7 项、
+`Gaussian/Hardy.lean` 9 项与 `Gaussian/Real.lean` 4 项；唯一 solution 入口给出单一
+certificate，同时打印完整接口，并检查标准、平移/方差 4、零方差和 Dirac 边界。
+来源/API/文件依赖见 `research/explorations/2026-09-04-gaussian-poincare-design.md`。
+
+本轮人工复核已确认：`v : NNReal` 是方差而非标准差；正方差密度证明与 `v = 0` 的
+Dirac 证明分开；结论只针对现有的全局光滑 Gaussian-L²、有限梯度能量测试类，不声称
+完整 Sobolev／闭 Dirichlet 域等价。后续工作不得把历史候选记录中的 `drafted` 或
+`sorry` 描述重新解释为当前状态。GitHub Issue、commit、push 与最终远端 CI 仍需按实际
+发布流程单独记录，不能由本地验收推断。
 
 其余路线分别为：
 
@@ -129,6 +155,10 @@ branch 或 PR。不得用较早 commit 的 CI 结果代替最终发布 commit �
 2. **多元 Gaussian 与仿射推前**：从一维结果、有限乘积张量化和仿射推前界获得
    $C_P(\gamma)=\lambda_{\max}(\Sigma)$。
 3. **Log-Sobolev 与 Bakry–Émery**：分别审查并冻结 LSI 定义、Gaussian LSI 与强凸性界。
+4. **canonical energy 桥**：证明 smooth-gradient relaxation 的 concrete normal-contraction
+   estimate，从 generic contraction transfer 得到 `Dirichlet`；随后分别处理与 `2 Ch` 的
+   识别、raw tests 上的 `AgreesOnTests`/core 条件，以及 affine/whitening invariance。闭二次型
+   本身已经完成，不再把 closability 当成它的前提。
 
 闭 Sobolev/谱隙等价、完整 optimal transport、Otto–Villani、Γ₂ calculus 和 KLS
 随机分析主干不属于本次张量化验收范围。
@@ -153,16 +183,33 @@ Issue #7 已存在并挂在 #1 下，勿重复立项。#2、#6 的通用证明�
 实现记录见 `research/explorations/2026-09-03-finite-tensorization-proofs.md`。
 这些历史文件中描述的草稿和待验收状态属于当时阶段，不覆盖本次验收记录。
 
-## 7. 当前目录约定（2026-09-03）
+## 7. 本次 Gaussian 验收记录（2026-09-04）
 
-可复用 Lean 模块按数学主题分组：`Poincare/` 放基本定义、线性测试和搬运接口，
-`Poincare/Product/` 放二因子结果，`Poincare/FiniteProduct/` 放有限乘积结果。
+本轮人工批准的契约、精确作用域及两项尾积分 API 泛化记录在
+`research/decisions/2026-09-04-gaussian-poincare-freeze.md`。最终证明收口、
+`Density 7 → Hardy 9 → Real 4` 模块拆分、唯一 certificate、ledger promotion、根模块导出、
+target 改名、公理 guard 和本地验证结果记录在
+`research/explorations/2026-09-04-gaussian-poincare-acceptance.md`。
+
+两项尾积分恒等式删去了未使用的端点顺序前提，现在对任意 `t : ℝ` 成立；左右半线下游
+证明仍由积分区域本身取得所需顺序事实。这是严格接口泛化，不改变 20 项声明的数学内容、
+锐常数或 ledger 陈述。上述记录只主张本地验收，不声称 commit、push 或远端 CI 已完成。
+
+## 8. 当前目录约定（2026-09-04）
+
+可复用 Lean 模块按数学主题分组：`Probability/` 放概率边界与 affine support，`L2/` 放
+内在均值/方差，`Energy/` 放扩展泛函、relaxation、quadratic/closed/Dirichlet 层及 Euclidean
+realization；`Poincare/` 放最优化、基本定义、线性测试和搬运接口，
+`Poincare/Product/` 放二因子结果，`Poincare/FiniteProduct/` 放有限乘积结果，
+`Poincare/Gaussian/` 依次以 `Density → Hardy → Real` 分隔密度计算、半线积分估计和
+最终锐常数定理。
 `solutions/` 是唯一节点入口层；每个已证节点一个 certificate，直接引用通用库。
 重复的 `Project/` 三文件已删除，Euclidean 特例采用精确类型应用检查。
 完整导航与放置规则见 `formalization/README.md`。
 根 aggregate `formalization/FunctionalInequalities.lean` 导入已验收的
-`Poincare/Product/Reverse` 和 `Poincare/FiniteProduct/Tensorization`，默认构建包含三个
-节点证书。
+`Poincare/Product/Reverse`、`Poincare/FiniteProduct/Tensorization` 和
+`Poincare/Gaussian/Real`。默认 `Solutions` target 包含四个节点证书和独立的 Gaussian
+传递公理审计根。
 
 早先的主题目录迁移见 `research/explorations/2026-09-03-module-layout.md`；之后的
 Project 去重和保留的 45 项通用接口以 `research/explorations/2026-09-03-certificate-deduplication.md`

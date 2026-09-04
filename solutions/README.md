@@ -40,11 +40,20 @@ with typed `#check` applications rather than duplicate public theorems.
   `Solutions.LemPoincareFiniteTensorization.certificate`, directly packaging the Issue #7
   binary reverse/equality, finite tensorization/equality, and boundary conclusions. Its API
   checks also retain the supporting transport interfaces.
+- `LemPoincareGaussianOneDimensional.lean` contains
+  `Solutions.LemPoincareGaussianOneDimensional.certificate`, directly packaging the valid
+  fixed constant and sharp optimal-constant equality for every real mean and nonnegative
+  variance. Its typed checks cover the standard, translated, and zero-variance laws.
 
-All three nodes are recorded as `proved` with `checked_by: lean`. The binary tensorization freeze and
-acceptance records are `../research/decisions/2026-09-03-tensorization-freeze.md` and
-`../research/explorations/2026-09-03-tensorization-acceptance.md`; the latter records validation
-and the final publication/CI status.
+These four nodes are recorded as `proved` with `checked_by: lean`. The binary tensorization
+freeze and acceptance records are `../research/decisions/2026-09-03-tensorization-freeze.md`
+and `../research/explorations/2026-09-03-tensorization-acceptance.md`; the latter records
+validation and the final publication/CI status.
+
+The `Solutions` default target has these four node roots plus
+`GaussianAxiomAudit.lean`. The audit imports the Gaussian certificate and uses `#guard_msgs` to
+fix its transitive axiom set to `propext`, `Classical.choice`, and `Quot.sound`; a changed set
+fails the default build. It is a regression check, not a fifth ledger node or certificate.
 
 ## Future draft and frozen statements
 
@@ -52,6 +61,31 @@ Drafted and frozen nodes use `checked_by: null`. They must meet the same path, h
 Lake target requirements, while placeholders remain permitted. Only proved nodes receive the
 escape-token check. See `../research/ledger-schema.md` for the human freeze and proof handoff
 rules.
+
+## Gaussian certificate
+
+`LemPoincareGaussianOneDimensional.lean` is the default-build entry point for
+`lem:poincare-gaussian-one-dimensional`, with `status: proved` and `checked_by: lean`.
+It imports `Poincare/Gaussian/Real.lean` directly and contains the sole node certificate,
+`Solutions.LemPoincareGaussianOneDimensional.certificate`. The certificate combines, for every
+`m : ℝ` and `v : NNReal`, that `(v : ℝ)` is a valid constant for `gaussianReal m v` and that the
+optimal `ENNReal` constant equals v. The file also prints the 20 proof-complete library interfaces.
+Seven typed applications cover the standard Gaussian, mean 3/variance 4, arbitrary-mean zero
+variance, and the existing Dirac-law identity; they introduce no duplicate public theorem.
+
+The imported Gaussian library is split into `Density` (7 declarations), `Hardy` (9), and `Real`
+(4): density calculus and integrability feed interval/Tonelli half-line estimates, which feed the
+fixed and sharp constants. All 20 declarations are proved, and the certificate and its local
+import closure contain no forbidden proof escapes. Human semantic and mathematical review
+confirmed the variance normalization, the separate zero-variance Dirac case, and the precise
+smooth L2 finite-energy scope. Use the
+[reading guide](../formalization/FunctionalInequalities/Poincare/Gaussian/README.md) for the
+current theorem and architecture. The
+[candidate package](../research/decisions/2026-09-04-gaussian-poincare-candidate.md) and
+[source audit](../research/explorations/2026-09-04-gaussian-poincare-design.md) remain historical
+review/provenance records. The current approved contract and verification evidence are in the
+[Gaussian freeze](../research/decisions/2026-09-04-gaussian-poincare-freeze.md) and
+[Gaussian acceptance record](../research/explorations/2026-09-04-gaussian-poincare-acceptance.md).
 
 ## Finite tensorization certificate
 

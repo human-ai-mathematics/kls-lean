@@ -151,7 +151,7 @@ SmoothGradient
 AffineSupport ──→ IntrinsicAffine ──→ IntrinsicAffineClosed
 ```
 
-旧的 [`Basic.lean`](Basic.lean)、`LinearTest`、`Transport`、product 与 finite product
+旧的 [`Basic.lean`](Basic.lean)、`LinearTest`、`Transport`、product、finite product 与 Gaussian
 模块继续提供已验收的实际函数接口。新名称主要位于 `Poincare.TestFamily` 与
 `Energy` namespace；新旧常数可以同时导入，但目前没有桥定理证明二者相等。
 

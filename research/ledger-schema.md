@@ -6,8 +6,9 @@ YAML 1.2), so the checker requires only Python 3.11 or newer and its standard li
 The top-level object contains `meta.program` (exactly `a-series`), `meta.scope` (nonempty prose),
 and `nodes` (an array of unique nodes). Every node contains `id`, `kind` (currently `lemma`),
 `status`, `statement`, `lean_solution`, and `checked_by`. `source` is optional provenance prose.
-The existing `lem:linear-test-lower` node remains required. It, `lem:poincare-tensorization`,
-and `lem:poincare-finite-tensorization` are recorded as `proved` with `checked_by: lean`.
+The existing `lem:linear-test-lower` node remains required. It,
+`lem:poincare-tensorization`, `lem:poincare-finite-tensorization`, and
+`lem:poincare-gaussian-one-dimensional` are recorded as `proved` with `checked_by: lean`.
 
 ## Lifecycle
 
@@ -85,3 +86,20 @@ are recorded in `explorations/2026-09-03-finite-tensorization-acceptance.md` and
 The earlier candidate and wrapper-removal records retain their historical draft status and
 placeholder counts. Both earlier proved nodes preserve their mathematical statements and
 retained certificate signatures.
+
+## One-dimensional Gaussian acceptance (2026-09-04)
+
+Node `lem:poincare-gaussian-one-dimensional` uses
+`lean_solution: solutions/LemPoincareGaussianOneDimensional.lean`, with `status: proved` and
+`checked_by: lean` after human semantic approval and proof closeout. Its sole named certificate
+packages the valid-constant and exact-optimal-constant conclusions for every mean and every
+nonnegative variance. The same default-build entry point checks all 20 supporting public
+declarations and the boundary applications. `solutions/GaussianAxiomAudit.lean` additionally
+makes the certificate's exact transitive axiom set a default-build obligation.
+
+The approved contract and the two generalized tail interfaces are recorded in
+`decisions/2026-09-04-gaussian-poincare-freeze.md`; the final architecture, semantic review,
+proof-escape checks, axiom audit and local machine gates are recorded in
+`explorations/2026-09-04-gaussian-poincare-acceptance.md`. Earlier candidate, design, signature
+and statement-validation records remain unchanged and retain their historical `drafted` state.
+No schema, checker or regression-test exemption was introduced for this promotion.
