@@ -16,6 +16,9 @@ accepted legacy smooth-test API.
 
 ```text
 formalization/
+├── blueprint/                                  # Executable theorem/dependency map
+│   ├── src/                                # Shared TeX source for PDF and web
+│   └── route-composition.yaml             # Machine-checked alternative KLS routes
 ├── FunctionalInequalities.lean               # Aggregate of the proved library
 └── FunctionalInequalities/
     ├── Probability/
@@ -208,6 +211,47 @@ freeze and acceptance links above record its accepted scope and final evidence.
 The [ledger](../research/a-series/ledger.yaml) records certification status, and
 [solutions/README.md](../solutions/README.md) explains the certificate checks.
 
+## Lean Blueprint
+
+The [Blueprint](blueprint/README.md) is an executable reading order and dependency graph for the
+formalization. It separates three things that prose can otherwise blur:
+
+- the canonical `L²`/closed-energy foundation already certified by Lean;
+- the precise analytic bridges that remain open, including Dirichlet/normal-contraction,
+  `2 Ch_μ`, raw-test/core agreement, and ambient/intrinsic comparison;
+- four alternative long routes from the canonical interface to KLS.
+
+The Blueprint is not a second proof-status database. Lean declarations and the
+[ledger](../research/a-series/ledger.yaml) remain authoritative. A `\lean{...}` annotation maps a
+statement to a declaration, and `\leanok` is used only at the status justified by that declaration
+and the ledger. An exact but open mathematical statement may appear without `\leanok`; a node
+whose final hypotheses are not frozen is additionally marked `\notready`. Successful PDF or web
+rendering alone certifies none of these claims.
+
+The helper script accounts for the Lake package living in `formalization/` rather than at the Git
+root. With `xelatex`, `latexmk`, and Graphviz's `dot` available, run the following from the
+repository root:
+
+```bash
+python3 -m venv /tmp/kls-blueprint-venv
+source /tmp/kls-blueprint-venv/bin/activate
+python -m pip install --requirement formalization/blueprint/requirements.txt
+
+python3 research/check_blueprint.py
+python3 -m unittest discover -s research/tests -p 'test_check_blueprint.py'
+(cd formalization && lake build)
+python3 formalization/blueprint/build.py checkdecls
+python3 formalization/blueprint/build.py pdf
+python3 formalization/blueprint/build.py web
+```
+
+The final three commands may be replaced by
+`python3 formalization/blueprint/build.py all`. Generated files are written to
+`formalization/blueprint/lean_decls`, `formalization/blueprint/print/`, and
+`formalization/blueprint/web/`; all are intentionally untracked. The dedicated
+[`blueprint.yml`](../.github/workflows/blueprint.yml) workflow repeats these gates and uploads the
+PDF and web tree as artifacts without deploying Pages.
+
 ## Build and validation
 
 - Lean: `leanprover/lean4:v4.33.0` in `lean-toolchain`.
@@ -219,6 +263,7 @@ automatically. From the repository root:
 
 ```bash
 python3 research/check_ledger.py
+python3 research/check_blueprint.py
 python3 -m unittest discover -s research/tests -p 'test_*.py'
 cd formalization && lake build
 ```

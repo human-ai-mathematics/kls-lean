@@ -1,0 +1,41 @@
+{
+  "version": 1,
+  "targets": [
+    {
+      "target": "conj:kls",
+      "operator": "any_of",
+      "alternatives": [
+        {
+          "route": "eldan-localization",
+          "operator": "all_of",
+          "nodes": [
+            "ass:tight-prefix-carleson",
+            "cor:tight-window-consumption"
+          ]
+        },
+        {
+          "route": "moment-map-spectral",
+          "operator": "all_of",
+          "nodes": [
+            "prop:spectral-sufficiency"
+          ]
+        },
+        {
+          "route": "moment-map-cmh",
+          "operator": "all_of",
+          "nodes": [
+            "cor:cmh-recovery-sequence-suffices"
+          ]
+        },
+        {
+          "route": "conditional-fiber-frame",
+          "operator": "all_of",
+          "nodes": [
+            "q:conditional-fiber-frame",
+            "lem:conditional-fiber-form"
+          ]
+        }
+      ]
+    }
+  ]
+}

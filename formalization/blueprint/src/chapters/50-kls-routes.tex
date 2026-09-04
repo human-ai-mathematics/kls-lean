@@ -1,0 +1,163 @@
+\chapter{Four routes to KLS}
+\label{chap:kls-routes}
+
+This chapter is a roadmap imported from the pinned upstream commit \sourcecommit.  Every
+statement below is either open or only conditionally reviewed upstream.  None is Lean-certified,
+so no node in this chapter carries \texttt{leanok}.
+
+The TeX command \texttt{\textbackslash uses} means logical AND.  The four routes, however, are
+alternatives.  Their logical composition is therefore recorded in
+\texttt{route-composition.yaml}: the target is an \texttt{any\_of}, while the named nodes inside
+each route form an \texttt{all\_of}.  In particular, \cref{conj:kls} intentionally has no
+\texttt{uses} edge to all four routes.
+
+\section{Eldan localization}
+\label{route:eldan-localization}
+
+The route follows the evolution of a balanced fixed cut under stochastic localization, with a
+two-color covariance/excess decomposition.  The live gate is weaker than the older all-cut
+Carleson package; see \cite{Eldan2013ThinShell,LeeVempala2024} for the underlying localization
+scheme and its KLS application.
+
+\begin{assumption}[Tight-prefix absorptive Carleson estimate]
+  \label{ass:tight-prefix-carleson}
+  There are universal $\eta\in(0,1/6]$, $T_0,C_0,C_1>0$, and $\alpha<1$ such that, for every
+  isotropic log-concave $\mu$, every fixed cut $E$ with
+  $\abs{\mu(E)-1/2}\le\eta/2$, and every $T\le T_0$,
+  \[
+    \E\int_0^{T\wedge\tau_\eta}S_t\dd t
+    \le C_0T+C_1\E\int_0^{T\wedge\tau_\eta}r_t\dd t
+       +\alpha\E\int_0^{T\wedge\tau_\eta}D_t\dd t.
+  \]
+  Here $S_t,r_t,D_t$ and the tight stopping time $\tau_\eta$ are the two-color quantities of the
+  pinned localization manuscript.
+\end{assumption}
+
+\begin{corollary}[Tight-window consumption]
+  \label{cor:tight-window-consumption}
+  \uses{ass:tight-prefix-carleson}
+  The tight-prefix estimate controls the stopped scalar Riccati evolution and yields the
+  dimension-free boundary lower bound for every balanced near-minimizing cut.  The standard
+  balanced near-minimizer reduction then yields KLS when the assumption holds universally.
+\end{corollary}
+\begin{proof}
+  Integrate the stopped Riccati identity, absorb the $D_t$ term using $\alpha<1$, and apply
+  Gronwall.  The resulting uniform stopped bound feeds the localization survival estimate.  This
+  proof is upstream agent-reviewed, not Lean-certified.
+\end{proof}
+
+\section{Moment-map spectral route}
+\label{route:moment-map-spectral}
+
+This route tracks a normalized first eigenfunction through localization, retaining the directional
+posterior covariance information that a scalar covariance bound discards.
+
+\begin{question}[Fixed-eigenfunction full-damping occupation]
+  \label{q:mm-spectral-occupation}
+  On smooth strongly log-concave isotropic approximants, do universal $T_0,C_0,C_1>0$ exist such
+  that the normalized first eigenfunction quantities $g_t,H_t,A_t$ satisfy, for $t\le T_0$,
+  \[
+    \E\int_0^t\norm{H_s}_{\mathrm{HS}}^2\dd s
+    \le C_0t+C_1\E\int_0^t\abs{g_s}^2\dd s
+       +\E\int_0^t2g_s^\mathsf{T}A_sg_s\dd s,
+  \]
+  uniformly through approximation?
+\end{question}
+
+\begin{proposition}[Full-damping sufficiency]
+  \label{prop:spectral-sufficiency}
+  \uses{q:mm-spectral-occupation}
+  If the occupation estimate holds, then every isotropic log-concave law satisfies
+  $\CP\le2/T_*$ for a universal $T_*>0$ determined by $T_0,C_0,C_1$.  Hence the estimate implies
+  KLS; no strict damping surplus is needed.
+\end{proposition}
+\begin{proof}
+  It\^o's formula for $\E\abs{g_t}^2$ contains the Hessian occupation and the full damping term
+  with opposite signs.  The hypothesis cancels the latter, Gronwall bounds the remaining moment,
+  and posterior variance conservation gives the spectral-gap estimate.  This is an upstream
+  conditional argument only.
+\end{proof}
+
+\section{Moment-map CMH route}
+\label{route:moment-map-cmh}
+
+The CMH route is a sufficient-condition program, not a reformulation of KLS.  It asks only for one
+well-chosen regular recovery sequence with bounded canonical moment-Hessian quotient.
+
+\begin{assumption}[Bounded CMH recovery envelope]
+  \label{ass:cmh-recovery-envelope}
+  There is a universal $C$ such that every centered log-concave probability $\mu$ admits a
+  regular recovery sequence $(\mu_k)$ converging in the specified affine-support sense and
+  satisfying
+  \[
+    \liminf_{k\to\infty}\CMH(\mu_k)\le C.
+  \]
+\end{assumption}
+
+\begin{corollary}[One CMH recovery sequence suffices]
+  \label{cor:cmh-recovery-sequence-suffices}
+  \uses{ass:cmh-recovery-envelope}
+  Under the bounded recovery-envelope assumption, every centered log-concave law satisfies the
+  universal affine Poincar\'e inequality.  Consequently the assumption implies KLS, including
+  degeneration to a proper affine support.
+\end{corollary}
+\begin{proof}
+  Apply the regular-class CMH-to-affine-Poincar\'e endpoint to the recovery sequence and pass to
+  the limit using the upstream lower-semicontinuity theorem.  This bridge is upstream
+  agent-reviewed, not Lean-certified.
+\end{proof}
+
+\section{Conditional-fiber frame route}
+\label{route:conditional-fiber-frame}
+
+The frame may depend on the measure, but it must be chosen before the test function.  The route is
+existential over all admissible frames; failure of the natural simplex root frame does not refute
+it.
+
+\begin{definition}[Conditional-fiber form]
+  \label{def:conditional-fiber-form}
+  For an isotropic law $\mu$ on $\R^d$ and an isotropic probability frame $\rho$ on the sphere,
+  disintegrate $\mu$ along lines $z+\R\theta$ and define
+  \[
+    \mathcal D_{\mu,\rho}(f)
+    =d\int_{S^{d-1}}\int_{\theta^\perp}
+      \frac{\Var_{\mu_{\theta,z}}(f(z+T\theta))}
+           {\Var_{\mu_{\theta,z}}(T)}
+      \dd\bar\mu_\theta(z)\dd\rho(\theta),
+  \]
+  with null or zero-variance fibers contributing zero.
+\end{definition}
+
+\begin{lemma}[Conditional-fiber form and factor-four bridge]
+  \label{lem:conditional-fiber-form}
+  \uses{def:conditional-fiber-form}
+  For a full-dimensional log-concave probability with density and finite second moment, the form
+  is densely defined, closed, symmetric, Markovian, and reversible.  Moreover, for locally
+  Lipschitz $f$ in its form domain,
+  \[
+    \mathcal D_{\mu,\rho}(f)\le4\int\norm{\nabla f}^2\dd\mu.
+  \]
+  Thus a form gap $\Var_\mu(f)\le C\mathcal D_{\mu,\rho}(f)$ implies
+  $\CP(\mu)\le4C$.
+\end{lemma}
+\begin{proof}
+  The one-dimensional conditional Poincar\'e estimate bounds each fiber variance; isotropy of the
+  frame averages directional derivatives to the full squared gradient.  The closed-form and
+  reversibility assertions use conditional expectation.  This candidate proof is upstream
+  agent-reviewed only.
+\end{proof}
+
+\begin{question}[Test-independent conditional-fiber frame]
+  \label{q:conditional-fiber-frame}
+  \uses{def:conditional-fiber-form}
+  For every full-dimensional isotropic log-concave $\mu$ on $\R^d$, is there an admissible frame
+  $\rho_\mu$, fixed independently of $f$, and a universal $C$ such that
+  \[
+    \Var_\mu(f)\le C\mathcal D_{\mu,\rho_\mu}(f)
+  \]
+  for every $f$ in the maximal closed form domain?
+\end{question}
+
+An affirmative answer together with \cref{lem:conditional-fiber-form} implies KLS.  There is no
+upstream theorem labelled \texttt{thm:conditional-fiber-frame-suffices}; the route sidecar uses
+the actual two-node conjunction instead of inventing one.

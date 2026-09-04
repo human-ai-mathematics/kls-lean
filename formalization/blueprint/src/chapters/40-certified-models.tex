@@ -1,0 +1,90 @@
+\chapter{Certified models in the legacy frontend}
+\label{chap:certified-models}
+
+The four certificates below compile today.  They deliberately sit behind a legacy-domain node:
+the current theorems quantify over globally smooth $L^2$ tests with integrable squared gradient,
+not over the new closed-energy domain.  The tensorization normalization follows the classical
+product argument in \cite{BakryGentilLedoux2014}.
+
+\begin{definition}[Legacy smooth-test Poincar\'e API]
+  \label{def:legacy-smooth-test-poincare}
+  \lean{FunctionalInequalities.Poincare.Admissible,
+        FunctionalInequalities.Poincare.Holds,
+        FunctionalInequalities.Poincare.constant}
+  \leanok
+  For a Borel measure $\mu$ on a real Hilbert space, an admissible test is globally $C^\infty$,
+  belongs to real $L^2(\mu)$, and has integrable squared canonical gradient.  The predicate
+  $\operatorname{Holds}(\mu,C)$ asserts the corresponding Poincar\'e inequality, and
+  $\CP(\mu)\in[0,\infty]$ is the infimum of valid finite nonnegative constants.
+\end{definition}
+
+\begin{theorem}[Linear-test and covariance lower bound]
+  \label{cert:linear-test-lower}
+  \lean{Solutions.LemLinearTestLower.certificate}
+  \leanok
+  \uses{def:legacy-smooth-test-poincare}
+  If a probability law has finite second moment, every admissible Rayleigh quotient is at most
+  $\CP(\mu)$, and $\lambda_{\max}(\Cov_\mu)\le\CP(\mu)$, including the zero-dimensional case.
+\end{theorem}
+\begin{proof}
+  \leanok
+  The certificate combines the supremum bound for admissible tests with the linear-test
+  covariance computation and the operator-norm characterization of covariance.
+\end{proof}
+
+\begin{theorem}[Binary tensorization]
+  \label{cert:binary-tensorization}
+  \lean{Solutions.LemPoincareTensorization.certificate}
+  \leanok
+  \uses{def:legacy-smooth-test-poincare}
+  For probability laws $\mu$ and $\nu$ on separable real Hilbert spaces, fixed valid constants
+  tensorize with $\max$, and
+  \[
+    \CP(\mu\otimes\nu)\le\max\{\CP(\mu),\CP(\nu)\}.
+  \]
+\end{theorem}
+\begin{proof}
+  \leanok
+  Variance decomposition and almost-everywhere admissible sections give the fixed-constant
+  inequality; taking the infimum yields the optimal upper bound.
+\end{proof}
+
+\begin{theorem}[Finite tensorization and equality]
+  \label{cert:finite-tensorization}
+  \lean{Solutions.LemPoincareFiniteTensorization.certificate}
+  \leanok
+  \uses{cert:binary-tensorization}
+  For every finite dependent family of probability laws,
+  \[
+    \CP\!\left(\bigotimes_i\mu_i\right)=\sup_i\CP(\mu_i).
+  \]
+  The theorem includes empty, singleton, zero-dimensional, and infinite-constant boundary cases.
+\end{theorem}
+\begin{proof}
+  \leanok
+  Iterate the binary upper bound.  Coordinate lifts preserve variance and energy and give every
+  reverse inequality.  The certificate packages the finite equality and all boundary laws.
+\end{proof}
+
+\begin{theorem}[Sharp one-dimensional Gaussian constant]
+  \label{cert:gaussian-one-dimensional}
+  \lean{Solutions.LemPoincareGaussianOneDimensional.certificate}
+  \leanok
+  \uses{cert:linear-test-lower,def:legacy-smooth-test-poincare}
+  For every $m\in\R$ and every variance $v\ge0$, the Gaussian law
+  $\gamma_{m,v}$ satisfies the legacy inequality at $v$, and
+  \[
+    \CP(\gamma_{m,v})=v.
+  \]
+  This includes the zero-variance Dirac law without a positivity premise.
+\end{theorem}
+\begin{proof}
+  \leanok
+  A direct one-dimensional density and Hardy estimate proves the upper bound for positive
+  variance; the Dirac case is separate.  The identity test and the covariance lower bound give
+  sharpness.
+\end{proof}
+
+These certificates do not use \cref{def:canonical-l2-constant}.  Moving them into the canonical
+column requires \cref{thm:legacy-canonical-constant-comparison}; a successful Lean build alone
+does not supply that bridge.

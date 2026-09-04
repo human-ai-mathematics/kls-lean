@@ -1,0 +1,126 @@
+\chapter{Smooth-gradient and affine realizations}
+\label{chap:smooth-affine}
+
+This chapter instantiates the abstract Basic.  The direct realization lives in the ambient
+Euclidean space.  The intrinsic realization first removes null normal directions by passing to
+the smallest closed affine support.
+
+\section{Ambient smooth-gradient relaxation}
+
+\begin{definition}[Smooth-gradient pre-energy]
+  \label{def:smooth-gradient-preenergy}
+  \lean{FunctionalInequalities.Energy.Euclidean.SmoothGradientTest,
+        FunctionalInequalities.Energy.Euclidean.SmoothGradientTest.gradientEnergy,
+        FunctionalInequalities.Energy.Euclidean.SmoothGradientTest.toL2,
+        FunctionalInequalities.Energy.Euclidean.smoothGradientPreEnergy}
+  \leanok
+  For a Borel probability $\mu$ on a finite-dimensional real inner-product space, the test space
+  consists of globally $C^\infty$ real functions with an $L^2(\mu)$ realization and integrable
+  squared gradient.  The pre-energy is
+  $\mathcal E_0(u)=\int\norm{\nabla u}^2\dd\mu$.
+\end{definition}
+
+\begin{theorem}[Quadratic dense core]
+  \label{thm:smooth-gradient-quadratic-dense}
+  \lean{FunctionalInequalities.Energy.Euclidean.smoothGradientPreEnergy_quadratic,
+        FunctionalInequalities.Energy.Euclidean.smoothGradientPreEnergy_denseRealization}
+  \leanok
+  \uses{def:smooth-gradient-preenergy}
+  The smooth-gradient pre-energy is quadratic, and its realization is dense in real $L^2(\mu)$.
+\end{theorem}
+\begin{proof}
+  \leanok
+  The gradient is linear and its squared norm satisfies the parallelogram law.  Density is the
+  finite-dimensional Borel $L^2$ density theorem for compactly supported smooth functions.
+\end{proof}
+
+\begin{definition}[Ambient relaxed gradient energy]
+  \label{def:smooth-gradient-relaxation}
+  \lean{FunctionalInequalities.Energy.Euclidean.smoothGradientRelaxation}
+  \leanok
+  \uses{def:preenergy-relaxation,def:smooth-gradient-preenergy}
+  The ambient smooth-gradient energy is the sequential $L^2(\mu)$ relaxation of the preceding
+  pre-energy.
+\end{definition}
+
+\begin{theorem}[Ambient relaxation is closed quadratic]
+  \label{thm:smooth-gradient-relaxation-closed}
+  \lean{FunctionalInequalities.Energy.Euclidean.smoothGradientRelaxation_closedQuadratic}
+  \leanok
+  \uses{thm:quadratic-relaxation-closed,thm:smooth-gradient-quadratic-dense,def:smooth-gradient-relaxation}
+  The ambient smooth-gradient relaxation is a densely defined closed quadratic energy on
+  $L^2(\mu)$.
+\end{theorem}
+\begin{proof}
+  \leanok
+  Apply the abstract quadratic-relaxation theorem to the smooth quadratic dense core.
+\end{proof}
+
+\section{Affine support and intrinsic energy}
+
+\begin{definition}[Affine support and intrinsic law]
+  \label{def:affine-support-intrinsic-law}
+  \lean{FunctionalInequalities.Probability.affineSupport,
+        FunctionalInequalities.Probability.intrinsicMap,
+        FunctionalInequalities.Probability.intrinsicMeasure,
+        FunctionalInequalities.Probability.reconstruct}
+  \leanok
+  The affine support of $\mu$ is the smallest closed affine subspace containing almost every
+  point.  Choosing its canonical direction space gives an intrinsic coordinate map, the pushed
+  intrinsic law, and a reconstruction map back to the ambient space.
+\end{definition}
+
+\begin{theorem}[Intrinsic $L^2$ equivalence]
+  \label{thm:intrinsic-l2-equivalence}
+  \lean{FunctionalInequalities.Energy.Euclidean.toIntrinsicL2,
+        FunctionalInequalities.Energy.Euclidean.toAmbientL2,
+        FunctionalInequalities.Energy.Euclidean.toAmbientL2_toIntrinsicL2,
+        FunctionalInequalities.Energy.Euclidean.toIntrinsicL2_toAmbientL2,
+        FunctionalInequalities.Energy.Euclidean.intrinsicL2Equiv}
+  \leanok
+  \uses{def:affine-support-intrinsic-law,def:l2-mean-variance}
+  Pullback and reconstruction define inverse real linear isometries between ambient
+  $L^2(\mu)$ and intrinsic $L^2$ of the intrinsic law.
+\end{theorem}
+\begin{proof}
+  \leanok
+  Both coordinate maps are measure preserving, and reconstruction is almost everywhere inverse
+  to the intrinsic map on the affine support.
+\end{proof}
+
+\begin{definition}[Intrinsic-affine relaxed energy]
+  \label{def:intrinsic-affine-energy}
+  \lean{FunctionalInequalities.Energy.Euclidean.intrinsicAffineSmoothGradientRelaxation}
+  \leanok
+  \uses{def:affine-support-intrinsic-law,thm:intrinsic-l2-equivalence,def:smooth-gradient-relaxation}
+  The intrinsic-affine energy of an ambient $L^2(\mu)$ class is the intrinsic law's
+  smooth-gradient relaxation evaluated after the intrinsic $L^2$ isometry.
+\end{definition}
+
+\begin{theorem}[Intrinsic-affine energy is closed quadratic]
+  \label{thm:intrinsic-affine-energy-closed}
+  \lean{FunctionalInequalities.Energy.Euclidean.intrinsicAffineSmoothGradientRelaxation_closedQuadratic}
+  \leanok
+  \uses{thm:smooth-gradient-relaxation-closed,thm:intrinsic-l2-equivalence,def:intrinsic-affine-energy}
+  The intrinsic-affine relaxed energy is a densely defined closed quadratic energy on ambient
+  $L^2(\mu)$.
+\end{theorem}
+\begin{proof}
+  \leanok
+  Transport the intrinsic closed quadratic form along the real linear isometric equivalence.
+\end{proof}
+
+\begin{theorem}[Intrinsic-affine optimal constant law]
+  \label{thm:intrinsic-affine-constant-order}
+  \lean{FunctionalInequalities.Poincare.Euclidean.intrinsicAffineSmoothGradientRelaxationConstant,
+        FunctionalInequalities.Poincare.Euclidean.IntrinsicAffineSmoothGradientRelaxationHolds,
+        FunctionalInequalities.Poincare.Euclidean.intrinsicAffineSmoothGradientRelaxationHolds_iff_constant_le}
+  \leanok
+  \uses{def:intrinsic-affine-energy,thm:canonical-holds-order}
+  The intrinsic-affine Poincar\'e predicate holds at $C$ exactly when its optimal extended
+  constant is at most $C$.
+\end{theorem}
+\begin{proof}
+  \leanok
+  This is the canonical $L^2$ order law instantiated with the intrinsic-affine energy.
+\end{proof}

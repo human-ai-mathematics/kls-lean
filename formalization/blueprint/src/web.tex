@@ -1,0 +1,27 @@
+% Web entry point for the KLS Lean Blueprint.
+\documentclass{report}
+
+\usepackage{amssymb,amsthm,amsmath}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage[capitalise,noabbrev]{cleveref}
+\usepackage[
+  thms=definition+lemma+proposition+theorem+corollary+conjecture+assumption+question+obstruction,
+  dep_graph
+]{blueprint}
+
+\input{macros/common}
+\input{macros/web}
+
+\home{https://github.com/numina-functional-inequalities/kls-lean}
+\github{https://github.com/numina-functional-inequalities/kls-lean}
+\dochome{https://github.com/numina-functional-inequalities/kls-lean/tree/main/formalization/blueprint}
+
+\title{KLS Formalization Blueprint}
+\author{kls-lean contributors}
+\date{September 2026}
+
+\begin{document}
+\maketitle
+\input{content}
+\end{document}

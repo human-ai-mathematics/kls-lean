@@ -1,0 +1,62 @@
+\chapter{Orientation and status}
+\label{chap:orientation}
+
+The mathematical source for the route layer is the repository
+\texttt{kls-exploration} at commit \sourcecommit.  The source is pinned so that a later edit of
+the manuscript cannot silently change this graph.  The classical conjecture goes back to
+Kannan, Lov\'asz and Simonovits \cite{KannanLovaszSimonovits1995}; useful modern route surveys
+include \cite{LeeVempala2018,LeeVempala2024}.
+
+This Blueprint is not a transcription of that manuscript.  It exposes the interfaces that the
+Lean project needs, and it records non-claims at every boundary where two commonly equivalent
+mathematical presentations have not yet been identified formally.
+
+\section{The target}
+
+\begin{definition}[Literature Poincar\'e constant]
+  \label{def:literature-poincare-constant}
+  Let $\mu$ be a Borel probability measure on a finite-dimensional Euclidean space.  Write
+  $\CPLit(\mu)$ for the least $C\in[0,\infty]$ such that
+  \[
+    \Var_\mu(f)\le C\int \norm{\nabla f}^{2}\dd\mu
+  \]
+  for every locally Lipschitz $f$ for which both sides are defined.  On a proper affine support,
+  the gradient is read intrinsically along that support.
+\end{definition}
+
+\begin{conjecture}[KLS, affine and isotropic forms]
+  \label{conj:kls}
+  \uses{def:literature-poincare-constant}
+  There is a universal $C<\infty$ such that every log-concave Borel probability $\mu$ with
+  finite second moment satisfies
+  \[
+    \CPLit(\mu)\le C\norm{\Cov_\mu}_{\op}.
+  \]
+  Equivalently, after passing to the affine support and putting the law in isotropic position,
+  $\CPLit(\mu)$ is bounded by a universal constant independent of the dimension.
+\end{conjecture}
+
+The conjecture has a precise mathematical statement, so it is not tagged \texttt{notready}.
+It has no \texttt{leanok}: no theorem in this repository proves it, and no upstream
+\texttt{checked\_by: agent} record is promoted to Lean certification.
+
+\section{Status contract}
+
+The graph uses the following meanings.
+
+\begin{itemize}
+  \item \texttt{\textbackslash lean\{name\}} maps a Blueprint node to an existing declaration.
+  \item \texttt{\textbackslash leanok} in both a statement and its proof records a checked Lean
+        statement and proof.
+  \item Absence of \texttt{leanok} means unfinished formalization, even when the mathematical
+        argument has been reviewed elsewhere.
+  \item \texttt{\textbackslash notready} is reserved for a public statement whose hypotheses or
+        normalization are not frozen.  It is not a synonym for an open proof.
+\end{itemize}
+
+There are two Poincar\'e frontends in the repository.  The canonical frontend of
+\cref{chap:canonical-basic} starts from an extended closed energy on $L^2$.  The accepted legacy
+frontend of \cref{chap:certified-models} quantifies over globally smooth finite-energy tests.
+The certificates in the second frontend are real Lean theorems, but they do not identify the two
+constants.  That identification is an explicit open bridge in
+\cref{chap:open-canonical-bridges}.

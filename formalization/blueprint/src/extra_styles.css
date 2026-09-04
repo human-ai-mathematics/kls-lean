@@ -1,0 +1,37 @@
+:root {
+  --kls-ink: #17212b;
+  --kls-blue: #234e70;
+  --kls-gold: #b8860b;
+  --kls-muted: #617080;
+}
+
+body {
+  color: var(--kls-ink);
+  line-height: 1.58;
+}
+
+h1, h2, h3, h4 {
+  color: var(--kls-blue);
+}
+
+div.theorem_thmcontent,
+div.proposition_thmcontent,
+div.lemma_thmcontent,
+div.corollary_thmcontent,
+div.conjecture_thmcontent {
+  border-left: .16rem solid var(--kls-blue);
+  padding-left: .8rem;
+}
+
+div.definition_thmcontent,
+div.assumption_thmcontent,
+div.question_thmcontent,
+div.obstruction_thmcontent {
+  border-left: .14rem solid var(--kls-gold);
+  padding-left: .8rem;
+}
+
+div.proof_content {
+  border-left: .08rem solid var(--kls-muted);
+  padding-left: .8rem;
+}

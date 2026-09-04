@@ -1,0 +1,33 @@
+% Printable entry point for the KLS Lean Blueprint.
+\documentclass[11pt,a4paper,openany]{report}
+
+\usepackage[a4paper,margin=28mm,headheight=14pt]{geometry}
+\usepackage{expl3}
+\usepackage{amssymb,amsthm,mathtools}
+\usepackage{microtype}
+\usepackage{xcolor}
+\usepackage[unicode,colorlinks=true,linkcolor=klsblue,urlcolor=klsblue,citecolor=klsgold]{hyperref}
+\usepackage[capitalise,noabbrev]{cleveref}
+\usepackage[warnings-off={mathtools-colon,mathtools-overbracket}]{unicode-math}
+
+\definecolor{klsblue}{HTML}{234E70}
+\definecolor{klsgold}{HTML}{9A6B00}
+\definecolor{klsgray}{HTML}{5A6672}
+
+\input{macros/common}
+\input{macros/print}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.45em}
+\setlength{\emergencystretch}{3em}
+\setcounter{tocdepth}{2}
+\setcounter{secnumdepth}{2}
+
+\title{\textcolor{klsblue}{KLS Formalization Blueprint}}
+\author{kls-lean contributors}
+\date{September 2026}
+
+\begin{document}
+\maketitle
+\input{content}
+\end{document}

@@ -1,0 +1,129 @@
+name: Lean Blueprint
+
+on:
+  push:
+    paths:
+      - '.github/workflows/blueprint.yml'
+      - 'formalization/blueprint/**'
+      - 'formalization/**/*.lean'
+      - 'formalization/lakefile.toml'
+      - 'formalization/lake-manifest.json'
+      - 'formalization/lean-toolchain'
+      - 'solutions/**/*.lean'
+      - 'research/a-series/ledger.yaml'
+      - 'research/check_blueprint.py'
+      - 'research/tests/test_check_blueprint.py'
+  pull_request:
+    paths:
+      - '.github/workflows/blueprint.yml'
+      - 'formalization/blueprint/**'
+      - 'formalization/**/*.lean'
+      - 'formalization/lakefile.toml'
+      - 'formalization/lake-manifest.json'
+      - 'formalization/lean-toolchain'
+      - 'solutions/**/*.lean'
+      - 'research/a-series/ledger.yaml'
+      - 'research/check_blueprint.py'
+      - 'research/tests/test_check_blueprint.py'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: blueprint-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Validate and render
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      MATHLIB_NO_CACHE_ON_UPDATE: '1'
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install Blueprint system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends \
+            graphviz \
+            libgraphviz-dev \
+            latexmk \
+            pkg-config \
+            texlive-fonts-recommended \
+            texlive-latex-extra \
+            texlive-science \
+            texlive-xetex
+
+      - name: Install pinned Blueprint Python dependencies
+        run: |
+          python3 -m venv "$RUNNER_TEMP/blueprint-venv"
+          "$RUNNER_TEMP/blueprint-venv/bin/python" -m pip install \
+            --requirement formalization/blueprint/requirements.txt
+          echo "$RUNNER_TEMP/blueprint-venv/bin" >> "$GITHUB_PATH"
+
+      - name: Check Blueprint structure and status metadata
+        run: python3 research/check_blueprint.py
+
+      - name: Test the Blueprint checker
+        run: python3 -m unittest discover -s research/tests -p 'test_check_blueprint.py'
+
+      - name: Set up Lean
+        uses: leanprover/lean-action@v1
+        with:
+          lake-package-directory: formalization
+          auto-config: 'false'
+          use-github-cache: 'false'
+          use-mathlib-cache: 'false'
+          build: 'false'
+
+      - name: Cache imported Mathlib modules
+        working-directory: formalization
+        run: |
+          python3 - <<'PY'
+          import re
+          import subprocess
+          from pathlib import Path
+
+          sources = [Path('FunctionalInequalities.lean')]
+          sources += list(Path('FunctionalInequalities').rglob('*.lean'))
+          sources += list(Path('../solutions').rglob('*.lean'))
+          modules = set()
+          for source in sources:
+              for imports in re.findall(r'(?m)^(?:public )?import ([\w. ]+)', source.read_text()):
+                  modules.update(name for name in imports.split() if name.startswith('Mathlib.'))
+          if not modules:
+              raise SystemExit('No Mathlib imports found; refusing an unbounded cache download')
+          subprocess.run(['lake', 'exe', 'cache', 'get', *sorted(modules)], check=True)
+          PY
+
+      - name: Build Lean library and certificates
+        working-directory: formalization
+        run: lake build
+
+      - name: Build Blueprint PDF
+        run: python3 formalization/blueprint/build.py pdf
+
+      - name: Build Blueprint web tree
+        run: python3 formalization/blueprint/build.py web
+
+      - name: Check Blueprint declaration links
+        run: python3 formalization/blueprint/build.py checkdecls
+
+      - name: Upload Blueprint artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: kls-lean-blueprint
+          path: |
+            formalization/blueprint/print/print.pdf
+            formalization/blueprint/web/
+          if-no-files-found: error
+          retention-days: 14

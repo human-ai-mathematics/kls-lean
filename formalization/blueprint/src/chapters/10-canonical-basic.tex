@@ -1,0 +1,117 @@
+\chapter{Canonical \texorpdfstring{$L^2$}{L2} Basic}
+\label{chap:canonical-basic}
+
+The canonical Basic has three layers: intrinsic $L^2$ variance, extended energies, and a pure
+optimization frontend.  None of these definitions assumes that the energy comes from a smooth
+gradient or from a particular Dirichlet form.
+
+\section{Variance and extended energy}
+
+\begin{definition}[Intrinsic $L^2$ mean, centering, and variance]
+  \label{def:l2-mean-variance}
+  \lean{FunctionalInequalities.L2.mean,
+        FunctionalInequalities.L2.center,
+        FunctionalInequalities.L2.variance}
+  \leanok
+  For a real $L^2(\mu)$ class $f$, define its mean by the integral of any representative, its
+  center by subtracting that mean, and
+  \[
+    \Var_\mu(f)=\norm{f-\textstyle\int f\dd\mu}_{L^2(\mu)}^2.
+  \]
+  All three objects are intrinsic to the almost-everywhere class.
+\end{definition}
+
+\begin{definition}[Extended energy]
+  \label{def:extended-energy}
+  \lean{FunctionalInequalities.Energy.Functional,
+        FunctionalInequalities.Energy.Functional.FiniteAt,
+        FunctionalInequalities.Energy.Functional.domain,
+        FunctionalInequalities.Energy.Functional.finiteValue}
+  \leanok
+  An energy functional on a space $H$ is a map $\mathcal E:H\to[0,\infty]$.  Its domain is
+  $\dom(\mathcal E)=\{f:\mathcal E(f)<\infty\}$; on this domain
+  $\mathcal E_{\mathrm{fin}}$ is the corresponding finite nonnegative real value.
+\end{definition}
+
+\begin{definition}[Pre-energy and sequential relaxation]
+  \label{def:preenergy-relaxation}
+  \lean{FunctionalInequalities.Energy.PreEnergy,
+        FunctionalInequalities.Energy.PreEnergy.DenseRealization,
+        FunctionalInequalities.Energy.PreEnergy.ApproximatingSequence,
+        FunctionalInequalities.Energy.PreEnergy.sequentialRelaxation}
+  \leanok
+  \uses{def:extended-energy}
+  A pre-energy consists of a test space, a realization into an ambient pseudo-metric space, and a
+  finite nonnegative energy on tests.  Its sequential relaxation at $f$ is the infimum of
+  $\liminf_n\mathcal E_0(u_n)$ over realized test sequences converging to $f$; it is
+  $\topenergy$ when no such sequence exists.
+\end{definition}
+
+\begin{theorem}[Quadratic relaxation is closed quadratic]
+  \label{thm:quadratic-relaxation-closed}
+  \lean{FunctionalInequalities.Energy.PreEnergy.Quadratic,
+        FunctionalInequalities.Energy.ClosedQuadratic,
+        FunctionalInequalities.Energy.PreEnergy.Quadratic.closedQuadratic_sequentialRelaxation}
+  \leanok
+  \uses{def:preenergy-relaxation}
+  If a pre-energy has a linear realization, satisfies the quadratic laws on tests, and has dense
+  realization, then its sequential relaxation is a densely defined lower-semicontinuous extended
+  quadratic form satisfying the extended parallelogram identity.
+\end{theorem}
+\begin{proof}
+  \leanok
+  Recovery sequences supply finite approximants; linear combinations of approximating sequences
+  transfer homogeneity and the parallelogram law through the liminf relaxation.  Lower
+  semicontinuity follows from the diagonal characterization of sequential relaxation.
+\end{proof}
+
+\section{The optimization frontend}
+
+\begin{definition}[Finite-domain test family]
+  \label{def:poincare-test-family}
+  \lean{FunctionalInequalities.Poincare.TestFamily,
+        FunctionalInequalities.Poincare.TestFamily.rayleigh,
+        FunctionalInequalities.Poincare.TestFamily.constant,
+        FunctionalInequalities.Poincare.TestFamily.Holds}
+  \leanok
+  A test family provides a variance and a nonnegative energy on a chosen domain.  Its Rayleigh
+  quotient uses the extended convention $0/0=0$ and $a/0=\topenergy$ for $a>0$.
+  The optimal constant is the supremum of these quotients, and
+  $\operatorname{Holds}(C)$ means that every test satisfies $\Var\le C\mathcal E$.
+\end{definition}
+
+\begin{definition}[Canonical constant of an $L^2$ energy]
+  \label{def:canonical-l2-constant}
+  \lean{FunctionalInequalities.Poincare.TestFamily.ofL2Energy,
+        FunctionalInequalities.Poincare.constantOfL2Energy,
+        FunctionalInequalities.Poincare.HoldsL2Energy}
+  \leanok
+  \uses{def:l2-mean-variance,def:extended-energy,def:poincare-test-family}
+  For a probability law $\mu$ and an extended energy $\mathcal E$ on real $L^2(\mu)$, let
+  \[
+    \CE(\mu,\mathcal E)
+      =\sup_{f\in\dom(\mathcal E)}
+        \frac{\Var_\mu(f)}{\mathcal E_{\mathrm{fin}}(f)}.
+  \]
+  The predicate $\operatorname{HoldsL2Energy}(\mu,\mathcal E,C)$ is the corresponding inequality
+  on every finite-energy $L^2$ class.
+\end{definition}
+
+\begin{theorem}[Optimal constant order law]
+  \label{thm:canonical-holds-order}
+  \lean{FunctionalInequalities.Poincare.holdsL2Energy_iff,
+        FunctionalInequalities.Poincare.holdsL2Energy_iff_constant_le}
+  \leanok
+  \uses{def:canonical-l2-constant}
+  For every nonnegative extended constant $C$,
+  \[
+    \operatorname{HoldsL2Energy}(\mu,\mathcal E,C)
+    \quad\Longleftrightarrow\quad
+    \CE(\mu,\mathcal E)\le C.
+  \]
+\end{theorem}
+\begin{proof}
+  \leanok
+  This is the order characterization of the supremum of the finite-domain Rayleigh quotients,
+  including zero energy and infinite optimal constants.
+\end{proof}

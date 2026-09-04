@@ -8,6 +8,7 @@ statement review and proof stages. Lean and Mathlib are pinned to **v4.33.0**.
 | Purpose | Entry point |
 | --- | --- |
 | Lean source layout, imports, and build instructions | [formalization/README.md](formalization/README.md) |
+| Executable theorem map and long-route alternatives | [formalization/blueprint/README.md](formalization/blueprint/README.md) |
 | Canonical `L²`/energy foundation guide | [Poincare/README.md](formalization/FunctionalInequalities/Poincare/README.md) |
 | Mathematical definitions and scope | [LEAN_DESIGN.md](LEAN_DESIGN.md) |
 | Current work and proof handoff | [NEXT_STEPS_CONTEXT_FOR_CODEX.md](NEXT_STEPS_CONTEXT_FOR_CODEX.md) |
@@ -49,15 +50,27 @@ intrinsic-affine pullback are proved densely defined closed quadratic energies. 
 assumption. Markov/Dirichlet structure, agreement with every raw gradient test, and identification
 with Cheeger energy `2 Ch` remain explicit later theorems rather than hidden premises.
 
+The [Lean Blueprint](formalization/blueprint/README.md) is the navigable mathematical map for
+this program. It displays the certified canonical spine, names the open comparison bridges, and
+keeps the four long KLS routes as alternatives rather than silently conjoining them. The
+Blueprint does not replace Lean or the ledger as the source of certification status: a rendered
+PDF or web page is documentation, while `\leanok` is reserved for statements and proofs backed by
+the checked declarations and ledger records.
+
 ## Verify
 
 From the repository root:
 
 ```bash
 python3 research/check_ledger.py
+python3 research/check_blueprint.py
 python3 -m unittest discover -s research/tests -p 'test_*.py'
 cd formalization && lake build
 ```
+
+To validate declaration links and build both rendered Blueprint formats, follow the exact local
+commands in the [formalization guide](formalization/README.md#lean-blueprint). CI publishes the
+PDF and web tree as workflow artifacts; it deliberately does not deploy GitHub Pages.
 
 The `Solutions` default target builds all four proved certificates. The reusable-library root
 also exports the accepted Gaussian implementation, organized as density calculus, Hardy/Tonelli

@@ -1,1 +1,21 @@
 /.lake/
+
+# Lean Blueprint generated outputs
+/blueprint/print/
+/blueprint/web/
+/blueprint/lean_decls
+/blueprint/src/web.paux
+/blueprint/src/web.bbl
+
+# TeX intermediates accidentally emitted beside Blueprint sources
+/blueprint/src/*.aux
+/blueprint/src/*.bcf
+/blueprint/src/*.blg
+/blueprint/src/*.fdb_latexmk
+/blueprint/src/*.fls
+/blueprint/src/*.log
+/blueprint/src/*.out
+/blueprint/src/*.run.xml
+/blueprint/src/*.synctex.gz
+/blueprint/src/*.toc
+/blueprint/src/*.xdv
