@@ -1,0 +1,151 @@
+\chapter{Shared analytic bridges}
+\label{chap:shared-analytic-bridges}
+
+The long routes reuse a small collection of shared and branch-specific endpoint interfaces.  This
+chapter records them once; it does not make every node a conjunctive premise of every route.  The
+displayed repository interfaces are phase-one proposals pending human review, so they are marked
+\texttt{notready}; none is Lean-certified here.  In particular, a published input or an upstream
+reviewed proof never receives \texttt{leanok} merely because it is cited.
+
+\section{Three presentations of the Poincar\'e constant}
+
+\begin{theorem}[Legacy tests and ambient relaxation have the same finite constants]
+  \label{thm:legacy-relaxed-holds-equivalence}
+  \notready
+  \uses{def:l2-mean-variance,def:smooth-gradient-preenergy,
+        def:smooth-gradient-relaxation,def:legacy-smooth-test-poincare}
+  Let $\mu$ be a probability law on a finite-dimensional real Hilbert space.  For every finite
+  $C\ge0$, the legacy inequality on all globally smooth finite-gradient-energy tests holds at $C$
+  if and only if the $L^2$ inequality for the ambient sequential relaxation holds at $C$.
+\end{theorem}
+\begin{proof}
+  Open.  A constant sequence gives relaxed energy at most the raw energy of each realized test, so
+  the relaxed inequality implies the legacy one.  Conversely, apply the legacy inequality along
+  every approximating sequence.  Variance is continuous under $L^2$ convergence; taking the
+  liminf and then the infimum over sequences gives the relaxed inequality.  No equality of raw and
+  relaxed energy on an individual test is used.
+\end{proof}
+
+\begin{theorem}[Legacy and selected canonical constants agree]
+  \label{thm:legacy-canonical-constant-comparison}
+  \notready
+  \uses{thm:legacy-relaxed-holds-equivalence,
+        thm:ambient-intrinsic-relaxation-equality,def:selected-canonical-frontend}
+  For every finite-dimensional Borel probability $\mu$,
+  \[
+    \CP(\mu)=\CPCan(\mu)
+  \]
+  as extended nonnegative constants, including the value $+\infty$.
+\end{theorem}
+\begin{proof}
+  Open.  The preceding theorem identifies the sets of valid finite constants for the legacy and
+  ambient-relaxed presentations.  Their extended optima therefore agree.  The exact
+  ambient/intrinsic equality identifies the latter with the selected constant.
+\end{proof}
+
+\begin{theorem}[Smooth and locally Lipschitz test constants agree]
+  \label{thm:smooth-lipschitz-constant-equivalence}
+  \notready
+  \uses{def:literature-poincare-constant,def:legacy-smooth-test-poincare}
+  If $\mu$ is a finite-dimensional log-concave probability law, then
+  \[
+    \CP(\mu)=\CPLit(\mu).
+  \]
+  Gradients and approximation are taken intrinsically on the affine support.
+\end{theorem}
+\begin{proof}
+  Open.  One inequality is restriction to globally smooth tests.  The reverse inequality is the
+  smooth-density and energy-recovery theorem on the relative interior of the convex support,
+  followed by cutoff and truncation.  This is a Sobolev-density step, not raw/core agreement; see
+  \cite{AmbrosioGigliSavare2013Density} for the corresponding weak-gradient framework.
+\end{proof}
+
+\begin{theorem}[Selected and literature constants agree]
+  \label{thm:selected-literature-constant-equivalence}
+  \notready
+  \uses{thm:legacy-canonical-constant-comparison,
+        thm:smooth-lipschitz-constant-equivalence}
+  For every finite-dimensional log-concave probability law $\mu$,
+  \[
+    \CPCan(\mu)=\CPLit(\mu).
+  \]
+\end{theorem}
+\begin{proof}
+  Open.  Both sides equal the legacy smooth-test optimum by the two preceding comparison
+  theorems.  The Cheeger-energy identification of
+  \cref{thm:smooth-gradient-relaxation-two-cheeger} is not needed.
+\end{proof}
+
+\section{Isoperimetric, affine, and one-dimensional endpoints}
+
+\begin{definition}[Isoperimetric Cheeger constant and inverse scale]
+  \label{def:isoperimetric-cheeger-scale}
+  \notready
+  For a probability law $\mu$, let
+  \[
+    h_\mu=\inf_B
+      \frac{\mu^+(B)}{\min\{\mu(B),1-\mu(B)\}},
+    \qquad
+    \PsiKLS(\mu)=h_\mu^{-1},
+  \]
+  where the infimum ranges over nontrivial Borel sets and $\mu^+$ is outer Minkowski boundary
+  measure in the affine support.  The isoperimetric number $h_\mu$ is not the metric energy
+  $\Ch_\mu$ of \cref{thm:smooth-gradient-relaxation-two-cheeger}.
+\end{definition}
+
+\begin{theorem}[Cheeger--Poincar\'e comparison for log-concave laws]
+  \label{thm:logconcave-cheeger-poincare-comparison}
+  \notready
+  \uses{def:isoperimetric-cheeger-scale,def:literature-poincare-constant}
+  Every finite-dimensional log-concave probability law satisfies
+  \[
+    \CPLit(\mu)\le4\PsiKLS(\mu)^2,
+    \qquad
+    \PsiKLS(\mu)^2\le\pi\CPLit(\mu).
+  \]
+\end{theorem}
+\begin{proof}
+  This is the published Cheeger and convex Buser--Ledoux comparison, recorded with the
+  normalization used here; see \cite{Milman2009Isoperimetric,LeeVempala2018}.  It is an imported
+  mathematical input, not a local Lean proof.
+\end{proof}
+
+\begin{theorem}[Affine and isotropic KLS formulations]
+  \label{thm:affine-isotropic-reduction}
+  \notready
+  \uses{def:literature-poincare-constant}
+  For a fixed $K\ge0$, the following statements are equivalent.
+  \begin{enumerate}
+    \item Every isotropic log-concave law on every finite-dimensional Euclidean space satisfies
+          $\CPLit\le K$.
+    \item Every finite-dimensional log-concave law $\mu$ satisfies
+          $\CPLit(\mu)\le K\norm{\Cov_\mu}_\op$.
+  \end{enumerate}
+  In the second statement covariance, whitening, and isotropy are computed on the tangent space of
+  the affine support; the zero-dimensional law is included.
+\end{theorem}
+\begin{proof}
+  Open.  The affine statement immediately specializes to covariance identity.  Conversely,
+  translate and whiten on the affine support, apply the isotropic statement, and pull the
+  inequality back.  The squared operator norm of the inverse whitening map is
+  $\norm{\Cov_\mu}_\op$.  This is the standard affine reduction in
+  \cite{KannanLovaszSimonovits1995,LeeVempala2018}.
+\end{proof}
+
+\begin{theorem}[One-dimensional log-concave Poincar\'e bound]
+  \label{thm:one-dimensional-logconcave-poincare}
+  \notready
+  \uses{def:literature-poincare-constant}
+  Every log-concave probability law $\nu$ on a line satisfies
+  \[
+    \CPLit(\nu)\le4\Var_\nu(T),
+  \]
+  including the zero-variance case.
+\end{theorem}
+\begin{proof}
+  This is the sharp universal one-dimensional input used by the conditional-fiber route; see
+  \cite{Bobkov1999LogConcave}.  It is imported mathematics and has no local \texttt{leanok}.
+\end{proof}
+
+These nodes are deliberately modest.  They do not provide a self-adjoint generator, identify a
+form gap with the reciprocal of an operator eigenvalue, or prove any of the four long-route gates.

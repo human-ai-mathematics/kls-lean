@@ -119,9 +119,10 @@ accepted legacy tests and the new smooth-gradient tests use `∞`.
 
 The foundation does **not** yet provide a Markov/Dirichlet witness for the smooth relaxation, an
 `AgreesOnTests` or core theorem, raw-gradient fiber consistency for singular measures, or an
-identification with Cheeger energy `2 · Ch`. It also does not identify the legacy smooth-test
-constant with the new extended-energy constant, or the intrinsic-affine relaxation constant with
-the ambient relaxation constant. See the
+identification with Cheeger energy `2 · Ch`. It also does not yet prove the recovery-based
+identification of the legacy smooth-test constant with the relaxed constant, or the exact
+ambient/intrinsic-affine coordinate equality. These two constant bridges do not require raw/core
+agreement. See the
 [mathematical guide](FunctionalInequalities/Poincare/README.md) for the theorem flow and the
 Dirac counterexample explaining the agreement boundary.
 
@@ -214,19 +215,26 @@ The [ledger](../research/a-series/ledger.yaml) records certification status, and
 ## Lean Blueprint
 
 The [Blueprint](blueprint/README.md) is an executable reading order and dependency graph for the
-formalization. It separates three things that prose can otherwise blur:
+formalization. It separates four things that prose can otherwise blur:
 
-- the canonical `L²`/closed-energy foundation already certified by Lean;
-- the precise analytic bridges that remain open, including Dirichlet/normal-contraction,
-  `2 Ch_μ`, raw-test/core agreement, and ambient/intrinsic comparison;
-- four alternative long routes from the canonical interface to KLS.
+- the energy-parameterized `L²`/closed-energy engine already certified by Lean;
+- the selected intrinsic-affine canonical frontend;
+- the status-explicit endpoint bridges, including `\notready` frontend-comparison proposals whose
+  proof state is open, Dirichlet/normal contraction, `2 Ch_μ`, affine normalization, the imported
+  Cheeger comparison, and the optional stronger raw-test/core question;
+- four sufficient long-route alternatives that share this analytic infrastructure. No
+  probabilistic or logical independence is asserted.
 
 The Blueprint is not a second proof-status database. Lean declarations and the
 [ledger](../research/a-series/ledger.yaml) remain authoritative. A `\lean{...}` annotation maps a
-statement to a declaration, and `\leanok` is used only at the status justified by that declaration
-and the ledger. An exact but open mathematical statement may appear without `\leanok`; a node
-whose final hypotheses are not frozen is additionally marked `\notready`. Successful PDF or web
-rendering alone certifies none of these claims.
+statement to a local declaration, and `\leanok` records the support of that checked declaration;
+for the four ledger-backed certificate nodes it additionally requires the matching ledger record.
+Absence of `\leanok` means only that a node is not locally Lean-certified: its mathematical status
+may instead be open, conditional, imported, or proved with upstream agent review. A node whose
+final hypotheses or normalization have not been human-frozen is additionally marked `\notready`.
+Successful PDF or web rendering alone certifies none of these claims. The route sidecar records
+recursive AND/OR composition, pinned provenance, and active or historical branch disposition; it
+is likewise not a proof certificate.
 
 The helper script accounts for the Lake package living in `formalization/` rather than at the Git
 root. With `xelatex`, `latexmk`, and Graphviz's `dot` available, run the following from the
@@ -265,7 +273,7 @@ automatically. From the repository root:
 python3 research/check_ledger.py
 python3 research/check_blueprint.py
 python3 -m unittest discover -s research/tests -p 'test_*.py'
-cd formalization && lake build
+(cd formalization && lake build)
 ```
 
 For a focused validation of the new foundation, run from `formalization/`:

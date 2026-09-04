@@ -3,7 +3,9 @@
 
 This chapter instantiates the abstract Basic.  The direct realization lives in the ambient
 Euclidean space.  The intrinsic realization first removes null normal directions by passing to
-the smallest closed affine support.
+the smallest closed affine support.  The repository selects the latter realization as its
+canonical frontend; this is a design choice, not a hidden identification with a literature
+Sobolev or Cheeger energy.
 
 \section{Ambient smooth-gradient relaxation}
 
@@ -110,13 +112,36 @@ the smallest closed affine support.
   Transport the intrinsic closed quadratic form along the real linear isometric equivalence.
 \end{proof}
 
+\begin{definition}[Selected canonical frontend]
+  \label{def:selected-canonical-frontend}
+  \lean{FunctionalInequalities.Energy.Euclidean.intrinsicAffineSmoothGradientRelaxation,
+        FunctionalInequalities.Poincare.Euclidean.intrinsicAffineSmoothGradientRelaxationConstant,
+        FunctionalInequalities.Poincare.Euclidean.IntrinsicAffineSmoothGradientRelaxationHolds}
+  \leanok
+  \uses{def:intrinsic-affine-energy,def:l2-energy-poincare-constant}
+  The selected canonical energy and constant are
+  \[
+    \mathcal E^{\mathrm{can}}_\mu
+      :=\mathcal E^{\mathrm{intr}}_\mu,
+    \qquad
+    \CPCan(\mu)
+      :=\CE\bigl(\mu,\mathcal E^{\mathrm{can}}_\mu\bigr).
+  \]
+  The corresponding finite-constant predicate is the $L^2$ energy inequality for
+  $\mathcal E^{\mathrm{can}}_\mu$.
+\end{definition}
+
+The word ``selected'' is part of the contract.  This definition does not assert
+$\mathcal E^{\mathrm{can}}_\mu=2\Ch_\mu$, equality with the ambient presentation, or equality with
+the locally Lipschitz literature constant.  Those are separate theorem nodes.
+
 \begin{theorem}[Intrinsic-affine optimal constant law]
   \label{thm:intrinsic-affine-constant-order}
   \lean{FunctionalInequalities.Poincare.Euclidean.intrinsicAffineSmoothGradientRelaxationConstant,
         FunctionalInequalities.Poincare.Euclidean.IntrinsicAffineSmoothGradientRelaxationHolds,
         FunctionalInequalities.Poincare.Euclidean.intrinsicAffineSmoothGradientRelaxationHolds_iff_constant_le}
   \leanok
-  \uses{def:intrinsic-affine-energy,thm:canonical-holds-order}
+  \uses{def:selected-canonical-frontend,thm:l2-energy-holds-order}
   The intrinsic-affine Poincar\'e predicate holds at $C$ exactly when its optimal extended
   constant is at most $C$.
 \end{theorem}

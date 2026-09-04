@@ -1,29 +1,34 @@
 \chapter{Four routes to KLS}
 \label{chap:kls-routes}
 
-This chapter is a roadmap imported from the pinned upstream commit \sourcecommit.  Every
-statement below is either open or only conditionally reviewed upstream.  None is Lean-certified,
-so no node in this chapter carries \texttt{leanok}.
+This chapter is a roadmap imported from the pinned upstream commit \sourcecommit.  Its nodes have
+different upstream statuses: open gates, conditional implications, and proof dossiers marked
+\texttt{proved}/\texttt{checked\_by: agent}.  Those statuses are reported route by route.  None is
+Lean-certified, so no node in this chapter carries \texttt{leanok}.
 
-The TeX command \texttt{\textbackslash uses} means logical AND.  The four routes, however, are
-alternatives.  Their logical composition is therefore recorded in
+The TeX command \texttt{\textbackslash uses} means logical AND.  The four sufficient routes,
+however, are alternatives.  Their logical composition is therefore recorded in
 \texttt{route-composition.yaml}: the target is an \texttt{any\_of}, while the named nodes inside
 each route form an \texttt{all\_of}.  In particular, \cref{conj:kls} intentionally has no
-\texttt{uses} edge to all four routes.
+\texttt{uses} edge to all four routes.  This logical OR asserts neither mathematical independence
+nor probabilistic independence; the routes share the bridges of
+\cref{chap:shared-analytic-bridges}.
 
 \section{Eldan localization}
 \label{route:eldan-localization}
 
 The route follows the evolution of a balanced fixed cut under stochastic localization, with a
 two-color covariance/excess decomposition.  The live gate is weaker than the older all-cut
-Carleson package; see \cite{Eldan2013ThinShell,LeeVempala2024} for the underlying localization
-scheme and its KLS application.
+Carleson package.  Eldan introduced the underlying scheme \cite{Eldan2013ThinShell}; Lee and
+Vempala obtained quantitative isoperimetric, concentration, and mixing bounds toward KLS
+\cite{LeeVempala2024}.  Neither paper proves the tight-prefix gate below or the full KLS
+conjecture.
 
 \begin{assumption}[Tight-prefix absorptive Carleson estimate]
   \label{ass:tight-prefix-carleson}
   There are universal $\eta\in(0,1/6]$, $T_0,C_0,C_1>0$, and $\alpha<1$ such that, for every
   isotropic log-concave $\mu$, every fixed cut $E$ with
-  $\abs{\mu(E)-1/2}\le\eta/2$, and every $T\le T_0$,
+  $\abs{\mu(E)-1/2}\le\eta/2$, and every $0<T\le T_0$,
   \[
     \E\int_0^{T\wedge\tau_\eta}S_t\dd t
     \le C_0T+C_1\E\int_0^{T\wedge\tau_\eta}r_t\dd t
@@ -35,7 +40,7 @@ scheme and its KLS application.
 
 \begin{corollary}[Tight-window consumption]
   \label{cor:tight-window-consumption}
-  \uses{ass:tight-prefix-carleson}
+  \uses{ass:tight-prefix-carleson,thm:logconcave-cheeger-poincare-comparison}
   The tight-prefix estimate controls the stopped scalar Riccati evolution and yields the
   dimension-free boundary lower bound for every balanced near-minimizing cut.  The standard
   balanced near-minimizer reduction then yields KLS when the assumption holds universally.
@@ -46,6 +51,60 @@ scheme and its KLS application.
   proof is upstream agent-reviewed, not Lean-certified.
 \end{proof}
 
+\paragraph{Pinned provenance.}
+At the pinned source commit:
+\begin{itemize}
+  \item \path{ass:tight-prefix-carleson} is \texttt{open} in
+        \path{modules/kls/20-eldan-statements.tex};
+  \item \path{cor:tight-window-consumption} is
+        \texttt{proved}/\texttt{checked\_by: agent} in
+        \path{modules/kls/21-carleson.tex};
+  \item its proof dossier is \path{solutions/kls-localization-riccati-core.tex}.
+\end{itemize}
+The reviewed consumer does not close the open gate and is not a Lean certificate.  The exact
+review artifact is pinned in the route sidecar.
+
+\subsection{Historical refuted weighted package}
+\label{route:eldan-weighted-package}
+
+The following package is retained only to make a failed historical branch auditable.  It is not a
+fifth route alternative and is not an input to the live tight-prefix package.
+
+\begin{assumption}[Refuted literal weighted near-Cheeger package]
+  \label{ass:weighted-package}
+  There are universal constants $T_0,C_0,C_1,C_2,\gamma>0$,
+  $\eta\in(0,1/4]$, and $\beta\in[0,1/2)$ with $2\beta+64\eta^2<1$ such that every balanced
+  finite-perimeter cut with initial excess $e_0\le1$ satisfies both a superlinear weighted-excess
+  estimate
+  \[
+    \E\int_0^{T\wedge\tau_\eta}
+      e_t\bigl(1+\norm{A_t}_\op\bigr)^{5/2}\dd t
+      \le C_2\bigl(Te_0+T^{1+\gamma}\bigr)
+  \]
+  and the paired absorptive weighted Stein-trace estimate, uniformly for $0<T\le T_0$.
+\end{assumption}
+
+\begin{proposition}[Exponential-spectator obstruction]
+  \label{prop:weighted-spectator-obstruction}
+  For every proposed $C,T_0,\gamma>0$, $\eta\in(0,1/2)$, and $\delta>0$, some balanced cylinder
+  in an isotropic product of centered one-sided exponentials has additive and relative initial
+  excess at most $\delta$ but violates the displayed weighted-excess estimate at a time
+  $0<T\le T_0$.  Thus \cref{ass:weighted-package} is false with its stated global quantifiers.
+  The product witnesses do not refute KLS.
+\end{proposition}
+\begin{proof}
+  The pinned upstream proof uses an independent exponential spectator to make the global
+  covariance weight large while preserving the cut geometry.  It is agent-reviewed, not
+  Lean-certified.
+\end{proof}
+
+\paragraph{Pinned provenance.}
+The ledger marks \path{ass:weighted-package} \texttt{refuted}.  It marks
+\path{prop:weighted-spectator-obstruction} \texttt{proved}/\texttt{checked\_by: agent}.  The
+statement is in \path{modules/kls/27-eldan-open-targets.tex}, and the proof dossier is
+\path{solutions/prop-weighted-spectator-obstruction.tex}.  The exact review artifact is pinned in
+the route sidecar.
+
 \section{Moment-map spectral route}
 \label{route:moment-map-spectral}
 
@@ -55,7 +114,7 @@ posterior covariance information that a scalar covariance bound discards.
 \begin{question}[Fixed-eigenfunction full-damping occupation]
   \label{q:mm-spectral-occupation}
   On smooth strongly log-concave isotropic approximants, do universal $T_0,C_0,C_1>0$ exist such
-  that the normalized first eigenfunction quantities $g_t,H_t,A_t$ satisfy, for $t\le T_0$,
+  that the normalized first eigenfunction quantities $g_t,H_t,A_t$ satisfy, for $0<t\le T_0$,
   \[
     \E\int_0^t\norm{H_s}_{\mathrm{HS}}^2\dd s
     \le C_0t+C_1\E\int_0^t\abs{g_s}^2\dd s
@@ -66,10 +125,16 @@ posterior covariance information that a scalar covariance bound discards.
 
 \begin{proposition}[Full-damping sufficiency]
   \label{prop:spectral-sufficiency}
-  \uses{q:mm-spectral-occupation}
-  If the occupation estimate holds, then every isotropic log-concave law satisfies
-  $\CP\le2/T_*$ for a universal $T_*>0$ determined by $T_0,C_0,C_1$.  Hence the estimate implies
-  KLS; no strict damping surplus is needed.
+  \uses{q:mm-spectral-occupation,thm:selected-literature-constant-equivalence,
+        thm:affine-isotropic-reduction}
+  If the occupation estimate holds, set
+  \[
+    M_*=(1+C_0T_0)e^{C_1T_0},
+    \qquad
+    T_* = \min\{T_0,(2M_*)^{-1}\}.
+  \]
+  Then every isotropic log-concave law satisfies $\CPLit\le2/T_*$.  Hence the estimate implies
+  KLS; no strict damping surplus or convergence of eigenfunctions is needed.
 \end{proposition}
 \begin{proof}
   It\^o's formula for $\E\abs{g_t}^2$ contains the Hessian occupation and the full damping term
@@ -78,16 +143,27 @@ posterior covariance information that a scalar covariance bound discards.
   conditional argument only.
 \end{proof}
 
+\paragraph{Pinned provenance.}
+At the pinned source commit, \path{q:mm-spectral-occupation} is \texttt{open} and
+\path{prop:spectral-sufficiency} is \texttt{conditional}/\texttt{checked\_by: agent}; both are in
+\path{modules/kls/30-spectral-route.tex}.  The proof dossier is
+\path{solutions/prop-spectral-sufficiency.tex}; the exact review artifact is pinned in the route
+sidecar.  This records a checked implication from the open occupation estimate, not a completed
+KLS route.
+
 \section{Moment-map CMH route}
 \label{route:moment-map-cmh}
 
 The CMH route is a sufficient-condition program, not a reformulation of KLS.  It asks only for one
-well-chosen regular recovery sequence with bounded canonical moment-Hessian quotient.
+well-chosen regular recovery sequence with bounded canonical moment-Hessian quotient.  The regular
+moment-map background is classical work of Berman--Berndtsson and Fathi
+\cite{BermanBerndtsson2013RealMA,Fathi2019SteinMomentMaps}; the recovery-envelope gate below is a
+separate repository statement.
 
 \begin{assumption}[Bounded CMH recovery envelope]
   \label{ass:cmh-recovery-envelope}
   There is a universal $C$ such that every centered log-concave probability $\mu$ admits a
-  regular recovery sequence $(\mu_k)$ converging in the specified affine-support sense and
+  regular recovery sequence $(\mu_k)$ converging to $\mu$ in ambient $W_2$ and
   satisfying
   \[
     \liminf_{k\to\infty}\CMH(\mu_k)\le C.
@@ -96,7 +172,8 @@ well-chosen regular recovery sequence with bounded canonical moment-Hessian quot
 
 \begin{corollary}[One CMH recovery sequence suffices]
   \label{cor:cmh-recovery-sequence-suffices}
-  \uses{ass:cmh-recovery-envelope}
+  \uses{ass:cmh-recovery-envelope,thm:selected-literature-constant-equivalence,
+        thm:affine-isotropic-reduction}
   Under the bounded recovery-envelope assumption, every centered log-concave law satisfies the
   universal affine Poincar\'e inequality.  Consequently the assumption implies KLS, including
   degeneration to a proper affine support.
@@ -107,6 +184,14 @@ well-chosen regular recovery sequence with bounded canonical moment-Hessian quot
   agent-reviewed, not Lean-certified.
 \end{proof}
 
+\paragraph{Pinned provenance.}
+At the pinned source commit, \path{ass:cmh-recovery-envelope} is \texttt{open} and
+\path{cor:cmh-recovery-sequence-suffices} is
+\texttt{conditional}/\texttt{checked\_by: agent}; both are in
+\path{modules/kls/41-cmh-normalization.tex}.  The proof dossier is
+\path{solutions/lem-affine-poincare-w2-liminf.tex}; the exact review artifact is pinned in the
+route sidecar.  Published moment-map inputs do not prove the open envelope.
+
 \section{Conditional-fiber frame route}
 \label{route:conditional-fiber-frame}
 
@@ -116,8 +201,11 @@ it.
 
 \begin{definition}[Conditional-fiber form]
   \label{def:conditional-fiber-form}
-  For an isotropic law $\mu$ on $\R^d$ and an isotropic probability frame $\rho$ on the sphere,
-  disintegrate $\mu$ along lines $z+\R\theta$ and define
+  For an isotropic law $\mu$ on $\R^d$, let $\rho$ be an even probability law on the sphere with
+  \[
+    d\int_{S^{d-1}}\theta\theta^{\mathsf T}\dd\rho(\theta)=I_d.
+  \]
+  Disintegrate $\mu$ along lines $z+\R\theta$ and define
   \[
     \mathcal D_{\mu,\rho}(f)
     =d\int_{S^{d-1}}\int_{\theta^\perp}
@@ -130,7 +218,8 @@ it.
 
 \begin{lemma}[Conditional-fiber form and factor-four bridge]
   \label{lem:conditional-fiber-form}
-  \uses{def:conditional-fiber-form}
+  \uses{def:conditional-fiber-form,thm:one-dimensional-logconcave-poincare,
+        thm:selected-literature-constant-equivalence}
   For a full-dimensional log-concave probability with density and finite second moment, the form
   is densely defined, closed, symmetric, Markovian, and reversible.  Moreover, for locally
   Lipschitz $f$ in its form domain,
@@ -138,13 +227,13 @@ it.
     \mathcal D_{\mu,\rho}(f)\le4\int\norm{\nabla f}^2\dd\mu.
   \]
   Thus a form gap $\Var_\mu(f)\le C\mathcal D_{\mu,\rho}(f)$ implies
-  $\CP(\mu)\le4C$.
+  $\CPLit(\mu)\le4C$.
 \end{lemma}
 \begin{proof}
   The one-dimensional conditional Poincar\'e estimate bounds each fiber variance; isotropy of the
   frame averages directional derivatives to the full squared gradient.  The closed-form and
-  reversibility assertions use conditional expectation.  This candidate proof is upstream
-  agent-reviewed only.
+  reversibility assertions use conditional expectation.  The proof dossier is marked
+  \texttt{proved}/\texttt{checked\_by: agent} upstream; it is not Lean-certified here.
 \end{proof}
 
 \begin{question}[Test-independent conditional-fiber frame]
@@ -161,3 +250,12 @@ it.
 An affirmative answer together with \cref{lem:conditional-fiber-form} implies KLS.  There is no
 upstream theorem labelled \texttt{thm:conditional-fiber-frame-suffices}; the route sidecar uses
 the actual two-node conjunction instead of inventing one.
+
+\paragraph{Pinned provenance.}
+The definition is transcribed from the pinned upstream conditional-fiber module; it is not an
+independent ledger certificate.  At the pinned source commit, \path{lem:conditional-fiber-form} is
+\texttt{proved}/\texttt{checked\_by: agent}, with evidence
+\path{solutions/conditional-fiber-frame-structure.tex}.  The exact review artifact is pinned in
+the route sidecar.  The gate \path{q:conditional-fiber-frame} is \texttt{open}.  Thus the form
+package is reviewed upstream, but the existence of a test-independent frame remains the live
+obstruction.

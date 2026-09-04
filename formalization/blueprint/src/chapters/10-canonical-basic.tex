@@ -1,9 +1,10 @@
-\chapter{Canonical \texorpdfstring{$L^2$}{L2} Basic}
+\chapter{Energy-parametrized \texorpdfstring{$L^2$}{L2} Basic}
 \label{chap:canonical-basic}
 
-The canonical Basic has three layers: intrinsic $L^2$ variance, extended energies, and a pure
-optimization frontend.  None of these definitions assumes that the energy comes from a smooth
-gradient or from a particular Dirichlet form.
+The reusable Basic has three layers: intrinsic $L^2$ variance, extended energies, and a pure
+optimization frontend.  It is parametrized by an energy and is not itself the choice of a
+canonical energy.  None of these definitions assumes that the energy comes from a smooth gradient
+or from a particular Dirichlet form.
 
 \section{Variance and extended energy}
 
@@ -80,8 +81,8 @@ gradient or from a particular Dirichlet form.
   $\operatorname{Holds}(C)$ means that every test satisfies $\Var\le C\mathcal E$.
 \end{definition}
 
-\begin{definition}[Canonical constant of an $L^2$ energy]
-  \label{def:canonical-l2-constant}
+\begin{definition}[Poincar\'e constant of an $L^2$ energy]
+  \label{def:l2-energy-poincare-constant}
   \lean{FunctionalInequalities.Poincare.TestFamily.ofL2Energy,
         FunctionalInequalities.Poincare.constantOfL2Energy,
         FunctionalInequalities.Poincare.HoldsL2Energy}
@@ -97,13 +98,13 @@ gradient or from a particular Dirichlet form.
   on every finite-energy $L^2$ class.
 \end{definition}
 
-\begin{theorem}[Optimal constant order law]
-  \label{thm:canonical-holds-order}
+\begin{theorem}[Energy-parametrized optimal constant order law]
+  \label{thm:l2-energy-holds-order}
   \lean{FunctionalInequalities.Poincare.holdsL2Energy_iff,
         FunctionalInequalities.Poincare.holdsL2Energy_iff_constant_le}
   \leanok
-  \uses{def:canonical-l2-constant}
-  For every nonnegative extended constant $C$,
+  \uses{def:l2-energy-poincare-constant}
+  For every finite nonnegative constant $C$,
   \[
     \operatorname{HoldsL2Energy}(\mu,\mathcal E,C)
     \quad\Longleftrightarrow\quad

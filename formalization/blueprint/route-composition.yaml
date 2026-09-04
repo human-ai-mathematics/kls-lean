@@ -1,41 +1,303 @@
 {
-  "version": 1,
+  "version": 2,
+  "sources": [
+    {
+      "id": "kls-lean",
+      "kind": "local",
+      "root": ".",
+      "ledger": "research/a-series/ledger.yaml"
+    },
+    {
+      "id": "kls-exploration",
+      "kind": "git",
+      "repository": "https://github.com/numina-functional-inequalities/kls-exploration.git",
+      "revision": "8185e46ffb040e04fea076953e5bcaeb4157d71a",
+      "ledger": "research/kls/ledger.yaml"
+    }
+  ],
+  "claims": [
+    {
+      "node": "conj:kls",
+      "state": "open",
+      "provenance": {
+        "source": "kls-exploration",
+        "record": "conj:kls"
+      },
+      "evidence": []
+    },
+    {
+      "node": "thm:selected-literature-constant-equivalence",
+      "state": "open",
+      "provenance": {
+        "source": "kls-lean",
+        "path": "formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex"
+      },
+      "evidence": []
+    },
+    {
+      "node": "thm:affine-isotropic-reduction",
+      "state": "open",
+      "provenance": {
+        "source": "kls-lean",
+        "path": "formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex"
+      },
+      "evidence": []
+    },
+    {
+      "node": "ass:tight-prefix-carleson",
+      "state": "open",
+      "provenance": {
+        "source": "kls-exploration",
+        "record": "ass:tight-prefix-carleson"
+      },
+      "evidence": []
+    },
+    {
+      "node": "cor:tight-window-consumption",
+      "state": "proved",
+      "provenance": {
+        "source": "kls-exploration",
+        "record": "cor:tight-window-consumption"
+      },
+      "evidence": [
+        {
+          "kind": "agent_review",
+          "source": "kls-exploration",
+          "artifact": "research/reviews/2026-08-25-kls-core-r2-audit.md"
+        }
+      ]
+    },
+    {
+      "node": "q:mm-spectral-occupation",
+      "state": "open",
+      "provenance": {
+        "source": "kls-exploration",
+        "record": "q:mm-spectral-occupation"
+      },
+      "evidence": []
+    },
+    {
+      "node": "prop:spectral-sufficiency",
+      "state": "conditional",
+      "provenance": {
+        "source": "kls-exploration",
+        "record": "prop:spectral-sufficiency"
+      },
+      "evidence": [
+        {
+          "kind": "agent_review",
+          "source": "kls-exploration",
+          "artifact": "research/reviews/2026-08-27-prop-spectral-sufficiency-proof-review.md"
+        }
+      ]
+    },
+    {
+      "node": "ass:cmh-recovery-envelope",
+      "state": "open",
+      "provenance": {
+        "source": "kls-exploration",
+        "record": "ass:cmh-recovery-envelope"
+      },
+      "evidence": []
+    },
+    {
+      "node": "cor:cmh-recovery-sequence-suffices",
+      "state": "conditional",
+      "provenance": {
+        "source": "kls-exploration",
+        "record": "cor:cmh-recovery-sequence-suffices"
+      },
+      "evidence": [
+        {
+          "kind": "agent_review",
+          "source": "kls-exploration",
+          "artifact": "research/reviews/2026-08-27-lem-affine-poincare-w2-liminf-proof-review.md"
+        }
+      ]
+    },
+    {
+      "node": "q:conditional-fiber-frame",
+      "state": "open",
+      "provenance": {
+        "source": "kls-exploration",
+        "record": "q:conditional-fiber-frame"
+      },
+      "evidence": []
+    },
+    {
+      "node": "lem:conditional-fiber-form",
+      "state": "proved",
+      "provenance": {
+        "source": "kls-exploration",
+        "record": "lem:conditional-fiber-form"
+      },
+      "evidence": [
+        {
+          "kind": "agent_review",
+          "source": "kls-exploration",
+          "artifact": "research/reviews/2026-08-27-conditional-fiber-frame-structure-proof-review.md"
+        }
+      ]
+    },
+    {
+      "node": "ass:weighted-package",
+      "state": "refuted",
+      "provenance": {
+        "source": "kls-exploration",
+        "record": "ass:weighted-package"
+      },
+      "evidence": [],
+      "refuted_by": [
+        "prop:weighted-spectator-obstruction"
+      ]
+    },
+    {
+      "node": "prop:weighted-spectator-obstruction",
+      "state": "proved",
+      "provenance": {
+        "source": "kls-exploration",
+        "record": "prop:weighted-spectator-obstruction"
+      },
+      "evidence": [
+        {
+          "kind": "agent_review",
+          "source": "kls-exploration",
+          "artifact": "research/reviews/2026-08-27-prop-weighted-spectator-obstruction-repair-proof-review.md"
+        }
+      ]
+    }
+  ],
+  "branches": [
+    {
+      "id": "eldan-tight-prefix",
+      "route": "eldan-localization",
+      "disposition": "active",
+      "provenance": {
+        "source": "kls-exploration",
+        "path": "research/kls/routes/eldan-localization.md"
+      },
+      "requires": {
+        "operator": "all_of",
+        "items": [
+          {
+            "node": "ass:tight-prefix-carleson"
+          },
+          {
+            "node": "cor:tight-window-consumption"
+          }
+        ]
+      }
+    },
+    {
+      "id": "moment-map-spectral-full-damping",
+      "route": "moment-map-spectral",
+      "disposition": "active",
+      "provenance": {
+        "source": "kls-exploration",
+        "path": "research/kls/routes/moment-map-spectral.md"
+      },
+      "requires": {
+        "operator": "all_of",
+        "items": [
+          {
+            "node": "q:mm-spectral-occupation"
+          },
+          {
+            "node": "prop:spectral-sufficiency"
+          }
+        ]
+      }
+    },
+    {
+      "id": "moment-map-cmh-recovery",
+      "route": "moment-map-cmh",
+      "disposition": "active",
+      "provenance": {
+        "source": "kls-exploration",
+        "path": "research/kls/routes/moment-map-cmh.md"
+      },
+      "requires": {
+        "operator": "all_of",
+        "items": [
+          {
+            "node": "ass:cmh-recovery-envelope"
+          },
+          {
+            "node": "cor:cmh-recovery-sequence-suffices"
+          }
+        ]
+      }
+    },
+    {
+      "id": "conditional-fiber-frame",
+      "route": "conditional-fiber-frame",
+      "disposition": "active",
+      "provenance": {
+        "source": "kls-exploration",
+        "path": "research/kls/routes/conditional-fiber-frame.md"
+      },
+      "requires": {
+        "operator": "all_of",
+        "items": [
+          {
+            "node": "q:conditional-fiber-frame"
+          },
+          {
+            "node": "lem:conditional-fiber-form"
+          }
+        ]
+      }
+    },
+    {
+      "id": "eldan-weighted-package-v1",
+      "route": "eldan-weighted-package",
+      "disposition": "refuted",
+      "provenance": {
+        "source": "kls-exploration",
+        "path": "modules/kls/20-eldan-statements.tex"
+      },
+      "requires": {
+        "node": "ass:weighted-package"
+      },
+      "refuted_by": [
+        "prop:weighted-spectator-obstruction"
+      ],
+      "superseded_by": [
+        "eldan-tight-prefix"
+      ]
+    }
+  ],
   "targets": [
     {
       "target": "conj:kls",
-      "operator": "any_of",
-      "alternatives": [
-        {
-          "route": "eldan-localization",
-          "operator": "all_of",
-          "nodes": [
-            "ass:tight-prefix-carleson",
-            "cor:tight-window-consumption"
-          ]
-        },
-        {
-          "route": "moment-map-spectral",
-          "operator": "all_of",
-          "nodes": [
-            "prop:spectral-sufficiency"
-          ]
-        },
-        {
-          "route": "moment-map-cmh",
-          "operator": "all_of",
-          "nodes": [
-            "cor:cmh-recovery-sequence-suffices"
-          ]
-        },
-        {
-          "route": "conditional-fiber-frame",
-          "operator": "all_of",
-          "nodes": [
-            "q:conditional-fiber-frame",
-            "lem:conditional-fiber-form"
-          ]
-        }
-      ]
+      "prerequisites": {
+        "operator": "all_of",
+        "items": [
+          {
+            "node": "thm:selected-literature-constant-equivalence"
+          },
+          {
+            "node": "thm:affine-isotropic-reduction"
+          }
+        ]
+      },
+      "composition": {
+        "operator": "any_of",
+        "items": [
+          {
+            "branch": "eldan-tight-prefix"
+          },
+          {
+            "branch": "moment-map-spectral-full-damping"
+          },
+          {
+            "branch": "moment-map-cmh-recovery"
+          },
+          {
+            "branch": "conditional-fiber-frame"
+          }
+        ]
+      }
     }
   ]
 }

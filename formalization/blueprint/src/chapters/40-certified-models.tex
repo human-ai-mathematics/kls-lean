@@ -54,7 +54,8 @@ product argument in \cite{BakryGentilLedoux2014}.
   \lean{Solutions.LemPoincareFiniteTensorization.certificate}
   \leanok
   \uses{cert:binary-tensorization}
-  For every finite dependent family of probability laws,
+  For every finite, possibly dependently typed family of spaces and probability laws
+  $(E_i,\mu_i)$, the product law---whose coordinates are independent by construction---satisfies
   \[
     \CP\!\left(\bigotimes_i\mu_i\right)=\sup_i\CP(\mu_i).
   \]
@@ -85,6 +86,10 @@ product argument in \cite{BakryGentilLedoux2014}.
   sharpness.
 \end{proof}
 
-These certificates do not use \cref{def:canonical-l2-constant}.  Moving them into the canonical
-column requires \cref{thm:legacy-canonical-constant-comparison}; a successful Lean build alone
-does not supply that bridge.
+These certificates do not use \cref{def:l2-energy-poincare-constant}.  Moving them into the
+selected canonical column uses the direct relaxation bridge
+\cref{thm:legacy-canonical-constant-comparison}; raw/core agreement is not required.  A successful
+Lean build alone does not supply that open bridge.  Tensorization and the Gaussian computation are
+certified model infrastructure, not a proof of KLS for every product log-concave law and not a
+route to full KLS without a general one-dimensional log-concave input and the shared endpoint
+bridges.

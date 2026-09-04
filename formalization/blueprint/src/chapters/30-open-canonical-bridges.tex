@@ -1,8 +1,10 @@
-\chapter{Open canonical bridges}
+\chapter{Open form-identification bridges}
 \label{chap:open-canonical-bridges}
 
-Closed quadratic structure is only the analytic base.  The following bridges are kept as named
-theorems so later work cannot smuggle them into the definition of the canonical constant.
+Closed quadratic structure is only the analytic base.  The following form-level bridges are kept
+as named theorems so later work cannot smuggle them into the definition of the selected canonical
+constant.  The constant-level bridges used by every route are collected separately in
+\cref{chap:shared-analytic-bridges}.
 
 \begin{obstruction}[Raw energy is not a property of an $L^2$ class]
   \label{obs:dirac-raw-energy}
@@ -31,14 +33,18 @@ theorems so later work cannot smuggle them into the definition of the canonical 
 \begin{theorem}[Identification with Cheeger energy]
   \label{thm:smooth-gradient-relaxation-two-cheeger}
   \notready
-  \uses{def:smooth-gradient-relaxation}
-  After fixing the Mathlib Cheeger-energy interface and normalization, identify the ambient
-  smooth-gradient relaxation with $2\Ch_\mu$ on real $L^2(\mu)$.
+  \uses{def:selected-canonical-frontend}
+  On the affine support, let $\Ch_\mu$ denote the standard metric Cheeger energy normalized as
+  one half of the lower-semicontinuous relaxation of the squared local slope.  After transporting
+  it to ambient real $L^2(\mu)$, prove
+  \[
+    \mathcal E^{\mathrm{can}}_\mu=2\Ch_\mu.
+  \]
 \end{theorem}
 
 The factor $2$ is part of the intended normalization, not an established declaration.  This node
-remains \texttt{notready} until the target Cheeger API and its affine-support convention are
-frozen.
+remains \texttt{notready} until a local Cheeger-energy API and its affine-support convention are
+frozen; it does not presuppose that Mathlib will supply that API.
 
 \section{Core and coordinate comparisons}
 
@@ -53,25 +59,32 @@ frozen.
 
 The Dirac obstruction shows why the missing hypotheses are mathematical data.  Neither the
 Dirichlet property nor a Cheeger identification is declared as a dependency until an actual proof
-uses it.
+uses it.  Raw/core agreement is an optional, strictly stronger testwise identification.  It is
+not a premise of the legacy--relaxed constant bridge.
 
-\begin{theorem}[Legacy and canonical constants agree]
-  \label{thm:legacy-canonical-constant-comparison}
-  \notready
-  \uses{thm:smooth-gradient-raw-core-agreement,def:canonical-l2-constant}
-  Freeze the precise hypotheses under which the legacy smooth-test optimal constant equals the
-  canonical optimal constant of the relaxed energy.
-\end{theorem}
-
-\begin{theorem}[Ambient and intrinsic relaxations compare]
-  \label{thm:ambient-intrinsic-relaxation-comparison}
+\begin{theorem}[Ambient and intrinsic relaxations agree]
+  \label{thm:ambient-intrinsic-relaxation-equality}
   \notready
   \uses{def:smooth-gradient-relaxation,def:intrinsic-affine-energy,thm:intrinsic-l2-equivalence}
-  Freeze the sharp comparison between ambient and intrinsic-affine relaxed energies and their
-  optimal constants, including the choice of affine origin and the treatment of normal
-  directions.
+  For every finite-dimensional Borel probability $\mu$, the intrinsic energy is already pulled
+  back to ambient $L^2(\mu)$, and on that common carrier
+  \[
+    \mathcal E^{\mathrm{amb}}_\mu(f)
+      =\mathcal E^{\mathrm{intr}}_\mu(f)
+    \qquad\text{for every }f\in L^2(\mu).
+  \]
+  Consequently the ambient and selected intrinsic-affine optimal constants are equal.  The
+  equality is independent of the affine origin used to write intrinsic coordinates.
 \end{theorem}
+\begin{proof}
+  Open.  Restriction of an ambient smooth test to the affine support projects its gradient onto
+  the tangent space and cannot increase energy.  Conversely, composing an intrinsic smooth test
+  with the orthogonal projection onto the affine support gives a global ambient smooth extension
+  with the same energy.  Apply both constructions to approximating sequences and take the two
+  relaxations.
+\end{proof}
 
-The preferred implementation order is Dirichlet first, then the Cheeger normalization, then a
-core theorem with explicit singular-measure hypotheses.  The ambient/intrinsic comparison is a
-separate coordinate theorem; it is not a premise of the Basic.
+The preferred implementation order is the exact ambient/intrinsic equality, the direct
+legacy--relaxed bridge of \cref{chap:shared-analytic-bridges}, and then the literature test-density
+bridge.  Dirichlet and Cheeger identifications follow as form enhancements.  A raw/core theorem
+with explicit singular-measure hypotheses remains useful, but it is not on this main path.

@@ -11,7 +11,7 @@ statement review and proof stages. Lean and Mathlib are pinned to **v4.33.0**.
 | Executable theorem map and long-route alternatives | [formalization/blueprint/README.md](formalization/blueprint/README.md) |
 | Canonical `L²`/energy foundation guide | [Poincare/README.md](formalization/FunctionalInequalities/Poincare/README.md) |
 | Mathematical definitions and scope | [LEAN_DESIGN.md](LEAN_DESIGN.md) |
-| Current work and proof handoff | [NEXT_STEPS_CONTEXT_FOR_CODEX.md](NEXT_STEPS_CONTEXT_FOR_CODEX.md) |
+| Current work and proof handoff | [HANDOFF.md](HANDOFF.md) |
 | Node statements and certification status | [research/a-series/ledger.yaml](research/a-series/ledger.yaml) |
 | Node-specific Lean entry points | [solutions/README.md](solutions/README.md) |
 | Review history | [research/decisions/](research/decisions/) and [research/explorations/](research/explorations/) |
@@ -33,9 +33,10 @@ the node is `proved` / `checked_by: lean`. Start with the
 [Gaussian reading guide](formalization/FunctionalInequalities/Poincare/Gaussian/README.md)
 for the mathematical meaning, proof architecture, examples and file map. The earlier
 [candidate statements](research/decisions/2026-09-04-gaussian-poincare-candidate.md) remain an
-append-only record of the review stage rather than the current status. Finite tensorization and
-its remaining analytic inputs form a separate product-case KLS path; the accepted Gaussian
-theorem is another certified node toward the broader program.
+append-only record of the review stage rather than the current status. Finite tensorization
+supplies infrastructure for the independent-product subclass; it is not a complete product-case
+proof for arbitrary one-dimensional log-concave factors. The accepted Gaussian theorem covers
+Gaussian factors only and is another certified node toward the broader program.
 
 The [Gaussian freeze](research/decisions/2026-09-04-gaussian-poincare-freeze.md) records the
 approved contract and the two permitted tail-API generalizations. The
@@ -55,7 +56,7 @@ this program. It displays the certified canonical spine, names the open comparis
 keeps the four long KLS routes as alternatives rather than silently conjoining them. The
 Blueprint does not replace Lean or the ledger as the source of certification status: a rendered
 PDF or web page is documentation, while `\leanok` is reserved for statements and proofs backed by
-the checked declarations and ledger records.
+checked local declarations and, for ledger-backed certificate nodes, matching ledger records.
 
 ## Verify
 
@@ -65,7 +66,7 @@ From the repository root:
 python3 research/check_ledger.py
 python3 research/check_blueprint.py
 python3 -m unittest discover -s research/tests -p 'test_*.py'
-cd formalization && lake build
+(cd formalization && lake build)
 ```
 
 To validate declaration links and build both rendered Blueprint formats, follow the exact local
