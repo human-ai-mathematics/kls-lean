@@ -1,4 +1,5 @@
 import FunctionalInequalities.Poincare.Basic
+import FunctionalInequalities.Poincare.Foundation
 import FunctionalInequalities.Poincare.LinearTest
 import FunctionalInequalities.Poincare.Product.Tensorization
 import FunctionalInequalities.Poincare.Product.Reverse

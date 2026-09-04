@@ -21,6 +21,7 @@ identification, are not established here.
 noncomputable section
 
 open MeasureTheory ProbabilityTheory
+open scoped ContDiff
 
 namespace FunctionalInequalities
 
@@ -31,10 +32,10 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
 namespace Poincare
 
 /-- Source: local test-domain encoding of Definition 2.1, linked above.
-Global `ContDiff ℝ ⊤` and finite canonical-gradient energy are explicit local choices;
+Global `ContDiff ℝ ∞` and finite canonical-gradient energy are explicit local choices;
 the energy field prevents a nonintegrable real integral from being assigned zero. -/
 structure Admissible (μ : Measure E) (f : E → ℝ) : Prop where
-  smooth' : ContDiff ℝ ⊤ f
+  smooth' : ContDiff ℝ ∞ f
   memLp_two : MemLp f 2 μ
   energy_integrable : Integrable (fun x ↦ ‖gradient f x‖ ^ 2) μ
 

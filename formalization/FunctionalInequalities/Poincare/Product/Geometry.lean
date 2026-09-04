@@ -26,6 +26,7 @@ and [gradient calculus](https://github.com/leanprover-community/mathlib4/blob/db
 noncomputable section
 
 open MeasureTheory ProbabilityTheory
+open scoped ContDiff
 
 namespace FunctionalInequalities.Poincare
 
@@ -50,20 +51,20 @@ variable {E F : Type*}
   [NormedAddCommGroup F] [InnerProductSpace ℝ F] [CompleteSpace F]
 
 omit [CompleteSpace E] [CompleteSpace F] in
-/-- Every left section is smooth. Source: local helper from Mathlib's `ContDiff.comp`,
+/-- Every left section is `C∞`. Source: local helper from Mathlib's `ContDiff.comp`,
 `WithLp.prodContinuousLinearEquiv`, and `contDiff_prodMk_left`; no section L² claim is made. -/
 theorem contDiff_section_left {f : WithLp 2 (E × F) → ℝ}
-    (hf : ContDiff ℝ ⊤ f) (y : F) :
-    ContDiff ℝ ⊤ (fun x ↦ f (WithLp.toLp 2 (x, y))) :=
+    (hf : ContDiff ℝ ∞ f) (y : F) :
+    ContDiff ℝ ∞ (fun x ↦ f (WithLp.toLp 2 (x, y))) :=
   hf.comp
     ((WithLp.prodContinuousLinearEquiv 2 ℝ E F).symm.contDiff.comp (contDiff_prodMk_left y))
 
 omit [CompleteSpace E] [CompleteSpace F] in
-/-- Every right section is smooth. Source: local helper from Mathlib's `ContDiff.comp`,
+/-- Every right section is `C∞`. Source: local helper from Mathlib's `ContDiff.comp`,
 `WithLp.prodContinuousLinearEquiv`, and `contDiff_prodMk_right`; no section L² claim is made. -/
 theorem contDiff_section_right {f : WithLp 2 (E × F) → ℝ}
-    (hf : ContDiff ℝ ⊤ f) (x : E) :
-    ContDiff ℝ ⊤ (fun y ↦ f (WithLp.toLp 2 (x, y))) :=
+    (hf : ContDiff ℝ ∞ f) (x : E) :
+    ContDiff ℝ ∞ (fun y ↦ f (WithLp.toLp 2 (x, y))) :=
   hf.comp
     ((WithLp.prodContinuousLinearEquiv 2 ℝ E F).symm.contDiff.comp (contDiff_prodMk_right x))
 

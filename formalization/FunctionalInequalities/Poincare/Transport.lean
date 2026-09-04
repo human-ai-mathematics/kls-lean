@@ -21,6 +21,7 @@ and [variance](https://github.com/leanprover-community/mathlib4/blob/db584cd6d46
 noncomputable section
 
 open MeasureTheory ProbabilityTheory
+open scoped ContDiff
 
 /- The unused ambient instances are part of the candidate signatures. -/
 set_option linter.unusedSectionVars false
@@ -37,10 +38,10 @@ section CoordinateLift
 
 variable (q : E →L[ℝ] F)
 
-/-- Smoothness of a test lifted along a continuous linear projection.
+/-- `C∞` regularity of a test lifted along a continuous linear projection.
 Source: local helper from Mathlib's `ContDiff.comp` and continuous-linear-map smoothness. -/
-theorem contDiff_comp_projection {f : F → ℝ} (hf : ContDiff ℝ ⊤ f) :
-    ContDiff ℝ ⊤ (f ∘ q) :=
+theorem contDiff_comp_projection {f : F → ℝ} (hf : ContDiff ℝ ∞ f) :
+    ContDiff ℝ ∞ (f ∘ q) :=
   hf.comp q.contDiff
 
 /-- The gradient chain rule uses the Hilbert adjoint.

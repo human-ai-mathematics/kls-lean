@@ -24,6 +24,7 @@ are outside this module.
 noncomputable section
 
 open MeasureTheory ProbabilityTheory
+open scoped ContDiff
 
 namespace FunctionalInequalities
 
@@ -80,7 +81,7 @@ theorem linearTest_admissible {μ : Measure E} (hprob : IsProbabilityMeasure μ)
     Admissible μ (linearTest v) := by
   let _ := hprob
   refine ⟨?_, ?_, ?_⟩
-  · change ContDiff ℝ ⊤ (fun x ↦ inner ℝ v x)
+  · change ContDiff ℝ ∞ (fun x ↦ inner ℝ v x)
     exact (innerSL ℝ v).contDiff
   · change MemLp (fun x ↦ inner ℝ v x) 2 μ
     simpa only [id_eq, innerSL_apply_apply] using
