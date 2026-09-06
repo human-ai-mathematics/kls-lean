@@ -9,9 +9,9 @@ The affine-support construction expresses a finite-dimensional probability law o
 vector space of the affine span of its support. This module evaluates the smooth-gradient
 relaxation in that intrinsic Hilbert space and pulls the result back to the original `L²` space.
 
-This removes energy in directions normal to the affine support. The name still says
-`SmoothGradientRelaxation`: identifying the result with the metric-measure canonical energy
-`2 Ch` is a later theorem, especially for singular laws inside their affine support.
+This removes energy in directions normal to the affine support. `Energy.Canonical.energy`
+names this selected construction; identification with the metric-measure energy `2 Ch`
+remains a separate theorem, especially for singular laws inside their affine support.
 -/
 
 noncomputable section
@@ -128,21 +128,31 @@ theorem intrinsicL2Equiv_symm_apply (μ : ProbabilityMeasure E)
     (intrinsicL2Equiv μ).symm f = toAmbientL2 μ f :=
   rfl
 
+end FunctionalInequalities.Energy.Euclidean
+
+namespace FunctionalInequalities.Energy.Canonical
+
+open Euclidean
+
+variable {E : Type u} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
+  [MeasurableSpace E] [BorelSpace E] [SecondCountableTopology E]
+  [FiniteDimensional ℝ E]
+
 /-- The intrinsic-affine smooth-gradient relaxation, represented on the original `L²(μ)` space.
 
 The functional first moves an `L²(μ)` class isometrically to the direction space of the affine
 support, then evaluates the smooth-gradient relaxation of the intrinsic probability law.
 -/
-def intrinsicAffineSmoothGradientRelaxation (μ : ProbabilityMeasure E) :
+def energy (μ : ProbabilityMeasure E) :
     Functional (Lp ℝ 2 (μ : Measure E)) :=
   (smoothGradientRelaxation (Probability.intrinsicMeasure μ)).comap (toIntrinsicL2 μ)
 
 /-- Unfolding the intrinsic-affine relaxation exposes the isometric pullback. -/
 @[simp]
-theorem intrinsicAffineSmoothGradientRelaxation_apply (μ : ProbabilityMeasure E)
+theorem energy_apply (μ : ProbabilityMeasure E)
     (f : Lp ℝ 2 (μ : Measure E)) :
-    intrinsicAffineSmoothGradientRelaxation μ f =
+    energy μ f =
       smoothGradientRelaxation (Probability.intrinsicMeasure μ) (toIntrinsicL2 μ f) :=
   rfl
 
-end FunctionalInequalities.Energy.Euclidean
+end FunctionalInequalities.Energy.Canonical

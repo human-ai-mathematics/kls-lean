@@ -1,5 +1,6 @@
 import FunctionalInequalities.Probability.Basic
 import Mathlib.Analysis.InnerProductSpace.Basic
+import Mathlib.Analysis.InnerProductSpace.Subspace
 import Mathlib.Analysis.Normed.Affine.Isometry
 import Mathlib.Analysis.Normed.Module.FiniteDimension
 import Mathlib.MeasureTheory.Measure.Support
@@ -184,5 +185,24 @@ theorem measurePreserving_reconstruct (μ : ProbabilityMeasure E) :
     filter_upwards [reconstruct_intrinsicMap_ae μ] with x hx
     simpa only [Function.comp_apply, id_eq] using hx
   rw [Measure.map_congr hcomp, Measure.map_id]
+
+/-- Intrinsic coordinates remove every redundant affine direction. This statement is purely
+geometric and does not require log-concavity or absolute continuity. -/
+theorem affineSupport_intrinsicMeasure (μ : ProbabilityMeasure E) :
+    affineSupport (intrinsicMeasure μ) = ⊤ := by
+  let ν := intrinsicMeasure μ
+  let A := (affineSupport ν).map (reconstruct μ).toAffineMap
+  have hA : IsClosed (A : Set E) := A.closed_of_finiteDimensional
+  have hfull : ∀ᵐ x ∂(μ : Measure E), x ∈ A := by
+    rw [← (measurePreserving_reconstruct μ).map_eq]
+    apply (ae_map_iff (measurable_reconstruct μ).aemeasurable hA.measurableSet).2
+    filter_upwards [ae_mem_affineSupport ν] with v hv
+    exact ⟨v, hv, rfl⟩
+  have hle : affineSupport μ ≤ A := affineSupport_le_of_ae_mem μ A hA hfull
+  apply top_unique
+  intro v _
+  have hv : reconstruct μ v ∈ affineSupport μ := (coordinateEquiv μ v).property
+  obtain ⟨w, hw, heq⟩ := hle hv
+  exact (reconstruct μ).injective heq ▸ hw
 
 end FunctionalInequalities.Probability

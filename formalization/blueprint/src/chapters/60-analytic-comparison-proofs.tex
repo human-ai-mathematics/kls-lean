@@ -1,0 +1,235 @@
+\appendix
+\chapter{Analytic comparison proofs}
+\label{chap:analytic-comparison-proofs}
+
+This appendix supplies the mathematical arguments for the relative-perimeter and covariance-core
+interfaces. The approximation lemma below is Lean-certified; the other analytic arguments remain
+written proofs unless a Lean certificate is explicitly linked.
+The statements specify their current domains and normalization; their interfaces may evolve
+during Lean implementation without a prior freeze.
+The two abstract comparison lemmas at the end are already proved in Lean.
+
+\section{Smooth approximation and the covariance core}
+
+\begin{lemma}[Approximation of locally Lipschitz tests]
+  \label{lem:covariance-test-core-density}
+  \lean{Solutions.LemCovarianceTestCoreDensity.certificate}
+  \leanok
+  Let $\nu\ll\mathrm{Leb}_V$ be a probability on a finite-dimensional Euclidean space, let
+  $B:V\to V$ be a fixed linear map, and let $g:V\to\mathbb R$ be locally Lipschitz with
+  $g\in L^2(\nu)$ and $B\nabla g\in L^2(\nu;V)$. There are $g_j\in C_c^\infty(V)$ such that
+  \[
+    g_j\longrightarrow g\text{ in }L^2(\nu),\qquad
+    B\nabla g_j\longrightarrow B\nabla g\text{ in }L^2(\nu;V).
+  \]
+  For a bounded globally Lipschitz $u$, convolution alone gives smooth $u_\varepsilon$ converging
+  in $L^1(\nu)$ with $\nabla u_\varepsilon\to\nabla u$ in $L^1(\nu;V)$.
+  If $0\le u\le1$, the same bounds hold for $u_\varepsilon$.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Choose smooth cutoffs $0\le\chi_R\le1$, equal to one on $B_R$, supported in $B_{2R}$, with
+  $\norm{\nabla\chi_R}\le c/R$. Put $g_R=\chi_Rg$. Then $g_R\to g$ in $L^2$ and
+  \[
+    \nabla g_R-\nabla g=(\chi_R-1)\nabla g+g\nabla\chi_R.
+  \]
+  After applying $B$, the first term tends to zero in $L^2(\nu;V)$ by dominated convergence,
+  using the assumed integrability of $|B\nabla g|^2$. The second has squared norm at most
+  $\norm{B}_\op^2c^2R^{-2}\int_{\{|x|>R\}}|g|^2\,d\nu$, which tends to zero.
+  Each $g_R$ is globally Lipschitz because $g$ is locally Lipschitz on a neighborhood of
+  the compact support of $\chi_R$.
+
+  For fixed $R$, convolve $g_R$ with a nonnegative compactly supported smooth approximate
+  identity $\eta_\varepsilon$. The functions converge uniformly to $g_R$. Their gradients are
+  bounded by $\operatorname{Lip}(g_R)$ and converge at Lebesgue-almost every point to the weak
+  gradient of $g_R$, by the Lebesgue differentiation theorem. Absolute continuity of $\nu$
+  and dominated convergence give convergence in the weighted $L^2$ norm. Choose $R\to\infty$
+  and then $\varepsilon\downarrow0$ diagonally. The same convolution argument, without a
+  cutoff, proves the bounded $L^1$ assertion. No comparison of translated density values is
+  used in this lemma.
+\end{proof}
+
+\begin{lemma}[Closable gradient and equality of the two closures]
+  \label{lem:covariance-core-closure}
+  \uses{lem:covariance-test-core-density,thm:borell-logconcave-density}
+  Let $\nu=\rho\,dx$ be a full-dimensional log-concave probability on $V$, with convex support
+  $K$, interior $\Omega$, and let $\Sigma\succeq0$ be a constant self-adjoint operator.
+  The operator $Tg=\Sigma^{1/2}\nabla g$ on globally Lipschitz $L^2(\nu)$ functions is densely
+  defined and closable. Its graph closure equals the graph closure of the restrictions of
+  $\mathbb R+C_c^\infty(V)$. The sequential relaxation of $\norm{Tg}_2^2$ is
+  \[
+    Q(f)=\begin{cases}\norm{\overline T f}_2^2,&f\in\operatorname{Dom}(\overline T),\\
+                          +\infty,&\text{otherwise}.
+          \end{cases}
+  \]
+\end{lemma}
+\begin{proof}
+  The density is positive and continuous on $\Omega$, bounded above and below by positive
+  constants on every compact subset of $\Omega$, and $\nu(\partial K)=0$. If $g_j\to0$ in
+  $L^2(\nu)$ and $Tg_j\to v$ in $L^2(\nu;V)$, these convergences also hold locally in
+  unweighted $L^2$ on $\Omega$. For every compactly supported smooth vector field $\varphi$
+  in $\Omega$, integration by parts gives
+  \[
+    \int\langle v,\varphi\rangle\,dx
+      =-\lim_j\int g_j\,\operatorname{div}(\Sigma^{1/2}\varphi)\,dx=0.
+  \]
+  Thus $v=0$ almost everywhere on $\Omega$, hence $\nu$-almost everywhere. This proves
+  closability, including when $\Sigma$ has a kernel. Smooth compactly supported functions
+  are dense in $L^2(\nu)$ by regularity of the finite Borel measure and uniform smooth
+  approximation of compactly supported continuous functions.
+
+  The preceding lemma gives graph-norm approximation of every globally Lipschitz test by
+  $C_c^\infty(V)$. Conversely, $\mathbb R+C_c^\infty(V)$ consists of globally Lipschitz
+  $L^2$ functions. Their graph closures therefore coincide. These are restrictions of ambient
+  functions: no vanishing trace on $\partial K$ is imposed.
+
+  To identify the relaxation, take a sequence of tests converging strongly to $f$ in $L^2$.
+  If its energy liminf is finite, pass to a subsequence attaining that liminf and then to a
+  weakly convergent subsequence of its images under $T$. The closed linear graph of
+  $\overline T$ is weakly closed, so the limit is $(f,\overline T f)$. Weak lower
+  semicontinuity of the squared norm gives $Q(f)\le\liminf\norm{Tg_j}_2^2$.
+  Conversely, graph-norm approximation of any $f\in\operatorname{Dom}(\overline T)$
+  attains its energy in the limit. Outside that domain the first argument excludes every
+  finite liminf. This proves the displayed identity and lower semicontinuity of $Q$.
+  In dimension zero all functions on the carrier are constant and the gradient is zero.
+\end{proof}
+
+\section{Relative perimeter without carrier-boundary charges}
+
+Throughout this section, a smooth domain is open and locally lies on one side of its smooth
+boundary. Put $m(t)=\min\{t,1-t\}$, and
+$P_\rho(U)=\int_{\partial U\cap\Omega}\rho\,d\mathcal H^{n-1}$, where $n=\dim V\ge1$.
+Here $M=\sup_V\rho<\infty$: choose a ball $B(a,r)$ on which $\rho\ge b_0>0$.
+Log-concavity gives $\rho\ge\sqrt{b_0\rho(x)}$ on $B((a+x)/2,r/2)$, so its integral,
+which is at most one, bounds $\rho(x)$ uniformly in $x$.
+
+\begin{lemma}[Expansion and smoothing of a relative perimeter]
+  \label{lem:relative-perimeter-smoothing}
+  \uses{thm:borell-logconcave-density}
+  For every smooth domain $U$ with $P_\rho(U)<\infty$, there are globally smooth Lipschitz
+  functions $0\le u_j\le1$ such that
+  \[
+    u_j\to\mathbf1_U\text{ in }L^1(\nu),\qquad
+    \limsup_j\int\norm{\nabla u_j}\,d\nu\le P_\rho(U).
+  \]
+  The domain and the convex carrier may be unbounded.
+\end{lemma}
+\begin{proof}
+  Choose $a\in\Omega$ and $r>0$ with $\overline B(a,r)\subset\Omega$, and put
+  $b_0=\min_{\overline B(a,r)}\rho>0$. For $0<s<1$ set
+  $v_s(x)=\mathbf1_U(a+s(x-a))$; its domain is the outward dilation of $U$ by $1/s$.
+  Let $u_{s,\varepsilon}=\eta_\varepsilon*v_s$, with
+  $s\varepsilon/(1-s)<r$. If
+  \[
+    x=a+(y-a)/s+z,\quad |z|<\varepsilon,\qquad
+    b=a-\frac{s}{1-s}z,
+  \]
+  then $y=sx+(1-s)b$. Whenever $\rho(x)>0$, convexity puts $y\in\Omega$, and log-concavity gives
+  \[
+    \rho(x)\le\rho(y)^{1/s}\rho(b)^{-(1-s)/s}
+       \le (M/b_0)^{(1-s)/s}\rho(y).
+  \]
+  If $y\notin\Omega$, the averaged weight is zero. The distributional derivative of
+  $\mathbf1_U$ is its oriented surface measure; dilation multiplies its total variation by
+  $s^{1-n}$. Convolution, the triangle inequality and Tonelli therefore give
+  \[
+    \int\norm{\nabla u_{s,\varepsilon}}\,d\nu
+      \le s^{1-n}(M/b_0)^{(1-s)/s}P_\rho(U).
+  \]
+  This bound also justifies Tonelli on unbounded boundaries; local finiteness of the smooth
+  surface measure suffices. For fixed $s$, convolution converges Lebesgue-almost everywhere
+  to $v_s$, hence in $L^1(\nu)$ by bounded convergence. As $s\uparrow1$, $v_s\to\mathbf1_U$
+  away from $\partial U$, which is $\nu$-null. Choose $\varepsilon$ diagonally subject to
+  the displayed restriction. The prefactor tends to one. In particular, a piece of
+  $\partial U$ on $\partial K$ contributes no cost; it is moved beyond the carrier before
+  smoothing.
+\end{proof}
+
+\begin{lemma}[The two Cheeger infima agree]
+  \label{lem:relative-perimeter-cheeger-infimum}
+  \uses{def:isoperimetric-cheeger-scale,lem:relative-perimeter-smoothing,
+        lem:covariance-test-core-density}
+  For a full-dimensional log-concave probability,
+  \[
+    \inf_{0<\nu(B)<1}\frac{\nu^+(B)}{m(\nu(B))}
+      =\inf_{\substack{U\text{ smooth domain}\\0<\nu(U)<1}}
+        \frac{P_\rho(U)}{m(\nu(U))}.
+  \]
+\end{lemma}
+\begin{proof}
+  Denote the left and right sides by $h_M$ and $h_S$. For every globally smooth Lipschitz
+  $0\le u\le1$, weighted coarea and Sard's theorem give
+  \[
+    h_S\int_0^1m(\nu\{u>t\})\,dt\le\int\norm{\nabla u}\,d\nu.
+  \]
+  There is also the Minkowski coarea inequality
+  \[
+    \int_0^1\nu^+(\{u\ge t\})\,dt\le\int\norm{\nabla u}\,d\nu,
+  \]
+  namely Lemma~3.2 of \cite{AmbrosioDiMarinoGigli2017Minkowski}, applied to the finite measure
+  on $V$. Its right side is the Euclidean gradient because $u$ is smooth. Consequently the
+  first displayed inequality holds with $h_M$ and closed superlevel sets as well.
+  Open and closed superlevel sets have the same measure for almost every $t$.
+
+  If $0\le u_j\le1$ converges in $L^1(\nu)$ to $\mathbf1_B$, then
+  \[
+    \int_0^1\nu(\{u_j>t\}\mathbin{\triangle}B)\,dt
+      =\norm{u_j-\mathbf1_B}_{L^1(\nu)}\to0.
+  \]
+  Since $m$ is 1-Lipschitz, the corresponding denominator integral tends to $m(\nu(B))$.
+  Applying the smoothing lemma to a smooth $U$ proves
+  $h_M m(\nu(U))\le P_\rho(U)$, hence $h_M\le h_S$.
+
+  Conversely, take a Borel $B$ with finite lower Minkowski content and $0<\nu(B)<1$.
+  Finiteness implies $\nu(\overline B)=\nu(B)$. Choose $r_j\downarrow0$ attaining the liminf,
+  and set $w_j=(1-d(\cdot,B)/r_j)_+$. These bounded Lipschitz functions converge in
+  $L^1(\nu)$ to $\mathbf1_B$, and
+  \[
+    \int\norm{\nabla w_j}\,d\nu
+      \le\frac{\nu(B^{r_j})-\nu(B)}{r_j}.
+  \]
+  Indeed the gradient is zero almost everywhere on the two constant-value sets and is bounded
+  by $1/r_j$ elsewhere. The bounded $L^1$ convolution assertion of
+  \cref{lem:covariance-test-core-density} gives smooth replacements preserving the limit of
+  these gradient integrals. Weighted coarea now yields
+  $h_S m(\nu(B))\le\nu^+(B)$. Sets with infinite content impose no restriction, proving
+  $h_S\le h_M$. The statement compares infima, not the two perimeters of each test set.
+\end{proof}
+
+\section{The abstract parts already certified in Lean}
+
+\begin{lemma}[Mutual test approximation identifies relaxations]
+  \label{lem:mutual-test-approximation-relaxation}
+  \lean{FunctionalInequalities.Energy.PreEnergy.le_sequentialRelaxation_of_lowerSemicontinuous,
+        FunctionalInequalities.Energy.PreEnergy.sequentialRelaxation_le_of_recovery_sequences,
+        FunctionalInequalities.Energy.PreEnergy.sequentialRelaxation_eq_of_recovery_sequences}
+  \leanok
+  \uses{def:preenergy-relaxation}
+  Let $P,Q$ be finite pre-energies on one pseudometric space. Suppose every $P$-test is a
+  limit of $Q$-tests whose energy liminf is at most its $P$-energy, and conversely.
+  Then $\overline P=\overline Q$, including at infinite-energy points.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Each test approximation bounds the other relaxed energy on that test. Lower semicontinuity
+  passes the bound to every approximating sequence, then to the infimum. Apply this in both
+  directions. The concrete approximations in the preceding sections remain analytic inputs.
+\end{proof}
+
+\begin{lemma}[A finite energy factor transfers a Poincar\'e bound]
+  \label{lem:finite-energy-factor-poincare}
+  \lean{FunctionalInequalities.Poincare.L2Energy.Holds.of_energy_le_mul,
+        FunctionalInequalities.Poincare.L2Energy.constant_le_mul_of_energy_le_mul}
+  \leanok
+  \uses{def:l2-energy-poincare-constant}
+  Let $D,E$ be extended energies on the same real $L^2$ probability space and let
+  $C,\kappa\ge0$ be finite. Suppose $\Var(f)\le C D(f)$ on the finite domain of $D$ and
+  $D(f)\le\kappa E(f)$ on the finite domain of $E$. Then the latter domain is contained
+  in that of $D$, and $\CE(\mu,E)\le\kappa C$. Zero factors are included.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Finite target energy and finite $\kappa$ imply finite source energy. Apply the source
+  inequality there and multiply the energy comparison by $C$. The finite-upper-bound
+  characterization gives the optimal-constant conclusion.
+\end{proof}

@@ -19,8 +19,11 @@ universe u
 
 /-- A family of tests whose variance and energy are both finite and nonnegative. -/
 structure TestFamily where
+  /-- The chosen test domain; it need not contain every ambient function. -/
   Test : Type u
+  /-- Finite nonnegative variance assigned to each test. -/
   variance : Test → NNReal
+  /-- Finite nonnegative energy assigned to each test; zero is allowed. -/
   energy : Test → NNReal
 
 namespace TestFamily
@@ -37,7 +40,8 @@ def constant (F : TestFamily) : ENNReal :=
 def Holds (F : TestFamily) (C : NNReal) : Prop :=
   ∀ f, F.variance f ≤ C * F.energy f
 
-/-- A finite Rayleigh quotient is bounded by `C` exactly when its defining inequality holds. -/
+/-- The extended Rayleigh quotient is bounded by a finite `C` exactly when the defining
+inequality holds. This includes zero-energy tests, whose quotient may be infinite. -/
 theorem rayleigh_le_iff (F : TestFamily) (f : F.Test) (C : NNReal) :
     rayleigh F f ≤ (C : ENNReal) ↔ F.variance f ≤ C * F.energy f := by
   rw [rayleigh, ENNReal.div_le_iff_le_mul

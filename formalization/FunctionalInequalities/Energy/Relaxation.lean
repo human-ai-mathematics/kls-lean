@@ -82,6 +82,28 @@ theorem sequentialRelaxation_finiteAt_toAmbient (f : P.Test) :
     P.sequentialRelaxation.FiniteAt (P.toAmbient f) :=
   ne_top_of_le_ne_top ENNReal.coe_ne_top (P.sequentialRelaxation_toAmbient_le f)
 
+/-- A continuous map with energy-nonincreasing lifts on concrete tests has the same bound
+after relaxation. Neither test class needs to be nonempty or densely realized.
+
+Each source test must have one target test realizing its image exactly. For comparison by
+approximating sequences in a common pseudometric space, see
+`PreEnergy.sequentialRelaxation_le_of_recovery_sequences` in
+`FunctionalInequalities.Energy.RelaxationLowerSemicontinuous`. The present result only needs
+topological ambient spaces and also allows a map between different spaces.
+-/
+theorem sequentialRelaxation_comp_le {Y : Type*} [TopologicalSpace Y]
+    (Q : PreEnergy Y) (T : X → Y) (hT : Continuous T)
+    (h : ∀ f : P.Test, ∃ g : Q.Test,
+      Q.toAmbient g = T (P.toAmbient f) ∧ Q.energy g ≤ P.energy f) (x : X) :
+    Q.sequentialRelaxation (T x) ≤ P.sequentialRelaxation x := by
+  rw [P.sequentialRelaxation_apply]
+  refine le_iInf fun s ↦ ?_
+  choose g hreal henergy using fun n ↦ h (s.1 n)
+  have hconv : Tendsto (fun n ↦ Q.toAmbient (g n)) atTop (𝓝 (T x)) := by
+    simpa only [hreal, Function.comp_def] using (hT.tendsto x).comp s.2
+  exact (Q.sequentialRelaxation_le_sequenceEnergy ⟨g, hconv⟩).trans
+    (liminf_le_liminf (Eventually.of_forall fun n ↦ ENNReal.coe_le_coe.mpr (henergy n)))
+
 /-- The concrete realization is contained in the finite domain of its relaxation. -/
 theorem range_toAmbient_subset_relaxation_domain :
     Set.range P.toAmbient ⊆ P.sequentialRelaxation.domain := by

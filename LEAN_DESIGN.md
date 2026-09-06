@@ -6,12 +6,24 @@ tensorization with optimal-constant equality, and the sharp one-dimensional Gaus
 constant. Multivariate Gaussian and log-Sobolev inequalities, Bakry--Émery, Otto--Villani,
 mode-indicator tests, and the KLS conjecture itself remain outside the certified scope.
 
+The interfaces described here may evolve as proofs and downstream uses clarify the design.
+There is no mandatory freeze before proof work or default promise of backward compatibility.
+Proof certification refers to the current statement. Record mathematical scope changes and
+migrate affected consumers; the [current lifecycle](research/ledger-schema.md#lifecycle) gives
+the validation rules. Historical freeze records below preserve their reviewed snapshots.
+
 ## Layered `L²` and energy foundation (2026-09-04)
 
 Downstream applications and smoke tests may import `FunctionalInequalities.Poincare.Foundation`;
 reusable library modules import only their exact direct dependencies. The accepted smooth-test API
 below remains available for its existing certificates, but it is no longer the architectural base
-for future KLS layers. No theorem currently identifies the two optimal constants.
+for future KLS layers. The finite-dimensional comparison now proves equality of the two optimal constants.
+
+The 12 comparison declarations in `Poincare.Relaxation`, `Energy.Euclidean.AffineComparison`,
+`Poincare.Euclidean.AffineComparison` and `Poincare.Euclidean.LegacyComparison` now have complete
+proofs with unchanged signatures. Both ledger nodes are proved and exported by the foundation;
+see the [comparison guide](formalization/FunctionalInequalities/Poincare/Euclidean/README.md)
+and [proof acceptance](research/decisions/2026-09-06-poincare-comparison-proofs.md).
 
 The new dependency direction is:
 
@@ -27,7 +39,7 @@ ProbabilityMeasure + intrinsic real L² variance + affine support coordinates
 
 `Poincare.TestFamily.constant` is the supremum of extended Rayleigh quotients. Its checked boundary
 semantics are `0 / 0 = 0`, positive variance divided by zero energy equals `⊤`, and a single such
-test forces the optimal constant to be `⊤`. `Poincare.constantOfL2Energy` applies this optimizer to
+test forces the optimal constant to be `⊤`. `Poincare.L2Energy.constant` applies this optimizer to
 the finite domain of `Q : Lp ℝ 2 μ → ENNReal`; `finiteValue` requires a proof that `Q f ≠ ⊤`, so
 infinite energy is never silently converted to zero.
 
@@ -155,12 +167,16 @@ cd formalization
 lake build
 ```
 
-The default targets compile the reusable `FunctionalInequalities` library and the four
+The default targets compile the reusable `FunctionalInequalities` library and the six
 root-level certificates: `solutions/LemLinearTestLower.lean`,
 `solutions/LemPoincareTensorization.lean`,
-`solutions/LemPoincareFiniteTensorization.lean`, and
-`solutions/LemPoincareGaussianOneDimensional.lean`. The certificate entry points belong to the
-`Solutions` default target, together with `solutions/GaussianAxiomAudit.lean`.
+`solutions/LemPoincareFiniteTensorization.lean`,
+`solutions/LemPoincareGaussianOneDimensional.lean`,
+`solutions/LemAmbientIntrinsicPoincareComparison.lean`, and
+`solutions/LemLegacyRelaxedPoincareComparison.lean`. The certificate entry points belong to the
+`Solutions` default target, together with `solutions/GaussianAxiomAudit.lean` and
+`solutions/FoundationAxiomAudit.lean`. The `Examples` default target compiles the usage and boundary
+examples in `examples/PoincareFoundation.lean`; the foundation guide explains their reading order.
 
 ## Formalized statement
 
@@ -282,7 +298,7 @@ finite second moment that makes the centered covariance matrix finite.
 - `solutions/GaussianAxiomAudit.lean`: a default-build `#guard_msgs` check fixing the Gaussian
   certificate's transitive axiom set to `propext`, `Classical.choice`, and `Quot.sound`.
 
-Compilation is enforced by `lake build`, whose default targets include all four root-level
+Compilation is enforced by `lake build`, whose default targets include all six root-level
 certificates. The linear-test certificate covers the two lower-bound conclusions above; the
 two tensorization certificates cover the binary and finite product results; the Gaussian
 certificate covers its fixed and optimal real-line constants. None proves the nonlinear parts of
@@ -310,11 +326,13 @@ python3 -m unittest discover -s research/tests -p 'test_*.py'
 The checker establishes repository structure and provenance; `lake build` performs compilation,
 and semantic agreement with the reference remains a separate review obligation.
 
-The lifecycle and checker rules are specified in `research/ledger-schema.md`. Future
-drafted/frozen declarations may contain placeholders and must still compile in the default
-build. Only proved nodes may claim `checked_by: lean`; their entry points and local imports
-undergo the static escape-token check. Human review and signature preservation are documented
-separately because the metadata checker validates the current state rather than approval history.
+The lifecycle and checker rules are specified in `research/ledger-schema.md`. New nodes may move
+directly from `drafted` to `proved`; draft declarations may contain placeholders and must still
+compile in the default build. The checker also accepts historical `frozen` snapshots as unproved
+nodes. Only proved nodes may claim `checked_by: lean`; their entry points and local imports
+undergo the static escape-token check. Semantic review and axiom inspection concern the current
+statement and proof, without a separate mandatory freeze checkpoint. The metadata checker
+validates the current state rather than approval history or signature stability.
 
 `.github/workflows/lean.yml` runs these two Python commands and the default Lean build on every
 push and pull request. It uses Python 3.12 without third-party packages and the official
@@ -360,8 +378,9 @@ removed. No proof placeholders remain in the accepted finite-product modules or 
 
 The `Project/` layer has been removed. Each proved node has one certificate directly combining
 library results; Euclidean specializations are checked without another named forwarding theorem.
-The reusable mathematics, frozen binary signatures, both retained certificate signatures, and
-ledger statements remain unchanged. See `formalization/README.md` for the current source map.
+The reusable mathematics, binary signatures reviewed at the time, both retained certificate
+signatures, and ledger statements were unchanged by that migration. See `formalization/README.md`
+for the current source map.
 
 The accepted signatures are preserved in
 `research/decisions/2026-09-03-finite-tensorization-freeze.md`; final semantic and structural
@@ -437,3 +456,13 @@ records the approved contract; the
 proof closeout, final architecture and validation gates. Local certification is complete;
 publication and remote CI status must still be reported from the actual final commit rather than
 inferred from this review.
+
+## Public naming
+
+Use the mathematical object's namespace for its role: `Poincare.Canonical.constant`,
+`Poincare.Ambient.constant`, and `Poincare.L2Energy.constant` distinguish the selected frontend,
+ambient relaxation, and an optimizer parameterized by an energy. `Energy.Canonical.energy`
+retains the intrinsic-affine construction in its definition. These names do not assert Cheeger
+or Dirichlet identifications. Theorems on `KLS.LogConcave` support proof-receiver calls such as
+`hμ.canonical_eq_literature`. Keep domain, integrability and boundary distinctions in theorem
+names when they matter; see [the naming guide](research/naming.md).

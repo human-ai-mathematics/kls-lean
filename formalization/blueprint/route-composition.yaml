@@ -27,12 +27,19 @@
     },
     {
       "node": "thm:selected-literature-constant-equivalence",
-      "state": "open",
+      "state": "proved",
       "provenance": {
         "source": "kls-lean",
         "path": "formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex"
       },
-      "evidence": []
+      "evidence": [
+        {
+          "kind": "lean",
+          "source": "kls-lean",
+          "ledger_node": "thm:selected-literature-constant-equivalence",
+          "declaration": "Solutions.ThmSelectedLiteratureConstantEquivalence.certificate"
+        }
+      ]
     },
     {
       "node": "thm:affine-isotropic-reduction",
@@ -165,6 +172,41 @@
           "artifact": "research/reviews/2026-08-27-prop-weighted-spectator-obstruction-repair-proof-review.md"
         }
       ]
+    },
+    {
+      "node": "lem:conditional-fiber-energy-comparison",
+      "state": "open",
+      "provenance": {
+        "source": "kls-lean",
+        "path": "formalization/blueprint/src/chapters/50-kls-routes.tex"
+      },
+      "evidence": []
+    },
+    {
+      "node": "cor:conditional-fiber-twelve-bound",
+      "state": "open",
+      "provenance": {
+        "source": "kls-lean",
+        "path": "formalization/blueprint/src/chapters/50-kls-routes.tex"
+      },
+      "evidence": []
+    },
+    {
+      "node": "thm:one-dimensional-logconcave-poincare",
+      "state": "imported",
+      "provenance": {
+        "source": "kls-lean",
+        "path": "formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex"
+      },
+      "evidence": [
+        {
+          "kind": "published",
+          "source": "kls-lean",
+          "references": [
+            "Bobkov1999LogConcave: Corollary 4.3, p. 1915; equation (1.3), p. 1904; constant 12."
+          ]
+        }
+      ]
     }
   ],
   "branches": [
@@ -244,6 +286,15 @@
           },
           {
             "node": "lem:conditional-fiber-form"
+          },
+          {
+            "node": "lem:conditional-fiber-energy-comparison"
+          },
+          {
+            "node": "thm:one-dimensional-logconcave-poincare"
+          },
+          {
+            "node": "thm:affine-isotropic-reduction"
           }
         ]
       }
@@ -270,7 +321,7 @@
   "targets": [
     {
       "target": "conj:kls",
-      "prerequisites": {
+      "adapters": {
         "operator": "all_of",
         "items": [
           {

@@ -14,6 +14,12 @@ each route form an \texttt{all\_of}.  In particular, \cref{conj:kls} intentional
 nor probabilistic independence; the routes share the bridges of
 \cref{chap:shared-analytic-bridges}.
 
+The target's \texttt{adapters} entry in the route sidecar is repository-facing alignment
+metadata, not a list of logical prerequisites for KLS.  In particular,
+\cref{thm:selected-literature-constant-equivalence} is not a \texttt{uses} edge of the route
+consumers below.  Logical uses remain explicit at the consuming node; hence the existing
+\cref{thm:affine-isotropic-reduction} edges are retained where that reduction is used.
+
 \section{Eldan localization}
 \label{route:eldan-localization}
 
@@ -125,8 +131,7 @@ posterior covariance information that a scalar covariance bound discards.
 
 \begin{proposition}[Full-damping sufficiency]
   \label{prop:spectral-sufficiency}
-  \uses{q:mm-spectral-occupation,thm:selected-literature-constant-equivalence,
-        thm:affine-isotropic-reduction}
+  \uses{q:mm-spectral-occupation,thm:affine-isotropic-reduction}
   If the occupation estimate holds, set
   \[
     M_*=(1+C_0T_0)e^{C_1T_0},
@@ -160,28 +165,69 @@ moment-map background is classical work of Berman--Berndtsson and Fathi
 \cite{BermanBerndtsson2013RealMA,Fathi2019SteinMomentMaps}; the recovery-envelope gate below is a
 separate repository statement.
 
+\begin{theorem}[CMH recovery controls the affine Poincar\'e constant]
+  \label{thm:cmh-recovery-affine-poincare-bound}
+  \uses{def:log-concave-law,def:affine-poincare-constant,
+        thm:affine-covariance-relaxation-closed}
+  Let $\mu$ be a centered log-concave probability law on a fixed finite-dimensional Euclidean
+  space, and let $(\mu_k)$ be a centered, full-dimensional, compactly supported log-concave
+  sequence in the pinned source's regular compact-target moment-map class.  If
+  $W_2(\mu_k,\mu)\to0$ in the original ambient coordinates, then
+  \[
+    C_{\mathrm P}^{\mathrm{aff}}(\mu)
+      \le \liminf_{k\to\infty}C_{\mathrm P}^{\mathrm{aff}}(\mu_k)
+      \le \liminf_{k\to\infty}\CMH(\mu_k).
+  \]
+  Here regularity includes the source's canonical moment-map kernel and weak zero-flux closed
+  Stein-generator convention.  The limiting law may have proper affine support.
+\end{theorem}
+\begin{proof}
+  This packages two pinned upstream results.  The first inequality is the record
+  \[
+    \texttt{lem:affine-poincare-w2-liminf},
+  \]
+  and the second follows pointwise from
+  \[
+    \texttt{thm:cmh-implies-affine-poincare}.
+  \]
+  The closed covariance form in those results is identified with the present relaxation by
+  \cref{thm:affine-covariance-relaxation-closed}.  These upstream results are agent-reviewed, not
+  Lean-certified here.
+\end{proof}
+
 \begin{assumption}[Bounded CMH recovery envelope]
   \label{ass:cmh-recovery-envelope}
-  There is a universal $C$ such that every centered log-concave probability $\mu$ admits a
-  regular recovery sequence $(\mu_k)$ converging to $\mu$ in ambient $W_2$ and
-  satisfying
+  There is a universal $C$ such that, for every finite-dimensional Euclidean space $E$ and every
+  centered log-concave probability law $\mu$ on $E$, there is a centered, full-dimensional,
+  compactly supported log-concave sequence $(\mu_k)$ on the same space $E$, belonging to the
+  pinned source's regular compact-target moment-map class, such that
   \[
+    W_2(\mu_k,\mu)\longrightarrow0,
+    \qquad
     \liminf_{k\to\infty}\CMH(\mu_k)\le C.
   \]
 \end{assumption}
 
 \begin{corollary}[One CMH recovery sequence suffices]
   \label{cor:cmh-recovery-sequence-suffices}
-  \uses{ass:cmh-recovery-envelope,thm:selected-literature-constant-equivalence,
-        thm:affine-isotropic-reduction}
-  Under the bounded recovery-envelope assumption, every centered log-concave law satisfies the
-  universal affine Poincar\'e inequality.  Consequently the assumption implies KLS, including
+  \uses{ass:cmh-recovery-envelope,def:affine-poincare-constant,
+        thm:cmh-recovery-affine-poincare-bound,
+        lem:affine-poincare-translation-invariance,thm:affine-isotropic-reduction}
+  Under the bounded recovery-envelope assumption, every centered finite-dimensional log-concave
+  law satisfies
+  \[
+    C_{\mathrm P}^{\mathrm{aff}}(\mu)\le C.
+  \]
+  Both log-concavity and $C_{\mathrm P}^{\mathrm{aff}}$ are invariant under translations, so the
+  same bound holds for every finite-dimensional log-concave law.  By item~(3) of
+  \cref{thm:affine-isotropic-reduction}, the assumption therefore implies KLS, including
   degeneration to a proper affine support.
 \end{corollary}
 \begin{proof}
-  Apply the regular-class CMH-to-affine-Poincar\'e endpoint to the recovery sequence and pass to
-  the limit using the upstream lower-semicontinuity theorem.  This bridge is upstream
-  agent-reviewed, not Lean-certified.
+  Apply \cref{thm:cmh-recovery-affine-poincare-bound} to the sequence supplied by
+  \cref{ass:cmh-recovery-envelope}.  For an arbitrary law, translate by its negative barycenter
+  and use \cref{lem:affine-poincare-translation-invariance} before applying item~(3) of
+  \cref{thm:affine-isotropic-reduction}.
 \end{proof}
 
 \paragraph{Pinned provenance.}
@@ -195,17 +241,23 @@ route sidecar.  Published moment-map inputs do not prove the open envelope.
 \section{Conditional-fiber frame route}
 \label{route:conditional-fiber-frame}
 
-The frame may depend on the measure, but it must be chosen before the test function.  The route is
-existential over all admissible frames; failure of the natural simplex root frame does not refute
-it.
+The frame may depend on the measure, but it must be chosen before the test function.  One finite
+constant must work for all positive dimensions and all eligible laws.  The route is existential
+over all admissible frames; failure of the natural simplex root frame does not refute it.
+The frame construction below is restricted to $d\ge1$: in dimension zero the unit sphere is empty
+and carries no probability frame.  The zero-dimensional KLS conclusion is handled separately by
+zero variance.
 
 \begin{definition}[Conditional-fiber form]
   \label{def:conditional-fiber-form}
-  For an isotropic law $\mu$ on $\R^d$, let $\rho$ be an even probability law on the sphere with
+  Let $d\ge1$.  For a Borel probability law $\mu$ on $\R^d$ with finite second moment, let $\rho$ be an
+  even probability law on the sphere with
   \[
     d\int_{S^{d-1}}\theta\theta^{\mathsf T}\dd\rho(\theta)=I_d.
   \]
-  Disintegrate $\mu$ along lines $z+\R\theta$ and define
+  Under $\rho\otimes\mu$, disintegrate $T=\inner{x}{\theta}$ over
+  $(\theta,z)=(\theta,P_{\theta^\perp}x)$.  This gives a jointly measurable conditional kernel
+  $\mu_{\theta,z}$; write $\bar\mu_\theta=(P_{\theta^\perp})_\#\mu$.  Define
   \[
     \mathcal D_{\mu,\rho}(f)
     =d\int_{S^{d-1}}\int_{\theta^\perp}
@@ -213,49 +265,130 @@ it.
            {\Var_{\mu_{\theta,z}}(T)}
       \dd\bar\mu_\theta(z)\dd\rho(\theta),
   \]
-  with null or zero-variance fibers contributing zero.
+  with exceptional fibers, zero-variance fibers, and fibers with infinite conditional second
+  moment contributing zero.
+  Finite second moment makes the last case null for the joint base law
+  $\dd\rho(\theta)\dd\bar\mu_\theta(z)$.  The value is independent of conditional versions and
+  of the Borel representative of $f\in L^2(\mu)$.  The nonnegative integrals take values
+  in $[0,\infty]$; the maximal form domain consists of the $L^2(\mu)$ classes with finite
+  $\mathcal D_{\mu,\rho}$.
 \end{definition}
 
-\begin{lemma}[Conditional-fiber form and factor-four bridge]
+\begin{lemma}[Closed conditional-fiber form]
   \label{lem:conditional-fiber-form}
-  \uses{def:conditional-fiber-form,thm:one-dimensional-logconcave-poincare,
-        thm:selected-literature-constant-equivalence}
-  For a full-dimensional log-concave probability with density and finite second moment, the form
-  is densely defined, closed, symmetric, Markovian, and reversible.  Moreover, for locally
-  Lipschitz $f$ in its form domain,
-  \[
-    \mathcal D_{\mu,\rho}(f)\le4\int\norm{\nabla f}^2\dd\mu.
-  \]
-  Thus a form gap $\Var_\mu(f)\le C\mathcal D_{\mu,\rho}(f)$ implies
-  $\CPLit(\mu)\le4C$.
+  \uses{def:conditional-fiber-form}
+  For $d\ge1$ and a full-dimensional log-concave probability with density and finite
+  second moment, the form
+  is densely defined, closed, symmetric, Markovian, and reversible.
 \end{lemma}
 \begin{proof}
-  The one-dimensional conditional Poincar\'e estimate bounds each fiber variance; isotropy of the
-  frame averages directional derivatives to the full squared gradient.  The closed-form and
-  reversibility assertions use conditional expectation.  The proof dossier is marked
-  \texttt{proved}/\texttt{checked\_by: agent} upstream; it is not Lean-certified here.
+  This is the structural part of the pinned upstream node. On a fiber of variance
+  $0<\sigma^2<\infty$, the normalized variance is
+  $(2\sigma^2)^{-1}\iint(f(t)-f(s))^2\,d\mu_{\theta,z}(t)d\mu_{\theta,z}(s)$.
+  Disintegrating and integrating gives a nonnegative symmetric jump form. An $L^2$-convergent
+  sequence has an almost-everywhere convergent subsequence; disintegration and Fatou make
+  this form lower semicontinuous, hence closed on its maximal domain. Lipschitz scalar
+  contractions decrease every squared difference, proving the Markov property.
+  Symmetry of the two-point measure gives reversibility.
+
+  For density, let $f$ be globally $L$-Lipschitz. Finite second moment gives $f\in L^2(\mu)$.
+  On a fiber with $0<\Var(T)<\infty$, let $T'$ be an independent copy of $T$. Since
+  $\norm{\theta}=1$,
+  \[
+    \Var(f(z+T\theta))
+      =\tfrac12\mathbb E\bigl[|f(z+T\theta)-f(z+T'\theta)|^2\bigr]
+      \le L^2\Var(T).
+  \]
+  Dividing by the positive variance and integrating over the probability base gives
+  $\mathcal D_{\mu,\rho}(f)\le dL^2$; the other fibers contribute zero by definition.
+  In particular, $C_c^\infty(\mathbb R^d)$ lies in the form domain and is dense in $L^2(\mu)$.
+  This density argument needs neither log-concavity nor a one-dimensional Poincar\'e bound.
+  The stated scope is retained to match the imported structural result. The comparison with
+  integrated gradient energy below is a separate use of the numerical input.
+\end{proof}
+
+\begin{lemma}[Conditional-fiber comparison with an explicit input constant]
+  \label{lem:conditional-fiber-energy-comparison}
+  \uses{def:conditional-fiber-form,def:literature-poincare-constant,
+        lem:finite-energy-factor-poincare}
+  Let $d\ge1$, let $\mu\ll\mathrm{Leb}_{\mathbb R^d}$ have finite second moment, and let
+  $\rho$ be an admissible frame. Suppose one finite $\kappa\ge0$ satisfies
+  $C_{\mathrm P}^{\mathrm{lit}}(\mu_{\theta,z})\le
+  \kappa\Var_{\mu_{\theta,z}}(T)$ for almost every nondegenerate conditional fiber.
+  Every locally Lipschitz $f\in L^2(\mu)$ with finite gradient energy then satisfies
+  \[
+    \mathcal D_{\mu,\rho}(f)\le\kappa\int\norm{\nabla f}^2\dd\mu<\infty.
+  \]
+  Hence $\Var_\mu(f)\le C\mathcal D_{\mu,\rho}(f)$ on the maximal finite form domain,
+  for finite $C\ge0$, implies $C_{\mathrm P}^{\mathrm{lit}}(\mu)\le\kappa C$.
+\end{lemma}
+\begin{proof}
+  A finite upper bound for the literature infimum is itself valid: choose admissible constants
+  below that bound plus $1/j$ and pass to the limit for each fixed finite-energy test.
+  Disintegration gives square integrability of the restricted test and integrability of its
+  directional derivative on almost every fiber. Rademacher's theorem, absolute continuity,
+  and Fubini identify that derivative with $\langle\nabla f,\theta\rangle$. Dividing the
+  assumed fiber inequality by its positive variance and using Tonelli gives
+  \begin{align*}
+    \mathcal D_{\mu,\rho}(f)
+      &\le \kappa d\int_{S^{d-1}}\int
+                |\langle\nabla f(x),\theta\rangle|^2\,d\mu(x)d\rho(\theta)\\
+      &=\kappa\int|\nabla f(x)|^2\,d\mu(x).
+  \end{align*}
+  The last equality is the frame identity. Conditional Dirac laws have zero numerator;
+  exceptional or infinite-second-moment fibers are null. The resulting finite bound puts the
+  test in the maximal form domain before the form-gap inequality is applied. The final
+  multiplication by $C$ is the abstract implication in \cref{lem:finite-energy-factor-poincare}.
+  The actual disintegration and directional-energy calculation here is an analytic proof,
+  not an application already elaborated in Lean.
+\end{proof}
+
+\begin{corollary}[Verified log-concave fiber specialization]
+  \label{cor:conditional-fiber-twelve-bound}
+  \uses{lem:conditional-fiber-energy-comparison,thm:one-dimensional-logconcave-poincare}
+  For a full-dimensional log-concave law with finite second moment,
+  $\mathcal D_{\mu,\rho}(f)\le12\int|\nabla f|^2\,d\mu$ on the literature test domain.
+  A finite form-gap bound $C$ therefore gives $\CPLit(\mu)\le12C$.
+\end{corollary}
+\begin{proof}
+  For each fixed direction, Fubini disintegration of the log-concave density gives conditional
+  densities proportional to $t\mapsto\rho_\mu(z+t\theta)$ wherever the normalizing slice
+  integral is finite and positive. These densities are log-concave. The remaining fibers are
+  null; finite second moment gives finite conditional variances almost everywhere. Apply
+  \cref{thm:one-dimensional-logconcave-poincare} and then the preceding comparison with
+  $\kappa=12$. The same argument accepts any independently established smaller universal input.
 \end{proof}
 
 \begin{question}[Test-independent conditional-fiber frame]
   \label{q:conditional-fiber-frame}
   \uses{def:conditional-fiber-form}
-  For every full-dimensional isotropic log-concave $\mu$ on $\R^d$, is there an admissible frame
-  $\rho_\mu$, fixed independently of $f$, and a universal $C$ such that
+  Is there a finite $C\ge0$ such that, for every integer $d\ge1$ and every full-dimensional
+  isotropic log-concave $\mu$ on $\R^d$, there is an admissible frame $\rho_\mu$, fixed
+  independently of $f$, satisfying
   \[
     \Var_\mu(f)\le C\mathcal D_{\mu,\rho_\mu}(f)
   \]
   for every $f$ in the maximal closed form domain?
 \end{question}
 
-An affirmative answer together with \cref{lem:conditional-fiber-form} implies KLS.  There is no
+An affirmative answer together with \cref{lem:conditional-fiber-form,cor:conditional-fiber-twelve-bound}
+gives the isotropic KLS bound $\CPLit\le12C$ in every positive dimension; an input $\kappa$
+gives $\kappa C$. In dimension zero the Poincar\'e constant is
+zero.  Applying \cref{thm:affine-isotropic-reduction} then gives the full KLS statement, including
+laws on proper affine supports.  There is no
 upstream theorem labelled \texttt{thm:conditional-fiber-frame-suffices}; the route sidecar uses
-the actual two-node conjunction instead of inventing one.
+the structural upstream node and frame question together with the local parameterized comparison,
+verified numerical input and affine/isotropic bridge. It does not attribute the new comparison
+statement to the upstream ledger.
 
 \paragraph{Pinned provenance.}
-The definition is transcribed from the pinned upstream conditional-fiber module; it is not an
-independent ledger certificate.  At the pinned source commit, \path{lem:conditional-fiber-form} is
+The formula comes from the pinned upstream conditional-fiber module.  The local presentation
+makes the positive-dimensional frame carrier, finite-energy domain, and universal-constant
+quantifiers explicit; it is not an independent ledger certificate.  At the pinned source commit,
+\path{lem:conditional-fiber-form} is
 \texttt{proved}/\texttt{checked\_by: agent}, with evidence
 \path{solutions/conditional-fiber-frame-structure.tex}.  The exact review artifact is pinned in
-the route sidecar.  The gate \path{q:conditional-fiber-frame} is \texttt{open}.  Thus the form
-package is reviewed upstream, but the existence of a test-independent frame remains the live
-obstruction.
+the route sidecar. Only the structural substatement is imported under that label here; the
+upstream factor-four claim is historical provenance, not the active numerical input.
+The new parameterized comparison and the $12$ specialization are local analytic statements,
+without Lean certificates. The gate \path{q:conditional-fiber-frame} remains \texttt{open}.

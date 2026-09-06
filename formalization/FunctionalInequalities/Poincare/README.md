@@ -1,357 +1,200 @@
-# Poincaré 新基础：从光滑梯度到闭二次型
+# Poincaré 基础：从概率测度到最优常数
 
-**当前状态：闭二次型链已完成，canonical identification 尚未完成。**
+这套基础为实 `L²` 上的 Poincaré 不等式提供可复用接口。给定概率测度 `μ` 和能量 `E`，它定义
+最优常数，并证明有限常数有效当且仅当它控制最优常数。具体欧氏实现选用仿射支撑上的光滑
+梯度能量，经 `L²` relaxation 后拉回原空间。
 
-有限维实 Borel Hilbert 空间上的 `C∞` 光滑梯度 pre-energy 已证明二次性与实现稠密性；其
-sequential relaxation 已经是稠密定义的下半连续闭二次泛函。对任意概率测度，还可以先约化到
-最小闭满测度 affine support 的方向空间，再把闭二次型沿双向线性等距等价拉回原来的实
-`L²` 空间。
+**当前已证明闭二次型链，以及 ambient/intrinsic 与 legacy/relaxed 比较桥。** 已验收的
+Gaussian 和 tensorization 定理使用光滑测试接口，可以通过有限维比较桥转到所选常数。
+与 locally Lipschitz 文献常数的等价已在 Blueprint 附录 A 中给出分析论证，仍待 Lean
+形式化与认证。
 
-这仍不是 Markov/Dirichlet 定理，也没有证明 relaxation 在每个具体测试上保留 raw gradient
-energy，更没有把该能量识别成 `2 · Chμ`。这些边界是当前 API 的一部分，不是待补的注释。
+当前接口默认允许随数学设计调整，已证明的接口也不例外；证明工作不以接口冻结为前提。
+认证针对当前声明与证明。修改假设、结论、测试域或归一化时，应明确记录变化，同步依赖并
+重新检查原数学目标是否仍被覆盖。详见[生命周期约定](../../../research/ledger-schema.md#lifecycle)。
 
-建议按以下顺序阅读：
+## 从这里开始
 
-1. [`Foundation.lean`](Foundation.lean)：新分层 API 的 aggregate 入口；
-2. [`SmoothGradientClosed.lean`](../Energy/Euclidean/SmoothGradientClosed.lean)：ambient
-   smooth-gradient relaxation 的闭二次型实例；
-3. [`IntrinsicAffineClosed.lean`](../Energy/Euclidean/IntrinsicAffineClosed.lean)：intrinsic
-   affine 版本及等距 transport；
-4. 本文余下部分：通用定理、具体实现与当前 non-claims。
+| 你要做的事 | 阅读入口 |
+| --- | --- |
+| 使用新基础 | [Foundation.lean](Foundation.lean) |
+| 理解最优常数与有限能量域 | [L2Energy.lean](L2Energy.lean) |
+| 使用项目选定的欧氏常数 | [Euclidean/IntrinsicAffine.lean](Euclidean/IntrinsicAffine.lean) |
+| 看完整的使用与边界示例 | [PoincareFoundation.lean](../../../examples/PoincareFoundation.lean) |
+| 使用已证明的 Gaussian 定理 | [Gaussian/README.md](Gaussian/README.md) |
+| 查找全部模块和 import 规则 | [formalization/README.md](../../README.md) |
+| 查看剩余数学桥梁与 KLS 路线 | [Blueprint](../../blueprint/README.md) |
+| 使用已证明的常数比较桥 | [Euclidean/README.md](Euclidean/README.md) |
 
-## 1. 先固定 `C∞` 的 Lean 语义
+示例文件包含常数函数的方差、能量比较的方向、所选常数的使用、Dirac 原始能量反例、空测试类
+的 recovery 障碍，以及 Gaussian 的数值和退化情形。所有 `example` 都进入默认 `lake build`。
 
-本仓库固定 Lean/Mathlib `v4.33.0`。在这个版本中，普通无限次可微写作
-
-```lean
-ContDiff ℝ ∞ f
-```
-
-而 `ContDiff ℝ ⊤ f` 表示更强的 analytic 正则性。旧文曾把 `⊤` 误当作普通 `C∞`；当前
-legacy Poincaré 测试类和新的 smooth-gradient 测试类都已迁移到 `∞`。因此本文中的“全局光滑”
-始终表示 `ContDiff ℝ ∞`，不暗含解析性。
-
-## 2. 数学对象
-
-一个有限 pre-energy `P : Energy.PreEnergy X` 记录
-
-```text
-P.Test                    concrete tests
-P.toAmbient : P.Test → X  realization in the ambient space
-P.energy : P.Test → ℝ≥0   finite concrete energy
-```
-
-它的 sequential relaxation 是扩展非负泛函
-
-```text
-P.sequentialRelaxation : X → ℝ≥0∞,
-```
-
-在 `x` 处对所有满足 `toAmbient (f n) → x` 的测试序列取 energy `liminf` 的下确界。常值
-序列总给出
+## 一个可以直接使用的接口
 
 ```lean
-P.sequentialRelaxation (P.toAmbient f) ≤ P.energy f
+import FunctionalInequalities.Poincare.Foundation
+
+open MeasureTheory FunctionalInequalities
+
+example (μ : ProbabilityMeasure ℝ) :
+    Energy.ClosedQuadratic (Energy.Canonical.energy μ) :=
+  Energy.Canonical.closedQuadratic μ
+
+example (μ : ProbabilityMeasure ℝ) (C : NNReal)
+    (h : Poincare.Canonical.constant μ ≤ (C : ENNReal)) :
+    Poincare.Canonical.Holds μ C :=
+  (Poincare.Canonical.holds_iff_constant_le μ C).mpr h
 ```
 
-但这里一般只有 `≤`，不能无条件改成等号。
+第一条适用于任意 Borel 概率测度，包括没有密度的测度。第二条说明如何使用一个已知的常数界；
+它不提供这个界本身。上述写法也适用于任意有限维实 Borel Hilbert 空间。
 
-[`QuadraticPreEnergy.lean`](../Energy/QuadraticPreEnergy.lean) 中的
-`PreEnergy.Quadratic` 另外要求：测试空间与环境空间都是实模，realization 保持 `0`、加法和
-实数缩放，有限能量满足二次缩放与 parallelogram identity。它导出线性 realization
-`toAmbientₗ` 以及 neg/sub 的相容性，但本身不假定闭性、稠密性、closability 或测试上一致性。
+新接口使用 `ProbabilityMeasure`。已有 `μ : Measure E` 和 `[IsProbabilityMeasure μ]` 时，
+可用 `Probability.ofMeasure μ` 打包；再转回 `Measure E` 在定义上就是原测度。旧接口保留其
+`Measure` 与概率假设形式，调用者无需迁移已验收的证明。
 
-闭包后的目标结构是 [`ClosedQuadratic.lean`](../Energy/ClosedQuadratic.lean) 中的
-`Energy.ClosedQuadratic`：
+## 数学对象与一般性
+
+基础按职责分成三层：
+
+1. `L2.mean`、`L2.center`、`L2.variance` 定义在实 `L²(μ)` 的几乎处处等价类上，适用于任意
+   可测空间上的概率测度。方差是中心化后的 `L²` 范数平方，取值于 `NNReal`。
+2. `Energy.Functional X` 是 `X → ENNReal`。有限域 `energy.domain` 携带排除 `⊤` 的证明，
+   `finiteValue` 才将该值转为 `NNReal`。无限能量不会被 `toNNReal` 静默转换为零后参与优化。
+3. `Poincare.TestFamily` 只记录测试类型、有限非负方差与能量。其最优常数是扩展 Rayleigh 商
+   的上确界；它不要求测度、光滑性、闭性或 Markov 性。
+
+在有限能量域上，`Poincare.L2Energy.constant μ energy` 与 `Poincare.L2Energy.Holds μ energy C` 满足
 
 ```text
-E(0) = 0
-E(c • f) = ENNReal.ofReal (c²) * E(f)       (c ≠ 0)
-E(f + g) + E(f - g) = 2 E(f) + 2 E(g)
-E is lower semicontinuous
-{f | E(f) < ⊤} is dense
+Poincare.L2Energy.Holds μ energy C ↔ Poincare.L2Energy.constant μ energy ≤ (C : ENNReal).
 ```
 
-有限能量域因而成为实子模。此结构仍不自动包含 normal-contraction/Markov 性。
+约定 `0 / 0 = 0`，正方差除以零能量为 `⊤`。空测试类的最优常数为零；有正方差、零能量测试时，
+最优常数为 `⊤`。这些边界由 [Optimal.lean](Optimal.lean) 中的定理明确覆盖。
 
-Poincaré 优化层则把任意扩展 `L²` 能量的有限域变成有限值测试族：
+[能量比较](L2Comparison.lean) 的方向是：同一测度下，若 `lower ≤ upper`，则
+`Poincare.L2Energy.constant μ upper ≤ Poincare.L2Energy.constant μ lower`。增大能量会同时缩小有限域并增大
+保留下来的分母，故不需要假设两者有相同定义域。
 
-```text
-rayleigh f = variance f / energy f : ℝ≥0∞
-constant   = ⨆ f, rayleigh f        : ℝ≥0∞
-Holds C    ↔ ∀ f, variance f ≤ C * energy f
-```
+## 从具体测试到闭二次型
 
-已经证明 `Holds C ↔ constant ≤ C`（把有限 `C : NNReal` 强制转换到 `ENNReal`）。值为 `⊤` 的
-能量点不进入测试族；不会通过 `ENNReal.toNNReal` 被静默改成零。
-
-## 3. Live source map
-
-下列是当前可编译的基础链；箭头表示主要依赖方向。
-
-```text
-Probability/
-├── Basic.lean
-└── AffineSupport.lean
-    # affineSpan(support), minimality, intrinsic law and affine reconstruction
-
-L2/
-└── MeanVariance.lean
-    # real L² constants, mean, centering and NNReal variance
-
-Energy/
-├── Functional.lean
-├── Comparison.lean
-├── Relaxation.lean
-├── QuadraticPreEnergy.lean
-├── RelaxationLowerSemicontinuous.lean
-├── RelaxationRecovery.lean
-├── RelaxationQuadratic.lean
-├── RelaxationContraction.lean
-├── FormCore.lean
-├── ClosedQuadratic.lean
-├── Dirichlet.lean
-└── Euclidean/
-    ├── SmoothGradient.lean
-    ├── SmoothGradientQuadratic.lean
-    ├── SmoothGradientDensity.lean
-    ├── SmoothGradientClosed.lean
-    ├── IntrinsicAffine.lean
-    └── IntrinsicAffineClosed.lean
-
-Poincare/
-├── Foundation.lean
-├── Optimal.lean
-├── Comparison.lean
-├── L2Energy.lean
-├── L2Comparison.lean
-└── Euclidean/
-    ├── SmoothGradient.lean
-    └── IntrinsicAffine.lean
-```
-
-通用闭包链是
+[PreEnergy](../Energy/Relaxation.lean) 记录具体测试、realization `toAmbient` 和有限能量。
+在 `x` 处的 sequential relaxation，是所有 realization 收敛到 `x` 的测试序列之能量 `liminf`
+的下确界。没有逼近序列时，值为 `⊤`。这个定义本身只用拓扑；下半连续性定理使用伪度量假设。
 
 ```text
 Relaxation
-  ├── LowerSemicontinuous
-  ├── Recovery
-  ├── QuadraticPreEnergy ──→ RelaxationQuadratic ──→ ClosedQuadratic
-  └── Contraction (conditional transfer only)
+  → RelaxationApproximation
+      → RelaxationLowerSemicontinuous
+      → RelaxationRecovery
+  + QuadraticPreEnergy
+      → RelaxationQuadratic → ClosedQuadratic
 ```
 
-具体欧氏链是
+[RelaxationApproximation.lean](../Energy/RelaxationApproximation.lean) 收集两处证明共用的选择步骤：
+严格的 relaxed-energy 上界可由任意小邻域内的具体测试实现；稠密 realization 提供逼近序列。
+它不要求最优测试存在，也不引入 closability 假设。
 
-```text
-SmoothGradient
-  ├── SmoothGradientQuadratic
-  ├── SmoothGradientDensity
-  └── SmoothGradientClosed
+已证明的分析结论包括：
 
-AffineSupport ──→ IntrinsicAffine ──→ IntrinsicAffineClosed
-```
+- 在任意伪度量环境中，sequential relaxation 下半连续，不要求二次性或密度。
+- 每个有限 relaxed-energy 点都有 recovery sequence，其能量收敛到 relaxed energy。
+- realization 稠密时，每个点都有 recovery sequence，包括能量为 `⊤` 的点。空测试类的例子
+  说明，此处不能删除密度前提。
+- 二次 pre-energy 的 relaxation 满足二次缩放和完整扩展 parallelogram identity；再加
+  realization 稠密性，就得到 `ClosedQuadratic`。
 
-旧的 [`Basic.lean`](Basic.lean)、`LinearTest`、`Transport`、product、finite product 与 Gaussian
-模块继续提供已验收的实际函数接口。新名称主要位于 `Poincare.TestFamily` 与
-`Energy` namespace；新旧常数可以同时导入，但目前没有桥定理证明二者相等。
+`ClosedQuadratic` 包含零值、非零实数缩放、parallelogram identity、下半连续性与有限域稠密性。
+有限域已封装为实子模。零倍缩放单独处理，所以即使原向量能量为 `⊤`，缩放为零后仍得到零能量。
+通用二次闭包定理不要求 raw energy 在 realization 的纤维上一致。
 
-## 4. 通用 relaxation 已精确证明什么
+[RelaxationContraction.lean](../Energy/RelaxationContraction.lean) 另给条件性转移：若连续变换
+在具体测试的 realization 上满足 `RelaxedContractionBound`，它就在所有点降低 relaxed energy。
+具体光滑梯度实现尚未提供所有 normal contractions 的这个前提。
 
-### Lower semicontinuity
+## 欧氏实现与仿射支撑
 
-[`RelaxationLowerSemicontinuous.lean`](../Energy/RelaxationLowerSemicontinuous.lean) 证明：在
-任意 pseudometric 环境空间中，`P.sequentialRelaxation` 下半连续。该定理不需要二次性、
-realization 稠密性或 Markov 假设。它是可度量环境中的 sequential 结论；本文不把它推广成
-任意拓扑空间的抽象 l.s.c. envelope 声明。
+[SmoothGradientTest](../Energy/Euclidean/SmoothGradient.lean) 是全局 `C∞` 实函数，携带
+`L²(μ)` 和平方梯度可积性的证明，有限能量为 `∫ ‖gradient f x‖² ∂μ`。
+**本项目固定的 Mathlib v4.33.0 中，普通 `C∞` 写作 `ContDiff ℝ ∞`；`ContDiff ℝ ⊤` 表示解析性。**
 
-### Recovery sequences
+光滑梯度 pre-energy 的二次性与 realization 稠密性均已证明。密度证明使用 Mathlib 中紧支撑
+光滑函数在 `L²` 的稠密性，再利用梯度连续且紧支撑获得能量可积性。这里说的是 `L²` 稠密性，
+没有额外声称 graph-norm core。
 
-[`RelaxationRecovery.lean`](../Energy/RelaxationRecovery.lean) 证明：
+具体闭二次型实现采用有限维实 Hilbert 空间、Borel measurable space 与 second-countable
+拓扑。它适用于任意概率测度，不要求密度、log-concavity、紧支撑或协方差非退化。
 
-- 每个有限 relaxed-energy 点都有 recovery sequence；
-- 如果 `P.DenseRealization`，则每个环境点都有 recovery sequence，包括 energy 为 `⊤` 的点。
+[AffineSupport.lean](../Probability/AffineSupport.lean) 取拓扑支撑的 affine span，并证明它闭、
+可测、满测度且最小。选一个支撑原点后，将测度表达在 affine support 的方向空间上。
+[intrinsicL2Equiv](../Energy/Euclidean/IntrinsicAffine.lean) 是原 `L²` 与 intrinsic `L²` 之间的
+双向线性等距等价；在 intrinsic 空间计算 smooth-gradient relaxation，再沿等价拉回，得到
+`Energy.Canonical.energy` 及其闭二次型定理。
 
-第二条的稠密性不能删除：测试类型为空时，relaxation 的值仍可为 `⊤`，但根本没有逼近序列。
+这包含 proper affine support 与零维载体。它消除了法向方向，但不会自动消除仿射支撑内部的
+其他奇异性。ambient 与 intrinsic relaxation 能量相等现已证明；原始测试能量只在
+正交延拓构造中保证保持，不能对任意环境测试假定逐点一致。
 
-### Quadratic closure
+## 四个接口如何区分
 
-[`RelaxationQuadratic.lean`](../Energy/RelaxationQuadratic.lean) 已证明完整的 extended-valued
-结论，而不只是单向不等式：
+| 接口 | 使用的测试或能量 | 当前状态 |
+| --- | --- | --- |
+| `Poincare.constant` | 全局光滑、`L²`、有限梯度能量测试 | Gaussian 与 tensorization 使用此接口 |
+| `Poincare.L2Energy.constant μ energy` | 任意扩展能量的有限域 | 通用优化器与 order law 已证明 |
+| `Poincare.Canonical.constant` | 项目选定的 intrinsic-affine relaxation | 能量、闭二次型与 order law 已证明 |
+| Blueprint 的 `C_P^lit` | locally Lipschitz 文献测试 | 本地 Lean 定义与比较仍待完成 |
 
-```lean
-PreEnergy.Quadratic.sequentialRelaxation_smul_of_ne_zero
-PreEnergy.Quadratic.sequentialRelaxation_parallelogram
-PreEnergy.Quadratic.closedQuadratic_sequentialRelaxation
-```
+Blueprint 的 `C_P^can` 是第三行的简写。当前 Lean 名称保留 `SmoothGradientRelaxation`，避免将
+项目选择当成已完成的文献识别。协方差加权的 `C_P^aff` 是 CMH 路线的另一能量常数，不是同一
+测度上无权常数的别名。
 
-最后一个定理精确地说：
+已证明的桥接顺序是 ambient/intrinsic 相等、legacy/relaxed 常数相等，然后在一般 log-concave
+情形下接通 locally Lipschitz 文献常数（`Euclidean/LogConcaveComparison.lean`）。legacy/relaxed 桥可使用 relaxation 上界、逼近序列和
+`L²` 方差连续性，不依赖 raw/core agreement 或 Cheeger identification。
 
-```text
-P.Quadratic + P.DenseRealization
-  ⇒ ClosedQuadratic P.sequentialRelaxation.
-```
+前两步已有 [12 条已证明比较定理](Euclidean/README.md)，并由 `Foundation` 导出。
+两份证书包含全部结论，公理 guards 同时覆盖 12 条定理及新增的关键辅助定理。
 
-parallelogram identity 本身不需要密度；密度只用于 `ClosedQuadratic` 的稠密有限能量域。这个
-定理也不需要 `AgreesOnTests` 或 closability，因为 relaxation 可以在 realization 的纤维上
-严格降低 concrete energy。
+## 原始能量、一致性与剩余工作
 
-### Conditional contraction transfer
+对 `μ = δ₀`，函数 `0` 与 `id` 表示同一个零 `L²` 元素，但原始梯度能量分别为 `0` 和 `1`。
+因此，对任意奇异测度都要求原始能量在 `L²` fibers 上一致是不成立的。
 
-[`RelaxationContraction.lean`](../Energy/RelaxationContraction.lean) 定义
-`PreEnergy.RelaxedContractionBound C`。若该 bound 已在 realized concrete tests 上建立，且
-`C : X → X` 连续，则
+[FormCore.lean](../Energy/FormCore.lean) 明确区分：
 
-```lean
-P.sequentialRelaxation (C x) ≤ P.sequentialRelaxation x
-```
+- `RespectsAmbientFibers`：原始能量在同一 realization fiber 上一致；
+- `AgreesOnTests`：指定环境能量在每个测试上等于原始能量；
+- `SequentiallyGenerates`：该环境能量等于 sequential relaxation；
+- `IsSequentialCoreFor`：同时具有 agreement 与 generation。
 
-对所有 `x` 成立。模块也给出由 transformed recovery sequences 建立该 bound 的方法。它没有
-证明 smooth-gradient relaxation 对所有 normal contractions 都满足这个前提，因此不能把这条
-条件性 transport 定理称为 Markov 定理。
+最后一个是项目内的精确规格，尚未与文献 graph-norm core 建立等价。以上性质均不属于
+`ClosedQuadratic` 的字段。
 
-## 5. Smooth-gradient 实例
+当前还没有具体 smooth-gradient 的 Markov/Dirichlet witness、raw/core agreement、
+`Ecan = 2 Chμ`、whitening、自伴生成元、半群或 reciprocal spectral-gap 定理。
+旧光滑测试常数、ambient relaxed 常数与所选 intrinsic-affine 常数的等价已经由 Lean 证明；
+locally Lipschitz 文献常数的本地定义与比较仍待形式化。以上剩余工作由 Blueprint 中不同的
+节点承载；KLS 主命题也尚未成为本地 Lean 声明。
 
-[`SmoothGradient.lean`](../Energy/Euclidean/SmoothGradient.lean) 的测试对象是全局
-`ContDiff ℝ ∞` 的实函数，并携带 `L²(μ)` 与平方梯度可积性证明。其有限能量为
+## 来源与检查
 
-```text
-∫ x, ‖gradient f x‖² ∂μ.
-```
+数学来源在声明附近分别记录：旧光滑测试接口说明历史手稿 Definition 2.1 的公式与本地测试域
+选择；光滑密度证明指向固定 Mathlib 的 `Lp.dense_hasCompactSupport_contDiff`；通用 relaxation
+与优化层是此项目已经证明的构造。文献识别与长路线的来源和状态由 Blueprint 另行记录。
 
-公开 frontend 采用有限维实 Hilbert 空间、Borel measurable space 与 second-countable
-topology；这些假设使梯度、可测性和 Mathlib 密度定理在一个稳定边界内工作。
+本文参考 [formech 的固定版本](https://github.com/lyw-ops/formech/tree/d0bb1913acc1f710ba6eadf1244b633abbc75fb9)
+组织“数学含义、具体例子、接口入口、范围与构建”。该参考仅影响书写方式，不提供 KLS 的数学依据。
 
-[`SmoothGradientQuadratic.lean`](../Energy/Euclidean/SmoothGradientQuadratic.lean) 构造测试的
-`0/+/-/-/ℝ-smul`，证明 `toL2` 相容性、梯度能量二次缩放和 parallelogram identity，并导出
-
-```lean
-smoothGradientPreEnergy_quadratic
-```
-
-[`SmoothGradientDensity.lean`](../Energy/Euclidean/SmoothGradientDensity.lean) 使用 Mathlib 的
-compactly supported `C∞` density 结果证明
-
-```lean
-smoothGradientPreEnergy_denseRealization
-```
-
-二者代入通用闭包定理，得到 [`SmoothGradientClosed.lean`](../Energy/Euclidean/SmoothGradientClosed.lean)
-中的命名结论
-
-```lean
-smoothGradientRelaxation_closedQuadratic (μ : ProbabilityMeasure E) :
-  ClosedQuadratic (smoothGradientRelaxation μ)
-```
-
-因此 smooth-gradient relaxation 的零值、二次缩放、完整 parallelogram identity、下半连续性和
-稠密有限能量域均已正式证明。
-
-## 6. Affine support 与 intrinsic `L²`
-
-[`AffineSupport.lean`](../Probability/AffineSupport.lean) 定义
-
-```text
-affineSupport μ = affineSpan ℝ (support μ).
-```
-
-它证明该 affine subspace 闭、可测且具有满测度，并给出 minimality：若闭 affine subspace
-`A` 满足 `x ∈ A` 几乎处处成立，则 `affineSupport μ ≤ A`。
-
-选择支撑中的一个原点后，`intrinsicMap` 把环境点送到 affine support 的 direction space，
-`intrinsicMeasure` 是相应 pushforward law；`reconstruct` 被封装为从 direction space 到环境空间
-的 `AffineIsometry`。已经证明
-
-```text
-intrinsicMap (reconstruct v) = v
-reconstruct (intrinsicMap x) = x        μ-a.e.
-```
-
-以及两个方向的 measure-preserving 性。
-
-[`IntrinsicAffine.lean`](../Energy/Euclidean/IntrinsicAffine.lean) 把这两个映射提升到实 `L²`：
-
-```lean
-toIntrinsicL2 : L²(μ) →ₗᵢ[ℝ] L²(intrinsicMeasure μ)
-toAmbientL2   : L²(intrinsicMeasure μ) →ₗᵢ[ℝ] L²(μ)
-intrinsicL2Equiv : L²(μ) ≃ₗᵢ[ℝ] L²(intrinsicMeasure μ)
-```
-
-两个复合都已证明为恒等，因此这里是**双向线性等距等价**，不是只有单向 embedding。
-`intrinsicAffineSmoothGradientRelaxation` 先经该等价进入 direction space，再计算该空间上的
-smooth-gradient relaxation。
-
-[`IntrinsicAffineClosed.lean`](../Energy/Euclidean/IntrinsicAffineClosed.lean) 用
-`ClosedQuadratic.comap_linearIsometryEquiv` 拉回全部结构，得到
-
-```lean
-intrinsicAffineSmoothGradientRelaxation_closedQuadratic
-```
-
-这会删除 affine support 的法向方向，但不会自动解决 support 内更细的奇异性。
-
-[`Poincare/Euclidean/IntrinsicAffine.lean`](Euclidean/IntrinsicAffine.lean) 再把这一扩展能量
-接到通用 `L²` 优化器，定义
-
-```lean
-intrinsicAffineSmoothGradientRelaxationConstant
-IntrinsicAffineSmoothGradientRelaxationHolds
-intrinsicAffineSmoothGradientRelaxationHolds_iff_constant_le
-```
-
-最后一个定理刻画有限常数有效当且仅当它控制最优 `ENNReal` 常数。它没有比较 intrinsic 与
-ambient 两个 smooth-gradient relaxation constant。
-
-## 7. 为什么仍保留 form-core 层
-
-[`FormCore.lean`](../Energy/FormCore.lean) 分别记录：
-
-- `RespectsAmbientFibers`：concrete energy 在同一 realization fiber 上一致；
-- `AgreesOnTests`：relaxation 在每个 concrete test 上等于原能量；
-- `SequentiallyGenerates`：concrete tests 生成整个 relaxed energy；
-- `IsSequentialCoreFor`：项目内由 agreement 与 generation 组成的精确 core 规格。
-
-这些不是 `ClosedQuadratic` 的字段。对 `μ = δ₀`，函数 `f = 0` 与 `g(x) = x` 表示同一个零
-`L²` 元素，但 ambient gradient energy 分别为 `0` 与 `1`。因此 raw ambient tests 一般不可能
-无条件满足 fiber consistency 或 `AgreesOnTests`；sequential relaxation 正是允许降低这种
-presentation-dependent energy 的机制。
-
-## 8. 当前明确不声称
-
-当前代码没有证明：
-
-- `smoothGradientRelaxation` 或 intrinsic 版本满足所有 normal contractions，因此没有
-  Markov/Dirichlet witness；
-- smooth-gradient tests 满足 `AgreesOnTests`、`IsSequentialCoreFor`，或 graph-norm core
-  等价；
-- raw ambient gradient energy 对奇异测度在 `L²` fibers 上一致；
-- smooth-gradient relaxation 与文献中的 canonical energy `2 · Chμ` 相等；
-- intrinsic-affine relaxation constant 与 ambient smooth-gradient relaxation constant 相等；
-- 新 `L²` 扩展能量常数等于 legacy `Poincare.Basic` 的光滑测试常数；
-- 已有自伴生成元、半群、`constant = 1 / spectralGap`、Bakry–Émery、localization 或 KLS
-  主定理。
-
-标准 metric-measure 归一化的预期目标仍是
-
-```text
-Ecan(f) = 2 · Chμ(f) = ∫ |Df|_*² dμ,
-```
-
-但当前 API 有意保留 `smoothGradientRelaxation` 名称，直到 identification theorem 真正完成。
-带参数的 anisotropic energy `∫ ⟨Q∇f, ∇f⟩ dμ` 也应保持为另一对象，不能与无参数 canonical
-energy 混名。
-
-## 9. 可复现构建
-
-从 `formalization/` 运行以下命令；它们可直接复制：
+从 `formalization/` 运行：
 
 ```sh
-lake env lean -DwarningAsError=true FunctionalInequalities/Energy/RelaxationQuadratic.lean
-lake env lean -DwarningAsError=true FunctionalInequalities/Energy/Euclidean/SmoothGradientClosed.lean
-lake env lean -DwarningAsError=true FunctionalInequalities/Energy/Euclidean/IntrinsicAffineClosed.lean
-lake env lean -DwarningAsError=true FunctionalInequalities/Poincare/Euclidean/IntrinsicAffine.lean
-lake build FunctionalInequalities.Poincare.Foundation
+lake build Examples
+lake build solutions.FoundationAxiomAudit
 lake build
 ```
 
-`Foundation.lean` 是下游应用和 smoke test 的便利入口；可复用低层模块仍应 import 精确依赖，
-避免让 aggregate 反向进入基础层。
+[FoundationAxiomAudit.lean](../../../solutions/FoundationAxiomAudit.lean) 在默认构建中固定八个核心
+声明的传递公理集为 `propext`、`Classical.choice`、`Quot.sound`。它补充现有四个节点证书及
+Gaussian audit，不新增 ledger 节点。完整构建验证 Lean 证明；文献含义的一致性仍须结合上述
+接口边界审阅。

@@ -42,49 +42,152 @@ constant.  The constant-level bridges used by every route are collected separate
   \]
 \end{theorem}
 
-The factor $2$ is part of the intended normalization, not an established declaration.  This node
-remains \texttt{notready} until a local Cheeger-energy API and its affine-support convention are
-frozen; it does not presuppose that Mathlib will supply that API.
+The factor $2$ is part of the intended normalization, not an established declaration. This node
+remains \texttt{notready} because the precise Cheeger-energy definition to formalize is still
+unresolved: relaxation of the local slope and asymptotic-Lipschitz relaxation must be
+distinguished, and their comparison for singular measures has no source recorded in the
+bibliography. The local API must make this choice and its affine-support transport explicit;
+it does not presuppose that Mathlib will supply that API. This is a statement question, not a
+requirement to freeze public signatures before proof work.
 
 \section{Core and coordinate comparisons}
 
-\begin{theorem}[Raw tests agree with the closed core]
-  \label{thm:smooth-gradient-raw-core-agreement}
-  \notready
-  \uses{obs:dirac-raw-energy,def:smooth-gradient-preenergy,def:smooth-gradient-relaxation}
-  Under hypotheses that exclude representative-dependent raw energy, formulate and prove the
-  exact \texttt{AgreesOnTests} and form-core statement relating smooth tests to the relaxed
-  energy.
+\begin{obstruction}[Ambient raw energy sees normal derivatives]
+  \label{obs:normal-direction-raw-energy}
+  \uses{def:affine-support-intrinsic-law,def:smooth-gradient-preenergy}
+  Let the affine support of $\mu$ be a proper affine subspace $A=a+V$.  If $n\in V^\perp$ is a
+  unit vector and $u(x)=\inner{n}{x-a}$, then $u=0$ in $L^2(\mu)$ whereas
+  \[
+    \int\norm{\nabla u}^2\dd\mu=1.
+  \]
+  Thus ambient raw energy depends on the extension away from $A$, even when the intrinsic law has
+  a regular density.
+\end{obstruction}
+\begin{proof}
+  The function vanishes on $A$, which carries $\mu$, while its ambient gradient is the constant
+  unit vector $n$.
+\end{proof}
+
+\begin{question}[Sequential cores and graph-norm cores]
+  \label{q:smooth-gradient-raw-core-agreement}
+  \uses{obs:dirac-raw-energy,obs:normal-direction-raw-energy,
+        def:smooth-gradient-preenergy,def:smooth-gradient-relaxation}
+  Beyond the density hypotheses below, determine when raw smooth-gradient energy descends through
+  the $L^2$ realization and satisfies the project predicate \texttt{IsSequentialCoreFor}.  On a
+  proper affine support the statement must be intrinsic, or must quotient out normal derivatives.
+  Separately, construct the finite-energy domain with its graph norm and prove the precise
+  implication or equivalence between graph-norm density and \texttt{IsSequentialCoreFor} under
+  closed-quadratic hypotheses.  No such equivalence is assumed definitionally.
+\end{question}
+
+\begin{theorem}[Intrinsic raw/sequential-core agreement under density hypotheses]
+  \label{thm:smooth-gradient-raw-core-agreement-density}
+  \uses{def:affine-support-intrinsic-law,def:smooth-gradient-preenergy,
+        def:smooth-gradient-relaxation}
+  Let $A=a+V$ be the affine support of $\mu$, and write $\nu$ for its intrinsic law.  Assume that
+  there are an open set $\Omega\subseteq V$ and a Borel function $\rho:V\to[0,\infty)$ such that
+  $\nu(V\setminus\Omega)=0$ and, for every Borel set $B\subseteq\Omega$,
+  \[
+    \nu(B)=\int_B\rho\dd\mathrm{Leb}_V.
+  \]
+  Assume also that $\rho>0$ almost everywhere on $\Omega$ and that
+  $\rho,\rho^{-1}\in L^\infty_{\mathrm{loc}}(\Omega,\mathrm{Leb}_V)$. The explicit positivity
+  premise is retained: real inversion in Lean sends zero to zero, so bounded reciprocal alone
+  does not encode positivity. Write $P_\nu$ for the
+  intrinsic smooth-gradient pre-energy and
+  \[
+    \mathcal E_\nu=P_\nu.\mathrm{sequentialRelaxation}.
+  \]
+  Then $P_\nu.\texttt{AgreesOnTests}(\mathcal E_\nu)$.  Consequently
+  $P_\nu.\texttt{IsSequentialCoreFor}(\mathcal E_\nu)$, since
+  \texttt{SequentiallyGenerates} is definitional for $\mathcal E_\nu$.
 \end{theorem}
 
-The Dirac obstruction shows why the missing hypotheses are mathematical data.  Neither the
-Dirichlet property nor a Cheeger identification is declared as a dependency until an actual proof
-uses it.  Raw/core agreement is an optional, strictly stronger testwise identification.  It is
-not a premise of the legacy--relaxed constant bridge.
+This gives a density-case answer to \cref{q:smooth-gradient-raw-core-agreement}; the question is
+not a logical premise of the theorem.  The three typewriter names above refer to the existing Lean
+predicates in \path{FunctionalInequalities/Energy/FormCore.lean}; graph-norm density is deliberately
+left in the question rather than conflated with that interface.  By
+\cref{thm:borell-logconcave-density}, the displayed density hypotheses hold for every
+finite-dimensional log-concave law in intrinsic coordinates.
+
+The two obstructions isolate representative dependence from the remaining density question.
+Neither the Dirichlet property nor a Cheeger identification is declared as a dependency until an
+actual proof uses it.  Intrinsic raw/core agreement is an optional, strictly stronger testwise
+identification; it is not a premise of the legacy--relaxed constant bridge.
+
+\begin{lemma}[Smooth tests restrict and extend along affine support]
+  \label{lem:smooth-tests-affine-restriction-extension}
+  \lean{FunctionalInequalities.Energy.Euclidean.SmoothGradientTest.exists_intrinsic_restriction,
+        FunctionalInequalities.Energy.Euclidean.SmoothGradientTest.exists_ambient_extension}
+  \leanok
+  \uses{def:smooth-gradient-preenergy,def:affine-support-intrinsic-law,
+        thm:intrinsic-l2-equivalence}
+  Let $\mu$ be a finite-dimensional Borel probability, with affine support $a+V$ and intrinsic
+  law $\nu$. Restriction gives an intrinsic smooth finite-energy test $g(v)=f(a+v)$ with the
+  transported $L^2$ realization and no greater raw energy. Every intrinsic test extends by
+  $f(x)=g(\operatorname{proj}_V(x-a))$, with the corresponding realization and the same raw energy.
+  Zero-dimensional support is included.
+\end{lemma}
+\begin{proof}
+  \leanok
+  The chain rule bounds gradient norms under smooth contractions. Reconstruction and orthogonal
+  projection preserve the respective laws. Restricting the constructed extension gives the
+  original test, so the two energy inequalities force equality.
+\end{proof}
 
 \begin{theorem}[Ambient and intrinsic relaxations agree]
   \label{thm:ambient-intrinsic-relaxation-equality}
-  \notready
-  \uses{def:smooth-gradient-relaxation,def:intrinsic-affine-energy,thm:intrinsic-l2-equivalence}
-  For every finite-dimensional Borel probability $\mu$, the intrinsic energy is already pulled
-  back to ambient $L^2(\mu)$, and on that common carrier
+  \lean{FunctionalInequalities.Energy.Euclidean.smoothGradientRelaxation_eq_canonical}
+  \leanok
+  \uses{def:smooth-gradient-relaxation,def:intrinsic-affine-energy,thm:intrinsic-l2-equivalence,
+        lem:smooth-tests-affine-restriction-extension}
+  Let $\mu$ be a Borel probability law on a finite-dimensional real Hilbert space.  Transport the
+  smooth-gradient relaxation of its intrinsic law back along the intrinsic $L^2$ equivalence, as
+  in \cref{def:intrinsic-affine-energy}.  Then, on the common carrier $L^2(\mu)$,
   \[
     \mathcal E^{\mathrm{amb}}_\mu(f)
       =\mathcal E^{\mathrm{intr}}_\mu(f)
     \qquad\text{for every }f\in L^2(\mu).
   \]
-  Consequently the ambient and selected intrinsic-affine optimal constants are equal.  The
-  equality is independent of the affine origin used to write intrinsic coordinates.
+  This includes laws on proper affine subspaces and the zero-dimensional case.
 \end{theorem}
 \begin{proof}
-  Open.  Restriction of an ambient smooth test to the affine support projects its gradient onto
-  the tangent space and cannot increase energy.  Conversely, composing an intrinsic smooth test
-  with the orthogonal projection onto the affine support gives a global ambient smooth extension
-  with the same energy.  Apply both constructions to approximating sequences and take the two
-  relaxations.
+  \leanok
+   Restricting an ambient smooth test to the affine support projects its gradient onto the
+  tangent space, so it cannot increase raw energy and gives one inequality after relaxation.
+  Conversely, composing an intrinsic smooth test with the orthogonal projection onto the affine
+  support gives a globally smooth ambient extension, constant in every normal direction, with
+  exactly the same raw energy.  Applying both operations termwise to approximating sequences gives
+  the reverse inequality.  In dimension zero the constant extension has zero energy on both sides.
 \end{proof}
+
+\begin{corollary}[Ambient and intrinsic-affine constants agree]
+  \label{cor:ambient-intrinsic-constant-equality}
+  \lean{FunctionalInequalities.Poincare.Ambient.constant_eq_canonical,
+        FunctionalInequalities.Poincare.Ambient.holds_iff_canonical}
+  \leanok
+  \uses{thm:ambient-intrinsic-relaxation-equality,def:l2-energy-poincare-constant,
+        def:selected-canonical-frontend}
+  For every finite-dimensional Borel probability law $\mu$,
+  \[
+    \CE\bigl(\mu,\mathcal E^{\mathrm{amb}}_\mu\bigr)=\CPCan(\mu)
+  \]
+  as extended nonnegative constants, including the value $+\infty$. The corresponding
+  finite-constant predicates agree for every $C\ge0$.
+\end{corollary}
+\begin{proof}
+  \leanok
+   The two energies are equal on the same $L^2(\mu)$ carrier by the preceding theorem, so
+  their finite-energy domains, Rayleigh quotients, and extended suprema coincide.
+\end{proof}
+
+Although intrinsic coordinates use an affine origin, changing that origin only translates the
+intrinsic law.  Translation conjugates the two $L^2$ carriers isometrically and preserves
+variance and gradient energy.  The energy equality and the constant equality are therefore
+independent of the chosen affine origin.
 
 The preferred implementation order is the exact ambient/intrinsic equality, the direct
 legacy--relaxed bridge of \cref{chap:shared-analytic-bridges}, and then the literature test-density
-bridge.  Dirichlet and Cheeger identifications follow as form enhancements.  A raw/core theorem
+bridge.  The first two are now proved in Lean, with two local certificates and unchanged reviewed signatures.
+Dirichlet and Cheeger identifications follow as form enhancements.  A raw/core theorem
 with explicit singular-measure hypotheses remains useful, but it is not on this main path.

@@ -12,17 +12,47 @@ The existing `lem:linear-test-lower` node remains required. It,
 
 ## Lifecycle
 
+The repository is in an exploratory stage. Public Lean interfaces may evolve, including those
+of proved nodes; there is no default backward-compatibility promise or mandatory freeze stage.
+Proof work may begin while a statement is being refined. New nodes normally move directly from
+`drafted` to `proved` once the current statement, proof, and certification evidence agree.
+
 | Status | Meaning | `checked_by` | Lean artifact |
 | --- | --- | --- | --- |
-| `drafted` | Candidate statement awaiting human review | `null` | Compilable declaration skeleton; placeholders allowed |
-| `frozen` | Human-approved statement awaiting proof | `null` | Same frozen signatures; placeholders allowed |
-| `proved` | Completed proof and certification | `"lean"` | No forbidden escape tokens in the artifact or its local imports |
+| `drafted` | Current statement under development or awaiting a complete proof | `null` | Compilable declaration skeleton; placeholders allowed |
+| `proved` | Current statement has a completed proof and certification | `"lean"` | No forbidden escape tokens in the artifact or its local imports |
+| `frozen` | Historical human-reviewed statement snapshot, still accepted by the checker | `null` | Compilable unproved declaration; placeholders allowed |
 
-The intended progression is `drafted → frozen → proved`. Only human review can freeze a
-statement. Proof work begins after that review; the proof agent must preserve the frozen public
-signatures and ledger statement. A suspected error goes into a new append-only exploration
-entry for human resolution. The checker validates a snapshot; it does not infer human approval
-or enforce transition history. A green skeleton build is not proof certification.
+`frozen` is not used as a required stage for new work. Earlier freeze and acceptance records
+remain dated review evidence, not permanent restrictions on public signatures. No per-node API
+stability field is needed: interface evolution is the repository default. An explicit stability
+commitment may be introduced later for selected mature interfaces.
+
+`proved`, `checked_by: lean`, and Blueprint `\leanok` certify the current statement and proof;
+they do not freeze an interface. When renaming declarations, reorganizing parameters, or
+refactoring modules, migrate the affected consumers directly and rerun the relevant checks.
+Changes to hypotheses, conclusions, test domains, or normalization must also be recorded in a
+new decision or exploration entry and reflected in the ledger, Blueprint, certificates, and
+consumers as applicable. Check whether the original mathematical goal is still covered; a
+stronger hypothesis or weaker conclusion must not be hidden by a successful build. If the revised
+statement lacks a complete proof, record it as `drafted` with `checked_by: null` and remove its
+Lean-certification claims until it is proved again.
+
+The checker validates a snapshot; it does not infer human approval or enforce transition history.
+A green skeleton build is not proof certification. Mathematical review and transitive axiom
+inspection remain part of certification, without a separate mandatory freeze checkpoint.
+
+The public KLS target additionally has a definition-dependency golden under
+`research/a-series/statement-snapshot/`. This records a reviewed statement baseline, not a ledger
+certificate or a permanent signature lock. Intentional baseline changes require a new nonempty
+`research/decisions/` record explaining mathematical scope changes and whether the original goal
+is still covered; toolchain or printing-only changes must be identified as such. Update it explicitly
+with `python3 research/statement_snapshot.py update --decision research/decisions/NEW-RECORD.md`.
+Normal verification only compares and fails on drift. The checker verifies the decision's content
+hash and requires a new decision path for an update; it cannot judge the adequacy of the review.
+See [verification.md](verification.md) for the local definition closure, external trust leaves and
+the rule to finish source/decision edits before final verification. Existing historical records
+remain append-only. This rule does not require a freeze before developing an interface change.
 
 For a future unproved node, retain the `checked_by` field with the explicit JSON value `null`.
 This illustrative node is not an entry in the current ledger:
@@ -46,6 +76,13 @@ entries remain unchanged as historical records. In particular, their past placeh
 do not describe the current proved node.
 
 ## Structural and proof checks
+
+The [local verification runner](verification.md) joins this ledger with the existing explicit
+Blueprint certificate mapping and fails if a proved node has no mapping for axiom inspection.
+It requires a report for every mapped certificate, audits all Blueprint Lean anchors, replays
+the local compiled modules, and ties the results to actual source hashes. All seven current
+certificates also retain default-build axiom guards. The generated task atlas derives these
+statuses; `tasks.json` does not own or duplicate certification state.
 
 For every status, the artifact must exist under `solutions/`, have the `.lean` suffix, name the
 exact node id in its header, and be a root of a default Lake target. A draft artifact can import
@@ -103,3 +140,28 @@ proof-escape checks, axiom audit and local machine gates are recorded in
 `explorations/2026-09-04-gaussian-poincare-acceptance.md`. Earlier candidate, design, signature
 and statement-validation records remain unchanged and retain their historical `drafted` state.
 No schema, checker or regression-test exemption was introduced for this promotion.
+
+## Comparison certificates (2026-09-06)
+
+`lem:ambient-intrinsic-poincare-comparison` and `lem:legacy-relaxed-poincare-comparison`
+are now `proved` with `checked_by: lean`. Their named certificates package all five and seven
+reviewed conclusions respectively. The owner authorized proof work after the external-review
+assessment; the 12 theorem signatures are unchanged. The approval, semantic boundaries and
+local proof audits are recorded in `decisions/2026-09-06-poincare-comparison-proofs.md`.
+The earlier draft record is preserved. That comparison batch brought the ledger to six certified nodes.
+
+## Weighted approximation acceptance (2026-09-06)
+
+`lem:covariance-test-core-density` adds the seventh proved node. Its sole certificate packages
+all four original contracts; both certificate and reusable theorems retain default-build axiom
+guards. The existing Blueprint mapping includes this node directly, without another graph node
+or checker exemption. See [the acceptance record](decisions/2026-09-06-weighted-approximation-acceptance.md).
+
+## Smooth/literature comparison acceptance (2026-09-06)
+
+`thm:smooth-lipschitz-constant-equivalence` is the eighth proved node. Its sole certificate
+packages all eight proved interfaces with individual quantifiers; each component and the
+certificate have default-build axiom guards. The comparison retains intrinsic absolute continuity,
+so the general log-concave comparison and Borell node remain uncertified. The a.e. slope and
+extended-energy declarations omit a redundant second-countable instance, covering the original
+scope. See [the proof record](decisions/2026-09-06-smooth-literature-proofs.md).

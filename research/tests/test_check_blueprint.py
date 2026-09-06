@@ -55,10 +55,10 @@ class BlueprintFixture(unittest.TestCase):
             "moment-map-cmh": "moment-map-cmh-recovery",
             "conditional-fiber-frame": "conditional-fiber-frame",
         }
-        shared = sorted(CHECKER.REQUIRED_SHARED_PREREQUISITES)
+        adapters = sorted(CHECKER.REQUIRED_REPOSITORY_ADAPTERS)
         claim_labels = [
             "conj:kls",
-            *shared,
+            *adapters,
             *(node for nodes in self.active_route_nodes.values() for node in nodes),
             "ass:weighted-package",
             "prop:weighted-spectator-obstruction",
@@ -77,7 +77,7 @@ class BlueprintFixture(unittest.TestCase):
             "claim\n"
             "\\end{lemma}"
             for label in claim_labels
-            if label != "conj:kls"
+            if label != "conj:kls" and label not in CHECKER.CERTIFICATES
         )
         blocks.extend(
             "\\begin{definition}\n"
@@ -132,7 +132,19 @@ class BlueprintFixture(unittest.TestCase):
         ]
         claims = [
             claim("conj:kls"),
-            *(claim(label, local=True) for label in shared),
+            *(
+                claim(
+                    label, "proved",
+                    [{
+                        "kind": "lean",
+                        "source": local_source,
+                        "ledger_node": CHECKER.CERTIFICATES[label][0],
+                        "declaration": CHECKER.CERTIFICATES[label][1],
+                    }],
+                    local=True,
+                ) if label in CHECKER.CERTIFICATES else claim(label, local=True)
+                for label in adapters
+            ),
             claim("ass:tight-prefix-carleson"),
             claim("cor:tight-window-consumption", "proved", review),
             claim("q:mm-spectral-occupation"),
@@ -201,9 +213,9 @@ class BlueprintFixture(unittest.TestCase):
             "targets": [
                 {
                     "target": "conj:kls",
-                    "prerequisites": {
+                    "adapters": {
                         "operator": "all_of",
-                        "items": [{"node": label} for label in shared],
+                        "items": [{"node": label} for label in adapters],
                     },
                     "composition": {
                         "operator": "any_of",
@@ -347,11 +359,15 @@ class BlueprintCheckerTests(BlueprintFixture):
         self.routes["statement"] = "not registry data"
         self.claim("conj:kls")["lean"] = "Fake.claim"
         self.branch("eldan-tight-prefix")["status"] = "proved"
+        target = self.routes["targets"][0]  # type: ignore[index]
+        target["prerequisites"] = target.pop("adapters")
         self.write_routes()
         errors = "\n".join(self.errors())
         self.assertIn("routes: unknown field: statement", errors)
         self.assertIn("routes.claims[0]: unknown field: lean", errors)
         self.assertIn("unknown field: status", errors)
+        self.assertIn("routes.targets[0]: unknown field: prerequisites", errors)
+        self.assertIn("adapters is missing required repository adapter", errors)
 
     def test_sources_are_pinned_and_paths_are_safe(self) -> None:
         exploration = self.source("kls-exploration")
@@ -470,15 +486,24 @@ class BlueprintCheckerTests(BlueprintFixture):
         self.assertIn("node references unknown label q:mm-spectral-occupation", errors)
         self.assertIn("unknown label route:moment-map-cmh", errors)
 
-    def test_shared_prerequisites_are_registry_requirements_not_tex_uses(self) -> None:
+    def test_repository_adapters_are_registry_metadata_not_tex_uses(self) -> None:
         self.assertNotIn("\\uses", self.chapter.read_text(encoding="utf-8"))
         self.assertEqual(self.errors(), [])
 
-    def test_kls_requires_both_shared_prerequisites(self) -> None:
+    def test_kls_requires_both_repository_adapters(self) -> None:
         target = self.routes["targets"][0]  # type: ignore[index]
-        target["prerequisites"] = {"node": "thm:affine-isotropic-reduction"}
+        target["adapters"] = {"node": "thm:affine-isotropic-reduction"}
         self.write_routes()
-        self.assertIn("missing shared requirement", "\n".join(self.errors()))
+        self.assertIn("missing required repository adapter", "\n".join(self.errors()))
+
+    def test_kls_repository_adapters_must_be_all_of(self) -> None:
+        target = self.routes["targets"][0]  # type: ignore[index]
+        target["adapters"]["operator"] = "any_of"  # type: ignore[index]
+        self.write_routes()
+        self.assertIn(
+            "routes.targets[0].adapters must have root operator 'all_of'",
+            "\n".join(self.errors()),
+        )
 
     def test_non_active_branches_cannot_be_target_exits(self) -> None:
         target = self.routes["targets"][0]  # type: ignore[index]
@@ -549,11 +574,12 @@ class BlueprintCheckerTests(BlueprintFixture):
         self.chapter.write_text(text, encoding="utf-8")
         self.assertIn("must not encode every any_of route node", "\n".join(self.errors()))
 
-    def test_kls_target_may_use_shared_prerequisites(self) -> None:
-        shared = sorted(CHECKER.REQUIRED_SHARED_PREREQUISITES)
+    def test_kls_target_may_use_an_adapter_when_it_is_a_logical_dependency(self) -> None:
         text = self.chapter.read_text(encoding="utf-8")
         text = text.replace(
-            "KLS target", "KLS target\n\\uses{" + ",".join(shared) + "}", 1
+            "KLS target",
+            "KLS target\n\\uses{thm:affine-isotropic-reduction}",
+            1,
         )
         self.chapter.write_text(text, encoding="utf-8")
         self.assertEqual(self.errors(), [])
@@ -639,53 +665,54 @@ class BlueprintCheckerTests(BlueprintFixture):
         self.assertIn("imported claims require published evidence", "\n".join(self.errors()))
 
     def test_each_certificate_has_its_exact_lean_mapping(self) -> None:
-        text = self.chapter.read_text(encoding="utf-8")
-        text = text.replace(
-            "Solutions.LemLinearTestLower.certificate",
-            "Solutions.NotTheCertificate.certificate",
-        )
-        self.chapter.write_text(text, encoding="utf-8")
-        self.assertIn(
-            "\\lean must name Solutions.LemLinearTestLower.certificate",
-            "\n".join(self.errors()),
-        )
+        original = self.chapter.read_text(encoding="utf-8")
+        for label, (_node_id, declaration) in CHECKER.CERTIFICATES.items():
+            with self.subTest(label=label):
+                self.chapter.write_text(
+                    original.replace(declaration, "Solutions.NotTheCertificate.certificate"),
+                    encoding="utf-8",
+                )
+                self.assertIn(f"\\lean must name {declaration}", "\n".join(self.errors()))
 
     def test_certificate_claim_requires_leanok(self) -> None:
-        text = self.chapter.read_text(encoding="utf-8")
-        needle = (
-            "\\label{cert:linear-test-lower}\n"
-            "\\lean{Solutions.LemLinearTestLower.certificate}\n"
-            "\\leanok\n"
-        )
-        self.chapter.write_text(
-            text.replace(needle, needle.replace("\\leanok\n", "")), encoding="utf-8"
-        )
-        self.assertIn("certified statement must contain \\leanok", "\n".join(self.errors()))
+        original = self.chapter.read_text(encoding="utf-8")
+        for label, (_node_id, declaration) in CHECKER.CERTIFICATES.items():
+            with self.subTest(label=label):
+                needle = f"\\label{{{label}}}\n\\lean{{{declaration}}}\n\\leanok\n"
+                self.chapter.write_text(
+                    original.replace(needle, needle.replace("\\leanok\n", "")),
+                    encoding="utf-8",
+                )
+                self.assertIn(
+                    "certified statement must contain \\leanok", "\n".join(self.errors())
+                )
 
     def test_certificate_requires_lean_certified_ledger_node(self) -> None:
-        node = next(
-            node
-            for node in self.ledger["nodes"]  # type: ignore[index]
-            if node["id"] == "lem:linear-test-lower"
-        )
-        node.update(status="frozen", checked_by=None)
-        self.write_ledger()
-        self.assertIn(
-            "must have status 'proved' and checked_by 'lean'",
-            "\n".join(self.errors()),
-        )
+        for node_id, _declaration in CHECKER.CERTIFICATES.values():
+            node = next(
+                node for node in self.ledger["nodes"] if node["id"] == node_id
+            )
+            with self.subTest(node_id=node_id):
+                node.update(status="frozen", checked_by=None)
+                self.write_ledger()
+                self.assertIn(
+                    "must have status 'proved' and checked_by 'lean'",
+                    "\n".join(self.errors()),
+                )
+            node.update(status="proved", checked_by="lean")
+            self.write_ledger()
 
-    def test_all_four_certificate_labels_are_required(self) -> None:
-        text = self.chapter.read_text(encoding="utf-8")
-        text = text.replace(
-            "\\label{cert:gaussian-one-dimensional}",
-            "\\label{cert:gaussian-omitted}",
-        )
-        self.chapter.write_text(text, encoding="utf-8")
-        self.assertIn(
-            "missing certified result label: cert:gaussian-one-dimensional",
-            "\n".join(self.errors()),
-        )
+    def test_all_certificate_labels_are_required(self) -> None:
+        original = self.chapter.read_text(encoding="utf-8")
+        for label in CHECKER.CERTIFICATES:
+            with self.subTest(label=label):
+                self.chapter.write_text(
+                    original.replace(f"\\label{{{label}}}", "\\label{cert:omitted}"),
+                    encoding="utf-8",
+                )
+                self.assertIn(
+                    f"missing certified result label: {label}", "\n".join(self.errors())
+                )
 
 
 if __name__ == "__main__":

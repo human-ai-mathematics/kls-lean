@@ -266,3 +266,10 @@ theorem certificate :
       Poincare.constant_eq_zero_of_subsingleton μ⟩
 
 end Solutions.LemPoincareFiniteTensorization
+
+set_option pp.universes false in
+/--
+info: 'Solutions.LemPoincareFiniteTensorization.certificate' depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms Solutions.LemPoincareFiniteTensorization.certificate

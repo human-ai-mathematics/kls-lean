@@ -50,28 +50,32 @@ theorem ofL2Energy_energy (μ : ProbabilityMeasure α)
 
 end TestFamily
 
+namespace L2Energy
+
 /-- The optimal extended Poincaré constant of an energy on real `L²(μ)`. -/
-def constantOfL2Energy (μ : ProbabilityMeasure α)
+def constant (μ : ProbabilityMeasure α)
     (energy : Energy.Functional (Lp ℝ 2 (μ : Measure α))) : ENNReal :=
   (TestFamily.ofL2Energy μ energy).constant
 
 /-- A finite Poincaré constant is valid on every finite-energy `L²` test. -/
-def HoldsL2Energy (μ : ProbabilityMeasure α)
+def Holds (μ : ProbabilityMeasure α)
     (energy : Energy.Functional (Lp ℝ 2 (μ : Measure α))) (C : NNReal) : Prop :=
   (TestFamily.ofL2Energy μ energy).Holds C
 
 /-- Unfolding validity gives the Poincaré inequality on the finite-energy domain. -/
-theorem holdsL2Energy_iff (μ : ProbabilityMeasure α)
+theorem holds_iff (μ : ProbabilityMeasure α)
     (energy : Energy.Functional (Lp ℝ 2 (μ : Measure α))) (C : NNReal) :
-    HoldsL2Energy μ energy C ↔
+    Holds μ energy C ↔
       ∀ f : energy.domain, L2.variance μ f.1 ≤ C * energy.finiteValue f :=
   Iff.rfl
 
 /-- A finite `L²` Poincaré constant is valid exactly when it bounds the optimal one. -/
-theorem holdsL2Energy_iff_constant_le (μ : ProbabilityMeasure α)
+theorem holds_iff_constant_le (μ : ProbabilityMeasure α)
     (energy : Energy.Functional (Lp ℝ 2 (μ : Measure α))) (C : NNReal) :
-    HoldsL2Energy μ energy C ↔ constantOfL2Energy μ energy ≤ (C : ENNReal) := by
-  simpa [HoldsL2Energy, constantOfL2Energy] using
+    Holds μ energy C ↔ constant μ energy ≤ (C : ENNReal) := by
+  simpa [Holds, constant] using
     TestFamily.holds_iff_constant_le (TestFamily.ofL2Energy μ energy) C
+
+end L2Energy
 
 end FunctionalInequalities.Poincare

@@ -4,8 +4,10 @@
 The committed ``ledger.yaml`` uses the JSON subset of YAML 1.2, allowing this
 checker to run with the Python standard library.  Exit 0 means that the ledger
 is structurally valid and every node names a Lean artifact in the default
-Lake build. Drafted/frozen statements may contain placeholders; only proved
-nodes can claim ``checked_by: lean`` and must pass the escape-token checks.
+Lake build. Drafts and historical frozen snapshots may contain placeholders;
+only proved nodes can claim ``checked_by: lean`` and must pass the escape-token
+checks. This snapshot checker permits direct drafted-to-proved development;
+it does not require a freeze or enforce public signature stability.
 
 This structural check does not replace ``lake build`` or semantic review.
 """

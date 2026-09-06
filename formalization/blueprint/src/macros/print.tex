@@ -5,6 +5,20 @@
 \newcommand{\mathlibok}{}
 \newcommand{\notready}{}
 
+% Shared numbering does not make a lemma, assumption, or definition a theorem.
+% Keep cleveref's type local to each environment while retaining one counter.
+\AddToHook{env/proposition/begin}{\crefalias{theorem}{proposition}}
+\AddToHook{env/lemma/begin}{\crefalias{theorem}{lemma}}
+\AddToHook{env/corollary/begin}{\crefalias{theorem}{corollary}}
+\AddToHook{env/conjecture/begin}{\crefalias{theorem}{conjecture}}
+\AddToHook{env/definition/begin}{\crefalias{theorem}{definition}}
+\AddToHook{env/assumption/begin}{\crefalias{theorem}{assumption}}
+\AddToHook{env/question/begin}{\crefalias{theorem}{question}}
+\AddToHook{env/obstruction/begin}{\crefalias{theorem}{obstruction}}
+\crefname{assumption}{Assumption}{Assumptions}
+\crefname{question}{Question}{Questions}
+\crefname{obstruction}{Obstruction}{Obstructions}
+
 % Make dependencies visible to LaTeX's undefined-reference check without printing them.
 \ExplSyntaxOn
 \NewDocumentCommand{\uses}{m}

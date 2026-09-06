@@ -84,8 +84,8 @@ or from a particular Dirichlet form.
 \begin{definition}[Poincar\'e constant of an $L^2$ energy]
   \label{def:l2-energy-poincare-constant}
   \lean{FunctionalInequalities.Poincare.TestFamily.ofL2Energy,
-        FunctionalInequalities.Poincare.constantOfL2Energy,
-        FunctionalInequalities.Poincare.HoldsL2Energy}
+        FunctionalInequalities.Poincare.L2Energy.constant,
+        FunctionalInequalities.Poincare.L2Energy.Holds}
   \leanok
   \uses{def:l2-mean-variance,def:extended-energy,def:poincare-test-family}
   For a probability law $\mu$ and an extended energy $\mathcal E$ on real $L^2(\mu)$, let
@@ -94,19 +94,19 @@ or from a particular Dirichlet form.
       =\sup_{f\in\dom(\mathcal E)}
         \frac{\Var_\mu(f)}{\mathcal E_{\mathrm{fin}}(f)}.
   \]
-  The predicate $\operatorname{HoldsL2Energy}(\mu,\mathcal E,C)$ is the corresponding inequality
+  The predicate $\operatorname{Poincare.L2Energy.Holds}(\mu,\mathcal E,C)$ is the corresponding inequality
   on every finite-energy $L^2$ class.
 \end{definition}
 
 \begin{theorem}[Energy-parametrized optimal constant order law]
   \label{thm:l2-energy-holds-order}
-  \lean{FunctionalInequalities.Poincare.holdsL2Energy_iff,
-        FunctionalInequalities.Poincare.holdsL2Energy_iff_constant_le}
+  \lean{FunctionalInequalities.Poincare.L2Energy.holds_iff,
+        FunctionalInequalities.Poincare.L2Energy.holds_iff_constant_le}
   \leanok
   \uses{def:l2-energy-poincare-constant}
   For every finite nonnegative constant $C$,
   \[
-    \operatorname{HoldsL2Energy}(\mu,\mathcal E,C)
+    \operatorname{Poincare.L2Energy.Holds}(\mu,\mathcal E,C)
     \quad\Longleftrightarrow\quad
     \CE(\mu,\mathcal E)\le C.
   \]
@@ -115,4 +115,27 @@ or from a particular Dirichlet form.
   \leanok
   This is the order characterization of the supremum of the finite-domain Rayleigh quotients,
   including zero energy and infinite optimal constants.
+\end{proof}
+
+
+\begin{lemma}[Relaxation preserves Poincar\'e constants]
+  \label{lem:preenergy-poincare-relaxation}
+  \lean{FunctionalInequalities.Poincare.TestFamily.ofPreEnergy,
+        FunctionalInequalities.Poincare.TestFamily.holds_ofPreEnergy_iff,
+        FunctionalInequalities.Poincare.TestFamily.constant_ofPreEnergy_eq}
+  \leanok
+  \uses{def:l2-mean-variance,def:preenergy-relaxation,
+        def:poincare-test-family,def:l2-energy-poincare-constant}
+  Let $\mu$ be a probability measure on any measurable space and $P$ a finite pre-energy
+  realized in real $L^2(\mu)$. Give each concrete test its realized variance and raw energy.
+  For every finite $C\ge0$, its Poincar\'e inequality holds at $C$ exactly when the inequality
+  holds on the finite-energy domain of $P.\mathrm{sequentialRelaxation}$ at $C$.
+  The two extended optimal constants agree. No density or quadraticity is required; empty test
+  classes, zero constants and infinite optima are included.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Constant sequences give one direction. At every finite-energy point, a recovery sequence
+  and continuity of $L^2$ variance give the converse, also for $C=0$. The existing finite-upper-bound
+  characterization in \texttt{ENNReal} identifies the extended optima.
 \end{proof}

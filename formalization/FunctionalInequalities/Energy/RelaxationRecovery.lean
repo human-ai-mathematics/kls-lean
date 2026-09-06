@@ -1,4 +1,5 @@
 import FunctionalInequalities.Energy.FormCore
+import FunctionalInequalities.Energy.RelaxationApproximation
 import Mathlib.Analysis.SpecificLimits.Basic
 
 /-!
@@ -50,20 +51,8 @@ theorem hasRecoverySequenceAt_sequentialRelaxation_of_finiteAt {x : X}
     have hrelaxed :
         P.sequentialRelaxation x < P.sequentialRelaxation x + energyError n :=
       ENNReal.lt_add_right hfinite (energyError_pos n).ne'
-    rw [P.sequentialRelaxation_apply, iInf_lt_iff] at hrelaxed
-    obtain ⟨approximation, henergy⟩ := hrelaxed
-    have happ_tendsto := approximation.2
-    have hnear : ∀ᶠ k : ℕ in atTop,
-        dist x (P.toAmbient (approximation.1 k)) < metricError n := by
-      rw [Metric.tendsto_atTop] at happ_tendsto
-      obtain ⟨N, hN⟩ := happ_tendsto (metricError n) (metricError_pos n)
-      exact eventually_atTop.2 ⟨N, fun k hk ↦ by simpa [dist_comm] using hN k hk⟩
-    have hlow : ∃ᶠ k : ℕ in atTop,
-        (P.energy (approximation.1 k) : ENNReal) <
-          P.sequentialRelaxation x + energyError n :=
-      frequently_lt_of_liminf_lt (by isBoundedDefault) henergy
-    obtain ⟨k, hk_energy, hk_near⟩ := (hlow.and_eventually hnear).exists
-    exact ⟨approximation.1 k, hk_near, hk_energy⟩
+    simpa only [dist_comm] using
+      P.exists_test_near_of_relaxation_lt hrelaxed (metricError_pos n)
   choose test htest_near htest_energy using exists_test
   have metricError_tendsto : Tendsto metricError atTop (𝓝 0) := by
     simpa [metricError] using
@@ -100,34 +89,11 @@ converge to `⊤` because the relaxed energy is the infimum of all sequence `lim
 private theorem hasRecoverySequenceAt_sequentialRelaxation_of_eq_top {x : X}
     (hDense : P.DenseRealization) (htop : P.sequentialRelaxation x = ⊤) :
     P.HasRecoverySequenceAt P.sequentialRelaxation x := by
-  let metricError : ℕ → ℝ := fun n ↦ 1 / ((n : ℝ) + 1)
-  have metricError_pos : ∀ n, 0 < metricError n := by
-    intro n
-    dsimp [metricError]
-    positivity
-  have exists_test : ∀ n, ∃ f : P.Test,
-      dist x (P.toAmbient f) < metricError n := by
-    intro n
-    obtain ⟨_, ⟨f, rfl⟩, hf⟩ := hDense.exists_dist_lt x (metricError_pos n)
-    exact ⟨f, hf⟩
-  choose test htest_near using exists_test
-  have metricError_tendsto : Tendsto metricError atTop (𝓝 0) := by
-    simpa [metricError] using
-      (tendsto_one_div_add_atTop_nhds_zero_nat (𝕜 := ℝ))
-  have hdist :
-      Tendsto (fun n ↦ dist x (P.toAmbient (test n))) atTop (𝓝 0) := by
-    apply Filter.Tendsto.squeeze tendsto_const_nhds metricError_tendsto
-    · intro n
-      exact dist_nonneg
-    · intro n
-      exact (htest_near n).le
-  have htest_tendsto : Tendsto (fun n ↦ P.toAmbient (test n)) atTop (𝓝 x) :=
-    tendsto_of_tendsto_of_dist tendsto_const_nhds hdist
-  let approximation : P.ApproximatingSequence x := ⟨test, htest_tendsto⟩
+  obtain ⟨approximation⟩ := hDense.nonempty_approximatingSequence x
   have hlower : ⊤ ≤ P.sequenceEnergy approximation := by
     simpa only [htop] using P.sequentialRelaxation_le_sequenceEnergy approximation
   have henergy :
-      Tendsto (fun n ↦ (P.energy (test n) : ENNReal)) atTop (𝓝 ⊤) :=
+      Tendsto (fun n ↦ (P.energy (approximation.1 n) : ENNReal)) atTop (𝓝 ⊤) :=
     tendsto_of_le_liminf_of_limsup_le hlower le_top
       (by isBoundedDefault) (by isBoundedDefault)
   refine ⟨approximation, ?_⟩

@@ -1,0 +1,694 @@
+{
+  "version": 2,
+  "policy": {
+    "max_attempts": 3,
+    "on_exhaustion": "reclassify"
+  },
+  "nodes": {
+    "def:log-concave-law": {
+      "mathematics": "definition",
+      "evidence": [
+        "blueprint:def:log-concave-law"
+      ],
+      "assumptions": [],
+      "priority": 0,
+      "note": "Implement the explicit Blueprint definition; no theorem or equivalence is supplied by the definition."
+    },
+    "def:literature-poincare-constant": {
+      "mathematics": "definition",
+      "evidence": [
+        "blueprint:def:literature-poincare-constant"
+      ],
+      "assumptions": [],
+      "priority": 0,
+      "note": "Implement the explicit Blueprint definition; no theorem or equivalence is supplied by the definition."
+    },
+    "def:isoperimetric-cheeger-scale": {
+      "mathematics": "definition",
+      "evidence": [
+        "blueprint:def:isoperimetric-cheeger-scale"
+      ],
+      "assumptions": [],
+      "priority": 5,
+      "note": "Implement the explicit Blueprint definition; no theorem or equivalence is supplied by the definition."
+    },
+    "def:isotropic-law": {
+      "mathematics": "definition",
+      "evidence": [
+        "blueprint:def:isotropic-law"
+      ],
+      "assumptions": [],
+      "priority": 5,
+      "note": "Implement the explicit Blueprint definition; no theorem or equivalence is supplied by the definition."
+    },
+    "def:affine-poincare-constant": {
+      "mathematics": "definition",
+      "evidence": [
+        "blueprint:def:affine-poincare-constant"
+      ],
+      "assumptions": [],
+      "priority": 5,
+      "note": "Implement the explicit Blueprint definition; no theorem or equivalence is supplied by the definition."
+    },
+    "def:conditional-fiber-form": {
+      "mathematics": "definition",
+      "evidence": [
+        "blueprint:def:conditional-fiber-form"
+      ],
+      "assumptions": [],
+      "priority": 5,
+      "note": "Implement the explicit Blueprint definition; no theorem or equivalence is supplied by the definition."
+    },
+    "thm:compact-borell-logconcavity-equivalence": {
+      "mathematics": "published",
+      "evidence": [
+        "blueprint:thm:compact-borell-logconcavity-equivalence"
+      ],
+      "assumptions": [],
+      "priority": 0,
+      "note": "Published input identified in Blueprint; verify the exact source hypotheses and normalization during formalization.",
+      "infrastructure": {
+        "status": "unchecked",
+        "mathlib_revision": null,
+        "evidence": [],
+        "gaps": []
+      }
+    },
+    "thm:borell-logconcave-density": {
+      "mathematics": "published",
+      "evidence": [
+        "blueprint:thm:borell-logconcave-density"
+      ],
+      "assumptions": [],
+      "priority": 0,
+      "note": "Published input identified in Blueprint; verify the exact source hypotheses and normalization during formalization.",
+      "infrastructure": {
+        "status": "unchecked",
+        "mathlib_revision": null,
+        "evidence": [],
+        "gaps": []
+      }
+    },
+    "thm:logconcave-cheeger-poincare-comparison": {
+      "mathematics": "published",
+      "evidence": [
+        "blueprint:thm:logconcave-cheeger-poincare-comparison"
+      ],
+      "assumptions": [],
+      "priority": 5,
+      "note": "Published input identified in Blueprint; verify the exact source hypotheses and normalization during formalization.",
+      "infrastructure": {
+        "status": "unchecked",
+        "mathlib_revision": null,
+        "evidence": [],
+        "gaps": []
+      }
+    },
+    "thm:one-dimensional-logconcave-poincare": {
+      "mathematics": "published",
+      "evidence": [
+        "blueprint:thm:one-dimensional-logconcave-poincare"
+      ],
+      "assumptions": [],
+      "priority": 5,
+      "note": "Published input identified in Blueprint; verify the exact source hypotheses and normalization during formalization.",
+      "infrastructure": {
+        "status": "unchecked",
+        "mathlib_revision": null,
+        "evidence": [],
+        "gaps": []
+      }
+    },
+    "conj:kls": {
+      "mathematics": "conjectural",
+      "evidence": [
+        "blueprint:conj:kls"
+      ],
+      "assumptions": [],
+      "priority": 5,
+      "note": "Research task with explicit stopping criteria; no ordinary proof-hole retry loop."
+    },
+    "q:smooth-gradient-raw-core-agreement": {
+      "mathematics": "conjectural",
+      "evidence": [
+        "blueprint:q:smooth-gradient-raw-core-agreement"
+      ],
+      "assumptions": [],
+      "priority": 5,
+      "note": "Research task with explicit stopping criteria; no ordinary proof-hole retry loop."
+    },
+    "ass:tight-prefix-carleson": {
+      "mathematics": "conjectural",
+      "evidence": [
+        "blueprint:ass:tight-prefix-carleson"
+      ],
+      "assumptions": [],
+      "priority": 5,
+      "note": "Research task with explicit stopping criteria; no ordinary proof-hole retry loop."
+    },
+    "q:mm-spectral-occupation": {
+      "mathematics": "conjectural",
+      "evidence": [
+        "blueprint:q:mm-spectral-occupation"
+      ],
+      "assumptions": [],
+      "priority": 5,
+      "note": "Research task with explicit stopping criteria; no ordinary proof-hole retry loop."
+    },
+    "ass:cmh-recovery-envelope": {
+      "mathematics": "conjectural",
+      "evidence": [
+        "blueprint:ass:cmh-recovery-envelope"
+      ],
+      "assumptions": [],
+      "priority": 5,
+      "note": "Research task with explicit stopping criteria; no ordinary proof-hole retry loop."
+    },
+    "q:conditional-fiber-frame": {
+      "mathematics": "conjectural",
+      "evidence": [
+        "blueprint:q:conditional-fiber-frame"
+      ],
+      "assumptions": [],
+      "priority": 5,
+      "note": "Research task with explicit stopping criteria; no ordinary proof-hole retry loop."
+    },
+    "ass:weighted-package": {
+      "mathematics": "refuted",
+      "evidence": [
+        "blueprint:ass:weighted-package"
+      ],
+      "assumptions": [],
+      "priority": 5,
+      "note": "Historical package refuted in pinned upstream review; exclude from active proof search. The obstruction is not a refutation of KLS."
+    },
+    "thm:smooth-gradient-relaxation-two-cheeger": {
+      "mathematics": "unknown",
+      "evidence": [
+        "blueprint:thm:smooth-gradient-relaxation-two-cheeger"
+      ],
+      "assumptions": [],
+      "priority": 5,
+      "note": "Resolve local-slope versus asymptotic-Lipschitz conventions and singular-measure scope before proof work."
+    },
+    "obs:dirac-raw-energy": {
+      "mathematics": "local_argument",
+      "evidence": [
+        "blueprint:obs:dirac-raw-energy"
+      ],
+      "assumptions": [],
+      "priority": 1,
+      "note": "The displayed local or pinned upstream argument needs mathematical review and Lean implementation; it is not a Lean certificate.",
+      "infrastructure": {
+        "status": "available",
+        "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
+        "evidence": [
+          {
+            "path": "examples/PoincareFoundation.lean",
+            "sha256": "757bfdce0576ca95ff625df4ca25014650df1cd6860f6bb3c77b8c8f30c8ed32"
+          }
+        ],
+        "gaps": []
+      }
+    },
+    "thm:smooth-gradient-relaxation-dirichlet": {
+      "mathematics": "local_argument",
+      "evidence": [
+        "blueprint:thm:smooth-gradient-relaxation-dirichlet"
+      ],
+      "assumptions": [],
+      "priority": 5,
+      "note": "Local proof plan only: instantiate contraction transfer using smooth approximations of a normal contraction. The concrete analytic argument still needs completion and review.",
+      "infrastructure": {
+        "status": "unchecked",
+        "mathlib_revision": null,
+        "evidence": [],
+        "gaps": []
+      }
+    },
+    "obs:normal-direction-raw-energy": {
+      "mathematics": "local_argument",
+      "evidence": [
+        "blueprint:obs:normal-direction-raw-energy"
+      ],
+      "assumptions": [],
+      "priority": 1,
+      "note": "The displayed local or pinned upstream argument needs mathematical review and Lean implementation; it is not a Lean certificate.",
+      "infrastructure": {
+        "status": "unchecked",
+        "mathlib_revision": null,
+        "evidence": [],
+        "gaps": []
+      }
+    },
+    "thm:smooth-gradient-raw-core-agreement-density": {
+      "mathematics": "local_argument",
+      "evidence": [
+        "blueprint:thm:smooth-gradient-raw-core-agreement-density"
+      ],
+      "assumptions": [],
+      "priority": 5,
+      "note": "The displayed local or pinned upstream argument needs mathematical review and Lean implementation; it is not a Lean certificate.",
+      "infrastructure": {
+        "status": "unchecked",
+        "mathlib_revision": null,
+        "evidence": [],
+        "gaps": []
+      }
+    },
+    "thm:smooth-lipschitz-constant-equivalence": {
+      "mathematics": "local_argument",
+      "evidence": [
+        "blueprint:thm:smooth-lipschitz-constant-equivalence"
+      ],
+      "assumptions": [],
+      "priority": 0,
+      "note": "Eight proved interfaces identify pointwise and a.e. slope/gradient, extended energy and finite test domains, finite Holds conditions and coordinate infima, then the ambient/intrinsic/literature constants under explicit intrinsic absolute continuity. The sole certificate packages all eight interfaces with separate quantifiers. The general log-concave extension is now separately certified by thm:selected-literature-constant-equivalence. Acceptance: research/decisions/2026-09-06-smooth-literature-proofs.md.",
+      "infrastructure": {
+        "status": "available",
+        "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
+        "evidence": [
+          {
+            "path": "formalization/FunctionalInequalities/KLS/Definitions.lean",
+            "sha256": "8e4e14448733ac1318c490c60e31e846ae26653b3c4ae6dcf7e1e56f6c6f2c35"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/KLS/LocalSlopeGradient.lean",
+            "sha256": "e8c19cad152502d4c06784ddc4aa8abef6368b020ed1d5ebcb1632515a30778a"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation.lean",
+            "sha256": "d6385f6db382af4e268517152a0f496877f5cc2ca191583706a61e7aac004818"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Energy/Euclidean/AffineComparison.lean",
+            "sha256": "269adaf5de2a50757b667471e9d0c2f45c43f666dadc105ff4aed23aae0a76c2"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/L2/MeanVariance.lean",
+            "sha256": "09e7f2b1b6e0a3969cc6ba24155c86a319939634a7e22b7dfa3a5a573a2a796a"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Poincare/Euclidean/LiteratureComparison.lean",
+            "sha256": "d602345d25caa3a9d646dc08c9e5f6242a94f8f56f5997d6c300bf3f9073bdfe"
+          },
+          {
+            "path": "solutions/ThmSmoothLipschitzConstantEquivalence.lean",
+            "sha256": "044ce7194344526773c1282af86c9b279b1a8a5de82703c126b2fb10de8eda0d"
+          }
+        ],
+        "gaps": []
+      }
+    },
+    "thm:selected-literature-constant-equivalence": {
+      "mathematics": "local_argument",
+      "evidence": [
+        "blueprint:thm:selected-literature-constant-equivalence"
+      ],
+      "assumptions": [],
+      "priority": 0,
+      "note": "The complete general log-concave frontend equality is Lean-proved. Intrinsic absolute continuity is derived from the existing compact-set LogConcave definition; no added density or finite-moment premise. Acceptance: research/decisions/2026-09-06-general-logconcave-comparison.md.",
+      "infrastructure": {
+        "status": "available",
+        "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
+        "evidence": [
+          {
+            "path": "formalization/FunctionalInequalities/KLS/Definitions.lean",
+            "sha256": "8e4e14448733ac1318c490c60e31e846ae26653b3c4ae6dcf7e1e56f6c6f2c35"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Probability/AffineSupport.lean",
+            "sha256": "1c36055b700a47f6f44ecfbacb36f4d660680c44d9baf150a61945563a5356a2"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/KLS/LogConcave.lean",
+            "sha256": "77d59008d0140b952dba306baf5effe9f4d78b4c1587716a10a8d6ac3941335f"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Probability/BallAverages.lean",
+            "sha256": "b3793456a96f0d8be61643e147d456a73d136cf46a266785a060a8bfa51eb749"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Probability/BallDomination.lean",
+            "sha256": "c0912639620de9c05c6644f7c1105bbbf0a779b493b30a1ae83a066e1df91833"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/KLS/LogConcaveDensity.lean",
+            "sha256": "870e1d4b4ce89fb5781a4f1f0bea6663184dad2ace494daf1c133aee936363cc"
+          },
+          {
+            "path": "solutions/LemLogConcaveIntrinsicAbsoluteContinuity.lean",
+            "sha256": "2b27d2c49c4952bffcc2ac8bb3063f721856f35f94ce8a141d4ae5aba21bcf21"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Poincare/Euclidean/LiteratureComparison.lean",
+            "sha256": "d602345d25caa3a9d646dc08c9e5f6242a94f8f56f5997d6c300bf3f9073bdfe"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Poincare/Euclidean/LogConcaveComparison.lean",
+            "sha256": "66ee96d352aad67e5687bb25e2244750f981367bfc2b53960718b3086d7caf42"
+          },
+          {
+            "path": "solutions/ThmSelectedLiteratureConstantEquivalence.lean",
+            "sha256": "5d48acfea675323b73be09f75921fbe9997c0a96e70b3c112148ea9f2db78f77"
+          }
+        ],
+        "gaps": []
+      }
+    },
+    "thm:klartag-density-frontend-identification": {
+      "mathematics": "local_argument",
+      "evidence": [
+        "blueprint:thm:klartag-density-frontend-identification"
+      ],
+      "assumptions": [],
+      "priority": 5,
+      "note": "The displayed local or pinned upstream argument needs mathematical review and Lean implementation; it is not a Lean certificate.",
+      "infrastructure": {
+        "status": "unchecked",
+        "mathlib_revision": null,
+        "evidence": [],
+        "gaps": []
+      }
+    },
+    "lem:ambient-intrinsic-covariance": {
+      "mathematics": "local_argument",
+      "evidence": [
+        "blueprint:lem:ambient-intrinsic-covariance"
+      ],
+      "assumptions": [],
+      "priority": 5,
+      "note": "The displayed local or pinned upstream argument needs mathematical review and Lean implementation; it is not a Lean certificate.",
+      "infrastructure": {
+        "status": "unchecked",
+        "mathlib_revision": null,
+        "evidence": [],
+        "gaps": []
+      }
+    },
+    "thm:affine-covariance-relaxation-closed": {
+      "mathematics": "local_argument",
+      "evidence": [
+        "blueprint:thm:affine-covariance-relaxation-closed"
+      ],
+      "assumptions": [],
+      "priority": 5,
+      "note": "The displayed local or pinned upstream argument needs mathematical review and Lean implementation; it is not a Lean certificate.",
+      "infrastructure": {
+        "status": "unchecked",
+        "mathlib_revision": null,
+        "evidence": [],
+        "gaps": []
+      }
+    },
+    "lem:affine-poincare-translation-invariance": {
+      "mathematics": "local_argument",
+      "evidence": [
+        "blueprint:lem:affine-poincare-translation-invariance"
+      ],
+      "assumptions": [],
+      "priority": 5,
+      "note": "The displayed local or pinned upstream argument needs mathematical review and Lean implementation; it is not a Lean certificate.",
+      "infrastructure": {
+        "status": "unchecked",
+        "mathlib_revision": null,
+        "evidence": [],
+        "gaps": []
+      }
+    },
+    "thm:affine-isotropic-reduction": {
+      "mathematics": "local_argument",
+      "evidence": [
+        "blueprint:thm:affine-isotropic-reduction"
+      ],
+      "assumptions": [],
+      "priority": 5,
+      "note": "The displayed local or pinned upstream argument needs mathematical review and Lean implementation; it is not a Lean certificate.",
+      "infrastructure": {
+        "status": "unchecked",
+        "mathlib_revision": null,
+        "evidence": [],
+        "gaps": []
+      }
+    },
+    "cor:tight-window-consumption": {
+      "mathematics": "local_argument",
+      "evidence": [
+        "blueprint:cor:tight-window-consumption"
+      ],
+      "assumptions": [
+        "ass:tight-prefix-carleson"
+      ],
+      "priority": 5,
+      "note": "Formalize the implication retaining the named open premise. Certifying this implication must not discharge the premise or unconditional KLS.",
+      "infrastructure": {
+        "status": "unchecked",
+        "mathlib_revision": null,
+        "evidence": [],
+        "gaps": []
+      }
+    },
+    "prop:weighted-spectator-obstruction": {
+      "mathematics": "local_argument",
+      "evidence": [
+        "blueprint:prop:weighted-spectator-obstruction"
+      ],
+      "assumptions": [],
+      "priority": 5,
+      "note": "The displayed local or pinned upstream argument needs mathematical review and Lean implementation; it is not a Lean certificate.",
+      "infrastructure": {
+        "status": "unchecked",
+        "mathlib_revision": null,
+        "evidence": [],
+        "gaps": []
+      }
+    },
+    "prop:spectral-sufficiency": {
+      "mathematics": "local_argument",
+      "evidence": [
+        "blueprint:prop:spectral-sufficiency"
+      ],
+      "assumptions": [
+        "q:mm-spectral-occupation"
+      ],
+      "priority": 5,
+      "note": "Formalize the implication retaining the named open premise. Certifying this implication must not discharge the premise or unconditional KLS.",
+      "infrastructure": {
+        "status": "unchecked",
+        "mathlib_revision": null,
+        "evidence": [],
+        "gaps": []
+      }
+    },
+    "thm:cmh-recovery-affine-poincare-bound": {
+      "mathematics": "local_argument",
+      "evidence": [
+        "blueprint:thm:cmh-recovery-affine-poincare-bound"
+      ],
+      "assumptions": [],
+      "priority": 5,
+      "note": "The displayed local or pinned upstream argument needs mathematical review and Lean implementation; it is not a Lean certificate.",
+      "infrastructure": {
+        "status": "unchecked",
+        "mathlib_revision": null,
+        "evidence": [],
+        "gaps": []
+      }
+    },
+    "cor:cmh-recovery-sequence-suffices": {
+      "mathematics": "local_argument",
+      "evidence": [
+        "blueprint:cor:cmh-recovery-sequence-suffices"
+      ],
+      "assumptions": [
+        "ass:cmh-recovery-envelope"
+      ],
+      "priority": 5,
+      "note": "Formalize the implication retaining the named open premise. Certifying this implication must not discharge the premise or unconditional KLS.",
+      "infrastructure": {
+        "status": "unchecked",
+        "mathlib_revision": null,
+        "evidence": [],
+        "gaps": []
+      }
+    },
+    "lem:conditional-fiber-form": {
+      "mathematics": "local_argument",
+      "evidence": [
+        "blueprint:lem:conditional-fiber-form"
+      ],
+      "assumptions": [],
+      "priority": 5,
+      "note": "The displayed local or pinned upstream argument needs mathematical review and Lean implementation; it is not a Lean certificate.",
+      "infrastructure": {
+        "status": "unchecked",
+        "mathlib_revision": null,
+        "evidence": [],
+        "gaps": []
+      }
+    },
+    "lem:conditional-fiber-energy-comparison": {
+      "mathematics": "local_argument",
+      "evidence": [
+        "blueprint:lem:conditional-fiber-energy-comparison"
+      ],
+      "assumptions": [],
+      "priority": 5,
+      "note": "The displayed local or pinned upstream argument needs mathematical review and Lean implementation; it is not a Lean certificate.",
+      "infrastructure": {
+        "status": "unchecked",
+        "mathlib_revision": null,
+        "evidence": [],
+        "gaps": []
+      }
+    },
+    "cor:conditional-fiber-twelve-bound": {
+      "mathematics": "local_argument",
+      "evidence": [
+        "blueprint:cor:conditional-fiber-twelve-bound"
+      ],
+      "assumptions": [],
+      "priority": 5,
+      "note": "The displayed local or pinned upstream argument needs mathematical review and Lean implementation; it is not a Lean certificate.",
+      "infrastructure": {
+        "status": "unchecked",
+        "mathlib_revision": null,
+        "evidence": [],
+        "gaps": []
+      }
+    },
+    "lem:covariance-test-core-density": {
+      "mathematics": "local_argument",
+      "evidence": [
+        "blueprint:lem:covariance-test-core-density"
+      ],
+      "assumptions": [],
+      "priority": 0,
+      "note": "Pilot completed: cutoff, compact-support mollification, weighted L2 approximation and interval-preserving L1 smoothing are proved with unchanged input hypotheses. The local adapter is Energy/Euclidean/LipschitzApproximation.lean; acceptance: research/decisions/2026-09-06-weighted-approximation-acceptance.md. Certification is derived from the ledger and Blueprint.",
+      "infrastructure": {
+        "status": "available",
+        "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
+        "evidence": [
+          {
+            "path": "formalization/.lake/packages/mathlib/Mathlib/Analysis/Calculus/Rademacher.lean",
+            "sha256": "5fc79ee3c9c5a0fc17fed09487b6b54dcad3b7d27e4e92880e18300a3f47a7cf"
+          },
+          {
+            "path": "formalization/.lake/packages/mathlib/Mathlib/Analysis/Calculus/BumpFunction/Convolution.lean",
+            "sha256": "7e89c7cb27e6d8fbeba7ef17cff8f9f62e4467337e5bf9e9d132b92825cf088a"
+          },
+          {
+            "path": "formalization/.lake/packages/mathlib/Mathlib/Analysis/Calculus/ContDiff/Convolution.lean",
+            "sha256": "51c4b08497f08a898573cabb6ad5a95f4a1e170ab74fec15d2bf4fdd8eba370b"
+          },
+          {
+            "path": "formalization/.lake/packages/mathlib/Mathlib/Analysis/Calculus/BumpFunction/SmoothApprox.lean",
+            "sha256": "39c168ee8b18140629cd1b9eb698e612373c9a0c424e9fd328c84c51704a1f1b"
+          },
+          {
+            "path": "formalization/blueprint/src/chapters/60-analytic-comparison-proofs.tex",
+            "sha256": "fc14deb0f1f7ff6a474639abe2dbeb8b49db098ae0465558854fb432eba81f4d"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation.lean",
+            "sha256": "d6385f6db382af4e268517152a0f496877f5cc2ca191583706a61e7aac004818"
+          },
+          {
+            "path": "solutions/LemCovarianceTestCoreDensity.lean",
+            "sha256": "56b1ab45c84e1f4a8a148cec281cd9496fffc0cc7f98a7010f0592d14d7f2e37"
+          }
+        ],
+        "gaps": []
+      }
+    },
+    "lem:covariance-core-closure": {
+      "mathematics": "local_argument",
+      "evidence": [
+        "blueprint:lem:covariance-core-closure"
+      ],
+      "assumptions": [],
+      "priority": 5,
+      "note": "The displayed local or pinned upstream argument needs mathematical review and Lean implementation; it is not a Lean certificate.",
+      "infrastructure": {
+        "status": "unchecked",
+        "mathlib_revision": null,
+        "evidence": [],
+        "gaps": []
+      }
+    },
+    "lem:relative-perimeter-smoothing": {
+      "mathematics": "local_argument",
+      "evidence": [
+        "blueprint:lem:relative-perimeter-smoothing"
+      ],
+      "assumptions": [],
+      "priority": 5,
+      "note": "The displayed local or pinned upstream argument needs mathematical review and Lean implementation; it is not a Lean certificate.",
+      "infrastructure": {
+        "status": "unchecked",
+        "mathlib_revision": null,
+        "evidence": [],
+        "gaps": []
+      }
+    },
+    "lem:relative-perimeter-cheeger-infimum": {
+      "mathematics": "local_argument",
+      "evidence": [
+        "blueprint:lem:relative-perimeter-cheeger-infimum"
+      ],
+      "assumptions": [],
+      "priority": 5,
+      "note": "The displayed local or pinned upstream argument needs mathematical review and Lean implementation; it is not a Lean certificate.",
+      "infrastructure": {
+        "status": "unchecked",
+        "mathlib_revision": null,
+        "evidence": [],
+        "gaps": []
+      }
+    },
+    "lem:logconcave-intrinsic-absolute-continuity": {
+      "mathematics": "published",
+      "evidence": [
+        "blueprint:lem:logconcave-intrinsic-absolute-continuity"
+      ],
+      "assumptions": [],
+      "priority": 0,
+      "note": "The absolute-continuity portion of the finite-dimensional representation theorem is now Lean-proved directly from compact-set log-concavity, using ball averages and Besicovitch covering. The broader Borell density/moment node is unchanged and remains unproved.",
+      "infrastructure": {
+        "status": "available",
+        "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
+        "evidence": [
+          {
+            "path": "formalization/FunctionalInequalities/KLS/Definitions.lean",
+            "sha256": "8e4e14448733ac1318c490c60e31e846ae26653b3c4ae6dcf7e1e56f6c6f2c35"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Probability/AffineSupport.lean",
+            "sha256": "1c36055b700a47f6f44ecfbacb36f4d660680c44d9baf150a61945563a5356a2"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/KLS/LogConcave.lean",
+            "sha256": "77d59008d0140b952dba306baf5effe9f4d78b4c1587716a10a8d6ac3941335f"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Probability/BallAverages.lean",
+            "sha256": "b3793456a96f0d8be61643e147d456a73d136cf46a266785a060a8bfa51eb749"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Probability/BallDomination.lean",
+            "sha256": "c0912639620de9c05c6644f7c1105bbbf0a779b493b30a1ae83a066e1df91833"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/KLS/LogConcaveDensity.lean",
+            "sha256": "870e1d4b4ce89fb5781a4f1f0bea6663184dad2ace494daf1c133aee936363cc"
+          },
+          {
+            "path": "solutions/LemLogConcaveIntrinsicAbsoluteContinuity.lean",
+            "sha256": "2b27d2c49c4952bffcc2ac8bb3063f721856f35f94ce8a141d4ae5aba21bcf21"
+          }
+        ],
+        "gaps": []
+      }
+    }
+  }
+}

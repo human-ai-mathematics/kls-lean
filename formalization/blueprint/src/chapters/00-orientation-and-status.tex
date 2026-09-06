@@ -15,24 +15,124 @@ mathematical presentations have not yet been identified formally.
 
 \section{The target}
 
+\begin{definition}[Log-concave probability law]
+  \label{def:log-concave-law}
+  \lean{FunctionalInequalities.KLS.LogConcave}
+  \leanok
+  A Borel probability law $\mu$ on a finite-dimensional real normed vector space is log-concave
+  when,
+  for all compact sets $K_0,K_1$ and every $\lambda\in(0,1)$,
+  \[
+    \mu\bigl(\lambda K_0+(1-\lambda)K_1\bigr)
+      \ge \mu(K_0)^\lambda\mu(K_1)^{1-\lambda}.
+  \]
+  The compact-set formulation ensures that the Minkowski combination is Borel and includes laws
+  carried by a proper affine subspace.
+\end{definition}
+
+\begin{theorem}[Compact-set and Borell formulations agree]
+  \label{thm:compact-borell-logconcavity-equivalence}
+  \uses{def:log-concave-law}
+  For an arbitrary set $S$, write
+  \[
+    \mu_*(S)=\sup\{\mu(K):K\subseteq S,\ K\text{ compact}\}.
+  \]
+  A finite-dimensional Borel probability law is log-concave in the sense of
+  \cref{def:log-concave-law} if and only if, for all Borel sets $B_0,B_1$ and every
+  $\lambda\in(0,1)$,
+  \[
+    \mu_*\bigl(\lambda B_0+(1-\lambda)B_1\bigr)
+      \ge \mu(B_0)^\lambda\mu(B_1)^{1-\lambda}.
+  \]
+\end{theorem}
+\begin{proof}
+  Open.  One direction specializes to compact sets.  Conversely, use inner regularity to
+  approximate each Borel set from within by compact sets and then take suprema.  This is the
+  precise bridge to the measure-theoretic formulation used in the cited literature; it must not
+  be implemented by evaluating a measure as an outer measure on a possibly non-Borel Minkowski
+  combination.  Compare Bobkov's equation~(5.1) in \cite{Bobkov1999LogConcave}.
+\end{proof}
+
+\begin{lemma}[Intrinsic absolute continuity of log-concave laws]
+  \label{lem:logconcave-intrinsic-absolute-continuity}
+  \lean{Solutions.LemLogConcaveIntrinsicAbsoluteContinuity.certificate}
+  \leanok
+  \uses{def:log-concave-law,def:affine-support-intrinsic-law}
+  Let $\nu$ be the intrinsic law of a finite-dimensional log-concave probability $\mu$ on the
+  direction space $V$ of its affine support. For every additive Haar measure $m$ on $V$,
+  $\nu\ll m$. This includes singular ambient laws and zero-dimensional affine supports.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Compact-set log-concavity passes through affine-isometric reconstruction and makes the
+  intrinsic support convex. Its affine span is $V$, so its interior is nonempty. Put
+  $q_r(x)=\nu(\overline B(x,r))$ and $b_r=m(\overline B(0,r))$.
+  Compactness supplies a uniform positive mass bound for fixed-radius balls with centers
+  in one interior compact ball. Tonelli gives $\int q_r\,\dd m=b_r$ and a localized lower
+  bound, forcing points with $q_r\ge c b_r$ near every such center, uniformly for small $r$.
+  Superlevel convexity and separation then give $q_r\ge c b_r$ throughout a fixed ball
+  $B(a,R)$. For any $x$, the midpoint inequality bounds $q_r$ below by
+  $\sqrt{q_r(x)c b_r}$ on $B((x+a)/2,R/2)$. Integrating and squaring yields
+  $q_r(x)\le b_r/(c\,m(B(0,R/2))^2)$. Besicovitch covering converts these uniformly
+  bounded small-ball ratios into measure domination and hence absolute continuity.
+  This proves the absolute-continuity portion of \cite{Borell1974Convex} directly from the
+  compact-set convention; it does not assume a density representative or the Borel-set bridge.
+\end{proof}
+
+\begin{theorem}[Borell representation on the affine support]
+  \label{thm:borell-logconcave-density}
+  \uses{def:log-concave-law,thm:compact-borell-logconcavity-equivalence,
+        def:affine-support-intrinsic-law}
+  Let $\nu$ be the intrinsic law of a finite-dimensional log-concave probability $\mu$ on the
+  direction space $V$ of its affine support.  Let $K_\nu$ be the closed convex hull of the
+  topological support of $\nu$, and put $\Omega=\operatorname{int}_V(K_\nu)$.  There is an
+  upper-semicontinuous log-concave Borel function $\rho:V\to[0,\infty)$ such that
+  \[
+    \nu(V\setminus\Omega)=0,
+    \qquad
+    \dd\nu=\rho\dd\mathrm{Leb}_V.
+  \]
+  Moreover, $\rho>0$ on $\Omega$ and
+  $\rho,\rho^{-1}\in L^\infty_{\mathrm{loc}}(\Omega,\mathrm{Leb}_V)$, and $\nu$ has finite moments
+  of every order.  In dimension zero, Lebesgue measure means counting measure on the one-point
+  space, so the assertion includes Dirac laws.
+\end{theorem}
+\begin{proof}
+  This is imported finite-dimensional convex-measure theory; see \cite{Borell1974Convex}.  It is
+  not a local Lean theorem in its full stated scope. The absolute-continuity input is certified
+  separately in \cref{lem:logconcave-intrinsic-absolute-continuity}; the density representative,
+  its local positive bounds, and the moment conclusions remain unproved in Lean.
+\end{proof}
+
 \begin{definition}[Literature Poincar\'e constant]
   \label{def:literature-poincare-constant}
+  \lean{FunctionalInequalities.KLS.localSlope,
+        FunctionalInequalities.KLS.literatureEnergy,
+        FunctionalInequalities.KLS.LiteratureAdmissible,
+        FunctionalInequalities.KLS.LiteratureHolds,
+        FunctionalInequalities.KLS.literatureConstant}
+  \leanok
   Let $\mu$ be a Borel probability measure on a finite-dimensional Euclidean space, and let $A$
   be its affine support.  For a locally Lipschitz function on $A$, write $\abs{D_Af}$ for its local
-  metric slope.  Write $\CPLit(\mu)$ for the least $C\in[0,\infty]$ such that
+  metric slope.  A finite $C\ge0$ is valid when
   \[
     \Var_\mu(f)\le C\int \abs{D_Af}^{2}\dd\mu
   \]
-  for every locally Lipschitz $f\in L^2(\mu)$ with finite right-hand side.  For log-concave laws,
-  the slope agrees almost everywhere with the tangential gradient on the relative interior of
-  $A$.  This convention also makes the definition meaningful for singular Borel measures.
+  for every locally Lipschitz $f\in L^2(\mu)$ with
+  $\int\abs{D_Af}^2\dd\mu<\infty$.  Define $\CPLit(\mu)\in[0,\infty]$ as the infimum of all
+  valid finite constants, with $\inf\varnothing=+\infty$.  The test domain is independent of
+  $C$; zero-energy tests are included.  For log-concave laws,
+  the slope agrees almost everywhere with the tangential gradient on the relative interior of the
+  convex support within $A$.  This convention also makes the definition meaningful for singular
+  Borel measures.
 \end{definition}
 
 \begin{conjecture}[KLS, affine and isotropic forms]
   \label{conj:kls}
-  \uses{def:literature-poincare-constant}
-  There is a universal $C<\infty$ such that every log-concave Borel probability $\mu$ with
-  finite second moment satisfies
+  \lean{FunctionalInequalities.KLS.Conjecture}
+  \uses{def:log-concave-law,def:literature-poincare-constant}
+  There is a universal $C<\infty$ such that, on every finite-dimensional Euclidean space, every
+  log-concave Borel probability $\mu$ with finite second moment satisfies
   \[
     \CPLit(\mu)\le C\norm{\Cov_\mu}_{\op}.
   \]
@@ -47,6 +147,12 @@ It has no \texttt{leanok}: no theorem in this repository proves it, and no upstr
 
 \section{Status contract}
 
+Public Lean interfaces may evolve during this exploratory stage, including those of proved
+results. Proof work may refine a draft without a prior freeze. Certification records the current
+statement and proof; it makes no promise of signature stability. Changes to mathematical
+hypotheses, conclusions, test domains, or normalization must be recorded and checked against
+the original goal, with the affected proofs and consumers updated.
+
 The graph uses the following meanings.
 
 \begin{itemize}
@@ -55,15 +161,23 @@ The graph uses the following meanings.
         statement and proof.
   \item Absence of \texttt{leanok} means unfinished formalization, even when the mathematical
         argument has been reviewed elsewhere.
-  \item \texttt{\textbackslash notready} is reserved for a public statement whose hypotheses or
-        normalization are not frozen.  It is not a synonym for an open proof.
+  \item \texttt{\textbackslash notready} marks an explicit unresolved statement choice, such as
+        its test domain, hypotheses, or normalization. The nearby text identifies that choice.
+        An open proof or possible future API changes alone do not justify the marker.
 \end{itemize}
+
+Removing \texttt{notready} does not add \texttt{leanok} or change a route's mathematical status.
+Historical freeze records remain dated review snapshots. The current development path permits
+\texttt{drafted} to become \texttt{proved} directly after certification of the current version.
 
 There are four levels, and their names are not interchangeable.  The energy-parametrized optimizer
 of \cref{chap:canonical-basic} accepts any extended energy.  The selected canonical frontend of
 \cref{chap:smooth-affine} chooses the intrinsic-affine smooth-gradient relaxation.  The accepted
 legacy frontend of \cref{chap:certified-models} quantifies over globally smooth finite-energy
 tests, while \cref{def:literature-poincare-constant} quantifies over locally Lipschitz tests.  The
-first two are Lean definitions; the comparisons between the selected, legacy, and literature
-constants are \texttt{notready} review proposals whose proof state is also open in
-\cref{chap:shared-analytic-bridges}.
+first two are Lean definitions. The selected and legacy constants are now proved equal in
+finite dimension. Their comparison with the locally Lipschitz literature constant has an
+analytic approximation proof in \cref{chap:analytic-comparison-proofs}, as do the relative
+perimeter and covariance-core identifications. These statements still await Lean formalization
+and certification. The active conditional-fiber route uses a general finite input
+$\kappa$ and the verified published choice $\kappa=12$.

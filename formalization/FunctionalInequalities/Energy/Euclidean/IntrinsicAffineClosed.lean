@@ -17,7 +17,9 @@ noncomputable section
 
 open MeasureTheory
 
-namespace FunctionalInequalities.Energy.Euclidean
+namespace FunctionalInequalities.Energy.Canonical
+
+open Euclidean
 
 universe u
 
@@ -27,10 +29,10 @@ variable {E : Type u} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [Complete
 
 /-- The intrinsic-affine smooth-gradient relaxation is a densely defined closed quadratic
 functional on the original real `L²(μ)` space. -/
-theorem intrinsicAffineSmoothGradientRelaxation_closedQuadratic
+theorem closedQuadratic
     (μ : ProbabilityMeasure E) :
-    ClosedQuadratic (intrinsicAffineSmoothGradientRelaxation μ) :=
+    ClosedQuadratic (energy μ) :=
   (smoothGradientRelaxation_closedQuadratic
     (Probability.intrinsicMeasure μ)).comap_linearIsometryEquiv (intrinsicL2Equiv μ)
 
-end FunctionalInequalities.Energy.Euclidean
+end FunctionalInequalities.Energy.Canonical

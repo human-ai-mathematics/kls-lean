@@ -1,4 +1,5 @@
 import FunctionalInequalities.Poincare.Basic
+import FunctionalInequalities.Probability.Covariance
 import Mathlib.Analysis.InnerProductSpace.Rayleigh
 import Mathlib.MeasureTheory.Function.LpSpace.Basic
 import Mathlib.Probability.Moments.CovarianceBilin
@@ -147,19 +148,6 @@ namespace Covariance
 
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
   [CompleteSpace E] [MeasurableSpace E] [BorelSpace E]
-
-/-- Source: local encoding of the source's centered covariance, using Mathlib's
-`covarianceBilin` and `InnerProductSpace.continuousLinearMapOfBilin`.
-The variance identification below retains its explicit second-moment hypothesis. -/
-def operator (μ : Measure E) : E →L[ℝ] E :=
-  InnerProductSpace.continuousLinearMapOfBilin (covarianceBilin μ)
-
-/-- Source: local Riesz-representation identity from
-`InnerProductSpace.continuousLinearMapOfBilin_apply`. -/
-@[simp]
-theorem operator_inner (μ : Measure E) (x y : E) :
-    inner ℝ (operator μ x) y = covarianceBilin μ x y := by
-  exact InnerProductSpace.continuousLinearMapOfBilin_apply (covarianceBilin μ) x y
 
 /-- Source: local consequence of `operator_inner`, Mathlib's `covarianceBilin_comm`,
 and `real_inner_comm`. -/

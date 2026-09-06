@@ -22,7 +22,7 @@ Sobolev or Cheeger energy.
   $\mathcal E_0(u)=\int\norm{\nabla u}^2\dd\mu$.
 \end{definition}
 
-\begin{theorem}[Quadratic dense core]
+\begin{theorem}[Quadratic pre-energy with dense realization]
   \label{thm:smooth-gradient-quadratic-dense}
   \lean{FunctionalInequalities.Energy.Euclidean.smoothGradientPreEnergy_quadratic,
         FunctionalInequalities.Energy.Euclidean.smoothGradientPreEnergy_denseRealization}
@@ -55,7 +55,8 @@ Sobolev or Cheeger energy.
 \end{theorem}
 \begin{proof}
   \leanok
-  Apply the abstract quadratic-relaxation theorem to the smooth quadratic dense core.
+  Apply the abstract quadratic-relaxation theorem to the smooth quadratic pre-energy with dense
+  realization.
 \end{proof}
 
 \section{Affine support and intrinsic energy}
@@ -92,7 +93,7 @@ Sobolev or Cheeger energy.
 
 \begin{definition}[Intrinsic-affine relaxed energy]
   \label{def:intrinsic-affine-energy}
-  \lean{FunctionalInequalities.Energy.Euclidean.intrinsicAffineSmoothGradientRelaxation}
+  \lean{FunctionalInequalities.Energy.Canonical.energy}
   \leanok
   \uses{def:affine-support-intrinsic-law,thm:intrinsic-l2-equivalence,def:smooth-gradient-relaxation}
   The intrinsic-affine energy of an ambient $L^2(\mu)$ class is the intrinsic law's
@@ -101,7 +102,7 @@ Sobolev or Cheeger energy.
 
 \begin{theorem}[Intrinsic-affine energy is closed quadratic]
   \label{thm:intrinsic-affine-energy-closed}
-  \lean{FunctionalInequalities.Energy.Euclidean.intrinsicAffineSmoothGradientRelaxation_closedQuadratic}
+  \lean{FunctionalInequalities.Energy.Canonical.closedQuadratic}
   \leanok
   \uses{thm:smooth-gradient-relaxation-closed,thm:intrinsic-l2-equivalence,def:intrinsic-affine-energy}
   The intrinsic-affine relaxed energy is a densely defined closed quadratic energy on ambient
@@ -114,9 +115,9 @@ Sobolev or Cheeger energy.
 
 \begin{definition}[Selected canonical frontend]
   \label{def:selected-canonical-frontend}
-  \lean{FunctionalInequalities.Energy.Euclidean.intrinsicAffineSmoothGradientRelaxation,
-        FunctionalInequalities.Poincare.Euclidean.intrinsicAffineSmoothGradientRelaxationConstant,
-        FunctionalInequalities.Poincare.Euclidean.IntrinsicAffineSmoothGradientRelaxationHolds}
+  \lean{FunctionalInequalities.Energy.Canonical.energy,
+        FunctionalInequalities.Poincare.Canonical.constant,
+        FunctionalInequalities.Poincare.Canonical.Holds}
   \leanok
   \uses{def:intrinsic-affine-energy,def:l2-energy-poincare-constant}
   The selected canonical energy and constant are
@@ -137,9 +138,9 @@ the locally Lipschitz literature constant.  Those are separate theorem nodes.
 
 \begin{theorem}[Intrinsic-affine optimal constant law]
   \label{thm:intrinsic-affine-constant-order}
-  \lean{FunctionalInequalities.Poincare.Euclidean.intrinsicAffineSmoothGradientRelaxationConstant,
-        FunctionalInequalities.Poincare.Euclidean.IntrinsicAffineSmoothGradientRelaxationHolds,
-        FunctionalInequalities.Poincare.Euclidean.intrinsicAffineSmoothGradientRelaxationHolds_iff_constant_le}
+  \lean{FunctionalInequalities.Poincare.Canonical.constant,
+        FunctionalInequalities.Poincare.Canonical.Holds,
+        FunctionalInequalities.Poincare.Canonical.holds_iff_constant_le}
   \leanok
   \uses{def:selected-canonical-frontend,thm:l2-energy-holds-order}
   The intrinsic-affine Poincar\'e predicate holds at $C$ exactly when its optimal extended

@@ -4,6 +4,12 @@ Reusable mathematics is organized by topic under `FunctionalInequalities/`.
 Each ledger node has one entry point in repository-root `solutions/`, importing the mathematics
 directly. There is no intermediate project-specific wrapper layer.
 
+Public interfaces may evolve, including those of proved results. Proof work may refine a draft
+without a prior freeze; certification applies to the current statement and proof. Migrate
+affected consumers directly and document changes to mathematical scope. The
+[lifecycle guide](../research/ledger-schema.md#lifecycle) is the current policy; earlier freeze
+records preserve dated reviews rather than a default compatibility promise.
+
 Downstream applications, examples, and smoke tests may start from
 [`Poincare/Foundation.lean`](FunctionalInequalities/Poincare/Foundation.lean). Reusable library
 modules must instead import their exact direct dependencies so the direction below remains
@@ -12,7 +18,21 @@ acyclic. The foundation's
 relaxation, closed-form, Dirichlet, and pure-optimization layers and distinguishes them from the
 accepted legacy smooth-test API.
 
+For a first concrete application, read
+[`examples/PoincareFoundation.lean`](../examples/PoincareFoundation.lean). Its examples are compiled
+by the default `Examples` target and cover arbitrary laws, the selected energy, singular raw
+tests, infinite relaxation, and the accepted Gaussian constants.
+
 ## Source map
+
+The literal target is in [`KLS/Statement.lean`](FunctionalInequalities/KLS/Statement.lean), with
+compact-set log-concavity and the intrinsic local-slope literature constant in
+[`KLS/Definitions.lean`](FunctionalInequalities/KLS/Definitions.lean). These modules define the
+current conjecture and do not prove it. They share the existing covariance operator through
+[`Probability/Covariance.lean`](FunctionalInequalities/Probability/Covariance.lean).
+[`StatementChecks.lean`](../solutions/StatementChecks.lean) checks the expanded target and
+constant-function/zero-dimensional boundary encodings in the default build.
+The [local workflow](../research/verification.md) adds task selection and snapshot-bound evidence.
 
 ```text
 formalization/
@@ -30,6 +50,7 @@ formalization/
     │   ├── Functional.lean                  # Extended energy and finite domain
     │   ├── Comparison.lean                  # Pointwise extended-energy comparison
     │   ├── Relaxation.lean                  # Sequential relaxation of a pre-energy
+    │   ├── RelaxationApproximation.lean     # Shared near-test and dense-sequence choices
     │   ├── QuadraticPreEnergy.lean           # Finite quadratic pre-energy interface
     │   ├── RelaxationLowerSemicontinuous.lean # LSC of sequential relaxation
     │   ├── RelaxationRecovery.lean          # Finite/all-point recovery sequences
@@ -44,6 +65,7 @@ formalization/
     │       ├── SmoothGradientDensity.lean    # Dense C∞ realization in real L²
     │       ├── SmoothGradientClosed.lean     # ClosedQuadratic smooth relaxation
     │       ├── IntrinsicAffine.lean          # Bidirectional intrinsic L² equivalence
+    │       ├── AffineComparison.lean         # Restriction/extension and energy equality
     │       └── IntrinsicAffineClosed.lean    # Transported ClosedQuadratic theorem
     └── Poincare/
         ├── Foundation.lean                  # Aggregate for the new layered API
@@ -51,9 +73,13 @@ formalization/
         ├── Comparison.lean                  # Test-family/domain comparisons
         ├── L2Energy.lean                    # Extended L² energy bridge
         ├── L2Comparison.lean                # Energy-order constant comparison
+        ├── Relaxation.lean                  # Proved constant comparison for any pre-energy
         ├── Euclidean/
         │   ├── SmoothGradient.lean          # Ambient relaxed-gradient constant
-        │   └── IntrinsicAffine.lean         # Intrinsic-affine Holds and optimal constant
+        │   ├── IntrinsicAffine.lean         # Intrinsic-affine Holds and optimal constant
+        │   ├── AffineComparison.lean        # Equality of the two relaxed frontends
+        │   ├── LegacyComparison.lean        # Legacy/relaxed Holds and constant equality
+        │   └── README.md                    # Theorem meaning, sources and usage examples
         ├── Basic.lean                       # Admissible, energy, Holds, constant
         ├── LinearTest.lean                  # Linear tests, Rayleigh, covariance bounds
         ├── Transport.lean                   # Coordinate lifts and isometry transport
@@ -104,7 +130,7 @@ interface:
   with dense realization has a full `ClosedQuadratic` sequential relaxation, including the
   extended parallelogram identity.
 - `smoothGradientRelaxation_closedQuadratic` instantiates this result for the finite-dimensional
-  Borel `C∞` gradient pre-energy. `intrinsicAffineSmoothGradientRelaxation_closedQuadratic`
+  Borel `C∞` gradient pre-energy. `Energy.Canonical.closedQuadratic`
   transports it through affine-support coordinates.
 - `affineSupport` is the smallest closed affine subspace containing almost every point.
   `intrinsicL2Equiv` is a two-sided real linear isometric equivalence between the original and
@@ -113,16 +139,25 @@ interface:
   `RelaxedContractionBound` on realized tests decreases relaxed energy everywhere.
 - `Poincare.Euclidean.IntrinsicAffine` exposes `Holds`, the optimal `ENNReal` constant, and their
   exact order-theoretic equivalence for the intrinsic-affine relaxed energy.
+- The proved comparison modules identify ambient and intrinsic-affine relaxed energies, preserve
+  arbitrary pre-energy Poincare constants under relaxation, and identify the finite-dimensional
+  legacy smooth-test constant with the selected canonical constant.
 
 In Mathlib v4.33 ordinary `C∞` regularity is `ContDiff ℝ ∞`; `ContDiff ℝ ⊤` is analytic. Both the
 accepted legacy tests and the new smooth-gradient tests use `∞`.
 
 The foundation does **not** yet provide a Markov/Dirichlet witness for the smooth relaxation, an
 `AgreesOnTests` or core theorem, raw-gradient fiber consistency for singular measures, or an
-identification with Cheeger energy `2 · Ch`. It also does not yet prove the recovery-based
-identification of the legacy smooth-test constant with the relaxed constant, or the exact
-ambient/intrinsic-affine coordinate equality. These two constant bridges do not require raw/core
-agreement. See the
+identification with Cheeger energy `2 · Ch`. The ambient/intrinsic and legacy/relaxed comparisons
+are proved and do not require raw/core agreement. Their comparison with the locally Lipschitz
+literature constant has a written argument in Blueprint Appendix A. The weighted approximation
+input and eight comparison interfaces are now certified under intrinsic absolute continuity.
+Import `FunctionalInequalities.Poincare.Euclidean.LiteratureComparison` for the proved API.
+Import `FunctionalInequalities.Poincare.Euclidean.LogConcaveComparison` for the general
+log-concave version: intrinsic absolute continuity is now proved from compact-set log-concavity.
+The full Borell density/moment representation remains separate. See the
+[general proof record](../research/decisions/2026-09-06-general-logconcave-comparison.md), the
+[proof record](../research/decisions/2026-09-06-smooth-literature-proofs.md) and the
 [mathematical guide](FunctionalInequalities/Poincare/README.md) for the theorem flow and the
 Dirac counterexample explaining the agreement boundary.
 
@@ -149,7 +184,7 @@ Dirac counterexample explaining the agreement boundary.
 - Keep proved certificates' import closures independent of future draft modules. The root
   aggregate exports both `Poincare/Foundation` and the accepted library, including
   `Poincare/Product/Reverse` and
-  `Poincare/FiniteProduct/Tensorization` and `Poincare/Gaussian/Real`. All four certificates
+  `Poincare/FiniteProduct/Tensorization` and `Poincare/Gaussian/Real`. All ten certificates
   compile through the `Solutions` default target.
 - Update this source map and current documentation when moving a module. Historical decisions
   and explorations remain append-only; append a migration record instead of rewriting them.
@@ -168,6 +203,15 @@ removes `Project/` and records the 45 reusable interfaces retained at acceptance
 | #6: binary tensorization upper bounds | [LemPoincareTensorization.lean](../solutions/LemPoincareTensorization.lean) | `proved` / `lean` |
 | #7: finite tensorization and optimal equality | [LemPoincareFiniteTensorization.lean](../solutions/LemPoincareFiniteTensorization.lean) | `proved` / `lean` |
 | Gaussian: sharp one-dimensional constant | [LemPoincareGaussianOneDimensional.lean](../solutions/LemPoincareGaussianOneDimensional.lean) | `proved` / `lean` |
+| Ambient/intrinsic comparison | [LemAmbientIntrinsicPoincareComparison.lean](../solutions/LemAmbientIntrinsicPoincareComparison.lean) | `proved` / `lean` |
+| Legacy/relaxed comparison | [LemLegacyRelaxedPoincareComparison.lean](../solutions/LemLegacyRelaxedPoincareComparison.lean) | `proved` / `lean` |
+
+The two comparison entries package 12 proved theorems and retain 12 application checks;
+see their [reading guide](FunctionalInequalities/Poincare/Euclidean/README.md). The generic bridge
+accepts any finite pre-energy realized in real `L²`; the concrete comparisons allow every
+finite-dimensional Borel probability, including singular and zero-dimensional laws. They are
+exported by `Poincare.Foundation` and the proved root aggregate. Their certificates and all
+12 theorem dependencies are guarded against nonstandard axioms.
 
 For the accepted Gaussian result, read the
 [mathematical guide](FunctionalInequalities/Poincare/Gaussian/README.md). Its 20 declarations are
@@ -219,8 +263,9 @@ formalization. It separates four things that prose can otherwise blur:
 
 - the energy-parameterized `L²`/closed-energy engine already certified by Lean;
 - the selected intrinsic-affine canonical frontend;
-- the status-explicit endpoint bridges, including `\notready` frontend-comparison proposals whose
-  proof state is open, Dirichlet/normal contraction, `2 Ch_μ`, affine normalization, the imported
+- the status-explicit endpoint bridges, including analytic proofs of the locally Lipschitz,
+  relative-perimeter and covariance-core comparisons awaiting formalization, Dirichlet/normal
+  contraction, `2 Ch_μ`, affine normalization, the imported
   Cheeger comparison, and the optional stronger raw-test/core question;
 - four sufficient long-route alternatives that share this analytic infrastructure. No
   probabilistic or logical independence is asserted.
@@ -228,10 +273,12 @@ formalization. It separates four things that prose can otherwise blur:
 The Blueprint is not a second proof-status database. Lean declarations and the
 [ledger](../research/a-series/ledger.yaml) remain authoritative. A `\lean{...}` annotation maps a
 statement to a local declaration, and `\leanok` records the support of that checked declaration;
-for the four ledger-backed certificate nodes it additionally requires the matching ledger record.
+for the ten ledger-backed certificate nodes it additionally requires the matching ledger record.
 Absence of `\leanok` means only that a node is not locally Lean-certified: its mathematical status
-may instead be open, conditional, imported, or proved with upstream agent review. A node whose
-final hypotheses or normalization have not been human-frozen is additionally marked `\notready`.
+may instead be open, conditional, imported, or proved with upstream agent review. `\notready`
+marks an explicit unresolved statement choice, such as the test domain or normalization; the
+nearby text must identify that choice. Possible future API changes alone do not justify it, and
+removing it does not certify a proof.
 Successful PDF or web rendering alone certifies none of these claims. The route sidecar records
 recursive AND/OR composition, pinned provenance, and active or historical branch disposition; it
 is likewise not a proof certificate.
@@ -284,19 +331,22 @@ lake env lean -DwarningAsError=true FunctionalInequalities/Energy/Euclidean/Smoo
 lake env lean -DwarningAsError=true FunctionalInequalities/Energy/Euclidean/IntrinsicAffineClosed.lean
 lake env lean -DwarningAsError=true FunctionalInequalities/Poincare/Euclidean/IntrinsicAffine.lean
 lake build FunctionalInequalities.Poincare.Foundation
+lake build Examples solutions.FoundationAxiomAudit
 ```
 
-The default targets build the library and the `Solutions` target containing all four entry points
-above plus `solutions/GaussianAxiomAudit.lean`. All four accepted nodes and their local import
-closures are proof-complete. The ledger checker scans proved certificates and their local imports
-for forbidden tokens. Lean compilation checks the proofs; the guarded audit fixes the Gaussian
-certificate's transitive axiom set to `propext`, `Classical.choice`, and `Quot.sound` and makes any
-change fail the default build.
+The default targets build the library, `Solutions`, and `Examples`. `Solutions` contains all eight
+certificate entry points, plus `solutions/GaussianAxiomAudit.lean` and
+`solutions/FoundationAxiomAudit.lean`. `Examples` compiles `examples/PoincareFoundation.lean` from
+the repository root. All ten accepted nodes and their local import closures are proof-complete.
+The ledger checker scans proved certificates and their local imports for forbidden tokens. Lean
+compilation checks the proofs; the guarded audits fix the Gaussian certificate and 27 foundation and comparison
+declarations to the transitive axiom set `propext`, `Classical.choice`, and `Quot.sound`.
+An unexpected dependency fails the default build.
 
 Lake downloads the pinned dependency on the first build. `.lake/` is ignored and
 `lake-manifest.json` is committed. The repository's `.github/workflows/lean.yml` runs the two
 Python checks and the default Lean build. The official `leanprover/lean-action@v1` sets up Lean;
-CI fetches only the local library and solution files' directly imported Mathlib modules and
+CI fetches only the local library, solution, and example files' directly imported Mathlib modules and
 their upstream dependencies, then runs the complete default `lake build`. Whole-`.lake` GitHub
 caching and automatic full-Mathlib downloads are disabled to limit runner disk usage.
 

@@ -5,6 +5,8 @@ import FunctionalInequalities.Poincare.Product.Tensorization
 import FunctionalInequalities.Poincare.Product.Reverse
 import FunctionalInequalities.Poincare.FiniteProduct.Tensorization
 import FunctionalInequalities.Poincare.Gaussian.Real
+import FunctionalInequalities.KLS.Statement
+import FunctionalInequalities.Poincare.Euclidean.LogConcaveComparison
 
 /-!
 # Functional inequalities
@@ -24,4 +26,8 @@ both now use ordinary `C∞` regularity. The foundation additionally exports seq
 lower-semicontinuity and recovery theorems, quadratic closure of dense pre-energies, the closed
 smooth-gradient relaxation, and intrinsic affine-support coordinates. No Cheeger-energy,
 Dirichlet, raw-test core, or spectral-gap identification is asserted by this aggregate.
+
+The proved comparison modules identify the ambient and intrinsic relaxations and the
+finite-dimensional legacy optimum, so the accepted Gaussian bounds and constants can be
+transported to the selected frontend through explicit equalities and fixed-constant equivalences.
 -/

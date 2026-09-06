@@ -38,13 +38,35 @@ git log -5 --oneline
 
 Older candidate, freeze, proof, and acceptance records are time-stamped, append-only evidence.
 An earlier `drafted` or incomplete state never overrides a later accepted ledger state.
+Historical freezes record the statement reviewed at that time; they do not impose permanent
+signature stability under the current interface-evolution policy.
+
+The 2026-09-06 follow-ups should be read in this order:
+
+1. [Comparison proof acceptance](research/decisions/2026-09-06-poincare-comparison-proofs.md):
+   the twelve Lean comparisons; the 77-label, 27-page snapshot.
+2. [Analytic bridge resolution](research/decisions/2026-09-06-analytic-bridge-resolution.md):
+   the subsequent analytic appendix and five generic Lean lemmas; the 86-label, 33-page snapshot.
+3. [Review clarifications](research/decisions/2026-09-06-blueprint-review-clarifications.md):
+   the later fiber-density dependency, BV/Minkowski convention, numerical wording, and Lean
+   documentation corrections. Earlier counts describe their own validation runs.
+4. [Rayleigh test-class alignment](research/decisions/2026-09-06-rayleigh-test-class-alignment.md):
+   the explicit density-lemma reference and the mean correction preserving bounded support
+   in the Cheeger--Buser proof.
+5. [Workflow and documentation status](research/decisions/2026-09-06-workflow-and-documentation-status.md):
+   the owner's CL policy and corrections aligning the live guides with the proved comparison
+   bridges, analytic proof drafts, and 27 foundation axiom guards.
+6. [Evolving interfaces and current proof certification](research/decisions/2026-09-06-evolving-interfaces.md):
+   the owner's subsequent decision to remove mandatory API freeze, allow direct
+   `drafted -> proved` development, and reserve `\notready` for explicit statement questions.
 
 ## Authority and source hierarchy
 
 1. Local Lean declarations accepted by `lake build` determine whether a local theorem typechecks.
-2. `research/a-series/ledger.yaml` owns the lifecycle and `checked_by: lean` status of the four
+2. `research/a-series/ledger.yaml` owns the lifecycle and `checked_by: lean` status of the ten
    certified nodes.
-3. Freeze and acceptance records preserve the human-approved statement and semantic review.
+3. Freeze and acceptance records preserve dated statement snapshots and semantic review.
+   The current interface-evolution policy governs subsequent changes.
 4. Blueprint TeX and `route-composition.yaml` provide derived navigation and AND/OR structure.
    They are not a proof database and cannot promote a node.
 5. Long-route mathematics is pinned to
@@ -63,8 +85,38 @@ audit, not as instructions that override this hierarchy.
 
 ## Current certified state
 
-Lean and Mathlib are pinned to `v4.33.0`. The production ledger contains four nodes with
-`status: proved` and `checked_by: lean`:
+The local proof-atlas extension is described in
+[`research/verification.md`](research/verification.md) and
+[`research/decisions/2026-09-06-local-proof-atlas.md`](research/decisions/2026-09-06-local-proof-atlas.md).
+`python3 research/verify.py` checks the current source snapshot, every Blueprint Lean anchor,
+all ten certificates and local module kernel replay. It also compares the elaborated local
+statement-definition closure with the explicit golden and audits six named definition checks.
+Afterwards export and query the task atlas. Task schema version 2 separates verification from
+infrastructure assessment (`available`, `missing`, `unchecked`); these do not change mathematical
+classification. Finish decisions before the final run so the resulting receipt stays current.
+The new `FunctionalInequalities.KLS.Conjecture` is only a proposition declaration, with explicit
+literature-facing definitions and typed checks. It is not itself a proved ledger node.
+The weighted smooth-approximation/literature-comparison chain is the prioritized formalization
+pilot. Its first node, `lem:covariance-test-core-density`, is now proved: all four contracts are
+packaged by `Solutions.LemCovarianceTestCoreDensity.certificate`, with default-build transitive
+axiom guards. The ledger records `proved / checked_by: lean`; the local approximation adapter
+is assessed as `available`. See the
+[acceptance record](research/decisions/2026-09-06-weighted-approximation-acceptance.md).
+`thm:smooth-lipschitz-constant-equivalence` now has eight proved interfaces in
+`KLS/LocalSlopeGradient.lean` and `Poincare/Euclidean/LiteratureComparison.lean`.
+The sole certificate in `solutions/ThmSmoothLipschitzConstantEquivalence.lean` packages all eight;
+it and every component have default-build axiom guards. The ledger records
+`proved / checked_by: lean`. Read the
+[proof record](research/decisions/2026-09-06-smooth-literature-proofs.md).
+The general log-concave extension is now proved as well. `KLS/LogConcaveDensity.lean` derives
+intrinsic absolute continuity directly from compact-set log-concavity, and
+`Poincare/Euclidean/LogConcaveComparison.lean` identifies the selected and literature constants
+without an added density premise. Two separate certificates record these exact results; the
+full Borell density representative and moment theorem remains unproved. Read the
+[general log-concave proof record](research/decisions/2026-09-06-general-logconcave-comparison.md).
+
+Lean and Mathlib are pinned to `v4.33.0`. The production ledger contains ten proved nodes,
+each with `status: proved` and `checked_by: lean`.
 
 | Ledger node | Public certificate |
 | --- | --- |
@@ -72,6 +124,12 @@ Lean and Mathlib are pinned to `v4.33.0`. The production ledger contains four no
 | `lem:poincare-tensorization` | `Solutions.LemPoincareTensorization.certificate` |
 | `lem:poincare-finite-tensorization` | `Solutions.LemPoincareFiniteTensorization.certificate` |
 | `lem:poincare-gaussian-one-dimensional` | `Solutions.LemPoincareGaussianOneDimensional.certificate` |
+| `lem:ambient-intrinsic-poincare-comparison` | `Solutions.LemAmbientIntrinsicPoincareComparison.certificate` |
+| `lem:legacy-relaxed-poincare-comparison` | `Solutions.LemLegacyRelaxedPoincareComparison.certificate` |
+| `lem:covariance-test-core-density` | `Solutions.LemCovarianceTestCoreDensity.certificate` |
+| `thm:smooth-lipschitz-constant-equivalence` | `Solutions.ThmSmoothLipschitzConstantEquivalence.certificate` |
+| `lem:logconcave-intrinsic-absolute-continuity` | `Solutions.LemLogConcaveIntrinsicAbsoluteContinuity.certificate` |
+| `thm:selected-literature-constant-equivalence` | `Solutions.ThmSelectedLiteratureConstantEquivalence.certificate` |
 
 The reusable library also proves intrinsic real `L²` mean, centering and variance; extended
 energies; sequential relaxation and recovery; quadratic relaxation as a closed quadratic form;
@@ -79,24 +137,43 @@ the ambient smooth-gradient closed form; affine support and intrinsic `L²` equi
 intrinsic-affine closed form; and the generic optimal-constant order law. These are foundational
 theorems, not a proof of KLS.
 
+`Energy/RelaxationApproximation.lean` contains the shared concrete-test selection steps used by
+lower semicontinuity and recovery. The default build also compiles the usage and boundary examples
+in `examples/PoincareFoundation.lean` and the 27 foundation and comparison guards in
+`solutions/FoundationAxiomAudit.lean`. The four previous certificates retain their public contracts; two new certificates package the
+comparison results with unchanged theorem signatures.
+
+The comparison batch in `solutions/LemAmbientIntrinsicPoincareComparison.lean` and
+`solutions/LemLegacyRelaxedPoincareComparison.lean` now has five and seven proved comparisons.
+They are exported by `Poincare.Foundation` and the root aggregate. All 12 theorem dependencies
+and both certificates have axiom guards. Read the
+[comparison guide](formalization/FunctionalInequalities/Poincare/Euclidean/README.md) and
+[proof acceptance](research/decisions/2026-09-06-poincare-comparison-proofs.md).
+
 ## Current mathematical boundary
 
 The Blueprint selects the intrinsic-affine smooth-gradient relaxation as the repository-facing
-canonical frontend. This is a project interface choice, not a completed identification with the
-literature energy. The generic `constantOfL2Energy μ E` remains an optimizer parameterized by an
+canonical frontend. Its optimal constant now equals the literature constant for every
+finite-dimensional log-concave law; equality of energies is a separate question.
+The generic `Poincare.L2Energy.constant μ E` remains an optimizer parameterized by an
 arbitrary energy; it is not, by itself, the selected Poincare constant.
 
 The following statements are not currently Lean-certified:
 
 - the concrete normal-contraction estimate and hence the Dirichlet property;
 - identification with the literature normalization `2 Ch_μ`;
-- equality between the legacy smooth-test constant and the relaxed constant;
-- equality between ambient and intrinsic-affine relaxations and constants;
-- equivalence with the locally Lipschitz literature frontend;
+- the full Borell density representative, local positive bounds, and all-order moments;
 - affine whitening, Cheeger--Poincare comparison, self-adjoint generator, and spectral-gap
   interfaces needed by the long routes.
 
-The preferred legacy-to-relaxed bridge does **not** require raw test/core agreement. One
+The 2026-09-06 analytic-comparison follow-up supplies complete written arguments for the
+locally Lipschitz approximation, relative-perimeter Cheeger infimum, and CMH covariance-core
+identification in Blueprint Appendix A. The approximation lemma is now Lean-certified; the
+relative-perimeter and covariance-core closure arguments still await Lean implementation. Five generic comparison theorems
+are proved in Lean, with the foundation audit extended to 27 guards. See
+`research/decisions/2026-09-06-analytic-bridge-resolution.md` for their exact scope and evidence.
+
+The proved legacy-to-relaxed bridge does **not** require raw test/core agreement. One
 direction uses the defining relaxation upper bound on each smooth test. The other uses recovery
 sequences and continuity of `L²` variance. Raw/core agreement is a separate, stronger question.
 It cannot hold without extra hypotheses: for `μ = δ₀`, the functions `0` and `x` represent the
@@ -119,13 +196,18 @@ repository-facing adapters and are not asserted to be premises of every upstream
 - Moment-map CMH: the recovery-envelope assumption is open; its sufficiency implication is
   conditional and agent-reviewed upstream. It is a sufficient condition, not a reformulation of
   KLS.
-- Conditional-fiber frame: the test-independent frame question is open; the form/factor-four
-  bridge is proved only in the pinned upstream, with agent review. Failure of the natural simplex
-  root frame does not refute the all-frame question.
+- Conditional-fiber frame: the test-independent frame question is open. The structural form
+  statement has pinned upstream agent review; the local energy comparison now has an explicit
+  finite input `κ`. The active numerical input is Bobkov's verified `12 Var`, yielding `12C`.
+  The old factor-four claim is historical provenance. Failure of the natural simplex
+  root frame does not refute the all-frame question. The frame construction uses positive
+  dimensions; zero-dimensional KLS has zero variance and needs no frame. The sidecar explicitly
+  includes affine/isotropic reduction for the passage to all affine supports.
 
 The literal global-operator-norm weighted Eldan-B package is refuted in the pinned manuscript.
 It is retained only as historical provenance and must not appear among the active alternatives.
-No replacement branch is added until it has a frozen statement and traceable provenance.
+Any replacement branch needs an explicit mathematical statement, traceable provenance, and an
+accurate route status. A separate API freeze is not required.
 
 The route chapter is a KLS-facing interface summary, not the transitive closure of the upstream
 ledger. Missing Riccati, stochastic, moment-map, recovery, and one-dimensional inputs must be
@@ -138,9 +220,19 @@ From the repository root:
 ```bash
 python3 research/check_ledger.py
 python3 research/check_blueprint.py
+python3 research/atlas.py check
 python3 -m unittest discover -s research/tests -p 'test_*.py'
 (cd formalization && lake build)
+python3 research/verify.py
+python3 research/atlas.py export
+python3 research/atlas.py ready
 ```
+
+`verify.py` already runs the structural checks, tests and build above, then the statement golden,
+declaration/axiom audit and replay. The individual commands are useful for diagnosing a failed gate.
+`python3 research/statement_snapshot.py check` builds and compares just the public statement
+definition closure. Baseline changes require a new decision and the explicit update command in
+[`research/verification.md`](research/verification.md); no automatic regeneration or API freeze.
 
 For rendered Blueprint artifacts, create a temporary environment once and run:
 
@@ -156,25 +248,38 @@ was actually checked for the named SHA.
 
 ## Change discipline and next stages
 
-- Preserve `drafted -> frozen -> proved`. Only human review freezes a public mathematical
-  statement; only checked local evidence permits `checked_by: lean` or `\leanok`.
+- Owner workflow instruction (2026-09-06): “后面我们除了大的推送其他的都不用CL”.
+  Use CL only for large pushes. Routine analysis, edits, documentation maintenance, and small
+  pushes proceed without a CL workflow. Run local checks appropriate to the change.
+- Owner interface policy (2026-09-06): public Lean interfaces may evolve, including proved
+  interfaces. Do not require a freeze before proof work; new nodes may move directly from
+  `drafted` to `proved`. There is no default backward-compatibility promise.
+- `proved`, `checked_by: lean`, and `\leanok` certify the current statement and proof. After
+  interface changes, migrate consumers and rerun the relevant build, semantic, and axiom checks.
+  Record changes to mathematical assumptions, conclusions, domains, or normalization explicitly;
+  synchronize the ledger and Blueprint and check whether the original goal is still covered.
+  An unproved revision returns to `drafted` / `checked_by: null` without `\leanok`.
+- Reserve Blueprint `\notready` for an explicit unresolved statement choice, such as its test
+  domain or normalization. Possible future API changes alone do not justify the marker.
+  Historical `frozen` records remain review snapshots; see `research/ledger-schema.md`.
+- Public API naming follows [research/naming.md](research/naming.md): use namespaces for object
+  roles and retain theorem conditions needed to distinguish mathematical claims.
 - Keep decisions and explorations append-only. Record a correction in a new file instead of
   rewriting the historical state.
 - Ordinary Mathlib `C∞` is `ContDiff ℝ ∞`; `ContDiff ℝ ⊤` is analytic.
 - Do not modify production ledger statements, route status, or Lean claims merely to make a
   diagram pass.
 
-The next proof workstreams are deliberately separate; their numbering is not a frozen scheduling
+The next proof workstreams are deliberately separate; their numbering is not a fixed scheduling
 decision:
 
-1. Prove the fixed-constant legacy/relaxed equivalence and equality of the optimal constants.
-2. Prove the ambient/intrinsic-affine energy and constant equality.
-3. Establish normal contraction and the Dirichlet witness.
-4. Build the locally Lipschitz, affine whitening, Cheeger, closed-form, generator, and spectral
-   interfaces.
-5. Formalize one long KLS branch after an explicit branch-selection decision. The present route
-   ordering is a navigation order, not a frozen scheduling priority.
+1. Establish normal contraction and the Dirichlet witness.
+2. Complete the Borell density/moment representation and build the affine whitening, Cheeger,
+   closed-form, generator, and spectral interfaces.
+3. Formalize one long KLS branch after an explicit branch-selection decision. The present route
+   ordering is a navigation order, not a fixed scheduling priority.
 
-Do not claim that KLS, the Dirichlet property, `2 Ch_μ`, a raw/core theorem, any frontend
-equality, or any long route is proved until the corresponding local declaration and status evidence
-exist.
+The ambient/intrinsic, legacy/relaxed, and general log-concave literature constant equalities
+are Lean-certified. KLS, the concrete Dirichlet property, `2 Ch_μ`, the full Borell representation,
+and the long routes still require their own local proofs. Unrestricted raw/core agreement is
+refuted by the recorded Dirac example.

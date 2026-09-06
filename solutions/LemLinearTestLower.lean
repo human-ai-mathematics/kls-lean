@@ -40,3 +40,9 @@ theorem certificate {D : ℕ}
   · exact Covariance.lambdaMax_le_constant hμ
 
 end Solutions.LemLinearTestLower
+
+/--
+info: 'Solutions.LemLinearTestLower.certificate' depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms Solutions.LemLinearTestLower.certificate

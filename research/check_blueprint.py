@@ -65,7 +65,7 @@ V2_BRANCH_FIELDS = {
     "superseded_by",
 }
 V2_BRANCH_PROVENANCE_FIELDS = {"source", "path"}
-V2_TARGET_FIELDS = {"target", "prerequisites", "composition"}
+V2_TARGET_FIELDS = {"target", "adapters", "composition"}
 V2_GROUP_FIELDS = {"operator", "items"}
 
 CLAIM_STATES = {"open", "conditional", "proved", "imported", "defined", "refuted"}
@@ -87,13 +87,37 @@ REQUIRED_ACTIVE_ROUTES = {
     "moment-map-cmh",
     "conditional-fiber-frame",
 }
-REQUIRED_SHARED_PREREQUISITES = {
+REQUIRED_REPOSITORY_ADAPTERS = {
     "thm:selected-literature-constant-equivalence",
     "thm:affine-isotropic-reduction",
 }
 
 # Blueprint label -> (ledger node, public Lean certificate declaration).
 CERTIFICATES: dict[str, tuple[str, str]] = {
+    "lem:logconcave-intrinsic-absolute-continuity": (
+        "lem:logconcave-intrinsic-absolute-continuity",
+        "Solutions.LemLogConcaveIntrinsicAbsoluteContinuity.certificate",
+    ),
+    "thm:selected-literature-constant-equivalence": (
+        "thm:selected-literature-constant-equivalence",
+        "Solutions.ThmSelectedLiteratureConstantEquivalence.certificate",
+    ),
+    "thm:smooth-lipschitz-constant-equivalence": (
+        "thm:smooth-lipschitz-constant-equivalence",
+        "Solutions.ThmSmoothLipschitzConstantEquivalence.certificate",
+    ),
+    "lem:covariance-test-core-density": (
+        "lem:covariance-test-core-density",
+        "Solutions.LemCovarianceTestCoreDensity.certificate",
+    ),
+    "cert:ambient-intrinsic-comparison": (
+        "lem:ambient-intrinsic-poincare-comparison",
+        "Solutions.LemAmbientIntrinsicPoincareComparison.certificate",
+    ),
+    "cert:legacy-relaxed-comparison": (
+        "lem:legacy-relaxed-poincare-comparison",
+        "Solutions.LemLegacyRelaxedPoincareComparison.certificate",
+    ),
     "cert:linear-test-lower": (
         "lem:linear-test-lower",
         "Solutions.LemLinearTestLower.certificate",
@@ -993,22 +1017,23 @@ def _validate_targets(
             if target not in index.labels:
                 errors.append(f"{context}.target references unknown label {target}")
 
-        prerequisite_info = ExpressionInfo()
-        if "prerequisites" in value_item:
-            prerequisite_info = _validate_expression(
-                value_item.get("prerequisites"),
+        adapter_info = ExpressionInfo()
+        adapter_value = value_item.get("adapters")
+        if "adapters" in value_item:
+            adapter_info = _validate_expression(
+                adapter_value,
                 leaf_kind="node",
-                context=f"{context}.prerequisites",
+                context=f"{context}.adapters",
                 errors=errors,
             )
-            for node in sorted(prerequisite_info.references):
+            for node in sorted(adapter_info.references):
                 claim = claims.get(node)
                 if claim is None:
-                    errors.append(f"{context}.prerequisites references unknown claim {node}")
+                    errors.append(f"{context}.adapters references unknown claim {node}")
                 elif claim.state == "refuted":
-                    errors.append(f"{context}.prerequisites references refuted claim {node}")
+                    errors.append(f"{context}.adapters references refuted claim {node}")
                 if node not in index.labels:
-                    errors.append(f"{context}.prerequisites references unknown label {node}")
+                    errors.append(f"{context}.adapters references unknown label {node}")
 
         composition_value = value_item.get("composition")
         composition = _validate_expression(
@@ -1050,13 +1075,20 @@ def _validate_targets(
             result.append((target, node_groups))
 
         if target == "conj:kls":
-            missing_shared = sorted(
-                REQUIRED_SHARED_PREREQUISITES - prerequisite_info.references
-            )
-            if missing_shared:
+            if not (
+                isinstance(adapter_value, dict)
+                and adapter_value.get("operator") == "all_of"
+            ):
                 errors.append(
-                    f"{context}.prerequisites is missing shared requirement(s): "
-                    + ", ".join(missing_shared)
+                    f"{context}.adapters must have root operator 'all_of'"
+                )
+            missing_adapters = sorted(
+                REQUIRED_REPOSITORY_ADAPTERS - adapter_info.references
+            )
+            if missing_adapters:
+                errors.append(
+                    f"{context}.adapters is missing required repository adapter(s): "
+                    + ", ".join(missing_adapters)
                 )
 
     if "conj:kls" not in target_names:

@@ -26,6 +26,11 @@ The certificate must:
 build performs the machine check. A green structural check alone does not establish semantic
 agreement with the reference statement.
 
+Certification applies to the current statement and proof, without freezing their public
+interfaces. When interfaces change, migrate consumers and revalidate the affected certificates.
+Changes to mathematical scope must be recorded and reflected in the ledger and Blueprint;
+an unproved revision cannot retain Lean-certification claims.
+
 Each proved node has exactly one named `certificate`, directly importing the reusable library.
 The former `Project/` forwarding layer has been removed. Concrete specializations are checked
 with typed `#check` applications rather than duplicate public theorems.
@@ -50,17 +55,60 @@ freeze and acceptance records are `../research/decisions/2026-09-03-tensorizatio
 and `../research/explorations/2026-09-03-tensorization-acceptance.md`; the latter records
 validation and the final publication/CI status.
 
-The `Solutions` default target has these four node roots plus
-`GaussianAxiomAudit.lean`. The audit imports the Gaussian certificate and uses `#guard_msgs` to
-fix its transitive axiom set to `propext`, `Classical.choice`, and `Quot.sound`; a changed set
-fails the default build. It is a regression check, not a fifth ledger node or certificate.
+The two comparison certificates, `LemAmbientIntrinsicPoincareComparison.lean` and
+`LemLegacyRelaxedPoincareComparison.lean`, package five and seven proved comparisons respectively.
+Their types preserve the reviewed generality, including empty test classes, zero-dimensional
+support, zero finite constants and infinite optima. Gaussian transport through these bridges is
+now proved. See the [comparison guide](../formalization/FunctionalInequalities/Poincare/Euclidean/README.md).
 
-## Future draft and frozen statements
+The `Solutions` default target builds all ten certificates plus `GaussianAxiomAudit.lean` and
+`FoundationAxiomAudit.lean`. The latter guards 27 foundation and comparison declarations; each new
+certificate also has its own axiom guard. These checks require exactly `propext`, `Classical.choice`
+and `Quot.sound`. Compiled user examples remain in
+[`examples/PoincareFoundation.lean`](../examples/PoincareFoundation.lean).
 
-Drafted and frozen nodes use `checked_by: null`. They must meet the same path, header, and default
-Lake target requirements, while placeholders remain permitted. Only proved nodes receive the
-escape-token check. See `../research/ledger-schema.md` for the human freeze and proof handoff
-rules.
+## Analytic comparison certificates and definition checks
+
+[`LemLogConcaveIntrinsicAbsoluteContinuity.lean`](LemLogConcaveIntrinsicAbsoluteContinuity.lean)
+certifies intrinsic absolute continuity from the compact-set definition.
+[`ThmSelectedLiteratureConstantEquivalence.lean`](ThmSelectedLiteratureConstantEquivalence.lean)
+then certifies the general log-concave constant equality, including singular ambient laws and
+zero-dimensional support. Both certificates and all new reusable declarations have default-build
+axiom guards. The full Borell density/moment theorem remains separate; read the
+[general proof record](../research/decisions/2026-09-06-general-logconcave-comparison.md).
+
+[`ThmSmoothLipschitzConstantEquivalence.lean`](ThmSmoothLipschitzConstantEquivalence.lean)
+packages eight proved interfaces from `KLS/LocalSlopeGradient.lean` and
+`Poincare/Euclidean/LiteratureComparison.lean`. The pointwise and almost-everywhere slope identities
+feed energy/domain identification and the finite-constant and extended-optimum comparisons.
+The final comparison assumes intrinsic absolute continuity. The node is
+`proved / checked_by: lean`; all eight components and the certificate have default-build
+transitive axiom guards. Read the
+[proof record](../research/decisions/2026-09-06-smooth-literature-proofs.md).
+
+[`LemCovarianceTestCoreDensity.lean`](LemCovarianceTestCoreDensity.lean) contains the certificate
+for four proved approximation contracts: weighted compact-support cutoff, full-gradient
+mollification, weighted L2 approximation, and interval-preserving bounded L1 smoothing. Its
+certificate and four reusable declarations have default-build transitive axiom guards. The
+node is `proved / checked_by: lean`; see the
+[acceptance record](../research/decisions/2026-09-06-weighted-approximation-acceptance.md).
+
+`StatementChecks.lean` is a default-build target for the literal KLS proposition and its domain
+and boundary encodings. It is not a ledger proof certificate. All ten mathematical certificates
+and the six named definition sanity checks have default-build transitive axiom guards. Existing
+Dirac representative examples and Gaussian comparisons are reused. A concrete Gaussian literature
+bound can now use a proof of the Gaussian law satisfying compact-set `KLS.LogConcave`
+to apply the general comparison; that specialization is not added here. The [verification runner](../research/verify.py)
+also audits the statement's local definition closure against its explicit golden,
+checks complete axiom coverage and stores source-bound evidence. See the
+[workflow guide](../research/verification.md).
+
+New nodes may move directly from `drafted` to `proved`; no prior freeze is required. Drafts use
+`checked_by: null` and meet the same path, header, and default Lake target requirements, while
+placeholders remain permitted. Historical `frozen` snapshots are still accepted as unproved
+nodes. Only proved nodes receive the escape-token check. See the
+[lifecycle guide](../research/ledger-schema.md#lifecycle) for current certification and interface
+change rules.
 
 ## Gaussian certificate
 

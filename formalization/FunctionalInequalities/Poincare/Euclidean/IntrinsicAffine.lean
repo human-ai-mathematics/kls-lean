@@ -9,15 +9,16 @@ smooth-gradient relaxation on the direction of the affine support. The variance 
 intrinsic `L²(μ)` variance of the original probability law; only the energy is evaluated through
 the linearly isometric intrinsic-coordinate presentation.
 
-The name deliberately retains `IntrinsicAffineSmoothGradientRelaxation`. No equality with the
-ambient smooth-gradient relaxation, Cheeger energy `2 Ch`, or a spectral-gap constant is asserted.
+The `Poincare.Canonical` namespace names the frontend selected by the repository: the
+intrinsic-affine smooth-gradient relaxation. Its construction remains explicit in
+`Energy.Canonical.energy`; the name itself asserts no Cheeger or spectral identification.
 -/
 
 noncomputable section
 
 open MeasureTheory
 
-namespace FunctionalInequalities.Poincare.Euclidean
+namespace FunctionalInequalities.Poincare.Canonical
 
 universe u
 
@@ -26,23 +27,23 @@ variable {E : Type u} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [Complete
   [FiniteDimensional ℝ E]
 
 /-- The optimal Poincaré constant of the intrinsic-affine smooth-gradient relaxation. -/
-def intrinsicAffineSmoothGradientRelaxationConstant (μ : ProbabilityMeasure E) : ENNReal :=
-  constantOfL2Energy μ
-    (Energy.Euclidean.intrinsicAffineSmoothGradientRelaxation μ)
+def constant (μ : ProbabilityMeasure E) : ENNReal :=
+  L2Energy.constant μ
+    (Energy.Canonical.energy μ)
 
 /-- Validity of a finite Poincaré constant on the finite domain of the intrinsic-affine
 smooth-gradient relaxation. -/
-def IntrinsicAffineSmoothGradientRelaxationHolds
+def Holds
     (μ : ProbabilityMeasure E) (C : NNReal) : Prop :=
-  HoldsL2Energy μ (Energy.Euclidean.intrinsicAffineSmoothGradientRelaxation μ) C
+  L2Energy.Holds μ (Energy.Canonical.energy μ) C
 
 /-- A finite constant is valid for the intrinsic-affine relaxation exactly when it bounds the
 optimal extended constant. -/
-theorem intrinsicAffineSmoothGradientRelaxationHolds_iff_constant_le
+theorem holds_iff_constant_le
     (μ : ProbabilityMeasure E) (C : NNReal) :
-    IntrinsicAffineSmoothGradientRelaxationHolds μ C ↔
-      intrinsicAffineSmoothGradientRelaxationConstant μ ≤ (C : ENNReal) := by
-  exact holdsL2Energy_iff_constant_le μ
-    (Energy.Euclidean.intrinsicAffineSmoothGradientRelaxation μ) C
+    Holds μ C ↔
+      constant μ ≤ (C : ENNReal) := by
+  exact L2Energy.holds_iff_constant_le μ
+    (Energy.Canonical.energy μ) C
 
-end FunctionalInequalities.Poincare.Euclidean
+end FunctionalInequalities.Poincare.Canonical

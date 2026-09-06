@@ -162,6 +162,22 @@ theorem center_center (μ : ProbabilityMeasure α) (f : Lp ℝ 2 (μ : Measure �
 def variance (μ : ProbabilityMeasure α) (f : Lp ℝ 2 (μ : Measure α)) : NNReal :=
   ‖center μ f‖₊ ^ 2
 
+/-- The mean is continuous in the real `L²` topology. -/
+theorem continuous_mean (μ : ProbabilityMeasure α) : Continuous (mean μ) :=
+  continuous_id.inner continuous_const
+
+/-- Subtracting the mean is continuous in the real `L²` topology. -/
+theorem continuous_center (μ : ProbabilityMeasure α) : Continuous (center μ) := by
+  apply (continuous_id.sub ((continuous_mean μ).smul continuous_const) :
+    Continuous (fun f : Lp ℝ 2 (μ : Measure α) ↦ f - mean μ f • const μ 1)).congr
+  intro f
+  simp only [center, ← const_smul, mul_one]
+  rfl
+
+/-- Variance is continuous in `L²`, including at constant functions. -/
+theorem continuous_variance (μ : ProbabilityMeasure α) : Continuous (variance μ) :=
+  (continuous_center μ).nnnorm.pow 2
+
 /-- Coercing the `NNReal` variance to `ℝ` gives the squared norm of the centered part. -/
 @[simp, norm_cast]
 theorem coe_variance (μ : ProbabilityMeasure α) (f : Lp ℝ 2 (μ : Measure α)) :

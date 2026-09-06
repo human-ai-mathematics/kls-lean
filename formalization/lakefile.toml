@@ -1,6 +1,6 @@
 name = "functional-inequalities"
 version = "0.1.0"
-defaultTargets = ["FunctionalInequalities", "Solutions"]
+defaultTargets = ["FunctionalInequalities", "Solutions", "Examples"]
 
 [[require]]
 name = "mathlib"
@@ -24,4 +24,17 @@ roots = [
   "solutions.LemPoincareFiniteTensorization",
   "solutions.LemPoincareGaussianOneDimensional",
   "solutions.GaussianAxiomAudit",
+  "solutions.FoundationAxiomAudit",
+  "solutions.LemAmbientIntrinsicPoincareComparison",
+  "solutions.LemLegacyRelaxedPoincareComparison",
+  "solutions.StatementChecks",
+  "solutions.LemCovarianceTestCoreDensity",
+  "solutions.ThmSmoothLipschitzConstantEquivalence",
+  "solutions.LemLogConcaveIntrinsicAbsoluteContinuity",
+  "solutions.ThmSelectedLiteratureConstantEquivalence",
 ]
+
+[[lean_lib]]
+name = "Examples"
+srcDir = ".."
+roots = ["examples.PoincareFoundation"]

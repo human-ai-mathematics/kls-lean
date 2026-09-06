@@ -1,4 +1,4 @@
-import FunctionalInequalities.Energy.Relaxation
+import FunctionalInequalities.Energy.RelaxationApproximation
 import Mathlib.Analysis.SpecificLimits.Basic
 import Mathlib.Topology.Instances.ENNReal.Lemmas
 import Mathlib.Topology.Semicontinuity.Basic
@@ -52,19 +52,7 @@ theorem lowerSemicontinuous_sequentialRelaxation :
     have hrelaxed : P.sequentialRelaxation (xseq n) < bound + energyError n :=
       (hxseq_bound n).trans_lt
         (ENNReal.lt_add_right hbound (energyError_pos n).ne')
-    rw [P.sequentialRelaxation_apply, iInf_lt_iff] at hrelaxed
-    obtain ⟨approximation, henergy⟩ := hrelaxed
-    have happ_tendsto := approximation.2
-    have hnear : ∀ᶠ k : ℕ in atTop,
-        dist (P.toAmbient (approximation.1 k)) (xseq n) < metricError n := by
-      rw [Metric.tendsto_atTop] at happ_tendsto
-      obtain ⟨N, hN⟩ := happ_tendsto (metricError n) (metricError_pos n)
-      exact eventually_atTop.2 ⟨N, hN⟩
-    have hlow : ∃ᶠ k : ℕ in atTop,
-        (P.energy (approximation.1 k) : ENNReal) < bound + energyError n :=
-      frequently_lt_of_liminf_lt (by isBoundedDefault) henergy
-    obtain ⟨k, hk_energy, hk_near⟩ := (hlow.and_eventually hnear).exists
-    exact ⟨approximation.1 k, hk_near, hk_energy⟩
+    exact P.exists_test_near_of_relaxation_lt hrelaxed (metricError_pos n)
   choose test htest_near htest_energy using exists_test
   have metricError_tendsto : Tendsto metricError atTop (𝓝 0) := by
     simpa [metricError] using
@@ -88,6 +76,64 @@ theorem lowerSemicontinuous_sequentialRelaxation :
       liminf_le_liminf (Eventually.of_forall fun n ↦ (htest_energy n).le)
     _ = bound := by
       simpa using (tendsto_const_nhds.add energyError_tendsto).liminf_eq
+
+end PreEnergy
+
+namespace PreEnergy
+
+variable {X : Type*} [TopologicalSpace X] (P : PreEnergy X)
+
+/-- A lower-semicontinuous functional bounded by the concrete test energies is bounded by
+their sequential relaxation. No density or finite-energy agreement is required. -/
+theorem le_sequentialRelaxation_of_lowerSemicontinuous
+    (energy : Functional X) (hlsc : LowerSemicontinuous fun x ↦ energy x)
+    (h : ∀ f : P.Test, energy (P.toAmbient f) ≤ (P.energy f : ENNReal)) (x : X) :
+    energy x ≤ P.sequentialRelaxation x := by
+  rw [P.sequentialRelaxation_apply]
+  refine le_iInf fun s ↦ ?_
+  have hlimit : energy x ≤ liminf (fun n ↦ energy (P.toAmbient (s.1 n))) atTop := by
+    refine le_of_forall_lt fun c hc ↦ ?_
+    obtain ⟨d, hcd, hd⟩ := exists_between hc
+    have heventually := s.2.eventually (hlsc x d hd)
+    exact hcd.trans_le (le_liminf_of_le (by isBoundedDefault)
+      (heventually.mono fun _ hn ↦ hn.le))
+  exact hlimit.trans (liminf_le_liminf (Eventually.of_forall fun n ↦ h (s.1 n)))
+
+end PreEnergy
+
+namespace PreEnergy
+
+variable {X : Type*} [PseudoMetricSpace X] (P Q : PreEnergy X)
+
+/-- Approximating each `P`-test by `Q`-tests at no greater limiting energy compares the two
+relaxations. The hypothesis allows different test types and nonattained raw minima.
+
+Both pre-energies use the same pseudometric ambient space, where the target relaxation is
+lower semicontinuous. If each source test instead has a single exact target realization under
+a continuous map, `PreEnergy.sequentialRelaxation_comp_le` applies even between different
+topological spaces, without a pseudometric hypothesis.
+-/
+theorem sequentialRelaxation_le_of_recovery_sequences
+    (h : ∀ f : P.Test, ∃ s : Q.ApproximatingSequence (P.toAmbient f),
+      Q.sequenceEnergy s ≤ (P.energy f : ENNReal)) (x : X) :
+    Q.sequentialRelaxation x ≤ P.sequentialRelaxation x := by
+  apply P.le_sequentialRelaxation_of_lowerSemicontinuous Q.sequentialRelaxation
+    Q.lowerSemicontinuous_sequentialRelaxation
+  intro f
+  obtain ⟨s, hs⟩ := h f
+  exact (Q.sequentialRelaxation_le_sequenceEnergy s).trans hs
+
+/-- Mutual approximation of concrete tests identifies their relaxed energies, including at
+infinite-energy points. Applications must prove the two actual approximation hypotheses. -/
+theorem sequentialRelaxation_eq_of_recovery_sequences
+    (hPQ : ∀ f : P.Test, ∃ s : Q.ApproximatingSequence (P.toAmbient f),
+      Q.sequenceEnergy s ≤ (P.energy f : ENNReal))
+    (hQP : ∀ g : Q.Test, ∃ s : P.ApproximatingSequence (Q.toAmbient g),
+      P.sequenceEnergy s ≤ (Q.energy g : ENNReal)) :
+    P.sequentialRelaxation = Q.sequentialRelaxation := by
+  ext x
+  exact le_antisymm (Q.sequentialRelaxation_le_of_recovery_sequences P hQP x)
+    (P.sequentialRelaxation_le_of_recovery_sequences Q hPQ x)
 
 end PreEnergy
 

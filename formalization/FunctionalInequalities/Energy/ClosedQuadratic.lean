@@ -12,7 +12,7 @@ This module records closed-quadratic-form structure as properties of an existing
 `Energy.Functional`. The carrier remains the ambient real normed space, and the functional may
 take the value `⊤` away from its finite domain.
 
-Homogeneity is stored only for nonzero scalars. The separate zero axiom supplies the missing
+Homogeneity is stored only for nonzero scalars. The separate zero field supplies the missing
 branch without interpreting the indeterminate expression `0 * ⊤`. The derived theorem
 `ClosedQuadratic.smul` exposes both branches in one total statement.
 -/

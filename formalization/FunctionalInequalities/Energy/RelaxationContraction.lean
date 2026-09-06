@@ -56,29 +56,8 @@ theorem RelaxedContractionBound.sequentialRelaxation_comp_le {C : X → X}
     (h : P.RelaxedContractionBound C) (hC : Continuous C) :
     ∀ x : X, P.sequentialRelaxation (C x) ≤ P.sequentialRelaxation x := by
   intro x
-  rw [P.sequentialRelaxation_apply]
-  refine le_iInf fun approximation ↦ ?_
-  have hC_tendsto :
-      Tendsto (fun n ↦ C (P.toAmbient (approximation.1 n))) atTop (𝓝 (C x)) :=
-    (hC.tendsto x).comp approximation.2
-  have hlsc_along : P.sequentialRelaxation (C x) ≤
-      liminf (fun n ↦
-        P.sequentialRelaxation (C (P.toAmbient (approximation.1 n)))) atTop := by
-    refine le_of_forall_lt fun c hc ↦ ?_
-    obtain ⟨d, hcd, hd⟩ := exists_between hc
-    have hd_eventually : ∀ᶠ n in atTop,
-        d < P.sequentialRelaxation (C (P.toAmbient (approximation.1 n))) :=
-      hC_tendsto.eventually
-        (P.lowerSemicontinuous_sequentialRelaxation (C x) d hd)
-    exact hcd.trans_le
-      (le_liminf_of_le (by isBoundedDefault)
-        (hd_eventually.mono fun _ hn ↦ hn.le))
-  calc
-    P.sequentialRelaxation (C x) ≤ liminf (fun n ↦
-        P.sequentialRelaxation (C (P.toAmbient (approximation.1 n)))) atTop := hlsc_along
-    _ ≤ liminf (fun n ↦ (P.energy (approximation.1 n) : ENNReal)) atTop :=
-      liminf_le_liminf (Eventually.of_forall fun n ↦ h (approximation.1 n))
-    _ = P.sequenceEnergy approximation := rfl
+  exact P.le_sequentialRelaxation_of_lowerSemicontinuous
+    (P.sequentialRelaxation.comap C) (P.lowerSemicontinuous_sequentialRelaxation.comp hC) h x
 
 end PseudoMetricSpace
 

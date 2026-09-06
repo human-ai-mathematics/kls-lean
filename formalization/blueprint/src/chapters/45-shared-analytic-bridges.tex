@@ -2,76 +2,98 @@
 \label{chap:shared-analytic-bridges}
 
 The long routes reuse a small collection of shared and branch-specific endpoint interfaces.  This
-chapter records them once; it does not make every node a conjunctive premise of every route.  The
-displayed repository interfaces are phase-one proposals pending human review, so they are marked
-\texttt{notready}; none is Lean-certified here.  In particular, a published input or an upstream
-reviewed proof never receives \texttt{leanok} merely because it is cited.
+chapter records them once; it does not make every node a conjunctive premise of every route.
+The first three comparison bridges below are proved in Lean, including smooth/literature
+equivalence under intrinsic absolute continuity. The general log-concave comparison still needs
+the separate Borell input. Interfaces may evolve during formalization without a prior API freeze.
+A published input or an upstream reviewed proof receives no \texttt{leanok} merely from its citation.
 
 \section{Three presentations of the Poincar\'e constant}
 
 \begin{theorem}[Legacy tests and ambient relaxation have the same finite constants]
   \label{thm:legacy-relaxed-holds-equivalence}
-  \notready
-  \uses{def:l2-mean-variance,def:smooth-gradient-preenergy,
+  \lean{FunctionalInequalities.Poincare.Euclidean.holds_iff_ambient,
+        FunctionalInequalities.Poincare.Euclidean.holds_iff_preEnergy}
+  \leanok
+  \uses{lem:preenergy-poincare-relaxation,def:l2-mean-variance,def:smooth-gradient-preenergy,
         def:smooth-gradient-relaxation,def:legacy-smooth-test-poincare}
   Let $\mu$ be a probability law on a finite-dimensional real Hilbert space.  For every finite
   $C\ge0$, the legacy inequality on all globally smooth finite-gradient-energy tests holds at $C$
   if and only if the $L^2$ inequality for the ambient sequential relaxation holds at $C$.
+  The raw smooth-gradient test family has exactly the same finite-constant predicate.
 \end{theorem}
 \begin{proof}
-  Open.  A constant sequence gives relaxed energy at most the raw energy of each realized test, so
-  the relaxed inequality implies the legacy one.  Conversely, apply the legacy inequality along
-  every approximating sequence.  Variance is continuous under $L^2$ convergence; taking the
-  liminf and then the infimum over sequences gives the relaxed inequality.  No equality of raw and
-  relaxed energy on an individual test is used.
+  \leanok
+  A constant sequence bounds relaxed energy by raw test energy. Conversely, at each
+  finite relaxed-energy point use a recovery sequence whose raw energies converge to that value.
+  Continuity of $L^2$ variance passes the inequality to the limit for every finite $C\ge0$,
+  including $C=0$. Infinite-energy points are outside the finite-energy test domain. No density
+  or equality of raw and relaxed energy on individual tests is required.
 \end{proof}
 
 \begin{theorem}[Legacy and selected canonical constants agree]
   \label{thm:legacy-canonical-constant-comparison}
-  \notready
+  \lean{FunctionalInequalities.Poincare.Euclidean.constant_eq_canonical,
+        FunctionalInequalities.Poincare.Euclidean.constant_eq_ambient,
+        FunctionalInequalities.Poincare.Euclidean.holds_iff_canonical}
+  \leanok
   \uses{thm:legacy-relaxed-holds-equivalence,
-        thm:ambient-intrinsic-relaxation-equality,def:selected-canonical-frontend}
+        cor:ambient-intrinsic-constant-equality,def:selected-canonical-frontend}
   For every finite-dimensional Borel probability $\mu$,
   \[
     \CP(\mu)=\CPCan(\mu)
   \]
-  as extended nonnegative constants, including the value $+\infty$.
+  as extended nonnegative constants, including the value $+\infty$. Both also equal the ambient
+  relaxed optimum; the legacy and selected finite-constant predicates agree for every $C\ge0$.
 \end{theorem}
 \begin{proof}
-  Open.  The preceding theorem identifies the sets of valid finite constants for the legacy and
-  ambient-relaxed presentations.  Their extended optima therefore agree.  The exact
+  \leanok
+   The preceding theorem identifies the sets of valid finite constants for the legacy and
+  ambient-relaxed presentations. The relaxed optimizer order law turns these into finite upper
+  bounds of an extended constant. If it is finite, its own nonnegative-real value is an allowed
+  upper bound; if it is infinite, the set is empty. Their extended optima therefore agree.  The exact
   ambient/intrinsic equality identifies the latter with the selected constant.
 \end{proof}
 
 \begin{theorem}[Smooth and locally Lipschitz test constants agree]
   \label{thm:smooth-lipschitz-constant-equivalence}
-  \notready
-  \uses{def:literature-poincare-constant,def:legacy-smooth-test-poincare}
-  If $\mu$ is a finite-dimensional log-concave probability law, then
+  \lean{Solutions.ThmSmoothLipschitzConstantEquivalence.certificate}
+  \leanok
+  \uses{def:affine-support-intrinsic-law,def:literature-poincare-constant,
+        def:legacy-smooth-test-poincare,lem:covariance-test-core-density}
+  Let $\nu$ be the intrinsic law of a finite-dimensional Borel probability $\mu$.  If $\nu$ is
+  absolutely continuous with respect to Lebesgue measure on its intrinsic space, then
   \[
-    \CP(\mu)=\CPLit(\mu).
+    \CP(\mu)=\CP(\nu)=\CPLit(\mu).
   \]
-  Gradients and approximation are taken intrinsically on the affine support.
 \end{theorem}
 \begin{proof}
-  Open.  One inequality is restriction to globally smooth tests.  The reverse inequality is the
-  smooth-density and energy-recovery theorem on the relative interior of the convex support,
-  followed by cutoff and truncation.  This is a Sobolev-density step, not raw/core agreement; see
-  \cite{AmbrosioGigliSavare2013Density} for the corresponding weak-gradient framework.
+  \leanok
+  Restriction to the affine support and extension constant in the normal directions give
+  the first equality. Every smooth admissible test is locally Lipschitz. Conversely,
+  \cref{lem:covariance-test-core-density} with $B=I$ approximates each finite-energy locally
+  Lipschitz test in both $L^2$ and gradient $L^2$ by compactly supported smooth tests.
+  Variance and energy converge, so each finite smooth-test constant also works on the
+  locally Lipschitz domain. The sets of admissible finite constants, and hence their extended
+  infima, agree. No raw/core identity for singular ambient laws is used.
 \end{proof}
 
 \begin{theorem}[Selected and literature constants agree]
   \label{thm:selected-literature-constant-equivalence}
-  \notready
-  \uses{thm:legacy-canonical-constant-comparison,
-        thm:smooth-lipschitz-constant-equivalence}
+  \lean{Solutions.ThmSelectedLiteratureConstantEquivalence.certificate}
+  \leanok
+  \uses{def:log-concave-law,lem:logconcave-intrinsic-absolute-continuity,
+        thm:legacy-canonical-constant-comparison,thm:smooth-lipschitz-constant-equivalence}
   For every finite-dimensional log-concave probability law $\mu$,
   \[
     \CPCan(\mu)=\CPLit(\mu).
   \]
 \end{theorem}
 \begin{proof}
-  Open.  Both sides equal the legacy smooth-test optimum by the two preceding comparison
+  \leanok
+  The intrinsic law is absolutely continuous by
+  \cref{lem:logconcave-intrinsic-absolute-continuity}. Both sides equal the legacy smooth-test
+  optimum by the two preceding comparison
   theorems.  The Cheeger-energy identification of
   \cref{thm:smooth-gradient-relaxation-two-cheeger} is not needed.
 \end{proof}
@@ -80,23 +102,81 @@ reviewed proof never receives \texttt{leanok} merely because it is cited.
 
 \begin{definition}[Isoperimetric Cheeger constant and inverse scale]
   \label{def:isoperimetric-cheeger-scale}
-  \notready
-  For a probability law $\mu$, let
+  \uses{def:affine-support-intrinsic-law}
+  Let $\mu$ be a probability law on a finite-dimensional Euclidean space $E$, and let $A$ be its
+  affine support, equipped with the distance induced from $E$.  For $x\in A$ and a nonempty Borel
+  set $B\subseteq A$, put
   \[
-    h_\mu=\inf_B
+    d_A(x,B)=\inf_{y\in B}\norm{x-y},
+    \qquad
+    B^r=\{x\in A:d_A(x,B)<r\},
+    \qquad
+    \mu^+(B)=\liminf_{r\downarrow0}\frac{\mu(B^r)-\mu(B)}{r}.
+  \]
+  If $A$ has positive dimension, define the extended nonnegative quantities
+  \[
+    h_\mu=\inf_{\substack{B\subseteq A\ \mathrm{Borel}\\0<\mu(B)<1}}
       \frac{\mu^+(B)}{\min\{\mu(B),1-\mu(B)\}},
     \qquad
     \PsiKLS(\mu)=h_\mu^{-1},
   \]
-  where the infimum ranges over nontrivial Borel sets and $\mu^+$ is outer Minkowski boundary
-  measure in the affine support.  The isoperimetric number $h_\mu$ is not the metric energy
+  with $0^{-1}=+\infty$ and $(+\infty)^{-1}=0$.  If $A$ is zero-dimensional, set
+  $h_\mu=+\infty$ and $\PsiKLS(\mu)=0$.  The isoperimetric number $h_\mu$ is not the metric energy
   $\Ch_\mu$ of \cref{thm:smooth-gradient-relaxation-two-cheeger}.
 \end{definition}
 
-\begin{theorem}[Cheeger--Poincar\'e comparison for log-concave laws]
+\begin{theorem}[Identification with the density Cheeger frontend]
+  \label{thm:klartag-density-frontend-identification}
+  \uses{def:log-concave-law,thm:borell-logconcave-density,
+        def:affine-support-intrinsic-law,def:literature-poincare-constant,
+        def:isoperimetric-cheeger-scale,lem:relative-perimeter-cheeger-infimum}
+  Let $\mu$ be a non-Dirac finite-dimensional log-concave probability law, let $A=a+V$ be its
+  affine support, and let $\nu$ be its intrinsic law on the positive-dimensional Euclidean space
+  $V$.  Let $\rho$ be the upper-semicontinuous log-concave density supplied by
+  \cref{thm:borell-logconcave-density}, put $\Omega=\operatorname{int}_V K_\nu$, and define
+  \[
+    h_\nu^{\mathrm{sm,rel}}
+      =\inf_{\substack{U\subseteq V\ \text{smooth domain}\\
+                       0<\nu(U)<1}}
+        \frac{\displaystyle\int_{\partial_VU\cap\Omega}\rho
+          \dd\mathcal H_V^{\dim V-1}}
+             {\min\{\nu(U),1-\nu(U)\}},
+    \qquad
+    \psi_\nu=(h_\nu^{\mathrm{sm,rel}})^{-1},
+  \]
+  where smooth domains locally lie on one side of their $C^\infty$ boundary, and
+  $\mathcal H_V^{\dim V-1}$ is Hausdorff measure for the Euclidean metric on $V$.
+  Then
+  \[
+    h_\mu=h_\nu^{\mathrm{sm,rel}},
+    \qquad
+    \PsiKLS(\mu)=\psi_\nu,
+  \]
+  and $\CPLit(\mu)$ equals the infimum of finite $C\ge0$ for which
+  \[
+    \Var_\nu(g)\le C\int_V\norm{\nabla g}^2\dd\nu
+  \]
+  holds for every locally Lipschitz $g\in L^2(\nu)$ with
+  $\int_V\norm{\nabla g}^2\dd\nu<\infty$, with $\inf\varnothing=+\infty$.  These quantities
+  do not depend on the affine origin $a$.
+\end{theorem}
+\begin{proof}
+  Translation to intrinsic coordinates is an isometry. Rademacher differentiability and
+  absolute continuity identify the two descriptions of the literature test energy.
+  The full proof of the Cheeger equality is \cref{lem:relative-perimeter-cheeger-infimum}:
+  distance cutoffs and smooth coarea give one inequality, while outward dilation about an
+  interior point followed by convolution gives the other. The latter uses an explicit
+  log-concave density bound to avoid a charge on the carrier boundary. The boundary of $U$
+  may meet or cross $\partial K_\nu$; no condition $\partial U\subseteq\Omega$ is imposed.
+  This proves equality of the two infima, without a testwise perimeter identity. The analytic
+  proof is supplied in the appendix; Lean implementation and certification remain to be done.
+\end{proof}
+
+\begin{theorem}[Cheeger--Buser comparison for log-concave laws]
   \label{thm:logconcave-cheeger-poincare-comparison}
-  \notready
-  \uses{def:isoperimetric-cheeger-scale,def:literature-poincare-constant}
+  \uses{def:log-concave-law,def:isoperimetric-cheeger-scale,
+        def:literature-poincare-constant,thm:klartag-density-frontend-identification,
+        lem:covariance-test-core-density}
   Every finite-dimensional log-concave probability law satisfies
   \[
     \CPLit(\mu)\le4\PsiKLS(\mu)^2,
@@ -105,46 +185,229 @@ reviewed proof never receives \texttt{leanok} merely because it is cited.
   \]
 \end{theorem}
 \begin{proof}
-  This is the published Cheeger and convex Buser--Ledoux comparison, recorded with the
-  normalization used here; see \cite{Milman2009Isoperimetric,LeeVempala2018}.  It is an imported
-  mathematical input, not a local Lean proof.
+  If $\mu$ is a Dirac law, then its affine support is a singleton, $\PsiKLS(\mu)=0$, and
+  $\CPLit(\mu)=0$ because every test is $\mu$-almost everywhere constant.  Thus both inequalities
+  hold directly.  Otherwise apply \cref{thm:klartag-density-frontend-identification}.  Cheeger's
+  inequality in the normalization of Milman's Theorem~1.1 and Bobkov's equation~(1.3) gives the
+  first inequality.  Klartag's equation~(1.4), with the right-hand bound due to
+  De Ponti--Mondino, gives the second; see
+  \cite{Milman2009Isoperimetric,Bobkov1999LogConcave,
+        Klartag2023Logarithmic,DePontiMondino2021}.
+  To make the boundary convention explicit, De Ponti--Mondino define their Cheeger constant
+  using metric BV perimeter. Work on the closed intrinsic support $K=K_\nu$, with its induced
+  distance and probability measure $\nu$, and write
+  \[
+    h_{\mathrm{BV}}(K,\nu)
+      =\inf_{\substack{B\subseteq K\ \mathrm{Borel}\\0<\nu(B)<1}}
+        \frac{\operatorname{Per}_\nu(B)}{\min\{\nu(B),1-\nu(B)\}}.
+  \]
+  Symmetry of BV perimeter under complementation identifies this with their convention
+  $0<\nu(B)\le1/2$. By Lemma~2.1 and Theorem~3.6 of
+  \cite{AmbrosioDiMarinoGigli2017Minkowski}, perimeter is the $L^1$ relaxation of outer
+  Minkowski content. Hence the corresponding Cheeger infima agree: perimeter is bounded by
+  Minkowski content, while recovery sets and continuity of
+  $\min\{\nu(B),1-\nu(B)\}$ under $L^1$ convergence give the reverse inequality.
+  Restricting a set to $K$ preserves its mass and can only decrease its measured enlargement;
+  for sets already in $K$, intrinsic enlargements have the same measure as ambient ones.
+  Thus $h_\mu=h_{\mathrm{BV}}(K,\nu)$. This is an equality of infima, not a claim that each
+  set's perimeter equals its unrelaxed Minkowski content.
+
+  De Ponti--Mondino's equation~(2) uses the Rayleigh numerator $\int|\nabla f|^2\,d\nu$,
+  without the factor $1/2$ in their Cheeger energy. Its tests are nonzero, mean-zero functions
+  in $\operatorname{Lip}_b(K)$, meaning bounded Lipschitz functions with bounded support.
+  To identify this test class with the literature one, apply
+  \cref{lem:covariance-test-core-density} with $B=I$ to a nonzero centered literature test
+  $g$, obtaining $g_j\in C_c^\infty(V)$ converging to $g$ in both $L^2(\nu)$ and gradient
+  $L^2(\nu;V)$. Fix $\psi\in C_c^\infty(V)$ with $\int\psi\,d\nu=1$ and put
+  \[
+    u_j=g_j-\Bigl(\int g_j\,d\nu\Bigr)\psi.
+  \]
+  Since $\int g_j\,d\nu\to0$, the same two convergences hold for $u_j$; its restriction to
+  $K$ has zero mean and bounded support, and is nonzero in $L^2$ for all sufficiently large
+  $j$. The metric slope on $K$ equals the ambient gradient norm $\nu$-almost everywhere,
+  since $\nu(\partial K)=0$. Conversely, a source test has a bounded Lipschitz extension
+  to $V$, with the same values and gradient norm $\nu$-almost everywhere. Passing to
+  Rayleigh quotients therefore gives $\lambda_1^{-1}=\CPLit(\mu)$, with the extended
+  reciprocal conventions. The zero-dimensional case was handled separately above.
+
+  Their Corollary~1.2, equation~(12), gives
+  a coefficient strictly smaller than $\pi$ in the zero-curvature case.
+  We retain the convenient bound $\pi$ in Klartag's formula and make no optimality
+  claim for it. Their sharp Buser estimate concerns the positive-curvature case.
+  The numerical inequalities are imported mathematics, not local Lean proofs; the frontend
+  transfer has an analytic proof in the appendix but is not yet Lean-certified.
+\end{proof}
+
+\begin{definition}[Isotropic probability law]
+  \label{def:isotropic-law}
+  A probability law $\nu$ with finite second moment on a finite-dimensional Euclidean space $V$
+  is isotropic when
+  \[
+    \int_V x\dd\nu(x)=0,
+    \qquad
+    \Cov_\nu=I_V.
+  \]
+  The unique probability law on the zero-dimensional space is included.
+\end{definition}
+
+\begin{lemma}[Ambient and intrinsic covariance agree]
+  \label{lem:ambient-intrinsic-covariance}
+  \uses{def:affine-support-intrinsic-law}
+  Let $\mu$ be a Borel probability law with finite second moment on a finite-dimensional Euclidean
+  space $E$, and let $A=a+V$ be its affine support.  Let $\Cov_{\mu,V}$ be the covariance operator
+  of its intrinsic law on $V$.  The ambient covariance $\Cov_\mu$ annihilates $V^\perp$, restricts
+  to $\Cov_{\mu,V}$ on $V$, and satisfies
+  \[
+    \norm{\Cov_\mu}_\op=\norm{\Cov_{\mu,V}}_\op.
+  \]
+  Moreover, $\Cov_{\mu,V}$ is positive definite on $V$; in dimension zero both covariance
+  operators and both norms are zero.
+\end{lemma}
+\begin{proof}
+  The barycenter lies in $A$, so the centered random vector lies in $V$ almost surely.  Hence the
+  covariance integral has range in $V$, annihilates $V^\perp$, and restricts to the intrinsic
+  covariance.  If its quadratic form vanished on a nonzero $v\in V$, then $\mu$ would be carried by
+  the proper affine hyperplane perpendicular to $v$, contradicting minimality of the affine
+  support.
+\end{proof}
+
+\begin{definition}[Affine covariance relaxation and Poincar\'e constant]
+  \label{def:affine-poincare-constant}
+  \uses{def:log-concave-law,thm:borell-logconcave-density,
+        def:affine-support-intrinsic-law,def:preenergy-relaxation,
+        def:l2-energy-poincare-constant,lem:ambient-intrinsic-covariance}
+  Let $\mu$ be a log-concave probability law on a finite-dimensional Euclidean space, let $\nu$ be
+  its intrinsic law on the direction space $V$ of its affine support, and put
+  $\Sigma=\Cov_{\mu,V}=\Cov_\nu$.
+  Let $P^{\mathrm{aff}}_\mu$ be the pre-energy whose tests are globally Lipschitz functions
+  $g\in L^2(\nu)$ with
+  \[
+    \int_V\inner{\Sigma\nabla g}{\nabla g}\dd\nu<\infty,
+  \]
+  whose realization is their $L^2(\nu)$ class, and whose finite energy is the displayed integral.
+  The absolute continuity in \cref{thm:borell-logconcave-density} and Rademacher's theorem make the
+  gradient well defined $\nu$-almost everywhere.  Define
+  \[
+    \mathcal E^{\mathrm{aff}}_\mu
+      :=(P^{\mathrm{aff}}_\mu).\mathrm{sequentialRelaxation},
+    \qquad
+    C_{\mathrm P}^{\mathrm{aff}}(\mu)
+      :=\CE\bigl(\nu,\mathcal E^{\mathrm{aff}}_\mu\bigr).
+  \]
+  Thus the closure of the covariance pre-form means its sequential $L^2(\nu)$ relaxation.  In
+  dimension zero the resulting constant is zero.
+\end{definition}
+
+\begin{theorem}[The affine covariance relaxation agrees with the closed source form]
+  \label{thm:affine-covariance-relaxation-closed}
+  \uses{def:affine-poincare-constant,thm:borell-logconcave-density,
+        lem:ambient-intrinsic-covariance,thm:quadratic-relaxation-closed,
+        lem:covariance-core-closure}
+  For every log-concave law on a finite-dimensional Euclidean space, $P^{\mathrm{aff}}_\mu$ is
+  quadratic with dense realization and is closable.  Its sequential relaxation is a closed
+  quadratic form and agrees with the raw covariance energy on every globally Lipschitz test.
+  Changing the affine origin translates $\nu$; pullback by this translation is an $L^2$ isometry
+  preserving variance and covariance energy.  Under this isometric identification,
+  $\mathcal E^{\mathrm{aff}}_\mu$ is the closed covariance form used by the pinned CMH source, and
+  $C_{\mathrm P}^{\mathrm{aff}}(\mu)$ is the same optimal constant.
+\end{theorem}
+\begin{proof}
+  Apply \cref{lem:covariance-core-closure} to the intrinsic law and its covariance.
+  That lemma proves closability by distributional integration by parts on compact subsets
+  of the support interior, identifies both graph closures by actual cutoff and convolution
+  approximations, and proves that the graph-closed energy equals the sequential relaxation.
+  Thus raw energy is preserved on every original test. Translation pullback preserves the
+  covariance matrix, gradient, measure and variance, so it also preserves both the graph norm
+  and its optimal Poincar\'e constant. Dimension zero has only constant classes and zero energy.
+  The pinned source, \texttt{modules/kls/41-cmh-normalization.tex}, defines its covariance
+  domain by completing the restrictions to $K_\nu$ of $\mathbb R+C_c^\infty(V)$ in the norm
+  \[
+    \left(\|f\|_{L^2(\nu)}^2+
+      \int\langle\Sigma\nabla f,\nabla f\rangle\,d\nu\right)^{1/2}.
+  \]
+  These are restrictions of ambient compactly supported functions, not functions compactly
+  supported inside $\Omega$. Consequently their closure imposes no zero boundary trace.
+  The preceding approximation and closability proof identifies exactly this source domain.
+  The analytic identification is now supplied. It remains to be implemented and certified
+  in Lean; the stated interface may evolve during that work.
+\end{proof}
+
+\begin{lemma}[Translation invariance of the affine Poincar\'e constant]
+  \label{lem:affine-poincare-translation-invariance}
+  \uses{def:log-concave-law,def:affine-poincare-constant,
+        thm:borell-logconcave-density,thm:affine-covariance-relaxation-closed}
+  Let $\mu$ be a log-concave probability law on a finite-dimensional Euclidean space $E$, let
+  $b\in E$, and put $\tau_b(x)=x+b$.  Then $(\tau_b)_\#\mu$ is log-concave and
+  \[
+    C_{\mathrm P}^{\mathrm{aff}}\bigl((\tau_b)_\#\mu\bigr)
+      =C_{\mathrm P}^{\mathrm{aff}}(\mu).
+  \]
+  In particular, translating by the negative barycenter produces a centered law without changing
+  the affine Poincar\'e constant.
+\end{lemma}
+\begin{proof}
+  Compact sets and their Minkowski combinations commute with translation, so log-concavity is
+  preserved.  Translation preserves covariance and identifies the two intrinsic laws by an
+  $L^2$ isometry.  The isometry preserves variance and intertwines the covariance pre-energies,
+  hence also their sequential relaxations and optimal constants.  The barycenter exists by
+  \cref{thm:borell-logconcave-density}.
 \end{proof}
 
 \begin{theorem}[Affine and isotropic KLS formulations]
   \label{thm:affine-isotropic-reduction}
-  \notready
-  \uses{def:literature-poincare-constant}
+  \uses{def:log-concave-law,thm:borell-logconcave-density,
+        def:isotropic-law,def:literature-poincare-constant,
+        lem:ambient-intrinsic-covariance,def:affine-poincare-constant,
+        thm:affine-covariance-relaxation-closed,
+        lem:affine-poincare-translation-invariance}
   For a fixed $K\ge0$, the following statements are equivalent.
   \begin{enumerate}
-    \item Every isotropic log-concave law on every finite-dimensional Euclidean space satisfies
-          $\CPLit\le K$.
+    \item Every isotropic log-concave law $\nu$ on every finite-dimensional Euclidean space
+          satisfies $\CPLit(\nu)\le K$.
     \item Every finite-dimensional log-concave law $\mu$ satisfies
           $\CPLit(\mu)\le K\norm{\Cov_\mu}_\op$.
+    \item Every finite-dimensional log-concave law $\mu$ satisfies
+          $C_{\mathrm P}^{\mathrm{aff}}(\mu)\le K$.
   \end{enumerate}
-  In the second statement covariance, whitening, and isotropy are computed on the tangent space of
-  the affine support; the zero-dimensional law is included.
+  If the affine support is $a+V$, then
+  $\norm{\Cov_\mu}_\op=\norm{\Cov_{\mu,V}}_\op$ by
+  \cref{lem:ambient-intrinsic-covariance}.  The zero-dimensional law is included in all three
+  statements.
 \end{theorem}
 \begin{proof}
-  Open.  The affine statement immediately specializes to covariance identity.  Conversely,
-  translate and whiten on the affine support, apply the isotropic statement, and pull the
-  inequality back.  The squared operator norm of the inverse whitening map is
-  $\norm{\Cov_\mu}_\op$.  This is the standard affine reduction in
+  Open.  By \cref{lem:affine-poincare-translation-invariance}, centering does not change the
+  affine Poincar\'e constant.  In positive dimension, whiten the centered intrinsic law by
+  $\Cov_{\mu,V}^{-1/2}$, which exists by \cref{lem:ambient-intrinsic-covariance}.  Pullback of the
+  isotropic inequality gives the covariance-form inequality and hence item~(3), first on the raw
+  tests and then on their relaxation.  Item~(3) implies item~(2) from
+  $\inner{\Cov_{\mu,V}v}{v}\le\norm{\Cov_{\mu,V}}_\op\norm{v}^2$, together with cutoff and
+  truncation from locally to globally Lipschitz tests.  Item~(2) specializes to item~(1) when
+  covariance is the identity.  The zero-dimensional case has zero variance and is immediate; see
   \cite{KannanLovaszSimonovits1995,LeeVempala2018}.
 \end{proof}
 
 \begin{theorem}[One-dimensional log-concave Poincar\'e bound]
   \label{thm:one-dimensional-logconcave-poincare}
-  \notready
-  \uses{def:literature-poincare-constant}
+  \uses{def:log-concave-law,def:literature-poincare-constant}
   Every log-concave probability law $\nu$ on a line satisfies
   \[
-    \CPLit(\nu)\le4\Var_\nu(T),
+    \CPLit(\nu)\le12\Var_\nu(T),
   \]
   including the zero-variance case.
 \end{theorem}
 \begin{proof}
-  This is the sharp universal one-dimensional input used by the conditional-fiber route; see
-  \cite{Bobkov1999LogConcave}.  It is imported mathematics and has no local \texttt{leanok}.
+  Bobkov's Corollary~4.3, p.~1915 of \cite{Bobkov1999LogConcave}, gives the spectral gap
+  $\lambda_1\ge1/(12\Var_\nu(T))$. His equation~(1.3), p.~1904, uses
+  $\lambda_1\Var_\nu(f)\le\int|f'|^2\,d\nu$ for locally Lipschitz tests.
+  Thus the reciprocal has exactly the displayed normalization. Zero variance means a Dirac
+  law and gives zero variance for every test. This is a verified published input, not a local
+  Lean proof.
+
+  The stronger numerical value $4$ is kept only as historical provenance: equation~(2.25)
+  in the 2018 preprint version of \cite{CattiauxGuillin2018Poincare} points to p.~11 of
+  \cite{AlonsoGutierrezBastero2015} and credits KLS~1995. The subsequent cautious remark
+  concerns a spherical application. That primary normalization has not been verified here;
+  the active fiber route now uses the explicit parameter $\kappa$ and the verified choice $12$.
 \end{proof}
 
 These nodes are deliberately modest.  They do not provide a self-adjoint generator, identify a

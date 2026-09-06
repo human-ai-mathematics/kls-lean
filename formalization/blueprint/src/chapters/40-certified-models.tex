@@ -1,9 +1,9 @@
-\chapter{Certified models in the legacy frontend}
+\chapter{Certified models and frontend comparisons}
 \label{chap:certified-models}
 
-The four certificates below compile today.  They deliberately sit behind a legacy-domain node:
-the current theorems quantify over globally smooth $L^2$ tests with integrable squared gradient,
-not over the new closed-energy domain.  The tensorization normalization follows the classical
+The first four certificates use the legacy smooth-test domain. Two further certificates
+identify ambient and intrinsic relaxations and transport the finite-dimensional legacy conclusions
+to the selected closed-energy domain.  The tensorization normalization follows the classical
 product argument in \cite{BakryGentilLedoux2014}.
 
 \begin{definition}[Legacy smooth-test Poincar\'e API]
@@ -29,7 +29,7 @@ product argument in \cite{BakryGentilLedoux2014}.
 \begin{proof}
   \leanok
   The certificate combines the supremum bound for admissible tests with the linear-test
-  covariance computation and the operator-norm characterization of covariance.
+  covariance computation and the Rayleigh characterization of its largest eigenvalue.
 \end{proof}
 
 \begin{theorem}[Binary tensorization]
@@ -86,10 +86,40 @@ product argument in \cite{BakryGentilLedoux2014}.
   sharpness.
 \end{proof}
 
-These certificates do not use \cref{def:l2-energy-poincare-constant}.  Moving them into the
-selected canonical column uses the direct relaxation bridge
-\cref{thm:legacy-canonical-constant-comparison}; raw/core agreement is not required.  A successful
-Lean build alone does not supply that open bridge.  Tensorization and the Gaussian computation are
-certified model infrastructure, not a proof of KLS for every product log-concave law and not a
-route to full KLS without a general one-dimensional log-concave input and the shared endpoint
-bridges.
+The four model certificates use the legacy frontend. In finite dimension, the proved bridge
+\cref{thm:legacy-canonical-constant-comparison} transfers their conclusions to the selected
+constant without raw/core agreement. Tensorization and the Gaussian computation remain model
+infrastructure: a general one-dimensional log-concave input is still required for all product
+log-concave laws, and the long KLS routes require the remaining shared endpoint bridges.
+
+
+\begin{theorem}[Certified ambient and intrinsic comparison]
+  \label{cert:ambient-intrinsic-comparison}
+  \lean{Solutions.LemAmbientIntrinsicPoincareComparison.certificate}
+  \leanok
+  \uses{lem:smooth-tests-affine-restriction-extension,
+        thm:ambient-intrinsic-relaxation-equality,cor:ambient-intrinsic-constant-equality}
+  The certificate packages smooth-test restriction and extension, equality of the two relaxed
+  energies on the original $L^2$ carrier, and equality of their finite-constant predicates and
+  extended optima for every finite-dimensional Borel probability.
+\end{theorem}
+\begin{proof}
+  \leanok
+  Combine the five geometric and optimizer comparisons without strengthening their hypotheses.
+\end{proof}
+
+\begin{theorem}[Certified legacy and relaxed comparison]
+  \label{cert:legacy-relaxed-comparison}
+  \lean{Solutions.LemLegacyRelaxedPoincareComparison.certificate}
+  \leanok
+  \uses{lem:preenergy-poincare-relaxation,thm:legacy-relaxed-holds-equivalence,
+        thm:legacy-canonical-constant-comparison}
+  The certificate packages the abstract pre-energy comparison for arbitrary measurable
+  probabilities and the five finite-dimensional legacy-to-ambient-to-intrinsic comparisons.
+  The Gaussian bound and exact optimum therefore transfer to the selected frontend, including
+  zero variance. No locally Lipschitz or Cheeger identification is part of this certificate.
+\end{theorem}
+\begin{proof}
+  \leanok
+  Combine the two abstract comparisons with test-domain identification and the geometric bridge.
+\end{proof}

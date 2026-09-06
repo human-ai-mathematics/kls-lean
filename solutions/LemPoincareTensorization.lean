@@ -61,3 +61,9 @@ variable {m n : ℕ}
 end EuclideanChecks
 
 end Solutions.LemPoincareTensorization
+
+/--
+info: 'Solutions.LemPoincareTensorization.certificate' depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms Solutions.LemPoincareTensorization.certificate
