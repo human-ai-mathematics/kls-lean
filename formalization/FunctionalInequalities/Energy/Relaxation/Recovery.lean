@@ -1,5 +1,5 @@
 import FunctionalInequalities.Energy.FormCore
-import FunctionalInequalities.Energy.RelaxationApproximation
+import FunctionalInequalities.Energy.Relaxation.Approximation
 import Mathlib.Analysis.SpecificLimits.Basic
 
 /-!

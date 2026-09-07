@@ -1,4 +1,4 @@
-import FunctionalInequalities.Energy.Euclidean.SmoothGradient
+import FunctionalInequalities.Energy.Euclidean.SmoothGradient.Basic
 import FunctionalInequalities.Poincare.L2Energy
 
 /-!

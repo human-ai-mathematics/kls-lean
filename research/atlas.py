@@ -190,7 +190,8 @@ def validate_tasks(tasks: Any, nodes: dict[str, dict], root: Path = ROOT) -> lis
             errors.append(f"task {name}: unknown mathematical node")
             continue
         required = TASK_FIELDS | ({"infrastructure"} if isinstance(meta, dict) and
-            meta.get("mathematics") in {"local_argument", "published"} else set())
+            (meta.get("mathematics") in {"local_argument", "published"} or
+             (meta.get("mathematics") == "definition" and "infrastructure" in meta)) else set())
         if not isinstance(meta, dict) or set(meta) != required:
             errors.append(f"task {name}: require exactly {sorted(required)}")
             continue

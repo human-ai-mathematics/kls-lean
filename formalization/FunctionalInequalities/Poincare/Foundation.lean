@@ -2,21 +2,21 @@ import FunctionalInequalities.Energy.ClosedQuadratic
 import FunctionalInequalities.Energy.Comparison
 import FunctionalInequalities.Energy.Dirichlet
 import FunctionalInequalities.Energy.Euclidean.AffineComparison
-import FunctionalInequalities.Energy.Euclidean.IntrinsicAffine
-import FunctionalInequalities.Energy.Euclidean.IntrinsicAffineClosed
-import FunctionalInequalities.Energy.Euclidean.SmoothGradient
-import FunctionalInequalities.Energy.Euclidean.SmoothGradientClosed
-import FunctionalInequalities.Energy.Euclidean.SmoothGradientDensity
-import FunctionalInequalities.Energy.Euclidean.SmoothGradientQuadratic
+import FunctionalInequalities.Energy.Euclidean.IntrinsicAffine.Basic
+import FunctionalInequalities.Energy.Euclidean.IntrinsicAffine.Closed
+import FunctionalInequalities.Energy.Euclidean.SmoothGradient.Basic
+import FunctionalInequalities.Energy.Euclidean.SmoothGradient.Closed
+import FunctionalInequalities.Energy.Euclidean.SmoothGradient.Density
+import FunctionalInequalities.Energy.Euclidean.SmoothGradient.Quadratic
 import FunctionalInequalities.Energy.FormCore
 import FunctionalInequalities.Energy.Functional
 import FunctionalInequalities.Energy.QuadraticPreEnergy
-import FunctionalInequalities.Energy.Relaxation
-import FunctionalInequalities.Energy.RelaxationApproximation
-import FunctionalInequalities.Energy.RelaxationContraction
-import FunctionalInequalities.Energy.RelaxationLowerSemicontinuous
-import FunctionalInequalities.Energy.RelaxationQuadratic
-import FunctionalInequalities.Energy.RelaxationRecovery
+import FunctionalInequalities.Energy.Relaxation.Approximation
+import FunctionalInequalities.Energy.Relaxation.Basic
+import FunctionalInequalities.Energy.Relaxation.Contraction
+import FunctionalInequalities.Energy.Relaxation.LowerSemicontinuous
+import FunctionalInequalities.Energy.Relaxation.Quadratic
+import FunctionalInequalities.Energy.Relaxation.Recovery
 import FunctionalInequalities.L2.MeanVariance
 import FunctionalInequalities.Poincare.Comparison
 import FunctionalInequalities.Poincare.Euclidean.AffineComparison
@@ -58,7 +58,7 @@ spectral-gap formulation.
 
 Start with `Poincare.L2Energy` for the inequality and optimal constant, then read
 `Poincare.Euclidean.IntrinsicAffine` for the selected concrete energy. Read
-`Energy.Relaxation` and `Energy.RelaxationQuadratic` when the proof needs approximation or
+`Energy.Relaxation.Basic` and `Energy.Relaxation.Quadratic` when the proof needs approximation or
 closedness. `examples/PoincareFoundation.lean` at the repository root contains compiled applications
 and boundary examples; the adjacent `README.md` explains their mathematical meaning and the source hierarchy.
 

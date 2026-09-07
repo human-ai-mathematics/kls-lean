@@ -1,4 +1,4 @@
-import FunctionalInequalities.Energy.RelaxationApproximation
+import FunctionalInequalities.Energy.Relaxation.Approximation
 import Mathlib.Analysis.SpecificLimits.Basic
 import Mathlib.Topology.Instances.ENNReal.Lemmas
 import Mathlib.Topology.Semicontinuity.Basic

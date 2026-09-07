@@ -7,14 +7,27 @@ import FunctionalInequalities.Poincare.FiniteProduct.Tensorization
 import FunctionalInequalities.Poincare.Gaussian.Real
 import FunctionalInequalities.KLS.Statement
 import FunctionalInequalities.Poincare.Euclidean.LogConcaveComparison
+import FunctionalInequalities.KLS.LogConcave.Borel
+import FunctionalInequalities.KLS.Isotropic
+import FunctionalInequalities.KLS.Isoperimetry
+import FunctionalInequalities.KLS.ConditionalFiber
+import FunctionalInequalities.Poincare.Euclidean.RawEnergyObstruction
+import FunctionalInequalities.KLS.LogConcave.BorellRepresentation
+import FunctionalInequalities.Probability.IntrinsicCovariance
 
 /-!
 # Functional inequalities
 
-Root module for the proved Poincaré definitions, linear-test lower bounds, binary tensorization,
+Root module for functional-inequality definitions, proved results, and explicit draft statements.
+The proved results include linear-test lower bounds, binary tensorization,
 finite Hilbert-product optimal-constant equality, and the sharp one-dimensional Gaussian
 Poincaré constant. It also exports the layered `L²`/extended-energy foundation for future
 developments. Node certificates are compiled separately from `solutions/`.
+
+The compact/Borel log-concavity equivalence and the six conditional-fiber contracts are proved.
+`KLS/LogConcave/BorellRepresentation.lean` states the Borell density-representative, local-bound and moment
+conclusions as explicit drafts containing `sorry`; importing this aggregate does not certify
+those draft theorems.
 
 The imported modules record their sources beside the declarations: manuscript Definition 2.1
 for the normalization, Remark 3.8 for the linear-test lower bound, BGL (2014), Proposition 4.3.1

@@ -8,11 +8,15 @@ constant.  The constant-level bridges used by every route are collected separate
 
 \begin{obstruction}[Raw energy is not a property of an $L^2$ class]
   \label{obs:dirac-raw-energy}
+  \lean{FunctionalInequalities.Poincare.Euclidean.dirac_raw_energy,
+        FunctionalInequalities.Poincare.Euclidean.dirac_toLp_zero_eq_id}
+  \leanok
   Let $\mu=\delta_0$ on $\R$, $f(x)=0$, and $g(x)=x$.  Then $f=g$ in $L^2(\mu)$, but their raw
   gradient energies are respectively $0$ and $1$.  Hence unconditional agreement of raw test
   energies cannot descend to $L^2$ equivalence classes for singular measures.
 \end{obstruction}
 \begin{proof}
+  \leanok
   Both functions take value zero at the support point, while $f'=0$ and $g'=1$ everywhere.
 \end{proof}
 

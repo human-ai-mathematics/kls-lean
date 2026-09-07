@@ -1,4 +1,4 @@
-import FunctionalInequalities.Energy.RelaxationRecovery
+import FunctionalInequalities.Energy.Relaxation.Recovery
 import FunctionalInequalities.Poincare.L2Energy
 
 /-!

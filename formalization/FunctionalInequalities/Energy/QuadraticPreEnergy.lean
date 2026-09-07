@@ -1,4 +1,4 @@
-import FunctionalInequalities.Energy.Relaxation
+import FunctionalInequalities.Energy.Relaxation.Basic
 import Mathlib.Analysis.Normed.Module.Basic
 
 /-!
@@ -11,7 +11,7 @@ the quadratic scaling and parallelogram identities.
 `PreEnergy.Quadratic` is deliberately weaker than `Energy.ClosedQuadratic`: it does not assert
 lower semicontinuity, density, closability, or that relaxation preserves the quadratic identities.
 The closure theorem is `Quadratic.closedQuadratic_sequentialRelaxation` in
-`Energy.RelaxationQuadratic`; agreement on tests remains a separate analytic question.
+`Energy.Relaxation.Quadratic`; agreement on tests remains a separate analytic question.
 -/
 
 namespace FunctionalInequalities.Energy

@@ -32,9 +32,20 @@ roots = [
   "solutions.ThmSmoothLipschitzConstantEquivalence",
   "solutions.LemLogConcaveIntrinsicAbsoluteContinuity",
   "solutions.ThmSelectedLiteratureConstantEquivalence",
+  "solutions.ThmCompactBorellLogconcavityEquivalence",
+  "solutions.ThmBorellLogconcaveDensity",
+  "solutions.LemAmbientIntrinsicCovariance",
 ]
 
 [[lean_lib]]
 name = "Examples"
 srcDir = ".."
 roots = ["examples.PoincareFoundation"]
+
+[[lean_lib]]
+# Development-only Mathlib search scratchpad (LeanSearchClient query commands).
+# Deliberately excluded from defaultTargets: those commands hit the network at elaboration
+# time, so this library must never be part of a reproducible `lake build`.
+# Build explicitly with `lake build Dev`.
+name = "Dev"
+roots = ["Dev.Search"]

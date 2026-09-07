@@ -1,5 +1,5 @@
-import FunctionalInequalities.Energy.Euclidean.IntrinsicAffine
-import FunctionalInequalities.Energy.Euclidean.SmoothGradientClosed
+import FunctionalInequalities.Energy.Euclidean.IntrinsicAffine.Basic
+import FunctionalInequalities.Energy.Euclidean.SmoothGradient.Closed
 
 /-!
 # Closed quadratic energy in intrinsic affine coordinates

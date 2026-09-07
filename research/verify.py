@@ -19,8 +19,27 @@ import statement_snapshot
 
 STANDARD_AXIOMS = {"propext", "Classical.choice", "Quot.sound"}
 STATEMENT_CHECKS = {"Solutions.StatementChecks." + name for name in (
-    "constant_energy", "constant_admissible", "zero_dimension_covariance",
-    "zero_dimension_bound", "localSlope_id", "ambient_dirac_identity_energy")}
+    'constant_energy',
+    'constant_admissible',
+    'zero_dimension_covariance',
+    'zero_dimension_bound',
+    'localSlope_id',
+    'ambient_dirac_identity_energy',
+    'borell_innerRegular',
+    'borell_rpow_iSup',
+    'borell_mul_iSup',
+    'isotropic_fields',
+    'zero_dimension_isotropic',
+    'borel_logconcavity_fields',
+    'zero_dimension_innerMeasure',
+    'isoperimetric_inverse',
+    'zero_dimension_isoperimetry',
+    'ambient_dirac_isoperimetry',
+    'isoperimetric_boundary_fields',
+    'conditional_zero_dimension_excluded',
+    'conditional_domain_fields',
+    'conditional_bad_fiber',
+)}
 
 
 def prepare_replay(root: Path, snapshot: dict, destination: Path) -> dict:

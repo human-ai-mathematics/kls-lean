@@ -57,7 +57,42 @@
       ],
       "assumptions": [],
       "priority": 5,
-      "note": "Implement the explicit Blueprint definition; no theorem or equivalence is supplied by the definition."
+      "note": "Implement the explicit Blueprint definition; it supplies no closedness, Markov-form, Poincare or frame-bound theorem. The six displayed well-definedness contracts (iterated base integral, a.e. finite conditional second moment, joint measurability, conditional-version independence, Borel-representative independence and L2 identification) are proved in ConditionalFiber.lean, so the definition node carries leanok; it remains a definition, not a ledger theorem. The admissible frame has positive dimension; zero-dimensional checks assert exclusion, not existence of a sphere probability law.",
+      "infrastructure": {
+        "status": "available",
+        "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
+        "evidence": [
+          {
+            "path": "formalization/.lake/packages/mathlib/Mathlib/Probability/Kernel/Disintegration/StandardBorel.lean",
+            "sha256": "cd61c45ea3d8a90c0e31e025a696ef3ff332a221469a55000c626979d007c505"
+          },
+          {
+            "path": "formalization/.lake/packages/mathlib/Mathlib/Probability/Kernel/Disintegration/Basic.lean",
+            "sha256": "44cc39f81f351587140506e8de722c0396e858541f591e76a707a524e25ffc28"
+          },
+          {
+            "path": "formalization/.lake/packages/mathlib/Mathlib/Probability/Kernel/Disintegration/Integral.lean",
+            "sha256": "c7026554cee6aab693ac055cf1852b7d122b86b5dcf7c21d4fa627b4bbeccbee"
+          },
+          {
+            "path": "formalization/.lake/packages/mathlib/Mathlib/Probability/Kernel/Disintegration/Unique.lean",
+            "sha256": "8548ebe451cbe533816bee5fd76c3b2d23ae1defabac321c8af37463822bf0c2"
+          },
+          {
+            "path": "formalization/.lake/packages/mathlib/Mathlib/Probability/Kernel/MeasurableIntegral.lean",
+            "sha256": "86ec3b1b05db7ebb39e47f85aa7811def39b696e31c1fdb13e4f8372c39b7650"
+          },
+          {
+            "path": "formalization/.lake/packages/mathlib/Mathlib/Probability/Moments/Variance.lean",
+            "sha256": "3a49f3a97302edfa5788098d13882105fe448c4d6cefe51fb3891991635e7638"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/KLS/ConditionalFiber.lean",
+            "sha256": "d12df6b99eb057008e7dab844362179bead315fbdef55f6c9149fa04d14fa777"
+          }
+        ],
+        "gaps": []
+      }
     },
     "thm:compact-borell-logconcavity-equivalence": {
       "mathematics": "published",
@@ -66,11 +101,56 @@
       ],
       "assumptions": [],
       "priority": 0,
-      "note": "Published input identified in Blueprint; verify the exact source hypotheses and normalization during formalization.",
+      "note": "Inner regularity, compact-product images, Set.image2 monotonicity and ENNReal sup/rpow/mul APIs are available at the pinned revision, and the equivalence is now Lean-proved in KLS/LogConcave/Borel.lean with the certificate Solutions.ThmCompactBorellLogconcavityEquivalence.certificate. Handoff: research/decisions/2026-09-07-borell-equivalence-claude-handoff.md; completion: research/decisions/2026-09-07-borell-equivalence-and-conditional-fiber-proofs.md.",
       "infrastructure": {
-        "status": "unchecked",
-        "mathlib_revision": null,
-        "evidence": [],
+        "status": "available",
+        "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
+        "evidence": [
+          {
+            "path": "formalization/.lake/packages/mathlib/Mathlib/MeasureTheory/Measure/Regular.lean",
+            "sha256": "634aa0663f4d800ec62184195e4ae19ba717a90b130b844c0d9ed7483b84e230"
+          },
+          {
+            "path": "formalization/.lake/packages/mathlib/Mathlib/MeasureTheory/Measure/RegularityCompacts.lean",
+            "sha256": "6f9481618bb186254418e6bd0abf9495860329acc099dcb67c17af42f8a0d341"
+          },
+          {
+            "path": "formalization/.lake/packages/mathlib/Mathlib/Analysis/SpecialFunctions/Pow/NNReal.lean",
+            "sha256": "34ca617eac6d3903c15dde5c1c833a0f490de28c10f3f4f8e21f912bb0028687"
+          },
+          {
+            "path": "formalization/.lake/packages/mathlib/Mathlib/Data/ENNReal/Inv.lean",
+            "sha256": "bbc0988d1a084ec35346dc7ab70b455efe86a833c84c499ec5e4dc0b07550d72"
+          },
+          {
+            "path": "formalization/.lake/packages/mathlib/Mathlib/Data/Set/NAry.lean",
+            "sha256": "51cf50491f4b07990b10d28cd9052a8dba2a30c67a0bbaf294a0cc539d11e269"
+          },
+          {
+            "path": "formalization/.lake/packages/mathlib/Mathlib/Topology/Compactness/Compact.lean",
+            "sha256": "670d9e0723f9b803fd68e21c02b735475cafb7a4612aa0dac16733c5dedb49aa"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/KLS/LogConcave/Transport.lean",
+            "sha256": "77d59008d0140b952dba306baf5effe9f4d78b4c1587716a10a8d6ac3941335f"
+          },
+          {
+            "path": "formalization/.lake/packages/mathlib/Mathlib/Algebra/Group/Pointwise/Set/Scalar.lean",
+            "sha256": "cd23c15ca7d577444adecf8e7f9f0846708844ad616d4cd09468d090b9300081"
+          },
+          {
+            "path": "solutions/StatementChecks.lean",
+            "sha256": "288a7d46403d2f01799d2f67747d2ddbc42b03c3b7bdacd0a1e569054aa7ae1b"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/KLS/LogConcave/Borel.lean",
+            "sha256": "ef10a0289f72a57e73e5c5ea0293c8b7997767ade2e8f227d3ad895a5017e174"
+          },
+          {
+            "path": "solutions/ThmCompactBorellLogconcavityEquivalence.lean",
+            "sha256": "3f96a8be9c9bc3f1e514a024b3c98a91f8c57107ecd53b7d0da65eabd90df0cb"
+          }
+        ],
         "gaps": []
       }
     },
@@ -81,11 +161,52 @@
       ],
       "assumptions": [],
       "priority": 0,
-      "note": "Published input identified in Blueprint; verify the exact source hypotheses and normalization during formalization.",
+      "note": "Proved node: KLS/LogConcave/BorellRepresentation.lean proves the density representative (KLS.IsBorellDensity), interior positivity, compact bounds, the exponential moment and all-order moments, and the certificate Solutions.ThmBorellLogconcaveDensity.certificate packages them with the two support identities. Intrinsic absolute continuity is the proved node lem:logconcave-intrinsic-absolute-continuity; the compact/Borel equivalence supplies the Borel-set formulation used by Borell's tail lemma. Statement design: research/decisions/2026-09-07-borell-density-statements.md; proofs: research/decisions/2026-09-07-borell-density-proofs.md.",
       "infrastructure": {
-        "status": "unchecked",
-        "mathlib_revision": null,
-        "evidence": [],
+        "status": "available",
+        "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
+        "evidence": [
+          {
+            "path": "formalization/FunctionalInequalities/KLS/LogConcave/AbsoluteContinuity.lean",
+            "sha256": "0247d28708186ccae6f3b6e12099bbee9e09e39335a68d19ef1ecafa7cc74af5"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/KLS/LogConcave/BorellRepresentation.lean",
+            "sha256": "7ae494ba36452281ff0fc3e31307c6cc3b63de81681a7ef7460cb2a978c4f1bb"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Probability/BallDomination.lean",
+            "sha256": "c0912639620de9c05c6644f7c1105bbbf0a779b493b30a1ae83a066e1df91833"
+          },
+          {
+            "path": "formalization/.lake/packages/mathlib/Mathlib/MeasureTheory/Measure/Decomposition/RadonNikodym.lean",
+            "sha256": "b9119e17ecb3bb04c02f29b557cf263c3ffd856ae781386a5350d53b85f91394"
+          },
+          {
+            "path": "formalization/.lake/packages/mathlib/Mathlib/MeasureTheory/Measure/Decomposition/Lebesgue.lean",
+            "sha256": "1d820ccbe6a50c24f0afbe46802d00d45b99bfdc75d89952edcb3a87251d46f4"
+          },
+          {
+            "path": "formalization/.lake/packages/mathlib/Mathlib/Analysis/Convex/Measure.lean",
+            "sha256": "7a2f7ad93e83fa8b6b216c199743ba148590b167f68f0d486cc1e514ab4b275a"
+          },
+          {
+            "path": "formalization/.lake/packages/mathlib/Mathlib/Probability/Moments/IntegrableExpMul.lean",
+            "sha256": "5e86bbe1d6d928f5c3d93ebd1fa0c31777e5d79d7ae805c00d9175aadb4e5b68"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/KLS/LogConcave/Borel.lean",
+            "sha256": "ef10a0289f72a57e73e5c5ea0293c8b7997767ade2e8f227d3ad895a5017e174"
+          },
+          {
+            "path": "formalization/.lake/packages/mathlib/Mathlib/MeasureTheory/Covering/Besicovitch.lean",
+            "sha256": "7d9e14c2dfe7588ab6b405667be6497f81290097b0d074146fc37a15ca25b30c"
+          },
+          {
+            "path": "formalization/.lake/packages/mathlib/Mathlib/Analysis/Convex/Continuous.lean",
+            "sha256": "1c509febf4d0dd2f2921cff867947cdaf672cba6d35bd3efb1379b7cfb9ff657"
+          }
+        ],
         "gaps": []
       }
     },
@@ -198,7 +319,7 @@
       ],
       "assumptions": [],
       "priority": 1,
-      "note": "The displayed local or pinned upstream argument needs mathematical review and Lean implementation; it is not a Lean certificate.",
+      "note": "Named library obstruction with actual equal L2 realizations and raw gradient energies zero and one. This records failure of representative independence for singular laws; it is not a ledger certificate and does not identify the intrinsic relaxed energy.",
       "infrastructure": {
         "status": "available",
         "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
@@ -278,11 +399,11 @@
           },
           {
             "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation.lean",
-            "sha256": "d6385f6db382af4e268517152a0f496877f5cc2ca191583706a61e7aac004818"
+            "sha256": "96a4953fae251311bda01a9f4ad3e0a665c139faa659ae8e9f146ae7f362759d"
           },
           {
             "path": "formalization/FunctionalInequalities/Energy/Euclidean/AffineComparison.lean",
-            "sha256": "269adaf5de2a50757b667471e9d0c2f45c43f666dadc105ff4aed23aae0a76c2"
+            "sha256": "95f52dac5e970bdaf24bda714cac402c9432f76f05c5c75b46e9118d192bccb1"
           },
           {
             "path": "formalization/FunctionalInequalities/L2/MeanVariance.lean",
@@ -321,7 +442,7 @@
             "sha256": "1c36055b700a47f6f44ecfbacb36f4d660680c44d9baf150a61945563a5356a2"
           },
           {
-            "path": "formalization/FunctionalInequalities/KLS/LogConcave.lean",
+            "path": "formalization/FunctionalInequalities/KLS/LogConcave/Transport.lean",
             "sha256": "77d59008d0140b952dba306baf5effe9f4d78b4c1587716a10a8d6ac3941335f"
           },
           {
@@ -333,12 +454,12 @@
             "sha256": "c0912639620de9c05c6644f7c1105bbbf0a779b493b30a1ae83a066e1df91833"
           },
           {
-            "path": "formalization/FunctionalInequalities/KLS/LogConcaveDensity.lean",
-            "sha256": "870e1d4b4ce89fb5781a4f1f0bea6663184dad2ace494daf1c133aee936363cc"
+            "path": "formalization/FunctionalInequalities/KLS/LogConcave/AbsoluteContinuity.lean",
+            "sha256": "0247d28708186ccae6f3b6e12099bbee9e09e39335a68d19ef1ecafa7cc74af5"
           },
           {
             "path": "solutions/LemLogConcaveIntrinsicAbsoluteContinuity.lean",
-            "sha256": "2b27d2c49c4952bffcc2ac8bb3063f721856f35f94ce8a141d4ae5aba21bcf21"
+            "sha256": "e64a65fdd6bb249603e67c7c075dc35be54799772972ae3e4eb649c5a1282bec"
           },
           {
             "path": "formalization/FunctionalInequalities/Poincare/Euclidean/LiteratureComparison.lean",
@@ -346,7 +467,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/Poincare/Euclidean/LogConcaveComparison.lean",
-            "sha256": "66ee96d352aad67e5687bb25e2244750f981367bfc2b53960718b3086d7caf42"
+            "sha256": "c90b7addd68f68545ee33908152035a235b55c189f35146fea4812552bcd6427"
           },
           {
             "path": "solutions/ThmSelectedLiteratureConstantEquivalence.lean",
@@ -378,11 +499,40 @@
       ],
       "assumptions": [],
       "priority": 5,
-      "note": "The displayed local or pinned upstream argument needs mathematical review and Lean implementation; it is not a Lean certificate.",
+      "note": "Proved node: Probability/IntrinsicCovariance.lean proves annihilation of the orthogonal complement, restriction to the intrinsic covariance, equality of operator norms, positive definiteness of the intrinsic covariance and the zero-dimensional case; the certificate Solutions.LemAmbientIntrinsicCovariance.certificate packages them under the explicit finite-second-moment hypothesis. Record: research/decisions/2026-09-07-ambient-intrinsic-covariance.md.",
       "infrastructure": {
-        "status": "unchecked",
-        "mathlib_revision": null,
-        "evidence": [],
+        "status": "available",
+        "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
+        "evidence": [
+          {
+            "path": "formalization/FunctionalInequalities/Probability/IntrinsicCovariance.lean",
+            "sha256": "589c97517766fc56dace2cb7a3ab6d6550cf3f7d6fcd646f33a6cee832ec9604"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Probability/AffineSupport.lean",
+            "sha256": "1c36055b700a47f6f44ecfbacb36f4d660680c44d9baf150a61945563a5356a2"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Probability/Covariance.lean",
+            "sha256": "f6a77438be724f5391e10c33c38f850b23e0f669ca6a9b55e36f921c0803053b"
+          },
+          {
+            "path": "formalization/.lake/packages/mathlib/Mathlib/Probability/Moments/CovarianceBilin.lean",
+            "sha256": "1005d48eb36c1dfe48d6ff8315c513cb10c682f91d9c66b6172ae9d3a0d29df6"
+          },
+          {
+            "path": "formalization/.lake/packages/mathlib/Mathlib/Analysis/InnerProductSpace/Projection/Basic.lean",
+            "sha256": "2314a7b2a9c1f01d2c08b267241d24b2bac9a47e3fb6a44863bc5095423689e0"
+          },
+          {
+            "path": "formalization/.lake/packages/mathlib/Mathlib/Analysis/InnerProductSpace/Adjoint.lean",
+            "sha256": "f28b5896638f712605265a69ffe4469f1f42e1b78b10ade0844738aeecd2b2a2"
+          },
+          {
+            "path": "formalization/.lake/packages/mathlib/Mathlib/Analysis/Convex/Integral.lean",
+            "sha256": "1b3115887fabf0dccc2fed689d1f1ddc7a114b5de4594e752c02908a445aafb4"
+          }
+        ],
         "gaps": []
       }
     },
@@ -591,7 +741,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation.lean",
-            "sha256": "d6385f6db382af4e268517152a0f496877f5cc2ca191583706a61e7aac004818"
+            "sha256": "96a4953fae251311bda01a9f4ad3e0a665c139faa659ae8e9f146ae7f362759d"
           },
           {
             "path": "solutions/LemCovarianceTestCoreDensity.lean",
@@ -667,7 +817,7 @@
             "sha256": "1c36055b700a47f6f44ecfbacb36f4d660680c44d9baf150a61945563a5356a2"
           },
           {
-            "path": "formalization/FunctionalInequalities/KLS/LogConcave.lean",
+            "path": "formalization/FunctionalInequalities/KLS/LogConcave/Transport.lean",
             "sha256": "77d59008d0140b952dba306baf5effe9f4d78b4c1587716a10a8d6ac3941335f"
           },
           {
@@ -679,12 +829,12 @@
             "sha256": "c0912639620de9c05c6644f7c1105bbbf0a779b493b30a1ae83a066e1df91833"
           },
           {
-            "path": "formalization/FunctionalInequalities/KLS/LogConcaveDensity.lean",
-            "sha256": "870e1d4b4ce89fb5781a4f1f0bea6663184dad2ace494daf1c133aee936363cc"
+            "path": "formalization/FunctionalInequalities/KLS/LogConcave/AbsoluteContinuity.lean",
+            "sha256": "0247d28708186ccae6f3b6e12099bbee9e09e39335a68d19ef1ecafa7cc74af5"
           },
           {
             "path": "solutions/LemLogConcaveIntrinsicAbsoluteContinuity.lean",
-            "sha256": "2b27d2c49c4952bffcc2ac8bb3063f721856f35f94ce8a141d4ae5aba21bcf21"
+            "sha256": "e64a65fdd6bb249603e67c7c075dc35be54799772972ae3e4eb649c5a1282bec"
           }
         ],
         "gaps": []

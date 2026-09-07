@@ -15,6 +15,9 @@
 | 任意给定 L² 能量的优化器 | `Poincare.L2Energy.constant μ energy`、`Poincare.L2Energy.Holds μ energy C` |
 | legacy 与所选常数的比较 | `Poincare.Euclidean.constant_eq_canonical` |
 | 一般对数凹律的文献比较 | `KLS.LogConcave.canonical_eq_literature`，可写 `hμ.canonical_eq_literature` |
+| Borell 密度代表及其性质 | `KLS.IsBorellDensity`；`hμ.exists_isBorellDensity m`；对代表元 `h`：`h.pos_of_mem_interior_support`、`h.continuousOn_interior_support`、`h.exists_bounds_of_isCompact` |
+| 内禀律的矩 | `hμ.intrinsic_integrable_exp_norm`、`hμ.intrinsic_integrable_norm_pow p` |
+| 环境/内禀协方差比较 | `Covariance.operator_coe_intrinsic μ hμ`、`Covariance.opNorm_operator_intrinsic μ hμ`、`Covariance.intrinsic_operator_inner_self_pos μ hμ`；前提 `hμ : MemLp id 2 μ` 显式 |
 
 `Canonical` 表示仓库选择的具体前端。其定义仍是：把原 L² 类送入内禀仿射支撑坐标，
 计算该坐标上的光滑梯度松弛，再拉回原空间。这个名字本身不提供 Cheeger、Dirichlet
@@ -43,7 +46,7 @@
 | --- | --- |
 | `Poincare/Euclidean` 与内禀能量 | 重复完整构造名最严重，整理为上表入口 |
 | `Poincare/L2Energy`、`L2Comparison` | 通用前缀重复出现在复合定理中，统一使用 `L2Energy` 命名空间 |
-| `Energy/Relaxation*` 与 `FormCore` | 已按 `PreEnergy`、`QuadraticPreEnergy`、恢复或核心性质分组；保留 `sequentialRelaxation` 与有限性条件，区分一般能量与具体松弛 |
+| `Energy/Relaxation/` 与 `FormCore` | 已按 `PreEnergy`、`QuadraticPreEnergy`、恢复或核心性质分组；保留 `sequentialRelaxation` 与有限性条件，区分一般能量与具体松弛 |
 | `Energy/Euclidean/LipschitzApproximation` | 保留光滑性、紧支撑、加权、L¹/L² 等区别；它们对应不同结论 |
 | `Poincare/Gaussian` | 保留半直线方向、密度权重、平方和导数等信息，防止混淆实际积分 |
 | `Probability` 与 `KLS/LogConcave*` | 支撑、内禀坐标、闭球、最终成立与内部非空等信息都有实际作用；不按长度截短 |

@@ -1,4 +1,4 @@
-import FunctionalInequalities.Energy.Relaxation
+import FunctionalInequalities.Energy.Relaxation.Basic
 import Mathlib.Topology.MetricSpace.Pseudo.Defs
 import Mathlib.Topology.Sequences
 

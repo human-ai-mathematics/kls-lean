@@ -13,7 +13,7 @@ Public interfaces remain editable under [the lifecycle](ledger-schema.md#lifecyc
    moment, compact-set log-concavity and the intrinsic local-slope literature constant.
 2. [Blueprint](../formalization/blueprint/README.md): mathematical statements and declared
    dependencies; the route sidecar owns alternative branches, adapters and pinned provenance.
-3. [Ledger](a-series/ledger.yaml): the ten certified mathematical nodes. A compiled definition
+3. [Ledger](a-series/ledger.yaml): the thirteen certified mathematical nodes. A compiled definition
    or conjecture declaration is not another proved ledger theorem.
 4. [Task metadata](tasks.json): mathematical classification, retained assumptions, priority,
    evidence references and the retry policy. It contains no second copy of Lean proof status.
@@ -51,10 +51,10 @@ so bare `leanchecker` guesses the wrong module in this checkout. The runner clea
 Lean worker threads to two. This view is made from the current build; it is not a source rebuild.
 
 The generated declaration audit imports the built library and certificates, checks all Blueprint
-Lean anchors, all local declarations reached by the statement snapshot, and the six named
+Lean anchors, all local declarations reached by the statement snapshot, and the twenty named
 definition checks in `solutions/StatementChecks.lean`, and inspects their transitive axioms.
 Missing reports or axioms outside `propext`,
-`Classical.choice`, and `Quot.sound` fail acceptance. The ten certificates additionally have
+`Classical.choice`, and `Quot.sound` fail acceptance. The thirteen certificates additionally have
 default-build guards. The expected certificate list comes from the existing explicit
 Blueprint-to-ledger mapping; a new proved ledger node without a mapping is an error.
 
@@ -135,7 +135,11 @@ receipt still matches: decisions are themselves included in the source hash.
 
 `tasks.json` and generated atlas use schema version 2. This is a local data-schema version, not an
 external Atlas product. Tasks have `policy` and a `nodes` object keyed by existing Blueprint labels.
-Each entry has these fields, plus `infrastructure` exactly for `local_argument` and `published`:
+Each entry has these fields, with `infrastructure` required for `local_argument` and `published`
+and optional for `definition`. A definition may need a nontrivial construction or a
+well-definedness adapter; opting into assessment does not change its mathematical classification.
+Other mathematical classes still do not accept this field. This additive schema-2 extension is
+recorded in [the Borell/Claude handoff](decisions/2026-09-07-borell-equivalence-claude-handoff.md).
 
 | Field | Meaning |
 | --- | --- |
@@ -170,8 +174,8 @@ contains `LipschitzWith.ae_differentiableAt`,
 the desired derivative transport for a merely Lipschitz test. The smooth/literature comparison now
 has eight proved local slope/gradient and finite-constant transport adapters, assessed as available
 with source hashes. The new intrinsic absolute-continuity proof and general log-concave
-comparison have available local adapters too. The remaining
-23 published/local argument task records are explicitly unchecked. This is not a survey claiming Mathlib lacks SDE,
+comparison have available local adapters too. Other published/local argument task records remain explicitly unchecked; inspect `tasks.json`
+for their current assessments. This is not a survey claiming Mathlib lacks SDE,
 BV or spectral theory. It does not add an analytic premise to the pilot theorem.
 
 Research, refuted and unresolved-statement classifications take precedence. Recorded declarations
@@ -207,6 +211,44 @@ counter, automatic stopping or automatic mathematical reclassification is implem
 record whether failures come from an API gap, missing known lemma, statement error, counterexample,
 or research frontier in `explorations/`. A retry budget is not evidence that a statement is false.
 No unattended retry executor is included in this phase.
+
+## Borell equivalence and conditional-fiber proofs
+
+The 2026-09-07 owner request deliberately retained seven `sorry` proofs for Claude: one
+compact/Borel log-concavity equivalence and six conditional-fiber well-definedness contracts.
+Claude then proved all seven. `thm:compact-borell-logconcavity-equivalence` is now a proved
+ledger node with the sole certificate `Solutions.ThmCompactBorellLogconcavityEquivalence.certificate`,
+registered in `check_blueprint.CERTIFICATES`, with `\leanok` on statement and proof and
+default-build axiom guards. `def:conditional-fiber-form` carries `\leanok` as a definition node
+because its six contracts are proved and guarded in `StatementChecks.lean`; it is not a ledger
+theorem. The declaration audit still examines every Blueprint anchor and was not relaxed:
+`STANDARD_AXIOMS` is unchanged and no anchor was omitted.
+
+Definitions may opt into an infrastructure record while retaining `mathematics: definition`,
+using the same source/pin/gap validation and scheduling as other assessed tasks. The
+conditional-fiber record is now `available` with no gaps. Existing theorem infrastructure
+requirements are unchanged.
+
+The statement golden still covers its original 26 declarations; the new objects do not occur
+in that root closure, so no baseline update is made. New anchors, twenty named typed checks,
+six contract guards and the certificate guards provide the stated additional coverage, without
+claiming an expanded golden. Source scope is in
+[the handoff decision](decisions/2026-09-07-borell-equivalence-claude-handoff.md) and the
+proofs are described in
+[the completion record](decisions/2026-09-07-borell-equivalence-and-conditional-fiber-proofs.md).
+
+## Borell density representation
+
+`thm:borell-logconcave-density` was drafted and then proved on 2026-09-07. While drafted, its
+five `sorry` obligations were deliberately kept out of the Blueprint `\lean` anchors, because the
+declaration audit examines every anchor for standard-only axioms and would have failed on a
+placeholder rather than hidden it. Now all five theorems, the predicate `KLS.IsBorellDensity`,
+the two support identities and the certificate `Solutions.ThmBorellLogconcaveDensity.certificate`
+are anchored with `\leanok`, the certificate is registered in `check_blueprint.CERTIFICATES`, and
+the certificate file carries default-build axiom guards for the certificate and its nine main
+dependencies. Statement design and the semantic alignment review are in
+[the statement decision](decisions/2026-09-07-borell-density-statements.md); the proofs are
+described in [the proof record](decisions/2026-09-07-borell-density-proofs.md).
 
 ## Definition checks
 

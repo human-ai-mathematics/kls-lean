@@ -1,4 +1,9 @@
 import FunctionalInequalities.KLS.Statement
+import FunctionalInequalities.KLS.LogConcave.Borel
+import FunctionalInequalities.KLS.Isotropic
+import FunctionalInequalities.KLS.Isoperimetry
+import FunctionalInequalities.KLS.ConditionalFiber
+import FunctionalInequalities.Poincare.Euclidean.RawEnergyObstruction
 
 /-!
 # Literal KLS statement checks
@@ -94,6 +99,124 @@ theorem ambient_dirac_identity_energy :
 
 end Solutions.StatementChecks
 
+namespace Solutions.StatementChecks
+
+/-- Infrastructure: inner regularity under the exact normed-space assumptions of the Borell draft. -/
+theorem borell_innerRegular {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [MeasurableSpace E] [BorelSpace E] [FiniteDimensional ℝ E] (μ : ProbabilityMeasure E) :
+    Measure.InnerRegular (μ : Measure E) := inferInstance
+
+/-- Infrastructure: positive ENNReal powers commute with arbitrary indexed suprema. -/
+theorem borell_rpow_iSup {I : Type*} (f : I → ENNReal) (t : ℝ) (ht : 0 < t) :
+    (⨆ i, f i) ^ t = ⨆ i, f i ^ t := (ENNReal.orderIsoRpow t ht).map_iSup f
+
+/-- Infrastructure: products distribute over the two independent approximation suprema. -/
+theorem borell_mul_iSup {I J : Type*} (a : I → ENNReal) (b : J → ENNReal) :
+    (⨆ i, a i) * (⨆ j, b j) = ⨆ i, ⨆ j, a i * b j := by
+  simp_rw [ENNReal.iSup_mul, ENNReal.mul_iSup]
+
+/-- The isotropic fields use finite second moment and the centered operator, in every dimension. -/
+theorem isotropic_fields (n : ℕ) (μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin n))) :
+    KLS.Isotropic μ ↔
+      MemLp id 2 (μ : Measure (EuclideanSpace ℝ (Fin n))) ∧
+      (∫ x, x ∂(μ : Measure (EuclideanSpace ℝ (Fin n)))) = 0 ∧
+      Covariance.operator (μ : Measure (EuclideanSpace ℝ (Fin n))) =
+        ContinuousLinearMap.id ℝ (EuclideanSpace ℝ (Fin n)) :=
+  ⟨fun h ↦ ⟨h.1, h.2, h.3⟩, fun h ↦ ⟨h.1, h.2.1, h.2.2⟩⟩
+
+/-- The unique zero-dimensional probability law really satisfies isotropy. -/
+theorem zero_dimension_isotropic (μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin 0))) :
+    KLS.Isotropic μ := by
+  refine ⟨?_, Subsingleton.elim _ _, Subsingleton.elim _ _⟩
+  have hid : (id : EuclideanSpace ℝ (Fin 0) → EuclideanSpace ℝ (Fin 0)) = fun _ ↦ 0 :=
+    funext fun _ ↦ Subsingleton.elim _ _
+  rw [hid]
+  exact memLp_const 0
+
+/-- Typed definition check for the Borel predicate; this uses no draft equivalence theorem. -/
+theorem borel_logconcavity_fields (n : ℕ) (μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin n))) :
+    KLS.BorelLogConcave μ ↔
+      ∀ (B₀ B₁ : Set (EuclideanSpace ℝ (Fin n))), MeasurableSet B₀ → MeasurableSet B₁ →
+        ∀ t : ℝ, 0 < t → t < 1 →
+          (μ : Measure (EuclideanSpace ℝ (Fin n))) B₀ ^ t *
+            (μ : Measure (EuclideanSpace ℝ (Fin n))) B₁ ^ (1 - t) ≤
+          KLS.innerMeasure (μ : Measure (EuclideanSpace ℝ (Fin n)))
+            {z | ∃ x ∈ B₀, ∃ y ∈ B₁, z = t • x + (1 - t) • y} := Iff.rfl
+
+/-- The inner-measure definition quantifies over compact subsets even in dimension zero. -/
+theorem zero_dimension_innerMeasure (μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin 0)))
+    (B : Set (EuclideanSpace ℝ (Fin 0))) :
+    KLS.innerMeasure (μ : Measure (EuclideanSpace ℝ (Fin 0))) B =
+      ⨆ (K : Set (EuclideanSpace ℝ (Fin 0))) (_ : K ⊆ B) (_ : IsCompact K),
+        (μ : Measure (EuclideanSpace ℝ (Fin 0))) K := rfl
+
+/-- Inversion remains in ENNReal, including both endpoints. -/
+theorem isoperimetric_inverse (n : ℕ) (μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin n))) :
+    KLS.Isoperimetry.inverseScale μ = (KLS.Isoperimetry.constant μ)⁻¹ := rfl
+
+/-- The zero-dimensional affine carrier gives infinity and inverse scale zero. -/
+theorem zero_dimension_isoperimetry (μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin 0))) :
+    KLS.Isoperimetry.constant μ = ⊤ ∧ KLS.Isoperimetry.inverseScale μ = 0 := by
+  have hdim : Module.finrank ℝ (Probability.affineSupport μ).direction = 0 :=
+    Module.finrank_zero_of_subsingleton
+  simp [KLS.Isoperimetry.inverseScale, KLS.Isoperimetry.constant, hdim]
+
+/-- A Dirac law in a positive-dimensional ambient space still has zero-dimensional carrier. -/
+theorem ambient_dirac_isoperimetry :
+    KLS.Isoperimetry.constant (Probability.ofMeasure (Measure.dirac (0 : ℝ))) = ⊤ ∧
+      KLS.Isoperimetry.inverseScale (Probability.ofMeasure (Measure.dirac (0 : ℝ))) = 0 := by
+  let μ := Probability.ofMeasure (Measure.dirac (0 : ℝ))
+  have hA : Probability.affineSupport μ ≤ affineSpan ℝ ({0} : Set ℝ) := by
+    apply Probability.affineSupport_le_of_ae_mem μ _ (AffineSubspace.closed_of_finiteDimensional _)
+    change ∀ᵐ x ∂(Measure.dirac (0 : ℝ)), x ∈ affineSpan ℝ ({0} : Set ℝ)
+    simp
+  have hdir : (Probability.affineSupport μ).direction = ⊥ := by
+    apply bot_unique
+    simpa only [direction_affineSpan, vectorSpan_singleton] using
+      AffineSubspace.direction_le hA
+  have hdim : Module.finrank ℝ (Probability.affineSupport μ).direction = 0 := by
+    rw [hdir]
+    simp
+  change KLS.Isoperimetry.constant μ = ⊤ ∧ KLS.Isoperimetry.inverseScale μ = 0
+  simp [KLS.Isoperimetry.inverseScale, KLS.Isoperimetry.constant, hdim]
+
+/-- The boundary-content filter approaches zero through positive radii in every dimension. -/
+theorem isoperimetric_boundary_fields (n : ℕ)
+    (μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin n)))
+    (B : Set (Probability.affineSupport μ)) :
+    KLS.Isoperimetry.boundaryContent μ B =
+      Filter.liminf (fun r : ℝ ↦
+        (((KLS.Isoperimetry.carrierMeasure μ : Measure (Probability.affineSupport μ))
+          (Metric.thickening r B)) -
+          (KLS.Isoperimetry.carrierMeasure μ : Measure (Probability.affineSupport μ)) B) /
+            ENNReal.ofReal r) (nhdsWithin 0 (Set.Ioi 0)) := rfl
+
+/-- The frame contract explicitly excludes zero dimension. No zero-dimensional frame is built. -/
+theorem conditional_zero_dimension_excluded
+    (μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin 0)))
+    (ρ : ProbabilityMeasure (KLS.ConditionalFiber.Direction (EuclideanSpace ℝ (Fin 0)))) :
+    ¬ KLS.ConditionalFiber.Admissible μ ρ := by
+  intro h
+  simpa using h.positive_dimension
+
+/-- The maximal conditional domain is exactly finite extended energy, in any positive dimension. -/
+theorem conditional_domain_fields (n : ℕ)
+    (μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin (n + 1))))
+    (ρ : ProbabilityMeasure (KLS.ConditionalFiber.Direction (EuclideanSpace ℝ (Fin (n + 1)))))
+    (f : Lp ℝ 2 (μ : Measure (EuclideanSpace ℝ (Fin (n + 1))))) :
+    f ∈ KLS.ConditionalFiber.domain μ ρ ↔ KLS.ConditionalFiber.form μ ρ f ≠ ⊤ := Iff.rfl
+
+/-- All excluded fibers contribute zero before extended division. -/
+theorem conditional_bad_fiber (n : ℕ)
+    (κ : Kernel (KLS.ConditionalFiber.Direction (EuclideanSpace ℝ (Fin (n + 1))) ×
+      EuclideanSpace ℝ (Fin (n + 1))) ℝ)
+    (b : KLS.ConditionalFiber.Direction (EuclideanSpace ℝ (Fin (n + 1))) ×
+      EuclideanSpace ℝ (Fin (n + 1))) (f : EuclideanSpace ℝ (Fin (n + 1)) → ℝ)
+    (h : ¬ KLS.ConditionalFiber.GoodFiber κ b) : KLS.ConditionalFiber.fiberEnergy κ b f = 0 := by
+  simp [KLS.ConditionalFiber.fiberEnergy, h]
+
+end Solutions.StatementChecks
+
 /-- info: 'Solutions.StatementChecks.constant_energy' depends on axioms: [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
 #print axioms Solutions.StatementChecks.constant_energy
@@ -117,3 +240,83 @@ end Solutions.StatementChecks
 /-- info: 'Solutions.StatementChecks.ambient_dirac_identity_energy' depends on axioms: [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
 #print axioms Solutions.StatementChecks.ambient_dirac_identity_energy
+
+/-- info: 'Solutions.StatementChecks.borell_innerRegular' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Solutions.StatementChecks.borell_innerRegular
+
+/-- info: 'Solutions.StatementChecks.borell_rpow_iSup' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Solutions.StatementChecks.borell_rpow_iSup
+
+/-- info: 'Solutions.StatementChecks.borell_mul_iSup' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Solutions.StatementChecks.borell_mul_iSup
+
+/-- info: 'Solutions.StatementChecks.isotropic_fields' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Solutions.StatementChecks.isotropic_fields
+
+/-- info: 'Solutions.StatementChecks.zero_dimension_isotropic' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Solutions.StatementChecks.zero_dimension_isotropic
+
+/-- info: 'Solutions.StatementChecks.borel_logconcavity_fields' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Solutions.StatementChecks.borel_logconcavity_fields
+
+/-- info: 'Solutions.StatementChecks.zero_dimension_innerMeasure' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Solutions.StatementChecks.zero_dimension_innerMeasure
+
+/-- info: 'Solutions.StatementChecks.isoperimetric_inverse' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Solutions.StatementChecks.isoperimetric_inverse
+
+/-- info: 'Solutions.StatementChecks.zero_dimension_isoperimetry' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Solutions.StatementChecks.zero_dimension_isoperimetry
+
+/-- info: 'Solutions.StatementChecks.ambient_dirac_isoperimetry' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Solutions.StatementChecks.ambient_dirac_isoperimetry
+
+/-- info: 'Solutions.StatementChecks.isoperimetric_boundary_fields' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Solutions.StatementChecks.isoperimetric_boundary_fields
+
+/-- info: 'Solutions.StatementChecks.conditional_zero_dimension_excluded' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Solutions.StatementChecks.conditional_zero_dimension_excluded
+
+/-- info: 'Solutions.StatementChecks.conditional_domain_fields' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Solutions.StatementChecks.conditional_domain_fields
+
+/-- info: 'Solutions.StatementChecks.conditional_bad_fiber' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Solutions.StatementChecks.conditional_bad_fiber
+
+/-- info: 'FunctionalInequalities.KLS.ConditionalFiber.lintegral_baseLaw' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms FunctionalInequalities.KLS.ConditionalFiber.lintegral_baseLaw
+
+/-- info: 'FunctionalInequalities.KLS.ConditionalFiber.ae_memLp_id' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms FunctionalInequalities.KLS.ConditionalFiber.ae_memLp_id
+
+/-- info: 'FunctionalInequalities.KLS.ConditionalFiber.measurable_fiberEnergy' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms FunctionalInequalities.KLS.ConditionalFiber.measurable_fiberEnergy
+
+/-- info: 'FunctionalInequalities.KLS.ConditionalFiber.energyWith_eq' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms FunctionalInequalities.KLS.ConditionalFiber.energyWith_eq
+
+/-- info: 'FunctionalInequalities.KLS.ConditionalFiber.energy_congr_ae' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms FunctionalInequalities.KLS.ConditionalFiber.energy_congr_ae
+
+/-- info: 'FunctionalInequalities.KLS.ConditionalFiber.form_toLp' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms FunctionalInequalities.KLS.ConditionalFiber.form_toLp
