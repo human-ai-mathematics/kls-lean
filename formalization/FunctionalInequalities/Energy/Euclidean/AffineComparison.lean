@@ -1,4 +1,4 @@
-import FunctionalInequalities.Energy.Euclidean.IntrinsicAffine.Basic
+import FunctionalInequalities.Energy.Euclidean.IntrinsicAffine
 import Mathlib.Analysis.Calculus.AddTorsor.AffineMap
 import Mathlib.Analysis.InnerProductSpace.Projection.FiniteDimensional
 

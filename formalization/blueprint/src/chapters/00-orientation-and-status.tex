@@ -32,11 +32,6 @@ mathematical presentations have not yet been identified formally.
 
 \begin{theorem}[Compact-set and Borell formulations agree]
   \label{thm:compact-borell-logconcavity-equivalence}
-  \lean{FunctionalInequalities.KLS.innerMeasure,
-        FunctionalInequalities.KLS.BorelLogConcave,
-        FunctionalInequalities.KLS.LogConcave.borel_iff,
-        Solutions.ThmCompactBorellLogconcavityEquivalence.certificate}
-  \leanok
   \uses{def:log-concave-law}
   For an arbitrary set $S$, write
   \[
@@ -51,19 +46,11 @@ mathematical presentations have not yet been identified formally.
   \]
 \end{theorem}
 \begin{proof}
-  \leanok
-  Compact sets are Borel and $\mu_*(S)\le\mu(S)$ for every set $S$, so the Borel formulation
-  specializes to the compact-set definition.  Conversely, finite-dimensional Borel probability
-  laws are inner regular: $\mu(B_i)=\sup\{\mu(K_i):K_i\subseteq B_i\text{ compact}\}$.
-  Positive powers and products commute with these suprema in $[0,\infty]$, and for compact
-  $K_i\subseteq B_i$ the combination $\lambda K_0+(1-\lambda)K_1$ is a compact subset of
-  $\lambda B_0+(1-\lambda)B_1$, being the continuous image of $K_0\times K_1$.  The compact-set
-  inequality on each pair $(K_0,K_1)$ therefore bounds $\mu(K_0)^\lambda\mu(K_1)^{1-\lambda}$ by
-  $\mu_*(\lambda B_0+(1-\lambda)B_1)$, and the two suprema give the claim.  Null sets are handled
-  by the empty compact subset.  This is the precise bridge to the measure-theoretic formulation
-  used in the cited literature; it is not implemented by evaluating a measure as an outer measure
-  on a possibly non-Borel Minkowski combination.  Compare Bobkov's equation~(5.1) in
-  \cite{Bobkov1999LogConcave}.
+  Open.  One direction specializes to compact sets.  Conversely, use inner regularity to
+  approximate each Borel set from within by compact sets and then take suprema.  This is the
+  precise bridge to the measure-theoretic formulation used in the cited literature; it must not
+  be implemented by evaluating a measure as an outer measure on a possibly non-Borel Minkowski
+  combination.  Compare Bobkov's equation~(5.1) in \cite{Bobkov1999LogConcave}.
 \end{proof}
 
 \begin{lemma}[Intrinsic absolute continuity of log-concave laws]
@@ -94,16 +81,6 @@ mathematical presentations have not yet been identified formally.
 
 \begin{theorem}[Borell representation on the affine support]
   \label{thm:borell-logconcave-density}
-  \lean{FunctionalInequalities.KLS.IsBorellDensity,
-        FunctionalInequalities.KLS.LogConcave.exists_isBorellDensity,
-        FunctionalInequalities.KLS.IsBorellDensity.pos_of_mem_interior_support,
-        FunctionalInequalities.KLS.IsBorellDensity.exists_bounds_of_isCompact,
-        FunctionalInequalities.KLS.LogConcave.closure_convexHull_intrinsic_support,
-        FunctionalInequalities.KLS.LogConcave.intrinsic_interior_support_compl,
-        FunctionalInequalities.KLS.LogConcave.intrinsic_integrable_exp_norm,
-        FunctionalInequalities.KLS.LogConcave.intrinsic_integrable_norm_pow,
-        Solutions.ThmBorellLogconcaveDensity.certificate}
-  \leanok
   \uses{def:log-concave-law,thm:compact-borell-logconcavity-equivalence,
         def:affine-support-intrinsic-law}
   Let $\nu$ be the intrinsic law of a finite-dimensional log-concave probability $\mu$ on the
@@ -121,33 +98,10 @@ mathematical presentations have not yet been identified formally.
   space, so the assertion includes Dirac laws.
 \end{theorem}
 \begin{proof}
-  \leanok
-  The absolute-continuity input is \cref{lem:logconcave-intrinsic-absolute-continuity}, and the
-  support of $\nu$ is closed and convex, so $K_\nu=\operatorname{supp}\nu$ and
-  $\Omega=\operatorname{int}\operatorname{supp}\nu$; the frontier of a convex set is Lebesgue-null,
-  which gives $\nu(V\setminus\Omega)=0$.  For the representative, put $r_n=1/(n+1)$ and
-  $\varphi_n(x)=\nu(\overline B(x,r_n))/\mathrm{Leb}(\overline B(0,r_n))$.  Equal-radius ball masses
-  satisfy the log-concavity inequality, so each $\varphi_n$ is log-concave, hence so is
-  $\psi=\liminf_n\varphi_n$; the proved small-ball estimate bounds $\psi$ uniformly, and the
-  Besicovitch differentiation theorem identifies $\psi$ with the Radon--Nikodym derivative
-  almost everywhere.  Let $\rho$ be the upper semicontinuous envelope
-  $\rho(x)=\inf_n\sup_{B(x,r_n)}\psi$.  It is upper semicontinuous, log-concave, finite, and
-  agrees with $\psi$ off the frontier of the convex set $\{\psi>0\}$: outside its closure both
-  vanish, and on its interior $\log\psi$ is a finite concave function, hence continuous.  Thus
-  $\dd\nu=\rho\,\dd\mathrm{Leb}_V$.  For any such representative, $\{\rho>0\}$ is convex; if it
-  had empty interior it would be Lebesgue-null and could not carry $\nu$, so
-  $\operatorname{supp}\nu\subseteq\overline{\{\rho>0\}}$ gives
-  $\Omega\subseteq\operatorname{int}\{\rho>0\}$ and $\rho>0$ on $\Omega$.  On a compact
-  $K\subset\Omega$, upper semicontinuity bounds $\rho$ above and continuity of the concave
-  function $\log\rho$ bounds it below by a positive constant; these pointwise bounds imply the
-  $L^\infty_{\mathrm{loc}}$ statement.  For the moments, choose a ball $B(0,R)$ of mass at least
-  $3/4$ by exhaustion; Borell's lemma, applied through the Borel-set formulation of
-  \cref{thm:compact-borell-logconcavity-equivalence} with $t=2/(k+1)$, gives
-  $\nu(\|v\|\ge kR)\le 3^{(1-k)/2}$, so $e^{t\|v\|}$ with $t=\log 3/(4R)$ is dominated by a
-  geometric series and all moments are finite.  This is imported finite-dimensional
-  convex-measure theory in the sense of \cite{Borell1974Convex}, now proved locally from the
-  compact-set convention; the reference measure is any additive Haar measure, which in dimension
-  zero is a positive multiple of the Dirac mass.
+  This is imported finite-dimensional convex-measure theory; see \cite{Borell1974Convex}.  It is
+  not a local Lean theorem in its full stated scope. The absolute-continuity input is certified
+  separately in \cref{lem:logconcave-intrinsic-absolute-continuity}; the density representative,
+  its local positive bounds, and the moment conclusions remain unproved in Lean.
 \end{proof}
 
 \begin{definition}[Literature Poincar\'e constant]

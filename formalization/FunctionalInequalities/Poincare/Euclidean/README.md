@@ -6,12 +6,12 @@
 
 **12 条比较定理均已证明，两份证书通过传递公理检查，ledger 状态为
 `proved / checked_by: lean`。** 原有声明的假设和类型保持不变，现由
-`Poincare.Foundation` 与 root aggregate 导出。后续批次已进一步证明一般对数凹
+`Poincare.Foundation` 与已证明库的 root aggregate 导出。后续批次已进一步证明一般对数凹
 测度的文献 locally Lipschitz 常数比较；Cheeger 和 KLS 仍未证明。
 
 一般对数凹版本位于 [LogConcaveComparison.lean](LogConcaveComparison.lean)：从现有
 `KLS.LogConcave μ` 推出 legacy、intrinsic 和 literature 常数相等，进而得到 selected 常数等式。
-内禀绝对连续性由 [AbsoluteContinuity.lean](../../KLS/LogConcave/AbsoluteContinuity.lean) 证明，未作为额外假设。
+内禀绝对连续性由 [LogConcaveDensity.lean](../../KLS/LogConcaveDensity.lean) 证明，未作为额外假设。
 包含环境奇异和零维支撑；完整 Borell 密度代表及矩定理仍未完成。见
 [本地证明记录](../../../../research/decisions/2026-09-06-general-logconcave-comparison.md)。
 

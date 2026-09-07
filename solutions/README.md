@@ -61,7 +61,7 @@ Their types preserve the reviewed generality, including empty test classes, zero
 support, zero finite constants and infinite optima. Gaussian transport through these bridges is
 now proved. See the [comparison guide](../formalization/FunctionalInequalities/Poincare/Euclidean/README.md).
 
-The `Solutions` default target builds all thirteen certificates plus `GaussianAxiomAudit.lean` and
+The `Solutions` default target builds all ten certificates plus `GaussianAxiomAudit.lean` and
 `FoundationAxiomAudit.lean`. The latter guards 27 foundation and comparison declarations; each new
 certificate also has its own axiom guard. These checks require exactly `propext`, `Classical.choice`
 and `Quot.sound`. Compiled user examples remain in
@@ -94,9 +94,8 @@ node is `proved / checked_by: lean`; see the
 [acceptance record](../research/decisions/2026-09-06-weighted-approximation-acceptance.md).
 
 `StatementChecks.lean` is a default-build target for the literal KLS proposition and its domain
-and boundary encodings. It is not a ledger proof certificate. All thirteen mathematical certificates,
-the twenty named definition sanity checks and the six conditional-fiber contracts have
-default-build transitive axiom guards. Existing
+and boundary encodings. It is not a ledger proof certificate. All ten mathematical certificates
+and the six named definition sanity checks have default-build transitive axiom guards. Existing
 Dirac representative examples and Gaussian comparisons are reused. A concrete Gaussian literature
 bound can now use a proof of the Gaussian law satisfying compact-set `KLS.LogConcave`
 to apply the general comparison; that specialization is not added here. The [verification runner](../research/verify.py)
@@ -161,49 +160,3 @@ SHA and matching CI result are tracked in
 The existing #2 and #6 nodes retain their ledger claims, certificate signatures, and independent
 checked import closures.
 See `../formalization/README.md` for the current reusable module layout.
-
-## Borell equivalence certificate and implemented definition checks
-
-[`ThmCompactBorellLogconcavityEquivalence.lean`](ThmCompactBorellLogconcavityEquivalence.lean)
-certifies `thm:compact-borell-logconcavity-equivalence`: compact-set log-concavity of a Borel
-probability law on a finite-dimensional real normed space is equivalent to Bobkov's Borel/inner-measure
-formulation, including singular laws, null sets, proper affine supports and dimension zero. Its
-`certificate` wraps `KLS.LogConcave.borel_iff`; the certificate, the library theorem and the two
-compactness/inner-regularity lemmas have default-build axiom guards. The node is
-`proved / checked_by: lean`. Read the
-[proof handoff](../research/decisions/2026-09-07-borell-equivalence-claude-handoff.md) and the
-[completion record](../research/decisions/2026-09-07-borell-equivalence-and-conditional-fiber-proofs.md).
-
-`StatementChecks.lean` contains twenty named, proved checks with standard-only axiom guards, plus
-axiom guards for the six proved conditional-fiber contracts in `KLS/ConditionalFiber.lean`
-(iterated base integral, a.e. finite conditional second moment, joint measurability, version
-independence, representative independence and the L² identification). The definition node
-`def:conditional-fiber-form` therefore carries `\leanok`; it is not a ledger theorem. The raw
-Dirac obstruction has named library proofs and FoundationAxiomAudit guards, without a ledger entry.
-
-## Borell density representation certificate
-
-[`ThmBorellLogconcaveDensity.lean`](ThmBorellLogconcaveDensity.lean) certifies
-`thm:borell-logconcave-density`. Its sole `certificate` packages, for every log-concave law and
-every Haar measure on the direction of its affine support: existence of an upper semicontinuous
-log-concave density representative `KLS.IsBorellDensity` of the intrinsic law, positivity of every
-such representative on the interior of the support, two-sided positive bounds on compact subsets of
-that interior, the closed-convex-hull identity of the support, the null complement of the support
-interior, an exponential moment and all-order moments. Typed applications cover the Euclidean
-family including dimension zero. The certificate and nine reusable declarations have default-build
-axiom guards. The node is `proved / checked_by: lean`. Read the
-[statement decision](../research/decisions/2026-09-07-borell-density-statements.md) and the
-[proof record](../research/decisions/2026-09-07-borell-density-proofs.md).
-
-## Ambient/intrinsic covariance certificate
-
-[`LemAmbientIntrinsicCovariance.lean`](LemAmbientIntrinsicCovariance.lean) certifies
-`lem:ambient-intrinsic-covariance`. Under an explicit finite second moment, its sole `certificate`
-packages: the ambient covariance operator annihilates the orthogonal complement of the
-affine-support direction, restricts on that direction to the covariance operator of the intrinsic
-law, has the same operator norm, the intrinsic covariance is positive definite, and a
-zero-dimensional direction gives zero operators. Typed applications cover the Euclidean family
-including dimension zero. The certificate and nine reusable declarations in
-`Probability/IntrinsicCovariance.lean` have default-build axiom guards. The node is
-`proved / checked_by: lean`. Read the
-[record](../research/decisions/2026-09-07-ambient-intrinsic-covariance.md).

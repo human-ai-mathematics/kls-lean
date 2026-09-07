@@ -1,4 +1,4 @@
-import FunctionalInequalities.KLS.LogConcave.AbsoluteContinuity
+import FunctionalInequalities.KLS.LogConcaveDensity
 
 /-!
 # Lean certificate: `lem:logconcave-intrinsic-absolute-continuity`

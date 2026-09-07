@@ -1,4 +1,4 @@
-import FunctionalInequalities.Energy.Relaxation.Basic
+import FunctionalInequalities.Energy.Relaxation
 import Mathlib.Topology.Instances.ENNReal.Lemmas
 
 /-!

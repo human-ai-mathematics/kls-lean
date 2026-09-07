@@ -1,10 +1,10 @@
-import FunctionalInequalities.KLS.LogConcave.AbsoluteContinuity
+import FunctionalInequalities.KLS.LogConcaveDensity
 import FunctionalInequalities.Poincare.Euclidean.LiteratureComparison
 
 /-!
 # Poincare constants for general log-concave laws
 
-Read `KLS.LogConcave.AbsoluteContinuity` for intrinsic absolute continuity, then `LiteratureComparison`
+Read `KLS.LogConcaveDensity` for intrinsic absolute continuity, then `LiteratureComparison`
 for the test-class comparison. This module removes the explicit absolute-continuity premise
 from the comparison when the probability law is compact-set log-concave. Ambient singularity,
 zero-dimensional affine support, and infinite optimal constants are included. No dimension-free

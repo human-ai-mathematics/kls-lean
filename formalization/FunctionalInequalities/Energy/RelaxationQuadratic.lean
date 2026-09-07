@@ -1,7 +1,7 @@
 import FunctionalInequalities.Energy.ClosedQuadratic
 import FunctionalInequalities.Energy.QuadraticPreEnergy
-import FunctionalInequalities.Energy.Relaxation.LowerSemicontinuous
-import FunctionalInequalities.Energy.Relaxation.Recovery
+import FunctionalInequalities.Energy.RelaxationLowerSemicontinuous
+import FunctionalInequalities.Energy.RelaxationRecovery
 import Mathlib.Data.ENNReal.Inv
 import Mathlib.Order.Filter.ENNReal
 

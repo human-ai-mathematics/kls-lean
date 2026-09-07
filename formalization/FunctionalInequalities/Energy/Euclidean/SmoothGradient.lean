@@ -1,4 +1,4 @@
-import FunctionalInequalities.Energy.Relaxation.Basic
+import FunctionalInequalities.Energy.Relaxation
 import Mathlib.Analysis.Calculus.ContDiff.Basic
 import Mathlib.Analysis.Calculus.Gradient.Basic
 import Mathlib.MeasureTheory.Function.L2Space

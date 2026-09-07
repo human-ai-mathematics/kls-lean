@@ -36,38 +36,68 @@ The [local workflow](../research/verification.md) adds task selection and snapsh
 
 ```text
 formalization/
-├── FunctionalInequalities.lean     # Aggregate: definitions, proved results and drafts
-├── FunctionalInequalities/
-│   ├── Probability/               # Probability laws, affine support, covariance, ball estimates
-│   ├── L2/                        # Mean and variance on real L²
-│   ├── Energy/                    # Extended energies, relaxation and Euclidean realizations
-│   ├── Poincare/                  # Constants, comparisons, products and Gaussian models
-│   └── KLS/                       # Target definitions, log-concavity and route-specific objects
-├── Dev/                           # Optional search scratchpad; excluded from default build
-├── blueprint/                     # TeX sources, dependency routes and rendering tools
-├── lakefile.toml                   # Library, solution, example and development targets
-├── lake-manifest.json              # Pinned dependencies
-├── lean-toolchain                 # Lean version
-└── README.md
+├── blueprint/                                  # Executable theorem/dependency map
+│   ├── src/                                # Shared TeX source for PDF and web
+│   └── route-composition.yaml             # Machine-checked alternative KLS routes
+├── FunctionalInequalities.lean               # Aggregate of the proved library
+└── FunctionalInequalities/
+    ├── Probability/
+    │   ├── Basic.lean                       # Bundled probability-measure boundary
+    │   └── AffineSupport.lean               # Minimal affine carrier and intrinsic law
+    ├── L2/
+    │   └── MeanVariance.lean                # Intrinsic real L² mean and variance
+    ├── Energy/
+    │   ├── Functional.lean                  # Extended energy and finite domain
+    │   ├── Comparison.lean                  # Pointwise extended-energy comparison
+    │   ├── Relaxation.lean                  # Sequential relaxation of a pre-energy
+    │   ├── RelaxationApproximation.lean     # Shared near-test and dense-sequence choices
+    │   ├── QuadraticPreEnergy.lean           # Finite quadratic pre-energy interface
+    │   ├── RelaxationLowerSemicontinuous.lean # LSC of sequential relaxation
+    │   ├── RelaxationRecovery.lean          # Finite/all-point recovery sequences
+    │   ├── RelaxationQuadratic.lean         # Quadratic laws and ClosedQuadratic theorem
+    │   ├── RelaxationContraction.lean       # Conditional continuous-contraction transfer
+    │   ├── FormCore.lean                    # Agreement, generation and core predicates
+    │   ├── ClosedQuadratic.lean             # Closed quadratic property layer
+    │   ├── Dirichlet.lean                   # Markov and Dirichlet property layers
+    │   └── Euclidean/
+    │       ├── SmoothGradient.lean           # C∞ gradient pre-energy and relaxation
+    │       ├── SmoothGradientQuadratic.lean  # Test algebra and quadratic energy
+    │       ├── SmoothGradientDensity.lean    # Dense C∞ realization in real L²
+    │       ├── SmoothGradientClosed.lean     # ClosedQuadratic smooth relaxation
+    │       ├── IntrinsicAffine.lean          # Bidirectional intrinsic L² equivalence
+    │       ├── AffineComparison.lean         # Restriction/extension and energy equality
+    │       └── IntrinsicAffineClosed.lean    # Transported ClosedQuadratic theorem
+    └── Poincare/
+        ├── Foundation.lean                  # Aggregate for the new layered API
+        ├── Optimal.lean                     # Pure finite test-family optimizer
+        ├── Comparison.lean                  # Test-family/domain comparisons
+        ├── L2Energy.lean                    # Extended L² energy bridge
+        ├── L2Comparison.lean                # Energy-order constant comparison
+        ├── Relaxation.lean                  # Proved constant comparison for any pre-energy
+        ├── Euclidean/
+        │   ├── SmoothGradient.lean          # Ambient relaxed-gradient constant
+        │   ├── IntrinsicAffine.lean         # Intrinsic-affine Holds and optimal constant
+        │   ├── AffineComparison.lean        # Equality of the two relaxed frontends
+        │   ├── LegacyComparison.lean        # Legacy/relaxed Holds and constant equality
+        │   └── README.md                    # Theorem meaning, sources and usage examples
+        ├── Basic.lean                       # Admissible, energy, Holds, constant
+        ├── LinearTest.lean                  # Linear tests, Rayleigh, covariance bounds
+        ├── Transport.lean                   # Coordinate lifts and isometry transport
+        ├── Product/
+        │   ├── Geometry.lean                # Binary Hilbert product and its measure
+        │   ├── Variance.lean                # L2/Fubini and variance decomposition
+        │   ├── Admissible.lean              # A.e. admissible sections and energy
+        │   ├── Tensorization.lean           # Binary upper bounds
+        │   └── Reverse.lean                 # Coordinate reverse bounds and equality
+        ├── FiniteProduct/
+        │   ├── Geometry.lean                # PiLp, dependent measure, reindexing, split
+        │   └── Tensorization.lean           # Finite upper bounds and optimal equality
+        └── Gaussian/
+            ├── README.md                    # Theorem guide, examples and proof map
+            ├── Density.lean                 # 7 density/calculus and integrability interfaces
+            ├── Hardy.lean                   # 9 interval, Tonelli and energy interfaces
+            └── Real.lean                    # 4 fixed/sharp-constant interfaces
 ```
-
-This is a topic map, not an exhaustive file listing. Use the subject guides for detailed
-reading order and placement rules:
-
-| Topic | Entry points and guide |
-| --- | --- |
-| Probability | [Basic](FunctionalInequalities/Probability/Basic.lean), [AffineSupport](FunctionalInequalities/Probability/AffineSupport.lean), [IntrinsicCovariance](FunctionalInequalities/Probability/IntrinsicCovariance.lean), [Covariance](FunctionalInequalities/Probability/Covariance.lean), [BallDomination](FunctionalInequalities/Probability/BallDomination.lean), [BallAverages](FunctionalInequalities/Probability/BallAverages.lean) |
-| Real L² | [MeanVariance](FunctionalInequalities/L2/MeanVariance.lean) |
-| Energy | [Guide](FunctionalInequalities/Energy/README.md): general interfaces, `Relaxation/`, and `Euclidean/` |
-| Poincaré | [Foundation guide](FunctionalInequalities/Poincare/README.md), [Euclidean comparisons](FunctionalInequalities/Poincare/Euclidean/README.md), [Gaussian guide](FunctionalInequalities/Poincare/Gaussian/README.md); product modules are in `Poincare/Product/` and `Poincare/FiniteProduct/` |
-| KLS | [Guide](FunctionalInequalities/KLS/README.md), including [log-concavity](FunctionalInequalities/KLS/LogConcave/README.md), isotropy, isoperimetry and conditional fibers |
-| Blueprint | [Build and navigation guide](blueprint/README.md) |
-
-The root aggregate also imports the Borell representation module. Successful aggregate
-compilation alone does not certify anything. Proved certificates import their specific
-dependencies and are checked separately; the [ledger](../research/a-series/ledger.yaml)
-records their status. Development search commands stay in `Dev/Search.lean`.
-
 
 Import the module needed by the argument, for example:
 
@@ -105,7 +135,7 @@ interface:
 - `affineSupport` is the smallest closed affine subspace containing almost every point.
   `intrinsicL2Equiv` is a two-sided real linear isometric equivalence between the original and
   intrinsic real `L²` spaces, rather than a one-way embedding.
-- `Energy.Relaxation.Contraction` gives a conditional transfer theorem: a continuous map satisfying
+- `RelaxationContraction` gives a conditional transfer theorem: a continuous map satisfying
   `RelaxedContractionBound` on realized tests decreases relaxed energy everywhere.
 - `Poincare.Euclidean.IntrinsicAffine` exposes `Holds`, the optimal `ENNReal` constant, and their
   exact order-theoretic equivalence for the intrinsic-affine relaxed energy.
@@ -154,8 +184,8 @@ Dirac counterexample explaining the agreement boundary.
 - Keep proved certificates' import closures independent of future draft modules. The root
   aggregate exports both `Poincare/Foundation` and the accepted library, including
   `Poincare/Product/Reverse` and
-  `Poincare/FiniteProduct/Tensorization` and `Poincare/Gaussian/Real`. The solution entry points
-  compile through the `Solutions` default target, including explicit draft statement checks.
+  `Poincare/FiniteProduct/Tensorization` and `Poincare/Gaussian/Real`. All ten certificates
+  compile through the `Solutions` default target.
 - Update this source map and current documentation when moving a module. Historical decisions
   and explorations remain append-only; append a migration record instead of rewriting them.
 
@@ -165,18 +195,7 @@ records, including the earlier Mathlib API probe, retain the paths used at their
 The later [wrapper removal record](../research/explorations/2026-09-03-certificate-deduplication.md)
 removes `Project/` and records the 45 reusable interfaces retained at acceptance.
 
-The [2026-09-07 Energy migration record](../research/explorations/2026-09-07-energy-module-layout.md)
-groups the relaxation, smooth-gradient and intrinsic-affine file families. The
-[Energy guide](FunctionalInequalities/Energy/README.md) gives the reading order and import examples.
-
-The [2026-09-07 log-concavity migration record](../research/explorations/2026-09-07-logconcave-module-layout.md)
-records the four moves into `KLS/LogConcave/` and the accompanying documentation corrections.
-
 ## Statements and proof status
-
-The table below lists the original Poincaré certificates. The complete current list, including
-log-concavity results and the Borell draft, is in [solutions/README.md](../solutions/README.md)
-and the [ledger](../research/a-series/ledger.yaml).
 
 | Issue | Default entry point in `../solutions/` | Status |
 | --- | --- | --- |
@@ -191,7 +210,7 @@ The two comparison entries package 12 proved theorems and retain 12 application 
 see their [reading guide](FunctionalInequalities/Poincare/Euclidean/README.md). The generic bridge
 accepts any finite pre-energy realized in real `L²`; the concrete comparisons allow every
 finite-dimensional Borel probability, including singular and zero-dimensional laws. They are
-exported by `Poincare.Foundation` and the root aggregate. Their certificates and all
+exported by `Poincare.Foundation` and the proved root aggregate. Their certificates and all
 12 theorem dependencies are guarded against nonstandard axioms.
 
 For the accepted Gaussian result, read the
@@ -209,7 +228,7 @@ case, and the exact smooth L2 finite-energy scope. The earlier
 remains historical. The current contract and proof closeout are recorded in the
 [Gaussian freeze](../research/decisions/2026-09-04-gaussian-poincare-freeze.md) and
 [Gaussian acceptance record](../research/explorations/2026-09-04-gaussian-poincare-acceptance.md).
-The root aggregate imports `Poincare/Gaussian/Real`.
+The proved-library aggregate imports `Poincare/Gaussian/Real`.
 
 `Poincare/Transport.lean`, `Poincare/Product/Reverse.lean`, and `Poincare/FiniteProduct/`
 contain the accepted mathematics and its library proofs; see the
@@ -307,9 +326,9 @@ python3 -m unittest discover -s research/tests -p 'test_*.py'
 For a focused validation of the new foundation, run from `formalization/`:
 
 ```bash
-lake env lean -DwarningAsError=true FunctionalInequalities/Energy/Relaxation/Quadratic.lean
-lake env lean -DwarningAsError=true FunctionalInequalities/Energy/Euclidean/SmoothGradient/Closed.lean
-lake env lean -DwarningAsError=true FunctionalInequalities/Energy/Euclidean/IntrinsicAffine/Closed.lean
+lake env lean -DwarningAsError=true FunctionalInequalities/Energy/RelaxationQuadratic.lean
+lake env lean -DwarningAsError=true FunctionalInequalities/Energy/Euclidean/SmoothGradientClosed.lean
+lake env lean -DwarningAsError=true FunctionalInequalities/Energy/Euclidean/IntrinsicAffineClosed.lean
 lake env lean -DwarningAsError=true FunctionalInequalities/Poincare/Euclidean/IntrinsicAffine.lean
 lake build FunctionalInequalities.Poincare.Foundation
 lake build Examples solutions.FoundationAxiomAudit

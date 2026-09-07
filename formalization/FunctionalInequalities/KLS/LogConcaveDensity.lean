@@ -1,4 +1,4 @@
-import FunctionalInequalities.KLS.LogConcave.Transport
+import FunctionalInequalities.KLS.LogConcave
 import FunctionalInequalities.Probability.BallAverages
 import Mathlib.Analysis.LocallyConvex.Separation
 

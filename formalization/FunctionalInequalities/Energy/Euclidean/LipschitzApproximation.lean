@@ -1,4 +1,4 @@
-import FunctionalInequalities.Energy.Euclidean.SmoothGradient.Basic
+import FunctionalInequalities.Energy.Euclidean.SmoothGradient
 import Mathlib.Analysis.Calculus.BumpFunction.InnerProduct
 import Mathlib.Analysis.Calculus.BumpFunction.Normed
 import Mathlib.Analysis.Calculus.ContDiff.Convolution

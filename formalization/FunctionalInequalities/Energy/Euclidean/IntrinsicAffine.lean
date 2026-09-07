@@ -1,4 +1,4 @@
-import FunctionalInequalities.Energy.Euclidean.SmoothGradient.Basic
+import FunctionalInequalities.Energy.Euclidean.SmoothGradient
 import FunctionalInequalities.Probability.AffineSupport
 import Mathlib.MeasureTheory.Function.LpSpace.Basic
 

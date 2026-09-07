@@ -1,4 +1,4 @@
-import FunctionalInequalities.Energy.Relaxation.LowerSemicontinuous
+import FunctionalInequalities.Energy.RelaxationLowerSemicontinuous
 
 /-!
 # Contraction bounds under sequential relaxation

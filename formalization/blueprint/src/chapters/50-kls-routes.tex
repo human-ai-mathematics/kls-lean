@@ -3,10 +3,8 @@
 
 This chapter is a roadmap imported from the pinned upstream commit \sourcecommit.  Its nodes have
 different upstream statuses: open gates, conditional implications, and proof dossiers marked
-\texttt{proved}/\texttt{checked\_by: agent}.  Those statuses are reported route by route.  None of
-these upstream statements is Lean-certified.  The only \texttt{leanok} in this chapter is the
-implemented definition \cref{def:conditional-fiber-form}, whose well-definedness contracts are proved;
-no theorem, corollary, assumption or question here carries \texttt{leanok}.
+\texttt{proved}/\texttt{checked\_by: agent}.  Those statuses are reported route by route.  None is
+Lean-certified, so no node in this chapter carries \texttt{leanok}.
 
 The TeX command \texttt{\textbackslash uses} means logical AND.  The four sufficient routes,
 however, are alternatives.  Their logical composition is therefore recorded in
@@ -252,21 +250,6 @@ zero variance.
 
 \begin{definition}[Conditional-fiber form]
   \label{def:conditional-fiber-form}
-  \lean{FunctionalInequalities.KLS.ConditionalFiber.Admissible,
-        FunctionalInequalities.KLS.ConditionalFiber.jointLaw,
-        FunctionalInequalities.KLS.ConditionalFiber.baseLaw,
-        FunctionalInequalities.KLS.ConditionalFiber.kernel,
-        FunctionalInequalities.KLS.ConditionalFiber.fiberEnergy,
-        FunctionalInequalities.KLS.ConditionalFiber.energy,
-        FunctionalInequalities.KLS.ConditionalFiber.form,
-        FunctionalInequalities.KLS.ConditionalFiber.domain,
-        FunctionalInequalities.KLS.ConditionalFiber.lintegral_baseLaw,
-        FunctionalInequalities.KLS.ConditionalFiber.ae_memLp_id,
-        FunctionalInequalities.KLS.ConditionalFiber.measurable_fiberEnergy,
-        FunctionalInequalities.KLS.ConditionalFiber.energyWith_eq,
-        FunctionalInequalities.KLS.ConditionalFiber.energy_congr_ae,
-        FunctionalInequalities.KLS.ConditionalFiber.form_toLp}
-  \leanok
   Let $d\ge1$.  For a Borel probability law $\mu$ on $\R^d$ with finite second moment, let $\rho$ be an
   even probability law on the sphere with
   \[
@@ -289,14 +272,6 @@ zero variance.
   of the Borel representative of $f\in L^2(\mu)$.  The nonnegative integrals take values
   in $[0,\infty]$; the maximal form domain consists of the $L^2(\mu)$ classes with finite
   $\mathcal D_{\mu,\rho}$.
-  The Lean integral construction is implemented, and its six base-law and well-definedness
-  contracts are proved: the fixed product base integrates as the iterated integral over
-  directions and projected laws; finite second moment makes infinite conditional second
-  moments a null set of base points; the guarded normalized variance is jointly measurable
-  for every Borel test; every Markov version of the same disintegration gives the same value;
-  $\mu$-a.e.\ equal Borel tests give the same value; and the chosen $L^2$ representative agrees
-  with the Borel formula.  This is a definition node: no closedness, Markov, frame-bound or
-  Poincar\'e statement is asserted here.
 \end{definition}
 
 \begin{lemma}[Closed conditional-fiber form]

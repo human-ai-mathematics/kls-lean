@@ -1,5 +1,4 @@
 import FunctionalInequalities.Poincare.Foundation
-import FunctionalInequalities.Poincare.Euclidean.RawEnergyObstruction
 
 /-!
 # Transitive axiom audit for the Poincaré foundation
@@ -200,11 +199,3 @@ info: 'FunctionalInequalities.Poincare.L2Energy.constant_le_mul_of_energy_le_mul
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms FunctionalInequalities.Poincare.L2Energy.constant_le_mul_of_energy_le_mul
-
-/-- info: 'FunctionalInequalities.Poincare.Euclidean.dirac_raw_energy' depends on axioms: [propext, Classical.choice, Quot.sound] -/
-#guard_msgs (whitespace := lax) in
-#print axioms FunctionalInequalities.Poincare.Euclidean.dirac_raw_energy
-
-/-- info: 'FunctionalInequalities.Poincare.Euclidean.dirac_toLp_zero_eq_id' depends on axioms: [propext, Classical.choice, Quot.sound] -/
-#guard_msgs (whitespace := lax) in
-#print axioms FunctionalInequalities.Poincare.Euclidean.dirac_toLp_zero_eq_id

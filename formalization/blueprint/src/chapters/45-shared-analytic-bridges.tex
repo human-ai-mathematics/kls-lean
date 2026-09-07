@@ -102,11 +102,6 @@ A published input or an upstream reviewed proof receives no \texttt{leanok} mere
 
 \begin{definition}[Isoperimetric Cheeger constant and inverse scale]
   \label{def:isoperimetric-cheeger-scale}
-  \lean{FunctionalInequalities.KLS.Isoperimetry.carrierMeasure,
-        FunctionalInequalities.KLS.Isoperimetry.boundaryContent,
-        FunctionalInequalities.KLS.Isoperimetry.constant,
-        FunctionalInequalities.KLS.Isoperimetry.inverseScale}
-  \leanok
   \uses{def:affine-support-intrinsic-law}
   Let $\mu$ be a probability law on a finite-dimensional Euclidean space $E$, and let $A$ be its
   affine support, equipped with the distance induced from $E$.  For $x\in A$ and a nonempty Borel
@@ -245,8 +240,6 @@ A published input or an upstream reviewed proof receives no \texttt{leanok} mere
 
 \begin{definition}[Isotropic probability law]
   \label{def:isotropic-law}
-  \lean{FunctionalInequalities.KLS.Isotropic}
-  \leanok
   A probability law $\nu$ with finite second moment on a finite-dimensional Euclidean space $V$
   is isotropic when
   \[
@@ -259,14 +252,6 @@ A published input or an upstream reviewed proof receives no \texttt{leanok} mere
 
 \begin{lemma}[Ambient and intrinsic covariance agree]
   \label{lem:ambient-intrinsic-covariance}
-  \lean{FunctionalInequalities.Covariance.operator_apply_eq_zero_of_mem_orthogonal,
-        FunctionalInequalities.Covariance.covarianceBilin_intrinsic,
-        FunctionalInequalities.Covariance.operator_coe_intrinsic,
-        FunctionalInequalities.Covariance.opNorm_operator_intrinsic,
-        FunctionalInequalities.Covariance.intrinsic_operator_inner_self_pos,
-        FunctionalInequalities.Covariance.operator_eq_zero_of_direction_eq_bot,
-        Solutions.LemAmbientIntrinsicCovariance.certificate}
-  \leanok
   \uses{def:affine-support-intrinsic-law}
   Let $\mu$ be a Borel probability law with finite second moment on a finite-dimensional Euclidean
   space $E$, and let $A=a+V$ be its affine support.  Let $\Cov_{\mu,V}$ be the covariance operator
@@ -279,19 +264,11 @@ A published input or an upstream reviewed proof receives no \texttt{leanok} mere
   operators and both norms are zero.
 \end{lemma}
 \begin{proof}
-  \leanok
-  The barycenter lies in $A$, because $A$ is closed and convex and carries $\mu$, so the centered
-  random vector lies in $V$ almost surely.  Hence the covariance form vanishes whenever one
-  argument is in $V^\perp$, and the operator annihilates $V^\perp$.  The intrinsic law is the
-  image of $\mu$ under translation by the chosen support point followed by orthogonal projection
-  onto $V$; translation leaves the covariance form unchanged and the adjoint of the projection is
-  the inclusion, so the intrinsic form is the restriction of the ambient form.  Decomposing an
-  ambient vector as its projection plus an orthogonal remainder gives the restriction identity for
-  the operators and, with the norm bound of the projection, the equality of operator norms.  If the
-  intrinsic form vanished on a nonzero $v\in V$, the variance of $\langle v,\cdot\rangle$ would be
-  zero, so $\nu$ would be carried by the proper affine hyperplane on which $\langle v,\cdot\rangle$
-  equals its mean, contradicting the fact that the affine support of the intrinsic law is all of
-  $V$.  In dimension zero $V^\perp=E$, so both operators are zero.
+  The barycenter lies in $A$, so the centered random vector lies in $V$ almost surely.  Hence the
+  covariance integral has range in $V$, annihilates $V^\perp$, and restricts to the intrinsic
+  covariance.  If its quadratic form vanished on a nonzero $v\in V$, then $\mu$ would be carried by
+  the proper affine hyperplane perpendicular to $v$, contradicting minimality of the affine
+  support.
 \end{proof}
 
 \begin{definition}[Affine covariance relaxation and Poincar\'e constant]

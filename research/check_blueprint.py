@@ -94,14 +94,6 @@ REQUIRED_REPOSITORY_ADAPTERS = {
 
 # Blueprint label -> (ledger node, public Lean certificate declaration).
 CERTIFICATES: dict[str, tuple[str, str]] = {
-    "lem:ambient-intrinsic-covariance": (
-        "lem:ambient-intrinsic-covariance",
-        "Solutions.LemAmbientIntrinsicCovariance.certificate",
-    ),
-    "thm:borell-logconcave-density": (
-        "thm:borell-logconcave-density",
-        "Solutions.ThmBorellLogconcaveDensity.certificate",
-    ),
     "lem:logconcave-intrinsic-absolute-continuity": (
         "lem:logconcave-intrinsic-absolute-continuity",
         "Solutions.LemLogConcaveIntrinsicAbsoluteContinuity.certificate",
@@ -109,10 +101,6 @@ CERTIFICATES: dict[str, tuple[str, str]] = {
     "thm:selected-literature-constant-equivalence": (
         "thm:selected-literature-constant-equivalence",
         "Solutions.ThmSelectedLiteratureConstantEquivalence.certificate",
-    ),
-    "thm:compact-borell-logconcavity-equivalence": (
-        "thm:compact-borell-logconcavity-equivalence",
-        "Solutions.ThmCompactBorellLogconcavityEquivalence.certificate",
     ),
     "thm:smooth-lipschitz-constant-equivalence": (
         "thm:smooth-lipschitz-constant-equivalence",

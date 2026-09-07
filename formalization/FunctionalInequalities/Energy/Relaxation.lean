@@ -88,7 +88,7 @@ after relaxation. Neither test class needs to be nonempty or densely realized.
 Each source test must have one target test realizing its image exactly. For comparison by
 approximating sequences in a common pseudometric space, see
 `PreEnergy.sequentialRelaxation_le_of_recovery_sequences` in
-`FunctionalInequalities.Energy.Relaxation.LowerSemicontinuous`. The present result only needs
+`FunctionalInequalities.Energy.RelaxationLowerSemicontinuous`. The present result only needs
 topological ambient spaces and also allows a map between different spaces.
 -/
 theorem sequentialRelaxation_comp_le {Y : Type*} [TopologicalSpace Y]

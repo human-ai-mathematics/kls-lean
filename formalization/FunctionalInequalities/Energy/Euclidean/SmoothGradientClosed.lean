@@ -1,6 +1,6 @@
-import FunctionalInequalities.Energy.Euclidean.SmoothGradient.Density
-import FunctionalInequalities.Energy.Euclidean.SmoothGradient.Quadratic
-import FunctionalInequalities.Energy.Relaxation.Quadratic
+import FunctionalInequalities.Energy.Euclidean.SmoothGradientDensity
+import FunctionalInequalities.Energy.Euclidean.SmoothGradientQuadratic
+import FunctionalInequalities.Energy.RelaxationQuadratic
 
 /-!
 # Closed quadratic structure of the smooth-gradient relaxation

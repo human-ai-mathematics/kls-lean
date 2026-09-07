@@ -6,11 +6,8 @@
 
 **当前已证明闭二次型链，以及 ambient/intrinsic 与 legacy/relaxed 比较桥。** 已验收的
 Gaussian 和 tensorization 定理使用光滑测试接口，可以通过有限维比较桥转到所选常数。
-与 locally Lipschitz 文献常数的等价也已完成 Lean 证明：一般比较要求内禀绝对连续性；
-对于对数凹概率测度，该绝对连续性已被证明，因此无需另加这一假设。见
-[文献常数比较](Euclidean/LiteratureComparison.lean) 与
-[一般对数凹版本](Euclidean/LogConcaveComparison.lean)。这不提供完整 Borell 密度代表与矩定理，
-也不证明 Cheeger 能量识别或 KLS。
+与 locally Lipschitz 文献常数的等价已在 Blueprint 附录 A 中给出分析论证，仍待 Lean
+形式化与认证。
 
 当前接口默认允许随数学设计调整，已证明的接口也不例外；证明工作不以接口冻结为前提。
 认证针对当前声明与证明。修改假设、结论、测试域或归一化时，应明确记录变化，同步依赖并
@@ -82,20 +79,20 @@ Poincare.L2Energy.Holds μ energy C ↔ Poincare.L2Energy.constant μ energy ≤
 
 ## 从具体测试到闭二次型
 
-[PreEnergy](../Energy/Relaxation/Basic.lean) 记录具体测试、realization `toAmbient` 和有限能量。
+[PreEnergy](../Energy/Relaxation.lean) 记录具体测试、realization `toAmbient` 和有限能量。
 在 `x` 处的 sequential relaxation，是所有 realization 收敛到 `x` 的测试序列之能量 `liminf`
 的下确界。没有逼近序列时，值为 `⊤`。这个定义本身只用拓扑；下半连续性定理使用伪度量假设。
 
 ```text
-Relaxation/Basic
-  → Relaxation/Approximation
-      → Relaxation/LowerSemicontinuous
-      → Relaxation/Recovery
+Relaxation
+  → RelaxationApproximation
+      → RelaxationLowerSemicontinuous
+      → RelaxationRecovery
   + QuadraticPreEnergy
-      → Relaxation/Quadratic → ClosedQuadratic
+      → RelaxationQuadratic → ClosedQuadratic
 ```
 
-[Relaxation/Approximation.lean](../Energy/Relaxation/Approximation.lean) 收集两处证明共用的选择步骤：
+[RelaxationApproximation.lean](../Energy/RelaxationApproximation.lean) 收集两处证明共用的选择步骤：
 严格的 relaxed-energy 上界可由任意小邻域内的具体测试实现；稠密 realization 提供逼近序列。
 它不要求最优测试存在，也不引入 closability 假设。
 
@@ -112,13 +109,13 @@ Relaxation/Basic
 有限域已封装为实子模。零倍缩放单独处理，所以即使原向量能量为 `⊤`，缩放为零后仍得到零能量。
 通用二次闭包定理不要求 raw energy 在 realization 的纤维上一致。
 
-[Relaxation/Contraction.lean](../Energy/Relaxation/Contraction.lean) 另给条件性转移：若连续变换
+[RelaxationContraction.lean](../Energy/RelaxationContraction.lean) 另给条件性转移：若连续变换
 在具体测试的 realization 上满足 `RelaxedContractionBound`，它就在所有点降低 relaxed energy。
 具体光滑梯度实现尚未提供所有 normal contractions 的这个前提。
 
 ## 欧氏实现与仿射支撑
 
-[SmoothGradientTest](../Energy/Euclidean/SmoothGradient/Basic.lean) 是全局 `C∞` 实函数，携带
+[SmoothGradientTest](../Energy/Euclidean/SmoothGradient.lean) 是全局 `C∞` 实函数，携带
 `L²(μ)` 和平方梯度可积性的证明，有限能量为 `∫ ‖gradient f x‖² ∂μ`。
 **本项目固定的 Mathlib v4.33.0 中，普通 `C∞` 写作 `ContDiff ℝ ∞`；`ContDiff ℝ ⊤` 表示解析性。**
 
@@ -131,7 +128,7 @@ Relaxation/Basic
 
 [AffineSupport.lean](../Probability/AffineSupport.lean) 取拓扑支撑的 affine span，并证明它闭、
 可测、满测度且最小。选一个支撑原点后，将测度表达在 affine support 的方向空间上。
-[intrinsicL2Equiv](../Energy/Euclidean/IntrinsicAffine/Basic.lean) 是原 `L²` 与 intrinsic `L²` 之间的
+[intrinsicL2Equiv](../Energy/Euclidean/IntrinsicAffine.lean) 是原 `L²` 与 intrinsic `L²` 之间的
 双向线性等距等价；在 intrinsic 空间计算 smooth-gradient relaxation，再沿等价拉回，得到
 `Energy.Canonical.energy` 及其闭二次型定理。
 

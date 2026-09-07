@@ -1,4 +1,4 @@
-import FunctionalInequalities.Energy.Euclidean.IntrinsicAffine.Closed
+import FunctionalInequalities.Energy.Euclidean.IntrinsicAffineClosed
 import FunctionalInequalities.Poincare.L2Energy
 
 /-!

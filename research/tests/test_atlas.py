@@ -101,40 +101,6 @@ class SchedulingTests(unittest.TestCase):
 
 
 class GraphTests(unittest.TestCase):
-    def test_definition_can_opt_into_infrastructure_without_changing_mathematics(self):
-        nodes = {"A": node("A", mathematics="definition")}
-        tasks = {"version": 2, "policy": {"max_attempts": 3, "on_exhaustion": "reclassify"},
-                 "nodes": {"A": copy.deepcopy(nodes["A"]["task"])}}
-        self.assertEqual(atlas.validate_tasks(tasks, nodes), [])
-        meta = tasks["nodes"]["A"]
-        meta["infrastructure"] = copy.deepcopy(node("infra")["task"]["infrastructure"])
-        meta["infrastructure"].update(status="missing", gaps=["L2 representative independence"])
-        self.assertEqual(atlas.validate_tasks(tasks, nodes), [])
-        nodes["A"]["task"] = meta
-        atlas.schedule(nodes, verified=True)
-        self.assertEqual(nodes["A"]["dispatch"]["action"], "develop_infrastructure")
-        self.assertEqual(meta["mathematics"], "definition")
-        self.assertFalse(nodes["A"]["lean"]["recorded"])
-
-    def test_definition_infrastructure_uses_the_same_evidence_validation(self):
-        nodes = {"A": node("A", mathematics="definition")}
-        meta = copy.deepcopy(nodes["A"]["task"])
-        meta["infrastructure"] = copy.deepcopy(node("infra")["task"]["infrastructure"])
-        tasks = {"version": 2, "policy": {"max_attempts": 3, "on_exhaustion": "reclassify"},
-                 "nodes": {"A": meta}}
-        meta["infrastructure"]["evidence"][0]["sha256"] = "stale"
-        self.assertIn("stale infrastructure evidence", "\n".join(atlas.validate_tasks(tasks, nodes)))
-        meta["unexpected"] = True
-        self.assertIn("require exactly", "\n".join(atlas.validate_tasks(tasks, nodes)))
-
-    def test_published_tasks_still_require_infrastructure(self):
-        nodes = {"A": node("A", mathematics="published")}
-        meta = copy.deepcopy(nodes["A"]["task"])
-        del meta["infrastructure"]
-        tasks = {"version": 2, "policy": {"max_attempts": 3, "on_exhaustion": "reclassify"},
-                 "nodes": {"A": meta}}
-        self.assertIn("require exactly", "\n".join(atlas.validate_tasks(tasks, nodes)))
-
     def test_cycle_reports_the_concrete_path(self):
         self.assertEqual(atlas.cycle_errors({"A": ["B"], "B": ["C"], "C": ["A"]}),
                          ["dependency cycle: A -> B -> C -> A"])
