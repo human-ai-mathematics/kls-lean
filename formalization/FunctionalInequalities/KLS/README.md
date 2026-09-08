@@ -9,9 +9,9 @@
 | --- | --- |
 | [Definitions.lean](Definitions.lean) | 紧集对数凹定义、局部斜率、文献测试域和常数；共享定义入口 |
 | [Statement.lean](Statement.lean) | 协方差归一化的 KLS 猜想命题；没有 KLS 证明 |
-| [LogConcave/](LogConcave/README.md) | 对数凹传输、紧集/Borel 等价、内禀绝对连续性与 Borell 密度表示 |
+| [LogConcave/](LogConcave/README.md) | 对数凹传输、紧集/Borel 等价、内禀绝对连续性、Borell 密度表示、仿射协方差常数的对数凹契约与闭形式、环境平移下的对数凹性与重心、KLS 的仿射/各向同性归约 |
 | [LocalSlopeGradient.lean](LocalSlopeGradient.lean) | 局部斜率与梯度关系，以及绝对连续性前提下的能量和测试域识别；已证明 |
-| [Isotropic.lean](Isotropic.lean) | 有限二阶矩、零均值和单位协方差的定义；不提供 whitening 定理 |
+| [Isotropic.lean](Isotropic.lean) | 有限二阶矩、零均值和单位协方差的定义；白化在 `Probability/CovarianceWhitening.lean`，仿射/各向同性归约在 `LogConcave/IsotropicReduction.lean` |
 | [Isoperimetry.lean](Isoperimetry.lean) | 仿射载体上的边界含量、等周常数及逆尺度定义；不提供 Cheeger 比较 |
 | [ConditionalFiber.lean](ConditionalFiber.lean) | 条件纤维能量的构造及六条已证明的良定义性契约；不提供闭性、Markov 性或框架界 |
 

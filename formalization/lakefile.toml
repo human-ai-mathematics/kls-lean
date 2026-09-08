@@ -35,6 +35,10 @@ roots = [
   "solutions.ThmCompactBorellLogconcavityEquivalence",
   "solutions.ThmBorellLogconcaveDensity",
   "solutions.LemAmbientIntrinsicCovariance",
+  "solutions.LemCovarianceCoreClosure",
+  "solutions.ThmAffineCovarianceRelaxationClosed",
+  "solutions.LemAffinePoincareTranslationInvariance",
+  "solutions.ThmAffineIsotropicReduction",
 ]
 
 [[lean_lib]]
@@ -42,10 +46,8 @@ name = "Examples"
 srcDir = ".."
 roots = ["examples.PoincareFoundation"]
 
-[[lean_lib]]
-# Development-only Mathlib search scratchpad (LeanSearchClient query commands).
-# Deliberately excluded from defaultTargets: those commands hit the network at elaboration
-# time, so this library must never be part of a reproducible `lake build`.
-# Build explicitly with `lake build Dev`.
-name = "Dev"
-roots = ["Dev.Search"]
+# `Dev/Search.lean` (LeanSearchClient query scratchpad) is intentionally NOT a `lean_lib`:
+# the Blueprint's `lake exe checkdecls` imports the roots of every library of this package,
+# and a library excluded from `defaultTargets` is never built in CI, so declaring it broke the
+# Blueprint workflow (run 34136280179, "unknown module prefix 'Dev'"). Elaborate the scratchpad
+# directly with `lake env lean Dev/Search.lean` or in an editor; it must never join `lake build`.

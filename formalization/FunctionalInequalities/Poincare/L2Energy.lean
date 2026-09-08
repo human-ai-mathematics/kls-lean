@@ -76,6 +76,64 @@ theorem holds_iff_constant_le (μ : ProbabilityMeasure α)
   simpa [Holds, constant] using
     TestFamily.holds_iff_constant_le (TestFamily.ofL2Energy μ energy) C
 
+/-- On a subsingleton carrier every `L²` class has zero variance, so every energy, including
+one with empty or infinite finite-energy domain, has optimal Poincaré constant zero. -/
+theorem constant_eq_zero_of_subsingleton [Subsingleton α] (μ : ProbabilityMeasure α)
+    (energy : Energy.Functional (Lp ℝ 2 (μ : Measure α))) : constant μ energy = 0 := by
+  apply TestFamily.constant_eq_zero_of_variance_zero
+  intro f
+  exact L2.variance_eq_zero_of_subsingleton μ f.1
+
+/-- Optimal constants agree along a linear isometric equivalence of `L²` spaces that preserves
+variance and intertwines the two energies. -/
+theorem constant_eq_of_linearIsometryEquiv {β : Type*} [MeasurableSpace β]
+    (μ : ProbabilityMeasure α) (μ' : ProbabilityMeasure β)
+    (energy : Energy.Functional (Lp ℝ 2 (μ : Measure α)))
+    (energy' : Energy.Functional (Lp ℝ 2 (μ' : Measure β)))
+    (e : Lp ℝ 2 (μ' : Measure β) ≃ₗᵢ[ℝ] Lp ℝ 2 (μ : Measure α))
+    (hvar : ∀ f, L2.variance μ (e f) = L2.variance μ' f)
+    (henergy : ∀ f, energy' f = energy (e f)) :
+    constant μ' energy' = constant μ energy := by
+  have hholds : ∀ C : NNReal, Holds μ' energy' C ↔ Holds μ energy C := by
+    intro C
+    rw [holds_iff, holds_iff]
+    constructor
+    · intro h f
+      have hmem : e.symm f.1 ∈ energy'.domain := by
+        change energy' (e.symm f.1) ≠ ⊤
+        rw [henergy, e.apply_symm_apply]
+        exact f.2
+      have := h ⟨e.symm f.1, hmem⟩
+      rw [← hvar, e.apply_symm_apply] at this
+      refine this.trans (le_of_eq ?_)
+      congr 1
+      apply NNReal.eq
+      simp only [Energy.Functional.finiteValue, henergy, e.apply_symm_apply]
+    · intro h f
+      have hmem : e f.1 ∈ energy.domain := by
+        change energy (e f.1) ≠ ⊤
+        rw [← henergy]
+        exact f.2
+      have := h ⟨e f.1, hmem⟩
+      rw [hvar] at this
+      refine this.trans (le_of_eq ?_)
+      congr 1
+      apply NNReal.eq
+      simp only [Energy.Functional.finiteValue, henergy]
+  refine le_antisymm ?_ ?_
+  · by_cases htop : constant μ energy = ⊤
+    · rw [htop]; exact le_top
+    · have h1 : Holds μ energy (constant μ energy).toNNReal :=
+        (holds_iff_constant_le _ _ _).mpr (by rw [ENNReal.coe_toNNReal htop])
+      have h2 := (holds_iff_constant_le _ _ _).mp ((hholds _).mpr h1)
+      rwa [ENNReal.coe_toNNReal htop] at h2
+  · by_cases htop : constant μ' energy' = ⊤
+    · rw [htop]; exact le_top
+    · have h1 : Holds μ' energy' (constant μ' energy').toNNReal :=
+        (holds_iff_constant_le _ _ _).mpr (by rw [ENNReal.coe_toNNReal htop])
+      have h2 := (holds_iff_constant_le _ _ _).mp ((hholds _).mp h1)
+      rwa [ENNReal.coe_toNNReal htop] at h2
+
 end L2Energy
 
 end FunctionalInequalities.Poincare

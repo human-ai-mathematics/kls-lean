@@ -39,6 +39,11 @@ STATEMENT_CHECKS = {"Solutions.StatementChecks." + name for name in (
     'conditional_zero_dimension_excluded',
     'conditional_domain_fields',
     'conditional_bad_fiber',
+    'affine_constant_unfold',
+    'affine_test_fields',
+    'affine_energy_integral',
+    'zero_dimension_affine_constant',
+    'ambient_dirac_affine_constant',
 )}
 
 

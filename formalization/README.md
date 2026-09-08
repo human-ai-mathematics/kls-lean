@@ -43,7 +43,7 @@ formalization/
 │   ├── Energy/                    # Extended energies, relaxation and Euclidean realizations
 │   ├── Poincare/                  # Constants, comparisons, products and Gaussian models
 │   └── KLS/                       # Target definitions, log-concavity and route-specific objects
-├── Dev/                           # Optional search scratchpad; excluded from default build
+├── Dev/                           # Optional search scratchpad; not a Lake library, never built
 ├── blueprint/                     # TeX sources, dependency routes and rendering tools
 ├── lakefile.toml                   # Library, solution, example and development targets
 ├── lake-manifest.json              # Pinned dependencies
@@ -56,11 +56,11 @@ reading order and placement rules:
 
 | Topic | Entry points and guide |
 | --- | --- |
-| Probability | [Basic](FunctionalInequalities/Probability/Basic.lean), [AffineSupport](FunctionalInequalities/Probability/AffineSupport.lean), [IntrinsicCovariance](FunctionalInequalities/Probability/IntrinsicCovariance.lean), [Covariance](FunctionalInequalities/Probability/Covariance.lean), [BallDomination](FunctionalInequalities/Probability/BallDomination.lean), [BallAverages](FunctionalInequalities/Probability/BallAverages.lean) |
+| Probability | [Basic](FunctionalInequalities/Probability/Basic.lean), [AffineSupport](FunctionalInequalities/Probability/AffineSupport.lean), [IntrinsicCovariance](FunctionalInequalities/Probability/IntrinsicCovariance.lean), [Covariance](FunctionalInequalities/Probability/Covariance.lean), [CovarianceSqrt](FunctionalInequalities/Probability/CovarianceSqrt.lean), [CovarianceWhitening](FunctionalInequalities/Probability/CovarianceWhitening.lean), [BallDomination](FunctionalInequalities/Probability/BallDomination.lean), [BallAverages](FunctionalInequalities/Probability/BallAverages.lean) |
 | Real L² | [MeanVariance](FunctionalInequalities/L2/MeanVariance.lean) |
 | Energy | [Guide](FunctionalInequalities/Energy/README.md): general interfaces, `Relaxation/`, and `Euclidean/` |
-| Poincaré | [Foundation guide](FunctionalInequalities/Poincare/README.md), [Euclidean comparisons](FunctionalInequalities/Poincare/Euclidean/README.md), [Gaussian guide](FunctionalInequalities/Poincare/Gaussian/README.md); product modules are in `Poincare/Product/` and `Poincare/FiniteProduct/` |
-| KLS | [Guide](FunctionalInequalities/KLS/README.md), including [log-concavity](FunctionalInequalities/KLS/LogConcave/README.md), isotropy, isoperimetry and conditional fibers |
+| Poincaré | [Foundation guide](FunctionalInequalities/Poincare/README.md), [Euclidean comparisons](FunctionalInequalities/Poincare/Euclidean/README.md), [affine covariance constant](FunctionalInequalities/Poincare/Euclidean/AffineCovariance.lean), [its ambient translation invariance](FunctionalInequalities/Poincare/Euclidean/AffineTranslation.lean), [Lipschitz/literature bridge](FunctionalInequalities/Poincare/Euclidean/LipschitzComparison.lean), [Gaussian guide](FunctionalInequalities/Poincare/Gaussian/README.md); product modules are in `Poincare/Product/` and `Poincare/FiniteProduct/` |
+| KLS | [Guide](FunctionalInequalities/KLS/README.md), including [log-concavity](FunctionalInequalities/KLS/LogConcave/README.md), isotropy, isoperimetry, conditional fibers, the log-concave contracts of the affine covariance constant, log-concavity under ambient translation and the affine/isotropic reduction of KLS |
 | Blueprint | [Build and navigation guide](blueprint/README.md) |
 
 The root aggregate also imports the Borell representation module. Successful aggregate
@@ -125,7 +125,7 @@ input and eight comparison interfaces are now certified under intrinsic absolute
 Import `FunctionalInequalities.Poincare.Euclidean.LiteratureComparison` for the proved API.
 Import `FunctionalInequalities.Poincare.Euclidean.LogConcaveComparison` for the general
 log-concave version: intrinsic absolute continuity is now proved from compact-set log-concavity.
-The full Borell density/moment representation remains separate. See the
+The full Borell density/moment representation is separately Lean-certified. See the
 [general proof record](../research/decisions/2026-09-06-general-logconcave-comparison.md), the
 [proof record](../research/decisions/2026-09-06-smooth-literature-proofs.md) and the
 [mathematical guide](FunctionalInequalities/Poincare/README.md) for the theorem flow and the
@@ -245,7 +245,8 @@ formalization. It separates four things that prose can otherwise blur:
 - the energy-parameterized `L²`/closed-energy engine already certified by Lean;
 - the selected intrinsic-affine canonical frontend;
 - the status-explicit endpoint bridges, including analytic proofs of the locally Lipschitz,
-  relative-perimeter and covariance-core comparisons awaiting formalization, Dirichlet/normal
+  relative-perimeter comparison awaiting formalization, the certified covariance-core closure,
+  Dirichlet/normal
   contraction, `2 Ch_μ`, affine normalization, the imported
   Cheeger comparison, and the optional stronger raw-test/core question;
 - four sufficient long-route alternatives that share this analytic infrastructure. No

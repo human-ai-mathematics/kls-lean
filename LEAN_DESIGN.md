@@ -167,8 +167,9 @@ cd formalization
 lake build
 ```
 
-The default targets compile the reusable `FunctionalInequalities` library and the six
-root-level certificates: `solutions/LemLinearTestLower.lean`,
+The default targets compile the reusable `FunctionalInequalities` library and all certificates
+listed in [`solutions/README.md`](solutions/README.md). The six original entry points are
+`solutions/LemLinearTestLower.lean`,
 `solutions/LemPoincareTensorization.lean`,
 `solutions/LemPoincareFiniteTensorization.lean`,
 `solutions/LemPoincareGaussianOneDimensional.lean`,
@@ -298,8 +299,8 @@ finite second moment that makes the centered covariance matrix finite.
 - `solutions/GaussianAxiomAudit.lean`: a default-build `#guard_msgs` check fixing the Gaussian
   certificate's transitive axiom set to `propext`, `Classical.choice`, and `Quot.sound`.
 
-Compilation is enforced by `lake build`, whose default targets include all six root-level
-certificates. The linear-test certificate covers the two lower-bound conclusions above; the
+Compilation is enforced by `lake build`, whose default targets include all current root-level
+certificates. Among the original certificates, the linear-test certificate covers the two lower-bound conclusions above; the
 two tensorization certificates cover the binary and finite product results; the Gaussian
 certificate covers its fixed and optimal real-line constants. None proves the nonlinear parts of
 Remark 3.8 or a multivariate Gaussian theorem.

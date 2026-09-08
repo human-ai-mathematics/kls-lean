@@ -23,6 +23,7 @@ Gaussian 和 tensorization 定理使用光滑测试接口，可以通过有限�
 | 使用新基础 | [Foundation.lean](Foundation.lean) |
 | 理解最优常数与有限能量域 | [L2Energy.lean](L2Energy.lean) |
 | 使用项目选定的欧氏常数 | [Euclidean/IntrinsicAffine.lean](Euclidean/IntrinsicAffine.lean) |
+| 使用仿射协方差常数 `C_P^aff`（定义；闭形式、环境平移不变性与各向同性归约另有定理，无 Poincaré 不等式） | [Euclidean/AffineCovariance.lean](Euclidean/AffineCovariance.lean)、[Euclidean/AffineTranslation.lean](Euclidean/AffineTranslation.lean)、[Euclidean/LipschitzComparison.lean](Euclidean/LipschitzComparison.lean) |
 | 看完整的使用与边界示例 | [PoincareFoundation.lean](../../../examples/PoincareFoundation.lean) |
 | 使用已证明的 Gaussian 定理 | [Gaussian/README.md](Gaussian/README.md) |
 | 查找全部模块和 import 规则 | [formalization/README.md](../../README.md) |
@@ -175,7 +176,8 @@ Blueprint 的 `C_P^can` 是第三行的简写。当前 Lean 名称保留 `Smooth
 `ClosedQuadratic` 的字段。
 
 当前还没有具体 smooth-gradient 的 Markov/Dirichlet witness、raw/core agreement、
-`Ecan = 2 Chμ`、whitening、自伴生成元、半群或 reciprocal spectral-gap 定理。
+`Ecan = 2 Chμ`、自伴生成元、半群或 reciprocal spectral-gap 定理；whitening 与仿射/各向同性归约已在
+`KLS/LogConcave/IsotropicReduction.lean` 证明。
 旧光滑测试常数、ambient relaxed 常数与所选 intrinsic-affine 常数的等价已经由 Lean 证明；
 locally Lipschitz 文献常数的本地定义与比较仍待形式化。以上剩余工作由 Blueprint 中不同的
 节点承载；KLS 主命题也尚未成为本地 Lean 声明。

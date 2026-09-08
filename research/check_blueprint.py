@@ -94,6 +94,22 @@ REQUIRED_REPOSITORY_ADAPTERS = {
 
 # Blueprint label -> (ledger node, public Lean certificate declaration).
 CERTIFICATES: dict[str, tuple[str, str]] = {
+    "thm:affine-isotropic-reduction": (
+        "thm:affine-isotropic-reduction",
+        "Solutions.ThmAffineIsotropicReduction.certificate",
+    ),
+    "lem:affine-poincare-translation-invariance": (
+        "lem:affine-poincare-translation-invariance",
+        "Solutions.LemAffinePoincareTranslationInvariance.certificate",
+    ),
+    "thm:affine-covariance-relaxation-closed": (
+        "thm:affine-covariance-relaxation-closed",
+        "Solutions.ThmAffineCovarianceRelaxationClosed.certificate",
+    ),
+    "lem:covariance-core-closure": (
+        "lem:covariance-core-closure",
+        "Solutions.LemCovarianceCoreClosure.certificate",
+    ),
     "lem:ambient-intrinsic-covariance": (
         "lem:ambient-intrinsic-covariance",
         "Solutions.LemAmbientIntrinsicCovariance.certificate",

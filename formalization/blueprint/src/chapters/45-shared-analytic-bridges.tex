@@ -296,6 +296,19 @@ A published input or an upstream reviewed proof receives no \texttt{leanok} mere
 
 \begin{definition}[Affine covariance relaxation and Poincar\'e constant]
   \label{def:affine-poincare-constant}
+  \lean{FunctionalInequalities.Energy.Euclidean.covarianceGradientDensity,
+        FunctionalInequalities.Energy.Euclidean.CovarianceGradientTest,
+        FunctionalInequalities.Energy.Euclidean.covariancePreEnergy,
+        FunctionalInequalities.Energy.Euclidean.covarianceRelaxation,
+        FunctionalInequalities.Energy.Affine.preEnergy,
+        FunctionalInequalities.Energy.Affine.energy,
+        FunctionalInequalities.Poincare.Affine.constant,
+        FunctionalInequalities.Poincare.Affine.Holds,
+        FunctionalInequalities.Poincare.Affine.constant_eq_zero_of_direction_eq_bot,
+        FunctionalInequalities.KLS.LogConcave.intrinsic_memLp_id_two,
+        FunctionalInequalities.KLS.LogConcave.intrinsic_ae_hasGradientAt,
+        FunctionalInequalities.KLS.LogConcave.intrinsic_covarianceEnergy_eq_of_toL2_eq}
+  \leanok
   \uses{def:log-concave-law,thm:borell-logconcave-density,
         def:affine-support-intrinsic-law,def:preenergy-relaxation,
         def:l2-energy-poincare-constant,lem:ambient-intrinsic-covariance}
@@ -319,10 +332,38 @@ A published input or an upstream reviewed proof receives no \texttt{leanok} mere
   \]
   Thus the closure of the covariance pre-form means its sequential $L^2(\nu)$ relaxation.  In
   dimension zero the resulting constant is zero.
+  The Lean definition is implemented for every Borel probability law on a finite-dimensional
+  Euclidean space, with $\Sigma$ the covariance operator of $\nu$ in Mathlib's convention and
+  $\nabla g$ the canonical Hilbert gradient, zero where $g$ is not differentiable; the definition
+  itself therefore needs no differentiability premise.  For log-concave $\mu$ the three
+  well-definedness contracts of the displayed sentence are proved: $\nu$ has a finite second
+  moment, so $\Sigma$ is the honest covariance; every test is differentiable $\nu$-almost
+  everywhere with the canonical gradient as derivative; and continuous representatives of one
+  $L^2(\nu)$ class have $\nu$-almost everywhere equal gradients, so the energy depends only on
+  the class.  This is a definition node: closability, agreement with the raw energy, translation
+  invariance and every Poincar\'e statement are separate nodes.
 \end{definition}
 
 \begin{theorem}[The affine covariance relaxation agrees with the closed source form]
   \label{thm:affine-covariance-relaxation-closed}
+  \lean{FunctionalInequalities.exists_norm_sq_eq_inner_of_isSymmetric,
+        FunctionalInequalities.Covariance.exists_sqrt,
+        FunctionalInequalities.Energy.PreEnergy.normSqEnergy,
+        FunctionalInequalities.Energy.PreEnergy.sequentialRelaxation_ofLinearPMap_eq_normSqEnergy,
+        FunctionalInequalities.Energy.Euclidean.translateLaw,
+        FunctionalInequalities.Energy.Euclidean.translateL2,
+        FunctionalInequalities.L2.variance_translateL2,
+        FunctionalInequalities.Covariance.operator_translateLaw,
+        FunctionalInequalities.Energy.Euclidean.covarianceRelaxation_translateLaw,
+        FunctionalInequalities.Energy.Euclidean.constantSmoothCore,
+        FunctionalInequalities.KLS.LogConcave.affine_denseRealization,
+        FunctionalInequalities.KLS.LogConcave.affine_closedQuadratic,
+        FunctionalInequalities.KLS.LogConcave.affine_isSequentialCoreFor,
+        FunctionalInequalities.Poincare.Affine.constant_translateLaw,
+        FunctionalInequalities.KLS.LogConcave.affine_energy_eq_normSqEnergy,
+        FunctionalInequalities.KLS.LogConcave.affine_constant_eq_normSqEnergy,
+        Solutions.ThmAffineCovarianceRelaxationClosed.certificate}
+  \leanok
   \uses{def:affine-poincare-constant,thm:borell-logconcave-density,
         lem:ambient-intrinsic-covariance,thm:quadratic-relaxation-closed,
         lem:covariance-core-closure}
@@ -333,8 +374,16 @@ A published input or an upstream reviewed proof receives no \texttt{leanok} mere
   preserving variance and covariance energy.  Under this isometric identification,
   $\mathcal E^{\mathrm{aff}}_\mu$ is the closed covariance form used by the pinned CMH source, and
   $C_{\mathrm P}^{\mathrm{aff}}(\mu)$ is the same optimal constant.
+  In Lean, quadraticity of $P^{\mathrm{aff}}_\mu$ is expressed through a square root $B$ of the
+  intrinsic covariance, $\inner{\Sigma v}{v}=\norm{Bv}^2$: the pre-energy has the same
+  realization and energies as the quadratic pre-energy $f\mapsto\norm{B\nabla f}^2$ of the
+  closable operator of \cref{lem:covariance-core-closure}.  The translation statement is proved
+  for every translate of $\nu$ by a vector of $V$ and for every Borel law, and the closed covariance
+  form is the squared-norm energy of the closure of $B\nabla$ restricted to the classes of
+  $\mathbb R+C_c^\infty(V)$.
 \end{theorem}
 \begin{proof}
+  \leanok
   Apply \cref{lem:covariance-core-closure} to the intrinsic law and its covariance.
   That lemma proves closability by distributional integration by parts on compact subsets
   of the support interior, identifies both graph closures by actual cutoff and convolution
@@ -351,12 +400,30 @@ A published input or an upstream reviewed proof receives no \texttt{leanok} mere
   These are restrictions of ambient compactly supported functions, not functions compactly
   supported inside $\Omega$. Consequently their closure imposes no zero boundary trace.
   The preceding approximation and closability proof identifies exactly this source domain.
-  The analytic identification is now supplied. It remains to be implemented and certified
-  in Lean; the stated interface may evolve during that work.
+  The Lean certificate packages dense realization, the closed quadratic form, the sequential
+  core, the translation isometry with its variance, energy and constant identities, and the
+  identification with the squared-norm energy of the closure on the core $\mathbb R+C_c^\infty(V)$.
 \end{proof}
 
 \begin{lemma}[Translation invariance of the affine Poincar\'e constant]
   \label{lem:affine-poincare-translation-invariance}
+  \lean{FunctionalInequalities.Energy.Euclidean.gradient_comp_linearIsometryEquiv,
+        FunctionalInequalities.Covariance.operator_map_linearIsometryEquiv,
+        FunctionalInequalities.Energy.Euclidean.mapLaw,
+        FunctionalInequalities.Energy.Euclidean.mapL2,
+        FunctionalInequalities.L2.variance_mapL2,
+        FunctionalInequalities.Energy.Euclidean.covarianceRelaxation_mapLaw,
+        FunctionalInequalities.Poincare.L2Energy.constant_covarianceRelaxation_mapLaw,
+        FunctionalInequalities.Probability.affineSupport_translateLaw,
+        FunctionalInequalities.Probability.direction_affineSupport_translateLaw,
+        FunctionalInequalities.Probability.intrinsicMeasure_translateLaw,
+        FunctionalInequalities.Energy.Affine.exists_translateLaw_isometry,
+        FunctionalInequalities.Poincare.Affine.constant_translateLaw_ambient,
+        FunctionalInequalities.KLS.LogConcave.translateLaw,
+        FunctionalInequalities.KLS.LogConcave.memLp_id_two,
+        FunctionalInequalities.KLS.LogConcave.integral_id_translateLaw_neg_integral,
+        Solutions.LemAffinePoincareTranslationInvariance.certificate}
+  \leanok
   \uses{def:log-concave-law,def:affine-poincare-constant,
         thm:borell-logconcave-density,thm:affine-covariance-relaxation-closed}
   Let $\mu$ be a log-concave probability law on a finite-dimensional Euclidean space $E$, let
@@ -367,17 +434,58 @@ A published input or an upstream reviewed proof receives no \texttt{leanok} mere
   \]
   In particular, translating by the negative barycenter produces a centered law without changing
   the affine Poincar\'e constant.
+  In Lean, $(\tau_b)_\#\mu$ is \texttt{Energy.Euclidean.translateLaw}~$\mu\,b$.  The affine
+  support of the translated law is the translate of the affine support of $\mu$, with the same
+  direction submodule, and the intrinsic law of the translated law is the translate, inside the
+  direction space, of the image of the intrinsic law of $\mu$ under the linear isometric
+  identification of the two direction submodules.  The constant identity, the invariance of the
+  ambient covariance operator and of the direction, and the variance-preserving $L^2$ isometry
+  intertwining the two affine relaxations are proved for every Borel probability law on $E$;
+  log-concavity is used only for log-concavity of the translated law and for the ambient second
+  moment that gives the barycenter.  Dimension zero is included.
 \end{lemma}
 \begin{proof}
+  \leanok
   Compact sets and their Minkowski combinations commute with translation, so log-concavity is
   preserved.  Translation preserves covariance and identifies the two intrinsic laws by an
   $L^2$ isometry.  The isometry preserves variance and intertwines the covariance pre-energies,
   hence also their sequential relaxations and optimal constants.  The barycenter exists by
   \cref{thm:borell-logconcave-density}.
+  The Lean certificate packages log-concavity of the translated law, invariance of the ambient
+  covariance operator and of the direction of the affine support, the variance-preserving $L^2$
+  isometry intertwining the affine relaxations, the constant identity, the ambient second moment,
+  and the zero mean of the translate by the negative barycenter.
 \end{proof}
 
 \begin{theorem}[Affine and isotropic KLS formulations]
   \label{thm:affine-isotropic-reduction}
+  \lean{FunctionalInequalities.Energy.PreEnergy.sequentialRelaxation_comp_le_mul,
+        FunctionalInequalities.Energy.Euclidean.gradient_comp_continuousLinearEquiv,
+        FunctionalInequalities.Covariance.operator_map_continuousLinearEquiv,
+        FunctionalInequalities.Energy.Euclidean.mapEquivLaw,
+        FunctionalInequalities.Energy.Euclidean.mapEquivL2,
+        FunctionalInequalities.Energy.Euclidean.covarianceRelaxation_mapEquivLaw,
+        FunctionalInequalities.Poincare.L2Energy.constant_covarianceRelaxation_mapEquivLaw,
+        FunctionalInequalities.exists_whitening_of_isSymmetric,
+        FunctionalInequalities.Covariance.exists_whitening,
+        FunctionalInequalities.Energy.Euclidean.lipschitzGradientRelaxation,
+        FunctionalInequalities.Poincare.L2Energy.holds_lipschitzGradientRelaxation_iff_literatureHolds,
+        FunctionalInequalities.Poincare.constant_eq_lipschitzGradientRelaxation,
+        FunctionalInequalities.Energy.Euclidean.covarianceRelaxation_eq_lipschitzGradientRelaxation,
+        FunctionalInequalities.Energy.Euclidean.covarianceRelaxation_le_opNorm_mul_lipschitzGradientRelaxation,
+        FunctionalInequalities.KLS.LogConcave.of_continuousLinearEquiv_map,
+        FunctionalInequalities.KLS.IsotropicBound,
+        FunctionalInequalities.KLS.CovarianceBound,
+        FunctionalInequalities.KLS.AffineBound,
+        FunctionalInequalities.KLS.LogConcave.exists_isotropic_literatureConstant_eq,
+        FunctionalInequalities.KLS.LogConcave.literatureConstant_le_opNorm_mul_affine_constant,
+        FunctionalInequalities.KLS.affineBound_of_isotropicBound,
+        FunctionalInequalities.KLS.covarianceBound_of_affineBound,
+        FunctionalInequalities.KLS.isotropicBound_of_covarianceBound,
+        FunctionalInequalities.KLS.affine_isotropic_reduction,
+        FunctionalInequalities.KLS.conjecture_of_affineBound,
+        Solutions.ThmAffineIsotropicReduction.certificate}
+  \leanok
   \uses{def:log-concave-law,thm:borell-logconcave-density,
         def:isotropic-law,def:literature-poincare-constant,
         lem:ambient-intrinsic-covariance,def:affine-poincare-constant,
@@ -396,17 +504,36 @@ A published input or an upstream reviewed proof receives no \texttt{leanok} mere
   $\norm{\Cov_\mu}_\op=\norm{\Cov_{\mu,V}}_\op$ by
   \cref{lem:ambient-intrinsic-covariance}.  The zero-dimensional law is included in all three
   statements.
+  In Lean the three statements are \texttt{KLS.IsotropicBound}~$K$,
+  \texttt{KLS.CovarianceBound}~$K$ and \texttt{KLS.AffineBound}~$K$, each quantifying over every
+  finite-dimensional Euclidean space of one fixed universe; item~(2) is written
+  $\CPLit(\mu)\le K\cdot\mathrm{ofReal}\,\norm{\Cov_\mu}_\op$ as in the KLS proposition.  The
+  certificate packages the three equivalences and, in addition, that item~(3) for some finite $K$
+  on the Euclidean family $\mathbb R^n$ implies the literal proposition \texttt{KLS.Conjecture}.
+  The truth of any item for some $K$ is not asserted.
 \end{theorem}
 \begin{proof}
-  Open.  By \cref{lem:affine-poincare-translation-invariance}, centering does not change the
-  affine Poincar\'e constant.  In positive dimension, whiten the centered intrinsic law by
-  $\Cov_{\mu,V}^{-1/2}$, which exists by \cref{lem:ambient-intrinsic-covariance}.  Pullback of the
-  isotropic inequality gives the covariance-form inequality and hence item~(3), first on the raw
-  tests and then on their relaxation.  Item~(3) implies item~(2) from
+  \leanok
+  Centering does not change the affine Poincar\'e constant.  In positive dimension, whiten the
+  centered intrinsic law by $\Cov_{\mu,V}^{-1/2}$, which exists by
+  \cref{lem:ambient-intrinsic-covariance}.  Pullback of the isotropic inequality gives the
+  covariance-form inequality and hence item~(3), first on the raw tests and then on their
+  relaxation.  Item~(3) implies item~(2) from
   $\inner{\Cov_{\mu,V}v}{v}\le\norm{\Cov_{\mu,V}}_\op\norm{v}^2$, together with cutoff and
   truncation from locally to globally Lipschitz tests.  Item~(2) specializes to item~(1) when
   covariance is the identity.  The zero-dimensional case has zero variance and is immediate; see
   \cite{KannanLovaszSimonovits1995,LeeVempala2018}.
+  In Lean, centering is performed on the intrinsic law inside its direction space by the
+  translation transport certified with \cref{thm:affine-covariance-relaxation-closed}; the
+  whitening is a self-adjoint linear equivalence $W$ satisfying $W\Sigma W=I$, obtained from the
+  spectral theorem.  The Lean statement does not assert positivity or uniqueness of $W$; the
+  displayed identity suffices for the reduction.  The covariance relaxation and its optimal constant are transported
+  along any continuous linear equivalence; the passage between the identity-weighted Lipschitz
+  relaxation and the locally Lipschitz literature constant uses the certified smooth approximation
+  of \cref{lem:covariance-test-core-density} in place of cutoff and truncation; and the comparison
+  $\inner{\Sigma v}{v}\le\norm\Sigma\norm v^2$ is applied to the raw tests and then to the
+  relaxations with the factor $\norm\Sigma$.  The zero-dimensional case is included uniformly: the
+  positivity premise of the whitening is vacuous and every constant is zero.
 \end{proof}
 
 \begin{theorem}[One-dimensional log-concave Poincar\'e bound]

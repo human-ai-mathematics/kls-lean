@@ -43,12 +43,19 @@
     },
     {
       "node": "thm:affine-isotropic-reduction",
-      "state": "open",
+      "state": "proved",
       "provenance": {
         "source": "kls-lean",
         "path": "formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex"
       },
-      "evidence": []
+      "evidence": [
+        {
+          "kind": "lean",
+          "source": "kls-lean",
+          "ledger_node": "thm:affine-isotropic-reduction",
+          "declaration": "Solutions.ThmAffineIsotropicReduction.certificate"
+        }
+      ]
     },
     {
       "node": "ass:tight-prefix-carleson",

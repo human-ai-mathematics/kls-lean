@@ -4,6 +4,8 @@ import FunctionalInequalities.KLS.Isotropic
 import FunctionalInequalities.KLS.Isoperimetry
 import FunctionalInequalities.KLS.ConditionalFiber
 import FunctionalInequalities.Poincare.Euclidean.RawEnergyObstruction
+import FunctionalInequalities.Poincare.Euclidean.AffineCovariance
+import FunctionalInequalities.KLS.LogConcave.AffineCovariance
 
 /-!
 # Literal KLS statement checks
@@ -206,6 +208,54 @@ theorem conditional_domain_fields (n : ℕ)
     (f : Lp ℝ 2 (μ : Measure (EuclideanSpace ℝ (Fin (n + 1))))) :
     f ∈ KLS.ConditionalFiber.domain μ ρ ↔ KLS.ConditionalFiber.form μ ρ f ≠ ⊤ := Iff.rfl
 
+/-- The affine constant is the generic `L²` optimizer of the intrinsic law at the sequential
+relaxation of the covariance pre-energy, in every dimension. -/
+theorem affine_constant_unfold (n : ℕ) (μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin n))) :
+    Poincare.Affine.constant μ =
+      Poincare.L2Energy.constant (Probability.intrinsicMeasure μ)
+        ((Energy.Euclidean.covariancePreEnergy
+          (Probability.intrinsicMeasure μ)).sequentialRelaxation) := rfl
+
+/-- The affine test class is exactly: globally Lipschitz, `L²`, and integrable covariance-weighted
+squared gradient. No differentiability premise is part of the structure. -/
+theorem affine_test_fields (n : ℕ) (ν : ProbabilityMeasure (EuclideanSpace ℝ (Fin n)))
+    (g : EuclideanSpace ℝ (Fin n) → ℝ) :
+    (∃ f : Energy.Euclidean.CovarianceGradientTest ν, f.toFun = g) ↔
+      (∃ K : NNReal, LipschitzWith K g) ∧ MemLp g 2 (ν : Measure (EuclideanSpace ℝ (Fin n))) ∧
+        Integrable (Energy.Euclidean.covarianceGradientDensity ν g)
+          (ν : Measure (EuclideanSpace ℝ (Fin n))) :=
+  ⟨fun ⟨f, hf⟩ ↦ hf ▸ ⟨f.lipschitz, f.memLp_two, f.integrable⟩,
+    fun h ↦ ⟨⟨g, h.1, h.2.1, h.2.2⟩, rfl⟩⟩
+
+/-- The finite affine energy is the real integral `∫ ⟪Σ ∇g, ∇g⟫ dν` with `Σ` the covariance
+operator of `ν`; no factor of one half is introduced. -/
+theorem affine_energy_integral (n : ℕ) (ν : ProbabilityMeasure (EuclideanSpace ℝ (Fin n)))
+    (f : Energy.Euclidean.CovarianceGradientTest ν) :
+    (f.covarianceEnergy : ℝ) =
+      ∫ x, inner ℝ (Covariance.operator (ν : Measure (EuclideanSpace ℝ (Fin n)))
+        (gradient f.toFun x)) (gradient f.toFun x) ∂(ν : Measure (EuclideanSpace ℝ (Fin n))) :=
+  rfl
+
+/-- Dimension zero: the affine covariance Poincaré constant is zero. -/
+theorem zero_dimension_affine_constant (μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin 0))) :
+    Poincare.Affine.constant μ = 0 :=
+  Poincare.Affine.constant_eq_zero_of_subsingleton μ
+
+/-- A Dirac law in a positive-dimensional ambient space has zero-dimensional affine support and
+therefore affine constant zero; the ambient dimension is irrelevant. -/
+theorem ambient_dirac_affine_constant :
+    Poincare.Affine.constant (Probability.ofMeasure (Measure.dirac (0 : ℝ))) = 0 := by
+  let μ := Probability.ofMeasure (Measure.dirac (0 : ℝ))
+  have hA : Probability.affineSupport μ ≤ affineSpan ℝ ({0} : Set ℝ) := by
+    apply Probability.affineSupport_le_of_ae_mem μ _ (AffineSubspace.closed_of_finiteDimensional _)
+    change ∀ᵐ x ∂(Measure.dirac (0 : ℝ)), x ∈ affineSpan ℝ ({0} : Set ℝ)
+    simp
+  have hdir : (Probability.affineSupport μ).direction = ⊥ := by
+    apply bot_unique
+    simpa only [direction_affineSpan, vectorSpan_singleton] using
+      AffineSubspace.direction_le hA
+  exact Poincare.Affine.constant_eq_zero_of_direction_eq_bot μ hdir
+
 /-- All excluded fibers contribute zero before extended division. -/
 theorem conditional_bad_fiber (n : ℕ)
     (κ : Kernel (KLS.ConditionalFiber.Direction (EuclideanSpace ℝ (Fin (n + 1))) ×
@@ -296,6 +346,46 @@ end Solutions.StatementChecks
 /-- info: 'Solutions.StatementChecks.conditional_bad_fiber' depends on axioms: [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
 #print axioms Solutions.StatementChecks.conditional_bad_fiber
+
+/-- info: 'Solutions.StatementChecks.affine_constant_unfold' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Solutions.StatementChecks.affine_constant_unfold
+
+/-- info: 'Solutions.StatementChecks.affine_test_fields' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Solutions.StatementChecks.affine_test_fields
+
+/-- info: 'Solutions.StatementChecks.affine_energy_integral' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Solutions.StatementChecks.affine_energy_integral
+
+/-- info: 'Solutions.StatementChecks.zero_dimension_affine_constant' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Solutions.StatementChecks.zero_dimension_affine_constant
+
+/-- info: 'Solutions.StatementChecks.ambient_dirac_affine_constant' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms Solutions.StatementChecks.ambient_dirac_affine_constant
+
+/-- info: 'FunctionalInequalities.KLS.LogConcave.intrinsic_memLp_id_two' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms FunctionalInequalities.KLS.LogConcave.intrinsic_memLp_id_two
+
+/-- info: 'FunctionalInequalities.KLS.LogConcave.intrinsic_ae_hasGradientAt' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms FunctionalInequalities.KLS.LogConcave.intrinsic_ae_hasGradientAt
+
+/-- info: 'FunctionalInequalities.KLS.LogConcave.intrinsic_gradient_ae_eq_of_ae_eq' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms FunctionalInequalities.KLS.LogConcave.intrinsic_gradient_ae_eq_of_ae_eq
+
+/-- info: 'FunctionalInequalities.KLS.LogConcave.intrinsic_covarianceEnergy_eq_of_toL2_eq' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms FunctionalInequalities.KLS.LogConcave.intrinsic_covarianceEnergy_eq_of_toL2_eq
+
+/-- info: 'FunctionalInequalities.Poincare.Affine.constant_eq_zero_of_direction_eq_bot' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms FunctionalInequalities.Poincare.Affine.constant_eq_zero_of_direction_eq_bot
 
 /-- info: 'FunctionalInequalities.KLS.ConditionalFiber.lintegral_baseLaw' depends on axioms: [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax) in

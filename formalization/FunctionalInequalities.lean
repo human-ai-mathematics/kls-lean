@@ -14,6 +14,11 @@ import FunctionalInequalities.KLS.ConditionalFiber
 import FunctionalInequalities.Poincare.Euclidean.RawEnergyObstruction
 import FunctionalInequalities.KLS.LogConcave.BorellRepresentation
 import FunctionalInequalities.Probability.IntrinsicCovariance
+import FunctionalInequalities.KLS.LogConcave.AffineCovariance
+import FunctionalInequalities.KLS.LogConcave.CovarianceClosure
+import FunctionalInequalities.KLS.LogConcave.AffineClosedForm
+import FunctionalInequalities.KLS.LogConcave.AffineTranslation
+import FunctionalInequalities.KLS.LogConcave.IsotropicReduction
 
 /-!
 # Functional inequalities
@@ -24,10 +29,22 @@ finite Hilbert-product optimal-constant equality, and the sharp one-dimensional 
 Poincaré constant. It also exports the layered `L²`/extended-energy foundation for future
 developments. Node certificates are compiled separately from `solutions/`.
 
-The compact/Borel log-concavity equivalence and the six conditional-fiber contracts are proved.
-`KLS/LogConcave/BorellRepresentation.lean` states the Borell density-representative, local-bound and moment
-conclusions as explicit drafts containing `sorry`; importing this aggregate does not certify
-those draft theorems.
+The compact/Borel log-concavity equivalence, the six conditional-fiber contracts, the Borell
+density-representative, local-bound and moment conclusions of
+`KLS/LogConcave/BorellRepresentation.lean`, and the ambient/intrinsic covariance comparison are
+proved. `Poincare.Affine.constant` implements the affine covariance Poincaré constant as a
+definition, with its log-concave well-definedness contracts in
+`KLS/LogConcave/AffineCovariance.lean`. `KLS/LogConcave/CovarianceClosure.lean` proves that the
+weighted gradient operator of a full-dimensional log-concave law is densely defined and closable,
+with smooth core and relaxation identified with its closure (`lem:covariance-core-closure`), and
+`KLS/LogConcave/AffineClosedForm.lean` identifies the affine relaxation with the closed covariance
+form of the CMH source (`thm:affine-covariance-relaxation-closed`), and
+`KLS/LogConcave/AffineTranslation.lean` with `Poincare/Euclidean/AffineTranslation.lean` prove that
+ambient translation keeps log-concavity and the affine constant
+(`lem:affine-poincare-translation-invariance`), and `KLS/LogConcave/IsotropicReduction.lean` proves
+the equivalence of the isotropic, covariance-normalized and affine KLS formulations for each fixed
+`K` (`thm:affine-isotropic-reduction`); no statement that any of them holds for some `K`, and no
+KLS proof, is included. Importing this aggregate certifies nothing by itself.
 
 The imported modules record their sources beside the declarations: manuscript Definition 2.1
 for the normalization, Remark 3.8 for the linear-test lower bound, BGL (2014), Proposition 4.3.1

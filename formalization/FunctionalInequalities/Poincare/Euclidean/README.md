@@ -17,7 +17,8 @@
 
 公共命名按数学角色组织：`Poincare.Canonical.constant` 是所选常数，
 `Poincare.Ambient.constant` 是环境空间上的松弛常数，`Poincare.L2Energy.constant μ energy`
-是通用优化器。对 `hμ : KLS.LogConcave μ`，直接使用 `hμ.canonical_eq_literature`。
+是通用优化器；`Poincare.Affine.constant` 是 CMH 路线使用的仿射协方差常数 `C_P^aff`，见
+[AffineCovariance.lean](AffineCovariance.lean)；[AffineTranslation.lean](AffineTranslation.lean) 证明它在环境平移下不变（对任意 Borel 律）；[LipschitzComparison.lean](LipschitzComparison.lean) 证明单位权 Lipschitz 梯度松弛的最优常数等于 legacy 与文献常数，故单位协方差时 `C_P^aff` 与前三者相等，一般时 `C_P^lit ≤ ‖Σ‖ C_P^aff`。对 `hμ : KLS.LogConcave μ`，直接使用 `hμ.canonical_eq_literature`。
 名称整理的范围与保留长名的理由见 [命名约定](../../../../research/naming.md)。
 
 ## 阅读入口
@@ -101,7 +102,7 @@ open FunctionalInequalities
 方差与梯度能量的归一化；它不是这些比较声明在任意 Borel 测度下的直接出处。
 
 这些定理不要求同一个原始测试的能量等于 relaxed energy。文献 locally Lipschitz 常数
-等式已由后续模块接通；Cheeger energy、Markov 性和 whitening 仍未证明。`LogConcave`
+等式已由后续模块接通，whitening 与仿射/各向同性归约亦已证明；Cheeger energy 与 Markov 性仍未证明。`LogConcave`
 及 KLS 主命题已有公开定义，KLS 本身未获证明。书写延续项目采用的 formech 风格：先给用途与例子，
 再说明精确范围、来源和未完成部分。
 

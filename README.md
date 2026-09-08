@@ -105,7 +105,10 @@ To validate declaration links and build both rendered Blueprint formats, follow 
 commands in the [formalization guide](formalization/README.md#lean-blueprint). CI publishes the
 PDF and web tree as workflow artifacts; it deliberately does not deploy GitHub Pages.
 
-The `Solutions` default target builds all thirteen proved certificates, including all four weighted
+The `Solutions` default target builds all seventeen proved certificates and the twenty-five named
+definition checks of `StatementChecks.lean`, including the zero-dimensional and Euclidean checks for
+the implemented affine covariance Poincaré constant `def:affine-poincare-constant` (a definition
+node, not a ledger theorem). The certificates include all four weighted
 approximation contracts; see their [acceptance record](research/decisions/2026-09-06-weighted-approximation-acceptance.md).
 The eighth certificate packages the eight proved smooth/literature comparison interfaces;
 two further certificates cover intrinsic absolute continuity and the general log-concave equality.

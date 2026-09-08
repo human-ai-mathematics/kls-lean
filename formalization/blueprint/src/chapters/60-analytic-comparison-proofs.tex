@@ -51,6 +51,21 @@ The two abstract comparison lemmas at the end are already proved in Lean.
 
 \begin{lemma}[Closable gradient and equality of the two closures]
   \label{lem:covariance-core-closure}
+  \lean{FunctionalInequalities.Energy.Euclidean.gradientOperator,
+        FunctionalInequalities.Energy.Euclidean.smoothCore,
+        FunctionalInequalities.Energy.PreEnergy.ofLinearPMap,
+        FunctionalInequalities.Energy.exists_mem_of_isClosed_of_frequently_norm_le,
+        FunctionalInequalities.Energy.PreEnergy.sequentialRelaxation_ofLinearPMap_of_mem,
+        FunctionalInequalities.Energy.PreEnergy.sequentialRelaxation_ofLinearPMap_of_notMem,
+        FunctionalInequalities.Energy.Euclidean.integral_mul_inner_gradient,
+        FunctionalInequalities.Energy.Euclidean.gradientOperator_isClosable,
+        FunctionalInequalities.Energy.Euclidean.dense_domain_gradientOperator,
+        FunctionalInequalities.Energy.Euclidean.closure_domRestrict_eq_of_smoothCore_le,
+        FunctionalInequalities.KLS.LogConcave.locallyDominates,
+        FunctionalInequalities.KLS.LogConcave.gradientOperator_isClosable,
+        FunctionalInequalities.KLS.LogConcave.affine_energy_eq,
+        Solutions.LemCovarianceCoreClosure.certificate}
+  \leanok
   \uses{lem:covariance-test-core-density,thm:borell-logconcave-density}
   Let $\nu=\rho\,dx$ be a full-dimensional log-concave probability on $V$, with convex support
   $K$, interior $\Omega$, and let $\Sigma\succeq0$ be a constant self-adjoint operator.
@@ -62,8 +77,15 @@ The two abstract comparison lemmas at the end are already proved in Lean.
                           +\infty,&\text{otherwise}.
           \end{cases}
   \]
+  The Lean statement replaces $\Sigma^{1/2}$ by an arbitrary continuous linear $B$ with
+  $Tg=B\nabla g$; the Blueprint case is $B=\Sigma^{1/2}$ and every $B$ gives the positive
+  semidefinite $\Sigma=B^*B$.  The graph closure identity is proved for every core between the
+  smooth compactly supported classes and the full domain, which includes $\mathbb R+C_c^\infty(V)$.
+  The identification with the affine covariance relaxation of
+  \cref{def:affine-poincare-constant} holds for every $B$ with $\inner{\Sigma v}{v}=\norm{Bv}^2$.
 \end{lemma}
 \begin{proof}
+  \leanok
   The density is positive and continuous on $\Omega$, bounded above and below by positive
   constants on every compact subset of $\Omega$, and $\nu(\partial K)=0$. If $g_j\to0$ in
   $L^2(\nu)$ and $Tg_j\to v$ in $L^2(\nu;V)$, these convergences also hold locally in

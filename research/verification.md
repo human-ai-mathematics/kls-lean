@@ -13,7 +13,7 @@ Public interfaces remain editable under [the lifecycle](ledger-schema.md#lifecyc
    moment, compact-set log-concavity and the intrinsic local-slope literature constant.
 2. [Blueprint](../formalization/blueprint/README.md): mathematical statements and declared
    dependencies; the route sidecar owns alternative branches, adapters and pinned provenance.
-3. [Ledger](a-series/ledger.yaml): the thirteen certified mathematical nodes. A compiled definition
+3. [Ledger](a-series/ledger.yaml): the seventeen certified mathematical nodes. A compiled definition
    or conjecture declaration is not another proved ledger theorem.
 4. [Task metadata](tasks.json): mathematical classification, retained assumptions, priority,
    evidence references and the retry policy. It contains no second copy of Lean proof status.
@@ -51,10 +51,10 @@ so bare `leanchecker` guesses the wrong module in this checkout. The runner clea
 Lean worker threads to two. This view is made from the current build; it is not a source rebuild.
 
 The generated declaration audit imports the built library and certificates, checks all Blueprint
-Lean anchors, all local declarations reached by the statement snapshot, and the twenty named
+Lean anchors, all local declarations reached by the statement snapshot, and the twenty-five named
 definition checks in `solutions/StatementChecks.lean`, and inspects their transitive axioms.
 Missing reports or axioms outside `propext`,
-`Classical.choice`, and `Quot.sound` fail acceptance. The thirteen certificates additionally have
+`Classical.choice`, and `Quot.sound` fail acceptance. The seventeen certificates additionally have
 default-build guards. The expected certificate list comes from the existing explicit
 Blueprint-to-ledger mapping; a new proved ledger node without a mapping is an error.
 
@@ -230,7 +230,7 @@ conditional-fiber record is now `available` with no gaps. Existing theorem infra
 requirements are unchanged.
 
 The statement golden still covers its original 26 declarations; the new objects do not occur
-in that root closure, so no baseline update is made. New anchors, twenty named typed checks,
+in that root closure, so no baseline update is made. New anchors, twenty-five named typed checks,
 six contract guards and the certificate guards provide the stated additional coverage, without
 claiming an expanded golden. Source scope is in
 [the handoff decision](decisions/2026-09-07-borell-equivalence-claude-handoff.md) and the
@@ -249,6 +249,76 @@ the certificate file carries default-build axiom guards for the certificate and 
 dependencies. Statement design and the semantic alignment review are in
 [the statement decision](decisions/2026-09-07-borell-density-statements.md); the proofs are
 described in [the proof record](decisions/2026-09-07-borell-density-proofs.md).
+
+## Affine covariance Poincaré constant
+
+`def:affine-poincare-constant` was implemented on 2026-09-07 as a definition node.
+`Energy.Euclidean.covariancePreEnergy ν` has globally Lipschitz `L²(ν)` tests with integrable
+`⟪Σ ∇g, ∇g⟫`, `Σ = Covariance.operator ν`; `Energy.Affine.energy μ` is its sequential relaxation
+on the intrinsic law, and `Poincare.Affine.constant μ` is `Poincare.L2Energy.constant` of that
+relaxation. The definition needs no log-concavity; for log-concave laws the three well-definedness
+contracts of the Blueprint sentence (finite intrinsic second moment, a.e. differentiability of
+tests, representative independence of the energy) are proved in
+`KLS/LogConcave/AffineCovariance.lean`. Twelve anchors carry `\leanok`; the node is not a ledger
+theorem, `check_blueprint.CERTIFICATES` is unchanged, and the statement golden is unchanged
+because the new objects do not occur in the KLS statement closure. The definition task record is
+`available` with source and Mathlib evidence hashes. Five new named checks cover the unfolding,
+the test fields, the energy integral, dimension zero and the ambient Dirac law. Read
+[the record](decisions/2026-09-07-affine-poincare-constant-definition.md).
+
+## Covariance-core closure
+
+`lem:covariance-core-closure` was proved on 2026-09-08 and is the fourteenth certificate,
+`Solutions.LemCovarianceCoreClosure.certificate`, registered in `check_blueprint.CERTIFICATES`.
+The Blueprint operator `T g = Σ^{1/2} ∇g` is `KLS.LogConcave.gradientOperator` with an arbitrary
+continuous linear `B` in place of the square root, following the certified approximation lemma.
+The certificate packages dense domain, closability, closure independence of every core between
+the smooth compactly supported classes and the full domain, and the identification of the
+sequential relaxation of `‖T f‖²` with `‖T̄ f‖²` on the domain of the closure and `⊤` outside.
+The generic relaxation/closure identification lives in `Energy/Relaxation/LinearPMap.lean` and
+is reusable for other operators. Fourteen anchors carry `\leanok` on statement and proof; the
+statement golden is unchanged. Read
+[the record](decisions/2026-09-08-covariance-core-closure.md).
+
+## Affine covariance closed form
+
+`thm:affine-covariance-relaxation-closed` was proved on 2026-09-08 and is the fifteenth
+certificate, `Solutions.ThmAffineCovarianceRelaxationClosed.certificate`. Quadraticity of the
+affine pre-energy is expressed through a square root `B` of the intrinsic covariance
+(`Covariance.exists_sqrt`); the certificate packages dense realization, the closed quadratic form
+`Energy.ClosedQuadratic (Energy.Affine.energy μ)`, the sequential core, translation of the intrinsic
+law with its `L²` isometry, and the identification of the affine relaxation and constant with the
+closed form on the core `ℝ + C_c^∞`. Seventeen anchors carry `\leanok` on statement and proof;
+the statement golden is unchanged. Read
+[the record](decisions/2026-09-08-affine-covariance-relaxation-closed.md).
+
+## Affine constant translation invariance
+
+`lem:affine-poincare-translation-invariance` was proved on 2026-09-08 and is the sixteenth
+certificate, `Solutions.LemAffinePoincareTranslationInvariance.certificate`. The ambient translate
+is `Energy.Euclidean.translateLaw μ b`; the certificate packages log-concavity of the translate,
+invariance of the ambient covariance operator and of the affine-support direction, a
+variance-preserving `L²` isometry intertwining the two affine relaxations, the identity
+`Poincare.Affine.constant (translateLaw μ b) = Poincare.Affine.constant μ`, the ambient second
+moment of a log-concave law and the zero mean of the translate by the negative barycenter. The
+constant identity is proved for every Borel law. Sixteen anchors carry `\leanok` on statement and
+proof; the statement golden is unchanged. Read
+[the record](decisions/2026-09-08-affine-poincare-translation-invariance.md).
+
+## Affine and isotropic KLS formulations
+
+`thm:affine-isotropic-reduction` was proved on 2026-09-08 and is the seventeenth certificate,
+`Solutions.ThmAffineIsotropicReduction.certificate`. The three statements `KLS.IsotropicBound K`,
+`KLS.CovarianceBound K` and `KLS.AffineBound K` quantify over every finite-dimensional Euclidean space
+of one fixed universe; the certificate packages their pairwise equivalences for every `K` and the
+implication from `KLS.AffineBound K` (universe zero) to `KLS.Conjecture`. The proof centers and whitens
+the intrinsic law (`Covariance.exists_whitening`), transports the covariance relaxation along
+translations and continuous linear equivalences, and identifies the identity-weighted Lipschitz
+gradient relaxation constant with the literature constant. Twenty-six anchors carry `\leanok` on
+statement and proof; the route sidecar claim for the node is `proved` with Lean evidence; the
+statement golden is unchanged. The same inspection records `thm:cmh-recovery-affine-poincare-bound`
+as `missing` infrastructure with four concrete gaps. Read
+[the record](decisions/2026-09-08-affine-isotropic-reduction.md).
 
 ## Definition checks
 
@@ -270,8 +340,8 @@ proved named theorems, followed by transitive axiom inspection.
 
 The first priority is `lem:covariance-test-core-density`, then the smooth/locally-Lipschitz
 comparison and selected/literature comparison; all three are now certified. The intrinsic
-absolute-continuity input is separately certified, while the stronger Borell representation
-remains a visible unproved branch. The written arguments are in Blueprint Appendix A and the shared
+absolute-continuity input and the stronger Borell density/moment representation are separately
+certified. The written arguments are in Blueprint Appendix A and the shared
 bridges chapter; the weighted gradient approximation is not supplied by ordinary value-only
 smooth density in L². Formalizers must identify or construct that analytic step explicitly.
 The pipeline does not require the more general, unresolved Cheeger-energy identification.
@@ -286,8 +356,8 @@ the explicit open gates. These are responsibilities, not six required persistent
 The approximation input has its own seventh certificate, and the smooth/literature comparison
 under intrinsic absolute continuity has the eighth. Intrinsic absolute continuity from
 compact-set log-concavity and the general constant equality now have the ninth and tenth.
-The full Borell density/moment representation remains unproved. The original eight ledger
-claims are unchanged by these two additions; see the
+The full Borell density/moment representation was subsequently certified as the twelfth node.
+The original eight ledger claims were unchanged by the ninth and tenth additions; see the
 [general proof record](decisions/2026-09-06-general-logconcave-comparison.md),
 [approximation acceptance](decisions/2026-09-06-weighted-approximation-acceptance.md) and
 [comparison proofs](decisions/2026-09-06-smooth-literature-proofs.md).

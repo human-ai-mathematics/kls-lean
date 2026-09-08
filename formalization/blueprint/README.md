@@ -38,23 +38,32 @@ legacy constants is Lean-certified. Their comparison with the literature constan
 cutoff-and-convolution proof in Appendix A. Its approximation input and eight smooth/literature
 interfaces are Lean-certified under intrinsic absolute continuity. The general log-concave
 comparison is now certified using the new precise intrinsic absolute-continuity lemma; the
-stronger Borell density/moment representation remains unproved. See the
-[general proof record](../../research/decisions/2026-09-06-general-logconcave-comparison.md).
+stronger Borell density/moment representation is separately Lean-certified. See the
+[general proof record](../../research/decisions/2026-09-06-general-logconcave-comparison.md) and
+[Borell proof record](../../research/decisions/2026-09-07-borell-density-proofs.md).
 
 Appendix A also supplies the relative-perimeter and covariance-core proofs. Outward dilation
 before smoothing handles the carrier boundary in the first; graph-norm approximation and
 closability identify the exact source domain in the second. These statements specify their
 current domains and normalization and remain open to revision during formalization. The
-relative-perimeter and covariance-core closure arguments still await Lean implementation and certification. The separate abstract
+covariance-core closure and the closed affine covariance form are now Lean-certified
+(`Solutions.LemCovarianceCoreClosure.certificate`,
+`Solutions.ThmAffineCovarianceRelaxationClosed.certificate`); the relative-perimeter smoothing
+argument still awaits Lean implementation. The separate abstract
 relaxation and finite-factor comparison lemmas in the appendix have actual Lean proofs.
 
 Separately, $C_{\mathrm P}^{\mathrm{aff}}(\mu)$ is the optimal constant of the closed
 covariance-weighted form used by the CMH route. It is defined from the globally Lipschitz
-covariance pre-energy by sequential $L^2$ relaxation on the intrinsic law. It is neither a fourth
+covariance pre-energy by sequential $L^2$ relaxation on the intrinsic law; the definition is
+implemented as `Poincare.Affine.constant` and carries `\leanok` as a definition node, with its
+log-concave well-definedness contracts proved. It is neither a fourth
 name for the unweighted constant of one fixed law nor a raw locally Lipschitz optimum. Translation
 invariance and the CMH recovery-sequence bound are separate named nodes, so neither the
 centered-to-arbitrary reduction nor the upstream lower-semicontinuity endpoint is hidden in proof
-prose.
+prose; the translation invariance and the affine/isotropic reduction are now Lean-certified
+(`Solutions.LemAffinePoincareTranslationInvariance.certificate`,
+`Solutions.ThmAffineIsotropicReduction.certificate`), while the CMH recovery-sequence bound is
+recorded as missing infrastructure.
 
 ## Build
 

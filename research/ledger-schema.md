@@ -80,7 +80,7 @@ do not describe the current proved node.
 The [local verification runner](verification.md) joins this ledger with the existing explicit
 Blueprint certificate mapping and fails if a proved node has no mapping for axiom inspection.
 It requires a report for every mapped certificate, audits all Blueprint Lean anchors, replays
-the local compiled modules, and ties the results to actual source hashes. All seven current
+the local compiled modules, and ties the results to actual source hashes. All current
 certificates also retain default-build axiom guards. The generated task atlas derives these
 statuses; `tasks.json` does not own or duplicate certification state.
 

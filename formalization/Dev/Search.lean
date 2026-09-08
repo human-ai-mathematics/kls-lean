@@ -21,8 +21,11 @@ non-deterministic and network-dependent, which the verification pipeline
 
 Therefore:
 
-* `Dev` is a `lean_lib` that is **deliberately absent from `defaultTargets`** in
-  `lakefile.toml`. `lake build` never builds it; build it explicitly with `lake build Dev`.
+* This file is **not a `lean_lib`** in `lakefile.toml` at all. The Blueprint's
+  `lake exe checkdecls` imports the root module of every library of the package, so even a
+  library outside `defaultTargets` would have to be built in CI; declaring one broke the
+  Blueprint workflow on 2026-09-07. `lake build` never touches this file; elaborate it with
+  `lake env lean Dev/Search.lean` or by opening it in an editor.
 * No module under `FunctionalInequalities/`, `solutions/`, or `examples/` may import
   `LeanSearchClient` or contain a query command.
 * Query commands are exploratory notes. Delete or comment them out before committing; nothing in
