@@ -4,12 +4,12 @@
 最优常数，并证明有限常数有效当且仅当它控制最优常数。具体欧氏实现选用仿射支撑上的光滑
 梯度能量，经 `L²` relaxation 后拉回原空间。
 
-**当前已证明闭二次型链，以及 ambient/intrinsic 与 legacy/relaxed 比较桥。** 已验收的
+**当前已证明闭二次型链，以及 ambient/intrinsic 与 smooth-test/relaxed 比较桥。** 已验收的
 Gaussian 和 tensorization 定理使用光滑测试接口，可以通过有限维比较桥转到所选常数。
 与 locally Lipschitz 文献常数的等价也已完成 Lean 证明：一般比较要求内禀绝对连续性；
 对于对数凹概率测度，该绝对连续性已被证明，因此无需另加这一假设。见
-[文献常数比较](Euclidean/LiteratureComparison.lean) 与
-[一般对数凹版本](Euclidean/LogConcaveComparison.lean)。这不提供完整 Borell 密度代表与矩定理，
+[文献常数比较](LocalSlope/SmoothTestComparison.lean) 与
+[一般对数凹版本](LocalSlope/Poincare.lean)。这不提供完整 Borell 密度代表与矩定理，
 也不证明 Cheeger 能量识别或 KLS。
 
 当前接口默认允许随数学设计调整，已证明的接口也不例外；证明工作不以接口冻结为前提。
@@ -22,8 +22,8 @@ Gaussian 和 tensorization 定理使用光滑测试接口，可以通过有限�
 | --- | --- |
 | 使用新基础 | [Foundation.lean](Foundation.lean) |
 | 理解最优常数与有限能量域 | [L2Energy.lean](L2Energy.lean) |
-| 使用项目选定的欧氏常数 | [Euclidean/IntrinsicAffine.lean](Euclidean/IntrinsicAffine.lean) |
-| 使用仿射协方差常数 `C_P^aff`（定义；闭形式、环境平移不变性与各向同性归约另有定理，无 Poincaré 不等式） | [Euclidean/AffineCovariance.lean](Euclidean/AffineCovariance.lean)、[Euclidean/AffineTranslation.lean](Euclidean/AffineTranslation.lean)、[Euclidean/LipschitzComparison.lean](Euclidean/LipschitzComparison.lean) |
+| 使用项目选定的欧氏常数 | [Euclidean/IntrinsicAffine.lean](SmoothGradient/Intrinsic.lean) |
+| 使用仿射协方差常数 `C_P^aff`（定义；闭形式、环境平移不变性与各向同性归约另有定理，无 Poincaré 不等式） | [Euclidean/Covariance.lean](CovarianceGradient/Intrinsic.lean)、[Euclidean/Translation.lean](CovarianceGradient/Translation.lean)、[Euclidean/LipschitzComparison.lean](LipschitzGradient/Comparison.lean) |
 | 看完整的使用与边界示例 | [PoincareFoundation.lean](../../../examples/PoincareFoundation.lean) |
 | 使用已证明的 Gaussian 定理 | [Gaussian/README.md](Gaussian/README.md) |
 | 查找全部模块和 import 规则 | [formalization/README.md](../../README.md) |
@@ -41,13 +41,13 @@ import FunctionalInequalities.Poincare.Foundation
 open MeasureTheory FunctionalInequalities
 
 example (μ : ProbabilityMeasure ℝ) :
-    Energy.ClosedQuadratic (Energy.Canonical.energy μ) :=
-  Energy.Canonical.closedQuadratic μ
+    Energy.ClosedQuadratic (Energy.SmoothGradient.Intrinsic.energy μ) :=
+  Energy.SmoothGradient.Intrinsic.closedQuadratic μ
 
 example (μ : ProbabilityMeasure ℝ) (C : NNReal)
-    (h : Poincare.Canonical.constant μ ≤ (C : ENNReal)) :
-    Poincare.Canonical.Holds μ C :=
-  (Poincare.Canonical.holds_iff_constant_le μ C).mpr h
+    (h : Poincare.SmoothGradient.Intrinsic.constant μ ≤ (C : ENNReal)) :
+    Poincare.SmoothGradient.Intrinsic.Holds μ C :=
+  (Poincare.SmoothGradient.Intrinsic.holds_iff_constant_le μ C).mpr h
 ```
 
 第一条适用于任意 Borel 概率测度，包括没有密度的测度。第二条说明如何使用一个已知的常数界；
@@ -75,7 +75,7 @@ Poincare.L2Energy.Holds μ energy C ↔ Poincare.L2Energy.constant μ energy ≤
 ```
 
 约定 `0 / 0 = 0`，正方差除以零能量为 `⊤`。空测试类的最优常数为零；有正方差、零能量测试时，
-最优常数为 `⊤`。这些边界由 [Optimal.lean](Optimal.lean) 中的定理明确覆盖。
+最优常数为 `⊤`。这些边界由 [Optimal.lean](SmoothTest/Optimal.lean) 中的定理明确覆盖。
 
 [能量比较](L2Comparison.lean) 的方向是：同一测度下，若 `lower ≤ upper`，则
 `Poincare.L2Energy.constant μ upper ≤ Poincare.L2Energy.constant μ lower`。增大能量会同时缩小有限域并增大
@@ -119,7 +119,7 @@ Relaxation/Basic
 
 ## 欧氏实现与仿射支撑
 
-[SmoothGradientTest](../Energy/Euclidean/SmoothGradient/Basic.lean) 是全局 `C∞` 实函数，携带
+[Energy.SmoothGradient.Test](../Energy/SmoothGradient/Basic.lean) 是全局 `C∞` 实函数，携带
 `L²(μ)` 和平方梯度可积性的证明，有限能量为 `∫ ‖gradient f x‖² ∂μ`。
 **本项目固定的 Mathlib v4.33.0 中，普通 `C∞` 写作 `ContDiff ℝ ∞`；`ContDiff ℝ ⊤` 表示解析性。**
 
@@ -132,9 +132,9 @@ Relaxation/Basic
 
 [AffineSupport.lean](../Probability/AffineSupport.lean) 取拓扑支撑的 affine span，并证明它闭、
 可测、满测度且最小。选一个支撑原点后，将测度表达在 affine support 的方向空间上。
-[intrinsicL2Equiv](../Energy/Euclidean/IntrinsicAffine/Basic.lean) 是原 `L²` 与 intrinsic `L²` 之间的
+[intrinsicL2Equiv](../Energy/SmoothGradient/Intrinsic/Basic.lean) 是原 `L²` 与 intrinsic `L²` 之间的
 双向线性等距等价；在 intrinsic 空间计算 smooth-gradient relaxation，再沿等价拉回，得到
-`Energy.Canonical.energy` 及其闭二次型定理。
+`Energy.SmoothGradient.Intrinsic.energy` 及其闭二次型定理。
 
 这包含 proper affine support 与零维载体。它消除了法向方向，但不会自动消除仿射支撑内部的
 其他奇异性。ambient 与 intrinsic relaxation 能量相等现已证明；原始测试能量只在
@@ -144,17 +144,17 @@ Relaxation/Basic
 
 | 接口 | 使用的测试或能量 | 当前状态 |
 | --- | --- | --- |
-| `Poincare.constant` | 全局光滑、`L²`、有限梯度能量测试 | Gaussian 与 tensorization 使用此接口 |
+| `Poincare.SmoothTest.constant` | 全局光滑、`L²`、有限梯度能量测试 | Gaussian 与 tensorization 使用此接口 |
 | `Poincare.L2Energy.constant μ energy` | 任意扩展能量的有限域 | 通用优化器与 order law 已证明 |
-| `Poincare.Canonical.constant` | 项目选定的 intrinsic-affine relaxation | 能量、闭二次型与 order law 已证明 |
-| Blueprint 的 `C_P^lit` | locally Lipschitz 文献测试 | 本地 Lean 定义与比较仍待完成 |
+| `Poincare.SmoothGradient.Intrinsic.constant` | 项目选定的 intrinsic-affine relaxation | 能量、闭二次型与 order law 已证明 |
+| `Poincare.LocalSlope.Intrinsic.constant` | 内在律上的局部 Lipschitz / 局部斜率测试 | 定义与一般对数凹常数比较已完成 |
 
-Blueprint 的 `C_P^can` 是第三行的简写。当前 Lean 名称保留 `SmoothGradientRelaxation`，避免将
-项目选择当成已完成的文献识别。协方差加权的 `C_P^aff` 是 CMH 路线的另一能量常数，不是同一
+Blueprint 的 `C_P^can` 是第三行的简写。当前 Lean 名称使用 `SmoothGradient.Intrinsic`，说明能量类型和内在坐标；
+常数比较不声称局部斜率能量与梯度松弛逐点相等。协方差加权的 `C_P^aff` 是 CMH 路线的另一能量常数，不是同一
 测度上无权常数的别名。
 
-已证明的桥接顺序是 ambient/intrinsic 相等、legacy/relaxed 常数相等，然后在一般 log-concave
-情形下接通 locally Lipschitz 文献常数（`Euclidean/LogConcaveComparison.lean`）。legacy/relaxed 桥可使用 relaxation 上界、逼近序列和
+已证明的桥接顺序是 ambient/intrinsic 相等、smooth-test/relaxed 常数相等，然后在一般 log-concave
+情形下接通 locally Lipschitz 文献常数（`LocalSlope/Poincare.lean`）。smooth-test/relaxed 桥可使用 relaxation 上界、逼近序列和
 `L²` 方差连续性，不依赖 raw/core agreement 或 Cheeger identification。
 
 前两步已有 [12 条已证明比较定理](Euclidean/README.md)，并由 `Foundation` 导出。
@@ -177,7 +177,7 @@ Blueprint 的 `C_P^can` 是第三行的简写。当前 Lean 名称保留 `Smooth
 
 当前还没有具体 smooth-gradient 的 Markov/Dirichlet witness、raw/core agreement、
 `Ecan = 2 Chμ`、自伴生成元、半群或 reciprocal spectral-gap 定理；whitening 与仿射/各向同性归约已在
-`KLS/LogConcave/IsotropicReduction.lean` 证明。
+`KLS/LogConcave/Isotropic.lean` 证明。
 旧光滑测试常数、ambient relaxed 常数与所选 intrinsic-affine 常数的等价已经由 Lean 证明；
 locally Lipschitz 文献常数的本地定义与比较仍待形式化。以上剩余工作由 Blueprint 中不同的
 节点承载；KLS 主命题也尚未成为本地 Lean 声明。

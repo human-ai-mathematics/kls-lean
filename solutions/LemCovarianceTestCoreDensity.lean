@@ -70,45 +70,45 @@ theorem certificate {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
           atTop (𝓝 0) ∧
         Tendsto (fun j ↦ eLpNorm (fun x ↦ gradient (gSeq j) x - gradient g x)
           1 (ν : Measure E)) atTop (𝓝 0)) :=
-  ⟨exists_compactSupport_weighted_L2_approximation ν m hν,
-    exists_smooth_compactSupport_L2_approximation ν m hν,
-    exists_smooth_weighted_L2_approximation ν m hν,
-    exists_smooth_bounded_L1_approximation ν m hν⟩
+  ⟨exists_compactSupport_weighted_L2 ν m hν,
+    exists_smooth_compactSupport_L2 ν m hν,
+    exists_smooth_weighted_L2 ν m hν,
+    exists_smooth_bounded_L1 ν m hν⟩
 
 end Solutions.LemCovarianceTestCoreDensity
 
-#check @exists_compactSupport_weighted_L2_approximation
-#check @exists_smooth_compactSupport_L2_approximation
-#check @exists_smooth_weighted_L2_approximation
-#check @exists_smooth_bounded_L1_approximation
+#check @exists_compactSupport_weighted_L2
+#check @exists_smooth_compactSupport_L2
+#check @exists_smooth_weighted_L2
+#check @exists_smooth_bounded_L1
 
 /--
-info: 'FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.exists_compactSupport_weighted_L2_approximation'
+info: 'FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.exists_compactSupport_weighted_L2'
   depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms exists_compactSupport_weighted_L2_approximation
+#print axioms exists_compactSupport_weighted_L2
 
 /--
-info: 'FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.exists_smooth_compactSupport_L2_approximation'
+info: 'FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.exists_smooth_compactSupport_L2'
   depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms exists_smooth_compactSupport_L2_approximation
+#print axioms exists_smooth_compactSupport_L2
 
 /--
-info: 'FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.exists_smooth_weighted_L2_approximation'
+info: 'FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.exists_smooth_weighted_L2'
   depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms exists_smooth_weighted_L2_approximation
+#print axioms exists_smooth_weighted_L2
 
 /--
-info: 'FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.exists_smooth_bounded_L1_approximation'
+info: 'FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.exists_smooth_bounded_L1'
   depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms exists_smooth_bounded_L1_approximation
+#print axioms exists_smooth_bounded_L1
 
 /--
 info: 'Solutions.LemCovarianceTestCoreDensity.certificate'

@@ -14,7 +14,7 @@ noncomputable section
 
 open MeasureTheory Set Topology
 
-namespace FunctionalInequalities.KLS
+namespace FunctionalInequalities.KLS.LogConcave
 
 section Transport
 
@@ -24,7 +24,7 @@ variable {E F : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
 
 /-- A probability law reconstructed by an affine isometry inherits compact-set log-concavity
 from its ambient law. Images of compact sets supply the exact test sets. -/
-theorem LogConcave.of_affineIsometry_map {μ : ProbabilityMeasure E} (hμ : LogConcave μ)
+theorem of_affineIsometry_map {μ : ProbabilityMeasure E} (hμ : LogConcave μ)
     (ν : ProbabilityMeasure F) (f : F →ᵃⁱ[ℝ] E)
     (hmap : Measure.map f (ν : Measure F) = (μ : Measure E)) : LogConcave ν := by
   intro K L hK hL t ht ht1
@@ -60,7 +60,7 @@ variable [ProperSpace E]
 omit [BorelSpace E] in
 /-- Equal-radius closed-ball masses inherit the log-concavity inequality. This is the
 pointwise inequality needed for ball-average regularizations of the measure. -/
-theorem LogConcave.closedBall_mul_le {μ : ProbabilityMeasure E} (hμ : LogConcave μ)
+theorem closedBall_mul_le {μ : ProbabilityMeasure E} (hμ : LogConcave μ)
     (x y : E) (r t : ℝ) (ht : 0 < t) (ht1 : t < 1) :
     (μ : Measure E) (Metric.closedBall x r) ^ t *
         (μ : Measure E) (Metric.closedBall y r) ^ (1 - t) ≤
@@ -86,7 +86,7 @@ theorem LogConcave.closedBall_mul_le {μ : ProbabilityMeasure E} (hμ : LogConca
 omit [BorelSpace E] in
 /-- Compact-set log-concavity forces the topological support to be convex. This uses positive
 neighborhood masses, without presupposing an ambient density. -/
-theorem LogConcave.convex_support {μ : ProbabilityMeasure E} (hμ : LogConcave μ) :
+theorem convex_support {μ : ProbabilityMeasure E} (hμ : LogConcave μ) :
     Convex ℝ (μ : Measure E).support := by
   intro x hx y hy a b ha hb hab
   by_cases ha0 : a = 0
@@ -109,7 +109,7 @@ theorem LogConcave.convex_support {μ : ProbabilityMeasure E} (hμ : LogConcave 
 
 omit [BorelSpace E] in
 /-- Superlevel sets of equal-radius closed-ball masses are convex. -/
-theorem LogConcave.convex_closedBall_superlevel {μ : ProbabilityMeasure E}
+theorem convex_closedBall_superlevel {μ : ProbabilityMeasure E}
     (hμ : LogConcave μ) (r : ℝ) (A : ENNReal) :
     Convex ℝ {x | A ≤ (μ : Measure E) (Metric.closedBall x r)} := by
   intro x hx y hy a b ha hb hab
@@ -139,28 +139,31 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteS
   [MeasurableSpace E] [BorelSpace E] [SecondCountableTopology E]
   [FiniteDimensional ℝ E]
 
+omit [CompleteSpace E] in
 /-- Log-concavity is retained on the direction of the affine support, even for singular
 ambient laws and a zero-dimensional carrier. -/
-theorem LogConcave.intrinsicMeasure {μ : ProbabilityMeasure E} (hμ : LogConcave μ) :
+theorem intrinsicMeasure {μ : ProbabilityMeasure E} (hμ : LogConcave μ) :
     LogConcave (Probability.intrinsicMeasure μ) :=
   hμ.of_affineIsometry_map (Probability.intrinsicMeasure μ) (Probability.reconstruct μ)
     (Probability.measurePreserving_reconstruct μ).map_eq
 
+omit [CompleteSpace E] in
 /-- The intrinsic support has nonempty interior. This includes the singleton topology in
 dimension zero and does not assert that the boundary has zero probability mass. -/
-theorem LogConcave.interior_intrinsic_support_nonempty {μ : ProbabilityMeasure E}
+theorem interior_intrinsic_support_nonempty {μ : ProbabilityMeasure E}
     (hμ : LogConcave μ) :
     (interior (Probability.intrinsicMeasure μ :
       Measure (Probability.affineSupport μ).direction).support).Nonempty := by
   apply hμ.intrinsicMeasure.convex_support.interior_nonempty_iff_affineSpan_eq_top.mpr
   exact Probability.affineSupport_intrinsicMeasure μ
 
+omit [CompleteSpace E] in
 /-- The intrinsic support boundary is Haar-null. Transferring this null set to the probability
 law still requires the separate absolute-continuity theorem. -/
-theorem LogConcave.haar_frontier_intrinsic_support {μ : ProbabilityMeasure E}
+theorem haar_frontier_intrinsic_support {μ : ProbabilityMeasure E}
     (hμ : LogConcave μ) (m : Measure (Probability.affineSupport μ).direction)
     [Measure.IsAddHaarMeasure m] :
     m (frontier (Probability.intrinsicMeasure μ : Measure _).support) = 0 :=
   hμ.intrinsicMeasure.convex_support.addHaar_frontier m
 
-end FunctionalInequalities.KLS
+end FunctionalInequalities.KLS.LogConcave

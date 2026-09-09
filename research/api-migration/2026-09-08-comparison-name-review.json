@@ -1,0 +1,787 @@
+{
+  "baseline_snapshot": "192ddba6daa0f0d0f0bdc3fdab82bb5bc180414f1c3f4809c73f3cf4c4229684",
+  "public_renamings": 12,
+  "source_comparison": {
+    "definitions": {
+      "exact": 189,
+      "differences": 0,
+      "missing": 0
+    },
+    "signatures": {
+      "exact": 881,
+      "differences": 0,
+      "missing": 0
+    },
+    "all_source_bodies": {
+      "exact": 885,
+      "differences": 0,
+      "missing": 0
+    }
+  },
+  "expressions": {
+    "declarations": 132,
+    "alpha_equivalent_types_and_definition_bodies": 132,
+    "module_universe_and_dependency_changes": 0,
+    "missing": [],
+    "added": [],
+    "roots_mapped_equal": true,
+    "external_equal": true,
+    "parameter_order_binder_info_and_types_unchanged": true,
+    "explicit_parameter_names_unchanged": true,
+    "metadata_review": "Only compiler-generated anonymous instance hygiene hashes differ; all 12 cases below were checked. Module and local hygienic index remain equal.",
+    "anonymous_instance_hygiene_changes": [
+      {
+        "before": "FunctionalInequalities.Poincare.SmoothGradient.Intrinsic.constant_eq_localSlope_constant_of_ac",
+        "after": "FunctionalInequalities.Poincare.SmoothGradient.Intrinsic.constant_eq_localSlope",
+        "anonymous_instance_names": [
+          {
+            "index": 1,
+            "before": "inst._@.FunctionalInequalities.Poincare.LocalSlope.SmoothTestComparison.3083031827._hygCtx._hyg.3",
+            "after": "inst._@.FunctionalInequalities.Poincare.LocalSlope.SmoothTestComparison.2433317123._hygCtx._hyg.3"
+          },
+          {
+            "index": 2,
+            "before": "inst._@.FunctionalInequalities.Poincare.LocalSlope.SmoothTestComparison.3083031827._hygCtx._hyg.6",
+            "after": "inst._@.FunctionalInequalities.Poincare.LocalSlope.SmoothTestComparison.2433317123._hygCtx._hyg.6"
+          },
+          {
+            "index": 3,
+            "before": "inst._@.FunctionalInequalities.Poincare.LocalSlope.SmoothTestComparison.3083031827._hygCtx._hyg.12",
+            "after": "inst._@.FunctionalInequalities.Poincare.LocalSlope.SmoothTestComparison.2433317123._hygCtx._hyg.12"
+          },
+          {
+            "index": 4,
+            "before": "inst._@.FunctionalInequalities.Poincare.LocalSlope.SmoothTestComparison.3083031827._hygCtx._hyg.15",
+            "after": "inst._@.FunctionalInequalities.Poincare.LocalSlope.SmoothTestComparison.2433317123._hygCtx._hyg.15"
+          },
+          {
+            "index": 5,
+            "before": "inst._@.FunctionalInequalities.Poincare.LocalSlope.SmoothTestComparison.3083031827._hygCtx._hyg.18",
+            "after": "inst._@.FunctionalInequalities.Poincare.LocalSlope.SmoothTestComparison.2433317123._hygCtx._hyg.18"
+          },
+          {
+            "index": 6,
+            "before": "inst._@.FunctionalInequalities.Poincare.LocalSlope.SmoothTestComparison.3083031827._hygCtx._hyg.21",
+            "after": "inst._@.FunctionalInequalities.Poincare.LocalSlope.SmoothTestComparison.2433317123._hygCtx._hyg.21"
+          },
+          {
+            "index": 7,
+            "before": "inst._@.FunctionalInequalities.Poincare.LocalSlope.SmoothTestComparison.3083031827._hygCtx._hyg.24",
+            "after": "inst._@.FunctionalInequalities.Poincare.LocalSlope.SmoothTestComparison.2433317123._hygCtx._hyg.24"
+          },
+          {
+            "index": 10,
+            "before": "inst._@.FunctionalInequalities.Poincare.LocalSlope.SmoothTestComparison.3083031827._hygCtx._hyg.38",
+            "after": "inst._@.FunctionalInequalities.Poincare.LocalSlope.SmoothTestComparison.2433317123._hygCtx._hyg.38"
+          }
+        ]
+      },
+      {
+        "before": "FunctionalInequalities.Poincare.LipschitzGradient.holds_iff_localSlope_holds",
+        "after": "FunctionalInequalities.Poincare.LipschitzGradient.holds_iff_localSlope",
+        "anonymous_instance_names": [
+          {
+            "index": 1,
+            "before": "inst._@.FunctionalInequalities.Poincare.LipschitzGradient.Comparison.2660125775._hygCtx._hyg.3",
+            "after": "inst._@.FunctionalInequalities.Poincare.LipschitzGradient.Comparison.2976157688._hygCtx._hyg.3"
+          },
+          {
+            "index": 2,
+            "before": "inst._@.FunctionalInequalities.Poincare.LipschitzGradient.Comparison.2660125775._hygCtx._hyg.6",
+            "after": "inst._@.FunctionalInequalities.Poincare.LipschitzGradient.Comparison.2976157688._hygCtx._hyg.6"
+          },
+          {
+            "index": 3,
+            "before": "inst._@.FunctionalInequalities.Poincare.LipschitzGradient.Comparison.2660125775._hygCtx._hyg.12",
+            "after": "inst._@.FunctionalInequalities.Poincare.LipschitzGradient.Comparison.2976157688._hygCtx._hyg.12"
+          },
+          {
+            "index": 4,
+            "before": "inst._@.FunctionalInequalities.Poincare.LipschitzGradient.Comparison.2660125775._hygCtx._hyg.15",
+            "after": "inst._@.FunctionalInequalities.Poincare.LipschitzGradient.Comparison.2976157688._hygCtx._hyg.15"
+          },
+          {
+            "index": 5,
+            "before": "inst._@.FunctionalInequalities.Poincare.LipschitzGradient.Comparison.2660125775._hygCtx._hyg.18",
+            "after": "inst._@.FunctionalInequalities.Poincare.LipschitzGradient.Comparison.2976157688._hygCtx._hyg.18"
+          },
+          {
+            "index": 6,
+            "before": "inst._@.FunctionalInequalities.Poincare.LipschitzGradient.Comparison.2660125775._hygCtx._hyg.21",
+            "after": "inst._@.FunctionalInequalities.Poincare.LipschitzGradient.Comparison.2976157688._hygCtx._hyg.21"
+          },
+          {
+            "index": 7,
+            "before": "inst._@.FunctionalInequalities.Poincare.LipschitzGradient.Comparison.2660125775._hygCtx._hyg.24",
+            "after": "inst._@.FunctionalInequalities.Poincare.LipschitzGradient.Comparison.2976157688._hygCtx._hyg.24"
+          },
+          {
+            "index": 10,
+            "before": "inst._@.FunctionalInequalities.Poincare.LipschitzGradient.Comparison.2660125775._hygCtx._hyg.34",
+            "after": "inst._@.FunctionalInequalities.Poincare.LipschitzGradient.Comparison.2976157688._hygCtx._hyg.34"
+          }
+        ]
+      },
+      {
+        "before": "FunctionalInequalities.Poincare.SmoothTest.holds_iff_localSlope_holds",
+        "after": "FunctionalInequalities.Poincare.SmoothTest.holds_iff_localSlope",
+        "anonymous_instance_names": [
+          {
+            "index": 1,
+            "before": "inst._@.FunctionalInequalities.Poincare.LocalSlope.SmoothTestComparison.1035674291._hygCtx._hyg.3",
+            "after": "inst._@.FunctionalInequalities.Poincare.LocalSlope.SmoothTestComparison.877376852._hygCtx._hyg.3"
+          },
+          {
+            "index": 2,
+            "before": "inst._@.FunctionalInequalities.Poincare.LocalSlope.SmoothTestComparison.1035674291._hygCtx._hyg.6",
+            "after": "inst._@.FunctionalInequalities.Poincare.LocalSlope.SmoothTestComparison.877376852._hygCtx._hyg.6"
+          },
+          {
+            "index": 3,
+            "before": "inst._@.FunctionalInequalities.Poincare.LocalSlope.SmoothTestComparison.1035674291._hygCtx._hyg.12",
+            "after": "inst._@.FunctionalInequalities.Poincare.LocalSlope.SmoothTestComparison.877376852._hygCtx._hyg.12"
+          },
+          {
+            "index": 4,
+            "before": "inst._@.FunctionalInequalities.Poincare.LocalSlope.SmoothTestComparison.1035674291._hygCtx._hyg.15",
+            "after": "inst._@.FunctionalInequalities.Poincare.LocalSlope.SmoothTestComparison.877376852._hygCtx._hyg.15"
+          },
+          {
+            "index": 5,
+            "before": "inst._@.FunctionalInequalities.Poincare.LocalSlope.SmoothTestComparison.1035674291._hygCtx._hyg.18",
+            "after": "inst._@.FunctionalInequalities.Poincare.LocalSlope.SmoothTestComparison.877376852._hygCtx._hyg.18"
+          },
+          {
+            "index": 6,
+            "before": "inst._@.FunctionalInequalities.Poincare.LocalSlope.SmoothTestComparison.1035674291._hygCtx._hyg.21",
+            "after": "inst._@.FunctionalInequalities.Poincare.LocalSlope.SmoothTestComparison.877376852._hygCtx._hyg.21"
+          },
+          {
+            "index": 7,
+            "before": "inst._@.FunctionalInequalities.Poincare.LocalSlope.SmoothTestComparison.1035674291._hygCtx._hyg.24",
+            "after": "inst._@.FunctionalInequalities.Poincare.LocalSlope.SmoothTestComparison.877376852._hygCtx._hyg.24"
+          },
+          {
+            "index": 10,
+            "before": "inst._@.FunctionalInequalities.Poincare.LocalSlope.SmoothTestComparison.1035674291._hygCtx._hyg.34",
+            "after": "inst._@.FunctionalInequalities.Poincare.LocalSlope.SmoothTestComparison.877376852._hygCtx._hyg.34"
+          }
+        ]
+      },
+      {
+        "before": "FunctionalInequalities.Poincare.SmoothTest.constant_eq_lipschitzGradient_constant",
+        "after": "FunctionalInequalities.Poincare.SmoothTest.constant_eq_lipschitz",
+        "anonymous_instance_names": [
+          {
+            "index": 1,
+            "before": "inst._@.FunctionalInequalities.Poincare.LipschitzGradient.Comparison.735050467._hygCtx._hyg.3",
+            "after": "inst._@.FunctionalInequalities.Poincare.LipschitzGradient.Comparison.2790372213._hygCtx._hyg.3"
+          },
+          {
+            "index": 2,
+            "before": "inst._@.FunctionalInequalities.Poincare.LipschitzGradient.Comparison.735050467._hygCtx._hyg.6",
+            "after": "inst._@.FunctionalInequalities.Poincare.LipschitzGradient.Comparison.2790372213._hygCtx._hyg.6"
+          },
+          {
+            "index": 3,
+            "before": "inst._@.FunctionalInequalities.Poincare.LipschitzGradient.Comparison.735050467._hygCtx._hyg.12",
+            "after": "inst._@.FunctionalInequalities.Poincare.LipschitzGradient.Comparison.2790372213._hygCtx._hyg.12"
+          },
+          {
+            "index": 4,
+            "before": "inst._@.FunctionalInequalities.Poincare.LipschitzGradient.Comparison.735050467._hygCtx._hyg.15",
+            "after": "inst._@.FunctionalInequalities.Poincare.LipschitzGradient.Comparison.2790372213._hygCtx._hyg.15"
+          },
+          {
+            "index": 5,
+            "before": "inst._@.FunctionalInequalities.Poincare.LipschitzGradient.Comparison.735050467._hygCtx._hyg.18",
+            "after": "inst._@.FunctionalInequalities.Poincare.LipschitzGradient.Comparison.2790372213._hygCtx._hyg.18"
+          },
+          {
+            "index": 6,
+            "before": "inst._@.FunctionalInequalities.Poincare.LipschitzGradient.Comparison.735050467._hygCtx._hyg.21",
+            "after": "inst._@.FunctionalInequalities.Poincare.LipschitzGradient.Comparison.2790372213._hygCtx._hyg.21"
+          },
+          {
+            "index": 7,
+            "before": "inst._@.FunctionalInequalities.Poincare.LipschitzGradient.Comparison.735050467._hygCtx._hyg.24",
+            "after": "inst._@.FunctionalInequalities.Poincare.LipschitzGradient.Comparison.2790372213._hygCtx._hyg.24"
+          },
+          {
+            "index": 10,
+            "before": "inst._@.FunctionalInequalities.Poincare.LipschitzGradient.Comparison.735050467._hygCtx._hyg.34",
+            "after": "inst._@.FunctionalInequalities.Poincare.LipschitzGradient.Comparison.2790372213._hygCtx._hyg.34"
+          }
+        ]
+      },
+      {
+        "before": "FunctionalInequalities.Poincare.SmoothTest.constant_eq_intrinsic_smoothGradient_constant",
+        "after": "FunctionalInequalities.Poincare.SmoothTest.constant_eq_intrinsic",
+        "anonymous_instance_names": [
+          {
+            "index": 1,
+            "before": "inst._@.FunctionalInequalities.Poincare.SmoothTest.RelaxationComparison.3367377014._hygCtx._hyg.3",
+            "after": "inst._@.FunctionalInequalities.Poincare.SmoothTest.RelaxationComparison.1034621349._hygCtx._hyg.3"
+          },
+          {
+            "index": 2,
+            "before": "inst._@.FunctionalInequalities.Poincare.SmoothTest.RelaxationComparison.3367377014._hygCtx._hyg.6",
+            "after": "inst._@.FunctionalInequalities.Poincare.SmoothTest.RelaxationComparison.1034621349._hygCtx._hyg.6"
+          },
+          {
+            "index": 3,
+            "before": "inst._@.FunctionalInequalities.Poincare.SmoothTest.RelaxationComparison.3367377014._hygCtx._hyg.12",
+            "after": "inst._@.FunctionalInequalities.Poincare.SmoothTest.RelaxationComparison.1034621349._hygCtx._hyg.12"
+          },
+          {
+            "index": 4,
+            "before": "inst._@.FunctionalInequalities.Poincare.SmoothTest.RelaxationComparison.3367377014._hygCtx._hyg.15",
+            "after": "inst._@.FunctionalInequalities.Poincare.SmoothTest.RelaxationComparison.1034621349._hygCtx._hyg.15"
+          },
+          {
+            "index": 5,
+            "before": "inst._@.FunctionalInequalities.Poincare.SmoothTest.RelaxationComparison.3367377014._hygCtx._hyg.18",
+            "after": "inst._@.FunctionalInequalities.Poincare.SmoothTest.RelaxationComparison.1034621349._hygCtx._hyg.18"
+          },
+          {
+            "index": 6,
+            "before": "inst._@.FunctionalInequalities.Poincare.SmoothTest.RelaxationComparison.3367377014._hygCtx._hyg.21",
+            "after": "inst._@.FunctionalInequalities.Poincare.SmoothTest.RelaxationComparison.1034621349._hygCtx._hyg.21"
+          },
+          {
+            "index": 7,
+            "before": "inst._@.FunctionalInequalities.Poincare.SmoothTest.RelaxationComparison.3367377014._hygCtx._hyg.24",
+            "after": "inst._@.FunctionalInequalities.Poincare.SmoothTest.RelaxationComparison.1034621349._hygCtx._hyg.24"
+          }
+        ]
+      },
+      {
+        "before": "FunctionalInequalities.Poincare.SmoothTest.holds_iff_intrinsic_smoothGradient_holds",
+        "after": "FunctionalInequalities.Poincare.SmoothTest.holds_iff_intrinsic",
+        "anonymous_instance_names": [
+          {
+            "index": 1,
+            "before": "inst._@.FunctionalInequalities.Poincare.SmoothTest.RelaxationComparison.2094072939._hygCtx._hyg.3",
+            "after": "inst._@.FunctionalInequalities.Poincare.SmoothTest.RelaxationComparison.3464278040._hygCtx._hyg.3"
+          },
+          {
+            "index": 2,
+            "before": "inst._@.FunctionalInequalities.Poincare.SmoothTest.RelaxationComparison.2094072939._hygCtx._hyg.6",
+            "after": "inst._@.FunctionalInequalities.Poincare.SmoothTest.RelaxationComparison.3464278040._hygCtx._hyg.6"
+          },
+          {
+            "index": 3,
+            "before": "inst._@.FunctionalInequalities.Poincare.SmoothTest.RelaxationComparison.2094072939._hygCtx._hyg.12",
+            "after": "inst._@.FunctionalInequalities.Poincare.SmoothTest.RelaxationComparison.3464278040._hygCtx._hyg.12"
+          },
+          {
+            "index": 4,
+            "before": "inst._@.FunctionalInequalities.Poincare.SmoothTest.RelaxationComparison.2094072939._hygCtx._hyg.15",
+            "after": "inst._@.FunctionalInequalities.Poincare.SmoothTest.RelaxationComparison.3464278040._hygCtx._hyg.15"
+          },
+          {
+            "index": 5,
+            "before": "inst._@.FunctionalInequalities.Poincare.SmoothTest.RelaxationComparison.2094072939._hygCtx._hyg.18",
+            "after": "inst._@.FunctionalInequalities.Poincare.SmoothTest.RelaxationComparison.3464278040._hygCtx._hyg.18"
+          },
+          {
+            "index": 6,
+            "before": "inst._@.FunctionalInequalities.Poincare.SmoothTest.RelaxationComparison.2094072939._hygCtx._hyg.21",
+            "after": "inst._@.FunctionalInequalities.Poincare.SmoothTest.RelaxationComparison.3464278040._hygCtx._hyg.21"
+          },
+          {
+            "index": 7,
+            "before": "inst._@.FunctionalInequalities.Poincare.SmoothTest.RelaxationComparison.2094072939._hygCtx._hyg.24",
+            "after": "inst._@.FunctionalInequalities.Poincare.SmoothTest.RelaxationComparison.3464278040._hygCtx._hyg.24"
+          }
+        ]
+      },
+      {
+        "before": "FunctionalInequalities.Poincare.SmoothTest.constant_eq_ambient_smoothGradient_constant",
+        "after": "FunctionalInequalities.Poincare.SmoothTest.constant_eq_ambient",
+        "anonymous_instance_names": [
+          {
+            "index": 1,
+            "before": "inst._@.FunctionalInequalities.Poincare.SmoothTest.RelaxationComparison.861923810._hygCtx._hyg.3",
+            "after": "inst._@.FunctionalInequalities.Poincare.SmoothTest.RelaxationComparison.712092177._hygCtx._hyg.3"
+          },
+          {
+            "index": 2,
+            "before": "inst._@.FunctionalInequalities.Poincare.SmoothTest.RelaxationComparison.861923810._hygCtx._hyg.6",
+            "after": "inst._@.FunctionalInequalities.Poincare.SmoothTest.RelaxationComparison.712092177._hygCtx._hyg.6"
+          },
+          {
+            "index": 3,
+            "before": "inst._@.FunctionalInequalities.Poincare.SmoothTest.RelaxationComparison.861923810._hygCtx._hyg.12",
+            "after": "inst._@.FunctionalInequalities.Poincare.SmoothTest.RelaxationComparison.712092177._hygCtx._hyg.12"
+          },
+          {
+            "index": 4,
+            "before": "inst._@.FunctionalInequalities.Poincare.SmoothTest.RelaxationComparison.861923810._hygCtx._hyg.15",
+            "after": "inst._@.FunctionalInequalities.Poincare.SmoothTest.RelaxationComparison.712092177._hygCtx._hyg.15"
+          },
+          {
+            "index": 5,
+            "before": "inst._@.FunctionalInequalities.Poincare.SmoothTest.RelaxationComparison.861923810._hygCtx._hyg.18",
+            "after": "inst._@.FunctionalInequalities.Poincare.SmoothTest.RelaxationComparison.712092177._hygCtx._hyg.18"
+          },
+          {
+            "index": 6,
+            "before": "inst._@.FunctionalInequalities.Poincare.SmoothTest.RelaxationComparison.861923810._hygCtx._hyg.21",
+            "after": "inst._@.FunctionalInequalities.Poincare.SmoothTest.RelaxationComparison.712092177._hygCtx._hyg.21"
+          },
+          {
+            "index": 7,
+            "before": "inst._@.FunctionalInequalities.Poincare.SmoothTest.RelaxationComparison.861923810._hygCtx._hyg.24",
+            "after": "inst._@.FunctionalInequalities.Poincare.SmoothTest.RelaxationComparison.712092177._hygCtx._hyg.24"
+          }
+        ]
+      },
+      {
+        "before": "FunctionalInequalities.Poincare.SmoothTest.holds_iff_ambient_smoothGradient_holds",
+        "after": "FunctionalInequalities.Poincare.SmoothTest.holds_iff_ambient",
+        "anonymous_instance_names": [
+          {
+            "index": 1,
+            "before": "inst._@.FunctionalInequalities.Poincare.SmoothTest.RelaxationComparison.1168383732._hygCtx._hyg.3",
+            "after": "inst._@.FunctionalInequalities.Poincare.SmoothTest.RelaxationComparison.4064992857._hygCtx._hyg.3"
+          },
+          {
+            "index": 2,
+            "before": "inst._@.FunctionalInequalities.Poincare.SmoothTest.RelaxationComparison.1168383732._hygCtx._hyg.6",
+            "after": "inst._@.FunctionalInequalities.Poincare.SmoothTest.RelaxationComparison.4064992857._hygCtx._hyg.6"
+          },
+          {
+            "index": 3,
+            "before": "inst._@.FunctionalInequalities.Poincare.SmoothTest.RelaxationComparison.1168383732._hygCtx._hyg.12",
+            "after": "inst._@.FunctionalInequalities.Poincare.SmoothTest.RelaxationComparison.4064992857._hygCtx._hyg.12"
+          },
+          {
+            "index": 4,
+            "before": "inst._@.FunctionalInequalities.Poincare.SmoothTest.RelaxationComparison.1168383732._hygCtx._hyg.15",
+            "after": "inst._@.FunctionalInequalities.Poincare.SmoothTest.RelaxationComparison.4064992857._hygCtx._hyg.15"
+          },
+          {
+            "index": 5,
+            "before": "inst._@.FunctionalInequalities.Poincare.SmoothTest.RelaxationComparison.1168383732._hygCtx._hyg.18",
+            "after": "inst._@.FunctionalInequalities.Poincare.SmoothTest.RelaxationComparison.4064992857._hygCtx._hyg.18"
+          },
+          {
+            "index": 6,
+            "before": "inst._@.FunctionalInequalities.Poincare.SmoothTest.RelaxationComparison.1168383732._hygCtx._hyg.21",
+            "after": "inst._@.FunctionalInequalities.Poincare.SmoothTest.RelaxationComparison.4064992857._hygCtx._hyg.21"
+          },
+          {
+            "index": 7,
+            "before": "inst._@.FunctionalInequalities.Poincare.SmoothTest.RelaxationComparison.1168383732._hygCtx._hyg.24",
+            "after": "inst._@.FunctionalInequalities.Poincare.SmoothTest.RelaxationComparison.4064992857._hygCtx._hyg.24"
+          }
+        ]
+      },
+      {
+        "before": "FunctionalInequalities.Poincare.SmoothTest.holds_iff_smoothGradient_preEnergy",
+        "after": "FunctionalInequalities.Poincare.SmoothTest.holds_iff_preEnergy",
+        "anonymous_instance_names": [
+          {
+            "index": 1,
+            "before": "inst._@.FunctionalInequalities.Poincare.SmoothTest.RelaxationComparison.2912381809._hygCtx._hyg.3",
+            "after": "inst._@.FunctionalInequalities.Poincare.SmoothTest.RelaxationComparison.2706656535._hygCtx._hyg.3"
+          },
+          {
+            "index": 2,
+            "before": "inst._@.FunctionalInequalities.Poincare.SmoothTest.RelaxationComparison.2912381809._hygCtx._hyg.6",
+            "after": "inst._@.FunctionalInequalities.Poincare.SmoothTest.RelaxationComparison.2706656535._hygCtx._hyg.6"
+          },
+          {
+            "index": 3,
+            "before": "inst._@.FunctionalInequalities.Poincare.SmoothTest.RelaxationComparison.2912381809._hygCtx._hyg.12",
+            "after": "inst._@.FunctionalInequalities.Poincare.SmoothTest.RelaxationComparison.2706656535._hygCtx._hyg.12"
+          },
+          {
+            "index": 4,
+            "before": "inst._@.FunctionalInequalities.Poincare.SmoothTest.RelaxationComparison.2912381809._hygCtx._hyg.15",
+            "after": "inst._@.FunctionalInequalities.Poincare.SmoothTest.RelaxationComparison.2706656535._hygCtx._hyg.15"
+          },
+          {
+            "index": 5,
+            "before": "inst._@.FunctionalInequalities.Poincare.SmoothTest.RelaxationComparison.2912381809._hygCtx._hyg.18",
+            "after": "inst._@.FunctionalInequalities.Poincare.SmoothTest.RelaxationComparison.2706656535._hygCtx._hyg.18"
+          },
+          {
+            "index": 6,
+            "before": "inst._@.FunctionalInequalities.Poincare.SmoothTest.RelaxationComparison.2912381809._hygCtx._hyg.21",
+            "after": "inst._@.FunctionalInequalities.Poincare.SmoothTest.RelaxationComparison.2706656535._hygCtx._hyg.21"
+          },
+          {
+            "index": 7,
+            "before": "inst._@.FunctionalInequalities.Poincare.SmoothTest.RelaxationComparison.2912381809._hygCtx._hyg.24",
+            "after": "inst._@.FunctionalInequalities.Poincare.SmoothTest.RelaxationComparison.2706656535._hygCtx._hyg.24"
+          }
+        ]
+      },
+      {
+        "before": "FunctionalInequalities.Energy.CovarianceGradient.relaxation_le_opNorm_mul_lipschitzGradient_relaxation",
+        "after": "FunctionalInequalities.Energy.CovarianceGradient.relaxation_le_mul_lipschitz",
+        "anonymous_instance_names": [
+          {
+            "index": 1,
+            "before": "inst._@.FunctionalInequalities.Poincare.LipschitzGradient.Comparison.2867413587._hygCtx._hyg.3",
+            "after": "inst._@.FunctionalInequalities.Poincare.LipschitzGradient.Comparison.132204794._hygCtx._hyg.3"
+          },
+          {
+            "index": 2,
+            "before": "inst._@.FunctionalInequalities.Poincare.LipschitzGradient.Comparison.2867413587._hygCtx._hyg.6",
+            "after": "inst._@.FunctionalInequalities.Poincare.LipschitzGradient.Comparison.132204794._hygCtx._hyg.6"
+          },
+          {
+            "index": 3,
+            "before": "inst._@.FunctionalInequalities.Poincare.LipschitzGradient.Comparison.2867413587._hygCtx._hyg.12",
+            "after": "inst._@.FunctionalInequalities.Poincare.LipschitzGradient.Comparison.132204794._hygCtx._hyg.12"
+          },
+          {
+            "index": 4,
+            "before": "inst._@.FunctionalInequalities.Poincare.LipschitzGradient.Comparison.2867413587._hygCtx._hyg.15",
+            "after": "inst._@.FunctionalInequalities.Poincare.LipschitzGradient.Comparison.132204794._hygCtx._hyg.15"
+          },
+          {
+            "index": 5,
+            "before": "inst._@.FunctionalInequalities.Poincare.LipschitzGradient.Comparison.2867413587._hygCtx._hyg.18",
+            "after": "inst._@.FunctionalInequalities.Poincare.LipschitzGradient.Comparison.132204794._hygCtx._hyg.18"
+          },
+          {
+            "index": 6,
+            "before": "inst._@.FunctionalInequalities.Poincare.LipschitzGradient.Comparison.2867413587._hygCtx._hyg.21",
+            "after": "inst._@.FunctionalInequalities.Poincare.LipschitzGradient.Comparison.132204794._hygCtx._hyg.21"
+          },
+          {
+            "index": 7,
+            "before": "inst._@.FunctionalInequalities.Poincare.LipschitzGradient.Comparison.2867413587._hygCtx._hyg.24",
+            "after": "inst._@.FunctionalInequalities.Poincare.LipschitzGradient.Comparison.132204794._hygCtx._hyg.24"
+          },
+          {
+            "index": 10,
+            "before": "inst._@.FunctionalInequalities.Poincare.LipschitzGradient.Comparison.2867413587._hygCtx._hyg.34",
+            "after": "inst._@.FunctionalInequalities.Poincare.LipschitzGradient.Comparison.132204794._hygCtx._hyg.34"
+          }
+        ]
+      },
+      {
+        "before": "FunctionalInequalities.Energy.CovarianceGradient.relaxation_eq_sequentialRelaxation_ofLinearPMap",
+        "after": "FunctionalInequalities.Energy.CovarianceGradient.relaxation_eq_ofLinearPMap",
+        "anonymous_instance_names": [
+          {
+            "index": 1,
+            "before": "inst._@.FunctionalInequalities.Energy.WeightedGradient.Basic.3352871910._hygCtx._hyg.3",
+            "after": "inst._@.FunctionalInequalities.Energy.WeightedGradient.Basic.1061576099._hygCtx._hyg.3"
+          },
+          {
+            "index": 2,
+            "before": "inst._@.FunctionalInequalities.Energy.WeightedGradient.Basic.3352871910._hygCtx._hyg.6",
+            "after": "inst._@.FunctionalInequalities.Energy.WeightedGradient.Basic.1061576099._hygCtx._hyg.6"
+          },
+          {
+            "index": 3,
+            "before": "inst._@.FunctionalInequalities.Energy.WeightedGradient.Basic.3352871910._hygCtx._hyg.12",
+            "after": "inst._@.FunctionalInequalities.Energy.WeightedGradient.Basic.1061576099._hygCtx._hyg.12"
+          },
+          {
+            "index": 4,
+            "before": "inst._@.FunctionalInequalities.Energy.WeightedGradient.Basic.3352871910._hygCtx._hyg.15",
+            "after": "inst._@.FunctionalInequalities.Energy.WeightedGradient.Basic.1061576099._hygCtx._hyg.15"
+          },
+          {
+            "index": 7,
+            "before": "inst._@.FunctionalInequalities.Energy.WeightedGradient.Basic.3352871910._hygCtx._hyg.31",
+            "after": "inst._@.FunctionalInequalities.Energy.WeightedGradient.Basic.1061576099._hygCtx._hyg.31"
+          },
+          {
+            "index": 8,
+            "before": "inst._@.FunctionalInequalities.Energy.WeightedGradient.Basic.3352871910._hygCtx._hyg.34",
+            "after": "inst._@.FunctionalInequalities.Energy.WeightedGradient.Basic.1061576099._hygCtx._hyg.34"
+          },
+          {
+            "index": 9,
+            "before": "inst._@.FunctionalInequalities.Energy.WeightedGradient.Basic.3352871910._hygCtx._hyg.37",
+            "after": "inst._@.FunctionalInequalities.Energy.WeightedGradient.Basic.1061576099._hygCtx._hyg.37"
+          },
+          {
+            "index": 11,
+            "before": "inst._@.FunctionalInequalities.Energy.WeightedGradient.Basic.3352871910._hygCtx._hyg.45",
+            "after": "inst._@.FunctionalInequalities.Energy.WeightedGradient.Basic.1061576099._hygCtx._hyg.45"
+          }
+        ]
+      },
+      {
+        "before": "FunctionalInequalities.Energy.CovarianceGradient.relaxation_eq_lipschitzGradient_relaxation_of_covariance_eq_id",
+        "after": "FunctionalInequalities.Energy.CovarianceGradient.relaxation_eq_lipschitz",
+        "anonymous_instance_names": [
+          {
+            "index": 1,
+            "before": "inst._@.FunctionalInequalities.Poincare.LipschitzGradient.Comparison.254399929._hygCtx._hyg.3",
+            "after": "inst._@.FunctionalInequalities.Poincare.LipschitzGradient.Comparison.1688131981._hygCtx._hyg.3"
+          },
+          {
+            "index": 2,
+            "before": "inst._@.FunctionalInequalities.Poincare.LipschitzGradient.Comparison.254399929._hygCtx._hyg.6",
+            "after": "inst._@.FunctionalInequalities.Poincare.LipschitzGradient.Comparison.1688131981._hygCtx._hyg.6"
+          },
+          {
+            "index": 3,
+            "before": "inst._@.FunctionalInequalities.Poincare.LipschitzGradient.Comparison.254399929._hygCtx._hyg.12",
+            "after": "inst._@.FunctionalInequalities.Poincare.LipschitzGradient.Comparison.1688131981._hygCtx._hyg.12"
+          },
+          {
+            "index": 4,
+            "before": "inst._@.FunctionalInequalities.Poincare.LipschitzGradient.Comparison.254399929._hygCtx._hyg.15",
+            "after": "inst._@.FunctionalInequalities.Poincare.LipschitzGradient.Comparison.1688131981._hygCtx._hyg.15"
+          },
+          {
+            "index": 5,
+            "before": "inst._@.FunctionalInequalities.Poincare.LipschitzGradient.Comparison.254399929._hygCtx._hyg.18",
+            "after": "inst._@.FunctionalInequalities.Poincare.LipschitzGradient.Comparison.1688131981._hygCtx._hyg.18"
+          },
+          {
+            "index": 6,
+            "before": "inst._@.FunctionalInequalities.Poincare.LipschitzGradient.Comparison.254399929._hygCtx._hyg.21",
+            "after": "inst._@.FunctionalInequalities.Poincare.LipschitzGradient.Comparison.1688131981._hygCtx._hyg.21"
+          },
+          {
+            "index": 7,
+            "before": "inst._@.FunctionalInequalities.Poincare.LipschitzGradient.Comparison.254399929._hygCtx._hyg.24",
+            "after": "inst._@.FunctionalInequalities.Poincare.LipschitzGradient.Comparison.1688131981._hygCtx._hyg.24"
+          },
+          {
+            "index": 10,
+            "before": "inst._@.FunctionalInequalities.Poincare.LipschitzGradient.Comparison.254399929._hygCtx._hyg.34",
+            "after": "inst._@.FunctionalInequalities.Poincare.LipschitzGradient.Comparison.1688131981._hygCtx._hyg.34"
+          }
+        ]
+      }
+    ]
+  },
+  "golden": {
+    "unchanged": true,
+    "declarations": 26,
+    "external_leaves": 221,
+    "sha256": "268ea5114a6baee17d2b070192ec4874b72655cbcb28cf68e372def7d7b4e9ef"
+  },
+  "history": {
+    "checked": 90,
+    "changed": []
+  },
+  "local_evidence_directory": "build/api-comparison-names",
+  "raw_comparison": {
+    "exact": [
+      "FunctionalInequalities.Probability.intrinsicMeasure",
+      "FunctionalInequalities.Probability.intrinsicMeasure._proof_1",
+      "FunctionalInequalities.Probability.intrinsicMap",
+      "FunctionalInequalities.Probability.retraction",
+      "FunctionalInequalities.Probability.origin",
+      "FunctionalInequalities.Probability.supportPoint",
+      "FunctionalInequalities.Probability.supportPoint._proof_1",
+      "FunctionalInequalities.Probability.origin._proof_1",
+      "FunctionalInequalities.Probability.affineSupport",
+      "FunctionalInequalities.Probability.instNonemptyAffineSupport",
+      "FunctionalInequalities.Probability.coordinateEquiv._proof_1",
+      "FunctionalInequalities.Probability.coordinateEquiv",
+      "FunctionalInequalities.Poincare.SmoothGradient.Intrinsic.constant",
+      "FunctionalInequalities.Poincare.L2Energy.constant",
+      "FunctionalInequalities.Poincare.TestFamily.ofL2Energy._proof_2",
+      "FunctionalInequalities.Poincare.TestFamily.ofL2Energy._proof_1",
+      "FunctionalInequalities.Poincare.TestFamily.ofL2Energy",
+      "FunctionalInequalities.Poincare.TestFamily.mk",
+      "FunctionalInequalities.Poincare.TestFamily",
+      "FunctionalInequalities.L2.variance",
+      "FunctionalInequalities.L2.const._proof_2",
+      "FunctionalInequalities.L2.const._proof_1",
+      "FunctionalInequalities.L2.center",
+      "FunctionalInequalities.L2.mean",
+      "FunctionalInequalities.L2.const",
+      "FunctionalInequalities.L2.const._proof_3",
+      "FunctionalInequalities.Energy.Functional.finiteValue",
+      "FunctionalInequalities.Energy.Functional.toFun",
+      "FunctionalInequalities.Energy.Functional",
+      "FunctionalInequalities.Energy.Functional.mk",
+      "FunctionalInequalities.Energy.Functional.domain",
+      "FunctionalInequalities.Energy.Functional.FiniteAt",
+      "FunctionalInequalities.Poincare.TestFamily.constant",
+      "FunctionalInequalities.Poincare.TestFamily.rayleigh",
+      "FunctionalInequalities.Poincare.TestFamily.variance",
+      "FunctionalInequalities.Poincare.TestFamily.Test",
+      "FunctionalInequalities.Poincare.TestFamily.energy",
+      "FunctionalInequalities.Energy.SmoothGradient.Intrinsic.energy",
+      "FunctionalInequalities.Energy.SmoothGradient.relaxation",
+      "FunctionalInequalities.Energy.SmoothGradient.preEnergy._proof_1",
+      "FunctionalInequalities.Energy.SmoothGradient.preEnergy",
+      "FunctionalInequalities.Energy.SmoothGradient.Test.toL2._proof_1",
+      "FunctionalInequalities.Energy.SmoothGradient.Test.toL2",
+      "FunctionalInequalities.Energy.SmoothGradient.Test.toFun",
+      "FunctionalInequalities.Energy.SmoothGradient.Test",
+      "FunctionalInequalities.Energy.SmoothGradient.Test.mk",
+      "FunctionalInequalities.Energy.SmoothGradient.Test.memLp_two",
+      "FunctionalInequalities.Energy.SmoothGradient.Test.energy",
+      "FunctionalInequalities.Energy.SmoothGradient.Test.gradientIntegral_nonneg",
+      "FunctionalInequalities.Energy.PreEnergy.mk",
+      "FunctionalInequalities.Energy.PreEnergy",
+      "FunctionalInequalities.Energy.PreEnergy.sequentialRelaxation",
+      "FunctionalInequalities.Energy.PreEnergy.sequenceEnergy",
+      "FunctionalInequalities.Energy.PreEnergy.toAmbient",
+      "FunctionalInequalities.Energy.PreEnergy.Test",
+      "FunctionalInequalities.Energy.PreEnergy.energy",
+      "FunctionalInequalities.Energy.PreEnergy.ApproximatingSequence",
+      "FunctionalInequalities.Energy.SmoothGradient.Intrinsic.energy._proof_4",
+      "FunctionalInequalities.Energy.SmoothGradient.Intrinsic.energy._proof_3",
+      "FunctionalInequalities.Energy.SmoothGradient.Intrinsic.energy._proof_2",
+      "FunctionalInequalities.Energy.SmoothGradient.Intrinsic.energy._proof_1",
+      "FunctionalInequalities.Energy.Functional.comap",
+      "FunctionalInequalities.Energy.Euclidean.toIntrinsicL2._proof_1",
+      "FunctionalInequalities.Energy.Euclidean.toIntrinsicL2",
+      "FunctionalInequalities.Probability.reconstruct",
+      "FunctionalInequalities.Probability.reconstruct._proof_1",
+      "FunctionalInequalities.Probability.measurePreserving_reconstruct",
+      "FunctionalInequalities.Energy.Euclidean.toIntrinsicL2._proof_2",
+      "FunctionalInequalities.Energy.Euclidean.intrinsicL2Equiv._proof_1",
+      "FunctionalInequalities.Poincare.LocalSlope.Intrinsic.constant",
+      "FunctionalInequalities.Poincare.LocalSlope.Holds",
+      "FunctionalInequalities.Energy.LocalSlope.energy",
+      "FunctionalInequalities.Energy.LocalSlope.apply",
+      "FunctionalInequalities.Energy.LocalSlope.Admissible",
+      "FunctionalInequalities.Energy.LocalSlope.Admissible.mk",
+      "FunctionalInequalities.Poincare.L2Energy.Holds",
+      "FunctionalInequalities.Poincare.TestFamily.Holds",
+      "FunctionalInequalities.Energy.LipschitzGradient.relaxation",
+      "FunctionalInequalities.Energy.WeightedGradient.operator",
+      "FunctionalInequalities.Energy.WeightedGradient.graph._proof_3",
+      "FunctionalInequalities.Energy.WeightedGradient.graph._proof_2",
+      "FunctionalInequalities.Energy.WeightedGradient.graph._proof_1",
+      "FunctionalInequalities.Energy.WeightedGradient.graph",
+      "FunctionalInequalities.Energy.WeightedGradient.graph._proof_6",
+      "FunctionalInequalities.Energy.WeightedGradient.apply",
+      "FunctionalInequalities.Energy.WeightedGradient.IsTest.memLp_apply",
+      "FunctionalInequalities.Energy.WeightedGradient.IsTest",
+      "FunctionalInequalities.Energy.WeightedGradient.IsTest._proof_1",
+      "FunctionalInequalities.Energy.WeightedGradient.IsTest.memLp",
+      "FunctionalInequalities.Energy.WeightedGradient.graph._proof_5",
+      "FunctionalInequalities.Energy.WeightedGradient.graph._proof_4",
+      "FunctionalInequalities.Energy.PreEnergy.ofLinearPMap",
+      "FunctionalInequalities.Energy.LipschitzGradient.relaxation._proof_3",
+      "FunctionalInequalities.Energy.LipschitzGradient.relaxation._proof_2",
+      "FunctionalInequalities.Energy.LipschitzGradient.relaxation._proof_1",
+      "FunctionalInequalities.Poincare.SmoothTest.Holds",
+      "FunctionalInequalities.Poincare.SmoothTest.Holds.mk",
+      "FunctionalInequalities.Poincare.SmoothTest.energy",
+      "FunctionalInequalities.Poincare.SmoothTest.Admissible",
+      "FunctionalInequalities.Poincare.SmoothTest.Admissible.mk",
+      "FunctionalInequalities.Poincare.SmoothTest.constant",
+      "FunctionalInequalities.Poincare.SmoothGradient.Intrinsic.Holds",
+      "FunctionalInequalities.Poincare.SmoothGradient.Ambient.constant",
+      "FunctionalInequalities.Poincare.SmoothGradient.Ambient.Holds",
+      "FunctionalInequalities.Poincare.TestFamily.ofPreEnergy",
+      "FunctionalInequalities.Poincare.TestFamily.ofPreEnergy._proof_2",
+      "FunctionalInequalities.Poincare.TestFamily.ofPreEnergy._proof_1",
+      "FunctionalInequalities.Energy.CovarianceGradient.relaxation",
+      "FunctionalInequalities.Energy.CovarianceGradient.preEnergy._proof_1",
+      "FunctionalInequalities.Energy.CovarianceGradient.preEnergy",
+      "FunctionalInequalities.Energy.CovarianceGradient.Test.toL2._proof_1",
+      "FunctionalInequalities.Energy.CovarianceGradient.Test.toL2",
+      "FunctionalInequalities.Energy.CovarianceGradient.Test.toFun",
+      "FunctionalInequalities.Energy.CovarianceGradient.Test",
+      "FunctionalInequalities.Energy.CovarianceGradient.Test.mk",
+      "FunctionalInequalities.Energy.CovarianceGradient.density",
+      "FunctionalInequalities.Covariance.operator",
+      "FunctionalInequalities.Energy.CovarianceGradient.Test.memLp_two",
+      "FunctionalInequalities.Energy.CovarianceGradient.Test.energy",
+      "FunctionalInequalities.Energy.CovarianceGradient.Test.integral_nonneg"
+    ],
+    "differences": [
+      {
+        "before": "FunctionalInequalities.Poincare.SmoothGradient.Intrinsic.constant_eq_localSlope_constant_of_ac",
+        "after": "FunctionalInequalities.Poincare.SmoothGradient.Intrinsic.constant_eq_localSlope",
+        "fields": [
+          "parameters"
+        ]
+      },
+      {
+        "before": "FunctionalInequalities.Poincare.LipschitzGradient.holds_iff_localSlope_holds",
+        "after": "FunctionalInequalities.Poincare.LipschitzGradient.holds_iff_localSlope",
+        "fields": [
+          "parameters"
+        ]
+      },
+      {
+        "before": "FunctionalInequalities.Poincare.SmoothTest.holds_iff_localSlope_holds",
+        "after": "FunctionalInequalities.Poincare.SmoothTest.holds_iff_localSlope",
+        "fields": [
+          "parameters"
+        ]
+      },
+      {
+        "before": "FunctionalInequalities.Poincare.SmoothTest.constant_eq_lipschitzGradient_constant",
+        "after": "FunctionalInequalities.Poincare.SmoothTest.constant_eq_lipschitz",
+        "fields": [
+          "parameters"
+        ]
+      },
+      {
+        "before": "FunctionalInequalities.Poincare.SmoothTest.constant_eq_intrinsic_smoothGradient_constant",
+        "after": "FunctionalInequalities.Poincare.SmoothTest.constant_eq_intrinsic",
+        "fields": [
+          "parameters"
+        ]
+      },
+      {
+        "before": "FunctionalInequalities.Poincare.SmoothTest.holds_iff_intrinsic_smoothGradient_holds",
+        "after": "FunctionalInequalities.Poincare.SmoothTest.holds_iff_intrinsic",
+        "fields": [
+          "parameters"
+        ]
+      },
+      {
+        "before": "FunctionalInequalities.Poincare.SmoothTest.constant_eq_ambient_smoothGradient_constant",
+        "after": "FunctionalInequalities.Poincare.SmoothTest.constant_eq_ambient",
+        "fields": [
+          "parameters"
+        ]
+      },
+      {
+        "before": "FunctionalInequalities.Poincare.SmoothTest.holds_iff_ambient_smoothGradient_holds",
+        "after": "FunctionalInequalities.Poincare.SmoothTest.holds_iff_ambient",
+        "fields": [
+          "parameters"
+        ]
+      },
+      {
+        "before": "FunctionalInequalities.Poincare.SmoothTest.holds_iff_smoothGradient_preEnergy",
+        "after": "FunctionalInequalities.Poincare.SmoothTest.holds_iff_preEnergy",
+        "fields": [
+          "parameters"
+        ]
+      },
+      {
+        "before": "FunctionalInequalities.Energy.CovarianceGradient.relaxation_le_opNorm_mul_lipschitzGradient_relaxation",
+        "after": "FunctionalInequalities.Energy.CovarianceGradient.relaxation_le_mul_lipschitz",
+        "fields": [
+          "parameters"
+        ]
+      },
+      {
+        "before": "FunctionalInequalities.Energy.CovarianceGradient.relaxation_eq_sequentialRelaxation_ofLinearPMap",
+        "after": "FunctionalInequalities.Energy.CovarianceGradient.relaxation_eq_ofLinearPMap",
+        "fields": [
+          "parameters"
+        ]
+      },
+      {
+        "before": "FunctionalInequalities.Energy.CovarianceGradient.relaxation_eq_lipschitzGradient_relaxation_of_covariance_eq_id",
+        "after": "FunctionalInequalities.Energy.CovarianceGradient.relaxation_eq_lipschitz",
+        "fields": [
+          "parameters"
+        ]
+      }
+    ],
+    "missing": [],
+    "added": [],
+    "roots_equal": true,
+    "external_equal": true
+  }
+}

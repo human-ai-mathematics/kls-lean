@@ -256,14 +256,14 @@ zero variance.
         FunctionalInequalities.KLS.ConditionalFiber.jointLaw,
         FunctionalInequalities.KLS.ConditionalFiber.baseLaw,
         FunctionalInequalities.KLS.ConditionalFiber.kernel,
-        FunctionalInequalities.KLS.ConditionalFiber.fiberEnergy,
+        FunctionalInequalities.KLS.ConditionalFiber.energyAt,
         FunctionalInequalities.KLS.ConditionalFiber.energy,
         FunctionalInequalities.KLS.ConditionalFiber.form,
         FunctionalInequalities.KLS.ConditionalFiber.domain,
         FunctionalInequalities.KLS.ConditionalFiber.lintegral_baseLaw,
         FunctionalInequalities.KLS.ConditionalFiber.ae_memLp_id,
-        FunctionalInequalities.KLS.ConditionalFiber.measurable_fiberEnergy,
-        FunctionalInequalities.KLS.ConditionalFiber.energyWith_eq,
+        FunctionalInequalities.KLS.ConditionalFiber.measurable_energyAt,
+        FunctionalInequalities.KLS.ConditionalFiber.energyWithKernel_eq_energy,
         FunctionalInequalities.KLS.ConditionalFiber.energy_congr_ae,
         FunctionalInequalities.KLS.ConditionalFiber.form_toLp}
   \leanok
@@ -368,7 +368,7 @@ zero variance.
   not an application already elaborated in Lean.
 \end{proof}
 
-\begin{corollary}[Verified log-concave fiber specialization]
+\begin{corollary}[Log-concave conditional fibers]
   \label{cor:conditional-fiber-twelve-bound}
   \uses{lem:conditional-fiber-energy-comparison,thm:one-dimensional-logconcave-poincare}
   For a full-dimensional log-concave law with finite second moment,
@@ -382,6 +382,7 @@ zero variance.
   null; finite second moment gives finite conditional variances almost everywhere. Apply
   \cref{thm:one-dimensional-logconcave-poincare} and then the preceding comparison with
   $\kappa=12$. The same argument accepts any independently established smaller universal input.
+  This analytic corollary has no local Lean certificate.
 \end{proof}
 
 \begin{question}[Test-independent conditional-fiber frame]

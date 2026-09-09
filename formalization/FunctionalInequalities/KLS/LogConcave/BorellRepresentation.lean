@@ -56,11 +56,13 @@ Dirichlet or KLS statement is asserted here.
 noncomputable section
 open MeasureTheory Set Topology Filter
 
-namespace FunctionalInequalities.KLS
+namespace FunctionalInequalities
 
 section Representative
 
 variable {V : Type*} [NormedAddCommGroup V] [NormedSpace ℝ V] [MeasurableSpace V] [BorelSpace V]
+
+namespace KLS
 
 /-- A Borell density representative of the measure `ν` relative to the reference measure `m`:
 a Borel, nonnegative, real-valued, upper semicontinuous, log-concave function whose
@@ -75,9 +77,13 @@ structure IsBorellDensity (ν m : Measure V) (ρ : V → ℝ) : Prop where
     ρ x ^ t * ρ y ^ (1 - t) ≤ ρ (t • x + (1 - t) • y)
   withDensity_eq : m.withDensity (fun x ↦ ENNReal.ofReal (ρ x)) = ν
 
+end KLS
+
+namespace KLS.IsBorellDensity
+
 omit [BorelSpace V] in
 /-- The positivity set of a Borell density representative is convex. -/
-theorem IsBorellDensity.convex_pos {ν m : Measure V} {ρ : V → ℝ} (h : IsBorellDensity ν m ρ) :
+theorem convex_pos {ν m : Measure V} {ρ : V → ℝ} (h : IsBorellDensity ν m ρ) :
     Convex ℝ {y | 0 < ρ y} := by
   intro a ha b hb s u hs hu hsu
   have ha' : 0 < ρ a := ha
@@ -99,7 +105,7 @@ theorem IsBorellDensity.convex_pos {ν m : Measure V} {ρ : V → ℝ} (h : IsBo
 
 omit [BorelSpace V] in
 /-- The logarithm of a Borell density representative is concave on the positivity set. -/
-theorem IsBorellDensity.concaveOn_log {ν m : Measure V} {ρ : V → ℝ} (h : IsBorellDensity ν m ρ) :
+theorem concaveOn_log {ν m : Measure V} {ρ : V → ℝ} (h : IsBorellDensity ν m ρ) :
     ConcaveOn ℝ {y | 0 < ρ y} fun y ↦ Real.log (ρ y) := by
   refine ⟨h.convex_pos, ?_⟩
   intro a ha b hb s u hs hu hsu
@@ -127,7 +133,7 @@ theorem IsBorellDensity.concaveOn_log {ν m : Measure V} {ρ : V → ℝ} (h : I
 
 omit [BorelSpace V] in
 /-- The measure of the complement of the positivity set vanishes. -/
-theorem IsBorellDensity.measure_compl_pos {ν m : Measure V} {ρ : V → ℝ}
+theorem measure_compl_pos {ν m : Measure V} {ρ : V → ℝ}
     (h : IsBorellDensity ν m ρ) : ν {y | 0 < ρ y}ᶜ = 0 := by
   have hmeas : MeasurableSet {y | 0 < ρ y} := measurableSet_lt measurable_const h.measurable
   rw [← h.withDensity_eq, withDensity_apply _ hmeas.compl]
@@ -137,11 +143,15 @@ theorem IsBorellDensity.measure_compl_pos {ν m : Measure V} {ρ : V → ℝ}
     have : ¬ 0 < ρ x := hx
     exact ENNReal.ofReal_eq_zero.mpr (not_lt.mp this)
 
+end KLS.IsBorellDensity
+
 variable [FiniteDimensional ℝ V]
+
+namespace KLS.IsBorellDensity
 
 /-- The interior of the support of a probability law with a Borell density representative lies
 inside the interior of the positivity set of that representative. -/
-theorem IsBorellDensity.interior_support_subset {ν : ProbabilityMeasure V} {m : Measure V}
+theorem interior_support_subset {ν : ProbabilityMeasure V} {m : Measure V}
     [m.IsAddHaarMeasure] {ρ : V → ℝ} (h : IsBorellDensity (ν : Measure V) m ρ) :
     interior (ν : Measure V).support ⊆ interior {y | 0 < ρ y} := by
   set S : Set V := {y | 0 < ρ y} with hS
@@ -176,7 +186,7 @@ theorem IsBorellDensity.interior_support_subset {ν : ProbabilityMeasure V} {m :
 
 /-- A Borell density representative of a probability law is positive at every interior point of
 the topological support. -/
-theorem IsBorellDensity.pos_of_mem_interior_support {ν : ProbabilityMeasure V} {m : Measure V}
+theorem pos_of_mem_interior_support {ν : ProbabilityMeasure V} {m : Measure V}
     [m.IsAddHaarMeasure] {ρ : V → ℝ} (h : IsBorellDensity (ν : Measure V) m ρ) {x : V}
     (hx : x ∈ interior (ν : Measure V).support) : 0 < ρ x := by
   have hxS : x ∈ {y | 0 < ρ y} := interior_subset (h.interior_support_subset hx)
@@ -185,7 +195,7 @@ theorem IsBorellDensity.pos_of_mem_interior_support {ν : ProbabilityMeasure V} 
 omit [BorelSpace V] in
 /-- A Borell density representative is continuous on the interior of its positivity set: the
 logarithm is a finite concave function there, hence continuous, and `ρ = exp ∘ log ρ`. -/
-theorem IsBorellDensity.continuousOn_interior_pos {ν m : Measure V} {ρ : V → ℝ}
+theorem continuousOn_interior_pos {ν m : Measure V} {ρ : V → ℝ}
     (h : IsBorellDensity ν m ρ) : ContinuousOn ρ (interior {y | 0 < ρ y}) := by
   have hlog := h.concaveOn_log.continuousOn_interior
   refine (Real.continuous_exp.comp_continuousOn hlog).congr ?_
@@ -197,7 +207,7 @@ theorem IsBorellDensity.continuousOn_interior_pos {ν m : Measure V} {ρ : V →
 /-- A Borell density representative of a probability law is continuous on the interior of the
 support. This is the continuity used by the downstream covariance-core and relative-perimeter
 arguments; it is not continuity on all of `V`, where `ρ` is only upper semicontinuous. -/
-theorem IsBorellDensity.continuousOn_interior_support {ν : ProbabilityMeasure V} {m : Measure V}
+theorem continuousOn_interior_support {ν : ProbabilityMeasure V} {m : Measure V}
     [m.IsAddHaarMeasure] {ρ : V → ℝ} (h : IsBorellDensity (ν : Measure V) m ρ) :
     ContinuousOn ρ (interior (ν : Measure V).support) :=
   h.continuousOn_interior_pos.mono h.interior_support_subset
@@ -206,7 +216,7 @@ theorem IsBorellDensity.continuousOn_interior_support {ν : ProbabilityMeasure V
 bounded above and bounded below by a positive constant. Upper semicontinuity gives the upper
 bound; continuity of the concave logarithm on the open interior gives the lower bound. This is
 the pointwise form of `ρ, ρ⁻¹ ∈ L^∞_loc(Ω)`. -/
-theorem IsBorellDensity.exists_bounds_of_isCompact {ν : ProbabilityMeasure V} {m : Measure V}
+theorem exists_bounds_of_isCompact {ν : ProbabilityMeasure V} {m : Measure V}
     [m.IsAddHaarMeasure] {ρ : V → ℝ} (h : IsBorellDensity (ν : Measure V) m ρ) {K : Set V}
     (hK : IsCompact K) (hKΩ : K ⊆ interior (ν : Measure V).support) :
     ∃ a b : ℝ, 0 < a ∧ ∀ x ∈ K, a ≤ ρ x ∧ ρ x ≤ b := by
@@ -218,6 +228,8 @@ theorem IsBorellDensity.exists_bounds_of_isCompact {ν : ProbabilityMeasure V} {
   refine ⟨ρ x₀, b, h.pos_of_mem_interior_support (hKΩ hx₀K), fun x hx ↦ ⟨?_, hb ⟨x, hx, rfl⟩⟩⟩
   exact (isMinOn_iff.mp hmin) x hx
 
+end KLS.IsBorellDensity
+
 end Representative
 
 section Moments
@@ -225,11 +237,13 @@ section Moments
 variable {V : Type*} [NormedAddCommGroup V] [NormedSpace ℝ V] [MeasurableSpace V] [BorelSpace V]
   [FiniteDimensional ℝ V]
 
+namespace KLS.BorelLogConcave
+
 omit [FiniteDimensional ℝ V] in
 /-- Borell's tail lemma in the form needed here: once a ball of radius `R` carries mass at
 least `3/4`, the mass outside radius `k R` decays geometrically in `k`. The bound is stated
 for every `k`, the cases `k = 0, 1` being trivial. -/
-theorem BorelLogConcave.measure_norm_ge_le {ν : ProbabilityMeasure V} (hν : BorelLogConcave ν)
+theorem measure_norm_ge_le {ν : ProbabilityMeasure V} (hν : BorelLogConcave ν)
     {R : ℝ} (hball : ENNReal.ofReal (3 / 4) ≤ (ν : Measure V) (Metric.ball (0 : V) R)) (k : ℕ) :
     (ν : Measure V) {v | (k : ℝ) * R ≤ ‖v‖} ≤ ENNReal.ofReal ((3 : ℝ) ^ ((1 - (k : ℝ)) / 2)) := by
   by_cases hk : k < 2
@@ -313,7 +327,7 @@ omit [FiniteDimensional ℝ V] in
 /-- A Borel log-concave probability law on a finite-dimensional space has an exponential
 moment. The radius is chosen from the exhaustion by balls, the tail from Borell's lemma, and
 the integral is dominated by a geometric series. -/
-theorem BorelLogConcave.exists_integrable_exp_norm {ν : ProbabilityMeasure V}
+theorem exists_integrable_exp_norm {ν : ProbabilityMeasure V}
     (hν : BorelLogConcave ν) :
     ∃ t : ℝ, 0 < t ∧ Integrable (fun v ↦ Real.exp (t * ‖v‖)) (ν : Measure V) := by
   -- a ball of integer radius carrying mass at least 3/4
@@ -396,9 +410,13 @@ theorem BorelLogConcave.exists_integrable_exp_norm {ν : ProbabilityMeasure V}
   · rw [hasFiniteIntegral_iff_ofReal (Eventually.of_forall fun v ↦ (Real.exp_pos _).le)]
     exact hbound
 
+end KLS.BorelLogConcave
+
+namespace Probability
+
 omit [NormedSpace ℝ V] [FiniteDimensional ℝ V] in
 /-- An exponential moment gives finite moments of every order. -/
-theorem _root_.FunctionalInequalities.Probability.integrable_norm_pow_of_integrable_exp_norm {ν : Measure V} [IsProbabilityMeasure ν]
+theorem integrable_norm_pow_of_integrable_exp_norm {ν : Measure V} [IsProbabilityMeasure ν]
     {t : ℝ} (ht : 0 < t) (hint : Integrable (fun v ↦ Real.exp (t * ‖v‖)) ν) (p : ℕ) :
     Integrable (fun v ↦ ‖v‖ ^ p) ν := by
   have hneg : Integrable (fun v ↦ Real.exp (-t * ‖v‖)) ν := by
@@ -410,6 +428,8 @@ theorem _root_.FunctionalInequalities.Probability.integrable_norm_pow_of_integra
   have := ProbabilityTheory.integrable_pow_abs_of_integrable_exp_mul ht.ne' hint hneg p
   simpa [abs_norm] using this
 
+end Probability
+
 end Moments
 
 section Construction
@@ -417,7 +437,7 @@ section Construction
 variable {V : Type*} [NormedAddCommGroup V] [NormedSpace ℝ V] [MeasurableSpace V] [BorelSpace V]
   [SecondCountableTopology V] [FiniteDimensional ℝ V]
 
-namespace BorellRepresentation
+namespace KLS.BorellRepresentation
 
 /-- The radii `1/(n+1)` along which ball ratios are read. -/
 def radius (n : ℕ) : ℝ := 1 / ((n : ℝ) + 1)
@@ -736,12 +756,15 @@ theorem envelope_ae_eq [m.IsAddHaarMeasure] {C : ENNReal} (hC : C ≠ ⊤)
     rw [hx0]
     exact (iInf_le _ n).trans hS.le
 
-end BorellRepresentation
+end KLS.BorellRepresentation
+
+namespace KLS.LogConcave
 
 open BorellRepresentation in
+
 /-- Existence of a Borell density representative for a compact-set log-concave probability law
 with full-dimensional support, relative to any additive Haar measure. -/
-theorem LogConcave.exists_isBorellDensity_of_interior_support_nonempty {ν : ProbabilityMeasure V}
+theorem exists_isBorellDensity_of_interior_support_nonempty {ν : ProbabilityMeasure V}
     (hlc : LogConcave ν) (m : Measure V) [m.IsAddHaarMeasure]
     (hint : (interior (ν : Measure V).support).Nonempty) (hac : (ν : Measure V) ≪ m) :
     ∃ ρ : V → ℝ, IsBorellDensity (ν : Measure V) m ρ := by
@@ -778,6 +801,8 @@ theorem LogConcave.exists_isBorellDensity_of_interior_support_nonempty {ν : Pro
       _ = m.withDensity ((ν : Measure V).rnDeriv m) := withDensity_congr_ae hψae
       _ = ν := Measure.withDensity_rnDeriv_eq _ _ hac
 
+end KLS.LogConcave
+
 end Construction
 
 section Intrinsic
@@ -785,18 +810,22 @@ section Intrinsic
 variable {F : Type*} [NormedAddCommGroup F] [InnerProductSpace ℝ F] [CompleteSpace F]
   [MeasurableSpace F] [BorelSpace F] [SecondCountableTopology F] [FiniteDimensional ℝ F]
 
+namespace KLS.LogConcave
+
+omit [CompleteSpace F] in
 /-- The support of the intrinsic law is already its own closed convex hull. Hence the interior
 of the closed convex hull of the support, as written in the Blueprint, is `interior ν.support`. -/
-theorem LogConcave.closure_convexHull_intrinsic_support {μ : ProbabilityMeasure F}
+theorem closure_convexHull_intrinsic_support {μ : ProbabilityMeasure F}
     (hμ : LogConcave μ) :
     closure (convexHull ℝ (Probability.intrinsicMeasure μ :
         Measure (Probability.affineSupport μ).direction).support) =
       (Probability.intrinsicMeasure μ : Measure (Probability.affineSupport μ).direction).support := by
   rw [hμ.intrinsicMeasure.convex_support.convexHull_eq, Measure.isClosed_support.closure_eq]
 
+omit [CompleteSpace F] in
 /-- The intrinsic law gives zero mass to the complement of the interior of its support. This is
 the `ν(V ∖ Ω) = 0` clause; it follows from the proved null-frontier result. -/
-theorem LogConcave.intrinsic_interior_support_compl {μ : ProbabilityMeasure F}
+theorem intrinsic_interior_support_compl {μ : ProbabilityMeasure F}
     (hμ : LogConcave μ) :
     (Probability.intrinsicMeasure μ : Measure (Probability.affineSupport μ).direction)
       (interior (Probability.intrinsicMeasure μ :
@@ -809,13 +838,14 @@ theorem LogConcave.intrinsic_interior_support_compl {μ : ProbabilityMeasure F}
     · exact Or.inr ⟨subset_closure hS, hx⟩
     · exact Or.inl hS
   exact measure_mono_null hsub
-    (measure_union_null Measure.measure_compl_support hμ.intrinsic_frontier_support)
+    (measure_union_null Measure.measure_compl_support hμ.intrinsic_frontier_support_eq_zero)
 
+omit [CompleteSpace F] in
 /-- Existence of a Borell density representative of the intrinsic law relative to any additive
 Haar measure on the direction of the affine support. Absolute continuity is already proved; the
 obligation is to choose an upper semicontinuous log-concave finite-valued version of the
 Radon--Nikodym density. Includes dimension zero. -/
-theorem LogConcave.exists_isBorellDensity {μ : ProbabilityMeasure F} (hμ : LogConcave μ)
+theorem exists_isBorellDensity {μ : ProbabilityMeasure F} (hμ : LogConcave μ)
     (m : Measure (Probability.affineSupport μ).direction) [m.IsAddHaarMeasure] :
     ∃ ρ : (Probability.affineSupport μ).direction → ℝ,
       IsBorellDensity (Probability.intrinsicMeasure μ :
@@ -823,24 +853,28 @@ theorem LogConcave.exists_isBorellDensity {μ : ProbabilityMeasure F} (hμ : Log
   hμ.intrinsicMeasure.exists_isBorellDensity_of_interior_support_nonempty m
     hμ.interior_intrinsic_support_nonempty (hμ.intrinsic_absolutelyContinuous m)
 
+omit [CompleteSpace F] in
 /-- The intrinsic law of a log-concave probability has an exponential moment: some positive
 rate `t` makes `exp (t ‖v‖)` integrable. This is the tail estimate behind the moment
 conclusion and is stated separately because it is the form proved in the literature. -/
-theorem LogConcave.intrinsic_integrable_exp_norm {μ : ProbabilityMeasure F}
+theorem intrinsic_integrable_exp_norm {μ : ProbabilityMeasure F}
     (hμ : LogConcave μ) :
     ∃ t : ℝ, 0 < t ∧ Integrable (fun v ↦ Real.exp (t * ‖v‖))
       (Probability.intrinsicMeasure μ : Measure (Probability.affineSupport μ).direction) :=
-  ((LogConcave.borel_iff _).1 hμ.intrinsicMeasure).exists_integrable_exp_norm
+  ((borel_iff _).1 hμ.intrinsicMeasure).exists_integrable_exp_norm
 
+omit [CompleteSpace F] in
 /-- The intrinsic law of a log-concave probability has finite moments of every order.
 It follows from the exponential moment and Mathlib's `IntegrableExpMul`. -/
-theorem LogConcave.intrinsic_integrable_norm_pow {μ : ProbabilityMeasure F}
+theorem intrinsic_integrable_norm_pow {μ : ProbabilityMeasure F}
     (hμ : LogConcave μ) (p : ℕ) :
     Integrable (fun v ↦ ‖v‖ ^ p)
       (Probability.intrinsicMeasure μ : Measure (Probability.affineSupport μ).direction) := by
   obtain ⟨t, ht, hint⟩ := hμ.intrinsic_integrable_exp_norm
   exact Probability.integrable_norm_pow_of_integrable_exp_norm ht hint p
 
+end KLS.LogConcave
+
 end Intrinsic
 
-end FunctionalInequalities.KLS
+end FunctionalInequalities

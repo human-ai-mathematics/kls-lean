@@ -71,11 +71,11 @@ info: 'FunctionalInequalities.Covariance.operator_apply_eq_zero_of_mem_orthogona
 #print axioms FunctionalInequalities.Covariance.operator_apply_eq_zero_of_mem_orthogonal
 
 /--
-info: 'FunctionalInequalities.Covariance.covarianceBilin_intrinsic'
+info: 'FunctionalInequalities.Covariance.bilin_intrinsic'
   depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms FunctionalInequalities.Covariance.covarianceBilin_intrinsic
+#print axioms FunctionalInequalities.Covariance.bilin_intrinsic
 
 /--
 info: 'FunctionalInequalities.Covariance.operator_coe_intrinsic'

@@ -80,7 +80,7 @@ theorem memLp_integral_left (hf : MemLp f 2 (μ.prod ν)) :
 
 /-- Source: local helper from `memLp_integral_right`, `memLp_right_ae`, and Mathlib's
 `variance_eq_sub`, retaining integrability of the iterated variance. -/
-theorem integrable_variance_right (hf : MemLp f 2 (μ.prod ν)) :
+theorem integrable_right (hf : MemLp f 2 (μ.prod ν)) :
     Integrable (fun x ↦ variance (fun y ↦ f (x, y)) ν) μ := by
   refine ((hf.integrable_sq.integral_prod_left).sub
     (memLp_integral_right hf).integrable_sq).congr ?_
@@ -90,7 +90,7 @@ theorem integrable_variance_right (hf : MemLp f 2 (μ.prod ν)) :
 
 /-- Source: local helper from `memLp_integral_left`, `memLp_left_ae`, and Mathlib's
 `variance_eq_sub`, retaining integrability of the iterated variance. -/
-theorem integrable_variance_left (hf : MemLp f 2 (μ.prod ν)) :
+theorem integrable_left (hf : MemLp f 2 (μ.prod ν)) :
     Integrable (fun y ↦ variance (fun x ↦ f (x, y)) μ) ν := by
   refine ((hf.integrable_sq.integral_prod_right).sub
     (memLp_integral_left hf).integrable_sq).congr ?_
@@ -101,7 +101,7 @@ theorem integrable_variance_left (hf : MemLp f 2 (μ.prod ν)) :
 /-- The law of total variance written using ordinary iterated integrals.
 Source: local identity from Mathlib's `variance_eq_sub` and `integral_prod`, with the
 section and averaging integrability helpers above. -/
-theorem variance_decomposition (hf : MemLp f 2 (μ.prod ν)) :
+theorem decomposition (hf : MemLp f 2 (μ.prod ν)) :
     variance f (μ.prod ν) =
       (∫ x, variance (fun y ↦ f (x, y)) ν ∂μ) +
       variance (fun x ↦ ∫ y, f (x, y) ∂ν) μ := by
@@ -126,7 +126,7 @@ theorem variance_decomposition (hf : MemLp f 2 (μ.prod ν)) :
 /-- Averaging one coordinate cannot increase the average variance in the other coordinate.
 Source: local consequence of `sq_integral_le`, centering, and Mathlib's
 `variance_le_expectation_sq` and `integral_integral_swap`; all inputs retain their L² hypotheses. -/
-theorem variance_integral_le (hf : MemLp f 2 (μ.prod ν)) :
+theorem integral_le (hf : MemLp f 2 (μ.prod ν)) :
     variance (fun x ↦ ∫ y, f (x, y) ∂ν) μ ≤
       ∫ y, variance (fun x ↦ f (x, y)) μ ∂ν := by
   set m : F → ℝ := fun y ↦ ∫ x, f (x, y) ∂μ with hm
@@ -167,14 +167,14 @@ theorem variance_integral_le (hf : MemLp f 2 (μ.prod ν)) :
     _ = ∫ y, variance (fun x ↦ f (x, y)) μ ∂ν := hstepE
 
 /-- The nonlinear two-factor variance inequality, with coefficient one in each coordinate.
-Source: local consequence of `variance_decomposition` and `variance_integral_le`, providing
+Source: local consequence of `decomposition` and `integral_le`, providing
 the variance step for the repository's binary tensorization proof. -/
-theorem variance_le (hf : MemLp f 2 (μ.prod ν)) :
+theorem le (hf : MemLp f 2 (μ.prod ν)) :
     variance f (μ.prod ν) ≤
       (∫ y, variance (fun x ↦ f (x, y)) μ ∂ν) +
       (∫ x, variance (fun y ↦ f (x, y)) ν ∂μ) := by
-  rw [variance_decomposition hf]
-  have := variance_integral_le hf
+  rw [decomposition hf]
+  have := integral_le hf
   linarith
 
 end FunctionalInequalities.ProductVariance

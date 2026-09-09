@@ -1,4 +1,4 @@
-import FunctionalInequalities.Poincare.Euclidean.LiteratureComparison
+import FunctionalInequalities.Poincare.LocalSlope.SmoothTestComparison
 
 /-!
 # Lean certificate: `thm:smooth-lipschitz-constant-equivalence`
@@ -13,7 +13,7 @@ Proof acceptance: `research/decisions/2026-09-06-smooth-literature-proofs.md`.
 noncomputable section
 
 open MeasureTheory Filter Topology FunctionalInequalities
-open FunctionalInequalities.KLS FunctionalInequalities.Poincare
+open FunctionalInequalities.Poincare
 open scoped ContDiff
 
 namespace Solutions.ThmSmoothLipschitzConstantEquivalence
@@ -24,72 +24,72 @@ universe u
 theorem certificate :
     (∀ {E : Type u} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
       (f : E → ℝ) (x : E) (_ : DifferentiableAt ℝ f x),
-    localSlope f x = ENNReal.ofReal ‖gradient f x‖) ∧
+    Energy.LocalSlope.apply f x = ENNReal.ofReal ‖gradient f x‖) ∧
     (∀ {E : Type u} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
       [MeasurableSpace E] [BorelSpace E] [FiniteDimensional ℝ E]
       (ν : ProbabilityMeasure E) (m : Measure E) [Measure.IsAddHaarMeasure m]
       (_ : (ν : Measure E) ≪ m)
     (f : E → ℝ) (_ : LocallyLipschitz f),
-    (fun x ↦ localSlope f x) =ᵐ[(ν : Measure E)]
+    (fun x ↦ Energy.LocalSlope.apply f x) =ᵐ[(ν : Measure E)]
       (fun x ↦ ENNReal.ofReal ‖gradient f x‖)) ∧
     (∀ {E : Type u} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
       [MeasurableSpace E] [BorelSpace E] [FiniteDimensional ℝ E]
       (ν : ProbabilityMeasure E) (m : Measure E) [Measure.IsAddHaarMeasure m]
       (_ : (ν : Measure E) ≪ m)
     (f : E → ℝ) (_ : LocallyLipschitz f),
-    literatureEnergy ν f = ∫⁻ x, (ENNReal.ofReal ‖gradient f x‖) ^ 2 ∂(ν : Measure E)) ∧
+    Energy.LocalSlope.energy ν f = ∫⁻ x, (ENNReal.ofReal ‖gradient f x‖) ^ 2 ∂(ν : Measure E)) ∧
     (∀ {E : Type u} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
       [MeasurableSpace E] [BorelSpace E] [SecondCountableTopology E] [FiniteDimensional ℝ E]
       (ν : ProbabilityMeasure E) (m : Measure E) [Measure.IsAddHaarMeasure m]
       (_ : (ν : Measure E) ≪ m) (f : E → ℝ),
-    LiteratureAdmissible ν f ↔
+    Energy.LocalSlope.Admissible ν f ↔
       LocallyLipschitz f ∧ MemLp f 2 (ν : Measure E) ∧ MemLp (gradient f) 2 (ν : Measure E)) ∧
     (∀ {E : Type u} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
       [MeasurableSpace E] [BorelSpace E] [SecondCountableTopology E] [FiniteDimensional ℝ E]
       (ν : ProbabilityMeasure E) (m : Measure E)
     [Measure.IsAddHaarMeasure m] (_ : (ν : Measure E) ≪ m) (C : NNReal),
-    Holds (ν : Measure E) (C : ℝ) ↔ KLS.LiteratureHolds ν C) ∧
+    Poincare.SmoothTest.Holds (ν : Measure E) (C : ℝ) ↔ Poincare.LocalSlope.Holds ν C) ∧
     (∀ {E : Type u} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
       [MeasurableSpace E] [BorelSpace E] [SecondCountableTopology E] [FiniteDimensional ℝ E]
       (ν : ProbabilityMeasure E) (m : Measure E)
     [Measure.IsAddHaarMeasure m] (_ : (ν : Measure E) ≪ m),
-    constant (ν : Measure E) =
-      ⨅ C : {C : NNReal // KLS.LiteratureHolds ν C}, (C.1 : ENNReal)) ∧
+    Poincare.SmoothTest.constant (ν : Measure E) =
+      ⨅ C : {C : NNReal // Poincare.LocalSlope.Holds ν C}, (C.1 : ENNReal)) ∧
     (∀ {E : Type u} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
       [MeasurableSpace E] [BorelSpace E] [SecondCountableTopology E] [FiniteDimensional ℝ E]
       (μ : ProbabilityMeasure E)
     (m : Measure (Probability.affineSupport μ).direction) [Measure.IsAddHaarMeasure m]
     (_ : (Probability.intrinsicMeasure μ : Measure (Probability.affineSupport μ).direction) ≪ m),
-    constant (μ : Measure E) =
-        constant (Probability.intrinsicMeasure μ : Measure (Probability.affineSupport μ).direction) ∧
-      constant (Probability.intrinsicMeasure μ : Measure (Probability.affineSupport μ).direction) =
-        KLS.literatureConstant μ) ∧
+    Poincare.SmoothTest.constant (μ : Measure E) =
+        Poincare.SmoothTest.constant (Probability.intrinsicMeasure μ : Measure (Probability.affineSupport μ).direction) ∧
+      Poincare.SmoothTest.constant (Probability.intrinsicMeasure μ : Measure (Probability.affineSupport μ).direction) =
+        Poincare.LocalSlope.Intrinsic.constant μ) ∧
     (∀ {E : Type u} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
       [MeasurableSpace E] [BorelSpace E] [SecondCountableTopology E] [FiniteDimensional ℝ E]
       (μ : ProbabilityMeasure E) (m : Measure (Probability.affineSupport μ).direction)
     [Measure.IsAddHaarMeasure m]
     (_ : (Probability.intrinsicMeasure μ : Measure (Probability.affineSupport μ).direction) ≪ m),
-    Poincare.Canonical.constant μ =
-      KLS.literatureConstant μ) :=
-  ⟨@KLS.localSlope_eq_norm_gradient_of_differentiableAt,
-    @KLS.localSlope_ae_eq_norm_gradient,
-    @KLS.literatureEnergy_eq_lintegral_gradient,
-    @KLS.literatureAdmissible_iff_memLp_gradient,
-    @Poincare.Euclidean.holds_iff_literatureHolds,
-    @Poincare.Euclidean.constant_eq_literatureInfimum,
-    @Poincare.Euclidean.constant_eq_intrinsic_and_literature,
-    @Poincare.Canonical.eq_literature_of_ac⟩
+    Poincare.SmoothGradient.Intrinsic.constant μ =
+      Poincare.LocalSlope.Intrinsic.constant μ) :=
+  ⟨@Energy.LocalSlope.apply_eq_norm_gradient,
+    @Energy.LocalSlope.apply_ae_eq_norm_gradient,
+    @Energy.LocalSlope.energy_eq_lintegral_gradient,
+    @Energy.LocalSlope.admissible_iff_memLp_gradient,
+    @Poincare.SmoothTest.holds_iff_localSlope,
+    @Poincare.SmoothTest.constant_eq_localSlope_infimum,
+    @Poincare.SmoothTest.constant_eq_intrinsicMeasure_and_localSlope,
+    @Poincare.SmoothGradient.Intrinsic.constant_eq_localSlope⟩
 
 end Solutions.ThmSmoothLipschitzConstantEquivalence
 
-#check @KLS.localSlope_eq_norm_gradient_of_differentiableAt
-#check @KLS.localSlope_ae_eq_norm_gradient
-#check @KLS.literatureEnergy_eq_lintegral_gradient
-#check @KLS.literatureAdmissible_iff_memLp_gradient
-#check @Poincare.Euclidean.holds_iff_literatureHolds
-#check @Poincare.Euclidean.constant_eq_literatureInfimum
-#check @Poincare.Euclidean.constant_eq_intrinsic_and_literature
-#check @Poincare.Canonical.eq_literature_of_ac
+#check @Energy.LocalSlope.apply_eq_norm_gradient
+#check @Energy.LocalSlope.apply_ae_eq_norm_gradient
+#check @Energy.LocalSlope.energy_eq_lintegral_gradient
+#check @Energy.LocalSlope.admissible_iff_memLp_gradient
+#check @Poincare.SmoothTest.holds_iff_localSlope
+#check @Poincare.SmoothTest.constant_eq_localSlope_infimum
+#check @Poincare.SmoothTest.constant_eq_intrinsicMeasure_and_localSlope
+#check @Poincare.SmoothGradient.Intrinsic.constant_eq_localSlope
 
 /--
 info: 'Solutions.ThmSmoothLipschitzConstantEquivalence.certificate'
@@ -99,57 +99,57 @@ info: 'Solutions.ThmSmoothLipschitzConstantEquivalence.certificate'
 #print axioms Solutions.ThmSmoothLipschitzConstantEquivalence.certificate
 
 /--
-info: 'FunctionalInequalities.KLS.localSlope_eq_norm_gradient_of_differentiableAt'
+info: 'FunctionalInequalities.Energy.LocalSlope.apply_eq_norm_gradient'
   depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms FunctionalInequalities.KLS.localSlope_eq_norm_gradient_of_differentiableAt
+#print axioms Energy.LocalSlope.apply_eq_norm_gradient
 
 /--
-info: 'FunctionalInequalities.KLS.localSlope_ae_eq_norm_gradient'
+info: 'FunctionalInequalities.Energy.LocalSlope.apply_ae_eq_norm_gradient'
   depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms FunctionalInequalities.KLS.localSlope_ae_eq_norm_gradient
+#print axioms Energy.LocalSlope.apply_ae_eq_norm_gradient
 
 /--
-info: 'FunctionalInequalities.KLS.literatureEnergy_eq_lintegral_gradient'
+info: 'FunctionalInequalities.Energy.LocalSlope.energy_eq_lintegral_gradient'
   depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms FunctionalInequalities.KLS.literatureEnergy_eq_lintegral_gradient
+#print axioms Energy.LocalSlope.energy_eq_lintegral_gradient
 
 /--
-info: 'FunctionalInequalities.KLS.literatureAdmissible_iff_memLp_gradient'
+info: 'FunctionalInequalities.Energy.LocalSlope.admissible_iff_memLp_gradient'
   depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms FunctionalInequalities.KLS.literatureAdmissible_iff_memLp_gradient
+#print axioms Energy.LocalSlope.admissible_iff_memLp_gradient
 
 /--
-info: 'FunctionalInequalities.Poincare.Euclidean.holds_iff_literatureHolds'
+info: 'FunctionalInequalities.Poincare.SmoothTest.holds_iff_localSlope'
   depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms FunctionalInequalities.Poincare.Euclidean.holds_iff_literatureHolds
+#print axioms Poincare.SmoothTest.holds_iff_localSlope
 
 /--
-info: 'FunctionalInequalities.Poincare.Euclidean.constant_eq_literatureInfimum'
+info: 'FunctionalInequalities.Poincare.SmoothTest.constant_eq_localSlope_infimum'
   depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms FunctionalInequalities.Poincare.Euclidean.constant_eq_literatureInfimum
+#print axioms Poincare.SmoothTest.constant_eq_localSlope_infimum
 
 /--
-info: 'FunctionalInequalities.Poincare.Euclidean.constant_eq_intrinsic_and_literature'
+info: 'FunctionalInequalities.Poincare.SmoothTest.constant_eq_intrinsicMeasure_and_localSlope'
   depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms FunctionalInequalities.Poincare.Euclidean.constant_eq_intrinsic_and_literature
+#print axioms Poincare.SmoothTest.constant_eq_intrinsicMeasure_and_localSlope
 
 /--
-info: 'FunctionalInequalities.Poincare.Canonical.eq_literature_of_ac'
+info: 'FunctionalInequalities.Poincare.SmoothGradient.Intrinsic.constant_eq_localSlope'
   depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms FunctionalInequalities.Poincare.Canonical.eq_literature_of_ac
+#print axioms Poincare.SmoothGradient.Intrinsic.constant_eq_localSlope

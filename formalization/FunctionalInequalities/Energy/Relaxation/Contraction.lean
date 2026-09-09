@@ -16,9 +16,8 @@ noncomputable section
 
 open Filter Topology
 
-namespace FunctionalInequalities.Energy
+namespace FunctionalInequalities.Energy.PreEnergy
 
-namespace PreEnergy
 
 universe u
 
@@ -50,17 +49,19 @@ section PseudoMetricSpace
 
 variable {X : Type u} [PseudoMetricSpace X] (P : PreEnergy X)
 
+namespace RelaxedContractionBound
+
 /-- A continuous transformation satisfying the relaxed contraction bound on concrete tests does
 not increase the sequential relaxation anywhere. -/
-theorem RelaxedContractionBound.sequentialRelaxation_comp_le {C : X → X}
+theorem sequentialRelaxation_comp_le {C : X → X}
     (h : P.RelaxedContractionBound C) (hC : Continuous C) :
     ∀ x : X, P.sequentialRelaxation (C x) ≤ P.sequentialRelaxation x := by
   intro x
   exact P.le_sequentialRelaxation_of_lowerSemicontinuous
     (P.sequentialRelaxation.comap C) (P.lowerSemicontinuous_sequentialRelaxation.comp hC) h x
 
+end RelaxedContractionBound
+
 end PseudoMetricSpace
 
-end PreEnergy
-
-end FunctionalInequalities.Energy
+end FunctionalInequalities.Energy.PreEnergy

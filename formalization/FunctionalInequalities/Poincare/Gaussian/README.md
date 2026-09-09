@@ -28,11 +28,11 @@ The first claim says that v works for every admissible test function. The second
 no smaller constant works for all those tests. In Lean, for every `m : ℝ` and `v : NNReal`:
 
 ```lean
-Poincare.holds_gaussianReal m v :
-  Poincare.Holds (ProbabilityTheory.gaussianReal m v) (v : ℝ)
+Poincare.SmoothTest.holds_gaussianReal m v :
+  Poincare.SmoothTest.Holds (ProbabilityTheory.gaussianReal m v) (v : ℝ)
 
-Poincare.constant_gaussianReal m v :
-  Poincare.constant (ProbabilityTheory.gaussianReal m v) = (v : ENNReal)
+Poincare.SmoothTest.constant_gaussianReal m v :
+  Poincare.SmoothTest.constant (ProbabilityTheory.gaussianReal m v) = (v : ENNReal)
 ```
 
 Here `Poincare` abbreviates the namespace `FunctionalInequalities.Poincare`. The fixed constant
@@ -41,7 +41,7 @@ parameter v is the **variance**, so variance 4 gives constant 4 rather than 2.
 
 An admissible test is globally smooth, square-integrable under γ, and has integrable squared
 canonical gradient. On ℝ that gradient equals f′. These are the existing conditions in
-[Basic.lean](../Basic.lean); no alternative test class is introduced.
+[Basic.lean](../SmoothTest/Basic.lean); no alternative test class is introduced.
 
 | Parameters | Proved specialization |
 | --- | --- |
@@ -84,7 +84,7 @@ The mathematical proof proceeds as follows:
 
 Every real integral used in the density argument carries explicit integrability evidence. The
 proof assumes neither global Lebesgue L² integrability of f′ nor test-function decay nor
-attainment of the infimum defining `Poincare.constant`.
+attainment of the infimum defining `Poincare.SmoothTest.constant`.
 
 As a final API cleanup, the two Gaussian first-moment tail identities quantify over every
 endpoint `t`. Their old endpoint-order premises were unused; the right/left half-line callers

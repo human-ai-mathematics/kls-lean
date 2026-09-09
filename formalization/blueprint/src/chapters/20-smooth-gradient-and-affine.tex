@@ -11,10 +11,10 @@ Sobolev or Cheeger energy.
 
 \begin{definition}[Smooth-gradient pre-energy]
   \label{def:smooth-gradient-preenergy}
-  \lean{FunctionalInequalities.Energy.Euclidean.SmoothGradientTest,
-        FunctionalInequalities.Energy.Euclidean.SmoothGradientTest.gradientEnergy,
-        FunctionalInequalities.Energy.Euclidean.SmoothGradientTest.toL2,
-        FunctionalInequalities.Energy.Euclidean.smoothGradientPreEnergy}
+  \lean{FunctionalInequalities.Energy.SmoothGradient.Test,
+        FunctionalInequalities.Energy.SmoothGradient.Test.energy,
+        FunctionalInequalities.Energy.SmoothGradient.Test.toL2,
+        FunctionalInequalities.Energy.SmoothGradient.preEnergy}
   \leanok
   For a Borel probability $\mu$ on a finite-dimensional real inner-product space, the test space
   consists of globally $C^\infty$ real functions with an $L^2(\mu)$ realization and integrable
@@ -24,8 +24,8 @@ Sobolev or Cheeger energy.
 
 \begin{theorem}[Quadratic pre-energy with dense realization]
   \label{thm:smooth-gradient-quadratic-dense}
-  \lean{FunctionalInequalities.Energy.Euclidean.smoothGradientPreEnergy_quadratic,
-        FunctionalInequalities.Energy.Euclidean.smoothGradientPreEnergy_denseRealization}
+  \lean{FunctionalInequalities.Energy.SmoothGradient.preEnergy_quadratic,
+        FunctionalInequalities.Energy.SmoothGradient.preEnergy_denseRealization}
   \leanok
   \uses{def:smooth-gradient-preenergy}
   The smooth-gradient pre-energy is quadratic, and its realization is dense in real $L^2(\mu)$.
@@ -38,7 +38,7 @@ Sobolev or Cheeger energy.
 
 \begin{definition}[Ambient relaxed gradient energy]
   \label{def:smooth-gradient-relaxation}
-  \lean{FunctionalInequalities.Energy.Euclidean.smoothGradientRelaxation}
+  \lean{FunctionalInequalities.Energy.SmoothGradient.relaxation}
   \leanok
   \uses{def:preenergy-relaxation,def:smooth-gradient-preenergy}
   The ambient smooth-gradient energy is the sequential $L^2(\mu)$ relaxation of the preceding
@@ -47,7 +47,7 @@ Sobolev or Cheeger energy.
 
 \begin{theorem}[Ambient relaxation is closed quadratic]
   \label{thm:smooth-gradient-relaxation-closed}
-  \lean{FunctionalInequalities.Energy.Euclidean.smoothGradientRelaxation_closedQuadratic}
+  \lean{FunctionalInequalities.Energy.SmoothGradient.relaxation_closedQuadratic}
   \leanok
   \uses{thm:quadratic-relaxation-closed,thm:smooth-gradient-quadratic-dense,def:smooth-gradient-relaxation}
   The ambient smooth-gradient relaxation is a densely defined closed quadratic energy on
@@ -93,7 +93,7 @@ Sobolev or Cheeger energy.
 
 \begin{definition}[Intrinsic-affine relaxed energy]
   \label{def:intrinsic-affine-energy}
-  \lean{FunctionalInequalities.Energy.Canonical.energy}
+  \lean{FunctionalInequalities.Energy.SmoothGradient.Intrinsic.energy}
   \leanok
   \uses{def:affine-support-intrinsic-law,thm:intrinsic-l2-equivalence,def:smooth-gradient-relaxation}
   The intrinsic-affine energy of an ambient $L^2(\mu)$ class is the intrinsic law's
@@ -102,7 +102,7 @@ Sobolev or Cheeger energy.
 
 \begin{theorem}[Intrinsic-affine energy is closed quadratic]
   \label{thm:intrinsic-affine-energy-closed}
-  \lean{FunctionalInequalities.Energy.Canonical.closedQuadratic}
+  \lean{FunctionalInequalities.Energy.SmoothGradient.Intrinsic.closedQuadratic}
   \leanok
   \uses{thm:smooth-gradient-relaxation-closed,thm:intrinsic-l2-equivalence,def:intrinsic-affine-energy}
   The intrinsic-affine relaxed energy is a densely defined closed quadratic energy on ambient
@@ -113,11 +113,11 @@ Sobolev or Cheeger energy.
   Transport the intrinsic closed quadratic form along the real linear isometric equivalence.
 \end{proof}
 
-\begin{definition}[Selected canonical frontend]
+\begin{definition}[Intrinsic smooth-gradient frontend]
   \label{def:selected-canonical-frontend}
-  \lean{FunctionalInequalities.Energy.Canonical.energy,
-        FunctionalInequalities.Poincare.Canonical.constant,
-        FunctionalInequalities.Poincare.Canonical.Holds}
+  \lean{FunctionalInequalities.Energy.SmoothGradient.Intrinsic.energy,
+        FunctionalInequalities.Poincare.SmoothGradient.Intrinsic.constant,
+        FunctionalInequalities.Poincare.SmoothGradient.Intrinsic.Holds}
   \leanok
   \uses{def:intrinsic-affine-energy,def:l2-energy-poincare-constant}
   The selected canonical energy and constant are
@@ -138,9 +138,9 @@ the locally Lipschitz literature constant.  Those are separate theorem nodes.
 
 \begin{theorem}[Intrinsic-affine optimal constant law]
   \label{thm:intrinsic-affine-constant-order}
-  \lean{FunctionalInequalities.Poincare.Canonical.constant,
-        FunctionalInequalities.Poincare.Canonical.Holds,
-        FunctionalInequalities.Poincare.Canonical.holds_iff_constant_le}
+  \lean{FunctionalInequalities.Poincare.SmoothGradient.Intrinsic.constant,
+        FunctionalInequalities.Poincare.SmoothGradient.Intrinsic.Holds,
+        FunctionalInequalities.Poincare.SmoothGradient.Intrinsic.holds_iff_constant_le}
   \leanok
   \uses{def:selected-canonical-frontend,thm:l2-energy-holds-order}
   The intrinsic-affine Poincar\'e predicate holds at $C$ exactly when its optimal extended

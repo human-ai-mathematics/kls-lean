@@ -40,11 +40,7 @@ open LipschitzApproximation
 universe u
 
 variable {V : Type u} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [CompleteSpace V]
-  [MeasurableSpace V] [BorelSpace V] [SecondCountableTopology V] [FiniteDimensional ℝ V]
-  (m : Measure V) [m.IsAddHaarMeasure]
 
-/- The common ambient assumptions are intentionally kept uniform across the public API. -/
-set_option linter.unusedSectionVars false
 
 /-- The inner product with the canonical gradient is the Fréchet derivative. -/
 theorem inner_gradient_eq_fderiv_apply (f : V → ℝ) (x w : V) :
@@ -57,6 +53,7 @@ theorem continuous_gradient_of_contDiff {f : V → ℝ} {n : WithTop ℕ∞} (hf
   change Continuous (fun x ↦ (toDual ℝ V).symm (fderiv ℝ f x))
   exact (toDual ℝ V).symm.continuous.comp (hf.continuous_fderiv hn)
 
+omit [CompleteSpace V] in
 /-- The derivative of a compactly supported `C¹` function is globally bounded. -/
 theorem exists_bound_fderiv_of_hasCompactSupport {u : V → ℝ} (hu : ContDiff ℝ 1 u)
     (hsupp : HasCompactSupport u) : ∃ M : ℝ, 0 ≤ M ∧ ∀ x, ‖fderiv ℝ u x‖ ≤ M := by
@@ -70,6 +67,13 @@ theorem exists_bound_fderiv_of_hasCompactSupport {u : V → ℝ} (hu : ContDiff 
     rw [h0, norm_zero]
     exact le_max_right _ _
 
+section HaarIntegration
+
+variable [MeasurableSpace V] [BorelSpace V] [SecondCountableTopology V]
+  [FiniteDimensional ℝ V] (m : Measure V) [m.IsAddHaarMeasure]
+
+omit [SecondCountableTopology V] in
+omit [CompleteSpace V] in
 /-- The integral of a directional derivative of a compactly supported `C¹` function against a
 Haar measure vanishes: translation invariance and differentiation under the integral sign. -/
 theorem integral_fderiv_apply_eq_zero {u : V → ℝ} (hu : ContDiff ℝ 1 u)
@@ -131,6 +135,8 @@ theorem integral_fderiv_apply_eq_zero {u : V → ℝ} (hu : ContDiff ℝ 1 u)
     h2.unique (hasDerivAt_const _ _)
   simpa using h3
 
+omit [SecondCountableTopology V] in
+omit [CompleteSpace V] in
 /-- Integration by parts for a smooth function against a smooth compactly supported test. -/
 theorem integral_mul_fderiv_apply {φ ψ : V → ℝ} (hφ : ContDiff ℝ ∞ φ) (hφs : HasCompactSupport φ)
     (hψ : ContDiff ℝ ∞ ψ) (w : V) :
@@ -156,6 +162,7 @@ theorem integral_mul_fderiv_apply {φ ψ : V → ℝ} (hφ : ContDiff ℝ ∞ φ
   rw [integral_add hint₁ hint₂] at h0
   linarith
 
+omit [SecondCountableTopology V] in
 /-- Weak-derivative identity for a globally Lipschitz function: the almost-everywhere gradient
 integrates against smooth compactly supported tests as a distributional gradient. -/
 theorem integral_mul_inner_gradient {g : V → ℝ} {K : NNReal} (hg : LipschitzWith K g)
@@ -231,5 +238,7 @@ theorem integral_mul_inner_gradient {g : V → ℝ} {K : NNReal} (hg : Lipschitz
       (𝓝 (-∫ x, g x * fderiv ℝ φ x w ∂m)) :=
     hR.neg.congr fun j ↦ (hid j).symm
   exact tendsto_nhds_unique hL hL'
+
+end HaarIntegration
 
 end FunctionalInequalities.Energy.Euclidean

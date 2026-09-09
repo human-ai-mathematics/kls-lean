@@ -19,9 +19,8 @@ noncomputable section
 
 open Filter Topology
 
-namespace FunctionalInequalities.Energy
+namespace FunctionalInequalities.Energy.PreEnergy
 
-namespace PreEnergy
 
 universe u v
 
@@ -61,19 +60,27 @@ structure IsSequentialCoreFor (energy : Functional X) : Prop where
   /-- Relaxing the test energy recovers the entire extended functional. -/
   sequentiallyGenerates : P.SequentiallyGenerates energy
 
+namespace AgreesOnTests
+
 omit [TopologicalSpace X] in
 /-- Agreement with an ambient functional forces the concrete energy to respect realization
 fibers. -/
-theorem AgreesOnTests.respectsAmbientFibers {energy : Functional X}
+theorem respectsAmbientFibers {energy : Functional X}
     (h : P.AgreesOnTests energy) : P.RespectsAmbientFibers := by
   intro f g hfg
   apply ENNReal.coe_injective
   rw [← h f, ← h g, hfg]
 
+end AgreesOnTests
+
+namespace IsSequentialCoreFor
+
 /-- A sequential core necessarily has an energy that is well defined on realization fibers. -/
-theorem IsSequentialCoreFor.respectsAmbientFibers {energy : Functional X}
+theorem respectsAmbientFibers {energy : Functional X}
     (h : P.IsSequentialCoreFor energy) : P.RespectsAmbientFibers :=
   h.agreesOnTests.respectsAmbientFibers
+
+end IsSequentialCoreFor
 
 /-- A recovery sequence gives the expected upper bound for the relaxed energy at its limit. -/
 theorem sequentialRelaxation_le_of_hasRecoverySequenceAt {energy : Functional X} {x : X}
@@ -84,19 +91,21 @@ theorem sequentialRelaxation_le_of_hasRecoverySequenceAt {energy : Functional X}
       P.sequentialRelaxation_le_sequenceEnergy f
     _ = energy x := hf.liminf_eq
 
+namespace IsSequentialCoreFor
+
 /-- On a sequential core, evaluating the relaxation is the same as evaluating the ambient
 energy. -/
-theorem IsSequentialCoreFor.sequentialRelaxation_apply {energy : Functional X}
+theorem sequentialRelaxation_apply {energy : Functional X}
     (h : P.IsSequentialCoreFor energy) (x : X) :
     P.sequentialRelaxation x = energy x := by
   rw [h.sequentiallyGenerates]
 
 /-- On a sequential core, every concrete test retains its original finite energy. -/
-theorem IsSequentialCoreFor.toAmbient_apply {energy : Functional X}
+theorem toAmbient_apply {energy : Functional X}
     (h : P.IsSequentialCoreFor energy) (f : P.Test) :
     energy (P.toAmbient f) = (P.energy f : ENNReal) :=
   h.agreesOnTests f
 
-end PreEnergy
+end IsSequentialCoreFor
 
-end FunctionalInequalities.Energy
+end FunctionalInequalities.Energy.PreEnergy

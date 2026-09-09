@@ -10,15 +10,15 @@ A published input or an upstream reviewed proof receives no \texttt{leanok} mere
 
 \section{Three presentations of the Poincar\'e constant}
 
-\begin{theorem}[Legacy tests and ambient relaxation have the same finite constants]
+\begin{theorem}[Smooth tests and ambient relaxation have the same finite constants]
   \label{thm:legacy-relaxed-holds-equivalence}
-  \lean{FunctionalInequalities.Poincare.Euclidean.holds_iff_ambient,
-        FunctionalInequalities.Poincare.Euclidean.holds_iff_preEnergy}
+  \lean{FunctionalInequalities.Poincare.SmoothTest.holds_iff_ambient,
+        FunctionalInequalities.Poincare.SmoothTest.holds_iff_preEnergy}
   \leanok
   \uses{lem:preenergy-poincare-relaxation,def:l2-mean-variance,def:smooth-gradient-preenergy,
         def:smooth-gradient-relaxation,def:legacy-smooth-test-poincare}
   Let $\mu$ be a probability law on a finite-dimensional real Hilbert space.  For every finite
-  $C\ge0$, the legacy inequality on all globally smooth finite-gradient-energy tests holds at $C$
+  $C\ge0$, the smooth-test inequality on all globally smooth finite-gradient-energy tests holds at $C$
   if and only if the $L^2$ inequality for the ambient sequential relaxation holds at $C$.
   The raw smooth-gradient test family has exactly the same finite-constant predicate.
 \end{theorem}
@@ -31,11 +31,11 @@ A published input or an upstream reviewed proof receives no \texttt{leanok} mere
   or equality of raw and relaxed energy on individual tests is required.
 \end{proof}
 
-\begin{theorem}[Legacy and selected canonical constants agree]
+\begin{theorem}[Smooth-test and intrinsic smooth-gradient constants agree]
   \label{thm:legacy-canonical-constant-comparison}
-  \lean{FunctionalInequalities.Poincare.Euclidean.constant_eq_canonical,
-        FunctionalInequalities.Poincare.Euclidean.constant_eq_ambient,
-        FunctionalInequalities.Poincare.Euclidean.holds_iff_canonical}
+  \lean{FunctionalInequalities.Poincare.SmoothTest.constant_eq_intrinsic,
+        FunctionalInequalities.Poincare.SmoothTest.constant_eq_ambient,
+        FunctionalInequalities.Poincare.SmoothTest.holds_iff_intrinsic}
   \leanok
   \uses{thm:legacy-relaxed-holds-equivalence,
         cor:ambient-intrinsic-constant-equality,def:selected-canonical-frontend}
@@ -78,7 +78,7 @@ A published input or an upstream reviewed proof receives no \texttt{leanok} mere
   infima, agree. No raw/core identity for singular ambient laws is used.
 \end{proof}
 
-\begin{theorem}[Selected and literature constants agree]
+\begin{theorem}[Intrinsic smooth-gradient and local-slope constants agree]
   \label{thm:selected-literature-constant-equivalence}
   \lean{Solutions.ThmSelectedLiteratureConstantEquivalence.certificate}
   \leanok
@@ -92,7 +92,7 @@ A published input or an upstream reviewed proof receives no \texttt{leanok} mere
 \begin{proof}
   \leanok
   The intrinsic law is absolutely continuous by
-  \cref{lem:logconcave-intrinsic-absolute-continuity}. Both sides equal the legacy smooth-test
+  \cref{lem:logconcave-intrinsic-absolute-continuity}. Both sides equal the smooth-test
   optimum by the two preceding comparison
   theorems.  The Cheeger-energy identification of
   \cref{thm:smooth-gradient-relaxation-two-cheeger} is not needed.
@@ -260,7 +260,7 @@ A published input or an upstream reviewed proof receives no \texttt{leanok} mere
 \begin{lemma}[Ambient and intrinsic covariance agree]
   \label{lem:ambient-intrinsic-covariance}
   \lean{FunctionalInequalities.Covariance.operator_apply_eq_zero_of_mem_orthogonal,
-        FunctionalInequalities.Covariance.covarianceBilin_intrinsic,
+        FunctionalInequalities.Covariance.bilin_intrinsic,
         FunctionalInequalities.Covariance.operator_coe_intrinsic,
         FunctionalInequalities.Covariance.opNorm_operator_intrinsic,
         FunctionalInequalities.Covariance.intrinsic_operator_inner_self_pos,
@@ -296,18 +296,18 @@ A published input or an upstream reviewed proof receives no \texttt{leanok} mere
 
 \begin{definition}[Affine covariance relaxation and Poincar\'e constant]
   \label{def:affine-poincare-constant}
-  \lean{FunctionalInequalities.Energy.Euclidean.covarianceGradientDensity,
-        FunctionalInequalities.Energy.Euclidean.CovarianceGradientTest,
-        FunctionalInequalities.Energy.Euclidean.covariancePreEnergy,
-        FunctionalInequalities.Energy.Euclidean.covarianceRelaxation,
-        FunctionalInequalities.Energy.Affine.preEnergy,
-        FunctionalInequalities.Energy.Affine.energy,
-        FunctionalInequalities.Poincare.Affine.constant,
-        FunctionalInequalities.Poincare.Affine.Holds,
-        FunctionalInequalities.Poincare.Affine.constant_eq_zero_of_direction_eq_bot,
+  \lean{FunctionalInequalities.Energy.CovarianceGradient.density,
+        FunctionalInequalities.Energy.CovarianceGradient.Test,
+        FunctionalInequalities.Energy.CovarianceGradient.preEnergy,
+        FunctionalInequalities.Energy.CovarianceGradient.relaxation,
+        FunctionalInequalities.Energy.CovarianceGradient.Intrinsic.preEnergy,
+        FunctionalInequalities.Energy.CovarianceGradient.Intrinsic.energy,
+        FunctionalInequalities.Poincare.CovarianceGradient.Intrinsic.constant,
+        FunctionalInequalities.Poincare.CovarianceGradient.Intrinsic.Holds,
+        FunctionalInequalities.Poincare.CovarianceGradient.Intrinsic.constant_eq_zero_of_direction_eq_bot,
         FunctionalInequalities.KLS.LogConcave.intrinsic_memLp_id_two,
         FunctionalInequalities.KLS.LogConcave.intrinsic_ae_hasGradientAt,
-        FunctionalInequalities.KLS.LogConcave.intrinsic_covarianceEnergy_eq_of_toL2_eq}
+        FunctionalInequalities.KLS.LogConcave.intrinsicCovariance_energy_eq_of_toL2_eq}
   \leanok
   \uses{def:log-concave-law,thm:borell-logconcave-density,
         def:affine-support-intrinsic-law,def:preenergy-relaxation,
@@ -347,21 +347,21 @@ A published input or an upstream reviewed proof receives no \texttt{leanok} mere
 \begin{theorem}[The affine covariance relaxation agrees with the closed source form]
   \label{thm:affine-covariance-relaxation-closed}
   \lean{FunctionalInequalities.exists_norm_sq_eq_inner_of_isSymmetric,
-        FunctionalInequalities.Covariance.exists_sqrt,
+        FunctionalInequalities.Covariance.exists_inner_eq_norm_sq,
         FunctionalInequalities.Energy.PreEnergy.normSqEnergy,
         FunctionalInequalities.Energy.PreEnergy.sequentialRelaxation_ofLinearPMap_eq_normSqEnergy,
-        FunctionalInequalities.Energy.Euclidean.translateLaw,
-        FunctionalInequalities.Energy.Euclidean.translateL2,
-        FunctionalInequalities.L2.variance_translateL2,
+        FunctionalInequalities.Probability.translateLaw,
+        FunctionalInequalities.L2.Translation.pullbackEquiv,
+        FunctionalInequalities.L2.Translation.variance_pullbackEquiv,
         FunctionalInequalities.Covariance.operator_translateLaw,
-        FunctionalInequalities.Energy.Euclidean.covarianceRelaxation_translateLaw,
-        FunctionalInequalities.Energy.Euclidean.constantSmoothCore,
-        FunctionalInequalities.KLS.LogConcave.affine_denseRealization,
-        FunctionalInequalities.KLS.LogConcave.affine_closedQuadratic,
-        FunctionalInequalities.KLS.LogConcave.affine_isSequentialCoreFor,
-        FunctionalInequalities.Poincare.Affine.constant_translateLaw,
-        FunctionalInequalities.KLS.LogConcave.affine_energy_eq_normSqEnergy,
-        FunctionalInequalities.KLS.LogConcave.affine_constant_eq_normSqEnergy,
+        FunctionalInequalities.Energy.CovarianceGradient.relaxation_translateLaw,
+        FunctionalInequalities.Energy.WeightedGradient.constantSmoothCore,
+        FunctionalInequalities.KLS.LogConcave.intrinsicCovariance_denseRealization,
+        FunctionalInequalities.KLS.LogConcave.intrinsicCovariance_closedQuadratic,
+        FunctionalInequalities.KLS.LogConcave.intrinsicCovariance_isSequentialCoreFor,
+        FunctionalInequalities.Poincare.CovarianceGradient.Intrinsic.constant_eq_translate_intrinsicMeasure,
+        FunctionalInequalities.KLS.LogConcave.intrinsicCovariance_energy_eq_normSq,
+        FunctionalInequalities.KLS.LogConcave.intrinsicCovariance_constant_eq_normSq,
         Solutions.ThmAffineCovarianceRelaxationClosed.certificate}
   \leanok
   \uses{def:affine-poincare-constant,thm:borell-logconcave-density,
@@ -374,7 +374,7 @@ A published input or an upstream reviewed proof receives no \texttt{leanok} mere
   preserving variance and covariance energy.  Under this isometric identification,
   $\mathcal E^{\mathrm{aff}}_\mu$ is the closed covariance form used by the pinned CMH source, and
   $C_{\mathrm P}^{\mathrm{aff}}(\mu)$ is the same optimal constant.
-  In Lean, quadraticity of $P^{\mathrm{aff}}_\mu$ is expressed through a square root $B$ of the
+  In Lean, quadraticity of $P^{\mathrm{aff}}_\mu$ is expressed through a norm factor $B$ for the
   intrinsic covariance, $\inner{\Sigma v}{v}=\norm{Bv}^2$: the pre-energy has the same
   realization and energies as the quadratic pre-energy $f\mapsto\norm{B\nabla f}^2$ of the
   closable operator of \cref{lem:covariance-core-closure}.  The translation statement is proved
@@ -409,16 +409,16 @@ A published input or an upstream reviewed proof receives no \texttt{leanok} mere
   \label{lem:affine-poincare-translation-invariance}
   \lean{FunctionalInequalities.Energy.Euclidean.gradient_comp_linearIsometryEquiv,
         FunctionalInequalities.Covariance.operator_map_linearIsometryEquiv,
-        FunctionalInequalities.Energy.Euclidean.mapLaw,
-        FunctionalInequalities.Energy.Euclidean.mapL2,
-        FunctionalInequalities.L2.variance_mapL2,
-        FunctionalInequalities.Energy.Euclidean.covarianceRelaxation_mapLaw,
-        FunctionalInequalities.Poincare.L2Energy.constant_covarianceRelaxation_mapLaw,
+        FunctionalInequalities.Probability.mapLinearIsometryEquiv,
+        FunctionalInequalities.L2.LinearIsometry.pullbackEquiv,
+        FunctionalInequalities.L2.LinearIsometry.variance_pullbackEquiv,
+        FunctionalInequalities.Energy.CovarianceGradient.relaxation_mapLinearIsometryEquiv,
+        FunctionalInequalities.Poincare.CovarianceGradient.constant_mapLinearIsometryEquiv,
         FunctionalInequalities.Probability.affineSupport_translateLaw,
         FunctionalInequalities.Probability.direction_affineSupport_translateLaw,
         FunctionalInequalities.Probability.intrinsicMeasure_translateLaw,
-        FunctionalInequalities.Energy.Affine.exists_translateLaw_isometry,
-        FunctionalInequalities.Poincare.Affine.constant_translateLaw_ambient,
+        FunctionalInequalities.Energy.CovarianceGradient.Intrinsic.exists_translateLaw_isometry,
+        FunctionalInequalities.Poincare.CovarianceGradient.Intrinsic.constant_translateLaw,
         FunctionalInequalities.KLS.LogConcave.translateLaw,
         FunctionalInequalities.KLS.LogConcave.memLp_id_two,
         FunctionalInequalities.KLS.LogConcave.integral_id_translateLaw_neg_integral,
@@ -434,7 +434,7 @@ A published input or an upstream reviewed proof receives no \texttt{leanok} mere
   \]
   In particular, translating by the negative barycenter produces a centered law without changing
   the affine Poincar\'e constant.
-  In Lean, $(\tau_b)_\#\mu$ is \texttt{Energy.Euclidean.translateLaw}~$\mu\,b$.  The affine
+  In Lean, $(\tau_b)_\#\mu$ is \texttt{Probability.translateLaw}~$\mu\,b$.  The affine
   support of the translated law is the translate of the affine support of $\mu$, with the same
   direction submodule, and the intrinsic law of the translated law is the translate, inside the
   direction space, of the image of the intrinsic law of $\mu$ under the linear isometric
@@ -462,23 +462,23 @@ A published input or an upstream reviewed proof receives no \texttt{leanok} mere
   \lean{FunctionalInequalities.Energy.PreEnergy.sequentialRelaxation_comp_le_mul,
         FunctionalInequalities.Energy.Euclidean.gradient_comp_continuousLinearEquiv,
         FunctionalInequalities.Covariance.operator_map_continuousLinearEquiv,
-        FunctionalInequalities.Energy.Euclidean.mapEquivLaw,
-        FunctionalInequalities.Energy.Euclidean.mapEquivL2,
-        FunctionalInequalities.Energy.Euclidean.covarianceRelaxation_mapEquivLaw,
-        FunctionalInequalities.Poincare.L2Energy.constant_covarianceRelaxation_mapEquivLaw,
+        FunctionalInequalities.Probability.mapContinuousLinearEquiv,
+        FunctionalInequalities.L2.ContinuousLinearEquiv.pullbackEquiv,
+        FunctionalInequalities.Energy.CovarianceGradient.relaxation_mapContinuousLinearEquiv,
+        FunctionalInequalities.Poincare.CovarianceGradient.constant_mapContinuousLinearEquiv,
         FunctionalInequalities.exists_whitening_of_isSymmetric,
         FunctionalInequalities.Covariance.exists_whitening,
-        FunctionalInequalities.Energy.Euclidean.lipschitzGradientRelaxation,
-        FunctionalInequalities.Poincare.L2Energy.holds_lipschitzGradientRelaxation_iff_literatureHolds,
-        FunctionalInequalities.Poincare.constant_eq_lipschitzGradientRelaxation,
-        FunctionalInequalities.Energy.Euclidean.covarianceRelaxation_eq_lipschitzGradientRelaxation,
-        FunctionalInequalities.Energy.Euclidean.covarianceRelaxation_le_opNorm_mul_lipschitzGradientRelaxation,
+        FunctionalInequalities.Energy.LipschitzGradient.relaxation,
+        FunctionalInequalities.Poincare.LipschitzGradient.holds_iff_localSlope,
+        FunctionalInequalities.Poincare.SmoothTest.constant_eq_lipschitz,
+        FunctionalInequalities.Energy.CovarianceGradient.relaxation_eq_lipschitz,
+        FunctionalInequalities.Energy.CovarianceGradient.relaxation_le_mul_lipschitz,
         FunctionalInequalities.KLS.LogConcave.of_continuousLinearEquiv_map,
         FunctionalInequalities.KLS.IsotropicBound,
         FunctionalInequalities.KLS.CovarianceBound,
         FunctionalInequalities.KLS.AffineBound,
-        FunctionalInequalities.KLS.LogConcave.exists_isotropic_literatureConstant_eq,
-        FunctionalInequalities.KLS.LogConcave.literatureConstant_le_opNorm_mul_affine_constant,
+        FunctionalInequalities.KLS.LogConcave.exists_isotropic_localSlope_constant_eq,
+        FunctionalInequalities.KLS.LogConcave.localSlope_le_mul_intrinsicCovariance,
         FunctionalInequalities.KLS.affineBound_of_isotropicBound,
         FunctionalInequalities.KLS.covarianceBound_of_affineBound,
         FunctionalInequalities.KLS.isotropicBound_of_covarianceBound,

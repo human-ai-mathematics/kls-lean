@@ -28,51 +28,51 @@ conclusions directly from this reusable API.
 set_option pp.universes true
 set_option format.width 100
 
-#check @FunctionalInequalities.Poincare.contDiff_comp_projection
-#check @FunctionalInequalities.Poincare.gradient_comp_projection
-#check @FunctionalInequalities.Poincare.norm_gradient_comp_projection
-#check @FunctionalInequalities.Poincare.memLp_comp_projection
-#check @FunctionalInequalities.Poincare.integrable_gradient_comp_projection
-#check @FunctionalInequalities.Poincare.Admissible.comp_projection
-#check @FunctionalInequalities.Poincare.variance_comp_projection
-#check @FunctionalInequalities.Poincare.energy_comp_projection
-#check @FunctionalInequalities.Poincare.admissible_map_linearIsometryEquiv_iff
-#check @FunctionalInequalities.Poincare.variance_map_linearIsometryEquiv
-#check @FunctionalInequalities.Poincare.energy_map_linearIsometryEquiv
-#check @FunctionalInequalities.Poincare.holds_map_linearIsometryEquiv_iff
-#check @FunctionalInequalities.Poincare.constant_map_linearIsometryEquiv
-#check @FunctionalInequalities.Poincare.holds_zero_of_subsingleton
-#check @FunctionalInequalities.Poincare.constant_eq_zero_of_subsingleton
-#check @FunctionalInequalities.Poincare.isometry_adjoint_fstL
-#check @FunctionalInequalities.Poincare.isometry_adjoint_sndL
-#check @FunctionalInequalities.Poincare.measurePreserving_prod_fst
-#check @FunctionalInequalities.Poincare.measurePreserving_prod_snd
-#check @FunctionalInequalities.Poincare.Holds.of_prod_left
-#check @FunctionalInequalities.Poincare.Holds.of_prod_right
-#check @FunctionalInequalities.Poincare.constant_left_le_prod
-#check @FunctionalInequalities.Poincare.constant_right_le_prod
-#check @FunctionalInequalities.Poincare.constant_prod_eq
-#check @FunctionalInequalities.Poincare.piMeasure
-#check @FunctionalInequalities.Poincare.piMeasure_isProbabilityMeasure
-#check @FunctionalInequalities.Poincare.adjoint_pi_proj
-#check @FunctionalInequalities.Poincare.isometry_adjoint_pi_proj
-#check @FunctionalInequalities.Poincare.measurePreserving_pi_proj
-#check @FunctionalInequalities.Poincare.piCongrLeft
-#check @FunctionalInequalities.Poincare.piCongrLeft_apply
-#check @FunctionalInequalities.Poincare.map_piMeasure_piCongrLeft
-#check @FunctionalInequalities.Poincare.piOptionEquivProd
-#check @FunctionalInequalities.Poincare.piOptionEquivProd_apply
-#check @FunctionalInequalities.Poincare.map_piMeasure_piOptionEquivProd
-#check @FunctionalInequalities.Poincare.Holds.pi
-#check @FunctionalInequalities.Poincare.Holds.of_pi
-#check @FunctionalInequalities.Poincare.constant_le_pi
-#check @FunctionalInequalities.Poincare.constant_pi_le
-#check @FunctionalInequalities.Poincare.constant_pi_eq
-#check @FunctionalInequalities.Poincare.holds_pi_empty
-#check @FunctionalInequalities.Poincare.constant_pi_empty
-#check @FunctionalInequalities.Poincare.constant_pi_unique
-#check @FunctionalInequalities.Poincare.constant_pi_of_subsingleton
-#check @FunctionalInequalities.Poincare.constant_pi_eq_top_of_factor
+#check @FunctionalInequalities.Poincare.SmoothTest.contDiff_comp_projection
+#check @FunctionalInequalities.Poincare.SmoothTest.gradient_comp_projection
+#check @FunctionalInequalities.Poincare.SmoothTest.norm_gradient_comp_projection
+#check @FunctionalInequalities.Poincare.SmoothTest.memLp_comp_projection
+#check @FunctionalInequalities.Poincare.SmoothTest.integrable_gradient_comp_projection
+#check @FunctionalInequalities.Poincare.SmoothTest.Admissible.comp_projection
+#check @FunctionalInequalities.Poincare.SmoothTest.variance_comp_projection
+#check @FunctionalInequalities.Poincare.SmoothTest.energy_comp_projection
+#check @FunctionalInequalities.Poincare.SmoothTest.admissible_map_linearIsometryEquiv_iff
+#check @FunctionalInequalities.Poincare.SmoothTest.variance_map_linearIsometryEquiv
+#check @FunctionalInequalities.Poincare.SmoothTest.energy_map_linearIsometryEquiv
+#check @FunctionalInequalities.Poincare.SmoothTest.holds_map_linearIsometryEquiv_iff
+#check @FunctionalInequalities.Poincare.SmoothTest.constant_map_linearIsometryEquiv
+#check @FunctionalInequalities.Poincare.SmoothTest.holds_zero_of_subsingleton
+#check @FunctionalInequalities.Poincare.SmoothTest.constant_eq_zero_of_subsingleton
+#check @FunctionalInequalities.Poincare.SmoothTest.isometry_adjoint_fstL
+#check @FunctionalInequalities.Poincare.SmoothTest.isometry_adjoint_sndL
+#check @FunctionalInequalities.Poincare.SmoothTest.measurePreserving_prod_fst
+#check @FunctionalInequalities.Poincare.SmoothTest.measurePreserving_prod_snd
+#check @FunctionalInequalities.Poincare.SmoothTest.Holds.of_prod_left
+#check @FunctionalInequalities.Poincare.SmoothTest.Holds.of_prod_right
+#check @FunctionalInequalities.Poincare.SmoothTest.constant_left_le_prod
+#check @FunctionalInequalities.Poincare.SmoothTest.constant_right_le_prod
+#check @FunctionalInequalities.Poincare.SmoothTest.constant_prod_eq
+#check @FunctionalInequalities.Poincare.SmoothTest.piMeasure
+#check @FunctionalInequalities.Poincare.SmoothTest.piMeasure_isProbabilityMeasure
+#check @FunctionalInequalities.Poincare.SmoothTest.adjoint_pi_proj
+#check @FunctionalInequalities.Poincare.SmoothTest.isometry_adjoint_pi_proj
+#check @FunctionalInequalities.Poincare.SmoothTest.measurePreserving_pi_proj
+#check @FunctionalInequalities.Poincare.SmoothTest.piCongrLeft
+#check @FunctionalInequalities.Poincare.SmoothTest.piCongrLeft_apply
+#check @FunctionalInequalities.Poincare.SmoothTest.map_piMeasure_piCongrLeft
+#check @FunctionalInequalities.Poincare.SmoothTest.piOptionEquivProd
+#check @FunctionalInequalities.Poincare.SmoothTest.piOptionEquivProd_apply
+#check @FunctionalInequalities.Poincare.SmoothTest.map_piMeasure_piOptionEquivProd
+#check @FunctionalInequalities.Poincare.SmoothTest.Holds.pi
+#check @FunctionalInequalities.Poincare.SmoothTest.Holds.of_pi
+#check @FunctionalInequalities.Poincare.SmoothTest.constant_le_pi
+#check @FunctionalInequalities.Poincare.SmoothTest.constant_pi_le
+#check @FunctionalInequalities.Poincare.SmoothTest.constant_pi_eq
+#check @FunctionalInequalities.Poincare.SmoothTest.holds_pi_empty
+#check @FunctionalInequalities.Poincare.SmoothTest.constant_pi_empty
+#check @FunctionalInequalities.Poincare.SmoothTest.constant_pi_unique
+#check @FunctionalInequalities.Poincare.SmoothTest.constant_pi_of_subsingleton
+#check @FunctionalInequalities.Poincare.SmoothTest.constant_pi_eq_top_of_factor
 
 /-! ## Euclidean application checks
 
@@ -92,17 +92,17 @@ open FunctionalInequalities
 #check (fun {ι : Type*} [Fintype ι] {d : ι → ℕ}
     {μ : ∀ i, Measure (EuclideanSpace ℝ (Fin (d i)))}
     [∀ i, IsProbabilityMeasure (μ i)] {C : ι → NNReal}
-    (h : ∀ i, Poincare.Holds (μ i) (C i : ℝ)) ↦
-  (Poincare.Holds.pi h :
-    Poincare.Holds (Poincare.piMeasure μ) ((Finset.univ.sup C : NNReal) : ℝ)))
+    (h : ∀ i, Poincare.SmoothTest.Holds (μ i) (C i : ℝ)) ↦
+  (Poincare.SmoothTest.Holds.pi h :
+    Poincare.SmoothTest.Holds (Poincare.SmoothTest.piMeasure μ) ((Finset.univ.sup C : NNReal) : ℝ)))
 
 -- 2. The Poincaré product formula of manuscript Theorem 3.4, via `constant_pi_eq`.
 -- This local `ENNReal` formulation includes infinite constants and an empty index type.
 #check (fun {ι : Type*} [Fintype ι] {d : ι → ℕ}
     (μ : ∀ i, Measure (EuclideanSpace ℝ (Fin (d i))))
     [∀ i, IsProbabilityMeasure (μ i)] ↦
-  (Poincare.constant_pi_eq (μ := μ) :
-    Poincare.constant (Poincare.piMeasure μ) = ⨆ i, Poincare.constant (μ i)))
+  (Poincare.SmoothTest.constant_pi_eq (μ := μ) :
+    Poincare.SmoothTest.constant (Poincare.SmoothTest.piMeasure μ) = ⨆ i, Poincare.SmoothTest.constant (μ i)))
 
 -- 3. Local coordinate-lift consequences `Holds.of_prod_left` and `Holds.of_prod_right`;
 -- both independent factor probability assumptions are retained.
@@ -110,9 +110,9 @@ open FunctionalInequalities
     {μ : Measure (EuclideanSpace ℝ (Fin m))}
     {ν : Measure (EuclideanSpace ℝ (Fin n))}
     [IsProbabilityMeasure μ] [IsProbabilityMeasure ν]
-    {C : ℝ} (h : Poincare.Holds (Poincare.prodMeasure μ ν) C) ↦
-  (⟨Poincare.Holds.of_prod_left h, Poincare.Holds.of_prod_right h⟩ :
-    Poincare.Holds μ C ∧ Poincare.Holds ν C))
+    {C : ℝ} (h : Poincare.SmoothTest.Holds (Poincare.SmoothTest.prodMeasure μ ν) C) ↦
+  (⟨Poincare.SmoothTest.Holds.of_prod_left h, Poincare.SmoothTest.Holds.of_prod_right h⟩ :
+    Poincare.SmoothTest.Holds μ C ∧ Poincare.SmoothTest.Holds ν C))
 
 -- 4. Binary specialization of the manuscript product formula, via `constant_prod_eq`,
 -- with the local `ENNReal` convention and arbitrary natural dimensions.
@@ -120,35 +120,35 @@ open FunctionalInequalities
     (μ : Measure (EuclideanSpace ℝ (Fin m)))
     (ν : Measure (EuclideanSpace ℝ (Fin n)))
     [IsProbabilityMeasure μ] [IsProbabilityMeasure ν] ↦
-  (Poincare.constant_prod_eq (μ := μ) (ν := ν) :
-    Poincare.constant (Poincare.prodMeasure μ ν) =
-      max (Poincare.constant μ) (Poincare.constant ν)))
+  (Poincare.SmoothTest.constant_prod_eq (μ := μ) (ν := ν) :
+    Poincare.SmoothTest.constant (Poincare.SmoothTest.prodMeasure μ ν) =
+      max (Poincare.SmoothTest.constant μ) (Poincare.SmoothTest.constant ν)))
 
 -- 5. Local empty-product consequence of `holds_pi_empty` and `constant_pi_empty`.
 -- An arbitrary empty dependent family needs no factor probability premise.
 #check (fun {d : Fin 0 → ℕ}
     (μ : ∀ i, Measure (EuclideanSpace ℝ (Fin (d i)))) ↦
   letI : ∀ i : Fin 0, IsProbabilityMeasure (μ i) := fun i ↦ Fin.elim0 i
-  (⟨Poincare.holds_pi_empty (μ := μ), Poincare.constant_pi_empty (μ := μ)⟩ :
-    Poincare.Holds (Poincare.piMeasure μ) 0 ∧
-      Poincare.constant (Poincare.piMeasure μ) = 0))
+  (⟨Poincare.SmoothTest.holds_pi_empty (μ := μ), Poincare.SmoothTest.constant_pi_empty (μ := μ)⟩ :
+    Poincare.SmoothTest.Holds (Poincare.SmoothTest.piMeasure μ) 0 ∧
+      Poincare.SmoothTest.constant (Poincare.SmoothTest.piMeasure μ) = 0))
 
 -- 6. Local singleton specialization `constant_pi_unique` of the product identity,
 -- including a zero-dimensional sole factor.
 #check (fun {n : ℕ} (μ : Measure (EuclideanSpace ℝ (Fin n)))
     [IsProbabilityMeasure μ] ↦
-  (Poincare.constant_pi_unique (μ := fun _ : Fin 1 ↦ μ) :
-    Poincare.constant (Poincare.piMeasure (fun _ : Fin 1 ↦ μ)) = Poincare.constant μ))
+  (Poincare.SmoothTest.constant_pi_unique (μ := fun _ : Fin 1 ↦ μ) :
+    Poincare.SmoothTest.constant (Poincare.SmoothTest.piMeasure (fun _ : Fin 1 ↦ μ)) = Poincare.SmoothTest.constant μ))
 
 -- 7. Local subsingleton-space consequences: every factor may be zero-dimensional,
 -- and the index type may also be empty. These boundary cases are not explicit in the manuscript.
 #check (fun {ι : Type*} [Fintype ι]
     (μ : ∀ _ : ι, Measure (EuclideanSpace ℝ (Fin 0)))
     [∀ i, IsProbabilityMeasure (μ i)] ↦
-  (⟨Poincare.holds_zero_of_subsingleton (Poincare.piMeasure μ),
-      Poincare.constant_pi_of_subsingleton (μ := μ)⟩ :
-    Poincare.Holds (Poincare.piMeasure μ) 0 ∧
-      Poincare.constant (Poincare.piMeasure μ) = 0))
+  (⟨Poincare.SmoothTest.holds_zero_of_subsingleton (Poincare.SmoothTest.piMeasure μ),
+      Poincare.SmoothTest.constant_pi_of_subsingleton (μ := μ)⟩ :
+    Poincare.SmoothTest.Holds (Poincare.SmoothTest.piMeasure μ) 0 ∧
+      Poincare.SmoothTest.constant (Poincare.SmoothTest.piMeasure μ) = 0))
 
 -- 8. Local `constant_eq_zero_of_subsingleton` consequence for a selected zero-dimensional
 -- factor in an otherwise arbitrary dependent family.
@@ -157,7 +157,7 @@ open FunctionalInequalities
     [∀ i, IsProbabilityMeasure (μ i)] (i : ι) (hi : d i = 0) ↦
   letI : Subsingleton (EuclideanSpace ℝ (Fin (d i))) :=
     hi.symm ▸ (inferInstance : Subsingleton (EuclideanSpace ℝ (Fin 0)))
-  (Poincare.constant_eq_zero_of_subsingleton (μ i) : Poincare.constant (μ i) = 0))
+  (Poincare.SmoothTest.constant_eq_zero_of_subsingleton (μ i) : Poincare.SmoothTest.constant (μ i) = 0))
 
 /-! ## Additional boundary applications
 
@@ -168,31 +168,31 @@ does not state these cases separately.
 
 #check (fun (μ₀ : Measure (EuclideanSpace ℝ (Fin 0))) [IsProbabilityMeasure μ₀]
     {n : ℕ} (ν : Measure (EuclideanSpace ℝ (Fin n))) [IsProbabilityMeasure ν] ↦
-  (Poincare.constant_prod_eq (μ := μ₀) (ν := ν) :
-    Poincare.constant (Poincare.prodMeasure μ₀ ν) =
-      max (Poincare.constant μ₀) (Poincare.constant ν)))
+  (Poincare.SmoothTest.constant_prod_eq (μ := μ₀) (ν := ν) :
+    Poincare.SmoothTest.constant (Poincare.SmoothTest.prodMeasure μ₀ ν) =
+      max (Poincare.SmoothTest.constant μ₀) (Poincare.SmoothTest.constant ν)))
 
 #check (fun (μ₀ : Measure (EuclideanSpace ℝ (Fin 0))) [IsProbabilityMeasure μ₀]
     {n : ℕ} (ν : Measure (EuclideanSpace ℝ (Fin n))) [IsProbabilityMeasure ν] ↦
-  (Poincare.constant_prod_eq (μ := ν) (ν := μ₀) :
-    Poincare.constant (Poincare.prodMeasure ν μ₀) =
-      max (Poincare.constant ν) (Poincare.constant μ₀)))
+  (Poincare.SmoothTest.constant_prod_eq (μ := ν) (ν := μ₀) :
+    Poincare.SmoothTest.constant (Poincare.SmoothTest.prodMeasure ν μ₀) =
+      max (Poincare.SmoothTest.constant ν) (Poincare.SmoothTest.constant μ₀)))
 
 #check (fun (μ₀ : Measure (EuclideanSpace ℝ (Fin 0))) [IsProbabilityMeasure μ₀] ↦
-  (Poincare.constant_pi_unique (μ := fun _ : Fin 1 ↦ μ₀) :
-    Poincare.constant (Poincare.piMeasure (fun _ : Fin 1 ↦ μ₀)) = Poincare.constant μ₀))
+  (Poincare.SmoothTest.constant_pi_unique (μ := fun _ : Fin 1 ↦ μ₀) :
+    Poincare.SmoothTest.constant (Poincare.SmoothTest.piMeasure (fun _ : Fin 1 ↦ μ₀)) = Poincare.SmoothTest.constant μ₀))
 
 #check (fun (μ₀ : Measure (EuclideanSpace ℝ (Fin 0))) [IsProbabilityMeasure μ₀] ↦
-  (Poincare.constant_pi_empty (μ := fun _ : Fin 0 ↦ μ₀) :
-    Poincare.constant (Poincare.piMeasure (fun _ : Fin 0 ↦ μ₀)) = 0))
+  (Poincare.SmoothTest.constant_pi_empty (μ := fun _ : Fin 0 ↦ μ₀) :
+    Poincare.SmoothTest.constant (Poincare.SmoothTest.piMeasure (fun _ : Fin 0 ↦ μ₀)) = 0))
 
 #check (fun (μ₀ : Measure (EuclideanSpace ℝ (Fin 0))) [IsProbabilityMeasure μ₀] ↦
-  (Poincare.holds_pi_empty (μ := fun _ : Fin 0 ↦ μ₀) :
-    Poincare.Holds (Poincare.piMeasure (fun _ : Fin 0 ↦ μ₀)) 0))
+  (Poincare.SmoothTest.holds_pi_empty (μ := fun _ : Fin 0 ↦ μ₀) :
+    Poincare.SmoothTest.Holds (Poincare.SmoothTest.piMeasure (fun _ : Fin 0 ↦ μ₀)) 0))
 
 #check (fun (μ₀ : Measure (EuclideanSpace ℝ (Fin 0))) [IsProbabilityMeasure μ₀] ↦
-  (Poincare.constant_pi_of_subsingleton (μ := fun _ : Fin 2 ↦ μ₀) :
-    Poincare.constant (Poincare.piMeasure (fun _ : Fin 2 ↦ μ₀)) = 0))
+  (Poincare.SmoothTest.constant_pi_of_subsingleton (μ := fun _ : Fin 2 ↦ μ₀) :
+    Poincare.SmoothTest.constant (Poincare.SmoothTest.piMeasure (fun _ : Fin 2 ↦ μ₀)) = 0))
 
 namespace Solutions.LemPoincareFiniteTensorization
 
@@ -210,60 +210,60 @@ theorem certificate :
       [MeasurableSpace F] [BorelSpace F] [SecondCountableTopology F]
       (μ : Measure E) (ν : Measure F)
       [IsProbabilityMeasure μ] [IsProbabilityMeasure ν],
-      (∀ ⦃C : ℝ⦄, Poincare.Holds (Poincare.prodMeasure μ ν) C →
-        Poincare.Holds μ C ∧ Poincare.Holds ν C) ∧
-      Poincare.constant μ ≤ Poincare.constant (Poincare.prodMeasure μ ν) ∧
-      Poincare.constant ν ≤ Poincare.constant (Poincare.prodMeasure μ ν) ∧
-      Poincare.constant (Poincare.prodMeasure μ ν) =
-        max (Poincare.constant μ) (Poincare.constant ν)) ∧
+      (∀ ⦃C : ℝ⦄, Poincare.SmoothTest.Holds (Poincare.SmoothTest.prodMeasure μ ν) C →
+        Poincare.SmoothTest.Holds μ C ∧ Poincare.SmoothTest.Holds ν C) ∧
+      Poincare.SmoothTest.constant μ ≤ Poincare.SmoothTest.constant (Poincare.SmoothTest.prodMeasure μ ν) ∧
+      Poincare.SmoothTest.constant ν ≤ Poincare.SmoothTest.constant (Poincare.SmoothTest.prodMeasure μ ν) ∧
+      Poincare.SmoothTest.constant (Poincare.SmoothTest.prodMeasure μ ν) =
+        max (Poincare.SmoothTest.constant μ) (Poincare.SmoothTest.constant ν)) ∧
     (∀ {ι : Type*} [Fintype ι] {E : ι → Type*}
       [∀ i, NormedAddCommGroup (E i)] [∀ i, InnerProductSpace ℝ (E i)]
       [∀ i, CompleteSpace (E i)] [∀ i, MeasurableSpace (E i)]
       [∀ i, BorelSpace (E i)] [∀ i, SecondCountableTopology (E i)]
       (μ : ∀ i, Measure (E i)) [∀ i, IsProbabilityMeasure (μ i)],
-      (∀ C : ι → NNReal, (∀ i, Poincare.Holds (μ i) (C i : ℝ)) →
-        Poincare.Holds (Poincare.piMeasure μ) ((Finset.univ.sup C : NNReal) : ℝ)) ∧
-      (∀ ⦃C : ℝ⦄ (i : ι), Poincare.Holds (Poincare.piMeasure μ) C →
-        Poincare.Holds (μ i) C) ∧
-      (∀ i, Poincare.constant (μ i) ≤ Poincare.constant (Poincare.piMeasure μ)) ∧
-      Poincare.constant (Poincare.piMeasure μ) ≤ ⨆ i, Poincare.constant (μ i) ∧
-      Poincare.constant (Poincare.piMeasure μ) = ⨆ i, Poincare.constant (μ i) ∧
+      (∀ C : ι → NNReal, (∀ i, Poincare.SmoothTest.Holds (μ i) (C i : ℝ)) →
+        Poincare.SmoothTest.Holds (Poincare.SmoothTest.piMeasure μ) ((Finset.univ.sup C : NNReal) : ℝ)) ∧
+      (∀ ⦃C : ℝ⦄ (i : ι), Poincare.SmoothTest.Holds (Poincare.SmoothTest.piMeasure μ) C →
+        Poincare.SmoothTest.Holds (μ i) C) ∧
+      (∀ i, Poincare.SmoothTest.constant (μ i) ≤ Poincare.SmoothTest.constant (Poincare.SmoothTest.piMeasure μ)) ∧
+      Poincare.SmoothTest.constant (Poincare.SmoothTest.piMeasure μ) ≤ ⨆ i, Poincare.SmoothTest.constant (μ i) ∧
+      Poincare.SmoothTest.constant (Poincare.SmoothTest.piMeasure μ) = ⨆ i, Poincare.SmoothTest.constant (μ i) ∧
       (∀ _h : IsEmpty ι,
-        Poincare.Holds (Poincare.piMeasure μ) 0 ∧
-          Poincare.constant (Poincare.piMeasure μ) = 0) ∧
+        Poincare.SmoothTest.Holds (Poincare.SmoothTest.piMeasure μ) 0 ∧
+          Poincare.SmoothTest.constant (Poincare.SmoothTest.piMeasure μ) = 0) ∧
       (∀ h : Unique ι,
-        Poincare.constant (Poincare.piMeasure μ) = Poincare.constant (μ h.default)) ∧
-      ((∀ i, Subsingleton (E i)) → Poincare.constant (Poincare.piMeasure μ) = 0) ∧
-      (∀ i, Poincare.constant (μ i) = ⊤ →
-        Poincare.constant (Poincare.piMeasure μ) = ⊤)) ∧
+        Poincare.SmoothTest.constant (Poincare.SmoothTest.piMeasure μ) = Poincare.SmoothTest.constant (μ h.default)) ∧
+      ((∀ i, Subsingleton (E i)) → Poincare.SmoothTest.constant (Poincare.SmoothTest.piMeasure μ) = 0) ∧
+      (∀ i, Poincare.SmoothTest.constant (μ i) = ⊤ →
+        Poincare.SmoothTest.constant (Poincare.SmoothTest.piMeasure μ) = ⊤)) ∧
     (∀ {E : Type*}
       [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
       [MeasurableSpace E] [BorelSpace E] [SecondCountableTopology E]
       (μ : Measure E) [IsProbabilityMeasure μ] [Subsingleton E],
-      Poincare.Holds μ 0 ∧ Poincare.constant μ = 0) := by
+      Poincare.SmoothTest.Holds μ 0 ∧ Poincare.SmoothTest.constant μ = 0) := by
   refine ⟨?_, ?_, ?_⟩
   · intro E F _ _ _ _ _ _ _ _ _ _ _ _ μ ν _ _
-    refine ⟨?_, Poincare.constant_left_le_prod, Poincare.constant_right_le_prod,
-      Poincare.constant_prod_eq⟩
+    refine ⟨?_, Poincare.SmoothTest.constant_left_le_prod, Poincare.SmoothTest.constant_right_le_prod,
+      Poincare.SmoothTest.constant_prod_eq⟩
     intro C h
     exact ⟨h.of_prod_left, h.of_prod_right⟩
   · intro ι _ E _ _ _ _ _ _ μ _
-    refine ⟨(fun C h ↦ Poincare.Holds.pi h), (fun {_} i h ↦ h.of_pi i),
-      (fun i ↦ Poincare.constant_le_pi i), Poincare.constant_pi_le,
-      Poincare.constant_pi_eq, ?_, ?_, ?_, (fun i h ↦
-        Poincare.constant_pi_eq_top_of_factor i h)⟩
+    refine ⟨(fun C h ↦ Poincare.SmoothTest.Holds.pi h), (fun {_} i h ↦ h.of_pi i),
+      (fun i ↦ Poincare.SmoothTest.constant_le_pi i), Poincare.SmoothTest.constant_pi_le,
+      Poincare.SmoothTest.constant_pi_eq, ?_, ?_, ?_, (fun i h ↦
+        Poincare.SmoothTest.constant_pi_eq_top_of_factor i h)⟩
     · intro h
       let _ : IsEmpty ι := h
-      exact ⟨Poincare.holds_pi_empty, Poincare.constant_pi_empty⟩
+      exact ⟨Poincare.SmoothTest.holds_pi_empty, Poincare.SmoothTest.constant_pi_empty⟩
     · intro h
       let _ : Unique ι := h
-      exact Poincare.constant_pi_unique
+      exact Poincare.SmoothTest.constant_pi_unique
     · intro h
       let _ : ∀ i, Subsingleton (E i) := h
-      exact Poincare.constant_pi_of_subsingleton
+      exact Poincare.SmoothTest.constant_pi_of_subsingleton
   · intro E _ _ _ _ _ _ μ _ _
-    exact ⟨Poincare.holds_zero_of_subsingleton μ,
-      Poincare.constant_eq_zero_of_subsingleton μ⟩
+    exact ⟨Poincare.SmoothTest.holds_zero_of_subsingleton μ,
+      Poincare.SmoothTest.constant_eq_zero_of_subsingleton μ⟩
 
 end Solutions.LemPoincareFiniteTensorization
 

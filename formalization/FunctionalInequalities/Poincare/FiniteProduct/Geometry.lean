@@ -23,10 +23,8 @@ noncomputable section
 
 open MeasureTheory
 
-/- The unused ambient instances are part of the candidate signatures. -/
-set_option linter.unusedSectionVars false
 
-namespace FunctionalInequalities.Poincare
+namespace FunctionalInequalities.Poincare.SmoothTest
 
 /-- The dependent finite product law on the Hilbert product, including the empty family.
 Source: local encoding of Mathlib's `Measure.pi` transported through `WithLp.toLp 2`. -/
@@ -49,6 +47,8 @@ variable {ι : Type*} [Fintype ι] {E : ι → Type*}
   [∀ i, CompleteSpace (E i)] [∀ i, MeasurableSpace (E i)]
   [∀ i, BorelSpace (E i)] [∀ i, SecondCountableTopology (E i)]
 
+omit [∀ (i : ι), BorelSpace (E i)] [∀ (i : ι), SecondCountableTopology (E i)] in
+omit [(i : ι) → MeasurableSpace (E i)] in
 /-- The adjoint inserts a vector in one coordinate and zero in all other coordinates.
 Source: local helper from Mathlib's `ContinuousLinearMap.adjoint_inner_left`,
 `PiLp.inner_apply`, and `PiLp.single`. -/
@@ -64,6 +64,8 @@ theorem adjoint_pi_proj [DecidableEq ι] (i : ι) (v : E i) :
   · intro h
     exact absurd (Finset.mem_univ i) h
 
+omit [∀ (i : ι), BorelSpace (E i)] [∀ (i : ι), SecondCountableTopology (E i)] in
+omit [(i : ι) → MeasurableSpace (E i)] in
 /-- Source: local consequence of `adjoint_pi_proj` and Mathlib's `PiLp.norm_single`. -/
 theorem isometry_adjoint_pi_proj (i : ι) :
     Isometry (PiLp.proj 2 E i : PiLp 2 E →L[ℝ] E i).adjoint := by
@@ -72,6 +74,7 @@ theorem isometry_adjoint_pi_proj (i : ι) :
   rw [adjoint_pi_proj i v]
   exact PiLp.norm_single 2 E i v
 
+omit [∀ (i : ι), CompleteSpace (E i)] in
 /-- Source: local transport of Mathlib's `measurePreserving_eval` through `WithLp.toLp 2`;
 every factor retains its probability normalization. -/
 theorem measurePreserving_pi_proj (μ : ∀ i, Measure (E i))
@@ -118,6 +121,7 @@ theorem piCongrLeft_apply (e : κ ≃ ι) (x : PiLp 2 fun j ↦ E (e j)) (j : κ
 variable [∀ i, CompleteSpace (E i)] [∀ i, MeasurableSpace (E i)]
   [∀ i, BorelSpace (E i)] [∀ i, SecondCountableTopology (E i)]
 
+omit [∀ (i : ι), CompleteSpace (E i)] in
 /-- Source: local compatibility helper from Mathlib's `Measure.pi_map_piCongrLeft` and
 `Measure.map_map`, for the dependent Hilbert-product encoding. -/
 theorem map_piMeasure_piCongrLeft (e : κ ≃ ι) (μ : ∀ i, Measure (E i))
@@ -173,6 +177,7 @@ theorem piOptionEquivProd_apply (x : PiLp 2 E) :
 variable [∀ i, CompleteSpace (E i)] [∀ i, MeasurableSpace (E i)]
   [∀ i, BorelSpace (E i)] [∀ i, SecondCountableTopology (E i)]
 
+omit [∀ (i : Option ι), CompleteSpace (E i)] in
 /-- Compatibility with the binary `prodMeasure`, including an empty tail.
 Source: local helper using Mathlib's `Measure.pi_map_piOptionEquivProd`, `Measure.prod_swap`,
 and pushforward composition to obtain the chosen `none`-then-tail order. -/
@@ -214,4 +219,4 @@ theorem map_piMeasure_piOptionEquivProd (μ : ∀ i, Measure (E i))
 
 end OptionSplit
 
-end FunctionalInequalities.Poincare
+end FunctionalInequalities.Poincare.SmoothTest

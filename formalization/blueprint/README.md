@@ -55,7 +55,7 @@ relaxation and finite-factor comparison lemmas in the appendix have actual Lean 
 Separately, $C_{\mathrm P}^{\mathrm{aff}}(\mu)$ is the optimal constant of the closed
 covariance-weighted form used by the CMH route. It is defined from the globally Lipschitz
 covariance pre-energy by sequential $L^2$ relaxation on the intrinsic law; the definition is
-implemented as `Poincare.Affine.constant` and carries `\leanok` as a definition node, with its
+implemented as `Poincare.CovarianceGradient.Intrinsic.constant` and carries `\leanok` as a definition node, with its
 log-concave well-definedness contracts proved. It is neither a fourth
 name for the unweighted constant of one fixed law nor a raw locally Lipschitz optimum. Translation
 invariance and the CMH recovery-sequence bound are separate named nodes, so neither the

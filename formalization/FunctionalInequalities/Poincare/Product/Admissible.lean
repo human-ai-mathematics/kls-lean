@@ -23,7 +23,7 @@ noncomputable section
 
 open MeasureTheory ProbabilityTheory
 
-namespace FunctionalInequalities.Poincare
+namespace FunctionalInequalities.Poincare.SmoothTest
 
 variable {E F : Type*}
   [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
@@ -143,4 +143,4 @@ theorem energy_prod_eq (hf : Admissible (prodMeasure μ ν) f) :
   exact integral_congr_ae
     (Filter.Eventually.of_forall fun p ↦ WithLp.prod_norm_sq_eq_of_L2 _)
 
-end FunctionalInequalities.Poincare
+end FunctionalInequalities.Poincare.SmoothTest

@@ -1,5 +1,7 @@
 # kls-lean
 
+公共 API 的短名去除命名空间中的重复信息，见[命名指南](research/naming.md)。
+
 Lean formalization of functional inequalities toward the KLS conjecture, with separate
 statement review and proof stages. Lean and Mathlib are pinned to **v4.33.0**.
 
@@ -10,15 +12,21 @@ recorded explicitly and checked against the original goal; see the
 [current lifecycle](research/ledger-schema.md#lifecycle). Earlier freeze records remain dated
 review snapshots.
 
+## Mathematical API organization (2026-09-08)
+
+The public frontends are `SmoothTest`, `SmoothGradient`, `WeightedGradient`,
+`CovarianceGradient`, and `LocalSlope`; `Ambient` and `Intrinsic` identify the carrier construction.
+Probability pushforwards and L² pullbacks occupy their own layers. See [the naming guide](research/naming.md) and [the migration record](research/decisions/2026-09-08-mathematical-api-organization.md).
+
 ## Where to look
 
 | Purpose | Entry point |
 | --- | --- |
 | Lean source layout, imports, and build instructions | [formalization/README.md](formalization/README.md) |
 | Executable theorem map and long-route alternatives | [formalization/blueprint/README.md](formalization/blueprint/README.md) |
-| Canonical `L²`/energy foundation guide | [Poincare/README.md](formalization/FunctionalInequalities/Poincare/README.md) |
+| `L²`/energy foundation guide | [Poincare/README.md](formalization/FunctionalInequalities/Poincare/README.md) |
 | Compiled foundation examples and boundary cases | [PoincareFoundation.lean](examples/PoincareFoundation.lean) |
-| Proved ambient/intrinsic and legacy/relaxed comparisons | [Comparison guide](formalization/FunctionalInequalities/Poincare/Euclidean/README.md) |
+| Proved ambient/intrinsic and smooth-test/relaxed comparisons | [Comparison guide](formalization/FunctionalInequalities/Poincare/Euclidean/README.md) |
 | Mathematical definitions and scope | [LEAN_DESIGN.md](LEAN_DESIGN.md) |
 | Current work and proof handoff | [HANDOFF.md](HANDOFF.md) |
 | Node statements and certification status | [research/a-series/ledger.yaml](research/a-series/ledger.yaml) |

@@ -9,8 +9,8 @@ Source: Bakry, Gentil and Ledoux, *Analysis and Geometry of Markov Diffusion Ope
 https://www.hse.ru/data/2016/11/24/1113029204/bok%253A978-3-319-00227-9.pdf#page=201
 The proposition gives the fixed-constant upper bound `max C C'` for a product of Markov triples.
 
-This certificate combines `Poincare.Holds.prod`, a local realization of that upper bound for
-the repository's smooth L² finite-gradient-energy tests, with `Poincare.constant_prod_le`, its
+This certificate combines `Poincare.SmoothTest.Holds.prod`, a local realization of that upper bound for
+the repository's smooth L² finite-gradient-energy tests, with `Poincare.SmoothTest.constant_prod_le`, its
 local infimum consequence in `ENNReal`. Each factor is explicitly a probability measure on a
 complete, second-countable real Hilbert space with its Borel structure, and the product uses
 `WithLp 2`. Equivalence with the book's Dirichlet-form domain is not asserted. Zero-dimensional
@@ -25,7 +25,7 @@ open FunctionalInequalities
 namespace Solutions.LemPoincareTensorization
 
 /-- Source: BGL Proposition 4.3.1 for the fixed-constant upper bound; the optimal-constant upper
-bound is the local infimum consequence `Poincare.constant_prod_le`. This certificate combines
+bound is the local infimum consequence `Poincare.SmoothTest.constant_prod_le`. This certificate combines
 both results for the repository's test domain, with separate probability assumptions on the
 two factors. See the module comment for the source's Markov-triple scope. -/
 theorem certificate {E F : Type*}
@@ -35,14 +35,14 @@ theorem certificate {E F : Type*}
     [MeasurableSpace F] [BorelSpace F] [SecondCountableTopology F]
     (μ : Measure E) (ν : Measure F)
     [IsProbabilityMeasure μ] [IsProbabilityMeasure ν] :
-    (∀ ⦃C C' : ℝ⦄, Poincare.Holds μ C → Poincare.Holds ν C' →
-      Poincare.Holds (Poincare.prodMeasure μ ν) (max C C')) ∧
-      Poincare.constant (Poincare.prodMeasure μ ν) ≤
-        max (Poincare.constant μ) (Poincare.constant ν) := by
+    (∀ ⦃C C' : ℝ⦄, Poincare.SmoothTest.Holds μ C → Poincare.SmoothTest.Holds ν C' →
+      Poincare.SmoothTest.Holds (Poincare.SmoothTest.prodMeasure μ ν) (max C C')) ∧
+      Poincare.SmoothTest.constant (Poincare.SmoothTest.prodMeasure μ ν) ≤
+        max (Poincare.SmoothTest.constant μ) (Poincare.SmoothTest.constant ν) := by
   constructor
   · intro C C' hμ hν
     exact hμ.prod hν
-  · exact Poincare.constant_prod_le
+  · exact Poincare.SmoothTest.constant_prod_le
 
 section EuclideanChecks
 
@@ -53,10 +53,10 @@ variable {m n : ℕ}
 
 -- Local specialization of this certificate to arbitrary Euclidean dimensions, including zero.
 #check (certificate μ ν :
-  (∀ ⦃C C' : ℝ⦄, Poincare.Holds μ C → Poincare.Holds ν C' →
-    Poincare.Holds (Poincare.prodMeasure μ ν) (max C C')) ∧
-    Poincare.constant (Poincare.prodMeasure μ ν) ≤
-      max (Poincare.constant μ) (Poincare.constant ν))
+  (∀ ⦃C C' : ℝ⦄, Poincare.SmoothTest.Holds μ C → Poincare.SmoothTest.Holds ν C' →
+    Poincare.SmoothTest.Holds (Poincare.SmoothTest.prodMeasure μ ν) (max C C')) ∧
+    Poincare.SmoothTest.constant (Poincare.SmoothTest.prodMeasure μ ν) ≤
+      max (Poincare.SmoothTest.constant μ) (Poincare.SmoothTest.constant ν))
 
 end EuclideanChecks
 

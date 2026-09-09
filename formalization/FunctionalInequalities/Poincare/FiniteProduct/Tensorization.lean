@@ -1,6 +1,6 @@
 import FunctionalInequalities.Poincare.FiniteProduct.Geometry
 import FunctionalInequalities.Poincare.Product.Tensorization
-import FunctionalInequalities.Poincare.Transport
+import FunctionalInequalities.Poincare.SmoothTest.Transport
 
 /-!
 # Finite Poincaré tensorization and optimal-constant equality
@@ -28,9 +28,8 @@ noncomputable section
 open MeasureTheory
 
 /- The unused ambient instances are retained in the candidate signatures. -/
-set_option linter.unusedSectionVars false
 
-namespace FunctionalInequalities.Poincare
+namespace FunctionalInequalities.Poincare.SmoothTest
 
 universe uι uE
 
@@ -160,6 +159,7 @@ family and infinite values. The exact test class and Hilbert encoding are local 
 theorem constant_pi_eq : constant (piMeasure μ) = ⨆ i, constant (μ i) :=
   le_antisymm constant_pi_le (iSup_le fun i ↦ constant_le_pi i)
 
+omit [∀ (i : ι), BorelSpace (E i)] [∀ (i : ι), SecondCountableTopology (E i)] in
 /-- Source: local empty-family consequence of `holds_zero_of_subsingleton`.
 The manuscript does not separately state an empty-product fixed constant. -/
 theorem holds_pi_empty [IsEmpty ι] : Holds (piMeasure μ) 0 := by
@@ -167,6 +167,7 @@ theorem holds_pi_empty [IsEmpty ι] : Holds (piMeasure μ) 0 := by
     (WithLp.linearEquiv 2 ℝ (∀ i, E i)).toEquiv.subsingleton
   exact holds_zero_of_subsingleton (piMeasure μ)
 
+omit [∀ (i : ι), BorelSpace (E i)] [∀ (i : ι), SecondCountableTopology (E i)] in
 /-- Source: local empty-family consequence of `constant_eq_zero_of_subsingleton`.
 This makes the empty-product boundary of the indexed-supremum formula explicit. -/
 theorem constant_pi_empty [IsEmpty ι] : constant (piMeasure μ) = 0 := by
@@ -180,6 +181,7 @@ theorem constant_pi_unique [Unique ι] : constant (piMeasure μ) = constant (μ 
   rw [constant_pi_eq]
   exact iSup_unique fun i ↦ constant (μ i)
 
+omit [∀ (i : ι), BorelSpace (E i)] [∀ (i : ι), SecondCountableTopology (E i)] in
 /-- Any family of zero-dimensional factors, including the empty family.
 Source: local boundary consequence of `constant_eq_zero_of_subsingleton`, not a separate
 manuscript theorem. -/
@@ -196,4 +198,4 @@ theorem constant_pi_eq_top_of_factor (i : ι) (hi : constant (μ i) = ⊤) :
     constant (piMeasure μ) = ⊤ :=
   top_unique (hi ▸ constant_le_pi i)
 
-end FunctionalInequalities.Poincare
+end FunctionalInequalities.Poincare.SmoothTest

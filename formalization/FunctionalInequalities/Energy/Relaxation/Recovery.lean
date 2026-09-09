@@ -19,9 +19,8 @@ noncomputable section
 
 open Filter Topology
 
-namespace FunctionalInequalities.Energy
+namespace FunctionalInequalities.Energy.PreEnergy
 
-namespace PreEnergy
 
 universe u
 
@@ -115,6 +114,4 @@ theorem hasRecoverySequenceAt_sequentialRelaxation
       exact not_ne_iff.mp hfinite
     exact P.hasRecoverySequenceAt_sequentialRelaxation_of_eq_top hDense htop
 
-end PreEnergy
-
-end FunctionalInequalities.Energy
+end FunctionalInequalities.Energy.PreEnergy

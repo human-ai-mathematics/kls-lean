@@ -1,9 +1,9 @@
-import FunctionalInequalities.Poincare.Optimal
+import FunctionalInequalities.Poincare.SmoothTest.Optimal
 
 /-!
 # Comparison of abstract Poincaré test families
 
-The optimizer in `Poincare.Optimal` is independent of analysis. This module records the two
+The optimizer in `Poincare.SmoothTest.Optimal` is independent of analysis. This module records the two
 order principles needed when changing a test domain or an energy: adding tests can only increase
 the optimal constant, while increasing the energy on a fixed family can only decrease it.
 

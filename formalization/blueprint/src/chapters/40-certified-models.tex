@@ -1,16 +1,16 @@
 \chapter{Certified models and frontend comparisons}
 \label{chap:certified-models}
 
-The first four certificates use the legacy smooth-test domain. Two further certificates
-identify ambient and intrinsic relaxations and transport the finite-dimensional legacy conclusions
+The first four certificates use the smooth-test domain. Two further certificates
+identify ambient and intrinsic relaxations and transport the finite-dimensional smooth-test conclusions
 to the selected closed-energy domain.  The tensorization normalization follows the classical
 product argument in \cite{BakryGentilLedoux2014}.
 
-\begin{definition}[Legacy smooth-test Poincar\'e API]
+\begin{definition}[Smooth-test Poincar\'e API]
   \label{def:legacy-smooth-test-poincare}
-  \lean{FunctionalInequalities.Poincare.Admissible,
-        FunctionalInequalities.Poincare.Holds,
-        FunctionalInequalities.Poincare.constant}
+  \lean{FunctionalInequalities.Poincare.SmoothTest.Admissible,
+        FunctionalInequalities.Poincare.SmoothTest.Holds,
+        FunctionalInequalities.Poincare.SmoothTest.constant}
   \leanok
   For a Borel measure $\mu$ on a real Hilbert space, an admissible test is globally $C^\infty$,
   belongs to real $L^2(\mu)$, and has integrable squared canonical gradient.  The predicate
@@ -73,7 +73,7 @@ product argument in \cite{BakryGentilLedoux2014}.
   \leanok
   \uses{cert:linear-test-lower,def:legacy-smooth-test-poincare}
   For every $m\in\R$ and every variance $v\ge0$, the Gaussian law
-  $\gamma_{m,v}$ satisfies the legacy inequality at $v$, and
+  $\gamma_{m,v}$ satisfies the smooth-test inequality at $v$, and
   \[
     \CP(\gamma_{m,v})=v.
   \]
@@ -86,7 +86,7 @@ product argument in \cite{BakryGentilLedoux2014}.
   sharpness.
 \end{proof}
 
-The four model certificates use the legacy frontend. In finite dimension, the proved bridge
+The four model certificates use the smooth-test frontend. In finite dimension, the proved bridge
 \cref{thm:legacy-canonical-constant-comparison} transfers their conclusions to the selected
 constant without raw/core agreement. Tensorization and the Gaussian computation remain model
 infrastructure: a general one-dimensional log-concave input is still required for all product
@@ -108,14 +108,14 @@ log-concave laws, and the long KLS routes require the remaining shared endpoint 
   Combine the five geometric and optimizer comparisons without strengthening their hypotheses.
 \end{proof}
 
-\begin{theorem}[Certified legacy and relaxed comparison]
+\begin{theorem}[Smooth-test and relaxed constants]
   \label{cert:legacy-relaxed-comparison}
   \lean{Solutions.LemLegacyRelaxedPoincareComparison.certificate}
   \leanok
   \uses{lem:preenergy-poincare-relaxation,thm:legacy-relaxed-holds-equivalence,
         thm:legacy-canonical-constant-comparison}
   The certificate packages the abstract pre-energy comparison for arbitrary measurable
-  probabilities and the five finite-dimensional legacy-to-ambient-to-intrinsic comparisons.
+  probabilities and the five finite-dimensional smooth-test-to-ambient-to-intrinsic comparisons.
   The Gaussian bound and exact optimum therefore transfer to the selected frontend, including
   zero variance. No locally Lipschitz or Cheeger identification is part of this certificate.
 \end{theorem}

@@ -1,0 +1,101 @@
+{
+  "formalization/FunctionalInequalities/Probability/CovarianceSqrt.lean": [
+    "formalization/FunctionalInequalities/Probability/CovarianceFactorization.lean"
+  ],
+  "formalization/FunctionalInequalities/KLS/ConditionalFiber.lean": [
+    "formalization/FunctionalInequalities/KLS/ConditionalFiber.lean",
+    "formalization/FunctionalInequalities/Probability/Moments.lean"
+  ],
+  "formalization/FunctionalInequalities/KLS/Definitions.lean": [
+    "formalization/FunctionalInequalities/Energy/LocalSlope/Basic.lean",
+    "formalization/FunctionalInequalities/KLS/Definitions.lean",
+    "formalization/FunctionalInequalities/Poincare/LocalSlope/Basic.lean"
+  ],
+  "formalization/FunctionalInequalities/KLS/LogConcave/AffineClosedForm.lean": [
+    "formalization/FunctionalInequalities/KLS/LogConcave/AffineClosedForm.lean",
+    "formalization/FunctionalInequalities/Probability/CovarianceFactorization.lean"
+  ],
+  "formalization/FunctionalInequalities/Poincare/Euclidean/LipschitzComparison.lean": [
+    "formalization/FunctionalInequalities/Energy/WeightedGradient/Basic.lean",
+    "formalization/FunctionalInequalities/Poincare/LipschitzGradient/Comparison.lean"
+  ],
+  "formalization/FunctionalInequalities/Poincare/Euclidean/AffineCovariance.lean": [
+    "formalization/FunctionalInequalities/Poincare/CovarianceGradient/Intrinsic.lean"
+  ],
+  "formalization/FunctionalInequalities/Poincare/Euclidean/IntrinsicAffine.lean": [
+    "formalization/FunctionalInequalities/Poincare/SmoothGradient/Intrinsic.lean"
+  ],
+  "formalization/FunctionalInequalities/Poincare/Euclidean/SmoothGradient.lean": [
+    "formalization/FunctionalInequalities/Poincare/SmoothGradient/Ambient.lean"
+  ],
+  "formalization/FunctionalInequalities/Poincare/Euclidean/LogConcaveComparison.lean": [
+    "formalization/FunctionalInequalities/Poincare/LocalSlope/LogConcaveComparison.lean"
+  ],
+  "formalization/FunctionalInequalities/Poincare/Euclidean/AffineTranslation.lean": [
+    "formalization/FunctionalInequalities/Energy/CovarianceGradient/IntrinsicTranslation.lean",
+    "formalization/FunctionalInequalities/Poincare/CovarianceGradient/Translation.lean",
+    "formalization/FunctionalInequalities/Probability/IntrinsicTranslation.lean"
+  ],
+  "formalization/FunctionalInequalities/Poincare/Euclidean/AffineComparison.lean": [
+    "formalization/FunctionalInequalities/Poincare/SmoothGradient/Comparison.lean"
+  ],
+  "formalization/FunctionalInequalities/Poincare/Euclidean/LiteratureComparison.lean": [
+    "formalization/FunctionalInequalities/Poincare/LocalSlope/SmoothTestComparison.lean"
+  ],
+  "formalization/FunctionalInequalities/Poincare/Euclidean/LegacyComparison.lean": [
+    "formalization/FunctionalInequalities/Poincare/SmoothTest/RelaxationComparison.lean"
+  ],
+  "formalization/FunctionalInequalities/Energy/Euclidean/AffineComparison.lean": [
+    "formalization/FunctionalInequalities/Energy/SmoothGradient/Intrinsic/Comparison.lean"
+  ],
+  "formalization/FunctionalInequalities/Energy/Euclidean/SmoothGradient/Quadratic.lean": [
+    "formalization/FunctionalInequalities/Energy/SmoothGradient/Quadratic.lean"
+  ],
+  "formalization/FunctionalInequalities/Energy/Euclidean/SmoothGradient/Closed.lean": [
+    "formalization/FunctionalInequalities/Energy/SmoothGradient/Closed.lean"
+  ],
+  "formalization/FunctionalInequalities/Energy/Euclidean/SmoothGradient/Basic.lean": [
+    "formalization/FunctionalInequalities/Energy/SmoothGradient/Basic.lean"
+  ],
+  "formalization/FunctionalInequalities/Energy/Euclidean/SmoothGradient/Density.lean": [
+    "formalization/FunctionalInequalities/Energy/SmoothGradient/Density.lean"
+  ],
+  "formalization/FunctionalInequalities/Energy/Euclidean/IntrinsicAffine/Closed.lean": [
+    "formalization/FunctionalInequalities/Energy/SmoothGradient/Intrinsic/Closed.lean"
+  ],
+  "formalization/FunctionalInequalities/Energy/Euclidean/IntrinsicAffine/Basic.lean": [
+    "formalization/FunctionalInequalities/Energy/SmoothGradient/Intrinsic/Basic.lean"
+  ],
+  "formalization/FunctionalInequalities/Energy/Euclidean/CovarianceGradient/Core.lean": [
+    "formalization/FunctionalInequalities/Energy/WeightedGradient/Core.lean"
+  ],
+  "formalization/FunctionalInequalities/Energy/Euclidean/CovarianceGradient/Isometry.lean": [
+    "formalization/FunctionalInequalities/Energy/CovarianceGradient/Isometry.lean",
+    "formalization/FunctionalInequalities/L2/Transport.lean",
+    "formalization/FunctionalInequalities/Poincare/CovarianceGradient/Transport.lean",
+    "formalization/FunctionalInequalities/Probability/Transport.lean"
+  ],
+  "formalization/FunctionalInequalities/Energy/Euclidean/CovarianceGradient/Basic.lean": [
+    "formalization/FunctionalInequalities/Energy/CovarianceGradient/Basic.lean"
+  ],
+  "formalization/FunctionalInequalities/Energy/Euclidean/CovarianceGradient/Closable.lean": [
+    "formalization/FunctionalInequalities/Energy/WeightedGradient/Closable.lean",
+    "formalization/FunctionalInequalities/Probability/LocalDomination.lean"
+  ],
+  "formalization/FunctionalInequalities/Energy/Euclidean/CovarianceGradient/Operator.lean": [
+    "formalization/FunctionalInequalities/Energy/WeightedGradient/Basic.lean",
+    "formalization/FunctionalInequalities/L2/MeanVariance.lean"
+  ],
+  "formalization/FunctionalInequalities/Energy/Euclidean/CovarianceGradient/LinearEquiv.lean": [
+    "formalization/FunctionalInequalities/Energy/CovarianceGradient/LinearEquiv.lean",
+    "formalization/FunctionalInequalities/L2/Transport.lean",
+    "formalization/FunctionalInequalities/Poincare/CovarianceGradient/Transport.lean",
+    "formalization/FunctionalInequalities/Probability/Transport.lean"
+  ],
+  "formalization/FunctionalInequalities/Energy/Euclidean/CovarianceGradient/Translation.lean": [
+    "formalization/FunctionalInequalities/Energy/CovarianceGradient/Translation.lean",
+    "formalization/FunctionalInequalities/L2/Transport.lean",
+    "formalization/FunctionalInequalities/Poincare/CovarianceGradient/Transport.lean",
+    "formalization/FunctionalInequalities/Probability/Transport.lean"
+  ]
+}

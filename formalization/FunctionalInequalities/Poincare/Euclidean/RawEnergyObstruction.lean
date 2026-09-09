@@ -1,4 +1,4 @@
-import FunctionalInequalities.Poincare.Basic
+import FunctionalInequalities.Poincare.SmoothTest.Basic
 import Mathlib.MeasureTheory.Function.LpSpace.Basic
 
 /-!
@@ -23,9 +23,9 @@ theorem zero_ae_eq_id_dirac : (fun _ : ℝ ↦ (0 : ℝ)) =ᵐ[Measure.dirac 0] 
 /-- The named raw-energy obstruction: the same a.e. representative class has energies 0 and 1. -/
 theorem dirac_raw_energy :
     (fun _ : ℝ ↦ (0 : ℝ)) =ᵐ[Measure.dirac 0] id ∧
-      energy (Measure.dirac (0 : ℝ)) (fun _ ↦ 0) = 0 ∧
-      energy (Measure.dirac (0 : ℝ)) id = 1 := by
-  refine ⟨zero_ae_eq_id_dirac, ?_, ?_⟩ <;> rw [energy_eq_fderiv] <;> simp
+      Poincare.SmoothTest.energy (Measure.dirac (0 : ℝ)) (fun _ ↦ 0) = 0 ∧
+      Poincare.SmoothTest.energy (Measure.dirac (0 : ℝ)) id = 1 := by
+  refine ⟨zero_ae_eq_id_dirac, ?_, ?_⟩ <;> rw [Poincare.SmoothTest.energy_eq_fderiv] <;> simp
 
 /-- Both representatives are in L² and their actual `toLp` classes are equal. -/
 theorem dirac_toLp_zero_eq_id :

@@ -1,4 +1,4 @@
-import FunctionalInequalities.KLS.LogConcave.IsotropicReduction
+import FunctionalInequalities.KLS.LogConcave.Isotropic
 import Mathlib.Analysis.Normed.Lp.MeasurableSpace
 
 /-!
@@ -36,14 +36,14 @@ theorem certificate (K : NNReal) :
 covariance-normalized literature bound in every dimension. -/
 example (K : NNReal) (h : KLS.AffineBound.{0} K) (n : ℕ)
     (μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin n))) (hμ : KLS.LogConcave μ) :
-    KLS.literatureConstant μ ≤
+    FunctionalInequalities.Poincare.LocalSlope.Intrinsic.constant μ ≤
       (K : ENNReal) * ENNReal.ofReal ‖Covariance.operator (μ : Measure (EuclideanSpace ℝ (Fin n)))‖ :=
   ((certificate K).2.1.mpr h) (EuclideanSpace ℝ (Fin n)) μ hμ
 
 /-- Dimension zero: both constants vanish, so every `K` bounds them. -/
 example (K : NNReal) (μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin 0))) :
-    Poincare.Affine.constant μ ≤ (K : ENNReal) ∧ KLS.literatureConstant μ ≤ (K : ENNReal) := by
-  rw [Poincare.Affine.constant_eq_zero_of_subsingleton μ, KLS.literatureConstant_eq_zero_of_subsingleton μ]
+    FunctionalInequalities.Poincare.CovarianceGradient.Intrinsic.constant μ ≤ (K : ENNReal) ∧ FunctionalInequalities.Poincare.LocalSlope.Intrinsic.constant μ ≤ (K : ENNReal) := by
+  rw [FunctionalInequalities.Poincare.CovarianceGradient.Intrinsic.constant_eq_zero_of_subsingleton μ, FunctionalInequalities.Poincare.LocalSlope.Intrinsic.constant_eq_zero_of_subsingleton μ]
   exact ⟨zero_le, zero_le⟩
 
 end Solutions.ThmAffineIsotropicReduction
@@ -77,18 +77,18 @@ info: 'FunctionalInequalities.Covariance.operator_map_continuousLinearEquiv'
 #print axioms FunctionalInequalities.Covariance.operator_map_continuousLinearEquiv
 
 /--
-info: 'FunctionalInequalities.Energy.Euclidean.covarianceRelaxation_mapEquivLaw'
+info: 'FunctionalInequalities.Energy.CovarianceGradient.relaxation_mapContinuousLinearEquiv'
   depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms FunctionalInequalities.Energy.Euclidean.covarianceRelaxation_mapEquivLaw
+#print axioms FunctionalInequalities.Energy.CovarianceGradient.relaxation_mapContinuousLinearEquiv
 
 /--
-info: 'FunctionalInequalities.Poincare.L2Energy.constant_covarianceRelaxation_mapEquivLaw'
+info: 'FunctionalInequalities.Poincare.CovarianceGradient.constant_mapContinuousLinearEquiv'
   depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms FunctionalInequalities.Poincare.L2Energy.constant_covarianceRelaxation_mapEquivLaw
+#print axioms FunctionalInequalities.Poincare.CovarianceGradient.constant_mapContinuousLinearEquiv
 
 /--
 info: 'FunctionalInequalities.exists_whitening_of_isSymmetric'
@@ -105,25 +105,25 @@ info: 'FunctionalInequalities.Covariance.exists_whitening'
 #print axioms FunctionalInequalities.Covariance.exists_whitening
 
 /--
-info: 'FunctionalInequalities.Poincare.L2Energy.holds_lipschitzGradientRelaxation_iff_literatureHolds'
+info: 'FunctionalInequalities.Poincare.LipschitzGradient.holds_iff_localSlope'
   depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms FunctionalInequalities.Poincare.L2Energy.holds_lipschitzGradientRelaxation_iff_literatureHolds
+#print axioms FunctionalInequalities.Poincare.LipschitzGradient.holds_iff_localSlope
 
 /--
-info: 'FunctionalInequalities.Poincare.constant_eq_lipschitzGradientRelaxation'
+info: 'FunctionalInequalities.Poincare.SmoothTest.constant_eq_lipschitz'
   depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms FunctionalInequalities.Poincare.constant_eq_lipschitzGradientRelaxation
+#print axioms FunctionalInequalities.Poincare.SmoothTest.constant_eq_lipschitz
 
 /--
-info: 'FunctionalInequalities.Energy.Euclidean.covarianceRelaxation_le_opNorm_mul_lipschitzGradientRelaxation'
+info: 'FunctionalInequalities.Energy.CovarianceGradient.relaxation_le_mul_lipschitz'
   depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms FunctionalInequalities.Energy.Euclidean.covarianceRelaxation_le_opNorm_mul_lipschitzGradientRelaxation
+#print axioms FunctionalInequalities.Energy.CovarianceGradient.relaxation_le_mul_lipschitz
 
 /--
 info: 'FunctionalInequalities.KLS.LogConcave.of_continuousLinearEquiv_map'
@@ -133,18 +133,18 @@ info: 'FunctionalInequalities.KLS.LogConcave.of_continuousLinearEquiv_map'
 #print axioms FunctionalInequalities.KLS.LogConcave.of_continuousLinearEquiv_map
 
 /--
-info: 'FunctionalInequalities.KLS.LogConcave.exists_isotropic_literatureConstant_eq'
+info: 'FunctionalInequalities.KLS.LogConcave.exists_isotropic_localSlope_constant_eq'
   depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms FunctionalInequalities.KLS.LogConcave.exists_isotropic_literatureConstant_eq
+#print axioms FunctionalInequalities.KLS.LogConcave.exists_isotropic_localSlope_constant_eq
 
 /--
-info: 'FunctionalInequalities.KLS.LogConcave.literatureConstant_le_opNorm_mul_affine_constant'
+info: 'FunctionalInequalities.KLS.LogConcave.localSlope_le_mul_intrinsicCovariance'
   depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms FunctionalInequalities.KLS.LogConcave.literatureConstant_le_opNorm_mul_affine_constant
+#print axioms FunctionalInequalities.KLS.LogConcave.localSlope_le_mul_intrinsicCovariance
 
 /--
 info: 'FunctionalInequalities.KLS.affine_isotropic_reduction'

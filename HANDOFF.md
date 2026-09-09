@@ -1,7 +1,16 @@
 # KLS Lean repository handoff
 
+命名空间已表达的内容不再重复进声明短名；见[短名补充记录](research/decisions/2026-09-08-namespace-short-names.md)。
+比较名称也只写一次共有操作，见[比较短名记录](research/decisions/2026-09-08-comparison-short-names.md)。
+
 This is the current operational handoff for `kls-lean`. It records repository identity,
 authority boundaries, certified results, exact non-claims, and reproducible checks.
+
+## Mathematical API organization (2026-09-08)
+
+The public frontends are `SmoothTest`, `SmoothGradient`, `WeightedGradient`,
+`CovarianceGradient`, and `LocalSlope`; `Ambient` and `Intrinsic` identify the carrier construction.
+Probability pushforwards and L² pullbacks occupy their own layers. See [the naming guide](research/naming.md) and [the migration record](research/decisions/2026-09-08-mathematical-api-organization.md).
 
 ## Repository identity
 
@@ -29,7 +38,7 @@ git log -5 --oneline
 | --- | --- |
 | Repository overview | [`README.md`](README.md) |
 | Lean layout and build | [`formalization/README.md`](formalization/README.md) |
-| Canonical energy boundary | [`formalization/FunctionalInequalities/Poincare/README.md`](formalization/FunctionalInequalities/Poincare/README.md) |
+| Energy foundation boundary | [`formalization/FunctionalInequalities/Poincare/README.md`](formalization/FunctionalInequalities/Poincare/README.md) |
 | Mathematical design contract | [`LEAN_DESIGN.md`](LEAN_DESIGN.md) |
 | Executable dependency map | [`formalization/blueprint/README.md`](formalization/blueprint/README.md) |
 | Certification lifecycle | [`research/a-series/ledger.yaml`](research/a-series/ledger.yaml) and [`research/ledger-schema.md`](research/ledger-schema.md) |
@@ -116,12 +125,12 @@ packages these, so the ledger then had thirteen proved nodes. This unblocks the 
 `def:affine-poincare-constant`. Read
 [the record](research/decisions/2026-09-07-ambient-intrinsic-covariance.md).
 
-`def:affine-poincare-constant` is now implemented. `Energy/Euclidean/CovarianceGradient/Basic.lean`
-defines the globally Lipschitz covariance-weighted gradient pre-energy `covariancePreEnergy ν` with
+`def:affine-poincare-constant` is now implemented. `Energy/CovarianceGradient/Basic.lean`
+defines the globally Lipschitz covariance-weighted gradient pre-energy `Energy.CovarianceGradient.preEnergy ν` with
 `Σ = Covariance.operator ν`, its sequential `L²(ν)` relaxation, and the affine specialization
-`Energy.Affine.energy μ` on the intrinsic law; `Poincare/Euclidean/AffineCovariance.lean` defines
-`Poincare.Affine.constant μ` through `Poincare.L2Energy.constant` and proves that a zero-dimensional
-direction gives constant zero. `KLS/LogConcave/AffineCovariance.lean` proves the three log-concave
+`Energy.CovarianceGradient.Intrinsic.energy μ` on the intrinsic law; `Poincare/CovarianceGradient/Intrinsic.lean` defines
+`Poincare.CovarianceGradient.Intrinsic.constant μ` through `Poincare.L2Energy.constant` and proves that a zero-dimensional
+direction gives constant zero. `KLS/LogConcave/Covariance.lean` proves the three log-concave
 well-definedness contracts: intrinsic finite second moment, almost-everywhere differentiability of
 every test by Rademacher, and representative independence of the energy. The Blueprint definition
 carries `\leanok` as a definition node and does not enter the ledger. Closability, closed-form
@@ -137,48 +146,48 @@ closure. `Energy/Euclidean/WeakDerivative.lean` proves integration by parts for 
 functions against `C_c^∞` tests. `Energy/Euclidean/CovarianceGradient/{Operator,Closable,Core}.lean`
 define the weighted gradient operator `g ↦ B ∘ ∇g` on `L²(ν)`, prove it closable under absolute
 continuity, null support frontier and local domination of Haar measure, and prove dense domain and
-the smooth-core closure identity. `KLS/LogConcave/CovarianceClosure.lean` discharges these
+the smooth-core closure identity. `KLS/LogConcave/WeightedGradient.lean` discharges these
 hypotheses for every full-dimensional log-concave law and for the intrinsic law of any log-concave
-law, and identifies `Energy.Affine.energy` with the operator relaxation for every `B` with
+law, and identifies `Energy.CovarianceGradient.Intrinsic.energy` with the operator relaxation for every `B` with
 `⟪Σ v, v⟫ = ‖B v‖²`. `Solutions.LemCovarianceCoreClosure.certificate` packages dense domain,
 closability, core independence and the relaxation identity; the ledger then had fourteen proved
 nodes. Read [the record](research/decisions/2026-09-08-covariance-core-closure.md).
 
-`thm:affine-covariance-relaxation-closed` was proved the same day. `Probability/CovarianceSqrt.lean`
-gives a square root `B` of any covariance operator (`⟪Σ v, v⟫ = ‖B v‖²`, spectral theorem);
-`Energy/Euclidean/CovarianceGradient/Translation.lean` proves that translating a law gives an `L²`
+`thm:affine-covariance-relaxation-closed` was proved the same day. `Probability/CovarianceFactorization.lean`
+gives a norm factorization `B` of any covariance quadratic form (`⟪Σ v, v⟫ = ‖B v‖²`, spectral theorem);
+`Energy/CovarianceGradient/Translation.lean` proves that translating a law gives an `L²`
 isometry preserving variance, covariance operator, covariance relaxation and optimal constant;
-`KLS/LogConcave/AffineClosedForm.lean` shows for every log-concave law that the affine pre-energy has
-dense realization, that `Energy.Affine.energy μ` is a closed quadratic form with the globally
+`KLS/LogConcave/ClosedForm.lean` shows for every log-concave law that the affine pre-energy has
+dense realization, that `Energy.CovarianceGradient.Intrinsic.energy μ` is a closed quadratic form with the globally
 Lipschitz tests as sequential core, and that it equals the squared-norm energy of the closure of
-`B ∇` on the core `ℝ + C_c^∞` (the CMH closed form), with `Poincare.Affine.constant μ` its optimal
+`B ∇` on the core `ℝ + C_c^∞` (the CMH closed form), with `Poincare.CovarianceGradient.Intrinsic.constant μ` its optimal
 constant. `Solutions.ThmAffineCovarianceRelaxationClosed.certificate` packages these; the ledger
 then had fifteen proved nodes. Read
 [the record](research/decisions/2026-09-08-affine-covariance-relaxation-closed.md).
 
 `lem:affine-poincare-translation-invariance` was proved later the same day.
-`Energy/Euclidean/CovarianceGradient/Isometry.lean` transports a law, its covariance operator, the
+`Energy/CovarianceGradient/Isometry.lean` transports a law, its covariance operator, the
 gradient, the covariance relaxation and its optimal constant along a linear isometric equivalence;
-`Poincare/Euclidean/AffineTranslation.lean` shows that the ambient translate
-`Energy.Euclidean.translateLaw μ b` has the translated affine support with the same direction, that
+`Poincare/CovarianceGradient/Translation.lean` shows that the ambient translate
+`Probability.translateLaw μ b` has the translated affine support with the same direction, that
 its intrinsic law is a translate of the isometric image of the intrinsic law of `μ`, and hence that
-`Poincare.Affine.constant` is unchanged (for every Borel law), together with a variance-preserving
+`Poincare.CovarianceGradient.Intrinsic.constant` is unchanged (for every Borel law), together with a variance-preserving
 `L²` isometry intertwining the two affine relaxations and the barycenter identity for translates;
-`KLS/LogConcave/AffineTranslation.lean` proves that translation keeps compact-set log-concavity,
+`KLS/LogConcave/Translation.lean` proves that translation keeps compact-set log-concavity,
 that log-concave laws have a finite ambient second moment, and that translating by the negative
 barycenter centers the law. `Solutions.LemAffinePoincareTranslationInvariance.certificate` packages
 these; the ledger then had sixteen proved nodes. Read
 [the record](research/decisions/2026-09-08-affine-poincare-translation-invariance.md).
 
-`thm:affine-isotropic-reduction` was proved next. `Energy/Euclidean/CovarianceGradient/LinearEquiv.lean`
+`thm:affine-isotropic-reduction` was proved next. `Energy/CovarianceGradient/LinearEquiv.lean`
 transports a law, its covariance operator (conjugated by the map and its adjoint), the gradient,
 the covariance relaxation and its optimal constant along any continuous linear equivalence;
 `Probability/CovarianceWhitening.lean` gives a self-adjoint whitening of a positive definite
 covariance, with `W Σ W = I` but no positivity or uniqueness conclusion for `W`;
-`Poincare/Euclidean/LipschitzComparison.lean` identifies the optimal constant of
-the identity-weighted Lipschitz gradient relaxation with the legacy smooth-test and literature
+`Poincare/LipschitzGradient/Comparison.lean` identifies the optimal constant of
+the identity-weighted Lipschitz gradient relaxation with the smooth-test and literature
 constants and bounds the covariance relaxation by `‖Σ‖` times it (with the new scaled relaxation
-comparison `PreEnergy.sequentialRelaxation_comp_le_mul`); `KLS/LogConcave/IsotropicReduction.lean`
+comparison `PreEnergy.sequentialRelaxation_comp_le_mul`); `KLS/LogConcave/Isotropic.lean`
 defines the three statements `KLS.IsotropicBound K`, `KLS.CovarianceBound K`, `KLS.AffineBound K`
 over every finite-dimensional Euclidean space of a fixed universe and proves their equivalence by
 centering and whitening the intrinsic law, together with `KLS.conjecture_of_affineBound`.
@@ -214,14 +223,14 @@ axiom guards. The ledger records `proved / checked_by: lean`; the local approxim
 is assessed as `available`. See the
 [acceptance record](research/decisions/2026-09-06-weighted-approximation-acceptance.md).
 `thm:smooth-lipschitz-constant-equivalence` now has eight proved interfaces in
-`KLS/LocalSlopeGradient.lean` and `Poincare/Euclidean/LiteratureComparison.lean`.
+`Energy/LocalSlope/Gradient.lean` and `Poincare/LocalSlope/SmoothTestComparison.lean`.
 The sole certificate in `solutions/ThmSmoothLipschitzConstantEquivalence.lean` packages all eight;
 it and every component have default-build axiom guards. The ledger records
 `proved / checked_by: lean`. Read the
 [proof record](research/decisions/2026-09-06-smooth-literature-proofs.md).
 The general log-concave extension is now proved as well. `KLS/LogConcave/AbsoluteContinuity.lean` derives
 intrinsic absolute continuity directly from compact-set log-concavity, and
-`Poincare/Euclidean/LogConcaveComparison.lean` identifies the selected and literature constants
+`KLS/LogConcave/Poincare.lean` identifies the selected and literature constants
 without an added density premise. Two separate certificates record these exact results; the
 full Borell density representative and moment theorem is separately certified by
 `Solutions.ThmBorellLogconcaveDensity.certificate`. Read the
@@ -294,7 +303,7 @@ implementation. Five generic comparison theorems
 are proved in Lean, with the foundation audit extended to 27 guards. See
 `research/decisions/2026-09-06-analytic-bridge-resolution.md` for their exact scope and evidence.
 
-The proved legacy-to-relaxed bridge does **not** require raw test/core agreement. One
+The proved smooth-test-to-relaxed bridge does **not** require raw test/core agreement. One
 direction uses the defining relaxation upper bound on each smooth test. The other uses recovery
 sequences and continuity of `L²` variance. Raw/core agreement is a separate, stronger question.
 It cannot hold without extra hypotheses: for `μ = δ₀`, the functions `0` and `x` represent the
@@ -416,7 +425,14 @@ decision:
 3. Formalize one long KLS branch after an explicit branch-selection decision. The present route
    ordering is a navigation order, not a fixed scheduling priority.
 
-The ambient/intrinsic, legacy/relaxed, and general log-concave literature constant equalities
+The ambient/intrinsic, smooth-test/relaxed, and general log-concave literature constant equalities
 are Lean-certified, and so is the Borell density/moment representation of the intrinsic law. KLS,
 the concrete Dirichlet property, `2 Ch_μ`, and the long routes still require their own local proofs. Unrestricted raw/core agreement is
 refuted by the recorded Dirac example.
+
+## 全库命名补充整理（2026-09-08）
+
+全库声明作用域和文件归属已进一步整理：33 个公共短名、12 个模块路径，
+881 个公共签名及 1085 项展开后的类型/定义闭包核对一致。完整记录见
+[research/decisions/2026-09-08-library-naming.md](research/decisions/2026-09-08-library-naming.md)。
+最终验收读取 `build/verification/latest.json` 并核对当前源码快照；工作区改动尚未提交。

@@ -1,4 +1,4 @@
-import FunctionalInequalities.Poincare.Basic
+import FunctionalInequalities.Poincare.SmoothTest.Basic
 import FunctionalInequalities.Poincare.Gaussian.Density
 import Mathlib.MeasureTheory.Integral.IntervalIntegral.ContDiff
 import Mathlib.MeasureTheory.Integral.Prod
@@ -7,7 +7,7 @@ import Mathlib.MeasureTheory.Integral.Prod
 # Analytic upper bound for the one-dimensional Gaussian Poincaré inequality
 
 This module isolates the direct density/Hardy argument used by
-`Poincare.holds_gaussianReal`. It contains the finite-interval FTC--Cauchy estimate,
+`Poincare.SmoothTest.holds_gaussianReal`. It contains the finite-interval FTC--Cauchy estimate,
 variance minimization, density-weighted integrability bridges, the two nonnegative Tonelli
 identities, the half-line bounds, and their full-line anchored consequence.
 
@@ -21,7 +21,7 @@ noncomputable section
 
 open MeasureTheory ProbabilityTheory
 
-namespace FunctionalInequalities.Poincare
+namespace FunctionalInequalities.Poincare.SmoothTest
 
 /-- Source: local finite-interval helper for the density proof, using
 `intervalIntegral.integral_deriv_of_contDiffOn_Icc` and integral Cauchy–Schwarz (the exponent-two
@@ -431,4 +431,4 @@ theorem Admissible.integral_sq_sub_gaussian_le {m : ℝ} {v : NNReal} {f : ℝ �
   exact add_le_add (hf.integral_Iio_sq_sub_gaussian_le hv)
     (hf.integral_Ioi_sq_sub_gaussian_le hv)
 
-end FunctionalInequalities.Poincare
+end FunctionalInequalities.Poincare.SmoothTest

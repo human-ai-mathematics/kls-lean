@@ -1,0 +1,779 @@
+{
+  "baseline_snapshot": "7151e3eb054c8f54dd8322c7fe4ea5af9093e23292179a3abcc450e22b5660b4",
+  "baseline_expression_provenance": [
+    "build/api-shortnames/final-expressions.json",
+    "build/api-comparison-names/final-expressions.json"
+  ],
+  "baseline_provenance_note": "The verified full 1085-record snapshot is overlaid with the later verified 132-record comparison closure. The earlier 12-name map is applied when reading older records; current baseline receipt and source hashes were checked before editing.",
+  "public_renamings": 33,
+  "module_moves": 12,
+  "organized_files": 35,
+  "source_comparison": {
+    "definitions": {
+      "exact": 189,
+      "differences": 0,
+      "missing": 0
+    },
+    "public_signatures": {
+      "exact": 881,
+      "differences": 0,
+      "missing": 0
+    },
+    "all_source_bodies": {
+      "exact": 969,
+      "differences": 0,
+      "missing": 0
+    }
+  },
+  "expressions": {
+    "exact_modulo_declared_names_modules_and_alpha_binders": 1085,
+    "external_leaves": 773,
+    "missing": 0,
+    "added": 0,
+    "unexplained_differences": 0,
+    "parameter_order_binder_info_and_types_unchanged": true,
+    "universes_unchanged": true,
+    "metadata_normalization": "Only declared module moves and compiler-generated anonymous instance command hashes are normalized. Local hygienic indices, binder kind, parameter order and heads are compared. Theorem proof bodies are covered by source comparison and Lean compilation, not by raw expression snapshots.",
+    "declarations_with_module_move": [
+      {
+        "name": "FunctionalInequalities.Covariance.lambdaMax",
+        "before": "FunctionalInequalities.Poincare.LinearTest",
+        "after": "FunctionalInequalities.Poincare.SmoothTest.Linear"
+      },
+      {
+        "name": "FunctionalInequalities.Covariance.lambdaMax_eq_zero_of_subsingleton",
+        "before": "FunctionalInequalities.Poincare.LinearTest",
+        "after": "FunctionalInequalities.Poincare.SmoothTest.Linear"
+      },
+      {
+        "name": "FunctionalInequalities.Covariance.lambdaMax_le",
+        "before": "FunctionalInequalities.Poincare.LinearTest",
+        "after": "FunctionalInequalities.Poincare.SmoothTest.Linear"
+      },
+      {
+        "name": "FunctionalInequalities.Covariance.lambdaMax_le_constant",
+        "before": "FunctionalInequalities.Poincare.LinearTest",
+        "after": "FunctionalInequalities.Poincare.SmoothTest.Linear"
+      },
+      {
+        "name": "FunctionalInequalities.Covariance.lambdaMax_le_norm",
+        "before": "FunctionalInequalities.Poincare.LinearTest",
+        "after": "FunctionalInequalities.Poincare.SmoothTest.Linear"
+      },
+      {
+        "name": "FunctionalInequalities.Covariance.lambdaMax_ne_top",
+        "before": "FunctionalInequalities.Poincare.LinearTest",
+        "after": "FunctionalInequalities.Poincare.SmoothTest.Linear"
+      },
+      {
+        "name": "FunctionalInequalities.Covariance.lambdaMax_toReal",
+        "before": "FunctionalInequalities.Poincare.LinearTest",
+        "after": "FunctionalInequalities.Poincare.SmoothTest.Linear"
+      },
+      {
+        "name": "FunctionalInequalities.Covariance.operator_hasEigenvalue_rayleighMax",
+        "before": "FunctionalInequalities.Poincare.LinearTest",
+        "after": "FunctionalInequalities.Poincare.SmoothTest.Linear"
+      },
+      {
+        "name": "FunctionalInequalities.Covariance.operator_isSymmetric",
+        "before": "FunctionalInequalities.Poincare.LinearTest",
+        "after": "FunctionalInequalities.Poincare.SmoothTest.Linear"
+      },
+      {
+        "name": "FunctionalInequalities.Covariance.operator_self_eq_variance",
+        "before": "FunctionalInequalities.Poincare.LinearTest",
+        "after": "FunctionalInequalities.Poincare.SmoothTest.Linear"
+      },
+      {
+        "name": "FunctionalInequalities.Covariance.operator_self_nonneg",
+        "before": "FunctionalInequalities.Poincare.LinearTest",
+        "after": "FunctionalInequalities.Poincare.SmoothTest.Linear"
+      },
+      {
+        "name": "FunctionalInequalities.Covariance.rayleighMax",
+        "before": "FunctionalInequalities.Poincare.LinearTest",
+        "after": "FunctionalInequalities.Poincare.SmoothTest.Linear"
+      },
+      {
+        "name": "FunctionalInequalities.Covariance.rayleighMax_eq_iSup_sphere",
+        "before": "FunctionalInequalities.Poincare.LinearTest",
+        "after": "FunctionalInequalities.Poincare.SmoothTest.Linear"
+      },
+      {
+        "name": "FunctionalInequalities.Covariance.rayleighMax_nonneg",
+        "before": "FunctionalInequalities.Poincare.LinearTest",
+        "after": "FunctionalInequalities.Poincare.SmoothTest.Linear"
+      },
+      {
+        "name": "FunctionalInequalities.Energy.CovarianceGradient.Intrinsic.relaxation_translate_intrinsicMeasure",
+        "before": "FunctionalInequalities.KLS.LogConcave.AffineClosedForm",
+        "after": "FunctionalInequalities.KLS.LogConcave.ClosedForm"
+      },
+      {
+        "name": "FunctionalInequalities.Energy.LocalSlope.admissible_iff_memLp_gradient",
+        "before": "FunctionalInequalities.KLS.LocalSlopeGradient",
+        "after": "FunctionalInequalities.Energy.LocalSlope.Gradient"
+      },
+      {
+        "name": "FunctionalInequalities.Energy.LocalSlope.apply_ae_eq_norm_gradient",
+        "before": "FunctionalInequalities.KLS.LocalSlopeGradient",
+        "after": "FunctionalInequalities.Energy.LocalSlope.Gradient"
+      },
+      {
+        "name": "FunctionalInequalities.Energy.LocalSlope.apply_eq_norm_gradient",
+        "before": "FunctionalInequalities.KLS.LocalSlopeGradient",
+        "after": "FunctionalInequalities.Energy.LocalSlope.Gradient"
+      },
+      {
+        "name": "FunctionalInequalities.Energy.LocalSlope.energy_eq_lintegral_gradient",
+        "before": "FunctionalInequalities.KLS.LocalSlopeGradient",
+        "after": "FunctionalInequalities.Energy.LocalSlope.Gradient"
+      },
+      {
+        "name": "FunctionalInequalities.KLS.AffineBound",
+        "before": "FunctionalInequalities.KLS.LogConcave.IsotropicReduction",
+        "after": "FunctionalInequalities.KLS.LogConcave.Isotropic"
+      },
+      {
+        "name": "FunctionalInequalities.KLS.CovarianceBound",
+        "before": "FunctionalInequalities.KLS.LogConcave.IsotropicReduction",
+        "after": "FunctionalInequalities.KLS.LogConcave.Isotropic"
+      },
+      {
+        "name": "FunctionalInequalities.KLS.IsotropicBound",
+        "before": "FunctionalInequalities.KLS.LogConcave.IsotropicReduction",
+        "after": "FunctionalInequalities.KLS.LogConcave.Isotropic"
+      },
+      {
+        "name": "FunctionalInequalities.KLS.LogConcave.absolutelyContinuous_haar",
+        "before": "FunctionalInequalities.KLS.LogConcave.CovarianceClosure",
+        "after": "FunctionalInequalities.KLS.LogConcave.WeightedGradient"
+      },
+      {
+        "name": "FunctionalInequalities.KLS.LogConcave.closure_domRestrict_eq_of_smoothCore_le",
+        "before": "FunctionalInequalities.KLS.LogConcave.CovarianceClosure",
+        "after": "FunctionalInequalities.KLS.LogConcave.WeightedGradient"
+      },
+      {
+        "name": "FunctionalInequalities.KLS.LogConcave.closure_domRestrict_intrinsicWeightedOperator",
+        "before": "FunctionalInequalities.KLS.LogConcave.CovarianceClosure",
+        "after": "FunctionalInequalities.KLS.LogConcave.WeightedGradient"
+      },
+      {
+        "name": "FunctionalInequalities.KLS.LogConcave.covariance_relaxation_eq_operator",
+        "before": "FunctionalInequalities.KLS.LogConcave.CovarianceClosure",
+        "after": "FunctionalInequalities.KLS.LogConcave.WeightedGradient"
+      },
+      {
+        "name": "FunctionalInequalities.KLS.LogConcave.dense_domain_intrinsicWeightedOperator",
+        "before": "FunctionalInequalities.KLS.LogConcave.CovarianceClosure",
+        "after": "FunctionalInequalities.KLS.LogConcave.WeightedGradient"
+      },
+      {
+        "name": "FunctionalInequalities.KLS.LogConcave.dense_domain_weightedOperator",
+        "before": "FunctionalInequalities.KLS.LogConcave.CovarianceClosure",
+        "after": "FunctionalInequalities.KLS.LogConcave.WeightedGradient"
+      },
+      {
+        "name": "FunctionalInequalities.KLS.LogConcave.exists_isotropic_localSlope_constant_eq",
+        "before": "FunctionalInequalities.KLS.LogConcave.IsotropicReduction",
+        "after": "FunctionalInequalities.KLS.LogConcave.Isotropic"
+      },
+      {
+        "name": "FunctionalInequalities.KLS.LogConcave.frontier_support_eq_zero",
+        "before": "FunctionalInequalities.KLS.LogConcave.CovarianceClosure",
+        "after": "FunctionalInequalities.KLS.LogConcave.WeightedGradient"
+      },
+      {
+        "name": "FunctionalInequalities.KLS.LogConcave.integrable_id",
+        "before": "FunctionalInequalities.KLS.LogConcave.AffineTranslation",
+        "after": "FunctionalInequalities.KLS.LogConcave.Translation"
+      },
+      {
+        "name": "FunctionalInequalities.KLS.LogConcave.integral_id_translateLaw_neg_integral",
+        "before": "FunctionalInequalities.KLS.LogConcave.AffineTranslation",
+        "after": "FunctionalInequalities.KLS.LogConcave.Translation"
+      },
+      {
+        "name": "FunctionalInequalities.KLS.LogConcave.interior_support_nonempty_of_affineSupport_eq_top",
+        "before": "FunctionalInequalities.KLS.LogConcave.IsotropicReduction",
+        "after": "FunctionalInequalities.KLS.LogConcave.Isotropic"
+      },
+      {
+        "name": "FunctionalInequalities.KLS.LogConcave.intrinsicWeightedOperator",
+        "before": "FunctionalInequalities.KLS.LogConcave.CovarianceClosure",
+        "after": "FunctionalInequalities.KLS.LogConcave.WeightedGradient"
+      },
+      {
+        "name": "FunctionalInequalities.KLS.LogConcave.intrinsicWeightedOperator._proof_1",
+        "before": "FunctionalInequalities.KLS.LogConcave.CovarianceClosure",
+        "after": "FunctionalInequalities.KLS.LogConcave.WeightedGradient"
+      },
+      {
+        "name": "FunctionalInequalities.KLS.LogConcave.intrinsicWeightedOperator._proof_2",
+        "before": "FunctionalInequalities.KLS.LogConcave.CovarianceClosure",
+        "after": "FunctionalInequalities.KLS.LogConcave.WeightedGradient"
+      },
+      {
+        "name": "FunctionalInequalities.KLS.LogConcave.intrinsicWeightedOperator._proof_3",
+        "before": "FunctionalInequalities.KLS.LogConcave.CovarianceClosure",
+        "after": "FunctionalInequalities.KLS.LogConcave.WeightedGradient"
+      },
+      {
+        "name": "FunctionalInequalities.KLS.LogConcave.intrinsicWeightedOperator._proof_4",
+        "before": "FunctionalInequalities.KLS.LogConcave.CovarianceClosure",
+        "after": "FunctionalInequalities.KLS.LogConcave.WeightedGradient"
+      },
+      {
+        "name": "FunctionalInequalities.KLS.LogConcave.intrinsicWeightedOperator_isClosable",
+        "before": "FunctionalInequalities.KLS.LogConcave.CovarianceClosure",
+        "after": "FunctionalInequalities.KLS.LogConcave.WeightedGradient"
+      },
+      {
+        "name": "FunctionalInequalities.KLS.LogConcave.intrinsic_ae_hasGradientAt",
+        "before": "FunctionalInequalities.KLS.LogConcave.AffineCovariance",
+        "after": "FunctionalInequalities.KLS.LogConcave.Covariance"
+      },
+      {
+        "name": "FunctionalInequalities.KLS.LogConcave.intrinsicCovariance_agreesOnTests",
+        "before": "FunctionalInequalities.KLS.LogConcave.AffineClosedForm",
+        "after": "FunctionalInequalities.KLS.LogConcave.ClosedForm"
+      },
+      {
+        "name": "FunctionalInequalities.KLS.LogConcave.intrinsicCovariance_closedQuadratic",
+        "before": "FunctionalInequalities.KLS.LogConcave.AffineClosedForm",
+        "after": "FunctionalInequalities.KLS.LogConcave.ClosedForm"
+      },
+      {
+        "name": "FunctionalInequalities.KLS.LogConcave.intrinsicCovariance_constant_eq_normSq",
+        "before": "FunctionalInequalities.KLS.LogConcave.AffineClosedForm",
+        "after": "FunctionalInequalities.KLS.LogConcave.ClosedForm"
+      },
+      {
+        "name": "FunctionalInequalities.KLS.LogConcave.intrinsicCovariance_denseRealization",
+        "before": "FunctionalInequalities.KLS.LogConcave.AffineClosedForm",
+        "after": "FunctionalInequalities.KLS.LogConcave.ClosedForm"
+      },
+      {
+        "name": "FunctionalInequalities.KLS.LogConcave.intrinsicCovariance_energy_eq_normSq",
+        "before": "FunctionalInequalities.KLS.LogConcave.AffineClosedForm",
+        "after": "FunctionalInequalities.KLS.LogConcave.ClosedForm"
+      },
+      {
+        "name": "FunctionalInequalities.KLS.LogConcave.intrinsicCovariance_energy_eq_of_toL2_eq",
+        "before": "FunctionalInequalities.KLS.LogConcave.AffineCovariance",
+        "after": "FunctionalInequalities.KLS.LogConcave.Covariance"
+      },
+      {
+        "name": "FunctionalInequalities.KLS.LogConcave.intrinsicCovariance_energy_eq_operator",
+        "before": "FunctionalInequalities.KLS.LogConcave.CovarianceClosure",
+        "after": "FunctionalInequalities.KLS.LogConcave.WeightedGradient"
+      },
+      {
+        "name": "FunctionalInequalities.KLS.LogConcave.intrinsicCovariance_isSequentialCoreFor",
+        "before": "FunctionalInequalities.KLS.LogConcave.AffineClosedForm",
+        "after": "FunctionalInequalities.KLS.LogConcave.ClosedForm"
+      },
+      {
+        "name": "FunctionalInequalities.KLS.LogConcave.intrinsicCovariance_respectsAmbientFibers",
+        "before": "FunctionalInequalities.KLS.LogConcave.AffineClosedForm",
+        "after": "FunctionalInequalities.KLS.LogConcave.ClosedForm"
+      },
+      {
+        "name": "FunctionalInequalities.KLS.LogConcave.intrinsic_gradient_ae_eq_of_ae_eq",
+        "before": "FunctionalInequalities.KLS.LogConcave.AffineCovariance",
+        "after": "FunctionalInequalities.KLS.LogConcave.Covariance"
+      },
+      {
+        "name": "FunctionalInequalities.KLS.LogConcave.intrinsic_memLp_id_two",
+        "before": "FunctionalInequalities.KLS.LogConcave.AffineCovariance",
+        "after": "FunctionalInequalities.KLS.LogConcave.Covariance"
+      },
+      {
+        "name": "FunctionalInequalities.KLS.LogConcave.intrinsicSmooth_constant_eq_localSlope",
+        "before": "FunctionalInequalities.Poincare.LocalSlope.LogConcaveComparison",
+        "after": "FunctionalInequalities.KLS.LogConcave.Poincare"
+      },
+      {
+        "name": "FunctionalInequalities.KLS.LogConcave.localSlope_le_mul_intrinsicCovariance",
+        "before": "FunctionalInequalities.KLS.LogConcave.IsotropicReduction",
+        "after": "FunctionalInequalities.KLS.LogConcave.Isotropic"
+      },
+      {
+        "name": "FunctionalInequalities.KLS.LogConcave.locallyDominates",
+        "before": "FunctionalInequalities.KLS.LogConcave.CovarianceClosure",
+        "after": "FunctionalInequalities.KLS.LogConcave.WeightedGradient"
+      },
+      {
+        "name": "FunctionalInequalities.KLS.LogConcave.mapContinuousLinearEquiv",
+        "before": "FunctionalInequalities.KLS.LogConcave.IsotropicReduction",
+        "after": "FunctionalInequalities.KLS.LogConcave.Isotropic"
+      },
+      {
+        "name": "FunctionalInequalities.KLS.LogConcave.memLp_id_two",
+        "before": "FunctionalInequalities.KLS.LogConcave.AffineTranslation",
+        "after": "FunctionalInequalities.KLS.LogConcave.Translation"
+      },
+      {
+        "name": "FunctionalInequalities.KLS.LogConcave.of_continuousLinearEquiv_map",
+        "before": "FunctionalInequalities.KLS.LogConcave.IsotropicReduction",
+        "after": "FunctionalInequalities.KLS.LogConcave.Isotropic"
+      },
+      {
+        "name": "FunctionalInequalities.KLS.LogConcave.weighted_relaxation_of_mem",
+        "before": "FunctionalInequalities.KLS.LogConcave.CovarianceClosure",
+        "after": "FunctionalInequalities.KLS.LogConcave.WeightedGradient"
+      },
+      {
+        "name": "FunctionalInequalities.KLS.LogConcave.weighted_relaxation_of_notMem",
+        "before": "FunctionalInequalities.KLS.LogConcave.CovarianceClosure",
+        "after": "FunctionalInequalities.KLS.LogConcave.WeightedGradient"
+      },
+      {
+        "name": "FunctionalInequalities.KLS.LogConcave.weighted_relaxation_toAmbient",
+        "before": "FunctionalInequalities.KLS.LogConcave.CovarianceClosure",
+        "after": "FunctionalInequalities.KLS.LogConcave.WeightedGradient"
+      },
+      {
+        "name": "FunctionalInequalities.KLS.LogConcave.smoothTest_constant_eq_intrinsic_and_localSlope",
+        "before": "FunctionalInequalities.Poincare.LocalSlope.LogConcaveComparison",
+        "after": "FunctionalInequalities.KLS.LogConcave.Poincare"
+      },
+      {
+        "name": "FunctionalInequalities.KLS.LogConcave.smoothTest_constant_eq_localSlope",
+        "before": "FunctionalInequalities.Poincare.LocalSlope.LogConcaveComparison",
+        "after": "FunctionalInequalities.KLS.LogConcave.Poincare"
+      },
+      {
+        "name": "FunctionalInequalities.KLS.LogConcave.translateLaw",
+        "before": "FunctionalInequalities.KLS.LogConcave.AffineTranslation",
+        "after": "FunctionalInequalities.KLS.LogConcave.Translation"
+      },
+      {
+        "name": "FunctionalInequalities.KLS.LogConcave.weightedOperator",
+        "before": "FunctionalInequalities.KLS.LogConcave.CovarianceClosure",
+        "after": "FunctionalInequalities.KLS.LogConcave.WeightedGradient"
+      },
+      {
+        "name": "FunctionalInequalities.KLS.LogConcave.weightedOperator_isClosable",
+        "before": "FunctionalInequalities.KLS.LogConcave.CovarianceClosure",
+        "after": "FunctionalInequalities.KLS.LogConcave.WeightedGradient"
+      },
+      {
+        "name": "FunctionalInequalities.KLS.affineBound_of_isotropicBound",
+        "before": "FunctionalInequalities.KLS.LogConcave.IsotropicReduction",
+        "after": "FunctionalInequalities.KLS.LogConcave.Isotropic"
+      },
+      {
+        "name": "FunctionalInequalities.KLS.affine_isotropic_reduction",
+        "before": "FunctionalInequalities.KLS.LogConcave.IsotropicReduction",
+        "after": "FunctionalInequalities.KLS.LogConcave.Isotropic"
+      },
+      {
+        "name": "FunctionalInequalities.KLS.conjecture_of_affineBound",
+        "before": "FunctionalInequalities.KLS.LogConcave.IsotropicReduction",
+        "after": "FunctionalInequalities.KLS.LogConcave.Isotropic"
+      },
+      {
+        "name": "FunctionalInequalities.KLS.covarianceBound_of_affineBound",
+        "before": "FunctionalInequalities.KLS.LogConcave.IsotropicReduction",
+        "after": "FunctionalInequalities.KLS.LogConcave.Isotropic"
+      },
+      {
+        "name": "FunctionalInequalities.KLS.isotropicBound_of_covarianceBound",
+        "before": "FunctionalInequalities.KLS.LogConcave.IsotropicReduction",
+        "after": "FunctionalInequalities.KLS.LogConcave.Isotropic"
+      },
+      {
+        "name": "FunctionalInequalities.Poincare.CovarianceGradient.Intrinsic.constant_eq_translate_intrinsicMeasure",
+        "before": "FunctionalInequalities.KLS.LogConcave.AffineClosedForm",
+        "after": "FunctionalInequalities.KLS.LogConcave.ClosedForm"
+      },
+      {
+        "name": "FunctionalInequalities.Poincare.SmoothTest.Admissible",
+        "before": "FunctionalInequalities.Poincare.Basic",
+        "after": "FunctionalInequalities.Poincare.SmoothTest.Basic"
+      },
+      {
+        "name": "FunctionalInequalities.Poincare.SmoothTest.Admissible.comp_projection",
+        "before": "FunctionalInequalities.Poincare.Transport",
+        "after": "FunctionalInequalities.Poincare.SmoothTest.Transport"
+      },
+      {
+        "name": "FunctionalInequalities.Poincare.SmoothTest.Admissible.mk",
+        "before": "FunctionalInequalities.Poincare.Basic",
+        "after": "FunctionalInequalities.Poincare.SmoothTest.Basic"
+      },
+      {
+        "name": "FunctionalInequalities.Poincare.SmoothTest.Holds",
+        "before": "FunctionalInequalities.Poincare.Basic",
+        "after": "FunctionalInequalities.Poincare.SmoothTest.Basic"
+      },
+      {
+        "name": "FunctionalInequalities.Poincare.SmoothTest.Holds.mk",
+        "before": "FunctionalInequalities.Poincare.Basic",
+        "after": "FunctionalInequalities.Poincare.SmoothTest.Basic"
+      },
+      {
+        "name": "FunctionalInequalities.Poincare.SmoothTest.Holds.mono",
+        "before": "FunctionalInequalities.Poincare.Basic",
+        "after": "FunctionalInequalities.Poincare.SmoothTest.Basic"
+      },
+      {
+        "name": "FunctionalInequalities.Poincare.SmoothTest.admissible_map_linearIsometryEquiv_iff",
+        "before": "FunctionalInequalities.Poincare.Transport",
+        "after": "FunctionalInequalities.Poincare.SmoothTest.Transport"
+      },
+      {
+        "name": "FunctionalInequalities.Poincare.SmoothTest.constant",
+        "before": "FunctionalInequalities.Poincare.Basic",
+        "after": "FunctionalInequalities.Poincare.SmoothTest.Basic"
+      },
+      {
+        "name": "FunctionalInequalities.Poincare.SmoothTest.constant_eq_top_iff",
+        "before": "FunctionalInequalities.Poincare.Basic",
+        "after": "FunctionalInequalities.Poincare.SmoothTest.Basic"
+      },
+      {
+        "name": "FunctionalInequalities.Poincare.SmoothTest.constant_eq_top_of_no_finite",
+        "before": "FunctionalInequalities.Poincare.Basic",
+        "after": "FunctionalInequalities.Poincare.SmoothTest.Basic"
+      },
+      {
+        "name": "FunctionalInequalities.Poincare.SmoothTest.constant_eq_zero_of_subsingleton",
+        "before": "FunctionalInequalities.Poincare.Transport",
+        "after": "FunctionalInequalities.Poincare.SmoothTest.Transport"
+      },
+      {
+        "name": "FunctionalInequalities.Poincare.SmoothTest.constant_le",
+        "before": "FunctionalInequalities.Poincare.Basic",
+        "after": "FunctionalInequalities.Poincare.SmoothTest.Basic"
+      },
+      {
+        "name": "FunctionalInequalities.Poincare.SmoothTest.constant_map_linearIsometryEquiv",
+        "before": "FunctionalInequalities.Poincare.Transport",
+        "after": "FunctionalInequalities.Poincare.SmoothTest.Transport"
+      },
+      {
+        "name": "FunctionalInequalities.Poincare.SmoothTest.constant_ne_top_of_holds",
+        "before": "FunctionalInequalities.Poincare.Basic",
+        "after": "FunctionalInequalities.Poincare.SmoothTest.Basic"
+      },
+      {
+        "name": "FunctionalInequalities.Poincare.SmoothTest.contDiff_comp_projection",
+        "before": "FunctionalInequalities.Poincare.Transport",
+        "after": "FunctionalInequalities.Poincare.SmoothTest.Transport"
+      },
+      {
+        "name": "FunctionalInequalities.Poincare.SmoothTest.energy",
+        "before": "FunctionalInequalities.Poincare.Basic",
+        "after": "FunctionalInequalities.Poincare.SmoothTest.Basic"
+      },
+      {
+        "name": "FunctionalInequalities.Poincare.SmoothTest.energy_comp_projection",
+        "before": "FunctionalInequalities.Poincare.Transport",
+        "after": "FunctionalInequalities.Poincare.SmoothTest.Transport"
+      },
+      {
+        "name": "FunctionalInequalities.Poincare.SmoothTest.energy_eq_fderiv",
+        "before": "FunctionalInequalities.Poincare.Basic",
+        "after": "FunctionalInequalities.Poincare.SmoothTest.Basic"
+      },
+      {
+        "name": "FunctionalInequalities.Poincare.SmoothTest.energy_linear",
+        "before": "FunctionalInequalities.Poincare.LinearTest",
+        "after": "FunctionalInequalities.Poincare.SmoothTest.Linear"
+      },
+      {
+        "name": "FunctionalInequalities.Poincare.SmoothTest.energy_map_linearIsometryEquiv",
+        "before": "FunctionalInequalities.Poincare.Transport",
+        "after": "FunctionalInequalities.Poincare.SmoothTest.Transport"
+      },
+      {
+        "name": "FunctionalInequalities.Poincare.SmoothTest.energy_nonneg",
+        "before": "FunctionalInequalities.Poincare.Basic",
+        "after": "FunctionalInequalities.Poincare.SmoothTest.Basic"
+      },
+      {
+        "name": "FunctionalInequalities.Poincare.SmoothTest.gradient_comp_projection",
+        "before": "FunctionalInequalities.Poincare.Transport",
+        "after": "FunctionalInequalities.Poincare.SmoothTest.Transport"
+      },
+      {
+        "name": "FunctionalInequalities.Poincare.SmoothTest.gradient_linear",
+        "before": "FunctionalInequalities.Poincare.LinearTest",
+        "after": "FunctionalInequalities.Poincare.SmoothTest.Linear"
+      },
+      {
+        "name": "FunctionalInequalities.Poincare.SmoothTest.hasGradientAt_linear",
+        "before": "FunctionalInequalities.Poincare.LinearTest",
+        "after": "FunctionalInequalities.Poincare.SmoothTest.Linear"
+      },
+      {
+        "name": "FunctionalInequalities.Poincare.SmoothTest.holds_map_linearIsometryEquiv_iff",
+        "before": "FunctionalInequalities.Poincare.Transport",
+        "after": "FunctionalInequalities.Poincare.SmoothTest.Transport"
+      },
+      {
+        "name": "FunctionalInequalities.Poincare.SmoothTest.holds_zero_of_subsingleton",
+        "before": "FunctionalInequalities.Poincare.Transport",
+        "after": "FunctionalInequalities.Poincare.SmoothTest.Transport"
+      },
+      {
+        "name": "FunctionalInequalities.Poincare.SmoothTest.integrable_gradient_comp_projection",
+        "before": "FunctionalInequalities.Poincare.Transport",
+        "after": "FunctionalInequalities.Poincare.SmoothTest.Transport"
+      },
+      {
+        "name": "FunctionalInequalities.Poincare.SmoothTest.le_constant",
+        "before": "FunctionalInequalities.Poincare.Basic",
+        "after": "FunctionalInequalities.Poincare.SmoothTest.Basic"
+      },
+      {
+        "name": "FunctionalInequalities.Poincare.SmoothTest.linear",
+        "before": "FunctionalInequalities.Poincare.LinearTest",
+        "after": "FunctionalInequalities.Poincare.SmoothTest.Linear"
+      },
+      {
+        "name": "FunctionalInequalities.Poincare.SmoothTest.linear_admissible",
+        "before": "FunctionalInequalities.Poincare.LinearTest",
+        "after": "FunctionalInequalities.Poincare.SmoothTest.Linear"
+      },
+      {
+        "name": "FunctionalInequalities.Poincare.SmoothTest.linear_apply",
+        "before": "FunctionalInequalities.Poincare.LinearTest",
+        "after": "FunctionalInequalities.Poincare.SmoothTest.Linear"
+      },
+      {
+        "name": "FunctionalInequalities.Poincare.SmoothTest.linear_eq_inner",
+        "before": "FunctionalInequalities.Poincare.LinearTest",
+        "after": "FunctionalInequalities.Poincare.SmoothTest.Linear"
+      },
+      {
+        "name": "FunctionalInequalities.Poincare.SmoothTest.memLp_comp_projection",
+        "before": "FunctionalInequalities.Poincare.Transport",
+        "after": "FunctionalInequalities.Poincare.SmoothTest.Transport"
+      },
+      {
+        "name": "FunctionalInequalities.Poincare.SmoothTest.norm_fderiv_eq_norm_gradient",
+        "before": "FunctionalInequalities.Poincare.Basic",
+        "after": "FunctionalInequalities.Poincare.SmoothTest.Basic"
+      },
+      {
+        "name": "FunctionalInequalities.Poincare.SmoothTest.norm_gradient_comp_projection",
+        "before": "FunctionalInequalities.Poincare.Transport",
+        "after": "FunctionalInequalities.Poincare.SmoothTest.Transport"
+      },
+      {
+        "name": "FunctionalInequalities.Poincare.SmoothTest.rayleigh",
+        "before": "FunctionalInequalities.Poincare.LinearTest",
+        "after": "FunctionalInequalities.Poincare.SmoothTest.Linear"
+      },
+      {
+        "name": "FunctionalInequalities.Poincare.SmoothTest.rayleigh_eq_of_energy_pos",
+        "before": "FunctionalInequalities.Poincare.LinearTest",
+        "after": "FunctionalInequalities.Poincare.SmoothTest.Linear"
+      },
+      {
+        "name": "FunctionalInequalities.Poincare.SmoothTest.rayleigh_eq_top_of_energy_zero",
+        "before": "FunctionalInequalities.Poincare.LinearTest",
+        "after": "FunctionalInequalities.Poincare.SmoothTest.Linear"
+      },
+      {
+        "name": "FunctionalInequalities.Poincare.SmoothTest.rayleigh_le_constant",
+        "before": "FunctionalInequalities.Poincare.LinearTest",
+        "after": "FunctionalInequalities.Poincare.SmoothTest.Linear"
+      },
+      {
+        "name": "FunctionalInequalities.Poincare.SmoothTest.realRayleigh_le_constant",
+        "before": "FunctionalInequalities.Poincare.LinearTest",
+        "after": "FunctionalInequalities.Poincare.SmoothTest.Linear"
+      },
+      {
+        "name": "FunctionalInequalities.Poincare.SmoothTest.variance_comp_projection",
+        "before": "FunctionalInequalities.Poincare.Transport",
+        "after": "FunctionalInequalities.Poincare.SmoothTest.Transport"
+      },
+      {
+        "name": "FunctionalInequalities.Poincare.SmoothTest.variance_linear_le",
+        "before": "FunctionalInequalities.Poincare.LinearTest",
+        "after": "FunctionalInequalities.Poincare.SmoothTest.Linear"
+      },
+      {
+        "name": "FunctionalInequalities.Poincare.SmoothTest.variance_map_linearIsometryEquiv",
+        "before": "FunctionalInequalities.Poincare.Transport",
+        "after": "FunctionalInequalities.Poincare.SmoothTest.Transport"
+      },
+      {
+        "name": "FunctionalInequalities.Poincare.TestFamily",
+        "before": "FunctionalInequalities.Poincare.Optimal",
+        "after": "FunctionalInequalities.Poincare.SmoothTest.Optimal"
+      },
+      {
+        "name": "FunctionalInequalities.Poincare.TestFamily.Holds",
+        "before": "FunctionalInequalities.Poincare.Optimal",
+        "after": "FunctionalInequalities.Poincare.SmoothTest.Optimal"
+      },
+      {
+        "name": "FunctionalInequalities.Poincare.TestFamily.Holds.mono",
+        "before": "FunctionalInequalities.Poincare.Optimal",
+        "after": "FunctionalInequalities.Poincare.SmoothTest.Optimal"
+      },
+      {
+        "name": "FunctionalInequalities.Poincare.TestFamily.Test",
+        "before": "FunctionalInequalities.Poincare.Optimal",
+        "after": "FunctionalInequalities.Poincare.SmoothTest.Optimal"
+      },
+      {
+        "name": "FunctionalInequalities.Poincare.TestFamily.constant",
+        "before": "FunctionalInequalities.Poincare.Optimal",
+        "after": "FunctionalInequalities.Poincare.SmoothTest.Optimal"
+      },
+      {
+        "name": "FunctionalInequalities.Poincare.TestFamily.constant_eq_top_iff",
+        "before": "FunctionalInequalities.Poincare.Optimal",
+        "after": "FunctionalInequalities.Poincare.SmoothTest.Optimal"
+      },
+      {
+        "name": "FunctionalInequalities.Poincare.TestFamily.constant_eq_top_of_positive_variance_energy_zero",
+        "before": "FunctionalInequalities.Poincare.Optimal",
+        "after": "FunctionalInequalities.Poincare.SmoothTest.Optimal"
+      },
+      {
+        "name": "FunctionalInequalities.Poincare.TestFamily.constant_eq_zero_of_isEmpty",
+        "before": "FunctionalInequalities.Poincare.Optimal",
+        "after": "FunctionalInequalities.Poincare.SmoothTest.Optimal"
+      },
+      {
+        "name": "FunctionalInequalities.Poincare.TestFamily.constant_eq_zero_of_variance_zero",
+        "before": "FunctionalInequalities.Poincare.Optimal",
+        "after": "FunctionalInequalities.Poincare.SmoothTest.Optimal"
+      },
+      {
+        "name": "FunctionalInequalities.Poincare.TestFamily.constant_le",
+        "before": "FunctionalInequalities.Poincare.Optimal",
+        "after": "FunctionalInequalities.Poincare.SmoothTest.Optimal"
+      },
+      {
+        "name": "FunctionalInequalities.Poincare.TestFamily.constant_ne_top_iff_exists_holds",
+        "before": "FunctionalInequalities.Poincare.Optimal",
+        "after": "FunctionalInequalities.Poincare.SmoothTest.Optimal"
+      },
+      {
+        "name": "FunctionalInequalities.Poincare.TestFamily.energy",
+        "before": "FunctionalInequalities.Poincare.Optimal",
+        "after": "FunctionalInequalities.Poincare.SmoothTest.Optimal"
+      },
+      {
+        "name": "FunctionalInequalities.Poincare.TestFamily.holds_iff_constant_le",
+        "before": "FunctionalInequalities.Poincare.Optimal",
+        "after": "FunctionalInequalities.Poincare.SmoothTest.Optimal"
+      },
+      {
+        "name": "FunctionalInequalities.Poincare.TestFamily.holds_of_constant_le",
+        "before": "FunctionalInequalities.Poincare.Optimal",
+        "after": "FunctionalInequalities.Poincare.SmoothTest.Optimal"
+      },
+      {
+        "name": "FunctionalInequalities.Poincare.TestFamily.mk",
+        "before": "FunctionalInequalities.Poincare.Optimal",
+        "after": "FunctionalInequalities.Poincare.SmoothTest.Optimal"
+      },
+      {
+        "name": "FunctionalInequalities.Poincare.TestFamily.rayleigh",
+        "before": "FunctionalInequalities.Poincare.Optimal",
+        "after": "FunctionalInequalities.Poincare.SmoothTest.Optimal"
+      },
+      {
+        "name": "FunctionalInequalities.Poincare.TestFamily.rayleigh_eq_top_of_energy_zero",
+        "before": "FunctionalInequalities.Poincare.Optimal",
+        "after": "FunctionalInequalities.Poincare.SmoothTest.Optimal"
+      },
+      {
+        "name": "FunctionalInequalities.Poincare.TestFamily.rayleigh_le_iff",
+        "before": "FunctionalInequalities.Poincare.Optimal",
+        "after": "FunctionalInequalities.Poincare.SmoothTest.Optimal"
+      },
+      {
+        "name": "FunctionalInequalities.Poincare.TestFamily.rayleigh_zero_zero",
+        "before": "FunctionalInequalities.Poincare.Optimal",
+        "after": "FunctionalInequalities.Poincare.SmoothTest.Optimal"
+      },
+      {
+        "name": "FunctionalInequalities.Poincare.TestFamily.variance",
+        "before": "FunctionalInequalities.Poincare.Optimal",
+        "after": "FunctionalInequalities.Poincare.SmoothTest.Optimal"
+      },
+      {
+        "name": "FunctionalInequalities.Probability.memLp_id_two_translateLaw",
+        "before": "FunctionalInequalities.KLS.LogConcave.IsotropicReduction",
+        "after": "FunctionalInequalities.KLS.LogConcave.Isotropic"
+      },
+      {
+        "name": "FunctionalInequalities.Poincare.SmoothTest.constant_eq_ambient",
+        "before": "FunctionalInequalities.Poincare.SmoothTest.RelaxationComparison",
+        "after": "FunctionalInequalities.Poincare.SmoothTest.Comparison"
+      },
+      {
+        "name": "FunctionalInequalities.Poincare.SmoothTest.constant_eq_intrinsic",
+        "before": "FunctionalInequalities.Poincare.SmoothTest.RelaxationComparison",
+        "after": "FunctionalInequalities.Poincare.SmoothTest.Comparison"
+      },
+      {
+        "name": "FunctionalInequalities.Poincare.SmoothTest.holds_iff_ambient",
+        "before": "FunctionalInequalities.Poincare.SmoothTest.RelaxationComparison",
+        "after": "FunctionalInequalities.Poincare.SmoothTest.Comparison"
+      },
+      {
+        "name": "FunctionalInequalities.Poincare.SmoothTest.holds_iff_intrinsic",
+        "before": "FunctionalInequalities.Poincare.SmoothTest.RelaxationComparison",
+        "after": "FunctionalInequalities.Poincare.SmoothTest.Comparison"
+      },
+      {
+        "name": "FunctionalInequalities.Poincare.SmoothTest.holds_iff_preEnergy",
+        "before": "FunctionalInequalities.Poincare.SmoothTest.RelaxationComparison",
+        "after": "FunctionalInequalities.Poincare.SmoothTest.Comparison"
+      }
+    ]
+  },
+  "public_namespaces_unchanged": true,
+  "private_identity_map": {
+    "_private.FunctionalInequalities.Poincare.Transport.0.FunctionalInequalities.Poincare.SmoothTest.admissible_comp_isometryEquiv": "_private.FunctionalInequalities.Poincare.SmoothTest.Transport.0.FunctionalInequalities.Poincare.SmoothTest.admissible_comp_isometryEquiv",
+    "_private.FunctionalInequalities.Poincare.Transport.0.FunctionalInequalities.Poincare.SmoothTest.isometry_adjoint_isometryEquiv": "_private.FunctionalInequalities.Poincare.SmoothTest.Transport.0.FunctionalInequalities.Poincare.SmoothTest.isometry_adjoint_isometryEquiv",
+    "_private.FunctionalInequalities.Poincare.Transport.0.FunctionalInequalities.Poincare.SmoothTest.measurePreserving_isometryEquiv": "_private.FunctionalInequalities.Poincare.SmoothTest.Transport.0.FunctionalInequalities.Poincare.SmoothTest.measurePreserving_isometryEquiv",
+    "_private.FunctionalInequalities.KLS.LogConcave.AbsoluteContinuity.0.FunctionalInequalities.KLS.ball_subset_of_nearby_points": "_private.FunctionalInequalities.KLS.LogConcave.AbsoluteContinuity.0.FunctionalInequalities.KLS.LogConcave.ball_subset_of_nearby_points",
+    "_private.FunctionalInequalities.KLS.LogConcave.AbsoluteContinuity.0.FunctionalInequalities.KLS.closedBall_le_of_ball_lower_bound": "_private.FunctionalInequalities.KLS.LogConcave.AbsoluteContinuity.0.FunctionalInequalities.KLS.LogConcave.closedBall_le_of_ball_lower_bound",
+    "_private.FunctionalInequalities.KLS.LogConcave.AbsoluteContinuity.0.FunctionalInequalities.KLS.exists_uniform_ball_average_lower_bound": "_private.FunctionalInequalities.KLS.LogConcave.AbsoluteContinuity.0.FunctionalInequalities.KLS.LogConcave.exists_uniform_ball_average_lower_bound",
+    "_private.FunctionalInequalities.KLS.LogConcave.AbsoluteContinuity.0.FunctionalInequalities.KLS.exists_uniform_ball_average_points": "_private.FunctionalInequalities.KLS.LogConcave.AbsoluteContinuity.0.FunctionalInequalities.KLS.LogConcave.exists_uniform_ball_average_points",
+    "_private.FunctionalInequalities.Poincare.LocalSlope.SmoothTestComparison.0.FunctionalInequalities.Poincare.Euclidean.holds_iff_intrinsicMeasure": "_private.FunctionalInequalities.Poincare.LocalSlope.SmoothTestComparison.0.FunctionalInequalities.Poincare.SmoothTest.holds_iff_intrinsicMeasure",
+    "_private.FunctionalInequalities.Poincare.LocalSlope.SmoothTestComparison.0.FunctionalInequalities.Poincare.Euclidean.integral_sq_norm_eq_norm_toLp_sq": "_private.FunctionalInequalities.Poincare.LocalSlope.SmoothTestComparison.0.FunctionalInequalities.Poincare.SmoothTest.integral_sq_norm_eq_norm_toLp_sq",
+    "_private.FunctionalInequalities.Poincare.LocalSlope.SmoothTestComparison.0.FunctionalInequalities.Poincare.Euclidean.literatureEnergy_eq_ofReal_energy": "_private.FunctionalInequalities.Poincare.LocalSlope.SmoothTestComparison.0.FunctionalInequalities.Poincare.SmoothTest.literatureEnergy_eq_ofReal_energy",
+    "_private.FunctionalInequalities.Poincare.LocalSlope.SmoothTestComparison.0.FunctionalInequalities.Poincare.Euclidean.ofReal_nnreal_mul": "_private.FunctionalInequalities.Poincare.LocalSlope.SmoothTestComparison.0.FunctionalInequalities.Poincare.SmoothTest.ofReal_nnreal_mul",
+    "_private.FunctionalInequalities.Poincare.LocalSlope.SmoothTestComparison.0.FunctionalInequalities.Poincare.Euclidean.variance_eq_coe_L2": "_private.FunctionalInequalities.Poincare.LocalSlope.SmoothTestComparison.0.FunctionalInequalities.Poincare.SmoothTest.variance_eq_coe_L2",
+    "_private.FunctionalInequalities.Energy.SmoothGradient.Intrinsic.Comparison.0.FunctionalInequalities.Energy.Euclidean.contDiff_projectionCoordinates": "_private.FunctionalInequalities.Energy.SmoothGradient.Intrinsic.Comparison.0.FunctionalInequalities.Energy.SmoothGradient.contDiff_projectionCoordinates",
+    "_private.FunctionalInequalities.Energy.SmoothGradient.Intrinsic.Comparison.0.FunctionalInequalities.Energy.Euclidean.lipschitz_projectionCoordinates": "_private.FunctionalInequalities.Energy.SmoothGradient.Intrinsic.Comparison.0.FunctionalInequalities.Energy.SmoothGradient.lipschitz_projectionCoordinates",
+    "_private.FunctionalInequalities.Energy.SmoothGradient.Intrinsic.Comparison.0.FunctionalInequalities.Energy.Euclidean.measurePreserving_projectionCoordinates": "_private.FunctionalInequalities.Energy.SmoothGradient.Intrinsic.Comparison.0.FunctionalInequalities.Energy.SmoothGradient.measurePreserving_projectionCoordinates",
+    "_private.FunctionalInequalities.Energy.SmoothGradient.Intrinsic.Comparison.0.FunctionalInequalities.Energy.Euclidean.norm_gradient_comp_le": "_private.FunctionalInequalities.Energy.SmoothGradient.Intrinsic.Comparison.0.FunctionalInequalities.Energy.SmoothGradient.norm_gradient_comp_le",
+    "_private.FunctionalInequalities.Energy.SmoothGradient.Intrinsic.Comparison.0.FunctionalInequalities.Energy.Euclidean.projectionCoordinates": "_private.FunctionalInequalities.Energy.SmoothGradient.Intrinsic.Comparison.0.FunctionalInequalities.Energy.SmoothGradient.projectionCoordinates",
+    "_private.FunctionalInequalities.Energy.SmoothGradient.Intrinsic.Comparison.0.FunctionalInequalities.Energy.Euclidean.projectionCoordinates_reconstruct": "_private.FunctionalInequalities.Energy.SmoothGradient.Intrinsic.Comparison.0.FunctionalInequalities.Energy.SmoothGradient.projectionCoordinates_reconstruct",
+    "_private.FunctionalInequalities.Energy.SmoothGradient.Intrinsic.Comparison.0.FunctionalInequalities.Energy.Euclidean.pullbackTest": "_private.FunctionalInequalities.Energy.SmoothGradient.Intrinsic.Comparison.0.FunctionalInequalities.Energy.SmoothGradient.pullbackTest",
+    "_private.FunctionalInequalities.Energy.SmoothGradient.Intrinsic.Comparison.0.FunctionalInequalities.Energy.Euclidean.pullbackTest_energy_le": "_private.FunctionalInequalities.Energy.SmoothGradient.Intrinsic.Comparison.0.FunctionalInequalities.Energy.SmoothGradient.pullbackTest_energy_le"
+  },
+  "golden": {
+    "unchanged": true,
+    "declarations": 26,
+    "external_leaves": 221,
+    "sha256": "268ea5114a6baee17d2b070192ec4874b72655cbcb28cf68e372def7d7b4e9ef"
+  },
+  "history": {
+    "protected_files": 94,
+    "changed": []
+  },
+  "pdf": {
+    "pages_rendered": 37,
+    "baseline_pages": 37,
+    "pixel_differences": []
+  },
+  "local_evidence_directory": "build/api-final-naming"
+}

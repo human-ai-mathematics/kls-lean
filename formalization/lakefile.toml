@@ -44,7 +44,7 @@ roots = [
 [[lean_lib]]
 name = "Examples"
 srcDir = ".."
-roots = ["examples.PoincareFoundation"]
+roots = ["examples.PoincareFoundation", "examples.ApiOrganization"]
 
 # `Dev/Search.lean` (LeanSearchClient query scratchpad) is intentionally NOT a `lean_lib`:
 # the Blueprint's `lake exe checkdecls` imports the roots of every library of this package,

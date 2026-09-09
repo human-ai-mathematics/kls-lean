@@ -1,4 +1,4 @@
-import FunctionalInequalities.Poincare.LinearTest
+import FunctionalInequalities.Poincare.SmoothTest.Linear
 
 /-!
 # Lean certificate for `KLS.pdf`, Remark 3.8 (`lem:linear-test-lower`)
@@ -12,7 +12,7 @@ https://github.com/numina-functional-inequalities/kls-exploration/blob/cd4a894a0
 
 This certificate combines the admissible-test Rayleigh lower bound and the covariance lower
 bound on `ℝ^D`. The explicit `MemLp id 2 μ` premise, the zero-dimensional convention, and the
-`ENNReal` encoding are local specifications; the test domain is the one in `Poincare.Basic`.
+`ENNReal` encoding are local specifications; the test domain is the one in `Poincare.SmoothTest.Basic`.
 The Gaussian equality and mode-indicator claims in the same remark are outside this certificate.
 The ledger binds this file through `lean_solution`.
 -/
@@ -26,17 +26,17 @@ namespace Solutions.LemLinearTestLower
 
 /-- Source: the two Poincaré lower bounds in manuscript Remark 3.8, linked above, with the
 finite-second-moment premise made explicit as in the linear-baseline dossier. This local
-certificate combines `Poincare.rayleigh_le_constant` and `Covariance.lambdaMax_le_constant`
+certificate combines `Poincare.SmoothTest.rayleigh_le_constant` and `Covariance.lambdaMax_le_constant`
 for the repository's admissible tests, including `D = 0`. -/
 theorem certificate {D : ℕ}
     (μ : Measure (EuclideanSpace ℝ (Fin D))) [IsProbabilityMeasure μ]
     (hμ : MemLp (id : EuclideanSpace ℝ (Fin D) → EuclideanSpace ℝ (Fin D)) 2 μ) :
     (∀ ⦃f : EuclideanSpace ℝ (Fin D) → ℝ⦄,
-      Poincare.Admissible μ f → Poincare.rayleigh μ f ≤ Poincare.constant μ) ∧
-      Covariance.lambdaMax μ ≤ Poincare.constant μ := by
+      Poincare.SmoothTest.Admissible μ f → Poincare.SmoothTest.rayleigh μ f ≤ Poincare.SmoothTest.constant μ) ∧
+      Covariance.lambdaMax μ ≤ Poincare.SmoothTest.constant μ := by
   constructor
   · intro f hf
-    exact Poincare.rayleigh_le_constant hf
+    exact Poincare.SmoothTest.rayleigh_le_constant hf
   · exact Covariance.lambdaMax_le_constant hμ
 
 end Solutions.LemLinearTestLower

@@ -51,19 +51,19 @@ The two abstract comparison lemmas at the end are already proved in Lean.
 
 \begin{lemma}[Closable gradient and equality of the two closures]
   \label{lem:covariance-core-closure}
-  \lean{FunctionalInequalities.Energy.Euclidean.gradientOperator,
-        FunctionalInequalities.Energy.Euclidean.smoothCore,
+  \lean{FunctionalInequalities.Energy.WeightedGradient.operator,
+        FunctionalInequalities.Energy.WeightedGradient.smoothCore,
         FunctionalInequalities.Energy.PreEnergy.ofLinearPMap,
         FunctionalInequalities.Energy.exists_mem_of_isClosed_of_frequently_norm_le,
         FunctionalInequalities.Energy.PreEnergy.sequentialRelaxation_ofLinearPMap_of_mem,
         FunctionalInequalities.Energy.PreEnergy.sequentialRelaxation_ofLinearPMap_of_notMem,
         FunctionalInequalities.Energy.Euclidean.integral_mul_inner_gradient,
-        FunctionalInequalities.Energy.Euclidean.gradientOperator_isClosable,
-        FunctionalInequalities.Energy.Euclidean.dense_domain_gradientOperator,
-        FunctionalInequalities.Energy.Euclidean.closure_domRestrict_eq_of_smoothCore_le,
+        FunctionalInequalities.Energy.WeightedGradient.operator_isClosable,
+        FunctionalInequalities.Energy.WeightedGradient.dense_domain_operator,
+        FunctionalInequalities.Energy.WeightedGradient.closure_domRestrict_eq_of_smoothCore_le,
         FunctionalInequalities.KLS.LogConcave.locallyDominates,
-        FunctionalInequalities.KLS.LogConcave.gradientOperator_isClosable,
-        FunctionalInequalities.KLS.LogConcave.affine_energy_eq,
+        FunctionalInequalities.KLS.LogConcave.weightedOperator_isClosable,
+        FunctionalInequalities.KLS.LogConcave.intrinsicCovariance_energy_eq_operator,
         Solutions.LemCovarianceCoreClosure.certificate}
   \leanok
   \uses{lem:covariance-test-core-density,thm:borell-logconcave-density}

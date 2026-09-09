@@ -16,12 +16,19 @@ modules must instead import their exact direct dependencies so the direction bel
 acyclic. The foundation's
 [mathematical guide](FunctionalInequalities/Poincare/README.md) records the `L²`, extended-energy,
 relaxation, closed-form, Dirichlet, and pure-optimization layers and distinguishes them from the
-accepted legacy smooth-test API.
+accepted smooth-test API.
 
 For a first concrete application, read
 [`examples/PoincareFoundation.lean`](../examples/PoincareFoundation.lean). Its examples are compiled
 by the default `Examples` target and cover arbitrary laws, the selected energy, singular raw
 tests, infinite relaxation, and the accepted Gaussian constants.
+
+## Mathematical API organization (2026-09-08)
+
+The public frontends are `SmoothTest`, `SmoothGradient`, `WeightedGradient`,
+`CovarianceGradient`, and `LocalSlope`; `Ambient` and `Intrinsic` identify the carrier construction.
+Probability pushforwards and L² pullbacks occupy their own layers. See [the naming guide](../research/naming.md) and [the migration record](../research/decisions/2026-09-08-mathematical-api-organization.md).
+
 
 ## Source map
 
@@ -56,10 +63,10 @@ reading order and placement rules:
 
 | Topic | Entry points and guide |
 | --- | --- |
-| Probability | [Basic](FunctionalInequalities/Probability/Basic.lean), [AffineSupport](FunctionalInequalities/Probability/AffineSupport.lean), [IntrinsicCovariance](FunctionalInequalities/Probability/IntrinsicCovariance.lean), [Covariance](FunctionalInequalities/Probability/Covariance.lean), [CovarianceSqrt](FunctionalInequalities/Probability/CovarianceSqrt.lean), [CovarianceWhitening](FunctionalInequalities/Probability/CovarianceWhitening.lean), [BallDomination](FunctionalInequalities/Probability/BallDomination.lean), [BallAverages](FunctionalInequalities/Probability/BallAverages.lean) |
+| Probability | [Basic](FunctionalInequalities/Probability/Basic.lean), [AffineSupport](FunctionalInequalities/Probability/AffineSupport.lean), [IntrinsicCovariance](FunctionalInequalities/Probability/IntrinsicCovariance.lean), [Covariance](FunctionalInequalities/Probability/Covariance.lean), [CovarianceSqrt](FunctionalInequalities/Probability/CovarianceFactorization.lean), [CovarianceWhitening](FunctionalInequalities/Probability/CovarianceWhitening.lean), [BallDomination](FunctionalInequalities/Probability/BallDomination.lean), [BallAverages](FunctionalInequalities/Probability/BallAverages.lean) |
 | Real L² | [MeanVariance](FunctionalInequalities/L2/MeanVariance.lean) |
 | Energy | [Guide](FunctionalInequalities/Energy/README.md): general interfaces, `Relaxation/`, and `Euclidean/` |
-| Poincaré | [Foundation guide](FunctionalInequalities/Poincare/README.md), [Euclidean comparisons](FunctionalInequalities/Poincare/Euclidean/README.md), [affine covariance constant](FunctionalInequalities/Poincare/Euclidean/AffineCovariance.lean), [its ambient translation invariance](FunctionalInequalities/Poincare/Euclidean/AffineTranslation.lean), [Lipschitz/literature bridge](FunctionalInequalities/Poincare/Euclidean/LipschitzComparison.lean), [Gaussian guide](FunctionalInequalities/Poincare/Gaussian/README.md); product modules are in `Poincare/Product/` and `Poincare/FiniteProduct/` |
+| Poincaré | [Foundation guide](FunctionalInequalities/Poincare/README.md), [Euclidean comparisons](FunctionalInequalities/Poincare/Euclidean/README.md), [affine covariance constant](FunctionalInequalities/Poincare/CovarianceGradient/Intrinsic.lean), [its ambient translation invariance](FunctionalInequalities/Poincare/CovarianceGradient/Translation.lean), [Lipschitz/literature bridge](FunctionalInequalities/Poincare/LipschitzGradient/Comparison.lean), [Gaussian guide](FunctionalInequalities/Poincare/Gaussian/README.md); product modules are in `Poincare/Product/` and `Poincare/FiniteProduct/` |
 | KLS | [Guide](FunctionalInequalities/KLS/README.md), including [log-concavity](FunctionalInequalities/KLS/LogConcave/README.md), isotropy, isoperimetry, conditional fibers, the log-concave contracts of the affine covariance constant, log-concavity under ambient translation and the affine/isotropic reduction of KLS |
 | Blueprint | [Build and navigation guide](blueprint/README.md) |
 
@@ -72,7 +79,7 @@ records their status. Development search commands stay in `Dev/Search.lean`.
 Import the module needed by the argument, for example:
 
 ```lean
-import FunctionalInequalities.Poincare.Basic
+import FunctionalInequalities.Poincare.SmoothTest.Basic
 -- For downstream applications using L² and extended energies:
 import FunctionalInequalities.Poincare.Foundation
 import FunctionalInequalities.Poincare.Product.Tensorization
@@ -99,31 +106,31 @@ interface:
 - `PreEnergy.Quadratic.closedQuadratic_sequentialRelaxation` proves that a quadratic pre-energy
   with dense realization has a full `ClosedQuadratic` sequential relaxation, including the
   extended parallelogram identity.
-- `smoothGradientRelaxation_closedQuadratic` instantiates this result for the finite-dimensional
-  Borel `C∞` gradient pre-energy. `Energy.Canonical.closedQuadratic`
+- `Energy.SmoothGradient.relaxation_closedQuadratic` instantiates this result for the finite-dimensional
+  Borel `C∞` gradient pre-energy. `Energy.SmoothGradient.Intrinsic.closedQuadratic`
   transports it through affine-support coordinates.
 - `affineSupport` is the smallest closed affine subspace containing almost every point.
   `intrinsicL2Equiv` is a two-sided real linear isometric equivalence between the original and
   intrinsic real `L²` spaces, rather than a one-way embedding.
 - `Energy.Relaxation.Contraction` gives a conditional transfer theorem: a continuous map satisfying
   `RelaxedContractionBound` on realized tests decreases relaxed energy everywhere.
-- `Poincare.Euclidean.IntrinsicAffine` exposes `Holds`, the optimal `ENNReal` constant, and their
+- `Poincare.SmoothGradient.Intrinsic` exposes `Holds`, the optimal `ENNReal` constant, and their
   exact order-theoretic equivalence for the intrinsic-affine relaxed energy.
 - The proved comparison modules identify ambient and intrinsic-affine relaxed energies, preserve
   arbitrary pre-energy Poincare constants under relaxation, and identify the finite-dimensional
-  legacy smooth-test constant with the selected canonical constant.
+  smooth-test constant with the selected canonical constant.
 
 In Mathlib v4.33 ordinary `C∞` regularity is `ContDiff ℝ ∞`; `ContDiff ℝ ⊤` is analytic. Both the
-accepted legacy tests and the new smooth-gradient tests use `∞`.
+accepted smooth tests and the new smooth-gradient tests use `∞`.
 
 The foundation does **not** yet provide a Markov/Dirichlet witness for the smooth relaxation, an
 `AgreesOnTests` or core theorem, raw-gradient fiber consistency for singular measures, or an
-identification with Cheeger energy `2 · Ch`. The ambient/intrinsic and legacy/relaxed comparisons
+identification with Cheeger energy `2 · Ch`. The ambient/intrinsic and smooth-test/relaxed comparisons
 are proved and do not require raw/core agreement. Their comparison with the locally Lipschitz
 literature constant has a written argument in Blueprint Appendix A. The weighted approximation
 input and eight comparison interfaces are now certified under intrinsic absolute continuity.
-Import `FunctionalInequalities.Poincare.Euclidean.LiteratureComparison` for the proved API.
-Import `FunctionalInequalities.Poincare.Euclidean.LogConcaveComparison` for the general
+Import `FunctionalInequalities.Poincare.LocalSlope.SmoothTestComparison` for the proved API.
+Import `FunctionalInequalities.KLS.LogConcave.Poincare` for the general
 log-concave version: intrinsic absolute continuity is now proved from compact-set log-concavity.
 The full Borell density/moment representation is separately Lean-certified. See the
 [general proof record](../research/decisions/2026-09-06-general-logconcave-comparison.md), the
@@ -185,7 +192,7 @@ and the [ledger](../research/a-series/ledger.yaml).
 | #7: finite tensorization and optimal equality | [LemPoincareFiniteTensorization.lean](../solutions/LemPoincareFiniteTensorization.lean) | `proved` / `lean` |
 | Gaussian: sharp one-dimensional constant | [LemPoincareGaussianOneDimensional.lean](../solutions/LemPoincareGaussianOneDimensional.lean) | `proved` / `lean` |
 | Ambient/intrinsic comparison | [LemAmbientIntrinsicPoincareComparison.lean](../solutions/LemAmbientIntrinsicPoincareComparison.lean) | `proved` / `lean` |
-| Legacy/relaxed comparison | [LemLegacyRelaxedPoincareComparison.lean](../solutions/LemLegacyRelaxedPoincareComparison.lean) | `proved` / `lean` |
+| Smooth-test/relaxed comparison | [LemLegacyRelaxedPoincareComparison.lean](../solutions/LemLegacyRelaxedPoincareComparison.lean) | `proved` / `lean` |
 
 The two comparison entries package 12 proved theorems and retain 12 application checks;
 see their [reading guide](FunctionalInequalities/Poincare/Euclidean/README.md). The generic bridge
@@ -211,7 +218,7 @@ remains historical. The current contract and proof closeout are recorded in the
 [Gaussian acceptance record](../research/explorations/2026-09-04-gaussian-poincare-acceptance.md).
 The root aggregate imports `Poincare/Gaussian/Real`.
 
-`Poincare/Transport.lean`, `Poincare/Product/Reverse.lean`, and `Poincare/FiniteProduct/`
+`Poincare/SmoothTest/Transport.lean`, `Poincare/Product/Reverse.lean`, and `Poincare/FiniteProduct/`
 contain the accepted mathematics and its library proofs; see the
 [proof-stage record](../research/explorations/2026-09-03-finite-tensorization-proofs.md).
 The solution entry point contains the sole node certificate,
@@ -222,7 +229,7 @@ semantic review are recorded in the
 [finite freeze](../research/decisions/2026-09-03-finite-tensorization-freeze.md) and
 [acceptance record](../research/explorations/2026-09-03-finite-tensorization-acceptance.md).
 
-All accepted legacy constants use globally `C∞` (`ContDiff ℝ ∞`) real-valued L2 tests with
+All accepted smooth-test constants use globally `C∞` (`ContDiff ℝ ∞`) real-valued L2 tests with
 integrable squared canonical gradient. Binary products use `WithLp 2 (E × F)` and finite products
 use `PiLp 2 E`;
 the laws are transported product probabilities. The finite statements include the empty family,
@@ -309,9 +316,9 @@ For a focused validation of the new foundation, run from `formalization/`:
 
 ```bash
 lake env lean -DwarningAsError=true FunctionalInequalities/Energy/Relaxation/Quadratic.lean
-lake env lean -DwarningAsError=true FunctionalInequalities/Energy/Euclidean/SmoothGradient/Closed.lean
-lake env lean -DwarningAsError=true FunctionalInequalities/Energy/Euclidean/IntrinsicAffine/Closed.lean
-lake env lean -DwarningAsError=true FunctionalInequalities/Poincare/Euclidean/IntrinsicAffine.lean
+lake env lean -DwarningAsError=true FunctionalInequalities/Energy/SmoothGradient/Closed.lean
+lake env lean -DwarningAsError=true FunctionalInequalities/Energy/SmoothGradient/Intrinsic/Closed.lean
+lake env lean -DwarningAsError=true FunctionalInequalities/Poincare/SmoothGradient/Intrinsic.lean
 lake build FunctionalInequalities.Poincare.Foundation
 lake build Examples solutions.FoundationAxiomAudit
 ```

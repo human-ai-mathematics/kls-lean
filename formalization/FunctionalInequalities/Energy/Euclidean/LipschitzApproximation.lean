@@ -1,4 +1,4 @@
-import FunctionalInequalities.Energy.Euclidean.SmoothGradient.Basic
+import FunctionalInequalities.Energy.SmoothGradient.Basic
 import Mathlib.Analysis.Calculus.BumpFunction.InnerProduct
 import Mathlib.Analysis.Calculus.BumpFunction.Normed
 import Mathlib.Analysis.Calculus.ContDiff.Convolution
@@ -13,7 +13,7 @@ import Mathlib.Topology.MetricSpace.Lipschitz
 # Weighted smooth approximation of locally Lipschitz tests
 
 Source: Blueprint Appendix A, `lem:covariance-test-core-density`, first statement and proof.
-Read `exists_smooth_weighted_L2_approximation` for the main contract, then the two preceding
+Read `exists_smooth_weighted_L2` for the main contract, then the two preceding
 intermediate statements for the cutoff / mollification / diagonal proof order. The final theorem
 is the bounded L1 variant, preserving an arbitrary closed interval and the Lipschitz constant.
 All four statements are proved; no proof placeholder remains in this module.
@@ -40,7 +40,7 @@ differences, with membership conditions explicit.
   bounds and compact support, and is uniformly `2 K R`-close to `g`.
 * At every differentiability point `x` of `g`, `fderiv (mollify m R g) x → fderiv g x` as `R → 0`.
   The argument compares the convolution derivative with the affine model `g x + L (· - x)`, using
-  `integral_affine_smul_fderiv_kernel` and the scale-free derivative mass `C₀ m` of the kernel.
+  `integral_affine_smul_fderiv_kernel` and the scale-free derivative mass `kernelDerivativeMass m` of the kernel.
   No weak derivative or Lebesgue differentiation argument is needed.
 * Dominated convergence in `L^p(ν)` (`tendsto_eLpNorm_zero_of_dominated`) transfers pointwise
   convergence to the weighted norms; the cutoff step uses the `L²` data `g` and `B ∘ gradient g`
@@ -59,9 +59,11 @@ namespace FunctionalInequalities.Energy.Euclidean.LipschitzApproximation
 
 universe u
 
-variable {E : Type u} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
+variable {E : Type u} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
 
-section Basic
+section Gradient
+
+variable [CompleteSpace E]
 
 theorem norm_gradient_eq_norm_fderiv (f : E → ℝ) (x : E) :
     ‖gradient f x‖ = ‖fderiv ℝ f x‖ :=
@@ -75,21 +77,22 @@ theorem gradient_eq_of_hasFDerivAt {f : E → ℝ} {L : E →L[ℝ] ℝ} {x : E}
     gradient f x = (InnerProductSpace.toDual ℝ E).symm L :=
   (hasFDerivAt_iff_hasGradientAt.mp h).gradient
 
+end Gradient
+
+section Basic
+
 /-- A fixed smooth bump: one on the closed unit ball, zero outside radius two. -/
 def bump : ContDiffBump (0 : E) := ⟨1, 2, one_pos, one_lt_two⟩
 
 /-- The bump rescaled to be one on radius `R` and zero outside radius `2 * R`. -/
 def scaled (R : ℝ) (x : E) : ℝ := (bump (E := E)) (R⁻¹ • x)
 
-omit [CompleteSpace E] in
 theorem scaled_nonneg (R : ℝ) (x : E) : 0 ≤ scaled R x := by
   unfold scaled; exact (bump (E := E)).nonneg
 
-omit [CompleteSpace E] in
 theorem scaled_le_one (R : ℝ) (x : E) : scaled R x ≤ 1 := by
   unfold scaled; exact (bump (E := E)).le_one
 
-omit [CompleteSpace E] in
 theorem scaled_eq_one {R : ℝ} (hR : 0 < R) {x : E} (hx : ‖x‖ ≤ R) : scaled R x = 1 := by
   unfold scaled
   apply (bump (E := E)).one_of_mem_closedBall
@@ -98,7 +101,6 @@ theorem scaled_eq_one {R : ℝ} (hR : 0 < R) {x : E} (hx : ‖x‖ ≤ R) : scal
     abs_of_pos hR, inv_mul_le_iff₀ hR, mul_one]
   exact hx
 
-omit [CompleteSpace E] in
 theorem scaled_eq_zero {R : ℝ} (hR : 0 < R) {x : E} (hx : 2 * R ≤ ‖x‖) : scaled R x = 0 := by
   unfold scaled
   apply (bump (E := E)).zero_of_le_dist
@@ -106,16 +108,13 @@ theorem scaled_eq_zero {R : ℝ} (hR : 0 < R) {x : E} (hx : 2 * R ≤ ‖x‖) :
   rw [dist_zero_right, norm_smul, norm_inv, Real.norm_eq_abs, abs_of_pos hR, le_inv_mul_iff₀ hR]
   linarith
 
-omit [CompleteSpace E] in
 theorem contDiff_scaled (R : ℝ) : ContDiff ℝ ∞ (scaled (E := E) R) := by
   unfold scaled
   exact ((bump (E := E)).contDiff (n := ⊤)).comp (contDiff_const_smul R⁻¹)
 
-omit [CompleteSpace E] in
 theorem continuous_scaled (R : ℝ) : Continuous (scaled (E := E) R) :=
   (contDiff_scaled R).continuous
 
-omit [CompleteSpace E] in
 theorem hasFDerivAt_scaled (R : ℝ) (x : E) :
     HasFDerivAt (scaled R) (R⁻¹ • fderiv ℝ (⇑(bump (E := E))) (R⁻¹ • x)) x := by
   have h1 : HasFDerivAt (fun y : E => R⁻¹ • y) (R⁻¹ • ContinuousLinearMap.id ℝ E) x :=
@@ -129,7 +128,6 @@ theorem hasFDerivAt_scaled (R : ℝ) (x : E) :
   unfold scaled
   exact (h2.comp x h1).congr_fderiv h3
 
-omit [CompleteSpace E] in
 theorem fderiv_scaled_eq_zero {R : ℝ} (hR : 0 < R) {x : E} (hx : ‖x‖ < R) :
     fderiv ℝ (scaled R) x = 0 := by
   have h : scaled (E := E) R =ᶠ[𝓝 x] fun _ => (1 : ℝ) := by
@@ -139,7 +137,6 @@ theorem fderiv_scaled_eq_zero {R : ℝ} (hR : 0 < R) {x : E} (hx : ‖x‖ < R) 
   rw [h.fderiv_eq]
   simp
 
-omit [CompleteSpace E] in
 theorem norm_fderiv_scaled_le {R : ℝ} (hR : 0 < R) {M : ℝ}
     (hM : ∀ x : E, ‖fderiv ℝ (⇑(bump (E := E))) x‖ ≤ M) (x : E) :
     ‖fderiv ℝ (scaled R) x‖ ≤ R⁻¹ * M := by
@@ -147,7 +144,6 @@ theorem norm_fderiv_scaled_le {R : ℝ} (hR : 0 < R) {M : ℝ}
   gcongr
   exact hM _
 
-omit [CompleteSpace E] in
 theorem lipschitzWith_scaled {R : ℝ} (hR : 0 < R) {M : ℝ} (hM0 : 0 ≤ M)
     (hM : ∀ x : E, ‖fderiv ℝ (⇑(bump (E := E))) x‖ ≤ M) :
     LipschitzWith (R⁻¹ * M).toNNReal (scaled (E := E) R) := by
@@ -156,7 +152,7 @@ theorem lipschitzWith_scaled {R : ℝ} (hR : 0 < R) {M : ℝ} (hM0 : 0 ≤ M)
   rw [← NNReal.coe_le_coe, coe_nnnorm, Real.coe_toNNReal _ (by positivity)]
   exact norm_fderiv_scaled_le hR hM x
 
-theorem gradient_scaled_mul {R : ℝ} {g : E → ℝ} {x : E} (hx : DifferentiableAt ℝ g x) :
+theorem gradient_scaled_mul [CompleteSpace E] {R : ℝ} {g : E → ℝ} {x : E} (hx : DifferentiableAt ℝ g x) :
     gradient (fun y => scaled R y * g y) x =
       scaled R x • gradient g x + g x • gradient (scaled R) x := by
   have h1 : HasFDerivAt (scaled R) (fderiv ℝ (scaled R) x) x :=
@@ -173,7 +169,7 @@ section FiniteDimensional
 
 variable [FiniteDimensional ℝ E]
 
-omit [InnerProductSpace ℝ E] [CompleteSpace E] [FiniteDimensional ℝ E] in
+omit [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] in
 /-- A locally Lipschitz real function is Lipschitz on every compact set. -/
 theorem lipschitzOnWith_of_locallyLipschitz_of_isCompact {f : E → ℝ} (hf : LocallyLipschitz f)
     {s : Set E} (hs : IsCompact s) : ∃ K : NNReal, LipschitzOnWith K f s := by
@@ -215,7 +211,6 @@ theorem lipschitzOnWith_of_locallyLipschitz_of_isCompact {f : E → ℝ} (hf : L
       _ ≤ (2 * C' / δ) * dist x y := by gcongr
       _ ≤ max (K' : ℝ) (2 * C' / δ) * dist x y := by gcongr; exact le_max_right _ _
 
-omit [CompleteSpace E] in
 theorem hasCompactSupport_scaled {R : ℝ} (hR : 0 < R) :
     HasCompactSupport (scaled (E := E) R) :=
   HasCompactSupport.intro (isCompact_closedBall (0 : E) (2 * R)) fun x hx =>
@@ -223,7 +218,6 @@ theorem hasCompactSupport_scaled {R : ℝ} (hR : 0 < R) :
       rw [Metric.mem_closedBall, dist_zero_right] at hx
       exact le_of_lt (not_le.mp hx))
 
-omit [CompleteSpace E] in
 theorem exists_bound_fderiv_bump :
     ∃ M : ℝ, 0 ≤ M ∧ ∀ x : E, ‖fderiv ℝ (⇑(bump (E := E))) x‖ ≤ M := by
   have hc : Continuous (fderiv ℝ (⇑(bump (E := E)))) :=
@@ -239,7 +233,7 @@ section Measurable
 
 variable [MeasurableSpace E]
 
-omit [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E] in
+omit [NormedAddCommGroup E] [InnerProductSpace ℝ E] in
 /-- Dominated convergence for the `L^p` seminorm, `0 < p < ∞`. -/
 theorem tendsto_eLpNorm_zero_of_dominated {V : Type*} [NormedAddCommGroup V]
     (μ : Measure E) {p : ℝ≥0∞} (hp0 : p ≠ 0) (hp : p ≠ ⊤)
@@ -272,7 +266,9 @@ theorem tendsto_eLpNorm_zero_of_dominated {V : Type*} [NormedAddCommGroup V]
   simpa [Function.comp_def, ENNReal.zero_rpow_of_pos (inv_pos.mpr hq),
     ENNReal.zero_rpow_of_pos (by positivity : 0 < 1 / p.toReal)] using this
 
-variable [BorelSpace E]
+section GradientMeasurability
+
+variable [BorelSpace E] [CompleteSpace E]
 
 theorem measurable_gradient (f : E → ℝ) : Measurable (gradient f) :=
   (InnerProductSpace.toDual ℝ E).symm.continuous.measurable.comp (measurable_fderiv ℝ f)
@@ -283,9 +279,9 @@ theorem aestronglyMeasurable_gradient (f : E → ℝ) (μ : Measure E) :
     AEStronglyMeasurable (gradient f) μ :=
   (measurable_gradient f).aestronglyMeasurable
 
-variable [FiniteDimensional ℝ E]
+end GradientMeasurability
 
-omit [SecondCountableTopology E] [CompleteSpace E] in
+variable [BorelSpace E] [FiniteDimensional ℝ E]
 /-- Rademacher's theorem for locally Lipschitz real functions. -/
 theorem ae_differentiableAt_of_locallyLipschitz {f : E → ℝ} (hf : LocallyLipschitz f)
     (m : Measure E) [m.IsAddHaarMeasure] : ∀ᵐ x ∂m, DifferentiableAt ℝ f x := by
@@ -309,84 +305,49 @@ theorem radius_pos (j : ℕ) : 0 < radius j := by unfold radius; positivity
 
 theorem tendsto_radius : Tendsto radius atTop (𝓝 0) := tendsto_one_div_add_atTop_nhds_zero_nat
 
+end Measurable
+
 section Kernel
 
-variable (m : Measure E) [Measure.IsAddHaarMeasure m]
-
-omit [CompleteSpace E] [SecondCountableTopology E] in
-theorem integral_bump_pos : 0 < ∫ x, bump (E := E) x ∂m := (bump (E := E)).integral_pos
-
-omit [CompleteSpace E] [SecondCountableTopology E] in
-theorem integral_scaled {R : ℝ} (hR : 0 < R) :
-    ∫ x, scaled R x ∂m = R ^ Module.finrank ℝ E * ∫ x, bump (E := E) x ∂m := by
-  have := Measure.integral_comp_inv_smul m (fun y : E => bump (E := E) y) R
-  simpa [scaled, abs_of_pos (pow_pos hR _)] using this
-
-omit [CompleteSpace E] [SecondCountableTopology E] in
-theorem integral_scaled_pos {R : ℝ} (hR : 0 < R) : 0 < ∫ x, scaled R x ∂m := by
-  rw [integral_scaled m hR]
-  have := integral_bump_pos (E := E) m
-  positivity
-
-omit [SecondCountableTopology E] [CompleteSpace E] in
-theorem integrable_scaled {R : ℝ} (hR : 0 < R) : Integrable (scaled (E := E) R) m :=
-  (continuous_scaled R).integrable_of_hasCompactSupport (hasCompactSupport_scaled hR)
+variable [MeasurableSpace E] (m : Measure E)
 
 /-- The normalized mollifier of radius `2 * R`. -/
 def kernel (R : ℝ) (x : E) : ℝ := (∫ y, scaled R y ∂m)⁻¹ • scaled R x
 
-omit [BorelSpace E] [SecondCountableTopology E] [FiniteDimensional ℝ E] [m.IsAddHaarMeasure] [CompleteSpace E] in
 theorem kernel_nonneg (R : ℝ) (x : E) : 0 ≤ kernel m R x :=
   smul_nonneg (inv_nonneg.mpr (integral_nonneg fun y => scaled_nonneg R y)) (scaled_nonneg R x)
 
-omit [BorelSpace E] [SecondCountableTopology E] [FiniteDimensional ℝ E] [m.IsAddHaarMeasure] [CompleteSpace E] in
 theorem kernel_eq_zero {R : ℝ} (hR : 0 < R) {x : E} (hx : 2 * R ≤ ‖x‖) : kernel m R x = 0 := by
   simp [kernel, scaled_eq_zero hR hx]
 
-omit [BorelSpace E] [SecondCountableTopology E] [FiniteDimensional ℝ E] [m.IsAddHaarMeasure] [CompleteSpace E] in
 theorem norm_le_of_kernel_ne_zero {R : ℝ} (hR : 0 < R) {x : E} (hx : kernel m R x ≠ 0) :
     ‖x‖ < 2 * R := by
   by_contra h
   push Not at h
   exact hx (kernel_eq_zero m hR h)
 
-omit [BorelSpace E] [SecondCountableTopology E] [m.IsAddHaarMeasure] [CompleteSpace E] in
-theorem hasCompactSupport_kernel {R : ℝ} (hR : 0 < R) : HasCompactSupport (kernel m R) :=
+theorem hasCompactSupport_kernel [FiniteDimensional ℝ E] {R : ℝ} (hR : 0 < R) : HasCompactSupport (kernel m R) :=
   HasCompactSupport.intro (isCompact_closedBall (0 : E) (2 * R)) fun x hx =>
     kernel_eq_zero m hR (by
       rw [Metric.mem_closedBall, dist_zero_right] at hx
       exact le_of_lt (not_le.mp hx))
 
-omit [BorelSpace E] [SecondCountableTopology E] [FiniteDimensional ℝ E] [m.IsAddHaarMeasure] [CompleteSpace E] in
 theorem tsupport_kernel_subset {R : ℝ} (hR : 0 < R) :
     tsupport (kernel m R) ⊆ Metric.closedBall (0 : E) (2 * R) :=
   closure_minimal (fun x hx => by
     rw [Metric.mem_closedBall, dist_zero_right]
     exact le_of_lt (norm_le_of_kernel_ne_zero m hR hx)) Metric.isClosed_closedBall
 
-omit [BorelSpace E] [SecondCountableTopology E] [FiniteDimensional ℝ E] [m.IsAddHaarMeasure] [CompleteSpace E] in
 theorem contDiff_kernel (R : ℝ) : ContDiff ℝ ∞ (kernel m R) :=
   (contDiff_scaled R).const_smul _
 
-omit [BorelSpace E] [SecondCountableTopology E] [FiniteDimensional ℝ E] [m.IsAddHaarMeasure] [CompleteSpace E] in
 theorem continuous_kernel (R : ℝ) : Continuous (kernel m R) := (contDiff_kernel m R).continuous
 
-omit [SecondCountableTopology E] [CompleteSpace E] in
-theorem integrable_kernel {R : ℝ} (hR : 0 < R) : Integrable (kernel m R) m :=
-  (continuous_kernel m R).integrable_of_hasCompactSupport (hasCompactSupport_kernel m hR)
-
-omit [CompleteSpace E] [SecondCountableTopology E] in
-theorem integral_kernel {R : ℝ} (hR : 0 < R) : ∫ x, kernel m R x ∂m = 1 := by
-  simp only [kernel]
-  rw [integral_smul, smul_eq_mul, inv_mul_cancel₀ (integral_scaled_pos m hR).ne']
-
-omit [BorelSpace E] [SecondCountableTopology E] [m.IsAddHaarMeasure] [CompleteSpace E] in
 theorem hasFDerivAt_kernel (R : ℝ) (x : E) :
     HasFDerivAt (kernel m R)
       ((∫ y, scaled R y ∂m)⁻¹ • (R⁻¹ • fderiv ℝ (⇑(bump (E := E))) (R⁻¹ • x))) x := by
   exact HasFDerivAt.const_smul (hasFDerivAt_scaled (E := E) R x) (∫ y, scaled R y ∂m)⁻¹
 
-omit [BorelSpace E] [SecondCountableTopology E] [m.IsAddHaarMeasure] [CompleteSpace E] in
 theorem norm_fderiv_kernel {R : ℝ} (hR : 0 < R) (x : E) :
     ‖fderiv ℝ (kernel m R) x‖ =
       (∫ y, scaled R y ∂m)⁻¹ * (R⁻¹ * ‖fderiv ℝ (⇑(bump (E := E))) (R⁻¹ • x)‖) := by
@@ -395,73 +356,92 @@ theorem norm_fderiv_kernel {R : ℝ} (hR : 0 < R) (x : E) :
     abs_of_pos hR]
 
 /-- The scale-free constant controlling the mass of the kernel derivative. -/
-def C₀ : ℝ := (∫ x, ‖fderiv ℝ (⇑(bump (E := E))) x‖ ∂m) / ∫ x, bump (E := E) x ∂m
+def kernelDerivativeMass : ℝ := (∫ x, ‖fderiv ℝ (⇑(bump (E := E))) x‖ ∂m) / ∫ x, bump (E := E) x ∂m
 
-omit [CompleteSpace E] [BorelSpace E] [SecondCountableTopology E] [m.IsAddHaarMeasure] in
-theorem C₀_nonneg : 0 ≤ C₀ (E := E) m :=
+theorem kernelDerivativeMass_nonneg : 0 ≤ kernelDerivativeMass (E := E) m :=
   div_nonneg (integral_nonneg fun _ => norm_nonneg _) (integral_nonneg fun _ => (bump (E := E)).nonneg)
 
-omit [BorelSpace E] [SecondCountableTopology E] [FiniteDimensional ℝ E] [m.IsAddHaarMeasure] [CompleteSpace E] in
 theorem continuous_fderiv_kernel (R : ℝ) : Continuous (fderiv ℝ (kernel m R)) :=
   (contDiff_kernel m R).continuous_fderiv (by simp)
 
-omit [BorelSpace E] [SecondCountableTopology E] [m.IsAddHaarMeasure] [CompleteSpace E] in
-theorem hasCompactSupport_fderiv_kernel {R : ℝ} (hR : 0 < R) :
+theorem hasCompactSupport_fderiv_kernel [FiniteDimensional ℝ E] {R : ℝ} (hR : 0 < R) :
     HasCompactSupport (fderiv ℝ (kernel m R)) :=
   (hasCompactSupport_kernel m hR).fderiv (𝕜 := ℝ)
 
-omit [BorelSpace E] [SecondCountableTopology E] [FiniteDimensional ℝ E] [m.IsAddHaarMeasure] [CompleteSpace E] in
 theorem norm_le_of_fderiv_kernel_ne_zero {R : ℝ} (hR : 0 < R) {x : E}
     (hx : fderiv ℝ (kernel m R) x ≠ 0) : ‖x‖ ≤ 2 * R := by
   have := tsupport_kernel_subset m hR (support_fderiv_subset ℝ hx)
   simpa [Metric.mem_closedBall, dist_zero_right] using this
 
-omit [SecondCountableTopology E] [CompleteSpace E] in
+/-- Mollification of `g` by the normalized kernel of radius `2 * R`. -/
+def mollify (R : ℝ) (g : E → ℝ) : E → ℝ :=
+  g ⋆[ContinuousLinearMap.lsmul ℝ ℝ, m] kernel m R
+
+theorem hasCompactSupport_mollify [FiniteDimensional ℝ E] {R : ℝ} (hR : 0 < R) {g : E → ℝ} (hg : HasCompactSupport g) :
+    HasCompactSupport (mollify m R g) :=
+  hg.convolution (ContinuousLinearMap.lsmul ℝ ℝ) (hasCompactSupport_kernel m hR)
+
+section HaarNormalization
+
+variable [BorelSpace E] [FiniteDimensional ℝ E] [m.IsAddHaarMeasure]
+
+theorem integral_bump_pos : 0 < ∫ x, bump (E := E) x ∂m := (bump (E := E)).integral_pos
+
+theorem integral_scaled {R : ℝ} (hR : 0 < R) :
+    ∫ x, scaled R x ∂m = R ^ Module.finrank ℝ E * ∫ x, bump (E := E) x ∂m := by
+  have := Measure.integral_comp_inv_smul m (fun y : E => bump (E := E) y) R
+  simpa [scaled, abs_of_pos (pow_pos hR _)] using this
+
+theorem integral_scaled_pos {R : ℝ} (hR : 0 < R) : 0 < ∫ x, scaled R x ∂m := by
+  rw [integral_scaled m hR]
+  have := integral_bump_pos (E := E) m
+  positivity
+
+theorem integrable_scaled {R : ℝ} (hR : 0 < R) : Integrable (scaled (E := E) R) m :=
+  (continuous_scaled R).integrable_of_hasCompactSupport (hasCompactSupport_scaled hR)
+
+theorem integrable_kernel {R : ℝ} (hR : 0 < R) : Integrable (kernel m R) m :=
+  (continuous_kernel m R).integrable_of_hasCompactSupport (hasCompactSupport_kernel m hR)
+
+theorem integral_kernel {R : ℝ} (hR : 0 < R) : ∫ x, kernel m R x ∂m = 1 := by
+  simp only [kernel]
+  rw [integral_smul, smul_eq_mul, inv_mul_cancel₀ (integral_scaled_pos m hR).ne']
+
 theorem integrable_norm_fderiv_kernel {R : ℝ} (hR : 0 < R) :
     Integrable (fun x => ‖fderiv ℝ (kernel m R) x‖) m :=
   ((continuous_fderiv_kernel m R).integrable_of_hasCompactSupport
     (hasCompactSupport_fderiv_kernel m hR)).norm
 
-omit [SecondCountableTopology E] [CompleteSpace E] in
 theorem integral_norm_fderiv_kernel {R : ℝ} (hR : 0 < R) :
-    ∫ x, ‖fderiv ℝ (kernel m R) x‖ ∂m = R⁻¹ * C₀ m := by
+    ∫ x, ‖fderiv ℝ (kernel m R) x‖ ∂m = R⁻¹ * kernelDerivativeMass m := by
   simp_rw [norm_fderiv_kernel m hR]
   rw [integral_const_mul, integral_const_mul,
     Measure.integral_comp_inv_smul m (fun y : E => ‖fderiv ℝ (⇑(bump (E := E))) y‖) R,
-    integral_scaled m hR, abs_of_pos (pow_pos hR _), C₀, smul_eq_mul]
+    integral_scaled m hR, abs_of_pos (pow_pos hR _), kernelDerivativeMass, smul_eq_mul]
   have h1 := integral_bump_pos (E := E) m
   have h2 : (0 : ℝ) < R ^ Module.finrank ℝ E := pow_pos hR _
   field_simp
 
-/-- Mollification of `g` by the normalized kernel of radius `2 * R`. -/
-def mollify (R : ℝ) (g : E → ℝ) : E → ℝ :=
-  g ⋆[ContinuousLinearMap.lsmul ℝ ℝ, m] kernel m R
-
-omit [CompleteSpace E] in
 theorem mollify_apply (R : ℝ) (g : E → ℝ) (x : E) :
     mollify m R g x = ∫ t, g (x - t) * kernel m R t ∂m := by
   rw [mollify, convolution_eq_swap]
   simp [ContinuousLinearMap.lsmul_apply, smul_eq_mul]
 
-omit [SecondCountableTopology E] [CompleteSpace E] in
 theorem integrable_shift_mul_kernel {R : ℝ} (hR : 0 < R) {g : E → ℝ} (hg : Continuous g) (x : E) :
     Integrable (fun t => g (x - t) * kernel m R t) m := by
   apply Continuous.integrable_of_hasCompactSupport
   · exact (hg.comp (continuous_const.sub continuous_id)).mul (continuous_kernel m R)
   · exact (hasCompactSupport_kernel m hR).mul_left
 
-omit [SecondCountableTopology E] [CompleteSpace E] in
 theorem contDiff_mollify {R : ℝ} (hR : 0 < R) {g : E → ℝ} (hg : Continuous g) :
     ContDiff ℝ ∞ (mollify m R g) :=
   (hasCompactSupport_kernel m hR).contDiff_convolution_right _ hg.locallyIntegrable
     (contDiff_kernel m R)
 
-omit [SecondCountableTopology E] [CompleteSpace E] in
 theorem continuous_mollify {R : ℝ} (hR : 0 < R) {g : E → ℝ} (hg : Continuous g) :
     Continuous (mollify m R g) :=
   (contDiff_mollify m hR hg).continuous
 
-omit [CompleteSpace E] in
 theorem lipschitzWith_mollify {R : ℝ} (hR : 0 < R) {K : NNReal} {g : E → ℝ}
     (hg : LipschitzWith K g) : LipschitzWith K (mollify m R g) := by
   refine LipschitzWith.of_dist_le_mul fun x y => ?_
@@ -481,7 +461,6 @@ theorem lipschitzWith_mollify {R : ℝ} (hR : 0 < R) {K : NNReal} {g : E → ℝ
           _ = K * dist x y := by rw [dist_sub_right]
     _ = K * dist x y := by rw [integral_const_mul, integral_kernel m hR, mul_one]
 
-omit [CompleteSpace E] in
 theorem mollify_le {R : ℝ} (hR : 0 < R) {g : E → ℝ} (hg : Continuous g) {b : ℝ}
     (hb : ∀ x, g x ≤ b) (x : E) : mollify m R g x ≤ b := by
   rw [mollify_apply]
@@ -491,7 +470,6 @@ theorem mollify_le {R : ℝ} (hR : 0 < R) {g : E → ℝ} (hg : Continuous g) {b
         exact mul_le_mul_of_nonneg_right (hb _) (kernel_nonneg m R t)
     _ = b := by rw [integral_const_mul, integral_kernel m hR, mul_one]
 
-omit [CompleteSpace E] in
 theorem le_mollify {R : ℝ} (hR : 0 < R) {g : E → ℝ} (hg : Continuous g) {a : ℝ}
     (ha : ∀ x, a ≤ g x) (x : E) : a ≤ mollify m R g x := by
   rw [mollify_apply]
@@ -501,13 +479,11 @@ theorem le_mollify {R : ℝ} (hR : 0 < R) {g : E → ℝ} (hg : Continuous g) {a
           (integrable_shift_mul_kernel m hR hg x) fun t => ?_
         exact mul_le_mul_of_nonneg_right (ha _) (kernel_nonneg m R t)
 
-omit [CompleteSpace E] in
 theorem abs_mollify_le {R : ℝ} (hR : 0 < R) {g : E → ℝ} (hg : Continuous g) {C : ℝ}
     (hC : ∀ x, |g x| ≤ C) (x : E) : |mollify m R g x| ≤ C :=
   abs_le.mpr ⟨le_mollify m hR hg (fun x => (abs_le.mp (hC x)).1) x,
     mollify_le m hR hg (fun x => (abs_le.mp (hC x)).2) x⟩
 
-omit [CompleteSpace E] in
 theorem norm_mollify_sub_le {R : ℝ} (hR : 0 < R) {K : NNReal} {g : E → ℝ}
     (hg : LipschitzWith K g) (x : E) : ‖mollify m R g x - g x‖ ≤ K * (2 * R) := by
   have h : mollify m R g x - g x = ∫ t, (g (x - t) - g x) * kernel m R t ∂m := by
@@ -529,19 +505,12 @@ theorem norm_mollify_sub_le {R : ℝ} (hR : 0 < R) {K : NNReal} {g : E → ℝ}
         _ ≤ K * (2 * R) := by gcongr
   · rw [integral_const_mul, integral_kernel m hR, mul_one]
 
-omit [BorelSpace E] [SecondCountableTopology E] [m.IsAddHaarMeasure] [CompleteSpace E] in
-theorem hasCompactSupport_mollify {R : ℝ} (hR : 0 < R) {g : E → ℝ} (hg : HasCompactSupport g) :
-    HasCompactSupport (mollify m R g) :=
-  hg.convolution (ContinuousLinearMap.lsmul ℝ ℝ) (hasCompactSupport_kernel m hR)
-
-omit [CompleteSpace E] in
 theorem hasFDerivAt_mollify {R : ℝ} (hR : 0 < R) {g : E → ℝ} (hg : Continuous g) (x : E) :
     HasFDerivAt (mollify m R g)
       ((g ⋆[(ContinuousLinearMap.lsmul ℝ ℝ).precompR E, m] fderiv ℝ (kernel m R)) x) x :=
   (hasCompactSupport_kernel m hR).hasFDerivAt_convolution_right _ hg.locallyIntegrable
     ((contDiff_kernel m R).of_le (mod_cast le_top)) x
 
-omit [CompleteSpace E] in
 theorem fderiv_mollify_apply {R : ℝ} (hR : 0 < R) {g : E → ℝ} (hg : Continuous g) (x : E) :
     fderiv ℝ (mollify m R g) x = ∫ t, g (x - t) • fderiv ℝ (kernel m R) t ∂m := by
   have h := (hasFDerivAt_mollify m hR hg x).fderiv
@@ -551,7 +520,6 @@ theorem fderiv_mollify_apply {R : ℝ} (hR : 0 < R) {g : E → ℝ} (hg : Contin
   ext v
   simp [ContinuousLinearMap.precompR_apply, ContinuousLinearMap.compL_apply, smul_eq_mul]
 
-omit [CompleteSpace E] in
 theorem mollify_affine {R : ℝ} (hR : 0 < R) (c : ℝ) (L : E →L[ℝ] ℝ) (x : E) :
     mollify m R (fun z => c + L z) x = c + L x - ∫ t, L t * kernel m R t ∂m := by
   rw [mollify_apply]
@@ -568,7 +536,6 @@ theorem mollify_affine {R : ℝ} (hR : 0 < R) (c : ℝ) (L : E →L[ℝ] ℝ) (x
   rw [h, integral_sub h12 h3, integral_add h1 h2, integral_const_mul, integral_const_mul,
     integral_kernel m hR, mul_one, mul_one]
 
-omit [CompleteSpace E] in
 theorem hasFDerivAt_mollify_affine {R : ℝ} (hR : 0 < R) (c : ℝ) (L : E →L[ℝ] ℝ) (x : E) :
     HasFDerivAt (mollify m R (fun z => c + L z)) L x := by
   have h : mollify m R (fun z => c + L z) = fun x => c + L x - ∫ t, L t * kernel m R t ∂m :=
@@ -576,7 +543,6 @@ theorem hasFDerivAt_mollify_affine {R : ℝ} (hR : 0 < R) (c : ℝ) (L : E →L[
   rw [h]
   exact (((hasFDerivAt_const c x).add L.hasFDerivAt).sub_const _).congr_fderiv (zero_add L)
 
-omit [CompleteSpace E] in
 theorem integral_affine_smul_fderiv_kernel {R : ℝ} (hR : 0 < R) (c : ℝ) (L : E →L[ℝ] ℝ)
     (x : E) : ∫ t, (c + L (x - t)) • fderiv ℝ (kernel m R) t ∂m = L := by
   have h1 := fderiv_mollify_apply m hR (g := fun z => c + L z)
@@ -584,7 +550,6 @@ theorem integral_affine_smul_fderiv_kernel {R : ℝ} (hR : 0 < R) (c : ℝ) (L :
   rw [(hasFDerivAt_mollify_affine m hR c L x).fderiv] at h1
   exact h1.symm
 
-omit [SecondCountableTopology E] [CompleteSpace E] in
 theorem integrable_mul_smul_fderiv_kernel {R : ℝ} (hR : 0 < R) {g : E → ℝ} (hg : Continuous g)
     (x : E) : Integrable (fun t => g (x - t) • fderiv ℝ (kernel m R) t) m := by
   apply Continuous.integrable_of_hasCompactSupport
@@ -594,11 +559,10 @@ theorem integrable_mul_smul_fderiv_kernel {R : ℝ} (hR : 0 < R) {g : E → ℝ}
     intro h
     exact ht (by simp [h])
 
-omit [CompleteSpace E] in
 theorem norm_fderiv_mollify_sub_le {R : ℝ} (hR : 0 < R) {g : E → ℝ} (hg : Continuous g) {x : E}
     {L : E →L[ℝ] ℝ} {δ r : ℝ} (hδ : 0 ≤ δ)
     (hr : ∀ y, dist y x < r → ‖g y - g x - L (y - x)‖ ≤ δ * ‖y - x‖) (hRr : 2 * R < r) :
-    ‖fderiv ℝ (mollify m R g) x - L‖ ≤ δ * (2 * C₀ m) := by
+    ‖fderiv ℝ (mollify m R g) x - L‖ ≤ δ * (2 * kernelDerivativeMass m) := by
   have hL : L = ∫ t, (g x - L x + L (x - t)) • fderiv ℝ (kernel m R) t ∂m :=
     (integral_affine_smul_fderiv_kernel m hR (g x - L x) L x).symm
   have hint := integrable_mul_smul_fderiv_kernel m hR (g := fun z => g x - L x + L z)
@@ -626,19 +590,18 @@ theorem norm_fderiv_mollify_sub_le {R : ℝ} (hR : 0 < R) {g : E → ℝ} (hg : 
           calc ‖g (x - t) - (g x - L x + L (x - t))‖ * ‖fderiv ℝ (kernel m R) t‖
               ≤ δ * ‖t‖ * ‖fderiv ℝ (kernel m R) t‖ := by gcongr
             _ ≤ δ * (2 * R) * ‖fderiv ℝ (kernel m R) t‖ := by gcongr
-    _ = δ * (2 * R) * (R⁻¹ * C₀ m) := by
+    _ = δ * (2 * R) * (R⁻¹ * kernelDerivativeMass m) := by
         rw [integral_const_mul, integral_norm_fderiv_kernel m hR]
-    _ = δ * (2 * C₀ m) := by field_simp
+    _ = δ * (2 * kernelDerivativeMass m) := by field_simp
 
-omit [CompleteSpace E] in
 theorem tendsto_fderiv_mollify {g : E → ℝ} (hg : Continuous g) {x : E}
     (hx : DifferentiableAt ℝ g x) {Rs : ℕ → ℝ} (hRs : ∀ j, 0 < Rs j)
     (hlim : Tendsto Rs atTop (𝓝 0)) :
     Tendsto (fun j => fderiv ℝ (mollify m (Rs j) g) x) atTop (𝓝 (fderiv ℝ g x)) := by
   rw [Metric.tendsto_atTop]
   intro η hη
-  have hC := C₀_nonneg (E := E) m
-  set δ := η / (2 * C₀ m + 1) with hδ_def
+  have hC := kernelDerivativeMass_nonneg (E := E) m
+  set δ := η / (2 * kernelDerivativeMass m + 1) with hδ_def
   have hδ : 0 < δ := by positivity
   obtain ⟨r, hr, hrδ⟩ := Metric.eventually_nhds_iff.mp (hx.hasFDerivAt.isLittleO.def hδ)
   have hev : ∀ᶠ j in atTop, 2 * Rs j < r := by
@@ -647,11 +610,11 @@ theorem tendsto_fderiv_mollify {g : E → ℝ} (hg : Continuous g) {x : E}
   obtain ⟨N, hN⟩ := eventually_atTop.mp hev
   refine ⟨N, fun j hj => ?_⟩
   rw [dist_eq_norm]
-  calc ‖fderiv ℝ (mollify m (Rs j) g) x - fderiv ℝ g x‖ ≤ δ * (2 * C₀ m) :=
+  calc ‖fderiv ℝ (mollify m (Rs j) g) x - fderiv ℝ g x‖ ≤ δ * (2 * kernelDerivativeMass m) :=
         norm_fderiv_mollify_sub_le m (hRs j) hg hδ.le (fun y hy => hrδ hy) (hN j hj)
     _ < η := by
         rw [hδ_def, div_mul_eq_mul_div, div_lt_iff₀ (by positivity)]
-        have := mul_lt_mul_of_pos_left (lt_add_one (2 * C₀ m)) hη
+        have := mul_lt_mul_of_pos_left (lt_add_one (2 * kernelDerivativeMass m)) hη
         linarith
 
 theorem tendsto_gradient_mollify {g : E → ℝ} (hg : Continuous g) {x : E}
@@ -661,9 +624,13 @@ theorem tendsto_gradient_mollify {g : E → ℝ} (hg : Continuous g) {x : E}
   ((InnerProductSpace.toDual ℝ E).symm.continuous.tendsto _).comp
     (tendsto_fderiv_mollify m hg hx hRs hlim)
 
+end HaarNormalization
+
 end Kernel
 
 section Main
+
+variable [MeasurableSpace E] [BorelSpace E] [FiniteDimensional ℝ E]
 
 variable (ν : ProbabilityMeasure E) (m : Measure E) [Measure.IsAddHaarMeasure m]
 
@@ -671,7 +638,7 @@ variable (ν : ProbabilityMeasure E) (m : Measure E) [Measure.IsAddHaarMeasure m
 with compact support. Suggested witnesses are smooth cutoffs times g; their Lipschitz constants
 may grow with j. This conclusion does not assert smoothness of the approximants. -/
 
-theorem exists_compactSupport_weighted_L2_approximation
+theorem exists_compactSupport_weighted_L2
     (hν : (ν : Measure E) ≪ m) (B : E →L[ℝ] E) (g : E → ℝ)
     (hg : LocallyLipschitz g) (hg_L2 : MemLp g 2 (ν : Measure E))
     (hBg_L2 : MemLp (fun x ↦ B (gradient g x)) 2 (ν : Measure E)) :
@@ -848,7 +815,7 @@ theorem exists_compactSupport_weighted_L2_approximation
 /-- Step 2 (mollification): smooth a compactly supported globally Lipschitz test.
 The original global Lipschitz constant is retained, and the *full* gradient converges in L2.
 Its source and approximant membership is part of the conclusion, not an extra hypothesis. -/
-theorem exists_smooth_compactSupport_L2_approximation
+theorem exists_smooth_compactSupport_L2
     (hν : (ν : Measure E) ≪ m) (g : E → ℝ) (K : NNReal)
     (hg : LipschitzWith K g) (hcompact : HasCompactSupport g) :
     MemLp g 2 (ν : Measure E) ∧ MemLp (gradient g) 2 (ν : Measure E) ∧
@@ -904,7 +871,7 @@ theorem exists_smooth_compactSupport_L2_approximation
 Choose compactly supported smooth approximants with simultaneous value and B-gradient convergence.
 For fixed B, continuity transports step 2 to the weighted norm; a diagonal choice combines steps
 1 and 2. This statement has no hypothesis asserting either intermediate approximation theorem. -/
-theorem exists_smooth_weighted_L2_approximation
+theorem exists_smooth_weighted_L2
     (hν : (ν : Measure E) ≪ m) (B : E →L[ℝ] E) (g : E → ℝ)
     (hg : LocallyLipschitz g) (hg_L2 : MemLp g 2 (ν : Measure E))
     (hBg_L2 : MemLp (fun x ↦ B (gradient g x)) 2 (ν : Measure E)) :
@@ -918,10 +885,10 @@ theorem exists_smooth_weighted_L2_approximation
         (fun x ↦ B (gradient (gSeq j) x) - B (gradient g x)) 2 (ν : Measure E))
         atTop (𝓝 0) := by
   obtain ⟨u, hu, hu1, hu2⟩ :=
-    exists_compactSupport_weighted_L2_approximation ν m hν B g hg hg_L2 hBg_L2
+    exists_compactSupport_weighted_L2 ν m hν B g hg hg_L2 hBg_L2
   choose K hK using fun j => (hu j).2.1
   choose v hv hv1 hv2 using fun j =>
-    (exists_smooth_compactSupport_L2_approximation ν m hν (u j) (K j) (hK j) (hu j).1).2.2
+    (exists_smooth_compactSupport_L2 ν m hν (u j) (K j) (hK j) (hu j).1).2.2
   have hpick : ∀ j, ∃ k,
       eLpNorm (fun x => v j k x - u j x) 2 (ν : Measure E) ≤ ENNReal.ofReal (radius j) ∧
       eLpNorm (fun x => gradient (v j k) x - gradient (u j) x) 2 (ν : Measure E) ≤
@@ -1000,7 +967,7 @@ theorem exists_smooth_weighted_L2_approximation
 /-- Bounded L1 variant of the same Blueprint lemma. A closed interval [a,b] is preserved;
 setting a=0 and b=1 gives the stated range-preserving case. No compact support is required here.
 The smoothing also preserves the supplied global Lipschitz bound. -/
-theorem exists_smooth_bounded_L1_approximation
+theorem exists_smooth_bounded_L1
     (hν : (ν : Measure E) ≪ m) (g : E → ℝ) (K : NNReal)
     (hg : LipschitzWith K g) (a b : ℝ) (hbounds : ∀ x, a ≤ g x ∧ g x ≤ b) :
     MemLp g 1 (ν : Measure E) ∧ MemLp (gradient g) 1 (ν : Measure E) ∧
@@ -1057,7 +1024,5 @@ theorem exists_smooth_bounded_L1_approximation
       simpa using this
 
 end Main
-
-end Measurable
 
 end FunctionalInequalities.Energy.Euclidean.LipschitzApproximation

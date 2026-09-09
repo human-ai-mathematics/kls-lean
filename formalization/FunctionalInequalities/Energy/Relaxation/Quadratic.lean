@@ -21,9 +21,8 @@ noncomputable section
 
 open Filter Topology
 
-namespace FunctionalInequalities.Energy
+namespace FunctionalInequalities.Energy.PreEnergy.Quadratic
 
-namespace PreEnergy.Quadratic
 
 universe u v
 
@@ -254,6 +253,4 @@ theorem closedQuadratic_sequentialRelaxation (h : P.Quadratic)
   lowerSemicontinuous := P.lowerSemicontinuous_sequentialRelaxation
   dense_domain := hDense.dense_relaxation_domain
 
-end PreEnergy.Quadratic
-
-end FunctionalInequalities.Energy
+end FunctionalInequalities.Energy.PreEnergy.Quadratic

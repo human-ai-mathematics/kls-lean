@@ -16,7 +16,7 @@ noncomputable section
 
 open MeasureTheory Filter Metric Set Topology
 
-namespace FunctionalInequalities.KLS
+namespace FunctionalInequalities.KLS.LogConcave
 
 variable {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E] [FiniteDimensional ℝ E]
   [MeasurableSpace E] [BorelSpace E] [SecondCountableTopology E]
@@ -204,7 +204,7 @@ private theorem closedBall_le_of_ball_lower_bound {μ : ProbabilityMeasure E}
 
 /-- Compact-set log-concavity and full-dimensional support give uniformly bounded small-ball
 mass ratios. This is a bound for one fixed law, not a dimension-free KLS bound. -/
-theorem LogConcave.exists_eventually_closedBall_le {μ : ProbabilityMeasure E}
+theorem exists_eventually_closedBall_le {μ : ProbabilityMeasure E}
     (hμ : LogConcave μ) (m : Measure E) [m.IsAddHaarMeasure]
     (hi : (interior (μ : Measure E).support).Nonempty) :
     ∃ C : NNReal, ∀ x : E, ∀ᶠ r : ℝ in 𝓝[>] 0,
@@ -223,7 +223,7 @@ theorem LogConcave.exists_eventually_closedBall_le {μ : ProbabilityMeasure E}
 
 /-- The absolute-continuity part of the finite-dimensional log-concave representation theorem.
 Its input is the compact-set inequality and nonempty support interior; no density is assumed. -/
-theorem LogConcave.absolutelyContinuous_of_interior_support_nonempty {μ : ProbabilityMeasure E}
+theorem absolutelyContinuous_of_interior_support_nonempty {μ : ProbabilityMeasure E}
     (hμ : LogConcave μ) (m : Measure E) [m.IsAddHaarMeasure]
     (hi : (interior (μ : Measure E).support).Nonempty) : (μ : Measure E) ≪ m := by
   obtain ⟨C, hC⟩ := hμ.exists_eventually_closedBall_le m hi
@@ -236,18 +236,20 @@ section Intrinsic
 variable {F : Type*} [NormedAddCommGroup F] [InnerProductSpace ℝ F] [CompleteSpace F]
   [MeasurableSpace F] [BorelSpace F] [SecondCountableTopology F] [FiniteDimensional ℝ F]
 
+omit [CompleteSpace F] in
 /-- Every compact-set log-concave probability law is absolutely continuous in its own affine
 support coordinates. Singular ambient measures and the zero-dimensional support are included. -/
-theorem LogConcave.intrinsic_absolutelyContinuous {μ : ProbabilityMeasure F}
+theorem intrinsic_absolutelyContinuous {μ : ProbabilityMeasure F}
     (hμ : LogConcave μ) (m : Measure (Probability.affineSupport μ).direction)
     [m.IsAddHaarMeasure] :
     (Probability.intrinsicMeasure μ : Measure (Probability.affineSupport μ).direction) ≪ m :=
   hμ.intrinsicMeasure.absolutelyContinuous_of_interior_support_nonempty m
     hμ.interior_intrinsic_support_nonempty
 
+omit [CompleteSpace F] in
 /-- The intrinsic probability law, as well as Haar measure, assigns zero mass to the boundary
 of its support. This is a consequence of the proved absolute-continuity theorem. -/
-theorem LogConcave.intrinsic_frontier_support {μ : ProbabilityMeasure F}
+theorem intrinsic_frontier_support_eq_zero {μ : ProbabilityMeasure F}
     (hμ : LogConcave μ) :
     (Probability.intrinsicMeasure μ : Measure (Probability.affineSupport μ).direction)
       (frontier (Probability.intrinsicMeasure μ :
@@ -257,4 +259,4 @@ theorem LogConcave.intrinsic_frontier_support {μ : ProbabilityMeasure F}
 
 end Intrinsic
 
-end FunctionalInequalities.KLS
+end FunctionalInequalities.KLS.LogConcave

@@ -14,9 +14,8 @@ The closure theorem is `Quadratic.closedQuadratic_sequentialRelaxation` in
 `Energy.Relaxation.Quadratic`; agreement on tests remains a separate analytic question.
 -/
 
-namespace FunctionalInequalities.Energy
+namespace FunctionalInequalities.Energy.PreEnergy
 
-namespace PreEnergy
 
 universe u v
 
@@ -91,6 +90,4 @@ theorem sequentialRelaxation_zero (h : P.Quadratic) : P.sequentialRelaxation 0 =
 
 end Quadratic
 
-end PreEnergy
-
-end FunctionalInequalities.Energy
+end FunctionalInequalities.Energy.PreEnergy

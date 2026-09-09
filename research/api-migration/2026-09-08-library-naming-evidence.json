@@ -1,0 +1,412 @@
+{
+  "baseline_entries_verified": 158,
+  "source_and_elaborated_expressions_compared_before_refresh": true,
+  "changes": [
+    {
+      "task": "def:affine-poincare-constant",
+      "before_path": "formalization/FunctionalInequalities/Energy/CovarianceGradient/Basic.lean",
+      "path": "formalization/FunctionalInequalities/Energy/CovarianceGradient/Basic.lean",
+      "before": "868d180f75630b5c07c89b687a54b450ace6b8594a37251157718cbbd9cb8b25",
+      "after": "45c56c0ae119530e8b281861466f3c550863b746cd0b85c1acf3d97b267bbf27"
+    },
+    {
+      "task": "def:affine-poincare-constant",
+      "before_path": "formalization/FunctionalInequalities/Poincare/CovarianceGradient/Intrinsic.lean",
+      "path": "formalization/FunctionalInequalities/Poincare/CovarianceGradient/Intrinsic.lean",
+      "before": "3794a0a9d9d3b4b4bbd66cf366b8810d54d2b9d328b5d6d1eaae8dd21a4be036",
+      "after": "2d3a9a87a21730e055bed39231e2196401e71ec2689a4c20c8bdc4b663aa8058"
+    },
+    {
+      "task": "def:affine-poincare-constant",
+      "before_path": "formalization/FunctionalInequalities/KLS/LogConcave/AffineCovariance.lean",
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/Covariance.lean",
+      "before": "302317dbe03a9e69341c53fbd9551606191b50ffa8882c238757a1c315361a47",
+      "after": "25eafebf1e3d4c4d50ddaa543676ad3c6a404cd58f001a502c0f3f69c2247df9"
+    },
+    {
+      "task": "def:affine-poincare-constant",
+      "before_path": "formalization/FunctionalInequalities/KLS/LogConcave/AbsoluteContinuity.lean",
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/AbsoluteContinuity.lean",
+      "before": "910a7ef72537f9f1f18978c62788d9e46658b45d017b2af500ce7dd66c29f680",
+      "after": "07633e256f6cf7eeadd2f7aa38d0ba60c1256f32fd9dd73c9288bfd63385f717"
+    },
+    {
+      "task": "thm:compact-borell-logconcavity-equivalence",
+      "before_path": "formalization/FunctionalInequalities/KLS/LogConcave/Transport.lean",
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/Transport.lean",
+      "before": "1bb0b6e63caa9ca3e8a2c1a0ad6ffbf0d7ae2fa25332e74766d58cef3aad6f82",
+      "after": "98f10deb7b1b4248609a980c394cae90bacda69f625957395fa4c71ed296ae96"
+    },
+    {
+      "task": "thm:compact-borell-logconcavity-equivalence",
+      "before_path": "solutions/StatementChecks.lean",
+      "path": "solutions/StatementChecks.lean",
+      "before": "9c26623f73fb2307a7213acbc5d9a78c511dc9d4ef125a0be8487568a2bb046d",
+      "after": "e79da86871e76d262cee1d58e4c5897d464c766306866107ba5af7b537304ec3"
+    },
+    {
+      "task": "thm:borell-logconcave-density",
+      "before_path": "formalization/FunctionalInequalities/KLS/LogConcave/AbsoluteContinuity.lean",
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/AbsoluteContinuity.lean",
+      "before": "910a7ef72537f9f1f18978c62788d9e46658b45d017b2af500ce7dd66c29f680",
+      "after": "07633e256f6cf7eeadd2f7aa38d0ba60c1256f32fd9dd73c9288bfd63385f717"
+    },
+    {
+      "task": "thm:borell-logconcave-density",
+      "before_path": "formalization/FunctionalInequalities/KLS/LogConcave/BorellRepresentation.lean",
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/BorellRepresentation.lean",
+      "before": "ee258f524d1433b92d712ff70f2a75bc570cbce619f0014731d8947bac032949",
+      "after": "0063b5d6eb138fec5ee6deb821d254ff06d6c162d8304afc5434675f6f0db17b"
+    },
+    {
+      "task": "thm:smooth-lipschitz-constant-equivalence",
+      "before_path": "formalization/FunctionalInequalities/Poincare/LocalSlope/Basic.lean",
+      "path": "formalization/FunctionalInequalities/Poincare/LocalSlope/Basic.lean",
+      "before": "c3794c92ec4197717cfeb1abb11789773a2ba3e39120d809dc6a73622204d1a0",
+      "after": "33ddee4379407ffef32566849f038ce58ba2cc3d0a3b474aa0ae3afc154c61e0"
+    },
+    {
+      "task": "thm:smooth-lipschitz-constant-equivalence",
+      "before_path": "formalization/FunctionalInequalities/KLS/LocalSlopeGradient.lean",
+      "path": "formalization/FunctionalInequalities/Energy/LocalSlope/Gradient.lean",
+      "before": "d2bd3a8e0575c05cc7bab1155499cc3fff34ffc64cc8b3db8e82a1fd55fc0a69",
+      "after": "52f02f38374a20673acd93eb661faacc69b57f3102775bc3af13b33799130672"
+    },
+    {
+      "task": "thm:smooth-lipschitz-constant-equivalence",
+      "before_path": "formalization/FunctionalInequalities/Energy/SmoothGradient/Intrinsic/Comparison.lean",
+      "path": "formalization/FunctionalInequalities/Energy/SmoothGradient/Intrinsic/Comparison.lean",
+      "before": "0dec7527ab0d6afa593e709d6967882ba7215c255ab118c3461c5ba512bab016",
+      "after": "13a26ffd96926b5909dd5cf3c095972eee52150980d6f006b3ef6d506bc238d6"
+    },
+    {
+      "task": "thm:smooth-lipschitz-constant-equivalence",
+      "before_path": "formalization/FunctionalInequalities/Poincare/LocalSlope/SmoothTestComparison.lean",
+      "path": "formalization/FunctionalInequalities/Poincare/LocalSlope/SmoothTestComparison.lean",
+      "before": "98fdc87be37dc46aa4b98fc23c7079db5cc2c81c5b2a947b726af1c287cd0c31",
+      "after": "fa3ceb42b3f60ce7ee720607770b193659a51638f3550909ae2eee26d1ae4339"
+    },
+    {
+      "task": "thm:smooth-lipschitz-constant-equivalence",
+      "before_path": "solutions/ThmSmoothLipschitzConstantEquivalence.lean",
+      "path": "solutions/ThmSmoothLipschitzConstantEquivalence.lean",
+      "before": "12a23392db4b492d9bdd2697aae007aca53cbf82017236710eebd6335a180713",
+      "after": "eb8e7fa81a2d0b25cdea73c2a0199587281dc9036cdb9f6db62200ce2862e0a1"
+    },
+    {
+      "task": "thm:selected-literature-constant-equivalence",
+      "before_path": "formalization/FunctionalInequalities/Poincare/LocalSlope/Basic.lean",
+      "path": "formalization/FunctionalInequalities/Poincare/LocalSlope/Basic.lean",
+      "before": "c3794c92ec4197717cfeb1abb11789773a2ba3e39120d809dc6a73622204d1a0",
+      "after": "33ddee4379407ffef32566849f038ce58ba2cc3d0a3b474aa0ae3afc154c61e0"
+    },
+    {
+      "task": "thm:selected-literature-constant-equivalence",
+      "before_path": "formalization/FunctionalInequalities/KLS/LogConcave/Transport.lean",
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/Transport.lean",
+      "before": "1bb0b6e63caa9ca3e8a2c1a0ad6ffbf0d7ae2fa25332e74766d58cef3aad6f82",
+      "after": "98f10deb7b1b4248609a980c394cae90bacda69f625957395fa4c71ed296ae96"
+    },
+    {
+      "task": "thm:selected-literature-constant-equivalence",
+      "before_path": "formalization/FunctionalInequalities/KLS/LogConcave/AbsoluteContinuity.lean",
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/AbsoluteContinuity.lean",
+      "before": "910a7ef72537f9f1f18978c62788d9e46658b45d017b2af500ce7dd66c29f680",
+      "after": "07633e256f6cf7eeadd2f7aa38d0ba60c1256f32fd9dd73c9288bfd63385f717"
+    },
+    {
+      "task": "thm:selected-literature-constant-equivalence",
+      "before_path": "formalization/FunctionalInequalities/Poincare/LocalSlope/SmoothTestComparison.lean",
+      "path": "formalization/FunctionalInequalities/Poincare/LocalSlope/SmoothTestComparison.lean",
+      "before": "98fdc87be37dc46aa4b98fc23c7079db5cc2c81c5b2a947b726af1c287cd0c31",
+      "after": "fa3ceb42b3f60ce7ee720607770b193659a51638f3550909ae2eee26d1ae4339"
+    },
+    {
+      "task": "thm:selected-literature-constant-equivalence",
+      "before_path": "formalization/FunctionalInequalities/Poincare/LocalSlope/LogConcaveComparison.lean",
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/Poincare.lean",
+      "before": "3676b104df94bea77a2bf32d16c81883d7970037a992f9208664c1d393072046",
+      "after": "cf87386c769ec52a68b43dd543c472b769685f1523bcfadc20056c28fa910e74"
+    },
+    {
+      "task": "thm:selected-literature-constant-equivalence",
+      "before_path": "solutions/ThmSelectedLiteratureConstantEquivalence.lean",
+      "path": "solutions/ThmSelectedLiteratureConstantEquivalence.lean",
+      "before": "73a4d3d826756b524fb7fab63dbc6be8e5dbf442b671ce2683035feb45d74107",
+      "after": "ca218550c8188155a66cd5952bcfbcc719ebb709642fb8a889467fcf13ee186d"
+    },
+    {
+      "task": "thm:affine-covariance-relaxation-closed",
+      "before_path": "formalization/FunctionalInequalities/Energy/Relaxation/LinearPMap.lean",
+      "path": "formalization/FunctionalInequalities/Energy/Relaxation/LinearPMap.lean",
+      "before": "49e3de93f545758c1cc3fd9ee8cce66f1bce418f03a9e11440ba14d7bd86d6a0",
+      "after": "2b593e1f5d0fa89a24c76619c5239872a3cb3cf47496a2e0c1739ace06401142"
+    },
+    {
+      "task": "thm:affine-covariance-relaxation-closed",
+      "before_path": "formalization/FunctionalInequalities/Energy/CovarianceGradient/Translation.lean",
+      "path": "formalization/FunctionalInequalities/Energy/CovarianceGradient/Translation.lean",
+      "before": "74d261cf4e5862220f0b004e5d07b478471f6fe4ae085a3b2dc685f557f5042f",
+      "after": "3202e56216c2a2c718f87579b6be365251a5a4a3049390ae459eb1d5ed7c0bca"
+    },
+    {
+      "task": "thm:affine-covariance-relaxation-closed",
+      "before_path": "formalization/FunctionalInequalities/L2/Transport.lean",
+      "path": "formalization/FunctionalInequalities/L2/Transport.lean",
+      "before": "6f6160c892f40ee09d18530f6acfcecb28203f69984d63cbf27a0f8fa6fc279f",
+      "after": "06003285706f0de53fa48b296cc7a5cfda8ad5d2de91eb904636d278389414f9"
+    },
+    {
+      "task": "thm:affine-covariance-relaxation-closed",
+      "before_path": "formalization/FunctionalInequalities/Energy/WeightedGradient/Core.lean",
+      "path": "formalization/FunctionalInequalities/Energy/WeightedGradient/Core.lean",
+      "before": "a998ba60a74184275eacd59b402ac05d53bad4b5c5ec0f96afbf7f3379605390",
+      "after": "8cf4876a25c7f5d119b491374c958593e5c44f9b0ddd7034e3e14c528b3c17bd"
+    },
+    {
+      "task": "thm:affine-covariance-relaxation-closed",
+      "before_path": "formalization/FunctionalInequalities/KLS/LogConcave/CovarianceClosure.lean",
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/WeightedGradient.lean",
+      "before": "64ec690d9c39b6030a1aedd76a075756d2c20000755804599570c87e9de1c760",
+      "after": "606b8217576b9780724d808b71dc13248a9dfc2666467de42d131fd6c39c244f"
+    },
+    {
+      "task": "thm:affine-covariance-relaxation-closed",
+      "before_path": "formalization/FunctionalInequalities/KLS/LogConcave/AffineClosedForm.lean",
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/ClosedForm.lean",
+      "before": "f5d624fc426e116c9f16ced146d2217ca7362d1a89ef08d9f60ec0b36945edea",
+      "after": "f7f88c9e04747aee69468972c784711f62536d4648d5b4c802760ced0de2310d"
+    },
+    {
+      "task": "thm:affine-covariance-relaxation-closed",
+      "before_path": "formalization/FunctionalInequalities/Poincare/L2Energy.lean",
+      "path": "formalization/FunctionalInequalities/Poincare/L2Energy.lean",
+      "before": "07656bcb00c2eeb50ae7debb44c17a2eb8eb791043ab16542b1a2de1adc5caf1",
+      "after": "285e651f34df652b2c9ff7330a7a2bec62a8ccf7ee3125e2df2b00ff47723741"
+    },
+    {
+      "task": "thm:affine-covariance-relaxation-closed",
+      "before_path": "formalization/FunctionalInequalities/Energy/Relaxation/Quadratic.lean",
+      "path": "formalization/FunctionalInequalities/Energy/Relaxation/Quadratic.lean",
+      "before": "624f966a7b8fff5de604d297b0310db189be895c9cc822c14217c28a87e88201",
+      "after": "62e903775ef1470b613bdd2f6719cc4f78bb45d0c7149c16c9d3b72dc1b1a213"
+    },
+    {
+      "task": "lem:affine-poincare-translation-invariance",
+      "before_path": "formalization/FunctionalInequalities/Energy/CovarianceGradient/Isometry.lean",
+      "path": "formalization/FunctionalInequalities/Energy/CovarianceGradient/Isometry.lean",
+      "before": "dfa1e14183fbb31b4342d2836af0708e080f1a183c2c61afb72a8d808621b17f",
+      "after": "d2571af2dd517b3dfff41ad8ad08770a24e68e2815d602a7f3db1a75b67a89e7"
+    },
+    {
+      "task": "lem:affine-poincare-translation-invariance",
+      "before_path": "formalization/FunctionalInequalities/L2/Transport.lean",
+      "path": "formalization/FunctionalInequalities/L2/Transport.lean",
+      "before": "6f6160c892f40ee09d18530f6acfcecb28203f69984d63cbf27a0f8fa6fc279f",
+      "after": "06003285706f0de53fa48b296cc7a5cfda8ad5d2de91eb904636d278389414f9"
+    },
+    {
+      "task": "lem:affine-poincare-translation-invariance",
+      "before_path": "formalization/FunctionalInequalities/Poincare/CovarianceGradient/Translation.lean",
+      "path": "formalization/FunctionalInequalities/Poincare/CovarianceGradient/Translation.lean",
+      "before": "9a5a989aea7960be224a9a7f6f2c9a1767a451f8dbed58c8b956c06f5656b1ab",
+      "after": "96152ffe4dcf6f3e5be9d0622fbcb75ac9eafda704308bec6b11d9a5ebeab447"
+    },
+    {
+      "task": "lem:affine-poincare-translation-invariance",
+      "before_path": "formalization/FunctionalInequalities/Probability/IntrinsicTranslation.lean",
+      "path": "formalization/FunctionalInequalities/Probability/IntrinsicTranslation.lean",
+      "before": "c64f50d29d505708060d1158ff20a3ca1ee0b51a2c45774482c8e9fb92bc6f5c",
+      "after": "c56a101ac25818a157317d576c0fd075232ae7ac9e80055006f7c06371532cf3"
+    },
+    {
+      "task": "lem:affine-poincare-translation-invariance",
+      "before_path": "formalization/FunctionalInequalities/KLS/LogConcave/AffineTranslation.lean",
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/Translation.lean",
+      "before": "c1b56c5f45f378f4526735457939b68924389dc9af2161af524b7fd0fff105cf",
+      "after": "f8e05264aa4d6185630c5f1eb4dea804e8efb19daa6e83e1ba0de57d7c255df5"
+    },
+    {
+      "task": "lem:affine-poincare-translation-invariance",
+      "before_path": "formalization/FunctionalInequalities/Energy/CovarianceGradient/Translation.lean",
+      "path": "formalization/FunctionalInequalities/Energy/CovarianceGradient/Translation.lean",
+      "before": "74d261cf4e5862220f0b004e5d07b478471f6fe4ae085a3b2dc685f557f5042f",
+      "after": "3202e56216c2a2c718f87579b6be365251a5a4a3049390ae459eb1d5ed7c0bca"
+    },
+    {
+      "task": "lem:affine-poincare-translation-invariance",
+      "before_path": "formalization/FunctionalInequalities/KLS/LogConcave/Transport.lean",
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/Transport.lean",
+      "before": "1bb0b6e63caa9ca3e8a2c1a0ad6ffbf0d7ae2fa25332e74766d58cef3aad6f82",
+      "after": "98f10deb7b1b4248609a980c394cae90bacda69f625957395fa4c71ed296ae96"
+    },
+    {
+      "task": "lem:affine-poincare-translation-invariance",
+      "before_path": "formalization/FunctionalInequalities/KLS/LogConcave/AffineCovariance.lean",
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/Covariance.lean",
+      "before": "302317dbe03a9e69341c53fbd9551606191b50ffa8882c238757a1c315361a47",
+      "after": "25eafebf1e3d4c4d50ddaa543676ad3c6a404cd58f001a502c0f3f69c2247df9"
+    },
+    {
+      "task": "thm:affine-isotropic-reduction",
+      "before_path": "formalization/FunctionalInequalities/Energy/CovarianceGradient/LinearEquiv.lean",
+      "path": "formalization/FunctionalInequalities/Energy/CovarianceGradient/LinearEquiv.lean",
+      "before": "4a9f18e82d9fceedfe418948e0057740dcf452369e75bca700e263eb176ec975",
+      "after": "3a4e35356aa173a5c562f59b26af18dab83be683153617e3322c4afc46a08eaa"
+    },
+    {
+      "task": "thm:affine-isotropic-reduction",
+      "before_path": "formalization/FunctionalInequalities/L2/Transport.lean",
+      "path": "formalization/FunctionalInequalities/L2/Transport.lean",
+      "before": "6f6160c892f40ee09d18530f6acfcecb28203f69984d63cbf27a0f8fa6fc279f",
+      "after": "06003285706f0de53fa48b296cc7a5cfda8ad5d2de91eb904636d278389414f9"
+    },
+    {
+      "task": "thm:affine-isotropic-reduction",
+      "before_path": "formalization/FunctionalInequalities/Energy/WeightedGradient/Basic.lean",
+      "path": "formalization/FunctionalInequalities/Energy/WeightedGradient/Basic.lean",
+      "before": "7574d1462ce63df82ad7725c3d24cafb1e5823969e4aeee88271d02d68371841",
+      "after": "531c59b6dbfa9fbd9cc792870cebf25c6c556090902c33b9740818a6b840e47a"
+    },
+    {
+      "task": "thm:affine-isotropic-reduction",
+      "before_path": "formalization/FunctionalInequalities/Poincare/LipschitzGradient/Comparison.lean",
+      "path": "formalization/FunctionalInequalities/Poincare/LipschitzGradient/Comparison.lean",
+      "before": "89bfeaca87a878a40db55eff05f1a154697e9d6dfb666c18c1c97fd8a93e41db",
+      "after": "97f1134127f4bf99fcb38d5cce2f85ca913681275c8b07b5a167339cf3966ea8"
+    },
+    {
+      "task": "thm:affine-isotropic-reduction",
+      "before_path": "formalization/FunctionalInequalities/KLS/LogConcave/IsotropicReduction.lean",
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/Isotropic.lean",
+      "before": "f4ff99a1b085e5700a04f991e502721a94e2569bf1224b13509e435d8862c539",
+      "after": "28c15f342b9bced150a90fc89e20d1df4cbd2bd86805abd4b2727ae28ea190c4"
+    },
+    {
+      "task": "thm:affine-isotropic-reduction",
+      "before_path": "formalization/FunctionalInequalities/Poincare/LocalSlope/SmoothTestComparison.lean",
+      "path": "formalization/FunctionalInequalities/Poincare/LocalSlope/SmoothTestComparison.lean",
+      "before": "98fdc87be37dc46aa4b98fc23c7079db5cc2c81c5b2a947b726af1c287cd0c31",
+      "after": "fa3ceb42b3f60ce7ee720607770b193659a51638f3550909ae2eee26d1ae4339"
+    },
+    {
+      "task": "thm:affine-isotropic-reduction",
+      "before_path": "formalization/FunctionalInequalities/Poincare/LocalSlope/LogConcaveComparison.lean",
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/Poincare.lean",
+      "before": "3676b104df94bea77a2bf32d16c81883d7970037a992f9208664c1d393072046",
+      "after": "cf87386c769ec52a68b43dd543c472b769685f1523bcfadc20056c28fa910e74"
+    },
+    {
+      "task": "thm:affine-isotropic-reduction",
+      "before_path": "formalization/FunctionalInequalities/KLS/LogConcave/CovarianceClosure.lean",
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/WeightedGradient.lean",
+      "before": "64ec690d9c39b6030a1aedd76a075756d2c20000755804599570c87e9de1c760",
+      "after": "606b8217576b9780724d808b71dc13248a9dfc2666467de42d131fd6c39c244f"
+    },
+    {
+      "task": "thm:cmh-recovery-affine-poincare-bound",
+      "before_path": "formalization/FunctionalInequalities/Poincare/CovarianceGradient/Intrinsic.lean",
+      "path": "formalization/FunctionalInequalities/Poincare/CovarianceGradient/Intrinsic.lean",
+      "before": "3794a0a9d9d3b4b4bbd66cf366b8810d54d2b9d328b5d6d1eaae8dd21a4be036",
+      "after": "2d3a9a87a21730e055bed39231e2196401e71ec2689a4c20c8bdc4b663aa8058"
+    },
+    {
+      "task": "thm:cmh-recovery-affine-poincare-bound",
+      "before_path": "formalization/FunctionalInequalities/KLS/LogConcave/AffineClosedForm.lean",
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/ClosedForm.lean",
+      "before": "f5d624fc426e116c9f16ced146d2217ca7362d1a89ef08d9f60ec0b36945edea",
+      "after": "f7f88c9e04747aee69468972c784711f62536d4648d5b4c802760ced0de2310d"
+    },
+    {
+      "task": "thm:cmh-recovery-affine-poincare-bound",
+      "before_path": "formalization/FunctionalInequalities/Poincare/CovarianceGradient/Translation.lean",
+      "path": "formalization/FunctionalInequalities/Poincare/CovarianceGradient/Translation.lean",
+      "before": "9a5a989aea7960be224a9a7f6f2c9a1767a451f8dbed58c8b956c06f5656b1ab",
+      "after": "96152ffe4dcf6f3e5be9d0622fbcb75ac9eafda704308bec6b11d9a5ebeab447"
+    },
+    {
+      "task": "thm:cmh-recovery-affine-poincare-bound",
+      "before_path": "formalization/FunctionalInequalities/Probability/IntrinsicTranslation.lean",
+      "path": "formalization/FunctionalInequalities/Probability/IntrinsicTranslation.lean",
+      "before": "c64f50d29d505708060d1158ff20a3ca1ee0b51a2c45774482c8e9fb92bc6f5c",
+      "after": "c56a101ac25818a157317d576c0fd075232ae7ac9e80055006f7c06371532cf3"
+    },
+    {
+      "task": "lem:covariance-test-core-density",
+      "before_path": "formalization/blueprint/src/chapters/60-analytic-comparison-proofs.tex",
+      "path": "formalization/blueprint/src/chapters/60-analytic-comparison-proofs.tex",
+      "before": "2feefc83643750f04eb12841c66c433ae90be33983532a3d2c7f9b793f49e15c",
+      "after": "ab2e28804c6e6247ea4413fab3dc8373c8fcd421dedc69f0b52c7495d4caa91b"
+    },
+    {
+      "task": "lem:covariance-core-closure",
+      "before_path": "formalization/FunctionalInequalities/Energy/Relaxation/LinearPMap.lean",
+      "path": "formalization/FunctionalInequalities/Energy/Relaxation/LinearPMap.lean",
+      "before": "49e3de93f545758c1cc3fd9ee8cce66f1bce418f03a9e11440ba14d7bd86d6a0",
+      "after": "2b593e1f5d0fa89a24c76619c5239872a3cb3cf47496a2e0c1739ace06401142"
+    },
+    {
+      "task": "lem:covariance-core-closure",
+      "before_path": "formalization/FunctionalInequalities/Energy/WeightedGradient/Basic.lean",
+      "path": "formalization/FunctionalInequalities/Energy/WeightedGradient/Basic.lean",
+      "before": "7574d1462ce63df82ad7725c3d24cafb1e5823969e4aeee88271d02d68371841",
+      "after": "531c59b6dbfa9fbd9cc792870cebf25c6c556090902c33b9740818a6b840e47a"
+    },
+    {
+      "task": "lem:covariance-core-closure",
+      "before_path": "formalization/FunctionalInequalities/Energy/WeightedGradient/Closable.lean",
+      "path": "formalization/FunctionalInequalities/Energy/WeightedGradient/Closable.lean",
+      "before": "31ed0cc72290dddfb9fbc0d44407f2aae20e2242a7e04844fd53800dbf086ff2",
+      "after": "ec4cb927c0f385166443034ac0b4b062bbfd7ba59f785ef78fc771004c0c0918"
+    },
+    {
+      "task": "lem:covariance-core-closure",
+      "before_path": "formalization/FunctionalInequalities/Probability/LocalDomination.lean",
+      "path": "formalization/FunctionalInequalities/Probability/LocalDomination.lean",
+      "before": "bfb72b9bcd365128872f85ff791a81a3c698b04cb6098f260f9c70dc465ee2bb",
+      "after": "1d1615edba66daf79455b1178682b035966aaa7619a74de50bb14542c64e8ae5"
+    },
+    {
+      "task": "lem:covariance-core-closure",
+      "before_path": "formalization/FunctionalInequalities/Energy/WeightedGradient/Core.lean",
+      "path": "formalization/FunctionalInequalities/Energy/WeightedGradient/Core.lean",
+      "before": "a998ba60a74184275eacd59b402ac05d53bad4b5c5ec0f96afbf7f3379605390",
+      "after": "8cf4876a25c7f5d119b491374c958593e5c44f9b0ddd7034e3e14c528b3c17bd"
+    },
+    {
+      "task": "lem:covariance-core-closure",
+      "before_path": "formalization/FunctionalInequalities/KLS/LogConcave/CovarianceClosure.lean",
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/WeightedGradient.lean",
+      "before": "64ec690d9c39b6030a1aedd76a075756d2c20000755804599570c87e9de1c760",
+      "after": "606b8217576b9780724d808b71dc13248a9dfc2666467de42d131fd6c39c244f"
+    },
+    {
+      "task": "lem:covariance-core-closure",
+      "before_path": "formalization/FunctionalInequalities/KLS/LogConcave/BorellRepresentation.lean",
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/BorellRepresentation.lean",
+      "before": "ee258f524d1433b92d712ff70f2a75bc570cbce619f0014731d8947bac032949",
+      "after": "0063b5d6eb138fec5ee6deb821d254ff06d6c162d8304afc5434675f6f0db17b"
+    },
+    {
+      "task": "lem:logconcave-intrinsic-absolute-continuity",
+      "before_path": "formalization/FunctionalInequalities/Poincare/LocalSlope/Basic.lean",
+      "path": "formalization/FunctionalInequalities/Poincare/LocalSlope/Basic.lean",
+      "before": "c3794c92ec4197717cfeb1abb11789773a2ba3e39120d809dc6a73622204d1a0",
+      "after": "33ddee4379407ffef32566849f038ce58ba2cc3d0a3b474aa0ae3afc154c61e0"
+    },
+    {
+      "task": "lem:logconcave-intrinsic-absolute-continuity",
+      "before_path": "formalization/FunctionalInequalities/KLS/LogConcave/Transport.lean",
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/Transport.lean",
+      "before": "1bb0b6e63caa9ca3e8a2c1a0ad6ffbf0d7ae2fa25332e74766d58cef3aad6f82",
+      "after": "98f10deb7b1b4248609a980c394cae90bacda69f625957395fa4c71ed296ae96"
+    },
+    {
+      "task": "lem:logconcave-intrinsic-absolute-continuity",
+      "before_path": "formalization/FunctionalInequalities/KLS/LogConcave/AbsoluteContinuity.lean",
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/AbsoluteContinuity.lean",
+      "before": "910a7ef72537f9f1f18978c62788d9e46658b45d017b2af500ce7dd66c29f680",
+      "after": "07633e256f6cf7eeadd2f7aa38d0ba60c1256f32fd9dd73c9288bfd63385f717"
+    }
+  ]
+}

@@ -20,9 +20,9 @@ noncomputable section
 
 open Filter Topology
 
-namespace FunctionalInequalities.Energy
+namespace FunctionalInequalities.Energy.PreEnergy
 
-namespace PreEnergy
+section Semicontinuity
 
 universe u
 
@@ -77,9 +77,9 @@ theorem lowerSemicontinuous_sequentialRelaxation :
     _ = bound := by
       simpa using (tendsto_const_nhds.add energyError_tendsto).liminf_eq
 
-end PreEnergy
+end Semicontinuity
 
-namespace PreEnergy
+section Maximality
 
 variable {X : Type*} [TopologicalSpace X] (P : PreEnergy X)
 
@@ -99,9 +99,9 @@ theorem le_sequentialRelaxation_of_lowerSemicontinuous
       (heventually.mono fun _ hn ↦ hn.le))
   exact hlimit.trans (liminf_le_liminf (Eventually.of_forall fun n ↦ h (s.1 n)))
 
-end PreEnergy
+end Maximality
 
-namespace PreEnergy
+section Comparison
 
 variable {X : Type*} [PseudoMetricSpace X] (P Q : PreEnergy X)
 
@@ -135,6 +135,6 @@ theorem sequentialRelaxation_eq_of_recovery_sequences
   exact le_antisymm (Q.sequentialRelaxation_le_of_recovery_sequences P hQP x)
     (P.sequentialRelaxation_le_of_recovery_sequences Q hPQ x)
 
-end PreEnergy
+end Comparison
 
-end FunctionalInequalities.Energy
+end FunctionalInequalities.Energy.PreEnergy

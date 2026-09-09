@@ -1,4 +1,4 @@
-import FunctionalInequalities.KLS.LogConcave.CovarianceClosure
+import FunctionalInequalities.KLS.LogConcave.WeightedGradient
 import Mathlib.Analysis.Normed.Lp.MeasurableSpace
 
 /-!
@@ -31,28 +31,28 @@ sequential relaxation with the squared norm of the closure. -/
 theorem certificate (ν : ProbabilityMeasure V) (hν : KLS.LogConcave ν)
     (hi : (interior (ν : Measure V).support).Nonempty) (m : Measure V) [m.IsAddHaarMeasure]
     (B : V →L[ℝ] V) :
-    Dense ((hν.gradientOperator m B hi).domain : Set (Lp ℝ 2 (ν : Measure V))) ∧
-    (hν.gradientOperator m B hi).IsClosable ∧
-    (∀ S : Submodule ℝ (Lp ℝ 2 (ν : Measure V)), Energy.Euclidean.smoothCore ν ≤ S →
-      S ≤ (hν.gradientOperator m B hi).domain →
-      ((hν.gradientOperator m B hi).domRestrict S).closure = (hν.gradientOperator m B hi).closure) ∧
-    (∀ f : (hν.gradientOperator m B hi).closure.domain,
-      (Energy.PreEnergy.ofLinearPMap (hν.gradientOperator m B hi)).sequentialRelaxation f =
-        (‖(hν.gradientOperator m B hi).closure f‖₊ ^ 2 : NNReal)) ∧
-    (∀ f : Lp ℝ 2 (ν : Measure V), f ∉ (hν.gradientOperator m B hi).closure.domain →
-      (Energy.PreEnergy.ofLinearPMap (hν.gradientOperator m B hi)).sequentialRelaxation f = ⊤) :=
-  ⟨hν.dense_domain_gradientOperator m B hi, hν.gradientOperator_isClosable m B hi,
+    Dense ((hν.weightedOperator m B hi).domain : Set (Lp ℝ 2 (ν : Measure V))) ∧
+    (hν.weightedOperator m B hi).IsClosable ∧
+    (∀ S : Submodule ℝ (Lp ℝ 2 (ν : Measure V)), FunctionalInequalities.Energy.WeightedGradient.smoothCore ν ≤ S →
+      S ≤ (hν.weightedOperator m B hi).domain →
+      ((hν.weightedOperator m B hi).domRestrict S).closure = (hν.weightedOperator m B hi).closure) ∧
+    (∀ f : (hν.weightedOperator m B hi).closure.domain,
+      (Energy.PreEnergy.ofLinearPMap (hν.weightedOperator m B hi)).sequentialRelaxation f =
+        (‖(hν.weightedOperator m B hi).closure f‖₊ ^ 2 : NNReal)) ∧
+    (∀ f : Lp ℝ 2 (ν : Measure V), f ∉ (hν.weightedOperator m B hi).closure.domain →
+      (Energy.PreEnergy.ofLinearPMap (hν.weightedOperator m B hi)).sequentialRelaxation f = ⊤) :=
+  ⟨hν.dense_domain_weightedOperator m B hi, hν.weightedOperator_isClosable m B hi,
     fun _ hS hS' ↦ hν.closure_domRestrict_eq_of_smoothCore_le m B hi hS hS',
-    fun f ↦ hν.sequentialRelaxation_gradientOperator_of_mem m B hi f,
-    fun _ hf ↦ hν.sequentialRelaxation_gradientOperator_of_notMem m B hi hf⟩
+    fun f ↦ hν.weighted_relaxation_of_mem m B hi f,
+    fun _ hf ↦ hν.weighted_relaxation_of_notMem m B hi hf⟩
 
 /-- The intrinsic law of every log-concave law on a Euclidean space of any dimension is
 full-dimensional on its direction space, so the certificate applies there. -/
 example (n : ℕ) (μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin n))) (hμ : KLS.LogConcave μ)
     (m : Measure (Probability.affineSupport μ).direction) [m.IsAddHaarMeasure]
     (B : (Probability.affineSupport μ).direction →L[ℝ] (Probability.affineSupport μ).direction) :
-    (hμ.intrinsicGradientOperator m B).IsClosable ∧
-      Dense ((hμ.intrinsicGradientOperator m B).domain : Set (Lp ℝ 2
+    (hμ.intrinsicWeightedOperator m B).IsClosable ∧
+      Dense ((hμ.intrinsicWeightedOperator m B).domain : Set (Lp ℝ 2
         (Probability.intrinsicMeasure μ : Measure (Probability.affineSupport μ).direction))) :=
   ⟨(certificate _ hμ.intrinsicMeasure hμ.interior_intrinsic_support_nonempty m B).2.1,
     (certificate _ hμ.intrinsicMeasure hμ.interior_intrinsic_support_nonempty m B).1⟩
@@ -61,10 +61,10 @@ example (n : ℕ) (μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin n))) (hμ : 
 example (μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin 0))) (hμ : KLS.LogConcave μ)
     (m : Measure (Probability.affineSupport μ).direction) [m.IsAddHaarMeasure]
     (B : (Probability.affineSupport μ).direction →L[ℝ] (Probability.affineSupport μ).direction) :
-    (∀ f : (hμ.intrinsicGradientOperator m B).domain, hμ.intrinsicGradientOperator m B f = 0) ∧
-      (hμ.intrinsicGradientOperator m B).domain = ⊤ :=
-  ⟨fun f ↦ Energy.Euclidean.gradientOperator_apply_eq_zero_of_subsingleton _ B _ f,
-    Energy.Euclidean.domain_gradientOperator_eq_top_of_subsingleton _ B _⟩
+    (∀ f : (hμ.intrinsicWeightedOperator m B).domain, hμ.intrinsicWeightedOperator m B f = 0) ∧
+      (hμ.intrinsicWeightedOperator m B).domain = ⊤ :=
+  ⟨fun f ↦ FunctionalInequalities.Energy.WeightedGradient.operator_apply_eq_zero_of_subsingleton _ B _ f,
+    FunctionalInequalities.Energy.WeightedGradient.domain_operator_eq_top_of_subsingleton _ B _⟩
 
 /-- The affine covariance relaxation of the definition node is the operator relaxation for any
 square root `B` of the intrinsic covariance. -/
@@ -74,9 +74,9 @@ example (n : ℕ) (μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin n))) (hμ : 
     (hB : ∀ v, inner ℝ (Covariance.operator
       (Probability.intrinsicMeasure μ : Measure (Probability.affineSupport μ).direction) v) v =
         ‖B v‖ ^ 2) :
-    Energy.Affine.energy μ =
-      (Energy.PreEnergy.ofLinearPMap (hμ.intrinsicGradientOperator m B)).sequentialRelaxation :=
-  hμ.affine_energy_eq m B hB
+    FunctionalInequalities.Energy.CovarianceGradient.Intrinsic.energy μ =
+      (Energy.PreEnergy.ofLinearPMap (hμ.intrinsicWeightedOperator m B)).sequentialRelaxation :=
+  hμ.intrinsicCovariance_energy_eq_operator m B hB
 
 end Solutions.LemCovarianceCoreClosure
 
@@ -123,32 +123,32 @@ info: 'FunctionalInequalities.Energy.Euclidean.integral_mul_inner_gradient'
 #print axioms FunctionalInequalities.Energy.Euclidean.integral_mul_inner_gradient
 
 /--
-info: 'FunctionalInequalities.Energy.Euclidean.gradientOperator_isClosable'
+info: 'FunctionalInequalities.Energy.WeightedGradient.operator_isClosable'
   depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms FunctionalInequalities.Energy.Euclidean.gradientOperator_isClosable
+#print axioms FunctionalInequalities.Energy.WeightedGradient.operator_isClosable
 
 /--
-info: 'FunctionalInequalities.Energy.Euclidean.dense_domain_gradientOperator'
+info: 'FunctionalInequalities.Energy.WeightedGradient.dense_domain_operator'
   depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms FunctionalInequalities.Energy.Euclidean.dense_domain_gradientOperator
+#print axioms FunctionalInequalities.Energy.WeightedGradient.dense_domain_operator
 
 /--
-info: 'FunctionalInequalities.Energy.Euclidean.closure_domRestrict_smoothCore'
+info: 'FunctionalInequalities.Energy.WeightedGradient.closure_domRestrict_smoothCore'
   depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms FunctionalInequalities.Energy.Euclidean.closure_domRestrict_smoothCore
+#print axioms FunctionalInequalities.Energy.WeightedGradient.closure_domRestrict_smoothCore
 
 /--
-info: 'FunctionalInequalities.Energy.Euclidean.covarianceRelaxation_eq_sequentialRelaxation_ofLinearPMap'
+info: 'FunctionalInequalities.Energy.CovarianceGradient.relaxation_eq_ofLinearPMap'
   depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms FunctionalInequalities.Energy.Euclidean.covarianceRelaxation_eq_sequentialRelaxation_ofLinearPMap
+#print axioms FunctionalInequalities.Energy.CovarianceGradient.relaxation_eq_ofLinearPMap
 
 /--
 info: 'FunctionalInequalities.KLS.LogConcave.locallyDominates'
@@ -158,8 +158,8 @@ info: 'FunctionalInequalities.KLS.LogConcave.locallyDominates'
 #print axioms FunctionalInequalities.KLS.LogConcave.locallyDominates
 
 /--
-info: 'FunctionalInequalities.KLS.LogConcave.affine_energy_eq'
+info: 'FunctionalInequalities.KLS.LogConcave.intrinsicCovariance_energy_eq_operator'
   depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms FunctionalInequalities.KLS.LogConcave.affine_energy_eq
+#print axioms FunctionalInequalities.KLS.LogConcave.intrinsicCovariance_energy_eq_operator

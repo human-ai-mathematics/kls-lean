@@ -23,6 +23,7 @@ namespace Solutions.ThmBorellLogconcaveDensity
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
   [MeasurableSpace E] [BorelSpace E] [SecondCountableTopology E] [FiniteDimensional ℝ E]
 
+omit [CompleteSpace E] in
 /-- The complete Borell representation from the Blueprint, for every Haar reference measure on
 the direction of the affine support. -/
 theorem certificate (μ : ProbabilityMeasure E) (hμ : KLS.LogConcave μ)

@@ -17,6 +17,7 @@ namespace Solutions.LemLogConcaveIntrinsicAbsoluteContinuity
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
   [MeasurableSpace E] [BorelSpace E] [SecondCountableTopology E] [FiniteDimensional ℝ E]
 
+omit [CompleteSpace E] in
 /-- Absolute continuity on the direction of the affine support, for any additive Haar reference. -/
 theorem certificate (μ : ProbabilityMeasure E) (hμ : KLS.LogConcave μ)
     (m : Measure (Probability.affineSupport μ).direction) [m.IsAddHaarMeasure] :
@@ -110,11 +111,11 @@ info: 'FunctionalInequalities.KLS.LogConcave.intrinsic_absolutelyContinuous'
 #print axioms FunctionalInequalities.KLS.LogConcave.intrinsic_absolutelyContinuous
 
 /--
-info: 'FunctionalInequalities.KLS.LogConcave.intrinsic_frontier_support'
+info: 'FunctionalInequalities.KLS.LogConcave.intrinsic_frontier_support_eq_zero'
   depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms FunctionalInequalities.KLS.LogConcave.intrinsic_frontier_support
+#print axioms FunctionalInequalities.KLS.LogConcave.intrinsic_frontier_support_eq_zero
 
 /--
 info: 'FunctionalInequalities.Probability.exists_pos_le_measure_ball_on_isCompact'

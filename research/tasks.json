@@ -48,30 +48,30 @@
       ],
       "assumptions": [],
       "priority": 5,
-      "note": "Implement the explicit Blueprint definition; no theorem or equivalence is supplied by the definition. The covariance pre-energy, its sequential relaxation on the intrinsic law and the affine constant are implemented in CovarianceGradient/Basic.lean and Poincare/Euclidean/AffineCovariance.lean for every Borel probability law; the three log-concave well-definedness contracts (intrinsic finite second moment, a.e. differentiability of Lipschitz tests by Rademacher, representative independence of the energy from the null support frontier) are proved in KLS/LogConcave/AffineCovariance.lean, so the definition node carries leanok; it remains a definition, not a ledger theorem. Dimension zero gives constant zero, including Dirac laws in positive-dimensional ambient spaces. Closability, raw/relaxed agreement, translation invariance and every Poincare statement are separate nodes.",
+      "note": "Implement the explicit Blueprint definition; no theorem or equivalence is supplied by the definition. The covariance pre-energy, its sequential relaxation on the intrinsic law and the affine constant are implemented in CovarianceGradient/Basic.lean and Poincare/CovarianceGradient/Intrinsic.lean for every Borel probability law; the three log-concave well-definedness contracts (intrinsic finite second moment, a.e. differentiability of Lipschitz tests by Rademacher, representative independence of the energy from the null support frontier) are proved in KLS/LogConcave/Covariance.lean, so the definition node carries leanok; it remains a definition, not a ledger theorem. Dimension zero gives constant zero, including Dirac laws in positive-dimensional ambient spaces. Closability, raw/relaxed agreement, translation invariance and every Poincare statement are separate nodes.",
       "infrastructure": {
         "status": "available",
         "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
         "evidence": [
           {
-            "path": "formalization/FunctionalInequalities/Energy/Euclidean/CovarianceGradient/Basic.lean",
-            "sha256": "dc21d0b3a11b0cbd70b8b59a6ff8762dfa5ad4dbf305157c5a7a38e17ec973f7"
+            "path": "formalization/FunctionalInequalities/Energy/CovarianceGradient/Basic.lean",
+            "sha256": "45c56c0ae119530e8b281861466f3c550863b746cd0b85c1acf3d97b267bbf27"
           },
           {
-            "path": "formalization/FunctionalInequalities/Poincare/Euclidean/AffineCovariance.lean",
-            "sha256": "9d5298fe96b6a37523fa7b35922e83a4798b832f92d0ff153c899f202afcaea6"
+            "path": "formalization/FunctionalInequalities/Poincare/CovarianceGradient/Intrinsic.lean",
+            "sha256": "2d3a9a87a21730e055bed39231e2196401e71ec2689a4c20c8bdc4b663aa8058"
           },
           {
-            "path": "formalization/FunctionalInequalities/KLS/LogConcave/AffineCovariance.lean",
-            "sha256": "3c0e972d799b64b5d7c7a9c83cdc2f465f1bbfc91e7eab246a296122633e55cd"
+            "path": "formalization/FunctionalInequalities/KLS/LogConcave/Covariance.lean",
+            "sha256": "25eafebf1e3d4c4d50ddaa543676ad3c6a404cd58f001a502c0f3f69c2247df9"
           },
           {
             "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation.lean",
-            "sha256": "96a4953fae251311bda01a9f4ad3e0a665c139faa659ae8e9f146ae7f362759d"
+            "sha256": "303d12e4a03605211f079d03a47515938e14623550012f6eb885f9b2fda551ff"
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/LogConcave/AbsoluteContinuity.lean",
-            "sha256": "0247d28708186ccae6f3b6e12099bbee9e09e39335a68d19ef1ecafa7cc74af5"
+            "sha256": "07633e256f6cf7eeadd2f7aa38d0ba60c1256f32fd9dd73c9288bfd63385f717"
           },
           {
             "path": "formalization/.lake/packages/mathlib/Mathlib/Analysis/Calculus/Rademacher.lean",
@@ -131,7 +131,11 @@
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/ConditionalFiber.lean",
-            "sha256": "d12df6b99eb057008e7dab844362179bead315fbdef55f6c9149fa04d14fa777"
+            "sha256": "a0149425ccc5d768856a86da422675af85186d0a711080db740346e3ef2731c8"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Probability/Moments.lean",
+            "sha256": "6d930f322895afd8a73d89cfb49681703dcf0f38a9a9d85f57fc989bb4ced490"
           }
         ],
         "gaps": []
@@ -175,7 +179,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/LogConcave/Transport.lean",
-            "sha256": "77d59008d0140b952dba306baf5effe9f4d78b4c1587716a10a8d6ac3941335f"
+            "sha256": "98f10deb7b1b4248609a980c394cae90bacda69f625957395fa4c71ed296ae96"
           },
           {
             "path": "formalization/.lake/packages/mathlib/Mathlib/Algebra/Group/Pointwise/Set/Scalar.lean",
@@ -183,7 +187,7 @@
           },
           {
             "path": "solutions/StatementChecks.lean",
-            "sha256": "60f17406c964dcc568799189a289ebf5dda60345340d8c35f11a018adb404bc6"
+            "sha256": "e79da86871e76d262cee1d58e4c5897d464c766306866107ba5af7b537304ec3"
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/LogConcave/Borel.lean",
@@ -211,11 +215,11 @@
         "evidence": [
           {
             "path": "formalization/FunctionalInequalities/KLS/LogConcave/AbsoluteContinuity.lean",
-            "sha256": "0247d28708186ccae6f3b6e12099bbee9e09e39335a68d19ef1ecafa7cc74af5"
+            "sha256": "07633e256f6cf7eeadd2f7aa38d0ba60c1256f32fd9dd73c9288bfd63385f717"
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/LogConcave/BorellRepresentation.lean",
-            "sha256": "7ae494ba36452281ff0fc3e31307c6cc3b63de81681a7ef7460cb2a978c4f1bb"
+            "sha256": "0063b5d6eb138fec5ee6deb821d254ff06d6c162d8304afc5434675f6f0db17b"
           },
           {
             "path": "formalization/FunctionalInequalities/Probability/BallDomination.lean",
@@ -369,7 +373,7 @@
         "evidence": [
           {
             "path": "examples/PoincareFoundation.lean",
-            "sha256": "757bfdce0576ca95ff625df4ca25014650df1cd6860f6bb3c77b8c8f30c8ed32"
+            "sha256": "93b2fd607e858f2d1c3ed67251db31216fad5a5645459df2d8594d08e5a105fb"
           }
         ],
         "gaps": []
@@ -433,32 +437,40 @@
         "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
         "evidence": [
           {
-            "path": "formalization/FunctionalInequalities/KLS/Definitions.lean",
-            "sha256": "8e4e14448733ac1318c490c60e31e846ae26653b3c4ae6dcf7e1e56f6c6f2c35"
+            "path": "formalization/FunctionalInequalities/Energy/LocalSlope/Basic.lean",
+            "sha256": "eff71e85ef7e219f287069149de867f49846ca8aae758b6f7129872202f83219"
           },
           {
-            "path": "formalization/FunctionalInequalities/KLS/LocalSlopeGradient.lean",
-            "sha256": "e8c19cad152502d4c06784ddc4aa8abef6368b020ed1d5ebcb1632515a30778a"
+            "path": "formalization/FunctionalInequalities/KLS/Definitions.lean",
+            "sha256": "13413143a168c3f46f5225b14306644eb88171575ad3c529274b151a938e3b57"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Poincare/LocalSlope/Basic.lean",
+            "sha256": "ed74b36985610dc1deb241d967be74e0b5ca51e8c53a5fcb3032e738fbadcddf"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Energy/LocalSlope/Gradient.lean",
+            "sha256": "52f02f38374a20673acd93eb661faacc69b57f3102775bc3af13b33799130672"
           },
           {
             "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation.lean",
-            "sha256": "96a4953fae251311bda01a9f4ad3e0a665c139faa659ae8e9f146ae7f362759d"
+            "sha256": "303d12e4a03605211f079d03a47515938e14623550012f6eb885f9b2fda551ff"
           },
           {
-            "path": "formalization/FunctionalInequalities/Energy/Euclidean/AffineComparison.lean",
-            "sha256": "95f52dac5e970bdaf24bda714cac402c9432f76f05c5c75b46e9118d192bccb1"
+            "path": "formalization/FunctionalInequalities/Energy/SmoothGradient/Intrinsic/Comparison.lean",
+            "sha256": "13a26ffd96926b5909dd5cf3c095972eee52150980d6f006b3ef6d506bc238d6"
           },
           {
             "path": "formalization/FunctionalInequalities/L2/MeanVariance.lean",
-            "sha256": "14912d709a9ce1578d034460bc735845c4d935f30db251b1101cfed89f1a646f"
+            "sha256": "7e418caed7f47683a12855df8901b9ed7168f184b53bfdb25611767093db3d25"
           },
           {
-            "path": "formalization/FunctionalInequalities/Poincare/Euclidean/LiteratureComparison.lean",
-            "sha256": "d602345d25caa3a9d646dc08c9e5f6242a94f8f56f5997d6c300bf3f9073bdfe"
+            "path": "formalization/FunctionalInequalities/Poincare/LocalSlope/SmoothTestComparison.lean",
+            "sha256": "fa3ceb42b3f60ce7ee720607770b193659a51638f3550909ae2eee26d1ae4339"
           },
           {
             "path": "solutions/ThmSmoothLipschitzConstantEquivalence.lean",
-            "sha256": "044ce7194344526773c1282af86c9b279b1a8a5de82703c126b2fb10de8eda0d"
+            "sha256": "eb8e7fa81a2d0b25cdea73c2a0199587281dc9036cdb9f6db62200ce2862e0a1"
           }
         ],
         "gaps": []
@@ -477,16 +489,24 @@
         "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
         "evidence": [
           {
+            "path": "formalization/FunctionalInequalities/Energy/LocalSlope/Basic.lean",
+            "sha256": "eff71e85ef7e219f287069149de867f49846ca8aae758b6f7129872202f83219"
+          },
+          {
             "path": "formalization/FunctionalInequalities/KLS/Definitions.lean",
-            "sha256": "8e4e14448733ac1318c490c60e31e846ae26653b3c4ae6dcf7e1e56f6c6f2c35"
+            "sha256": "13413143a168c3f46f5225b14306644eb88171575ad3c529274b151a938e3b57"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Poincare/LocalSlope/Basic.lean",
+            "sha256": "ed74b36985610dc1deb241d967be74e0b5ca51e8c53a5fcb3032e738fbadcddf"
           },
           {
             "path": "formalization/FunctionalInequalities/Probability/AffineSupport.lean",
-            "sha256": "1c36055b700a47f6f44ecfbacb36f4d660680c44d9baf150a61945563a5356a2"
+            "sha256": "864ac9c2d9869c985a53ff0c4ed256f3ad355e03b7074d1be058ec30c7bc8fee"
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/LogConcave/Transport.lean",
-            "sha256": "77d59008d0140b952dba306baf5effe9f4d78b4c1587716a10a8d6ac3941335f"
+            "sha256": "98f10deb7b1b4248609a980c394cae90bacda69f625957395fa4c71ed296ae96"
           },
           {
             "path": "formalization/FunctionalInequalities/Probability/BallAverages.lean",
@@ -498,23 +518,23 @@
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/LogConcave/AbsoluteContinuity.lean",
-            "sha256": "0247d28708186ccae6f3b6e12099bbee9e09e39335a68d19ef1ecafa7cc74af5"
+            "sha256": "07633e256f6cf7eeadd2f7aa38d0ba60c1256f32fd9dd73c9288bfd63385f717"
           },
           {
             "path": "solutions/LemLogConcaveIntrinsicAbsoluteContinuity.lean",
-            "sha256": "e64a65fdd6bb249603e67c7c075dc35be54799772972ae3e4eb649c5a1282bec"
+            "sha256": "a4337ba889127b4aa55742bbab28f01b49d7f6f9b23079f0aaf9d26b23d1539c"
           },
           {
-            "path": "formalization/FunctionalInequalities/Poincare/Euclidean/LiteratureComparison.lean",
-            "sha256": "d602345d25caa3a9d646dc08c9e5f6242a94f8f56f5997d6c300bf3f9073bdfe"
+            "path": "formalization/FunctionalInequalities/Poincare/LocalSlope/SmoothTestComparison.lean",
+            "sha256": "fa3ceb42b3f60ce7ee720607770b193659a51638f3550909ae2eee26d1ae4339"
           },
           {
-            "path": "formalization/FunctionalInequalities/Poincare/Euclidean/LogConcaveComparison.lean",
-            "sha256": "c90b7addd68f68545ee33908152035a235b55c189f35146fea4812552bcd6427"
+            "path": "formalization/FunctionalInequalities/KLS/LogConcave/Poincare.lean",
+            "sha256": "cf87386c769ec52a68b43dd543c472b769685f1523bcfadc20056c28fa910e74"
           },
           {
             "path": "solutions/ThmSelectedLiteratureConstantEquivalence.lean",
-            "sha256": "5d48acfea675323b73be09f75921fbe9997c0a96e70b3c112148ea9f2db78f77"
+            "sha256": "ca218550c8188155a66cd5952bcfbcc719ebb709642fb8a889467fcf13ee186d"
           }
         ],
         "gaps": []
@@ -549,11 +569,11 @@
         "evidence": [
           {
             "path": "formalization/FunctionalInequalities/Probability/IntrinsicCovariance.lean",
-            "sha256": "589c97517766fc56dace2cb7a3ab6d6550cf3f7d6fcd646f33a6cee832ec9604"
+            "sha256": "8a6c76c06990ba7347c5d20d17bad3516ef71965546a3579ab1f14f14b68d8ce"
           },
           {
             "path": "formalization/FunctionalInequalities/Probability/AffineSupport.lean",
-            "sha256": "1c36055b700a47f6f44ecfbacb36f4d660680c44d9baf150a61945563a5356a2"
+            "sha256": "864ac9c2d9869c985a53ff0c4ed256f3ad355e03b7074d1be058ec30c7bc8fee"
           },
           {
             "path": "formalization/FunctionalInequalities/Probability/Covariance.lean",
@@ -586,42 +606,54 @@
       ],
       "assumptions": [],
       "priority": 5,
-      "note": "Proved in Lean on 2026-09-08. Quadraticity of the affine pre-energy is expressed through a square root B of the intrinsic covariance (<Sigma v,v> = ||B v||^2, from the spectral theorem): the pre-energy has the same realization and energies as the quadratic pre-energy ||B grad f||^2 of the closable operator of lem:covariance-core-closure. The certificate packages dense realization, the closed quadratic form Energy.ClosedQuadratic (Energy.Affine.energy mu), the sequential core (agreement with the raw covariance energy on every globally Lipschitz test), translation of the intrinsic law by any vector of V with the pullback L^2 isometry preserving variance, covariance, relaxation and optimal constant, and the identification of Energy.Affine.energy with the squared-norm energy of the closure of B grad on the core R + C_c^infinity(V) together with the equality of Poincare.Affine.constant with the optimal constant of that closed form. Ambient translation invariance of the affine constant is lem:affine-poincare-translation-invariance; no Poincare inequality, isotropic reduction or KLS statement is claimed.",
+      "note": "Proved in Lean on 2026-09-08. Quadraticity of the affine pre-energy is expressed through a square root B of the intrinsic covariance (<Sigma v,v> = ||B v||^2, from the spectral theorem): the pre-energy has the same realization and energies as the quadratic pre-energy ||B grad f||^2 of the closable operator of lem:covariance-core-closure. The certificate packages dense realization, the closed quadratic form Energy.ClosedQuadratic (Energy.CovarianceGradient.Intrinsic.energy mu), the sequential core (agreement with the raw covariance energy on every globally Lipschitz test), translation of the intrinsic law by any vector of V with the pullback L^2 isometry preserving variance, covariance, relaxation and optimal constant, and the identification of Energy.CovarianceGradient.Intrinsic.energy with the squared-norm energy of the closure of B grad on the core R + C_c^infinity(V) together with the equality of Poincare.CovarianceGradient.Intrinsic.constant with the optimal constant of that closed form. Ambient translation invariance of the affine constant is lem:affine-poincare-translation-invariance; no Poincare inequality, isotropic reduction or KLS statement is claimed.",
       "infrastructure": {
         "status": "available",
         "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
         "evidence": [
           {
-            "path": "formalization/FunctionalInequalities/Probability/CovarianceSqrt.lean",
-            "sha256": "7b32f1e91861cc891c9ed10dee54fbefa500e703bf25435b4d4b3043068d8ff7"
+            "path": "formalization/FunctionalInequalities/Probability/CovarianceFactorization.lean",
+            "sha256": "090f05afd43ae6e52401b8c1d513ecd26c38f951dab595587c6b9c2d3c907cd8"
           },
           {
             "path": "formalization/FunctionalInequalities/Energy/Relaxation/LinearPMap.lean",
-            "sha256": "49e3de93f545758c1cc3fd9ee8cce66f1bce418f03a9e11440ba14d7bd86d6a0"
+            "sha256": "2b593e1f5d0fa89a24c76619c5239872a3cb3cf47496a2e0c1739ace06401142"
           },
           {
-            "path": "formalization/FunctionalInequalities/Energy/Euclidean/CovarianceGradient/Translation.lean",
-            "sha256": "4238581c4936ed8e66572b87b452a367f80a4439fdf4b363dd3a85b7ba09ab80"
+            "path": "formalization/FunctionalInequalities/Energy/CovarianceGradient/Translation.lean",
+            "sha256": "3202e56216c2a2c718f87579b6be365251a5a4a3049390ae459eb1d5ed7c0bca"
           },
           {
-            "path": "formalization/FunctionalInequalities/Energy/Euclidean/CovarianceGradient/Core.lean",
-            "sha256": "ed890348b8de9a13fa963c781e8dbc2eb56198ce7bdd37c19a8f8625aaefc1a7"
+            "path": "formalization/FunctionalInequalities/L2/Transport.lean",
+            "sha256": "06003285706f0de53fa48b296cc7a5cfda8ad5d2de91eb904636d278389414f9"
           },
           {
-            "path": "formalization/FunctionalInequalities/KLS/LogConcave/CovarianceClosure.lean",
-            "sha256": "bd633f7ca7b397076fd2cdcb042e620a5cdffd3cd9207e26a7d9805d5e71689f"
+            "path": "formalization/FunctionalInequalities/Poincare/CovarianceGradient/Transport.lean",
+            "sha256": "00c890660acc80ea776706e46daf6c484f5ce16faa766cda61e0baab2868db95"
           },
           {
-            "path": "formalization/FunctionalInequalities/KLS/LogConcave/AffineClosedForm.lean",
-            "sha256": "3754df3ed993860c4ab07e4d530452427716943bbba4e0e9a0544c75da153ed0"
+            "path": "formalization/FunctionalInequalities/Probability/Transport.lean",
+            "sha256": "06217f847849f931c06c79b4f964ac0263efae99c623213b3cae8900c4beba04"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Energy/WeightedGradient/Core.lean",
+            "sha256": "8cf4876a25c7f5d119b491374c958593e5c44f9b0ddd7034e3e14c528b3c17bd"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/KLS/LogConcave/WeightedGradient.lean",
+            "sha256": "606b8217576b9780724d808b71dc13248a9dfc2666467de42d131fd6c39c244f"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/KLS/LogConcave/ClosedForm.lean",
+            "sha256": "f7f88c9e04747aee69468972c784711f62536d4648d5b4c802760ced0de2310d"
           },
           {
             "path": "formalization/FunctionalInequalities/Poincare/L2Energy.lean",
-            "sha256": "07656bcb00c2eeb50ae7debb44c17a2eb8eb791043ab16542b1a2de1adc5caf1"
+            "sha256": "285e651f34df652b2c9ff7330a7a2bec62a8ccf7ee3125e2df2b00ff47723741"
           },
           {
             "path": "formalization/FunctionalInequalities/Energy/Relaxation/Quadratic.lean",
-            "sha256": "624f966a7b8fff5de604d297b0310db189be895c9cc822c14217c28a87e88201"
+            "sha256": "62e903775ef1470b613bdd2f6719cc4f78bb45d0c7149c16c9d3b72dc1b1a213"
           },
           {
             "path": "formalization/.lake/packages/mathlib/Mathlib/Analysis/InnerProductSpace/Spectrum.lean",
@@ -650,38 +682,58 @@
       ],
       "assumptions": [],
       "priority": 5,
-      "note": "Proved in Lean on 2026-09-08. (tau_b)_# mu is Energy.Euclidean.translateLaw mu b. The translated law is log-concave by transporting compact-set log-concavity along the inverse translation (KLS.LogConcave.translateLaw); its affine support is the translated affine support with the same direction (Probability.affineSupport_translateLaw, Probability.direction_affineSupport_translateLaw); its intrinsic law is the translate, inside the direction space, of the image of the intrinsic law of mu under the linear isometric identification of the two direction submodules (Probability.intrinsicMeasure_translateLaw). The covariance relaxation and its optimal constant are transported along linear isometric equivalences (Energy.Euclidean.mapLaw, mapL2, covarianceRelaxation_mapLaw, Poincare.L2Energy.constant_covarianceRelaxation_mapLaw) and along translations (the certified Translation module), giving Poincare.Affine.constant_translateLaw_ambient for every Borel law. The ambient second moment KLS.LogConcave.memLp_id_two comes from the intrinsic second moment and the affine isometry reconstruct, so the barycenter exists and translating by its negative centers the law. The certificate packages all of these; no Poincare inequality, isotropic reduction or KLS statement is claimed.",
+      "note": "Proved in Lean on 2026-09-08. (tau_b)_# mu is Probability.translateLaw mu b. The translated law is log-concave by transporting compact-set log-concavity along the inverse translation (KLS.LogConcave.translateLaw); its affine support is the translated affine support with the same direction (Probability.affineSupport_translateLaw, Probability.direction_affineSupport_translateLaw); its intrinsic law is the translate, inside the direction space, of the image of the intrinsic law of mu under the linear isometric identification of the two direction submodules (Probability.intrinsicMeasure_translateLaw). The covariance relaxation and its optimal constant are transported along linear isometric equivalences (Probability.mapLinearIsometryEquiv, mapL2, Energy.CovarianceGradient.relaxation_mapLinearIsometryEquiv, Poincare.CovarianceGradient.constant_mapLinearIsometryEquiv) and along translations (the certified Translation module), giving Poincare.CovarianceGradient.Intrinsic.constant_translateLaw for every Borel law. The ambient second moment KLS.LogConcave.memLp_id_two comes from the intrinsic second moment and the affine isometry reconstruct, so the barycenter exists and translating by its negative centers the law. The certificate packages all of these; no Poincare inequality, isotropic reduction or KLS statement is claimed.",
       "infrastructure": {
         "status": "available",
         "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
         "evidence": [
           {
-            "path": "formalization/FunctionalInequalities/Energy/Euclidean/CovarianceGradient/Isometry.lean",
-            "sha256": "df596d8adeb3f36a065d3a3347f0443b37460fa502e5a198d93badeb34596715"
+            "path": "formalization/FunctionalInequalities/Energy/CovarianceGradient/Isometry.lean",
+            "sha256": "d2571af2dd517b3dfff41ad8ad08770a24e68e2815d602a7f3db1a75b67a89e7"
           },
           {
-            "path": "formalization/FunctionalInequalities/Poincare/Euclidean/AffineTranslation.lean",
-            "sha256": "9d1e3ff01f3eed8c571912bd752c1e7c0112ae906eea29292b079068b025bda8"
+            "path": "formalization/FunctionalInequalities/L2/Transport.lean",
+            "sha256": "06003285706f0de53fa48b296cc7a5cfda8ad5d2de91eb904636d278389414f9"
           },
           {
-            "path": "formalization/FunctionalInequalities/KLS/LogConcave/AffineTranslation.lean",
-            "sha256": "20dfdaf82b66814276019c17ef01a47659eea54fd9bb0bf1524d95c1efa827ff"
+            "path": "formalization/FunctionalInequalities/Poincare/CovarianceGradient/Transport.lean",
+            "sha256": "00c890660acc80ea776706e46daf6c484f5ce16faa766cda61e0baab2868db95"
           },
           {
-            "path": "formalization/FunctionalInequalities/Energy/Euclidean/CovarianceGradient/Translation.lean",
-            "sha256": "4238581c4936ed8e66572b87b452a367f80a4439fdf4b363dd3a85b7ba09ab80"
+            "path": "formalization/FunctionalInequalities/Probability/Transport.lean",
+            "sha256": "06217f847849f931c06c79b4f964ac0263efae99c623213b3cae8900c4beba04"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Energy/CovarianceGradient/IntrinsicTranslation.lean",
+            "sha256": "651dae79975a46c9ee1d229ae927c63480b4c37b77bcf6d5b33e44a4ee22306f"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Poincare/CovarianceGradient/Translation.lean",
+            "sha256": "96152ffe4dcf6f3e5be9d0622fbcb75ac9eafda704308bec6b11d9a5ebeab447"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Probability/IntrinsicTranslation.lean",
+            "sha256": "c56a101ac25818a157317d576c0fd075232ae7ac9e80055006f7c06371532cf3"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/KLS/LogConcave/Translation.lean",
+            "sha256": "f8e05264aa4d6185630c5f1eb4dea804e8efb19daa6e83e1ba0de57d7c255df5"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Energy/CovarianceGradient/Translation.lean",
+            "sha256": "3202e56216c2a2c718f87579b6be365251a5a4a3049390ae459eb1d5ed7c0bca"
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/LogConcave/Transport.lean",
-            "sha256": "77d59008d0140b952dba306baf5effe9f4d78b4c1587716a10a8d6ac3941335f"
+            "sha256": "98f10deb7b1b4248609a980c394cae90bacda69f625957395fa4c71ed296ae96"
           },
           {
             "path": "formalization/FunctionalInequalities/Probability/AffineSupport.lean",
-            "sha256": "1c36055b700a47f6f44ecfbacb36f4d660680c44d9baf150a61945563a5356a2"
+            "sha256": "864ac9c2d9869c985a53ff0c4ed256f3ad355e03b7074d1be058ec30c7bc8fee"
           },
           {
-            "path": "formalization/FunctionalInequalities/KLS/LogConcave/AffineCovariance.lean",
-            "sha256": "3c0e972d799b64b5d7c7a9c83cdc2f465f1bbfc91e7eab246a296122633e55cd"
+            "path": "formalization/FunctionalInequalities/KLS/LogConcave/Covariance.lean",
+            "sha256": "25eafebf1e3d4c4d50ddaa543676ad3c6a404cd58f001a502c0f3f69c2247df9"
           },
           {
             "path": "formalization/.lake/packages/mathlib/Mathlib/Analysis/Calculus/FDeriv/Equiv.lean",
@@ -714,50 +766,66 @@
       ],
       "assumptions": [],
       "priority": 5,
-      "note": "Proved in Lean on 2026-09-08. The three items are KLS.IsotropicBound K, KLS.CovarianceBound K and KLS.AffineBound K, each quantified over every finite-dimensional Euclidean space of one fixed universe. (1) => (3): the intrinsic law is centered inside its direction space (translation transport of the covariance relaxation, certified with thm:affine-covariance-relaxation-closed) and whitened by the self-adjoint inverse square root of the positive definite intrinsic covariance (Covariance.exists_whitening, spectral theorem; positivity from lem:ambient-intrinsic-covariance); the covariance relaxation and its optimal constant are transported along continuous linear equivalences (Energy.Euclidean.mapEquivLaw, covarianceRelaxation_mapEquivLaw); the whitened law is isotropic and log-concave and its covariance relaxation is the identity-weighted Lipschitz gradient relaxation, whose optimal constant is the legacy smooth-test constant and hence the literature constant (Poincare.constant_eq_lipschitzGradientRelaxation via the certified smooth approximation lemma, then LogConcave.legacy_eq_literature). (3) => (2): the literature constant of mu is the optimal constant of the Lipschitz gradient relaxation of the intrinsic law, the covariance relaxation is at most ||Sigma|| times it (PreEnergy.sequentialRelaxation_comp_le_mul), and ||Sigma|| = ||Cov_mu||. (2) => (1): an isotropic law has covariance operator 1 of norm at most one. The certificate also shows that AffineBound K in universe zero implies KLS.Conjecture. Dimension zero is included. lem:affine-poincare-translation-invariance is a declared dependency but is not invoked by the Lean proof, which centers the intrinsic law directly; the truth of any item for some K is not claimed.",
+      "note": "Proved in Lean on 2026-09-08. The three items are KLS.IsotropicBound K, KLS.CovarianceBound K and KLS.AffineBound K, each quantified over every finite-dimensional Euclidean space of one fixed universe. (1) => (3): the intrinsic law is centered inside its direction space (translation transport of the covariance relaxation, certified with thm:affine-covariance-relaxation-closed) and whitened by the self-adjoint whitening equivalence of the positive definite intrinsic covariance (Covariance.exists_whitening, spectral theorem; positivity from lem:ambient-intrinsic-covariance); the covariance relaxation and its optimal constant are transported along continuous linear equivalences (Probability.mapContinuousLinearEquiv, Energy.CovarianceGradient.relaxation_mapContinuousLinearEquiv); the whitened law is isotropic and log-concave and its covariance relaxation is the identity-weighted Lipschitz gradient relaxation, whose optimal constant is the legacy smooth-test constant and hence the literature constant (Poincare.SmoothTest.constant_eq_lipschitzGradient_constant via the certified smooth approximation lemma, then LogConcave.smoothTest_constant_eq_localSlope). (3) => (2): the literature constant of mu is the optimal constant of the Lipschitz gradient relaxation of the intrinsic law, the covariance relaxation is at most ||Sigma|| times it (PreEnergy.sequentialRelaxation_comp_le_mul), and ||Sigma|| = ||Cov_mu||. (2) => (1): an isotropic law has covariance operator 1 of norm at most one. The certificate also shows that AffineBound K in universe zero implies KLS.Conjecture. Dimension zero is included. lem:affine-poincare-translation-invariance is a declared dependency but is not invoked by the Lean proof, which centers the intrinsic law directly; the truth of any item for some K is not claimed.",
       "infrastructure": {
         "status": "available",
         "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
         "evidence": [
           {
-            "path": "formalization/FunctionalInequalities/Energy/Euclidean/CovarianceGradient/LinearEquiv.lean",
-            "sha256": "d760c8c972ae788ad4e5a2c86ba04f5dc5066fe3989436308f01af133a206364"
+            "path": "formalization/FunctionalInequalities/Energy/CovarianceGradient/LinearEquiv.lean",
+            "sha256": "3a4e35356aa173a5c562f59b26af18dab83be683153617e3322c4afc46a08eaa"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/L2/Transport.lean",
+            "sha256": "06003285706f0de53fa48b296cc7a5cfda8ad5d2de91eb904636d278389414f9"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Poincare/CovarianceGradient/Transport.lean",
+            "sha256": "00c890660acc80ea776706e46daf6c484f5ce16faa766cda61e0baab2868db95"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Probability/Transport.lean",
+            "sha256": "06217f847849f931c06c79b4f964ac0263efae99c623213b3cae8900c4beba04"
           },
           {
             "path": "formalization/FunctionalInequalities/Probability/CovarianceWhitening.lean",
             "sha256": "51e29db68c5887bc97b186f0dd1fb9731e0f2871b18709bc0b34ea7acc4c1464"
           },
           {
-            "path": "formalization/FunctionalInequalities/Poincare/Euclidean/LipschitzComparison.lean",
-            "sha256": "131837bde402bedfdb3194a4ce6de44e6f9d6bbe3a8dca8d9a36e17a19f6f79f"
+            "path": "formalization/FunctionalInequalities/Energy/WeightedGradient/Basic.lean",
+            "sha256": "531c59b6dbfa9fbd9cc792870cebf25c6c556090902c33b9740818a6b840e47a"
           },
           {
-            "path": "formalization/FunctionalInequalities/KLS/LogConcave/IsotropicReduction.lean",
-            "sha256": "c2b70e8dc60ea4f455e0f1d9fdded0829cb27a7088199f3b608eca4f10694a79"
+            "path": "formalization/FunctionalInequalities/Poincare/LipschitzGradient/Comparison.lean",
+            "sha256": "97f1134127f4bf99fcb38d5cce2f85ca913681275c8b07b5a167339cf3966ea8"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/KLS/LogConcave/Isotropic.lean",
+            "sha256": "1e3a2890cee38df5e378b7f801c41ddc8104d40a573d0ce237cc4a144a3206d0"
           },
           {
             "path": "formalization/FunctionalInequalities/Energy/Relaxation/Basic.lean",
             "sha256": "f8ef5f53d536ecfb1b3843100bda10ee0c7ecb6f0eda2823a20ee1b73066ed2f"
           },
           {
-            "path": "formalization/FunctionalInequalities/Energy/Euclidean/CovarianceGradient/Operator.lean",
-            "sha256": "4a75d0a6e8f3ef247a781c772e7a90b0dcf69874a7c30d92f74283d1daa1cb75"
+            "path": "formalization/FunctionalInequalities/L2/MeanVariance.lean",
+            "sha256": "7e418caed7f47683a12855df8901b9ed7168f184b53bfdb25611767093db3d25"
           },
           {
-            "path": "formalization/FunctionalInequalities/Poincare/Euclidean/LiteratureComparison.lean",
-            "sha256": "d602345d25caa3a9d646dc08c9e5f6242a94f8f56f5997d6c300bf3f9073bdfe"
+            "path": "formalization/FunctionalInequalities/Poincare/LocalSlope/SmoothTestComparison.lean",
+            "sha256": "fa3ceb42b3f60ce7ee720607770b193659a51638f3550909ae2eee26d1ae4339"
           },
           {
-            "path": "formalization/FunctionalInequalities/Poincare/Euclidean/LogConcaveComparison.lean",
-            "sha256": "c90b7addd68f68545ee33908152035a235b55c189f35146fea4812552bcd6427"
+            "path": "formalization/FunctionalInequalities/KLS/LogConcave/Poincare.lean",
+            "sha256": "cf87386c769ec52a68b43dd543c472b769685f1523bcfadc20056c28fa910e74"
           },
           {
-            "path": "formalization/FunctionalInequalities/KLS/LogConcave/CovarianceClosure.lean",
-            "sha256": "bd633f7ca7b397076fd2cdcb042e620a5cdffd3cd9207e26a7d9805d5e71689f"
+            "path": "formalization/FunctionalInequalities/KLS/LogConcave/WeightedGradient.lean",
+            "sha256": "606b8217576b9780724d808b71dc13248a9dfc2666467de42d131fd6c39c244f"
           },
           {
             "path": "formalization/FunctionalInequalities/Probability/IntrinsicCovariance.lean",
-            "sha256": "589c97517766fc56dace2cb7a3ab6d6550cf3f7d6fcd646f33a6cee832ec9604"
+            "sha256": "8a6c76c06990ba7347c5d20d17bad3516ef71965546a3579ab1f14f14b68d8ce"
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/Isotropic.lean",
@@ -847,29 +915,41 @@
       ],
       "assumptions": [],
       "priority": 5,
-      "note": "Inspected on 2026-09-08: this node packages two pinned upstream results (lem:affine-poincare-w2-liminf and thm:cmh-implies-affine-poincare) that are agent-reviewed, not Lean-certified. The only locally available ingredients are the implemented affine constant Poincare.Affine.constant, its certified closed-form identification (thm:affine-covariance-relaxation-closed) and translation invariance; a formalization would additionally need Lean definitions of the quadratic Wasserstein distance and its convergence for laws on a Euclidean space, of the CMH constant with the pinned source's regular compact-target moment-map class, canonical moment-map kernel and weak zero-flux closed Stein-generator convention, and proofs of the two upstream results themselves. Not a Lean certificate.",
+      "note": "Inspected on 2026-09-08: this node packages two pinned upstream results (lem:affine-poincare-w2-liminf and thm:cmh-implies-affine-poincare) that are agent-reviewed, not Lean-certified. The only locally available ingredients are the implemented affine constant Poincare.CovarianceGradient.Intrinsic.constant, its certified closed-form identification (thm:affine-covariance-relaxation-closed) and translation invariance; a formalization would additionally need Lean definitions of the quadratic Wasserstein distance and its convergence for laws on a Euclidean space, of the CMH constant with the pinned source's regular compact-target moment-map class, canonical moment-map kernel and weak zero-flux closed Stein-generator convention, and proofs of the two upstream results themselves. Not a Lean certificate.",
       "infrastructure": {
         "status": "missing",
         "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
         "evidence": [
           {
-            "path": "formalization/FunctionalInequalities/Poincare/Euclidean/AffineCovariance.lean",
-            "sha256": "9d5298fe96b6a37523fa7b35922e83a4798b832f92d0ff153c899f202afcaea6"
+            "path": "formalization/FunctionalInequalities/Poincare/CovarianceGradient/Intrinsic.lean",
+            "sha256": "2d3a9a87a21730e055bed39231e2196401e71ec2689a4c20c8bdc4b663aa8058"
           },
           {
-            "path": "formalization/FunctionalInequalities/KLS/LogConcave/AffineClosedForm.lean",
-            "sha256": "3754df3ed993860c4ab07e4d530452427716943bbba4e0e9a0544c75da153ed0"
+            "path": "formalization/FunctionalInequalities/KLS/LogConcave/ClosedForm.lean",
+            "sha256": "f7f88c9e04747aee69468972c784711f62536d4648d5b4c802760ced0de2310d"
           },
           {
-            "path": "formalization/FunctionalInequalities/Poincare/Euclidean/AffineTranslation.lean",
-            "sha256": "9d1e3ff01f3eed8c571912bd752c1e7c0112ae906eea29292b079068b025bda8"
+            "path": "formalization/FunctionalInequalities/Probability/CovarianceFactorization.lean",
+            "sha256": "090f05afd43ae6e52401b8c1d513ecd26c38f951dab595587c6b9c2d3c907cd8"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Energy/CovarianceGradient/IntrinsicTranslation.lean",
+            "sha256": "651dae79975a46c9ee1d229ae927c63480b4c37b77bcf6d5b33e44a4ee22306f"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Poincare/CovarianceGradient/Translation.lean",
+            "sha256": "96152ffe4dcf6f3e5be9d0622fbcb75ac9eafda704308bec6b11d9a5ebeab447"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Probability/IntrinsicTranslation.lean",
+            "sha256": "c56a101ac25818a157317d576c0fd075232ae7ac9e80055006f7c06371532cf3"
           }
         ],
         "gaps": [
           "Lean definition of the quadratic Wasserstein distance W_2 between probability laws on a finite-dimensional Euclidean space and of W_2 convergence (not in the pinned Mathlib)",
           "Lean definition of the CMH constant CMH(mu) with the pinned source's regular compact-target moment-map class, canonical moment-map kernel and weak zero-flux closed Stein-generator convention",
-          "local proof of lem:affine-poincare-w2-liminf (lower semicontinuity of Poincare.Affine.constant under W_2 convergence of centered log-concave laws)",
-          "local proof of thm:cmh-implies-affine-poincare (Poincare.Affine.constant mu_k <= CMH(mu_k) for the regular class)"
+          "local proof of lem:affine-poincare-w2-liminf (lower semicontinuity of Poincare.CovarianceGradient.Intrinsic.constant under W_2 convergence of centered log-concave laws)",
+          "local proof of thm:cmh-implies-affine-poincare (Poincare.CovarianceGradient.Intrinsic.constant mu_k <= CMH(mu_k) for the regular class)"
         ]
       }
     },
@@ -965,15 +1045,15 @@
           },
           {
             "path": "formalization/blueprint/src/chapters/60-analytic-comparison-proofs.tex",
-            "sha256": "a0457c09adb023362d166fefb04e78f87c0c85e0680e126bc3b4d3c1176efbea"
+            "sha256": "ab2e28804c6e6247ea4413fab3dc8373c8fcd421dedc69f0b52c7495d4caa91b"
           },
           {
             "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation.lean",
-            "sha256": "96a4953fae251311bda01a9f4ad3e0a665c139faa659ae8e9f146ae7f362759d"
+            "sha256": "303d12e4a03605211f079d03a47515938e14623550012f6eb885f9b2fda551ff"
           },
           {
             "path": "solutions/LemCovarianceTestCoreDensity.lean",
-            "sha256": "56b1ab45c84e1f4a8a148cec281cd9496fffc0cc7f98a7010f0592d14d7f2e37"
+            "sha256": "1a1c3f3799641110910b06a99c39e00cfd0ca70d725750c6fe45d5ea07e5a2cb"
           }
         ],
         "gaps": []
@@ -986,42 +1066,50 @@
       ],
       "assumptions": [],
       "priority": 5,
-      "note": "Proved in Lean on 2026-09-08. The Blueprint operator Sigma^(1/2) grad is Energy.Euclidean.gradientOperator with an arbitrary continuous linear B in place of the square root (Sigma = B^* B); the certificate packages dense domain, closability, closure independence of every core between the smooth compactly supported classes and the full domain, and the identification of the sequential relaxation with the squared norm of the closure. Hypotheses on the law are absolute continuity, null support frontier and local domination of Haar measure, all discharged for full-dimensional log-concave laws and for the intrinsic law of any log-concave law from the Borell density bounds. Existence of Sigma^(1/2) itself is left to the consumer; no Poincare, translation-invariance or KLS statement is claimed.",
+      "note": "Proved in Lean on 2026-09-08. The Blueprint operator Sigma^(1/2) grad is Energy.WeightedGradient.operator with an arbitrary continuous linear B in place of the square root (Sigma = B^* B); the certificate packages dense domain, closability, closure independence of every core between the smooth compactly supported classes and the full domain, and the identification of the sequential relaxation with the squared norm of the closure. Hypotheses on the law are absolute continuity, null support frontier and local domination of Haar measure, all discharged for full-dimensional log-concave laws and for the intrinsic law of any log-concave law from the Borell density bounds. Existence of Sigma^(1/2) itself is left to the consumer; no Poincare, translation-invariance or KLS statement is claimed.",
       "infrastructure": {
         "status": "available",
         "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
         "evidence": [
           {
             "path": "formalization/FunctionalInequalities/Energy/Relaxation/LinearPMap.lean",
-            "sha256": "49e3de93f545758c1cc3fd9ee8cce66f1bce418f03a9e11440ba14d7bd86d6a0"
+            "sha256": "2b593e1f5d0fa89a24c76619c5239872a3cb3cf47496a2e0c1739ace06401142"
           },
           {
             "path": "formalization/FunctionalInequalities/Energy/Euclidean/WeakDerivative.lean",
-            "sha256": "3b4c22228375ce3bf43922923e7940b63fee0680229c23bd43ac099e2b1fcbea"
+            "sha256": "6dfa642fb08643aa3e64173262590a2bf08e38390037522c26169f439c83ba23"
           },
           {
-            "path": "formalization/FunctionalInequalities/Energy/Euclidean/CovarianceGradient/Operator.lean",
-            "sha256": "4a75d0a6e8f3ef247a781c772e7a90b0dcf69874a7c30d92f74283d1daa1cb75"
+            "path": "formalization/FunctionalInequalities/Energy/WeightedGradient/Basic.lean",
+            "sha256": "531c59b6dbfa9fbd9cc792870cebf25c6c556090902c33b9740818a6b840e47a"
           },
           {
-            "path": "formalization/FunctionalInequalities/Energy/Euclidean/CovarianceGradient/Closable.lean",
-            "sha256": "f353ea417df7c8ece0a0268d88466f59c39ee3aa1c56f20107c7a381519c3ada"
+            "path": "formalization/FunctionalInequalities/L2/MeanVariance.lean",
+            "sha256": "7e418caed7f47683a12855df8901b9ed7168f184b53bfdb25611767093db3d25"
           },
           {
-            "path": "formalization/FunctionalInequalities/Energy/Euclidean/CovarianceGradient/Core.lean",
-            "sha256": "ed890348b8de9a13fa963c781e8dbc2eb56198ce7bdd37c19a8f8625aaefc1a7"
+            "path": "formalization/FunctionalInequalities/Energy/WeightedGradient/Closable.lean",
+            "sha256": "ec4cb927c0f385166443034ac0b4b062bbfd7ba59f785ef78fc771004c0c0918"
           },
           {
-            "path": "formalization/FunctionalInequalities/KLS/LogConcave/CovarianceClosure.lean",
-            "sha256": "bd633f7ca7b397076fd2cdcb042e620a5cdffd3cd9207e26a7d9805d5e71689f"
+            "path": "formalization/FunctionalInequalities/Probability/LocalDomination.lean",
+            "sha256": "1d1615edba66daf79455b1178682b035966aaa7619a74de50bb14542c64e8ae5"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Energy/WeightedGradient/Core.lean",
+            "sha256": "8cf4876a25c7f5d119b491374c958593e5c44f9b0ddd7034e3e14c528b3c17bd"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/KLS/LogConcave/WeightedGradient.lean",
+            "sha256": "606b8217576b9780724d808b71dc13248a9dfc2666467de42d131fd6c39c244f"
           },
           {
             "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation.lean",
-            "sha256": "96a4953fae251311bda01a9f4ad3e0a665c139faa659ae8e9f146ae7f362759d"
+            "sha256": "303d12e4a03605211f079d03a47515938e14623550012f6eb885f9b2fda551ff"
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/LogConcave/BorellRepresentation.lean",
-            "sha256": "7ae494ba36452281ff0fc3e31307c6cc3b63de81681a7ef7460cb2a978c4f1bb"
+            "sha256": "0063b5d6eb138fec5ee6deb821d254ff06d6c162d8304afc5434675f6f0db17b"
           },
           {
             "path": "formalization/.lake/packages/mathlib/Mathlib/Topology/Algebra/Module/LinearPMap.lean",
@@ -1094,16 +1182,24 @@
         "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
         "evidence": [
           {
+            "path": "formalization/FunctionalInequalities/Energy/LocalSlope/Basic.lean",
+            "sha256": "eff71e85ef7e219f287069149de867f49846ca8aae758b6f7129872202f83219"
+          },
+          {
             "path": "formalization/FunctionalInequalities/KLS/Definitions.lean",
-            "sha256": "8e4e14448733ac1318c490c60e31e846ae26653b3c4ae6dcf7e1e56f6c6f2c35"
+            "sha256": "13413143a168c3f46f5225b14306644eb88171575ad3c529274b151a938e3b57"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Poincare/LocalSlope/Basic.lean",
+            "sha256": "ed74b36985610dc1deb241d967be74e0b5ca51e8c53a5fcb3032e738fbadcddf"
           },
           {
             "path": "formalization/FunctionalInequalities/Probability/AffineSupport.lean",
-            "sha256": "1c36055b700a47f6f44ecfbacb36f4d660680c44d9baf150a61945563a5356a2"
+            "sha256": "864ac9c2d9869c985a53ff0c4ed256f3ad355e03b7074d1be058ec30c7bc8fee"
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/LogConcave/Transport.lean",
-            "sha256": "77d59008d0140b952dba306baf5effe9f4d78b4c1587716a10a8d6ac3941335f"
+            "sha256": "98f10deb7b1b4248609a980c394cae90bacda69f625957395fa4c71ed296ae96"
           },
           {
             "path": "formalization/FunctionalInequalities/Probability/BallAverages.lean",
@@ -1115,11 +1211,11 @@
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/LogConcave/AbsoluteContinuity.lean",
-            "sha256": "0247d28708186ccae6f3b6e12099bbee9e09e39335a68d19ef1ecafa7cc74af5"
+            "sha256": "07633e256f6cf7eeadd2f7aa38d0ba60c1256f32fd9dd73c9288bfd63385f717"
           },
           {
             "path": "solutions/LemLogConcaveIntrinsicAbsoluteContinuity.lean",
-            "sha256": "e64a65fdd6bb249603e67c7c075dc35be54799772972ae3e4eb649c5a1282bec"
+            "sha256": "a4337ba889127b4aa55742bbab28f01b49d7f6f9b23079f0aaf9d26b23d1539c"
           }
         ],
         "gaps": []

@@ -32,54 +32,54 @@ namespace Solutions.LemPoincareGaussianOneDimensional
 /-- The accepted one-dimensional Gaussian Poincaré claim: the variance is both a valid and the
 optimal constant for every real mean and every nonnegative variance, including the Dirac case. -/
 theorem certificate (m : ℝ) (v : NNReal) :
-    Poincare.Holds (gaussianReal m v) (v : ℝ) ∧
-      Poincare.constant (gaussianReal m v) = (v : ENNReal) := by
-  exact ⟨Poincare.holds_gaussianReal m v, Poincare.constant_gaussianReal m v⟩
+    FunctionalInequalities.Poincare.SmoothTest.Holds (gaussianReal m v) (v : ℝ) ∧
+      FunctionalInequalities.Poincare.SmoothTest.constant (gaussianReal m v) = (v : ENNReal) := by
+  exact ⟨FunctionalInequalities.Poincare.SmoothTest.holds_gaussianReal m v, FunctionalInequalities.Poincare.SmoothTest.constant_gaussianReal m v⟩
 
 #check @certificate
 
-#check @FunctionalInequalities.Poincare.holds_gaussianReal
-#check @FunctionalInequalities.Poincare.constant_gaussianReal
+#check @FunctionalInequalities.Poincare.SmoothTest.holds_gaussianReal
+#check @FunctionalInequalities.Poincare.SmoothTest.constant_gaussianReal
 
 /-! ## Density calculus and integrability interfaces -/
 
-#check @FunctionalInequalities.Poincare.hasDerivAt_gaussianPDFReal
-#check @FunctionalInequalities.Poincare.tendsto_gaussianPDFReal_atTop
-#check @FunctionalInequalities.Poincare.tendsto_gaussianPDFReal_atBot
-#check @FunctionalInequalities.Poincare.integrable_centered_gaussianPDFReal
-#check @FunctionalInequalities.Poincare.integral_Ioi_centered_gaussianPDFReal
-#check @FunctionalInequalities.Poincare.integral_Iio_centered_gaussianPDFReal
-#check @FunctionalInequalities.Poincare.integrable_gaussianReal_iff
+#check @FunctionalInequalities.Poincare.SmoothTest.hasDerivAt_gaussianPDFReal
+#check @FunctionalInequalities.Poincare.SmoothTest.tendsto_gaussianPDFReal_atTop
+#check @FunctionalInequalities.Poincare.SmoothTest.tendsto_gaussianPDFReal_atBot
+#check @FunctionalInequalities.Poincare.SmoothTest.integrable_centered_gaussianPDFReal
+#check @FunctionalInequalities.Poincare.SmoothTest.integral_Ioi_centered_gaussianPDFReal
+#check @FunctionalInequalities.Poincare.SmoothTest.integral_Iio_centered_gaussianPDFReal
+#check @FunctionalInequalities.Poincare.SmoothTest.integrable_gaussianReal_iff
 
 /-! ## Interval, Tonelli, admissibility and sharpness interfaces -/
 
-#check @FunctionalInequalities.Poincare.interval_sq_sub_le_integral_sq_deriv
-#check @FunctionalInequalities.Poincare.Admissible.variance_le_integral_sq_sub
-#check @FunctionalInequalities.Poincare.Admissible.integrable_gaussianPDFReal_mul_sq_sub
-#check @FunctionalInequalities.Poincare.Admissible.integrable_gaussianPDFReal_mul_sq_deriv
-#check @FunctionalInequalities.Poincare.lintegral_gaussian_right_triangle
-#check @FunctionalInequalities.Poincare.lintegral_gaussian_left_triangle
-#check @FunctionalInequalities.Poincare.Admissible.integral_Ioi_sq_sub_gaussian_le
-#check @FunctionalInequalities.Poincare.Admissible.integral_Iio_sq_sub_gaussian_le
-#check @FunctionalInequalities.Poincare.Admissible.integral_sq_sub_gaussian_le
-#check @FunctionalInequalities.Poincare.holds_gaussianReal_zero
-#check @FunctionalInequalities.Poincare.Holds.gaussianReal_variance_le
+#check @FunctionalInequalities.Poincare.SmoothTest.interval_sq_sub_le_integral_sq_deriv
+#check @FunctionalInequalities.Poincare.SmoothTest.Admissible.variance_le_integral_sq_sub
+#check @FunctionalInequalities.Poincare.SmoothTest.Admissible.integrable_gaussianPDFReal_mul_sq_sub
+#check @FunctionalInequalities.Poincare.SmoothTest.Admissible.integrable_gaussianPDFReal_mul_sq_deriv
+#check @FunctionalInequalities.Poincare.SmoothTest.lintegral_gaussian_right_triangle
+#check @FunctionalInequalities.Poincare.SmoothTest.lintegral_gaussian_left_triangle
+#check @FunctionalInequalities.Poincare.SmoothTest.Admissible.integral_Ioi_sq_sub_gaussian_le
+#check @FunctionalInequalities.Poincare.SmoothTest.Admissible.integral_Iio_sq_sub_gaussian_le
+#check @FunctionalInequalities.Poincare.SmoothTest.Admissible.integral_sq_sub_gaussian_le
+#check @FunctionalInequalities.Poincare.SmoothTest.holds_gaussianReal_zero
+#check @FunctionalInequalities.Poincare.SmoothTest.Holds.gaussianReal_variance_le
 
 /-! ## Typed applications of the proved interfaces -/
 
 -- Standard Gaussian: variance one means Poincaré constant one.
-#check (Poincare.holds_gaussianReal 0 1 : Poincare.Holds (gaussianReal 0 1) 1)
-#check (Poincare.constant_gaussianReal 0 1 : Poincare.constant (gaussianReal 0 1) = 1)
+#check (FunctionalInequalities.Poincare.SmoothTest.holds_gaussianReal 0 1 : FunctionalInequalities.Poincare.SmoothTest.Holds (gaussianReal 0 1) 1)
+#check (FunctionalInequalities.Poincare.SmoothTest.constant_gaussianReal 0 1 : FunctionalInequalities.Poincare.SmoothTest.constant (gaussianReal 0 1) = 1)
 
 -- Mean three, variance four: the constant is four, not the standard deviation two.
-#check (Poincare.holds_gaussianReal 3 4 : Poincare.Holds (gaussianReal 3 4) 4)
-#check (Poincare.constant_gaussianReal 3 4 : Poincare.constant (gaussianReal 3 4) = 4)
+#check (FunctionalInequalities.Poincare.SmoothTest.holds_gaussianReal 3 4 : FunctionalInequalities.Poincare.SmoothTest.Holds (gaussianReal 3 4) 4)
+#check (FunctionalInequalities.Poincare.SmoothTest.constant_gaussianReal 3 4 : FunctionalInequalities.Poincare.SmoothTest.constant (gaussianReal 3 4) = 4)
 
 -- Zero variance is allowed for every mean in the same two main interfaces.
 #check (fun (m : ℝ) ↦
-  (Poincare.holds_gaussianReal m 0 : Poincare.Holds (gaussianReal m 0) 0))
+  (FunctionalInequalities.Poincare.SmoothTest.holds_gaussianReal m 0 : FunctionalInequalities.Poincare.SmoothTest.Holds (gaussianReal m 0) 0))
 #check (fun (m : ℝ) ↦
-  (Poincare.constant_gaussianReal m 0 : Poincare.constant (gaussianReal m 0) = 0))
+  (FunctionalInequalities.Poincare.SmoothTest.constant_gaussianReal m 0 : FunctionalInequalities.Poincare.SmoothTest.constant (gaussianReal m 0) = 0))
 
 -- The existing Mathlib identity explains the law used in those boundary applications.
 #check (fun (m : ℝ) ↦ (gaussianReal_zero_var m : gaussianReal m 0 = Measure.dirac m))
@@ -87,7 +87,7 @@ theorem certificate (m : ℝ) (v : NNReal) :
 /-! ## Exact node proposition -/
 
 #check (∀ (m : ℝ) (v : NNReal),
-  Poincare.Holds (gaussianReal m v) (v : ℝ) ∧
-    Poincare.constant (gaussianReal m v) = (v : ENNReal) : Prop)
+  FunctionalInequalities.Poincare.SmoothTest.Holds (gaussianReal m v) (v : ℝ) ∧
+    FunctionalInequalities.Poincare.SmoothTest.constant (gaussianReal m v) = (v : ENNReal) : Prop)
 
 end Solutions.LemPoincareGaussianOneDimensional

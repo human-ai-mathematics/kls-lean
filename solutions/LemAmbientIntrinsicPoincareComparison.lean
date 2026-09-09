@@ -1,4 +1,4 @@
-import FunctionalInequalities.Poincare.Euclidean.AffineComparison
+import FunctionalInequalities.Poincare.SmoothGradient.Comparison
 
 /-!
 # Lean certificate: ambient and intrinsic-affine comparison
@@ -19,52 +19,52 @@ namespace Solutions.LemAmbientIntrinsicPoincareComparison
 theorem certificate {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
     [CompleteSpace E] [MeasurableSpace E] [BorelSpace E] [SecondCountableTopology E]
     [FiniteDimensional ℝ E] (μ : ProbabilityMeasure E) :
-    (∀ f : Energy.Euclidean.SmoothGradientTest μ,
-      ∃ g : Energy.Euclidean.SmoothGradientTest (Probability.intrinsicMeasure μ),
+    (∀ f : FunctionalInequalities.Energy.SmoothGradient.Test μ,
+      ∃ g : FunctionalInequalities.Energy.SmoothGradient.Test (Probability.intrinsicMeasure μ),
         (∀ v, g v = f (Probability.reconstruct μ v)) ∧
-        g.toL2 = Energy.Euclidean.toIntrinsicL2 μ f.toL2 ∧ g.gradientEnergy ≤ f.gradientEnergy) ∧
-    (∀ g : Energy.Euclidean.SmoothGradientTest (Probability.intrinsicMeasure μ),
-      ∃ f : Energy.Euclidean.SmoothGradientTest μ,
+        g.toL2 = Energy.Euclidean.toIntrinsicL2 μ f.toL2 ∧ g.energy ≤ f.energy) ∧
+    (∀ g : FunctionalInequalities.Energy.SmoothGradient.Test (Probability.intrinsicMeasure μ),
+      ∃ f : FunctionalInequalities.Energy.SmoothGradient.Test μ,
         (∀ v, f (Probability.reconstruct μ v) = g v) ∧
-        Energy.Euclidean.toIntrinsicL2 μ f.toL2 = g.toL2 ∧ f.gradientEnergy = g.gradientEnergy) ∧
-    Energy.Euclidean.smoothGradientRelaxation μ =
-      Energy.Canonical.energy μ ∧
-    (∀ C : NNReal, Poincare.Ambient.Holds μ C ↔
-      Poincare.Canonical.Holds μ C) ∧
-    Poincare.Ambient.constant μ =
-      Poincare.Canonical.constant μ :=
-  ⟨Energy.Euclidean.SmoothGradientTest.exists_intrinsic_restriction μ,
-    Energy.Euclidean.SmoothGradientTest.exists_ambient_extension μ,
-    Energy.Euclidean.smoothGradientRelaxation_eq_canonical μ,
-    Poincare.Ambient.holds_iff_canonical μ,
-    Poincare.Ambient.constant_eq_canonical μ⟩
+        Energy.Euclidean.toIntrinsicL2 μ f.toL2 = g.toL2 ∧ f.energy = g.energy) ∧
+    FunctionalInequalities.Energy.SmoothGradient.relaxation μ =
+      FunctionalInequalities.Energy.SmoothGradient.Intrinsic.energy μ ∧
+    (∀ C : NNReal, FunctionalInequalities.Poincare.SmoothGradient.Ambient.Holds μ C ↔
+      FunctionalInequalities.Poincare.SmoothGradient.Intrinsic.Holds μ C) ∧
+    FunctionalInequalities.Poincare.SmoothGradient.Ambient.constant μ =
+      FunctionalInequalities.Poincare.SmoothGradient.Intrinsic.constant μ :=
+  ⟨FunctionalInequalities.Energy.SmoothGradient.Test.exists_intrinsic_restriction μ,
+    FunctionalInequalities.Energy.SmoothGradient.Test.exists_ambient_extension μ,
+    FunctionalInequalities.Energy.SmoothGradient.relaxation_eq_intrinsic_energy μ,
+    FunctionalInequalities.Poincare.SmoothGradient.Ambient.holds_iff_intrinsic μ,
+    FunctionalInequalities.Poincare.SmoothGradient.Ambient.constant_eq_intrinsic μ⟩
 
 end Solutions.LemAmbientIntrinsicPoincareComparison
 
-#check @Energy.Euclidean.SmoothGradientTest.exists_intrinsic_restriction
-#check @Energy.Euclidean.SmoothGradientTest.exists_ambient_extension
-#check @Energy.Euclidean.smoothGradientRelaxation_eq_canonical
-#check @Poincare.Ambient.holds_iff_canonical
-#check @Poincare.Ambient.constant_eq_canonical
+#check @FunctionalInequalities.Energy.SmoothGradient.Test.exists_intrinsic_restriction
+#check @FunctionalInequalities.Energy.SmoothGradient.Test.exists_ambient_extension
+#check @FunctionalInequalities.Energy.SmoothGradient.relaxation_eq_intrinsic_energy
+#check @FunctionalInequalities.Poincare.SmoothGradient.Ambient.holds_iff_intrinsic
+#check @FunctionalInequalities.Poincare.SmoothGradient.Ambient.constant_eq_intrinsic
 
 -- Every dimension is permitted; no positivity hypothesis is hidden in the carrier.
 #check (fun (d : ℕ) (μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin d))) ↦
-  Energy.Euclidean.smoothGradientRelaxation_eq_canonical μ)
+  FunctionalInequalities.Energy.SmoothGradient.relaxation_eq_intrinsic_energy μ)
 
 -- The intrinsic carrier can collapse to a point.
 #check (fun (μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin 0))) ↦
-  Poincare.Ambient.holds_iff_canonical μ 0)
+  FunctionalInequalities.Poincare.SmoothGradient.Ambient.holds_iff_intrinsic μ 0)
 
 -- A Dirac law still fits the raw test restriction/extension statements.
-#check (fun (g : Energy.Euclidean.SmoothGradientTest
+#check (fun (g : FunctionalInequalities.Energy.SmoothGradient.Test
     (Probability.intrinsicMeasure (Probability.ofMeasure (Measure.dirac (0 : ℝ))))) ↦
-  Energy.Euclidean.SmoothGradientTest.exists_ambient_extension
+  FunctionalInequalities.Energy.SmoothGradient.Test.exists_ambient_extension
     (Probability.ofMeasure (Measure.dirac (0 : ℝ))) g)
 
 -- Equality transports the infinite value without converting it to a real constant.
 #check (fun (μ : ProbabilityMeasure ℝ)
-    (h : Poincare.Ambient.constant μ = ⊤) ↦
-  (Poincare.Ambient.constant_eq_canonical μ).symm.trans h)
+    (h : FunctionalInequalities.Poincare.SmoothGradient.Ambient.constant μ = ⊤) ↦
+  (FunctionalInequalities.Poincare.SmoothGradient.Ambient.constant_eq_intrinsic μ).symm.trans h)
 
 /--
 info: 'Solutions.LemAmbientIntrinsicPoincareComparison.certificate'

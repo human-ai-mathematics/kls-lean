@@ -6,9 +6,8 @@ import Mathlib.Data.ENNReal.Basic
 This module separates tests from the subtype on which an extended nonnegative energy is finite.
 -/
 
-namespace FunctionalInequalities
+namespace FunctionalInequalities.Energy
 
-namespace Energy
 
 /-- An extended nonnegative energy on tests of type `X`. -/
 structure Functional (X : Type*) where
@@ -25,7 +24,7 @@ instance : CoeFun (Functional X) fun _ ↦ X → ENNReal where
 
 /-- Applying a functional built from a function returns that function's value. -/
 @[simp]
-theorem mk_apply (energy : X → ENNReal) (x : X) : Functional.mk energy x = energy x := rfl
+theorem mk_apply (energy : X → ENNReal) (x : X) : mk energy x = energy x := rfl
 
 /-- Extended energy functionals are equal when all of their values are equal. -/
 @[ext]
@@ -134,6 +133,4 @@ theorem zero : ZeroEnergy (0 : Functional X) :=
 
 end ZeroEnergy
 
-end Energy
-
-end FunctionalInequalities
+end FunctionalInequalities.Energy

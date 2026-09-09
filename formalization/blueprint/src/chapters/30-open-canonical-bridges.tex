@@ -117,12 +117,12 @@ finite-dimensional log-concave law in intrinsic coordinates.
 The two obstructions isolate representative dependence from the remaining density question.
 Neither the Dirichlet property nor a Cheeger identification is declared as a dependency until an
 actual proof uses it.  Intrinsic raw/core agreement is an optional, strictly stronger testwise
-identification; it is not a premise of the legacy--relaxed constant bridge.
+identification; it is not a premise of the smooth-test--relaxed constant bridge.
 
 \begin{lemma}[Smooth tests restrict and extend along affine support]
   \label{lem:smooth-tests-affine-restriction-extension}
-  \lean{FunctionalInequalities.Energy.Euclidean.SmoothGradientTest.exists_intrinsic_restriction,
-        FunctionalInequalities.Energy.Euclidean.SmoothGradientTest.exists_ambient_extension}
+  \lean{FunctionalInequalities.Energy.SmoothGradient.Test.exists_intrinsic_restriction,
+        FunctionalInequalities.Energy.SmoothGradient.Test.exists_ambient_extension}
   \leanok
   \uses{def:smooth-gradient-preenergy,def:affine-support-intrinsic-law,
         thm:intrinsic-l2-equivalence}
@@ -141,7 +141,7 @@ identification; it is not a premise of the legacy--relaxed constant bridge.
 
 \begin{theorem}[Ambient and intrinsic relaxations agree]
   \label{thm:ambient-intrinsic-relaxation-equality}
-  \lean{FunctionalInequalities.Energy.Euclidean.smoothGradientRelaxation_eq_canonical}
+  \lean{FunctionalInequalities.Energy.SmoothGradient.relaxation_eq_intrinsic_energy}
   \leanok
   \uses{def:smooth-gradient-relaxation,def:intrinsic-affine-energy,thm:intrinsic-l2-equivalence,
         lem:smooth-tests-affine-restriction-extension}
@@ -167,8 +167,8 @@ identification; it is not a premise of the legacy--relaxed constant bridge.
 
 \begin{corollary}[Ambient and intrinsic-affine constants agree]
   \label{cor:ambient-intrinsic-constant-equality}
-  \lean{FunctionalInequalities.Poincare.Ambient.constant_eq_canonical,
-        FunctionalInequalities.Poincare.Ambient.holds_iff_canonical}
+  \lean{FunctionalInequalities.Poincare.SmoothGradient.Ambient.constant_eq_intrinsic,
+        FunctionalInequalities.Poincare.SmoothGradient.Ambient.holds_iff_intrinsic}
   \leanok
   \uses{thm:ambient-intrinsic-relaxation-equality,def:l2-energy-poincare-constant,
         def:selected-canonical-frontend}
@@ -191,7 +191,7 @@ variance and gradient energy.  The energy equality and the constant equality are
 independent of the chosen affine origin.
 
 The preferred implementation order is the exact ambient/intrinsic equality, the direct
-legacy--relaxed bridge of \cref{chap:shared-analytic-bridges}, and then the literature test-density
+smooth-test--relaxed bridge of \cref{chap:shared-analytic-bridges}, and then the literature test-density
 bridge.  The first two are now proved in Lean, with two local certificates and unchanged reviewed signatures.
 Dirichlet and Cheeger identifications follow as form enhancements.  A raw/core theorem
 with explicit singular-measure hypotheses remains useful, but it is not on this main path.

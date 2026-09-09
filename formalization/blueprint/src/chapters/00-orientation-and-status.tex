@@ -150,13 +150,13 @@ mathematical presentations have not yet been identified formally.
   zero is a positive multiple of the Dirac mass.
 \end{proof}
 
-\begin{definition}[Literature Poincar\'e constant]
+\begin{definition}[Intrinsic local-slope Poincar\'e constant]
   \label{def:literature-poincare-constant}
-  \lean{FunctionalInequalities.KLS.localSlope,
-        FunctionalInequalities.KLS.literatureEnergy,
-        FunctionalInequalities.KLS.LiteratureAdmissible,
-        FunctionalInequalities.KLS.LiteratureHolds,
-        FunctionalInequalities.KLS.literatureConstant}
+  \lean{FunctionalInequalities.Energy.LocalSlope.apply,
+        FunctionalInequalities.Energy.LocalSlope.energy,
+        FunctionalInequalities.Energy.LocalSlope.Admissible,
+        FunctionalInequalities.Poincare.LocalSlope.Holds,
+        FunctionalInequalities.Poincare.LocalSlope.Intrinsic.constant}
   \leanok
   Let $\mu$ be a Borel probability measure on a finite-dimensional Euclidean space, and let $A$
   be its affine support.  For a locally Lipschitz function on $A$, write $\abs{D_Af}$ for its local
@@ -219,7 +219,7 @@ Historical freeze records remain dated review snapshots. The current development
 There are four levels, and their names are not interchangeable.  The energy-parametrized optimizer
 of \cref{chap:canonical-basic} accepts any extended energy.  The selected canonical frontend of
 \cref{chap:smooth-affine} chooses the intrinsic-affine smooth-gradient relaxation.  The accepted
-legacy frontend of \cref{chap:certified-models} quantifies over globally smooth finite-energy
+smooth-test frontend of \cref{chap:certified-models} quantifies over globally smooth finite-energy
 tests, while \cref{def:literature-poincare-constant} quantifies over locally Lipschitz tests.  The
 first two are Lean definitions. The selected and legacy constants are now proved equal in
 finite dimension. Their comparison with the locally Lipschitz literature constant has an

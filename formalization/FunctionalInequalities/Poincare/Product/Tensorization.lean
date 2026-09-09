@@ -4,7 +4,7 @@ import FunctionalInequalities.Poincare.Product.Admissible
 # Poincaré tensorization on Hilbert products
 
 Node: `lem:poincare-tensorization`. The product law lives on `WithLp 2 (E × F)` and uses the
-manuscript normalization `Var(f) ≤ C ∫ ‖gradient f‖²` for `Poincare.Admissible` tests. The fixed
+manuscript normalization `Var(f) ≤ C ∫ ‖gradient f‖²` for `Poincare.SmoothTest.Admissible` tests. The fixed
 and extended optimal-constant bounds below are packaged by the node-specific certificate.
 
 Source: Bakry--Gentil--Ledoux (2014),
@@ -19,7 +19,7 @@ noncomputable section
 
 open MeasureTheory ProbabilityTheory
 
-namespace FunctionalInequalities.Poincare
+namespace FunctionalInequalities.Poincare.SmoothTest
 
 variable {E F : Type*}
   [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
@@ -49,9 +49,9 @@ theorem Holds.prod
     rfl
   have hIntG1 := hg.integrable_gradient_fst
   have hIntG2 := hg.integrable_gradient_snd
-  have hIntVL := ProductVariance.integrable_variance_left hun
-  have hIntVR := ProductVariance.integrable_variance_right hun
-  have hVle := ProductVariance.variance_le hun
+  have hIntVL := ProductVariance.integrable_left hun
+  have hIntVR := ProductVariance.integrable_right hun
+  have hVle := ProductVariance.le hun
   set A : ℝ := ∫ p : E × F, ‖(gradient g (WithLp.toLp 2 p)).fst‖ ^ 2 ∂μ.prod ν with hA_def
   set B : ℝ := ∫ p : E × F, ‖(gradient g (WithLp.toLp 2 p)).snd‖ ^ 2 ∂μ.prod ν with hB_def
   have hA : 0 ≤ A := integral_nonneg fun _ ↦ sq_nonneg _
@@ -150,4 +150,4 @@ theorem constant_prod_le
     exact max_lt hC hC'
   exact absurd (hle.trans_lt hmax) (lt_irrefl _)
 
-end FunctionalInequalities.Poincare
+end FunctionalInequalities.Poincare.SmoothTest

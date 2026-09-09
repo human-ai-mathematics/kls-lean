@@ -95,6 +95,27 @@ def parse_axioms(output: str, expected: set[str]) -> tuple[dict[str, list[str]],
     return reports, errors
 
 
+def axiom_audit_code(declarations: set[str]) -> str:
+    """Inspect exact environment names, including compiler-generated auxiliary declarations.
+
+    Use the same transitive collector as Lean's `#print axioms`, without elaborating generated
+    names as source identifiers. Missing names must fail before collection: collectAxioms alone
+    can return an empty list for a name absent from the environment.
+    """
+    names = ",\n    ".join(json.dumps(name, ensure_ascii=False) for name in sorted(declarations))
+    return f'''run_cmd do
+  let names : Array String := #[{names}]
+  let env ← Lean.getEnv
+  for text in names do
+    let name := text.toName
+    unless (env.find? name).isSome do
+      throwError "Axiom audit declaration not found: {{text}}"
+    let axioms ← Lean.collectAxioms name
+    let rendered := String.intercalate ", " (axioms.toList.map Lean.Name.toString)
+    Lean.logInfo m!"'{{text}}' depends on axioms: [{{rendered}}]"
+'''
+
+
 def run_verification(root: Path) -> int:
     started = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S.%fZ")
     artifact = Path("build/verification") / started
@@ -156,7 +177,7 @@ def run_verification(root: Path) -> int:
         declarations.update(d["name"] for d in statement["declarations"])
         declarations.update(STATEMENT_CHECKS)
         code = "\n".join("import " + m for m in sorted(imports)) + "\n"
-        code += "\n".join("#print axioms " + d for d in sorted(declarations)) + "\n"
+        code += axiom_audit_code(declarations)
         code += "set_option pp.all true\n"
         code += "\n".join("#print " + c["declaration"] for c in derived["certificates"].values()) + "\n"
         (output_dir / "DeclarationAudit.lean").write_text(code)

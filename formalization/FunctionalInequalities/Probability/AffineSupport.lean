@@ -25,12 +25,9 @@ namespace FunctionalInequalities.Probability
 
 universe u
 
-variable {E : Type u} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
-  [MeasurableSpace E] [BorelSpace E] [SecondCountableTopology E]
-  [FiniteDimensional ℝ E]
+variable {E : Type u} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+  [MeasurableSpace E]
 
-/- The common ambient assumptions are intentionally kept uniform across the public API. -/
-set_option linter.unusedSectionVars false
 
 /-- The affine span of the topological support of a probability measure.
 
@@ -45,15 +42,34 @@ theorem support_subset_affineSupport (μ : ProbabilityMeasure E) :
     (μ : Measure E).support ⊆ affineSupport μ :=
   subset_affineSpan ℝ _
 
+/-- The affine support is the smallest closed affine subspace of full measure. -/
+theorem affineSupport_le_of_ae_mem (μ : ProbabilityMeasure E) (A : AffineSubspace ℝ E)
+    (hA : IsClosed (A : Set E)) (hμ : ∀ᵐ x ∂(μ : Measure E), x ∈ A) :
+    affineSupport μ ≤ A := by
+  apply affineSpan_le.mpr
+  exact Measure.support_subset_of_isClosed hA hμ
+
+section Closedness
+
+variable [FiniteDimensional ℝ E]
+
 /-- The affine support is closed in finite dimension. -/
 theorem isClosed_affineSupport (μ : ProbabilityMeasure E) :
     IsClosed (affineSupport μ : Set E) :=
   (affineSupport μ).closed_of_finiteDimensional
 
+variable [BorelSpace E]
+
 /-- The affine support is Borel measurable. -/
 theorem measurableSet_affineSupport (μ : ProbabilityMeasure E) :
     MeasurableSet (affineSupport μ : Set E) :=
   (isClosed_affineSupport μ).measurableSet
+
+end Closedness
+
+section FullMeasure
+
+variable [SecondCountableTopology E]
 
 /-- The affine support has full measure. -/
 theorem measure_compl_affineSupport (μ : ProbabilityMeasure E) :
@@ -67,23 +83,23 @@ theorem ae_mem_affineSupport (μ : ProbabilityMeasure E) :
   filter_upwards [Measure.support_mem_ae (μ := (μ : Measure E))] with x hx
   exact support_subset_affineSupport μ hx
 
-/-- The affine support is the smallest closed affine subspace of full measure. -/
-theorem affineSupport_le_of_ae_mem (μ : ProbabilityMeasure E) (A : AffineSubspace ℝ E)
-    (hA : IsClosed (A : Set E)) (hμ : ∀ᵐ x ∂(μ : Measure E), x ∈ A) :
-    affineSupport μ ≤ A := by
-  apply affineSpan_le.mpr
-  exact Measure.support_subset_of_isClosed hA hμ
-
 /-- A chosen point of the topological support, used only to put vector coordinates on the affine
 carrier. Different choices give affinely isometric coordinate presentations. -/
 def supportPoint (μ : ProbabilityMeasure E) : E :=
   ((μ : Measure E).nonempty_support (IsProbabilityMeasure.ne_zero (μ : Measure E))).choose
 
+omit [InnerProductSpace ℝ E] in
 /-- The chosen point really belongs to the topological support. -/
 theorem supportPoint_mem_support (μ : ProbabilityMeasure E) :
     supportPoint μ ∈ (μ : Measure E).support :=
   ((μ : Measure E).nonempty_support
     (IsProbabilityMeasure.ne_zero (μ : Measure E))).choose_spec
+
+end FullMeasure
+
+section Coordinates
+
+variable [CompleteSpace E] [BorelSpace E] [SecondCountableTopology E] [FiniteDimensional ℝ E]
 
 /-- The chosen support point, regarded as a point of the affine support. -/
 def origin (μ : ProbabilityMeasure E) : affineSupport μ :=
@@ -105,6 +121,7 @@ def retraction (μ : ProbabilityMeasure E) (x : E) : affineSupport μ :=
     classical
     exact if hx : x ∈ affineSupport μ then ⟨x, hx⟩ else origin μ
 
+omit [CompleteSpace E] in
 /-- The affine-support retraction is measurable. -/
 theorem measurable_retraction (μ : ProbabilityMeasure E) : Measurable (retraction μ) := by
   classical
@@ -112,6 +129,7 @@ theorem measurable_retraction (μ : ProbabilityMeasure E) : Measurable (retracti
     if hx : x ∈ affineSupport μ then (⟨x, hx⟩ : affineSupport μ) else origin μ)
   exact Measurable.dite measurable_id measurable_const (measurableSet_affineSupport μ)
 
+omit [CompleteSpace E] [BorelSpace E] [FiniteDimensional ℝ E] in
 /-- On the affine support, the retraction is the identity. -/
 @[simp]
 theorem coe_retraction_of_mem (μ : ProbabilityMeasure E) {x : E}
@@ -119,6 +137,7 @@ theorem coe_retraction_of_mem (μ : ProbabilityMeasure E) {x : E}
   classical
   simp [retraction, hx]
 
+omit [CompleteSpace E] [BorelSpace E] [FiniteDimensional ℝ E] in
 /-- The affine-support retraction agrees almost everywhere with the ambient identity. -/
 theorem coe_retraction_ae (μ : ProbabilityMeasure E) :
     (fun x ↦ (retraction μ x : E)) =ᵐ[(μ : Measure E)] fun x ↦ x := by
@@ -129,6 +148,7 @@ theorem coe_retraction_ae (μ : ProbabilityMeasure E) :
 def intrinsicMap (μ : ProbabilityMeasure E) (x : E) : (affineSupport μ).direction :=
   (coordinateEquiv μ).symm (retraction μ x)
 
+omit [CompleteSpace E] in
 /-- The intrinsic-coordinate map is measurable. -/
 theorem measurable_intrinsicMap (μ : ProbabilityMeasure E) : Measurable (intrinsicMap μ) :=
   (coordinateEquiv μ).symm.continuous.measurable.comp (measurable_retraction μ)
@@ -143,14 +163,17 @@ affine isometry. -/
 def reconstruct (μ : ProbabilityMeasure E) : (affineSupport μ).direction →ᵃⁱ[ℝ] E :=
   (affineSupport μ).subtypeₐᵢ.comp (coordinateEquiv μ).toAffineIsometry
 
+omit [CompleteSpace E] [BorelSpace E] [FiniteDimensional ℝ E] in
 /-- Reconstruction is continuous. -/
 theorem continuous_reconstruct (μ : ProbabilityMeasure E) : Continuous (reconstruct μ) :=
   (reconstruct μ).continuous
 
+omit [CompleteSpace E] [FiniteDimensional ℝ E] in
 /-- Reconstruction is measurable. -/
 theorem measurable_reconstruct (μ : ProbabilityMeasure E) : Measurable (reconstruct μ) :=
   (reconstruct μ).continuous.measurable
 
+omit [CompleteSpace E] [BorelSpace E] [FiniteDimensional ℝ E] in
 /-- Taking intrinsic coordinates after reconstruction recovers the original coordinates. -/
 @[simp]
 theorem intrinsicMap_reconstruct (μ : ProbabilityMeasure E)
@@ -164,17 +187,20 @@ theorem intrinsicMap_reconstruct (μ : ProbabilityMeasure E)
   rw [intrinsicMap, hret]
   exact (coordinateEquiv μ).symm_apply_apply v
 
+omit [CompleteSpace E] [BorelSpace E] [FiniteDimensional ℝ E] in
 /-- Reconstruction after taking intrinsic coordinates is the ambient identity almost everywhere. -/
 theorem reconstruct_intrinsicMap_ae (μ : ProbabilityMeasure E) :
     (fun x ↦ reconstruct μ (intrinsicMap μ x)) =ᵐ[(μ : Measure E)] fun x ↦ x := by
   filter_upwards [ae_mem_affineSupport μ] with x hx
   simp [reconstruct, intrinsicMap, coordinateEquiv, retraction, hx]
 
+omit [CompleteSpace E] in
 /-- Taking intrinsic coordinates preserves the probability law by construction. -/
 theorem measurePreserving_intrinsicMap (μ : ProbabilityMeasure E) :
     MeasurePreserving (intrinsicMap μ) (μ : Measure E) (intrinsicMeasure μ : Measure _) :=
   ⟨measurable_intrinsicMap μ, rfl⟩
 
+omit [CompleteSpace E] in
 /-- Reconstructing the intrinsic law gives back the original ambient probability law exactly. -/
 theorem measurePreserving_reconstruct (μ : ProbabilityMeasure E) :
     MeasurePreserving (reconstruct μ) (intrinsicMeasure μ : Measure _) (μ : Measure E) := by
@@ -186,6 +212,7 @@ theorem measurePreserving_reconstruct (μ : ProbabilityMeasure E) :
     simpa only [Function.comp_apply, id_eq] using hx
   rw [Measure.map_congr hcomp, Measure.map_id]
 
+omit [CompleteSpace E] in
 /-- Intrinsic coordinates remove every redundant affine direction. This statement is purely
 geometric and does not require log-concavity or absolute continuity. -/
 theorem affineSupport_intrinsicMeasure (μ : ProbabilityMeasure E) :
@@ -204,5 +231,7 @@ theorem affineSupport_intrinsicMeasure (μ : ProbabilityMeasure E) :
   have hv : reconstruct μ v ∈ affineSupport μ := (coordinateEquiv μ v).property
   obtain ⟨w, hw, heq⟩ := hle hv
   exact (reconstruct μ).injective heq ▸ hw
+
+end Coordinates
 
 end FunctionalInequalities.Probability

@@ -53,6 +53,10 @@ Lean worker threads to two. This view is made from the current build; it is not 
 The generated declaration audit imports the built library and certificates, checks all Blueprint
 Lean anchors, all local declarations reached by the statement snapshot, and the twenty-five named
 definition checks in `solutions/StatementChecks.lean`, and inspects their transitive axioms.
+The generated audit looks up exact declaration names in Lean's environment and calls
+`Lean.collectAxioms`, the same transitive collector used by `#print axioms`. This keeps
+compiler-generated auxiliary proofs in the audit without referencing their unstable names as
+source identifiers. A missing declaration fails before collection; it cannot pass as axiom-free.
 Missing reports or axioms outside `propext`,
 `Classical.choice`, and `Quot.sound` fail acceptance. The seventeen certificates additionally have
 default-build guards. The expected certificate list comes from the existing explicit
@@ -253,13 +257,13 @@ described in [the proof record](decisions/2026-09-07-borell-density-proofs.md).
 ## Affine covariance Poincaré constant
 
 `def:affine-poincare-constant` was implemented on 2026-09-07 as a definition node.
-`Energy.Euclidean.covariancePreEnergy ν` has globally Lipschitz `L²(ν)` tests with integrable
-`⟪Σ ∇g, ∇g⟫`, `Σ = Covariance.operator ν`; `Energy.Affine.energy μ` is its sequential relaxation
-on the intrinsic law, and `Poincare.Affine.constant μ` is `Poincare.L2Energy.constant` of that
+`Energy.CovarianceGradient.preEnergy ν` has globally Lipschitz `L²(ν)` tests with integrable
+`⟪Σ ∇g, ∇g⟫`, `Σ = Covariance.operator ν`; `Energy.CovarianceGradient.Intrinsic.energy μ` is its sequential relaxation
+on the intrinsic law, and `Poincare.CovarianceGradient.Intrinsic.constant μ` is `Poincare.L2Energy.constant` of that
 relaxation. The definition needs no log-concavity; for log-concave laws the three well-definedness
 contracts of the Blueprint sentence (finite intrinsic second moment, a.e. differentiability of
 tests, representative independence of the energy) are proved in
-`KLS/LogConcave/AffineCovariance.lean`. Twelve anchors carry `\leanok`; the node is not a ledger
+`KLS/LogConcave/Covariance.lean`. Twelve anchors carry `\leanok`; the node is not a ledger
 theorem, `check_blueprint.CERTIFICATES` is unchanged, and the statement golden is unchanged
 because the new objects do not occur in the KLS statement closure. The definition task record is
 `available` with source and Mathlib evidence hashes. Five new named checks cover the unfolding,
@@ -270,7 +274,7 @@ the test fields, the energy integral, dimension zero and the ambient Dirac law. 
 
 `lem:covariance-core-closure` was proved on 2026-09-08 and is the fourteenth certificate,
 `Solutions.LemCovarianceCoreClosure.certificate`, registered in `check_blueprint.CERTIFICATES`.
-The Blueprint operator `T g = Σ^{1/2} ∇g` is `KLS.LogConcave.gradientOperator` with an arbitrary
+The Blueprint operator `T g = Σ^{1/2} ∇g` is `KLS.LogConcave.weightedOperator` with an arbitrary
 continuous linear `B` in place of the square root, following the certified approximation lemma.
 The certificate packages dense domain, closability, closure independence of every core between
 the smooth compactly supported classes and the full domain, and the identification of the
@@ -285,8 +289,8 @@ statement golden is unchanged. Read
 `thm:affine-covariance-relaxation-closed` was proved on 2026-09-08 and is the fifteenth
 certificate, `Solutions.ThmAffineCovarianceRelaxationClosed.certificate`. Quadraticity of the
 affine pre-energy is expressed through a square root `B` of the intrinsic covariance
-(`Covariance.exists_sqrt`); the certificate packages dense realization, the closed quadratic form
-`Energy.ClosedQuadratic (Energy.Affine.energy μ)`, the sequential core, translation of the intrinsic
+(`Covariance.exists_inner_eq_norm_sq`); the certificate packages dense realization, the closed quadratic form
+`Energy.ClosedQuadratic (Energy.CovarianceGradient.Intrinsic.energy μ)`, the sequential core, translation of the intrinsic
 law with its `L²` isometry, and the identification of the affine relaxation and constant with the
 closed form on the core `ℝ + C_c^∞`. Seventeen anchors carry `\leanok` on statement and proof;
 the statement golden is unchanged. Read
@@ -296,10 +300,10 @@ the statement golden is unchanged. Read
 
 `lem:affine-poincare-translation-invariance` was proved on 2026-09-08 and is the sixteenth
 certificate, `Solutions.LemAffinePoincareTranslationInvariance.certificate`. The ambient translate
-is `Energy.Euclidean.translateLaw μ b`; the certificate packages log-concavity of the translate,
+is `Probability.translateLaw μ b`; the certificate packages log-concavity of the translate,
 invariance of the ambient covariance operator and of the affine-support direction, a
 variance-preserving `L²` isometry intertwining the two affine relaxations, the identity
-`Poincare.Affine.constant (translateLaw μ b) = Poincare.Affine.constant μ`, the ambient second
+`Poincare.CovarianceGradient.Intrinsic.constant (translateLaw μ b) = Poincare.CovarianceGradient.Intrinsic.constant μ`, the ambient second
 moment of a log-concave law and the zero mean of the translate by the negative barycenter. The
 constant identity is proved for every Borel law. Sixteen anchors carry `\leanok` on statement and
 proof; the statement golden is unchanged. Read
@@ -373,3 +377,10 @@ ledger lifecycle; certification and axiom checks reject them in the audited clai
 CI uses the same verification runner and uploads evidence as workflow artifacts. Editing its
 configuration locally does not run remote CI or publish any source. No successful CI run or
 remote publication is claimed by a local receipt.
+
+## 全库命名补充整理（2026-09-08）
+
+全库声明作用域和文件归属已进一步整理：33 个公共短名、12 个模块路径，
+881 个公共签名及 1085 项展开后的类型/定义闭包核对一致。完整记录见
+[decisions/2026-09-08-library-naming.md](decisions/2026-09-08-library-naming.md)。
+最终验收读取 `build/verification/latest.json` 并核对当前源码快照；工作区改动尚未提交。

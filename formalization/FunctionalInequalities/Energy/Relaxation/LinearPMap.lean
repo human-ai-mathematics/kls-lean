@@ -337,7 +337,7 @@ theorem mem_closure_domain_of_frequently (hT : T.IsClosable) {x : X}
 /-- Outside the domain of the closure the relaxed energy is infinite. -/
 theorem sequentialRelaxation_ofLinearPMap_of_notMem (hT : T.IsClosable) {x : X}
     (hx : x ∉ T.closure.domain) : (ofLinearPMap T).sequentialRelaxation x = ⊤ := by
-  rw [PreEnergy.sequentialRelaxation_apply]
+  rw [sequentialRelaxation_apply]
   refine le_antisymm le_top (le_iInf fun f ↦ ?_)
   by_contra hlt
   rw [not_le] at hlt
@@ -358,7 +358,7 @@ theorem sequentialRelaxation_ofLinearPMap_of_notMem (hT : T.IsClosable) {x : X}
 theorem sequentialRelaxation_ofLinearPMap_of_mem (hT : T.IsClosable) (x : T.closure.domain) :
     (ofLinearPMap T).sequentialRelaxation x = (‖T.closure x‖₊ ^ 2 : NNReal) := by
   refine le_antisymm (sequentialRelaxation_ofLinearPMap_le T hT x) ?_
-  rw [PreEnergy.sequentialRelaxation_apply]
+  rw [sequentialRelaxation_apply]
   refine le_iInf fun f ↦ ?_
   by_contra hlt
   rw [not_le] at hlt

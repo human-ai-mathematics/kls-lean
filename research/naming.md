@@ -1,72 +1,115 @@
-# Lean 公共命名约定
+# Lean 公共命名与参数组织
 
-公共名称说明数学对象和结论；构造细节放在定义及文档中。目录仍按现有 Blueprint
-分层组织，模块路径、节点标签和证书入口保持稳定。命名空间可以跨这些实现文件组织 API。
+公共名称表达数学对象、操作和结论。命名空间可以跨实现模块组织；证书入口、ledger
+节点 ID 和来源标签保留稳定身份。完整本轮映射见
+[迁移记录](decisions/2026-09-08-mathematical-api-organization.md)及
+[声明映射](api-migration/2026-09-08-name-map.json)。以下省略 `FunctionalInequalities`。
 
-## 当前入口
+## 短名不重复命名空间
 
-下表省略共同前缀 `FunctionalInequalities`。
+命名空间已经说明的对象或角色，不再写进声明短名。操作用 `apply`、`energy`、
+`toL2`、`constant` 等名称；定理短名描述操作的性质。不要把所有假设拼进名称。
+本轮补充迁移见 [短名记录](decisions/2026-09-08-namespace-short-names.md)及
+[完整映射](api-migration/2026-09-08-short-name-map.json)。例如：
 
-| 用途 | 公共 API |
-| --- | --- |
-| 项目选定的内禀仿射松弛能量 | `Energy.Canonical.energy` |
-| 所选常数与有限界 | `Poincare.Canonical.constant`、`Poincare.Canonical.Holds` |
-| 环境空间上的光滑梯度松弛常数 | `Poincare.Ambient.constant`、`Poincare.Ambient.Holds` |
-| 任意给定 L² 能量的优化器 | `Poincare.L2Energy.constant μ energy`、`Poincare.L2Energy.Holds μ energy C` |
-| legacy 与所选常数的比较 | `Poincare.Euclidean.constant_eq_canonical` |
-| 一般对数凹律的文献比较 | `KLS.LogConcave.canonical_eq_literature`，可写 `hμ.canonical_eq_literature` |
-| Borell 密度代表及其性质 | `KLS.IsBorellDensity`；`hμ.exists_isBorellDensity m`；对代表元 `h`：`h.pos_of_mem_interior_support`、`h.continuousOn_interior_support`、`h.exists_bounds_of_isCompact` |
-| 内禀律的矩 | `hμ.intrinsic_integrable_exp_norm`、`hμ.intrinsic_integrable_norm_pow p` |
-| 环境/内禀协方差比较 | `Covariance.operator_coe_intrinsic μ hμ`、`Covariance.opNorm_operator_intrinsic μ hμ`、`Covariance.intrinsic_operator_inner_self_pos μ hμ`；前提 `hμ : MemLp id 2 μ` 显式 |
-| 仿射协方差预能量与常数 `C_P^aff` | 通用：`Energy.Euclidean.CovarianceGradientTest ν`、`Energy.Euclidean.covariancePreEnergy ν`、`Energy.Euclidean.covarianceRelaxation ν`；内禀律：`Energy.Affine.energy μ`、`Poincare.Affine.constant μ`、`Poincare.Affine.Holds μ C`；零维 `Poincare.Affine.constant_eq_zero_of_direction_eq_bot` |
-| 仿射预能量的对数凹契约 | `hμ.intrinsic_memLp_id_two`、`hμ.intrinsic_ae_hasGradientAt f`、`hμ.intrinsic_gradient_ae_eq_of_ae_eq`、`hμ.intrinsic_covarianceEnergy_eq_of_toL2_eq`；通用前提版本在 `Energy.Euclidean` |
-| 加权梯度算子与闭包 | 通用：`Energy.Euclidean.gradientOperator ν B hac`、`Energy.Euclidean.smoothCore ν`、`Energy.PreEnergy.ofLinearPMap T`、`Probability.LocallyDominates ν m`；对数凹：`hν.gradientOperator m B hi`、`hν.gradientOperator_isClosable m B hi`、`hμ.intrinsicGradientOperator m B`、`hμ.affine_energy_eq m B hB` |
-| 任意可闭算子的松弛 | `Energy.PreEnergy.sequentialRelaxation_ofLinearPMap_of_mem`、`_of_notMem`、`_toAmbient`、`_eq_normSqEnergy`；`Energy.PreEnergy.normSqEnergy S`；`Energy.IsClosable.closure_domRestrict_eq`；选择引理 `Energy.exists_mem_of_isClosed_of_frequently_norm_le` |
-| 协方差平方根与平移 | `Covariance.exists_sqrt μ`（通用 `exists_norm_sq_eq_inner_of_isSymmetric`）；`Energy.Euclidean.translateLaw ν c`、`translateL2 ν c`、`L2.variance_translateL2`、`Covariance.operator_translateLaw`、`covarianceRelaxation_translateLaw`、`Poincare.L2Energy.constant_covarianceRelaxation_translateLaw`；通用常数传输 `Poincare.L2Energy.constant_eq_of_linearIsometryEquiv` |
-| 线性等距传输 | `Energy.Euclidean.mapLaw ν L`、`mapL2 ν L`、`L2.variance_mapL2`、`Covariance.operator_mapLaw`、`Covariance.operator_map_linearIsometryEquiv`、`Covariance.operator_of_not_memLp`、`Energy.Euclidean.gradient_comp_linearIsometryEquiv`、`covarianceRelaxation_mapLaw`、`Poincare.L2Energy.constant_covarianceRelaxation_mapLaw` |
-| 一般线性等价传输与白化 | `Energy.Euclidean.mapEquivLaw ν T`、`mapEquivL2 ν T`、`L2.variance_mapEquivL2`、`Covariance.operator_mapEquivLaw`、`Covariance.operator_map_continuousLinearEquiv`、`Energy.Euclidean.gradient_comp_continuousLinearEquiv`、`covarianceRelaxation_mapEquivLaw`、`Poincare.L2Energy.constant_covarianceRelaxation_mapEquivLaw`、`Probability.affineSupport_mapEquivLaw`、`memLp_id_two_mapEquivLaw`、`integral_id_mapEquivLaw`；白化 `exists_whitening_of_isSymmetric`、`Covariance.exists_whitening μ hpos`；带因子的松弛比较 `Energy.PreEnergy.sequentialRelaxation_comp_le_mul` |
-| Lipschitz 梯度松弛与文献常数 | `Energy.Euclidean.lipschitzGradientRelaxation ν m hac`、`Poincare.L2Energy.holds_lipschitzGradientRelaxation_iff_literatureHolds`、`Poincare.constant_eq_lipschitzGradientRelaxation`、`Energy.Euclidean.covarianceRelaxation_eq_lipschitzGradientRelaxation`（单位协方差）、`covarianceRelaxation_le_opNorm_mul_lipschitzGradientRelaxation`、`KLS.literatureEnergy_eq_ofReal_integral_sq_norm_gradient` |
-| KLS 的三种表述 | `KLS.IsotropicBound K`、`KLS.CovarianceBound K`、`KLS.AffineBound K`（宇宙显式）；`KLS.affine_isotropic_reduction K`、`KLS.affineBound_of_isotropicBound`、`KLS.covarianceBound_of_affineBound`、`KLS.isotropicBound_of_covarianceBound`、`KLS.conjecture_of_affineBound`；对数凹：`hμ.exists_isotropic_literatureConstant_eq`、`hμ.literatureConstant_le_opNorm_mul_affine_constant`、`hν.mapEquivLaw T`、`hμ.of_continuousLinearEquiv_map` |
-| 环境平移 | 几何：`Probability.affineSupport_translateLaw`、`Probability.direction_affineSupport_translateLaw`、`Probability.translateDirectionEquiv μ b`、`Probability.translateShift μ b`、`Probability.intrinsicMeasure_translateLaw`；能量与常数（任意 Borel 律）：`Energy.Affine.exists_translateLaw_isometry μ b`、`Poincare.Affine.constant_translateLaw_ambient μ b`、`Energy.Euclidean.integral_id_translateLaw`；对数凹：`hμ.translateLaw b`、`hμ.memLp_id_two`、`hμ.integrable_id`、`hμ.integral_id_translateLaw_neg_integral` |
-| 仿射闭形式（对数凹） | `hμ.affine_denseRealization`、`hμ.affine_closedQuadratic`、`hμ.affine_agreesOnTests`、`hμ.affine_isSequentialCoreFor`、`hμ.affine_energy_eq_normSqEnergy m B hB`、`hμ.affine_constant_eq_normSqEnergy m B hB`；不需对数凹的 `Energy.Affine.energy_translateLaw μ c`、`Poincare.Affine.constant_translateLaw μ c`；核 `Energy.Euclidean.constantSmoothCore ν` |
+- `WeightedGradient.IsTest.memLp_apply`、`apply_add_ae`、`apply_smul_ae`。
+- `LocalSlope.apply`、`apply_const`，不再写 `LocalSlope.slope`。
+- `LipschitzApproximation.exists_smooth_weighted_L2`，不再重复 `approximation`。
+- `ConditionalFiber.energyAt` 是单个基点处的能量；`energy` 是积分后的能量。
+- `SmoothTest.linear`、`energy_linear`；`ProductVariance.decomposition`、`integral_le`。
 
-`Affine` 表示 CMH 路线的协方差加权前端：把内禀律上的全局 Lipschitz 测试按 `∫⟪Σ∇g,∇g⟫dν` 赋能量，
-再取序列松弛；这个名字本身不提供闭性、平移不变性或与 `Canonical` 的比较，闭形式与环境平移不变性由
-`hμ.affine_closedQuadratic`、`Poincare.Affine.constant_translateLaw_ambient` 等定理表达；`_translateLaw` 后缀指
-内禀律在方向空间内的平移，`_translateLaw_ambient` 指 `μ` 在环境空间 `E` 中的平移。
-`Canonical` 表示仓库选择的具体前端。其定义仍是：把原 L² 类送入内禀仿射支撑坐标，
-计算该坐标上的光滑梯度松弛，再拉回原空间。这个名字本身不提供 Cheeger、Dirichlet
-或谱隙识别。`Ambient` 表示在环境空间直接做光滑梯度松弛；`L2Energy` 接受能量参数。
-这三类对象的相等或比较仍通过已证明的定理表达。
+按数学含义去重：跨对象比较的另一侧、另一个算子或空间仍要标明。
+`WeightedGradient` 中关于普通 `gradient` 的辅助引理不能据此伪装成加权梯度结论；
+`pullbackEquiv` 的 `Equiv` 表示 L² 拉回构成等价，与底层空间的等价不同。
 
-## 规则
+比较定理的短名也不复述完整类型：两侧共有的 `relaxation`、`constant` 或 `holds`
+只写一次，目标使用可区分的短称；完整的数学前提保留在定理类型与文档中。例如
+`CovarianceGradient.relaxation_eq_lipschitz`、`relaxation_eq_ofLinearPMap`、
+`relaxation_le_mul_lipschitz`，以及 `SmoothTest.constant_eq_ambient`、
+`constant_eq_intrinsic`、`constant_eq_lipschitz`。
+乘法比较保留 `mul`，不把带系数的不等式命名成直接支配。
+详见[比较短名记录](decisions/2026-09-08-comparison-short-names.md)。
 
-- 让命名空间表达稳定的对象类别；局部名称用 `constant`、`Holds`、`energy` 和相应结论。
-  不把同一串构造限定词重复拼接到每个定理名中。
-- 性质专属的结论放入该性质的命名空间。对数凹结论使用 `KLS.LogConcave`，由证明
-  `hμ` 调用；需要的测度从证明推断。普通函数和比较仍保留清楚的参数。
-- 保留有数学作用的条件与方向，例如 `_of_finiteAt`、`Ioi`/`Iio`、`weighted`、
-  `compactSupport`、`L1`/`L2`、`ae`。不使用 `main`、`result`、`bound1` 或不透明缩写。
-- 以可读性和可检索性判断，不设置机械字符上限。一个较长但准确的名字可以保留。
-- 重命名时同步调用、Blueprint 声明锚点、公理 guards、当前指南和来源哈希；不增加
-  旧名兼容别名。历史 decisions/explorations 不改写，新记录给出映射和验证证据。
+## 能量、测试与最优常数
 
-## 本次全库检查的取舍
+| 数学对象 | 公共入口 | 承载空间与测试类 |
+| --- | --- | --- |
+| 光滑测试 Poincaré 不等式 | `Poincare.SmoothTest.Admissible`、`energy`、`Holds`、`constant` | 给定测度；全局 C∞、L²、梯度平方可积 |
+| 普通光滑梯度松弛 | `Energy.SmoothGradient.Test`、`preEnergy`、`relaxation` | 给定律的 L²；普通梯度权重 |
+| 环境普通梯度常数 | `Poincare.SmoothGradient.Ambient.Holds`、`constant` | 在环境空间直接松弛 |
+| 内在普通梯度能量和常数 | `Energy.SmoothGradient.Intrinsic.energy`；`Poincare.SmoothGradient.Intrinsic.Holds`、`constant` | 内在支撑的普通梯度松弛，拉回原律的 L² |
+| 外部加权梯度 | `Energy.WeightedGradient.apply B g`、`IsTest ν B g`、`operator ν B hac` | 给定律；外部选择的连续线性算子 B；不要求 B 是协方差因子 |
+| 普通 Lipschitz 梯度松弛 | `Energy.LipschitzGradient.relaxation ν m hac` | B = id 的全局 Lipschitz L² 测试松弛，保留与光滑测试类的区别 |
+| 协方差加权梯度松弛 | `Energy.CovarianceGradient.Test`、`density`、`preEnergy`、`relaxation` | 给定律；全局 Lipschitz、L²、协方差梯度密度可积 |
+| 内在协方差能量和常数 | `Energy.CovarianceGradient.Intrinsic.energy`；`Poincare.CovarianceGradient.Intrinsic.Holds`、`constant` | 留在 intrinsicMeasure 的 L²，不拉回环境 L² |
+| 局部斜率 | `Energy.LocalSlope.apply`、`energy`、`Admissible` | 点态局部斜率的平方积分；没有 1/2 因子 |
+| 局部斜率有限界 | `Poincare.LocalSlope.Holds ν C` | 给定坐标律 ν，未自动取内在律 |
+| 内在局部斜率最优常数 | `Poincare.LocalSlope.Intrinsic.constant μ` | 先取 intrinsicMeasure μ，再对有限非负常数取下确界 |
+| 任意 L² 能量的优化器 | `Poincare.L2Energy.Holds μ Q C`、`constant μ Q` | 能量 Q 显式；保留无限最优常数及零能量边界 |
 
-2026-09-07 扫描 `formalization/FunctionalInequalities/` 中 498 条具名公共定义、结构与
-定理声明，并检查 `solutions/`、`examples/` 及 Blueprint 的调用。本次迁移 29 个公共
-声明，主要覆盖所选能量、环境/所选常数比较、通用 L² 优化器和对数凹常数比较。
+两种测试对象均支持 `f.energy` 和 `f.toL2`；加权测试性质支持 `hf.memLp`。
+不要把数学上不同的测试类、权重、承载空间或松弛构造合并。`ClosedQuadratic` 本身不包含
+Markov/Dirichlet 性质；普通梯度与局部斜率的最优常数比较不自动给出能量相等。
 
-| 检查区域 | 处理与理由 |
-| --- | --- |
-| `Poincare/Euclidean` 与内禀能量 | 重复完整构造名最严重，整理为上表入口 |
-| `Poincare/L2Energy`、`L2Comparison` | 通用前缀重复出现在复合定理中，统一使用 `L2Energy` 命名空间 |
-| `Energy/Relaxation/` 与 `FormCore` | 已按 `PreEnergy`、`QuadraticPreEnergy`、恢复或核心性质分组；保留 `sequentialRelaxation` 与有限性条件，区分一般能量与具体松弛 |
-| `Energy/Euclidean/LipschitzApproximation` | 保留光滑性、紧支撑、加权、L¹/L² 等区别；它们对应不同结论 |
-| `Poincare/Gaussian` | 保留半直线方向、密度权重、平方和导数等信息，防止混淆实际积分 |
-| `Probability` 与 `KLS/LogConcave*` | 支撑、内禀坐标、闭球、最终成立与内部非空等信息都有实际作用；不按长度截短 |
-| 张量化、运输、协方差、L² 和抽象优化 | 名称已按对象或操作组织，未发现需要同类批量迁移的重复构造串 |
-| `solutions` 证书名、模块路径与 Blueprint 标签 | 保留与节点一一对应的稳定入口；只迁移内部所引用的公共声明 |
+## 运输与协方差
 
-精确的旧名/新名映射、三处参数推断调整及本地验证记录见
-[命名整理决策](decisions/2026-09-07-public-naming-cleanup.md)。
+- 概率律推前：`Probability.translateLaw`、`mapLinearIsometryEquiv`、
+  `mapContinuousLinearEquiv`。一般线性等价与欧氏等距的条件在名称中明确区分。
+- L² 函数类拉回：`L2.Translation`、`L2.LinearIsometry`、`L2.ContinuousLinearEquiv`
+  各自提供 `pullback`、`pullbackInv`、`pullbackEquiv`。拉回从图像律的 L² 到源律的 L²；
+  `pullbackInv` 沿逆映射复合。实现复用 Mathlib 的 `Lp.compMeasurePreservingₗᵢ`。
+- 能量不变性在 `Energy.CovarianceGradient`；对应最优常数不变性在
+  `Poincare.CovarianceGradient`。
+- `Poincare.CovarianceGradient.Intrinsic.constant_translateLaw` 是直接的环境律平移不变性。
+  `constant_eq_translate_intrinsicMeasure` 比较内在律平移后的最优常数表达。
+- `Covariance.exists_inner_eq_norm_sq` 与 `exists_intrinsic_inner_eq_norm_sq` 只给出
+  `∃ B, ∀ v, ⟪Σ v,v⟫ = ‖B v‖²`。名称不声称 B² = Σ、自伴、正性或唯一性。
+  白化仍是自伴 W 满足 WΣW = id，不升级为正的唯一逆平方根。
+
+## 性质证明与局部名称
+
+对数凹推论留在 `KLS.LogConcave`，从证明推断测度，支持：
+
+```lean
+hμ.intrinsicSmooth_constant_eq_localSlope
+hμ.intrinsicCovariance_closedQuadratic
+hμ.intrinsicCovariance_energy_eq_operator m B hB
+hμ.intrinsicCovariance_constant_eq_normSq m B hB
+hμ.intrinsic_frontier_support_eq_zero
+```
+
+`ConditionalFiber.Nondegenerate` 的定义要求正交基点、有限二阶矩和非零方差；
+`energyWithKernel` 明示外部提供的 kernel。`Probability.memLp_id_two_iff_lintegral_enorm_rpow_lt_top`
+统一实数律和一般 Borel 范数空间上的二阶矩判据。
+`LipschitzApproximation.kernelDerivativeMass` 是核的导数范数积分相对于核质量的归一化值。
+
+## 作用域和参数
+
+1. 先组织微分性质，再引入测度/L²、Haar/绝对连续和对数凹假设。局部 section 按所需
+   结构分组；不在文件头堆积强假设后关闭 `unusedSectionVars`。
+2. 从对象或性质证明可推断的测度和测试函数用隐式参数。构造所选择的测度、权重算子和
+   必要参考测度保持显式；结构用实例；关键数学前提保留明确证明参数。
+3. `variable (hμ : LogConcave μ)` 不会仅因证明体引用 hμ 而把它放入 theorem statement。
+   在 theorem 头明确写出，或使用局部 `include hμ in`，并检查 elaborated 参数。
+4. 不同一般性混排时允许局部 `omit ... in`；检查保持开启。删除冗余实例、参数显隐或
+   次序变化、引理合并分别记录并验证，不能算作纯重命名。
+5. 私有的一次性证明辅助使用 `private`。`open`、notation、include、实例和 option
+   保持局部。不要用打包全部假设的新结构或 typeclass 缩短变量行。
+6. 保留有数学作用的 weighted、L¹/L²、ae、紧支撑、边界、有限性和方向限定。
+   Borel 集与 Borell 表示是不同概念。名称负责定位，类型和文档给出完整条件与结论，
+   不把整条定理复述成名称。
+
+重命名同步所有消费者、Blueprint 锚点、guards、快照及当前文档。历史
+ decisions/explorations 不改写；经审查后更新 golden 与来源哈希，不提供旧名兼容别名。
+
+## 文件与声明作用域
+
+文件按主要数学对象归属：光滑测试前端在 `Poincare/SmoothTest/`，局部斜率和梯度的关系在
+`Energy/LocalSlope/Gradient.lean`。对数凹推论用 `LogConcave/{Covariance,Translation,ClosedForm,WeightedGradient,Isotropic,Poincare}`。
+同一对象的声明置于对应 namespace；声明头只写短名，不用 `_root_.FunctionalInequalities.…`
+绕过错误的外层 namespace。跨对象比较在共同父 namespace 下分组；不为缩短调用增加别名。
+
+例如 `Energy.LocalSlope` 中写 `theorem apply_eq_norm_gradient`。对数凹证明仍可调用
+`hμ.intrinsicCovariance_closedQuadratic`、`hμ.intrinsicSmooth_constant_eq_localSlope`、
+`hμ.intrinsicWeightedOperator m B`；`weighted` 保留任意外部权重 B 的含义。
+完整改动见[全库命名整理](decisions/2026-09-08-library-naming.md)。

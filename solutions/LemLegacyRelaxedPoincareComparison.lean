@@ -1,4 +1,4 @@
-import FunctionalInequalities.Poincare.Euclidean.LegacyComparison
+import FunctionalInequalities.Poincare.SmoothTest.Comparison
 import FunctionalInequalities.Poincare.Gaussian.Real
 
 /-!
@@ -26,33 +26,33 @@ theorem certificate {α E : Type*} [MeasurableSpace α]
       Poincare.L2Energy.Holds ν P.sequentialRelaxation C) ∧
     (Poincare.TestFamily.ofPreEnergy ν P).constant =
       Poincare.L2Energy.constant ν P.sequentialRelaxation ∧
-    (∀ C : NNReal, Poincare.Holds (μ : Measure E) (C : ℝ) ↔
-      (Poincare.TestFamily.ofPreEnergy μ (Energy.Euclidean.smoothGradientPreEnergy μ)).Holds C) ∧
-    (∀ C : NNReal, Poincare.Holds (μ : Measure E) (C : ℝ) ↔
-      Poincare.Ambient.Holds μ C) ∧
-    Poincare.constant (μ : Measure E) = Poincare.Ambient.constant μ ∧
-    (∀ C : NNReal, Poincare.Holds (μ : Measure E) (C : ℝ) ↔
-      Poincare.Canonical.Holds μ C) ∧
-    Poincare.constant (μ : Measure E) =
-      Poincare.Canonical.constant μ :=
+    (∀ C : NNReal, FunctionalInequalities.Poincare.SmoothTest.Holds (μ : Measure E) (C : ℝ) ↔
+      (Poincare.TestFamily.ofPreEnergy μ (FunctionalInequalities.Energy.SmoothGradient.preEnergy μ)).Holds C) ∧
+    (∀ C : NNReal, FunctionalInequalities.Poincare.SmoothTest.Holds (μ : Measure E) (C : ℝ) ↔
+      FunctionalInequalities.Poincare.SmoothGradient.Ambient.Holds μ C) ∧
+    FunctionalInequalities.Poincare.SmoothTest.constant (μ : Measure E) = FunctionalInequalities.Poincare.SmoothGradient.Ambient.constant μ ∧
+    (∀ C : NNReal, FunctionalInequalities.Poincare.SmoothTest.Holds (μ : Measure E) (C : ℝ) ↔
+      FunctionalInequalities.Poincare.SmoothGradient.Intrinsic.Holds μ C) ∧
+    FunctionalInequalities.Poincare.SmoothTest.constant (μ : Measure E) =
+      FunctionalInequalities.Poincare.SmoothGradient.Intrinsic.constant μ :=
   ⟨Poincare.TestFamily.holds_ofPreEnergy_iff ν P,
     Poincare.TestFamily.constant_ofPreEnergy_eq ν P,
-    Poincare.Euclidean.holds_iff_preEnergy μ,
-    Poincare.Euclidean.holds_iff_ambient μ,
-    Poincare.Euclidean.constant_eq_ambient μ,
-    Poincare.Euclidean.holds_iff_canonical μ,
-    Poincare.Euclidean.constant_eq_canonical μ⟩
+    FunctionalInequalities.Poincare.SmoothTest.holds_iff_preEnergy μ,
+    FunctionalInequalities.Poincare.SmoothTest.holds_iff_ambient μ,
+    FunctionalInequalities.Poincare.SmoothTest.constant_eq_ambient μ,
+    FunctionalInequalities.Poincare.SmoothTest.holds_iff_intrinsic μ,
+    FunctionalInequalities.Poincare.SmoothTest.constant_eq_intrinsic μ⟩
 
 end Solutions.LemLegacyRelaxedPoincareComparison
 
 #check @Poincare.TestFamily.ofPreEnergy
 #check @Poincare.TestFamily.holds_ofPreEnergy_iff
 #check @Poincare.TestFamily.constant_ofPreEnergy_eq
-#check @Poincare.Euclidean.holds_iff_preEnergy
-#check @Poincare.Euclidean.holds_iff_ambient
-#check @Poincare.Euclidean.constant_eq_ambient
-#check @Poincare.Euclidean.holds_iff_canonical
-#check @Poincare.Euclidean.constant_eq_canonical
+#check @FunctionalInequalities.Poincare.SmoothTest.holds_iff_preEnergy
+#check @FunctionalInequalities.Poincare.SmoothTest.holds_iff_ambient
+#check @FunctionalInequalities.Poincare.SmoothTest.constant_eq_ambient
+#check @FunctionalInequalities.Poincare.SmoothTest.holds_iff_intrinsic
+#check @FunctionalInequalities.Poincare.SmoothTest.constant_eq_intrinsic
 
 -- Arbitrary measurable probabilities and concrete pre-energies, without density or quadraticity.
 #check (fun {α : Type*} [MeasurableSpace α] (μ : ProbabilityMeasure α)
@@ -71,29 +71,29 @@ private def emptyPreEnergy (μ : ProbabilityMeasure ℝ) :
 
 -- Proper affine supports and dimension zero require no density or second-moment premise.
 #check (fun (d : ℕ) (μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin d))) (C : NNReal) ↦
-  Poincare.Euclidean.holds_iff_canonical μ C)
+  FunctionalInequalities.Poincare.SmoothTest.holds_iff_intrinsic μ C)
 #check (fun (μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin 0))) ↦
-  Poincare.Euclidean.constant_eq_canonical μ)
+  FunctionalInequalities.Poincare.SmoothTest.constant_eq_intrinsic μ)
 
 -- Transfer the accepted Gaussian inequality through the proved bridge.
 #check (fun (m : ℝ) (v : NNReal) ↦
-  (Poincare.Euclidean.holds_iff_canonical
+  (FunctionalInequalities.Poincare.SmoothTest.holds_iff_intrinsic
     (Probability.ofMeasure (ProbabilityTheory.gaussianReal m v)) v).mp
-      (Poincare.holds_gaussianReal m v))
+      (FunctionalInequalities.Poincare.SmoothTest.holds_gaussianReal m v))
 
 -- Sharp values transfer by equality, including the zero-variance Dirac case.
 #check (fun (m : ℝ) (v : NNReal) ↦
-  (Poincare.Euclidean.constant_eq_canonical
+  (FunctionalInequalities.Poincare.SmoothTest.constant_eq_intrinsic
     (Probability.ofMeasure (ProbabilityTheory.gaussianReal m v))).symm.trans
-      (Poincare.constant_gaussianReal m v))
+      (FunctionalInequalities.Poincare.SmoothTest.constant_gaussianReal m v))
 #check (fun (m : ℝ) ↦
-  (Poincare.Euclidean.constant_eq_canonical
+  (FunctionalInequalities.Poincare.SmoothTest.constant_eq_intrinsic
     (Probability.ofMeasure (ProbabilityTheory.gaussianReal m 0))).symm.trans
-      (Poincare.constant_gaussianReal m 0))
+      (FunctionalInequalities.Poincare.SmoothTest.constant_gaussianReal m 0))
 
 -- Infinite values remain extended values throughout the comparison.
-#check (fun (μ : ProbabilityMeasure ℝ) (h : Poincare.constant (μ : Measure ℝ) = ⊤) ↦
-  (Poincare.Euclidean.constant_eq_canonical μ).symm.trans h)
+#check (fun (μ : ProbabilityMeasure ℝ) (h : FunctionalInequalities.Poincare.SmoothTest.constant (μ : Measure ℝ) = ⊤) ↦
+  (FunctionalInequalities.Poincare.SmoothTest.constant_eq_intrinsic μ).symm.trans h)
 
 /--
 info: 'Solutions.LemLegacyRelaxedPoincareComparison.certificate'

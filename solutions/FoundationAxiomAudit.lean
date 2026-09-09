@@ -41,11 +41,11 @@ info: 'FunctionalInequalities.Energy.PreEnergy.Quadratic.closedQuadratic_sequent
 #print axioms FunctionalInequalities.Energy.PreEnergy.Quadratic.closedQuadratic_sequentialRelaxation
 
 /--
-info: 'FunctionalInequalities.Energy.Euclidean.smoothGradientRelaxation_closedQuadratic'
+info: 'FunctionalInequalities.Energy.SmoothGradient.relaxation_closedQuadratic'
   depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms FunctionalInequalities.Energy.Euclidean.smoothGradientRelaxation_closedQuadratic
+#print axioms FunctionalInequalities.Energy.SmoothGradient.relaxation_closedQuadratic
 
 /--
 info: 'FunctionalInequalities.Energy.Euclidean.intrinsicL2Equiv'
@@ -55,18 +55,18 @@ info: 'FunctionalInequalities.Energy.Euclidean.intrinsicL2Equiv'
 #print axioms FunctionalInequalities.Energy.Euclidean.intrinsicL2Equiv
 
 /--
-info: 'FunctionalInequalities.Energy.Canonical.closedQuadratic'
+info: 'FunctionalInequalities.Energy.SmoothGradient.Intrinsic.closedQuadratic'
   depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms FunctionalInequalities.Energy.Canonical.closedQuadratic
+#print axioms FunctionalInequalities.Energy.SmoothGradient.Intrinsic.closedQuadratic
 
 /--
-info: 'FunctionalInequalities.Poincare.Canonical.holds_iff_constant_le'
+info: 'FunctionalInequalities.Poincare.SmoothGradient.Intrinsic.holds_iff_constant_le'
   depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms FunctionalInequalities.Poincare.Canonical.holds_iff_constant_le
+#print axioms FunctionalInequalities.Poincare.SmoothGradient.Intrinsic.holds_iff_constant_le
 
 /--
 info: 'FunctionalInequalities.L2.continuous_variance'
@@ -97,74 +97,74 @@ info: 'FunctionalInequalities.Poincare.TestFamily.constant_ofPreEnergy_eq'
 #print axioms FunctionalInequalities.Poincare.TestFamily.constant_ofPreEnergy_eq
 
 /--
-info: 'FunctionalInequalities.Energy.Euclidean.SmoothGradientTest.exists_intrinsic_restriction'
+info: 'FunctionalInequalities.Energy.SmoothGradient.Test.exists_intrinsic_restriction'
   depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms FunctionalInequalities.Energy.Euclidean.SmoothGradientTest.exists_intrinsic_restriction
+#print axioms FunctionalInequalities.Energy.SmoothGradient.Test.exists_intrinsic_restriction
 
 /--
-info: 'FunctionalInequalities.Energy.Euclidean.SmoothGradientTest.exists_ambient_extension'
+info: 'FunctionalInequalities.Energy.SmoothGradient.Test.exists_ambient_extension'
   depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms FunctionalInequalities.Energy.Euclidean.SmoothGradientTest.exists_ambient_extension
+#print axioms FunctionalInequalities.Energy.SmoothGradient.Test.exists_ambient_extension
 
 /--
-info: 'FunctionalInequalities.Energy.Euclidean.smoothGradientRelaxation_eq_canonical'
+info: 'FunctionalInequalities.Energy.SmoothGradient.relaxation_eq_intrinsic_energy'
   depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms FunctionalInequalities.Energy.Euclidean.smoothGradientRelaxation_eq_canonical
+#print axioms FunctionalInequalities.Energy.SmoothGradient.relaxation_eq_intrinsic_energy
 
 /--
-info: 'FunctionalInequalities.Poincare.Ambient.holds_iff_canonical'
+info: 'FunctionalInequalities.Poincare.SmoothGradient.Ambient.holds_iff_intrinsic'
   depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms FunctionalInequalities.Poincare.Ambient.holds_iff_canonical
+#print axioms FunctionalInequalities.Poincare.SmoothGradient.Ambient.holds_iff_intrinsic
 
 /--
-info: 'FunctionalInequalities.Poincare.Ambient.constant_eq_canonical'
+info: 'FunctionalInequalities.Poincare.SmoothGradient.Ambient.constant_eq_intrinsic'
   depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms FunctionalInequalities.Poincare.Ambient.constant_eq_canonical
+#print axioms FunctionalInequalities.Poincare.SmoothGradient.Ambient.constant_eq_intrinsic
 
 /--
-info: 'FunctionalInequalities.Poincare.Euclidean.holds_iff_preEnergy'
+info: 'FunctionalInequalities.Poincare.SmoothTest.holds_iff_preEnergy'
   depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms FunctionalInequalities.Poincare.Euclidean.holds_iff_preEnergy
+#print axioms FunctionalInequalities.Poincare.SmoothTest.holds_iff_preEnergy
 
 /--
-info: 'FunctionalInequalities.Poincare.Euclidean.holds_iff_ambient'
+info: 'FunctionalInequalities.Poincare.SmoothTest.holds_iff_ambient'
   depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms FunctionalInequalities.Poincare.Euclidean.holds_iff_ambient
+#print axioms FunctionalInequalities.Poincare.SmoothTest.holds_iff_ambient
 
 /--
-info: 'FunctionalInequalities.Poincare.Euclidean.constant_eq_ambient'
+info: 'FunctionalInequalities.Poincare.SmoothTest.constant_eq_ambient'
   depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms FunctionalInequalities.Poincare.Euclidean.constant_eq_ambient
+#print axioms FunctionalInequalities.Poincare.SmoothTest.constant_eq_ambient
 
 /--
-info: 'FunctionalInequalities.Poincare.Euclidean.holds_iff_canonical'
+info: 'FunctionalInequalities.Poincare.SmoothTest.holds_iff_intrinsic'
   depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms FunctionalInequalities.Poincare.Euclidean.holds_iff_canonical
+#print axioms FunctionalInequalities.Poincare.SmoothTest.holds_iff_intrinsic
 
 /--
-info: 'FunctionalInequalities.Poincare.Euclidean.constant_eq_canonical'
+info: 'FunctionalInequalities.Poincare.SmoothTest.constant_eq_intrinsic'
   depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms FunctionalInequalities.Poincare.Euclidean.constant_eq_canonical
+#print axioms FunctionalInequalities.Poincare.SmoothTest.constant_eq_intrinsic
 
 /--
 info: 'FunctionalInequalities.Energy.PreEnergy.le_sequentialRelaxation_of_lowerSemicontinuous'

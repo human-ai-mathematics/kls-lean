@@ -18,7 +18,7 @@ Proved here:
    annihilates `Vᗮ`, because the barycenter lies in the affine support and centered samples lie
    in `V` almost surely;
 2. `Covariance.operator_coe_intrinsic`: on `V` the ambient operator is the intrinsic covariance
-   operator `Covariance.operator ν`, through `covarianceBilin_intrinsic`, which identifies the two
+   operator `Covariance.operator ν`, through `bilin_intrinsic`, which identifies the two
    bilinear forms by transporting the law along the translation and the orthogonal projection;
 3. `Covariance.opNorm_operator_intrinsic`: both operators have the same operator norm;
 4. `Covariance.intrinsic_operator_inner_self_pos`: the intrinsic covariance is positive definite,
@@ -41,6 +41,7 @@ namespace FunctionalInequalities.Probability
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
   [MeasurableSpace E] [BorelSpace E] [SecondCountableTopology E] [FiniteDimensional ℝ E]
 
+omit [CompleteSpace E] [BorelSpace E] in
 /-- Intrinsic coordinates are, almost everywhere, the orthogonal projection of the displacement
 from the chosen support point onto the direction space. -/
 theorem intrinsicMap_ae_eq_orthogonalProjection (μ : ProbabilityMeasure E) :
@@ -55,12 +56,14 @@ theorem intrinsicMap_ae_eq_orthogonalProjection (μ : ProbabilityMeasure E) :
   rw [← Submodule.starProjection_apply, Submodule.starProjection_eq_self_iff.mpr hdir]
   rfl
 
+omit [BorelSpace E] in
 /-- The barycenter of a probability law with finite second moment lies in its affine support. -/
 theorem integral_id_mem_affineSupport (μ : ProbabilityMeasure E)
     (hμ : MemLp id 2 (μ : Measure E)) : (∫ x, x ∂(μ : Measure E)) ∈ affineSupport μ :=
   (affineSupport μ).convex.integral_mem (isClosed_affineSupport μ) (ae_mem_affineSupport μ)
     (hμ.integrable (by norm_num))
 
+omit [CompleteSpace E] in
 /-- The intrinsic law keeps a finite second moment. -/
 theorem memLp_id_two_intrinsicMeasure (μ : ProbabilityMeasure E)
     (hμ : MemLp id 2 (μ : Measure E)) :
@@ -101,7 +104,7 @@ theorem operator_apply_eq_zero_of_mem_orthogonal (μ : ProbabilityMeasure E)
 
 /-- The ambient covariance bilinear form restricted to the direction space is the covariance
 bilinear form of the intrinsic law. -/
-theorem covarianceBilin_intrinsic (μ : ProbabilityMeasure E) (hμ : MemLp id 2 (μ : Measure E))
+theorem bilin_intrinsic (μ : ProbabilityMeasure E) (hμ : MemLp id 2 (μ : Measure E))
     (v w : (affineSupport μ).direction) :
     covarianceBilin (intrinsicMeasure μ : Measure (affineSupport μ).direction) v w =
       covarianceBilin (μ : Measure E) v w := by
@@ -141,7 +144,7 @@ theorem operator_coe_intrinsic (μ : ProbabilityMeasure E) (hμ : MemLp id 2 (μ
     _ = covarianceBilin (μ : Measure E) v (P y) := by
         rw [covarianceBilin_comm (v : E) (y - P y), ← operator_inner (μ : Measure E) (y - P y) v,
           operator_apply_eq_zero_of_mem_orthogonal μ hμ hperp, inner_zero_left, add_zero]
-    _ = covarianceBilin ν v (P y) := (covarianceBilin_intrinsic μ hμ v (P y)).symm
+    _ = covarianceBilin ν v (P y) := (bilin_intrinsic μ hμ v (P y)).symm
     _ = inner ℝ (operator ν v) (P y) := (operator_inner _ _ _).symm
     _ = inner ℝ (operator ν v : E) (P y : E) := rfl
     _ = inner ℝ (operator ν v : E) y := by
@@ -176,6 +179,7 @@ theorem opNorm_operator_intrinsic (μ : ProbabilityMeasure E) (hμ : MemLp id 2 
       _ ≤ ‖operator ν‖ * ‖y‖ :=
           mul_le_mul_of_nonneg_left ((affineSupport μ).direction.norm_orthogonalProjectionOnto_apply_le y) (norm_nonneg _)
 
+omit [CompleteSpace E] in
 /-- The intrinsic covariance operator is positive definite on the direction space. -/
 theorem intrinsic_operator_inner_self_pos (μ : ProbabilityMeasure E)
     (hμ : MemLp id 2 (μ : Measure E)) {v : (affineSupport μ).direction} (hv : v ≠ 0) :

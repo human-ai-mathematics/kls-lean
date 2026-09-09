@@ -272,3 +272,22 @@ theorem variance_toLp (μ : ProbabilityMeasure α) {f : α → ℝ}
     (ProbabilityTheory.variance_congr hf.coeFn_toLp)
 
 end FunctionalInequalities.L2
+
+namespace FunctionalInequalities.L2
+
+section NormSquare
+
+variable {V : Type*} [MeasurableSpace V]
+
+/-- The `L²` norm squared of a square-integrable function is the integral of its squared norm. -/
+theorem norm_toLp_sq {W : Type*} [NormedAddCommGroup W] [InnerProductSpace ℝ W]
+    {μ : Measure V} {u : V → W} (hu : MemLp u 2 μ) :
+    ‖hu.toLp u‖ ^ 2 = ∫ x, ‖u x‖ ^ 2 ∂μ := by
+  rw [← real_inner_self_eq_norm_sq, L2.inner_def]
+  refine integral_congr_ae ?_
+  filter_upwards [hu.coeFn_toLp] with x hx
+  rw [hx, real_inner_self_eq_norm_sq]
+
+end NormSquare
+
+end FunctionalInequalities.L2

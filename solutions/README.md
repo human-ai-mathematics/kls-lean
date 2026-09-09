@@ -35,11 +35,11 @@ Each proved node has exactly one named `certificate`, directly importing the reu
 The former `Project/` forwarding layer has been removed. Concrete specializations are checked
 with typed `#check` applications rather than duplicate public theorems.
 
-- `LemLinearTestLower.lean` directly combines `Poincare.rayleigh_le_constant` and
+- `LemLinearTestLower.lean` directly combines `Poincare.SmoothTest.rayleigh_le_constant` and
   `Covariance.lambdaMax_le_constant` into the Issue #2 Euclidean statement, retaining the finite
   second-moment assumption and the zero-dimensional case.
-- `LemPoincareTensorization.lean` directly combines `Poincare.Holds.prod` and
-  `Poincare.constant_prod_le` into the Issue #6 Hilbert statement. A typed application checks
+- `LemPoincareTensorization.lean` directly combines `Poincare.SmoothTest.Holds.prod` and
+  `Poincare.SmoothTest.constant_prod_le` into the Issue #6 Hilbert statement. A typed application checks
   Euclidean factors of arbitrary dimensions, including zero.
 - `LemPoincareFiniteTensorization.lean` contains
   `Solutions.LemPoincareFiniteTensorization.certificate`, directly packaging the Issue #7
@@ -78,8 +78,8 @@ axiom guards. The full Borell density/moment theorem remains separate; read the
 [general proof record](../research/decisions/2026-09-06-general-logconcave-comparison.md).
 
 [`ThmSmoothLipschitzConstantEquivalence.lean`](ThmSmoothLipschitzConstantEquivalence.lean)
-packages eight proved interfaces from `KLS/LocalSlopeGradient.lean` and
-`Poincare/Euclidean/LiteratureComparison.lean`. The pointwise and almost-everywhere slope identities
+packages eight proved interfaces from `Energy/LocalSlope/Gradient.lean` and
+`Poincare/LocalSlope/SmoothTestComparison.lean`. The pointwise and almost-everywhere slope identities
 feed energy/domain identification and the finite-constant and extended-optimum comparisons.
 The final comparison assumes intrinsic absolute continuity. The node is
 `proved / checked_by: lean`; all eight components and the certificate have default-build
@@ -187,7 +187,7 @@ The five affine covariance checks (`affine_constant_unfold`, `affine_test_fields
 law at the sequential relaxation of the covariance pre-energy, the test class is exactly globally
 Lipschitz, `L²` and integrable `⟪Σ ∇g, ∇g⟫`, the energy is that real integral without a factor
 one half, and dimension zero (including a Dirac law in `ℝ`) gives constant zero. Axiom guards also
-cover the four log-concave contracts in `KLS/LogConcave/AffineCovariance.lean` and the
+cover the four log-concave contracts in `KLS/LogConcave/Covariance.lean` and the
 zero-dimensional theorem. The definition node carries `\leanok`; it is not a ledger theorem.
 
 ## Borell density representation certificate
@@ -214,7 +214,7 @@ and closable; every core between the smooth compactly supported classes and the 
 particular `ℝ + C_c^∞`) has the same closure; and the sequential relaxation of `‖B ∇g‖²` equals
 `‖T̄ f‖²` on the domain of the closure and `⊤` outside it. Typed applications cover the intrinsic
 law of every log-concave law on `EuclideanSpace ℝ (Fin n)`, dimension zero (zero operator, full
-domain) and the identity with `Energy.Affine.energy` for every square root `B` of the intrinsic
+domain) and the identity with `Energy.CovarianceGradient.Intrinsic.energy` for every square root `B` of the intrinsic
 covariance. The certificate and eleven reusable declarations carry default-build axiom guards.
 Read [the record](../research/decisions/2026-09-08-covariance-core-closure.md).
 
@@ -222,12 +222,12 @@ Read [the record](../research/decisions/2026-09-08-covariance-core-closure.md).
 
 [`ThmAffineCovarianceRelaxationClosed.lean`](ThmAffineCovarianceRelaxationClosed.lean) certifies
 `thm:affine-covariance-relaxation-closed`. For every log-concave law its sole `certificate`
-packages: dense realization of the affine covariance pre-energy; `Energy.Affine.energy μ` is a
+packages: dense realization of the affine covariance pre-energy; `Energy.CovarianceGradient.Intrinsic.energy μ` is a
 closed quadratic form; the globally Lipschitz tests are a sequential core (raw energy preserved);
 translating the intrinsic law by any vector preserves the covariance operator and gives an `L²`
 isometry preserving variance, relaxation and optimal constant; and for a square root `B` of the
 intrinsic covariance the affine relaxation is the squared-norm energy of the closure of `B ∇` on the
-core `ℝ + C_c^∞`, with `Poincare.Affine.constant μ` its optimal constant. Typed applications cover
+core `ℝ + C_c^∞`, with `Poincare.CovarianceGradient.Intrinsic.constant μ` its optimal constant. Typed applications cover
 every `EuclideanSpace ℝ (Fin n)` and dimension zero. The certificate and ten reusable declarations
 carry default-build axiom guards. Read
 [the record](../research/decisions/2026-09-08-affine-covariance-relaxation-closed.md).
@@ -236,10 +236,10 @@ carry default-build axiom guards. Read
 
 [`LemAffinePoincareTranslationInvariance.lean`](LemAffinePoincareTranslationInvariance.lean)
 certifies `lem:affine-poincare-translation-invariance`. For every log-concave law `μ` and every
-ambient vector `b` its sole `certificate` packages: the translate `Energy.Euclidean.translateLaw μ b`
+ambient vector `b` its sole `certificate` packages: the translate `Probability.translateLaw μ b`
 is log-concave; its ambient covariance operator and the direction of its affine support are those of
 `μ`; a linear isometric equivalence of the two intrinsic `L²` spaces preserves variance and
-intertwines the affine covariance relaxations; `Poincare.Affine.constant` is unchanged; `μ` has a
+intertwines the affine covariance relaxations; `Poincare.CovarianceGradient.Intrinsic.constant` is unchanged; `μ` has a
 finite ambient second moment; and translating by the negative barycenter gives zero mean. Typed
 applications cover centering on every `EuclideanSpace ℝ (Fin n)` and dimension zero. The certificate
 and twelve reusable declarations carry default-build axiom guards. Read

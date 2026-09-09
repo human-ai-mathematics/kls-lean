@@ -1,0 +1,42 @@
+import FunctionalInequalities.Energy.SmoothGradient.Intrinsic.Comparison
+import FunctionalInequalities.Poincare.SmoothGradient.Intrinsic
+import FunctionalInequalities.Poincare.SmoothGradient.Ambient
+
+/-!
+# Ambient and intrinsic-affine Poincaré comparisons
+
+Proved optimizer consequences for `lem:ambient-intrinsic-poincare-comparison`.
+The two functionals are represented on the same original `L²(μ)` space, so the variance is
+identical and energy equality identifies both their finite domains and their optimal constants.
+
+Source: Blueprint `cor:ambient-intrinsic-constant-equality` and its energy-level predecessor.
+Neither raw/core agreement nor a literature or Cheeger-energy identification is a premise.
+-/
+
+noncomputable section
+
+open MeasureTheory
+
+namespace FunctionalInequalities.Poincare.SmoothGradient.Ambient
+
+universe u
+
+variable {E : Type u} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
+  [MeasurableSpace E] [BorelSpace E] [SecondCountableTopology E] [FiniteDimensional ℝ E]
+  (μ : ProbabilityMeasure E)
+
+/-- Ambient and intrinsic-affine inequalities have the same valid finite constants.
+Source: exact equality of the relaxed energies on their common ambient carrier. -/
+theorem holds_iff_intrinsic (C : NNReal) :
+    Holds μ C ↔ Poincare.SmoothGradient.Intrinsic.Holds μ C := by
+  unfold Holds Poincare.SmoothGradient.Intrinsic.Holds
+  rw [Energy.SmoothGradient.relaxation_eq_intrinsic_energy]
+
+/-- The ambient and selected optima agree in `ENNReal`, with no finiteness assumption.
+Source: Blueprint `cor:ambient-intrinsic-constant-equality`. -/
+theorem constant_eq_intrinsic :
+    constant μ = Poincare.SmoothGradient.Intrinsic.constant μ := by
+  unfold constant Poincare.SmoothGradient.Intrinsic.constant
+  rw [Energy.SmoothGradient.relaxation_eq_intrinsic_energy]
+
+end FunctionalInequalities.Poincare.SmoothGradient.Ambient

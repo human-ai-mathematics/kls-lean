@@ -1,5 +1,5 @@
 import FunctionalInequalities.Poincare.Gaussian.Hardy
-import FunctionalInequalities.Poincare.LinearTest
+import FunctionalInequalities.Poincare.SmoothTest.Linear
 
 /-!
 # Sharp one-dimensional Gaussian Poincaré constant
@@ -12,7 +12,7 @@ finite-energy `Admissible` domain.
 The parameter `v : NNReal` is the variance, not its square root. Arbitrary means and the
 zero-variance Dirac law are explicit local extensions. The positive-variance upper bound is
 imported from `Gaussian.Hardy`; the identity test supplies sharpness through
-`Poincare.LinearTest`. The result does not assert a Sobolev-domain or spectral-gap
+`Poincare.SmoothTest.Linear`. The result does not assert a Sobolev-domain or spectral-gap
 identification, nor does it formalize the source's Bakry--Émery/LSI proof route.
 
 ## Main results
@@ -25,7 +25,7 @@ noncomputable section
 
 open MeasureTheory ProbabilityTheory
 
-namespace FunctionalInequalities.Poincare
+namespace FunctionalInequalities.Poincare.SmoothTest
 
 /-- Source: local zero-variance extension beyond the manuscript's positive-definite Gaussian
 family. Mathlib's `gaussianReal_zero_var` and `variance_dirac` give the inequality with constant
@@ -52,17 +52,17 @@ theorem holds_gaussianReal (m : ℝ) (v : NNReal) :
 
 /-- Source: the linear-test lower-bound argument in the
 [Gaussian covariance family](https://github.com/numina-functional-inequalities/kls-exploration/blob/cd4a894a0faf40c0180f80b1a31eec1fdb6cb576/modules/03-tier1-gaussian.tex#L24-L28).
-Use `variance_linearTest_le` at `1 : ℝ`, Mathlib's `memLp_id_gaussianReal`, and
+Use `variance_linear_le` at `1 : ℝ`, Mathlib's `memLp_id_gaussianReal`, and
 `variance_id_gaussianReal`. The test is the identity, whose energy is one, including for `v = 0`.
 Arbitrary means and zero variance are local extensions; no covariance eigenvalue theorem is needed. -/
 theorem Holds.gaussianReal_variance_le {m : ℝ} {v : NNReal} {C : ℝ}
     (h : Holds (gaussianReal m v) C) : (v : ℝ) ≤ C := by
   have hmem : MemLp (id : ℝ → ℝ) 2 (gaussianReal m v) :=
     memLp_id_gaussianReal' 2 (by norm_num)
-  have hlin := variance_linearTest_le h hmem (1 : ℝ)
-  have hid : linearTest (1 : ℝ) = id := by
+  have hlin := variance_linear_le h hmem (1 : ℝ)
+  have hid : linear (1 : ℝ) = id := by
     funext x
-    simp [linearTest]
+    simp [linear]
   rw [hid] at hlin
   simpa [variance_id_gaussianReal] using hlin
 
@@ -78,4 +78,4 @@ theorem constant_gaussianReal (m : ℝ) (v : NNReal) :
   have hvc : (v : ℝ) ≤ (C : ℝ) := hC.gaussianReal_variance_le
   exact_mod_cast hvc
 
-end FunctionalInequalities.Poincare
+end FunctionalInequalities.Poincare.SmoothTest

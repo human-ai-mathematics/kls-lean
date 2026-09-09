@@ -1,4 +1,4 @@
-import FunctionalInequalities.Poincare.Basic
+import FunctionalInequalities.Poincare.SmoothTest.Basic
 import Mathlib.Analysis.InnerProductSpace.ProdL2
 import Mathlib.Analysis.Normed.Lp.MeasurableSpace
 import Mathlib.Analysis.Calculus.ContDiff.Operations
@@ -28,7 +28,7 @@ noncomputable section
 open MeasureTheory ProbabilityTheory
 open scoped ContDiff
 
-namespace FunctionalInequalities.Poincare
+namespace FunctionalInequalities.Poincare.SmoothTest
 
 /-- The product law transported to the Hilbert product.
 Source: local encoding of Mathlib's `Measure.prod` through `WithLp.toLp 2`. -/
@@ -151,4 +151,4 @@ theorem norm_gradient_sq_prod {f : WithLp 2 (E × F) → ℝ} {x : E} {y : F}
 
 end Geometry
 
-end FunctionalInequalities.Poincare
+end FunctionalInequalities.Poincare.SmoothTest

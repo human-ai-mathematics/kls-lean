@@ -1,12 +1,12 @@
-import FunctionalInequalities.Poincare.Basic
+import FunctionalInequalities.Poincare.SmoothTest.Basic
 import FunctionalInequalities.Poincare.Foundation
-import FunctionalInequalities.Poincare.LinearTest
+import FunctionalInequalities.Poincare.SmoothTest.Linear
 import FunctionalInequalities.Poincare.Product.Tensorization
 import FunctionalInequalities.Poincare.Product.Reverse
 import FunctionalInequalities.Poincare.FiniteProduct.Tensorization
 import FunctionalInequalities.Poincare.Gaussian.Real
 import FunctionalInequalities.KLS.Statement
-import FunctionalInequalities.Poincare.Euclidean.LogConcaveComparison
+import FunctionalInequalities.KLS.LogConcave.Poincare
 import FunctionalInequalities.KLS.LogConcave.Borel
 import FunctionalInequalities.KLS.Isotropic
 import FunctionalInequalities.KLS.Isoperimetry
@@ -14,11 +14,11 @@ import FunctionalInequalities.KLS.ConditionalFiber
 import FunctionalInequalities.Poincare.Euclidean.RawEnergyObstruction
 import FunctionalInequalities.KLS.LogConcave.BorellRepresentation
 import FunctionalInequalities.Probability.IntrinsicCovariance
-import FunctionalInequalities.KLS.LogConcave.AffineCovariance
-import FunctionalInequalities.KLS.LogConcave.CovarianceClosure
-import FunctionalInequalities.KLS.LogConcave.AffineClosedForm
-import FunctionalInequalities.KLS.LogConcave.AffineTranslation
-import FunctionalInequalities.KLS.LogConcave.IsotropicReduction
+import FunctionalInequalities.KLS.LogConcave.Covariance
+import FunctionalInequalities.KLS.LogConcave.WeightedGradient
+import FunctionalInequalities.KLS.LogConcave.ClosedForm
+import FunctionalInequalities.KLS.LogConcave.Translation
+import FunctionalInequalities.KLS.LogConcave.Isotropic
 
 /-!
 # Functional inequalities
@@ -32,16 +32,16 @@ developments. Node certificates are compiled separately from `solutions/`.
 The compact/Borel log-concavity equivalence, the six conditional-fiber contracts, the Borell
 density-representative, local-bound and moment conclusions of
 `KLS/LogConcave/BorellRepresentation.lean`, and the ambient/intrinsic covariance comparison are
-proved. `Poincare.Affine.constant` implements the affine covariance Poincaré constant as a
+proved. `Poincare.CovarianceGradient.Intrinsic.constant` implements the affine covariance Poincaré constant as a
 definition, with its log-concave well-definedness contracts in
-`KLS/LogConcave/AffineCovariance.lean`. `KLS/LogConcave/CovarianceClosure.lean` proves that the
+`KLS/LogConcave/Covariance.lean`. `KLS/LogConcave/WeightedGradient.lean` proves that the
 weighted gradient operator of a full-dimensional log-concave law is densely defined and closable,
 with smooth core and relaxation identified with its closure (`lem:covariance-core-closure`), and
-`KLS/LogConcave/AffineClosedForm.lean` identifies the affine relaxation with the closed covariance
+`KLS/LogConcave/ClosedForm.lean` identifies the affine relaxation with the closed covariance
 form of the CMH source (`thm:affine-covariance-relaxation-closed`), and
-`KLS/LogConcave/AffineTranslation.lean` with `Poincare/Euclidean/AffineTranslation.lean` prove that
+`KLS/LogConcave/Translation.lean` with `Poincare/CovarianceGradient/Translation.lean` prove that
 ambient translation keeps log-concavity and the affine constant
-(`lem:affine-poincare-translation-invariance`), and `KLS/LogConcave/IsotropicReduction.lean` proves
+(`lem:affine-poincare-translation-invariance`), and `KLS/LogConcave/Isotropic.lean` proves
 the equivalence of the isotropic, covariance-normalized and affine KLS formulations for each fixed
 `K` (`thm:affine-isotropic-reduction`); no statement that any of them holds for some `K`, and no
 KLS proof, is included. Importing this aggregate certifies nothing by itself.

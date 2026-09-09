@@ -1,5 +1,8 @@
 # Lean design: Poincaré certificates
 
+命名空间已表达的内容不再重复进声明短名；见[短名补充记录](research/decisions/2026-09-08-namespace-short-names.md)。
+比较名称也只写一次共有操作，见[比较短名记录](research/decisions/2026-09-08-comparison-short-names.md)。
+
 This document records the implemented Lean architecture and semantic contracts for the Issue #2
 linear-test lower bound, Issue #6 two-factor Poincaré tensorization, Issue #7 finite-product
 tensorization with optimal-constant equality, and the sharp one-dimensional Gaussian Poincaré
@@ -12,6 +15,12 @@ Proof certification refers to the current statement. Record mathematical scope c
 migrate affected consumers; the [current lifecycle](research/ledger-schema.md#lifecycle) gives
 the validation rules. Historical freeze records below preserve their reviewed snapshots.
 
+## Mathematical API organization (2026-09-08)
+
+The public frontends are `SmoothTest`, `SmoothGradient`, `WeightedGradient`,
+`CovarianceGradient`, and `LocalSlope`; `Ambient` and `Intrinsic` identify the carrier construction.
+Probability pushforwards and L² pullbacks occupy their own layers. See [the naming guide](research/naming.md) and [the migration record](research/decisions/2026-09-08-mathematical-api-organization.md).
+
 ## Layered `L²` and energy foundation (2026-09-04)
 
 Downstream applications and smoke tests may import `FunctionalInequalities.Poincare.Foundation`;
@@ -19,8 +28,8 @@ reusable library modules import only their exact direct dependencies. The accept
 below remains available for its existing certificates, but it is no longer the architectural base
 for future KLS layers. The finite-dimensional comparison now proves equality of the two optimal constants.
 
-The 12 comparison declarations in `Poincare.Relaxation`, `Energy.Euclidean.AffineComparison`,
-`Poincare.Euclidean.AffineComparison` and `Poincare.Euclidean.LegacyComparison` now have complete
+The 12 comparison declarations in `Poincare.Relaxation`, `Energy.SmoothGradient.Intrinsic.Comparison`,
+`Poincare.SmoothGradient.Comparison` and `Poincare.SmoothTest.Comparison` now have complete
 proofs with unchanged signatures. Both ledger nodes are proved and exported by the foundation;
 see the [comparison guide](formalization/FunctionalInequalities/Poincare/Euclidean/README.md)
 and [proof acceptance](research/decisions/2026-09-06-poincare-comparison-proofs.md).
@@ -43,7 +52,7 @@ test forces the optimal constant to be `⊤`. `Poincare.L2Energy.constant` appli
 the finite domain of `Q : Lp ℝ 2 μ → ENNReal`; `finiteValue` requires a proof that `Q f ≠ ⊤`, so
 infinite energy is never silently converted to zero.
 
-`Energy.Euclidean.smoothGradientRelaxation` realizes globally `C∞`, square-integrable,
+`Energy.SmoothGradient.relaxation` realizes globally `C∞`, square-integrable,
 finite-gradient tests in `L²` and sequentially relaxes their `NNReal` gradient integral on a
 finite-dimensional real Hilbert space with Borel, second-countable measurable topology. In
 Mathlib v4.33, ordinary infinite differentiability is `ContDiff ℝ ∞`; `ContDiff ℝ ⊤` means the
@@ -90,7 +99,7 @@ Hilbert product norm. No global or local replacement of its norm/inner-product i
 permitted. The measurable structure is Mathlib's transported structure from
 `Analysis.Normed.Lp.MeasurableSpace`.
 
-Define `Poincare.prodMeasure μ ν := (μ.prod ν).map (WithLp.toLp 2)`. This is the same product
+Define `Poincare.SmoothTest.prodMeasure μ ν := (μ.prod ν).map (WithLp.toLp 2)`. This is the same product
 probability law expressed on the Hilbert product, not a change of normalization. Use the
 measurable equivalence `MeasurableEquiv.toLp 2 (E × F)` to transport integrability, variance,
 and integrals. Its continuous linear counterpart is `WithLp.prodContinuousLinearEquiv`.
@@ -109,16 +118,16 @@ variable {E F : Type*}
 
 example
     {μ : Measure E} {ν : Measure F} {C C' : ℝ}
-    (hμ : Poincare.Holds μ C) (hν : Poincare.Holds ν C') :
-    Poincare.Holds (Poincare.prodMeasure μ ν) (max C C') :=
-  Poincare.Holds.prod hμ hν
+    (hμ : Poincare.SmoothTest.Holds μ C) (hν : Poincare.SmoothTest.Holds ν C') :
+    Poincare.SmoothTest.Holds (Poincare.SmoothTest.prodMeasure μ ν) (max C C') :=
+  Poincare.SmoothTest.Holds.prod hμ hν
 
 example
     {μ : Measure E} {ν : Measure F}
     [IsProbabilityMeasure μ] [IsProbabilityMeasure ν] :
-    Poincare.constant (Poincare.prodMeasure μ ν) ≤
-      max (Poincare.constant μ) (Poincare.constant ν) :=
-  Poincare.constant_prod_le
+    Poincare.SmoothTest.constant (Poincare.SmoothTest.prodMeasure μ ν) ≤
+      max (Poincare.SmoothTest.constant μ) (Poincare.SmoothTest.constant ν) :=
+  Poincare.SmoothTest.constant_prod_le
 ```
 
 `Holds` already carries probability normalization and nonnegative constants. The accepted ledger
@@ -201,7 +210,7 @@ the linear-test variance and energy identities, and finite-dimensional Rayleigh-
 
 ## Semantic contract
 
-`FunctionalInequalities.Poincare.Basic` implements the manuscript normalization
+`FunctionalInequalities.Poincare.SmoothTest.Basic` implements the manuscript normalization
 
 $$
 \operatorname{Var}_\mu(f)\le C\int \lVert\nabla f\rVert^2\,d\mu.
@@ -209,21 +218,21 @@ $$
 
 The exact choices are:
 
-- `Poincare.Admissible μ f` means that `f` is globally smooth, belongs to $L^2(\mu)$, and has
+- `Poincare.SmoothTest.Admissible μ f` means that `f` is globally smooth, belongs to $L^2(\mu)$, and has
   integrable squared gradient. The finite-energy field prevents Lean's totalized real integral
   from silently assigning an unintended value to a nonintegrable energy. This is the smooth
   finite-energy core; no equivalence with a closed Sobolev or spectral-gap domain is claimed.
-- `Poincare.energy μ f` is the real integral of the squared norm of Mathlib's canonical gradient.
+- `Poincare.SmoothTest.energy μ f` is the real integral of the squared norm of Mathlib's canonical gradient.
   A bridge theorem identifies it with the squared operator norm of the Fréchet derivative.
-- `Poincare.Holds μ C` is a `Prop`-valued structure containing probability normalization,
+- `Poincare.SmoothTest.Holds μ C` is a `Prop`-valued structure containing probability normalization,
   nonnegativity of `C`, and the fixed-constant inequality for every admissible test.
-- `Poincare.constant μ : ℝ≥0∞` is the infimum of all finite nonnegative constants satisfying
-  `Poincare.Holds μ C`. It is `⊤` exactly when no finite valid constant exists.
-- `Poincare.rayleigh μ f : ℝ≥0∞` divides only after mapping variance and energy into extended
+- `Poincare.SmoothTest.constant μ : ℝ≥0∞` is the infimum of all finite nonnegative constants satisfying
+  `Poincare.SmoothTest.Holds μ C`. It is `⊤` exactly when no finite valid constant exists.
+- `Poincare.SmoothTest.rayleigh μ f : ℝ≥0∞` divides only after mapping variance and energy into extended
   nonnegative reals. Thus positive variance over zero energy is `⊤`, while `0 / 0 = 0`. At
   positive energy it equals the ordinary real quotient from the manuscript.
 
-The theorem quantifies over every `Poincare.Admissible` test, including constant functions. The
+The theorem quantifies over every `Poincare.SmoothTest.Admissible` test, including constant functions. The
 formal statement does not use “nonconstant” as a substitute for positive energy, since that
 implication fails for an arbitrary measure.
 
@@ -263,9 +272,9 @@ finite second moment that makes the centered covariance matrix finite.
 
 ## Proof and module boundary
 
-- `formalization/FunctionalInequalities/Poincare/Basic.lean`: admissibility, energy, fixed constants, and
+- `formalization/FunctionalInequalities/Poincare/SmoothTest/Basic.lean`: admissibility, energy, fixed constants, and
   the optimal extended Poincaré constant.
-- `formalization/FunctionalInequalities/Poincare/LinearTest.lean`: linear tests, extended Rayleigh quotients,
+- `formalization/FunctionalInequalities/Poincare/SmoothTest/Linear.lean`: linear tests, extended Rayleigh quotients,
   centered covariance, the finite-dimensional eigenvalue bridge, and the fixed/optimal bounds.
 - `solutions/LemLinearTestLower.lean`: the sole Issue #2 certificate, directly combining the
   reusable Rayleigh and covariance lower bounds.
@@ -278,7 +287,7 @@ finite second moment that makes the centered covariance matrix finite.
 - `formalization/FunctionalInequalities/Poincare/Product/Tensorization.lean`: the two proved public theorems.
 - `solutions/LemPoincareTensorization.lean`: the sole Issue #6 certificate, directly combining
   both product bounds, with a typed Euclidean application check including dimension zero.
-- `formalization/FunctionalInequalities/Poincare/Transport.lean`: measure-preserving coordinate
+- `formalization/FunctionalInequalities/Poincare/SmoothTest/Transport.lean`: measure-preserving coordinate
   lifts and exact transport under real linear isometry equivalences.
 - `formalization/FunctionalInequalities/Poincare/Product/Reverse.lean`: binary coordinate reverse
   bounds and optimal-constant equality.
@@ -407,8 +416,8 @@ and Cheeger--Poincaré comparison remain separate obligations.
 The node `lem:poincare-gaussian-one-dimensional` is **proved** with `checked_by: lean` after
 human semantic and mathematical review. The two main interfaces assert, for every `m : ℝ` and
 `v : NNReal`,
-`Poincare.Holds (gaussianReal m v) (v : ℝ)` and
-`Poincare.constant (gaussianReal m v) = (v : ENNReal)`. The test-domain definitions above are
+`Poincare.SmoothTest.Holds (gaussianReal m v) (v : ℝ)` and
+`Poincare.SmoothTest.constant (gaussianReal m v) = (v : ENNReal)`. The test-domain definitions above are
 used unchanged. The variance parameter v is the constant; v = 0 is the Dirac law at m.
 
 The 20 declarations are all proved and split by responsibility. `Poincare/Gaussian/Density.lean`
@@ -460,9 +469,9 @@ inferred from this review.
 
 ## Public naming
 
-Use the mathematical object's namespace for its role: `Poincare.Canonical.constant`,
-`Poincare.Ambient.constant`, and `Poincare.L2Energy.constant` distinguish the selected frontend,
-ambient relaxation, and an optimizer parameterized by an energy. `Energy.Canonical.energy`
+Use the mathematical object's namespace for its role: `Poincare.SmoothGradient.Intrinsic.constant`,
+`Poincare.SmoothGradient.Ambient.constant`, and `Poincare.L2Energy.constant` distinguish the selected frontend,
+ambient relaxation, and an optimizer parameterized by an energy. `Energy.SmoothGradient.Intrinsic.energy`
 retains the intrinsic-affine construction in its definition. These names do not assert Cheeger
 or Dirichlet identifications. Theorems on `KLS.LogConcave` support proof-receiver calls such as
 `hμ.canonical_eq_literature`. Keep domain, integrability and boundary distinctions in theorem

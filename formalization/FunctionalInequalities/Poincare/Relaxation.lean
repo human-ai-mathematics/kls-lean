@@ -12,7 +12,7 @@ relaxation. It does not need density, quadraticity, a Markov property, or agreem
 relaxed energy. In particular it includes an empty test type and an infinite optimal constant.
 
 Source: local abstract formulation of Blueprint `thm:legacy-relaxed-holds-equivalence`.
-The Euclidean specialization is in `Poincare.Euclidean.LegacyComparison`; these statements
+The Euclidean specialization is in `Poincare.SmoothTest.Comparison`; these statements
 are not claimed as a separate theorem in the cited KLS literature.
 -/
 

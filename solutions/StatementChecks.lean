@@ -4,8 +4,8 @@ import FunctionalInequalities.KLS.Isotropic
 import FunctionalInequalities.KLS.Isoperimetry
 import FunctionalInequalities.KLS.ConditionalFiber
 import FunctionalInequalities.Poincare.Euclidean.RawEnergyObstruction
-import FunctionalInequalities.Poincare.Euclidean.AffineCovariance
-import FunctionalInequalities.KLS.LogConcave.AffineCovariance
+import FunctionalInequalities.Poincare.CovarianceGradient.Intrinsic
+import FunctionalInequalities.KLS.LogConcave.Covariance
 
 /-!
 # Literal KLS statement checks
@@ -17,7 +17,7 @@ alone is not a semantic-stability guarantee. Mathematical scope changes remain r
 The existing Dirac representative checks are in `examples/PoincareFoundation.lean`.
 Gaussian variance-normalized bounds and their transfer to the intrinsic smooth relaxation are
 already checked in `solutions/LemLegacyRelaxedPoincareComparison.lean`. A Gaussian bound for
-`KLS.literatureConstant` can now use the proved smooth/locally-Lipschitz comparison after
+`Poincare.LocalSlope.Intrinsic.constant` can now use the proved smooth/locally-Lipschitz comparison after
 discharging intrinsic absolute continuity for the concrete Gaussian law. That specialization
 is not included among these definition checks.
 -/
@@ -29,25 +29,25 @@ open MeasureTheory ProbabilityTheory FunctionalInequalities
 example : KLS.Conjecture ↔
     ∃ C : NNReal, ∀ (n : ℕ) (μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin n))),
       KLS.LogConcave μ → MemLp id 2 (μ : Measure (EuclideanSpace ℝ (Fin n))) →
-        KLS.literatureConstant μ ≤
+        FunctionalInequalities.Poincare.LocalSlope.Intrinsic.constant μ ≤
           (C : ENNReal) *
             ENNReal.ofReal ‖Covariance.operator (μ : Measure (EuclideanSpace ℝ (Fin n)))‖ := Iff.rfl
 
 example {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
     [MeasurableSpace E] [BorelSpace E] [SecondCountableTopology E] [FiniteDimensional ℝ E]
     (μ : ProbabilityMeasure E) (f : E → ℝ) :
-    KLS.LiteratureAdmissible μ f ↔
-      LocallyLipschitz f ∧ MemLp f 2 (μ : Measure E) ∧ KLS.literatureEnergy μ f ≠ ⊤ :=
+    FunctionalInequalities.Energy.LocalSlope.Admissible μ f ↔
+      LocallyLipschitz f ∧ MemLp f 2 (μ : Measure E) ∧ FunctionalInequalities.Energy.LocalSlope.energy μ f ≠ ⊤ :=
   ⟨fun h ↦ ⟨h.1, h.2, h.3⟩, fun h ↦ ⟨h.1, h.2.1, h.2.2⟩⟩
 
 example (c : ℝ) :
-    KLS.localSlope (fun _ : EuclideanSpace ℝ (Fin 0) ↦ c) 0 = 0 := by simp
+    FunctionalInequalities.Energy.LocalSlope.apply (fun _ : EuclideanSpace ℝ (Fin 0) ↦ c) 0 = 0 := by simp
 
 example (f : EuclideanSpace ℝ (Fin 0) → ℝ) (x : EuclideanSpace ℝ (Fin 0)) :
-    KLS.localSlope f x = 0 := KLS.localSlope_eq_zero_of_subsingleton f x
+    FunctionalInequalities.Energy.LocalSlope.apply f x = 0 := FunctionalInequalities.Energy.LocalSlope.apply_eq_zero_of_subsingleton f x
 
 example (μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin 0))) :
-    KLS.literatureConstant μ = 0 := KLS.literatureConstant_eq_zero_of_subsingleton μ
+    FunctionalInequalities.Poincare.LocalSlope.Intrinsic.constant μ = 0 := FunctionalInequalities.Poincare.LocalSlope.Intrinsic.constant_eq_zero_of_subsingleton μ
 
 namespace Solutions.StatementChecks
 
@@ -55,14 +55,14 @@ namespace Solutions.StatementChecks
 theorem constant_energy {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
     [CompleteSpace E] [MeasurableSpace E] [BorelSpace E] [SecondCountableTopology E]
     [FiniteDimensional ℝ E] (c : ℝ) (μ : ProbabilityMeasure E) :
-    KLS.literatureEnergy μ (fun _ ↦ c) = 0 := by simp [KLS.literatureEnergy]
+    FunctionalInequalities.Energy.LocalSlope.energy μ (fun _ ↦ c) = 0 := by simp [FunctionalInequalities.Energy.LocalSlope.energy]
 
 /-- Test domain: finite-energy tests include constants, even when their energy is zero. -/
 theorem constant_admissible {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
     [CompleteSpace E] [MeasurableSpace E] [BorelSpace E] [SecondCountableTopology E]
     [FiniteDimensional ℝ E] (c : ℝ) (μ : ProbabilityMeasure E) :
-    KLS.LiteratureAdmissible μ (fun _ ↦ c) :=
-  ⟨LocallyLipschitz.const c, memLp_const c, by simp [KLS.literatureEnergy]⟩
+    FunctionalInequalities.Energy.LocalSlope.Admissible μ (fun _ ↦ c) :=
+  ⟨LocallyLipschitz.const c, memLp_const c, by simp [FunctionalInequalities.Energy.LocalSlope.energy]⟩
 
 /-- Dimension convention: the covariance operator on the zero-dimensional space has norm zero. -/
 theorem zero_dimension_covariance (μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin 0))) :
@@ -73,14 +73,14 @@ theorem zero_dimension_covariance (μ : ProbabilityMeasure (EuclideanSpace ℝ (
 
 /-- Quantifier boundary: the literal KLS inequality holds in dimension zero for every finite C. -/
 theorem zero_dimension_bound (μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin 0))) (C : NNReal) :
-    KLS.literatureConstant μ ≤ (C : ENNReal) *
+    FunctionalInequalities.Poincare.LocalSlope.Intrinsic.constant μ ≤ (C : ENNReal) *
       ENNReal.ofReal ‖Covariance.operator (μ : Measure (EuclideanSpace ℝ (Fin 0)))‖ := by
-  rw [KLS.literatureConstant_eq_zero_of_subsingleton, zero_dimension_covariance]
+  rw [FunctionalInequalities.Poincare.LocalSlope.Intrinsic.constant_eq_zero_of_subsingleton, zero_dimension_covariance]
   simp
 
 /-- Nonzero normalization: the ambient real identity has pointwise local slope one. -/
-theorem localSlope_id (x : ℝ) : KLS.localSlope id x = 1 := by
-  unfold KLS.localSlope
+theorem localSlope_id (x : ℝ) : FunctionalInequalities.Energy.LocalSlope.apply id x = 1 := by
+  unfold FunctionalInequalities.Energy.LocalSlope.apply
   apply le_antisymm
   · apply iInf_le_of_le (1 : ℝ)
     apply iInf_le_of_le zero_lt_one
@@ -96,8 +96,8 @@ theorem localSlope_id (x : ℝ) : KLS.localSlope id x = 1 := by
 /-- Carrier convention: ambient slope energy at a Dirac atom need not vanish for its L² class.
 The literature constant instead takes the intrinsic law, removing ambient normal directions. -/
 theorem ambient_dirac_identity_energy :
-    KLS.literatureEnergy (Probability.ofMeasure (Measure.dirac (0 : ℝ))) id = 1 := by
-  simp [KLS.literatureEnergy, localSlope_id]
+    FunctionalInequalities.Energy.LocalSlope.energy (Probability.ofMeasure (Measure.dirac (0 : ℝ))) id = 1 := by
+  simp [FunctionalInequalities.Energy.LocalSlope.energy, localSlope_id]
 
 end Solutions.StatementChecks
 
@@ -211,18 +211,18 @@ theorem conditional_domain_fields (n : ℕ)
 /-- The affine constant is the generic `L²` optimizer of the intrinsic law at the sequential
 relaxation of the covariance pre-energy, in every dimension. -/
 theorem affine_constant_unfold (n : ℕ) (μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin n))) :
-    Poincare.Affine.constant μ =
+    FunctionalInequalities.Poincare.CovarianceGradient.Intrinsic.constant μ =
       Poincare.L2Energy.constant (Probability.intrinsicMeasure μ)
-        ((Energy.Euclidean.covariancePreEnergy
+        ((FunctionalInequalities.Energy.CovarianceGradient.preEnergy
           (Probability.intrinsicMeasure μ)).sequentialRelaxation) := rfl
 
 /-- The affine test class is exactly: globally Lipschitz, `L²`, and integrable covariance-weighted
 squared gradient. No differentiability premise is part of the structure. -/
 theorem affine_test_fields (n : ℕ) (ν : ProbabilityMeasure (EuclideanSpace ℝ (Fin n)))
     (g : EuclideanSpace ℝ (Fin n) → ℝ) :
-    (∃ f : Energy.Euclidean.CovarianceGradientTest ν, f.toFun = g) ↔
+    (∃ f : FunctionalInequalities.Energy.CovarianceGradient.Test ν, f.toFun = g) ↔
       (∃ K : NNReal, LipschitzWith K g) ∧ MemLp g 2 (ν : Measure (EuclideanSpace ℝ (Fin n))) ∧
-        Integrable (Energy.Euclidean.covarianceGradientDensity ν g)
+        Integrable (FunctionalInequalities.Energy.CovarianceGradient.density ν g)
           (ν : Measure (EuclideanSpace ℝ (Fin n))) :=
   ⟨fun ⟨f, hf⟩ ↦ hf ▸ ⟨f.lipschitz, f.memLp_two, f.integrable⟩,
     fun h ↦ ⟨⟨g, h.1, h.2.1, h.2.2⟩, rfl⟩⟩
@@ -230,21 +230,21 @@ theorem affine_test_fields (n : ℕ) (ν : ProbabilityMeasure (EuclideanSpace �
 /-- The finite affine energy is the real integral `∫ ⟪Σ ∇g, ∇g⟫ dν` with `Σ` the covariance
 operator of `ν`; no factor of one half is introduced. -/
 theorem affine_energy_integral (n : ℕ) (ν : ProbabilityMeasure (EuclideanSpace ℝ (Fin n)))
-    (f : Energy.Euclidean.CovarianceGradientTest ν) :
-    (f.covarianceEnergy : ℝ) =
+    (f : FunctionalInequalities.Energy.CovarianceGradient.Test ν) :
+    (f.energy : ℝ) =
       ∫ x, inner ℝ (Covariance.operator (ν : Measure (EuclideanSpace ℝ (Fin n)))
         (gradient f.toFun x)) (gradient f.toFun x) ∂(ν : Measure (EuclideanSpace ℝ (Fin n))) :=
   rfl
 
 /-- Dimension zero: the affine covariance Poincaré constant is zero. -/
 theorem zero_dimension_affine_constant (μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin 0))) :
-    Poincare.Affine.constant μ = 0 :=
-  Poincare.Affine.constant_eq_zero_of_subsingleton μ
+    FunctionalInequalities.Poincare.CovarianceGradient.Intrinsic.constant μ = 0 :=
+  FunctionalInequalities.Poincare.CovarianceGradient.Intrinsic.constant_eq_zero_of_subsingleton μ
 
 /-- A Dirac law in a positive-dimensional ambient space has zero-dimensional affine support and
 therefore affine constant zero; the ambient dimension is irrelevant. -/
 theorem ambient_dirac_affine_constant :
-    Poincare.Affine.constant (Probability.ofMeasure (Measure.dirac (0 : ℝ))) = 0 := by
+    FunctionalInequalities.Poincare.CovarianceGradient.Intrinsic.constant (Probability.ofMeasure (Measure.dirac (0 : ℝ))) = 0 := by
   let μ := Probability.ofMeasure (Measure.dirac (0 : ℝ))
   have hA : Probability.affineSupport μ ≤ affineSpan ℝ ({0} : Set ℝ) := by
     apply Probability.affineSupport_le_of_ae_mem μ _ (AffineSubspace.closed_of_finiteDimensional _)
@@ -254,7 +254,7 @@ theorem ambient_dirac_affine_constant :
     apply bot_unique
     simpa only [direction_affineSpan, vectorSpan_singleton] using
       AffineSubspace.direction_le hA
-  exact Poincare.Affine.constant_eq_zero_of_direction_eq_bot μ hdir
+  exact FunctionalInequalities.Poincare.CovarianceGradient.Intrinsic.constant_eq_zero_of_direction_eq_bot μ hdir
 
 /-- All excluded fibers contribute zero before extended division. -/
 theorem conditional_bad_fiber (n : ℕ)
@@ -262,8 +262,8 @@ theorem conditional_bad_fiber (n : ℕ)
       EuclideanSpace ℝ (Fin (n + 1))) ℝ)
     (b : KLS.ConditionalFiber.Direction (EuclideanSpace ℝ (Fin (n + 1))) ×
       EuclideanSpace ℝ (Fin (n + 1))) (f : EuclideanSpace ℝ (Fin (n + 1)) → ℝ)
-    (h : ¬ KLS.ConditionalFiber.GoodFiber κ b) : KLS.ConditionalFiber.fiberEnergy κ b f = 0 := by
-  simp [KLS.ConditionalFiber.fiberEnergy, h]
+    (h : ¬ FunctionalInequalities.KLS.ConditionalFiber.Nondegenerate κ b) : KLS.ConditionalFiber.energyAt κ b f = 0 := by
+  simp [KLS.ConditionalFiber.energyAt, h]
 
 end Solutions.StatementChecks
 
@@ -379,13 +379,13 @@ end Solutions.StatementChecks
 #guard_msgs (whitespace := lax) in
 #print axioms FunctionalInequalities.KLS.LogConcave.intrinsic_gradient_ae_eq_of_ae_eq
 
-/-- info: 'FunctionalInequalities.KLS.LogConcave.intrinsic_covarianceEnergy_eq_of_toL2_eq' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+/-- info: 'FunctionalInequalities.KLS.LogConcave.intrinsicCovariance_energy_eq_of_toL2_eq' depends on axioms: [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
-#print axioms FunctionalInequalities.KLS.LogConcave.intrinsic_covarianceEnergy_eq_of_toL2_eq
+#print axioms FunctionalInequalities.KLS.LogConcave.intrinsicCovariance_energy_eq_of_toL2_eq
 
-/-- info: 'FunctionalInequalities.Poincare.Affine.constant_eq_zero_of_direction_eq_bot' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+/-- info: 'FunctionalInequalities.Poincare.CovarianceGradient.Intrinsic.constant_eq_zero_of_direction_eq_bot' depends on axioms: [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
-#print axioms FunctionalInequalities.Poincare.Affine.constant_eq_zero_of_direction_eq_bot
+#print axioms FunctionalInequalities.Poincare.CovarianceGradient.Intrinsic.constant_eq_zero_of_direction_eq_bot
 
 /-- info: 'FunctionalInequalities.KLS.ConditionalFiber.lintegral_baseLaw' depends on axioms: [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
@@ -395,13 +395,13 @@ end Solutions.StatementChecks
 #guard_msgs (whitespace := lax) in
 #print axioms FunctionalInequalities.KLS.ConditionalFiber.ae_memLp_id
 
-/-- info: 'FunctionalInequalities.KLS.ConditionalFiber.measurable_fiberEnergy' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+/-- info: 'FunctionalInequalities.KLS.ConditionalFiber.measurable_energyAt' depends on axioms: [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
-#print axioms FunctionalInequalities.KLS.ConditionalFiber.measurable_fiberEnergy
+#print axioms FunctionalInequalities.KLS.ConditionalFiber.measurable_energyAt
 
-/-- info: 'FunctionalInequalities.KLS.ConditionalFiber.energyWith_eq' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+/-- info: 'FunctionalInequalities.KLS.ConditionalFiber.energyWithKernel_eq_energy' depends on axioms: [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
-#print axioms FunctionalInequalities.KLS.ConditionalFiber.energyWith_eq
+#print axioms FunctionalInequalities.KLS.ConditionalFiber.energyWithKernel_eq_energy
 
 /-- info: 'FunctionalInequalities.KLS.ConditionalFiber.energy_congr_ae' depends on axioms: [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax) in

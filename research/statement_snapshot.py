@@ -13,9 +13,7 @@ import sys
 
 ROOT = Path(__file__).resolve().parents[1]
 DIRECTORY = Path("research/a-series/statement-snapshot")
-ROOTS = ["FunctionalInequalities.KLS." + name for name in (
-    "Conjecture", "LogConcave", "localSlope", "literatureEnergy",
-    "LiteratureAdmissible", "LiteratureHolds", "literatureConstant")]
+ROOTS = ['FunctionalInequalities.KLS.Conjecture', 'FunctionalInequalities.KLS.LogConcave', 'FunctionalInequalities.Energy.LocalSlope.apply', 'FunctionalInequalities.Energy.LocalSlope.energy', 'FunctionalInequalities.Energy.LocalSlope.Admissible', 'FunctionalInequalities.Poincare.LocalSlope.Holds', 'FunctionalInequalities.Poincare.LocalSlope.Intrinsic.constant']
 
 
 def sha256(path: Path) -> str:

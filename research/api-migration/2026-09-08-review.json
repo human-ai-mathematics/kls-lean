@@ -1,0 +1,143 @@
+{
+  "baseline_head": "19cd996817d1c31c6fe46e949e19a51cb7cc5ae2",
+  "baseline_source_files": 233,
+  "pure_renaming": {
+    "declarations": 1088,
+    "exact_alpha_equivalence": 1088,
+    "differences": 0
+  },
+  "final_source_comparison": {
+    "definition_and_structure_bodies": 189,
+    "exact_bodies": 189,
+    "source_signatures": 882,
+    "exact_source_signatures": 876,
+    "reviewed_header_adjustments": 6
+  },
+  "parameters": {
+    "baseline_public_declarations": 882,
+    "final_public_declarations": 881,
+    "elaborated_parameter_changes": 305,
+    "categories": {
+      "instance_removal_and_reordering": 68,
+      "instance_removal": 214,
+      "parameter_reordering": 22,
+      "moment_lemma_merge": 1
+    },
+    "non_instance_mode_changes": 0,
+    "universe_generalizations": [
+      "FunctionalInequalities.KLS.ConditionalFiber.memLp_id_two_iff"
+    ],
+    "non_instance_order_changes": [
+      {
+        "declaration": "FunctionalInequalities.Energy.WeightedGradient.IsTest.smul",
+        "before_order": [
+          "V",
+          "ν",
+          "B",
+          "m",
+          "g",
+          "hac",
+          "c",
+          "h"
+        ],
+        "after_order": [
+          "V",
+          "ν",
+          "B",
+          "g",
+          "m",
+          "hac",
+          "c",
+          "h"
+        ]
+      },
+      {
+        "declaration": "FunctionalInequalities.Energy.WeightedGradient.IsTest.weightedGradient_smul_ae",
+        "before_order": [
+          "V",
+          "ν",
+          "B",
+          "m",
+          "g",
+          "hac",
+          "c",
+          "h"
+        ],
+        "after_order": [
+          "V",
+          "ν",
+          "B",
+          "g",
+          "m",
+          "hac",
+          "c",
+          "h"
+        ]
+      }
+    ],
+    "certificate_instance_generalizations": [
+      {
+        "declaration": "Solutions.LemLogConcaveIntrinsicAbsoluteContinuity.certificate",
+        "removed_instances": [
+          "[CompleteSpace E]"
+        ],
+        "path": "formalization/../solutions/LemLogConcaveIntrinsicAbsoluteContinuity.lean",
+        "reason": "Lean unusedSectionVars reports these automatically included instances unused in the elaborated theorem."
+      },
+      {
+        "declaration": "Solutions.ThmAffineCovarianceRelaxationClosed.certificate",
+        "removed_instances": [
+          "[CompleteSpace E]"
+        ],
+        "path": "formalization/../solutions/ThmAffineCovarianceRelaxationClosed.lean",
+        "reason": "Lean unusedSectionVars reports these automatically included instances unused in the elaborated theorem."
+      },
+      {
+        "declaration": "Solutions.ThmBorellLogconcaveDensity.certificate",
+        "removed_instances": [
+          "[CompleteSpace E]"
+        ],
+        "path": "formalization/../solutions/ThmBorellLogconcaveDensity.lean",
+        "reason": "Lean unusedSectionVars reports these automatically included instances unused in the elaborated theorem."
+      }
+    ]
+  },
+  "final_raw_expression_comparison": {
+    "missing": [
+      "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.C₀._proof_1",
+      "FunctionalInequalities.Energy.Euclidean.mapEquivForward._proof_1",
+      "FunctionalInequalities.Energy.Euclidean.mapEquivL2._proof_4",
+      "FunctionalInequalities.Energy.Euclidean.mapForward._proof_1",
+      "FunctionalInequalities.Energy.Euclidean.mapL2._proof_4"
+    ],
+    "added": [
+      "FunctionalInequalities.Energy.CovarianceGradient.Test.compContinuousLinearEquiv._proof_9",
+      "FunctionalInequalities.Energy.CovarianceGradient.Test.compLinearIsometryEquiv._proof_4",
+      "FunctionalInequalities.Energy.CovarianceGradient.Test.translate._proof_4"
+    ],
+    "classification_counts": {
+      "dependency_parameter_adjustment": 36,
+      "elaborated_parameter_adjustment": 335,
+      "generated_proof_reindexing": 4
+    },
+    "review_required": [],
+    "exact_count": 708,
+    "changed_count": 375
+  },
+  "raw_evidence": {
+    "baseline": "build/api-refactor/baseline-expressions.json",
+    "renaming_stage": "build/api-refactor/renamed-raw.json",
+    "final": "build/api-refactor/final-expressions.json"
+  },
+  "validation_before_final_runner": {
+    "lake_jobs": 3359,
+    "python_tests": 100,
+    "old_public_names_removed": 405,
+    "blueprint_labels": 87,
+    "active_routes": 4,
+    "blueprint_pdf_pages": 37,
+    "blueprint_pdf_web_checkdecls": "passed",
+    "pdf_visual_review": "All 37 pages in contact sheets; full page review of updated intrinsic frontend, comparison titles, and conditional fiber certification boundary."
+  },
+  "final_receipt": "build/verification/latest.json"
+}

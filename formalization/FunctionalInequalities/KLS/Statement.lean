@@ -25,7 +25,7 @@ namespace FunctionalInequalities.KLS
 def Conjecture : Prop :=
   ∃ C : NNReal, ∀ (n : ℕ) (μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin n))),
     LogConcave μ → MemLp id 2 (μ : Measure (EuclideanSpace ℝ (Fin n))) →
-      literatureConstant μ ≤ (C : ENNReal) *
+      Poincare.LocalSlope.Intrinsic.constant μ ≤ (C : ENNReal) *
         ENNReal.ofReal ‖Covariance.operator (μ : Measure (EuclideanSpace ℝ (Fin n)))‖
 
 end FunctionalInequalities.KLS

@@ -1,5 +1,5 @@
 import FunctionalInequalities.Poincare.Product.Tensorization
-import FunctionalInequalities.Poincare.Transport
+import FunctionalInequalities.Poincare.SmoothTest.Transport
 
 /-!
 # Binary reverse bounds and equality
@@ -20,15 +20,14 @@ noncomputable section
 open MeasureTheory
 
 /- The unused ambient instances are retained in the candidate signatures. -/
-set_option linter.unusedSectionVars false
 
-namespace FunctionalInequalities.Poincare
+namespace FunctionalInequalities.Poincare.SmoothTest
 
 variable {E F : Type*}
   [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
-  [MeasurableSpace E] [BorelSpace E] [SecondCountableTopology E]
+
   [NormedAddCommGroup F] [InnerProductSpace ℝ F] [CompleteSpace F]
-  [MeasurableSpace F] [BorelSpace F] [SecondCountableTopology F]
+
 
 private theorem adjoint_fstL :
     (((WithLp.prodContinuousLinearEquiv 2 ℝ E F).symm :
@@ -64,9 +63,11 @@ theorem isometry_adjoint_sndL : Isometry (WithLp.sndL 2 ℝ E F).adjoint := by
   show ‖WithLp.toLp 2 ((0 : E), (v : F))‖ = ‖v‖
   exact WithLp.norm_toLp_snd 2 E F v
 
-variable {μ : Measure E} {ν : Measure F}
-  [IsProbabilityMeasure μ] [IsProbabilityMeasure ν]
+variable [MeasurableSpace E] [BorelSpace E] [SecondCountableTopology E]
+  [MeasurableSpace F] [BorelSpace F] [SecondCountableTopology F]
+  {μ : Measure E} {ν : Measure F} [IsProbabilityMeasure μ] [IsProbabilityMeasure ν]
 
+omit [CompleteSpace E] [CompleteSpace F] [SecondCountableTopology E] [IsProbabilityMeasure μ] in
 /-- Source: local transport of Mathlib's `measurePreserving_fst` through `WithLp.toLp`.
 The marginal law uses the other factor's probability normalization. -/
 theorem measurePreserving_prod_fst :
@@ -76,6 +77,7 @@ theorem measurePreserving_prod_fst :
     (WithLp.measurable_toLp 2 (E × F))]
   exact measurePreserving_fst.map_eq
 
+omit [CompleteSpace E] [CompleteSpace F] [SecondCountableTopology E] in
 /-- Source: local transport of Mathlib's `measurePreserving_snd` through `WithLp.toLp`.
 The marginal law uses the other factor's probability normalization. -/
 theorem measurePreserving_prod_snd :
@@ -85,6 +87,7 @@ theorem measurePreserving_prod_snd :
     (WithLp.measurable_toLp 2 (E × F))]
   exact measurePreserving_snd.map_eq
 
+omit [SecondCountableTopology E] in
 /-- Recover the first factor at the same finite real constant.
 Source: local coordinate-test deduction using `Admissible.comp_projection` and the first
 marginal law; both factor probabilities are retained. -/
@@ -96,6 +99,7 @@ theorem Holds.of_prod_left {C : ℝ} (h : Holds (prodMeasure μ ν) C) : Holds �
   rwa [variance_comp_projection _ measurePreserving_prod_fst hf.memLp_two,
     energy_comp_projection _ isometry_adjoint_fstL measurePreserving_prod_fst hf] at hv
 
+omit [SecondCountableTopology E] in
 /-- Recover the second factor at the same finite real constant.
 Source: local coordinate-test deduction using `Admissible.comp_projection` and the second
 marginal law; both factor probabilities are retained. -/
@@ -107,11 +111,13 @@ theorem Holds.of_prod_right {C : ℝ} (h : Holds (prodMeasure μ ν) C) : Holds 
   rwa [variance_comp_projection _ measurePreserving_prod_snd hf.memLp_two,
     energy_comp_projection _ isometry_adjoint_sndL measurePreserving_prod_snd hf] at hv
 
+omit [SecondCountableTopology E] in
 /-- Source: local infimum consequence of `Holds.of_prod_left`.
 This is the first-factor lower bound needed for the manuscript's product identity. -/
 theorem constant_left_le_prod : constant μ ≤ constant (prodMeasure μ ν) :=
   le_constant fun _ hC ↦ constant_le hC.of_prod_left
 
+omit [SecondCountableTopology E] in
 /-- Source: local infimum consequence of `Holds.of_prod_right`.
 This is the second-factor lower bound needed for the manuscript's product identity. -/
 theorem constant_right_le_prod : constant ν ≤ constant (prodMeasure μ ν) :=
@@ -124,4 +130,4 @@ theorem constant_prod_eq :
     constant (prodMeasure μ ν) = max (constant μ) (constant ν) :=
   le_antisymm constant_prod_le (max_le constant_left_le_prod constant_right_le_prod)
 
-end FunctionalInequalities.Poincare
+end FunctionalInequalities.Poincare.SmoothTest

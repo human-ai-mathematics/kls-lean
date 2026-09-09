@@ -1,6 +1,6 @@
 import FunctionalInequalities.Energy.Functional
 import FunctionalInequalities.L2.MeanVariance
-import FunctionalInequalities.Poincare.Optimal
+import FunctionalInequalities.Poincare.SmoothTest.Optimal
 
 /-!
 # Poincaré constants for extended energies on real `L²`

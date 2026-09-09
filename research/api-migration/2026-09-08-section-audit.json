@@ -1,0 +1,103 @@
+{
+  "original_disabled_sites": [
+    {
+      "path": "formalization/FunctionalInequalities/Probability/AffineSupport.lean",
+      "line": 33
+    },
+    {
+      "path": "formalization/FunctionalInequalities/Poincare/Transport.lean",
+      "line": 27
+    },
+    {
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/AffineTranslation.lean",
+      "line": 38
+    },
+    {
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/IsotropicReduction.lean",
+      "line": 98
+    },
+    {
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/IsotropicReduction.lean",
+      "line": 150
+    },
+    {
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/AffineClosedForm.lean",
+      "line": 50
+    },
+    {
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/CovarianceClosure.lean",
+      "line": 46
+    },
+    {
+      "path": "formalization/FunctionalInequalities/Poincare/Euclidean/AffineTranslation.lean",
+      "line": 44
+    },
+    {
+      "path": "formalization/FunctionalInequalities/Poincare/Euclidean/AffineTranslation.lean",
+      "line": 150
+    },
+    {
+      "path": "formalization/FunctionalInequalities/Poincare/Euclidean/AffineTranslation.lean",
+      "line": 179
+    },
+    {
+      "path": "formalization/FunctionalInequalities/Poincare/Euclidean/LipschitzComparison.lean",
+      "line": 46
+    },
+    {
+      "path": "formalization/FunctionalInequalities/Poincare/Product/Reverse.lean",
+      "line": 23
+    },
+    {
+      "path": "formalization/FunctionalInequalities/Poincare/FiniteProduct/Geometry.lean",
+      "line": 27
+    },
+    {
+      "path": "formalization/FunctionalInequalities/Poincare/FiniteProduct/Tensorization.lean",
+      "line": 31
+    },
+    {
+      "path": "formalization/FunctionalInequalities/Energy/Euclidean/WeakDerivative.lean",
+      "line": 47
+    },
+    {
+      "path": "formalization/FunctionalInequalities/Energy/Euclidean/CovarianceGradient/Core.lean",
+      "line": 43
+    },
+    {
+      "path": "formalization/FunctionalInequalities/Energy/Euclidean/CovarianceGradient/Translation.lean",
+      "line": 38
+    },
+    {
+      "path": "formalization/FunctionalInequalities/Energy/Euclidean/CovarianceGradient/Operator.lean",
+      "line": 45
+    },
+    {
+      "path": "formalization/FunctionalInequalities/Energy/Euclidean/CovarianceGradient/Isometry.lean",
+      "line": 43
+    },
+    {
+      "path": "formalization/FunctionalInequalities/Energy/Euclidean/CovarianceGradient/LinearEquiv.lean",
+      "line": 46
+    },
+    {
+      "path": "formalization/FunctionalInequalities/Energy/Euclidean/CovarianceGradient/LinearEquiv.lean",
+      "line": 366
+    },
+    {
+      "path": "formalization/FunctionalInequalities/Energy/Euclidean/CovarianceGradient/Closable.lean",
+      "line": 43
+    }
+  ],
+  "remaining_disabled_sites": 0,
+  "final_default_build_log": "build/api-refactor/scopes16.log",
+  "unused_section_variable_warnings": 0,
+  "scope_design": [
+    "Calculus, measurable tests, Haar/Rademacher assumptions in WeightedGradient.Basic",
+    "Generic measurability and local measure domination separated from gradient closability",
+    "Geometry, closedness, full measure, and intrinsic coordinates in AffineSupport",
+    "Raw kernels separated from Haar normalization in LipschitzApproximation",
+    "Probability and L2 transports separated from energy and Poincare constants"
+  ],
+  "retained_local_omit_reason": "Isolated general lemmas and properties have weaker assumptions than adjacent results; the linter stays enabled."
+}

@@ -29,7 +29,7 @@ noncomputable section
 open Filter MeasureTheory ProbabilityTheory
 open scoped Topology
 
-namespace FunctionalInequalities.Poincare
+namespace FunctionalInequalities.Poincare.SmoothTest
 
 /-- [Local helper] The derivative of the positive-variance Gaussian density, with variance
 `v` rather than standard deviation as the parameter.
@@ -217,4 +217,4 @@ theorem integrable_gaussianReal_iff (m : ℝ) {v : NNReal} (hv : v ≠ 0) (f : �
       (ae_of_all _ fun _ ↦ gaussianPDF_lt_top)]
   simp_rw [smul_eq_mul, toReal_gaussianPDF]
 
-end FunctionalInequalities.Poincare
+end FunctionalInequalities.Poincare.SmoothTest

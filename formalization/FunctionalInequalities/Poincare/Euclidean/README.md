@@ -1,6 +1,6 @@
 # 从光滑测试接到所选 Poincaré 常数
 
-这批已证明的比较定理接通三个对象：legacy 光滑测试常数、ambient relaxation
+这批已证明的比较定理接通三个对象：光滑测试常数、ambient relaxation
 常数，以及项目选定的 intrinsic-affine relaxation 常数。已有 Gaussian 和有限维 tensorization
 结论现在可以通过等式用于所选常数。
 
@@ -9,16 +9,16 @@
 `Poincare.Foundation` 与 root aggregate 导出。后续批次已进一步证明一般对数凹
 测度的文献 locally Lipschitz 常数比较；Cheeger 和 KLS 仍未证明。
 
-一般对数凹版本位于 [LogConcaveComparison.lean](LogConcaveComparison.lean)：从现有
-`KLS.LogConcave μ` 推出 legacy、intrinsic 和 literature 常数相等，进而得到 selected 常数等式。
+一般对数凹版本位于 [Poincare.lean](../LocalSlope/Poincare.lean)：从现有
+`KLS.LogConcave μ` 推出 光滑测试、内在光滑梯度和局部斜率 常数相等，进而得到 selected 常数等式。
 内禀绝对连续性由 [AbsoluteContinuity.lean](../../KLS/LogConcave/AbsoluteContinuity.lean) 证明，未作为额外假设。
-包含环境奇异和零维支撑；完整 Borell 密度代表及矩定理仍未完成。见
+包含环境奇异和零维支撑；完整 Borell 密度代表、局部界及矩定理也已由后续证书完成。见
 [本地证明记录](../../../../research/decisions/2026-09-06-general-logconcave-comparison.md)。
 
-公共命名按数学角色组织：`Poincare.Canonical.constant` 是所选常数，
-`Poincare.Ambient.constant` 是环境空间上的松弛常数，`Poincare.L2Energy.constant μ energy`
-是通用优化器；`Poincare.Affine.constant` 是 CMH 路线使用的仿射协方差常数 `C_P^aff`，见
-[AffineCovariance.lean](AffineCovariance.lean)；[AffineTranslation.lean](AffineTranslation.lean) 证明它在环境平移下不变（对任意 Borel 律）；[LipschitzComparison.lean](LipschitzComparison.lean) 证明单位权 Lipschitz 梯度松弛的最优常数等于 legacy 与文献常数，故单位协方差时 `C_P^aff` 与前三者相等，一般时 `C_P^lit ≤ ‖Σ‖ C_P^aff`。对 `hμ : KLS.LogConcave μ`，直接使用 `hμ.canonical_eq_literature`。
+公共命名按数学角色组织：`Poincare.SmoothGradient.Intrinsic.constant` 是所选常数，
+`Poincare.SmoothGradient.Ambient.constant` 是环境空间上的松弛常数，`Poincare.L2Energy.constant μ energy`
+是通用优化器；`Poincare.CovarianceGradient.Intrinsic.constant` 是 CMH 路线使用的仿射协方差常数 `C_P^aff`，见
+[Intrinsic.lean](../CovarianceGradient/Intrinsic.lean)；[Translation.lean](../CovarianceGradient/Translation.lean) 证明它在环境平移下不变（对任意 Borel 律）；[Comparison.lean](../LipschitzGradient/Comparison.lean) 证明单位权 Lipschitz 梯度松弛的最优常数等于 legacy 与文献常数，故单位协方差时 `C_P^aff` 与前三者相等，一般时 `C_P^lit ≤ ‖Σ‖ C_P^aff`。对 `hμ : KLS.LogConcave μ`，直接使用 `hμ.intrinsicSmooth_constant_eq_localSlope`。
 名称整理的范围与保留长名的理由见 [命名约定](../../../../research/naming.md)。
 
 ## 阅读入口
@@ -28,9 +28,9 @@
 | 先看几何比较和退化情形 | [LemAmbientIntrinsicPoincareComparison.lean](../../../../solutions/LemAmbientIntrinsicPoincareComparison.lean) | 5 条声明、4 个应用 |
 | 看抽象比较和 Gaussian 的未来用法 | [LemLegacyRelaxedPoincareComparison.lean](../../../../solutions/LemLegacyRelaxedPoincareComparison.lean) | 7 条比较声明、8 个应用 |
 | 任意具体 pre-energy 的常数比较 | [Poincare/Relaxation.lean](../Relaxation.lean) | 原始测试族定义、有限常数等价、扩展最优常数等式 |
-| 比较两种坐标下的能量 | [Energy/Euclidean/AffineComparison.lean](../../Energy/Euclidean/AffineComparison.lean) | 测试限制、测试延拓、relaxation 等式 |
-| 从能量等式得到常数等式 | [AffineComparison.lean](AffineComparison.lean) | 两种 relaxed `Holds` 与常数比较 |
-| 接到旧光滑测试接口 | [LegacyComparison.lean](LegacyComparison.lean) | 原始测试域识别及两级常数比较 |
+| 比较两种坐标下的能量 | [Energy/SmoothGradient/Intrinsic/Comparison.lean](../../Energy/SmoothGradient/Intrinsic/Comparison.lean) | 测试限制、测试延拓、relaxation 等式 |
+| 从能量等式得到常数等式 | [Comparison.lean](../SmoothGradient/Comparison.lean) | 两种 relaxed `Holds` 与常数比较 |
+| 接到旧光滑测试接口 | [Comparison.lean](../SmoothTest/Comparison.lean) | 原始测试域识别及两级常数比较 |
 
 ## 要表达的数学结论
 
@@ -51,12 +51,12 @@ raw/core agreement。测试类可以为空，常数可以是零，最优常数�
 intrinsic-affine relaxation 完全相等。因此二者的有限能量域、有效有限常数和扩展最优
 常数一致。测度允许奇异、proper affine support 或零维支撑，不要求二阶矩或 log-concavity。
 
-最后一组将 legacy 的 `Admissible` 与 `SmoothGradientTest` 对齐，得到
+最后一组将 SmoothTest 的 `Admissible` 与 `Energy.SmoothGradient.Test` 对齐，得到
 
 ```text
-Poincare.constant μ
-  = Poincare.Ambient.constant μ
-  = Poincare.Canonical.constant μ.
+Poincare.SmoothTest.constant μ
+  = Poincare.SmoothGradient.Ambient.constant μ
+  = Poincare.SmoothGradient.Intrinsic.constant μ.
 ```
 
 这里略去了 `ProbabilityMeasure → Measure` 的 coercion。真正的有限常数接口明确使用
@@ -68,18 +68,18 @@ Poincare.constant μ
 以下调用已在第二份证书入口中编译检查，使用已证明的 Gaussian 定理与比较桥：
 
 ```lean
-import FunctionalInequalities.Poincare.Euclidean.LegacyComparison
+import FunctionalInequalities.Poincare.SmoothTest.Comparison
 import FunctionalInequalities.Poincare.Gaussian.Real
 
 open FunctionalInequalities
 
 #check (fun (m : ℝ) (v : NNReal) ↦
-  (Poincare.Euclidean.holds_iff_canonical
+  (Poincare.SmoothTest.holds_iff_intrinsic
     (Probability.ofMeasure (ProbabilityTheory.gaussianReal m v)) v).mp
-      (Poincare.holds_gaussianReal m v))
+      (Poincare.SmoothTest.holds_gaussianReal m v))
 ```
 
-这里 `v` 是方差，包括 `v = 0` 的 Dirac 情形。比较桥把 legacy Gaussian 的有效常数与
+这里 `v` 是方差，包括 `v = 0` 的 Dirac 情形。比较桥把 SmoothTest Gaussian 的有效常数与
 精确最优值传到所选接口。入口还检查任意维数、空测试类型及无穷常数的传递。
 
 ## 证明与来源
@@ -116,7 +116,7 @@ lake build solutions.LemLegacyRelaxedPoincareComparison
 lake build
 ```
 
-默认构建检查十份证书、公理 guards 和使用示例；这批比较模块没有证明占位。
+默认构建检查十七份证书、公理 guards 和使用示例；这批比较模块没有证明占位。
 新增的方差连续性与连续测试映射的 relaxation 比较也有公理 guards。
 两个节点的数学规格在 [ledger](../../../../research/a-series/ledger.yaml)，原草案设计保留在
 [历史记录](../../../../research/decisions/2026-09-06-poincare-comparison-statements.md)，

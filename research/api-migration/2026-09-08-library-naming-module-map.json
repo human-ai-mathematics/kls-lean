@@ -1,0 +1,14 @@
+{
+  "FunctionalInequalities.KLS.LocalSlopeGradient": "FunctionalInequalities.Energy.LocalSlope.Gradient",
+  "FunctionalInequalities.KLS.LogConcave.AffineClosedForm": "FunctionalInequalities.KLS.LogConcave.ClosedForm",
+  "FunctionalInequalities.KLS.LogConcave.AffineCovariance": "FunctionalInequalities.KLS.LogConcave.Covariance",
+  "FunctionalInequalities.KLS.LogConcave.AffineTranslation": "FunctionalInequalities.KLS.LogConcave.Translation",
+  "FunctionalInequalities.KLS.LogConcave.CovarianceClosure": "FunctionalInequalities.KLS.LogConcave.WeightedGradient",
+  "FunctionalInequalities.KLS.LogConcave.IsotropicReduction": "FunctionalInequalities.KLS.LogConcave.Isotropic",
+  "FunctionalInequalities.Poincare.LocalSlope.LogConcaveComparison": "FunctionalInequalities.KLS.LogConcave.Poincare",
+  "FunctionalInequalities.Poincare.SmoothTest.RelaxationComparison": "FunctionalInequalities.Poincare.SmoothTest.Comparison",
+  "FunctionalInequalities.Poincare.Basic": "FunctionalInequalities.Poincare.SmoothTest.Basic",
+  "FunctionalInequalities.Poincare.Optimal": "FunctionalInequalities.Poincare.SmoothTest.Optimal",
+  "FunctionalInequalities.Poincare.Transport": "FunctionalInequalities.Poincare.SmoothTest.Transport",
+  "FunctionalInequalities.Poincare.LinearTest": "FunctionalInequalities.Poincare.SmoothTest.Linear"
+}
