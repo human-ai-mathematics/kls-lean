@@ -138,4 +138,3 @@ theorem integral_id_translateLaw_neg_integral (ν : ProbabilityMeasure V)
   simp
 
 end FunctionalInequalities.Probability
-

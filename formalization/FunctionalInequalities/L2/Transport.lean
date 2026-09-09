@@ -18,8 +18,8 @@ universe u v
 
 namespace Translation
 
-variable {V : Type u} [NormedAddCommGroup V] [InnerProductSpace ℝ V] 
-  [MeasurableSpace V] [BorelSpace V]  
+variable {V : Type u} [NormedAddCommGroup V] [InnerProductSpace ℝ V]
+  [MeasurableSpace V] [BorelSpace V]
 
 variable (ν : ProbabilityMeasure V) (c : V)
 
@@ -101,10 +101,10 @@ end Translation
 
 namespace LinearIsometry
 
-variable {V₁ : Type u} [NormedAddCommGroup V₁] [InnerProductSpace ℝ V₁] 
-  [MeasurableSpace V₁] [BorelSpace V₁]  
-variable {V₂ : Type v} [NormedAddCommGroup V₂] [InnerProductSpace ℝ V₂] 
-  [MeasurableSpace V₂] [BorelSpace V₂]  
+variable {V₁ : Type u} [NormedAddCommGroup V₁] [InnerProductSpace ℝ V₁]
+  [MeasurableSpace V₁] [BorelSpace V₁]
+variable {V₂ : Type v} [NormedAddCommGroup V₂] [InnerProductSpace ℝ V₂]
+  [MeasurableSpace V₂] [BorelSpace V₂]
 
 variable (ν : ProbabilityMeasure V₁) (L : V₁ ≃ₗᵢ[ℝ] V₂)
 
@@ -178,10 +178,10 @@ end LinearIsometry
 
 namespace ContinuousLinearEquiv
 
-variable {V₁ : Type u} [NormedAddCommGroup V₁] [InnerProductSpace ℝ V₁] 
-  [MeasurableSpace V₁] [BorelSpace V₁]  
-variable {V₂ : Type v} [NormedAddCommGroup V₂] [InnerProductSpace ℝ V₂] 
-  [MeasurableSpace V₂] [BorelSpace V₂]  
+variable {V₁ : Type u} [NormedAddCommGroup V₁] [InnerProductSpace ℝ V₁]
+  [MeasurableSpace V₁] [BorelSpace V₁]
+variable {V₂ : Type v} [NormedAddCommGroup V₂] [InnerProductSpace ℝ V₂]
+  [MeasurableSpace V₂] [BorelSpace V₂]
 
 variable (ν : ProbabilityMeasure V₁) (T : V₁ ≃L[ℝ] V₂)
 

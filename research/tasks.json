@@ -625,7 +625,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/L2/Transport.lean",
-            "sha256": "06003285706f0de53fa48b296cc7a5cfda8ad5d2de91eb904636d278389414f9"
+            "sha256": "245b7f53be19531cd0befe7ceb628430c9caa73f723ad695b177cc2bd7d423cb"
           },
           {
             "path": "formalization/FunctionalInequalities/Poincare/CovarianceGradient/Transport.lean",
@@ -693,7 +693,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/L2/Transport.lean",
-            "sha256": "06003285706f0de53fa48b296cc7a5cfda8ad5d2de91eb904636d278389414f9"
+            "sha256": "245b7f53be19531cd0befe7ceb628430c9caa73f723ad695b177cc2bd7d423cb"
           },
           {
             "path": "formalization/FunctionalInequalities/Poincare/CovarianceGradient/Transport.lean",
@@ -713,7 +713,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/Probability/IntrinsicTranslation.lean",
-            "sha256": "c56a101ac25818a157317d576c0fd075232ae7ac9e80055006f7c06371532cf3"
+            "sha256": "fcc0ad57b64fcd2e47d86ba74138ef6aa95e1dd6dc805671ed3ecf78015b523e"
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/LogConcave/Translation.lean",
@@ -773,11 +773,11 @@
         "evidence": [
           {
             "path": "formalization/FunctionalInequalities/Energy/CovarianceGradient/LinearEquiv.lean",
-            "sha256": "3a4e35356aa173a5c562f59b26af18dab83be683153617e3322c4afc46a08eaa"
+            "sha256": "e0875c710259846f0799b515ab4975a7e8c31fc659022ec436055213108d5f31"
           },
           {
             "path": "formalization/FunctionalInequalities/L2/Transport.lean",
-            "sha256": "06003285706f0de53fa48b296cc7a5cfda8ad5d2de91eb904636d278389414f9"
+            "sha256": "245b7f53be19531cd0befe7ceb628430c9caa73f723ad695b177cc2bd7d423cb"
           },
           {
             "path": "formalization/FunctionalInequalities/Poincare/CovarianceGradient/Transport.lean",
@@ -942,7 +942,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/Probability/IntrinsicTranslation.lean",
-            "sha256": "c56a101ac25818a157317d576c0fd075232ae7ac9e80055006f7c06371532cf3"
+            "sha256": "fcc0ad57b64fcd2e47d86ba74138ef6aa95e1dd6dc805671ed3ecf78015b523e"
           }
         ],
         "gaps": [

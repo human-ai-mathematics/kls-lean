@@ -183,4 +183,3 @@ end CovarianceGradient
 end Relaxation
 
 end FunctionalInequalities.Energy
-
