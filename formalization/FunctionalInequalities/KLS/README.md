@@ -18,10 +18,11 @@
 | [ConditionalFiber/EnergyComparison.lean](ConditionalFiber/EnergyComparison.lean) | 纤维 Poincaré 输入 `FiberBound μ ρ κ` 下，条件纤维能量与局部斜率（梯度）能量的比较 `energy_le_of_fiberBound`（`D_{μ,ρ}(f) ≤ κ·∫‖∇f‖²`，有限）及形式差界 `C` 到 `C_P^lit(μ) ≤ κC` 的传递 `literatureConstant_le_of_fiberBound`；要求 `μ ≪ Haar` 与可容许框架，不固定 `κ` 的取值，不提供纤维对数凹性或框架界 |
 | [ConditionalFiber/SliceKernel.lean](ConditionalFiber/SliceKernel.lean) | 给定 Haar 密度 `p` 时沿直线的显式切片核 `sliceKernel`（密度 `t ↦ p(z+tθ)/Z(θ,z)`，坏基点取狄拉克律）；`compProd_baseLaw_sliceKernel`（`baseLaw ⊗ₘ sliceKernel = jointLaw`）与 `ae_sliceKernel_eq`（与所选条件核几乎处处相等）；不假设对数凹，只要一个 Haar 密度 |
 | [LogConcave/ConditionalFiber.lean](LogConcave/ConditionalFiber.lean) | 全维对数凹律的条件纤维几乎处处对数凹 `ae_conditionalFiber_logConcave`，由此得 `FiberBound μ ρ 4`、`D_{μ,ρ}(f) ≤ 4·∫‖∇f‖²` 与 `C_P^lit(μ) ≤ 4C`（Blueprint 的 `12` 版本带 `_of_four` 后缀保留）；不提供框架界，`q:conditional-fiber-frame` 仍开放 |
-| [WIP/](WIP/) | **未注册**、不进聚合导入的进行中模块，任何证书都不依赖它们：`RelativePerimeter.lean`（光滑区域 `SmoothDomain`、归一化面积测度 `surfaceMeasure`、相对周长与 `lem:relative-perimeter-smoothing` 的骨架，5 条 `sorry`）、`CheegerInfimum.lean`（两种 Cheeger 下确界相等的骨架，9 条 `sorry`）、`AnalyticPrerequisites.lean`（上述两文件所缺分析前提的 KLS 无关陈述：等周直径不等式经 Brunn–Minkowski、正则水平集的 Lipschitz 图与 `μH[n−1]` 局部有限、光滑区域的 Gauss–Green、加权 coarea、Sard；5 条 `sorry`；Prékopa–Leindler、Brunn–Minkowski、等周直径、Hausdorff 归一化和正则水平集局部有限性已有证明，Gauss–Green、coarea、Sard 仍待完成）。记录见 `research/decisions/2026-09-1{1,2}-relative-perimeter-*.md` |
+| [WIP/](WIP/) | **未注册**、不进聚合导入的进行中模块，任何证书都不依赖它们：`RelativePerimeter.lean`（光滑区域 `SmoothDomain`、归一化面积测度 `surfaceMeasure`、相对周长与 `lem:relative-perimeter-smoothing` 的骨架，5 条 `sorry`）、`CheegerInfimum.lean`（两种 Cheeger 下确界相等的骨架，9 条 `sorry`）、`AnalyticPrerequisites.lean`（上述两文件所缺分析前提的 KLS 无关陈述：等周直径不等式经 Brunn–Minkowski、正则水平集的 Lipschitz 图与 `μH[n−1]` 局部有限、光滑区域的 Gauss–Green、加权 coarea、Sard；5 条 `sorry`（四条边界正则性接口已证且无 `sorryAx`）；Prékopa–Leindler、Brunn–Minkowski、等周直径、Hausdorff 归一化和正则水平集局部有限性已有证明，Gauss–Green、coarea、Sard 仍待完成）。记录见 `research/decisions/2026-09-1{1,2}-relative-perimeter-*.md` |
 
 三个 KLS WIP 文件共 19 个直接 `sorry`，另有 `Energy/WIP/Cheeger.lean` 的 5 个；本轮按 owner
-要求全部保留。部分完整证明体仍传递依赖 `sorryAx`。已有几何输入尚未接入不等于仍需新数学，
+要求保留未完成义务；四条新增接口现已证明，见
+[证明记录](../../../research/decisions/2026-09-12-outward-normal-interfaces-proofs.md)。部分完整证明体仍传递依赖 `sorryAx`。已有几何输入尚未接入不等于仍需新数学，
 详见[当前审计与保留策略](../../../research/decisions/2026-09-12-status-audit-and-wip-retention.md)。
 
 先读 `Definitions` 和 `Statement` 确定目标；对数凹分析沿子目录的阅读顺序展开。

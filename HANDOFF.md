@@ -19,7 +19,12 @@ finiteness. Those results still need integration with the perimeter chain. Gauss
 coarea and Sard remain substantial proof obligations. The existing certified
 `exists_smooth_bounded_L1` also supplies the smoothing input still left as `sorry` in
 `CheegerInfimum`; retaining that placeholder does not mean this input is mathematically missing.
-No proof filling or statement changes are part of this documentation update.
+The four boundary-regularity interfaces now have standard-axiom proofs: boundary continuity,
+measurability, local finiteness of normalized boundary measure, and boundary integrability.
+The prerequisite module has 21 obligations: 16 filled bodies, 14 without transitive `sorryAx`.
+Read the [proof record](research/decisions/2026-09-12-outward-normal-interfaces-proofs.md) and
+[closeout](research/decisions/2026-09-12-outward-normal-interfaces-closeout.md); both sorry prompts
+are historical handoffs. C1/C2, coarea and Sard remain open.
 
 Read [the audit record](research/decisions/2026-09-12-status-audit-and-wip-retention.md) before using older counts or infrastructure
 assessments below. The unconditional singular-law Cheeger comparison remains unregistered; its

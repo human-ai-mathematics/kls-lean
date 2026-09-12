@@ -1694,7 +1694,7 @@
       ],
       "assumptions": [],
       "priority": 5,
-      "note": "Reassessed 2026-09-12: KLS/WIP/RelativePerimeter.lean defines SmoothDomain, normalized surfaceMeasure and relativePerimeter and retains five sorry bodies. The companion AnalyticPrerequisites.lean already proves Prekopa-Leindler, Brunn-Minkowski, the isodiametric inequality, Hausdorff normalization and regular-level-set local finiteness with standard axioms. It imports RelativePerimeter, so those inputs need a lower-level module split before they can discharge its normalization and local-finiteness holes. Gauss-Green, its boundary-integrability inputs and the resulting weighted convolution/recovery estimates remain unfinished. These WIP modules are unregistered and excluded from certified imports. All holes are retained under the owner's documentation-and-commit instruction; see research/decisions/2026-09-12-status-audit-and-wip-retention.md.",
+      "note": "Reassessed 2026-09-12 after the four boundary-interface proofs: RelativePerimeter retains five sorry bodies. AnalyticPrerequisites proves Prekopa-Leindler, Brunn-Minkowski, isodiametric and Hausdorff results, regular-level-set local finiteness, outward-normal continuity and measurability, local finiteness of normalized boundary measure, and compactly supported boundary integrability using only standard axioms. The source now has five direct holes (coarea and its measurability, Sard, scalar and vector Gauss-Green); 16 of 21 bodies are filled and 14 are free of transitive sorryAx. Its import of RelativePerimeter still prevents reverse integration of the normalization and local-finiteness inputs without a lower-level split. Gauss-Green and the resulting weighted convolution/recovery estimates remain unfinished, so infrastructure remains missing. The WIP modules remain unregistered and excluded from certified imports. See research/decisions/2026-09-12-outward-normal-interfaces-closeout.md.",
       "infrastructure": {
         "status": "missing",
         "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
@@ -1737,12 +1737,12 @@
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/WIP/AnalyticPrerequisites.lean",
-            "sha256": "dfa0d4613a1832c8921380801cd3d040d7f49cdd24031212b4e3197be028fa21"
+            "sha256": "eb9fb5e28bf6cccda6ef98d72b04258a049c2bfa5d9f53327e8d5881b887a964"
           }
         ],
         "gaps": [
           "Integrate the already-proved Hausdorff normalization and regular-level-set local finiteness into the smooth-domain perimeter module without creating the existing reverse-import cycle; the definitions of SmoothDomain, surfaceMeasure and relativePerimeter are present in WIP.",
-          "Prove Gauss-Green for smooth domains with the normalized surface measure, including the required graph area formula and boundary measurability/integrability of the outward-normal field; its scalar and vector formulations retain sorry.",
+          "Prove Gauss-Green for smooth domains with the normalized surface measure, including the required graph area formula; boundary measurability and integrability are now proved, but both Gauss-Green formulations retain sorry.",
           "Use Gauss-Green, surface-measure finiteness and the log-concave weight comparison to prove the gradient-integral estimate for mollified outward dilations, then assemble the relative-perimeter recovery sequence."
         ]
       }

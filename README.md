@@ -17,7 +17,9 @@ review snapshots.
 The ledger contains **24 Lean-certified nodes**. Four isolated WIP modules retain **24 explicit
 `sorry` proofs**; some downstream proof bodies also depend transitively on those holes. The owner
 has chosen to retain this work for later proof development. Neither a WIP file's presence nor its
-successful ordinary elaboration promotes it to certified mathematics.
+successful ordinary elaboration promotes it to certified mathematics. The four
+[boundary-regularity interfaces](research/decisions/2026-09-12-outward-normal-interfaces-proofs.md)
+now have proofs with only standard axioms; Gauss--Green itself remains open.
 
 The recent results include the one-dimensional `4 Var` upper bound, the conditional-fiber
 comparison with factor `4`, and `E^can = 2 Ch` in the local-slope convention whenever the intrinsic

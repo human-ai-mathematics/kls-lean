@@ -9,9 +9,10 @@ import FunctionalInequalities.Probability.Line.BrunnMinkowski
 /-!
 # Analytic prerequisites of the relative-perimeter chain
 
-Partially proved work-in-progress module: 12 of the original 17 proof bodies are filled and
-five explicit `sorry` remain (weighted coarea and its measurability, Sard, and the two Gauss–Green
-statements). Ten of the filled results use only standard axioms; `ae_forall_fderiv_ne_zero` and
+Partially proved work-in-progress module: 16 of the 21 proof bodies are filled, the four
+boundary-regularity interfaces of Section C among them. Five explicit `sorry`s remain: weighted
+coarea and its measurability, Sard, and the two Gauss–Green statements.
+Fourteen of the filled results use only standard axioms; `ae_forall_fderiv_ne_zero` and
 `gradient_mollifiedIndicator_eq` still depend on `sorryAx` through their inputs. All holes are
 retained by the owner. The module is not imported by the library root, not registered in the
 ledger, and not anchored from the Blueprint. It turns
@@ -73,6 +74,18 @@ oriented surface measure `-ν ℋ^{n-1}⌊∂U`; `gradient_mollifiedIndicator_eq
 `η = φ.normed (x - ·)` and is the exact formula behind `SmoothDomain.enorm_gradient_mollified_le`.
 Mathlib's divergence theorem (`MeasureTheory/Integral/DivergenceTheorem.lean`) covers only boxes
 in `Fin (n+1) → ℝ`.
+
+The boundary-integrability inputs are now proved: `continuousOn_outwardNormal`,
+`measurable_outwardNormal`, `isLocallyFiniteMeasure_surfaceMeasure_frontier`, and
+`integrableOn_smul_outwardNormal`. Continuity is only asserted on the frontier; global
+measurability uses the zero extension off this closed set. Local finiteness concerns the
+restriction of the normalized surface measure to the frontier, not the ambient surface measure,
+and is obtained from the pointwise level-set bound of Section B, one defining neighbourhood at a
+time, so an unbounded frontier of infinite total measure is allowed. These inputs are what lets
+the scalar-to-vector Gauss–Green argument commute boundary integrals with inner products; the two
+Gauss–Green statements themselves are still open. The handoff prompt is recorded in
+`research/decisions/2026-09-12-outward-normal-interfaces-sorry-prompt.md`, the proof round in
+`research/decisions/2026-09-12-outward-normal-interfaces-proofs.md`.
 
 ## D. Weighted coarea formula
 
@@ -1094,12 +1107,121 @@ theorem norm_outwardNormal (U : SmoothDomain V) {x : V} (hx : x ∈ frontier U.c
   rw [outwardNormal, dif_pos hx, norm_smul, norm_inv, norm_norm,
     inv_mul_cancel₀ (norm_ne_zero_iff.mpr hne)]
 
+/-- The outward unit normal is continuous on the frontier. Its zero extension need not be
+continuous on the ambient space. -/
+theorem continuousOn_outwardNormal (U : SmoothDomain V) :
+    ContinuousOn U.outwardNormal (frontier U.carrier) := by
+  intro x hx
+  obtain ⟨W, φ, hW, hxW, hφ, hφ', hU⟩ := U.exists_defining x hx
+  set h : V → V := fun y => ‖gradient φ y‖⁻¹ • gradient φ y
+  have hgradcont : Continuous fun y : V => gradient φ y := by
+    have hfd : Continuous (fderiv ℝ φ) := hφ.continuous_fderiv (by simp)
+    exact (InnerProductSpace.toDual ℝ V).symm.continuous.comp hfd
+  have hgradne : gradient φ x ≠ 0 := fun hzero =>
+    hφ' x hxW (by rw [← toDual_gradient (𝕜 := ℝ), hzero, map_zero])
+  have hcont : ContinuousAt h x :=
+    ContinuousAt.smul ((hgradcont.continuousAt.norm).inv₀ (norm_ne_zero_iff.mpr hgradne))
+      hgradcont.continuousAt
+  have heq : ∀ y ∈ frontier U.carrier ∩ W, U.outwardNormal y = h y := by
+    rintro y ⟨hy1, hy2⟩
+    exact U.outwardNormal_eq hy1 hW hy2 hφ hφ' hU
+  refine ContinuousWithinAt.congr_of_eventuallyEq hcont.continuousWithinAt ?_ (heq x ⟨hx, hxW⟩)
+  filter_upwards [Filter.inter_mem self_mem_nhdsWithin
+    (nhdsWithin_le_nhds (hW.mem_nhds hxW))] with y hy
+  exact heq y ⟨hy.1, hy.2⟩
+
 end Normal
+
+section NormalMeasurability
+
+variable {V : Type u} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [CompleteSpace V]
+  [MeasurableSpace V] [BorelSpace V]
+
+open Classical in
+/-- The outward unit normal, extended by zero off the closed frontier, is Borel measurable. -/
+theorem measurable_outwardNormal (U : SmoothDomain V) :
+    Measurable U.outwardNormal := by
+  have hpw : U.outwardNormal
+      = (frontier U.carrier).piecewise U.outwardNormal (fun _ => (0 : V)) := by
+    funext x
+    by_cases hx : x ∈ frontier U.carrier
+    · rw [Set.piecewise_eq_of_mem _ _ _ hx]
+    · rw [Set.piecewise_eq_of_notMem _ _ _ hx, outwardNormal, dif_neg hx]
+  rw [hpw]
+  exact U.continuousOn_outwardNormal.measurable_piecewise continuousOn_const
+    isClosed_frontier.measurableSet
+
+end NormalMeasurability
 
 section GaussGreen
 
 variable {V : Type u} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [CompleteSpace V]
   [MeasurableSpace V] [BorelSpace V] [FiniteDimensional ℝ V]
+
+-- The type is the one fixed by the statement round; `CompleteSpace V` became unused only because
+-- the body is now a proof rather than `sorry` (`FiniteDimensional ℝ V` already supplies
+-- completeness to every step), so the linter is silenced instead of the signature changed.
+set_option linter.unusedSectionVars false in
+/-- The normalized surface measure restricted to a smooth frontier is locally finite,
+including for unbounded domains and in dimension zero. -/
+theorem isLocallyFiniteMeasure_surfaceMeasure_frontier (U : SmoothDomain V) :
+    IsLocallyFiniteMeasure ((surfaceMeasure V).restrict (frontier U.carrier)) := by
+  have hfrmeas : MeasurableSet (frontier U.carrier) := isClosed_frontier.measurableSet
+  constructor
+  intro x
+  by_cases hx : x ∈ frontier U.carrier
+  · -- A nonempty frontier forces a positive dimension, so `n - 1` is the honest exponent.
+    have hpos : 1 ≤ Module.finrank ℝ V := by
+      by_contra hcon
+      have h0 : Module.finrank ℝ V = 0 := by omega
+      have hss : Subsingleton V := Module.finrank_zero_iff.mp h0
+      have hemp : frontier U.carrier = ∅ := by
+        rcases Set.eq_empty_or_nonempty U.carrier with he | hne
+        · rw [he, frontier_empty]
+        · rw [Subsingleton.eq_univ_of_nonempty hne, frontier_univ]
+      rw [hemp] at hx
+      exact hx
+    have hcast : ((Module.finrank ℝ V - 1 : ℕ) : ℝ) = (Module.finrank ℝ V : ℝ) - 1 := by
+      rw [Nat.cast_sub hpos, Nat.cast_one]
+    obtain ⟨W, φ, hW, hxW, hφ, hφ', hU⟩ := U.exists_defining x hx
+    obtain ⟨N, hN, hNfin⟩ := Analysis.exists_hausdorffMeasure_levelSet_lt_top
+      (hφ.of_le (by simp)) (hφ' x hxW)
+    refine ⟨N ∩ W, Filter.inter_mem hN (hW.mem_nhds hxW), ?_⟩
+    have hsub : N ∩ W ∩ frontier U.carrier ⊆ N ∩ {y | φ y = φ x} := by
+      have hfr := U.frontier_inter_eq hW hφ hφ' hU
+      have hφx : φ x = 0 := by
+        have hmem : x ∈ {y ∈ W | φ y = 0} := by rw [← hfr]; exact ⟨hx, hxW⟩
+        exact hmem.2
+      rintro y ⟨⟨hyN, hyW⟩, hyfr⟩
+      have hmem : y ∈ {y ∈ W | φ y = 0} := by rw [← hfr]; exact ⟨hyfr, hyW⟩
+      exact ⟨hyN, by simp only [Set.mem_ofPred_eq, hφx]; exact hmem.2⟩
+    rw [Measure.restrict_apply' hfrmeas, surfaceMeasure, hausdorffNormalized,
+      Measure.smul_apply, smul_eq_mul, hcast]
+    exact ENNReal.mul_lt_top ENNReal.ofReal_lt_top
+      (lt_of_le_of_lt (measure_mono hsub) hNfin)
+  · refine ⟨(frontier U.carrier)ᶜ, isClosed_frontier.isOpen_compl.mem_nhds hx, ?_⟩
+    rw [Measure.restrict_apply' hfrmeas, Set.compl_inter_self]
+    simp
+
+/-- A continuous compactly supported scalar test times the outward unit normal is integrable
+on the frontier with respect to the normalized surface measure. -/
+theorem integrableOn_smul_outwardNormal (U : SmoothDomain V) {η : V → ℝ}
+    (hη : Continuous η) (hηc : HasCompactSupport η) :
+    IntegrableOn (fun x ↦ η x • U.outwardNormal x) (frontier U.carrier)
+      (surfaceMeasure V) := by
+  have hloc := U.isLocallyFiniteMeasure_surfaceMeasure_frontier
+  set μ : Measure V := (surfaceMeasure V).restrict (frontier U.carrier)
+  have hint : Integrable η μ := hη.integrable_of_hasCompactSupport hηc
+  have hmeas : AEStronglyMeasurable (fun x => η x • U.outwardNormal x) μ :=
+    (hη.measurable.smul U.measurable_outwardNormal).aestronglyMeasurable
+  have hnorm : ∀ x : V, ‖η x • U.outwardNormal x‖ ≤ ‖η x‖ := by
+    intro x
+    rw [norm_smul]
+    by_cases hx : x ∈ frontier U.carrier
+    · rw [U.norm_outwardNormal hx, mul_one]
+    · rw [outwardNormal, dif_neg hx]
+      simp
+  exact hint.mono hmeas (Eventually.of_forall hnorm)
 
 /-- **Gauss–Green theorem** for a smooth domain and a compactly supported `C¹` vector field:
 `∫_U div F = ∫_{∂U} ⟪F, ν⟫ dℋ^{n-1}`, with the normalized surface measure and the outward unit

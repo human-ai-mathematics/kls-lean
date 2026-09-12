@@ -18,7 +18,11 @@ Kernel replay includes the four WIP modules and can accept terms using `sorryAx`
 import closure excludes WIP. Ordinary direct elaboration of each WIP file succeeds with its
 expected `sorry` warnings. With `-DwarningAsError=true`, those warnings become errors and the
 command exits nonzero. Thus neither ordinary elaboration nor replay certifies a WIP proof.
-The owner explicitly retains all 24 WIP holes. See the [audit record](decisions/2026-09-12-status-audit-and-wip-retention.md).
+The statement-only follow-up temporarily increased the total from 24 to 28. Its four boundary
+interfaces now have standard-axiom proofs, returning the current total to 24; see the
+[proof record](decisions/2026-09-12-outward-normal-interfaces-proofs.md) and
+[closeout](decisions/2026-09-12-outward-normal-interfaces-closeout.md).
+The earlier counts and gate results remain a historical [audit snapshot](decisions/2026-09-12-status-audit-and-wip-retention.md).
 
 Verification trusts pinned third-party compiled imports; it is not a fresh independent Mathlib
 rebuild or a remote CI result. Re-run `python3 research/verify.py` after source or metadata changes
@@ -419,7 +423,9 @@ obligations in `KLS/WIP/AnalyticPrerequisites.lean` (isodiametric via Brunn--Min
 Lipschitz-graph level sets, Gauss--Green with an outward normal, weighted coarea, Sard); the module is
 unregistered and no registered module depends on it. The subsequent
 [proof round](decisions/2026-09-12-relative-perimeter-prerequisites-proofs.md) filled 12 bodies,
-leaving 5 explicit holes. Ten of those filled results have only standard axioms; two still inherit
+leaving 5 explicit holes at that point. Four later boundary-regularity statements have now also
+been proved, so this module has 21 obligations, 16 filled bodies and 5 explicit holes. Fourteen
+of the filled results have only standard axioms; two still inherit
 `sorryAx` through Sard or Gauss--Green. The general geometric results need integration into the
 perimeter chain, so its infrastructure is still incomplete. Read the
 [statement record](decisions/2026-09-12-relative-perimeter-prerequisites-statement.md) and the
