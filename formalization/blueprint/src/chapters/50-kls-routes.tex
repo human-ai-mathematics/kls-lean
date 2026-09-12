@@ -4,9 +4,15 @@
 This chapter is a roadmap imported from the pinned upstream commit \sourcecommit.  Its nodes have
 different upstream statuses: open gates, conditional implications, and proof dossiers marked
 \texttt{proved}/\texttt{checked\_by: agent}.  Those statuses are reported route by route.  None of
-these upstream statements is Lean-certified.  The only \texttt{leanok} in this chapter is the
-implemented definition \cref{def:conditional-fiber-form}, whose well-definedness contracts are proved;
-no theorem, corollary, assumption or question here carries \texttt{leanok}.
+these upstream statements is Lean-certified as imported.  The \texttt{leanok} markers in this
+chapter are the implemented definition \cref{def:conditional-fiber-form}, whose well-definedness
+contracts are proved, the structural form lemma \cref{lem:conditional-fiber-form}, which now has
+a local Lean proof (\path{KLS/ConditionalFiber/Closed.lean}), the parameterized comparison
+\cref{lem:conditional-fiber-energy-comparison}, proved in
+\path{KLS/ConditionalFiber/EnergyComparison.lean}, and the log-concave specialization
+\cref{cor:conditional-fiber-twelve-bound}, proved in
+\path{KLS/LogConcave/ConditionalFiber.lean}; no other theorem, corollary,
+assumption or question here carries \texttt{leanok}.
 
 The TeX command \texttt{\textbackslash uses} means logical AND.  The four sufficient routes,
 however, are alternatives.  Their logical composition is therefore recorded in
@@ -302,11 +308,43 @@ zero variance.
 \begin{lemma}[Closed conditional-fiber form]
   \label{lem:conditional-fiber-form}
   \uses{def:conditional-fiber-form}
+  \lean{FunctionalInequalities.KLS.ConditionalFiber.functional,
+        FunctionalInequalities.KLS.ConditionalFiber.twoPointMeasure,
+        FunctionalInequalities.KLS.ConditionalFiber.twoPointMeasure_swap,
+        FunctionalInequalities.KLS.ConditionalFiber.jump,
+        FunctionalInequalities.KLS.ConditionalFiber.energyAt_eq_jump_div,
+        FunctionalInequalities.Probability.two_mul_evariance_eq_lintegral_prod,
+        FunctionalInequalities.KLS.ConditionalFiber.energy_le_of_lipschitzWith,
+        FunctionalInequalities.KLS.ConditionalFiber.smoothCore_subset_domain,
+        FunctionalInequalities.KLS.ConditionalFiber.dense_domain,
+        FunctionalInequalities.KLS.ConditionalFiber.form_parallelogram,
+        FunctionalInequalities.KLS.ConditionalFiber.energy_le_liminf,
+        FunctionalInequalities.KLS.ConditionalFiber.lowerSemicontinuous_form,
+        FunctionalInequalities.KLS.ConditionalFiber.closedQuadratic,
+        FunctionalInequalities.KLS.ConditionalFiber.markovian,
+        FunctionalInequalities.KLS.ConditionalFiber.dirichlet,
+        Solutions.LemConditionalFiberForm.certificate}
+  \leanok
   For $d\ge1$ and a full-dimensional log-concave probability with density and finite
   second moment, the form
   is densely defined, closed, symmetric, Markovian, and reversible.
+
+  In Lean the form is the extended functional \texttt{ConditionalFiber.functional}
+  $f\mapsto\mathcal D_{\mu,\rho}(f)$ on $L^2(\mu)$, and the conclusion is
+  \texttt{Energy.Dirichlet}: dense finite domain, lower semicontinuity, the extended quadratic
+  identities and the normal-contraction (Markov) property.  Symmetry and reversibility are read
+  through the jump representation: on every nondegenerate fiber the normalized variance is the
+  integral of $|f(z+t\theta)-f(z+s\theta)|^2$ against the two-point measure
+  $\mu_{\theta,z}\otimes\mu_{\theta,z}$ divided by $2\Var_{\mu_{\theta,z}}(T)$
+  (\texttt{energyAt\_eq\_jump\_div}), and that two-point measure is invariant under exchanging
+  its coordinates (\texttt{twoPointMeasure\_swap}).  The Lean theorem holds for every Borel
+  probability law $\mu$ on a finite-dimensional inner-product space and every probability law
+  $\rho$ on the sphere: log-concavity, a density, the finite second moment and the frame identity
+  are not used, and the stated scope is a typed application in the certificate.  In dimension zero
+  the sphere is empty, so no $\rho$ exists and the statement is vacuous there.
 \end{lemma}
 \begin{proof}
+  \leanok
   This is the structural part of the pinned upstream node. On a fiber of variance
   $0<\sigma^2<\infty$, the normalized variance is
   $(2\sigma^2)^{-1}\iint(f(t)-f(s))^2\,d\mu_{\theta,z}(t)d\mu_{\theta,z}(s)$.
@@ -330,12 +368,31 @@ zero variance.
   This density argument needs neither log-concavity nor a one-dimensional Poincar\'e bound.
   The stated scope is retained to match the imported structural result. The comparison with
   integrated gradient energy below is a separate use of the numerical input.
+
+  The Lean proof follows this route.  The two-point identity
+  $2\,\Var(X)=\iint|X(t)-X(s)|^2\,d\nu\,d\nu$ is proved in $[0,\infty]$ for every probability
+  law and every almost-everywhere strongly measurable $X$, both sides being infinite exactly when
+  $X\notin L^2(\nu)$; dividing by $2\Var(T)$ gives the jump representation on nondegenerate
+  fibers, while degenerate fibers contribute zero by definition.  Homogeneity, the parallelogram
+  identity and the contraction inequality are pointwise identities of the jump integrand.  For
+  closedness, an $L^2(\mu)$-convergent sequence converges in measure and has an almost-everywhere
+  convergent subsequence; pushing that null set through the joint law and disintegrating gives
+  almost-everywhere convergence along almost every fiber, Fatou on the two-point space gives lower
+  semicontinuity of each fiber energy, and Fatou on the base law gives lower semicontinuity of the
+  form.  A globally $L$-Lipschitz test has jump integrand at most $L^2|t-s|^2$ because
+  $\norm\theta=1$, so its energy is at most $dL^2$; smooth compactly supported functions are
+  globally Lipschitz and their classes are dense in $L^2(\mu)$.
 \end{proof}
 
 \begin{lemma}[Conditional-fiber comparison with an explicit input constant]
   \label{lem:conditional-fiber-energy-comparison}
   \uses{def:conditional-fiber-form,def:literature-poincare-constant,
         lem:finite-energy-factor-poincare}
+  \lean{FunctionalInequalities.KLS.ConditionalFiber.FiberBound,
+        FunctionalInequalities.KLS.ConditionalFiber.energy_le_of_fiberBound,
+        FunctionalInequalities.KLS.ConditionalFiber.literatureConstant_le_of_fiberBound,
+        Solutions.LemConditionalFiberEnergyComparison.certificate}
+  \leanok
   Let $d\ge1$, let $\mu\ll\mathrm{Leb}_{\mathbb R^d}$ have finite second moment, and let
   $\rho$ be an admissible frame. Suppose one finite $\kappa\ge0$ satisfies
   $C_{\mathrm P}^{\mathrm{lit}}(\mu_{\theta,z})\le
@@ -346,8 +403,23 @@ zero variance.
   \]
   Hence $\Var_\mu(f)\le C\mathcal D_{\mu,\rho}(f)$ on the maximal finite form domain,
   for finite $C\ge0$, implies $C_{\mathrm P}^{\mathrm{lit}}(\mu)\le\kappa C$.
+
+  In Lean the fiber hypothesis is \texttt{ConditionalFiber.FiberBound}: for base-law almost every
+  base point with a nondegenerate fiber (orthogonal base point, finite second moment, nonzero
+  variance), \texttt{Poincare.LocalSlope.Intrinsic.constant} of the fiber law is at most
+  $\kappa\,\mathrm{eVar}[T]$.  The displayed inequality is
+  \texttt{energy\_le\_of\_fiberBound}: for every test in the literature class
+  \texttt{Energy.LocalSlope.Admissible} (locally Lipschitz, square integrable, finite local-slope
+  energy), the conditional-fiber energy is at most $\kappa$ times the local-slope energy and is
+  finite; under absolute continuity the local-slope energy is the extended integral of
+  $\norm{\nabla f}^2$ (\texttt{Energy.LocalSlope.energy\_eq\_lintegral\_gradient}).  The
+  ``hence'' is \texttt{literatureConstant\_le\_of\_fiberBound}, stated with the $L^2$ form
+  \texttt{form} on its maximal finite domain \texttt{domain} and the literature constant of $\mu$
+  itself.  The Lebesgue reference is any additive Haar measure $m$ with $\mu\ll m$, and the finite
+  second moment is a field of the admissible frame.  No value of $\kappa$ is fixed here.
 \end{lemma}
 \begin{proof}
+  \leanok
   A finite upper bound for the literature infimum is itself valid: choose admissible constants
   below that bound plus $1/j$ and pass to the limit for each fixed finite-energy test.
   Disintegration gives square integrability of the restricted test and integrability of its
@@ -364,25 +436,78 @@ zero variance.
   exceptional or infinite-second-moment fibers are null. The resulting finite bound puts the
   test in the maximal form domain before the form-gap inequality is applied. The final
   multiplication by $C$ is the abstract implication in \cref{lem:finite-energy-factor-poincare}.
-  The actual disintegration and directional-energy calculation here is an analytic proof,
-  not an application already elaborated in Lean.
+
+  The Lean proof follows this route.  The literature constant of the fiber law is defined on its
+  intrinsic law; a real law with nonzero variance has full affine support, so intrinsic
+  reconstruction is a measure-preserving isometric equivalence, the local-slope bound transports
+  across it, and the intrinsic constant is the infimum of the coordinate constants.  A finite
+  upper bound on that infimum gives the inequality for each fixed admissible test directly, by
+  distributing the infimum over the product with the finite energy (no $1/j$ sequence is needed).
+  Along a line $t\mapsto f(z+t\theta)$ the local slope at a point where $f$ is differentiable
+  equals $|\langle\theta,\nabla f\rangle|$ by the chain rule; Rademacher's theorem on the Haar
+  reference and $\mu\ll m$ give differentiability $\mu$-almost everywhere, and this null set and
+  the square integrability of $f$ pass through the joint law and the disintegration to almost
+  every fiber.  Dividing the fiber bound by the positive finite variance, integrating over the
+  base law, rewriting the double integral through the joint law and Tonelli, and applying the
+  frame identity at each point gives $\kappa$ times the gradient energy, which is the local-slope
+  energy under absolute continuity.  For the ``hence'', the finite bound places the $L^2$ class of
+  the test in the maximal form domain, the form-gap bound and the comparison chain, and $\mu\ll m$
+  makes the affine support of $\mu$ the whole space (proper affine subspaces are Haar null), so the
+  resulting coordinate bound is a bound on the intrinsic literature constant.
 \end{proof}
 
 \begin{corollary}[Log-concave conditional fibers]
   \label{cor:conditional-fiber-twelve-bound}
   \uses{lem:conditional-fiber-energy-comparison,thm:one-dimensional-logconcave-poincare}
+  \lean{FunctionalInequalities.KLS.LogConcave.ae_conditionalFiber_logConcave,
+        FunctionalInequalities.KLS.LogConcave.conditionalFiber_fiberBound_four,
+        FunctionalInequalities.KLS.LogConcave.conditionalFiber_energy_le_four_mul,
+        FunctionalInequalities.KLS.LogConcave.conditionalFiber_literatureConstant_le_four_mul,
+        Solutions.CorConditionalFiberTwelveBound.certificate}
+  \leanok
   For a full-dimensional log-concave law with finite second moment,
-  $\mathcal D_{\mu,\rho}(f)\le12\int|\nabla f|^2\,d\mu$ on the literature test domain.
-  A finite form-gap bound $C$ therefore gives $\CPLit(\mu)\le12C$.
+  $\mathcal D_{\mu,\rho}(f)\le4\int|\nabla f|^2\,d\mu$ on the literature test domain.
+  A finite form-gap bound $C$ therefore gives $\CPLit(\mu)\le4C$.  The constant $12$ common in
+  the literature is the immediate weakening of $4$.
+
+  The constant is the one supplied by \cref{thm:one-dimensional-logconcave-poincare}; earlier
+  drafts of this corollary recorded $12$, the value obtained from Bobkov's bound.  In Lean the
+  fiber input is \texttt{conditionalFiber\_fiberBound\_four}, the instance $\kappa=4$ of
+  \texttt{ConditionalFiber.FiberBound}, obtained from
+  \texttt{ae\_conditionalFiber\_logConcave}: for base-law almost every base point the chosen
+  conditional kernel is a compact-set log-concave law on $\R$.  ``Full-dimensional'' is read, as
+  in \cref{lem:conditional-fiber-energy-comparison}, as $\mu\ll m$ for an additive Haar measure
+  $m$, and the finite second moment is a field of the admissible frame.  The $12$ versions are
+  \texttt{conditionalFiber\_energy\_le\_twelve\_mul\_of\_four} and
+  \texttt{conditionalFiber\_literatureConstant\_le\_twelve\_mul\_of\_four}.
 \end{corollary}
 \begin{proof}
+  \leanok
   For each fixed direction, Fubini disintegration of the log-concave density gives conditional
   densities proportional to $t\mapsto\rho_\mu(z+t\theta)$ wherever the normalizing slice
   integral is finite and positive. These densities are log-concave. The remaining fibers are
   null; finite second moment gives finite conditional variances almost everywhere. Apply
   \cref{thm:one-dimensional-logconcave-poincare} and then the preceding comparison with
-  $\kappa=12$. The same argument accepts any independently established smaller universal input.
-  This analytic corollary has no local Lean certificate.
+  $\kappa=4$. The same argument accepts any independently established smaller universal input.
+
+  The Lean proof follows this route.  Absolute continuity with respect to $m$ makes the affine
+  support of $\mu$ the whole space, so \cref{thm:borell-logconcave-density} supplies a Borell
+  density $p$.  The slice kernel of \path{KLS/ConditionalFiber/SliceKernel.lean} is the explicit
+  Markov kernel with Lebesgue density $t\mapsto p(z+t\theta)/Z(\theta,z)$ on the base points
+  where the slice mass $Z$ is positive and finite, and the Dirac law elsewhere.  Splitting the
+  Haar measure along the line $\R\theta$ through the linear equivalence
+  $\theta^{\perp}\times\R\cong\R^d$ (\path{Probability/HaarLine.lean}; the proportionality
+  constant between the two Haar measures depends on $\theta$ and is never evaluated) identifies
+  the base-law section of $\mu$ and shows $Z<\infty$ almost everywhere, which gives
+  $\mathrm{baseLaw}\otimes\text{slice kernel}=\text{joint law}$; uniqueness of conditional
+  kernels then identifies the slice kernel with the chosen one base-law almost everywhere.  On a
+  base point with positive finite slice mass the normalized line density is measurable,
+  nonnegative, upper semicontinuous and log-concave because $p$ is and the reconstruction map is
+  affine, and a law on $\R$ with a log-concave Lebesgue density is compact-set log-concave: this
+  is one-dimensional Prekopa--Leindler, proved in \path{Probability/Line/BrunnMinkowski.lean}
+  from the compact one-dimensional Brunn--Minkowski inequality by the layer-cake formula, and
+  applied in \path{KLS/LogConcave/Line/OfDensity.lean}.  The remaining base points carry a Dirac
+  law, which is log-concave, so no exceptional set has to be discarded at this step.
 \end{proof}
 
 \begin{question}[Test-independent conditional-fiber frame]
@@ -398,7 +523,7 @@ zero variance.
 \end{question}
 
 An affirmative answer together with \cref{lem:conditional-fiber-form,cor:conditional-fiber-twelve-bound}
-gives the isotropic KLS bound $\CPLit\le12C$ in every positive dimension; an input $\kappa$
+gives the isotropic KLS bound $\CPLit\le4C$ in every positive dimension; an input $\kappa$
 gives $\kappa C$. In dimension zero the Poincar\'e constant is
 zero.  Applying \cref{thm:affine-isotropic-reduction} then gives the full KLS statement, including
 laws on proper affine supports.  There is no
@@ -415,6 +540,15 @@ quantifiers explicit; it is not an independent ledger certificate.  At the pinne
 \texttt{proved}/\texttt{checked\_by: agent}, with evidence
 \path{solutions/conditional-fiber-frame-structure.tex}.  The exact review artifact is pinned in
 the route sidecar. Only the structural substatement is imported under that label here; the
-upstream factor-four claim is historical provenance, not the active numerical input.
-The new parameterized comparison and the $12$ specialization are local analytic statements,
-without Lean certificates. The gate \path{q:conditional-fiber-frame} remains \texttt{open}.
+upstream factor-four claim is historical provenance, not the active numerical input.  That
+structural substatement now also has a local Lean proof and the certificate
+\texttt{Solutions.LemConditionalFiberForm.certificate}, recorded as Lean evidence beside the
+upstream review in the route sidecar.
+The parameterized comparison \cref{lem:conditional-fiber-energy-comparison} is a local statement
+with a local Lean proof and the certificate
+\texttt{Solutions.LemConditionalFiberEnergyComparison.certificate}.  Its log-concave
+specialization \cref{cor:conditional-fiber-twelve-bound} is likewise a local statement with a
+local Lean proof and the certificate
+\texttt{Solutions.CorConditionalFiberTwelveBound.certificate}; it is stated here with the sharp
+constant $4$, the upstream factor-four provenance remaining historical rather than an input. The
+gate \path{q:conditional-fiber-frame} remains \texttt{open}, so no KLS bound follows.

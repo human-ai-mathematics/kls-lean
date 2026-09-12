@@ -72,9 +72,17 @@ The following statements are now proved rather than assumed:
   original and intrinsic-coordinate real `L²` spaces are linearly isometrically equivalent;
   the intrinsic-affine smooth relaxation is therefore also `ClosedQuadratic`.
 
-These theorems do not identify either relaxation with Cheeger energy `2 Ch`, prove the concrete
-normal-contraction estimate required for `Dirichlet`, or show `AgreesOnTests`. For singular
-measures, raw ambient gradients need not be constant on an `L²` fiber (`0` and `x ↦ x` already
+The original closed-quadratic results above are supplemented by three later certificates:
+`thm:smooth-gradient-relaxation-dirichlet` proves the normal-contraction estimate and Dirichlet
+property for every Borel probability law; `thm:smooth-gradient-raw-core-agreement-density` proves
+`AgreesOnTests` and the sequential-core property under `SmoothGradient.LocalDensity`; and
+`cor:absolutely-continuous-relaxation-two-cheeger` identifies the intrinsic canonical energy with
+`2 Ch` in the local-slope convention when the intrinsic law is Haar-absolutely-continuous, hence
+for every log-concave law. The unconditional singular-law Cheeger comparison and the equivalence
+with the asymptotic-Lipschitz convention remain isolated WIP obligations. See the
+[current status record](research/decisions/2026-09-12-status-audit-and-wip-retention.md).
+
+For singular measures, raw ambient gradients need not be constant on an `L²` fiber (`0` and `x ↦ x` already
 differ under `δ₀`). This obstructs a raw-test core theorem, but it does not obstruct the closed
 quadratic relaxation itself. The intrinsic affine reduction removes normal directions and gives
 a canonical coordinate presentation; it does not by itself prove raw-test agreement for atomic

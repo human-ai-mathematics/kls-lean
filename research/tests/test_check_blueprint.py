@@ -152,7 +152,19 @@ class BlueprintFixture(unittest.TestCase):
             claim("ass:cmh-recovery-envelope"),
             claim("cor:cmh-recovery-sequence-suffices", "conditional", review),
             claim("q:conditional-fiber-frame"),
-            claim("lem:conditional-fiber-form", "proved", review),
+            claim(
+                "lem:conditional-fiber-form",
+                "proved",
+                [
+                    {
+                        "kind": "lean",
+                        "source": local_source,
+                        "ledger_node": CHECKER.CERTIFICATES["lem:conditional-fiber-form"][0],
+                        "declaration": CHECKER.CERTIFICATES["lem:conditional-fiber-form"][1],
+                    },
+                    *review,
+                ],
+            ),
             claim(
                 "ass:weighted-package",
                 "refuted",

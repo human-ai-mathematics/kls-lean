@@ -12,6 +12,21 @@ recorded explicitly and checked against the original goal; see the
 [current lifecycle](research/ledger-schema.md#lifecycle). Earlier freeze records remain dated
 review snapshots.
 
+## Current status (2026-09-12)
+
+The ledger contains **24 Lean-certified nodes**. Four isolated WIP modules retain **24 explicit
+`sorry` proofs**; some downstream proof bodies also depend transitively on those holes. The owner
+has chosen to retain this work for later proof development. Neither a WIP file's presence nor its
+successful ordinary elaboration promotes it to certified mathematics.
+
+The recent results include the one-dimensional `4 Var` upper bound, the conditional-fiber
+comparison with factor `4`, and `E^can = 2 Ch` in the local-slope convention whenever the intrinsic
+law is absolutely continuous, hence for all log-concave laws. The universal conditional-fiber
+frame bound and the dimension-free KLS bound remain open. The one-dimensional certificate proves
+the upper bound; it does not separately certify optimality of the coefficient `4` across all laws.
+See the [status audit and WIP policy](research/decisions/2026-09-12-status-audit-and-wip-retention.md) for the remaining proof
+obligations, existing inputs awaiting integration, and verification boundaries.
+
 ## Mathematical API organization (2026-09-08)
 
 The public frontends are `SmoothTest`, `SmoothGradient`, `WeightedGradient`,
@@ -67,8 +82,18 @@ sequential relaxation and recovery, quadratic closure, and affine-support coordi
 compactly supported `C∞` gradient realization is dense, and both its direct relaxation and its
 intrinsic-affine pullback are proved densely defined closed quadratic energies. Here ordinary
 `C∞` is correctly encoded by Mathlib's `ContDiff ℝ ∞`; `ContDiff ℝ ⊤` is analytic and is not an
-assumption. Markov/Dirichlet structure, agreement with every raw gradient test, and identification
-with Cheeger energy `2 Ch` remain explicit later theorems rather than hidden premises.
+assumption. The Markov/Dirichlet property of both relaxations is now a proved theorem; agreement
+with every raw gradient test and identification with Cheeger energy `2 Ch` remain explicit later
+theorems rather than hidden premises; raw/core agreement is now proved for every law with a local
+density (`Energy/SmoothGradient/Core.lean`), while the Dirac and normal-direction obstructions show
+why it cannot hold unconditionally for the ambient pre-energy. The sharp one-dimensional bound `C_P^lit(ν) ≤ 4 Var_ν` for
+every log-concave law on the real line, zero variance included, is now a local Lean theorem (Bobkov's
+`12 Var` is a corollary) rather than an imported published input. The conditional-fiber form of the frame route is a proved
+Dirichlet energy on `L²(μ)` for every Borel law and every direction law
+(`KLS/ConditionalFiber/Closed.lean`), through its symmetric two-point jump representation, and its
+comparison with the gradient energy under a fiber Poincaré input `κ`
+(`D_{μ,ρ}(f) ≤ κ ∫‖∇f‖² dμ`, hence a form-gap bound `C` gives `C_P^lit(μ) ≤ κ C`) is proved in
+`KLS/ConditionalFiber/EnergyComparison.lean`.
 
 The 12 comparison theorems are now proved, with two additional ledger certificates and guarded
 transitive axiom checks. They identify arbitrary pre-energy optima with their relaxations and
@@ -113,7 +138,7 @@ To validate declaration links and build both rendered Blueprint formats, follow 
 commands in the [formalization guide](formalization/README.md#lean-blueprint). CI publishes the
 PDF and web tree as workflow artifacts; it deliberately does not deploy GitHub Pages.
 
-The `Solutions` default target builds all seventeen proved certificates and the twenty-five named
+The `Solutions` default target builds all twenty-four proved certificates and the twenty-five named
 definition checks of `StatementChecks.lean`, including the zero-dimensional and Euclidean checks for
 the implemented affine covariance Poincaré constant `def:affine-poincare-constant` (a definition
 node, not a ledger theorem). The certificates include all four weighted

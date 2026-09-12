@@ -61,8 +61,9 @@ Their types preserve the reviewed generality, including empty test classes, zero
 support, zero finite constants and infinite optima. Gaussian transport through these bridges is
 now proved. See the [comparison guide](../formalization/FunctionalInequalities/Poincare/Euclidean/README.md).
 
-The `Solutions` default target builds all seventeen certificates plus `GaussianAxiomAudit.lean` and
-`FoundationAxiomAudit.lean`. The latter guards 27 foundation and comparison declarations; each new
+The `Solutions` default target builds all twenty-four certificates plus `GaussianAxiomAudit.lean` and
+`FoundationAxiomAudit.lean`. The latter guards 27 foundation and comparison declarations together
+with the Dirac and normal-direction raw-energy obstructions; each new
 certificate also has its own axiom guard. These checks require exactly `propext`, `Classical.choice`
 and `Quot.sound`. Compiled user examples remain in
 [`examples/PoincareFoundation.lean`](../examples/PoincareFoundation.lean).
@@ -94,7 +95,7 @@ node is `proved / checked_by: lean`; see the
 [acceptance record](../research/decisions/2026-09-06-weighted-approximation-acceptance.md).
 
 `StatementChecks.lean` is a default-build target for the literal KLS proposition and its domain
-and boundary encodings. It is not a ledger proof certificate. All seventeen mathematical certificates,
+and boundary encodings. It is not a ledger proof certificate. All twenty-four mathematical certificates,
 the twenty-five named definition sanity checks, the six conditional-fiber contracts and the five
 affine covariance contracts have default-build transitive axiom guards. Existing
 Dirac representative examples and Gaussian comparisons are reused. A concrete Gaussian literature
@@ -178,7 +179,8 @@ compactness/inner-regularity lemmas have default-build axiom guards. The node is
 axiom guards for the six proved conditional-fiber contracts in `KLS/ConditionalFiber.lean`
 (iterated base integral, a.e. finite conditional second moment, joint measurability, version
 independence, representative independence and the L² identification). The definition node
-`def:conditional-fiber-form` therefore carries `\leanok`; it is not a ledger theorem. The raw
+`def:conditional-fiber-form` therefore carries `\leanok`; it is not a ledger theorem. The structural
+lemma `lem:conditional-fiber-form` built on it is a separate proved ledger node (see below). The raw
 Dirac obstruction has named library proofs and FoundationAxiomAudit guards, without a ledger entry.
 
 The five affine covariance checks (`affine_constant_unfold`, `affine_test_fields`,
@@ -257,6 +259,114 @@ bound in universe zero to `KLS.Conjecture`. Typed applications cover the covaria
 on every `EuclideanSpace ℝ (Fin n)` and dimension zero. The certificate and fifteen reusable
 declarations carry default-build axiom guards. Read
 [the record](../research/decisions/2026-09-08-affine-isotropic-reduction.md).
+
+## Smooth-gradient Dirichlet certificate
+
+[`ThmSmoothGradientRelaxationDirichlet.lean`](ThmSmoothGradientRelaxationDirichlet.lean) certifies
+`thm:smooth-gradient-relaxation-dirichlet`. For every Borel probability law on a finite-dimensional
+Euclidean space its sole `certificate` packages: the smooth-gradient relaxation is Markovian (every
+normal contraction of an `L²` class does not increase the relaxed energy), it is a Dirichlet energy,
+and the intrinsic-affine relaxation on the ambient `L²` is a Dirichlet energy. Typed applications
+cover the contraction inequality on every `EuclideanSpace ℝ (Fin n)`, dimension zero and the Dirac
+law on `ℝ`. The certificate and eleven reusable declarations carry default-build axiom guards. Read
+[the record](../research/decisions/2026-09-10-smooth-gradient-relaxation-dirichlet.md).
+
+## One-dimensional log-concave Poincaré certificate
+
+[`ThmOneDimensionalLogConcavePoincare.lean`](ThmOneDimensionalLogConcavePoincare.lean) certifies
+`thm:one-dimensional-logconcave-poincare`. For every compact-set log-concave law `ν` on `ℝ` its sole
+`certificate` packages `Poincare.LocalSlope.Intrinsic.constant ν ≤ ENNReal.ofReal (4 * variance id ν)`
+and the extended-variance form `≤ 4 * evariance id ν`; the zero-variance case is the one-point
+affine support, where the constant is `0`. Typed applications cover finiteness of the literature
+constant, Bobkov's constant `12` as a corollary, the Dirac law at the origin (log-concave by
+`KLS.logConcave_dirac`, constant `≤ 0`), and the smooth-test inequality with constant `4 · Var` for
+laws with interior support. The certificate and twenty-two reusable declarations carry
+default-build axiom guards. Read
+[the constant-12 record](../research/decisions/2026-09-10-one-dimensional-logconcave-poincare.md)
+and [the constant-4 record](../research/decisions/2026-09-11-one-dimensional-logconcave-poincare-four.md).
+
+## Raw/sequential-core agreement certificate
+
+[`ThmSmoothGradientRawCoreAgreementDensity.lean`](ThmSmoothGradientRawCoreAgreementDensity.lean)
+certifies `thm:smooth-gradient-raw-core-agreement-density`. For every probability law on a
+finite-dimensional inner-product space with a local density (`Energy.SmoothGradient.LocalDensity`:
+open carrier, density positive almost everywhere with locally essentially bounded reciprocal) its
+sole `certificate` packages agreement of the smooth-gradient pre-energy with its relaxation on every
+smooth test and the sequential-core property. Typed applications cover the intrinsic law named by
+the Blueprint, the Euclidean family, and the consequence that two smooth tests with the same `L²`
+class have the same raw energy. The certificate and eleven reusable declarations carry default-build
+axiom guards. Read
+[the record](../research/decisions/2026-09-10-smooth-gradient-raw-core-agreement-density.md).
+
+## Closed conditional-fiber form certificate
+
+[`LemConditionalFiberForm.lean`](LemConditionalFiberForm.lean) certifies
+`lem:conditional-fiber-form`. For every Borel probability law `μ` on a finite-dimensional
+inner-product space and every probability law `ρ` on its unit sphere its sole `certificate`
+packages: `Energy.Dirichlet μ (KLS.ConditionalFiber.functional μ ρ)`, the conditional-fiber form
+as a densely defined closed quadratic Markovian energy on `L²(μ)`; the jump representation of the
+fiber energy on nondegenerate fibers (squared two-point differences against `μ_{θ,z} ⊗ μ_{θ,z}`
+over `2 Var(T)`); the swap invariance of every two-point measure (reversibility); and the bound
+`d L²` for globally `L`-Lipschitz tests. Typed applications cover the Blueprint scope (log-concave
+law, finite second moment, admissible frame, none of which the theorem uses), dense domain and lower
+semicontinuity on `EuclideanSpace ℝ (Fin (n + 1))`, the Markov inequality, the smooth compactly
+supported core inside the finite domain, and the empty sphere of dimension zero. The certificate and
+eleven reusable declarations carry default-build axiom guards. Read
+[the record](../research/decisions/2026-09-11-conditional-fiber-form.md).
+
+## Conditional-fiber energy comparison certificate
+
+[`LemConditionalFiberEnergyComparison.lean`](LemConditionalFiberEnergyComparison.lean) certifies
+`lem:conditional-fiber-energy-comparison`. For a law `μ ≪ m` (any additive Haar measure), an
+admissible frame `ρ` and a finite `κ` with `KLS.ConditionalFiber.FiberBound μ ρ κ` (the literature
+Poincaré constant of almost every nondegenerate conditional fiber is at most `κ · eVar[T]`), its
+sole `certificate` packages: every literature test (`Energy.LocalSlope.Admissible μ f`) has
+conditional-fiber energy at most `κ` times its finite local-slope energy, and every form-gap bound
+`Var_μ ≤ C · D_{μ,ρ}` on the maximal finite domain `domain μ ρ` gives
+`Poincare.LocalSlope.Intrinsic.constant μ ≤ κ C`. Typed applications display the Blueprint scope
+(log-concave law, finite second moment, neither used), the gradient form `κ ∫‖∇f‖² dμ` of the
+bound, membership of every finite-energy test in `domain μ ρ`, the Euclidean family with Lebesgue
+measure as the Haar reference, and the empty sphere of dimension zero. The certificate and the two
+library theorems carry default-build axiom guards. No value of `κ`, no fiber log-concavity and no
+Poincaré inequality for `μ` is claimed; `cor:conditional-fiber-twelve-bound` is a separate node.
+Read [the statement record](../research/decisions/2026-09-11-conditional-fiber-energy-comparison-statement.md)
+and [the proof record](../research/decisions/2026-09-11-conditional-fiber-energy-comparison-proofs.md).
+
+## Log-concave conditional fibers certificate
+
+[`CorConditionalFiberTwelveBound.lean`](CorConditionalFiberTwelveBound.lean) certifies
+`cor:conditional-fiber-twelve-bound`. For a compact-set log-concave law `μ ≪ m` (any additive Haar
+measure) and an admissible frame `ρ`, its sole `certificate` packages the four steps of the
+Blueprint proof: base-law almost every conditional kernel `kernel μ ρ b` is a compact-set
+log-concave law on `ℝ`; `KLS.ConditionalFiber.FiberBound μ ρ 4`; every literature test
+(`Energy.LocalSlope.Admissible μ f`) has conditional-fiber energy at most `4` times its finite
+local-slope energy; and every form-gap bound `Var_μ ≤ C · D_{μ,ρ}` on `domain μ ρ` gives
+`Poincare.LocalSlope.Intrinsic.constant μ ≤ 4 C`. Typed applications display the gradient form
+`4 ∫‖∇f‖² dμ`, the literature constant `12` as the immediate weakening, membership of every
+finite-energy test in `domain μ ρ`, the corollary as an instance of the parameterized comparison,
+the Euclidean family with Lebesgue measure as the Haar reference, and the empty sphere of dimension
+zero. The certificate and two library theorems carry default-build axiom guards. No frame bound, no
+Poincaré inequality for `μ` and no KLS statement is claimed; `q:conditional-fiber-frame` is open.
+Read [the statement record](../research/decisions/2026-09-11-conditional-fiber-twelve-bound-statement.md)
+and [the proof record](../research/decisions/2026-09-11-conditional-fiber-twelve-bound-proofs.md).
+
+## Cheeger identification certificate (absolutely continuous scope)
+
+[`CorAbsolutelyContinuousRelaxationTwoCheeger.lean`](CorAbsolutelyContinuousRelaxationTwoCheeger.lean)
+certifies `cor:absolutely-continuous-relaxation-two-cheeger`. For a Borel probability law `μ` whose
+intrinsic law is absolutely continuous with respect to an additive Haar measure `m` on the
+direction space of its affine support, its sole `certificate` packages: the smooth-gradient
+relaxation of the intrinsic law equals the relaxed squared local slope, and for every `f ∈ L²(μ)`
+the selected canonical energy satisfies `𝓔^can_μ f = 2 · Ch_μ f`. Typed applications display the
+log-concave case (hypothesis discharged by `intrinsic_absolutelyContinuous`), the convention
+`2 · Ch = LocalSlope.relaxation`, the unconditional inequality
+`LocalSlope.relaxation ≤ SmoothGradient.relaxation`, the vanishing of the Cheeger energy on a
+one-point space, and the Euclidean family with the canonical Haar measure. The certificate and two
+library theorems carry default-build axiom guards. The singular case
+`thm:smooth-gradient-relaxation-two-cheeger` is **not** claimed; no Poincaré inequality, constant
+finiteness or Cheeger--Buser comparison follows. Read
+[the statement record](../research/decisions/2026-09-11-smooth-gradient-relaxation-two-cheeger-statement.md)
+and [the registration record](../research/decisions/2026-09-12-cheeger-absolutely-continuous-registration.md).
 
 ## Ambient/intrinsic covariance certificate
 

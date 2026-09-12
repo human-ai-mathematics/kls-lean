@@ -2,7 +2,7 @@ import Mathlib.MeasureTheory.Function.LpSpace.Basic
 import Mathlib.MeasureTheory.Measure.ProbabilityMeasure
 import Mathlib.MeasureTheory.Measure.Support
 
-/-! # Local domination of a law on the interior of its support -/
+/-! # Local domination of a law on an open set, in particular on the interior of its support -/
 
 noncomputable section
 
@@ -16,20 +16,26 @@ universe u
 variable {V : Type u} [NormedAddCommGroup V] [MeasurableSpace V]
 
 
+/-- On every compact subset of the set `Ω`, the reference measure `m` is dominated by a constant
+multiple of `ν`. For a law with a density this says the density is locally bounded below by
+positive constants on `Ω`. -/
+def LocallyDominatesOn (ν : ProbabilityMeasure V) (m : Measure V) (Ω : Set V) : Prop :=
+  ∀ K : Set V, IsCompact K → K ⊆ Ω →
+    ∃ C : ℝ≥0, m.restrict K ≤ (C : ℝ≥0∞) • (ν : Measure V).restrict K
+
 /-- On every compact subset of the interior of the support of `ν`, the reference measure `m` is
 dominated by a constant multiple of `ν`. For a law with a density this says the density is
 locally bounded below by positive constants on the interior of the support. -/
-def LocallyDominates (ν : ProbabilityMeasure V) (m : Measure V) : Prop :=
-  ∀ K : Set V, IsCompact K → K ⊆ interior (ν : Measure V).support →
-    ∃ C : ℝ≥0, m.restrict K ≤ (C : ℝ≥0∞) • (ν : Measure V).restrict K
+abbrev LocallyDominates (ν : ProbabilityMeasure V) (m : Measure V) : Prop :=
+  LocallyDominatesOn ν m (interior (ν : Measure V).support)
 
-namespace LocallyDominates
+namespace LocallyDominatesOn
 
-variable {ν : ProbabilityMeasure V} {m : Measure V}
+variable {ν : ProbabilityMeasure V} {m : Measure V} {Ω : Set V}
 
-/-- Lower integrals over a compact subset of the interior compare with a constant. -/
-theorem exists_lintegral_le (h : LocallyDominates ν m) {K : Set V} (hK : IsCompact K)
-    (hKΩ : K ⊆ interior (ν : Measure V).support) :
+/-- Lower integrals over a compact subset of `Ω` compare with a constant. -/
+theorem exists_lintegral_le (h : LocallyDominatesOn ν m Ω) {K : Set V} (hK : IsCompact K)
+    (hKΩ : K ⊆ Ω) :
     ∃ C : ℝ≥0, ∀ u : V → ℝ≥0∞,
       ∫⁻ x in K, u x ∂m ≤ (C : ℝ≥0∞) * ∫⁻ x in K, u x ∂(ν : Measure V) := by
   obtain ⟨C, hC⟩ := h K hK hKΩ
@@ -41,10 +47,10 @@ theorem exists_lintegral_le (h : LocallyDominates ν m) {K : Set V} (hK : IsComp
 variable [BorelSpace V]
 
 omit [BorelSpace V] in
-/-- The restriction of `m` to a compact subset of the interior is absolutely continuous with
-respect to the restriction of `ν`. -/
-theorem restrict_absolutelyContinuous (h : LocallyDominates ν m) {K : Set V} (hK : IsCompact K)
-    (hKΩ : K ⊆ interior (ν : Measure V).support) :
+/-- The restriction of `m` to a compact subset of `Ω` is absolutely continuous with respect to
+the restriction of `ν`. -/
+theorem restrict_absolutelyContinuous (h : LocallyDominatesOn ν m Ω) {K : Set V} (hK : IsCompact K)
+    (hKΩ : K ⊆ Ω) :
     m.restrict K ≪ (ν : Measure V).restrict K := by
   obtain ⟨C, hC⟩ := h K hK hKΩ
   refine Measure.AbsolutelyContinuous.mk fun s _ hs ↦ ?_
@@ -52,9 +58,9 @@ theorem restrict_absolutelyContinuous (h : LocallyDominates ν m) {K : Set V} (h
   rw [Measure.smul_apply, hs, smul_zero] at this
   exact le_antisymm this bot_le
 
-/-- `ν`-null sets inside a compact subset of the interior are `m`-null. -/
-theorem measure_inter_eq_zero (h : LocallyDominates ν m) {K : Set V} (hK : IsCompact K)
-    (hKΩ : K ⊆ interior (ν : Measure V).support) {s : Set V} (hs : (ν : Measure V) s = 0) :
+/-- `ν`-null sets inside a compact subset of `Ω` are `m`-null. -/
+theorem measure_inter_eq_zero (h : LocallyDominatesOn ν m Ω) {K : Set V} (hK : IsCompact K)
+    (hKΩ : K ⊆ Ω) {s : Set V} (hs : (ν : Measure V) s = 0) :
     m (s ∩ K) = 0 := by
   obtain ⟨C, hC⟩ := h K hK hKΩ
   have h1 := Measure.le_iff'.mp hC s
@@ -64,6 +70,6 @@ theorem measure_inter_eq_zero (h : LocallyDominates ν m) {K : Set V} (hK : IsCo
   rw [h2, smul_zero] at h1
   exact le_antisymm h1 bot_le
 
-end LocallyDominates
+end LocallyDominatesOn
 
 end FunctionalInequalities.Probability

@@ -39,6 +39,13 @@ roots = [
   "solutions.ThmAffineCovarianceRelaxationClosed",
   "solutions.LemAffinePoincareTranslationInvariance",
   "solutions.ThmAffineIsotropicReduction",
+  "solutions.ThmSmoothGradientRelaxationDirichlet",
+  "solutions.ThmOneDimensionalLogConcavePoincare",
+  "solutions.ThmSmoothGradientRawCoreAgreementDensity",
+  "solutions.LemConditionalFiberForm",
+  "solutions.LemConditionalFiberEnergyComparison",
+  "solutions.CorConditionalFiberTwelveBound",
+  "solutions.CorAbsolutelyContinuousRelaxationTwoCheeger",
 ]
 
 [[lean_lib]]

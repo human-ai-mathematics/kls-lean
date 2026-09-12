@@ -226,4 +226,9 @@ finite dimension. Their comparison with the locally Lipschitz literature constan
 analytic approximation proof in \cref{chap:analytic-comparison-proofs}, as do the relative
 perimeter and covariance-core identifications. These statements still await Lean formalization
 and certification. The active conditional-fiber route uses a general finite input
-$\kappa$ and the verified published choice $\kappa=12$.
+$\kappa$; its structural form lemma (\cref{lem:conditional-fiber-form}), its parameterized
+comparison with the gradient energy (\cref{lem:conditional-fiber-energy-comparison}) and the
+log-concave specialization that supplies the input $\kappa=4$
+(\cref{cor:conditional-fiber-twelve-bound}) are Lean-certified.  The published choice
+$\kappa=12$ is the immediate weakening of $4$.  The remaining gate of the route is the
+test-independent frame question \cref{q:conditional-fiber-frame}.

@@ -131,7 +131,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/ConditionalFiber.lean",
-            "sha256": "a0149425ccc5d768856a86da422675af85186d0a711080db740346e3ef2731c8"
+            "sha256": "075ab8908d4bfbc7f94d2c7047c70d1195c6b669dd4dd1a0aede704e0ad55811"
           },
           {
             "path": "formalization/FunctionalInequalities/Probability/Moments.lean",
@@ -279,11 +279,116 @@
       ],
       "assumptions": [],
       "priority": 5,
-      "note": "Published input identified in Blueprint; verify the exact source hypotheses and normalization during formalization.",
+      "note": "Proved in Lean on 2026-09-10 with Bobkov's constant 12 and strengthened on 2026-09-11 to the sharp constant 4 following the collaborator audit research/explorations/2026-09-11-poincare-constant-4-audit.md (the published constant 4 on p. 11 of Alonso-Gutierrez--Bastero 2015 is stated without proof; the local proof follows neither Bobkov's Cheeger route nor any literature source). Probability/Line/Cdf.lean gives the distribution function, its continuity and derivative under a Lebesgue density, a point with any prescribed distribution value in (0,1), the uniform pushforward map_cdf_eq_uniform and the centered moments 1/12 and 0. Probability/Line/AffineProfile.lean gives the affine quantile model on the unit uniform law with its variance closed form and the lower bound 1/(sqrt A + sqrt B)^4. KLS/LogConcave/Line/Density.lean packages the Borell density of a log-concave law on the line (KLS.LineDensity); Hazard.lean proves the four-point inequality, the monotone hazard rates, the median bounds 2 rho(m)(1-F) <= rho, 2 rho(m) F <= rho and the supporting line rho <= rho(x0) + k (F - F x0) at any interior point; Profile.lean proves the supporting line rho <= A(1-F) + B F with A, B >= 0, the variance bound 1/(sqrt A + sqrt B)^4 <= Var and the profile bound F(1-F) <= sigma rho; Hardy.lean proves the integration-by-parts Hardy inequality on intervals and half-lines anchored at any interior point on the median's side with constant 1/rho(m)^2 and gives SmoothTest.Holds nu (1/rho(m))^2; SharpHardy.lean proves the ground-state sharp Hardy inequality for tests clipped to constants outside [a, b] straddling a median, Var(clip) <= 4 Var(nu) int f'^2; SharpPoincare.lean makes the clipping tails vanish by absolute continuity, applies a (1+delta)-split and assembles LocalSlope.Intrinsic.constant nu <= ENNReal.ofReal (4 * variance id nu) (and the evariance form) using the certified equality of the smooth-test and literature optima, with the zero-dimensional direction case giving constant zero and KLS.logConcave_dirac as the Dirac example; Variance.lean and Poincare.lean keep the independent proof of the constant 12. The constant 4 is attained by the exponential law; no higher-dimensional bound or Cheeger inequality is claimed.",
       "infrastructure": {
-        "status": "unchecked",
-        "mathlib_revision": null,
-        "evidence": [],
+        "status": "available",
+        "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
+        "evidence": [
+          {
+            "path": "formalization/FunctionalInequalities/Probability/Line/Cdf.lean",
+            "sha256": "7139601523546c87c803e0c97a5e5327647cd8919252ee758f900858ecb93962"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Probability/Line/ExpIntegral.lean",
+            "sha256": "eb8248b7c5ab1a028684d77db9e199e02c4d82d3012ea8db6e244755fe7597f5"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/KLS/LogConcave/Line/Density.lean",
+            "sha256": "7b48b16874f98375ade61d574d03305870fba294e271acdd81aa159a4af53464"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/KLS/LogConcave/Line/Hazard.lean",
+            "sha256": "e9e5d99d0ffdf0c5242e92b0d4765e6db6e02295094c538a53b5b93c13b53f3a"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/KLS/LogConcave/Line/Hardy.lean",
+            "sha256": "50c3e80e0a94d427a73d9b030c3bb5fe80cbc6563d33f336a89c9dd26e92d895"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/KLS/LogConcave/Line/Variance.lean",
+            "sha256": "4f8dcf23d395d40089c1a0933a876a0af9f301236632f5734f6408697d273c96"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/KLS/LogConcave/Line/Poincare.lean",
+            "sha256": "74409d0f8802b6c1a428557ea21e1fe0ae3a6d42e4149d2680b3b1089e97a603"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Probability/Line/AffineProfile.lean",
+            "sha256": "74de113921b1b7ba836b12c7034b20fb74c5fc9fea36c1cb4ad3dea0a035f550"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/KLS/LogConcave/Line/Profile.lean",
+            "sha256": "c44b1dbceefd511fd2b34da9d249b636eff8ea3d6259e6d9a43e649c10637388"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/KLS/LogConcave/Line/SharpHardy.lean",
+            "sha256": "6bf808082d4c69eefc6897c5788d6c20b68aa8abbddce3e5b7e3c979bcea859c"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/KLS/LogConcave/Line/SharpPoincare.lean",
+            "sha256": "976c973c79bc45da187e068d142504fdabdce353d1a96ebc7044764559a7cb49"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Poincare/LocalSlope/Basic.lean",
+            "sha256": "5127ac0f0a9d0d63c489f0bf1bbc35c7cbf251beffda6ae433ccbad2ba851c23"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/KLS/LogConcave/BorellRepresentation.lean",
+            "sha256": "0063b5d6eb138fec5ee6deb821d254ff06d6c162d8304afc5434675f6f0db17b"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/KLS/LogConcave/Poincare.lean",
+            "sha256": "cf87386c769ec52a68b43dd543c472b769685f1523bcfadc20056c28fa910e74"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/KLS/LogConcave/Isotropic.lean",
+            "sha256": "1e3a2890cee38df5e378b7f801c41ddc8104d40a573d0ce237cc4a144a3206d0"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/KLS/LogConcave/Translation.lean",
+            "sha256": "f8e05264aa4d6185630c5f1eb4dea804e8efb19daa6e83e1ba0de57d7c255df5"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Poincare/Gaussian/Hardy.lean",
+            "sha256": "c385c937eaf842891b2b162362b51f001c872c72f9834322de25cbeb07a65959"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Poincare/SmoothTest/Basic.lean",
+            "sha256": "864a1074e90520009d6955a60875aec0aa1b3f7d2d9631ca7b8d6abe5e25b47e"
+          },
+          {
+            "path": "formalization/.lake/packages/mathlib/Mathlib/Probability/Moments/Variance.lean",
+            "sha256": "3a49f3a97302edfa5788098d13882105fe448c4d6cefe51fb3891991635e7638"
+          },
+          {
+            "path": "formalization/.lake/packages/mathlib/Mathlib/MeasureTheory/Integral/IntervalIntegral/IntegrationByParts.lean",
+            "sha256": "848ba7260b6e8b0734dc3e9fef185865f3f4d185b4db9e67c22b847ee063eabb"
+          },
+          {
+            "path": "formalization/.lake/packages/mathlib/Mathlib/MeasureTheory/Integral/IntegralEqImproper.lean",
+            "sha256": "9b23ece88109c97647472e92ac73478da988c81436efc63e17a2acfb2db15353"
+          },
+          {
+            "path": "formalization/.lake/packages/mathlib/Mathlib/MeasureTheory/Measure/WithDensity.lean",
+            "sha256": "b62c4ad72728e11a87bb3cefc6b968a081a70901030e8ac8e60d43b5ec2a8649"
+          },
+          {
+            "path": "formalization/.lake/packages/mathlib/Mathlib/Analysis/Convex/Slope.lean",
+            "sha256": "4b7252aa97b650433f2725e207accb28d4778f61653eb836864c971ef79bc65a"
+          },
+          {
+            "path": "formalization/.lake/packages/mathlib/Mathlib/MeasureTheory/Integral/Lebesgue/Basic.lean",
+            "sha256": "0766c86bbadd288efdacafb833f55d225c97eea926e9fbde166b0c2529a807f6"
+          },
+          {
+            "path": "formalization/.lake/packages/mathlib/Mathlib/Analysis/SpecialFunctions/Integrals/Basic.lean",
+            "sha256": "58a81e8137bddf5cc43ae28f08ffa75ea3aa086e607cf70e70f70c3c8e935e81"
+          },
+          {
+            "path": "formalization/.lake/packages/mathlib/Mathlib/Analysis/SpecialFunctions/Trigonometric/DerivHyp.lean",
+            "sha256": "844af136334c7090283da8458fcd54258b0999ef1090fe849312bed55cd6e626"
+          }
+        ],
         "gaps": []
       }
     },
@@ -357,7 +462,7 @@
       ],
       "assumptions": [],
       "priority": 5,
-      "note": "Resolve local-slope versus asymptotic-Lipschitz conventions and singular-measure scope before proof work."
+      "note": "The local-slope convention is fixed. Energy/Cheeger.lean certifies the absolutely continuous intrinsic-law identity, including every log-concave law, under cor:absolutely-continuous-relaxation-two-cheeger (registered 2026-09-12). Energy/WIP/Cheeger.lean retains five sorry bodies: the local-slope/asymptotic-Lipschitz relaxation comparison, the unconditional smooth-gradient/local-slope comparison, and three consequences. The WIP source cites Ambrosio-Gigli-Savare for the first comparison; a complete source-to-Lean bridge for the unconditional package is still unverified, so its classification remains unknown. The aggregate and all certificates exclude WIP. The owner explicitly retains all holes; this task is not a requirement to discharge singular-law comparisons before using the already-certified log-concave scope. See research/decisions/2026-09-12-status-audit-and-wip-retention.md."
     },
     "obs:dirac-raw-energy": {
       "mathematics": "local_argument",
@@ -386,11 +491,60 @@
       ],
       "assumptions": [],
       "priority": 5,
-      "note": "Local proof plan only: instantiate contraction transfer using smooth approximations of a normal contraction. The concrete analytic argument still needs completion and review.",
+      "note": "Proved in Lean on 2026-09-10. The normal contraction is mollified on the real line (Energy.NormalContraction.smoothed, via LipschitzApproximation.mollify with the Lebesgue measure): it is smooth, 1-Lipschitz and uniformly within 2/(j+1) of the contraction. Composing a smooth test with it gives a smooth test (SmoothGradient.Test.compSmoothed) whose gradient norm is pointwise not larger, hence with energy at most that of the test, and whose L^2 class converges to the contracted class. This is the relaxed contraction bound on realized tests (SmoothGradient.relaxedContractionBound), and the certified contraction-transfer theorem gives Energy.Markovian and Energy.Dirichlet for Energy.SmoothGradient.relaxation mu for every Borel probability law, including singular laws and dimension zero; the intrinsic-affine relaxation SmoothGradient.Intrinsic.energy mu inherits the property because intrinsic coordinates commute with contractions. No Cheeger identification, Poincare inequality or Markov property of the covariance-weighted relaxations is claimed.",
       "infrastructure": {
-        "status": "unchecked",
-        "mathlib_revision": null,
-        "evidence": [],
+        "status": "available",
+        "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
+        "evidence": [
+          {
+            "path": "formalization/FunctionalInequalities/Energy/SmoothGradient/Dirichlet.lean",
+            "sha256": "fe09c480d60fdc1030e21614ed9cb9e819201a203e6a66263b96616f70965775"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Energy/Dirichlet.lean",
+            "sha256": "f2b571c215a6c57cca04a3dd6664da8594cd6bb9394d49fca7e691ad836124bb"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Energy/Relaxation/Contraction.lean",
+            "sha256": "6edbf16fde2aab13c9420f9cdca5e33e73b2aa98a78bfdf9d81af59eb6aa1314"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation.lean",
+            "sha256": "303d12e4a03605211f079d03a47515938e14623550012f6eb885f9b2fda551ff"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Energy/SmoothGradient/Basic.lean",
+            "sha256": "38ab6f0de7129058a58b13f571283001084dd81c05b6bf635cd9228a2c4a4758"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Energy/SmoothGradient/Closed.lean",
+            "sha256": "fe7c581e99d1748b286f7d509c3909725f50d5c10289aa3d4b209d55fb0d3d79"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Energy/SmoothGradient/Intrinsic/Basic.lean",
+            "sha256": "ac6ae5eaacb251526dc622fc4a2a04915d6e790fb813a2eda6793db40e8898d4"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Energy/SmoothGradient/Intrinsic/Closed.lean",
+            "sha256": "7b43d722fda58db7553a7953a10082476f43db6a326d71e91137fb9f09ef70ac"
+          },
+          {
+            "path": "formalization/.lake/packages/mathlib/Mathlib/MeasureTheory/Function/LpSpace/Basic.lean",
+            "sha256": "c333a6caa56906c6203cad3e3214be2114a65728fcfdf95ae639992abefb373f"
+          },
+          {
+            "path": "formalization/.lake/packages/mathlib/Mathlib/Analysis/Convolution.lean",
+            "sha256": "2e02a96b2ee6de4b52b6414aa938fd46f89690939d5c86964071b73a88dbd184"
+          },
+          {
+            "path": "formalization/.lake/packages/mathlib/Mathlib/Analysis/Calculus/FDeriv/Basic.lean",
+            "sha256": "a4e41e70a5c80c4289f24e2ca5e9511ca8278b2aec9ab0b9e5100f7df9ef7929"
+          },
+          {
+            "path": "formalization/.lake/packages/mathlib/Mathlib/Analysis/Calculus/FDeriv/Comp.lean",
+            "sha256": "22b49670dfaa646c560b62e60674ac86288f32b09e920c00cf2d867c60f36a80"
+          }
+        ],
         "gaps": []
       }
     },
@@ -401,11 +555,40 @@
       ],
       "assumptions": [],
       "priority": 1,
-      "note": "The displayed local or pinned upstream argument needs mathematical review and Lean implementation; it is not a Lean certificate.",
+      "note": "Named library obstruction proved in Lean on 2026-09-10 (Energy/SmoothGradient/NormalDirection.lean): on a proper affine support the coordinate along a unit normal vector is zero in L2(mu) but has raw gradient energy one, so the ambient smooth-gradient pre-energy does not respect realization fibers (SmoothGradient.not_respectsAmbientFibers). It is not a ledger certificate and does not identify the intrinsic relaxed energy.",
       "infrastructure": {
-        "status": "unchecked",
-        "mathlib_revision": null,
-        "evidence": [],
+        "status": "available",
+        "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
+        "evidence": [
+          {
+            "path": "formalization/FunctionalInequalities/Energy/SmoothGradient/NormalDirection.lean",
+            "sha256": "e3ae8bb6fcbd3ea932968787410fb559881b43fab7a272f7ec2636db44287ab6"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Energy/SmoothGradient/Basic.lean",
+            "sha256": "38ab6f0de7129058a58b13f571283001084dd81c05b6bf635cd9228a2c4a4758"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Energy/SmoothGradient/Quadratic.lean",
+            "sha256": "28196753d9391997c32bbcb46a46c44e902d9f5179a506e65e6c66ebba54a26c"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Energy/FormCore.lean",
+            "sha256": "2c783e15b8351de77bb12762951aac667e351bca8aa86880a3f6e2ce203992f0"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Probability/AffineSupport.lean",
+            "sha256": "864ac9c2d9869c985a53ff0c4ed256f3ad355e03b7074d1be058ec30c7bc8fee"
+          },
+          {
+            "path": "formalization/.lake/packages/mathlib/Mathlib/Analysis/InnerProductSpace/Projection/Submodule.lean",
+            "sha256": "a217247c8f6957bd34ef8ecb008eadf392a8f4653604c7c7478b96b2dcbb26c0"
+          },
+          {
+            "path": "formalization/.lake/packages/mathlib/Mathlib/Analysis/Calculus/Gradient/Basic.lean",
+            "sha256": "89f93934750efd40fd2eb8e261b888be4566d34a293eda1436f43ff5500817a8"
+          }
+        ],
         "gaps": []
       }
     },
@@ -416,11 +599,68 @@
       ],
       "assumptions": [],
       "priority": 5,
-      "note": "The displayed local or pinned upstream argument needs mathematical review and Lean implementation; it is not a Lean certificate.",
+      "note": "Proved in Lean on 2026-09-10. Energy/SmoothGradient/Core.lean packages the density hypotheses as Energy.SmoothGradient.LocalDensity nu m (open carrier Omega, nu(Omega^c) = 0, density representation on Omega, positivity a.e. on Omega, locally essentially bounded reciprocal; the Blueprint's local boundedness of rho is not used), derives absolute continuity, a null support frontier and local domination of m by nu on compact subsets of Omega, and applies the unit-weight Lipschitz gradient operator: WeightedGradient.operator_isClosable_of_isOpen (closability of Energy/WeightedGradient/Closable.lean generalized from the interior of the support to an arbitrary open carrier with Probability.LocallyDominatesOn), smooth cutoffs via LipschitzApproximation.exists_compactSupport_weighted_L2 put every smooth test in the closure domain with closure value its gradient, recovery sequences give Lipschitz relaxation <= smooth relaxation, and the closable-operator relaxation formula gives AgreesOnTests and IsSequentialCoreFor for preEnergy nu and relaxation nu; the intrinsic law is the named instance. No claim without a local density, no Cheeger identification, no graph-norm core equivalence.",
       "infrastructure": {
-        "status": "unchecked",
-        "mathlib_revision": null,
-        "evidence": [],
+        "status": "available",
+        "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
+        "evidence": [
+          {
+            "path": "formalization/FunctionalInequalities/Energy/SmoothGradient/Core.lean",
+            "sha256": "56938e92832fa262d546f00b9c103892d030e21c5561bd3f39e4becac8cb94a8"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Energy/WeightedGradient/Closable.lean",
+            "sha256": "d2b37b5df25ee91792a30f143af165bab1d783754c872545f835b75879e01d6e"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Energy/WeightedGradient/Core.lean",
+            "sha256": "8cf4876a25c7f5d119b491374c958593e5c44f9b0ddd7034e3e14c528b3c17bd"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Energy/WeightedGradient/Basic.lean",
+            "sha256": "531c59b6dbfa9fbd9cc792870cebf25c6c556090902c33b9740818a6b840e47a"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Probability/LocalDomination.lean",
+            "sha256": "94c2fe1632aa6ff68099c6983816a9d9bfbe5b80bfa4e78a40f79a66f8352a59"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation.lean",
+            "sha256": "303d12e4a03605211f079d03a47515938e14623550012f6eb885f9b2fda551ff"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Energy/Relaxation/LinearPMap.lean",
+            "sha256": "2b593e1f5d0fa89a24c76619c5239872a3cb3cf47496a2e0c1739ace06401142"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Energy/Relaxation/LowerSemicontinuous.lean",
+            "sha256": "424fd847e1c4b35d8bb65687883100f639211fe89399bfeecdd2b46c0b5058e0"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Energy/FormCore.lean",
+            "sha256": "2c783e15b8351de77bb12762951aac667e351bca8aa86880a3f6e2ce203992f0"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Energy/SmoothGradient/Basic.lean",
+            "sha256": "38ab6f0de7129058a58b13f571283001084dd81c05b6bf635cd9228a2c4a4758"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Energy/SmoothGradient/Intrinsic/Basic.lean",
+            "sha256": "ac6ae5eaacb251526dc622fc4a2a04915d6e790fb813a2eda6793db40e8898d4"
+          },
+          {
+            "path": "formalization/.lake/packages/mathlib/Mathlib/Topology/Algebra/Module/LinearPMap.lean",
+            "sha256": "0f09b4171438d914fb2326706eea68be85b1423d1e9340cdd07afa6fc87e4360"
+          },
+          {
+            "path": "formalization/.lake/packages/mathlib/Mathlib/MeasureTheory/Measure/WithDensity.lean",
+            "sha256": "b62c4ad72728e11a87bb3cefc6b968a081a70901030e8ac8e60d43b5ec2a8649"
+          },
+          {
+            "path": "formalization/.lake/packages/mathlib/Mathlib/MeasureTheory/Measure/Support.lean",
+            "sha256": "bf77ffa13b41cd3b0d5b1aa0ea6dd0c237ef5191680ffc0c2ba49a69d75fe060"
+          }
+        ],
         "gaps": []
       }
     },
@@ -446,7 +686,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/Poincare/LocalSlope/Basic.lean",
-            "sha256": "ed74b36985610dc1deb241d967be74e0b5ca51e8c53a5fcb3032e738fbadcddf"
+            "sha256": "5127ac0f0a9d0d63c489f0bf1bbc35c7cbf251beffda6ae433ccbad2ba851c23"
           },
           {
             "path": "formalization/FunctionalInequalities/Energy/LocalSlope/Gradient.lean",
@@ -498,7 +738,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/Poincare/LocalSlope/Basic.lean",
-            "sha256": "ed74b36985610dc1deb241d967be74e0b5ca51e8c53a5fcb3032e738fbadcddf"
+            "sha256": "5127ac0f0a9d0d63c489f0bf1bbc35c7cbf251beffda6ae433ccbad2ba851c23"
           },
           {
             "path": "formalization/FunctionalInequalities/Probability/AffineSupport.lean",
@@ -883,12 +1123,33 @@
       ],
       "assumptions": [],
       "priority": 5,
-      "note": "The displayed local or pinned upstream argument needs mathematical review and Lean implementation; it is not a Lean certificate.",
+      "note": "Infrastructure inspected on 2026-09-11 and recorded as missing. The proposition refutes ass:weighted-package, whose objects (Eldan's stochastic localization process, the excess e_t of a balanced finite-perimeter cut along the process, the weighted covariance A_t, the stopping time tau_eta and the paired absorptive weighted Stein-trace estimate) have no Lean statement in this repository; the Stein-trace estimate is not even displayed locally. The witness computation on an isotropic product of centered one-sided exponentials evaluates these process quantities at positive times, so it is not a purely static product/cylinder computation. The upstream proof dossier is not in this repository. The node stays proved / checked_by: agent upstream and is not a Lean certificate.",
       "infrastructure": {
-        "status": "unchecked",
-        "mathlib_revision": null,
-        "evidence": [],
-        "gaps": []
+        "status": "missing",
+        "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
+        "evidence": [
+          {
+            "path": "formalization/blueprint/src/chapters/50-kls-routes.tex",
+            "sha256": "ca202b4fa34709cc00499c440df1d20a824871c1f395dfee63ac1a98fac2bd4f"
+          },
+          {
+            "path": "formalization/.lake/packages/mathlib/Mathlib/Probability/BrownianMotion/Basic.lean",
+            "sha256": "de6c9e2a1fe6addf9ede01bc29514b63f80b5eb4a5c7912e580d13aa1674127f"
+          },
+          {
+            "path": "formalization/.lake/packages/mathlib/Mathlib/Probability/Process/Stopping.lean",
+            "sha256": "1624c85426f16a2043570e3947c1af37e12149dad62edd8d7eed5feea5483977"
+          },
+          {
+            "path": "formalization/.lake/packages/mathlib/Mathlib/Probability/Process/HittingTime.lean",
+            "sha256": "f6fef7e241b973e5e03ca8dd5546f938cf8e32431876d148772149f563745452"
+          }
+        ],
+        "gaps": [
+          "Lean statement of ass:weighted-package: definitions of Eldan's stochastic localization process on a finite-dimensional Euclidean space (the tilted measures mu_t driven by a Brownian motion), of a balanced finite-perimeter cut and its excess e_t along the process, of the weighted covariance A_t and its operator norm, of the stopping time tau_eta, and of the paired absorptive weighted Stein-trace estimate (only stated in the upstream module modules/kls/20-eldan-statements.tex)",
+          "Stochastic calculus in the pinned Mathlib: Brownian motion exists only as a process with prescribed finite-dimensional laws (IsBrownianReal), with stopping and hitting times; there is no stochastic integral, no Ito formula and no existence/uniqueness theory for the localization SDE, so the process quantities cannot yet be defined",
+          "Local proof of the exponential-spectator computation: the upstream dossier solutions/prop-weighted-spectator-obstruction.tex (kls-exploration) is not in this repository, and the violation is asserted at a positive time 0 < T <= T_0, so the product-of-exponentials and cylinder-set calculation must be re-derived along the process rather than from the initial data alone"
+        ]
       }
     },
     "prop:spectral-sufficiency": {
@@ -977,11 +1238,80 @@
       ],
       "assumptions": [],
       "priority": 5,
-      "note": "The displayed local or pinned upstream argument needs mathematical review and Lean implementation; it is not a Lean certificate.",
+      "note": "Proved in Lean on 2026-09-11. KLS/ConditionalFiber/Closed.lean packages the form of def:conditional-fiber-form as the extended functional KLS.ConditionalFiber.functional mu rho on L^2(mu) and proves Energy.Dirichlet mu (functional mu rho): dense finite domain, lower semicontinuity, the extended quadratic identities and the normal-contraction (Markov) property, for every Borel probability law mu on a finite-dimensional inner-product space and every probability law rho on the unit sphere (no log-concavity, density, second moment or frame identity is used; the Blueprint scope is a typed application in the certificate). The route is the jump representation energyAt_eq_jump_div: on a nondegenerate fiber the normalized variance is the squared jump integral against the two-point measure (kappa b) x (kappa b) divided by 2 Var(id), by the new two-point variance identity Probability.two_mul_evariance_eq_lintegral_prod (Probability/TwoPointVariance.lean, valid in [0, infinity] without square integrability). Symmetry and reversibility are read as this representation and the swap invariance twoPointMeasure_swap. Closedness pushes an almost-everywhere convergent subsequence (TendstoInMeasure.exists_seq_tendsto_ae) through the joint law and the disintegration (Measure.ae_ae_of_ae_compProd) and applies Fatou (lintegral_liminf_le) on the two-point space and on the base law; Lipschitz tests have energy at most d L^2 (energy_le_of_lipschitzWith), so the smooth compactly supported core (WeightedGradient.dense_smoothCore) lies in the finite domain. No comparison with a gradient energy, no fiber Poincare input, no frame bound and no Poincare inequality is claimed.",
       "infrastructure": {
-        "status": "unchecked",
-        "mathlib_revision": null,
-        "evidence": [],
+        "status": "available",
+        "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
+        "evidence": [
+          {
+            "path": "formalization/FunctionalInequalities/KLS/ConditionalFiber/Closed.lean",
+            "sha256": "57abdebff14412bdf9ba755b190b5a33f0f734c846c0610e816ead51a0aa7c96"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/KLS/ConditionalFiber.lean",
+            "sha256": "075ab8908d4bfbc7f94d2c7047c70d1195c6b669dd4dd1a0aede704e0ad55811"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Probability/TwoPointVariance.lean",
+            "sha256": "213afd988e23128ae2f69d5c3ee64b98f0f899cac3a879d06255b0814084cd56"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Energy/Dirichlet.lean",
+            "sha256": "f2b571c215a6c57cca04a3dd6664da8594cd6bb9394d49fca7e691ad836124bb"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Energy/ClosedQuadratic.lean",
+            "sha256": "a814acdadb68b7dbcc023ba7e3132552cfe0e02f7524b72580054a532c48996b"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Energy/WeightedGradient/Core.lean",
+            "sha256": "8cf4876a25c7f5d119b491374c958593e5c44f9b0ddd7034e3e14c528b3c17bd"
+          },
+          {
+            "path": "solutions/LemConditionalFiberForm.lean",
+            "sha256": "4a39c10696462659bf3c03922df2fc6429f435d7e02ab61787b3f8df08d37aea"
+          },
+          {
+            "path": "formalization/.lake/packages/mathlib/Mathlib/Probability/Kernel/Composition/MeasureCompProd.lean",
+            "sha256": "b591ce8d70883875dceafc16737ce643e18d31b82be9c3100eff2eda0a890386"
+          },
+          {
+            "path": "formalization/.lake/packages/mathlib/Mathlib/Probability/Kernel/Disintegration/StandardBorel.lean",
+            "sha256": "cd61c45ea3d8a90c0e31e025a696ef3ff332a221469a55000c626979d007c505"
+          },
+          {
+            "path": "formalization/.lake/packages/mathlib/Mathlib/Probability/Moments/Variance.lean",
+            "sha256": "3a49f3a97302edfa5788098d13882105fe448c4d6cefe51fb3891991635e7638"
+          },
+          {
+            "path": "formalization/.lake/packages/mathlib/Mathlib/MeasureTheory/Function/ConvergenceInMeasure.lean",
+            "sha256": "c6e28eb4336201821ce7d9e987d50052797d54f1fb8f8b415104583d61051ee6"
+          },
+          {
+            "path": "formalization/.lake/packages/mathlib/Mathlib/MeasureTheory/Function/LpSpace/Complete.lean",
+            "sha256": "7b020ac252943ab4b4f8ac917e030d5b21f8de7f2a624675fc0bc5078cf26aa8"
+          },
+          {
+            "path": "formalization/.lake/packages/mathlib/Mathlib/MeasureTheory/Integral/Lebesgue/Add.lean",
+            "sha256": "e705fd0f391d51b184cca4e1bf54d6d59374a3ee5f5c0c91dd074d49cebc2e9d"
+          },
+          {
+            "path": "formalization/.lake/packages/mathlib/Mathlib/MeasureTheory/Integral/Prod.lean",
+            "sha256": "c7d4d23349591c5c65aa5b1b6024331fb0b7f22e9b2b08d6a1fe19b1c258ec5b"
+          },
+          {
+            "path": "formalization/.lake/packages/mathlib/Mathlib/MeasureTheory/Measure/Prod.lean",
+            "sha256": "739ba1838b5b67c1ff5d3b43ed263c2ad34f91e01e7a8946a6f529922d463e79"
+          },
+          {
+            "path": "formalization/.lake/packages/mathlib/Mathlib/MeasureTheory/MeasurableSpace/MeasurablyGenerated.lean",
+            "sha256": "55897eb1175e5b01e648880c7cfcb56729d23410b8ea78079d28eacc39d905d5"
+          },
+          {
+            "path": "formalization/.lake/packages/mathlib/Mathlib/Topology/Semicontinuity/Defs.lean",
+            "sha256": "1d4b61f8edd71521a9bbef19b95e5c3e7f9656c2c5b7b424d5576b0922287867"
+          }
+        ],
         "gaps": []
       }
     },
@@ -992,11 +1322,104 @@
       ],
       "assumptions": [],
       "priority": 5,
-      "note": "The displayed local or pinned upstream argument needs mathematical review and Lean implementation; it is not a Lean certificate.",
+      "note": "Proved in Lean on 2026-09-11. KLS/ConditionalFiber/EnergyComparison.lean states the fiber hypothesis as FiberBound mu rho kappa (for baseLaw-almost every nondegenerate fiber, Poincare.LocalSlope.Intrinsic.constant of the fiber law <= kappa * evariance id) and proves energy_le_of_fiberBound (energy mu rho f <= kappa * Energy.LocalSlope.energy mu f, finite, for every Energy.LocalSlope.Admissible test) and literatureConstant_le_of_fiberBound (a form-gap bound C on domain mu rho gives Poincare.LocalSlope.Intrinsic.constant mu <= kappa * C), for mu absolutely continuous with respect to a Haar measure and an admissible frame rho. The route: Poincare.LocalSlope.Holds transports across a measure-preserving isometric equivalence (MeasurePreserving.lintegral_comp_emb, Function.Surjective.iSup_comp on the local-slope definition), so for a law with full affine support the intrinsic constant is the infimum of its coordinate constants and ENNReal.iInf_mul turns a finite bound on that infimum into the per-test inequality; full support follows from Measure.addHaar_affineSubspace for mu and from nonzero variance for the real fibers (Submodule.finrank_lt on a proper direction of R). The line slice t -> f(z + t theta) has local slope |<theta, grad f>| at Rademacher points (HasFDerivAt.comp_hasDerivAt, HasDerivAt.hasGradientAt, the existing apply_eq_norm_gradient); the Rademacher null set and square integrability pass through the joint law and Measure.ae_ae_of_ae_compProd; Measure.lintegral_compProd, lintegral_map with reconstruct_coordinates, lintegral_prod_symm and the frame identity (ofReal_integral_eq_lintegral_ofReal) give kappa times the gradient energy, identified with the local-slope energy by energy_eq_lintegral_gradient. The second conclusion is proved directly on Poincare.LocalSlope.Holds through form_toLp, L2.variance_toLp and ofReal_variance. No value of kappa, no log-concavity, no fiber Poincare input and no KLS statement is claimed.",
       "infrastructure": {
-        "status": "unchecked",
-        "mathlib_revision": null,
-        "evidence": [],
+        "status": "available",
+        "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
+        "evidence": [
+          {
+            "path": "formalization/FunctionalInequalities/KLS/ConditionalFiber/EnergyComparison.lean",
+            "sha256": "81a1af990163a86d29c8c0d200daef2450d00914c4af8aaef868b86141845323"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/KLS/ConditionalFiber.lean",
+            "sha256": "075ab8908d4bfbc7f94d2c7047c70d1195c6b669dd4dd1a0aede704e0ad55811"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Energy/LocalSlope/Basic.lean",
+            "sha256": "eff71e85ef7e219f287069149de867f49846ca8aae758b6f7129872202f83219"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Energy/LocalSlope/Gradient.lean",
+            "sha256": "52f02f38374a20673acd93eb661faacc69b57f3102775bc3af13b33799130672"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation.lean",
+            "sha256": "303d12e4a03605211f079d03a47515938e14623550012f6eb885f9b2fda551ff"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Poincare/LocalSlope/Basic.lean",
+            "sha256": "5127ac0f0a9d0d63c489f0bf1bbc35c7cbf251beffda6ae433ccbad2ba851c23"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Probability/AffineSupport.lean",
+            "sha256": "864ac9c2d9869c985a53ff0c4ed256f3ad355e03b7074d1be058ec30c7bc8fee"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/L2/MeanVariance.lean",
+            "sha256": "7e418caed7f47683a12855df8901b9ed7168f184b53bfdb25611767093db3d25"
+          },
+          {
+            "path": "solutions/LemConditionalFiberEnergyComparison.lean",
+            "sha256": "ad1dc0d47735d5e694499de045cae0ffff6cef1b62f03f2966879367e277bfaa"
+          },
+          {
+            "path": "formalization/.lake/packages/mathlib/Mathlib/Probability/Kernel/Composition/MeasureCompProd.lean",
+            "sha256": "b591ce8d70883875dceafc16737ce643e18d31b82be9c3100eff2eda0a890386"
+          },
+          {
+            "path": "formalization/.lake/packages/mathlib/Mathlib/MeasureTheory/Measure/Prod.lean",
+            "sha256": "739ba1838b5b67c1ff5d3b43ed263c2ad34f91e01e7a8946a6f529922d463e79"
+          },
+          {
+            "path": "formalization/.lake/packages/mathlib/Mathlib/MeasureTheory/Measure/Lebesgue/EqHaar.lean",
+            "sha256": "269a2815cff12469aa8361d9062bfb11f8f7c45787799752b6e5bc3a7705e5a3"
+          },
+          {
+            "path": "formalization/.lake/packages/mathlib/Mathlib/MeasureTheory/Integral/Lebesgue/Map.lean",
+            "sha256": "fc366c68884d2abc7d3d8bc5bb49687be1a1e9ab6fece7ad0c4924d4394c9450"
+          },
+          {
+            "path": "formalization/.lake/packages/mathlib/Mathlib/MeasureTheory/Function/SpecialFunctions/Inner.lean",
+            "sha256": "d963880ed6ec01fb57bd247aab4359b33c3103af0e23b31f9b32885ed59e9cfb"
+          },
+          {
+            "path": "formalization/.lake/packages/mathlib/Mathlib/Dynamics/Ergodic/MeasurePreserving.lean",
+            "sha256": "5cd8f60392fa0fbe36af8164610515addc2fe31c2f9e3ce36cd5d367ff9e76fa"
+          },
+          {
+            "path": "formalization/.lake/packages/mathlib/Mathlib/Probability/Moments/Variance.lean",
+            "sha256": "3a49f3a97302edfa5788098d13882105fe448c4d6cefe51fb3891991635e7638"
+          },
+          {
+            "path": "formalization/.lake/packages/mathlib/Mathlib/Analysis/Calculus/Gradient/Basic.lean",
+            "sha256": "89f93934750efd40fd2eb8e261b888be4566d34a293eda1436f43ff5500817a8"
+          },
+          {
+            "path": "formalization/.lake/packages/mathlib/Mathlib/Analysis/Calculus/Deriv/Comp.lean",
+            "sha256": "f98d6383df7e29a0712f18c7bd38e7eaa53b9ffffd39d3a6526e1e9513cfa534"
+          },
+          {
+            "path": "formalization/.lake/packages/mathlib/Mathlib/Analysis/Calculus/FDeriv/Measurable.lean",
+            "sha256": "0555dbb6b1529a6d8ffc252254448fdb43a9582a53c946aa124dcdf8a9e83568"
+          },
+          {
+            "path": "formalization/.lake/packages/mathlib/Mathlib/Topology/MetricSpace/Isometry.lean",
+            "sha256": "232ca4fa9ad47231c78a737438e798041e2226ac0d822231485218c4ff187dbc"
+          },
+          {
+            "path": "formalization/.lake/packages/mathlib/Mathlib/Data/ENNReal/Inv.lean",
+            "sha256": "bbc0988d1a084ec35346dc7ab70b455efe86a833c84c499ec5e4dc0b07550d72"
+          },
+          {
+            "path": "formalization/.lake/packages/mathlib/Mathlib/LinearAlgebra/AffineSpace/AffineSubspace/Defs.lean",
+            "sha256": "c533e9c7f8496c33406e6e2c629afcc5d9d852e3e067cc488b14702c02229155"
+          },
+          {
+            "path": "formalization/.lake/packages/mathlib/Mathlib/LinearAlgebra/FiniteDimensional/Lemmas.lean",
+            "sha256": "2b383a91a6e4566f630b2c682506d4305a0098d9d085387e9e3bdb1d3126f129"
+          }
+        ],
         "gaps": []
       }
     },
@@ -1007,11 +1430,136 @@
       ],
       "assumptions": [],
       "priority": 5,
-      "note": "The displayed local or pinned upstream argument needs mathematical review and Lean implementation; it is not a Lean certificate.",
+      "note": "Proved in Lean on 2026-09-11 and registered on 2026-09-12. KLS/LogConcave/ConditionalFiber.lean proves ae_conditionalFiber_logConcave (for baseLaw-almost every base point the chosen conditional kernel kernel mu rho b is a compact-set log-concave law on R) and derives conditionalFiber_fiberBound_four (FiberBound mu rho 4), conditionalFiber_energy_le_four_mul, conditionalFiber_literatureConstant_le_four_mul and the literal 12 versions with the _of_four suffix. Three pieces of new infrastructure close the gaps recorded on 2026-09-11. (1) Probability/Line/BrunnMinkowski.lean proves compact one-dimensional Brunn-Minkowski (translate K by inf L and L by sup K inside K + L; the two translates meet in a single point, so measure_union_add_inter with translation invariance gives vol K + vol L <= vol (K + L)), its inner-regular convex-combination form, and the fully general one-dimensional Prekopa-Leindler inequality (layer cake lintegral_eq_lintegral_meas_lt, the level-set inclusion t {f > s} + (1-t) {g > s} subset {h > s}, normalization of both factors to supremum one by homogeneity, truncation with monotone convergence for unbounded factors, and a two-term ENNReal AM-GM proved from NNReal.geom_mean_le_arith_mean2_weighted). KLS/LogConcave/Line/OfDensity.lean applies it to indicator multiples of a Borell density and gives LineDensity.logConcave, the converse of the existing LogConcave.exists_lineDensity. (2) Probability/HaarLine.lean builds the linear equivalence (R theta)-perp x R = E, (z, s) -> z + s theta, and proves exists_lintegral_line: for a unit theta there is a positive finite c with c * integral G dm = double integral of G(z + s theta) against addHaar and volume (ContinuousLinearEquiv.isAddHaarMeasure_map, Measure.isAddLeftInvariant_eq_smul, addHaarScalarFactor_pos_of_isAddHaarMeasure); c depends on theta and is never evaluated, and the proof never needs measurability of theta -> c. (3) KLS/ConditionalFiber/SliceKernel.lean defines sliceMass, SliceGood, sliceDensity and the Markov kernel sliceKernel (Kernel.withDensity of the normalized line density on the good set, Kernel.piecewise with a Dirac law elsewhere) and proves compProd_baseLaw_sliceKernel (baseLaw ⊗ₘ sliceKernel = jointLaw) by reducing both sides, for each fixed direction, to the same iterated integral through exists_lintegral_line; finiteness of the slice mass almost everywhere is the case G = 1 of that identity. ae_sliceKernel_eq is then ProbabilityTheory.eq_condKernel_of_measure_eq_compProd. Assembly: absolute continuity gives full affine support (affineSupport_eq_top_of_absolutelyContinuous, made public in EnergyComparison.lean without a type change) and hence a Borell density; on a good base point the normalized line density is a Borell density of the slice kernel (upper semicontinuity by UpperSemicontinuous.comp and Continuous.comp_upperSemicontinuous, log-concavity along the affine reconstruction map), so LineDensity.logConcave applies; the remaining base points carry a Dirac law and KLS.logConcave_dirac covers them, so no exceptional set is discarded. The Blueprint corollary is restated with the sharp constant 4; 12 is the immediate weakening. No frame bound, no Poincare inequality for mu and no KLS statement is claimed; q:conditional-fiber-frame remains open.",
       "infrastructure": {
-        "status": "unchecked",
-        "mathlib_revision": null,
-        "evidence": [],
+        "status": "available",
+        "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
+        "evidence": [
+          {
+            "path": "formalization/FunctionalInequalities/KLS/LogConcave/ConditionalFiber.lean",
+            "sha256": "1072946bb1deea8a3492d414f0617b0db0a1b73e99feca9bc668e2ae12c337d2"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/KLS/ConditionalFiber/SliceKernel.lean",
+            "sha256": "ea3759692f680fc71fa3d679b2677082e96eb77c4cb2d214da57dde4c90a8097"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Probability/HaarLine.lean",
+            "sha256": "d413ae1cc6dcf283a1b35968de49164791cb3104c5304e51ab82f67120676915"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Probability/Line/BrunnMinkowski.lean",
+            "sha256": "79b8bb56ea16661e7239ea0bfd708379c1ceb7df92cfe65e6d76ab7fa20cee30"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/KLS/LogConcave/Line/OfDensity.lean",
+            "sha256": "0a6f6dbd2b98eb2377d82acb7c76a95916208c334e4dd44206916ffedc75ccc8"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/KLS/ConditionalFiber/EnergyComparison.lean",
+            "sha256": "81a1af990163a86d29c8c0d200daef2450d00914c4af8aaef868b86141845323"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/KLS/ConditionalFiber.lean",
+            "sha256": "075ab8908d4bfbc7f94d2c7047c70d1195c6b669dd4dd1a0aede704e0ad55811"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/KLS/Definitions.lean",
+            "sha256": "13413143a168c3f46f5225b14306644eb88171575ad3c529274b151a938e3b57"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/KLS/LogConcave/Borel.lean",
+            "sha256": "ef10a0289f72a57e73e5c5ea0293c8b7997767ade2e8f227d3ad895a5017e174"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/KLS/LogConcave/BorellRepresentation.lean",
+            "sha256": "0063b5d6eb138fec5ee6deb821d254ff06d6c162d8304afc5434675f6f0db17b"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/KLS/LogConcave/Isotropic.lean",
+            "sha256": "1e3a2890cee38df5e378b7f801c41ddc8104d40a573d0ce237cc4a144a3206d0"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/KLS/LogConcave/Line/Density.lean",
+            "sha256": "7b48b16874f98375ade61d574d03305870fba294e271acdd81aa159a4af53464"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/KLS/LogConcave/Line/Poincare.lean",
+            "sha256": "74409d0f8802b6c1a428557ea21e1fe0ae3a6d42e4149d2680b3b1089e97a603"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/KLS/LogConcave/Line/SharpPoincare.lean",
+            "sha256": "976c973c79bc45da187e068d142504fdabdce353d1a96ebc7044764559a7cb49"
+          },
+          {
+            "path": "solutions/CorConditionalFiberTwelveBound.lean",
+            "sha256": "5810754f1efa0e55abcb937dc995c55f424363d93dd6faf1e421c635f74c94b4"
+          },
+          {
+            "path": "formalization/.lake/packages/mathlib/Mathlib/Probability/Kernel/Disintegration/Unique.lean",
+            "sha256": "8548ebe451cbe533816bee5fd76c3b2d23ae1defabac321c8af37463822bf0c2"
+          },
+          {
+            "path": "formalization/.lake/packages/mathlib/Mathlib/Probability/Kernel/WithDensity.lean",
+            "sha256": "7b34d15d20793c1c5fa7af7b78801c525b1184789ad6f45532264c46aa27cca0"
+          },
+          {
+            "path": "formalization/.lake/packages/mathlib/Mathlib/Probability/Kernel/Basic.lean",
+            "sha256": "903572b8a1c881dd278ad402772be8616d69c6ceabf59bf70fb14a484163d331"
+          },
+          {
+            "path": "formalization/.lake/packages/mathlib/Mathlib/Probability/Kernel/MeasurableLIntegral.lean",
+            "sha256": "91cae866ddb710a3d470bea02c2a943c18e681ebc16ddfd6bb0027a4fae60e5f"
+          },
+          {
+            "path": "formalization/.lake/packages/mathlib/Mathlib/MeasureTheory/Measure/Haar/Disintegration.lean",
+            "sha256": "0ffbaf26f51087bb77f30feda8e7509e370eb434d20a97910f5053b2f743db2d"
+          },
+          {
+            "path": "formalization/.lake/packages/mathlib/Mathlib/MeasureTheory/Measure/Haar/Unique.lean",
+            "sha256": "a3c699594a136c622ebacb69632d5b250acb9a718123eeb8ef97a3aed7a11782"
+          },
+          {
+            "path": "formalization/.lake/packages/mathlib/Mathlib/MeasureTheory/Measure/Prod.lean",
+            "sha256": "739ba1838b5b67c1ff5d3b43ed263c2ad34f91e01e7a8946a6f529922d463e79"
+          },
+          {
+            "path": "formalization/.lake/packages/mathlib/Mathlib/MeasureTheory/Measure/Regular.lean",
+            "sha256": "634aa0663f4d800ec62184195e4ae19ba717a90b130b844c0d9ed7483b84e230"
+          },
+          {
+            "path": "formalization/.lake/packages/mathlib/Mathlib/MeasureTheory/Measure/WithDensity.lean",
+            "sha256": "b62c4ad72728e11a87bb3cefc6b968a081a70901030e8ac8e60d43b5ec2a8649"
+          },
+          {
+            "path": "formalization/.lake/packages/mathlib/Mathlib/MeasureTheory/Measure/Lebesgue/EqHaar.lean",
+            "sha256": "269a2815cff12469aa8361d9062bfb11f8f7c45787799752b6e5bc3a7705e5a3"
+          },
+          {
+            "path": "formalization/.lake/packages/mathlib/Mathlib/MeasureTheory/Integral/Layercake.lean",
+            "sha256": "0e4258080dc24f55367c29ed67538c6db1248be5a1690637c7f8a5979e9a1f09"
+          },
+          {
+            "path": "formalization/.lake/packages/mathlib/Mathlib/Analysis/MeanInequalities.lean",
+            "sha256": "aea57be3b9fba6441497656bbdf98633ab43b41ccbc6a45bde71c5d3e1e9fcdc"
+          },
+          {
+            "path": "formalization/.lake/packages/mathlib/Mathlib/Analysis/InnerProductSpace/Orthogonal.lean",
+            "sha256": "3d4d67ecd4bc3a1ee3620520336783f0f909a8b40bbd7802f8eda3bf28acfd5d"
+          },
+          {
+            "path": "formalization/.lake/packages/mathlib/Mathlib/Analysis/SpecialFunctions/Pow/NNReal.lean",
+            "sha256": "34ca617eac6d3903c15dde5c1c833a0f490de28c10f3f4f8e21f912bb0028687"
+          },
+          {
+            "path": "formalization/.lake/packages/mathlib/Mathlib/Topology/Semicontinuity/Basic.lean",
+            "sha256": "3f35bb8264463730b6570e5859bd05d68579330461ae1b85d5f5bd8d239e5d67"
+          },
+          {
+            "path": "formalization/.lake/packages/mathlib/Mathlib/Topology/Order/Compact.lean",
+            "sha256": "002eb018e5c875f619438d68c26293ef1fd75267dc94327f23fba430c9d526e5"
+          }
+        ],
         "gaps": []
       }
     },
@@ -1089,11 +1637,11 @@
           },
           {
             "path": "formalization/FunctionalInequalities/Energy/WeightedGradient/Closable.lean",
-            "sha256": "ec4cb927c0f385166443034ac0b4b062bbfd7ba59f785ef78fc771004c0c0918"
+            "sha256": "d2b37b5df25ee91792a30f143af165bab1d783754c872545f835b75879e01d6e"
           },
           {
             "path": "formalization/FunctionalInequalities/Probability/LocalDomination.lean",
-            "sha256": "1d1615edba66daf79455b1178682b035966aaa7619a74de50bb14542c64e8ae5"
+            "sha256": "94c2fe1632aa6ff68099c6983816a9d9bfbe5b80bfa4e78a40f79a66f8352a59"
           },
           {
             "path": "formalization/FunctionalInequalities/Energy/WeightedGradient/Core.lean",
@@ -1146,12 +1694,57 @@
       ],
       "assumptions": [],
       "priority": 5,
-      "note": "The displayed local or pinned upstream argument needs mathematical review and Lean implementation; it is not a Lean certificate.",
+      "note": "Reassessed 2026-09-12: KLS/WIP/RelativePerimeter.lean defines SmoothDomain, normalized surfaceMeasure and relativePerimeter and retains five sorry bodies. The companion AnalyticPrerequisites.lean already proves Prekopa-Leindler, Brunn-Minkowski, the isodiametric inequality, Hausdorff normalization and regular-level-set local finiteness with standard axioms. It imports RelativePerimeter, so those inputs need a lower-level module split before they can discharge its normalization and local-finiteness holes. Gauss-Green, its boundary-integrability inputs and the resulting weighted convolution/recovery estimates remain unfinished. These WIP modules are unregistered and excluded from certified imports. All holes are retained under the owner's documentation-and-commit instruction; see research/decisions/2026-09-12-status-audit-and-wip-retention.md.",
       "infrastructure": {
-        "status": "unchecked",
-        "mathlib_revision": null,
-        "evidence": [],
-        "gaps": []
+        "status": "missing",
+        "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
+        "evidence": [
+          {
+            "path": "formalization/blueprint/src/chapters/60-analytic-comparison-proofs.tex",
+            "sha256": "ab2e28804c6e6247ea4413fab3dc8373c8fcd421dedc69f0b52c7495d4caa91b"
+          },
+          {
+            "path": "formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex",
+            "sha256": "eaec772582ccef2621743135a18ad9f6badc913ee0691b6e5f494ce8e9cf3213"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/KLS/Isoperimetry.lean",
+            "sha256": "db185cf4fe869347881fff739e0dd0808a6ad7dd8a160c28b5aa0b74bc4e4248"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/KLS/LogConcave/BorellRepresentation.lean",
+            "sha256": "0063b5d6eb138fec5ee6deb821d254ff06d6c162d8304afc5434675f6f0db17b"
+          },
+          {
+            "path": "formalization/.lake/packages/mathlib/Mathlib/MeasureTheory/Measure/Hausdorff.lean",
+            "sha256": "82edd0cc267b39bbf04175c91b14cf9abafe0d2327da8e4c62726d4a43a336e1"
+          },
+          {
+            "path": "formalization/.lake/packages/mathlib/Mathlib/MeasureTheory/Integral/DivergenceTheorem.lean",
+            "sha256": "7801deae1fa630bca3f1966f17b9005e0e9dfc86be62f7abd14e88bece1a26cc"
+          },
+          {
+            "path": "formalization/.lake/packages/mathlib/Mathlib/Analysis/BoundedVariation.lean",
+            "sha256": "4b339ac9774705efe8256ed8a7bf060a6642f76876d355a4ae9e3e1338ec306c"
+          },
+          {
+            "path": "formalization/.lake/packages/mathlib/Mathlib/Analysis/Convolution.lean",
+            "sha256": "2e02a96b2ee6de4b52b6414aa938fd46f89690939d5c86964071b73a88dbd184"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/KLS/WIP/RelativePerimeter.lean",
+            "sha256": "2661d0fa005b93695b46ef75dafdc4bff7884ed8160dc651c78ebade226f79c7"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/KLS/WIP/AnalyticPrerequisites.lean",
+            "sha256": "dfa0d4613a1832c8921380801cd3d040d7f49cdd24031212b4e3197be028fa21"
+          }
+        ],
+        "gaps": [
+          "Integrate the already-proved Hausdorff normalization and regular-level-set local finiteness into the smooth-domain perimeter module without creating the existing reverse-import cycle; the definitions of SmoothDomain, surfaceMeasure and relativePerimeter are present in WIP.",
+          "Prove Gauss-Green for smooth domains with the normalized surface measure, including the required graph area formula and boundary measurability/integrability of the outward-normal field; its scalar and vector formulations retain sorry.",
+          "Use Gauss-Green, surface-measure finiteness and the log-concave weight comparison to prove the gradient-integral estimate for mollified outward dilations, then assemble the relative-perimeter recovery sequence."
+        ]
       }
     },
     "lem:relative-perimeter-cheeger-infimum": {
@@ -1161,7 +1754,7 @@
       ],
       "assumptions": [],
       "priority": 5,
-      "note": "The displayed local or pinned upstream argument needs mathematical review and Lean implementation; it is not a Lean certificate.",
+      "note": "KLS/WIP/CheegerInfimum.lean retains nine sorry bodies. Weighted coarea, Sard, the Minkowski coarea inequality and the downstream infimum comparisons remain unproved; filled consequences can inherit sorryAx. The distance-cutoff statements have been corrected for nonemptiness and measurability. The certified Energy.Euclidean.LipschitzApproximation.exists_smooth_bounded_L1 already supplies the L1 smoothing input: norm continuity turns its gradient L1 convergence into convergence of gradient-norm integrals, checked by an independent audit client. This is pending integration, not missing mathematical input. The owner retains all holes. See research/decisions/2026-09-12-status-audit-and-wip-retention.md.",
       "infrastructure": {
         "status": "unchecked",
         "mathlib_revision": null,
@@ -1191,7 +1784,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/Poincare/LocalSlope/Basic.lean",
-            "sha256": "ed74b36985610dc1deb241d967be74e0b5ca51e8c53a5fcb3032e738fbadcddf"
+            "sha256": "5127ac0f0a9d0d63c489f0bf1bbc35c7cbf251beffda6ae433ccbad2ba851c23"
           },
           {
             "path": "formalization/FunctionalInequalities/Probability/AffineSupport.lean",

@@ -208,3 +208,11 @@ info: 'FunctionalInequalities.Poincare.L2Energy.constant_le_mul_of_energy_le_mul
 /-- info: 'FunctionalInequalities.Poincare.Euclidean.dirac_toLp_zero_eq_id' depends on axioms: [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
 #print axioms FunctionalInequalities.Poincare.Euclidean.dirac_toLp_zero_eq_id
+
+/-- info: 'FunctionalInequalities.Energy.SmoothGradient.exists_test_toL2_eq_zero_energy_eq_one' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms FunctionalInequalities.Energy.SmoothGradient.exists_test_toL2_eq_zero_energy_eq_one
+
+/-- info: 'FunctionalInequalities.Energy.SmoothGradient.not_respectsAmbientFibers' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms FunctionalInequalities.Energy.SmoothGradient.not_respectsAmbientFibers

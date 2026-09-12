@@ -17,6 +17,15 @@
 | [ClosedForm.lean](ClosedForm.lean) | 仿射协方差松弛是闭二次型、测试为序列核、内禀律平移下的等距与常数不变、与 ℝ + C_c^∞ 核上闭算子范数平方（CMH 闭形式）相等 | 已证明；由 `Solutions.ThmAffineCovarianceRelaxationClosed.certificate` 打包，不含 Poincaré 不等式、环境平移不变或 KLS |
 | [Translation.lean](Translation.lean) | 环境平移保持紧集对数凹；对数凹律的环境二阶矩与重心；平移到负重心得到零均值律 | 已证明；与 `Poincare/CovarianceGradient/Translation.lean` 的常数不变性一起由 `Solutions.LemAffinePoincareTranslationInvariance.certificate` 打包，不含 Poincaré 不等式、各向同性归约或 KLS |
 | [Isotropic.lean](Isotropic.lean) | 连续线性等价保持对数凹；三条 KLS 表述 `IsotropicBound`、`CovarianceBound`、`AffineBound` 及其两两等价；中心化、白化后的各向同性律；`AffineBound → Conjecture` | 已证明；由 `Solutions.ThmAffineIsotropicReduction.certificate` 打包，不断言任一表述对某个 K 成立 |
+| [Line/Density.lean](Line/Density.lean) | 实轴对数凹律的 Borell 密度结构 `LineDensity`；支撑内部为区间且承载全部质量；分布值严格在 (0,1) 的点落在支撑内部；`log ρ` 的弦下界、外推上界与中位数处的支撑指数 | 已证明；不含 Poincaré 结论 |
+| [Line/Hazard.lean](Line/Hazard.lean) | 四点不等式 `ρ a ρ e ≤ ρ b ρ c`；单调失效率 `ρ x μ(Ioi y) ≤ ρ y μ(Ioi x)` 及其镜像；中位数界 `2ρ(m)(1−F) ≤ ρ`、`2ρ(m)F ≤ ρ`；支撑线界 `ρ ≤ ρ(m) + k(F − 1/2)` | 已证明；使用 `Probability/Line/{Cdf,ExpIntegral}` |
+| [Line/Hardy.lean](Line/Hardy.lean) | 区间上的分部积分 Hardy 步骤；半直线上的有理端点有向并，锚点可取中位数同侧任意内点（常数仍为 `1/ρ(m)²`）；光滑测试 Poincaré 不等式 `SmoothTest.Holds ν (1/ρ(m))²` | 已证明；常数以中位数密度表达，不含方差 |
+| [Line/Variance.lean](Line/Variance.lean) | 比较函数 `φ(F x) − (x − m)` 的单调性；`∫(x−m)(F−1/2) dν ≥ 1/(12ρ(m))`；Bobkov 方差界 `1/(12ρ(m)²) ≤ Var` | 已证明；对均匀律取等 |
+| [Line/Poincare.lean](Line/Poincare.lean) | Bobkov 常数：`C_P^lit(ν) ≤ 12·Var_ν`（实与扩展方差两种形式）；零维仿射支撑时常数为零；`logConcave_dirac` | 已证明；独立于常数 4 的路线，作为历史推论保留 |
+| [Line/Profile.lean](Line/Profile.lean) | 均值落在支撑内部；支撑线 `ρ ≤ A(1−F)+BF`（`A,B ≥ 0`）；仿射模型方差下界 `1/(√A+√B)⁴ ≤ Var`；轮廓界 `F(1−F) ≤ σρ` | 已证明；使用 `Probability/Line/AffineProfile.lean` 的仿射分位数模型 |
+| [Line/SharpHardy.lean](Line/SharpHardy.lean) | 截断测试 `clip a b f`、居中版本与尾积分 `G̃`；分部积分 `∫h² dμ = −∫_a^b f' G̃`；基态恒等式与边界项控制；`∫_a^b G̃²ρ/W² ≤ 4∫h² dμ`；`Var(clip) ≤ 4·Var_ν·∫f'² dν` | 已证明；区间 `[a,b] ⊆ Ω` 需跨越中位数 |
+| [Line/SharpPoincare.lean](Line/SharpPoincare.lean) | 尾项消失（锚定半直线 Hardy 界 + 积分的绝对连续性）；`(1+δ)` 分裂；`SmoothTest.Holds ν (4·Var)`；`C_P^lit(ν) ≤ 4·Var_ν`（实与扩展方差两种形式），`12` 作为推论 | 已证明；由 `Solutions.ThmOneDimensionalLogConcavePoincare.certificate` 打包，常数 4 在指数律取等，不断言高维结论 |
+| [Line/OfDensity.lean](Line/OfDensity.lean) | 反方向：有对数凹 Lebesgue 密度的实轴概率律是紧集对数凹 `LineDensity.logConcave` | 已证明；用 `Probability/Line/BrunnMinkowski.lean` 的一维 Prékopa–Leindler，与 `LogConcave.exists_lineDensity` 互逆 |
 
 局部依赖关系为：
 
@@ -24,6 +33,10 @@
 Definitions → Transport → AbsoluteContinuity → BorellRepresentation → Covariance → Translation ─┐
             → Borel ─────────────────────────────┘                  → WeightedGradient → ClosedForm   → Isotropic
 ```
+
+`Line/` 的局部依赖为 `Density → Hazard → {Hardy, Variance} → Poincare`；`Density` 使用
+`BorellRepresentation` 与 `Probability/Line/Cdf`，`Poincare` 另外使用 `Poincare.lean`（光滑测试
+与文献常数相等）及 `Isotropic`（全仿射支撑给出支撑内部非空）。
 
 `WeightedGradient` 使用 `Energy/WeightedGradient/{Basic,Closable,Core}`：对数凹律
 只负责提供三条前提（`ν ≪ Haar`、支撑边界零测、Haar 在支撑内部紧集上被 `ν` 局部支配）。

@@ -13,7 +13,10 @@ import FunctionalInequalities.Energy.SmoothGradient.Intrinsic.Basic
 import FunctionalInequalities.Energy.SmoothGradient.Intrinsic.Closed
 import FunctionalInequalities.Energy.SmoothGradient.Basic
 import FunctionalInequalities.Energy.SmoothGradient.Closed
+import FunctionalInequalities.Energy.SmoothGradient.Core
 import FunctionalInequalities.Energy.SmoothGradient.Density
+import FunctionalInequalities.Energy.SmoothGradient.Dirichlet
+import FunctionalInequalities.Energy.SmoothGradient.NormalDirection
 import FunctionalInequalities.Energy.SmoothGradient.Quadratic
 import FunctionalInequalities.Energy.Euclidean.WeakDerivative
 import FunctionalInequalities.Energy.FormCore
@@ -55,8 +58,12 @@ This is the aggregate entry point for the new layered API:
   sequences, and continuous contraction transfer;
 * pure Rayleigh optimization and comparison;
 * the bridge from finite `L²` energy domains to optimal Poincaré constants;
-* the concrete `C∞` smooth-gradient realization, its quadratic and density theorems, and the
-  closed-quadratic structure of its relaxation, named without assuming a Cheeger-energy theorem;
+* the concrete `C∞` smooth-gradient realization, its quadratic and density theorems, the
+  closed-quadratic structure of its relaxation and its Dirichlet property under normal
+  contractions, named without assuming a Cheeger-energy theorem, together with the
+  normal-direction obstruction showing that the ambient pre-energy does not respect `L²`
+  fibers on a proper affine support, and the raw/sequential-core agreement of the pre-energy
+  with its relaxation for laws with a local density (`Energy.SmoothGradient.LocalDensity`);
 * the minimal closed full-measure affine carrier, its intrinsic probability law, and the
   linearly isometric equivalence between the ambient and intrinsic real `L²` spaces, including
   transport of the closed-quadratic relaxation;

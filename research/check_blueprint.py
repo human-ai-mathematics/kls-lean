@@ -94,6 +94,34 @@ REQUIRED_REPOSITORY_ADAPTERS = {
 
 # Blueprint label -> (ledger node, public Lean certificate declaration).
 CERTIFICATES: dict[str, tuple[str, str]] = {
+    "cor:absolutely-continuous-relaxation-two-cheeger": (
+        "cor:absolutely-continuous-relaxation-two-cheeger",
+        "Solutions.CorAbsolutelyContinuousRelaxationTwoCheeger.certificate",
+    ),
+    "cor:conditional-fiber-twelve-bound": (
+        "cor:conditional-fiber-twelve-bound",
+        "Solutions.CorConditionalFiberTwelveBound.certificate",
+    ),
+    "lem:conditional-fiber-energy-comparison": (
+        "lem:conditional-fiber-energy-comparison",
+        "Solutions.LemConditionalFiberEnergyComparison.certificate",
+    ),
+    "lem:conditional-fiber-form": (
+        "lem:conditional-fiber-form",
+        "Solutions.LemConditionalFiberForm.certificate",
+    ),
+    "thm:smooth-gradient-raw-core-agreement-density": (
+        "thm:smooth-gradient-raw-core-agreement-density",
+        "Solutions.ThmSmoothGradientRawCoreAgreementDensity.certificate",
+    ),
+    "thm:one-dimensional-logconcave-poincare": (
+        "thm:one-dimensional-logconcave-poincare",
+        "Solutions.ThmOneDimensionalLogConcavePoincare.certificate",
+    ),
+    "thm:smooth-gradient-relaxation-dirichlet": (
+        "thm:smooth-gradient-relaxation-dirichlet",
+        "Solutions.ThmSmoothGradientRelaxationDirichlet.certificate",
+    ),
     "thm:affine-isotropic-reduction": (
         "thm:affine-isotropic-reduction",
         "Solutions.ThmAffineIsotropicReduction.certificate",

@@ -46,10 +46,33 @@
 | 局部斜率有限界 | `Poincare.LocalSlope.Holds ν C` | 给定坐标律 ν，未自动取内在律 |
 | 内在局部斜率最优常数 | `Poincare.LocalSlope.Intrinsic.constant μ` | 先取 intrinsicMeasure μ，再对有限非负常数取下确界 |
 | 任意 L² 能量的优化器 | `Poincare.L2Energy.Holds μ Q C`、`constant μ Q` | 能量 Q 显式；保留无限最优常数及零能量边界 |
+| 实轴概率律的分布函数 | `Probability.Line.cdf μ`、`map_cdf_eq_uniform`、`integral_cdf_sub_half_sq` | 给定 `ProbabilityMeasure ℝ`；有密度时的连续性、导数与均匀推前在同一命名空间 |
+| 实轴对数凹律的 Borell 密度 | `KLS.LineDensity μ`（字段 `ρ`、`isBorell`）；`d.pos`、`d.mul_le_mul_of_add_eq`、`d.two_mul_cdf_le`、`d.smoothTest_holds`、`d.one_div_le_variance` | 密度数据用结构承载，结论以 `d.` 点记法调用；对数凹前提 `hμ` 与中位数 `hm` 作为显式参数 |
+| 一维 4·Var 界 | `KLS.LogConcave.localSlope_constant_le_four_variance`、`localSlope_constant_le_four_evariance`、`smoothTest_holds_four_variance`、`KLS.logConcave_dirac` | 结论以 `hν.` 点记法调用；常数 4 写在名字里，不另设参数 |
+| 一维 12·Var 界（历史推论） | `KLS.LogConcave.localSlope_constant_le_twelve_variance`、`smoothTest_holds_twelve_variance`、`localSlope_constant_le_twelve_variance_of_four` | 独立证明保留在 `Line/Poincare.lean`；由 4 推出的版本带 `_of_four` 后缀 |
+| 仿射分位数模型 | `Probability.Line.unitUniform`、`affineWeight a b`、`affineQuantile a b p`、`variance_affineQuantile`、`one_div_le_variance_affineQuantile` | 参数顺序 `a b p u`：`a²(1−u)+b²u` 的权重、积分起点 `p`、自变量 `u` |
+| 轮廓界与截断测试 | `d.variance_ge_of_affine_bound`、`d.cdf_mul_one_sub_cdf_le_sd_mul`、`KLS.clip a b f`、`clipCentered μ a b f`、`tailIntegral μ h`、`cdfProd μ`、`boundaryTerm μ h`；`d.variance_clip_le`、`d.variance_le_four_variance_mul` | `clip` 是 `FunctionalInequalities.KLS` 下的顶层定义，引理放在 `clip` 命名空间（`clip.of_le`、`clip.of_mem`）；`LineDensity` 上的结论以 `d.` 点记法调用 |
+| 锚定半直线 Hardy 界 | `d.setIntegral_Iic_sq_sub_le_of_le hμ hi hm hf hpΩ hpm`、`d.setIntegral_Ioi_sq_sub_le_of_le`、`d.integral_sq_sub_mul_le_left_of_le` | 中位数版本是 `p = m` 的包装；`_of_le` 后缀表示锚点在中位数同侧的序前提 |
+| 开集上的局部支配 | `Probability.LocallyDominatesOn ν m Ω`；`LocallyDominates ν m` 是 `Ω = interior support` 的缩写 | 引理放在 `LocallyDominatesOn` 命名空间，用 `h.exists_lintegral_le` 等点记法调用 |
+| 局部密度假设与 raw/core 一致 | `Energy.SmoothGradient.LocalDensity ν m`（字段 `Ω`、`ρ` 及五条性质）；`D.absolutelyContinuous`、`D.locallyDominatesOn`；`SmoothGradient.preEnergy_agreesOnTests ν m D` | 假设打包成结构，结论以显式 `(ν m D)` 参数调用；内禀实例在 `SmoothGradient.Intrinsic` 下 |
+| 法向坐标障碍 | `Energy.SmoothGradient.normalCoordinate μ n`、`Test.normalCoordinate`、`not_respectsAmbientFibers` | 与 `Poincare.Euclidean.dirac_raw_energy` 并列的命名障碍，不是 ledger 节点 |
+| 两点方差恒等式 | `Probability.two_mul_evariance_eq_lintegral_prod ν hX`、`integral_sub_sq_prod` | 概率律 ν 与 a.e. 强可测 X：`2·eVar[X] = ∬‖X t − X s‖ₑ² d(ν⊗ν)`，X ∉ L² 时两边为 ⊤ |
+| 条件纤维形式 | `KLS.ConditionalFiber.functional μ ρ`（`Energy.Functional`，值为 `form μ ρ`）；纤维层 `twoPointMeasure κ b`、`twoPointMeasure_swap`、`jump κ b f`、`energyAt_eq_jump_div`；形式层 `energy_le_of_lipschitzWith`、`dense_domain`、`lowerSemicontinuous_form`、`closedQuadratic`、`markovian`、`dirichlet` | 纤维层引理以 `(κ b)` 显式参数调用，形式层以 `(μ ρ)` 显式参数调用；`jump` 是未归一化的平方跳跃积分，`energyAt` 是它除以 `2·eVar[id]` 后的值 |
+| 条件纤维能量比较 | `KLS.ConditionalFiber.FiberBound μ ρ κ`（纤维 Poincaré 输入）；`energy_le_of_fiberBound μ ρ hρ m hac hfiber hf`、`literatureConstant_le_of_fiberBound μ ρ hρ m hac hfiber hform` | 输入常数 `κ : NNReal` 与形式差常数 `C : NNReal` 作为隐式参数由假设推断；Haar 参考测度 `m` 与 `hac : μ ≪ m` 显式；`_of_fiberBound` 后缀标明结论来自纤维输入，不写入 `κ` 的取值 |
+| 一维 Brunn–Minkowski 与 Prékopa–Leindler | `Probability.Line.volume_add_le_volume_add`、`le_volume_combination`、`prekopaLeindler` | 纯一维测度论工具，与对数凹无关；组合集写法与 `KLS.LogConcave` 一致，右端允许不可测（外测度） |
+| Haar 沿直线的 Fubini 拆分 | `Probability.lineMap`、`lineEquiv hθ`、`exists_lintegral_line` | `θ^⊥ × ℝ ≃ₗ E`；比例常数随 `θ` 变化，作为存在量词给出，不计算也不要求关于 `θ` 可测 |
+| 对数凹密度到紧集对数凹 | `KLS.LineDensity.logConcave` | 以 `d.` 点记法调用；与 `KLS.LogConcave.exists_lineDensity` 互为反方向 |
+| 沿直线的显式切片核 | `KLS.ConditionalFiber.sliceMass`、`SliceGood`、`sliceDensity`、`sliceKernel p hp`；`compProd_baseLaw_sliceKernel`、`ae_sliceKernel_eq`、`sliceKernel_mul_sliceMass` | 可测性证明 `hp : Measurable p` 是显式参数（`Kernel.piecewise` 需要可测集）；不假设对数凹 |
+| 对数凹条件纤维 | `KLS.LogConcave.ae_conditionalFiber_logConcave`、`conditionalFiber_fiberBound_four`、`conditionalFiber_energy_le_four_mul`、`conditionalFiber_literatureConstant_le_four_mul`；`conditionalFiber_energy_le_twelve_mul_of_four`、`conditionalFiber_literatureConstant_le_twelve_mul_of_four` | 结论以 `hμ.` 点记法调用；常数 4 写在名字里，由 4 推出的 12 版本带 `_of_four` 后缀 |
+| 局部斜率与渐近 Lipschitz 的松弛 | `Energy.AsymptoticLipschitz.{apply,energy,Admissible,preEnergy,relaxation}`；`Energy.LocalSlope.{preEnergy,relaxation}` | 两种 Cheeger 约定各自成对出现；只证无条件的 `LocalSlope.relaxation ≤ AsymptoticLipschitz.relaxation`，相等是显式义务 |
+| 度量 Cheeger 能量 | `Energy.Cheeger.{ofLocalSlope,ofAsymptoticLipschitz,energy,Intrinsic.energy}`；`Energy.SmoothGradient.relaxation_eq_localSlope_of_absolutelyContinuous`、`Intrinsic.energy_eq_two_mul_cheeger_of_absolutelyContinuous`；`KLS.LogConcave.intrinsicSmooth_energy_eq_two_mul_cheeger` | 约定选择只记在 `Cheeger.energy := ofLocalSlope` 一处；`_of_absolutelyContinuous` 后缀标明受限范围，无条件版本仍在 WIP |
 
 两种测试对象均支持 `f.energy` 和 `f.toL2`；加权测试性质支持 `hf.memLp`。
 不要把数学上不同的测试类、权重、承载空间或松弛构造合并。`ClosedQuadratic` 本身不包含
-Markov/Dirichlet 性质；普通梯度与局部斜率的最优常数比较不自动给出能量相等。
+Markov/Dirichlet 性质；光滑梯度松弛的 Markov/Dirichlet 性是单独定理
+`Energy.SmoothGradient.markovian`、`dirichlet`、`Intrinsic.dirichlet`，用磨光正规收缩
+`Energy.NormalContraction.smoothed` 与测试复合 `SmoothGradient.Test.compSmoothed` 证明；
+普通梯度与局部斜率的最优常数比较不自动给出能量相等。
 
 ## 运输与协方差
 

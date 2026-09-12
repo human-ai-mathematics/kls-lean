@@ -56,7 +56,8 @@ def coordinates (p : Direction E × E) : (Direction E × E) × ℝ :=
 /-- Reconstruct an ambient point from its base and scalar fiber coordinate. -/
 def reconstruct (b : Direction E × E) (t : ℝ) : E := b.2 + t • b.1.1
 
-private theorem measurable_coordinates : Measurable (coordinates (E := E)) := by
+/-- The joint coordinate map is measurable. -/
+theorem measurable_coordinates : Measurable (coordinates (E := E)) := by
   unfold coordinates
   fun_prop
 
@@ -125,8 +126,15 @@ theorem reconstruct_coordinates (p : Direction E × E) :
     reconstruct (coordinates p).1 (coordinates p).2 = p.2 := by
   simp [reconstruct, coordinates]
 
-private theorem measurable_reconstruct :
+/-- Reconstruction is jointly measurable in the base point and the scalar coordinate. -/
+theorem measurable_reconstruct :
     Measurable (fun q : (Direction E × E) × ℝ ↦ reconstruct q.1 q.2) := by
+  unfold reconstruct
+  fun_prop
+
+omit [SecondCountableTopology E] in
+/-- Along a fixed base point, reconstruction is a measurable function of the scalar. -/
+theorem measurable_reconstruct_left (b : Direction E × E) : Measurable (reconstruct b) := by
   unfold reconstruct
   fun_prop
 

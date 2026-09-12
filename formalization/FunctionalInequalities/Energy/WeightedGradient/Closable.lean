@@ -67,8 +67,8 @@ omit [InnerProductSpace ℝ V] [CompleteSpace V] [BorelSpace V] [SecondCountable
 /-- Local domination bounds the `L¹(m)` norm over a compact subset of the interior by the
 `L²(ν)` norm. -/
 theorem exists_lintegral_enorm_restrict_le (W : Type v) [NormedAddCommGroup W]
-    (h : LocallyDominates ν m) {K : Set V}
-    (hK : IsCompact K) (hKΩ : K ⊆ interior (ν : Measure V).support) :
+    {Ω : Set V} (h : LocallyDominatesOn ν m Ω) {K : Set V}
+    (hK : IsCompact K) (hKΩ : K ⊆ Ω) :
     ∃ C : ℝ≥0, ∀ (u : V → W),
       AEStronglyMeasurable u (ν : Measure V) →
       ∫⁻ x in K, ‖u x‖ₑ ∂m ≤ (C : ℝ≥0∞) * eLpNorm u 2 (ν : Measure V) := by
@@ -80,8 +80,8 @@ theorem exists_lintegral_enorm_restrict_le (W : Type v) [NormedAddCommGroup W]
 omit [InnerProductSpace ℝ V] [CompleteSpace V] [BorelSpace V] [SecondCountableTopology V] [FiniteDimensional ℝ V] in
 /-- A square-integrable function for `ν` is integrable for `m` on compact subsets of the
 interior of the support. -/
-theorem integrableOn_of_locallyDominates (h : LocallyDominates ν m) {K : Set V}
-    (hK : IsCompact K) (hKΩ : K ⊆ interior (ν : Measure V).support)
+theorem integrableOn_of_locallyDominates {Ω : Set V} (h : LocallyDominatesOn ν m Ω) {K : Set V}
+    (hK : IsCompact K) (hKΩ : K ⊆ Ω)
     {W : Type v} [NormedAddCommGroup W] {u : V → W} (hu : StronglyMeasurable u)
     (hu2 : eLpNorm u 2 (ν : Measure V) ≠ ⊤) : IntegrableOn u K m := by
   obtain ⟨C, hC⟩ := exists_lintegral_enorm_restrict_le W h hK hKΩ
@@ -93,8 +93,8 @@ omit [InnerProductSpace ℝ V] [CompleteSpace V] [SecondCountableTopology V] [Fi
 /-- The lower integral of a bounded test times a square-integrable function, when the test
 vanishes outside a compact subset of the interior. -/
 theorem lintegral_enorm_smul_le (W : Type v) [NormedAddCommGroup W] [NormedSpace ℝ W]
-    (h : LocallyDominates ν m) {K : Set V} (hK : IsCompact K)
-    (hKΩ : K ⊆ interior (ν : Measure V).support) :
+    {Ω : Set V} (h : LocallyDominatesOn ν m Ω) {K : Set V} (hK : IsCompact K)
+    (hKΩ : K ⊆ Ω) :
     ∃ C : ℝ≥0, ∀ (ψ : V → ℝ) (M : ℝ≥0), (∀ x, ‖ψ x‖₊ ≤ M) → (∀ x, x ∉ K → ψ x = 0) →
       ∀ (u : V → W), AEStronglyMeasurable u (ν : Measure V) →
       ∫⁻ x, ‖ψ x • u x‖ₑ ∂m ≤ (M : ℝ≥0∞) * ((C : ℝ≥0∞) * eLpNorm u 2 (ν : Measure V)) := by
@@ -120,8 +120,8 @@ omit [InnerProductSpace ℝ V] [CompleteSpace V] [SecondCountableTopology V] [Fi
 /-- Integrability of a bounded test times a square-integrable function, and the resulting bound
 on the integral, in real form. -/
 theorem exists_norm_integral_smul_le (W : Type v) [NormedAddCommGroup W] [NormedSpace ℝ W]
-    (h : LocallyDominates ν m) {K : Set V} (hK : IsCompact K)
-    (hKΩ : K ⊆ interior (ν : Measure V).support) :
+    {Ω : Set V} (h : LocallyDominatesOn ν m Ω) {K : Set V} (hK : IsCompact K)
+    (hKΩ : K ⊆ Ω) :
     ∃ C : ℝ≥0, ∀ (ψ : V → ℝ) (M : ℝ≥0), Measurable ψ → (∀ x, ‖ψ x‖₊ ≤ M) → (∀ x, x ∉ K → ψ x = 0) →
       ∀ (u : V → W), StronglyMeasurable u → eLpNorm u 2 (ν : Measure V) ≠ ⊤ →
       Integrable (fun x ↦ ψ x • u x) m ∧
@@ -145,8 +145,8 @@ theorem exists_norm_integral_smul_le (W : Type v) [NormedAddCommGroup W] [Normed
 omit [InnerProductSpace ℝ V] [CompleteSpace V] [SecondCountableTopology V] [FiniteDimensional ℝ V] in
 /-- Functions equal `ν`-almost everywhere give `m`-almost everywhere equal products with a test
 vanishing outside a compact subset of the interior. -/
-theorem smul_ae_eq_of_ae_eq (h : LocallyDominates ν m) {K : Set V} (hK : IsCompact K)
-    (hKΩ : K ⊆ interior (ν : Measure V).support) {ψ : V → ℝ} (hψ : ∀ x, x ∉ K → ψ x = 0)
+theorem smul_ae_eq_of_ae_eq {Ω : Set V} (h : LocallyDominatesOn ν m Ω) {K : Set V} (hK : IsCompact K)
+    (hKΩ : K ⊆ Ω) {ψ : V → ℝ} (hψ : ∀ x, x ∉ K → ψ x = 0)
     {W : Type*} [NormedAddCommGroup W] [NormedSpace ℝ W] {u₁ u₂ : V → W}
     (hu : u₁ =ᵐ[(ν : Measure V)] u₂) :
     (fun x ↦ ψ x • u₁ x) =ᵐ[m] fun x ↦ ψ x • u₂ x := by
@@ -233,10 +233,12 @@ theorem ae_mem_interior_support (hfr : (ν : Measure V) (frontier (ν : Measure 
   exact by_contra fun hnot ↦ hxf ⟨hx, hnot⟩
 
 /-- The weighted gradient operator is closable: if `[g_j] → 0` in `L²(ν)` and `[B ∇g_j] → y`
-in `L²(ν; V)`, then `y = 0`. -/
-theorem operator_isClosable (hac : (ν : Measure V) ≪ m)
+in `L²(ν; V)`, then `y = 0`. The open set `Ω` carries `ν` and `m` is locally dominated by `ν` on
+its compact subsets; the frontier of the support is `ν`-null. -/
+theorem operator_isClosable_of_isOpen (hac : (ν : Measure V) ≪ m)
     (hfr : (ν : Measure V) (frontier (ν : Measure V).support) = 0)
-    (hloc : LocallyDominates ν m) : (operator ν B hac).IsClosable := by
+    {Ω : Set V} (hΩ : IsOpen Ω) (hΩν : (ν : Measure V) Ωᶜ = 0)
+    (hloc : LocallyDominatesOn ν m Ω) : (operator ν B hac).IsClosable := by
   apply Energy.isClosable_of_graph_closure_snd_eq_zero
   rintro ⟨p₁, y⟩ hp h0
   simp only at h0
@@ -254,8 +256,7 @@ theorem operator_isClosable (hac : (ν : Measure V) ≪ m)
   have hTf : ∀ n, operator ν B hac (f n) =
       (hg n).memLp_apply.toLp (apply B (g n)) :=
     fun n ↦ operator_apply ν B hac hfr (hg n) (f n).2 (hfg n)
-  set Ω := interior (ν : Measure V).support with hΩ
-  have hΩo : IsOpen Ω := isOpen_interior
+  have hΩo : IsOpen Ω := hΩ
   -- y is locally integrable on Ω
   have hyloc : LocallyIntegrableOn (fun x ↦ (y : V → V) x) Ω m := by
     rw [locallyIntegrableOn_iff ⟨Ω, Set.univ, hΩo, isClosed_univ, (Set.inter_univ _).symm⟩]
@@ -381,9 +382,20 @@ theorem operator_isClosable (hac : (ν : Measure V) ≪ m)
   have hae_m : ∀ᵐ x ∂m, x ∈ Ω → (y : V → V) x = 0 :=
     hΩo.ae_eq_zero_of_integral_contDiff_smul_eq_zero hyloc hvan
   have hae_ν : ∀ᵐ x ∂(ν : Measure V), x ∈ Ω → (y : V → V) x = 0 := hac.ae_le hae_m
+  have hΩae : ∀ᵐ x ∂(ν : Measure V), x ∈ Ω := by
+    rw [ae_iff]
+    exact hΩν
   rw [Lp.eq_zero_iff_ae_eq_zero]
-  filter_upwards [hae_ν, ae_mem_interior_support ν hfr] with x hx hxΩ
+  filter_upwards [hae_ν, hΩae] with x hx hxΩ
   exact hx hxΩ
+
+/-- The weighted gradient operator is closable under local domination on the interior of the
+support. -/
+theorem operator_isClosable (hac : (ν : Measure V) ≪ m)
+    (hfr : (ν : Measure V) (frontier (ν : Measure V).support) = 0)
+    (hloc : LocallyDominates ν m) : (operator ν B hac).IsClosable := by
+  refine operator_isClosable_of_isOpen ν B hac hfr isOpen_interior ?_ hloc
+  exact ae_iff.mp (ae_mem_interior_support ν hfr)
 
 end Closable
 

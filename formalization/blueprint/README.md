@@ -25,7 +25,11 @@ Upstream `checked_by: agent` metadata is provenance, never Lean certification. T
 relaxation/recovery bridge now identifies the legacy and selected canonical constants.
 That bridge does not require
 raw-test/core agreement; raw/core is an optional stronger statement and is obstructed for general
-singular measures.
+singular measures (`obs:dirac-raw-energy`) and, for the ambient pre-energy, on every proper
+affine support (`obs:normal-direction-raw-energy`, Lean-certified in
+`Energy/SmoothGradient/NormalDirection.lean`). Under the local density hypotheses of
+`thm:smooth-gradient-raw-core-agreement-density` the agreement is Lean-certified by
+`Solutions.ThmSmoothGradientRawCoreAgreementDensity.certificate`.
 
 The Blueprint keeps three unweighted frontend levels visible:
 
@@ -50,7 +54,12 @@ covariance-core closure and the closed affine covariance form are now Lean-certi
 (`Solutions.LemCovarianceCoreClosure.certificate`,
 `Solutions.ThmAffineCovarianceRelaxationClosed.certificate`); the relative-perimeter smoothing
 argument still awaits Lean implementation. The separate abstract
-relaxation and finite-factor comparison lemmas in the appendix have actual Lean proofs.
+relaxation and finite-factor comparison lemmas in the appendix have actual Lean proofs. The
+Dirichlet property of the smooth-gradient relaxation (`thm:smooth-gradient-relaxation-dirichlet`)
+is Lean-certified by `Solutions.ThmSmoothGradientRelaxationDirichlet.certificate`. The
+one-dimensional log-concave bound `C_P^lit(ν) ≤ 4 Var_ν` (`thm:one-dimensional-logconcave-poincare`),
+formerly an imported published input with Bobkov's constant `12` (now a corollary), is Lean-certified by
+`Solutions.ThmOneDimensionalLogConcavePoincare.certificate`; its route sidecar claim is `proved`.
 
 Separately, $C_{\mathrm P}^{\mathrm{aff}}(\mu)$ is the optimal constant of the closed
 covariance-weighted form used by the CMH route. It is defined from the globally Lipschitz
@@ -100,12 +109,23 @@ independence nor certification.
 
 The conditional-fiber branch lists the structural upstream form node and frame question, the
 local comparison with an explicit input `κ`, Bobkov's verified one-dimensional bound `12 Var`,
-and the local affine/isotropic bridge. The resulting numerical bound is `12C`; generally it is
-`κC`. The old factor-four attribution is retained only as provenance and is not an active input.
+and the local affine/isotropic bridge. With the certified log-concave input the resulting
+numerical bound is `4C`; generally it is `κC`. The old factor-four attribution is retained only as provenance and is not an active input.
 Its frame question has one finite constant outside the dimension and measure quantifiers, and
 the frame construction uses positive dimensions. The zero-dimensional KLS conclusion is handled
 separately by zero variance. Finite-gradient-energy literature tests are explicitly included in
-the maximal fiber-form domain before the form-gap bound is used.
+the maximal fiber-form domain before the form-gap bound is used. The structural form lemma
+`lem:conditional-fiber-form` (densely defined, closed, symmetric, Markovian, reversible) is
+Lean-certified by `Solutions.LemConditionalFiberForm.certificate` for every Borel law and every
+direction law; its route sidecar claim carries that Lean evidence beside the upstream review. The
+local comparison `lem:conditional-fiber-energy-comparison` (`D_{μ,ρ}(f) ≤ κ ∫‖∇f‖² dμ < ∞` under
+the fiber input `κ`, hence `C_P^lit(μ) ≤ κ C` from a form-gap bound `C`) is Lean-certified by
+`Solutions.LemConditionalFiberEnergyComparison.certificate` for Haar-absolutely continuous laws and
+admissible frames; its sidecar claim is `proved` with Lean evidence. Its log-concave
+specialization `cor:conditional-fiber-twelve-bound` is Lean-certified by
+`Solutions.CorConditionalFiberTwelveBound.certificate` and restated with the sharp constant `4`
+supplied by `thm:one-dimensional-logconcave-poincare`; the literature `12` is its immediate
+weakening. The remaining gate of the route is the frame question `q:conditional-fiber-frame`.
 
 The `targets[].adapters` expression records repository-facing interfaces used to align the
 imported route statements with this Blueprint's selected constants and normalizations. An adapter
@@ -117,8 +137,10 @@ conjuncts of the target theorem. In particular, `thm:selected-literature-constan
 not a logical prerequisite of `conj:kls`.
 
 The sidecar's `state: open` field is the mathematical proof/lifecycle axis. TeX `\notready`
-separately identifies an unresolved statement choice. The remaining marked node is
-`thm:smooth-gradient-relaxation-two-cheeger`: the local-slope versus asymptotic-Lipschitz
-relaxation convention and its comparison for singular measures still need resolution. All
-other interfaces remain editable even without this marker. A node may be both `open` and
-`\notready`; neither field supplies proof evidence.
+separately identifies an unresolved statement choice. No node currently carries the marker:
+`thm:smooth-gradient-relaxation-two-cheeger` lost it on 2026-09-12, when the local-slope
+convention was fixed and its absolutely continuous scope was certified as
+`cor:absolutely-continuous-relaxation-two-cheeger`; what remains there is an open proof for
+singular measures, which the absence of `\leanok` already records. All interfaces remain editable
+even without this marker. A node may be both `open` and `\notready`; neither field supplies proof
+evidence.

@@ -538,27 +538,128 @@ A published input or an upstream reviewed proof receives no \texttt{leanok} mere
 
 \begin{theorem}[One-dimensional log-concave Poincar\'e bound]
   \label{thm:one-dimensional-logconcave-poincare}
+  \lean{FunctionalInequalities.Probability.Line.cdf,
+        FunctionalInequalities.Probability.Line.map_cdf_eq_uniform,
+        FunctionalInequalities.KLS.LineDensity,
+        FunctionalInequalities.KLS.LogConcave.exists_lineDensity,
+        FunctionalInequalities.KLS.LineDensity.exists_supergradient,
+        FunctionalInequalities.KLS.LineDensity.mul_le_mul_of_add_eq,
+        FunctionalInequalities.KLS.LineDensity.two_mul_measureReal_Ioi_le,
+        FunctionalInequalities.KLS.LineDensity.two_mul_cdf_le,
+        FunctionalInequalities.KLS.LineDensity.le_add_mul_cdf_sub,
+        FunctionalInequalities.KLS.LineDensity.smoothTest_holds,
+        FunctionalInequalities.KLS.LineDensity.one_div_le_variance,
+        FunctionalInequalities.KLS.LogConcave.smoothTest_holds_twelve_variance,
+        FunctionalInequalities.KLS.LogConcave.localSlope_constant_le_twelve_variance,
+        FunctionalInequalities.KLS.LogConcave.localSlope_constant_le_twelve_evariance,
+        FunctionalInequalities.KLS.logConcave_dirac,
+        FunctionalInequalities.Probability.Line.affineQuantile,
+        FunctionalInequalities.Probability.Line.one_div_le_variance_affineQuantile,
+        FunctionalInequalities.KLS.LineDensity.le_add_mul_cdf_sub_of_mem,
+        FunctionalInequalities.KLS.LineDensity.variance_ge_of_affine_bound,
+        FunctionalInequalities.KLS.LineDensity.cdf_mul_one_sub_cdf_le_sd_mul,
+        FunctionalInequalities.KLS.clip,
+        FunctionalInequalities.KLS.LineDensity.integral_sq_clipCentered_eq,
+        FunctionalInequalities.KLS.LineDensity.groundState_inequality,
+        FunctionalInequalities.KLS.LineDensity.integral_sq_div_le,
+        FunctionalInequalities.KLS.LineDensity.variance_clip_le,
+        FunctionalInequalities.KLS.LineDensity.setIntegral_Iic_sq_sub_le_of_le,
+        FunctionalInequalities.KLS.LineDensity.setIntegral_Ioi_sq_sub_le_of_le,
+        FunctionalInequalities.KLS.LineDensity.variance_le_four_variance_mul,
+        FunctionalInequalities.KLS.LogConcave.smoothTest_holds_four_variance,
+        FunctionalInequalities.KLS.LogConcave.localSlope_constant_le_four_variance,
+        FunctionalInequalities.KLS.LogConcave.localSlope_constant_le_four_evariance,
+        Solutions.ThmOneDimensionalLogConcavePoincare.certificate}
+  \leanok
   \uses{def:log-concave-law,def:literature-poincare-constant}
   Every log-concave probability law $\nu$ on a line satisfies
   \[
-    \CPLit(\nu)\le12\Var_\nu(T),
+    \CPLit(\nu)\le4\Var_\nu(T),
   \]
   including the zero-variance case.
+  In Lean the line is $\mathbb R$, $T$ is the coordinate \texttt{id}, $\CPLit(\nu)$ is
+  \texttt{Poincare.LocalSlope.Intrinsic.constant}~$\nu$, and the right-hand side is read in
+  the extended reals as \texttt{ENNReal.ofReal}~$(4\Var_\nu(\mathrm{id}))$; the same bound
+  through the extended variance is recorded as well.  The zero-variance case is the case of a
+  one-point affine support, where the constant is $0$.  Bobkov's constant $12$ is a corollary
+  and is also proved independently.
 \end{theorem}
 \begin{proof}
+  \leanok
   Bobkov's Corollary~4.3, p.~1915 of \cite{Bobkov1999LogConcave}, gives the spectral gap
-  $\lambda_1\ge1/(12\Var_\nu(T))$. His equation~(1.3), p.~1904, uses
-  $\lambda_1\Var_\nu(f)\le\int|f'|^2\,d\nu$ for locally Lipschitz tests.
-  Thus the reciprocal has exactly the displayed normalization. Zero variance means a Dirac
-  law and gives zero variance for every test. This is a verified published input, not a local
-  Lean proof.
+  $\lambda_1\ge1/(12\Var_\nu(T))$; his equation~(1.3), p.~1904, uses
+  $\lambda_1\Var_\nu(f)\le\int|f'|^2\,d\nu$ for locally Lipschitz tests.  The value $4$ is stated
+  on p.~11 of \cite{AlonsoGutierrezBastero2015} in every dimension, credited to KLS~1995 and
+  without proof there, and is recalled in equation~(2.25) of \cite{CattiauxGuillin2018Poincare}.
+  The Lean proof of the
+  constant $4$ follows the elementary one-dimensional argument recorded in
+  \texttt{research/explorations/2026-09-11-poincare-constant-4-audit.md}; it does not follow
+  Bobkov's Cheeger route.  Zero variance means a Dirac law and gives zero variance for every test.
 
-  The stronger numerical value $4$ is kept only as historical provenance: equation~(2.25)
-  in the 2018 preprint version of \cite{CattiauxGuillin2018Poincare} points to p.~11 of
-  \cite{AlonsoGutierrezBastero2015} and credits KLS~1995. The subsequent cautious remark
-  concerns a spherical application. That primary normalization has not been verified here;
-  the active fiber route now uses the explicit parameter $\kappa$ and the verified choice $12$.
+  If the affine support of $\nu$ is a point, the direction space is zero-dimensional and the
+  literature constant vanishes.  Otherwise the support has nonempty interior $\Omega$, an open
+  interval carrying $\nu$, and the Borell representation gives a density $\rho$, continuous and
+  positive on $\Omega$ with concave logarithm.  Let $F$ be the distribution function,
+  $W=F(1-F)$, $\sigma^2=\Var_\nu(T)$, and $m$ a median with $c=\rho(m)>0$.
+
+  \emph{Profile bound $W\le\sigma\rho$ on $\Omega$.}  A supporting exponential
+  $\rho(s)\le\rho(x_0)e^{k(s-x_0)}$ at a point $x_0\in\Omega$, integrated against the chord
+  bounds of $\log\rho$, gives the supporting line $\rho\le A(1-F)+BF$ on $\Omega$ with
+  $A=\rho(x_0)-kF(x_0)$, $B=\rho(x_0)+k(1-F(x_0))$, both nonnegative.  For $A,B>0$ let
+  $w(u)=A(1-u)+Bu$ and $q(u)=\int_p^u w^{-1}$ on $[0,1]$; $q\circ F$ is $1$-Lipschitz on
+  $\Omega$ because $(q\circ F)'=\rho/w(F)\le1$, so, since $F(X)$ is uniform on $[0,1]$ under
+  $\nu$ and the mean of $\nu$ lies in $\Omega$, $\Var_{[0,1]}(q)=\Var_\nu(q\circ F)\le\sigma^2$.
+  The closed form of $\Var_{[0,1]}(q)$ (through $\int_0^1\log w$ and $\int_0^1\log^2w$) and the
+  inequality $ab(\log b-\log a)^2\le(b-a)^2$ give $\Var_{[0,1]}(q)\ge(\sqrt A+\sqrt B)^{-4}$.
+  Taking $x_0=x$, perturbing $(A,B)$ to $(A+\varepsilon,B+\varepsilon)$ and letting
+  $\varepsilon\to0$ yields $F(x)(1-F(x))\le\sigma\rho(x)$.
+
+  \emph{Sharp Hardy inequality for clipped tests.}  For $a\le b$ in $\Omega$ with
+  $F(a)\le\tfrac12\le F(b)$ and a smooth test $f$, let $f_{ab}$ be $f$ clipped to the constants
+  $f(a)$ and $f(b)$ outside $[a,b]$, $h=f_{ab}-\int f_{ab}\,d\nu$ and
+  $\tilde G(x)=\int_{(-\infty,x]}h\,d\nu$.  Integration by parts gives
+  $\int h^2\,d\nu=-\int_a^b f'\tilde G$.  The ground-state identity
+  $h^2\rho=\rho\bigl(h-\tilde G(1-2F)/(2W)\bigr)^2+\tilde G^2\rho/(4W^2)+\Xi'$ with
+  $\Xi=\tilde G^2(1-2F)/(2W)$, integrated over intervals $[c,e]\subseteq\Omega$ containing
+  $[a,b]$ with $F(c)\le\tfrac12\le F(e)$, gives
+  $\tfrac14\int_c^e\tilde G^2\rho/W^2\le\int h^2\,d\nu+h(a)^2F(c)+h(b)^2(1-F(e))$ because
+  $\tilde G=h(a)F$ left of $a$ and $\tilde G=-h(b)(1-F)$ right of $b$; letting $F(c)\to0$ and
+  $F(e)\to1$ gives $\int_a^b\tilde G^2\rho/W^2\le4\int h^2\,d\nu$.  With
+  $-f'\tilde G\le\tilde G^2\rho/(8W^2)+2f'^2W^2/\rho$ and the profile bound
+  $W^2/\rho\le\sigma^2\rho$ this yields
+  $\Var_\nu(f_{ab})=\int h^2\,d\nu\le4\sigma^2\int_a^b f'^2\,d\nu\le4\sigma^2\int f'^2\,d\nu$.
+
+  \emph{Exhaustion.}  The four-point inequality $\rho(a)\rho(e)\le\rho(b)\rho(c)$ for
+  $a\le b\le c\le e$, $a+e=b+c$, integrated along translates, gives the monotone hazard rates
+  $2c\,(1-F)\le\rho$ on $[m,\infty)$ and $2c\,F\le\rho$ on $(-\infty,m]$.  For an admissible test
+  $f$ and $a\le m\le b$ in $\Omega$, integration by parts against $F$ (resp.\ $1-F$), the
+  elementary bound $2xy\le c\,x^2+y^2/c$ and a directed union over rational endpoints give the
+  anchored half-line bounds $\int_{x\le a}(f-f(a))^2\,d\nu\le c^{-2}\int_{x\le a}f'^2\,d\nu$ and
+  $\int_{x>b}(f-f(b))^2\,d\nu\le c^{-2}\int_{x>b}f'^2\,d\nu$, which can be made arbitrarily
+  small by absolute continuity of $\int f'^2\,d\nu$, choosing $a,b$ with $F(a)$ and $1-F(b)$
+  small.  Since $\int(f-f_{ab})^2\,d\nu$ is bounded by the sum of the two tails and
+  $(u+v)^2\le(1+\delta)u^2+(1+\delta^{-1})v^2$ for $\delta>0$,
+  $\Var_\nu(f)\le(1+\delta)\Var_\nu(f_{ab})+(1+\delta^{-1})\int(f-f_{ab})^2\,d\nu$; letting the
+  tails and then $\delta$ tend to zero yields $\Var_\nu(f)\le4\sigma^2\int f'^2\,d\nu$.  The
+  smooth-test optimum equals the literature optimum for log-concave laws
+  (\cref{thm:selected-literature-constant-equivalence}).
+
+  \emph{The constant $12$, independently.}  With $a=b=m$ the anchored half-line bounds give
+  $\Var_\nu(f)\le\int (f-f(m))^2\,d\nu\le c^{-2}\int (f')^2\,d\nu$.  A supporting exponential
+  $\rho(s)\le c\,e^{k(s-m)}$ at the median gives $\rho\le c+k(F-\tfrac12)$ on $\Omega$; hence
+  $\varphi(F(x))\le x-m$ for $x\ge m$ and $\varphi(F(x))\ge x-m$ for $x\le m$ with
+  $\varphi(u)=(u-\tfrac12)/c-k(u-\tfrac12)^2/(2c^2)$.  Since $F(X)$ is uniform on $[0,1]$
+  under $\nu$, $\int (x-m)(F(x)-\tfrac12)\,d\nu\ge\int_0^1\varphi(u)(u-\tfrac12)\,du
+  =1/(12c)$, and $ab\le c\,a^2/2+b^2/(2c)$ with $\int (F-\tfrac12)^2\,d\nu=1/12$ yields
+  $\Var_\nu\ge1/(12c^2)$, so $c^{-2}\le12\Var_\nu$.
 \end{proof}
+
+\noindent\textbf{Remark (sharpness, not Lean-certified here).}
+The constant $4$ is optimal: the exponential law has $\CPLit=4\Var$, so no smaller universal
+coefficient is possible.  The certificate above proves the upper bound only; the exponential-law
+equality and the resulting optimality are not formalized in this repository.  The constant-$12$
+route uses two estimates that are sharp for the exponential and uniform laws respectively;
+these sharpness assertions are also informal background.
 
 These nodes are deliberately modest.  They do not provide a self-adjoint generator, identify a
 form gap with the reciprocal of an operator eigenvalue, or prove any of the four long-route gates.

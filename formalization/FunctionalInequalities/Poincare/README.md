@@ -175,9 +175,13 @@ Blueprint 的 `C_P^can` 是第三行的简写。当前 Lean 名称使用 `Smooth
 最后一个是项目内的精确规格，尚未与文献 graph-norm core 建立等价。以上性质均不属于
 `ClosedQuadratic` 的字段。
 
-当前还没有具体 smooth-gradient 的 Markov/Dirichlet witness、raw/core agreement、
+smooth-gradient 松弛及其内禀拉回的 Markov/Dirichlet witness 已在
+`Energy/SmoothGradient/Dirichlet.lean` 证明（对任意 Borel 概率律）；局部密度假设下的 raw/core agreement 已在
+`Energy/SmoothGradient/Core.lean` 证明（`LocalDensity`），无密度时对环境预能量不成立
+（`Energy/SmoothGradient/NormalDirection.lean`）；当前还没有
 `Ecan = 2 Chμ`、自伴生成元、半群或 reciprocal spectral-gap 定理；whitening 与仿射/各向同性归约已在
-`KLS/LogConcave/Isotropic.lean` 证明。
+`KLS/LogConcave/Isotropic.lean` 证明；实轴上对数凹律的一维界 `C_P^lit(ν) ≤ 12·Var_ν` 已在
+`KLS/LogConcave/Line/Poincare.lean` 证明（`LocalSlope/Basic.lean` 补充了零维方向空间的常数为零）。
 旧光滑测试常数、ambient relaxed 常数与所选 intrinsic-affine 常数的等价已经由 Lean 证明；
 locally Lipschitz 文献常数的本地定义与比较仍待形式化。以上剩余工作由 Blueprint 中不同的
 节点承载；KLS 主命题也尚未成为本地 Lean 声明。

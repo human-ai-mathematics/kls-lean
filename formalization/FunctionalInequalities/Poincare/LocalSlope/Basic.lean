@@ -45,5 +45,23 @@ theorem Intrinsic.constant_eq_zero_of_subsingleton [Subsingleton E] (μ : Probab
   exact iInf_le_of_le ⟨0, Poincare.LocalSlope.holds_zero_of_subsingleton (Probability.intrinsicMeasure μ)⟩
     (by simp)
 
+omit [CompleteSpace E] in
+/-- A zero-dimensional direction space gives literature optimum zero: every intrinsic test is
+constant there. -/
+theorem Intrinsic.constant_eq_zero_of_direction_subsingleton (μ : ProbabilityMeasure E)
+    [Subsingleton (Probability.affineSupport μ).direction] :
+    Poincare.LocalSlope.Intrinsic.constant μ = 0 := by
+  apply le_antisymm ?_ bot_le
+  exact iInf_le_of_le ⟨0, Poincare.LocalSlope.holds_zero_of_subsingleton (Probability.intrinsicMeasure μ)⟩
+    (by simp)
+
+omit [CompleteSpace E] in
+/-- The zero-dimensional case stated through the direction submodule. -/
+theorem Intrinsic.constant_eq_zero_of_direction_eq_bot (μ : ProbabilityMeasure E)
+    (h : (Probability.affineSupport μ).direction = ⊥) :
+    Poincare.LocalSlope.Intrinsic.constant μ = 0 := by
+  have : Subsingleton (Probability.affineSupport μ).direction :=
+    Submodule.subsingleton_iff_eq_bot.mpr h
+  exact Intrinsic.constant_eq_zero_of_direction_subsingleton μ
 
 end FunctionalInequalities.Poincare.LocalSlope

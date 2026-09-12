@@ -23,6 +23,16 @@ For a first concrete application, read
 by the default `Examples` target and cover arbitrary laws, the selected energy, singular raw
 tests, infinite relaxation, and the accepted Gaussian constants.
 
+## Certified and WIP boundaries (2026-09-12)
+
+The current ledger records 24 certified nodes. The aggregate and certificate imports exclude the
+four WIP modules, which retain 24 explicit `sorry` bodies (5 perimeter, 9 Cheeger-infimum,
+5 analytic prerequisites, 5 singular-law Cheeger comparisons). Some WIP results without a direct
+hole still depend transitively on `sorryAx`. Ordinary elaboration is allowed to warn on these
+files; warnings-as-errors is expected to reject their remaining holes. The owner retains them
+for later work. See the [audit record](../research/decisions/2026-09-12-status-audit-and-wip-retention.md) for existing inputs,
+remaining geometric-analysis proofs and the still-open uniform KLS bound.
+
 ## Mathematical API organization (2026-09-08)
 
 The public frontends are `SmoothTest`, `SmoothGradient`, `WeightedGradient`,
@@ -63,11 +73,11 @@ reading order and placement rules:
 
 | Topic | Entry points and guide |
 | --- | --- |
-| Probability | [Basic](FunctionalInequalities/Probability/Basic.lean), [AffineSupport](FunctionalInequalities/Probability/AffineSupport.lean), [IntrinsicCovariance](FunctionalInequalities/Probability/IntrinsicCovariance.lean), [Covariance](FunctionalInequalities/Probability/Covariance.lean), [CovarianceSqrt](FunctionalInequalities/Probability/CovarianceFactorization.lean), [CovarianceWhitening](FunctionalInequalities/Probability/CovarianceWhitening.lean), [BallDomination](FunctionalInequalities/Probability/BallDomination.lean), [BallAverages](FunctionalInequalities/Probability/BallAverages.lean) |
+| Probability | [Basic](FunctionalInequalities/Probability/Basic.lean), [AffineSupport](FunctionalInequalities/Probability/AffineSupport.lean), [IntrinsicCovariance](FunctionalInequalities/Probability/IntrinsicCovariance.lean), [Covariance](FunctionalInequalities/Probability/Covariance.lean), [CovarianceSqrt](FunctionalInequalities/Probability/CovarianceFactorization.lean), [CovarianceWhitening](FunctionalInequalities/Probability/CovarianceWhitening.lean), [BallDomination](FunctionalInequalities/Probability/BallDomination.lean), [BallAverages](FunctionalInequalities/Probability/BallAverages.lean), [TwoPointVariance](FunctionalInequalities/Probability/TwoPointVariance.lean) |
 | Real L² | [MeanVariance](FunctionalInequalities/L2/MeanVariance.lean) |
 | Energy | [Guide](FunctionalInequalities/Energy/README.md): general interfaces, `Relaxation/`, and `Euclidean/` |
 | Poincaré | [Foundation guide](FunctionalInequalities/Poincare/README.md), [Euclidean comparisons](FunctionalInequalities/Poincare/Euclidean/README.md), [affine covariance constant](FunctionalInequalities/Poincare/CovarianceGradient/Intrinsic.lean), [its ambient translation invariance](FunctionalInequalities/Poincare/CovarianceGradient/Translation.lean), [Lipschitz/literature bridge](FunctionalInequalities/Poincare/LipschitzGradient/Comparison.lean), [Gaussian guide](FunctionalInequalities/Poincare/Gaussian/README.md); product modules are in `Poincare/Product/` and `Poincare/FiniteProduct/` |
-| KLS | [Guide](FunctionalInequalities/KLS/README.md), including [log-concavity](FunctionalInequalities/KLS/LogConcave/README.md), isotropy, isoperimetry, conditional fibers, the log-concave contracts of the affine covariance constant, log-concavity under ambient translation and the affine/isotropic reduction of KLS |
+| KLS | [Guide](FunctionalInequalities/KLS/README.md), including [log-concavity](FunctionalInequalities/KLS/LogConcave/README.md), isotropy, isoperimetry, conditional fibers and their Dirichlet form (`KLS/ConditionalFiber/Closed.lean`), the explicit slice kernel and the log-concave fiber input `κ = 4`, the log-concave contracts of the affine covariance constant, log-concavity under ambient translation and the affine/isotropic reduction of KLS |
 | Blueprint | [Build and navigation guide](blueprint/README.md) |
 
 The root aggregate also imports the Borell representation module. Successful aggregate
@@ -123,9 +133,31 @@ interface:
 In Mathlib v4.33 ordinary `C∞` regularity is `ContDiff ℝ ∞`; `ContDiff ℝ ⊤` is analytic. Both the
 accepted smooth tests and the new smooth-gradient tests use `∞`.
 
-The foundation does **not** yet provide a Markov/Dirichlet witness for the smooth relaxation, an
-`AgreesOnTests` or core theorem, raw-gradient fiber consistency for singular measures, or an
-identification with Cheeger energy `2 · Ch`. The ambient/intrinsic and smooth-test/relaxed comparisons
+The foundation now provides the Markov/Dirichlet witness for the smooth relaxation and its
+intrinsic-affine pullback (`Energy/SmoothGradient/Dirichlet.lean`), and the one-dimensional
+log-concave bound `C_P^lit(ν) ≤ 4 Var_ν` on `ℝ` (`KLS/LogConcave/Line/SharpPoincare.lean`, with the
+distribution-function and affine-profile tools of `Probability/Line/`; Bobkov's `12 Var` stays as an
+independent corollary in `Line/Poincare.lean`), and the raw/sequential-core agreement
+`AgreesOnTests`/`IsSequentialCoreFor` of the smooth-gradient pre-energy for every law with a local
+density (`Energy/SmoothGradient/Core.lean`, hypotheses `Energy.SmoothGradient.LocalDensity`). The
+conditional-fiber form of the frame route is a proved `Energy.Dirichlet` energy on `L²(μ)` for every
+Borel law and every direction law (`KLS/ConditionalFiber/Closed.lean`, via the two-point variance
+identity of `Probability/TwoPointVariance.lean`), and under a fiber Poincaré input `κ` it is at most
+`κ` times the local-slope gradient energy, so a form-gap bound `C` gives `C_P^lit(μ) ≤ κ C`
+(`KLS/ConditionalFiber/EnergyComparison.lean`, for Haar-absolutely continuous laws and admissible
+frames). For a full-dimensional log-concave law that input is supplied with `κ = 4`: base-law almost
+every conditional fiber is log-concave on the line (`KLS/LogConcave/ConditionalFiber.lean`, via the
+explicit slice kernel of `KLS/ConditionalFiber/SliceKernel.lean`, the Haar line splitting of
+`Probability/HaarLine.lean` and the one-dimensional Prékopa--Leindler inequality of
+`Probability/Line/BrunnMinkowski.lean` with `KLS/LogConcave/Line/OfDensity.lean`), so
+`D_{μ,ρ}(f) ≤ 4 ∫‖∇f‖² dμ` and `C_P^lit(μ) ≤ 4 C`; the frame question is still open. It
+does **not** provide raw-gradient fiber consistency for singular measures;
+`Energy/SmoothGradient/NormalDirection.lean` proves that fiber consistency fails for the ambient
+pre-energy on every proper affine support. The identification with the metric Cheeger energy
+`𝓔^can = 2 · Ch` is proved whenever the intrinsic law is absolutely continuous with respect to a
+Haar measure, hence for every log-concave law (`Energy/Cheeger.lean` on top of
+`Energy/LocalSlope/Relaxation.lean`, `cor:absolutely-continuous-relaxation-two-cheeger`); the
+singular case stays open in `Energy/WIP/Cheeger.lean`. The ambient/intrinsic and smooth-test/relaxed comparisons
 are proved and do not require raw/core agreement. Their comparison with the locally Lipschitz
 literature constant has a written argument in Blueprint Appendix A. The weighted approximation
 input and eight comparison interfaces are now certified under intrinsic absolute continuity.
@@ -253,9 +285,9 @@ formalization. It separates four things that prose can otherwise blur:
 - the selected intrinsic-affine canonical frontend;
 - the status-explicit endpoint bridges, including analytic proofs of the locally Lipschitz,
   relative-perimeter comparison awaiting formalization, the certified covariance-core closure,
-  Dirichlet/normal
-  contraction, `2 Ch_μ`, affine normalization, the imported
-  Cheeger comparison, and the optional stronger raw-test/core question;
+  the certified Dirichlet/normal
+  contraction, the certified one-dimensional `4 Var` bound, `2 Ch_μ`, affine normalization, the
+  imported Cheeger comparison, and the optional stronger raw-test/core question;
 - four sufficient long-route alternatives that share this analytic infrastructure. No
   probabilistic or logical independence is asserted.
 

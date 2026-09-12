@@ -24,19 +24,46 @@ constant.  The constant-level bridges used by every route are collected separate
 
 \begin{theorem}[Dirichlet property of the smooth relaxation]
   \label{thm:smooth-gradient-relaxation-dirichlet}
+  \lean{FunctionalInequalities.Energy.NormalContraction.smoothed,
+        FunctionalInequalities.Energy.NormalContraction.contDiff_smoothed,
+        FunctionalInequalities.Energy.NormalContraction.lipschitzWith_smoothed,
+        FunctionalInequalities.Energy.NormalContraction.norm_smoothed_sub_le,
+        FunctionalInequalities.Energy.SmoothGradient.Test.compSmoothed,
+        FunctionalInequalities.Energy.SmoothGradient.Test.energy_compSmoothed_le,
+        FunctionalInequalities.Energy.SmoothGradient.Test.norm_toL2_compSmoothed_sub_le,
+        FunctionalInequalities.Energy.SmoothGradient.relaxedContractionBound,
+        FunctionalInequalities.Energy.SmoothGradient.markovian,
+        FunctionalInequalities.Energy.SmoothGradient.dirichlet,
+        FunctionalInequalities.Energy.SmoothGradient.Intrinsic.markovian,
+        FunctionalInequalities.Energy.SmoothGradient.Intrinsic.dirichlet,
+        Solutions.ThmSmoothGradientRelaxationDirichlet.certificate}
+  \leanok
   \uses{thm:smooth-gradient-relaxation-closed}
   For every finite-dimensional Borel probability $\mu$, the ambient smooth-gradient relaxation
   is Markovian: every normal contraction of an $L^2(\mu)$ class decreases its relaxed energy.
   Together with closed quadratic structure, it therefore defines a Dirichlet energy.
+  In Lean a normal contraction is \texttt{Energy.NormalContraction} ($1$-Lipschitz, fixing $0$)
+  acting on $L^2(\mu)$ classes through Mathlib's \texttt{LipschitzWith.compLp}, and the
+  conclusion is \texttt{Energy.Dirichlet}~$\mu$~\texttt{(SmoothGradient.relaxation}~$\mu$\texttt{)}.
+  The certificate also records the same Dirichlet property for the intrinsic-affine relaxation
+  \texttt{SmoothGradient.Intrinsic.energy}~$\mu$ on the ambient $L^2(\mu)$.  No absolute
+  continuity or density is assumed: the law may be singular, and dimension zero is included.
 \end{theorem}
 \begin{proof}
-  Open.  The reusable contraction-transfer theorem already isolates the required input; the
-  missing step is a concrete smooth approximation argument uniform in the relaxed energy.
+  \leanok
+  Mollify the contraction on the real line.  The mollified contraction $\varphi_j$ is smooth,
+  $1$-Lipschitz and uniformly within $2/(j+1)$ of $\varphi$.  For a smooth test $f$ the
+  composition $\varphi_j\circ f$ is again a smooth test with $\norm{\nabla(\varphi_j\circ f)}\le
+  \norm{\nabla f}$ pointwise, hence with energy at most that of $f$, and its $L^2$ class converges
+  to $\varphi\circ f$.  This is the relaxed contraction bound on every realized test, and the
+  reusable contraction-transfer theorem extends it to every $L^2$ class by lower semicontinuity.
+  The contraction is mollified rather than the test, so no Rademacher, density or absolute
+  continuity input is needed.  The intrinsic statement follows because passing to intrinsic
+  coordinates commutes with the contraction almost everywhere.
 \end{proof}
 
 \begin{theorem}[Identification with Cheeger energy]
   \label{thm:smooth-gradient-relaxation-two-cheeger}
-  \notready
   \uses{def:selected-canonical-frontend}
   On the affine support, let $\Ch_\mu$ denote the standard metric Cheeger energy normalized as
   one half of the lower-semicontinuous relaxation of the squared local slope.  After transporting
@@ -46,18 +73,70 @@ constant.  The constant-level bridges used by every route are collected separate
   \]
 \end{theorem}
 
-The factor $2$ is part of the intended normalization, not an established declaration. This node
-remains \texttt{notready} because the precise Cheeger-energy definition to formalize is still
-unresolved: relaxation of the local slope and asymptotic-Lipschitz relaxation must be
-distinguished, and their comparison for singular measures has no source recorded in the
-bibliography. The local API must make this choice and its affine-support transport explicit;
-it does not presuppose that Mathlib will supply that API. This is a statement question, not a
-requirement to freeze public signatures before proof work.
+The factor $2$ is part of the intended normalization, not an established declaration. The
+statement choice this node deferred is now made, so \texttt{notready} is removed. The Cheeger
+energy to formalize is the local-slope convention: one half of the sequential
+lower-semicontinuous relaxation of the squared local slope over the literature test class
+(\texttt{Energy.Cheeger.energy}), transported to the affine support by the construction of
+\cref{def:intrinsic-affine-energy} (\texttt{Energy.Cheeger.Intrinsic.energy}). The
+asymptotic-Lipschitz relaxation is defined separately, and its agreement with the local-slope
+relaxation is carried as its own explicit obligation instead of being imposed by definition. What
+remains is an open proof rather than an open statement, and the absence of \texttt{leanok}
+already records that: for singular measures neither the comparison of the two relaxations nor the
+identification of the smooth-gradient relaxation with the relaxed squared local slope has a source
+recorded in the bibliography. Those two obligations, and the three statements that follow from
+them, are the whole content of \path{Energy/WIP/Cheeger.lean}, which is not imported by the
+aggregate and has no certificate. The absolutely continuous scope is separated out as
+\cref{cor:absolutely-continuous-relaxation-two-cheeger} and is certified.
+
+\begin{corollary}[Cheeger identification for absolutely continuous laws]
+  \label{cor:absolutely-continuous-relaxation-two-cheeger}
+  \uses{def:selected-canonical-frontend,lem:logconcave-intrinsic-absolute-continuity}
+  \lean{FunctionalInequalities.Energy.Cheeger.energy,
+        FunctionalInequalities.Energy.Cheeger.Intrinsic.energy,
+        FunctionalInequalities.Energy.SmoothGradient.relaxation_eq_localSlope_of_absolutelyContinuous,
+        FunctionalInequalities.Energy.SmoothGradient.Intrinsic.energy_eq_two_mul_cheeger_of_absolutelyContinuous,
+        FunctionalInequalities.KLS.LogConcave.intrinsicSmooth_energy_eq_two_mul_cheeger,
+        Solutions.CorAbsolutelyContinuousRelaxationTwoCheeger.certificate}
+  \leanok
+  Let $\mu$ be a Borel probability law whose intrinsic law on the direction space of its affine
+  support is absolutely continuous with respect to some additive Haar measure there.  Then
+  \[
+    \mathcal E^{\mathrm{can}}_\mu=2\Ch_\mu
+  \]
+  on ambient real $L^2(\mu)$.  In particular this holds for every compact-set log-concave law,
+  whose intrinsic law is absolutely continuous by
+  \cref{lem:logconcave-intrinsic-absolute-continuity}, so the identification is available
+  throughout the KLS routes without the singular case.
+\end{corollary}
+\begin{proof}
+  \leanok
+  One inequality is unconditional: a globally smooth test is an admissible local-slope test with
+  the same energy, so relaxing the squared local slope over the larger class gives the smaller
+  functional, $\Ch$-side $\le$ canonical side.  For the reverse inequality, absolute continuity
+  supplies the certified weighted smooth approximation: every locally Lipschitz $L^2$ test of
+  finite slope energy has a sequence of globally smooth tests converging to it in $L^2$ with
+  gradient energies converging to its slope energy, which is a recovery sequence for the
+  smooth-gradient pre-energy.  Hence the two relaxations agree, and halving gives
+  $\mathcal E^{\mathrm{can}}=2\Ch$ after transport along the intrinsic $L^2$ isometry.  The
+  log-concave case is this statement applied to the canonical Haar measure of the direction
+  space.  Nothing here touches the singular comparisons of
+  \cref{thm:smooth-gradient-relaxation-two-cheeger}.
+\end{proof}
 
 \section{Core and coordinate comparisons}
 
 \begin{obstruction}[Ambient raw energy sees normal derivatives]
   \label{obs:normal-direction-raw-energy}
+  \lean{FunctionalInequalities.Energy.SmoothGradient.normalCoordinate,
+        FunctionalInequalities.Energy.SmoothGradient.normalCoordinate_ae_eq_zero,
+        FunctionalInequalities.Energy.SmoothGradient.gradient_normalCoordinate,
+        FunctionalInequalities.Energy.SmoothGradient.smoothTest_energy_normalCoordinate,
+        FunctionalInequalities.Energy.SmoothGradient.Test.normalCoordinate,
+        FunctionalInequalities.Energy.SmoothGradient.Test.toL2_normalCoordinate,
+        FunctionalInequalities.Energy.SmoothGradient.exists_test_toL2_eq_zero_energy_eq_one,
+        FunctionalInequalities.Energy.SmoothGradient.not_respectsAmbientFibers}
+  \leanok
   \uses{def:affine-support-intrinsic-law,def:smooth-gradient-preenergy}
   Let the affine support of $\mu$ be a proper affine subspace $A=a+V$.  If $n\in V^\perp$ is a
   unit vector and $u(x)=\inner{n}{x-a}$, then $u=0$ in $L^2(\mu)$ whereas
@@ -65,11 +144,16 @@ requirement to freeze public signatures before proof work.
     \int\norm{\nabla u}^2\dd\mu=1.
   \]
   Thus ambient raw energy depends on the extension away from $A$, even when the intrinsic law has
-  a regular density.
+  a regular density.  In Lean the properness of $A$ is the hypothesis that the direction space
+  of the affine support is not the whole space, $a$ is the chosen support point, and the
+  conclusion is recorded both as the pair of values $0$ and $1$ for the smooth test $u$ and as
+  the failure of \texttt{RespectsAmbientFibers} for the ambient smooth-gradient pre-energy.
 \end{obstruction}
 \begin{proof}
+  \leanok
   The function vanishes on $A$, which carries $\mu$, while its ambient gradient is the constant
-  unit vector $n$.
+  unit vector $n$; a unit normal exists because the orthogonal complement of a proper subspace
+  of a finite-dimensional inner-product space is nonzero.
 \end{proof}
 
 \begin{question}[Sequential cores and graph-norm cores]
@@ -86,6 +170,22 @@ requirement to freeze public signatures before proof work.
 
 \begin{theorem}[Intrinsic raw/sequential-core agreement under density hypotheses]
   \label{thm:smooth-gradient-raw-core-agreement-density}
+  \lean{FunctionalInequalities.Probability.LocallyDominatesOn,
+        FunctionalInequalities.Energy.WeightedGradient.operator_isClosable_of_isOpen,
+        FunctionalInequalities.Energy.SmoothGradient.LocalDensity,
+        FunctionalInequalities.Energy.SmoothGradient.LocalDensity.absolutelyContinuous,
+        FunctionalInequalities.Energy.SmoothGradient.LocalDensity.frontier_support_null,
+        FunctionalInequalities.Energy.SmoothGradient.LocalDensity.locallyDominatesOn,
+        FunctionalInequalities.Energy.SmoothGradient.lipschitzOperator_isClosable,
+        FunctionalInequalities.Energy.SmoothGradient.Test.exists_domain_sequence_tendsto,
+        FunctionalInequalities.Energy.SmoothGradient.Test.toL2_mem_closure_domain,
+        FunctionalInequalities.Energy.SmoothGradient.lipschitzRelaxation_le_relaxation,
+        FunctionalInequalities.Energy.SmoothGradient.preEnergy_agreesOnTests,
+        FunctionalInequalities.Energy.SmoothGradient.preEnergy_isSequentialCoreFor,
+        FunctionalInequalities.Energy.SmoothGradient.Intrinsic.preEnergy_agreesOnTests,
+        FunctionalInequalities.Energy.SmoothGradient.Intrinsic.preEnergy_isSequentialCoreFor,
+        Solutions.ThmSmoothGradientRawCoreAgreementDensity.certificate}
+  \leanok
   \uses{def:affine-support-intrinsic-law,def:smooth-gradient-preenergy,
         def:smooth-gradient-relaxation}
   Let $A=a+V$ be the affine support of $\mu$, and write $\nu$ for its intrinsic law.  Assume that
@@ -105,7 +205,31 @@ requirement to freeze public signatures before proof work.
   Then $P_\nu.\texttt{AgreesOnTests}(\mathcal E_\nu)$.  Consequently
   $P_\nu.\texttt{IsSequentialCoreFor}(\mathcal E_\nu)$, since
   \texttt{SequentiallyGenerates} is definitional for $\mathcal E_\nu$.
+  In Lean the density hypotheses are the structure
+  \texttt{Energy.SmoothGradient.LocalDensity}~$\nu$~$m$ for a Haar measure $m$ on the direction
+  space: the open set $\Omega$, $\nu(\Omega^c)=0$, the density representation of $\nu$ on
+  Borel subsets of $\Omega$, positivity of $\rho$ almost everywhere on $\Omega$, and local
+  essential boundedness of $\rho^{-1}$ on compact subsets of $\Omega$.  The local
+  boundedness of $\rho$ itself is not needed for the proof and is not assumed.  The theorem is
+  proved for every probability law on a finite-dimensional inner-product space with a local
+  density; the intrinsic law is the named instance.
 \end{theorem}
+\begin{proof}
+  \leanok
+  The density hypotheses give $\nu\ll m$, $\Omega\subseteq\operatorname{int}\operatorname{supp}\nu$
+  (so the frontier of the support is $\nu$-null), and local domination of $m$ by $\nu$ on the
+  compact subsets of $\Omega$.  The unit-weight gradient operator $T$ on globally Lipschitz
+  $L^2(\nu)$ tests is therefore closable: the closability argument of
+  \cref{lem:covariance-core-closure} is carried out on an arbitrary open carrier $\Omega$ with
+  local domination instead of the interior of the support.  For a smooth test $f$ the cutoffs
+  $\chi_R f$ are globally Lipschitz compactly supported tests converging to $f$ in graph norm,
+  so $f\in\operatorname{dom}\bar T$ with $\bar Tf=\nabla f$ and
+  $\|\bar Tf\|^2=\int\norm{\nabla f}^2\,d\nu$.  The same cutoffs are recovery sequences,
+  so the relaxation of $\|Tg\|^2$ is at most $\mathcal E_\nu$; the relaxation of a closable
+  operator is $\|\bar T\cdot\|^2$ on the domain of the closure.  Hence
+  $\int\norm{\nabla f}^2\,d\nu=\|\bar Tf\|^2\le\mathcal E_\nu([f])\le P_\nu(f)$, which is
+  agreement on tests; sequential generation is definitional.
+\end{proof}
 
 This gives a density-case answer to \cref{q:smooth-gradient-raw-core-agreement}; the question is
 not a logical premise of the theorem.  The three typewriter names above refer to the existing Lean
