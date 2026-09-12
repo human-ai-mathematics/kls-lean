@@ -74,9 +74,18 @@ prose; the translation invariance and the affine/isotropic reduction are now Lea
 `Solutions.ThmAffineIsotropicReduction.certificate`), while the CMH recovery-sequence bound is
 recorded as missing infrastructure.
 
+## Research source (2026-09-12)
+
+The route source now pins `kls-conjecture-search@34b5fcd57fef17089e781616005fe6d3641bd11e`.
+The stable source identifier remains `kls-exploration`. Upstream uses `proofs.mode` and
+explicit `assumes`; a proved implication with open assumptions remains conditional locally.
+See the [research synchronization record](../../research/decisions/2026-09-12-upstream-research-sync.md) for
+the two 2026 preprints, new spectral/CMH/cone/fiber results and the scoped formalization queue.
+These additions are research navigation, not new certified or dispatch-ready Lean nodes.
+
 ## Build
 
-The [task atlas](../../research/verification.md) now derives 74 mathematical nodes from these
+The [task atlas](../../research/verification.md) now derives 75 mathematical nodes from these
 sources, preserving proof dependencies, route alternatives and adapter metadata. It separately
 classifies research, local arguments, published inputs and refuted packages. Readiness requires
 a current local verification receipt. The two target definitions now have Lean implementations;
@@ -108,9 +117,9 @@ discharge `conj:kls`. The `any_of` records alternative sufficiency only; it conv
 independence nor certification.
 
 The conditional-fiber branch lists the structural upstream form node and frame question, the
-local comparison with an explicit input `κ`, Bobkov's verified one-dimensional bound `12 Var`,
+local comparison with an explicit input `κ`, the verified one-dimensional bound `4 Var`,
 and the local affine/isotropic bridge. With the certified log-concave input the resulting
-numerical bound is `4C`; generally it is `κC`. The old factor-four attribution is retained only as provenance and is not an active input.
+numerical bound is `4C`; generally it is `κC`. The sharpness example remains outside Lean certification.
 Its frame question has one finite constant outside the dimension and measure quantifiers, and
 the frame construction uses positive dimensions. The zero-dimensional KLS conclusion is handled
 separately by zero variance. Finite-gradient-energy literature tests are explicitly included in

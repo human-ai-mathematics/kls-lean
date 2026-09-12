@@ -417,7 +417,7 @@
       ],
       "assumptions": [],
       "priority": 5,
-      "note": "Research task with explicit stopping criteria; no ordinary proof-hole retry loop."
+      "note": "Research task with explicit stopping criteria; no ordinary proof-hole retry loop. The new screened-supply result applies only to the regular split class; it does not discharge this universal gate. See research/decisions/2026-09-12-upstream-research-sync.md."
     },
     "q:mm-spectral-occupation": {
       "mathematics": "conjectural",
@@ -426,7 +426,7 @@
       ],
       "assumptions": [],
       "priority": 5,
-      "note": "Research task with explicit stopping criteria; no ordinary proof-hole retry loop."
+      "note": "Research task with explicit stopping criteria; no ordinary proof-hole retry loop. The 2026-09-12 upstream sync adds a reviewed short-window chain and a C_P <= C log^2 n endpoint conditional on Letwin v1; universal-time occupation remains open. See research/decisions/2026-09-12-upstream-research-sync.md."
     },
     "ass:cmh-recovery-envelope": {
       "mathematics": "conjectural",
@@ -435,7 +435,7 @@
       ],
       "assumptions": [],
       "priority": 5,
-      "note": "Research task with explicit stopping criteria; no ordinary proof-hole retry loop."
+      "note": "Research task with explicit stopping criteria; no ordinary proof-hole retry loop. Wave five adds weak linear spectral resolution and exact exponential-cone models, not a uniform CMH recovery envelope. See research/decisions/2026-09-12-upstream-research-sync.md."
     },
     "q:conditional-fiber-frame": {
       "mathematics": "conjectural",
@@ -444,7 +444,7 @@
       ],
       "assumptions": [],
       "priority": 5,
-      "note": "Research task with explicit stopping criteria; no ordinary proof-hole retry loop."
+      "note": "Research task with explicit stopping criteria; no ordinary proof-hole retry loop. Wave five proves an upstream degree-two simplex root-frame calculation, not the all-function frame bound. Audit its simplex law and polynomial quotient as a separate formalization candidate. See research/decisions/2026-09-12-upstream-research-sync.md."
     },
     "ass:weighted-package": {
       "mathematics": "refuted",
@@ -1130,7 +1130,7 @@
         "evidence": [
           {
             "path": "formalization/blueprint/src/chapters/50-kls-routes.tex",
-            "sha256": "ca202b4fa34709cc00499c440df1d20a824871c1f395dfee63ac1a98fac2bd4f"
+            "sha256": "f2a0f8e8f28f8d46867a4e6e6a30bcfcb227962ec24a7e6ad3cd59558a3172ac"
           },
           {
             "path": "formalization/.lake/packages/mathlib/Mathlib/Probability/BrownianMotion/Basic.lean",
@@ -1161,7 +1161,7 @@
         "q:mm-spectral-occupation"
       ],
       "priority": 5,
-      "note": "Formalize the implication retaining the named open premise. Certifying this implication must not discharge the premise or unconditional KLS.",
+      "note": "Formalize the implication retaining the named open premise. Certifying this implication must not discharge the premise or unconditional KLS. At the new upstream pin, proved plus assumes=[q:mm-spectral-occupation] encodes this same conditional implication; the local route state stays conditional. See research/decisions/2026-09-12-upstream-research-sync.md.",
       "infrastructure": {
         "status": "unchecked",
         "mathlib_revision": null,
@@ -1176,7 +1176,7 @@
       ],
       "assumptions": [],
       "priority": 5,
-      "note": "Inspected on 2026-09-08: this node packages two pinned upstream results (lem:affine-poincare-w2-liminf and thm:cmh-implies-affine-poincare) that are agent-reviewed, not Lean-certified. The only locally available ingredients are the implemented affine constant Poincare.CovarianceGradient.Intrinsic.constant, its certified closed-form identification (thm:affine-covariance-relaxation-closed) and translation invariance; a formalization would additionally need Lean definitions of the quadratic Wasserstein distance and its convergence for laws on a Euclidean space, of the CMH constant with the pinned source's regular compact-target moment-map class, canonical moment-map kernel and weak zero-flux closed Stein-generator convention, and proofs of the two upstream results themselves. Not a Lean certificate.",
+      "note": "Inspected on 2026-09-08: this node packages two pinned upstream results (lem:affine-poincare-w2-liminf and thm:cmh-implies-affine-poincare) that are agent-reviewed, not Lean-certified. The only locally available ingredients are the implemented affine constant Poincare.CovarianceGradient.Intrinsic.constant, its certified closed-form identification (thm:affine-covariance-relaxation-closed) and translation invariance; a formalization would additionally need Lean definitions of the quadratic Wasserstein distance and its convergence for laws on a Euclidean space, of the CMH constant with the pinned source's regular compact-target moment-map class, canonical moment-map kernel and weak zero-flux closed Stein-generator convention, and proofs of the two upstream results themselves. Not a Lean certificate. The upstream sync adds CMH linear-sector and cone results, but supplies no local Lean moment-map, Stein-generator or Wasserstein infrastructure. See research/decisions/2026-09-12-upstream-research-sync.md.",
       "infrastructure": {
         "status": "missing",
         "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",

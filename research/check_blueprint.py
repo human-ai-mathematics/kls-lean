@@ -78,9 +78,9 @@ EVIDENCE_FIELDS = {
 }
 MAX_EXPRESSION_DEPTH = 32
 PINNED_EXPLORATION_REPOSITORY = (
-    "https://github.com/numina-functional-inequalities/kls-exploration.git"
+    "https://github.com/numina-functional-inequalities/kls-conjecture-search.git"
 )
-PINNED_EXPLORATION_REVISION = "8185e46ffb040e04fea076953e5bcaeb4157d71a"
+PINNED_EXPLORATION_REVISION = "34b5fcd57fef17089e781616005fe6d3641bd11e"
 REQUIRED_ACTIVE_ROUTES = {
     "eldan-localization",
     "moment-map-spectral",

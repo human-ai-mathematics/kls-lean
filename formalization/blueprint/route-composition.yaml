@@ -10,9 +10,9 @@
     {
       "id": "kls-exploration",
       "kind": "git",
-      "repository": "https://github.com/numina-functional-inequalities/kls-exploration.git",
-      "revision": "8185e46ffb040e04fea076953e5bcaeb4157d71a",
-      "ledger": "research/kls/ledger.yaml"
+      "repository": "https://github.com/numina-functional-inequalities/kls-conjecture-search.git",
+      "revision": "34b5fcd57fef17089e781616005fe6d3641bd11e",
+      "ledger": "research/program/ledger.yaml"
     }
   ],
   "claims": [
@@ -250,7 +250,7 @@
       "disposition": "active",
       "provenance": {
         "source": "kls-exploration",
-        "path": "research/kls/routes/eldan-localization.md"
+        "path": "research/program/portfolio.yaml"
       },
       "requires": {
         "operator": "all_of",
@@ -270,7 +270,7 @@
       "disposition": "active",
       "provenance": {
         "source": "kls-exploration",
-        "path": "research/kls/routes/moment-map-spectral.md"
+        "path": "research/program/portfolio.yaml"
       },
       "requires": {
         "operator": "all_of",
@@ -290,7 +290,7 @@
       "disposition": "active",
       "provenance": {
         "source": "kls-exploration",
-        "path": "research/kls/routes/moment-map-cmh.md"
+        "path": "research/program/portfolio.yaml"
       },
       "requires": {
         "operator": "all_of",
@@ -310,7 +310,7 @@
       "disposition": "active",
       "provenance": {
         "source": "kls-exploration",
-        "path": "research/kls/routes/conditional-fiber-frame.md"
+        "path": "research/program/portfolio.yaml"
       },
       "requires": {
         "operator": "all_of",

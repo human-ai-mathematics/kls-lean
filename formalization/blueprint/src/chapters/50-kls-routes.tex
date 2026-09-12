@@ -2,8 +2,8 @@
 \label{chap:kls-routes}
 
 This chapter is a roadmap imported from the pinned upstream commit \sourcecommit.  Its nodes have
-different upstream statuses: open gates, conditional implications, and proof dossiers marked
-\texttt{proved}/\texttt{checked\_by: agent}.  Those statuses are reported route by route.  None of
+different upstream statuses: open gates, conditional implications, and proof dossiers recorded under
+\texttt{proofs} with \texttt{mode: agent}.  Those statuses are reported route by route.  None of
 these upstream statements is Lean-certified as imported.  The \texttt{leanok} markers in this
 chapter are the implemented definition \cref{def:conditional-fiber-form}, whose well-definedness
 contracts are proved, the structural form lemma \cref{lem:conditional-fiber-form}, which now has
@@ -71,7 +71,7 @@ At the pinned source commit:
   \item \path{ass:tight-prefix-carleson} is \texttt{open} in
         \path{modules/kls/20-eldan-statements.tex};
   \item \path{cor:tight-window-consumption} is
-        \texttt{proved}/\texttt{checked\_by: agent} in
+        \texttt{proved} with \texttt{proofs.mode: agent} in
         \path{modules/kls/21-carleson.tex};
   \item its proof dossier is \path{solutions/kls-localization-riccati-core.tex}.
 \end{itemize}
@@ -114,7 +114,7 @@ fifth route alternative and is not an input to the live tight-prefix package.
 
 \paragraph{Pinned provenance.}
 The ledger marks \path{ass:weighted-package} \texttt{refuted}.  It marks
-\path{prop:weighted-spectator-obstruction} \texttt{proved}/\texttt{checked\_by: agent}.  The
+\path{prop:weighted-spectator-obstruction} \texttt{proved} with \texttt{proofs.mode: agent}.  The
 statement is in \path{modules/kls/27-eldan-open-targets.tex}, and the proof dossier is
 \path{solutions/prop-weighted-spectator-obstruction.tex}.  The exact review artifact is pinned in
 the route sidecar.
@@ -158,7 +158,7 @@ posterior covariance information that a scalar covariance bound discards.
 
 \paragraph{Pinned provenance.}
 At the pinned source commit, \path{q:mm-spectral-occupation} is \texttt{open} and
-\path{prop:spectral-sufficiency} is \texttt{conditional}/\texttt{checked\_by: agent}; both are in
+\path{prop:spectral-sufficiency} is \texttt{proved} with an explicit \texttt{assumes} field and an agent-reviewed proof; both are in
 \path{modules/kls/30-spectral-route.tex}.  The proof dossier is
 \path{solutions/prop-spectral-sufficiency.tex}; the exact review artifact is pinned in the route
 sidecar.  This records a checked implication from the open occupation estimate, not a completed
@@ -241,7 +241,7 @@ separate repository statement.
 \paragraph{Pinned provenance.}
 At the pinned source commit, \path{ass:cmh-recovery-envelope} is \texttt{open} and
 \path{cor:cmh-recovery-sequence-suffices} is
-\texttt{conditional}/\texttt{checked\_by: agent}; both are in
+\texttt{proved} with an explicit \texttt{assumes} field and an agent-reviewed proof; both are in
 \path{modules/kls/41-cmh-normalization.tex}.  The proof dossier is
 \path{solutions/lem-affine-poincare-w2-liminf.tex}; the exact review artifact is pinned in the
 route sidecar.  Published moment-map inputs do not prove the open envelope.
@@ -537,7 +537,7 @@ The formula comes from the pinned upstream conditional-fiber module.  The local 
 makes the positive-dimensional frame carrier, finite-energy domain, and universal-constant
 quantifiers explicit; it is not an independent ledger certificate.  At the pinned source commit,
 \path{lem:conditional-fiber-form} is
-\texttt{proved}/\texttt{checked\_by: agent}, with evidence
+\texttt{proved} with \texttt{proofs.mode: agent}, with evidence
 \path{solutions/conditional-fiber-frame-structure.tex}.  The exact review artifact is pinned in
 the route sidecar. Only the structural substatement is imported under that label here; the
 upstream factor-four claim is historical provenance, not the active numerical input.  That
@@ -552,3 +552,53 @@ local Lean proof and the certificate
 \texttt{Solutions.CorConditionalFiberTwelveBound.certificate}; it is stated here with the sharp
 constant $4$, the upstream factor-four provenance remaining historical rather than an input. The
 gate \path{q:conditional-fiber-frame} remains \texttt{open}, so no KLS bound follows.
+
+
+\section*{Research synchronized on 12 September 2026}
+The source revision above includes the wave-four and wave-five research records. These
+updates are upstream natural-language mathematics, not additional Lean certificates.
+The local route registry retains the state \texttt{conditional} when upstream records
+\texttt{proved} with a nonempty \texttt{assumes}. The four universal gates remain open.
+The full source links, scope restrictions and formalization queue are recorded in
+the repository research synchronization record dated 12 September; selected unmodified ledger
+records are retained in its companion JSON evidence snapshot under \path{research/upstream/}.
+
+\paragraph{Literature frontier.}
+Chen--Klartag's version-one preprint states the sharp thin-shell bound
+$\operatorname{Var}(|X|^2)\le8n$ for isotropic log-concave $X$
+\cite{ChenKlartag2026SharpThinShell}. Letwin's version-one preprint states
+$\operatorname{Var}(\langle MX,X\rangle)\le2\E|\nabla\langle MX,X\rangle|^2$
+for symmetric $M$, and $\psi_n\le C(\log n)^{1/4}$ for $n\ge2$
+\cite{Letwin2026QuadraticKLS}. In the convention
+$\tfrac14\le\psi_\mu^2/C_P(\mu)\le\pi$, the latter yields
+$C_P\le C'\sqrt{\log n}$, not a dimension-free bound. Neither preprint is
+Lean-certified here, and thin-shell control alone is not a proof of KLS.
+
+\paragraph{Spectral and screened localization.}
+Upstream restart de-weighting and
+small-gap fourth-moment control have agent-reviewed dossiers.
+The stopped-window source lemma and the window occupation proposition
+retain the explicit assumption Letwin's quadratic Poincar\'e inequality; their endpoint
+$C_P\le C\log^2 n$ is a conditional route result, not the strongest literature bound.
+It does not close the universal-time question \cref{q:mm-spectral-occupation}.
+The screened supply result is restricted to the
+regular split class and does not discharge \cref{ass:tight-prefix-carleson}.
+
+\paragraph{Moment-map linear sector and exact cones.}
+The reviewed linear spectral resolution lemma proves a weak column equation;
+the strong operator-domain statement is not available in general.
+The linear-sector third-moment lemma decomposes the canonical Stein column energy
+into the constant term, a directional third-moment term and an orthogonal high-mode
+remainder. The new sharp gate-zero conjecture asks for
+$\E[H\Sigma^{-1}H]\preceq2\Sigma$ and remains open. Explicit exponential-cone
+moment maps, the axis equality cases and the cube-cone gate bound are reviewed exact-case
+results. They establish neither general gate zero nor the full CMH bound; the recovery
+envelope \cref{ass:cmh-recovery-envelope} remains open.
+
+\paragraph{Conditional-fiber models.}
+For the isotropic uniform simplex, the root-frame degree-two lemma computes the
+root-frame degree-two minimum as $(m+2)(m+3)/(5m^2)>1/5$ for $m\ge3$.
+This rules out a degree-two polynomial dual refuter within the stated all-frame framework;
+it is not a full-$L^2$ gap bound or a solution of \cref{q:conditional-fiber-frame}.
+It is a candidate for a separate Lean statement audit after defining the simplex law,
+root frame and finite-dimensional polynomial quotient.

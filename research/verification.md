@@ -56,7 +56,7 @@ python3 research/atlas.py show thm:selected-literature-constant-equivalence
 ```
 
 `check` runs the existing ledger/Blueprint structural checks plus task classification, reference,
-certificate coverage and cycle checks. The 87 navigation labels contain 74 mathematical nodes;
+certificate coverage and cycle checks. The 88 navigation labels contain 75 mathematical nodes;
 chapter labels are not tasks. Statement dependencies and those in the immediately following
 proof are combined. The graph records declared dependencies, not an extraction of proof terms;
 missing mathematical prerequisites can still be discovered while formalizing a node.
@@ -64,6 +64,10 @@ missing mathematical prerequisites can still be discovered while formalizing a n
 `verify.py` runs the Python tests, default Lake build, elaborated statement snapshot comparison,
 declaration and axiom audit, and kernel
 replay of every compiled module under `FunctionalInequalities`, `solutions`, and `examples`.
+Before preparing replay it explicitly builds every current in-scope module with `lake build +Module`,
+including WIP outside the default import closure. This prevents a development cache from masking
+missing artifacts on clean CI; WIP is still excluded from the certificate axiom audit. See the
+[CI repair and route audit](decisions/2026-09-12-ci-replay-scope-and-route-audit.md).
 It copies the compiled parts of exactly the current source modules into the run's `local-olean/`
 view, records their hashes, and replaces only the local entry in Lake's search path for replay.
 This excludes orphaned modules and ignored duplicate artifacts in an old development cache

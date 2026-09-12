@@ -388,7 +388,7 @@ class BlueprintCheckerTests(BlueprintFixture):
         self.write_routes()
         errors = "\n".join(self.errors())
         self.assertIn("full lowercase Git commit hash", errors)
-        self.assertIn("must pin 8185e46", errors)
+        self.assertIn("must pin 34b5fcd", errors)
         self.assertIn("safe repository-relative path", errors)
 
     def test_sources_are_unique_and_references_must_exist(self) -> None:

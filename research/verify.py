@@ -47,10 +47,9 @@ STATEMENT_CHECKS = {"Solutions.StatementChecks." + name for name in (
 )}
 
 
-def prepare_replay(root: Path, snapshot: dict, destination: Path) -> dict:
-    """Copy only current source modules, leaving obsolete development artifacts untouched."""
-    compiled = root / "formalization/.lake/build/lib/lean"
-    modules, hashes = [], {}
+def replay_sources(snapshot: dict) -> dict[str, str]:
+    """Map every in-scope current module to its source, independently of build caches."""
+    result = {}
     for name, source_hash in sorted(snapshot["files"].items()):
         if source_hash is None or not name.endswith(".lean"):
             continue
@@ -61,7 +60,26 @@ def prepare_replay(root: Path, snapshot: dict, destination: Path) -> dict:
         else:
             continue
         module = ".".join(relative.parts)
-        modules.append(module)
+        result[module] = name
+    if not result:
+        raise RuntimeError("No current Lean source modules to replay")
+    return result
+
+
+def build_replay_inputs(root: Path, snapshot: dict, destination: Path, run) -> dict:
+    """Build the exact replay scope, including modules outside default import closures."""
+    targets = ["+" + module for module in replay_sources(snapshot)]
+    run("lake-build-replay-scope", ["lake", "build", *targets], cwd=root / "formalization")
+    return prepare_replay(root, snapshot, destination)
+
+
+def prepare_replay(root: Path, snapshot: dict, destination: Path) -> dict:
+    """Copy only current source modules, leaving obsolete development artifacts untouched."""
+    compiled = root / "formalization/.lake/build/lib/lean"
+    sources = replay_sources(snapshot)
+    hashes = {}
+    for module, name in sources.items():
+        relative = Path(*module.split("."))
         for suffix in [".olean", ".olean.server", ".olean.private"]:
             source = compiled / relative.with_suffix(suffix)
             if not source.is_file():
@@ -72,9 +90,7 @@ def prepare_replay(root: Path, snapshot: dict, destination: Path) -> dict:
             target.parent.mkdir(parents=True, exist_ok=True)
             shutil.copy2(source, target)
             hashes[str(source.relative_to(compiled))] = hashlib.sha256(target.read_bytes()).hexdigest()
-    if not modules:
-        raise RuntimeError("No current Lean source modules to replay")
-    return {"modules": modules, "compiled_sha256": hashes}
+    return {"modules": list(sources), "compiled_sha256": hashes}
 
 
 def parse_axioms(output: str, expected: set[str]) -> tuple[dict[str, list[str]], list[str]]:
@@ -187,7 +203,7 @@ def run_verification(root: Path) -> int:
         if errors:
             raise RuntimeError("\n".join(errors))
         view = output_dir / "local-olean"
-        replay = prepare_replay(root, before, view)
+        replay = build_replay_inputs(root, before, view, run)
         report["replay_inputs"] = replay
         formalization = root / "formalization"
         search_path = run("lake-search-path", ["lake", "env", "printenv", "LEAN_PATH"], cwd=formalization).strip()

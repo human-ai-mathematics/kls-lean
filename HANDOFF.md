@@ -31,6 +31,15 @@ assessments below. The unconditional singular-law Cheeger comparison remains unr
 absolutely continuous scope is already certified as `cor:absolutely-continuous-relaxation-two-cheeger`.
 The dimension-free KLS bound and the uniform conditional-fiber frame inequality remain open.
 
+## Upstream research sync (2026-09-12)
+
+The current research source is `kls-conjecture-search@34b5fcd57fef17089e781616005fe6d3641bd11e`.
+Read [the synchronization record](research/decisions/2026-09-12-upstream-research-sync.md) for
+wave-four/five results, the two July 2026 preprints, and the next formalization candidates.
+The route source key `kls-exploration` is retained as an identifier; its URL and ledger path
+now point to the renamed repository. Upstream `proved` with `assumes` remains conditional
+here, and `proofs.mode: agent` is not Lean certification. The 24 local certificates are unchanged.
+
 ## Mathematical API organization (2026-09-08)
 
 The public frontends are `SmoothTest`, `SmoothGradient`, `WeightedGradient`,
@@ -104,7 +113,7 @@ The 2026-09-06 follow-ups should be read in this order:
 4. Blueprint TeX and `route-composition.yaml` provide derived navigation and AND/OR structure.
    They are not a proof database and cannot promote a node.
 5. Long-route mathematics is pinned to
-   `numina-functional-inequalities/kls-exploration@8185e46ffb040e04fea076953e5bcaeb4157d71a`.
+   `numina-functional-inequalities/kls-conjecture-search@34b5fcd57fef17089e781616005fe6d3641bd11e`.
    Its manuscript, ledger, route notes, and reviews supply statements and provenance only.
    `checked_by: agent` is review evidence and never authorizes `\leanok`.
 6. `lyw-ops/formech@d0bb1913acc1f710ba6eadf1244b633abbc75fb9` is a writing-style reference only.
