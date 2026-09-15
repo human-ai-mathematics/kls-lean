@@ -12,22 +12,88 @@ recorded explicitly and checked against the original goal; see the
 [current lifecycle](research/ledger-schema.md#lifecycle). Earlier freeze records remain dated
 review snapshots.
 
-## Current status (2026-09-12)
+## Current status (2026-09-15)
 
-The ledger contains **24 Lean-certified nodes**. Four isolated WIP modules retain **24 explicit
-`sorry` proofs**; some downstream proof bodies also depend transitively on those holes. The owner
-has chosen to retain this work for later proof development. Neither a WIP file's presence nor its
-successful ordinary elaboration promotes it to certified mathematics. The four
-[boundary-regularity interfaces](research/decisions/2026-09-12-outward-normal-interfaces-proofs.md)
-now have proofs with only standard axioms; Gauss--Green itself remains open.
+The ledger contains **24 Lean-certified nodes**. Three isolated WIP modules retain **10 explicit
+`sorry` proofs** (2/3/5); some downstream proof bodies also depend transitively on those holes.
+The proved infrastructure now includes global Gauss–Green, smooth recovery sequences, the
+Minkowski coarea inequality, smooth Sard, level-set integral measurability, critical-slice nullity,
+weighted graph area on open domains, and C¹ coarea on regular open domains.
 
-The recent results include the one-dimensional `4 Var` upper bound, the conditional-fiber
-comparison with factor `4`, and `E^can = 2 Ch` in the local-slope convention whenever the intrinsic
-law is absolutely continuous, hence for all log-concave laws. The universal conditional-fiber
-frame bound and the dimension-free KLS bound remain open. The one-dimensional certificate proves
-the upper bound; it does not separately certify optimality of the coefficient `4` across all laws.
-See the [status audit and WIP policy](research/decisions/2026-09-12-status-audit-and-wip-retention.md) for the remaining proof
-obligations, existing inputs awaiting integration, and verification boundaries.
+The general C¹ and Lipschitz weighted coarea formulas and the reverse Cheeger comparison remain
+open. So do the universal conditional-fiber frame bound and the dimension-free KLS bound.
+The one-dimensional certificate proves the `4 Var` upper bound; it does not separately certify
+optimality of the coefficient `4` across all laws. The identity `E^can = 2 Ch` uses the local-slope
+convention and holds when the intrinsic law is absolutely continuous, hence for log-concave laws.
+See the [current handoff](HANDOFF.md) for precise scopes and remaining obligations.
+
+## Proof progress tree
+
+Last updated: **2026-09-15**.
+
+**Legend:** ✓ Proved · ◐ Partially complete · ○ Open. The highlighted node is the next planned step.
+Here `h_M` denotes the Minkowski Cheeger constant and `h_S` the smooth-boundary Cheeger constant.
+Edges group results by topic and route; they are not an exact theorem-dependency graph.
+“Proved” refers to the stated result and its checked proof, not to completion of its parent route
+or registration as a separate ledger certificate. The [ledger](research/a-series/ledger.yaml)
+and [verification guide](research/verification.md) retain those certification boundaries.
+
+```mermaid
+flowchart LR
+    ROOT["KLS Formalization<br/>○ Dimension-free bound remains open"]
+
+    ROOT --> A["✓ Formulation and Reductions"]
+    A --> A1["Log-concave densities<br/>and intrinsic affine support"]
+    A --> A2["Centering and covariance whitening"]
+    A --> A3["Affine ⇔ Covariance-normalized ⇔ Isotropic"]
+
+    ROOT --> B["✓ Analysis and Energy Foundations"]
+    B --> B1["Closed quadratic forms"]
+    B --> B2["Normal contraction estimates<br/>→ Dirichlet property"]
+    B --> B3["For log-concave densities<br/>Canonical energy = 2 × Cheeger energy"]
+
+    ROOT --> C["◐ Conditional-Fiber Route"]
+    C --> C1["✓ One-dimensional log-concave bound<br/>Poincaré constant ≤ 4 × variance"]
+    C --> C2["✓ Almost-everywhere fiber log-concavity"]
+    C --> C3["✓ Fiber energy ≤ 4 × gradient energy"]
+    C --> C4["○ Key frame bound<br/>Dimension-free control needed"]
+
+    ROOT --> D["◐ Isoperimetric Comparison<br/>Current development focus"]
+    D --> D1["✓ Forward inequality: h_M ≤ h_S"]
+    D1 --> D11["✓ Global Gauss–Green theorem"]
+    D1 --> D12["✓ Smooth recovery sequences"]
+    D1 --> D13["✓ Minkowski coarea inequality"]
+
+    D --> D2["○ Reverse inequality: h_S ≤ h_M"]
+    D2 --> D21["✓ Smooth Sard theorem<br/>Regular superlevel sets"]
+    D2 --> D22["◐ Weighted Coarea Formula"]
+    D22 --> D221["✓ Measurability of level-set integrals"]
+    D22 --> D222["✓ Weighted graph area on open domains"]
+    D22 --> D223["✓ Critical slices are null<br/>for almost every level"]
+    D22 --> D224["✓ Coarea on regular open domains<br/>Parametric implicit functions and substitution"]
+    D22 --> D225["○ Assemble the general C¹ formula<br/>Next step"]
+    D22 --> D226["○ Extend to Lipschitz functions"]
+    D2 --> D23["○ Smooth coarea inequality<br/>Combine with distance cutoffs"]
+
+    ROOT --> E["✓ Benchmark Results"]
+    E --> E1["Sharp one-dimensional Gaussian constant"]
+    E --> E2["Finite Poincaré tensorization"]
+
+    classDef done fill:#e8f5e9,stroke:#388e3c,color:#183b1c;
+    classDef partial fill:#fff3df,stroke:#c88719,color:#66420d;
+    classDef todo fill:#f2f2f2,stroke:#888,color:#333;
+    classDef focus fill:#fff0dc,stroke:#d47b13,color:#663800,stroke-width:3px;
+
+    class A,A1,A2,A3,B,B1,B2,B3,C1,C2,C3,D1,D11,D12,D13,D21,D221,D222,D223,D224,E,E1,E2 done;
+    class C,D,D22 partial;
+    class ROOT,C4,D2,D226,D23 todo;
+    class D225 focus;
+```
+
+**Maintenance:** Whenever proof progress changes, update this tree, its date, and the current
+status above in the same change as the proof and its verification records. Keep labels in English,
+preserve the exact mathematical scope, and move completion markers or the next-step highlight only
+when supported by the current source and verification evidence.
 
 ## Mathematical API organization (2026-09-08)
 
