@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="172" height="26" viewBox="0 0 172 26" role="img" aria-label="✓ Formalized in Lean">
   <title>✓ Formalized in Lean</title>
-  <rect x="0.5" y="0.5" width="171" height="25" rx="5" fill="#dcfce7" stroke="#86efac"/>
-  <text x="12" y="17" fill="#166534" font-family="DejaVu Sans,Arial,sans-serif" font-size="12" font-weight="600">✓ Formalized in Lean</text>
+  <rect x="0.5" y="0.5" width="171" height="25" rx="5" fill="#dbeafe" stroke="#60a5fa"/>
+  <text x="12" y="17" fill="#1e3a8a" font-family="DejaVu Sans,Arial,sans-serif" font-size="12" font-weight="600">✓ Formalized in Lean</text>
 </svg>

@@ -122,7 +122,7 @@ flowchart LR
     FAND --> ANY
     ANY --> KLS
     CONST -.-> ANY
-    classDef done fill:#e8f5e9,stroke:#388e3c,color:#183b1c;
+    classDef done fill:#dbeafe,stroke:#2563eb,color:#1e3a8a;
     class ENERGY,F4,MT,FP,FC,NORM,DENS,ONE,CONST,FORMS,MEAS,GRAPH,REG,CRIT,GG,REC,FWD,SARD,CUT,MINK,FLOG done;
     classDef partial fill:#fff3df,stroke:#c88719,color:#66420d;
     class EQ,FAND partial;
@@ -363,7 +363,7 @@ Every node has a link. If diagram links are disabled in your viewer, use this di
 
 `update.py` resolves these inputs once and generates the README diagram, both progress tables,
 node links, `STATUS.md`, `TREE.mmd`, and local SVG status badges. Generated blocks and badges
-must not be edited by hand. Table badges use green for formalized, red for pending, orange for
+must not be edited by hand. Table badges use blue for formalized, red for pending, orange for
 partial, and gray for excluded results; text labels preserve the meaning without color.
 The auxiliary assessments preserve the reviewed status at the cited baseline commit; they do not
 claim a new kernel audit. See the [verification guide](../verification.md) for proof verification.

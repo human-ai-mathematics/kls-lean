@@ -5,7 +5,7 @@ from html import escape
 
 STATES = {'formalized': '✓ Formalized in Lean', 'partial': '◐ Partially formalized',
           'pending': '○ Not yet formalized', 'excluded': '— Excluded: refuted', 'logic': 'OR'}
-STYLES = {'done': 'fill:#e8f5e9,stroke:#388e3c,color:#183b1c',
+STYLES = {'done': 'fill:#dbeafe,stroke:#2563eb,color:#1e3a8a',
           'partial': 'fill:#fff3df,stroke:#c88719,color:#66420d',
           'todo': 'fill:#f2f2f2,stroke:#888,color:#333',
           'focus': 'fill:#fff0dc,stroke:#d47b13,color:#663800,stroke-width:3px',
@@ -13,7 +13,7 @@ STYLES = {'done': 'fill:#e8f5e9,stroke:#388e3c,color:#183b1c',
 
 
 BADGE_COLORS = {
-    'formalized': ('#dcfce7', '#166534', '#86efac'),
+    'formalized': ('#dbeafe', '#1e3a8a', '#60a5fa'),
     'pending': ('#fee2e2', '#991b1b', '#fca5a5'),
     'partial': ('#ffedd5', '#9a3412', '#fdba74'),
     'excluded': ('#f1f5f9', '#475569', '#cbd5e1'),
