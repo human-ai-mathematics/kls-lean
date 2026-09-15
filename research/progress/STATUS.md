@@ -8,7 +8,7 @@ Generated from staged canonical records. These are recorded proof/definition sta
 not a fresh Lean run or a remote CI receipt. A missing local proof means only that this
 register does not certify it; unregistered auxiliary progress appears in the diagram directory below.
 
-**✓** Recorded Lean proof or implemented definition · **○** Not recorded as complete.
+**✓** Formalized in Lean (proof or definition) · **○** Not recorded as complete.
 Upstream status is shown only where an explicit upstream mapping exists; no mapping is inferred
 from a similar title. Upstream `proved` does not mean Lean-proved.
 
@@ -16,81 +16,81 @@ from a similar title. Upstream `proved` does not mean Lean-proved.
 
 | Node ID | Upstream / mathematical record | Our Lean record | Certificate / statement |
 | --- | --- | --- | --- |
-| `ass:cmh-recovery-envelope` | Upstream: open | ○ Pending | [Statement](../../formalization/blueprint/src/chapters/50-kls-routes.tex#L206) |
-| `ass:tight-prefix-carleson` | Upstream: open | ○ Pending | [Statement](../../formalization/blueprint/src/chapters/50-kls-routes.tex#L41) |
+| `ass:cmh-recovery-envelope` | Upstream: open | ○ Not yet formalized | [Statement](../../formalization/blueprint/src/chapters/50-kls-routes.tex#L206) |
+| `ass:tight-prefix-carleson` | Upstream: open | ○ Not yet formalized | [Statement](../../formalization/blueprint/src/chapters/50-kls-routes.tex#L41) |
 | `ass:weighted-package` | Upstream: refuted | — Excluded: refuted | [Statement](../../formalization/blueprint/src/chapters/50-kls-routes.tex#L87) |
-| `cert:ambient-intrinsic-comparison` | Local Lean result; no upstream mapping | ✓ Proof recorded | [Statement](../../formalization/blueprint/src/chapters/40-certified-models.tex#L96) · [Lean certificate](../../solutions/LemAmbientIntrinsicPoincareComparison.lean) |
-| `cert:binary-tensorization` | Local Lean result; no upstream mapping | ✓ Proof recorded | [Statement](../../formalization/blueprint/src/chapters/40-certified-models.tex#L35) · [Lean certificate](../../solutions/LemPoincareTensorization.lean) |
-| `cert:finite-tensorization` | Local Lean result; no upstream mapping | ✓ Proof recorded | [Statement](../../formalization/blueprint/src/chapters/40-certified-models.tex#L52) · [Lean certificate](../../solutions/LemPoincareFiniteTensorization.lean) |
-| `cert:gaussian-one-dimensional` | Local Lean result; no upstream mapping | ✓ Proof recorded | [Statement](../../formalization/blueprint/src/chapters/40-certified-models.tex#L70) · [Lean certificate](../../solutions/LemPoincareGaussianOneDimensional.lean) |
-| `cert:legacy-relaxed-comparison` | Local Lean result; no upstream mapping | ✓ Proof recorded | [Statement](../../formalization/blueprint/src/chapters/40-certified-models.tex#L111) · [Lean certificate](../../solutions/LemLegacyRelaxedPoincareComparison.lean) |
-| `cert:linear-test-lower` | Local Lean result; no upstream mapping | ✓ Proof recorded | [Statement](../../formalization/blueprint/src/chapters/40-certified-models.tex#L21) · [Lean certificate](../../solutions/LemLinearTestLower.lean) |
-| `conj:kls` | Upstream: open | ○ Pending | [Statement](../../formalization/blueprint/src/chapters/00-orientation-and-status.tex#L176) |
-| `cor:absolutely-continuous-relaxation-two-cheeger` | Local Lean result; no upstream mapping | ✓ Proof recorded | [Statement](../../formalization/blueprint/src/chapters/30-open-canonical-bridges.tex#L92) · [Lean certificate](../../solutions/CorAbsolutelyContinuousRelaxationTwoCheeger.lean) |
-| `cor:ambient-intrinsic-constant-equality` | Local Lean result; no upstream mapping | ✓ Proof recorded | [Statement](../../formalization/blueprint/src/chapters/30-open-canonical-bridges.tex#L292) |
-| `cor:cmh-recovery-sequence-suffices` | Upstream: conditional | ○ Pending | [Statement](../../formalization/blueprint/src/chapters/50-kls-routes.tex#L219) |
-| `cor:conditional-fiber-twelve-bound` | Local classification: local_argument | ✓ Proof recorded | [Statement](../../formalization/blueprint/src/chapters/50-kls-routes.tex#L459) · [Lean certificate](../../solutions/CorConditionalFiberTwelveBound.lean) |
-| `cor:tight-window-consumption` | Upstream: proved | ○ Pending | [Statement](../../formalization/blueprint/src/chapters/50-kls-routes.tex#L55) |
-| `def:affine-poincare-constant` | Local classification: definition | ✓ Definition implemented | [Statement](../../formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex#L297) |
-| `def:affine-support-intrinsic-law` | Local definition; no upstream mapping | ✓ Definition implemented | [Statement](../../formalization/blueprint/src/chapters/20-smooth-gradient-and-affine.tex#L64) |
-| `def:conditional-fiber-form` | Local classification: definition | ✓ Definition implemented | [Statement](../../formalization/blueprint/src/chapters/50-kls-routes.tex#L259) |
-| `def:extended-energy` | Local definition; no upstream mapping | ✓ Definition implemented | [Statement](../../formalization/blueprint/src/chapters/10-canonical-basic.tex#L25) |
-| `def:intrinsic-affine-energy` | Local definition; no upstream mapping | ✓ Definition implemented | [Statement](../../formalization/blueprint/src/chapters/20-smooth-gradient-and-affine.tex#L94) |
-| `def:isoperimetric-cheeger-scale` | Local classification: definition | ✓ Definition implemented | [Statement](../../formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex#L103) |
-| `def:isotropic-law` | Local classification: definition | ✓ Definition implemented | [Statement](../../formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex#L246) |
-| `def:l2-energy-poincare-constant` | Local definition; no upstream mapping | ✓ Definition implemented | [Statement](../../formalization/blueprint/src/chapters/10-canonical-basic.tex#L84) |
-| `def:l2-mean-variance` | Local definition; no upstream mapping | ✓ Definition implemented | [Statement](../../formalization/blueprint/src/chapters/10-canonical-basic.tex#L11) |
-| `def:legacy-smooth-test-poincare` | Local definition; no upstream mapping | ✓ Definition implemented | [Statement](../../formalization/blueprint/src/chapters/40-certified-models.tex#L9) |
-| `def:literature-poincare-constant` | Local classification: definition | ✓ Definition implemented | [Statement](../../formalization/blueprint/src/chapters/00-orientation-and-status.tex#L153) |
-| `def:log-concave-law` | Local classification: definition | ✓ Definition implemented | [Statement](../../formalization/blueprint/src/chapters/00-orientation-and-status.tex#L18) |
-| `def:poincare-test-family` | Local definition; no upstream mapping | ✓ Definition implemented | [Statement](../../formalization/blueprint/src/chapters/10-canonical-basic.tex#L71) |
-| `def:preenergy-relaxation` | Local definition; no upstream mapping | ✓ Definition implemented | [Statement](../../formalization/blueprint/src/chapters/10-canonical-basic.tex#L37) |
-| `def:selected-canonical-frontend` | Local definition; no upstream mapping | ✓ Definition implemented | [Statement](../../formalization/blueprint/src/chapters/20-smooth-gradient-and-affine.tex#L116) |
-| `def:smooth-gradient-preenergy` | Local definition; no upstream mapping | ✓ Definition implemented | [Statement](../../formalization/blueprint/src/chapters/20-smooth-gradient-and-affine.tex#L12) |
-| `def:smooth-gradient-relaxation` | Local definition; no upstream mapping | ✓ Definition implemented | [Statement](../../formalization/blueprint/src/chapters/20-smooth-gradient-and-affine.tex#L39) |
-| `lem:affine-poincare-translation-invariance` | Local classification: local_argument | ✓ Proof recorded | [Statement](../../formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex#L408) · [Lean certificate](../../solutions/LemAffinePoincareTranslationInvariance.lean) |
-| `lem:ambient-intrinsic-covariance` | Local classification: local_argument | ✓ Proof recorded | [Statement](../../formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex#L260) · [Lean certificate](../../solutions/LemAmbientIntrinsicCovariance.lean) |
-| `lem:conditional-fiber-energy-comparison` | Local classification: local_argument | ✓ Proof recorded | [Statement](../../formalization/blueprint/src/chapters/50-kls-routes.tex#L387) · [Lean certificate](../../solutions/LemConditionalFiberEnergyComparison.lean) |
-| `lem:conditional-fiber-form` | Upstream: proved | ✓ Proof recorded | [Statement](../../formalization/blueprint/src/chapters/50-kls-routes.tex#L308) · [Lean certificate](../../solutions/LemConditionalFiberForm.lean) |
-| `lem:covariance-core-closure` | Local classification: local_argument | ✓ Proof recorded | [Statement](../../formalization/blueprint/src/chapters/60-analytic-comparison-proofs.tex#L52) · [Lean certificate](../../solutions/LemCovarianceCoreClosure.lean) |
-| `lem:covariance-test-core-density` | Local classification: local_argument | ✓ Proof recorded | [Statement](../../formalization/blueprint/src/chapters/60-analytic-comparison-proofs.tex#L14) · [Lean certificate](../../solutions/LemCovarianceTestCoreDensity.lean) |
-| `lem:finite-energy-factor-poincare` | Local Lean result; no upstream mapping | ✓ Proof recorded | [Statement](../../formalization/blueprint/src/chapters/60-analytic-comparison-proofs.tex#L241) |
-| `lem:logconcave-intrinsic-absolute-continuity` | Local classification: published | ✓ Proof recorded | [Statement](../../formalization/blueprint/src/chapters/00-orientation-and-status.tex#L69) · [Lean certificate](../../solutions/LemLogConcaveIntrinsicAbsoluteContinuity.lean) |
-| `lem:mutual-test-approximation-relaxation` | Local Lean result; no upstream mapping | ✓ Proof recorded | [Statement](../../formalization/blueprint/src/chapters/60-analytic-comparison-proofs.tex#L223) |
-| `lem:preenergy-poincare-relaxation` | Local Lean result; no upstream mapping | ✓ Proof recorded | [Statement](../../formalization/blueprint/src/chapters/10-canonical-basic.tex#L121) |
-| `lem:relative-perimeter-cheeger-infimum` | Local classification: local_argument | ○ Pending | [Statement](../../formalization/blueprint/src/chapters/60-analytic-comparison-proofs.tex#L170) |
-| `lem:relative-perimeter-smoothing` | Local classification: local_argument | ○ Pending | [Statement](../../formalization/blueprint/src/chapters/60-analytic-comparison-proofs.tex#L128) |
-| `lem:smooth-tests-affine-restriction-extension` | Local Lean result; no upstream mapping | ✓ Proof recorded | [Statement](../../formalization/blueprint/src/chapters/30-open-canonical-bridges.tex#L246) |
-| `obs:dirac-raw-energy` | Local classification: local_argument | ✓ Proof recorded | [Statement](../../formalization/blueprint/src/chapters/30-open-canonical-bridges.tex#L9) |
-| `obs:normal-direction-raw-energy` | Local classification: local_argument | ✓ Proof recorded | [Statement](../../formalization/blueprint/src/chapters/30-open-canonical-bridges.tex#L129) |
-| `prop:spectral-sufficiency` | Upstream: conditional | ○ Pending | [Statement](../../formalization/blueprint/src/chapters/50-kls-routes.tex#L140) |
-| `prop:weighted-spectator-obstruction` | Upstream: proved | ○ Pending | [Statement](../../formalization/blueprint/src/chapters/50-kls-routes.tex#L101) |
-| `q:conditional-fiber-frame` | Upstream: open | ○ Pending | [Statement](../../formalization/blueprint/src/chapters/50-kls-routes.tex#L513) |
-| `q:mm-spectral-occupation` | Upstream: open | ○ Pending | [Statement](../../formalization/blueprint/src/chapters/50-kls-routes.tex#L128) |
-| `q:smooth-gradient-raw-core-agreement` | Local classification: conjectural | ○ Pending | [Statement](../../formalization/blueprint/src/chapters/30-open-canonical-bridges.tex#L159) |
-| `thm:affine-covariance-relaxation-closed` | Local classification: local_argument | ✓ Proof recorded | [Statement](../../formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex#L347) · [Lean certificate](../../solutions/ThmAffineCovarianceRelaxationClosed.lean) |
-| `thm:affine-isotropic-reduction` | Local classification: local_argument | ✓ Proof recorded | [Statement](../../formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex#L460) · [Lean certificate](../../solutions/ThmAffineIsotropicReduction.lean) |
-| `thm:ambient-intrinsic-relaxation-equality` | Local Lean result; no upstream mapping | ✓ Proof recorded | [Statement](../../formalization/blueprint/src/chapters/30-open-canonical-bridges.tex#L266) |
-| `thm:borell-logconcave-density` | Local classification: published | ✓ Proof recorded | [Statement](../../formalization/blueprint/src/chapters/00-orientation-and-status.tex#L95) · [Lean certificate](../../solutions/ThmBorellLogconcaveDensity.lean) |
-| `thm:cmh-recovery-affine-poincare-bound` | Local classification: local_argument | ○ Pending | [Statement](../../formalization/blueprint/src/chapters/50-kls-routes.tex#L176) |
-| `thm:compact-borell-logconcavity-equivalence` | Local classification: published | ✓ Proof recorded | [Statement](../../formalization/blueprint/src/chapters/00-orientation-and-status.tex#L33) · [Lean certificate](../../solutions/ThmCompactBorellLogconcavityEquivalence.lean) |
-| `thm:intrinsic-affine-constant-order` | Local Lean result; no upstream mapping | ✓ Proof recorded | [Statement](../../formalization/blueprint/src/chapters/20-smooth-gradient-and-affine.tex#L139) |
-| `thm:intrinsic-affine-energy-closed` | Local Lean result; no upstream mapping | ✓ Proof recorded | [Statement](../../formalization/blueprint/src/chapters/20-smooth-gradient-and-affine.tex#L103) |
-| `thm:intrinsic-l2-equivalence` | Local Lean result; no upstream mapping | ✓ Proof recorded | [Statement](../../formalization/blueprint/src/chapters/20-smooth-gradient-and-affine.tex#L76) |
-| `thm:klartag-density-frontend-identification` | Local classification: local_argument | ○ Pending | [Statement](../../formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex#L133) |
-| `thm:l2-energy-holds-order` | Local Lean result; no upstream mapping | ✓ Proof recorded | [Statement](../../formalization/blueprint/src/chapters/10-canonical-basic.tex#L101) |
-| `thm:legacy-canonical-constant-comparison` | Local Lean result; no upstream mapping | ✓ Proof recorded | [Statement](../../formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex#L34) |
-| `thm:legacy-relaxed-holds-equivalence` | Local Lean result; no upstream mapping | ✓ Proof recorded | [Statement](../../formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex#L13) |
-| `thm:logconcave-cheeger-poincare-comparison` | Local classification: published | ○ Pending | [Statement](../../formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex#L180) |
-| `thm:one-dimensional-logconcave-poincare` | Local classification: published | ✓ Proof recorded | [Statement](../../formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex#L539) · [Lean certificate](../../solutions/ThmOneDimensionalLogConcavePoincare.lean) |
-| `thm:quadratic-relaxation-closed` | Local Lean result; no upstream mapping | ✓ Proof recorded | [Statement](../../formalization/blueprint/src/chapters/10-canonical-basic.tex#L51) |
-| `thm:selected-literature-constant-equivalence` | Local classification: local_argument | ✓ Proof recorded | [Statement](../../formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex#L81) · [Lean certificate](../../solutions/ThmSelectedLiteratureConstantEquivalence.lean) |
-| `thm:smooth-gradient-quadratic-dense` | Local Lean result; no upstream mapping | ✓ Proof recorded | [Statement](../../formalization/blueprint/src/chapters/20-smooth-gradient-and-affine.tex#L25) |
-| `thm:smooth-gradient-raw-core-agreement-density` | Local classification: local_argument | ✓ Proof recorded | [Statement](../../formalization/blueprint/src/chapters/30-open-canonical-bridges.tex#L171) · [Lean certificate](../../solutions/ThmSmoothGradientRawCoreAgreementDensity.lean) |
-| `thm:smooth-gradient-relaxation-closed` | Local Lean result; no upstream mapping | ✓ Proof recorded | [Statement](../../formalization/blueprint/src/chapters/20-smooth-gradient-and-affine.tex#L48) |
-| `thm:smooth-gradient-relaxation-dirichlet` | Local classification: local_argument | ✓ Proof recorded | [Statement](../../formalization/blueprint/src/chapters/30-open-canonical-bridges.tex#L25) · [Lean certificate](../../solutions/ThmSmoothGradientRelaxationDirichlet.lean) |
-| `thm:smooth-gradient-relaxation-two-cheeger` | Local classification: unknown | ○ Pending | [Statement](../../formalization/blueprint/src/chapters/30-open-canonical-bridges.tex#L65) |
-| `thm:smooth-lipschitz-constant-equivalence` | Local classification: local_argument | ✓ Proof recorded | [Statement](../../formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex#L58) · [Lean certificate](../../solutions/ThmSmoothLipschitzConstantEquivalence.lean) |
+| `cert:ambient-intrinsic-comparison` | Local Lean result; no upstream mapping | ✓ Formalized in Lean | [Statement](../../formalization/blueprint/src/chapters/40-certified-models.tex#L96) · [Lean certificate](../../solutions/LemAmbientIntrinsicPoincareComparison.lean) |
+| `cert:binary-tensorization` | Local Lean result; no upstream mapping | ✓ Formalized in Lean | [Statement](../../formalization/blueprint/src/chapters/40-certified-models.tex#L35) · [Lean certificate](../../solutions/LemPoincareTensorization.lean) |
+| `cert:finite-tensorization` | Local Lean result; no upstream mapping | ✓ Formalized in Lean | [Statement](../../formalization/blueprint/src/chapters/40-certified-models.tex#L52) · [Lean certificate](../../solutions/LemPoincareFiniteTensorization.lean) |
+| `cert:gaussian-one-dimensional` | Local Lean result; no upstream mapping | ✓ Formalized in Lean | [Statement](../../formalization/blueprint/src/chapters/40-certified-models.tex#L70) · [Lean certificate](../../solutions/LemPoincareGaussianOneDimensional.lean) |
+| `cert:legacy-relaxed-comparison` | Local Lean result; no upstream mapping | ✓ Formalized in Lean | [Statement](../../formalization/blueprint/src/chapters/40-certified-models.tex#L111) · [Lean certificate](../../solutions/LemLegacyRelaxedPoincareComparison.lean) |
+| `cert:linear-test-lower` | Local Lean result; no upstream mapping | ✓ Formalized in Lean | [Statement](../../formalization/blueprint/src/chapters/40-certified-models.tex#L21) · [Lean certificate](../../solutions/LemLinearTestLower.lean) |
+| `conj:kls` | Upstream: open | ○ Not yet formalized | [Statement](../../formalization/blueprint/src/chapters/00-orientation-and-status.tex#L176) |
+| `cor:absolutely-continuous-relaxation-two-cheeger` | Local Lean result; no upstream mapping | ✓ Formalized in Lean | [Statement](../../formalization/blueprint/src/chapters/30-open-canonical-bridges.tex#L92) · [Lean certificate](../../solutions/CorAbsolutelyContinuousRelaxationTwoCheeger.lean) |
+| `cor:ambient-intrinsic-constant-equality` | Local Lean result; no upstream mapping | ✓ Formalized in Lean | [Statement](../../formalization/blueprint/src/chapters/30-open-canonical-bridges.tex#L292) |
+| `cor:cmh-recovery-sequence-suffices` | Upstream: conditional | ○ Not yet formalized | [Statement](../../formalization/blueprint/src/chapters/50-kls-routes.tex#L219) |
+| `cor:conditional-fiber-twelve-bound` | Local classification: local_argument | ✓ Formalized in Lean | [Statement](../../formalization/blueprint/src/chapters/50-kls-routes.tex#L459) · [Lean certificate](../../solutions/CorConditionalFiberTwelveBound.lean) |
+| `cor:tight-window-consumption` | Upstream: proved | ○ Not yet formalized | [Statement](../../formalization/blueprint/src/chapters/50-kls-routes.tex#L55) |
+| `def:affine-poincare-constant` | Local classification: definition | ✓ Formalized in Lean (definition) | [Statement](../../formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex#L297) |
+| `def:affine-support-intrinsic-law` | Local definition; no upstream mapping | ✓ Formalized in Lean (definition) | [Statement](../../formalization/blueprint/src/chapters/20-smooth-gradient-and-affine.tex#L64) |
+| `def:conditional-fiber-form` | Local classification: definition | ✓ Formalized in Lean (definition) | [Statement](../../formalization/blueprint/src/chapters/50-kls-routes.tex#L259) |
+| `def:extended-energy` | Local definition; no upstream mapping | ✓ Formalized in Lean (definition) | [Statement](../../formalization/blueprint/src/chapters/10-canonical-basic.tex#L25) |
+| `def:intrinsic-affine-energy` | Local definition; no upstream mapping | ✓ Formalized in Lean (definition) | [Statement](../../formalization/blueprint/src/chapters/20-smooth-gradient-and-affine.tex#L94) |
+| `def:isoperimetric-cheeger-scale` | Local classification: definition | ✓ Formalized in Lean (definition) | [Statement](../../formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex#L103) |
+| `def:isotropic-law` | Local classification: definition | ✓ Formalized in Lean (definition) | [Statement](../../formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex#L246) |
+| `def:l2-energy-poincare-constant` | Local definition; no upstream mapping | ✓ Formalized in Lean (definition) | [Statement](../../formalization/blueprint/src/chapters/10-canonical-basic.tex#L84) |
+| `def:l2-mean-variance` | Local definition; no upstream mapping | ✓ Formalized in Lean (definition) | [Statement](../../formalization/blueprint/src/chapters/10-canonical-basic.tex#L11) |
+| `def:legacy-smooth-test-poincare` | Local definition; no upstream mapping | ✓ Formalized in Lean (definition) | [Statement](../../formalization/blueprint/src/chapters/40-certified-models.tex#L9) |
+| `def:literature-poincare-constant` | Local classification: definition | ✓ Formalized in Lean (definition) | [Statement](../../formalization/blueprint/src/chapters/00-orientation-and-status.tex#L153) |
+| `def:log-concave-law` | Local classification: definition | ✓ Formalized in Lean (definition) | [Statement](../../formalization/blueprint/src/chapters/00-orientation-and-status.tex#L18) |
+| `def:poincare-test-family` | Local definition; no upstream mapping | ✓ Formalized in Lean (definition) | [Statement](../../formalization/blueprint/src/chapters/10-canonical-basic.tex#L71) |
+| `def:preenergy-relaxation` | Local definition; no upstream mapping | ✓ Formalized in Lean (definition) | [Statement](../../formalization/blueprint/src/chapters/10-canonical-basic.tex#L37) |
+| `def:selected-canonical-frontend` | Local definition; no upstream mapping | ✓ Formalized in Lean (definition) | [Statement](../../formalization/blueprint/src/chapters/20-smooth-gradient-and-affine.tex#L116) |
+| `def:smooth-gradient-preenergy` | Local definition; no upstream mapping | ✓ Formalized in Lean (definition) | [Statement](../../formalization/blueprint/src/chapters/20-smooth-gradient-and-affine.tex#L12) |
+| `def:smooth-gradient-relaxation` | Local definition; no upstream mapping | ✓ Formalized in Lean (definition) | [Statement](../../formalization/blueprint/src/chapters/20-smooth-gradient-and-affine.tex#L39) |
+| `lem:affine-poincare-translation-invariance` | Local classification: local_argument | ✓ Formalized in Lean | [Statement](../../formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex#L408) · [Lean certificate](../../solutions/LemAffinePoincareTranslationInvariance.lean) |
+| `lem:ambient-intrinsic-covariance` | Local classification: local_argument | ✓ Formalized in Lean | [Statement](../../formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex#L260) · [Lean certificate](../../solutions/LemAmbientIntrinsicCovariance.lean) |
+| `lem:conditional-fiber-energy-comparison` | Local classification: local_argument | ✓ Formalized in Lean | [Statement](../../formalization/blueprint/src/chapters/50-kls-routes.tex#L387) · [Lean certificate](../../solutions/LemConditionalFiberEnergyComparison.lean) |
+| `lem:conditional-fiber-form` | Upstream: proved | ✓ Formalized in Lean | [Statement](../../formalization/blueprint/src/chapters/50-kls-routes.tex#L308) · [Lean certificate](../../solutions/LemConditionalFiberForm.lean) |
+| `lem:covariance-core-closure` | Local classification: local_argument | ✓ Formalized in Lean | [Statement](../../formalization/blueprint/src/chapters/60-analytic-comparison-proofs.tex#L52) · [Lean certificate](../../solutions/LemCovarianceCoreClosure.lean) |
+| `lem:covariance-test-core-density` | Local classification: local_argument | ✓ Formalized in Lean | [Statement](../../formalization/blueprint/src/chapters/60-analytic-comparison-proofs.tex#L14) · [Lean certificate](../../solutions/LemCovarianceTestCoreDensity.lean) |
+| `lem:finite-energy-factor-poincare` | Local Lean result; no upstream mapping | ✓ Formalized in Lean | [Statement](../../formalization/blueprint/src/chapters/60-analytic-comparison-proofs.tex#L241) |
+| `lem:logconcave-intrinsic-absolute-continuity` | Local classification: published | ✓ Formalized in Lean | [Statement](../../formalization/blueprint/src/chapters/00-orientation-and-status.tex#L69) · [Lean certificate](../../solutions/LemLogConcaveIntrinsicAbsoluteContinuity.lean) |
+| `lem:mutual-test-approximation-relaxation` | Local Lean result; no upstream mapping | ✓ Formalized in Lean | [Statement](../../formalization/blueprint/src/chapters/60-analytic-comparison-proofs.tex#L223) |
+| `lem:preenergy-poincare-relaxation` | Local Lean result; no upstream mapping | ✓ Formalized in Lean | [Statement](../../formalization/blueprint/src/chapters/10-canonical-basic.tex#L121) |
+| `lem:relative-perimeter-cheeger-infimum` | Local classification: local_argument | ○ Not yet formalized | [Statement](../../formalization/blueprint/src/chapters/60-analytic-comparison-proofs.tex#L170) |
+| `lem:relative-perimeter-smoothing` | Local classification: local_argument | ○ Not yet formalized | [Statement](../../formalization/blueprint/src/chapters/60-analytic-comparison-proofs.tex#L128) |
+| `lem:smooth-tests-affine-restriction-extension` | Local Lean result; no upstream mapping | ✓ Formalized in Lean | [Statement](../../formalization/blueprint/src/chapters/30-open-canonical-bridges.tex#L246) |
+| `obs:dirac-raw-energy` | Local classification: local_argument | ✓ Formalized in Lean | [Statement](../../formalization/blueprint/src/chapters/30-open-canonical-bridges.tex#L9) |
+| `obs:normal-direction-raw-energy` | Local classification: local_argument | ✓ Formalized in Lean | [Statement](../../formalization/blueprint/src/chapters/30-open-canonical-bridges.tex#L129) |
+| `prop:spectral-sufficiency` | Upstream: conditional | ○ Not yet formalized | [Statement](../../formalization/blueprint/src/chapters/50-kls-routes.tex#L140) |
+| `prop:weighted-spectator-obstruction` | Upstream: proved | ○ Not yet formalized | [Statement](../../formalization/blueprint/src/chapters/50-kls-routes.tex#L101) |
+| `q:conditional-fiber-frame` | Upstream: open | ○ Not yet formalized | [Statement](../../formalization/blueprint/src/chapters/50-kls-routes.tex#L513) |
+| `q:mm-spectral-occupation` | Upstream: open | ○ Not yet formalized | [Statement](../../formalization/blueprint/src/chapters/50-kls-routes.tex#L128) |
+| `q:smooth-gradient-raw-core-agreement` | Local classification: conjectural | ○ Not yet formalized | [Statement](../../formalization/blueprint/src/chapters/30-open-canonical-bridges.tex#L159) |
+| `thm:affine-covariance-relaxation-closed` | Local classification: local_argument | ✓ Formalized in Lean | [Statement](../../formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex#L347) · [Lean certificate](../../solutions/ThmAffineCovarianceRelaxationClosed.lean) |
+| `thm:affine-isotropic-reduction` | Local classification: local_argument | ✓ Formalized in Lean | [Statement](../../formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex#L460) · [Lean certificate](../../solutions/ThmAffineIsotropicReduction.lean) |
+| `thm:ambient-intrinsic-relaxation-equality` | Local Lean result; no upstream mapping | ✓ Formalized in Lean | [Statement](../../formalization/blueprint/src/chapters/30-open-canonical-bridges.tex#L266) |
+| `thm:borell-logconcave-density` | Local classification: published | ✓ Formalized in Lean | [Statement](../../formalization/blueprint/src/chapters/00-orientation-and-status.tex#L95) · [Lean certificate](../../solutions/ThmBorellLogconcaveDensity.lean) |
+| `thm:cmh-recovery-affine-poincare-bound` | Local classification: local_argument | ○ Not yet formalized | [Statement](../../formalization/blueprint/src/chapters/50-kls-routes.tex#L176) |
+| `thm:compact-borell-logconcavity-equivalence` | Local classification: published | ✓ Formalized in Lean | [Statement](../../formalization/blueprint/src/chapters/00-orientation-and-status.tex#L33) · [Lean certificate](../../solutions/ThmCompactBorellLogconcavityEquivalence.lean) |
+| `thm:intrinsic-affine-constant-order` | Local Lean result; no upstream mapping | ✓ Formalized in Lean | [Statement](../../formalization/blueprint/src/chapters/20-smooth-gradient-and-affine.tex#L139) |
+| `thm:intrinsic-affine-energy-closed` | Local Lean result; no upstream mapping | ✓ Formalized in Lean | [Statement](../../formalization/blueprint/src/chapters/20-smooth-gradient-and-affine.tex#L103) |
+| `thm:intrinsic-l2-equivalence` | Local Lean result; no upstream mapping | ✓ Formalized in Lean | [Statement](../../formalization/blueprint/src/chapters/20-smooth-gradient-and-affine.tex#L76) |
+| `thm:klartag-density-frontend-identification` | Local classification: local_argument | ○ Not yet formalized | [Statement](../../formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex#L133) |
+| `thm:l2-energy-holds-order` | Local Lean result; no upstream mapping | ✓ Formalized in Lean | [Statement](../../formalization/blueprint/src/chapters/10-canonical-basic.tex#L101) |
+| `thm:legacy-canonical-constant-comparison` | Local Lean result; no upstream mapping | ✓ Formalized in Lean | [Statement](../../formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex#L34) |
+| `thm:legacy-relaxed-holds-equivalence` | Local Lean result; no upstream mapping | ✓ Formalized in Lean | [Statement](../../formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex#L13) |
+| `thm:logconcave-cheeger-poincare-comparison` | Local classification: published | ○ Not yet formalized | [Statement](../../formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex#L180) |
+| `thm:one-dimensional-logconcave-poincare` | Local classification: published | ✓ Formalized in Lean | [Statement](../../formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex#L539) · [Lean certificate](../../solutions/ThmOneDimensionalLogConcavePoincare.lean) |
+| `thm:quadratic-relaxation-closed` | Local Lean result; no upstream mapping | ✓ Formalized in Lean | [Statement](../../formalization/blueprint/src/chapters/10-canonical-basic.tex#L51) |
+| `thm:selected-literature-constant-equivalence` | Local classification: local_argument | ✓ Formalized in Lean | [Statement](../../formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex#L81) · [Lean certificate](../../solutions/ThmSelectedLiteratureConstantEquivalence.lean) |
+| `thm:smooth-gradient-quadratic-dense` | Local Lean result; no upstream mapping | ✓ Formalized in Lean | [Statement](../../formalization/blueprint/src/chapters/20-smooth-gradient-and-affine.tex#L25) |
+| `thm:smooth-gradient-raw-core-agreement-density` | Local classification: local_argument | ✓ Formalized in Lean | [Statement](../../formalization/blueprint/src/chapters/30-open-canonical-bridges.tex#L171) · [Lean certificate](../../solutions/ThmSmoothGradientRawCoreAgreementDensity.lean) |
+| `thm:smooth-gradient-relaxation-closed` | Local Lean result; no upstream mapping | ✓ Formalized in Lean | [Statement](../../formalization/blueprint/src/chapters/20-smooth-gradient-and-affine.tex#L48) |
+| `thm:smooth-gradient-relaxation-dirichlet` | Local classification: local_argument | ✓ Formalized in Lean | [Statement](../../formalization/blueprint/src/chapters/30-open-canonical-bridges.tex#L25) · [Lean certificate](../../solutions/ThmSmoothGradientRelaxationDirichlet.lean) |
+| `thm:smooth-gradient-relaxation-two-cheeger` | Local classification: unknown | ○ Not yet formalized | [Statement](../../formalization/blueprint/src/chapters/30-open-canonical-bridges.tex#L65) |
+| `thm:smooth-lipschitz-constant-equivalence` | Local classification: local_argument | ✓ Formalized in Lean | [Statement](../../formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex#L58) · [Lean certificate](../../solutions/ThmSmoothLipschitzConstantEquivalence.lean) |
 
 ## Pending-node dependencies and infrastructure
 
@@ -255,33 +255,8 @@ These markers preserve the diagram assessment; this generator does not independe
 
 | Diagram node | Recorded progress | Source |
 | --- | --- | --- |
-| `OV_E` | ○ Eldan localization — Gap: Carleson estimate | [Source](https://github.com/numina-functional-inequalities/kls-lean/tree/main/research/progress#eldan-localization) |
-| `OV_S` | ○ Spectral route — Gap: occupation bound | [Source](https://github.com/numina-functional-inequalities/kls-lean/tree/main/research/progress#moment-map-spectral) |
-| `OV_M` | ○ CMH route — Gap: recovery envelope | [Source](https://github.com/numina-functional-inequalities/kls-lean/tree/main/research/progress#moment-map-cmh) |
-| `OV_F` | ◐ Conditional fibers — Gap: universal frame | [Source](https://github.com/numina-functional-inequalities/kls-lean/tree/main/research/progress#conditional-fiber-frames) |
-| `ANY` | OR — Any completed route | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/route-composition.yaml) |
-| `KLS` | ○ KLS — Dimension-free bound | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Statement.lean) |
-| `EG` | ○ Tight-prefix — Carleson estimate | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/src/chapters/50-kls-routes.tex) |
-| `EC` | ○ Tight-window — Consumption | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/src/chapters/50-kls-routes.tex) |
-| `CB` | ○ Cheeger–Buser — Comparison | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex) |
-| `EAND` | AND — ○ Eldan route | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/route-composition.yaml) |
-| `SG` | ○ Full-damping — Occupation bound | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/src/chapters/50-kls-routes.tex) |
-| `SC` | ○ Spectral — Sufficiency | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/src/chapters/50-kls-routes.tex) |
-| `NORM` | ✓ Affine / isotropic — Reduction | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/Isotropic.lean) |
-| `SAND` | AND — ○ Spectral route | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/route-composition.yaml) |
-| `MH` | ○ W₂ limit and — CMH comparison | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/src/chapters/50-kls-routes.tex) |
-| `MG` | ○ Bounded CMH — Recovery envelope | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/src/chapters/50-kls-routes.tex) |
-| `MT` | ✓ Affine constant — Translation invariance | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Poincare/CovarianceGradient/Translation.lean) |
-| `MC` | ○ Recovery-sequence — Sufficiency | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/src/chapters/50-kls-routes.tex) |
-| `MAND` | AND — ○ CMH route | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/route-composition.yaml) |
-| `ONE` | ✓ One-dimensional — Poincaré ≤ 4 Var | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/Line/SharpPoincare.lean) |
-| `FLOG` | ✓ Fiber log-concavity | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/ConditionalFiber.lean) |
-| `FP` | ✓ Fiber-bound — Energy comparison | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/ConditionalFiber/EnergyComparison.lean) |
-| `F4` | ✓ Fiber energy — ≤ 4 × gradient energy | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/ConditionalFiber.lean) |
-| `FC` | ✓ Fiber Dirichlet form | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/ConditionalFiber/Closed.lean) |
-| `FG` | ○ Universal — Frame bound | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/src/chapters/50-kls-routes.tex) |
-| `FAND` | AND — ◐ Fiber route | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/route-composition.yaml) |
 | `DENS` | ✓ Log-concave density — Intrinsic support | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/BorellRepresentation.lean) |
+| `NORM` | ✓ Affine / isotropic — Reduction | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/Isotropic.lean) |
 | `FORMS` | ✓ Closed forms — Dirichlet property | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Energy/SmoothGradient/Dirichlet.lean) |
 | `ENERGY` | ✓ Canonical energy — = 2 × Cheeger energy | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Energy/Cheeger.lean) |
 | `CONST` | ✓ Poincaré frontend — Equivalence | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/Poincare.lean) |
@@ -301,7 +276,28 @@ These markers preserve the diagram assessment; this generator does not independe
 | `REV` | ○ h_S ≤ h_M | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/WIP/CheegerInfimum.lean) |
 | `EQ` | ◐ h_M = h_S | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/WIP/CheegerInfimum.lean) |
 | `FRONT` | ○ Density Cheeger — Identification | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex) |
+| `CB` | ○ Cheeger–Buser — Comparison | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex) |
 | `MINK` | ✓ Minkowski coarea | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/MinkowskiContent.lean) |
+| `EG` | ○ Tight-prefix — Carleson estimate | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/src/chapters/50-kls-routes.tex) |
+| `EC` | ○ Tight-window — Consumption | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/src/chapters/50-kls-routes.tex) |
+| `EAND` | AND — ○ Eldan route | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/route-composition.yaml) |
+| `SG` | ○ Full-damping — Occupation bound | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/src/chapters/50-kls-routes.tex) |
+| `SC` | ○ Spectral — Sufficiency | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/src/chapters/50-kls-routes.tex) |
+| `SAND` | AND — ○ Spectral route | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/route-composition.yaml) |
+| `MH` | ○ W₂ limit and — CMH comparison | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/src/chapters/50-kls-routes.tex) |
+| `MG` | ○ Bounded CMH — Recovery envelope | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/src/chapters/50-kls-routes.tex) |
+| `MT` | ✓ Affine constant — Translation invariance | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Poincare/CovarianceGradient/Translation.lean) |
+| `MC` | ○ Recovery-sequence — Sufficiency | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/src/chapters/50-kls-routes.tex) |
+| `MAND` | AND — ○ CMH route | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/route-composition.yaml) |
+| `ONE` | ✓ One-dimensional — Poincaré ≤ 4 Var | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/Line/SharpPoincare.lean) |
+| `FLOG` | ✓ Fiber log-concavity | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/ConditionalFiber.lean) |
+| `FP` | ✓ Fiber-bound — Energy comparison | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/ConditionalFiber/EnergyComparison.lean) |
+| `F4` | ✓ Fiber energy — ≤ 4 × gradient energy | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/ConditionalFiber.lean) |
+| `FC` | ✓ Fiber Dirichlet form | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/ConditionalFiber/Closed.lean) |
+| `FG` | ○ Universal — Frame bound | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/src/chapters/50-kls-routes.tex) |
+| `FAND` | AND — ◐ Fiber route | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/route-composition.yaml) |
+| `ANY` | OR — Any completed route | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/route-composition.yaml) |
+| `KLS` | ○ KLS — Dimension-free bound | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Statement.lean) |
 
 ## Provenance
 
@@ -309,7 +305,7 @@ Upstream revision: `34b5fcd57fef17089e781616005fe6d3641bd11e`. The selected upst
 20 records; this register is not an inventory of the entire upstream ledger.
 
 Canonical input digest: `1fc1e6084dc74aeea394830ddb1ed6ce770b0315c2d279bab8818b8c82482e27`.
-Diagram digest: `2591f64aeb05833d992b294814e9fbf2cef6cf8b5c3aa81e55d1940d4ca5d935`.
+Diagram digest: `e8bd9ea6c59c58deda6a0d7f4fe5d1e38d333cabbeb55eab4faf5afe3505e141`.
 
 Regenerate with `python3 research/progress/update.py` after staging the intended source and
 metadata updates. Unstaged unrelated metadata is deliberately excluded.

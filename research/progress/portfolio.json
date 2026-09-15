@@ -1,0 +1,120 @@
+{
+  "revision": "34b5fcd57fef17089e781616005fe6d3641bd11e",
+  "source": "https://github.com/numina-functional-inequalities/kls-conjecture-search/blob/34b5fcd57fef17089e781616005fe6d3641bd11e/research/program/portfolio.yaml",
+  "approaches": [
+    {
+      "id": "ap:eldan-trace-upgrade",
+      "family": "fam:eldan-localization",
+      "state": "active",
+      "objective": "Upgrade directional occupation control to trace scale for all balanced cuts, producing the tight-prefix absorptive trace estimate with every source and damping term matched to the scalar Riccati bound."
+    },
+    {
+      "id": "ap:eldan-weighted-excess",
+      "family": "fam:eldan-localization",
+      "state": "blocked",
+      "objective": "Propagate the perimeter excess with a global operator-norm covariance weight at the unit-rate scale."
+    },
+    {
+      "id": "ap:eldan-screened-supply",
+      "family": "fam:eldan-localization",
+      "state": "active",
+      "objective": "Charge the weighted excess only on the aligned screen where the trace term dominates, and return at most an absorbable fraction on its complement."
+    },
+    {
+      "id": "ap:eldan-stein-weighted",
+      "family": "fam:eldan-localization",
+      "state": "queued",
+      "objective": "Specify the tensor-stable replacement for the refuted weighted package and supply the matching localization-uniform almost-stability trace theorem modulo Jacobi zero modes."
+    },
+    {
+      "id": "ap:eldan-taming-splitting",
+      "family": "fam:eldan-localization",
+      "state": "queued",
+      "objective": "Define one bridge object carrying both the cut-free covariance index and the cut-indexed boundary geometry, and prove the covariance-taming or almost-splitting estimate from it."
+    },
+    {
+      "id": "ap:eldan-alignment",
+      "family": "fam:eldan-localization",
+      "state": "queued",
+      "objective": "Decide the incident-high product-cut model with a uniform analytic bound for fixed balanced product cuts, or a certified counterexample."
+    },
+    {
+      "id": "ap:spectral-occupation",
+      "family": "fam:mm-spectral",
+      "state": "active",
+      "objective": "Prove the universal-time full-damping source estimate uniformly on regular approximants, preserving tensor orientation under unwhitening."
+    },
+    {
+      "id": "ap:spectral-window-chain",
+      "family": "fam:mm-spectral",
+      "state": "completed",
+      "objective": "Close the occupation estimate on the published polylogarithmic covariance window through the initial-layer window chain."
+    },
+    {
+      "id": "ap:cmh-recovery-envelope",
+      "family": "fam:mm-cmh",
+      "state": "active",
+      "objective": "Construct, for every centered log-concave law, one regular compact-target moment-map recovery sequence with a universal bound on the CMH liminf."
+    },
+    {
+      "id": "ap:cmh-anisotropic-bootstrap",
+      "family": "fam:mm-cmh",
+      "state": "queued",
+      "objective": "Prove the anisotropic source-retention inequality that would bound the linear-test quotient through the exact isotropic-coordinate matrices, working from the weak column equation of the linear-sector gate-matrix spectral resolution without assuming its strong operator-domain form, and supplying the integrated corrector or nonlocal coercivity that matrix polarization alone cannot."
+    },
+    {
+      "id": "ap:cmh-uniform-approximants",
+      "family": "fam:mm-cmh",
+      "state": "queued",
+      "objective": "Bound the CMH constant uniformly along the certified regular approximant families, a stronger premise than the recovery envelope and not needed if that one is discharged."
+    },
+    {
+      "id": "ap:cmh-invariant-lift",
+      "family": "fam:mm-cmh",
+      "state": "queued",
+      "objective": "Derive the target-flat multiplier invariantly and reduce arbitrary split dimensions to controlled Codazzi components paired with named positive squares."
+    },
+    {
+      "id": "ap:cmh-square-root-commutator",
+      "family": "fam:mm-cmh",
+      "state": "queued",
+      "objective": "Control the complete Haar sum of square-root commutators on a common core, accounting for every retained positive and error term without double spending."
+    },
+    {
+      "id": "ap:cmh-solenoidal-perturbation",
+      "family": "fam:mm-cmh",
+      "state": "queued",
+      "objective": "Compute the exact second variation through the Hodge split at an admissible target-side perturbation of the saturating one-sided-exponential product, aimed at the radial Gamma factor rather than at the base of an exponential cone."
+    },
+    {
+      "id": "ap:cmh-gate-zero",
+      "family": "fam:mm-cmh",
+      "state": "active",
+      "objective": "Decide the necessary linear moment-map inequality, first in the sharp form of gate zero and then at the CMH constant itself, by an independently checked analytic argument or a genuine moment-map counterexample, using the certified third-moment decomposition of the linear sector and the exact exponential-cone battery as the equality set any argument must be tight on."
+    },
+    {
+      "id": "ap:fiber-frame-construction",
+      "family": "fam:conditional-fiber",
+      "state": "active",
+      "objective": "Construct one test-independent isotropic frame with a universal L2 gap on the maximal closed form domain."
+    },
+    {
+      "id": "ap:fiber-simplex-dual",
+      "family": "fam:conditional-fiber",
+      "state": "queued",
+      "objective": "Refute the all-frame gate with an exact uniform-simplex dual certificate of polynomial degree at least three whose objective tends to zero, the certified degree-two floors of the root-frame degree-two pencil identity having ruled out every degree-two refuter."
+    },
+    {
+      "id": "ap:cone-boundary-gap",
+      "family": "fam:novel-routes",
+      "state": "blocked",
+      "objective": "Establish a universal tangential Poincare gap for normalized cone measure, feeding the published Hardy boundary bridge."
+    },
+    {
+      "id": "ap:laplace-brenier-simplex",
+      "family": "fam:novel-routes",
+      "state": "blocked",
+      "objective": "Decide the rotation-optimized simplex transmission bound before registering a Laplace-Brenier route."
+    }
+  ]
+}

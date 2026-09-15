@@ -57,7 +57,7 @@ def generate():
            'Generated from staged canonical records. These are recorded proof/definition statuses,',
            'not a fresh Lean run or a remote CI receipt. A missing local proof means only that this',
            'register does not certify it; unregistered auxiliary progress appears in the diagram directory below.', '',
-           '**✓** Recorded Lean proof or implemented definition · **○** Not recorded as complete.',
+           '**✓** Formalized in Lean (proof or definition) · **○** Not recorded as complete.',
            'Upstream status is shown only where an explicit upstream mapping exists; no mapping is inferred',
            'from a similar title. Upstream `proved` does not mean Lean-proved.', '',
            '## Local nodes', '',
@@ -70,7 +70,7 @@ def generate():
         meta = tasks.get(name, {})
         math = ('Upstream: ' + claim['state']) if provenance.get('source') == 'kls-exploration' else ('Local classification: ' + meta.get('mathematics', 'definition' if node['kind'] == 'definition' else 'not separately classified'))
         complete = node['lean']['recorded'] and bool(node['lean']['declarations']) and (node['kind'] == 'definition' or node['proof_leanok'])
-        status = '✓ Definition implemented' if complete and node['kind'] == 'definition' else ('✓ Proof recorded' if complete else '○ Pending')
+        status = '✓ Formalized in Lean (definition)' if complete and node['kind'] == 'definition' else ('✓ Formalized in Lean' if complete else '○ Not yet formalized')
         excluded = claim.get('state') == 'refuted' or meta.get('mathematics') == 'refuted'
         if excluded:
             status = '— Excluded: refuted'
@@ -127,6 +127,12 @@ def main():
     args = parser.parse_args()
     output = ROOT / 'research/progress/STATUS.md'
     text = generate()
+    diagram = re.search(r'```mermaid\n(.*?)```', (ROOT / 'research/progress/README.md').read_text(), re.S)[1]
+    tree = ROOT / 'research/progress/TREE.mmd'
+    if args.check and (not tree.exists() or tree.read_text() != diagram):
+        raise SystemExit('Standalone diagram is stale; regenerate.')
+    if not args.check:
+        tree.write_text(diagram)
     if args.check:
         if not output.exists() or output.read_text() != text:
             raise SystemExit('Progress table is stale; regenerate after staging the intended inputs.')
