@@ -17,3 +17,6 @@
   overview and the detailed analytic diagram after proof updates or source-file moves.
 - Keep the progress tree and its surrounding documentation in English. Preserve unrelated work
   when preparing documentation commits.
+- Use the established progress notation: `✓` for completed local Lean proofs, `◐` for partial
+  local formalization, and `○` for pending work. Keep upstream mathematical or conditional-proof
+  provenance separate; it must not turn a pending local formalization into a completed result.
