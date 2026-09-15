@@ -1,6 +1,6 @@
 # kls-lean
 
-公共 API 的短名去除命名空间中的重复信息，见[命名指南](research/naming.md)。
+Public API short names omit information already expressed by their namespaces; see the [naming guide](research/naming.md).
 
 Lean formalization of functional inequalities toward the KLS conjecture, with separate
 statement review and proof stages. Lean and Mathlib are pinned to **v4.33.0**.
