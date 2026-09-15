@@ -30,7 +30,7 @@ See the [current handoff](HANDOFF.md) for precise scopes and remaining obligatio
 ## Proof progress tree
 
 The [progress hub](research/progress/README.md) keeps our
-[route diagrams](research/progress/ROUTES.md) and
+[route diagrams](research/progress/README.md#proof-progress-tree) and
 [node-by-node progress table](research/progress/STATUS.md) together.
 The diagrams use ✓ / ◐ / ○ for local Lean progress, with arrows pointing toward KLS.
 The table separates upstream mathematical status from local formalization and certificate records.

@@ -1,6 +1,6 @@
 # Formalization progress register
 
-[Progress hub](README.md) · [Route diagrams](ROUTES.md)
+[Progress hub](README.md) · [Route diagrams](README.md#proof-progress-tree)
 
 **75 local Blueprint nodes · 24 registered Lean certificates.**
 
@@ -305,7 +305,7 @@ Upstream revision: `34b5fcd57fef17089e781616005fe6d3641bd11e`. The selected upst
 20 records; this register is not an inventory of the entire upstream ledger.
 
 Canonical input digest: `1fc1e6084dc74aeea394830ddb1ed6ce770b0315c2d279bab8818b8c82482e27`.
-Diagram digest: `42addd8a81168324dac1efe12779b56373d82f8b106cf95065b5ae89e70c8d07`.
+Diagram digest: `7b1206bef12569866b0b08adc9fb956997f7cb440a616c2e6da5abc9a5801a72`.
 
 Regenerate with `python3 research/progress/update.py` after staging the intended source and
 metadata updates. Unstaged unrelated metadata is deliberately excluded.

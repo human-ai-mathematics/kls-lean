@@ -52,7 +52,7 @@ def generate():
     claims = {c['node']: c for c in routes['claims']}
     cert_by_label = {c['label']: ledger[i] for i, c in certificates.items()}
     digest = hashlib.sha256(b''.join(name.encode() + b'\0' + data for name, data in inputs.items())).hexdigest()
-    out = ['# Formalization progress register', '', '[Progress hub](README.md) · [Route diagrams](ROUTES.md)', '',
+    out = ['# Formalization progress register', '', '[Progress hub](README.md) · [Route diagrams](README.md#proof-progress-tree)', '',
            f'**{len(nodes)} local Blueprint nodes · {len(certificates)} registered Lean certificates.**', '',
            'Generated from staged canonical records. These are recorded proof/definition statuses,',
            'not a fresh Lean run or a remote CI receipt. A missing local proof means only that this',
@@ -105,7 +105,7 @@ def generate():
             'Derived from the reviewed diagrams, including results not registered as separate Blueprint nodes.',
             'These markers preserve the diagram assessment; this generator does not independently audit proofs.', '',
             '| Diagram node | Recorded progress | Source |', '| --- | --- | --- |']
-    diagram = (ROOT / 'research/progress/ROUTES.md').read_text()
+    diagram = (ROOT / 'research/progress/README.md').read_text()
     labels = dict(re.findall(r'^    (\w+)[\[{]"([^"\n]+)"', diagram, re.M))
     links = dict(re.findall(r'^    click (\w+) href "([^"]+)"', diagram, re.M))
     assert labels.keys() == links.keys()

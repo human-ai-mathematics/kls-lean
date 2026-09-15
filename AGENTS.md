@@ -1,7 +1,7 @@
 # Project documentation maintenance
 
-- Keep progress documentation together in `research/progress/`: `ROUTES.md` contains the
-  English Mermaid diagrams, `STATUS.md` the generated node register, and `README.md` their index.
+- Keep progress documentation together in `research/progress/`: `README.md` directly displays
+  the English Mermaid diagrams on the GitHub directory page; `STATUS.md` is the generated node register.
   The root README retains the entry link and current-status summary.
 - When proof progress changes, review both diagrams, their date, and the root current-status
   summary. After staging the intended proof/metadata changes, regenerate the register with
