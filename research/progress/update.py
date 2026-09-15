@@ -61,8 +61,15 @@ def generate():
            'Upstream status is shown only where an explicit upstream mapping exists; no mapping is inferred',
            'from a similar title. Upstream `proved` does not mean Lean-proved.', '',
            '## Local nodes', '',
-           '| Node ID | Upstream / mathematical record | Our Lean record | Certificate / statement |',
-           '| --- | --- | --- | --- |']
+           'Descriptions explain the mathematical statement; the Lean column separately reports completion.',
+           'See the linked statement for full hypotheses and scope.', '',
+           '| Node ID | Plain-English description | Upstream / mathematical record | Our Lean record | Certificate / statement |',
+           '| --- | --- | --- | --- | --- |']
+    descriptions = json.loads((ROOT / 'research/progress/node-descriptions.json').read_text())
+    if descriptions.keys() != nodes.keys():
+        raise ValueError('Update node-descriptions.json to match the Blueprint node inventory.')
+    if any(not isinstance(value, str) or not value.strip() for value in descriptions.values()):
+        raise ValueError('Every local node needs a nonempty English description.')
     pending = []
     for name, node in sorted(nodes.items()):
         claim = claims.get(name, {})
@@ -82,7 +89,7 @@ def generate():
         if cert:
             assert complete and cert['checked_by'] == 'lean', name
             source += ' · ' + link(cert['lean_solution'], 'Lean certificate')
-        out.append(f'| `{name}` | {cell(math)} | {status} | {source} |')
+        out.append(f'| `{name}` | {cell(descriptions[name])} | {cell(math)} | {status} | {source} |')
         if not complete and not excluded:
             pending.append((name, node, meta))
     out += ['', '## Pending-node dependencies and infrastructure', '',

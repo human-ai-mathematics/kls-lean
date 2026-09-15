@@ -360,7 +360,9 @@ individual Blueprint IDs.
 
 ## Updating after proof work
 
-1. Update the relevant source, ledger/Blueprint annotations, and task metadata with the appropriate
+1. Maintain the short English explanations in `node-descriptions.json` when adding, removing, or
+   changing a local Blueprint statement. These explanations describe the statement, not its proof status.
+   Update the relevant source, ledger/Blueprint annotations, and task metadata with the appropriate
    proof evidence. Review [the complete diagram](#proof-progress-tree), their links, and the next-step highlight.
 2. Stage only the intended proof and metadata changes, then run from the repository root:
 
