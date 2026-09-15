@@ -88,12 +88,90 @@ flowchart LR
     class C,D,D22 partial;
     class ROOT,C4,D2,D226,D23 todo;
     class D225 focus;
+
+    click ROOT href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Statement.lean" "KLS Formalization — ○ Dimension-free bound remains open" _blank
+    click A href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/Isotropic.lean" "✓ Formulation and Reductions" _blank
+    click A1 href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/BorellRepresentation.lean" "Log-concave densities — and intrinsic affine support" _blank
+    click A2 href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/Isotropic.lean" "Centering and covariance whitening" _blank
+    click A3 href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/Isotropic.lean" "Affine ⇔ Covariance-normalized ⇔ Isotropic" _blank
+    click B href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Energy/README.md" "✓ Analysis and Energy Foundations" _blank
+    click B1 href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Energy/SmoothGradient/Closed.lean" "Closed quadratic forms" _blank
+    click B2 href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Energy/SmoothGradient/Dirichlet.lean" "Normal contraction estimates — → Dirichlet property" _blank
+    click B3 href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Energy/Cheeger.lean" "For log-concave densities — Canonical energy = 2 × Cheeger energy" _blank
+    click C href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/ConditionalFiber.lean" "◐ Conditional-Fiber Route" _blank
+    click C1 href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/Line/SharpPoincare.lean" "✓ One-dimensional log-concave bound — Poincaré constant ≤ 4 × variance" _blank
+    click C2 href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/ConditionalFiber.lean" "✓ Almost-everywhere fiber log-concavity" _blank
+    click C3 href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/ConditionalFiber.lean" "✓ Fiber energy ≤ 4 × gradient energy" _blank
+    click C4 href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/src/chapters/50-kls-routes.tex" "○ Key frame bound — Dimension-free control needed" _blank
+    click D href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/CheegerInfimum.lean" "◐ Isoperimetric Comparison — Current development focus" _blank
+    click D1 href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/CheegerInfimum.lean" "✓ Forward inequality: h_M ≤ h_S" _blank
+    click D11 href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/GaussGreen.lean" "✓ Global Gauss–Green theorem" _blank
+    click D12 href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/PerimeterRecovery.lean" "✓ Smooth recovery sequences" _blank
+    click D13 href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/MinkowskiContent.lean" "✓ Minkowski coarea inequality" _blank
+    click D2 href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/WIP/CheegerInfimum.lean" "○ Reverse inequality: h_S ≤ h_M" _blank
+    click D21 href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/SmoothSard.lean" "✓ Smooth Sard theorem — Regular superlevel sets" _blank
+    click D22 href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/research/decisions/2026-09-15-weighted-coarea-route.md" "◐ Weighted Coarea Formula" _blank
+    click D221 href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/LevelSetMeasurable.lean" "✓ Measurability of level-set integrals" _blank
+    click D222 href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/OpenGraphIntegral.lean" "✓ Weighted graph area on open domains" _blank
+    click D223 href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/CriticalSlice.lean" "✓ Critical slices are null — for almost every level" _blank
+    click D224 href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/RegularCoarea.lean" "✓ Coarea on regular open domains — Parametric implicit functions and substitution" _blank
+    click D225 href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/research/decisions/2026-09-15-weighted-coarea-route.md#l11" "○ Assemble the general C¹ formula — Next step" _blank
+    click D226 href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/research/decisions/2026-09-15-weighted-coarea-route.md#l12" "○ Extend to Lipschitz functions" _blank
+    click D23 href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/WIP/CheegerInfimum.lean" "○ Smooth coarea inequality — Combine with distance cutoffs" _blank
+    click E href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Poincare/README.md" "✓ Benchmark Results" _blank
+    click E1 href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Poincare/Gaussian/Real.lean" "Sharp one-dimensional Gaussian constant" _blank
+    click E2 href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Poincare/FiniteProduct/Tensorization.lean" "Finite Poincaré tensorization" _blank
 ```
+
+Click any node to open its Lean source or documentation in a new tab. Open nodes link to
+unproved obligations or route plans. Links follow `main` so they stay aligned with the current tree.
+If your Markdown viewer disables diagram links, use the directory below.
+
+<details>
+<summary>Node links: Lean sources and documentation</summary>
+
+| Node | Destination |
+| --- | --- |
+| KLS Formalization — ○ Dimension-free bound remains open | [Open Lean source](formalization/FunctionalInequalities/KLS/Statement.lean) |
+| ✓ Formulation and Reductions | [Open Lean source](formalization/FunctionalInequalities/KLS/LogConcave/Isotropic.lean) |
+| Log-concave densities — and intrinsic affine support | [Open Lean source](formalization/FunctionalInequalities/KLS/LogConcave/BorellRepresentation.lean) |
+| Centering and covariance whitening | [Open Lean source](formalization/FunctionalInequalities/KLS/LogConcave/Isotropic.lean) |
+| Affine ⇔ Covariance-normalized ⇔ Isotropic | [Open Lean source](formalization/FunctionalInequalities/KLS/LogConcave/Isotropic.lean) |
+| ✓ Analysis and Energy Foundations | [Open documentation](formalization/FunctionalInequalities/Energy/README.md) |
+| Closed quadratic forms | [Open Lean source](formalization/FunctionalInequalities/Energy/SmoothGradient/Closed.lean) |
+| Normal contraction estimates — → Dirichlet property | [Open Lean source](formalization/FunctionalInequalities/Energy/SmoothGradient/Dirichlet.lean) |
+| For log-concave densities — Canonical energy = 2 × Cheeger energy | [Open Lean source](formalization/FunctionalInequalities/Energy/Cheeger.lean) |
+| ◐ Conditional-Fiber Route | [Open Lean source](formalization/FunctionalInequalities/KLS/ConditionalFiber.lean) |
+| ✓ One-dimensional log-concave bound — Poincaré constant ≤ 4 × variance | [Open Lean source](formalization/FunctionalInequalities/KLS/LogConcave/Line/SharpPoincare.lean) |
+| ✓ Almost-everywhere fiber log-concavity | [Open Lean source](formalization/FunctionalInequalities/KLS/LogConcave/ConditionalFiber.lean) |
+| ✓ Fiber energy ≤ 4 × gradient energy | [Open Lean source](formalization/FunctionalInequalities/KLS/LogConcave/ConditionalFiber.lean) |
+| ○ Key frame bound — Dimension-free control needed | [Open documentation](formalization/blueprint/src/chapters/50-kls-routes.tex) |
+| ◐ Isoperimetric Comparison — Current development focus | [Open Lean source](formalization/FunctionalInequalities/KLS/Geometry/CheegerInfimum.lean) |
+| ✓ Forward inequality: h_M ≤ h_S | [Open Lean source](formalization/FunctionalInequalities/KLS/Geometry/CheegerInfimum.lean) |
+| ✓ Global Gauss–Green theorem | [Open Lean source](formalization/FunctionalInequalities/KLS/Geometry/GaussGreen.lean) |
+| ✓ Smooth recovery sequences | [Open Lean source](formalization/FunctionalInequalities/KLS/Geometry/PerimeterRecovery.lean) |
+| ✓ Minkowski coarea inequality | [Open Lean source](formalization/FunctionalInequalities/KLS/Geometry/MinkowskiContent.lean) |
+| ○ Reverse inequality: h_S ≤ h_M | [Open Lean source](formalization/FunctionalInequalities/KLS/WIP/CheegerInfimum.lean) |
+| ✓ Smooth Sard theorem — Regular superlevel sets | [Open Lean source](formalization/FunctionalInequalities/Analysis/SmoothSard.lean) |
+| ◐ Weighted Coarea Formula | [Open documentation](research/decisions/2026-09-15-weighted-coarea-route.md) |
+| ✓ Measurability of level-set integrals | [Open Lean source](formalization/FunctionalInequalities/KLS/Geometry/LevelSetMeasurable.lean) |
+| ✓ Weighted graph area on open domains | [Open Lean source](formalization/FunctionalInequalities/Analysis/OpenGraphIntegral.lean) |
+| ✓ Critical slices are null — for almost every level | [Open Lean source](formalization/FunctionalInequalities/KLS/Geometry/CriticalSlice.lean) |
+| ✓ Coarea on regular open domains — Parametric implicit functions and substitution | [Open Lean source](formalization/FunctionalInequalities/KLS/Geometry/RegularCoarea.lean) |
+| ○ Assemble the general C¹ formula — Next step | [Open documentation](research/decisions/2026-09-15-weighted-coarea-route.md#l11) |
+| ○ Extend to Lipschitz functions | [Open documentation](research/decisions/2026-09-15-weighted-coarea-route.md#l12) |
+| ○ Smooth coarea inequality — Combine with distance cutoffs | [Open Lean source](formalization/FunctionalInequalities/KLS/WIP/CheegerInfimum.lean) |
+| ✓ Benchmark Results | [Open documentation](formalization/FunctionalInequalities/Poincare/README.md) |
+| Sharp one-dimensional Gaussian constant | [Open Lean source](formalization/FunctionalInequalities/Poincare/Gaussian/Real.lean) |
+| Finite Poincaré tensorization | [Open Lean source](formalization/FunctionalInequalities/Poincare/FiniteProduct/Tensorization.lean) |
+
+</details>
 
 **Maintenance:** Whenever proof progress changes, update this tree, its date, and the current
 status above in the same change as the proof and its verification records. Keep labels in English,
 preserve the exact mathematical scope, and move completion markers or the next-step highlight only
-when supported by the current source and verification evidence.
+when supported by the current source and verification evidence. Keep every node link and the
+link directory aligned with its current source or document, including after file moves.
 
 ## Mathematical API organization (2026-09-08)
 
