@@ -21,6 +21,316 @@ The public frontends are `SmoothTest`, `SmoothGradient`, `WeightedGradient`,
 `CovarianceGradient`, and `LocalSlope`; `Ambient` and `Intrinsic` identify the carrier construction.
 Probability pushforwards and L² pullbacks occupy their own layers. See [the naming guide](research/naming.md) and [the migration record](research/decisions/2026-09-08-mathematical-api-organization.md).
 
+`FunctionalInequalities/Analysis/` (added 2026-09-12) holds KLS-independent geometric analysis:
+statements about a finite-dimensional real inner-product space that would be legitimate Mathlib
+targets on their own. `Analysis/LevelSet.lean` is its first module (Prékopa--Leindler,
+Brunn--Minkowski, the isodiametric inequality, the Hausdorff normalization, and finiteness of
+`μH[n-1]` near a regular level set); `Analysis/AreaFormula.lean` proves the codimension-one area
+formula for `C¹` graphs; `Analysis/Divergence.lean` carries `div F = tr (DF)` with the
+rank-one trace identity; and `Analysis/ImplicitGraph.lean` (added 2026-09-13) proves the local
+`C^∞` graph representation of a regular level set, through the `C^k` inverse function theorem
+rather than Mathlib's implicit function theorem, together with the gradient identity along the
+graph and the area formula for a translated graph. `Analysis/SubgraphDivergence.lean` and
+`Analysis/GraphIntegral.lean` (added 2026-09-13) prove the divergence formula on the region below
+a `C¹` graph and the weighted change of variables that turns the area formula into an integral
+identity, and `Analysis/PartitionOfUnity.lean` (added 2026-09-13) proves the finite smooth
+decomposition of a compactly supported map subordinate to an open cover of its support. The
+layering rule this enforces: base
+definitions go below (`KLS/Geometry/SurfaceMeasure.lean`), general geometry in the middle, and the
+perimeter application layer on top, so an application module can import a general theorem without
+the general theorem importing the application. The `SmoothDomain`-specific consequences of the
+general graph geometry — `outwardNormal`, the tangent hyperplane, the boundary chart and its
+surface-measure identity — live in the application layer,
+`KLS/Geometry/BoundaryChart.lean`, which is also `sorry`-free, the chart-local Gauss--Green
+identity (for a field whose support lies in one chart cylinder) in
+`KLS/Geometry/LocalGaussGreen.lean`, and the **global** Gauss--Green theorem for an arbitrary
+compactly supported `C¹` field in `KLS/Geometry/GaussGreen.lean`, all likewise `sorry`-free. A
+completed obligation therefore leaves `KLS/WIP/` rather than staying there with a filled body: the
+global theorem, the local finiteness of the restricted surface measure and the
+boundary-integrability lemmas moved down on 2026-09-13, keeping their names and statements.
+The remaining unfinished obligations (coarea, Sard) stay in `KLS/WIP/`; nothing in `Analysis/` may
+carry a `sorry`. See
+[the integration record](research/decisions/2026-09-12-perimeter-interface-integration.md),
+[the boundary-chart record](research/decisions/2026-09-13-boundary-chart-and-area-interface.md),
+[the subgraph record](research/decisions/2026-09-13-subgraph-divergence-and-local-gauss-green.md)
+and [the global Gauss--Green record](research/decisions/2026-09-13-global-gauss-green.md).
+
+## Smooth-domain and mollification layering (2026-09-13)
+
+The current dependency split replaces the former `BoundaryChart → WIP/RelativePerimeter` edge.
+`KLS/Geometry/SmoothDomain.lean` now owns the domain structure, local defining-function API,
+normalization check, homotheties, local boundary finiteness and Haar-null frontier.
+`BoundaryChart` imports these foundations directly. `Geometry/Mollification.lean` owns the
+indicator convolution, its local integrability, smoothness, Lipschitz property and `[0,1]` range.
+The previously duplicated private convolution and integrability helpers are now single public
+interfaces in that module. Names are preserved without compatibility aliases.
+
+The scalar Gauss--Green formula belongs beside the vector theorem in `Geometry/GaussGreen.lean`.
+`Geometry/MollifiedBoundary.lean` combines it with `Mollification` to prove the negative boundary
+formula and `SmoothDomain.enorm_gradient_mollified_le`. All 15 local modules in this consequence's
+import closure are WIP-free. Coarea and Sard stay in `WIP/AnalyticPrerequisites`; the two remaining
+perimeter recovery obligations stayed, at that date, in `WIP/RelativePerimeter`, which imported
+the proved consequence; that layer has since been emptied and removed.
+This changes no mathematical scope or surface-measure normalization and adds no certificate.
+The [decision](research/decisions/2026-09-13-mollified-gradient-bound.md) records the proof and the
+remaining weighted homothety, support-localization and recovery dependencies.
+
+## Quantitative relative-perimeter layer (2026-09-13)
+
+`Geometry/SurfaceHomothety.lean` now proves the normalized measure pushforward under an inverse
+homothety and the resulting weighted set/boundary lintegral change of variables. The unique
+homothety homeomorphism is public in `Geometry/SmoothDomain.lean`, alongside the shared frontier
+transport identity. A total-boundary-mass equality is not used as a substitute for weighted
+change of variables.
+
+`LogConcave/DensityBounds.lean` holds the former WIP density bounds and the positivity-interior
+inclusion into the measure-support interior. It depends only on BorellRepresentation.
+`Geometry/RelativePerimeter.lean` combines those density estimates, SurfaceHomothety and
+MollifiedBoundary to prove the original outward-dilation gradient-integral bound. The perimeter
+definition and indicator-homothety convergence moved there with unchanged names. Its 29 local
+imports contain no WIP module; `WIP/RelativePerimeter` retained, at that date, only the
+recovery-sequence obligation, and the other analytic WIP modules remain separate. No certificate was added.
+See the [decision and recovery dependencies](research/decisions/2026-09-13-dilated-gradient-integral.md).
+
+## Perimeter recovery layer (2026-09-13)
+
+`Geometry/PerimeterRecovery.lean` is the hole-free application layer on top of
+`Geometry/RelativePerimeter.lean`. It owns the two mollification-convergence interfaces
+(`SmoothDomain.mollifiedIndicator_eq_indicator_of_const`,
+`SmoothDomain.exists_bump_lintegral_enorm_mollifiedIndicator_sub_lt`) and the proved
+`RelativePerimeter.exists_smooth_recovery_sequence`. Its 30 local imports contain no WIP module.
+`LogConcave/DensityBounds.lean` gained `IsBorellDensity.absolutelyContinuous` and made the
+existing ball lemma public rather than duplicating it.
+
+A completed obligation leaves `KLS/WIP/` instead of staying there with a filled body, and an
+emptied WIP layer is removed rather than kept as a shim: `KLS/WIP/RelativePerimeter.lean` was
+deleted once its last obligation moved down, and `KLS/WIP/CheegerInfimum.lean` now imports
+`Geometry/PerimeterRecovery` directly. Names, namespaces, the `surfaceMeasure` normalization and
+the `volume` reference are unchanged, and no certificate was added. The remaining WIP obligations
+are coarea and Sard in `WIP/AnalyticPrerequisites` and the eight Cheeger-infimum bodies.
+See the [recovery decision](research/decisions/2026-09-13-smooth-recovery-sequence.md).
+
+## Superlevel rewiring (2026-09-15)
+
+A completed obligation leaves `KLS/WIP/`: `SmoothDomain.ae_exists_superlevel` and
+`SmoothDomain.frontier_superlevel_subset` moved to the new hole-free
+`KLS/Geometry/RegularSuperlevel.lean`, with `pp.all` signatures byte-identical before and after.
+The packaging was deliberately **not** returned to `Geometry/SmoothDomain.lean`, which the design
+keeps independent of Sard; it sits one layer above, importing `Geometry/SmoothDomain` and
+`Analysis/SmoothSard`. `WIP/CheegerInfimum.lean` swapped its `WIP/AnalyticPrerequisites` import for
+the new module and still compiles, so the sharp Sard and coarea holes now live in a file that no
+module imports. Hole count is unchanged: a filled body moved, not a direct hole. See the
+[decision](research/decisions/2026-09-15-superlevel-rewire.md).
+
+## Smooth Sard (2026-09-15)
+
+`Analysis/SmoothSard.lean` now carries the `C^∞` Sard theorem itself, proved by induction on the
+dimension over the ingredients it already owned. The design choice worth recording is that the
+induction stays **global**: rather than relaxing the flat layer and the order-`n` remainder to open
+domains, the module proves one small extension lemma, `exists_contDiff_eventuallyEq`, and replaces
+each local graph by a globally smooth map agreeing with it near the base parameter. The already
+proved `volume_image_flat_pow_univ_eq_zero` is then used unchanged. The module states the smooth
+theorem only; the sharp `C^n` `Analysis.sard` in `KLS/WIP/AnalyticPrerequisites.lean` keeps its
+text and its direct-hole status, and no WIP file was rewired. See the
+[decision](research/decisions/2026-09-15-smooth-sard.md).
+
+## Smooth Sard ingredients (2026-09-15)
+
+`Analysis/SmoothSard.lean` owns the three descent ingredients `critical_subset_layers`,
+`exists_flat_direction` and `exists_local_graph`; its only local import is
+`Analysis/QuadraticCover`. The chart in `exists_local_graph` is the inverse function theorem
+applied to the map replacing one coordinate by the defining function, so no manifold layer and no
+second implicit-function framework enters the repository, and `Analysis/ImplicitGraph.lean` — which
+needs `C^∞` data with an inner-product graph splitting — is deliberately not reused. The module is
+explicitly a set of ingredients: it states no Sard theorem, and the sharp `C^n` `Analysis.sard`
+keeps its text and its direct-hole status. See the
+[decision](research/decisions/2026-09-15-smooth-sard-ingredients.md).
+
+## Higher-order flat layer (2026-09-15)
+
+The order and the dimension are now parameters rather than the literal `2`.
+`Analysis/TaylorRemainder.lean` owns `Analysis.exists_uniform_pow_remainder`, proved by induction
+on the order through `fderiv f`; the vector-valued induction runs in a private same-universe
+auxiliary lemma so the public real-valued statement keeps arbitrary universes and needs no
+finite-dimensionality. `Analysis/QuadraticCover.lean` owns
+`Analysis.volume_image_eq_zero_of_oscillation_pow` over `Fintype.piFinset`, plus the fully flat
+layer in dimension `n`. A generalized statement replaces its own special case rather than sitting
+beside it: `exists_uniform_quadratic_remainder` and
+`volume_image_eq_zero_of_quadratic_oscillation` are corollaries with byte-identical statements, so
+no client moved and no proof content is duplicated. The dimension-`n` restriction to the fully
+flat layer is explicit in the names; general `Analysis.sard` is untouched. See the
+[decision](research/decisions/2026-09-15-higher-order-flat-layer.md).
+
+## Planar Sard analysis layer (2026-09-14)
+
+`Analysis/PlanarSard.lean` owns `Analysis.volume_image_nonflat_eq_zero` and `Analysis.sard_plane`;
+its only local import is `Analysis/QuadraticCover`. The nonflat layer is deliberately built from a
+mean-value inequality with linear principal part plus elementary `Fin 2` linear algebra rather than
+from an implicit function theorem: `Analysis/ImplicitGraph.lean` requires `C^∞` and an inner
+product and does not apply to the merely `C¹` map `Du`, and no new implicit-function framework is
+introduced. Compactness is dissolved by Lindelöf, so the public statements carry no `K`. The
+dimension-two restriction is kept in the name, and general `Analysis.sard` is untouched. See the
+[decision](research/decisions/2026-09-14-planar-sard.md).
+
+## Planar covering analysis layer (2026-09-14)
+
+`Analysis/QuadraticCover.lean` owns `Analysis.volume_image_eq_zero_of_quadratic_oscillation` and
+`Analysis.volume_image_flat_eq_zero`. Its only local import is `Analysis/TaylorRemainder`; it adds
+no outer-measure or covering framework, using Mathlib's `Finset` subadditivity, `Real.volume_Icc`,
+integer floors and `ENNReal.le_of_forall_pos_le_add` directly. The covering lemma keeps the
+proposed scope verbatim — dimension two, bounded set, uniform quadratic oscillation — and assumes
+no measurability anywhere. The flat-layer corollary is deliberately the **subset** form
+`{x ∈ K | Du x = 0 ∧ D²u x = 0}`, never "all of K is flat"; its whole-plane version is a countable
+exhaustion, not a new argument. No migration or certificate expansion.
+The [decision](research/decisions/2026-09-14-planar-quadratic-cover.md) separates this planar layer
+from the planar nonflat layer and from general Sard, both still unproved.
+
+## Uniform remainder analysis layer (2026-09-14)
+
+`Analysis/TaylorRemainder.lean` owns `Analysis.exists_uniform_quadratic_remainder`, independent of
+Sard and KLS, with Mathlib-only imports. The compact-base, flat-point C² estimate is proved for
+any real normed domain, without finite-dimensionality or completeness. It combines compact
+external-neighbourhood uniform continuity of D²u with two convex mean-value bounds. One δ works
+for all flat x∈K and all nearby y, including y outside K. No migration or certificate expansion.
+The [decision](research/decisions/2026-09-14-uniform-quadratic-remainder.md) separates this proved
+estimate from the still-missing planar covering/null-image lemma and general Sard.
+
+## Independent low-dimensional Sard layer (2026-09-14)
+
+`Analysis/Sard.lean` owns `Analysis.sard_of_finrank_le_one`, with Mathlib-only imports and no WIP
+edge. Its general real normed-space statement assumes finrank ≤ 1 and C^(finrank), including C⁰
+in dimension zero. It proves nullity of the critical **values**, without domain measure or inner
+product assumptions. Dimension one uses a continuous linear equivalence ℝ → V and zero-derivative
+chain rule; the determinant occurs only for the resulting ℝ endomorphism. General `Analysis.sard`
+stays unchanged in WIP with `sorryAx`, as do its consumers. There is no compatibility alias,
+module migration or certificate expansion. See the
+[proof and corrected next obligation](research/decisions/2026-09-14-low-dimensional-sard.md).
+
+## Regular superlevel sets and the Sard packaging (2026-09-14)
+
+`KLS/Geometry/SmoothDomain.lean` — the module that already owns the structure, the local
+defining-function API and the `empty` / `univ` / `homothety` constructors — gains one more
+constructor, `SmoothDomain.ofSuperlevel`, with its `ofSuperlevel_carrier`. It is hole-free and
+depends on the standard three axioms only. The layering rule it follows is the one this document
+already states: a completed obligation is proved in the lowest layer that can carry it, and the
+`sorryAx`-dependent application stays in `KLS/WIP/`.
+
+The hypothesis is deliberately the weakest one the structure needs: nonvanishing of `fderiv ℝ u` on
+`frontier {x | t < u x}` only. Requiring the whole level set `{x | u x = t}` to be regular, or the
+derivative to be nonzero on the whole space, would be a strictly stronger interface with no gain,
+and would make the degenerate cases need extra hypotheses instead of falling out. The defining data
+is `W = {y | fderiv ℝ u y ≠ 0}`, open as the preimage of `{0}ᶜ` under the continuous
+`y ↦ fderiv ℝ u y`, and `φ = t - u`, which matches the structure's convention that the domain is the
+**negative** sublevel set of `φ` inside `W`: `carrier ∩ W = {y ∈ W | φ y < 0}` is exactly
+`t - u y < 0 ↔ t < u y`. Empty frontier, empty carrier, full carrier and dimension zero need no
+branch and no extra hypothesis, because in each of them the frontier is empty and the
+`exists_defining` premise is vacuous. Nothing here builds a manifold framework; the construction
+needs only `NormedAddCommGroup` and `NormedSpace ℝ`.
+
+`SmoothDomain.ae_exists_superlevel` stays in `KLS/WIP/CheegerInfimum.lean`, which is where a
+statement that depends on `Analysis.sard` belongs. It now has a proof body — `filter_upwards` on
+`Analysis.ae_forall_fderiv_ne_zero`, the order reduction discharged by `ENat.LEInfty.out` rather
+than `le_top`, then `ofSuperlevel` through `frontier_superlevel_subset` — but it **still inherits
+`sorryAx`**, so a filled body is not a certified result and it is not listed as one. No module
+migrated: `frontier_superlevel_subset`'s only consumer is the wrapper in the same file, and the
+frontier-form hypothesis means the hole-free construction never needs it, so it was only reordered
+above its consumer with its `omit ... in` prefix. The WIP file gains one import of
+`KLS/WIP/AnalyticPrerequisites`, a WIP-to-WIP edge that leaves the hole-free layer untouched.
+No certificate was added and no mathematical scope changed.
+See the [decision](research/decisions/2026-09-14-regular-superlevel-smooth-domain.md).
+
+## Distance-cutoff layer (2026-09-13)
+
+`KLS/Geometry/DistanceCutoff.lean` is hole-free and imports **no local module at all**: its import
+closure is Mathlib only, like `Geometry/MinkowskiContent.lean`. It owns the complete distance-cutoff
+basis — `Isoperimetry.distanceCutoff` with its range, Lipschitz and boundary-value lemmas, and the
+`L¹(ν)` convergence `tendsto_distanceCutoff_indicator` — all migrated verbatim from
+`KLS/WIP/CheegerInfimum.lean` with byte-identical `pp.all` signatures, together with the proved
+gradient estimate `Isoperimetry.lintegral_enorm_gradient_distanceCutoff_le`.
+
+The estimate is pointwise rather than almost-everywhere: the cutoff attains a global extremum on
+each of its two constant-value sets, so `IsLocalMax.fderiv_eq_zero` and
+`IsLocalMin.fderiv_eq_zero` — neither of which needs a differentiability hypothesis, since Mathlib
+defines `fderiv` and `gradient` to be zero at points of non-differentiability — kill the gradient at
+every point of them, endpoint level sets included. That is why the module needs no Rademacher
+theorem, no Lebesgue density theorem and no absolute continuity, and why its import closure can stay
+empty. The published interface is unchanged all the same: the Haar measure and `hac` remain in the
+signature, silenced by two declaration-local linter options rather than removed.
+
+The migration was decided by actual dependency, not by moving a whole WIP file:
+`tendsto_distanceCutoff_indicator` came along because it is hole-free and its only dependencies are
+the four cutoff lemmas, so leaving it behind would split one API across two modules, while
+`exists_smooth_approximation_lipschitz` stayed in `KLS/WIP/CheegerInfimum.lean` — already proved,
+but part of the smooth-replacement interface and carrying an `Energy.Euclidean` import that does not
+belong in a geometry module. No certificate was added and no mathematical scope changed.
+See the [decision](research/decisions/2026-09-13-distance-cutoff-gradient-integral.md).
+
+## One-sided Cheeger comparison layer (2026-09-13)
+
+`KLS/Geometry/CheegerInfimum.lean` is hole-free and its 32-module local import closure contains no
+work-in-progress module: it sits on the two finished chains `Geometry/PerimeterRecovery` (the smooth
+recovery sequence) and `Geometry/MinkowskiConstant` (the integrated Minkowski coarea bound). It owns
+`Isoperimetry.smoothConstant` with `smoothConstant_eq_top_of_subsingleton`, the layer-cake identity
+`lintegral_measure_symmDiff_superlevel`, the balance estimate
+`min_measure_le_add_measure_symmDiff`, the convergence `tendsto_lintegral_min_superlevel` — all five
+migrated verbatim from `KLS/WIP/CheegerInfimum.lean` with byte-identical `pp.all` signatures — and
+the proved `Isoperimetry.minkowskiConstant_le_smoothConstant`.
+
+Exactly one direction is proved. `smoothConstant_le_minkowskiConstant`, which still needs Sard, the
+weighted coarea formula and the distance-cutoff gradient estimate, and the equality
+`minkowskiConstant_eq_smoothConstant` stay in `KLS/WIP/CheegerInfimum.lean` together with the
+affine-support transport that consumes them; nothing in the hole-free layer claims the two Cheeger
+infima agree. `Geometry/MinkowskiConstant.lean` was deliberately left untouched, so no recovery,
+relative-perimeter or WIP dependency entered that base layer, whose closure is still the single
+`Geometry/MinkowskiContent`. The migrated set is the minimum the new theorem actually uses; the
+distance cutoffs, which only the reverse direction needs, stayed behind. No certificate was added,
+and no mathematical scope changed.
+See the [decision](research/decisions/2026-09-13-cheeger-infimum-one-sided.md).
+The [audit correction](research/decisions/2026-09-13-cutoff-route-audit-correction.md)
+supersedes its cutoff route: extrema and Lipschitz derivative bounds apply pointwise,
+so Rademacher and `hac` are unnecessary for this estimate; retain the original signature.
+`SmoothDomain.ae_exists_superlevel` now has a body but still inherits `sorryAx` through general Sard.
+
+## Minkowski constant layer (2026-09-13)
+
+`KLS/Geometry/MinkowskiConstant.lean` is hole-free and its local import closure is the single
+hole-free `KLS/Geometry/MinkowskiContent.lean`. It owns the Minkowski Cheeger infimum
+`Isoperimetry.minkowskiConstant` and `minkowskiConstant_eq_top_of_subsingleton`, migrated verbatim
+from `KLS/WIP/CheegerInfimum.lean` with byte-identical `pp.all` signatures; the multiplied form of
+the defining infimum `minkowskiConstant_mul_min_le`; the almost-everywhere agreement
+`ae_measure_superlevel_lt_eq_le` of strict and closed superlevel masses, stated for any `SFinite`
+measure and any measurable function; the measurability `measurable_min_measure_superlevel` of the
+superlevel balance for an arbitrary function; and the proved integrated coarea bound
+`Isoperimetry.minkowskiConstant_mul_lintegral_min_superlevel_le`.
+
+`minkowskiConstant` moved down this round for the reason the layering rule prescribes: the finished
+theorem must be hole-free, and a hole-free module may not import the work-in-progress layer.
+`measurable_min_measure_superlevel` was extracted from the inlined measurability step of
+`tendsto_lintegral_min_superlevel`, and that consumer was migrated to the new lemma rather than the
+proof being duplicated. `smoothConstant`, the layer-cake identities, the distance cutoffs and the
+two unfinished comparisons stay in the application layer `KLS/WIP/CheegerInfimum.lean`, which now
+imports the new module and no longer imports `MinkowskiContent` directly. No certificate was added,
+and no mathematical scope changed.
+See the [decision](research/decisions/2026-09-13-minkowski-constant-coarea-product.md).
+
+## Minkowski content layer (2026-09-13)
+
+`KLS/Geometry/MinkowskiContent.lean` is hole-free and imports **no local module at all**: its
+import closure is Mathlib only. It owns the coordinate-space outer Minkowski content
+`Isoperimetry.minkowskiContent` (open thickenings, `ENNReal` truncated subtraction, `𝓝[>] 0`
+liminf), the migrated `measure_closure_eq_of_minkowskiContent_ne_top`, the local supremum
+`Isoperimetry.ballSup` with its Lipschitz transfer and near-neighbour witness, and the proved
+Minkowski coarea inequality `Isoperimetry.lintegral_minkowskiContent_superlevel_le`.
+
+The definition keeps its `KLS.Isoperimetry` namespace and full name, so the migration renames
+nothing and needs no alias; that is why the module sits in `KLS/Geometry/` rather than in
+`Analysis/`, even though the theorem is KLS-independent — the zero-module import closure is the
+honest record of that independence. The unfinished Cheeger-infimum comparisons
+(`minkowskiConstant`, `smoothConstant`, the two product inequalities and the two one-sided
+comparisons) stay in the application layer `KLS/WIP/CheegerInfimum.lean`, which now imports the
+new module. No certificate was added and no surface-measure normalization changed. See the
+[coarea decision](research/decisions/2026-09-13-minkowski-coarea-inequality.md).
+
 ## Layered `L²` and energy foundation (2026-09-04)
 
 Downstream applications and smoke tests may import `FunctionalInequalities.Poincare.Foundation`;

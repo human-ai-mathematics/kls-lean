@@ -1,0 +1,157 @@
+{
+  "scope": "Independent local audit, not a formal certificate. This round proves the planar second-order flat layer only. The planar nonflat layer, general Sard, weighted coarea and the reverse Cheeger comparison remain unproved; general Sard and both consumers retain sorryAx.",
+  "axioms": {
+    "FunctionalInequalities.Analysis.volume_image_eq_zero_of_quadratic_oscillation": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "FunctionalInequalities.Analysis.volume_image_flat_eq_zero": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "QuadraticCoverAudit.planar_cover": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "QuadraticCoverAudit.empty_set": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "QuadraticCoverAudit.singleton": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "QuadraticCoverAudit.constant_on_bounded": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "QuadraticCoverAudit.flat_layer": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "QuadraticCoverAudit.constant_flat": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "FunctionalInequalities.Analysis.volume_image_flat_univ_eq_zero": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "QuadraticCoverAudit.flat_layer_univ": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "QuadraticCoverAudit.constant_flat_univ": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "QuadraticCoverAudit.cubic_contDiff": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "QuadraticCoverAudit.cubic_flat_layer": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "QuadraticCoverAudit.cubic_closedBall": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "QuadraticCoverAudit.cubic_fderiv": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "QuadraticCoverAudit.cubic_nonflat": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "QuadraticCoverAudit.cubic_flat_point": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "QuadraticCoverAudit.cubic_nonflat_mem": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "QuadraticCoverAudit.cubic_ball_layer_proper": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ]
+  },
+  "wip_holes": [
+    3,
+    3,
+    5
+  ],
+  "scope_axioms": {
+    "SuperlevelSardScope.client_ae_superlevel": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext",
+      "sorryAx"
+    ],
+    "FunctionalInequalities.KLS.SmoothDomain.ae_exists_superlevel": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext",
+      "sorryAx"
+    ],
+    "FunctionalInequalities.KLS.SmoothDomain.frontier_superlevel_subset": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "FunctionalInequalities.Analysis.ae_forall_fderiv_ne_zero": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext",
+      "sorryAx"
+    ],
+    "FunctionalInequalities.Analysis.sard": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext",
+      "sorryAx"
+    ]
+  },
+  "next_obligation": {
+    "statement_file": "build/audit/PlanarNonflatNextStatement.lean",
+    "description": "Type checked only: for C2 u on a compact K in the plane, the image of {x in K | fderiv u x = 0 and iteratedFDeriv 2 u x != 0} is Lebesgue null. No proof, declaration or placeholder axiom is asserted."
+  },
+  "files": {
+    "formalization/FunctionalInequalities/Analysis/QuadraticCover.lean": "1ec549d9591a422610034795b8bbf669b2a111ecdca897c71aec758b09697d63",
+    "build/audit/QuadraticCoverAudit.lean": "43ca8b4232f88994e6354f39ed4f5fec0458eb18680a40d745a935cd0fa0f31e",
+    "build/audit/PlanarNonflatNextStatement.lean": "a14fcb1c50a5a9c74f0157f41a18f57fbbff1f605bc9a501a0af9b9ebe6e2c10",
+    "build/audit/quadratic-cover-module-strict.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "build/audit/quadratic-cover-client-strict.log": "555bc53b8da2f5db474a58a0a5d9b551bf40a13f6a0aa62fb986ffc9345128e4",
+    "build/audit/planar-nonflat-next-statement.log": "7e90fdb13f3e12203891dace0be4572b982b4ffa6698e21eb012271b140d735e",
+    "build/audit/quadratic-cover-rerun-QuadraticRemainderAudit.log": "68636d499e022e502528841b118a8b0f73a00cf02e749da083eaa6606266041e",
+    "build/audit/quadratic-cover-rerun-SardLowDimAudit.log": "18d2945d32707fc05cef01dd01d15d262406850fa333f5df62032f2e3bf55723",
+    "build/audit/quadratic-cover-rerun-AreaFormulaAudit.log": "012a848c88ac87ae07220136a1ca7b1a1238bb88a96c94c33eda6f2143e9e905",
+    "build/audit/quadratic-cover-rerun-SuperlevelSardScope.log": "e172008bdf61715608c1095fa65bfbe3a7641d2f3490c1ff9dc4ff0ab5f481e3",
+    "build/audit/quadratic-cover-wip-WIP-AnalyticPrerequisites.log": "8088f94d8faafb648beb5c11eb62cd1c4fbf60723116c2d254d7cfd822c3ba74",
+    "build/audit/quadratic-cover-wip-WIP-CheegerInfimum.log": "2511a7d3417def4ad14cc29cc51eaf48ea22640d99489a5f565639d019e1e093",
+    "build/audit/quadratic-cover-wip-WIP-Cheeger.log": "7003e6f52a47b150e5fd6cd14ca240b5f4ee2d53ce464ad80ed811e67a181870",
+    "build/audit/quadratic-cover-wip-results.json": "50bcda5a589ad42ed1660a5472876daf67cebf232c32740bc45cd6bf9bfb028b",
+    "build/audit/quadratic-cover-lake-build.log": "663bb667d5c904f6f3ae9df70d321b447153c405a323c525ff5c63b947dc2f97"
+  }
+}

@@ -1,0 +1,113 @@
+{
+  "scope": "Independent local audit, not a formal certificate. Three route lemmas are proved; C-infinity Sard is NOT proved, no sorryAx was removed, and Analysis.sard keeps its statement and direct-hole status with both consumers still inheriting sorryAx.",
+  "proved_route_lemmas": [
+    "L2 critical_subset_layers",
+    "L4 exists_flat_direction",
+    "L5 exists_local_graph"
+  ],
+  "route_correction": "ContDiffAt R infinity does not upgrade to ContDiffOn R infinity on a neighbourhood, so L5 was strengthened to produce C-infinity smoothness on an open parameter set via OpenPartialHomeomorph.contDiffAt_symm applied pointwise on the region where the chosen partial derivative is nonzero.",
+  "still_missing": [
+    "L3 open-domain flat layer and open-domain order-n remainder",
+    "L1 dimension induction",
+    "L6 transfer to finite-dimensional spaces",
+    "L7 C-infinity variant of ae_forall_fderiv_ne_zero",
+    "sharp C^n Analysis.sard (n=4, j=2 obstruction untouched)"
+  ],
+  "axioms": {
+    "FunctionalInequalities.Analysis.critical_subset_layers": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "FunctionalInequalities.Analysis.exists_flat_direction": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "FunctionalInequalities.Analysis.exists_local_graph": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "SmoothSardIngredientsAudit.layers": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "SmoothSardIngredientsAudit.layers_dim_zero": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "SmoothSardIngredientsAudit.flat_direction": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "SmoothSardIngredientsAudit.flat_direction_one": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "SmoothSardIngredientsAudit.local_graph": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "SmoothSardIngredientsAudit.local_graph_plane": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "SmoothSardIngredientsAudit.top_layer": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ]
+  },
+  "wip_holes": [
+    3,
+    3,
+    5
+  ],
+  "scope_axioms": {
+    "SuperlevelSardScope.client_ae_superlevel": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext",
+      "sorryAx"
+    ],
+    "FunctionalInequalities.KLS.SmoothDomain.ae_exists_superlevel": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext",
+      "sorryAx"
+    ],
+    "FunctionalInequalities.KLS.SmoothDomain.frontier_superlevel_subset": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "FunctionalInequalities.Analysis.ae_forall_fderiv_ne_zero": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext",
+      "sorryAx"
+    ],
+    "FunctionalInequalities.Analysis.sard": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext",
+      "sorryAx"
+    ]
+  },
+  "files": {
+    "formalization/FunctionalInequalities/Analysis/SmoothSard.lean": "e11e027d323d0c87bb9ee1bd4881ac5670ae3cf17e40043aa4360a581d44a5ba",
+    "build/audit/SmoothSardIngredientsAudit.lean": "41a6e2f5efc43c1c2e7c7872be936c3d98a2a83f15b575d5ba77618a0760de58",
+    "build/audit/smooth-sard-module-strict.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "build/audit/smooth-sard-ingredients-strict.log": "d7edbb50c8629d95d79a53a63f820dbeb4801b8248ad58f676be171f9e4f66df",
+    "build/audit/smooth-sard-rerun-SuperlevelSardScope.log": "e172008bdf61715608c1095fa65bfbe3a7641d2f3490c1ff9dc4ff0ab5f481e3",
+    "build/audit/smooth-sard-wip-results.json": "50bcda5a589ad42ed1660a5472876daf67cebf232c32740bc45cd6bf9bfb028b",
+    "build/audit/smooth-sard-lake-build.log": "c42f3fc5873aacf16d56add48439580ad133767a843ac24bb4359481eb8e4c29"
+  }
+}

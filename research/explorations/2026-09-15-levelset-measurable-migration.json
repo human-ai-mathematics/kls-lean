@@ -1,0 +1,352 @@
+{
+  "scope": "Migrates the direct hole Analysis.aemeasurable_lintegral_levelSet out of KLS/WIP/AnalyticPrerequisites.lean into the new hole-free KLS/Geometry/LevelSetMeasurable.lean with a byte-identical pp.all signature, proved from last round's L5. NO NEW THEOREM is proved; the weighted coarea EQUALITY is not closed. Direct holes drop from 11 (3/3/5) to 10 (2/3/5). No other Lean declaration changed in statement, proof or position; no certificate, no Blueprint leanok scope and no historical decision changed; no commit or push.",
+  "head": "2965b32bc79bdb24921c633df12102450eaedcc4",
+  "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
+  "incoming_receipt": "build/verification/20260915T033803.710026Z/report.json",
+  "incoming_receipt_sha256": "15452127ee73f4dc76cd9faf284617c1a3696c86d44102925a549bac8ed8f5ea",
+  "incoming_latest_equals_dated_receipt_bytes": true,
+  "incoming_snapshot_sha256": "8abb1b22ab2ebac05aac28d7ac32536dba0dc2d40da4a1e1109f285d50ed60f8",
+  "incoming_snapshot_entries": 421,
+  "incoming_snapshot_exact": true,
+  "migration": {
+    "declaration": "FunctionalInequalities.Analysis.aemeasurable_lintegral_levelSet",
+    "from": "formalization/FunctionalInequalities/KLS/WIP/AnalyticPrerequisites.lean",
+    "to": "formalization/FunctionalInequalities/KLS/Geometry/LevelSetMeasurable.lean",
+    "signature_before_log": "build/audit/migration-signature-before.log",
+    "signature_after_log": "build/audit/migration-signature-after.log",
+    "signature_before_sha256": "03537cff44ef13f750ba33aac7f7968ff880289abfdba0970aed5e7fb7f50ad6",
+    "signature_after_sha256": "03537cff44ef13f750ba33aac7f7968ff880289abfdba0970aed5e7fb7f50ad6",
+    "pp_all_signature_byte_identical": true,
+    "unused_instances_kept": [
+      "CompleteSpace V",
+      "FiniteDimensional ℝ V"
+    ],
+    "linter_handling": "set_option linter.unusedSectionVars false in, as in the 2026-09-15 superlevel rewire; the signature is NOT narrowed with omit",
+    "namespace_kept": "FunctionalInequalities.Analysis (the published name must not change)",
+    "wip_file_before_copy": "build/audit/migration-AnalyticPrerequisites.before.lean",
+    "wip_declarations_removed": [
+      "FunctionalInequalities.Analysis.aemeasurable_lintegral_levelSet"
+    ],
+    "wip_declarations_otherwise_unchanged": true
+  },
+  "new_proved_results": [],
+  "new_definitions": [],
+  "changed_lean_files": [
+    "formalization/FunctionalInequalities/KLS/WIP/AnalyticPrerequisites.lean"
+  ],
+  "new_lean_modules": [
+    "formalization/FunctionalInequalities/KLS/Geometry/LevelSetMeasurable.lean"
+  ],
+  "all_other_lean_file_hashes_unchanged": true,
+  "all_historical_decisions_unchanged": true,
+  "axiom_audit": {
+    "FunctionalInequalities.Analysis.aemeasurable_lintegral_levelSet": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "LevelSetMeasurableAudit.client_aemeasurable_lintegral_levelSet": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "FunctionalInequalities.Analysis.lintegral_enorm_gradient_mul_eq_lintegral_levelSet": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext",
+      "sorryAx"
+    ],
+    "LevelSetMeasurableAudit.client_coarea_statement": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext",
+      "sorryAx"
+    ],
+    "FunctionalInequalities.Analysis.sard": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext",
+      "sorryAx"
+    ],
+    "FunctionalInequalities.Analysis.ae_forall_fderiv_ne_zero": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext",
+      "sorryAx"
+    ]
+  },
+  "axiom_audit_note": "All six reports come from ONE environment: the client imports both the new module and the WIP file, so the migrated name resolves to a single declaration. The two sorryAx-carrying client theorems restate open obligations; restating is not proving.",
+  "client_checks": {
+    "statement_checks": 0,
+    "proved_theorems": 2,
+    "axiom_prints": 6
+  },
+  "sorryAx_in_migrated_result": false,
+  "validation": {
+    "LevelSetMeasurableAudit": {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "../build/audit/LevelSetMeasurableAudit.lean"
+      ],
+      "exit_code": 0,
+      "log": "build/audit/migration-LevelSetMeasurableAudit.log",
+      "log_sha256": "c5c553f9452f5126d490668f6dd68548fd185b6670e2e7f3d6e3c331eeec71e7"
+    },
+    "BorelSliceAudit": {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "../build/audit/BorelSliceAudit.lean"
+      ],
+      "exit_code": 0,
+      "log": "build/audit/migration-BorelSliceAudit.log",
+      "log_sha256": "a8dfcca0234207b99fb88f7194f00eb762f69feb8bb48cfbb0dd39be4f882bc0"
+    },
+    "CompactSliceAudit": {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "../build/audit/CompactSliceAudit.lean"
+      ],
+      "exit_code": 0,
+      "log": "build/audit/migration-CompactSliceAudit.log",
+      "log_sha256": "6183637269791471cbd4afecdf4bb9686eca8f8680c85386058ae18487adcafc"
+    },
+    "EilenbergMajorantAudit": {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "../build/audit/EilenbergMajorantAudit.lean"
+      ],
+      "exit_code": 0,
+      "log": "build/audit/migration-EilenbergMajorantAudit.log",
+      "log_sha256": "97c23ff29115ea64ef45606ddc56e5ee3e5f833a8ff4bfc1d58d5dadab1c8a77"
+    },
+    "NullSlicingAudit": {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "../build/audit/NullSlicingAudit.lean"
+      ],
+      "exit_code": 0,
+      "log": "build/audit/migration-NullSlicingAudit.log",
+      "log_sha256": "65d75f410323559fb026cb4855c86bd6267176daee2c6c43b495cfd8012e856d"
+    },
+    "WeightedCoareaRouteStatements": {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "../build/audit/WeightedCoareaRouteStatements.lean"
+      ],
+      "exit_code": 0,
+      "log": "build/audit/migration-WeightedCoareaRouteStatements.log",
+      "log_sha256": "3a74a1ef789572ff5238ff7faf8a591be11e73fc3030db04e32b2e6497fe0d6a"
+    },
+    "WeightedCoareaInfrastructure": {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "../build/audit/WeightedCoareaInfrastructure.lean"
+      ],
+      "exit_code": 0,
+      "log": "build/audit/migration-WeightedCoareaInfrastructure.log",
+      "log_sha256": "d589fa8fcd2e485f0803b4b59e2ee188bc95ceff56e06156b5adf2b4c6b9655a"
+    },
+    "AreaFormulaAudit": {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "../build/audit/AreaFormulaAudit.lean"
+      ],
+      "exit_code": 0,
+      "log": "build/audit/migration-AreaFormulaAudit.log",
+      "log_sha256": "012a848c88ac87ae07220136a1ca7b1a1238bb88a96c94c33eda6f2143e9e905"
+    },
+    "CheegerInfimumAudit": {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "../build/audit/CheegerInfimumAudit.lean"
+      ],
+      "exit_code": 0,
+      "log": "build/audit/migration-CheegerInfimumAudit.log",
+      "log_sha256": "f91015c9f2b831300fc64abbcc1120baca81d03d15a2d425097b50ee96f2ac74"
+    },
+    "MinkowskiConstantAudit": {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "../build/audit/MinkowskiConstantAudit.lean"
+      ],
+      "exit_code": 0,
+      "log": "build/audit/migration-MinkowskiConstantAudit.log",
+      "log_sha256": "efd1523ac10c8010fc527f14f64401998f1c54daf31f94b5e61642a6f67159eb"
+    },
+    "SuperlevelSardScope": {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "../build/audit/SuperlevelSardScope.lean"
+      ],
+      "exit_code": 0,
+      "log": "build/audit/migration-SuperlevelSardScope.log",
+      "log_sha256": "9f7b4971a9a7fd42cfad81024dcfd13341cf8daaf3f9171aeac81e107d7e9562"
+    },
+    "SmoothSardAudit": {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "../build/audit/SmoothSardAudit.lean"
+      ],
+      "exit_code": 0,
+      "log": "build/audit/migration-SmoothSardAudit.log",
+      "log_sha256": "bbb56e86e2b6005f1f31236fd465aa8e5862c75adb03deeba3ecccaddbf81490"
+    },
+    "SmoothSardRouteStatements": {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "../build/audit/SmoothSardRouteStatements.lean"
+      ],
+      "exit_code": 0,
+      "log": "build/audit/migration-SmoothSardRouteStatements.log",
+      "log_sha256": "a11b0d4a5b5608157f7f4881b1dd8196504b94bab0c50b981d86b467c6579f6d"
+    },
+    "AnalyticPrerequisites": {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "FunctionalInequalities/KLS/WIP/AnalyticPrerequisites.lean"
+      ],
+      "exit_code": 0,
+      "log": "build/audit/migration-AnalyticPrerequisites.log",
+      "log_sha256": "28f048d73f77fc5d2b83f114a22aefdc90da2981d043477726711ea6cf60b671",
+      "holes": 2,
+      "diagnostic_lines": 2
+    },
+    "CheegerInfimum": {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "FunctionalInequalities/KLS/WIP/CheegerInfimum.lean"
+      ],
+      "exit_code": 0,
+      "log": "build/audit/migration-CheegerInfimum.log",
+      "log_sha256": "392b75056ab6dae8d916f2144a28c828381c848c196dcfede771d16faf1af7fd",
+      "holes": 3,
+      "diagnostic_lines": 3
+    },
+    "Cheeger": {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "FunctionalInequalities/Energy/WIP/Cheeger.lean"
+      ],
+      "exit_code": 0,
+      "log": "build/audit/migration-Cheeger.log",
+      "log_sha256": "7003e6f52a47b150e5fd6cd14ca240b5f4ee2d53ce464ad80ed811e67a181870",
+      "holes": 5,
+      "diagnostic_lines": 5
+    }
+  },
+  "default_lake_build_exit_code": 0,
+  "default_lake_build_log": "build/audit/migration-lake-build.log",
+  "wip_holes": [
+    2,
+    3,
+    5
+  ],
+  "wip_holes_total": 10,
+  "wip_holes_before": [
+    3,
+    3,
+    5
+  ],
+  "wip_holes_total_before": 11,
+  "certificates": 24,
+  "perimeter_infrastructure": "missing",
+  "root_verification_receipt": "build/verification/latest.json",
+  "final_snapshot_attestation": "build/audit/migration-final-snapshot.json",
+  "hash_binding": "This evidence is finalized before root verification and is itself hashed in that receipt. The final attestation binds receipt bytes, final snapshot and evidence bytes without a circular self-hash. build/ is gitignored, so build/audit files are bound here rather than by the snapshot.",
+  "not_proved": [
+    "the weighted coarea EQUALITY Analysis.lintegral_enorm_gradient_mul_eq_lintegral_levelSet, still a direct hole",
+    "its C1 specialization Isoperimetry.lintegral_enorm_gradient_mul_eq_lintegral_levelSet, still a direct hole",
+    "obligations L6-L12 and targets T2/T3, including the Whitney C1 extension",
+    "sharpness of the Eilenberg constant",
+    "sharp C^(finrank) Analysis.sard (no downstream consumer) and Analysis.ae_forall_fderiv_ne_zero, both still carrying sorryAx",
+    "smoothConstant_le_minkowskiConstant",
+    "smoothConstant_mul_lintegral_min_superlevel_le",
+    "equality of the two Cheeger constants"
+  ],
+  "files": {
+    "HANDOFF.md": "73d27c91bbea5098745fe4e23cf4a7497274575646f8536c48bb9df6e07995ff",
+    "build/audit/LevelSetMeasurableAudit.lean": "d3cbab7879d2dbac140cc1104d6e92ca37f1566fbd8291307e7285d7a080b801",
+    "build/audit/migration-AnalyticPrerequisites.before.lean": "e87e0de4a9684a0dd4ee6c57e2c18f26abfbb60748fc6e54b465d353c844b5ea",
+    "build/audit/migration-AnalyticPrerequisites.log": "28f048d73f77fc5d2b83f114a22aefdc90da2981d043477726711ea6cf60b671",
+    "build/audit/migration-AreaFormulaAudit.log": "012a848c88ac87ae07220136a1ca7b1a1238bb88a96c94c33eda6f2143e9e905",
+    "build/audit/migration-BorelSliceAudit.log": "a8dfcca0234207b99fb88f7194f00eb762f69feb8bb48cfbb0dd39be4f882bc0",
+    "build/audit/migration-Cheeger.log": "7003e6f52a47b150e5fd6cd14ca240b5f4ee2d53ce464ad80ed811e67a181870",
+    "build/audit/migration-CheegerInfimum.log": "392b75056ab6dae8d916f2144a28c828381c848c196dcfede771d16faf1af7fd",
+    "build/audit/migration-CheegerInfimumAudit.log": "f91015c9f2b831300fc64abbcc1120baca81d03d15a2d425097b50ee96f2ac74",
+    "build/audit/migration-CompactSliceAudit.log": "6183637269791471cbd4afecdf4bb9686eca8f8680c85386058ae18487adcafc",
+    "build/audit/migration-EilenbergMajorantAudit.log": "97c23ff29115ea64ef45606ddc56e5ee3e5f833a8ff4bfc1d58d5dadab1c8a77",
+    "build/audit/migration-LevelSetMeasurableAudit.log": "c5c553f9452f5126d490668f6dd68548fd185b6670e2e7f3d6e3c331eeec71e7",
+    "build/audit/migration-MinkowskiConstantAudit.log": "efd1523ac10c8010fc527f14f64401998f1c54daf31f94b5e61642a6f67159eb",
+    "build/audit/migration-NullSlicingAudit.log": "65d75f410323559fb026cb4855c86bd6267176daee2c6c43b495cfd8012e856d",
+    "build/audit/migration-SmoothSardAudit.log": "bbb56e86e2b6005f1f31236fd465aa8e5862c75adb03deeba3ecccaddbf81490",
+    "build/audit/migration-SmoothSardRouteStatements.log": "a11b0d4a5b5608157f7f4881b1dd8196504b94bab0c50b981d86b467c6579f6d",
+    "build/audit/migration-SuperlevelSardScope.log": "9f7b4971a9a7fd42cfad81024dcfd13341cf8daaf3f9171aeac81e107d7e9562",
+    "build/audit/migration-WeightedCoareaInfrastructure.log": "d589fa8fcd2e485f0803b4b59e2ee188bc95ceff56e06156b5adf2b4c6b9655a",
+    "build/audit/migration-WeightedCoareaRouteStatements.log": "3a74a1ef789572ff5238ff7faf8a591be11e73fc3030db04e32b2e6497fe0d6a",
+    "build/audit/migration-lake-build.log": "663bb667d5c904f6f3ae9df70d321b447153c405a323c525ff5c63b947dc2f97",
+    "build/audit/migration-signature-after.log": "03537cff44ef13f750ba33aac7f7968ff880289abfdba0970aed5e7fb7f50ad6",
+    "build/audit/migration-signature-before.log": "03537cff44ef13f750ba33aac7f7968ff880289abfdba0970aed5e7fb7f50ad6",
+    "formalization/FunctionalInequalities/Analysis/HausdorffContent.lean": "eba5b911c345234048ad8313fec87618fb825abddd30f2eeb79e6874255800d0",
+    "formalization/FunctionalInequalities/Analysis/HausdorffSlicing.lean": "dfb24684b91b6821f8fa4b3f62e85ef8336e5fde3fba1e7bb2abe204a57ca95d",
+    "formalization/FunctionalInequalities/Energy/WIP/Cheeger.lean": "5c081733ce43889fcbb80a8971b9488bfd65e3bd1bf2fefa28b240cebe43aa78",
+    "formalization/FunctionalInequalities/KLS/Geometry/LevelSetMeasurable.lean": "669202b882504692a37a2cbcbdb8267f0155bb38c0d57600d3cef4e14205ce6b",
+    "formalization/FunctionalInequalities/KLS/Geometry/SurfaceSlicing.lean": "5ee77022573eae2754fabd760b4635488782d468228a6c3637294a6e7650a691",
+    "formalization/FunctionalInequalities/KLS/README.md": "00c6dabe70ce8d062d16395ccfc906187b6b1e17416dbed0f1aee4a074c1cb61",
+    "formalization/FunctionalInequalities/KLS/WIP/AnalyticPrerequisites.lean": "712dd3591d4d93043065502cb4baaee964a88ea27babb474b4bda3f4da8266db",
+    "formalization/FunctionalInequalities/KLS/WIP/CheegerInfimum.lean": "b719d713ef41c087bd381009a38ca625d387d42543ef09e7a91a94009b125331",
+    "formalization/README.md": "68c16b12c970c0346ef31b4f75a9dd63df2e9caefcfdc1818bd594694ce68cfa",
+    "research/decisions/2026-09-15-borel-slice-measurable.md": "3ec33e9f6242ae957d384bddad23363a5fb1d93e233132cfed75de02fd575c84",
+    "research/decisions/2026-09-15-compact-slice-measurable.md": "91552cc2686c5530f307fc4890249e35c298f87419cccf5a46ba0bce6b15f86f",
+    "research/decisions/2026-09-15-eilenberg-majorant.md": "7da6d4749e76ea8286787699314d2096416cbe313f3566933dc4aa9c40752316",
+    "research/decisions/2026-09-15-levelset-measurable-migration.md": "ec13b73713941467d393a6e18af059e0e21cb4c8a8a330d71e8a90cb6ecfb1fe",
+    "research/decisions/2026-09-15-null-slicing.md": "fd60450014d080db4b07d3467c1260149240e7e4cf2fa54974351280127fabf2",
+    "research/explorations/2026-09-15-borel-slice-measurable.json": "b721044d9b08505a0cd2c8a3d6b61fdf78cf910f5a9c57832c3b9c6927e1821a",
+    "research/tasks.json": "2933961261be97d571669c1ad68499787d39b7a2369f47e3ed31a1aee509da3f",
+    "research/verification.md": "201ad826fe950be1ddf75e7c0b68100559e61b77b1800ce5836d2dcf10588547"
+  }
+}

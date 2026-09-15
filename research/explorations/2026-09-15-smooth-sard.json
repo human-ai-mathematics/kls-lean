@@ -1,0 +1,87 @@
+{
+  "scope": "Independent local audit, not a formal certificate. Sard for C-infinity real-valued functions is proved. No WIP file was changed, no sorryAx was removed from any existing declaration, and the sharp C^n Analysis.sard keeps its statement and direct-hole status.",
+  "axioms": {
+    "FunctionalInequalities.Analysis.sard_smooth_pi": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "FunctionalInequalities.Analysis.sard_smooth": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "FunctionalInequalities.Analysis.ae_forall_fderiv_ne_zero_of_contDiff_top": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "SmoothSardAudit.sard_pi": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "SmoothSardAudit.sard_general": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "SmoothSardAudit.regular_values": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "SmoothSardAudit.sard_dim_zero": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "SmoothSardAudit.sard_dim_three": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "SmoothSardAudit.constant_critical_univ": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "SmoothSardAudit.constant_sard": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "SmoothSardAudit.superlevel_without_sard": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "FunctionalInequalities.KLS.SmoothDomain.ae_exists_superlevel": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext",
+      "sorryAx"
+    ]
+  },
+  "gap_closed_mathematically": "SmoothSardAudit.superlevel_without_sard reproves the statement of SmoothDomain.ae_exists_superlevel with no sorryAx; the WIP declaration itself still carries sorryAx because the WIP file was left unchanged.",
+  "wip_holes": [
+    3,
+    3,
+    5
+  ],
+  "still_missing": [
+    "rewiring WIP to the new theorem",
+    "sharp C^n Analysis.sard",
+    "weighted coarea and its level-set measurability",
+    "reverse Cheeger comparison"
+  ],
+  "files": {
+    "formalization/FunctionalInequalities/Analysis/SmoothSard.lean": "6521158c7e37acaf403a22676c71c5acf7b42c084bf5c9ba824b8b0ba08f8525",
+    "build/audit/SmoothSardAudit.lean": "eb3e969d0b7aaf9e9f263d9f2a3b252b203bed3b0592a632c972ff658f928b94",
+    "build/audit/smooth-sard-module-strict.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "build/audit/smooth-sard-audit-strict.log": "2e8f406c7856b7fd3cc1445222e12f0596a3694d9c3e7dc3caaa6f3dc64160dd",
+    "build/audit/sard-smooth-rerun-SuperlevelSardScope.log": "e172008bdf61715608c1095fa65bfbe3a7641d2f3490c1ff9dc4ff0ab5f481e3",
+    "build/audit/sard-smooth-wip-results.json": "50bcda5a589ad42ed1660a5472876daf67cebf232c32740bc45cd6bf9bfb028b",
+    "build/audit/sard-smooth-lake-build.log": "663bb667d5c904f6f3ae9df70d321b447153c405a323c525ff5c63b947dc2f97"
+  }
+}

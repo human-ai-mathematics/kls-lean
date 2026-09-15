@@ -1,0 +1,371 @@
+{
+  "scope": "Proves obligation L10 of the weighted coarea route (null critical slices of a C1 function) in the new KLS/Geometry/CriticalSlice.lean, the first genuine consumer of the Eilenberg bound L1. No existing Lean file, no existing signature, no certificate, no Blueprint leanok scope and no historical decision changed; no commit or push. L10 is NOT Sard's theorem and does not imply it; it fills no hole.",
+  "head": "2965b32bc79bdb24921c633df12102450eaedcc4",
+  "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
+  "incoming_receipt": "build/verification/20260915T035117.865459Z/report.json",
+  "incoming_receipt_sha256": "1d6f2f36bcbcbc8a74515b0a045eef6f4d8846f4fb468e1ce2d895a3f8f7fb09",
+  "incoming_latest_equals_dated_receipt_bytes": true,
+  "incoming_snapshot_sha256": "2fb5014b1bbfb1bbd8b05a41cbc7a5e45529fc97783da9305036597d7be7ce9d",
+  "incoming_snapshot_entries": 424,
+  "incoming_snapshot_exact": true,
+  "new_lean_modules": [
+    "formalization/FunctionalInequalities/KLS/Geometry/CriticalSlice.lean"
+  ],
+  "changed_lean_files": [],
+  "all_other_lean_file_hashes_unchanged": true,
+  "all_historical_decisions_unchanged": true,
+  "new_proved_results": [
+    "FunctionalInequalities.KLS.isClosed_critical",
+    "FunctionalInequalities.KLS.exists_lipschitzOnWith_critical_cover",
+    "FunctionalInequalities.KLS.ae_surfaceMeasure_critical_ball_eq_zero",
+    "FunctionalInequalities.KLS.ae_surfaceMeasure_critical_inter_levelSet_eq_zero"
+  ],
+  "new_definitions": [],
+  "target_statement": "L10 of research/decisions/2026-09-15-weighted-coarea-route.md, restated verbatim and proved as CriticalSliceAudit.target; the library theorem omits only the never-used [CompleteSpace V] (target_of_not_completeSpace proves that form) and adds no hypothesis.",
+  "not_sard": "L10 concerns the codimension-one measure of the critical PART of each slice, for merely C1 functions. Sard concerns the Lebesgue measure of the set of critical VALUES, needs C^(finrank) regularity in general, and remains the unproved direct hole Analysis.sard, untouched this round. L10 does not imply Sard: a C1 function may have a positive-measure set of critical values. CriticalSliceAudit.constant_exceptional_level exhibits a constant function whose slice at the attained value has NONZERO surface measure.",
+  "client_checks": {
+    "statement_checks": 1,
+    "proved_theorems": 7,
+    "axiom_prints": 11
+  },
+  "new_result_axiom_audit": {
+    "FunctionalInequalities.KLS.isClosed_critical": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "FunctionalInequalities.KLS.exists_lipschitzOnWith_critical_cover": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "FunctionalInequalities.KLS.ae_surfaceMeasure_critical_ball_eq_zero": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "FunctionalInequalities.KLS.ae_surfaceMeasure_critical_inter_levelSet_eq_zero": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "CriticalSliceAudit.target": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "CriticalSliceAudit.target_of_not_completeSpace": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "CriticalSliceAudit.ae_slice_eq_regular": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "CriticalSliceAudit.surfaceMeasure_real_singleton": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "CriticalSliceAudit.constant_exceptional_level": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "CriticalSliceAudit.not_lipschitz": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "CriticalSliceAudit.preserved_exists_measurable_majorant": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ]
+  },
+  "sorryAx_in_new_results": false,
+  "validation": {
+    "CriticalSliceAudit": {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "../build/audit/CriticalSliceAudit.lean"
+      ],
+      "exit_code": 0,
+      "log": "build/audit/critical-CriticalSliceAudit.log",
+      "log_sha256": "56f69bb05102711355e17db74a43e07ce4b7f99232fda47a16c53659041cf8d8"
+    },
+    "LevelSetMeasurableAudit": {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "../build/audit/LevelSetMeasurableAudit.lean"
+      ],
+      "exit_code": 0,
+      "log": "build/audit/critical-LevelSetMeasurableAudit.log",
+      "log_sha256": "c5c553f9452f5126d490668f6dd68548fd185b6670e2e7f3d6e3c331eeec71e7"
+    },
+    "BorelSliceAudit": {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "../build/audit/BorelSliceAudit.lean"
+      ],
+      "exit_code": 0,
+      "log": "build/audit/critical-BorelSliceAudit.log",
+      "log_sha256": "a8dfcca0234207b99fb88f7194f00eb762f69feb8bb48cfbb0dd39be4f882bc0"
+    },
+    "CompactSliceAudit": {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "../build/audit/CompactSliceAudit.lean"
+      ],
+      "exit_code": 0,
+      "log": "build/audit/critical-CompactSliceAudit.log",
+      "log_sha256": "6183637269791471cbd4afecdf4bb9686eca8f8680c85386058ae18487adcafc"
+    },
+    "EilenbergMajorantAudit": {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "../build/audit/EilenbergMajorantAudit.lean"
+      ],
+      "exit_code": 0,
+      "log": "build/audit/critical-EilenbergMajorantAudit.log",
+      "log_sha256": "97c23ff29115ea64ef45606ddc56e5ee3e5f833a8ff4bfc1d58d5dadab1c8a77"
+    },
+    "NullSlicingAudit": {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "../build/audit/NullSlicingAudit.lean"
+      ],
+      "exit_code": 0,
+      "log": "build/audit/critical-NullSlicingAudit.log",
+      "log_sha256": "65d75f410323559fb026cb4855c86bd6267176daee2c6c43b495cfd8012e856d"
+    },
+    "WeightedCoareaRouteStatements": {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "../build/audit/WeightedCoareaRouteStatements.lean"
+      ],
+      "exit_code": 0,
+      "log": "build/audit/critical-WeightedCoareaRouteStatements.log",
+      "log_sha256": "3a74a1ef789572ff5238ff7faf8a591be11e73fc3030db04e32b2e6497fe0d6a"
+    },
+    "WeightedCoareaInfrastructure": {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "../build/audit/WeightedCoareaInfrastructure.lean"
+      ],
+      "exit_code": 0,
+      "log": "build/audit/critical-WeightedCoareaInfrastructure.log",
+      "log_sha256": "d589fa8fcd2e485f0803b4b59e2ee188bc95ceff56e06156b5adf2b4c6b9655a"
+    },
+    "AreaFormulaAudit": {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "../build/audit/AreaFormulaAudit.lean"
+      ],
+      "exit_code": 0,
+      "log": "build/audit/critical-AreaFormulaAudit.log",
+      "log_sha256": "012a848c88ac87ae07220136a1ca7b1a1238bb88a96c94c33eda6f2143e9e905"
+    },
+    "CheegerInfimumAudit": {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "../build/audit/CheegerInfimumAudit.lean"
+      ],
+      "exit_code": 0,
+      "log": "build/audit/critical-CheegerInfimumAudit.log",
+      "log_sha256": "f91015c9f2b831300fc64abbcc1120baca81d03d15a2d425097b50ee96f2ac74"
+    },
+    "MinkowskiConstantAudit": {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "../build/audit/MinkowskiConstantAudit.lean"
+      ],
+      "exit_code": 0,
+      "log": "build/audit/critical-MinkowskiConstantAudit.log",
+      "log_sha256": "efd1523ac10c8010fc527f14f64401998f1c54daf31f94b5e61642a6f67159eb"
+    },
+    "SuperlevelSardScope": {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "../build/audit/SuperlevelSardScope.lean"
+      ],
+      "exit_code": 0,
+      "log": "build/audit/critical-SuperlevelSardScope.log",
+      "log_sha256": "9f7b4971a9a7fd42cfad81024dcfd13341cf8daaf3f9171aeac81e107d7e9562"
+    },
+    "SmoothSardAudit": {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "../build/audit/SmoothSardAudit.lean"
+      ],
+      "exit_code": 0,
+      "log": "build/audit/critical-SmoothSardAudit.log",
+      "log_sha256": "bbb56e86e2b6005f1f31236fd465aa8e5862c75adb03deeba3ecccaddbf81490"
+    },
+    "SmoothSardRouteStatements": {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "../build/audit/SmoothSardRouteStatements.lean"
+      ],
+      "exit_code": 0,
+      "log": "build/audit/critical-SmoothSardRouteStatements.log",
+      "log_sha256": "a11b0d4a5b5608157f7f4881b1dd8196504b94bab0c50b981d86b467c6579f6d"
+    },
+    "AnalyticPrerequisites": {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "FunctionalInequalities/KLS/WIP/AnalyticPrerequisites.lean"
+      ],
+      "exit_code": 0,
+      "log": "build/audit/critical-AnalyticPrerequisites.log",
+      "log_sha256": "28f048d73f77fc5d2b83f114a22aefdc90da2981d043477726711ea6cf60b671",
+      "holes": 2,
+      "diagnostic_lines": 2
+    },
+    "CheegerInfimum": {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "FunctionalInequalities/KLS/WIP/CheegerInfimum.lean"
+      ],
+      "exit_code": 0,
+      "log": "build/audit/critical-CheegerInfimum.log",
+      "log_sha256": "392b75056ab6dae8d916f2144a28c828381c848c196dcfede771d16faf1af7fd",
+      "holes": 3,
+      "diagnostic_lines": 3
+    },
+    "Cheeger": {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "FunctionalInequalities/Energy/WIP/Cheeger.lean"
+      ],
+      "exit_code": 0,
+      "log": "build/audit/critical-Cheeger.log",
+      "log_sha256": "7003e6f52a47b150e5fd6cd14ca240b5f4ee2d53ce464ad80ed811e67a181870",
+      "holes": 5,
+      "diagnostic_lines": 5
+    }
+  },
+  "default_lake_build_exit_code": 0,
+  "default_lake_build_log": "build/audit/critical-lake-build.log",
+  "wip_holes": [
+    2,
+    3,
+    5
+  ],
+  "wip_holes_total": 10,
+  "wip_holes_unchanged": true,
+  "certificates": 24,
+  "perimeter_infrastructure": "missing",
+  "root_verification_receipt": "build/verification/latest.json",
+  "final_snapshot_attestation": "build/audit/critical-final-snapshot.json",
+  "hash_binding": "This evidence is finalized before root verification and is itself hashed in that receipt. The final attestation binds receipt bytes, final snapshot and evidence bytes without a circular self-hash. build/ is gitignored, so build/audit files are bound here rather than by the snapshot.",
+  "proof_route": [
+    "isClosed_critical: fderiv of a C1 function is continuous, so the critical set is closed and needs no measurability hypothesis",
+    "exists_lipschitzOnWith_critical_cover: exists_partition_approximatesLinearOn_of_hasFDerivWithinAt gives pairwise disjoint measurable pieces with approximating linear maps that are VALUES OF THE DERIVATIVE; on the critical set those values are zero, so ApproximatesLinearOn with linear part 0 is literally an epsilon-Lipschitz estimate. The empty critical set is a separate branch since the value clause needs nonemptiness",
+    "ball localization: for radius R and epsilon = (k+1)^-1, apply L1 on each piece D n = C inter closedBall inter T n, sum the majorants with lintegral_tsum and ENNReal.tsum_mul_left, and use measure_iUnion on the disjoint measurable pieces to get eilenbergConstant V * volume (closedBall 0 R) * (k+1)^-1",
+    "the pointwise infimum over k is measurable (Measurable.iInf), still dominates, and its integral is below a sequence tending to 0 (ge_of_tendsto'), so it is zero and vanishes a.e. by lintegral_eq_zero_iff; finiteness of volume (closedBall 0 R) is what makes this work, hence the localization",
+    "removing the ball: ae_all_iff over the radii plus Metric.iUnion_closedBall_nat and measure_iUnion_null"
+  ],
+  "not_proved": [
+    "Sard's theorem: sharp C^(finrank) Analysis.sard and Analysis.ae_forall_fderiv_ne_zero, both still carrying sorryAx; L10 does not imply it",
+    "L8 weighted graph area on an open parameter domain",
+    "L9 regular-part C1 coarea",
+    "L11 general C1 weighted coarea and L12 the Lipschitz version",
+    "the weighted coarea EQUALITY Analysis.lintegral_enorm_gradient_mul_eq_lintegral_levelSet and its C1 specialization Isoperimetry.lintegral_enorm_gradient_mul_eq_lintegral_levelSet, both still direct holes",
+    "L6/L6a/L7 Whitney C1 extension and exact C1 pieces",
+    "sharpness of the Eilenberg constant",
+    "smoothConstant_le_minkowskiConstant",
+    "smoothConstant_mul_lintegral_min_superlevel_le",
+    "equality of the two Cheeger constants"
+  ],
+  "files": {
+    "HANDOFF.md": "faae758d89590fec01327cd630cbe3194fac3a9f0c07b2c25b30ca005491397a",
+    "build/audit/CriticalSliceAudit.lean": "3f06c6fb4eebfccec13a12077cb1c0bcad7b0dd40961b763d259e7b09562d1b2",
+    "build/audit/critical-AnalyticPrerequisites.log": "28f048d73f77fc5d2b83f114a22aefdc90da2981d043477726711ea6cf60b671",
+    "build/audit/critical-AreaFormulaAudit.log": "012a848c88ac87ae07220136a1ca7b1a1238bb88a96c94c33eda6f2143e9e905",
+    "build/audit/critical-BorelSliceAudit.log": "a8dfcca0234207b99fb88f7194f00eb762f69feb8bb48cfbb0dd39be4f882bc0",
+    "build/audit/critical-Cheeger.log": "7003e6f52a47b150e5fd6cd14ca240b5f4ee2d53ce464ad80ed811e67a181870",
+    "build/audit/critical-CheegerInfimum.log": "392b75056ab6dae8d916f2144a28c828381c848c196dcfede771d16faf1af7fd",
+    "build/audit/critical-CheegerInfimumAudit.log": "f91015c9f2b831300fc64abbcc1120baca81d03d15a2d425097b50ee96f2ac74",
+    "build/audit/critical-CompactSliceAudit.log": "6183637269791471cbd4afecdf4bb9686eca8f8680c85386058ae18487adcafc",
+    "build/audit/critical-CriticalSliceAudit.log": "56f69bb05102711355e17db74a43e07ce4b7f99232fda47a16c53659041cf8d8",
+    "build/audit/critical-EilenbergMajorantAudit.log": "97c23ff29115ea64ef45606ddc56e5ee3e5f833a8ff4bfc1d58d5dadab1c8a77",
+    "build/audit/critical-LevelSetMeasurableAudit.log": "c5c553f9452f5126d490668f6dd68548fd185b6670e2e7f3d6e3c331eeec71e7",
+    "build/audit/critical-MinkowskiConstantAudit.log": "efd1523ac10c8010fc527f14f64401998f1c54daf31f94b5e61642a6f67159eb",
+    "build/audit/critical-NullSlicingAudit.log": "65d75f410323559fb026cb4855c86bd6267176daee2c6c43b495cfd8012e856d",
+    "build/audit/critical-SmoothSardAudit.log": "bbb56e86e2b6005f1f31236fd465aa8e5862c75adb03deeba3ecccaddbf81490",
+    "build/audit/critical-SmoothSardRouteStatements.log": "a11b0d4a5b5608157f7f4881b1dd8196504b94bab0c50b981d86b467c6579f6d",
+    "build/audit/critical-SuperlevelSardScope.log": "9f7b4971a9a7fd42cfad81024dcfd13341cf8daaf3f9171aeac81e107d7e9562",
+    "build/audit/critical-WeightedCoareaInfrastructure.log": "d589fa8fcd2e485f0803b4b59e2ee188bc95ceff56e06156b5adf2b4c6b9655a",
+    "build/audit/critical-WeightedCoareaRouteStatements.log": "3a74a1ef789572ff5238ff7faf8a591be11e73fc3030db04e32b2e6497fe0d6a",
+    "build/audit/critical-lake-build.log": "663bb667d5c904f6f3ae9df70d321b447153c405a323c525ff5c63b947dc2f97",
+    "formalization/.lake/packages/mathlib/Mathlib/MeasureTheory/Function/Jacobian.lean": "56c0b9342e7a3c2d09cab936c8502a1144175b08e6f960f828154f1efef9ba68",
+    "formalization/FunctionalInequalities/Analysis/HausdorffContent.lean": "eba5b911c345234048ad8313fec87618fb825abddd30f2eeb79e6874255800d0",
+    "formalization/FunctionalInequalities/Analysis/HausdorffSlicing.lean": "dfb24684b91b6821f8fa4b3f62e85ef8336e5fde3fba1e7bb2abe204a57ca95d",
+    "formalization/FunctionalInequalities/KLS/Geometry/CriticalSlice.lean": "00afc4ec131f08138749790276ac1093417e73edb6e6e343679f996e7187b5c2",
+    "formalization/FunctionalInequalities/KLS/Geometry/LevelSetMeasurable.lean": "669202b882504692a37a2cbcbdb8267f0155bb38c0d57600d3cef4e14205ce6b",
+    "formalization/FunctionalInequalities/KLS/Geometry/SurfaceSlicing.lean": "5ee77022573eae2754fabd760b4635488782d468228a6c3637294a6e7650a691",
+    "formalization/FunctionalInequalities/KLS/README.md": "c364cf736ad7992f564538040bd344674c601b5e707643aa39d912752152bb73",
+    "formalization/FunctionalInequalities/KLS/WIP/AnalyticPrerequisites.lean": "712dd3591d4d93043065502cb4baaee964a88ea27babb474b4bda3f4da8266db",
+    "formalization/README.md": "c42fe11f2012b538cb0abfc8a1f401d8fc04dc78fcf3fdc442af12c2f62eedd7",
+    "research/decisions/2026-09-15-borel-slice-measurable.md": "3ec33e9f6242ae957d384bddad23363a5fb1d93e233132cfed75de02fd575c84",
+    "research/decisions/2026-09-15-compact-slice-measurable.md": "91552cc2686c5530f307fc4890249e35c298f87419cccf5a46ba0bce6b15f86f",
+    "research/decisions/2026-09-15-critical-slice.md": "f582e581ff93eff6174e9b09532a7071482e3e6557f0a57ef6223363e9a38cc3",
+    "research/decisions/2026-09-15-eilenberg-majorant.md": "7da6d4749e76ea8286787699314d2096416cbe313f3566933dc4aa9c40752316",
+    "research/decisions/2026-09-15-levelset-measurable-migration.md": "ec13b73713941467d393a6e18af059e0e21cb4c8a8a330d71e8a90cb6ecfb1fe",
+    "research/decisions/2026-09-15-null-slicing.md": "fd60450014d080db4b07d3467c1260149240e7e4cf2fa54974351280127fabf2",
+    "research/explorations/2026-09-15-levelset-measurable-migration.json": "72f804fbb0d30d62ccad4bbee39b57b40e03f54ff60d05b00d5585e6b735f55e",
+    "research/tasks.json": "3e9033a060a2d495a5c89910b6916cb76555f3aeccfafb01da42040c99959464",
+    "research/verification.md": "712d45b35f0fa284b472cea633080e7554a5b106536e0319d34559c3de8c1473"
+  }
+}

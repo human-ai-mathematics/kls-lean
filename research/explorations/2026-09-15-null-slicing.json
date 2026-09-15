@@ -1,0 +1,327 @@
+{
+  "scope": "Proves obligation L2 of the weighted coarea route (null slicing) in two new Lean modules. No existing Lean declaration, signature, certificate, Blueprint leanok scope or historical decision changed; no commit or push. L2 fills none of the three original coarea holes and supplies no fibre measurability.",
+  "head": "2965b32bc79bdb24921c633df12102450eaedcc4",
+  "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
+  "incoming_receipt": "build/verification/20260914T194849.197366Z/report.json",
+  "incoming_receipt_sha256": "cc265566fc376ff989c601791ca62964f9240578b7f6a439e49de20569738aaa",
+  "incoming_latest_equals_dated_receipt_bytes": true,
+  "incoming_snapshot_sha256": "0fb70f2270d6c2f6c52ba89931a3ffcf80b8c5d9a4eea3ef671a99157283c53b",
+  "incoming_snapshot_entries": 410,
+  "incoming_snapshot_exact": true,
+  "all_incoming_lean_file_hashes_unchanged": true,
+  "all_historical_decisions_unchanged": true,
+  "new_lean_modules": [
+    "formalization/FunctionalInequalities/Analysis/HausdorffSlicing.lean",
+    "formalization/FunctionalInequalities/KLS/Geometry/SurfaceSlicing.lean"
+  ],
+  "existing_lean_files_changed": [],
+  "new_proved_results": [
+    "FunctionalInequalities.Analysis.exists_cover_of_hausdorffMeasure_eq_zero",
+    "FunctionalInequalities.Analysis.exists_levelSlab",
+    "FunctionalInequalities.Analysis.ae_hausdorffMeasure_inter_levelSet_eq_zero",
+    "FunctionalInequalities.KLS.ae_surfaceMeasure_inter_levelSet_eq_zero"
+  ],
+  "target_statement": "L2 of research/decisions/2026-09-15-weighted-coarea-route.md, restated verbatim and proved as NullSlicingAudit.target; the library theorem omits only the never-used [CompleteSpace V] instance and adds no hypothesis.",
+  "client_checks": {
+    "statement_checks": 1,
+    "proved_theorems": 10,
+    "axiom_prints": 14
+  },
+  "new_result_axiom_audit": {
+    "FunctionalInequalities.Analysis.exists_cover_of_hausdorffMeasure_eq_zero": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "FunctionalInequalities.Analysis.exists_levelSlab": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "FunctionalInequalities.Analysis.ae_hausdorffMeasure_inter_levelSet_eq_zero": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "FunctionalInequalities.KLS.ae_surfaceMeasure_inter_levelSet_eq_zero": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "NullSlicingAudit.target": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "NullSlicingAudit.subset_of_null": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "NullSlicingAudit.constant_on_null": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "NullSlicingAudit.ae_setLIntegral_eq_zero": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "NullSlicingAudit.dim_zero_surfaceMeasure_univ": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "NullSlicingAudit.dim_zero": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "NullSlicingAudit.dim_one_exceptional_level": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "NullSlicingAudit.dim_one": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "NullSlicingAudit.lipschitzOnWith_only": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "NullSlicingAudit.plane_segment_ne_zero": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ]
+  },
+  "sorryAx_in_new_results": false,
+  "validation": {
+    "NullSlicingAudit": {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "../build/audit/NullSlicingAudit.lean"
+      ],
+      "exit_code": 0,
+      "log": "build/audit/nullslicing-NullSlicingAudit.log",
+      "log_sha256": "65d75f410323559fb026cb4855c86bd6267176daee2c6c43b495cfd8012e856d"
+    },
+    "WeightedCoareaRouteStatements": {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "../build/audit/WeightedCoareaRouteStatements.lean"
+      ],
+      "exit_code": 0,
+      "log": "build/audit/nullslicing-WeightedCoareaRouteStatements.log",
+      "log_sha256": "3a74a1ef789572ff5238ff7faf8a591be11e73fc3030db04e32b2e6497fe0d6a"
+    },
+    "WeightedCoareaInfrastructure": {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "../build/audit/WeightedCoareaInfrastructure.lean"
+      ],
+      "exit_code": 0,
+      "log": "build/audit/nullslicing-WeightedCoareaInfrastructure.log",
+      "log_sha256": "d589fa8fcd2e485f0803b4b59e2ee188bc95ceff56e06156b5adf2b4c6b9655a"
+    },
+    "AreaFormulaAudit": {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "../build/audit/AreaFormulaAudit.lean"
+      ],
+      "exit_code": 0,
+      "log": "build/audit/nullslicing-AreaFormulaAudit.log",
+      "log_sha256": "012a848c88ac87ae07220136a1ca7b1a1238bb88a96c94c33eda6f2143e9e905"
+    },
+    "CheegerInfimumAudit": {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "../build/audit/CheegerInfimumAudit.lean"
+      ],
+      "exit_code": 0,
+      "log": "build/audit/nullslicing-CheegerInfimumAudit.log",
+      "log_sha256": "f91015c9f2b831300fc64abbcc1120baca81d03d15a2d425097b50ee96f2ac74"
+    },
+    "MinkowskiConstantAudit": {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "../build/audit/MinkowskiConstantAudit.lean"
+      ],
+      "exit_code": 0,
+      "log": "build/audit/nullslicing-MinkowskiConstantAudit.log",
+      "log_sha256": "efd1523ac10c8010fc527f14f64401998f1c54daf31f94b5e61642a6f67159eb"
+    },
+    "SuperlevelSardScope": {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "../build/audit/SuperlevelSardScope.lean"
+      ],
+      "exit_code": 0,
+      "log": "build/audit/nullslicing-SuperlevelSardScope.log",
+      "log_sha256": "9f7b4971a9a7fd42cfad81024dcfd13341cf8daaf3f9171aeac81e107d7e9562"
+    },
+    "SmoothSardAudit": {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "../build/audit/SmoothSardAudit.lean"
+      ],
+      "exit_code": 0,
+      "log": "build/audit/nullslicing-SmoothSardAudit.log",
+      "log_sha256": "bbb56e86e2b6005f1f31236fd465aa8e5862c75adb03deeba3ecccaddbf81490"
+    },
+    "SmoothSardRouteStatements": {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "../build/audit/SmoothSardRouteStatements.lean"
+      ],
+      "exit_code": 0,
+      "log": "build/audit/nullslicing-SmoothSardRouteStatements.log",
+      "log_sha256": "a11b0d4a5b5608157f7f4881b1dd8196504b94bab0c50b981d86b467c6579f6d"
+    },
+    "AnalyticPrerequisites": {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "FunctionalInequalities/KLS/WIP/AnalyticPrerequisites.lean"
+      ],
+      "exit_code": 0,
+      "log": "build/audit/nullslicing-AnalyticPrerequisites.log",
+      "log_sha256": "8088f94d8faafb648beb5c11eb62cd1c4fbf60723116c2d254d7cfd822c3ba74",
+      "holes": 3,
+      "diagnostic_lines": 3
+    },
+    "CheegerInfimum": {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "FunctionalInequalities/KLS/WIP/CheegerInfimum.lean"
+      ],
+      "exit_code": 0,
+      "log": "build/audit/nullslicing-CheegerInfimum.log",
+      "log_sha256": "392b75056ab6dae8d916f2144a28c828381c848c196dcfede771d16faf1af7fd",
+      "holes": 3,
+      "diagnostic_lines": 3
+    },
+    "Cheeger": {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "FunctionalInequalities/Energy/WIP/Cheeger.lean"
+      ],
+      "exit_code": 0,
+      "log": "build/audit/nullslicing-Cheeger.log",
+      "log_sha256": "7003e6f52a47b150e5fd6cd14ca240b5f4ee2d53ce464ad80ed811e67a181870",
+      "holes": 5,
+      "diagnostic_lines": 5
+    }
+  },
+  "default_lake_build_exit_code": 0,
+  "default_lake_build_log": "build/audit/nullslicing-lake-build.log",
+  "wip_holes": [
+    3,
+    3,
+    5
+  ],
+  "wip_holes_total": 11,
+  "wip_holes_unchanged": true,
+  "certificates": 24,
+  "perimeter_infrastructure": "missing",
+  "root_verification_receipt": "build/verification/latest.json",
+  "final_snapshot_attestation": "build/audit/nullslicing-final-snapshot.json",
+  "hash_binding": "This evidence is finalized before root verification and is itself hashed in that receipt. The final attestation binds receipt bytes, final snapshot and evidence bytes without a circular self-hash. build/ is gitignored, so build/audit files are bound here rather than by the snapshot.",
+  "proof_route": [
+    "exists_cover_of_hausdorffMeasure_eq_zero: read countable small-diameter covers of small total (d+1)-cost off the infimum formula Measure.hausdorffMeasure_apply; Mathlib's Nonempty guard keeps an empty piece at cost 0 even for d = 0",
+    "exists_levelSlab: each cover piece meeting N gets an explicit closed interval of length at most 2 K diam around u of one of its N-points; the Lipschitz estimate compares only points of N; pieces disjoint from N get the empty interval",
+    "measurable majorant: a tsum of constant-times-indicator functions, measurable by ENNReal.tsum_eq_iSup_sum and measurability of finite sums",
+    "pointwise bound: Measure.hausdorffMeasure_le_liminf_tsum indexed by the subtype {i // t in slab i}; the subtype is required because an empty piece would contribute 0 ^ (0 : R) = 1 for d = 0",
+    "integral bound: lintegral_tsum and lintegral_indicator_const give at most 2 K (k+1)^-1; K = 0 needs no branch because every interval is then a single point",
+    "Fatou (lintegral_liminf_le') on the MEASURABLE majorants, then lintegral_eq_zero_iff on the measurable liminf; no measurability of the slice function is assumed or used",
+    "dimension zero: natural subtraction gives surfaceMeasure V = hausdorffNormalized V (finrank R V) = volume via KLS.hausdorffNormalized_finrank_eq_volume, and monotonicity closes every level; the zero-dimensional fibre measure is NOT treated as the zero measure (the client computes surfaceMeasure univ = 1 there)",
+    "positive dimension: Analysis.hausdorffMeasure_finrank_eq_smul_volume turns volume N = 0 into muH[n] N = 0, and ((n-1 : N) : R) + 1 = n needs 1 <= n, so the dimension split is necessary"
+  ],
+  "not_proved": [
+    "L1 with a constant: the Eilenberg measurable majorant with right-hand side C K volume S; only the null special case is proved and no constant C is exhibited",
+    "L3 compact-fibre Hausdorff measurability and the open-cover content limit bridge to mkMetric'",
+    "L4 Borel-set fibre a.e. measurability",
+    "L5 measurable-weight fibre measurability",
+    "Analysis.aemeasurable_lintegral_levelSet",
+    "Analysis.lintegral_enorm_gradient_mul_eq_lintegral_levelSet",
+    "Isoperimetry.lintegral_enorm_gradient_mul_eq_lintegral_levelSet",
+    "sharp C^(finrank) Analysis.sard (no downstream consumer) and Analysis.ae_forall_fderiv_ne_zero, both still carrying sorryAx",
+    "smoothConstant_le_minkowskiConstant",
+    "smoothConstant_mul_lintegral_min_superlevel_le",
+    "equality of the two Cheeger constants",
+    "L6/L6a/L7 Whitney extension and exact C1 pieces; L8-L12"
+  ],
+  "files": {
+    "HANDOFF.md": "f7f1d25202a8c613612f23fb125f60c124f4d87d510714a925f4434772a5836e",
+    "build/audit/NullSlicingAudit.lean": "4b270dad0ad10a0d8df05b110403df662393dea505eeb7e7d210f87c92b2751e",
+    "build/audit/WeightedCoareaInfrastructure.lean": "fd74dcddfaf7342ec463633c6847963ed83894847ef1df78f17da7c44f6d4215",
+    "build/audit/WeightedCoareaRouteStatements.lean": "81170a5d93ca7195e308cac85bbe1d9147b00cb72aed4bd488499072ad285a0a",
+    "build/audit/nullslicing-AnalyticPrerequisites.log": "8088f94d8faafb648beb5c11eb62cd1c4fbf60723116c2d254d7cfd822c3ba74",
+    "build/audit/nullslicing-AreaFormulaAudit.log": "012a848c88ac87ae07220136a1ca7b1a1238bb88a96c94c33eda6f2143e9e905",
+    "build/audit/nullslicing-Cheeger.log": "7003e6f52a47b150e5fd6cd14ca240b5f4ee2d53ce464ad80ed811e67a181870",
+    "build/audit/nullslicing-CheegerInfimum.log": "392b75056ab6dae8d916f2144a28c828381c848c196dcfede771d16faf1af7fd",
+    "build/audit/nullslicing-CheegerInfimumAudit.log": "f91015c9f2b831300fc64abbcc1120baca81d03d15a2d425097b50ee96f2ac74",
+    "build/audit/nullslicing-MinkowskiConstantAudit.log": "efd1523ac10c8010fc527f14f64401998f1c54daf31f94b5e61642a6f67159eb",
+    "build/audit/nullslicing-NullSlicingAudit.log": "65d75f410323559fb026cb4855c86bd6267176daee2c6c43b495cfd8012e856d",
+    "build/audit/nullslicing-SmoothSardAudit.log": "bbb56e86e2b6005f1f31236fd465aa8e5862c75adb03deeba3ecccaddbf81490",
+    "build/audit/nullslicing-SmoothSardRouteStatements.log": "a11b0d4a5b5608157f7f4881b1dd8196504b94bab0c50b981d86b467c6579f6d",
+    "build/audit/nullslicing-SuperlevelSardScope.log": "9f7b4971a9a7fd42cfad81024dcfd13341cf8daaf3f9171aeac81e107d7e9562",
+    "build/audit/nullslicing-WeightedCoareaInfrastructure.log": "d589fa8fcd2e485f0803b4b59e2ee188bc95ceff56e06156b5adf2b4c6b9655a",
+    "build/audit/nullslicing-WeightedCoareaRouteStatements.log": "3a74a1ef789572ff5238ff7faf8a591be11e73fc3030db04e32b2e6497fe0d6a",
+    "build/audit/nullslicing-lake-build.log": "663bb667d5c904f6f3ae9df70d321b447153c405a323c525ff5c63b947dc2f97",
+    "formalization/.lake/packages/mathlib/Mathlib/Analysis/Calculus/Rademacher.lean": "5fc79ee3c9c5a0fc17fed09487b6b54dcad3b7d27e4e92880e18300a3f47a7cf",
+    "formalization/.lake/packages/mathlib/Mathlib/MeasureTheory/Integral/Lebesgue/Add.lean": "e705fd0f391d51b184cca4e1bf54d6d59374a3ee5f5c0c91dd074d49cebc2e9d",
+    "formalization/.lake/packages/mathlib/Mathlib/MeasureTheory/Measure/Hausdorff.lean": "82edd0cc267b39bbf04175c91b14cf9abafe0d2327da8e4c62726d4a43a336e1",
+    "formalization/.lake/packages/mathlib/Mathlib/MeasureTheory/Measure/Lebesgue/Basic.lean": "c831261b75c98f3f9b3f7126c5dae3629215b7bb2ff8bbd2ba9edc7b1abbd659",
+    "formalization/FunctionalInequalities/Analysis/HausdorffSlicing.lean": "6e768ad9f6b288c8d2a71fd7e59e5ebbdd58c33fb74b6166042988844fcea331",
+    "formalization/FunctionalInequalities/Analysis/LevelSet.lean": "ed8fbdd98635b627ebe82e866e84ab52fceaec553faf7200d95e21d224ad5f82",
+    "formalization/FunctionalInequalities/Energy/WIP/Cheeger.lean": "5c081733ce43889fcbb80a8971b9488bfd65e3bd1bf2fefa28b240cebe43aa78",
+    "formalization/FunctionalInequalities/KLS/Geometry/SmoothDomain.lean": "28f976cfd958ffc4f7f8e9ecc397bd0040b0433131b7cdd1b812d39170e93367",
+    "formalization/FunctionalInequalities/KLS/Geometry/SurfaceMeasure.lean": "21ff6aa596a9e61a2d8b818f6200435b126eeff5b1c6ec82547414b7a5e5300c",
+    "formalization/FunctionalInequalities/KLS/Geometry/SurfaceSlicing.lean": "c7696bfe287b6e4f73e470429d4cb398ab05c68662812e0e5d99901bf0d5133a",
+    "formalization/FunctionalInequalities/KLS/README.md": "2817e98210f646621774763f66ba980454645b3a7a0e10513d7370a844d53b23",
+    "formalization/FunctionalInequalities/KLS/WIP/AnalyticPrerequisites.lean": "e87e0de4a9684a0dd4ee6c57e2c18f26abfbb60748fc6e54b465d353c844b5ea",
+    "formalization/FunctionalInequalities/KLS/WIP/CheegerInfimum.lean": "b719d713ef41c087bd381009a38ca625d387d42543ef09e7a91a94009b125331",
+    "formalization/README.md": "9e453381380cb5b57f4b4803ce836acc8f5a2cf09a71b16a594a464615b413de",
+    "research/decisions/2026-09-15-null-slicing.md": "fd60450014d080db4b07d3467c1260149240e7e4cf2fa54974351280127fabf2",
+    "research/decisions/2026-09-15-weighted-coarea-route.md": "54fbf7cb046bd494b712cb06de494791138018c8f22f83d694df3139ea8f9856",
+    "research/tasks.json": "13dad50fce6015b8b57dc07bf7e76d2230173dd4235b4a6753fc53e70377a98c",
+    "research/verification.md": "2a5adc10eebf64235be1ddf24f2f917f96f1bf4fd7b276923507e54f69a94b8a"
+  }
+}
