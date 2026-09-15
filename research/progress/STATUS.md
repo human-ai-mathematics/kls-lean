@@ -251,56 +251,57 @@ See the linked statement and task record for the remaining proof obligation.
 
 [Task record](../../research/tasks.json)
 
-## Diagram-level auxiliary progress
+## Diagram-level progress
 
-Derived from the reviewed diagrams, including results not registered as separate Blueprint nodes.
-These markers preserve the diagram assessment; this generator does not independently audit proofs.
+Generated from the same resolved records as the README diagram and result table.
+Blueprint mappings derive status from staged proof annotations. Auxiliary assessments
+retain their evidence source; generating this view does not run Lean.
 
-| Diagram node | Recorded progress | Source |
-| --- | --- | --- |
-| `DENS` | ✓ Log-concave density — Intrinsic support | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/BorellRepresentation.lean) |
-| `NORM` | ✓ Affine / isotropic — Reduction | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/Isotropic.lean) |
-| `FORMS` | ✓ Closed forms — Dirichlet property | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Energy/SmoothGradient/Dirichlet.lean) |
-| `ENERGY` | ✓ Canonical energy — = 2 × Cheeger energy | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Energy/Cheeger.lean) |
-| `CONST` | ✓ Poincaré frontend — Equivalence | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/Poincare.lean) |
-| `MEAS` | ✓ Slice measurability | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/LevelSetMeasurable.lean) |
-| `GRAPH` | ✓ Open-domain — Graph area | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/OpenGraphIntegral.lean) |
-| `REG` | ✓ Regular-domain — Coarea | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/RegularCoarea.lean) |
-| `CRIT` | ✓ Critical-slice nullity | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/CriticalSlice.lean) |
-| `C1` | ○ General C¹ coarea — Next step | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/research/decisions/2026-09-15-weighted-coarea-route.md#l11) |
-| `WHIT` | ○ Whitney extension — Exact C¹ pieces | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/research/decisions/2026-09-15-weighted-coarea-route.md#l6) |
-| `LIP` | ○ Lipschitz coarea | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/research/decisions/2026-09-15-weighted-coarea-route.md#l12) |
-| `GG` | ✓ Global Gauss–Green | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/GaussGreen.lean) |
-| `REC` | ✓ Smooth recovery | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/PerimeterRecovery.lean) |
-| `FWD` | ✓ h_M ≤ h_S | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/CheegerInfimum.lean) |
-| `SARD` | ✓ Smooth Sard | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/SmoothSard.lean) |
-| `SCI` | ○ Smooth coarea — Inequality | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/WIP/CheegerInfimum.lean) |
-| `CUT` | ✓ Distance cutoffs | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/DistanceCutoff.lean) |
-| `REV` | ○ h_S ≤ h_M | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/WIP/CheegerInfimum.lean) |
-| `EQ` | ◐ h_M = h_S | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/WIP/CheegerInfimum.lean) |
-| `FRONT` | ○ Density Cheeger — Identification | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex) |
-| `CB` | ○ Cheeger–Buser — Comparison | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex) |
-| `MINK` | ✓ Minkowski coarea | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/MinkowskiContent.lean) |
-| `EG` | ○ Tight-prefix — Carleson estimate | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/src/chapters/50-kls-routes.tex) |
-| `EC` | ○ Tight-window — Consumption | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/src/chapters/50-kls-routes.tex) |
-| `EAND` | AND — ○ Eldan route | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/route-composition.yaml) |
-| `SG` | ○ Full-damping — Occupation bound | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/src/chapters/50-kls-routes.tex) |
-| `SC` | ○ Spectral — Sufficiency | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/src/chapters/50-kls-routes.tex) |
-| `SAND` | AND — ○ Spectral route | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/route-composition.yaml) |
-| `MH` | ○ W₂ limit and — CMH comparison | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/src/chapters/50-kls-routes.tex) |
-| `MG` | ○ Bounded CMH — Recovery envelope | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/src/chapters/50-kls-routes.tex) |
-| `MT` | ✓ Affine constant — Translation invariance | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Poincare/CovarianceGradient/Translation.lean) |
-| `MC` | ○ Recovery-sequence — Sufficiency | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/src/chapters/50-kls-routes.tex) |
-| `MAND` | AND — ○ CMH route | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/route-composition.yaml) |
-| `ONE` | ✓ One-dimensional — Poincaré ≤ 4 Var | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/Line/SharpPoincare.lean) |
-| `FLOG` | ✓ Fiber log-concavity | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/ConditionalFiber.lean) |
-| `FP` | ✓ Fiber-bound — Energy comparison | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/ConditionalFiber/EnergyComparison.lean) |
-| `F4` | ✓ Fiber energy — ≤ 4 × gradient energy | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/ConditionalFiber.lean) |
-| `FC` | ✓ Fiber Dirichlet form | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/ConditionalFiber/Closed.lean) |
-| `FG` | ○ Universal — Frame bound | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/src/chapters/50-kls-routes.tex) |
-| `FAND` | AND — ◐ Fiber route | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/route-composition.yaml) |
-| `ANY` | OR — Any completed route | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/route-composition.yaml) |
-| `KLS` | ○ KLS — Dimension-free bound | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Statement.lean) |
+| Diagram node | Description | Our Lean record | Source |
+| --- | --- | --- | --- |
+| `MG` | Seek a regular moment-map approximation of every centered log-concave law with a dimension-free CMH bound. | ○ Not yet formalized | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/src/chapters/50-kls-routes.tex) |
+| `EG` | Control the accumulated localization source by time, the remainder, and an absorbable share of damping. | ○ Not yet formalized | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/src/chapters/50-kls-routes.tex) |
+| `KLS` | Seek one dimension-free Poincaré bound for all isotropic log-concave laws, equivalently a covariance-scaled bound. | ○ Not yet formalized | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Statement.lean) |
+| `ENERGY` | Identify canonical energy with twice Cheeger energy when the intrinsic law has a density, including log-concave laws. | ✓ Formalized in Lean | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Energy/Cheeger.lean) |
+| `MC` | Deduce KLS if every centered log-concave law has a regular recovery sequence with a universal CMH bound. | ○ Not yet formalized | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/src/chapters/50-kls-routes.tex) |
+| `F4` | For full-dimensional log-concave laws, bound fiber energy by four times gradient energy; the historical ID retains “twelve”. | ✓ Formalized in Lean | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/ConditionalFiber.lean) |
+| `EC` | Turn the assumed tight-prefix estimate into a dimension-free boundary bound and then KLS. | ○ Not yet formalized | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/src/chapters/50-kls-routes.tex) |
+| `MT` | Show that translating a log-concave law preserves log-concavity and its affine Poincaré constant. | ✓ Formalized in Lean | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Poincare/CovarianceGradient/Translation.lean) |
+| `FP` | Turn an assumed fiber Poincaré bound with coefficient κ into a gradient-energy comparison and a κC global bound. | ✓ Formalized in Lean | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/ConditionalFiber/EnergyComparison.lean) |
+| `FC` | Establish closed quadratic and Markov properties of the conditional-fiber energy under the stated density and moment assumptions. | ✓ Formalized in Lean | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/ConditionalFiber/Closed.lean) |
+| `SC` | Deduce a dimension-free Poincaré bound from the assumed full-damping occupation estimate. | ○ Not yet formalized | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/src/chapters/50-kls-routes.tex) |
+| `FG` | Seek a frame independent of the test function that controls variance by fiber energy with a universal constant. | ○ Not yet formalized | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/src/chapters/50-kls-routes.tex) |
+| `SG` | Seek a universal-time source estimate for a fixed eigenfunction along localization, uniform through regular approximation. | ○ Not yet formalized | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/src/chapters/50-kls-routes.tex) |
+| `NORM` | Show that isotropic, covariance-scaled, and affine-energy KLS bounds are equivalent, including lower-dimensional laws. | ✓ Formalized in Lean | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/Isotropic.lean) |
+| `DENS` | Represent a log-concave law by an intrinsic log-concave density, positive with locally bounded reciprocal inside its convex support. | ✓ Formalized in Lean | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/BorellRepresentation.lean) |
+| `MH` | Bound the affine Poincaré constant of a W₂ limit by the limiting CMH constants of a regular recovery sequence. | ○ Not yet formalized | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/src/chapters/50-kls-routes.tex) |
+| `FRONT` | Identify the intrinsic Cheeger constant with the smooth-boundary density formulation for non-Dirac log-concave laws. | ○ Not yet formalized | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex) |
+| `CB` | Compare Poincaré and inverse-Cheeger scales in both directions for log-concave laws, with factors 4 and π. | ○ Not yet formalized | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex) |
+| `ONE` | Bound a one-dimensional log-concave law's Poincaré constant by four times its variance, including zero variance. | ✓ Formalized in Lean | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/Line/SharpPoincare.lean) |
+| `CONST` | Identify canonical and local-slope Poincaré constants for finite-dimensional log-concave laws. | ✓ Formalized in Lean | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/Poincare.lean) |
+| `FORMS` | Show that normal contractions decrease relaxed gradient energy, giving the ambient and intrinsic energies the Dirichlet property. | ✓ Formalized in Lean | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Energy/SmoothGradient/Dirichlet.lean) |
+| `MEAS` | Slice measurability | ✓ Formalized in Lean | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/LevelSetMeasurable.lean) |
+| `GRAPH` | Open-domain — Graph area | ✓ Formalized in Lean | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/OpenGraphIntegral.lean) |
+| `REG` | Regular-domain — Coarea | ✓ Formalized in Lean | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/RegularCoarea.lean) |
+| `CRIT` | Critical-slice nullity | ✓ Formalized in Lean | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/CriticalSlice.lean) |
+| `C1` | General C¹ coarea — Next step | ○ Not yet formalized | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/research/decisions/2026-09-15-weighted-coarea-route.md#l11) |
+| `WHIT` | Whitney extension — Exact C¹ pieces | ○ Not yet formalized | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/research/decisions/2026-09-15-weighted-coarea-route.md#l6) |
+| `LIP` | Lipschitz coarea | ○ Not yet formalized | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/research/decisions/2026-09-15-weighted-coarea-route.md#l12) |
+| `GG` | Global Gauss–Green | ✓ Formalized in Lean | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/GaussGreen.lean) |
+| `REC` | Smooth recovery | ✓ Formalized in Lean | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/PerimeterRecovery.lean) |
+| `FWD` | h_M ≤ h_S | ✓ Formalized in Lean | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/CheegerInfimum.lean) |
+| `SARD` | Smooth Sard | ✓ Formalized in Lean | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/SmoothSard.lean) |
+| `SCI` | Smooth coarea — Inequality | ○ Not yet formalized | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/WIP/CheegerInfimum.lean) |
+| `CUT` | Distance cutoffs | ✓ Formalized in Lean | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/DistanceCutoff.lean) |
+| `REV` | h_S ≤ h_M | ○ Not yet formalized | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/WIP/CheegerInfimum.lean) |
+| `EQ` | h_M = h_S | ◐ Partially formalized | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/WIP/CheegerInfimum.lean) |
+| `MINK` | Minkowski coarea | ✓ Formalized in Lean | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/MinkowskiContent.lean) |
+| `EAND` | AND — Eldan route | ○ Not yet formalized | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/route-composition.yaml) |
+| `SAND` | AND — Spectral route | ○ Not yet formalized | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/route-composition.yaml) |
+| `MAND` | AND — CMH route | ○ Not yet formalized | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/route-composition.yaml) |
+| `FLOG` | Fiber log-concavity | ✓ Formalized in Lean | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/ConditionalFiber.lean) |
+| `FAND` | AND — Fiber route | ◐ Partially formalized | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/route-composition.yaml) |
+| `ANY` | OR — Any completed route | OR | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/route-composition.yaml) |
 
 ## Provenance
 
@@ -308,7 +309,8 @@ Upstream revision: `34b5fcd57fef17089e781616005fe6d3641bd11e`. The selected upst
 20 records; this register is not an inventory of the entire upstream ledger.
 
 Canonical input digest: `1fc1e6084dc74aeea394830ddb1ed6ce770b0315c2d279bab8818b8c82482e27`.
-Diagram digest: `2f9ab7bbd724c08fdcb5c7dc6cfee13c736e2b261a60712307f451a26efce7ad`.
+Diagram digest: `3f13f3a8d153e3c8adb2b0ff05960a73e0c846183d0cd1619de8cf3798abc7ca`.
+View input digest: `7af70f8acd6411bd75aae053cb833ae46a826f7f54e6f646544f657191b878db`.
 
 Regenerate with `python3 research/progress/update.py` after staging the intended source and
 metadata updates. Unstaged unrelated metadata is deliberately excluded.

@@ -6,115 +6,196 @@
       "id": "ap:eldan-trace-upgrade",
       "family": "fam:eldan-localization",
       "state": "active",
-      "objective": "Upgrade directional occupation control to trace scale for all balanced cuts, producing the tight-prefix absorptive trace estimate with every source and damping term matched to the scalar Riccati bound."
+      "objective": "Upgrade directional occupation control to trace scale for all balanced cuts, producing the tight-prefix absorptive trace estimate with every source and damping term matched to the scalar Riccati bound.",
+      "local_record": "ass:tight-prefix-carleson"
     },
     {
       "id": "ap:eldan-weighted-excess",
       "family": "fam:eldan-localization",
       "state": "blocked",
-      "objective": "Propagate the perimeter excess with a global operator-norm covariance weight at the unit-rate scale."
+      "objective": "Propagate the perimeter excess with a global operator-norm covariance weight at the unit-rate scale.",
+      "local_record": null,
+      "local_assessment": {
+        "state": "pending",
+        "note": "No complete local Lean formalization recorded for this approach objective."
+      },
+      "scope_note": "Original package refuted."
     },
     {
       "id": "ap:eldan-screened-supply",
       "family": "fam:eldan-localization",
       "state": "active",
-      "objective": "Charge the weighted excess only on the aligned screen where the trace term dominates, and return at most an absorbable fraction on its complement."
+      "objective": "Charge the weighted excess only on the aligned screen where the trace term dominates, and return at most an absorbable fraction on its complement.",
+      "local_record": null,
+      "local_assessment": {
+        "state": "pending",
+        "note": "No complete local Lean formalization recorded for this approach objective."
+      }
     },
     {
       "id": "ap:eldan-stein-weighted",
       "family": "fam:eldan-localization",
       "state": "queued",
-      "objective": "Specify the tensor-stable replacement for the refuted weighted package and supply the matching localization-uniform almost-stability trace theorem modulo Jacobi zero modes."
+      "objective": "Specify the tensor-stable replacement for the refuted weighted package and supply the matching localization-uniform almost-stability trace theorem modulo Jacobi zero modes.",
+      "local_record": null,
+      "local_assessment": {
+        "state": "pending",
+        "note": "No complete local Lean formalization recorded for this approach objective."
+      }
     },
     {
       "id": "ap:eldan-taming-splitting",
       "family": "fam:eldan-localization",
       "state": "queued",
-      "objective": "Define one bridge object carrying both the cut-free covariance index and the cut-indexed boundary geometry, and prove the covariance-taming or almost-splitting estimate from it."
+      "objective": "Define one bridge object carrying both the cut-free covariance index and the cut-indexed boundary geometry, and prove the covariance-taming or almost-splitting estimate from it.",
+      "local_record": null,
+      "local_assessment": {
+        "state": "pending",
+        "note": "No complete local Lean formalization recorded for this approach objective."
+      }
     },
     {
       "id": "ap:eldan-alignment",
       "family": "fam:eldan-localization",
       "state": "queued",
-      "objective": "Decide the incident-high product-cut model with a uniform analytic bound for fixed balanced product cuts, or a certified counterexample."
+      "objective": "Decide the incident-high product-cut model with a uniform analytic bound for fixed balanced product cuts, or a certified counterexample.",
+      "local_record": null,
+      "local_assessment": {
+        "state": "pending",
+        "note": "No complete local Lean formalization recorded for this approach objective."
+      }
     },
     {
       "id": "ap:spectral-occupation",
       "family": "fam:mm-spectral",
       "state": "active",
-      "objective": "Prove the universal-time full-damping source estimate uniformly on regular approximants, preserving tensor orientation under unwhitening."
+      "objective": "Prove the universal-time full-damping source estimate uniformly on regular approximants, preserving tensor orientation under unwhitening.",
+      "local_record": "q:mm-spectral-occupation"
     },
     {
       "id": "ap:spectral-window-chain",
       "family": "fam:mm-spectral",
       "state": "completed",
-      "objective": "Close the occupation estimate on the published polylogarithmic covariance window through the initial-layer window chain."
+      "objective": "Close the occupation estimate on the published polylogarithmic covariance window through the initial-layer window chain.",
+      "local_record": null,
+      "local_assessment": {
+        "state": "pending",
+        "note": "No complete local Lean formalization recorded for this approach objective."
+      },
+      "scope_note": "Conditional on Letwin; short-time only."
     },
     {
       "id": "ap:cmh-recovery-envelope",
       "family": "fam:mm-cmh",
       "state": "active",
-      "objective": "Construct, for every centered log-concave law, one regular compact-target moment-map recovery sequence with a universal bound on the CMH liminf."
+      "objective": "Construct, for every centered log-concave law, one regular compact-target moment-map recovery sequence with a universal bound on the CMH liminf.",
+      "local_record": "ass:cmh-recovery-envelope"
     },
     {
       "id": "ap:cmh-anisotropic-bootstrap",
       "family": "fam:mm-cmh",
       "state": "queued",
-      "objective": "Prove the anisotropic source-retention inequality that would bound the linear-test quotient through the exact isotropic-coordinate matrices, working from the weak column equation of the linear-sector gate-matrix spectral resolution without assuming its strong operator-domain form, and supplying the integrated corrector or nonlocal coercivity that matrix polarization alone cannot."
+      "objective": "Prove the anisotropic source-retention inequality that would bound the linear-test quotient through the exact isotropic-coordinate matrices, working from the weak column equation of the linear-sector gate-matrix spectral resolution without assuming its strong operator-domain form, and supplying the integrated corrector or nonlocal coercivity that matrix polarization alone cannot.",
+      "local_record": null,
+      "local_assessment": {
+        "state": "pending",
+        "note": "No complete local Lean formalization recorded for this approach objective."
+      }
     },
     {
       "id": "ap:cmh-uniform-approximants",
       "family": "fam:mm-cmh",
       "state": "queued",
-      "objective": "Bound the CMH constant uniformly along the certified regular approximant families, a stronger premise than the recovery envelope and not needed if that one is discharged."
+      "objective": "Bound the CMH constant uniformly along the certified regular approximant families, a stronger premise than the recovery envelope and not needed if that one is discharged.",
+      "local_record": null,
+      "local_assessment": {
+        "state": "pending",
+        "note": "No complete local Lean formalization recorded for this approach objective."
+      }
     },
     {
       "id": "ap:cmh-invariant-lift",
       "family": "fam:mm-cmh",
       "state": "queued",
-      "objective": "Derive the target-flat multiplier invariantly and reduce arbitrary split dimensions to controlled Codazzi components paired with named positive squares."
+      "objective": "Derive the target-flat multiplier invariantly and reduce arbitrary split dimensions to controlled Codazzi components paired with named positive squares.",
+      "local_record": null,
+      "local_assessment": {
+        "state": "pending",
+        "note": "No complete local Lean formalization recorded for this approach objective."
+      }
     },
     {
       "id": "ap:cmh-square-root-commutator",
       "family": "fam:mm-cmh",
       "state": "queued",
-      "objective": "Control the complete Haar sum of square-root commutators on a common core, accounting for every retained positive and error term without double spending."
+      "objective": "Control the complete Haar sum of square-root commutators on a common core, accounting for every retained positive and error term without double spending.",
+      "local_record": null,
+      "local_assessment": {
+        "state": "pending",
+        "note": "No complete local Lean formalization recorded for this approach objective."
+      }
     },
     {
       "id": "ap:cmh-solenoidal-perturbation",
       "family": "fam:mm-cmh",
       "state": "queued",
-      "objective": "Compute the exact second variation through the Hodge split at an admissible target-side perturbation of the saturating one-sided-exponential product, aimed at the radial Gamma factor rather than at the base of an exponential cone."
+      "objective": "Compute the exact second variation through the Hodge split at an admissible target-side perturbation of the saturating one-sided-exponential product, aimed at the radial Gamma factor rather than at the base of an exponential cone.",
+      "local_record": null,
+      "local_assessment": {
+        "state": "pending",
+        "note": "No complete local Lean formalization recorded for this approach objective."
+      }
     },
     {
       "id": "ap:cmh-gate-zero",
       "family": "fam:mm-cmh",
       "state": "active",
-      "objective": "Decide the necessary linear moment-map inequality, first in the sharp form of gate zero and then at the CMH constant itself, by an independently checked analytic argument or a genuine moment-map counterexample, using the certified third-moment decomposition of the linear sector and the exact exponential-cone battery as the equality set any argument must be tight on."
+      "objective": "Decide the necessary linear moment-map inequality, first in the sharp form of gate zero and then at the CMH constant itself, by an independently checked analytic argument or a genuine moment-map counterexample, using the certified third-moment decomposition of the linear sector and the exact exponential-cone battery as the equality set any argument must be tight on.",
+      "local_record": null,
+      "local_assessment": {
+        "state": "pending",
+        "note": "No complete local Lean formalization recorded for this approach objective."
+      }
     },
     {
       "id": "ap:fiber-frame-construction",
       "family": "fam:conditional-fiber",
       "state": "active",
-      "objective": "Construct one test-independent isotropic frame with a universal L2 gap on the maximal closed form domain."
+      "objective": "Construct one test-independent isotropic frame with a universal L2 gap on the maximal closed form domain.",
+      "local_record": "q:conditional-fiber-frame"
     },
     {
       "id": "ap:fiber-simplex-dual",
       "family": "fam:conditional-fiber",
       "state": "queued",
-      "objective": "Refute the all-frame gate with an exact uniform-simplex dual certificate of polynomial degree at least three whose objective tends to zero, the certified degree-two floors of the root-frame degree-two pencil identity having ruled out every degree-two refuter."
+      "objective": "Refute the all-frame gate with an exact uniform-simplex dual certificate of polynomial degree at least three whose objective tends to zero, the certified degree-two floors of the root-frame degree-two pencil identity having ruled out every degree-two refuter.",
+      "local_record": null,
+      "local_assessment": {
+        "state": "pending",
+        "note": "No complete local Lean formalization recorded for this approach objective."
+      }
     },
     {
       "id": "ap:cone-boundary-gap",
       "family": "fam:novel-routes",
       "state": "blocked",
-      "objective": "Establish a universal tangential Poincare gap for normalized cone measure, feeding the published Hardy boundary bridge."
+      "objective": "Establish a universal tangential Poincare gap for normalized cone measure, feeding the published Hardy boundary bridge.",
+      "local_record": null,
+      "local_assessment": {
+        "state": "pending",
+        "note": "No complete local Lean formalization recorded for this approach objective."
+      }
     },
     {
       "id": "ap:laplace-brenier-simplex",
       "family": "fam:novel-routes",
       "state": "blocked",
-      "objective": "Decide the rotation-optimized simplex transmission bound before registering a Laplace-Brenier route."
+      "objective": "Decide the rotation-optimized simplex transmission bound before registering a Laplace-Brenier route.",
+      "local_record": null,
+      "local_assessment": {
+        "state": "pending",
+        "note": "No complete local Lean formalization recorded for this approach objective."
+      }
     }
   ]
 }

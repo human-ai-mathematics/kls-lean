@@ -3,8 +3,8 @@
 - Keep progress documentation together in `research/progress/`: `README.md` directly displays
   the English Mermaid diagrams on the GitHub directory page; `STATUS.md` is the generated node register.
   The root README retains the entry link and current-status summary.
-- When proof progress changes, review the complete diagram, their date, and the root current-status
-  summary. After staging the intended proof/metadata changes, regenerate the register with
+- When proof progress changes, review the complete diagram, its date, and the root current-status
+  summary. After staging the intended proof/metadata changes, regenerate all progress views with
   `python3 research/progress/update.py` and include it in the same commit. The generator reads
   canonical records from the Git index to exclude unrelated unstaged changes.
 - Base completion markers on the current theorem statements and verification evidence. Preserve
@@ -18,7 +18,9 @@
   Distinguish upstream mathematical results, conditional implications, and local Lean proofs;
   keep refuted branches and restricted model calculations outside the active implication chain.
 - Keep one large combined Mermaid diagram and a row-by-row upstream approach table on the same page.
-  Synchronize `TREE.mmd` with the README diagram and preserve the pinned portfolio inventory.
+  Maintain `research/progress/nodes.json` and the pinned portfolio inventory; generate the README
+  blocks, `STATUS.md`, and `TREE.mmd` with `update.py`. Do not edit generated blocks directly.
+  Derive mapped node statuses from Blueprint records; record evidence for auxiliary assessments.
   Label completed local results "Formalized in Lean"; distinguish full approach goals from supporting results.
 - Maintain links for every diagram node and the fallback link directory. Review the route
   diagram and the approach table after proof updates or source-file moves.

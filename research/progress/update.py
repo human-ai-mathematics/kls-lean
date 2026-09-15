@@ -13,6 +13,7 @@ import tempfile
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / 'research'))
 import atlas
+import views
 
 
 def staged(path):
@@ -65,9 +66,15 @@ def generate():
            'See the linked statement for full hypotheses and scope.', '',
            '| Node ID | Plain-English description | Upstream / mathematical record | Our Lean record | Certificate / statement |',
            '| --- | --- | --- | --- | --- |']
-    descriptions = json.loads((ROOT / 'research/progress/node-descriptions.json').read_text())
+    catalog = json.loads((ROOT / 'research/progress/nodes.json').read_text())
+    portfolio = json.loads((ROOT / 'research/progress/portfolio.json').read_text())
+    records = views.resolve(catalog, nodes, claims)
+    views.validate_routes(catalog, records, routes)
+    tree = views.render_tree(catalog, records)
+    readme = views.render_readme((ROOT / 'research/progress/README.md').read_text(), tree, catalog, records, portfolio)
+    descriptions = {r['blueprint']: r['description'] for r in records.values() if 'blueprint' in r}
     if descriptions.keys() != nodes.keys():
-        raise ValueError('Update node-descriptions.json to match the Blueprint node inventory.')
+        raise ValueError('Update nodes.json to match the Blueprint node inventory.')
     if any(not isinstance(value, str) or not value.strip() for value in descriptions.values()):
         raise ValueError('Every local node needs a nonempty English description.')
     pending = []
@@ -76,7 +83,7 @@ def generate():
         provenance = claim.get('provenance', {})
         meta = tasks.get(name, {})
         math = ('Upstream: ' + claim['state']) if provenance.get('source') == 'kls-exploration' else ('Local classification: ' + meta.get('mathematics', 'definition' if node['kind'] == 'definition' else 'not separately classified'))
-        complete = node['lean']['recorded'] and bool(node['lean']['declarations']) and (node['kind'] == 'definition' or node['proof_leanok'])
+        complete = records[name]['state'] == 'formalized'
         status = '✓ Formalized in Lean (definition)' if complete and node['kind'] == 'definition' else ('✓ Formalized in Lean' if complete else '○ Not yet formalized')
         excluded = claim.get('state') == 'refuted' or meta.get('mathematics') == 'refuted'
         if excluded:
@@ -108,45 +115,44 @@ def generate():
         else:
             out += ['', 'See the linked statement and task record for the remaining proof obligation.']
         out += ['', link('research/tasks.json', 'Task record'), '']
-    out += ['## Diagram-level auxiliary progress', '',
-            'Derived from the reviewed diagrams, including results not registered as separate Blueprint nodes.',
-            'These markers preserve the diagram assessment; this generator does not independently audit proofs.', '',
-            '| Diagram node | Recorded progress | Source |', '| --- | --- | --- |']
-    diagram = (ROOT / 'research/progress/README.md').read_text()
-    labels = dict(re.findall(r'^    (\w+)[\[{]"([^"\n]+)"', diagram, re.M))
-    links = dict(re.findall(r'^    click (\w+) href "([^"]+)"', diagram, re.M))
-    assert labels.keys() == links.keys()
-    for name, label in labels.items():
-        out.append(f'| `{name}` | {cell(label.replace("<br/>", " — "))} | [Source]({links[name]}) |')
+    out += ['## Diagram-level progress', '',
+            'Generated from the same resolved records as the README diagram and result table.',
+            'Blueprint mappings derive status from staged proof annotations. Auxiliary assessments',
+            'retain their evidence source; generating this view does not run Lean.', '',
+            '| Diagram node | Description | Our Lean record | Source |', '| --- | --- | --- | --- |']
+    for record in records.values():
+        if 'diagram' not in record:
+            continue
+        d = record['diagram']
+        out.append(f'| `{d["id"]}` | {cell(record["description"])} | {views.STATES[record["state"]]} | [Source]({d["source"]}) |')
+    diagram = tree
     out += ['', '## Provenance', '',
             f'Upstream revision: `{upstream["revision"]}`. The selected upstream snapshot contains',
             f'{len(upstream["records"])} records; this register is not an inventory of the entire upstream ledger.', '',
             f'Canonical input digest: `{digest}`.',
-            f'Diagram digest: `{hashlib.sha256(diagram.encode()).hexdigest()}`.', '',
+            f'Diagram digest: `{hashlib.sha256(diagram.encode()).hexdigest()}`.',
+            f'View input digest: `{hashlib.sha256(json.dumps([catalog, portfolio], sort_keys=True).encode()).hexdigest()}`.', '',
             'Regenerate with `python3 research/progress/update.py` after staging the intended source and',
             'metadata updates. Unstaged unrelated metadata is deliberately excluded.', '']
-    return '\n'.join(out)
+    return {'STATUS.md': '\n'.join(out), 'README.md': readme, 'TREE.mmd': tree}
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--check', action='store_true')
     args = parser.parse_args()
-    output = ROOT / 'research/progress/STATUS.md'
-    text = generate()
-    diagram = re.search(r'```mermaid\n(.*?)```', (ROOT / 'research/progress/README.md').read_text(), re.S)[1]
-    tree = ROOT / 'research/progress/TREE.mmd'
-    if args.check and (not tree.exists() or tree.read_text() != diagram):
-        raise SystemExit('Standalone diagram is stale; regenerate.')
-    if not args.check:
-        tree.write_text(diagram)
+    outputs = generate()
+    stale = [name for name, content in outputs.items()
+             if not (ROOT / 'research/progress' / name).exists()
+             or (ROOT / 'research/progress' / name).read_text() != content]
     if args.check:
-        if not output.exists() or output.read_text() != text:
-            raise SystemExit('Progress table is stale; regenerate after staging the intended inputs.')
-        print('Progress table matches staged records and route diagrams.')
+        if stale:
+            raise SystemExit('Generated progress views are stale: ' + ', '.join(stale))
+        print('All progress views match the shared records.')
     else:
-        output.write_text(text)
-        print('Generated research/progress/STATUS.md')
+        for name, content in outputs.items():
+            (ROOT / 'research/progress' / name).write_text(content)
+        print('Generated README.md, STATUS.md, and TREE.mmd from shared records.')
 
 
 if __name__ == '__main__':

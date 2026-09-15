@@ -1,0 +1,1131 @@
+{
+  "version": 1,
+  "last_updated": "2026-09-15",
+  "nodes": {
+    "ass:cmh-recovery-envelope": {
+      "description": "Seek a regular moment-map approximation of every centered log-concave law with a dimension-free CMH bound.",
+      "blueprint": "ass:cmh-recovery-envelope",
+      "diagram": {
+        "id": "MG",
+        "label": "Bounded CMH<br/>Recovery envelope",
+        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/src/chapters/50-kls-routes.tex",
+        "shape": "box"
+      }
+    },
+    "ass:tight-prefix-carleson": {
+      "description": "Control the accumulated localization source by time, the remainder, and an absorbable share of damping.",
+      "blueprint": "ass:tight-prefix-carleson",
+      "diagram": {
+        "id": "EG",
+        "label": "Tight-prefix<br/>Carleson estimate",
+        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/src/chapters/50-kls-routes.tex",
+        "shape": "box"
+      }
+    },
+    "ass:weighted-package": {
+      "description": "The historical covariance-weighted estimate for near-minimizing cuts; its universal claim was refuted.",
+      "blueprint": "ass:weighted-package"
+    },
+    "cert:ambient-intrinsic-comparison": {
+      "description": "Package equality of ambient and intrinsic relaxed energies and Poincaré constants.",
+      "blueprint": "cert:ambient-intrinsic-comparison"
+    },
+    "cert:binary-tensorization": {
+      "description": "Bound the Poincaré constant of two independent factors by the larger factor constant.",
+      "blueprint": "cert:binary-tensorization"
+    },
+    "cert:finite-tensorization": {
+      "description": "Identify the constant of a finite independent product with the supremum of its factor constants, including degenerate cases.",
+      "blueprint": "cert:finite-tensorization"
+    },
+    "cert:gaussian-one-dimensional": {
+      "description": "Identify a one-dimensional Gaussian's optimal Poincaré constant with its variance, including zero variance.",
+      "blueprint": "cert:gaussian-one-dimensional"
+    },
+    "cert:legacy-relaxed-comparison": {
+      "description": "Transfer smooth-test bounds to relaxed-energy constants; this certificate does not identify Cheeger energy.",
+      "blueprint": "cert:legacy-relaxed-comparison"
+    },
+    "cert:linear-test-lower": {
+      "description": "Use linear tests to bound the Poincaré constant below by the largest covariance eigenvalue.",
+      "blueprint": "cert:linear-test-lower"
+    },
+    "conj:kls": {
+      "description": "Seek one dimension-free Poincaré bound for all isotropic log-concave laws, equivalently a covariance-scaled bound.",
+      "blueprint": "conj:kls",
+      "diagram": {
+        "id": "KLS",
+        "label": "KLS<br/>Dimension-free bound",
+        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Statement.lean",
+        "shape": "box"
+      }
+    },
+    "cor:absolutely-continuous-relaxation-two-cheeger": {
+      "description": "Identify canonical energy with twice Cheeger energy when the intrinsic law has a density, including log-concave laws.",
+      "blueprint": "cor:absolutely-continuous-relaxation-two-cheeger",
+      "diagram": {
+        "id": "ENERGY",
+        "label": "Canonical energy<br/>= 2 × Cheeger energy",
+        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Energy/Cheeger.lean",
+        "shape": "box"
+      }
+    },
+    "cor:ambient-intrinsic-constant-equality": {
+      "description": "Show that ambient and intrinsic relaxed energies have the same optimal Poincaré constant, including infinity.",
+      "blueprint": "cor:ambient-intrinsic-constant-equality"
+    },
+    "cor:cmh-recovery-sequence-suffices": {
+      "description": "Deduce KLS if every centered log-concave law has a regular recovery sequence with a universal CMH bound.",
+      "blueprint": "cor:cmh-recovery-sequence-suffices",
+      "diagram": {
+        "id": "MC",
+        "label": "Recovery-sequence<br/>Sufficiency",
+        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/src/chapters/50-kls-routes.tex",
+        "shape": "box"
+      }
+    },
+    "cor:conditional-fiber-twelve-bound": {
+      "description": "For full-dimensional log-concave laws, bound fiber energy by four times gradient energy; the historical ID retains “twelve”.",
+      "blueprint": "cor:conditional-fiber-twelve-bound",
+      "diagram": {
+        "id": "F4",
+        "label": "Fiber energy<br/>≤ 4 × gradient energy",
+        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/ConditionalFiber.lean",
+        "shape": "box"
+      }
+    },
+    "cor:tight-window-consumption": {
+      "description": "Turn the assumed tight-prefix estimate into a dimension-free boundary bound and then KLS.",
+      "blueprint": "cor:tight-window-consumption",
+      "diagram": {
+        "id": "EC",
+        "label": "Tight-window<br/>Consumption",
+        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/src/chapters/50-kls-routes.tex",
+        "shape": "box"
+      }
+    },
+    "def:affine-poincare-constant": {
+      "description": "Define the affine Poincaré constant using relaxed covariance-weighted gradient energy on the affine support.",
+      "blueprint": "def:affine-poincare-constant"
+    },
+    "def:affine-support-intrinsic-law": {
+      "description": "Describe the smallest affine space carrying the law and its probability distribution in intrinsic coordinates.",
+      "blueprint": "def:affine-support-intrinsic-law"
+    },
+    "def:conditional-fiber-form": {
+      "description": "Define energy by averaging conditional variances along lines, normalized by each fiber's coordinate variance.",
+      "blueprint": "def:conditional-fiber-form"
+    },
+    "def:extended-energy": {
+      "description": "Define an energy that may be infinite and the domain where it is finite.",
+      "blueprint": "def:extended-energy"
+    },
+    "def:intrinsic-affine-energy": {
+      "description": "Transport relaxed smooth-gradient energy from intrinsic coordinates back to ambient L² classes.",
+      "blueprint": "def:intrinsic-affine-energy"
+    },
+    "def:isoperimetric-cheeger-scale": {
+      "description": "Define the Cheeger constant from boundary expansion relative to the smaller mass, and define its reciprocal scale.",
+      "blueprint": "def:isoperimetric-cheeger-scale"
+    },
+    "def:isotropic-law": {
+      "description": "Define an isotropic law as centered with identity covariance, including the zero-dimensional case.",
+      "blueprint": "def:isotropic-law"
+    },
+    "def:l2-energy-poincare-constant": {
+      "description": "Define the optimal variance-to-energy constant for an extended energy on L².",
+      "blueprint": "def:l2-energy-poincare-constant"
+    },
+    "def:l2-mean-variance": {
+      "description": "Define mean, centering, and variance independently of the representative of an L² class.",
+      "blueprint": "def:l2-mean-variance"
+    },
+    "def:legacy-smooth-test-poincare": {
+      "description": "Define the Poincaré inequality and its optimal constant using globally smooth tests with finite gradient energy.",
+      "blueprint": "def:legacy-smooth-test-poincare"
+    },
+    "def:literature-poincare-constant": {
+      "description": "Define the literature Poincaré constant using locally Lipschitz tests and local slopes on the affine support.",
+      "blueprint": "def:literature-poincare-constant"
+    },
+    "def:log-concave-law": {
+      "description": "Define log-concavity by the mass inequality for convex combinations of compact sets, allowing lower-dimensional support.",
+      "blueprint": "def:log-concave-law"
+    },
+    "def:poincare-test-family": {
+      "description": "Define variance-to-energy quotients and their optimal bound on a specified test domain, with zero-energy conventions.",
+      "blueprint": "def:poincare-test-family"
+    },
+    "def:preenergy-relaxation": {
+      "description": "Extend a test energy by taking the least limiting energy among convergent test sequences.",
+      "blueprint": "def:preenergy-relaxation"
+    },
+    "def:selected-canonical-frontend": {
+      "description": "Choose intrinsic relaxed smooth-gradient energy as the canonical energy and define its Poincaré constant.",
+      "blueprint": "def:selected-canonical-frontend"
+    },
+    "def:smooth-gradient-preenergy": {
+      "description": "Assign each admissible smooth function the integral of its squared gradient.",
+      "blueprint": "def:smooth-gradient-preenergy"
+    },
+    "def:smooth-gradient-relaxation": {
+      "description": "Extend smooth-gradient energy to L² by sequential relaxation.",
+      "blueprint": "def:smooth-gradient-relaxation"
+    },
+    "lem:affine-poincare-translation-invariance": {
+      "description": "Show that translating a log-concave law preserves log-concavity and its affine Poincaré constant.",
+      "blueprint": "lem:affine-poincare-translation-invariance",
+      "diagram": {
+        "id": "MT",
+        "label": "Affine constant<br/>Translation invariance",
+        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Poincare/CovarianceGradient/Translation.lean",
+        "shape": "box"
+      }
+    },
+    "lem:ambient-intrinsic-covariance": {
+      "description": "Identify ambient covariance with intrinsic covariance on the support and zero on normal directions, preserving the operator norm.",
+      "blueprint": "lem:ambient-intrinsic-covariance"
+    },
+    "lem:conditional-fiber-energy-comparison": {
+      "description": "Turn an assumed fiber Poincaré bound with coefficient κ into a gradient-energy comparison and a κC global bound.",
+      "blueprint": "lem:conditional-fiber-energy-comparison",
+      "diagram": {
+        "id": "FP",
+        "label": "Fiber-bound<br/>Energy comparison",
+        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/ConditionalFiber/EnergyComparison.lean",
+        "shape": "box"
+      }
+    },
+    "lem:conditional-fiber-form": {
+      "description": "Establish closed quadratic and Markov properties of the conditional-fiber energy under the stated density and moment assumptions.",
+      "blueprint": "lem:conditional-fiber-form",
+      "diagram": {
+        "id": "FC",
+        "label": "Fiber Dirichlet form",
+        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/ConditionalFiber/Closed.lean",
+        "shape": "box"
+      }
+    },
+    "lem:covariance-core-closure": {
+      "description": "Close the transformed gradient operator and identify its Lipschitz and smooth-core closures for log-concave densities.",
+      "blueprint": "lem:covariance-core-closure"
+    },
+    "lem:covariance-test-core-density": {
+      "description": "Approximate locally Lipschitz tests and their transformed gradients by compactly supported smooth tests under absolute continuity.",
+      "blueprint": "lem:covariance-test-core-density"
+    },
+    "lem:finite-energy-factor-poincare": {
+      "description": "Transfer a Poincaré bound between energies when one is bounded by a finite multiple of the other.",
+      "blueprint": "lem:finite-energy-factor-poincare"
+    },
+    "lem:logconcave-intrinsic-absolute-continuity": {
+      "description": "Show that a log-concave law has a density in its intrinsic affine space, even if singular in the ambient space.",
+      "blueprint": "lem:logconcave-intrinsic-absolute-continuity"
+    },
+    "lem:mutual-test-approximation-relaxation": {
+      "description": "Identify two relaxed energies when each test family approximates the other without increasing limiting energy.",
+      "blueprint": "lem:mutual-test-approximation-relaxation"
+    },
+    "lem:preenergy-poincare-relaxation": {
+      "description": "Show that sequential relaxation preserves valid Poincaré bounds and the optimal constant.",
+      "blueprint": "lem:preenergy-poincare-relaxation"
+    },
+    "lem:relative-perimeter-cheeger-infimum": {
+      "description": "Identify the Cheeger infimum over Borel sets with the weighted-perimeter infimum over smooth domains.",
+      "blueprint": "lem:relative-perimeter-cheeger-infimum"
+    },
+    "lem:relative-perimeter-smoothing": {
+      "description": "Approximate a smooth-domain indicator by smooth Lipschitz functions whose limiting gradient integral is at most its perimeter.",
+      "blueprint": "lem:relative-perimeter-smoothing"
+    },
+    "lem:smooth-tests-affine-restriction-extension": {
+      "description": "Restrict smooth tests to the affine support and extend intrinsic tests back while controlling gradient energy.",
+      "blueprint": "lem:smooth-tests-affine-restriction-extension"
+    },
+    "obs:dirac-raw-energy": {
+      "description": "Exhibit two functions equal for a Dirac law whose raw gradient energies differ, explaining the need for relaxation.",
+      "blueprint": "obs:dirac-raw-energy"
+    },
+    "obs:normal-direction-raw-energy": {
+      "description": "Show that a function vanishing on the affine support can still have positive ambient gradient energy in a normal direction.",
+      "blueprint": "obs:normal-direction-raw-energy"
+    },
+    "prop:spectral-sufficiency": {
+      "description": "Deduce a dimension-free Poincaré bound from the assumed full-damping occupation estimate.",
+      "blueprint": "prop:spectral-sufficiency",
+      "diagram": {
+        "id": "SC",
+        "label": "Spectral<br/>Sufficiency",
+        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/src/chapters/50-kls-routes.tex",
+        "shape": "box"
+      }
+    },
+    "prop:weighted-spectator-obstruction": {
+      "description": "Use independent exponential factors to refute the historical weighted package, without refuting KLS.",
+      "blueprint": "prop:weighted-spectator-obstruction"
+    },
+    "q:conditional-fiber-frame": {
+      "description": "Seek a frame independent of the test function that controls variance by fiber energy with a universal constant.",
+      "blueprint": "q:conditional-fiber-frame",
+      "diagram": {
+        "id": "FG",
+        "label": "Universal<br/>Frame bound",
+        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/src/chapters/50-kls-routes.tex",
+        "shape": "box"
+      }
+    },
+    "q:mm-spectral-occupation": {
+      "description": "Seek a universal-time source estimate for a fixed eigenfunction along localization, uniform through regular approximation.",
+      "blueprint": "q:mm-spectral-occupation",
+      "diagram": {
+        "id": "SG",
+        "label": "Full-damping<br/>Occupation bound",
+        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/src/chapters/50-kls-routes.tex",
+        "shape": "box"
+      }
+    },
+    "q:smooth-gradient-raw-core-agreement": {
+      "description": "Determine when raw energy descends to L² and how sequential approximation relates to graph-norm density.",
+      "blueprint": "q:smooth-gradient-raw-core-agreement"
+    },
+    "thm:affine-covariance-relaxation-closed": {
+      "description": "Identify the relaxed covariance energy of a log-concave law with the closed affine form used by the CMH route.",
+      "blueprint": "thm:affine-covariance-relaxation-closed"
+    },
+    "thm:affine-isotropic-reduction": {
+      "description": "Show that isotropic, covariance-scaled, and affine-energy KLS bounds are equivalent, including lower-dimensional laws.",
+      "blueprint": "thm:affine-isotropic-reduction",
+      "diagram": {
+        "id": "NORM",
+        "label": "Affine / isotropic<br/>Reduction",
+        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/Isotropic.lean",
+        "shape": "box"
+      }
+    },
+    "thm:ambient-intrinsic-relaxation-equality": {
+      "description": "Show that ambient and intrinsic smooth-gradient relaxations agree on the same L² space.",
+      "blueprint": "thm:ambient-intrinsic-relaxation-equality"
+    },
+    "thm:borell-logconcave-density": {
+      "description": "Represent a log-concave law by an intrinsic log-concave density, positive with locally bounded reciprocal inside its convex support.",
+      "blueprint": "thm:borell-logconcave-density",
+      "diagram": {
+        "id": "DENS",
+        "label": "Log-concave density<br/>Intrinsic support",
+        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/BorellRepresentation.lean",
+        "shape": "box"
+      }
+    },
+    "thm:cmh-recovery-affine-poincare-bound": {
+      "description": "Bound the affine Poincaré constant of a W₂ limit by the limiting CMH constants of a regular recovery sequence.",
+      "blueprint": "thm:cmh-recovery-affine-poincare-bound",
+      "diagram": {
+        "id": "MH",
+        "label": "W₂ limit and<br/>CMH comparison",
+        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/src/chapters/50-kls-routes.tex",
+        "shape": "box"
+      }
+    },
+    "thm:compact-borell-logconcavity-equivalence": {
+      "description": "Show that compact-set log-concavity is equivalent to the Borel-set formulation using inner measure.",
+      "blueprint": "thm:compact-borell-logconcavity-equivalence"
+    },
+    "thm:intrinsic-affine-constant-order": {
+      "description": "Characterize a valid intrinsic-affine Poincaré bound by comparison with the optimal extended constant.",
+      "blueprint": "thm:intrinsic-affine-constant-order"
+    },
+    "thm:intrinsic-affine-energy-closed": {
+      "description": "Establish that intrinsic relaxed energy is a densely defined closed quadratic energy on ambient L².",
+      "blueprint": "thm:intrinsic-affine-energy-closed"
+    },
+    "thm:intrinsic-l2-equivalence": {
+      "description": "Identify ambient and intrinsic L² spaces by inverse linear isometries.",
+      "blueprint": "thm:intrinsic-l2-equivalence"
+    },
+    "thm:klartag-density-frontend-identification": {
+      "description": "Identify the intrinsic Cheeger constant with the smooth-boundary density formulation for non-Dirac log-concave laws.",
+      "blueprint": "thm:klartag-density-frontend-identification",
+      "diagram": {
+        "id": "FRONT",
+        "label": "Density Cheeger<br/>Identification",
+        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex",
+        "shape": "box"
+      }
+    },
+    "thm:l2-energy-holds-order": {
+      "description": "Show that an L² energy inequality holds at a finite constant exactly when the optimal constant is no larger.",
+      "blueprint": "thm:l2-energy-holds-order"
+    },
+    "thm:legacy-canonical-constant-comparison": {
+      "description": "Identify the smooth-test, ambient relaxed, and canonical intrinsic Poincaré constants.",
+      "blueprint": "thm:legacy-canonical-constant-comparison"
+    },
+    "thm:legacy-relaxed-holds-equivalence": {
+      "description": "Show that smooth tests and ambient relaxed energy admit exactly the same finite Poincaré bounds.",
+      "blueprint": "thm:legacy-relaxed-holds-equivalence"
+    },
+    "thm:logconcave-cheeger-poincare-comparison": {
+      "description": "Compare Poincaré and inverse-Cheeger scales in both directions for log-concave laws, with factors 4 and π.",
+      "blueprint": "thm:logconcave-cheeger-poincare-comparison",
+      "diagram": {
+        "id": "CB",
+        "label": "Cheeger–Buser<br/>Comparison",
+        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex",
+        "shape": "box"
+      }
+    },
+    "thm:one-dimensional-logconcave-poincare": {
+      "description": "Bound a one-dimensional log-concave law's Poincaré constant by four times its variance, including zero variance.",
+      "blueprint": "thm:one-dimensional-logconcave-poincare",
+      "diagram": {
+        "id": "ONE",
+        "label": "One-dimensional<br/>Poincaré ≤ 4 Var",
+        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/Line/SharpPoincare.lean",
+        "shape": "box"
+      }
+    },
+    "thm:quadratic-relaxation-closed": {
+      "description": "Show that relaxing a quadratic pre-energy with dense linear realization gives a closed quadratic form.",
+      "blueprint": "thm:quadratic-relaxation-closed"
+    },
+    "thm:selected-literature-constant-equivalence": {
+      "description": "Identify canonical and local-slope Poincaré constants for finite-dimensional log-concave laws.",
+      "blueprint": "thm:selected-literature-constant-equivalence",
+      "diagram": {
+        "id": "CONST",
+        "label": "Poincaré frontend<br/>Equivalence",
+        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/Poincare.lean",
+        "shape": "box"
+      }
+    },
+    "thm:smooth-gradient-quadratic-dense": {
+      "description": "Show that smooth-gradient pre-energy is quadratic and its test realizations are dense in L².",
+      "blueprint": "thm:smooth-gradient-quadratic-dense"
+    },
+    "thm:smooth-gradient-raw-core-agreement-density": {
+      "description": "Under explicit positive-density and local reciprocal bounds, identify intrinsic raw energy with its relaxation on the smooth core.",
+      "blueprint": "thm:smooth-gradient-raw-core-agreement-density"
+    },
+    "thm:smooth-gradient-relaxation-closed": {
+      "description": "Establish closed quadratic structure and a dense finite-energy domain for ambient relaxed gradient energy.",
+      "blueprint": "thm:smooth-gradient-relaxation-closed"
+    },
+    "thm:smooth-gradient-relaxation-dirichlet": {
+      "description": "Show that normal contractions decrease relaxed gradient energy, giving the ambient and intrinsic energies the Dirichlet property.",
+      "blueprint": "thm:smooth-gradient-relaxation-dirichlet",
+      "diagram": {
+        "id": "FORMS",
+        "label": "Closed forms<br/>Dirichlet property",
+        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Energy/SmoothGradient/Dirichlet.lean",
+        "shape": "box"
+      }
+    },
+    "thm:smooth-gradient-relaxation-two-cheeger": {
+      "description": "Seek identification of canonical energy with twice metric Cheeger energy for general laws, beyond the proved density case.",
+      "blueprint": "thm:smooth-gradient-relaxation-two-cheeger"
+    },
+    "thm:smooth-lipschitz-constant-equivalence": {
+      "description": "Identify smooth-test and locally Lipschitz Poincaré constants when the intrinsic law is absolutely continuous.",
+      "blueprint": "thm:smooth-lipschitz-constant-equivalence"
+    },
+    "diagram:MEAS": {
+      "description": "Slice measurability",
+      "assessment": {
+        "state": "formalized",
+        "evidence": {
+          "kind": "reviewed_progress",
+          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/LevelSetMeasurable.lean",
+          "baseline_commit": "b7b458c"
+        },
+        "kind": "auxiliary"
+      },
+      "diagram": {
+        "id": "MEAS",
+        "label": "Slice measurability",
+        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/LevelSetMeasurable.lean",
+        "shape": "box"
+      }
+    },
+    "diagram:GRAPH": {
+      "description": "Open-domain — Graph area",
+      "assessment": {
+        "state": "formalized",
+        "evidence": {
+          "kind": "reviewed_progress",
+          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/OpenGraphIntegral.lean",
+          "baseline_commit": "b7b458c"
+        },
+        "kind": "auxiliary"
+      },
+      "diagram": {
+        "id": "GRAPH",
+        "label": "Open-domain<br/>Graph area",
+        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/OpenGraphIntegral.lean",
+        "shape": "box"
+      }
+    },
+    "diagram:REG": {
+      "description": "Regular-domain — Coarea",
+      "assessment": {
+        "state": "formalized",
+        "evidence": {
+          "kind": "reviewed_progress",
+          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/RegularCoarea.lean",
+          "baseline_commit": "b7b458c"
+        },
+        "kind": "auxiliary"
+      },
+      "diagram": {
+        "id": "REG",
+        "label": "Regular-domain<br/>Coarea",
+        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/RegularCoarea.lean",
+        "shape": "box"
+      }
+    },
+    "diagram:CRIT": {
+      "description": "Critical-slice nullity",
+      "assessment": {
+        "state": "formalized",
+        "evidence": {
+          "kind": "reviewed_progress",
+          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/CriticalSlice.lean",
+          "baseline_commit": "b7b458c"
+        },
+        "kind": "auxiliary"
+      },
+      "diagram": {
+        "id": "CRIT",
+        "label": "Critical-slice nullity",
+        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/CriticalSlice.lean",
+        "shape": "box"
+      }
+    },
+    "diagram:C1": {
+      "description": "General C¹ coarea — Next step",
+      "assessment": {
+        "state": "pending",
+        "evidence": {
+          "kind": "reviewed_progress",
+          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/research/decisions/2026-09-15-weighted-coarea-route.md#l11",
+          "baseline_commit": "b7b458c"
+        },
+        "kind": "auxiliary"
+      },
+      "diagram": {
+        "id": "C1",
+        "label": "General C¹ coarea<br/>Next step",
+        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/research/decisions/2026-09-15-weighted-coarea-route.md#l11",
+        "shape": "box",
+        "focus": true
+      }
+    },
+    "diagram:WHIT": {
+      "description": "Whitney extension — Exact C¹ pieces",
+      "assessment": {
+        "state": "pending",
+        "evidence": {
+          "kind": "reviewed_progress",
+          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/research/decisions/2026-09-15-weighted-coarea-route.md#l6",
+          "baseline_commit": "b7b458c"
+        },
+        "kind": "auxiliary"
+      },
+      "diagram": {
+        "id": "WHIT",
+        "label": "Whitney extension<br/>Exact C¹ pieces",
+        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/research/decisions/2026-09-15-weighted-coarea-route.md#l6",
+        "shape": "box"
+      }
+    },
+    "diagram:LIP": {
+      "description": "Lipschitz coarea",
+      "assessment": {
+        "state": "pending",
+        "evidence": {
+          "kind": "reviewed_progress",
+          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/research/decisions/2026-09-15-weighted-coarea-route.md#l12",
+          "baseline_commit": "b7b458c"
+        },
+        "kind": "auxiliary"
+      },
+      "diagram": {
+        "id": "LIP",
+        "label": "Lipschitz coarea",
+        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/research/decisions/2026-09-15-weighted-coarea-route.md#l12",
+        "shape": "box"
+      }
+    },
+    "diagram:GG": {
+      "description": "Global Gauss–Green",
+      "assessment": {
+        "state": "formalized",
+        "evidence": {
+          "kind": "reviewed_progress",
+          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/GaussGreen.lean",
+          "baseline_commit": "b7b458c"
+        },
+        "kind": "auxiliary"
+      },
+      "diagram": {
+        "id": "GG",
+        "label": "Global Gauss–Green",
+        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/GaussGreen.lean",
+        "shape": "box"
+      }
+    },
+    "diagram:REC": {
+      "description": "Smooth recovery",
+      "assessment": {
+        "state": "formalized",
+        "evidence": {
+          "kind": "reviewed_progress",
+          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/PerimeterRecovery.lean",
+          "baseline_commit": "b7b458c"
+        },
+        "kind": "auxiliary"
+      },
+      "diagram": {
+        "id": "REC",
+        "label": "Smooth recovery",
+        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/PerimeterRecovery.lean",
+        "shape": "box"
+      }
+    },
+    "diagram:FWD": {
+      "description": "h_M ≤ h_S",
+      "assessment": {
+        "state": "formalized",
+        "evidence": {
+          "kind": "reviewed_progress",
+          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/CheegerInfimum.lean",
+          "baseline_commit": "b7b458c"
+        },
+        "kind": "auxiliary"
+      },
+      "diagram": {
+        "id": "FWD",
+        "label": "h_M ≤ h_S",
+        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/CheegerInfimum.lean",
+        "shape": "box"
+      }
+    },
+    "diagram:SARD": {
+      "description": "Smooth Sard",
+      "assessment": {
+        "state": "formalized",
+        "evidence": {
+          "kind": "reviewed_progress",
+          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/SmoothSard.lean",
+          "baseline_commit": "b7b458c"
+        },
+        "kind": "auxiliary"
+      },
+      "diagram": {
+        "id": "SARD",
+        "label": "Smooth Sard",
+        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/SmoothSard.lean",
+        "shape": "box"
+      }
+    },
+    "diagram:SCI": {
+      "description": "Smooth coarea — Inequality",
+      "assessment": {
+        "state": "pending",
+        "evidence": {
+          "kind": "reviewed_progress",
+          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/WIP/CheegerInfimum.lean",
+          "baseline_commit": "b7b458c"
+        },
+        "kind": "auxiliary"
+      },
+      "diagram": {
+        "id": "SCI",
+        "label": "Smooth coarea<br/>Inequality",
+        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/WIP/CheegerInfimum.lean",
+        "shape": "box"
+      }
+    },
+    "diagram:CUT": {
+      "description": "Distance cutoffs",
+      "assessment": {
+        "state": "formalized",
+        "evidence": {
+          "kind": "reviewed_progress",
+          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/DistanceCutoff.lean",
+          "baseline_commit": "b7b458c"
+        },
+        "kind": "auxiliary"
+      },
+      "diagram": {
+        "id": "CUT",
+        "label": "Distance cutoffs",
+        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/DistanceCutoff.lean",
+        "shape": "box"
+      }
+    },
+    "diagram:REV": {
+      "description": "h_S ≤ h_M",
+      "assessment": {
+        "state": "pending",
+        "evidence": {
+          "kind": "reviewed_progress",
+          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/WIP/CheegerInfimum.lean",
+          "baseline_commit": "b7b458c"
+        },
+        "kind": "auxiliary"
+      },
+      "diagram": {
+        "id": "REV",
+        "label": "h_S ≤ h_M",
+        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/WIP/CheegerInfimum.lean",
+        "shape": "box"
+      }
+    },
+    "diagram:EQ": {
+      "description": "h_M = h_S",
+      "assessment": {
+        "state": "partial",
+        "evidence": {
+          "kind": "reviewed_progress",
+          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/WIP/CheegerInfimum.lean",
+          "baseline_commit": "b7b458c"
+        },
+        "kind": "auxiliary"
+      },
+      "diagram": {
+        "id": "EQ",
+        "label": "h_M = h_S",
+        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/WIP/CheegerInfimum.lean",
+        "shape": "box"
+      }
+    },
+    "diagram:MINK": {
+      "description": "Minkowski coarea",
+      "assessment": {
+        "state": "formalized",
+        "evidence": {
+          "kind": "reviewed_progress",
+          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/MinkowskiContent.lean",
+          "baseline_commit": "b7b458c"
+        },
+        "kind": "auxiliary"
+      },
+      "diagram": {
+        "id": "MINK",
+        "label": "Minkowski coarea",
+        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/MinkowskiContent.lean",
+        "shape": "box"
+      }
+    },
+    "diagram:EAND": {
+      "description": "AND — Eldan route",
+      "assessment": {
+        "state": "pending",
+        "evidence": {
+          "kind": "reviewed_progress",
+          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/route-composition.yaml",
+          "baseline_commit": "b7b458c"
+        },
+        "kind": "route"
+      },
+      "diagram": {
+        "id": "EAND",
+        "label": "AND<br/>Eldan route",
+        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/route-composition.yaml",
+        "shape": "diamond"
+      },
+      "route_branch": "eldan-tight-prefix"
+    },
+    "diagram:SAND": {
+      "description": "AND — Spectral route",
+      "assessment": {
+        "state": "pending",
+        "evidence": {
+          "kind": "reviewed_progress",
+          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/route-composition.yaml",
+          "baseline_commit": "b7b458c"
+        },
+        "kind": "route"
+      },
+      "diagram": {
+        "id": "SAND",
+        "label": "AND<br/>Spectral route",
+        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/route-composition.yaml",
+        "shape": "diamond"
+      },
+      "route_branch": "moment-map-spectral-full-damping"
+    },
+    "diagram:MAND": {
+      "description": "AND — CMH route",
+      "assessment": {
+        "state": "pending",
+        "evidence": {
+          "kind": "reviewed_progress",
+          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/route-composition.yaml",
+          "baseline_commit": "b7b458c"
+        },
+        "kind": "route"
+      },
+      "diagram": {
+        "id": "MAND",
+        "label": "AND<br/>CMH route",
+        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/route-composition.yaml",
+        "shape": "diamond"
+      },
+      "route_branch": "moment-map-cmh-recovery"
+    },
+    "diagram:FLOG": {
+      "description": "Fiber log-concavity",
+      "assessment": {
+        "state": "formalized",
+        "evidence": {
+          "kind": "reviewed_progress",
+          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/ConditionalFiber.lean",
+          "baseline_commit": "b7b458c"
+        },
+        "kind": "auxiliary"
+      },
+      "diagram": {
+        "id": "FLOG",
+        "label": "Fiber log-concavity",
+        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/ConditionalFiber.lean",
+        "shape": "box"
+      }
+    },
+    "diagram:FAND": {
+      "description": "AND — Fiber route",
+      "assessment": {
+        "state": "partial",
+        "evidence": {
+          "kind": "reviewed_progress",
+          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/route-composition.yaml",
+          "baseline_commit": "b7b458c"
+        },
+        "kind": "route"
+      },
+      "diagram": {
+        "id": "FAND",
+        "label": "AND<br/>Fiber route",
+        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/route-composition.yaml",
+        "shape": "diamond"
+      },
+      "route_branch": "conditional-fiber-frame"
+    },
+    "diagram:ANY": {
+      "description": "OR — Any completed route",
+      "assessment": {
+        "state": "logic",
+        "evidence": {
+          "kind": "reviewed_progress",
+          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/route-composition.yaml",
+          "baseline_commit": "b7b458c"
+        },
+        "kind": "logic"
+      },
+      "diagram": {
+        "id": "ANY",
+        "label": "OR<br/>Any completed route",
+        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/route-composition.yaml",
+        "shape": "diamond"
+      }
+    }
+  },
+  "diagram": {
+    "groups": [
+      {
+        "id": "FOUND",
+        "title": "Shared foundations",
+        "nodes": [
+          "DENS",
+          "NORM",
+          "FORMS",
+          "ENERGY",
+          "CONST"
+        ]
+      },
+      {
+        "id": "ANALYSIS",
+        "title": "Analytic comparison",
+        "nodes": [
+          "MEAS",
+          "GRAPH",
+          "REG",
+          "CRIT",
+          "C1",
+          "WHIT",
+          "LIP",
+          "GG",
+          "REC",
+          "FWD",
+          "SARD",
+          "SCI",
+          "CUT",
+          "REV",
+          "EQ",
+          "FRONT",
+          "CB",
+          "MINK"
+        ]
+      },
+      {
+        "id": "ELDAN",
+        "title": "Eldan localization",
+        "nodes": [
+          "EG",
+          "EC",
+          "EAND"
+        ]
+      },
+      {
+        "id": "SPECTRAL",
+        "title": "Moment-map spectral",
+        "nodes": [
+          "SG",
+          "SC",
+          "SAND"
+        ]
+      },
+      {
+        "id": "CMH",
+        "title": "Moment-map CMH",
+        "nodes": [
+          "MH",
+          "MG",
+          "MT",
+          "MC",
+          "MAND"
+        ]
+      },
+      {
+        "id": "FIBER",
+        "title": "Conditional-fiber frames",
+        "nodes": [
+          "ONE",
+          "FLOG",
+          "FP",
+          "F4",
+          "FC",
+          "FG",
+          "FAND"
+        ]
+      }
+    ],
+    "edges": [
+      {
+        "from": "EG",
+        "to": "EAND",
+        "kind": "dependency"
+      },
+      {
+        "from": "EC",
+        "to": "EAND",
+        "kind": "dependency"
+      },
+      {
+        "from": "CB",
+        "to": "EAND",
+        "kind": "dependency"
+      },
+      {
+        "from": "SG",
+        "to": "SAND",
+        "kind": "dependency"
+      },
+      {
+        "from": "SC",
+        "to": "SAND",
+        "kind": "dependency"
+      },
+      {
+        "from": "NORM",
+        "to": "SAND",
+        "kind": "dependency"
+      },
+      {
+        "from": "MH",
+        "to": "MAND",
+        "kind": "dependency"
+      },
+      {
+        "from": "MG",
+        "to": "MAND",
+        "kind": "dependency"
+      },
+      {
+        "from": "MT",
+        "to": "MAND",
+        "kind": "dependency"
+      },
+      {
+        "from": "MC",
+        "to": "MAND",
+        "kind": "dependency"
+      },
+      {
+        "from": "NORM",
+        "to": "MAND",
+        "kind": "dependency"
+      },
+      {
+        "from": "ONE",
+        "to": "F4",
+        "kind": "dependency"
+      },
+      {
+        "from": "FLOG",
+        "to": "F4",
+        "kind": "dependency"
+      },
+      {
+        "from": "FP",
+        "to": "F4",
+        "kind": "dependency"
+      },
+      {
+        "from": "FC",
+        "to": "FAND",
+        "kind": "dependency"
+      },
+      {
+        "from": "F4",
+        "to": "FAND",
+        "kind": "dependency"
+      },
+      {
+        "from": "FG",
+        "to": "FAND",
+        "kind": "dependency"
+      },
+      {
+        "from": "NORM",
+        "to": "FAND",
+        "kind": "dependency"
+      },
+      {
+        "from": "DENS",
+        "to": "NORM",
+        "kind": "dependency"
+      },
+      {
+        "from": "FORMS",
+        "to": "ENERGY",
+        "kind": "context"
+      },
+      {
+        "from": "GRAPH",
+        "to": "REG",
+        "kind": "dependency"
+      },
+      {
+        "from": "MEAS",
+        "to": "REG",
+        "kind": "context"
+      },
+      {
+        "from": "REG",
+        "to": "C1",
+        "kind": "dependency"
+      },
+      {
+        "from": "CRIT",
+        "to": "C1",
+        "kind": "dependency"
+      },
+      {
+        "from": "C1",
+        "to": "LIP",
+        "kind": "dependency"
+      },
+      {
+        "from": "WHIT",
+        "to": "LIP",
+        "kind": "dependency"
+      },
+      {
+        "from": "MEAS",
+        "to": "LIP",
+        "kind": "dependency"
+      },
+      {
+        "from": "GG",
+        "to": "REC",
+        "kind": "dependency"
+      },
+      {
+        "from": "REC",
+        "to": "FWD",
+        "kind": "dependency"
+      },
+      {
+        "from": "C1",
+        "to": "SCI",
+        "kind": "dependency"
+      },
+      {
+        "from": "SARD",
+        "to": "SCI",
+        "kind": "dependency"
+      },
+      {
+        "from": "SCI",
+        "to": "REV",
+        "kind": "dependency"
+      },
+      {
+        "from": "CUT",
+        "to": "REV",
+        "kind": "dependency"
+      },
+      {
+        "from": "FWD",
+        "to": "EQ",
+        "kind": "dependency"
+      },
+      {
+        "from": "REV",
+        "to": "EQ",
+        "kind": "dependency"
+      },
+      {
+        "from": "EQ",
+        "to": "FRONT",
+        "kind": "dependency"
+      },
+      {
+        "from": "FRONT",
+        "to": "CB",
+        "kind": "dependency"
+      },
+      {
+        "from": "EAND",
+        "to": "ANY",
+        "kind": "dependency"
+      },
+      {
+        "from": "SAND",
+        "to": "ANY",
+        "kind": "dependency"
+      },
+      {
+        "from": "MAND",
+        "to": "ANY",
+        "kind": "dependency"
+      },
+      {
+        "from": "FAND",
+        "to": "ANY",
+        "kind": "dependency"
+      },
+      {
+        "from": "ANY",
+        "to": "KLS",
+        "kind": "dependency"
+      },
+      {
+        "from": "CONST",
+        "to": "ANY",
+        "kind": "context"
+      }
+    ]
+  }
+}
