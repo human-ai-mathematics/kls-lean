@@ -12,7 +12,9 @@ a separately registered certificate. KLS remains open.
 ## Proof progress tree
 
 <!-- BEGIN GENERATED DATE -->
-Last updated: **2026-09-15**. **✓** Formalized in Lean · **◐** Partially formalized · **○** Pending.
+Last updated: **2026-09-15**.
+
+![✓ Formalized in Lean](badges/formalized.svg) · ![○ Not yet formalized](badges/pending.svg) · ![◐ Partially formalized](badges/partial.svg) · ![— Excluded: refuted](badges/excluded.svg)
 <!-- END GENERATED DATE -->
 The orange outline marks the next proof step. Upstream mathematical proofs alone do not earn a ✓.
 

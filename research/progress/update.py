@@ -58,7 +58,7 @@ def generate():
            'Generated from staged canonical records. These are recorded proof/definition statuses,',
            'not a fresh Lean run or a remote CI receipt. A missing local proof means only that this',
            'register does not certify it; unregistered auxiliary progress appears in the diagram directory below.', '',
-           '**✓** Formalized in Lean (proof or definition) · **○** Not recorded as complete.',
+           views.status_legend(), '',
            'Upstream status is shown only where an explicit upstream mapping exists; no mapping is inferred',
            'from a similar title. Upstream `proved` does not mean Lean-proved.', '',
            '## Local nodes', '',

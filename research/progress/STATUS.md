@@ -8,7 +8,8 @@ Generated from staged canonical records. These are recorded proof/definition sta
 not a fresh Lean run or a remote CI receipt. A missing local proof means only that this
 register does not certify it; unregistered auxiliary progress appears in the diagram directory below.
 
-**✓** Formalized in Lean (proof or definition) · **○** Not recorded as complete.
+![✓ Formalized in Lean](badges/formalized.svg) · ![○ Not yet formalized](badges/pending.svg) · ![◐ Partially formalized](badges/partial.svg) · ![— Excluded: refuted](badges/excluded.svg)
+
 Upstream status is shown only where an explicit upstream mapping exists; no mapping is inferred
 from a similar title. Upstream `proved` does not mean Lean-proved.
 

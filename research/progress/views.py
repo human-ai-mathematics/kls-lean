@@ -27,6 +27,10 @@ def status_cell(state):
     return f'![{STATES[state]}](badges/{state}.svg)'
 
 
+def status_legend():
+    return " · ".join(status_cell(state) for state in BADGE_COLORS)
+
+
 def render_badges():
     outputs = {}
     for state, (background, foreground, border) in BADGE_COLORS.items():
@@ -145,7 +149,7 @@ def replace_block(text, name, content):
 
 def render_readme(template, tree, catalog, records, portfolio):
     text = replace_block(template, 'TREE', '```mermaid\n'+tree+'```')
-    text = replace_block(text, 'DATE', 'Last updated: **'+catalog['last_updated']+'**. **✓** Formalized in Lean · **◐** Partially formalized · **○** Pending.')
+    text = replace_block(text, 'DATE', 'Last updated: **'+catalog['last_updated']+'**.\n\n'+status_legend())
     rows = ['| Family | Approach | Upstream state | Our Lean formalization | Objective / remaining work |', '| --- | --- | --- | --- | --- |']
     families = {'fam:eldan-localization':'Eldan', 'fam:mm-spectral':'Spectral', 'fam:mm-cmh':'CMH', 'fam:conditional-fiber':'Conditional fibers', 'fam:novel-routes':'Parked probes'}
     ids = set()
