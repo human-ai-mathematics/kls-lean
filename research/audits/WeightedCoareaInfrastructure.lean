@@ -1,0 +1,27 @@
+import FunctionalInequalities.Analysis.AreaFormula
+import FunctionalInequalities.KLS.Geometry.SmoothDomain
+import Mathlib.Analysis.Calculus.Rademacher
+import Mathlib.Analysis.Calculus.ImplicitContDiff
+import Mathlib.MeasureTheory.Function.Egorov
+
+-- Existing infrastructure only; these are not new proofs.
+#check LipschitzWith.ae_differentiableAt
+#check measurable_fderiv
+#check gradient_eq_zero_of_not_differentiableAt
+#check toDual_gradient
+#check MeasureTheory.Measure.hausdorffMeasure_le_liminf_tsum
+#check MeasureTheory.OuterMeasure.mkMetric'.eq_iSup_nat
+#check LipschitzOnWith.hausdorffMeasure_image_le
+#check FunctionalInequalities.Analysis.hausdorffNormalized_image_graphMap
+#check FunctionalInequalities.KLS.hausdorffNormalized_finrank_eq_volume
+#check MeasureTheory.lintegral_image_eq_lintegral_abs_det_fderiv_mul
+#check exists_closed_cover_approximatesLinearOn_of_hasFDerivWithinAt
+#check exists_partition_approximatesLinearOn_of_hasFDerivWithinAt
+#check MeasureTheory.tendstoUniformlyOn_of_ae_tendsto
+#check MeasurableSet.exists_isCompact_isClosed_sdiff_lt
+#check ContDiffAt.implicitFunction
+#check ContDiffAt.contDiffAt_implicitFunction
+#check ContDiffAt.eventually_apply_eq_iff_implicitFunction
+#check Measurable.lintegral_prod_right'
+#check MeasureTheory.lintegral_iSup
+#check MeasureTheory.lintegral_iUnion

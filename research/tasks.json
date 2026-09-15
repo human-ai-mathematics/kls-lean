@@ -1828,11 +1828,11 @@
             "sha256": "54fbf7cb046bd494b712cb06de494791138018c8f22f83d694df3139ea8f9856"
           },
           {
-            "path": "build/audit/WeightedCoareaRouteStatements.lean",
+            "path": "research/audits/WeightedCoareaRouteStatements.lean",
             "sha256": "81170a5d93ca7195e308cac85bbe1d9147b00cb72aed4bd488499072ad285a0a"
           },
           {
-            "path": "build/audit/WeightedCoareaInfrastructure.lean",
+            "path": "research/audits/WeightedCoareaInfrastructure.lean",
             "sha256": "fd74dcddfaf7342ec463633c6847963ed83894847ef1df78f17da7c44f6d4215"
           },
           {
@@ -1848,7 +1848,7 @@
             "sha256": "fd60450014d080db4b07d3467c1260149240e7e4cf2fa54974351280127fabf2"
           },
           {
-            "path": "build/audit/NullSlicingAudit.lean",
+            "path": "research/audits/NullSlicingAudit.lean",
             "sha256": "4b270dad0ad10a0d8df05b110403df662393dea505eeb7e7d210f87c92b2751e"
           },
           {
@@ -1856,7 +1856,7 @@
             "sha256": "7da6d4749e76ea8286787699314d2096416cbe313f3566933dc4aa9c40752316"
           },
           {
-            "path": "build/audit/EilenbergMajorantAudit.lean",
+            "path": "research/audits/EilenbergMajorantAudit.lean",
             "sha256": "fb9b0810fea708aeba35784051f3215e7c5216d669aa19cc00a8ebc43492e877"
           },
           {
@@ -1868,7 +1868,7 @@
             "sha256": "91552cc2686c5530f307fc4890249e35c298f87419cccf5a46ba0bce6b15f86f"
           },
           {
-            "path": "build/audit/CompactSliceAudit.lean",
+            "path": "research/audits/CompactSliceAudit.lean",
             "sha256": "97da84f969c2aa33330b559472ead9f9901da071cb4c83b45f033032c801816b"
           },
           {
@@ -1876,7 +1876,7 @@
             "sha256": "3ec33e9f6242ae957d384bddad23363a5fb1d93e233132cfed75de02fd575c84"
           },
           {
-            "path": "build/audit/BorelSliceAudit.lean",
+            "path": "research/audits/BorelSliceAudit.lean",
             "sha256": "3014672a29aca5f3d8ee3fe3e71fd75af2d042cf5aee08bbb1ce9511893e5a06"
           },
           {
@@ -1888,7 +1888,7 @@
             "sha256": "ec13b73713941467d393a6e18af059e0e21cb4c8a8a330d71e8a90cb6ecfb1fe"
           },
           {
-            "path": "build/audit/LevelSetMeasurableAudit.lean",
+            "path": "research/audits/LevelSetMeasurableAudit.lean",
             "sha256": "d3cbab7879d2dbac140cc1104d6e92ca37f1566fbd8291307e7285d7a080b801"
           },
           {
@@ -1900,7 +1900,7 @@
             "sha256": "f582e581ff93eff6174e9b09532a7071482e3e6557f0a57ef6223363e9a38cc3"
           },
           {
-            "path": "build/audit/CriticalSliceAudit.lean",
+            "path": "research/audits/CriticalSliceAudit.lean",
             "sha256": "3f06c6fb4eebfccec13a12077cb1c0bcad7b0dd40961b763d259e7b09562d1b2"
           },
           {
@@ -1912,7 +1912,7 @@
             "sha256": "21b903d343732a07f7ce896c8aed7bfa136adf7d7f2c49ef1e0c597e4bcc9ae2"
           },
           {
-            "path": "build/audit/OpenGraphAudit.lean",
+            "path": "research/audits/OpenGraphAudit.lean",
             "sha256": "f2e54f16a028cb000bd91eca26c11815b985595edf74cb7334ebb21246808925"
           }
         ],
