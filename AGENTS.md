@@ -8,5 +8,12 @@
   and a ledger certificate. Do not mark a wrapper proved if it still depends on `sorryAx`.
 - Keep the next-step highlight aligned with the current handoff. The dimension-free KLS bound
   stays open until that exact statement is proved and verified.
+- Keep the route overview complete for the four active branches in
+  `formalization/blueprint/route-composition.yaml`. Draw arrows from prerequisites toward
+  conclusions and ultimately KLS, with AND within each route and OR between sufficient routes.
+  Distinguish upstream mathematical results, conditional implications, and local Lean proofs;
+  keep refuted branches and restricted model calculations outside the active implication chain.
+- Maintain links for every diagram node and the fallback link directory. Review both the route
+  overview and the detailed analytic diagram after proof updates or source-file moves.
 - Keep the progress tree and its surrounding documentation in English. Preserve unrelated work
   when preparing documentation commits.

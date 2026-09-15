@@ -29,149 +29,293 @@ See the [current handoff](HANDOFF.md) for precise scopes and remaining obligatio
 
 ## Proof progress tree
 
-Last updated: **2026-09-15**.
+Last updated: **2026-09-15**. All four active sufficient routes in the
+[route composition](formalization/blueprint/route-composition.yaml) are shown below.
+The upstream roadmap is pinned to `34b5fcd57fef17089e781616005fe6d3641bd11e`, as recorded in
+[the September 12 synchronization](research/decisions/2026-09-12-upstream-research-sync.md).
+This is a complete overview of those four routes, not an enumeration of every upstream lemma.
 
-**Legend:** ✓ Proved · ◐ Partially complete · ○ Open. The highlighted node is the next planned step.
-Here `h_M` denotes the Minkowski Cheeger constant and `h_S` the smooth-boundary Cheeger constant.
-Edges group results by topic and route; they are not an exact theorem-dependency graph.
-“Proved” refers to the stated result and its checked proof, not to completion of its parent route
-or registration as a separate ledger certificate. The [ledger](research/a-series/ledger.yaml)
-and [verification guide](research/verification.md) retain those certification boundaries.
+**Read from left to right, toward KLS.** Solid arrows carry required inputs toward a consumer or
+route assembly. All inputs to an **AND** diamond are required; the **OR** diamond means any one
+completed route suffices. Dotted arrows show supporting context or frontend alignment, not
+additional sufficient implications. An arrow records how an input would be used; it does not
+assert that an open input or an unformalized consumer has been proved. Only selected dependencies
+are displayed; the Blueprint and route composition retain the precise statements and dependencies.
+
+| Label | Meaning |
+| --- | --- |
+| LEAN (green) | The stated result has a checked local Lean proof; it need not be a separate ledger certificate |
+| MATH (blue) | A mathematical argument or reviewed upstream result is recorded; local Lean certification is incomplete |
+| COND (amber) | A reviewed upstream implication from open hypotheses; neither the hypotheses nor the whole route are solved |
+| OPEN (gray) | An unresolved proof or formalization obligation; the node text and linked source specify which |
+| OPEN (orange outline) | The next planned local proof step |
+
+### Four routes converging on KLS
 
 ```mermaid
 flowchart LR
-    ROOT["KLS Formalization<br/>○ Dimension-free bound remains open"]
+    KLS["OPEN: KLS conjecture<br/>Dimension-free bound"]
+    ANY{"OR<br/>Any one completed route"}
+    DENS["LEAN: Log-concave densities<br/>Intrinsic affine support"]
+    NORM["LEAN: Centering and whitening<br/>Affine ⇔ Covariance-normalized ⇔ Isotropic"]
+    FORMS["LEAN: Closed quadratic energies<br/>Normal contractions and Dirichlet property"]
+    ENERGY["LEAN: Canonical energy = 2 × Cheeger energy<br/>For log-concave laws; local-slope convention"]
+    CONST["LEAN: Smooth, intrinsic and local-slope<br/>Poincaré constants agree for log-concave laws"]
+    CB["MATH: Cheeger–Buser comparison<br/>Not yet Lean-certified"]
+    EG["OPEN: Tight-prefix absorptive<br/>Carleson estimate"]
+    EC["COND: Tight-window consumption<br/>Upstream reviewed implication; not Lean"]
+    EAND{"AND<br/>Eldan localization route"}
+    SG["OPEN: Fixed-eigenfunction<br/>Full-damping occupation bound"]
+    SC["COND: Full-damping sufficiency<br/>Upstream reviewed implication; not Lean"]
+    SAND{"AND<br/>Moment-map spectral route"}
+    MH["MATH: W₂ lower semicontinuity<br/>and CMH → affine Poincaré bound<br/>Upstream reviewed; not Lean"]
+    MG["OPEN: Uniformly bounded<br/>CMH recovery envelope"]
+    MT["LEAN: Affine Poincaré constant<br/>Translation invariance and closed form"]
+    MC["COND: One CMH recovery sequence suffices<br/>Upstream reviewed implication; not Lean"]
+    MAND{"AND<br/>Moment-map CMH route"}
+    FC["LEAN: Conditional-fiber<br/>Closed Dirichlet form"]
+    ONE["LEAN: One-dimensional log-concave bound<br/>Poincaré constant ≤ 4 × variance"]
+    FLOG["LEAN: Almost-everywhere<br/>Fiber log-concavity"]
+    FP["LEAN: Energy comparison<br/>Given a fiber Poincaré bound"]
+    F4["LEAN: Fiber energy<br/>≤ 4 × gradient energy"]
+    FG["OPEN: Test-independent frame<br/>Universal bound Var ≤ C × fiber energy"]
+    FAND{"AND<br/>Conditional-fiber frame route"}
 
-    ROOT --> A["✓ Formulation and Reductions"]
-    A --> A1["Log-concave densities<br/>and intrinsic affine support"]
-    A --> A2["Centering and covariance whitening"]
-    A --> A3["Affine ⇔ Covariance-normalized ⇔ Isotropic"]
+    DENS --> NORM
+    DENS --> FLOG
+    FORMS -.->|energy foundation| FC
+    FORMS -.->|energy foundation| ENERGY
+    CONST -.->|frontend alignment, not an extra gate| KLS
+    CB --> EAND
+    EG --> EAND
+    EC --> EAND
+    SG --> SAND
+    SC --> SAND
+    NORM --> SAND
+    MH --> MAND
+    MG --> MAND
+    MT --> MAND
+    MC --> MAND
+    NORM --> MAND
+    ONE --> F4
+    FLOG --> F4
+    FP --> F4
+    FC --> FAND
+    FP --> FAND
+    F4 --> FAND
+    FG --> FAND
+    NORM --> FAND
+    EAND --> ANY
+    SAND --> ANY
+    MAND --> ANY
+    FAND --> ANY
+    ANY --> KLS
 
-    ROOT --> B["✓ Analysis and Energy Foundations"]
-    B --> B1["Closed quadratic forms"]
-    B --> B2["Normal contraction estimates<br/>→ Dirichlet property"]
-    B --> B3["For log-concave densities<br/>Canonical energy = 2 × Cheeger energy"]
-
-    ROOT --> C["◐ Conditional-Fiber Route"]
-    C --> C1["✓ One-dimensional log-concave bound<br/>Poincaré constant ≤ 4 × variance"]
-    C --> C2["✓ Almost-everywhere fiber log-concavity"]
-    C --> C3["✓ Fiber energy ≤ 4 × gradient energy"]
-    C --> C4["○ Key frame bound<br/>Dimension-free control needed"]
-
-    ROOT --> D["◐ Isoperimetric Comparison<br/>Current development focus"]
-    D --> D1["✓ Forward inequality: h_M ≤ h_S"]
-    D1 --> D11["✓ Global Gauss–Green theorem"]
-    D1 --> D12["✓ Smooth recovery sequences"]
-    D1 --> D13["✓ Minkowski coarea inequality"]
-
-    D --> D2["○ Reverse inequality: h_S ≤ h_M"]
-    D2 --> D21["✓ Smooth Sard theorem<br/>Regular superlevel sets"]
-    D2 --> D22["◐ Weighted Coarea Formula"]
-    D22 --> D221["✓ Measurability of level-set integrals"]
-    D22 --> D222["✓ Weighted graph area on open domains"]
-    D22 --> D223["✓ Critical slices are null<br/>for almost every level"]
-    D22 --> D224["✓ Coarea on regular open domains<br/>Parametric implicit functions and substitution"]
-    D22 --> D225["○ Assemble the general C¹ formula<br/>Next step"]
-    D22 --> D226["○ Extend to Lipschitz functions"]
-    D2 --> D23["○ Smooth coarea inequality<br/>Combine with distance cutoffs"]
-
-    ROOT --> E["✓ Benchmark Results"]
-    E --> E1["Sharp one-dimensional Gaussian constant"]
-    E --> E2["Finite Poincaré tensorization"]
-
-    classDef done fill:#e8f5e9,stroke:#388e3c,color:#183b1c;
-    classDef partial fill:#fff3df,stroke:#c88719,color:#66420d;
-    classDef todo fill:#f2f2f2,stroke:#888,color:#333;
+    classDef lean fill:#e8f5e9,stroke:#388e3c,color:#183b1c;
+    classDef math fill:#e8f0fe,stroke:#5078b8,color:#18355c;
+    classDef conditional fill:#fff3df,stroke:#c88719,color:#66420d;
+    classDef open fill:#f2f2f2,stroke:#888,color:#333;
     classDef focus fill:#fff0dc,stroke:#d47b13,color:#663800,stroke-width:3px;
-
-    class A,A1,A2,A3,B,B1,B2,B3,C1,C2,C3,D1,D11,D12,D13,D21,D221,D222,D223,D224,E,E1,E2 done;
-    class C,D,D22 partial;
-    class ROOT,C4,D2,D226,D23 todo;
-    class D225 focus;
-
-    click ROOT href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Statement.lean" "KLS Formalization — ○ Dimension-free bound remains open" _blank
-    click A href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/Isotropic.lean" "✓ Formulation and Reductions" _blank
-    click A1 href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/BorellRepresentation.lean" "Log-concave densities — and intrinsic affine support" _blank
-    click A2 href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/Isotropic.lean" "Centering and covariance whitening" _blank
-    click A3 href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/Isotropic.lean" "Affine ⇔ Covariance-normalized ⇔ Isotropic" _blank
-    click B href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Energy/README.md" "✓ Analysis and Energy Foundations" _blank
-    click B1 href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Energy/SmoothGradient/Closed.lean" "Closed quadratic forms" _blank
-    click B2 href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Energy/SmoothGradient/Dirichlet.lean" "Normal contraction estimates — → Dirichlet property" _blank
-    click B3 href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Energy/Cheeger.lean" "For log-concave densities — Canonical energy = 2 × Cheeger energy" _blank
-    click C href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/ConditionalFiber.lean" "◐ Conditional-Fiber Route" _blank
-    click C1 href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/Line/SharpPoincare.lean" "✓ One-dimensional log-concave bound — Poincaré constant ≤ 4 × variance" _blank
-    click C2 href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/ConditionalFiber.lean" "✓ Almost-everywhere fiber log-concavity" _blank
-    click C3 href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/ConditionalFiber.lean" "✓ Fiber energy ≤ 4 × gradient energy" _blank
-    click C4 href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/src/chapters/50-kls-routes.tex" "○ Key frame bound — Dimension-free control needed" _blank
-    click D href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/CheegerInfimum.lean" "◐ Isoperimetric Comparison — Current development focus" _blank
-    click D1 href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/CheegerInfimum.lean" "✓ Forward inequality: h_M ≤ h_S" _blank
-    click D11 href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/GaussGreen.lean" "✓ Global Gauss–Green theorem" _blank
-    click D12 href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/PerimeterRecovery.lean" "✓ Smooth recovery sequences" _blank
-    click D13 href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/MinkowskiContent.lean" "✓ Minkowski coarea inequality" _blank
-    click D2 href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/WIP/CheegerInfimum.lean" "○ Reverse inequality: h_S ≤ h_M" _blank
-    click D21 href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/SmoothSard.lean" "✓ Smooth Sard theorem — Regular superlevel sets" _blank
-    click D22 href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/research/decisions/2026-09-15-weighted-coarea-route.md" "◐ Weighted Coarea Formula" _blank
-    click D221 href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/LevelSetMeasurable.lean" "✓ Measurability of level-set integrals" _blank
-    click D222 href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/OpenGraphIntegral.lean" "✓ Weighted graph area on open domains" _blank
-    click D223 href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/CriticalSlice.lean" "✓ Critical slices are null — for almost every level" _blank
-    click D224 href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/RegularCoarea.lean" "✓ Coarea on regular open domains — Parametric implicit functions and substitution" _blank
-    click D225 href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/research/decisions/2026-09-15-weighted-coarea-route.md#l11" "○ Assemble the general C¹ formula — Next step" _blank
-    click D226 href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/research/decisions/2026-09-15-weighted-coarea-route.md#l12" "○ Extend to Lipschitz functions" _blank
-    click D23 href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/WIP/CheegerInfimum.lean" "○ Smooth coarea inequality — Combine with distance cutoffs" _blank
-    click E href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Poincare/README.md" "✓ Benchmark Results" _blank
-    click E1 href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Poincare/Gaussian/Real.lean" "Sharp one-dimensional Gaussian constant" _blank
-    click E2 href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Poincare/FiniteProduct/Tensorization.lean" "Finite Poincaré tensorization" _blank
+    classDef logic fill:#ffffff,stroke:#555,color:#222;
+    class DENS,NORM,FORMS,ENERGY,CONST,MT,FC,ONE,FLOG,FP,F4 lean;
+    class CB,MH math;
+    class EC,SC,MC conditional;
+    class KLS,EG,SG,MG,FG open;
+    class ANY,EAND,SAND,MAND,FAND logic;
+    click KLS href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Statement.lean" "OPEN: KLS conjecture — Dimension-free bound" _blank
+    click ANY href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/route-composition.yaml" "OR — Any one completed route" _blank
+    click DENS href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/BorellRepresentation.lean" "LEAN: Log-concave densities — Intrinsic affine support" _blank
+    click NORM href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/Isotropic.lean" "LEAN: Centering and whitening — Affine ⇔ Covariance-normalized ⇔ Isotropic" _blank
+    click FORMS href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Energy/SmoothGradient/Dirichlet.lean" "LEAN: Closed quadratic energies — Normal contractions and Dirichlet property" _blank
+    click ENERGY href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Energy/Cheeger.lean" "LEAN: Canonical energy = 2 × Cheeger energy — For log-concave laws; local-slope convention" _blank
+    click CONST href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/Poincare.lean" "LEAN: Smooth, intrinsic and local-slope — Poincaré constants agree for log-concave laws" _blank
+    click CB href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex" "MATH: Cheeger–Buser comparison — Not yet Lean-certified" _blank
+    click EG href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/src/chapters/50-kls-routes.tex" "OPEN: Tight-prefix absorptive — Carleson estimate" _blank
+    click EC href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/src/chapters/50-kls-routes.tex" "COND: Tight-window consumption — Upstream reviewed implication; not Lean" _blank
+    click EAND href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/route-composition.yaml" "AND — Eldan localization route" _blank
+    click SG href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/src/chapters/50-kls-routes.tex" "OPEN: Fixed-eigenfunction — Full-damping occupation bound" _blank
+    click SC href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/src/chapters/50-kls-routes.tex" "COND: Full-damping sufficiency — Upstream reviewed implication; not Lean" _blank
+    click SAND href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/route-composition.yaml" "AND — Moment-map spectral route" _blank
+    click MH href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/src/chapters/50-kls-routes.tex" "MATH: W₂ lower semicontinuity — and CMH → affine Poincaré bound — Upstream reviewed; not Lean" _blank
+    click MG href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/src/chapters/50-kls-routes.tex" "OPEN: Uniformly bounded — CMH recovery envelope" _blank
+    click MT href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Poincare/CovarianceGradient/Translation.lean" "LEAN: Affine Poincaré constant — Translation invariance and closed form" _blank
+    click MC href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/src/chapters/50-kls-routes.tex" "COND: One CMH recovery sequence suffices — Upstream reviewed implication; not Lean" _blank
+    click MAND href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/route-composition.yaml" "AND — Moment-map CMH route" _blank
+    click FC href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/ConditionalFiber/Closed.lean" "LEAN: Conditional-fiber — Closed Dirichlet form" _blank
+    click ONE href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/Line/SharpPoincare.lean" "LEAN: One-dimensional log-concave bound — Poincaré constant ≤ 4 × variance" _blank
+    click FLOG href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/ConditionalFiber.lean" "LEAN: Almost-everywhere — Fiber log-concavity" _blank
+    click FP href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/ConditionalFiber/EnergyComparison.lean" "LEAN: Energy comparison — Given a fiber Poincaré bound" _blank
+    click F4 href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/ConditionalFiber.lean" "LEAN: Fiber energy — ≤ 4 × gradient energy" _blank
+    click FG href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/src/chapters/50-kls-routes.tex" "OPEN: Test-independent frame — Universal bound Var ≤ C × fiber energy" _blank
+    click FAND href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/route-composition.yaml" "AND — Conditional-fiber frame route" _blank
 ```
 
-Click any node to open its Lean source or documentation in a new tab. Open nodes link to
-unproved obligations or route plans. Links follow `main` so they stay aligned with the current tree.
-If your Markdown viewer disables diagram links, use the directory below.
+The four AND nodes describe unfinished route assemblies, not additional proved theorems.
+In particular, no upstream theorem named `thm:conditional-fiber-frame-suffices` is invented:
+the fiber route assembles the named form, comparison, one-dimensional bound, frame gate, and
+normalization inputs. The CMH route requires a regular recovery sequence; it is a sufficient
+condition, not an equivalence with KLS. The metric Cheeger **energy** identity is distinct from
+the isoperimetric Cheeger **constant** comparison.
+
+### Shared analytic progress: coarea and isoperimetric comparison
+
+The endpoint below is the Cheeger–Buser input to the Eldan assembly above. Completing this
+analytic chain alone does not complete that route: the tight-prefix gate and its formalized
+consumer are still needed. Here `h_M` is the Minkowski Cheeger constant and `h_S` the
+smooth-boundary Cheeger constant. Multiple incoming solid arrows are joint inputs.
+
+```mermaid
+flowchart LR
+    GG["LEAN: Global Gauss–Green"]
+    REC["LEAN: Smooth recovery sequences"]
+    FWD["LEAN: Forward comparison<br/>h_M ≤ h_S"]
+    MINK["LEAN: Minkowski coarea inequality"]
+    SARD["LEAN: Smooth Sard theorem<br/>Regular superlevel sets"]
+    MEAS["LEAN: Level-set integral measurability"]
+    GRAPH["LEAN: Weighted graph area<br/>On open domains"]
+    REG["LEAN: Coarea on regular open domains<br/>Parametric inverse and substitution"]
+    CRIT["LEAN: Critical slices are null<br/>For almost every level"]
+    C1["OPEN: Assemble general C¹ coarea<br/>Next proof step"]
+    WHIT["OPEN: Whitney extension<br/>Exact Lipschitz-to-C¹ pieces"]
+    LIP["OPEN: General Lipschitz<br/>Weighted coarea formula"]
+    SCI["OPEN: Smooth coarea inequality"]
+    CUT["LEAN: Distance-cutoff estimates<br/>and smooth approximation"]
+    REV["OPEN: Reverse comparison<br/>h_S ≤ h_M"]
+    EQ["MATH: Equality h_M = h_S<br/>Lean proof still incomplete"]
+    FRONT["MATH: Density Cheeger<br/>Frontend identification; not Lean"]
+    CB["MATH: Cheeger–Buser comparison<br/>Not yet Lean-certified"]
+
+    GG --> REC
+    REC --> FWD
+    GRAPH --> REG
+    MEAS -.->|localized measurability| REG
+    REG --> C1
+    CRIT --> C1
+    C1 --> LIP
+    WHIT --> LIP
+    MEAS --> LIP
+    C1 --> SCI
+    SARD --> SCI
+    SCI --> REV
+    CUT --> REV
+    FWD --> EQ
+    REV --> EQ
+    EQ --> FRONT
+    FRONT --> CB
+
+    classDef lean fill:#e8f5e9,stroke:#388e3c,color:#183b1c;
+    classDef math fill:#e8f0fe,stroke:#5078b8,color:#18355c;
+    classDef conditional fill:#fff3df,stroke:#c88719,color:#66420d;
+    classDef open fill:#f2f2f2,stroke:#888,color:#333;
+    classDef focus fill:#fff0dc,stroke:#d47b13,color:#663800,stroke-width:3px;
+    classDef logic fill:#ffffff,stroke:#555,color:#222;
+    class GG,REC,FWD,MINK,SARD,MEAS,GRAPH,REG,CRIT,CUT lean;
+    class EQ,FRONT,CB math;
+    class WHIT,LIP,SCI,REV open;
+    class C1 focus;
+    click GG href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/GaussGreen.lean" "LEAN: Global Gauss–Green" _blank
+    click REC href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/PerimeterRecovery.lean" "LEAN: Smooth recovery sequences" _blank
+    click FWD href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/CheegerInfimum.lean" "LEAN: Forward comparison — h_M ≤ h_S" _blank
+    click MINK href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/MinkowskiContent.lean" "LEAN: Minkowski coarea inequality" _blank
+    click SARD href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/SmoothSard.lean" "LEAN: Smooth Sard theorem — Regular superlevel sets" _blank
+    click MEAS href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/LevelSetMeasurable.lean" "LEAN: Level-set integral measurability" _blank
+    click GRAPH href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/OpenGraphIntegral.lean" "LEAN: Weighted graph area — On open domains" _blank
+    click REG href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/RegularCoarea.lean" "LEAN: Coarea on regular open domains — Parametric inverse and substitution" _blank
+    click CRIT href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/CriticalSlice.lean" "LEAN: Critical slices are null — For almost every level" _blank
+    click C1 href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/research/decisions/2026-09-15-weighted-coarea-route.md#l11" "OPEN: Assemble general C¹ coarea — Next proof step" _blank
+    click WHIT href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/research/decisions/2026-09-15-weighted-coarea-route.md#l6" "OPEN: Whitney extension — Exact Lipschitz-to-C¹ pieces" _blank
+    click LIP href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/research/decisions/2026-09-15-weighted-coarea-route.md#l12" "OPEN: General Lipschitz — Weighted coarea formula" _blank
+    click SCI href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/WIP/CheegerInfimum.lean" "OPEN: Smooth coarea inequality" _blank
+    click CUT href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/DistanceCutoff.lean" "LEAN: Distance-cutoff estimates — and smooth approximation" _blank
+    click REV href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/WIP/CheegerInfimum.lean" "OPEN: Reverse comparison — h_S ≤ h_M" _blank
+    click EQ href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/WIP/CheegerInfimum.lean" "MATH: Equality h_M = h_S — Lean proof still incomplete" _blank
+    click FRONT href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex" "MATH: Density Cheeger — Frontend identification; not Lean" _blank
+    click CB href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex" "MATH: Cheeger–Buser comparison — Not yet Lean-certified" _blank
+```
+
+The general C¹ formula combines regular-region coarea with critical-slice nullity. The Lipschitz
+extension has its own Whitney/decomposition obligations and is not a prerequisite for the C¹
+specialization used by smooth coarea. The proved Minkowski coarea inequality is shown separately;
+it is not the still-open weighted coarea equality. Smooth Sard here means the C∞ theorem, not
+the still-open sharp finite-regularity Sard statement.
+
+### Benchmarks and upstream research beyond the four route gates
+
+These results calibrate or investigate the program. They do not provide additional completed
+routes to KLS, and no solid implication arrow from a model calculation to a universal gate is intended.
+
+| Result or research direction | Recorded status and boundary | Source |
+| --- | --- | --- |
+| Sharp one-dimensional Gaussian constant | LEAN; Gaussian laws only | [Lean source](formalization/FunctionalInequalities/Poincare/Gaussian/Real.lean) |
+| Finite Poincaré tensorization | LEAN; independent-product infrastructure | [Lean source](formalization/FunctionalInequalities/Poincare/FiniteProduct/Tensorization.lean) |
+| Spectral restart and fourth-moment estimates | Upstream reviewed; not Lean; do not close uniform-time occupation | [Synchronization record](research/decisions/2026-09-12-upstream-research-sync.md) |
+| Letwin-dependent short-time spectral chain | Conditional upstream result; not Lean; not dimension-free KLS | [Synchronization record](research/decisions/2026-09-12-upstream-research-sync.md) |
+| Screened localization on a regular split class | Restricted upstream result; the universal gate remains open | [Synchronization record](research/decisions/2026-09-12-upstream-research-sync.md) |
+| CMH linear spectral resolution and third-moment decomposition | Upstream reviewed weak/closed-form statements; no universal higher-order remainder bound | [Synchronization record](research/decisions/2026-09-12-upstream-research-sync.md) |
+| Sharp gate-zero matrix bound | Upstream conjecture; not proved or Lean-certified | [Synchronization record](research/decisions/2026-09-12-upstream-research-sync.md) |
+| Exponential-cone and cube-cone models | Exact restricted models; not a universal CMH or recovery-envelope bound | [Synchronization record](research/decisions/2026-09-12-upstream-research-sync.md) |
+| Simplex root-frame degree-two result | Upstream reviewed polynomial-sector result; not a full L² frame bound | [Synchronization record](research/decisions/2026-09-12-upstream-research-sync.md) |
+| Historical weighted near-Cheeger package | REFUTED upstream by the exponential-spectator obstruction; excluded from the four active routes | [Historical branch](formalization/blueprint/src/chapters/50-kls-routes.tex) |
+
+Click a node to open its source in a new tab. Links follow `main`; the upstream provenance remains
+pinned as stated above. If diagram links are disabled in your viewer, use the directory below.
 
 <details>
 <summary>Node links: Lean sources and documentation</summary>
 
-| Node | Destination |
+| Node | Source |
 | --- | --- |
-| KLS Formalization — ○ Dimension-free bound remains open | [Open Lean source](formalization/FunctionalInequalities/KLS/Statement.lean) |
-| ✓ Formulation and Reductions | [Open Lean source](formalization/FunctionalInequalities/KLS/LogConcave/Isotropic.lean) |
-| Log-concave densities — and intrinsic affine support | [Open Lean source](formalization/FunctionalInequalities/KLS/LogConcave/BorellRepresentation.lean) |
-| Centering and covariance whitening | [Open Lean source](formalization/FunctionalInequalities/KLS/LogConcave/Isotropic.lean) |
-| Affine ⇔ Covariance-normalized ⇔ Isotropic | [Open Lean source](formalization/FunctionalInequalities/KLS/LogConcave/Isotropic.lean) |
-| ✓ Analysis and Energy Foundations | [Open documentation](formalization/FunctionalInequalities/Energy/README.md) |
-| Closed quadratic forms | [Open Lean source](formalization/FunctionalInequalities/Energy/SmoothGradient/Closed.lean) |
-| Normal contraction estimates — → Dirichlet property | [Open Lean source](formalization/FunctionalInequalities/Energy/SmoothGradient/Dirichlet.lean) |
-| For log-concave densities — Canonical energy = 2 × Cheeger energy | [Open Lean source](formalization/FunctionalInequalities/Energy/Cheeger.lean) |
-| ◐ Conditional-Fiber Route | [Open Lean source](formalization/FunctionalInequalities/KLS/ConditionalFiber.lean) |
-| ✓ One-dimensional log-concave bound — Poincaré constant ≤ 4 × variance | [Open Lean source](formalization/FunctionalInequalities/KLS/LogConcave/Line/SharpPoincare.lean) |
-| ✓ Almost-everywhere fiber log-concavity | [Open Lean source](formalization/FunctionalInequalities/KLS/LogConcave/ConditionalFiber.lean) |
-| ✓ Fiber energy ≤ 4 × gradient energy | [Open Lean source](formalization/FunctionalInequalities/KLS/LogConcave/ConditionalFiber.lean) |
-| ○ Key frame bound — Dimension-free control needed | [Open documentation](formalization/blueprint/src/chapters/50-kls-routes.tex) |
-| ◐ Isoperimetric Comparison — Current development focus | [Open Lean source](formalization/FunctionalInequalities/KLS/Geometry/CheegerInfimum.lean) |
-| ✓ Forward inequality: h_M ≤ h_S | [Open Lean source](formalization/FunctionalInequalities/KLS/Geometry/CheegerInfimum.lean) |
-| ✓ Global Gauss–Green theorem | [Open Lean source](formalization/FunctionalInequalities/KLS/Geometry/GaussGreen.lean) |
-| ✓ Smooth recovery sequences | [Open Lean source](formalization/FunctionalInequalities/KLS/Geometry/PerimeterRecovery.lean) |
-| ✓ Minkowski coarea inequality | [Open Lean source](formalization/FunctionalInequalities/KLS/Geometry/MinkowskiContent.lean) |
-| ○ Reverse inequality: h_S ≤ h_M | [Open Lean source](formalization/FunctionalInequalities/KLS/WIP/CheegerInfimum.lean) |
-| ✓ Smooth Sard theorem — Regular superlevel sets | [Open Lean source](formalization/FunctionalInequalities/Analysis/SmoothSard.lean) |
-| ◐ Weighted Coarea Formula | [Open documentation](research/decisions/2026-09-15-weighted-coarea-route.md) |
-| ✓ Measurability of level-set integrals | [Open Lean source](formalization/FunctionalInequalities/KLS/Geometry/LevelSetMeasurable.lean) |
-| ✓ Weighted graph area on open domains | [Open Lean source](formalization/FunctionalInequalities/Analysis/OpenGraphIntegral.lean) |
-| ✓ Critical slices are null — for almost every level | [Open Lean source](formalization/FunctionalInequalities/KLS/Geometry/CriticalSlice.lean) |
-| ✓ Coarea on regular open domains — Parametric implicit functions and substitution | [Open Lean source](formalization/FunctionalInequalities/KLS/Geometry/RegularCoarea.lean) |
-| ○ Assemble the general C¹ formula — Next step | [Open documentation](research/decisions/2026-09-15-weighted-coarea-route.md#l11) |
-| ○ Extend to Lipschitz functions | [Open documentation](research/decisions/2026-09-15-weighted-coarea-route.md#l12) |
-| ○ Smooth coarea inequality — Combine with distance cutoffs | [Open Lean source](formalization/FunctionalInequalities/KLS/WIP/CheegerInfimum.lean) |
-| ✓ Benchmark Results | [Open documentation](formalization/FunctionalInequalities/Poincare/README.md) |
-| Sharp one-dimensional Gaussian constant | [Open Lean source](formalization/FunctionalInequalities/Poincare/Gaussian/Real.lean) |
-| Finite Poincaré tensorization | [Open Lean source](formalization/FunctionalInequalities/Poincare/FiniteProduct/Tensorization.lean) |
+| OPEN: KLS conjecture — Dimension-free bound | [Open source](formalization/FunctionalInequalities/KLS/Statement.lean) |
+| OR — Any one completed route | [Open source](formalization/blueprint/route-composition.yaml) |
+| LEAN: Log-concave densities — Intrinsic affine support | [Open source](formalization/FunctionalInequalities/KLS/LogConcave/BorellRepresentation.lean) |
+| LEAN: Centering and whitening — Affine ⇔ Covariance-normalized ⇔ Isotropic | [Open source](formalization/FunctionalInequalities/KLS/LogConcave/Isotropic.lean) |
+| LEAN: Closed quadratic energies — Normal contractions and Dirichlet property | [Open source](formalization/FunctionalInequalities/Energy/SmoothGradient/Dirichlet.lean) |
+| LEAN: Canonical energy = 2 × Cheeger energy — For log-concave laws; local-slope convention | [Open source](formalization/FunctionalInequalities/Energy/Cheeger.lean) |
+| LEAN: Smooth, intrinsic and local-slope — Poincaré constants agree for log-concave laws | [Open source](formalization/FunctionalInequalities/KLS/LogConcave/Poincare.lean) |
+| MATH: Cheeger–Buser comparison — Not yet Lean-certified | [Open source](formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex) |
+| OPEN: Tight-prefix absorptive — Carleson estimate | [Open source](formalization/blueprint/src/chapters/50-kls-routes.tex) |
+| COND: Tight-window consumption — Upstream reviewed implication; not Lean | [Open source](formalization/blueprint/src/chapters/50-kls-routes.tex) |
+| AND — Eldan localization route | [Open source](formalization/blueprint/route-composition.yaml) |
+| OPEN: Fixed-eigenfunction — Full-damping occupation bound | [Open source](formalization/blueprint/src/chapters/50-kls-routes.tex) |
+| COND: Full-damping sufficiency — Upstream reviewed implication; not Lean | [Open source](formalization/blueprint/src/chapters/50-kls-routes.tex) |
+| AND — Moment-map spectral route | [Open source](formalization/blueprint/route-composition.yaml) |
+| MATH: W₂ lower semicontinuity — and CMH → affine Poincaré bound — Upstream reviewed; not Lean | [Open source](formalization/blueprint/src/chapters/50-kls-routes.tex) |
+| OPEN: Uniformly bounded — CMH recovery envelope | [Open source](formalization/blueprint/src/chapters/50-kls-routes.tex) |
+| LEAN: Affine Poincaré constant — Translation invariance and closed form | [Open source](formalization/FunctionalInequalities/Poincare/CovarianceGradient/Translation.lean) |
+| COND: One CMH recovery sequence suffices — Upstream reviewed implication; not Lean | [Open source](formalization/blueprint/src/chapters/50-kls-routes.tex) |
+| AND — Moment-map CMH route | [Open source](formalization/blueprint/route-composition.yaml) |
+| LEAN: Conditional-fiber — Closed Dirichlet form | [Open source](formalization/FunctionalInequalities/KLS/ConditionalFiber/Closed.lean) |
+| LEAN: One-dimensional log-concave bound — Poincaré constant ≤ 4 × variance | [Open source](formalization/FunctionalInequalities/KLS/LogConcave/Line/SharpPoincare.lean) |
+| LEAN: Almost-everywhere — Fiber log-concavity | [Open source](formalization/FunctionalInequalities/KLS/LogConcave/ConditionalFiber.lean) |
+| LEAN: Energy comparison — Given a fiber Poincaré bound | [Open source](formalization/FunctionalInequalities/KLS/ConditionalFiber/EnergyComparison.lean) |
+| LEAN: Fiber energy — ≤ 4 × gradient energy | [Open source](formalization/FunctionalInequalities/KLS/LogConcave/ConditionalFiber.lean) |
+| OPEN: Test-independent frame — Universal bound Var ≤ C × fiber energy | [Open source](formalization/blueprint/src/chapters/50-kls-routes.tex) |
+| AND — Conditional-fiber frame route | [Open source](formalization/blueprint/route-composition.yaml) |
+| LEAN: Global Gauss–Green | [Open source](formalization/FunctionalInequalities/KLS/Geometry/GaussGreen.lean) |
+| LEAN: Smooth recovery sequences | [Open source](formalization/FunctionalInequalities/KLS/Geometry/PerimeterRecovery.lean) |
+| LEAN: Forward comparison — h_M ≤ h_S | [Open source](formalization/FunctionalInequalities/KLS/Geometry/CheegerInfimum.lean) |
+| LEAN: Minkowski coarea inequality | [Open source](formalization/FunctionalInequalities/KLS/Geometry/MinkowskiContent.lean) |
+| LEAN: Smooth Sard theorem — Regular superlevel sets | [Open source](formalization/FunctionalInequalities/Analysis/SmoothSard.lean) |
+| LEAN: Level-set integral measurability | [Open source](formalization/FunctionalInequalities/KLS/Geometry/LevelSetMeasurable.lean) |
+| LEAN: Weighted graph area — On open domains | [Open source](formalization/FunctionalInequalities/Analysis/OpenGraphIntegral.lean) |
+| LEAN: Coarea on regular open domains — Parametric inverse and substitution | [Open source](formalization/FunctionalInequalities/KLS/Geometry/RegularCoarea.lean) |
+| LEAN: Critical slices are null — For almost every level | [Open source](formalization/FunctionalInequalities/KLS/Geometry/CriticalSlice.lean) |
+| OPEN: Assemble general C¹ coarea — Next proof step | [Open source](research/decisions/2026-09-15-weighted-coarea-route.md#l11) |
+| OPEN: Whitney extension — Exact Lipschitz-to-C¹ pieces | [Open source](research/decisions/2026-09-15-weighted-coarea-route.md#l6) |
+| OPEN: General Lipschitz — Weighted coarea formula | [Open source](research/decisions/2026-09-15-weighted-coarea-route.md#l12) |
+| OPEN: Smooth coarea inequality | [Open source](formalization/FunctionalInequalities/KLS/WIP/CheegerInfimum.lean) |
+| LEAN: Distance-cutoff estimates — and smooth approximation | [Open source](formalization/FunctionalInequalities/KLS/Geometry/DistanceCutoff.lean) |
+| OPEN: Reverse comparison — h_S ≤ h_M | [Open source](formalization/FunctionalInequalities/KLS/WIP/CheegerInfimum.lean) |
+| MATH: Equality h_M = h_S — Lean proof still incomplete | [Open source](formalization/FunctionalInequalities/KLS/WIP/CheegerInfimum.lean) |
+| MATH: Density Cheeger — Frontend identification; not Lean | [Open source](formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex) |
 
 </details>
 
-**Maintenance:** Whenever proof progress changes, update this tree, its date, and the current
-status above in the same change as the proof and its verification records. Keep labels in English,
-preserve the exact mathematical scope, and move completion markers or the next-step highlight only
-when supported by the current source and verification evidence. Keep every node link and the
-link directory aligned with its current source or document, including after file moves.
+**Maintenance:** Review both diagrams after every proof update. Update the affected labels,
+status colors, dependencies, date, source links, directory, and current-status summary together
+with the proof and its verification records. Preserve prerequisite-to-conclusion arrow direction,
+AND within routes, OR between routes, and the distinction between upstream mathematics and
+local Lean proofs. Keep the diagrams and their surrounding documentation in English.
 
 ## Mathematical API organization (2026-09-08)
 
