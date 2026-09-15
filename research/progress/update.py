@@ -84,10 +84,12 @@ def generate():
         meta = tasks.get(name, {})
         math = ('Upstream: ' + claim['state']) if provenance.get('source') == 'kls-exploration' else ('Local classification: ' + meta.get('mathematics', 'definition' if node['kind'] == 'definition' else 'not separately classified'))
         complete = records[name]['state'] == 'formalized'
-        status = '✓ Formalized in Lean (definition)' if complete and node['kind'] == 'definition' else ('✓ Formalized in Lean' if complete else '○ Not yet formalized')
+        status = views.status_cell(records[name]['state'])
+        if complete and node['kind'] == 'definition':
+            status += ' (definition)'
         excluded = claim.get('state') == 'refuted' or meta.get('mathematics') == 'refuted'
         if excluded:
-            status = '— Excluded: refuted'
+            status = views.status_cell('excluded')
         if complete and provenance.get('source') != 'kls-exploration' and 'mathematics' not in meta:
             math = 'Local definition; no upstream mapping' if node['kind'] == 'definition' else 'Local Lean result; no upstream mapping'
         ref = node['statement_ref']
@@ -124,7 +126,7 @@ def generate():
         if 'diagram' not in record:
             continue
         d = record['diagram']
-        out.append(f'| `{d["id"]}` | {cell(record["description"])} | {views.STATES[record["state"]]} | [Source]({d["source"]}) |')
+        out.append(f'| `{d["id"]}` | {cell(record["description"])} | {views.status_cell(record["state"])} | [Source]({d["source"]}) |')
     diagram = tree
     out += ['', '## Provenance', '',
             f'Upstream revision: `{upstream["revision"]}`. The selected upstream snapshot contains',
@@ -134,7 +136,7 @@ def generate():
             f'View input digest: `{hashlib.sha256(json.dumps([catalog, portfolio], sort_keys=True).encode()).hexdigest()}`.', '',
             'Regenerate with `python3 research/progress/update.py` after staging the intended source and',
             'metadata updates. Unstaged unrelated metadata is deliberately excluded.', '']
-    return {'STATUS.md': '\n'.join(out), 'README.md': readme, 'TREE.mmd': tree}
+    return {'STATUS.md': '\n'.join(out), 'README.md': readme, 'TREE.mmd': tree, **views.render_badges()}
 
 
 def main():
@@ -151,8 +153,10 @@ def main():
         print('All progress views match the shared records.')
     else:
         for name, content in outputs.items():
-            (ROOT / 'research/progress' / name).write_text(content)
-        print('Generated README.md, STATUS.md, and TREE.mmd from shared records.')
+            destination = ROOT / 'research/progress' / name
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            destination.write_text(content)
+        print('Generated progress documents, diagram, and status badges from shared records.')
 
 
 if __name__ == '__main__':

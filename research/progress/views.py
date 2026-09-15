@@ -1,6 +1,7 @@
 """Render progress views from one resolved node inventory; never infer Lean proofs from upstream status."""
 from __future__ import annotations
 import re
+from html import escape
 
 STATES = {'formalized': '✓ Formalized in Lean', 'partial': '◐ Partially formalized',
           'pending': '○ Not yet formalized', 'excluded': '— Excluded: refuted', 'logic': 'OR'}
@@ -9,6 +10,37 @@ STYLES = {'done': 'fill:#e8f5e9,stroke:#388e3c,color:#183b1c',
           'todo': 'fill:#f2f2f2,stroke:#888,color:#333',
           'focus': 'fill:#fff0dc,stroke:#d47b13,color:#663800,stroke-width:3px',
           'logic': 'fill:#fff,stroke:#555,color:#222'}
+
+
+BADGE_COLORS = {
+    'formalized': ('#dcfce7', '#166534', '#86efac'),
+    'pending': ('#fee2e2', '#991b1b', '#fca5a5'),
+    'partial': ('#ffedd5', '#9a3412', '#fdba74'),
+    'excluded': ('#f1f5f9', '#475569', '#cbd5e1'),
+}
+
+
+def status_cell(state):
+    """Local SVG badges work as Markdown images; alt text preserves the status."""
+    if state == 'logic':
+        return STATES[state]
+    return f'![{STATES[state]}](badges/{state}.svg)'
+
+
+def render_badges():
+    outputs = {}
+    for state, (background, foreground, border) in BADGE_COLORS.items():
+        label = escape(STATES[state])
+        width = max(172, len(STATES[state]) * 7 + 24)
+        outputs[f'badges/{state}.svg'] = (
+            f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="26" '
+            f'viewBox="0 0 {width} 26" role="img" aria-label="{label}">\n'
+            f'  <title>{label}</title>\n'
+            f'  <rect x="0.5" y="0.5" width="{width-1}" height="25" rx="5" '
+            f'fill="{background}" stroke="{border}"/>\n'
+            f'  <text x="12" y="17" fill="{foreground}" font-family="DejaVu Sans,Arial,sans-serif" '
+            f'font-size="12" font-weight="600">{label}</text>\n</svg>\n')
+    return outputs
 
 
 def cell(value):
@@ -125,7 +157,7 @@ def render_readme(template, tree, catalog, records, portfolio):
         if not a.get('local_record') and state == 'formalized':
             raise ValueError('A formalized approach needs an explicit local proof mapping')
         upstream = a['state'] + ('; '+a['scope_note'] if a.get('scope_note') else '')
-        rows.append(f'| {families[a["family"]]} | [`{a["id"]}`]({portfolio["source"]}) | {cell(upstream)} | {STATES[state]} | {cell(a["objective"])} |')
+        rows.append(f'| {families[a["family"]]} | [`{a["id"]}`]({portfolio["source"]}) | {cell(upstream)} | {status_cell(state)} | {cell(a["objective"])} |')
     intro = f'**{len(ids)} approaches in the [pinned upstream portfolio]({portfolio["source"]})** (`{portfolio["revision"][:7]}`).\nUpstream activity and local Lean formalization are separate. Supporting results appear below.\n'
     text = replace_block(text, 'APPROACHES', intro+'\n'+'\n'.join(rows))
     rows = ['| Result / step | Our Lean formalization | Source |', '| --- | --- | --- |']
@@ -136,7 +168,7 @@ def render_readme(template, tree, catalog, records, portfolio):
         d = r['diagram']; title = cell(d['label'].replace('<br/>',' — '))
         links.append(f'| {title} | [Source]({d["source"]}) |')
         if r.get('assessment',{}).get('kind') not in ('route','logic') and r.get('blueprint') != 'conj:kls':
-            rows.append(f'| {title} | {STATES[r["state"]]} | [Source]({d["source"]}) |')
+            rows.append(f'| {title} | {status_cell(r["state"])} | [Source]({d["source"]}) |')
     text = replace_block(text, 'RESULTS', '\n'.join(rows))
     return replace_block(text, 'LINKS', '\n'.join(links))
 

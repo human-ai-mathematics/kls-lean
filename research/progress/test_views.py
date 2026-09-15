@@ -32,7 +32,7 @@ class ProgressViewsTests(unittest.TestCase):
             tree = views.render_tree(catalog, records)
             readme = views.render_readme(template, tree, catalog, records, portfolio)
             self.assertIn(f'X["{marker} Example"]', tree)
-            self.assertIn(f'| Example | {views.STATES[records["x"]["state"]]} |', readme)
+            self.assertIn(f'| Example | {views.status_cell(records["x"]["state"])} |', readme)
 
     def test_missing_route_input_is_rejected(self):
         catalog = json.loads((HERE / 'nodes.json').read_text())
