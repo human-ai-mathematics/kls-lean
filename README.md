@@ -49,6 +49,7 @@ Probability pushforwards and L² pullbacks occupy their own layers. See [the nam
 | Node statements and certification status | [research/a-series/ledger.yaml](research/a-series/ledger.yaml) |
 | Node-specific Lean entry points | [solutions/README.md](solutions/README.md) |
 | Review history | [research/decisions/](research/decisions/) and [research/explorations/](research/explorations/) |
+| Proof corrections, stronger bounds, and simpler arguments | [Proof Corrections and Improvements](research/proof-corrections-and-improvements.md) |
 | Literal Lean KLS target | [KLS/Statement.lean](formalization/FunctionalInequalities/KLS/Statement.lean) |
 | Local task atlas and snapshot-bound verification | [research/verification.md](research/verification.md) |
 
