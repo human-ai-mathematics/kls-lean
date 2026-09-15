@@ -3,28 +3,10 @@ name: Lean Blueprint
 on:
   push:
     paths:
-      - '.github/workflows/blueprint.yml'
-      - 'formalization/blueprint/**'
-      - 'formalization/**/*.lean'
-      - 'formalization/lakefile.toml'
-      - 'formalization/lake-manifest.json'
-      - 'formalization/lean-toolchain'
-      - 'solutions/**/*.lean'
-      - 'research/a-series/ledger.yaml'
-      - 'research/check_blueprint.py'
-      - 'research/tests/test_check_blueprint.py'
+      - '**/*.lean'
   pull_request:
     paths:
-      - '.github/workflows/blueprint.yml'
-      - 'formalization/blueprint/**'
-      - 'formalization/**/*.lean'
-      - 'formalization/lakefile.toml'
-      - 'formalization/lake-manifest.json'
-      - 'formalization/lean-toolchain'
-      - 'solutions/**/*.lean'
-      - 'research/a-series/ledger.yaml'
-      - 'research/check_blueprint.py'
-      - 'research/tests/test_check_blueprint.py'
+      - '**/*.lean'
   workflow_dispatch:
 
 permissions:

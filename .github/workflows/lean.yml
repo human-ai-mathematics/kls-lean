@@ -2,7 +2,11 @@ name: Lean certification
 
 on:
   push:
+    paths:
+      - '**/*.lean'
   pull_request:
+    paths:
+      - '**/*.lean'
 
 permissions:
   contents: read
