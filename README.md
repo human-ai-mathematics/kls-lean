@@ -34,6 +34,9 @@ The [progress hub](research/progress/README.md) keeps our
 [node-by-node progress table](research/progress/STATUS.md) together.
 The diagrams use ✓ / ◐ / ○ for local Lean progress, with arrows pointing toward KLS.
 The table separates upstream mathematical status from local formalization and certificate records.
+The [literature map](research/progress/README.md#kls-literature-through-july-2026) and
+[paper-by-paper register](research/progress/LITERATURE.md) cover foundational sources and the
+KLS, thin-shell and slicing literature through July 2026, with explicit local proof coverage.
 
 ## Mathematical API organization (2026-09-08)
 

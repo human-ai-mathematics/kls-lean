@@ -1,0 +1,574 @@
+{
+  "version": 1,
+  "checked_on": "2026-09-16",
+  "literature_cutoff": "2026-07-31",
+  "scope": "Selected foundational sources, the main general KLS bound milestones, and the connected moment-map, slicing and thin-shell developments through July 2026; not an exhaustive bibliography or a paper-by-paper proof verification.",
+  "groups": [
+    {
+      "id": "frontier",
+      "title": "General KLS bounds and stochastic localization"
+    },
+    {
+      "id": "thin_shell",
+      "title": "Thin shell and slicing"
+    },
+    {
+      "id": "moment",
+      "title": "Moment measures and Stein kernels"
+    },
+    {
+      "id": "foundations",
+      "title": "Analytic foundations and selected local coverage"
+    },
+    {
+      "id": "surveys",
+      "title": "Reading guides"
+    }
+  ],
+  "papers": [
+    {
+      "id": "Borell1974",
+      "group": "foundations",
+      "authors": "Borell",
+      "title": "Convex measures on locally convex spaces",
+      "date": "1974",
+      "publication": "Journal article",
+      "url": "https://link.springer.com/article/10.1007/BF02384761",
+      "locator": "Definition 1.1 and finite-dimensional density characterization",
+      "result": "Convex/log-concave measures, inner measure and density representation on the affine support.",
+      "remaining": "The locally convex-space theory and the other convexity parameters are outside our finite-dimensional log-concave scope.",
+      "local_results": [
+        {
+          "node": "thm:compact-borell-logconcavity-equivalence",
+          "scope": "Compact/Borel definitions with inner measure"
+        },
+        {
+          "node": "thm:borell-logconcave-density",
+          "scope": "Finite-dimensional intrinsic density representation"
+        }
+      ]
+    },
+    {
+      "id": "KLS1995",
+      "group": "frontier",
+      "authors": "Kannan–Lovász–Simonovits",
+      "title": "Isoperimetric problems for convex bodies and a localization lemma",
+      "date": "1995",
+      "publication": "Journal article",
+      "url": "https://link.springer.com/article/10.1007/BF02574061",
+      "locator": "Localization lemma; historical dimension bound, also reviewed in Klartag–Lehec lecture notes",
+      "result": "Introduces the conjecture and localization; the classical dimension-scale bound is ψₙ = O(n^(1/2)), hence C_P = O(n).",
+      "remaining": "The high-dimensional localization theorem and this general dimension bound are not locally formalized.",
+      "local_results": [],
+      "diagram": "1995 · KLS<br/>ψₙ = O(n^(1/2))",
+      "additional_sources": [
+        "https://arxiv.org/abs/2406.01324"
+      ]
+    },
+    {
+      "id": "Bobkov1999",
+      "group": "foundations",
+      "authors": "Bobkov",
+      "title": "Isoperimetric and analytic inequalities for log-concave probability measures",
+      "date": "1999",
+      "publication": "Journal article",
+      "url": "https://www-users.cse.umn.edu/~bobko001/papers/1999_AOP_Isop.pdf",
+      "locator": "Corollary 4.3 and one-dimensional specialization",
+      "result": "Cheeger/Poincaré inequalities for log-concave laws; the one-dimensional comparison yields C_P ≤ 12 Var.",
+      "remaining": "Our one-dimensional proof uses a different analytic argument. The paper’s general isoperimetric theory is not fully formalized.",
+      "local_results": [
+        {
+          "node": "thm:one-dimensional-logconcave-poincare",
+          "scope": "One-dimensional upper bound, now strengthened locally to 4 Var; the independent 12 Var proof is retained"
+        }
+      ]
+    },
+    {
+      "id": "Milman2009",
+      "group": "foundations",
+      "authors": "E. Milman",
+      "title": "On the role of convexity in isoperimetry, spectral gap and concentration",
+      "date": "2009",
+      "publication": "Journal article",
+      "url": "https://arxiv.org/abs/0712.4092",
+      "locator": "Main equivalence theorem",
+      "result": "Under convexity, isoperimetry, spectral gap and concentration control one another up to universal constants.",
+      "remaining": "The full equivalence remains open locally; our forward infimum comparison is supporting infrastructure, not this theorem.",
+      "local_results": []
+    },
+    {
+      "id": "GuedonMilman2011",
+      "group": "thin_shell",
+      "authors": "Guédon–Milman",
+      "title": "Interpolating thin-shell and sharp large-deviation estimates for isotropic log-concave measures",
+      "date": "2010 preprint / 2011 publication",
+      "publication": "Journal article",
+      "url": "https://arxiv.org/abs/1011.0943v3",
+      "locator": "Main deviation estimate",
+      "result": "Quantitative radial concentration across thin-shell and large-deviation scales for isotropic log-concave laws.",
+      "remaining": "Radial deviation estimates and their thin-shell/isoperimetric consequences are not locally formalized.",
+      "local_results": []
+    },
+    {
+      "id": "Eldan2013",
+      "group": "frontier",
+      "authors": "Eldan",
+      "title": "Thin shell implies spectral gap up to polylog via a stochastic localization scheme",
+      "date": "2012 preprint / 2013 publication",
+      "publication": "Journal article",
+      "url": "https://arxiv.org/abs/1203.0893",
+      "locator": "Main thin-shell/spectral-gap comparison",
+      "result": "Introduces stochastic localization and transfers thin-shell control to KLS with logarithmic losses.",
+      "remaining": "The stochastic process, its covariance estimates and the transfer theorem are not locally formalized.",
+      "local_results": [],
+      "diagram": "2013 · Eldan<br/>Stochastic localization"
+    },
+    {
+      "id": "AGS2013",
+      "group": "foundations",
+      "authors": "Ambrosio–Gigli–Savaré",
+      "title": "Density of Lipschitz functions and equivalence of weak gradients in metric measure spaces",
+      "date": "2011 preprint / 2013 publication",
+      "publication": "Journal article",
+      "url": "https://arxiv.org/abs/1111.3730",
+      "locator": "Weak-gradient and relaxed-energy equivalence theorems",
+      "result": "Identifies weak-gradient notions and relaxed energies in metric measure spaces.",
+      "remaining": "The general metric-space theorem and unrestricted singular-law comparison are not formalized here. Our absolutely-continuous Euclidean identity is an independent restricted counterpart.",
+      "local_results": [
+        {
+          "node": "cor:absolutely-continuous-relaxation-two-cheeger",
+          "scope": "Intrinsic absolutely-continuous E^can = 2 Ch in the local-slope convention"
+        }
+      ]
+    },
+    {
+      "id": "BGL2014",
+      "group": "foundations",
+      "authors": "Bakry–Gentil–Ledoux",
+      "title": "Analysis and Geometry of Markov Diffusion Operators",
+      "date": "2014",
+      "publication": "Monograph",
+      "url": "https://link.springer.com/book/10.1007/978-3-319-00227-9",
+      "locator": "Proposition 4.3.1; Gaussian Poincaré and Dirichlet-form background",
+      "result": "Tensorization and Gaussian functional inequalities within the diffusion/Dirichlet-form framework.",
+      "remaining": "The full diffusion, semigroup and Γ-calculus theory is not covered by our selected results.",
+      "local_results": [
+        {
+          "node": "cert:binary-tensorization",
+          "scope": "Binary smooth-test tensorization"
+        },
+        {
+          "node": "cert:finite-tensorization",
+          "scope": "Finite Hilbert-product constants, including empty products"
+        },
+        {
+          "node": "cert:gaussian-one-dimensional",
+          "scope": "Exact one-dimensional Gaussian constant"
+        }
+      ]
+    },
+    {
+      "id": "Klartag2014Moment",
+      "group": "moment",
+      "authors": "Klartag",
+      "title": "Logarithmically-concave moment measures I",
+      "date": "2013 preprint / 2014 publication",
+      "publication": "Book chapter",
+      "url": "https://arxiv.org/abs/1309.2767",
+      "locator": "Theorem 1.1; weighted moment-measure geometry",
+      "result": "Develops the Hessian metric and weighted Poincaré structure associated with log-concave moment measures.",
+      "remaining": "Moment-map existence/regularity, the Hessian metric and weighted geometric identities are not locally formalized.",
+      "local_results": [],
+      "diagram": "2014 · Klartag<br/>Moment-measure geometry",
+      "additional_sources": [
+        "https://www.weizmann.ac.il/math/klartag/publications-0"
+      ]
+    },
+    {
+      "id": "CorderoKlartag2015",
+      "group": "moment",
+      "authors": "Cordero-Erausquin–Klartag",
+      "title": "Moment measures",
+      "date": "2013 preprint / 2015 publication",
+      "publication": "Journal article",
+      "url": "https://arxiv.org/abs/1304.0630",
+      "locator": "Theorem 2",
+      "result": "A nonzero finite centered measure whose support spans the space is the moment measure of an essentially continuous convex potential, unique up to translation.",
+      "remaining": "The existence/uniqueness theorem is not locally formalized; generic closed forms do not supply its convex potential.",
+      "local_results": [],
+      "diagram": "2015 · Cordero-Erausquin–Klartag<br/>Moment-measure existence",
+      "additional_sources": [
+        "https://webusers.imj-prg.fr/~dario.cordero/Docs/articles/2015_moment_measures.pdf"
+      ]
+    },
+    {
+      "id": "AlonsoBastero2015",
+      "group": "foundations",
+      "authors": "Alonso-Gutiérrez–Bastero",
+      "title": "Approaching the Kannan–Lovász–Simonovits and variance conjectures",
+      "date": "2015",
+      "publication": "Monograph",
+      "url": "https://link.springer.com/book/10.1007/978-3-319-13263-1",
+      "locator": "Page 11; local source audit linked below",
+      "result": "Records C_P ≤ 4 tr(Cov), whose one-dimensional specialization is 4 Var, in a broader account of KLS and the variance conjecture.",
+      "remaining": "Only the one-dimensional bound is formalized here, by an independent proof. The high-dimensional trace bound, its original exact-constant attribution and optimality over all laws are not certified.",
+      "local_results": [
+        {
+          "node": "thm:one-dimensional-logconcave-poincare",
+          "scope": "One-dimensional 4 Var upper bound, including zero variance"
+        }
+      ]
+    },
+    {
+      "id": "ADMG2017",
+      "group": "foundations",
+      "authors": "Ambrosio–Di Marino–Gigli",
+      "title": "Perimeter as relaxed Minkowski content in metric measure spaces",
+      "date": "2016 preprint / 2017 publication",
+      "publication": "Journal article",
+      "url": "https://arxiv.org/abs/1603.08412",
+      "locator": "Lemma 3.2; Theorem 3.6",
+      "result": "A Minkowski coarea inequality and identification of relaxed Minkowski content with BV perimeter.",
+      "remaining": "The general metric-space BV identification is not formalized; our result is the stated finite-dimensional C¹ Lipschitz specialization.",
+      "local_results": [
+        {
+          "node": "diagram:MINK",
+          "scope": "Minkowski coarea inequality in the local Euclidean scope"
+        }
+      ]
+    },
+    {
+      "id": "LeeVempala2024",
+      "group": "frontier",
+      "authors": "Lee–Vempala",
+      "title": "Eldan’s stochastic localization and the KLS conjecture: Isoperimetry, concentration and mixing",
+      "date": "2016 preprint / 2017 FOCS / 2024 journal",
+      "publication": "Journal article",
+      "url": "https://annals.math.princeton.edu/2024/199-3/p02",
+      "locator": "Main Poincaré estimate",
+      "result": "For isotropic log-concave laws, C_P = O(n^(1/2)), equivalently ψₙ = O(n^(1/4)); the paper also studies mixing and concentration.",
+      "remaining": "The quantitative localization theorem, covariance bounds and mixing results are not locally formalized.",
+      "local_results": [],
+      "diagram": "2016/17 · Lee–Vempala<br/>ψₙ = O(n^(1/4))",
+      "additional_sources": [
+        "https://arxiv.org/abs/1612.01507"
+      ]
+    },
+    {
+      "id": "LeeVempalaSurvey2018",
+      "group": "surveys",
+      "authors": "Lee–Vempala",
+      "title": "The Kannan–Lovász–Simonovits conjecture",
+      "date": "2018",
+      "publication": "Survey preprint",
+      "url": "https://arxiv.org/abs/1807.03465",
+      "locator": "Survey",
+      "result": "A guide to KLS formulations, geometric consequences and algorithmic motivation at the 2018 frontier.",
+      "remaining": "Use for orientation; its historical frontier is superseded by the later papers in the frontier table.",
+      "local_results": []
+    },
+    {
+      "id": "Fathi2019",
+      "group": "moment",
+      "authors": "Fathi",
+      "title": "Stein kernels and moment maps",
+      "date": "2018 preprint / 2019 publication",
+      "publication": "Journal article",
+      "url": "https://arxiv.org/abs/1804.04699",
+      "locator": "Moment-map Stein-kernel construction",
+      "result": "Constructs Stein kernels using moment maps, connecting Hessian geometry to probabilistic identities.",
+      "remaining": "The canonical moment-map Stein kernel is not locally formalized.",
+      "local_results": [],
+      "diagram": "2019 · Fathi<br/>Stein kernels"
+    },
+    {
+      "id": "Chen2021",
+      "group": "frontier",
+      "authors": "Chen",
+      "title": "An almost constant lower bound of the isoperimetric coefficient in the KLS conjecture",
+      "date": "2020 preprint / 2021 publication",
+      "publication": "Journal article",
+      "url": "https://arxiv.org/abs/2011.13661",
+      "locator": "Main bound, translated from the lower-bound convention for h",
+      "result": "ψₙ ≤ exp(C√(log n · log log n)) = n^o(1); hence C_P = n^o(1), breaking the polynomial barrier.",
+      "remaining": "The stochastic-localization bootstrap and the subpolynomial bound are not locally formalized.",
+      "local_results": [],
+      "diagram": "2020/21 · Chen<br/>ψₙ = n^o(1)",
+      "additional_sources": [
+        "https://link.springer.com/article/10.1007/s00039-021-00558-4"
+      ]
+    },
+    {
+      "id": "DePontiMondino2021",
+      "group": "foundations",
+      "authors": "De Ponti–Mondino",
+      "title": "Sharp Cheeger–Buser type inequalities in RCD(K,∞) spaces",
+      "date": "2019 preprint / 2021 publication",
+      "publication": "Journal article",
+      "url": "https://arxiv.org/abs/1902.03835",
+      "locator": "Cheeger–Buser comparison; log-concave specialization in Letwin, introduction",
+      "result": "Provides the sharp reverse-comparison input used to normalize ψ² and C_P; in the log-concave convention, 1/4 ≤ ψ²/C_P ≤ π.",
+      "remaining": "The local full Cheeger–Buser theorem is pending; weighted coarea and one forward infimum comparison do not establish it.",
+      "local_results": [],
+      "additional_sources": [
+        "https://arxiv.org/html/2607.24164v1#S1"
+      ]
+    },
+    {
+      "id": "KlartagLehec2022",
+      "group": "frontier",
+      "authors": "Klartag–Lehec",
+      "title": "Bourgain’s slicing problem and KLS isoperimetry up to polylog",
+      "date": "2022",
+      "publication": "Journal article",
+      "url": "https://arxiv.org/html/2203.15551v2",
+      "locator": "Theorem 1.1 and end of Section 6",
+      "result": "First polylogarithmic KLS bound: ψₙ = O((log n)^5), hence C_P = O((log n)^10).",
+      "remaining": "The localization covariance window and spectral argument are not locally formalized.",
+      "local_results": [],
+      "diagram": "2022 · Klartag–Lehec<br/>ψₙ = O((log n)^5)"
+    },
+    {
+      "id": "JambulapatiLeeVempala2022",
+      "group": "frontier",
+      "authors": "Jambulapati–Lee–Vempala",
+      "title": "A slightly improved bound for the KLS constant",
+      "date": "2022",
+      "publication": "Preprint (v2)",
+      "url": "https://arxiv.org/html/2208.11644v2",
+      "locator": "Theorem 2",
+      "result": "Improves the logarithmic exponent: ψₙ = O((log n)^3.2226), hence C_P = O((log n)^6.4452).",
+      "remaining": "The refined localization growth estimate and resulting bound are not locally formalized.",
+      "local_results": [],
+      "diagram": "2022 · Jambulapati–Lee–Vempala<br/>ψₙ = O((log n)^3.2226)"
+    },
+    {
+      "id": "Klartag2023",
+      "group": "frontier",
+      "authors": "Klartag",
+      "title": "Logarithmic bounds for isoperimetry and slices of convex sets",
+      "date": "2023",
+      "publication": "Journal article",
+      "url": "https://arxiv.org/html/2303.14938v2",
+      "locator": "Theorems 1.2 and 1.3",
+      "result": "ψₙ = O(√log n), hence C_P = O(log n), using an improved log-concave Lichnerowicz inequality.",
+      "remaining": "The improved Lichnerowicz estimate and stochastic localization remain unformalized locally.",
+      "local_results": [],
+      "diagram": "2023 · Klartag<br/>ψₙ = O((log n)^(1/2))"
+    },
+    {
+      "id": "Guan2024",
+      "group": "thin_shell",
+      "authors": "Guan",
+      "title": "A note on Bourgain’s slicing problem",
+      "date": "2024",
+      "publication": "Preprint (v1)",
+      "url": "https://arxiv.org/html/2412.09075v1",
+      "locator": "Theorems 1.1 and 1.2; covariance estimates",
+      "result": "Obtains an iterated-logarithmic slicing bound and localization estimates used in the later slicing and thin-shell work.",
+      "remaining": "The covariance process and Guan’s estimates are not locally formalized.",
+      "local_results": [],
+      "diagram": "2024 · Guan<br/>Localization estimates"
+    },
+    {
+      "id": "KlartagLehecSlicing2025",
+      "group": "thin_shell",
+      "authors": "Klartag–Lehec",
+      "title": "Affirmative resolution of Bourgain’s slicing problem using Guan’s bound",
+      "date": "2024 preprint / 2025 publication",
+      "publication": "Journal article",
+      "url": "https://arxiv.org/abs/2412.15044",
+      "locator": "Main slicing theorem",
+      "result": "Every volume-one convex body has a hyperplane section of volume at least a universal positive constant. This resolves slicing, not KLS.",
+      "remaining": "The slicing theorem, M-ellipsoids and entropy-stability inputs are not locally formalized.",
+      "local_results": [],
+      "diagram": "2024/25 · Klartag–Lehec<br/>Slicing resolved",
+      "additional_sources": [
+        "https://lehec.pages.math.cnrs.fr/website/"
+      ]
+    },
+    {
+      "id": "Bizeul2025",
+      "group": "thin_shell",
+      "authors": "Bizeul",
+      "title": "The slicing conjecture via small ball estimates",
+      "date": "2025",
+      "publication": "Preprint",
+      "url": "https://arxiv.org/abs/2501.06854",
+      "locator": "Main alternative proof",
+      "result": "An alternative proof of slicing via small-ball estimates and Guan’s localization bound.",
+      "remaining": "The small-ball argument and slicing conclusion are not locally formalized.",
+      "local_results": []
+    },
+    {
+      "id": "KlartagLehecSurvey2025",
+      "group": "surveys",
+      "authors": "Klartag–Lehec",
+      "title": "Isoperimetric inequalities in high-dimensional convex sets",
+      "date": "2024 preprint / 2025 publication",
+      "publication": "Published lecture notes",
+      "url": "https://arxiv.org/abs/2406.01324",
+      "locator": "Lecture notes",
+      "result": "A detailed entry point to stochastic localization, KLS and slicing up to the period covered by the notes.",
+      "remaining": "Reading guide; the July 2026 frontier requires the newer sources in the frontier table.",
+      "local_results": [],
+      "additional_sources": [
+        "https://lehec.pages.math.cnrs.fr/website/"
+      ]
+    },
+    {
+      "id": "KlartagLehecThin2025",
+      "group": "thin_shell",
+      "authors": "Klartag–Lehec",
+      "title": "Thin-shell bounds via parallel coupling",
+      "date": "21 July 2025 / v2 23 February 2026",
+      "publication": "Preprint (v2)",
+      "url": "https://arxiv.org/abs/2507.15495v2",
+      "locator": "Main thin-shell theorem",
+      "result": "For isotropic log-concave X, E(‖X‖ − √n)² ≤ C with a universal constant, via parallel coupling.",
+      "remaining": "The coupling construction and dimension-free thin-shell theorem are not locally formalized; thin shell alone does not remove the KLS logarithms.",
+      "local_results": [],
+      "diagram": "2025 · Klartag–Lehec<br/>Thin shell resolved"
+    },
+    {
+      "id": "ChenKlartag2026",
+      "group": "thin_shell",
+      "authors": "Chen–Klartag",
+      "title": "Digesting the proof of the sharp thin-shell inequality",
+      "date": "25 July 2026",
+      "publication": "Preprint (v1)",
+      "url": "https://arxiv.org/html/2607.23307v1",
+      "locator": "Theorems 1.1, 1.2 and 1.5",
+      "result": "For isotropic log-concave X: Var(‖X‖²) ≤ 8n and ‖T₃(X)‖²_HS ≤ 4n. The constants are sharp.",
+      "remaining": "The moment-Hessian estimate, third-order tensor identities and sharp conclusions are not locally formalized. A trace bound is not a universal matrix bound.",
+      "local_results": [],
+      "diagram": "25 July 2026 · Chen–Klartag<br/>Sharp thin shell: 8n"
+    },
+    {
+      "id": "Letwin2026",
+      "group": "frontier",
+      "authors": "Letwin",
+      "title": "The KLS constant is O(log^(1/4) n)",
+      "date": "27 July 2026",
+      "publication": "Preprint (v1)",
+      "url": "https://arxiv.org/html/2607.24164v1",
+      "locator": "Theorems 1.1 and 1.2",
+      "result": "For isotropic log-concave X and symmetric M, Var(XᵀMX) ≤ 8‖M‖²_HS = 2 E‖∇(XᵀMX)‖². For n ≥ 2, ψₙ = O((log n)^(1/4)), hence C_P = O(√log n).",
+      "remaining": "The quadratic inequality, its moment-map/Stein proof and the κₙ-to-KLS conversion are not locally formalized. Quadratic tests do not suffice for full KLS.",
+      "local_results": [],
+      "diagram": "27 July 2026 · Letwin<br/>ψₙ = O((log n)^(1/4))"
+    }
+  ],
+  "diagram_groups": [
+    {
+      "id": "bounds",
+      "title": "General KLS frontier — inverse Cheeger convention",
+      "papers": [
+        "KLS1995",
+        "Eldan2013",
+        "LeeVempala2024",
+        "Chen2021",
+        "KlartagLehec2022",
+        "JambulapatiLeeVempala2022",
+        "Klartag2023",
+        "Letwin2026"
+      ]
+    },
+    {
+      "id": "shell",
+      "title": "Related breakthroughs — do not imply dimension-free KLS",
+      "papers": [
+        "Guan2024",
+        "KlartagLehecSlicing2025",
+        "KlartagLehecThin2025",
+        "ChenKlartag2026"
+      ]
+    },
+    {
+      "id": "moments",
+      "title": "Moment-measure background for the July papers",
+      "papers": [
+        "CorderoKlartag2015",
+        "Klartag2014Moment",
+        "Fathi2019"
+      ]
+    }
+  ],
+  "diagram_edges": [
+    {
+      "from": "KLS1995",
+      "to": "Eldan2013",
+      "kind": "chronology"
+    },
+    {
+      "from": "Eldan2013",
+      "to": "LeeVempala2024",
+      "kind": "chronology"
+    },
+    {
+      "from": "LeeVempala2024",
+      "to": "Chen2021",
+      "kind": "chronology"
+    },
+    {
+      "from": "Chen2021",
+      "to": "KlartagLehec2022",
+      "kind": "chronology"
+    },
+    {
+      "from": "KlartagLehec2022",
+      "to": "JambulapatiLeeVempala2022",
+      "kind": "chronology"
+    },
+    {
+      "from": "JambulapatiLeeVempala2022",
+      "to": "Klartag2023",
+      "kind": "chronology"
+    },
+    {
+      "from": "Klartag2023",
+      "to": "Letwin2026",
+      "kind": "chronology"
+    },
+    {
+      "from": "Guan2024",
+      "to": "KlartagLehecSlicing2025",
+      "kind": "context"
+    },
+    {
+      "from": "Guan2024",
+      "to": "KlartagLehecThin2025",
+      "kind": "context"
+    },
+    {
+      "from": "KlartagLehecThin2025",
+      "to": "ChenKlartag2026",
+      "kind": "context"
+    },
+    {
+      "from": "CorderoKlartag2015",
+      "to": "Klartag2014Moment",
+      "kind": "context"
+    },
+    {
+      "from": "CorderoKlartag2015",
+      "to": "Fathi2019",
+      "kind": "context"
+    },
+    {
+      "from": "Klartag2014Moment",
+      "to": "ChenKlartag2026",
+      "kind": "context"
+    },
+    {
+      "from": "Klartag2014Moment",
+      "to": "Letwin2026",
+      "kind": "context"
+    },
+    {
+      "from": "Fathi2019",
+      "to": "Letwin2026",
+      "kind": "context"
+    }
+  ]
+}

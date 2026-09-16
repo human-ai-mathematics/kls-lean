@@ -14,6 +14,7 @@ ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / 'research'))
 import atlas
 import views
+import literature
 
 
 def staged(path):
@@ -68,10 +69,13 @@ def generate():
            '| --- | --- | --- | --- | --- |']
     catalog = json.loads((ROOT / 'research/progress/nodes.json').read_text())
     portfolio = json.loads((ROOT / 'research/progress/portfolio.json').read_text())
+    bibliography = json.loads((ROOT / 'research/progress/literature.json').read_text())
     records = views.resolve(catalog, nodes, claims)
     views.validate_routes(catalog, records, routes)
     tree = views.render_tree(catalog, records)
     readme = views.render_readme((ROOT / 'research/progress/README.md').read_text(), tree, catalog, records, portfolio)
+    literature_outputs, literature_overview = literature.render(bibliography, records, nodes)
+    readme = views.replace_block(readme, 'LITERATURE', literature_overview)
     descriptions = {r['blueprint']: r['description'] for r in records.values() if 'blueprint' in r}
     if descriptions.keys() != nodes.keys():
         raise ValueError('Update nodes.json to match the Blueprint node inventory.')
@@ -133,10 +137,11 @@ def generate():
             f'{len(upstream["records"])} records; this register is not an inventory of the entire upstream ledger.', '',
             f'Canonical input digest: `{digest}`.',
             f'Diagram digest: `{hashlib.sha256(diagram.encode()).hexdigest()}`.',
-            f'View input digest: `{hashlib.sha256(json.dumps([catalog, portfolio], sort_keys=True).encode()).hexdigest()}`.', '',
+            f'View input digest: `{hashlib.sha256(json.dumps([catalog, portfolio, bibliography], sort_keys=True).encode()).hexdigest()}`.', '',
             'Regenerate with `python3 research/progress/update.py` after staging the intended source and',
             'metadata updates. Unstaged unrelated metadata is deliberately excluded.', '']
-    return {'STATUS.md': '\n'.join(out), 'README.md': readme, 'TREE.mmd': tree, **views.render_badges()}
+    return {'STATUS.md': '\n'.join(out), 'README.md': readme, 'TREE.mmd': tree,
+            **literature_outputs, **views.render_badges()}
 
 
 def main():
