@@ -1,5 +1,5 @@
 import FunctionalInequalities.Analysis.LocalInverse
-import FunctionalInequalities.Analysis.ImplicitGraph
+import FunctionalInequalities.Analysis.Graph.Implicit
 
 /-! # C¹ charts for a family of regular levels
 

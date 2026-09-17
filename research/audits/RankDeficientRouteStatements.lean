@@ -1,4 +1,4 @@
-import FunctionalInequalities.Analysis.VectorCriticalSlice
+import FunctionalInequalities.Analysis.Vector.CriticalSlice
 import Mathlib.Analysis.InnerProductSpace.ProdL2
 
 /-!
@@ -15,8 +15,8 @@ Same convention as `AreaFormulaRouteStatements.lean` and `WeightedCoareaRouteSta
 
 ## What is already proved, and where the gap is
 
-`Analysis/VectorRegularCoarea.lean` proves the codimension-`m` coarea formula **where the
-differential is surjective**.  `Analysis/VectorCriticalSlice.lean` proves that almost every level
+`Analysis/Vector/RegularCoarea.lean` proves the codimension-`m` coarea formula **where the
+differential is surjective**.  `Analysis/Vector/CriticalSlice.lean` proves that almost every level
 meets `{x | fderiv ℝ u x = 0}` in an `ℋ^k`-null set, and extends the coarea formula to the whole
 space **under the hypothesis that the derivative vanishes wherever it fails to be surjective**.
 
@@ -80,7 +80,7 @@ open scoped ENNReal NNReal RealInnerProductSpace
 
 /-! ### R0 — the target: the rank-deficient part of almost every level is null
 
-The statement `Analysis/VectorCriticalSlice.lean` proves with `{x | fderiv ℝ u x = 0}` in place of
+The statement `Analysis/Vector/CriticalSlice.lean` proves with `{x | fderiv ℝ u x = 0}` in place of
 the full critical set.  For `m = 1` the two agree and this is the proved scalar `L10`.
 
 Unlike the proved vanishing-derivative statement, this one needs **no** `0 < finrank ℝ W`: a
@@ -212,7 +212,7 @@ the stratum comes.  That is enough, because `R8` only has to cover the set being
 Near each point of the stratum the projections `P` and `Q` are fixed, the approximating partition
 is taken for `u` itself so that one partition serves both components, `R4` gives the small
 tangential Lipschitz constant on each fibre piece, `R5` the finite measure at the repaired
-exponent, and the codimension-`(m − r)` Eilenberg bound of `Analysis/VectorHausdorffSlicing.lean`
+exponent, and the codimension-`(m − r)` Eilenberg bound of `Analysis/Vector/HausdorffSlicing.lean`
 finishes as `ε → 0`. -/
 
 #check (∀ {V W : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [FiniteDimensional ℝ V]

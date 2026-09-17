@@ -1,4 +1,4 @@
-import FunctionalInequalities.Analysis.VectorGraph
+import FunctionalInequalities.Analysis.Vector.Graph.Basic
 import Mathlib.LinearAlgebra.Matrix.SchurComplement
 
 /-! # The fibre Jacobian of a codimension-`m` level family

@@ -1,10 +1,10 @@
 import FunctionalInequalities.KLS.Geometry.SmoothDomain
-import FunctionalInequalities.Analysis.ImplicitGraph
+import FunctionalInequalities.Analysis.Graph.Implicit
 
 /-!
 # The outward normal and the local boundary chart of a smooth domain
 
-Application layer of `Analysis/ImplicitGraph.lean` to `KLS.SmoothDomain`.  Every statement in this
+Application layer of `Analysis/Graph/Implicit.lean` to `KLS.SmoothDomain`.  Every statement in this
 module is proved and uses only the standard axioms; the module contains **no** `sorry`.
 
 ## Why this module exists, and what it imports
@@ -295,7 +295,7 @@ theorem inner_outwardNormal_tangent (U : SmoothDomain V) (x₀ : V) (y : U.tange
   exact h
 
 /-- At a frontier point the outward normal and the tangent hyperplane split the ambient space
-orthogonally, which is the hypothesis of the graph geometry of `Analysis/ImplicitGraph.lean`.
+orthogonally, which is the hypothesis of the graph geometry of `Analysis/Graph/Implicit.lean`.
 This is `Analysis.isGraphSplitting_orthogonal` for the unit vector `outwardNormal x₀`. -/
 theorem isGraphSplitting_tangent [FiniteDimensional ℝ V] (U : SmoothDomain V) {x₀ : V}
     (hx₀ : x₀ ∈ frontier U.carrier) :

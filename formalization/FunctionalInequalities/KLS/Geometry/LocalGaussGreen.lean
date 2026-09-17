@@ -1,13 +1,13 @@
 import FunctionalInequalities.KLS.Geometry.BoundaryChart
 import FunctionalInequalities.Analysis.SubgraphDivergence
-import FunctionalInequalities.Analysis.GraphIntegral
+import FunctionalInequalities.Analysis.Graph.Integral
 import Mathlib.MeasureTheory.Function.SpecialFunctions.Inner
 
 /-!
 # Gauss–Green for a vector field supported in one boundary chart
 
 Application layer: the subgraph divergence formula of `Analysis/SubgraphDivergence.lean` and the
-weighted boundary change of variables of `Analysis/GraphIntegral.lean`, connected to the local
+weighted boundary change of variables of `Analysis/Graph/Integral.lean`, connected to the local
 `C^∞` boundary chart of `KLS/Geometry/BoundaryChart.lean`.  Every statement here is proved and
 uses only the standard axioms; the module contains **no** `sorry`.
 
@@ -45,7 +45,7 @@ cylinder `F` vanishes on a neighbourhood, hence so does its derivative, so *both
   cylinder (`BoundaryChart.map_notMem_cylinder`).
 
 Boundary-side integrability is never assumed: the change of variables of
-`Analysis/GraphIntegral.lean` needs only measurability, and the restriction steps are equalities of
+`Analysis/Graph/Integral.lean` needs only measurability, and the restriction steps are equalities of
 indicator functions, so nothing here supposes that `∂U` has finite total surface measure.  The
 domain is not assumed bounded and `V` is not assumed nontrivial.
 -/
@@ -139,7 +139,7 @@ theorem integral_divergence_carrier (hx₀ : x₀ ∈ frontier U.carrier) (C : U
 
 /-- **Localization of the boundary integral.**  For a field supported in the chart cylinder the
 flux through the frontier is the flux through the single graph piece the chart covers, and the
-weighted change of variables of `Analysis/GraphIntegral.lean` together with the chart's normal
+weighted change of variables of `Analysis/Graph/Integral.lean` together with the chart's normal
 formula cancels the graph Jacobian exactly. -/
 theorem integral_inner_outwardNormal_frontier (hx₀ : x₀ ∈ frontier U.carrier)
     (C : U.BoundaryChart x₀) {F : V → V} (hF : ContDiff ℝ 1 F)

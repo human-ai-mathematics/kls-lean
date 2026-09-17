@@ -1,5 +1,5 @@
-import FunctionalInequalities.Analysis.RankStratification
-import FunctionalInequalities.Analysis.VectorCriticalSlice
+import FunctionalInequalities.Analysis.RankDeficient.Stratification
+import FunctionalInequalities.Analysis.Vector.CriticalSlice
 import Mathlib.Analysis.InnerProductSpace.PiL2
 
 /-!

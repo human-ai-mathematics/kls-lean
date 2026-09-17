@@ -1,4 +1,4 @@
-import FunctionalInequalities.Analysis.WhitneyExtension
+import FunctionalInequalities.Analysis.Whitney.Extension
 import Mathlib.Analysis.InnerProductSpace.PiL2
 import Mathlib.MeasureTheory.Constructions.BorelSpace.Basic
 

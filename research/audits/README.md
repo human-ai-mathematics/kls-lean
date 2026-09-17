@@ -242,4 +242,92 @@ approaches a non-surjective map. **`R0`, `R4`–`R10`, `N1` and `N2` remain unpr
 rank-deficient part of the codimension-`m` coarea critical set remains open. Its local import
 closure is 2 modules with no work-in-progress file.
 
-There are now 37 source clients here, plus the 7 previously referenced local clients.
+`TangentialLipschitzAudit.lean` audits the **tangential small-Lipschitz estimate**, that is route
+obligation **`R4` only** — the step the route turns on. Its 10 standard-only reports include the
+route proposition copied **verbatim** and discharged (`route_R4`), a strengthening recording that
+`R4` needs no inner product, measure, completeness or finite-dimensionality,
+`ker_hypothesis_necessary` — which **exhibits** the failure of `R4` when only the `R2` hypothesis is
+dropped, with the `R3` hypothesis still holding — `zero_model_recovers_vanishing_derivative`, which
+records that on the rank-zero layer `R4` returns the already proved situation and **adds nothing**,
+three boundary cases, and the corollary combining `R2`, `R3` and `R4` on a rank stratum, which is
+**not `R7`**: no measure, Hausdorff dimension, slice or approximating partition appears in it. The
+`R3` hypothesis is **not** claimed necessary; it supplies the constant. **`R0`, `R5`–`R10`, `N1`
+and `N2` remain unproved** and the rank-deficient part of the codimension-`m` coarea critical set
+remains open. Its local import closure is 3 modules with no work-in-progress file.
+
+`RegularFibreFiniteAudit.lean` audits **route obligation `R5` only**: at almost every level the
+fibre of a regular `C¹` map meets a relatively compact piece in a set of finite `ℋ^{n−r}` measure.
+Its 8 standard-only reports include the route proposition copied **verbatim** and discharged
+(`route_R5`), both directions of the normalized-versus-raw finiteness transfer, the empty piece, and
+`relative_compactness_necessary`, which **exhibits** the failure without that hypothesis: the first
+coordinate functional of the plane on `S = univ` is a submersion everywhere, yet every fibre is a
+full line of infinite `ℋ^1` measure. `R5` is a corollary of the proved regular coarea formula and
+**extends its applicability by nothing**; it says nothing about the critical set of `v`.
+
+`TargetSplitFubiniAudit.lean` audits **route obligation `R6` only**: a set whose almost every
+first-coordinate slice is null is null. Its 6 standard-only reports include the route proposition
+copied **verbatim** and discharged (`route_R6`), an instantiation along
+`Submodule.orthogonalDecomposition` confirming that the abstract splitting is directly usable for
+the route's intended decomposition, the **converse** direction so that `R6` is not mistaken for the
+easy half, and the empty set. **`R0`, `R7`–`R10`, `N1` and `N2` remain unproved** and the
+rank-deficient part of the codimension-`m` coarea critical set remains open. The local import
+closures are 22 and 1 modules, neither containing a work-in-progress file.
+
+`StratumSlicingRouteStatements.lean` states the two sub-obligations `R7b`, the per-scale bound, and
+`R7c`, the limit, as proposition types only, declaring nothing and proving nothing. Both were open
+when it was written and **both are now proved** in `Analysis/RankDeficient/StratumSlicing.lean`; a status note at
+the top records that, and the two propositions are unchanged.
+
+`StratumSlicingAudit.lean` audits **obligation `R7`, which is proved**: `route_R7` copies it
+**verbatim** from `RankDeficientRouteStatements.lean` and discharges it. Its 16 standard-only
+reports also cover the pieces — the **local package**, which assembles `R2`, `R3` and `R4` into one
+neighbourhood carrying a single tangential Lipschitz constant valid for every stratum point in it
+(the uniformity over the points is the difficulty, since `R4`'s constant depends on each piece's
+linear model), the **integral form of the target splitting**, and the per-scale bound itself. `R7`
+is a statement about **one stratum in one neighbourhood**: **`R0`, `R8`, `R9`, `R10`, `N1` and `N2`
+remain unproved**, `R0` still needing `R8` and the finite union over the strata, and the
+rank-deficient part of the codimension-`m` coarea critical set remains open.
+
+`RankDeficientCoareaAudit.lean` audits the **last three obligations**, `R8`, **`R0`** and **`R9`**,
+copied **verbatim** from `RankDeficientRouteStatements.lean` and discharged. Its 14 standard-only
+reports also include `strictly_extends_conditional`, which derives the previously proved conditional
+coarea formula from the new unconditional one; `rank_deficient_witness_now_covered`, which shows the
+rank-one projection of the plane — the witness that the old hypothesis fails at every point — is
+covered by `R0`; `no_sard_claimed`, recording that `R0` is about the critical set **inside a level**
+and asserts nothing about the set of critical *values*; a zero-dimensional target; and the `m = 1`
+recovery of the proved scalar `L10` and `L11`, each with the extra `1 ≤ finrank V` the
+codimension-`m` bookkeeping forces. **The rank-deficient gap of the codimension-`m` coarea program
+is closed**; `R10`, `N1` and `N2` remain unproved, and **no Sard theorem is proved**.
+
+`EquidimensionalSardAudit.lean` audits **obligation `R10`, which is proved**: `route_R10` copies it
+**verbatim** from `RankDeficientRouteStatements.lean` and discharges it. Its 13 standard-only reports
+also record where `R10` sits. It is **not a Sard theorem and not progress on the route**:
+`r10_reaches_only_dimension_one` shows the entire overlap with the direct hole `Analysis.sard` is
+`finrank ℝ V = 1`, `sard_dimension_one_recovered` carries that recovery out — a case
+`Analysis.sard_of_finrank_le_one` already proved unconditionally from the same Mathlib lemma — and
+for `n ≥ 2` nothing is claimed; the sharp finite-regularity Sard hole is untouched.
+`equidimensional_R0_of_R10` and `equidimensional_R10_of_R0` derive `R10` and the `n = m` reading of
+`R0` from each other, which is a genuine cross-check because `Analysis/Sard/Equidimensional.lean`
+imports no part of the rank-deficient route. The boundary cases — two zero-dimensional spaces, a
+constant map together with `constant_map_critical_everywhere` showing that case is not vacuous, and
+`n = m` with an everywhere invertible differential — are all checked.
+
+`ExponentObstructionAudit.lean` audits the route's two diagnostics. **`N1` is proved**: `route_N1`
+copies it **verbatim** from `RankDeficientRouteStatements.lean` and discharges it from
+`Analysis/RankDeficient/ExponentObstruction.lean`. Proving it is **not progress on the route** — `N1` is the
+obstruction itself, whose exponent is `k + r` and not `k` (`N1_exponent_is_k_add_r`), and for
+`r ≥ 1` a `μH[k + r]`-null statement implies nothing about `μH[k]`, where a set of positive Lebesgue
+measure already has infinite measure (`N1_null_at_higher_exponent_says_nothing_at_k`). Its side
+condition `0 < finrank ℝ W₂` is necessary: `N1_needs_positive_codimension` refutes `N1` with that
+hypothesis deleted, using a zero-dimensional target where the Eilenberg constant is `1`.
+**`N2` is proved false as written**: `N2_counterexample` exhibits the zero-dimensional space, where
+the truncated exponent `finrank ℝ V - r` collapses to `0` and `μH[0]` of the one set of nonzero
+volume is `1`, not `⊤`, and `route_N2_is_false` derives the contradiction from the `Type` instance of
+the route proposition, which its `Type*` version implies. The repair itself lives in the module, as
+`Analysis.hausdorffMeasure_finrank_sub_eq_top`: `N2` with `0 < finrank ℝ V` added, necessary by the
+counterexample and free wherever the route appeals to `N2`, which is what the client's
+`N2_repair_is_free_on_the_route` records. Both side-condition counterexamples share the single
+zero-dimensional abbreviation `Pt`. 11 standard-only reports; local import closure 5 modules, no
+work-in-progress file.
+
+There are now 45 source clients here, plus the 7 previously referenced local clients.

@@ -1,4 +1,4 @@
-import FunctionalInequalities.Analysis.VectorRegularChart
+import FunctionalInequalities.Analysis.Vector.RegularChart
 import Mathlib.Analysis.InnerProductSpace.PiL2
 
 /-!

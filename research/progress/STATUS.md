@@ -269,7 +269,7 @@ retain their evidence source; generating this view does not run Lean.
 | `CONST` | Identify canonical and local-slope Poincaré constants for finite-dimensional log-concave laws. | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/Poincare.lean) |
 | `FORMS` | Show that normal contractions decrease relaxed gradient energy, giving the ambient and intrinsic energies the Dirichlet property. | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Energy/SmoothGradient/Dirichlet.lean) |
 | `MEAS` | Slice measurability | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/LevelSetMeasurable.lean) |
-| `GRAPH` | Open-domain — Graph area | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/OpenGraphIntegral.lean) |
+| `GRAPH` | Open-domain — Graph area | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/Graph/OpenIntegral.lean) |
 | `REG` | Regular-domain — Coarea | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/RegularCoarea.lean) |
 | `CRIT` | Critical-slice nullity | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/CriticalSlice.lean) |
 | `C1` | General C¹ weighted coarea | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/SmoothCoarea.lean) |
@@ -278,7 +278,7 @@ retain their evidence source; generating this view does not run Lean.
 | `GG` | Global Gauss–Green | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/GaussGreen.lean) |
 | `REC` | The exact smooth recovery sequence for finite relative perimeter is proved and registered in Blueprint, including unbounded domains and carriers. This is not the full Cheeger comparison or a separate ledger certificate. | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/PerimeterRecovery.lean) |
 | `FWD` | h_M ≤ h_S | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/CheegerInfimum.lean) |
-| `SARD` | Smooth Sard | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/SmoothSard.lean) |
+| `SARD` | Smooth Sard | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/Sard/Smooth.lean) |
 | `SCI` | Integrated smooth Cheeger superlevel inequality; the coarea formula itself is already proved. This pending step belongs to the separately assigned Cheeger-Buser workstream. | ![○ Not yet formalized](badges/pending.svg) | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/WIP/CheegerInfimum.lean) |
 | `CUT` | Distance cutoffs | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/DistanceCutoff.lean) |
 | `REV` | h_S ≤ h_M | ![○ Not yet formalized](badges/pending.svg) | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/WIP/CheegerInfimum.lean) |
@@ -290,20 +290,20 @@ retain their evidence source; generating this view does not run Lean.
 | `FLOG` | Fiber log-concavity | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/ConditionalFiber.lean) |
 | `FAND` | AND — Fiber route | ![◐ Partially formalized](badges/partial.svg) | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/route-composition.yaml) |
 | `ANY` | OR — Any completed route | OR | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/route-composition.yaml) |
-| `VREG` | Coarea on an open region where the derivative is surjective, with normalized Hausdorff fibres; this is not general vector coarea. | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/VectorRegularCoarea.lean) |
-| `VZERO` | Slice measurability and nullity of almost every slice of the zero-derivative set; intermediate positive ranks are not covered. | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/VectorCriticalSlice.lean) |
+| `VREG` | Coarea on an open region where the derivative is surjective, with normalized Hausdorff fibres; this is not general vector coarea. | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/Vector/RegularCoarea.lean) |
+| `VZERO` | Slice measurability and nullity of almost every slice of the zero-derivative set; intermediate positive ranks are not covered. | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/Vector/CriticalSlice.lean) |
 | `VR123` | Rank stratification, the kernel identity and pointwise/uniform approximate right inverses are proved. | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/research/audits/RightInverseBoundAudit.lean) |
-| `VR4` | Pending small-Lipschitz estimate on fibres from the approximation error and R2/R3; this is one obligation, not the complete critical-set argument. | ![○ Not yet formalized](badges/pending.svg) | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/research/audits/RankDeficientRouteStatements.lean) |
-| `VFULL` | General codimension-m coarea remains open: R0, R4–R10, N1 and N2 are outstanding. Supporting results shown here are not a sufficient completed route. | ![◐ Partially formalized](badges/partial.svg) | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/research/decisions/2026-09-17-rank-deficient-route.md) |
+| `VR4` | The tangential small-Lipschitz estimate on fibres is proved; it is a supporting result for the critical-set argument. | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/research/decisions/2026-09-17-tangential-lipschitz.md) |
+| `VFULL` | General codimension-m weighted coarea for C1 maps is proved, including the rank-deficient critical part. This does not prove the Lipschitz vector case, sharp finite-regularity Sard, or KLS. | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/research/decisions/2026-09-17-rank-deficient-coarea.md) |
 
 ## Provenance
 
 Upstream revision: `34b5fcd57fef17089e781616005fe6d3641bd11e`. The selected upstream snapshot contains
 20 records; this register is not an inventory of the entire upstream ledger.
 
-Canonical input digest: `2327255bd34964e2e6c6538efa39d29dc2b278efa46bfcf880ff6318cd6470df`.
-Diagram digest: `aa70dda26f59bd6088e48aaaf4fc2019a88e93eed847207355790609534638d1`.
-View input digest: `fda0770c1e3e37a44f9f360aa2bce94d4613dfb82b23e9feedce7c8b53c3db64`.
+Canonical input digest: `e2e6ed62dc6c4f7ab63a7fa47b8b72fa61b6754b02171f5c35baa363677d9d53`.
+Diagram digest: `2eefea20e9e4d11d57e85ae42d0d82529464aebf85e12049c79fbb0f6d2dc30a`.
+View input digest: `581a28973378e693373a4714da3e127e918fc848e308f817772ea9db4784bf5c`.
 
 Regenerate with `python3 research/progress/update.py` after staging the intended source and
 metadata updates. Unstaged unrelated metadata is deliberately excluded.

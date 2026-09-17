@@ -1,4 +1,4 @@
-import FunctionalInequalities.Analysis.ImplicitGraph
+import FunctionalInequalities.Analysis.Graph.Implicit
 import FunctionalInequalities.Analysis.Divergence
 import Mathlib.MeasureTheory.Measure.Haar.InnerProductSpace
 import Mathlib.MeasureTheory.Integral.Prod
@@ -15,7 +15,7 @@ standard axioms; the module contains no `sorry`.
 ## Setting
 
 `H` and `V` are finite-dimensional real inner-product spaces with an orthogonal splitting
-`IsGraphSplitting ι e` (`Analysis/ImplicitGraph.lean`), so that `V = ι H ⊕ ℝ e`.  For a `C¹`
+`IsGraphSplitting ι e` (`Analysis/Graph/Implicit.lean`), so that `V = ι H ⊕ ℝ e`.  For a `C¹`
 height function `g : H → ℝ`, a base point `x₀ : V` and the graph parametrization
 `Ψ y = x₀ + ι y + g y • e` (`graphChartMap`), the subgraph is
 

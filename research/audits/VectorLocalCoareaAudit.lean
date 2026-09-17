@@ -1,4 +1,4 @@
-import FunctionalInequalities.Analysis.VectorLocalCoarea
+import FunctionalInequalities.Analysis.Vector.LocalCoarea
 import Mathlib.Analysis.InnerProductSpace.PiL2
 
 /-!

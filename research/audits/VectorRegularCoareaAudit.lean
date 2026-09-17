@@ -1,4 +1,4 @@
-import FunctionalInequalities.Analysis.VectorRegularCoarea
+import FunctionalInequalities.Analysis.Vector.RegularCoarea
 import FunctionalInequalities.KLS.Geometry.RegularCoarea
 import Mathlib.Analysis.InnerProductSpace.PiL2
 

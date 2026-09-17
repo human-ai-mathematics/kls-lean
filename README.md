@@ -29,9 +29,9 @@ The weighted coarea formula has since been generalized to **locally Lipschitz** 
 subsumes both the Lipschitz and the C¹ versions and covers functions neither of them reaches.
 
 For vector-valued maps, regular coarea, slice measurability and vanishing-derivative critical
-slicing are proved. General codimension-`m` coarea still needs the intermediate-rank critical
-part: rank stratification and the kernel/right-inverse estimates R1–R3 are proved, with the
-tangential small-Lipschitz estimate R4 next.
+slicing are proved. General codimension-`m` weighted coarea for C¹ maps now also includes the
+intermediate-rank critical part, via the completed rank-deficient route R0–R9.
+This does not establish the Lipschitz vector case or sharp finite-regularity Sard.
 
 The integrated Cheeger superlevel bound and reverse Cheeger comparison remain open, as do
 the universal conditional-fiber frame bound and the dimension-free KLS bound. Smooth-recovery

@@ -1,0 +1,82 @@
+{
+ "scope": "Proof of EXACTLY route obligations R5 and R6 of the rank-deficient route, the two independent items next in the recommended order. With R1 through R4 that is six of the route's thirteen numbered items. R0, R7-R10, N1 and N2 remain OPEN and the rank-deficient part of the codimension-m coarea critical set remains OPEN. NO coarea formula in a new case, NO slicing statement about the critical set and NO Sard theorem is proved. No hole migrated. No existing .lean file modified, aggregate import untouched. The log-concave Cheeger-Buser line belongs to collaborator Wang Haocheng and was not touched.",
+ "head": "e7c4403352011b6c3ed6dc02f0af3eef6cbb300e",
+ "origin_main": "e7c4403352011b6c3ed6dc02f0af3eef6cbb300e",
+ "incoming_receipt": "build/verification/20260917T063346.288828Z/report.json",
+ "incoming_snapshot": "48d51f94be3b32ff9459acee074af1301a84518c7eb05cc2104187f1d0e28c3e",
+ "incoming_entries": 586,
+ "incoming_replayed_modules": 218,
+ "incoming_workspace_drift": [],
+ "incoming_uncommitted_was_previous_round": true,
+ "concurrent_session_changed_workspace_this_round": false,
+ "new_declarations": [
+  "Analysis.hausdorffNormalized_ne_top_iff",
+  "Analysis.ae_hausdorffMeasure_fibre_ne_top",
+  "Analysis.measurableSet_splitPreimage",
+  "Analysis.measure_eq_zero_of_ae_slice_eq_zero"
+ ],
+ "obligations_proved_this_round": ["R5", "R6"],
+ "obligations_proved_so_far": ["R1", "R2", "R3", "R4", "R5", "R6"],
+ "obligations_still_open": ["R0", "R7", "R8", "R9", "R10", "N1", "N2"],
+ "R5": {
+  "statement": "at almost every level the fibre of a regular C1 map meets a relatively compact piece in a set of finite H^(n-r) measure",
+  "why_needed": "the route applies the Eilenberg bound INSIDE a fibre with d = k and a target of dimension m - r, so d + (m - r) = n - r; for the bound to say anything the fibre must carry FINITE H^(n-r) measure, otherwise the right-hand side is infinity and the estimate is vacuous, which is exactly the failure N2 records for the one-step method",
+  "how_proved": "a COROLLARY of the proved regular coarea formula with weight 1: the total fibre measure integrates to the integral of the coarea Jacobian, finite on a relatively compact piece because the integrand is continuous there, and a finite integral has almost everywhere finite integrand",
+  "new_analysis": false,
+  "extends_applicability_of_the_proved_coarea_formula_by": "nothing",
+  "says_nothing_about": "the critical set of v; surjectivity is assumed on all of O",
+  "companion_lemma": "hausdorffNormalized_ne_top_iff, the finiteness companion of the proved hausdorffNormalized_eq_zero_iff",
+  "relative_compactness_is_necessary": "EXHIBITED: the first coordinate functional of the plane on S = univ is a submersion everywhere, every other hypothesis holds, but each fibre is a full line of infinite H^1 measure, so the conclusion fails at EVERY level, not merely on a null set of them"
+ },
+ "R6": {
+  "statement": "a set whose almost every first-coordinate slice across an orthogonal splitting of the target is null is itself null",
+  "why_needed": "the two slicings produce 'for almost every s, for almost every tau' while the conclusion is about almost every t; R6 joins the two levels",
+  "how_proved": "assembly of Mathlib's LinearIsometryEquiv.measurePreserving, WithLp.volume_preserving_toLp and Measure.prod_apply",
+  "new_mathematics": false,
+  "was_absent_from_the_repository": true,
+  "usable_for_the_intended_splitting": "the audit instantiates it along Submodule.orthogonalDecomposition and the instances resolve, so the abstract isometry statement is directly usable for the decomposition along the range of the differential",
+  "converse_recorded": "the audit also proves the converse direction, so R6 is not mistaken for the easy half",
+  "mathlib_only": true,
+  "local_import_closure_modules": 1
+ },
+ "not_done": [
+  "R0, the rank-deficient part, is untouched",
+  "R7, the per-stratum assembly, is NOT proved and remains the ONLY high-risk item; it must run the approximating partition on u itself so that one partition serves both components, may start only from points OF the stratum, and needs its constant uniform across the pieces",
+  "R8, R9, R10, N1 and N2 are unproved",
+  "no coarea formula is proved in a new case",
+  "no Sard theorem: nothing is claimed about the measure of the set of critical values",
+  "no existing .lean file modified, including formalization/FunctionalInequalities.lean, research/audits/RankDeficientRouteStatements.lean and research/audits/AreaFormulaRouteStatements.lean",
+  "no hole migrated, no certificate or Blueprint leanok expansion, no compatibility alias, no proved conclusion weakened"
+ ],
+ "audit": {
+  "clients": ["research/audits/RegularFibreFiniteAudit.lean", "research/audits/TargetSplitFubiniAudit.lean"],
+  "axiom_reports": {"RegularFibreFiniteAudit": 8, "TargetSplitFubiniAudit": 6, "total_new": 14},
+  "nonstandard_axioms": 0,
+  "route_propositions_copied_verbatim_and_discharged": ["route_R5", "route_R6"],
+  "local_import_closure_modules": {"RegularFibreFiniteAudit": 22, "TargetSplitFubiniAudit": 1},
+  "wip_modules_in_closures": 0,
+  "clients_rerun": 47,
+  "clients_rerun_breakdown": {"research/audits": 40, "build/audit": 7, "pre_existing": 45, "new": 2},
+  "client_failures": 0,
+  "strict": "every client run with -DwarningAsError=true",
+  "total_axiom_reports": 618,
+  "sorryAx_reports": 12,
+  "sorryAx_report_locations": ["research/audits/LevelSetMeasurableAudit.lean", "research/audits/IsoperimetryCoareaAudit.lean", "research/audits/LipschitzCoareaMigrationAudit.lean", "build/audit/SuperlevelSardScope.lean"],
+  "sorryAx_reports_are_deliberate": true
+ },
+ "new_modules": [
+  {"path": "formalization/FunctionalInequalities/Analysis/RegularFibreFinite.lean", "lines": 103, "local_import_closure_modules": 22, "wip_modules_in_closure": 0, "sorry": 0, "axiom": 0},
+  {"path": "formalization/FunctionalInequalities/Analysis/TargetSplitFubini.lean", "lines": 91, "mathlib_only": true, "local_import_closure_modules": 1, "wip_modules_in_closure": 0, "sorry": 0, "axiom": 0}
+ ],
+ "holes": {"KLS/WIP/AnalyticPrerequisites": 1, "KLS/WIP/CheegerInfimum": 2, "Energy/WIP/Cheeger": 5, "total": 8},
+ "certificates": 24,
+ "hole_migrated": false,
+ "general_coarea_formula_proved_this_round": false,
+ "rank_deficient_part_proved_this_round": false,
+ "sard_proved_this_round": false,
+ "existing_lean_files_modified": 0,
+ "aggregate_import_modified": false,
+ "committed": false,
+ "pushed": false,
+ "real_git_index_modified": false
+}

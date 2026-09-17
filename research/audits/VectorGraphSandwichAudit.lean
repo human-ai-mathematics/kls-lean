@@ -1,4 +1,4 @@
-import FunctionalInequalities.Analysis.VectorGraphSandwich
+import FunctionalInequalities.Analysis.Vector.Graph.Sandwich
 import Mathlib.Analysis.InnerProductSpace.PiL2
 
 /-!

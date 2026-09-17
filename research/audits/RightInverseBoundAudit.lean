@@ -1,4 +1,4 @@
-import FunctionalInequalities.Analysis.RightInverseBound
+import FunctionalInequalities.Analysis.RankDeficient.RightInverseBound
 import FunctionalInequalities.Analysis.CoareaJacobian
 import Mathlib.Analysis.InnerProductSpace.PiL2
 
@@ -8,7 +8,7 @@ import Mathlib.Analysis.InnerProductSpace.PiL2
 **What is proved.**  Exactly route obligation `R3` of
 `research/audits/RankDeficientRouteStatements.lean`, whose two propositions are restated
 **verbatim** below as `route_R3_pointwise` and `route_R3_uniform` and discharged.  With `R1` and
-`R2` of `Analysis/RankStratification.lean` that is three of the route's obligations.  **`R0`,
+`R2` of `Analysis/RankDeficient/Stratification.lean` that is three of the route's obligations.  **`R0`,
 `R4`–`R10`, `N1` and `N2` are still open**, and so is the rank-deficient part of the
 codimension-`m` coarea critical set.  **No coarea formula, no slicing statement and no Sard theorem
 is proved here.**

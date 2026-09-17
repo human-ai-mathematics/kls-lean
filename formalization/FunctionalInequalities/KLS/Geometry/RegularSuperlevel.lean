@@ -1,5 +1,5 @@
 import FunctionalInequalities.KLS.Geometry.SmoothDomain
-import FunctionalInequalities.Analysis.SmoothSard
+import FunctionalInequalities.Analysis.Sard.Smooth
 
 /-! # Regular superlevel sets of smooth functions
 

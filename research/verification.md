@@ -32,6 +32,630 @@ module is added to the aggregate imports so the registered declaration is audite
 See [the semantic alignment record](decisions/2026-09-16-semantic-alignment.md) for the reviewed scopes and reproducible evidence.
 The dated rounds below retain their historical counts and infrastructure assessments.
 
+## `Analysis/` regrouped: the family word moved from the basename into the directory (2026-09-17)
+
+**Newest round. It proves nothing and changes no declaration.** No hole was migrated: direct holes
+stay **8 (1/2/5)** and certificates **24**. 32 of the 50 modules in
+`formalization/FunctionalInequalities/Analysis/` moved into family sub-directories and dropped the
+family word from their basenames, under the rule added to `research/naming.md` in the round below.
+
+**Nothing mathematical moved, and the axiom report proves it.** The library-wide count is **672
+reports with 12 `sorryAx`**, digit for digit what it was before the move. 43 of the 50 modules use
+the flat `namespace FunctionalInequalities.Analysis`, and the three nested namespaces
+(`Analysis.WhitneyCover`, `Analysis.WhitneyJet`, `Analysis.LipschitzJet`) were left alone, so
+declaration names do not depend on the directory: ledger nodes, Blueprint declarations, the
+statement-snapshot golden and every axiom report are untouched by construction.
+
+**`WhitneyCover` was the trap.** It is both a module name and a namespace name. The module
+`Analysis.WhitneyCover` became `Analysis.Whitney.Cover` while the namespace
+`FunctionalInequalities.Analysis.WhitneyCover` stayed exactly as it was. The rewrite therefore
+touched **only `import` lines** and `Analysis/<File>.lean` path strings in docstrings — never a
+bare identifier. Of the 148 textual `FunctionalInequalities.Analysis.<moved module>` occurrences,
+126 were on import lines; the other 22 were checked one by one and are all that namespace and its
+declarations, left untouched.
+
+**The layout.** `Whitney/` (Bump, Construction, Cover, Extension, Partition); `Sard/` (Basic,
+Planar, Smooth, Equidimensional); `Vector/` (CriticalSlice, FiberIntegral, HausdorffSlicing,
+LocalCoarea, RegularChart, RegularCoarea, SliceMeasurable) with `Vector/Graph/` nested one level
+further (Basic, Area, Integral, Sandwich); `RankDeficient/` (Stratification, RightInverseBound,
+TangentialLipschitz, RegularFibreFinite, TargetSplitFubini, StratumSlicing, Coarea,
+ExponentObstruction); `Graph/` (Integral, Jacobian, Implicit, OpenIntegral). Eighteen modules stay
+flat. `Sard/Equidimensional` is filed by **mathematical object rather than by route provenance** —
+it is route obligation `R10`, but its subject is the equidimensional Sard lemma, and `naming.md`
+groups files by their primary object; the trade-off is recorded rather than hidden.
+`CoareaGraphJacobian` deliberately did **not** move: `Graph/CoareaJacobian` would create a second
+module whose basename is `CoareaJacobian`, which reads worse than the repetition it removes. The
+two-module families (`Divergence`, `HausdorffContent`/`HausdorffSlicing`,
+`LipschitzC1Pieces`/`LipschitzJet`) are below the rule's three-module threshold.
+
+**The historical citations are not rewritten; they are mapped.**
+`research/api-migration/2026-09-17-analysis-module-map.json` carries 32 module mappings and 32 file
+path mappings, so the ~434 textual `Analysis/<File>.lean` citations in the dated decision and
+exploration records stay resolvable. This is the same device as the 2026-09-08 renames
+(`2026-09-08-module-map.json`, `2026-09-08-library-naming-module-map.json`).
+
+**What was rewritten**: 70 `import` lines and 44 docstring path strings across 61 `.lean` files, in
+`formalization/`, `research/audits/` and the **seven** `build/audit/` clients that are re-run every
+round. The 38 frozen `.before.lean` and route-review artifacts under `build/audit/` keep their old
+imports on purpose. `research/tasks.json` had 29 evidence paths remapped and 59 hashes refreshed,
+and the living `formalization/README.md` and `research/audits/README.md` were repointed.
+
+**One correction to a standing claim.** `research/audits/RankDeficientRouteStatements.lean` was
+recorded as **byte-unchanged** by every earlier round. This round changes **five lines** of it: one
+`import` and four docstring path strings. That is unavoidable — a module move reaches every
+importer. **All fifteen `#check` propositions are byte-identical**, verified block by block against
+`HEAD`, and the stale status note at the top was not touched. The earlier rounds' statements remain
+true of those rounds; this one supersedes them as to the current file.
+
+**A build-scope fact worth recording.** The `Analysis` layer is outside the aggregate
+`formalization/FunctionalInequalities.lean` — zero of its 50 modules are imported there — so a plain
+`lake build` does not produce their `.olean`s and the audit clients fail with "object file does not
+exist" until the modules are built explicitly. `research/verify.py` already does exactly that
+through `build_replay_inputs`, which is why verification is unaffected; the round-local sweep now
+does it too.
+
+The two Cheeger comparisons and the five Energy holes are untouched.
+
+**The log-concave Cheeger–Buser line belongs to 王浩丞 and is deliberately untouched here.**
+
+See [the regrouping decision](decisions/2026-09-17-analysis-regrouping.md),
+`research/explorations/2026-09-17-analysis-regrouping.json` and the path map
+`research/api-migration/2026-09-17-analysis-module-map.json`. The final verification receipt is
+identified in `build/audit/analysis-regrouping/final-snapshot.json`.
+No commit or push; the real Git index is unchanged.
+
+## File management: the `N2` repair moved into the module, and a module-naming rule added (2026-09-17)
+
+**Newest round; no mathematics changed and no registration number moved.** Direct holes stay
+**8 (1/2/5)** and certificates **24**. No statement was added, removed, weakened or strengthened:
+every declaration proved in the two rounds below is still proved, with the same type.
+
+**What moved.** The repaired `N2` — below the top dimension a set of positive Lebesgue measure has
+infinite Hausdorff measure, *provided the dimension is positive* — was proved in the audit client a
+round ago. It is mathematical content with a statement of its own, so it now lives in the module,
+as `Analysis.hausdorffMeasure_finrank_sub_eq_top` in `Analysis/ExponentObstruction.lean`
+(previously `ExponentObstructionAudit.hausdorffMeasure_finrank_sub_eq_top_of_finrank_pos`). The
+module gained `import Analysis.LevelSet` for `hausdorffMeasure_finrank_eq_smul_volume`; its local
+import closure is **4 modules, no WIP**. The audit keeps only the route bookkeeping,
+`N2_repair_is_free_on_the_route`, and the refutation `route_N2_is_false` that makes the added
+hypothesis necessary.
+
+**Two name defects fixed, both in this session's own uncommitted code.**
+`FunctionalInequalities.Analysis.ContinuousLinearMap.det_eq_zero_of_not_surjective` nested a
+`ContinuousLinearMap` namespace inside `Analysis`, which buys nothing — dot notation resolves only
+against the root `ContinuousLinearMap` — while repeating the namespace in the short name, against
+the first rule of `research/naming.md`. It is now `Analysis.det_eq_zero_of_not_surjective`. And
+`ExponentObstructionAudit` declared the zero-dimensional space **twice**, as `Pt₀` and as `Pt`, one
+per counterexample; there is now a single `Pt`, and the client is regrouped so that all of `N1`
+comes before all of `N2` rather than interleaving.
+
+**A module-naming rule was added to `research/naming.md`** (§文件与声明作用域, new subsection
+「家族词归目录，不进文件名」): once a mathematical family has three or more modules, the family
+name belongs to the **directory** and the basename keeps only the distinguishing word.
+`Poincare/SmoothTest/`, `Energy/LocalSlope/`, `Energy/CovarianceGradient/` and
+`KLS/LogConcave/Line/` already do this.
+
+**`Analysis/` does not, and is deliberately left alone for now.** Its 50 modules are flat and bake
+the family word into every basename — `Vector` 11 times, `Graph` 9, `Whitney` 5, `Coarea` 5,
+`Sard` 4. Regrouping is a **file-layer** change only: 43 of the 50 modules use the flat
+`FunctionalInequalities.Analysis` namespace, so declaration names do not depend on the directory and
+the ledger, Blueprint, statement snapshot and axiom audits would all be untouched. The cost is 238
+`import` lines across 128 files and 84 `tasks.json` evidence paths, both mechanical — and **434
+textual `Analysis/<File>.lean` citations in the dated decision and exploration records**, which this
+project does not rewrite. The regrouping is therefore deferred to **its own round**, which will
+publish a path map under `research/api-migration/`, exactly as the 2026-09-08 module renames did
+(`2026-09-08-module-map.json`, `2026-09-08-library-naming-module-map.json`, which contain the same
+kind of move — `KLS.LogConcave.AffineCovariance → KLS.LogConcave.Covariance`). Until that round the
+existing modules stay where they are; the rule binds **new** `Analysis/` modules only.
+
+**Also recorded, not acted on.** Twelve untracked macOS duplicate-name files (`* 2.*`) exist outside
+`build/`; **six of them differ from the file they shadow**, some substantially —
+`research/check_blueprint 2.py` is 460 lines against the real 1367,
+`formalization/blueprint/route-composition 2.yaml` is 41 against 388, and
+`formalization/FunctionalInequalities/Poincare/README 2.md` is 276 lines against a tracked README of
+215, so it may hold edits that exist nowhere else. They are untracked, so deleting them is
+unrecoverable; none was touched. Separately `build/` holds 21 GB, of which `build/verification/` is
+8.4 GB across 175 receipts — **62 of those receipts are cited by name in the records**, so pruning
+by age would break cited evidence and was not done.
+
+**Verification.** The two affected modules and their two audit clients compile strictly; all **52**
+audit clients were re-run with `-DwarningAsError=true`, 0 failures. Axiom reports are unchanged in
+content and count except for the two renamed entries. Nothing in `KLS/WIP` or `Energy/WIP` was
+touched, `research/audits/RankDeficientRouteStatements.lean` stays **byte-unchanged**, and no
+committed `.lean` file was modified.
+
+The two Cheeger comparisons and the five Energy holes are untouched.
+
+**The log-concave Cheeger–Buser line belongs to 王浩丞 and is deliberately untouched here.**
+
+See [the N1 decision](decisions/2026-09-17-exponent-obstruction-n1.md), whose addendum
+records this move, and `build/audit/exponent-obstruction-n1/final-snapshot.json` for the receipt.
+No commit or push; the real Git index is unchanged.
+
+## `N1` proved: the obstruction of the small-Lipschitz method, stated as a theorem (2026-09-17)
+
+**Newest implementation round; it changes none of the registration numbers recorded above.** No
+hole was migrated: direct holes stay **8 (1/2/5)** and certificates **24**.
+
+**`N1` is proved.** If `S` is measurable with `μH[n] S` finite, the target `W₂` has positive
+dimension, and at every scale `ε` the composite `Q ∘ u` is `ε`-Lipschitz on the pieces of some
+countable measurable partition of `S`, then for almost every `τ ∈ W₂` the slice
+`S ∩ {Q ∘ u = τ}` is `μH[n − dim W₂]`-null. **No regularity whatever is assumed of `u`.** With
+`R0`–`R10` that is twelve of the route's thirteen numbered items; the thirteenth, `N2`, was shown
+**false as written** in the round below and its repair proved.
+
+**Proving `N1` is not progress on the route, and the route record already said so.** `N1` is the
+*statement of the obstruction*: the exponent it delivers is `n − dim W₂`, and in the route's
+notation `W₂` is the orthogonal complement of the rank-`r` range inside the `m`-dimensional target,
+so `dim W₂ = m − r` and the exponent is **`k + r`, not `k`** — recorded as
+`N1_exponent_is_k_add_r` so it cannot be misread. For `r ≥ 1` that is weaker than `R0` in the
+useless direction: at the exponent `k = n − r` every set of positive Lebesgue measure has
+**infinite** Hausdorff measure, so no `μH[k]` statement follows from a `μH[k + r]` one
+(`N1_null_at_higher_exponent_says_nothing_at_k`, a specialization of the repaired `N2`). `R0` does
+not depend on `N1`; it was proved independently by slicing **inside a fibre**, where
+`k + (m − r) = n − r` is the right exponent, and `Analysis/ExponentObstruction.lean` has **no
+downstream consumer**.
+
+**How it is proved.** At a single scale, the repository's codimension-`m` Eilenberg majorant
+`exists_measurable_majorant_vector` is applied to each piece and the majorants are summed:
+`exists_measurable_majorant_of_lipschitz_pieces` produces a **measurable** dominating function of
+integral at most `C · ε ^ (dim W₂) · μH[n] S`. The slice function itself is not known to be
+measurable — nothing is assumed about `u` — which is why the bound has to be carried by a majorant.
+Measurability and disjointness of the pieces enter exactly once, in the countable additivity that
+reassembles the pieces' right-hand sides into `μH` of `S`. Taking `ε_j = (j+1)⁻¹` and the pointwise
+infimum of the resulting majorants gives a measurable function that still dominates and whose
+integral beats every scale; positivity of `dim W₂` and finiteness of `μH[n] S` send the bound to
+zero.
+
+**The truncated exponent is harmless here, unlike in `N2`.** `finrank ℝ V - finrank ℝ W₂` is a
+natural subtraction, and the proof never needs `dim W₂ ≤ n`: `hausdorffMeasure_truncated_add_le`
+records that `(n − m) + m ≥ n` holds in `ℕ` either way, so the Eilenberg right-hand side stays
+bounded by `μH[n] S`. This is the exact point on which `N2` fails, and `N1` survives it.
+
+**Both side conditions are real.** `0 < finrank ℝ W₂` is necessary, not decoration:
+`N1_needs_positive_codimension` refutes `N1` **with that hypothesis deleted** — with `V = W = ℝ`,
+a zero-dimensional `W₂`, `Q = 0`, `u = id` and `S = [0,1]` the piece hypothesis holds trivially
+because `Q ∘ u` is constant, the single fibre is all of `S`, and `μH[1] S = 1`. With `dim W₂ = 0`
+the Eilenberg constant `ε ^ (dim W₂)` is `1` and nothing tends to zero. Measurability of `S` is
+used exactly once, as described above.
+
+**Still open.** `N2` remains **unproved and known false as written**; what is proved is the
+repaired statement. Sharp finite-regularity `Analysis.sard` remains a direct hole and is untouched
+— nothing in this round concerns critical values at all. No hole was migrated, no certificate was
+added and no Blueprint `leanok` scope was widened: this is infrastructure, and the dimension-free
+KLS bound remains open.
+
+`research/audits/RankDeficientRouteStatements.lean` stays **byte-unchanged**; `route_N1` copies its
+proposition verbatim and discharges it. No existing `.lean` file was modified: this round adds one
+module and extends the audit client it had created a step earlier. The new module
+`Analysis/ExponentObstruction.lean` has a local import closure of **2 modules, no WIP**, and the
+audit client now carries **11** standard-only axiom reports.
+
+The two Cheeger comparisons and the five Energy holes are untouched.
+
+**The log-concave Cheeger–Buser line belongs to 王浩丞 and is deliberately untouched here.**
+
+See [the N1 decision](decisions/2026-09-17-exponent-obstruction-n1.md) and
+`research/explorations/2026-09-17-exponent-obstruction-n1.json`. The final verification receipt is
+identified in `build/audit/exponent-obstruction-n1/final-snapshot.json`.
+No commit or push; the real Git index is unchanged.
+
+## `R10` proved: the equidimensional degenerate case; and the diagnostic `N2` shown **false as stated** (2026-09-17)
+
+**Newest implementation round; it changes none of the registration numbers recorded above.** No
+hole was migrated: direct holes stay **8 (1/2/5)** and certificates **24**.
+
+**`R10` is proved.** When `n = m` the fibre dimension is `k = 0`, so `ℋ^0`-nullity of a slice means
+the slice is **empty**: for almost every `t` the level `{u = t}` of a `C¹` map contains **no**
+critical point at all. With `R0`–`R9` that is eleven of the route's thirteen numbered items.
+
+**`R10` is not a Sard theorem, and it is not progress on the route.** Both points matter and are
+easy to misread, because `R10` is the one item on the whole list that is about critical *values*.
+Sard's theorem concerns the measure of the set of critical values of a map `ℝⁿ → ℝᵐ`; what is proved
+is the case `n = m` alone, where a singular differential contracts volume and Mathlib already
+supplies the self-map statement. For `n > m` the critical values of a merely `C¹` map can have
+positive measure, and nothing here says otherwise. The direct hole
+`FunctionalInequalities.Analysis.sard` is about a real-valued map on a domain of **any** dimension
+at regularity `C^n`; **its status is unchanged and it was not touched.** The entire overlap is
+`finrank ℝ V = 1` — `r10_reaches_only_dimension_one` records that, and
+`sard_dimension_one_recovered` carries the recovery out — and that case was already proved
+unconditionally by `Analysis.sard_of_finrank_le_one`, from the same Mathlib lemma. For `n ≥ 2`
+nothing was said. As for the route: `R0` was proved independently by the stratification route, which
+never specializes to `n = m`, so `R10` is an after-the-fact consistency check.
+`Analysis/EquidimensionalSard.lean` imports **no part** of that route, which makes the check
+genuinely independent; `equidimensional_R0_of_R10` and `equidimensional_R10_of_R0` derive each
+statement from the other in the case `n = m`, where they are equivalent because `μH[0]` of a
+nonempty set is at least `1`.
+
+**How it is proved.** Mathlib's `addHaar_image_eq_zero_of_det_fderivWithin_eq_zero` is a self-map
+statement; it is transported along the repository's `isometryEquivOfFinrankEq` by precomposing `u`
+with the inverse isometry rather than postcomposing it, so the image already lives in `W` and the
+null set itself never has to be moved. The linear-algebra step, that in equal dimensions a
+non-surjective map is singular, goes through injectivity and is proved as
+`ContinuousLinearMap.det_eq_zero_of_not_surjective`; Mathlib has only the converse direction.
+
+**The diagnostic `N2` is false as written, and this round proves it false.** `N2` reads
+`volume S ≠ 0 → 0 < r → μH[((finrank ℝ V - r : ℕ) : ℝ)] S = ⊤`, with `finrank ℝ V - r` a
+**truncated** natural subtraction. At `finrank ℝ V = 0` the space is a single point, the only set of
+nonzero volume is that point, the truncated exponent is `0` rather than negative, and `μH[0]` of a
+singleton is `1`, not `⊤`. `N2_counterexample` exhibits the three facts and `route_N2_is_false`
+derives the contradiction; it refutes the `Type` instance of the route proposition, which the
+route's `Type*` version implies. **The repair is the missing positivity of the dimension and is
+proved**: `hausdorffMeasure_finrank_sub_eq_top_of_finrank_pos` is `N2` with `0 < finrank ℝ V` added,
+a hypothesis the counterexample shows is necessary and which is **free** wherever the route appeals
+to `N2` — there `1 ≤ r < finrank ℝ W ≤ finrank ℝ V`, recorded as
+`N2_repair_is_free_on_the_route` — so the diagnostic role of `N2` in the route record survives the
+correction unchanged.
+
+**Still open.** `N1`, the other diagnostic, is **not proved**; it needs the Eilenberg majorant
+machinery and is not a step, `R0` not depending on it. `N2` remains **unproved and now known
+false**; what is proved is the repaired statement, named so that the two cannot be confused. Sharp
+finite-regularity `Analysis.sard` remains a direct hole. No hole was migrated, no certificate was
+added and no Blueprint `leanok` scope was widened: this is infrastructure, and the dimension-free
+KLS bound remains open.
+
+**Boundary cases** are checked one by one: both spaces zero-dimensional (every linear map is
+surjective, the critical set is empty); a constant map, together with
+`constant_map_critical_everywhere` showing that case is not vacuous (the derivative vanishes
+identically, so with a positive-dimensional target every point is critical, and the conclusion holds
+because the whole image is one point); and `n = m` with an everywhere invertible differential, where
+the critical set is empty and the conclusion holds for *every* level.
+
+`research/audits/RankDeficientRouteStatements.lean` stays **byte-unchanged**, as in the previous
+round and for the same reason: it is a committed historical route snapshot whose editing ownership
+the collaborator has taken, and the repository's way of recording that an obligation is met is for an
+audit client to copy its proposition **verbatim** and discharge it, which `route_R10` does. Its
+header status note remains out of date and refreshing it is left to whoever maintains the file.
+
+No existing `.lean` file was modified by this round, and the aggregate is untouched. The new module
+`Analysis/EquidimensionalSard.lean` has a local import closure of **18 modules, no WIP**. The two
+new clients have **13** and **4** standard-only axiom reports.
+
+The two Cheeger comparisons and the five Energy holes are untouched.
+
+**The log-concave Cheeger–Buser line belongs to 王浩丞 and is deliberately untouched here.**
+
+See [the equidimensional Sard decision](decisions/2026-09-17-equidimensional-sard.md) and
+`research/explorations/2026-09-17-equidimensional-sard.json`. The final verification receipt is
+identified in `build/audit/equidimensional-sard/final-snapshot.json`.
+No commit or push; the real Git index is unchanged.
+
+## `R8`, `R0` and `R9` proved: the rank-deficient critical set, and the codimension-`m` coarea formula (2026-09-17)
+
+**Newest implementation round; it changes none of the registration numbers recorded above.** No
+hole was migrated: direct holes stay **8 (1/2/5)** and certificates **24**.
+
+**The rank-deficient gap of the codimension-`m` coarea program is closed.** `R0` is proved: for a
+`C¹` map into an `m`-dimensional target, **the whole critical set** `{x | fderiv ℝ u x` is not
+surjective`}` — not merely the part where the derivative vanishes — meets almost every level in an
+`ℋ^k`-null set. With it, `R9`: **the codimension-`m` coarea formula holds with no hypothesis on the
+critical set**. With `R1`–`R7` that is ten of the route's thirteen numbered items.
+
+**This is not a Sard theorem.** `R0` bounds the critical set **inside a level**; nothing whatever is
+claimed about the measure of the set of critical *values*, which for a merely `C¹` map may well be
+positive. Sharp finite-regularity Sard remains a direct hole and is untouched. The map is assumed
+`C¹`, not Lipschitz, and the fibre measure is the normalized Hausdorff measure of the complementary
+dimension, in the repository's standing convention.
+
+**What the earlier rounds could not do, and now can.**
+`Analysis/VectorRegularCoarea.lean` proved the formula where the differential is surjective;
+`Analysis/VectorCriticalSlice.lean` extended it under the hypothesis that the derivative *vanishes*
+wherever it fails to be surjective, which for `m ≥ 2` is a genuine restriction — its own audit
+exhibited a rank-one projection of the plane where the hypothesis fails at **every** point. The new
+audit's `rank_deficient_witness_now_covered` shows that same witness is covered by `R0`, and
+`strictly_extends_conditional` derives the old conditional formula from the new one.
+
+**The route in one paragraph.** `R1` stratifies the critical set by the exact rank of the
+differential into finitely many measurable layers. On a layer, `R2` says the differential dies along
+the fibres of the regular component `P ∘ u`, `R3` makes that quantitative with a locally uniform
+right-inverse bound, and `R4` combines them into a tangential Lipschitz constant proportional to the
+approximation parameter. `R7` runs the approximating partition on `u` itself and applies the
+Eilenberg bound **inside a fibre**, where `k + (m − r) = n − r` is the right exponent, integrating
+against the **proved** regular coarea formula. `R8`, proved here, patches those neighbourhoods
+together by second countability; the finite union over `r < m` gives `R0`; and the critical part of
+the coarea equality then vanishes on both sides, giving `R9`. **The exponent is repaired in the
+fibre**: the same bound applied in the ambient space forces `k + r`, and forcing it back to `k` puts
+`μH[n − r]` of a set of positive Lebesgue measure — that is, `∞` — on the right, which is exactly
+the obstruction the route's diagnostic `N2` records.
+
+**Still open.** `R10`, the equidimensional degenerate case, is a separate cheap sanity check and is
+**not proved**; `N1` and `N2` are diagnostics of the obstruction rather than steps and are **not
+proved**. No hole was migrated, no certificate was added and no Blueprint `leanok` scope was
+widened: this is infrastructure, and the dimension-free KLS bound remains open.
+
+**`m = 1` returns the proved scalar statements**, `KLS.ae_surfaceMeasure_critical_inter_levelSet_eq_zero`
+and `KLS.coarea_of_contDiff`, both with the extra `1 ≤ finrank V` that the codimension-`m`
+bookkeeping forces, recorded rather than hidden.
+
+`research/audits/RankDeficientRouteStatements.lean` stays **byte-unchanged**. Its header status note,
+added by the collaborator in `e7c4403`, is now out of date — it says `R0` and `R4`–`R10` are open,
+whereas `R4`–`R9` and `R0` are proved. This round deliberately did **not** edit it: it is a committed
+historical route snapshot which the collaborator has already taken editing ownership of, and the
+repository's way of recording that an obligation is met is for an audit client to copy its
+proposition **verbatim** and discharge it — which `route_R8`, `route_R0` and `route_R9` of
+`research/audits/RankDeficientCoareaAudit.lean` do. Refreshing that note is left to whoever maintains
+the file. `AreaFormulaRouteStatements.lean` was re-run and shows **no new errors**.
+
+No existing `.lean` file was modified by this round, and the aggregate is untouched. The new client
+has **14 standard-only axiom reports**.
+
+The two Cheeger comparisons and the five Energy holes are untouched.
+
+**The log-concave Cheeger–Buser line belongs to 王浩丞 and is deliberately untouched here.**
+
+See [the rank-deficient coarea decision](decisions/2026-09-17-rank-deficient-coarea.md) and
+`research/explorations/2026-09-17-rank-deficient-coarea.json`. The final verification receipt is
+identified in `build/audit/rank-deficient-coarea/final-snapshot.json`.
+No commit or push; the real Git index is unchanged.
+
+## Route obligation `R7` proved: the per-stratum local slicing (2026-09-17)
+
+**Newest implementation round; it changes none of the registration numbers recorded above.** No
+hole was migrated: direct holes stay **8 (1/2/5)** and certificates **24**.
+
+**`R7` is proved.** Around every point of the rank-`r` stratum there is a neighbourhood in which
+almost every level meets the stratum in an `ℋ^k`-null set. With `R1`–`R6` that is **seven** of the
+route's thirteen numbered items. **`R0` is still open**: it needs `R8`, the localization of `R7` to
+the whole stratum, and the finite union over `r < m`, for which `R1`'s decomposition is already in
+place.
+
+**The argument, and where the wrong exponent gets repaired.** Run Mathlib's approximating partition
+on `u` **itself**, so that one partition serves both components; on each piece the local package
+makes `Q ∘ u` `c ε`-Lipschitz along every fibre of `P ∘ u`; the Eilenberg bound applies **inside a
+fibre** at exponent `k` with a target of dimension `m − r`, where `k + (m − r) = n − r` is exactly
+right; integrating over the fibre parameter against the **proved** regular coarea formula turns the
+fibre measures into an ordinary integral of the coarea Jacobian, and the target-splitting identity
+reads the result as an integral over the target. That is `lintegral_hausdorffMeasure_stratum_le`,
+the per-scale bound, whose constant does **not** depend on `ε`. The limit `ε → 0` then gives `R7`:
+the right-hand factor is finite because the neighbourhood's closure is compact, and the exponent
+`m − r` is positive exactly because `r < m`.
+
+Applying the same bound in the ambient space instead would force the exponent `k + r`, and forcing
+it back to `k` would put `μH[n − r]` of a set of positive Lebesgue measure — that is, `∞` — on the
+right. **The fibre is where the dimension count comes out right**, which is what `R5` and `R6` were
+for: this round uses the same two engines, the proved regular coarea formula and measure-preserving
+change of variables with Tonelli, in their integral rather than null-set form.
+
+**Two existing `.lean` files were modified, recorded rather than hidden.** Both are this session's
+own uncommitted files and both changes are additive. `Analysis/StratumSlicing.lean` gained the three
+new theorems and had its module docstring **rewritten**, since it previously said `R7` was not
+proved; the statements of `exists_stratum_local_data` and `lintegral_split_target` are **unchanged**.
+`research/audits/StratumSlicingRouteStatements.lean` gained a status note at the top recording that
+`R7b` and `R7c` are now proved, with **both propositions unchanged** — the same treatment the
+collaborator gave `RankDeficientRouteStatements.lean`. That file and
+`AreaFormulaRouteStatements.lean` were **not** modified by this round.
+
+**What `R7` is not.** It is a statement about **one stratum in one neighbourhood**. It says nothing
+about the whole critical set, which is the union of the strata of every rank `r < m`; it is not a
+coarea formula in a new case, and it is not a Sard theorem — no claim whatever is made about the
+measure of the set of critical *values*. `R0`, `R8`, `R9`, `R10`, `N1` and `N2` remain unproved.
+
+**Next**: `R8`, the localization, estimated at about 90 lines and low to moderate risk; `R0` is then
+`R1`'s finite union together with it, and `R9` the unconditional codimension-`m` coarea formula.
+
+The new client `research/audits/StratumSlicingAudit.lean` has **16 standard-only axiom reports**,
+among them `route_R7`, which copies `R7` **verbatim** from
+`research/audits/RankDeficientRouteStatements.lean` and discharges it.
+
+Sharp finite-regularity Sard, the two Cheeger comparisons and the five Energy holes are untouched.
+
+**The log-concave Cheeger–Buser line belongs to 王浩丞 and is deliberately untouched here.**
+
+See [the R7 decision](decisions/2026-09-17-stratum-slicing-complete.md) and
+`research/explorations/2026-09-17-stratum-slicing-complete.json`. The final verification receipt is
+identified in `build/audit/stratum-slicing-complete/final-snapshot.json`.
+No commit or push; the real Git index is unchanged.
+
+## Per-stratum slicing `R7`: the local package and the target split proved, **`R7` itself not** (2026-09-17)
+
+**Newest implementation round; it changes none of the registration numbers recorded above.** No
+hole was migrated: direct holes stay **8 (1/2/5)** and certificates **24**.
+
+**`R7` was the target of this round and it is NOT proved.** `R0` remains open and so does the
+general codimension-`m` coarea formula. What is proved is two parts of `R7`, and the remaining gap
+is written down precisely as `R7b` and `R7c` in the new `#check`-only file
+`research/audits/StratumSlicingRouteStatements.lean`, where **nothing is proved**.
+
+**An existing `.lean` was modified, recorded rather than hidden.**
+`Analysis/TangentialLipschitz.lean`, this session's `R4` module and still uncommitted, was refactored
+so that the **explicit** constant comes first (`lipschitzOnWith_of_ker_bound`); the route's
+existential statement `exists_lipschitzOnWith_of_ker_bound` is **kept verbatim** and re-derived from
+it. This is a strict strengthening and weakens nothing. The reason is hard: the assembly needs
+**one** constant valid on every piece of the approximating partition, and the existential form's
+constant depends on each piece's linear model. This is where the previous round's insistence on the
+**locally uniform** half of `R3` pays off.
+
+**What is proved.** `Analysis/StratumSlicing.lean` (local import closure 25 modules, no
+work-in-progress file, aggregate untouched):
+
+* `exists_stratum_local_data`, the **local package**. At a point of the rank-`r` stratum, with `K`
+  the range of the differential there and `P`, `Q` the orthogonal projections onto `K` and `Kᗮ`,
+  there is an open neighbourhood with compact closure on which `P ∘ u` is a submersion, together
+  with **one** constant `c` that works for **every** stratum point `y` in it, every `ε`, every set
+  `ε`-approximated by `fderiv ℝ u y`, and every fibre: `Q ∘ u` is `c ε`-Lipschitz along each fibre
+  of `P ∘ u`. **The uniformity of `c` over `y` is the whole difficulty**, since `R4`'s constant
+  depends on the piece's linear model through `‖fderiv ℝ u y‖` and the right-inverse bound; it comes
+  from `R2`, the locally uniform half of `R3`, and a bound on `‖fderiv ℝ u‖` near the point.
+* `lintegral_split_target`, the **integral form of the target splitting**: an integral over the
+  target is the iterated integral over an orthogonal splitting. This is what `R6` does for null sets,
+  in the shape the per-scale estimate must be integrated against, and it assumes only almost
+  everywhere measurability of the integrand.
+
+**What is missing, stated precisely.** `R7b` is the per-scale bound: at a fixed `ε` the total fibre
+measure of the stratum piece over the whole target is at most a constant — independent of `ε` —
+times `ε ^ (m − r)` times the integral of the coarea Jacobian of the regular component. The route to
+it is to run the approximating partition on `u` **itself** so one partition serves both components,
+use the local package on each piece, apply the Eilenberg bound **inside a fibre** at exponent `k`
+with a target of dimension `m − r` where `k + (m − r) = n − r` is exactly right, integrate over the
+fibre parameter against the **proved** regular coarea formula, and read the result through
+`lintegral_split_target`. `R7c` is the limit `ε → 0`, the pattern already used twice in the
+repository. **Neither is proved.**
+
+**Nothing here is a coarea formula, a slicing statement about the critical set, or a Sard theorem**,
+and no claim whatever is made about the measure of the set of critical *values*. `R8`–`R10`, `N1`
+and `N2` are also still unproved.
+
+`research/audits/RankDeficientRouteStatements.lean` and `AreaFormulaRouteStatements.lean` were not
+modified; the latter was re-run and shows **no new errors**. The new client
+`research/audits/StratumSlicingAudit.lean` has **11 standard-only axiom reports**, and the new
+route-statement file has **2 `#check`s and no declaration**.
+
+Sharp finite-regularity Sard, the two Cheeger comparisons and the five Energy holes are untouched.
+
+**The log-concave Cheeger–Buser line belongs to 王浩丞 and is deliberately untouched here.**
+
+See [the stratum slicing decision](decisions/2026-09-17-stratum-slicing.md) and
+`research/explorations/2026-09-17-stratum-slicing.json`. The final verification receipt is
+identified in `build/audit/stratum-slicing/final-snapshot.json`.
+No commit or push; the real Git index is unchanged.
+
+## Fibre finiteness and target Fubini: route obligations `R5` and `R6` proved (2026-09-17)
+
+**Newest implementation round; it changes none of the registration numbers recorded above.** No
+hole was migrated: direct holes stay **8 (1/2/5)** and certificates **24**.
+
+**What is proved: exactly `R5` and `R6`**, the two independent obligations that were next in the
+recommended order, in `Analysis/RegularFibreFinite.lean` (local import closure 22 modules) and
+`Analysis/TargetSplitFubini.lean` (Mathlib-only, closure **1 module**), both with no
+work-in-progress file and the aggregate untouched. With `R1`–`R4`, **six** of the route's thirteen
+numbered items are discharged.
+
+**`R5`: the fibres of the regular part carry finite measure.** The route applies the Eilenberg
+bound *inside* a fibre with `d = k` and a target of dimension `m − r`, so `d + (m − r) = n − r`;
+for that to say anything the fibre must have **finite** `ℋ^{n−r}` measure, or the right-hand side
+is `∞` and the estimate is vacuous — exactly the failure `N2` records for the one-step method.
+`R5` is a **corollary of the proved regular coarea formula**, not new analysis: with weight `1` the
+total fibre measure integrates to `∫⁻ coareaJacobian`, finite on a relatively compact piece because
+the integrand is continuous there, and a finite integral has almost everywhere finite integrand.
+
+**Relative compactness is necessary, and that is exhibited rather than asserted.** For the first
+coordinate functional of the plane — a submersion everywhere — with `S = univ`, every other
+hypothesis holds, but each fibre is a full line of infinite `ℋ^1` measure, so the conclusion fails
+at **every** level, not merely on a null set of them.
+
+**`R6`: Fubini across an orthogonal splitting of the target.** The two slicings produce "for almost
+every `s`, for almost every `τ`" while the conclusion is about almost every `t`; `R6` joins the two
+levels. It is assembly rather than new mathematics — `LinearIsometryEquiv.measurePreserving`,
+`WithLp.volume_preserving_toLp` and `Measure.prod_apply` are all in Mathlib — but it was not in the
+repository in any form. The splitting is stated abstractly as an isometry onto `WithLp 2 (W₁ × W₂)`;
+the audit instantiates it along `Submodule.orthogonalDecomposition`, confirming that **the
+instances resolve and the abstract statement is directly usable** for the splitting along the range
+of the differential. The audit also records the **converse** direction, so `R6` is not mistaken for
+the easy half.
+
+**What `R5` does not say.** It assumes the differential is surjective on all of `O`; the critical
+set of `v` is outside its reach, which is precisely why the route still needs the rest. It extends
+the applicability of the proved codimension-`m` coarea formula by **nothing**.
+
+**Still open: `R0`, `R7`–`R10`, `N1`, `N2`**, and the **general codimension-`m` coarea formula**.
+Nothing here is a coarea formula in a new case, a slicing statement about the critical set, or a
+Sard theorem; no claim whatever is made about the measure of the set of critical *values*. **Only
+`R7` now stands between the proved pieces and `R0`**, followed by `R8` and `R9`. `R7` remains the
+only high-risk item: it must run the approximating partition on `u` itself so that one partition
+serves both components, may start only from points *of* the stratum, and needs its constant uniform
+across the pieces.
+
+`research/audits/RankDeficientRouteStatements.lean` was not modified by this round; the two new
+clients `research/audits/RegularFibreFiniteAudit.lean` and
+`research/audits/TargetSplitFubiniAudit.lean` copy its `R5` and `R6` propositions **verbatim** and
+discharge them, with **8 and 6 standard-only axiom reports**. The area-formula route statements
+were re-run and show **no new errors**.
+
+Sharp finite-regularity Sard, the two Cheeger comparisons and the five Energy holes are untouched,
+and no existing `.lean` file was modified.
+
+**The log-concave Cheeger–Buser line belongs to 王浩丞 and is deliberately untouched here.**
+
+See [the fibre finiteness and Fubini decision](decisions/2026-09-17-fibre-finite-fubini.md)
+and `research/explorations/2026-09-17-fibre-finite-fubini.json`. The final verification receipt is
+identified in `build/audit/fibre-finite-fubini/final-snapshot.json`.
+No commit or push; the real Git index is unchanged.
+
+## The tangential small-Lipschitz estimate: route obligation `R4`, the point of no return, proved (2026-09-17)
+
+**Newest implementation round; it changes none of the registration numbers recorded above.** No
+hole was migrated: direct holes stay **8 (1/2/5)** and certificates **24**.
+
+**What "point of no return" means, stated precisely before anything else.** The round below marked
+`R4` so because, with `R2` and `R3` in place, it is self-contained and **the route is wrong if it
+fails or if its constant is not uniform**. It does not fail: `R4` is proved and its constant is
+genuinely independent of the approximation parameter. That means only that **the route has not been
+refuted at its critical analytic step**. It does **not** mean `R0` holds, and it does not mean the
+remaining steps will work: the exponent now matches and the estimate is available, but turning it
+into null slices still needs the finite `ℋ^{n−r}` measure of the fibres (`R5`), Fubini across the
+orthogonal splitting of the target (`R6`), and the genuinely hard per-stratum assembly (`R7`,
+estimated 450–600 lines and the only high-risk item). **Not one inch of the rank-deficient part is
+proved.**
+
+**A concurrent session committed the workspace during this round, recorded rather than hidden.**
+After this round's Lean was written and before it was wrapped up, the concurrent session committed
+the whole workspace: `HEAD = origin/main` moved from `34b9269…` to
+`e7c4403352011b6c3ed6dc02f0af3eef6cbb300e` (138 files). That commit **absorbed all four earlier
+rounds of this session**, so their "not committed" status no longer holds — they were committed by
+the collaborator, not by this session. The same commit made a submission-review pass that edited
+two files this session had written: `research/audits/RankDeficientRouteStatements.lean` gained a
+status note at the top (recording that `R1`, `R2` and both versions of `R3` are proved and that
+**the propositions below are unchanged**; it still contains only `#check`s), and
+`research/audits/RightInverseBoundAudit.lean` had one docstring reworded. **Neither edit was made
+or reverted here.** This round therefore does not claim the route-statement file is byte-unchanged;
+the accurate statement is that **this session did not modify it**, and it is clean against the
+current `HEAD`. All verification below was redone on top of `e7c4403…`.
+
+**What is proved: exactly `R4`**, in the new module `Analysis/TangentialLipschitz.lean` (local
+import closure **3 modules**, no work-in-progress file, aggregate untouched), over the same round's
+`Analysis/RankStratification.lean` and `Analysis/RightInverseBound.lean`. With `R1`, `R2` and `R3`,
+**four** of the route's thirteen numbered items are discharged.
+
+**The estimate.** For two points of one fibre the chord `b − a` satisfies
+`‖P (A (b − a))‖ ≤ ‖P‖ ε ‖b − a‖` — it is *almost* in the kernel of `P ∘ A`, and this is the only
+place the fibre hypothesis is used and the exact point where the situation differs from the
+vanishing-derivative case. `R3` converts that into an honest kernel element, `R2` says the linear
+model dies there, and so `‖A (b − a)‖ ≤ ‖A‖ C ‖P‖ ε ‖b − a‖`. Feeding it back into the
+approximation and applying `Q` gives `‖Q‖ (1 + ‖A‖ C ‖P‖)`, which **does not depend on `ε`, on
+`f`, on `S` or on the fibre**. That independence is the whole point — the `ε → 0` limit uses a
+different approximating partition at every scale — and it is visible in the shape of the statement,
+`∃ c, ∀ ε, …`.
+
+**The `R2` hypothesis is necessary, and that is exhibited rather than asserted.** For the identity
+of the plane with `P` the first and `Q` the second coordinate, the `R3` hypothesis holds, the `R2`
+hypothesis fails, and the conclusion of `R4` fails outright: at `ε = 0` it would force the second
+coordinate to be constant along the second axis. So `R4` is not a statement about the approximation
+alone.
+
+**The `R3` hypothesis is not claimed necessary.** It supplies the constant, not a restriction; in
+finite dimensions its conclusion holds for every linear map, which this round neither proves nor
+uses. At the other end, for the rank-zero model `A = 0` both hypotheses hold with `C = 0`, the
+constant collapses to `‖Q‖`, and `R4` returns exactly the proved vanishing-derivative situation —
+**adding nothing on the `r = 0` layer**.
+
+`R4` itself uses no inner product, no measure, no completeness and no finite-dimensionality; `f`
+and `S` are arbitrary. A corollary records what `R2`, `R3` and `R4` combine to on a rank stratum;
+it is **a corollary of three proved obligations, not a new one, and in particular not `R7`** — no
+measure, Hausdorff dimension, slice or approximating partition appears in it.
+
+**Still open: `R0`, `R5`–`R10`, `N1`, `N2`**, and the **general codimension-`m` coarea formula**.
+Nothing here is a coarea formula, a slicing statement or a Sard theorem, and no claim whatever is
+made about the measure of the set of critical *values*. Next in the recommended order are `R5` and
+`R6`, which are independent of each other, then `R7`.
+
+Boundary cases are covered rather than excluded: the empty set, `ε = 0` with a genuine linear
+model, a zero-dimensional projection target, and the rank-zero model.
+
+`research/audits/RankDeficientRouteStatements.lean` stays **byte-unchanged**; the new client
+`research/audits/TangentialLipschitzAudit.lean` copies its `R4` proposition **verbatim** and
+discharges it, with **10 standard-only axiom reports**. The area-formula route statements were
+re-run and show **no new errors**; that file too stays byte-unchanged.
+
+Sharp finite-regularity Sard, the two Cheeger comparisons and the five Energy holes are untouched,
+and no existing `.lean` file was modified.
+
+**The log-concave Cheeger–Buser line belongs to 王浩丞 and is deliberately untouched here.**
+
+See [the tangential Lipschitz decision](decisions/2026-09-17-tangential-lipschitz.md) and
+`research/explorations/2026-09-17-tangential-lipschitz.json`. The final verification receipt is
+identified in `build/audit/tangential-lipschitz/final-snapshot.json`.
+No commit or push; the real Git index is unchanged.
+
 ## Approximate right inverses: route obligation `R3`, both versions, proved (2026-09-17)
 
 **Newest implementation round; it changes none of the registration numbers recorded above.** No

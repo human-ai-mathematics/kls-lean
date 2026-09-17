@@ -1,4 +1,4 @@
-import FunctionalInequalities.Analysis.GraphJacobian
+import FunctionalInequalities.Analysis.Graph.Jacobian
 import FunctionalInequalities.KLS.Geometry.LinearAreaFormula
 
 /-!

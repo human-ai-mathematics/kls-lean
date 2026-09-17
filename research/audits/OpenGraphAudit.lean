@@ -1,9 +1,9 @@
-import FunctionalInequalities.Analysis.OpenGraphIntegral
+import FunctionalInequalities.Analysis.Graph.OpenIntegral
 
 /-!
 # Strict audit client for the weighted graph area over an open domain (obligation `L8`)
 
-Independent client of `Analysis/OpenGraphIntegral.lean`.  `target` states the route's `L8`
+Independent client of `Analysis/Graph/OpenIntegral.lean`.  `target` states the route's `L8`
 quantifier for quantifier and proves it.
 
 The consumers are not repetitions of the proof.  `global_case` recovers the pre-existing global

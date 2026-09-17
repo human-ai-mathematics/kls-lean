@@ -452,7 +452,7 @@
         "state": "formalized",
         "evidence": {
           "kind": "reviewed_progress",
-          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/OpenGraphIntegral.lean",
+          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/Graph/OpenIntegral.lean",
           "baseline_commit": "b7b458c"
         },
         "kind": "auxiliary"
@@ -460,7 +460,7 @@
       "diagram": {
         "id": "GRAPH",
         "label": "Open-domain<br/>Graph area",
-        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/OpenGraphIntegral.lean",
+        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/Graph/OpenIntegral.lean",
         "shape": "box"
       }
     },
@@ -614,7 +614,7 @@
         "state": "formalized",
         "evidence": {
           "kind": "reviewed_progress",
-          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/SmoothSard.lean",
+          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/Sard/Smooth.lean",
           "baseline_commit": "b7b458c"
         },
         "kind": "auxiliary"
@@ -622,7 +622,7 @@
       "diagram": {
         "id": "SARD",
         "label": "Smooth Sard",
-        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/SmoothSard.lean",
+        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/Sard/Smooth.lean",
         "shape": "box"
       }
     },
@@ -834,7 +834,7 @@
         "state": "formalized",
         "evidence": {
           "kind": "reviewed_progress",
-          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/VectorRegularCoarea.lean",
+          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/Vector/RegularCoarea.lean",
           "note": "Reviewed against current theorem statements and local axiom/client checks on 2026-09-17."
         },
         "kind": "auxiliary"
@@ -842,7 +842,7 @@
       "diagram": {
         "id": "VREG",
         "label": "Vector coarea<br/>Regular region",
-        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/VectorRegularCoarea.lean",
+        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/Vector/RegularCoarea.lean",
         "shape": "box"
       }
     },
@@ -852,7 +852,7 @@
         "state": "formalized",
         "evidence": {
           "kind": "reviewed_progress",
-          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/VectorCriticalSlice.lean",
+          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/Vector/CriticalSlice.lean",
           "note": "Reviewed against current theorem statements and local axiom/client checks on 2026-09-17."
         },
         "kind": "auxiliary"
@@ -860,7 +860,7 @@
       "diagram": {
         "id": "VZERO",
         "label": "Vector slices<br/>Zero derivative",
-        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/VectorCriticalSlice.lean",
+        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/Vector/CriticalSlice.lean",
         "shape": "box"
       }
     },
@@ -883,39 +883,38 @@
       }
     },
     "diagram:VR4": {
-      "description": "Pending small-Lipschitz estimate on fibres from the approximation error and R2/R3; this is one obligation, not the complete critical-set argument.",
+      "description": "The tangential small-Lipschitz estimate on fibres is proved; it is a supporting result for the critical-set argument.",
       "assessment": {
-        "state": "pending",
+        "state": "formalized",
         "evidence": {
           "kind": "reviewed_progress",
-          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/research/audits/RankDeficientRouteStatements.lean",
-          "note": "Reviewed against current theorem statements and local axiom/client checks on 2026-09-17."
+          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/research/decisions/2026-09-17-tangential-lipschitz.md",
+          "note": "Based on the dated proof record and recorded local audit evidence of 2026-09-17; no fresh Lean or CI run during this commit preparation."
         },
         "kind": "auxiliary"
       },
       "diagram": {
         "id": "VR4",
-        "label": "Tangential estimate<br/>R4 — Next step",
-        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/research/audits/RankDeficientRouteStatements.lean",
-        "shape": "box",
-        "focus": true
+        "label": "Tangential estimate<br/>R4",
+        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/research/decisions/2026-09-17-tangential-lipschitz.md",
+        "shape": "box"
       }
     },
     "diagram:VFULL": {
-      "description": "General codimension-m coarea remains open: R0, R4–R10, N1 and N2 are outstanding. Supporting results shown here are not a sufficient completed route.",
+      "description": "General codimension-m weighted coarea for C1 maps is proved, including the rank-deficient critical part. This does not prove the Lipschitz vector case, sharp finite-regularity Sard, or KLS.",
       "assessment": {
-        "state": "partial",
+        "state": "formalized",
         "evidence": {
           "kind": "reviewed_progress",
-          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/research/decisions/2026-09-17-rank-deficient-route.md",
-          "note": "Reviewed against current theorem statements and local axiom/client checks on 2026-09-17."
+          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/research/decisions/2026-09-17-rank-deficient-coarea.md",
+          "note": "Based on the dated proof record and recorded local audit evidence of 2026-09-17; no fresh Lean or CI run during this commit preparation."
         },
         "kind": "auxiliary"
       },
       "diagram": {
         "id": "VFULL",
-        "label": "General vector coarea<br/>Rank-deficient gap",
-        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/research/decisions/2026-09-17-rank-deficient-route.md",
+        "label": "C¹ vector coarea<br/>Rank-deficient part closed",
+        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/research/decisions/2026-09-17-rank-deficient-coarea.md",
         "shape": "box"
       }
     }

@@ -1,5 +1,5 @@
 import FunctionalInequalities.Analysis.LipschitzJet
-import FunctionalInequalities.Analysis.WhitneyConstruction
+import FunctionalInequalities.Analysis.Whitney.Construction
 import Mathlib.MeasureTheory.Measure.Haar.InnerProductSpace
 
 /-! # Exact C¹ pieces of a Lipschitz function
