@@ -1,0 +1,414 @@
+{
+  "scope": "Proves obligation L11 (weighted coarea for an arbitrary C1 function) in the new KLS/Geometry/SmoothCoarea.lean, and with it target T3, which is verbatim the statement of the direct hole KLS.Isoperimetry.lintegral_enorm_gradient_mul_eq_lintegral_levelSet. NO WIP FILE WAS TOUCHED: that declaration still carries sorry and the direct-hole count is unchanged. No existing Lean file, no existing signature, no certificate, no Blueprint leanok scope and no historical decision changed. NO COMMIT, NO PUSH. The Lipschitz coarea formula is NOT proved.",
+  "head": "dcc158d7d3b9e91f17d2ee0fd49b30cdb6f4f7d8",
+  "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
+  "incoming_receipt": "build/verification/20260915T113452.444474Z/report.json",
+  "incoming_receipt_sha256": "4c1f74599d9d48c4b66d31dc5fbd552fdf2957fbaf3763bf3eec6319dc1febbc",
+  "incoming_snapshot_sha256": "856a6b6bd93a8fea3099878a5b65b2cfc4ecfdb0fd1407b60e976f8036f5ad60",
+  "incoming_snapshot_entries": 450,
+  "incoming_snapshot_exact": true,
+  "incoming_worktree_note": "The starting worktree carried the previous round's four uncommitted evidence-completion changes; this round builds on top of them and likewise leaves everything uncommitted.",
+  "new_lean_modules": [
+    "formalization/FunctionalInequalities/KLS/Geometry/SmoothCoarea.lean"
+  ],
+  "changed_lean_files": [],
+  "wip_files_touched": [],
+  "all_other_lean_file_hashes_unchanged": true,
+  "all_historical_decisions_unchanged": true,
+  "new_proved_results": [
+    "FunctionalInequalities.KLS.isOpen_regular",
+    "FunctionalInequalities.KLS.coarea_of_contDiff"
+  ],
+  "new_definitions": [],
+  "target_statement": "L11 of research/decisions/2026-09-15-weighted-coarea-route.md, restated verbatim and proved as SmoothCoareaAudit.target; the library theorem omits only the never-used [CompleteSpace V] (target_of_not_completeSpace proves that form) and adds no hypothesis.",
+  "target_T3": "Route target T3 proved verbatim as SmoothCoareaAudit.target_T3, and the WIP hole's own statement as SmoothCoareaAudit.wip_isoperimetry_statement through NAMED arguments. Both are L11 at S = univ; the LipschitzWith hypothesis is never used because those statements already assume ContDiff R 1 u.",
+  "wip_hole_status": "KLS.Isoperimetry.lintegral_enorm_gradient_mul_eq_lintegral_levelSet in KLS/WIP/CheegerInfimum.lean STILL CARRIES sorry. Its statement is now proved from hole-free modules, but the declaration was not migrated: that is a separate decision, following the precedent of the 2026-09-15 superlevel rewire and level-set measurability migration. Direct holes therefore remain 2/3/5, total 10; migrating would give 2/2/5, total 9.",
+  "client_checks": {
+    "statement_checks": 1,
+    "proved_theorems": 11,
+    "axiom_prints": 12
+  },
+  "new_result_axiom_audit": {
+    "FunctionalInequalities.KLS.isOpen_regular": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "FunctionalInequalities.KLS.coarea_of_contDiff": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "SmoothCoareaAudit.target": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "SmoothCoareaAudit.target_of_not_completeSpace": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "SmoothCoareaAudit.target_T3": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "SmoothCoareaAudit.wip_isoperimetry_statement": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "SmoothCoareaAudit.top_weight": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "SmoothCoareaAudit.empty_set": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "SmoothCoareaAudit.everywhere_critical": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "SmoothCoareaAudit.constant_function": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "SmoothCoareaAudit.preserved_coarea_of_contDiffOn_of_fderiv_ne_zero": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "SmoothCoareaAudit.preserved_ae_surfaceMeasure_critical_inter_levelSet_eq_zero": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ]
+  },
+  "sorryAx_in_new_results": false,
+  "validation": {
+    "BorelSliceAudit": {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "../research/audits/BorelSliceAudit.lean"
+      ],
+      "exit_code": 0,
+      "log": "build/audit/l11-BorelSliceAudit.log",
+      "log_sha256": "a8dfcca0234207b99fb88f7194f00eb762f69feb8bb48cfbb0dd39be4f882bc0"
+    },
+    "CompactSliceAudit": {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "../research/audits/CompactSliceAudit.lean"
+      ],
+      "exit_code": 0,
+      "log": "build/audit/l11-CompactSliceAudit.log",
+      "log_sha256": "6183637269791471cbd4afecdf4bb9686eca8f8680c85386058ae18487adcafc"
+    },
+    "CriticalSliceAudit": {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "../research/audits/CriticalSliceAudit.lean"
+      ],
+      "exit_code": 0,
+      "log": "build/audit/l11-CriticalSliceAudit.log",
+      "log_sha256": "56f69bb05102711355e17db74a43e07ce4b7f99232fda47a16c53659041cf8d8"
+    },
+    "EilenbergMajorantAudit": {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "../research/audits/EilenbergMajorantAudit.lean"
+      ],
+      "exit_code": 0,
+      "log": "build/audit/l11-EilenbergMajorantAudit.log",
+      "log_sha256": "97c23ff29115ea64ef45606ddc56e5ee3e5f833a8ff4bfc1d58d5dadab1c8a77"
+    },
+    "LevelSetMeasurableAudit": {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "../research/audits/LevelSetMeasurableAudit.lean"
+      ],
+      "exit_code": 0,
+      "log": "build/audit/l11-LevelSetMeasurableAudit.log",
+      "log_sha256": "c5c553f9452f5126d490668f6dd68548fd185b6670e2e7f3d6e3c331eeec71e7"
+    },
+    "NullSlicingAudit": {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "../research/audits/NullSlicingAudit.lean"
+      ],
+      "exit_code": 0,
+      "log": "build/audit/l11-NullSlicingAudit.log",
+      "log_sha256": "65d75f410323559fb026cb4855c86bd6267176daee2c6c43b495cfd8012e856d"
+    },
+    "OpenGraphAudit": {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "../research/audits/OpenGraphAudit.lean"
+      ],
+      "exit_code": 0,
+      "log": "build/audit/l11-OpenGraphAudit.log",
+      "log_sha256": "92136a3e0b400a36198d8abf9ed6d915035caddb1ff4255e18a32039e0c91a33"
+    },
+    "RegularCoareaAudit": {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "../research/audits/RegularCoareaAudit.lean"
+      ],
+      "exit_code": 0,
+      "log": "build/audit/l11-RegularCoareaAudit.log",
+      "log_sha256": "88de01742cfd90d75eb062a7aac5f7cdfc5266fc0690ef6efe381884cd2c2fef"
+    },
+    "SmoothCoareaAudit": {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "../research/audits/SmoothCoareaAudit.lean"
+      ],
+      "exit_code": 0,
+      "log": "build/audit/l11-SmoothCoareaAudit.log",
+      "log_sha256": "aae8a32b1fcc7798fc523c4d977207862ee08432d07a06797e15cce6a9fe0e21"
+    },
+    "WeightedCoareaInfrastructure": {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "../research/audits/WeightedCoareaInfrastructure.lean"
+      ],
+      "exit_code": 0,
+      "log": "build/audit/l11-WeightedCoareaInfrastructure.log",
+      "log_sha256": "d589fa8fcd2e485f0803b4b59e2ee188bc95ceff56e06156b5adf2b4c6b9655a"
+    },
+    "WeightedCoareaRouteStatements": {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "../research/audits/WeightedCoareaRouteStatements.lean"
+      ],
+      "exit_code": 0,
+      "log": "build/audit/l11-WeightedCoareaRouteStatements.log",
+      "log_sha256": "3a74a1ef789572ff5238ff7faf8a591be11e73fc3030db04e32b2e6497fe0d6a"
+    },
+    "AreaFormulaAudit": {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "../build/audit/AreaFormulaAudit.lean"
+      ],
+      "exit_code": 0,
+      "log": "build/audit/l11-AreaFormulaAudit.log",
+      "log_sha256": "012a848c88ac87ae07220136a1ca7b1a1238bb88a96c94c33eda6f2143e9e905"
+    },
+    "CheegerInfimumAudit": {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "../build/audit/CheegerInfimumAudit.lean"
+      ],
+      "exit_code": 0,
+      "log": "build/audit/l11-CheegerInfimumAudit.log",
+      "log_sha256": "f91015c9f2b831300fc64abbcc1120baca81d03d15a2d425097b50ee96f2ac74"
+    },
+    "MinkowskiConstantAudit": {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "../build/audit/MinkowskiConstantAudit.lean"
+      ],
+      "exit_code": 0,
+      "log": "build/audit/l11-MinkowskiConstantAudit.log",
+      "log_sha256": "efd1523ac10c8010fc527f14f64401998f1c54daf31f94b5e61642a6f67159eb"
+    },
+    "SuperlevelSardScope": {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "../build/audit/SuperlevelSardScope.lean"
+      ],
+      "exit_code": 0,
+      "log": "build/audit/l11-SuperlevelSardScope.log",
+      "log_sha256": "9f7b4971a9a7fd42cfad81024dcfd13341cf8daaf3f9171aeac81e107d7e9562"
+    },
+    "SmoothSardAudit": {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "../build/audit/SmoothSardAudit.lean"
+      ],
+      "exit_code": 0,
+      "log": "build/audit/l11-SmoothSardAudit.log",
+      "log_sha256": "bbb56e86e2b6005f1f31236fd465aa8e5862c75adb03deeba3ecccaddbf81490"
+    },
+    "SmoothSardRouteStatements": {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "../build/audit/SmoothSardRouteStatements.lean"
+      ],
+      "exit_code": 0,
+      "log": "build/audit/l11-SmoothSardRouteStatements.log",
+      "log_sha256": "a11b0d4a5b5608157f7f4881b1dd8196504b94bab0c50b981d86b467c6579f6d"
+    },
+    "AnalyticPrerequisites": {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "FunctionalInequalities/KLS/WIP/AnalyticPrerequisites.lean"
+      ],
+      "exit_code": 0,
+      "log": "build/audit/l11-AnalyticPrerequisites.log",
+      "log_sha256": "28f048d73f77fc5d2b83f114a22aefdc90da2981d043477726711ea6cf60b671",
+      "holes": 2,
+      "diagnostic_lines": 2
+    },
+    "CheegerInfimum": {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "FunctionalInequalities/KLS/WIP/CheegerInfimum.lean"
+      ],
+      "exit_code": 0,
+      "log": "build/audit/l11-CheegerInfimum.log",
+      "log_sha256": "392b75056ab6dae8d916f2144a28c828381c848c196dcfede771d16faf1af7fd",
+      "holes": 3,
+      "diagnostic_lines": 3
+    },
+    "Cheeger": {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "FunctionalInequalities/Energy/WIP/Cheeger.lean"
+      ],
+      "exit_code": 0,
+      "log": "build/audit/l11-Cheeger.log",
+      "log_sha256": "7003e6f52a47b150e5fd6cd14ca240b5f4ee2d53ce464ad80ed811e67a181870",
+      "holes": 5,
+      "diagnostic_lines": 5
+    }
+  },
+  "default_lake_build_exit_code": 0,
+  "default_lake_build_log": "build/audit/l11-lake-build.log",
+  "wip_holes": [
+    2,
+    3,
+    5
+  ],
+  "wip_holes_total": 10,
+  "wip_holes_unchanged": true,
+  "certificates": 24,
+  "perimeter_infrastructure": "missing",
+  "committed": false,
+  "pushed": false,
+  "root_verification_receipt": "build/verification/latest.json",
+  "final_snapshot_attestation": "build/audit/smoothcoarea-final-snapshot.json",
+  "hash_binding": "This evidence is finalized before root verification and is itself hashed in that receipt. The final attestation binds receipt bytes, final snapshot and evidence bytes without a circular self-hash. Each per-round evidence record binds only the state at its own round, so its research/tasks.json entry is expected to go stale once a later round edits that file.",
+  "proof_route": [
+    "isOpen_regular: the critical set is closed (isClosed_critical, from continuity of fderiv), so the regular set is its open complement",
+    "left-hand side: S splits into the disjoint measurable pieces S inter R and S inter C, and on C the gradient vanishes so the integrand is zero there; lintegral_union then drops the critical part",
+    "right-hand side: L10 makes surfaceMeasure (C inter level set) zero at almost every level, so ae_eq_set and Measure.restrict_congr_set identify the slice integral over S inter level set with the one over (S inter R) inter level set for almost every level",
+    "middle: L9 applied to the open set R and the measurable subset S inter R gives both the identity and the AEMeasurable component there",
+    "the same almost-everywhere equality transports the AEMeasurable component (AEMeasurable.congr) and joins the two right-hand integrals (lintegral_congr_ae)",
+    "T3 and the WIP hole's statement: L11 at S = univ, simplified by Set.univ_inter; their LipschitzWith hypothesis is unused"
+  ],
+  "not_proved": [
+    "the LIPSCHITZ coarea formula Analysis.lintegral_enorm_gradient_mul_eq_lintegral_levelSet, still a direct hole; it assumes no C1 regularity and needs L12",
+    "L12 (Lipschitz case), L7 (exact C1 pieces), L6/L6a (closed-set Whitney first-order jet extension and compact jet extraction)",
+    "migration of KLS.Isoperimetry.lintegral_enorm_gradient_mul_eq_lintegral_levelSet out of WIP",
+    "sharp C^(finrank) Analysis.sard (no downstream consumer) and Analysis.ae_forall_fderiv_ne_zero, both still carrying sorryAx",
+    "sharpness of the Eilenberg constant",
+    "smoothConstant_le_minkowskiConstant",
+    "smoothConstant_mul_lintegral_min_superlevel_le",
+    "equality of the two Cheeger constants"
+  ],
+  "files": {
+    "HANDOFF.md": "cf97be1c8540f40f2f5418f55c3a3062c254510772df692622b162bc01e56560",
+    "build/audit/l11-AnalyticPrerequisites.log": "28f048d73f77fc5d2b83f114a22aefdc90da2981d043477726711ea6cf60b671",
+    "build/audit/l11-AreaFormulaAudit.log": "012a848c88ac87ae07220136a1ca7b1a1238bb88a96c94c33eda6f2143e9e905",
+    "build/audit/l11-BorelSliceAudit.log": "a8dfcca0234207b99fb88f7194f00eb762f69feb8bb48cfbb0dd39be4f882bc0",
+    "build/audit/l11-Cheeger.log": "7003e6f52a47b150e5fd6cd14ca240b5f4ee2d53ce464ad80ed811e67a181870",
+    "build/audit/l11-CheegerInfimum.log": "392b75056ab6dae8d916f2144a28c828381c848c196dcfede771d16faf1af7fd",
+    "build/audit/l11-CheegerInfimumAudit.log": "f91015c9f2b831300fc64abbcc1120baca81d03d15a2d425097b50ee96f2ac74",
+    "build/audit/l11-CompactSliceAudit.log": "6183637269791471cbd4afecdf4bb9686eca8f8680c85386058ae18487adcafc",
+    "build/audit/l11-CriticalSliceAudit.log": "56f69bb05102711355e17db74a43e07ce4b7f99232fda47a16c53659041cf8d8",
+    "build/audit/l11-EilenbergMajorantAudit.log": "97c23ff29115ea64ef45606ddc56e5ee3e5f833a8ff4bfc1d58d5dadab1c8a77",
+    "build/audit/l11-LevelSetMeasurableAudit.log": "c5c553f9452f5126d490668f6dd68548fd185b6670e2e7f3d6e3c331eeec71e7",
+    "build/audit/l11-MinkowskiConstantAudit.log": "efd1523ac10c8010fc527f14f64401998f1c54daf31f94b5e61642a6f67159eb",
+    "build/audit/l11-NullSlicingAudit.log": "65d75f410323559fb026cb4855c86bd6267176daee2c6c43b495cfd8012e856d",
+    "build/audit/l11-OpenGraphAudit.log": "92136a3e0b400a36198d8abf9ed6d915035caddb1ff4255e18a32039e0c91a33",
+    "build/audit/l11-RegularCoareaAudit.log": "88de01742cfd90d75eb062a7aac5f7cdfc5266fc0690ef6efe381884cd2c2fef",
+    "build/audit/l11-SmoothCoareaAudit.log": "aae8a32b1fcc7798fc523c4d977207862ee08432d07a06797e15cce6a9fe0e21",
+    "build/audit/l11-SmoothSardAudit.log": "bbb56e86e2b6005f1f31236fd465aa8e5862c75adb03deeba3ecccaddbf81490",
+    "build/audit/l11-SmoothSardRouteStatements.log": "a11b0d4a5b5608157f7f4881b1dd8196504b94bab0c50b981d86b467c6579f6d",
+    "build/audit/l11-SuperlevelSardScope.log": "9f7b4971a9a7fd42cfad81024dcfd13341cf8daaf3f9171aeac81e107d7e9562",
+    "build/audit/l11-WeightedCoareaInfrastructure.log": "d589fa8fcd2e485f0803b4b59e2ee188bc95ceff56e06156b5adf2b4c6b9655a",
+    "build/audit/l11-WeightedCoareaRouteStatements.log": "3a74a1ef789572ff5238ff7faf8a591be11e73fc3030db04e32b2e6497fe0d6a",
+    "build/audit/l11-lake-build.log": "663bb667d5c904f6f3ae9df70d321b447153c405a323c525ff5c63b947dc2f97",
+    "formalization/FunctionalInequalities/Energy/WIP/Cheeger.lean": "5c081733ce43889fcbb80a8971b9488bfd65e3bd1bf2fefa28b240cebe43aa78",
+    "formalization/FunctionalInequalities/KLS/Geometry/CriticalSlice.lean": "00afc4ec131f08138749790276ac1093417e73edb6e6e343679f996e7187b5c2",
+    "formalization/FunctionalInequalities/KLS/Geometry/RegularCoarea.lean": "a7e81090d35790c33b25854e8ff5f46a4ac654d7f5342a2a02fb79268bca5b4f",
+    "formalization/FunctionalInequalities/KLS/Geometry/SmoothCoarea.lean": "af8db3cbeba25abdc376855668f8cb4a61e14f9e41a8e9608783803c2770d827",
+    "formalization/FunctionalInequalities/KLS/README.md": "6c7a596f3db891e1fbe6dd5ed983932e1b2a39c87875088b71a00e7dff955787",
+    "formalization/FunctionalInequalities/KLS/WIP/AnalyticPrerequisites.lean": "712dd3591d4d93043065502cb4baaee964a88ea27babb474b4bda3f4da8266db",
+    "formalization/FunctionalInequalities/KLS/WIP/CheegerInfimum.lean": "b719d713ef41c087bd381009a38ca625d387d42543ef09e7a91a94009b125331",
+    "formalization/README.md": "4c991d4ffa33a268a76026ec8c287ec6891fa292d8198da3588ffa85b1b5bbde",
+    "research/audits/README.md": "b9fcacf486351abb180c7ad37b07f06e3d6d7f2f9153cc8d3bfa2d433f1095f7",
+    "research/audits/SmoothCoareaAudit.lean": "59c6c46fe840901d797ad5bb143bf5787b950f69d223bf33c729840bfa9d84e5",
+    "research/decisions/2026-09-15-coarea-audit-evidence-completion.md": "7037376cc8ace7296b6ec53a825d7cd5997788e96deba72c272b9a1c38e20c88",
+    "research/decisions/2026-09-15-critical-slice.md": "f582e581ff93eff6174e9b09532a7071482e3e6557f0a57ef6223363e9a38cc3",
+    "research/decisions/2026-09-15-regular-coarea.md": "7594469553a2f2835bfd25744b44a2dbb9597dacdac7fd5a8be50f0ddeab9241",
+    "research/decisions/2026-09-16-smooth-coarea.md": "f239ff6178da1c7bb52991dafe268ee175cd80b7d5793bfc744cc026692fc784",
+    "research/explorations/2026-09-15-regular-coarea.json": "cd58bcbc36433a2ff74e170d1da36da6f2a3d99a18aeab8532b6d8d52900ee48",
+    "research/tasks.json": "a882f19698f697e525dbeed4c2ff2e85bd989f3f5dce76a327e56746ed5b8764",
+    "research/verification.md": "4f2aafe61c690f60fc8bd311d526e05e4ce4edf06324f48c9366c428d83bb020"
+  }
+}

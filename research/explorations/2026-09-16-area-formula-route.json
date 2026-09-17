@@ -1,0 +1,609 @@
+{
+ "scope": "ROUTE EXPLORATION ONLY for the nonlinear (Federer) area formula. No theorem proved, no .lean library source modified, no hole migrated. The only new Lean file contains #checks only.",
+ "head": "34b92695ece4f636a1a7f1eafbbf41c685ee0348",
+ "origin_main": "34b92695ece4f636a1a7f1eafbbf41c685ee0348",
+ "incoming_receipt": "build/verification/20260916T132852.139911Z/report.json",
+ "incoming_snapshot": "8b8056f523c6324ccac139eb21d90c844d27d3ecb068625966e8c2f3c970bc52",
+ "incoming_entries": 518,
+ "theorems_proved_this_round": 0,
+ "lean_library_sources_modified": [],
+ "new_lean_files": [
+  "research/audits/AreaFormulaRouteStatements.lean"
+ ],
+ "new_lean_file_kind": "#check only: no declaration, no proof, no placeholder axiom",
+ "mathlib_findings": {
+  "area_formula_for_differing_dimensions": "absent: a full-library search for \"area formula\" has no hit",
+  "normDet_continuity": "absent, so measurability of the integrand is a genuine obligation",
+  "partition_lemma": "exists_partition_approximatesLinearOn_of_hasFDerivWithinAt exists with the right shape and guarantees each linear model is an actual differential",
+  "two_sided_sandwich": "BLOCKED: ApproximatesLinearOn.antilipschitz requires the linear model to be a continuous linear EQUIVALENCE, hence equal dimensions",
+  "available_replacement": "ContinuousLinearMap.antilipschitz_of_injective_of_isClosed_range yields only an existential Classical.choose constant, with no quantitative control"
+ },
+ "recommendation": {
+  "route": "graph route B1: prove the codimension-m GRAPH area formula first, then localize",
+  "why": [
+   "a graph map is injective by construction, so no InjOn hypothesis and no multiplicity",
+   "its parameter projection is an EXPLICIT left inverse, which is exactly what obligation A3 lacks",
+   "the volume factor sqrt(det(1 + adjoint A comp A)) was proved in the previous round and already agrees with the repository codimension-one graphJacobian",
+   "obligation A4 does not arise at all, because a graph map differential is always injective"
+  ],
+  "cost_anchor": "the repository proved the codimension-one graph case in Analysis/AreaFormula.lean at 957 lines, alongside Analysis/ImplicitGraph.lean at 859 lines",
+  "suggested_order": [
+   "A1 continuity and measurability of normDet (low risk)",
+   "B1 codimension-m graph area formula (2-3 rounds)",
+   "A5 and A2 patching",
+   "only then the codimension-m regular case of the coarea formula"
+  ]
+ },
+ "obligations": {
+  "A0": {
+   "content": "target: area formula for an injective C1 parametrization",
+   "mathlib": "none",
+   "lines": null,
+   "risk": null
+  },
+  "A1": {
+   "content": "normDet continuous, hence the integrand is measurable",
+   "mathlib": "none (measurable_fderiv available)",
+   "lines": "60-120",
+   "risk": "medium"
+  },
+  "A2": {
+   "content": "countable additivity on the image side",
+   "mathlib": "none",
+   "lines": "80-160",
+   "risk": "medium"
+  },
+  "A3": {
+   "content": "two-sided comparison against an injective linear model",
+   "mathlib": "none; ApproximatesLinearOn.antilipschitz does not apply",
+   "lines": "250-500",
+   "risk": "high"
+  },
+  "A4": {
+   "content": "the degenerate part carries no measure",
+   "mathlib": "none",
+   "lines": "100-200",
+   "risk": "medium"
+  },
+  "A5": {
+   "content": "local area formula patches to a global one",
+   "mathlib": "none",
+   "lines": "80-160",
+   "risk": "medium"
+  },
+  "B1": {
+   "content": "codimension-m graph area formula (recommended main target)",
+   "mathlib": "none; codimension-one case proved in this repository as a template",
+   "lines": "600-1000",
+   "risk": "high"
+  },
+  "B2": {
+   "content": "the hausdorffNormalized form of B1",
+   "mathlib": "none; the constant-cancellation pattern is already available",
+   "lines": "20-40",
+   "risk": "low"
+  }
+ },
+ "exact_statements_file": "research/audits/AreaFormulaRouteStatements.lean",
+ "statements_type_check": true,
+ "statements_claimed_to_hold": false,
+ "validation": {
+  "research/audits/AreaFormulaRouteStatements.lean": {
+   "command": [
+    "lake",
+    "env",
+    "lean",
+    "-DwarningAsError=true",
+    "../research/audits/AreaFormulaRouteStatements.lean"
+   ],
+   "cwd": "formalization",
+   "exit_code": 0,
+   "log": "build/audit/area-formula-route/research_audits_AreaFormulaRouteStatements.lean.log",
+   "sha256": "863828512f1c0c342aac4877c067657f8e159ac7cd5ffdb9c0fff6e57f1b246d",
+   "sorryAx_reports": 0,
+   "sorry_diagnostics": 0
+  },
+  "research/audits/BorelSliceAudit.lean": {
+   "command": [
+    "lake",
+    "env",
+    "lean",
+    "-DwarningAsError=true",
+    "../research/audits/BorelSliceAudit.lean"
+   ],
+   "cwd": "formalization",
+   "exit_code": 0,
+   "log": "build/audit/area-formula-route/research_audits_BorelSliceAudit.lean.log",
+   "sha256": "a8dfcca0234207b99fb88f7194f00eb762f69feb8bb48cfbb0dd39be4f882bc0",
+   "sorryAx_reports": 0,
+   "sorry_diagnostics": 0
+  },
+  "research/audits/CoareaJacobianAudit.lean": {
+   "command": [
+    "lake",
+    "env",
+    "lean",
+    "-DwarningAsError=true",
+    "../research/audits/CoareaJacobianAudit.lean"
+   ],
+   "cwd": "formalization",
+   "exit_code": 0,
+   "log": "build/audit/area-formula-route/research_audits_CoareaJacobianAudit.lean.log",
+   "sha256": "0b5856d4918bebc9669b5387fa591400fbcaad41a2eb1dc0688720af2b142290",
+   "sorryAx_reports": 0,
+   "sorry_diagnostics": 0
+  },
+  "research/audits/CompactSliceAudit.lean": {
+   "command": [
+    "lake",
+    "env",
+    "lean",
+    "-DwarningAsError=true",
+    "../research/audits/CompactSliceAudit.lean"
+   ],
+   "cwd": "formalization",
+   "exit_code": 0,
+   "log": "build/audit/area-formula-route/research_audits_CompactSliceAudit.lean.log",
+   "sha256": "6183637269791471cbd4afecdf4bb9686eca8f8680c85386058ae18487adcafc",
+   "sorryAx_reports": 0,
+   "sorry_diagnostics": 0
+  },
+  "research/audits/CriticalSliceAudit.lean": {
+   "command": [
+    "lake",
+    "env",
+    "lean",
+    "-DwarningAsError=true",
+    "../research/audits/CriticalSliceAudit.lean"
+   ],
+   "cwd": "formalization",
+   "exit_code": 0,
+   "log": "build/audit/area-formula-route/research_audits_CriticalSliceAudit.lean.log",
+   "sha256": "56f69bb05102711355e17db74a43e07ce4b7f99232fda47a16c53659041cf8d8",
+   "sorryAx_reports": 0,
+   "sorry_diagnostics": 0
+  },
+  "research/audits/EilenbergMajorantAudit.lean": {
+   "command": [
+    "lake",
+    "env",
+    "lean",
+    "-DwarningAsError=true",
+    "../research/audits/EilenbergMajorantAudit.lean"
+   ],
+   "cwd": "formalization",
+   "exit_code": 0,
+   "log": "build/audit/area-formula-route/research_audits_EilenbergMajorantAudit.lean.log",
+   "sha256": "97c23ff29115ea64ef45606ddc56e5ee3e5f833a8ff4bfc1d58d5dadab1c8a77",
+   "sorryAx_reports": 0,
+   "sorry_diagnostics": 0
+  },
+  "research/audits/FirstOrderJetAudit.lean": {
+   "command": [
+    "lake",
+    "env",
+    "lean",
+    "-DwarningAsError=true",
+    "../research/audits/FirstOrderJetAudit.lean"
+   ],
+   "cwd": "formalization",
+   "exit_code": 0,
+   "log": "build/audit/area-formula-route/research_audits_FirstOrderJetAudit.lean.log",
+   "sha256": "9cf5593e284a4e5e419bcfc40d8f29da6d4b7587d622acfc052f5129c62ea65d",
+   "sorryAx_reports": 0,
+   "sorry_diagnostics": 0
+  },
+  "research/audits/GraphJacobianAudit.lean": {
+   "command": [
+    "lake",
+    "env",
+    "lean",
+    "-DwarningAsError=true",
+    "../research/audits/GraphJacobianAudit.lean"
+   ],
+   "cwd": "formalization",
+   "exit_code": 0,
+   "log": "build/audit/area-formula-route/research_audits_GraphJacobianAudit.lean.log",
+   "sha256": "bea60b036d0177916c89252e63f69ba0751f6a9a56a82ae3daaf7f33156f6bae",
+   "sorryAx_reports": 0,
+   "sorry_diagnostics": 0
+  },
+  "research/audits/IsoperimetryCoareaAudit.lean": {
+   "command": [
+    "lake",
+    "env",
+    "lean",
+    "-DwarningAsError=true",
+    "../research/audits/IsoperimetryCoareaAudit.lean"
+   ],
+   "cwd": "formalization",
+   "exit_code": 0,
+   "log": "build/audit/area-formula-route/research_audits_IsoperimetryCoareaAudit.lean.log",
+   "sha256": "dde4c1365470a4837742f129c0e29737e0a50fd90ffb315b136ad9db2dfd7178",
+   "sorryAx_reports": 4,
+   "sorry_diagnostics": 0
+  },
+  "research/audits/LevelSetMeasurableAudit.lean": {
+   "command": [
+    "lake",
+    "env",
+    "lean",
+    "-DwarningAsError=true",
+    "../research/audits/LevelSetMeasurableAudit.lean"
+   ],
+   "cwd": "formalization",
+   "exit_code": 0,
+   "log": "build/audit/area-formula-route/research_audits_LevelSetMeasurableAudit.lean.log",
+   "sha256": "1414ccd117403c81a17bf3bb8a8dc43b4594933320de3988c324b158d258be19",
+   "sorryAx_reports": 2,
+   "sorry_diagnostics": 0
+  },
+  "research/audits/LinearAreaFormulaAudit.lean": {
+   "command": [
+    "lake",
+    "env",
+    "lean",
+    "-DwarningAsError=true",
+    "../research/audits/LinearAreaFormulaAudit.lean"
+   ],
+   "cwd": "formalization",
+   "exit_code": 0,
+   "log": "build/audit/area-formula-route/research_audits_LinearAreaFormulaAudit.lean.log",
+   "sha256": "6e91eaa7af958b1af216c00d35b604cc1d9e02785fb7bbb5875b6f0514043f56",
+   "sorryAx_reports": 0,
+   "sorry_diagnostics": 0
+  },
+  "research/audits/LipschitzCoareaAudit.lean": {
+   "command": [
+    "lake",
+    "env",
+    "lean",
+    "-DwarningAsError=true",
+    "../research/audits/LipschitzCoareaAudit.lean"
+   ],
+   "cwd": "formalization",
+   "exit_code": 0,
+   "log": "build/audit/area-formula-route/research_audits_LipschitzCoareaAudit.lean.log",
+   "sha256": "2df013f36bdf53d5fb1d777ccf6fe814e4b1355fc65b530e9037227c92713258",
+   "sorryAx_reports": 0,
+   "sorry_diagnostics": 0
+  },
+  "research/audits/LipschitzCoareaMigrationAudit.lean": {
+   "command": [
+    "lake",
+    "env",
+    "lean",
+    "-DwarningAsError=true",
+    "../research/audits/LipschitzCoareaMigrationAudit.lean"
+   ],
+   "cwd": "formalization",
+   "exit_code": 0,
+   "log": "build/audit/area-formula-route/research_audits_LipschitzCoareaMigrationAudit.lean.log",
+   "sha256": "4e0db8c551cdabd12b846bd28cd0dddf24a2cf06f4f480d787ff478afc4d34f5",
+   "sorryAx_reports": 4,
+   "sorry_diagnostics": 0
+  },
+  "research/audits/LocallyLipschitzCoareaAudit.lean": {
+   "command": [
+    "lake",
+    "env",
+    "lean",
+    "-DwarningAsError=true",
+    "../research/audits/LocallyLipschitzCoareaAudit.lean"
+   ],
+   "cwd": "formalization",
+   "exit_code": 0,
+   "log": "build/audit/area-formula-route/research_audits_LocallyLipschitzCoareaAudit.lean.log",
+   "sha256": "5ba4c2301882581ff2502b4e02e394e972f0338118cf092a0e4b4d39c5146876",
+   "sorryAx_reports": 0,
+   "sorry_diagnostics": 0
+  },
+  "research/audits/NullSlicingAudit.lean": {
+   "command": [
+    "lake",
+    "env",
+    "lean",
+    "-DwarningAsError=true",
+    "../research/audits/NullSlicingAudit.lean"
+   ],
+   "cwd": "formalization",
+   "exit_code": 0,
+   "log": "build/audit/area-formula-route/research_audits_NullSlicingAudit.lean.log",
+   "sha256": "65d75f410323559fb026cb4855c86bd6267176daee2c6c43b495cfd8012e856d",
+   "sorryAx_reports": 0,
+   "sorry_diagnostics": 0
+  },
+  "research/audits/OpenGraphAudit.lean": {
+   "command": [
+    "lake",
+    "env",
+    "lean",
+    "-DwarningAsError=true",
+    "../research/audits/OpenGraphAudit.lean"
+   ],
+   "cwd": "formalization",
+   "exit_code": 0,
+   "log": "build/audit/area-formula-route/research_audits_OpenGraphAudit.lean.log",
+   "sha256": "92136a3e0b400a36198d8abf9ed6d915035caddb1ff4255e18a32039e0c91a33",
+   "sorryAx_reports": 0,
+   "sorry_diagnostics": 0
+  },
+  "research/audits/RegularCoareaAudit.lean": {
+   "command": [
+    "lake",
+    "env",
+    "lean",
+    "-DwarningAsError=true",
+    "../research/audits/RegularCoareaAudit.lean"
+   ],
+   "cwd": "formalization",
+   "exit_code": 0,
+   "log": "build/audit/area-formula-route/research_audits_RegularCoareaAudit.lean.log",
+   "sha256": "88de01742cfd90d75eb062a7aac5f7cdfc5266fc0690ef6efe381884cd2c2fef",
+   "sorryAx_reports": 0,
+   "sorry_diagnostics": 0
+  },
+  "research/audits/SmoothCoareaAudit.lean": {
+   "command": [
+    "lake",
+    "env",
+    "lean",
+    "-DwarningAsError=true",
+    "../research/audits/SmoothCoareaAudit.lean"
+   ],
+   "cwd": "formalization",
+   "exit_code": 0,
+   "log": "build/audit/area-formula-route/research_audits_SmoothCoareaAudit.lean.log",
+   "sha256": "aae8a32b1fcc7798fc523c4d977207862ee08432d07a06797e15cce6a9fe0e21",
+   "sorryAx_reports": 0,
+   "sorry_diagnostics": 0
+  },
+  "research/audits/WeightedCoareaInfrastructure.lean": {
+   "command": [
+    "lake",
+    "env",
+    "lean",
+    "-DwarningAsError=true",
+    "../research/audits/WeightedCoareaInfrastructure.lean"
+   ],
+   "cwd": "formalization",
+   "exit_code": 0,
+   "log": "build/audit/area-formula-route/research_audits_WeightedCoareaInfrastructure.lean.log",
+   "sha256": "d589fa8fcd2e485f0803b4b59e2ee188bc95ceff56e06156b5adf2b4c6b9655a",
+   "sorryAx_reports": 0,
+   "sorry_diagnostics": 0
+  },
+  "research/audits/WeightedCoareaRouteStatements.lean": {
+   "command": [
+    "lake",
+    "env",
+    "lean",
+    "-DwarningAsError=true",
+    "../research/audits/WeightedCoareaRouteStatements.lean"
+   ],
+   "cwd": "formalization",
+   "exit_code": 0,
+   "log": "build/audit/area-formula-route/research_audits_WeightedCoareaRouteStatements.lean.log",
+   "sha256": "3a74a1ef789572ff5238ff7faf8a591be11e73fc3030db04e32b2e6497fe0d6a",
+   "sorryAx_reports": 0,
+   "sorry_diagnostics": 0
+  },
+  "research/audits/WhitneyConstructionAudit.lean": {
+   "command": [
+    "lake",
+    "env",
+    "lean",
+    "-DwarningAsError=true",
+    "../research/audits/WhitneyConstructionAudit.lean"
+   ],
+   "cwd": "formalization",
+   "exit_code": 0,
+   "log": "build/audit/area-formula-route/research_audits_WhitneyConstructionAudit.lean.log",
+   "sha256": "36d70231ff8d2deadce898b80a4f02599162af5f2c3cc734864870d33f9cc7df",
+   "sorryAx_reports": 0,
+   "sorry_diagnostics": 0
+  },
+  "research/audits/WhitneyExtensionAudit.lean": {
+   "command": [
+    "lake",
+    "env",
+    "lean",
+    "-DwarningAsError=true",
+    "../research/audits/WhitneyExtensionAudit.lean"
+   ],
+   "cwd": "formalization",
+   "exit_code": 0,
+   "log": "build/audit/area-formula-route/research_audits_WhitneyExtensionAudit.lean.log",
+   "sha256": "a6461ba0960f1bf9f63ec31dd0713a6311d164eb7201f49625c0722444ae1a5d",
+   "sorryAx_reports": 0,
+   "sorry_diagnostics": 0
+  },
+  "build/audit/AreaFormulaAudit.lean": {
+   "command": [
+    "lake",
+    "env",
+    "lean",
+    "-DwarningAsError=true",
+    "../build/audit/AreaFormulaAudit.lean"
+   ],
+   "cwd": "formalization",
+   "exit_code": 0,
+   "log": "build/audit/area-formula-route/build_audit_AreaFormulaAudit.lean.log",
+   "sha256": "012a848c88ac87ae07220136a1ca7b1a1238bb88a96c94c33eda6f2143e9e905",
+   "sorryAx_reports": 0,
+   "sorry_diagnostics": 0
+  },
+  "build/audit/CheegerInfimumAudit.lean": {
+   "command": [
+    "lake",
+    "env",
+    "lean",
+    "-DwarningAsError=true",
+    "../build/audit/CheegerInfimumAudit.lean"
+   ],
+   "cwd": "formalization",
+   "exit_code": 0,
+   "log": "build/audit/area-formula-route/build_audit_CheegerInfimumAudit.lean.log",
+   "sha256": "f91015c9f2b831300fc64abbcc1120baca81d03d15a2d425097b50ee96f2ac74",
+   "sorryAx_reports": 0,
+   "sorry_diagnostics": 0
+  },
+  "build/audit/MinkowskiConstantAudit.lean": {
+   "command": [
+    "lake",
+    "env",
+    "lean",
+    "-DwarningAsError=true",
+    "../build/audit/MinkowskiConstantAudit.lean"
+   ],
+   "cwd": "formalization",
+   "exit_code": 0,
+   "log": "build/audit/area-formula-route/build_audit_MinkowskiConstantAudit.lean.log",
+   "sha256": "efd1523ac10c8010fc527f14f64401998f1c54daf31f94b5e61642a6f67159eb",
+   "sorryAx_reports": 0,
+   "sorry_diagnostics": 0
+  },
+  "build/audit/SuperlevelSardScope.lean": {
+   "command": [
+    "lake",
+    "env",
+    "lean",
+    "-DwarningAsError=true",
+    "../build/audit/SuperlevelSardScope.lean"
+   ],
+   "cwd": "formalization",
+   "exit_code": 0,
+   "log": "build/audit/area-formula-route/build_audit_SuperlevelSardScope.lean.log",
+   "sha256": "9f7b4971a9a7fd42cfad81024dcfd13341cf8daaf3f9171aeac81e107d7e9562",
+   "sorryAx_reports": 2,
+   "sorry_diagnostics": 0
+  },
+  "build/audit/SmoothSardAudit.lean": {
+   "command": [
+    "lake",
+    "env",
+    "lean",
+    "-DwarningAsError=true",
+    "../build/audit/SmoothSardAudit.lean"
+   ],
+   "cwd": "formalization",
+   "exit_code": 0,
+   "log": "build/audit/area-formula-route/build_audit_SmoothSardAudit.lean.log",
+   "sha256": "bbb56e86e2b6005f1f31236fd465aa8e5862c75adb03deeba3ecccaddbf81490",
+   "sorryAx_reports": 0,
+   "sorry_diagnostics": 0
+  },
+  "build/audit/SmoothSardRouteStatements.lean": {
+   "command": [
+    "lake",
+    "env",
+    "lean",
+    "-DwarningAsError=true",
+    "../build/audit/SmoothSardRouteStatements.lean"
+   ],
+   "cwd": "formalization",
+   "exit_code": 0,
+   "log": "build/audit/area-formula-route/build_audit_SmoothSardRouteStatements.lean.log",
+   "sha256": "a11b0d4a5b5608157f7f4881b1dd8196504b94bab0c50b981d86b467c6579f6d",
+   "sorryAx_reports": 0,
+   "sorry_diagnostics": 0
+  },
+  "build/audit/RegularCoareaAudit.lean": {
+   "command": [
+    "lake",
+    "env",
+    "lean",
+    "-DwarningAsError=true",
+    "../build/audit/RegularCoareaAudit.lean"
+   ],
+   "cwd": "formalization",
+   "exit_code": 0,
+   "log": "build/audit/area-formula-route/build_audit_RegularCoareaAudit.lean.log",
+   "sha256": "88de01742cfd90d75eb062a7aac5f7cdfc5266fc0690ef6efe381884cd2c2fef",
+   "sorryAx_reports": 0,
+   "sorry_diagnostics": 0
+  },
+  "KLS/WIP/AnalyticPrerequisites": {
+   "command": [
+    "lake",
+    "env",
+    "lean",
+    "FunctionalInequalities/KLS/WIP/AnalyticPrerequisites.lean"
+   ],
+   "cwd": "formalization",
+   "exit_code": 0,
+   "log": "build/audit/area-formula-route/KLS_WIP_AnalyticPrerequisites.log",
+   "sha256": "165461a306be4df069715678da4b5d3d18faa2cd01b4caf66c553204f8fd51e2",
+   "sorryAx_reports": 0,
+   "sorry_diagnostics": 1
+  },
+  "KLS/WIP/CheegerInfimum": {
+   "command": [
+    "lake",
+    "env",
+    "lean",
+    "FunctionalInequalities/KLS/WIP/CheegerInfimum.lean"
+   ],
+   "cwd": "formalization",
+   "exit_code": 0,
+   "log": "build/audit/area-formula-route/KLS_WIP_CheegerInfimum.log",
+   "sha256": "f48f3d5923b15d0b1f137a227c99c8d296989f03c9a2e5218223ad18ffe50172",
+   "sorryAx_reports": 0,
+   "sorry_diagnostics": 2
+  },
+  "Energy/WIP/Cheeger": {
+   "command": [
+    "lake",
+    "env",
+    "lean",
+    "FunctionalInequalities/Energy/WIP/Cheeger.lean"
+   ],
+   "cwd": "formalization",
+   "exit_code": 0,
+   "log": "build/audit/area-formula-route/Energy_WIP_Cheeger.log",
+   "sha256": "7003e6f52a47b150e5fd6cd14ca240b5f4ee2d53ce464ad80ed811e67a181870",
+   "sorryAx_reports": 0,
+   "sorry_diagnostics": 5
+  },
+  "lake-build": {
+   "command": [
+    "lake",
+    "build"
+   ],
+   "cwd": "formalization",
+   "exit_code": 0,
+   "log": "build/audit/area-formula-route/lake-build.log",
+   "sha256": "aa55900e2c215829eddd72ac38ee5d70e3e942a8d85c4575f02e4df827fb0a58",
+   "sorryAx_reports": 0,
+   "sorry_diagnostics": 0
+  }
+ },
+ "axiom_audit_of_new_results": "empty: this round produced no new result, which is NOT the same as having proved the area formula",
+ "changed_source_files_vs_incoming_receipt": [
+  "HANDOFF.md",
+  "formalization/README.md",
+  "research/audits/README.md",
+  "research/tasks.json",
+  "research/verification.md"
+ ],
+ "prior_lean_and_decisions_unchanged": true,
+ "audit_clients": 29,
+ "versioned_audit_sources": 22,
+ "wip_holes": [
+  1,
+  2,
+  5
+ ],
+ "wip_holes_total": 8,
+ "certificates": 24,
+ "infrastructure_evidence_count": 94,
+ "handed_off_line": {
+  "owner": "Wang Haocheng",
+  "date": "2026-09-16",
+  "touched_this_round": false
+ },
+ "committed": false,
+ "pushed": false,
+ "real_git_index_modified": false,
+ "root_verification": "See build/audit/area-formula-route/final-snapshot.json for the final full verification receipt and exact-source binding."
+}

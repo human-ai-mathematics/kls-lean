@@ -95,14 +95,16 @@ See the [full tables and normalization](LITERATURE.md#constant-conventions).
 ## Proof progress tree
 
 <!-- BEGIN GENERATED DATE -->
-Last updated: **2026-09-15**.
+Last updated: **2026-09-17**.
 
 ![✓ Formalized in Lean](badges/formalized.svg) · ![○ Not yet formalized](badges/pending.svg) · ![◐ Partially formalized](badges/partial.svg) · ![— Excluded: refuted](badges/excluded.svg)
 <!-- END GENERATED DATE -->
-The orange outline marks the next proof step. Upstream mathematical proofs alone do not earn a ✓.
+The orange outline marks R4, the next vector-coarea obligation in the current handoff. The
+Cheeger–Buser comparison remains a separately assigned workstream. Upstream mathematical proofs alone do not earn a ✓.
 
 One large diagram shows the four sufficient routes and their shared proof infrastructure.
-Arrows point toward KLS: AND within each route, OR between routes. Dotted arrows show context.
+Arrows point toward KLS: AND within each route, OR between routes. Dotted arrows show context. The vector-coarea extension is shown separately and does not
+assert an additional implication to KLS.
 The diagram uses a larger font and full canvas width; [open its source](TREE.mmd) for a separate view.
 
 <!-- BEGIN GENERATED TREE -->
@@ -121,14 +123,14 @@ flowchart LR
     GRAPH["✓ Open-domain<br/>Graph area"]
     REG["✓ Regular-domain<br/>Coarea"]
     CRIT["✓ Critical-slice nullity"]
-    C1["○ General C¹ coarea<br/>Next step"]
-    WHIT["○ Whitney extension<br/>Exact C¹ pieces"]
-    LIP["○ Lipschitz coarea"]
+    C1["✓ General C¹ coarea"]
+    WHIT["✓ Compact Whitney jets<br/>Exact C¹ pieces"]
+    LIP["✓ Coarea: Lipschitz<br/>and locally Lipschitz"]
     GG["✓ Global Gauss–Green"]
     REC["✓ Smooth recovery"]
     FWD["✓ h_M ≤ h_S"]
     SARD["✓ Smooth Sard"]
-    SCI["○ Smooth coarea<br/>Inequality"]
+    SCI["○ Cheeger superlevel<br/>Integral bound"]
     CUT["✓ Distance cutoffs"]
     REV["○ h_S ≤ h_M"]
     EQ["◐ h_M = h_S"]
@@ -161,6 +163,13 @@ flowchart LR
     FC["✓ Fiber Dirichlet form"]
     FG["○ Universal<br/>Frame bound"]
     FAND{"AND<br/>◐ Fiber route"}
+    end
+    subgraph VECTOR["Vector coarea extension — separate from the KLS implication routes"]
+    VREG["✓ Vector coarea<br/>Regular region"]
+    VZERO["✓ Vector slices<br/>Zero derivative"]
+    VR123["✓ Rank and kernel<br/>R1–R3"]
+    VR4["○ Tangential estimate<br/>R4 — Next step"]
+    VFULL["◐ General vector coarea<br/>Rank-deficient gap"]
     end
     KLS["○ KLS<br/>Dimension-free bound"]
     ANY{"OR<br/>Any completed route"}
@@ -207,14 +216,18 @@ flowchart LR
     FAND --> ANY
     ANY --> KLS
     CONST -.-> ANY
+    VR123 --> VR4
+    VREG -.-> VFULL
+    VZERO -.-> VFULL
+    VR4 -.-> VFULL
     classDef done fill:#dbeafe,stroke:#2563eb,color:#1e3a8a;
-    class ENERGY,F4,MT,FP,FC,NORM,DENS,ONE,CONST,FORMS,MEAS,GRAPH,REG,CRIT,GG,REC,FWD,SARD,CUT,MINK,FLOG done;
+    class ENERGY,F4,MT,FP,FC,NORM,DENS,ONE,CONST,FORMS,MEAS,GRAPH,REG,CRIT,C1,WHIT,LIP,GG,REC,FWD,SARD,CUT,MINK,FLOG,VREG,VZERO,VR123 done;
     classDef partial fill:#fff3df,stroke:#c88719,color:#66420d;
-    class EQ,FAND partial;
+    class EQ,FAND,VFULL partial;
     classDef todo fill:#f2f2f2,stroke:#888,color:#333;
-    class MG,EG,KLS,MC,EC,SC,FG,SG,MH,FRONT,CB,WHIT,LIP,SCI,REV,EAND,SAND,MAND todo;
+    class MG,EG,KLS,MC,EC,SC,FG,SG,MH,FRONT,CB,SCI,REV,EAND,SAND,MAND todo;
     classDef focus fill:#fff0dc,stroke:#d47b13,color:#663800,stroke-width:3px;
-    class C1 focus;
+    class VR4 focus;
     classDef logic fill:#fff,stroke:#555,color:#222;
     class ANY logic;
     click MG href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/src/chapters/50-kls-routes.tex" "Bounded CMH — Recovery envelope" _blank
@@ -242,14 +255,14 @@ flowchart LR
     click GRAPH href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/OpenGraphIntegral.lean" "Open-domain — Graph area" _blank
     click REG href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/RegularCoarea.lean" "Regular-domain — Coarea" _blank
     click CRIT href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/CriticalSlice.lean" "Critical-slice nullity" _blank
-    click C1 href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/research/decisions/2026-09-15-weighted-coarea-route.md#l11" "General C¹ coarea — Next step" _blank
-    click WHIT href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/research/decisions/2026-09-15-weighted-coarea-route.md#l6" "Whitney extension — Exact C¹ pieces" _blank
-    click LIP href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/research/decisions/2026-09-15-weighted-coarea-route.md#l12" "Lipschitz coarea" _blank
+    click C1 href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/SmoothCoarea.lean" "General C¹ coarea" _blank
+    click WHIT href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/research/decisions/2026-09-16-lipschitz-coarea.md" "Compact Whitney jets — Exact C¹ pieces" _blank
+    click LIP href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/LocallyLipschitzCoarea.lean" "Coarea: Lipschitz — and locally Lipschitz" _blank
     click GG href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/GaussGreen.lean" "Global Gauss–Green" _blank
     click REC href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/PerimeterRecovery.lean" "Smooth recovery" _blank
     click FWD href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/CheegerInfimum.lean" "h_M ≤ h_S" _blank
     click SARD href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/SmoothSard.lean" "Smooth Sard" _blank
-    click SCI href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/WIP/CheegerInfimum.lean" "Smooth coarea — Inequality" _blank
+    click SCI href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/WIP/CheegerInfimum.lean" "Cheeger superlevel — Integral bound" _blank
     click CUT href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/DistanceCutoff.lean" "Distance cutoffs" _blank
     click REV href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/WIP/CheegerInfimum.lean" "h_S ≤ h_M" _blank
     click EQ href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/WIP/CheegerInfimum.lean" "h_M = h_S" _blank
@@ -260,6 +273,11 @@ flowchart LR
     click FLOG href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/ConditionalFiber.lean" "Fiber log-concavity" _blank
     click FAND href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/route-composition.yaml" "AND — Fiber route" _blank
     click ANY href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/route-composition.yaml" "OR — Any completed route" _blank
+    click VREG href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/VectorRegularCoarea.lean" "Vector coarea — Regular region" _blank
+    click VZERO href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/VectorCriticalSlice.lean" "Vector slices — Zero derivative" _blank
+    click VR123 href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/research/audits/RightInverseBoundAudit.lean" "Rank and kernel — R1–R3" _blank
+    click VR4 href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/research/audits/RankDeficientRouteStatements.lean" "Tangential estimate — R4 — Next step" _blank
+    click VFULL href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/research/decisions/2026-09-17-rank-deficient-route.md" "General vector coarea — Rank-deficient gap" _blank
 ```
 <!-- END GENERATED TREE -->
 
@@ -269,7 +287,9 @@ flowchart LR
 - The one-dimensional coefficient is 4; this does not prove dimension-free KLS.
 - The fiber route still needs one universal frame independent of the test function.
 - Smooth Sard here means C∞ Sard; sharp finite-regularity Sard remains pending.
-- General C¹ coarea is the next step. Lipschitz coarea needs additional Whitney work.
+- Compact-set Whitney extension, compact jet extraction, exact C¹ pieces and weighted coarea for C¹, globally Lipschitz and locally Lipschitz functions are formalized in Lean. All original T1/T2/T3 entry points are wired to hole-free modules; 8 direct WIP holes remain (1 sharp Sard, 2 Cheeger-infimum obligations, 5 singular-law energy comparisons).
+- The pending Cheeger superlevel integral bound is an application of coarea, not the coarea formula itself. The forward infimum comparison is proved; the reverse and equality remain open.
+- Smooth recovery has an exact local Lean proof, now registered at its Blueprint node without adding a ledger certificate. This does not complete the full Cheeger–Buser line.
 - The Cheeger–Buser comparison feeds the Eldan route and does not alone prove KLS.
 - CMH sufficiency requires a regular recovery sequence; it is not an equivalence.
 - Refuted packages and parked probes appear in the table, outside the active implication chain.
@@ -336,19 +356,24 @@ The [full node register](STATUS.md) separately lists definitions and registered 
 | Open-domain — Graph area | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/OpenGraphIntegral.lean) |
 | Regular-domain — Coarea | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/RegularCoarea.lean) |
 | Critical-slice nullity | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/CriticalSlice.lean) |
-| General C¹ coarea — Next step | ![○ Not yet formalized](badges/pending.svg) | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/research/decisions/2026-09-15-weighted-coarea-route.md#l11) |
-| Whitney extension — Exact C¹ pieces | ![○ Not yet formalized](badges/pending.svg) | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/research/decisions/2026-09-15-weighted-coarea-route.md#l6) |
-| Lipschitz coarea | ![○ Not yet formalized](badges/pending.svg) | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/research/decisions/2026-09-15-weighted-coarea-route.md#l12) |
+| General C¹ coarea | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/SmoothCoarea.lean) |
+| Compact Whitney jets — Exact C¹ pieces | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/research/decisions/2026-09-16-lipschitz-coarea.md) |
+| Coarea: Lipschitz — and locally Lipschitz | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/LocallyLipschitzCoarea.lean) |
 | Global Gauss–Green | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/GaussGreen.lean) |
 | Smooth recovery | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/PerimeterRecovery.lean) |
 | h_M ≤ h_S | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/CheegerInfimum.lean) |
 | Smooth Sard | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/SmoothSard.lean) |
-| Smooth coarea — Inequality | ![○ Not yet formalized](badges/pending.svg) | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/WIP/CheegerInfimum.lean) |
+| Cheeger superlevel — Integral bound | ![○ Not yet formalized](badges/pending.svg) | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/WIP/CheegerInfimum.lean) |
 | Distance cutoffs | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/DistanceCutoff.lean) |
 | h_S ≤ h_M | ![○ Not yet formalized](badges/pending.svg) | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/WIP/CheegerInfimum.lean) |
 | h_M = h_S | ![◐ Partially formalized](badges/partial.svg) | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/WIP/CheegerInfimum.lean) |
 | Minkowski coarea | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/MinkowskiContent.lean) |
 | Fiber log-concavity | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/ConditionalFiber.lean) |
+| Vector coarea — Regular region | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/VectorRegularCoarea.lean) |
+| Vector slices — Zero derivative | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/VectorCriticalSlice.lean) |
+| Rank and kernel — R1–R3 | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/research/audits/RightInverseBoundAudit.lean) |
+| Tangential estimate — R4 — Next step | ![○ Not yet formalized](badges/pending.svg) | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/research/audits/RankDeficientRouteStatements.lean) |
+| General vector coarea — Rank-deficient gap | ![◐ Partially formalized](badges/partial.svg) | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/research/decisions/2026-09-17-rank-deficient-route.md) |
 <!-- END GENERATED RESULTS -->
 
 ### Benchmarks and upstream research beyond the four route gates
@@ -411,14 +436,14 @@ Every node has a link. If diagram links are disabled in your viewer, use this di
 | Open-domain — Graph area | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/OpenGraphIntegral.lean) |
 | Regular-domain — Coarea | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/RegularCoarea.lean) |
 | Critical-slice nullity | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/CriticalSlice.lean) |
-| General C¹ coarea — Next step | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/research/decisions/2026-09-15-weighted-coarea-route.md#l11) |
-| Whitney extension — Exact C¹ pieces | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/research/decisions/2026-09-15-weighted-coarea-route.md#l6) |
-| Lipschitz coarea | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/research/decisions/2026-09-15-weighted-coarea-route.md#l12) |
+| General C¹ coarea | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/SmoothCoarea.lean) |
+| Compact Whitney jets — Exact C¹ pieces | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/research/decisions/2026-09-16-lipschitz-coarea.md) |
+| Coarea: Lipschitz — and locally Lipschitz | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/LocallyLipschitzCoarea.lean) |
 | Global Gauss–Green | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/GaussGreen.lean) |
 | Smooth recovery | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/PerimeterRecovery.lean) |
 | h_M ≤ h_S | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/CheegerInfimum.lean) |
 | Smooth Sard | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/SmoothSard.lean) |
-| Smooth coarea — Inequality | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/WIP/CheegerInfimum.lean) |
+| Cheeger superlevel — Integral bound | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/WIP/CheegerInfimum.lean) |
 | Distance cutoffs | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/DistanceCutoff.lean) |
 | h_S ≤ h_M | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/WIP/CheegerInfimum.lean) |
 | h_M = h_S | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/WIP/CheegerInfimum.lean) |
@@ -429,6 +454,11 @@ Every node has a link. If diagram links are disabled in your viewer, use this di
 | Fiber log-concavity | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/ConditionalFiber.lean) |
 | AND — Fiber route | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/route-composition.yaml) |
 | OR — Any completed route | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/route-composition.yaml) |
+| Vector coarea — Regular region | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/VectorRegularCoarea.lean) |
+| Vector slices — Zero derivative | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/VectorCriticalSlice.lean) |
+| Rank and kernel — R1–R3 | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/research/audits/RightInverseBoundAudit.lean) |
+| Tangential estimate — R4 — Next step | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/research/audits/RankDeficientRouteStatements.lean) |
+| General vector coarea — Rank-deficient gap | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/research/decisions/2026-09-17-rank-deficient-route.md) |
 <!-- END GENERATED LINKS -->
 
 </details>

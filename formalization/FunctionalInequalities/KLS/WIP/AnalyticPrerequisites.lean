@@ -5,12 +5,16 @@ import Mathlib.Analysis.Calculus.Gradient.Basic
 
 /-! # Open analytic prerequisites
 
-Weighted coarea and Sard remain two direct holes.  Its measurability half
-`Analysis.aemeasurable_lintegral_levelSet` moved to the hole-free
-`KLS/Geometry/LevelSetMeasurable.lean` with a byte-identical `pp.all` signature, where it is
-proved; only the **equality** below is still open here.
-The Sard consequence inherits its hole. Gauss–Green and mollification consequences
-now live in `KLS/Geometry`, without importing this module. -/
+The sharp `C^(finrank)` Sard theorem is the one remaining direct hole here, and
+`Analysis.ae_forall_fderiv_ne_zero` inherits it.
+
+Both halves of the weighted coarea formula have now left this file with byte-identical `pp.all`
+signatures.  Its measurability half `Analysis.aemeasurable_lintegral_levelSet` moved to the
+hole-free `KLS/Geometry/LevelSetMeasurable.lean`, and its equality half
+`Analysis.lintegral_enorm_gradient_mul_eq_lintegral_levelSet` moved to the hole-free
+`KLS/Geometry/LipschitzCoarea.lean`, where it is proved from `L12` at `S = Set.univ`.
+Gauss–Green and mollification consequences now live in `KLS/Geometry`, without importing this
+module. -/
 
 noncomputable section
 
@@ -22,25 +26,6 @@ namespace FunctionalInequalities
 universe u
 
 namespace Analysis
-
-/-! ### D. Weighted coarea formula -/
-
-section Coarea
-
-variable {V : Type u} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [CompleteSpace V]
-  [FiniteDimensional ℝ V] [MeasurableSpace V] [BorelSpace V]
-
-/-- **Weighted coarea formula** for a Lipschitz function on a finite-dimensional inner-product
-space, with Lebesgue measure on `V` and the normalized surface measure `ℋ^{n-1}` on the level
-sets: `∫ g ‖∇u‖ = ∫_ℝ (∫_{u = t} g dℋ^{n-1}) dt`.  The gradient is Mathlib's `gradient`, zero at
-the points of non-differentiability (a null set by Rademacher's theorem). -/
-theorem lintegral_enorm_gradient_mul_eq_lintegral_levelSet {u : V → ℝ} {K : ℝ≥0}
-    (hu : LipschitzWith K u) {g : V → ℝ≥0∞} (hg : Measurable g) :
-    ∫⁻ x, ‖gradient u x‖ₑ * g x ∂(volume : Measure V) =
-      ∫⁻ t, ∫⁻ y in {x | u x = t}, g y ∂(KLS.surfaceMeasure V) ∂(volume : Measure ℝ) := by
-  sorry
-
-end Coarea
 
 /-! ### E. Sard's theorem for real-valued functions -/
 

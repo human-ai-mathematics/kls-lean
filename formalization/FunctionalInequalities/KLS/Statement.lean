@@ -11,8 +11,10 @@ The target includes dimension zero, singular affine supports, and a finite secon
 It uses the literature local-slope constant, not an arbitrary supplied energy.
 
 This file defines a proposition. It contains no proof of KLS and no assertion of equivalence
-with the isotropic formulation. The explicit affine/isotropic and selected/literature bridges
-remain separate tasks. This declaration is versioned with its definitions, not API-frozen.
+with the isotropic formulation. The affine/isotropic equivalence is proved separately in
+`KLS/LogConcave/Isotropic.lean`, and the selected/literature bridge in
+`KLS/LogConcave/Poincare.lean`; neither supplies a dimension-free bound. This declaration is
+versioned with its definitions, not API-frozen.
 -/
 
 noncomputable section

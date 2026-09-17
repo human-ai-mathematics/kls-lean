@@ -1,6 +1,95 @@
 # KLS 文件导航
 
-当前进度（2026-09-15，正则 coarea 轮）：**完整证明 L9 的两个分量**。
+当前语义状态（2026-09-16）：24 个证书；8 个直接洞（1/2/5），仅位于三个 WIP 模块。
+恢复序列 `KLS.RelativePerimeter.exists_smooth_recovery_sequence` 已证明，相关基础设施为
+available，并已补上现有证明的 Blueprint 链接和完成标记，未新增账本证书。
+Cheeger-infimum 基础设施仍 missing，具体是
+超水平集积分界和反向比较。coarea、光滑 Sard、Gauss–Green 和恢复序列不再是缺失前提。
+下方各轮记录保留当时的状态；当前状态以本段及
+[语义对齐记录](../../../research/decisions/2026-09-16-semantic-alignment.md)为准。
+
+历史进度（2026-09-16，L13 轮）：**加权 coarea 推广到局部 Lipschitz**。
+[`Geometry/LocallyLipschitzCoarea.lean`](Geometry/LocallyLipschitzCoarea.lean) 证明
+`KLS.coarea_of_locallyLipschitz`：只假设 `LocallyLipschitz u`，给出同样的加权等式与切片
+`AEMeasurable`，不要求 Lipschitz 常数、不要求 C¹，也不加有界、有限体积、可积性或 SFinite。
+它是 **L11 与 L12 的共同推广**（两条原定理语句、证明均不变，也没有用它重述）：
+`LipschitzWith K u` 与 `ContDiff ℝ 1 u` 都蕴涵 `LocallyLipschitz u`。
+推广是**严格**的，客户端证明 `x ↦ x² + ‖x‖` 局部 Lipschitz、对任何常数都不是全局 Lipschitz、
+且在 0 处不可微，两条原定理都够不到它。证明用半开环带归约到 L12：闭球上 McShane 延拓成全局
+Lipschitz 代表，每片落在**开**球内，故梯度逐点相等、水平集切片一致，再用可数不交可加性拼接。
+**本轮不迁洞**，直接洞仍 **8（1/2/5）**，证书仍 **24**，perimeter infrastructure 仍 **missing**。
+审计见 `research/audits/LocallyLipschitzCoareaAudit.lean`（10 条报告全标准，不导入任何 WIP），
+详见[L13 决定](../../../research/decisions/2026-09-16-locally-lipschitz-coarea.md)。
+
+**对数凹 Cheeger–Buser 线（等周常数几种定义的对齐直到与 Poincaré 常数的双向比较，
+含 `WIP/CheegerInfimum.lean` 剩下的两个洞）已于 2026-09-16 交给王浩丞，本轮刻意未触碰。**
+
+上一轮（2026-09-16，T2 迁出轮）：**最后一个原始 coarea 洞已闭合**。
+`Analysis.lintegral_enorm_gradient_mul_eq_lintegral_levelSet` 从
+`WIP/AnalyticPrerequisites.lean` 迁到无洞的
+[`Geometry/LipschitzCoarea.lean`](Geometry/LipschitzCoarea.lean) 末尾，
+`pp.all` 签名经**机器逐字节核对**不变（同一 universe 参数 `u`、同样六个实例及顺序，
+含语句里 `gradient` 实际使用的 `CompleteSpace V`、同样的 binder 与假设名、同样的结论），
+由同文件的 **L12** `KLS.coarea_of_lipschitz` 在 `S = Set.univ` 时证明，不新增兼容 alias，
+不重复证明 coarea，也不增加 C¹/正维/有限体积/可积性/SFinite 假设。**本轮未证明新定理。**
+直接洞 **9（2/2/5）→ 8（1/2/5）**；`WIP/AnalyticPrerequisites.lean` 只剩尖锐
+`C^(finrank)` `Analysis.sard`，它与 `Analysis.ae_forall_fderiv_ne_zero` 的语句和证明原样保留。
+T1/T2/T3 三个原始目标现已全部正式接通。证书仍 **24**，perimeter infrastructure 仍 **missing**。
+审计见 `research/audits/LipschitzCoareaMigrationAudit.lean`，
+详见[迁出决定](../../../research/decisions/2026-09-16-t2-coarea-migration.md)。
+
+上一轮（2026-09-16，L12 完成）：`Analysis/LipschitzJet.lean` 证明 **L6a** 紧 jet 提取，
+`Analysis/LipschitzC1Pieces.lean` 证明 **L7** 精确 C¹ 分片，
+`Geometry/LipschitzCoarea.lean` 证明 **L12** 的 Lipschitz
+带权 coarea 等式及切片 AEMeasurable，不假设 C¹、正维、有界、有限体积或有限权重。
+原始 L6a/L7/L12/T2 语句的证明均通过新客户端审计，15 条公理报告全标准。
+该轮所有旧 Lean 文件保持原字节，直接洞仍 **9（2/2/5）**。
+
+历史轮次（2026-09-16，L6 完成）：[`Analysis/WhitneyConstruction.lean`](../Analysis/WhitneyConstruction.lean)
+已证明紧集一阶 jet 的全局 C¹ 延拓，精确保留值和环境导数；含空集、稀疏集和零维。
+定量覆盖、光滑单位分解及两项一致误差估计均已构造。新客户端证明原始 L6 全部量词，
+13 条公理报告全标准。下一步 **L6a 紧 jet 提取 → L7 精确 C¹ 分片 → L12 Lipschitz coarea**。
+直接洞 **9（2/2/5）**、证书 **24**、perimeter infrastructure **missing** 不变。
+
+以下为各轮历史快照；其中“未证明”和“下一步”描述的是当轮状态。
+
+历史轮次（2026-09-16，L6 边界拼接）：`Analysis/WhitneyExtension.lean` 已证明从补集上
+具有定量 jet 估计的 C¹ 候选函数拼出全局 C¹ 延拓，保持紧集上的精确值与导数。
+**还没有构造满足估计的候选函数，因此 L6 一般存在性仍未证明**；下一步是 Whitney
+覆盖、带导数控制的单位分解及仿射 jet 求和估计。新客户端 13 条公理报告全标准。
+直接洞 **9（2/2/5）**、证书 **24**、perimeter infrastructure **missing** 不变。
+
+上一轮（2026-09-16，FirstOrderJet 收尾）：紧集上一阶 jet 的一致余项条件已证明为
+全局 C¹ 实现的**必要条件**（`Analysis.uniform_jet_remainder_of_contDiff`）。
+**L6 的延拓存在性仍未证明**，是下一步；L6a/L7/Lipschitz coarea 仍未完成。
+直接洞 **9（2/2/5）**、证书 **24**、perimeter infrastructure **missing**。
+
+上一轮（2026-09-16，C¹ coarea 迁出轮）：**第二个原始 coarea 洞已闭合**。
+`Isoperimetry.lintegral_enorm_gradient_mul_eq_lintegral_levelSet` 已从 `WIP/CheegerInfimum.lean`
+迁出到无洞的 [`Geometry/IsoperimetryCoarea.lean`](Geometry/IsoperimetryCoarea.lean)，
+`pp.all` 签名**逐字节不变**（机器 `diff` 核对，含未使用的 `CompleteSpace`、
+`SecondCountableTopology` 与未使用的假设名 `hK`），由上一轮的 L11 取 `S = univ` 证明，
+**不再带 `sorryAx`**。直接洞 **10（2/3/5）→ 9（2/2/5)**；`WIP/CheegerInfimum.lean`
+只剩两条 Cheeger 比较。本轮**没有新定理**，也**没有**证明 Lipschitz 情形
+（`Analysis.lintegral_enorm_gradient_mul_eq_lintegral_levelSet` 不假设 `C¹`，仍是直接洞，
+需要 L12 → L7 → L6）。
+详见[迁出决定](../../../research/decisions/2026-09-16-isoperimetry-coarea-migration.md)。
+
+上一轮（2026-09-16，C¹ coarea 轮）：**已证明加权 coarea 路线的 L11**——对**任意** `C¹` 实函数、
+任意可测集、任意可测 `ℝ≥0∞` 权重给出带权 coarea 等式与切片积分的 `AEMeasurable`
+（[`Geometry/SmoothCoarea.lean`](Geometry/SmoothCoarea.lean) 的 `coarea_of_contDiff`）。
+`u` 不要求 Lipschitz、有界或紧支撑，`S` 不要求有界或有限体积，`g` 允许恒为 `⊤`，
+**对导数无任何非退化要求**（临界集可以是整个空间）。L9 与 L10 在此恰好接上、缺一不可：
+临界集是闭集故其补是开集，L9 管 `S ∩ R`；左端临界部分因 `gradient u = 0` 贡献为零；
+右端由 L10 使临界切片几乎处处零测，同一条 a.e. 相等又把 L9 的 `AEMeasurable` 搬到完整切片函数。
+**目标 T3 随之证明**，它正是直接洞 `Isoperimetry.lintegral_enorm_gradient_mul_eq_lintegral_levelSet`
+的语句（该声明本来就假设 `ContDiff ℝ 1 u`，其 `LipschitzWith` 假设用不上）。
+**本轮未动 WIP**，故直接洞仍 **10**（2/3/5）；迁出可使 `WIP/CheegerInfimum.lean` 由 3 洞降至 2、
+总数降至 **9**，按惯例是单独一轮。**Lipschitz 情形仍未证明**：那需要 L12 → L7 → L6 的闭集
+Whitney 延拓，全部未证。
+详见[C¹ coarea 决定](../../../research/decisions/2026-09-16-smooth-coarea.md)。
+
+上一轮（2026-09-15，正则 coarea 轮）：**完整证明 L9 的两个分量**。
 [`Geometry/RegularCoarea.lean`](Geometry/RegularCoarea.lean) 的
 `coarea_of_contDiffOn_of_fderiv_ne_zero` 给出正则开域上的 C¹ 带权 coarea 等式，连同截面积分的
 `AEMeasurable`。无需全局 C¹/Lipschitz、有界性、有限体积、可积性、非零维或 SFinite。
@@ -94,7 +183,7 @@ coarea 洞是对 `univ` 陈述的，紧集版本填不了它。
 | [Definitions.lean](Definitions.lean) | 紧集对数凹定义、局部斜率、文献测试域和常数；共享定义入口 |
 | [Statement.lean](Statement.lean) | 协方差归一化的 KLS 猜想命题；没有 KLS 证明 |
 | [LogConcave/](LogConcave/README.md) | 对数凹传输、紧集/Borel 等价、内禀绝对连续性、Borell 密度表示、仿射协方差常数的对数凹契约与闭形式、环境平移下的对数凹性与重心、KLS 的仿射/各向同性归约、实轴上的一维 `4·Var` Poincaré 界（`LogConcave/Line/`，Bobkov 的 `12·Var` 作为推论保留） |
-| [Gradient.lean](Gradient.lean) | 局部斜率与梯度关系，以及绝对连续性前提下的能量和测试域识别；已证明 |
+| [LocalSlope/Gradient.lean](../Energy/LocalSlope/Gradient.lean) | 局部斜率与梯度关系，以及绝对连续性前提下的能量和测试域识别；已证明 |
 | [Isotropic.lean](Isotropic.lean) | 有限二阶矩、零均值和单位协方差的定义；白化在 `Probability/CovarianceWhitening.lean`，仿射/各向同性归约在 `LogConcave/Isotropic.lean` |
 | [Isoperimetry.lean](Isoperimetry.lean) | 仿射载体上的边界含量、等周常数及逆尺度定义；不提供 Cheeger 比较 |
 | [ConditionalFiber.lean](ConditionalFiber.lean) | 条件纤维能量的构造及六条已证明的良定义性契约；本文件不提供闭性、Markov 性或框架界 |
@@ -109,23 +198,29 @@ coarea 洞是对 `univ` 陈述的，紧集版本填不了它。
 | [Geometry/MinkowskiContent.lean](Geometry/MinkowskiContent.lean) | 无洞坐标空间含量层（本地导入闭包为空，只依赖 Mathlib）：`minkowskiContent` 定义、`measure_closure_eq_of_minkowskiContent_ne_top`、局部上确界 `ballSup` 及其 Lipschitz 传递与近邻见证 `thickening_superlevel_subset`，以及已证明的 Minkowski 余面积不等式 `lintegral_minkowskiContent_superlevel_le`；任意概率律（含奇异、原子），`u` 只要 `C¹` 与全局 Lipschitz，不要求密度、绝对连续性、有界值域或非零维数 |
 | [Geometry/MinkowskiConstant.lean](Geometry/MinkowskiConstant.lean) | 无洞 Cheeger 下确界层（本地导入闭包只有无洞的 `Geometry/MinkowskiContent.lean`）：由 WIP 原样迁入的 `minkowskiConstant` 与 `minkowskiConstant_eq_top_of_subsingleton`（`pp.all` 签名逐字节不变）、下确界的乘积形式 `minkowskiConstant_mul_min_le`（零质量与满质量由 `⊤ * 0 = 0` 收尾，不代入下确界）、开闭超水平集质量的几乎处处一致 `ae_measure_superlevel_lt_eq_le`（任意 `SFinite` 测度、任意可测 `u`）、平衡量可测性 `measurable_min_measure_superlevel`（任意 `u`），以及已证明的 `minkowskiConstant_mul_lintegral_min_superlevel_le`；任意概率律（含奇异、原子），不要求密度、非原子性、非零维数或 `h_M` 有限 |
 | [Geometry/DistanceCutoff.lean](Geometry/DistanceCutoff.lean) | 无洞距离截断层（**本地导入闭包为空**，只依赖 Mathlib）：由 WIP 原样迁入的 `distanceCutoff` 定义、`distanceCutoff_mem_Icc`、`lipschitzWith_distanceCutoff`、两条边界取值引理与 `L¹(ν)` 收敛 `tendsto_distanceCutoff_indicator`（`pp.all` 签名逐字节不变），以及已证明的梯度积分估计 `lintegral_enorm_gradient_distanceCutoff_le`；`B` 任意（不要求非空、可测、闭、有界），右端保留 `ν (closure B)`，`m`／Haar／`hac` 原样保留但证明不使用。**逐点**结论：截断在两个常值集上取全局极值，`IsLocalMax/IsLocalMin.fderiv_eq_zero` 无需可微性假设，故不用 Rademacher、Lebesgue 密度定理或水平集梯度一般引理 |
-| [Geometry/CheegerInfimum.lean](Geometry/CheegerInfimum.lean) | 无洞单向比较层（32 个本地导入，**无 WIP**）：由 WIP 原样迁入的 `smoothConstant`、`smoothConstant_eq_top_of_subsingleton`、`lintegral_measure_symmDiff_superlevel`、`min_measure_le_add_measure_symmDiff`、`tendsto_lintegral_min_superlevel`（`pp.all` 签名逐字节不变），以及已证明的 `minkowskiConstant_le_smoothConstant`；零维、无可取光滑域、单个域相对周长为 `⊤`、常数为 `⊤` 均被覆盖，不要求支撑或区域有界、边界总测度有限、常数有限或相对周长有限。**只证一个方向**：反方向与等式仍在 WIP |
+| [Geometry/CheegerInfimum.lean](Geometry/CheegerInfimum.lean) | 无洞单向比较层（**无 WIP**）：由 WIP 原样迁入的 `smoothConstant`、`smoothConstant_eq_top_of_subsingleton`、`lintegral_measure_symmDiff_superlevel`、`min_measure_le_add_measure_symmDiff`、`tendsto_lintegral_min_superlevel`（`pp.all` 签名逐字节不变），以及已证明的 `minkowskiConstant_le_smoothConstant`；零维、无可取光滑域、单个域相对周长为 `⊤`、常数为 `⊤` 均被覆盖，不要求支撑或区域有界、边界总测度有限、常数有限或相对周长有限。**只证一个方向**：反方向与等式仍在 WIP |
 | [Geometry/SmoothDomain.lean](Geometry/SmoothDomain.lean) | 无洞基础：光滑区域结构、frontier 定义接口、归一化约定检查、`empty`／`univ`／homothety、局部边界有限性、Haar 零测度与总边界 Hausdorff 缩放；2026-09-14 新增正则超水平集构造 `ofSuperlevel` 与 `ofSuperlevel_carrier`——`C∞` 函数的**严格**超水平集 `{x | t < u x}` 在 `fderiv ℝ u` 于 **`frontier`** 上非零时即为光滑域，定义函数按负子水平约定取 `φ = t - u`，邻域取 `{y | fderiv ℝ u y ≠ 0}`；不要求整条水平集正则、不要求全空间非零、不要求正维数或有界，空边界／空载体／全载体／零维由构造自然覆盖 |
 | [Geometry/Mollification.lean](Geometry/Mollification.lean) | 无洞磨光接口：`mollifiedIndicator`、indicator 局部可积性、卷积表示、光滑性／Lipschitz／`[0,1]` 值域 |
 | [Geometry/MollifiedBoundary.lean](Geometry/MollifiedBoundary.lean) | 无洞后果：`gradient_mollifiedIndicator_eq` 与已证明的 `enorm_gradient_mollified_le`；向量积分可积、核非负、外法向单位长度，不假设区域有界或边界总测度有限 |
 | [Geometry/BoundaryChart.lean](Geometry/BoundaryChart.lean) | 应用层（无 `sorry`）：由 `WIP/AnalyticPrerequisites.lean` 迁入的外法向 `outwardNormal` 及 `outwardNormal_eq`、`norm_outwardNormal`、`continuousOn_outwardNormal`、`measurable_outwardNormal`（名称与陈述不变）；切超平面 `tangentSpace`/`tangentEmbedding`/`tangentCoord`、正交分解 `isGraphSplitting_tangent`、`finrank_tangentSpace`；局部边界图表 `BoundaryChart` 与 `exists_boundaryChart`（柱内边界恰为图、区域恰为图下方、沿图的外法向 `(ι(-∇g)+ν)/√(1+‖∇g‖²)`）；面积等式 `BoundaryChart.surfaceMeasure_image`。直接导入无洞基础 `Geometry/SmoothDomain.lean`，没有 WIP 依赖 |
 | [Geometry/LocalGaussGreen.lean](Geometry/LocalGaussGreen.lean) | 应用层（无 `sorry`）：图表局部 Gauss–Green `BoundaryChart.integral_divergence_eq_integral_inner_outwardNormal`——对满足 `tsupport F ⊆ C.cylinder` 的紧支撑 `C¹` 向量场，`∫_U div F = ∫_{∂U} ⟪F, ν⟫ ∂surfaceMeasure`；两条局部化引理 `integral_divergence_carrier`（体积分退化到全局子图，柱外 `F` 与 `divergence F` 同时为零）与 `integral_inner_outwardNormal_frontier`（通量退化到单张图片，Jacobian 与单位法向分母逐点抵消）。**不是**任意紧支撑场的全局定理，全局拼接在 `Geometry/GaussGreen.lean`；不假设边界总测度有限 |
 | [Geometry/GaussGreen.lean](Geometry/GaussGreen.lean) | 应用层（无 `sorry`）：**全局** Gauss–Green `SmoothDomain.integral_divergence_eq_integral_inner_outwardNormal`——对任意紧支撑 `C¹` 向量场，`∫_U div F = ∫_{∂U} ⟪F, ν⟫ ∂surfaceMeasure`，不假设区域有界、边界总测度有限、`F` 更光滑或 `V` 非平凡；三类局部块引理 `…_of_tsupport_subset_carrier`（内部块）、`…_of_tsupport_subset_compl_closure`（外部块）与图表块（调用 `LocalGaussGreen`）；由 `WIP/AnalyticPrerequisites.lean` 迁入的 `isLocallyFiniteMeasure_surfaceMeasure_frontier`、`integrableOn_smul_outwardNormal`（名称与陈述不变），以及有限求和交换所需的 `norm_outwardNormal_le_one`、`integrableOn_inner_outwardNormal` |
-| [Geometry/SurfaceSlicing.lean](Geometry/SurfaceSlicing.lean) | 无洞切片可测性与 Eilenberg 界层：Borel 集截面 a.e. 可测 `aemeasurable_surfaceMeasure_inter_levelSet` 与可测权重版 `aemeasurable_setLIntegral_inter_levelSet`（连同内正则性分解 `exists_isCompact_seq_volume_sdiff_eq_zero`）——`S` 只要可测，不要求有界或有限体积，`u` 连续且**只在 `S` 上** Lipschitz，`g` 允许恒为 `⊤`；**只给可测性，不给等式**。紧集可测性：紧集截面可测性 `measurable_surfaceMeasure_inter_levelSet`——`S` **紧**、`u` 仅连续时截面测度是水平的 Borel 可测函数，不要求 Lipschitz、有限维或有限测度，零维与一维同一条语句覆盖；对一般 Borel 集**无**断言。显式常数 `eilenbergConstant V = 4 ω_{n-1}/ω_n`（`eilenbergConstant_pos`，不声称尖锐）与带权上界 `exists_measurable_majorant`——`u` **只在 `S` 上** Lipschitz 时，截面函数被**可测**支配函数控制且 `∫⁻ F ≤ eilenbergConstant V · K · volume S`；不要求 `S` 可测、有界、非空或有限体积，`K = 0`、`volume S = ⊤` 与零维都是显式分支。零集切片：`ae_surfaceMeasure_inter_levelSet_eq_zero`——`volume N = 0` 且 `u` **只在 `N` 上** Lipschitz 时，几乎每个水平 `t` 满足 `surfaceMeasure V (N ∩ {u = t}) = 0`。不要求 `N` 可测、有界、非空，不要求 `u` 全局 Lipschitz、可微或可测，`K = 0` 与零维均覆盖；零维由自然数减法给 `ℋ^{0-1} = ℋ⁰ = volume`（**不**把零维纤维测度当成零测度），正维由 `Analysis.hausdorffMeasure_finrank_eq_smul_volume` 与 `(n-1)+1 = n` 归约到 `Analysis/HausdorffSlicing.lean`。**不给**截面可测性，也不填任何 coarea 洞 |
+| [Geometry/SurfaceSlicing.lean](Geometry/SurfaceSlicing.lean) | L1–L5：显式非尖锐 Eilenberg 上界、零集切片、连续函数的紧集截面 Borel 可测性，以及连续且在可测集合上 Lipschitz 时的截面与可测 ENNReal 权重积分的 a.e. 可测性。无有限体积、权重有限或正维假设；不假设 surfaceMeasure 为 SFinite。零维使用 ℋ⁰，而非零测度。这里只给可测性与上界，coarea 等式由后续模块证明 |
 | [Geometry/SurfaceMeasure.lean](Geometry/SurfaceMeasure.lean) | 基础定义层（无 `sorry`）：单位球体积 `unitBallVolume`、归一化 Hausdorff 测度 `hausdorffNormalized` 与面积测度 `surfaceMeasure`；不含定理，供 `Analysis/LevelSet.lean` 与周长层共用 |
 | [Geometry/RegularSuperlevel.lean](Geometry/RegularSuperlevel.lean) | 无洞正则超水平集层：由 `WIP/CheegerInfimum.lean` 迁入的 `SmoothDomain.frontier_superlevel_subset` 与 `SmoothDomain.ae_exists_superlevel`（`pp.all` 签名逐字节不变）。后者现由**已证明**的光滑 Sard `Analysis.sard_smooth` 经 `Analysis.ae_forall_fderiv_ne_zero_of_contDiff_top` 得到，**不再继承 `sorryAx`**；不用尖锐 `C^(finrank)` 的 `Analysis.sard`。`Geometry/SmoothDomain.lean` 刻意保持与 Sard 无关，故打包放在其上一层 |
+| [Geometry/IsoperimetryCoarea.lean](Geometry/IsoperimetryCoarea.lean) | 无洞 C¹ coarea 交付层：由 `WIP/CheegerInfimum.lean` 迁入的 `Isoperimetry.lintegral_enorm_gradient_mul_eq_lintegral_levelSet`（`pp.all` 签名逐字节不变，机器 `diff` 核对），现由 L11 `coarea_of_contDiff` 取 `S = univ` 证明，**不再带 `sorryAx`**；未使用的 `hK`、`CompleteSpace`、`SecondCountableTopology` 一律保留以固定接口。**不含** Lipschitz 情形 |
+| [Geometry/SmoothCoarea.lean](Geometry/SmoothCoarea.lean) | 无洞 C¹ coarea 层：`isOpen_regular` 与 `coarea_of_contDiff`（L11）——任意 `C¹` `u`、任意可测 `S`、任意可测 `ℝ≥0∞` 权重的带权 coarea 等式加切片 `AEMeasurable`；不要求 Lipschitz、有界、有限体积，`g` 允许恒 `⊤`，临界集可为全空间。由 L9（正则开域）与 L10（临界切片零测）拼成，两者缺一不可。**目标 T3 即其 `S = univ` 特例**；**不含** Lipschitz 情形（需 L12/L7/L6） |
 | [Geometry/CriticalSlice.lean](Geometry/CriticalSlice.lean) | 无洞临界截面层：`isClosed_critical`、`exists_lipschitzOnWith_critical_cover`（临界集上导数为零使 Mathlib 分片引理的逼近变成 `ε`-Lipschitz 估计，分片两两不交且可测）与 `ae_surfaceMeasure_critical_inter_levelSet_eq_zero`（L10）。**L1 的第一个下游消费者**；`u` 不要求 Lipschitz、有界或紧支撑，零维覆盖。**不是 Sard**：对临界**值**集无任何断言 |
 | [Geometry/LevelSetMeasurable.lean](Geometry/LevelSetMeasurable.lean) | 无洞水平集可测性层：由 `WIP/AnalyticPrerequisites.lean` 迁入的 `Analysis.aemeasurable_lintegral_levelSet`（`pp.all` 签名逐字节不变，机器 `diff` 核对），现由 L5 `KLS.aemeasurable_setLIntegral_inter_levelSet` 取 `S = univ` 证明，**不再带 `sorryAx`**。保留 `Analysis` 命名空间是为了公共名不变；文件放在 `KLS/Geometry/` 是因为语句出现 `KLS.surfaceMeasure`。**不含**加权 coarea 等式 |
-| [WIP/](WIP/) | 不进认证聚合导入：`RelativePerimeter.lean` 已清空并删除；`AnalyticPrerequisites.lean` 有 3 条公开定理，coarea **等式**与尖锐 Sard 两个直接洞（可测性半边已迁出到 `Geometry/LevelSetMeasurable.lean`），唯一填体的尖锐 Sard 后果 `ae_forall_fderiv_ne_zero` 仍有传递 `sorryAx`，且**已无任何模块导入该文件**；`CheegerInfimum.lean` 为 3 个洞（`minkowskiContent`、Minkowski 余面积不等式、`minkowskiConstant`、乘积余面积界、`smoothConstant`、单向比较 `h_M ≤ h_S`、距离截断基础及其梯度估计均已迁出并证明；`ae_exists_superlevel` 与 `frontier_superlevel_subset` 已迁出到 `Geometry/RegularSuperlevel.lean` 并不再带 `sorryAx`；coarea 的 `C¹` 特化、反方向与其组装仍是洞） |
+| [WIP/](WIP/) | 隔离的未完成层：`AnalyticPrerequisites.lean` 仅有尖锐 `Analysis.sard` 的 1 个直接洞，`ae_forall_fderiv_ne_zero` 传递依赖它；`CheegerInfimum.lean` 有超水平集积分界与反向比较的 2 个直接洞，等式及其内禀推论仍继承 `sorryAx`。原始 T1/T2/T3 均已迁到无洞几何模块；这些 WIP 文件不进库根聚合或证书导入闭包 |
 
-两个 KLS WIP 文件共 6 个直接 `sorry`，另有 `Energy/WIP/Cheeger.lean` 的 5 个，合计 11；
+两个 KLS WIP 文件共 3 个直接 `sorry`，另有 `Energy/WIP/Cheeger.lean` 的 5 个，合计 8；
 先前几轮接入并证明了三条已有数学输入的接口（Hausdorff 归一化、边界局部有限性、光滑 Lipschitz 逼近），
 并证明了余维一面积公式（`Analysis/AreaFormula.lean`）、把标量形式 Gauss–Green 归约到向量形式。
+### 历史构造记录
+
+以下按轮次保留当时的证明边界；洞数、未证明项和待迁移项不代表当前状态。当前以页首及文件表为准。
+
 2026-09-13 一轮证明了局部 `C^∞` 边界图表示、区域侧别与外法向公式，并把面积公式接到
 `surfaceMeasure`（`Analysis/ImplicitGraph.lean` 与 `Geometry/BoundaryChart.lean`，均无 `sorry`）。
 同日后一轮证明了光滑子图上的散度公式与带权边界积分换元（`Analysis/SubgraphDivergence.lean`、

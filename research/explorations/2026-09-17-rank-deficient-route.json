@@ -1,0 +1,119 @@
+{
+ "scope": "ROUTE EXPLORATION ONLY for the rank-deficient part of the codimension-m coarea critical set. NO THEOREM WAS PROVED, no library module was added and no existing .lean file was modified. Deliverables: an exact localization of the obstruction, an honest search of Mathlib and this repository, a numbered obligation list with exact Lean statements, line estimates and risk, and the check-only file research/audits/RankDeficientRouteStatements.lean. A PROPOSITION THAT TYPE-CHECKS IS NOT A PROOF: none of the fifteen propositions is proved anywhere in this repository. Not extended to Sard. No hole migrated. The log-concave Cheeger-Buser line belongs to collaborator Wang Haocheng and was not touched.",
+ "head": "34b92695ece4f636a1a7f1eafbbf41c685ee0348",
+ "origin_main": "34b92695ece4f636a1a7f1eafbbf41c685ee0348",
+ "incoming_receipt": "build/verification/20260917T040643.447621Z/report.json",
+ "incoming_snapshot": "269225e023675a7cac5a1f69eae2980bcf7d9e96bd073111871dfe6b8e9e9efb",
+ "incoming_entries": 570,
+ "incoming_replayed_modules": 215,
+ "incoming_workspace_drift": [],
+ "new_declarations": [],
+ "theorems_proved_this_round": 0,
+ "obstruction": {
+  "stratification": "the coarea critical set is {x | rank (fderiv u x) < m}, stratified as Sigma_r = {x | rank (fderiv u x) = r} for r < m; the proved vanishing-derivative result is exactly the layer r = 0",
+  "why_the_proved_method_stops_at_r_zero": "the approximating partition's linear models are values of the derivative; on Sigma_0 they vanish, the linear part drops out and u is genuinely epsilon-Lipschitz on each piece. For r >= 1 the derivative does not vanish and u is not Lipschitz-small in any direction inside the range of Du.",
+  "wrong_exponent": "projecting onto the m - r surviving directions does make Q . u epsilon-Lipschitz on the pieces, but the Eilenberg bound then reads integral over tau of mu_H[d] (S inter {Q.u = tau}) <= C * eps^(m-r) * mu_H[d + (m-r)] S, so a finite right-hand side for S of positive Lebesgue measure forces d + (m-r) = n, that is d = k + r. The conclusion is mu_H[k+r]-nullity, and a mu_H[k+r]-null set can have infinite mu_H[k]: the wrong direction. This is route statement N1.",
+  "infinite_right_hand_side": "insisting on d = k instead puts mu_H[k + (m-r)] S = mu_H[n-r] S on the right, which is infinity for every r >= 1 as soon as S has positive Lebesgue measure, so the bound is vacuous. This is route statement N2.",
+  "conclusion": "no single slicing works at any exponent; the slicing must be iterated"
+ },
+ "route": {
+  "idea": "slice first along the r directions in which the differential is already surjective, then apply the Eilenberg bound inside a fibre along the m - r surviving directions",
+  "step_one": "with W1 the range of the differential at a point of Sigma_r and P, Q the orthogonal projections onto W1 and its orthogonal complement, v = P . u is a submersion near that point, so the PROVED regular coarea formula coarea_of_contDiffOn_of_coareaJacobian_ne_zero applies and its fibres carry finite H^(n-r) measure",
+  "key_linear_algebra": "on the stratum P is injective on the range of Du, so ker (P . Du) = ker (Du) and the differential vanishes along the fibre directions; hence Q . u has vanishing derivative along the fibre",
+  "step_two": "inside a fibre the Eilenberg bound is used with d = k and target of dimension m - r, and d + (m - r) = k + m - r = n - r is exactly the dimension in which the fibre has finite measure",
+  "recombination": "Fubini across the orthogonal splitting of the target turns 'for almost every s, for almost every tau' into 'for almost every t'",
+  "technical_point_found_this_round": "a chord of a fibre is not a tangent vector: two points in the same fibre of P . u only give ||P A (b-a)|| <= ||P|| eps ||b-a||, and converting that into smallness of ||A (b-a)|| needs a norm bound on a right inverse of P . A, uniform over the neighbourhood because every scale of the eps -> 0 limit uses a different partition"
+ },
+ "mathlib_search": {
+  "coarea": "NO coarea formula anywhere in Mathlib (repository-wide search for 'coarea' has zero hits)",
+  "constant_rank": "NO constant-rank theorem; the only 'constantRank' occurrences are in RingTheory and are unrelated to submersions",
+  "federer_degenerate_part": "absent",
+  "sard": "only the equidimensional Sard lemma addHaar_image_eq_zero_of_det_fderivWithin_eq_zero in MeasureTheory/Function/Jacobian.lean, plus two dense-complement statements in Topology/MetricSpace/HausdorffDimension.lean that give density, not nullity",
+  "rank_semicontinuity": "isOpen_setOfPred_nat_le_rank in Analysis/Normed/Module/FiniteDimension.lean gives openness of {f | r <= rank f}, which is exactly what the stratification needs",
+  "approximates_linear_on": "exists_partition_approximatesLinearOn_of_hasFDerivWithinAt gives the approximation and a countable disjoint measurable partition and NOTHING about rank; ApproximatesLinearOn.antilipschitz needs the linear model to be an equivalence and does not apply when the model is rank-deficient. What that line can supply is exactly the input of obligation R4, no more and no less.",
+  "orthogonal_splitting": "Submodule.orthogonalDecomposition, LinearIsometryEquiv.measurePreserving and WithLp.volume_preserving_ofLp are all present, so obligation R6 has all its parts",
+  "hausdorff_dimension": "hausdorffMeasure_of_lt_dimH supplies N2"
+ },
+ "repository_has": [
+  "the codimension-m Eilenberg inequality, Analysis/VectorHausdorffSlicing.lean",
+  "the regular codimension-m coarea formula, Analysis/VectorRegularCoarea.lean",
+  "unconditional slice measurability, Analysis/VectorSliceMeasurable.lean",
+  "the vanishing-derivative critical slice, Analysis/VectorCriticalSlice.lean",
+  "coareaJacobian and the adjoint line, Analysis/CoareaJacobian.lean",
+  "isometryEquivOfFinrankEq, Analysis/VectorFiberIntegral.lean"
+ ],
+ "obligations": [
+  {"id": "R0", "content": "TARGET: the rank-deficient critical set is H^k-null in almost every level", "lines": null, "risk": "assembled from R1-R8", "proved": false},
+  {"id": "R1", "content": "the rank strata are measurable and the critical set is their finite union over r < m", "lines": 60, "risk": "low", "proved": false},
+  {"id": "R2", "content": "kernel lemma: on the stratum the differential vanishes along the fibre of the regular part", "lines": 40, "risk": "low", "proved": false},
+  {"id": "R3", "content": "approximate right inverse of a surjection, pointwise and locally uniform", "lines": 170, "risk": "low pointwise, moderate uniform", "proved": false},
+  {"id": "R4", "content": "the tangential small-Lipschitz estimate on fibres: the new analytic content and the single point of no return", "lines": 120, "risk": "moderate", "proved": false},
+  {"id": "R5", "content": "the fibres of the regular part carry finite H^(n-r) measure at almost every level", "lines": 150, "risk": "moderate", "proved": false},
+  {"id": "R6", "content": "Fubini across the orthogonal splitting of the target", "lines": 150, "risk": "moderate, instance plumbing", "proved": false},
+  {"id": "R7", "content": "the local per-stratum slicing: assembly of R1-R6", "lines": "450-600", "risk": "high", "proved": false},
+  {"id": "R8", "content": "localization of a local null-slicing statement to a global one", "lines": 90, "risk": "low to moderate", "proved": false},
+  {"id": "R9", "content": "the consumer: the codimension-m coarea formula with no dichotomy hypothesis", "lines": 60, "risk": "low", "proved": false},
+  {"id": "R10", "content": "the equidimensional degenerate case n = m, from Mathlib's equidimensional Sard lemma", "lines": 80, "risk": "low, CHEAP", "proved": false},
+  {"id": "N1", "content": "diagnostic: the wrong exponent the one-step method yields", "lines": 120, "risk": "low to moderate", "proved": false},
+  {"id": "N2", "content": "diagnostic: lowering the exponent makes the right-hand side infinite", "lines": 40, "risk": "low", "proved": false}
+ ],
+ "total_estimated_lines": 1500,
+ "recommended_order": ["R2", "R1", "R3", "R4", "R5 and R6 in parallel", "R7", "R8", "R9"],
+ "explicitly_not_recommended_now": [
+  "do not start with R7: it depends on all five earlier obligations and would only produce a skeleton full of sorry",
+  "do not count R10 as progress on the rank-deficient part: it is cheap and can stand as an audit witness, but the equidimensional Sard lemma says nothing about the intermediate ranks, which are the whole difficulty",
+  "do not attempt any Sard theorem: this route targets null critical SLICES and asserts nothing about the measure of the set of critical VALUES, which for a merely C1 map may well be positive",
+  "do not attempt the full degenerate Federer coarea formula or C1 Morse-Sard in one go",
+  "do not touch the log-concave Cheeger-Buser line (Wang Haocheng), sharp finite-regularity Sard, or the five Energy holes"
+ ],
+ "why_nothing_was_proved": "R10 is genuinely cheap, but proving it into the library needs a new library module, and a new module must join the aggregate import in formalization/FunctionalInequalities.lean to be covered by the default lake build, which would mean modifying an existing .lean file. This round was instructed not to. R10 is therefore recorded as cheap-but-unproved rather than smuggled in.",
+ "route_statement_file": {
+  "path": "research/audits/RankDeficientRouteStatements.lean",
+  "lines": 309,
+  "checks": 15,
+  "declarations": 0,
+  "axioms": 0,
+  "sorry": 0,
+  "strict_compile": "passes with -DwarningAsError=true",
+  "local_import_closure_modules": 28,
+  "wip_modules_in_closure": 0,
+  "disclaimer_in_header": "a proposition that type-checks is not a proof"
+ },
+ "route_statement_review": {
+  "area_formula_route_file_byte_unchanged": true,
+  "new_errors_found": 0,
+  "known_errors_unchanged": ["B1 normalization mismatch", "A0 falsified"],
+  "new_observation_not_an_error": "A5 carries the same mu_H-against-Lebesgue pairing as the falsified A0, but A5 is an implication whose proof is countable additivity and is therefore normalization-agnostic, so A5 is NOT falsified; only its conclusion is the literally false A0, so its hypothesis is unsatisfiable in that normalization. Recorded, file not modified."
+ },
+ "scalar_consistency": "for m = 1 non-surjective and zero are the same condition for a real differential, so the rank-deficient part is EMPTY and R0 degenerates to the already proved scalar L10; the route adds nothing and claims nothing new in codimension one",
+ "boundary_cases_in_the_statements": {
+  "zero_dimensional_target": "R0 needs no positivity of the codimension: with finrank W = 0 every linear map into W is surjective, the critical set is empty and R0 is vacuous rather than false, so the hypothesis was deliberately NOT imposed",
+  "zero_dimensional_ambient_space": "forced to be zero-dimensional as well by k + finrank W = finrank V with finrank W = 0, and covered by the same vacuous branch",
+  "no_finiteness_hypothesis": "R0, R1, R2, R3, R4, R8 and R9 assume no finiteness; R5 assumes relative compactness because that is exactly what makes the fibre measure finite, and N1 assumes mu_H[n] S finite because the majorants of the disjoint pieces have to add up",
+  "r_equal_m_in_N1": "0 < finrank W2 is a real hypothesis of N1: with r = m there is no direction left to project onto, the Eilenberg constant is eps^0 = 1 and the statement is false",
+  "R7_only_reaches_points_of_the_stratum": "at a point of lower rank no fixed rank-r projection works however close the stratum comes; R8 only has to cover the set being sliced, so this is enough"
+ },
+ "audit": {
+  "new_declarations_audited": 0,
+  "reason": "the round proved nothing, so there is no new declaration to audit and no new axiom report",
+  "clients_rerun": 42,
+  "clients_rerun_breakdown": {"research/audits": 35, "build/audit": 7, "pre_existing": 41, "new": 1},
+  "client_failures": 0,
+  "strict": "every client run with -DwarningAsError=true",
+  "standard_axiom_reports": 558,
+  "sorryAx_reports": 12,
+  "sorryAx_report_locations": ["research/audits/LevelSetMeasurableAudit.lean", "research/audits/IsoperimetryCoareaAudit.lean", "research/audits/LipschitzCoareaMigrationAudit.lean", "build/audit/SuperlevelSardScope.lean"],
+  "sorryAx_reports_are_deliberate": true,
+  "nonstandard_axioms_in_closed_declarations": 0
+ },
+ "holes": {"KLS/WIP/AnalyticPrerequisites": 1, "KLS/WIP/CheegerInfimum": 2, "Energy/WIP/Cheeger": 5, "total": 8},
+ "certificates": 24,
+ "sard_proved_this_round": false,
+ "general_coarea_formula_proved_this_round": false,
+ "hole_migrated": false,
+ "existing_lean_files_modified": 0,
+ "library_modules_added": 0,
+ "committed": false,
+ "pushed": false,
+ "real_git_index_modified": false
+}

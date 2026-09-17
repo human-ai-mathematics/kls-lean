@@ -9,8 +9,9 @@ Gaussian 和 tensorization 定理使用光滑测试接口，可以通过有限�
 与 locally Lipschitz 文献常数的等价也已完成 Lean 证明：一般比较要求内禀绝对连续性；
 对于对数凹概率测度，该绝对连续性已被证明，因此无需另加这一假设。见
 [文献常数比较](LocalSlope/SmoothTestComparison.lean) 与
-[一般对数凹版本](LocalSlope/Poincare.lean)。这不提供完整 Borell 密度代表与矩定理，
-也不证明 Cheeger 能量识别或 KLS。
+[一般对数凹版本](../KLS/LogConcave/Poincare.lean)。完整 Borell 密度代表与矩定理已有独立证书；
+内禀律绝对连续时，Cheeger 能量识别 `Ecan = 2 Ch`（局部斜率约定）也已证明，覆盖所有对数凹律。
+任意奇异律的无条件识别与 KLS 仍未证明。
 
 当前接口默认允许随数学设计调整，已证明的接口也不例外；证明工作不以接口冻结为前提。
 认证针对当前声明与证明。修改假设、结论、测试域或归一化时，应明确记录变化，同步依赖并
@@ -115,7 +116,8 @@ Relaxation/Basic
 
 [Relaxation/Contraction.lean](../Energy/Relaxation/Contraction.lean) 另给条件性转移：若连续变换
 在具体测试的 realization 上满足 `RelaxedContractionBound`，它就在所有点降低 relaxed energy。
-具体光滑梯度实现尚未提供所有 normal contractions 的这个前提。
+具体光滑梯度实现已在 [Dirichlet.lean](../Energy/SmoothGradient/Dirichlet.lean) 中
+证明所有 normal contractions 的这个前提，并得到任意 Borel 概率律下的 Markov/Dirichlet 性。
 
 ## 欧氏实现与仿射支撑
 
@@ -154,7 +156,7 @@ Blueprint 的 `C_P^can` 是第三行的简写。当前 Lean 名称使用 `Smooth
 测度上无权常数的别名。
 
 已证明的桥接顺序是 ambient/intrinsic 相等、smooth-test/relaxed 常数相等，然后在一般 log-concave
-情形下接通 locally Lipschitz 文献常数（`LocalSlope/Poincare.lean`）。smooth-test/relaxed 桥可使用 relaxation 上界、逼近序列和
+情形下接通 locally Lipschitz 文献常数（`KLS/LogConcave/Poincare.lean`）。smooth-test/relaxed 桥可使用 relaxation 上界、逼近序列和
 `L²` 方差连续性，不依赖 raw/core agreement 或 Cheeger identification。
 
 前两步已有 [12 条已证明比较定理](Euclidean/README.md)，并由 `Foundation` 导出。
@@ -178,13 +180,17 @@ Blueprint 的 `C_P^can` 是第三行的简写。当前 Lean 名称使用 `Smooth
 smooth-gradient 松弛及其内禀拉回的 Markov/Dirichlet witness 已在
 `Energy/SmoothGradient/Dirichlet.lean` 证明（对任意 Borel 概率律）；局部密度假设下的 raw/core agreement 已在
 `Energy/SmoothGradient/Core.lean` 证明（`LocalDensity`），无密度时对环境预能量不成立
-（`Energy/SmoothGradient/NormalDirection.lean`）；当前还没有
-`Ecan = 2 Chμ`、自伴生成元、半群或 reciprocal spectral-gap 定理；whitening 与仿射/各向同性归约已在
-`KLS/LogConcave/Isotropic.lean` 证明；实轴上对数凹律的一维界 `C_P^lit(ν) ≤ 12·Var_ν` 已在
-`KLS/LogConcave/Line/Poincare.lean` 证明（`LocalSlope/Basic.lean` 补充了零维方向空间的常数为零）。
+（`Energy/SmoothGradient/NormalDirection.lean`）。`Ecan = 2 Chμ` 已在
+`Energy/Cheeger.lean` 中对内禀律绝对连续的情形证明，采用局部斜率约定，因而覆盖全部对数凹律；
+任意奇异律的识别、自伴生成元、半群及 reciprocal spectral-gap 接口仍未完成。
+whitening 与仿射/各向同性归约已在 `KLS/LogConcave/Isotropic.lean` 证明；
+实轴上对数凹律的一维界 `C_P^lit(ν) ≤ 4·Var_ν` 已在
+`KLS/LogConcave/Line/SharpPoincare.lean` 证明，系数 12 的旧界另有独立证明。
+`LocalSlope/Basic.lean` 包含零维方向空间的常数为零。
 旧光滑测试常数、ambient relaxed 常数与所选 intrinsic-affine 常数的等价已经由 Lean 证明；
-locally Lipschitz 文献常数的本地定义与比较仍待形式化。以上剩余工作由 Blueprint 中不同的
-节点承载；KLS 主命题也尚未成为本地 Lean 声明。
+locally Lipschitz 文献常数的定义、绝对连续情形及一般对数凹情形的比较也均已形式化。
+剩余工作由 Blueprint 中不同节点承载；`KLS/Statement.lean` 中的 `KLS.Conjecture`
+已给出维数无关目标的精确命题定义，但没有证明该命题。
 
 ## 来源与检查
 

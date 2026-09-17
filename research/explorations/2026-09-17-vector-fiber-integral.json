@@ -1,0 +1,765 @@
+{
+ "scope": "The THIRD sub-block of the codimension-m regular coarea case: the FIBREWISE m-DIMENSIONAL CHANGE OF VARIABLES, and its immediate payoff, the AMBIENT SIDE of the local coarea equality. NO COAREA FORMULA IS PROVED. No hole migrated. The log-concave Cheeger-Buser line belongs to collaborator Wang Haocheng and was not touched.",
+ "head": "34b92695ece4f636a1a7f1eafbbf41c685ee0348",
+ "origin_main": "34b92695ece4f636a1a7f1eafbbf41c685ee0348",
+ "incoming_receipt": "build/verification/20260916T163322.273570Z/report.json",
+ "incoming_snapshot": "9f415ea90a30a962ef13bff80995e84f7d3d30c3110785b7f4b3752ace00370d",
+ "incoming_entries": 545,
+ "incoming_replayed_modules": 208,
+ "incoming_workspace_drift": [],
+ "mathlib_gap": {
+  "what": "Mathlib's change of variables lintegral_image_eq_lintegral_abs_det_fderiv_mul is a SELF-MAP statement, f : E -> E, with volume factor |det (f' x)|",
+  "why_it_does_not_apply": "a fibre map t |-> psi (y,t) goes from the level space W to the normal factor K, two DIFFERENT spaces of the same dimension, so that determinant does not even typecheck",
+  "what_was_proved": "lintegral_image_eq_lintegral_normDet_fderiv_mul: the change of variables between two inner product spaces of the same dimension, with LinearMap.normDet as the volume factor, which is defined between different spaces",
+  "proof": "conjugate by a linear isometry equivalence: measure preserving, and of unit norm determinant, so nothing is added; the chosen isometry appears only inside the proof, never in a statement",
+  "hypotheses": "f needs only a within-derivative at each point of s and injectivity on s; the weight is an arbitrary ENNReal function with no integrability, finiteness or continuity"
+ },
+ "equal_dimension_hypothesis": {
+  "necessary": true,
+  "how_shown": "not asserted but exhibited: VectorFiberIntegralAudit.equal_dimension_necessary takes the line map from R into the plane on the unit interval; the left-hand side is 0 because the image lies in a proper subspace, and the right-hand side is 1 because a linear isometry has unit volume factor"
+ },
+ "new_declarations": [
+  "Analysis.isometryEquivOfFinrankEq",
+  "Analysis.lintegral_image_eq_lintegral_normDet_fderiv_mul",
+  "Analysis.fderiv_snd_eq",
+  "Analysis.continuous_normDet_fderiv_snd",
+  "Analysis.setLIntegral_image_vectorVerticalMap",
+  "Analysis.splitVectorEquiv",
+  "Analysis.splitVectorEquiv_apply",
+  "Analysis.setLIntegral_image_levelGraphMap",
+  "Analysis.setLIntegral_coareaJacobian_levelGraphFamily"
+ ],
+ "main_result": "setLIntegral_coareaJacobian_levelGraphFamily: on a Borel piece of a level-graph family the integral of the ambient coarea density against an ARBITRARY ENNReal weight equals the integral over the parameter-level domain of the GRAPH AREA DENSITY, which is exactly what the proved normalized area formula B2 consumes. The substitution is the codimension-m vertical one; the change of density is last round's fibre Jacobian identity applied pointwise.",
+ "scalar_consistency": {
+  "normDet_fderiv_eq_abs_deriv": "the one-dimensional volume factor is the absolute derivative",
+  "codimension_one_verticalMap": "the repository's already proved Analysis.setLIntegral_image_verticalMap is derived VERBATIM from the codimension-m statement"
+ },
+ "is_not": [
+  "no coarea formula of any codimension is proved",
+  "the codimension-m regular case is NOT completed",
+  "no WEIGHTED codimension-m area formula on the fibre side; last round's fibre measure carries weight one only",
+  "no Tonelli assembly in the level variable",
+  "no local-to-global patching and no codimension-m weighted slice measurability",
+  "nothing about the critical set, sharp finite-regularity Sard, the two Cheeger comparisons or the five Energy holes"
+ ],
+ "remaining_work_for_the_regular_case": [
+  "the WEIGHTED codimension-m graph area formula, the analogue of setLIntegral_image_graphMap, upgrading B2 from the measure of a graph to a weighted integral over it",
+  "Tonelli in the level variable, joining this round's ambient side to that fibre side, giving the local coarea equality (scalar analogue setLIntegral_coarea_graph_family)",
+  "countable cover and disjoint patching, plus codimension-m weighted slice measurability (scalar analogue OpenSliceMeasurable.lean)"
+ ],
+ "local_import_closure_of_new_module": [
+  "FunctionalInequalities.Analysis.AreaFormula",
+  "FunctionalInequalities.Analysis.CoareaGraphJacobian",
+  "FunctionalInequalities.Analysis.CoareaJacobian",
+  "FunctionalInequalities.Analysis.FiberIntegral",
+  "FunctionalInequalities.Analysis.GraphIntegral",
+  "FunctionalInequalities.Analysis.GraphJacobian",
+  "FunctionalInequalities.Analysis.ImplicitGraph",
+  "FunctionalInequalities.Analysis.LevelSet",
+  "FunctionalInequalities.Analysis.LocalInverse",
+  "FunctionalInequalities.Analysis.NormDetContinuity",
+  "FunctionalInequalities.Analysis.OpenGraphIntegral",
+  "FunctionalInequalities.Analysis.VectorFiberIntegral",
+  "FunctionalInequalities.Analysis.VectorGraph",
+  "FunctionalInequalities.Analysis.VectorGraphArea",
+  "FunctionalInequalities.Analysis.VectorGraphSandwich",
+  "FunctionalInequalities.Analysis.VectorRegularChart",
+  "FunctionalInequalities.KLS.Geometry.SurfaceMeasure",
+  "FunctionalInequalities.Probability.Line.BrunnMinkowski"
+ ],
+ "no_WIP_in_new_import_closure": true,
+ "route_statements_review": {
+  "new_errors_found_this_round": 0,
+  "already_recorded": [
+   "B1 (2026-09-16 vector-graph-area)",
+   "A0 (2026-09-16 coarea-graph-jacobian, proved false)"
+  ],
+  "route_file_left_byte_unchanged": true
+ },
+ "validation": {
+  "Analysis/VectorFiberIntegral": {
+   "command": [
+    "lake",
+    "env",
+    "lean",
+    "-DwarningAsError=true",
+    "FunctionalInequalities/Analysis/VectorFiberIntegral.lean"
+   ],
+   "cwd": "formalization",
+   "exit_code": 0,
+   "log": "build/audit/vector-fiber-integral/Analysis_VectorFiberIntegral.log",
+   "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "sorryAx_reports": 0,
+   "sorry_diagnostics": 0
+  },
+  "research/audits/AreaFormulaRouteStatements.lean": {
+   "command": [
+    "lake",
+    "env",
+    "lean",
+    "-DwarningAsError=true",
+    "../research/audits/AreaFormulaRouteStatements.lean"
+   ],
+   "cwd": "formalization",
+   "exit_code": 0,
+   "log": "build/audit/vector-fiber-integral/research_audits_AreaFormulaRouteStatements.lean.log",
+   "sha256": "863828512f1c0c342aac4877c067657f8e159ac7cd5ffdb9c0fff6e57f1b246d",
+   "sorryAx_reports": 0,
+   "sorry_diagnostics": 0
+  },
+  "research/audits/BorelSliceAudit.lean": {
+   "command": [
+    "lake",
+    "env",
+    "lean",
+    "-DwarningAsError=true",
+    "../research/audits/BorelSliceAudit.lean"
+   ],
+   "cwd": "formalization",
+   "exit_code": 0,
+   "log": "build/audit/vector-fiber-integral/research_audits_BorelSliceAudit.lean.log",
+   "sha256": "a8dfcca0234207b99fb88f7194f00eb762f69feb8bb48cfbb0dd39be4f882bc0",
+   "sorryAx_reports": 0,
+   "sorry_diagnostics": 0
+  },
+  "research/audits/CoareaGraphJacobianAudit.lean": {
+   "command": [
+    "lake",
+    "env",
+    "lean",
+    "-DwarningAsError=true",
+    "../research/audits/CoareaGraphJacobianAudit.lean"
+   ],
+   "cwd": "formalization",
+   "exit_code": 0,
+   "log": "build/audit/vector-fiber-integral/research_audits_CoareaGraphJacobianAudit.lean.log",
+   "sha256": "8c2d1374694b1906e4d081cbb27370fd4171adc7b9db6732b74074e0e83bc0b6",
+   "sorryAx_reports": 0,
+   "sorry_diagnostics": 0
+  },
+  "research/audits/CoareaJacobianAudit.lean": {
+   "command": [
+    "lake",
+    "env",
+    "lean",
+    "-DwarningAsError=true",
+    "../research/audits/CoareaJacobianAudit.lean"
+   ],
+   "cwd": "formalization",
+   "exit_code": 0,
+   "log": "build/audit/vector-fiber-integral/research_audits_CoareaJacobianAudit.lean.log",
+   "sha256": "0b5856d4918bebc9669b5387fa591400fbcaad41a2eb1dc0688720af2b142290",
+   "sorryAx_reports": 0,
+   "sorry_diagnostics": 0
+  },
+  "research/audits/CompactSliceAudit.lean": {
+   "command": [
+    "lake",
+    "env",
+    "lean",
+    "-DwarningAsError=true",
+    "../research/audits/CompactSliceAudit.lean"
+   ],
+   "cwd": "formalization",
+   "exit_code": 0,
+   "log": "build/audit/vector-fiber-integral/research_audits_CompactSliceAudit.lean.log",
+   "sha256": "6183637269791471cbd4afecdf4bb9686eca8f8680c85386058ae18487adcafc",
+   "sorryAx_reports": 0,
+   "sorry_diagnostics": 0
+  },
+  "research/audits/CriticalSliceAudit.lean": {
+   "command": [
+    "lake",
+    "env",
+    "lean",
+    "-DwarningAsError=true",
+    "../research/audits/CriticalSliceAudit.lean"
+   ],
+   "cwd": "formalization",
+   "exit_code": 0,
+   "log": "build/audit/vector-fiber-integral/research_audits_CriticalSliceAudit.lean.log",
+   "sha256": "56f69bb05102711355e17db74a43e07ce4b7f99232fda47a16c53659041cf8d8",
+   "sorryAx_reports": 0,
+   "sorry_diagnostics": 0
+  },
+  "research/audits/EilenbergMajorantAudit.lean": {
+   "command": [
+    "lake",
+    "env",
+    "lean",
+    "-DwarningAsError=true",
+    "../research/audits/EilenbergMajorantAudit.lean"
+   ],
+   "cwd": "formalization",
+   "exit_code": 0,
+   "log": "build/audit/vector-fiber-integral/research_audits_EilenbergMajorantAudit.lean.log",
+   "sha256": "97c23ff29115ea64ef45606ddc56e5ee3e5f833a8ff4bfc1d58d5dadab1c8a77",
+   "sorryAx_reports": 0,
+   "sorry_diagnostics": 0
+  },
+  "research/audits/FirstOrderJetAudit.lean": {
+   "command": [
+    "lake",
+    "env",
+    "lean",
+    "-DwarningAsError=true",
+    "../research/audits/FirstOrderJetAudit.lean"
+   ],
+   "cwd": "formalization",
+   "exit_code": 0,
+   "log": "build/audit/vector-fiber-integral/research_audits_FirstOrderJetAudit.lean.log",
+   "sha256": "9cf5593e284a4e5e419bcfc40d8f29da6d4b7587d622acfc052f5129c62ea65d",
+   "sorryAx_reports": 0,
+   "sorry_diagnostics": 0
+  },
+  "research/audits/GraphJacobianAudit.lean": {
+   "command": [
+    "lake",
+    "env",
+    "lean",
+    "-DwarningAsError=true",
+    "../research/audits/GraphJacobianAudit.lean"
+   ],
+   "cwd": "formalization",
+   "exit_code": 0,
+   "log": "build/audit/vector-fiber-integral/research_audits_GraphJacobianAudit.lean.log",
+   "sha256": "bea60b036d0177916c89252e63f69ba0751f6a9a56a82ae3daaf7f33156f6bae",
+   "sorryAx_reports": 0,
+   "sorry_diagnostics": 0
+  },
+  "research/audits/IsoperimetryCoareaAudit.lean": {
+   "command": [
+    "lake",
+    "env",
+    "lean",
+    "-DwarningAsError=true",
+    "../research/audits/IsoperimetryCoareaAudit.lean"
+   ],
+   "cwd": "formalization",
+   "exit_code": 0,
+   "log": "build/audit/vector-fiber-integral/research_audits_IsoperimetryCoareaAudit.lean.log",
+   "sha256": "dde4c1365470a4837742f129c0e29737e0a50fd90ffb315b136ad9db2dfd7178",
+   "sorryAx_reports": 4,
+   "sorry_diagnostics": 0
+  },
+  "research/audits/LevelSetMeasurableAudit.lean": {
+   "command": [
+    "lake",
+    "env",
+    "lean",
+    "-DwarningAsError=true",
+    "../research/audits/LevelSetMeasurableAudit.lean"
+   ],
+   "cwd": "formalization",
+   "exit_code": 0,
+   "log": "build/audit/vector-fiber-integral/research_audits_LevelSetMeasurableAudit.lean.log",
+   "sha256": "1414ccd117403c81a17bf3bb8a8dc43b4594933320de3988c324b158d258be19",
+   "sorryAx_reports": 2,
+   "sorry_diagnostics": 0
+  },
+  "research/audits/LinearAreaFormulaAudit.lean": {
+   "command": [
+    "lake",
+    "env",
+    "lean",
+    "-DwarningAsError=true",
+    "../research/audits/LinearAreaFormulaAudit.lean"
+   ],
+   "cwd": "formalization",
+   "exit_code": 0,
+   "log": "build/audit/vector-fiber-integral/research_audits_LinearAreaFormulaAudit.lean.log",
+   "sha256": "6e91eaa7af958b1af216c00d35b604cc1d9e02785fb7bbb5875b6f0514043f56",
+   "sorryAx_reports": 0,
+   "sorry_diagnostics": 0
+  },
+  "research/audits/LipschitzCoareaAudit.lean": {
+   "command": [
+    "lake",
+    "env",
+    "lean",
+    "-DwarningAsError=true",
+    "../research/audits/LipschitzCoareaAudit.lean"
+   ],
+   "cwd": "formalization",
+   "exit_code": 0,
+   "log": "build/audit/vector-fiber-integral/research_audits_LipschitzCoareaAudit.lean.log",
+   "sha256": "2df013f36bdf53d5fb1d777ccf6fe814e4b1355fc65b530e9037227c92713258",
+   "sorryAx_reports": 0,
+   "sorry_diagnostics": 0
+  },
+  "research/audits/LipschitzCoareaMigrationAudit.lean": {
+   "command": [
+    "lake",
+    "env",
+    "lean",
+    "-DwarningAsError=true",
+    "../research/audits/LipschitzCoareaMigrationAudit.lean"
+   ],
+   "cwd": "formalization",
+   "exit_code": 0,
+   "log": "build/audit/vector-fiber-integral/research_audits_LipschitzCoareaMigrationAudit.lean.log",
+   "sha256": "4e0db8c551cdabd12b846bd28cd0dddf24a2cf06f4f480d787ff478afc4d34f5",
+   "sorryAx_reports": 4,
+   "sorry_diagnostics": 0
+  },
+  "research/audits/LocallyLipschitzCoareaAudit.lean": {
+   "command": [
+    "lake",
+    "env",
+    "lean",
+    "-DwarningAsError=true",
+    "../research/audits/LocallyLipschitzCoareaAudit.lean"
+   ],
+   "cwd": "formalization",
+   "exit_code": 0,
+   "log": "build/audit/vector-fiber-integral/research_audits_LocallyLipschitzCoareaAudit.lean.log",
+   "sha256": "5ba4c2301882581ff2502b4e02e394e972f0338118cf092a0e4b4d39c5146876",
+   "sorryAx_reports": 0,
+   "sorry_diagnostics": 0
+  },
+  "research/audits/NormDetContinuityAudit.lean": {
+   "command": [
+    "lake",
+    "env",
+    "lean",
+    "-DwarningAsError=true",
+    "../research/audits/NormDetContinuityAudit.lean"
+   ],
+   "cwd": "formalization",
+   "exit_code": 0,
+   "log": "build/audit/vector-fiber-integral/research_audits_NormDetContinuityAudit.lean.log",
+   "sha256": "fee9c0acc264b6942fcdc3a1ce9be66d9532b0c0d8d8ec64190040db0edfc613",
+   "sorryAx_reports": 0,
+   "sorry_diagnostics": 0
+  },
+  "research/audits/NullSlicingAudit.lean": {
+   "command": [
+    "lake",
+    "env",
+    "lean",
+    "-DwarningAsError=true",
+    "../research/audits/NullSlicingAudit.lean"
+   ],
+   "cwd": "formalization",
+   "exit_code": 0,
+   "log": "build/audit/vector-fiber-integral/research_audits_NullSlicingAudit.lean.log",
+   "sha256": "65d75f410323559fb026cb4855c86bd6267176daee2c6c43b495cfd8012e856d",
+   "sorryAx_reports": 0,
+   "sorry_diagnostics": 0
+  },
+  "research/audits/OpenGraphAudit.lean": {
+   "command": [
+    "lake",
+    "env",
+    "lean",
+    "-DwarningAsError=true",
+    "../research/audits/OpenGraphAudit.lean"
+   ],
+   "cwd": "formalization",
+   "exit_code": 0,
+   "log": "build/audit/vector-fiber-integral/research_audits_OpenGraphAudit.lean.log",
+   "sha256": "92136a3e0b400a36198d8abf9ed6d915035caddb1ff4255e18a32039e0c91a33",
+   "sorryAx_reports": 0,
+   "sorry_diagnostics": 0
+  },
+  "research/audits/RegularCoareaAudit.lean": {
+   "command": [
+    "lake",
+    "env",
+    "lean",
+    "-DwarningAsError=true",
+    "../research/audits/RegularCoareaAudit.lean"
+   ],
+   "cwd": "formalization",
+   "exit_code": 0,
+   "log": "build/audit/vector-fiber-integral/research_audits_RegularCoareaAudit.lean.log",
+   "sha256": "88de01742cfd90d75eb062a7aac5f7cdfc5266fc0690ef6efe381884cd2c2fef",
+   "sorryAx_reports": 0,
+   "sorry_diagnostics": 0
+  },
+  "research/audits/SmoothCoareaAudit.lean": {
+   "command": [
+    "lake",
+    "env",
+    "lean",
+    "-DwarningAsError=true",
+    "../research/audits/SmoothCoareaAudit.lean"
+   ],
+   "cwd": "formalization",
+   "exit_code": 0,
+   "log": "build/audit/vector-fiber-integral/research_audits_SmoothCoareaAudit.lean.log",
+   "sha256": "aae8a32b1fcc7798fc523c4d977207862ee08432d07a06797e15cce6a9fe0e21",
+   "sorryAx_reports": 0,
+   "sorry_diagnostics": 0
+  },
+  "research/audits/VectorFiberIntegralAudit.lean": {
+   "command": [
+    "lake",
+    "env",
+    "lean",
+    "-DwarningAsError=true",
+    "../research/audits/VectorFiberIntegralAudit.lean"
+   ],
+   "cwd": "formalization",
+   "exit_code": 0,
+   "log": "build/audit/vector-fiber-integral/research_audits_VectorFiberIntegralAudit.lean.log",
+   "sha256": "a569ac3393aa946ab24633942c1eee69c96df1d137569a1439bf6268941d64a3",
+   "sorryAx_reports": 0,
+   "sorry_diagnostics": 0
+  },
+  "research/audits/VectorGraphAreaAudit.lean": {
+   "command": [
+    "lake",
+    "env",
+    "lean",
+    "-DwarningAsError=true",
+    "../research/audits/VectorGraphAreaAudit.lean"
+   ],
+   "cwd": "formalization",
+   "exit_code": 0,
+   "log": "build/audit/vector-fiber-integral/research_audits_VectorGraphAreaAudit.lean.log",
+   "sha256": "b3f802740e58000feaac5db375fa336b02d85cca25ad02768754a533467e9c49",
+   "sorryAx_reports": 0,
+   "sorry_diagnostics": 0
+  },
+  "research/audits/VectorGraphAudit.lean": {
+   "command": [
+    "lake",
+    "env",
+    "lean",
+    "-DwarningAsError=true",
+    "../research/audits/VectorGraphAudit.lean"
+   ],
+   "cwd": "formalization",
+   "exit_code": 0,
+   "log": "build/audit/vector-fiber-integral/research_audits_VectorGraphAudit.lean.log",
+   "sha256": "2fea4134e32084f226422476fb892e06df0e5ff90bb93bf988c8c117a9aa94f5",
+   "sorryAx_reports": 0,
+   "sorry_diagnostics": 0
+  },
+  "research/audits/VectorGraphSandwichAudit.lean": {
+   "command": [
+    "lake",
+    "env",
+    "lean",
+    "-DwarningAsError=true",
+    "../research/audits/VectorGraphSandwichAudit.lean"
+   ],
+   "cwd": "formalization",
+   "exit_code": 0,
+   "log": "build/audit/vector-fiber-integral/research_audits_VectorGraphSandwichAudit.lean.log",
+   "sha256": "5132a025258561caee3f7e0d73db1434068d950d29279e97cc26a452dd7c02e5",
+   "sorryAx_reports": 0,
+   "sorry_diagnostics": 0
+  },
+  "research/audits/VectorRegularChartAudit.lean": {
+   "command": [
+    "lake",
+    "env",
+    "lean",
+    "-DwarningAsError=true",
+    "../research/audits/VectorRegularChartAudit.lean"
+   ],
+   "cwd": "formalization",
+   "exit_code": 0,
+   "log": "build/audit/vector-fiber-integral/research_audits_VectorRegularChartAudit.lean.log",
+   "sha256": "495bcf116c77c92127dc27679de75cb87823c93b06a139b3dd7b9598be3c876c",
+   "sorryAx_reports": 0,
+   "sorry_diagnostics": 0
+  },
+  "research/audits/WeightedCoareaInfrastructure.lean": {
+   "command": [
+    "lake",
+    "env",
+    "lean",
+    "-DwarningAsError=true",
+    "../research/audits/WeightedCoareaInfrastructure.lean"
+   ],
+   "cwd": "formalization",
+   "exit_code": 0,
+   "log": "build/audit/vector-fiber-integral/research_audits_WeightedCoareaInfrastructure.lean.log",
+   "sha256": "d589fa8fcd2e485f0803b4b59e2ee188bc95ceff56e06156b5adf2b4c6b9655a",
+   "sorryAx_reports": 0,
+   "sorry_diagnostics": 0
+  },
+  "research/audits/WeightedCoareaRouteStatements.lean": {
+   "command": [
+    "lake",
+    "env",
+    "lean",
+    "-DwarningAsError=true",
+    "../research/audits/WeightedCoareaRouteStatements.lean"
+   ],
+   "cwd": "formalization",
+   "exit_code": 0,
+   "log": "build/audit/vector-fiber-integral/research_audits_WeightedCoareaRouteStatements.lean.log",
+   "sha256": "3a74a1ef789572ff5238ff7faf8a591be11e73fc3030db04e32b2e6497fe0d6a",
+   "sorryAx_reports": 0,
+   "sorry_diagnostics": 0
+  },
+  "research/audits/WhitneyConstructionAudit.lean": {
+   "command": [
+    "lake",
+    "env",
+    "lean",
+    "-DwarningAsError=true",
+    "../research/audits/WhitneyConstructionAudit.lean"
+   ],
+   "cwd": "formalization",
+   "exit_code": 0,
+   "log": "build/audit/vector-fiber-integral/research_audits_WhitneyConstructionAudit.lean.log",
+   "sha256": "36d70231ff8d2deadce898b80a4f02599162af5f2c3cc734864870d33f9cc7df",
+   "sorryAx_reports": 0,
+   "sorry_diagnostics": 0
+  },
+  "research/audits/WhitneyExtensionAudit.lean": {
+   "command": [
+    "lake",
+    "env",
+    "lean",
+    "-DwarningAsError=true",
+    "../research/audits/WhitneyExtensionAudit.lean"
+   ],
+   "cwd": "formalization",
+   "exit_code": 0,
+   "log": "build/audit/vector-fiber-integral/research_audits_WhitneyExtensionAudit.lean.log",
+   "sha256": "a6461ba0960f1bf9f63ec31dd0713a6311d164eb7201f49625c0722444ae1a5d",
+   "sorryAx_reports": 0,
+   "sorry_diagnostics": 0
+  },
+  "build/audit/AreaFormulaAudit.lean": {
+   "command": [
+    "lake",
+    "env",
+    "lean",
+    "-DwarningAsError=true",
+    "../build/audit/AreaFormulaAudit.lean"
+   ],
+   "cwd": "formalization",
+   "exit_code": 0,
+   "log": "build/audit/vector-fiber-integral/build_audit_AreaFormulaAudit.lean.log",
+   "sha256": "012a848c88ac87ae07220136a1ca7b1a1238bb88a96c94c33eda6f2143e9e905",
+   "sorryAx_reports": 0,
+   "sorry_diagnostics": 0
+  },
+  "build/audit/CheegerInfimumAudit.lean": {
+   "command": [
+    "lake",
+    "env",
+    "lean",
+    "-DwarningAsError=true",
+    "../build/audit/CheegerInfimumAudit.lean"
+   ],
+   "cwd": "formalization",
+   "exit_code": 0,
+   "log": "build/audit/vector-fiber-integral/build_audit_CheegerInfimumAudit.lean.log",
+   "sha256": "f91015c9f2b831300fc64abbcc1120baca81d03d15a2d425097b50ee96f2ac74",
+   "sorryAx_reports": 0,
+   "sorry_diagnostics": 0
+  },
+  "build/audit/MinkowskiConstantAudit.lean": {
+   "command": [
+    "lake",
+    "env",
+    "lean",
+    "-DwarningAsError=true",
+    "../build/audit/MinkowskiConstantAudit.lean"
+   ],
+   "cwd": "formalization",
+   "exit_code": 0,
+   "log": "build/audit/vector-fiber-integral/build_audit_MinkowskiConstantAudit.lean.log",
+   "sha256": "efd1523ac10c8010fc527f14f64401998f1c54daf31f94b5e61642a6f67159eb",
+   "sorryAx_reports": 0,
+   "sorry_diagnostics": 0
+  },
+  "build/audit/RegularCoareaAudit.lean": {
+   "command": [
+    "lake",
+    "env",
+    "lean",
+    "-DwarningAsError=true",
+    "../build/audit/RegularCoareaAudit.lean"
+   ],
+   "cwd": "formalization",
+   "exit_code": 0,
+   "log": "build/audit/vector-fiber-integral/build_audit_RegularCoareaAudit.lean.log",
+   "sha256": "88de01742cfd90d75eb062a7aac5f7cdfc5266fc0690ef6efe381884cd2c2fef",
+   "sorryAx_reports": 0,
+   "sorry_diagnostics": 0
+  },
+  "build/audit/SmoothSardAudit.lean": {
+   "command": [
+    "lake",
+    "env",
+    "lean",
+    "-DwarningAsError=true",
+    "../build/audit/SmoothSardAudit.lean"
+   ],
+   "cwd": "formalization",
+   "exit_code": 0,
+   "log": "build/audit/vector-fiber-integral/build_audit_SmoothSardAudit.lean.log",
+   "sha256": "bbb56e86e2b6005f1f31236fd465aa8e5862c75adb03deeba3ecccaddbf81490",
+   "sorryAx_reports": 0,
+   "sorry_diagnostics": 0
+  },
+  "build/audit/SmoothSardRouteStatements.lean": {
+   "command": [
+    "lake",
+    "env",
+    "lean",
+    "-DwarningAsError=true",
+    "../build/audit/SmoothSardRouteStatements.lean"
+   ],
+   "cwd": "formalization",
+   "exit_code": 0,
+   "log": "build/audit/vector-fiber-integral/build_audit_SmoothSardRouteStatements.lean.log",
+   "sha256": "a11b0d4a5b5608157f7f4881b1dd8196504b94bab0c50b981d86b467c6579f6d",
+   "sorryAx_reports": 0,
+   "sorry_diagnostics": 0
+  },
+  "build/audit/SuperlevelSardScope.lean": {
+   "command": [
+    "lake",
+    "env",
+    "lean",
+    "-DwarningAsError=true",
+    "../build/audit/SuperlevelSardScope.lean"
+   ],
+   "cwd": "formalization",
+   "exit_code": 0,
+   "log": "build/audit/vector-fiber-integral/build_audit_SuperlevelSardScope.lean.log",
+   "sha256": "9f7b4971a9a7fd42cfad81024dcfd13341cf8daaf3f9171aeac81e107d7e9562",
+   "sorryAx_reports": 2,
+   "sorry_diagnostics": 0
+  }
+ },
+ "wip_compiles": {
+  "FunctionalInequalities/KLS/WIP/AnalyticPrerequisites.lean": {
+   "log": "build/audit/vector-fiber-integral/FunctionalInequalities_KLS_WIP_AnalyticPrerequisites.lean.log",
+   "sha256": "165461a306be4df069715678da4b5d3d18faa2cd01b4caf66c553204f8fd51e2",
+   "direct_holes": 1,
+   "expected": 1
+  },
+  "FunctionalInequalities/KLS/WIP/CheegerInfimum.lean": {
+   "log": "build/audit/vector-fiber-integral/FunctionalInequalities_KLS_WIP_CheegerInfimum.lean.log",
+   "sha256": "f48f3d5923b15d0b1f137a227c99c8d296989f03c9a2e5218223ad18ffe50172",
+   "direct_holes": 2,
+   "expected": 2
+  },
+  "FunctionalInequalities/Energy/WIP/Cheeger.lean": {
+   "log": "build/audit/vector-fiber-integral/FunctionalInequalities_Energy_WIP_Cheeger.lean.log",
+   "sha256": "7003e6f52a47b150e5fd6cd14ca240b5f4ee2d53ce464ad80ed811e67a181870",
+   "direct_holes": 5,
+   "expected": 5
+  }
+ },
+ "axiom_audit": {
+  "VectorFiberIntegralAudit": {
+   "FunctionalInequalities.Analysis.isometryEquivOfFinrankEq": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ],
+   "FunctionalInequalities.Analysis.lintegral_image_eq_lintegral_normDet_fderiv_mul": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ],
+   "FunctionalInequalities.Analysis.fderiv_snd_eq": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ],
+   "FunctionalInequalities.Analysis.continuous_normDet_fderiv_snd": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ],
+   "FunctionalInequalities.Analysis.setLIntegral_image_vectorVerticalMap": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ],
+   "FunctionalInequalities.Analysis.splitVectorEquiv": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ],
+   "FunctionalInequalities.Analysis.splitVectorEquiv_apply": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ],
+   "FunctionalInequalities.Analysis.setLIntegral_image_levelGraphMap": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ],
+   "FunctionalInequalities.Analysis.setLIntegral_coareaJacobian_levelGraphFamily": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ],
+   "VectorFiberIntegralAudit.change_of_variables": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ],
+   "VectorFiberIntegralAudit.isometry_preserves_measure": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ],
+   "VectorFiberIntegralAudit.whole_space": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ],
+   "VectorFiberIntegralAudit.zero_dimensional_fibre": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ],
+   "VectorFiberIntegralAudit.normDet_fderiv_eq_abs_deriv": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ],
+   "VectorFiberIntegralAudit.codimension_one_verticalMap": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ],
+   "VectorFiberIntegralAudit.equal_dimension_necessary": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ]
+  }
+ },
+ "axiom_reports": 16,
+ "nonstandard_axiom_reports": 0,
+ "audit_clients": 36,
+ "versioned_audit_sources": 29,
+ "wip_holes": [
+  1,
+  2,
+  5
+ ],
+ "wip_holes_total": 8,
+ "certificates": 24,
+ "infrastructure_evidence_count": 108,
+ "coarea_formula_proved_this_round": false,
+ "hole_migrated": false,
+ "handed_off_line": {
+  "owner": "Wang Haocheng",
+  "date": "2026-09-16",
+  "touched_this_round": false
+ },
+ "concurrent_session_changed_workspace": false,
+ "committed": false,
+ "pushed": false,
+ "real_git_index_modified": false,
+ "next": "the weighted codimension-m graph area formula, then Tonelli to join the two sides into the local coarea equality",
+ "root_verification": "See build/audit/vector-fiber-integral/final-snapshot.json for the final full verification receipt and exact-source binding."
+}

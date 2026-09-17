@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "last_updated": "2026-09-15",
+  "last_updated": "2026-09-17",
   "nodes": {
     "ass:cmh-recovery-envelope": {
       "description": "Seek a regular moment-map approximation of every centered log-concave law with a dimension-free CMH bound.",
@@ -501,57 +501,56 @@
       }
     },
     "diagram:C1": {
-      "description": "General C¹ coarea — Next step",
+      "description": "General C¹ weighted coarea",
       "assessment": {
-        "state": "pending",
+        "state": "formalized",
         "evidence": {
           "kind": "reviewed_progress",
-          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/research/decisions/2026-09-15-weighted-coarea-route.md#l11",
-          "baseline_commit": "b7b458c"
+          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/SmoothCoarea.lean",
+          "note": "L11 proved; strict source client research/audits/SmoothCoareaAudit.lean. Uncommitted source evidence at the 2026-09-16 FirstOrderJet closeout."
         },
         "kind": "auxiliary"
       },
       "diagram": {
         "id": "C1",
-        "label": "General C¹ coarea<br/>Next step",
-        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/research/decisions/2026-09-15-weighted-coarea-route.md#l11",
-        "shape": "box",
-        "focus": true
+        "label": "General C¹ coarea",
+        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/SmoothCoarea.lean",
+        "shape": "box"
       }
     },
     "diagram:WHIT": {
-      "description": "Whitney extension — Exact C¹ pieces",
+      "description": "Compact-set C1 Whitney extension and exact C1 pieces of Lipschitz functions (L6/L6a/L7); no arbitrary noncompact closed-set extension is claimed.",
       "assessment": {
-        "state": "pending",
+        "state": "formalized",
         "evidence": {
           "kind": "reviewed_progress",
-          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/research/decisions/2026-09-15-weighted-coarea-route.md#l6",
-          "baseline_commit": "b7b458c"
+          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/research/decisions/2026-09-16-lipschitz-coarea.md",
+          "note": "L6, L6a and L7 are formalized in Lean. Compact jets cover almost every point, and global C1 representatives preserve both values and ambient derivatives on disjoint measurable pieces. Audit: research/audits/LipschitzCoareaAudit.lean. Uncommitted local proof."
         },
         "kind": "auxiliary"
       },
       "diagram": {
         "id": "WHIT",
-        "label": "Whitney extension<br/>Exact C¹ pieces",
-        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/research/decisions/2026-09-15-weighted-coarea-route.md#l6",
+        "label": "Compact Whitney jets<br/>Exact C¹ pieces",
+        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/research/decisions/2026-09-16-lipschitz-coarea.md",
         "shape": "box"
       }
     },
     "diagram:LIP": {
-      "description": "Lipschitz coarea",
+      "description": "Weighted coarea for locally Lipschitz functions (L11/L12/L13; T1/T2/T3 wired)",
       "assessment": {
-        "state": "pending",
+        "state": "formalized",
         "evidence": {
           "kind": "reviewed_progress",
-          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/research/decisions/2026-09-15-weighted-coarea-route.md#l12",
-          "baseline_commit": "b7b458c"
+          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/LocallyLipschitzCoarea.lean",
+          "note": "L12 and the original T1/T2/T3 entry points are formally wired to hole-free modules, each by a migration with a machine-checked byte-identical pp.all signature. L13 KLS.coarea_of_locallyLipschitz then generalizes the formula to locally Lipschitz functions, subsuming L11 and L12; the audit proves the generalization is strict. The Cheeger infima and the Cheeger-Poincare comparison are a separate line owned by a collaborator. Audits: research/audits/LipschitzCoareaAudit.lean, LipschitzCoareaMigrationAudit.lean and LocallyLipschitzCoareaAudit.lean. Uncommitted local proof."
         },
         "kind": "auxiliary"
       },
       "diagram": {
         "id": "LIP",
-        "label": "Lipschitz coarea",
-        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/research/decisions/2026-09-15-weighted-coarea-route.md#l12",
+        "label": "Coarea: Lipschitz<br/>and locally Lipschitz",
+        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/LocallyLipschitzCoarea.lean",
         "shape": "box"
       }
     },
@@ -574,7 +573,7 @@
       }
     },
     "diagram:REC": {
-      "description": "Smooth recovery",
+      "description": "The exact smooth recovery sequence for finite relative perimeter is proved and registered in Blueprint, including unbounded domains and carriers. This is not the full Cheeger comparison or a separate ledger certificate.",
       "assessment": {
         "state": "formalized",
         "evidence": {
@@ -628,7 +627,7 @@
       }
     },
     "diagram:SCI": {
-      "description": "Smooth coarea — Inequality",
+      "description": "Integrated smooth Cheeger superlevel inequality; the coarea formula itself is already proved. This pending step belongs to the separately assigned Cheeger-Buser workstream.",
       "assessment": {
         "state": "pending",
         "evidence": {
@@ -640,7 +639,7 @@
       },
       "diagram": {
         "id": "SCI",
-        "label": "Smooth coarea<br/>Inequality",
+        "label": "Cheeger superlevel<br/>Integral bound",
         "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/WIP/CheegerInfimum.lean",
         "shape": "box"
       }
@@ -828,6 +827,97 @@
         "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/route-composition.yaml",
         "shape": "diamond"
       }
+    },
+    "diagram:VREG": {
+      "description": "Coarea on an open region where the derivative is surjective, with normalized Hausdorff fibres; this is not general vector coarea.",
+      "assessment": {
+        "state": "formalized",
+        "evidence": {
+          "kind": "reviewed_progress",
+          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/VectorRegularCoarea.lean",
+          "note": "Reviewed against current theorem statements and local axiom/client checks on 2026-09-17."
+        },
+        "kind": "auxiliary"
+      },
+      "diagram": {
+        "id": "VREG",
+        "label": "Vector coarea<br/>Regular region",
+        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/VectorRegularCoarea.lean",
+        "shape": "box"
+      }
+    },
+    "diagram:VZERO": {
+      "description": "Slice measurability and nullity of almost every slice of the zero-derivative set; intermediate positive ranks are not covered.",
+      "assessment": {
+        "state": "formalized",
+        "evidence": {
+          "kind": "reviewed_progress",
+          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/VectorCriticalSlice.lean",
+          "note": "Reviewed against current theorem statements and local axiom/client checks on 2026-09-17."
+        },
+        "kind": "auxiliary"
+      },
+      "diagram": {
+        "id": "VZERO",
+        "label": "Vector slices<br/>Zero derivative",
+        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/VectorCriticalSlice.lean",
+        "shape": "box"
+      }
+    },
+    "diagram:VR123": {
+      "description": "Rank stratification, the kernel identity and pointwise/uniform approximate right inverses are proved.",
+      "assessment": {
+        "state": "formalized",
+        "evidence": {
+          "kind": "reviewed_progress",
+          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/research/audits/RightInverseBoundAudit.lean",
+          "note": "Reviewed against current theorem statements and local axiom/client checks on 2026-09-17."
+        },
+        "kind": "auxiliary"
+      },
+      "diagram": {
+        "id": "VR123",
+        "label": "Rank and kernel<br/>R1–R3",
+        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/research/audits/RightInverseBoundAudit.lean",
+        "shape": "box"
+      }
+    },
+    "diagram:VR4": {
+      "description": "Pending small-Lipschitz estimate on fibres from the approximation error and R2/R3; this is one obligation, not the complete critical-set argument.",
+      "assessment": {
+        "state": "pending",
+        "evidence": {
+          "kind": "reviewed_progress",
+          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/research/audits/RankDeficientRouteStatements.lean",
+          "note": "Reviewed against current theorem statements and local axiom/client checks on 2026-09-17."
+        },
+        "kind": "auxiliary"
+      },
+      "diagram": {
+        "id": "VR4",
+        "label": "Tangential estimate<br/>R4 — Next step",
+        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/research/audits/RankDeficientRouteStatements.lean",
+        "shape": "box",
+        "focus": true
+      }
+    },
+    "diagram:VFULL": {
+      "description": "General codimension-m coarea remains open: R0, R4–R10, N1 and N2 are outstanding. Supporting results shown here are not a sufficient completed route.",
+      "assessment": {
+        "state": "partial",
+        "evidence": {
+          "kind": "reviewed_progress",
+          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/research/decisions/2026-09-17-rank-deficient-route.md",
+          "note": "Reviewed against current theorem statements and local axiom/client checks on 2026-09-17."
+        },
+        "kind": "auxiliary"
+      },
+      "diagram": {
+        "id": "VFULL",
+        "label": "General vector coarea<br/>Rank-deficient gap",
+        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/research/decisions/2026-09-17-rank-deficient-route.md",
+        "shape": "box"
+      }
     }
   },
   "diagram": {
@@ -907,6 +997,17 @@
           "FC",
           "FG",
           "FAND"
+        ]
+      },
+      {
+        "id": "VECTOR",
+        "title": "Vector coarea extension — separate from the KLS implication routes",
+        "nodes": [
+          "VREG",
+          "VZERO",
+          "VR123",
+          "VR4",
+          "VFULL"
         ]
       }
     ],
@@ -1124,6 +1225,26 @@
       {
         "from": "CONST",
         "to": "ANY",
+        "kind": "context"
+      },
+      {
+        "from": "VR123",
+        "to": "VR4",
+        "kind": "dependency"
+      },
+      {
+        "from": "VREG",
+        "to": "VFULL",
+        "kind": "context"
+      },
+      {
+        "from": "VZERO",
+        "to": "VFULL",
+        "kind": "context"
+      },
+      {
+        "from": "VR4",
+        "to": "VFULL",
         "kind": "context"
       }
     ]

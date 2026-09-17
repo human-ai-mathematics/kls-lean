@@ -9,13 +9,13 @@ import FunctionalInequalities.Energy.Euclidean.LipschitzApproximation
 
 Partially proved work-in-progress module for Blueprint `lem:relative-perimeter-cheeger-infimum`
 (Appendix A), together with the `h_μ = h_ν^{sm,rel}` clause of
-`thm:klartag-density-frontend-identification`. Three explicit `sorry` bodies remain; filled
+`thm:klartag-density-frontend-identification`. Two explicit `sorry` bodies remain; filled
 consequences may still depend on `sorryAx`. The module is not
 imported by the library root, not registered in the ledger, and not anchored from the Blueprint.
 Only the direction `minkowskiConstant_le_smoothConstant` is proved, and it has moved down to the
 hole-free `KLS/Geometry/CheegerInfimum.lean`; `minkowskiConstant_eq_smoothConstant` has a
 `le_antisymm` body but inherits `sorryAx` through the unproved reverse direction. Read the
-remaining coarea obligations, then `minkowskiConstant_eq_smoothConstant` and
+remaining integrated superlevel bound and reverse comparison, then `minkowskiConstant_eq_smoothConstant` and
 `constant_eq_smoothConstant_intrinsic`.
 
 ## The two infima
@@ -65,9 +65,11 @@ Dimension zero: no set has `0 < ν(B) < 1`, both infima are `⊤`, and the equal
 
 `exists_smooth_approximation_lipschitz` (smooth `[0,1]`-valued replacements preserving the
 `L¹(ν)` limit and the gradient integrals, the "bounded `L¹` convolution assertion");
-`lintegral_enorm_gradient_mul_eq_lintegral_levelSet` (weighted coarea formula
-with the normalized surface measure); and the one-sided bound
-`smoothConstant_mul_lintegral_min_superlevel_le`.
+and the one-sided bound `smoothConstant_mul_lintegral_min_superlevel_le`.
+The `C¹` weighted coarea formula
+`Isoperimetry.lintegral_enorm_gradient_mul_eq_lintegral_levelSet` is **no longer** an obligation
+here: it moved to the hole-free `KLS/Geometry/IsoperimetryCoarea.lean` with a byte-identical
+`pp.all` signature, where it is proved from `KLS.coarea_of_contDiff`.
 
 `minkowskiContent`, `measure_closure_eq_of_minkowskiContent_ne_top` and the Minkowski coarea
 inequality `lintegral_minkowskiContent_superlevel_le` (Ambrosio–Di Marino–Gigli 2017, Lemma 3.2)
@@ -86,10 +88,12 @@ The Sard obligation is **discharged**: `SmoothDomain.ae_exists_superlevel` and
 theorem `Analysis.sard_smooth` via `Analysis.ae_forall_fderiv_ne_zero_of_contDiff_top`.  Their
 statements are unchanged and neither depends on `sorryAx` any more, so this module no longer
 imports `KLS/WIP/AnalyticPrerequisites.lean` at all.  The **sharp** `C^(finrank)` statement
-`Analysis.sard`, with `Analysis.ae_forall_fderiv_ne_zero`, remains an unproved direct hole there,
-as does `Analysis.lintegral_enorm_gradient_mul_eq_lintegral_levelSet` (weighted coarea for
-Lipschitz `u`, of which `Isoperimetry.lintegral_enorm_gradient_mul_eq_lintegral_levelSet` is the
-`C¹` specialization); nothing in this module depends on either.
+`Analysis.sard` remains a direct hole there, and `Analysis.ae_forall_fderiv_ne_zero` inherits it.
+`Analysis.lintegral_enorm_gradient_mul_eq_lintegral_levelSet` (weighted coarea for Lipschitz `u`,
+with no `C¹` hypothesis) is proved in `KLS/Geometry/LipschitzCoarea.lean`. Nothing in this module
+imports that coarea module or the sharp Sard obligation. Its
+`C¹` specialization `Isoperimetry.lintegral_enorm_gradient_mul_eq_lintegral_levelSet` is **proved**
+and lives in `KLS/Geometry/IsoperimetryCoarea.lean`.
 `smoothConstant`, `smoothConstant_eq_top_of_subsingleton`, the layer-cake identity
 `lintegral_measure_symmDiff_superlevel`, the balance estimate
 `min_measure_le_add_measure_symmDiff`, the convergence `tendsto_lintegral_min_superlevel` and the
@@ -122,25 +126,6 @@ namespace FunctionalInequalities.KLS
 universe u
 
 /-! ### Sard and coarea for smooth functions -/
-
-section Coarea
-
-variable {V : Type u} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [CompleteSpace V]
-  [MeasurableSpace V] [BorelSpace V] [SecondCountableTopology V] [FiniteDimensional ℝ V]
-
-namespace Isoperimetry
-
-/-- Weighted coarea formula for a `C¹` Lipschitz function on `V`, with Lebesgue measure on `V`
-and the normalized surface measure `ℋ^{n-1}` on the level sets. -/
-theorem lintegral_enorm_gradient_mul_eq_lintegral_levelSet {u : V → ℝ} (hu : ContDiff ℝ 1 u)
-    {K : ℝ≥0} (hK : LipschitzWith K u) {g : V → ℝ≥0∞} (hg : Measurable g) :
-    ∫⁻ x, ‖gradient u x‖ₑ * g x ∂(volume : Measure V) =
-      ∫⁻ t, ∫⁻ y in {x | u x = t}, g y ∂(surfaceMeasure V) ∂(volume : Measure ℝ) := by
-  sorry
-
-end Isoperimetry
-
-end Coarea
 
 namespace Isoperimetry
 

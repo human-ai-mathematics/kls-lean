@@ -7,9 +7,10 @@
 **12 条比较定理均已证明，两份证书通过传递公理检查，ledger 状态为
 `proved / checked_by: lean`。** 原有声明的假设和类型保持不变，现由
 `Poincare.Foundation` 与 root aggregate 导出。后续批次已进一步证明一般对数凹
-测度的文献 locally Lipschitz 常数比较；Cheeger 和 KLS 仍未证明。
+测度的文献 locally Lipschitz 常数比较，以及内禀律绝对连续时的 Cheeger 能量识别；
+任意奇异律的无条件 Cheeger 识别、Cheeger–Buser 比较和 KLS 仍未证明。
 
-一般对数凹版本位于 [Poincare.lean](../LocalSlope/Poincare.lean)：从现有
+一般对数凹版本位于 [Poincare.lean](../../KLS/LogConcave/Poincare.lean)：从现有
 `KLS.LogConcave μ` 推出 光滑测试、内在光滑梯度和局部斜率 常数相等，进而得到 selected 常数等式。
 内禀绝对连续性由 [AbsoluteContinuity.lean](../../KLS/LogConcave/AbsoluteContinuity.lean) 证明，未作为额外假设。
 包含环境奇异和零维支撑；完整 Borell 密度代表、局部界及矩定理也已由后续证书完成。见
@@ -102,7 +103,10 @@ open FunctionalInequalities
 方差与梯度能量的归一化；它不是这些比较声明在任意 Borel 测度下的直接出处。
 
 这些定理不要求同一个原始测试的能量等于 relaxed energy。文献 locally Lipschitz 常数
-等式已由后续模块接通，whitening 与仿射/各向同性归约亦已证明；Cheeger energy 与 Markov 性仍未证明。`LogConcave`
+等式已由后续模块接通，whitening 与仿射/各向同性归约亦已证明。
+光滑梯度松弛的 Markov/Dirichlet 性适用于任意 Borel 概率律；
+`Ecan = 2 Ch` 采用局部斜率约定，已在内禀律绝对连续时证明，因而覆盖全部对数凹律。
+任意奇异律的无条件识别仍未完成。`LogConcave`
 及 KLS 主命题已有公开定义，KLS 本身未获证明。书写延续项目采用的 formech 风格：先给用途与例子，
 再说明精确范围、来源和未完成部分。
 
@@ -116,7 +120,7 @@ lake build solutions.LemLegacyRelaxedPoincareComparison
 lake build
 ```
 
-默认构建检查十七份证书、公理 guards 和使用示例；这批比较模块没有证明占位。
+默认构建检查二十四份证书、公理 guards 和使用示例；这批比较模块没有证明占位。
 新增的方差连续性与连续测试映射的 relaxation 比较也有公理 guards。
 两个节点的数学规格在 [ledger](../../../../research/a-series/ledger.yaml)，原草案设计保留在
 [历史记录](../../../../research/decisions/2026-09-06-poincare-comparison-statements.md)，

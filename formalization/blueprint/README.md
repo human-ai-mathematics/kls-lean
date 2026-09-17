@@ -52,8 +52,12 @@ closability identify the exact source domain in the second. These statements spe
 current domains and normalization and remain open to revision during formalization. The
 covariance-core closure and the closed affine covariance form are now Lean-certified
 (`Solutions.LemCovarianceCoreClosure.certificate`,
-`Solutions.ThmAffineCovarianceRelaxationClosed.certificate`); the relative-perimeter smoothing
-argument still awaits Lean implementation. The separate abstract
+`Solutions.ThmAffineCovarianceRelaxationClosed.certificate`). The relative-perimeter smoothing
+statement already has a local proof, `KLS.RelativePerimeter.exists_smooth_recovery_sequence`,
+in `KLS/Geometry/PerimeterRecovery.lean`; that existing proof is now registered in Blueprint,
+without adding a separate ledger certificate.
+The reverse Cheeger-infimum comparison and the Cheeger–Buser theorem remain unproved in Lean.
+The separate abstract
 relaxation and finite-factor comparison lemmas in the appendix have actual Lean proofs. The
 Dirichlet property of the smooth-gradient relaxation (`thm:smooth-gradient-relaxation-dirichlet`)
 is Lean-certified by `Solutions.ThmSmoothGradientRelaxationDirichlet.certificate`. The

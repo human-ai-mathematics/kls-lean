@@ -1,0 +1,129 @@
+{
+  "scope": "L6 boundary gluing, including piecewise construction from a controlled C1 complement candidate. Full L6 existence remains open.",
+  "head": "dcc158d7d3b9e91f17d2ee0fd49b30cdb6f4f7d8",
+  "part_A_receipt": "build/verification/20260915T170113.583163Z/report.json",
+  "part_A_snapshot": "051483acb993b037ccccd2682cb0c735a9d373ce20cc399defc54a384b10fa09",
+  "validation": {
+    "module": {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "FunctionalInequalities/Analysis/WhitneyExtension.lean"
+      ],
+      "exit_code": 0,
+      "log": "build/audit/whitney-boundary/module.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "WhitneyExtensionAudit": {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "../research/audits/WhitneyExtensionAudit.lean"
+      ],
+      "exit_code": 0,
+      "log": "build/audit/whitney-boundary/WhitneyExtensionAudit.log",
+      "sha256": "a6461ba0960f1bf9f63ec31dd0713a6311d164eb7201f49625c0722444ae1a5d"
+    },
+    "axiom_audit": {
+      "FunctionalInequalities.Analysis.WhitneyJet.norm_affine_sub_le": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "FunctionalInequalities.Analysis.WhitneyJet.dist_nearest_le": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "FunctionalInequalities.Analysis.WhitneyJet.hasFDerivWithinAt": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "FunctionalInequalities.Analysis.WhitneyJet.hasFDerivAt_of_nearby_affine": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "FunctionalInequalities.Analysis.WhitneyJet.continuousAt_of_nearby_field": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "FunctionalInequalities.Analysis.WhitneyJet.contDiff_of_nearby_jet": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "FunctionalInequalities.Analysis.WhitneyJet.exists_contDiff_of_compl_approx": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "WhitneyExtensionAudit.singleton_extension": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "WhitneyExtensionAudit.empty_extension": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "WhitneyExtensionAudit.singleton_within": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "WhitneyExtensionAudit.within_does_not_identify_ambient": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "WhitneyExtensionAudit.zero_dimension": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "WhitneyExtensionAudit.discard_wrong_value_on_set": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    }
+  },
+  "prior_clients": "20 clients and 3 WIP sources checked in part A; source hashes unchanged. See research/explorations/2026-09-16-first-order-jet.json.",
+  "all_incoming_lean_unchanged": true,
+  "all_historical_decisions_unchanged": true,
+  "real_index_unchanged": true,
+  "wip_holes": [
+    2,
+    2,
+    5
+  ],
+  "certificates": 24,
+  "perimeter_infrastructure": "missing",
+  "committed": false,
+  "pushed": false,
+  "not_proved": [
+    "L6 extension existence",
+    "L6a",
+    "L7",
+    "L12",
+    "Lipschitz coarea",
+    "sharp finite-regularity Sard",
+    "both Cheeger comparisons",
+    "dimension-free KLS"
+  ],
+  "files": {
+    "formalization/FunctionalInequalities/Analysis/WhitneyExtension.lean": "d7b2659afbb8e8246f5edc92943916c32faf31bc4ee01c68da017940c5125992",
+    "research/audits/WhitneyExtensionAudit.lean": "42ec5d740a7e22af52af921f42ab446ece66aa0006064d3ce71a1f9908f7f5e1",
+    "research/decisions/2026-09-16-whitney-boundary.md": "554cef678d04f328d6c0faa5e0eb3201f68cfc1abfa42cf730ee22ba6f19363d",
+    "research/tasks.json": "e70e8a4ff087d2a278e358349233e6809d73d47771b97abcf25986dd8e826661"
+  },
+  "root_verification": "See build/audit/whitney-boundary/final-snapshot.json for the exact full verification receipt and final snapshot attestation."
+}

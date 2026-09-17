@@ -21,9 +21,11 @@ must not change, while the file sits under `KLS/Geometry/` because the statement
 `KLS.surfaceMeasure` and is therefore not part of the KLS-independent `Analysis/` layer; the
 work-in-progress file it replaces made the same choice.
 
-**This does not close the weighted coarea formula.**
-`Analysis.lintegral_enorm_gradient_mul_eq_lintegral_levelSet` — the equality — remains a direct
-hole in `KLS/WIP/AnalyticPrerequisites.lean`, as does the sharp `C^(finrank)` `Analysis.sard`. -/
+This module supplies measurability. The equality
+`Analysis.lintegral_enorm_gradient_mul_eq_lintegral_levelSet` is proved separately in
+`KLS/Geometry/LipschitzCoarea.lean`; `LocallyLipschitzCoarea` extends both conclusions to locally
+Lipschitz functions. The sharp `C^(finrank)` `Analysis.sard` remains the direct hole in
+`KLS/WIP/AnalyticPrerequisites.lean`. -/
 
 noncomputable section
 

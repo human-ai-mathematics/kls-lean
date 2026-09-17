@@ -3,8 +3,8 @@
 \label{chap:analytic-comparison-proofs}
 
 This appendix supplies the mathematical arguments for the relative-perimeter and covariance-core
-interfaces. The approximation lemma below is Lean-certified; the other analytic arguments remain
-written proofs unless a Lean certificate is explicitly linked.
+interfaces. The approximation and recovery-sequence lemmas below have Lean proofs; other analytic
+arguments remain written proofs unless a Lean declaration and proof marker are explicitly linked.
 The statements specify their current domains and normalization; their interfaces may evolve
 during Lean implementation without a prior freeze.
 The two abstract comparison lemmas at the end are already proved in Lean.
@@ -127,6 +127,8 @@ which is at most one, bounds $\rho(x)$ uniformly in $x$.
 
 \begin{lemma}[Expansion and smoothing of a relative perimeter]
   \label{lem:relative-perimeter-smoothing}
+  \lean{FunctionalInequalities.KLS.RelativePerimeter.exists_smooth_recovery_sequence}
+  \leanok
   \uses{thm:borell-logconcave-density}
   For every smooth domain $U$ with $P_\rho(U)<\infty$, there are globally smooth Lipschitz
   functions $0\le u_j\le1$ such that
@@ -137,6 +139,7 @@ which is at most one, bounds $\rho(x)$ uniformly in $x$.
   The domain and the convex carrier may be unbounded.
 \end{lemma}
 \begin{proof}
+  \leanok
   Choose $a\in\Omega$ and $r>0$ with $\overline B(a,r)\subset\Omega$, and put
   $b_0=\min_{\overline B(a,r)}\rho>0$. For $0<s<1$ set
   $v_s(x)=\mathbf1_U(a+s(x-a))$; its domain is the outward dilation of $U$ by $1/s$.

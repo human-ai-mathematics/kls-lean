@@ -15,6 +15,27 @@ Proof certification refers to the current statement. Record mathematical scope c
 migrate affected consumers; the [current lifecycle](research/ledger-schema.md#lifecycle) gives
 the validation rules. Historical freeze records below preserve their reviewed snapshots.
 
+## Current semantic boundary (2026-09-16)
+
+The ledger has 24 certified nodes. Three WIP modules retain 8 direct holes: sharp finite-regularity
+Sard (1), the smooth Cheeger superlevel bound and reverse infimum comparison (2), and singular-law
+Cheeger energy comparisons (5). Smooth Sard, Gauss–Green, smooth perimeter recovery, compact
+Whitney extension, exact C¹ pieces and weighted coarea through locally Lipschitz functions are
+proved auxiliary results. They are not additional ledger certificates. The forward comparison
+`h_M ≤ h_S` is proved; the reverse and equality are not. The log-concave Cheeger–Buser workstream
+is assigned separately, as recorded in the current handoff.
+
+The canonical energy is `2 Ch` in the local-slope convention when the intrinsic law is absolutely
+continuous, including every log-concave law. The arbitrary singular-law identity and the
+asymptotic-Lipschitz identification remain open. One-dimensional Poincaré has coefficient 4,
+including Dirac laws; optimality of 4 is not a separately certified conclusion. `KLS.Conjecture`
+is the dimension-free proposition, not a theorem. See the
+[alignment review](research/decisions/2026-09-16-semantic-alignment.md).
+
+The dated construction sections below preserve their historical design context. Statements about
+what a particular round had not proved describe that round; the boundary above and current source
+determine completion today.
+
 ## Mathematical API organization (2026-09-08)
 
 The public frontends are `SmoothTest`, `SmoothGradient`, `WeightedGradient`,
@@ -662,8 +683,8 @@ undergo the static escape-token check. Semantic review and axiom inspection conc
 statement and proof, without a separate mandatory freeze checkpoint. The metadata checker
 validates the current state rather than approval history or signature stability.
 
-`.github/workflows/lean.yml` runs these two Python commands and the default Lean build on every
-push and pull request. It uses Python 3.12 without third-party packages and the official
+`.github/workflows/lean.yml` runs on pushes and pull requests whose changed paths include
+`**/*.lean`; non-Lean-only commits do not trigger it. It uses Python 3.12 without third-party packages and the official
 `leanprover/lean-action@v1` to set up Lean in `formalization`. CI then enumerates the local
 library and solution files' direct Mathlib imports, downloads those modules and their upstream
 dependencies with `lake exe cache get`, and runs the complete default `lake build`. The action's

@@ -5,9 +5,1388 @@ the distinction between known mathematics, local arguments, open research, and L
 This workflow runs locally and does not commit, push, dispatch agents, or publish artifacts.
 Public interfaces remain editable under [the lifecycle](ledger-schema.md#lifecycle).
 
+## Consolidated submission review (2026-09-17)
+
+See [the local review record](decisions/2026-09-17-consolidated-submission-review.md) for the combined proof scope,
+comment corrections and validation boundaries. The dated rounds below retain their original
+no-commit statements as historical records. The current next analytic obligation is R4.
+
+## Semantic alignment (2026-09-16)
+
+**Current source status.** There are **24 registered certificates** and **8 direct holes**:
+sharp finite-regularity Sard (1), Cheeger-infimum comparisons (2), and general Energy identities
+(5). The current full-library axiom scan found 12 declarations depending on these holes, all
+inside those three WIP modules; none escaped into the proved library or certificate layer.
+The dimension-free KLS bound remains open.
+
+The exact smooth recovery sequence is already proved by
+`KLS.RelativePerimeter.exists_smooth_recovery_sequence`. Its infrastructure assessment is now
+**available**, and its existing proof is now linked and marked complete in Blueprint. This
+auxiliary registration does not add a ledger certificate. The
+Cheeger-infimum node remains **missing** exactly the integrated superlevel bound and reverse
+comparison. Coarea through L13, smooth Sard, Gauss–Green and recovery are available inputs;
+they must not be listed as missing proofs. The Cheeger–Buser workstream remains assigned to
+王浩丞; this alignment changes no theorem statement or proof body. The proved recovery
+module is added to the aggregate imports so the registered declaration is audited there.
+
+See [the semantic alignment record](decisions/2026-09-16-semantic-alignment.md) for the reviewed scopes and reproducible evidence.
+The dated rounds below retain their historical counts and infrastructure assessments.
+
+## Approximate right inverses: route obligation `R3`, both versions, proved (2026-09-17)
+
+**Newest implementation round; it changes none of the registration numbers recorded above.** No
+hole was migrated: direct holes stay **8 (1/2/5)** and certificates **24**.
+
+**What is proved: exactly `R3`**, pointwise and locally uniform, in the new Mathlib-only module
+`Analysis/RightInverseBound.lean` (local import closure **1 module**, no work-in-progress file,
+aggregate untouched). With `R1` and `R2` of the round below, **three** of the route's thirteen
+numbered items are now discharged.
+
+**What `R3` is for.** The route slices inside a fibre of the regular component `v = P ∘ u`, and a
+chord of a fibre is *not* a tangent vector: two points of one fibre give only
+`‖Dv (b − a)‖ ≤ ε ‖b − a‖`, not `Dv (b − a) = 0`. Converting that into smallness of `‖Du (b − a)‖`
+needs the quantitative statement that a vector almost annihilated by a surjection is close to its
+kernel, which is a norm bound on a right inverse.
+
+**The uniform version is a hard requirement, not a convenience.** The `ε → 0` limit of the
+Eilenberg argument runs through a *different* approximating partition at every scale, so a constant
+depending on the piece is useless; the bound must hold with one constant on a whole neighbourhood.
+`exists_nhds_uniform_rightInverse_bound` supplies it by perturbing a single right inverse at the
+base point: `Units.isOpen` keeps `A ∘ R₀` invertible nearby, `NormedRing.inverse_continuousAt`
+keeps the inverse bounded, and `R₀ ∘ (A ∘ R₀)⁻¹` is then a right inverse of `A` of norm at most
+`2‖R₀‖`.
+
+**Both statements are stronger than the route asked for**: they need **no inner product** and **no
+finite-dimensional domain**. The domain is an arbitrary real normed space and only the target is
+finite-dimensional; the route's `coareaJacobian (fderiv ℝ v x₀) ≠ 0` is converted to surjectivity
+by the proved `coareaJacobian_ne_zero_iff`, so inner products enter only in that translation. The
+core estimate needs no surjectivity at all — any right inverse gives the bound with its own norm.
+
+**Where surjectivity is and is not needed, recorded so the obligation is not overstated.** It is
+what makes the right inverse exist: the rank-one projection of the plane admits none. It is **not**
+forced by the pointwise conclusion — the zero map satisfies that conclusion with `C = 0` while
+failing to be surjective — so this round does **not** claim surjectivity is necessary for the
+pointwise half, and does not prove the (true) statement that in finite dimensions every linear map
+satisfies it. For the **locally uniform** half the hypothesis at the base point does real work:
+along `t • id` the smallest admissible constant is `|t|⁻¹`, which blows up as the family approaches
+the non-surjective `0`, so no neighbourhood of such a point carries a single constant.
+
+**What is still open, which is most of it.** `R0` — the rank-deficient part of almost every level
+being `ℋ^k`-null — and `R4`–`R10`, `N1`, `N2` are **not proved**, and the **general codimension-`m`
+coarea formula remains open**. Nothing here is a coarea formula, a slicing statement or a Sard
+theorem, and no claim whatever is made about the measure of the set of critical *values*. **The
+next obligation, `R4`, is the point of no return**: with `R2` and `R3` in place it is
+self-contained, and if it fails the route is wrong.
+
+Boundary cases are covered rather than excluded: a zero-dimensional target, a linear isomorphism, a
+constant map, and the core estimate without surjectivity.
+
+`research/audits/RankDeficientRouteStatements.lean` stays **byte-unchanged**; the new client
+`research/audits/RightInverseBoundAudit.lean` copies its two `R3` propositions **verbatim** and
+discharges them, with **16 standard-only axiom reports**. The area-formula route statements were
+re-run and show **no new errors**; that file too stays byte-unchanged.
+
+Sharp finite-regularity Sard, the two Cheeger comparisons and the five Energy holes are untouched,
+and no existing `.lean` file was modified.
+
+**The log-concave Cheeger–Buser line belongs to 王浩丞 and is deliberately untouched here.**
+
+See [the right inverse decision](decisions/2026-09-17-right-inverse-bound.md) and
+`research/explorations/2026-09-17-right-inverse-bound.json`. The final verification receipt is
+identified in `build/audit/right-inverse-bound/final-snapshot.json`.
+No commit or push; the real Git index is unchanged.
+
+## Rank stratification and the kernel lemma: route obligations `R1` and `R2` proved (2026-09-17)
+
+**Newest implementation round; it changes none of the registration numbers recorded above.** No
+hole was migrated: direct holes stay **8 (1/2/5)** and certificates **24**.
+
+**A correction to the round below, recorded rather than hidden.** That round declined to prove
+anything on the ground that a new library module would force an edit to the aggregate
+`formalization/FunctionalInequalities.lean`. **That reason was wrong.** `research/verify.py`
+computes its build and kernel-replay scope from the source tree, not from the aggregate's import
+closure — `build_replay_inputs` is documented as building the exact replay scope *including modules
+outside default import closures* — and the existing `Analysis/Vector*.lean` modules are covered
+that way without appearing in the aggregate. Adding an `Analysis` module therefore needs no
+aggregate edit. The round below, its decision record and its receipt are **not rewritten**; the
+correction is appended there and repeated here.
+
+**What is proved: exactly `R1` and `R2`**, the first two obligations in the recommended order, in
+the new Mathlib-only module `Analysis/RankStratification.lean` (local import closure **1 module**,
+no work-in-progress file, and `formalization/FunctionalInequalities.lean` untouched).
+
+**`R2`, the kernel lemma**, is the structural heart of the route and pure linear algebra. If
+`P ∘ L` is surjective onto a space whose dimension equals the rank of `L`, then `P` is injective on
+the range of `L`, so `ker (P ∘ L) = ker L`. In the route `L` is the differential at a point of the
+stratum and `P` the orthogonal projection onto its range, so the conclusion is that **the
+differential vanishes along the fibre of the regular component** — the fact that will let the
+Eilenberg bound be applied inside a fibre at the exponent that matches. It uses no inner product,
+no measure and no completeness.
+
+**The dimension hypothesis of `R2` is necessary, and that is exhibited, not asserted.** Dropping
+only that hypothesis makes the statement false: for the identity of the plane composed with the
+first coordinate functional the composite is surjective onto `ℝ`, but the second basis vector lies
+in the kernel of the composite and not in the kernel of the identity. `R2` is therefore not a
+statement about surjectivity of the composite alone; it says exactly that `P` collapses no part of
+the range of `L`.
+
+**`R1`, the stratification**, has two halves. `measurableSet_rank_fderiv_eq`: the rank strata of a
+`C¹` differential are measurable, because Mathlib's `isOpen_setOfPred_nat_le_rank` makes
+`{f | r ≤ rank f}` open and a stratum is the difference of two such sets pulled back along the
+continuous derivative — needing **no** measurable structure on the operator space and **no**
+finite-dimensionality of the target. `setOf_not_surjective_fderiv_eq_iUnion`: the critical set is
+the finite union of the strata of rank below the target dimension, with **no** regularity of `u`,
+being pointwise linear algebra.
+
+**`m = 1` returns the proved scalar situation.** For a one-dimensional target the critical set is
+exactly the vanishing-derivative set, so the stratification adds nothing in codimension one, and
+the audit **derives** the `m = 1` case of the still-open `R0` from the already proved
+`ae_hausdorffMeasure_zeroDeriv_inter_levelSet_eq_zero`. That closes **no part of the rank-deficient
+problem**, which is empty when `m = 1`; the open case is `m ≥ 2`.
+
+**What is still open, which is nearly all of it.** `R0` — the rank-deficient part of almost every
+level being `ℋ^k`-null — and `R3`–`R10`, `N1`, `N2` are **not proved**, and the **general
+codimension-`m` coarea formula remains open**. Nothing here is a coarea formula, a slicing
+statement or a Sard theorem: no claim whatever is made about the measure of the set of critical
+*values*. The next step in the recommended order is `R3`, then the point of no return `R4`.
+
+Boundary cases are covered rather than excluded: a zero-dimensional target (every map surjective,
+both sides of the decomposition empty, which is why `R0` needs no positivity of the codimension), a
+zero-dimensional domain, a stratum index above the target dimension, and a zero-dimensional
+projection target in `R2`.
+
+`research/audits/RankDeficientRouteStatements.lean` stays **byte-unchanged**: the new client
+`research/audits/RankStratificationAudit.lean` copies its `R1` and `R2` propositions **verbatim**
+and discharges them, which is this repository's existing convention for a route obligation being
+met. It has **20 standard-only axiom reports**. This round also re-ran the area-formula route
+statements and found **no new errors**; that file too stays byte-unchanged.
+
+Sharp finite-regularity Sard, the two Cheeger comparisons and the five Energy holes are untouched,
+and no existing `.lean` file was modified.
+
+**The log-concave Cheeger–Buser line belongs to 王浩丞 and is deliberately untouched here.**
+
+See [the rank stratification decision](decisions/2026-09-17-rank-stratification.md) and
+`research/explorations/2026-09-17-rank-stratification.json`. The final verification receipt is
+identified in `build/audit/rank-stratification/final-snapshot.json`.
+No commit or push; the real Git index is unchanged.
+
+## Rank-deficient critical slicing: route exploration only (2026-09-17)
+
+**Newest round; it changes none of the registration numbers recorded above, and it proves
+nothing.** Direct holes stay **8 (1/2/5)** and certificates **24**.
+
+**No theorem was proved this round.** This was a route exploration for the one remaining
+structural gap of the codimension-`m` coarea program: the part of the critical set where the
+derivative is rank-deficient but nonzero. The deliverable is
+`research/audits/RankDeficientRouteStatements.lean`, a file of **15 `#check`s and nothing else** —
+no declaration, no proof, no placeholder axiom. **A proposition that type-checks is not a proof,
+and none of the 15 is proved anywhere in this repository.**
+
+**The obstruction, located.** Writing `Σ_r = {x | rank (fderiv ℝ u x) = r}`, the proved
+vanishing-derivative argument is exactly the `r = 0` layer: the approximating partition's linear
+models are values of the derivative, so on `Σ_0` the linear part drops out and `u` is genuinely
+`ε`-Lipschitz on each piece. For `r ≥ 1` it is not, in any direction inside the range of `Du`.
+Projecting onto the `m − r` surviving directions does restore a small Lipschitz constant, but at
+the **wrong exponent**: the Eilenberg bound then reads
+`∫⁻ τ, μH[d] (S ∩ {Q ∘ u = τ}) dτ ≤ C · ε ^ (m−r) · μH[d + (m−r)] S`, so a finite right-hand side
+forces `d = k + r`, and `μH[k + r]`-nullity says nothing about `μH[k]`. Insisting on `d = k`
+instead puts `μH[n − r] S` on the right, which is `∞` for every `r ≥ 1` as soon as `S` has positive
+Lebesgue measure. Both halves of this are written down as the route statements `N1` and `N2`.
+
+**The route.** The exponent is repaired by slicing first along the `r` good directions: with `W₁`
+the range of the differential and `P`, `Q` the orthogonal projections onto `W₁` and `W₁ᗮ`, the map
+`P ∘ u` is a submersion near a point of `Σ_r`, so the **proved** regular coarea formula applies and
+its fibres carry finite `ℋ^{n−r}` measure. On the stratum the differential kills the kernel of
+`P ∘ Du`, so `Q ∘ u` has vanishing derivative along those fibres, and the Eilenberg bound used
+**inside a fibre** has `d + (m − r) = n − r`, which is exactly right. This is an iterated slicing,
+and Fubini across the orthogonal splitting of the target puts the two levels back together.
+
+**What Mathlib has and lacks.** Mathlib has **no coarea formula, no constant-rank theorem and no
+degenerate part of Federer's coarea formula**. It does have `isOpen_setOfPred_nat_le_rank` (lower
+semicontinuity of the rank), the `ApproximatesLinearOn` line — which supplies the approximating
+partition and nothing about rank, and whose `antilipschitz` half needs the model to be an
+equivalence, so it does not apply here — the **equidimensional** Sard lemma
+`addHaar_image_eq_zero_of_det_fderivWithin_eq_zero`, and the measure-preserving orthogonal
+splitting tools `Submodule.orthogonalDecomposition`, `LinearIsometryEquiv.measurePreserving` and
+`WithLp.volume_preserving_ofLp`.
+
+**Ten numbered obligations, none proved**, with exact Lean statements in the route file: `R1` rank
+strata measurable, `R2` the kernel lemma, `R3` an approximate right inverse pointwise and locally
+uniformly, `R4` the tangential small-Lipschitz estimate, `R5` finiteness of the fibre measure, `R6`
+Fubini across the target splitting, `R7` the local per-stratum assembly, `R8` localization, `R9`
+the unconditional coarea formula that consumes it, and `R10` the equidimensional degenerate case.
+Estimated at roughly 1500 lines in total, with `R7` (450–600 lines) the only high-risk item and
+`R4` the single point of no return: it is self-contained once `R2` and `R3` are in, and if it fails
+the route is wrong. Recommended order is `R2`, `R1`, `R3`, `R4`, then `R5`/`R6` in parallel, then
+`R7`, `R8`, `R9`.
+
+**`R10` is cheap and was deliberately not proved.** With `n = m` the fibre dimension is `0` and
+`μH[0]`-nullity of a slice means the slice is empty, which Mathlib's equidimensional Sard lemma
+gives directly. Proving it would require a new library module and therefore an edit to the
+aggregate `formalization/FunctionalInequalities.lean`, which this round was instructed not to make.
+It is recorded as cheap-but-unproved rather than smuggled in, and it must not be counted as
+progress on the rank-deficient part: it says nothing about the intermediate ranks, which are the
+whole difficulty.
+
+**No Sard theorem is in scope here either.** The route targets null critical *slices*; nothing is
+claimed about the measure of the set of critical *values*, which for a merely `C¹` map may well be
+positive.
+
+This round reviewed the area-formula route statements again and found **no new errors**;
+`research/audits/AreaFormulaRouteStatements.lean` stays **byte-unchanged**. One new observation,
+recorded rather than acted on: `A5` carries the same `μH`-against-Lebesgue pairing as the falsified
+`A0`, but `A5` is an implication whose proof is countable additivity and is therefore
+normalization-agnostic, so `A5` is **not** falsified — only its conclusion is the literally false
+`A0`, so its hypothesis is unsatisfiable in that normalization.
+
+No `.lean` library source was modified, no module was added to the library, and no hole was
+migrated. The new client's local import closure is 28 modules with **no** work-in-progress file.
+
+**The log-concave Cheeger–Buser line belongs to 王浩丞 and is deliberately untouched here.**
+
+See [the rank-deficient route decision](decisions/2026-09-17-rank-deficient-route.md) and
+`research/explorations/2026-09-17-rank-deficient-route.json`. The final verification receipt is
+identified in `build/audit/rank-deficient-route/final-snapshot.json`.
+No commit or push; the real Git index is unchanged.
+
+## Codimension-`m` critical slicing: the vanishing-derivative part (2026-09-17)
+
+**Newest implementation round; it changes none of the registration numbers recorded above.** No
+hole was migrated: direct holes stay **8 (1/2/5)** and certificates **24**.
+
+**What is proved.** `Analysis/VectorCriticalSlice.lean` proves that for a `C¹` map into an
+`m`-dimensional target with `m ≥ 1`, almost every level meets `{x | fderiv ℝ u x = 0}` in an
+`ℋ^{n−m}`-null set. The argument is the scalar one verbatim — the approximating partition makes `u`
+`ε`-Lipschitz on disjoint pieces precisely because the derivative vanishes — run with the
+codimension-`m` Eilenberg bound, whose constant `ε ^ m` tends to `0` exactly because `m ≥ 1`. The
+positivity of `m` is a genuine hypothesis: with a zero-dimensional target every derivative vanishes.
+With it, `coarea_of_contDiff_of_critical_eq_zeroDeriv` extends the regular-case coarea formula to
+the whole space **under the hypothesis that the derivative vanishes wherever it fails to be
+surjective**; the measurability comes from the previous round's unconditional slice measurability,
+and the critical contribution vanishes on both sides.
+
+**`m = 1` gives back the proved scalar `L10` and `L11`.** For a real differential, non-surjective
+and zero are the same condition, so the dichotomy is automatic, and the audit recovers
+`KLS.ae_surfaceMeasure_critical_inter_levelSet_eq_zero` and `KLS.coarea_of_contDiff` verbatim — both
+with the extra `1 ≤ finrank V` that the codimension-`m` dimension bookkeeping forces, recorded
+rather than hidden.
+
+**The gap is exhibited, not asserted.** For `m ≥ 2` the coarea critical set is where the rank drops
+below `m`, **strictly larger** than the vanishing-derivative set. The audit's
+`rank_deficient_witness` is the rank-one orthogonal projection of the plane onto its first axis:
+its derivative is **nowhere zero** and **nowhere surjective**, so the vanishing-derivative set is
+empty while the critical set is everything, and the dichotomy hypothesis fails at every point. The
+method does not extend, because it rests on `u` being `ε`-Lipschitz on the pieces, which needs the
+derivative to vanish rather than merely to be non-surjective. **Nothing about the rank-deficient
+part is proved**, and with it the **general codimension-`m` coarea formula remains open**.
+
+**No Sard theorem is claimed**: nothing is asserted about the measure of the set of critical
+*values*, which for a merely `C¹` map may well be positive. `KLS/Geometry/CriticalSlice.lean` and
+`KLS/Geometry/SmoothCoarea.lean` were not modified; the codimension-`m` versions are parallel new
+modules. Sharp finite-regularity Sard, the two Cheeger comparisons and the five Energy holes are
+untouched.
+
+This round reviewed the area-formula route statements again and found **no further errors**;
+`research/audits/AreaFormulaRouteStatements.lean` stays **byte-unchanged**.
+
+The module's local import closure is 28 modules with **no** work-in-progress file.
+`research/audits/VectorCriticalSliceAudit.lean` has 17 standard-only axiom reports.
+
+**Next in the program**: the rank-deficient part is the only remaining structural gap. A plausible
+route is a rank stratification with iterated slicing along the surviving directions — the hard part
+of the degenerate case of Federer's coarea formula, for which neither this repository nor Mathlib
+has tools; a route-exploration round is recommended before attempting it.
+
+**The log-concave Cheeger–Buser line belongs to 王浩丞 and is deliberately untouched here.**
+
+See [the critical slicing decision](decisions/2026-09-17-vector-critical-slice.md) and
+`research/explorations/2026-09-17-vector-critical-slice.json`. The final verification receipt is
+identified in `build/audit/vector-critical-slice/final-snapshot.json`.
+No commit or push; the real Git index is unchanged.
+
+## Codimension-`m` compact slices and unconditional slice measurability (2026-09-17)
+
+**Newest implementation round; it changes none of the registration numbers recorded above.** No
+hole was migrated: direct holes stay **8 (1/2/5)** and certificates **24**.
+
+**Only half of the scalar layer needed redoing.** `Analysis/HausdorffContent.lean` proves two
+things: that the scalewise **open**-cover costs have `μH[d]` as their scale limit, and that at a
+fixed scale the open-cover cost of the slices of a compact set is upper semicontinuous in the level.
+The first is about the ambient space only and is reused **verbatim**; only the second mentions the
+target. Its proof is unchanged except that the real-valued distance `|u x − t|` becomes
+`dist (u x) t`.
+
+**What is proved.** `Analysis/VectorSliceMeasurable.lean` gives
+`measurable_hausdorffMeasure_inter_levelSet_vector` — for `S` compact and `u` continuous into a
+metric space, the slice measure is Borel measurable in the level, with no Lipschitz hypothesis and
+no finiteness — and then, with the Eilenberg inequality of the previous round, the whole chain:
+`aemeasurable_setLIntegral_inter_levelSet_vector` for a map Lipschitz on a Borel set, and
+`aemeasurable_setLIntegral_inter_levelSet_of_contDiffOn_vector` for a map that is `C¹` on an open
+set only. Inner regularity exhausts the Borel set by compacts up to a Lebesgue-null remainder, the
+compact pieces are handled by upper semicontinuity and the remainder by the Eilenberg null slicing;
+increasing simple functions carry the result to an arbitrary measurable `ℝ≥0∞` weight.
+
+**None of this needs the differential to be surjective.** Unlike the chart route of
+`Analysis/VectorRegularCoarea.lean`, these statements cover the **critical** part of the domain; the
+audit witnesses it with a constant map, whose differential is nowhere surjective once the target is
+positive-dimensional.
+
+**`m = 1` gives back the proved scalar statements, with one difference recorded rather than
+hidden.** `Analysis.measurable_hausdorffMeasure_inter_levelSet` is recovered verbatim, and
+`KLS.aemeasurable_setLIntegral_inter_levelSet_of_contDiffOn` is recovered **with an extra
+hypothesis `1 ≤ finrank V`**: the codimension-`m` statements carry
+`k + finrank W = finrank V`, so a zero-dimensional ambient space — which the scalar statement covers
+through natural subtraction and a subsingleton branch — is outside their reach.
+
+**What this is not: a coarea formula.** What is removed is the regularity hypothesis from the
+**measurability** half, not from the coarea **equality**, which still holds only where the
+differential is surjective. The critical part of the equality needs a codimension-`m` Sard or
+critical-slice argument, which is not proved. `HausdorffContent.lean`, `HausdorffSlicing.lean`,
+`SurfaceSlicing.lean` and `OpenSliceMeasurable.lean` were not modified; the codimension-`m` versions
+are parallel new modules. Sharp finite-regularity Sard, the two Cheeger comparisons and the five
+Energy holes are untouched.
+
+This round reviewed the area-formula route statements again and found **no further errors**;
+`research/audits/AreaFormulaRouteStatements.lean` stays **byte-unchanged**.
+
+The module's local import closure is 13 modules with **no** work-in-progress file.
+`research/audits/VectorSliceMeasurableAudit.lean` has 18 standard-only axiom reports.
+
+**Next in the program**: a codimension-`m` Sard or critical-slice argument, and then the general
+codimension-`m` coarea formula.
+
+**The log-concave Cheeger–Buser line belongs to 王浩丞 and is deliberately untouched here.**
+
+See [the slice measurability decision](decisions/2026-09-17-vector-slice-measurable.md) and
+`research/explorations/2026-09-17-vector-slice-measurable.json`. The final verification receipt is
+identified in `build/audit/vector-slice-measurable/final-snapshot.json`.
+No commit or push; the real Git index is unchanged.
+
+## The Eilenberg slicing inequality in codimension `m` (2026-09-17)
+
+**Newest implementation round; it changes none of the registration numbers recorded above.** No
+hole was migrated: direct holes stay **8 (1/2/5)** and certificates **24**.
+
+**What is proved.** `Analysis/VectorHausdorffSlicing.lean` is the codimension-`m` analogue of
+`Analysis/HausdorffSlicing.lean`: for `u` Lipschitz on `S` with values in an `m`-dimensional inner
+product space, the slice function `t ↦ μH[d] (S ∩ {u = t})` is dominated by a **measurable** `F`
+with `∫⁻ F ≤ volume (closedBall 0 1) · K ^ m · μH[d + m] S`. The majorant's measurability is part of
+the conclusion: the slice function itself is not known to be measurable at this point of the
+development. Its null case — a `μH[d + m]`-null set has `μH[d]`-null slices at almost every level —
+is proved with it, in the raw and in the normalized convention, the latter being what the coarea
+layer consumes. The module's local import closure is **two** modules; everything else is Mathlib.
+
+**Where the codimension enters, and only there.** The argument is a covering argument, not
+Rademacher. In the real-valued case the `u`-image of a cover piece lies in an **interval** of length
+`2 K · diam`; in codimension `m` it lies in a **ball** of radius `K · diam`, whose volume is
+`volume (closedBall 0 1) · (K · diam) ^ m` — that is the whole of the difference, and it is where
+the `m`-th power comes from.
+
+**`m = 1` gives back the proved scalar bound, constant included.** On the real line
+`volume (closedBall 0 1) = 2` and `K ^ 1 = K`, so the codimension-`m` constant **is** the scalar
+`2 K`; the audit reproduces the statement of `Analysis.exists_measurable_majorant` verbatim and
+discharges it from the codimension-`m` theorem.
+
+Degenerate data are handled rather than excluded: `K = 0`, `d = 0`, an infinite cover cost, and
+**a zero-dimensional target**, where every ball is the whole space and the inequality degenerates to
+an equality. `S` need not be measurable, bounded or nonempty, and `u` need not be globally
+Lipschitz, differentiable or measurable.
+
+**What this is not: slice measurability.** The chain from the Eilenberg inequality to unconditional
+weighted slice measurability is **not** completed: it also needs codimension-`m` **compact-slice
+measurability**, the analogue of `Analysis.measurable_hausdorffMeasure_inter_levelSet`, which is
+stated for a real-valued function and is not generalized here. So the coarea layer's
+codimension-`m` slice measurability still carries the regularity hypothesis obtained from the chart,
+the **critical set is still untreated**, and the **general codimension-`m` coarea formula remains
+open**. `Analysis/HausdorffSlicing.lean` was not modified: the codimension-`m` version is a parallel
+new module. Sharp finite-regularity Sard, the two Cheeger comparisons and the five Energy holes are
+untouched.
+
+This round reviewed the area-formula route statements again and found **no further errors**;
+`research/audits/AreaFormulaRouteStatements.lean` stays **byte-unchanged**.
+
+`research/audits/VectorHausdorffSlicingAudit.lean` has 15 standard-only axiom reports.
+
+**Next in the program**: codimension-`m` compact-slice measurability — generalizing the scalewise
+open-cover costs and their upper semicontinuity in the level to a vector-valued map — then
+unconditional weighted slice measurability, and only then the critical case.
+
+**The log-concave Cheeger–Buser line belongs to 王浩丞 and is deliberately untouched here.**
+
+See [the Eilenberg decision](decisions/2026-09-17-vector-hausdorff-slicing.md) and
+`research/explorations/2026-09-17-vector-hausdorff-slicing.json`. The final verification receipt is
+identified in `build/audit/vector-hausdorff-slicing/final-snapshot.json`.
+No commit or push; the real Git index is unchanged.
+
+## Codimension-`m` slice measurability and the regular coarea formula (2026-09-17)
+
+**Newest implementation round; it changes none of the registration numbers recorded above.** No
+hole was migrated: direct holes stay **8 (1/2/5)** and certificates **24**.
+
+**The route differs from the scalar one, and that is a real limitation.** In codimension one the
+repository proves weighted slice measurability for an **arbitrary** Borel subset of an open `C¹`
+domain, with **no** regular-point hypothesis, through the Eilenberg slicing inequality of
+`KLS/Geometry/SurfaceSlicing.lean`. The **codimension-`m` Eilenberg inequality is not proved here**
+and Mathlib does not provide it. So this round goes through the chart instead: on a level-graph
+family the slice integral is the Tonelli section of one measurable function on the parameter–level
+product, so its measurability is immediate and no slicing inequality is used. The cost is that the
+statement holds **only where the differential is surjective**.
+
+**What is proved.** `Analysis/VectorRegularCoarea.lean` gives chart-local weighted slice
+measurability, the neighbourhood form carrying both the measurability and the equality, and their
+assembly: **`coarea_of_contDiffOn_of_coareaJacobian_ne_zero`, the codimension-`m` regular coarea
+formula** — the analogue of the scalar `L9`. On an open set where the differential is everywhere
+surjective, for every Borel `S` inside it and every measurable `ℝ≥0∞` weight, the level function is
+**measurable** and
+
+`∫ coareaJacobian (Du) · g dx = ∫_t ∫_{S ∩ {u = t}} g dℋ^{n−m} dt`,
+
+with the normalized Hausdorff measure of the codimension as fibre measure. The assembly is the same
+shape as the scalar one: countable cover, `disjointed` pieces, the neighbourhood form on each, and
+`lintegral_tsum`. The conclusion is `Measurable`, **stronger** than the scalar `L9`'s
+`AEMeasurable`; that is a by-product of the chart route. No finiteness, boundedness, integrability,
+regular-value or `SFinite` hypothesis, and no regularity outside the open set.
+
+**`m = 1` gives back the proved scalar `L9` verbatim.** The audit reproduces the statement of
+`KLS.coarea_of_contDiffOn_of_fderiv_ne_zero` — gradient norm, `surfaceMeasure V`, `AEMeasurable` —
+and discharges it from the codimension-`m` theorem, through `coareaJacobian_fderiv`, the dimension
+identity, and the fact that a nonzero real differential is surjective.
+
+**What this is not: the general codimension-`m` coarea formula.** That needs the **critical set**,
+hence a codimension-`m` Sard or critical-slice argument, and it needs slice measurability without
+the regularity hypothesis, hence the codimension-`m` Eilenberg slicing inequality — none of which is
+proved. Sharp finite-regularity Sard, the two Cheeger comparisons and the five Energy holes are
+untouched.
+
+This round reviewed the area-formula route statements again and found **no further errors**;
+`research/audits/AreaFormulaRouteStatements.lean` stays **byte-unchanged**.
+
+The module's local import closure is 21 modules with **no** work-in-progress file.
+`research/audits/VectorRegularCoareaAudit.lean` has 11 standard-only axiom reports.
+
+**Next in the program**: the codimension-`m` Eilenberg slicing inequality, which is what would make
+slice measurability available without regularity and open the critical case.
+
+**The log-concave Cheeger–Buser line belongs to 王浩丞 and is deliberately untouched here.**
+
+See [the regular coarea decision](decisions/2026-09-17-vector-regular-coarea.md) and
+`research/explorations/2026-09-17-vector-regular-coarea.json`. The final verification receipt is
+identified in `build/audit/vector-regular-coarea/final-snapshot.json`.
+No commit or push; the real Git index is unchanged.
+
+## Weighted codimension-`m` area formula and the local coarea equality (2026-09-17)
+
+**Newest implementation round; it changes none of the registration numbers recorded above.** No
+hole was migrated: direct holes stay **8 (1/2/5)** and certificates **24**.
+
+**The weighted area formula.** `Analysis/VectorGraphIntegral.lean` upgrades obligation `B2` from an
+identity of *measures of sets* to an identity of *measures*:
+`map_vectorGraphMap_withDensity` says the graph parametrization pushes the Jacobian-weighted
+Lebesgue measure on the parameter space forward to the normalized surface measure restricted to the
+graph — injectivity of the graph map is automatic by construction, and its image is measurable, both
+already proved. From it, `setLIntegral_image_vectorGraphMap` is the **weighted codimension-`m` graph
+area formula**: the surface integral of an arbitrary measurable `ℝ≥0∞` weight over a piece of a `C¹`
+graph is the Lebesgue integral of that weight against the graph area density. `B2` is the `f = 1`
+case, recovered verbatim in the audit. No integrability, finiteness or boundedness is assumed, and
+the weight may be identically `∞`.
+
+**The local coarea equality.** `Analysis/VectorLocalCoarea.lean` joins three results, one from each
+of the last three rounds — the ambient-side identity, this round's weighted area formula, and the
+slice description — by Tonelli in the level variable. The outcome is
+`setLIntegral_coarea_levelGraphFamily`, the codimension-`m` analogue of the scalar
+`setLIntegral_coarea_graph_family`, and hence `exists_vector_coarea_neighborhood`: **every point
+where the differential is surjective has an open neighbourhood on every Borel subset of which the
+codimension-`m` coarea equality holds**, for every measurable `ℝ≥0∞` weight, with the surface
+measure in dimension `finrank V - finrank W`. The hypotheses are only that `u` is `C¹` on an open set
+and that its differential is surjective at the point: no regularity outside that set, and no
+finiteness, boundedness, integrability, regular-value or `SFinite` hypothesis.
+
+**`m = 1` returns the proved scalar statements.** The audit recovers the repository's proved
+`Analysis.setLIntegral_image_graphMap` from the codimension-`m` weighted formula, and checks that the
+ambient density of the local coarea equality is `‖gradient u x‖ₑ` when the target is `ℝ`.
+
+**What this is not: the codimension-`m` regular coarea formula.** Two things are missing. First,
+codimension-`m` **weighted slice measurability** — the `AEMeasurable` statement for
+`t ↦ ∫⁻ over S ∩ {u = t}` — without which a sum cannot be exchanged with the outer integral, since
+`lintegral_tsum` needs measurability; the scalar analogue is
+`KLS/Geometry/OpenSliceMeasurable.lean`. Second, the **countable cover with disjoint patching** that
+assembles the neighbourhood form into an equality on a whole regular open set; the scalar analogue
+is the assembly in `KLS/Geometry/RegularCoarea.lean`. Critical slicing, sharp finite-regularity
+Sard, the two Cheeger comparisons and the five Energy holes are untouched.
+
+This round reviewed the area-formula route statements again and found **no further errors**;
+`research/audits/AreaFormulaRouteStatements.lean` stays **byte-unchanged**.
+
+The two modules' local import closures are 11 and 20 modules, with **no** work-in-progress file.
+`research/audits/VectorLocalCoareaAudit.lean` has 15 standard-only axiom reports.
+
+**Next in the program**: codimension-`m` weighted slice measurability, then the countable cover and
+disjoint patching.
+
+**The log-concave Cheeger–Buser line belongs to 王浩丞 and is deliberately untouched here.**
+
+See [the local coarea decision](decisions/2026-09-17-vector-local-coarea.md) and
+`research/explorations/2026-09-17-vector-local-coarea.json`. The final verification receipt is
+identified in `build/audit/vector-local-coarea/final-snapshot.json`.
+No commit or push; the real Git index is unchanged.
+
+## Fibrewise `m`-dimensional change of variables (2026-09-17)
+
+**Newest implementation round; it changes none of the registration numbers recorded above.**
+It is the **third** auditable sub-block of the codimension-`m` **regular** case and does not
+complete it. **No coarea formula is proved.** No hole was migrated: direct holes stay **8 (1/2/5)**
+and certificates **24**.
+
+**A Mathlib gap had to be filled first.** Mathlib's change of variables
+`lintegral_image_eq_lintegral_abs_det_fderiv_mul` is a **self-map** statement, `f : E → E`, whose
+volume factor `|det (f' x)|` is the determinant of an endomorphism. A fibre map `t ↦ ψ (y, t)` goes
+from the level space `W` to the normal factor `K`, two **different** spaces of the same dimension,
+so that determinant does not even typecheck.
+`Analysis/VectorFiberIntegral.lean` proves the missing statement,
+`lintegral_image_eq_lintegral_normDet_fderiv_mul`: the change of variables between two inner product
+spaces of the same dimension, with `LinearMap.normDet` — which is defined between different spaces —
+as the volume factor. The proof conjugates by a linear isometry equivalence, which is measure
+preserving and has unit norm determinant, so nothing is added; the chosen isometry appears only
+inside the proof and in no statement. The map needs only a within-derivative at each point and
+injectivity there, and the weight is an arbitrary `ℝ≥0∞` function: **no integrability, finiteness or
+continuity**.
+
+**What is proved on top of it.** `setLIntegral_image_vectorVerticalMap` is the codimension-`m`
+vertical substitution for `T (y, t) = (y, ψ (y, t))`, with the level space and the normal factor
+kept distinct throughout; `setLIntegral_image_levelGraphMap` transports it to the ambient space
+along the measure-preserving splitting proved two rounds ago; and
+`setLIntegral_coareaJacobian_levelGraphFamily` is the **ambient side of the local coarea equality**:
+on a Borel piece of a level-graph family, the integral of the ambient coarea density against an
+arbitrary weight equals the integral over the parameter–level domain of the **graph area density**,
+which is exactly what the proved area formula `B2` consumes. The change of density is the previous
+round's fibre Jacobian identity, applied pointwise.
+
+**The equal-dimension hypothesis is necessary**, and the audit exhibits the failure rather than
+asserting it: for the line map from `ℝ` into the plane on the unit interval the left-hand side is
+`0`, because the image lies in a proper subspace, and the right-hand side is `1`.
+
+**`m = 1` returns the proved scalar substitution.** The audit derives the repository's already
+proved `Analysis.setLIntegral_image_verticalMap` **verbatim** from the codimension-`m` statement.
+
+**What this is not**: not the codimension-`m` coarea formula and not its regular case. Still missing
+are the **weighted** codimension-`m` area formula on the fibre side — the analogue of
+`setLIntegral_image_graphMap`, since last round's fibre measure carries weight one only — the
+Tonelli assembly in the level variable, the patching, and codimension-`m` weighted slice
+measurability. Critical slicing, sharp finite-regularity Sard, the two Cheeger comparisons and the
+five Energy holes are untouched.
+
+This round reviewed the area-formula route statements again and found **no further errors**;
+`research/audits/AreaFormulaRouteStatements.lean` stays **byte-unchanged**.
+
+The module's local import closure is 18 modules with **no** work-in-progress file.
+`research/audits/VectorFiberIntegralAudit.lean` has 16 standard-only axiom reports.
+
+**Next in the program**: the weighted codimension-`m` graph area formula, then Tonelli joining the
+two sides into the local coarea equality, then the countable patching.
+
+**The log-concave Cheeger–Buser line belongs to 王浩丞 and is deliberately untouched here.**
+
+See [the fibre change-of-variables decision](decisions/2026-09-17-vector-fiber-integral.md) and
+`research/explorations/2026-09-17-vector-fiber-integral.json`. The final verification receipt is
+identified in `build/audit/vector-fiber-integral/final-snapshot.json`.
+No commit or push; the real Git index is unchanged.
+
+## Codimension-`m` parametric implicit-function charting (2026-09-17)
+
+**Newest implementation round; it changes none of the registration numbers recorded above.**
+It is the **second** auditable sub-block of the codimension-`m` **regular** case and does not
+complete it. **No coarea formula is proved.** No hole was migrated: direct holes stay **8 (1/2/5)**
+and certificates **24**.
+
+**What is proved.** `Analysis/VectorRegularChart.lean` builds the codimension-`m` analogue of
+`RegularChart.lean`: near a point where the differential is surjective, the fibres of `u : V → W`
+are **simultaneously** the graphs of **one globally `C¹` map** `ψ` over a fixed parameter space,
+with the level as a parameter. `exists_levelGraphFamily` delivers an open joint domain `Ω ⊆ H × W`,
+a globally `C¹` `ψ`, and an open neighbourhood `N ⊆ O` of the point that the graph map
+`p ↦ ι p.1 + κ (ψ p)` carries **bijectively** onto `Ω`'s image, with `u (ι p.1 + κ (ψ p)) = p.2`.
+Its regular-point form assumes only `coareaJacobian (fderiv ℝ u x₀) ≠ 0`: the parameter space is the
+kernel of the differential, the normal factor its orthogonal complement, and the codimension match
+is automatic. There is **no** regularity hypothesis outside `O` and no finiteness, boundedness,
+integrability, regular-value or `SFinite` hypothesis anywhere.
+
+**One step genuinely differs from codimension one.** The scalar chart
+`x ↦ graphRetract ι x + u x • e` is still valued in `V`, because the normal direction is a line
+inside `V` and `u x` is a scalar. In codimension `m` the value `u x` lies in `W`, which is **not**
+inside `V`, so this round's chart maps into the **product**, `Φ x = (ιᵀ x, u x) : H × W`. No copy of
+`W` inside `V` and no identification of the normal factor with `W` is needed, and the repository's
+`exists_contDiffOn_localInverse` is already stated between two different spaces. The inverse of the
+derivative is written down **explicitly**, `(y, w) ↦ ι y + κ (Q⁻¹ w)`, rather than obtained from a
+dimension count.
+
+**Two interfaces with results already proved.** `slice_eq_image_vectorGraphMap` identifies
+`N ∩ {u = t}` with the graph of `y ↦ ψ (y, t)`, so
+`hausdorffNormalized_slice_of_levelGraphFamily` measures that fibre through the proved area formula
+`B2` — **with weight one**; the weighted version, the analogue of `setLIntegral_image_graphMap`, is
+**not** proved. And `normDet_fderiv_mul_coareaJacobian_of_levelGraphFamily` shows the family
+satisfies verbatim the hypotheses of the previous round's fibre Jacobian identity, so the two
+densities match on the whole chart.
+
+**`m = 1` returns the proved scalar shape.** The audit proves that a scalar `IsGraphSplitting` **is**
+a vector splitting with one-dimensional normal factor, and that from the scalar hypotheses
+`gradient u x₀ = c • e` with `c ≠ 0` the chart produces `u (ι y + ψ (y, t) • e) = t` — exactly the
+`hlevel` shape consumed by the proved `Analysis.setLIntegral_coarea_graph_family`.
+
+**What this is not**: not the codimension-`m` coarea formula and not its regular case. Still missing
+are the fibrewise `m`-dimensional change of variables on the ambient side, the **weighted** area
+formula on the fibre side, the local-to-global patching, and codimension-`m` weighted slice
+measurability. Critical slicing, sharp finite-regularity Sard, the two Cheeger comparisons and the
+five Energy holes are untouched.
+
+This round reviewed the area-formula route statements again and found **no further errors**; the two
+already recorded — `B1` and `A0`, the latter proved false last round — stand, and
+`research/audits/AreaFormulaRouteStatements.lean` stays **byte-unchanged**.
+
+The module's local import closure is 16 modules with **no** work-in-progress file.
+`research/audits/VectorRegularChartAudit.lean` has 25 standard-only axiom reports.
+
+**Next in the program**: the fibrewise `m`-dimensional change of variables on this round's
+measure-preserving splitting, and the weighted codimension-`m` area formula; then the assembly into
+the local coarea equality and the countable patching.
+
+**The log-concave Cheeger–Buser line belongs to 王浩丞 and is deliberately untouched here.**
+
+See [the charting decision](decisions/2026-09-17-vector-regular-chart.md) and
+`research/explorations/2026-09-17-vector-regular-chart.json`. The final verification receipt is
+identified in `build/audit/vector-regular-chart/final-snapshot.json`.
+No commit or push; the real Git index is unchanged.
+
+## Codimension-`m` fibre Jacobian: the regular case's density matching (2026-09-16)
+
+**Newest implementation round; it changes none of the registration numbers recorded above.**
+It delivers **one complete, auditable sub-block** of the codimension-`m` **regular** case and
+**does not** complete that case. **No coarea formula is proved.** No hole was migrated: direct
+holes stay **8 (1/2/5)** and certificates **24**.
+
+**Why not the whole regular case.** The scalar `L9` chain is four stages: local graph family,
+measure-preserving splitting, fibrewise change of variables, pointwise density matching, then
+patching. Stages one and two alone are `ImplicitGraph.lean` (859 lines), `RegularChart.lean` (164)
+and `SubgraphDivergence.lean` (859), and the codimension-`m` analogue needs a **parametric**
+implicit function theorem into an `m`-dimensional target and an `m`-dimensional fibrewise change of
+variables. Rather than leave half a chain, this round finishes the one stage that is genuinely new
+mathematics and independent of the charting machinery — the **density matching** — together with
+the linear and measure backbone of stage two.
+
+**What is proved.** `Analysis/CoareaGraphJacobian.lean` matches the two densities of the
+codimension-`m` coarea formula. In linear form, under an orthogonal splitting `V = ι '' H ⊕ κ '' K`
+with `finrank K = finrank W` and a slope whose graph lies in `ker L`,
+`coareaJacobian L = normDet (L ∘ κ) · normDet (graphMapLinear ι κ A)`. In `C¹` form, along a level
+family `u (ι y + κ (ψ (y, t))) = t`,
+`normDet (Dₜψ) · coareaJacobian (fderiv ℝ u x) = normDet (graphMapLinear ι κ (D_yψ))` — the
+codimension-`m` analogue of `abs_deriv_mul_norm_gradient`, whose right-hand side is exactly the
+density the proved `B2` integrates. Only differentiability of `u` at the point is used: **no
+finiteness, boundedness, integrability, regular-value or `SFinite` hypothesis**. The round also
+proves that `(y, z) ↦ ι y + κ z` **preserves Lebesgue measure**, the Tonelli backbone the next
+stage needs, and that a surjective differential supplies the splitting and the codimension match
+automatically.
+
+**One piece of linear algebra was missing from Mathlib.** The **Weinstein–Aronszajn identity in
+linear-map form**, `det (1 + X ∘ Y) = det (1 + Y ∘ X)` with the two identity maps on *different*
+spaces; Mathlib has the matrix statement only. It is precisely the passage from the Gram
+determinant on the target — a coarea Jacobian — to the Gram determinant on the parameter space — an
+area Jacobian.
+
+**The codimension hypothesis `finrank K = finrank W` is necessary, and the audit exhibits the
+failure rather than asserting it.** With `finrank W < finrank K` and `L` surjective the right-hand
+side is `0` while the left-hand side is not; `necessity` instantiates this with the zero subspace
+of `ℝ²` as parameter space, the whole plane as normal factor and `ℝ` as target, where orthogonality,
+spanning and the slope equation all hold.
+
+**A second route-statement error, reported and corrected rather than quietly fixed.** Reviewing
+the route statements again for the defect recorded for `B1` last round, obligation **`A0`** — the
+route's own target, the Federer area formula — carries **exactly the same** normalization defect: it
+pairs the **raw** `μH[finrank H]` on the left with **Lebesgue** measure on the right. The audit's
+`route_A0_false` **proves that statement false**, with the identity map of the plane on the closed
+unit ball, the two sides differing by `2² / ω₂ = 4 / π`. Obligation **`A5`** writes the same
+mis-pairing on **both** sides, so the constant cancels and `A5` is **not** falsified by it, though
+its hypothesis is then not the true local area formula. `A1`–`A4` and `B2` are unaffected.
+`research/audits/AreaFormulaRouteStatements.lean` is left **byte-unchanged** as its own round's
+dated evidence.
+
+**`m = 1` returns the proved scalar theory.** `normDet_graphMapLinear_eq_graphJacobian` identifies
+the new volume factor with `graphJacobian`, `coareaJacobian_fderiv` already identified the ambient
+density with `‖gradient u x‖`, and `abs_deriv_mul_norm_gradient_of_vectorGraphSplitting` is
+literally the scalar identity.
+
+**What this is not**: not the codimension-`m` coarea formula, not its regular case, and not the
+codimension-`m` charting or the fibrewise `m`-dimensional change of variables — none of which
+exists anywhere in the repository. Critical slicing, sharp finite-regularity Sard, the two Cheeger
+comparisons and the five Energy holes are untouched.
+
+The module's local import closure is 9 modules with **no** work-in-progress file.
+`research/audits/CoareaGraphJacobianAudit.lean` has 30 standard-only axiom reports.
+
+**Next in the program**: the codimension-`m` local graph family from a parametric implicit function
+theorem, then the `m`-dimensional fibrewise change of variables on this round's measure-preserving
+splitting, then the assembly with `B2` and the countable patching.
+
+**The log-concave Cheeger–Buser line belongs to 王浩丞 and is deliberately untouched here.**
+
+See [the fibre Jacobian decision](decisions/2026-09-16-coarea-graph-jacobian.md) and
+`research/explorations/2026-09-16-coarea-graph-jacobian.json`. The final verification receipt is
+identified in `build/audit/coarea-graph-jacobian/final-snapshot.json`.
+No commit or push; the real Git index is unchanged.
+
+## Codimension-`m` area formula for `C¹` graphs: `B1` completed (2026-09-16)
+
+**Newest implementation round; it changes none of the registration numbers recorded above.**
+`Analysis/VectorGraphArea.lean` proves the **codimension-`m` area formula for `C¹` graphs**, in both
+the raw and the normalized Hausdorff convention. Obligation `B1` of the area formula route is
+complete. No hole was migrated: direct holes stay **8 (1/2/5)** and certificates **24**.
+
+The `k`-dimensional measure of the graph of a `C¹` `K`-valued map over a measurable parameter set is
+the integral of `√det (1 + Dγᵀ Dγ)` — against `μH[k]` in the raw form, against **Lebesgue** measure
+in the normalized form, which is what the coarea program consumes. The parameter set need only be
+measurable: **no finiteness, boundedness or injectivity hypothesis**, a graph map being injective by
+construction.
+
+**One step genuinely differs from codimension one.** That proof uses that the Jacobian
+`√(1 + ‖a‖²)` is globally `1`-Lipschitz in the slope, so closeness of derivatives transfers to
+closeness of Jacobians. In codimension `m` the Jacobian `√det (1 + AᵀA)` is **not** uniformly
+Lipschitz — for `A = t • id` on a two-dimensional parameter space it grows like `1 + t²` — so the
+previous round's partition was not enough. This round's partition controls the Jacobian
+**directly**, which the continuity proved as obligation `A1` supplies. Everything after that
+mirrors the codimension-one file, and its limit lemmas `tendsto_aux`, `tendsto_aux'` are
+graph-independent and were reused unchanged.
+
+**A correction to the route statements, recorded rather than quietly fixed.** Obligation `B1` as
+written in `research/audits/AreaFormulaRouteStatements.lean` paired the **raw** `μH[k]` on the left
+with **Lebesgue** measure on the right. Those differ by `2^k / ω_k`, which is `1` only for `k ≤ 1`,
+so **that statement is false as written for `k ≥ 2`** and is not what was proved. Both correct
+pairings are proved and audited: raw with raw, and normalized with Lebesgue — the latter being the
+route's `B2`, which was stated correctly and is discharged verbatim. The route statements file is
+left **byte-unchanged** as its own round's dated evidence.
+
+**What this is not**: it is the area formula for a **graph**, not the Federer area formula `A0` for
+an arbitrary injective `C¹` parametrization, which stays open together with `A2`–`A5`. The route
+recommended the graph version precisely because a graph map is injective by construction and has an
+explicit left inverse.
+
+The module's local import closure is 10 modules with **no** work-in-progress file.
+`research/audits/VectorGraphAreaAudit.lean` has 10 standard-only axiom reports.
+
+**Next in the program**: the codimension-`m` **regular case** of the coarea formula, the analogue of
+the scalar `L9` — on the open set where `coareaJacobian ≠ 0`, represent the fibres as a family of
+graphs by the parametric implicit function theorem and apply this round's normalized area formula.
+
+**The log-concave Cheeger–Buser line belongs to 王浩丞 and is deliberately untouched here.**
+Sharp finite-regularity Sard, Energy's five holes and dimension-free KLS also remain open.
+
+See [the `B1` completion decision](decisions/2026-09-16-vector-graph-area.md) and
+`research/explorations/2026-09-16-vector-graph-area.json`. The final verification receipt is
+identified in `build/audit/vector-graph-area/final-snapshot.json`.
+No commit or push; the real Git index is unchanged.
+
+## Vector-valued sandwich estimates: `B1` fourth phase (2026-09-16)
+
+**Superseded by the `B1` completion round above; retained as a dated snapshot. It it changes none of the registration numbers recorded above.**
+`Analysis/VectorGraphSandwich.lean` proves the two-sided estimates of the codimension-`m` graph area
+formula, together with the approximating partition that feeds the fifth phase. **The area formula
+itself is still not proved**, no hole was migrated: direct holes stay **8 (1/2/5)** and certificates
+**24**.
+
+Everything rests on the **Pythagorean identity** `‖ι y + κ z‖² = ‖y‖² + ‖z‖²`, which holds because
+the two embeddings have orthogonal ranges. Its consequence is that a graph map **never moves points
+closer together** — and that is exactly the lower-bound input the general area formula route has to
+extract from an inverse it does not have. With it, a graph map that is `ε`-close to its linear model
+has `k`-dimensional image measure within a factor `(1 + ε)^k` of the linear one, on **both** sides.
+
+Both directions reduce to the same generic comparison
+`Analysis.hausdorffMeasure_image_le_of_norm_le`, which was already proved for the codimension-one
+file and is **reused, not reproved**; the linear case comes from Mathlib. The round also supplies
+`exists_approximating_partition_vectorGraph`, the countable measurable partition on which the graph
+map is `ε`-approximated and the derivative stays `ε`-close to the corresponding slope.
+
+The module's local import closure is 9 modules with **no** work-in-progress file.
+`research/audits/VectorGraphSandwichAudit.lean` has 15 standard-only axiom reports. Its
+`exact_at_zero` client is the sandwich **degenerating correctly at `ε = 0`**, not the area formula.
+
+**Next, and last, for `B1`**: the fifth phase — `ε → 0` and the countable patching, about 280 lines
+in the codimension-one file. The limit lemmas `tendsto_aux` and `tendsto_aux'` there are already
+graph-independent, so they should be reusable and the remaining work should come in under that.
+Route obligations `A2`–`A5` and `B2` remain untouched.
+
+**The log-concave Cheeger–Buser line belongs to 王浩丞 and is deliberately untouched here.**
+Sharp finite-regularity Sard, Energy's five holes and dimension-free KLS also remain open.
+
+See [the fourth-phase decision](decisions/2026-09-16-vector-graph-sandwich.md) and
+`research/explorations/2026-09-16-vector-graph-sandwich.json`. The final verification receipt is
+identified in `build/audit/vector-graph-sandwich/final-snapshot.json`.
+No commit or push; the real Git index is unchanged.
+
+## Vector-valued graphs: `B1` first part (2026-09-16)
+
+**Superseded by the fourth-phase round above; retained as a dated snapshot. It it changes none of the registration numbers recorded above.**
+`Analysis/VectorGraph.lean` mirrors phases two and three of the codimension-one area formula file
+with a vector-valued slope. **The area formula itself is not proved**, no hole was migrated: direct
+holes stay **8 (1/2/5)** and certificates **24**.
+
+`Analysis/AreaFormula.lean` (codimension one, 957 lines) runs in five phases — linear model, `C¹`
+graph map, linear approximation, two-sided estimates, area formula. This round does phases two and
+three in codimension `m`, and gets phase one for free.
+
+Proved: `vectorGraphMap ι κ γ = fun y ↦ ι y + κ (γ y)`; the retraction identity
+`graphProj ι (vectorGraphMap ι κ γ y) = y`, which is the **explicit left inverse** the general route
+`A3` has to construct by hand, valid for an arbitrary slope; injectivity with **no hypothesis on the
+slope**, so no `InjOn` assumption and no multiplicity anywhere; the derivative identification
+`HasFDerivAt (vectorGraphMap ι κ γ) (graphMapLinear ι κ (fderiv ℝ γ y)) y`, so the volume factor
+computed last round is pointwise the right one; linear approximation on a ball where the derivative
+varies by at most `ε` — **cleaner than codimension one**, since the second factor is an isometry and
+its norm disappears rather than needing the `innerSL`/gradient detour; and image measurability.
+
+**Phase one came for free.** The linear case of `B1` follows directly from Mathlib's linear area
+formula together with last round's `normDet_graphMapLinear`, so the shear-and-dilation argument the
+codimension-one file needed (about 160 lines) is not repeated. The round also consumes `A1` to show
+the volume factor along a `C¹` slope is measurable, so the right-hand side of `B1` is a genuine
+lower integral.
+
+The module's local import closure is 8 modules with **no** work-in-progress file.
+`research/audits/VectorGraphAudit.lean` has 20 standard-only axiom reports, including codimension
+zero, a constant slope and a zero-dimensional parameter space.
+
+**Next**: phases four and five — the two-sided Hausdorff estimates, where the explicit left inverse
+pays for itself on the lower bound, then `ε → 0` and the countable patching. One to two rounds.
+Route obligations `A2`–`A5` and `B2` remain untouched.
+
+**The log-concave Cheeger–Buser line belongs to 王浩丞 and is deliberately untouched here.**
+Sharp finite-regularity Sard, Energy's five holes and dimension-free KLS also remain open.
+
+See [the `B1` first-part decision](decisions/2026-09-16-vector-graph.md) and
+`research/explorations/2026-09-16-vector-graph.json`. The final verification receipt is identified
+in `build/audit/vector-graph/final-snapshot.json`.
+No commit or push; the real Git index is unchanged.
+
+## Route obligation `A1` proved: continuity of the volume factor (2026-09-16)
+
+**Superseded by the `B1` first-part round above; retained as a dated snapshot. It it changes none of the registration numbers recorded above.**
+`Analysis/NormDetContinuity.lean` proves that `normDet` is continuous in the operator and that the
+area-formula integrand is measurable. **No area formula and no coarea formula are proved**, no hole
+was migrated: direct holes stay **8 (1/2/5)** and certificates **24**.
+
+Why it was a real obligation: Mathlib carries the algebra of `LinearMap.normDet` but **not** its
+continuity, and without that the right-hand side of the area formula is not even known to integrate
+a measurable function. The previous round's route exploration listed this as `A1`.
+
+Proved: `normDet A = √det (Aᵀ ∘L A)` in continuous-linear-map form; `A ↦ Aᵀ ∘L A` is continuous
+because the adjoint is a linear isometry and composition is a bounded bilinear map; hence
+`continuous_normDet` by `ContinuousLinearMap.continuous_det` and `Real.continuous_sqrt`; hence
+`measurable_normDet_fderiv`. The same chain gives `continuous_coareaJacobian` and
+`measurable_coareaJacobian_fderiv` on the coarea side.
+
+**Stronger than the route asked for**: the route stated measurability under `ContDiff ℝ 1 g`, but
+`measurable_fderiv` holds for an arbitrary function — `fderiv` is zero where the function is not
+differentiable — so the proved lemma carries **no** differentiability hypothesis and the route form
+follows by discarding it. The audit records this against a function that is differentiable nowhere.
+
+**Consistency with the proved scalar theory**: combining the new measurability with
+`coareaJacobian_fderiv` gives measurability of `‖gradient u x‖`, the integrand of the already proved
+`L11`/`L12`/`L13`. The new layer is the same object as the scalar one, not a parallel construction.
+
+The module's local import closure is 2 modules with **no** work-in-progress file.
+`research/audits/NormDetContinuityAudit.lean` has 13 standard-only axiom reports and reproduces the
+two `A1` route statements verbatim before discharging them;
+`research/audits/AreaFormulaRouteStatements.lean` is left **byte-unchanged** as the previous round's
+dated evidence.
+
+**Route progress.** `A1` is done. Still open: `A2` (image-side countable additivity), `A3` (the
+two-sided comparison against an injective linear model — the high-risk gap of the general route),
+`A4` (degenerate part null), `A5` (local to global), `B1` (the codimension-`m` graph area formula,
+the recommended main target, 600–1000 lines over two to three rounds) and `B2` (its normalized
+form). **Next is `B1`.**
+
+**The log-concave Cheeger–Buser line belongs to 王浩丞 and is deliberately untouched here.**
+Sharp finite-regularity Sard, Energy's five holes and dimension-free KLS also remain open.
+
+See [the `A1` decision](decisions/2026-09-16-normdet-continuity.md) and
+`research/explorations/2026-09-16-normdet-continuity.json`. The final verification receipt is
+identified in `build/audit/normdet-continuity/final-snapshot.json`.
+No commit or push; the real Git index is unchanged.
+
+## Nonlinear area formula: route exploration (2026-09-16)
+
+**Superseded by the `A1` round above; retained as a dated snapshot. It was a route exploration and changed none of the registration numbers above.**
+**No theorem was proved and no `.lean` library source was modified.** The only new Lean file is
+`research/audits/AreaFormulaRouteStatements.lean`, which contains **`#check`s only** — it declares
+nothing, proves nothing and adds no placeholder axiom, exactly as
+`WeightedCoareaRouteStatements.lean` did for the scalar route. Direct holes stay **8 (1/2/5)** and
+certificates **24**.
+
+**Findings.** Mathlib has **no** area formula for maps between spaces of differing dimensions, and
+**no** continuity of `normDet`, so measurability of the integrand is a genuine obligation rather
+than a lookup. The textbook route partitions the domain with
+`exists_partition_approximatesLinearOn_of_hasFDerivWithinAt`, which does exist with the right shape
+and even guarantees that each linear model is an actual differential.
+
+**The obstruction is localized at the lower half of the sandwich.**
+`ApproximatesLinearOn.antilipschitz` requires the linear model to be a continuous linear
+**equivalence** — hence equal dimensions — so it does not apply when `finrank H < finrank V`. The
+available replacement, `ContinuousLinearMap.antilipschitz_of_injective_of_isClosed_range`, only
+produces `∃ K, AntilipschitzWith K f` through `Classical.choose`, with none of the quantitative
+control the sandwich needs. Supplying that step is obligation `A3`, estimated at 250–500 lines and
+high risk.
+
+**Recommendation: take the graph route instead.** A graph map `y ↦ ι y + κ (γ y)` is injective by
+construction and its parameter projection `ιᵀ` is an **explicit** left inverse, which is precisely
+what the general route lacks; its volume factor `√det (1 + Aᵀ A)` was proved last round, and it
+already agrees with the repository's codimension-one `graphJacobian`. The repository proved the
+codimension-**one** graph case in `Analysis/AreaFormula.lean` (957 lines, alongside
+`Analysis/ImplicitGraph.lean` at 859), and that is the honest cost anchor for the codimension-`m`
+analogue: obligation `B1`, 600–1000 lines, expected to take two to three rounds. The general
+obligation `A3` can then be skipped, and `A4` — the degenerate part — does not arise at all,
+because a graph map's differential is always injective.
+
+**Suggested order**: `A1` (continuity and measurability of `normDet`, low risk) first, then `B1`,
+then the patching obligations `A5` and `A2`, and only afterwards the codimension-`m` regular case
+of the coarea formula itself.
+
+The nine obligations `A0`–`A5`, `B1`, `B2` are stated exactly in the route statements file and
+type-check under `-DwarningAsError=true`. **None of them is claimed to hold in Lean.**
+
+**The log-concave Cheeger–Buser line belongs to 王浩丞 and is deliberately untouched here.**
+Sharp finite-regularity Sard, Energy's five holes and dimension-free KLS also remain open.
+
+See [the area formula route decision](decisions/2026-09-16-area-formula-route.md) and
+`research/explorations/2026-09-16-area-formula-route.json`. The final verification receipt is
+identified in `build/audit/area-formula-route/final-snapshot.json`.
+No commit or push; the real Git index is unchanged.
+
+## Graph Jacobian in arbitrary codimension: codimension-`m` step 2, linear layer (2026-09-16)
+
+**Superseded by the area formula route exploration above; retained as a dated snapshot. It it changes none of the registration numbers recorded above.**
+`Analysis/GraphJacobian.lean` supplies the graph model the codimension-`m` coarea program needs.
+**No area formula and no coarea formula are proved in this round**, and no hole was migrated:
+direct holes stay **8 (1/2/5)** and certificates **24**.
+
+What the round established first is a limitation of what was already there: the area formula proved
+in `Analysis/AreaFormula.lean` is **codimension one only** — its graph is the graph of a
+*real-valued* function, with linear model `graphLinear ι e a v = ι v + ⟪a, v⟫ • e` and factor
+`graphJacobian a = √(1 + ‖a‖²)`. Fibres of a map into an `m`-dimensional target have codimension
+`m`, so the plan of reducing a general `C¹` parametrization to the existing graph formula only
+covers `m = 1`; a `K`-valued slope model had to be built first.
+
+Proved: for a slope `A : H →L[ℝ] K` and isometric embeddings with orthogonal ranges, the Gram
+operator of `y ↦ ι y + κ (A y)` is `1 + Aᵀ A` **on the parameter space**, the two isometries each
+contributing the identity and the cross terms vanishing by orthogonality; hence the volume factor
+in arbitrary codimension is `√det (1 + Aᵀ A)`, a determinant on the parameter space and therefore
+independent of the ambient embedding. The squared form needs no square root and no positivity
+argument.
+
+The codimension-one case **agrees exactly**: `normDet (graphLinear ι e a) = graphJacobian a`. This
+identifies the repository's own codimension-one Jacobian with Mathlib's general `normDet`, so the
+already proved codimension-one area formula is the `m = 1` case of the general volume factor. The
+proof avoids the rank-one determinant lemma: the repository's linear codimension-one area formula
+and Mathlib's linear area formula describe the scaling of the same map, and the volume factor of a
+linear map is unique because some set has positive finite measure.
+
+The module's local import closure is 6 modules with **no** work-in-progress file.
+`research/audits/GraphJacobianAudit.lean` has 11 standard-only axiom reports, including a flat
+graph, a subsingleton target and a zero-dimensional parameter space.
+
+**The next target is now pinned exactly.** The end of that audit file records, as a proposition
+type-check and explicitly **not** a proof, the Federer area formula for an injective `C¹`
+parametrization: `μH[k] (g '' s) = ∫⁻ y in s, ofReal (normDet (fderiv ℝ g y))`. That remains open.
+
+**The log-concave Cheeger–Buser line belongs to 王浩丞 and is deliberately untouched here.**
+Sharp finite-regularity Sard, Energy's five holes and dimension-free KLS also remain open.
+
+See [the graph Jacobian decision](decisions/2026-09-16-graph-jacobian.md) and
+`research/explorations/2026-09-16-graph-jacobian.json`. The final verification receipt and
+exact-source comparison are identified in `build/audit/graph-jacobian/final-snapshot.json`.
+All incoming Lean files, historical decisions and audit clients retain their bytes.
+No commit or push; the real Git index is unchanged.
+
+## Linear area formula and affine fibres: codimension-`m` step 1 (2026-09-16)
+
+**Superseded by the graph Jacobian round above; retained as a dated snapshot. It it changes none of the registration numbers recorded above.**
+`KLS/Geometry/LinearAreaFormula.lean` carries the **linear** area formula from Mathlib's raw `μH`
+across to this repository's `KLS.hausdorffNormalized` normalization, and draws the fibre
+consequence the codimension-`m` coarea formula needs. **No coarea formula and no `C¹` area formula
+are proved in this round.** No hole was migrated and no certificate was added: direct holes stay
+**8 (1/2/5)** and certificates **24**.
+
+Why it is needed: Mathlib proves `μH[k] (L '' s) = normDet L * μH[k] s` for the raw Hausdorff
+measure, while every measure here is the classical `ω_d (diam/2)^d` normalization. The two differ
+by a dimensional constant, and the inner integral of the codimension-`m` formula has to come out
+with **no residual constant**, or the whole formula acquires a spurious dimensional factor.
+
+Proved: the normalized linear area formula, where the same constant appears on both sides and
+cancels, so the norm determinant is the exact volume factor; the adjoint of a linear isometric
+embedding is a left inverse, hence such an embedding has **unit** norm determinant and preserves
+the normalized `k`-dimensional measure; and, combining these with the already proved translation
+invariance and top-dimensional identity, that **a translated isometric slice carries exactly
+Lebesgue measure on its parameter space**. Specialized to `ker L`, that is the fibre statement: the
+fibres of a linear map are translates of its kernel, and measured in the kernel's dimension they
+carry exactly its Lebesgue measure. For surjective `L` that dimension is `n - m`, which the audit
+records separately.
+
+The round **reuses rather than reproves**: `Analysis.hausdorffNormalized_image_add_left`,
+`KLS.hausdorffNormalized_finrank_eq_volume` and Mathlib's `LinearMap.hausdorffMeasure_image` are
+all taken as given. The module's local import closure is 8 modules and contains **no**
+work-in-progress file. `research/audits/LinearAreaFormulaAudit.lean` has 14 standard-only axiom
+reports, including a top-dimensional consistency check, a zero-dimensional parameter space, a
+degenerate zero map and the codimension count.
+
+**Next in the program**: the nonlinear local area formula — the `k`-dimensional measure of a `C¹`
+parametrized image as the integral of `normDet (fderiv)`. The repository already has the `C¹`
+**graph** case and the `RegularChart`/`ImplicitGraph`/`LocalInverse` charts, so the general case
+should reduce to it locally. Then the codimension-`m` regular case, then the critical part and the
+gluing.
+
+**The log-concave Cheeger–Buser line belongs to 王浩丞 and is deliberately untouched here.**
+Sharp finite-regularity Sard, Energy's five holes and dimension-free KLS also remain open.
+
+See [the linear area formula decision](decisions/2026-09-16-linear-area-formula.md) and
+`research/explorations/2026-09-16-linear-area-formula.json`. The final verification receipt and
+exact-source comparison are identified in
+`build/audit/linear-area-formula/final-snapshot.json`.
+All incoming Lean files, historical decisions and audit clients retain their bytes.
+No commit or push; the real Git index is unchanged.
+
+## Coarea Jacobian: the codimension-`m` program opens (2026-09-16)
+
+**Superseded by the linear area formula round above; retained as a dated snapshot. It it changes none of the registration numbers recorded above.**
+`Analysis/CoareaJacobian.lean` defines `Analysis.coareaJacobian L = sqrt (det (L ∘ Lᵀ))` and proves
+its basic theory. It is the **linear-algebra layer of the vector-valued (codimension-`m`) coarea
+program**, and **no coarea formula is proved in this round**. No hole was migrated and no
+certificate was added: direct holes stay **8 (1/2/5)** and certificates **24**.
+
+Mathlib already carries the rectangular volume factor `LinearMap.normDet f = sqrt (det (fᵀ ∘ f))`,
+together with its square, nonnegativity, singular-value product, vanishing criterion, and the fact
+that it is the volume factor for Hausdorff measure. `normDet` is the **area**-formula Jacobian; the
+coarea Jacobian is its adjoint counterpart, so this module defines `coareaJacobian L = normDet Lᵀ`
+rather than re-deriving determinant theory. The linear-algebra layer of the program therefore did
+not have to be built from scratch.
+
+Proved here: nonnegativity; the defining identity `J² = det (L ∘ Lᵀ)`, a determinant on the
+**target**, hence the `m × m` Gram determinant and not the `n × n` one; the adjoint of a real
+functional sends `1` to its Riesz representative; the scalar value is the norm of that
+representative; `ker Lᵀ = (range L)ᗮ`; and the regular-set characterization **`J ≠ 0` iff `L` is
+surjective**, which is what the codimension-`m` formula will split on and which degenerates to a
+nonzero gradient when `W = ℝ`.
+
+The point of the round is **`coareaJacobian_fderiv`**: `coareaJacobian (fderiv ℝ u x)` is
+*literally* `‖gradient u x‖`, the integrand of the proved `L11`/`L12`/`L13`. So the already
+certified scalar theory is the `m = 1` case of this density, and no existing statement has to be
+restated, weakened or rewritten to accommodate the vector-valued program. That compatibility is
+proved, not asserted.
+
+The module depends on **Mathlib only** — its local import closure is itself.
+`research/audits/CoareaJacobianAudit.lean` has 17 standard-only axiom reports, including the
+identity map, the zero map, a subsingleton target and a Euclidean projection.
+
+**Next in the program**: the area formula for lowering dimension, then the codimension-`m` regular
+case via a parametric implicit-function normal form, then the critical part and the gluing. The
+scalar chain `L1`–`L13` took about ten rounds; no faster schedule is promised.
+
+**The log-concave Cheeger–Buser line — the alignment of the isoperimetric-constant definitions
+through the two-way Poincaré comparison, including the two remaining holes of
+`KLS/WIP/CheegerInfimum.lean` — belongs to 王浩丞 and is deliberately untouched here.** Sharp
+finite-regularity Sard, Energy's five holes and dimension-free KLS also remain open.
+
+See [the coarea Jacobian decision](decisions/2026-09-16-coarea-jacobian.md) and
+`research/explorations/2026-09-16-coarea-jacobian.json`. The final verification receipt and
+exact-source comparison are identified in `build/audit/coarea-jacobian/final-snapshot.json`.
+All incoming Lean files, historical decisions and audit clients retain their bytes.
+No commit or push; the real Git index is unchanged.
+
+## Locally Lipschitz coarea: L13 proved (2026-09-16)
+
+**Historical L13 implementation snapshot; current registration status is recorded above.**
+`KLS/Geometry/LocallyLipschitzCoarea.lean` proves `KLS.coarea_of_locallyLipschitz` (L13): the
+weighted coarea equality and slice `AEMeasurable` for a **locally Lipschitz** real function, any
+measurable set and any measurable `ENNReal` weight. No global Lipschitz constant, no `C¹`
+regularity, and no boundedness, finite-volume, integrability, positive-dimension or `SFinite`
+surface-measure hypothesis.
+
+This is a **common generalization of L11 and L12**, which both keep their statements and proofs:
+`LipschitzWith K u → LocallyLipschitz u` recovers L12, and `ContDiff ℝ 1 u → LocallyLipschitz u`
+recovers L11. The generalization is **strict**, and the audit proves that rather than asserting it:
+`x ↦ x² + ‖x‖` is shown to be locally Lipschitz, **not** globally Lipschitz for any constant, and
+**not** differentiable at `0`, so neither earlier theorem reaches it, while L13 does.
+
+The proof reduces to L12 on half-open annuli. A finite-dimensional space is proper, so `u` is
+Lipschitz on each closed ball and McShane extension replaces it there by a globally Lipschitz
+`v k`. Each piece `S ∩ (ball 0 (k+1) \ ball 0 k)` sits inside the **open** ball, where `u` and
+`v k` agree on a neighbourhood of every point, so the gradients agree pointwise and the level sets
+cut each piece identically — the equality is not inferred from agreement on a sparse set. Countable
+additivity assembles both conclusions; the total slice measurability comes from the same countable
+decomposition, since an unbounded `S` carries no global `LipschitzOnWith` bound and L5 does not
+apply directly.
+
+**No hole was migrated**, so direct holes stay **8 (1/2/5)**, certificates **24**, perimeter
+infrastructure **missing**. The audit client imports no work-in-progress file and its 10 axiom
+reports are standard-only.
+
+**The log-concave Cheeger–Buser line — the alignment of the isoperimetric-constant definitions
+through the two-way Poincaré comparison, including the two remaining holes of
+`KLS/WIP/CheegerInfimum.lean` — was handed to 王浩丞 on 2026-09-16 and is deliberately untouched
+here.** Sharp finite-regularity Sard, Energy's five holes and dimension-free KLS also remain open.
+
+See [the L13 decision](decisions/2026-09-16-locally-lipschitz-coarea.md) and
+`research/explorations/2026-09-16-locally-lipschitz-coarea.json`. The final verification receipt and
+exact-source comparison are identified in
+`build/audit/locally-lipschitz-coarea/final-snapshot.json`.
+All incoming Lean files, historical decisions and audit clients retain their bytes.
+No commit or push; the real Git index is unchanged.
+
+## Original `T2` entry point migrated: the last coarea hole is closed (2026-09-16)
+
+**Superseded by the L13 round above; retained as a dated snapshot.**
+`Analysis.lintegral_enorm_gradient_mul_eq_lintegral_levelSet` has left
+`KLS/WIP/AnalyticPrerequisites.lean`, where it was a direct hole, for the end of the hole-free
+`KLS/Geometry/LipschitzCoarea.lean`, beside the `L12` theorem `KLS.coarea_of_lipschitz` that
+proves it at `S = Set.univ`. **No new theorem was proved this round**: this is a migration and a
+rewiring, not a new proof, and the coarea theorem was not reproved.
+
+The migration is signature-preserving, and that was checked by machine twice, not by eye and not
+by a `defeq` claim. The `pp.all` type printed before the move from an environment importing the
+work-in-progress file and after it from an environment importing the new module is byte-identical
+(SHA256 `9e2121c254f66ed331b0f8fbb6b7ca7955f277f3f66705d7ed21a6ff490786a9`). Because `#check @`
+renames universes, a second probe reads the stored `ConstantInfo` directly: the universe parameter
+is `u` on both sides, the twelve binder names and binder kinds agree, and the type hashes are
+equal; the only difference is the module tag inside the inaccessible anonymous instance binders,
+which is by construction the enclosing module name. So the universe, the six instance arguments in
+their original order — `CompleteSpace V` included, which is what the statement's `gradient`
+actually elaborates against — the implicit binders `u`, `K`, `g`, the hypothesis names `hu`, `hg`,
+the `LipschitzWith` hypothesis, the `KLS.surfaceMeasure` normalization and the unrestricted
+`ℝ≥0∞` weight range are unchanged. No `C¹`, positive-dimension, finite-volume, integrability or
+`SFinite` hypothesis was added, and no compatibility alias was introduced.
+
+Direct source holes drop to **8 (1/2/5)**: `KLS/WIP/AnalyticPrerequisites.lean` keeps only the
+sharp `C^(finrank)` `Analysis.sard`, whose statement and proof, and those of
+`Analysis.ae_forall_fderiv_ne_zero`, are unchanged. Certificates stay **24**, perimeter
+infrastructure stays **missing**. With `T1` and `T3` already migrated in earlier rounds, all three
+original coarea targets are now formally wired to hole-free modules.
+
+`research/audits/LipschitzCoareaMigrationAudit.lean` imports the new module and both
+work-in-progress files, so its sixteen reports come from one environment: twelve are standard-only
+(the migrated declaration, `KLS.coarea_of_lipschitz`, the two previously migrated neighbours, and
+eight clients including a verbatim restatement discharged through named arguments, the original
+`T2` proposition text, a function not differentiable at zero, an identically infinite weight and a
+zero-dimensional space), while `Analysis.sard`, `Analysis.ae_forall_fderiv_ne_zero` and the two
+Cheeger comparisons still report `sorryAx`. The two existing consumers,
+`research/audits/LevelSetMeasurableAudit.lean` and `research/audits/IsoperimetryCoareaAudit.lean`,
+gained the new import and lost `sorryAx` on exactly their two coarea reports each; their client
+statements were not altered.
+
+**Sharp finite-regularity Sard, both Cheeger comparisons, Energy's five holes and dimension-free
+KLS remain open.** See [the T2 migration decision](decisions/2026-09-16-t2-coarea-migration.md)
+and `research/explorations/2026-09-16-t2-coarea-migration.json`. The final full verification
+receipt and exact-source comparison are identified in `build/audit/t2-migration/final-snapshot.json`.
+All incoming Lean files, historical decisions and audit clients retain their bytes.
+No commit or push; the real Git index is unchanged.
+
+## Lipschitz coarea: L6a, L7 and L12 proved (2026-09-16)
+
+**Superseded by the T2 migration round above; retained as a dated snapshot.**
+`Analysis/LipschitzJet.lean` proves L6a: compact jets covering almost every point of a Lipschitz
+function, retaining differentiability, continuity of the ambient derivative and a uniform
+first-order remainder. The proof works for any additive Haar measure on a finite-dimensional
+real normed space. `Analysis/LipschitzC1Pieces.lean` combines these jets with L6 and disjointifies
+them to prove L7, preserving both values and ambient derivatives on each measurable piece.
+
+`KLS/Geometry/LipschitzCoarea.lean` proves `KLS.coarea_of_lipschitz` (L12): weighted coarea and
+slice AEMeasurable for a globally Lipschitz real function, any measurable set and any measurable
+ENNReal weight. No C¹, positive-dimension, boundedness, finite-volume, integrability or SFinite
+surface-measure hypothesis is added. L11 handles the C¹ pieces, L2 removes the remaining null
+slices, and countable additivity joins them. The new strict client proves the original L6a/L7/L12
+and T2 propositions with byte-identical statement text and 15 standard-only axiom reports.
+It includes a function not differentiable at zero, an infinite weight and a zero-dimensional case.
+
+**Next: migrate the original T2 entry point**, preserving its machine-printed `pp.all` signature.
+The mathematical Lipschitz coarea theorem and the original T2 proposition are proved, but the old
+`Analysis.lintegral_enorm_gradient_mul_eq_lintegral_levelSet` declaration in
+`KLS/WIP/AnalyticPrerequisites.lean` is unchanged and still contains `sorry`. Thus source holes
+remain **9 (2/2/5)** until that separate integration; certificates **24**, perimeter infrastructure
+**missing**. Sharp finite-regularity Sard, both Cheeger comparisons, Energy's five holes and
+dimension-free KLS remain open.
+
+See [the L12 decision](decisions/2026-09-16-lipschitz-coarea.md) and
+`research/explorations/2026-09-16-lipschitz-coarea.json`. The final full verification receipt and
+exact-source comparison are identified in `build/audit/lipschitz-coarea/final-snapshot.json`.
+All incoming Lean files, historical decisions and audit clients retain their bytes.
+No commit or push; the real Git index is unchanged.
+
+## Whitney extension: L6 proved (2026-09-16)
+
+**Superseded by the L6a/L7/L12 round above; retained as a dated snapshot.**
+`Analysis/WhitneyConstruction.lean` proves `WhitneyJet.exists_contDiff_extension`: every compact
+first-order real-valued jet in a finite-dimensional real inner-product space, with continuous
+derivative data and the original uniform remainder condition, has a global C¹ extension with
+exact values and ambient derivatives on the set. Empty sets, zero dimension and sparse sets are
+included. This completes the original L6 compact-set statement; the arbitrary noncompact
+closed-set version is not asserted.
+
+The construction uses the new `WhitneyCover`, `WhitneyBump` and `WhitneyPartition` modules:
+a capped-distance Vitali cover, local overlap at most `81^finrank`, smooth nonnegative weights
+summing to one, and derivative bounds proportional to inverse radius. Nearest-point affine jets
+then satisfy both uniform estimates required by the previously proved boundary gluing theorem.
+`research/audits/WhitneyConstructionAudit.lean` proves the original L6 proposition with all its
+instances and hypotheses retained. Its 13 axiom reports contain only the three standard axioms.
+The source/client checks and preservation audit are in
+`research/explorations/2026-09-16-whitney-extension.json`; the final exact-source verification
+receipt is identified by `build/audit/whitney-extension/final-snapshot.json`.
+
+**Next: L6a, compact jet extraction for Lipschitz functions**, retaining differentiability,
+continuous derivative data and a uniform remainder on each compact piece. Then use L6 to prove
+L7's exact C¹ pieces, before L12. See
+[the extension decision](decisions/2026-09-16-whitney-extension.md).
+L6a/L7/L12 and Lipschitz coarea remain open. Direct holes **9 (2/2/5)**, certificates **24**,
+perimeter infrastructure **missing**; sharp finite-regularity Sard, both Cheeger comparisons,
+and dimension-free KLS remain open. All incoming Lean files and historical decisions retain their
+bytes. No commit or push; the real Git index is unchanged.
+
+## Whitney boundary gluing: L6 started (2026-09-16)
+
+**Superseded by the full L6 extension round above; retained as a dated snapshot.**
+The new `Analysis/WhitneyExtension.lean` proves the **boundary gluing step**, not L6's existence
+claim. `WhitneyJet.exists_contDiff_of_compl_approx` takes a C¹ candidate on the complement of a
+compact set, with uniformly small value and derivative errors relative to nearest-point affine
+jets, and constructs a globally C¹ extension with the exact prescribed values and derivatives.
+The candidate need not be continuous or agree with the data on the compact set. The boundary
+proof works in any real normed space; it does not require finite dimension or interior points.
+
+**Next: construct the controlled candidate on `Sᶜ`.** The precise remaining proposition is
+`#check`ed (not proved) in `research/audits/WhitneyExtensionAudit.lean`. Implement a Whitney
+cover and smooth partition with support radii comparable to distance from `S`, bounded overlap,
+and derivative bounds; combine the affine jets and prove both estimates consumed by the new
+reduction. A qualitative partition of unity alone does not supply these quantitative bounds.
+See [the boundary decision](decisions/2026-09-16-whitney-boundary.md) for the exact target
+and the value/derivative cancellation argument. Do not replace this task with an interior bump
+extension or assert equality of ambient derivatives from equality on a sparse set.
+
+The new strict client covers empty sets, arbitrary nonzero derivatives on a singleton,
+a zero-dimensional domain, and a candidate whose value on the set must be discarded. Thirteen
+axiom reports use only `propext`, `Classical.choice`, and `Quot.sound`. The original FirstOrderJet
+module/client, all prior Lean sources and all prior decisions retain their bytes.
+A was closed first with receipt `20260915T170113.583163Z`: 10 gates, 190 replayed modules,
+475 entries, snapshot `051483acb993b037ccccd2682cb0c735a9d373ce20cc399defc54a384b10fa09`.
+The separate final B receipt and exact-source comparison are recorded in
+`build/audit/whitney-boundary/final-snapshot.json`; source/check evidence is in
+`research/explorations/2026-09-16-whitney-boundary.json`.
+
+**L6/L6a/L7/L12 and Lipschitz coarea remain open.** Direct holes **9 (2/2/5)**, certificates
+**24**, perimeter infrastructure **missing**. Sharp finite-regularity Sard, both Cheeger
+comparisons, and dimension-free KLS remain open. No commit or push; the real Git index is unchanged.
+
+## First-order jet necessity closeout (2026-09-16)
+
+**Superseded by the Whitney boundary gluing round above; retained as a dated snapshot.**
+`Analysis.uniform_jet_remainder_of_contDiff` in `Analysis/FirstOrderJet.lean` proves that a
+globally C¹ realization on a compact set satisfies L6's uniform first-order remainder estimate.
+This is the **necessity direction only**: L6's extension existence, L6a, L7 and Lipschitz
+coarea remain open. The four strict axiom reports in `research/audits/FirstOrderJetAudit.lean`
+use only the standard axioms. Direct WIP holes stay **9 (2/2/5)**, certificates **24**, and
+perimeter infrastructure **missing**. The next proof target is the original compact-set jet
+extension L6, with exact values and derivatives and no extra interior assumption.
+
+The incoming migration receipt `20260915T164547.132773Z` covers 471 entries; the starting
+workspace has 473 entries and SHA256 `2e0e01c666cbbec14f684c0ded0d5e6130719c95fbf106c895c0dc399cc908ad`.
+Their only differences are the FirstOrderJet module and client. This expected mismatch is closed
+by the new source-bound verification, not by rewriting the migration's historical evidence.
+See `research/decisions/2026-09-16-first-order-jet.md` and
+`research/explorations/2026-09-16-first-order-jet.json`; the exact closeout receipt is recorded in
+`build/audit/first-order-jet/final-snapshot.json`. All existing work is retained; no commit or push.
+
+## Isoperimetry coarea migration round (2026-09-16)
+
+**Superseded by the First-order jet necessity closeout above; retained as a dated snapshot.**
+This round **closes the second original coarea hole**. The direct hole
+`KLS.Isoperimetry.lintegral_enorm_gradient_mul_eq_lintegral_levelSet` moved out of
+`KLS/WIP/CheegerInfimum.lean` into the hole-free `KLS/Geometry/IsoperimetryCoarea.lean` with a
+**byte-identical `pp.all` signature** and is now proved from last round's `L11`
+(`KLS.coarea_of_contDiff` at `S = univ`). Direct holes drop **10 (2/3/5) → 9 (2/2/5)**;
+`KLS/WIP/CheegerInfimum.lean` is down to its two Cheeger comparisons. Certificates stay **24**,
+perimeter infrastructure **missing**.
+
+Byte-identity is machine-checked: the `pp.all` type was printed before the move in an environment
+importing the WIP file and after the move in one importing the new module, and the two logs `diff`
+empty (`build/audit/iso-signature-before.log`, `iso-signature-after.log`). The same universe, the
+same **seven** instance arguments in the same order — including the `CompleteSpace V` and
+`SecondCountableTopology V` the proof does not use — the same binders and hypothesis names, and the
+same conclusion. The unused section variables and the unused hypothesis name `hK` are kept and the
+two linters silenced, rather than the signature being narrowed by `omit` or `hK` renamed to `_`.
+The `LipschitzWith` hypothesis is never used: the declaration already assumes `ContDiff ℝ 1 u`.
+The WIP file lost exactly that one declaration, plus the now-empty `section Coarea` scaffolding it
+left behind; every other declaration there is unchanged in statement, proof and position, and the
+original is kept at `build/audit/iso-migration-CheegerInfimum.before.lean`.
+
+**This round proves no new theorem** and does **not** close the Lipschitz coarea formula.
+`research/audits/IsoperimetryCoareaAudit.lean` imports the new module **and both** WIP files, so its
+eight `#print axioms` reports come from one environment: the migrated result reports only `propext`,
+`Classical.choice` and `Quot.sound`, while `Analysis.lintegral_enorm_gradient_mul_eq_lintegral_levelSet`
+(the **Lipschitz** formula, assuming no `C¹` regularity — the migrated result is its `C¹`
+specialization and does not imply it), the sharp `Analysis.sard`, both Cheeger comparisons and the
+Cheeger equality all still report `sorryAx`. A client theorem restating the Lipschitz formula
+compiles **with** `sorryAx`.
+
+Eighteen earlier strict clients re-pass unedited, the three WIP files actually recompile with
+**2/2/5** direct holes, and default `lake build` and root `research/verify.py` pass; the final
+source-bound receipt is `build/verification/latest.json`, with the final equality check in
+`build/audit/iso-migration-final-snapshot.json`. No commit, no push. See
+[the migration decision](decisions/2026-09-16-isoperimetry-coarea-migration.md) and
+`research/explorations/2026-09-16-isoperimetry-coarea-migration.json`.
+
+Still unproved: the **Lipschitz** coarea formula, which needs `L12`, hence `L7` and the closed-set
+Whitney jet extension `L6`/`L6a`; sharp `C^(finrank)` `Analysis.sard` (no downstream consumer);
+sharpness of the Eilenberg constant; both Cheeger comparisons; and equality of the two Cheeger
+constants. No certificate or Blueprint leanok scope was expanded.
+
+## Smooth coarea round (2026-09-16)
+
+**Superseded by the Isoperimetry coarea migration round above; retained as a dated snapshot.**
+This round **proves obligation `L11`**: the weighted coarea formula for **any** `C¹` real function
+on a finite-dimensional inner-product space, over any measurable set and any measurable `ℝ≥0∞`
+weight, together with almost everywhere measurability of the weighted slices
+(`KLS.coarea_of_contDiff` in the new `KLS/Geometry/SmoothCoarea.lean`). Only the unused
+`[CompleteSpace V]` is dropped; `u` is **not** assumed Lipschitz, bounded or proper, `S` need not
+be bounded or of finite volume, `g` may be unbounded, non-integrable or identically `∞`, and **no
+nondegeneracy of the derivative is assumed** — the critical set may be the whole space.
+
+`L9` and `L10` meet exactly here and neither suffices alone. The critical set is closed, so its
+complement is open and `L9` gives the identity on `S ∩ R`; on the left the critical part
+contributes nothing because the gradient vanishes there; on the right `L10` makes the critical
+slice null at almost every level, so the two slice integrals agree almost everywhere, and that
+same equality transports `L9`'s `AEMeasurable` component to the full slice function.
+
+**Target `T3` follows**, and it is verbatim the statement of the direct hole
+`KLS.Isoperimetry.lintegral_enorm_gradient_mul_eq_lintegral_levelSet` in
+`KLS/WIP/CheegerInfimum.lean`: that declaration already assumes `ContDiff ℝ 1 u`, so `L11` at
+`S = univ` discharges it and its `LipschitzWith` hypothesis is never used.
+**No WIP file was touched**, so the declaration still carries `sorry` and direct holes stay
+**2/3/5**, total **10**; migrating it out would take `KLS/WIP/CheegerInfimum.lean` from 3 holes to
+2 and the total to **9**, which by repository convention is a separate decision.
+
+`research/audits/SmoothCoareaAudit.lean` (placed directly in the versioned audit path) compiles
+strictly: the route's `L11` text `#check` and eleven theorems — `target`,
+`target_of_not_completeSpace`, `target_T3`, `wip_isoperimetry_statement` (both discharged through
+named arguments), an identically-`∞` weight, the empty set, an everywhere-critical constant
+function, `constant_function` checking the `⊤ · 0` boundary **independently of `L11`**, and two
+`preserved_*` signature checks — plus 12 `#print axioms` lines that all report only `propext`,
+`Classical.choice` and `Quot.sound`. Sixteen earlier strict clients re-pass unedited, and the three
+WIP files actually recompile with **2/3/5** direct holes. Default `lake build` and root
+`research/verify.py` pass; the final source-bound receipt is `build/verification/latest.json`, with
+the final equality check in `build/audit/smoothcoarea-final-snapshot.json`. Certificates stay
+**24**, perimeter infrastructure **missing**. No commit, no push. See
+[the smooth-coarea decision](decisions/2026-09-16-smooth-coarea.md) and
+`research/explorations/2026-09-16-smooth-coarea.json`.
+
+Still unproved: the **Lipschitz** coarea formula
+`Analysis.lintegral_enorm_gradient_mul_eq_lintegral_levelSet`, which assumes no `C¹` regularity and
+needs `L12`, hence the exact `C¹` decomposition `L7` and the closed-set Whitney jet extension
+`L6`/`L6a` — none of which is proved; sharp `C^(finrank)` `Analysis.sard` (no downstream
+consumer); sharpness of the Eilenberg constant; `smoothConstant_le_minkowskiConstant`;
+`smoothConstant_mul_lintegral_min_superlevel_le`; and equality of the two Cheeger constants. No
+certificate or Blueprint leanok scope was expanded.
+
 ## Regular open-domain coarea round (2026-09-15)
 
-**Current state; older dated rounds below are historical snapshots.**
+**Superseded by the smooth coarea round above; retained as a dated snapshot.**
 **L9 is proved in full**, including weighted-slice `AEMeasurable`, as
 `KLS.coarea_of_contDiffOn_of_fderiv_ne_zero` in `KLS/Geometry/RegularCoarea.lean`.
 The hypotheses are exactly the requested open-domain C¹ regularity, Borel `S ⊆ O`, and measurable

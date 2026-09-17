@@ -1,0 +1,426 @@
+{
+  "scope": "Migrates the direct hole KLS.Isoperimetry.lintegral_enorm_gradient_mul_eq_lintegral_levelSet out of KLS/WIP/CheegerInfimum.lean into the new hole-free KLS/Geometry/IsoperimetryCoarea.lean with a byte-identical pp.all signature, proved from L11. NO NEW THEOREM is proved; the Lipschitz coarea formula is NOT closed. Direct holes drop from 10 (2/3/5) to 9 (2/2/5). No other declaration changed in statement, proof or position; no certificate, no Blueprint leanok scope and no historical decision changed. NO COMMIT, NO PUSH.",
+  "head": "dcc158d7d3b9e91f17d2ee0fd49b30cdb6f4f7d8",
+  "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
+  "incoming_receipt": "build/verification/20260915T161514.695618Z/report.json",
+  "incoming_receipt_sha256": "77260db256943cde32a06a3b8cba9dbcd5112a1ac1c32ffd1f0c548d6a00cbf2",
+  "incoming_snapshot_sha256": "5994b4b4758eeb95e354bd1b081cc22919a4dea1e02ab7188bf1c035790be0bb",
+  "incoming_snapshot_entries": 467,
+  "incoming_snapshot_exact": true,
+  "migration": {
+    "declaration": "FunctionalInequalities.KLS.Isoperimetry.lintegral_enorm_gradient_mul_eq_lintegral_levelSet",
+    "from": "formalization/FunctionalInequalities/KLS/WIP/CheegerInfimum.lean",
+    "to": "formalization/FunctionalInequalities/KLS/Geometry/IsoperimetryCoarea.lean",
+    "signature_before_log": "build/audit/iso-signature-before.log",
+    "signature_after_log": "build/audit/iso-signature-after.log",
+    "signature_before_sha256": "9cc909365e1fd4b9970c6f8ea3d36a27730f404b03123e49d20f69d61a82a5e7",
+    "signature_after_sha256": "9cc909365e1fd4b9970c6f8ea3d36a27730f404b03123e49d20f69d61a82a5e7",
+    "pp_all_signature_byte_identical": true,
+    "unused_instances_kept": [
+      "CompleteSpace V",
+      "SecondCountableTopology V"
+    ],
+    "unused_hypothesis_kept": "hK : LipschitzWith K u",
+    "linter_handling": "set_option linter.unusedSectionVars false and linter.unusedVariables false; the signature is NOT narrowed with omit and hK is NOT renamed to _",
+    "namespace_kept": "FunctionalInequalities.KLS.Isoperimetry (the published name must not change)",
+    "wip_file_before_copy": "build/audit/iso-migration-CheegerInfimum.before.lean",
+    "wip_declarations_removed": [
+      "FunctionalInequalities.KLS.Isoperimetry.lintegral_enorm_gradient_mul_eq_lintegral_levelSet"
+    ],
+    "wip_scaffolding_removed": "the now-empty section Coarea with its unused variable line and empty namespace Isoperimetry",
+    "wip_declarations_otherwise_unchanged": true
+  },
+  "new_proved_results": [],
+  "new_definitions": [],
+  "new_lean_modules": [
+    "formalization/FunctionalInequalities/KLS/Geometry/IsoperimetryCoarea.lean"
+  ],
+  "changed_lean_files": [
+    "formalization/FunctionalInequalities/KLS/WIP/CheegerInfimum.lean"
+  ],
+  "all_other_lean_file_hashes_unchanged": true,
+  "all_historical_decisions_unchanged": true,
+  "axiom_audit": {
+    "FunctionalInequalities.KLS.Isoperimetry.lintegral_enorm_gradient_mul_eq_lintegral_levelSet": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "IsoperimetryCoareaAudit.client_isoperimetry_coarea": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "FunctionalInequalities.Analysis.lintegral_enorm_gradient_mul_eq_lintegral_levelSet": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext",
+      "sorryAx"
+    ],
+    "IsoperimetryCoareaAudit.client_lipschitz_coarea_statement": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext",
+      "sorryAx"
+    ],
+    "FunctionalInequalities.Analysis.sard": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext",
+      "sorryAx"
+    ],
+    "FunctionalInequalities.KLS.Isoperimetry.smoothConstant_mul_lintegral_min_superlevel_le": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext",
+      "sorryAx"
+    ],
+    "FunctionalInequalities.KLS.Isoperimetry.smoothConstant_le_minkowskiConstant": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext",
+      "sorryAx"
+    ],
+    "FunctionalInequalities.KLS.Isoperimetry.minkowskiConstant_eq_smoothConstant": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext",
+      "sorryAx"
+    ]
+  },
+  "axiom_audit_note": "All eight reports come from ONE environment: the client imports the new module and BOTH work-in-progress files, so the migrated name resolves to a single declaration. The migrated result is only the C1 specialization of the Lipschitz formula and does not imply it; restating is not proving.",
+  "client_checks": {
+    "statement_checks": 0,
+    "proved_theorems": 2,
+    "axiom_prints": 8
+  },
+  "sorryAx_in_migrated_result": false,
+  "validation": {
+    "BorelSliceAudit": {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "../research/audits/BorelSliceAudit.lean"
+      ],
+      "exit_code": 0,
+      "log": "build/audit/iso-BorelSliceAudit.log",
+      "log_sha256": "a8dfcca0234207b99fb88f7194f00eb762f69feb8bb48cfbb0dd39be4f882bc0"
+    },
+    "CompactSliceAudit": {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "../research/audits/CompactSliceAudit.lean"
+      ],
+      "exit_code": 0,
+      "log": "build/audit/iso-CompactSliceAudit.log",
+      "log_sha256": "6183637269791471cbd4afecdf4bb9686eca8f8680c85386058ae18487adcafc"
+    },
+    "CriticalSliceAudit": {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "../research/audits/CriticalSliceAudit.lean"
+      ],
+      "exit_code": 0,
+      "log": "build/audit/iso-CriticalSliceAudit.log",
+      "log_sha256": "56f69bb05102711355e17db74a43e07ce4b7f99232fda47a16c53659041cf8d8"
+    },
+    "EilenbergMajorantAudit": {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "../research/audits/EilenbergMajorantAudit.lean"
+      ],
+      "exit_code": 0,
+      "log": "build/audit/iso-EilenbergMajorantAudit.log",
+      "log_sha256": "97c23ff29115ea64ef45606ddc56e5ee3e5f833a8ff4bfc1d58d5dadab1c8a77"
+    },
+    "IsoperimetryCoareaAudit": {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "../research/audits/IsoperimetryCoareaAudit.lean"
+      ],
+      "exit_code": 0,
+      "log": "build/audit/iso-IsoperimetryCoareaAudit.log",
+      "log_sha256": "b099323776a874946e8aab429cabf0e14d02d0403232a77d58d1b43a64a1a2e1"
+    },
+    "LevelSetMeasurableAudit": {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "../research/audits/LevelSetMeasurableAudit.lean"
+      ],
+      "exit_code": 0,
+      "log": "build/audit/iso-LevelSetMeasurableAudit.log",
+      "log_sha256": "c5c553f9452f5126d490668f6dd68548fd185b6670e2e7f3d6e3c331eeec71e7"
+    },
+    "NullSlicingAudit": {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "../research/audits/NullSlicingAudit.lean"
+      ],
+      "exit_code": 0,
+      "log": "build/audit/iso-NullSlicingAudit.log",
+      "log_sha256": "65d75f410323559fb026cb4855c86bd6267176daee2c6c43b495cfd8012e856d"
+    },
+    "OpenGraphAudit": {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "../research/audits/OpenGraphAudit.lean"
+      ],
+      "exit_code": 0,
+      "log": "build/audit/iso-OpenGraphAudit.log",
+      "log_sha256": "92136a3e0b400a36198d8abf9ed6d915035caddb1ff4255e18a32039e0c91a33"
+    },
+    "RegularCoareaAudit": {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "../build/audit/RegularCoareaAudit.lean"
+      ],
+      "exit_code": 0,
+      "log": "build/audit/iso-RegularCoareaAudit.log",
+      "log_sha256": "88de01742cfd90d75eb062a7aac5f7cdfc5266fc0690ef6efe381884cd2c2fef"
+    },
+    "SmoothCoareaAudit": {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "../research/audits/SmoothCoareaAudit.lean"
+      ],
+      "exit_code": 0,
+      "log": "build/audit/iso-SmoothCoareaAudit.log",
+      "log_sha256": "aae8a32b1fcc7798fc523c4d977207862ee08432d07a06797e15cce6a9fe0e21"
+    },
+    "WeightedCoareaInfrastructure": {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "../research/audits/WeightedCoareaInfrastructure.lean"
+      ],
+      "exit_code": 0,
+      "log": "build/audit/iso-WeightedCoareaInfrastructure.log",
+      "log_sha256": "d589fa8fcd2e485f0803b4b59e2ee188bc95ceff56e06156b5adf2b4c6b9655a"
+    },
+    "WeightedCoareaRouteStatements": {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "../research/audits/WeightedCoareaRouteStatements.lean"
+      ],
+      "exit_code": 0,
+      "log": "build/audit/iso-WeightedCoareaRouteStatements.log",
+      "log_sha256": "3a74a1ef789572ff5238ff7faf8a591be11e73fc3030db04e32b2e6497fe0d6a"
+    },
+    "AreaFormulaAudit": {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "../build/audit/AreaFormulaAudit.lean"
+      ],
+      "exit_code": 0,
+      "log": "build/audit/iso-AreaFormulaAudit.log",
+      "log_sha256": "012a848c88ac87ae07220136a1ca7b1a1238bb88a96c94c33eda6f2143e9e905"
+    },
+    "CheegerInfimumAudit": {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "../build/audit/CheegerInfimumAudit.lean"
+      ],
+      "exit_code": 0,
+      "log": "build/audit/iso-CheegerInfimumAudit.log",
+      "log_sha256": "f91015c9f2b831300fc64abbcc1120baca81d03d15a2d425097b50ee96f2ac74"
+    },
+    "MinkowskiConstantAudit": {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "../build/audit/MinkowskiConstantAudit.lean"
+      ],
+      "exit_code": 0,
+      "log": "build/audit/iso-MinkowskiConstantAudit.log",
+      "log_sha256": "efd1523ac10c8010fc527f14f64401998f1c54daf31f94b5e61642a6f67159eb"
+    },
+    "SuperlevelSardScope": {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "../build/audit/SuperlevelSardScope.lean"
+      ],
+      "exit_code": 0,
+      "log": "build/audit/iso-SuperlevelSardScope.log",
+      "log_sha256": "9f7b4971a9a7fd42cfad81024dcfd13341cf8daaf3f9171aeac81e107d7e9562"
+    },
+    "SmoothSardAudit": {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "../build/audit/SmoothSardAudit.lean"
+      ],
+      "exit_code": 0,
+      "log": "build/audit/iso-SmoothSardAudit.log",
+      "log_sha256": "bbb56e86e2b6005f1f31236fd465aa8e5862c75adb03deeba3ecccaddbf81490"
+    },
+    "SmoothSardRouteStatements": {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "../build/audit/SmoothSardRouteStatements.lean"
+      ],
+      "exit_code": 0,
+      "log": "build/audit/iso-SmoothSardRouteStatements.log",
+      "log_sha256": "a11b0d4a5b5608157f7f4881b1dd8196504b94bab0c50b981d86b467c6579f6d"
+    },
+    "AnalyticPrerequisites": {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "FunctionalInequalities/KLS/WIP/AnalyticPrerequisites.lean"
+      ],
+      "exit_code": 0,
+      "log": "build/audit/iso-AnalyticPrerequisites.log",
+      "log_sha256": "28f048d73f77fc5d2b83f114a22aefdc90da2981d043477726711ea6cf60b671",
+      "holes": 2,
+      "diagnostic_lines": 2
+    },
+    "CheegerInfimum": {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "FunctionalInequalities/KLS/WIP/CheegerInfimum.lean"
+      ],
+      "exit_code": 0,
+      "log": "build/audit/iso-CheegerInfimum.log",
+      "log_sha256": "32c413d2b4d318aec797098df8bb9ee6747c39f99cb0c3476dfac8074e093c7d",
+      "holes": 2,
+      "diagnostic_lines": 2
+    },
+    "Cheeger": {
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "FunctionalInequalities/Energy/WIP/Cheeger.lean"
+      ],
+      "exit_code": 0,
+      "log": "build/audit/iso-Cheeger.log",
+      "log_sha256": "7003e6f52a47b150e5fd6cd14ca240b5f4ee2d53ce464ad80ed811e67a181870",
+      "holes": 5,
+      "diagnostic_lines": 5
+    }
+  },
+  "default_lake_build_exit_code": 0,
+  "default_lake_build_log": "build/audit/iso-lake-build.log",
+  "wip_holes": [
+    2,
+    2,
+    5
+  ],
+  "wip_holes_total": 9,
+  "wip_holes_before": [
+    2,
+    3,
+    5
+  ],
+  "wip_holes_total_before": 10,
+  "certificates": 24,
+  "perimeter_infrastructure": "missing",
+  "committed": false,
+  "pushed": false,
+  "root_verification_receipt": "build/verification/latest.json",
+  "final_snapshot_attestation": "build/audit/iso-migration-final-snapshot.json",
+  "hash_binding": "This evidence is finalized before root verification and is itself hashed in that receipt. Each per-round evidence record binds only the state at its own round, so its research/tasks.json entry is expected to go stale once a later round edits that file.",
+  "not_proved": [
+    "the LIPSCHITZ coarea formula Analysis.lintegral_enorm_gradient_mul_eq_lintegral_levelSet, still a direct hole; the migrated result is only its C1 specialization",
+    "L12, L7, L6 and L6a",
+    "sharp C^(finrank) Analysis.sard (no downstream consumer) and Analysis.ae_forall_fderiv_ne_zero",
+    "Isoperimetry.smoothConstant_mul_lintegral_min_superlevel_le and Isoperimetry.smoothConstant_le_minkowskiConstant, the two remaining holes of KLS/WIP/CheegerInfimum.lean",
+    "equality of the two Cheeger constants",
+    "sharpness of the Eilenberg constant"
+  ],
+  "files": {
+    "HANDOFF.md": "5e71add0d6932624c9dbd900c3ba6a60c124ec6545f4a32c099ae2732c47e2d3",
+    "build/audit/iso-AnalyticPrerequisites.log": "28f048d73f77fc5d2b83f114a22aefdc90da2981d043477726711ea6cf60b671",
+    "build/audit/iso-AreaFormulaAudit.log": "012a848c88ac87ae07220136a1ca7b1a1238bb88a96c94c33eda6f2143e9e905",
+    "build/audit/iso-BorelSliceAudit.log": "a8dfcca0234207b99fb88f7194f00eb762f69feb8bb48cfbb0dd39be4f882bc0",
+    "build/audit/iso-Cheeger.log": "7003e6f52a47b150e5fd6cd14ca240b5f4ee2d53ce464ad80ed811e67a181870",
+    "build/audit/iso-CheegerInfimum.log": "32c413d2b4d318aec797098df8bb9ee6747c39f99cb0c3476dfac8074e093c7d",
+    "build/audit/iso-CheegerInfimumAudit.log": "f91015c9f2b831300fc64abbcc1120baca81d03d15a2d425097b50ee96f2ac74",
+    "build/audit/iso-CompactSliceAudit.log": "6183637269791471cbd4afecdf4bb9686eca8f8680c85386058ae18487adcafc",
+    "build/audit/iso-CriticalSliceAudit.log": "56f69bb05102711355e17db74a43e07ce4b7f99232fda47a16c53659041cf8d8",
+    "build/audit/iso-EilenbergMajorantAudit.log": "97c23ff29115ea64ef45606ddc56e5ee3e5f833a8ff4bfc1d58d5dadab1c8a77",
+    "build/audit/iso-IsoperimetryCoareaAudit.log": "b099323776a874946e8aab429cabf0e14d02d0403232a77d58d1b43a64a1a2e1",
+    "build/audit/iso-LevelSetMeasurableAudit.log": "c5c553f9452f5126d490668f6dd68548fd185b6670e2e7f3d6e3c331eeec71e7",
+    "build/audit/iso-MinkowskiConstantAudit.log": "efd1523ac10c8010fc527f14f64401998f1c54daf31f94b5e61642a6f67159eb",
+    "build/audit/iso-NullSlicingAudit.log": "65d75f410323559fb026cb4855c86bd6267176daee2c6c43b495cfd8012e856d",
+    "build/audit/iso-OpenGraphAudit.log": "92136a3e0b400a36198d8abf9ed6d915035caddb1ff4255e18a32039e0c91a33",
+    "build/audit/iso-RegularCoareaAudit.log": "88de01742cfd90d75eb062a7aac5f7cdfc5266fc0690ef6efe381884cd2c2fef",
+    "build/audit/iso-SmoothCoareaAudit.log": "aae8a32b1fcc7798fc523c4d977207862ee08432d07a06797e15cce6a9fe0e21",
+    "build/audit/iso-SmoothSardAudit.log": "bbb56e86e2b6005f1f31236fd465aa8e5862c75adb03deeba3ecccaddbf81490",
+    "build/audit/iso-SmoothSardRouteStatements.log": "a11b0d4a5b5608157f7f4881b1dd8196504b94bab0c50b981d86b467c6579f6d",
+    "build/audit/iso-SuperlevelSardScope.log": "9f7b4971a9a7fd42cfad81024dcfd13341cf8daaf3f9171aeac81e107d7e9562",
+    "build/audit/iso-WeightedCoareaInfrastructure.log": "d589fa8fcd2e485f0803b4b59e2ee188bc95ceff56e06156b5adf2b4c6b9655a",
+    "build/audit/iso-WeightedCoareaRouteStatements.log": "3a74a1ef789572ff5238ff7faf8a591be11e73fc3030db04e32b2e6497fe0d6a",
+    "build/audit/iso-lake-build.log": "663bb667d5c904f6f3ae9df70d321b447153c405a323c525ff5c63b947dc2f97",
+    "build/audit/iso-migration-CheegerInfimum.before.lean": "b719d713ef41c087bd381009a38ca625d387d42543ef09e7a91a94009b125331",
+    "build/audit/iso-signature-after.log": "9cc909365e1fd4b9970c6f8ea3d36a27730f404b03123e49d20f69d61a82a5e7",
+    "build/audit/iso-signature-before.log": "9cc909365e1fd4b9970c6f8ea3d36a27730f404b03123e49d20f69d61a82a5e7",
+    "formalization/FunctionalInequalities/Energy/WIP/Cheeger.lean": "5c081733ce43889fcbb80a8971b9488bfd65e3bd1bf2fefa28b240cebe43aa78",
+    "formalization/FunctionalInequalities/KLS/Geometry/IsoperimetryCoarea.lean": "6f39682c9ed8425ce3fc28a87c1fb460fc1a1fb0189444d0745621466dfe4ed7",
+    "formalization/FunctionalInequalities/KLS/Geometry/SmoothCoarea.lean": "af8db3cbeba25abdc376855668f8cb4a61e14f9e41a8e9608783803c2770d827",
+    "formalization/FunctionalInequalities/KLS/README.md": "b802116228586d146c63e1b93934e69e080e7da2de9c010e459d0f8e6ca89ad2",
+    "formalization/FunctionalInequalities/KLS/WIP/AnalyticPrerequisites.lean": "712dd3591d4d93043065502cb4baaee964a88ea27babb474b4bda3f4da8266db",
+    "formalization/FunctionalInequalities/KLS/WIP/CheegerInfimum.lean": "77ff0662252f543a401b7f2d257f03b8cec7c3fe23904a81f7ed6cfdf636a4e9",
+    "formalization/README.md": "4924c80f9f2df9c30a8d1ab2aa01a358acce03fc0b46669b1eaed070ee939adc",
+    "research/audits/IsoperimetryCoareaAudit.lean": "a1b5ba61347a34f3cf268d6d529ee679128f9d8c3021f679e024c652f75c073b",
+    "research/audits/SmoothCoareaAudit.lean": "59c6c46fe840901d797ad5bb143bf5787b950f69d223bf33c729840bfa9d84e5",
+    "research/decisions/2026-09-16-isoperimetry-coarea-migration.md": "5ef4f5d2c75bbafca460fd0bf25d9c09ba33dc7afe0b4560d52c2b243d95ee4c",
+    "research/decisions/2026-09-16-smooth-coarea.md": "f239ff6178da1c7bb52991dafe268ee175cd80b7d5793bfc744cc026692fc784",
+    "research/explorations/2026-09-16-smooth-coarea.json": "302018ee69e53cf44dc56b02dee1a86890acf6e471289e3131b729aeb8fc8a60",
+    "research/tasks.json": "c79cc0eeb4b5c8822ba3bfd27bc77cae8957906ba65575f6855bb773b601db22",
+    "research/verification.md": "7aac4e99d5eb0c1e16585a6b6181fd0e5297f7b65120064060f92e72d5c0590e"
+  }
+}

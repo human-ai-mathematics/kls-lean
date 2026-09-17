@@ -12,20 +12,37 @@ recorded explicitly and checked against the original goal; see the
 [current lifecycle](research/ledger-schema.md#lifecycle). Earlier freeze records remain dated
 review snapshots.
 
-## Current status (2026-09-15)
+## Current status (2026-09-17)
 
-The ledger contains **24 Lean-certified nodes**. Three isolated WIP modules retain **10 explicit
-`sorry` proofs** (2/3/5); some downstream proof bodies also depend transitively on those holes.
+The ledger contains **24 Lean-certified nodes**. Three isolated WIP modules retain **8 explicit
+`sorry` proofs** (1/2/5); some downstream proof bodies also depend transitively on those holes.
 The proved infrastructure now includes global Gauss–Green, smooth recovery sequences, the
 Minkowski coarea inequality, smooth Sard, level-set integral measurability, critical-slice nullity,
-weighted graph area on open domains, and C¹ coarea on regular open domains.
+weighted graph area on open domains, and general C¹ weighted coarea.
+The compact first-order Whitney jet extension theorem **L6 is proved**, with exact values and
+ambient derivatives, including empty and sparse sets and dimension zero. **L6a compact jet
+extraction, L7 exact C¹ pieces and L12 Lipschitz weighted coarea are now also proved.**
+**All three original coarea targets T1, T2 and T3 are now formally wired** to hole-free modules,
+each by a migration whose `pp.all` signature was machine-checked byte-identical. The remaining hole
+of `KLS/WIP/AnalyticPrerequisites.lean` is the sharp `C^(finrank)` Sard theorem.
+The weighted coarea formula has since been generalized to **locally Lipschitz** functions, which
+subsumes both the Lipschitz and the C¹ versions and covers functions neither of them reaches.
 
-The general C¹ and Lipschitz weighted coarea formulas and the reverse Cheeger comparison remain
-open. So do the universal conditional-fiber frame bound and the dimension-free KLS bound.
+For vector-valued maps, regular coarea, slice measurability and vanishing-derivative critical
+slicing are proved. General codimension-`m` coarea still needs the intermediate-rank critical
+part: rank stratification and the kernel/right-inverse estimates R1–R3 are proved, with the
+tangential small-Lipschitz estimate R4 next.
+
+The integrated Cheeger superlevel bound and reverse Cheeger comparison remain open, as do
+the universal conditional-fiber frame bound and the dimension-free KLS bound. Smooth-recovery
+infrastructure is available and its existing proof is now registered in Blueprint; it has no
+separate ledger certificate.
 The one-dimensional certificate proves the `4 Var` upper bound; it does not separately certify
 optimality of the coefficient `4` across all laws. The identity `E^can = 2 Ch` uses the local-slope
 convention and holds when the intrinsic law is absolutely continuous, hence for log-concave laws.
-See the [current handoff](HANDOFF.md) for precise scopes and remaining obligations.
+See the [current handoff](HANDOFF.md) and the
+[semantic alignment record](research/decisions/2026-09-16-semantic-alignment.md) for precise scopes
+and remaining obligations.
 
 ## Proof progress tree
 

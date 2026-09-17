@@ -10,6 +10,7 @@ import FunctionalInequalities.KLS.LogConcave.Poincare
 import FunctionalInequalities.KLS.LogConcave.Borel
 import FunctionalInequalities.KLS.Isotropic
 import FunctionalInequalities.KLS.Isoperimetry
+import FunctionalInequalities.KLS.Geometry.PerimeterRecovery
 import FunctionalInequalities.KLS.ConditionalFiber
 import FunctionalInequalities.KLS.ConditionalFiber.Closed
 import FunctionalInequalities.KLS.ConditionalFiber.EnergyComparison
@@ -92,7 +93,11 @@ auxiliary results. `Poincare.Foundation` deliberately coexists with the accepted
 both now use ordinary `C∞` regularity. The foundation additionally exports sequential
 lower-semicontinuity and recovery theorems, quadratic closure of dense pre-energies, the closed
 smooth-gradient relaxation with its Dirichlet property, and intrinsic affine-support coordinates.
-No Cheeger-energy, raw-test core, or spectral-gap identification is asserted by this aggregate.
+The absolute-continuity Cheeger identity and the density-based raw/core results above keep
+their stated hypotheses; no unrestricted singular-law or spectral-gap identification is asserted.
+`KLS/Geometry/PerimeterRecovery.lean` also exports the proved smooth recovery sequence for
+finite relative perimeter, now linked by the corresponding Blueprint proof marker. This
+auxiliary registration does not add a ledger certificate.
 
 The proved comparison modules identify the ambient and intrinsic relaxations and the
 finite-dimensional legacy optimum, so the accepted Gaussian bounds and constants can be
