@@ -23,8 +23,8 @@ The formula here retains its original `C¹` and Lipschitz hypotheses. The more g
 `Analysis.lintegral_enorm_gradient_mul_eq_lintegral_levelSet`, assuming only global Lipschitz
 continuity, is proved separately in `LipschitzCoarea` from L12 and the compact-set Whitney
 construction L6/L6a/L7. `LocallyLipschitzCoarea` proves the locally Lipschitz extension L13.
-The sharp `C^(finrank)` `Analysis.sard` remains a direct hole in
-`KLS/WIP/AnalyticPrerequisites.lean`. -/
+The sharp `C^(finrank)` `Analysis.sard` is proved in `Analysis/Sard/Sharp.lean`; the former
+`KLS/WIP/AnalyticPrerequisites.lean` is deleted. -/
 
 noncomputable section
 

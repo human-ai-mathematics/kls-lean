@@ -380,3 +380,30 @@ including dimension zero. The certificate and nine reusable declarations in
 `Probability/IntrinsicCovariance.lean` have default-build axiom guards. The node is
 `proved / checked_by: lean`. Read the
 [record](../research/decisions/2026-09-07-ambient-intrinsic-covariance.md).
+
+## Cheeger-infimum equality certificate
+
+[`LemRelativePerimeterCheegerInfimum.lean`](LemRelativePerimeterCheegerInfimum.lean) certifies
+`lem:relative-perimeter-cheeger-infimum`. For every probability law with a Borell density relative to
+Lebesgue measure on a finite-dimensional real inner-product space, its sole `certificate` states that
+the Minkowski Cheeger infimum over Borel sets of intermediate mass equals the relative-perimeter
+Cheeger infimum over smooth domains, both `⊤` when no admissible set exists; `intrinsic` gives the
+log-concave affine-support form `h_μ = h_ν^{sm,rel}` and `Ψ_KLS(μ) = ψ_ν`, the two isoperimetric
+clauses of `thm:klartag-density-frontend-identification`. Lean is stronger than the Blueprint's
+full-dimensional log-concave hypothesis. The one-sided comparisons, dimension zero and the Euclidean
+family are exercised; four axiom guards. The node is `proved / checked_by: lean`. Read the
+[route](../research/decisions/2026-09-19-cheeger-infimum-route.md) and the
+[registration record](../research/decisions/2026-09-19-cheeger-line-proofs.md).
+
+## Cheeger identification certificate (every Borel law)
+
+[`ThmSmoothGradientRelaxationTwoCheeger.lean`](ThmSmoothGradientRelaxationTwoCheeger.lean) certifies
+`thm:smooth-gradient-relaxation-two-cheeger`. For **every** Borel probability law on a
+finite-dimensional real inner-product space — no absolute continuity, density, positive dimension or
+log-concavity — its sole `certificate` packages the equality of the smooth-gradient and local-slope
+relaxations of the intrinsic law and the identity `𝓔^can_μ = 2 Ch_μ` on ambient real `L²(μ)`, with
+`⊤` allowed on both sides; `conventions_agree` records that the asymptotic-Lipschitz convention relaxes
+to the same functional. The absolutely continuous certificate is recovered without its hypothesis,
+the coordinate form, dimension zero and the Euclidean family are exercised; four axiom guards. The node
+is `proved / checked_by: lean`. Read the [route](../research/decisions/2026-09-19-energy-slope-route.md)
+and the [registration record](../research/decisions/2026-09-19-energy-slope-proofs.md).

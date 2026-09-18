@@ -5,7 +5,7 @@ import FunctionalInequalities.Analysis.Graph.Implicit
 # The outward normal and the local boundary chart of a smooth domain
 
 Application layer of `Analysis/Graph/Implicit.lean` to `KLS.SmoothDomain`.  Every statement in this
-module is proved and uses only the standard axioms; the module contains **no** `sorry`.
+module is proved and uses only the standard axioms; the module contains **no** hole.
 
 ## Why this module exists, and what it imports
 

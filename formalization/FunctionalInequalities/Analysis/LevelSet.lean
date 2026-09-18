@@ -10,7 +10,7 @@ import Mathlib.MeasureTheory.Covering.BesicovitchVectorSpace
 
 General geometric analysis on a finite-dimensional real inner-product space `V`, independent of
 the KLS objects and of the relative-perimeter statements that consume it.  Every statement here
-is proved and uses only the standard axioms; the module contains no `sorry`.
+is proved and uses only the standard axioms; the module contains no hole.
 
 ## A. Prékopa–Leindler, Brunn–Minkowski, and the isodiametric inequality
 

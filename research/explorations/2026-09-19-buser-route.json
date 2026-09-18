@@ -1,0 +1,108 @@
+{
+ "scope": "ROUTE EXPLORATION ONLY for the Buser half Psi_KLS(mu)^2 <= pi C_P^lit(mu) of thm:logconcave-cheeger-poincare-comparison. NO THEOREM WAS PROVED. Finding: in dimension n >= 2 every known proof for log-concave laws needs either the weighted heat semigroup with the Bakry-Emery gradient bound (Ledoux; De Ponti-Mondino for the sharp pi) or a localization / needle decomposition with a transfer of the Poincare constant to needles; Mathlib has neither (no heat semigroup, no Hille-Yosida, no unbounded spectral theorem, no needle decomposition, no log-concavity). The Buser half is therefore the target of a PROGRAM. Stage 1 (defined here, provable now): dimension one with the explicit constant 12, from the repository's one-dimensional hazard bounds, h_M = h_S, a density-vs-median bound, a bathtub variance bound and the linear test. Stage 2 (not started): semigroup or localization. Direct holes 0, certificates 26, unchanged.",
+ "date": "2026-09-19",
+ "head": "f108397aa6eafcde0a8ca99658e40c47b2926db3",
+ "origin_main": "f108397aa6eafcde0a8ca99658e40c47b2926db3",
+ "incoming_receipt": "build/verification/20260918T151845.800831Z/report.json",
+ "incoming_snapshot": "1fc50cd6d74a2b42f74600fc30b5b245316a9d58d53e034f05cd56f2a033606d",
+ "incoming_entries": 662,
+ "incoming_replayed_modules": 241,
+ "theorems_proved_this_round": 0,
+ "obstruction": {
+  "target": "lambda_1 <= pi h^2 for every finite-dimensional log-concave law (B0)",
+  "route_semigroup": {
+   "needs": [
+    "existence of the Markov semigroup of the weighted Laplacian / Cheeger form (Hille-Yosida or unbounded spectral theorem: absent from Mathlib)",
+    "Bakry-Emery gradient bound |grad P_t f|^2 <= P_t |grad f|^2 from log-concavity (parabolic regularity on a possibly non-smooth support, or Wasserstein contraction / EVI)",
+    "Ledoux's duality estimate |f - P_t f|_1 <= c sqrt(t) mu^+(A) against spectral decay"
+   ],
+   "sharp_constant": "pi via De Ponti-Mondino on RCD(0,infty)"
+  },
+  "route_localization": {
+   "needs": [
+    "Lovasz-Simonovits bisection and needle limit (long but elementary)",
+    "a transfer of the Poincare constant to needles: the needles' variances are controlled only on average by Var<x,theta> <= |Cov| <= C_P, and h >~ 1/sqrt(|Cov|) is the KLS conjecture itself"
+   ],
+   "conclusion": "no elementary transfer is known; Milman's concentration-implies-isoperimetry uses semigroups or GMT regularity, Klartag's needle proof uses curvature-dimension comparison"
+  },
+  "mathlib_search": {
+   "absent": [
+    "heat kernel / heat equation / Ornstein-Uhlenbeck",
+    "Bakry-Emery",
+    "localization lemma / needle decomposition",
+    "log-concavity",
+    "Prekopa-Leindler"
+   ],
+   "present": [
+    "convolution, ContDiffBump, Gaussian distributions, Fourier transform",
+    "variance and evariance"
+   ]
+  },
+  "repository_has": [
+   "one-dimensional Borell density and hazard bounds (KLS/LogConcave/Line/{Density,Hazard}.lean)",
+   "one-dimensional Prekopa-Leindler",
+   "one-dimensional log-concave Poincare certificate C_P^lit <= 4 Var",
+   "linear-test lower bound Var <= C_P^smooth",
+   "conditional fibers (Poincare-type, not isoperimetric)",
+   "h_M = h_S and the Cheeger half (this day)"
+  ]
+ },
+ "program": {
+  "stage_1": {
+   "scope": "dimension one, constant 12",
+   "obligations": [
+    "Q1' smooth-domain form of one-dimensional isoperimetry 2 rho(m) min(nu U, 1 - nu U) <= P_rho(U)",
+    "Q1 2 rho(m) <= h_M via h_M = h_S",
+    "Q2 rho <= 2 rho(m)",
+    "Q3 Var >= 1/(12 M^2) for a density bounded by M",
+    "Q4 Var(id) <= C_P^smooth",
+    "Q5 finite second moment",
+    "Q0 Psi^2 <= 12 C_P^smooth on the line",
+    "Q0' Psi_KLS^2 <= 12 C_P^lit for affine support of dimension <= 1"
+   ],
+   "estimated_lines": 800,
+   "recommended_order": [
+    "Q5",
+    "Q4",
+    "Q3",
+    "Q2",
+    "Q1'",
+    "Q1",
+    "Q0",
+    "Q0'"
+   ],
+   "constant_caveat": "12 is not pi; the Blueprint keeps pi; a non-sharp closure must weaken the Blueprint statement explicitly"
+  },
+  "stage_2": {
+   "scope": "dimension n >= 2",
+   "options": [
+    "Markov semigroup of the Cheeger form + Bakry-Emery + Ledoux",
+    "Lovasz-Simonovits bisection + needle limit + a transfer argument"
+   ],
+   "status": "not started; thousands of lines with Mathlib-level prerequisites"
+  }
+ },
+ "route_statement_file": {
+  "path": "research/audits/BuserRouteStatements.lean",
+  "checks": 17,
+  "reference_checks": 7,
+  "proposition_checks": 10,
+  "declares": 0,
+  "proves": 0,
+  "placeholder_axioms": 0,
+  "compiled_with": "lake env lean -DwarningAsError=true",
+  "errors": 0,
+  "warnings": 0,
+  "log": "build/audit/buser-route/route-statements.log"
+ },
+ "explicitly_not_claimed": [
+  "any Buser-type inequality in dimension n >= 2",
+  "the constant pi in any dimension",
+  "the dimension-free KLS bound"
+ ],
+ "holes": 0,
+ "certificates": 26,
+ "committed": false,
+ "pushed": false,
+ "real_git_index_modified": false
+}

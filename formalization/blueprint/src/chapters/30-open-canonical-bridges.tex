@@ -65,6 +65,13 @@ constant.  The constant-level bridges used by every route are collected separate
 \begin{theorem}[Identification with Cheeger energy]
   \label{thm:smooth-gradient-relaxation-two-cheeger}
   \uses{def:selected-canonical-frontend}
+  \lean{FunctionalInequalities.Energy.SmoothGradient.relaxation_eq_localSlope,
+        FunctionalInequalities.Energy.LocalSlope.relaxation_eq_asymptoticLipschitz,
+        FunctionalInequalities.Energy.Cheeger.energy_eq_ofAsymptoticLipschitz,
+        FunctionalInequalities.Energy.SmoothGradient.relaxation_eq_two_mul_cheeger,
+        FunctionalInequalities.Energy.SmoothGradient.Intrinsic.energy_eq_two_mul_cheeger,
+        Solutions.ThmSmoothGradientRelaxationTwoCheeger.certificate}
+  \leanok
   On the affine support, let $\Ch_\mu$ denote the standard metric Cheeger energy normalized as
   one half of the lower-semicontinuous relaxation of the squared local slope.  After transporting
   it to ambient real $L^2(\mu)$, prove
@@ -72,22 +79,44 @@ constant.  The constant-level bridges used by every route are collected separate
     \mathcal E^{\mathrm{can}}_\mu=2\Ch_\mu.
   \]
 \end{theorem}
+\begin{proof}
+  \leanok
+  One inequality is unconditional: a globally smooth test is an admissible local-slope test with
+  the same energy, so the relaxed squared local slope is at most the smooth-gradient relaxation.
+  For the reverse inequality it suffices, by lower semicontinuity of the relaxation, to recover the
+  local-slope energy of every admissible test by smooth tests.  A cutoff with a smooth bump reduces
+  this to globally Lipschitz tests (the one-moving-point Leibniz bound and Young's inequality
+  control the error).  For a globally Lipschitz test $g$ the local slope $\abs{\nabla g}$ is Borel,
+  being the countable infimum of the lower-semicontinuous secant suprema at radii $1/(m+1)$;
+  stratify it into bands of width $\alpha$, cut each band into small balls of a dense sequence and
+  disjoint the family into a Borel partition on which $g$ is Lipschitz with constant within
+  $2\alpha$ of its slope; inner regularity of $\nu$ gives finitely many disjoint compact cores
+  carrying all but $\delta$ of the mass; extend $g$ from each core by McShane with the core's
+  constant and glue the extensions to $g$ with linear cutoffs at a scale below the separation of
+  the cores.  The patched test is globally Lipschitz with a constant independent of $\delta$,
+  equals $g$ on the cores, and its asymptotic Lipschitz constant on the cores is within $2\alpha$
+  of the local slope of $g$, so mollification (smooth recovery for globally Lipschitz tests, by
+  reverse Fatou under the global Lipschitz bound) bounds the smooth-gradient relaxation at the
+  patch by $(1+4\alpha)\int\abs{\nabla g}^2\,d\nu+O(\alpha)+O(\delta)$; let
+  $\alpha,\delta\downarrow0$.  Halving and transport along the intrinsic $L^2$ isometry give
+  $\mathcal E^{\mathrm{can}}=2\Ch$; collapsing the sandwich with the asymptotic-Lipschitz
+  relaxation shows that the two Cheeger conventions agree.  The closest published statement is
+  Eriksson-Bique's density of Lipschitz functions in energy (Calc.\ Var.\ PDE 62 (2023),
+  Article 60, Theorem 1.1), of which this Euclidean argument is an elementary special case;
+  Ambrosio--Gigli--Savar\'e (2013, \S8.3) reach the same conclusion through Hopf--Lax.
+\end{proof}
 
-The factor $2$ is part of the intended normalization, not an established declaration. The
-statement choice this node deferred is now made, so \texttt{notready} is removed. The Cheeger
-energy to formalize is the local-slope convention: one half of the sequential
-lower-semicontinuous relaxation of the squared local slope over the literature test class
-(\texttt{Energy.Cheeger.energy}), transported to the affine support by the construction of
-\cref{def:intrinsic-affine-energy} (\texttt{Energy.Cheeger.Intrinsic.energy}). The
-asymptotic-Lipschitz relaxation is defined separately, and its agreement with the local-slope
-relaxation is carried as its own explicit obligation instead of being imposed by definition. What
-remains is an open proof rather than an open statement, and the absence of \texttt{leanok}
-already records that: for singular measures neither the comparison of the two relaxations nor the
-identification of the smooth-gradient relaxation with the relaxed squared local slope has a source
-recorded in the bibliography. Those two obligations, and the three statements that follow from
-them, are the whole content of \path{Energy/WIP/Cheeger.lean}, which is not imported by the
-aggregate and has no certificate. The absolutely continuous scope is separated out as
-\cref{cor:absolutely-continuous-relaxation-two-cheeger} and is certified.
+The factor $2$ is part of the intended normalization. The Cheeger energy formalized is the
+local-slope convention: one half of the sequential lower-semicontinuous relaxation of the squared
+local slope over the literature test class (\texttt{Energy.Cheeger.energy}), transported to the
+affine support by the construction of \cref{def:intrinsic-affine-energy}
+(\texttt{Energy.Cheeger.Intrinsic.energy}). The asymptotic-Lipschitz relaxation is defined
+separately; its agreement with the local-slope relaxation is a proved consequence of the
+identification, not an identification by definition. The theorem is proved for every Borel
+probability law, singular laws and one-point affine supports included, in
+\path{Energy/Cheeger/Identification.lean} on top of \path{Energy/Euclidean/SlopeDensity.lean}; the
+absolutely continuous scope, certified first as
+\cref{cor:absolutely-continuous-relaxation-two-cheeger}, is a special case.
 
 \begin{corollary}[Cheeger identification for absolutely continuous laws]
   \label{cor:absolutely-continuous-relaxation-two-cheeger}

@@ -174,7 +174,15 @@ which is at most one, bounds $\rho(x)$ uniformly in $x$.
   \label{lem:relative-perimeter-cheeger-infimum}
   \uses{def:isoperimetric-cheeger-scale,lem:relative-perimeter-smoothing,
         lem:covariance-test-core-density}
-  For a full-dimensional log-concave probability,
+  \lean{FunctionalInequalities.KLS.Isoperimetry.minkowskiConstant_eq_smoothConstant,
+        FunctionalInequalities.KLS.Isoperimetry.smoothConstant_le_minkowskiConstant,
+        FunctionalInequalities.KLS.Isoperimetry.minkowskiConstant_le_smoothConstant,
+        FunctionalInequalities.KLS.Isoperimetry.constant_eq_smoothConstant_intrinsic,
+        FunctionalInequalities.KLS.Isoperimetry.inverseScale_eq_inv_smoothConstant_intrinsic,
+        Solutions.LemRelativePerimeterCheegerInfimum.certificate}
+  \leanok
+  For a full-dimensional log-concave probability (in Lean: for every probability law with a
+  Borell density relative to Lebesgue measure, dimension zero included with both sides $+\infty$),
   \[
     \inf_{0<\nu(B)<1}\frac{\nu^+(B)}{m(\nu(B))}
       =\inf_{\substack{U\text{ smooth domain}\\0<\nu(U)<1}}
@@ -182,6 +190,7 @@ which is at most one, bounds $\rho(x)$ uniformly in $x$.
   \]
 \end{lemma}
 \begin{proof}
+  \leanok
   Denote the left and right sides by $h_M$ and $h_S$. For every globally smooth Lipschitz
   $0\le u\le1$, weighted coarea and Sard's theorem give
   \[

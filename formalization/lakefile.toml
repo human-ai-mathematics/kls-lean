@@ -46,6 +46,8 @@ roots = [
   "solutions.LemConditionalFiberEnergyComparison",
   "solutions.CorConditionalFiberTwelveBound",
   "solutions.CorAbsolutelyContinuousRelaxationTwoCheeger",
+  "solutions.LemRelativePerimeterCheegerInfimum",
+  "solutions.ThmSmoothGradientRelaxationTwoCheeger",
 ]
 
 [[lean_lib]]

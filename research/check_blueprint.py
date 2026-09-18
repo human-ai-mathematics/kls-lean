@@ -98,6 +98,14 @@ CERTIFICATES: dict[str, tuple[str, str]] = {
         "cor:absolutely-continuous-relaxation-two-cheeger",
         "Solutions.CorAbsolutelyContinuousRelaxationTwoCheeger.certificate",
     ),
+    "thm:smooth-gradient-relaxation-two-cheeger": (
+        "thm:smooth-gradient-relaxation-two-cheeger",
+        "Solutions.ThmSmoothGradientRelaxationTwoCheeger.certificate",
+    ),
+    "lem:relative-perimeter-cheeger-infimum": (
+        "lem:relative-perimeter-cheeger-infimum",
+        "Solutions.LemRelativePerimeterCheegerInfimum.certificate",
+    ),
     "cor:conditional-fiber-twelve-bound": (
         "cor:conditional-fiber-twelve-bound",
         "Solutions.CorConditionalFiberTwelveBound.certificate",

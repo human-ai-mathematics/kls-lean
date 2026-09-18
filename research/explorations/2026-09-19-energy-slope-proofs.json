@@ -1,0 +1,103 @@
+{
+ "scope": "IMPLEMENTATION + REGISTRATION ROUND closing the last WIP module. PROVED: all five holes of Energy/WIP/Cheeger.lean — the unconditional Cheeger identification E^can = 2 Ch for every Borel probability law (SmoothGradient.relaxation = LocalSlope.relaxation via the density of smooth tests in the local-slope energy: McShane patches on a slope-adapted Borel partition, smooth recovery of globally Lipschitz tests by mollification and reverse Fatou, a cutoff reduction of admissible tests) and the agreement of the two Cheeger conventions (sandwich collapse). MIGRATED to Energy/Cheeger/Identification.lean with byte-identical pp.all signatures; Energy/WIP/Cheeger.lean and the Energy/WIP/ directory deleted; NO WORK-IN-PROGRESS MODULE LEFT, direct holes 5 (0/0/5) -> 0. REGISTERED thm:smooth-gradient-relaxation-two-cheeger as the 26th certificate.",
+ "date": "2026-09-19",
+ "head": "f108397aa6eafcde0a8ca99658e40c47b2926db3",
+ "origin_main": "f108397aa6eafcde0a8ca99658e40c47b2926db3",
+ "incoming_receipt": "build/verification/20260918T141537.829419Z/report.json",
+ "incoming_snapshot": "f91b06cac5cf4d62e270ae9ec48c1d6c2459fa53583be0b4f06a51d7baa3aa4c",
+ "incoming_entries": 650,
+ "incoming_replayed_modules": 237,
+ "proving_sessions": {
+  "model": "Claude Opus (two concurrent general-purpose agents: A = sandwich; B/C = recovery + density)",
+  "route": "research/audits/EnergySlopeRouteStatements.lean",
+  "rules_respected": true
+ },
+ "new_library_modules": {
+  "Energy/Euclidean/SlopeComparison.lean": 218,
+  "Energy/Euclidean/SlopeRecovery.lean": 659,
+  "Energy/Euclidean/SlopeDensity.lean": 1202,
+  "Energy/Cheeger/Identification.lean": "the five migrated statements composed from the three modules"
+ },
+ "new_audit_clients": [
+  "research/audits/EnergySlopeComparisonAudit.lean",
+  "research/audits/EnergySlopeRecoveryAudit.lean",
+  "research/audits/EnergySlopeDensityAudit.lean"
+ ],
+ "route_items_to_declarations": {
+  "A1": "SmoothGradient.Test.asymptoticLipschitz_apply (general: AsymptoticLipschitz.apply_eq_norm_gradient)",
+  "A2": "SmoothGradient.asymptoticLipschitz_relaxation_le",
+  "A3": "LocalSlope.relaxation_eq_asymptoticLipschitz_of_smoothGradient",
+  "B1": "SmoothGradient.relaxation_le_asymptoticLipschitz_of_lipschitzWith",
+  "B2": "locallyLipschitz_mul",
+  "B3": "exists_lipschitzWith_of_eq_zero_outside_ball",
+  "B4": "AsymptoticLipschitz.apply_mul_le",
+  "B5": "LocalSlope.apply_mul_le",
+  "C1": "LocalSlope.measurable_apply",
+  "C2": "LocalSlope.exists_patch (exists_partition, exists_thickening_pairwise_disjoint, exists_patch_of_isCompact)",
+  "C4": "SmoothGradient.relaxation_le_localSlope_of_lipschitzWith",
+  "C5": "SmoothGradient.relaxation_le_localSlope_of_admissible",
+  "C6": "SmoothGradient.relaxation_le_localSlope",
+  "E0a-E0e": "the five former holes in Energy/Cheeger/Identification.lean"
+ },
+ "implementation_notes": [
+  "C2's library form carries the extra uniform bound |F x - f x| <= 2L + 2 alpha everywhere, indispensable for the L^2 convergence in C4 (patches do not converge pointwise); route_C2 projects the verbatim conjunction out of it; block constant min((k+1) alpha, L + alpha), one alpha sharper than the route",
+  "B4 needs an O(r) correction the route text omits (|g z| <= |g x| + Lip_a g(x) r at the second moving point); proved with the stated constants",
+  "empty inner-regularity cores must be dropped, since Metric.infDist x empty = 0 (same trap as K7 of the Cheeger-infimum route)"
+ ],
+ "migration": {
+  "from": "Energy/WIP/Cheeger.lean (deleted; Energy/WIP/ removed; frozen at build/audit/energy-slope-proofs/Cheeger.before.lean)",
+  "to": "Energy/Cheeger/Identification.lean",
+  "declarations": 5,
+  "pp_all_before": "build/audit/energy-slope-proofs/ppall-before.txt",
+  "pp_all_after": "build/audit/energy-slope-proofs/ppall-after.txt",
+  "pp_all_diff_empty": true,
+  "clients_importing_wip_before": 0
+ },
+ "registration": {
+  "certificate": "solutions/ThmSmoothGradientRelaxationTwoCheeger.lean",
+  "ledger_node": "thm:smooth-gradient-relaxation-two-cheeger (kind lemma, proved, checked_by lean)",
+  "check_blueprint_mapping": true,
+  "lakefile_root": "solutions.ThmSmoothGradientRelaxationTwoCheeger",
+  "blueprint": "30-open-canonical-bridges.tex: theorem \\lean{6 names}, \\leanok, proof block with the route; explanatory paragraph rewritten",
+  "aggregate_imports_added": [
+   "Energy.Euclidean.SlopeComparison",
+   "Energy.Euclidean.SlopeRecovery",
+   "Energy.Euclidean.SlopeDensity",
+   "Energy.Cheeger.Identification"
+  ],
+  "escape_word_prescan": "47-module import closure of the certificate, no forbidden word"
+ },
+ "holes": {
+  "before": "5 (0/0/5)",
+  "after": "0",
+  "wip_modules_left": []
+ },
+ "certificates": {
+  "before": 25,
+  "after": 26
+ },
+ "explicitly_not_claimed": [
+  "the dimension-free KLS bound",
+  "the Buser half of the Cheeger-Buser comparison",
+  "the literature-Poincare clause of the Klartag identification",
+  "agreement of raw slope energy with the relaxed energy on an individual test",
+  "formalization of the diagnostic D1"
+ ],
+ "verification": {
+  "lake_build_jobs": 3512,
+  "audit_clients_rerun_strict": 66,
+  "audit_failures": 0,
+  "axiom_reports": 867,
+  "sorryAx_lines": 0,
+  "direct_holes": 0,
+  "wip_modules": 0,
+  "pp_all_diff_empty": true,
+  "check_ledger_certificates": 26,
+  "check_blueprint_labels": 88,
+  "logs": "build/audit/energy-slope-proofs/ (sweep/summary.txt, ppall-before.txt, ppall-after.txt, Cheeger.before.lean)"
+ },
+ "final_receipt": "see build/audit/energy-slope-proofs/final-snapshot.json",
+ "committed": false,
+ "pushed": false,
+ "real_git_index_modified": false
+}

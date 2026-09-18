@@ -21,8 +21,9 @@ on `Fin n → ℝ`.
   inner-product graph splitting.
 
 These are ingredients only. Sard's theorem itself is **not** proved here: the dimension descent
-that consumes them, and the open-domain form of the flat layer it needs, are still missing, and
-the sharp `C^n` `Analysis.sard` remains a direct hole in `KLS/WIP/AnalyticPrerequisites.lean`.
+that consumes them, and the open-domain form of the flat layer it needs, are still missing. The
+sharp `C^n` `Analysis.sard` is proved by a different route — Morse's decomposition, not this
+descent — in `Analysis/Sard/Sharp.lean`.
 -/
 
 noncomputable section

@@ -174,7 +174,12 @@ A published input or an upstream reviewed proof receives no \texttt{leanok} mere
   log-concave density bound to avoid a charge on the carrier boundary. The boundary of $U$
   may meet or cross $\partial K_\nu$; no condition $\partial U\subseteq\Omega$ is imposed.
   This proves equality of the two infima, without a testwise perimeter identity. The analytic
-  proof is supplied in the appendix; Lean implementation and certification remain to be done.
+  proof is supplied in the appendix. The two isoperimetric clauses $h_\mu=h_\nu^{\mathrm{sm,rel}}$
+  and $\PsiKLS(\mu)=\psi_\nu$ are Lean-certified through
+  \cref{lem:relative-perimeter-cheeger-infimum}
+  (\texttt{Solutions.LemRelativePerimeterCheegerInfimum.intrinsic}, 2026-09-19); the
+  $\CPLit(\mu)$ clause is not certified under this node, which therefore carries no
+  \texttt{leanok}.
 \end{proof}
 
 \begin{theorem}[Cheeger--Buser comparison for log-concave laws]
@@ -182,6 +187,9 @@ A published input or an upstream reviewed proof receives no \texttt{leanok} mere
   \uses{def:log-concave-law,def:isoperimetric-cheeger-scale,
         def:literature-poincare-constant,thm:klartag-density-frontend-identification,
         lem:covariance-test-core-density}
+  \lean{FunctionalInequalities.KLS.LogConcave.literatureConstant_le_four_mul_inverseScale_sq,
+        FunctionalInequalities.KLS.Isoperimetry.smoothTest_constant_le,
+        FunctionalInequalities.KLS.LogConcave.inverseScale_sq_le_of_finrank_le_one}
   Every finite-dimensional log-concave probability law satisfies
   \[
     \CPLit(\mu)\le4\PsiKLS(\mu)^2,
@@ -194,7 +202,18 @@ A published input or an upstream reviewed proof receives no \texttt{leanok} mere
   $\CPLit(\mu)=0$ because every test is $\mu$-almost everywhere constant.  Thus both inequalities
   hold directly.  Otherwise apply \cref{thm:klartag-density-frontend-identification}.  Cheeger's
   inequality in the normalization of Milman's Theorem~1.1 and Bobkov's equation~(1.3) gives the
-  first inequality.  Klartag's equation~(1.4), with the right-hand bound due to
+  first inequality; this first inequality is also a local Lean proof
+  (\texttt{KLS/Geometry/CheegerInequality.lean}, 2026-09-19: a median split, the layer-cake
+  formula, the multiplied Minkowski infimum bound and the Minkowski coarea inequality give
+  $h_M^2\int(g-m)_+^2\le4\int_{\{g>m\}}\norm{\nabla g}^2$ for bounded $C^1$ Lipschitz $g$, a
+  smooth cutoff extends this to every smooth test, and \cref{lem:relative-perimeter-cheeger-infimum}
+  transports it to $\CPLit(\mu)\le4\PsiKLS(\mu)^2$).  The second inequality, Buser's, remains
+  imported mathematics in dimension $n\ge2$, so the node carries no \texttt{leanok}.  In dimension
+  at most one it is a local Lean proof with the constant $12$ in place of $\pi$
+  (\texttt{KLS/LogConcave/Line/Buser.lean}, 2026-09-19: $h_M\ge2\rho(m)$ at a median by the hazard
+  bounds, $\rho\le2\rho(m)$, $\Var\ge1/(12\rho_{\max}^2)$ and the linear test give
+  $\PsiKLS(\mu)^2\le12\,\CPLit(\mu)$ whenever the affine support has dimension at most one); the
+  constant $\pi$ and every dimension $n\ge2$ remain imported mathematics.  Klartag's equation~(1.4), with the right-hand bound due to
   De Ponti--Mondino, gives the second; see
   \cite{Milman2009Isoperimetric,Bobkov1999LogConcave,
         Klartag2023Logarithmic,DePontiMondino2021}.

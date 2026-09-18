@@ -8,7 +8,7 @@ import Mathlib.Analysis.Calculus.MeanValue
 
 General geometric analysis, independent of the KLS objects: the implicit function theorem in the
 form needed by the codimension-one area formula of `Analysis/AreaFormula.lean`.  Every statement
-here is proved and uses only the standard axioms; the module contains no `sorry`.
+here is proved and uses only the standard axioms; the module contains no hole.
 
 ## Setting
 

@@ -201,7 +201,7 @@ Lebesgue measure is already infinite. The module has **no downstream consumer**.
 `0 < finrank ℝ W₂` is necessary, exhibited by a counterexample with a zero-dimensional target. The
 sharp finite-regularity `Analysis.sard` is still a direct hole, untouched. **No coarea formula is proved**: the codimension-`m` charting, the fibrewise
 `m`-dimensional change of variables and the patching are all still missing.
-Current direct holes: **8 (1/2/5)**; certificates **24**. Smooth-recovery infrastructure is
+Current direct holes: **8 (1/2/5)**; certificates **24**. *(2026-09-19: the sharp Sard hole is proved in `Analysis/Sard/Sharp.lean` and its WIP module deleted; direct holes are now **7 (0/2/5)**; later the same day the two Cheeger-infimum holes were proved and `lem:relative-perimeter-cheeger-infimum` certified: **5 (0/0/5)**, certificates **25**; and finally the five Energy holes were proved and `Energy/WIP/Cheeger.lean` deleted: **0 direct holes, no WIP module, 26 certificates**.)* Smooth-recovery infrastructure is
 **available** and its existing proof is registered in Blueprint (no new ledger certificate);
 Cheeger-infimum infrastructure
 remains **missing** the integrated superlevel bound and reverse comparison.
@@ -305,14 +305,14 @@ declaration has been migrated and proved as described below. The **Lipschitz** c
 same universe parameter, same six instances in order including `CompleteSpace V`, same binders and
 hypothesis names, same conclusion — where it is proved as `L12` at `S = Set.univ` and no longer
 depends on `sorryAx`. No compatibility alias was added and the coarea theorem was not reproved.
-`KLS/WIP/AnalyticPrerequisites.lean` now holds only the sharp `C^(finrank)` `Analysis.sard`.
+`KLS/WIP/AnalyticPrerequisites.lean` now holds only the sharp `C^(finrank)` `Analysis.sard`. *(Historical: on 2026-09-19 `Analysis.sard` was proved in `Analysis/Sard/Sharp.lean` with a byte-identical `pp.all` signature and the WIP module was deleted.)*
 
 Its `C¹` specialization `KLS.Isoperimetry.lintegral_enorm_gradient_mul_eq_lintegral_levelSet` has
 now been **migrated** out of `KLS/WIP/CheegerInfimum.lean` into the hole-free
 `KLS/Geometry/IsoperimetryCoarea.lean` with a machine-checked byte-identical `pp.all` signature,
 where it is proved from `L11` and no longer depends on `sorryAx`.
 
-There are 8 direct holes (1/2/5) and 24 certificates. Recovery is proved; the remaining
+There are 0 direct holes and 26 certificates (2026-09-19, after the sharp Sard theorem, both Cheeger-infimum holes and the five Energy holes were proved; 8 (1/2/5) and 24 before); no work-in-progress module remains. Recovery is proved; the remaining
 Cheeger-infimum gaps are the integrated superlevel bound and the reverse comparison.
 The [historical route](../research/decisions/2026-09-15-weighted-coarea-route.md) records the original
 17 obligations; later dated decisions record which have been proved. Audit clients are outside

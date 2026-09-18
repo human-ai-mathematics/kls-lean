@@ -93,7 +93,7 @@ theorem openCoverCost_lt_iff {d : ℝ} {r c : ℝ≥0∞} {A : Set X} :
     exact (openCoverCost_le hopen hcov hdiam).trans_lt hcost
 
 omit [MeasurableSpace X] [BorelSpace X] in
-/-- Smaller scales admit fewer covers, so the cover cost is antitone in the scale. -/
+/-- Smaller scales allow fewer covers, so the cover cost is antitone in the scale. -/
 theorem coverCost_mono_scale {d : ℝ} {r r' : ℝ≥0∞} (h : r' ≤ r) (A : Set X) :
     coverCost d r A ≤ coverCost d r' A :=
   le_iInf fun _T => le_iInf fun hcov => le_iInf fun hdiam =>

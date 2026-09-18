@@ -7,7 +7,7 @@ import Mathlib.Geometry.Manifold.ContMDiff.NormedSpace
 General analysis, independent of the KLS objects: a compactly supported `C^n` map on a
 finite-dimensional real normed space splits as a **finite** sum of `C^n` maps, each of which has
 compact support inside a prescribed member of an open cover of the support.  Every statement here
-is proved and uses only the standard axioms; the module contains no `sorry`.
+is proved and uses only the standard axioms; the module contains no hole.
 
 ## What the statement gives, and why each clause is needed
 

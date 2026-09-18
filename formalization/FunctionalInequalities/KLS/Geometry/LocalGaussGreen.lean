@@ -9,7 +9,7 @@ import Mathlib.MeasureTheory.Function.SpecialFunctions.Inner
 Application layer: the subgraph divergence formula of `Analysis/SubgraphDivergence.lean` and the
 weighted boundary change of variables of `Analysis/Graph/Integral.lean`, connected to the local
 `C^∞` boundary chart of `KLS/Geometry/BoundaryChart.lean`.  Every statement here is proved and
-uses only the standard axioms; the module contains **no** `sorry`.
+uses only the standard axioms; the module contains **no** hole.
 
 ## What is proved, and what is not
 
@@ -24,7 +24,7 @@ supported field: that needs in addition a finite smooth partition of unity subor
 of the support, which this module does not provide.  The gluing is done one level up, in
 `KLS/Geometry/GaussGreen.lean`, where this identity supplies the boundary blocks of the cover and
 the interior and exterior blocks are handled separately; the global theorem there is proved and
-no longer a `sorry`.
+no longer a hole.
 
 ## The two localizations
 

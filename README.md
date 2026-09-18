@@ -28,6 +28,25 @@ of `KLS/WIP/AnalyticPrerequisites.lean` is the sharp `C^(finrank)` Sard theorem.
 The weighted coarea formula has since been generalized to **locally Lipschitz** functions, which
 subsumes both the Lipschitz and the C¹ versions and covers functions neither of them reaches.
 
+*Addendum (2026-09-19).* The sharp `C^(finrank)` Sard theorem `Analysis.sard` is **proved**
+(`Analysis/Sard/Sharp.lean`, Morse's route) and `KLS/WIP/AnalyticPrerequisites.lean` is deleted, so two
+isolated WIP modules retain **7 explicit `sorry` proofs** (0/2/5). The codimension-`m` coarea formula is
+proved for **Lipschitz** and **locally Lipschitz** maps (`Analysis/Lipschitz/`), level with the scalar chain.
+
+*Addendum (2026-09-19, later).* The Cheeger line was taken over: both Cheeger-infimum holes are proved,
+`KLS/WIP/CheegerInfimum.lean` is deleted, `lem:relative-perimeter-cheeger-infimum` is the **25th certificate**,
+and Cheeger's inequality `C_P^lit(μ) ≤ 4 Ψ_KLS(μ)²` is proved for every log-concave law (the Buser half is not).
+One WIP module remains, `Energy/WIP/Cheeger.lean`, with **5 explicit `sorry` proofs** (0/0/5); **25 Lean-certified nodes**.
+
+*Addendum (2026-09-19, Energy).* The five Energy holes are proved: `𝓔^can = 2 Ch` holds for **every** Borel
+probability law (`Energy/Cheeger/Identification.lean`, density of smooth tests in the local-slope energy),
+`Energy/WIP/Cheeger.lean` is deleted, **no WIP module remains and there are no explicit `sorry` proofs**;
+**26 Lean-certified nodes**. The dimension-free KLS bound remains open.
+
+*Addendum (2026-09-19, Buser).* The Buser half of the Cheeger–Buser comparison is proved **in dimension at
+most one with the constant `12`** (`KLS/LogConcave/Line/Buser.lean`); in dimension `n ≥ 2`, and with the constant
+`π`, it remains imported mathematics (a program: heat semigroup + Bakry–Émery, or localization).
+
 For vector-valued maps, regular coarea, slice measurability and vanishing-derivative critical
 slicing are proved. General codimension-`m` weighted coarea for C¹ maps now also includes the
 intermediate-rank critical part, via the completed rank-deficient route R0–R9.

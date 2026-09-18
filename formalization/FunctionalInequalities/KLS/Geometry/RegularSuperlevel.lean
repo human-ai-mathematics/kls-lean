@@ -5,8 +5,8 @@ import FunctionalInequalities.Analysis.Sard.Smooth
 
 Almost every strict superlevel set of a `C^∞` real-valued function is a smooth domain.  This is a
 consequence of Sard's theorem in the smooth category, `Analysis.sard_smooth`, which is proved;
-it does **not** use the sharp `C^(finrank)` statement `Analysis.sard`, which remains an unproved
-obligation in `KLS/WIP/AnalyticPrerequisites.lean`.  This module is free of `sorry` and of
+it does **not** use the sharp `C^(finrank)` statement `Analysis.sard`, which is proved separately
+in `Analysis/Sard/Sharp.lean`.  This module is free of holes and of
 transitive `sorryAx`.
 
 `Geometry/SmoothDomain.lean` is deliberately kept independent of Sard, so the packaging lives one

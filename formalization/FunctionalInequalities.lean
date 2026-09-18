@@ -31,6 +31,16 @@ import FunctionalInequalities.Probability.Line.BrunnMinkowski
 import FunctionalInequalities.Probability.HaarLine
 import FunctionalInequalities.Energy.LocalSlope.Relaxation
 import FunctionalInequalities.Energy.Cheeger
+import FunctionalInequalities.Analysis.Lipschitz.VectorCoarea
+import FunctionalInequalities.Analysis.Lipschitz.Local
+import FunctionalInequalities.Analysis.Sard.Sharp
+import FunctionalInequalities.KLS.Geometry.CheegerEquality
+import FunctionalInequalities.KLS.Geometry.CheegerInequality
+import FunctionalInequalities.Energy.Euclidean.SlopeComparison
+import FunctionalInequalities.Energy.Euclidean.SlopeRecovery
+import FunctionalInequalities.Energy.Euclidean.SlopeDensity
+import FunctionalInequalities.Energy.Cheeger.Identification
+import FunctionalInequalities.KLS.LogConcave.Line.Buser
 
 /-!
 # Functional inequalities
@@ -80,9 +90,19 @@ slope and the sequential `L²` relaxations of both, and `Energy/Cheeger.lean` de
 Cheeger energy in the Blueprint's local-slope convention with its affine-support transport and
 proves `𝓔^can_μ = 2 Ch_μ` whenever the intrinsic law is absolutely continuous with respect to a
 Haar measure, hence for every log-concave law
-(`cor:absolutely-continuous-relaxation-two-cheeger`); the singular case stays open in
-`Energy/WIP/Cheeger.lean`, which this aggregate does not import. Importing this aggregate
-certifies nothing by itself.
+(`cor:absolutely-continuous-relaxation-two-cheeger`). The singular case is closed by
+`Energy/Euclidean/SlopeComparison.lean` (a smooth test's asymptotic Lipschitz constant is its
+gradient norm, so the three relaxations are sandwiched for every Borel law),
+`Energy/Euclidean/SlopeRecovery.lean` (mollification recovers globally Lipschitz tests by smooth
+ones, with the cutoff tools that reduce admissible tests to them) and
+`Energy/Euclidean/SlopeDensity.lean` (the local slope of a continuous function is Borel, a Lipschitz
+test is patched by McShane extensions on finitely many compact cores of a slope-adapted Borel
+partition, and so `SmoothGradient.relaxation ν ≤ LocalSlope.relaxation ν` for every Borel
+probability law); `Energy/Cheeger/Identification.lean` then states the unconditional identity
+`𝓔^can_μ = 2 Ch_μ` (`thm:smooth-gradient-relaxation-two-cheeger`) and the agreement of the two
+Cheeger conventions for every Borel probability law, singular and zero-dimensional laws included;
+the former work-in-progress module `Energy/WIP/Cheeger.lean` is deleted, and the repository has
+no work-in-progress module left. Importing this aggregate certifies nothing by itself.
 
 The imported modules record their sources beside the declarations: manuscript Definition 2.1
 for the normalization, Remark 3.8 for the linear-test lower bound, BGL (2014), Proposition 4.3.1
@@ -102,4 +122,37 @@ auxiliary registration does not add a ledger certificate.
 The proved comparison modules identify the ambient and intrinsic relaxations and the
 finite-dimensional legacy optimum, so the accepted Gaussian bounds and constants can be
 transported to the selected frontend through explicit equalities and fixed-constant equivalences.
+
+`Analysis/Sard/Sharp.lean` proves the sharp finite-regularity Sard theorem `Analysis.sard` — the
+critical values of a `C^n` real-valued function on an `n`-dimensional real normed space are
+Lebesgue-null — by Morse's decomposition of an arbitrary set (`Analysis/Sard/{Chart,Disk,
+MorseVanishing}.lean`), together with its consequence `Analysis.ae_forall_fderiv_ne_zero`; the
+former work-in-progress module `KLS/WIP/AnalyticPrerequisites.lean` is deleted.
+`Analysis/Lipschitz/VectorCoarea.lean` proves the codimension-`m` coarea formula for **globally
+Lipschitz** maps (`Analysis.coarea_of_lipschitz`, the `C¹` pieces assembled componentwise from the
+scalar ones), and `Analysis/Lipschitz/Local.lean` the **locally Lipschitz** version
+(`Analysis.coarea_of_locallyLipschitz`), so the vector coarea chain `C¹ → Lipschitz → locally
+Lipschitz` is level with the scalar one. None of this is a Sard theorem for vector-valued maps and
+none of it is a ledger certificate.
+
+`KLS/Geometry/CheegerEquality.lean` closes the log-concave Cheeger line's first node: the Minkowski
+and smooth relative-perimeter Cheeger infima agree for every law with a Borell density
+(`lem:relative-perimeter-cheeger-infimum`, `Isoperimetry.minkowskiConstant_eq_smoothConstant`), so the
+affine-support isoperimetric constant of a log-concave law is its smooth relative-perimeter infimum
+and the inverse scales agree (the two isoperimetric clauses of
+`thm:klartag-density-frontend-identification`); the former work-in-progress module
+`KLS/WIP/CheegerInfimum.lean` is deleted and the `KLS/WIP/` directory with it.
+
+`KLS/Geometry/CheegerInequality.lean` (with the median lemma of `KLS/Geometry/Median.lean`) proves
+the Cheeger half of the Cheeger–Buser comparison `thm:logconcave-cheeger-poincare-comparison`:
+`C_P^smooth(ν) ≤ 4 / h_M(ν)²` for every Borel probability law and
+`C_P^lit(μ) ≤ 4 Ψ_KLS(μ)²` for every log-concave law
+(`LogConcave.literatureConstant_le_four_mul_inverseScale_sq`); the Buser half is not proved.
+
+`KLS/LogConcave/Line/Isoperimetry.lean` and `KLS/LogConcave/Line/Buser.lean` prove the **Buser half in
+dimension one with the explicit constant `12`**: for a log-concave law on the line, `h_M ≥ 2ρ(m)` at a
+median, `ρ ≤ 2ρ(m)`, and `Var ≥ 1/(12 ρ_max²)`, so `Ψ² ≤ 12 C_P^smooth(ν)`; transported to every
+log-concave law whose affine support has dimension at most one, `Ψ_KLS(μ)² ≤ 12 C_P^lit(μ)`
+(`LogConcave.inverseScale_sq_le_of_finrank_le_one`). The Buser half in dimension `n ≥ 2`, and the
+constant `π`, are **not** proved.
 -/

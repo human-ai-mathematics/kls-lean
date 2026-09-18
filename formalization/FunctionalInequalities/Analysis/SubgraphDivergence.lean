@@ -10,7 +10,7 @@ import Mathlib.Analysis.InnerProductSpace.ProdL2
 
 General geometric analysis, independent of the KLS objects: the local Gauss–Green identity for the
 region below the graph of a `C¹` function.  Every statement here is proved and uses only the
-standard axioms; the module contains no `sorry`.
+standard axioms; the module contains no hole.
 
 ## Setting
 

@@ -330,4 +330,130 @@ counterexample and free wherever the route appeals to `N2`, which is what the cl
 zero-dimensional abbreviation `Pt`. 11 standard-only reports; local import closure 5 modules, no
 work-in-progress file.
 
-There are now 45 source clients here, plus the 7 previously referenced local clients.
+`SharpSardRouteStatements.lean` checks the route obligations for the **sharp finite-regularity
+Sard theorem** `Analysis.sard` — the one direct hole of `KLS/WIP/AnalyticPrerequisites.lean` — as
+proposition types only: **eleven `#check`s**, three referencing proved declarations
+(`volume_image_eq_zero_of_oscillation_pow`, `exists_local_graph`, `sard_smooth`) and eight stating
+the obligations `M1`, `M1'`, `M2`–`M6` and the diagnostic `D1`. Like `RankDeficientRouteStatements.lean`
+it declares nothing, proves nothing and introduces no placeholder axiom, and **a proposition that
+type-checks is not a proof**. The route is Morse's (1939) decomposition of an arbitrary set rather
+than the hypersurface descent of the proved `C^∞` theorem, which loses `j − 1` derivatives on the
+`j`-th layer and cannot run at finite regularity (`D1` records the bookkeeping): `M3`, the Morse
+vanishing lemma, is the single high-risk item; `M4` forgets the disks, `M5` consumes the proved
+covering count and `M6` is the target verbatim. The statements use Mathlib notions only, with no
+auxiliary `structure` or `def`, so that an audit client can copy them verbatim once a proof lands.
+**Nothing in this repository proves any of `M1`–`M6`.** Its local import closure contains no
+work-in-progress file.
+
+`LipschitzVectorCoareaRouteStatements.lean` checks the route obligations for the **codimension-`m`
+coarea formula of Lipschitz maps** — `coarea_of_contDiff` with `ContDiff ℝ 1 u` replaced by
+`LipschitzWith K u` — as proposition types only: **fifteen `#check`s**, five referencing proved
+declarations (`exists_contDiff_pieces`, `coarea_of_contDiff`, `KLS.coarea_of_lipschitz`,
+`KLS.coarea_of_locallyLipschitz`, `ae_hausdorffMeasure_inter_levelSet_eq_zero_vector`) and ten
+stating `L0`, `V1`–`V5`, `V4'`, `V4''` and the diagnostics `M1`, `M2`. Like the other route files it
+declares nothing, proves nothing and introduces no placeholder axiom, and **a proposition that
+type-checks is not a proof**. Of the scalar `L12`'s three steps, the `C¹` formula and the null
+slicing already exist in codimension `m`; the vector `C¹` pieces `V1` are the only new ingredient,
+routed componentwise through a linear isometry (`V3`, `V4`, `V4'`, `V4''`) rather than through a
+vector-valued Whitney extension, and `V5` is the `L12` assembly stated as an implication from `V1`.
+The locally Lipschitz version `M2` is out of scope. **Nothing in this repository proves any of `L0`,
+`V1`, `V3`–`V5`.** Its local import closure contains no work-in-progress file.
+
+`LocallyLipschitzVectorCoareaRouteStatements.lean` checks the route obligations for the
+**codimension-`m` coarea formula of locally Lipschitz maps** — `coarea_of_contDiff` with
+`LocallyLipschitz u`, the `M2` that the Lipschitz route left out of scope — as proposition types only:
+**eleven `#check`s**, two referencing proved declarations (`KLS.coarea_of_locallyLipschitz`,
+`coarea_of_contDiff`) and nine stating the target `N0`, the steps `X1`–`X5`, the strictness witness `D1`
+and the consistency items `C1`, `C2`. Like the other route files it declares nothing, proves nothing
+and introduces no placeholder axiom, and **a proposition that type-checks is not a proof**. The route
+is the scalar `L13` reduction by half-open annuli, verbatim except that the scalar McShane extension
+becomes a componentwise one (`X1`, some constant, not Kirszbraun); `X5` is stated as the implication
+`L0 → N0`. **Nothing in this repository proves any of `N0`, `X1`, `X3`–`X5`.** Its local import
+closure contains no work-in-progress file.
+
+`SharpSardAudit.lean` audits the **sharp finite-regularity Sard theorem**. Seven of the eight
+propositions of `SharpSardRouteStatements.lean` are copied **verbatim** and discharged
+(`route_M1`, `route_M1'`, `route_M3`, `route_M4`, `route_M5`, `route_M6`, `route_D1`); `route_M6` is
+`Analysis.sard` itself. **`M2` is false as written** — the mean value step without the disk's
+antilipschitz bound; the client states the pen-and-paper spiral counterexample in its header,
+declares no `route_M2`, and proves `route_M2_antilipschitz`, the statement with exactly that bound
+inserted, which is what the Morse decomposition supplies and `M3`–`M6` consume. Consistency checks
+recover the statements of `sard_smooth`, `sard_plane` and `sard_of_finrank_le_one` from the sharp
+theorem without naming them, plus dimension-zero and constant-function boundary cases.
+14 standard-only axiom reports; local import closure with no work-in-progress file.
+
+`LipschitzVectorCoareaAudit.lean` audits the **codimension-`m` coarea formula for Lipschitz maps**.
+All nine in-scope propositions of `LipschitzVectorCoareaRouteStatements.lean` are copied
+**verbatim** and discharged (`route_L0`, `route_V1`–`route_V5`, `route_V4'`, `route_V4''`,
+`route_M1` — the last with a universe-polymorphic witness), and `route_M2`, the locally Lipschitz
+follow-on, is discharged from `Analysis.coarea_of_locallyLipschitz`. Boundary cases: a
+zero-dimensional target, the equidimensional case `k = 0`, a constant map, and the `m = 1`
+comparison with `KLS.coarea_of_lipschitz`. 24 standard-only axiom reports; no
+work-in-progress file in the import closure.
+
+`LocallyLipschitzVectorCoareaAudit.lean` audits the **codimension-`m` coarea formula for locally
+Lipschitz maps**. All eight propositions of `LocallyLipschitzVectorCoareaRouteStatements.lean` are
+copied **verbatim** and discharged (`route_X1`–`route_X5`, `route_D1`, `route_C1`, `route_C2`),
+and `route_N0`, the target, from `Analysis.coarea_of_locallyLipschitz`. The strictness witness
+`x ↦ ‖x‖² e₀ + ‖x‖ e₁` on the plane is proved locally Lipschitz, globally Lipschitz for no
+constant, and not differentiable at `0`. 22 standard-only axiom reports; no
+work-in-progress file in the import closure.
+
+`LipschitzCoareaMigrationAudit.lean`, `LevelSetMeasurableAudit.lean` and
+`IsoperimetryCoareaAudit.lean` formerly imported `KLS/WIP/AnalyticPrerequisites.lean`; since
+2026-09-19 they import the proved `Analysis/Sard/Sharp.lean`, and their reports on `Analysis.sard`
+and `Analysis.ae_forall_fderiv_ne_zero` no longer show `sorryAx`.
+
+`CheegerEqualityAudit.lean` audits the **closed Cheeger-infimum line**. All fourteen propositions of
+`CheegerInfimumRouteStatements.lean` are copied **verbatim** and discharged (`route_K0`–`route_K13`),
+with one exception recorded honestly: **`K7` is false as written** — for `B = ∅` the distance cutoff
+is identically `1` while the thickening is empty — so `route_K7` carries `B.Nonempty` and
+`route_K7_empty_counterexample` refutes the verbatim form on a Dirac law. `route_K0` and `route_K5` are
+the two former holes, `route_K10` the certified equality. Boundary cases: dimension zero (both infima
+`⊤`), `h_M = ⊤ ↔ h_S = ⊤`, and a Dirac-type law on the affine support. 31 standard-only axiom
+reports; no work-in-progress file in the import closure.
+
+`CheegerInequalityAudit.lean` audits **Cheeger's inequality**. `P0`–`P6` and `D1` of
+`CheegerInequalityRouteStatements.lean` are copied **verbatim** and discharged (`route_P0` added at
+integration once the Cheeger-infimum module supplied `h_μ = h_M(ν)`); `B1`, the Buser half, is not
+touched. Boundary cases: dimension zero (smooth-test constant `0`), a constant test, a `1`-Lipschitz
+admissible test. 28 standard-only axiom reports; no work-in-progress file in the import closure.
+
+`LipschitzCoareaMigrationAudit.lean` and `IsoperimetryCoareaAudit.lean` formerly imported
+`KLS/WIP/CheegerInfimum.lean` and deliberately reported its two holes; since 2026-09-19 they import
+`KLS/Geometry/CheegerEquality.lean` and every report is standard.
+
+`EnergySlopeComparisonAudit.lean` audits the **sandwich of the three relaxations**: `A1`–`A3` of
+`EnergySlopeRouteStatements.lean` copied **verbatim** and discharged, the sandwich as one statement,
+the pointwise agreement of the two slope conventions on smooth tests, the four consequences
+`E0b`–`E0e` derived with `E0a` as an explicit hypothesis, the absolutely continuous scope recovering
+that hypothesis, and dimension zero. 18 standard-only axiom reports.
+
+`EnergySlopeRecoveryAudit.lean` audits **smooth recovery of globally Lipschitz tests**: `B1`–`B5`
+copied **verbatim** and discharged, the sandwich on Lipschitz tests and boundary cases. 33
+standard-only axiom reports.
+
+`EnergySlopeDensityAudit.lean` audits the **density of smooth tests in the local-slope energy**:
+`C1`–`C6` copied **verbatim** and discharged (`route_C2` projects the route's conjunction out of the
+stronger patch lemma, which also bounds `|F − f|` everywhere), the sandwich
+`LocalSlope.relaxation ≤ SmoothGradient.relaxation ≤ LocalSlope.energy ≤ AsymptoticLipschitz.energy`
+on Lipschitz tests, and the now law-independent vanishing of every relaxation in dimension zero.
+25 standard-only axiom reports. None of the three clients imports a work-in-progress module —
+there is none left.
+
+`BuserRouteStatements.lean` checks the route for the **Buser half** `Ψ_KLS(μ)² ≤ π C_P^lit(μ)` as
+proposition types only: **seventeen `#check`s**, seven referencing proved declarations, the target
+`B0` verbatim as the Blueprint states it (out of reach in dimension `n ≥ 2`: no heat semigroup, no
+Bakry–Émery, no localization in Mathlib or here), the Stage-1 items `Q0`, `Q0'`, `Q1`, `Q1'`, `Q2`–`Q5`
+(dimension one with the explicit constant `12`: one-dimensional isoperimetry through `h_M = h_S`, a
+density-versus-median bound, a bathtub variance bound, the linear test) and the bookkeeping `D1`
+(`π < 12`). Like the other route files it declares nothing, proves nothing and introduces no
+placeholder axiom, and **a proposition that type-checks is not a proof**.
+
+`BuserLineAudit.lean` audits **Stage 1 of the Buser program**: `Q0`, `Q0'`, `Q1`, `Q1'`, `Q2`–`Q5`
+and `D1` of `BuserRouteStatements.lean` copied **verbatim** and discharged — one-dimensional
+isoperimetry `h_M ≥ 2ρ(m)`, `ρ ≤ 2ρ(m)`, `Var ≥ 1/(12ρ_max²)`, the linear test, and the assembled
+`Ψ² ≤ 12 C_P` on the line and for affine supports of dimension at most one — with the
+zero-dimensional and Dirac boundary cases. `B0` is not touched. 36 standard-only axiom reports.
+
+There are now 61 source clients here, plus the 7 previously referenced local clients.

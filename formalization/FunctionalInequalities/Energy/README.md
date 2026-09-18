@@ -18,7 +18,7 @@
 | 仿射支撑内的实现 | `SmoothGradient/Intrinsic/Basic.lean` → `Closed.lean` |
 | 两种实现的比较与 Lipschitz 逼近 | `SmoothGradient/Intrinsic/Comparison.lean`、`Euclidean/LipschitzApproximation.lean` |
 | 局部斜率与渐近 Lipschitz 的 L² 松弛 | `LocalSlope/Relaxation.lean`：`AsymptoticLipschitz.{apply,energy,Admissible,preEnergy,relaxation}`、`LocalSlope.{preEnergy,relaxation}` 及无条件比较 `relaxation_le_asymptoticLipschitz`；两种约定相等未证 |
-| 度量 Cheeger 能量与 `𝓔^can = 2·Ch` | `Cheeger.lean`：`Cheeger.{ofLocalSlope,ofAsymptoticLipschitz,energy,Intrinsic.energy}`；内禀律绝对连续时 `SmoothGradient.relaxation = LocalSlope.relaxation` 与 `𝓔^can_μ = 2·Ch_μ`，对数凹律自动满足前提；奇异情形的五条开放义务留在 `WIP/Cheeger.lean`，不在聚合导入中 |
+| 度量 Cheeger 能量与 `𝓔^can = 2·Ch` | `Cheeger.lean`：`Cheeger.{ofLocalSlope,ofAsymptoticLipschitz,energy,Intrinsic.energy}`；内禀律绝对连续时 `SmoothGradient.relaxation = LocalSlope.relaxation` 与 `𝓔^can_μ = 2·Ch_μ`，对数凹律自动满足前提。**2026-09-19 起对任意 Borel 律成立**：`Euclidean/SlopeComparison.lean`（光滑测试的渐近 Lipschitz 常数 = 梯度范数，三松弛夹逼）、`Euclidean/SlopeRecovery.lean`（全局 Lipschitz 测试的磨光恢复与截断工具）、`Euclidean/SlopeDensity.lean`（局部斜率可测、McShane 补丁、光滑测试在局部斜率能量中稠密）、`Cheeger/Identification.lean`（五条恒等式，`thm:smooth-gradient-relaxation-two-cheeger` 第 26 个证书）；原 `WIP/Cheeger.lean` 已删除，`Energy/` 下不再有 WIP |
 | 协方差加权的 Lipschitz 梯度定义 | `CovarianceGradient/Basic.lean`：预能量、序列松弛、内禀律上的 `Energy.CovarianceGradient.Intrinsic.energy` |
 | 算子形式与可闭性 | `Relaxation/LinearPMap.lean`（任意可闭 `LinearPMap` 的松弛等于闭包范数平方 `normSqEnergy`；Hilbert 选择引理）→ `Euclidean/WeakDerivative.lean`（Lipschitz 函数分部积分）→ `WeightedGradient/Basic.lean`、`Closable.lean`、`Core.lean`（含 ℝ + C_c^∞ 核 `constantSmoothCore`） |
 | 平移不变性 | `CovarianceGradient/Translation.lean`：平移律、L² 拉回等距 `L2.Translation.pullbackEquiv`、方差与协方差不变、协方差松弛与最优常数不变 |

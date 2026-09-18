@@ -11,6 +11,27 @@ See [the local review record](decisions/2026-09-17-consolidated-submission-revie
 comment corrections and validation boundaries. The dated rounds below retain their original
 no-commit statements as historical records. The current next analytic obligation is R4.
 
+*Addendum (2026-09-19).* A route for the sharp Sard hole is recorded in the section "Sharp
+finite-regularity Sard: route exploration only" below; nothing is proved and the counts are unchanged.
+A second route of the same day, for the codimension-`m` coarea formula of Lipschitz maps, is
+recorded in "Lipschitz vector coarea: route exploration only"; again nothing is proved.
+A third, for the locally Lipschitz version, is recorded in "Locally Lipschitz vector coarea: route
+exploration only"; nothing is proved there either.
+*Addendum (2026-09-19, implementation).* All three routes are now **proved**: `Analysis.sard`,
+`Analysis.coarea_of_lipschitz` and `Analysis.coarea_of_locallyLipschitz`; `KLS/WIP/AnalyticPrerequisites.lean`
+is deleted. Direct holes are **7 (0/2/5)**, certificates still **24**. See "Sharp Sard proved; Lipschitz
+and locally Lipschitz vector coarea proved" below.
+*Addendum (2026-09-19, Cheeger line).* At the owner's instruction the Cheeger line was taken over: both
+Cheeger-infimum holes are **proved**, `KLS/WIP/CheegerInfimum.lean` is deleted,
+`lem:relative-perimeter-cheeger-infimum` is the **25th certificate**, and Cheeger's inequality
+`C_P^lit(μ) ≤ 4 Ψ_KLS(μ)²` is proved; the Buser half is not. Direct holes **5 (0/0/5)**, certificates **25**.
+See "The Cheeger line taken over and closed" below.
+*Addendum (2026-09-19, Energy).* The five Energy holes are **proved** and `Energy/WIP/Cheeger.lean` is deleted:
+**no work-in-progress module remains, direct holes 0**, `thm:smooth-gradient-relaxation-two-cheeger` is the
+**26th certificate**. See "The last work-in-progress module closed" below.
+*Addendum (2026-09-19, Buser).* The Buser half is proved **in dimension at most one with the constant `12`**
+(`KLS/LogConcave/Line/Buser.lean`); dimension `n ≥ 2` and the constant `π` remain open — a program, not a round.
+
 ## Semantic alignment (2026-09-16)
 
 **Current source status.** There are **24 registered certificates** and **8 direct holes**:
@@ -26,11 +47,450 @@ auxiliary registration does not add a ledger certificate. The
 Cheeger-infimum node remains **missing** exactly the integrated superlevel bound and reverse
 comparison. Coarea through L13, smooth Sard, Gauss–Green and recovery are available inputs;
 they must not be listed as missing proofs. The Cheeger–Buser workstream remains assigned to
-王浩丞; this alignment changes no theorem statement or proof body. The proved recovery
+王浩丞; this alignment changes no theorem statement or proof body. *(2026-09-19: the workstream was reassigned to this session by the owner and its infimum node is now certified; see the Cheeger-line section.)* The proved recovery
 module is added to the aggregate imports so the registered declaration is audited there.
 
 See [the semantic alignment record](decisions/2026-09-16-semantic-alignment.md) for the reviewed scopes and reproducible evidence.
 The dated rounds below retain their historical counts and infrastructure assessments.
+
+## Buser, Stage 1 proved: dimension one with the constant `12` (2026-09-19)
+
+**Implementation round, following the Buser route round of the same day; it changes none of the
+registration numbers recorded above.** Direct holes stay **0** and certificates **26**.
+
+**Proved.** For every log-concave law on the line, `Ψ² = h_M⁻² ≤ 12 · C_P^smooth(ν)`
+(`KLS.LogConcave.inv_minkowskiConstant_sq_le`), and for every log-concave law whose affine support has
+dimension at most one, `Ψ_KLS(μ)² ≤ 12 · C_P^lit(μ)` (`KLS.LogConcave.inverseScale_sq_le_of_finrank_le_one`,
+`KLS/LogConcave/Line/Buser.lean`, Dirac laws included with `Ψ = 0`). The chain: one-dimensional
+isoperimetry `h_M ≥ 2ρ(m)` at a median — through the certified `h_M = h_S`, the relative perimeter of
+a smooth domain of `ℝ` is bounded below by `ρ` at one or two frontier points that the hazard bounds
+control, with **no** use of frontier discreteness, smoothness or `ν(∂U) = 0`
+(`KLS/LogConcave/Line/Isoperimetry.lean`); `ρ ≤ 2ρ(m)`; `Var ≥ 1/(12 ρ_max²)` from the certified
+median variance bound; and the linear test `Var ≤ C_P^smooth`. Transport to the affine support needed
+a new lemma, `Isoperimetry.minkowskiConstant_map` for linear isometry equivalences.
+`research/audits/BuserLineAudit.lean` discharges `Q0`, `Q0'`, `Q1`, `Q1'`, `Q2`–`Q5` and `D1` verbatim
+with the zero-dimensional and Dirac boundary cases; **36 standard-only axiom reports**.
+
+**Not proved.** `B0`, the Buser half in dimension `n ≥ 2`, and the constant `π` in any dimension:
+Stage 2 (semigroup + Bakry–Émery, or localization + transfer) is not started.
+`thm:logconcave-cheeger-poincare-comparison` gets the third `\lean` name and a remark stating exactly
+this, and still no `\leanok`.
+
+**Verification.** Default `lake build` (3514 jobs) passed. All **68** audit clients (`research/audits` 61 + `build/audit` 7 live clients) rerun with `-DwarningAsError=true`, **0 failures**; **903 axiom reports, 0 `sorryAx`**. `check_ledger.py` **26** certificates, 0 errors; `check_blueprint.py` 88 labels, 0 errors; `atlas.py check` 75 nodes, 26 certificates, no cycles; 104 unit tests. The root `python3 research/verify.py` was rerun at the end of the round; its receipt is identified in `build/audit/buser-line-proofs/final-snapshot.json`, with the snapshot recomputed file by file against the working tree and drift empty.
+
+See [the implementation decision](decisions/2026-09-19-buser-line-proofs.md), [the route
+decision](decisions/2026-09-19-buser-route.md) and
+`research/explorations/2026-09-19-buser-line-proofs.json`. The final verification receipt is
+identified in `build/audit/buser-line-proofs/final-snapshot.json`.
+No commit or push; the real Git index is unchanged.
+
+## The Buser half: route exploration only, and a staged program (2026-09-19)
+
+**Route round; it changes none of the registration numbers recorded above, and it proves nothing.**
+Direct holes stay **0** and certificates **26**.
+
+**No theorem was proved this round.** The target `B0` is the Buser half of
+`thm:logconcave-cheeger-poincare-comparison`, `Ψ_KLS(μ)² ≤ π C_P^lit(μ)`, i.e. `λ₁ ≤ π h²`. **In
+dimension `n ≥ 2` it is out of reach today, not by a round but by infrastructure**: every known proof
+for log-concave laws goes through either the weighted heat semigroup with the Bakry–Émery gradient
+bound (Ledoux; De Ponti–Mondino for the sharp `π`) — Mathlib has no heat semigroup, no Hille–Yosida
+and no unbounded spectral theorem, and the bound itself needs parabolic regularity on a possibly
+non-smooth support or the Wasserstein-contraction characterization of `CD(0,∞)` — or a
+Lovász–Simonovits/Klartag localization together with a transfer of the Poincaré constant to the
+one-dimensional needles, for which no elementary argument is known (needle variances are controlled
+only on average, and `h ≳ 1/√‖Cov‖` is the KLS conjecture itself). Mathlib also has no log-concavity
+and no Prékopa–Leindler. `B0` is therefore recorded as the target of a **program**.
+
+**Stage 1, defined here and provable now: dimension one with the explicit constant `12`.** On the
+line the repository already has everything: the Borell density `ρ` of a log-concave law, a median
+`m`, and the hazard bounds `2ρ(m)F(x) ≤ ρ(x)` for `x ≤ m`, `2ρ(m)(1 − F(x)) ≤ ρ(x)` for `x ≥ m`.
+The route: one-dimensional isoperimetry `h_M ≥ 2ρ(m)` through the certified `h_M = h_S` — a smooth
+domain of `ℝ` has discrete frontier and relative perimeter `Σ ρ(frontier points)`, and the hazard
+bounds give `2ρ(m) · min(νU, 1 − νU) ≤ P_ρ(U)` component by component (`Q1'`, `Q1`); the density is at
+most twice its median value, sharp for the exponential law (`Q2`); a density bounded by `M` has
+variance at least `1/(12M²)`, by a bathtub comparison with the uniform law (`Q3`); the linear test
+gives `Var ≤ C_P^smooth` (`Q4`, `Q5`); hence `Ψ² = h_M⁻² ≤ 1/(4ρ(m)²) ≤ 12 Var ≤ 12 C_P^smooth` on
+the line (`Q0`) and `Ψ_KLS(μ)² ≤ 12 C_P^lit(μ)` for every log-concave law whose affine support has
+dimension at most one (`Q0'`). **`12` is not `π`**: Stage 1 proves the Buser half with a worse
+constant in dimension one and nothing in higher dimension; the Blueprint node keeps `π`, and a
+non-sharp closure would have to weaken its statement explicitly. About 800 lines are estimated.
+
+**Stage 2 is not started**: either the Markov semigroup of the Cheeger form plus Bakry–Émery plus
+Ledoux's argument, or the localization lemma plus a transfer argument — thousands of lines with
+Mathlib-level prerequisites.
+
+The route file `research/audits/BuserRouteStatements.lean` has **17 `#check`s and nothing else**:
+seven referencing proved declarations, `B0` verbatim as the Blueprint states it, the Stage-1 items
+`Q0`, `Q0'`, `Q1`, `Q1'`, `Q2`–`Q5`, and the bookkeeping `D1` (`π < 12`). **A proposition that
+type-checks is not a proof.** No `.lean` library source was modified.
+
+See [the Buser route decision](decisions/2026-09-19-buser-route.md) and
+`research/explorations/2026-09-19-buser-route.json`.
+No commit or push; the real Git index is unchanged.
+
+## The last work-in-progress module closed: `𝓔^can = 2 Ch` for every Borel law, `thm:smooth-gradient-relaxation-two-cheeger` certified (2026-09-19)
+
+**Implementation and registration round; it changes both registration numbers recorded above.**
+Direct holes fall from **5 (0/0/5) to 0** — `Energy/WIP/Cheeger.lean` is deleted and **the repository
+has no work-in-progress module left** — and certificates rise from **25 to 26**.
+
+**Route first** (`research/audits/EnergySlopeRouteStatements.lean`, `E0a`–`E0e`, `A1`–`A3`, `B1`–`B5`,
+`C1`–`C6`, diagnostic `D1`), then two concurrent proving sessions integrated here. The five holes
+were never five obligations: only `SmoothGradient.relaxation = LocalSlope.relaxation` (`E0a`) is
+genuine; the agreement of the two Cheeger conventions (`E0b`, `E0c`) follows by collapsing the
+unconditional sandwich `LocalSlope ≤ AsymptoticLipschitz ≤ SmoothGradient`, and `E0d`, `E0e` are the
+coordinate and affine-support forms of `𝓔 = 2 Ch`. The former WIP module's citation of
+Ambrosio–Gigli–Savaré for `E0b` pointed the wrong way: the singular case needs the **density of smooth
+tests in the local-slope energy**.
+
+**The sandwich** (`Energy/Euclidean/SlopeComparison.lean`): a smooth test's asymptotic Lipschitz
+constant is its gradient norm at every point, so `AsymptoticLipschitz.relaxation ≤ SmoothGradient.relaxation`
+for every law. **Smooth recovery** (`Energy/Euclidean/SlopeRecovery.lean`): mollification at a fixed
+radius inherits local Lipschitz constants, `limsup ‖∇(g ⋆ ρ_R)‖ ≤ Lip_a g` pointwise, and the global
+Lipschitz bound makes reverse Fatou apply, so `SmoothGradient.relaxation (toLp g) ≤ AsymptoticLipschitz.energy g`
+for globally Lipschitz `g`; a uniform radius is genuinely insufficient for general tests (`D1`), hence
+the cutoff tools. **Density** (`Energy/Euclidean/SlopeDensity.lean`, 1202 lines): the local slope of a
+continuous function is Borel; a globally Lipschitz test is patched by McShane extensions on finitely
+many disjoint compact cores of a slope-adapted Borel partition into a globally Lipschitz test with
+constant independent of the co-mass `δ`, equal to the test on the cores and with asymptotic Lipschitz
+constant within `2α` of the local slope there; the patches converge in `L²`, their recovered energies
+converge to the local-slope energy, and a smooth cutoff with Young's inequality reduces every
+admissible test to the globally Lipschitz case. Hence `SmoothGradient.relaxation ν ≤ LocalSlope.relaxation ν`
+for **every** Borel probability law. Three implementation findings are recorded in the decision: the
+patch lemma carries an extra uniform bound the route omitted (indispensable for `L²` convergence), the
+two-moving-point Leibniz bound needs an `O(r)` correction, and empty inner-regularity cores must be
+dropped because `Metric.infDist x ∅ = 0`.
+
+**Migration and registration.** The five declarations are moved to `Energy/Cheeger/Identification.lean`
+with **byte-identical `pp.all` signatures** (978-line prints, `diff` empty;
+`build/audit/energy-slope-proofs/`). `thm:smooth-gradient-relaxation-two-cheeger` is certified by
+`solutions/ThmSmoothGradientRelaxationTwoCheeger.lean`: `certificate μ` packages, for **every** Borel
+probability law, the equality of the two relaxations of the intrinsic law and `𝓔^can_μ = 2 Ch_μ` on
+ambient `L²(μ)`; `conventions_agree` records the agreement of the two Cheeger conventions. Ledger
+node, `check_blueprint.py` mapping, lakefile root, Blueprint chapter 30 `\lean{}`/`\leanok` with a
+proof block, the four modules in the aggregate. Closest literature: Eriksson-Bique, Calc. Var. PDE 62
+(2023), Art. 60, Thm 1.1; Ambrosio–Gigli–Savaré (2013) §8.3.
+
+**Audits.** `EnergySlopeComparisonAudit`, `EnergySlopeRecoveryAudit` and `EnergySlopeDensityAudit`
+discharge every route proposition verbatim (`route_C2` projects the route's conjunction out of the
+stronger library lemma), with the sandwich on Lipschitz tests, constant-test and dimension-zero
+boundary cases, and the four consequences `E0b`–`E0e` derived from `E0a` as an explicit hypothesis.
+
+**Verification.** Default `lake build` (3512 jobs, the `Solutions` library with the new certificate included) passed. All **66** audit clients (`research/audits` 59 + `build/audit` 7 live clients) rerun with `-DwarningAsError=true`, **0 failures**; **867 axiom reports, 0 `sorryAx`**. No work-in-progress module remains, so there is nothing left to count as a direct hole. `pp.all` of the five migrated declarations before and after: `diff` empty. `check_ledger.py` **26** certificates, 0 errors; `check_blueprint.py` 88 labels, 0 errors; `atlas.py check` 75 nodes, 26 certificates, no cycles; 104 unit tests. The root `python3 research/verify.py` was rerun at the end of the round; its receipt is identified in `build/audit/energy-slope-proofs/final-snapshot.json`, with the snapshot recomputed file by file against the working tree and drift empty.
+
+**Not proved:** the dimension-free KLS bound; the Buser half of the Cheeger–Buser comparison; the
+literature-Poincaré clause of the Klartag identification; the diagnostic `D1` is not formalized.
+
+See [the implementation decision](decisions/2026-09-19-energy-slope-proofs.md), [the route
+decision](decisions/2026-09-19-energy-slope-route.md) and
+`research/explorations/2026-09-19-energy-slope-proofs.json`. The final verification receipt is
+identified in `build/audit/energy-slope-proofs/final-snapshot.json`.
+No commit or push; the real Git index is unchanged.
+
+## The Cheeger line taken over and closed: both infimum holes proved, `lem:relative-perimeter-cheeger-infimum` certified, Cheeger's inequality proved (2026-09-19)
+
+**Implementation and registration round; it changes both registration numbers recorded above.** At
+the owner's instruction (学长那个我们接手了) the log-concave Cheeger line formerly assigned to 王浩丞
+was taken over here. Direct holes fall from **7 (0/2/5) to 5 (0/0/5)** — only `Energy/WIP/Cheeger.lean`
+is left, and the `KLS/WIP/` directory is gone — and certificates rise from **24 to 25**.
+
+**Two route rounds first**, `research/audits/CheegerInfimumRouteStatements.lean` (`K0`–`K13`) and
+`CheegerInequalityRouteStatements.lean` (`P0`–`P6`, `D1`, `B1`), then two concurrent proving
+sessions on disjoint new files, integrated here.
+
+**The two Cheeger-infimum holes** are **proved** in `KLS/Geometry/CheegerEquality.lean`.
+`smoothConstant_mul_lintegral_min_superlevel_le`: almost every strict superlevel set of a smooth
+Lipschitz `[0,1]`-valued `u` is a smooth domain (smooth Sard) whose frontier lies in the level set, so
+the multiplied infimum bound `h_S · m(ν U) ≤ P_ρ(U)` is dominated by the level integral of the Borell
+density, and the weighted `C¹` coarea formula for the density turns the integrated level integrals
+into `∫ ‖∇u‖ dν`. `smoothConstant_le_minkowskiConstant`: for a Borel set of intermediate mass and
+finite content, distance cutoffs have gradient integral at most `(ν(B^r) − ν B)/r` and `L¹` distance
+to the indicator at most `ν(B^r) − ν B`; their mollifications satisfy the coarea bound; the balance is
+`1`-Lipschitz in the set; the error is subtracted from the balance rather than multiplied into `h_S`,
+so no finiteness of `h_S` is needed, and the `liminf` along `r → 0⁺` is the Minkowski content. All
+seven public declarations of `KLS/WIP/CheegerInfimum.lean` are **migrated with byte-identical
+`pp.all` signatures** (2223-line prints, `diff` empty; `build/audit/cheeger-line-proofs/`) and the WIP
+module is **deleted**. **One route statement was wrong:** `K7` as written fails for `B = ∅`
+(`Metric.infDist x ∅ = 0` makes the cutoff identically `1`); the audit refutes the verbatim form on a
+Dirac law and proves it with `B.Nonempty`, which is all `K5` uses.
+
+**Registration.** `lem:relative-perimeter-cheeger-infimum` is certified by
+`solutions/LemRelativePerimeterCheegerInfimum.lean`: `certificate hρ : h_M = h_S` for **every** law
+with a Borell density relative to Lebesgue measure (stronger than the Blueprint's full-dimensional
+log-concave scope, dimension zero included with both sides `⊤`), and `intrinsic hμ hρ`, the
+`h_μ = h_ν^{sm,rel}` and `Ψ_KLS(μ) = ψ_ν` clauses of `thm:klartag-density-frontend-identification`
+(whose literature-Poincaré clause is **not** certified under that node, which therefore keeps no
+`\leanok`). Ledger node (`kind: lemma`), `check_blueprint.py` mapping, lakefile root, Blueprint
+`\lean{}`/`\leanok` in chapter 60 and remarks in chapter 45. `check_ledger.py`'s text scan of the
+certificate's import closure required rewriting the words "sorry"/"admit" in the docstrings of 13
+modules (hole/allow); no code changed.
+
+**Cheeger's inequality** `C_P^lit(μ) ≤ 4 Ψ_KLS(μ)²` is **proved** for every log-concave law
+(`KLS.LogConcave.literatureConstant_le_four_mul_inverseScale_sq`, `KLS/Geometry/CheegerInequality.lean`,
+Dirac laws included with both sides `0`), from `C_P^smooth(ν) ≤ 4 / h_M(ν)²` for **every** Borel
+probability law (`Isoperimetry.smoothTest_constant_le`): a median exists (`KLS/Geometry/Median.lean`);
+for bounded `C¹` Lipschitz `g`, `Var(g) ≤ ∫ (g − m)²` splits into two positive-part squares, each
+`C¹`, Lipschitz and supported on a half-mass set, where layer cake, the multiplied Minkowski bound and
+the Minkowski coarea inequality give the `L¹` Cheeger inequality, and the chain rule with
+Cauchy–Schwarz gives `h_M² ∫ (g − m)₊² ≤ 4 ∫_{g>m} ‖∇g‖²`; the repository's smooth cutoff `scaled`
+extends the bound to every admissible test by dominated convergence and Fatou; the literature constant
+is the smooth-test constant of the intrinsic law and `h_μ = h_M(ν)`. **The Buser half
+`Ψ_KLS(μ)² ≤ π C_P^lit(μ)` is not proved**: every known proof for log-concave laws uses the
+Bakry–Émery gradient bound or Lovász–Simonovits localization, neither in Mathlib nor here.
+`thm:logconcave-cheeger-poincare-comparison` gets the two `\lean` names and a remark, no `\leanok`.
+
+**Audits.** `research/audits/CheegerEqualityAudit.lean` discharges `K0`–`K13` verbatim (`K7` with
+`B.Nonempty` plus the refutation of the verbatim form), with zero-dimensional, `h_M = ⊤` and
+Dirac-type boundary cases; `CheegerInequalityAudit.lean` discharges `P0`–`P6` and `D1` verbatim with
+dimension-zero, constant-test and `1`-Lipschitz boundary cases. The three clients that imported the
+deleted WIP module now import `CheegerEquality`; their five formerly `sorryAx` reports are standard.
+
+**Verification.** Default `lake build` (3507 jobs, the `Solutions` library with the new certificate included) passed. All **62** audit clients (`research/audits` 55 + `build/audit` 7 live clients) rerun with `-DwarningAsError=true`, **0 failures**; **791 axiom reports, 0 `sorryAx`** — for the first time no client reports a hole. The one remaining WIP module `Energy/WIP/Cheeger.lean` compiles with **5** `sorry` warnings, so direct holes are **5 (0/0/5)**. `pp.all` of the seven migrated declarations before and after: `diff` empty. `check_ledger.py` **25** certificates, 0 errors; `check_blueprint.py` 88 labels, 0 errors; `atlas.py check` 75 nodes, 25 certificates, no cycles; 104 unit tests. The root `python3 research/verify.py` was rerun at the end of the round; its receipt is identified in `build/audit/cheeger-line-proofs/final-snapshot.json`, with the snapshot recomputed file by file against the working tree and drift empty.
+
+**Not proved:** the Buser half; the literature-Poincaré clause of the Klartag identification under its
+node; the five Energy holes; the dimension-free KLS bound.
+
+See [the implementation decision](decisions/2026-09-19-cheeger-line-proofs.md), the two route
+decisions ([infimum](decisions/2026-09-19-cheeger-infimum-route.md),
+[inequality](decisions/2026-09-19-cheeger-inequality-route.md)) and
+`research/explorations/2026-09-19-cheeger-line-proofs.json`. The final verification receipt is
+identified in `build/audit/cheeger-line-proofs/final-snapshot.json`.
+No commit or push; the real Git index is unchanged.
+
+## Sharp Sard proved; Lipschitz and locally Lipschitz vector coarea proved (2026-09-19)
+
+**Implementation round, following the three route rounds of the same day; it changes the hole count
+recorded above.** Direct holes fall from **8 (1/2/5) to 7 (0/2/5)**; certificates stay **24**
+(these are `Analysis/`-layer results, not ledger nodes); the `KLS/WIP/` directory keeps only
+`CheegerInfimum.lean`.
+
+**Three proving sessions, one per route, ran concurrently on disjoint new files; this session
+integrated them.** Every file passes `-DwarningAsError=true`; no `sorry`, `admit`, `axiom`,
+`native_decide` or `unsafe` anywhere; no work-in-progress module in any import closure.
+
+**Sharp finite-regularity Sard (`M1`–`M6`).** `Analysis.sard` — the critical values of a `C^n`
+real-valued function on an `n`-dimensional real normed space are Lebesgue-null — is **proved** in
+`Analysis/Sard/Sharp.lean` by Morse's route: the `C^k` graph chart and its `1`-antilipschitz bound
+(`Analysis/Sard/Chart.lean`), `C¹` parametrized disks, flatness along a disk and the mean value step
+(`Analysis/Sard/Disk.lean`), the Morse vanishing lemma by double induction on `(n, k)`
+(`Analysis/Sard/MorseVanishing.lean`, `MorseSard.hasDecompRel_self`), the criticality lemma
+`exists_cover_of_critical`, `sard_pi` on `Fin n → ℝ` and the transport `sard`. The theorem and its
+consequence `ae_forall_fderiv_ne_zero` are **migrated** from `KLS/WIP/AnalyticPrerequisites.lean`
+with **byte-identical `pp.all` signatures** (machine `diff`, `build/audit/sharp-sard-proofs/`), the
+WIP module is **deleted** (frozen copy `AnalyticPrerequisites.before.lean` there), and the five audit
+clients that imported it now import `Analysis/Sard/Sharp.lean`. **One route statement was wrong:**
+`M2` as written — the mean value step *without* the disk's antilipschitz bound — is **false**; the
+proving session gave a pen-and-paper counterexample (a `C¹` spiral `t ↦ (t³cos(1/t), t³sin(1/t))`
+with infinitely many scales, not formalized) and proved the statement with that bound added
+(`route_M2_antilipschitz`), which is the one every disk of a Morse decomposition satisfies and the one
+`M3`–`M6` consume. The route file stays byte-unchanged; the correction is recorded in the route
+decision. Seven of the eight route propositions are discharged verbatim in
+`research/audits/SharpSardAudit.lean`, which also recovers the statements of `sard_smooth`,
+`sard_plane` and `sard_of_finrank_le_one` from the sharp theorem without naming them.
+
+**Lipschitz vector coarea (`V1`–`V5`, `L0`).** `Analysis.coarea_of_lipschitz`
+(`Analysis/Lipschitz/VectorCoarea.lean`) is `coarea_of_contDiff` with `LipschitzWith K u`, proved
+exactly as the route planned, `L0 = V5 ∘ V1`: coordinates through a linear isometry
+(`Analysis/Lipschitz/Componentwise.lean`), a countable common refinement indexed through an
+injection `(Fin m → ℕ) ↪ ℕ` (`Analysis/Lipschitz/Refinement.lean`), the vector `C¹` pieces
+`exists_contDiff_pieces_vector` (`Analysis/Lipschitz/VectorPieces.lean`), the null-complement step and
+the `L12`-style assembly. All nine in-scope route propositions are discharged verbatim in
+`research/audits/LipschitzVectorCoareaAudit.lean` (the `M1` witness had to be universe-polymorphic:
+`EuclideanSpace ℝ (ULift (Fin 1))`), with boundary cases and the `m = 1` comparison.
+
+**Locally Lipschitz vector coarea (`X1`–`X5`, `N0`).** `Analysis.coarea_of_locallyLipschitz`
+(`Analysis/Lipschitz/Local.lean`) is `coarea_of_contDiff` with `LocallyLipschitz u`, the
+codimension-`m` `L13`: componentwise McShane extension with an existential constant
+(`Analysis/Lipschitz/Extension.lean`, not Kirszbraun), the half-open annuli
+(`Analysis/Lipschitz/Annuli.lean`), locality of `fderiv` and level sets, and the assembly
+`coarea_of_locallyLipschitz_of_lipschitz` as the implication `L0 → N0`, closed by `L0` at
+integration. `research/audits/LocallyLipschitzVectorCoareaAudit.lean` discharges all eight route
+propositions verbatim plus `route_N0`, and proves the strictness witness `x ↦ ‖x‖² e₀ + ‖x‖ e₁`
+(locally Lipschitz, globally Lipschitz for no constant, not differentiable at `0`). The `M2` of the
+Lipschitz route file — the same statement — is discharged as `route_M2` there. **The vector coarea
+chain `C¹ → Lipschitz → locally Lipschitz` is now level with the scalar one.**
+
+**Registration.** The three modules `Analysis.Lipschitz.VectorCoarea`, `Analysis.Lipschitz.Local`
+and `Analysis.Sard.Sharp` join the aggregate import so their declarations are in the replay scope.
+No ledger node, no Blueprint `\leanok`, no alias, no restated theorem. **Not proved:** any Sard
+theorem for vector-valued maps, Hausdorff measures of critical values, Whitney's `C^{n−1}`
+counterexample; the two Cheeger-infimum holes and the five Energy holes are untouched, and the
+dimension-free KLS bound remains open.
+
+**Verification.** Default `lake build` (3492 jobs) passed after the orphan artifacts were removed. All **58** audit clients (`research/audits` 51 + `build/audit` 7 live clients) rerun with `-DwarningAsError=true`, **0 failures**; **732 axiom reports, 5 `sorryAx` lines**, all five on the two Cheeger-infimum holes of `KLS/WIP/CheegerInfimum.lean` deliberately reported by `IsoperimetryCoareaAudit` and `LipschitzCoareaMigrationAudit`. The two remaining WIP modules compile with `2 + 5 = 7` `sorry` warnings, so direct holes are **7 (0/2/5)**. `pp.all` of `Analysis.sard` and `Analysis.ae_forall_fderiv_ne_zero` before and after the migration: `diff` empty. `check_ledger.py` **24** certificates, 0 errors. The root `python3 research/verify.py` was rerun at the end of the round; its receipt is identified in `build/audit/coarea-sard-proofs/final-snapshot.json`, with the snapshot recomputed file by file against the working tree and drift empty.
+
+**The log-concave Cheeger–Buser line belongs to 王浩丞 and is deliberately untouched here.**
+
+See [the implementation decision](decisions/2026-09-19-coarea-sard-proofs.md) and
+`research/explorations/2026-09-19-coarea-sard-proofs.json`. The final verification receipt is
+identified in `build/audit/coarea-sard-proofs/final-snapshot.json`.
+No commit or push; the real Git index is unchanged.
+
+## Locally Lipschitz vector coarea: route exploration only (2026-09-19)
+
+**Newest round, the third route round of the day; it changes none of the registration numbers
+recorded above, and it proves nothing.** Direct holes stay **8 (1/2/5)** and certificates **24**.
+
+**No theorem was proved this round.** The target `N0` is the `M2` that the Lipschitz vector coarea
+route of the same day left out of scope: the codimension-`m` coarea formula `coarea_of_contDiff` with
+`ContDiff ℝ 1 u` replaced by `LocallyLipschitz u`, no global constant and no global modulus — the
+codimension-`m` copy of the proved scalar `L13` (`KLS.coarea_of_locallyLipschitz`), and the common
+generalization of `L0` and `R9`. The deliverable is
+`research/audits/LocallyLipschitzVectorCoareaRouteStatements.lean`, **11 `#check`s and nothing
+else** — two referencing proved declarations, nine stating `N0`, `X1`–`X5`, the strictness witness `D1`
+and the consistency items `C1`, `C2`. **A proposition that type-checks is not a proof, and none of
+`N0`, `X1`, `X3`–`X5` is proved anywhere in this repository.**
+
+**The scalar `L13` reduction transfers step by step.** `L13` reduces to `L12` by half-open annuli:
+Lipschitz on each closed ball by compactness, a McShane extension to a globally Lipschitz `v k`,
+agreement with `u` near every point of the piece so that density and level sets agree there, the
+global formula on `v k`, and countable additivity. In codimension `m` four of the five steps are
+verbatim (`X2`, `X4` with `Filter.EventuallyEq.fderiv_eq` in place of `gradient_eq`, `L0` in place
+of `L12`, `X3`/`X5` bookkeeping). **Only the extension changes**: `extend_real` is scalar and
+Kirszbraun is not in Mathlib, but `L0` only needs *some* Lipschitz constant, so a **componentwise**
+McShane extension through a linear isometry onto `EuclideanSpace ℝ (Fin m)` (`LipschitzOnWith.extend_pi`
+on the sup-norm `Fin m → ℝ`, transported back at the cost of `√m`) suffices (`X1`). Nothing is claimed
+about the constant.
+
+**`X5` is stated as an implication from `L0`**, so `N0 = X5 ∘ L0`: the vector chain
+`C¹ → Lipschitz → locally Lipschitz` closes the moment `L0` is proved. Roughly 230 lines in total,
+all low risk except the 120-line assembly; recommended order `X2`, `X3`, `X4`, `X1`, `X5`. The
+witness `D1` — on the plane, `x ↦ ‖x‖² e₀ + ‖x‖ e₁`, locally Lipschitz, globally Lipschitz for no
+constant, not differentiable at `0` — records a map that `N0` reaches and neither `L0` nor `R9` does.
+
+No `.lean` library source was modified, no module was added to the library, the aggregate is
+untouched and no hole was migrated. The new client's local import closure contains **no**
+work-in-progress file; it compiles with `-DwarningAsError=true` with 0 errors and 0 warnings.
+
+**The log-concave Cheeger–Buser line belongs to 王浩丞 and is deliberately untouched here.**
+
+See [the locally Lipschitz vector coarea route decision](decisions/2026-09-19-locally-lipschitz-vector-coarea-route.md)
+and `research/explorations/2026-09-19-locally-lipschitz-vector-coarea-route.json`. The final
+verification receipt is identified in `build/audit/locally-lipschitz-vector-coarea-route/final-snapshot.json`.
+No commit or push; the real Git index is unchanged.
+
+## Lipschitz vector coarea: route exploration only (2026-09-19)
+
+**Newest round, following the sharp Sard route round of the same day; it changes none of the
+registration numbers recorded above, and it proves nothing.** Direct holes stay **8 (1/2/5)** and
+certificates **24**.
+
+**No theorem was proved this round.** This was a route exploration for the next step of the
+codimension-`m` coarea program: `coarea_of_contDiff` (`R9`) is proved for **`C¹`** maps with no
+hypothesis on the critical set, while Federer's formula holds for merely **Lipschitz** maps and the
+scalar side already went `C¹ → Lipschitz → locally Lipschitz`. The target `L0` is `R9` with
+`ContDiff ℝ 1 u` replaced by `LipschitzWith K u`, everything else verbatim. The deliverable is
+`research/audits/LipschitzVectorCoareaRouteStatements.lean`, **15 `#check`s and nothing else** — five
+referencing proved declarations, ten stating the obligations `L0`, `V1`–`V5`, `V4'`, `V4''` and the
+diagnostics `M1`, `M2`. **A proposition that type-checks is not a proof, and none of `L0`, `V1`,
+`V3`–`V5` is proved anywhere in this repository.**
+
+**Two of the scalar `L12`'s three steps already exist in codimension `m`.** `KLS.coarea_of_lipschitz`
+cuts the domain into countably many disjoint measurable pieces carrying `C¹` functions that agree
+with `u` to first order (`L7`, `exists_contDiff_pieces`), applies the `C¹` formula on each piece, and
+sums, deleting the Lebesgue-null complement from almost every level. In codimension `m` the `C¹`
+formula is `coarea_of_contDiff` and the null-complement step is
+`ae_hausdorffMeasure_inter_levelSet_eq_zero_vector` at `d = k` (`V2`, a ten-line derivation through
+`hausdorffMeasure_finrank_eq_smul_volume`, confirmed by type only and **not** committed). The `C¹`
+pieces are the gap: the whole jet and Whitney chain behind `L7` is stated for `u : V → ℝ`. **`V1`,
+the vector `C¹` pieces, is the only genuinely new ingredient.**
+
+**The route for `V1` is componentwise.** Through a linear isometry onto `EuclideanSpace ℝ (Fin m)`
+each coordinate of `u` is scalar Lipschitz (`V4'`) and gets its own partition from the proved `L7`;
+`V3` takes a countable common refinement of the `m` partitions; `V4''` recovers differentiability of
+`u` from its coordinates and `V4` upgrades coordinatewise first-order agreement to first-order
+agreement of `u` with the `C¹` vector map assembled from the scalar representatives. No vector-valued
+Whitney extension and no new analysis: bookkeeping and calculus. `V5` is the codimension-`m` copy of
+the `L12` assembly, stated as an implication from the conclusion of `V1`, so `L0 = V5 ∘ V1`.
+
+**Where this could be wrong.** `V3` (measurability and disjointness of the common refinement) and
+`V4` (componentwise `fderiv` through the isometry) are the two places that may be heavier than
+expected; if so `V1` falls back to a vector-target Whitney extension. Neither was verified this round.
+
+**Ten numbered items, none proved**, with exact Lean statements in the route file, estimated at
+roughly 420 lines in total with no single point of no return: the analysis (`L7`, `R9`, null slicing)
+is already proved and the remaining items are bookkeeping. Recommended order is `V4'`, `V4''`, `V4`,
+`V3`, `V1`, `V2`, `V5`, `L0`. The locally Lipschitz version `M2` is recorded as the follow-on and is
+**not** an obligation of this route.
+
+No `.lean` library source was modified, no module was added to the library, the aggregate is
+untouched and no hole was migrated. The new client's local import closure contains **no**
+work-in-progress file; it compiles with `-DwarningAsError=true` with 0 errors and 0 warnings.
+
+**The log-concave Cheeger–Buser line belongs to 王浩丞 and is deliberately untouched here.**
+
+See [the Lipschitz vector coarea route decision](decisions/2026-09-19-lipschitz-vector-coarea-route.md)
+and `research/explorations/2026-09-19-lipschitz-vector-coarea-route.json`. The final verification
+receipt is identified in `build/audit/lipschitz-vector-coarea-route/final-snapshot.json`.
+No commit or push; the real Git index is unchanged.
+
+## Sharp finite-regularity Sard: route exploration only (2026-09-19)
+
+**Newest round; it changes none of the registration numbers recorded above, and it proves
+nothing.** Direct holes stay **8 (1/2/5)** and certificates **24**.
+
+**No theorem was proved this round.** This was a route exploration for the one direct hole of
+`KLS/WIP/AnalyticPrerequisites.lean`, the sharp `C^n` Sard theorem `Analysis.sard`. The deliverable
+is `research/audits/SharpSardRouteStatements.lean`, a file of **11 `#check`s and nothing else** —
+no declaration, no proof, no placeholder axiom. Three of them reference proved declarations
+(`volume_image_eq_zero_of_oscillation_pow`, `exists_local_graph`, `sard_smooth`); the other eight
+are the obligations `M1`, `M1'`, `M2`–`M6` and the diagnostic `D1`. **A proposition that
+type-checks is not a proof, and none of `M1`–`M6` is proved anywhere in this repository.**
+
+**Downstream relevance, unchanged since 2026-09-15.** The hole's only consumer chain
+(`ae_forall_fderiv_ne_zero` → `SmoothDomain.ae_exists_superlevel`) assumes `C^∞` and is already
+served by the proved `sard_smooth`; the sharp theorem blocks no KLS chain. Closing it completes the
+`Analysis/` layer itself: direct holes `8 → 7 (0/2/5)`, the WIP module emptied and deleted by
+precedent, `ae_forall_fderiv_ne_zero` freed of `sorryAx`, statement text unchanged.
+
+**The obstruction, located.** The proved `C^∞` descent (`Analysis/Sard/Smooth.lean`) restricts `u`,
+on the layer where the derivatives of order `≤ j` vanish and the order `j + 1` does not, to the
+regular zero set of a `j`-th derivative component, a `C^{n−j}` hypersurface, and inducts on the
+dimension. At finite regularity the restriction is only `C^{n−j}` (`D1`), while dimension `n − 1`
+needs `C^{n−1}`: the descent loses `j − 1` derivatives and fails for every `j ≥ 2`. Any route that
+restricts `u` first pays this.
+
+**The route** is Morse's (1939), in Norton's `C^k` formulation: decompose an **arbitrary set**
+`A ⊆ ℝⁿ`, at every order `k`, into a countable set and countably many pieces carried by `C¹`
+parametrized disks so that **every** `C^k` function vanishing on `A` is flat of order `k` along
+each piece (`M3`, the Morse vanishing lemma). The proof is a double induction on `(n, k)`: the
+critical step `k → k + 1` differentiates and uses the mean value step along parametric segments
+(`M2`); the regular step `n → n + 1` pushes the decomposition of a preimage forward along a `C^k`
+graph chart (`M1`), which is `1`-antilipschitz (`M1'`), **at the same `k`** — the induction
+quantifies over all sets at a fixed order, so what is restricted is never `u` but the class of `C^k`
+functions vanishing on `A`, and no regularity is lost. Applied to the critical set of a `C^{k+1}`
+function it gives the Morse criticality lemma `M4` (countable set plus countably many bounded
+pieces with a uniform `o(‖y − x‖^{k+1})` modulus), the **proved** covering count finishes on
+`Fin n → ℝ` with `k + 1 = n` (`M5`), and the transport of `sard_smooth` gives the target (`M6`).
+
+**What Mathlib has and lacks.** No Morse–Sard theorem in any form (the "special cases of Sard" in
+`HausdorffDimension.lean` give only density of the complement of the image), no Morse
+decomposition, no flatness along a disk. It does have the `C^k` inverse function theorem
+`ContDiffAt.to_localInverse` (the core of `M1`), `Fin.insertNth`/`Fin.removeNth` with pointwise
+lemmas only, `ContDiff.fderiv_right`, and the mean value inequality on a segment.
+
+**Seven numbered obligations, none proved**, with exact Lean statements in the route file: `M1`
+the `C^k` graph chart, `M1'` its antilipschitz bound, `M2` the mean value step, `M3` the Morse
+vanishing lemma, `M4` the criticality lemma, `M5` Sard on `Fin n → ℝ`, `M6` the target verbatim.
+Estimated at roughly 1000 lines, with `M3` (about 300 lines) the only high-risk item and the single
+point of no return. Recommended order is `M1'`, `M1`, `M2`, `M3`, then `M4`, `M5`, `M6`. A proving
+session may introduce auxiliary definitions (disks, flatness, decompositions) in new
+`Analysis/Sard/` modules; the route statements deliberately avoid them so that an audit client can
+copy them verbatim and discharge them.
+
+**Out of scope.** Vector-valued targets, Hausdorff measures of critical values and Whitney's
+`C^{n−1}` counterexample (the sharpness itself) are not part of this route.
+
+No `.lean` library source was modified, no module was added to the library, the aggregate is
+untouched and no hole was migrated. The new client's local import closure contains **no**
+work-in-progress file; it compiles with `-DwarningAsError=true` with 0 errors and 0 warnings.
+
+**The log-concave Cheeger–Buser line belongs to 王浩丞 and is deliberately untouched here.**
+
+See [the sharp Sard route decision](decisions/2026-09-19-sharp-sard-route.md) and
+`research/explorations/2026-09-19-sharp-sard-route.json`. The final verification receipt is
+identified in `build/audit/sharp-sard-route/final-snapshot.json`.
+No commit or push; the real Git index is unchanged.
 
 ## `Analysis/` regrouped: the family word moved from the basename into the directory (2026-09-17)
 

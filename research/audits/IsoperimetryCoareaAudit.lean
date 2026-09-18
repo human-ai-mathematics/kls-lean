@@ -1,7 +1,9 @@
 import FunctionalInequalities.KLS.Geometry.IsoperimetryCoarea
 import FunctionalInequalities.KLS.Geometry.LipschitzCoarea
-import FunctionalInequalities.KLS.WIP.CheegerInfimum
-import FunctionalInequalities.KLS.WIP.AnalyticPrerequisites
+import FunctionalInequalities.KLS.Geometry.CheegerEquality
+import FunctionalInequalities.Analysis.Sard.Sharp
+-- 2026-09-19: `Analysis.sard` is proved in `Analysis/Sard/Sharp.lean`; the former `KLS/WIP/AnalyticPrerequisites.lean` is deleted, and this client now imports the proved module.
+-- 2026-09-19: both Cheeger-infimum holes are proved in `KLS/Geometry/CheegerEquality.lean`; the former `KLS/WIP/CheegerInfimum.lean` is deleted, and this client now imports the proved module.
 
 /-!
 # Scope audit for the migrated `C¹` weighted coarea formula

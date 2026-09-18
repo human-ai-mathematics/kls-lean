@@ -1,0 +1,132 @@
+{
+ "scope": "ROUTE EXPLORATION ONLY for the codimension-m coarea formula of LOCALLY Lipschitz maps (N0 = the M2 of the same day's Lipschitz vector coarea route): coarea_of_contDiff with ContDiff R 1 u replaced by LocallyLipschitz u. NO THEOREM WAS PROVED, no library module was added and no existing .lean file was modified. The scalar L13 reduction by half-open annuli transfers step by step; the only ingredient to replace is the scalar McShane extension, and a componentwise McShane through EuclideanSpace suffices since L0 only needs some constant (no Kirszbraun). Deliverable: the #check-only file research/audits/LocallyLipschitzVectorCoareaRouteStatements.lean. A proposition that type-checks is not a proof. Direct holes stay 8 (1/2/5), certificates 24. The log-concave Cheeger-Buser line belongs to collaborator Wang Haocheng and was not touched.",
+ "date": "2026-09-19",
+ "head": "f108397aa6eafcde0a8ca99658e40c47b2926db3",
+ "origin_main": "f108397aa6eafcde0a8ca99658e40c47b2926db3",
+ "incoming_receipt": "build/verification/20260918T115012.397782Z/report.json",
+ "incoming_snapshot": "4793a31700897b94edbb049599ccbc7f2b2dc0feb9fbd58af850eeca63ab5352",
+ "incoming_entries": 620,
+ "incoming_replayed_modules": 224,
+ "incoming_gates": 10,
+ "incoming_workspace_drift": [],
+ "concurrent_session_changed_workspace_this_round": false,
+ "new_declarations": [],
+ "theorems_proved_this_round": 0,
+ "position": {
+  "chain": "R9 (C^1, proved) -> L0 (globally Lipschitz, open, own route) -> N0 (locally Lipschitz, this route)",
+  "scalar_counterpart": "L11 -> L12 -> L13 = KLS.coarea_of_locallyLipschitz (proved)",
+  "N0_generalizes": [
+   "L0 (LipschitzWith -> LocallyLipschitz, C1)",
+   "R9 (ContDiff 1 -> LocallyLipschitz, C2)"
+  ]
+ },
+ "scalar_L13_steps_in_codimension_m": {
+  "1_lipschitz_on_closed_balls": "unchanged (X2): LocallyLipschitzOn.exists_lipschitzOnWith_of_compact",
+  "2_extension_to_global_lipschitz": "THE ONLY CHANGE (X1): extend_real is scalar and Kirszbraun is absent from Mathlib; componentwise McShane via LipschitzOnWith.extend_pi through a linear isometry onto EuclideanSpace R (Fin m) and the PiLp equivalences gives some constant (sqrt m * K), which is all L0 needs",
+  "3_agreement_on_open_ball": "unchanged (X4): Filter.EventuallyEq.fderiv_eq replaces gradient_eq; density coareaJacobian (fderiv u x) and level sets agree on the piece",
+  "4_formula_on_piece": "L0 instead of L12",
+  "5_countable_additivity": "unchanged (X3 bookkeeping; lintegral_iUnion, lintegral_tsum, AEMeasurable.tsum)"
+ },
+ "obligations": [
+  {
+   "id": "N0",
+   "statement": "TARGET: coarea_of_contDiff with LocallyLipschitz u",
+   "status": "open",
+   "lines": 0,
+   "risk": "X5 applied to L0"
+  },
+  {
+   "id": "X1",
+   "statement": "vector Lipschitz extension with some constant (componentwise McShane, not Kirszbraun)",
+   "status": "open",
+   "lines": 40,
+   "risk": "low"
+  },
+  {
+   "id": "X2",
+   "statement": "locally Lipschitz implies Lipschitz on every closed ball",
+   "status": "open, Mathlib direct",
+   "lines": 10,
+   "risk": "low"
+  },
+  {
+   "id": "X3",
+   "statement": "half-open annuli: measurable, pairwise disjoint, cover, inside open-ball neighbourhoods",
+   "status": "open",
+   "lines": 40,
+   "risk": "low"
+  },
+  {
+   "id": "X4",
+   "statement": "equality on an open set transfers fderiv and level sets on a piece inside it",
+   "status": "open",
+   "lines": 20,
+   "risk": "low"
+  },
+  {
+   "id": "X5",
+   "statement": "assembly: L0 implies N0",
+   "status": "open",
+   "lines": 120,
+   "risk": "medium; copy of L13"
+  },
+  {
+   "id": "D1",
+   "statement": "strictness witness on the plane: locally Lipschitz, not globally Lipschitz, not differentiable at 0",
+   "status": "diagnostic",
+   "lines": 60,
+   "risk": "none"
+  },
+  {
+   "id": "C1/C2",
+   "statement": "LipschitzWith and ContDiff 1 imply LocallyLipschitz",
+   "status": "consistency",
+   "lines": 5,
+   "risk": "none"
+  }
+ ],
+ "total_estimated_lines": 230,
+ "recommended_order": [
+  "X2",
+  "X3",
+  "X4",
+  "X1",
+  "X5",
+  "N0 after L0"
+ ],
+ "route_statement_file": {
+  "path": "research/audits/LocallyLipschitzVectorCoareaRouteStatements.lean",
+  "checks": 11,
+  "reference_checks": 2,
+  "obligation_diagnostic_consistency_checks": 9,
+  "declares": 0,
+  "proves": 0,
+  "placeholder_axioms": 0,
+  "compiled_with": "lake env lean -DwarningAsError=true",
+  "errors": 0,
+  "warnings": 0,
+  "log": "build/audit/locally-lipschitz-vector-coarea-route/route-statements.log",
+  "imports_wip": false
+ },
+ "explicitly_not_claimed": [
+  "any coarea formula beyond the proved C^1 one; L0 remains open",
+  "optimality of the extension constant (not Kirszbraun)",
+  "domains other than the whole space",
+  "any Sard theorem",
+  "the two Cheeger-infimum holes (Wang Haocheng), the five Energy holes, the dimension-free KLS bound"
+ ],
+ "holes": {
+  "direct": 8,
+  "split": "1/2/5",
+  "migrated": 0
+ },
+ "certificates": 24,
+ "hole_migrated": false,
+ "existing_lean_files_modified": 0,
+ "library_modules_added": 0,
+ "aggregate_import_modified": false,
+ "final_receipt": "see build/audit/locally-lipschitz-vector-coarea-route/final-snapshot.json",
+ "committed": false,
+ "pushed": false,
+ "real_git_index_modified": false
+}

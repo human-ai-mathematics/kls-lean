@@ -1,6 +1,10 @@
 # KLS 文件导航
 
-当前语义状态（2026-09-16）：24 个证书；8 个直接洞（1/2/5），仅位于三个 WIP 模块。
+当前语义状态（2026-09-19，Cheeger 线接手后）：**25 个证书；5 个直接洞（0/0/5）**，仅剩 `Energy/WIP/Cheeger.lean`；`KLS/WIP/` 目录已不存在。Cheeger 下确界两洞在 [`Geometry/CheegerEquality.lean`](Geometry/CheegerEquality.lean) 证出并以逐字节相同的 `pp.all` 签名迁入，`lem:relative-perimeter-cheeger-infimum` 注册为第 25 个证书（`Solutions.LemRelativePerimeterCheegerInfimum.certificate`）；Cheeger 不等式 `C_P^lit(μ) ≤ 4Ψ_KLS(μ)²` 在 [`Geometry/CheegerInequality.lean`](Geometry/CheegerInequality.lean) 证出，Buser 半未证。
+
+历史语义状态（2026-09-19，Cheeger 线接手前）：24 个证书；**7 个直接洞（0/2/5）**，位于两个 WIP 模块（`WIP/CheegerInfimum.lean` 与 `Energy/WIP/Cheeger.lean`）。尖锐 `Analysis.sard` 已在 `Analysis/Sard/Sharp.lean` 证明（Morse 路线，`pp.all` 签名逐字节不变），`WIP/AnalyticPrerequisites.lean` 已删除。
+
+历史语义状态（2026-09-16）：24 个证书；8 个直接洞（1/2/5），仅位于三个 WIP 模块。
 恢复序列 `KLS.RelativePerimeter.exists_smooth_recovery_sequence` 已证明，相关基础设施为
 available，并已补上现有证明的 Blueprint 链接和完成标记，未新增账本证书。
 Cheeger-infimum 基础设施仍 missing，具体是
@@ -198,6 +202,9 @@ coarea 洞是对 `univ` 陈述的，紧集版本填不了它。
 | [Geometry/MinkowskiContent.lean](Geometry/MinkowskiContent.lean) | 无洞坐标空间含量层（本地导入闭包为空，只依赖 Mathlib）：`minkowskiContent` 定义、`measure_closure_eq_of_minkowskiContent_ne_top`、局部上确界 `ballSup` 及其 Lipschitz 传递与近邻见证 `thickening_superlevel_subset`，以及已证明的 Minkowski 余面积不等式 `lintegral_minkowskiContent_superlevel_le`；任意概率律（含奇异、原子），`u` 只要 `C¹` 与全局 Lipschitz，不要求密度、绝对连续性、有界值域或非零维数 |
 | [Geometry/MinkowskiConstant.lean](Geometry/MinkowskiConstant.lean) | 无洞 Cheeger 下确界层（本地导入闭包只有无洞的 `Geometry/MinkowskiContent.lean`）：由 WIP 原样迁入的 `minkowskiConstant` 与 `minkowskiConstant_eq_top_of_subsingleton`（`pp.all` 签名逐字节不变）、下确界的乘积形式 `minkowskiConstant_mul_min_le`（零质量与满质量由 `⊤ * 0 = 0` 收尾，不代入下确界）、开闭超水平集质量的几乎处处一致 `ae_measure_superlevel_lt_eq_le`（任意 `SFinite` 测度、任意可测 `u`）、平衡量可测性 `measurable_min_measure_superlevel`（任意 `u`），以及已证明的 `minkowskiConstant_mul_lintegral_min_superlevel_le`；任意概率律（含奇异、原子），不要求密度、非原子性、非零维数或 `h_M` 有限 |
 | [Geometry/DistanceCutoff.lean](Geometry/DistanceCutoff.lean) | 无洞距离截断层（**本地导入闭包为空**，只依赖 Mathlib）：由 WIP 原样迁入的 `distanceCutoff` 定义、`distanceCutoff_mem_Icc`、`lipschitzWith_distanceCutoff`、两条边界取值引理与 `L¹(ν)` 收敛 `tendsto_distanceCutoff_indicator`（`pp.all` 签名逐字节不变），以及已证明的梯度积分估计 `lintegral_enorm_gradient_distanceCutoff_le`；`B` 任意（不要求非空、可测、闭、有界），右端保留 `ν (closure B)`，`m`／Haar／`hac` 原样保留但证明不使用。**逐点**结论：截断在两个常值集上取全局极值，`IsLocalMax/IsLocalMin.fderiv_eq_zero` 无需可微性假设，故不用 Rademacher、Lebesgue 密度定理或水平集梯度一般引理 |
+| [Geometry/CheegerEquality.lean](Geometry/CheegerEquality.lean) | 无洞等式层（2026-09-19）：由已删除的 `WIP/CheegerInfimum.lean` 原样迁入的七条公开声明（`exists_smooth_approximation_lipschitz`、两个前洞、`minkowskiConstant_eq_smoothConstant`、三条内禀传输，`pp.all` 逐字节相同），加 `smoothConstant_mul_min_le`、`relativePerimeter_le_lintegral_levelSet`、`lintegral_enorm_gradient_eq_lintegral_levelSet_density`、`lintegral_enorm_distanceCutoff_sub_indicator_le`、`min_measure_le_lintegral_min_superlevel_add`；不依赖 `sorryAx`。 |
+| [Geometry/CheegerInequality.lean](Geometry/CheegerInequality.lean) | 无洞 Cheeger 不等式层（2026-09-19）：`L¹` Cheeger `minkowskiConstant_mul_lintegral_le`、正部平方界、有界 `C¹` Lipschitz 与全部可容许测试的 `h_M² Var ≤ 4∫‖∇g‖²`、`smoothTest_constant_le`（`C_P^smooth(ν) ≤ 4/h_M²`，任意 Borel 律）、`LogConcave.literatureConstant_le_four_mul_inverseScale_sq`（对数凹律）；Buser 半未证。 |
+| [Geometry/Median.lean](Geometry/Median.lean) | 中位数存在 `exists_median`（分布函数的左右连续性）。 |
 | [Geometry/CheegerInfimum.lean](Geometry/CheegerInfimum.lean) | 无洞单向比较层（**无 WIP**）：由 WIP 原样迁入的 `smoothConstant`、`smoothConstant_eq_top_of_subsingleton`、`lintegral_measure_symmDiff_superlevel`、`min_measure_le_add_measure_symmDiff`、`tendsto_lintegral_min_superlevel`（`pp.all` 签名逐字节不变），以及已证明的 `minkowskiConstant_le_smoothConstant`；零维、无可取光滑域、单个域相对周长为 `⊤`、常数为 `⊤` 均被覆盖，不要求支撑或区域有界、边界总测度有限、常数有限或相对周长有限。**只证一个方向**：反方向与等式仍在 WIP |
 | [Geometry/SmoothDomain.lean](Geometry/SmoothDomain.lean) | 无洞基础：光滑区域结构、frontier 定义接口、归一化约定检查、`empty`／`univ`／homothety、局部边界有限性、Haar 零测度与总边界 Hausdorff 缩放；2026-09-14 新增正则超水平集构造 `ofSuperlevel` 与 `ofSuperlevel_carrier`——`C∞` 函数的**严格**超水平集 `{x | t < u x}` 在 `fderiv ℝ u` 于 **`frontier`** 上非零时即为光滑域，定义函数按负子水平约定取 `φ = t - u`，邻域取 `{y | fderiv ℝ u y ≠ 0}`；不要求整条水平集正则、不要求全空间非零、不要求正维数或有界，空边界／空载体／全载体／零维由构造自然覆盖 |
 | [Geometry/Mollification.lean](Geometry/Mollification.lean) | 无洞磨光接口：`mollifiedIndicator`、indicator 局部可积性、卷积表示、光滑性／Lipschitz／`[0,1]` 值域 |
@@ -212,7 +219,7 @@ coarea 洞是对 `univ` 陈述的，紧集版本填不了它。
 | [Geometry/SmoothCoarea.lean](Geometry/SmoothCoarea.lean) | 无洞 C¹ coarea 层：`isOpen_regular` 与 `coarea_of_contDiff`（L11）——任意 `C¹` `u`、任意可测 `S`、任意可测 `ℝ≥0∞` 权重的带权 coarea 等式加切片 `AEMeasurable`；不要求 Lipschitz、有界、有限体积，`g` 允许恒 `⊤`，临界集可为全空间。由 L9（正则开域）与 L10（临界切片零测）拼成，两者缺一不可。**目标 T3 即其 `S = univ` 特例**；**不含** Lipschitz 情形（需 L12/L7/L6） |
 | [Geometry/CriticalSlice.lean](Geometry/CriticalSlice.lean) | 无洞临界截面层：`isClosed_critical`、`exists_lipschitzOnWith_critical_cover`（临界集上导数为零使 Mathlib 分片引理的逼近变成 `ε`-Lipschitz 估计，分片两两不交且可测）与 `ae_surfaceMeasure_critical_inter_levelSet_eq_zero`（L10）。**L1 的第一个下游消费者**；`u` 不要求 Lipschitz、有界或紧支撑，零维覆盖。**不是 Sard**：对临界**值**集无任何断言 |
 | [Geometry/LevelSetMeasurable.lean](Geometry/LevelSetMeasurable.lean) | 无洞水平集可测性层：由 `WIP/AnalyticPrerequisites.lean` 迁入的 `Analysis.aemeasurable_lintegral_levelSet`（`pp.all` 签名逐字节不变，机器 `diff` 核对），现由 L5 `KLS.aemeasurable_setLIntegral_inter_levelSet` 取 `S = univ` 证明，**不再带 `sorryAx`**。保留 `Analysis` 命名空间是为了公共名不变；文件放在 `KLS/Geometry/` 是因为语句出现 `KLS.surfaceMeasure`。**不含**加权 coarea 等式 |
-| [WIP/](WIP/) | 隔离的未完成层：`AnalyticPrerequisites.lean` 仅有尖锐 `Analysis.sard` 的 1 个直接洞，`ae_forall_fderiv_ne_zero` 传递依赖它；`CheegerInfimum.lean` 有超水平集积分界与反向比较的 2 个直接洞，等式及其内禀推论仍继承 `sorryAx`。原始 T1/T2/T3 均已迁到无洞几何模块；这些 WIP 文件不进库根聚合或证书导入闭包 |
+| （已无 `WIP/` 目录）| 2026-09-19 删除 `AnalyticPrerequisites.lean`（尖锐 Sard 已证，迁入 `Analysis/Sard/Sharp.lean`）与 `CheegerInfimum.lean`（两洞已证，七条声明迁入 `Geometry/CheegerEquality.lean`）；以下为历史描述：`CheegerInfimum.lean` 有超水平集积分界与反向比较的 2 个直接洞，等式及其内禀推论仍继承 `sorryAx`。原始 T1/T2/T3 均已迁到无洞几何模块；这些 WIP 文件不进库根聚合或证书导入闭包 |
 
 两个 KLS WIP 文件共 3 个直接 `sorry`，另有 `Energy/WIP/Cheeger.lean` 的 5 个，合计 8；
 先前几轮接入并证明了三条已有数学输入的接口（Hausdorff 归一化、边界局部有限性、光滑 Lipschitz 逼近），

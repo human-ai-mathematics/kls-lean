@@ -24,8 +24,8 @@ work-in-progress file it replaces made the same choice.
 This module supplies measurability. The equality
 `Analysis.lintegral_enorm_gradient_mul_eq_lintegral_levelSet` is proved separately in
 `KLS/Geometry/LipschitzCoarea.lean`; `LocallyLipschitzCoarea` extends both conclusions to locally
-Lipschitz functions. The sharp `C^(finrank)` `Analysis.sard` remains the direct hole in
-`KLS/WIP/AnalyticPrerequisites.lean`. -/
+Lipschitz functions. The sharp `C^(finrank)` `Analysis.sard` is proved in
+`Analysis/Sard/Sharp.lean`; the former `KLS/WIP/AnalyticPrerequisites.lean` is deleted. -/
 
 noncomputable section
 

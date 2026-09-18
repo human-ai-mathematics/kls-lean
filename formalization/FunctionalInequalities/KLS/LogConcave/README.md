@@ -22,6 +22,8 @@
 | [Line/Hardy.lean](Line/Hardy.lean) | 区间上的分部积分 Hardy 步骤；半直线上的有理端点有向并，锚点可取中位数同侧任意内点（常数仍为 `1/ρ(m)²`）；光滑测试 Poincaré 不等式 `SmoothTest.Holds ν (1/ρ(m))²` | 已证明；常数以中位数密度表达，不含方差 |
 | [Line/Variance.lean](Line/Variance.lean) | 比较函数 `φ(F x) − (x − m)` 的单调性；`∫(x−m)(F−1/2) dν ≥ 1/(12ρ(m))`；Bobkov 方差界 `1/(12ρ(m)²) ≤ Var` | 已证明；对均匀律取等 |
 | [Line/Poincare.lean](Line/Poincare.lean) | Bobkov 常数：`C_P^lit(ν) ≤ 12·Var_ν`（实与扩展方差两种形式）；零维仿射支撑时常数为零；`logConcave_dirac` | 已证明；独立于常数 4 的路线，作为历史推论保留 |
+| [Line/Isoperimetry.lean](Line/Isoperimetry.lean) | 一维等周（2026-09-19）：`LineDensity.mul_min_le_relativePerimeter`（`2ρ(m)·min(νU,1−νU) ≤ P_ρ(U)`，对任意光滑域，不用边界离散）、`two_mul_le_minkowskiConstant`（`2ρ(m) ≤ h_M`，经 `h_M = h_S`）、`le_two_mul`（`ρ ≤ 2ρ(m)`）、`one_div_le_evariance`（`Var ≥ 1/(12M²)`）、`interior_support_nonempty` |
+| [Line/Buser.lean](Line/Buser.lean) | Buser 半阶段一（2026-09-19）：`evariance_le_smoothTest_constant`（线性测试）、`Isoperimetry.minkowskiConstant_map`（等距搬运）、`LogConcave.inv_minkowskiConstant_sq_le`（直线上 `Ψ² ≤ 12·C_P^smooth`）、`LogConcave.inverseScale_sq_le_of_finrank_le_one`（仿射支撑维数 `≤ 1` 时 `Ψ_KLS² ≤ 12·C_P^lit`）；`n ≥ 2` 与常数 `π` 未证 |
 | [Line/Profile.lean](Line/Profile.lean) | 均值落在支撑内部；支撑线 `ρ ≤ A(1−F)+BF`（`A,B ≥ 0`）；仿射模型方差下界 `1/(√A+√B)⁴ ≤ Var`；轮廓界 `F(1−F) ≤ σρ` | 已证明；使用 `Probability/Line/AffineProfile.lean` 的仿射分位数模型 |
 | [Line/SharpHardy.lean](Line/SharpHardy.lean) | 截断测试 `clip a b f`、居中版本与尾积分 `G̃`；分部积分 `∫h² dμ = −∫_a^b f' G̃`；基态恒等式与边界项控制；`∫_a^b G̃²ρ/W² ≤ 4∫h² dμ`；`Var(clip) ≤ 4·Var_ν·∫f'² dν` | 已证明；区间 `[a,b] ⊆ Ω` 需跨越中位数 |
 | [Line/SharpPoincare.lean](Line/SharpPoincare.lean) | 尾项消失（锚定半直线 Hardy 界 + 积分的绝对连续性）；`(1+δ)` 分裂；`SmoothTest.Holds ν (4·Var)`；`C_P^lit(ν) ≤ 4·Var_ν`（实与扩展方差两种形式），`12` 作为推论 | 已证明；由 `Solutions.ThmOneDimensionalLogConcavePoincare.certificate` 打包，常数 4 在指数律取等，不断言高维结论 |

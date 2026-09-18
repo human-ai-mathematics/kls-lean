@@ -1,10 +1,12 @@
 import FunctionalInequalities.KLS.Geometry.LipschitzCoarea
 import FunctionalInequalities.KLS.Geometry.LevelSetMeasurable
 import FunctionalInequalities.KLS.Geometry.IsoperimetryCoarea
-import FunctionalInequalities.KLS.WIP.AnalyticPrerequisites
-import FunctionalInequalities.KLS.WIP.CheegerInfimum
+import FunctionalInequalities.Analysis.Sard.Sharp
+import FunctionalInequalities.KLS.Geometry.CheegerEquality
 import Mathlib.Analysis.Calculus.FDeriv.Norm
 import Mathlib.Analysis.InnerProductSpace.PiL2
+-- 2026-09-19: `Analysis.sard` is proved in `Analysis/Sard/Sharp.lean`; the former `KLS/WIP/AnalyticPrerequisites.lean` is deleted, and this client now imports the proved module.
+-- 2026-09-19: both Cheeger-infimum holes are proved in `KLS/Geometry/CheegerEquality.lean`; the former `KLS/WIP/CheegerInfimum.lean` is deleted, and this client now imports the proved module.
 
 /-!
 # Scope audit for the migrated Lipschitz weighted coarea formula (`T2`)

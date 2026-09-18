@@ -217,7 +217,7 @@ theorem limsup_ofReal_ballSup_le {u : V → ℝ} {x : V} (hx : DifferentiableAt 
 /-! ### The Minkowski coarea inequality -/
 
 -- The type class assumptions are the ones fixed by the original statement; `FiniteDimensional ℝ V`
--- became unused only because the body is now a proof rather than `sorry`, so the linter is
+-- became unused only because the body is now a proof rather than a hole, so the linter is
 -- silenced instead of the mathematical scope of the statement changed.
 set_option linter.unusedSectionVars false in
 /-- Minkowski coarea inequality (Ambrosio–Di Marino–Gigli 2017, Lemma 3.2) for a `C¹` Lipschitz

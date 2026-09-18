@@ -27,7 +27,7 @@ normal formula `ν (Ψ y) = (ι (-∇g y) + e)/√(1 + ‖∇g y‖²)` of a bou
 `√(1 + ‖∇g y‖²)` cancels exactly against the denominator of the unit normal; that cancellation is
 carried out in `KLS/Geometry/LocalGaussGreen.lean`.
 
-Every statement here is proved and uses only the standard axioms; the module contains no `sorry`.
+Every statement here is proved and uses only the standard axioms; the module contains no hole.
 -/
 
 noncomputable section

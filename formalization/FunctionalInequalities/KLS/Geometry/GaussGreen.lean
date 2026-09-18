@@ -9,7 +9,7 @@ Application layer: the chart-local identity of `KLS/Geometry/LocalGaussGreen.lea
 divergence-free identity `Analysis.integral_divergence_eq_zero` of
 `Analysis/SubgraphDivergence.lean` and the finite smooth decomposition of
 `Analysis/PartitionOfUnity.lean`, glued into the global statement.  Every statement here is proved
-and uses only the standard axioms; the module contains **no** `sorry`.
+and uses only the standard axioms; the module contains **no** hole.
 
 ## The statement
 

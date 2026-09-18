@@ -1,6 +1,7 @@
 import FunctionalInequalities.KLS.Geometry.LevelSetMeasurable
 import FunctionalInequalities.KLS.Geometry.LipschitzCoarea
-import FunctionalInequalities.KLS.WIP.AnalyticPrerequisites
+import FunctionalInequalities.Analysis.Sard.Sharp
+-- 2026-09-19: `Analysis.sard` is proved in `Analysis/Sard/Sharp.lean`; the former `KLS/WIP/AnalyticPrerequisites.lean` is deleted, and this client now imports the proved module.
 
 /-!
 # Scope audit for the migrated level-set measurability
