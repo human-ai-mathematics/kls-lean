@@ -95,7 +95,7 @@ See the [full tables and normalization](LITERATURE.md#constant-conventions).
 ## Proof progress tree
 
 <!-- BEGIN GENERATED DATE -->
-Last updated: **2026-09-17**.
+Last updated: **2026-09-19**.
 
 ![✓ Formalized in Lean](badges/formalized.svg) · ![○ Not yet formalized](badges/pending.svg) · ![◐ Partially formalized](badges/partial.svg) · ![— Excluded: refuted](badges/excluded.svg)
 <!-- END GENERATED DATE -->
@@ -136,7 +136,7 @@ flowchart LR
     CUT["✓ Distance cutoffs"]
     REV["○ h_S ≤ h_M"]
     EQ["◐ h_M = h_S"]
-    FRONT["○ Density Cheeger<br/>Identification"]
+    FRONT["✓ Density Cheeger<br/>Identification"]
     CB["○ Cheeger–Buser<br/>Comparison"]
     MINK["✓ Minkowski coarea"]
     end
@@ -223,11 +223,11 @@ flowchart LR
     VZERO -.-> VFULL
     VR4 -.-> VFULL
     classDef done fill:#dbeafe,stroke:#2563eb,color:#1e3a8a;
-    class ENERGY,F4,MT,FP,FC,NORM,DENS,ONE,CONST,FORMS,MEAS,GRAPH,REG,CRIT,C1,WHIT,LIP,GG,REC,FWD,SARD,CUT,MINK,FLOG,VREG,VZERO,VR123,VR4,VFULL done;
+    class ENERGY,F4,MT,FP,FC,NORM,DENS,FRONT,ONE,CONST,FORMS,MEAS,GRAPH,REG,CRIT,C1,WHIT,LIP,GG,REC,FWD,SARD,CUT,MINK,FLOG,VREG,VZERO,VR123,VR4,VFULL done;
     classDef partial fill:#fff3df,stroke:#c88719,color:#66420d;
     class EQ,FAND partial;
     classDef todo fill:#f2f2f2,stroke:#888,color:#333;
-    class MG,EG,KLS,MC,EC,SC,FG,SG,MH,FRONT,CB,SCI,REV,EAND,SAND,MAND todo;
+    class MG,EG,KLS,MC,EC,SC,FG,SG,MH,CB,SCI,REV,EAND,SAND,MAND todo;
     classDef logic fill:#fff,stroke:#555,color:#222;
     class ANY logic;
     click MG href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/src/chapters/50-kls-routes.tex" "Bounded CMH — Recovery envelope" _blank
@@ -347,7 +347,7 @@ The [full node register](STATUS.md) separately lists definitions and registered 
 | Affine / isotropic — Reduction | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/Isotropic.lean) |
 | Log-concave density — Intrinsic support | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/BorellRepresentation.lean) |
 | W₂ limit and — CMH comparison | ![○ Not yet formalized](badges/pending.svg) | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/src/chapters/50-kls-routes.tex) |
-| Density Cheeger — Identification | ![○ Not yet formalized](badges/pending.svg) | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex) |
+| Density Cheeger — Identification | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex) |
 | Cheeger–Buser — Comparison | ![○ Not yet formalized](badges/pending.svg) | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex) |
 | One-dimensional — Poincaré ≤ 4 Var | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/Line/SharpPoincare.lean) |
 | Poincaré frontend — Equivalence | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/Poincare.lean) |

@@ -135,6 +135,9 @@ A published input or an upstream reviewed proof receives no \texttt{leanok} mere
   \uses{def:log-concave-law,thm:borell-logconcave-density,
         def:affine-support-intrinsic-law,def:literature-poincare-constant,
         def:isoperimetric-cheeger-scale,lem:relative-perimeter-cheeger-infimum}
+  \lean{Solutions.LemRelativePerimeterCheegerInfimum.intrinsic,
+        FunctionalInequalities.Poincare.LocalSlope.Intrinsic.constant_eq_iInf_gradient_of_logConcave}
+  \leanok
   Let $\mu$ be a non-Dirac finite-dimensional log-concave probability law, let $A=a+V$ be its
   affine support, and let $\nu$ be its intrinsic law on the positive-dimensional Euclidean space
   $V$.  Let $\rho$ be the upper-semicontinuous log-concave density supplied by
@@ -166,6 +169,7 @@ A published input or an upstream reviewed proof receives no \texttt{leanok} mere
   do not depend on the affine origin $a$.
 \end{theorem}
 \begin{proof}
+  \leanok
   Translation to intrinsic coordinates is an isometry. Rademacher differentiability and
   absolute continuity identify the two descriptions of the literature test energy.
   The full proof of the Cheeger equality is \cref{lem:relative-perimeter-cheeger-infimum}:
@@ -177,9 +181,17 @@ A published input or an upstream reviewed proof receives no \texttt{leanok} mere
   proof is supplied in the appendix. The two isoperimetric clauses $h_\mu=h_\nu^{\mathrm{sm,rel}}$
   and $\PsiKLS(\mu)=\psi_\nu$ are Lean-certified through
   \cref{lem:relative-perimeter-cheeger-infimum}
-  (\texttt{Solutions.LemRelativePerimeterCheegerInfimum.intrinsic}, 2026-09-19); the
-  $\CPLit(\mu)$ clause is not certified under this node, which therefore carries no
-  \texttt{leanok}.
+  (\texttt{Solutions.LemRelativePerimeterCheegerInfimum.intrinsic}, 2026-09-19).  The
+  $\CPLit(\mu)$ clause is a local Lean proof as well
+  (\texttt{Poincare/LocalSlope/Gradient.lean}, 2026-09-19): $\CPLit$ is defined through the local
+  metric slope, and Rademacher differentiability together with the intrinsic absolute continuity of
+  every log-concave law identifies the slope with $\norm{\nabla g}$ almost everywhere, hence the
+  admissible class and the energy, hence the two infima.  The reference Haar measure is
+  constructed inside the proof rather than assumed, so the statement carries neither a reference
+  measure nor an affine origin, which is the last sentence of the theorem.  All three clauses being
+  local Lean proofs, the node now carries \texttt{leanok}.  This does \emph{not} make
+  \cref{thm:logconcave-cheeger-poincare-comparison} Lean-certified: its Buser half stays imported
+  mathematics in dimension $n\ge2$.
 \end{proof}
 
 \begin{theorem}[Cheeger--Buser comparison for log-concave laws]

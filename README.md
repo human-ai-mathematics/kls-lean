@@ -47,6 +47,11 @@ probability law (`Energy/Cheeger/Identification.lean`, density of smooth tests i
 most one with the constant `12`** (`KLS/LogConcave/Line/Buser.lean`); in dimension `n ≥ 2`, and with the constant
 `π`, it remains imported mathematics (a program: heat semigroup + Bakry–Émery, or localization).
 
+*Addendum (2026-09-19, literature Poincaré).* The intrinsic literature Poincaré constant now has a
+proved gradient-form characterization (`Poincare/LocalSlope/Gradient.lean`), completing the three
+local Lean clauses of the Klartag density frontend identification. The ledger still has **26
+certificates**; the higher-dimensional Buser comparison and dimension-free KLS remain open locally.
+
 For vector-valued maps, regular coarea, slice measurability and vanishing-derivative critical
 slicing are proved. General codimension-`m` weighted coarea for C¹ maps now also includes the
 intermediate-rank critical part, via the completed rank-deficient route R0–R9.

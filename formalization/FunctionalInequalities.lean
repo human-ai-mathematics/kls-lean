@@ -41,6 +41,7 @@ import FunctionalInequalities.Energy.Euclidean.SlopeRecovery
 import FunctionalInequalities.Energy.Euclidean.SlopeDensity
 import FunctionalInequalities.Energy.Cheeger.Identification
 import FunctionalInequalities.KLS.LogConcave.Line.Buser
+import FunctionalInequalities.Poincare.LocalSlope.Gradient
 
 /-!
 # Functional inequalities

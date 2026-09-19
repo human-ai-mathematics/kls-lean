@@ -854,11 +854,24 @@
       ],
       "assumptions": [],
       "priority": 5,
-      "note": "The displayed local or pinned upstream argument needs mathematical review and Lean implementation; it is not a Lean certificate. 2026-09-19: the two isoperimetric clauses h_mu = h_nu^{sm,rel} and Psi_KLS(mu) = psi_nu are Lean-proved (Solutions.LemRelativePerimeterCheegerInfimum.intrinsic); the literature-Poincare clause is not certified under this node.",
+      "note": "All three clauses of the node are local Lean proofs as of 2026-09-19. The two isoperimetric clauses h_mu = h_nu^{sm,rel} and Psi_KLS(mu) = psi_nu are certified by Solutions.LemRelativePerimeterCheegerInfimum.intrinsic; the literature-Poincare clause is Poincare.LocalSlope.Intrinsic.constant_eq_iInf_gradient_of_logConcave (formalization/FunctionalInequalities/Poincare/LocalSlope/Gradient.lean), which transports the Rademacher slope/gradient identification of Energy/LocalSlope/Gradient.lean through the validity predicate and its infimum. The Haar reference is constructed in the proof, so the statement fixes neither a reference measure nor an affine origin. This does not certify thm:logconcave-cheeger-poincare-comparison: its Buser half stays imported for n >= 2.",
       "infrastructure": {
-        "status": "unchecked",
-        "mathlib_revision": null,
-        "evidence": [],
+        "status": "available",
+        "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
+        "evidence": [
+          {
+            "path": "formalization/FunctionalInequalities/Poincare/LocalSlope/Gradient.lean",
+            "sha256": "36907df2bae131b8af7f0e3d3a0446e4c0ffc72942c9ac7d44bcec06f8408603"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Energy/LocalSlope/Gradient.lean",
+            "sha256": "52f02f38374a20673acd93eb661faacc69b57f3102775bc3af13b33799130672"
+          },
+          {
+            "path": "formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex",
+            "sha256": "31de7957954a2f4285af6f5dcf453305ae28a671d28063a9028e93940b6144d5"
+          }
+        ],
         "gaps": []
       }
     },
@@ -1772,7 +1785,7 @@
           },
           {
             "path": "formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex",
-            "sha256": "4ea0c865d01bc92b012d2a7b9bcb1f25803c6475aa0b3103597175f44ee21d42"
+            "sha256": "31de7957954a2f4285af6f5dcf453305ae28a671d28063a9028e93940b6144d5"
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/Isoperimetry.lean",
