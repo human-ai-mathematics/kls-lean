@@ -1,9 +1,9 @@
-import FunctionalInequalities.KLS.Geometry.CheegerEquality
+import FunctionalInequalities.KLS.Geometry.Cheeger.Equality
 
 /-!
 # Scope audit for the hole-free Cheeger-equality module
 
-`KLS/Geometry/CheegerEquality.lean` is a drop-in replacement of `KLS/WIP/CheegerInfimum.lean`: it
+`KLS/Geometry/Cheeger/Equality.lean` is a drop-in replacement of `KLS/WIP/CheegerInfimum.lean`: it
 carries the same seven public declarations with byte-identical `pp.all` signatures and proves the
 two obligations that were open there,
 `Isoperimetry.smoothConstant_mul_lintegral_min_superlevel_le` (`K0`) and
@@ -313,7 +313,7 @@ end CheegerEqualityAudit
 
 /-! ### Axiom audit
 
-Every public declaration of `KLS/Geometry/CheegerEquality.lean` and every theorem of this client.
+Every public declaration of `KLS/Geometry/Cheeger/Equality.lean` and every theorem of this client.
 Only `propext`, `Classical.choice` and `Quot.sound` may appear; in particular no placeholder-proof
 axiom. -/
 

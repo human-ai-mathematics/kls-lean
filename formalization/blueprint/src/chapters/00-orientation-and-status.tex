@@ -190,6 +190,13 @@ the named affine-support and whitening bridge \cref{thm:affine-isotropic-reducti
 The conjecture has a precise mathematical statement, so it is not tagged \texttt{notready}.
 It has no \texttt{leanok}: no theorem in this repository proves it, and no upstream
 \texttt{checked\_by: agent} record is promoted to Lean certification.
+The Lean name above is a \texttt{def \ldots : Prop}: it names the sentence and asserts nothing.
+The claim itself is stated as the theorem \texttt{FunctionalInequalities.KLS.kls} in
+\texttt{KLS/Target.lean}, with an explicit \texttt{sorry}: that is the repository's one
+deliberate proof hole, kept so that the final target is visible in Lean and not only here.
+It is not listed in \texttt{\textbackslash lean} because the declaration audit rejects
+\texttt{sorryAx}, and no certificate imports it (decision record
+\texttt{research/decisions/2026-09-19-kls-target-theorem.md}).
 
 \section{Status contract}
 

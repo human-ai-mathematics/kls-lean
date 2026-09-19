@@ -1,6 +1,6 @@
 import FunctionalInequalities.Analysis.Lipschitz.VectorCoarea
 import FunctionalInequalities.Analysis.Lipschitz.Local
-import FunctionalInequalities.KLS.Geometry.LipschitzCoarea
+import FunctionalInequalities.KLS.Geometry.Coarea.Lipschitz
 import Mathlib.Analysis.Calculus.Deriv.Abs
 
 /-!

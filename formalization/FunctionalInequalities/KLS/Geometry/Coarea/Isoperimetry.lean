@@ -1,4 +1,4 @@
-import FunctionalInequalities.KLS.Geometry.SmoothCoarea
+import FunctionalInequalities.KLS.Geometry.Coarea.Smooth
 
 /-! # Weighted coarea for a `C¹` Lipschitz function
 

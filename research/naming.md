@@ -136,16 +136,19 @@ hμ.intrinsic_frontier_support_eq_zero
 
 一个数学家族有三个以上模块时，family 名归**目录**，文件名只留区分词。已经这样做的有
 `Poincare/SmoothTest/`、`Energy/LocalSlope/Gradient.lean`、`Energy/CovarianceGradient/`、
-`KLS/LogConcave/Line/`。不要把家族词重复烤进每个 basename：`LogConcave/Covariance.lean`，
+`KLS/LogConcave/Line/`，以及 `Analysis/Semigroup/` 下的 `Resolvent/`、`Exponential/`、
+`Yosida/`、`Generated/`，以及 `KLS/` 下的 `ConditionalFiber/`、`Geometry/Cheeger/`、
+`Geometry/Coarea/`、`Geometry/Surface/`。不要把家族词重复烤进每个 basename：`LogConcave/Covariance.lean`，
 不是 `LogConcave/AffineCovariance.lean`（该次迁移见
 [模块映射](api-migration/2026-09-08-library-naming-module-map.json)）。
 
 **新增 `Analysis/` 模块按此规则放入家族子目录**，basename 去掉家族词。
-`Analysis/` 现存 50 个模块是**平铺的历史遗留**，同一家族词被重复写进文件名——
-`Vector` 11 次、`Graph` 9 次、`Whitney` 5 次、`Coarea` 5 次、`Sard` 4 次。
-它不符合本节规则，但**不追溯改名**：约 434 处历史 decision 与 exploration 按路径引用这些文件，
-本项目不改写历史记录。重组另开一轮，并像 2026-09-08 那次一样产出路径映射表，
-使历史引用保持可解析；在那之前，既有模块留在原处。
+历史平铺模块分批重组：2026-09-17 的 `Graph`、`RankDeficient`、`Sard`、`Vector`、
+`Whitney` 迁移见 [Analysis 模块映射](api-migration/2026-09-17-analysis-module-map.json)；
+2026-09-19 的半群模块迁移见
+[Semigroup 模块映射](api-migration/2026-09-19-semigroup-module-map.json)，KLS 家族迁移见
+[KLS 模块映射](api-migration/2026-09-19-kls-module-map.json)。历史 decision 与
+exploration 按原路径冻结，不追溯改写；每轮重组必须提供路径映射表，使旧引用仍可解析。
 
 目录只承担分组，不改数学身份：`Analysis/` 的模块无论放在哪个子目录，
 namespace 都仍是 `FunctionalInequalities.Analysis`，声明名因此不随目录变动，

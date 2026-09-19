@@ -26,7 +26,7 @@ with an arbitrary measurable `ℝ≥0∞` weight and no finiteness hypothesis an
 things are still missing for that: the countable cover of a regular open set by such charts with the
 disjoint patching, and the codimension-`m` weighted slice measurability that makes the outer
 integral well posed as an a.e. statement (the scalar analogues are the assembly in
-`KLS/Geometry/RegularCoarea.lean` and `KLS/Geometry/OpenSliceMeasurable.lean`).
+`KLS/Geometry/Coarea/Regular.lean` and `KLS/Geometry/OpenSliceMeasurable.lean`).
 -/
 
 noncomputable section

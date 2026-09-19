@@ -1,6 +1,6 @@
 import FunctionalInequalities.Analysis.RankDeficient.Coarea
 import FunctionalInequalities.Analysis.Vector.CriticalSlice
-import FunctionalInequalities.KLS.Geometry.SmoothCoarea
+import FunctionalInequalities.KLS.Geometry.Coarea.Smooth
 import Mathlib.Analysis.InnerProductSpace.PiL2
 
 /-!

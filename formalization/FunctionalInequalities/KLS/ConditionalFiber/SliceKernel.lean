@@ -1,4 +1,4 @@
-import FunctionalInequalities.KLS.ConditionalFiber
+import FunctionalInequalities.KLS.ConditionalFiber.Basic
 import FunctionalInequalities.Probability.HaarLine
 import Mathlib.Probability.Kernel.WithDensity
 
@@ -12,7 +12,7 @@ scalar coordinate given the base point `(θ, z)` is the normalized line density
 `t ↦ p (z + t θ) / Z(θ, z)`, where `Z` is the slice mass. This module builds that Markov kernel,
 proves that it disintegrates the joint law, and concludes from Mathlib's uniqueness of conditional
 kernels that it agrees base-law almost everywhere with the chosen kernel of
-`KLS/ConditionalFiber.lean`.
+`KLS/ConditionalFiber/Basic.lean`.
 
 No ledger, certificate, or Blueprint claim is made by this module.
 -/

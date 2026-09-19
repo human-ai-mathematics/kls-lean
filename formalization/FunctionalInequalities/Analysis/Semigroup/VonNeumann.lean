@@ -1,0 +1,269 @@
+import FunctionalInequalities.Analysis.Semigroup.AdjointComp
+import FunctionalInequalities.Analysis.Semigroup.Resolvent.Basic
+
+/-!
+# von Neumann's theorem for `T†T`
+
+Part A (`V1`–`V5`) of the von Neumann route recorded in
+`research/decisions/2026-09-19-von-neumann-route.md`, for a closed densely defined operator
+`T : H₀ →ₗ.[ℝ] H₁` between real Hilbert spaces.  `T†T` is `Analysis.Semigroup.adjointComp T`
+(`AdjointComp.lean`) and `J_s = (1 + s T†T)⁻¹` is `Analysis.Semigroup.resolventCLM`
+(`Resolvent.lean`, built from the weak equation `WeakResolvent` of `Form.lean`).
+
+What is proved here:
+
+* `V1` = `inner_adjointComp` / `inner_adjointComp_apply`: `⟪T†T x, y⟫ = ⟪T x, T y⟫` for
+  `x ∈ D(T†T)`, `y ∈ D(T)`;
+* `V2` = `resolvent_add_smul_adjointComp` (with the two halves
+  `mem_adjointComp_domain_resolventDomain` and `adjointComp_resolventDomain`):
+  `J_s f ∈ D(T†T)` and `(1 + s T†T) J_s f = f`;
+* `V3` = `isSelfAdjoint_adjointComp`: `T†T` is self-adjoint;
+* `V4` = `dense_adjointComp_domain`: `D(T†T)` is dense;
+* `V5` = `sub_resolvent_eq_smul`: `f - J_s f = s • J_s (T†T f)` for `f ∈ D(T†T)`.
+
+## Unused route hypotheses (stronger statements, verbatim wrappers kept)
+
+Following the precedent of `Form.lean` (`S2` drops `0 < s`, `S3` drops `Dense`) and
+`Resolvent.lean` (`S5` drops self-adjointness), hypotheses that turn out to be unnecessary are
+**not** assumed:
+
+* `V1` is proved without `T.IsClosed` (the route statement does not carry it either) and
+  without `CompleteSpace H₁`: `inner_adjointComp` and the verbatim wrapper
+  `inner_adjointComp_apply` live in the section before `CompleteSpace H₁` is introduced.  Only
+  density of `D(T)` is used, and it is genuinely needed because Mathlib's `LinearPMap.adjoint`
+  carries a junk value on a non-dense domain.
+* The domain half of `V2`, `mem_adjointComp_domain_resolventDomain`, needs **no density**: that
+  `T (J_s f) ∈ D(T†)` follows from `mem_adjoint_domain_of_exists` applied to the weak equation,
+  and only the identification of the value `T† (T (J_s f)) = s⁻¹ (f - J_s f)`
+  (`adjointComp_resolventDomain`) uses `adjoint_apply_eq`, hence density.
+
+## Deviation from the route sketch
+
+The route sketches `V4` as "immediate from `V3` and `IsSelfAdjoint.dense_domain`".  That order is
+not available: `LinearPMap.IsFormalAdjoint.le_adjoint`, which turns symmetry of `T†T` into
+`T†T ≤ (T†T)†`, already requires `D(T†T)` to be dense.  So `V4` is proved first, by the direct
+argument the route also records (if `g ⊥ D(T†T)` then `g = u + T†T u` with `u = J_1 g`, and
+`0 = ⟪u, g⟫ = ‖u‖² + ‖T u‖²`), and `V3` is then derived from it.
+
+## Deliberately out of scope
+
+Nothing here proves `S6`–`S8` of the semigroup-generation route (Yosida exponentials, their
+strong convergence, the semigroup), nothing proves Part B (`R1`–`R3`, the resolvent limits), and
+nothing here concerns Buser's inequality, the Markov property, Bakry–Émery calculus or any KLS
+quantity.  This module is general real Hilbert space material: no measure, no log-concavity.
+-/
+noncomputable section
+
+open InnerProductSpace
+
+open scoped RealInnerProductSpace LinearPMap
+
+namespace FunctionalInequalities.Analysis.Semigroup
+
+variable {H₀ H₁ : Type*} [NormedAddCommGroup H₀] [InnerProductSpace ℝ H₀] [CompleteSpace H₀]
+  [NormedAddCommGroup H₁] [InnerProductSpace ℝ H₁]
+
+/-- `V1`: `T†T` acts through the form.
+
+For `x ∈ D(T†T)` and `y ∈ D(T)` one has `⟪T†T x, y⟫ = ⟪T x, T y⟫`.  This is
+`LinearPMap.adjoint_isFormalAdjoint` read through `adjointComp_apply`; density of `D(T)` is
+needed because Mathlib's adjoint is a junk value otherwise.  Neither `T.IsClosed` nor
+completeness of `H₁` is used.  The membership of `y` is taken as a hypothesis rather than
+packaged into a subtype, so that the lemma rewrites against goals mentioning a bare `y : H₀`. -/
+theorem inner_adjointComp {T : H₀ →ₗ.[ℝ] H₁} (hd : Dense (T.domain : Set H₀))
+    (x : (adjointComp T).domain) {y : H₀} (hy : y ∈ T.domain) :
+    ⟪adjointComp T x, y⟫ = ⟪T ⟨(x : H₀), x.2.2⟩, T ⟨y, hy⟩⟫ := by
+  rw [adjointComp_apply]
+  exact LinearPMap.adjoint_isFormalAdjoint hd _ ⟨y, hy⟩
+
+/-- `V1`, in the verbatim shape of the route statement: the pairing version of
+`inner_adjointComp` with `y` presented as an element of `T.domain`. -/
+theorem inner_adjointComp_apply (T : H₀ →ₗ.[ℝ] H₁) (hd : Dense (T.domain : Set H₀))
+    (x : (adjointComp T).domain) (y : T.domain) :
+    ⟪adjointComp T x, (y : H₀)⟫ = ⟪T ⟨(x : H₀), x.2.2⟩, T y⟫ :=
+  inner_adjointComp hd x y.2
+
+/-- `T†T` is symmetric: it is a formal adjoint of itself.
+
+Both sides of `⟪T†T x, y⟫ = ⟪x, T†T y⟫` equal `⟪T x, T y⟫` by `V1`, the right-hand one after a
+real inner-product flip.  This is the input that `LinearPMap.IsFormalAdjoint.le_adjoint` turns
+into `T†T ≤ (T†T)†` once `D(T†T)` is known to be dense. -/
+theorem adjointComp_isFormalAdjoint {T : H₀ →ₗ.[ℝ] H₁} (hd : Dense (T.domain : Set H₀)) :
+    (adjointComp T).IsFormalAdjoint (adjointComp T) := by
+  intro x y
+  rw [inner_adjointComp hd x y.2.2, ← real_inner_comm ((x : H₀)) (adjointComp T y),
+    inner_adjointComp hd y x.2.2]
+  exact real_inner_comm _ _
+
+section Resolvent
+
+variable [CompleteSpace H₁]
+
+/-- `V2`, domain half: the weak solution `J_s f` lies in `D(T†T)`.
+
+From the weak equation `⟪u, v⟫ + s ⟪T u, T v⟫ = ⟪f, v⟫` the vector `T u` pairs continuously
+against `T v`, with representative `w = s⁻¹ (f - u)`, so `T u ∈ D(T†)` by
+`LinearPMap.mem_adjoint_domain_of_exists`.  **Density of `D(T)` is not needed for this half**
+(see the module docstring). -/
+theorem mem_adjointComp_domain_resolventDomain (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClosed)
+    {s : ℝ} (hs : 0 < s) (f : H₀) :
+    ((resolventDomain T hT hs f : H₀)) ∈ (adjointComp T).domain := by
+  set u := resolventDomain T hT hs f with hu
+  refine ⟨mem_adjointCompDomain.mpr ⟨u.2, ?_⟩, u.2⟩
+  have hue : (⟨(u : H₀), u.2⟩ : T.domain) = u := rfl
+  rw [hue]
+  refine LinearPMap.mem_adjoint_domain_of_exists _ ⟨s⁻¹ • (f - (u : H₀)), ?_⟩
+  intro v
+  have h := resolventDomain_spec T hT hs f v
+  rw [← hu] at h
+  rw [real_inner_smul_left, inner_sub_left]
+  field_simp
+  linarith
+
+/-- `V2`, value half: `T† (T (J_s f)) = s⁻¹ (f - J_s f)`.
+
+The same representative `w = s⁻¹ (f - u)` that witnesses membership in `D(T†)` is the value of
+the adjoint, by `LinearPMap.adjoint_apply_eq`; this step does use density of `D(T)`.  The
+membership proof is taken as an argument so that the statement does not depend on how it was
+produced. -/
+theorem adjointComp_resolventDomain (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClosed)
+    (hd : Dense (T.domain : Set H₀)) {s : ℝ} (hs : 0 < s) (f : H₀)
+    (hmem : ((resolventDomain T hT hs f : H₀)) ∈ (adjointComp T).domain) :
+    adjointComp T ⟨(resolventDomain T hT hs f : H₀), hmem⟩
+      = s⁻¹ • (f - (resolventDomain T hT hs f : H₀)) := by
+  set u := resolventDomain T hT hs f with hu
+  rw [adjointComp_apply]
+  refine LinearPMap.adjoint_apply_eq hd _ ?_
+  intro v
+  have h := resolventDomain_spec T hT hs f v
+  rw [← hu] at h
+  show ⟪s⁻¹ • (f - (u : H₀)), (v : H₀)⟫ = ⟪T u, T v⟫
+  rw [real_inner_smul_left, inner_sub_left]
+  field_simp
+  linarith
+
+/-- `V2`: the resolvent inverts `1 + s T†T`.
+
+For `s > 0` and every datum `f`, the weak solution `J_s f` lies in `D(T†T)` and satisfies
+`J_s f + s • T†T (J_s f) = f`.  This is the verbatim route statement, assembled from
+`mem_adjointComp_domain_resolventDomain` and `adjointComp_resolventDomain`. -/
+theorem resolvent_add_smul_adjointComp (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClosed)
+    (hd : Dense (T.domain : Set H₀)) {s : ℝ} (hs : 0 < s) (f : H₀) :
+    ∃ hu : resolventCLM T hT hs f ∈ (adjointComp T).domain,
+      resolventCLM T hT hs f + s • adjointComp T ⟨resolventCLM T hT hs f, hu⟩ = f := by
+  refine ⟨mem_adjointComp_domain_resolventDomain T hT hs f, ?_⟩
+  show (resolventDomain T hT hs f : H₀) + s • adjointComp T
+      ⟨(resolventDomain T hT hs f : H₀), mem_adjointComp_domain_resolventDomain T hT hs f⟩ = f
+  rw [adjointComp_resolventDomain T hT hd hs f, smul_smul, mul_inv_cancel₀ hs.ne', one_smul]
+  abel
+
+/-- `1 + T†T` is surjective: every `z : H₀` is `x + T†T x` for some `x ∈ D(T†T)`.
+
+This is `V2` at `s = 1`, and it is the only consequence of `V2` used in the proofs of `V3` and
+`V4`. -/
+theorem exists_add_adjointComp (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClosed)
+    (hd : Dense (T.domain : Set H₀)) (z : H₀) :
+    ∃ x : (adjointComp T).domain, (x : H₀) + adjointComp T x = z := by
+  have h1 : (0 : ℝ) < 1 := zero_lt_one
+  refine ⟨⟨(resolventDomain T hT h1 z : H₀),
+    mem_adjointComp_domain_resolventDomain T hT h1 z⟩, ?_⟩
+  rw [adjointComp_resolventDomain T hT hd h1 z]
+  rw [inv_one, one_smul]
+  abel
+
+/-- `V4`: `D(T†T)` is dense.
+
+Proved directly, not from `V3` (see the module docstring for why the route's order is not
+available).  If `g` is orthogonal to `D(T†T)`, write `g = x + T†T x` with `x ∈ D(T†T)` by
+surjectivity of `1 + T†T`; then `0 = ⟪x, g⟫ = ‖x‖² + ‖T x‖²` by `V1`, so `x = 0` and `g = 0`.
+A submodule of a complete inner product space with trivial orthogonal complement is dense. -/
+theorem dense_adjointComp_domain (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClosed)
+    (hd : Dense (T.domain : Set H₀)) :
+    Dense (((adjointComp T).domain : Submodule ℝ H₀) : Set H₀) := by
+  rw [Submodule.dense_iff_topologicalClosure_eq_top, Submodule.topologicalClosure_eq_top_iff,
+    Submodule.eq_bot_iff]
+  intro g hg
+  obtain ⟨x, hx⟩ := exists_add_adjointComp T hT hd g
+  have hzero : ⟪(x : H₀), g⟫ = 0 := hg (x : H₀) x.2
+  rw [← hx, inner_add_right, ← real_inner_comm ((x : H₀)) (adjointComp T x),
+    inner_adjointComp hd x x.2.2, real_inner_self_eq_norm_sq, real_inner_self_eq_norm_sq] at hzero
+  have hxz : (x : H₀) = 0 := by
+    have : ‖(x : H₀)‖ = 0 := by nlinarith [norm_nonneg (x : H₀), sq_nonneg ‖T ⟨(x : H₀), x.2.2⟩‖]
+    simpa using this
+  have hx0 : x = 0 := Subtype.ext hxz
+  rw [← hx, hx0]
+  simp
+
+/-- `V3` (von Neumann): `T†T` is self-adjoint.
+
+Symmetry (`adjointComp_isFormalAdjoint`) together with density of `D(T†T)` (`V4`) gives
+`T†T ≤ (T†T)†`.  For the reverse inclusion take `y ∈ D((T†T)†)`, solve `u + T†T u = y + (T†T)† y`
+with `u ∈ D(T†T)` by surjectivity of `1 + T†T`, and test against an arbitrary `z = x + T†T x`:
+both `⟪z, y⟫` and `⟪z, u⟫` collapse to `⟪x, y + (T†T)† y⟫`, so `y - u` is orthogonal to all of
+`H₀` and therefore `y = u ∈ D(T†T)`, with `(T†T)† y = T†T u`.  The two inclusions have equal
+domains, so `LinearPMap.eq_of_le_of_domain_eq` finishes. -/
+theorem isSelfAdjoint_adjointComp (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClosed)
+    (hd : Dense (T.domain : Set H₀)) : IsSelfAdjoint (adjointComp T) := by
+  have hdA := dense_adjointComp_domain T hT hd
+  have hsym := adjointComp_isFormalAdjoint hd
+  have hle : adjointComp T ≤ (adjointComp T)† := hsym.le_adjoint hdA
+  have hfa := LinearPMap.adjoint_isFormalAdjoint hdA (T := adjointComp T)
+  have key : ∀ y : ((adjointComp T)†).domain, ∃ hm : (y : H₀) ∈ (adjointComp T).domain,
+      adjointComp T ⟨(y : H₀), hm⟩ = (adjointComp T)† y := by
+    intro y
+    obtain ⟨u, hueq⟩ := exists_add_adjointComp T hT hd ((y : H₀) + (adjointComp T)† y)
+    have hperp : ∀ z : H₀, ⟪z, (y : H₀) - (u : H₀)⟫ = 0 := by
+      intro z
+      obtain ⟨x, hxeq⟩ := exists_add_adjointComp T hT hd z
+      have e1 : ⟪adjointComp T x, (y : H₀)⟫ = ⟪(x : H₀), (adjointComp T)† y⟫ := by
+        rw [← real_inner_comm (adjointComp T x) ((y : H₀)), ← hfa y x]
+        exact real_inner_comm _ _
+      have e2 : ⟪adjointComp T x, (u : H₀)⟫ = ⟪(x : H₀), adjointComp T u⟫ := hsym x u
+      have ea : ⟪(x : H₀) + adjointComp T x, (y : H₀)⟫
+          = ⟪(x : H₀), (y : H₀) + (adjointComp T)† y⟫ := by
+        rw [inner_add_left, inner_add_right, e1]
+      have eb : ⟪(x : H₀) + adjointComp T x, (u : H₀)⟫
+          = ⟪(x : H₀), (y : H₀) + (adjointComp T)† y⟫ := by
+        rw [inner_add_left, e2, ← inner_add_right, hueq]
+      rw [← hxeq, inner_sub_right, ea, eb, sub_self]
+    have hyu : (y : H₀) = (u : H₀) :=
+      sub_eq_zero.mp (inner_self_eq_zero.mp (hperp ((y : H₀) - (u : H₀))))
+    refine ⟨hyu ▸ u.2, ?_⟩
+    have hAu : adjointComp T ⟨(y : H₀), hyu ▸ u.2⟩ = adjointComp T u := by
+      congr 1
+      exact Subtype.ext hyu
+    rw [hAu]
+    have : (u : H₀) + adjointComp T u = (y : H₀) + (adjointComp T)† y := hueq
+    rw [hyu] at this
+    exact add_left_cancel this
+  have hge : (adjointComp T)† ≤ adjointComp T := by
+    refine ⟨fun y hy => (key ⟨y, hy⟩).choose, ?_⟩
+    intro a b hab
+    obtain ⟨hm, hval⟩ := key a
+    have : b = ⟨(a : H₀), hm⟩ := Subtype.ext hab.symm
+    rw [this, hval]
+  rw [LinearPMap.isSelfAdjoint_def]
+  exact LinearPMap.eq_of_le_of_domain_eq hge (le_antisymm hge.1 hle.1)
+
+/-- `V5`: the Yosida approximation on `D(T†T)`.
+
+For `f ∈ D(T†T)`, `f - J_s f = s • J_s (T†T f)`; equivalently `L_s f = s⁻¹ (f - J_s f)` equals
+`J_s (T†T f)`.  By `V1`, `f` itself solves the weak equation with datum `f + s • T†T f`, so
+uniqueness (`eq_resolventDomain`) gives `J_s (f + s • T†T f) = f`, and linearity of `J_s`
+separates the two terms. -/
+theorem sub_resolvent_eq_smul (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClosed)
+    (hd : Dense (T.domain : Set H₀)) {s : ℝ} (hs : 0 < s) (f : (adjointComp T).domain) :
+    (f : H₀) - resolventCLM T hT hs f = s • resolventCLM T hT hs (adjointComp T f) := by
+  have hweak : WeakResolvent T s ((f : H₀) + s • adjointComp T f) ⟨(f : H₀), f.2.2⟩ := by
+    intro v
+    have h := inner_adjointComp hd f v.2
+    rw [inner_add_left, real_inner_smul_left, h]
+  have heq := eq_resolventDomain T hT hs hweak
+  have h2 : resolventCLM T hT hs ((f : H₀) + s • adjointComp T f) = (f : H₀) := by
+    rw [resolventCLM_apply, ← heq]
+  rw [map_add, map_smul] at h2
+  exact (eq_sub_of_add_eq' h2).symm
+
+end Resolvent
+
+end FunctionalInequalities.Analysis.Semigroup

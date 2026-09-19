@@ -57,7 +57,7 @@ a `C¹` graph and the weighted change of variables that turns the area formula i
 identity, and `Analysis/PartitionOfUnity.lean` (added 2026-09-13) proves the finite smooth
 decomposition of a compactly supported map subordinate to an open cover of its support. The
 layering rule this enforces: base
-definitions go below (`KLS/Geometry/SurfaceMeasure.lean`), general geometry in the middle, and the
+definitions go below (`KLS/Geometry/Surface/Measure.lean`), general geometry in the middle, and the
 perimeter application layer on top, so an application module can import a general theorem without
 the general theorem importing the application. The `SmoothDomain`-specific consequences of the
 general graph geometry — `outwardNormal`, the tangent hyperplane, the boundary chart and its
@@ -98,7 +98,7 @@ remaining weighted homothety, support-localization and recovery dependencies.
 
 ## Quantitative relative-perimeter layer (2026-09-13)
 
-`Geometry/SurfaceHomothety.lean` now proves the normalized measure pushforward under an inverse
+`Geometry/Surface/Homothety.lean` now proves the normalized measure pushforward under an inverse
 homothety and the resulting weighted set/boundary lintegral change of variables. The unique
 homothety homeomorphism is public in `Geometry/SmoothDomain.lean`, alongside the shared frontier
 transport identity. A total-boundary-mass equality is not used as a substitute for weighted
@@ -288,7 +288,7 @@ See the [decision](research/decisions/2026-09-13-distance-cutoff-gradient-integr
 
 ## One-sided Cheeger comparison layer (2026-09-13)
 
-`KLS/Geometry/CheegerInfimum.lean` is hole-free and its 32-module local import closure contains no
+`KLS/Geometry/Cheeger/Infimum.lean` is hole-free and its 32-module local import closure contains no
 work-in-progress module: it sits on the two finished chains `Geometry/PerimeterRecovery` (the smooth
 recovery sequence) and `Geometry/MinkowskiConstant` (the integrated Minkowski coarea bound). It owns
 `Isoperimetry.smoothConstant` with `smoothConstant_eq_top_of_subsingleton`, the layer-cake identity

@@ -1,4 +1,4 @@
-import FunctionalInequalities.KLS.Geometry.RegularCoarea
+import FunctionalInequalities.KLS.Geometry.Coarea.Regular
 
 noncomputable section
 open MeasureTheory Filter Topology Set FunctionalInequalities

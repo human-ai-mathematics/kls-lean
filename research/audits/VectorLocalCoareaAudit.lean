@@ -17,7 +17,7 @@ measurable weight, with the surface measure in dimension `finrank V - finrank W`
 the countable cover of a regular open set by such neighbourhoods with the disjoint patching, and the
 codimension-`m` **weighted slice measurability** — the `AEMeasurable` statement for
 `t ↦ ∫⁻ over S ∩ {u = t}` — which the patching needs in order to exchange a sum with the outer
-integral.  The scalar analogues are the assembly in `KLS/Geometry/RegularCoarea.lean` and
+integral.  The scalar analogues are the assembly in `KLS/Geometry/Coarea/Regular.lean` and
 `KLS/Geometry/OpenSliceMeasurable.lean`.  Nothing about the critical set, sharp Sard or the Cheeger
 comparisons is touched.
 

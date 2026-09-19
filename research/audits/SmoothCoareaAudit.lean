@@ -1,9 +1,9 @@
-import FunctionalInequalities.KLS.Geometry.SmoothCoarea
+import FunctionalInequalities.KLS.Geometry.Coarea.Smooth
 
 /-!
 # Strict audit client for the `C¹` weighted coarea formula (obligation `L11`, target `T3`)
 
-Independent client of `KLS/Geometry/SmoothCoarea.lean`.  `target` states the route's `L11`
+Independent client of `KLS/Geometry/Coarea/Smooth.lean`.  `target` states the route's `L11`
 quantifier for quantifier and proves it; `target_of_not_completeSpace` drops the unused
 `[CompleteSpace V]`.
 

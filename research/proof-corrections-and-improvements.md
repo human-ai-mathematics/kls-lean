@@ -150,7 +150,7 @@ to arbitrary Lipschitz fibers without a bridge. These are dependency findings,
 not a claim that every proposed shortcut had appeared in a published proof.
 
 There has been progress since that route audit:
-[RegularCoarea.lean](../formalization/FunctionalInequalities/KLS/Geometry/RegularCoarea.lean)
+[RegularCoarea.lean](../formalization/FunctionalInequalities/KLS/Geometry/Coarea/Regular.lean)
 now proves weighted coarea on regular open C¹ domains (L9). Its module explicitly
 separates this result from the full coarea targets in
 [AnalyticPrerequisites.lean](../formalization/FunctionalInequalities/KLS/WIP/AnalyticPrerequisites.lean).

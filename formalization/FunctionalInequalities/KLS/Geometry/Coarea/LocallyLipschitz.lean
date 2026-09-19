@@ -1,4 +1,4 @@
-import FunctionalInequalities.KLS.Geometry.LipschitzCoarea
+import FunctionalInequalities.KLS.Geometry.Coarea.Lipschitz
 
 /-! # Weighted coarea for locally Lipschitz functions
 

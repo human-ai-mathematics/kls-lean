@@ -200,7 +200,7 @@ is left, and the `KLS/WIP/` directory is gone — and certificates rise from **2
 `CheegerInequalityRouteStatements.lean` (`P0`–`P6`, `D1`, `B1`), then two concurrent proving
 sessions on disjoint new files, integrated here.
 
-**The two Cheeger-infimum holes** are **proved** in `KLS/Geometry/CheegerEquality.lean`.
+**The two Cheeger-infimum holes** are **proved** in `KLS/Geometry/Cheeger/Equality.lean`.
 `smoothConstant_mul_lintegral_min_superlevel_le`: almost every strict superlevel set of a smooth
 Lipschitz `[0,1]`-valued `u` is a smooth domain (smooth Sard) whose frontier lies in the level set, so
 the multiplied infimum bound `h_S · m(ν U) ≤ P_ρ(U)` is dominated by the level integral of the Borell
@@ -228,7 +228,7 @@ certificate's import closure required rewriting the words "sorry"/"admit" in the
 modules (hole/allow); no code changed.
 
 **Cheeger's inequality** `C_P^lit(μ) ≤ 4 Ψ_KLS(μ)²` is **proved** for every log-concave law
-(`KLS.LogConcave.literatureConstant_le_four_mul_inverseScale_sq`, `KLS/Geometry/CheegerInequality.lean`,
+(`KLS.LogConcave.literatureConstant_le_four_mul_inverseScale_sq`, `KLS/Geometry/Cheeger/Inequality.lean`,
 Dirac laws included with both sides `0`), from `C_P^smooth(ν) ≤ 4 / h_M(ν)²` for **every** Borel
 probability law (`Isoperimetry.smoothTest_constant_le`): a median exists (`KLS/Geometry/Median.lean`);
 for bounded `C¹` Lipschitz `g`, `Var(g) ≤ ∫ (g − m)²` splits into two positive-part squares, each
@@ -1369,7 +1369,7 @@ part is proved**, and with it the **general codimension-`m` coarea formula remai
 
 **No Sard theorem is claimed**: nothing is asserted about the measure of the set of critical
 *values*, which for a merely `C¹` map may well be positive. `KLS/Geometry/CriticalSlice.lean` and
-`KLS/Geometry/SmoothCoarea.lean` were not modified; the codimension-`m` versions are parallel new
+`KLS/Geometry/Coarea/Smooth.lean` were not modified; the codimension-`m` versions are parallel new
 modules. Sharp finite-regularity Sard, the two Cheeger comparisons and the five Energy holes are
 untouched.
 
@@ -1513,7 +1513,7 @@ hole was migrated: direct holes stay **8 (1/2/5)** and certificates **24**.
 **The route differs from the scalar one, and that is a real limitation.** In codimension one the
 repository proves weighted slice measurability for an **arbitrary** Borel subset of an open `C¹`
 domain, with **no** regular-point hypothesis, through the Eilenberg slicing inequality of
-`KLS/Geometry/SurfaceSlicing.lean`. The **codimension-`m` Eilenberg inequality is not proved here**
+`KLS/Geometry/Surface/Slicing.lean`. The **codimension-`m` Eilenberg inequality is not proved here**
 and Mathlib does not provide it. So this round goes through the chart instead: on a level-graph
 family the slice integral is the Tonelli section of one measurable function on the parameter–level
 product, so its measurability is immediate and no slicing inequality is used. The cost is that the
@@ -1598,7 +1598,7 @@ codimension-`m` **weighted slice measurability** — the `AEMeasurable` statemen
 `lintegral_tsum` needs measurability; the scalar analogue is
 `KLS/Geometry/OpenSliceMeasurable.lean`. Second, the **countable cover with disjoint patching** that
 assembles the neighbourhood form into an equality on a whole regular open set; the scalar analogue
-is the assembly in `KLS/Geometry/RegularCoarea.lean`. Critical slicing, sharp finite-regularity
+is the assembly in `KLS/Geometry/Coarea/Regular.lean`. Critical slicing, sharp finite-regularity
 Sard, the two Cheeger comparisons and the five Energy holes are untouched.
 
 This round reviewed the area-formula route statements again and found **no further errors**;
@@ -2183,7 +2183,7 @@ No commit or push; the real Git index is unchanged.
 ## Locally Lipschitz coarea: L13 proved (2026-09-16)
 
 **Historical L13 implementation snapshot; current registration status is recorded above.**
-`KLS/Geometry/LocallyLipschitzCoarea.lean` proves `KLS.coarea_of_locallyLipschitz` (L13): the
+`KLS/Geometry/Coarea/LocallyLipschitz.lean` proves `KLS.coarea_of_locallyLipschitz` (L13): the
 weighted coarea equality and slice `AEMeasurable` for a **locally Lipschitz** real function, any
 measurable set and any measurable `ENNReal` weight. No global Lipschitz constant, no `C¹`
 regularity, and no boundedness, finite-volume, integrability, positive-dimension or `SFinite`
@@ -2225,7 +2225,7 @@ No commit or push; the real Git index is unchanged.
 **Superseded by the L13 round above; retained as a dated snapshot.**
 `Analysis.lintegral_enorm_gradient_mul_eq_lintegral_levelSet` has left
 `KLS/WIP/AnalyticPrerequisites.lean`, where it was a direct hole, for the end of the hole-free
-`KLS/Geometry/LipschitzCoarea.lean`, beside the `L12` theorem `KLS.coarea_of_lipschitz` that
+`KLS/Geometry/Coarea/Lipschitz.lean`, beside the `L12` theorem `KLS.coarea_of_lipschitz` that
 proves it at `S = Set.univ`. **No new theorem was proved this round**: this is a migration and a
 rewiring, not a new proof, and the coarea theorem was not reproved.
 
@@ -2276,7 +2276,7 @@ first-order remainder. The proof works for any additive Haar measure on a finite
 real normed space. `Analysis/LipschitzC1Pieces.lean` combines these jets with L6 and disjointifies
 them to prove L7, preserving both values and ambient derivatives on each measurable piece.
 
-`KLS/Geometry/LipschitzCoarea.lean` proves `KLS.coarea_of_lipschitz` (L12): weighted coarea and
+`KLS/Geometry/Coarea/Lipschitz.lean` proves `KLS.coarea_of_lipschitz` (L12): weighted coarea and
 slice AEMeasurable for a globally Lipschitz real function, any measurable set and any measurable
 ENNReal weight. No C¹, positive-dimension, boundedness, finite-volume, integrability or SFinite
 surface-measure hypothesis is added. L11 handles the C¹ pieces, L2 removes the remaining null
@@ -2384,7 +2384,7 @@ See `research/decisions/2026-09-16-first-order-jet.md` and
 **Superseded by the First-order jet necessity closeout above; retained as a dated snapshot.**
 This round **closes the second original coarea hole**. The direct hole
 `KLS.Isoperimetry.lintegral_enorm_gradient_mul_eq_lintegral_levelSet` moved out of
-`KLS/WIP/CheegerInfimum.lean` into the hole-free `KLS/Geometry/IsoperimetryCoarea.lean` with a
+`KLS/WIP/CheegerInfimum.lean` into the hole-free `KLS/Geometry/Coarea/Isoperimetry.lean` with a
 **byte-identical `pp.all` signature** and is now proved from last round's `L11`
 (`KLS.coarea_of_contDiff` at `S = univ`). Direct holes drop **10 (2/3/5) → 9 (2/2/5)**;
 `KLS/WIP/CheegerInfimum.lean` is down to its two Cheeger comparisons. Certificates stay **24**,
@@ -2429,7 +2429,7 @@ constants. No certificate or Blueprint leanok scope was expanded.
 This round **proves obligation `L11`**: the weighted coarea formula for **any** `C¹` real function
 on a finite-dimensional inner-product space, over any measurable set and any measurable `ℝ≥0∞`
 weight, together with almost everywhere measurability of the weighted slices
-(`KLS.coarea_of_contDiff` in the new `KLS/Geometry/SmoothCoarea.lean`). Only the unused
+(`KLS.coarea_of_contDiff` in the new `KLS/Geometry/Coarea/Smooth.lean`). Only the unused
 `[CompleteSpace V]` is dropped; `u` is **not** assumed Lipschitz, bounded or proper, `S` need not
 be bounded or of finite volume, `g` may be unbounded, non-integrable or identically `∞`, and **no
 nondegeneracy of the derivative is assumed** — the critical set may be the whole space.
@@ -2474,7 +2474,7 @@ certificate or Blueprint leanok scope was expanded.
 
 **Superseded by the smooth coarea round above; retained as a dated snapshot.**
 **L9 is proved in full**, including weighted-slice `AEMeasurable`, as
-`KLS.coarea_of_contDiffOn_of_fderiv_ne_zero` in `KLS/Geometry/RegularCoarea.lean`.
+`KLS.coarea_of_contDiffOn_of_fderiv_ne_zero` in `KLS/Geometry/Coarea/Regular.lean`.
 The hypotheses are exactly the requested open-domain C¹ regularity, Borel `S ⊆ O`, and measurable
 ENNReal weight. No global regularity, boundedness, integrability, finite measure, nonzero-dimension,
 or SFinite hypothesis is added; the client restates the complete target including `CompleteSpace`.
@@ -2656,7 +2656,7 @@ statement is now provable from hole-free modules.
 
 `KLS.aemeasurable_surfaceMeasure_inter_levelSet` (`L4`) and
 `KLS.aemeasurable_setLIntegral_inter_levelSet` (`L5`) are added to
-`KLS/Geometry/SurfaceSlicing.lean`; no new module, and no other Lean file changed. `L4` combines
+`KLS/Geometry/Surface/Slicing.lean`; no new module, and no other Lean file changed. `L4` combines
 all three earlier results and needs each: inner regularity
 (`exists_isCompact_seq_volume_sdiff_eq_zero`, new here) splits a measurable `S` into an increasing
 sequence of compact pieces plus a Lebesgue-null remainder, `L3` makes each compact slice
@@ -2698,7 +2698,7 @@ equality of the two Cheeger constants. No certificate or Blueprint leanok scope 
 **Superseded by the Borel-slice and measurable-weight round above; retained as a dated snapshot.**
 This round **proves obligation `L3`** of the weighted coarea route: for `S` **compact** and `u`
 merely continuous, `t ↦ surfaceMeasure V (S ∩ {u = t})` is Borel measurable
-(`KLS.measurable_surfaceMeasure_inter_levelSet` in `KLS/Geometry/SurfaceSlicing.lean`, over the
+(`KLS.measurable_surfaceMeasure_inter_levelSet` in `KLS/Geometry/Surface/Slicing.lean`, over the
 Mathlib-only `Analysis.measurable_hausdorffMeasure_inter_levelSet` in the new
 `Analysis/HausdorffContent.lean`). `L3` is **not** a consequence of `L1`: the majorant bound says
 nothing about the slice function's own measurability. Both `[CompleteSpace V]` and
@@ -2749,7 +2749,7 @@ constant: for `u` Lipschitz **on `S` only**, the slice function
 `t ↦ surfaceMeasure V (S ∩ {u = t})` is dominated by a **measurable** `F` with
 `∫⁻ F ≤ eilenbergConstant V * K * volume S`, where
 `eilenbergConstant V = 4 ω_{n-1} / ω_n > 0` (`KLS.exists_measurable_majorant` and
-`KLS.eilenbergConstant_pos` in `KLS/Geometry/SurfaceSlicing.lean`, over the Mathlib-only
+`KLS.eilenbergConstant_pos` in `KLS/Geometry/Surface/Slicing.lean`, over the Mathlib-only
 `Analysis.exists_measurable_majorant` in `Analysis/HausdorffSlicing.lean`, which carries Mathlib's
 diameter-gauge constant `2` on an arbitrary `EMetricSpace` with no dimension and no ambient
 volume). Last round's `L2` is now the null special case, with **statements unchanged**. No
@@ -2793,7 +2793,7 @@ This round **proves obligation `L2`** of the weighted coarea route: a Lebesgue-n
 set only**. The metric-space core is `Analysis.ae_hausdorffMeasure_inter_levelSet_eq_zero` in the
 new `Analysis/HausdorffSlicing.lean` (local import closure empty, Mathlib only, arbitrary
 `EMetricSpace`), and the normalized wrapper is
-`KLS.ae_surfaceMeasure_inter_levelSet_eq_zero` in the new `KLS/Geometry/SurfaceSlicing.lean`.
+`KLS.ae_surfaceMeasure_inter_levelSet_eq_zero` in the new `KLS/Geometry/Surface/Slicing.lean`.
 `N` is not assumed measurable, bounded or nonempty, `u` is not assumed globally Lipschitz,
 differentiable or measurable, `K = 0` is allowed and `V` may be zero-dimensional. Rademacher's
 theorem does **not** give this; the proof is a covering argument with a **measurable majorant**,
@@ -3336,7 +3336,7 @@ next-step text are corrected by the
 [route correction](research/decisions/2026-09-13-cutoff-route-audit-correction.md).**
 `Isoperimetry.minkowskiConstant_le_smoothConstant` is proved, with its original statement text, in
 the new hole-free module
-`formalization/FunctionalInequalities/KLS/Geometry/CheegerInfimum.lean`: for every finite-dimensional
+`formalization/FunctionalInequalities/KLS/Geometry/Cheeger/Infimum.lean`: for every finite-dimensional
 real inner-product space — **zero dimension included** — and every Borell density `ρ` of `ν`
 relative to Lebesgue `volume`,
 `minkowskiConstant ν ≤ smoothConstant ρ (interior ν.support) ν`.
@@ -3366,7 +3366,7 @@ bound. `h_M` is never divided out and no limit is exchanged with an integral wit
 admissible smooth domain exists, `le_iInf` has an empty premise and the bound is covered by the
 `iInf` structure itself; no nonemptiness or positive-dimension assumption was added.
 
-Layer changes: `Geometry/CheegerInfimum.lean` is new and hole-free, and its 32-module local import
+Layer changes: `Geometry/Cheeger/Infimum.lean` is new and hole-free, and its 32-module local import
 closure contains **no WIP module**. `smoothConstant`, `smoothConstant_eq_top_of_subsingleton`,
 `lintegral_measure_symmDiff_superlevel`, `min_measure_le_add_measure_symmDiff` and
 `tendsto_lintegral_min_superlevel` moved there verbatim from `KLS/WIP/CheegerInfimum.lean`; the
@@ -3606,7 +3606,7 @@ restricted boundary measure → weighted normalized boundary change of variables
 kernel-average bound, including exact zero contribution outside Ω. Zero dimension is handled
 by empty frontier before converting natural subtraction to the real scaling exponent.
 
-New layers: `Geometry/SurfaceHomothety.lean` provides weighted surface change of variables;
+New layers: `Geometry/Surface/Homothety.lean` provides weighted surface change of variables;
 `LogConcave/DensityBounds.lean` owns the migrated density bounds and new positivity/support
 interior inclusion; `Geometry/RelativePerimeter.lean` owns the perimeter, indicator-dilation
 convergence and proved quantitative bound. Its 29-module local closure contains no WIP import.
@@ -3909,7 +3909,7 @@ Closed this round, each with only `propext / Classical.choice / Quot.sound`:
 
 The import direction that had blocked this is fixed by a module split, not by restating anything:
 the base definitions `unitBallVolume / hausdorffNormalized / surfaceMeasure` moved down to
-`formalization/FunctionalInequalities/KLS/Geometry/SurfaceMeasure.lean`, and the proved, KLS-independent
+`formalization/FunctionalInequalities/KLS/Geometry/Surface/Measure.lean`, and the proved, KLS-independent
 Hausdorff and level-set geometry moved out of `AnalyticPrerequisites` into
 `formalization/FunctionalInequalities/Analysis/LevelSet.lean`. `RelativePerimeter` imports both;
 `AnalyticPrerequisites` keeps only the open Gauss--Green, coarea and Sard obligations and still
@@ -4031,7 +4031,7 @@ for Claude, and Claude then completed them. Read
 [the completion record](research/decisions/2026-09-07-borell-equivalence-and-conditional-fiber-proofs.md).
 `KLS/LogConcave/Borel.lean` proves the compact/Borel equivalence `LogConcave.borel_iff`, packaged
 by `Solutions.ThmCompactBorellLogconcavityEquivalence.certificate` and registered in
-`check_blueprint.CERTIFICATES`. `KLS/ConditionalFiber.lean` proves its six well-definedness
+`check_blueprint.CERTIFICATES`. `KLS/ConditionalFiber/Basic.lean` proves its six well-definedness
 contracts, so `def:conditional-fiber-form` carries `\leanok` as a definition node.
 
 The same day, `thm:borell-logconcave-density` was first drafted and then proved.

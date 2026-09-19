@@ -2,7 +2,7 @@ import FunctionalInequalities.KLS.Statement
 import FunctionalInequalities.KLS.LogConcave.Borel
 import FunctionalInequalities.KLS.Isotropic
 import FunctionalInequalities.KLS.Isoperimetry
-import FunctionalInequalities.KLS.ConditionalFiber
+import FunctionalInequalities.KLS.ConditionalFiber.Basic
 import FunctionalInequalities.Poincare.Euclidean.RawEnergyObstruction
 import FunctionalInequalities.Poincare.CovarianceGradient.Intrinsic
 import FunctionalInequalities.KLS.LogConcave.Covariance

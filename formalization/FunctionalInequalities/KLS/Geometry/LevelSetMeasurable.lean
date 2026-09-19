@@ -1,4 +1,4 @@
-import FunctionalInequalities.KLS.Geometry.SurfaceSlicing
+import FunctionalInequalities.KLS.Geometry.Surface.Slicing
 
 /-! # Measurability of weighted level-set integrals
 
@@ -12,7 +12,7 @@ of `sorry` and of transitive `sorryAx`.
 The proof is `KLS.aemeasurable_setLIntegral_inter_levelSet` (obligation `L5` of the weighted coarea
 route) at `S = Set.univ`, which is itself built from the measurable Eilenberg majorant (`L1`), null
 slicing (`L2`), compact-slice measurability (`L3`) and the Borel version (`L4`) of
-`KLS/Geometry/SurfaceSlicing.lean` and `Analysis/HausdorffContent.lean`.  No parametric-integral
+`KLS/Geometry/Surface/Slicing.lean` and `Analysis/HausdorffContent.lean`.  No parametric-integral
 theorem is used, so the codimension-one surface measure is never assumed `SFinite`, which it is not
 in positive dimension.
 
@@ -23,7 +23,7 @@ work-in-progress file it replaces made the same choice.
 
 This module supplies measurability. The equality
 `Analysis.lintegral_enorm_gradient_mul_eq_lintegral_levelSet` is proved separately in
-`KLS/Geometry/LipschitzCoarea.lean`; `LocallyLipschitzCoarea` extends both conclusions to locally
+`KLS/Geometry/Coarea/Lipschitz.lean`; `LocallyLipschitzCoarea` extends both conclusions to locally
 Lipschitz functions. The sharp `C^(finrank)` `Analysis.sard` is proved in
 `Analysis/Sard/Sharp.lean`; the former `KLS/WIP/AnalyticPrerequisites.lean` is deleted. -/
 

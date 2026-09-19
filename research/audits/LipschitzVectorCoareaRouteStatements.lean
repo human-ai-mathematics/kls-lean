@@ -1,7 +1,7 @@
 import FunctionalInequalities.Analysis.RankDeficient.Coarea
 import FunctionalInequalities.Analysis.LipschitzC1Pieces
 import FunctionalInequalities.Analysis.Vector.HausdorffSlicing
-import FunctionalInequalities.KLS.Geometry.LocallyLipschitzCoarea
+import FunctionalInequalities.KLS.Geometry.Coarea.LocallyLipschitz
 
 /-!
 # Route statements for the codimension-`m` coarea formula of Lipschitz maps

@@ -1,4 +1,4 @@
-import FunctionalInequalities.KLS.Geometry.SurfaceMeasure
+import FunctionalInequalities.KLS.Geometry.Surface.Measure
 import FunctionalInequalities.Probability.Line.BrunnMinkowski
 import Mathlib.MeasureTheory.Measure.Lebesgue.VolumeOfBalls
 import Mathlib.Analysis.Calculus.Implicit

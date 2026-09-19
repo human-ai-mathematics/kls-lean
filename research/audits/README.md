@@ -42,7 +42,7 @@ It imports the new hole-free coarea module; it does not import the work-in-progr
 
 `LipschitzCoareaMigrationAudit.lean` audits the **migration of the original `T2` entry point**
 `Analysis.lintegral_enorm_gradient_mul_eq_lintegral_levelSet` out of
-`KLS/WIP/AnalyticPrerequisites.lean` into `KLS/Geometry/LipschitzCoarea.lean`. It imports the new
+`KLS/WIP/AnalyticPrerequisites.lean` into `KLS/Geometry/Coarea/Lipschitz.lean`. It imports the new
 module and **both** work-in-progress files, so its sixteen reports come from one environment:
 twelve are standard-only — the migrated declaration, its `L12` source `KLS.coarea_of_lipschitz`,
 the two previously migrated neighbours, and eight clients including a verbatim restatement
@@ -53,7 +53,7 @@ comparisons still report `sorryAx`. The machine `pp.all` signature comparison fo
 is in `build/audit/t2-migration/`.
 
 `LevelSetMeasurableAudit.lean` and `IsoperimetryCoareaAudit.lean` gained an import of
-`KLS/Geometry/LipschitzCoarea.lean` in the same round, so that the migrated name still resolves;
+`KLS/Geometry/Coarea/Lipschitz.lean` in the same round, so that the migrated name still resolves;
 their client statements are unchanged and two reports in each stopped carrying `sorryAx`.
 
 `LocallyLipschitzCoareaAudit.lean` audits **L13**, `KLS.coarea_of_locallyLipschitz`: the weighted
@@ -421,7 +421,7 @@ admissible test. 28 standard-only axiom reports; no work-in-progress file in the
 
 `LipschitzCoareaMigrationAudit.lean` and `IsoperimetryCoareaAudit.lean` formerly imported
 `KLS/WIP/CheegerInfimum.lean` and deliberately reported its two holes; since 2026-09-19 they import
-`KLS/Geometry/CheegerEquality.lean` and every report is standard.
+`KLS/Geometry/Cheeger/Equality.lean` and every report is standard.
 
 `EnergySlopeComparisonAudit.lean` audits the **sandwich of the three relaxations**: `A1`–`A3` of
 `EnergySlopeRouteStatements.lean` copied **verbatim** and discharged, the sandwich as one statement,

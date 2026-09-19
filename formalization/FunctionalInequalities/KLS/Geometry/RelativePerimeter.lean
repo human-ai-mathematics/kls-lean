@@ -1,5 +1,5 @@
 import FunctionalInequalities.KLS.LogConcave.DensityBounds
-import FunctionalInequalities.KLS.Geometry.SurfaceHomothety
+import FunctionalInequalities.KLS.Geometry.Surface.Homothety
 import FunctionalInequalities.KLS.Geometry.MollifiedBoundary
 
 /-! # Relative perimeter and quantitative mollification

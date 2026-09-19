@@ -1,9 +1,9 @@
-import FunctionalInequalities.KLS.Geometry.SurfaceSlicing
+import FunctionalInequalities.KLS.Geometry.Surface.Slicing
 
 /-!
 # Strict audit client for the Eilenberg measurable majorant (obligation `L1`)
 
-Independent client of `KLS/Geometry/SurfaceSlicing.lean` and `Analysis/HausdorffSlicing.lean`.
+Independent client of `KLS/Geometry/Surface/Slicing.lean` and `Analysis/HausdorffSlicing.lean`.
 `target` states the route's `L1` quantifier for quantifier — including its `∃ C : ℝ≥0, 0 < C` and
 its `[Nontrivial V]` — and proves it; `target_of_trivial` proves the same conclusion with
 `[Nontrivial V]` dropped, so the library statement is strictly stronger than `L1` asks.

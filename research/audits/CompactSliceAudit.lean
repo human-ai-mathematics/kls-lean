@@ -1,9 +1,9 @@
-import FunctionalInequalities.KLS.Geometry.SurfaceSlicing
+import FunctionalInequalities.KLS.Geometry.Surface.Slicing
 
 /-!
 # Strict audit client for compact-slice measurability (obligation `L3`)
 
-Independent client of `KLS/Geometry/SurfaceSlicing.lean` and `Analysis/HausdorffContent.lean`.
+Independent client of `KLS/Geometry/Surface/Slicing.lean` and `Analysis/HausdorffContent.lean`.
 `target` states the route's `L3` quantifier for quantifier and proves it;
 `target_of_not_finiteDimensional` proves the same conclusion with both `[CompleteSpace V]` and
 `[FiniteDimensional ℝ V]` dropped, so the library statement is strictly stronger than `L3` asks.

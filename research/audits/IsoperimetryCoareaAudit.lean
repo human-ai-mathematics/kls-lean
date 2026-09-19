@@ -1,15 +1,15 @@
-import FunctionalInequalities.KLS.Geometry.IsoperimetryCoarea
-import FunctionalInequalities.KLS.Geometry.LipschitzCoarea
-import FunctionalInequalities.KLS.Geometry.CheegerEquality
+import FunctionalInequalities.KLS.Geometry.Coarea.Isoperimetry
+import FunctionalInequalities.KLS.Geometry.Coarea.Lipschitz
+import FunctionalInequalities.KLS.Geometry.Cheeger.Equality
 import FunctionalInequalities.Analysis.Sard.Sharp
 -- 2026-09-19: `Analysis.sard` is proved in `Analysis/Sard/Sharp.lean`; the former `KLS/WIP/AnalyticPrerequisites.lean` is deleted, and this client now imports the proved module.
--- 2026-09-19: both Cheeger-infimum holes are proved in `KLS/Geometry/CheegerEquality.lean`; the former `KLS/WIP/CheegerInfimum.lean` is deleted, and this client now imports the proved module.
+-- 2026-09-19: both Cheeger-infimum holes are proved in `KLS/Geometry/Cheeger/Equality.lean`; the former `KLS/WIP/CheegerInfimum.lean` is deleted, and this client now imports the proved module.
 
 /-!
 # Scope audit for the migrated `C¹` weighted coarea formula
 
 `Isoperimetry.lintegral_enorm_gradient_mul_eq_lintegral_levelSet` has moved out of
-`KLS/WIP/CheegerInfimum.lean` into the hole-free `KLS/Geometry/IsoperimetryCoarea.lean` with a
+`KLS/WIP/CheegerInfimum.lean` into the hole-free `KLS/Geometry/Coarea/Isoperimetry.lean` with a
 **byte-identical `pp.all` signature** (recorded in `build/audit/iso-signature-before.log` and
 `build/audit/iso-signature-after.log`), and is now proved from obligation `L11`
 (`KLS.coarea_of_contDiff`) at `S = Set.univ`.  Its axiom report below therefore no longer contains
@@ -22,7 +22,7 @@ obligation that is still open reports `sorryAx` from that same environment.
 **Updated on 2026-09-16.** The **Lipschitz** formula
 `Analysis.lintegral_enorm_gradient_mul_eq_lintegral_levelSet`, which assumes no `C¹` regularity,
 has since been proved through `L12` and migrated out of `KLS/WIP/AnalyticPrerequisites.lean` into
-`KLS/Geometry/LipschitzCoarea.lean` with a byte-identical `pp.all` signature.  That import was
+`KLS/Geometry/Coarea/Lipschitz.lean` with a byte-identical `pp.all` signature.  That import was
 added here, so the two reports naming it below no longer contain `sorryAx`; the clients and their
 statements are unchanged.  The `C¹` result audited above is still only its specialization and
 still does not imply it — it is `L12` that does.

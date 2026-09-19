@@ -1,4 +1,4 @@
-import FunctionalInequalities.KLS.ConditionalFiber
+import FunctionalInequalities.KLS.ConditionalFiber.Basic
 import FunctionalInequalities.Energy.LocalSlope.Gradient
 import FunctionalInequalities.Poincare.LocalSlope.Basic
 import FunctionalInequalities.L2.MeanVariance

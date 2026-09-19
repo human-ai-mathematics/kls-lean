@@ -7,7 +7,7 @@ import Mathlib.Analysis.Calculus.ContDiff.Deriv
 import Mathlib.Analysis.Calculus.Deriv.Slope
 import Mathlib.Analysis.Calculus.MeanValue
 import FunctionalInequalities.Energy.Euclidean.LipschitzApproximation
-import FunctionalInequalities.KLS.Geometry.CheegerEquality
+import FunctionalInequalities.KLS.Geometry.Cheeger.Equality
 import FunctionalInequalities.Poincare.LocalSlope.SmoothTestComparison
 import FunctionalInequalities.KLS.LogConcave.BorellRepresentation
 

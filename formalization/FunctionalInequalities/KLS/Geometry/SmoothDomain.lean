@@ -1,4 +1,4 @@
-import FunctionalInequalities.KLS.Geometry.SurfaceMeasure
+import FunctionalInequalities.KLS.Geometry.Surface.Measure
 import FunctionalInequalities.Analysis.LevelSet
 import Mathlib.Analysis.Calculus.Deriv.MeanValue
 
@@ -18,7 +18,7 @@ universe u
 /-! ### Normalized Hausdorff measure
 
 The definitions `unitBallVolume`, `hausdorffNormalized` and `surfaceMeasure` now live in the
-base module `KLS/Geometry/SurfaceMeasure.lean`, below the general Hausdorff geometry of
+base module `KLS/Geometry/Surface/Measure.lean`, below the general Hausdorff geometry of
 `Analysis/LevelSet.lean`; the convention check and smooth-domain geometry are proved here. -/
 
 section Normalization

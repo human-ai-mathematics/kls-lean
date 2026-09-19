@@ -1,19 +1,19 @@
-import FunctionalInequalities.KLS.Geometry.LipschitzCoarea
+import FunctionalInequalities.KLS.Geometry.Coarea.Lipschitz
 import FunctionalInequalities.KLS.Geometry.LevelSetMeasurable
-import FunctionalInequalities.KLS.Geometry.IsoperimetryCoarea
+import FunctionalInequalities.KLS.Geometry.Coarea.Isoperimetry
 import FunctionalInequalities.Analysis.Sard.Sharp
-import FunctionalInequalities.KLS.Geometry.CheegerEquality
+import FunctionalInequalities.KLS.Geometry.Cheeger.Equality
 import Mathlib.Analysis.Calculus.FDeriv.Norm
 import Mathlib.Analysis.InnerProductSpace.PiL2
 -- 2026-09-19: `Analysis.sard` is proved in `Analysis/Sard/Sharp.lean`; the former `KLS/WIP/AnalyticPrerequisites.lean` is deleted, and this client now imports the proved module.
--- 2026-09-19: both Cheeger-infimum holes are proved in `KLS/Geometry/CheegerEquality.lean`; the former `KLS/WIP/CheegerInfimum.lean` is deleted, and this client now imports the proved module.
+-- 2026-09-19: both Cheeger-infimum holes are proved in `KLS/Geometry/Cheeger/Equality.lean`; the former `KLS/WIP/CheegerInfimum.lean` is deleted, and this client now imports the proved module.
 
 /-!
 # Scope audit for the migrated Lipschitz weighted coarea formula (`T2`)
 
 `Analysis.lintegral_enorm_gradient_mul_eq_lintegral_levelSet` has moved out of
 `KLS/WIP/AnalyticPrerequisites.lean`, where it was a direct hole, into the hole-free
-`KLS/Geometry/LipschitzCoarea.lean`, beside the `L12` theorem `KLS.coarea_of_lipschitz` that
+`KLS/Geometry/Coarea/Lipschitz.lean`, beside the `L12` theorem `KLS.coarea_of_lipschitz` that
 proves it at `S = Set.univ`.  The migration is signature-preserving:
 
 * the `pp.all` type printed before the migration from an environment importing the

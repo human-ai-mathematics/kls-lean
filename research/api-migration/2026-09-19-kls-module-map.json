@@ -1,0 +1,53 @@
+{
+  "version": 1,
+  "date": "2026-09-19",
+  "what": "KLS module regrouping. Repeated family words move from basenames into ConditionalFiber, Geometry/Cheeger, Geometry/Coarea, and Geometry/Surface directories. This is a file-layer-only migration: declarations, namespaces, theorem statements, and proofs are unchanged except for import and current-path documentation updates.",
+  "rule": "research/naming.md, 文件与声明作用域 / 家族词归目录，不进文件名",
+  "modules_moved": 12,
+  "module_map": {
+    "FunctionalInequalities.KLS.ConditionalFiber": "FunctionalInequalities.KLS.ConditionalFiber.Basic",
+    "FunctionalInequalities.KLS.Geometry.CheegerEquality": "FunctionalInequalities.KLS.Geometry.Cheeger.Equality",
+    "FunctionalInequalities.KLS.Geometry.CheegerInequality": "FunctionalInequalities.KLS.Geometry.Cheeger.Inequality",
+    "FunctionalInequalities.KLS.Geometry.CheegerInfimum": "FunctionalInequalities.KLS.Geometry.Cheeger.Infimum",
+    "FunctionalInequalities.KLS.Geometry.IsoperimetryCoarea": "FunctionalInequalities.KLS.Geometry.Coarea.Isoperimetry",
+    "FunctionalInequalities.KLS.Geometry.LipschitzCoarea": "FunctionalInequalities.KLS.Geometry.Coarea.Lipschitz",
+    "FunctionalInequalities.KLS.Geometry.LocallyLipschitzCoarea": "FunctionalInequalities.KLS.Geometry.Coarea.LocallyLipschitz",
+    "FunctionalInequalities.KLS.Geometry.RegularCoarea": "FunctionalInequalities.KLS.Geometry.Coarea.Regular",
+    "FunctionalInequalities.KLS.Geometry.SmoothCoarea": "FunctionalInequalities.KLS.Geometry.Coarea.Smooth",
+    "FunctionalInequalities.KLS.Geometry.SurfaceHomothety": "FunctionalInequalities.KLS.Geometry.Surface.Homothety",
+    "FunctionalInequalities.KLS.Geometry.SurfaceMeasure": "FunctionalInequalities.KLS.Geometry.Surface.Measure",
+    "FunctionalInequalities.KLS.Geometry.SurfaceSlicing": "FunctionalInequalities.KLS.Geometry.Surface.Slicing"
+  },
+  "path_map": {
+    "formalization/FunctionalInequalities/KLS/ConditionalFiber.lean": "formalization/FunctionalInequalities/KLS/ConditionalFiber/Basic.lean",
+    "formalization/FunctionalInequalities/KLS/Geometry/CheegerEquality.lean": "formalization/FunctionalInequalities/KLS/Geometry/Cheeger/Equality.lean",
+    "formalization/FunctionalInequalities/KLS/Geometry/CheegerInequality.lean": "formalization/FunctionalInequalities/KLS/Geometry/Cheeger/Inequality.lean",
+    "formalization/FunctionalInequalities/KLS/Geometry/CheegerInfimum.lean": "formalization/FunctionalInequalities/KLS/Geometry/Cheeger/Infimum.lean",
+    "formalization/FunctionalInequalities/KLS/Geometry/IsoperimetryCoarea.lean": "formalization/FunctionalInequalities/KLS/Geometry/Coarea/Isoperimetry.lean",
+    "formalization/FunctionalInequalities/KLS/Geometry/LipschitzCoarea.lean": "formalization/FunctionalInequalities/KLS/Geometry/Coarea/Lipschitz.lean",
+    "formalization/FunctionalInequalities/KLS/Geometry/LocallyLipschitzCoarea.lean": "formalization/FunctionalInequalities/KLS/Geometry/Coarea/LocallyLipschitz.lean",
+    "formalization/FunctionalInequalities/KLS/Geometry/RegularCoarea.lean": "formalization/FunctionalInequalities/KLS/Geometry/Coarea/Regular.lean",
+    "formalization/FunctionalInequalities/KLS/Geometry/SmoothCoarea.lean": "formalization/FunctionalInequalities/KLS/Geometry/Coarea/Smooth.lean",
+    "formalization/FunctionalInequalities/KLS/Geometry/SurfaceHomothety.lean": "formalization/FunctionalInequalities/KLS/Geometry/Surface/Homothety.lean",
+    "formalization/FunctionalInequalities/KLS/Geometry/SurfaceMeasure.lean": "formalization/FunctionalInequalities/KLS/Geometry/Surface/Measure.lean",
+    "formalization/FunctionalInequalities/KLS/Geometry/SurfaceSlicing.lean": "formalization/FunctionalInequalities/KLS/Geometry/Surface/Slicing.lean"
+  },
+  "left_flat": [
+    "FunctionalInequalities.KLS.Definitions",
+    "FunctionalInequalities.KLS.Statement",
+    "FunctionalInequalities.KLS.Target",
+    "FunctionalInequalities.KLS.Geometry.GaussGreen",
+    "FunctionalInequalities.KLS.Geometry.LocalGaussGreen",
+    "FunctionalInequalities.KLS.LogConcave.HeatSemigroup",
+    "FunctionalInequalities.KLS.LogConcave.HeatSemigroupMarkov"
+  ],
+  "left_flat_reason": "Definitions, Statement, and Target are stable public entry layers rather than repeated-family basenames. GaussGreen and HeatSemigroup each have only two modules, below the three-module threshold in research/naming.md.",
+  "namespaces_unchanged": [
+    "FunctionalInequalities.KLS",
+    "FunctionalInequalities.KLS.ConditionalFiber",
+    "FunctionalInequalities.KLS.Isoperimetry",
+    "FunctionalInequalities.KLS.RelativePerimeter"
+  ],
+  "historical_artifacts_left_frozen": "Existing dated decisions and explorations retain their original paths. Current source imports, live audits, the aggregate import, canonical task paths, and generated progress links were migrated.",
+  "route_statement_policy": "Only imports and current-path prose changed in live route clients; proposition bodies were not altered."
+}

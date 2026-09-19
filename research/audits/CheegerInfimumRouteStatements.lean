@@ -1,7 +1,7 @@
-import FunctionalInequalities.KLS.Geometry.CheegerInfimum
+import FunctionalInequalities.KLS.Geometry.Cheeger.Infimum
 import FunctionalInequalities.KLS.Geometry.DistanceCutoff
 import FunctionalInequalities.KLS.Geometry.RegularSuperlevel
-import FunctionalInequalities.KLS.Geometry.LipschitzCoarea
+import FunctionalInequalities.KLS.Geometry.Coarea.Lipschitz
 import FunctionalInequalities.KLS.Isoperimetry
 import FunctionalInequalities.Energy.Euclidean.LipschitzApproximation
 
@@ -27,7 +27,7 @@ work-in-progress module.
 * `K5` — `Isoperimetry.smoothConstant_le_minkowskiConstant`: `h_S ≤ h_M`.
 
 Together with the proved `minkowskiConstant_le_smoothConstant` (`h_M ≤ h_S`,
-`KLS/Geometry/CheegerInfimum.lean`) they give `lem:relative-perimeter-cheeger-infimum`, the
+`KLS/Geometry/Cheeger/Infimum.lean`) they give `lem:relative-perimeter-cheeger-infimum`, the
 `h_μ = h_ν^{sm,rel}` and `Ψ_KLS(μ) = ψ_ν` clauses of `thm:klartag-density-frontend-identification`,
 and free the three intrinsic transports `K11`–`K13` of `sorryAx`.
 

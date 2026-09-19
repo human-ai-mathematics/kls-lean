@@ -6,12 +6,13 @@ import FunctionalInequalities.Poincare.Product.Reverse
 import FunctionalInequalities.Poincare.FiniteProduct.Tensorization
 import FunctionalInequalities.Poincare.Gaussian.Real
 import FunctionalInequalities.KLS.Statement
+import FunctionalInequalities.KLS.Target
 import FunctionalInequalities.KLS.LogConcave.Poincare
 import FunctionalInequalities.KLS.LogConcave.Borel
 import FunctionalInequalities.KLS.Isotropic
 import FunctionalInequalities.KLS.Isoperimetry
 import FunctionalInequalities.KLS.Geometry.PerimeterRecovery
-import FunctionalInequalities.KLS.ConditionalFiber
+import FunctionalInequalities.KLS.ConditionalFiber.Basic
 import FunctionalInequalities.KLS.ConditionalFiber.Closed
 import FunctionalInequalities.KLS.ConditionalFiber.EnergyComparison
 import FunctionalInequalities.KLS.ConditionalFiber.SliceKernel
@@ -34,14 +35,29 @@ import FunctionalInequalities.Energy.Cheeger
 import FunctionalInequalities.Analysis.Lipschitz.VectorCoarea
 import FunctionalInequalities.Analysis.Lipschitz.Local
 import FunctionalInequalities.Analysis.Sard.Sharp
-import FunctionalInequalities.KLS.Geometry.CheegerEquality
-import FunctionalInequalities.KLS.Geometry.CheegerInequality
+import FunctionalInequalities.KLS.Geometry.Cheeger.Equality
+import FunctionalInequalities.KLS.Geometry.Cheeger.Inequality
 import FunctionalInequalities.Energy.Euclidean.SlopeComparison
 import FunctionalInequalities.Energy.Euclidean.SlopeRecovery
 import FunctionalInequalities.Energy.Euclidean.SlopeDensity
 import FunctionalInequalities.Energy.Cheeger.Identification
 import FunctionalInequalities.KLS.LogConcave.Line.Buser
 import FunctionalInequalities.Poincare.LocalSlope.Gradient
+import FunctionalInequalities.Analysis.Semigroup.Resolvent.Form
+import FunctionalInequalities.Analysis.Semigroup.Resolvent.Basic
+import FunctionalInequalities.Analysis.Semigroup.Exponential.Contraction
+import FunctionalInequalities.Analysis.Semigroup.AdjointComp
+import FunctionalInequalities.Analysis.Semigroup.VonNeumann
+import FunctionalInequalities.Analysis.Semigroup.Resolvent.Limit
+import FunctionalInequalities.Analysis.Semigroup.Yosida.Approximation
+import FunctionalInequalities.Analysis.Semigroup.Yosida.Family
+import FunctionalInequalities.Analysis.Semigroup.Exponential.Limit
+import FunctionalInequalities.Analysis.Semigroup.Yosida.Limit
+import FunctionalInequalities.Analysis.Semigroup.Generated.Basic
+import FunctionalInequalities.Analysis.Semigroup.Generated.Laws
+import FunctionalInequalities.Analysis.Semigroup.Exponential.MeanValue
+import FunctionalInequalities.Analysis.Semigroup.Generated.Generator
+import FunctionalInequalities.KLS.LogConcave.HeatSemigroup
 
 /-!
 # Functional inequalities
@@ -136,7 +152,7 @@ scalar ones), and `Analysis/Lipschitz/Local.lean` the **locally Lipschitz** vers
 Lipschitz` is level with the scalar one. None of this is a Sard theorem for vector-valued maps and
 none of it is a ledger certificate.
 
-`KLS/Geometry/CheegerEquality.lean` closes the log-concave Cheeger line's first node: the Minkowski
+`KLS/Geometry/Cheeger/Equality.lean` closes the log-concave Cheeger line's first node: the Minkowski
 and smooth relative-perimeter Cheeger infima agree for every law with a Borell density
 (`lem:relative-perimeter-cheeger-infimum`, `Isoperimetry.minkowskiConstant_eq_smoothConstant`), so the
 affine-support isoperimetric constant of a log-concave law is its smooth relative-perimeter infimum
@@ -144,7 +160,7 @@ and the inverse scales agree (the two isoperimetric clauses of
 `thm:klartag-density-frontend-identification`); the former work-in-progress module
 `KLS/WIP/CheegerInfimum.lean` is deleted and the `KLS/WIP/` directory with it.
 
-`KLS/Geometry/CheegerInequality.lean` (with the median lemma of `KLS/Geometry/Median.lean`) proves
+`KLS/Geometry/Cheeger/Inequality.lean` (with the median lemma of `KLS/Geometry/Median.lean`) proves
 the Cheeger half of the Cheeger–Buser comparison `thm:logconcave-cheeger-poincare-comparison`:
 `C_P^smooth(ν) ≤ 4 / h_M(ν)²` for every Borel probability law and
 `C_P^lit(μ) ≤ 4 Ψ_KLS(μ)²` for every log-concave law

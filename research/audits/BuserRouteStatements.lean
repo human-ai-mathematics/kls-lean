@@ -1,5 +1,5 @@
-import FunctionalInequalities.KLS.Geometry.CheegerEquality
-import FunctionalInequalities.KLS.Geometry.CheegerInequality
+import FunctionalInequalities.KLS.Geometry.Cheeger.Equality
+import FunctionalInequalities.KLS.Geometry.Cheeger.Inequality
 import FunctionalInequalities.KLS.LogConcave.Line.Hazard
 import FunctionalInequalities.Poincare.LocalSlope.SmoothTestComparison
 import FunctionalInequalities.KLS.LogConcave.BorellRepresentation

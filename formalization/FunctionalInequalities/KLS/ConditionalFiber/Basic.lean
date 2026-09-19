@@ -7,7 +7,7 @@ import Mathlib.Probability.Kernel.Disintegration.Unique
 import Mathlib.Probability.Moments.Variance
 
 /-!
-# Conditional-fiber energy: construction and proved well-definedness contracts
+# Conditional-fiber energy: basic construction and proved well-definedness contracts
 
 Source: Blueprint `def:conditional-fiber-form`, with the pinned conditional-frame route.
 Read `Admissible`, `jointLaw`, `energyAt`, `energy`, `form`, and then the well-definedness theorems.

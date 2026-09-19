@@ -176,7 +176,7 @@ compactness/inner-regularity lemmas have default-build axiom guards. The node is
 [completion record](../research/decisions/2026-09-07-borell-equivalence-and-conditional-fiber-proofs.md).
 
 `StatementChecks.lean` contains twenty-five named, proved checks with standard-only axiom guards, plus
-axiom guards for the six proved conditional-fiber contracts in `KLS/ConditionalFiber.lean`
+axiom guards for the six proved conditional-fiber contracts in `KLS/ConditionalFiber/Basic.lean`
 (iterated base integral, a.e. finite conditional second moment, joint measurability, version
 independence, representative independence and the L² identification). The definition node
 `def:conditional-fiber-form` therefore carries `\leanok`; it is not a ledger theorem. The structural

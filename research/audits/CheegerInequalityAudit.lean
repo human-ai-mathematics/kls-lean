@@ -1,4 +1,4 @@
-import FunctionalInequalities.KLS.Geometry.CheegerInequality
+import FunctionalInequalities.KLS.Geometry.Cheeger.Inequality
 import FunctionalInequalities.KLS.Geometry.Median
 
 /-!
@@ -7,7 +7,7 @@ import FunctionalInequalities.KLS.Geometry.Median
 Every obligation `P1`–`P6` and the consequence `D1` of
 `research/audits/CheegerInequalityRouteStatements.lean` is restated here **verbatim** — the
 propositions are copied character for character from that route snapshot — and discharged from
-the two new hole-free modules `KLS/Geometry/Median.lean` and `KLS/Geometry/CheegerInequality.lean`.
+the two new hole-free modules `KLS/Geometry/Median.lean` and `KLS/Geometry/Cheeger/Inequality.lean`.
 A renamed binder, a reordered hypothesis or a weakened conclusion would fail to elaborate here.
 
 Out of scope, deliberately absent from this file: the target `P0`
@@ -210,7 +210,7 @@ Every public declaration of the two new modules, then every theorem of this clie
 #print axioms CheegerInequalityAudit.boundary_lipschitz_one
 
 /-! #### The target `P0`, verbatim, added at integration (2026-09-19) once
-`KLS/Geometry/CheegerEquality.lean` supplied `h_μ = h_M(ν)` -/
+`KLS/Geometry/Cheeger/Equality.lean` supplied `h_μ = h_M(ν)` -/
 
 theorem CheegerInequalityAudit.route_P0 : ∀ {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
     [MeasurableSpace E] [BorelSpace E] [SecondCountableTopology E] [FiniteDimensional ℝ E]

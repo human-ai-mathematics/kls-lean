@@ -2,7 +2,7 @@ import FunctionalInequalities.Analysis.Lipschitz.Annuli
 import FunctionalInequalities.Analysis.Lipschitz.Extension
 import FunctionalInequalities.Analysis.Lipschitz.VectorCoarea
 import FunctionalInequalities.Analysis.CoareaJacobian
-import FunctionalInequalities.KLS.Geometry.SurfaceMeasure
+import FunctionalInequalities.KLS.Geometry.Surface.Measure
 
 /-! # From the globally Lipschitz coarea formula to the locally Lipschitz one
 
@@ -13,7 +13,7 @@ import FunctionalInequalities.KLS.Geometry.SurfaceMeasure
 every closed ball.  `X4` is the locality step: two maps agreeing on an open set have the same
 differential and the same level sets on any piece inside it.  `X5` is the assembly, and it is the
 codimension-`m` transcription of the scalar argument of
-`KLS/Geometry/LocallyLipschitzCoarea.lean`, step for step: the annuli of
+`KLS/Geometry/Coarea/LocallyLipschitz.lean`, step for step: the annuli of
 `Analysis/Lipschitz/Annuli.lean` cut the ambient set into countably many disjoint measurable
 pieces, on the piece of index `n` the map is replaced by a **globally** Lipschitz extension
 supplied by `Analysis/Lipschitz/Extension.lean`, the hypothesis is applied to that extension, `X4`

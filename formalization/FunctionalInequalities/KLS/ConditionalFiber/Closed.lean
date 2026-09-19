@@ -1,6 +1,6 @@
 import FunctionalInequalities.Energy.Dirichlet
 import FunctionalInequalities.Energy.WeightedGradient.Core
-import FunctionalInequalities.KLS.ConditionalFiber
+import FunctionalInequalities.KLS.ConditionalFiber.Basic
 import FunctionalInequalities.Probability.TwoPointVariance
 import Mathlib.MeasureTheory.Function.ConvergenceInMeasure
 import Mathlib.MeasureTheory.Function.LpSpace.Complete

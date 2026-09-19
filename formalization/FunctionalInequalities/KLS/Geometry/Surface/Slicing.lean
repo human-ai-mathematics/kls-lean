@@ -7,7 +7,7 @@ import FunctionalInequalities.KLS.Geometry.SmoothDomain
 
 Normalized wrapper of `Analysis.exists_measurable_majorant` and of
 `Analysis.measurable_hausdorffMeasure_inter_levelSet` for the codimension-one
-`KLS.surfaceMeasure` of `KLS/Geometry/SurfaceMeasure.lean`.  The measure and the conclusions are
+`KLS.surfaceMeasure` of `KLS/Geometry/Surface/Measure.lean`. The measure and the conclusions are
 unchanged: `surfaceMeasure V` stays `(ω_{n-1} / 2^{n-1}) • μH[n-1]` with the repository's
 natural-subtraction convention, and the two statements are a genuine measurable majorant for the
 slice function and a genuine almost-everywhere vanishing of the slice measure, not statements about

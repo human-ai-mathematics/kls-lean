@@ -1,8 +1,8 @@
-import FunctionalInequalities.KLS.Geometry.CheegerInfimum
+import FunctionalInequalities.KLS.Geometry.Cheeger.Infimum
 import FunctionalInequalities.KLS.Geometry.DistanceCutoff
 import FunctionalInequalities.KLS.Isoperimetry
 import FunctionalInequalities.KLS.Geometry.RegularSuperlevel
-import FunctionalInequalities.KLS.Geometry.LipschitzCoarea
+import FunctionalInequalities.KLS.Geometry.Coarea.Lipschitz
 import FunctionalInequalities.Energy.Euclidean.LipschitzApproximation
 
 /-!
@@ -28,7 +28,7 @@ For a probability law `ν` on a finite-dimensional real inner-product space `V`,
 * `h_S = smoothConstant ρ Ω ν = inf_{0 < ν(U) < 1} P_ρ(U) / m(ν(U))` over smooth domains, with the
   relative perimeter `relativePerimeter ρ Ω U` of `KLS/Geometry/RelativePerimeter.lean`
   (normalized `ℋ^{n-1}`, `ρ` the Borell density of `ν` with respect to Lebesgue measure `volume`,
-  `Ω = interior ν.support`); `smoothConstant` lives in `KLS/Geometry/CheegerInfimum.lean`.
+  `Ω = interior ν.support`); `smoothConstant` lives in `KLS/Geometry/Cheeger/Infimum.lean`.
 
 Both infima are `⊤` when no admissible set exists, in particular in dimension zero, where the
 equality reads `⊤ = ⊤`.
