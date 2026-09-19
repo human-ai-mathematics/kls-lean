@@ -5,7 +5,7 @@ import Mathlib.Analysis.InnerProductSpace.PiL2
 # Scope audit for the vector-valued graph infrastructure (`B1`, first part)
 
 The codimension-`m` graph area formula `B1` is being built by mirroring the five phases of the
-codimension-one file `Analysis/AreaFormula.lean`.  This round covers its second and third phases:
+codimension-one file `Analysis/Graph/Area.lean`.  This round covers its second and third phases:
 the graph map of a `K`-valued slope, its retraction, injectivity, derivative, image measurability
 and linear approximation, plus the linear case, which needs no shear argument here.
 

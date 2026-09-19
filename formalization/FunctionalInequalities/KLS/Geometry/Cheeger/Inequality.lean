@@ -1,5 +1,5 @@
-import FunctionalInequalities.KLS.Geometry.MinkowskiConstant
-import FunctionalInequalities.KLS.Geometry.Median
+import FunctionalInequalities.KLS.Geometry.Cheeger.MinkowskiConstant
+import FunctionalInequalities.KLS.Geometry.Cheeger.Median
 import FunctionalInequalities.Poincare.SmoothTest.Basic
 import Mathlib.MeasureTheory.Integral.Layercake
 import Mathlib.Analysis.MeanInequalitiesPow
@@ -9,12 +9,12 @@ import Mathlib.Analysis.Calculus.MeanValue
 import FunctionalInequalities.Energy.Euclidean.LipschitzApproximation
 import FunctionalInequalities.KLS.Geometry.Cheeger.Equality
 import FunctionalInequalities.Poincare.LocalSlope.SmoothTestComparison
-import FunctionalInequalities.KLS.LogConcave.BorellRepresentation
+import FunctionalInequalities.KLS.LogConcave.Density.BorellRepresentation
 
 /-!
 # Cheeger's inequality for the Minkowski Cheeger infimum
 
-Hole-free layer on top of `KLS/Geometry/MinkowskiConstant.lean` and `KLS/Geometry/Median.lean`:
+Hole-free layer on top of `KLS/Geometry/Cheeger/MinkowskiConstant.lean` and `KLS/Geometry/Cheeger/Median.lean`:
 for an arbitrary Borel probability law `ν` on a finite-dimensional real Hilbert space, the
 smooth-test Poincaré constant of `Poincare/SmoothTest/Basic.lean` is bounded by `4 / h_M(ν)²`,
 where `h_M = minkowskiConstant ν` is the Minkowski Cheeger infimum.  No density, no absolute

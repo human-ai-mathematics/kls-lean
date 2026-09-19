@@ -1,10 +1,10 @@
-import FunctionalInequalities.Energy.Euclidean.SlopeComparison
+import FunctionalInequalities.Energy.Euclidean.Slope.Comparison
 
 /-!
 # Scope audit for the slope sandwich `A1`–`A3`
 
 This client imports **only** the new hole-free module
-`FunctionalInequalities/Energy/Euclidean/SlopeComparison.lean`; no work-in-progress layer is
+`FunctionalInequalities/Energy/Euclidean/Slope/Comparison.lean`; no work-in-progress layer is
 imported, and no `#check` stands in for a proof.  It discharges the three obligations `A1`, `A2`,
 `A3` of `research/audits/EnergySlopeRouteStatements.lean`, restated **verbatim** as `route_A1`,
 `route_A2`, `route_A3`.
@@ -216,7 +216,7 @@ end EnergySlopeComparisonAudit
 
 /-! ### Axiom reports
 
-Every public declaration of `FunctionalInequalities/Energy/Euclidean/SlopeComparison.lean`, then
+Every public declaration of `FunctionalInequalities/Energy/Euclidean/Slope/Comparison.lean`, then
 every theorem of this client.  Only `propext`, `Classical.choice` and `Quot.sound` may appear. -/
 
 #print axioms FunctionalInequalities.Energy.AsymptoticLipschitz.apply_eq_norm_gradient

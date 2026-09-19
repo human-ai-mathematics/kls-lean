@@ -1,4 +1,4 @@
-import FunctionalInequalities.Analysis.QuadraticCover
+import FunctionalInequalities.Analysis.Sard.QuadraticCover
 import Mathlib.Analysis.Calculus.InverseFunctionTheorem.ContDiff
 import Mathlib.Analysis.Calculus.ContDiff.Operations
 import Mathlib.Analysis.Normed.Module.FiniteDimension

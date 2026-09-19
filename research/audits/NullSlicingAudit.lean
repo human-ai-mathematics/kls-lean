@@ -3,7 +3,7 @@ import FunctionalInequalities.KLS.Geometry.Surface.Slicing
 /-!
 # Strict audit client for null slicing (obligation `L2` of the weighted coarea route)
 
-Independent client of `KLS/Geometry/Surface/Slicing.lean` and `Analysis/HausdorffSlicing.lean`.
+Independent client of `KLS/Geometry/Surface/Slicing.lean` and `Analysis/Hausdorff/Slicing.lean`.
 `target` states the round's obligation quantifier for quantifier, with no added hypothesis: `N` is
 not measurable, `V` may be zero-dimensional, `u` is Lipschitz on `N` only, `K` is an arbitrary
 `ℝ≥0`, and `surfaceMeasure` keeps the repository's normalized Hausdorff definition.

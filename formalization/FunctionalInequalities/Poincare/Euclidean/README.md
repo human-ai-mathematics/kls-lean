@@ -12,7 +12,7 @@
 
 一般对数凹版本位于 [Poincare.lean](../../KLS/LogConcave/Poincare.lean)：从现有
 `KLS.LogConcave μ` 推出 光滑测试、内在光滑梯度和局部斜率 常数相等，进而得到 selected 常数等式。
-内禀绝对连续性由 [AbsoluteContinuity.lean](../../KLS/LogConcave/AbsoluteContinuity.lean) 证明，未作为额外假设。
+内禀绝对连续性由 [AbsoluteContinuity.lean](../../KLS/LogConcave/Density/AbsoluteContinuity.lean) 证明，未作为额外假设。
 包含环境奇异和零维支撑；完整 Borell 密度代表、局部界及矩定理也已由后续证书完成。见
 [本地证明记录](../../../../research/decisions/2026-09-06-general-logconcave-comparison.md)。
 

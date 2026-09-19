@@ -377,7 +377,7 @@ affine-support direction, restricts on that direction to the covariance operator
 law, has the same operator norm, the intrinsic covariance is positive definite, and a
 zero-dimensional direction gives zero operators. Typed applications cover the Euclidean family
 including dimension zero. The certificate and nine reusable declarations in
-`Probability/IntrinsicCovariance.lean` have default-build axiom guards. The node is
+`Probability/Covariance/Intrinsic.lean` have default-build axiom guards. The node is
 `proved / checked_by: lean`. Read the
 [record](../research/decisions/2026-09-07-ambient-intrinsic-covariance.md).
 

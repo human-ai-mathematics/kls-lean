@@ -1,5 +1,5 @@
 import FunctionalInequalities.Poincare.SmoothTest.Basic
-import FunctionalInequalities.Probability.Covariance
+import FunctionalInequalities.Probability.Covariance.Basic
 import Mathlib.Analysis.InnerProductSpace.Rayleigh
 import Mathlib.MeasureTheory.Function.LpSpace.Basic
 import Mathlib.Probability.Moments.CovarianceBilin

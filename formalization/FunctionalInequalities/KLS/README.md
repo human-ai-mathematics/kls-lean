@@ -42,8 +42,8 @@ T1/T2/T3 三个原始目标现已全部正式接通。证书仍 **24**，perimet
 审计见 `research/audits/LipschitzCoareaMigrationAudit.lean`，
 详见[迁出决定](../../../research/decisions/2026-09-16-t2-coarea-migration.md)。
 
-上一轮（2026-09-16，L12 完成）：`Analysis/LipschitzJet.lean` 证明 **L6a** 紧 jet 提取，
-`Analysis/LipschitzC1Pieces.lean` 证明 **L7** 精确 C¹ 分片，
+上一轮（2026-09-16，L12 完成）：`Analysis/Lipschitz/Jet.lean` 证明 **L6a** 紧 jet 提取，
+`Analysis/Lipschitz/C1Pieces.lean` 证明 **L7** 精确 C¹ 分片，
 `Geometry/Coarea/Lipschitz.lean` 证明 **L12** 的 Lipschitz
 带权 coarea 等式及切片 AEMeasurable，不假设 C¹、正维、有界、有限体积或有限权重。
 原始 L6a/L7/L12/T2 语句的证明均通过新客户端审计，15 条公理报告全标准。
@@ -152,7 +152,7 @@ L4/L5 只给**可测性，不给等式**：加权 coarea 等式本身（L6–L12
 上一轮（紧集截面可测性轮）：**已证明加权 coarea 路线的 L3**——对**紧** `S` 与
 仅连续的 `u`，`t ↦ surfaceMeasure V (S ∩ {u = t})` 是 Borel 可测函数
 （`Geometry/Surface/Slicing.lean` 的 `measurable_surfaceMeasure_inter_levelSet`，底层是只依赖
-Mathlib 的新模块 `Analysis/HausdorffContent.lean`）。L3 **不是** L1 的推论：L1 只给构造出来的
+Mathlib 的新模块 `Analysis/Hausdorff/Content.lean`）。L3 **不是** L1 的推论：L1 只给构造出来的
 支配函数的可测性。证明走两层结构——固定尺度上的**开覆盖** content 对水平上半连续（紧的
 `S \ U` 使 `u` 与该水平保持正距离），且开覆盖 content 的尺度极限仍是 `μH[d]`（逐块加厚，
 直径增量由余量吸收、成本增量由可和正数列吸收）。固定尺度上 `openCoverCost` 一般严格大于
@@ -166,7 +166,7 @@ coarea 洞是对 `univ` 陈述的，紧集版本填不了它。
 `t ↦ surfaceMeasure V (S ∩ {u = t})` 被**可测**支配函数 `F` 控制，且
 `∫⁻ F ≤ eilenbergConstant V · K · volume S`，其中 `eilenbergConstant V = 4 ω_{n-1}/ω_n > 0`
 （`Geometry/Surface/Slicing.lean`），底层是只依赖 Mathlib、任意 `EMetricSpace`、无维数无环境
-测度的 `Analysis.exists_measurable_majorant`（`Analysis/HausdorffSlicing.lean`，Mathlib 直径
+测度的 `Analysis.exists_measurable_majorant`（`Analysis/Hausdorff/Slicing.lean`，Mathlib 直径
 规范下常数 `2`）。不声称常数尖锐；客户端算出线上为 `2`、零维为 `4`。
 不要求 `S` 可测、有界、非空或有限体积，不要求 `u` 全局 Lipschitz、可微或可测，
 `K = 0` 与 `volume S = ⊤` 是显式分支，零维与 `[CompleteSpace V]` 均无需假设。
@@ -189,7 +189,7 @@ coarea 洞是对 `univ` 陈述的，紧集版本填不了它。
 | [Target.lean](Target.lean) | `theorem kls : Conjecture := by sorry`——KLS 断言本身，仓库唯一有意保留的直接洞；只被聚合根 import，不进任何证书闭包与 Blueprint `\lean` 标签（2026-09-19，见 `research/decisions/2026-09-19-kls-target-theorem.md`） |
 | [LogConcave/](LogConcave/README.md) | 对数凹传输、紧集/Borel 等价、内禀绝对连续性、Borell 密度表示、仿射协方差常数的对数凹契约与闭形式、环境平移下的对数凹性与重心、KLS 的仿射/各向同性归约、实轴上的一维 `4·Var` Poincaré 界（`LogConcave/Line/`，Bobkov 的 `12·Var` 作为推论保留） |
 | [LocalSlope/Gradient.lean](../Energy/LocalSlope/Gradient.lean) | 局部斜率与梯度关系，以及绝对连续性前提下的能量和测试域识别；已证明 |
-| [Isotropic.lean](Isotropic.lean) | 有限二阶矩、零均值和单位协方差的定义；白化在 `Probability/CovarianceWhitening.lean`，仿射/各向同性归约在 `LogConcave/Isotropic.lean` |
+| [Isotropic.lean](Isotropic.lean) | 有限二阶矩、零均值和单位协方差的定义；白化在 `Probability/Covariance/Whitening.lean`，仿射/各向同性归约在 `LogConcave/Isotropic.lean` |
 | [Isoperimetry.lean](Isoperimetry.lean) | 仿射载体上的边界含量、等周常数及逆尺度定义；不提供 Cheeger 比较 |
 | [ConditionalFiber/Basic.lean](ConditionalFiber/Basic.lean) | 条件纤维能量的构造及六条已证明的良定义性契约；本文件不提供闭性、Markov 性或框架界 |
 | [ConditionalFiber/Closed.lean](ConditionalFiber/Closed.lean) | 条件纤维形式的两点跳跃表示、两点测度的交换不变性、Lipschitz 界 `d·L²`、稠密定义域、下半连续与 Markov 性，合成 `Energy.Dirichlet`；对任意 Borel 律与方向律成立，不提供与梯度能量的比较或框架界 |
@@ -214,7 +214,7 @@ coarea 洞是对 `univ` 陈述的，紧集版本填不了它。
 | [Geometry/LocalGaussGreen.lean](Geometry/LocalGaussGreen.lean) | 应用层（无 `sorry`）：图表局部 Gauss–Green `BoundaryChart.integral_divergence_eq_integral_inner_outwardNormal`——对满足 `tsupport F ⊆ C.cylinder` 的紧支撑 `C¹` 向量场，`∫_U div F = ∫_{∂U} ⟪F, ν⟫ ∂surfaceMeasure`；两条局部化引理 `integral_divergence_carrier`（体积分退化到全局子图，柱外 `F` 与 `divergence F` 同时为零）与 `integral_inner_outwardNormal_frontier`（通量退化到单张图片，Jacobian 与单位法向分母逐点抵消）。**不是**任意紧支撑场的全局定理，全局拼接在 `Geometry/GaussGreen.lean`；不假设边界总测度有限 |
 | [Geometry/GaussGreen.lean](Geometry/GaussGreen.lean) | 应用层（无 `sorry`）：**全局** Gauss–Green `SmoothDomain.integral_divergence_eq_integral_inner_outwardNormal`——对任意紧支撑 `C¹` 向量场，`∫_U div F = ∫_{∂U} ⟪F, ν⟫ ∂surfaceMeasure`，不假设区域有界、边界总测度有限、`F` 更光滑或 `V` 非平凡；三类局部块引理 `…_of_tsupport_subset_carrier`（内部块）、`…_of_tsupport_subset_compl_closure`（外部块）与图表块（调用 `LocalGaussGreen`）；由 `WIP/AnalyticPrerequisites.lean` 迁入的 `isLocallyFiniteMeasure_surfaceMeasure_frontier`、`integrableOn_smul_outwardNormal`（名称与陈述不变），以及有限求和交换所需的 `norm_outwardNormal_le_one`、`integrableOn_inner_outwardNormal` |
 | [Geometry/Surface/Slicing.lean](Geometry/Surface/Slicing.lean) | L1–L5：显式非尖锐 Eilenberg 上界、零集切片、连续函数的紧集截面 Borel 可测性，以及连续且在可测集合上 Lipschitz 时的截面与可测 ENNReal 权重积分的 a.e. 可测性。无有限体积、权重有限或正维假设；不假设 surfaceMeasure 为 SFinite。零维使用 ℋ⁰，而非零测度。这里只给可测性与上界，coarea 等式由后续模块证明 |
-| [Geometry/Surface/Measure.lean](Geometry/Surface/Measure.lean) | 基础定义层（无 `sorry`）：单位球体积 `unitBallVolume`、归一化 Hausdorff 测度 `hausdorffNormalized` 与面积测度 `surfaceMeasure`；不含定理，供 `Analysis/LevelSet.lean` 与周长层共用 |
+| [Geometry/Surface/Measure.lean](Geometry/Surface/Measure.lean) | 基础定义层（无 `sorry`）：单位球体积 `unitBallVolume`、归一化 Hausdorff 测度 `hausdorffNormalized` 与面积测度 `surfaceMeasure`；不含定理，供 `Analysis/Hausdorff/LevelSet.lean` 与周长层共用 |
 | [Geometry/RegularSuperlevel.lean](Geometry/RegularSuperlevel.lean) | 无洞正则超水平集层：由 `WIP/CheegerInfimum.lean` 迁入的 `SmoothDomain.frontier_superlevel_subset` 与 `SmoothDomain.ae_exists_superlevel`（`pp.all` 签名逐字节不变）。后者现由**已证明**的光滑 Sard `Analysis.sard_smooth` 经 `Analysis.ae_forall_fderiv_ne_zero_of_contDiff_top` 得到，**不再继承 `sorryAx`**；不用尖锐 `C^(finrank)` 的 `Analysis.sard`。`Geometry/SmoothDomain.lean` 刻意保持与 Sard 无关，故打包放在其上一层 |
 | [Geometry/Coarea/Isoperimetry.lean](Geometry/Coarea/Isoperimetry.lean) | 无洞 C¹ coarea 交付层：由 `WIP/CheegerInfimum.lean` 迁入的 `Isoperimetry.lintegral_enorm_gradient_mul_eq_lintegral_levelSet`（`pp.all` 签名逐字节不变，机器 `diff` 核对），现由 L11 `coarea_of_contDiff` 取 `S = univ` 证明，**不再带 `sorryAx`**；未使用的 `hK`、`CompleteSpace`、`SecondCountableTopology` 一律保留以固定接口。**不含** Lipschitz 情形 |
 | [Geometry/Coarea/Smooth.lean](Geometry/Coarea/Smooth.lean) | 无洞 C¹ coarea 层：`isOpen_regular` 与 `coarea_of_contDiff`（L11）——任意 `C¹` `u`、任意可测 `S`、任意可测 `ℝ≥0∞` 权重的带权 coarea 等式加切片 `AEMeasurable`；不要求 Lipschitz、有界、有限体积，`g` 允许恒 `⊤`，临界集可为全空间。由 L9（正则开域）与 L10（临界切片零测）拼成，两者缺一不可。**目标 T3 即其 `S = univ` 特例**；**不含** Lipschitz 情形（需 L12/L7/L6） |
@@ -224,14 +224,14 @@ coarea 洞是对 `univ` 陈述的，紧集版本填不了它。
 
 两个 KLS WIP 文件共 3 个直接 `sorry`，另有 `Energy/WIP/Cheeger.lean` 的 5 个，合计 8；
 先前几轮接入并证明了三条已有数学输入的接口（Hausdorff 归一化、边界局部有限性、光滑 Lipschitz 逼近），
-并证明了余维一面积公式（`Analysis/AreaFormula.lean`）、把标量形式 Gauss–Green 归约到向量形式。
+并证明了余维一面积公式（`Analysis/Graph/Area.lean`）、把标量形式 Gauss–Green 归约到向量形式。
 ### 历史构造记录
 
 以下按轮次保留当时的证明边界；洞数、未证明项和待迁移项不代表当前状态。当前以页首及文件表为准。
 
 2026-09-13 一轮证明了局部 `C^∞` 边界图表示、区域侧别与外法向公式，并把面积公式接到
 `surfaceMeasure`（`Analysis/ImplicitGraph.lean` 与 `Geometry/BoundaryChart.lean`，均无 `sorry`）。
-同日后一轮证明了光滑子图上的散度公式与带权边界积分换元（`Analysis/SubgraphDivergence.lean`、
+同日后一轮证明了光滑子图上的散度公式与带权边界积分换元（`Analysis/Graph/Divergence.lean`、
 `Analysis/GraphIntegral.lean`），并接通图表交付**图表局部** Gauss–Green
 （`Geometry/LocalGaussGreen.lean`，均无 `sorry`）。同日第三轮用有限光滑单位分解
 （`Analysis/PartitionOfUnity.lean`）把图表块、内部块与外部块拼成**全局**向量形式 Gauss–Green
@@ -283,13 +283,13 @@ coarea 洞是对 `univ` 陈述的，紧集版本填不了它。
 后续文件按数学职责放置，证明完成不触发文件移动。旧路径与新路径的对应关系见
 [迁移记录](../../../research/explorations/2026-09-07-logconcave-module-layout.md)。
 
-一致二阶余项 `Analysis.exists_uniform_quadratic_remainder` 已在 `Analysis/TaylorRemainder.lean`
+一致二阶余项 `Analysis.exists_uniform_quadratic_remainder` 已在 `Analysis/Sard/TaylorRemainder.lean`
 无洞证明：任意实赋范空间、C²、紧集中的平坦基点、可在紧集外的近邻，均由同一 δ 控制。
 这不证明像集零测。洞仍为 11，证书 24，详见
 [决定记录](../../../research/decisions/2026-09-14-uniform-quadratic-remainder.md)。
 
 二维定量覆盖 `Analysis.volume_image_eq_zero_of_quadratic_oscillation` 与二阶平坦层
-`Analysis.volume_image_flat_eq_zero` 已在 `Analysis/QuadraticCover.lean` 无洞证明：
+`Analysis.volume_image_flat_eq_zero` 已在 `Analysis/Sard/QuadraticCover.lean` 无洞证明：
 有界平面集上的一致二次振幅控制推出像集零测，不需要任何可测性或正则性；
 接上余项定理即得平面紧集中**二阶平坦子集**的像零测（不是整个紧集平坦）；
 再经可数穷竭得到全平面版本 `Analysis.volume_image_flat_univ_eq_zero`，不留紧性或可测性假设。

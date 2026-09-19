@@ -1,4 +1,4 @@
-import FunctionalInequalities.Energy.Cheeger
+import FunctionalInequalities.Energy.Cheeger.Basic
 import FunctionalInequalities.KLS.Definitions
 
 /-!

@@ -1,4 +1,4 @@
-import FunctionalInequalities.Analysis.AreaFormula
+import FunctionalInequalities.Analysis.Graph.Area
 import Mathlib.Analysis.Calculus.InverseFunctionTheorem.ContDiff
 import Mathlib.Analysis.Calculus.BumpFunction.InnerProduct
 import Mathlib.Analysis.Calculus.MeanValue
@@ -7,7 +7,7 @@ import Mathlib.Analysis.Calculus.MeanValue
 # Local `C^∞` graph representation of a regular level set
 
 General geometric analysis, independent of the KLS objects: the implicit function theorem in the
-form needed by the codimension-one area formula of `Analysis/AreaFormula.lean`.  Every statement
+form needed by the codimension-one area formula of `Analysis/Graph/Area.lean`.  Every statement
 here is proved and uses only the standard axioms; the module contains no hole.
 
 ## Setting
@@ -54,7 +54,7 @@ the implicit function on the whole parameter neighbourhood, so no consumer ever 
   inverse parameter map `graphProj ι (· - x₀)`.
 * `isGraphSplitting_orthogonal`: a unit vector and the orthogonal complement of its span form a
   splitting; this is the splitting used by every boundary chart and by the dimension induction of
-  `Analysis/SubgraphDivergence.lean`.
+  `Analysis/Graph/Divergence.lean`.
 * `hausdorffNormalized_image_graphChartMap`: the area formula for a *translated* graph map,
   which is the form a boundary chart produces.
 -/
@@ -161,7 +161,7 @@ variable {W : Type v} [NormedAddCommGroup W] [InnerProductSpace ℝ W] [FiniteDi
 /-- **A unit vector splits the space.**  The orthogonal complement of the line spanned by a unit
 vector `u`, with its natural isometric embedding, together with `u` itself, is an orthogonal
 splitting.  This is the splitting used by every boundary chart and by the divergence computation
-of `Analysis/SubgraphDivergence.lean`. -/
+of `Analysis/Graph/Divergence.lean`. -/
 theorem isGraphSplitting_orthogonal {u : W} (hu : ‖u‖ = 1) :
     IsGraphSplitting ((ℝ ∙ u)ᗮ : Submodule ℝ W).subtypeₗᵢ u := by
   have hee : (⟪u, u⟫ : ℝ) = 1 := by rw [real_inner_self_eq_norm_sq, hu]; norm_num

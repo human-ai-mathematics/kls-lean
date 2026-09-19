@@ -1,4 +1,4 @@
-import FunctionalInequalities.Probability.LocalDomination
+import FunctionalInequalities.Probability.Domination.Local
 import FunctionalInequalities.Energy.WeightedGradient.Basic
 import FunctionalInequalities.Energy.Euclidean.WeakDerivative
 import Mathlib.Analysis.Distribution.AEEqOfIntegralContDiff

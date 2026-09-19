@@ -101,7 +101,7 @@ linear model to be a continuous linear **equivalence**, so it does not apply whe
 
 /-! ### B1 — the recommended route: the nonlinear codimension-`m` graph area formula
 
-The repository proved the codimension-**one** graph case in `Analysis/AreaFormula.lean`.  This is
+The repository proved the codimension-**one** graph case in `Analysis/Graph/Area.lean`.  This is
 its codimension-`m` analogue, with the volume factor supplied by `normDet_graphMapLinear`.  Here
 the map is injective by construction and the parameter projection `ιᵀ` is an explicit left inverse,
 which is exactly what `A3` lacks in general. -/

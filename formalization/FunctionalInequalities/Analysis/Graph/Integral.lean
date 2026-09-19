@@ -3,7 +3,7 @@ import FunctionalInequalities.Analysis.Graph.Implicit
 /-!
 # Integration against the surface measure of a `C¹` graph
 
-The codimension-one area formula of `Analysis/AreaFormula.lean` is an identity of *measures of
+The codimension-one area formula of `Analysis/Graph/Area.lean` is an identity of *measures of
 sets*: `ℋ^k (Ψ '' s) = ∫_s √(1 + ‖∇g‖²)` for every measurable parameter set `s`.  That is not by
 itself a change of variables for an arbitrary integrand.  This module supplies the minimal
 interface the boundary flux needs, and nothing more: it is not a general area or manifold
@@ -25,7 +25,7 @@ No integrability hypothesis appears: `integral_map` and `integral_withDensity_eq
 hold verbatim, both sides being zero when the integrand is not integrable.  Combined with the
 normal formula `ν (Ψ y) = (ι (-∇g y) + e)/√(1 + ‖∇g y‖²)` of a boundary chart, the Jacobian
 `√(1 + ‖∇g y‖²)` cancels exactly against the denominator of the unit normal; that cancellation is
-carried out in `KLS/Geometry/LocalGaussGreen.lean`.
+carried out in `KLS/Geometry/SmoothDomain/LocalGaussGreen.lean`.
 
 Every statement here is proved and uses only the standard axioms; the module contains no hole.
 -/

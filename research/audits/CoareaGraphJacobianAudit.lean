@@ -1,4 +1,4 @@
-import FunctionalInequalities.Analysis.CoareaGraphJacobian
+import FunctionalInequalities.Analysis.Vector.Graph.CoareaJacobian
 import Mathlib.Analysis.InnerProductSpace.PiL2
 import Mathlib.Analysis.Real.Pi.Bounds
 

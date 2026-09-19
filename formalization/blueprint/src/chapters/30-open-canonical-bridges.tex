@@ -114,7 +114,7 @@ affine support by the construction of \cref{def:intrinsic-affine-energy}
 separately; its agreement with the local-slope relaxation is a proved consequence of the
 identification, not an identification by definition. The theorem is proved for every Borel
 probability law, singular laws and one-point affine supports included, in
-\path{Energy/Cheeger/Identification.lean} on top of \path{Energy/Euclidean/SlopeDensity.lean}; the
+\path{Energy/Cheeger/Identification.lean} on top of \path{Energy/Euclidean/Slope/Density.lean}; the
 absolutely continuous scope, certified first as
 \cref{cor:absolutely-continuous-relaxation-two-cheeger}, is a special case.
 
@@ -262,7 +262,7 @@ absolutely continuous scope, certified first as
 
 This gives a density-case answer to \cref{q:smooth-gradient-raw-core-agreement}; the question is
 not a logical premise of the theorem.  The three typewriter names above refer to the existing Lean
-predicates in \path{FunctionalInequalities/Energy/FormCore.lean}; graph-norm density is deliberately
+predicates in \path{FunctionalInequalities/Energy/Form/Core.lean}; graph-norm density is deliberately
 left in the question rather than conflated with that interface.  By
 \cref{thm:borell-logconcave-density}, the displayed density hypotheses hold for every
 finite-dimensional log-concave law in intrinsic coordinates.

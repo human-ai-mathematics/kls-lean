@@ -1,5 +1,5 @@
 import FunctionalInequalities.KLS.Definitions
-import FunctionalInequalities.Probability.Covariance
+import FunctionalInequalities.Probability.Covariance.Basic
 import Mathlib.Analysis.InnerProductSpace.PiL2
 
 /-!

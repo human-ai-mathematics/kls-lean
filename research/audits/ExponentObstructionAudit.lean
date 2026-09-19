@@ -1,5 +1,5 @@
-import FunctionalInequalities.Analysis.RankDeficient.ExponentObstruction
-import FunctionalInequalities.Analysis.LevelSet
+import FunctionalInequalities.Analysis.Vector.RankDeficient.ExponentObstruction
+import FunctionalInequalities.Analysis.Hausdorff.LevelSet
 import Mathlib.Analysis.InnerProductSpace.PiL2
 
 /-!
@@ -10,7 +10,7 @@ items of the rank-deficient route: they record what the small-Lipschitz method y
 exponent cannot simply be lowered.  Neither is a step towards `R0`, which is proved.
 
 **`N1` is proved**, restated **verbatim** below as `route_N1` and discharged from
-`Analysis/RankDeficient/ExponentObstruction.lean`.  It is the obstruction *stated*, not repaired: the exponent it
+`Analysis/Vector/RankDeficient/ExponentObstruction.lean`.  It is the obstruction *stated*, not repaired: the exponent it
 delivers is `n − dim W₂`, which in the route's notation is `k + r` and **not** `k`
 (`N1_exponent_is_k_add_r`), and for `r ≥ 1` that is weaker than `R0` in the useless direction — at
 the exponent `k` a set of positive Lebesgue measure has **infinite** Hausdorff measure
@@ -198,7 +198,7 @@ variable {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [FiniteDim
 
 omit [FiniteDimensional ℝ V] [MeasurableSpace V] [BorelSpace V] in
 /-- **The repair costs the route nothing.**  The repaired statement itself is
-`Analysis.hausdorffMeasure_finrank_sub_eq_top` in `Analysis/RankDeficient/ExponentObstruction.lean`.  Wherever
+`Analysis.hausdorffMeasure_finrank_sub_eq_top` in `Analysis/Vector/RankDeficient/ExponentObstruction.lean`.  Wherever
 the route record appeals to `N2`, `r` is the rank of a differential `V → W` with
 `r < finrank ℝ W` and `finrank ℝ W ≤ finrank ℝ V`, so the dimension is positive already and the
 added hypothesis is discharged on the spot. -/

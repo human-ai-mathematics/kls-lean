@@ -1,7 +1,7 @@
-import FunctionalInequalities.Energy.Euclidean.SlopeDensity
+import FunctionalInequalities.Energy.Euclidean.Slope.Density
 
 /-!
-# Scope audit for the density module `Energy/Euclidean/SlopeDensity.lean`
+# Scope audit for the density module `Energy/Euclidean/Slope/Density.lean`
 
 This client imports **only** the new library module — no work-in-progress layer — and discharges
 the five propositions `C1`, `C2`, `C4`, `C5`, `C6` of the route file
@@ -170,7 +170,7 @@ end Boundary
 
 /-! ### Axiom reports
 
-Every public declaration of `Energy/Euclidean/SlopeDensity.lean`, then every theorem of this
+Every public declaration of `Energy/Euclidean/Slope/Density.lean`, then every theorem of this
 client.  Only `propext`, `Classical.choice` and `Quot.sound` may appear. -/
 
 #print axioms FunctionalInequalities.Energy.LocalSlope.lowerSemicontinuous_secant

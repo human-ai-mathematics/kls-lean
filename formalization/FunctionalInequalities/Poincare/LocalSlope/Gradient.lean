@@ -1,6 +1,6 @@
 import FunctionalInequalities.Energy.LocalSlope.Gradient
 import FunctionalInequalities.Poincare.LocalSlope.Basic
-import FunctionalInequalities.KLS.LogConcave.AbsoluteContinuity
+import FunctionalInequalities.KLS.LogConcave.Density.AbsoluteContinuity
 
 /-!
 # The literature Poincaré constant in gradient form

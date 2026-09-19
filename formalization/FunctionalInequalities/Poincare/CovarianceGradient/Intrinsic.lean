@@ -1,5 +1,5 @@
 import FunctionalInequalities.Energy.CovarianceGradient.Basic
-import FunctionalInequalities.Poincare.L2Energy
+import FunctionalInequalities.Poincare.L2.Energy
 
 /-!
 # The affine covariance Poincaré constant

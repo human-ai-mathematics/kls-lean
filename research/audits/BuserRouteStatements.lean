@@ -2,7 +2,7 @@ import FunctionalInequalities.KLS.Geometry.Cheeger.Equality
 import FunctionalInequalities.KLS.Geometry.Cheeger.Inequality
 import FunctionalInequalities.KLS.LogConcave.Line.Hazard
 import FunctionalInequalities.Poincare.LocalSlope.SmoothTestComparison
-import FunctionalInequalities.KLS.LogConcave.BorellRepresentation
+import FunctionalInequalities.KLS.LogConcave.Density.BorellRepresentation
 import FunctionalInequalities.Poincare.SmoothTest.Linear
 import Mathlib.Probability.Moments.Variance
 

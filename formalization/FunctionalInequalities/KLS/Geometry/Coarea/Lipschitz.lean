@@ -1,4 +1,4 @@
-import FunctionalInequalities.Analysis.LipschitzC1Pieces
+import FunctionalInequalities.Analysis.Lipschitz.C1Pieces
 import FunctionalInequalities.KLS.Geometry.Coarea.Smooth
 
 /-! # Weighted coarea for Lipschitz functions
@@ -15,7 +15,7 @@ instance arguments in the same order, the same implicit binders `u`, `K`, `g`, t
 hypothesis names `hu`, `hg`, and the same conclusion.  Only its proof is new, and it no longer
 depends on `sorryAx`.  It is `L12` at `S = Set.univ`; the coarea theorem is not reproved and no
 compatibility alias is introduced.  It keeps the `FunctionalInequalities.Analysis` namespace
-because its published name must not change, exactly as `KLS/Geometry/LevelSetMeasurable.lean`
+because its published name must not change, exactly as `KLS/Geometry/Slice/Measurable.lean`
 and `KLS/Geometry/Coarea/Isoperimetry.lean` did for their own migrations.
 
 **This closes neither the sharp `C^(finrank)` `Analysis.sard` nor its consequence

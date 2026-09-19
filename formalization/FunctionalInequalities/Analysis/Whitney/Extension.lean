@@ -1,4 +1,4 @@
-import FunctionalInequalities.Analysis.FirstOrderJet
+import FunctionalInequalities.Analysis.Whitney.FirstOrderJet
 
 /-!
 # Boundary gluing for the compact first-order Whitney extension problem

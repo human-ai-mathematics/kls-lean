@@ -66,7 +66,7 @@
       "diagram": {
         "id": "ENERGY",
         "label": "Canonical energy<br/>= 2 × Cheeger energy",
-        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Energy/Cheeger.lean",
+        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Energy/Cheeger/Basic.lean",
         "shape": "box"
       }
     },
@@ -312,7 +312,7 @@
       "diagram": {
         "id": "DENS",
         "label": "Log-concave density<br/>Intrinsic support",
-        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/BorellRepresentation.lean",
+        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation.lean",
         "shape": "box"
       }
     },
@@ -434,7 +434,7 @@
         "state": "formalized",
         "evidence": {
           "kind": "reviewed_progress",
-          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/LevelSetMeasurable.lean",
+          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Slice/Measurable.lean",
           "baseline_commit": "b7b458c"
         },
         "kind": "auxiliary"
@@ -442,7 +442,7 @@
       "diagram": {
         "id": "MEAS",
         "label": "Slice measurability",
-        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/LevelSetMeasurable.lean",
+        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Slice/Measurable.lean",
         "shape": "box"
       }
     },
@@ -488,7 +488,7 @@
         "state": "formalized",
         "evidence": {
           "kind": "reviewed_progress",
-          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/CriticalSlice.lean",
+          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Slice/Critical.lean",
           "baseline_commit": "b7b458c"
         },
         "kind": "auxiliary"
@@ -496,7 +496,7 @@
       "diagram": {
         "id": "CRIT",
         "label": "Critical-slice nullity",
-        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/CriticalSlice.lean",
+        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Slice/Critical.lean",
         "shape": "box"
       }
     },
@@ -560,7 +560,7 @@
         "state": "formalized",
         "evidence": {
           "kind": "reviewed_progress",
-          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/GaussGreen.lean",
+          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/SmoothDomain/GaussGreen.lean",
           "baseline_commit": "b7b458c"
         },
         "kind": "auxiliary"
@@ -568,7 +568,7 @@
       "diagram": {
         "id": "GG",
         "label": "Global Gauss–Green",
-        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/GaussGreen.lean",
+        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/SmoothDomain/GaussGreen.lean",
         "shape": "box"
       }
     },
@@ -578,7 +578,7 @@
         "state": "formalized",
         "evidence": {
           "kind": "reviewed_progress",
-          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/PerimeterRecovery.lean",
+          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Perimeter/Recovery.lean",
           "baseline_commit": "b7b458c"
         },
         "kind": "auxiliary"
@@ -586,7 +586,7 @@
       "diagram": {
         "id": "REC",
         "label": "Smooth recovery",
-        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/PerimeterRecovery.lean",
+        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Perimeter/Recovery.lean",
         "shape": "box"
       }
     },
@@ -650,7 +650,7 @@
         "state": "formalized",
         "evidence": {
           "kind": "reviewed_progress",
-          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/DistanceCutoff.lean",
+          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Cheeger/DistanceCutoff.lean",
           "baseline_commit": "b7b458c"
         },
         "kind": "auxiliary"
@@ -658,7 +658,7 @@
       "diagram": {
         "id": "CUT",
         "label": "Distance cutoffs",
-        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/DistanceCutoff.lean",
+        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Cheeger/DistanceCutoff.lean",
         "shape": "box"
       }
     },
@@ -704,7 +704,7 @@
         "state": "formalized",
         "evidence": {
           "kind": "reviewed_progress",
-          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/MinkowskiContent.lean",
+          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Cheeger/MinkowskiContent.lean",
           "baseline_commit": "b7b458c"
         },
         "kind": "auxiliary"
@@ -712,7 +712,7 @@
       "diagram": {
         "id": "MINK",
         "label": "Minkowski coarea",
-        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/MinkowskiContent.lean",
+        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Cheeger/MinkowskiContent.lean",
         "shape": "box"
       }
     },
@@ -834,7 +834,7 @@
         "state": "formalized",
         "evidence": {
           "kind": "reviewed_progress",
-          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/Vector/RegularCoarea.lean",
+          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/Vector/Coarea/Regular.lean",
           "note": "Reviewed against current theorem statements and local axiom/client checks on 2026-09-17."
         },
         "kind": "auxiliary"
@@ -842,7 +842,7 @@
       "diagram": {
         "id": "VREG",
         "label": "Vector coarea<br/>Regular region",
-        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/Vector/RegularCoarea.lean",
+        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/Vector/Coarea/Regular.lean",
         "shape": "box"
       }
     },
@@ -852,7 +852,7 @@
         "state": "formalized",
         "evidence": {
           "kind": "reviewed_progress",
-          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/Vector/CriticalSlice.lean",
+          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/Vector/Slice/Critical.lean",
           "note": "Reviewed against current theorem statements and local axiom/client checks on 2026-09-17."
         },
         "kind": "auxiliary"
@@ -860,7 +860,7 @@
       "diagram": {
         "id": "VZERO",
         "label": "Vector slices<br/>Zero derivative",
-        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/Vector/CriticalSlice.lean",
+        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/Vector/Slice/Critical.lean",
         "shape": "box"
       }
     },

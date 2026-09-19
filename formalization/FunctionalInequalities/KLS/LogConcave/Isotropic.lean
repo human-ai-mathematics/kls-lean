@@ -4,10 +4,10 @@ import FunctionalInequalities.KLS.LogConcave.Translation
 import FunctionalInequalities.KLS.LogConcave.WeightedGradient
 import FunctionalInequalities.KLS.Statement
 import FunctionalInequalities.Poincare.LipschitzGradient.Comparison
-import FunctionalInequalities.Poincare.L2Comparison
+import FunctionalInequalities.Poincare.L2.Comparison
 import FunctionalInequalities.KLS.LogConcave.Poincare
-import FunctionalInequalities.Probability.CovarianceWhitening
-import FunctionalInequalities.Probability.IntrinsicCovariance
+import FunctionalInequalities.Probability.Covariance.Whitening
+import FunctionalInequalities.Probability.Covariance.Intrinsic
 
 /-!
 # Affine and isotropic KLS formulations

@@ -1,5 +1,5 @@
-import FunctionalInequalities.Analysis.Vector.SliceMeasurable
-import FunctionalInequalities.KLS.Geometry.OpenSliceMeasurable
+import FunctionalInequalities.Analysis.Vector.Slice.Measurable
+import FunctionalInequalities.KLS.Geometry.Slice.OpenMeasurable
 import Mathlib.Analysis.InnerProductSpace.PiL2
 
 /-!
@@ -12,7 +12,7 @@ chain: `aemeasurable_setLIntegral_inter_levelSet_vector` is weighted slice measu
 Lipschitz on a Borel set, and
 `aemeasurable_setLIntegral_inter_levelSet_of_contDiffOn_vector` localizes it to a map that is `C¹`
 on an open set only.  **Neither needs the differential to be surjective**, so unlike the chart route
-of `Analysis/Vector/RegularCoarea.lean` these statements cover the **critical** part of the domain.
+of `Analysis/Vector/Coarea/Regular.lean` these statements cover the **critical** part of the domain.
 
 **`m = 1` gives back the proved scalar statements.**  `scalar_compact_slices` reproduces
 `Analysis.measurable_hausdorffMeasure_inter_levelSet` and `scalar_open_slices` reproduces

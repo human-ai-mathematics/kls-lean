@@ -17,7 +17,7 @@ critical set, over the Mathlib-only analytic layer of `Analysis/`.
 
 The declaration keeps the `FunctionalInequalities.KLS.Isoperimetry` namespace because its published
 name must not change, while the file sits under `KLS/Geometry/` beside the coarea layer it consumes;
-`KLS/Geometry/LevelSetMeasurable.lean` made the same choice.
+`KLS/Geometry/Slice/Measurable.lean` made the same choice.
 
 The formula here retains its original `C¹` and Lipschitz hypotheses. The more general
 `Analysis.lintegral_enorm_gradient_mul_eq_lintegral_levelSet`, assuming only global Lipschitz

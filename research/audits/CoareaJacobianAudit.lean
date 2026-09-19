@@ -1,4 +1,4 @@
-import FunctionalInequalities.Analysis.CoareaJacobian
+import FunctionalInequalities.Analysis.Vector.Jacobian
 import Mathlib.Analysis.InnerProductSpace.PiL2
 
 /-!

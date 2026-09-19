@@ -1,4 +1,4 @@
-import FunctionalInequalities.Probability.IntrinsicCovariance
+import FunctionalInequalities.Probability.Covariance.Intrinsic
 import Mathlib.Analysis.Normed.Lp.MeasurableSpace
 
 /-!

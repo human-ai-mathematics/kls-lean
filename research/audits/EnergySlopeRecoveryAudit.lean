@@ -1,7 +1,7 @@
-import FunctionalInequalities.Energy.Euclidean.SlopeRecovery
+import FunctionalInequalities.Energy.Euclidean.Slope.Recovery
 
 /-!
-# Scope audit for the smooth-recovery module `Energy/Euclidean/SlopeRecovery.lean`
+# Scope audit for the smooth-recovery module `Energy/Euclidean/Slope/Recovery.lean`
 
 This client imports **only** the new library module — no work-in-progress layer — and discharges
 the five propositions `B1`–`B5` of the route file
@@ -129,7 +129,7 @@ end Boundary
 
 /-! ### Axiom reports
 
-Every public declaration of `Energy/Euclidean/SlopeRecovery.lean`, then every theorem of this
+Every public declaration of `Energy/Euclidean/Slope/Recovery.lean`, then every theorem of this
 client.  Only `propext`, `Classical.choice` and `Quot.sound` may appear. -/
 
 #print axioms FunctionalInequalities.Energy.LocalSlope.secant

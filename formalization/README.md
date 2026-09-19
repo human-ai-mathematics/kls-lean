@@ -9,8 +9,8 @@ directly. There is no intermediate project-specific wrapper layer.
 derivatives. The proof uses the quantitative WhitneyCover, WhitneyBump and WhitneyPartition
 modules and the boundary gluing in WhitneyExtension. FirstOrderJet supplies the converse
 necessity estimate. Empty sets, sparse sets and zero dimension are included.
-[LipschitzJet](FunctionalInequalities/Analysis/LipschitzJet.lean) now proves **L6a** compact jet
-extraction, [LipschitzC1Pieces](FunctionalInequalities/Analysis/LipschitzC1Pieces.lean) proves **L7**
+[LipschitzJet](FunctionalInequalities/Analysis/Lipschitz/Jet.lean) now proves **L6a** compact jet
+extraction, [LipschitzC1Pieces](FunctionalInequalities/Analysis/Lipschitz/C1Pieces.lean) proves **L7**
 exact C¹ pieces, and [LipschitzCoarea](FunctionalInequalities/KLS/Geometry/Coarea/Lipschitz.lean)
 proves **L12**, full weighted coarea and slice measurability for Lipschitz functions.
 The original `T2` entry point `Analysis.lintegral_enorm_gradient_mul_eq_lintegral_levelSet` has
@@ -22,7 +22,7 @@ proves **L13**, `KLS.coarea_of_locallyLipschitz`: the same weighted coarea concl
 **local** Lipschitz continuity alone. It is a common generalization of `L11` and `L12` — a global
 Lipschitz bound and `C¹` regularity each imply `LocallyLipschitz` — and the generalization is
 strict, `x ↦ x² + ‖x‖` being covered by neither earlier theorem. Both keep their statements.
-[Analysis/CoareaJacobian](FunctionalInequalities/Analysis/CoareaJacobian.lean) opens the
+[Analysis/CoareaJacobian](FunctionalInequalities/Analysis/Vector/Jacobian.lean) opens the
 codimension-`m` program: `Analysis.coareaJacobian L = sqrt (det (L ∘ Lᵀ))`, built on Mathlib's
 `LinearMap.normDet`, with the regular-set criterion `J ≠ 0 ↔ surjective` and the compatibility
 `coareaJacobian (fderiv ℝ u x) = ‖gradient u x‖` that makes the proved scalar theory its `m = 1`
@@ -41,7 +41,7 @@ The nonlinear area formula is **not** proved: a route exploration recorded its n
 obstruction of the textbook route (`ApproximatesLinearOn.antilipschitz` needs equal dimensions) and
 recommended the graph route instead.
 Its obligation `A1` is now **proved** in
-[Analysis/NormDetContinuity](FunctionalInequalities/Analysis/NormDetContinuity.lean): `normDet` is
+[Analysis/NormDetContinuity](FunctionalInequalities/Analysis/Vector/JacobianContinuity.lean): `normDet` is
 continuous in the operator — Mathlib has the algebra but not the continuity — so the area-formula
 integrand is measurable, with no differentiability hypothesis needed. `A2`–`A5`, `B1` and `B2`
 remain open.
@@ -56,7 +56,7 @@ expansive, which gives the two-sided `(1 + ε)^k` estimates, plus the approximat
 normalized convention, with no finiteness, boundedness or injectivity hypothesis. The route's own
 `B1` statement mixed the two normalizations and is corrected in that round's audit; the Federer
 area formula `A0` for arbitrary injective parametrizations stays open with `A2`–`A5`.
-[Analysis/CoareaGraphJacobian](FunctionalInequalities/Analysis/CoareaGraphJacobian.lean) opens the
+[Analysis/CoareaGraphJacobian](FunctionalInequalities/Analysis/Vector/Graph/CoareaJacobian.lean) opens the
 codimension-`m` **regular** case by matching its two densities: linearly,
 `coareaJacobian L = normDet (L ∘ κ) · normDet (graphMapLinear ι κ A)` under an orthogonal splitting
 with `finrank K = finrank W` and a slope whose graph lies in `ker L`; and along a `C¹` level family
@@ -68,7 +68,7 @@ form, which Mathlib has for matrices only. The codimension hypothesis is necessa
 exhibits the failure. That audit also **proves route statement `A0` false as written**: like `B1`
 it pairs the raw `μH` with Lebesgue measure, and the identity map of the plane on the closed unit
 ball separates the two sides by `4 / π`.
-[Analysis/VectorRegularChart](FunctionalInequalities/Analysis/Vector/RegularChart.lean) supplies the
+[Analysis/VectorRegularChart](FunctionalInequalities/Analysis/Vector/Coarea/RegularChart.lean) supplies the
 other half of the regular case's local data: the **parametric implicit-function charting** in
 codimension `m`. Near a point where the differential is surjective, the fibres of `u : V → W` are
 simultaneously the graphs of one globally `C¹` map over a fixed parameter space, with the level as a
@@ -79,7 +79,7 @@ explicit. Each fibre is then identified with a graph, so the proved `B2` measure
 one), and the family satisfies the fibre Jacobian identity verbatim. **No coarea formula is
 proved**: the fibrewise `m`-dimensional change of variables, the weighted area formula and the
 patching are all still missing.
-[Analysis/VectorFiberIntegral](FunctionalInequalities/Analysis/Vector/FiberIntegral.lean) supplies
+[Analysis/VectorFiberIntegral](FunctionalInequalities/Analysis/Vector/Coarea/FiberIntegral.lean) supplies
 the **fibrewise `m`-dimensional change of variables**. Mathlib's change of variables is a self-map
 statement whose factor `|det f'|` does not typecheck between the level space and the normal factor,
 two different spaces of the same dimension, so this module first proves the missing statement with
@@ -94,12 +94,12 @@ weighted area formula, the Tonelli assembly and the patching remain.
 the **weighted** codimension-`m` graph area formula, upgrading `B2` from an identity of measures of
 sets to an identity of measures and then to a change of variables for an arbitrary measurable
 `ℝ≥0∞` weight; `B2` is its weight-one case.
-[Analysis/VectorLocalCoarea](FunctionalInequalities/Analysis/Vector/LocalCoarea.lean) joins that to
+[Analysis/VectorLocalCoarea](FunctionalInequalities/Analysis/Vector/Coarea/Local.lean) joins that to
 the ambient-side identity by Tonelli in the level variable, giving the **local codimension-`m`
 coarea equality**: every point where the differential is surjective has an open neighbourhood on
 every Borel subset of which the coarea equality holds, for every measurable weight, with the surface
 measure in dimension `finrank V - finrank W`. For `m = 1` this returns the proved scalar statements.
-[Analysis/VectorRegularCoarea](FunctionalInequalities/Analysis/Vector/RegularCoarea.lean) supplies
+[Analysis/VectorRegularCoarea](FunctionalInequalities/Analysis/Vector/Coarea/Regular.lean) supplies
 the last two steps and **proves the codimension-`m` regular coarea formula**,
 `coarea_of_contDiffOn_of_coareaJacobian_ne_zero`, the analogue of the scalar `L9`: on an open set
 where the differential is everywhere surjective, for every Borel subset and every measurable
@@ -110,14 +110,14 @@ section, not from an Eilenberg inequality — the codimension-`m` Eilenberg slic
 **not** proved — so it holds only where the differential is surjective. **The general
 codimension-`m` coarea formula remains open**: it needs the critical set, hence a codimension-`m`
 Sard or critical-slice argument, and slice measurability without regularity.
-[Analysis/VectorHausdorffSlicing](FunctionalInequalities/Analysis/Vector/HausdorffSlicing.lean)
+[Analysis/VectorHausdorffSlicing](FunctionalInequalities/Analysis/Vector/Slice/Hausdorff.lean)
 proves the **Eilenberg slicing inequality in codimension `m`**, in the measurable-majorant form the
 route needs, together with its null-slicing corollary in both conventions; the codimension enters
 only through the cover pieces' images lying in a **ball** rather than an interval, which is where
 the `m`-th power of the Lipschitz constant comes from, and for `m = 1` the constant is exactly the
 scalar `2 K`. It does **not** give slice measurability: that also needs codimension-`m`
 compact-slice measurability, which
-[Analysis/VectorSliceMeasurable](FunctionalInequalities/Analysis/Vector/SliceMeasurable.lean) then
+[Analysis/VectorSliceMeasurable](FunctionalInequalities/Analysis/Vector/Slice/Measurable.lean) then
 supplies, reusing the ambient half of `HausdorffContent.lean` verbatim and redoing only the slice
 half for a metric target. With it the chain closes: weighted slice measurability for a map Lipschitz
 on a Borel set, and for a map `C¹` on an open set only — **with no surjectivity of the
@@ -126,7 +126,7 @@ statements are recovered, the open-domain one with the extra hypothesis `1 ≤ f
 rather than hidden. **This is still not a coarea formula**: what is removed is the regularity
 hypothesis from the measurability half, not from the coarea equality, whose critical part needs a
 codimension-`m` Sard or critical-slice argument.
-[Analysis/VectorCriticalSlice](FunctionalInequalities/Analysis/Vector/CriticalSlice.lean) proves that
+[Analysis/VectorCriticalSlice](FunctionalInequalities/Analysis/Vector/Slice/Critical.lean) proves that
 part of it: for `m ≥ 1` almost every level meets the **vanishing-derivative** set in an
 `ℋ^{n−m}`-null set, and hence the coarea formula holds on the whole space whenever the derivative
 vanishes wherever it fails to be surjective. For `m = 1` that hypothesis is automatic and the audit
@@ -136,7 +136,7 @@ exhibits a rank-one map of the plane whose derivative is nowhere zero and nowher
 rank-deficient part was given a route exploration on 2026-09-17, recorded as fifteen proposition
 type-checks in `research/audits/RankDeficientRouteStatements.lean`; a proposition that type-checks
 is not a proof.
-[Analysis/RankStratification](FunctionalInequalities/Analysis/RankDeficient/Stratification.lean), a
+[Analysis/RankStratification](FunctionalInequalities/Analysis/Vector/RankDeficient/Stratification.lean), a
 Mathlib-only module, then proved **exactly two** of them: `R2`, the kernel lemma saying that a
 projection which preserves the rank of a linear map preserves its kernel, so that on a stratum the
 differential vanishes along the fibre of the regular component — with a counterexample showing its
@@ -144,32 +144,32 @@ dimension hypothesis is necessary — and `R1`, the measurability of the rank st
 differential together with the decomposition of the critical set into the finitely many strata of
 rank below the target dimension. **`R0`, `R3`–`R10`, `N1` and `N2` are still unproved**, the
 rank-deficient part is still open, and none of this is a coarea formula or a Sard theorem.
-[Analysis/RightInverseBound](FunctionalInequalities/Analysis/RankDeficient/RightInverseBound.lean), also
+[Analysis/RightInverseBound](FunctionalInequalities/Analysis/Vector/RankDeficient/RightInverseBound.lean), also
 Mathlib-only, then proved `R3` in both versions: a surjection onto a finite-dimensional space puts
 every vector within `C ‖L z‖` of its kernel, and around a point where the differential of a `C¹`
 map is surjective one neighbourhood carries a single such constant — the form the route needs,
 because the `ε → 0` limit uses a different approximating partition at every scale. Both need no
 inner product and no finite-dimensional domain. **`R0`, `R4`–`R10`, `N1` and `N2` are still
 unproved**, and `R4` is the point of no return.
-[Analysis/TangentialLipschitz](FunctionalInequalities/Analysis/RankDeficient/TangentialLipschitz.lean) then proved
+[Analysis/TangentialLipschitz](FunctionalInequalities/Analysis/Vector/RankDeficient/TangentialLipschitz.lean) then proved
 `R4` itself: on every fibre of `P ∘ f` the projected map `Q ∘ f` is Lipschitz with a constant
 proportional to the approximation parameter, the proportionality depending only on the linear data
 and never on that parameter. That the point of no return holds means the route has **not been
 refuted** at its critical analytic step; it does **not** mean `R0` holds. **`R0`, `R5`–`R10`, `N1`
 and `N2` are still unproved**, and `R7` remains the only high-risk item.
-[Analysis/RegularFibreFinite](FunctionalInequalities/Analysis/RankDeficient/RegularFibreFinite.lean) and
-[Analysis/TargetSplitFubini](FunctionalInequalities/Analysis/RankDeficient/TargetSplitFubini.lean) then proved
+[Analysis/RegularFibreFinite](FunctionalInequalities/Analysis/Vector/RankDeficient/RegularFibreFinite.lean) and
+[Analysis/TargetSplitFubini](FunctionalInequalities/Analysis/Vector/RankDeficient/TargetSplitFubini.lean) then proved
 `R5` and `R6`: the fibres of a regular `C¹` map meet a relatively compact piece in a set of finite
 `ℋ^{n−r}` measure at almost every level — a corollary of the proved regular coarea formula, whose
 applicability it extends by nothing — and a set with almost everywhere null slices across an
 orthogonal splitting of the target is null. **`R0`, `R7`–`R10`, `N1` and `N2` are still unproved**;
 only `R7`, still the one high-risk item, now stands between the proved pieces and `R0`.
-[Analysis/StratumSlicing](FunctionalInequalities/Analysis/RankDeficient/StratumSlicing.lean) then proved **`R7`**:
+[Analysis/StratumSlicing](FunctionalInequalities/Analysis/Vector/RankDeficient/StratumSlicing.lean) then proved **`R7`**:
 around every point of the rank-`r` stratum there is a neighbourhood in which almost every level meets
 the stratum in an `ℋ^k`-null set. The route runs the approximating partition on `u` itself, makes the
 projected map small-Lipschitz along the fibres of the regular component, applies the Eilenberg bound
 **inside a fibre** where `k + (m − r) = n − r` is exactly the right exponent, and integrates against
-the proved regular coarea formula. [Analysis/RankDeficientCoarea](FunctionalInequalities/Analysis/RankDeficient/Coarea.lean) then proved
+the proved regular coarea formula. [Analysis/RankDeficientCoarea](FunctionalInequalities/Analysis/Vector/RankDeficient/Coarea.lean) then proved
 `R8`, **`R0`** and **`R9`**: the whole critical set of a `C¹` map is `ℋ^k`-null in almost every
 level, and **the codimension-`m` coarea formula holds with no hypothesis on the critical set**. That
 closes the rank-deficient gap of the program. **It is not a Sard theorem**: nothing is claimed about
@@ -189,7 +189,7 @@ the diagnostic **`N2` false as written** — at `finrank ℝ V = 0` the truncate
 `μH[0]` of the one point of nonzero volume is `1`, not `⊤` — and proved the repair,
 `N2` with `0 < finrank ℝ V`, a hypothesis the counterexample shows is necessary and which is free
 wherever the route appeals to `N2`.
-[Analysis/ExponentObstruction](FunctionalInequalities/Analysis/RankDeficient/ExponentObstruction.lean) then proved
+[Analysis/ExponentObstruction](FunctionalInequalities/Analysis/Vector/RankDeficient/ExponentObstruction.lean) then proved
 **`N1`**, the last open item: with `S` measurable of finite `μH[n]`, a positive-dimensional `W₂`,
 and `Q ∘ u` made `ε`-Lipschitz at every scale on the pieces of a countable measurable partition,
 almost every level of `Q ∘ u` meets `S` in a `μH[n − dim W₂]`-null set; **no regularity of `u` is
@@ -209,23 +209,23 @@ remains **missing** the integrated superlevel bound and reverse comparison.
 The relative-perimeter work now has a WIP-free geometry foundation in
 `KLS/Geometry/{SmoothDomain,Mollification,GaussGreen,MollifiedBoundary}.lean`.
 The pointwise mollified gradient bound, the quantitative outward-dilation integral bound and the
-smooth recovery sequence are proved; `KLS/Geometry/RelativePerimeter.lean` contains the dilation
-bound and `KLS/Geometry/PerimeterRecovery.lean` the recovery sequence, with SurfaceHomothety and
+smooth recovery sequence are proved; `KLS/Geometry/Perimeter/Relative.lean` contains the dilation
+bound and `KLS/Geometry/Perimeter/Recovery.lean` the recovery sequence, with SurfaceHomothety and
 LogConcave/DensityBounds as inputs. `KLS/WIP/RelativePerimeter.lean` was emptied and deleted.
 The Minkowski coarea inequality `∫ ν⁺({u ≥ t}) dt ≤ ∫ ‖∇u‖ dν` is proved in
-`KLS/Geometry/MinkowskiContent.lean`, a hole-free module whose local import closure is empty, and
-its multiplied form `h_M · ∫₀¹ m(ν{u > t}) dt ≤ ∫ ‖∇u‖ dν` in `KLS/Geometry/MinkowskiConstant.lean`,
+`KLS/Geometry/Cheeger/MinkowskiContent.lean`, a hole-free module whose local import closure is empty, and
+its multiplied form `h_M · ∫₀¹ m(ν{u > t}) dt ≤ ∫ ‖∇u‖ dν` in `KLS/Geometry/Cheeger/MinkowskiConstant.lean`,
 a hole-free module importing only the former, which also owns the migrated `minkowskiConstant`.
 The one-sided comparison `h_M ≤ h_S`
 (`minkowskiConstant_le_smoothConstant`) is proved in `KLS/Geometry/Cheeger/Infimum.lean`, a hole-free
 module whose local import closure contains no WIP module and which also owns the migrated
 `smoothConstant`. The distance-cutoff gradient estimate
-`lintegral_enorm_gradient_distanceCutoff_le` is proved in `KLS/Geometry/DistanceCutoff.lean`, a
+`lintegral_enorm_gradient_distanceCutoff_le` is proved in `KLS/Geometry/Cheeger/DistanceCutoff.lean`, a
 hole-free module whose local import closure is empty, which also owns the migrated cutoff basis.
 The regular-value construction `SmoothDomain.ofSuperlevel` — a strict superlevel set of a `C^∞`
 function is a smooth domain once `fderiv ℝ u` is nonzero on its **frontier** — is proved, without
-`sorryAx`, in `KLS/Geometry/SmoothDomain.lean`. With it, the packaging
-`SmoothDomain.ae_exists_superlevel` now lives in `KLS/Geometry/RegularSuperlevel.lean` and
+`sorryAx`, in `KLS/Geometry/SmoothDomain/Basic.lean`. With it, the packaging
+`SmoothDomain.ae_exists_superlevel` now lives in `KLS/Geometry/SmoothDomain/RegularSuperlevel.lean` and
 is proved from `Analysis.sard_smooth` without `sorryAx`. No library module imports
 `KLS/WIP/AnalyticPrerequisites.lean`.
 
@@ -235,7 +235,7 @@ only**, the slice function `t ↦ surfaceMeasure V (S ∩ {u = t})` is dominated
 `eilenbergConstant V = 4 ω_{n-1} / ω_n` being explicit and positive
 (`KLS.exists_measurable_majorant`, `KLS.eilenbergConstant_pos` in
 `KLS/Geometry/Surface/Slicing.lean`, over the Mathlib-only, dimension-free
-`Analysis.exists_measurable_majorant` in `Analysis/HausdorffSlicing.lean`); no sharpness is
+`Analysis.exists_measurable_majorant` in `Analysis/Hausdorff/Slicing.lean`); no sharpness is
 claimed. Its null case is `L2`: a Lebesgue-null set has `surfaceMeasure`-null slices along almost
 every level (`KLS.ae_surfaceMeasure_inter_levelSet_eq_zero`). `S` need not be measurable, bounded,
 nonempty or of finite volume, `u` need not be globally Lipschitz, differentiable or measurable,
@@ -246,7 +246,7 @@ Measurability is asserted only of that majorant, so it supplies no fibre measura
 Obligation `L3` is **proved** separately: for `S` **compact** and `u` merely continuous,
 `t ↦ surfaceMeasure V (S ∩ {u = t})` is Borel measurable
 (`KLS.measurable_surfaceMeasure_inter_levelSet`, over the Mathlib-only
-`Analysis.measurable_hausdorffMeasure_inter_levelSet` in `Analysis/HausdorffContent.lean`), with
+`Analysis.measurable_hausdorffMeasure_inter_levelSet` in `Analysis/Hausdorff/Content.lean`), with
 no Lipschitz, finite-dimensionality or finiteness hypothesis. It is not a consequence of `L1`. The
 route goes through the scalewise **open**-cover costs, each upper semicontinuous in the level and
 with scale limit `μH[d]`; upper semicontinuity of `μH[d]` itself is **not** claimed and would be
@@ -258,14 +258,14 @@ Lebesgue-null remainder, `L3` handles the pieces, `L2` the remainder — and `L5
 functions, with **no** parametric-integral theorem, so the inner measure is never assumed
 `SFinite`. With `S = univ` this proves the first original target `T1`, and the corresponding direct hole
 `Analysis.aemeasurable_lintegral_levelSet` has now been **migrated** out of
-`KLS/WIP/AnalyticPrerequisites.lean` into the hole-free `KLS/Geometry/LevelSetMeasurable.lean`
+`KLS/WIP/AnalyticPrerequisites.lean` into the hole-free `KLS/Geometry/Slice/Measurable.lean`
 with a machine-checked byte-identical `pp.all` signature, where it is proved and no longer depends
 on `sorryAx`. These results give measurability. The C¹ equality is proved below via L11;
 the Lipschitz equality is proved via L6a/L7/L12 and its `T2` entry point has now been migrated in
 the same way. Sharp C^(finrank) Sard (no downstream consumer) and the reverse Cheeger comparison
 remain open.
 
-Obligation `L10` is **proved** in `KLS/Geometry/CriticalSlice.lean`: for a `C¹` real function,
+Obligation `L10` is **proved** in `KLS/Geometry/Slice/Critical.lean`: for a `C¹` real function,
 almost every level meets the critical set `{x | fderiv ℝ u x = 0}` in a `surfaceMeasure`-null set
 (`KLS.ae_surfaceMeasure_critical_inter_levelSet_eq_zero`), with no Lipschitz, boundedness or
 measurability hypothesis. It is the first genuine consumer of the Eilenberg bound `L1`: on the
@@ -282,11 +282,11 @@ slice measurability and the exact coarea equality for regular C¹ functions on a
 with arbitrary Borel subsets and measurable ENNReal weights. The proof uses a joint C¹ inverse,
 volume-preserving orthogonal splitting, fiberwise Jacobian substitution, graph area, and disjoint
 Borel gluing. No outside-domain regularity or finiteness assumption is added.
-[OpenSliceMeasurable](FunctionalInequalities/KLS/Geometry/OpenSliceMeasurable.lean) proves the
+[OpenSliceMeasurable](FunctionalInequalities/KLS/Geometry/Slice/OpenMeasurable.lean) proves the
 measurability component by localizing L5. The Mathlib-only
 [LocalInverse](FunctionalInequalities/Analysis/LocalInverse.lean) and
-[FiberIntegral](FunctionalInequalities/Analysis/FiberIntegral.lean), with
-[RegularChart](FunctionalInequalities/Analysis/RegularChart.lean), supply the new analytic layer.
+[FiberIntegral](FunctionalInequalities/Analysis/Coarea/FiberIntegral.lean), with
+[RegularChart](FunctionalInequalities/Analysis/Coarea/RegularChart.lean), supply the new analytic layer.
 See the [L9 decision](../research/decisions/2026-09-15-regular-coarea.md).
 
 `L6a`, `L7` and `L12` are now proved. Sharp `C^(finrank)` Sard, Eilenberg constant sharpness,
@@ -323,13 +323,13 @@ The independent `Analysis.sard_of_finrank_le_one` is proved in `Analysis/Sard/Ba
 axioms only and Mathlib-only imports: general real normed spaces, finrank ≤ 1, C^(finrank),
 including dimension zero without extra C¹. It does not resolve the general Sard hole.
 
-`Analysis.exists_uniform_quadratic_remainder` is now proved in `Analysis/TaylorRemainder.lean`:
+`Analysis.exists_uniform_quadratic_remainder` is now proved in `Analysis/Sard/TaylorRemainder.lean`:
 for C² functions on arbitrary real normed spaces, the quadratic remainder is uniformly small
 near the points of compact K where the first two derivatives vanish. Nearby points may be outside
 K. This standard-axiom estimate does not prove image nullity or general Sard; see the
 [remainder decision](../research/decisions/2026-09-14-uniform-quadratic-remainder.md).
 
-`Analysis/QuadraticCover.lean` adds `Analysis.volume_image_eq_zero_of_quadratic_oscillation` and
+`Analysis/Sard/QuadraticCover.lean` adds `Analysis.volume_image_eq_zero_of_quadratic_oscillation` and
 `Analysis.volume_image_flat_eq_zero`, both with standard axioms only. A bounded planar set on which
 a function oscillates quadratically in the mutual distance has Lebesgue null image, with no
 measurability of the set or of its image and no regularity of the function; feeding the uniform
@@ -375,7 +375,7 @@ declaration still inherits `sorryAx` and the sharp `C^n` `Analysis.sard` remains
 the [smooth Sard decision](../research/decisions/2026-09-15-smooth-sard.md).
 
 `SmoothDomain.ae_exists_superlevel` and `SmoothDomain.frontier_superlevel_subset` have since moved
-out of `KLS/WIP/CheegerInfimum.lean` into the hole-free `KLS/Geometry/RegularSuperlevel.lean` with
+out of `KLS/WIP/CheegerInfimum.lean` into the hole-free `KLS/Geometry/SmoothDomain/RegularSuperlevel.lean` with
 byte-identical signatures, and the former is proved from the smooth Sard theorem, so it **no longer
 inherits `sorryAx`**. `WIP/CheegerInfimum.lean` no longer imports `WIP/AnalyticPrerequisites`, and
 no module does. Direct holes are unchanged at 11 — a filled body moved, not a hole — and the sharp
@@ -426,7 +426,7 @@ The literal target is in [`KLS/Statement.lean`](FunctionalInequalities/KLS/State
 compact-set log-concavity and the intrinsic local-slope literature constant in
 [`KLS/Definitions.lean`](FunctionalInequalities/KLS/Definitions.lean). These modules define the
 current conjecture and do not prove it. They share the existing covariance operator through
-[`Probability/Covariance.lean`](FunctionalInequalities/Probability/Covariance.lean).
+[`Probability/Covariance/Basic.lean`](FunctionalInequalities/Probability/Covariance/Basic.lean).
 [`StatementChecks.lean`](../solutions/StatementChecks.lean) checks the expanded target and
 constant-function/zero-dimensional boundary encodings in the default build.
 The [local workflow](../research/verification.md) adds task selection and snapshot-bound evidence.
@@ -454,9 +454,9 @@ reading order and placement rules:
 
 | Topic | Entry points and guide |
 | --- | --- |
-| Probability | [Basic](FunctionalInequalities/Probability/Basic.lean), [AffineSupport](FunctionalInequalities/Probability/AffineSupport.lean), [IntrinsicCovariance](FunctionalInequalities/Probability/IntrinsicCovariance.lean), [Covariance](FunctionalInequalities/Probability/Covariance.lean), [CovarianceSqrt](FunctionalInequalities/Probability/CovarianceFactorization.lean), [CovarianceWhitening](FunctionalInequalities/Probability/CovarianceWhitening.lean), [BallDomination](FunctionalInequalities/Probability/BallDomination.lean), [BallAverages](FunctionalInequalities/Probability/BallAverages.lean), [TwoPointVariance](FunctionalInequalities/Probability/TwoPointVariance.lean) |
+| Probability | [Basic](FunctionalInequalities/Probability/Basic.lean), [AffineSupport](FunctionalInequalities/Probability/AffineSupport.lean), [IntrinsicCovariance](FunctionalInequalities/Probability/Covariance/Intrinsic.lean), [Covariance](FunctionalInequalities/Probability/Covariance/Basic.lean), [CovarianceSqrt](FunctionalInequalities/Probability/Covariance/Factorization.lean), [CovarianceWhitening](FunctionalInequalities/Probability/Covariance/Whitening.lean), [BallDomination](FunctionalInequalities/Probability/Domination/Ball.lean), [BallAverages](FunctionalInequalities/Probability/Domination/Averages.lean), [TwoPointVariance](FunctionalInequalities/Probability/TwoPointVariance.lean) |
 | Real L² | [MeanVariance](FunctionalInequalities/L2/MeanVariance.lean) |
-| Geometric analysis | [LevelSet](FunctionalInequalities/Analysis/LevelSet.lean): Prékopa–Leindler and Brunn–Minkowski on `V`, the isodiametric inequality, the Hausdorff normalization `μH[n] = (2^n / ω_n) • volume`, and finiteness of `μH[n-1]` near a regular level set. [AreaFormula](FunctionalInequalities/Analysis/AreaFormula.lean): the codimension-one area formula `ℋ^k(graph of g over s) = ∫_s √(1 + ‖∇g‖²)` for a `C¹` function `g`, in the linear and the general case. [Divergence](FunctionalInequalities/Analysis/Divergence.lean): `div F = tr (DF)` and the rank-one trace identity `div (η • v) = ⟪∇η, v⟫`. [ImplicitGraph](FunctionalInequalities/Analysis/Graph/Implicit.lean): the local `C^∞` graph representation of a regular level set (`exists_graphRepr`, via the `C^k` inverse function theorem), the gradient identity `∇φ = ⟪∇φ, e⟫ • (ι(-∇g) + e)` along the graph, and the area formula for a translated graph. [SubgraphDivergence](FunctionalInequalities/Analysis/SubgraphDivergence.lean): the divergence formula on the region below a `C¹` graph, `∫_S div F = ∫_H ⟪F ∘ Ψ, ι(-∇g) + e⟫` (`integral_divergence_subgraph`), together with the measure-preserving shear chart, the basis-free trace splitting `div F = tangentDiv ι (DF) + ⟪e, DF e⟫`, and `integral_divergence_eq_zero` (no boundary term on the whole space, by induction on the dimension). [GraphIntegral](FunctionalInequalities/Analysis/Graph/Integral.lean): the weighted change of variables `∫_{Ψ '' s} f dℋ^k = ∫_s √(1 + ‖∇g‖²) • f (Ψ y) dy` that turns the area formula from an identity of measures of sets into one for arbitrary integrands; measurability only, no integrability hypothesis. [OpenGraphIntegral](FunctionalInequalities/Analysis/Graph/OpenIntegral.lean): the weighted graph-area change of variables for a graph function that is `C¹` only on an **open** set (`setLIntegral_image_graphMap_of_contDiffOn`, obligation `L8`), together with the `C¹` interior localization `exists_contDiff_one_eqOn_ball` — a `ContDiffOn` function on an open set need not extend globally (`x ↦ x⁻¹` on `(0, ∞)`), so the reduction is a countable decomposition into disjoint measurable pieces carrying local `C¹` representatives; not the compact-set Whitney extension, which is now proved separately as `L6` in [WhitneyConstruction](FunctionalInequalities/Analysis/Whitney/Construction.lean). [HausdorffContent](FunctionalInequalities/Analysis/HausdorffContent.lean): the scalewise Hausdorff cover costs `familyCost`, `coverCost` and the open-cover variant `openCoverCost`, the scale-limit identity `⨆ n, openCoverCost d (n+1)⁻¹ A = μH[d] A` (`iSup_openCoverCost_eq_hausdorffMeasure`, by thickening a near-optimal cover with summably small radii), upper semicontinuity of each open-cover cost along the level slices of a compact set (`upperSemicontinuous_openCoverCost_slice`, from `isOpen_setOf_slice_subset`), and hence Borel measurability of `t ↦ μH[d] (S ∩ {u = t})` for `S` compact and `u` continuous (`measurable_hausdorffMeasure_inter_levelSet`); no claim of upper semicontinuity of `μH[d]` itself, and nothing about noncompact `S`. [HausdorffSlicing](FunctionalInequalities/Analysis/HausdorffSlicing.lean): the Eilenberg slicing bound along a real function Lipschitz on the sliced set only — near-optimal countable covers at every scale (`exists_cover_cost_lt`, with the null case `exists_cover_of_hausdorffMeasure_eq_zero`), their level slabs (`exists_levelSlab`), the one-point majorant for a function constant on the set (`exists_measurable_majorant_of_eqOn`), and the resulting measurable majorant `exists_measurable_majorant` with `∫⁻ F ≤ 2 K μH[d+1] S` on an arbitrary `EMetricSpace`, whose null case `ae_hausdorffMeasure_inter_levelSet_eq_zero` gives `μH[d] (N ∩ {u = t}) = 0` for a.e. `t`; no measurability of the sliced set or of the slice function, and `K = 0`, `d = 0` and infinite cover cost are explicit branches. [PartitionOfUnity](FunctionalInequalities/Analysis/PartitionOfUnity.lean): the finite smooth decomposition `exists_finset_sum_eq_of_isOpen_cover` — a compactly supported `C^n` map whose support is covered by open sets `W i` is a **finite** sum of compactly supported `C^n` maps with `tsupport (G i) ⊆ W i`, the sum identity holding at every point of the space. All proved, KLS-independent and `sorry`-free; their base definitions are in [KLS/Geometry/SurfaceMeasure](FunctionalInequalities/KLS/Geometry/Surface/Measure.lean), and the `SmoothDomain` consequences (outward normal, boundary chart, surface measure of a boundary piece, chart-local Gauss–Green, and the **global** Gauss–Green theorem `∫_U div F = ∫_{∂U} ⟪F, ν⟫ dℋ^{n-1}` for any compactly supported `C¹` field) in [KLS/Geometry/BoundaryChart](FunctionalInequalities/KLS/Geometry/BoundaryChart.lean), [KLS/Geometry/LocalGaussGreen](FunctionalInequalities/KLS/Geometry/LocalGaussGreen.lean) and [KLS/Geometry/GaussGreen](FunctionalInequalities/KLS/Geometry/GaussGreen.lean) |
+| Geometric analysis | [LevelSet](FunctionalInequalities/Analysis/Hausdorff/LevelSet.lean): Prékopa–Leindler and Brunn–Minkowski on `V`, the isodiametric inequality, the Hausdorff normalization `μH[n] = (2^n / ω_n) • volume`, and finiteness of `μH[n-1]` near a regular level set. [AreaFormula](FunctionalInequalities/Analysis/Graph/Area.lean): the codimension-one area formula `ℋ^k(graph of g over s) = ∫_s √(1 + ‖∇g‖²)` for a `C¹` function `g`, in the linear and the general case. [Divergence](FunctionalInequalities/Analysis/Divergence.lean): `div F = tr (DF)` and the rank-one trace identity `div (η • v) = ⟪∇η, v⟫`. [ImplicitGraph](FunctionalInequalities/Analysis/Graph/Implicit.lean): the local `C^∞` graph representation of a regular level set (`exists_graphRepr`, via the `C^k` inverse function theorem), the gradient identity `∇φ = ⟪∇φ, e⟫ • (ι(-∇g) + e)` along the graph, and the area formula for a translated graph. [SubgraphDivergence](FunctionalInequalities/Analysis/Graph/Divergence.lean): the divergence formula on the region below a `C¹` graph, `∫_S div F = ∫_H ⟪F ∘ Ψ, ι(-∇g) + e⟫` (`integral_divergence_subgraph`), together with the measure-preserving shear chart, the basis-free trace splitting `div F = tangentDiv ι (DF) + ⟪e, DF e⟫`, and `integral_divergence_eq_zero` (no boundary term on the whole space, by induction on the dimension). [GraphIntegral](FunctionalInequalities/Analysis/Graph/Integral.lean): the weighted change of variables `∫_{Ψ '' s} f dℋ^k = ∫_s √(1 + ‖∇g‖²) • f (Ψ y) dy` that turns the area formula from an identity of measures of sets into one for arbitrary integrands; measurability only, no integrability hypothesis. [OpenGraphIntegral](FunctionalInequalities/Analysis/Graph/OpenIntegral.lean): the weighted graph-area change of variables for a graph function that is `C¹` only on an **open** set (`setLIntegral_image_graphMap_of_contDiffOn`, obligation `L8`), together with the `C¹` interior localization `exists_contDiff_one_eqOn_ball` — a `ContDiffOn` function on an open set need not extend globally (`x ↦ x⁻¹` on `(0, ∞)`), so the reduction is a countable decomposition into disjoint measurable pieces carrying local `C¹` representatives; not the compact-set Whitney extension, which is now proved separately as `L6` in [WhitneyConstruction](FunctionalInequalities/Analysis/Whitney/Construction.lean). [HausdorffContent](FunctionalInequalities/Analysis/Hausdorff/Content.lean): the scalewise Hausdorff cover costs `familyCost`, `coverCost` and the open-cover variant `openCoverCost`, the scale-limit identity `⨆ n, openCoverCost d (n+1)⁻¹ A = μH[d] A` (`iSup_openCoverCost_eq_hausdorffMeasure`, by thickening a near-optimal cover with summably small radii), upper semicontinuity of each open-cover cost along the level slices of a compact set (`upperSemicontinuous_openCoverCost_slice`, from `isOpen_setOf_slice_subset`), and hence Borel measurability of `t ↦ μH[d] (S ∩ {u = t})` for `S` compact and `u` continuous (`measurable_hausdorffMeasure_inter_levelSet`); no claim of upper semicontinuity of `μH[d]` itself, and nothing about noncompact `S`. [HausdorffSlicing](FunctionalInequalities/Analysis/Hausdorff/Slicing.lean): the Eilenberg slicing bound along a real function Lipschitz on the sliced set only — near-optimal countable covers at every scale (`exists_cover_cost_lt`, with the null case `exists_cover_of_hausdorffMeasure_eq_zero`), their level slabs (`exists_levelSlab`), the one-point majorant for a function constant on the set (`exists_measurable_majorant_of_eqOn`), and the resulting measurable majorant `exists_measurable_majorant` with `∫⁻ F ≤ 2 K μH[d+1] S` on an arbitrary `EMetricSpace`, whose null case `ae_hausdorffMeasure_inter_levelSet_eq_zero` gives `μH[d] (N ∩ {u = t}) = 0` for a.e. `t`; no measurability of the sliced set or of the slice function, and `K = 0`, `d = 0` and infinite cover cost are explicit branches. [PartitionOfUnity](FunctionalInequalities/Analysis/PartitionOfUnity.lean): the finite smooth decomposition `exists_finset_sum_eq_of_isOpen_cover` — a compactly supported `C^n` map whose support is covered by open sets `W i` is a **finite** sum of compactly supported `C^n` maps with `tsupport (G i) ⊆ W i`, the sum identity holding at every point of the space. All proved, KLS-independent and `sorry`-free; their base definitions are in [KLS/Geometry/SurfaceMeasure](FunctionalInequalities/KLS/Geometry/Surface/Measure.lean), and the `SmoothDomain` consequences (outward normal, boundary chart, surface measure of a boundary piece, chart-local Gauss–Green, and the **global** Gauss–Green theorem `∫_U div F = ∫_{∂U} ⟪F, ν⟫ dℋ^{n-1}` for any compactly supported `C¹` field) in [KLS/Geometry/BoundaryChart](FunctionalInequalities/KLS/Geometry/SmoothDomain/BoundaryChart.lean), [KLS/Geometry/LocalGaussGreen](FunctionalInequalities/KLS/Geometry/SmoothDomain/LocalGaussGreen.lean) and [KLS/Geometry/GaussGreen](FunctionalInequalities/KLS/Geometry/SmoothDomain/GaussGreen.lean) |
 | Energy | [Guide](FunctionalInequalities/Energy/README.md): general interfaces, `Relaxation/`, and `Euclidean/` |
 | Poincaré | [Foundation guide](FunctionalInequalities/Poincare/README.md), [Euclidean comparisons](FunctionalInequalities/Poincare/Euclidean/README.md), [affine covariance constant](FunctionalInequalities/Poincare/CovarianceGradient/Intrinsic.lean), [its ambient translation invariance](FunctionalInequalities/Poincare/CovarianceGradient/Translation.lean), [Lipschitz/literature bridge](FunctionalInequalities/Poincare/LipschitzGradient/Comparison.lean), [Gaussian guide](FunctionalInequalities/Poincare/Gaussian/README.md); product modules are in `Poincare/Product/` and `Poincare/FiniteProduct/` |
 | KLS | [Guide](FunctionalInequalities/KLS/README.md), including [log-concavity](FunctionalInequalities/KLS/LogConcave/README.md), isotropy, isoperimetry, conditional fibers and their Dirichlet form (`KLS/ConditionalFiber/Closed.lean`), the explicit slice kernel and the log-concave fiber input `κ = 4`, the log-concave contracts of the affine covariance constant, log-concavity under ambient translation and the affine/isotropic reduction of KLS |
@@ -530,14 +530,14 @@ identity of `Probability/TwoPointVariance.lean`), and under a fiber Poincaré in
 frames). For a full-dimensional log-concave law that input is supplied with `κ = 4`: base-law almost
 every conditional fiber is log-concave on the line (`KLS/LogConcave/ConditionalFiber.lean`, via the
 explicit slice kernel of `KLS/ConditionalFiber/SliceKernel.lean`, the Haar line splitting of
-`Probability/HaarLine.lean` and the one-dimensional Prékopa--Leindler inequality of
+`Probability/Line/Haar.lean` and the one-dimensional Prékopa--Leindler inequality of
 `Probability/Line/BrunnMinkowski.lean` with `KLS/LogConcave/Line/OfDensity.lean`), so
 `D_{μ,ρ}(f) ≤ 4 ∫‖∇f‖² dμ` and `C_P^lit(μ) ≤ 4 C`; the frame question is still open. It
 does **not** provide raw-gradient fiber consistency for singular measures;
 `Energy/SmoothGradient/NormalDirection.lean` proves that fiber consistency fails for the ambient
 pre-energy on every proper affine support. The identification with the metric Cheeger energy
 `𝓔^can = 2 · Ch` is proved whenever the intrinsic law is absolutely continuous with respect to a
-Haar measure, hence for every log-concave law (`Energy/Cheeger.lean` on top of
+Haar measure, hence for every log-concave law (`Energy/Cheeger/Basic.lean` on top of
 `Energy/LocalSlope/Relaxation.lean`, `cor:absolutely-continuous-relaxation-two-cheeger`); the
 singular case stays open in `Energy/WIP/Cheeger.lean`. The ambient/intrinsic and smooth-test/relaxed comparisons
 are proved and do not require raw/core agreement. Their comparison with the locally Lipschitz

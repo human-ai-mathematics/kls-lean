@@ -1,4 +1,4 @@
-import FunctionalInequalities.Energy.Functional
+import FunctionalInequalities.Energy.Form.Functional
 import Mathlib.Data.ENNReal.Inv
 import Mathlib.Topology.Instances.ENNReal.Lemmas
 import Mathlib.Topology.Order.LiminfLimsup

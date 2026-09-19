@@ -1,4 +1,4 @@
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroupMarkov
+import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Markov
 
 /-!
 # Audit: Markov property of the log-concave heat semigroup

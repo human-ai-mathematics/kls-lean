@@ -1,5 +1,5 @@
-import FunctionalInequalities.Analysis.AreaFormula
-import FunctionalInequalities.KLS.Geometry.SmoothDomain
+import FunctionalInequalities.Analysis.Graph.Area
+import FunctionalInequalities.KLS.Geometry.SmoothDomain.Basic
 import Mathlib.Analysis.Calculus.Rademacher
 import Mathlib.Analysis.Calculus.ImplicitContDiff
 import Mathlib.MeasureTheory.Function.Egorov

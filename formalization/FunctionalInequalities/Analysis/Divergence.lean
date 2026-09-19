@@ -43,7 +43,7 @@ def divergence (F : V → V) (x : V) : ℝ :=
   LinearMap.trace ℝ V (fderiv ℝ F x).toLinearMap
 
 /-- A function vanishing outside its support has vanishing derivative there.  Moved down from
-`Analysis/SubgraphDivergence.lean`, which still uses it, so that the support lemmas of the
+`Analysis/Graph/Divergence.lean`, which still uses it, so that the support lemmas of the
 divergence can live next to the definition. -/
 theorem fderiv_eq_zero_of_notMem_tsupport {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
     {F : V → E} {x : V} (hx : x ∉ tsupport F) : fderiv ℝ F x = 0 := by

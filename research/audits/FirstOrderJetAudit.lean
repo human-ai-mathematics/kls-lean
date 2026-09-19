@@ -1,4 +1,4 @@
-import FunctionalInequalities.Analysis.FirstOrderJet
+import FunctionalInequalities.Analysis.Whitney.FirstOrderJet
 import Mathlib.Analysis.InnerProductSpace.Basic
 import Mathlib.Analysis.Calculus.ContDiff.Operations
 import Mathlib.MeasureTheory.Constructions.BorelSpace.Basic
@@ -6,7 +6,7 @@ import Mathlib.MeasureTheory.Constructions.BorelSpace.Basic
 /-!
 # Strict audit client for the first-order jet condition (necessity half of `L6`)
 
-Independent client of `Analysis/FirstOrderJet.lean`.
+Independent client of `Analysis/Whitney/FirstOrderJet.lean`.
 
 **`L6` is NOT proved.**  The `#check` below records its statement text verbatim so that the open
 obligation stays pinned, and no theorem in this client proves it.  What is proved is the converse,

@@ -1,11 +1,11 @@
 import FunctionalInequalities.Analysis.Graph.Jacobian
-import FunctionalInequalities.Analysis.NormDetContinuity
+import FunctionalInequalities.Analysis.Vector.JacobianContinuity
 
 /-! # Graphs of vector-valued maps
 
 Obligation `B1` of the area formula route, first part: the `C¹` infrastructure for the graph of a
 **`K`-valued** map, `dim K = m`, which is what a codimension-`m` fibre looks like.  The
-codimension-one case lives in `Analysis/AreaFormula.lean`; this module mirrors its second and third
+codimension-one case lives in `Analysis/Graph/Area.lean`; this module mirrors its second and third
 phases — the graph map, its retraction, injectivity, derivative, image measurability and linear
 approximation — with a vector-valued slope.
 

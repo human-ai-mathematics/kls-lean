@@ -83,7 +83,7 @@ theorem route_K2 :
 
 /-! ### `K3` — almost every strict superlevel set is a smooth domain -/
 
-/-- Smooth Sard, already proved in `KLS/Geometry/RegularSuperlevel.lean`. -/
+/-- Smooth Sard, already proved in `KLS/Geometry/SmoothDomain/RegularSuperlevel.lean`. -/
 theorem route_K3 :
     ∀ {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [CompleteSpace V]
       [MeasurableSpace V] [BorelSpace V] [SecondCountableTopology V] [FiniteDimensional ℝ V]
@@ -120,7 +120,7 @@ theorem route_K5 :
 
 /-! ### `K6` — the gradient integral of a distance cutoff -/
 
-/-- Already proved in `KLS/Geometry/DistanceCutoff.lean`. -/
+/-- Already proved in `KLS/Geometry/Cheeger/DistanceCutoff.lean`. -/
 theorem route_K6 :
     ∀ {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [CompleteSpace V]
       [MeasurableSpace V] [BorelSpace V] [SecondCountableTopology V] [FiniteDimensional ℝ V]

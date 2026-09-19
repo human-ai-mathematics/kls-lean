@@ -1,5 +1,5 @@
 import FunctionalInequalities.KLS.ConditionalFiber.Basic
-import FunctionalInequalities.Probability.HaarLine
+import FunctionalInequalities.Probability.Line.Haar
 import Mathlib.Probability.Kernel.WithDensity
 
 /-!

@@ -1,7 +1,7 @@
 import FunctionalInequalities.KLS.Geometry.Cheeger.Infimum
-import FunctionalInequalities.KLS.Geometry.DistanceCutoff
+import FunctionalInequalities.KLS.Geometry.Cheeger.DistanceCutoff
 import FunctionalInequalities.KLS.Isoperimetry
-import FunctionalInequalities.KLS.Geometry.RegularSuperlevel
+import FunctionalInequalities.KLS.Geometry.SmoothDomain.RegularSuperlevel
 import FunctionalInequalities.KLS.Geometry.Coarea.Lipschitz
 import FunctionalInequalities.Energy.Euclidean.LipschitzApproximation
 
@@ -23,10 +23,10 @@ For a probability law `ν` on a finite-dimensional real inner-product space `V`,
 
 * `h_M = minkowskiConstant ν = inf_{0 < ν(B) < 1} ν⁺(B) / m(ν(B))` over Borel sets, where
   `minkowskiContent ν B = ν⁺(B) = liminf_{r ↓ 0} (ν(B^r) - ν(B)) / r` is the outer Minkowski
-  content with open `r`-thickenings (`KLS/Geometry/MinkowskiContent.lean`,
-  `KLS/Geometry/MinkowskiConstant.lean`);
+  content with open `r`-thickenings (`KLS/Geometry/Cheeger/MinkowskiContent.lean`,
+  `KLS/Geometry/Cheeger/MinkowskiConstant.lean`);
 * `h_S = smoothConstant ρ Ω ν = inf_{0 < ν(U) < 1} P_ρ(U) / m(ν(U))` over smooth domains, with the
-  relative perimeter `relativePerimeter ρ Ω U` of `KLS/Geometry/RelativePerimeter.lean`
+  relative perimeter `relativePerimeter ρ Ω U` of `KLS/Geometry/Perimeter/Relative.lean`
   (normalized `ℋ^{n-1}`, `ρ` the Borell density of `ν` with respect to Lebesgue measure `volume`,
   `Ω = interior ν.support`); `smoothConstant` lives in `KLS/Geometry/Cheeger/Infimum.lean`.
 

@@ -1,5 +1,5 @@
 import FunctionalInequalities.KLS.Geometry.Coarea.Lipschitz
-import FunctionalInequalities.KLS.Geometry.LevelSetMeasurable
+import FunctionalInequalities.KLS.Geometry.Slice.Measurable
 import FunctionalInequalities.KLS.Geometry.Coarea.Isoperimetry
 import FunctionalInequalities.Analysis.Sard.Sharp
 import FunctionalInequalities.KLS.Geometry.Cheeger.Equality

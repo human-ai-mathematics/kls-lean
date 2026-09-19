@@ -1,5 +1,5 @@
-import FunctionalInequalities.Analysis.Vector.HausdorffSlicing
-import FunctionalInequalities.Analysis.HausdorffSlicing
+import FunctionalInequalities.Analysis.Vector.Slice.Hausdorff
+import FunctionalInequalities.Analysis.Hausdorff.Slicing
 import Mathlib.Analysis.InnerProductSpace.PiL2
 
 /-!

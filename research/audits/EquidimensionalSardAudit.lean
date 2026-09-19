@@ -1,5 +1,5 @@
 import FunctionalInequalities.Analysis.Sard.Equidimensional
-import FunctionalInequalities.Analysis.RankDeficient.Coarea
+import FunctionalInequalities.Analysis.Vector.RankDeficient.Coarea
 import FunctionalInequalities.Analysis.Sard.Basic
 import Mathlib.Analysis.InnerProductSpace.PiL2
 
@@ -27,7 +27,7 @@ explicitly and this audit repeats it.  Two separate points:
   unconditionally by `Analysis.sard_of_finrank_le_one`, which uses the same Mathlib lemma.
   `sard_dimension_one_recovered` carries out the recovery, so the overlap is exhibited rather than
   asserted.  For `n ≥ 2` nothing here says anything.
-* *Not a step towards `R0`.*  `R0` was proved independently in `Analysis/RankDeficient/Coarea.lean`
+* *Not a step towards `R0`.*  `R0` was proved independently in `Analysis/Vector/RankDeficient/Coarea.lean`
   by the stratification route, which never specializes to `n = m`.  `R10` is a consistency check
   run after the fact.  `Analysis/Sard/Equidimensional.lean` imports no part of that route, so the
   check is genuinely independent: `equidimensional_R0_of_R10` and `equidimensional_R10_of_R0`

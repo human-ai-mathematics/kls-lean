@@ -2,7 +2,7 @@ import FunctionalInequalities.Energy.WeightedGradient.Core
 import FunctionalInequalities.Energy.WeightedGradient.Closable
 import FunctionalInequalities.Energy.SmoothGradient.Intrinsic.Basic
 import FunctionalInequalities.Energy.Relaxation.LowerSemicontinuous
-import FunctionalInequalities.Energy.FormCore
+import FunctionalInequalities.Energy.Form.Core
 import FunctionalInequalities.L2.MeanVariance
 
 /-!

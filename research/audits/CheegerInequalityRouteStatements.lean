@@ -1,6 +1,6 @@
-import FunctionalInequalities.KLS.Geometry.MinkowskiConstant
+import FunctionalInequalities.KLS.Geometry.Cheeger.MinkowskiConstant
 import FunctionalInequalities.Poincare.LocalSlope.SmoothTestComparison
-import FunctionalInequalities.KLS.LogConcave.BorellRepresentation
+import FunctionalInequalities.KLS.LogConcave.Density.BorellRepresentation
 import FunctionalInequalities.KLS.Isoperimetry
 import Mathlib.Probability.Moments.Variance
 

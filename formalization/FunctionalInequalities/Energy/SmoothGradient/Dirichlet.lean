@@ -1,4 +1,4 @@
-import FunctionalInequalities.Energy.Dirichlet
+import FunctionalInequalities.Energy.Form.Dirichlet
 import FunctionalInequalities.Energy.Euclidean.LipschitzApproximation
 import FunctionalInequalities.Energy.Relaxation.Contraction
 import FunctionalInequalities.Energy.SmoothGradient.Closed

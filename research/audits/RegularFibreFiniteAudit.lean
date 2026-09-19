@@ -1,4 +1,4 @@
-import FunctionalInequalities.Analysis.RankDeficient.RegularFibreFinite
+import FunctionalInequalities.Analysis.Vector.RankDeficient.RegularFibreFinite
 import Mathlib.Analysis.InnerProductSpace.PiL2
 
 /-!

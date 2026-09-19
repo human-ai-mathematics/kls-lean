@@ -134,6 +134,20 @@ hμ.intrinsic_frontier_support_eq_zero
 
 ### 家族词归目录，不进文件名
 
+目录规范（2026-09-20 起为全库统一规则，见
+[目录整理](decisions/2026-09-20-formalization-directory-organization.md)）：
+
+1. **三个以上**属于同一数学对象的模块必须进入家族目录。
+2. 两个模块若构成明确的“基础模块 + 扩展/性质模块”，可以进入家族目录；只是碰巧相邻、
+   没有基础/扩展关系的两个模块留在原层级。
+3. 不允许 `X.lean` 与 `X/` 同时存在；这种情况下基础模块改名为 `X/Basic.lean`。
+   根聚合 `FunctionalInequalities.lean` 与 `FunctionalInequalities/` 并存是 Lean 的
+   标准库根布局，不属于这一冲突。
+4. 根目录只保留跨家族基础设施、稳定公共入口，或确实无法归入单一对象的模块。
+5. 目录按**主要数学对象**划分，不按一次性的证明路线划分。
+6. 文件迁移不得改变 namespace、声明名、定理陈述、证明、假设、维数范围或证书状态。
+7. 不提供旧路径兼容模块或别名；旧引用只通过本节列出的映射表解析。
+
 一个数学家族有三个以上模块时，family 名归**目录**，文件名只留区分词。已经这样做的有
 `Poincare/SmoothTest/`、`Energy/LocalSlope/Gradient.lean`、`Energy/CovarianceGradient/`、
 `KLS/LogConcave/Line/`，以及 `Analysis/Semigroup/` 下的 `Resolvent/`、`Exponential/`、
@@ -147,8 +161,14 @@ hμ.intrinsic_frontier_support_eq_zero
 `Whitney` 迁移见 [Analysis 模块映射](api-migration/2026-09-17-analysis-module-map.json)；
 2026-09-19 的半群模块迁移见
 [Semigroup 模块映射](api-migration/2026-09-19-semigroup-module-map.json)，KLS 家族迁移见
-[KLS 模块映射](api-migration/2026-09-19-kls-module-map.json)。历史 decision 与
+[KLS 模块映射](api-migration/2026-09-19-kls-module-map.json)；2026-09-20 的全库目录迁移
+分三批，见 [Analysis 模块映射](api-migration/2026-09-20-analysis-module-map.json)、
+[Energy/Probability/Poincare 模块映射](api-migration/2026-09-20-foundation-module-map.json)
+和 [KLS 模块映射](api-migration/2026-09-20-kls-module-map.json)。历史 decision 与
 exploration 按原路径冻结，不追溯改写；每轮重组必须提供路径映射表，使旧引用仍可解析。
+
+按 namespace 或定义域划分而非按家族词划分的目录是规则 5 的既有例外，保持不动：
+`Poincare/Euclidean/`、`Poincare/FiniteProduct/`、`Poincare/LipschitzGradient/`。
 
 目录只承担分组，不改数学身份：`Analysis/` 的模块无论放在哪个子目录，
 namespace 都仍是 `FunctionalInequalities.Analysis`，声明名因此不随目录变动，

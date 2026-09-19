@@ -1,5 +1,5 @@
 import FunctionalInequalities.Analysis.Semigroup.Generated.Laws
-import FunctionalInequalities.Energy.Dirichlet
+import FunctionalInequalities.Energy.Form.Dirichlet
 import FunctionalInequalities.Energy.Relaxation.LinearPMap
 import FunctionalInequalities.L2.MeanVariance
 import Mathlib.MeasureTheory.Function.LpOrder

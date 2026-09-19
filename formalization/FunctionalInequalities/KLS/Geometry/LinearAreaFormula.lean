@@ -1,6 +1,6 @@
-import FunctionalInequalities.Analysis.CoareaJacobian
+import FunctionalInequalities.Analysis.Vector.Jacobian
 import FunctionalInequalities.Analysis.Graph.Implicit
-import FunctionalInequalities.KLS.Geometry.SmoothDomain
+import FunctionalInequalities.KLS.Geometry.SmoothDomain.Basic
 
 /-! # The linear area formula in the normalized convention, and affine fibres
 

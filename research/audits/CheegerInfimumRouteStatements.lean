@@ -1,6 +1,6 @@
 import FunctionalInequalities.KLS.Geometry.Cheeger.Infimum
-import FunctionalInequalities.KLS.Geometry.DistanceCutoff
-import FunctionalInequalities.KLS.Geometry.RegularSuperlevel
+import FunctionalInequalities.KLS.Geometry.Cheeger.DistanceCutoff
+import FunctionalInequalities.KLS.Geometry.SmoothDomain.RegularSuperlevel
 import FunctionalInequalities.KLS.Geometry.Coarea.Lipschitz
 import FunctionalInequalities.KLS.Isoperimetry
 import FunctionalInequalities.Energy.Euclidean.LipschitzApproximation

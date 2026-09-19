@@ -1,11 +1,11 @@
-import FunctionalInequalities.Analysis.QuadraticCover
+import FunctionalInequalities.Analysis.Sard.QuadraticCover
 import Mathlib.Topology.Bases
 
 /-! # Sard's theorem in the plane
 
 The critical values of a `C²` function on `Fin 2 → ℝ` are Lebesgue null. The critical set is
 split at the second derivative. The flat layer is handled by the planar covering lemma of
-`Analysis/QuadraticCover.lean`. On the nonflat layer the critical set is locally a Lipschitz
+`Analysis/Sard/QuadraticCover.lean`. On the nonflat layer the critical set is locally a Lipschitz
 graph over one coordinate — proved here by an elementary mean-value estimate with linear
 principal part, **not** by the implicit function theorem — so the quadratic bound at critical
 points collapses onto the one-dimensional covering lemma.

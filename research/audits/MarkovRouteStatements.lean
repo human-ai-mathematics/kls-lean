@@ -1,7 +1,7 @@
 import FunctionalInequalities.Analysis.Semigroup.Generated.Laws
-import FunctionalInequalities.Energy.Dirichlet
+import FunctionalInequalities.Energy.Form.Dirichlet
 import FunctionalInequalities.Energy.Relaxation.LinearPMap
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup
+import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Basic
 
 /-!
 # Route statements: Markov property of the log-concave heat semigroup

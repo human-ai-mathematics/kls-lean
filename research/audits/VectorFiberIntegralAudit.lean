@@ -1,4 +1,4 @@
-import FunctionalInequalities.Analysis.Vector.FiberIntegral
+import FunctionalInequalities.Analysis.Vector.Coarea.FiberIntegral
 import Mathlib.Analysis.InnerProductSpace.PiL2
 
 /-!

@@ -1,11 +1,11 @@
-import FunctionalInequalities.Analysis.AreaFormula
-import FunctionalInequalities.Analysis.CoareaJacobian
+import FunctionalInequalities.Analysis.Graph.Area
+import FunctionalInequalities.Analysis.Vector.Jacobian
 
 /-! # The graph Jacobian in arbitrary codimension
 
 Step two of the codimension-`m` coarea program, linear layer.
 
-The area formula already proved in `Analysis/AreaFormula.lean` is **codimension one**: its graph
+The area formula already proved in `Analysis/Graph/Area.lean` is **codimension one**: its graph
 map is `y ↦ ι y + g y • e` for a *real-valued* `g`, with linear model `graphLinear ι e a` and
 volume factor `graphJacobian a = √(1 + ‖a‖²)`.  The fibres of a map into an `m`-dimensional target
 have codimension `m`, so the program needs the graph of a `K`-valued slope with `dim K = m`.

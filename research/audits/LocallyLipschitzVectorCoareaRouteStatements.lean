@@ -1,4 +1,4 @@
-import FunctionalInequalities.Analysis.RankDeficient.Coarea
+import FunctionalInequalities.Analysis.Vector.RankDeficient.Coarea
 import FunctionalInequalities.KLS.Geometry.Coarea.LocallyLipschitz
 
 /-!
@@ -13,7 +13,7 @@ route snapshot none of `N0`, `X1`, `X3`–`X5` had been proved**.  Same conventi
 
 ## Position in the coarea program
 
-`Analysis/RankDeficient/Coarea.lean` proves the codimension-`m` coarea formula for `C¹` maps (`R9`);
+`Analysis/Vector/RankDeficient/Coarea.lean` proves the codimension-`m` coarea formula for `C¹` maps (`R9`);
 the route of the same day (`LipschitzVectorCoareaRouteStatements.lean`) states it for globally
 Lipschitz maps (`L0`, open).  The scalar side ends one step further, at **locally Lipschitz**
 functions with no global constant and no global modulus (`KLS.coarea_of_locallyLipschitz`, `L13`).

@@ -1,4 +1,4 @@
-import FunctionalInequalities.Energy.Cheeger
+import FunctionalInequalities.Energy.Cheeger.Basic
 import FunctionalInequalities.Energy.Euclidean.LipschitzApproximation
 
 /-!
@@ -19,7 +19,7 @@ the two Cheeger conventions relax to the same functional; `E0c` the two Cheeger 
 `𝓔 = 2 Ch` on the coordinate space; `E0e` the Blueprint identity
 `thm:smooth-gradient-relaxation-two-cheeger` on the affine support.  The certified corollary
 `cor:absolutely-continuous-relaxation-two-cheeger` proves all five under absolute continuity of `ν`
-(`Energy/Cheeger.lean`).  **Only `E0a` is a genuine obligation**: `E0b` follows from the sandwich
+(`Energy/Cheeger/Basic.lean`).  **Only `E0a` is a genuine obligation**: `E0b` follows from the sandwich
 `LocalSlope.relaxation ≤ AsymptoticLipschitz.relaxation ≤ SmoothGradient.relaxation` (`A2`) once
 `E0a` collapses its ends (`A3`), `E0c` is `E0b` halved, `E0d` is `Cheeger.two_mul_energy`, and `E0e`
 is `E0a` on the intrinsic law transported as in the certified corollary.  The citation of
@@ -29,13 +29,13 @@ is **density of smooth tests in the local-slope energy**, i.e. the reverse inequ
 
 ## The route
 
-**A — the sandwich** (`Energy/Euclidean/SlopeComparison.lean`).  A smooth test's asymptotic
+**A — the sandwich** (`Energy/Euclidean/Slope/Comparison.lean`).  A smooth test's asymptotic
 Lipschitz constant is its gradient norm at every point (`A1`; lower bound from the one-moving-point
 slope, upper bound by the mean value inequality on small balls), so smooth tests lie in the
 asymptotic-Lipschitz test class with the same energy and `A2` follows by relaxing over the larger
 class.  `A3` records the collapse.
 
-**B — recovery for globally Lipschitz tests** (`Energy/Euclidean/SlopeRecovery.lean`).  Mollifying a
+**B — recovery for globally Lipschitz tests** (`Energy/Euclidean/Slope/Recovery.lean`).  Mollifying a
 globally `K`-Lipschitz `g` at radius `2R` with the repository's kernel: the mollifier at `x` sees `g`
 only within `2R`, so on the ball of radius `δ` it inherits the Lipschitz constant of `g` on the ball
 of radius `δ + 2R`, whence `limsup_{R→0} ‖∇(g ⋆ ρ_R)(x)‖ ≤ Lip_a g (x)` pointwise; the global
@@ -48,7 +48,7 @@ function times a bounded globally Lipschitz one is locally Lipschitz (`B2`), loc
 vanishing outside a ball implies globally Lipschitz (`B3`), and the one-moving-point Leibniz bounds
 for both slopes (`B4`, `B5`).
 
-**C — density** (`Energy/Euclidean/SlopeDensity.lean`).  `C1`: the local slope of a continuous
+**C — density** (`Energy/Euclidean/Slope/Density.lean`).  `C1`: the local slope of a continuous
 function is Borel, as the countable infimum over radii `1/(m+1)` of the lower-semicontinuous secant
 suprema.  `C2`, the McShane patch: for a globally `L`-Lipschitz `f` and `α, δ > 0`, stratify the slope
 into bands of width `α`, cut each band into small balls of a dense sequence and disjoint the family

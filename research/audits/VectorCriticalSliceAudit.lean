@@ -1,4 +1,4 @@
-import FunctionalInequalities.Analysis.Vector.CriticalSlice
+import FunctionalInequalities.Analysis.Vector.Slice.Critical
 import FunctionalInequalities.KLS.Geometry.Coarea.Smooth
 import Mathlib.Analysis.InnerProductSpace.PiL2
 

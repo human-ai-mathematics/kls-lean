@@ -275,7 +275,7 @@ closures are 22 and 1 modules, neither containing a work-in-progress file.
 
 `StratumSlicingRouteStatements.lean` states the two sub-obligations `R7b`, the per-scale bound, and
 `R7c`, the limit, as proposition types only, declaring nothing and proving nothing. Both were open
-when it was written and **both are now proved** in `Analysis/RankDeficient/StratumSlicing.lean`; a status note at
+when it was written and **both are now proved** in `Analysis/Vector/RankDeficient/StratumSlicing.lean`; a status note at
 the top records that, and the two propositions are unchanged.
 
 `StratumSlicingAudit.lean` audits **obligation `R7`, which is proved**: `route_R7` copies it
@@ -314,7 +314,7 @@ constant map together with `constant_map_critical_everywhere` showing that case 
 
 `ExponentObstructionAudit.lean` audits the route's two diagnostics. **`N1` is proved**: `route_N1`
 copies it **verbatim** from `RankDeficientRouteStatements.lean` and discharges it from
-`Analysis/RankDeficient/ExponentObstruction.lean`. Proving it is **not progress on the route** — `N1` is the
+`Analysis/Vector/RankDeficient/ExponentObstruction.lean`. Proving it is **not progress on the route** — `N1` is the
 obstruction itself, whose exponent is `k + r` and not `k` (`N1_exponent_is_k_add_r`), and for
 `r ≥ 1` a `μH[k + r]`-null statement implies nothing about `μH[k]`, where a set of positive Lebesgue
 measure already has infinite measure (`N1_null_at_higher_exponent_says_nothing_at_k`). Its side

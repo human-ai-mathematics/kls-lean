@@ -1,6 +1,6 @@
-import FunctionalInequalities.Analysis.HausdorffSlicing
-import FunctionalInequalities.Analysis.HausdorffContent
-import FunctionalInequalities.KLS.Geometry.SmoothDomain
+import FunctionalInequalities.Analysis.Hausdorff.Slicing
+import FunctionalInequalities.Analysis.Hausdorff.Content
+import FunctionalInequalities.KLS.Geometry.SmoothDomain.Basic
 
 /-!
 # Eilenberg slicing bound and compact-slice measurability in the normalized surface measure
@@ -33,7 +33,7 @@ caller that has it available applies the statements unchanged.
 `measurable_surfaceMeasure_inter_levelSet` is the separate compact-slice statement: for `S`
 **compact** and `u` merely continuous, the slice measure is a Borel measurable function of the
 level.  It is not a consequence of the majorant bound — that bound says nothing about the slice
-function's measurability — and it is proved in `Analysis/HausdorffContent.lean` through the
+function's measurability — and it is proved in `Analysis/Hausdorff/Content.lean` through the
 scalewise open-cover costs, whose scale limit is `μH[d]` and each of which is upper semicontinuous
 in the level.  Only the positive normalizing scalar is added here, so no dimension split is
 needed. The later declarations in this module prove the Borel-set bridge L4 and

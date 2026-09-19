@@ -1,7 +1,7 @@
 import FunctionalInequalities.Energy.WeightedGradient.Core
 import FunctionalInequalities.Poincare.LocalSlope.SmoothTestComparison
 import FunctionalInequalities.Poincare.Relaxation
-import FunctionalInequalities.Probability.CovarianceFactorization
+import FunctionalInequalities.Probability.Covariance.Factorization
 
 /-!
 # The identity-weighted Lipschitz gradient relaxation and the literature constant

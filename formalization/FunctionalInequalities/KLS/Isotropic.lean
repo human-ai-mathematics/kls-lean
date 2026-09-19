@@ -1,4 +1,4 @@
-import FunctionalInequalities.Probability.Covariance
+import FunctionalInequalities.Probability.Covariance.Basic
 import FunctionalInequalities.Probability.Basic
 import Mathlib.MeasureTheory.Function.LpSpace.Basic
 

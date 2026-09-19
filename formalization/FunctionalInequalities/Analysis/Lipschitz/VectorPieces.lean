@@ -1,6 +1,6 @@
 import FunctionalInequalities.Analysis.Lipschitz.Componentwise
 import FunctionalInequalities.Analysis.Lipschitz.Refinement
-import FunctionalInequalities.Analysis.LipschitzC1Pieces
+import FunctionalInequalities.Analysis.Lipschitz.C1Pieces
 
 /-! # Exact `C¹` pieces of a Lipschitz map into a finite-dimensional target
 

@@ -1,4 +1,4 @@
-import FunctionalInequalities.KLS.Geometry.SmoothDomain
+import FunctionalInequalities.KLS.Geometry.SmoothDomain.Basic
 
 /-! # Weighted surface integrals under homotheties
 

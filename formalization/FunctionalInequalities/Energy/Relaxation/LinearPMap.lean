@@ -1,4 +1,4 @@
-import FunctionalInequalities.Energy.QuadraticPreEnergy
+import FunctionalInequalities.Energy.Form.QuadraticPreEnergy
 import FunctionalInequalities.Energy.Relaxation.Basic
 import Mathlib.Analysis.Convex.Combination
 import Mathlib.Analysis.InnerProductSpace.Projection.Minimal

@@ -1,5 +1,5 @@
 import FunctionalInequalities.Energy.CovarianceGradient.LinearEquiv
-import FunctionalInequalities.Poincare.L2Energy
+import FunctionalInequalities.Poincare.L2.Energy
 
 /-! # Poincaré constants under covariance-gradient transport -/
 

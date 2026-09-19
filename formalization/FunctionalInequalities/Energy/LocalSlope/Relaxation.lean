@@ -1,7 +1,7 @@
 import FunctionalInequalities.Energy.LocalSlope.Gradient
 import FunctionalInequalities.Energy.SmoothGradient.Intrinsic.Basic
 import FunctionalInequalities.Energy.Relaxation.LowerSemicontinuous
-import FunctionalInequalities.KLS.LogConcave.AbsoluteContinuity
+import FunctionalInequalities.KLS.LogConcave.Density.AbsoluteContinuity
 import FunctionalInequalities.Poincare.LipschitzGradient.Comparison
 import FunctionalInequalities.L2.MeanVariance
 

@@ -1,5 +1,5 @@
-import FunctionalInequalities.Energy.ClosedQuadratic
-import FunctionalInequalities.Energy.QuadraticPreEnergy
+import FunctionalInequalities.Energy.Form.ClosedQuadratic
+import FunctionalInequalities.Energy.Form.QuadraticPreEnergy
 import FunctionalInequalities.Energy.Relaxation.LowerSemicontinuous
 import FunctionalInequalities.Energy.Relaxation.Recovery
 import Mathlib.Data.ENNReal.Inv

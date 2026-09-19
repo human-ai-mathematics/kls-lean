@@ -1,4 +1,4 @@
-import FunctionalInequalities.Analysis.Vector.FiberIntegral
+import FunctionalInequalities.Analysis.Vector.Coarea.FiberIntegral
 
 /-! # The equidimensional degenerate case: almost no level is a critical value
 
@@ -22,7 +22,7 @@ measure of the set of critical **values** of a map `ℝⁿ → ℝᵐ`; what is 
 singular linear map contracts volume.  For `n > m` the critical values of a `C¹` map can have
 positive measure (Whitney), and nothing below says otherwise.  `R0`, the target of the
 rank-deficient route, is a statement about `ℋ^k` **inside** a level and was proved independently in
-`Analysis/RankDeficient/Coarea.lean`; `R10` is a consistency check on it, not an ingredient of it.
+`Analysis/Vector/RankDeficient/Coarea.lean`; `R10` is a consistency check on it, not an ingredient of it.
 
 **Relation to `R0`.**  In the equidimensional case `R0` reads `μH[0] (C ∩ {u = t}) = 0` for almost
 every `t`, and a nonempty set has `μH[0] ≥ 1`, so `R0` and `R10` are then *equivalent* statements.

@@ -1,18 +1,18 @@
-import FunctionalInequalities.Analysis.RankDeficient.StratumSlicing
+import FunctionalInequalities.Analysis.Vector.RankDeficient.StratumSlicing
 
 /-!
 # Route statements for the remaining gap in obligation `R7`
 
 **This file contains only `#check`s.  A proposition that type-checks is not a proof.**  It declares
 nothing, proves nothing, and introduces no placeholder axiom.  **At the time of this route snapshot
-neither proposition below had been proved.**  As of the same day, `Analysis/RankDeficient/StratumSlicing.lean`
+neither proposition below had been proved.**  As of the same day, `Analysis/Vector/RankDeficient/StratumSlicing.lean`
 proves both — `R7b` as `lintegral_hausdorffMeasure_stratum_le` and `R7c` as the limit step inside
 `exists_nhds_ae_hausdorffMeasure_stratum_inter_levelSet_eq_zero`, which is `R7` itself.  **The
 propositions below are unchanged.**  `R0` remains open: it still needs `R8` and the finite union
 over the strata.
 
 `R7` of `research/audits/RankDeficientRouteStatements.lean` — the per-stratum local slicing — was
-open when this file was written.  `Analysis/RankDeficient/StratumSlicing.lean` proved two of its parts first: the **local package**
+open when this file was written.  `Analysis/Vector/RankDeficient/StratumSlicing.lean` proved two of its parts first: the **local package**
 `exists_stratum_local_data`, which assembles `R2`, `R3` and `R4` into one neighbourhood carrying a
 single tangential Lipschitz constant, and `lintegral_split_target`, the change-of-variables and
 Tonelli identity for the orthogonal splitting of the target.  What is left is the estimate itself
@@ -23,13 +23,13 @@ and its limit, recorded here as `R7b` and `R7c`.
 With the local package in hand the argument is: run the approximating partition on `u` itself at
 scale `ε`, so that one partition serves both components; on each piece the local package makes
 `Q ∘ u` `c ε`-Lipschitz along every fibre of `P ∘ u`; apply the Eilenberg bound of
-`Analysis/Vector/HausdorffSlicing.lean` inside a fibre, at exponent `k` with a target of dimension
+`Analysis/Vector/Slice/Hausdorff.lean` inside a fibre, at exponent `k` with a target of dimension
 `m − r`, where `k + (m − r) = n − r` is exactly right; integrate over the fibre parameter against
 the **proved** regular coarea formula for `P ∘ u`, which converts the fibre measures into an
 ordinary integral of the coarea Jacobian over the piece; and use `lintegral_split_target` to read
 the result as an integral over the target.  `R7b` is the outcome of that computation at a fixed
 scale.  `R7c` is the limit `ε → 0`, which is the pattern already used twice in the repository, in
-`Analysis/Vector/HausdorffSlicing.lean` and `Analysis/Vector/CriticalSlice.lean`.
+`Analysis/Vector/Slice/Hausdorff.lean` and `Analysis/Vector/Slice/Critical.lean`.
 
 Both are now proved, and with them `R7`.  **`R0` and the general codimension-`m` coarea formula
 remain open**, and need `R8` and the finite union over `r < m`.

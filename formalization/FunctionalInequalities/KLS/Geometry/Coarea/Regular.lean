@@ -1,7 +1,7 @@
-import FunctionalInequalities.Analysis.RegularChart
-import FunctionalInequalities.Analysis.FiberIntegral
-import FunctionalInequalities.Analysis.SubgraphDivergence
-import FunctionalInequalities.KLS.Geometry.OpenSliceMeasurable
+import FunctionalInequalities.Analysis.Coarea.RegularChart
+import FunctionalInequalities.Analysis.Coarea.FiberIntegral
+import FunctionalInequalities.Analysis.Graph.Divergence
+import FunctionalInequalities.KLS.Geometry.Slice.OpenMeasurable
 
 /-! # Weighted coarea on regular open C¹ domains (L9)
 

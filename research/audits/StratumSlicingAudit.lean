@@ -1,4 +1,4 @@
-import FunctionalInequalities.Analysis.RankDeficient.StratumSlicing
+import FunctionalInequalities.Analysis.Vector.RankDeficient.StratumSlicing
 
 /-!
 # Scope audit for the local package and the target split

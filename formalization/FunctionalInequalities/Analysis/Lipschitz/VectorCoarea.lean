@@ -1,10 +1,10 @@
 import FunctionalInequalities.Analysis.Lipschitz.VectorPieces
-import FunctionalInequalities.Analysis.RankDeficient.Coarea
-import FunctionalInequalities.Analysis.Vector.SliceMeasurable
+import FunctionalInequalities.Analysis.Vector.RankDeficient.Coarea
+import FunctionalInequalities.Analysis.Vector.Slice.Measurable
 
 /-! # The codimension-`m` coarea formula for Lipschitz maps
 
-`Analysis/RankDeficient/Coarea.lean` proves the codimension-`m` coarea formula
+`Analysis/Vector/RankDeficient/Coarea.lean` proves the codimension-`m` coarea formula
 `coarea_of_contDiff` for **`C¹`** maps with no hypothesis on the critical set.  Federer's coarea
 formula holds for merely **Lipschitz** maps, and this module makes that step, exactly as
 `KLS/Geometry/Coarea/Lipschitz.lean` did in codimension one:

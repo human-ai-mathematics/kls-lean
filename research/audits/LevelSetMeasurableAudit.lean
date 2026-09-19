@@ -1,4 +1,4 @@
-import FunctionalInequalities.KLS.Geometry.LevelSetMeasurable
+import FunctionalInequalities.KLS.Geometry.Slice.Measurable
 import FunctionalInequalities.KLS.Geometry.Coarea.Lipschitz
 import FunctionalInequalities.Analysis.Sard.Sharp
 -- 2026-09-19: `Analysis.sard` is proved in `Analysis/Sard/Sharp.lean`; the former `KLS/WIP/AnalyticPrerequisites.lean` is deleted, and this client now imports the proved module.
@@ -7,7 +7,7 @@ import FunctionalInequalities.Analysis.Sard.Sharp
 # Scope audit for the migrated level-set measurability
 
 `Analysis.aemeasurable_lintegral_levelSet` has moved out of `KLS/WIP/AnalyticPrerequisites.lean`
-into the hole-free `KLS/Geometry/LevelSetMeasurable.lean` with a **byte-identical `pp.all`
+into the hole-free `KLS/Geometry/Slice/Measurable.lean` with a **byte-identical `pp.all`
 signature** (recorded in `build/audit/migration-signature-before.log` and
 `build/audit/migration-signature-after.log`), and is now proved from obligation `L5`
 (`KLS.aemeasurable_setLIntegral_inter_levelSet`).  Its axiom report below therefore no longer

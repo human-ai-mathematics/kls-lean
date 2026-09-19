@@ -1,5 +1,5 @@
 import FunctionalInequalities.Energy.SmoothGradient.Intrinsic.Closed
-import FunctionalInequalities.Poincare.L2Energy
+import FunctionalInequalities.Poincare.L2.Energy
 
 /-!
 # Poincaré optimization in intrinsic affine coordinates

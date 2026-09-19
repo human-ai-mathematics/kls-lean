@@ -12,11 +12,11 @@ codimension-one `surfaceMeasure` used throughout `lem:relative-perimeter-smoothi
 `lem:relative-perimeter-cheeger-infimum`.
 
 The module carries definitions only, so that the general Hausdorff and level-set geometry of
-`Analysis/LevelSet.lean` can be stated in terms of `unitBallVolume` without depending on the
+`Analysis/Hausdorff/LevelSet.lean` can be stated in terms of `unitBallVolume` without depending on the
 perimeter statements that consume it.  The convention check
 `KLS.hausdorffNormalized_finrank_eq_volume` — that the normalized top-dimensional Hausdorff
-measure is Lebesgue measure — is proved in `KLS/Geometry/SmoothDomain.lean`, where the
-isodiametric input of `Analysis/LevelSet.lean` is available.
+measure is Lebesgue measure — is proved in `KLS/Geometry/SmoothDomain/Basic.lean`, where the
+isodiametric input of `Analysis/Hausdorff/LevelSet.lean` is available.
 -/
 
 noncomputable section

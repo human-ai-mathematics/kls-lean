@@ -1,4 +1,4 @@
-import FunctionalInequalities.Analysis.RankDeficient.TangentialLipschitz
+import FunctionalInequalities.Analysis.Vector.RankDeficient.TangentialLipschitz
 import Mathlib.Analysis.InnerProductSpace.PiL2
 
 /-!
@@ -88,7 +88,7 @@ theorem strengthened (A : V →L[ℝ] W) (P : W →L[ℝ] W₁) (Q : W →L[ℝ]
 /-- **The rank-zero model returns the proved vanishing-derivative situation.**  With `A = 0` both
 hypotheses hold with `C = 0`, and the approximation hypothesis then says exactly that `f` is
 `ε`-Lipschitz on `S`, so the conclusion is the familiar one with constant `‖Q‖`.  This is the
-`r = 0` end of the stratification, already covered by `Analysis/Vector/CriticalSlice.lean`; `R4`
+`r = 0` end of the stratification, already covered by `Analysis/Vector/Slice/Critical.lean`; `R4`
 adds nothing there and claims nothing new. -/
 theorem zero_model_recovers_vanishing_derivative (P : W →L[ℝ] W₁) (Q : W →L[ℝ] W₂) :
     ∃ c : ℝ≥0, ∀ (ε : ℝ≥0) (f : V → W) (S : Set V) (s : W₁),

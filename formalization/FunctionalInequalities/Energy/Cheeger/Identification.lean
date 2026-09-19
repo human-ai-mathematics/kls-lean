@@ -1,6 +1,6 @@
-import FunctionalInequalities.Energy.Cheeger
-import FunctionalInequalities.Energy.Euclidean.SlopeComparison
-import FunctionalInequalities.Energy.Euclidean.SlopeDensity
+import FunctionalInequalities.Energy.Cheeger.Basic
+import FunctionalInequalities.Energy.Euclidean.Slope.Comparison
+import FunctionalInequalities.Energy.Euclidean.Slope.Density
 
 /-!
 # The Cheeger identification for every Borel probability law
@@ -12,12 +12,12 @@ signatures (`build/audit/energy-slope-proofs/ppall-before.txt` and `ppall-after.
 
 * `SmoothGradient.relaxation_eq_localSlope`: the smooth-gradient relaxation is the relaxed squared
   local slope, for every Borel probability law on a finite-dimensional inner-product space — the
-  inequality `≤` is the density theorem of `Energy/Euclidean/SlopeDensity.lean` (McShane patches on
+  inequality `≤` is the density theorem of `Energy/Euclidean/Slope/Density.lean` (McShane patches on
   a slope-adapted Borel partition, smooth recovery of globally Lipschitz tests, a cutoff for general
   admissible tests), the inequality `≥` the unconditional `SmoothGradient.localSlope_relaxation_le`.
 * `LocalSlope.relaxation_eq_asymptoticLipschitz`, `Cheeger.energy_eq_ofAsymptoticLipschitz`: the two
   Cheeger conventions agree, by collapsing the unconditional sandwich of
-  `Energy/Euclidean/SlopeComparison.lean`; this is a consequence of the identification, not a
+  `Energy/Euclidean/Slope/Comparison.lean`; this is a consequence of the identification, not a
   second obligation, and the citation of Ambrosio–Gigli–Savaré recorded for it in the former WIP
   module is no longer load-bearing.
 * `SmoothGradient.relaxation_eq_two_mul_cheeger`, `SmoothGradient.Intrinsic.energy_eq_two_mul_cheeger`:

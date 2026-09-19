@@ -1,4 +1,4 @@
-import FunctionalInequalities.Energy.FormCore
+import FunctionalInequalities.Energy.Form.Core
 import FunctionalInequalities.Energy.Relaxation.Approximation
 import Mathlib.Analysis.SpecificLimits.Basic
 

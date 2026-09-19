@@ -1,5 +1,5 @@
 import FunctionalInequalities.Energy.SmoothGradient.Basic
-import FunctionalInequalities.Poincare.L2Energy
+import FunctionalInequalities.Poincare.L2.Energy
 
 /-!
 # Poincaré optimization for the smooth-gradient relaxation

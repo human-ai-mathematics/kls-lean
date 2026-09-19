@@ -1,5 +1,5 @@
 import FunctionalInequalities.Energy.Relaxation.Recovery
-import FunctionalInequalities.Poincare.L2Energy
+import FunctionalInequalities.Poincare.L2.Energy
 
 /-!
 # Poincaré constants before and after relaxation

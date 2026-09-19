@@ -1,4 +1,4 @@
-import FunctionalInequalities.KLS.LogConcave.BorellRepresentation
+import FunctionalInequalities.KLS.LogConcave.Density.BorellRepresentation
 import Mathlib.Analysis.Normed.Lp.MeasurableSpace
 
 /-!

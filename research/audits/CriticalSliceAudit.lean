@@ -1,9 +1,9 @@
-import FunctionalInequalities.KLS.Geometry.CriticalSlice
+import FunctionalInequalities.KLS.Geometry.Slice.Critical
 
 /-!
 # Strict audit client for the critical slices of a `C¹` function (obligation `L10`)
 
-Independent client of `KLS/Geometry/CriticalSlice.lean`.  `target` states the route's `L10`
+Independent client of `KLS/Geometry/Slice/Critical.lean`.  `target` states the route's `L10`
 quantifier for quantifier and proves it; `target_of_not_completeSpace` drops the unused
 `[CompleteSpace V]`.
 

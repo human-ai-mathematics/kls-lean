@@ -113,7 +113,7 @@ an energy comparison for arbitrary singular laws.
 
 **Evidence.** The [route correction](decisions/2026-09-13-cutoff-route-audit-correction.md)
 is followed by the [completed proof record](decisions/2026-09-13-distance-cutoff-gradient-integral.md).
-The implementation is [DistanceCutoff.lean](../formalization/FunctionalInequalities/KLS/Geometry/DistanceCutoff.lean),
+The implementation is [DistanceCutoff.lean](../formalization/FunctionalInequalities/KLS/Geometry/Cheeger/DistanceCutoff.lean),
 especially `lintegral_enorm_gradient_distanceCutoff_le`. The completion record reports
 unchanged signatures and standard-axiom checks; its earlier pending status is historical.
 

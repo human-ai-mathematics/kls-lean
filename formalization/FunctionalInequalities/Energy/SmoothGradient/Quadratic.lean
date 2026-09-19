@@ -1,5 +1,5 @@
 import FunctionalInequalities.Energy.SmoothGradient.Basic
-import FunctionalInequalities.Energy.QuadraticPreEnergy
+import FunctionalInequalities.Energy.Form.QuadraticPreEnergy
 import Mathlib.Analysis.Calculus.ContDiff.Operations
 
 /-!

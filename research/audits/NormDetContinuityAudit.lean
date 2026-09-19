@@ -1,4 +1,4 @@
-import FunctionalInequalities.Analysis.NormDetContinuity
+import FunctionalInequalities.Analysis.Vector.JacobianContinuity
 import Mathlib.Analysis.InnerProductSpace.PiL2
 
 /-!

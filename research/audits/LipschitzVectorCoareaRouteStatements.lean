@@ -1,6 +1,6 @@
-import FunctionalInequalities.Analysis.RankDeficient.Coarea
-import FunctionalInequalities.Analysis.LipschitzC1Pieces
-import FunctionalInequalities.Analysis.Vector.HausdorffSlicing
+import FunctionalInequalities.Analysis.Vector.RankDeficient.Coarea
+import FunctionalInequalities.Analysis.Lipschitz.C1Pieces
+import FunctionalInequalities.Analysis.Vector.Slice.Hausdorff
 import FunctionalInequalities.KLS.Geometry.Coarea.LocallyLipschitz
 
 /-!
@@ -14,7 +14,7 @@ convention as `SharpSardRouteStatements.lean` and `RankDeficientRouteStatements.
 
 ## The gap
 
-`Analysis/RankDeficient/Coarea.lean` proves the codimension-`m` coarea formula `coarea_of_contDiff`
+`Analysis/Vector/RankDeficient/Coarea.lean` proves the codimension-`m` coarea formula `coarea_of_contDiff`
 for **`C¹`** maps with no hypothesis on the critical set.  Federer's coarea formula holds for merely
 **Lipschitz** maps, and the scalar side already went the whole way `C¹ → Lipschitz → locally
 Lipschitz` (`KLS/Geometry/{SmoothCoarea,LipschitzCoarea,LocallyLipschitzCoarea}.lean`).  The vector

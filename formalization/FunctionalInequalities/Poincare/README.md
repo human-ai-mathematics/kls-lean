@@ -167,7 +167,7 @@ Blueprint 的 `C_P^can` 是第三行的简写。当前 Lean 名称使用 `Smooth
 对 `μ = δ₀`，函数 `0` 与 `id` 表示同一个零 `L²` 元素，但原始梯度能量分别为 `0` 和 `1`。
 因此，对任意奇异测度都要求原始能量在 `L²` fibers 上一致是不成立的。
 
-[FormCore.lean](../Energy/FormCore.lean) 明确区分：
+[FormCore.lean](../Energy/Form/Core.lean) 明确区分：
 
 - `RespectsAmbientFibers`：原始能量在同一 realization fiber 上一致；
 - `AgreesOnTests`：指定环境能量在每个测试上等于原始能量；
@@ -181,7 +181,7 @@ smooth-gradient 松弛及其内禀拉回的 Markov/Dirichlet witness 已在
 `Energy/SmoothGradient/Dirichlet.lean` 证明（对任意 Borel 概率律）；局部密度假设下的 raw/core agreement 已在
 `Energy/SmoothGradient/Core.lean` 证明（`LocalDensity`），无密度时对环境预能量不成立
 （`Energy/SmoothGradient/NormalDirection.lean`）。`Ecan = 2 Chμ` 已在
-`Energy/Cheeger.lean` 中对内禀律绝对连续的情形证明，采用局部斜率约定，因而覆盖全部对数凹律；
+`Energy/Cheeger/Basic.lean` 中对内禀律绝对连续的情形证明，采用局部斜率约定，因而覆盖全部对数凹律；
 任意奇异律的识别、自伴生成元、半群及 reciprocal spectral-gap 接口仍未完成。
 whitening 与仿射/各向同性归约已在 `KLS/LogConcave/Isotropic.lean` 证明；
 实轴上对数凹律的一维界 `C_P^lit(ν) ≤ 4·Var_ν` 已在

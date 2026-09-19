@@ -143,13 +143,13 @@ coordinate and affine-support forms of `𝓔 = 2 Ch`. The former WIP module's ci
 Ambrosio–Gigli–Savaré for `E0b` pointed the wrong way: the singular case needs the **density of smooth
 tests in the local-slope energy**.
 
-**The sandwich** (`Energy/Euclidean/SlopeComparison.lean`): a smooth test's asymptotic Lipschitz
+**The sandwich** (`Energy/Euclidean/Slope/Comparison.lean`): a smooth test's asymptotic Lipschitz
 constant is its gradient norm at every point, so `AsymptoticLipschitz.relaxation ≤ SmoothGradient.relaxation`
-for every law. **Smooth recovery** (`Energy/Euclidean/SlopeRecovery.lean`): mollification at a fixed
+for every law. **Smooth recovery** (`Energy/Euclidean/Slope/Recovery.lean`): mollification at a fixed
 radius inherits local Lipschitz constants, `limsup ‖∇(g ⋆ ρ_R)‖ ≤ Lip_a g` pointwise, and the global
 Lipschitz bound makes reverse Fatou apply, so `SmoothGradient.relaxation (toLp g) ≤ AsymptoticLipschitz.energy g`
 for globally Lipschitz `g`; a uniform radius is genuinely insufficient for general tests (`D1`), hence
-the cutoff tools. **Density** (`Energy/Euclidean/SlopeDensity.lean`, 1202 lines): the local slope of a
+the cutoff tools. **Density** (`Energy/Euclidean/Slope/Density.lean`, 1202 lines): the local slope of a
 continuous function is Borel; a globally Lipschitz test is patched by McShane extensions on finitely
 many disjoint compact cores of a slope-adapted Borel partition into a globally Lipschitz test with
 constant independent of the co-mass `δ`, equal to the test on the cores and with asymptotic Lipschitz
@@ -228,7 +228,7 @@ modules (hole/allow); no code changed.
 **Cheeger's inequality** `C_P^lit(μ) ≤ 4 Ψ_KLS(μ)²` is **proved** for every log-concave law
 (`KLS.LogConcave.literatureConstant_le_four_mul_inverseScale_sq`, `KLS/Geometry/Cheeger/Inequality.lean`,
 Dirac laws included with both sides `0`), from `C_P^smooth(ν) ≤ 4 / h_M(ν)²` for **every** Borel
-probability law (`Isoperimetry.smoothTest_constant_le`): a median exists (`KLS/Geometry/Median.lean`);
+probability law (`Isoperimetry.smoothTest_constant_le`): a median exists (`KLS/Geometry/Cheeger/Median.lean`);
 for bounded `C¹` Lipschitz `g`, `Var(g) ≤ ∫ (g − m)²` splits into two positive-part squares, each
 `C¹`, Lipschitz and supported on a half-mass set, where layer cake, the multiplied Minkowski bound and
 the Minkowski coarea inequality give the `L¹` Cheeger inequality, and the chain rule with
@@ -1366,7 +1366,7 @@ derivative to vanish rather than merely to be non-surjective. **Nothing about th
 part is proved**, and with it the **general codimension-`m` coarea formula remains open**.
 
 **No Sard theorem is claimed**: nothing is asserted about the measure of the set of critical
-*values*, which for a merely `C¹` map may well be positive. `KLS/Geometry/CriticalSlice.lean` and
+*values*, which for a merely `C¹` map may well be positive. `KLS/Geometry/Slice/Critical.lean` and
 `KLS/Geometry/Coarea/Smooth.lean` were not modified; the codimension-`m` versions are parallel new
 modules. Sharp finite-regularity Sard, the two Cheeger comparisons and the five Energy holes are
 untouched.
@@ -1394,7 +1394,7 @@ No commit or push; the real Git index is unchanged.
 **Newest implementation round; it changes none of the registration numbers recorded above.** No
 hole was migrated: direct holes stay **8 (1/2/5)** and certificates **24**.
 
-**Only half of the scalar layer needed redoing.** `Analysis/HausdorffContent.lean` proves two
+**Only half of the scalar layer needed redoing.** `Analysis/Hausdorff/Content.lean` proves two
 things: that the scalewise **open**-cover costs have `μH[d]` as their scale limit, and that at a
 fixed scale the open-cover cost of the slices of a compact set is upper semicontinuous in the level.
 The first is about the ambient space only and is reused **verbatim**; only the second mentions the
@@ -1453,7 +1453,7 @@ No commit or push; the real Git index is unchanged.
 hole was migrated: direct holes stay **8 (1/2/5)** and certificates **24**.
 
 **What is proved.** `Analysis/VectorHausdorffSlicing.lean` is the codimension-`m` analogue of
-`Analysis/HausdorffSlicing.lean`: for `u` Lipschitz on `S` with values in an `m`-dimensional inner
+`Analysis/Hausdorff/Slicing.lean`: for `u` Lipschitz on `S` with values in an `m`-dimensional inner
 product space, the slice function `t ↦ μH[d] (S ∩ {u = t})` is dominated by a **measurable** `F`
 with `∫⁻ F ≤ volume (closedBall 0 1) · K ^ m · μH[d + m] S`. The majorant's measurability is part of
 the conclusion: the slice function itself is not known to be measurable at this point of the
@@ -1483,7 +1483,7 @@ measurability**, the analogue of `Analysis.measurable_hausdorffMeasure_inter_lev
 stated for a real-valued function and is not generalized here. So the coarea layer's
 codimension-`m` slice measurability still carries the regularity hypothesis obtained from the chart,
 the **critical set is still untreated**, and the **general codimension-`m` coarea formula remains
-open**. `Analysis/HausdorffSlicing.lean` was not modified: the codimension-`m` version is a parallel
+open**. `Analysis/Hausdorff/Slicing.lean` was not modified: the codimension-`m` version is a parallel
 new module. Sharp finite-regularity Sard, the two Cheeger comparisons and the five Energy holes are
 untouched.
 
@@ -1594,7 +1594,7 @@ ambient density of the local coarea equality is `‖gradient u x‖ₑ` when the
 codimension-`m` **weighted slice measurability** — the `AEMeasurable` statement for
 `t ↦ ∫⁻ over S ∩ {u = t}` — without which a sum cannot be exchanged with the outer integral, since
 `lintegral_tsum` needs measurability; the scalar analogue is
-`KLS/Geometry/OpenSliceMeasurable.lean`. Second, the **countable cover with disjoint patching** that
+`KLS/Geometry/Slice/OpenMeasurable.lean`. Second, the **countable cover with disjoint patching** that
 assembles the neighbourhood form into an equality on a whole regular open set; the scalar analogue
 is the assembly in `KLS/Geometry/Coarea/Regular.lean`. Critical slicing, sharp finite-regularity
 Sard, the two Cheeger comparisons and the five Energy holes are untouched.
@@ -1756,7 +1756,7 @@ variables. Rather than leave half a chain, this round finishes the one stage tha
 mathematics and independent of the charting machinery — the **density matching** — together with
 the linear and measure backbone of stage two.
 
-**What is proved.** `Analysis/CoareaGraphJacobian.lean` matches the two densities of the
+**What is proved.** `Analysis/Vector/Graph/CoareaJacobian.lean` matches the two densities of the
 codimension-`m` coarea formula. In linear form, under an orthogonal splitting `V = ι '' H ⊕ κ '' K`
 with `finrank K = finrank W` and a slope whose graph lies in `ker L`,
 `coareaJacobian L = normDet (L ∘ κ) · normDet (graphMapLinear ι κ A)`. In `C¹` form, along a level
@@ -1910,7 +1910,7 @@ No commit or push; the real Git index is unchanged.
 with a vector-valued slope. **The area formula itself is not proved**, no hole was migrated: direct
 holes stay **8 (1/2/5)** and certificates **24**.
 
-`Analysis/AreaFormula.lean` (codimension one, 957 lines) runs in five phases — linear model, `C¹`
+`Analysis/Graph/Area.lean` (codimension one, 957 lines) runs in five phases — linear model, `C¹`
 graph map, linear approximation, two-sided estimates, area formula. This round does phases two and
 three in codimension `m`, and gets phase one for free.
 
@@ -1948,7 +1948,7 @@ No commit or push; the real Git index is unchanged.
 ## Route obligation `A1` proved: continuity of the volume factor (2026-09-16)
 
 **Superseded by the `B1` first-part round above; retained as a dated snapshot. It it changes none of the registration numbers recorded above.**
-`Analysis/NormDetContinuity.lean` proves that `normDet` is continuous in the operator and that the
+`Analysis/Vector/JacobianContinuity.lean` proves that `normDet` is continuous in the operator and that the
 area-formula integrand is measurable. **No area formula and no coarea formula are proved**, no hole
 was migrated: direct holes stay **8 (1/2/5)** and certificates **24**.
 
@@ -2018,7 +2018,7 @@ high risk.
 construction and its parameter projection `ιᵀ` is an **explicit** left inverse, which is precisely
 what the general route lacks; its volume factor `√det (1 + Aᵀ A)` was proved last round, and it
 already agrees with the repository's codimension-one `graphJacobian`. The repository proved the
-codimension-**one** graph case in `Analysis/AreaFormula.lean` (957 lines, alongside
+codimension-**one** graph case in `Analysis/Graph/Area.lean` (957 lines, alongside
 `Analysis/ImplicitGraph.lean` at 859), and that is the honest cost anchor for the codimension-`m`
 analogue: obligation `B1`, 600–1000 lines, expected to take two to three rounds. The general
 obligation `A3` can then be skipped, and `A4` — the degenerate part — does not arise at all,
@@ -2047,7 +2047,7 @@ No commit or push; the real Git index is unchanged.
 direct holes stay **8 (1/2/5)** and certificates **24**.
 
 What the round established first is a limitation of what was already there: the area formula proved
-in `Analysis/AreaFormula.lean` is **codimension one only** — its graph is the graph of a
+in `Analysis/Graph/Area.lean` is **codimension one only** — its graph is the graph of a
 *real-valued* function, with linear model `graphLinear ι e a v = ι v + ⟪a, v⟫ • e` and factor
 `graphJacobian a = √(1 + ‖a‖²)`. Fibres of a map into an `m`-dimensional target have codimension
 `m`, so the plan of reducing a general `C¹` parametrization to the existing graph formula only
@@ -2134,7 +2134,7 @@ No commit or push; the real Git index is unchanged.
 ## Coarea Jacobian: the codimension-`m` program opens (2026-09-16)
 
 **Superseded by the linear area formula round above; retained as a dated snapshot. It it changes none of the registration numbers recorded above.**
-`Analysis/CoareaJacobian.lean` defines `Analysis.coareaJacobian L = sqrt (det (L ∘ Lᵀ))` and proves
+`Analysis/Vector/Jacobian.lean` defines `Analysis.coareaJacobian L = sqrt (det (L ∘ Lᵀ))` and proves
 its basic theory. It is the **linear-algebra layer of the vector-valued (codimension-`m`) coarea
 program**, and **no coarea formula is proved in this round**. No hole was migrated and no
 certificate was added: direct holes stay **8 (1/2/5)** and certificates **24**.
@@ -2268,10 +2268,10 @@ No commit or push; the real Git index is unchanged.
 ## Lipschitz coarea: L6a, L7 and L12 proved (2026-09-16)
 
 **Superseded by the T2 migration round above; retained as a dated snapshot.**
-`Analysis/LipschitzJet.lean` proves L6a: compact jets covering almost every point of a Lipschitz
+`Analysis/Lipschitz/Jet.lean` proves L6a: compact jets covering almost every point of a Lipschitz
 function, retaining differentiability, continuity of the ambient derivative and a uniform
 first-order remainder. The proof works for any additive Haar measure on a finite-dimensional
-real normed space. `Analysis/LipschitzC1Pieces.lean` combines these jets with L6 and disjointifies
+real normed space. `Analysis/Lipschitz/C1Pieces.lean` combines these jets with L6 and disjointifies
 them to prove L7, preserving both values and ambient derivatives on each measurable piece.
 
 `KLS/Geometry/Coarea/Lipschitz.lean` proves `KLS.coarea_of_lipschitz` (L12): weighted coarea and
@@ -2361,7 +2361,7 @@ comparisons, and dimension-free KLS remain open. No commit or push; the real Git
 ## First-order jet necessity closeout (2026-09-16)
 
 **Superseded by the Whitney boundary gluing round above; retained as a dated snapshot.**
-`Analysis.uniform_jet_remainder_of_contDiff` in `Analysis/FirstOrderJet.lean` proves that a
+`Analysis.uniform_jet_remainder_of_contDiff` in `Analysis/Whitney/FirstOrderJet.lean` proves that a
 globally C¹ realization on a compact set satisfies L6's uniform first-order remainder estimate.
 This is the **necessity direction only**: L6's extension existence, L6a, L7 and Lipschitz
 coarea remain open. The four strict axiom reports in `research/audits/FirstOrderJetAudit.lean`
@@ -2484,8 +2484,8 @@ provide a fiberwise substitution, followed by Tonelli. The proved identity
 only, so infinite weights and measures remain in scope. Interior C¹ representatives on smaller
 balls and countably many disjoint Borel pieces remove all outside-domain regularity. Slice
 measurability is proved independently by localizing L5 in `OpenSliceMeasurable.lean`.
-`Analysis/LocalInverse.lean` and `Analysis/FiberIntegral.lean` depend only on Mathlib;
-`Analysis/RegularChart.lean` supplies the joint chart and differential identity.
+`Analysis/LocalInverse.lean` and `Analysis/Coarea/FiberIntegral.lean` depend only on Mathlib;
+`Analysis/Coarea/RegularChart.lean` supplies the joint chart and differential identity.
 
 Five new modules and `RegularCoareaAudit` compile with `-DwarningAsError=true`. All 29 new/client
 axiom reports use only the standard three axioms. Clients cover infinite weight, the empty set,
@@ -2557,7 +2557,7 @@ equality of the two Cheeger constants. No certificate or Blueprint leanok scope 
 This round **proves obligation `L10`**: for a `C¹` real function on a finite-dimensional
 inner-product space, almost every level meets the critical set `{x | fderiv ℝ u x = 0}` in a set of
 zero `surfaceMeasure` (`KLS.ae_surfaceMeasure_critical_inter_levelSet_eq_zero` in the new
-`KLS/Geometry/CriticalSlice.lean`). Only the unused `[CompleteSpace V]` is dropped; `u` is **not**
+`KLS/Geometry/Slice/Critical.lean`). Only the unused `[CompleteSpace V]` is dropped; `u` is **not**
 assumed Lipschitz, bounded or proper, the critical set needs no measurability hypothesis (it is
 closed), and `V` may be zero-dimensional.
 
@@ -2604,7 +2604,7 @@ equality of the two Cheeger constants. No certificate or Blueprint leanok scope 
 **Superseded by the critical-slice round above; retained as a dated snapshot.**
 This round **closes the first original coarea hole**. The direct hole
 `Analysis.aemeasurable_lintegral_levelSet` moved out of `KLS/WIP/AnalyticPrerequisites.lean` into
-the hole-free `KLS/Geometry/LevelSetMeasurable.lean` with a **byte-identical `pp.all` signature**
+the hole-free `KLS/Geometry/Slice/Measurable.lean` with a **byte-identical `pp.all` signature**
 and is now proved from last round's `L5` (`KLS.aemeasurable_setLIntegral_inter_levelSet` at
 `S = univ`). Direct holes drop **11 (3/3/5) → 10 (2/3/5)** — the first hole-count reduction of
 this sequence. Certificates stay **24**, perimeter infrastructure **missing**.
@@ -2698,7 +2698,7 @@ This round **proves obligation `L3`** of the weighted coarea route: for `S` **co
 merely continuous, `t ↦ surfaceMeasure V (S ∩ {u = t})` is Borel measurable
 (`KLS.measurable_surfaceMeasure_inter_levelSet` in `KLS/Geometry/Surface/Slicing.lean`, over the
 Mathlib-only `Analysis.measurable_hausdorffMeasure_inter_levelSet` in the new
-`Analysis/HausdorffContent.lean`). `L3` is **not** a consequence of `L1`: the majorant bound says
+`Analysis/Hausdorff/Content.lean`). `L3` is **not** a consequence of `L1`: the majorant bound says
 nothing about the slice function's own measurability. Both `[CompleteSpace V]` and
 `[FiniteDimensional ℝ V]` of the recorded `L3` are dropped as unused — `surfaceMeasure` only reads
 `Module.finrank` — and no Lipschitz, boundedness or finiteness hypothesis is added.
@@ -2748,7 +2748,7 @@ constant: for `u` Lipschitz **on `S` only**, the slice function
 `∫⁻ F ≤ eilenbergConstant V * K * volume S`, where
 `eilenbergConstant V = 4 ω_{n-1} / ω_n > 0` (`KLS.exists_measurable_majorant` and
 `KLS.eilenbergConstant_pos` in `KLS/Geometry/Surface/Slicing.lean`, over the Mathlib-only
-`Analysis.exists_measurable_majorant` in `Analysis/HausdorffSlicing.lean`, which carries Mathlib's
+`Analysis.exists_measurable_majorant` in `Analysis/Hausdorff/Slicing.lean`, which carries Mathlib's
 diameter-gauge constant `2` on an arbitrary `EMetricSpace` with no dimension and no ambient
 volume). Last round's `L2` is now the null special case, with **statements unchanged**. No
 sharpness is claimed for the constant; the audit client computes it as `2` on the line and `4` in
@@ -2789,7 +2789,7 @@ equality of the two Cheeger constants. No certificate or Blueprint leanok scope 
 This round **proves obligation `L2`** of the weighted coarea route: a Lebesgue-null set has
 `surfaceMeasure`-null slices along almost every level of a function that is Lipschitz **on that
 set only**. The metric-space core is `Analysis.ae_hausdorffMeasure_inter_levelSet_eq_zero` in the
-new `Analysis/HausdorffSlicing.lean` (local import closure empty, Mathlib only, arbitrary
+new `Analysis/Hausdorff/Slicing.lean` (local import closure empty, Mathlib only, arbitrary
 `EMetricSpace`), and the normalized wrapper is
 `KLS.ae_surfaceMeasure_inter_levelSet_eq_zero` in the new `KLS/Geometry/Surface/Slicing.lean`.
 `N` is not assumed measurable, bounded or nonempty, `u` is not assumed globally Lipschitz,
@@ -2851,7 +2851,7 @@ fiber measurability. No certificate or Blueprint leanok scope was expanded.
 
 **Superseded by the weighted coarea route round above; retained as a dated snapshot.**
 `SmoothDomain.ae_exists_superlevel` and `SmoothDomain.frontier_superlevel_subset` moved from
-`KLS/WIP/CheegerInfimum.lean` to the hole-free `KLS/Geometry/RegularSuperlevel.lean` with
+`KLS/WIP/CheegerInfimum.lean` to the hole-free `KLS/Geometry/SmoothDomain/RegularSuperlevel.lean` with
 byte-identical `pp.all` signatures, and the former is now proved from the smooth Sard theorem, so
 **it no longer inherits `sorryAx`**. `WIP/CheegerInfimum.lean` dropped its import of
 `WIP/AnalyticPrerequisites` and still compiles, so no module imports that file any more.
@@ -2992,7 +2992,7 @@ type-checked but unproved in `build/audit/HigherSardNextStatement.lean`. See the
 
 **Superseded by the planar Sard round above; retained as a dated snapshot.**
 `Analysis.volume_image_eq_zero_of_quadratic_oscillation` and `Analysis.volume_image_flat_eq_zero`
-are proved in `formalization/FunctionalInequalities/Analysis/QuadraticCover.lean`, with standard
+are proved in `formalization/FunctionalInequalities/Analysis/Sard/QuadraticCover.lean`, with standard
 three axioms only. For a bounded `A : Set (Fin 2 → ℝ)` and an arbitrary `f`, a uniform
 `|f y - f x| ≤ ε‖y-x‖²` over pairs of points of `A` gives `volume (f '' A) = 0`; neither `A` nor
 `f '' A` is assumed measurable, `f` has no regularity anywhere, and the empty set is covered.
@@ -3030,7 +3030,7 @@ comparison all remain unproved, and the chain is not closed. See the
 
 **Superseded by the planar covering round above; retained as a dated snapshot.**
 `Analysis.exists_uniform_quadratic_remainder` is proved in
-`formalization/FunctionalInequalities/Analysis/TaylorRemainder.lean`, with standard three axioms
+`formalization/FunctionalInequalities/Analysis/Sard/TaylorRemainder.lean`, with standard three axioms
 only. For a C² real-valued function and compact K, every ε>0 has a single δ>0 such that
 `|u y-u x| ≤ ε * ‖y-x‖²` whenever x∈K has Du(x)=D²u(x)=0 and ‖y-x‖<δ.
 Not all of K must be flat; y may lie outside K. Empty K, zero dimension and y=x are included.
@@ -3274,11 +3274,11 @@ import closure excludes WIP. Ordinary direct elaboration of each WIP file succee
 expected `sorry` warnings. With `-DwarningAsError=true`, those warnings become errors and the
 command exits nonzero. Thus neither ordinary elaboration nor replay certifies a WIP proof. The
 hole-free modules added on 2026-09-12 — `KLS/Geometry/Surface/Measure.lean`,
-`Analysis/LevelSet.lean`, `Analysis/AreaFormula.lean` and `Analysis/Divergence.lean` — do pass
+`Analysis/Hausdorff/LevelSet.lean`, `Analysis/Graph/Area.lean` and `Analysis/Divergence.lean` — do pass
 `-DwarningAsError=true` at exit 0, as do the later hole-free modules `Analysis/ImplicitGraph.lean`,
-`Analysis/SubgraphDivergence.lean`, `Analysis/GraphIntegral.lean`,
-`Analysis/PartitionOfUnity.lean`, `KLS/Geometry/BoundaryChart.lean`,
-`KLS/Geometry/LocalGaussGreen.lean` and `KLS/Geometry/GaussGreen.lean`, and the independent
+`Analysis/Graph/Divergence.lean`, `Analysis/GraphIntegral.lean`,
+`Analysis/PartitionOfUnity.lean`, `KLS/Geometry/SmoothDomain/BoundaryChart.lean`,
+`KLS/Geometry/SmoothDomain/LocalGaussGreen.lean` and `KLS/Geometry/SmoothDomain/GaussGreen.lean`, and the independent
 audit clients; the four WIP files still do not, and their strict-mode failure is the control that
 shows the flag is active.
 The statement-only follow-up temporarily increased the total from 24 to 28. Its four boundary
@@ -3693,7 +3693,7 @@ unregistered and no registered module depends on it. The subsequent
 leaving 5 explicit holes at that point. Four later boundary-regularity statements were also
 proved, bringing that module to 21 obligations, 16 filled bodies and 5 explicit holes. On the same
 day the proved, KLS-independent Hausdorff and level-set results moved out to
-`Analysis/LevelSet.lean` (with their base definitions in `KLS/Geometry/Surface/Measure.lean`), so
+`Analysis/Hausdorff/LevelSet.lean` (with their base definitions in `KLS/Geometry/Surface/Measure.lean`), so
 that `KLS/WIP/RelativePerimeter.lean` can import them without a cycle: `AnalyticPrerequisites` now
 carries 13 obligations, 8 filled bodies and the same 5 explicit holes, 6 of the filled bodies free
 of `sorryAx`. The integration closed the two perimeter holes
@@ -3701,7 +3701,7 @@ of `sorryAx`. The integration closed the two perimeter holes
 `CheegerInfimum` hole `exists_smooth_approximation_lipschitz`, all three with standard axioms only.
 
 A later round of the same day proved the codimension-one **area formula** for `C¹` graphs in the
-new module `Analysis/AreaFormula.lean` (standard axioms only) and moved `divergence` into
+new module `Analysis/Graph/Area.lean` (standard axioms only) and moved `divergence` into
 `Analysis/Divergence.lean` with the rank-one trace identity. Using that identity, the scalar-test
 Gauss--Green statement `setIntegral_gradient_eq_integral_smul_outwardNormal` was **reduced** to
 the vector-field statement `integral_divergence_eq_integral_inner_outwardNormal`, which is still a
@@ -3713,7 +3713,7 @@ graph representation, a subgraph Fubini/FTC computation and a smooth partition o
 which exists yet.
 
 A 2026-09-13 round closed the first of the three remaining Gauss--Green sub-obligations. Two new
-`sorry`-free modules, `Analysis/ImplicitGraph.lean` and `KLS/Geometry/BoundaryChart.lean`, prove
+`sorry`-free modules, `Analysis/ImplicitGraph.lean` and `KLS/Geometry/SmoothDomain/BoundaryChart.lean`, prove
 the local `C^∞` graph representation of a `SmoothDomain` frontier
 (`KLS.SmoothDomain.exists_boundaryChart`): inside an explicit cylinder the frontier is exactly the
 graph of a globally `C^∞` height function over the tangent hyperplane, the domain is exactly the
@@ -3740,7 +3740,7 @@ smooth partition of unity. Read the
 A later 2026-09-13 round closed the **second** of the three sub-obligations and connected it to the
 boundary chart. Three new `sorry`-free modules pass `-DwarningAsError=true` at exit 0:
 
-* `Analysis/SubgraphDivergence.lean` proves `Analysis.integral_divergence_subgraph`,
+* `Analysis/Graph/Divergence.lean` proves `Analysis.integral_divergence_subgraph`,
   `∫_S div F = ∫_H ⟪F (Ψ y), ι(-∇g y) + e⟫ dy` for the region `S` strictly below the graph of a
   `C¹` height function and any compactly supported `C¹` field. The right-hand side is the
   unnormalized flux: the graph Jacobian has already cancelled against the denominator of the unit
@@ -3753,7 +3753,7 @@ boundary chart. Three new `sorry`-free modules pass `-DwarningAsError=true` at e
   a change of variables for arbitrary integrands (`map_graphChartMap_withDensity`,
   `setLIntegral_image_graphChartMap`, `setIntegral_image_graphChartMap`), assuming only
   measurability, never integrability.
-* `KLS/Geometry/LocalGaussGreen.lean` proves
+* `KLS/Geometry/SmoothDomain/LocalGaussGreen.lean` proves
   `KLS.SmoothDomain.BoundaryChart.integral_divergence_eq_integral_inner_outwardNormal`:
   `∫_U div F = ∫_{∂U} ⟪F, ν⟫ dℋ^{n-1}` **for a field with `tsupport F ⊆ C.cylinder`**. This is the
   chart-local identity, not the theorem for an arbitrary compactly supported field. Boundary
@@ -3777,7 +3777,7 @@ client theorems use only the standard axioms. Read the
 `KLS.SmoothDomain.integral_divergence_eq_integral_inner_outwardNormal` — `∫_U div F = ∫_{∂U} ⟪F, ν⟫
 dℋ^{n-1}` for **any** compactly supported `C¹` field — is proved with only the standard axioms, and
 moved out of `KLS/WIP/AnalyticPrerequisites.lean` into the new hole-free
-`KLS/Geometry/GaussGreen.lean`. Its statement is unchanged: same name, same namespace, the same
+`KLS/Geometry/SmoothDomain/GaussGreen.lean`. Its statement is unchanged: same name, same namespace, the same
 `ContDiff ℝ 1` and `HasCompactSupport` hypotheses, the same `surfaceMeasure` normalization and
 outward orientation, no boundedness of the domain or its frontier, no finite total surface measure,
 no extra smoothness, no `Nontrivial V`.
@@ -3798,12 +3798,12 @@ no extra smoothness, no `Nontrivial V`.
   dimension zero.
 * Every exchange of the finite sum with an integral is proved, not assumed:
   `Analysis/Divergence.lean` gains `traceLM`, `continuous_divergence`,
-  `hasCompactSupport_divergence` and `divergence_finset_sum`, and `KLS/Geometry/GaussGreen.lean`
+  `hasCompactSupport_divergence` and `divergence_finset_sum`, and `KLS/Geometry/SmoothDomain/GaussGreen.lean`
   proves `integrableOn_inner_outwardNormal` from `‖ν‖ ≤ 1`, `measurable_outwardNormal` and
   `isLocallyFiniteMeasure_surfaceMeasure_frontier`. No bound on `surfaceMeasure (∂U)` is used.
 * `isLocallyFiniteMeasure_surfaceMeasure_frontier` and `integrableOn_smul_outwardNormal` migrated
   verbatim into the same module, and `Analysis.fderiv_eq_zero_of_notMem_tsupport` moved down from
-  `Analysis/SubgraphDivergence.lean` to `Analysis/Divergence.lean`: no alias, no duplicate, no
+  `Analysis/Graph/Divergence.lean` to `Analysis/Divergence.lean`: no alias, no duplicate, no
   forwarding declaration.
 
 Consequently `setIntegral_gradient_eq_integral_smul_outwardNormal` and
@@ -3862,7 +3862,7 @@ the immediate weakening and stays available as the `_of_four` versions.
 Three new modules close the gaps recorded with the statement skeleton:
 `Probability/Line/BrunnMinkowski.lean` (compact one-dimensional Brunn--Minkowski, its inner-regular
 convex-combination form, and Prékopa--Leindler with no boundedness hypothesis),
-`Probability/HaarLine.lean` (the linear equivalence `θ^⊥ × ℝ ≅ E` and the Fubini splitting of a
+`Probability/Line/Haar.lean` (the linear equivalence `θ^⊥ × ℝ ≅ E` and the Fubini splitting of a
 Haar measure along a line) and `KLS/ConditionalFiber/SliceKernel.lean` (the explicit slice kernel,
 its disintegration of the joint law, and the almost-everywhere identification with the chosen
 conditional kernel), together with `KLS/LogConcave/Line/OfDensity.lean`. The only change to an
@@ -3889,7 +3889,7 @@ remains open, uncertified and without `\leanok`. The Cheeger energy is the Bluep
 convention, fixed by one definition (`Energy.Cheeger.energy := Cheeger.ofLocalSlope`); the
 asymptotic-Lipschitz convention is defined separately and its agreement with the local-slope one is
 an explicit obligation, not a definitional identification. Registration split the former
-work-in-progress module: `Energy/LocalSlope/Relaxation.lean` and `Energy/Cheeger.lean` are
+work-in-progress module: `Energy/LocalSlope/Relaxation.lean` and `Energy/Cheeger/Basic.lean` are
 registered and `sorry`-free, and `Energy/WIP/Cheeger.lean` retains only the five open obligations
 of the singular case; no registered module depends on any of them, which the build enforces. Read
 [the statement record](decisions/2026-09-11-smooth-gradient-relaxation-two-cheeger-statement.md),

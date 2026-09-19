@@ -60,7 +60,7 @@ Definitions → Transport → AbsoluteContinuity → BorellRepresentation → Co
 
 ```lean
 import FunctionalInequalities.KLS.LogConcave.Borel
-import FunctionalInequalities.KLS.LogConcave.AbsoluteContinuity
+import FunctionalInequalities.KLS.LogConcave.Density.AbsoluteContinuity
 
 #check FunctionalInequalities.KLS.LogConcave.borel_iff
 #check FunctionalInequalities.KLS.LogConcave.intrinsic_absolutelyContinuous

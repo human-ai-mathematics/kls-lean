@@ -1,9 +1,9 @@
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup
+import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Basic
 
 /-!
 # Axiom audit for the heat semigroup of a log-concave law
 
-`KLS/LogConcave/HeatSemigroup.lean` specialises the abstract semigroup construction
+`KLS/LogConcave/HeatSemigroup/Basic.lean` specialises the abstract semigroup construction
 (`Analysis/Semigroup/`, route `S1`–`S8`) to the closed weighted gradient of a full-dimensional
 log-concave law, and to the intrinsic law of an arbitrary one. There is no route-statement file for
 this step — every theorem is a one-line transfer — so this client only records that each public

@@ -1,4 +1,4 @@
-import FunctionalInequalities.Energy.Dirichlet
+import FunctionalInequalities.Energy.Form.Dirichlet
 import FunctionalInequalities.Energy.WeightedGradient.Core
 import FunctionalInequalities.KLS.ConditionalFiber.Basic
 import FunctionalInequalities.Probability.TwoPointVariance

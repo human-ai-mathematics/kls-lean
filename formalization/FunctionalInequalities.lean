@@ -11,14 +11,14 @@ import FunctionalInequalities.KLS.LogConcave.Poincare
 import FunctionalInequalities.KLS.LogConcave.Borel
 import FunctionalInequalities.KLS.Isotropic
 import FunctionalInequalities.KLS.Isoperimetry
-import FunctionalInequalities.KLS.Geometry.PerimeterRecovery
+import FunctionalInequalities.KLS.Geometry.Perimeter.Recovery
 import FunctionalInequalities.KLS.ConditionalFiber.Basic
 import FunctionalInequalities.KLS.ConditionalFiber.Closed
 import FunctionalInequalities.KLS.ConditionalFiber.EnergyComparison
 import FunctionalInequalities.KLS.ConditionalFiber.SliceKernel
 import FunctionalInequalities.Poincare.Euclidean.RawEnergyObstruction
-import FunctionalInequalities.KLS.LogConcave.BorellRepresentation
-import FunctionalInequalities.Probability.IntrinsicCovariance
+import FunctionalInequalities.KLS.LogConcave.Density.BorellRepresentation
+import FunctionalInequalities.Probability.Covariance.Intrinsic
 import FunctionalInequalities.KLS.LogConcave.Covariance
 import FunctionalInequalities.KLS.LogConcave.WeightedGradient
 import FunctionalInequalities.KLS.LogConcave.ClosedForm
@@ -29,17 +29,17 @@ import FunctionalInequalities.KLS.LogConcave.Line.SharpPoincare
 import FunctionalInequalities.KLS.LogConcave.Line.OfDensity
 import FunctionalInequalities.KLS.LogConcave.ConditionalFiber
 import FunctionalInequalities.Probability.Line.BrunnMinkowski
-import FunctionalInequalities.Probability.HaarLine
+import FunctionalInequalities.Probability.Line.Haar
 import FunctionalInequalities.Energy.LocalSlope.Relaxation
-import FunctionalInequalities.Energy.Cheeger
+import FunctionalInequalities.Energy.Cheeger.Basic
 import FunctionalInequalities.Analysis.Lipschitz.VectorCoarea
 import FunctionalInequalities.Analysis.Lipschitz.Local
 import FunctionalInequalities.Analysis.Sard.Sharp
 import FunctionalInequalities.KLS.Geometry.Cheeger.Equality
 import FunctionalInequalities.KLS.Geometry.Cheeger.Inequality
-import FunctionalInequalities.Energy.Euclidean.SlopeComparison
-import FunctionalInequalities.Energy.Euclidean.SlopeRecovery
-import FunctionalInequalities.Energy.Euclidean.SlopeDensity
+import FunctionalInequalities.Energy.Euclidean.Slope.Comparison
+import FunctionalInequalities.Energy.Euclidean.Slope.Recovery
+import FunctionalInequalities.Energy.Euclidean.Slope.Density
 import FunctionalInequalities.Energy.Cheeger.Identification
 import FunctionalInequalities.KLS.LogConcave.Line.Buser
 import FunctionalInequalities.Poincare.LocalSlope.Gradient
@@ -57,7 +57,7 @@ import FunctionalInequalities.Analysis.Semigroup.Generated.Basic
 import FunctionalInequalities.Analysis.Semigroup.Generated.Laws
 import FunctionalInequalities.Analysis.Semigroup.Exponential.MeanValue
 import FunctionalInequalities.Analysis.Semigroup.Generated.Generator
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup
+import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Basic
 
 /-!
 # Functional inequalities
@@ -70,7 +70,7 @@ developments. Node certificates are compiled separately from `solutions/`.
 
 The compact/Borel log-concavity equivalence, the six conditional-fiber contracts, the Borell
 density-representative, local-bound and moment conclusions of
-`KLS/LogConcave/BorellRepresentation.lean`, and the ambient/intrinsic covariance comparison are
+`KLS/LogConcave/Density/BorellRepresentation.lean`, and the ambient/intrinsic covariance comparison are
 proved. `Poincare.CovarianceGradient.Intrinsic.constant` implements the affine covariance Poincaré constant as a
 definition, with its log-concave well-definedness contracts in
 `KLS/LogConcave/Covariance.lean`. `KLS/LogConcave/WeightedGradient.lean` proves that the
@@ -97,22 +97,22 @@ energy under a fiber Poincaré input `κ` and transfers a form-gap bound `C` to
 `KLS/LogConcave/ConditionalFiber.lean` supplies that input for a full-dimensional log-concave law:
 base-law almost every conditional fiber is log-concave on the line, hence `FiberBound μ ρ 4`,
 `D_{μ,ρ}(f) ≤ 4 ∫‖∇f‖² dμ` and `C_P^lit(μ) ≤ 4 C` (`cor:conditional-fiber-twelve-bound`). Its
-analytic inputs are `Probability/HaarLine.lean` (Fubini splitting of a Haar measure along a line),
+analytic inputs are `Probability/Line/Haar.lean` (Fubini splitting of a Haar measure along a line),
 `KLS/ConditionalFiber/SliceKernel.lean` (the explicit slice kernel and its disintegration of the
 joint law), and `Probability/Line/BrunnMinkowski.lean` with `KLS/LogConcave/Line/OfDensity.lean`
 (one-dimensional Brunn--Minkowski and Prekopa--Leindler, hence compact-set log-concavity of a law
 with a log-concave Lebesgue density).
 `Energy/LocalSlope/Relaxation.lean` builds the asymptotic-Lipschitz constant beside the local
-slope and the sequential `L²` relaxations of both, and `Energy/Cheeger.lean` defines the metric
+slope and the sequential `L²` relaxations of both, and `Energy/Cheeger/Basic.lean` defines the metric
 Cheeger energy in the Blueprint's local-slope convention with its affine-support transport and
 proves `𝓔^can_μ = 2 Ch_μ` whenever the intrinsic law is absolutely continuous with respect to a
 Haar measure, hence for every log-concave law
 (`cor:absolutely-continuous-relaxation-two-cheeger`). The singular case is closed by
-`Energy/Euclidean/SlopeComparison.lean` (a smooth test's asymptotic Lipschitz constant is its
+`Energy/Euclidean/Slope/Comparison.lean` (a smooth test's asymptotic Lipschitz constant is its
 gradient norm, so the three relaxations are sandwiched for every Borel law),
-`Energy/Euclidean/SlopeRecovery.lean` (mollification recovers globally Lipschitz tests by smooth
+`Energy/Euclidean/Slope/Recovery.lean` (mollification recovers globally Lipschitz tests by smooth
 ones, with the cutoff tools that reduce admissible tests to them) and
-`Energy/Euclidean/SlopeDensity.lean` (the local slope of a continuous function is Borel, a Lipschitz
+`Energy/Euclidean/Slope/Density.lean` (the local slope of a continuous function is Borel, a Lipschitz
 test is patched by McShane extensions on finitely many compact cores of a slope-adapted Borel
 partition, and so `SmoothGradient.relaxation ν ≤ LocalSlope.relaxation ν` for every Borel
 probability law); `Energy/Cheeger/Identification.lean` then states the unconditional identity
@@ -132,7 +132,7 @@ lower-semicontinuity and recovery theorems, quadratic closure of dense pre-energ
 smooth-gradient relaxation with its Dirichlet property, and intrinsic affine-support coordinates.
 The absolute-continuity Cheeger identity and the density-based raw/core results above keep
 their stated hypotheses; no unrestricted singular-law or spectral-gap identification is asserted.
-`KLS/Geometry/PerimeterRecovery.lean` also exports the proved smooth recovery sequence for
+`KLS/Geometry/Perimeter/Recovery.lean` also exports the proved smooth recovery sequence for
 finite relative perimeter, now linked by the corresponding Blueprint proof marker. This
 auxiliary registration does not add a ledger certificate.
 
@@ -160,7 +160,7 @@ and the inverse scales agree (the two isoperimetric clauses of
 `thm:klartag-density-frontend-identification`); the former work-in-progress module
 `KLS/WIP/CheegerInfimum.lean` is deleted and the `KLS/WIP/` directory with it.
 
-`KLS/Geometry/Cheeger/Inequality.lean` (with the median lemma of `KLS/Geometry/Median.lean`) proves
+`KLS/Geometry/Cheeger/Inequality.lean` (with the median lemma of `KLS/Geometry/Cheeger/Median.lean`) proves
 the Cheeger half of the Cheeger–Buser comparison `thm:logconcave-cheeger-poincare-comparison`:
 `C_P^smooth(ν) ≤ 4 / h_M(ν)²` for every Borel probability law and
 `C_P^lit(μ) ≤ 4 Ψ_KLS(μ)²` for every log-concave law

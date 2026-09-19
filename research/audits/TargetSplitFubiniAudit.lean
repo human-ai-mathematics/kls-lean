@@ -1,4 +1,4 @@
-import FunctionalInequalities.Analysis.RankDeficient.TargetSplitFubini
+import FunctionalInequalities.Analysis.Vector.RankDeficient.TargetSplitFubini
 
 /-!
 # Scope audit for Fubini across an orthogonal splitting of the target

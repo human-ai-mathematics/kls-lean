@@ -1,4 +1,4 @@
-import FunctionalInequalities.Analysis.AreaFormula
+import FunctionalInequalities.Analysis.Graph.Area
 import Mathlib.Analysis.Calculus.Rademacher
 import Mathlib.MeasureTheory.Function.Egorov
 

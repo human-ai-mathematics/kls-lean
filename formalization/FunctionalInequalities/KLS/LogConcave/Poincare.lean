@@ -1,4 +1,4 @@
-import FunctionalInequalities.KLS.LogConcave.AbsoluteContinuity
+import FunctionalInequalities.KLS.LogConcave.Density.AbsoluteContinuity
 import FunctionalInequalities.Poincare.LocalSlope.SmoothTestComparison
 
 /-!

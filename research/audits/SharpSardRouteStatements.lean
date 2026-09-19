@@ -1,4 +1,4 @@
-import FunctionalInequalities.Analysis.QuadraticCover
+import FunctionalInequalities.Analysis.Sard.QuadraticCover
 import FunctionalInequalities.Analysis.Sard.Smooth
 
 /-!
@@ -53,7 +53,7 @@ open Set Metric Filter Topology MeasureTheory FunctionalInequalities FunctionalI
 /-! ### M0 — proved: the covering count
 
 A bounded subset of `Fin n → ℝ` on which `f` has a uniform `o(‖y - x‖ⁿ)` modulus has Lebesgue-null
-image.  Already in the repository (`Analysis/QuadraticCover.lean`); recorded here because `M5`
+image.  Already in the repository (`Analysis/Sard/QuadraticCover.lean`); recorded here because `M5`
 consumes it with the exponent `n = k + 1`. -/
 
 #check @FunctionalInequalities.Analysis.volume_image_eq_zero_of_oscillation_pow

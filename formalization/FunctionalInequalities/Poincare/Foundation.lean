@@ -1,6 +1,6 @@
-import FunctionalInequalities.Energy.ClosedQuadratic
-import FunctionalInequalities.Energy.Comparison
-import FunctionalInequalities.Energy.Dirichlet
+import FunctionalInequalities.Energy.Form.ClosedQuadratic
+import FunctionalInequalities.Energy.Form.Comparison
+import FunctionalInequalities.Energy.Form.Dirichlet
 import FunctionalInequalities.Energy.SmoothGradient.Intrinsic.Comparison
 import FunctionalInequalities.Energy.CovarianceGradient.Basic
 import FunctionalInequalities.Energy.WeightedGradient.Closable
@@ -19,9 +19,9 @@ import FunctionalInequalities.Energy.SmoothGradient.Dirichlet
 import FunctionalInequalities.Energy.SmoothGradient.NormalDirection
 import FunctionalInequalities.Energy.SmoothGradient.Quadratic
 import FunctionalInequalities.Energy.Euclidean.WeakDerivative
-import FunctionalInequalities.Energy.FormCore
-import FunctionalInequalities.Energy.Functional
-import FunctionalInequalities.Energy.QuadraticPreEnergy
+import FunctionalInequalities.Energy.Form.Core
+import FunctionalInequalities.Energy.Form.Functional
+import FunctionalInequalities.Energy.Form.QuadraticPreEnergy
 import FunctionalInequalities.Energy.Relaxation.Approximation
 import FunctionalInequalities.Energy.Relaxation.Basic
 import FunctionalInequalities.Energy.Relaxation.Contraction
@@ -38,14 +38,14 @@ import FunctionalInequalities.Poincare.LipschitzGradient.Comparison
 import FunctionalInequalities.Poincare.SmoothGradient.Intrinsic
 import FunctionalInequalities.Poincare.SmoothTest.Comparison
 import FunctionalInequalities.Poincare.SmoothGradient.Ambient
-import FunctionalInequalities.Poincare.L2Comparison
-import FunctionalInequalities.Poincare.L2Energy
+import FunctionalInequalities.Poincare.L2.Comparison
+import FunctionalInequalities.Poincare.L2.Energy
 import FunctionalInequalities.Poincare.SmoothTest.Optimal
 import FunctionalInequalities.Poincare.Relaxation
 import FunctionalInequalities.Probability.AffineSupport
 import FunctionalInequalities.Probability.Basic
-import FunctionalInequalities.Probability.CovarianceFactorization
-import FunctionalInequalities.Probability.CovarianceWhitening
+import FunctionalInequalities.Probability.Covariance.Factorization
+import FunctionalInequalities.Probability.Covariance.Whitening
 
 /-!
 # The foundation for Poincaré inequalities on real `L²`

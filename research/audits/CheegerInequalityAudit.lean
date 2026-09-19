@@ -1,5 +1,5 @@
 import FunctionalInequalities.KLS.Geometry.Cheeger.Inequality
-import FunctionalInequalities.KLS.Geometry.Median
+import FunctionalInequalities.KLS.Geometry.Cheeger.Median
 
 /-!
 # Scope audit for Cheeger's inequality `C_P^smooth(ν) ≤ 4 / h_M(ν)²`
@@ -7,7 +7,7 @@ import FunctionalInequalities.KLS.Geometry.Median
 Every obligation `P1`–`P6` and the consequence `D1` of
 `research/audits/CheegerInequalityRouteStatements.lean` is restated here **verbatim** — the
 propositions are copied character for character from that route snapshot — and discharged from
-the two new hole-free modules `KLS/Geometry/Median.lean` and `KLS/Geometry/Cheeger/Inequality.lean`.
+the two new hole-free modules `KLS/Geometry/Cheeger/Median.lean` and `KLS/Geometry/Cheeger/Inequality.lean`.
 A renamed binder, a reordered hypothesis or a weakened conclusion would fail to elaborate here.
 
 Out of scope, deliberately absent from this file: the target `P0`

@@ -1,12 +1,12 @@
-import FunctionalInequalities.KLS.Geometry.MinkowskiConstant
-import FunctionalInequalities.KLS.Geometry.PerimeterRecovery
+import FunctionalInequalities.KLS.Geometry.Cheeger.MinkowskiConstant
+import FunctionalInequalities.KLS.Geometry.Perimeter.Recovery
 
 /-!
 # The smooth Cheeger infimum and the bound `h_M ≤ h_S`
 
 Hole-free application layer over the proved recovery sequence
-(`KLS/Geometry/PerimeterRecovery.lean`) and the proved integrated Minkowski coarea bound
-(`KLS/Geometry/MinkowskiConstant.lean`).  It owns
+(`KLS/Geometry/Perimeter/Recovery.lean`) and the proved integrated Minkowski coarea bound
+(`KLS/Geometry/Cheeger/MinkowskiConstant.lean`).  It owns
 
 * `Isoperimetry.smoothConstant ρ Ω ν = ⨅_{0 < ν U < 1} P_ρ(U) / min {ν U, 1 - ν U}`, the infimum
   over smooth domains, `⊤` when no admissible domain exists (in particular in dimension zero, by

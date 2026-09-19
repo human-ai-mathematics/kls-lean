@@ -3,7 +3,7 @@ import FunctionalInequalities.Energy.Relaxation.Quadratic
 import FunctionalInequalities.KLS.LogConcave.WeightedGradient
 import FunctionalInequalities.Poincare.CovarianceGradient.Intrinsic
 import FunctionalInequalities.Poincare.CovarianceGradient.Transport
-import FunctionalInequalities.Probability.CovarianceFactorization
+import FunctionalInequalities.Probability.Covariance.Factorization
 
 /-!
 # The affine covariance relaxation is the closed covariance form

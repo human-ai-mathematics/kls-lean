@@ -54,7 +54,7 @@ covariance-core closure and the closed affine covariance form are now Lean-certi
 (`Solutions.LemCovarianceCoreClosure.certificate`,
 `Solutions.ThmAffineCovarianceRelaxationClosed.certificate`). The relative-perimeter smoothing
 statement already has a local proof, `KLS.RelativePerimeter.exists_smooth_recovery_sequence`,
-in `KLS/Geometry/PerimeterRecovery.lean`; that existing proof is now registered in Blueprint,
+in `KLS/Geometry/Perimeter/Recovery.lean`; that existing proof is now registered in Blueprint,
 without adding a separate ledger certificate.
 The reverse Cheeger-infimum comparison and the Cheeger–Buser theorem remain unproved in Lean.
 The separate abstract
