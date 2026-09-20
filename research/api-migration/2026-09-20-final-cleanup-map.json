@@ -1,0 +1,1391 @@
+{
+  "date": "2026-09-20",
+  "scope": "LD-008; LC-001 and LC-002 responsibility splits; LC-003/004 review",
+  "public_renames": {
+    "FunctionalInequalities.Analysis.Semigroup.semigroupApply": "FunctionalInequalities.Analysis.Semigroup.Generated.apply",
+    "FunctionalInequalities.Analysis.Semigroup.semigroupApply_of_not_nonneg": "FunctionalInequalities.Analysis.Semigroup.Generated.apply_of_not_nonneg",
+    "FunctionalInequalities.Analysis.Semigroup.semigroupApply_spec": "FunctionalInequalities.Analysis.Semigroup.Generated.yosida_limit",
+    "FunctionalInequalities.Analysis.Semigroup.eq_semigroupApply_of_tendsto": "FunctionalInequalities.Analysis.Semigroup.Generated.eq_apply_of_tendsto",
+    "FunctionalInequalities.Analysis.Semigroup.norm_semigroupApply_le": "FunctionalInequalities.Analysis.Semigroup.Generated.norm_apply_le",
+    "FunctionalInequalities.Analysis.Semigroup.semigroupApply_smul_add": "FunctionalInequalities.Analysis.Semigroup.Generated.map_smul_add",
+    "FunctionalInequalities.Analysis.Semigroup.semigroupApply_sub": "FunctionalInequalities.Analysis.Semigroup.Generated.map_sub",
+    "FunctionalInequalities.Analysis.Semigroup.semigroupApply_zero_vector": "FunctionalInequalities.Analysis.Semigroup.Generated.map_zero",
+    "FunctionalInequalities.Analysis.Semigroup.semigroupApply_smul": "FunctionalInequalities.Analysis.Semigroup.Generated.map_smul",
+    "FunctionalInequalities.Analysis.Semigroup.semigroupApply_add_vector": "FunctionalInequalities.Analysis.Semigroup.Generated.map_add",
+    "FunctionalInequalities.Analysis.Semigroup.semigroupCLM": "FunctionalInequalities.Analysis.Semigroup.Generated.operator",
+    "FunctionalInequalities.Analysis.Semigroup.semigroupCLM_apply": "FunctionalInequalities.Analysis.Semigroup.Generated.operator_apply",
+    "FunctionalInequalities.Analysis.Semigroup.inner_semigroupApply_left": "FunctionalInequalities.Analysis.Semigroup.Generated.symmetric",
+    "FunctionalInequalities.Analysis.Semigroup.semigroupApply_zero": "FunctionalInequalities.Analysis.Semigroup.Generated.zero_time",
+    "FunctionalInequalities.Analysis.Semigroup.semigroupApply_add": "FunctionalInequalities.Analysis.Semigroup.Generated.add_time",
+    "FunctionalInequalities.Analysis.Semigroup.norm_semigroupApply_sub_self_le": "FunctionalInequalities.Analysis.Semigroup.Generated.displacement_le",
+    "FunctionalInequalities.Analysis.Semigroup.exists_delta_norm_semigroupApply_sub_self_lt": "FunctionalInequalities.Analysis.Semigroup.Generated.continuous_at_zero",
+    "FunctionalInequalities.Analysis.Semigroup.continuousOn_semigroupApply": "FunctionalInequalities.Analysis.Semigroup.Generated.continuousOn",
+    "FunctionalInequalities.Analysis.Semigroup.norm_exp_neg_smul_yosida_sub_semigroupApply_le": "FunctionalInequalities.Analysis.Semigroup.Generated.yosida_error_le",
+    "FunctionalInequalities.Analysis.Semigroup.exists_delta_norm_exp_neg_smul_yosida_sub_semigroupApply_lt": "FunctionalInequalities.Analysis.Semigroup.Generated.yosida_converges",
+    "FunctionalInequalities.Analysis.Semigroup.norm_semigroupApply_sub_self_add_smul_le": "FunctionalInequalities.Analysis.Semigroup.Generated.generator_error_le",
+    "FunctionalInequalities.Analysis.Semigroup.exists_delta_norm_inv_smul_semigroupApply_sub_self_add_adjointComp_lt": "FunctionalInequalities.Analysis.Semigroup.Generated.generator_limit",
+    "FunctionalInequalities.Analysis.Semigroup.LpMarkov.semigroupApply_positive": "FunctionalInequalities.Analysis.Semigroup.Generated.positive",
+    "FunctionalInequalities.Analysis.Semigroup.LpMarkov.semigroupApply_mono": "FunctionalInequalities.Analysis.Semigroup.Generated.mono",
+    "FunctionalInequalities.Analysis.Semigroup.LpMarkov.semigroupApply_one": "FunctionalInequalities.Analysis.Semigroup.Generated.one",
+    "FunctionalInequalities.Analysis.Semigroup.LpMarkov.semigroupApply_le_one": "FunctionalInequalities.Analysis.Semigroup.Generated.le_one",
+    "FunctionalInequalities.Analysis.Semigroup.LpMarkov.semigroupApply_subMarkov": "FunctionalInequalities.Analysis.Semigroup.Generated.subMarkov",
+    "FunctionalInequalities.Analysis.Semigroup.LpMarkov.mean_semigroupApply": "FunctionalInequalities.Analysis.Semigroup.Generated.mean",
+    "FunctionalInequalities.Analysis.Semigroup.LpMarkov.abs_semigroupApply_le": "FunctionalInequalities.Analysis.Semigroup.Generated.abs_le",
+    "FunctionalInequalities.Analysis.Semigroup.LpMarkov.abs_semigroupApply_le_const": "FunctionalInequalities.Analysis.Semigroup.Generated.abs_le_const",
+    "FunctionalInequalities.KLS.LogConcave.heatSemigroup": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.operator",
+    "FunctionalInequalities.KLS.LogConcave.intrinsicHeatSemigroup": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.intrinsic",
+    "FunctionalInequalities.KLS.LogConcave.heatSemigroup_apply": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.apply",
+    "FunctionalInequalities.KLS.LogConcave.norm_heatSemigroup_apply_le": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.norm_apply_le",
+    "FunctionalInequalities.KLS.LogConcave.inner_heatSemigroup_left": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.symmetric",
+    "FunctionalInequalities.KLS.LogConcave.heatSemigroup_zero_apply": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.zero",
+    "FunctionalInequalities.KLS.LogConcave.heatSemigroup_add_apply": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.add",
+    "FunctionalInequalities.KLS.LogConcave.continuousOn_heatSemigroup": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.continuousOn",
+    "FunctionalInequalities.KLS.LogConcave.heatSemigroup_generator": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.generator_limit",
+    "FunctionalInequalities.KLS.LogConcave.heatSemigroup_positive": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.positive",
+    "FunctionalInequalities.KLS.LogConcave.heatSemigroup_mono": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.mono",
+    "FunctionalInequalities.KLS.LogConcave.heatSemigroup_one": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.one",
+    "FunctionalInequalities.KLS.LogConcave.heatSemigroup_le_one": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.le_one",
+    "FunctionalInequalities.KLS.LogConcave.heatSemigroup_subMarkov": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.subMarkov",
+    "FunctionalInequalities.KLS.LogConcave.mean_heatSemigroup": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.mean",
+    "FunctionalInequalities.KLS.LogConcave.integral_heatSemigroup": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.integral",
+    "FunctionalInequalities.KLS.LogConcave.abs_heatSemigroup_le": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.abs_le",
+    "FunctionalInequalities.KLS.LogConcave.abs_heatSemigroup_le_const": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.abs_le_const"
+  },
+  "paths": {
+    "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation.lean": [
+      "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Basic.lean",
+      "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Measurable.lean",
+      "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Kernel.lean",
+      "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Approximation.lean"
+    ],
+    "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation.lean": [
+      "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Basic.lean",
+      "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Moments.lean",
+      "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Construction.lean",
+      "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Intrinsic.lean"
+    ]
+  },
+  "declarations": {
+    "FunctionalInequalities.Analysis.Semigroup.continuousOn_semigroupApply": {
+      "name": "FunctionalInequalities.Analysis.Semigroup.Generated.continuousOn",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Laws.lean",
+      "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Laws.lean",
+      "line": 424
+    },
+    "FunctionalInequalities.Analysis.Semigroup.eq_semigroupApply_of_tendsto": {
+      "name": "FunctionalInequalities.Analysis.Semigroup.Generated.eq_apply_of_tendsto",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Laws.lean",
+      "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Laws.lean",
+      "line": 112
+    },
+    "FunctionalInequalities.Analysis.Semigroup.eq_zero_of_forall_le_mul": {
+      "name": "FunctionalInequalities.Analysis.Semigroup.eq_zero_of_forall_le_mul",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Laws.lean",
+      "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Laws.lean",
+      "line": 71
+    },
+    "FunctionalInequalities.Analysis.Semigroup.eq_zero_of_forall_pos_lt": {
+      "name": "FunctionalInequalities.Analysis.Semigroup.eq_zero_of_forall_pos_lt",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Laws.lean",
+      "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Laws.lean",
+      "line": 66
+    },
+    "FunctionalInequalities.Analysis.Semigroup.exists_delta_norm_semigroupApply_sub_self_lt": {
+      "name": "FunctionalInequalities.Analysis.Semigroup.Generated.continuous_at_zero",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Laws.lean",
+      "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Laws.lean",
+      "line": 388
+    },
+    "FunctionalInequalities.Analysis.Semigroup.exp_neg_add_smul_apply": {
+      "name": "FunctionalInequalities.Analysis.Semigroup.exp_neg_add_smul_apply",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Laws.lean",
+      "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Laws.lean",
+      "line": 85
+    },
+    "FunctionalInequalities.Analysis.Semigroup.inner_exp_neg_smul_yosida": {
+      "name": "FunctionalInequalities.Analysis.Semigroup.inner_exp_neg_smul_yosida",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Laws.lean",
+      "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Laws.lean",
+      "line": 244
+    },
+    "FunctionalInequalities.Analysis.Semigroup.inner_semigroupApply_left": {
+      "name": "FunctionalInequalities.Analysis.Semigroup.Generated.symmetric",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Laws.lean",
+      "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Laws.lean",
+      "line": 255
+    },
+    "FunctionalInequalities.Analysis.Semigroup.isSelfAdjoint_exp_neg_smul_yosida": {
+      "name": "FunctionalInequalities.Analysis.Semigroup.isSelfAdjoint_exp_neg_smul_yosida",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Laws.lean",
+      "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Laws.lean",
+      "line": 237
+    },
+    "FunctionalInequalities.Analysis.Semigroup.norm_exp_neg_smul_yosida_sub_le": {
+      "name": "FunctionalInequalities.Analysis.Semigroup.norm_exp_neg_smul_yosida_sub_le",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Laws.lean",
+      "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Laws.lean",
+      "line": 99
+    },
+    "FunctionalInequalities.Analysis.Semigroup.norm_semigroupApply_le": {
+      "name": "FunctionalInequalities.Analysis.Semigroup.Generated.norm_apply_le",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Laws.lean",
+      "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Laws.lean",
+      "line": 138
+    },
+    "FunctionalInequalities.Analysis.Semigroup.norm_semigroupApply_sub_self_le": {
+      "name": "FunctionalInequalities.Analysis.Semigroup.Generated.displacement_le",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Laws.lean",
+      "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Laws.lean",
+      "line": 351
+    },
+    "FunctionalInequalities.Analysis.Semigroup.semigroupApply_add": {
+      "name": "FunctionalInequalities.Analysis.Semigroup.Generated.add_time",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Laws.lean",
+      "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Laws.lean",
+      "line": 312
+    },
+    "FunctionalInequalities.Analysis.Semigroup.semigroupApply_add_vector": {
+      "name": "FunctionalInequalities.Analysis.Semigroup.Generated.map_add",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Laws.lean",
+      "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Laws.lean",
+      "line": 212
+    },
+    "FunctionalInequalities.Analysis.Semigroup.semigroupApply_smul": {
+      "name": "FunctionalInequalities.Analysis.Semigroup.Generated.map_smul",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Laws.lean",
+      "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Laws.lean",
+      "line": 205
+    },
+    "FunctionalInequalities.Analysis.Semigroup.semigroupApply_smul_add": {
+      "name": "FunctionalInequalities.Analysis.Semigroup.Generated.map_smul_add",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Laws.lean",
+      "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Laws.lean",
+      "line": 153
+    },
+    "FunctionalInequalities.Analysis.Semigroup.semigroupApply_sub": {
+      "name": "FunctionalInequalities.Analysis.Semigroup.Generated.map_sub",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Laws.lean",
+      "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Laws.lean",
+      "line": 189
+    },
+    "FunctionalInequalities.Analysis.Semigroup.semigroupApply_zero": {
+      "name": "FunctionalInequalities.Analysis.Semigroup.Generated.zero_time",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Laws.lean",
+      "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Laws.lean",
+      "line": 296
+    },
+    "FunctionalInequalities.Analysis.Semigroup.semigroupApply_zero_vector": {
+      "name": "FunctionalInequalities.Analysis.Semigroup.Generated.map_zero",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Laws.lean",
+      "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Laws.lean",
+      "line": 198
+    },
+    "FunctionalInequalities.Analysis.Semigroup.semigroupCLM": {
+      "name": "FunctionalInequalities.Analysis.Semigroup.Generated.operator",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Laws.lean",
+      "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Laws.lean",
+      "line": 221
+    },
+    "FunctionalInequalities.Analysis.Semigroup.semigroupCLM_apply": {
+      "name": "FunctionalInequalities.Analysis.Semigroup.Generated.operator_apply",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Laws.lean",
+      "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Laws.lean",
+      "line": 231
+    },
+    "FunctionalInequalities.Analysis.Semigroup.semigroupApply": {
+      "name": "FunctionalInequalities.Analysis.Semigroup.Generated.apply",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Basic.lean",
+      "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Basic.lean",
+      "line": 27
+    },
+    "FunctionalInequalities.Analysis.Semigroup.semigroupApply_of_not_nonneg": {
+      "name": "FunctionalInequalities.Analysis.Semigroup.Generated.apply_of_not_nonneg",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Basic.lean",
+      "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Basic.lean",
+      "line": 41
+    },
+    "FunctionalInequalities.Analysis.Semigroup.semigroupApply_spec": {
+      "name": "FunctionalInequalities.Analysis.Semigroup.Generated.yosida_limit",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Basic.lean",
+      "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Basic.lean",
+      "line": 32
+    },
+    "FunctionalInequalities.Analysis.Semigroup.exists_delta_norm_exp_neg_smul_yosida_sub_semigroupApply_lt": {
+      "name": "FunctionalInequalities.Analysis.Semigroup.Generated.yosida_converges",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Generator.lean",
+      "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Generator.lean",
+      "line": 179
+    },
+    "FunctionalInequalities.Analysis.Semigroup.exists_delta_norm_inv_smul_semigroupApply_sub_self_add_adjointComp_lt": {
+      "name": "FunctionalInequalities.Analysis.Semigroup.Generated.generator_limit",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Generator.lean",
+      "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Generator.lean",
+      "line": 301
+    },
+    "FunctionalInequalities.Analysis.Semigroup.le_of_forall_pos_add_le": {
+      "name": "FunctionalInequalities.Analysis.Semigroup.le_of_forall_pos_add_le",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Generator.lean",
+      "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Generator.lean",
+      "line": 92
+    },
+    "FunctionalInequalities.Analysis.Semigroup.norm_exp_neg_smul_yosida_sub_semigroupApply_le": {
+      "name": "FunctionalInequalities.Analysis.Semigroup.Generated.yosida_error_le",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Generator.lean",
+      "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Generator.lean",
+      "line": 119
+    },
+    "FunctionalInequalities.Analysis.Semigroup.norm_semigroupApply_sub_self_add_smul_le": {
+      "name": "FunctionalInequalities.Analysis.Semigroup.Generated.generator_error_le",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Generator.lean",
+      "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Generator.lean",
+      "line": 216
+    },
+    "FunctionalInequalities.Analysis.Semigroup.norm_sub_le_add_norm_sub": {
+      "name": "FunctionalInequalities.Analysis.Semigroup.norm_sub_le_add_norm_sub",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Generator.lean",
+      "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Generator.lean",
+      "line": 99
+    },
+    "FunctionalInequalities.Analysis.Semigroup.Generated.generator_comm": {
+      "name": "FunctionalInequalities.Analysis.Semigroup.Generated.generator_comm",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Domain.lean",
+      "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Domain.lean",
+      "line": 89
+    },
+    "FunctionalInequalities.Analysis.Semigroup.Generated.generator_limit_apply": {
+      "name": "FunctionalInequalities.Analysis.Semigroup.Generated.generator_limit_apply",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Domain.lean",
+      "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Domain.lean",
+      "line": 64
+    },
+    "FunctionalInequalities.Analysis.Semigroup.Generated.mem_domain_of_generator_limit": {
+      "name": "FunctionalInequalities.Analysis.Semigroup.Generated.mem_domain_of_generator_limit",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Domain.lean",
+      "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Domain.lean",
+      "line": 15
+    },
+    "FunctionalInequalities.Analysis.Semigroup.Generated.preserves_domain": {
+      "name": "FunctionalInequalities.Analysis.Semigroup.Generated.preserves_domain",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Domain.lean",
+      "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Domain.lean",
+      "line": 81
+    },
+    "FunctionalInequalities.Analysis.Semigroup.Generated.right_derivative": {
+      "name": "FunctionalInequalities.Analysis.Semigroup.Generated.right_derivative",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Domain.lean",
+      "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Domain.lean",
+      "line": 100
+    },
+    "FunctionalInequalities.Analysis.Semigroup.LpMarkov.IsPositive": {
+      "name": "FunctionalInequalities.Analysis.Semigroup.LpMarkov.IsPositive",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Markov.lean",
+      "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Markov.lean",
+      "line": 188
+    },
+    "FunctionalInequalities.Analysis.Semigroup.LpMarkov.IsPositive.comp": {
+      "name": "FunctionalInequalities.Analysis.Semigroup.LpMarkov.IsPositive.comp",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Markov.lean",
+      "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Markov.lean",
+      "line": 210
+    },
+    "FunctionalInequalities.Analysis.Semigroup.LpMarkov.IsPositive.pow": {
+      "name": "FunctionalInequalities.Analysis.Semigroup.LpMarkov.IsPositive.pow",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Markov.lean",
+      "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Markov.lean",
+      "line": 218
+    },
+    "FunctionalInequalities.Analysis.Semigroup.LpMarkov.IsPositive.smul": {
+      "name": "FunctionalInequalities.Analysis.Semigroup.LpMarkov.IsPositive.smul",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Markov.lean",
+      "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Markov.lean",
+      "line": 202
+    },
+    "FunctionalInequalities.Analysis.Semigroup.LpMarkov.abs_semigroupApply_le": {
+      "name": "FunctionalInequalities.Analysis.Semigroup.Generated.abs_le",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Markov.lean",
+      "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Markov.lean",
+      "line": 427
+    },
+    "FunctionalInequalities.Analysis.Semigroup.LpMarkov.abs_semigroupApply_le_const": {
+      "name": "FunctionalInequalities.Analysis.Semigroup.Generated.abs_le_const",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Markov.lean",
+      "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Markov.lean",
+      "line": 442
+    },
+    "FunctionalInequalities.Analysis.Semigroup.LpMarkov.compL2_mem_domain_and_norm_le": {
+      "name": "FunctionalInequalities.Analysis.Semigroup.LpMarkov.compL2_mem_domain_and_norm_le",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Markov.lean",
+      "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Markov.lean",
+      "line": 69
+    },
+    "FunctionalInequalities.Analysis.Semigroup.LpMarkov.eq_resolventDomain_of_objective_le": {
+      "name": "FunctionalInequalities.Analysis.Semigroup.LpMarkov.eq_resolventDomain_of_objective_le",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Markov.lean",
+      "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Markov.lean",
+      "line": 91
+    },
+    "FunctionalInequalities.Analysis.Semigroup.LpMarkov.exp_apply_of_apply_eq_zero": {
+      "name": "FunctionalInequalities.Analysis.Semigroup.LpMarkov.exp_apply_of_apply_eq_zero",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Markov.lean",
+      "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Markov.lean",
+      "line": 242
+    },
+    "FunctionalInequalities.Analysis.Semigroup.LpMarkov.exp_neg_smul_yosida_factor": {
+      "name": "FunctionalInequalities.Analysis.Semigroup.LpMarkov.exp_neg_smul_yosida_factor",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Markov.lean",
+      "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Markov.lean",
+      "line": 276
+    },
+    "FunctionalInequalities.Analysis.Semigroup.LpMarkov.exp_neg_smul_yosida_le_one": {
+      "name": "FunctionalInequalities.Analysis.Semigroup.LpMarkov.exp_neg_smul_yosida_le_one",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Markov.lean",
+      "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Markov.lean",
+      "line": 337
+    },
+    "FunctionalInequalities.Analysis.Semigroup.LpMarkov.exp_neg_smul_yosida_one": {
+      "name": "FunctionalInequalities.Analysis.Semigroup.LpMarkov.exp_neg_smul_yosida_one",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Markov.lean",
+      "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Markov.lean",
+      "line": 329
+    },
+    "FunctionalInequalities.Analysis.Semigroup.LpMarkov.exp_smul_one_apply": {
+      "name": "FunctionalInequalities.Analysis.Semigroup.LpMarkov.exp_smul_one_apply",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Markov.lean",
+      "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Markov.lean",
+      "line": 257
+    },
+    "FunctionalInequalities.Analysis.Semigroup.LpMarkov.isPositive_exp": {
+      "name": "FunctionalInequalities.Analysis.Semigroup.LpMarkov.isPositive_exp",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Markov.lean",
+      "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Markov.lean",
+      "line": 227
+    },
+    "FunctionalInequalities.Analysis.Semigroup.LpMarkov.isPositive_exp_neg_smul_yosida": {
+      "name": "FunctionalInequalities.Analysis.Semigroup.LpMarkov.isPositive_exp_neg_smul_yosida",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Markov.lean",
+      "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Markov.lean",
+      "line": 306
+    },
+    "FunctionalInequalities.Analysis.Semigroup.LpMarkov.mean_semigroupApply": {
+      "name": "FunctionalInequalities.Analysis.Semigroup.Generated.mean",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Markov.lean",
+      "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Markov.lean",
+      "line": 417
+    },
+    "FunctionalInequalities.Analysis.Semigroup.LpMarkov.positivePart": {
+      "name": "FunctionalInequalities.Analysis.Semigroup.LpMarkov.positivePart",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Markov.lean",
+      "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Markov.lean",
+      "line": 33
+    },
+    "FunctionalInequalities.Analysis.Semigroup.LpMarkov.positivePart_compL2": {
+      "name": "FunctionalInequalities.Analysis.Semigroup.LpMarkov.positivePart_compL2",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Markov.lean",
+      "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Markov.lean",
+      "line": 47
+    },
+    "FunctionalInequalities.Analysis.Semigroup.LpMarkov.resolventCLM_le_one": {
+      "name": "FunctionalInequalities.Analysis.Semigroup.LpMarkov.resolventCLM_le_one",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Markov.lean",
+      "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Markov.lean",
+      "line": 145
+    },
+    "FunctionalInequalities.Analysis.Semigroup.LpMarkov.resolventCLM_one": {
+      "name": "FunctionalInequalities.Analysis.Semigroup.LpMarkov.resolventCLM_one",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Markov.lean",
+      "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Markov.lean",
+      "line": 175
+    },
+    "FunctionalInequalities.Analysis.Semigroup.LpMarkov.resolventCLM_positive": {
+      "name": "FunctionalInequalities.Analysis.Semigroup.LpMarkov.resolventCLM_positive",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Markov.lean",
+      "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Markov.lean",
+      "line": 117
+    },
+    "FunctionalInequalities.Analysis.Semigroup.LpMarkov.semigroupApply_le_one": {
+      "name": "FunctionalInequalities.Analysis.Semigroup.Generated.le_one",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Markov.lean",
+      "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Markov.lean",
+      "line": 391
+    },
+    "FunctionalInequalities.Analysis.Semigroup.LpMarkov.semigroupApply_mono": {
+      "name": "FunctionalInequalities.Analysis.Semigroup.Generated.mono",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Markov.lean",
+      "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Markov.lean",
+      "line": 380
+    },
+    "FunctionalInequalities.Analysis.Semigroup.LpMarkov.semigroupApply_one": {
+      "name": "FunctionalInequalities.Analysis.Semigroup.Generated.one",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Markov.lean",
+      "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Markov.lean",
+      "line": 368
+    },
+    "FunctionalInequalities.Analysis.Semigroup.LpMarkov.semigroupApply_positive": {
+      "name": "FunctionalInequalities.Analysis.Semigroup.Generated.positive",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Markov.lean",
+      "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Markov.lean",
+      "line": 353
+    },
+    "FunctionalInequalities.Analysis.Semigroup.LpMarkov.semigroupApply_subMarkov": {
+      "name": "FunctionalInequalities.Analysis.Semigroup.Generated.subMarkov",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Markov.lean",
+      "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Markov.lean",
+      "line": 404
+    },
+    "FunctionalInequalities.Analysis.Semigroup.LpMarkov.smul_nonneg_Lp": {
+      "name": "FunctionalInequalities.Analysis.Semigroup.LpMarkov.smul_nonneg_Lp",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Markov.lean",
+      "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Markov.lean",
+      "line": 193
+    },
+    "FunctionalInequalities.Analysis.Semigroup.LpMarkov.upperOne": {
+      "name": "FunctionalInequalities.Analysis.Semigroup.LpMarkov.upperOne",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Markov.lean",
+      "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Markov.lean",
+      "line": 39
+    },
+    "FunctionalInequalities.Analysis.Semigroup.LpMarkov.upperOne_compL2": {
+      "name": "FunctionalInequalities.Analysis.Semigroup.LpMarkov.upperOne_compL2",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Markov.lean",
+      "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Markov.lean",
+      "line": 56
+    },
+    "FunctionalInequalities.Analysis.Semigroup.LpMarkov.yosida_one": {
+      "name": "FunctionalInequalities.Analysis.Semigroup.LpMarkov.yosida_one",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Markov.lean",
+      "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Markov.lean",
+      "line": 323
+    },
+    "FunctionalInequalities.KLS.LogConcave.continuousOn_heatSemigroup": {
+      "name": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.continuousOn",
+      "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Basic.lean",
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Basic.lean",
+      "line": 94
+    },
+    "FunctionalInequalities.KLS.LogConcave.heatSemigroup": {
+      "name": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.operator",
+      "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Basic.lean",
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Basic.lean",
+      "line": 54
+    },
+    "FunctionalInequalities.KLS.LogConcave.heatSemigroup_add_apply": {
+      "name": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.add",
+      "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Basic.lean",
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Basic.lean",
+      "line": 86
+    },
+    "FunctionalInequalities.KLS.LogConcave.heatSemigroup_apply": {
+      "name": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.apply",
+      "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Basic.lean",
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Basic.lean",
+      "line": 62
+    },
+    "FunctionalInequalities.KLS.LogConcave.heatSemigroup_generator": {
+      "name": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.generator_limit",
+      "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Basic.lean",
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Basic.lean",
+      "line": 102
+    },
+    "FunctionalInequalities.KLS.LogConcave.heatSemigroup_zero_apply": {
+      "name": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.zero",
+      "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Basic.lean",
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Basic.lean",
+      "line": 80
+    },
+    "FunctionalInequalities.KLS.LogConcave.inner_adjointComp_self_eq": {
+      "name": "FunctionalInequalities.KLS.LogConcave.inner_adjointComp_self_eq",
+      "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Basic.lean",
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Basic.lean",
+      "line": 115
+    },
+    "FunctionalInequalities.KLS.LogConcave.inner_heatSemigroup_left": {
+      "name": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.symmetric",
+      "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Basic.lean",
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Basic.lean",
+      "line": 74
+    },
+    "FunctionalInequalities.KLS.LogConcave.intrinsicHeatSemigroup": {
+      "name": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.intrinsic",
+      "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Basic.lean",
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Basic.lean",
+      "line": 135
+    },
+    "FunctionalInequalities.KLS.LogConcave.norm_heatSemigroup_apply_le": {
+      "name": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.norm_apply_le",
+      "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Basic.lean",
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Basic.lean",
+      "line": 68
+    },
+    "FunctionalInequalities.KLS.LogConcave.adjointComp_toLp_eq": {
+      "name": "FunctionalInequalities.KLS.LogConcave.adjointComp_toLp_eq",
+      "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Generator.lean",
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Generator.lean",
+      "line": 202
+    },
+    "FunctionalInequalities.KLS.LogConcave.closedWeightedOperator_toLp_eq": {
+      "name": "FunctionalInequalities.KLS.LogConcave.closedWeightedOperator_toLp_eq",
+      "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Generator.lean",
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Generator.lean",
+      "line": 114
+    },
+    "FunctionalInequalities.KLS.LogConcave.inner_toLp_neg_weightedLaplacian_eq": {
+      "name": "FunctionalInequalities.KLS.LogConcave.inner_toLp_neg_weightedLaplacian_eq",
+      "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Generator.lean",
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Generator.lean",
+      "line": 131
+    },
+    "FunctionalInequalities.KLS.LogConcave.integral_inner_gradient_eq": {
+      "name": "FunctionalInequalities.KLS.LogConcave.integral_inner_gradient_eq",
+      "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Generator.lean",
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Generator.lean",
+      "line": 61
+    },
+    "FunctionalInequalities.KLS.LogConcave.integral_weightedLaplacian_eq_zero": {
+      "name": "FunctionalInequalities.KLS.LogConcave.integral_weightedLaplacian_eq_zero",
+      "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Generator.lean",
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Generator.lean",
+      "line": 73
+    },
+    "FunctionalInequalities.KLS.LogConcave.memLp_gradient_of_contDiff_hasCompactSupport": {
+      "name": "FunctionalInequalities.KLS.LogConcave.memLp_gradient_of_contDiff_hasCompactSupport",
+      "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Generator.lean",
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Generator.lean",
+      "line": 90
+    },
+    "FunctionalInequalities.KLS.LogConcave.memLp_neg_weightedLaplacian": {
+      "name": "FunctionalInequalities.KLS.LogConcave.memLp_neg_weightedLaplacian",
+      "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Generator.lean",
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Generator.lean",
+      "line": 97
+    },
+    "FunctionalInequalities.KLS.LogConcave.toLp_mem_adjointComp_domain": {
+      "name": "FunctionalInequalities.KLS.LogConcave.toLp_mem_adjointComp_domain",
+      "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Generator.lean",
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Generator.lean",
+      "line": 188
+    },
+    "FunctionalInequalities.KLS.LogConcave.toLp_mem_closedWeightedOperator_domain": {
+      "name": "FunctionalInequalities.KLS.LogConcave.toLp_mem_closedWeightedOperator_domain",
+      "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Generator.lean",
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Generator.lean",
+      "line": 104
+    },
+    "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.generator_comm": {
+      "name": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.generator_comm",
+      "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Domain.lean",
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Domain.lean",
+      "line": 23
+    },
+    "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.mem_closedWeightedOperator_domain": {
+      "name": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.mem_closedWeightedOperator_domain",
+      "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Domain.lean",
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Domain.lean",
+      "line": 32
+    },
+    "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.preserves_domain": {
+      "name": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.preserves_domain",
+      "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Domain.lean",
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Domain.lean",
+      "line": 16
+    },
+    "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.right_derivative": {
+      "name": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.right_derivative",
+      "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Domain.lean",
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Domain.lean",
+      "line": 39
+    },
+    "FunctionalInequalities.KLS.LogConcave.MarkovProof.compSmoothed": {
+      "name": "FunctionalInequalities.KLS.LogConcave.MarkovProof.compSmoothed",
+      "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Markov.lean",
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Markov.lean",
+      "line": 80
+    },
+    "FunctionalInequalities.KLS.LogConcave.MarkovProof.gradient_comp_eq_smul": {
+      "name": "FunctionalInequalities.KLS.LogConcave.MarkovProof.gradient_comp_eq_smul",
+      "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Markov.lean",
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Markov.lean",
+      "line": 45
+    },
+    "FunctionalInequalities.KLS.LogConcave.MarkovProof.norm_operator_compSmoothed_le": {
+      "name": "FunctionalInequalities.KLS.LogConcave.MarkovProof.norm_operator_compSmoothed_le",
+      "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Markov.lean",
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Markov.lean",
+      "line": 135
+    },
+    "FunctionalInequalities.KLS.LogConcave.MarkovProof.norm_toLp_compSmoothed_sub_le": {
+      "name": "FunctionalInequalities.KLS.LogConcave.MarkovProof.norm_toLp_compSmoothed_sub_le",
+      "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Markov.lean",
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Markov.lean",
+      "line": 111
+    },
+    "FunctionalInequalities.KLS.LogConcave.MarkovProof.norm_weightedGradient_comp_smoothed_le": {
+      "name": "FunctionalInequalities.KLS.LogConcave.MarkovProof.norm_weightedGradient_comp_smoothed_le",
+      "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Markov.lean",
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Markov.lean",
+      "line": 63
+    },
+    "FunctionalInequalities.KLS.LogConcave.abs_heatSemigroup_le": {
+      "name": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.abs_le",
+      "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Markov.lean",
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Markov.lean",
+      "line": 333
+    },
+    "FunctionalInequalities.KLS.LogConcave.abs_heatSemigroup_le_const": {
+      "name": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.abs_le_const",
+      "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Markov.lean",
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Markov.lean",
+      "line": 343
+    },
+    "FunctionalInequalities.KLS.LogConcave.closedWeightedOperator_markovian": {
+      "name": "FunctionalInequalities.KLS.LogConcave.closedWeightedOperator_markovian",
+      "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Markov.lean",
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Markov.lean",
+      "line": 214
+    },
+    "FunctionalInequalities.KLS.LogConcave.closedWeightedOperator_one_eq_zero": {
+      "name": "FunctionalInequalities.KLS.LogConcave.closedWeightedOperator_one_eq_zero",
+      "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Markov.lean",
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Markov.lean",
+      "line": 232
+    },
+    "FunctionalInequalities.KLS.LogConcave.heatSemigroup_le_one": {
+      "name": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.le_one",
+      "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Markov.lean",
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Markov.lean",
+      "line": 287
+    },
+    "FunctionalInequalities.KLS.LogConcave.heatSemigroup_mono": {
+      "name": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.mono",
+      "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Markov.lean",
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Markov.lean",
+      "line": 267
+    },
+    "FunctionalInequalities.KLS.LogConcave.heatSemigroup_one": {
+      "name": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.one",
+      "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Markov.lean",
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Markov.lean",
+      "line": 277
+    },
+    "FunctionalInequalities.KLS.LogConcave.heatSemigroup_positive": {
+      "name": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.positive",
+      "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Markov.lean",
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Markov.lean",
+      "line": 257
+    },
+    "FunctionalInequalities.KLS.LogConcave.heatSemigroup_subMarkov": {
+      "name": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.subMarkov",
+      "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Markov.lean",
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Markov.lean",
+      "line": 299
+    },
+    "FunctionalInequalities.KLS.LogConcave.integral_heatSemigroup": {
+      "name": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.integral",
+      "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Markov.lean",
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Markov.lean",
+      "line": 323
+    },
+    "FunctionalInequalities.KLS.LogConcave.mean_heatSemigroup": {
+      "name": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.mean",
+      "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Markov.lean",
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Markov.lean",
+      "line": 312
+    },
+    "FunctionalInequalities.KLS.LogConcave.one_mem_domain_closedWeightedOperator": {
+      "name": "FunctionalInequalities.KLS.LogConcave.one_mem_domain_closedWeightedOperator",
+      "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Markov.lean",
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Markov.lean",
+      "line": 223
+    },
+    "FunctionalInequalities.KLS.LogConcave.weighted_relaxation_markovian": {
+      "name": "FunctionalInequalities.KLS.LogConcave.weighted_relaxation_markovian",
+      "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Markov.lean",
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Markov.lean",
+      "line": 203
+    },
+    "FunctionalInequalities.KLS.LogConcave.weighted_relaxedContractionBound": {
+      "name": "FunctionalInequalities.KLS.LogConcave.weighted_relaxedContractionBound",
+      "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Markov.lean",
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Markov.lean",
+      "line": 160
+    },
+    "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.abs_mollify_le": {
+      "name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.abs_mollify_le",
+      "old_path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation.lean",
+      "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Kernel.lean",
+      "line": 193
+    },
+    "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.ae_differentiableAt_of_locallyLipschitz": {
+      "name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.ae_differentiableAt_of_locallyLipschitz",
+      "old_path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation.lean",
+      "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Measurable.lean",
+      "line": 76
+    },
+    "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.aestronglyMeasurable_gradient": {
+      "name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.aestronglyMeasurable_gradient",
+      "old_path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation.lean",
+      "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Measurable.lean",
+      "line": 68
+    },
+    "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.bump": {
+      "name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.bump",
+      "old_path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation.lean",
+      "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Basic.lean",
+      "line": 49
+    },
+    "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.contDiff_kernel": {
+      "name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.contDiff_kernel",
+      "old_path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation.lean",
+      "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Kernel.lean",
+      "line": 52
+    },
+    "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.contDiff_mollify": {
+      "name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.contDiff_mollify",
+      "old_path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation.lean",
+      "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Kernel.lean",
+      "line": 147
+    },
+    "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.contDiff_scaled": {
+      "name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.contDiff_scaled",
+      "old_path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation.lean",
+      "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Basic.lean",
+      "line": 75
+    },
+    "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.continuous_fderiv_kernel": {
+      "name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.continuous_fderiv_kernel",
+      "old_path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation.lean",
+      "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Kernel.lean",
+      "line": 75
+    },
+    "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.continuous_kernel": {
+      "name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.continuous_kernel",
+      "old_path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation.lean",
+      "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Kernel.lean",
+      "line": 55
+    },
+    "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.continuous_mollify": {
+      "name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.continuous_mollify",
+      "old_path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation.lean",
+      "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Kernel.lean",
+      "line": 152
+    },
+    "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.continuous_scaled": {
+      "name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.continuous_scaled",
+      "old_path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation.lean",
+      "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Basic.lean",
+      "line": 79
+    },
+    "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.exists_bound_fderiv_bump": {
+      "name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.exists_bound_fderiv_bump",
+      "old_path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation.lean",
+      "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Basic.lean",
+      "line": 185
+    },
+    "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.exists_compactSupport_weighted_L2": {
+      "name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.exists_compactSupport_weighted_L2",
+      "old_path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation.lean",
+      "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Approximation.lean",
+      "line": 69
+    },
+    "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.exists_smooth_bounded_L1": {
+      "name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.exists_smooth_bounded_L1",
+      "old_path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation.lean",
+      "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Approximation.lean",
+      "line": 398
+    },
+    "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.exists_smooth_compactSupport_L2": {
+      "name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.exists_smooth_compactSupport_L2",
+      "old_path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation.lean",
+      "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Approximation.lean",
+      "line": 246
+    },
+    "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.exists_smooth_weighted_L2": {
+      "name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.exists_smooth_weighted_L2",
+      "old_path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation.lean",
+      "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Approximation.lean",
+      "line": 302
+    },
+    "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.fderiv_mollify_apply": {
+      "name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.fderiv_mollify_apply",
+      "old_path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation.lean",
+      "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Kernel.lean",
+      "line": 225
+    },
+    "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.fderiv_scaled_eq_zero": {
+      "name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.fderiv_scaled_eq_zero",
+      "old_path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation.lean",
+      "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Basic.lean",
+      "line": 95
+    },
+    "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.gradient_eq_of_hasFDerivAt": {
+      "name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.gradient_eq_of_hasFDerivAt",
+      "old_path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation.lean",
+      "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Basic.lean",
+      "line": 40
+    },
+    "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.gradient_scaled_mul": {
+      "name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.gradient_scaled_mul",
+      "old_path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation.lean",
+      "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Basic.lean",
+      "line": 119
+    },
+    "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.hasCompactSupport_fderiv_kernel": {
+      "name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.hasCompactSupport_fderiv_kernel",
+      "old_path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation.lean",
+      "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Kernel.lean",
+      "line": 78
+    },
+    "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.hasCompactSupport_kernel": {
+      "name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.hasCompactSupport_kernel",
+      "old_path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation.lean",
+      "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Kernel.lean",
+      "line": 40
+    },
+    "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.hasCompactSupport_mollify": {
+      "name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.hasCompactSupport_mollify",
+      "old_path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation.lean",
+      "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Kernel.lean",
+      "line": 91
+    },
+    "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.hasCompactSupport_scaled": {
+      "name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.hasCompactSupport_scaled",
+      "old_path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation.lean",
+      "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Basic.lean",
+      "line": 178
+    },
+    "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.hasFDerivAt_kernel": {
+      "name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.hasFDerivAt_kernel",
+      "old_path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation.lean",
+      "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Kernel.lean",
+      "line": 57
+    },
+    "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.hasFDerivAt_mollify": {
+      "name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.hasFDerivAt_mollify",
+      "old_path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation.lean",
+      "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Kernel.lean",
+      "line": 219
+    },
+    "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.hasFDerivAt_mollify_affine": {
+      "name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.hasFDerivAt_mollify_affine",
+      "old_path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation.lean",
+      "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Kernel.lean",
+      "line": 250
+    },
+    "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.hasFDerivAt_scaled": {
+      "name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.hasFDerivAt_scaled",
+      "old_path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation.lean",
+      "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Basic.lean",
+      "line": 82
+    },
+    "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.integrable_kernel": {
+      "name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.integrable_kernel",
+      "old_path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation.lean",
+      "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Kernel.lean",
+      "line": 114
+    },
+    "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.integrable_mul_smul_fderiv_kernel": {
+      "name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.integrable_mul_smul_fderiv_kernel",
+      "old_path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation.lean",
+      "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Kernel.lean",
+      "line": 264
+    },
+    "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.integrable_norm_fderiv_kernel": {
+      "name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.integrable_norm_fderiv_kernel",
+      "old_path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation.lean",
+      "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Kernel.lean",
+      "line": 121
+    },
+    "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.integrable_scaled": {
+      "name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.integrable_scaled",
+      "old_path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation.lean",
+      "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Kernel.lean",
+      "line": 111
+    },
+    "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.integrable_shift_mul_kernel": {
+      "name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.integrable_shift_mul_kernel",
+      "old_path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation.lean",
+      "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Kernel.lean",
+      "line": 141
+    },
+    "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.integral_affine_smul_fderiv_kernel": {
+      "name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.integral_affine_smul_fderiv_kernel",
+      "old_path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation.lean",
+      "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Kernel.lean",
+      "line": 257
+    },
+    "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.integral_bump_pos": {
+      "name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.integral_bump_pos",
+      "old_path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation.lean",
+      "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Kernel.lean",
+      "line": 99
+    },
+    "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.integral_kernel": {
+      "name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.integral_kernel",
+      "old_path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation.lean",
+      "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Kernel.lean",
+      "line": 117
+    },
+    "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.integral_norm_fderiv_kernel": {
+      "name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.integral_norm_fderiv_kernel",
+      "old_path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation.lean",
+      "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Kernel.lean",
+      "line": 126
+    },
+    "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.integral_scaled": {
+      "name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.integral_scaled",
+      "old_path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation.lean",
+      "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Kernel.lean",
+      "line": 101
+    },
+    "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.integral_scaled_pos": {
+      "name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.integral_scaled_pos",
+      "old_path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation.lean",
+      "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Kernel.lean",
+      "line": 106
+    },
+    "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.kernel": {
+      "name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.kernel",
+      "old_path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation.lean",
+      "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Kernel.lean",
+      "line": 26
+    },
+    "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.kernelDerivativeMass": {
+      "name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.kernelDerivativeMass",
+      "old_path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation.lean",
+      "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Kernel.lean",
+      "line": 70
+    },
+    "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.kernelDerivativeMass_nonneg": {
+      "name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.kernelDerivativeMass_nonneg",
+      "old_path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation.lean",
+      "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Kernel.lean",
+      "line": 72
+    },
+    "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.kernel_eq_zero": {
+      "name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.kernel_eq_zero",
+      "old_path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation.lean",
+      "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Kernel.lean",
+      "line": 31
+    },
+    "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.kernel_nonneg": {
+      "name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.kernel_nonneg",
+      "old_path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation.lean",
+      "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Kernel.lean",
+      "line": 28
+    },
+    "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.le_mollify": {
+      "name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.le_mollify",
+      "old_path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation.lean",
+      "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Kernel.lean",
+      "line": 184
+    },
+    "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.lipschitzOnWith_of_locallyLipschitz_of_isCompact": {
+      "name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.lipschitzOnWith_of_locallyLipschitz_of_isCompact",
+      "old_path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation.lean",
+      "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Basic.lean",
+      "line": 138
+    },
+    "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.lipschitzWith_mollify": {
+      "name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.lipschitzWith_mollify",
+      "old_path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation.lean",
+      "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Kernel.lean",
+      "line": 156
+    },
+    "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.lipschitzWith_scaled": {
+      "name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.lipschitzWith_scaled",
+      "old_path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation.lean",
+      "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Basic.lean",
+      "line": 111
+    },
+    "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.measurable_gradient": {
+      "name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.measurable_gradient",
+      "old_path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation.lean",
+      "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Measurable.lean",
+      "line": 63
+    },
+    "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.mollify": {
+      "name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.mollify",
+      "old_path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation.lean",
+      "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Kernel.lean",
+      "line": 88
+    },
+    "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.mollify_affine": {
+      "name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.mollify_affine",
+      "old_path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation.lean",
+      "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Kernel.lean",
+      "line": 234
+    },
+    "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.mollify_apply": {
+      "name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.mollify_apply",
+      "old_path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation.lean",
+      "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Kernel.lean",
+      "line": 136
+    },
+    "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.mollify_le": {
+      "name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.mollify_le",
+      "old_path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation.lean",
+      "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Kernel.lean",
+      "line": 175
+    },
+    "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.norm_fderiv_kernel": {
+      "name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.norm_fderiv_kernel",
+      "old_path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation.lean",
+      "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Kernel.lean",
+      "line": 62
+    },
+    "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.norm_fderiv_mollify_sub_le": {
+      "name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.norm_fderiv_mollify_sub_le",
+      "old_path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation.lean",
+      "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Kernel.lean",
+      "line": 273
+    },
+    "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.norm_fderiv_scaled_le": {
+      "name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.norm_fderiv_scaled_le",
+      "old_path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation.lean",
+      "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Basic.lean",
+      "line": 104
+    },
+    "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.norm_gradient_eq_norm_fderiv": {
+      "name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.norm_gradient_eq_norm_fderiv",
+      "old_path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation.lean",
+      "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Basic.lean",
+      "line": 32
+    },
+    "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.norm_gradient_le_of_lipschitz": {
+      "name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.norm_gradient_le_of_lipschitz",
+      "old_path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation.lean",
+      "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Basic.lean",
+      "line": 36
+    },
+    "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.norm_le_of_fderiv_kernel_ne_zero": {
+      "name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.norm_le_of_fderiv_kernel_ne_zero",
+      "old_path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation.lean",
+      "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Kernel.lean",
+      "line": 82
+    },
+    "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.norm_le_of_kernel_ne_zero": {
+      "name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.norm_le_of_kernel_ne_zero",
+      "old_path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation.lean",
+      "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Kernel.lean",
+      "line": 34
+    },
+    "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.norm_mollify_sub_le": {
+      "name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.norm_mollify_sub_le",
+      "old_path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation.lean",
+      "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Kernel.lean",
+      "line": 198
+    },
+    "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.radius": {
+      "name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.radius",
+      "old_path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation.lean",
+      "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Measurable.lean",
+      "line": 92
+    },
+    "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.radius_pos": {
+      "name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.radius_pos",
+      "old_path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation.lean",
+      "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Measurable.lean",
+      "line": 94
+    },
+    "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.scaled": {
+      "name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.scaled",
+      "old_path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation.lean",
+      "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Basic.lean",
+      "line": 52
+    },
+    "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.scaled_eq_one": {
+      "name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.scaled_eq_one",
+      "old_path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation.lean",
+      "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Basic.lean",
+      "line": 60
+    },
+    "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.scaled_eq_zero": {
+      "name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.scaled_eq_zero",
+      "old_path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation.lean",
+      "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Basic.lean",
+      "line": 68
+    },
+    "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.scaled_le_one": {
+      "name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.scaled_le_one",
+      "old_path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation.lean",
+      "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Basic.lean",
+      "line": 57
+    },
+    "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.scaled_nonneg": {
+      "name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.scaled_nonneg",
+      "old_path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation.lean",
+      "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Basic.lean",
+      "line": 54
+    },
+    "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.tendsto_eLpNorm_zero_of_dominated": {
+      "name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.tendsto_eLpNorm_zero_of_dominated",
+      "old_path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation.lean",
+      "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Measurable.lean",
+      "line": 28
+    },
+    "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.tendsto_fderiv_mollify": {
+      "name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.tendsto_fderiv_mollify",
+      "old_path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation.lean",
+      "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Kernel.lean",
+      "line": 308
+    },
+    "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.tendsto_gradient_mollify": {
+      "name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.tendsto_gradient_mollify",
+      "old_path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation.lean",
+      "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Kernel.lean",
+      "line": 331
+    },
+    "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.tendsto_radius": {
+      "name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.tendsto_radius",
+      "old_path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation.lean",
+      "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Measurable.lean",
+      "line": 96
+    },
+    "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.tsupport_kernel_subset": {
+      "name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.tsupport_kernel_subset",
+      "old_path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation.lean",
+      "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Kernel.lean",
+      "line": 46
+    },
+    "FunctionalInequalities.KLS.BorelLogConcave.exists_integrable_exp_norm": {
+      "name": "FunctionalInequalities.KLS.BorelLogConcave.exists_integrable_exp_norm",
+      "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation.lean",
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Moments.lean",
+      "line": 110
+    },
+    "FunctionalInequalities.KLS.BorelLogConcave.measure_norm_ge_le": {
+      "name": "FunctionalInequalities.KLS.BorelLogConcave.measure_norm_ge_le",
+      "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation.lean",
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Moments.lean",
+      "line": 26
+    },
+    "FunctionalInequalities.KLS.BorellRepresentation.ballRatio": {
+      "name": "FunctionalInequalities.KLS.BorellRepresentation.ballRatio",
+      "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation.lean",
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Construction.lean",
+      "line": 48
+    },
+    "FunctionalInequalities.KLS.BorellRepresentation.ballRatio_logConcave": {
+      "name": "FunctionalInequalities.KLS.BorellRepresentation.ballRatio_logConcave",
+      "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation.lean",
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Construction.lean",
+      "line": 104
+    },
+    "FunctionalInequalities.KLS.BorellRepresentation.concaveOn_log_toReal_of_logConcave": {
+      "name": "FunctionalInequalities.KLS.BorellRepresentation.concaveOn_log_toReal_of_logConcave",
+      "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation.lean",
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Construction.lean",
+      "line": 249
+    },
+    "FunctionalInequalities.KLS.BorellRepresentation.convex_pos_of_logConcave": {
+      "name": "FunctionalInequalities.KLS.BorellRepresentation.convex_pos_of_logConcave",
+      "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation.lean",
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Construction.lean",
+      "line": 224
+    },
+    "FunctionalInequalities.KLS.BorellRepresentation.envelope": {
+      "name": "FunctionalInequalities.KLS.BorellRepresentation.envelope",
+      "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation.lean",
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Construction.lean",
+      "line": 56
+    },
+    "FunctionalInequalities.KLS.BorellRepresentation.envelope_ae_eq": {
+      "name": "FunctionalInequalities.KLS.BorellRepresentation.envelope_ae_eq",
+      "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation.lean",
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Construction.lean",
+      "line": 282
+    },
+    "FunctionalInequalities.KLS.BorellRepresentation.envelope_le": {
+      "name": "FunctionalInequalities.KLS.BorellRepresentation.envelope_le",
+      "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation.lean",
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Construction.lean",
+      "line": 166
+    },
+    "FunctionalInequalities.KLS.BorellRepresentation.envelope_logConcave": {
+      "name": "FunctionalInequalities.KLS.BorellRepresentation.envelope_logConcave",
+      "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation.lean",
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Construction.lean",
+      "line": 191
+    },
+    "FunctionalInequalities.KLS.BorellRepresentation.exists_radius_lt": {
+      "name": "FunctionalInequalities.KLS.BorellRepresentation.exists_radius_lt",
+      "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation.lean",
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Construction.lean",
+      "line": 35
+    },
+    "FunctionalInequalities.KLS.BorellRepresentation.le_envelope": {
+      "name": "FunctionalInequalities.KLS.BorellRepresentation.le_envelope",
+      "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation.lean",
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Construction.lean",
+      "line": 160
+    },
+    "FunctionalInequalities.KLS.BorellRepresentation.lowerDensity": {
+      "name": "FunctionalInequalities.KLS.BorellRepresentation.lowerDensity",
+      "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation.lean",
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Construction.lean",
+      "line": 53
+    },
+    "FunctionalInequalities.KLS.BorellRepresentation.lowerDensity_ae_eq": {
+      "name": "FunctionalInequalities.KLS.BorellRepresentation.lowerDensity_ae_eq",
+      "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation.lean",
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Construction.lean",
+      "line": 94
+    },
+    "FunctionalInequalities.KLS.BorellRepresentation.lowerDensity_le": {
+      "name": "FunctionalInequalities.KLS.BorellRepresentation.lowerDensity_le",
+      "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation.lean",
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Construction.lean",
+      "line": 84
+    },
+    "FunctionalInequalities.KLS.BorellRepresentation.lowerDensity_logConcave": {
+      "name": "FunctionalInequalities.KLS.BorellRepresentation.lowerDensity_logConcave",
+      "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation.lean",
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Construction.lean",
+      "line": 138
+    },
+    "FunctionalInequalities.KLS.BorellRepresentation.measurable_ballRatio": {
+      "name": "FunctionalInequalities.KLS.BorellRepresentation.measurable_ballRatio",
+      "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation.lean",
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Construction.lean",
+      "line": 69
+    },
+    "FunctionalInequalities.KLS.BorellRepresentation.measurable_lowerDensity": {
+      "name": "FunctionalInequalities.KLS.BorellRepresentation.measurable_lowerDensity",
+      "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation.lean",
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Construction.lean",
+      "line": 74
+    },
+    "FunctionalInequalities.KLS.BorellRepresentation.measurable_measure_closedBall": {
+      "name": "FunctionalInequalities.KLS.BorellRepresentation.measurable_measure_closedBall",
+      "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation.lean",
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Construction.lean",
+      "line": 61
+    },
+    "FunctionalInequalities.KLS.BorellRepresentation.radius": {
+      "name": "FunctionalInequalities.KLS.BorellRepresentation.radius",
+      "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation.lean",
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Construction.lean",
+      "line": 24
+    },
+    "FunctionalInequalities.KLS.BorellRepresentation.radius_pos": {
+      "name": "FunctionalInequalities.KLS.BorellRepresentation.radius_pos",
+      "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation.lean",
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Construction.lean",
+      "line": 27
+    },
+    "FunctionalInequalities.KLS.BorellRepresentation.radius_two_mul_add_one": {
+      "name": "FunctionalInequalities.KLS.BorellRepresentation.radius_two_mul_add_one",
+      "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation.lean",
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Construction.lean",
+      "line": 38
+    },
+    "FunctionalInequalities.KLS.BorellRepresentation.tendsto_radius": {
+      "name": "FunctionalInequalities.KLS.BorellRepresentation.tendsto_radius",
+      "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation.lean",
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Construction.lean",
+      "line": 30
+    },
+    "FunctionalInequalities.KLS.BorellRepresentation.upperSemicontinuous_envelope": {
+      "name": "FunctionalInequalities.KLS.BorellRepresentation.upperSemicontinuous_envelope",
+      "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation.lean",
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Construction.lean",
+      "line": 172
+    },
+    "FunctionalInequalities.KLS.IsBorellDensity": {
+      "name": "FunctionalInequalities.KLS.IsBorellDensity",
+      "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation.lean",
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Basic.lean",
+      "line": 30
+    },
+    "FunctionalInequalities.KLS.IsBorellDensity.concaveOn_log": {
+      "name": "FunctionalInequalities.KLS.IsBorellDensity.concaveOn_log",
+      "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation.lean",
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Basic.lean",
+      "line": 66
+    },
+    "FunctionalInequalities.KLS.IsBorellDensity.continuousOn_interior_pos": {
+      "name": "FunctionalInequalities.KLS.IsBorellDensity.continuousOn_interior_pos",
+      "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation.lean",
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Basic.lean",
+      "line": 156
+    },
+    "FunctionalInequalities.KLS.IsBorellDensity.continuousOn_interior_support": {
+      "name": "FunctionalInequalities.KLS.IsBorellDensity.continuousOn_interior_support",
+      "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation.lean",
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Basic.lean",
+      "line": 168
+    },
+    "FunctionalInequalities.KLS.IsBorellDensity.convex_pos": {
+      "name": "FunctionalInequalities.KLS.IsBorellDensity.convex_pos",
+      "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation.lean",
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Basic.lean",
+      "line": 44
+    },
+    "FunctionalInequalities.KLS.IsBorellDensity.exists_bounds_of_isCompact": {
+      "name": "FunctionalInequalities.KLS.IsBorellDensity.exists_bounds_of_isCompact",
+      "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation.lean",
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Basic.lean",
+      "line": 177
+    },
+    "FunctionalInequalities.KLS.IsBorellDensity.interior_support_subset": {
+      "name": "FunctionalInequalities.KLS.IsBorellDensity.interior_support_subset",
+      "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation.lean",
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Basic.lean",
+      "line": 112
+    },
+    "FunctionalInequalities.KLS.IsBorellDensity.measure_compl_pos": {
+      "name": "FunctionalInequalities.KLS.IsBorellDensity.measure_compl_pos",
+      "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation.lean",
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Basic.lean",
+      "line": 94
+    },
+    "FunctionalInequalities.KLS.IsBorellDensity.pos_of_mem_interior_support": {
+      "name": "FunctionalInequalities.KLS.IsBorellDensity.pos_of_mem_interior_support",
+      "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation.lean",
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Basic.lean",
+      "line": 147
+    },
+    "FunctionalInequalities.KLS.LogConcave.closure_convexHull_intrinsic_support": {
+      "name": "FunctionalInequalities.KLS.LogConcave.closure_convexHull_intrinsic_support",
+      "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation.lean",
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Intrinsic.lean",
+      "line": 68
+    },
+    "FunctionalInequalities.KLS.LogConcave.exists_isBorellDensity": {
+      "name": "FunctionalInequalities.KLS.LogConcave.exists_isBorellDensity",
+      "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation.lean",
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Intrinsic.lean",
+      "line": 98
+    },
+    "FunctionalInequalities.KLS.LogConcave.exists_isBorellDensity_of_interior_support_nonempty": {
+      "name": "FunctionalInequalities.KLS.LogConcave.exists_isBorellDensity_of_interior_support_nonempty",
+      "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation.lean",
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Construction.lean",
+      "line": 348
+    },
+    "FunctionalInequalities.KLS.LogConcave.intrinsic_integrable_exp_norm": {
+      "name": "FunctionalInequalities.KLS.LogConcave.intrinsic_integrable_exp_norm",
+      "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation.lean",
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Intrinsic.lean",
+      "line": 110
+    },
+    "FunctionalInequalities.KLS.LogConcave.intrinsic_integrable_norm_pow": {
+      "name": "FunctionalInequalities.KLS.LogConcave.intrinsic_integrable_norm_pow",
+      "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation.lean",
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Intrinsic.lean",
+      "line": 119
+    },
+    "FunctionalInequalities.KLS.LogConcave.intrinsic_interior_support_compl": {
+      "name": "FunctionalInequalities.KLS.LogConcave.intrinsic_interior_support_compl",
+      "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation.lean",
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Intrinsic.lean",
+      "line": 78
+    },
+    "FunctionalInequalities.Probability.integrable_norm_pow_of_integrable_exp_norm": {
+      "name": "FunctionalInequalities.Probability.integrable_norm_pow_of_integrable_exp_norm",
+      "old_path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation.lean",
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Moments.lean",
+      "line": 199
+    }
+  },
+  "proof_status_changed": false
+}

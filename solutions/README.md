@@ -61,12 +61,13 @@ Their types preserve the reviewed generality, including empty test classes, zero
 support, zero finite constants and infinite optima. Gaussian transport through these bridges is
 now proved. See the [comparison guide](../formalization/FunctionalInequalities/Poincare/Euclidean/README.md).
 
-The `Solutions` default target builds all twenty-four certificates plus `GaussianAxiomAudit.lean` and
+The `Solutions` default target builds all twenty-six certificates plus `GaussianAxiomAudit.lean` and
 `FoundationAxiomAudit.lean`. The latter guards 27 foundation and comparison declarations together
 with the Dirac and normal-direction raw-energy obstructions; each new
 certificate also has its own axiom guard. These checks require exactly `propext`, `Classical.choice`
 and `Quot.sound`. Compiled user examples remain in
-[`examples/PoincareFoundation.lean`](../examples/PoincareFoundation.lean).
+[`examples/PoincareFoundation.lean`](../examples/PoincareFoundation.lean) and
+[`examples/ApiOrganization.lean`](../examples/ApiOrganization.lean).
 
 ## Analytic comparison certificates and definition checks
 
@@ -95,7 +96,7 @@ node is `proved / checked_by: lean`; see the
 [acceptance record](../research/decisions/2026-09-06-weighted-approximation-acceptance.md).
 
 `StatementChecks.lean` is a default-build target for the literal KLS proposition and its domain
-and boundary encodings. It is not a ledger proof certificate. All twenty-four mathematical certificates,
+and boundary encodings. It is not a ledger proof certificate. All twenty-six mathematical certificates,
 the twenty-five named definition sanity checks, the six conditional-fiber contracts and the five
 affine covariance contracts have default-build transitive axiom guards. Existing
 Dirac representative examples and Gaussian comparisons are reused. A concrete Gaussian literature

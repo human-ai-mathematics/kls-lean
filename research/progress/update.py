@@ -56,7 +56,8 @@ def generate():
     digest = hashlib.sha256(b''.join(name.encode() + b'\0' + data for name, data in inputs.items())).hexdigest()
     out = ['# Formalization progress register', '', '[Progress hub](README.md) · [Route diagrams](README.md#proof-progress-tree)', '',
            f'**{len(nodes)} local Blueprint nodes · {len(certificates)} registered Lean certificates.**', '',
-           'Generated from staged canonical records. These are recorded proof/definition statuses,',
+           'Generated from the canonical records of the Git index used for this run, identified',
+           'by the canonical input digest below. These are recorded proof/definition statuses,',
            'not a fresh Lean run or a remote CI receipt. A missing local proof means only that this',
            'register does not certify it; unregistered auxiliary progress appears in the diagram directory below.', '',
            views.status_legend(), '',
@@ -139,7 +140,9 @@ def generate():
             f'Diagram digest: `{hashlib.sha256(diagram.encode()).hexdigest()}`.',
             f'View input digest: `{hashlib.sha256(json.dumps([catalog, portfolio, bibliography], sort_keys=True).encode()).hexdigest()}`.', '',
             'Regenerate with `python3 research/progress/update.py` after staging the intended source and',
-            'metadata updates. Unstaged unrelated metadata is deliberately excluded.', '']
+            'metadata updates; unstaged unrelated metadata is then deliberately excluded. When the',
+            'intended records are deliberately left unstaged, run the generator and `--check` with a',
+            'temporary `GIT_INDEX_FILE` holding exactly those records, and verify the digest above.', '']
     return {'STATUS.md': '\n'.join(out), 'README.md': readme, 'TREE.mmd': tree,
             **literature_outputs, **views.render_badges()}
 

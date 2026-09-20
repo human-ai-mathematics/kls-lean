@@ -1,6 +1,6 @@
 import FunctionalInequalities.Analysis.Semigroup.Generated.Basic
 import FunctionalInequalities.Analysis.Semigroup.Exponential.Limit
-import FunctionalInequalities.Analysis.Semigroup.Yosida.Family
+import FunctionalInequalities.Analysis.Semigroup.Yosida.Laws
 
 /-!
 # Route statements: the generated semigroup (`S7`) and its generator (`S8`)
@@ -13,8 +13,8 @@ and **at the time of this route snapshot none of `P1`–`P8`, `G1`–`G3` had be
 ## The target
 
 `S1`–`S6` of the semigroup-generation route are proved.  `Analysis/Semigroup/Generated/Basic.lean` names
-the `S6` limit: `P_t f = semigroupApply T hT hd t f` is the strong limit of `exp (-t • L_s) f` as
-`s ↓ 0` (`semigroupApply_spec`), for `T` closed and densely defined and `t ≥ 0`.  What remains of
+the `S6` limit: `P_t f = FunctionalInequalities.Analysis.Semigroup.Generated.apply T hT hd t f` is the strong limit of `exp (-t • L_s) f` as
+`s ↓ 0` (`FunctionalInequalities.Analysis.Semigroup.Generated.yosida_limit`), for `T` closed and densely defined and `t ≥ 0`.  What remains of
 the route is
 
 * **`S7`** (`P1`–`P8`): `P_t` is linear and a contraction, symmetric, `P_0 = 1`, `P_{t+u} = P_t P_u`,
@@ -35,7 +35,7 @@ only the first of the four prerequisites recorded for it.
 
 ## Conventions
 
-`⟪x, y⟫` is the real inner product.  `L_s = yosida T hT hs`, `P t f = semigroupApply T hT hd t f`
+`⟪x, y⟫` is the real inner product.  `L_s = yosida T hT hs`, `P t f = FunctionalInequalities.Analysis.Semigroup.Generated.apply T hT hd t f`
 (equal to `f` for `t < 0` by convention, so every statement below carries `0 ≤ t`).  Limits are in
 `ε`–`δ` form because `yosida` carries the proof `0 < s` as an argument.  `adjointComp T` is `T†T`;
 for `f : (adjointComp T).domain`, `(f : H₀)` is the vector and `adjointComp T f` is `T†T f`.
@@ -49,7 +49,7 @@ open scoped RealInnerProductSpace
 
 /-! ### Proved inputs, for reference -/
 
-#check @FunctionalInequalities.Analysis.Semigroup.semigroupApply_spec
+#check @FunctionalInequalities.Analysis.Semigroup.Generated.yosida_limit
 #check @FunctionalInequalities.Analysis.Semigroup.norm_exp_neg_smul_apply_le
 #check @FunctionalInequalities.Analysis.Semigroup.norm_exp_neg_smul_sub_le
 #check @FunctionalInequalities.Analysis.Semigroup.yosida_nonneg
@@ -65,14 +65,14 @@ open scoped RealInnerProductSpace
 /-! ### `P1` — the limit is unique
 
 Any `g` with `exp (-t • L_s) f → g` as `s ↓ 0` equals `P_t f`.  Triangle inequality against
-`semigroupApply_spec`. -/
+`FunctionalInequalities.Analysis.Semigroup.Generated.yosida_limit`. -/
 
 #check (∀ {H₀ H₁ : Type*} [NormedAddCommGroup H₀] [InnerProductSpace ℝ H₀] [CompleteSpace H₀]
     [NormedAddCommGroup H₁] [InnerProductSpace ℝ H₁] [CompleteSpace H₁]
     (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClosed) (hd : Dense (T.domain : Set H₀)) {t : ℝ}, 0 ≤ t →
       ∀ (f g : H₀), (∀ {ε : ℝ}, 0 < ε → ∃ δ : ℝ, 0 < δ ∧ ∀ {s : ℝ} (hs : 0 < s), s < δ →
         ‖NormedSpace.exp (-t • yosida T hT hs) f - g‖ < ε) →
-        g = semigroupApply T hT hd t f)
+        g = FunctionalInequalities.Analysis.Semigroup.Generated.apply T hT hd t f)
 
 /-! ### `P2` — `P_t` is linear
 
@@ -82,8 +82,8 @@ Any `g` with `exp (-t • L_s) f → g` as `s ↓ 0` equals `P_t f`.  Triangle i
     [NormedAddCommGroup H₁] [InnerProductSpace ℝ H₁] [CompleteSpace H₁]
     (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClosed) (hd : Dense (T.domain : Set H₀)) {t : ℝ}, 0 ≤ t →
       ∀ (a : ℝ) (f g : H₀),
-        semigroupApply T hT hd t (a • f + g) =
-          a • semigroupApply T hT hd t f + semigroupApply T hT hd t g)
+        FunctionalInequalities.Analysis.Semigroup.Generated.apply T hT hd t (a • f + g) =
+          a • FunctionalInequalities.Analysis.Semigroup.Generated.apply T hT hd t f + FunctionalInequalities.Analysis.Semigroup.Generated.apply T hT hd t g)
 
 /-! ### `P3` — `P_t` is a contraction
 
@@ -93,7 +93,7 @@ limit. -/
 #check (∀ {H₀ H₁ : Type*} [NormedAddCommGroup H₀] [InnerProductSpace ℝ H₀] [CompleteSpace H₀]
     [NormedAddCommGroup H₁] [InnerProductSpace ℝ H₁] [CompleteSpace H₁]
     (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClosed) (hd : Dense (T.domain : Set H₀)) {t : ℝ}, 0 ≤ t →
-      ∀ f : H₀, ‖semigroupApply T hT hd t f‖ ≤ ‖f‖)
+      ∀ f : H₀, ‖FunctionalInequalities.Analysis.Semigroup.Generated.apply T hT hd t f‖ ≤ ‖f‖)
 
 /-! ### `P4` — `P_t` is symmetric
 
@@ -107,7 +107,7 @@ product. -/
 #check (∀ {H₀ H₁ : Type*} [NormedAddCommGroup H₀] [InnerProductSpace ℝ H₀] [CompleteSpace H₀]
     [NormedAddCommGroup H₁] [InnerProductSpace ℝ H₁] [CompleteSpace H₁]
     (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClosed) (hd : Dense (T.domain : Set H₀)) {t : ℝ}, 0 ≤ t →
-      ∀ f g : H₀, ⟪semigroupApply T hT hd t f, g⟫ = ⟪f, semigroupApply T hT hd t g⟫)
+      ∀ f g : H₀, ⟪FunctionalInequalities.Analysis.Semigroup.Generated.apply T hT hd t f, g⟫ = ⟪f, FunctionalInequalities.Analysis.Semigroup.Generated.apply T hT hd t g⟫)
 
 /-! ### `P5` — `P_0 = 1`
 
@@ -116,7 +116,7 @@ product. -/
 #check (∀ {H₀ H₁ : Type*} [NormedAddCommGroup H₀] [InnerProductSpace ℝ H₀] [CompleteSpace H₀]
     [NormedAddCommGroup H₁] [InnerProductSpace ℝ H₁] [CompleteSpace H₁]
     (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClosed) (hd : Dense (T.domain : Set H₀)) (f : H₀),
-      semigroupApply T hT hd 0 f = f)
+      FunctionalInequalities.Analysis.Semigroup.Generated.apply T hT hd 0 f = f)
 
 /-! ### `P6` — the semigroup law
 
@@ -129,8 +129,8 @@ scalar multiples of `L_s` commute).  Then `exp (-t • L_s) (exp (-u • L_s) f)
 #check (∀ {H₀ H₁ : Type*} [NormedAddCommGroup H₀] [InnerProductSpace ℝ H₀] [CompleteSpace H₀]
     [NormedAddCommGroup H₁] [InnerProductSpace ℝ H₁] [CompleteSpace H₁]
     (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClosed) (hd : Dense (T.domain : Set H₀)) {t u : ℝ}, 0 ≤ t → 0 ≤ u →
-      ∀ f : H₀, semigroupApply T hT hd (t + u) f =
-        semigroupApply T hT hd t (semigroupApply T hT hd u f))
+      ∀ f : H₀, FunctionalInequalities.Analysis.Semigroup.Generated.apply T hT hd (t + u) f =
+        FunctionalInequalities.Analysis.Semigroup.Generated.apply T hT hd t (FunctionalInequalities.Analysis.Semigroup.Generated.apply T hT hd u f))
 
 /-! ### `P7` — strong continuity at `0`
 
@@ -142,7 +142,7 @@ general `f` approximate by `g ∈ D(T†T)` (`dense_adjointComp_domain`) and use
 #check (∀ {H₀ H₁ : Type*} [NormedAddCommGroup H₀] [InnerProductSpace ℝ H₀] [CompleteSpace H₀]
     [NormedAddCommGroup H₁] [InnerProductSpace ℝ H₁] [CompleteSpace H₁]
     (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClosed) (hd : Dense (T.domain : Set H₀)) (f : H₀) {ε : ℝ}, 0 < ε →
-      ∃ δ : ℝ, 0 < δ ∧ ∀ t : ℝ, 0 ≤ t → t < δ → ‖semigroupApply T hT hd t f - f‖ < ε)
+      ∃ δ : ℝ, 0 < δ ∧ ∀ t : ℝ, 0 ≤ t → t < δ → ‖FunctionalInequalities.Analysis.Semigroup.Generated.apply T hT hd t f - f‖ < ε)
 
 /-! ### `P8` — strong continuity on `[0, ∞)`
 
@@ -153,7 +153,7 @@ roles.  `Metric.continuousOn_iff`. -/
 #check (∀ {H₀ H₁ : Type*} [NormedAddCommGroup H₀] [InnerProductSpace ℝ H₀] [CompleteSpace H₀]
     [NormedAddCommGroup H₁] [InnerProductSpace ℝ H₁] [CompleteSpace H₁]
     (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClosed) (hd : Dense (T.domain : Set H₀)) (f : H₀),
-      ContinuousOn (fun t : ℝ => semigroupApply T hT hd t f) (Set.Ici 0))
+      ContinuousOn (fun t : ℝ => FunctionalInequalities.Analysis.Semigroup.Generated.apply T hT hd t f) (Set.Ici 0))
 
 /-! ## Part B — `S8`: the generator is `-T†T` -/
 
@@ -168,7 +168,7 @@ and `P3`). -/
     [NormedAddCommGroup H₁] [InnerProductSpace ℝ H₁] [CompleteSpace H₁]
     (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClosed) (hd : Dense (T.domain : Set H₀)) (g : H₀) {t : ℝ}, 0 ≤ t →
       ∀ {ε : ℝ}, 0 < ε → ∃ δ : ℝ, 0 < δ ∧ ∀ {s : ℝ} (hs : 0 < s), s < δ → ∀ τ ∈ Set.Icc 0 t,
-        ‖NormedSpace.exp (-τ • yosida T hT hs) g - semigroupApply T hT hd τ g‖ < ε)
+        ‖NormedSpace.exp (-τ • yosida T hT hs) g - FunctionalInequalities.Analysis.Semigroup.Generated.apply T hT hd τ g‖ < ε)
 
 /-! ### `G2` — the mean value bound for `exp (-t • A) f - f + t • A f`
 
@@ -188,7 +188,7 @@ For `f ∈ D(T†T)` and `ε > 0` there is `δ > 0` with `‖(P_t f - f)/t + T�
 Proof: put `g = T†T f`.  Choose `δ` with `‖P_τ g - g‖ < ε/3` for `τ < δ` (`P7`).  For `0 < t < δ` and
 `s` small, `‖exp (-τ • L_s) (L_s f) - L_s f‖ ≤ 2 ‖L_s f - g‖ + ‖exp (-τ • L_s) g - P_τ g‖ +
 ‖P_τ g - g‖ < ε` for all `τ ∈ [0, t]` (`Y5`, `G1`, `S5`), so `G2` with `A = L_s` gives
-`‖exp (-t • L_s) f - f + t • L_s f‖ ≤ ε t`; let `s ↓ 0` (`semigroupApply_spec`, `Y5`) to get
+`‖exp (-t • L_s) f - f + t • L_s f‖ ≤ ε t`; let `s ↓ 0` (`FunctionalInequalities.Analysis.Semigroup.Generated.yosida_limit`, `Y5`) to get
 `‖P_t f - f + t • g‖ ≤ ε t`, and divide by `t`. -/
 
 #check (∀ {H₀ H₁ : Type*} [NormedAddCommGroup H₀] [InnerProductSpace ℝ H₀] [CompleteSpace H₀]
@@ -196,4 +196,4 @@ Proof: put `g = T†T f`.  Choose `δ` with `‖P_τ g - g‖ < ε/3` for `τ < 
     (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClosed) (hd : Dense (T.domain : Set H₀))
     (f : (adjointComp T).domain) {ε : ℝ}, 0 < ε →
       ∃ δ : ℝ, 0 < δ ∧ ∀ t : ℝ, 0 < t → t < δ →
-        ‖t⁻¹ • (semigroupApply T hT hd t f - f) + adjointComp T f‖ < ε)
+        ‖t⁻¹ • (FunctionalInequalities.Analysis.Semigroup.Generated.apply T hT hd t f - f) + adjointComp T f‖ < ε)

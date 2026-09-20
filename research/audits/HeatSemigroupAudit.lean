@@ -25,8 +25,8 @@ variable {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [CompleteS
   (hν : KLS.LogConcave ν) (hi : (interior (ν : Measure V).support).Nonempty)
 
 /-- Boundary case `t = 0`: the heat semigroup is the identity. -/
-theorem boundary_t_zero (f : Lp ℝ 2 (ν : Measure V)) : hν.heatSemigroup m B hi le_rfl f = f :=
-  hν.heatSemigroup_zero_apply m B hi f
+theorem boundary_t_zero (f : Lp ℝ 2 (ν : Measure V)) : FunctionalInequalities.KLS.LogConcave.HeatSemigroup.operator m B hν hi le_rfl f = f :=
+  FunctionalInequalities.KLS.LogConcave.HeatSemigroup.zero m B hν hi f
 
 /-- The contraction bound transfers to the intrinsic semigroup of an arbitrary log-concave law. -/
 theorem intrinsic_contraction {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
@@ -35,8 +35,8 @@ theorem intrinsic_contraction {E : Type*} [NormedAddCommGroup E] [InnerProductSp
     [m.IsAddHaarMeasure] (B : (Probability.affineSupport μ).direction →L[ℝ]
       (Probability.affineSupport μ).direction) (hμ : KLS.LogConcave μ) {t : ℝ} (ht : 0 ≤ t)
     (f : Lp ℝ 2 (Probability.intrinsicMeasure μ : Measure (Probability.affineSupport μ).direction)) :
-    ‖hμ.intrinsicHeatSemigroup m B ht f‖ ≤ ‖f‖ :=
-  hμ.intrinsicMeasure.norm_heatSemigroup_apply_le m B hμ.interior_intrinsic_support_nonempty ht f
+    ‖FunctionalInequalities.KLS.LogConcave.HeatSemigroup.intrinsic m B hμ ht f‖ ≤ ‖f‖ :=
+  FunctionalInequalities.KLS.LogConcave.HeatSemigroup.norm_apply_le m B hμ.intrinsicMeasure hμ.interior_intrinsic_support_nonempty ht f
 
 end HeatSemigroupAudit
 
@@ -44,14 +44,14 @@ end HeatSemigroupAudit
 
 #print axioms FunctionalInequalities.KLS.LogConcave.closedWeightedOperator_isClosed
 #print axioms FunctionalInequalities.KLS.LogConcave.dense_domain_closedWeightedOperator
-#print axioms FunctionalInequalities.KLS.LogConcave.heatSemigroup
-#print axioms FunctionalInequalities.KLS.LogConcave.norm_heatSemigroup_apply_le
-#print axioms FunctionalInequalities.KLS.LogConcave.inner_heatSemigroup_left
-#print axioms FunctionalInequalities.KLS.LogConcave.heatSemigroup_zero_apply
-#print axioms FunctionalInequalities.KLS.LogConcave.heatSemigroup_add_apply
-#print axioms FunctionalInequalities.KLS.LogConcave.continuousOn_heatSemigroup
-#print axioms FunctionalInequalities.KLS.LogConcave.heatSemigroup_generator
+#print axioms FunctionalInequalities.KLS.LogConcave.HeatSemigroup.operator
+#print axioms FunctionalInequalities.KLS.LogConcave.HeatSemigroup.norm_apply_le
+#print axioms FunctionalInequalities.KLS.LogConcave.HeatSemigroup.symmetric
+#print axioms FunctionalInequalities.KLS.LogConcave.HeatSemigroup.zero
+#print axioms FunctionalInequalities.KLS.LogConcave.HeatSemigroup.add
+#print axioms FunctionalInequalities.KLS.LogConcave.HeatSemigroup.continuousOn
+#print axioms FunctionalInequalities.KLS.LogConcave.HeatSemigroup.generator_limit
 #print axioms FunctionalInequalities.KLS.LogConcave.inner_adjointComp_self_eq
-#print axioms FunctionalInequalities.KLS.LogConcave.intrinsicHeatSemigroup
+#print axioms FunctionalInequalities.KLS.LogConcave.HeatSemigroup.intrinsic
 #print axioms HeatSemigroupAudit.boundary_t_zero
 #print axioms HeatSemigroupAudit.intrinsic_contraction

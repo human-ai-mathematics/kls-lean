@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "last_updated": "2026-09-19",
+  "last_updated": "2026-09-20",
   "nodes": {
     "ass:cmh-recovery-envelope": {
       "description": "Seek a regular moment-map approximation of every centered log-concave law with a dimension-free CMH bound.",
@@ -232,7 +232,13 @@
     },
     "lem:relative-perimeter-cheeger-infimum": {
       "description": "Identify the Cheeger infimum over Borel sets with the weighted-perimeter infimum over smooth domains.",
-      "blueprint": "lem:relative-perimeter-cheeger-infimum"
+      "blueprint": "lem:relative-perimeter-cheeger-infimum",
+      "diagram": {
+        "id": "EQ",
+        "label": "h_M = h_S",
+        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Cheeger/Equality.lean",
+        "shape": "box"
+      }
     },
     "lem:relative-perimeter-smoothing": {
       "description": "Approximate a smooth-domain indicator by smooth Lipschitz functions whose limiting gradient integral is at most its perimeter.",
@@ -312,7 +318,7 @@
       "diagram": {
         "id": "DENS",
         "label": "Log-concave density<br/>Intrinsic support",
-        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation.lean",
+        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Intrinsic.lean",
         "shape": "box"
       }
     },
@@ -365,13 +371,14 @@
       "blueprint": "thm:legacy-relaxed-holds-equivalence"
     },
     "thm:logconcave-cheeger-poincare-comparison": {
-      "description": "Compare Poincaré and inverse-Cheeger scales in both directions for log-concave laws, with factors 4 and π.",
+      "description": "Compare Poincare and inverse-Cheeger scales with factors 4 and pi. The Cheeger half is proved; the full pi Buser half remains unproved, beyond the dimension-at-most-one result with 12.",
       "blueprint": "thm:logconcave-cheeger-poincare-comparison",
       "diagram": {
         "id": "CB",
-        "label": "Cheeger–Buser<br/>Comparison",
+        "label": "NEXT: Cheeger–Buser<br/>Complete pi bound",
         "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex",
-        "shape": "box"
+        "shape": "box",
+        "focus": true
       }
     },
     "thm:one-dimensional-logconcave-poincare": {
@@ -421,7 +428,7 @@
       }
     },
     "thm:smooth-gradient-relaxation-two-cheeger": {
-      "description": "Seek identification of canonical energy with twice metric Cheeger energy for general laws, beyond the proved density case.",
+      "description": "Identify canonical energy with twice local-slope Cheeger energy for every Borel probability law, including singular laws.",
       "blueprint": "thm:smooth-gradient-relaxation-two-cheeger"
     },
     "thm:smooth-lipschitz-constant-equivalence": {
@@ -609,38 +616,38 @@
       }
     },
     "diagram:SARD": {
-      "description": "Smooth Sard",
+      "description": "Scalar Sard at sharp C^(finrank) regularity, hence also smooth scalar Sard; no general vector-valued sharp Sard claim.",
       "assessment": {
         "state": "formalized",
         "evidence": {
           "kind": "reviewed_progress",
-          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/Sard/Smooth.lean",
-          "baseline_commit": "b7b458c"
+          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/Sard/Sharp.lean",
+          "baseline_commit": "f8e4ca8b63a53b2de070f02d93a3d3f7674a4648"
         },
         "kind": "auxiliary"
       },
       "diagram": {
         "id": "SARD",
-        "label": "Smooth Sard",
-        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/Sard/Smooth.lean",
+        "label": "Scalar Sard<br/>Sharp finite regularity",
+        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/Sard/Sharp.lean",
         "shape": "box"
       }
     },
     "diagram:SCI": {
-      "description": "Integrated smooth Cheeger superlevel inequality; the coarea formula itself is already proved. This pending step belongs to the separately assigned Cheeger-Buser workstream.",
+      "description": "Bound the integrated minimum of superlevel masses by gradient energy using the smooth Cheeger constant; proved by smoothConstant_mul_lintegral_min_superlevel_le.",
       "assessment": {
-        "state": "pending",
+        "state": "formalized",
         "evidence": {
           "kind": "reviewed_progress",
-          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/WIP/CheegerInfimum.lean",
-          "baseline_commit": "b7b458c"
+          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Cheeger/Equality.lean",
+          "baseline_commit": "f8e4ca8b63a53b2de070f02d93a3d3f7674a4648"
         },
         "kind": "auxiliary"
       },
       "diagram": {
         "id": "SCI",
         "label": "Cheeger superlevel<br/>Integral bound",
-        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/WIP/CheegerInfimum.lean",
+        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Cheeger/Equality.lean",
         "shape": "box"
       }
     },
@@ -663,38 +670,20 @@
       }
     },
     "diagram:REV": {
-      "description": "h_S ≤ h_M",
+      "description": "Prove h_S <= h_M by distance cutoffs and the integrated superlevel inequality; smoothConstant_le_minkowskiConstant.",
       "assessment": {
-        "state": "pending",
+        "state": "formalized",
         "evidence": {
           "kind": "reviewed_progress",
-          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/WIP/CheegerInfimum.lean",
-          "baseline_commit": "b7b458c"
+          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Cheeger/Equality.lean",
+          "baseline_commit": "f8e4ca8b63a53b2de070f02d93a3d3f7674a4648"
         },
         "kind": "auxiliary"
       },
       "diagram": {
         "id": "REV",
         "label": "h_S ≤ h_M",
-        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/WIP/CheegerInfimum.lean",
-        "shape": "box"
-      }
-    },
-    "diagram:EQ": {
-      "description": "h_M = h_S",
-      "assessment": {
-        "state": "partial",
-        "evidence": {
-          "kind": "reviewed_progress",
-          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/WIP/CheegerInfimum.lean",
-          "baseline_commit": "b7b458c"
-        },
-        "kind": "auxiliary"
-      },
-      "diagram": {
-        "id": "EQ",
-        "label": "h_M = h_S",
-        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/WIP/CheegerInfimum.lean",
+        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Cheeger/Equality.lean",
         "shape": "box"
       }
     },
@@ -917,6 +906,96 @@
         "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/research/decisions/2026-09-17-rank-deficient-coarea.md",
         "shape": "box"
       }
+    },
+    "diagram:SEMI": {
+      "description": "Construct the concrete strongly continuous symmetric contraction semigroup and identify its abstract generator as -T*T; S1-S8 and specialisation are proved.",
+      "assessment": {
+        "state": "formalized",
+        "evidence": {
+          "kind": "reviewed_progress",
+          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Basic.lean",
+          "baseline_commit": "f8e4ca8b63a53b2de070f02d93a3d3f7674a4648"
+        },
+        "kind": "auxiliary"
+      },
+      "diagram": {
+        "id": "SEMI",
+        "label": "Weighted-gradient<br/>Heat semigroup",
+        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Basic.lean",
+        "shape": "box"
+      }
+    },
+    "diagram:MARKOV": {
+      "description": "Prove positivity, preservation of constants and integrals, sub-Markov bounds and contraction of finite essential bounds on L2; intrinsic laws cover lower-dimensional support.",
+      "assessment": {
+        "state": "formalized",
+        "evidence": {
+          "kind": "reviewed_progress",
+          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Markov.lean",
+          "baseline_commit": "f8e4ca8b63a53b2de070f02d93a3d3f7674a4648"
+        },
+        "kind": "auxiliary"
+      },
+      "diagram": {
+        "id": "MARKOV",
+        "label": "Heat semigroup<br/>Markov properties",
+        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Markov.lean",
+        "shape": "box"
+      }
+    },
+    "diagram:BE": {
+      "description": "Generator identification on smooth compactly supported tests (T*T f = -(Delta f - <grad U, grad f>), weighted integration by parts) and the local Gamma/Gamma_2 calculus (carre du champ product identity, positive semidefinite Hessian of a convex potential, Bochner identity in the fixed standard basis, Gamma_2 >= 0) are proved pointwise for smooth potentials; D(A) invariance, generator commutation and right time derivatives for D(A) inputs are also proved for arbitrary weights; arbitrary-input smoothing, full form-domain stability, Gamma interpolation, the gradient estimates for the existing semigroup and their general-law passage remain pending, as internal milestones of the full pi Buser task.",
+      "assessment": {
+        "state": "partial",
+        "evidence": {
+          "kind": "reviewed_progress",
+          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/BakryEmery/Bochner.lean",
+          "baseline_commit": "f8e4ca8b63a53b2de070f02d93a3d3f7674a4648"
+        },
+        "kind": "auxiliary"
+      },
+      "diagram": {
+        "id": "BE",
+        "label": "Generator / Bochner<br/>Gradient estimates",
+        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/BakryEmery/Bochner.lean",
+        "shape": "box"
+      }
+    },
+    "diagram:HEAT": {
+      "description": "Prove the heat approximation and gradient smoothing estimates, their perimeter and spectral-gap interfaces, and the pi comparison for general log-concave laws.",
+      "assessment": {
+        "state": "pending",
+        "evidence": {
+          "kind": "reviewed_progress",
+          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/research/decisions/2026-09-20-current-status-alignment.md",
+          "baseline_commit": "f8e4ca8b63a53b2de070f02d93a3d3f7674a4648"
+        },
+        "kind": "auxiliary"
+      },
+      "diagram": {
+        "id": "HEAT",
+        "label": "Small-time heat bounds<br/>and pi Buser assembly",
+        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/research/decisions/2026-09-20-current-status-alignment.md",
+        "shape": "box"
+      }
+    },
+    "diagram:VLIP": {
+      "description": "Prove codimension-m weighted coarea for Lipschitz and locally Lipschitz maps; no general vector-valued sharp Sard assertion.",
+      "assessment": {
+        "state": "formalized",
+        "evidence": {
+          "kind": "reviewed_progress",
+          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/Lipschitz/Local.lean",
+          "baseline_commit": "f8e4ca8b63a53b2de070f02d93a3d3f7674a4648"
+        },
+        "kind": "auxiliary"
+      },
+      "diagram": {
+        "id": "VLIP",
+        "label": "Vector coarea<br/>Lipschitz and local",
+        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/Lipschitz/Local.lean",
+        "shape": "box"
+      }
     }
   },
   "diagram": {
@@ -954,6 +1033,16 @@
           "FRONT",
           "CB",
           "MINK"
+        ]
+      },
+      {
+        "id": "HEATPROGRAM",
+        "title": "Buser analytic program — dotted links are planned steps",
+        "nodes": [
+          "SEMI",
+          "MARKOV",
+          "BE",
+          "HEAT"
         ]
       },
       {
@@ -1006,7 +1095,8 @@
           "VZERO",
           "VR123",
           "VR4",
-          "VFULL"
+          "VFULL",
+          "VLIP"
         ]
       }
     ],
@@ -1244,6 +1334,31 @@
       {
         "from": "VR4",
         "to": "VFULL",
+        "kind": "context"
+      },
+      {
+        "from": "SEMI",
+        "to": "MARKOV",
+        "kind": "context"
+      },
+      {
+        "from": "MARKOV",
+        "to": "BE",
+        "kind": "context"
+      },
+      {
+        "from": "BE",
+        "to": "HEAT",
+        "kind": "context"
+      },
+      {
+        "from": "HEAT",
+        "to": "CB",
+        "kind": "context"
+      },
+      {
+        "from": "VFULL",
+        "to": "VLIP",
         "kind": "context"
       }
     ]

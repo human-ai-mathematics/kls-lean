@@ -1,5 +1,5 @@
 import FunctionalInequalities.Analysis.Graph.OpenIntegral
-import FunctionalInequalities.KLS.Geometry.Surface.Slicing
+import FunctionalInequalities.Analysis.Hausdorff.SurfaceSlicing
 
 /-! # Measurability of weighted slices on an open C¹ domain
 

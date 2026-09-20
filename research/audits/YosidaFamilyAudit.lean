@@ -1,11 +1,12 @@
-import FunctionalInequalities.Analysis.Semigroup.Yosida.Family
+import FunctionalInequalities.Analysis.Semigroup.Exponential.Counterexample
+import FunctionalInequalities.Analysis.Semigroup.Yosida.Laws
 
 /-!
 # Scope audit for `Y0`–`Y5` of the Yosida-limit route
 
 The six obligations of Part A of `research/audits/YosidaLimitRouteStatements.lean` are restated
 here **verbatim** — each proposition is copied character for character from that route snapshot —
-and discharged from the new hole-free module `Analysis/Semigroup/Yosida/Family.lean`. A renamed
+and discharged from the new hole-free module `Analysis/Semigroup/Yosida/Laws.lean and Exponential/Counterexample.lean`. A renamed
 binder, a reordered hypothesis or a weakened conclusion would fail to elaborate here.
 
 `Y0` is the negative item: it records that the abstract `S6` of

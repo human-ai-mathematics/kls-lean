@@ -8,7 +8,7 @@ patching exchanges a countable sum with the outer integral and `lintegral_tsum` 
 
 **The route taken here is not the scalar one.**  In codimension one the repository proves slice
 measurability for an arbitrary Borel `S` inside an open `C¹` domain **with no regular-point
-hypothesis**, through the Eilenberg slicing inequality of `KLS/Geometry/Surface/Slicing.lean`.  The
+hypothesis**, through the Eilenberg slicing inequality of `Analysis/Hausdorff/SurfaceSlicing.lean`.  The
 codimension-`m` Eilenberg inequality is **not** available here, so this module proves the statement
 only where the differential is surjective, and proves it **directly from the chart**: on a chart the
 slice integral is a Tonelli section of one measurable function on the parameter–level product, so

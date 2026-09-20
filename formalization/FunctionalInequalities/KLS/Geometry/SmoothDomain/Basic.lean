@@ -1,4 +1,4 @@
-import FunctionalInequalities.KLS.Geometry.Surface.Measure
+import FunctionalInequalities.Analysis.Hausdorff.Volume
 import FunctionalInequalities.Analysis.Hausdorff.LevelSet
 import Mathlib.Analysis.Calculus.Deriv.MeanValue
 
@@ -14,38 +14,6 @@ open scoped ENNReal NNReal ContDiff
 namespace FunctionalInequalities.KLS
 
 universe u
-
-/-! ### Normalized Hausdorff measure
-
-The definitions `unitBallVolume`, `hausdorffNormalized` and `surfaceMeasure` now live in the
-base module `KLS/Geometry/Surface/Measure.lean`, below the general Hausdorff geometry of
-`Analysis/Hausdorff/LevelSet.lean`; the convention check and smooth-domain geometry are proved here. -/
-
-section Normalization
-
-variable (V : Type u) [NormedAddCommGroup V] [InnerProductSpace ℝ V] [MeasurableSpace V]
-  [BorelSpace V] [FiniteDimensional ℝ V]
-
-/-- Convention check: the normalized top-dimensional Hausdorff measure is Lebesgue measure on the
-inner-product space (the isodiametric inequality).  Recorded so that the normalization of
-`surfaceMeasure` is pinned by a statement rather than by a comment.
-
-Proved from `Analysis.hausdorffMeasure_finrank_eq_smul_volume`, which pins Mathlib's diameter-gauge
-`μH[n]` as `(2^n / ω_n) • volume`; the normalizing factor `ω_n / 2^n` of `hausdorffNormalized` is
-its exact inverse, and `ω_n > 0` in every dimension.  In dimension zero the general input already
-covers the subsingleton case and `ω_0 = 1`, so both sides are the unit mass at the single point. -/
-theorem hausdorffNormalized_finrank_eq_volume :
-    hausdorffNormalized V (Module.finrank ℝ V) = (volume : Measure V) := by
-  have hωpos : 0 < unitBallVolume (Module.finrank ℝ V) := by
-    unfold unitBallVolume; positivity
-  rw [hausdorffNormalized, Analysis.hausdorffMeasure_finrank_eq_smul_volume V, smul_smul,
-    ← ENNReal.ofReal_mul (by positivity),
-    show unitBallVolume (Module.finrank ℝ V) / 2 ^ Module.finrank ℝ V
-        * (2 ^ Module.finrank ℝ V / unitBallVolume (Module.finrank ℝ V)) = 1 by
-      field_simp,
-    ENNReal.ofReal_one, one_smul]
-
-end Normalization
 
 /-! ### Smooth domains -/
 

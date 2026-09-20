@@ -1,5 +1,7 @@
 # Lean 公共命名与参数组织
 
+新增模块、拆分文件和 API 迁移先遵循[分类与交付工作流](workflow.md)；本文维护具体命名与参数约定。
+
 公共名称表达数学对象、操作和结论。命名空间可以跨实现模块组织；证书入口、ledger
 节点 ID 和来源标签保留稳定身份。完整本轮映射见
 [迁移记录](decisions/2026-09-08-mathematical-api-organization.md)及
@@ -152,7 +154,7 @@ hμ.intrinsic_frontier_support_eq_zero
 `Poincare/SmoothTest/`、`Energy/LocalSlope/Gradient.lean`、`Energy/CovarianceGradient/`、
 `KLS/LogConcave/Line/`，以及 `Analysis/Semigroup/` 下的 `Resolvent/`、`Exponential/`、
 `Yosida/`、`Generated/`，以及 `KLS/` 下的 `ConditionalFiber/`、`Geometry/Cheeger/`、
-`Geometry/Coarea/`、`Geometry/Surface/`。不要把家族词重复烤进每个 basename：`LogConcave/Covariance.lean`，
+`Geometry/Coarea/`。不要把家族词重复烤进每个 basename：`LogConcave/Covariance.lean`，
 不是 `LogConcave/AffineCovariance.lean`（该次迁移见
 [模块映射](api-migration/2026-09-08-library-naming-module-map.json)）。
 
@@ -170,11 +172,33 @@ exploration 按原路径冻结，不追溯改写；每轮重组必须提供路�
 按 namespace 或定义域划分而非按家族词划分的目录是规则 5 的既有例外，保持不动：
 `Poincare/Euclidean/`、`Poincare/FiniteProduct/`、`Poincare/LipschitzGradient/`。
 
-目录只承担分组，不改数学身份：`Analysis/` 的模块无论放在哪个子目录，
-namespace 都仍是 `FunctionalInequalities.Analysis`，声明名因此不随目录变动，
-ledger、Blueprint、statement snapshot 与公理审计都不受目录重组影响。
+目录只承担分组，不改数学身份：纯文件迁移必须保留各声明已有的 namespace，
+包括 `FunctionalInequalities.Analysis` 及其已有的对象子命名空间；不能统一压平，也不能
+仅因目录变化就改名。namespace 与公开名称的调整另列为 API 迁移，单独映射和验证。
+目录重组仍须检查 imports、证据路径、Blueprint 链接和验证快照，不能据此跳过验收。
 
 例如 `Energy.LocalSlope` 中写 `theorem apply_eq_norm_gradient`。对数凹证明仍可调用
 `hμ.intrinsicCovariance_closedQuadratic`、`hμ.intrinsicSmooth_constant_eq_localSlope`、
 `hμ.intrinsicWeightedOperator m B`；`weighted` 保留任意外部权重 B 的含义。
 完整改动见[全库命名整理](decisions/2026-09-08-library-naming.md)。
+
+## Semigroup interface layout (2026-09-20, after S0a)
+
+File responsibilities and public API names are reviewed separately. Generic differential tools
+belong in `BakryEmery/Calculus.lean`; the weighted Laplacian in `Laplacian.lean`; integration by
+parts, Gamma and Bochner each retain their own module. Counterexamples to unrestricted operator
+families belong in `Semigroup/Exponential/Counterexample.lean`, not inside `Yosida/Laws.lean`.
+The closed-form normalization bridge belongs in `LogConcave/WeightedGradient/Energy.lean`.
+
+The S0a public interfaces use `Analysis.Semigroup.Generated` and
+`KLS.LogConcave.HeatSemigroup`, with short names such as `preserves_domain`, `generator_comm`
+and `right_derivative`. Types retain the exact generator domain, right-limit direction and
+arbitrary-weight scope. The final cleanup also migrates the construction, law and Markov APIs into these namespaces,
+with an explicit old/new name map. Parameter order and mathematical scope are preserved. See the [layout record](decisions/2026-09-20-semigroup-layout.md) and
+[complete migration map](api-migration/2026-09-20-semigroup-layout-map.json).
+
+The completed family migration and candidate decisions are recorded in
+[the final cleanup](decisions/2026-09-20-final-cleanup.md), with the
+[48-name API map](api-migration/2026-09-20-final-cleanup-map.json). Generic resolvent, Yosida
+and weighted-operator helpers retain their own object identities. Name length or the absence of
+an external library consumer alone is not grounds for renaming or privatizing a mathematical lemma.

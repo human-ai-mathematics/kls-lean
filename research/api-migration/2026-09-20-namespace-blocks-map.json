@@ -1,0 +1,257 @@
+{
+  "date": "2026-09-20",
+  "public_names_changed": false,
+  "declarations": {
+    "FunctionalInequalities.Analysis.Semigroup.Generated.apply": {
+      "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Basic.lean",
+      "before_line": 28,
+      "line": 30
+    },
+    "FunctionalInequalities.Analysis.Semigroup.Generated.apply_of_not_nonneg": {
+      "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Basic.lean",
+      "before_line": 42,
+      "line": 44
+    },
+    "FunctionalInequalities.Analysis.Semigroup.Generated.yosida_limit": {
+      "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Basic.lean",
+      "before_line": 33,
+      "line": 35
+    },
+    "FunctionalInequalities.Analysis.Semigroup.Generated.eq_apply_of_tendsto": {
+      "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Laws.lean",
+      "before_line": 113,
+      "line": 115
+    },
+    "FunctionalInequalities.Analysis.Semigroup.Generated.norm_apply_le": {
+      "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Laws.lean",
+      "before_line": 139,
+      "line": 141
+    },
+    "FunctionalInequalities.Analysis.Semigroup.Generated.map_smul_add": {
+      "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Laws.lean",
+      "before_line": 154,
+      "line": 156
+    },
+    "FunctionalInequalities.Analysis.Semigroup.Generated.map_sub": {
+      "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Laws.lean",
+      "before_line": 190,
+      "line": 192
+    },
+    "FunctionalInequalities.Analysis.Semigroup.Generated.map_zero": {
+      "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Laws.lean",
+      "before_line": 199,
+      "line": 201
+    },
+    "FunctionalInequalities.Analysis.Semigroup.Generated.map_smul": {
+      "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Laws.lean",
+      "before_line": 154,
+      "line": 208
+    },
+    "FunctionalInequalities.Analysis.Semigroup.Generated.map_add": {
+      "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Laws.lean",
+      "before_line": 213,
+      "line": 215
+    },
+    "FunctionalInequalities.Analysis.Semigroup.Generated.operator": {
+      "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Laws.lean",
+      "before_line": 222,
+      "line": 224
+    },
+    "FunctionalInequalities.Analysis.Semigroup.Generated.operator_apply": {
+      "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Laws.lean",
+      "before_line": 232,
+      "line": 234
+    },
+    "FunctionalInequalities.Analysis.Semigroup.Generated.symmetric": {
+      "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Laws.lean",
+      "before_line": 256,
+      "line": 262
+    },
+    "FunctionalInequalities.Analysis.Semigroup.Generated.zero_time": {
+      "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Laws.lean",
+      "before_line": 297,
+      "line": 303
+    },
+    "FunctionalInequalities.Analysis.Semigroup.Generated.add_time": {
+      "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Laws.lean",
+      "before_line": 313,
+      "line": 319
+    },
+    "FunctionalInequalities.Analysis.Semigroup.Generated.displacement_le": {
+      "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Laws.lean",
+      "before_line": 352,
+      "line": 358
+    },
+    "FunctionalInequalities.Analysis.Semigroup.Generated.continuous_at_zero": {
+      "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Laws.lean",
+      "before_line": 389,
+      "line": 395
+    },
+    "FunctionalInequalities.Analysis.Semigroup.Generated.continuousOn": {
+      "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Laws.lean",
+      "before_line": 425,
+      "line": 431
+    },
+    "FunctionalInequalities.Analysis.Semigroup.Generated.yosida_error_le": {
+      "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Generator.lean",
+      "before_line": 120,
+      "line": 122
+    },
+    "FunctionalInequalities.Analysis.Semigroup.Generated.yosida_converges": {
+      "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Generator.lean",
+      "before_line": 180,
+      "line": 182
+    },
+    "FunctionalInequalities.Analysis.Semigroup.Generated.generator_error_le": {
+      "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Generator.lean",
+      "before_line": 217,
+      "line": 219
+    },
+    "FunctionalInequalities.Analysis.Semigroup.Generated.generator_limit": {
+      "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Generator.lean",
+      "before_line": 302,
+      "line": 304
+    },
+    "FunctionalInequalities.Analysis.Semigroup.Generated.positive": {
+      "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Markov.lean",
+      "before_line": 354,
+      "line": 364
+    },
+    "FunctionalInequalities.Analysis.Semigroup.Generated.mono": {
+      "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Markov.lean",
+      "before_line": 381,
+      "line": 391
+    },
+    "FunctionalInequalities.Analysis.Semigroup.Generated.one": {
+      "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Markov.lean",
+      "before_line": 369,
+      "line": 379
+    },
+    "FunctionalInequalities.Analysis.Semigroup.Generated.le_one": {
+      "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Markov.lean",
+      "before_line": 392,
+      "line": 402
+    },
+    "FunctionalInequalities.Analysis.Semigroup.Generated.subMarkov": {
+      "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Markov.lean",
+      "before_line": 405,
+      "line": 415
+    },
+    "FunctionalInequalities.Analysis.Semigroup.Generated.mean": {
+      "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Markov.lean",
+      "before_line": 418,
+      "line": 428
+    },
+    "FunctionalInequalities.Analysis.Semigroup.Generated.abs_le": {
+      "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Markov.lean",
+      "before_line": 428,
+      "line": 438
+    },
+    "FunctionalInequalities.Analysis.Semigroup.Generated.abs_le_const": {
+      "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Markov.lean",
+      "before_line": 443,
+      "line": 453
+    },
+    "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.operator": {
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Basic.lean",
+      "before_line": 55,
+      "line": 57
+    },
+    "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.intrinsic": {
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Basic.lean",
+      "before_line": 136,
+      "line": 146
+    },
+    "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.apply": {
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Basic.lean",
+      "before_line": 63,
+      "line": 69
+    },
+    "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.norm_apply_le": {
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Basic.lean",
+      "before_line": 69,
+      "line": 75
+    },
+    "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.symmetric": {
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Basic.lean",
+      "before_line": 75,
+      "line": 81
+    },
+    "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.zero": {
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Basic.lean",
+      "before_line": 81,
+      "line": 87
+    },
+    "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.add": {
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Basic.lean",
+      "before_line": 87,
+      "line": 93
+    },
+    "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.continuousOn": {
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Basic.lean",
+      "before_line": 95,
+      "line": 101
+    },
+    "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.generator_limit": {
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Basic.lean",
+      "before_line": 103,
+      "line": 109
+    },
+    "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.positive": {
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Markov.lean",
+      "before_line": 258,
+      "line": 260
+    },
+    "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.mono": {
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Markov.lean",
+      "before_line": 268,
+      "line": 270
+    },
+    "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.one": {
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Markov.lean",
+      "before_line": 278,
+      "line": 280
+    },
+    "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.le_one": {
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Markov.lean",
+      "before_line": 288,
+      "line": 290
+    },
+    "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.subMarkov": {
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Markov.lean",
+      "before_line": 300,
+      "line": 302
+    },
+    "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.mean": {
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Markov.lean",
+      "before_line": 313,
+      "line": 315
+    },
+    "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.integral": {
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Markov.lean",
+      "before_line": 324,
+      "line": 326
+    },
+    "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.abs_le": {
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Markov.lean",
+      "before_line": 334,
+      "line": 336
+    },
+    "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.abs_le_const": {
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Markov.lean",
+      "before_line": 344,
+      "line": 346
+    }
+  },
+  "semantic_check": {
+    "roots": 220,
+    "before_declaration_closure": 337,
+    "after_declaration_closure": 337,
+    "canonical_closure_records": 319,
+    "external_leaves": 514,
+    "before_generated_proof_auxiliaries": 55,
+    "after_generated_proof_auxiliaries": 55,
+    "comparison": "Binder-label alpha normalization; hygienic anonymous-instance labels and module locations excluded. Compiler-generated theorem auxiliaries are identified only by identical full normalized types and universe levels, recursively. This uses proof irrelevance; no non-proof constants are renamed. Public names and explicit parameter names, order, visibility and all other types/definition bodies/dependencies are unchanged.",
+    "differences": []
+  }
+}

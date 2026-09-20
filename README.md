@@ -12,61 +12,53 @@ recorded explicitly and checked against the original goal; see the
 [current lifecycle](research/ledger-schema.md#lifecycle). Earlier freeze records remain dated
 review snapshots.
 
-## Current status (2026-09-17)
+## Current status (2026-09-20)
 
-The ledger contains **24 Lean-certified nodes**. Three isolated WIP modules retain **8 explicit
-`sorry` proofs** (1/2/5); some downstream proof bodies also depend transitively on those holes.
-The proved infrastructure now includes global Gauss–Green, smooth recovery sequences, the
-Minkowski coarea inequality, smooth Sard, level-set integral measurability, critical-slice nullity,
-weighted graph area on open domains, and general C¹ weighted coarea.
-The compact first-order Whitney jet extension theorem **L6 is proved**, with exact values and
-ambient derivatives, including empty and sparse sets and dimension zero. **L6a compact jet
-extraction, L7 exact C¹ pieces and L12 Lipschitz weighted coarea are now also proved.**
-**All three original coarea targets T1, T2 and T3 are now formally wired** to hole-free modules,
-each by a migration whose `pp.all` signature was machine-checked byte-identical. The remaining hole
-of `KLS/WIP/AnalyticPrerequisites.lean` is the sharp `C^(finrank)` Sard theorem.
-The weighted coarea formula has since been generalized to **locally Lipschitz** functions, which
-subsumes both the Lipschitz and the C¹ versions and covers functions neither of them reaches.
+The ledger contains **26 Lean-certified nodes**. The former coarea, Sard, Cheeger-infimum
+and Energy WIP modules have been closed and removed. **One explicit target hole remains**:
+`KLS.kls` in `KLS/Target.lean`, outside every certificate import closure. The dimension-free
+KLS bound remains open.
 
-*Addendum (2026-09-19).* The sharp `C^(finrank)` Sard theorem `Analysis.sard` is **proved**
-(`Analysis/Sard/Sharp.lean`, Morse's route) and `KLS/WIP/AnalyticPrerequisites.lean` is deleted, so two
-isolated WIP modules retain **7 explicit `sorry` proofs** (0/2/5). The codimension-`m` coarea formula is
-proved for **Lipschitz** and **locally Lipschitz** maps (`Analysis/Lipschitz/`), level with the scalar chain.
+**Formalized in Lean:** scalar and vector weighted coarea for C¹, Lipschitz and locally
+Lipschitz maps; scalar Sard at the sharp `C^(finrank)` regularity; the Cheeger superlevel
+integral bound and both infimum comparisons; canonical energy `E^can = 2 Ch` for every Borel
+probability law, using the local-slope convention; and the intrinsic literature Poincaré
+constant's gradient characterization. The one-dimensional Poincaré certificate gives the
+`4 Var` upper bound, without separately certifying optimality across all laws.
 
-*Addendum (2026-09-19, later).* The Cheeger line was taken over: both Cheeger-infimum holes are proved,
-`KLS/WIP/CheegerInfimum.lean` is deleted, `lem:relative-perimeter-cheeger-infimum` is the **25th certificate**,
-and Cheeger's inequality `C_P^lit(μ) ≤ 4 Ψ_KLS(μ)²` is proved for every log-concave law (the Buser half is not).
-One WIP module remains, `Energy/WIP/Cheeger.lean`, with **5 explicit `sorry` proofs** (0/0/5); **25 Lean-certified nodes**.
+The Cheeger direction `C_P^lit(μ) ≤ 4 Ψ_KLS(μ)²` is proved for every log-concave law. The Buser
+direction is proved for affine-support dimension at most one with constant **12**. The target
+`Ψ_KLS(μ)² ≤ π C_P^lit(μ)` remains unproved locally; 12 does not establish π.
 
-*Addendum (2026-09-19, Energy).* The five Energy holes are proved: `𝓔^can = 2 Ch` holds for **every** Borel
-probability law (`Energy/Cheeger/Identification.lean`, density of smooth tests in the local-slope energy),
-`Energy/WIP/Cheeger.lean` is deleted, **no WIP module remains and there are no explicit `sorry` proofs**;
-**26 Lean-certified nodes**. The dimension-free KLS bound remains open.
+The semigroup program now includes **S1–S8**, the concrete weighted-gradient heat semigroup,
+and its **Markov properties**: positivity, preservation of constants and integrals, the
+sub-Markov bound, absolute-value domination, and contraction of finite essential bounds on
+`L²`. The full-dimensional theorems apply to arbitrary log-concave laws in intrinsic
+coordinates. For a smooth tilted potential the generator is identified on smooth compactly
+supported tests: `T̄†T̄ [f] = [-(Δf - ⟪∇U, ∇f⟫)]`, via weighted integration by parts. This is a
+per-test statement, not an operator-core result. The local Bakry–Émery calculus is proved
+pointwise for smooth functions: the carré-du-champ product identity, positive semidefiniteness
+of the Hessian of a convex potential, the Bochner identity
+`Γ₂(f) = ∑ᵢ∑ⱼ (D²f(eᵢ, eⱼ))² + D²U(∇f, ∇f)` in the fixed standard basis, and `Γ₂ ≥ 0`
+(`Analysis/BakryEmery/Gamma.lean`, `Bochner.lean`). Right generator limits now characterize
+`D(A)`: for inputs in `D(A)`, `P_t` preserves that domain, commutes with `A`, and has right
+derivative `-A(P_t f)` at every `t ≥ 0`. The heat wrappers retain arbitrary weights and give
+closed weighted gradients. Arbitrary-input smoothing and full form-domain stability remain open.
+There are no Bakry–Émery gradient estimates
+for the semigroup or small-time heat bounds yet.
 
-*Addendum (2026-09-19, Buser).* The Buser half of the Cheeger–Buser comparison is proved **in dimension at
-most one with the constant `12`** (`KLS/LogConcave/Line/Buser.lean`); in dimension `n ≥ 2`, and with the constant
-`π`, it remains imported mathematics (a program: heat semigroup + Bakry–Émery, or localization).
+**Next priority:** [complete the Buser comparison with constant π for every finite-dimensional
+log-concave law](research/decisions/2026-09-20-buser-handoff-prompt.md), then combine it with the
+proved Cheeger half. Generator identification, Bochner/gradient estimates, general-law passage
+and small-time heat bounds are internal proof milestones, not the final deliverable. This is
+an implementation target, not a completed result. Even its completion will leave the four KLS
+routes' open research conditions to resolve.
 
-*Addendum (2026-09-19, literature Poincaré).* The intrinsic literature Poincaré constant now has a
-proved gradient-form characterization (`Poincare/LocalSlope/Gradient.lean`), completing the three
-local Lean clauses of the Klartag density frontend identification. The ledger still has **26
-certificates**; the higher-dimensional Buser comparison and dimension-free KLS remain open locally.
-
-For vector-valued maps, regular coarea, slice measurability and vanishing-derivative critical
-slicing are proved. General codimension-`m` weighted coarea for C¹ maps now also includes the
-intermediate-rank critical part, via the completed rank-deficient route R0–R9.
-This does not establish the Lipschitz vector case or sharp finite-regularity Sard.
-
-The integrated Cheeger superlevel bound and reverse Cheeger comparison remain open, as do
-the universal conditional-fiber frame bound and the dimension-free KLS bound. Smooth-recovery
-infrastructure is available and its existing proof is now registered in Blueprint; it has no
-separate ledger certificate.
-The one-dimensional certificate proves the `4 Var` upper bound; it does not separately certify
-optimality of the coefficient `4` across all laws. The identity `E^can = 2 Ch` uses the local-slope
-convention and holds when the intrinsic law is absolutely continuous, hence for log-concave laws.
-See the [current handoff](HANDOFF.md) and the
-[semantic alignment record](research/decisions/2026-09-16-semantic-alignment.md) for precise scopes
-and remaining obligations.
+The [current handoff](HANDOFF.md#current-operational-status-2026-09-20) and
+[status correction record](research/decisions/2026-09-20-current-status-alignment.md) supersede
+older pending-work summaries. This documentation update changes no Lean proof or certificate;
+the existing verification receipt is evidence for the unchanged Lean sources, not a fresh
+full verification of the edited documentation.
 
 ## Proof progress tree
 
@@ -136,8 +128,8 @@ compactly supported `C∞` gradient realization is dense, and both its direct re
 intrinsic-affine pullback are proved densely defined closed quadratic energies. Here ordinary
 `C∞` is correctly encoded by Mathlib's `ContDiff ℝ ∞`; `ContDiff ℝ ⊤` is analytic and is not an
 assumption. The Markov/Dirichlet property of both relaxations is now a proved theorem; agreement
-with every raw gradient test and identification with Cheeger energy `2 Ch` remain explicit later
-theorems rather than hidden premises; raw/core agreement is now proved for every law with a local
+with raw gradient tests retains explicit hypotheses, while identification with Cheeger energy
+`2 Ch` is proved for every Borel probability law. Raw/core agreement is proved for every law with a local
 density (`Energy/SmoothGradient/Core.lean`), while the Dirac and normal-direction obstructions show
 why it cannot hold unconditionally for the ambient pre-energy. The sharp one-dimensional bound `C_P^lit(ν) ≤ 4 Var_ν` for
 every log-concave law on the real line, zero variance included, is now a local Lean theorem (Bobkov's
@@ -172,11 +164,12 @@ checked local declarations and, for ledger-backed certificate nodes, matching le
 
 For a quick structural/task check, run `python3 research/atlas.py check`.
 For the complete local acceptance workflow, including the statement/definition golden comparison,
-all certificate axiom reports and local module kernel replay, run `python3 research/verify.py`. Then run
+all certificate axiom reports, strict compilation of every research audit client, and local module
+kernel replay, run `python3 research/verify.py`. Then run
 `python3 research/atlas.py export` and `python3 research/atlas.py ready` to inspect tasks against
 the verified source snapshot. See the [workflow guide](research/verification.md).
-The KLS statement remains a proposition declaration. The general log-concave constant-comparison
-pilot is proved; it supplies no dimension-free bound.
+`KLS.Conjecture` names the proposition; `KLS.kls` in the isolated target module remains unproved.
+The general log-concave constant comparison is proved; it supplies no dimension-free bound.
 
 From the repository root:
 
@@ -191,7 +184,7 @@ To validate declaration links and build both rendered Blueprint formats, follow 
 commands in the [formalization guide](formalization/README.md#lean-blueprint). CI publishes the
 PDF and web tree as workflow artifacts; it deliberately does not deploy GitHub Pages.
 
-The `Solutions` default target builds all twenty-four proved certificates and the twenty-five named
+The `Solutions` default target builds all twenty-six proved certificates and the twenty-five named
 definition checks of `StatementChecks.lean`, including the zero-dimensional and Euclidean checks for
 the implemented affine covariance Poincaré constant `def:affine-poincare-constant` (a definition
 node, not a ledger theorem). The certificates include all four weighted

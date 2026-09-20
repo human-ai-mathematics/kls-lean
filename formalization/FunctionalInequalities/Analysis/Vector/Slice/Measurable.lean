@@ -1,7 +1,7 @@
 import FunctionalInequalities.Analysis.Hausdorff.Content
 import FunctionalInequalities.Analysis.Vector.Slice.Hausdorff
-import FunctionalInequalities.Analysis.Hausdorff.LevelSet
-import FunctionalInequalities.KLS.Geometry.Surface.Slicing
+import FunctionalInequalities.Analysis.Hausdorff.Volume
+import FunctionalInequalities.Analysis.Hausdorff.SurfaceSlicing
 import FunctionalInequalities.Analysis.Graph.OpenIntegral
 
 /-!
@@ -20,7 +20,7 @@ else in the proof changes.  A countable supremum of upper semicontinuous functio
 which gives `measurable_hausdorffMeasure_inter_levelSet_vector`.
 
 With the Eilenberg inequality of `Analysis/Vector/Slice/Hausdorff.lean` this completes the chain the
-coarea route needs, exactly as `KLS/Geometry/Surface/Slicing.lean` does in codimension one: inner
+coarea route needs, exactly as `Analysis/Hausdorff/SurfaceSlicing.lean` does in codimension one: inner
 regularity exhausts a Borel set by compacts up to a Lebesgue-null remainder, the compact pieces are
 handled by upper semicontinuity and the remainder by null slicing, and increasing simple functions
 carry the result to an arbitrary measurable weight.  The conclusion,

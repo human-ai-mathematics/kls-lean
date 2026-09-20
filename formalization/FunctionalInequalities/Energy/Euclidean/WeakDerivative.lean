@@ -1,4 +1,4 @@
-import FunctionalInequalities.Energy.Euclidean.LipschitzApproximation
+import FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Kernel
 import Mathlib.Analysis.Calculus.ParametricIntegral
 import Mathlib.MeasureTheory.Group.Integral
 

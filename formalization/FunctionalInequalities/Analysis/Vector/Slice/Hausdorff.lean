@@ -2,7 +2,7 @@ import Mathlib.MeasureTheory.Measure.Hausdorff
 import Mathlib.MeasureTheory.Measure.Lebesgue.EqHaar
 import Mathlib.MeasureTheory.Measure.Haar.InnerProductSpace
 import Mathlib.MeasureTheory.Integral.Lebesgue.Add
-import FunctionalInequalities.KLS.Geometry.Surface.Measure
+import FunctionalInequalities.Analysis.Hausdorff.Measure
 
 /-!
 # The Eilenberg slicing inequality in codimension `m`

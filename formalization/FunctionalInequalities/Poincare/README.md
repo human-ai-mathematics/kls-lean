@@ -10,8 +10,9 @@ Gaussian 和 tensorization 定理使用光滑测试接口，可以通过有限�
 对于对数凹概率测度，该绝对连续性已被证明，因此无需另加这一假设。见
 [文献常数比较](LocalSlope/SmoothTestComparison.lean) 与
 [一般对数凹版本](../KLS/LogConcave/Poincare.lean)。完整 Borell 密度代表与矩定理已有独立证书；
-内禀律绝对连续时，Cheeger 能量识别 `Ecan = 2 Ch`（局部斜率约定）也已证明，覆盖所有对数凹律。
-任意奇异律的无条件识别与 KLS 仍未证明。
+Cheeger 能量识别 `Ecan = 2 Ch`（局部斜率约定）已对任意有限维 Borel 概率律证明，
+包括奇异律；见 [Cheeger 识别](../Energy/Cheeger/Identification.lean)。
+这是松弛能量的恒等式，不提供原始测试能量的一致性或 Poincaré 有限界。维数无关 KLS 界仍开放。
 
 当前接口默认允许随数学设计调整，已证明的接口也不例外；证明工作不以接口冻结为前提。
 认证针对当前声明与证明。修改假设、结论、测试域或归一化时，应明确记录变化，同步依赖并
@@ -22,9 +23,9 @@ Gaussian 和 tensorization 定理使用光滑测试接口，可以通过有限�
 | 你要做的事 | 阅读入口 |
 | --- | --- |
 | 使用新基础 | [Foundation.lean](Foundation.lean) |
-| 理解最优常数与有限能量域 | [L2Energy.lean](L2Energy.lean) |
-| 使用项目选定的欧氏常数 | [Euclidean/IntrinsicAffine.lean](SmoothGradient/Intrinsic.lean) |
-| 使用仿射协方差常数 `C_P^aff`（定义；闭形式、环境平移不变性与各向同性归约另有定理，无 Poincaré 不等式） | [Euclidean/Covariance.lean](CovarianceGradient/Intrinsic.lean)、[Euclidean/Translation.lean](CovarianceGradient/Translation.lean)、[Euclidean/LipschitzComparison.lean](LipschitzGradient/Comparison.lean) |
+| 理解最优常数与有限能量域 | [L2/Energy.lean](L2/Energy.lean) |
+| 使用项目选定的欧氏常数 | [SmoothGradient/Intrinsic.lean](SmoothGradient/Intrinsic.lean) |
+| 使用仿射协方差常数 `C_P^aff`（定义；闭形式、环境平移不变性与各向同性归约另有定理，无 Poincaré 不等式） | [CovarianceGradient/Intrinsic.lean](CovarianceGradient/Intrinsic.lean)、[CovarianceGradient/Translation.lean](CovarianceGradient/Translation.lean)、[LipschitzGradient/Comparison.lean](LipschitzGradient/Comparison.lean) |
 | 看完整的使用与边界示例 | [PoincareFoundation.lean](../../../examples/PoincareFoundation.lean) |
 | 使用已证明的 Gaussian 定理 | [Gaussian/README.md](Gaussian/README.md) |
 | 查找全部模块和 import 规则 | [formalization/README.md](../../README.md) |
@@ -76,9 +77,9 @@ Poincare.L2Energy.Holds μ energy C ↔ Poincare.L2Energy.constant μ energy ≤
 ```
 
 约定 `0 / 0 = 0`，正方差除以零能量为 `⊤`。空测试类的最优常数为零；有正方差、零能量测试时，
-最优常数为 `⊤`。这些边界由 [Optimal.lean](SmoothTest/Optimal.lean) 中的定理明确覆盖。
+最优常数为 `⊤`。这些边界由 [SmoothTest/Optimal.lean](SmoothTest/Optimal.lean) 中的定理明确覆盖。
 
-[能量比较](L2Comparison.lean) 的方向是：同一测度下，若 `lower ≤ upper`，则
+[能量比较](L2/Comparison.lean) 的方向是：同一测度下，若 `lower ≤ upper`，则
 `Poincare.L2Energy.constant μ upper ≤ Poincare.L2Energy.constant μ lower`。增大能量会同时缩小有限域并增大
 保留下来的分母，故不需要假设两者有相同定义域。
 

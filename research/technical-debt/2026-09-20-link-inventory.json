@@ -1,0 +1,157 @@
+{
+  "scanned_files": [
+    "README.md",
+    "HANDOFF.md",
+    "AGENTS.md",
+    "formalization/FunctionalInequalities/Energy/README.md",
+    "formalization/FunctionalInequalities/Poincare/README 2.md",
+    "formalization/FunctionalInequalities/Poincare/README.md",
+    "formalization/FunctionalInequalities/KLS/README.md",
+    "formalization/FunctionalInequalities/KLS/LogConcave/README.md",
+    "formalization/FunctionalInequalities/Poincare/Gaussian/README.md",
+    "formalization/FunctionalInequalities/Poincare/Euclidean/README.md",
+    "research/workflow.md",
+    "research/verification.md",
+    "research/proof-corrections-and-improvements.md",
+    "research/ledger-schema.md",
+    "research/naming.md",
+    "research/progress/STATUS.md",
+    "research/progress/LITERATURE.md",
+    "research/progress/README.md",
+    "research/audits/README.md",
+    "formalization/README.md",
+    "formalization/blueprint/README.md"
+  ],
+  "broken": [
+    {
+      "path": "formalization/FunctionalInequalities/Poincare/README.md",
+      "line": 25,
+      "target": "L2Energy.lean"
+    },
+    {
+      "path": "formalization/FunctionalInequalities/Poincare/README.md",
+      "line": 81,
+      "target": "L2Comparison.lean"
+    },
+    {
+      "path": "formalization/FunctionalInequalities/KLS/README.md",
+      "line": 52,
+      "target": "../Analysis/WhitneyConstruction.lean"
+    },
+    {
+      "path": "formalization/FunctionalInequalities/KLS/README.md",
+      "line": 101,
+      "target": "Geometry/OpenSliceMeasurable.lean"
+    },
+    {
+      "path": "formalization/FunctionalInequalities/KLS/README.md",
+      "line": 122,
+      "target": "Geometry/CriticalSlice.lean"
+    },
+    {
+      "path": "formalization/FunctionalInequalities/KLS/README.md",
+      "line": 134,
+      "target": "Geometry/LevelSetMeasurable.lean"
+    },
+    {
+      "path": "formalization/FunctionalInequalities/KLS/README.md",
+      "line": 200,
+      "target": "LogConcave/DensityBounds.lean"
+    },
+    {
+      "path": "formalization/FunctionalInequalities/KLS/README.md",
+      "line": 201,
+      "target": "Geometry/RelativePerimeter.lean"
+    },
+    {
+      "path": "formalization/FunctionalInequalities/KLS/README.md",
+      "line": 202,
+      "target": "Geometry/PerimeterRecovery.lean"
+    },
+    {
+      "path": "formalization/FunctionalInequalities/KLS/README.md",
+      "line": 203,
+      "target": "Geometry/MinkowskiContent.lean"
+    },
+    {
+      "path": "formalization/FunctionalInequalities/KLS/README.md",
+      "line": 204,
+      "target": "Geometry/MinkowskiConstant.lean"
+    },
+    {
+      "path": "formalization/FunctionalInequalities/KLS/README.md",
+      "line": 205,
+      "target": "Geometry/DistanceCutoff.lean"
+    },
+    {
+      "path": "formalization/FunctionalInequalities/KLS/README.md",
+      "line": 208,
+      "target": "Geometry/Median.lean"
+    },
+    {
+      "path": "formalization/FunctionalInequalities/KLS/README.md",
+      "line": 210,
+      "target": "Geometry/SmoothDomain.lean"
+    },
+    {
+      "path": "formalization/FunctionalInequalities/KLS/README.md",
+      "line": 211,
+      "target": "Geometry/Mollification.lean"
+    },
+    {
+      "path": "formalization/FunctionalInequalities/KLS/README.md",
+      "line": 212,
+      "target": "Geometry/MollifiedBoundary.lean"
+    },
+    {
+      "path": "formalization/FunctionalInequalities/KLS/README.md",
+      "line": 213,
+      "target": "Geometry/BoundaryChart.lean"
+    },
+    {
+      "path": "formalization/FunctionalInequalities/KLS/README.md",
+      "line": 214,
+      "target": "Geometry/LocalGaussGreen.lean"
+    },
+    {
+      "path": "formalization/FunctionalInequalities/KLS/README.md",
+      "line": 215,
+      "target": "Geometry/GaussGreen.lean"
+    },
+    {
+      "path": "formalization/FunctionalInequalities/KLS/README.md",
+      "line": 218,
+      "target": "Geometry/RegularSuperlevel.lean"
+    },
+    {
+      "path": "formalization/FunctionalInequalities/KLS/README.md",
+      "line": 221,
+      "target": "Geometry/CriticalSlice.lean"
+    },
+    {
+      "path": "formalization/FunctionalInequalities/KLS/README.md",
+      "line": 222,
+      "target": "Geometry/LevelSetMeasurable.lean"
+    },
+    {
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/README.md",
+      "line": 13,
+      "target": "AbsoluteContinuity.lean"
+    },
+    {
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/README.md",
+      "line": 14,
+      "target": "BorellRepresentation.lean"
+    },
+    {
+      "path": "research/proof-corrections-and-improvements.md",
+      "line": 141,
+      "target": "../formalization/FunctionalInequalities/KLS/WIP/CheegerInfimum.lean"
+    },
+    {
+      "path": "research/proof-corrections-and-improvements.md",
+      "line": 156,
+      "target": "../formalization/FunctionalInequalities/KLS/WIP/AnalyticPrerequisites.lean"
+    }
+  ]
+}

@@ -1,0 +1,120 @@
+{
+  "date": "2026-09-20",
+  "resolved": [
+    "LD-006",
+    "LD-007",
+    "LD-009"
+  ],
+  "semantics": {
+    "roots": 54,
+    "before_declaration_closure": 241,
+    "after_declaration_closure": 244,
+    "canonical_closure_records": 210,
+    "external_leaves": 406,
+    "before_generated_proof_auxiliaries": 73,
+    "after_generated_proof_auxiliaries": 76,
+    "comparison": "Binder-label alpha normalization; hygienic anonymous-instance labels and module locations excluded. Compiler-generated theorem auxiliaries are identified only by identical full normalized types and universe levels, recursively. This uses proof irrelevance; no non-proof constant is renamed. Public names, explicit parameter names, order, visibility and all other types/definition bodies/dependencies are unchanged.",
+    "differences": []
+  },
+  "graph": {
+    "modules": 246,
+    "local_import_edges": 460,
+    "cycles": [],
+    "missing_local_imports": [],
+    "generic_comparisons_reach_KLS": false,
+    "weighted_gradient_closure_or_energy_reach_semigroup": false,
+    "dependency_counts": [
+      {
+        "old_module": "Poincare.LocalSlope.Gradient",
+        "new_module": "Poincare.LocalSlope.Gradient",
+        "old_project_closure": 14,
+        "new_project_closure": 9
+      },
+      {
+        "old_module": "Energy.Cheeger.Basic",
+        "new_module": "Energy.Cheeger.Basic",
+        "old_project_closure": 46,
+        "new_project_closure": 41
+      },
+      {
+        "old_module": "KLS.LogConcave.HeatSemigroup.Energy",
+        "new_module": "KLS.LogConcave.WeightedGradient.Energy",
+        "old_project_closure": 72,
+        "new_project_closure": 58
+      },
+      {
+        "old_module": "KLS.LogConcave.HeatSemigroup.Basic",
+        "new_module": "KLS.LogConcave.WeightedGradient.Closure",
+        "old_project_closure": 40,
+        "new_project_closure": 26
+      }
+    ]
+  },
+  "strict_compilation": [
+    {
+      "path": "FunctionalInequalities/Energy/Cheeger/Basic.lean",
+      "exit_code": 0
+    },
+    {
+      "path": "FunctionalInequalities/KLS/LogConcave/Cheeger.lean",
+      "exit_code": 0
+    },
+    {
+      "path": "FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Basic.lean",
+      "exit_code": 0
+    },
+    {
+      "path": "FunctionalInequalities/KLS/LogConcave/Poincare.lean",
+      "exit_code": 0
+    },
+    {
+      "path": "FunctionalInequalities/KLS/LogConcave/WeightedGradient/Basic.lean",
+      "exit_code": 0
+    },
+    {
+      "path": "FunctionalInequalities/KLS/LogConcave/WeightedGradient/Closure.lean",
+      "exit_code": 0
+    },
+    {
+      "path": "FunctionalInequalities/KLS/LogConcave/WeightedGradient/Energy.lean",
+      "exit_code": 0
+    },
+    {
+      "path": "FunctionalInequalities/Poincare/LocalSlope/Gradient.lean",
+      "exit_code": 0
+    },
+    {
+      "path": "../solutions/CorAbsolutelyContinuousRelaxationTwoCheeger.lean",
+      "exit_code": 0
+    },
+    {
+      "path": "../solutions/LemCovarianceCoreClosure.lean",
+      "exit_code": 0
+    },
+    {
+      "path": "../research/audits/KlartagLiteraturePoincareAudit.lean",
+      "exit_code": 0
+    },
+    {
+      "path": "../research/audits/BakryEmeryGeneratorAudit.lean",
+      "exit_code": 0
+    },
+    {
+      "path": "../research/audits/SemigroupDomainStabilityAudit.lean",
+      "exit_code": 0
+    }
+  ],
+  "poincare_universe_parameter": "Original raw universe name u_2 restored explicitly; affected source and Klartag audit recompiled strictly.",
+  "proof_blocks": "Moved specialization and closure declaration/proof blocks byte-identical.",
+  "full_build": "passed (3559 jobs)",
+  "evidence_source_entries_updated": 24,
+  "public_names_changed": false,
+  "proof_status_changed": false,
+  "verification_scope": "Local interface/build checks; the full verifier emits a separate snapshot-bound receipt.",
+  "frozen_baseline_files_unchanged": 321,
+  "live_documentation_links": "passed",
+  "path_map_coverage": "passed",
+  "file_directory_collisions": false,
+  "real_staging_unchanged": true,
+  "progress_views": "regenerated in isolated index/object store; root summary and complete diagram unchanged"
+}

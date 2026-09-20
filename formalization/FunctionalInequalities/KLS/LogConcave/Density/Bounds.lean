@@ -1,4 +1,4 @@
-import FunctionalInequalities.KLS.LogConcave.Density.BorellRepresentation
+import FunctionalInequalities.KLS.LogConcave.Density.BorellRepresentation.Basic
 
 /-! # Quantitative bounds for Borell density representatives -/
 noncomputable section

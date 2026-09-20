@@ -5,6 +5,62 @@ the distinction between known mathematics, local arguments, open research, and L
 This workflow runs locally and does not commit, push, dispatch agents, or publish artifacts.
 Public interfaces remain editable under [the lifecycle](ledger-schema.md#lifecycle).
 
+## Current status and receipt scope (2026-09-20)
+
+For today's proved scope and next task, use the [current operational handoff](../HANDOFF.md#current-operational-status-2026-09-20)
+and [status alignment record](decisions/2026-09-20-current-status-alignment.md). There are 26
+certificates and one deliberate, isolated KLS target hole. The older dated reports below retain
+their historical counts. Semigroup generation and the stated `L²` Markov properties are now
+proved; the next task is the complete general-law Buser comparison with π. Generator/Bochner
+and heat-estimate proofs are internal milestones, not a route-exploration-only deliverable.
+The first of them, the generator identification `T̄†T̄ [f] = [-ℒf]` on smooth compactly supported
+tests for tilted smooth potentials (`G0`/`G1`), is proved; see the section below and
+[the implementation record](decisions/2026-09-20-generator-identification.md). The second, the
+local `Γ`/`Γ₂` calculus with the Bochner identity and `Γ₂ ≥ 0` for convex potentials (`B0`–`B4`),
+is proved pointwise for smooth functions; see
+[the Bochner record](decisions/2026-09-20-bochner-identification.md).
+
+A receipt certifies its recorded snapshot and trust scope. A subsequent documentation edit
+changes that snapshot even when all Lean sources remain byte-identical. Structural metadata
+checks and progress regeneration do not constitute a new Lean or remote CI receipt.
+
+## Local Bakry–Émery calculus: `B0`–`B4` proved (2026-09-20, later)
+
+Implementation round; no registration number changes (26 certificates, one deliberate target hole).
+`Analysis/BakryEmery/Gamma.lean` defines `Γ(f, g) = ⟪∇f, ∇g⟫` and `Γ₂(f) = ℒ(Γ(f, f))/2 - Γ(f, ℒf)`
+for `ℒf = Δf - ⟪∇U, ∇f⟫` and proves the product identity `B0`; `Analysis/BakryEmery/Bochner.lean`
+proves `B1` (convex `C²` potentials have positive semidefinite Hessians), `B3`
+(`Γ₂(f) = ∑ᵢ∑ⱼ (D²f(eᵢ, eⱼ))² + D²U(∇f, ∇f)` in the fixed standard orthonormal basis, `C³` `f`,
+`C²` `U`) and `B4` (`Γ₂ ≥ 0` for convex potentials). Pointwise statements for smooth functions only:
+no basis independence of the Hessian square, no regularity of `P_t f`, no gradient estimate, no
+general-law passage, no Buser step.
+
+**Verification.** The two modules, `research/audits/BakryEmeryBochnerAudit.lean` (verbatim `B0`–`B4`,
+`Γ₂` forms, boundary checks including an independent one-dimensional value `Γ₂(t²)(0) = 4`) and
+`research/audits/BakryEmeryRouteStatements.lean` compile with `-DwarningAsError=true`, 0 errors,
+0 warnings; **70 axiom reports, 0 `sorryAx`**. Default `lake build` (3550 jobs) passed.
+`check_ledger.py` 26 certificates, `check_blueprint.py` 88 labels, `atlas.py check` 75 nodes / 26
+certificates / no cycles, 104 unit tests. The root `python3 research/verify.py` was rerun at the end
+of the round; its receipt is identified in `build/audit/bochner-identification/final-snapshot.json`.
+No commit or push.
+
+## Generator identification on smooth tests: `G0` and `G1` proved (2026-09-20)
+
+Implementation round; no registration number changes (26 certificates, one deliberate target hole).
+For `(ν : Measure V) = m.tilted (-U)` with `U ∈ C¹` and the closed unit-weight gradient `T̄`:
+weighted integration by parts `∫ ⟪∇f, ∇g⟫ dν = ∫ (-ℒf) g dν`, `ℒf = Δf - ⟪∇U, ∇f⟫`
+(`Analysis/BakryEmery/IntegrationByParts.lean`), and for every `f ∈ C_c^∞`, `[f] ∈ D(T̄†T̄)` with
+`T̄†T̄ [f] = [-ℒf]` (`KLS/LogConcave/HeatSemigroup/Generator.lean`, through the closure lemma of
+`Analysis/Semigroup/AdjointClosure.lean` and the adjoint's defining property). Per-test statements
+only: no operator-core claim, no `Γ₂`/Bochner, no gradient estimate, no Buser step.
+
+**Verification.** Default `lake build` (3548 jobs) passed; `research/audits/BakryEmeryGeneratorAudit.lean`
+restates `G0`/`G1` verbatim, **32 axiom reports, 0 `sorryAx`**, and both Bakry–Émery audit files pass
+`-DwarningAsError=true`. `check_ledger.py` 26 certificates, `check_blueprint.py` 88 labels,
+`atlas.py check` 75 nodes / 26 certificates / no cycles, 104 unit tests. The root
+`python3 research/verify.py` was rerun at the end of the round; its receipt is identified in
+`build/audit/generator-identification/final-snapshot.json`. No commit or push.
+
 ## Consolidated submission review (2026-09-17)
 
 See [the local review record](decisions/2026-09-17-consolidated-submission-review.md) for the combined proof scope,

@@ -18,14 +18,20 @@ flowchart LR
     GG["✓ Global Gauss–Green"]
     REC["✓ Smooth recovery"]
     FWD["✓ h_M ≤ h_S"]
-    SARD["✓ Smooth Sard"]
-    SCI["○ Cheeger superlevel<br/>Integral bound"]
+    SARD["✓ Scalar Sard<br/>Sharp finite regularity"]
+    SCI["✓ Cheeger superlevel<br/>Integral bound"]
     CUT["✓ Distance cutoffs"]
-    REV["○ h_S ≤ h_M"]
-    EQ["◐ h_M = h_S"]
+    REV["✓ h_S ≤ h_M"]
+    EQ["✓ h_M = h_S"]
     FRONT["✓ Density Cheeger<br/>Identification"]
-    CB["○ Cheeger–Buser<br/>Comparison"]
+    CB["○ NEXT: Cheeger–Buser<br/>Complete pi bound"]
     MINK["✓ Minkowski coarea"]
+    end
+    subgraph HEATPROGRAM["Buser analytic program — dotted links are planned steps"]
+    SEMI["✓ Weighted-gradient<br/>Heat semigroup"]
+    MARKOV["✓ Heat semigroup<br/>Markov properties"]
+    BE["◐ Generator / Bochner<br/>Gradient estimates"]
+    HEAT["○ Small-time heat bounds<br/>and pi Buser assembly"]
     end
     subgraph ELDAN["Eldan localization"]
     EG["○ Tight-prefix<br/>Carleson estimate"]
@@ -59,6 +65,7 @@ flowchart LR
     VR123["✓ Rank and kernel<br/>R1–R3"]
     VR4["✓ Tangential estimate<br/>R4"]
     VFULL["✓ C¹ vector coarea<br/>Rank-deficient part closed"]
+    VLIP["✓ Vector coarea<br/>Lipschitz and local"]
     end
     KLS["○ KLS<br/>Dimension-free bound"]
     ANY{"OR<br/>Any completed route"}
@@ -109,12 +116,19 @@ flowchart LR
     VREG -.-> VFULL
     VZERO -.-> VFULL
     VR4 -.-> VFULL
+    SEMI -.-> MARKOV
+    MARKOV -.-> BE
+    BE -.-> HEAT
+    HEAT -.-> CB
+    VFULL -.-> VLIP
     classDef done fill:#dbeafe,stroke:#2563eb,color:#1e3a8a;
-    class ENERGY,F4,MT,FP,FC,NORM,DENS,FRONT,ONE,CONST,FORMS,MEAS,GRAPH,REG,CRIT,C1,WHIT,LIP,GG,REC,FWD,SARD,CUT,MINK,FLOG,VREG,VZERO,VR123,VR4,VFULL done;
+    class ENERGY,F4,MT,FP,FC,EQ,NORM,DENS,FRONT,ONE,CONST,FORMS,MEAS,GRAPH,REG,CRIT,C1,WHIT,LIP,GG,REC,FWD,SARD,SCI,CUT,REV,MINK,FLOG,VREG,VZERO,VR123,VR4,VFULL,SEMI,MARKOV,VLIP done;
     classDef partial fill:#fff3df,stroke:#c88719,color:#66420d;
-    class EQ,FAND partial;
-    classDef todo fill:#f2f2f2,stroke:#888,color:#333;
-    class MG,EG,KLS,MC,EC,SC,FG,SG,MH,CB,SCI,REV,EAND,SAND,MAND todo;
+    class FAND,BE partial;
+    classDef todo fill:#fee2e2,stroke:#dc2626,color:#991b1b;
+    class MG,EG,KLS,MC,EC,SC,FG,SG,MH,EAND,SAND,MAND,HEAT todo;
+    classDef focus fill:#fee2e2,stroke:#dc2626,color:#991b1b,stroke-width:3px;
+    class CB focus;
     classDef logic fill:#fff,stroke:#555,color:#222;
     class ANY logic;
     click MG href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/src/chapters/50-kls-routes.tex" "Bounded CMH — Recovery envelope" _blank
@@ -127,14 +141,15 @@ flowchart LR
     click MT href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Poincare/CovarianceGradient/Translation.lean" "Affine constant — Translation invariance" _blank
     click FP href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/ConditionalFiber/EnergyComparison.lean" "Fiber-bound — Energy comparison" _blank
     click FC href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/ConditionalFiber/Closed.lean" "Fiber Dirichlet form" _blank
+    click EQ href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Cheeger/Equality.lean" "h_M = h_S" _blank
     click SC href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/src/chapters/50-kls-routes.tex" "Spectral — Sufficiency" _blank
     click FG href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/src/chapters/50-kls-routes.tex" "Universal — Frame bound" _blank
     click SG href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/src/chapters/50-kls-routes.tex" "Full-damping — Occupation bound" _blank
     click NORM href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/Isotropic.lean" "Affine / isotropic — Reduction" _blank
-    click DENS href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation.lean" "Log-concave density — Intrinsic support" _blank
+    click DENS href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Intrinsic.lean" "Log-concave density — Intrinsic support" _blank
     click MH href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/src/chapters/50-kls-routes.tex" "W₂ limit and — CMH comparison" _blank
     click FRONT href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex" "Density Cheeger — Identification" _blank
-    click CB href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex" "Cheeger–Buser — Comparison" _blank
+    click CB href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex" "NEXT: Cheeger–Buser — Complete pi bound" _blank
     click ONE href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/Line/SharpPoincare.lean" "One-dimensional — Poincaré ≤ 4 Var" _blank
     click CONST href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/Poincare.lean" "Poincaré frontend — Equivalence" _blank
     click FORMS href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Energy/SmoothGradient/Dirichlet.lean" "Closed forms — Dirichlet property" _blank
@@ -148,11 +163,10 @@ flowchart LR
     click GG href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/SmoothDomain/GaussGreen.lean" "Global Gauss–Green" _blank
     click REC href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Perimeter/Recovery.lean" "Smooth recovery" _blank
     click FWD href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Cheeger/Infimum.lean" "h_M ≤ h_S" _blank
-    click SARD href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/Sard/Smooth.lean" "Smooth Sard" _blank
-    click SCI href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/WIP/CheegerInfimum.lean" "Cheeger superlevel — Integral bound" _blank
+    click SARD href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/Sard/Sharp.lean" "Scalar Sard — Sharp finite regularity" _blank
+    click SCI href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Cheeger/Equality.lean" "Cheeger superlevel — Integral bound" _blank
     click CUT href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Cheeger/DistanceCutoff.lean" "Distance cutoffs" _blank
-    click REV href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/WIP/CheegerInfimum.lean" "h_S ≤ h_M" _blank
-    click EQ href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/WIP/CheegerInfimum.lean" "h_M = h_S" _blank
+    click REV href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Cheeger/Equality.lean" "h_S ≤ h_M" _blank
     click MINK href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Cheeger/MinkowskiContent.lean" "Minkowski coarea" _blank
     click EAND href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/route-composition.yaml" "AND — Eldan route" _blank
     click SAND href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/route-composition.yaml" "AND — Spectral route" _blank
@@ -165,3 +179,8 @@ flowchart LR
     click VR123 href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/research/audits/RightInverseBoundAudit.lean" "Rank and kernel — R1–R3" _blank
     click VR4 href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/research/decisions/2026-09-17-tangential-lipschitz.md" "Tangential estimate — R4" _blank
     click VFULL href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/research/decisions/2026-09-17-rank-deficient-coarea.md" "C¹ vector coarea — Rank-deficient part closed" _blank
+    click SEMI href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Basic.lean" "Weighted-gradient — Heat semigroup" _blank
+    click MARKOV href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Markov.lean" "Heat semigroup — Markov properties" _blank
+    click BE href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/BakryEmery/Bochner.lean" "Generator / Bochner — Gradient estimates" _blank
+    click HEAT href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/research/decisions/2026-09-20-current-status-alignment.md" "Small-time heat bounds — and pi Buser assembly" _blank
+    click VLIP href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/Lipschitz/Local.lean" "Vector coarea — Lipschitz and local" _blank

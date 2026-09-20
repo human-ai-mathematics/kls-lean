@@ -1,3 +1,4 @@
+import FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Approximation
 import FunctionalInequalities.Poincare.LocalSlope.Basic
 import FunctionalInequalities.Energy.LocalSlope.Gradient
 import FunctionalInequalities.Poincare.SmoothTest.Comparison

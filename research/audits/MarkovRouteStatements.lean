@@ -100,9 +100,9 @@ membership and the energy bound; the lattice inequality
     (_hM : Energy.Markovian (μ : Measure α) (Energy.PreEnergy.normSqEnergy T))
     {t : ℝ} (_ht : 0 ≤ t) (hone : L2.const μ 1 ∈ T.domain)
     (_hTone : T ⟨L2.const μ 1, hone⟩ = 0),
-      (∀ f, 0 ≤ f → 0 ≤ semigroupApply T hT hd t f) ∧
-      (∀ f, f ≤ L2.const μ 1 → semigroupApply T hT hd t f ≤ L2.const μ 1) ∧
-      semigroupApply T hT hd t (L2.const μ 1) = L2.const μ 1)
+      (∀ f, 0 ≤ f → 0 ≤ FunctionalInequalities.Analysis.Semigroup.Generated.apply T hT hd t f) ∧
+      (∀ f, f ≤ L2.const μ 1 → FunctionalInequalities.Analysis.Semigroup.Generated.apply T hT hd t f ≤ L2.const μ 1) ∧
+      FunctionalInequalities.Analysis.Semigroup.Generated.apply T hT hd t (L2.const μ 1) = L2.const μ 1)
 
 /-! ### `M7` -- mean preservation, absolute-value domination and the `L^infinity` bound -/
 
@@ -113,9 +113,9 @@ membership and the energy bound; the lattice inequality
     (_hM : Energy.Markovian (μ : Measure α) (Energy.PreEnergy.normSqEnergy T))
     {t : ℝ} (_ht : 0 ≤ t) (hone : L2.const μ 1 ∈ T.domain)
     (_hTone : T ⟨L2.const μ 1, hone⟩ = 0) (f : Lp ℝ 2 (μ : Measure α)),
-      L2.mean μ (semigroupApply T hT hd t f) = L2.mean μ f ∧
-      |semigroupApply T hT hd t f| ≤ semigroupApply T hT hd t |f| ∧
+      L2.mean μ (FunctionalInequalities.Analysis.Semigroup.Generated.apply T hT hd t f) = L2.mean μ f ∧
+      |FunctionalInequalities.Analysis.Semigroup.Generated.apply T hT hd t f| ≤ FunctionalInequalities.Analysis.Semigroup.Generated.apply T hT hd t |f| ∧
       ∀ {C : ℝ}, 0 ≤ C → |f| ≤ C • L2.const μ 1 →
-        |semigroupApply T hT hd t f| ≤ C • L2.const μ 1)
+        |FunctionalInequalities.Analysis.Semigroup.Generated.apply T hT hd t f| ≤ C • L2.const μ 1)
 
 end FunctionalInequalities

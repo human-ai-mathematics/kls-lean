@@ -11,18 +11,18 @@ import FunctionalInequalities.Analysis.Semigroup.Exponential.MeanValue
 `Analysis/Semigroup/Generated/Laws.lean`; both are imported and used, not reproved.
 
 Throughout, `T : H₀ →ₗ.[ℝ] H₁` is closed and densely defined, `L_s = yosida T hT hs` is the Yosida
-approximation of `T†T` and `P_t f = semigroupApply T hT hd t f` is the `S6` limit of
+approximation of `T†T` and `P_t f = Generated.apply T hT hd t f` is the `S6` limit of
 `exp (-t • L_s) f` as `s ↓ 0`.
 
 ## What is proved here
 
-* **`G1`** (`exists_delta_norm_exp_neg_smul_yosida_sub_semigroupApply_lt`): the `S6` convergence
+* **`G1`** (`Generated.yosida_converges`): the `S6` convergence
   `exp (-τ • L_s) g → P_τ g` is **uniform in `τ` on a compact time interval** `[0, t]`.  On
-  `D(T†T)` this is `norm_exp_neg_smul_yosida_sub_semigroupApply_le`, the `≤` form with the
+  `D(T†T)` this is `Generated.yosida_error_le`, the `≤` form with the
   approximating vector fixed.
-* **`G3` = `S8`** (`exists_delta_norm_inv_smul_semigroupApply_sub_self_add_adjointComp_lt`): for
+* **`G3` = `S8`** (`Generated.generator_limit`): for
   `f ∈ D(T†T)`, `(P_t f - f)/t → -T†T f` as `t ↓ 0`, i.e. **the generator of `P_t` is `-T†T` on
-  `D(T†T)`**.  The quantitative form behind it is `norm_semigroupApply_sub_self_add_smul_le`:
+  `D(T†T)`**.  The quantitative form behind it is `Generated.generator_error_le`:
   for every `ε > 0` there is `δ > 0` with `‖P_t f - f + t • T†T f‖ ≤ (7 ε / 8) * t` for
   `0 < t < δ`.
 
@@ -40,11 +40,11 @@ Yosida approximations are nonnegative and commute) gives
 `‖exp (-τ • L_s) b - exp (-τ • L_r) b‖ ≤ τ ‖L_s b - L_r b‖ ≤ t ‖L_s b - L_r b‖`, and `Y5`
 (`exists_delta_norm_yosida_sub_adjointComp_lt`) makes `‖L_s b - T†T b‖` smaller than
 `ε / (2 (t + 1))` for `s` small, so the Cauchy estimate is **uniform in `τ`**.  Letting `r ↓ 0` at
-the fixed `τ` through `semigroupApply_spec` and squeezing (`le_of_forall_pos_add_le`) turns it
+the fixed `τ` through `Generated.yosida_limit` and squeezing (`le_of_forall_pos_add_le`) turns it
 into `‖exp (-τ • L_s) b - P_τ b‖ ≤ ε`, still uniformly in `τ`.  For general `g`, pick
 `b ∈ D(T†T)` with `‖g - b‖ < ε / 3` (`dense_adjointComp_domain`) and insert it: the two error
 terms are controlled by the contractions `S5` (`norm_exp_neg_smul_apply_le`, for `exp (-τ • L_s)`)
-and `P3` (`norm_semigroupApply_le`, for `P_τ`).
+and `P3` (`Generated.norm_apply_le`, for `P_τ`).
 
 `G3`.  Put `g = T†T f`.  Choose `δ` from `P7` so that `‖P_τ g - g‖ < ε/4` for `0 ≤ τ < δ`, and fix
 `0 < t < δ`.  For `s` small, `Y5` gives `‖L_s f - g‖ < ε/8` and `G1` gives
@@ -53,19 +53,19 @@ hypothesis of `G2` needs — so, inserting `g` and `P_τ g` and using `S5`,
 `‖exp (-τ • L_s) (L_s f) - L_s f‖ ≤ 3ε/4` on `[0, t]`.  `G2`
 (`norm_exp_neg_smul_sub_add_smul_le`) with `A = L_s` then yields
 `‖exp (-t • L_s) f - f + t • L_s f‖ ≤ (3ε/4) t`.  Letting `s ↓ 0` at the fixed `t`
-(`semigroupApply_spec`, plus `‖L_s f - g‖ < ε/8` for the linear term) and squeezing gives
+(`Generated.yosida_limit`, plus `‖L_s f - g‖ < ε/8` for the linear term) and squeezing gives
 `‖P_t f - f + t • g‖ ≤ (7ε/8) t`; dividing by `t > 0` gives `‖t⁻¹ • (P_t f - f) + g‖ ≤ 7ε/8 < ε`.
 No integral, no spectral theorem and no functional calculus is used.
 
 ## Route hypotheses
 
 Every hypothesis of the route statements `G1` and `G3` is used: `hT` and `hd` are needed to form
-`yosida`, `adjointComp` and `semigroupApply`; `0 ≤ t` in `G1` is needed for `[0, t]` to be the
+`yosida`, `adjointComp` and `Generated.apply`; `0 ≤ t` in `G1` is needed for `[0, t]` to be the
 time interval and for `P_τ` to be the semigroup value rather than the `t < 0` convention; `0 < ε`
 is needed throughout.  No lemma of this module is therefore accompanied by a "supplied and
 dropped" wrapper.  The `≤`-form intermediate results
-(`norm_exp_neg_smul_yosida_sub_semigroupApply_le`,
-`norm_semigroupApply_sub_self_add_smul_le`) are **stronger** than what the route asks for — they
+(`Generated.yosida_error_le`,
+`Generated.generator_error_le`) are **stronger** than what the route asks for — they
 are uniform-in-`τ` and quantitative-in-`t` respectively — and the route statements are derived
 from them; this is a strengthening, not a deviation.
 
@@ -106,23 +106,25 @@ section Generator
 variable {H₀ H₁ : Type*} [NormedAddCommGroup H₀] [InnerProductSpace ℝ H₀] [CompleteSpace H₀]
   [NormedAddCommGroup H₁] [InnerProductSpace ℝ H₁] [CompleteSpace H₁]
 
+namespace Generated
+
 /-- **`G1` on `D(T†T)`.** For `b ∈ D(T†T)`, `0 ≤ t` and `ε > 0` there is `δ > 0` such that for
 every `0 < s < δ` **and every `τ ∈ [0, t]` simultaneously**
 
 `‖exp (-τ • L_s) b - P_τ b‖ ≤ ε`.
 
-The point is the uniformity in `τ`: the `S6` convergence `semigroupApply_spec` is a pointwise
+The point is the uniformity in `τ`: the `S6` convergence `Generated.yosida_limit` is a pointwise
 statement at a fixed time, whereas the bound here has a single `δ` for the whole interval.
 
 Proof: `Y6` bounds `‖exp (-τ • L_s) b - exp (-τ • L_r) b‖` by `τ ‖L_s b - L_r b‖ ≤ t ‖L_s b - L_r b‖`,
 and `Y5` makes `‖L_s b - T†T b‖ < ε / (2 (t + 1))` for `s < δ`; letting `r ↓ 0` at the fixed `τ`
-through `semigroupApply_spec` and squeezing removes the auxiliary parameter. -/
-theorem norm_exp_neg_smul_yosida_sub_semigroupApply_le (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClosed)
+through `Generated.yosida_limit` and squeezing removes the auxiliary parameter. -/
+theorem yosida_error_le (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClosed)
     (hd : Dense (T.domain : Set H₀)) (b : (adjointComp T).domain) {t : ℝ} (ht : 0 ≤ t) {ε : ℝ}
     (hε : 0 < ε) :
     ∃ δ : ℝ, 0 < δ ∧ ∀ {s : ℝ} (hs : 0 < s), s < δ → ∀ τ ∈ Set.Icc 0 t,
       ‖NormedSpace.exp (-τ • yosida T hT hs) (b : H₀)
-        - semigroupApply T hT hd τ (b : H₀)‖ ≤ ε := by
+        - Generated.apply T hT hd τ (b : H₀)‖ ≤ ε := by
   have htp : (0 : ℝ) < t + 1 := by linarith
   obtain ⟨δ, hδ, hY5⟩ := exists_delta_norm_yosida_sub_adjointComp_lt T hT hd b
     (show (0 : ℝ) < ε / (2 * (t + 1)) by positivity)
@@ -130,7 +132,7 @@ theorem norm_exp_neg_smul_yosida_sub_semigroupApply_le (T : H₀ →ₗ.[ℝ] H�
   intro s hs hsδ τ hτ
   refine le_of_forall_pos_add_le ?_
   intro η hη
-  obtain ⟨δ₂, hδ₂, hspec⟩ := semigroupApply_spec T hT hd hτ.1 (b : H₀) hη
+  obtain ⟨δ₂, hδ₂, hspec⟩ := Generated.yosida_limit T hT hd hτ.1 (b : H₀) hη
   obtain ⟨r, hr0, hrδ, hrδ₂⟩ : ∃ r : ℝ, 0 < r ∧ r < δ ∧ r < δ₂ := by
     have hmin : 0 < min δ δ₂ := lt_min hδ hδ₂
     have h1 : min δ δ₂ ≤ δ := min_le_left _ _
@@ -163,7 +165,7 @@ theorem norm_exp_neg_smul_yosida_sub_semigroupApply_le (T : H₀ →ₗ.[ℝ] H�
   -- Let `r ↓ 0` at the fixed time `τ`.
   have hlim := hspec hr0 hrδ₂
   have htri := norm_sub_le_add_norm_sub (NormedSpace.exp (-τ • yosida T hT hs) (b : H₀))
-    (NormedSpace.exp (-τ • yosida T hT hr0) (b : H₀)) (semigroupApply T hT hd τ (b : H₀))
+    (NormedSpace.exp (-τ • yosida T hT hr0) (b : H₀)) (Generated.apply T hT hd τ (b : H₀))
   linarith
 
 /-- **`G1`.** For every `g : H₀`, every `0 ≤ t` and every `ε > 0` there is `δ > 0` such that for
@@ -171,38 +173,38 @@ all `0 < s < δ` and **all** `τ ∈ [0, t]`
 
 `‖exp (-τ • L_s) g - P_τ g‖ < ε`,
 
-i.e. the `S6` convergence of `semigroupApply_spec` is uniform on compact time intervals.
+i.e. the `S6` convergence of `Generated.yosida_limit` is uniform on compact time intervals.
 
 Proof: approximate `g` within `ε/3` by `b ∈ D(T†T)` (`dense_adjointComp_domain`), apply
-`norm_exp_neg_smul_yosida_sub_semigroupApply_le` to `b` with `ε/3`, and absorb the two
+`Generated.yosida_error_le` to `b` with `ε/3`, and absorb the two
 approximation errors with the contraction bounds `S5` (`norm_exp_neg_smul_apply_le`) and `P3`
-(`norm_semigroupApply_le`). -/
-theorem exists_delta_norm_exp_neg_smul_yosida_sub_semigroupApply_lt (T : H₀ →ₗ.[ℝ] H₁)
+(`Generated.norm_apply_le`). -/
+theorem yosida_converges (T : H₀ →ₗ.[ℝ] H₁)
     (hT : T.IsClosed) (hd : Dense (T.domain : Set H₀)) (g : H₀) {t : ℝ} (ht : 0 ≤ t) {ε : ℝ}
     (hε : 0 < ε) :
     ∃ δ : ℝ, 0 < δ ∧ ∀ {s : ℝ} (hs : 0 < s), s < δ → ∀ τ ∈ Set.Icc 0 t,
-      ‖NormedSpace.exp (-τ • yosida T hT hs) g - semigroupApply T hT hd τ g‖ < ε := by
+      ‖NormedSpace.exp (-τ • yosida T hT hs) g - Generated.apply T hT hd τ g‖ < ε := by
   obtain ⟨b, hbmem, hbdist⟩ :=
     Metric.mem_closure_iff.mp (dense_adjointComp_domain T hT hd g) (ε / 3) (by positivity)
   have hbnorm : ‖g - b‖ < ε / 3 := by rwa [dist_eq_norm] at hbdist
   have hbnorm' : ‖b - g‖ < ε / 3 := by rwa [norm_sub_rev] at hbnorm
-  obtain ⟨δ, hδ, hb⟩ := norm_exp_neg_smul_yosida_sub_semigroupApply_le T hT hd
+  obtain ⟨δ, hδ, hb⟩ := Generated.yosida_error_le T hT hd
     (⟨b, hbmem⟩ : (adjointComp T).domain) ht (show (0 : ℝ) < ε / 3 by positivity)
   refine ⟨δ, hδ, ?_⟩
   intro s hs hsδ τ hτ
-  have hmid : ‖NormedSpace.exp (-τ • yosida T hT hs) b - semigroupApply T hT hd τ b‖ ≤ ε / 3 :=
+  have hmid : ‖NormedSpace.exp (-τ • yosida T hT hs) b - Generated.apply T hT hd τ b‖ ≤ ε / 3 :=
     hb hs hsδ τ hτ
   have hleft : ‖NormedSpace.exp (-τ • yosida T hT hs) g
       - NormedSpace.exp (-τ • yosida T hT hs) b‖ ≤ ‖g - b‖ := by
-    rw [← map_sub]
+    rw [← _root_.map_sub]
     exact norm_exp_neg_smul_apply_le _ (yosida_nonneg T hT hs) hτ.1 _
-  have hright : ‖semigroupApply T hT hd τ b - semigroupApply T hT hd τ g‖ ≤ ‖b - g‖ := by
-    rw [← semigroupApply_sub T hT hd hτ.1]
-    exact norm_semigroupApply_le T hT hd hτ.1 _
+  have hright : ‖Generated.apply T hT hd τ b - Generated.apply T hT hd τ g‖ ≤ ‖b - g‖ := by
+    rw [← Generated.map_sub T hT hd hτ.1]
+    exact Generated.norm_apply_le T hT hd hτ.1 _
   have h1 := norm_sub_le_add_norm_sub (NormedSpace.exp (-τ • yosida T hT hs) g)
-    (NormedSpace.exp (-τ • yosida T hT hs) b) (semigroupApply T hT hd τ g)
+    (NormedSpace.exp (-τ • yosida T hT hs) b) (Generated.apply T hT hd τ g)
   have h2 := norm_sub_le_add_norm_sub (NormedSpace.exp (-τ • yosida T hT hs) b)
-    (semigroupApply T hT hd τ b) (semigroupApply T hT hd τ g)
+    (Generated.apply T hT hd τ b) (Generated.apply T hT hd τ g)
   linarith
 
 /-- **The quantitative form of `S8`.** For `f ∈ D(T†T)` and `ε > 0` there is `δ > 0` with
@@ -213,12 +215,12 @@ i.e. `P_t f = f - t • T†T f + o(t)` as `t ↓ 0`, with an explicit modulus.
 
 Proof: `G2` applied to `A = L_s` needs `‖exp (-τ • L_s) (L_s f) - L_s f‖` bounded on all of
 `[0, t]`, which is exactly what `G1` (uniformity in `τ`), `Y5` and `P7` supply; then `s ↓ 0` at
-the fixed `t` through `semigroupApply_spec`, squeezed by `le_of_forall_pos_add_le`. -/
-theorem norm_semigroupApply_sub_self_add_smul_le (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClosed)
+the fixed `t` through `Generated.yosida_limit`, squeezed by `le_of_forall_pos_add_le`. -/
+theorem generator_error_le (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClosed)
     (hd : Dense (T.domain : Set H₀)) (f : (adjointComp T).domain) {ε : ℝ} (hε : 0 < ε) :
     ∃ δ : ℝ, 0 < δ ∧ ∀ t : ℝ, 0 < t → t < δ →
-      ‖semigroupApply T hT hd t (f : H₀) - (f : H₀) + t • adjointComp T f‖ ≤ 7 * ε / 8 * t := by
-  obtain ⟨δ, hδ, hP7⟩ := exists_delta_norm_semigroupApply_sub_self_lt T hT hd
+      ‖Generated.apply T hT hd t (f : H₀) - (f : H₀) + t • adjointComp T f‖ ≤ 7 * ε / 8 * t := by
+  obtain ⟨δ, hδ, hP7⟩ := Generated.continuous_at_zero T hT hd
     (adjointComp T f) (show (0 : ℝ) < ε / 4 by positivity)
   refine ⟨δ, hδ, ?_⟩
   intro t htpos htδ
@@ -227,9 +229,9 @@ theorem norm_semigroupApply_sub_self_add_smul_le (T : H₀ →ₗ.[ℝ] H₁) (h
   -- Choose one Yosida parameter `s` small enough for all three inputs at once.
   obtain ⟨δa, hδa, hY5⟩ := exists_delta_norm_yosida_sub_adjointComp_lt T hT hd f
     (show (0 : ℝ) < ε / 8 by positivity)
-  obtain ⟨δb, hδb, hG1⟩ := exists_delta_norm_exp_neg_smul_yosida_sub_semigroupApply_lt T hT hd
+  obtain ⟨δb, hδb, hG1⟩ := Generated.yosida_converges T hT hd
     (adjointComp T f) htpos.le (show (0 : ℝ) < ε / 4 by positivity)
-  obtain ⟨δc, hδc, hspec⟩ := semigroupApply_spec T hT hd htpos.le (f : H₀) hη
+  obtain ⟨δc, hδc, hspec⟩ := Generated.yosida_limit T hT hd htpos.le (f : H₀) hη
   obtain ⟨s, hs, hsa, hsb, hsc⟩ : ∃ s : ℝ, 0 < s ∧ s < δa ∧ s < δb ∧ s < δc := by
     have hmin : 0 < min (min δa δb) δc := lt_min (lt_min hδa hδb) hδc
     have h1 : min (min δa δb) δc ≤ min δa δb := min_le_left _ _
@@ -247,26 +249,26 @@ theorem norm_semigroupApply_sub_self_add_smul_le (T : H₀ →ₗ.[ℝ] H₁) (h
     have e1 : ‖NormedSpace.exp (-τ • yosida T hT hs) (yosida T hT hs (f : H₀))
         - NormedSpace.exp (-τ • yosida T hT hs) (adjointComp T f)‖
         ≤ ‖yosida T hT hs (f : H₀) - adjointComp T f‖ := by
-      rw [← map_sub]
+      rw [← _root_.map_sub]
       exact norm_exp_neg_smul_apply_le _ (yosida_nonneg T hT hs) hτ.1 _
     have e2 : ‖NormedSpace.exp (-τ • yosida T hT hs) (adjointComp T f)
-        - semigroupApply T hT hd τ (adjointComp T f)‖ < ε / 4 := hG1 hs hsb τ hτ
-    have e3 : ‖semigroupApply T hT hd τ (adjointComp T f) - adjointComp T f‖ < ε / 4 :=
+        - Generated.apply T hT hd τ (adjointComp T f)‖ < ε / 4 := hG1 hs hsb τ hτ
+    have e3 : ‖Generated.apply T hT hd τ (adjointComp T f) - adjointComp T f‖ < ε / 4 :=
       hP7 τ hτ.1 (lt_of_le_of_lt hτ.2 htδ)
     have h1 := norm_sub_le_add_norm_sub
       (NormedSpace.exp (-τ • yosida T hT hs) (yosida T hT hs (f : H₀)))
       (NormedSpace.exp (-τ • yosida T hT hs) (adjointComp T f)) (yosida T hT hs (f : H₀))
     have h2 := norm_sub_le_add_norm_sub
       (NormedSpace.exp (-τ • yosida T hT hs) (adjointComp T f))
-      (semigroupApply T hT hd τ (adjointComp T f)) (yosida T hT hs (f : H₀))
-    have h3 := norm_sub_le_add_norm_sub (semigroupApply T hT hd τ (adjointComp T f))
+      (Generated.apply T hT hd τ (adjointComp T f)) (yosida T hT hs (f : H₀))
+    have h3 := norm_sub_le_add_norm_sub (Generated.apply T hT hd τ (adjointComp T f))
       (adjointComp T f) (yosida T hT hs (f : H₀))
     linarith
   have hG2 := norm_exp_neg_smul_sub_add_smul_le (yosida T hT hs) (f : H₀) htpos.le hC
   have hlim := hspec hs hsc
   -- Assemble.
-  have hdecomp : semigroupApply T hT hd t (f : H₀) - (f : H₀) + t • adjointComp T f
-      = (semigroupApply T hT hd t (f : H₀) - NormedSpace.exp (-t • yosida T hT hs) (f : H₀))
+  have hdecomp : Generated.apply T hT hd t (f : H₀) - (f : H₀) + t • adjointComp T f
+      = (Generated.apply T hT hd t (f : H₀) - NormedSpace.exp (-t • yosida T hT hs) (f : H₀))
         + (NormedSpace.exp (-t • yosida T hT hs) (f : H₀) - (f : H₀)
             + t • yosida T hT hs (f : H₀))
         + (t • adjointComp T f - t • yosida T hT hs (f : H₀)) := by
@@ -278,14 +280,14 @@ theorem norm_semigroupApply_sub_self_add_smul_le (T : H₀ →ₗ.[ℝ] H₁) (h
     mul_le_mul_of_nonneg_left hYs'.le htpos.le
   rw [hdecomp]
   have htri1 := norm_add_le
-    ((semigroupApply T hT hd t (f : H₀) - NormedSpace.exp (-t • yosida T hT hs) (f : H₀))
+    ((Generated.apply T hT hd t (f : H₀) - NormedSpace.exp (-t • yosida T hT hs) (f : H₀))
       + (NormedSpace.exp (-t • yosida T hT hs) (f : H₀) - (f : H₀)
           + t • yosida T hT hs (f : H₀)))
     (t • adjointComp T f - t • yosida T hT hs (f : H₀))
   have htri2 := norm_add_le
-    (semigroupApply T hT hd t (f : H₀) - NormedSpace.exp (-t • yosida T hT hs) (f : H₀))
+    (Generated.apply T hT hd t (f : H₀) - NormedSpace.exp (-t • yosida T hT hs) (f : H₀))
     (NormedSpace.exp (-t • yosida T hT hs) (f : H₀) - (f : H₀) + t • yosida T hT hs (f : H₀))
-  have hfirst : ‖semigroupApply T hT hd t (f : H₀)
+  have hfirst : ‖Generated.apply T hT hd t (f : H₀)
       - NormedSpace.exp (-t • yosida T hT hs) (f : H₀)‖ < η := by
     rwa [norm_sub_rev] at hlim
   linarith
@@ -297,26 +299,28 @@ there is `δ > 0` with
 
 that is, `(P_t f - f)/t → -T†T f` as `t ↓ 0`.
 
-Immediate from the quantitative form `norm_semigroupApply_sub_self_add_smul_le` after dividing by
+Immediate from the quantitative form `Generated.generator_error_le` after dividing by
 `t > 0`. -/
-theorem exists_delta_norm_inv_smul_semigroupApply_sub_self_add_adjointComp_lt (T : H₀ →ₗ.[ℝ] H₁)
+theorem generator_limit (T : H₀ →ₗ.[ℝ] H₁)
     (hT : T.IsClosed) (hd : Dense (T.domain : Set H₀)) (f : (adjointComp T).domain) {ε : ℝ}
     (hε : 0 < ε) :
     ∃ δ : ℝ, 0 < δ ∧ ∀ t : ℝ, 0 < t → t < δ →
-      ‖t⁻¹ • (semigroupApply T hT hd t (f : H₀) - (f : H₀)) + adjointComp T f‖ < ε := by
-  obtain ⟨δ, hδ, hq⟩ := norm_semigroupApply_sub_self_add_smul_le T hT hd f hε
+      ‖t⁻¹ • (Generated.apply T hT hd t (f : H₀) - (f : H₀)) + adjointComp T f‖ < ε := by
+  obtain ⟨δ, hδ, hq⟩ := Generated.generator_error_le T hT hd f hε
   refine ⟨δ, hδ, ?_⟩
   intro t htpos htδ
   have htne : t ≠ 0 := ne_of_gt htpos
-  have hrw : t⁻¹ • (semigroupApply T hT hd t (f : H₀) - (f : H₀)) + adjointComp T f
-      = t⁻¹ • (semigroupApply T hT hd t (f : H₀) - (f : H₀) + t • adjointComp T f) := by
+  have hrw : t⁻¹ • (Generated.apply T hT hd t (f : H₀) - (f : H₀)) + adjointComp T f
+      = t⁻¹ • (Generated.apply T hT hd t (f : H₀) - (f : H₀) + t • adjointComp T f) := by
     rw [smul_add, smul_smul, inv_mul_cancel₀ htne, one_smul]
   rw [hrw, norm_smul, Real.norm_eq_abs, abs_of_pos (inv_pos.mpr htpos)]
-  have h1 : t⁻¹ * ‖semigroupApply T hT hd t (f : H₀) - (f : H₀) + t • adjointComp T f‖
+  have h1 : t⁻¹ * ‖Generated.apply T hT hd t (f : H₀) - (f : H₀) + t • adjointComp T f‖
       ≤ t⁻¹ * (7 * ε / 8 * t) :=
     mul_le_mul_of_nonneg_left (hq t htpos htδ) (inv_pos.mpr htpos).le
   have h2 : t⁻¹ * (7 * ε / 8 * t) = 7 * ε / 8 := by field_simp
   linarith
+
+end Generated
 
 end Generator
 

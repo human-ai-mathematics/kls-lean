@@ -3,20 +3,12 @@ import Mathlib.Analysis.InnerProductSpace.Basic
 import Mathlib.Analysis.SpecialFunctions.Gamma.Basic
 
 /-!
-# Normalized Hausdorff measures and the surface measure of the relative-perimeter chain
+# Normalized Hausdorff and codimension-one measures
 
-Base definitions layer of the relative-perimeter chain.  Mathlib's `μH[d]` uses the gauge
-`diam ^ d`; the classical `d`-dimensional Hausdorff measure uses `ω_d (diam / 2) ^ d`.  This
-module fixes `ω_d` (`unitBallVolume`), the rescaled measure `hausdorffNormalized`, and the
-codimension-one `surfaceMeasure` used throughout `lem:relative-perimeter-smoothing` and
-`lem:relative-perimeter-cheeger-infimum`.
-
-The module carries definitions only, so that the general Hausdorff and level-set geometry of
-`Analysis/Hausdorff/LevelSet.lean` can be stated in terms of `unitBallVolume` without depending on the
-perimeter statements that consume it.  The convention check
-`KLS.hausdorffNormalized_finrank_eq_volume` — that the normalized top-dimensional Hausdorff
-measure is Lebesgue measure — is proved in `KLS/Geometry/SmoothDomain/Basic.lean`, where the
-isodiametric input of `Analysis/Hausdorff/LevelSet.lean` is available.
+Mathlib uses the diameter gauge. These definitions rescale it by `ω_d / 2^d` and fix the
+codimension-one measure with natural subtraction in dimension zero. The existing KLS namespace
+is retained as a public interface; the definitions have no log-concavity or smooth-domain input.
+The top-dimensional convention check is in `Analysis/Hausdorff/Volume.lean`.
 -/
 
 noncomputable section

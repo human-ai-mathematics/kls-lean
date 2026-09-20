@@ -15,7 +15,7 @@ respect to a Haar measure `m`, the frontier of its support is `ν`-null, and on 
 of the interior `Ω` of the support the Haar measure is dominated by a constant multiple of `ν`
 (`Probability.LocallyDominates ν m`). For a log-concave law these follow from the Borell density
 representative, which is bounded below by a positive constant on such compact sets; that
-instantiation is in `KLS/LogConcave/WeightedGradient.lean`.
+instantiation is in `KLS/LogConcave/WeightedGradient/Basic.lean`.
 
 Proof. If `[g_j] → 0` in `L²(ν)` and `[B ∇g_j] → y` in `L²(ν; V)`, fix `φ ∈ C_c^∞` with support
 in `Ω`. Local domination turns `L²(ν)` convergence into `L¹(m)` convergence on the support of

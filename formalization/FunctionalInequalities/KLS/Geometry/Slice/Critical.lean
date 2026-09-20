@@ -1,4 +1,4 @@
-import FunctionalInequalities.KLS.Geometry.Surface.Slicing
+import FunctionalInequalities.Analysis.Hausdorff.SurfaceSlicing
 import Mathlib.MeasureTheory.Function.Jacobian
 
 /-! # The critical part of a `C¹` function has null level slices

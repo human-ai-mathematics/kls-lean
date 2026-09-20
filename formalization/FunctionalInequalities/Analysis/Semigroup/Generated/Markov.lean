@@ -347,18 +347,28 @@ theorem exp_neg_smul_yosida_le_one (hT : T.IsClosed)
   rw [map_sub, exp_neg_smul_yosida_one hT hs t hone hTone, sub_nonneg] at himage
   exact himage
 
+end LpMarkov
+
+namespace Generated
+
+open LpMarkov
+
+variable {α H : Type*} [MeasurableSpace α]
+  [NormedAddCommGroup H] [InnerProductSpace ℝ H] [CompleteSpace H]
+  {μ : ProbabilityMeasure α} {T : Lp ℝ 2 (μ : Measure α) →ₗ.[ℝ] H}
+
 /-! ## Passage to the generated semigroup -/
 
 /-- The generated semigroup preserves positivity. Closedness of the `L²` positive cone transfers
 the property from the Yosida exponentials to their strong limit. -/
-theorem semigroupApply_positive (hT : T.IsClosed) (hd : Dense (T.domain : Set (Lp ℝ 2
+theorem positive (hT : T.IsClosed) (hd : Dense (T.domain : Set (Lp ℝ 2
     (μ : Measure α))))
     (hM : Energy.Markovian (μ : Measure α) (Energy.PreEnergy.normSqEnergy T))
     {t : ℝ} (ht : 0 ≤ t) {f : Lp ℝ 2 (μ : Measure α)} (hf : 0 ≤ f) :
-    0 ≤ semigroupApply T hT hd t f := by
+    0 ≤ Generated.apply T hT hd t f := by
   apply (isClosed_Ici : IsClosed (Set.Ici (0 : Lp ℝ 2 (μ : Measure α)))).closure_subset
   refine Metric.mem_closure_iff.mpr fun ε hε ↦ ?_
-  obtain ⟨δ, hδ, happ⟩ := semigroupApply_spec T hT hd ht f hε
+  obtain ⟨δ, hδ, happ⟩ := Generated.yosida_limit T hT hd ht f hε
   have hs : 0 < δ / 2 := half_pos hδ
   have hsδ : δ / 2 < δ := half_lt_self hδ
   refine ⟨NormedSpace.exp (-t • yosida T hT hs) f,
@@ -366,11 +376,11 @@ theorem semigroupApply_positive (hT : T.IsClosed) (hd : Dense (T.domain : Set (L
   simpa only [dist_eq_norm, norm_sub_rev] using happ hs hsδ
 
 /-- If the form kills one, the generated semigroup fixes one. -/
-theorem semigroupApply_one (hT : T.IsClosed) (hd : Dense (T.domain : Set (Lp ℝ 2
+theorem one (hT : T.IsClosed) (hd : Dense (T.domain : Set (Lp ℝ 2
     (μ : Measure α)))) {t : ℝ} (ht : 0 ≤ t)
     (hone : L2.const μ 1 ∈ T.domain) (hTone : T ⟨L2.const μ 1, hone⟩ = 0) :
-    semigroupApply T hT hd t (L2.const μ 1) = L2.const μ 1 := by
-  refine (eq_semigroupApply_of_tendsto T hT hd ht (L2.const μ 1) (L2.const μ 1) ?_).symm
+    Generated.apply T hT hd t (L2.const μ 1) = L2.const μ 1 := by
+  refine (Generated.eq_apply_of_tendsto T hT hd ht (L2.const μ 1) (L2.const μ 1) ?_).symm
   intro ε hε
   refine ⟨1, one_pos, ?_⟩
   intro s hs _
@@ -378,84 +388,84 @@ theorem semigroupApply_one (hT : T.IsClosed) (hd : Dense (T.domain : Set (Lp ℝ
   exact hε
 
 /-- The generated semigroup is order preserving. -/
-theorem semigroupApply_mono (hT : T.IsClosed) (hd : Dense (T.domain : Set (Lp ℝ 2
+theorem mono (hT : T.IsClosed) (hd : Dense (T.domain : Set (Lp ℝ 2
     (μ : Measure α))))
     (hM : Energy.Markovian (μ : Measure α) (Energy.PreEnergy.normSqEnergy T))
     {t : ℝ} (ht : 0 ≤ t) {f g : Lp ℝ 2 (μ : Measure α)} (hfg : f ≤ g) :
-    semigroupApply T hT hd t f ≤ semigroupApply T hT hd t g := by
+    Generated.apply T hT hd t f ≤ Generated.apply T hT hd t g := by
   have hnonneg : 0 ≤ g - f := sub_nonneg.mpr hfg
-  have himage := semigroupApply_positive hT hd hM ht hnonneg
-  rw [semigroupApply_sub T hT hd ht, sub_nonneg] at himage
+  have himage := Generated.positive hT hd hM ht hnonneg
+  rw [Generated.map_sub T hT hd ht, sub_nonneg] at himage
   exact himage
 
 /-- The generated semigroup is sub-Markov. -/
-theorem semigroupApply_le_one (hT : T.IsClosed) (hd : Dense (T.domain : Set (Lp ℝ 2
+theorem le_one (hT : T.IsClosed) (hd : Dense (T.domain : Set (Lp ℝ 2
     (μ : Measure α))))
     (hM : Energy.Markovian (μ : Measure α) (Energy.PreEnergy.normSqEnergy T))
     {t : ℝ} (ht : 0 ≤ t)
     (hone : L2.const μ 1 ∈ T.domain) (hTone : T ⟨L2.const μ 1, hone⟩ = 0)
     {f : Lp ℝ 2 (μ : Measure α)} (hf : f ≤ L2.const μ 1) :
-    semigroupApply T hT hd t f ≤ L2.const μ 1 := by
+    Generated.apply T hT hd t f ≤ L2.const μ 1 := by
   calc
-    semigroupApply T hT hd t f ≤ semigroupApply T hT hd t (L2.const μ 1) :=
-      semigroupApply_mono hT hd hM ht hf
-    _ = L2.const μ 1 := semigroupApply_one hT hd ht hone hTone
+    Generated.apply T hT hd t f ≤ Generated.apply T hT hd t (L2.const μ 1) :=
+      Generated.mono hT hd hM ht hf
+    _ = L2.const μ 1 := Generated.one hT hd ht hone hTone
 
 /-- Combined sub-Markov statement: `0 ≤ f ≤ 1` implies `0 ≤ P_t f ≤ 1`. -/
-theorem semigroupApply_subMarkov (hT : T.IsClosed) (hd : Dense (T.domain : Set (Lp ℝ 2
+theorem subMarkov (hT : T.IsClosed) (hd : Dense (T.domain : Set (Lp ℝ 2
     (μ : Measure α))))
     (hM : Energy.Markovian (μ : Measure α) (Energy.PreEnergy.normSqEnergy T))
     {t : ℝ} (ht : 0 ≤ t)
     (hone : L2.const μ 1 ∈ T.domain) (hTone : T ⟨L2.const μ 1, hone⟩ = 0)
     {f : Lp ℝ 2 (μ : Measure α)} (hf0 : 0 ≤ f) (hf1 : f ≤ L2.const μ 1) :
-    0 ≤ semigroupApply T hT hd t f ∧ semigroupApply T hT hd t f ≤ L2.const μ 1 :=
-  ⟨semigroupApply_positive hT hd hM ht hf0,
-    semigroupApply_le_one hT hd hM ht hone hTone hf1⟩
+    0 ≤ Generated.apply T hT hd t f ∧ Generated.apply T hT hd t f ≤ L2.const μ 1 :=
+  ⟨Generated.positive hT hd hM ht hf0,
+    Generated.le_one hT hd hM ht hone hTone hf1⟩
 
 /-! ## Consequences -/
 
 /-- Symmetry and preservation of one imply preservation of the `L²` mean. -/
-theorem mean_semigroupApply (hT : T.IsClosed) (hd : Dense (T.domain : Set (Lp ℝ 2
+theorem mean (hT : T.IsClosed) (hd : Dense (T.domain : Set (Lp ℝ 2
     (μ : Measure α)))) {t : ℝ} (ht : 0 ≤ t)
     (hone : L2.const μ 1 ∈ T.domain) (hTone : T ⟨L2.const μ 1, hone⟩ = 0)
     (f : Lp ℝ 2 (μ : Measure α)) :
-    L2.mean μ (semigroupApply T hT hd t f) = L2.mean μ f := by
-  rw [L2.mean, inner_semigroupApply_left T hT hd ht,
-    semigroupApply_one hT hd ht hone hTone]
+    L2.mean μ (Generated.apply T hT hd t f) = L2.mean μ f := by
+  rw [L2.mean, Generated.symmetric T hT hd ht,
+    Generated.one hT hd ht hone hTone]
   rfl
 
 /-- A positive linear semigroup satisfies `|P_t f| ≤ P_t |f|`. -/
-theorem abs_semigroupApply_le (hT : T.IsClosed) (hd : Dense (T.domain : Set (Lp ℝ 2
+theorem abs_le (hT : T.IsClosed) (hd : Dense (T.domain : Set (Lp ℝ 2
     (μ : Measure α))))
     (hM : Energy.Markovian (μ : Measure α) (Energy.PreEnergy.normSqEnergy T))
     {t : ℝ} (ht : 0 ≤ t) (f : Lp ℝ 2 (μ : Measure α)) :
-    |semigroupApply T hT hd t f| ≤ semigroupApply T hT hd t |f| := by
+    |Generated.apply T hT hd t f| ≤ Generated.apply T hT hd t |f| := by
   rw [abs_le']
   constructor
-  · exact semigroupApply_mono hT hd hM ht (le_abs_self f)
-  · have h := semigroupApply_mono hT hd hM ht (neg_le_abs f)
+  · exact Generated.mono hT hd hM ht (le_abs_self f)
+  · have h := Generated.mono hT hd hM ht (neg_le_abs f)
     have hneg : -f = (-1 : ℝ) • f := by module
-    rw [hneg, semigroupApply_smul T hT hd ht, neg_one_smul] at h
+    rw [hneg, Generated.map_smul T hT hd ht, neg_one_smul] at h
     exact h
 
 /-- The generated semigroup preserves every symmetric essential bound. This is the `L^∞`
 contraction stated entirely in the order of `L²`, without choosing representatives. -/
-theorem abs_semigroupApply_le_const (hT : T.IsClosed) (hd : Dense (T.domain : Set (Lp ℝ 2
+theorem abs_le_const (hT : T.IsClosed) (hd : Dense (T.domain : Set (Lp ℝ 2
     (μ : Measure α))))
     (hM : Energy.Markovian (μ : Measure α) (Energy.PreEnergy.normSqEnergy T))
     {t : ℝ} (ht : 0 ≤ t)
     (hone : L2.const μ 1 ∈ T.domain) (hTone : T ⟨L2.const μ 1, hone⟩ = 0)
     (f : Lp ℝ 2 (μ : Measure α)) {C : ℝ} (_hC : 0 ≤ C)
     (hf : |f| ≤ C • L2.const μ 1) :
-    |semigroupApply T hT hd t f| ≤ C • L2.const μ 1 := by
+    |Generated.apply T hT hd t f| ≤ C • L2.const μ 1 := by
   calc
-    |semigroupApply T hT hd t f| ≤ semigroupApply T hT hd t |f| :=
-      abs_semigroupApply_le hT hd hM ht f
-    _ ≤ semigroupApply T hT hd t (C • L2.const μ 1) :=
-      semigroupApply_mono hT hd hM ht hf
+    |Generated.apply T hT hd t f| ≤ Generated.apply T hT hd t |f| :=
+      Generated.abs_le hT hd hM ht f
+    _ ≤ Generated.apply T hT hd t (C • L2.const μ 1) :=
+      Generated.mono hT hd hM ht hf
     _ = C • L2.const μ 1 := by
-      rw [semigroupApply_smul T hT hd ht, semigroupApply_one hT hd ht hone hTone]
+      rw [Generated.map_smul T hT hd ht, Generated.one hT hd ht hone hTone]
 
-end LpMarkov
+end Generated
 
 end FunctionalInequalities.Analysis.Semigroup

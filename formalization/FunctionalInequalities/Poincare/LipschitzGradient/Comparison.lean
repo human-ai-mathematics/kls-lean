@@ -9,8 +9,8 @@ import FunctionalInequalities.Probability.Covariance.Factorization
 Source: Blueprint `thm:affine-isotropic-reduction`, the passages "pullback of the isotropic inequality
 gives the covariance-form inequality, first on the raw tests and then on their relaxation" and
 "item (3) implies item (2) from `⟪Cov v, v⟫ ≤ ‖Cov‖ ‖v‖²`, together with cutoff and truncation from
-locally to globally Lipschitz tests". Read `relaxation`,
-`L2Energy.holds_lipschitzGradientRelaxation_iff_literatureHolds`,
+locally to globally Lipschitz tests". Read `Energy.LipschitzGradient.relaxation`,
+`Poincare.LipschitzGradient.holds_iff_localSlope`,
 `FunctionalInequalities.Poincare.SmoothTest.constant_eq_lipschitz`, `Energy.CovarianceGradient.relaxation_eq_lipschitz`
 and `Energy.CovarianceGradient.relaxation_le_mul_lipschitz`.
 
@@ -26,7 +26,7 @@ covariance operator is the identity the covariance relaxation of `def:affine-poi
 this relaxation; in general the covariance relaxation is at most `‖Σ‖` times it.
 
 Nothing here asserts a Poincaré inequality, finiteness of any constant, or log-concavity; the
-log-concave discharge of the two hypotheses is in `KLS/LogConcave/WeightedGradient.lean`. The
+log-concave discharge of the two hypotheses is in `KLS/LogConcave/WeightedGradient/Basic.lean`. The
 zero-dimensional space is included.
 -/
 
@@ -56,24 +56,6 @@ def relaxation (hac : (ν : Measure V) ≪ m) :
   (PreEnergy.ofLinearPMap (Energy.WeightedGradient.operator ν (ContinuousLinearMap.id ℝ V) hac)).sequentialRelaxation
 
 end Energy.LipschitzGradient
-
-namespace Energy.LocalSlope
-
-omit [SecondCountableTopology V] in
-/-- The literature energy of a locally Lipschitz function with square-integrable gradient is the
-real integral of the squared gradient norm, under absolute continuity. -/
-theorem energy_eq_integral_gradient
-    (hac : (ν : Measure V) ≪ m) (f : V → ℝ) (hf : LocallyLipschitz f)
-    (hg : MemLp (gradient f) 2 (ν : Measure V)) :
-    energy ν f = ENNReal.ofReal (∫ x, ‖gradient f x‖ ^ 2 ∂(ν : Measure V)) := by
-  rw [energy_eq_lintegral_gradient ν m hac f hf,
-    ofReal_integral_eq_lintegral_ofReal ((memLp_two_iff_integrable_sq_norm hg.1).mp hg)
-      (ae_of_all _ fun x ↦ sq_nonneg ‖gradient f x‖)]
-  congr 1
-  funext x
-  rw [ENNReal.ofReal_pow (norm_nonneg _) 2]
-
-end Energy.LocalSlope
 
 section Bridge
 

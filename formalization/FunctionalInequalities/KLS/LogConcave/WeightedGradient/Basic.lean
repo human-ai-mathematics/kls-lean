@@ -1,6 +1,6 @@
 import FunctionalInequalities.Energy.WeightedGradient.Closable
 import FunctionalInequalities.Energy.WeightedGradient.Core
-import FunctionalInequalities.KLS.LogConcave.Density.BorellRepresentation
+import FunctionalInequalities.KLS.LogConcave.Density.BorellRepresentation.Construction
 
 /-!
 # Closable weighted gradient on a full-dimensional log-concave law

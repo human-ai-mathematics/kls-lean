@@ -1,5 +1,5 @@
 import FunctionalInequalities.Energy.Cheeger.Basic
-import FunctionalInequalities.Energy.Euclidean.LipschitzApproximation
+import FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Kernel
 
 /-!
 # Smooth recovery of a globally Lipschitz test, and the reduction tools
@@ -13,7 +13,7 @@ and `LocalSlope.apply_mul_le` (`B5`).
 ## What is proved
 
 `B1`.  For a globally `K`-Lipschitz `g` the mollifications `g ⋆ ρ_R` of
-`Energy/Euclidean/LipschitzApproximation.lean` are `C^∞`, uniformly `K`-Lipschitz, converge to
+`Energy/Euclidean/LipschitzApproximation/Kernel.lean` are `C^∞`, uniformly `K`-Lipschitz, converge to
 `g` uniformly (hence in `L²(ν)` for every probability law `ν`), and satisfy the pointwise bound
 `limsup_{R → 0} ‖∇(g ⋆ ρ_R)(x)‖ ≤ Lip_a g (x)`: the mollification at `x` sees `g` only within
 `2R`, so on the ball of radius `δ` it inherits the Lipschitz constant of `g` on the ball of

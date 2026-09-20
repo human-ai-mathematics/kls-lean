@@ -1,0 +1,199 @@
+{
+  "date": "2026-09-20",
+  "resolved": [
+    "LD-008",
+    "LC-001",
+    "LC-002"
+  ],
+  "accepted_exceptions": [
+    "LC-003",
+    "LC-004"
+  ],
+  "semantics": {
+    "roots": 220,
+    "before_declaration_closure": 337,
+    "after_declaration_closure": 337,
+    "canonical_closure_records": 319,
+    "external_leaves": 514,
+    "before_generated_proof_auxiliaries": 55,
+    "after_generated_proof_auxiliaries": 55,
+    "comparison": "Binder-label alpha normalization; hygienic anonymous-instance labels and module locations excluded. Compiler-generated theorem auxiliaries are identified only by identical full normalized types and universe levels, recursively. This uses proof irrelevance; non-proof constants are renamed only by the explicit migration map. Public names follow the explicit 48-name migration map; explicit parameter names, order, visibility and all other types/definition bodies/dependencies are unchanged.",
+    "differences": []
+  },
+  "graph": {
+    "modules": 252,
+    "public_source_declarations": 2225,
+    "local_import_edges": 468,
+    "cycles": [],
+    "missing_local_imports": [],
+    "analysis_reaches_KLS": false,
+    "generic_comparisons_reach_KLS": false,
+    "weighted_gradient_closure_or_energy_reaches_generation": false,
+    "file_directory_collisions": [],
+    "accepted_single_module_directories": [
+      "Poincare/Euclidean",
+      "Poincare/LipschitzGradient"
+    ]
+  },
+  "renamed_public_APIs": 48,
+  "api_presence_and_old_alias_absence": "passed in aggregate environment",
+  "strict_checks": [
+    {
+      "path": "research/audits/GeneratedSemigroupRouteStatements.lean",
+      "exit_code": 0,
+      "log": "build/final-cleanup/strict-GeneratedSemigroupRouteStatements-0.log"
+    },
+    {
+      "path": "research/audits/EnergySlopeRouteStatements.lean",
+      "exit_code": 0,
+      "log": "build/final-cleanup/strict-EnergySlopeRouteStatements-1.log"
+    },
+    {
+      "path": "research/audits/HeatSemigroupAudit.lean",
+      "exit_code": 0,
+      "log": "build/final-cleanup/strict-HeatSemigroupAudit-2.log"
+    },
+    {
+      "path": "research/audits/SemigroupLawsAudit.lean",
+      "exit_code": 0,
+      "log": "build/final-cleanup/strict-SemigroupLawsAudit-3.log"
+    },
+    {
+      "path": "research/audits/GeneratorAudit.lean",
+      "exit_code": 0,
+      "log": "build/final-cleanup/strict-GeneratorAudit-4.log"
+    },
+    {
+      "path": "research/audits/BakryEmeryRouteStatements.lean",
+      "exit_code": 0,
+      "log": "build/final-cleanup/strict-BakryEmeryRouteStatements-5.log",
+      "note": "Explicit KLS Poincare frontend import added; strict recheck passed."
+    },
+    {
+      "path": "research/audits/MarkovRouteStatements.lean",
+      "exit_code": 0,
+      "log": "build/final-cleanup/strict-MarkovRouteStatements-6.log"
+    },
+    {
+      "path": "research/audits/CheegerInfimumRouteStatements.lean",
+      "exit_code": 0,
+      "log": "build/final-cleanup/strict-CheegerInfimumRouteStatements-7.log"
+    },
+    {
+      "path": "research/audits/BuserRouteStatements.lean",
+      "exit_code": 0,
+      "log": "build/final-cleanup/strict-BuserRouteStatements-8.log"
+    },
+    {
+      "path": "research/audits/HeatSemigroupMarkovAudit.lean",
+      "exit_code": 0,
+      "log": "build/final-cleanup/strict-HeatSemigroupMarkovAudit-9.log"
+    },
+    {
+      "path": "research/audits/SemigroupDomainStabilityAudit.lean",
+      "exit_code": 0,
+      "log": "build/final-cleanup/strict-SemigroupDomainStabilityAudit-10.log"
+    },
+    {
+      "path": "research/audits/CheegerInequalityRouteStatements.lean",
+      "exit_code": 0,
+      "log": "build/final-cleanup/strict-CheegerInequalityRouteStatements-11.log"
+    },
+    {
+      "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Laws.lean",
+      "exit_code": 0,
+      "log": "build/final-cleanup/strict-Laws-12.log"
+    },
+    {
+      "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Basic.lean",
+      "exit_code": 0,
+      "log": "build/final-cleanup/strict-Basic-13.log"
+    },
+    {
+      "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Generator.lean",
+      "exit_code": 0,
+      "log": "build/final-cleanup/strict-Generator-14.log"
+    },
+    {
+      "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Domain.lean",
+      "exit_code": 0,
+      "log": "build/final-cleanup/strict-Domain-15.log"
+    },
+    {
+      "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Markov.lean",
+      "exit_code": 0,
+      "log": "build/final-cleanup/strict-Markov-16.log"
+    },
+    {
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Basic.lean",
+      "exit_code": 0,
+      "log": "build/final-cleanup/strict-Basic-17.log"
+    },
+    {
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Generator.lean",
+      "exit_code": 0,
+      "log": "build/final-cleanup/strict-Generator-18.log"
+    },
+    {
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Domain.lean",
+      "exit_code": 0,
+      "log": "build/final-cleanup/strict-Domain-19.log"
+    },
+    {
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Markov.lean",
+      "exit_code": 0,
+      "log": "build/final-cleanup/strict-Markov-20.log"
+    },
+    {
+      "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Approximation.lean",
+      "exit_code": 0,
+      "log": "build/final-cleanup/strict-Approximation-21.log"
+    },
+    {
+      "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Basic.lean",
+      "exit_code": 0,
+      "log": "build/final-cleanup/strict-Basic-22.log"
+    },
+    {
+      "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Measurable.lean",
+      "exit_code": 0,
+      "log": "build/final-cleanup/strict-Measurable-23.log"
+    },
+    {
+      "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Kernel.lean",
+      "exit_code": 0,
+      "log": "build/final-cleanup/strict-Kernel-24.log"
+    },
+    {
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Construction.lean",
+      "exit_code": 0,
+      "log": "build/final-cleanup/strict-Construction-25.log"
+    },
+    {
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Basic.lean",
+      "exit_code": 0,
+      "log": "build/final-cleanup/strict-Basic-26.log"
+    },
+    {
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Intrinsic.lean",
+      "exit_code": 0,
+      "log": "build/final-cleanup/strict-Intrinsic-27.log"
+    },
+    {
+      "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Moments.lean",
+      "exit_code": 0,
+      "log": "build/final-cleanup/strict-Moments-28.log"
+    }
+  ],
+  "full_build": "passed (3565 jobs)",
+  "proof_status_changed": false,
+  "frozen_baseline_files_unchanged": 235,
+  "real_staging_unchanged": true,
+  "relative_links": {
+    "checked": 271,
+    "historical_missing": [],
+    "unexpected_missing": []
+  },
+  "progress_views": "regenerated in isolated Git index/object store; complete diagram and root current-status summary reviewed",
+  "verification_scope": "This checked-in record covers structural, API, strict compilation and semantic checks. The final full verifier emits a separate snapshot-bound receipt under build/verification after this record is finalized."
+}

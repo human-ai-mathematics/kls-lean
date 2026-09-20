@@ -46,9 +46,9 @@ theorem route_G1 :
     [NormedAddCommGroup H₁] [InnerProductSpace ℝ H₁] [CompleteSpace H₁]
     (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClosed) (hd : Dense (T.domain : Set H₀)) (g : H₀) {t : ℝ}, 0 ≤ t →
       ∀ {ε : ℝ}, 0 < ε → ∃ δ : ℝ, 0 < δ ∧ ∀ {s : ℝ} (hs : 0 < s), s < δ → ∀ τ ∈ Set.Icc 0 t,
-        ‖NormedSpace.exp (-τ • yosida T hT hs) g - semigroupApply T hT hd τ g‖ < ε := by
+        ‖NormedSpace.exp (-τ • yosida T hT hs) g - FunctionalInequalities.Analysis.Semigroup.Generated.apply T hT hd τ g‖ < ε := by
   intro H₀ H₁ _ _ _ _ _ _ T hT hd g t ht ε hε
-  exact exists_delta_norm_exp_neg_smul_yosida_sub_semigroupApply_lt T hT hd g ht hε
+  exact FunctionalInequalities.Analysis.Semigroup.Generated.yosida_converges T hT hd g ht hε
 
 /-- **`G3`** (`= S8`), verbatim from the route snapshot (the generator of `P_t` is `-T†T` on
 `D(T†T)`), discharged from `Analysis/Semigroup/Generated/Generator.lean`. -/
@@ -58,9 +58,9 @@ theorem route_G3 :
     (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClosed) (hd : Dense (T.domain : Set H₀))
     (f : (adjointComp T).domain) {ε : ℝ}, 0 < ε →
       ∃ δ : ℝ, 0 < δ ∧ ∀ t : ℝ, 0 < t → t < δ →
-        ‖t⁻¹ • (semigroupApply T hT hd t f - f) + adjointComp T f‖ < ε := by
+        ‖t⁻¹ • (FunctionalInequalities.Analysis.Semigroup.Generated.apply T hT hd t f - f) + adjointComp T f‖ < ε := by
   intro H₀ H₁ _ _ _ _ _ _ T hT hd f ε hε
-  exact exists_delta_norm_inv_smul_semigroupApply_sub_self_add_adjointComp_lt T hT hd f hε
+  exact FunctionalInequalities.Analysis.Semigroup.Generated.generator_limit T hT hd f hε
 
 end GeneratorAudit
 
@@ -73,7 +73,7 @@ Every report below must be exactly `[propext, Classical.choice, Quot.sound]`. -/
 
 #print axioms FunctionalInequalities.Analysis.Semigroup.le_of_forall_pos_add_le
 #print axioms FunctionalInequalities.Analysis.Semigroup.norm_sub_le_add_norm_sub
-#print axioms FunctionalInequalities.Analysis.Semigroup.norm_exp_neg_smul_yosida_sub_semigroupApply_le
-#print axioms FunctionalInequalities.Analysis.Semigroup.exists_delta_norm_exp_neg_smul_yosida_sub_semigroupApply_lt
-#print axioms FunctionalInequalities.Analysis.Semigroup.norm_semigroupApply_sub_self_add_smul_le
-#print axioms FunctionalInequalities.Analysis.Semigroup.exists_delta_norm_inv_smul_semigroupApply_sub_self_add_adjointComp_lt
+#print axioms FunctionalInequalities.Analysis.Semigroup.Generated.yosida_error_le
+#print axioms FunctionalInequalities.Analysis.Semigroup.Generated.yosida_converges
+#print axioms FunctionalInequalities.Analysis.Semigroup.Generated.generator_error_le
+#print axioms FunctionalInequalities.Analysis.Semigroup.Generated.generator_limit

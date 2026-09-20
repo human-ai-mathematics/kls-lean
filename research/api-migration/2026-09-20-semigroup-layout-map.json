@@ -1,0 +1,337 @@
+{
+  "classification": "module splits and moves; separate nine-declaration namespace/short-name migration; no parameter or mathematical changes",
+  "module_destinations": {
+    "Analysis/BakryEmery/Basic": [
+      "Analysis/BakryEmery/Calculus"
+    ],
+    "Analysis/BakryEmery/IntegrationByParts": [
+      "Analysis/BakryEmery/Calculus",
+      "Analysis/BakryEmery/Laplacian",
+      "Analysis/BakryEmery/IntegrationByParts"
+    ],
+    "Analysis/BakryEmery/Gamma": [
+      "Analysis/BakryEmery/Calculus",
+      "Analysis/BakryEmery/Gamma"
+    ],
+    "Analysis/Semigroup/Yosida/Family": [
+      "Analysis/Semigroup/Exponential/Counterexample",
+      "Analysis/Semigroup/Yosida/Laws"
+    ],
+    "KLS/LogConcave/CanonicalEnergy": [
+      "KLS/LogConcave/HeatSemigroup/Energy"
+    ]
+  },
+  "declarations": {
+    "FunctionalInequalities.Analysis.Semigroup.mem_adjointComp_domain_of_generator_limit": "FunctionalInequalities.Analysis.Semigroup.Generated.mem_domain_of_generator_limit",
+    "FunctionalInequalities.Analysis.Semigroup.generator_limit_semigroupApply": "FunctionalInequalities.Analysis.Semigroup.Generated.generator_limit_apply",
+    "FunctionalInequalities.Analysis.Semigroup.semigroupApply_mem_adjointComp_domain": "FunctionalInequalities.Analysis.Semigroup.Generated.preserves_domain",
+    "FunctionalInequalities.Analysis.Semigroup.adjointComp_semigroupApply": "FunctionalInequalities.Analysis.Semigroup.Generated.generator_comm",
+    "FunctionalInequalities.Analysis.Semigroup.exists_delta_norm_inv_smul_semigroupApply_add_sub_add_adjointComp_lt": "FunctionalInequalities.Analysis.Semigroup.Generated.right_derivative",
+    "FunctionalInequalities.KLS.LogConcave.heatSemigroup_mem_generator_domain": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.preserves_domain",
+    "FunctionalInequalities.KLS.LogConcave.heatSemigroup_generator_comm": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.generator_comm",
+    "FunctionalInequalities.KLS.LogConcave.heatSemigroup_mem_closedWeightedOperator_domain": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.mem_closedWeightedOperator_domain",
+    "FunctionalInequalities.KLS.LogConcave.heatSemigroup_right_derivative": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.right_derivative"
+  },
+  "declaration_module_moves": [
+    {
+      "declaration": "FunctionalInequalities.Analysis.BakryEmery.bilinearIteratedFDerivTwo_eq_fderiv_apply",
+      "before": "FunctionalInequalities.Analysis.BakryEmery.Gamma",
+      "after": "FunctionalInequalities.Analysis.BakryEmery.Calculus"
+    },
+    {
+      "declaration": "FunctionalInequalities.Analysis.BakryEmery.bilinearIteratedFDerivTwo_gradient_gradient",
+      "before": "FunctionalInequalities.Analysis.BakryEmery.Gamma",
+      "after": "FunctionalInequalities.Analysis.BakryEmery.Calculus"
+    },
+    {
+      "declaration": "FunctionalInequalities.Analysis.BakryEmery.bilinearIteratedFDerivTwo_symm",
+      "before": "FunctionalInequalities.Analysis.BakryEmery.Basic",
+      "after": "FunctionalInequalities.Analysis.BakryEmery.Calculus"
+    },
+    {
+      "declaration": "FunctionalInequalities.Analysis.BakryEmery.bilinear_sum_smul_sum_smul",
+      "before": "FunctionalInequalities.Analysis.BakryEmery.Gamma",
+      "after": "FunctionalInequalities.Analysis.BakryEmery.Calculus"
+    },
+    {
+      "declaration": "FunctionalInequalities.Analysis.BakryEmery.contDiff_fderiv_apply",
+      "before": "FunctionalInequalities.Analysis.BakryEmery.Gamma",
+      "after": "FunctionalInequalities.Analysis.BakryEmery.Calculus"
+    },
+    {
+      "declaration": "FunctionalInequalities.Analysis.BakryEmery.contDiff_gradient",
+      "before": "FunctionalInequalities.Analysis.BakryEmery.Gamma",
+      "after": "FunctionalInequalities.Analysis.BakryEmery.Calculus"
+    },
+    {
+      "declaration": "FunctionalInequalities.Analysis.BakryEmery.contDiff_laplacian",
+      "before": "FunctionalInequalities.Analysis.BakryEmery.Gamma",
+      "after": "FunctionalInequalities.Analysis.BakryEmery.Calculus"
+    },
+    {
+      "declaration": "FunctionalInequalities.Analysis.BakryEmery.continuous_gradient",
+      "before": "FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts",
+      "after": "FunctionalInequalities.Analysis.BakryEmery.Calculus"
+    },
+    {
+      "declaration": "FunctionalInequalities.Analysis.BakryEmery.continuous_laplacian",
+      "before": "FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts",
+      "after": "FunctionalInequalities.Analysis.BakryEmery.Calculus"
+    },
+    {
+      "declaration": "FunctionalInequalities.Analysis.BakryEmery.continuous_weightedLaplacian",
+      "before": "FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts",
+      "after": "FunctionalInequalities.Analysis.BakryEmery.Laplacian"
+    },
+    {
+      "declaration": "FunctionalInequalities.Analysis.BakryEmery.differentiable_fderiv_apply",
+      "before": "FunctionalInequalities.Analysis.BakryEmery.Gamma",
+      "after": "FunctionalInequalities.Analysis.BakryEmery.Calculus"
+    },
+    {
+      "declaration": "FunctionalInequalities.Analysis.BakryEmery.fderiv_add_apply",
+      "before": "FunctionalInequalities.Analysis.BakryEmery.Gamma",
+      "after": "FunctionalInequalities.Analysis.BakryEmery.Calculus"
+    },
+    {
+      "declaration": "FunctionalInequalities.Analysis.BakryEmery.fderiv_apply_comm",
+      "before": "FunctionalInequalities.Analysis.BakryEmery.Gamma",
+      "after": "FunctionalInequalities.Analysis.BakryEmery.Calculus"
+    },
+    {
+      "declaration": "FunctionalInequalities.Analysis.BakryEmery.fderiv_const_mul_apply",
+      "before": "FunctionalInequalities.Analysis.BakryEmery.Gamma",
+      "after": "FunctionalInequalities.Analysis.BakryEmery.Calculus"
+    },
+    {
+      "declaration": "FunctionalInequalities.Analysis.BakryEmery.fderiv_fderiv_apply",
+      "before": "FunctionalInequalities.Analysis.BakryEmery.Gamma",
+      "after": "FunctionalInequalities.Analysis.BakryEmery.Calculus"
+    },
+    {
+      "declaration": "FunctionalInequalities.Analysis.BakryEmery.fderiv_fderiv_fderiv_apply_comm",
+      "before": "FunctionalInequalities.Analysis.BakryEmery.Gamma",
+      "after": "FunctionalInequalities.Analysis.BakryEmery.Calculus"
+    },
+    {
+      "declaration": "FunctionalInequalities.Analysis.BakryEmery.fderiv_mul_apply",
+      "before": "FunctionalInequalities.Analysis.BakryEmery.Gamma",
+      "after": "FunctionalInequalities.Analysis.BakryEmery.Calculus"
+    },
+    {
+      "declaration": "FunctionalInequalities.Analysis.BakryEmery.fderiv_sub_apply",
+      "before": "FunctionalInequalities.Analysis.BakryEmery.Gamma",
+      "after": "FunctionalInequalities.Analysis.BakryEmery.Calculus"
+    },
+    {
+      "declaration": "FunctionalInequalities.Analysis.BakryEmery.fderiv_sum_apply",
+      "before": "FunctionalInequalities.Analysis.BakryEmery.Gamma",
+      "after": "FunctionalInequalities.Analysis.BakryEmery.Calculus"
+    },
+    {
+      "declaration": "FunctionalInequalities.Analysis.BakryEmery.gradient_eq_sum_fderiv_smul",
+      "before": "FunctionalInequalities.Analysis.BakryEmery.Gamma",
+      "after": "FunctionalInequalities.Analysis.BakryEmery.Calculus"
+    },
+    {
+      "declaration": "FunctionalInequalities.Analysis.BakryEmery.gradient_mul",
+      "before": "FunctionalInequalities.Analysis.BakryEmery.Gamma",
+      "after": "FunctionalInequalities.Analysis.BakryEmery.Calculus"
+    },
+    {
+      "declaration": "FunctionalInequalities.Analysis.BakryEmery.gradient_sub",
+      "before": "FunctionalInequalities.Analysis.BakryEmery.Gamma",
+      "after": "FunctionalInequalities.Analysis.BakryEmery.Calculus"
+    },
+    {
+      "declaration": "FunctionalInequalities.Analysis.BakryEmery.hasCompactSupport_gradient",
+      "before": "FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts",
+      "after": "FunctionalInequalities.Analysis.BakryEmery.Calculus"
+    },
+    {
+      "declaration": "FunctionalInequalities.Analysis.BakryEmery.hasCompactSupport_laplacian",
+      "before": "FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts",
+      "after": "FunctionalInequalities.Analysis.BakryEmery.Calculus"
+    },
+    {
+      "declaration": "FunctionalInequalities.Analysis.BakryEmery.hasCompactSupport_weightedLaplacian",
+      "before": "FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts",
+      "after": "FunctionalInequalities.Analysis.BakryEmery.Laplacian"
+    },
+    {
+      "declaration": "FunctionalInequalities.Analysis.BakryEmery.inner_gradient_eq_sum_fderiv_mul_fderiv",
+      "before": "FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts",
+      "after": "FunctionalInequalities.Analysis.BakryEmery.Calculus"
+    },
+    {
+      "declaration": "FunctionalInequalities.Analysis.BakryEmery.laplacian_eq_fun_sum",
+      "before": "FunctionalInequalities.Analysis.BakryEmery.Gamma",
+      "after": "FunctionalInequalities.Analysis.BakryEmery.Calculus"
+    },
+    {
+      "declaration": "FunctionalInequalities.Analysis.BakryEmery.laplacian_eq_sum_fderiv_apply_fderiv_apply",
+      "before": "FunctionalInequalities.Analysis.BakryEmery.Gamma",
+      "after": "FunctionalInequalities.Analysis.BakryEmery.Calculus"
+    },
+    {
+      "declaration": "FunctionalInequalities.Analysis.BakryEmery.laplacian_eq_sum_fderiv_fderiv",
+      "before": "FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts",
+      "after": "FunctionalInequalities.Analysis.BakryEmery.Calculus"
+    },
+    {
+      "declaration": "FunctionalInequalities.Analysis.BakryEmery.laplacian_mul",
+      "before": "FunctionalInequalities.Analysis.BakryEmery.Gamma",
+      "after": "FunctionalInequalities.Analysis.BakryEmery.Calculus"
+    },
+    {
+      "declaration": "FunctionalInequalities.Analysis.BakryEmery.memLp_weightedLaplacian",
+      "before": "FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts",
+      "after": "FunctionalInequalities.Analysis.BakryEmery.Laplacian"
+    },
+    {
+      "declaration": "FunctionalInequalities.Analysis.BakryEmery.norm_gradient_sq_eq_sum",
+      "before": "FunctionalInequalities.Analysis.BakryEmery.Gamma",
+      "after": "FunctionalInequalities.Analysis.BakryEmery.Calculus"
+    },
+    {
+      "declaration": "FunctionalInequalities.Analysis.BakryEmery.weightedLaplacian",
+      "before": "FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts",
+      "after": "FunctionalInequalities.Analysis.BakryEmery.Laplacian"
+    },
+    {
+      "declaration": "FunctionalInequalities.Analysis.BakryEmery.weightedLaplacian_apply",
+      "before": "FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts",
+      "after": "FunctionalInequalities.Analysis.BakryEmery.Laplacian"
+    },
+    {
+      "declaration": "FunctionalInequalities.Analysis.Semigroup.counterCoeff",
+      "before": "FunctionalInequalities.Analysis.Semigroup.Yosida.Family",
+      "after": "FunctionalInequalities.Analysis.Semigroup.Exponential.Counterexample"
+    },
+    {
+      "declaration": "FunctionalInequalities.Analysis.Semigroup.counterCoeff_nonneg",
+      "before": "FunctionalInequalities.Analysis.Semigroup.Yosida.Family",
+      "after": "FunctionalInequalities.Analysis.Semigroup.Exponential.Counterexample"
+    },
+    {
+      "declaration": "FunctionalInequalities.Analysis.Semigroup.counterCoeff_of_mem",
+      "before": "FunctionalInequalities.Analysis.Semigroup.Yosida.Family",
+      "after": "FunctionalInequalities.Analysis.Semigroup.Exponential.Counterexample"
+    },
+    {
+      "declaration": "FunctionalInequalities.Analysis.Semigroup.counterCoeff_of_notMem",
+      "before": "FunctionalInequalities.Analysis.Semigroup.Yosida.Family",
+      "after": "FunctionalInequalities.Analysis.Semigroup.Exponential.Counterexample"
+    },
+    {
+      "declaration": "FunctionalInequalities.Analysis.Semigroup.counterCoeff_one_div",
+      "before": "FunctionalInequalities.Analysis.Semigroup.Yosida.Family",
+      "after": "FunctionalInequalities.Analysis.Semigroup.Exponential.Counterexample"
+    },
+    {
+      "declaration": "FunctionalInequalities.Analysis.Semigroup.counterCoeff_two_div",
+      "before": "FunctionalInequalities.Analysis.Semigroup.Yosida.Family",
+      "after": "FunctionalInequalities.Analysis.Semigroup.Exponential.Counterexample"
+    },
+    {
+      "declaration": "FunctionalInequalities.Analysis.Semigroup.counterFamily",
+      "before": "FunctionalInequalities.Analysis.Semigroup.Yosida.Family",
+      "after": "FunctionalInequalities.Analysis.Semigroup.Exponential.Counterexample"
+    },
+    {
+      "declaration": "FunctionalInequalities.Analysis.Semigroup.counterFamily._proof_1",
+      "before": "FunctionalInequalities.Analysis.Semigroup.Yosida.Family",
+      "after": "FunctionalInequalities.Analysis.Semigroup.Exponential.Counterexample"
+    },
+    {
+      "declaration": "FunctionalInequalities.Analysis.Semigroup.counterFamily._proof_2",
+      "before": "FunctionalInequalities.Analysis.Semigroup.Yosida.Family",
+      "after": "FunctionalInequalities.Analysis.Semigroup.Exponential.Counterexample"
+    },
+    {
+      "declaration": "FunctionalInequalities.Analysis.Semigroup.counterFamily_comm",
+      "before": "FunctionalInequalities.Analysis.Semigroup.Yosida.Family",
+      "after": "FunctionalInequalities.Analysis.Semigroup.Exponential.Counterexample"
+    },
+    {
+      "declaration": "FunctionalInequalities.Analysis.Semigroup.counterFamily_exp_apply",
+      "before": "FunctionalInequalities.Analysis.Semigroup.Yosida.Family",
+      "after": "FunctionalInequalities.Analysis.Semigroup.Exponential.Counterexample"
+    },
+    {
+      "declaration": "FunctionalInequalities.Analysis.Semigroup.counterFamily_nonneg",
+      "before": "FunctionalInequalities.Analysis.Semigroup.Yosida.Family",
+      "after": "FunctionalInequalities.Analysis.Semigroup.Exponential.Counterexample"
+    },
+    {
+      "declaration": "FunctionalInequalities.Analysis.Semigroup.counterSet",
+      "before": "FunctionalInequalities.Analysis.Semigroup.Yosida.Family",
+      "after": "FunctionalInequalities.Analysis.Semigroup.Exponential.Counterexample"
+    },
+    {
+      "declaration": "FunctionalInequalities.Analysis.Semigroup.exists_delta_norm_yosida_sub_adjointComp_lt",
+      "before": "FunctionalInequalities.Analysis.Semigroup.Yosida.Family",
+      "after": "FunctionalInequalities.Analysis.Semigroup.Yosida.Laws"
+    },
+    {
+      "declaration": "FunctionalInequalities.Analysis.Semigroup.exp_smul_one_apply",
+      "before": "FunctionalInequalities.Analysis.Semigroup.Yosida.Family",
+      "after": "FunctionalInequalities.Analysis.Semigroup.Exponential.Counterexample"
+    },
+    {
+      "declaration": "FunctionalInequalities.Analysis.Semigroup.not_forall_exists_tendsto_exp_neg_smul",
+      "before": "FunctionalInequalities.Analysis.Semigroup.Yosida.Family",
+      "after": "FunctionalInequalities.Analysis.Semigroup.Exponential.Counterexample"
+    },
+    {
+      "declaration": "FunctionalInequalities.Analysis.Semigroup.tendsto_one_div_nhdsGT_zero",
+      "before": "FunctionalInequalities.Analysis.Semigroup.Yosida.Family",
+      "after": "FunctionalInequalities.Analysis.Semigroup.Exponential.Counterexample"
+    },
+    {
+      "declaration": "FunctionalInequalities.Analysis.Semigroup.tendsto_two_div_nhdsGT_zero",
+      "before": "FunctionalInequalities.Analysis.Semigroup.Yosida.Family",
+      "after": "FunctionalInequalities.Analysis.Semigroup.Exponential.Counterexample"
+    },
+    {
+      "declaration": "FunctionalInequalities.Analysis.Semigroup.yosida_apply_eq_resolventCLM_adjointComp",
+      "before": "FunctionalInequalities.Analysis.Semigroup.Yosida.Family",
+      "after": "FunctionalInequalities.Analysis.Semigroup.Yosida.Laws"
+    },
+    {
+      "declaration": "FunctionalInequalities.Analysis.Semigroup.yosida_comp_comm",
+      "before": "FunctionalInequalities.Analysis.Semigroup.Yosida.Family",
+      "after": "FunctionalInequalities.Analysis.Semigroup.Yosida.Laws"
+    },
+    {
+      "declaration": "FunctionalInequalities.Analysis.Semigroup.yosida_nonneg",
+      "before": "FunctionalInequalities.Analysis.Semigroup.Yosida.Family",
+      "after": "FunctionalInequalities.Analysis.Semigroup.Yosida.Laws"
+    },
+    {
+      "declaration": "FunctionalInequalities.Analysis.Semigroup.yosida_symm",
+      "before": "FunctionalInequalities.Analysis.Semigroup.Yosida.Family",
+      "after": "FunctionalInequalities.Analysis.Semigroup.Yosida.Laws"
+    },
+    {
+      "declaration": "FunctionalInequalities.KLS.LogConcave.closedWeightedOperator_id_energy_eq_smoothGradient",
+      "before": "FunctionalInequalities.KLS.LogConcave.CanonicalEnergy",
+      "after": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Energy"
+    },
+    {
+      "declaration": "FunctionalInequalities.KLS.LogConcave.closedWeightedOperator_id_energy_eq_two_mul_cheeger",
+      "before": "FunctionalInequalities.KLS.LogConcave.CanonicalEnergy",
+      "after": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Energy"
+    },
+    {
+      "declaration": "FunctionalInequalities.KLS.LogConcave.exists_smoothGradient_localDensity",
+      "before": "FunctionalInequalities.KLS.LogConcave.CanonicalEnergy",
+      "after": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Energy"
+    },
+    {
+      "declaration": "FunctionalInequalities.KLS.LogConcave.weightedRelaxation_id_eq_smoothGradient",
+      "before": "FunctionalInequalities.KLS.LogConcave.CanonicalEnergy",
+      "after": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Energy"
+    }
+  ]
+}

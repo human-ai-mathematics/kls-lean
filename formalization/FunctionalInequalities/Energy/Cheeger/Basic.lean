@@ -1,3 +1,4 @@
+import FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Approximation
 import FunctionalInequalities.Energy.LocalSlope.Relaxation
 
 /-!
@@ -7,8 +8,8 @@ Source: Blueprint `cor:absolutely-continuous-relaxation-two-cheeger`, the absolu
 scope of `thm:smooth-gradient-relaxation-two-cheeger`.  Read `Cheeger.energy`,
 `Cheeger.Intrinsic.energy`, then
 `SmoothGradient.relaxation_eq_localSlope_of_absolutelyContinuous`,
-`SmoothGradient.Intrinsic.energy_eq_two_mul_cheeger_of_absolutelyContinuous` and
-`KLS.LogConcave.intrinsicSmooth_energy_eq_two_mul_cheeger`.
+`SmoothGradient.Intrinsic.energy_eq_two_mul_cheeger_of_absolutelyContinuous`. The log-concave
+specialization is in `KLS/LogConcave/Cheeger.lean`.
 
 ## The convention made explicit
 
@@ -270,23 +271,3 @@ end Intrinsic
 end SmoothGradient
 
 end FunctionalInequalities.Energy
-
-namespace FunctionalInequalities.KLS.LogConcave
-
-universe u
-
-variable {E : Type u} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
-  [MeasurableSpace E] [BorelSpace E] [SecondCountableTopology E] [FiniteDimensional ℝ E]
-
-omit [CompleteSpace E] in
-/-- Restricted scope with certified input: for a log-concave law the intrinsic law is absolutely
-continuous with respect to Haar measure (`intrinsic_absolutelyContinuous`), so the selected
-canonical energy is twice the transported Cheeger energy.  This covers every law in the KLS
-routes without waiting for the singular case. -/
-theorem intrinsicSmooth_energy_eq_two_mul_cheeger {μ : ProbabilityMeasure E}
-    (hμ : LogConcave μ) (f : Lp ℝ 2 (μ : Measure E)) :
-    Energy.SmoothGradient.Intrinsic.energy μ f = 2 * Energy.Cheeger.Intrinsic.energy μ f :=
-  Energy.SmoothGradient.Intrinsic.energy_eq_two_mul_cheeger_of_absolutelyContinuous μ
-    Measure.addHaar (hμ.intrinsic_absolutelyContinuous Measure.addHaar) f
-
-end FunctionalInequalities.KLS.LogConcave

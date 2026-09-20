@@ -10,10 +10,13 @@
 | --- | --- | --- |
 | [Transport.lean](Transport.lean) | 仿射等距传输、内禀坐标与支撑几何 | 已证明 |
 | [Borel.lean](Borel.lean) | 紧集与 Borel 集版本的对数凹等价 | 已证明；不预设密度或二阶矩 |
-| [AbsoluteContinuity.lean](AbsoluteContinuity.lean) | 小球估计、内禀绝对连续性及支撑边界结论 | 已证明；不构造完整对数凹密度代表 |
-| [BorellRepresentation.lean](BorellRepresentation.lean) | 密度代表、内部正性、局部界和矩结论 | 已证明；由 `Solutions.ThmBorellLogconcaveDensity.certificate` 打包 |
+| [Density/AbsoluteContinuity.lean](Density/AbsoluteContinuity.lean) | 小球估计、内禀绝对连续性及支撑边界结论 | 已证明；不构造完整对数凹密度代表 |
+| [Density/BorellRepresentation/Intrinsic.lean](Density/BorellRepresentation/Intrinsic.lean) | 密度代表、内部正性、局部界和矩结论 | 已证明；由 `Solutions.ThmBorellLogconcaveDensity.certificate` 打包 |
 | [Covariance.lean](Covariance.lean) | 仿射协方差预能量在对数凹律上的良定义契约：内禀二阶矩、Lipschitz 测试 a.e. 可微、能量只依赖 L² 类 | 已证明；定义节点 `def:affine-poincare-constant` 的契约，不含闭性或 Poincaré 结论 |
-| [WeightedGradient.lean](WeightedGradient.lean) | 全维对数凹律上加权梯度算子 `g ↦ B∇g` 的稠密定义、可闭性、光滑核闭包相等、松弛等于闭包范数平方；内禀律版本 | 已证明；由 `Solutions.LemCovarianceCoreClosure.certificate` 打包，不含 Poincaré、平移不变或 KLS 结论 |
+| [WeightedGradient/Basic.lean](WeightedGradient/Basic.lean) | 全维对数凹律上加权梯度算子 `g ↦ B∇g` 的稠密定义、可闭性、光滑核闭包相等、松弛等于闭包范数平方；内禀律版本 | 已证明；由 `Solutions.LemCovarianceCoreClosure.certificate` 打包，不含 Poincaré、平移不变或 KLS 结论 |
+| [WeightedGradient/Closure.lean](WeightedGradient/Closure.lean) | 任意有界线性权重的闭梯度、闭性与稠密定义域；不依赖半群生成 | 已证明 |
+| [WeightedGradient/Energy.lean](WeightedGradient/Energy.lean) | 单位权重闭梯度的范数平方与 canonical／Cheeger 能量识别 | 已证明 |
+| [Cheeger.lean](Cheeger.lean) | 由内禀绝对连续性推出的对数凹 Cheeger 能量识别特化 | 已证明；一般律版本见 Energy/Cheeger/Identification |
 | [ClosedForm.lean](ClosedForm.lean) | 仿射协方差松弛是闭二次型、测试为序列核、内禀律平移下的等距与常数不变、与 ℝ + C_c^∞ 核上闭算子范数平方（CMH 闭形式）相等 | 已证明；由 `Solutions.ThmAffineCovarianceRelaxationClosed.certificate` 打包，不含 Poincaré 不等式、环境平移不变或 KLS |
 | [Translation.lean](Translation.lean) | 环境平移保持紧集对数凹；对数凹律的环境二阶矩与重心；平移到负重心得到零均值律 | 已证明；与 `Poincare/CovarianceGradient/Translation.lean` 的常数不变性一起由 `Solutions.LemAffinePoincareTranslationInvariance.certificate` 打包，不含 Poincaré 不等式、各向同性归约或 KLS |
 | [Isotropic.lean](Isotropic.lean) | 连续线性等价保持对数凹；三条 KLS 表述 `IsotropicBound`、`CovarianceBound`、`AffineBound` 及其两两等价；中心化、白化后的各向同性律；`AffineBound → Conjecture` | 已证明；由 `Solutions.ThmAffineIsotropicReduction.certificate` 打包，不断言任一表述对某个 K 成立 |
@@ -70,3 +73,9 @@ import FunctionalInequalities.KLS.LogConcave.Density.AbsoluteContinuity
 [Poincare.lean](../../KLS/LogConcave/Poincare.lean) 中组合这些工具。
 现有声明名称保持不变；旧模块路径不保留转发文件。路径映射见
 [迁移记录](../../../../research/explorations/2026-09-07-logconcave-module-layout.md)。
+
+`Density/BorellRepresentation/` 分为
+[Basic](Density/BorellRepresentation/Basic.lean)（密度代表性质）、
+[Moments](Density/BorellRepresentation/Moments.lean)（尾界与矩）、
+[Construction](Density/BorellRepresentation/Construction.lean)（存在性构造）、
+[Intrinsic](Density/BorellRepresentation/Intrinsic.lean)（内蕴接口）。

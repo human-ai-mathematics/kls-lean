@@ -1,4 +1,4 @@
-import FunctionalInequalities.Analysis.Hausdorff.LevelSet
+import FunctionalInequalities.Analysis.Hausdorff.Volume
 import FunctionalInequalities.Analysis.Vector.Slice.Hausdorff
 
 /-! # What the small-Lipschitz method actually yields: the exponent of the obstruction

@@ -1,5 +1,5 @@
 import FunctionalInequalities.Energy.Cheeger.Basic
-import FunctionalInequalities.Energy.Euclidean.LipschitzApproximation
+import FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Approximation
 
 /-!
 # Route statements for the singular-law Cheeger identification `𝓔^can = 2 Ch`

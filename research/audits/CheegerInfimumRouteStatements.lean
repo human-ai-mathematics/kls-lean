@@ -3,7 +3,7 @@ import FunctionalInequalities.KLS.Geometry.Cheeger.DistanceCutoff
 import FunctionalInequalities.KLS.Geometry.SmoothDomain.RegularSuperlevel
 import FunctionalInequalities.KLS.Geometry.Coarea.Lipschitz
 import FunctionalInequalities.KLS.Isoperimetry
-import FunctionalInequalities.Energy.Euclidean.LipschitzApproximation
+import FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Approximation
 
 /-!
 # Route statements for the two Cheeger-infimum holes

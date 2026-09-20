@@ -1,5 +1,5 @@
 import FunctionalInequalities.Energy.Form.Dirichlet
-import FunctionalInequalities.Energy.Euclidean.LipschitzApproximation
+import FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Kernel
 import FunctionalInequalities.Energy.Relaxation.Contraction
 import FunctionalInequalities.Energy.SmoothGradient.Closed
 import FunctionalInequalities.Energy.SmoothGradient.Intrinsic.Closed

@@ -1,5 +1,5 @@
 import FunctionalInequalities.Energy.CovarianceGradient.Basic
-import FunctionalInequalities.KLS.LogConcave.Density.BorellRepresentation
+import FunctionalInequalities.KLS.LogConcave.Density.BorellRepresentation.Intrinsic
 
 /-!
 # Log-concave discharge of the affine covariance pre-energy contracts

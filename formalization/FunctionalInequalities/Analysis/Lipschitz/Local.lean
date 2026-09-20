@@ -2,7 +2,7 @@ import FunctionalInequalities.Analysis.Lipschitz.Annuli
 import FunctionalInequalities.Analysis.Lipschitz.Extension
 import FunctionalInequalities.Analysis.Lipschitz.VectorCoarea
 import FunctionalInequalities.Analysis.Vector.Jacobian
-import FunctionalInequalities.KLS.Geometry.Surface.Measure
+import FunctionalInequalities.Analysis.Hausdorff.Measure
 
 /-! # From the globally Lipschitz coarea formula to the locally Lipschitz one
 

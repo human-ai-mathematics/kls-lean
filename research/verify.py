@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timezone
 import hashlib
 import json
@@ -75,6 +76,8 @@ def build_replay_inputs(root: Path, snapshot: dict, destination: Path, run) -> d
 
 def prepare_replay(root: Path, snapshot: dict, destination: Path) -> dict:
     """Copy only current source modules, leaving obsolete development artifacts untouched."""
+    if destination.exists() and any(destination.iterdir()):
+        raise RuntimeError("The checked module view must be empty before copying current modules")
     compiled = root / "formalization/.lake/build/lib/lean"
     sources = replay_sources(snapshot)
     hashes = {}
@@ -132,6 +135,42 @@ def axiom_audit_code(declarations: set[str]) -> str:
 '''
 
 
+def check_research_audits(root: Path, snapshot: dict, run, *, lean: str, lean_path: str) -> list[str]:
+    """Strictly elaborate every live audit source, including nonignored new files.
+
+    Each file is a separate client: concatenating imports would mask missing dependencies.
+    These checks do not register candidate statements as certificates or extend kernel replay.
+    """
+    paths = sorted(name for name, source_hash in snapshot["files"].items()
+                   if source_hash is not None and name.startswith("research/audits/")
+                   and name.endswith(".lean"))
+
+    def check(item):
+        index, name = item
+        output = run(f"research-audit-{index:03d}",
+                     [lean, "-DwarningAsError=true", str(root / name)],
+                     cwd=root / "formalization", lean_path=lean_path)
+        names = set(re.findall(r"'([^']+)' depends on axioms:", output))
+        _, errors = parse_axioms(output, names)
+        if errors:
+            raise RuntimeError(f"{name}: " + "; ".join(errors))
+        return name
+
+    with ThreadPoolExecutor(max_workers=3) as workers:
+        return list(workers.map(check, enumerate(paths)))
+
+
+def undiscovered_lean_sources(root: Path, snapshot: dict) -> list[str]:
+    """Reject on-disk production/audit sources hidden from the Git-aware snapshot."""
+    live = {name for name, digest in snapshot["files"].items() if digest is not None}
+    paths = [root / "formalization/FunctionalInequalities.lean"]
+    for directory in ["formalization/FunctionalInequalities", "solutions", "examples",
+                      "research/audits"]:
+        paths.extend((root / directory).rglob("*.lean"))
+    return sorted(str(p.relative_to(root)) for p in paths
+                  if p.is_file() and str(p.relative_to(root)) not in live)
+
+
 def run_verification(root: Path) -> int:
     started = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S.%fZ")
     artifact = Path("build/verification") / started
@@ -170,15 +209,35 @@ def run_verification(root: Path) -> int:
             raise RuntimeError("\n".join(errors))
 
     try:
+        hidden = undiscovered_lean_sources(root, before)
+        internal_gate("source-discovery", [f"Lean source missing from snapshot: {p}" for p in hidden],
+                      "Checked production and audit directories against the source snapshot")
         derived, errors = atlas.build_atlas(root, snapshot=before)
         internal_gate("atlas-ledger-blueprint", errors, "Structural and task metadata checks")
         (output_dir / "atlas.json").write_text(json.dumps(derived, ensure_ascii=False, indent=2) + "\n")
         run("python-tests", [sys.executable, "-m", "unittest", "discover", "-s", "research/tests", "-p", "test_*.py"])
         run("lake-build", ["lake", "build"], cwd=root / "formalization")
+        view = output_dir / "local-olean"
+        replay = build_replay_inputs(root, before, view, run)
+        report["replay_inputs"] = replay
+        formalization = root / "formalization"
+        search_path = run("lake-search-path", ["lake", "env", "printenv", "LEAN_PATH"], cwd=formalization).strip()
+        toolchain = run("lean-toolchain", ["lake", "env", "lean", "--print-prefix"], cwd=formalization).strip()
+        compiled = formalization / ".lake/build/lib/lean"
+        paths = search_path.split(os.pathsep)
+        matches = [i for i, p in enumerate(paths) if (formalization / p).resolve() == compiled.resolve()]
+        if len(matches) != 1:
+            raise RuntimeError("Lake search path must contain exactly one local compiled-library directory")
+        paths[matches[0]] = str(view)
+        checked_path = os.pathsep.join(paths)
+        lean = str(Path(toolchain) / "bin/lean")
+        report["checked_lean_path"] = paths
+        report["research_audits"] = check_research_audits(
+            root, before, run, lean=lean, lean_path=checked_path)
         code = statement_snapshot.snapshot_code(root)
         (output_dir / "StatementSnapshot.lean").write_text(code)
-        output = run("statement-snapshot", ["lake", "env", "lean", "--stdin"],
-                     cwd=root / "formalization", code=code)
+        output = run("statement-snapshot", [lean, "--stdin"],
+                     cwd=root / "formalization", code=code, lean_path=checked_path)
         statement = statement_snapshot.parse_snapshot(output, root)
         (output_dir / "statement-snapshot.json").write_text(json.dumps(statement, indent=2, ensure_ascii=False) + "\n")
         internal_gate("statement-golden", statement_snapshot.check_snapshot(root, statement),
@@ -197,23 +256,12 @@ def run_verification(root: Path) -> int:
         code += "set_option pp.all true\n"
         code += "\n".join("#print " + c["declaration"] for c in derived["certificates"].values()) + "\n"
         (output_dir / "DeclarationAudit.lean").write_text(code)
-        output = run("declaration-audit", ["lake", "env", "lean", "--stdin"], cwd=root / "formalization", code=code)
+        output = run("declaration-audit", [lean, "--stdin"], cwd=root / "formalization",
+                     code=code, lean_path=checked_path)
         reports, errors = parse_axioms(output, declarations)
         report["axioms"] = reports
         if errors:
             raise RuntimeError("\n".join(errors))
-        view = output_dir / "local-olean"
-        replay = build_replay_inputs(root, before, view, run)
-        report["replay_inputs"] = replay
-        formalization = root / "formalization"
-        search_path = run("lake-search-path", ["lake", "env", "printenv", "LEAN_PATH"], cwd=formalization).strip()
-        toolchain = run("lean-toolchain", ["lake", "env", "lean", "--print-prefix"], cwd=formalization).strip()
-        compiled = formalization / ".lake/build/lib/lean"
-        paths = search_path.split(os.pathsep)
-        matches = [i for i, p in enumerate(paths) if (formalization / p).resolve() == compiled.resolve()]
-        if len(matches) != 1:
-            raise RuntimeError("Lake search path must contain exactly one local compiled-library directory")
-        paths[matches[0]] = str(view)
         output = run("leanchecker", [str(Path(toolchain) / "bin/leanchecker"), "--verbose", "FunctionalInequalities", "solutions", "examples"],
                      cwd=formalization, lean_path=os.pathsep.join(paths))
         replayed = sorted(set(re.findall(r"(?m)^replaying (\S+)\s*$", output)))

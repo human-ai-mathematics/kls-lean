@@ -1,6 +1,5 @@
 import FunctionalInequalities.Energy.LocalSlope.Gradient
 import FunctionalInequalities.Poincare.LocalSlope.Basic
-import FunctionalInequalities.KLS.LogConcave.Density.AbsoluteContinuity
 
 /-!
 # The literature Poincaré constant in gradient form
@@ -18,7 +17,7 @@ constant remains `Poincare.LocalSlope.Intrinsic.constant`. The analysis is alrea
 only the transport of that identification through the validity predicate and its infimum.
 
 Read `holds_iff_memLp_gradient` first, then `Intrinsic.constant_eq_iInf_gradient` and its
-log-concave specialization. Route: `research/decisions/2026-09-19-klartag-literature-poincare-route.md`.
+log-concave specialization in `KLS/LogConcave/Poincare.lean`. Route: `research/decisions/2026-09-19-klartag-literature-poincare-route.md`.
 -/
 
 noncomputable section
@@ -82,33 +81,5 @@ theorem Intrinsic.constant_eq_iInf_gradient (μ : ProbabilityMeasure E)
   · refine le_iInf fun C => ?_
     exact iInf_le_of_le ⟨C.1, (hiff C.1).mp C.2⟩ le_rfl
 
-omit [CompleteSpace E] in
-/-- `Q0`: the literature-Poincaré clause of `thm:klartag-density-frontend-identification`.
-
-Every finite-dimensional log-concave law has an absolutely continuous intrinsic law, so its
-literature optimum is the gradient-form optimum. The reference Haar measure is produced here
-rather than assumed: the direction of the affine support is a finite-dimensional normed space,
-hence weakly locally compact, so it carries an additive Haar measure. The statement therefore
-mentions no reference measure, and the constant does not depend on the choice. -/
-theorem Intrinsic.constant_eq_iInf_gradient_of_logConcave {μ : ProbabilityMeasure E}
-    (hμ : KLS.LogConcave μ) :
-    Poincare.LocalSlope.Intrinsic.constant μ =
-      ⨅ C : {C : NNReal //
-          ∀ g : (Probability.affineSupport μ).direction → ℝ, LocallyLipschitz g →
-            MemLp g 2 (Probability.intrinsicMeasure μ :
-              Measure (Probability.affineSupport μ).direction) →
-            MemLp (gradient g) 2 (Probability.intrinsicMeasure μ :
-              Measure (Probability.affineSupport μ).direction) →
-            evariance g (Probability.intrinsicMeasure μ :
-                Measure (Probability.affineSupport μ).direction) ≤
-              (C : ENNReal) * ∫⁻ x, (ENNReal.ofReal ‖gradient g x‖) ^ 2
-                ∂(Probability.intrinsicMeasure μ :
-                  Measure (Probability.affineSupport μ).direction)},
-        (C.1 : ENNReal) := by
-  obtain ⟨K₀⟩ : Nonempty (PositiveCompacts (Probability.affineSupport μ).direction) := inferInstance
-  have hm : (Measure.addHaarMeasure K₀).IsAddHaarMeasure :=
-    Measure.isAddHaarMeasure_addHaarMeasure K₀
-  exact Intrinsic.constant_eq_iInf_gradient μ (Measure.addHaarMeasure K₀)
-    (hμ.intrinsic_absolutelyContinuous _)
 
 end FunctionalInequalities.Poincare.LocalSlope

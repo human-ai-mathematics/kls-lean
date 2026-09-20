@@ -1,0 +1,1137 @@
+{
+  "date": "2026-09-20",
+  "scope": "LD-013 declaration move, and a location refresh for the 2026-09-20 final-cleanup map",
+  "public_names_changed": false,
+  "proof_status_changed": false,
+  "moved_declarations": {
+    "FunctionalInequalities.Energy.LocalSlope.energy_eq_integral_gradient": {
+      "old_path": "formalization/FunctionalInequalities/Poincare/LipschitzGradient/Comparison.lean",
+      "path": "formalization/FunctionalInequalities/Energy/LocalSlope/Gradient.lean",
+      "namespace_changed": false,
+      "signature": "byte-identical `pp.all` type and definition; universe parameter, implicit type variable, hypothesis names, parameter order and binder visibility unchanged",
+      "evidence": [
+        "build/review-fixes-2026-09-20/signature-before.txt",
+        "build/review-fixes-2026-09-20/signature-after.txt"
+      ]
+    }
+  },
+  "import_changes": {
+    "formalization/FunctionalInequalities/Energy/LocalSlope/Relaxation.lean": {
+      "removed": [
+        "FunctionalInequalities.Poincare.LipschitzGradient.Comparison"
+      ]
+    },
+    "formalization/FunctionalInequalities/Energy/Cheeger/Basic.lean": {
+      "added": [
+        "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Approximation"
+      ],
+      "reason": "previously obtained through the removed transitive Poincare re-export"
+    }
+  },
+  "location_refresh": {
+    "supersedes_line_field_of": "research/api-migration/2026-09-20-final-cleanup-map.json",
+    "note": "The final-cleanup map recorded declaration lines before the 2026-09-20 namespace-block change shifted them; that dated map is left unchanged and these are the current lines.",
+    "declarations": {
+      "FunctionalInequalities.Analysis.Semigroup.Generated.continuousOn": {
+        "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Laws.lean",
+        "line": 432,
+        "recorded_2026_09_20_final_cleanup": 424
+      },
+      "FunctionalInequalities.Analysis.Semigroup.Generated.eq_apply_of_tendsto": {
+        "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Laws.lean",
+        "line": 116,
+        "recorded_2026_09_20_final_cleanup": 112
+      },
+      "FunctionalInequalities.Analysis.Semigroup.eq_zero_of_forall_le_mul": {
+        "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Laws.lean",
+        "line": 73,
+        "recorded_2026_09_20_final_cleanup": 71
+      },
+      "FunctionalInequalities.Analysis.Semigroup.eq_zero_of_forall_pos_lt": {
+        "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Laws.lean",
+        "line": 68,
+        "recorded_2026_09_20_final_cleanup": 66
+      },
+      "FunctionalInequalities.Analysis.Semigroup.Generated.continuous_at_zero": {
+        "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Laws.lean",
+        "line": 396,
+        "recorded_2026_09_20_final_cleanup": 388
+      },
+      "FunctionalInequalities.Analysis.Semigroup.exp_neg_add_smul_apply": {
+        "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Laws.lean",
+        "line": 87,
+        "recorded_2026_09_20_final_cleanup": 85
+      },
+      "FunctionalInequalities.Analysis.Semigroup.inner_exp_neg_smul_yosida": {
+        "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Laws.lean",
+        "line": 250,
+        "recorded_2026_09_20_final_cleanup": 244
+      },
+      "FunctionalInequalities.Analysis.Semigroup.Generated.symmetric": {
+        "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Laws.lean",
+        "line": 263,
+        "recorded_2026_09_20_final_cleanup": 255
+      },
+      "FunctionalInequalities.Analysis.Semigroup.isSelfAdjoint_exp_neg_smul_yosida": {
+        "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Laws.lean",
+        "line": 243,
+        "recorded_2026_09_20_final_cleanup": 237
+      },
+      "FunctionalInequalities.Analysis.Semigroup.norm_exp_neg_smul_yosida_sub_le": {
+        "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Laws.lean",
+        "line": 101,
+        "recorded_2026_09_20_final_cleanup": 99
+      },
+      "FunctionalInequalities.Analysis.Semigroup.Generated.norm_apply_le": {
+        "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Laws.lean",
+        "line": 142,
+        "recorded_2026_09_20_final_cleanup": 138
+      },
+      "FunctionalInequalities.Analysis.Semigroup.Generated.displacement_le": {
+        "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Laws.lean",
+        "line": 359,
+        "recorded_2026_09_20_final_cleanup": 351
+      },
+      "FunctionalInequalities.Analysis.Semigroup.Generated.add_time": {
+        "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Laws.lean",
+        "line": 320,
+        "recorded_2026_09_20_final_cleanup": 312
+      },
+      "FunctionalInequalities.Analysis.Semigroup.Generated.map_add": {
+        "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Laws.lean",
+        "line": 216,
+        "recorded_2026_09_20_final_cleanup": 212
+      },
+      "FunctionalInequalities.Analysis.Semigroup.Generated.map_smul": {
+        "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Laws.lean",
+        "line": 209,
+        "recorded_2026_09_20_final_cleanup": 205
+      },
+      "FunctionalInequalities.Analysis.Semigroup.Generated.map_smul_add": {
+        "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Laws.lean",
+        "line": 157,
+        "recorded_2026_09_20_final_cleanup": 153
+      },
+      "FunctionalInequalities.Analysis.Semigroup.Generated.map_sub": {
+        "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Laws.lean",
+        "line": 193,
+        "recorded_2026_09_20_final_cleanup": 189
+      },
+      "FunctionalInequalities.Analysis.Semigroup.Generated.zero_time": {
+        "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Laws.lean",
+        "line": 304,
+        "recorded_2026_09_20_final_cleanup": 296
+      },
+      "FunctionalInequalities.Analysis.Semigroup.Generated.map_zero": {
+        "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Laws.lean",
+        "line": 202,
+        "recorded_2026_09_20_final_cleanup": 198
+      },
+      "FunctionalInequalities.Analysis.Semigroup.Generated.operator": {
+        "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Laws.lean",
+        "line": 225,
+        "recorded_2026_09_20_final_cleanup": 221
+      },
+      "FunctionalInequalities.Analysis.Semigroup.Generated.operator_apply": {
+        "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Laws.lean",
+        "line": 235,
+        "recorded_2026_09_20_final_cleanup": 231
+      },
+      "FunctionalInequalities.Analysis.Semigroup.Generated.apply": {
+        "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Basic.lean",
+        "line": 32,
+        "recorded_2026_09_20_final_cleanup": 27
+      },
+      "FunctionalInequalities.Analysis.Semigroup.Generated.apply_of_not_nonneg": {
+        "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Basic.lean",
+        "line": 46,
+        "recorded_2026_09_20_final_cleanup": 41
+      },
+      "FunctionalInequalities.Analysis.Semigroup.Generated.yosida_limit": {
+        "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Basic.lean",
+        "line": 37,
+        "recorded_2026_09_20_final_cleanup": 32
+      },
+      "FunctionalInequalities.Analysis.Semigroup.Generated.yosida_converges": {
+        "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Generator.lean",
+        "line": 182,
+        "recorded_2026_09_20_final_cleanup": 179
+      },
+      "FunctionalInequalities.Analysis.Semigroup.Generated.generator_limit": {
+        "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Generator.lean",
+        "line": 304,
+        "recorded_2026_09_20_final_cleanup": 301
+      },
+      "FunctionalInequalities.Analysis.Semigroup.le_of_forall_pos_add_le": {
+        "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Generator.lean",
+        "line": 93,
+        "recorded_2026_09_20_final_cleanup": 92
+      },
+      "FunctionalInequalities.Analysis.Semigroup.Generated.yosida_error_le": {
+        "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Generator.lean",
+        "line": 122,
+        "recorded_2026_09_20_final_cleanup": 119
+      },
+      "FunctionalInequalities.Analysis.Semigroup.Generated.generator_error_le": {
+        "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Generator.lean",
+        "line": 219,
+        "recorded_2026_09_20_final_cleanup": 216
+      },
+      "FunctionalInequalities.Analysis.Semigroup.norm_sub_le_add_norm_sub": {
+        "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Generator.lean",
+        "line": 100,
+        "recorded_2026_09_20_final_cleanup": 99
+      },
+      "FunctionalInequalities.Analysis.Semigroup.Generated.generator_comm": {
+        "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Domain.lean",
+        "line": 90,
+        "recorded_2026_09_20_final_cleanup": 89
+      },
+      "FunctionalInequalities.Analysis.Semigroup.Generated.generator_limit_apply": {
+        "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Domain.lean",
+        "line": 65,
+        "recorded_2026_09_20_final_cleanup": 64
+      },
+      "FunctionalInequalities.Analysis.Semigroup.Generated.mem_domain_of_generator_limit": {
+        "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Domain.lean",
+        "line": 16,
+        "recorded_2026_09_20_final_cleanup": 15
+      },
+      "FunctionalInequalities.Analysis.Semigroup.Generated.preserves_domain": {
+        "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Domain.lean",
+        "line": 82,
+        "recorded_2026_09_20_final_cleanup": 81
+      },
+      "FunctionalInequalities.Analysis.Semigroup.Generated.right_derivative": {
+        "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Domain.lean",
+        "line": 101,
+        "recorded_2026_09_20_final_cleanup": 100
+      },
+      "FunctionalInequalities.Analysis.Semigroup.LpMarkov.IsPositive": {
+        "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Markov.lean",
+        "line": 189,
+        "recorded_2026_09_20_final_cleanup": 188
+      },
+      "FunctionalInequalities.Analysis.Semigroup.LpMarkov.IsPositive.comp": {
+        "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Markov.lean",
+        "line": 211,
+        "recorded_2026_09_20_final_cleanup": 210
+      },
+      "FunctionalInequalities.Analysis.Semigroup.LpMarkov.IsPositive.pow": {
+        "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Markov.lean",
+        "line": 219,
+        "recorded_2026_09_20_final_cleanup": 218
+      },
+      "FunctionalInequalities.Analysis.Semigroup.LpMarkov.IsPositive.smul": {
+        "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Markov.lean",
+        "line": 203,
+        "recorded_2026_09_20_final_cleanup": 202
+      },
+      "FunctionalInequalities.Analysis.Semigroup.Generated.abs_le": {
+        "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Markov.lean",
+        "line": 438,
+        "recorded_2026_09_20_final_cleanup": 427
+      },
+      "FunctionalInequalities.Analysis.Semigroup.Generated.abs_le_const": {
+        "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Markov.lean",
+        "line": 453,
+        "recorded_2026_09_20_final_cleanup": 442
+      },
+      "FunctionalInequalities.Analysis.Semigroup.LpMarkov.compL2_mem_domain_and_norm_le": {
+        "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Markov.lean",
+        "line": 70,
+        "recorded_2026_09_20_final_cleanup": 69
+      },
+      "FunctionalInequalities.Analysis.Semigroup.LpMarkov.eq_resolventDomain_of_objective_le": {
+        "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Markov.lean",
+        "line": 92,
+        "recorded_2026_09_20_final_cleanup": 91
+      },
+      "FunctionalInequalities.Analysis.Semigroup.LpMarkov.exp_apply_of_apply_eq_zero": {
+        "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Markov.lean",
+        "line": 243,
+        "recorded_2026_09_20_final_cleanup": 242
+      },
+      "FunctionalInequalities.Analysis.Semigroup.LpMarkov.exp_neg_smul_yosida_factor": {
+        "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Markov.lean",
+        "line": 277,
+        "recorded_2026_09_20_final_cleanup": 276
+      },
+      "FunctionalInequalities.Analysis.Semigroup.LpMarkov.exp_neg_smul_yosida_le_one": {
+        "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Markov.lean",
+        "line": 338,
+        "recorded_2026_09_20_final_cleanup": 337
+      },
+      "FunctionalInequalities.Analysis.Semigroup.LpMarkov.exp_neg_smul_yosida_one": {
+        "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Markov.lean",
+        "line": 330,
+        "recorded_2026_09_20_final_cleanup": 329
+      },
+      "FunctionalInequalities.Analysis.Semigroup.LpMarkov.exp_smul_one_apply": {
+        "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Markov.lean",
+        "line": 258,
+        "recorded_2026_09_20_final_cleanup": 257
+      },
+      "FunctionalInequalities.Analysis.Semigroup.LpMarkov.isPositive_exp": {
+        "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Markov.lean",
+        "line": 228,
+        "recorded_2026_09_20_final_cleanup": 227
+      },
+      "FunctionalInequalities.Analysis.Semigroup.LpMarkov.isPositive_exp_neg_smul_yosida": {
+        "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Markov.lean",
+        "line": 307,
+        "recorded_2026_09_20_final_cleanup": 306
+      },
+      "FunctionalInequalities.Analysis.Semigroup.Generated.mean": {
+        "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Markov.lean",
+        "line": 428,
+        "recorded_2026_09_20_final_cleanup": 417
+      },
+      "FunctionalInequalities.Analysis.Semigroup.LpMarkov.positivePart": {
+        "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Markov.lean",
+        "line": 34,
+        "recorded_2026_09_20_final_cleanup": 33
+      },
+      "FunctionalInequalities.Analysis.Semigroup.LpMarkov.positivePart_compL2": {
+        "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Markov.lean",
+        "line": 48,
+        "recorded_2026_09_20_final_cleanup": 47
+      },
+      "FunctionalInequalities.Analysis.Semigroup.LpMarkov.resolventCLM_le_one": {
+        "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Markov.lean",
+        "line": 146,
+        "recorded_2026_09_20_final_cleanup": 145
+      },
+      "FunctionalInequalities.Analysis.Semigroup.LpMarkov.resolventCLM_one": {
+        "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Markov.lean",
+        "line": 176,
+        "recorded_2026_09_20_final_cleanup": 175
+      },
+      "FunctionalInequalities.Analysis.Semigroup.LpMarkov.resolventCLM_positive": {
+        "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Markov.lean",
+        "line": 118,
+        "recorded_2026_09_20_final_cleanup": 117
+      },
+      "FunctionalInequalities.Analysis.Semigroup.Generated.le_one": {
+        "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Markov.lean",
+        "line": 402,
+        "recorded_2026_09_20_final_cleanup": 391
+      },
+      "FunctionalInequalities.Analysis.Semigroup.Generated.mono": {
+        "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Markov.lean",
+        "line": 391,
+        "recorded_2026_09_20_final_cleanup": 380
+      },
+      "FunctionalInequalities.Analysis.Semigroup.Generated.one": {
+        "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Markov.lean",
+        "line": 379,
+        "recorded_2026_09_20_final_cleanup": 368
+      },
+      "FunctionalInequalities.Analysis.Semigroup.Generated.positive": {
+        "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Markov.lean",
+        "line": 364,
+        "recorded_2026_09_20_final_cleanup": 353
+      },
+      "FunctionalInequalities.Analysis.Semigroup.Generated.subMarkov": {
+        "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Markov.lean",
+        "line": 415,
+        "recorded_2026_09_20_final_cleanup": 404
+      },
+      "FunctionalInequalities.Analysis.Semigroup.LpMarkov.smul_nonneg_Lp": {
+        "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Markov.lean",
+        "line": 194,
+        "recorded_2026_09_20_final_cleanup": 193
+      },
+      "FunctionalInequalities.Analysis.Semigroup.LpMarkov.upperOne": {
+        "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Markov.lean",
+        "line": 40,
+        "recorded_2026_09_20_final_cleanup": 39
+      },
+      "FunctionalInequalities.Analysis.Semigroup.LpMarkov.upperOne_compL2": {
+        "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Markov.lean",
+        "line": 57,
+        "recorded_2026_09_20_final_cleanup": 56
+      },
+      "FunctionalInequalities.Analysis.Semigroup.LpMarkov.yosida_one": {
+        "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Markov.lean",
+        "line": 324,
+        "recorded_2026_09_20_final_cleanup": 323
+      },
+      "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.continuousOn": {
+        "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Basic.lean",
+        "line": 101,
+        "recorded_2026_09_20_final_cleanup": 94
+      },
+      "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.operator": {
+        "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Basic.lean",
+        "line": 57,
+        "recorded_2026_09_20_final_cleanup": 54
+      },
+      "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.add": {
+        "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Basic.lean",
+        "line": 93,
+        "recorded_2026_09_20_final_cleanup": 86
+      },
+      "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.apply": {
+        "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Basic.lean",
+        "line": 69,
+        "recorded_2026_09_20_final_cleanup": 62
+      },
+      "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.generator_limit": {
+        "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Basic.lean",
+        "line": 109,
+        "recorded_2026_09_20_final_cleanup": 102
+      },
+      "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.zero": {
+        "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Basic.lean",
+        "line": 87,
+        "recorded_2026_09_20_final_cleanup": 80
+      },
+      "FunctionalInequalities.KLS.LogConcave.inner_adjointComp_self_eq": {
+        "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Basic.lean",
+        "line": 124,
+        "recorded_2026_09_20_final_cleanup": 115
+      },
+      "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.symmetric": {
+        "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Basic.lean",
+        "line": 81,
+        "recorded_2026_09_20_final_cleanup": 74
+      },
+      "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.intrinsic": {
+        "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Basic.lean",
+        "line": 146,
+        "recorded_2026_09_20_final_cleanup": 135
+      },
+      "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.norm_apply_le": {
+        "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Basic.lean",
+        "line": 75,
+        "recorded_2026_09_20_final_cleanup": 68
+      },
+      "FunctionalInequalities.KLS.LogConcave.adjointComp_toLp_eq": {
+        "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Generator.lean",
+        "line": 203,
+        "recorded_2026_09_20_final_cleanup": 202
+      },
+      "FunctionalInequalities.KLS.LogConcave.closedWeightedOperator_toLp_eq": {
+        "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Generator.lean",
+        "line": 115,
+        "recorded_2026_09_20_final_cleanup": 114
+      },
+      "FunctionalInequalities.KLS.LogConcave.inner_toLp_neg_weightedLaplacian_eq": {
+        "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Generator.lean",
+        "line": 132,
+        "recorded_2026_09_20_final_cleanup": 131
+      },
+      "FunctionalInequalities.KLS.LogConcave.integral_inner_gradient_eq": {
+        "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Generator.lean",
+        "line": 62,
+        "recorded_2026_09_20_final_cleanup": 61
+      },
+      "FunctionalInequalities.KLS.LogConcave.integral_weightedLaplacian_eq_zero": {
+        "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Generator.lean",
+        "line": 74,
+        "recorded_2026_09_20_final_cleanup": 73
+      },
+      "FunctionalInequalities.KLS.LogConcave.memLp_gradient_of_contDiff_hasCompactSupport": {
+        "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Generator.lean",
+        "line": 91,
+        "recorded_2026_09_20_final_cleanup": 90
+      },
+      "FunctionalInequalities.KLS.LogConcave.memLp_neg_weightedLaplacian": {
+        "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Generator.lean",
+        "line": 98,
+        "recorded_2026_09_20_final_cleanup": 97
+      },
+      "FunctionalInequalities.KLS.LogConcave.toLp_mem_adjointComp_domain": {
+        "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Generator.lean",
+        "line": 189,
+        "recorded_2026_09_20_final_cleanup": 188
+      },
+      "FunctionalInequalities.KLS.LogConcave.toLp_mem_closedWeightedOperator_domain": {
+        "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Generator.lean",
+        "line": 105,
+        "recorded_2026_09_20_final_cleanup": 104
+      },
+      "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.generator_comm": {
+        "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Domain.lean",
+        "line": 24,
+        "recorded_2026_09_20_final_cleanup": 23
+      },
+      "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.mem_closedWeightedOperator_domain": {
+        "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Domain.lean",
+        "line": 33,
+        "recorded_2026_09_20_final_cleanup": 32
+      },
+      "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.preserves_domain": {
+        "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Domain.lean",
+        "line": 17,
+        "recorded_2026_09_20_final_cleanup": 16
+      },
+      "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.right_derivative": {
+        "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Domain.lean",
+        "line": 40,
+        "recorded_2026_09_20_final_cleanup": 39
+      },
+      "FunctionalInequalities.KLS.LogConcave.MarkovProof.compSmoothed": {
+        "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Markov.lean",
+        "line": 81,
+        "recorded_2026_09_20_final_cleanup": 80
+      },
+      "FunctionalInequalities.KLS.LogConcave.MarkovProof.gradient_comp_eq_smul": {
+        "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Markov.lean",
+        "line": 46,
+        "recorded_2026_09_20_final_cleanup": 45
+      },
+      "FunctionalInequalities.KLS.LogConcave.MarkovProof.norm_operator_compSmoothed_le": {
+        "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Markov.lean",
+        "line": 136,
+        "recorded_2026_09_20_final_cleanup": 135
+      },
+      "FunctionalInequalities.KLS.LogConcave.MarkovProof.norm_toLp_compSmoothed_sub_le": {
+        "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Markov.lean",
+        "line": 112,
+        "recorded_2026_09_20_final_cleanup": 111
+      },
+      "FunctionalInequalities.KLS.LogConcave.MarkovProof.norm_weightedGradient_comp_smoothed_le": {
+        "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Markov.lean",
+        "line": 64,
+        "recorded_2026_09_20_final_cleanup": 63
+      },
+      "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.abs_le": {
+        "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Markov.lean",
+        "line": 336,
+        "recorded_2026_09_20_final_cleanup": 333
+      },
+      "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.abs_le_const": {
+        "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Markov.lean",
+        "line": 346,
+        "recorded_2026_09_20_final_cleanup": 343
+      },
+      "FunctionalInequalities.KLS.LogConcave.closedWeightedOperator_markovian": {
+        "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Markov.lean",
+        "line": 215,
+        "recorded_2026_09_20_final_cleanup": 214
+      },
+      "FunctionalInequalities.KLS.LogConcave.closedWeightedOperator_one_eq_zero": {
+        "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Markov.lean",
+        "line": 233,
+        "recorded_2026_09_20_final_cleanup": 232
+      },
+      "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.le_one": {
+        "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Markov.lean",
+        "line": 290,
+        "recorded_2026_09_20_final_cleanup": 287
+      },
+      "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.mono": {
+        "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Markov.lean",
+        "line": 270,
+        "recorded_2026_09_20_final_cleanup": 267
+      },
+      "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.one": {
+        "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Markov.lean",
+        "line": 280,
+        "recorded_2026_09_20_final_cleanup": 277
+      },
+      "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.positive": {
+        "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Markov.lean",
+        "line": 260,
+        "recorded_2026_09_20_final_cleanup": 257
+      },
+      "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.subMarkov": {
+        "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Markov.lean",
+        "line": 302,
+        "recorded_2026_09_20_final_cleanup": 299
+      },
+      "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.integral": {
+        "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Markov.lean",
+        "line": 326,
+        "recorded_2026_09_20_final_cleanup": 323
+      },
+      "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.mean": {
+        "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Markov.lean",
+        "line": 315,
+        "recorded_2026_09_20_final_cleanup": 312
+      },
+      "FunctionalInequalities.KLS.LogConcave.one_mem_domain_closedWeightedOperator": {
+        "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Markov.lean",
+        "line": 224,
+        "recorded_2026_09_20_final_cleanup": 223
+      },
+      "FunctionalInequalities.KLS.LogConcave.weighted_relaxation_markovian": {
+        "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Markov.lean",
+        "line": 204,
+        "recorded_2026_09_20_final_cleanup": 203
+      },
+      "FunctionalInequalities.KLS.LogConcave.weighted_relaxedContractionBound": {
+        "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Markov.lean",
+        "line": 161,
+        "recorded_2026_09_20_final_cleanup": 160
+      },
+      "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.abs_mollify_le": {
+        "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Kernel.lean",
+        "line": 194,
+        "recorded_2026_09_20_final_cleanup": 193
+      },
+      "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.ae_differentiableAt_of_locallyLipschitz": {
+        "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Measurable.lean",
+        "line": 77,
+        "recorded_2026_09_20_final_cleanup": 76
+      },
+      "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.aestronglyMeasurable_gradient": {
+        "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Measurable.lean",
+        "line": 69,
+        "recorded_2026_09_20_final_cleanup": 68
+      },
+      "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.bump": {
+        "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Basic.lean",
+        "line": 50,
+        "recorded_2026_09_20_final_cleanup": 49
+      },
+      "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.contDiff_kernel": {
+        "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Kernel.lean",
+        "line": 53,
+        "recorded_2026_09_20_final_cleanup": 52
+      },
+      "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.contDiff_mollify": {
+        "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Kernel.lean",
+        "line": 148,
+        "recorded_2026_09_20_final_cleanup": 147
+      },
+      "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.contDiff_scaled": {
+        "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Basic.lean",
+        "line": 76,
+        "recorded_2026_09_20_final_cleanup": 75
+      },
+      "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.continuous_fderiv_kernel": {
+        "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Kernel.lean",
+        "line": 76,
+        "recorded_2026_09_20_final_cleanup": 75
+      },
+      "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.continuous_kernel": {
+        "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Kernel.lean",
+        "line": 56,
+        "recorded_2026_09_20_final_cleanup": 55
+      },
+      "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.continuous_mollify": {
+        "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Kernel.lean",
+        "line": 153,
+        "recorded_2026_09_20_final_cleanup": 152
+      },
+      "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.continuous_scaled": {
+        "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Basic.lean",
+        "line": 80,
+        "recorded_2026_09_20_final_cleanup": 79
+      },
+      "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.exists_bound_fderiv_bump": {
+        "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Basic.lean",
+        "line": 186,
+        "recorded_2026_09_20_final_cleanup": 185
+      },
+      "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.exists_compactSupport_weighted_L2": {
+        "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Approximation.lean",
+        "line": 70,
+        "recorded_2026_09_20_final_cleanup": 69
+      },
+      "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.exists_smooth_bounded_L1": {
+        "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Approximation.lean",
+        "line": 399,
+        "recorded_2026_09_20_final_cleanup": 398
+      },
+      "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.exists_smooth_compactSupport_L2": {
+        "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Approximation.lean",
+        "line": 247,
+        "recorded_2026_09_20_final_cleanup": 246
+      },
+      "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.exists_smooth_weighted_L2": {
+        "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Approximation.lean",
+        "line": 303,
+        "recorded_2026_09_20_final_cleanup": 302
+      },
+      "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.fderiv_mollify_apply": {
+        "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Kernel.lean",
+        "line": 226,
+        "recorded_2026_09_20_final_cleanup": 225
+      },
+      "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.fderiv_scaled_eq_zero": {
+        "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Basic.lean",
+        "line": 96,
+        "recorded_2026_09_20_final_cleanup": 95
+      },
+      "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.gradient_eq_of_hasFDerivAt": {
+        "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Basic.lean",
+        "line": 41,
+        "recorded_2026_09_20_final_cleanup": 40
+      },
+      "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.gradient_scaled_mul": {
+        "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Basic.lean",
+        "line": 120,
+        "recorded_2026_09_20_final_cleanup": 119
+      },
+      "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.hasCompactSupport_fderiv_kernel": {
+        "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Kernel.lean",
+        "line": 79,
+        "recorded_2026_09_20_final_cleanup": 78
+      },
+      "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.hasCompactSupport_kernel": {
+        "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Kernel.lean",
+        "line": 41,
+        "recorded_2026_09_20_final_cleanup": 40
+      },
+      "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.hasCompactSupport_mollify": {
+        "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Kernel.lean",
+        "line": 92,
+        "recorded_2026_09_20_final_cleanup": 91
+      },
+      "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.hasCompactSupport_scaled": {
+        "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Basic.lean",
+        "line": 179,
+        "recorded_2026_09_20_final_cleanup": 178
+      },
+      "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.hasFDerivAt_kernel": {
+        "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Kernel.lean",
+        "line": 58,
+        "recorded_2026_09_20_final_cleanup": 57
+      },
+      "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.hasFDerivAt_mollify": {
+        "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Kernel.lean",
+        "line": 220,
+        "recorded_2026_09_20_final_cleanup": 219
+      },
+      "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.hasFDerivAt_mollify_affine": {
+        "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Kernel.lean",
+        "line": 251,
+        "recorded_2026_09_20_final_cleanup": 250
+      },
+      "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.hasFDerivAt_scaled": {
+        "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Basic.lean",
+        "line": 83,
+        "recorded_2026_09_20_final_cleanup": 82
+      },
+      "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.integrable_kernel": {
+        "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Kernel.lean",
+        "line": 115,
+        "recorded_2026_09_20_final_cleanup": 114
+      },
+      "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.integrable_mul_smul_fderiv_kernel": {
+        "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Kernel.lean",
+        "line": 265,
+        "recorded_2026_09_20_final_cleanup": 264
+      },
+      "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.integrable_norm_fderiv_kernel": {
+        "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Kernel.lean",
+        "line": 122,
+        "recorded_2026_09_20_final_cleanup": 121
+      },
+      "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.integrable_scaled": {
+        "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Kernel.lean",
+        "line": 112,
+        "recorded_2026_09_20_final_cleanup": 111
+      },
+      "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.integrable_shift_mul_kernel": {
+        "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Kernel.lean",
+        "line": 142,
+        "recorded_2026_09_20_final_cleanup": 141
+      },
+      "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.integral_affine_smul_fderiv_kernel": {
+        "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Kernel.lean",
+        "line": 258,
+        "recorded_2026_09_20_final_cleanup": 257
+      },
+      "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.integral_bump_pos": {
+        "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Kernel.lean",
+        "line": 100,
+        "recorded_2026_09_20_final_cleanup": 99
+      },
+      "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.integral_kernel": {
+        "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Kernel.lean",
+        "line": 118,
+        "recorded_2026_09_20_final_cleanup": 117
+      },
+      "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.integral_norm_fderiv_kernel": {
+        "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Kernel.lean",
+        "line": 127,
+        "recorded_2026_09_20_final_cleanup": 126
+      },
+      "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.integral_scaled": {
+        "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Kernel.lean",
+        "line": 102,
+        "recorded_2026_09_20_final_cleanup": 101
+      },
+      "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.integral_scaled_pos": {
+        "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Kernel.lean",
+        "line": 107,
+        "recorded_2026_09_20_final_cleanup": 106
+      },
+      "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.kernel": {
+        "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Kernel.lean",
+        "line": 27,
+        "recorded_2026_09_20_final_cleanup": 26
+      },
+      "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.kernelDerivativeMass": {
+        "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Kernel.lean",
+        "line": 71,
+        "recorded_2026_09_20_final_cleanup": 70
+      },
+      "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.kernelDerivativeMass_nonneg": {
+        "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Kernel.lean",
+        "line": 73,
+        "recorded_2026_09_20_final_cleanup": 72
+      },
+      "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.kernel_eq_zero": {
+        "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Kernel.lean",
+        "line": 32,
+        "recorded_2026_09_20_final_cleanup": 31
+      },
+      "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.kernel_nonneg": {
+        "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Kernel.lean",
+        "line": 29,
+        "recorded_2026_09_20_final_cleanup": 28
+      },
+      "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.le_mollify": {
+        "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Kernel.lean",
+        "line": 185,
+        "recorded_2026_09_20_final_cleanup": 184
+      },
+      "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.lipschitzOnWith_of_locallyLipschitz_of_isCompact": {
+        "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Basic.lean",
+        "line": 139,
+        "recorded_2026_09_20_final_cleanup": 138
+      },
+      "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.lipschitzWith_mollify": {
+        "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Kernel.lean",
+        "line": 157,
+        "recorded_2026_09_20_final_cleanup": 156
+      },
+      "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.lipschitzWith_scaled": {
+        "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Basic.lean",
+        "line": 112,
+        "recorded_2026_09_20_final_cleanup": 111
+      },
+      "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.measurable_gradient": {
+        "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Measurable.lean",
+        "line": 64,
+        "recorded_2026_09_20_final_cleanup": 63
+      },
+      "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.mollify": {
+        "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Kernel.lean",
+        "line": 89,
+        "recorded_2026_09_20_final_cleanup": 88
+      },
+      "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.mollify_affine": {
+        "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Kernel.lean",
+        "line": 235,
+        "recorded_2026_09_20_final_cleanup": 234
+      },
+      "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.mollify_apply": {
+        "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Kernel.lean",
+        "line": 137,
+        "recorded_2026_09_20_final_cleanup": 136
+      },
+      "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.mollify_le": {
+        "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Kernel.lean",
+        "line": 176,
+        "recorded_2026_09_20_final_cleanup": 175
+      },
+      "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.norm_fderiv_kernel": {
+        "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Kernel.lean",
+        "line": 63,
+        "recorded_2026_09_20_final_cleanup": 62
+      },
+      "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.norm_fderiv_mollify_sub_le": {
+        "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Kernel.lean",
+        "line": 274,
+        "recorded_2026_09_20_final_cleanup": 273
+      },
+      "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.norm_fderiv_scaled_le": {
+        "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Basic.lean",
+        "line": 105,
+        "recorded_2026_09_20_final_cleanup": 104
+      },
+      "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.norm_gradient_eq_norm_fderiv": {
+        "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Basic.lean",
+        "line": 33,
+        "recorded_2026_09_20_final_cleanup": 32
+      },
+      "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.norm_gradient_le_of_lipschitz": {
+        "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Basic.lean",
+        "line": 37,
+        "recorded_2026_09_20_final_cleanup": 36
+      },
+      "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.norm_le_of_fderiv_kernel_ne_zero": {
+        "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Kernel.lean",
+        "line": 83,
+        "recorded_2026_09_20_final_cleanup": 82
+      },
+      "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.norm_le_of_kernel_ne_zero": {
+        "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Kernel.lean",
+        "line": 35,
+        "recorded_2026_09_20_final_cleanup": 34
+      },
+      "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.norm_mollify_sub_le": {
+        "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Kernel.lean",
+        "line": 199,
+        "recorded_2026_09_20_final_cleanup": 198
+      },
+      "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.radius": {
+        "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Measurable.lean",
+        "line": 93,
+        "recorded_2026_09_20_final_cleanup": 92
+      },
+      "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.radius_pos": {
+        "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Measurable.lean",
+        "line": 95,
+        "recorded_2026_09_20_final_cleanup": 94
+      },
+      "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.scaled": {
+        "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Basic.lean",
+        "line": 53,
+        "recorded_2026_09_20_final_cleanup": 52
+      },
+      "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.scaled_eq_one": {
+        "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Basic.lean",
+        "line": 61,
+        "recorded_2026_09_20_final_cleanup": 60
+      },
+      "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.scaled_eq_zero": {
+        "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Basic.lean",
+        "line": 69,
+        "recorded_2026_09_20_final_cleanup": 68
+      },
+      "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.scaled_le_one": {
+        "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Basic.lean",
+        "line": 58,
+        "recorded_2026_09_20_final_cleanup": 57
+      },
+      "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.scaled_nonneg": {
+        "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Basic.lean",
+        "line": 55,
+        "recorded_2026_09_20_final_cleanup": 54
+      },
+      "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.tendsto_eLpNorm_zero_of_dominated": {
+        "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Measurable.lean",
+        "line": 29,
+        "recorded_2026_09_20_final_cleanup": 28
+      },
+      "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.tendsto_fderiv_mollify": {
+        "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Kernel.lean",
+        "line": 309,
+        "recorded_2026_09_20_final_cleanup": 308
+      },
+      "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.tendsto_gradient_mollify": {
+        "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Kernel.lean",
+        "line": 332,
+        "recorded_2026_09_20_final_cleanup": 331
+      },
+      "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.tendsto_radius": {
+        "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Measurable.lean",
+        "line": 97,
+        "recorded_2026_09_20_final_cleanup": 96
+      },
+      "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.tsupport_kernel_subset": {
+        "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Kernel.lean",
+        "line": 47,
+        "recorded_2026_09_20_final_cleanup": 46
+      },
+      "FunctionalInequalities.KLS.BorelLogConcave.exists_integrable_exp_norm": {
+        "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Moments.lean",
+        "line": 111,
+        "recorded_2026_09_20_final_cleanup": 110
+      },
+      "FunctionalInequalities.KLS.BorelLogConcave.measure_norm_ge_le": {
+        "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Moments.lean",
+        "line": 27,
+        "recorded_2026_09_20_final_cleanup": 26
+      },
+      "FunctionalInequalities.KLS.BorellRepresentation.ballRatio": {
+        "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Construction.lean",
+        "line": 49,
+        "recorded_2026_09_20_final_cleanup": 48
+      },
+      "FunctionalInequalities.KLS.BorellRepresentation.ballRatio_logConcave": {
+        "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Construction.lean",
+        "line": 105,
+        "recorded_2026_09_20_final_cleanup": 104
+      },
+      "FunctionalInequalities.KLS.BorellRepresentation.concaveOn_log_toReal_of_logConcave": {
+        "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Construction.lean",
+        "line": 250,
+        "recorded_2026_09_20_final_cleanup": 249
+      },
+      "FunctionalInequalities.KLS.BorellRepresentation.convex_pos_of_logConcave": {
+        "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Construction.lean",
+        "line": 225,
+        "recorded_2026_09_20_final_cleanup": 224
+      },
+      "FunctionalInequalities.KLS.BorellRepresentation.envelope": {
+        "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Construction.lean",
+        "line": 57,
+        "recorded_2026_09_20_final_cleanup": 56
+      },
+      "FunctionalInequalities.KLS.BorellRepresentation.envelope_ae_eq": {
+        "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Construction.lean",
+        "line": 283,
+        "recorded_2026_09_20_final_cleanup": 282
+      },
+      "FunctionalInequalities.KLS.BorellRepresentation.envelope_le": {
+        "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Construction.lean",
+        "line": 167,
+        "recorded_2026_09_20_final_cleanup": 166
+      },
+      "FunctionalInequalities.KLS.BorellRepresentation.envelope_logConcave": {
+        "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Construction.lean",
+        "line": 192,
+        "recorded_2026_09_20_final_cleanup": 191
+      },
+      "FunctionalInequalities.KLS.BorellRepresentation.exists_radius_lt": {
+        "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Construction.lean",
+        "line": 36,
+        "recorded_2026_09_20_final_cleanup": 35
+      },
+      "FunctionalInequalities.KLS.BorellRepresentation.le_envelope": {
+        "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Construction.lean",
+        "line": 161,
+        "recorded_2026_09_20_final_cleanup": 160
+      },
+      "FunctionalInequalities.KLS.BorellRepresentation.lowerDensity": {
+        "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Construction.lean",
+        "line": 54,
+        "recorded_2026_09_20_final_cleanup": 53
+      },
+      "FunctionalInequalities.KLS.BorellRepresentation.lowerDensity_ae_eq": {
+        "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Construction.lean",
+        "line": 95,
+        "recorded_2026_09_20_final_cleanup": 94
+      },
+      "FunctionalInequalities.KLS.BorellRepresentation.lowerDensity_le": {
+        "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Construction.lean",
+        "line": 85,
+        "recorded_2026_09_20_final_cleanup": 84
+      },
+      "FunctionalInequalities.KLS.BorellRepresentation.lowerDensity_logConcave": {
+        "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Construction.lean",
+        "line": 139,
+        "recorded_2026_09_20_final_cleanup": 138
+      },
+      "FunctionalInequalities.KLS.BorellRepresentation.measurable_ballRatio": {
+        "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Construction.lean",
+        "line": 70,
+        "recorded_2026_09_20_final_cleanup": 69
+      },
+      "FunctionalInequalities.KLS.BorellRepresentation.measurable_lowerDensity": {
+        "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Construction.lean",
+        "line": 75,
+        "recorded_2026_09_20_final_cleanup": 74
+      },
+      "FunctionalInequalities.KLS.BorellRepresentation.measurable_measure_closedBall": {
+        "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Construction.lean",
+        "line": 62,
+        "recorded_2026_09_20_final_cleanup": 61
+      },
+      "FunctionalInequalities.KLS.BorellRepresentation.radius": {
+        "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Construction.lean",
+        "line": 25,
+        "recorded_2026_09_20_final_cleanup": 24
+      },
+      "FunctionalInequalities.KLS.BorellRepresentation.radius_pos": {
+        "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Construction.lean",
+        "line": 28,
+        "recorded_2026_09_20_final_cleanup": 27
+      },
+      "FunctionalInequalities.KLS.BorellRepresentation.radius_two_mul_add_one": {
+        "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Construction.lean",
+        "line": 39,
+        "recorded_2026_09_20_final_cleanup": 38
+      },
+      "FunctionalInequalities.KLS.BorellRepresentation.tendsto_radius": {
+        "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Construction.lean",
+        "line": 31,
+        "recorded_2026_09_20_final_cleanup": 30
+      },
+      "FunctionalInequalities.KLS.BorellRepresentation.upperSemicontinuous_envelope": {
+        "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Construction.lean",
+        "line": 173,
+        "recorded_2026_09_20_final_cleanup": 172
+      },
+      "FunctionalInequalities.KLS.IsBorellDensity": {
+        "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Basic.lean",
+        "line": 31,
+        "recorded_2026_09_20_final_cleanup": 30
+      },
+      "FunctionalInequalities.KLS.IsBorellDensity.concaveOn_log": {
+        "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Basic.lean",
+        "line": 67,
+        "recorded_2026_09_20_final_cleanup": 66
+      },
+      "FunctionalInequalities.KLS.IsBorellDensity.continuousOn_interior_pos": {
+        "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Basic.lean",
+        "line": 157,
+        "recorded_2026_09_20_final_cleanup": 156
+      },
+      "FunctionalInequalities.KLS.IsBorellDensity.continuousOn_interior_support": {
+        "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Basic.lean",
+        "line": 169,
+        "recorded_2026_09_20_final_cleanup": 168
+      },
+      "FunctionalInequalities.KLS.IsBorellDensity.convex_pos": {
+        "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Basic.lean",
+        "line": 45,
+        "recorded_2026_09_20_final_cleanup": 44
+      },
+      "FunctionalInequalities.KLS.IsBorellDensity.exists_bounds_of_isCompact": {
+        "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Basic.lean",
+        "line": 178,
+        "recorded_2026_09_20_final_cleanup": 177
+      },
+      "FunctionalInequalities.KLS.IsBorellDensity.interior_support_subset": {
+        "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Basic.lean",
+        "line": 113,
+        "recorded_2026_09_20_final_cleanup": 112
+      },
+      "FunctionalInequalities.KLS.IsBorellDensity.measure_compl_pos": {
+        "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Basic.lean",
+        "line": 95,
+        "recorded_2026_09_20_final_cleanup": 94
+      },
+      "FunctionalInequalities.KLS.IsBorellDensity.pos_of_mem_interior_support": {
+        "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Basic.lean",
+        "line": 148,
+        "recorded_2026_09_20_final_cleanup": 147
+      },
+      "FunctionalInequalities.KLS.LogConcave.closure_convexHull_intrinsic_support": {
+        "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Intrinsic.lean",
+        "line": 69,
+        "recorded_2026_09_20_final_cleanup": 68
+      },
+      "FunctionalInequalities.KLS.LogConcave.exists_isBorellDensity": {
+        "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Intrinsic.lean",
+        "line": 99,
+        "recorded_2026_09_20_final_cleanup": 98
+      },
+      "FunctionalInequalities.KLS.LogConcave.exists_isBorellDensity_of_interior_support_nonempty": {
+        "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Construction.lean",
+        "line": 349,
+        "recorded_2026_09_20_final_cleanup": 348
+      },
+      "FunctionalInequalities.KLS.LogConcave.intrinsic_integrable_exp_norm": {
+        "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Intrinsic.lean",
+        "line": 111,
+        "recorded_2026_09_20_final_cleanup": 110
+      },
+      "FunctionalInequalities.KLS.LogConcave.intrinsic_integrable_norm_pow": {
+        "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Intrinsic.lean",
+        "line": 120,
+        "recorded_2026_09_20_final_cleanup": 119
+      },
+      "FunctionalInequalities.KLS.LogConcave.intrinsic_interior_support_compl": {
+        "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Intrinsic.lean",
+        "line": 79,
+        "recorded_2026_09_20_final_cleanup": 78
+      },
+      "FunctionalInequalities.Probability.integrable_norm_pow_of_integrable_exp_norm": {
+        "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Moments.lean",
+        "line": 200,
+        "recorded_2026_09_20_final_cleanup": 199
+      }
+    }
+  }
+}

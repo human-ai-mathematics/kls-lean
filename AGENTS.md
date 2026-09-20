@@ -32,3 +32,23 @@
 - Commits containing only non-Lean files must not trigger CI. Automatic workflow path filters
   select `**/*.lean`; commits with Lean changes retain normal CI. Never add `[skip ci]` to a
   commit containing Lean changes merely because it also updates progress documentation.
+
+# Formalization classification and layout
+
+- Before adding or splitting a module, or changing a public API, follow
+  `research/workflow.md` and the detailed rules in `research/naming.md`.
+- Classify by mathematical object, actual scope, role and dependency level. Reuse the existing
+  owning family; distinguish generic tools, object definitions, substantive properties, concrete
+  specializations, identification bridges, counterexamples and audit-only candidate statements.
+- Record a brief placement plan in the current task/handoff before editing: owner, scope,
+  destination, imports, extend/split/create decision, API impact and validation. This is not an
+  extra approval requirement, and small edits do not need a separate planning document.
+- Split when responsibilities or dependency requirements diverge, not solely because a file is
+  long. Do not create empty future modules or use `Basic`, `Misc` or `Utils` as catch-all files.
+- Review directory names, filenames and declaration names separately. Let family directories and
+  object namespaces carry context; preserve meaningful mathematical distinctions in the API.
+- Treat module moves and namespace/name changes as separate migration classes. Preserve the dirty
+  baseline, provide complete maps, update consumers, and compare semantic interfaces before
+  refreshing evidence. Historical records stay unchanged; no old-path wrappers or name aliases.
+- Finish with the change-appropriate checks in `research/workflow.md`; documentation-only edits
+  do not require a Lean rebuild, and layout cleanup does not change proof or certificate status.

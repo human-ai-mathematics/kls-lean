@@ -1,4 +1,4 @@
-import FunctionalInequalities.Energy.Euclidean.LipschitzApproximation
+import FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Approximation
 
 /-!
 # Lean certificate: `lem:covariance-test-core-density`

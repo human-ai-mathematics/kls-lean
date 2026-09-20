@@ -254,42 +254,44 @@ theorem closedWeightedOperator_one_eq_zero (hν : LogConcave ν)
 
 /-! ## Markov properties of the concrete heat semigroup -/
 
+namespace HeatSemigroup
+
 /-- The heat semigroup of a full-dimensional log-concave law preserves positivity. -/
-theorem heatSemigroup_positive (hν : LogConcave ν)
+theorem positive (hν : LogConcave ν)
     (hi : (interior (ν : Measure V).support).Nonempty) {t : ℝ} (ht : 0 ≤ t)
     {f : Lp ℝ 2 (ν : Measure V)} (hf : 0 ≤ f) :
-    0 ≤ hν.heatSemigroup m B hi ht f := by
-  exact LpMarkov.semigroupApply_positive
+    0 ≤ HeatSemigroup.operator m B hν hi ht f := by
+  exact FunctionalInequalities.Analysis.Semigroup.Generated.positive
     (hν.closedWeightedOperator_isClosed m B hi)
     (hν.dense_domain_closedWeightedOperator m B hi)
     (closedWeightedOperator_markovian m B hν hi) ht hf
 
 /-- The heat semigroup is order preserving. -/
-theorem heatSemigroup_mono (hν : LogConcave ν)
+theorem mono (hν : LogConcave ν)
     (hi : (interior (ν : Measure V).support).Nonempty) {t : ℝ} (ht : 0 ≤ t)
     {f g : Lp ℝ 2 (ν : Measure V)} (hfg : f ≤ g) :
-    hν.heatSemigroup m B hi ht f ≤ hν.heatSemigroup m B hi ht g := by
-  exact LpMarkov.semigroupApply_mono
+    HeatSemigroup.operator m B hν hi ht f ≤ HeatSemigroup.operator m B hν hi ht g := by
+  exact FunctionalInequalities.Analysis.Semigroup.Generated.mono
     (hν.closedWeightedOperator_isClosed m B hi)
     (hν.dense_domain_closedWeightedOperator m B hi)
     (closedWeightedOperator_markovian m B hν hi) ht hfg
 
 /-- The heat semigroup fixes the constant one. -/
-theorem heatSemigroup_one (hν : LogConcave ν)
+theorem one (hν : LogConcave ν)
     (hi : (interior (ν : Measure V).support).Nonempty) {t : ℝ} (ht : 0 ≤ t) :
-    hν.heatSemigroup m B hi ht (L2.const ν 1) = L2.const ν 1 := by
-  exact LpMarkov.semigroupApply_one
+    HeatSemigroup.operator m B hν hi ht (L2.const ν 1) = L2.const ν 1 := by
+  exact FunctionalInequalities.Analysis.Semigroup.Generated.one
     (hν.closedWeightedOperator_isClosed m B hi)
     (hν.dense_domain_closedWeightedOperator m B hi) ht
     (one_mem_domain_closedWeightedOperator m B hν hi)
     (closedWeightedOperator_one_eq_zero m B hν hi)
 
 /-- Upper-one functions remain upper bounded by one under the heat semigroup. -/
-theorem heatSemigroup_le_one (hν : LogConcave ν)
+theorem le_one (hν : LogConcave ν)
     (hi : (interior (ν : Measure V).support).Nonempty) {t : ℝ} (ht : 0 ≤ t)
     {f : Lp ℝ 2 (ν : Measure V)} (hf : f ≤ L2.const ν 1) :
-    hν.heatSemigroup m B hi ht f ≤ L2.const ν 1 := by
-  exact LpMarkov.semigroupApply_le_one
+    HeatSemigroup.operator m B hν hi ht f ≤ L2.const ν 1 := by
+  exact FunctionalInequalities.Analysis.Semigroup.Generated.le_one
     (hν.closedWeightedOperator_isClosed m B hi)
     (hν.dense_domain_closedWeightedOperator m B hi)
     (closedWeightedOperator_markovian m B hν hi) ht
@@ -297,12 +299,12 @@ theorem heatSemigroup_le_one (hν : LogConcave ν)
     (closedWeightedOperator_one_eq_zero m B hν hi) hf
 
 /-- Combined Markov bound: `0 ≤ f ≤ 1` implies `0 ≤ P_t f ≤ 1`. -/
-theorem heatSemigroup_subMarkov (hν : LogConcave ν)
+theorem subMarkov (hν : LogConcave ν)
     (hi : (interior (ν : Measure V).support).Nonempty) {t : ℝ} (ht : 0 ≤ t)
     {f : Lp ℝ 2 (ν : Measure V)} (hf0 : 0 ≤ f) (hf1 : f ≤ L2.const ν 1) :
-    0 ≤ hν.heatSemigroup m B hi ht f ∧
-      hν.heatSemigroup m B hi ht f ≤ L2.const ν 1 := by
-  exact LpMarkov.semigroupApply_subMarkov
+    0 ≤ HeatSemigroup.operator m B hν hi ht f ∧
+      HeatSemigroup.operator m B hν hi ht f ≤ L2.const ν 1 := by
+  exact FunctionalInequalities.Analysis.Semigroup.Generated.subMarkov
     (hν.closedWeightedOperator_isClosed m B hi)
     (hν.dense_domain_closedWeightedOperator m B hi)
     (closedWeightedOperator_markovian m B hν hi) ht
@@ -310,47 +312,49 @@ theorem heatSemigroup_subMarkov (hν : LogConcave ν)
     (closedWeightedOperator_one_eq_zero m B hν hi) hf0 hf1
 
 /-- The heat semigroup preserves the `L²` mean. -/
-theorem mean_heatSemigroup (hν : LogConcave ν)
+theorem mean (hν : LogConcave ν)
     (hi : (interior (ν : Measure V).support).Nonempty) {t : ℝ} (ht : 0 ≤ t)
     (f : Lp ℝ 2 (ν : Measure V)) :
-    L2.mean ν (hν.heatSemigroup m B hi ht f) = L2.mean ν f := by
-  exact LpMarkov.mean_semigroupApply
+    L2.mean ν (HeatSemigroup.operator m B hν hi ht f) = L2.mean ν f := by
+  exact FunctionalInequalities.Analysis.Semigroup.Generated.mean
     (hν.closedWeightedOperator_isClosed m B hi)
     (hν.dense_domain_closedWeightedOperator m B hi) ht
     (one_mem_domain_closedWeightedOperator m B hν hi)
     (closedWeightedOperator_one_eq_zero m B hν hi) f
 
 /-- The heat semigroup preserves the integral of every `L²` function. -/
-theorem integral_heatSemigroup (hν : LogConcave ν)
+theorem integral (hν : LogConcave ν)
     (hi : (interior (ν : Measure V).support).Nonempty) {t : ℝ} (ht : 0 ≤ t)
     (f : Lp ℝ 2 (ν : Measure V)) :
-    (∫ x, hν.heatSemigroup m B hi ht f x ∂(ν : Measure V)) =
+    (∫ x, HeatSemigroup.operator m B hν hi ht f x ∂(ν : Measure V)) =
       ∫ x, f x ∂(ν : Measure V) := by
   rw [← L2.mean_eq_integral, ← L2.mean_eq_integral]
-  exact mean_heatSemigroup m B hν hi ht f
+  exact HeatSemigroup.mean m B hν hi ht f
 
 /-- Absolute values are dominated pointwise in the `L²` order by applying the heat semigroup to
 the absolute value. -/
-theorem abs_heatSemigroup_le (hν : LogConcave ν)
+theorem abs_le (hν : LogConcave ν)
     (hi : (interior (ν : Measure V).support).Nonempty) {t : ℝ} (ht : 0 ≤ t)
     (f : Lp ℝ 2 (ν : Measure V)) :
-    |hν.heatSemigroup m B hi ht f| ≤ hν.heatSemigroup m B hi ht |f| := by
-  exact LpMarkov.abs_semigroupApply_le
+    |HeatSemigroup.operator m B hν hi ht f| ≤ HeatSemigroup.operator m B hν hi ht |f| := by
+  exact FunctionalInequalities.Analysis.Semigroup.Generated.abs_le
     (hν.closedWeightedOperator_isClosed m B hi)
     (hν.dense_domain_closedWeightedOperator m B hi)
     (closedWeightedOperator_markovian m B hν hi) ht f
 
 /-- Every finite symmetric essential bound is contracted by the heat semigroup. -/
-theorem abs_heatSemigroup_le_const (hν : LogConcave ν)
+theorem abs_le_const (hν : LogConcave ν)
     (hi : (interior (ν : Measure V).support).Nonempty) {t : ℝ} (ht : 0 ≤ t)
     (f : Lp ℝ 2 (ν : Measure V)) {C : ℝ} (hC : 0 ≤ C)
     (hf : |f| ≤ C • L2.const ν 1) :
-    |hν.heatSemigroup m B hi ht f| ≤ C • L2.const ν 1 := by
-  exact LpMarkov.abs_semigroupApply_le_const
+    |HeatSemigroup.operator m B hν hi ht f| ≤ C • L2.const ν 1 := by
+  exact FunctionalInequalities.Analysis.Semigroup.Generated.abs_le_const
     (hν.closedWeightedOperator_isClosed m B hi)
     (hν.dense_domain_closedWeightedOperator m B hi)
     (closedWeightedOperator_markovian m B hν hi) ht
     (one_mem_domain_closedWeightedOperator m B hν hi)
     (closedWeightedOperator_one_eq_zero m B hν hi) f hC hf
+
+end HeatSemigroup
 
 end FunctionalInequalities.KLS.LogConcave

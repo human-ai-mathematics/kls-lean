@@ -1,6 +1,6 @@
 import FunctionalInequalities.Energy.CovarianceGradient.Translation
 import FunctionalInequalities.Energy.Relaxation.Quadratic
-import FunctionalInequalities.KLS.LogConcave.WeightedGradient
+import FunctionalInequalities.KLS.LogConcave.WeightedGradient.Basic
 import FunctionalInequalities.Poincare.CovarianceGradient.Intrinsic
 import FunctionalInequalities.Poincare.CovarianceGradient.Transport
 import FunctionalInequalities.Probability.Covariance.Factorization

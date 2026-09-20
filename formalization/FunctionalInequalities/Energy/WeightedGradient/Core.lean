@@ -1,3 +1,4 @@
+import FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Approximation
 import FunctionalInequalities.Energy.WeightedGradient.Basic
 import FunctionalInequalities.Energy.Euclidean.WeakDerivative
 import FunctionalInequalities.L2.MeanVariance

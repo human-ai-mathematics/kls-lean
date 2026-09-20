@@ -1,13 +1,15 @@
 import FunctionalInequalities.Energy.LocalSlope.Basic
-import FunctionalInequalities.Energy.Euclidean.LipschitzApproximation
+import FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Measurable
 
 /-!
 # Local metric slope and the canonical Hilbert gradient
 
-Four proved interfaces for `thm:smooth-lipschitz-constant-equivalence`.
+Five proved interfaces for `thm:smooth-lipschitz-constant-equivalence`.
 Source: the existing `Energy.LocalSlope.apply` definition and Blueprint shared analytic bridges.
 Read the pointwise identity first, then its almost-everywhere consequence, extended energy
-identity, and finite-energy domain characterization. All four proofs are complete.
+identity, finite-energy domain characterization, and the real-integral form of the energy
+(`energy_eq_integral_gradient`, moved here from `Poincare/LipschitzGradient/Comparison.lean` by
+LD-013, statement and proof unchanged). All five proofs are complete.
 Proof acceptance: `research/decisions/2026-09-06-smooth-literature-proofs.md`.
 The earlier statement handoff remains a historical scope record.
 
@@ -130,5 +132,32 @@ theorem admissible_iff_memLp_gradient (hν : (ν : Measure E) ≪ m) (f : E → 
     refine ⟨hlip, hL2, ?_⟩
     rw [energy_eq_lintegral_gradient ν m hν f hlip]
     exact hmem.mp hgrad
+
+section RealIntegral
+
+/-! The real-integral form of the gradient energy. The binder context reproduces the one this
+theorem was elaborated in before the move, so its universe parameter, implicit type variable and
+hypothesis names are unchanged. -/
+
+universe u
+
+variable {V : Type u} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [CompleteSpace V]
+  [MeasurableSpace V] [BorelSpace V] [FiniteDimensional ℝ V]
+  (ν : ProbabilityMeasure V) (m : Measure V) [m.IsAddHaarMeasure]
+
+/-- The literature energy of a locally Lipschitz function with square-integrable gradient is the
+real integral of the squared gradient norm, under absolute continuity. -/
+theorem energy_eq_integral_gradient
+    (hac : (ν : Measure V) ≪ m) (f : V → ℝ) (hf : LocallyLipschitz f)
+    (hg : MemLp (gradient f) 2 (ν : Measure V)) :
+    energy ν f = ENNReal.ofReal (∫ x, ‖gradient f x‖ ^ 2 ∂(ν : Measure V)) := by
+  rw [energy_eq_lintegral_gradient ν m hac f hf,
+    ofReal_integral_eq_lintegral_ofReal ((memLp_two_iff_integrable_sq_norm hg.1).mp hg)
+      (ae_of_all _ fun x ↦ sq_nonneg ‖gradient f x‖)]
+  congr 1
+  funext x
+  rw [ENNReal.ofReal_pow (norm_nonneg _) 2]
+
+end RealIntegral
 
 end FunctionalInequalities.Energy.LocalSlope

@@ -1,4 +1,4 @@
-import FunctionalInequalities.KLS.LogConcave.WeightedGradient
+import FunctionalInequalities.KLS.LogConcave.WeightedGradient.Basic
 import Mathlib.Analysis.Normed.Lp.MeasurableSpace
 
 /-!

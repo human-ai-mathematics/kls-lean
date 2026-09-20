@@ -1,4 +1,4 @@
-import FunctionalInequalities.Poincare.LocalSlope.Gradient
+import FunctionalInequalities.KLS.LogConcave.Poincare
 
 /-!
 # Scope audit for the literature-Poincaré clause of `thm:klartag-density-frontend-identification`

@@ -1,8 +1,6 @@
 import FunctionalInequalities.Energy.LocalSlope.Gradient
 import FunctionalInequalities.Energy.SmoothGradient.Intrinsic.Basic
 import FunctionalInequalities.Energy.Relaxation.LowerSemicontinuous
-import FunctionalInequalities.KLS.LogConcave.Density.AbsoluteContinuity
-import FunctionalInequalities.Poincare.LipschitzGradient.Comparison
 import FunctionalInequalities.L2.MeanVariance
 
 /-!
@@ -24,10 +22,11 @@ space `L²(ν)` is lower semicontinuous and is the largest lower-semicontinuous 
 the raw energy on tests (`LocalSlope.lowerSemicontinuous_relaxation`,
 `LocalSlope.le_relaxation_of_lowerSemicontinuous`).
 
-The reverse comparison `LocalSlope.relaxation ν = AsymptoticLipschitz.relaxation ν` for singular
-laws (Ambrosio--Gigli--Savaré 2013) is **not** proved here and is not used: it is an open
-obligation kept in `Energy/WIP/Cheeger.lean`.  Nothing in this module is a Poincaré inequality,
-a Cheeger energy, or a statement about individual tests.
+The equality `LocalSlope.relaxation ν = AsymptoticLipschitz.relaxation ν` is proved downstream
+for every Borel probability law on a finite-dimensional inner-product space in
+`Energy/Cheeger/Identification.lean` (`LocalSlope.relaxation_eq_asymptoticLipschitz`). This
+foundational module does not use that equality. The identification concerns relaxed energies,
+not agreement on individual tests, a finiteness assertion, or a Poincaré inequality.
 -/
 
 noncomputable section

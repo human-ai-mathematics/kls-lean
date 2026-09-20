@@ -1,4 +1,4 @@
-import FunctionalInequalities.KLS.Geometry.Surface.Slicing
+import FunctionalInequalities.Analysis.Hausdorff.SurfaceSlicing
 
 /-! # Measurability of weighted level-set integrals
 
@@ -12,7 +12,7 @@ of `sorry` and of transitive `sorryAx`.
 The proof is `KLS.aemeasurable_setLIntegral_inter_levelSet` (obligation `L5` of the weighted coarea
 route) at `S = Set.univ`, which is itself built from the measurable Eilenberg majorant (`L1`), null
 slicing (`L2`), compact-slice measurability (`L3`) and the Borel version (`L4`) of
-`KLS/Geometry/Surface/Slicing.lean` and `Analysis/Hausdorff/Content.lean`.  No parametric-integral
+`Analysis/Hausdorff/SurfaceSlicing.lean` and `Analysis/Hausdorff/Content.lean`.  No parametric-integral
 theorem is used, so the codimension-one surface measure is never assumed `SFinite`, which it is not
 in positive dimension.
 

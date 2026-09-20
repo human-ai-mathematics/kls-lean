@@ -1,4 +1,4 @@
-import FunctionalInequalities.Energy.Euclidean.LipschitzApproximation
+import FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Measurable
 import FunctionalInequalities.Energy.Relaxation.Basic
 import FunctionalInequalities.Probability.AffineSupport
 import FunctionalInequalities.Probability.Covariance.Basic

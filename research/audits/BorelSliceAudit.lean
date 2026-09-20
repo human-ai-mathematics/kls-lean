@@ -1,9 +1,9 @@
-import FunctionalInequalities.KLS.Geometry.Surface.Slicing
+import FunctionalInequalities.Analysis.Hausdorff.SurfaceSlicing
 
 /-!
 # Strict audit client for Borel slices and measurable weights (obligations `L4`, `L5`, target `T1`)
 
-Independent client of `KLS/Geometry/Surface/Slicing.lean`.  `target_L4`, `target_L5` and
+Independent client of `Analysis/Hausdorff/SurfaceSlicing.lean`.  `target_L4`, `target_L5` and
 `target_T1` state the route's `L4`, `L5` and first original target quantifier for quantifier and
 prove them; `target_L4_of_lipschitzOnWith` and `target_L5_of_lipschitzOnWith` prove the same
 conclusions with `[CompleteSpace V]` dropped and global Lipschitz weakened to continuity plus

@@ -7,8 +7,8 @@ STATES = {'formalized': '✓ Formalized in Lean', 'partial': '◐ Partially form
           'pending': '○ Not yet formalized', 'excluded': '— Excluded: refuted', 'logic': 'OR'}
 STYLES = {'done': 'fill:#dbeafe,stroke:#2563eb,color:#1e3a8a',
           'partial': 'fill:#fff3df,stroke:#c88719,color:#66420d',
-          'todo': 'fill:#f2f2f2,stroke:#888,color:#333',
-          'focus': 'fill:#fff0dc,stroke:#d47b13,color:#663800,stroke-width:3px',
+          'todo': 'fill:#fee2e2,stroke:#dc2626,color:#991b1b',
+          'focus': 'fill:#fee2e2,stroke:#dc2626,color:#991b1b,stroke-width:3px',
           'logic': 'fill:#fff,stroke:#555,color:#222'}
 
 

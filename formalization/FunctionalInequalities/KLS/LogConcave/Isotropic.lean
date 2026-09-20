@@ -1,7 +1,7 @@
 import FunctionalInequalities.Energy.CovarianceGradient.LinearEquiv
 import FunctionalInequalities.KLS.Isotropic
 import FunctionalInequalities.KLS.LogConcave.Translation
-import FunctionalInequalities.KLS.LogConcave.WeightedGradient
+import FunctionalInequalities.KLS.LogConcave.WeightedGradient.Basic
 import FunctionalInequalities.KLS.Statement
 import FunctionalInequalities.Poincare.LipschitzGradient.Comparison
 import FunctionalInequalities.Poincare.L2.Comparison

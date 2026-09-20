@@ -1,10 +1,191 @@
 # KLS Lean repository handoff
 
+## Current layout update: cleanup completed (2026-09-20)
+
+LD-001–013 are resolved; see the [technical-debt register](research/technical-debt/README.md) for
+the later verifier, ignore-rule and layering repairs (LD-010–013), which are not covered by the
+three layout records linked below.
+
+LD-001–009 are resolved. The semigroup family migration renames 48 APIs; the approximation and
+Borell representation files are split by responsibility. LC-003/004 are reviewed accepted API
+choices, not outstanding mandatory cleanup. See the
+[final decision](research/decisions/2026-09-20-final-cleanup.md),
+[migration map](research/api-migration/2026-09-20-final-cleanup-map.json), and
+[final checks](research/technical-debt/2026-09-20-final-checks.json).
+Mathematical scope and proof status are unchanged. Earlier layout notes below are historical.
+
+
+## Current layout update: concrete frontends and closed gradient (2026-09-20)
+
+LD-006/007/009 separate generic comparison, log-concave specialization and closed-gradient
+prerequisites. See [the decision](research/decisions/2026-09-20-interface-layout.md) and
+[source/declaration map](research/api-migration/2026-09-20-interface-layout-map.json).
+Old names and theorem contracts remain unchanged; historical paths below resolve through the map.
+LD-008 was subsequently completed in the final cleanup above.
+
+
+## Current layout update: Hausdorff foundations (2026-09-20)
+
+LD-003/004 move generic normalized measures and slicing below KLS geometry. See
+[the placement decision](research/decisions/2026-09-20-hausdorff-layout.md) and
+[complete source/declaration map](research/api-migration/2026-09-20-hausdorff-layout-map.json).
+Namespaces, mathematical scope and proof/certificate status are unchanged. Older path mentions
+below are historical; use the map to resolve them. The dimension-free KLS bound remains open.
+
+
 命名空间已表达的内容不再重复进声明短名；见[短名补充记录](research/decisions/2026-09-08-namespace-short-names.md)。
 比较名称也只写一次共有操作，见[比较短名记录](research/decisions/2026-09-08-comparison-short-names.md)。
 
 This is the current operational handoff for `kls-lean`. It records repository identity,
 authority boundaries, certified results, exact non-claims, and reproducible checks.
+
+## Current operational status (2026-09-20)
+
+This section is the current handoff. The dated rounds below are historical records; their
+hole counts, assignments and "next" steps describe those rounds, not today's queue.
+
+- **26 registered certificates; one deliberate target hole** in `KLS/Target.lean`. No former
+  coarea/Sard/Cheeger/Energy WIP module remains. The target is outside every certificate closure.
+- **Proved:** sharp scalar Sard, scalar/vector coarea through locally Lipschitz maps, the
+  Cheeger superlevel bound and infimum equality, `E^can = 2 Ch` for every Borel probability law,
+  and the literature Poincaré gradient characterization.
+- **Cheeger–Buser boundary:** `C_P^lit ≤ 4 Ψ²` is proved; the reverse inequality is proved with
+  constant 12 for affine-support dimension at most one. The target constant π is still open
+  locally. The dimension-free KLS bound and the four routes' research conditions remain open.
+- **Semigroup gaps 1 and 2:** S1–S8 and the weighted-gradient specialisation are proved, as are
+  the Markov properties in `Analysis/Semigroup/Generated/Markov.lean` and
+  `KLS/LogConcave/HeatSemigroup/Markov.lean`. The latter states full-dimensional results on `L²`;
+  apply them to the intrinsic law to cover lower-dimensional support. A standalone extension
+  to all `L¹` functions is not claimed by these results.
+- **Generator on smooth tests (2026-09-20):** for `ν = m.tilted (-U)` with a `C¹` potential and
+  unit weight, weighted integration by parts `∫ ⟪∇f, ∇g⟫ dν = ∫ (-ℒf) g dν` (`G0`) and, for every
+  `f ∈ C_c^∞`, `[f] ∈ D(T̄†T̄)` with `T̄†T̄ [f] = [-ℒf]`, `ℒf = Δf - ⟪∇U, ∇f⟫` (`G1`), are proved in
+  `Analysis/BakryEmery/IntegrationByParts.lean` and `KLS/LogConcave/HeatSemigroup/Generator.lean`.
+  These are per-test statements: `C_c^∞` is not shown to be an operator core of `T̄†T̄`.
+- **Local `Γ`/`Γ₂` calculus (2026-09-20, later):** with `Γ(f, g) = ⟪∇f, ∇g⟫` and
+  `Γ₂(f) = ℒ(Γ(f, f))/2 - Γ(f, ℒf)` in the diffusion convention, the product identity `B0`, the
+  positive semidefiniteness of the Hessian of a `C²` convex potential `B1`, the Bochner identity
+  `Γ₂(f) = ∑ᵢ∑ⱼ (D²f(eᵢ, eⱼ))² + D²U(∇f, ∇f)` in the **fixed** standard orthonormal basis `B3`,
+  and `Γ₂ ≥ 0` for convex potentials `B4` are proved in `Analysis/BakryEmery/Gamma.lean` and
+  `Analysis/BakryEmery/Bochner.lean`. These are pointwise identities for smooth functions; basis
+  independence of the Hessian square is not proved, and no semigroup estimate follows yet.
+- **Generator-domain interface (S0a, 2026-09-20):** right quotient limits characterize `D(A)`;
+  for `f ∈ D(A)` and `t ≥ 0`, `P_t f ∈ D(A)`, `A(P_t f)=P_t(Af)`, and the right derivative is
+  `-A(P_t f)`. The heat wrappers allow arbitrary weights and provide a closed weighted gradient.
+  See [D0–D4](research/decisions/2026-09-20-semigroup-domain-stability.md). Arbitrary-input
+  positive-time smoothing, full form-domain invariance and classical representatives remain open.
+- **Remaining analytic work:** positive-time regularity, full form-domain stability, time differentiation
+  of `s ↦ P_s Γ(P_{t-s} f)`, the Bakry–Émery gradient estimates, passage from smooth potentials to
+  general log-concave laws, and small-time heat estimates with constants sufficient for the π
+  target. The earlier Markov handoff is completed in its stated scope.
+
+**Module/API organization (2026-09-20, after S0a):** generic differential tools now live in
+`BakryEmery/Calculus.lean`, the classical weighted operator in `Laplacian.lean`, and the
+canonical-energy bridge in `WeightedGradient/Energy.lean`. Yosida laws and the independent
+exponential-family counterexample are separate. S0a APIs use `Analysis.Semigroup.Generated`
+and `KLS.LogConcave.HeatSemigroup`; see the [layout and exact name map](research/decisions/2026-09-20-semigroup-layout.md).
+This is a semantics-preserving reorganization, with no new proof milestone.
+
+**Next task (owner priority):** [complete the general-law Buser inequality with constant π](research/decisions/2026-09-20-buser-handoff-prompt.md),
+then combine it with the existing Cheeger half. Route analysis, generator identification,
+Bochner/gradient estimates, general-law approximation and small-time heat estimates are internal
+milestones. Continue implementation beyond the route file; the acceptance target is the exact
+original Buser statement with no unresolved analytic premises. The smooth `B = I` subclass may
+be an intermediate step only. A formal Bochner computation alone is not a semigroup estimate.
+This supersedes the earlier route-exploration-only scope; it changes no proof status.
+
+**Immediate semigroup cut after S0a:** full `D(T)` form-domain invariance and energy contraction;
+see the [minimal remaining estimates](research/decisions/2026-09-20-semigroup-domain-stability.md#next-cut).
+
+**Verifier scope since LD-010/011:** `research/verify.py` now has 11 structural/build gates plus
+one strict gate per live `research/audits/**/*.lean` client, all run against a filtered view that
+contains only current modules. See the [audit-coverage repair](research/decisions/2026-09-20-audit-coverage.md),
+the [review remediation](research/decisions/2026-09-20-review-remediation.md) (LD-011 checked
+module provenance, LD-012 rooted ignore patterns) and the
+[closeout correction](research/decisions/2026-09-20-review-closeout.md). Receipts written before
+that repair record a narrower 10-gate scope and must not be quoted as current coverage.
+
+**Evidence:** the current local receipt is named in `build/verification/latest.json`. The most
+recent passing run records 95 gates, 84 strict research-audit clients, 284 replayed modules and
+367 standard-only axiom reports over a 789-file source snapshot. A receipt certifies only its own
+recorded snapshot: editing any tracked document changes that snapshot, so do not quote an earlier
+receipt as a fresh verification of a later revision. See the
+[status correction record](research/decisions/2026-09-20-current-status-alignment.md) and the
+[independent-review fixes](research/decisions/2026-09-20-review-fixes.md).
+
+## Generator identification on smooth tests: `G0` and `G1` proved (2026-09-20)
+
+**Implementation round, the first internal milestone of the full Buser task; it changes none of
+the registration numbers.** Certificates stay **26**, the deliberate target hole stays the only one.
+
+**Proved.** Let `ν` be a full-dimensional log-concave law with `(ν : Measure V) = m.tilted (-U)`
+for a Haar measure `m` and a `C¹` potential `U`, and `T̄` the closed unit-weight gradient, so that
+`P_t = exp (-t T̄†T̄)`. `G0`: `∫ ⟪∇f, ∇g⟫ dν = ∫ (-ℒf) g dν` for `C²` compactly supported `f` and
+`C¹` `g` (`Analysis.BakryEmery.integral_inner_gradient_tilted`, from the Haar identity
+`∫ w ⟪∇f, ∇g⟫ dm = -∫ (w Δf + ⟪∇w, ∇f⟫) g dm` summed over the standard orthonormal basis), where
+`ℒf = Δf - ⟪∇U, ∇f⟫` is `Analysis.BakryEmery.weightedLaplacian`. `G1`: for every `f ∈ C_c^∞`,
+`-ℒf ∈ L²(ν)`, `[f] ∈ D(T̄†T̄)` and `T̄†T̄ [f] = [-ℒf]` (`KLS.LogConcave.adjointComp_toLp_eq`), proved
+through the adjoint: the weak identity holds on the smooth core by `G0`, extends to all of `D(T̄)`
+by the new closure lemma `Analysis.Semigroup.inner_eq_inner_closure_apply`, and the adjoint's
+defining property does the rest. So `d/dt P_t f |_{t=0} = ℒf` on smooth tests, with the sign
+convention of the route record. `research/audits/BakryEmeryGeneratorAudit.lean` discharges `G0`
+and `G1` verbatim plus three consistency uses; **32 standard-only axiom reports**.
+
+**Not proved.** That `C_c^∞` is an operator core of `T̄†T̄`, or that the closure of `-ℒ` on `C_c^∞`
+is `T̄†T̄`; `Γ`, `Γ₂`, Bochner (`B0`, `B1`, `B3`, `B4` remained type-checked candidates at the time
+of this round; they are proved in the following round), any
+regularity of `P_t f` for `t > 0`, any gradient estimate, the general-law passage and Buser. The
+premise `ν = m.tilted (-U)` is explicit and is not derived from log-concavity; no convexity is used.
+
+**Verification.** Default `lake build` (3548 jobs; the aggregate root now also imports the
+previously unlisted `Generated/Markov`, `HeatSemigroup/Markov`, `CanonicalEnergy` and
+`BakryEmery/Basic` modules) passed. The two Bakry–Émery audit files compile with
+`-DwarningAsError=true`, 0 errors, 0 warnings; **32 axiom reports, 0 `sorryAx`**. `check_ledger.py`
+**26** certificates, 0 errors; `check_blueprint.py` 88 labels, 0 errors; `atlas.py check` 75 nodes,
+26 certificates, no cycles; 104 unit tests. The root `python3 research/verify.py` was rerun at the
+end of the round; its receipt is identified in
+`build/audit/generator-identification/final-snapshot.json`.
+
+See [the implementation record](research/decisions/2026-09-20-generator-identification.md) and
+[the route record](research/decisions/2026-09-20-bakry-emery-route.md). No commit or push; the
+real Git index is unchanged.
+
+## Local Bakry–Émery calculus: `B0`–`B4` proved (2026-09-20, later)
+
+**Implementation round, the second internal milestone of the full Buser task; it changes none of
+the registration numbers.** Certificates stay **26**, the deliberate target hole stays the only one.
+
+**Proved.** On a finite-dimensional real inner product space, with the diffusion generator
+`ℒf = Δf - ⟪∇U, ∇f⟫`, the carré du champ `Γ(f, g) = ⟪∇f, ∇g⟫` (`Analysis.BakryEmery.gamma`) and
+`Γ₂(f) = ℒ(Γ(f, f))/2 - Γ(f, ℒf)` (`Analysis.BakryEmery.gammaTwo`):
+`B0` `(ℒ(fg) - fℒg - gℒf)/2 = Γ(f, g)` for `C²` `f, g` and any `U` (`gamma_eq_weightedLaplacian`);
+`B1` `0 ≤ D²U(x)(v, v)` for `C²` convex `U` (`bilinearIteratedFDerivTwo_nonneg_of_convexOn`, through
+the line `t ↦ U(x + tv)`, `ConvexOn.monotoneOn_deriv` and `Monotone.deriv_nonneg`);
+`B3` `Γ₂(f) = ∑ᵢ∑ⱼ (D²f(eᵢ, eⱼ))² + D²U(∇f, ∇f)` for `C²` `U` and `C³` `f`, `eᵢ` the fixed standard
+orthonormal basis (`gammaTwo_eq_hessianSqStdBasis_add`; expanded verbatim form `bochner_stdBasis`);
+`B4` `0 ≤ Γ₂(f)` for convex `U` (`gammaTwo_nonneg`, `bochner_nonneg_stdBasis`). The third-order
+terms of `Δ‖∇f‖²/2` and `⟪∇f, ∇Δf⟫` cancel through `fderiv_fderiv_fderiv_apply_comm`
+(`∂ⱼ∂ᵢ∂ᵢf = ∂ᵢ∂ᵢ∂ⱼf`, from the `B2` symmetry applied twice); the drift terms leave `+D²U(∇f, ∇f)`.
+`research/audits/BakryEmeryBochnerAudit.lean` restates `B0`–`B4` verbatim, adds the `Γ₂` forms and
+the boundary checks `U = 0` (Euclidean Bochner), affine `f`, zero dimension, and a one-dimensional
+value `Γ₂(t²)(0) = 4` computed independently of `B3`; **70 standard-only axiom reports, 0 `sorryAx`**.
+
+**Not proved.** Basis independence of the Hessian square (`hessianSqStdBasis` stays tied to
+`stdOrthonormalBasis`; no invariant Hilbert–Schmidt notation is introduced); any regularity of
+`P_t f` for `t > 0`, stability of `D(T̄)` or `D(T̄†T̄)` under `P_t`, time differentiation of
+`s ↦ P_s Γ(P_{t-s} f)`, `Γ(P_t f) ≤ P_t Γ(f)`, the `L¹` gradient bound, the general-law passage,
+an operator core, and Buser. A formal Bochner identity is not a semigroup estimate.
+
+**Verification.** `Gamma.lean`, `Bochner.lean`, `BakryEmeryBochnerAudit.lean` and
+`BakryEmeryRouteStatements.lean` compile with `-DwarningAsError=true`, 0 errors, 0 warnings. Default
+`lake build` (3550 jobs; the aggregate root now imports the two new modules) passed.
+`check_ledger.py` **26** certificates, 0 errors; `check_blueprint.py` 88 labels, 0 errors;
+`atlas.py check` 75 nodes, 26 certificates, no cycles; 104 unit tests. The root
+`python3 research/verify.py` was rerun at the end of the round; its receipt is identified in
+`build/audit/bochner-identification/final-snapshot.json`.
+
+See [the implementation record](research/decisions/2026-09-20-bochner-identification.md). No commit
+or push; the real Git index is unchanged.
 
 ## Consolidated submission review (2026-09-17)
 
@@ -4035,7 +4216,7 @@ by `Solutions.ThmCompactBorellLogconcavityEquivalence.certificate` and registere
 contracts, so `def:conditional-fiber-form` carries `\leanok` as a definition node.
 
 The same day, `thm:borell-logconcave-density` was first drafted and then proved.
-`KLS/LogConcave/Density/BorellRepresentation.lean` defines the representative predicate
+`KLS/LogConcave/Density/BorellRepresentation/Intrinsic.lean` defines the representative predicate
 `KLS.IsBorellDensity` and proves existence of an upper semicontinuous log-concave density of the
 intrinsic law relative to every Haar measure on the direction space, positivity of every such
 representative on the interior of the support, positive two-sided bounds on compact subsets of

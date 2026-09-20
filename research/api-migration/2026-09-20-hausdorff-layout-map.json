@@ -1,0 +1,281 @@
+{
+  "date": "2026-09-20",
+  "scope": "LD-003 and LD-004; namespace and declaration names preserved",
+  "paths": {
+    "formalization/FunctionalInequalities/KLS/Geometry/Surface/Measure.lean": [
+      "formalization/FunctionalInequalities/Analysis/Hausdorff/Measure.lean"
+    ],
+    "formalization/FunctionalInequalities/KLS/Geometry/Surface/Slicing.lean": [
+      "formalization/FunctionalInequalities/Analysis/Hausdorff/SurfaceSlicing.lean"
+    ],
+    "formalization/FunctionalInequalities/KLS/Geometry/Surface/Homothety.lean": [
+      "formalization/FunctionalInequalities/KLS/Geometry/SmoothDomain/Homothety.lean"
+    ],
+    "formalization/FunctionalInequalities/Analysis/Hausdorff/LevelSet.lean": [
+      "formalization/FunctionalInequalities/Probability/BrunnMinkowski.lean",
+      "formalization/FunctionalInequalities/Analysis/Hausdorff/Isodiametric.lean",
+      "formalization/FunctionalInequalities/Analysis/Hausdorff/Volume.lean",
+      "formalization/FunctionalInequalities/Analysis/Hausdorff/LevelSet.lean"
+    ],
+    "formalization/FunctionalInequalities/KLS/Geometry/SmoothDomain/Basic.lean": [
+      "formalization/FunctionalInequalities/Analysis/Hausdorff/Volume.lean",
+      "formalization/FunctionalInequalities/KLS/Geometry/SmoothDomain/Basic.lean"
+    ]
+  },
+  "declarations": {
+    "FunctionalInequalities.Analysis.isodiametric": {
+      "old_module": "FunctionalInequalities.Analysis.Hausdorff.LevelSet",
+      "old_line": 413,
+      "new_module": "FunctionalInequalities.Analysis.Hausdorff.Isodiametric",
+      "new_line": 31
+    },
+    "FunctionalInequalities.Analysis.exists_hausdorffMeasure_levelSet_lt_top": {
+      "old_module": "FunctionalInequalities.Analysis.Hausdorff.LevelSet",
+      "old_line": 788,
+      "new_module": "FunctionalInequalities.Analysis.Hausdorff.LevelSet",
+      "new_line": 87
+    },
+    "FunctionalInequalities.Analysis.exists_lipschitzOnWith_levelSet_subset_image": {
+      "old_module": "FunctionalInequalities.Analysis.Hausdorff.LevelSet",
+      "old_line": 733,
+      "new_module": "FunctionalInequalities.Analysis.Hausdorff.LevelSet",
+      "new_line": 32
+    },
+    "FunctionalInequalities.KLS.hausdorffNormalized": {
+      "old_module": "FunctionalInequalities.KLS.Geometry.Surface.Measure",
+      "old_line": 40,
+      "new_module": "FunctionalInequalities.Analysis.Hausdorff.Measure",
+      "new_line": 32
+    },
+    "FunctionalInequalities.KLS.surfaceMeasure": {
+      "old_module": "FunctionalInequalities.KLS.Geometry.Surface.Measure",
+      "old_line": 46,
+      "new_module": "FunctionalInequalities.Analysis.Hausdorff.Measure",
+      "new_line": 38
+    },
+    "FunctionalInequalities.KLS.unitBallVolume": {
+      "old_module": "FunctionalInequalities.KLS.Geometry.Surface.Measure",
+      "old_line": 36,
+      "new_module": "FunctionalInequalities.Analysis.Hausdorff.Measure",
+      "new_line": 28
+    },
+    "FunctionalInequalities.KLS.ae_surfaceMeasure_inter_levelSet_eq_zero": {
+      "old_module": "FunctionalInequalities.KLS.Geometry.Surface.Slicing",
+      "old_line": 142,
+      "new_module": "FunctionalInequalities.Analysis.Hausdorff.SurfaceSlicing",
+      "new_line": 142
+    },
+    "FunctionalInequalities.KLS.aemeasurable_setLIntegral_inter_levelSet": {
+      "old_module": "FunctionalInequalities.KLS.Geometry.Surface.Slicing",
+      "old_line": 250,
+      "new_module": "FunctionalInequalities.Analysis.Hausdorff.SurfaceSlicing",
+      "new_line": 250
+    },
+    "FunctionalInequalities.KLS.aemeasurable_surfaceMeasure_inter_levelSet": {
+      "old_module": "FunctionalInequalities.KLS.Geometry.Surface.Slicing",
+      "old_line": 214,
+      "new_module": "FunctionalInequalities.Analysis.Hausdorff.SurfaceSlicing",
+      "new_line": 214
+    },
+    "FunctionalInequalities.KLS.coe_eilenbergConstant": {
+      "old_module": "FunctionalInequalities.KLS.Geometry.Surface.Slicing",
+      "old_line": 63,
+      "new_module": "FunctionalInequalities.Analysis.Hausdorff.SurfaceSlicing",
+      "new_line": 63
+    },
+    "FunctionalInequalities.KLS.eilenbergConstant": {
+      "old_module": "FunctionalInequalities.KLS.Geometry.Surface.Slicing",
+      "old_line": 59,
+      "new_module": "FunctionalInequalities.Analysis.Hausdorff.SurfaceSlicing",
+      "new_line": 59
+    },
+    "FunctionalInequalities.KLS.eilenbergConstant_pos": {
+      "old_module": "FunctionalInequalities.KLS.Geometry.Surface.Slicing",
+      "old_line": 67,
+      "new_module": "FunctionalInequalities.Analysis.Hausdorff.SurfaceSlicing",
+      "new_line": 67
+    },
+    "FunctionalInequalities.KLS.exists_isCompact_seq_volume_sdiff_eq_zero": {
+      "old_module": "FunctionalInequalities.KLS.Geometry.Surface.Slicing",
+      "old_line": 178,
+      "new_module": "FunctionalInequalities.Analysis.Hausdorff.SurfaceSlicing",
+      "new_line": 178
+    },
+    "FunctionalInequalities.KLS.exists_measurable_majorant": {
+      "old_module": "FunctionalInequalities.KLS.Geometry.Surface.Slicing",
+      "old_line": 87,
+      "new_module": "FunctionalInequalities.Analysis.Hausdorff.SurfaceSlicing",
+      "new_line": 87
+    },
+    "FunctionalInequalities.KLS.measurable_surfaceMeasure_inter_levelSet": {
+      "old_module": "FunctionalInequalities.KLS.Geometry.Surface.Slicing",
+      "old_line": 159,
+      "new_module": "FunctionalInequalities.Analysis.Hausdorff.SurfaceSlicing",
+      "new_line": 159
+    },
+    "FunctionalInequalities.Analysis.hausdorffMeasure_finrank_eq_smul_volume": {
+      "old_module": "FunctionalInequalities.Analysis.Hausdorff.LevelSet",
+      "old_line": 654,
+      "new_module": "FunctionalInequalities.Analysis.Hausdorff.Volume",
+      "new_line": 205
+    },
+    "FunctionalInequalities.Analysis.volume_le_ofReal_mul_hausdorffMeasure": {
+      "old_module": "FunctionalInequalities.Analysis.Hausdorff.LevelSet",
+      "old_line": 477,
+      "new_module": "FunctionalInequalities.Analysis.Hausdorff.Volume",
+      "new_line": 28
+    },
+    "FunctionalInequalities.KLS.hausdorffNormalized_finrank_eq_volume": {
+      "old_module": "FunctionalInequalities.KLS.Geometry.SmoothDomain.Basic",
+      "old_line": 36,
+      "new_module": "FunctionalInequalities.Analysis.Hausdorff.Volume",
+      "new_line": 295
+    },
+    "FunctionalInequalities.KLS.SmoothDomain": {
+      "old_module": "FunctionalInequalities.KLS.Geometry.SmoothDomain.Basic",
+      "old_line": 54,
+      "new_module": "FunctionalInequalities.KLS.Geometry.SmoothDomain.Basic",
+      "new_line": 22
+    },
+    "FunctionalInequalities.KLS.SmoothDomain.addHaar_frontier": {
+      "old_module": "FunctionalInequalities.KLS.Geometry.SmoothDomain.Basic",
+      "old_line": 404,
+      "new_module": "FunctionalInequalities.KLS.Geometry.SmoothDomain.Basic",
+      "new_line": 372
+    },
+    "FunctionalInequalities.KLS.SmoothDomain.coe_homothetyHomeomorph": {
+      "old_module": "FunctionalInequalities.KLS.Geometry.SmoothDomain.Basic",
+      "old_line": 261,
+      "new_module": "FunctionalInequalities.KLS.Geometry.SmoothDomain.Basic",
+      "new_line": 229
+    },
+    "FunctionalInequalities.KLS.SmoothDomain.coe_homothetyHomeomorph_symm": {
+      "old_module": "FunctionalInequalities.KLS.Geometry.SmoothDomain.Basic",
+      "old_line": 265,
+      "new_module": "FunctionalInequalities.KLS.Geometry.SmoothDomain.Basic",
+      "new_line": 233
+    },
+    "FunctionalInequalities.KLS.SmoothDomain.empty": {
+      "old_module": "FunctionalInequalities.KLS.Geometry.SmoothDomain.Basic",
+      "old_line": 196,
+      "new_module": "FunctionalInequalities.KLS.Geometry.SmoothDomain.Basic",
+      "new_line": 164
+    },
+    "FunctionalInequalities.KLS.SmoothDomain.frontier_homothety": {
+      "old_module": "FunctionalInequalities.KLS.Geometry.SmoothDomain.Basic",
+      "old_line": 335,
+      "new_module": "FunctionalInequalities.KLS.Geometry.SmoothDomain.Basic",
+      "new_line": 303
+    },
+    "FunctionalInequalities.KLS.SmoothDomain.frontier_inter_eq": {
+      "old_module": "FunctionalInequalities.KLS.Geometry.SmoothDomain.Basic",
+      "old_line": 73,
+      "new_module": "FunctionalInequalities.KLS.Geometry.SmoothDomain.Basic",
+      "new_line": 41
+    },
+    "FunctionalInequalities.KLS.SmoothDomain.hausdorff_frontier_homothety": {
+      "old_module": "FunctionalInequalities.KLS.Geometry.SmoothDomain.Basic",
+      "old_line": 525,
+      "new_module": "FunctionalInequalities.KLS.Geometry.SmoothDomain.Basic",
+      "new_line": 493
+    },
+    "FunctionalInequalities.KLS.SmoothDomain.homothety": {
+      "old_module": "FunctionalInequalities.KLS.Geometry.SmoothDomain.Basic",
+      "old_line": 295,
+      "new_module": "FunctionalInequalities.KLS.Geometry.SmoothDomain.Basic",
+      "new_line": 263
+    },
+    "FunctionalInequalities.KLS.SmoothDomain.homothetyHomeomorph": {
+      "old_module": "FunctionalInequalities.KLS.Geometry.SmoothDomain.Basic",
+      "old_line": 250,
+      "new_module": "FunctionalInequalities.KLS.Geometry.SmoothDomain.Basic",
+      "new_line": 218
+    },
+    "FunctionalInequalities.KLS.SmoothDomain.homothety_carrier": {
+      "old_module": "FunctionalInequalities.KLS.Geometry.SmoothDomain.Basic",
+      "old_line": 330,
+      "new_module": "FunctionalInequalities.KLS.Geometry.SmoothDomain.Basic",
+      "new_line": 298
+    },
+    "FunctionalInequalities.KLS.SmoothDomain.indicator_homothety": {
+      "old_module": "FunctionalInequalities.KLS.Geometry.SmoothDomain.Basic",
+      "old_line": 340,
+      "new_module": "FunctionalInequalities.KLS.Geometry.SmoothDomain.Basic",
+      "new_line": 308
+    },
+    "FunctionalInequalities.KLS.SmoothDomain.instCoeOutSet": {
+      "old_module": "FunctionalInequalities.KLS.Geometry.SmoothDomain.Basic",
+      "old_line": 70,
+      "new_module": "FunctionalInequalities.KLS.Geometry.SmoothDomain.Basic",
+      "new_line": 38
+    },
+    "FunctionalInequalities.KLS.SmoothDomain.isLocallyFiniteMeasure_hausdorff_frontier": {
+      "old_module": "FunctionalInequalities.KLS.Geometry.SmoothDomain.Basic",
+      "old_line": 373,
+      "new_module": "FunctionalInequalities.KLS.Geometry.SmoothDomain.Basic",
+      "new_line": 341
+    },
+    "FunctionalInequalities.KLS.SmoothDomain.measurableSet": {
+      "old_module": "FunctionalInequalities.KLS.Geometry.SmoothDomain.Basic",
+      "old_line": 360,
+      "new_module": "FunctionalInequalities.KLS.Geometry.SmoothDomain.Basic",
+      "new_line": 328
+    },
+    "FunctionalInequalities.KLS.SmoothDomain.ofSuperlevel": {
+      "old_module": "FunctionalInequalities.KLS.Geometry.SmoothDomain.Basic",
+      "old_line": 218,
+      "new_module": "FunctionalInequalities.KLS.Geometry.SmoothDomain.Basic",
+      "new_line": 186
+    },
+    "FunctionalInequalities.KLS.SmoothDomain.ofSuperlevel_carrier": {
+      "old_module": "FunctionalInequalities.KLS.Geometry.SmoothDomain.Basic",
+      "old_line": 235,
+      "new_module": "FunctionalInequalities.KLS.Geometry.SmoothDomain.Basic",
+      "new_line": 203
+    },
+    "FunctionalInequalities.KLS.SmoothDomain.univ": {
+      "old_module": "FunctionalInequalities.KLS.Geometry.SmoothDomain.Basic",
+      "old_line": 203,
+      "new_module": "FunctionalInequalities.KLS.Geometry.SmoothDomain.Basic",
+      "new_line": 171
+    },
+    "FunctionalInequalities.KLS.SmoothDomain.setLIntegral_frontier_homothety": {
+      "old_module": "FunctionalInequalities.KLS.Geometry.Surface.Homothety",
+      "old_line": 40,
+      "new_module": "FunctionalInequalities.KLS.Geometry.SmoothDomain.Homothety",
+      "new_line": 40
+    },
+    "FunctionalInequalities.KLS.map_inv_homothety_surfaceMeasure": {
+      "old_module": "FunctionalInequalities.KLS.Geometry.Surface.Homothety",
+      "old_line": 15,
+      "new_module": "FunctionalInequalities.KLS.Geometry.SmoothDomain.Homothety",
+      "new_line": 15
+    },
+    "FunctionalInequalities.KLS.setLIntegral_image_homothety_surfaceMeasure": {
+      "old_module": "FunctionalInequalities.KLS.Geometry.Surface.Homothety",
+      "old_line": 23,
+      "new_module": "FunctionalInequalities.KLS.Geometry.SmoothDomain.Homothety",
+      "new_line": 23
+    },
+    "FunctionalInequalities.Analysis.prekopaLeindler": {
+      "old_module": "FunctionalInequalities.Analysis.Hausdorff.LevelSet",
+      "old_line": 229,
+      "new_module": "FunctionalInequalities.Probability.BrunnMinkowski",
+      "new_line": 183
+    },
+    "FunctionalInequalities.Analysis.volume_rpow_add_le_volume_add_rpow": {
+      "old_module": "FunctionalInequalities.Analysis.Hausdorff.LevelSet",
+      "old_line": 312,
+      "new_module": "FunctionalInequalities.Probability.BrunnMinkowski",
+      "new_line": 266
+    },
+    "FunctionalInequalities.Analysis.volume_rpow_mul_le_volume_combination": {
+      "old_module": "FunctionalInequalities.Analysis.Hausdorff.LevelSet",
+      "old_line": 246,
+      "new_module": "FunctionalInequalities.Probability.BrunnMinkowski",
+      "new_line": 200
+    }
+  },
+  "proof_status_changes": false,
+  "private_helpers": "Compiler-generated private identities follow their owning modules; no public alias is introduced."
+}

@@ -1,5 +1,5 @@
 import FunctionalInequalities.Analysis.Semigroup.Exponential.Limit
-import FunctionalInequalities.Analysis.Semigroup.Yosida.Family
+import FunctionalInequalities.Analysis.Semigroup.Yosida.Laws
 
 /-!
 # `S6`: the Yosida exponentials converge strongly

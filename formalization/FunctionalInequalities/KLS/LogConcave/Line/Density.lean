@@ -1,4 +1,4 @@
-import FunctionalInequalities.KLS.LogConcave.Density.BorellRepresentation
+import FunctionalInequalities.KLS.LogConcave.Density.BorellRepresentation.Construction
 import FunctionalInequalities.Probability.Line.Cdf
 import Mathlib.Analysis.Convex.Slope
 

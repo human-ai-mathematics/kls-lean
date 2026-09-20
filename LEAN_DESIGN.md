@@ -15,7 +15,54 @@ Proof certification refers to the current statement. Record mathematical scope c
 migrate affected consumers; the [current lifecycle](research/ledger-schema.md#lifecycle) gives
 the validation rules. Historical freeze records below preserve their reviewed snapshots.
 
-## Current semantic boundary (2026-09-16)
+## Current semantic boundary (2026-09-20)
+
+The ledger has 26 certified nodes. The library's only intentional proof hole is the theorem
+`KLS.kls` in `KLS/Target.lean`. `KLS.Conjecture` (`KLS/Statement.lean`) is a `def … : Prop` that
+only names the sentence; it carries no hole and is axiom-audited with the standard axioms only.
+Sharp Sard, the Cheeger infimum comparison, and the smooth-gradient/Cheeger identification are
+proved. The canonical energy is `2 Ch` for every
+Borel probability law in the stated finite-dimensional setting, including singular laws;
+local-slope and asymptotic-Lipschitz relaxations agree in that scope. See
+`Energy/Cheeger/Identification.lean` and the [current progress register](research/progress/STATUS.md).
+
+The general high-dimensional Buser inequality with constant pi and dimension-free KLS remain
+open. The pointwise Bochner calculus and the generator-domain interfaces do not establish
+positive-time regularity, the full form-domain bridge or the required semigroup gradient bounds.
+The one-dimensional coefficient-4 result does not by itself certify optimality of 4.
+
+The following dated boundary and construction records describe their original rounds; they do
+not override this current boundary or the current theorem statements.
+
+## Current path directory for historical references
+
+The dated records below retain their original paths and proof-status descriptions. Use this
+live directory to locate the current implementations; a historical path is not a compatibility
+module. Deleted WIP paths remain provenance, not active navigation or current proof gaps.
+
+| Historical path | Current source |
+| --- | --- |
+| `Analysis/GraphIntegral.lean` | [Analysis/Graph/Integral.lean](formalization/FunctionalInequalities/Analysis/Graph/Integral.lean) |
+| `Analysis/ImplicitGraph.lean` | [Analysis/Graph/Implicit.lean](formalization/FunctionalInequalities/Analysis/Graph/Implicit.lean) |
+| `Analysis/PlanarSard.lean` | [Analysis/Sard/Planar.lean](formalization/FunctionalInequalities/Analysis/Sard/Planar.lean) |
+| `Analysis/Sard.lean` | [Analysis/Sard/Basic.lean](formalization/FunctionalInequalities/Analysis/Sard/Basic.lean) |
+| `Analysis/SmoothSard.lean` | [Analysis/Sard/Smooth.lean](formalization/FunctionalInequalities/Analysis/Sard/Smooth.lean) |
+| `Geometry/GaussGreen.lean` | [KLS/Geometry/SmoothDomain/GaussGreen.lean](formalization/FunctionalInequalities/KLS/Geometry/SmoothDomain/GaussGreen.lean) |
+| `Geometry/MinkowskiConstant.lean` | [KLS/Geometry/Cheeger/MinkowskiConstant.lean](formalization/FunctionalInequalities/KLS/Geometry/Cheeger/MinkowskiConstant.lean) |
+| `Geometry/MinkowskiContent.lean` | [KLS/Geometry/Cheeger/MinkowskiContent.lean](formalization/FunctionalInequalities/KLS/Geometry/Cheeger/MinkowskiContent.lean) |
+| `Geometry/Mollification.lean` | [KLS/Geometry/Perimeter/Mollification.lean](formalization/FunctionalInequalities/KLS/Geometry/Perimeter/Mollification.lean) |
+| `Geometry/MollifiedBoundary.lean` | [KLS/Geometry/Perimeter/MollifiedBoundary.lean](formalization/FunctionalInequalities/KLS/Geometry/Perimeter/MollifiedBoundary.lean) |
+| `Geometry/PerimeterRecovery.lean` | [KLS/Geometry/Perimeter/Recovery.lean](formalization/FunctionalInequalities/KLS/Geometry/Perimeter/Recovery.lean) |
+| `Geometry/RelativePerimeter.lean` | [KLS/Geometry/Perimeter/Relative.lean](formalization/FunctionalInequalities/KLS/Geometry/Perimeter/Relative.lean) |
+| `Geometry/SmoothDomain.lean` | [KLS/Geometry/SmoothDomain/Basic.lean](formalization/FunctionalInequalities/KLS/Geometry/SmoothDomain/Basic.lean) |
+| `Geometry/Surface/Homothety.lean` | [KLS/Geometry/SmoothDomain/Homothety.lean](formalization/FunctionalInequalities/KLS/Geometry/SmoothDomain/Homothety.lean) |
+| `KLS/Geometry/Surface/Measure.lean` | [Analysis/Hausdorff/Measure.lean](formalization/FunctionalInequalities/Analysis/Hausdorff/Measure.lean) |
+| `LogConcave/DensityBounds.lean` | [KLS/LogConcave/Density/Bounds.lean](formalization/FunctionalInequalities/KLS/LogConcave/Density/Bounds.lean) |
+
+The [migration records](research/api-migration/) and [current progress register](research/progress/STATUS.md)
+provide broader context. This directory does not modify the dated records.
+
+## Historical semantic boundary (2026-09-16)
 
 The ledger has 24 certified nodes. Three WIP modules retain 8 direct holes: sharp finite-regularity
 Sard (1), the smooth Cheeger superlevel bound and reverse infimum comparison (2), and singular-law

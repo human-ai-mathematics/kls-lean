@@ -1,3 +1,6 @@
+import FunctionalInequalities.Analysis.Semigroup.Exponential.Counterexample
+import FunctionalInequalities.Analysis.Semigroup.Generated.Domain
+import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Domain
 import FunctionalInequalities.Poincare.SmoothTest.Basic
 import FunctionalInequalities.Poincare.Foundation
 import FunctionalInequalities.Poincare.SmoothTest.Linear
@@ -17,10 +20,10 @@ import FunctionalInequalities.KLS.ConditionalFiber.Closed
 import FunctionalInequalities.KLS.ConditionalFiber.EnergyComparison
 import FunctionalInequalities.KLS.ConditionalFiber.SliceKernel
 import FunctionalInequalities.Poincare.Euclidean.RawEnergyObstruction
-import FunctionalInequalities.KLS.LogConcave.Density.BorellRepresentation
+import FunctionalInequalities.KLS.LogConcave.Density.BorellRepresentation.Intrinsic
 import FunctionalInequalities.Probability.Covariance.Intrinsic
 import FunctionalInequalities.KLS.LogConcave.Covariance
-import FunctionalInequalities.KLS.LogConcave.WeightedGradient
+import FunctionalInequalities.KLS.LogConcave.WeightedGradient.Basic
 import FunctionalInequalities.KLS.LogConcave.ClosedForm
 import FunctionalInequalities.KLS.LogConcave.Translation
 import FunctionalInequalities.KLS.LogConcave.Isotropic
@@ -32,6 +35,7 @@ import FunctionalInequalities.Probability.Line.BrunnMinkowski
 import FunctionalInequalities.Probability.Line.Haar
 import FunctionalInequalities.Energy.LocalSlope.Relaxation
 import FunctionalInequalities.Energy.Cheeger.Basic
+import FunctionalInequalities.KLS.LogConcave.Cheeger
 import FunctionalInequalities.Analysis.Lipschitz.VectorCoarea
 import FunctionalInequalities.Analysis.Lipschitz.Local
 import FunctionalInequalities.Analysis.Sard.Sharp
@@ -50,7 +54,7 @@ import FunctionalInequalities.Analysis.Semigroup.AdjointComp
 import FunctionalInequalities.Analysis.Semigroup.VonNeumann
 import FunctionalInequalities.Analysis.Semigroup.Resolvent.Limit
 import FunctionalInequalities.Analysis.Semigroup.Yosida.Approximation
-import FunctionalInequalities.Analysis.Semigroup.Yosida.Family
+import FunctionalInequalities.Analysis.Semigroup.Yosida.Laws
 import FunctionalInequalities.Analysis.Semigroup.Exponential.Limit
 import FunctionalInequalities.Analysis.Semigroup.Yosida.Limit
 import FunctionalInequalities.Analysis.Semigroup.Generated.Basic
@@ -58,6 +62,15 @@ import FunctionalInequalities.Analysis.Semigroup.Generated.Laws
 import FunctionalInequalities.Analysis.Semigroup.Exponential.MeanValue
 import FunctionalInequalities.Analysis.Semigroup.Generated.Generator
 import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Basic
+import FunctionalInequalities.Analysis.Semigroup.Generated.Markov
+import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Markov
+import FunctionalInequalities.KLS.LogConcave.WeightedGradient.Energy
+import FunctionalInequalities.Analysis.BakryEmery.Calculus
+import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts
+import FunctionalInequalities.Analysis.BakryEmery.Gamma
+import FunctionalInequalities.Analysis.BakryEmery.Bochner
+import FunctionalInequalities.Analysis.Semigroup.AdjointClosure
+import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Generator
 
 /-!
 # Functional inequalities
@@ -70,10 +83,10 @@ developments. Node certificates are compiled separately from `solutions/`.
 
 The compact/Borel log-concavity equivalence, the six conditional-fiber contracts, the Borell
 density-representative, local-bound and moment conclusions of
-`KLS/LogConcave/Density/BorellRepresentation.lean`, and the ambient/intrinsic covariance comparison are
+`KLS/LogConcave/Density/BorellRepresentation/Intrinsic.lean`, and the ambient/intrinsic covariance comparison are
 proved. `Poincare.CovarianceGradient.Intrinsic.constant` implements the affine covariance Poincaré constant as a
 definition, with its log-concave well-definedness contracts in
-`KLS/LogConcave/Covariance.lean`. `KLS/LogConcave/WeightedGradient.lean` proves that the
+`KLS/LogConcave/Covariance.lean`. `KLS/LogConcave/WeightedGradient/Basic.lean` proves that the
 weighted gradient operator of a full-dimensional log-concave law is densely defined and closable,
 with smooth core and relaxation identified with its closure (`lem:covariance-core-closure`), and
 `KLS/LogConcave/ClosedForm.lean` identifies the affine relaxation with the closed covariance

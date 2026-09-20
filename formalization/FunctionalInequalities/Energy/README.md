@@ -8,17 +8,17 @@
 
 | 目的 | 入口与后续模块 |
 | --- | --- |
-| 一般能量与大小比较 | `Functional.lean` → `Comparison.lean` |
+| 一般能量与大小比较 | `Form/Functional.lean` → `Form/Comparison.lean` |
 | 从有限测试能量定义松弛 | `Relaxation/Basic.lean`（含沿连续映射的松弛比较 `sequentialRelaxation_comp_le` 与带常数因子的 `_comp_le_mul`）→ `Relaxation/Approximation.lean` |
 | 下半连续性与恢复序列 | `Relaxation/LowerSemicontinuous.lean`、`Relaxation/Recovery.lean` |
-| 二次性与闭包 | `QuadraticPreEnergy.lean`、`ClosedQuadratic.lean` → `Relaxation/Quadratic.lean` |
-| 核心与 Markov 性质 | `FormCore.lean`、`Dirichlet.lean`；条件性转移见 `Relaxation/Contraction.lean` |
+| 二次性与闭包 | `Form/QuadraticPreEnergy.lean`、`Form/ClosedQuadratic.lean` → `Relaxation/Quadratic.lean` |
+| 核心与 Markov 性质 | `Form/Core.lean`、`Form/Dirichlet.lean`；条件性转移见 `Relaxation/Contraction.lean` |
 | 光滑梯度松弛的 Dirichlet 性 | `SmoothGradient/Dirichlet.lean`：磨光正规收缩 `NormalContraction.smoothed`、测试复合 `Test.compSmoothed`、`SmoothGradient.markovian`/`dirichlet` 与内禀版本 `Intrinsic.dirichlet`；对任意 Borel 概率律成立 |
 | 光滑梯度实现 | `SmoothGradient/Basic.lean` → `Quadratic.lean`、`Density.lean` → `Closed.lean`；`SmoothGradient/NormalDirection.lean`：真仿射支撑上的法向坐标是 L² 零类但原始能量为 1，环境预能量不满足 `RespectsAmbientFibers`；`SmoothGradient/Core.lean`：局部密度假设 `LocalDensity` 下的 raw/sequential-core 一致性 `preEnergy_agreesOnTests`、`preEnergy_isSequentialCoreFor` 及内禀律实例 |
 | 仿射支撑内的实现 | `SmoothGradient/Intrinsic/Basic.lean` → `Closed.lean` |
-| 两种实现的比较与 Lipschitz 逼近 | `SmoothGradient/Intrinsic/Comparison.lean`、`Euclidean/LipschitzApproximation.lean` |
-| 局部斜率与渐近 Lipschitz 的 L² 松弛 | `LocalSlope/Relaxation.lean`：`AsymptoticLipschitz.{apply,energy,Admissible,preEnergy,relaxation}`、`LocalSlope.{preEnergy,relaxation}` 及无条件比较 `relaxation_le_asymptoticLipschitz`；两种约定相等未证 |
-| 度量 Cheeger 能量与 `𝓔^can = 2·Ch` | `Cheeger.lean`：`Cheeger.{ofLocalSlope,ofAsymptoticLipschitz,energy,Intrinsic.energy}`；内禀律绝对连续时 `SmoothGradient.relaxation = LocalSlope.relaxation` 与 `𝓔^can_μ = 2·Ch_μ`，对数凹律自动满足前提。**2026-09-19 起对任意 Borel 律成立**：`Euclidean/SlopeComparison.lean`（光滑测试的渐近 Lipschitz 常数 = 梯度范数，三松弛夹逼）、`Euclidean/SlopeRecovery.lean`（全局 Lipschitz 测试的磨光恢复与截断工具）、`Euclidean/SlopeDensity.lean`（局部斜率可测、McShane 补丁、光滑测试在局部斜率能量中稠密）、`Cheeger/Identification.lean`（五条恒等式，`thm:smooth-gradient-relaxation-two-cheeger` 第 26 个证书）；原 `WIP/Cheeger.lean` 已删除，`Energy/` 下不再有 WIP |
+| 两种实现的比较与 Lipschitz 逼近 | `SmoothGradient/Intrinsic/Comparison.lean`、`Euclidean/LipschitzApproximation/Approximation.lean` |
+| 局部斜率与渐近 Lipschitz 的 L² 松弛 | `LocalSlope/Relaxation.lean`：`AsymptoticLipschitz.{apply,energy,Admissible,preEnergy,relaxation}`、`LocalSlope.{preEnergy,relaxation}` 及无条件比较 `relaxation_le_asymptoticLipschitz`；两种约定在有限维 Borel 概率律上的相等见 `Cheeger/Identification.lean` |
+| 度量 Cheeger 能量与 `𝓔^can = 2·Ch` | `Cheeger/Basic.lean`：`Cheeger.{ofLocalSlope,ofAsymptoticLipschitz,energy,Intrinsic.energy}`；`Cheeger/Identification.lean` 对任意有限维 Borel 概率律证明 `SmoothGradient.relaxation = LocalSlope.relaxation` 与 `𝓔^can_μ = 2·Ch_μ`，允许奇异律和无限能量；证明依赖：`Euclidean/Slope/Comparison.lean`（光滑测试的渐近 Lipschitz 常数 = 梯度范数，三松弛夹逼）、`Euclidean/Slope/Recovery.lean`（全局 Lipschitz 测试的磨光恢复与截断工具）、`Euclidean/Slope/Density.lean`（局部斜率可测、McShane 补丁、光滑测试在局部斜率能量中稠密）、`Cheeger/Identification.lean`（五条恒等式，`thm:smooth-gradient-relaxation-two-cheeger` 第 26 个证书）；原 `WIP/Cheeger.lean` 已删除，`Energy/` 下不再有 WIP |
 | 协方差加权的 Lipschitz 梯度定义 | `CovarianceGradient/Basic.lean`：预能量、序列松弛、内禀律上的 `Energy.CovarianceGradient.Intrinsic.energy` |
 | 算子形式与可闭性 | `Relaxation/LinearPMap.lean`（任意可闭 `LinearPMap` 的松弛等于闭包范数平方 `normSqEnergy`；Hilbert 选择引理）→ `Euclidean/WeakDerivative.lean`（Lipschitz 函数分部积分）→ `WeightedGradient/Basic.lean`、`Closable.lean`、`Core.lean`（含 ℝ + C_c^∞ 核 `constantSmoothCore`） |
 | 平移不变性 | `CovarianceGradient/Translation.lean`：平移律、L² 拉回等距 `L2.Translation.pullbackEquiv`、方差与协方差不变、协方差松弛与最优常数不变 |
@@ -42,10 +42,17 @@ import FunctionalInequalities.Energy.SmoothGradient.Intrinsic.Closed
 ## 后续文件放置
 
 - 同一主题的基础定义放在 `Basic.lean`，后续文件以职责命名；目录提供共同前缀。
-- 通用能量接口放在根目录；一般松弛定理放在 `Relaxation/`。
+- 通用能量与闭二次型接口放在 `Form/`；一般松弛定理放在 `Relaxation/`。
 - 具体实现放在对应欧氏主题目录；跨实现的比较保留在 `Euclidean/`。
 - 按数学职责和依赖拆分，不按证明状态、任务编号或日期拆分。
 
 文件路径与声明命名空间各自独立。本次整理保留所有数学声明，闭二次性仍不自动提供
 Dirichlet 性质或原始测试能量与松弛能量的一致性。旧导入路径的逐项替换见
 [迁移记录](../../../research/explorations/2026-09-07-energy-module-layout.md)。
+
+`Euclidean/LipschitzApproximation/` 按职责分为
+[Basic](Euclidean/LipschitzApproximation/Basic.lean)（梯度与截断）、
+[Measurable](Euclidean/LipschitzApproximation/Measurable.lean)（可测性）、
+[Kernel](Euclidean/LipschitzApproximation/Kernel.lean)（核与卷积估计）、
+[Approximation](Euclidean/LipschitzApproximation/Approximation.lean)（加权逼近）。
+客户端按所需接口导入最早一层。
