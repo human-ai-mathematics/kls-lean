@@ -39,6 +39,28 @@ below are historical; use the map to resolve them. The dimension-free KLS bound 
 This is the current operational handoff for `kls-lean`. It records repository identity,
 authority boundaries, certified results, exact non-claims, and reproducible checks.
 
+## Heat-test extension takeover (2026-09-22): partial, full target still open
+
+The latest implementation is `HeatSemigroup/TestClass.lean`; see
+[the record and exact remaining obligations](research/decisions/2026-09-22-heat-test-class.md).
+The incoming interrupted run supplied four compiled order/Markov lemmas only. The takeover
+proves uniform essential bounds on `P_s φ` and `A(P_s φ)`, integrability of both weak-Γ pairings
+for arbitrary `L²` vector fields, and the weak Γ₂ inequality for **smooth compactly supported
+data** tested against **any nonnegative `D(A)` class**, in particular `P_s φ`.
+
+The transfer theorem still requires `∇f_n → T̄F` and `-∇ℒf_n → T̄(AF)` in `L²`. That second
+convergence has not been proved for arbitrary `F = P_r g`. The existing graph core of `A`
+does not supply it. Consequently the requested full heat-test extension, time interpolation
+and gradient estimates remain open. Do not repeat the bounds or smooth-data result as though
+they complete the arbitrary-input target. No extra hypothesis has been added to the previously
+completed interior-regularity or compact-test heat-flow theorems.
+
+**Next implementation target:** prove a valid transfer for arbitrary `F = P_r g`, either by
+constructing the stated two-field approximation or by a test-approximation/product-rule route
+with all necessary bounds proved. The record identifies the missing estimates for each route.
+Validation of this partial delivery is identified by
+`build/audit/heat-test-class-takeover/final-snapshot.json`. Certificates remain 26.
+
 ## Current operational status (2026-09-20)
 
 This section is the current handoff. The dated rounds below are historical records; their
@@ -73,11 +95,91 @@ hole counts, assignments and "next" steps describe those rounds, not today's que
   for `f ∈ D(A)` and `t ≥ 0`, `P_t f ∈ D(A)`, `A(P_t f)=P_t(Af)`, and the right derivative is
   `-A(P_t f)`. The heat wrappers allow arbitrary weights and provide a closed weighted gradient.
   See [D0–D4](research/decisions/2026-09-20-semigroup-domain-stability.md). Arbitrary-input
-  positive-time smoothing, full form-domain invariance and classical representatives remain open.
-- **Remaining analytic work:** positive-time regularity, full form-domain stability, time differentiation
-  of `s ↦ P_s Γ(P_{t-s} f)`, the Bakry–Émery gradient estimates, passage from smooth potentials to
-  general log-concave laws, and small-time heat estimates with constants sufficient for the π
-  target. The earlier Markov handoff is completed in its stated scope.
+  positive-time smoothing was completed later by E0–E5 below; classical representatives remain
+  open, and full form-domain invariance was completed by F0–F4 below.
+- **Form-domain interface (F0–F4, 2026-09-20):** for **every** `f ∈ D(T̄)` and `t ≥ 0`,
+  `P_t f ∈ D(T̄)` and `‖T̄(P_t f)‖ ≤ ‖T̄ f‖`, with the `D(A)` case
+  `⟪A(P_t f), P_t f⟫ ≤ ⟪Af, f⟫` and graph-norm density of `D(A)` in `D(T̄)` as the two steps.
+  Abstract results in `Analysis/Semigroup/Generated/FormDomain.lean`, resolvent core in
+  `Analysis/Semigroup/Resolvent/Limit.lean`, concrete arbitrary-weight frontends in
+  `KLS/LogConcave/HeatSemigroup/Domain.lean`. See
+  [F0–F4](research/decisions/2026-09-20-semigroup-form-domain-stability.md). The gradient is the
+  closed weighted operator. Arbitrary-input positive-time smoothing was completed by E0–E5
+  below; classical representatives and pointwise gradient estimates remain open.
+- **Positive-time smoothing (E0–E5, 2026-09-21):** for **arbitrary** `f ∈ L²(ν)` and `t > 0`,
+  `P_t f ∈ D(T̄†T̄) ⊆ D(T̄)`, with `‖T̄(P_t f)‖ ≤ ‖f‖/√(2t)` and `‖T̄†T̄(P_t f)‖ ≤ ‖f‖/t`. The engine
+  is a pair of second-order dissipation estimates for `exp(-u L)` in
+  `Analysis/Semigroup/Exponential/Dissipation.lean`, passed to the Yosida limit and transported by
+  density and closed graphs in `Analysis/Semigroup/Generated/Smoothing.lean`; concrete
+  arbitrary-weight frontends in `KLS/LogConcave/HeatSemigroup/Domain.lean`. See
+  [E0–E5](research/decisions/2026-09-21-semigroup-positive-time-smoothing.md). This closes the two
+  statements the S0a and F0–F4 audits carried as type-checked candidates. The **sharp** constants
+  `1/√(2et)` and `1/(et)` are not proved. Membership in `D(T̄†T̄)` is **not** a classical
+  representative.
+- **Weak `Γ` interface (W0–W3, 2026-09-21, later):** the weak carré du champ
+  `Γ(u, v) = ⟪u, v⟫` of two `L²` vector fields is defined with its full `L¹` theory
+  (`Analysis/BakryEmery/WeakGamma.lean`), the Leibniz and chain rules hold on `IsTest` inputs
+  and for their images under `T̄`, with the stated boundedness and outer-map hypotheses (`Energy/WeightedGradient/Leibniz.lean`), weak integration by parts
+  `∫ Γ(T̄ f, T̄ x) dν = ∫ (A f) x dν` holds for `f ∈ D(A)`, `x ∈ D(T̄)` and arbitrary weight,
+  the **integrated** Bochner inequality
+  `0 ≤ (∫ (ℒφ) Γ(f, f) dν)/2 - ∫ φ Γ(f, ℒf) dν` is proved on smooth compactly supported tests in
+  classical and weak form (`Analysis/BakryEmery/IntegratedBochner.lean`), and it transfers to any
+  `L²` limits of the two fields. Heat-flow consequences proved outright:
+  `∫ Γ(T̄ (P_t f)) dν ≤ ∫ Γ(T̄ f) dν`, `2t ∫ Γ(T̄ (P_t g)) dν ≤ ‖g‖²` for arbitrary `g` and
+  `t > 0`, the weak generator identity for `P_t g`, and **second-order regularity**
+  `A (P_t g) ∈ D(T̄)`. See [W0–W3](research/decisions/2026-09-21-weak-gamma-interface.md).
+  `Γ(P_t f) ≤ P_t Γ(f)` is **not** proved, pointwise or otherwise.
+- **Generator form of weak `Γ₂` (G0–G5, 2026-09-21, later):** the **second-order field is
+  eliminated** from the weak `Γ₂` inequality, so the two-field approximation listed above as the
+  obstruction is no longer needed. Multiplication of an `L²` class by an a.e. bounded scalar or
+  vector multiplier is packaged as continuous linear maps (`L2/BoundedMultiplier.lean`); the
+  `L¹` pairing `a · Γ(u, β)` for an a.e. bounded field `β` gets its stability and limit transfer
+  (`Analysis/BakryEmery/WeakGamma.lean`, `IntegratedBochner.lean`); the **Leibniz rule for the
+  closed gradient against a `C_c^∞` multiplier now holds on the whole form domain**,
+  `T̄(φ x) = φ (T̄ x) + x (B ∇φ)` a.e. for every `x ∈ D(T̄)`, together with the sequential smooth
+  graph core of `T̄` (`KLS/LogConcave/WeightedGradient/Multiplier.lean`). From these,
+  `∫ φ Γ(T̄ F, T̄ (A F)) dν = ∫ φ (A F)² dν - ∫ (A F) Γ(T̄ F, T̄ φ) dν` for `F ∈ D(A)` with
+  `A F ∈ D(T̄)` and arbitrary weight, hence the weak `Γ₂` inequality transfers along
+  **first-order** graph convergence for the generator: `[fₙ] → F` and `A [fₙ] → A F` in `L²`
+  suffice, with `T̄ fₙ → T̄ F` derived, not assumed
+  (`KLS/LogConcave/HeatSemigroup/GammaTwo.lean`). The admissible class contains every `C_c^∞`
+  class and is closed for the graph norm of `A`, i.e. it is the domain of the closure of `A`
+  restricted to `C_c^∞`; it is **not** claimed to be `D(A)`. See
+  [G0–G5](research/decisions/2026-09-21-generator-gamma-two.md) and its
+  [comparison and interpolation correction](research/decisions/2026-09-21-generator-gamma-two.md#comparison-and-interpolation-correction-after-review):
+  generator-graph convergence is a **different sufficient** condition that eliminates the second
+  field, and is not proved to be weaker than the earlier two-field condition.
+- **Operator-core criterion (C0–C5, 2026-09-22):** the global half of the classical
+  essential-self-adjointness argument is a Lean theorem: an `L²` class `u` orthogonal to
+  `(A + 1) C_c^∞(V)` whose localizations `[χ u]`, `χ ∈ C_c^∞(V)`, all lie in `D(T̄)` is zero
+  (`KLS.LogConcave.eq_zero_of_localRegularity`), through the cutoff estimate
+  `‖χ_r u‖ ≤ (M / r) ‖u‖`; hence local regularity of every such `u` gives the operator core
+  (`exists_seq_smooth_tendsto_adjointComp_of_localRegularity`) and the conditional heat-flow weak
+  `Γ₂` frontend (`HeatSemigroup.integral_mul_weakGamma_apply_nonneg_of_localRegularity`). New
+  module `KLS/LogConcave/HeatSemigroup/OperatorCore.lean`; see
+  [C0–C5](research/decisions/2026-09-22-operator-core-criterion.md).
+- **Interior regularity (M0–M3, R1–R3, 2026-09-22, later):** the local hypothesis is **proved**
+  for every `C¹` potential by mollification against the Haar measure
+  (`KLS.LogConcave.toLp_mul_mem_closedWeightedOperator_domain_of_orthogonal`,
+  `KLS/LogConcave/HeatSemigroup/InteriorRegularity.lean`, with the `L²` mollifier toolkit of
+  `Analysis/Mollification.lean`), so **`C_c^∞(V)` is an operator core of `A = T̄†T̄`**
+  (`exists_seq_smooth_tendsto_adjointComp`, `ℒ` essentially self-adjoint on `C_c^∞(V)`) and the
+  **heat-flow weak `Γ₂` inequality holds with only the model hypotheses**
+  (`HeatSemigroup.integral_mul_weakGamma_apply_nonneg`: `C^∞` convex `U`, unit weight, arbitrary
+  `g ∈ L²(ν)`, every `t > 0`, every nonnegative `φ ∈ C_c^∞(V)`). See
+  [M0–M3, R1–R3](research/decisions/2026-09-22-interior-regularity.md).
+- **Remaining analytic work:** the heat-flow weak `Γ₂` inequality at `F = P_t g` is proved with
+  only the model hypotheses; `hcore` and `hreg` are theorems for every `C¹` potential. Not proved:
+  product/chain rules for arbitrary form-domain or heat-flow inputs beyond the bounded-multiplier
+  case; the interpolation `s ↦ ∫ (P_s φ) Γ(T̄ (P_{t-s} f)) dν`, **with the outer semigroup applied
+  to the test function** — a pairing against a fixed `φ` is a different functional and does not
+  replace it, so extending the weak `Γ₂` inequality from smooth compactly supported tests to the
+  class `{P_s φ}` is a separate obligation and not a formal product-rule computation. Only after
+  that come its time differentiation and justified limits, the square and first-order Bakry–Émery
+  gradient estimates, passage from smooth potentials to general log-concave laws, and small-time
+  heat estimates with constants sufficient for the π target. The earlier Markov handoff is
+  completed in its stated scope; full form-domain stability, energy contraction, positive-time
+  domain regularity and second-order positive-time regularity are now proved.
 
 **Module/API organization (2026-09-20, after S0a):** generic differential tools now live in
 `BakryEmery/Calculus.lean`, the classical weighted operator in `Laplacian.lean`, and the
@@ -94,8 +196,18 @@ original Buser statement with no unresolved analytic premises. The smooth `B = I
 be an intermediate step only. A formal Bochner computation alone is not a semigroup estimate.
 This supersedes the earlier route-exploration-only scope; it changes no proof status.
 
-**Immediate semigroup cut after S0a:** full `D(T)` form-domain invariance and energy contraction;
-see the [minimal remaining estimates](research/decisions/2026-09-20-semigroup-domain-stability.md#next-cut).
+**Immediate semigroup cut after E0–E5:** form-domain stability and positive-time generator-domain
+regularization are proved; the original second-stage gradient-estimate target remains open. `P_t` maps all
+of `L²` into `D(T̄†T̄)` for `t > 0`, so `S0a`'s commutation and right time derivative and `F0`–`F4`'s
+gradient contraction all apply to `P_t f` for arbitrary `f`; the quantitative `1/t` and `1/√t`
+rates are `Generated.mul_norm_adjointComp_apply_le` and `Generated.two_mul_norm_map_apply_sq_le`.
+See the [scope correction](research/decisions/2026-09-21-semigroup-positive-time-smoothing.md#scope-correction-after-independent-review).
+Membership of `P_t f` in `D(A)` does not establish the integrability, operator domains or
+differentiation rules needed for `Γ(P_t f)`. A merely continuous representative is insufficient;
+a weak Γ route need not first construct a classical smooth representative. The earlier next-cut notes
+in the [form-domain record](research/decisions/2026-09-20-semigroup-form-domain-stability.md#next-stage)
+and the [S0a record](research/decisions/2026-09-20-semigroup-domain-stability.md#next-cut) are
+historical.
 
 **Verifier scope since LD-010/011:** `research/verify.py` now has 11 structural/build gates plus
 one strict gate per live `research/audits/**/*.lean` client, all run against a filtered view that
@@ -105,13 +217,207 @@ module provenance, LD-012 rooted ignore patterns) and the
 [closeout correction](research/decisions/2026-09-20-review-closeout.md). Receipts written before
 that repair record a narrower 10-gate scope and must not be quoted as current coverage.
 
-**Evidence:** the current local receipt is named in `build/verification/latest.json`. The most
-recent passing run records 95 gates, 84 strict research-audit clients, 284 replayed modules and
-367 standard-only axiom reports over a 789-file source snapshot. A receipt certifies only its own
-recorded snapshot: editing any tracked document changes that snapshot, so do not quote an earlier
-receipt as a fresh verification of a later revision. See the
+**Evidence:** local receipts are indexed by `build/verification/latest.json`; read the referenced
+report for its counts and source digest. The current receipt is the operator-core one, identified
+in `build/audit/operator-core-criterion/final-snapshot.json`, which records its identifier, its
+gate, strict-audit-client, module-replay and declaration-audit counts and its source digest; it
+was produced after every tracked edit of the 2026-09-22 round, so it certifies the delivered
+snapshot. The earlier weak-`Γ` receipt, identified in
+`build/audit/weak-gamma-interface/final-snapshot.json` (99 gates, 88 strict audit clients, 291
+module replays and 367 declaration-audit axiom reports with no non-standard axiom, over 798
+source files), and the E0–E5 receipt `20260921T074919.898873Z` (98 gates, 87 strict audit
+clients, 287 module replays, 792 source files) certify their own, earlier snapshots only. A
+receipt certifies only its own recorded snapshot: editing any tracked document changes that
+snapshot, so do not quote an earlier receipt as a fresh verification of a later revision. See the
 [status correction record](research/decisions/2026-09-20-current-status-alignment.md) and the
 [independent-review fixes](research/decisions/2026-09-20-review-fixes.md).
+
+## Interior regularity: `hreg` proved, `hcore` discharged, unconditional heat-flow weak `Γ₂` (2026-09-22, later)
+
+**Implementation round, the sixth internal milestone of the full Buser task; it changes none of
+the registration numbers.** Certificates stay **26**, the deliberate target hole stays the only
+one. **The stated target — the heat-flow weak `Γ₂` theorem with no operator-core, approximation or
+regularity hypothesis, in the smooth convex-potential model — is met.**
+
+**Proved.** Write `T̄` for the closed unit-weight gradient of `ν = m.tilted (-U)`, `A = T̄†T̄`,
+`ℒ = -A`, `P_t = exp (-tA)`, `ρ = e^{-U}/Z` for the density of `ν` with respect to `m`.
+
+* `M0`–`M3` (`Analysis/Mollification.lean`, new): for a normalised smooth bump `ρₙ` on a Haar
+  measure, the `L²` contraction `‖ρₙ ⋆ f‖₂ ≤ ‖f‖₂`, the `L²` convergence `ρₙ ⋆ f → f` for every
+  `f ∈ L²(m)` as the radii tend to zero, the symmetry identity `∫ ⟪ρₙ ⋆ a, b⟫ = ∫ ⟪a, ρₙ ⋆ b⟫`,
+  and `∇(ρₙ ⋆ g) = ρₙ ⋆ ∇g`, `Δ(ρₙ ⋆ g) = ρₙ ⋆ Δg` on `C_c^∞`. Mathlib had none of the first
+  three.
+* `R1` **interior regularity** (`KLS.LogConcave.toLp_mul_mem_closedWeightedOperator_domain_of_orthogonal`,
+  `KLS/LogConcave/HeatSemigroup/InteriorRegularity.lean`, new): for a `C¹` potential and unit
+  weight, if `u ∈ L²(ν)` satisfies `⟪A [f], u⟫ + ⟪[f], u⟫ = 0` for every `f ∈ C_c^∞(V)`, then
+  `[χ u] ∈ D(T̄)` for every `χ ∈ C_c^∞(V)` — the exact hypothesis `hreg` of the previous round's
+  criterion theorems, for the exact class they use. The class `W = ρ u` satisfies the
+  divergence-form equation `Δ W = -div (W ∇U) + W` weakly against the Haar measure; its
+  mollifications `vₙ = ρₙ ⋆ (η W)` satisfy the same equation with `Hₙ = ρₙ ⋆ (η W ∇U)`; the
+  Caccioppoli estimate `‖χ ∇v‖₂ ≤ 3 ‖v ∇χ‖₂ + 2 ‖χ H‖₂` applied to the **differences**
+  `vₙ - vₖ` makes `χ ∇vₙ` Cauchy in `L²(m)`; the `C¹` compactly supported tests `χ vₙ / ρ` are
+  then graph-Cauchy and converge to `[χ u]` in `L²(ν)`, and closedness of `T̄` concludes. No
+  weak compactness, no Friedrichs commutator, no Fourier transform, no classical derivative of
+  `u`.
+* `R2` **operator core** (`KLS.LogConcave.exists_seq_smooth_tendsto_adjointComp`): for every `C¹`
+  potential, every `F ∈ D(A)` is a graph-norm limit of smooth compactly supported classes; this
+  is `hcore`, now a theorem. Equivalently `ℒ` is essentially self-adjoint on `C_c^∞(V)`, and
+  every deficiency element is zero (audit `R2'`).
+* `R3` **unconditional heat-flow weak `Γ₂`**
+  (`KLS.LogConcave.HeatSemigroup.integral_mul_weakGamma_apply_nonneg`, `GammaTwo.lean`): for
+  `C^∞` convex `U`, unit weight, **arbitrary** `g ∈ L²(ν)`, **every** `t > 0` and **every**
+  nonnegative `φ ∈ C_c^∞(V)`, with `F = P_t g`,
+  `0 ≤ (∫ (ℒφ) Γ(T̄ F, T̄ F) dν)/2 + ∫ φ Γ(T̄ F, T̄ (A F)) dν`. The only hypotheses are those of the
+  model. The conditional frontends `_of_core` and `_of_localRegularity` and all `C¹` theorems of
+  `OperatorCore.lean` stay exported unchanged.
+
+`research/audits/BakryEmeryInteriorRegularityAudit.lean` restates and proves every public
+conclusion, checks the sign of the tested equation (`A + 1`) and the exact `D(T̄)` class,
+exercises the zero function, the non-vacuity of `R2` on smooth classes and the implication to the
+older conditional frontend; **23 standard-only axiom reports, 0 `sorryAx`**.
+
+**Not proved.** `Γ(P_t f) ≤ P_t Γ(f)`; the `Γ` time interpolation
+`s ↦ ∫ (P_s φ) Γ(T̄ (P_{t-s} f)) dν` with the outer semigroup on the test function; the extension
+of the weak `Γ₂` inequality to the test class `{P_s φ}`; the square and first-order gradient
+estimates; the general-law passage; the constant `π`; Buser; KLS. These remain separate
+obligations.
+
+**Verification.** Default `lake build` (3579 jobs) passed with the single deliberate
+`KLS/Target.lean` warning. The two new modules, the two touched modules (`GammaTwo.lean`,
+`OperatorCore.lean` documentation), the root aggregate and the new audit compile with
+`-DwarningAsError=true`, 0 errors, 0 warnings. The root `python3 research/verify.py` was rerun at
+the **end** of the round, after every tracked edit; its receipt is identified in
+`build/audit/interior-regularity/final-snapshot.json`. See
+[the implementation record](research/decisions/2026-09-22-interior-regularity.md) for the
+placement plan, the route check against the pinned Mathlib, the exact hypotheses and the
+remaining obligations. No commit or push; the real Git index is unchanged.
+
+
+## Operator-core criterion: `C0`–`C5` proved, `hcore` reduced but **not** discharged (2026-09-22)
+
+**Implementation round, the fifth internal milestone of the full Buser task; it changes none of
+the registration numbers.** Certificates stay **26**, the deliberate target hole stays the only
+one. **The round's stated target — a heat-flow weak `Γ₂` theorem with no operator-core and no
+approximation hypothesis — is not met.**
+
+**Proved.** Write `T̄` for the closed unit-weight gradient of `ν = m.tilted (-U)`, `A = T̄†T̄ ≥ 0`,
+`ℒ = -A`, `P_t = exp (-tA)`.
+
+* `C0`: `weightedLaplacian U f x = 0` for every `x ∉ tsupport f`, for an arbitrary potential and
+  with no regularity assumed of `f` (`Analysis/BakryEmery/Laplacian.lean`).
+* `C1`: a real a.e. bounded scalar multiplier is symmetric on `L²`, `⟪c · u, v⟫ = ⟪u, c · v⟫`
+  (`L2/BoundedMultiplier.lean`).
+* `C2`: **the global cutoff theorem.** For a `C¹` potential and unit weight, if `u ∈ L²(ν)`
+  satisfies `⟪A [f], u⟫ + ⟪[f], u⟫ = 0` for every `f ∈ C_c^∞(V)` — orthogonality to the range of
+  `A + 1` on `C_c^∞(V)` — and if `[χ u] ∈ D(T̄)` for **every** `χ ∈ C_c^∞(V)`, then `u = 0`
+  (`KLS.LogConcave.eq_zero_of_localRegularity`). The engine is the quantitative estimate
+  `‖χ_r u‖ ≤ (M / r) ‖u‖` for a scaled bump family, proved from the Leibniz rule
+  `T̄(χ x) = χ (T̄ x) + x (B ∇χ)` on the whole form domain, the sequential smooth graph core of
+  `T̄`, the weak integration by parts `⟪A f, x⟫ = ⟪T̄ f, T̄ x⟫` and `C0`/`C1`. **Only the first
+  derivative of the cutoff occurs**, so the unbounded commutator `⟪∇U, ∇χ⟫` never appears. No
+  convexity, no semigroup, no `Γ₂` input.
+* `C3`: **the operator-core criterion.** If that local regularity holds for every such `u`, then
+  every `F ∈ D(A)` satisfies the conclusion of `hcore`: `[fₙ] → F` and `A [fₙ] → A F` in `L²(ν)`
+  for smooth compactly supported `fₙ`
+  (`exists_seq_smooth_tendsto_adjointComp_of_localRegularity`), through triviality of the
+  orthogonal complement and `‖(A + 1) v‖² = ‖A v‖² + 2 ‖T̄ v‖² + ‖v‖²`.
+* `C4`: the same two statements with the stronger and more familiar hypothesis `u ∈ D(T̄)`, and
+  the implication from the global hypothesis to the local one for an arbitrary weight `B`.
+* `C5`: the heat-flow weak `Γ₂` inequality with the local hypothesis in place of `hcore`
+  (`HeatSemigroup.integral_mul_weakGamma_apply_nonneg_of_localRegularity`), for arbitrary
+  `g ∈ L²(ν)`, every `t > 0` and every nonnegative `φ ∈ C_c^∞(V)`, with `C^∞` convex `U`.
+
+**The local hypothesis is equivalent to `hcore`, not weaker.** If `hcore` holds there is no
+nonzero class orthogonal to `(A + 1) C_c^∞(V)`, so the local hypothesis holds vacuously, and `C3`
+proves the converse. What changed is the shape and location of the gap — the global cutoff half is
+discharged and what remains is a single local PDE statement — not its logical strength.
+
+`research/audits/BakryEmeryOperatorCoreAudit.lean` restates and proves every public conclusion,
+checks the sign of the tested equation (`A + 1`, not `A - 1`), and exercises the zero multiplier,
+the zero class as a non-vacuity witness, the empty-support case and the global-to-local
+implication; **18 standard-only axiom reports, 0 `sorryAx`**.
+
+**Not proved.** Interior elliptic regularity for `div(e^{-U} ∇ ·)`: that a distributional
+solution of `ℒ u = u` in `L²(ν)` satisfies `[χ u] ∈ D(T̄)` for `χ ∈ C_c^∞(V)`. That is the
+hypothesis of `C3`–`C5` and **the whole remaining gap**. Hence: essential self-adjointness of
+`ℒ` on `C_c^∞(V)`; the unconditional heat-flow weak `Γ₂` inequality; `Γ(P_t f) ≤ P_t Γ(f)`; the
+`Γ` time interpolation `s ↦ ∫ (P_s φ) Γ(T̄ (P_{t-s} f)) dν` and the extension of the weak `Γ₂`
+inequality to the test class `{P_s φ}`; the square and first-order gradient estimates; the
+general-law passage; the constant `π`; Buser; KLS. Four routes to the missing ingredient were
+compared and are recorded, including the localized Fourier/Bessel bootstrap that Mathlib's new
+`TemperedDistribution.MemSobolev` would in principle support; none was within this round.
+
+**Verification.** Default `lake build` (3576 jobs) passed. The new and touched modules
+(`OperatorCore.lean`, `Laplacian.lean`, `BoundedMultiplier.lean`, `GammaTwo.lean`, the root
+aggregate) and the new audit compile with `-DwarningAsError=true`, 0 errors, 0 warnings. The root
+`python3 research/verify.py` was rerun at the **end** of the round, after every tracked edit; its
+receipt is identified in `build/audit/operator-core-criterion/final-snapshot.json`. See
+[the implementation record](research/decisions/2026-09-22-operator-core-criterion.md) for the
+placement plan, the exact hypotheses, the route check and the minimal remaining gap. No commit or
+push; the real Git index is unchanged.
+
+
+## Weak `Γ` interface: `W0`–`W3` proved (2026-09-21, later)
+
+**Implementation round, the fourth internal milestone of the full Buser task; it changes none of
+the registration numbers.** Certificates stay **26**, the deliberate target hole stays the only one.
+
+**Proved.** Write `T̄` for the closed weighted gradient, `A = T̄†T̄ ≥ 0`, `ℒ = -A`,
+`P_t = exp (-tA)`, and `Γ(u, v)(x) = ⟪u x, v x⟫` for `u, v ∈ L²(ν; V)`
+(`Analysis.BakryEmery.WeakGamma.apply`).
+
+* `W0`: `Γ(u, v)` is a.e. strongly measurable, **`L¹` and not `L²`**, independent of the chosen
+  representatives, symmetric, nonnegative on the diagonal with `Γ(u, u) = ‖u‖²`, and
+  `∫ Γ(u, v) dν = ⟪u, v⟫`, `∫ Γ(u, u) dν = ‖u‖²`. Testing `∫ φ Γ(u, v) dν` is legal exactly for
+  a.e. bounded `φ` (`integrable_mul`), and the pairing is `L¹`-stable in the `L²` norms of the
+  fields (`integral_abs_sub_le`, `abs_integral_mul_sub_le`, `tendsto_integral_mul`). On
+  `C_c^∞` classes it is the classical `Γ` (`KLS.LogConcave.weakGamma_toLp`).
+* `W1`: the Leibniz rule `B ∇(g₁g₂) = g₁ B∇g₂ + g₂ B∇g₁` a.e. and the chain rule
+  `B ∇(Φ ∘ g) = Φ'(g) B∇g` a.e., with the test class closed under products of **bounded** tests
+  and under `C¹` maps with bounded derivative fixing `0` (`Energy/WeightedGradient/Leibniz.lean`,
+  and `KLS.LogConcave.coeFn_closedWeightedOperator_mul`/`_comp` for `T̄`); weak integration by
+  parts `∫ Γ(T̄ f, T̄ x) dν = ∫ (A f) x dν` for `f ∈ D(A)`, `x ∈ D(T̄)`, arbitrary weight `B`
+  (`WeakGamma.integral_eq_integral_mul_adjointComp`), agreeing with `∫ (-ℒf) x dν` on `C_c^∞`.
+* `W2`: for `ν = m.tilted (-U)` with `U` `C²` convex, `f` `C³` compactly supported and `φ` `C²`
+  compactly supported with `φ ≥ 0`,
+  `0 ≤ (∫ (ℒφ) Γ(f, f) dν)/2 - ∫ φ Γ(f, ℒf) dν`
+  (`Analysis.BakryEmery.integral_mul_gammaTwo_nonneg`), through the new symmetry
+  `integral_weightedLaplacian_mul_comm` of `ℒ` on `C_c²`; also in weak form with `L²` fields
+  (`integral_mul_weakGamma_nonneg`). Every integrand is continuous with compact support, so all
+  three integrals are finite; `Γ(f, f)` is never treated as an `L²` function.
+* `W3`: the weak inequality transfers along `L²` convergence of the two fields
+  (`integral_mul_weakGamma_nonneg_of_tendsto` and its closed-gradient form). Proved outright for
+  the actual heat flow: `∫ Γ(T̄ (P_t f)) dν ≤ ∫ Γ(T̄ f) dν` on the form domain,
+  `2t ∫ Γ(T̄ (P_t g)) dν ≤ ‖g‖²` for **arbitrary** `g ∈ L²(ν)` and `t > 0`, the weak generator
+  identity for `P_t g`, and the new **second-order regularity** `A (P_t g) ∈ D(T̄)`
+  (`Generated.mem_domain_adjointComp_apply_of_pos`, by `A(P_t g) = P_{t/2}(A(P_{t/2} g))`), so
+  both fields of the weak `Γ₂` inequality exist for every `L²` datum at positive times
+  (`HeatSemigroup.integral_mul_weakGamma_apply_nonneg_of_tendsto`).
+
+`research/audits/BakryEmeryWeakGammaAudit.lean` restates and proves every public conclusion,
+exercises the zero field, the zero test function, the reflexive stability case and the
+non-vacuity of the transfer theorem on smooth data; **87 standard-only axiom reports, 0
+`sorryAx`**.
+
+**Not proved.** `Γ(P_t f) ≤ P_t Γ(f)` in any form, pointwise or integrated; `|T(P_t f)| ≤ P_t|Tf|`;
+the time derivative of `s ↦ P_s Γ(P_{t-s} f)`; the **second-order smooth core**
+(`∇fₙ → T̄ F` and `∇(ℒfₙ) → T̄ (A F)` in `L²` for `F = P_t g`), which is the single remaining
+hypothesis of the transfer theorems; classical or smooth representatives of `P_t g`; an operator
+core for `A`; the general-law passage; small-time BV/perimeter estimates; the constant `π`;
+Buser; KLS. `Γ(u, v)` is `L¹`, so no `L²` semigroup is applied to it and no `L¹` extension is
+constructed.
+
+**Verification.** Default `lake build` (3572 jobs) passed. The touched and new modules and the
+new audit compile with `-DwarningAsError=true`, 0 errors, 0 warnings. `check_ledger.py` **26**
+certificates, `check_blueprint.py` 88 labels, `atlas.py check` 75 nodes and the unit tests run
+inside the root gate. The root `python3 research/verify.py` was rerun at the end of the round,
+after every documentation edit; its receipt is identified in
+`build/audit/weak-gamma-interface/final-snapshot.json` and reports 99 gates, 88 strict audit
+clients, 291 module replays and 367 declaration-audit axiom reports with no non-standard axiom,
+over 798 source files. See
+[the implementation record](research/decisions/2026-09-21-weak-gamma-interface.md) for the
+placement plan, the exact hypotheses, the source normalizations and the minimal remaining gap.
+No commit or push; the real Git index is unchanged.
 
 ## Generator identification on smooth tests: `G0` and `G1` proved (2026-09-20)
 

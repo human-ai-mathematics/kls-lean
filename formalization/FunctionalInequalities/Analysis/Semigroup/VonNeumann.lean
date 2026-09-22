@@ -83,6 +83,17 @@ theorem inner_adjointComp_apply (T : H₀ →ₗ.[ℝ] H₁) (hd : Dense (T.doma
     ⟪adjointComp T x, (y : H₀)⟫ = ⟪T ⟨(x : H₀), x.2.2⟩, T y⟫ :=
   inner_adjointComp hd x y.2
 
+/-- The Dirichlet form of `T†T`: for `x ∈ D(T†T)`, `⟪T†T x, x⟫ = ‖T x‖ ^ 2`.
+
+`V1` with `y = x`, which is legitimate because `D(T†T) ⊆ D(T)`.  This is the form that the
+semigroup contracts; `FunctionalInequalities.KLS.LogConcave.inner_adjointComp_self_eq` is its
+specialization to the closed weighted gradient.  Neither `T.IsClosed` nor completeness of `H₁`
+is used. -/
+theorem inner_adjointComp_self {T : H₀ →ₗ.[ℝ] H₁} (hd : Dense (T.domain : Set H₀))
+    (x : (adjointComp T).domain) :
+    ⟪adjointComp T x, (x : H₀)⟫ = ‖T ⟨(x : H₀), x.2.2⟩‖ ^ 2 := by
+  rw [inner_adjointComp hd x x.2.2, real_inner_self_eq_norm_sq]
+
 /-- `T†T` is symmetric: it is a formal adjoint of itself.
 
 Both sides of `⟪T†T x, y⟫ = ⟪x, T†T y⟫` equal `⟪T x, T y⟫` by `V1`, the right-hand one after a

@@ -38,6 +38,24 @@ theorem gamma_self (f : E → ℝ) (x : E) : gamma f f x = ‖gradient f x‖ ^ 
 theorem gamma_self_fun (f : E → ℝ) : gamma f f = fun y => ‖gradient f y‖ ^ 2 :=
   funext (gamma_self f)
 
+/-- Regularity of the carré du champ: `C^{n+1}` data give a `C^n` carré du champ. -/
+theorem contDiff_gamma {n p q : WithTop ℕ∞} {f g : E → ℝ} (hf : ContDiff ℝ p f)
+    (hg : ContDiff ℝ q g) (hp : n + 1 ≤ p) (hq : n + 1 ≤ q) : ContDiff ℝ n (gamma f g) :=
+  ContDiff.inner ℝ (contDiff_gradient hf hp) (contDiff_gradient hg hq)
+
+/-- The carré du champ inherits the compact support of its first argument. -/
+theorem hasCompactSupport_gamma_left {f : E → ℝ} (g : E → ℝ) (hfc : HasCompactSupport f) :
+    HasCompactSupport (gamma f g) := by
+  refine (hasCompactSupport_gradient hfc).mono fun x hx => ?_
+  intro h0
+  apply hx
+  simp [gamma_apply, h0]
+
+/-- The carré du champ of two `C¹` functions is continuous. -/
+theorem continuous_gamma {f g : E → ℝ} (hf : ContDiff ℝ 1 f) (hg : ContDiff ℝ 1 g) :
+    Continuous (gamma f g) :=
+  (continuous_gradient hf).inner (continuous_gradient hg)
+
 variable [FiniteDimensional ℝ E]
 
 /-- Product rule for the weighted Laplacian: `ℒ(fg) = f ℒg + g ℒf + 2 Γ(f, g)`, for `C²` `f`, `g`

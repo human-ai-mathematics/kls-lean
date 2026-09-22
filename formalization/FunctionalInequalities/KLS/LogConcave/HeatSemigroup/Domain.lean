@@ -1,9 +1,19 @@
 import FunctionalInequalities.Analysis.Semigroup.Generated.Domain
+import FunctionalInequalities.Analysis.Semigroup.Generated.FormDomain
+import FunctionalInequalities.Analysis.Semigroup.Generated.Smoothing
 import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Basic
 
 /-! # Heat semigroup domain interfaces
-All results require inputs in `D(T̄†T̄)` and allow arbitrary weights `B`.
-The gradient supplied here is the closed weighted operator, not a classical representative.
+Every result allows arbitrary weights `B`. Time zero is allowed for the generator-domain and
+form-domain interfaces; arbitrary-input smoothing requires strictly positive time. The generator-domain interfaces
+(`preserves_domain`, `generator_comm`, `mem_closedWeightedOperator_domain`, `right_derivative`)
+require inputs in `D(T̄†T̄)`; the form-domain interfaces (`preserves_form_domain`,
+`norm_closedWeightedOperator_le`) require only `f ∈ D(T̄)`; the positive-time smoothing
+interfaces (`mem_closedWeightedOperator_domain_of_pos`, `mem_adjointComp_domain_of_pos` and their
+bounds) require nothing of the datum beyond membership in `L²(ν)`, but need `t > 0`.
+The gradient supplied here is the closed weighted operator, not a classical representative:
+no pointwise gradient, no smooth representative and no `Γ`-calculus is claimed, and the sharp
+constants `1/√(2et)` and `1/(et)` are not claimed either.
 -/
 noncomputable section
 open MeasureTheory FunctionalInequalities.Analysis.Semigroup
@@ -47,5 +57,80 @@ theorem right_derivative
   Generated.right_derivative _
     (hν.closedWeightedOperator_isClosed m B hi)
     (hν.dense_domain_closedWeightedOperator m B hi) f ht hε
+
+/-- Form-domain inputs remain in the form domain: for `f ∈ D(T̄)` and `t ≥ 0`, `P_t f ∈ D(T̄)`.
+This is the concrete case of `Generated.preserves_form_domain`, with arbitrary weight `B`. -/
+theorem preserves_form_domain
+    (f : (hν.closedWeightedOperator m B hi).domain) {t : ℝ} (ht : 0 ≤ t) :
+    HeatSemigroup.operator m B hν hi ht f ∈ (hν.closedWeightedOperator m B hi).domain :=
+  Generated.preserves_form_domain _ (hν.closedWeightedOperator_isClosed m B hi)
+    (hν.dense_domain_closedWeightedOperator m B hi) f ht
+
+/-- The heat semigroup contracts the closed weighted gradient on the whole form domain:
+`‖T̄ (P_t f)‖ ≤ ‖T̄ f‖` for `f ∈ D(T̄)` and `t ≥ 0`, with arbitrary weight `B`.
+The gradient is `T̄` in the closed-operator sense. -/
+theorem norm_closedWeightedOperator_le
+    (f : (hν.closedWeightedOperator m B hi).domain) {t : ℝ} (ht : 0 ≤ t)
+    (hft : HeatSemigroup.operator m B hν hi ht f ∈
+      (hν.closedWeightedOperator m B hi).domain) :
+    ‖hν.closedWeightedOperator m B hi ⟨HeatSemigroup.operator m B hν hi ht f, hft⟩‖
+      ≤ ‖hν.closedWeightedOperator m B hi f‖ :=
+  Generated.norm_map_apply_le _ (hν.closedWeightedOperator_isClosed m B hi)
+    (hν.dense_domain_closedWeightedOperator m B hi) f ht hft
+
+/-- **Positive-time smoothing into the form domain**: for *every* `f ∈ L²(ν)` and every `t > 0`,
+`P_t f` has a closed weighted gradient.  Concrete case of
+`Generated.mem_domain_apply_of_pos`, with arbitrary weight `B`. -/
+theorem mem_closedWeightedOperator_domain_of_pos
+    (f : Lp ℝ 2 (ν : Measure V)) {t : ℝ} (ht : 0 < t) :
+    HeatSemigroup.operator m B hν hi ht.le f ∈ (hν.closedWeightedOperator m B hi).domain :=
+  Generated.mem_domain_apply_of_pos _ (hν.closedWeightedOperator_isClosed m B hi)
+    (hν.dense_domain_closedWeightedOperator m B hi) f ht
+
+/-- The gradient bound accompanying `mem_closedWeightedOperator_domain_of_pos`:
+`2 t ‖T̄ (P_t f)‖ ² ≤ ‖f‖ ²`, i.e. `‖T̄ (P_t f)‖ ≤ ‖f‖ / √(2t)`, for arbitrary `f ∈ L²(ν)`. -/
+theorem two_mul_norm_closedWeightedOperator_sq_le
+    (f : Lp ℝ 2 (ν : Measure V)) {t : ℝ} (ht : 0 < t)
+    (hft : HeatSemigroup.operator m B hν hi ht.le f ∈
+      (hν.closedWeightedOperator m B hi).domain) :
+    2 * t * ‖hν.closedWeightedOperator m B hi
+        ⟨HeatSemigroup.operator m B hν hi ht.le f, hft⟩‖ ^ 2 ≤ ‖f‖ ^ 2 :=
+  Generated.two_mul_norm_map_apply_sq_le _ (hν.closedWeightedOperator_isClosed m B hi)
+    (hν.dense_domain_closedWeightedOperator m B hi) f ht hft
+
+/-- **Positive-time smoothing into the generator domain**: for *every* `f ∈ L²(ν)` and every
+`t > 0`, `P_t f ∈ D(T̄†T̄)`.  Concrete case of
+`Generated.mem_adjointComp_domain_apply_of_pos`, with arbitrary weight `B`. -/
+theorem mem_adjointComp_domain_of_pos
+    (f : Lp ℝ 2 (ν : Measure V)) {t : ℝ} (ht : 0 < t) :
+    HeatSemigroup.operator m B hν hi ht.le f ∈
+      (adjointComp (hν.closedWeightedOperator m B hi)).domain :=
+  Generated.mem_adjointComp_domain_apply_of_pos _ (hν.closedWeightedOperator_isClosed m B hi)
+    (hν.dense_domain_closedWeightedOperator m B hi) f ht
+
+/-- The generator bound accompanying `mem_adjointComp_domain_of_pos`:
+`t ‖T̄†T̄ (P_t f)‖ ≤ ‖f‖` for arbitrary `f ∈ L²(ν)` and `t > 0`. -/
+theorem mul_norm_adjointComp_le
+    (f : Lp ℝ 2 (ν : Measure V)) {t : ℝ} (ht : 0 < t)
+    (hft : HeatSemigroup.operator m B hν hi ht.le f ∈
+      (adjointComp (hν.closedWeightedOperator m B hi)).domain) :
+    t * ‖adjointComp (hν.closedWeightedOperator m B hi)
+        ⟨HeatSemigroup.operator m B hν hi ht.le f, hft⟩‖ ≤ ‖f‖ :=
+  Generated.mul_norm_adjointComp_apply_le _ (hν.closedWeightedOperator_isClosed m B hi)
+    (hν.dense_domain_closedWeightedOperator m B hi) f ht hft
+
+/-- **Second-order positive-time regularity**: for *every* `f ∈ L²(ν)` and every `t > 0`, the
+generator image `T̄†T̄ (P_t f)` again has a closed weighted gradient.  Concrete case of
+`Generated.mem_domain_adjointComp_apply_of_pos`, with arbitrary weight `B`.  This is membership
+in `D(T̄)` of the generator image, not a classical representative and not a pointwise bound. -/
+theorem mem_closedWeightedOperator_domain_adjointComp_of_pos
+    (f : Lp ℝ 2 (ν : Measure V)) {t : ℝ} (ht : 0 < t)
+    (hft : HeatSemigroup.operator m B hν hi ht.le f ∈
+      (adjointComp (hν.closedWeightedOperator m B hi)).domain) :
+    (adjointComp (hν.closedWeightedOperator m B hi)
+        ⟨HeatSemigroup.operator m B hν hi ht.le f, hft⟩ : Lp ℝ 2 (ν : Measure V)) ∈
+      (hν.closedWeightedOperator m B hi).domain :=
+  Generated.mem_domain_adjointComp_apply_of_pos _ (hν.closedWeightedOperator_isClosed m B hi)
+    (hν.dense_domain_closedWeightedOperator m B hi) f ht hft
 
 end FunctionalInequalities.KLS.LogConcave.HeatSemigroup

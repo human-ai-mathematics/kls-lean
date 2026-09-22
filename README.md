@@ -42,10 +42,41 @@ of the Hessian of a convex potential, the Bochner identity
 `Γ₂(f) = ∑ᵢ∑ⱼ (D²f(eᵢ, eⱼ))² + D²U(∇f, ∇f)` in the fixed standard basis, and `Γ₂ ≥ 0`
 (`Analysis/BakryEmery/Gamma.lean`, `Bochner.lean`). Right generator limits now characterize
 `D(A)`: for inputs in `D(A)`, `P_t` preserves that domain, commutes with `A`, and has right
-derivative `-A(P_t f)` at every `t ≥ 0`. The heat wrappers retain arbitrary weights and give
-closed weighted gradients. Arbitrary-input smoothing and full form-domain stability remain open.
-There are no Bakry–Émery gradient estimates
-for the semigroup or small-time heat bounds yet.
+derivative `-A(P_t f)` at every `t ≥ 0`. The **whole form domain** is now stable as well: for
+every `f ∈ D(T̄)` and `t ≥ 0`, `P_t f ∈ D(T̄)` and `‖T̄(P_t f)‖ ≤ ‖T̄ f‖`, proved through
+graph-norm density of `D(A)` in `D(T̄)` and a two-parameter resolvent energy identity
+(`Analysis/Semigroup/Generated/FormDomain.lean`, `Resolvent/Limit.lean`). **Positive time even
+regularizes arbitrary data**: for every `f ∈ L²(ν)` and `t > 0`, `P_t f ∈ D(T̄†T̄)` with
+`‖T̄(P_t f)‖ ≤ ‖f‖/√(2t)` and `‖T̄†T̄(P_t f)‖ ≤ ‖f‖/t`, from two second-order dissipation estimates
+for the Yosida exponentials (`Analysis/Semigroup/Exponential/Dissipation.lean`,
+`Generated/Smoothing.lean`). The heat wrappers retain arbitrary weights and give closed weighted
+gradients. The sharp constants `1/√(2et)` and `1/(et)`, classical representatives and pointwise
+gradient estimates remain open; membership in `D(T̄†T̄)` does not supply a classical representative
+or the integrability, domains and differentiation rules for `Γ(P_t f)`. Weak Γ integrability, stability, smooth-test integrated Bochner and conditional limit-transfer
+interfaces are now proved. The **second-order field has since been eliminated** from the weak
+`Γ₂` inequality: a Leibniz rule for the closed gradient against a `C_c^∞` multiplier, valid on
+the whole form domain, gives
+`∫ φ Γ(T̄F, T̄(AF)) dν = ∫ φ (AF)² dν - ∫ (AF) Γ(T̄F, T̄φ) dν`, so the inequality transfers along
+`[fₙ] → F` and `A[fₙ] → A F` in `L²` alone
+(`L2/BoundedMultiplier.lean`, `KLS/LogConcave/WeightedGradient/Multiplier.lean`,
+`KLS/LogConcave/HeatSemigroup/GammaTwo.lean`). For the heat flow the inequality was first proved under a
+single explicit hypothesis, then that hypothesis was **reduced to a local one**
+(`KLS/LogConcave/HeatSemigroup/OperatorCore.lean`), and that local statement — interior
+regularity of distributional solutions of `ℒ u = u`, i.e. `[χ u] ∈ D(T̄)` for every
+`χ ∈ C_c^∞` — is now **proved** by mollification against the Haar measure
+(`Analysis/Mollification.lean`, `KLS/LogConcave/HeatSemigroup/InteriorRegularity.lean`). Hence
+`C_c^∞` **is an operator core** of `T̄†T̄` for every `C¹` potential (`ℒ` is essentially
+self-adjoint on `C_c^∞`), and the **heat-flow weak `Γ₂` inequality holds with only the model
+hypotheses** — `C^∞` convex potential, unit weight, arbitrary `g ∈ L²(ν)`, every `t > 0`, every
+nonnegative `φ ∈ C_c^∞` (`HeatSemigroup.integral_mul_weakGamma_apply_nonneg`). The product/chain rules otherwise still apply to `IsTest` inputs, and the
+original second-stage gradient-estimate target remains open. There
+are no pointwise Bakry–Émery gradient estimates for the semigroup or small-time heat bounds yet.
+
+The heat-test extension is **partial** (`HeatSemigroup/TestClass.lean`): evolved smooth tests
+`P_s φ` and their generator images have uniform essential bounds, and both weak-Γ pairings
+are integrable for arbitrary `L²` fields. The inequality accepts these tests when the data
+are smooth and compactly supported. Its extension to arbitrary positive-time heat data still
+requires an unproved limit argument; time interpolation and gradient estimates remain open.
 
 **Next priority:** [complete the Buser comparison with constant π for every finite-dimensional
 log-concave law](research/decisions/2026-09-20-buser-handoff-prompt.md), then combine it with the

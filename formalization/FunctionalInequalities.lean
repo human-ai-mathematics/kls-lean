@@ -1,5 +1,7 @@
 import FunctionalInequalities.Analysis.Semigroup.Exponential.Counterexample
 import FunctionalInequalities.Analysis.Semigroup.Generated.Domain
+import FunctionalInequalities.Analysis.Semigroup.Generated.FormDomain
+import FunctionalInequalities.Analysis.Semigroup.Generated.Smoothing
 import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Domain
 import FunctionalInequalities.Poincare.SmoothTest.Basic
 import FunctionalInequalities.Poincare.Foundation
@@ -50,6 +52,7 @@ import FunctionalInequalities.Poincare.LocalSlope.Gradient
 import FunctionalInequalities.Analysis.Semigroup.Resolvent.Form
 import FunctionalInequalities.Analysis.Semigroup.Resolvent.Basic
 import FunctionalInequalities.Analysis.Semigroup.Exponential.Contraction
+import FunctionalInequalities.Analysis.Semigroup.Exponential.Dissipation
 import FunctionalInequalities.Analysis.Semigroup.AdjointComp
 import FunctionalInequalities.Analysis.Semigroup.VonNeumann
 import FunctionalInequalities.Analysis.Semigroup.Resolvent.Limit
@@ -71,6 +74,17 @@ import FunctionalInequalities.Analysis.BakryEmery.Gamma
 import FunctionalInequalities.Analysis.BakryEmery.Bochner
 import FunctionalInequalities.Analysis.Semigroup.AdjointClosure
 import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Generator
+import FunctionalInequalities.Analysis.BakryEmery.WeakGamma
+import FunctionalInequalities.Analysis.BakryEmery.IntegratedBochner
+import FunctionalInequalities.Energy.WeightedGradient.Leibniz
+import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Gamma
+import FunctionalInequalities.L2.BoundedMultiplier
+import FunctionalInequalities.KLS.LogConcave.WeightedGradient.Multiplier
+import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.OperatorCore
+import FunctionalInequalities.Analysis.Mollification
+import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.InteriorRegularity
+import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.GammaTwo
+import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.TestClass
 
 /-!
 # Functional inequalities

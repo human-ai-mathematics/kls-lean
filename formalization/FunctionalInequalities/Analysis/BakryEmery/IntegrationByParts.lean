@@ -170,6 +170,30 @@ theorem integral_inner_gradient_tilted {U f g : E → ℝ} (hU : ContDiff ℝ 1 
   rw [inner_gradient_tilted_weight hU Z, weightedLaplacian_apply]
   ring
 
+/-- **Symmetry of the weighted Laplacian on compactly supported `C²` functions.** For
+`μ = m.tilted (-U)` and a `C¹` potential `U`, `∫ (ℒf) g dμ = ∫ f (ℒg) dμ`. Both functions must be
+`C²` with compact support; no convexity and no `L²` theory is used. This is the classical
+self-adjointness of `ℒ` on the smooth compactly supported class, in integrated form. -/
+theorem integral_weightedLaplacian_mul_comm {U f g : E → ℝ} (hU : ContDiff ℝ 1 U)
+    (hf : ContDiff ℝ 2 f) (hfc : HasCompactSupport f) (hg : ContDiff ℝ 2 g)
+    (hgc : HasCompactSupport g) :
+    ∫ x, weightedLaplacian U f x * g x ∂(m.tilted (-U)) =
+      ∫ x, f x * weightedLaplacian U g x ∂(m.tilted (-U)) := by
+  have h1 := integral_inner_gradient_tilted m hU hf hfc (hg.of_le (by norm_num))
+  have h2 := integral_inner_gradient_tilted m hU hg hgc (hf.of_le (by norm_num))
+  have hcomm : ∫ x, ⟪gradient f x, gradient g x⟫ ∂(m.tilted (-U)) =
+      ∫ x, ⟪gradient g x, gradient f x⟫ ∂(m.tilted (-U)) :=
+    integral_congr_ae (Filter.Eventually.of_forall fun x => real_inner_comm _ _)
+  have e1 : ∫ x, weightedLaplacian U f x * g x ∂(m.tilted (-U)) =
+      -∫ x, -weightedLaplacian U f x * g x ∂(m.tilted (-U)) := by
+    rw [← integral_neg]
+    exact integral_congr_ae (Filter.Eventually.of_forall fun x => by ring)
+  have e2 : ∫ x, f x * weightedLaplacian U g x ∂(m.tilted (-U)) =
+      -∫ x, -weightedLaplacian U g x * f x ∂(m.tilted (-U)) := by
+    rw [← integral_neg]
+    exact integral_congr_ae (Filter.Eventually.of_forall fun x => by ring)
+  rw [e1, e2, ← h1, ← h2, hcomm]
+
 end Tilted
 
 end FunctionalInequalities.Analysis.BakryEmery

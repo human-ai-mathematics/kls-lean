@@ -1,3 +1,4 @@
+import Mathlib.Analysis.InnerProductSpace.Calculus
 import Mathlib.Analysis.Calculus.FDeriv.Symmetric
 import Mathlib.Analysis.Calculus.Gradient.Basic
 import Mathlib.Analysis.InnerProductSpace.Laplacian
@@ -208,6 +209,20 @@ theorem gradient_mul {f g : E → ℝ} {x : E} (hf : DifferentiableAt ℝ f x)
   unfold gradient
   rw [fderiv_fun_mul hf hg, map_add, map_smulₛₗ, map_smulₛₗ]
   simp
+
+/-- The gradient of a negation, with no differentiability hypothesis. -/
+theorem gradient_neg (f : E → ℝ) (x : E) : gradient (fun y => -f y) x = -gradient f x := by
+  unfold gradient
+  rw [fderiv_fun_neg, map_neg]
+
+/-- Chain rule for the gradient: `∇(Φ ∘ g) = Φ'(g) ∇g`. -/
+theorem gradient_comp {Φ : ℝ → ℝ} {g : E → ℝ} {x : E} (hΦ : DifferentiableAt ℝ Φ (g x))
+    (hg : DifferentiableAt ℝ g x) :
+    gradient (fun y => Φ (g y)) x = deriv Φ (g x) • gradient g x := by
+  have hcomp : HasFDerivAt (fun y => Φ (g y)) (deriv Φ (g x) • fderiv ℝ g x) x :=
+    hΦ.hasDerivAt.comp_hasFDerivAt x hg.hasFDerivAt
+  unfold gradient
+  rw [hcomp.fderiv, map_smul]
 
 /-- Difference rule for the gradient. -/
 theorem gradient_sub {f g : E → ℝ} {x : E} (hf : DifferentiableAt ℝ f x)

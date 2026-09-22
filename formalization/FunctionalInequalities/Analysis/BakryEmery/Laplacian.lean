@@ -35,6 +35,34 @@ theorem continuous_weightedLaplacian {U f : E → ℝ} (hU : ContDiff ℝ 1 U) (
   (continuous_laplacian hf).sub
     ((continuous_gradient hU).inner (continuous_gradient (hf.of_le (by norm_num))))
 
+/-- Regularity of the weighted Laplacian: a `C^{n+1}` potential and `C^{n+2}` data give a `C^n`
+weighted Laplacian. -/
+theorem contDiff_weightedLaplacian {n p q : WithTop ℕ∞} {U f : E → ℝ} (hU : ContDiff ℝ p U)
+    (hf : ContDiff ℝ q f) (hp : n + 1 ≤ p) (hq : n + 2 ≤ q) :
+    ContDiff ℝ n (weightedLaplacian U f) := by
+  have hnq : n + 1 ≤ q :=
+    le_trans (by gcongr; norm_num : n + (1 : WithTop ℕ∞) ≤ n + 2) hq
+  exact ContDiff.sub (contDiff_laplacian hf hq)
+    (ContDiff.inner ℝ (contDiff_gradient hU hp) (contDiff_gradient hf hnq))
+
+/-- **The weighted Laplacian is local**: it vanishes at every point outside the closed support of
+its argument, because both the gradient and the second derivative do. The potential is
+unrestricted. -/
+theorem weightedLaplacian_eq_zero_of_notMem_tsupport (U : E → ℝ) {f : E → ℝ} {x : E}
+    (hx : x ∉ tsupport f) : weightedLaplacian U f x = 0 := by
+  have h1 : fderiv ℝ f x = 0 := by
+    by_contra h
+    exact hx (support_fderiv_subset (𝕜 := ℝ) h)
+  have h2 : fderiv ℝ (fderiv ℝ f) x = 0 := by
+    by_contra h
+    exact hx (tsupport_fderiv_subset (𝕜 := ℝ) (support_fderiv_subset (𝕜 := ℝ) h))
+  have hgrad : gradient f x = 0 := by
+    rw [gradient, h1, map_zero]
+  have hlap : Laplacian.laplacian f x = 0 := by
+    rw [laplacian_eq_sum_fderiv_fderiv, h2]
+    simp
+  rw [weightedLaplacian_apply, hlap, hgrad, inner_zero_right, sub_zero]
+
 /-- The weighted Laplacian of a compactly supported function has compact support. -/
 theorem hasCompactSupport_weightedLaplacian (U : E → ℝ) {f : E → ℝ}
     (hfc : HasCompactSupport f) : HasCompactSupport (weightedLaplacian U f) := by
