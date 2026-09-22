@@ -5,9 +5,9 @@ the distinction between known mathematics, local arguments, open research, and L
 This workflow runs locally and does not commit, push, dispatch agents, or publish artifacts.
 Public interfaces remain editable under [the lifecycle](ledger-schema.md#lifecycle).
 
-## Current status and receipt scope (2026-09-20)
+## Current status and receipt scope (2026-09-22)
 
-For today's proved scope and next task, use the [current operational handoff](../HANDOFF.md#current-operational-status-2026-09-20)
+For today's proved scope and next task, use the [current operational handoff](../HANDOFF.md#current-operational-status-2026-09-22)
 and [status alignment record](decisions/2026-09-20-current-status-alignment.md). There are 26
 certificates and one deliberate, isolated KLS target hole. The older dated reports below retain
 their historical counts. Semigroup generation and the stated `L²` Markov properties are now
@@ -19,6 +19,13 @@ tests for tilted smooth potentials (`G0`/`G1`), is proved; see the section below
 local `Γ`/`Γ₂` calculus with the Bochner identity and `Γ₂ ≥ 0` for convex potentials (`B0`–`B4`),
 is proved pointwise for smooth functions; see
 [the Bochner record](decisions/2026-09-20-bochner-identification.md).
+The later [interior-regularity round](decisions/2026-09-22-interior-regularity.md) proves the
+operator core in the current unit-weight model and the heat-flow weak `Γ₂` inequality for
+smooth compactly supported tests. The [heat-test extension](decisions/2026-09-22-heat-test-class.md)
+is partial: bounds and pairings are available, and nonnegative `D(A)` tests are admitted for
+smooth compactly supported data; extension to arbitrary heat-flow data remains the immediate
+cut. The latest proof-round receipt is `20260922T110108.224405Z`, identified in
+`build/audit/heat-test-class-takeover/final-snapshot.json`.
 
 A receipt certifies its recorded snapshot and trust scope. A subsequent documentation edit
 changes that snapshot even when all Lean sources remain byte-identical. Structural metadata

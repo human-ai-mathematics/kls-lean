@@ -12,7 +12,7 @@ recorded explicitly and checked against the original goal; see the
 [current lifecycle](research/ledger-schema.md#lifecycle). Earlier freeze records remain dated
 review snapshots.
 
-## Current status (2026-09-20)
+## Current status (2026-09-22)
 
 The ledger contains **26 Lean-certified nodes**. The former coarea, Sard, Cheeger-infimum
 and Energy WIP modules have been closed and removed. **One explicit target hole remains**:
@@ -85,11 +85,13 @@ and small-time heat bounds are internal proof milestones, not the final delivera
 an implementation target, not a completed result. Even its completion will leave the four KLS
 routes' open research conditions to resolve.
 
-The [current handoff](HANDOFF.md#current-operational-status-2026-09-20) and
+The [current handoff](HANDOFF.md#current-operational-status-2026-09-22) and
 [status correction record](research/decisions/2026-09-20-current-status-alignment.md) supersede
-older pending-work summaries. This documentation update changes no Lean proof or certificate;
-the existing verification receipt is evidence for the unchanged Lean sources, not a fresh
-full verification of the edited documentation.
+older pending-work summaries. The latest proof-round receipt is
+`20260922T110108.224405Z`, identified in
+`build/audit/heat-test-class-takeover/final-snapshot.json`. It records a local build and kernel
+replay for that snapshot. The subsequent documentation alignment leaves Lean sources and
+certificate status unchanged; it is not a fresh full verification or a remote CI result.
 
 ## Proof progress tree
 

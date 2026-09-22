@@ -61,7 +61,7 @@ with all necessary bounds proved. The record identifies the missing estimates fo
 Validation of this partial delivery is identified by
 `build/audit/heat-test-class-takeover/final-snapshot.json`. Certificates remain 26.
 
-## Current operational status (2026-09-20)
+## Current operational status (2026-09-22)
 
 This section is the current handoff. The dated rounds below are historical records; their
 hole counts, assignments and "next" steps describe those rounds, not today's queue.
@@ -83,7 +83,8 @@ hole counts, assignments and "next" steps describe those rounds, not today's que
   unit weight, weighted integration by parts `∫ ⟪∇f, ∇g⟫ dν = ∫ (-ℒf) g dν` (`G0`) and, for every
   `f ∈ C_c^∞`, `[f] ∈ D(T̄†T̄)` with `T̄†T̄ [f] = [-ℒf]`, `ℒf = Δf - ⟪∇U, ∇f⟫` (`G1`), are proved in
   `Analysis/BakryEmery/IntegrationByParts.lean` and `KLS/LogConcave/HeatSemigroup/Generator.lean`.
-  These are per-test statements: `C_c^∞` is not shown to be an operator core of `T̄†T̄`.
+  These per-test statements are complemented by the operator-core theorem proved in
+  `HeatSemigroup/InteriorRegularity.lean` for the current unit-weight model, as recorded below.
 - **Local `Γ`/`Γ₂` calculus (2026-09-20, later):** with `Γ(f, g) = ⟪∇f, ∇g⟫` and
   `Γ₂(f) = ℒ(Γ(f, f))/2 - Γ(f, ℒf)` in the diffusion convention, the product identity `B0`, the
   positive semidefiniteness of the Hessian of a `C²` convex potential `B1`, the Bochner identity
@@ -144,7 +145,8 @@ hole counts, assignments and "next" steps describe those rounds, not today's que
   suffice, with `T̄ fₙ → T̄ F` derived, not assumed
   (`KLS/LogConcave/HeatSemigroup/GammaTwo.lean`). The admissible class contains every `C_c^∞`
   class and is closed for the graph norm of `A`, i.e. it is the domain of the closure of `A`
-  restricted to `C_c^∞`; it is **not** claimed to be `D(A)`. See
+  restricted to `C_c^∞`. The later interior-regularity theorem identifies this class with
+  `D(A)` in the current unit-weight model; the arbitrary-weight statement retains its scope. See
   [G0–G5](research/decisions/2026-09-21-generator-gamma-two.md) and its
   [comparison and interpolation correction](research/decisions/2026-09-21-generator-gamma-two.md#comparison-and-interpolation-correction-after-review):
   generator-graph convergence is a **different sufficient** condition that eliminates the second
@@ -159,7 +161,8 @@ hole counts, assignments and "next" steps describe those rounds, not today's que
   module `KLS/LogConcave/HeatSemigroup/OperatorCore.lean`; see
   [C0–C5](research/decisions/2026-09-22-operator-core-criterion.md).
 - **Interior regularity (M0–M3, R1–R3, 2026-09-22, later):** the local hypothesis is **proved**
-  for every `C¹` potential by mollification against the Haar measure
+  for every `C¹` potential in the current full-dimensional log-concave tilted-law model
+  with unit weight, by mollification against the Haar measure
   (`KLS.LogConcave.toLp_mul_mem_closedWeightedOperator_domain_of_orthogonal`,
   `KLS/LogConcave/HeatSemigroup/InteriorRegularity.lean`, with the `L²` mollifier toolkit of
   `Analysis/Mollification.lean`), so **`C_c^∞(V)` is an operator core of `A = T̄†T̄`**
@@ -169,12 +172,18 @@ hole counts, assignments and "next" steps describe those rounds, not today's que
   `g ∈ L²(ν)`, every `t > 0`, every nonnegative `φ ∈ C_c^∞(V)`). See
   [M0–M3, R1–R3](research/decisions/2026-09-22-interior-regularity.md).
 - **Remaining analytic work:** the heat-flow weak `Γ₂` inequality at `F = P_t g` is proved with
-  only the model hypotheses; `hcore` and `hreg` are theorems for every `C¹` potential. Not proved:
+  only the model hypotheses; `hcore` and `hreg` are theorems for `C¹` potentials in the current
+  full-dimensional log-concave tilted-law model with unit weight. The heat-test-class extension
+  proves bounds for `P_s φ` and `A(P_s φ)`, pairing integrability, and the inequality for smooth
+  compactly supported data against nonnegative `D(A)` tests. Its extension to arbitrary
+  `F = P_r g` remains open: convergence of `T̄(A fₙ)` is required by the conditional two-field
+  transfer and is not supplied by the existing `A` graph core. See the
+  [heat-test-class record](research/decisions/2026-09-22-heat-test-class.md). Not proved:
   product/chain rules for arbitrary form-domain or heat-flow inputs beyond the bounded-multiplier
   case; the interpolation `s ↦ ∫ (P_s φ) Γ(T̄ (P_{t-s} f)) dν`, **with the outer semigroup applied
   to the test function** — a pairing against a fixed `φ` is a different functional and does not
   replace it, so extending the weak `Γ₂` inequality from smooth compactly supported tests to the
-  class `{P_s φ}` is a separate obligation and not a formal product-rule computation. Only after
+  class `{P_s φ}` for arbitrary heat-flow data remains a separate obligation. Only after
   that come its time differentiation and justified limits, the square and first-order Bakry–Émery
   gradient estimates, passage from smooth potentials to general log-concave laws, and small-time
   heat estimates with constants sufficient for the π target. The earlier Markov handoff is
@@ -196,8 +205,8 @@ original Buser statement with no unresolved analytic premises. The smooth `B = I
 be an intermediate step only. A formal Bochner computation alone is not a semigroup estimate.
 This supersedes the earlier route-exploration-only scope; it changes no proof status.
 
-**Immediate semigroup cut after E0–E5:** form-domain stability and positive-time generator-domain
-regularization are proved; the original second-stage gradient-estimate target remains open. `P_t` maps all
+**Positive-time foundation (E0–E5; the current cut is the heat-test extension above):**
+form-domain stability and positive-time generator-domain regularization are proved; the original second-stage gradient-estimate target remains open. `P_t` maps all
 of `L²` into `D(T̄†T̄)` for `t > 0`, so `S0a`'s commutation and right time derivative and `F0`–`F4`'s
 gradient contraction all apply to `P_t f` for arbitrary `f`; the quantitative `1/t` and `1/√t`
 rates are `Generated.mul_norm_adjointComp_apply_le` and `Generated.two_mul_norm_map_apply_sq_le`.
@@ -218,11 +227,14 @@ module provenance, LD-012 rooted ignore patterns) and the
 that repair record a narrower 10-gate scope and must not be quoted as current coverage.
 
 **Evidence:** local receipts are indexed by `build/verification/latest.json`; read the referenced
-report for its counts and source digest. The current receipt is the operator-core one, identified
-in `build/audit/operator-core-criterion/final-snapshot.json`, which records its identifier, its
-gate, strict-audit-client, module-replay and declaration-audit counts and its source digest; it
-was produced after every tracked edit of the 2026-09-22 round, so it certifies the delivered
-snapshot. The earlier weak-`Γ` receipt, identified in
+report for its counts and source digest. The latest proof-round receipt is
+`20260922T110108.224405Z`, identified in
+`build/audit/heat-test-class-takeover/final-snapshot.json`: 103 gates, 92 strict audit clients,
+298 module replays and 367 declaration-audit reports over 813 snapshot files. It records a local
+build and local-module kernel replay, trusting pinned third-party compiled imports; it is not
+a remote CI result or an isolated rebuild. It certifies its recorded proof-round snapshot,
+not the subsequent documentation alignment. The operator-core receipt and the earlier weak-`Γ`
+receipt, the latter identified in
 `build/audit/weak-gamma-interface/final-snapshot.json` (99 gates, 88 strict audit clients, 291
 module replays and 367 declaration-audit axiom reports with no non-standard axiom, over 798
 source files), and the E0–E5 receipt `20260921T074919.898873Z` (98 gates, 87 strict audit
