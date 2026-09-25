@@ -1,5 +1,377 @@
 # KLS Lean repository handoff
 
+## Precommit audit and placement plan (2026-09-26)
+
+Review the complete dirty tree before one commit: theorem statements and
+transitive axioms, mathematical normalizations and edge cases, current
+Blueprint/progress claims, module ownership, dependency direction, and naming.
+The only layout correction identified is the foundational classical flow module
+`Analysis/WaveSplitting.lean`: it conflicts with the existing
+`Analysis/WaveSplitting/` family. Move it to
+`Analysis/WaveSplitting/Basic.lean` without changing its namespace or public
+declarations; update the three direct Lean consumers and current canonical
+metadata, record the old-to-new path, and leave dated historical decisions
+unchanged. This is a path-only API migration. Also align the current Blueprint
+and literature register with the proved numerical log-concave comparison while
+keeping the broader RCD paper and dimension-free KLS separate. Regenerate
+progress views from the intended Git index, run strict clients and the full
+verifier, then make one commit if the exact snapshot is clean.
+
+## Current result: nonsmooth Gaussian Cheeger passage (2026-09-26)
+
+Object and scope: transfer a uniform isoperimetric lower bound from the actual
+Gaussian-smoothed laws to a Borell source law. The relevant source quantity is
+the intrinsic Minkowski/Cheeger infimum, not the perimeter of each individual
+smooth domain: a source support boundary can carry positive smoothed perimeter
+while being omitted from source relative perimeter. Put reusable stability of
+the Cheeger test inequality under setwise/weak law convergence in the existing
+`KLS/Geometry/Cheeger` family, and the Gaussian specialization above the
+existing density approximation and Poincaré modules. Extend an owning module
+when its dependencies suffice; create a focused stability or assembly module
+only if the dependency level requires it. Preserve public signatures and all
+dirty work. Validate full signatures, transitive axioms, progress provenance,
+and a frozen full verifier; no commit or push. General nonsmooth π-Buser may be
+marked proved only after a genuine exact-constant assembly, including zero
+dimension and extended optimum cases.
+
+That assembly is now proved. `Geometry/Cheeger/Stability.lean` passes a finite
+uniform Cheeger lower bound through setwise convergence to an absolutely
+continuous law by the smooth-test characterization. `Density/GaussianBuser.lean`
+applies it to the actual Gaussian convolution and proves
+`LogConcave.inverseScale_sq_le_pi_literature` for every finite-dimensional
+log-concave probability law, including zero-dimensional support and infinite
+Poincaré optimum. The root `FunctionalInequalities.lean` exports the new
+module for repository-wide declaration auditing. `GaussianBuserPassageAudit.lean`
+strictly checks four full signatures with only `propext`, `Classical.choice`, and `Quot.sound` as
+transitive axioms. Individual-domain relative-perimeter convergence and the
+dimension-free KLS bound are not claimed. The frozen full-verifier receipt is
+`build/audit/nonsmooth-pi-buser/final-snapshot.json`.
+
+## Active placement plan: Poincaré bound under convolution (2026-09-25 continuation)
+
+Object and role: the fixed-constant smooth-test Poincaré inequality under addition
+of independent laws, then its specialization to the actual normalized Gaussian
+convolution. First extend `Poincare/Product/Tensorization.lean` with the
+anisotropic two-factor estimate: its proof already has the separate coordinate
+terms before taking their maximum. Put addition-map transport in a focused
+`Poincare/Convolution.lean`, importing product tensorization. The standard
+multivariate Gaussian factor bound belongs in `Poincare/Gaussian/Multivariate.lean`;
+identification with the actual normalized kernel and the final specialization
+belong above it in the log-concave density family.
+Preserve existing signatures and the current dirty baseline. The exact target
+is an upper bound tending to the original intrinsic literature Poincaré
+constant as inverse variance tends to infinity, including zero dimension and
+extended-constant edge cases. Do not infer perimeter transfer or general
+nonsmooth π-Buser. Check each proved boundary with strict clients and standard
+axioms; refresh English progress only when proof status changes, then run the
+full frozen-source verifier using an isolated Git index/object store. No commit
+or push.
+
+Implemented: the actual normalized Gaussian factor is identified with a scaled
+standard multivariate Gaussian by its characteristic function. An anisotropic
+product estimate, scalar transport, and addition-map transport give the
+smooth-test convolution bound, then the log-concave frontend transfers it to
+the intrinsic literature optimum:
+`C_P^lit(ν * γ_s) ≤ C_P^lit(ν) + 1/(2s)` for every positive `s`, including
+dimension zero and infinite source constants. No source moment or optimal-
+constant attainment is assumed. The independent full-signature client
+`research/audits/GaussianPoincareStabilityAudit.lean` strictly compiles with
+only `propext`, `Classical.choice`, and `Quot.sound` as transitive axioms.
+Relative-perimeter transfer, general nonsmooth π-Buser, and KLS remain open.
+See `research/decisions/2026-09-25-gaussian-poincare-stability.md` and the
+frozen-source receipt at `build/audit/gaussian-poincare-stability/final-snapshot.json`.
+
+## Active placement plan: all-order Gaussian regularity (2026-09-25 continuation)
+
+Owner: `KLS/LogConcave/Density/GaussianSmoothing.lean`. Scope: the actual
+normalized source-law convolution and its logarithmic potential for every
+finite-dimensional real inner product space, including dimension zero, every
+Borell probability density, and `s > 0`. Extend this owning module: the kernel,
+integral representation, positivity, and first two derivatives already live
+there; an additional module would split one object's regularity proof without
+a dependency benefit. Imports remain within Mathlib analysis and measure theory.
+Prove uniform bounds and measurability for all finite Gaussian-kernel derivatives,
+then iterate differentiation under the actual source-law integral to obtain
+`ContDiff ℝ ∞` for the density and potential. Preserve all public signatures.
+Validate with an independent full-signature client, transitive-axiom checks,
+isolated-index progress generation, and full frozen-source verification. The
+Poincare upper-stability and relative-perimeter bridges remain separate. No
+commit or push; preserve the dirty baseline and real index.
+
+Implemented: `normalizedDensity_contDiff_infty` and
+`potential_contDiff_infty` prove smoothness of the actual normalized
+source-law convolution and its logarithmic potential, including dimension
+zero. Each finite Gaussian-kernel derivative has a uniform bound obtained
+from polynomial-times-Gaussian decay. An induction differentiates the
+source-law integral at every order under a probability-law constant bound;
+the existing integral representation identifies it with `normalizedDensity`.
+No source moment or source regularity is used. Strict full-signature clients,
+including explicit zero-dimensional clients, report only `propext`,
+`Classical.choice`, and `Quot.sound`. Source SHA-256:
+`4c825958029c17c39a09d271a88008b22268bd085d07ca89d3d768bce605f2b8`;
+client SHA-256: `1ab3c905f4d11b083d0284129f51c97fcfb7f9e08028615f888384e9955b7181`.
+Poincaré upper stability, relative-perimeter transfer, general nonsmooth
+π-Buser, and KLS remain open. The frozen-source receipt for this round is
+`build/audit/gaussian-infinite-regularity/final-snapshot.json`.
+
+## Active placement plan: second Gaussian regularity bridge (2026-09-25 continuation)
+
+Object and role: extend the actual normalized Gaussian convolution's regularity
+beyond the existing first derivative. Target the second derivative by proving a
+uniform bound on the derivative of the Gaussian-kernel derivative, then apply
+dominated parametric differentiation to the actual source-law integral. The
+owner is `KLS/LogConcave/Density/GaussianSmoothing.lean`; extend this module
+and namespace, retaining all public signatures. The exact scope is a Borell
+probability input on a finite-dimensional real inner product space and `s > 0`.
+This remains below the `C∞` assumption of smooth Buser and does not assert
+Poincaré or perimeter stability. Audit any new theorem through an independent
+full-signature client and transitive axioms; then update English documentation,
+use an isolated Git index/object store for progress, and run frozen-source full
+verification. Preserve the dirty baseline and real index; no commit or push.
+
+Implemented: the derivative of `kernelDerivative` has norm bounded uniformly
+by `6 s / mass s`. The proof uses the explicit first derivative and
+`(s‖z‖²) exp(-s‖z‖²) ≤ 1`, with no moment assumption on the source law.
+Dominated differentiation of its actual source-law integral proves
+`normalizedDensity_contDiff_two`; positivity and logarithmic composition give
+`potential_contDiff_two`. `GaussianSecondRegularityAudit.lean` checks both full
+signatures with only the three standard transitive axioms. The `C∞` hypothesis,
+Poincaré upper stability and perimeter passage remain open.
+
+## Active placement plan: first Gaussian regularity bridge (2026-09-25 continuation)
+
+Object and role: regularity of the existing normalized Gaussian convolution density and
+its logarithmic potential. Exact target is a proved first derivative of the actual
+convolution integral for arbitrary Borell probability input; this is an intermediate
+ingredient, not the `C∞` hypothesis of smooth Buser. Extend the owning
+`KLS/LogConcave/Density/GaussianSmoothing.lean` and its namespace because the
+definitions, integral representation, and positivity already live there. Import
+Mathlib's parametric integral derivative and Gaussian derivative bound as needed;
+dependency stays within the density family. No existing public signatures change.
+Add an independent full-signature client, inspect transitive axioms, update English
+decision/progress/evidence, run the full verifier on frozen source, and check the
+source snapshot and real index. Preserve all dirty work; no commit or push.
+
+Implemented: the explicit derivative of the normalized Gaussian kernel has a
+uniform bound from Mathlib's Gaussian radial estimate. Differentiation under the
+actual source-law integral gives `normalizedDensity_hasFDerivAt`; continuity of
+the derivative integral gives `normalizedDensity_contDiff_one`. Positivity and
+the logarithm chain rule give `potential_contDiff_one`. The independent client
+`GaussianFirstRegularityAudit.lean` checks all three full signatures and reports
+only `propext`, `Classical.choice`, and `Quot.sound`. Higher smoothness, Poincaré
+upper stability under smoothing, and perimeter passage remain open.
+
+## Active placement plan: Gaussian approximate identity (2026-09-25 continuation)
+
+Object and role: show that the existing normalized Gaussian convolution density
+recovers its source density at points of continuity as the inverse variance
+tends to infinity. Scope: finite-dimensional real inner product spaces and an
+actual Borell probability density; the conclusion is pointwise at a stated
+continuity point, not convergence of laws, perimeters or Poincaré constants.
+Create `KLS/LogConcave/Density/GaussianApproximation.lean`, importing the
+existing Gaussian smoothing construction and Mathlib's finite-dimensional
+peak-function/asymptotic interfaces. Convergence has different dependencies
+from normalization, so the existing module remains focused on its measure and
+density properties. No existing public signature changes. Add an independent
+full-signature client, inspect
+transitive axioms, refresh English handoff/decision/progress evidence through
+an isolated Git index/object store, and rerun full frozen-source verification.
+Preserve the dirty tree and real index; no commit or push.
+
+Further density bridge: extend `Density/BorellRepresentation/Basic.lean` with
+almost-everywhere continuity of a finite-dimensional Borell density relative
+to Haar measure. Its positivity set is convex, its frontier has Haar measure
+zero, it is continuous on the interior, and it vanishes locally outside the
+closure. Use this generic density fact in `GaussianApproximation.lean` to
+obtain almost-everywhere pointwise Gaussian convergence. No law-level or
+perimeter convergence is inferred from this fact alone.
+
+Further consequence in `GaussianApproximation.lean`: combine almost-everywhere
+convergence with unit mass and dominated convergence for the pointwise minimum
+to prove the full `L¹(volume)` density difference tends to zero. This supports
+setwise convergence of the constructed laws; formalize that consequence for
+every measurable set using the restricted integral and the actual with-density
+identifications. It does not by itself establish
+Poincaré upper stability, perimeter convergence or higher smoothness of the potential.
+
+Implemented: `IsBorellDensity.ae_continuous` uses the null frontier of the
+convex positivity set. The actual normalized Gaussian density converges at
+every continuity point, almost everywhere, and in `L¹(volume)` as `s → ∞`.
+For every measurable `D`, `(smoothedLaw ν s) D → ν D`, with both laws
+identified by their actual density representations. Independent full-signature
+clients check these interfaces with only standard transitive axioms. This
+closes the law mass convergence ingredient, while higher smoothness of the potential,
+Poincaré upper stability and relative-perimeter convergence remain open.
+
+## Active placement plan: Gaussian mass normalization (2026-09-25 continuation)
+
+Object and role: normalize the explicit Gaussian kernel already used by the
+Borell-density convolution. Scope: positive inverse variance, arbitrary finite
+dimensional real inner product space, including dimension zero. Extend
+`KLS/LogConcave/Density/GaussianSmoothing.lean`; import Mathlib's finite-dimensional
+Gaussian integral theorem, then prove the kernel's integral, positivity and
+unit mass before constructing a normalized convolution law. Keep any new
+probability-law or smoothness claim separate until its exact proof exists.
+No existing public signature changes. Validate with strict independent clients,
+axiom audit, isolated-index progress views and full frozen-source verification;
+preserve all dirty work and the real index, with no commit or push.
+
+Additional density-to-law bridge: the one-dimensional proof in
+`LogConcave/Line/OfDensity.lean` specializes the local Prékopa–Leindler
+inequality. Generalize that argument in a new
+`LogConcave/Density/FromBorell.lean`, importing the finite-dimensional
+Prékopa–Leindler theorem and existing compact combination lemma. Its scope is
+a probability law with an actual Borell density relative to volume; it proves
+compact-set `LogConcave` with no smoothing or Buser conclusion. Import it
+from Gaussian smoothing to identify the normalized convolution law as
+log-concave. Keep the line theorem and all existing signatures unchanged;
+strictly compile both a full-signature client and the main library.
+
+Implemented: the exact Gaussian mass is `(π/s)^(finrank/2)` for `s > 0`,
+including dimension zero. The normalized kernel integrates to one and its
+convolution with a Borell probability law is a probability measure. Its actual
+Haar density is everywhere positive, continuous, integrable and pointwise
+log-concave; its negative logarithm is a continuous convex potential and gives
+the same law as a tilted volume. The finite-dimensional Borell-density converse
+promotes this to compact-set `LogConcave` for the smoothed probability law.
+Independent full-signature clients and transitive axiom checks cover these
+interfaces. Smoothness of the potential, convergence and Poincaré/perimeter
+stability are still open, so the unrestricted positive-dimensional π-Buser
+statement does not follow from this continuation.
+
+## Active placement plan: nonsmooth log-concave pi passage (2026-09-25)
+
+Object and role: construct the first source-level regularization ingredient for a
+general intrinsic Borell density, then identify the exact remaining heat/perimeter
+stability obligations. The existing spectral decay and indicator L1 displacement
+lower bound already apply without a smooth potential; do not re-assume them.
+Extend `Probability/BrunnMinkowski.lean` with a generic ENNReal-valued convolution
+log-concavity consequence of its finite-dimensional Prekopa-Leindler theorem.
+This theorem depends only on measurable log-concave factors and Lebesgue measure,
+so it belongs below the KLS density family. Preserve all public signatures and
+record a full-signature independent client. If the actual smooth positive
+approximation, Poincare upper stability and per-domain perimeter convergence can
+be proved, add them in their owning density/Poincare/geometry families; do not
+replace any of them by a conclusion-bearing hypothesis. Refresh evidence through
+an isolated Git index/object store and run the full verifier on a frozen source
+snapshot. Preserve all dirty work and the real index; no commit or push.
+
+Concrete specialization: create `LogConcave/Density/GaussianSmoothing.lean` only
+for proved properties of the explicit Gaussian factor and its convolution with
+a Borell density. It imports the generic convolution lemma and the existing
+Borell representation, while the latter does not depend on smoothing. Keep
+finite mass, positivity, pointwise convergence and smoothness as distinct
+obligations; do not name a mere log-concavity lemma a completed approximation.
+
+Implemented in this continuation: finite-dimensional Prekopa–Leindler proves
+log-concavity of the ENNReal convolution of two measurable log-concave factors.
+For a Borell representative of a probability law, the explicit unnormalized
+Gaussian convolution is measurable, finite (at most one), strictly positive,
+and real-valued pointwise log-concave. Two independent full-signature clients
+check the generic and concrete interfaces. These facts do not yet construct a
+normalized smooth probability law. The remaining passage requires Gaussian
+normalization, smoothness and convex potential, convergence of the laws,
+Poincare upper stability, and the needed domain/perimeter convergence with
+extended-real endpoints. No arbitrary nonsmooth π-Buser theorem follows yet.
+See [the continuation](research/decisions/2026-09-25-nonsmooth-gaussian-smoothing.md).
+
+## Active placement plan: affine-support smooth Buser transport (2026-09-25)
+
+Object and role: transport the already verified smooth convex tilted intrinsic-law pi Buser
+comparison to the original law's `Isoperimetry.inverseScale`, with the exact intrinsic
+literature Poincare constant. Scope: arbitrary affine support, including dimension zero,
+provided the intrinsic law itself has an explicit smooth convex tilted representation;
+no nonsmooth-law approximation is claimed. Extend `LogConcave/SmoothBuser.lean`, whose
+geometric conclusion already owns the smooth model result. Import only the existing
+Cheeger equality, intrinsic Borell density, and smooth-test/literature constant bridges
+through their owning modules. Preserve all public signatures. Add an independent full
+signature client, inspect transitive axioms, update evidence and progress from an isolated
+Git index/object store, then rerun full verification with frozen source. Preserve the dirty
+tree and real index; no commit or push.
+
+Zero-dimensional endpoint: extend the same geometric conclusion module with the
+unconditional `finrank = 0` pi comparison, using the existing `inverseScale = 0`
+definition. It has no smoothness or log-concavity premise and separates the
+zero-dimensional boundary from the unresolved positive-dimensional nonsmooth case.
+
+Implemented: `LogConcave.inverseScale_sq_le_pi_literature_of_intrinsic_smooth_tilt`
+proves `inverseScale μ ^ 2 ≤ π * C_P^lit(μ)` for any log-concave `μ` whose intrinsic
+law has the displayed smooth convex tilted representation. The existing
+affine-support Minkowski equality and smooth-test/literature optimum equality
+handle every affine-support dimension and the extended optimum endpoints. The
+additional independent client has only standard transitive axioms. The full
+arbitrary-law statement remains open at the nonsmooth intrinsic-law passage.
+The zero-dimensional support case is additionally proved without any smoothness
+or log-concavity premise.
+See [the continuation](research/decisions/2026-09-25-affine-smooth-buser.md).
+
+## Active placement plan: literature gap and Buser continuation (2026-09-25)
+
+Object and role: identify the Poincare inequality on the actual closed unit gradient with
+the literature optimal constant, then use the existing heat correlation and smooth-domain
+perimeter interfaces toward the Buser comparison. Scope: full-dimensional intrinsic laws,
+explicit finite constants first; general-law passage and extended-real endpoints require
+separate proofs. Owner: the identification belongs at the `LogConcave/WeightedGradient/`
+boundary; heat estimates remain in `HeatSemigroup/`, and the final geometric statement
+belongs in the established isoperimetry/KLS family. Create `WeightedGradient/Poincare.lean`
+because it imports both the form-energy equality and Poincare optimizer comparison, while
+`Energy.lean` retains only energy identification. Preserve all existing public signatures.
+Create `HeatSemigroup/Correlation.lean` for the Markov indicator-to-L1 identity and the
+quantitative scalar optimization needed by a smooth-model Buser step; it depends on the
+existing decay and perimeter modules, not conversely.
+Extend `L2/MeanVariance.lean` with the generic centered-inner-product identity used to
+translate indicator correlation; this is probability-L2 algebra, below the heat layer.
+Create `LogConcave/SmoothBuser.lean` only if the smooth-model perimeter lower bound can be
+converted to the smooth Cheeger infimum; that geometric application imports the heat
+correlation and Cheeger equality, without moving either prerequisite upward.
+Strictly compile each new interface and independent full-signature clients, inspect
+transitive axioms, update evidence and progress through an isolated Git index/object store,
+then run the complete verifier with frozen source. Preserve the dirty tree and real index;
+no commit or push.
+
+Implemented: the closed unit-gradient form's optimal constant equals the intrinsic literature
+Poincare constant, and a finite literature upper bound supplies the actual form-domain gap.
+The heat decay and indicator correlation therefore have literature-bound interfaces.
+The Markov indicator L1/correlation identity and the fixed-time pi scalar inequality combine
+with the earlier perimeter estimate. `LogConcave/SmoothBuser.lean` proves the pi squared
+comparison for the smooth convex tilted model's smooth and Minkowski Cheeger constants,
+including zero and infinite literature optima; nine independent clients audit the signatures.
+See [the decision](research/decisions/2026-09-25-heat-buser-bridge.md) and
+[the client](research/audits/HeatBuserBridgeAudit.lean). The full affine-support inverseScale
+comparison for arbitrary log-concave laws remains open because the pi heat/perimeter argument
+has not been transferred to nonsmooth intrinsic Borell densities. The existing equality of
+smooth and Minkowski infima is already proved. KLS remains open.
+
+## Active placement plan: heat spectral decay (2026-09-25)
+
+Object and role: centered L2 decay and indicator correlation for the actual generated heat
+semigroup. Scope: a full-dimensional log-concave tilted law, arbitrary closed-gradient weight B,
+an explicit positive real C and a form-domain Poincare inequality; no comparison to the
+literature constant or Buser conclusion. Owner and consumers: the existing
+`KLS/LogConcave/HeatSemigroup/` family; the correlation is intended for the later Buser step.
+Create `HeatSemigroup/Decay.lean` because the spectral-gap argument and correlation form one
+property module, while `Domain.lean` and `Markov.lean` retain their present roles. Import
+`L2/MeanVariance.lean`, `HeatSemigroup/Markov.lean`, `HeatSemigroup/Domain.lean`, and
+`Generated/TimeDerivative.lean`, with application dependencies pointing down to the generic
+semigroup. Extend `L2/MeanVariance.lean` only for a generic probability-law indicator variance
+identity, rather than burying it in the log-concave application. Add public decay/correlation
+declarations without changing existing signatures.
+Validate strict compilation, independent full-signature clients, transitive axioms and the
+complete `research/verify.py` run. Preserve the dirty tree and real index; generate progress
+views through an isolated Git index/object store. No commit or push.
+
+Implemented interfaces: `HeatSemigroup.norm_center_operator_sq_le_exp` for arbitrary L2 data,
+all nonnegative times and any positive C satisfying the explicit full form-domain gap;
+`inner_center_operator_le_exp` and `inner_center_indicator_le_exp` at rate exp(-t/C).
+`L2.norm_center_indicatorConstLp_sq` handles all measurable sets, including mass zero and one.
+The actual positive-time orbit lies in D(A), and `hasDerivAt_norm_sq_of_pos` identifies the
+closed-gradient energy derivative. Mean preservation and constant fixing give
+`center_operator`; the half-time law and symmetry account for the factor of two.
+See [the decision](research/decisions/2026-09-25-heat-spectral-decay.md) and the independent
+[client](research/audits/HeatSpectralDecayAudit.lean). The explicit gap is not yet identified
+with the literature constant. General-law π heat/perimeter passage and full Buser assembly
+remain separate.
+
 ## Current layout update: cleanup completed (2026-09-20)
 
 LD-001–013 are resolved; see the [technical-debt register](research/technical-debt/README.md) for
@@ -39,6 +411,784 @@ below are historical; use the map to resolve them. The dimension-free KLS bound 
 This is the current operational handoff for `kls-lean`. It records repository identity,
 authority boundaries, certified results, exact non-claims, and reproducible checks.
 
+## Gaussian heat coefficients (2026-09-25): improved L1 and perimeter bounds
+
+Placement plan. Extend the Gaussian heat boundary with unit-interval and bounded-data
+gradient coefficients from BGL. Extend the existing Approximation and Perimeter
+owners with explicit pi-coefficient theorems, preserving earlier theorem signatures.
+Approximation may import GaussianProfile; ReversePoincare must not import it because
+that would create a cycle. Reuse/refactor existing duality and recovery proofs so
+old numerical statements remain genuine weaker consequences where practical.
+Handle zero bounds, t=0 and infinite perimeter explicitly. Validate strict clients,
+standard axioms and full verification. Preserve the dirty baseline and real index;
+regenerate progress via an isolated index. No commit or push.
+Baseline: `build/audit/heat-pi-coefficient/baseline/`.
+
+The [pi-coefficient record](research/decisions/2026-09-25-heat-pi-coefficient.md)
+proves |T P_t f| <= M/sqrt(pi*t), the whole-form-domain L1 estimate with coefficient
+2 sqrt(t/pi), its approximation/recovery transfer and the actual smooth-domain
+relative-perimeter bound. The ENNReal theorem includes t=0 and infinite perimeter;
+the bounded gradient theorem includes M=0. Eight previous public signatures remain
+unchanged, and eight full-signature clients audit the new statements.
+The later [spectral-decay continuation](research/decisions/2026-09-25-heat-spectral-decay.md)
+closes centered heat decay under an explicit positive form-domain gap. The remaining
+general-law/perimeter interfaces, identification of that gap with the literature constant,
+and Buser assembly remain open. The pi Cheeger-Buser comparison and dimension-free KLS remain open.
+Current receipt: `build/audit/heat-pi-coefficient/final-snapshot.json`.
+
+## Gaussian epsilon removal (2026-09-24): BGL in the smooth convex model
+
+Placement plan. Extend the scalar Gaussian-profile module with continuity of its
+existing zero extension. Promote the existing dominated L2 convergence lemma in
+`L2/Composition.lean` to a documented public theorem, preserving its statement and
+proof. At the existing heat/Gaussian boundary, use bounded profile compositions,
+scaled inputs and linearity of the actual heat and closed-gradient operators to
+remove the epsilon range margin. Keep all representative and L2 convergence
+obligations explicit. Validate independent clients and full verification; preserve
+the dirty baseline and regenerate progress with an isolated index. No commit or push.
+Baseline: `build/audit/heat-profile-limit/baseline/`.
+
+The [profile-limit record](research/decisions/2026-09-24-heat-profile-limit.md)
+proves continuity of the scalar zero extension and dominated L2 convergence of
+I((1-2eps)f+eps). Heat and closed-gradient linearity, followed by continuity of the
+bounded-test square functional, remove the range margin. For every 0 <= f <= 1
+in L2 and t > 0, the actual smooth convex unit-weight model now satisfies
+`2t Gamma(T P_t f) <= I(P_t f)^2 - (P_t I(f))^2` a.e., with I(f) constructed in L2.
+Four independent clients audit the scalar, generic, integrated and a.e. statements.
+Next derive the improved gradient coefficient and the 2 sqrt(t/pi) L1/perimeter
+bound. General-law passage, pi Buser and KLS remain open.
+Current receipt: `build/audit/heat-profile-limit/final-snapshot.json`.
+
+## Integrated Gaussian profile (2026-09-24): both time endpoints implemented
+
+Placement plan. Extend `Generated/TimeDerivative.lean` with strong continuity for
+varying continuous data on nonnegative time sets, and `L2/Composition.lean` with
+continuity of bounded-test quadratic integrals. Extend the existing Gaussian heat
+boundary with one interpolation curve on [0,t], time integration of its derivative
+bound and identification of both endpoints. Keep the epsilon range margin explicit;
+epsilon removal and improved constants are separate. Preserve public signatures and
+the dirty baseline, validate strict clients and full verification, and synchronize
+progress using an isolated index. No commit or push.
+Placement addition: use the existing smooth-test order detector for the a.e. form,
+with actual L2 profile representatives and integrability established explicitly.
+Baseline: `build/audit/heat-integrated-profile/baseline/`.
+
+The [integrated-profile record](research/decisions/2026-09-24-heat-integrated-profile.md)
+proves varying-data strong continuity, bounded-test quadratic continuity, one Gaussian
+interpolation curve on [0,t], and time integration with both endpoints identified.
+The resulting inequality is `2t Gamma(T P_t f) <= I(P_t f+eps)^2 - (P_t I(f+eps))^2`
+a.e., with the initial profile constructed in L2. It retains the smooth convex model,
+unit weight and epsilon range margin. Four full-signature clients audit the results.
+Next remove the epsilon/range margin for 0 <= f <= 1 data. The unregularized BGL
+bound, improved heat constants, general-law passage and pi Buser remain open.
+Current receipt: `build/audit/heat-integrated-profile/final-snapshot.json`.
+
+## Weighted heat Cauchy-Schwarz (2026-09-24): quantitative dissipation implemented
+
+Placement plan. Create `L2/PositiveMap.lean` for preservation of pointwise quadratic
+inequalities by positive real linear maps on L2. Use rational test polynomials and
+countable a.e. intersections, then continuity, with no uncountable a.e. interchange.
+At the heat/Gaussian boundary, combine this inequality with L1 gradient self-improvement
+to bound the square-interpolation dissipation. Reuse existing owning families and
+preserve current signatures. Validate strict clients, transitive axioms and the full
+verifier; synchronize progress through an isolated index. No commit or push.
+Placement addition: extend `HeatSemigroup/SelfImprovement.lean` with the weighted
+square-gradient consequence and import it at the Gaussian integration boundary.
+Baseline: `build/audit/heat-weighted-cauchy/baseline/`.
+
+The [weighted-Cauchy record](research/decisions/2026-09-24-heat-weighted-cauchy.md)
+proves preservation of pointwise two-by-two positive semidefinite matrices under
+positive real linear maps on L2. The weighted heat consequence and actual Gaussian
+profile specialization give `Gamma(T P_t f) <= Y_s P_s z` a.e. In the smooth convex
+model, for bounded nonnegative tests and the initial epsilon range margin, the
+square interpolation has derivative `-2 int beta Y_s P_s z <= -2 int beta Gamma(T P_t f)`.
+Four full-signature clients audit these results. Time integration, both endpoints
+and epsilon removal remain next; heat constants and route markers are unchanged.
+Current receipt: `build/audit/heat-weighted-cauchy/final-snapshot.json`.
+
+## Strong heat interpolation (2026-09-24): square derivative implemented
+
+Placement plan. Extend `Analysis/Semigroup/Generated/TimeDerivative.lean` with the
+product rule for applying the generated semigroup to a differentiable Hilbert-space
+curve, using contraction, strong continuity and the frozen-datum derivative.
+Reuse `HeatSemigroup/Interpolation.lean` and extend the Gaussian integration boundary with
+the resulting strong L2 interpolation derivative and generator cancellation.
+Keep domain membership and Gamma integrability explicit and discharge them for
+positive-time bounded data. Preserve APIs and unrelated work. Validate strict
+clients, axioms and full verification; regenerate progress with an isolated index.
+Placement addition: extend `L2/Composition.lean` with differentiation of bounded-test
+quadratic integrals. Add the unshifted positive Gaussian profile and squared tested
+interpolation derivative at the Gaussian boundary. The quantitative differential
+inequality, integration and endpoints remain separate obligations.
+Baseline: `build/audit/heat-strong-interpolation/baseline/`. No commit or push.
+
+The [strong-interpolation record](research/decisions/2026-09-24-heat-strong-interpolation.md)
+proves the product rule for a generated semigroup acting on a varying differentiable
+datum, its generator-domain version, and bounded-test quadratic differentiation.
+The actual shifted Gaussian interpolation has strong L2 derivative `-P_s z`, with
+z represented by Gamma/I. Its L2 membership is proved, not assumed. Adding the
+heat-invariant constant I(eps) gives the positive unshifted profile and the exact
+squared derivative `-2 int beta Y_s P_s z`. Six independent clients audit the results.
+Next: weighted semigroup Cauchy-Schwarz and L1 self-improvement for the quantitative
+lower bound on Y_s P_s z, followed by time integration, endpoints and epsilon removal.
+Heat constants and route completion markers are unchanged.
+Current receipt: `build/audit/heat-strong-interpolation/final-snapshot.json`.
+
+## Nonlinear L2 time differentiation (2026-09-24): interior interpolation implemented
+
+Placement plan. Create `L2/Composition.lean` for differentiation of scalar Lipschitz
+composition along differentiable L2 curves. Prove dominated convergence of directional
+difference quotients and transfer from affine curves by the Lipschitz bound; do not
+claim global Frechet differentiability of the Nemytskii map on L2. This is generic
+measure-space analysis, below the concrete heat modules. Reuse Mathlib compLp and
+existing bounded multipliers. Add a concrete positive-time heat client in the existing
+heat family, preserving actual representatives and generator signs. Validate strict
+source, full-signature clients, transitive axioms and the full verifier. Preserve
+the real Git index; regenerate progress via an isolated index. No commit or push.
+Placement addition: create `HeatSemigroup/Interpolation.lean` for the interior
+scalar heat-interpolation derivative, importing ChainRule and L2/Composition.
+Extend the existing Gaussian integration boundary with the actual shifted-profile
+specialization. Keep squared interpolation, quantitative integration and endpoint
+limits distinct from this first derivative identity.
+Baseline: `build/audit/heat-composition-derivative/baseline/`.
+
+The [time-differentiation record](research/decisions/2026-09-24-heat-composition-derivative.md)
+proves scalar composition differentiation along arbitrary differentiable L2 curves,
+using affine quotients and Lipschitz perturbations. It proves the interior derivative
+of `int P_s psi Phi(P_(t-s) f)` and cancels the two generator terms with the tested
+chain rule (C1 potential, bounded D(A) test, arbitrary L2 datum). The actual shifted
+Gaussian specialization gives the negative `int P_s psi Gamma/I` derivative under
+the explicit initial range. An actual positive-time Gaussian L2 curve and its
+`quantile(P_t f+eps) * A(P_t f)` derivative are also constructed.
+Next: squared BGL interpolation, the quantitative differential inequality using
+weighted Cauchy-Schwarz and L1 gradient self-improvement, integration, endpoints and
+epsilon/range-margin removal. Heat coefficients and open route statuses are unchanged.
+Current receipt: `build/audit/heat-composition-derivative/final-snapshot.json`.
+
+## Generator composition domain (2026-09-24): operator identity implemented
+
+Placement plan. Extend `HeatSemigroup/ChainRule.lean` in its existing namespace with
+recognition of the self-adjoint generator domain from smooth compact test pairings,
+using the actual graph core. Then derive the operator composition identity when the
+Gamma field belongs to L2. The extra integrability must be explicit and must be
+proved for any positive-time specialization. Reuse existing self-adjointness and
+bounded multiplier APIs; preserve all current statements. This is not yet the BGL
+interpolation or a sharper heat coefficient. Validate strict independent clients,
+axioms and the full verifier; synchronize progress through an isolated index.
+Placement addition: extend `ReversePoincare.lean` with square-integrability of the
+positive-time Gamma field for bounded data, and `HeatSemigroup/GaussianProfile.lean`
+with the actual shifted-profile operator identity. The latter may import the reverse
+estimate to discharge its integrability premise on heat data.
+Baseline: `build/audit/heat-composition-domain/baseline/`. No commit or push.
+
+The [composition-domain record](research/decisions/2026-09-24-heat-composition-domain.md)
+proves domain recognition from smooth test pairings and the actual operator chain
+rule when Gamma belongs to L2, under a C1 potential. For positive-time bounded heat
+data in the smooth convex model, Gamma integrability is proved from the existing
+gradient bound. The shifted Gaussian frontend proves both range preservation and
+composition-domain membership, with its explicit generator formula. Five independent
+full-signature clients audit these endpoints.
+Next: squared BGL heat interpolation, including nonlinear time differentiation,
+integration, endpoint limits and epsilon/range-margin removal. Heat constants are
+unchanged; general-law passage, pi Buser and KLS remain open.
+Current receipt: `build/audit/heat-composition-domain/final-snapshot.json`.
+
+## Tested generator chain rule (2026-09-24): D(A) identity implemented
+
+Placement plan. Extend `Analysis/BakryEmery/WeakGamma.lean` with convergence of tested
+pairings for uniformly bounded a.e.-convergent scalar multipliers and L2-convergent fields.
+Create `KLS/LogConcave/HeatSemigroup/ChainRule.lean` for the tested generator composition
+identity on D(A), importing the existing operator core, smooth generator symmetry and
+pointwise chain rule. Use globally smooth scalar functions vanishing at zero with bounded
+value and first two derivatives, as supplied by Gaussian regularization. No range bound
+on core approximants, convexity of the potential, or stronger composition-domain conclusion
+is to be assumed. Preserve existing APIs; validate strict clients, transitive axioms and
+full verification. Synchronize progress with an isolated index. Baseline:
+`build/audit/heat-chain-rule/baseline/`. No commit or push.
+
+Placement addition: create `HeatSemigroup/GaussianProfile.lean` at the integration boundary
+between the generic tested chain rule and `Probability/Line/GaussianProfile.lean`.
+Instantiate the proved global extension, then remove it from the endpoint using its
+neighborhood agreement and first/second derivative identities. Keep the actual a.e. range
+of F and epsilon margin explicit. This is a generator identity, not the BGL heat estimate.
+
+The [chain-rule record](research/decisions/2026-09-24-heat-chain-rule.md) proves the
+actual tested identity on arbitrary D(A) data, with all three pairings integrable.
+The potential is only C1; no convexity or bound on A(psi) is required. The Gaussian
+specialization constructs and eliminates the smooth scalar extension under the explicit
+a.e. range `0 <= F <= 1-2*eps`. Four independent axiom reports check these endpoints.
+Next: positive-time composition/domain identification where needed, the BGL squared
+heat interpolation and its endpoint limits, then epsilon/range-margin removal. Do not
+apply the L2 semigroup to a merely L1 Gamma field. Heat constants remain unchanged.
+Current receipt: `build/audit/heat-chain-rule/final-snapshot.json`.
+
+## Gaussian regularization (2026-09-24): scalar extension implemented
+
+Placement plan. Extend `Probability/Line/GaussianProfile.lean` in its existing namespace
+with interior smoothness, reflection and the shifted profile `I(x+eps)-I(eps)`.
+Add an actual bump-cutoff extension agreeing near the admissible interval, with globally
+bounded value and first two derivatives; this is still scalar probability calculus.
+These remain one-dimensional scalar calculus, with compact-range regularity and bounds
+explicit. Reuse the inverse CDF and ODE, import Mathlib smooth inverse calculus, and
+preserve existing signatures. Investigate the closed-generator composition interface
+separately; no scalar result alone certifies a heat inequality. Validate strict source
+and independent clients, transitive axioms and the full verifier. Synchronize canonical
+progress through an isolated index; preserve the actual index and all previous work.
+Baseline: `build/audit/gaussian-regularization/baseline/`. No commit or push.
+
+The [regularization record](research/decisions/2026-09-24-gaussian-regularization.md)
+proves interior smoothness, reflection and midpoint normalization, the shifted profile's
+nonnegativity, first/second derivative identities and bounds, Lipschitz control, uniform
+value bound and pointwise epsilon limit on `[0,1)`. It constructs a globally smooth
+extension, equal near the full admissible interval, with bounded value and first two
+derivatives and value zero at zero. Compact smooth composition and an actual smooth
+weighted-Laplacian chain-rule client are checked.
+Next prove the tested closed-generator composition identity on `D(A)` using the operator
+core and the global extension, then the BGL heat interpolation. No heat coefficient
+has changed. Current receipt: `build/audit/gaussian-regularization/final-snapshot.json`.
+
+## Gaussian profile construction (2026-09-24): scalar inputs implemented
+
+Placement plan. Construct the standard Gaussian CDF inverse and its density profile in
+`Probability/Line/GaussianProfile.lean`, namespace `Probability.Line.GaussianProfile`.
+This is one-dimensional probability calculus, below the Bakry--Emery and heat applications.
+Import the existing CDF API and Mathlib Gaussian/inverse calculus; do not depend on Poincare
+applications. Create a separate module because the Gaussian specialization has distinct
+objects and imports. Preserve all existing APIs. Prove the actual profile derivative identity
+and sharp scalar bound, with the domain `(0,1)` explicit. This does not prove the BGL heat
+interpolation or sharpen the existing heat estimates. Validate strict compilation, an
+independent client and its axioms, then the project verifier and synchronized progress views.
+Baseline: `build/audit/gaussian-profile/baseline/`. No commit or push.
+
+The [Gaussian profile record](research/decisions/2026-09-24-gaussian-profile.md) proves
+the actual CDF/quantile construction, `I' = -quantile`, `I I'' = -1`, the attained scalar
+bound `1/sqrt(2*pi)`, endpoint limits, continuity and strict concavity on `[0,1]`.
+No ODE is assumed. The independent client is `research/audits/GaussianProfileAudit.lean`.
+Next: interior smoothness and regularized-profile calculus, followed by the closed-generator
+chain rule and BGL heat interpolation. The heat constants remain unchanged; no BGL or Buser
+completion is claimed. The current round receipt is
+`build/audit/gaussian-profile/final-snapshot.json`.
+
+## Small-time L1 approximation (2026-09-23): form-domain and smooth-perimeter bounds implemented
+
+Placement plan. Create `L2/Duality.lean` for bounded scalar L2 tests detecting the integral
+absolute value on a finite measure; this is generic measure/L2 material. Create
+`KLS/LogConcave/HeatSemigroup/Approximation.lean`, importing ReversePoincare and the L2 tool,
+for the form-domain small-time estimate `integral |f - P_t f| <= sqrt(2t) integral |T f|`
+in the smooth convex tilted-law model. Use the derivative of the dual pairing, the a.e.
+bounded-data gradient estimate, and a continuous comparison at time zero. Then inspect the
+L1 stability and smooth recovery interfaces needed for perimeter/BV passage; retain all
+unproved passage obligations explicitly. Preserve existing APIs and the dirty baseline.
+Validate strict source/client compilation, transitive axioms, full build and the project
+verifier; synchronize progress through an isolated index. No commit or push. Baseline:
+`build/audit/heat-small-time/baseline/`.
+
+Placement addition: create `HeatSemigroup/Perimeter.lean` as the integration boundary between
+`HeatSemigroup/Approximation.lean` and `Geometry/Perimeter/Recovery.lean`. Instantiate the
+existing smooth-domain recovery sequence, prove its members are weighted-gradient tests,
+and derive the finite-relative-perimeter indicator estimate. This does not claim a metric
+BV theorem for arbitrary measurable sets or extend the potential class.
+
+The [small-time record](research/decisions/2026-09-23-heat-small-time-perimeter.md) proves
+`integral_abs_sub_operator_le` on the whole form domain, L1 contraction between L2 data,
+a quantitative recovery transfer, and `lintegral_enorm_indicator_sub_operator_le` for
+smooth domains via the actual existing relative-perimeter recovery sequence. The coefficient
+is `sqrt(2t)`, with zero time and infinite perimeter included in the ENNReal endpoint.
+
+**Constant correction and next target:** the ordinary reverse local Poincare estimate is
+not the Gaussian-profile BGL estimate in De Ponti--Mondino (32)--(33). The sharp route needs
+`M/sqrt(pi t)` and `2 sqrt(t/pi)`, still unproved. Establish that stronger input before claiming
+the sharp small-time step. General-law passage, perimeter comparisons, spectral decay and
+pi Buser assembly remain open. This correction supersedes stronger identifications in older
+historical sections; the proved Lean statements are unchanged. Final receipt:
+`build/audit/heat-small-time/final-snapshot.json`.
+
+## Almost-everywhere heat estimates (2026-09-23): a.e. bounds implemented
+
+Placement plan. Prove the order-separation theorem for integrable real functions tested by
+nonnegative smooth compactly supported functions on a finite-dimensional real space with a
+finite Borel measure. Create `Analysis/TestFunctionOrder.lean`, namespace
+`FunctionalInequalities.Analysis.TestFunction`, importing Mathlib's distribution and measure
+regularity tools. This generic measure-theoretic result has no KLS assumptions. Extend
+`HeatSemigroup/ReversePoincare.lean` with the a.e. bounded-data gradient estimate and
+`HeatSemigroup/SelfImprovement.lean` with the a.e. norm estimate, using semigroup symmetry.
+Preserve existing APIs; add the generic module to the root imports. Validate the source,
+independent clients including zero dimension and time zero where applicable, transitive
+axioms, full build and project verifier. Baseline: `build/audit/heat-ae-estimates/baseline/`.
+Small-time BV, general-law passage and Buser with constant pi remain separate obligations.
+
+The [a.e. continuation](research/decisions/2026-09-23-heat-almost-everywhere.md) proves
+`ae_norm_gradient_le_of_bounded`: `|T P_t f| <= M / sqrt(2t)` a.e. for bounded L2 initial
+data and `t > 0`; `ae_norm_gradient_le`: `|T P_t f| <= P_t |T f|` a.e. for all form-domain
+initial data and `t >= 0`; and `integral_norm_gradient_le`, the global gradient L1 contraction.
+The generic smooth-test order lemma includes atomic measures and zero-dimensional spaces.
+Next: the small-time L1 approximation estimate and its BV/perimeter extension, followed by
+the general-law passage and Buser assembly. Final receipt:
+`build/audit/heat-ae-estimates/final-snapshot.json`.
+
+
+## Reverse local Poincaré and the L¹ self-improvement (2026-09-23): both estimates implemented
+
+Placement plan (recorded before editing). Objects and roles: (1) the reverse local Poincaré
+(Bakry–Gentil–Ledoux, `K = 0`) inequality
+`2t ∫ φ Γ(T̄P_t f) dν ≤ ∫ (P_t φ) f² dν - ∫ φ (P_t f)² dν` for arbitrary `f ∈ L²(ν)`, `t > 0`,
+nonnegative `φ ∈ C_c^∞`, and its bounded-data consequence `2t ∫ φ Γ(T̄P_t f) ≤ M² ∫ φ`;
+(2) the `L¹`-type self-improvement `∫ φ |T̄P_t f| dν ≤ ∫ (P_t φ) |T̄f| dν` for `f ∈ D(T̄)`.
+Placement: the generic derivative of `t ↦ P_t g` at `t > 0` for arbitrary `g` extends
+`Analysis/Semigroup/Generated/TimeDerivative.lean`; the pointwise improved Bochner inequality
+`|∇Γ(f)|² ≤ 4 Γ(f) Γ₂(f)` for convex potentials extends `Analysis/BakryEmery/Bochner.lean`, and
+the chain rule for `ℒ` of a composition goes next to the product identity in `Gamma.lean`.
+Create `KLS/LogConcave/HeatSemigroup/ReversePoincare.lean` (weak carré identity
+`∫ (Aψ) g² - 2∫ ψ g Ag = -2 ∫ ψ Γ(T̄g)` on `D(A)`, the interpolation `s ↦ ∫ (P_s φ)(P_{t-s} f)²`
+and the inequality) and `KLS/LogConcave/HeatSemigroup/SelfImprovement.lean` (smooth-data and
+two-field transfer of the `√(ε + Γ)` inequality, the `ε`-interpolation and the `L¹` estimate),
+both importing GradientEstimate. No existing declaration or API changes; the root imports the
+new modules. Validation: strict checks, independent audit clients (arbitrary data, `t` limits,
+bounded data, zero test, axiom reports), full build and `research/verify.py`. No commit or
+push. Baseline: `build/audit/heat-bgl-selfimprovement/baseline/`.
+
+Placement additions: `Analysis/BakryEmery/RegularizedNorm.lean` was created for
+`N_ε(a) = √(ε+‖a‖²) - √ε`, with its pointwise and tested calculus. The Laplacian chain rule
+went into `Calculus.lean`.
+
+The [record](research/decisions/2026-09-23-heat-reverse-poincare-self-improvement.md) proves
+two estimates, with smooth convex `U` and nonnegative `φ ∈ C_c^∞`:
+
+- the **reverse local Poincaré** inequality
+  `2t ∫ φ Γ(T̄P_t f) dν ≤ ∫ (P_t φ) f² dν - ∫ φ (P_t f)² dν`, for arbitrary `f ∈ L²` and
+  `t > 0` (`HeatSemigroup.two_mul_integral_mul_weakGamma_le`). Its bounded-data form is
+  `2t ∫ φ Γ(T̄P_t f) ≤ M² ∫ φ` for `|f| ≤ M`;
+- **Bakry's `L¹` self-improvement** `∫ φ |T̄P_t f| dν ≤ ∫ (P_t φ) |T̄f| dν`, for every
+  `f ∈ D(T̄)` and `t ≥ 0` (`HeatSemigroup.integral_mul_norm_le`).
+
+The inputs are the Laplacian chain rule, the improved Bochner inequality
+`‖∇Γ(f)‖² ≤ 4Γ(f)Γ₂(f)`, the pointwise `√(ε+Γ)` inequality, the regularized-norm product
+rule, the `D(A)` carré identity and the orbit derivative for arbitrary data. Both estimates
+are tested against `C_c^∞`; a.e. forms are not claimed. Next: the a.e. passage, the
+small-time BV estimate, and the Buser assembly with constant π. Final receipt:
+`build/audit/heat-bgl-selfimprovement/final-snapshot.json`.
+
+
+## Time interpolation and the square gradient estimate (2026-09-23): square estimate implemented
+
+Placement plan (recorded before editing). Object and role: the interpolation
+`Ψ(r) = ∫ (P_{t-r} φ) Γ(T̄ P_r f) dν` and its monotonicity, giving the integrated square
+gradient estimate `∫ φ Γ(T̄ P_t f) dν ≤ ∫ (P_t φ) Γ(T̄ f) dν` (the weak form of
+`Γ(P_t f) ≤ P_t Γ(f)`) for nonnegative `φ ∈ C_c^∞`. Split by level:
+(1) `L2/BoundedMultiplier.lean` (extend): uniformly bounded `L²`-convergent multipliers test
+integrable functions, via truncation. (2) `Analysis/Semigroup/Generated/TimeDerivative.lean`
+(create, imports `Generated.Smoothing` and `Generated.FormDomain`): the right derivative of
+`t ↦ P_t f` on `D(A)`, the left derivative, the right derivative of `t ↦ T(P_t g)` for `t > 0`,
+continuity of `t ↦ T(P_t g)` on `(0,∞)`, and form-domain continuity at `0`. Generic Hilbert
+material; no measure. (3) `KLS/LogConcave/HeatSemigroup/GradientEstimate.lean` (create,
+imports TestClassExtension and TimeDerivative): the difference-quotient bound
+`|P_h φ - φ| ≤ h sup|ℒφ|`, the right derivative of `Ψ`, the monotonicity via the frontend,
+and the square estimate for positive-time and form-domain data. No existing declaration or
+API changes; the root imports the new modules. Validation: strict checks, an independent
+audit client (arbitrary data, `t = 0`, zero test, the form-domain version, axiom reports), full
+build and `research/verify.py`. No commit or push. Baseline:
+`build/audit/heat-gradient-square/baseline/`.
+
+Placement deviation: the joint multiplier/field convergence lemma and the tested product rule
+went into `Analysis/BakryEmery/WeakGamma.lean` (extended; it now imports `L2.BoundedMultiplier`
+and Mathlib slopes) because they are generic statements about tested weak `Γ`.
+
+The [square-estimate record](research/decisions/2026-09-23-heat-gradient-square-estimate.md)
+proves the following:
+
+- the `L²`/`L¹` pairing under uniform bounds;
+- the tested product rule for `s ↦ ∫ q s Γ(u s, u s)`;
+- generic time derivatives: `P_t f` on `D(A)` from both sides, the gradient orbit `T P_t g`
+  for `t > 0`, its continuity, and form-domain continuity at `0`;
+- the difference bound `|P_h ψ - ψ| ≤ h sup|Aψ|`;
+- the interpolation `integral_mul_weakGamma_le_of_pos` for arbitrary `g ∈ L²` and
+  `0 < a ≤ t`;
+- the integrated square gradient estimate `integral_mul_weakGamma_le`:
+  `∫ φ Γ(T̄P_t f) dν ≤ ∫ (P_t φ) Γ(T̄f) dν` for every `f ∈ D(T̄)`, `t ≥ 0` and nonnegative
+  `φ ∈ C_c^∞`, with smooth convex `U`.
+
+Next: the `L¹` self-improvement `|T̄P_t f| ≤ P_t|T̄f|` and the reverse BGL estimate. Final
+receipt: `build/audit/heat-gradient-square/final-snapshot.json`.
+
+
+## Two-field convergence and the heat-test frontend (2026-09-23): frontend implemented
+
+Placement plan (recorded before editing). Object and role: (1) the second-order graph-norm
+identity `‖Je‖² + ‖T(Je)‖² = ‖e‖² + 3‖Te‖² + 3‖T†Te‖² + ‖T(T†Te)‖²`, `J = I + T†T`, for
+`e ∈ D(T†T)` with `T†Te ∈ D(T)`, and its sequential consequence (convergence of `J xₙ` in the
+graph norm forces convergence of all four fields). This is generic Hilbert-space material at
+the level of V1: extend `Analysis/Semigroup/VonNeumann.lean` (namespace `Analysis.Semigroup`,
+no new import). (2) The concrete two-field core for the tilted-law closed gradient: for every
+`F ∈ D(A)` with `AF ∈ D(T̄)` a sequence `qₙ ∈ C_c^∞` with `[qₙ] → F`, `[∇qₙ] → T̄F`,
+`[-ℒqₙ] → AF`, `[∇(-ℒqₙ)] → T̄(AF)`: extend `KLS/LogConcave/HeatSemigroup/FormRange.lean`,
+its only prerequisite being the density theorem there. (3) The arbitrary-data heat-test
+frontend: for arbitrary `g ∈ L²(ν)`, `r > 0`, nonnegative `φ ∈ C_c^∞`, `s ≥ 0`, with
+`F = P_r g`, `ψ = P_s[φ]`, both integrabilities and
+`0 ≤ -(1/2)∫(Aψ)Γ(T̄F,T̄F) dν + ∫ψ Γ(T̄F,T̄(AF)) dν`. Create
+`KLS/LogConcave/HeatSemigroup/TestClassExtension.lean` (namespace `KLS.LogConcave.HeatSemigroup`)
+importing TestClass and FormRange; TestClass itself should not import the wave-splitting chain.
+No existing declaration or API changes; the root imports the new module. Validation: strict
+checks, an independent audit client (arbitrary `g`, `r > 0`, `s ≥ 0`, the case `s = 0`, the
+zero test, the norm identity and the two-field core, axiom reports), full build and
+`research/verify.py`. No commit or push. Baseline:
+`build/audit/heat-test-splitting-two-field/baseline/`.
+
+The [frontend record](research/decisions/2026-09-23-heat-test-extension-frontend.md) proves
+three results:
+
+- the generic expansion `‖Je‖² + ‖T(Je)‖² = ‖e‖² + 3‖Te‖² + 3‖T†Te‖² + ‖T(T†Te)‖²` and
+  four-field convergence (`VonNeumann.lean`);
+- the two-field smooth core `exists_seq_smooth_tendsto_two_fields`: for every `F ∈ D(A)` with
+  `AF ∈ D(T̄)` there are `qₙ ∈ C_c^∞` with `[qₙ] → F`, `[∇qₙ] → T̄F`, `[-ℒqₙ] → AF` and
+  `[∇(-ℒqₙ)] → T̄(AF)`;
+- the arbitrary-data frontend `HeatSemigroup.integral_weakGamma_operator_nonneg`.
+
+The frontend holds for smooth convex `U`, arbitrary `g ∈ L²(ν)`, `r > 0`, nonnegative
+`φ ∈ C_c^∞` and `s ≥ 0`. With `F = P_r g` and `ψ = P_s[φ]`, both pairings are integrable and
+`0 ≤ -(1/2)∫(Aψ)Γ(T̄F,T̄F) dν + ∫ψ Γ(T̄F,T̄(AF)) dν`. It has no wave, core, residual or
+sequence premise. The clients check arbitrary data, `s = 0` (`ψ = φ`, `Aψ = -ℒφ`) and the
+zero test. Next: the interpolation `s ↦ ∫ (P_s φ) Γ(T̄(P_{t-s} f)) dν`, its time
+differentiation and limits, and then the gradient estimates. Final receipt:
+`build/audit/heat-test-splitting-two-field/final-snapshot.json`.
+
+
+## Class-level form-range density (2026-09-23): density theorem implemented
+
+Placement plan (recorded before editing). Object and role: identification of the classical
+wave-splitting objects with the tilted-law closed gradient, and the class-level density of the
+form range `J C_c^∞`, `J = I + T̄†T̄`, in the form domain `E = D(T̄)` with its graph norm.
+Split by dependency level. (1) `Analysis/WaveSplitting/Potential.lean` (namespace
+`Analysis.WaveSplitting`; imports AverageError, `BakryEmery.Laplacian` and Mathlib tilted
+measures; no KLS import): the potential weight `exp(-U)` with `D_(a_j) w = -b_j w`, the
+production classical density theorem, and for an orthonormal basis `a` with `b_j = D_(a_j) U`
+the pointwise identities `Σ_j (D_(a_j) f)^2 = ‖∇f‖²`, `Σ_j D_(a_j) D_(a_j) f = Δf`,
+`Σ_j b_j D_(a_j) f = ⟪∇U, ∇f⟫`, `formOperator = f - ℒf`, and the normalization
+`weightedFormEnergy = Z ∫ (f² + ‖∇f‖²) d(m.tilted (-U))`, `Z = ∫ exp(-U) dm > 0`.
+(2) `KLS/LogConcave/HeatSemigroup/FormRange.lean` (namespace `KLS.LogConcave`; imports
+Potential, `HeatSemigroup.Generator`, `WeightedGradient.Multiplier`): the class-level norm
+bridge on `D(T̄)`, the operator bridge `[q] ∈ D(A)`, `J[q] = [formOperator q] ∈ D(T̄)`, and the
+density theorem for arbitrary `z ∈ D(T̄)` in the graph norm (also in the `graphL2` form).
+Create both: no existing module has this role, and the analysis layer must not import the
+closed operator. No existing declaration, file or API changes; the root imports both.
+Validation: strict checks, independent audit clients (arbitrary `z`, zero dimension, norm and
+operator bridges, axiom reports), full build and `research/verify.py`. No commit or push.
+Baseline: `build/audit/heat-test-splitting-form-range/baseline/`.
+
+The [form-range continuation](research/decisions/2026-09-23-wave-splitting-form-range.md)
+proves `exists_toLp_add_adjointComp_graph_lt`. For `ν = m.tilted (-U)` log-concave with
+nonempty interior support, smooth `U`, `T̄` the closed unit-weight gradient, `A = T̄†T̄` and
+`J = I + A`: for every `z ∈ D(T̄)` and `ε > 0` there is `q ∈ C_c^∞` with `[q] ∈ D(A)`,
+`J[q] ∈ D(T̄)` and `√(‖J[q] - z‖² + ‖T̄J[q] - T̄z‖²) < ε`; `dense_formRange_graphL2` is the
+`Dense` form in `graphL2 T̄`. The three bridges are proved: the norm bridge
+`‖x‖² + ‖T̄x‖² = FE_w(f)/Z` for `x = [f]`, `f ∈ C_c^∞`, in any orthonormal basis; the
+operator bridge `J[q] = [formOperator e b q] = [q - ℒq]`; and density by combining the graph
+core, the classical approximation and Minkowski's inequality in the graph norm. The proofs
+also establish `Σ(D_(e_j) f)² = ‖∇f‖²`, `Σ D_(e_j)D_(e_j) f = Δf`, `Σ b_j D_(e_j) f = ⟪∇U,∇f⟫`
+and `Z > 0` with `∫ exp(-U) g dm = Z ∫ g dν`. Zero dimension is included (`J = I`). Next:
+two-field convergence and the arbitrary-data heat-test frontend. Final receipt:
+`build/audit/heat-test-splitting-form-range/final-snapshot.json`.
+
+
+## Quantitative error of the time average (2026-09-23): mesh-uniform bound implemented
+
+Placement plan (recorded before editing). Object and role: the quantitative bound
+`sqrt FE_w(J_cl q - h) <= sqrt(∫ w h^2)/L + C δ` for the cellwise time average of wave data
+`(0,h,0)` on meshes with `N δ = L`, in the weighted coordinate form energy
+`FE_w(f) = ∫ w (f^2 + Σ_j (D_(a_j) f)^2)`. Owner: existing `Analysis/WaveSplitting` family.
+Create `AverageError.lean`, importing TimeAverage. It contains joint smoothness of time
+primitives, a time-integral energy lemma reusing the Fubini lemma, Minkowski for scalar and
+weighted form energies, control of `div_b d` by the localized generator bound, and the final
+mesh-uniform error client. No existing declaration, file or API changes; root imports it.
+Validation: strict checks, an independent audit client (potential weight, zero dimension,
+axiom reports), full build and `research/verify.py`. No commit or push. Baseline:
+`build/audit/heat-test-splitting-average-error/baseline/`.
+
+The [error continuation](research/decisions/2026-09-23-wave-splitting-average-error.md) proves
+`sqrt FE_w(J_cl q - h) <= sqrt(∫ w h^2)/L + C δ` for all meshes `N δ = L`, `0 < δ <= 1`,
+where `FE_w(f) = ∫ w (f^2 + Σ_j (D_(a_j) f)^2)` (`exists_timeAverage_error_bound`). It uses a
+time-integral energy lemma, Minkowski inequalities and the localized divergence bound. The
+potential client also proves classical approximation: every `ε > 0` admits an actual
+`q ∈ C_c^∞` with `sqrt FE_w(J_cl q - h) < ε`. Next: identify `FE_w`, `J_cl` and `[C_c^∞]` with
+the tilted-law form norm, `I + A` and the form domain. Final receipt:
+`build/audit/heat-test-splitting-average-error/final-snapshot.json`.
+
+
+## Finite time average and the J q - h identity (2026-09-23): exact identity implemented
+
+Placement plan (recorded before editing). Object and role: the cellwise finite time average
+`q = Σ_k ∫_0^δ (1 - (kδ+θ)/(Nδ)) u_k(θ) dθ` of the actual split cells, its `C_c^∞`
+regularity, and the exact classical identity for `J_cl q - v(0)`, where
+`J_cl f = f - Σ_j (D_j D_j f - b_j D_j f)`. Owner: existing `Analysis/WaveSplitting` family.
+Create `TimeAverage.lean`, importing Compatibility (the defect enters the identity through
+`div_b d`). It contains the generic smoothness and differentiation of parametric interval
+integrals of jointly smooth functions (a Mathlib gap, used only here), the coordinate
+operator and weighted divergence, the per-cell integration by parts, the telescoping over
+actual nodes, and the final identity. No existing declaration, file or API changes; the root
+imports it. Validation: strict checks, an independent audit client (initial data `(0,h,0)`,
+support, zero dimension, one-cell case, axiom reports), full build and `research/verify.py`.
+No commit or push. Baseline: `build/audit/heat-test-splitting-average/baseline/`.
+
+The [time-average continuation](research/decisions/2026-09-23-wave-splitting-time-average.md)
+proves differentiation and `C^∞` smoothness of parametric interval integrals of jointly
+smooth functions. The cellwise average `q` is `C_c^∞`, and the exact pointwise identity
+`J_cl q - v(0) = (u(0)-u_N)/L + (1/L)Σ∫e_u + Σ∫(1-t/L)(div_b d + e_v)` holds with
+`L = Nδ ≠ 0`, the actual residuals and the actual defect. For `(0,h,0)` it is the route's
+`J q - h` identity. Next: the quantitative bound `||J[q]-[h]||_E <= ||h||/L + Cδ` and the
+identifications with the tilted-law operator and norms. Final receipt:
+`build/audit/heat-test-splitting-average/final-snapshot.json`.
+
+
+## Weighted forced energy and gradient compatibility (2026-09-23): cell bounds implemented
+
+Placement plan (recorded before editing). Object and role: weighted L2 energy of the actual
+split cells with its forced growth law, and the gradient-compatibility defect `p - grad u`
+of the actual scheme. Owner: existing `Analysis/WaveSplitting` family. Create
+`WeightedEnergy.lean` (imports Residual and Mathlib Haar integration by parts, parametric
+differentiation and quadratic discriminants: Minkowski/Cauchy-Schwarz for the square
+energies, the weighted skew identity for `waveGenerator` when `D_(a_j) w = -b_j w`,
+differentiation of the weighted energy along cells, `sqrt W(cell) <= sqrt W(Y) + t eta`, and
+the mesh-uniform client for original smooth potentials) and `Compatibility.lean` (imports
+WeightedEnergy: the defect state, its exact time derivative equal to the defect of the
+residual, the mesh-uniform `E_k` defect bound, and the weighted coordinate form-energy bound
+of `u`). Split because the defect is a separate object with different derivative orders. No
+existing declaration, file or API changes; root imports both. Validation: strict checks, an
+independent audit client (orders, zero dimension, zero time, potential coefficients, axiom
+reports), full build and `research/verify.py`. No commit or push. Baseline:
+`build/audit/heat-test-splitting-weighted/baseline/`.
+
+The [weighted-energy continuation](research/decisions/2026-09-23-wave-splitting-weighted-energy.md)
+proves Cauchy-Schwarz/Minkowski for the weighted and ordered derivative energies, the weighted
+skew identity of `waveGenerator` under `D_(a_j) w = -b_j w`, and the forced growth
+`sqrt W(cell_k(θ)) <= sqrt W(Y) + C δ`, with leading coefficient one. The defect
+`d = p - D u` evolves by the defect of the actual residual, and `sqrt E_k(d(cell)) <=
+sqrt E_k(d(Y)) + C δ`. The weighted coordinate form energy of `u` is bounded by
+`sqrt W(Y) + C(sqrt E_0(d(Y)) + δ)`. All bounds hold on actual cells for smooth coefficients
+without global bounds. The potential client uses `w = exp(-U)` and initial `(0,h,0)`. Next:
+the finite time average and its `J q - h` identity. Final receipt:
+`build/audit/heat-test-splitting-weighted/final-snapshot.json`.
+
+
+## Actual split residual estimate (2026-09-23): tame bound and grid-cell client implemented
+
+Placement plan (recorded before editing). Object and role: arbitrary-time temporal chain
+rules of the actual flows, and the tame energy estimate of the actual split residual.
+Owner: existing `Analysis/WaveSplitting` family. Create `FlowDerivative.lean` (imports
+Consistency; pure calculus: all-time chain rules, the sweep derivative with its flow
+factors between generators, time/space derivative exchange, exact residual decomposition)
+and `Residual.lean` (imports FlowDerivative, GeneratorBounds and Localization; the time-
+integral energy lemma with Fubini, commutator bounds, `E_k(e_Y(t)) <= C t^2 E_(k+2)(Y)` and
+the localized grid-cell client). Split because the calculus layer needs no measure theory.
+No existing declaration, file or API changes; root imports both. Validation: strict module
+checks, a new independent audit client (order 3/5 endpoint, actual cells, zero dimension,
+zero time, axiom reports), full build and `research/verify.py`. No commit or push. Baseline:
+`build/audit/heat-test-splitting-residual/baseline/`.
+
+The [residual continuation](research/decisions/2026-09-23-wave-splitting-residual.md) proves the
+all-time chain rules, time/space derivative exchange, the exact ordered identity
+`e_Y(t) = R(t) sweepDerivative(t,js,Y) - G_js(S(t)Y)`, and a Fubini time-integral lemma.
+`derivativeEnergy_residual_le` gives `E_k(e_Y(t)) <= residualConstant(js,k,B) t^2 E_(k+2)(Y)`
+for `0 <= t <= 1`. The constant depends only on the coordinate count, the list, `k` and the
+coefficient bound through order `k+1`. `exists_cell_residual_bound` gives
+`E_order(e_(nodes k)(θ)) <= C δ^2` on actual cells: `k < N`, `0 <= θ <= δ <= 1`,
+`N δ <= L`. It applies to original smooth coefficients, without global bounds, through
+one localization. The independent client covers order 3/5, cells, zero dimension and zero
+time. Weighted forced energy, gradient compatibility, the time average and form-range density
+remain open. Final receipt: `build/audit/heat-test-splitting-residual/final-snapshot.json`.
+
+
+## Generator energy bounds (2026-09-23): one- and two-order bounds implemented
+
+Placement: add `Analysis/WaveSplitting/GeneratorBounds.lean`, importing Consistency and
+Stability. Prove scalar coordinate differentiation loses one order in the existing energy,
+then estimates for the actual coordinate/reaction/wave generators and their compositions.
+Use the finite-word derivative bridge, without treating a multilinear operator norm as the
+ordered-coordinate energy. Keep the actual residual bound distinct from these prerequisites.
+Preserve incoming work and APIs, add independent clients, strict checks and full verification.
+Baseline: `build/audit/heat-test-generator-bounds/baseline/`. No commit or push.
+
+The [generator bounds](research/decisions/2026-09-23-wave-generator-bounds.md) prove the
+coordinate one-order bound, reaction same-order bound, finite-list generator bound and
+its two-order square bound. Every ordered elementary pair, including both mixed orders,
+has a proved two-order estimate; independent clients instantiate order five to three.
+Next bound the actual differentiated split products, with flow factors between generators.
+Do not identify the second time derivative of a split product with the square of its summed
+generator. The tame residual estimate, weighted energy and time-average approximation remain
+open. Final verification receipt: `build/audit/heat-test-generator-bounds/final-snapshot.json`.
+
+
+## Split consistency and residual (2026-09-23): exact identities implemented
+
+Placement: add `Analysis/WaveSplitting/Consistency.lean` for the actual full-step temporal
+jet, coordinate generator and residual at zero. Import the explicit-flow layer; preserve
+existing APIs and separate consistency from the still-required uniform quantitative residual
+bound with two derivative losses. Prove temporal chain rules for the finite composition,
+not a package assuming the residual estimate. Add an independent complete-coordinate client,
+strict source and axiom checks, full build and project verification. Preserve the real index;
+no commit or push. Baseline: `build/audit/heat-test-splitting-consistency/baseline/`.
+
+The [consistency continuation](research/decisions/2026-09-23-wave-splitting-consistency.md)
+proves the time-dependent-input chain rules and complete-step generator identity, identifies
+complete coordinate lists with the wave system, and defines the actual residual. Its joint
+smoothness, zero initial value and exact temporal integral representation are proved.
+Next prove the tame estimate `E_3(residual(theta)) <= C theta^2 E_5(Y)` with the two derivative
+losses; smoothness or separately chosen constants for each grid state cannot replace it.
+The weighted-energy, compatibility and time-average obligations remain open. Final receipt:
+`build/audit/heat-test-splitting-consistency/final-snapshot.json`.
+
+
+## Coefficient localization (2026-09-23): original-coefficient stability implemented
+
+Placement plan: extend the existing `Analysis/WaveSplitting` family with `Localization.lean`,
+importing Stability and Mathlib smooth bumps. Construct a compact smooth coefficient equal to
+an arbitrary smooth coefficient on the finite propagation ball; prove all finite coordinate
+word derivatives bounded and establish equality of the actual flows on supported states.
+This discharges a concrete prerequisite of applying the residual/stability route to the
+original coefficient; it does not assume global derivative bounds on the original potential.
+Preserve old APIs and files, add an independent client, run strict/full verification and update
+progress metadata. No commit or push. The baseline is in
+`build/audit/heat-test-splitting-localization/baseline/`.
+
+The [localization continuation](research/decisions/2026-09-23-wave-splitting-localization.md)
+constructs one compact smooth coefficient agreeing on the propagation ball, proves all finite
+coordinate derivative bounds for it, and proves equality of the actual grid and cells.
+Fixed-horizon finite-order stability now holds for the original smooth coefficient without
+global derivative-bound hypotheses, including the fifth-order smooth-potential client.
+Next prove the actual third-order split residual estimate with two derivative losses. Weighted
+energy, compatibility and the time-average approximation remain open. The final verifier receipt
+is `build/audit/heat-test-splitting-localization/final-snapshot.json`.
+
+
+## Higher-order finite splitting stability (2026-09-23): finite-order estimates implemented
+
+Placement plan: the existing owner is `Analysis/WaveSplitting`. Add `Product.lean` for finite
+scalar derivative Leibniz estimates and their integrated energy bound; add `Stability.lean` only
+when it contains the reaction/split consequences. The product layer imports the current energy
+construction and Mathlib directional calculus; stability imports product estimates. Preserve
+all existing names and source files. Prove the actual finite Leibniz expansion and estimates,
+not conclusion-bearing assumptions. Bound coefficient derivatives explicitly in these generic
+lemmas; deriving those bounds for a localized original coefficient remains separate. Target
+finite-order reaction and iteration stability, including order five and empty coordinates.
+Residuals, the time average, and the arbitrary-data heat-test frontend remain later obligations.
+Strict source/client checks, axiom audits, the full build and project verification will bind the
+final snapshot. The incoming baseline is `build/audit/heat-test-splitting-stability/baseline/`.
+No commit, push, migration, certificate or completed route change is authorized.
+
+The [stability continuation](research/decisions/2026-09-23-wave-splitting-stability.md) now proves
+that finite Leibniz expansion, the integrated scalar product bound, and reaction, split, grid
+and cell stability at every finite derivative order, including five. The bound has an explicit
+dimension-dependent constant and assumes bounds on actual coefficient derivatives. It does
+not identify ordered-coordinate energy with another derivative norm. Next prove the actual
+third-order split residual bound with two derivative losses, and construct the localized
+coefficient before application to the original potential. The residual-controlled time average
+and arbitrary-data heat-test frontend are still open. The final verification receipt is
+`build/audit/heat-test-splitting-stability/final-snapshot.json`; no certification change is claimed.
+
+
+## Finite splitting derivative energy (2026-09-22): transport at all orders, reaction at order zero
+
+The [energy continuation](research/decisions/2026-09-22-wave-splitting-energy.md) implements
+`Analysis/WaveSplitting/Energy.lean`, an integration extension of the unchanged explicit-flow
+module. Actual scalar iterated derivatives commute with coordinate transport. Haar square-energy
+preservation is proved for each transport and finite coordinate sweep at every finite derivative
+order. The energy sums squares over ordered direction tuples; it is not a multilinear operator
+norm or a completed Sobolev space. Empty coordinates and time zero are admitted.
+
+For a smooth coefficient with the explicit bound `sum_j b_j(x)^2 <= B`, `B >= 0`, the actual
+reaction and complete split step have zero-order energy factor `1+(1+4B)t` for `0<=t<=1`.
+Finite iteration gives `E_0(Y_k) <= exp((1+4B)k*delta) E_0(Y_0)`; an independent fixed-horizon
+client uses `delta=L/N` and arbitrary compact smooth initial velocity. This does not supply
+higher-order reaction stability or the later weighted energy argument's horizon-independent term.
+
+**Next analytic target:** prove the higher-order coefficient product/Leibniz estimate in this
+finite derivative energy and derive higher-order reaction stability. Coefficient localization,
+the order-three residual bound, the finite time average, form-range density and the arbitrary-data
+heat-test frontend remain open. The exploration's minimum substantive target is not yet reached.
+
+Placement plan (recorded before editing): generic derivative-energy/integration estimates belong
+in `Analysis/WaveSplitting/Energy.lean`, forming a basic/extension pair without any module move
+or public API migration. The library root imports the extension; existing proof statements are
+unchanged. Incoming baseline and scoped verification are in
+`build/audit/heat-test-splitting-energy/`; read `final-snapshot.json` for the final verifier outcome.
+No commit or push is authorized. Proof completion markers and certificate count are unchanged.
+
+## Finite wave splitting construction (2026-09-22): first layer formalized
+
+The [construction record](research/decisions/2026-09-22-wave-splitting-construction.md) and
+`Analysis/WaveSplitting.lean` implement actual reaction/translation flows, coordinate sweeps,
+finite grid nodes and cell functions. Spatial and joint time-space smoothness, common compact
+support on every finite grid and adjacent endpoint agreement are proved. The reaction equations,
+coordinate-flow derivatives at zero and characteristic pointwise energy identity are proved.
+The independent client checks full coordinate sweeps, empty coordinates and zero initial data.
+The conservative support radius is `R + N*δ*travel`; for orthonormal directions it gives `R+dL`,
+not the sharper coordinate-box bound. Coordinate functions have no asserted Hilbert norm yet.
+
+**Next analytic target:** finite derivative norms, Haar translation isometry, reaction stability
+and the actual consistency/residual estimate for these flows. The residual-controlled time
+average, its error bound, form-range density and arbitrary-data heat-test frontend remain open.
+The exploration's minimum substantive approximation target has not yet been reached.
+
+Placement plan (recorded before editing): generic explicit classical splitting is owned by
+`Analysis/WaveSplitting.lean`, namespace `FunctionalInequalities.Analysis.WaveSplitting`, with
+Mathlib calculus/trigonometry/support imports and no existing API changes. The root imports the
+new prerequisite. Baseline and scoped verification are in `build/audit/heat-test-splitting/`;
+read `final-snapshot.json` for the final check outcome. No commit or push is authorized.
+
+## Heat-test wave approximation exploration (2026-09-22): not formalized
+
+The [new exploration record](research/decisions/2026-09-22-heat-test-wave-approximation.md)
+records the subsequent wave argument and its refinement to a finite explicit splitting scheme.
+The time average `q = ∫₀ᴸ (1-t/L)u(t) dt` gives `Jq = h-u(L)/L` for an exact wave.
+For finite splitting, a tracked equation residual and the defect `p-∇u` give the proposed
+bound `‖J[q]-[h]‖_E ≤ ‖h‖₂/L + C_(h,L) δ`, with `q` actually smooth and compactly supported.
+This would yield form-range density and both required field limits without first constructing
+an exact wave or a higher-power self-adjointness theory. The record includes the elementary
+flow formulas, support control, estimate derivations, literature provenance and local interfaces.
+
+**Next analytic implementation target:** prove stability, consistency and the residual-controlled
+time-average construction for these explicit flows. These are informal deductions, not new
+Lean theorems or admissible extra frontend assumptions. The full heat-test frontend remains open.
+This update changes documentation only; the earlier records below are preserved as history.
+The previous full verification receipt binds its old snapshot and does not cover these added
+documents. The separate documentation snapshot is
+`build/audit/heat-test-wave-route/documentation-snapshot.json`; it is not a proof audit.
+Proof/progress markers and certificate status are unchanged. No commit or push was made.
+
+## Heat-test extension route review (2026-09-22): no new Lean proof
+
+The [route review](research/decisions/2026-09-22-heat-test-extension-route.md) checks the proposed
+resolvent approach. The existing resolvent bounds would transport form-norm approximation of
+`(I+A)F` to the required two fields, but density of `(I+A)C_c^∞` in `D(T)` remains unproved.
+Form orthogonality gives `⟨z,(I+A)²q⟩ = 0`, not the second-order deficiency equation handled
+by the existing interior-regularity theorem. The record also identifies a first-order
+scalar/vector block-power core route using external mathematics; no such core is proved in Lean.
+
+This round changes documentation only. The previous proofs and audits are preserved; there is
+no full heat-test frontend or corresponding client. The exact next target remains true
+`C_c^∞` two-field approximation, or a justified alternative extension. New revalidation evidence
+is recorded in `build/audit/heat-test-extension/final-snapshot.json`; it must not be read as
+verification of the informal route. Certificates remain 26; Buser and KLS remain open.
+
+## Heat-test approximation continuation (2026-09-22): full target still open
+
+The [new approximation record](research/decisions/2026-09-22-heat-test-approximation.md)
+supersedes the earlier takeover as the latest partial delivery. Positive-time smoothing now
+has the bound `r³ ‖T A P_r g‖² ≤ 4 ‖g‖²` and continuity of both `T P_r` and `T A P_r`
+under convergence of arbitrary initial data. The concrete theorem
+`HeatSemigroup.exists_seq_smooth_tendsto_regularized_fields` constructs `fₙ ∈ C_c^∞`
+whose **heat evolutions** `P_{r/2}[fₙ]` approximate both fields of `P_r g`.
+
+This does not construct `C_c^∞` data whose own two fields converge, and does not prove
+the weak Γ₂ inequality at arbitrary heat data with positive test time. The exact remaining
+statement is `[∇qₙ] → T P_r g` and `[-∇ℒqₙ] → T A P_r g` for some `qₙ ∈ C_c^∞`, or a
+fully justified alternative extension. Do not remove `P_{r/2}` from the proved approximation.
+No higher-order core, pointwise gradient bound, Buser result or KLS result is claimed.
+
+The new audit uses actual arbitrary heat data for integrability, checks the inequality at
+`s = 0` and checks the zero test at every `s ≥ 0`; it cannot instantiate the missing full
+frontend. Current-round evidence is identified by
+`build/audit/heat-test-approximation/final-snapshot.json`; inspect its outcome, not the old
+takeover receipt. Certificates remain 26. No commit, push or dependency upgrade was made.
+
 ## Heat-test extension takeover (2026-09-22): partial, full target still open
 
 The latest implementation is `HeatSemigroup/TestClass.lean`; see
@@ -61,10 +1211,10 @@ with all necessary bounds proved. The record identifies the missing estimates fo
 Validation of this partial delivery is identified by
 `build/audit/heat-test-class-takeover/final-snapshot.json`. Certificates remain 26.
 
-## Current operational status (2026-09-22)
+## Operational status archive (2026-09-22)
 
-This section is the current handoff. The dated rounds below are historical records; their
-hole counts, assignments and "next" steps describe those rounds, not today's queue.
+This section is a dated record. Its hole counts, assignments and "next" steps
+describe that round, not today's queue; the current result is at the top.
 
 - **26 registered certificates; one deliberate target hole** in `KLS/Target.lean`. No former
   coarea/Sard/Cheeger/Energy WIP module remains. The target is outside every certificate closure.
@@ -129,7 +1279,9 @@ hole counts, assignments and "next" steps describe those rounds, not today's que
   `∫ Γ(T̄ (P_t f)) dν ≤ ∫ Γ(T̄ f) dν`, `2t ∫ Γ(T̄ (P_t g)) dν ≤ ‖g‖²` for arbitrary `g` and
   `t > 0`, the weak generator identity for `P_t g`, and **second-order regularity**
   `A (P_t g) ∈ D(T̄)`. See [W0–W3](research/decisions/2026-09-21-weak-gamma-interface.md).
-  `Γ(P_t f) ≤ P_t Γ(f)` is **not** proved, pointwise or otherwise.
+  At that round `Γ(P_t f) ≤ P_t Γ(f)` was not proved in any form. Its integrated form
+  `∫ φ Γ(T̄P_t f) dν ≤ ∫ (P_t φ) Γ(T̄f) dν` was proved on 2026-09-23 (below); a pointwise
+  a.e. form is still not proved.
 - **Generator form of weak `Γ₂` (G0–G5, 2026-09-21, later):** the **second-order field is
   eliminated** from the weak `Γ₂` inequality, so the two-field approximation listed above as the
   obstruction is no longer needed. Multiplication of an `L²` class by an a.e. bounded scalar or
@@ -176,17 +1328,27 @@ hole counts, assignments and "next" steps describe those rounds, not today's que
   full-dimensional log-concave tilted-law model with unit weight. The heat-test-class extension
   proves bounds for `P_s φ` and `A(P_s φ)`, pairing integrability, and the inequality for smooth
   compactly supported data against nonnegative `D(A)` tests. Its extension to arbitrary
-  `F = P_r g` remains open: convergence of `T̄(A fₙ)` is required by the conditional two-field
-  transfer and is not supplied by the existing `A` graph core. See the
-  [heat-test-class record](research/decisions/2026-09-22-heat-test-class.md). Not proved:
+  `F = P_r g` was proved on 2026-09-23 (`HeatSemigroup.integral_weakGamma_operator_nonneg`,
+  `HeatSemigroup/TestClassExtension.lean`). The two field limits come from the smooth core
+  `exists_seq_smooth_tendsto_two_fields`, built on the finite-wave-splitting density of
+  `(I + A) C_c^∞` in `D(T̄)`. See the
+  [heat-test-class record](research/decisions/2026-09-22-heat-test-class.md) and the
+  [frontend record](research/decisions/2026-09-23-heat-test-extension-frontend.md). Not proved:
   product/chain rules for arbitrary form-domain or heat-flow inputs beyond the bounded-multiplier
-  case; the interpolation `s ↦ ∫ (P_s φ) Γ(T̄ (P_{t-s} f)) dν`, **with the outer semigroup applied
-  to the test function** — a pairing against a fixed `φ` is a different functional and does not
-  replace it, so extending the weak `Γ₂` inequality from smooth compactly supported tests to the
-  class `{P_s φ}` for arbitrary heat-flow data remains a separate obligation. Only after
-  that come its time differentiation and justified limits, the square and first-order Bakry–Émery
-  gradient estimates, passage from smooth potentials to general log-concave laws, and small-time
-  heat estimates with constants sufficient for the π target. The earlier Markov handoff is
+  case. The weak `Γ₂` inequality against the class `{P_s φ}` for arbitrary heat-flow data is
+  the proved frontend above. The interpolation `s ↦ ∫ (P_s φ) Γ(T̄ (P_{t-s} f)) dν`, with the
+  outer semigroup applied to the test function, is also proved, with its time differentiation
+  and justified limits. This gives the **integrated square gradient estimate**
+  `∫ φ Γ(T̄P_t f) dν ≤ ∫ (P_t φ) Γ(T̄f) dν` for every `f ∈ D(T̄)`, `t ≥ 0` and nonnegative
+  `φ ∈ C_c^∞` (`HeatSemigroup.integral_mul_weakGamma_le`, 2026-09-23; see the
+  [square-estimate record](research/decisions/2026-09-23-heat-gradient-square-estimate.md)).
+  The `L¹` estimate `∫ φ |T̄P_t f| ≤ ∫ (P_t φ) |T̄f|` and the reverse Bakry–Gentil–Ledoux
+  estimate `2t ∫ φ Γ(T̄P_t f) ≤ ∫ (P_t φ) f² - ∫ φ (P_t f)²` were proved the same day in
+  tested form, with the `L^∞ → Lip` bound `2t ∫ φ Γ(T̄P_t f) ≤ ‖f‖²_∞ ∫ φ`. See the
+  [reverse-Poincaré record](research/decisions/2026-09-23-heat-reverse-poincare-self-improvement.md).
+  Still open: the a.e. forms of these tested estimates, passage from smooth potentials to
+  general log-concave laws, and small-time heat estimates with constants sufficient for the π
+  target. The earlier Markov handoff is
   completed in its stated scope; full form-domain stability, energy contraction, positive-time
   domain regularity and second-order positive-time regularity are now proved.
 

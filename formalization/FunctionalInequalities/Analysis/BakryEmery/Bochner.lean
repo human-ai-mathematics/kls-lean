@@ -1,6 +1,8 @@
 import FunctionalInequalities.Analysis.BakryEmery.Gamma
 import Mathlib.Analysis.Convex.Deriv
 import Mathlib.Analysis.InnerProductSpace.Calculus
+import Mathlib.Analysis.Calculus.Deriv.Inv
+import Mathlib.Analysis.SpecialFunctions.Sqrt
 
 /-!
 # Convex Hessians and the local Bochner identity: `B1`, `B3`, `B4`
@@ -26,6 +28,12 @@ the diffusion generator `ℒ f = Δ f - ⟪∇U, ∇f⟫` on a finite-dimensiona
   symmetry `∂ᵢ∂ⱼf = ∂ⱼ∂ᵢf` (route `B2`).
 * `B4` (`gammaTwo_nonneg`, `bochner_nonneg_stdBasis`): for convex `U`, `0 ≤ Γ₂(f)`, as a sum of
   squares plus a value of the positive semidefinite Hessian of `U`.
+
+* Improved Bochner (`norm_gradient_norm_gradient_sq_le`): for convex `U` and `C³` `f`,
+  `‖∇‖∇f‖²‖² ≤ 4 ‖∇f‖² Γ₂(f)`, by Cauchy–Schwarz in the standard basis. Its consequence
+  `weightedLaplacian_sqrt_sub_div_nonneg` is the pointwise `L¹` self-improvement inequality
+  `0 ≤ ℒ(√(ε + Γ(f)) - √ε) - Γ(f, ℒf)/√(ε + Γ(f))` for `ε > 0`, via the chain rule
+  `weightedLaplacian_comp`.
 
 The identity holds in every finite dimension, including dimension zero, where both double sums are
 empty.
@@ -335,6 +343,103 @@ theorem bochner_nonneg_stdBasis {U f : E → ℝ} (hU : ContDiff ℝ 3 U)
           gradient (fun y => Laplacian.laplacian f y - ⟪gradient U y, gradient f y⟫) x⟫ := by
   rw [← gammaTwo_eq_expanded]
   exact gammaTwo_nonneg (hU.of_le (by norm_num)) hconv hf x
+
+/-- **The improved Bochner inequality** `|∇Γ(f)|² ≤ 4 Γ(f) Γ₂(f)` for a `C²` convex potential and
+a `C³` function, with `Γ(f) = ‖∇f‖²`. Since `∂ᵢ‖∇f‖² = 2 ∑ⱼ ∂ⱼf D²f(eᵢ, eⱼ)`, Cauchy–Schwarz in
+`j` gives `‖∇Γ(f)‖² ≤ 4 ‖∇f‖² ∑ᵢⱼ (D²f(eᵢ, eⱼ))²`, and the potential term of `Γ₂` is
+nonnegative by convexity. This is the Kato-type input of Bakry's `L¹` self-improvement. -/
+theorem norm_gradient_norm_gradient_sq_le {U f : E → ℝ} (hU : ContDiff ℝ 2 U)
+    (hconv : ConvexOn ℝ Set.univ U) (hf : ContDiff ℝ 3 f) (x : E) :
+    ‖gradient (fun y => ‖gradient f y‖ ^ 2) x‖ ^ 2 ≤ 4 * ‖gradient f x‖ ^ 2 * gammaTwo U f x := by
+  have hf2 : ContDiff ℝ 2 f := hf.of_le (by norm_num)
+  have hpart : ∀ i, fderiv ℝ (fun y => ‖gradient f y‖ ^ 2) x (stdOrthonormalBasis ℝ E i) =
+      2 * ∑ j, fderiv ℝ f x (stdOrthonormalBasis ℝ E j) *
+        bilinearIteratedFDerivTwo ℝ f x (stdOrthonormalBasis ℝ E i)
+          (stdOrthonormalBasis ℝ E j) := by
+    intro i
+    rw [fderiv_norm_gradient_sq_apply hf2]
+    congr 1
+    refine Finset.sum_congr rfl fun j _ => ?_
+    rw [bilinearIteratedFDerivTwo_eq_fderiv_apply hf2]
+  have hU0 := bilinearIteratedFDerivTwo_nonneg_of_convexOn hU hconv x (gradient f x)
+  rw [norm_gradient_sq_eq_sum (fun y => ‖gradient f y‖ ^ 2), gammaTwo_eq_hessianSqStdBasis_add hU hf x,
+    norm_gradient_sq_eq_sum f x, hessianSqStdBasis_apply]
+  simp_rw [hpart]
+  have hcs : ∀ i, (∑ j, fderiv ℝ f x (stdOrthonormalBasis ℝ E j) *
+      bilinearIteratedFDerivTwo ℝ f x (stdOrthonormalBasis ℝ E i) (stdOrthonormalBasis ℝ E j)) ^ 2 ≤
+      (∑ j, fderiv ℝ f x (stdOrthonormalBasis ℝ E j) ^ 2) *
+        ∑ j, bilinearIteratedFDerivTwo ℝ f x (stdOrthonormalBasis ℝ E i)
+          (stdOrthonormalBasis ℝ E j) ^ 2 :=
+    fun i => Finset.sum_mul_sq_le_sq_mul_sq _ _ _
+  have hsum := Finset.sum_le_sum fun i (_ : i ∈ (Finset.univ : Finset (Fin (Module.finrank ℝ E)))) =>
+    hcs i
+  rw [← Finset.mul_sum] at hsum
+  have hA : 0 ≤ ∑ j, fderiv ℝ f x (stdOrthonormalBasis ℝ E j) ^ 2 :=
+    Finset.sum_nonneg fun _ _ => sq_nonneg _
+  have hlhs : ∑ i, (2 * ∑ j, fderiv ℝ f x (stdOrthonormalBasis ℝ E j) *
+      bilinearIteratedFDerivTwo ℝ f x (stdOrthonormalBasis ℝ E i) (stdOrthonormalBasis ℝ E j)) ^ 2 =
+      4 * ∑ i, (∑ j, fderiv ℝ f x (stdOrthonormalBasis ℝ E j) *
+        bilinearIteratedFDerivTwo ℝ f x (stdOrthonormalBasis ℝ E i)
+          (stdOrthonormalBasis ℝ E j)) ^ 2 := by
+    rw [Finset.mul_sum]; refine Finset.sum_congr rfl fun i _ => by ring
+  rw [hlhs]
+  nlinarith [mul_nonneg hA hU0]
+
+/-- **The pointwise `L¹` self-improvement inequality.** For `ε > 0`, a `C²` convex potential and a
+`C³` function `f`, `0 ≤ ℒ(√(ε + Γ(f)) - √ε) - Γ(f, ℒf) / √(ε + Γ(f))`. With `r = √(ε + Γ(f))`
+the left side is `Γ₂(f)/r - |∇Γ(f)|²/(4 r³) ≥ ε Γ₂(f)/r³`, by
+`norm_gradient_norm_gradient_sq_le`. The constant `√ε` makes the function vanish where
+`∇f = 0`, so it is compactly supported for compactly supported `f`. -/
+theorem weightedLaplacian_sqrt_sub_div_nonneg {U f : E → ℝ} (hU : ContDiff ℝ 2 U)
+    (hconv : ConvexOn ℝ Set.univ U) (hf : ContDiff ℝ 3 f) {ε : ℝ} (hε : 0 < ε) (x : E) :
+    0 ≤ weightedLaplacian U (fun y => √(ε + gamma f f y) - √ε) x -
+      gamma f (weightedLaplacian U f) x / √(ε + gamma f f x) := by
+  have hG : ContDiff ℝ 2 (gamma f f) := contDiff_gamma hf hf (by norm_num) (by norm_num)
+  have hpos : ∀ s, 0 ≤ s → 0 < ε + s := fun s hs => by linarith
+  have hGnn : ∀ y, 0 ≤ gamma f f y := fun y => by rw [gamma_self]; positivity
+  set h' : ℝ → ℝ := fun s => (2 * √(ε + s))⁻¹ with hh'def
+  set h'' : ℝ → ℝ := fun s => -(1 / (4 * (ε + s) * √(ε + s))) with hh''def
+  have hh : ∀ y, HasDerivAt (fun s => √(ε + s) - √ε) (h' (gamma f f y)) (gamma f f y) := by
+    intro y
+    have h1 := (((hasDerivAt_id (gamma f f y)).const_add ε).sqrt (hpos _ (hGnn y)).ne').sub_const
+      (√ε)
+    simpa [hh'def, div_eq_inv_mul] using h1
+  have hh' : HasDerivAt h' (h'' (gamma f f x)) (gamma f f x) := by
+    have hp := hpos _ (hGnn x)
+    have hs : 0 < √(ε + gamma f f x) := Real.sqrt_pos.mpr hp
+    have h1 := (((hasDerivAt_id' (gamma f f x)).const_add ε).sqrt hp.ne').const_mul 2
+    have h2 := HasDerivAt.inv h1 (by positivity)
+    refine h2.congr_deriv ?_
+    simp only [hh''def]
+    rw [mul_pow, Real.sq_sqrt hp.le]
+    field_simp
+    norm_num
+  rw [weightedLaplacian_comp U hG hh hh']
+  have hsq := norm_gradient_norm_gradient_sq_le hU hconv hf x
+  have hΓ2 := gammaTwo_nonneg hU hconv hf x
+  rw [gammaTwo_apply] at hΓ2 hsq
+  have hfun : (fun y => gamma f f y) = fun y => ‖gradient f y‖ ^ 2 := gamma_self_fun f
+  rw [← hfun, ← gamma_self f x] at hsq
+  rw [← gamma_self] at hsq
+  set G := gamma f f x with hGdef
+  set L := weightedLaplacian U (fun y => gamma f f y) x
+  set M := gamma f (weightedLaplacian U f) x
+  set N := gamma (fun y => gamma f f y) (fun y => gamma f f y) x
+  have hp := hpos _ (hGnn x)
+  set r := √(ε + G) with hrdef
+  have hr : 0 < r := Real.sqrt_pos.mpr hp
+  have hr2 : r ^ 2 = ε + G := Real.sq_sqrt hp.le
+  simp only [hh'def, hh''def]
+  rw [← hrdef]
+  have hN : N ≤ 4 * G * (L / 2 - M) := hsq
+  have key : 0 ≤ (2 * r ^ 2 * (L / 2 - M) - N / 2) / (2 * r ^ 3) := by
+    apply div_nonneg _ (by positivity)
+    nlinarith
+  have hexpr : (2 * r)⁻¹ * L + -(1 / (4 * (ε + G) * r)) * N - M / r =
+      (2 * r ^ 2 * (L / 2 - M) - N / 2) / (2 * r ^ 3) := by
+    rw [← hr2]; field_simp; ring
+  rw [hexpr]
+  exact key
 
 end Bochner
 

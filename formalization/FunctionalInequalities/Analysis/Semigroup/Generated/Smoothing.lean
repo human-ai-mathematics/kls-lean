@@ -12,6 +12,9 @@ and densely defined and **every** `g : H₀`,
   `2 t ‖T (P_t g)‖ ² ≤ ‖g‖ ²`;
 * `mem_adjointComp_domain_apply_of_pos` / `mul_norm_adjointComp_apply_le`: `t > 0` implies
   `P_t g ∈ D(T†T)` and `t ‖T†T (P_t g)‖ ≤ ‖g‖`.
+* `pow_three_mul_norm_map_adjointComp_apply_sq_le`: `t³ ‖T (T†T (P_t g))‖² ≤ 4 ‖g‖²`;
+* `tendsto_map_apply_of_pos` / `tendsto_map_adjointComp_apply_of_pos`: both fields converge
+  under convergence of the initial data, at each fixed strictly positive time.
 
 These are the two statements that the audits of the previous two rounds carried as
 **type-checked candidates only**; they are now proved. The constants are the ones the proof
@@ -46,8 +49,8 @@ upgrades the second estimate to every `f ∈ D(T)`
 
 A **classical** or smooth representative of `P_t g`, pointwise gradient bounds, gradient
 commutation, `Γ`/`Γ₂` estimates for the semigroup and their `L¹` self-improvement, BGL, small-time
-BV bounds, general-law passage and Buser's inequality are all still open. `P_t` is not claimed to
-map into any space smaller than `D(T†T)`, and no operator-core statement is proved. This is
+BV bounds, general-law passage and Buser's inequality are all still open. The generator image
+is in `D(T)` with the bound above, but no smooth operator-core statement is proved. This is
 general real Hilbert space material: no measure, no log-concavity and no KLS quantity.
 -/
 
@@ -430,5 +433,87 @@ theorem mem_domain_adjointComp_apply_of_pos (g : H₀) {t : ℝ} (ht : 0 < t)
       ⟨apply T hT hd t g, h⟩ := Subtype.ext heq
   rw [← hsub, generator_comm T hT hd ⟨_, hmem2⟩ hhalf.le]
   exact mem_domain_apply_of_pos T hT hd _ hhalf
+
+/-- A quantitative bound on the second field: `t³ ‖T A P_t g‖² ≤ 4 ‖g‖²`.
+This uses positive-time smoothing and generator commutation, not a pointwise gradient
+estimate or a smooth representative. The constant is not claimed sharp. -/
+theorem pow_three_mul_norm_map_adjointComp_apply_sq_le (g : H₀) {t : ℝ} (ht : 0 < t)
+    (h : apply T hT hd t g ∈ (adjointComp T).domain)
+    (hA : (adjointComp T ⟨apply T hT hd t g, h⟩ : H₀) ∈ T.domain) :
+    t ^ 3 * ‖T ⟨adjointComp T ⟨apply T hT hd t g, h⟩, hA⟩‖ ^ 2 ≤ 4 * ‖g‖ ^ 2 := by
+  have hh : 0 < t / 2 := by positivity
+  let f : (adjointComp T).domain :=
+    ⟨apply T hT hd (t / 2) g, mem_adjointComp_domain_apply_of_pos T hT hd g hh⟩
+  have heq : apply T hT hd (t / 2) (f : H₀) = apply T hT hd t g := by
+    dsimp only [f]
+    rw [← add_time T hT hd hh.le hh.le]
+    norm_num
+  have hsub : (⟨apply T hT hd (t / 2) (f : H₀),
+      preserves_domain T hT hd f hh.le⟩ : (adjointComp T).domain) =
+      ⟨apply T hT hd t g, h⟩ := Subtype.ext heq
+  have hcomm : adjointComp T ⟨apply T hT hd t g, h⟩ =
+      apply T hT hd (t / 2) (adjointComp T f) := by
+    rw [← hsub, generator_comm T hT hd f hh.le]
+  have hgrad := two_mul_norm_map_apply_sq_le T hT hd (adjointComp T f) hh
+    (mem_domain_apply_of_pos T hT hd (adjointComp T f) hh)
+  have hfield : (⟨apply T hT hd (t / 2) (adjointComp T f),
+      mem_domain_apply_of_pos T hT hd (adjointComp T f) hh⟩ : T.domain) =
+      ⟨adjointComp T ⟨apply T hT hd t g, h⟩, hA⟩ := Subtype.ext hcomm.symm
+  rw [hfield] at hgrad
+  have hgen := mul_norm_adjointComp_apply_le T hT hd g hh f.property
+  change t / 2 * ‖adjointComp T f‖ ≤ ‖g‖ at hgen
+  have hsq := sq_le_sq₀ (by positivity : 0 ≤ t / 2 * ‖adjointComp T f‖)
+    (norm_nonneg g)
+  have hscaled := mul_le_mul_of_nonneg_left hgrad (sq_nonneg t)
+  nlinarith [hsq.mpr hgen]
+
+/-- At a fixed positive time the closed-gradient field depends continuously on the initial
+Hilbert-space datum. No regularity of the approximating data is required. -/
+theorem tendsto_map_apply_of_pos {g : ℕ → H₀} {g₀ : H₀}
+    (hg : Filter.Tendsto g Filter.atTop (nhds g₀)) {t : ℝ} (ht : 0 < t) :
+    Filter.Tendsto (fun n => T ⟨apply T hT hd t (g n),
+      mem_domain_apply_of_pos T hT hd (g n) ht⟩) Filter.atTop
+      (nhds (T ⟨apply T hT hd t g₀, mem_domain_apply_of_pos T hT hd g₀ ht⟩)) := by
+  rw [Metric.tendsto_atTop] at hg ⊢
+  intro ε hε
+  obtain ⟨N, hN⟩ := hg (ε * Real.sqrt (2 * t)) (by positivity)
+  refine ⟨N, fun n hn => ?_⟩
+  have hb := two_mul_norm_map_apply_sq_le T hT hd (g n - g₀) ht
+    (mem_domain_apply_of_pos T hT hd (g n - g₀) ht)
+  rw [apply_sub_of_eq_sub (mem_domain_apply_of_pos T hT hd (g n) ht)
+    (mem_domain_apply_of_pos T hT hd g₀ ht) _ (map_sub T hT hd ht.le _ _)] at hb
+  rw [dist_eq_norm]
+  exact lt_of_two_mul_sq_le ht (norm_nonneg _) (norm_nonneg _) hε hb
+    (by simpa [dist_eq_norm] using hN n hn)
+
+/-- At a fixed positive time the second field `T A P_t g` depends continuously on arbitrary
+initial data. This does not make `P_t g` a compactly supported smooth datum. -/
+theorem tendsto_map_adjointComp_apply_of_pos {g : ℕ → H₀} {g₀ : H₀}
+    (hg : Filter.Tendsto g Filter.atTop (nhds g₀)) {t : ℝ} (ht : 0 < t) :
+    Filter.Tendsto (fun n => T ⟨adjointComp T ⟨apply T hT hd t (g n),
+      mem_adjointComp_domain_apply_of_pos T hT hd (g n) ht⟩,
+      mem_domain_adjointComp_apply_of_pos T hT hd (g n) ht _⟩) Filter.atTop
+      (nhds (T ⟨adjointComp T ⟨apply T hT hd t g₀,
+        mem_adjointComp_domain_apply_of_pos T hT hd g₀ ht⟩,
+        mem_domain_adjointComp_apply_of_pos T hT hd g₀ ht _⟩)) := by
+  rw [Metric.tendsto_atTop] at hg ⊢
+  intro ε hε
+  have hc : 0 < t ^ 3 / 8 := by positivity
+  obtain ⟨N, hN⟩ := hg (ε * Real.sqrt (2 * (t ^ 3 / 8))) (by positivity)
+  refine ⟨N, fun n hn => ?_⟩
+  have hdiff := apply_sub_of_eq_sub
+    (mem_adjointComp_domain_apply_of_pos T hT hd (g n) ht)
+    (mem_adjointComp_domain_apply_of_pos T hT hd g₀ ht)
+    (mem_adjointComp_domain_apply_of_pos T hT hd (g n - g₀) ht)
+    (map_sub T hT hd ht.le (g n) g₀)
+  have hb := pow_three_mul_norm_map_adjointComp_apply_sq_le T hT hd (g n - g₀) ht
+    (mem_adjointComp_domain_apply_of_pos T hT hd (g n - g₀) ht)
+    (mem_domain_adjointComp_apply_of_pos T hT hd (g n - g₀) ht _)
+  rw [apply_sub_of_eq_sub (mem_domain_adjointComp_apply_of_pos T hT hd (g n) ht _)
+    (mem_domain_adjointComp_apply_of_pos T hT hd g₀ ht _) _ hdiff] at hb
+  rw [dist_eq_norm]
+  apply lt_of_two_mul_sq_le hc (norm_nonneg _) (norm_nonneg (g n - g₀)) hε
+  · nlinarith [hb]
+  · simpa [dist_eq_norm] using hN n hn
 
 end FunctionalInequalities.Analysis.Semigroup.Generated

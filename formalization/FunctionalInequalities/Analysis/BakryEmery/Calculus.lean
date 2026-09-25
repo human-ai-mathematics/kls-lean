@@ -305,6 +305,38 @@ theorem contDiff_laplacian {g : E → ℝ} {n m : WithTop ℕ∞} (hg : ContDiff
   calc m + 1 + 1 = m + 2 := by rw [add_assoc]; norm_num
     _ ≤ n := hmn
 
+/-- **Chain rule for the Laplacian.** If `h` has derivative `h' (G y)` at every value `G y`, and
+`h'` has derivative `h'' (G x)` at `G x`, then `Δ(h ∘ G)(x) = h'(G x) ΔG(x) + h''(G x) ‖∇G(x)‖²`
+for a `C²` function `G`. No global smoothness of `h` is required, so `h = √(ε + ·)` is allowed
+on nonnegative `G`. -/
+theorem laplacian_comp {h h' h'' : ℝ → ℝ} {G : E → ℝ} (hG : ContDiff ℝ 2 G)
+    (hh : ∀ y, HasDerivAt h (h' (G y)) (G y)) {x : E} (hh' : HasDerivAt h' (h'' (G x)) (G x)) :
+    Laplacian.laplacian (fun y => h (G y)) x =
+      h' (G x) * Laplacian.laplacian G x + h'' (G x) * ‖gradient G x‖ ^ 2 := by
+  have hG1 : Differentiable ℝ G := hG.differentiable (by norm_num)
+  have hfd : ∀ y, fderiv ℝ (fun y => h (G y)) y = h' (G y) • fderiv ℝ G y := fun y =>
+    ((hh y).comp_hasFDerivAt y (hG1 y).hasFDerivAt).fderiv
+  have hdG : DifferentiableAt ℝ (fderiv ℝ G) x :=
+    (hG.fderiv_right (m := 1) (by norm_num)).differentiable one_ne_zero x
+  have hh'G : DifferentiableAt ℝ (fun y => h' (G y)) x :=
+    hh'.differentiableAt.comp x (hG1 x)
+  have hdiff : DifferentiableAt ℝ (fderiv ℝ (fun y => h (G y))) x := by
+    rw [show fderiv ℝ (fun y => h (G y)) = fun y => h' (G y) • fderiv ℝ G y from funext hfd]
+    exact hh'G.smul hdG
+  have hh'd : ∀ v, fderiv ℝ (fun y => h' (G y)) x v = h'' (G x) * fderiv ℝ G x v := fun v => by
+    have hc : HasFDerivAt (fun y => h' (G y)) (h'' (G x) • fderiv ℝ G x) x :=
+      hh'.comp_hasFDerivAt x (hG1 x).hasFDerivAt
+    rw [hc.fderiv]; rfl
+  rw [laplacian_eq_sum_fderiv_apply_fderiv_apply hdiff,
+    laplacian_eq_sum_fderiv_apply_fderiv_apply hdG, norm_gradient_sq_eq_sum, Finset.mul_sum,
+    Finset.mul_sum, ← Finset.sum_add_distrib]
+  refine Finset.sum_congr rfl fun i _ => ?_
+  have hfun : (fun y => fderiv ℝ (fun y => h (G y)) y (stdOrthonormalBasis ℝ E i)) =
+      fun y => h' (G y) * fderiv ℝ G y (stdOrthonormalBasis ℝ E i) :=
+    funext fun y => by rw [hfd y]; rfl
+  rw [hfun, fderiv_mul_apply hh'G (differentiable_fderiv_apply hG _ x), hh'd]
+  ring
+
 /-- Product rule for the Laplacian: `Δ(fg) = f Δg + g Δf + 2 ⟪∇f, ∇g⟫`. -/
 theorem laplacian_mul {f g : E → ℝ} (hf : ContDiff ℝ 2 f) (hg : ContDiff ℝ 2 g) (x : E) :
     Laplacian.laplacian (fun y => f y * g y) x =

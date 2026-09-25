@@ -1,7 +1,24 @@
+import FunctionalInequalities.L2.Duality
+import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Approximation
+import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Perimeter
+import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Decay
+import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Correlation
+import FunctionalInequalities.KLS.LogConcave.SmoothBuser
+import FunctionalInequalities.Analysis.TestFunctionOrder
+import FunctionalInequalities.Analysis.WaveSplitting.GeneratorBounds
+import FunctionalInequalities.Analysis.WaveSplitting.Localization
+import FunctionalInequalities.Analysis.WaveSplitting.FlowDerivative
+import FunctionalInequalities.Analysis.WaveSplitting.Residual
+import FunctionalInequalities.Analysis.WaveSplitting.WeightedEnergy
+import FunctionalInequalities.Analysis.WaveSplitting.Compatibility
+import FunctionalInequalities.Analysis.WaveSplitting.TimeAverage
+import FunctionalInequalities.Analysis.WaveSplitting.AverageError
+import FunctionalInequalities.Analysis.WaveSplitting.Potential
 import FunctionalInequalities.Analysis.Semigroup.Exponential.Counterexample
 import FunctionalInequalities.Analysis.Semigroup.Generated.Domain
 import FunctionalInequalities.Analysis.Semigroup.Generated.FormDomain
 import FunctionalInequalities.Analysis.Semigroup.Generated.Smoothing
+import FunctionalInequalities.Analysis.Semigroup.Generated.TimeDerivative
 import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Domain
 import FunctionalInequalities.Poincare.SmoothTest.Basic
 import FunctionalInequalities.Poincare.Foundation
@@ -23,6 +40,9 @@ import FunctionalInequalities.KLS.ConditionalFiber.EnergyComparison
 import FunctionalInequalities.KLS.ConditionalFiber.SliceKernel
 import FunctionalInequalities.Poincare.Euclidean.RawEnergyObstruction
 import FunctionalInequalities.KLS.LogConcave.Density.BorellRepresentation.Intrinsic
+import FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing
+import FunctionalInequalities.KLS.LogConcave.Density.GaussianApproximation
+import FunctionalInequalities.KLS.LogConcave.Density.GaussianBuser
 import FunctionalInequalities.Probability.Covariance.Intrinsic
 import FunctionalInequalities.KLS.LogConcave.Covariance
 import FunctionalInequalities.KLS.LogConcave.WeightedGradient.Basic
@@ -35,6 +55,7 @@ import FunctionalInequalities.KLS.LogConcave.Line.OfDensity
 import FunctionalInequalities.KLS.LogConcave.ConditionalFiber
 import FunctionalInequalities.Probability.Line.BrunnMinkowski
 import FunctionalInequalities.Probability.Line.Haar
+import FunctionalInequalities.Probability.Line.GaussianProfile
 import FunctionalInequalities.Energy.LocalSlope.Relaxation
 import FunctionalInequalities.Energy.Cheeger.Basic
 import FunctionalInequalities.KLS.LogConcave.Cheeger
@@ -68,6 +89,7 @@ import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Basic
 import FunctionalInequalities.Analysis.Semigroup.Generated.Markov
 import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Markov
 import FunctionalInequalities.KLS.LogConcave.WeightedGradient.Energy
+import FunctionalInequalities.KLS.LogConcave.WeightedGradient.Poincare
 import FunctionalInequalities.Analysis.BakryEmery.Calculus
 import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts
 import FunctionalInequalities.Analysis.BakryEmery.Gamma
@@ -75,16 +97,25 @@ import FunctionalInequalities.Analysis.BakryEmery.Bochner
 import FunctionalInequalities.Analysis.Semigroup.AdjointClosure
 import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Generator
 import FunctionalInequalities.Analysis.BakryEmery.WeakGamma
+import FunctionalInequalities.Analysis.BakryEmery.RegularizedNorm
 import FunctionalInequalities.Analysis.BakryEmery.IntegratedBochner
 import FunctionalInequalities.Energy.WeightedGradient.Leibniz
 import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Gamma
 import FunctionalInequalities.L2.BoundedMultiplier
+import FunctionalInequalities.L2.PositiveMap
+import FunctionalInequalities.L2.Composition
 import FunctionalInequalities.KLS.LogConcave.WeightedGradient.Multiplier
 import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.OperatorCore
 import FunctionalInequalities.Analysis.Mollification
 import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.InteriorRegularity
 import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.GammaTwo
 import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.TestClass
+import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.FormRange
+import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.TestClassExtension
+import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.GradientEstimate
+import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.ReversePoincare
+import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.GaussianProfile
+import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.SelfImprovement
 
 /-!
 # Functional inequalities
@@ -191,12 +222,14 @@ and the inverse scales agree (the two isoperimetric clauses of
 the Cheeger half of the Cheeger–Buser comparison `thm:logconcave-cheeger-poincare-comparison`:
 `C_P^smooth(ν) ≤ 4 / h_M(ν)²` for every Borel probability law and
 `C_P^lit(μ) ≤ 4 Ψ_KLS(μ)²` for every log-concave law
-(`LogConcave.literatureConstant_le_four_mul_inverseScale_sq`); the Buser half is not proved.
+(`LogConcave.literatureConstant_le_four_mul_inverseScale_sq`). The pi-coefficient Buser half
+is proved for smooth convex tilted full-dimensional laws at their exact extended literature
+constant in `KLS/LogConcave/SmoothBuser.lean`; the arbitrary-law comparison remains open.
 
 `KLS/LogConcave/Line/Isoperimetry.lean` and `KLS/LogConcave/Line/Buser.lean` prove the **Buser half in
 dimension one with the explicit constant `12`**: for a log-concave law on the line, `h_M ≥ 2ρ(m)` at a
 median, `ρ ≤ 2ρ(m)`, and `Var ≥ 1/(12 ρ_max²)`, so `Ψ² ≤ 12 C_P^smooth(ν)`; transported to every
 log-concave law whose affine support has dimension at most one, `Ψ_KLS(μ)² ≤ 12 C_P^lit(μ)`
 (`LogConcave.inverseScale_sq_le_of_finrank_le_one`). The Buser half in dimension `n ≥ 2`, and the
-constant `π`, are **not** proved.
+constant `π` for every finite-dimensional log-concave law, are **not** proved.
 -/

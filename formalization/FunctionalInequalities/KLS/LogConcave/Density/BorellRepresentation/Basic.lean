@@ -3,6 +3,7 @@ import FunctionalInequalities.KLS.LogConcave.Borel
 import Mathlib.Topology.Semicontinuity.Basic
 import Mathlib.Analysis.SpecialFunctions.Exp
 import Mathlib.Analysis.Convex.Continuous
+import Mathlib.Analysis.Convex.Measure
 
 
 /-!
@@ -162,6 +163,28 @@ theorem continuousOn_interior_pos {ν m : Measure V} {ρ : V → ℝ}
   have hyS : y ∈ {y | 0 < ρ y} := interior_subset hy
   have hy' : 0 < ρ y := hyS
   simp [Function.comp, Real.exp_log hy']
+
+/-- A finite-dimensional Borell density is continuous Haar-almost everywhere.
+It is continuous inside its convex positivity set, zero locally outside the
+closure, and the frontier of that set has Haar measure zero. -/
+theorem ae_continuous {ν m : Measure V} [m.IsAddHaarMeasure]
+    {ρ : V → ℝ} (h : IsBorellDensity ν m ρ) :
+    ∀ᵐ x ∂m, ContinuousAt ρ x := by
+  let S : Set V := {x | 0 < ρ x}
+  have hfront : m (frontier S) = 0 := h.convex_pos.addHaar_frontier m
+  have hgood : ∀ᵐ x ∂m, x ∉ frontier S := by
+    rw [ae_iff]
+    simpa only [not_not, Set.ofPred_mem_eq] using hfront
+  filter_upwards [hgood] with x hx
+  have hx' : x ∈ interior S ∪ interior Sᶜ := by
+    exact (compl_frontier_eq_union_interior (s := S)) ▸ hx
+  rcases hx' with hxS | hxSc
+  · exact h.continuousOn_interior_pos.continuousAt (isOpen_interior.mem_nhds hxS)
+  · have hnear : ρ =ᶠ[𝓝 x] (fun _ : V => (0 : ℝ)) := by
+      filter_upwards [isOpen_interior.mem_nhds hxSc] with y hy
+      have hnot : ¬ 0 < ρ y := interior_subset hy
+      exact le_antisymm (le_of_not_gt hnot) (h.nonneg y)
+    exact continuousAt_const.congr_of_eventuallyEq hnear
 
 /-- A Borell density representative of a probability law is continuous on the interior of the
 support. This is the continuity used by the downstream covariance-core and relative-perimeter

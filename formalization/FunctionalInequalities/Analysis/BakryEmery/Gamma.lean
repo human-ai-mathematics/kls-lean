@@ -69,6 +69,17 @@ theorem weightedLaplacian_mul (U : E → ℝ) {f g : E → ℝ} (hf : ContDiff �
     (hg.differentiable (by norm_num) x), inner_add_right, inner_smul_right, inner_smul_right]
   ring
 
+/-- **Chain rule for the weighted Laplacian.** Under the hypotheses of `laplacian_comp`,
+`ℒ(h ∘ G) = h'(G) ℒG + h''(G) Γ(G, G)`. -/
+theorem weightedLaplacian_comp (U : E → ℝ) {h h' h'' : ℝ → ℝ} {G : E → ℝ} (hG : ContDiff ℝ 2 G)
+    (hh : ∀ y, HasDerivAt h (h' (G y)) (G y)) {x : E} (hh' : HasDerivAt h' (h'' (G x)) (G x)) :
+    weightedLaplacian U (fun y => h (G y)) x =
+      h' (G x) * weightedLaplacian U G x + h'' (G x) * gamma G G x := by
+  simp only [weightedLaplacian_apply, gamma_self]
+  rw [laplacian_comp hG hh hh', gradient_comp (hh x).differentiableAt
+    ((hG.differentiable (by norm_num)) x), (hh x).deriv, inner_smul_right]
+  ring
+
 /-- **Route `B0`, the carré-du-champ product identity**: for `C²` functions `f`, `g` and any
 potential `U`, `(ℒ(fg) - f ℒg - g ℒf) / 2 = Γ(f, g) = ⟪∇f, ∇g⟫`. -/
 theorem gamma_eq_weightedLaplacian (U : E → ℝ) {f g : E → ℝ} (hf : ContDiff ℝ 2 f)

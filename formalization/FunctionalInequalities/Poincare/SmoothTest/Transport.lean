@@ -219,6 +219,57 @@ theorem constant_map_linearIsometryEquiv : constant (μ.map e) = constant μ := 
 
 end IsometryTransport
 
+section ScalingTransport
+
+variable [MeasurableSpace E] [BorelSpace E]
+
+omit [MeasurableSpace E] [BorelSpace E] in
+private theorem gradient_comp_smul (f : E → ℝ) (r : ℝ) (x : E) :
+    gradient (fun y : E => f (r • y)) x = r • gradient f (r • x) := by
+  apply (InnerProductSpace.toDual ℝ E).injective
+  simp only [toDual_gradient, map_smul, fderiv_comp_smul]
+
+/-- Scaling a probability law scales its smooth-test Poincaré constant by
+the squared scale, including the zero scale. -/
+theorem Holds.map_smul {μ : Measure E} {C : ℝ} (h : Holds μ C) (r : ℝ) :
+    Holds (μ.map (fun x : E => r • x)) (r ^ 2 * C) := by
+  have := h.probability
+  let q : E → E := fun x => r • x
+  have hq : Measurable q := by fun_prop
+  let hmap : MeasurePreserving q μ (μ.map q) := ⟨hq, rfl⟩
+  refine ⟨Measure.isProbabilityMeasure_map hq.aemeasurable,
+    mul_nonneg (sq_nonneg r) h.constant_nonneg, ?_⟩
+  intro f hf
+  have hdiff : Differentiable ℝ f := hf.smooth'.differentiable (by simp)
+  have hlift : Admissible μ (fun x => f (q x)) := by
+    have hbase : Integrable (fun x => ‖gradient f (q x)‖ ^ 2) μ :=
+      hmap.integrable_comp_of_integrable hf.energy_integrable
+    refine ⟨hf.smooth'.comp (by fun_prop : ContDiff ℝ ∞ q),
+      hf.memLp_two.comp_measurePreserving hmap, ?_⟩
+    refine (hbase.const_mul (r ^ 2)).congr (Filter.Eventually.of_forall fun x => ?_)
+    change r ^ 2 * ‖gradient f (r • x)‖ ^ 2 =
+      ‖gradient (fun y : E => f (r • y)) x‖ ^ 2
+    rw [gradient_comp_smul, norm_smul, Real.norm_eq_abs, mul_pow, sq_abs]
+  have hv := h.variance_le hlift
+  have hvar : variance (fun x => f (q x)) μ = variance f (μ.map q) :=
+    hmap.variance_fun_comp hf.smooth'.continuous.aemeasurable
+  have henergy : energy μ (fun x => f (q x)) = r ^ 2 * energy (μ.map q) f := by
+    rw [energy, energy, ← hmap.map_eq,
+      integral_map hq.aemeasurable (by
+        rw [hmap.map_eq]
+        exact hf.energy_integrable.aestronglyMeasurable),
+      ← integral_const_mul]
+    apply integral_congr_ae
+    exact Filter.Eventually.of_forall fun x => by
+      change ‖gradient (fun y : E => f (r • y)) x‖ ^ 2 =
+        r ^ 2 * ‖gradient f (r • x)‖ ^ 2
+      rw [gradient_comp_smul, norm_smul, Real.norm_eq_abs, mul_pow, sq_abs]
+  rw [hvar, henergy] at hv
+  convert hv using 1
+  ring
+
+end ScalingTransport
+
 variable [MeasurableSpace E]
 
 /-- Empty products and zero-dimensional Hilbert factors have a valid constant zero.

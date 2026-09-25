@@ -12,7 +12,7 @@ recorded explicitly and checked against the original goal; see the
 [current lifecycle](research/ledger-schema.md#lifecycle). Earlier freeze records remain dated
 review snapshots.
 
-## Current status (2026-09-22)
+## Current status (2026-09-26)
 
 The ledger contains **26 Lean-certified nodes**. The former coarea, Sard, Cheeger-infimum
 and Energy WIP modules have been closed and removed. **One explicit target hole remains**:
@@ -26,9 +26,41 @@ probability law, using the local-slope convention; and the intrinsic literature 
 constant's gradient characterization. The one-dimensional Poincaré certificate gives the
 `4 Var` upper bound, without separately certifying optimality across all laws.
 
-The Cheeger direction `C_P^lit(μ) ≤ 4 Ψ_KLS(μ)²` is proved for every log-concave law. The Buser
-direction is proved for affine-support dimension at most one with constant **12**. The target
-`Ψ_KLS(μ)² ≤ π C_P^lit(μ)` remains unproved locally; 12 does not establish π.
+Both numerical Cheeger–Buser directions are now proved for every finite-dimensional
+log-concave probability law: `C_P^lit(μ) ≤ 4 Ψ_KLS(μ)²` and
+`Ψ_KLS(μ)² ≤ π C_P^lit(μ)`. The second bound uses actual Gaussian convolution,
+Cheeger test stability and intrinsic-coordinate transport; it includes zero-dimensional
+affine support and infinite optima. This does not prove a dimension-free KLS bound.
+
+For the actual full-dimensional log-concave weighted-gradient heat semigroup, an explicit
+form-domain Poincaré inequality with `C > 0` now gives centered squared `L²` decay
+`‖center(P_t f)‖² ≤ exp(-2t/C) ‖center(f)‖²` for every `f ∈ L²` and `t ≥ 0`.
+The centered indicator correlation is at most `exp(-t/C) ν(D)(1-ν(D))`, including
+mass-zero/full sets and time zero. The closed unit-gradient form's optimal constant is now
+identified with `C_P^lit`; indicator L¹ displacement and the π perimeter bound yield the
+exact π comparison for the smooth convex tilted model, including zero and infinite optima.
+The affine-support transport is now proved in that smooth intrinsic model. A new
+Prékopa–Leindler argument shows that Gaussian convolution of an arbitrary intrinsic
+Borell density is measurable, finite, positive, and log-concave. The Gaussian
+mass is now computed, and the normalized convolution is a log-concave probability
+law with a positive `C∞` density and `C∞` convex potential, including dimension
+zero. Every finite Gaussian-kernel derivative has a uniform bound, allowing
+iterated differentiation of the actual source-law integral without source
+moments. The normalized densities converge almost everywhere and in `L¹(volume)`;
+the laws converge on every measurable set. The intrinsic literature Poincaré
+constant of the actual convolution is at most the source constant plus
+`1/(2s)` for every `s > 0`, including dimension zero and infinite optima.
+The Cheeger-infimum passage now transfers the exact π comparison to general
+nonsmooth laws. It does not assert a pointwise perimeter limit for each smooth
+domain. See
+the [bridge record](research/decisions/2026-09-25-heat-buser-bridge.md),
+[affine continuation](research/decisions/2026-09-25-affine-smooth-buser.md),
+[approximation continuation](research/decisions/2026-09-25-gaussian-approximation.md),
+[first regularity](research/decisions/2026-09-25-gaussian-first-regularity.md),
+[second regularity](research/decisions/2026-09-25-gaussian-second-regularity.md), and
+[all-order regularity](research/decisions/2026-09-25-gaussian-infinite-regularity.md), and
+[Poincaré stability](research/decisions/2026-09-25-gaussian-poincare-stability.md), and
+[general π-Buser passage](research/decisions/2026-09-26-nonsmooth-pi-buser.md).
 
 The semigroup program now includes **S1–S8**, the concrete weighted-gradient heat semigroup,
 and its **Markov properties**: positivity, preservation of constants and integrals, the
@@ -69,29 +101,137 @@ regularity of distributional solutions of `ℒ u = u`, i.e. `[χ u] ∈ D(T̄)` 
 self-adjoint on `C_c^∞`), and the **heat-flow weak `Γ₂` inequality holds with only the model
 hypotheses** — `C^∞` convex potential, unit weight, arbitrary `g ∈ L²(ν)`, every `t > 0`, every
 nonnegative `φ ∈ C_c^∞` (`HeatSemigroup.integral_mul_weakGamma_apply_nonneg`). The product/chain rules otherwise still apply to `IsTest` inputs, and the
-original second-stage gradient-estimate target remains open. There
-are no pointwise Bakry–Émery gradient estimates for the semigroup or small-time heat bounds yet.
+original second-stage gradient-estimate target was still open at that stage; the later
+pointwise and small-time heat results are recorded below. This integrated square estimate
+itself is a tested, rather than pointwise, statement.
 
-The heat-test extension is **partial** (`HeatSemigroup/TestClass.lean`): evolved smooth tests
-`P_s φ` and their generator images have uniform essential bounds, and both weak-Γ pairings
-are integrable for arbitrary `L²` fields. The inequality accepts these tests when the data
-are smooth and compactly supported. Its extension to arbitrary positive-time heat data still
-requires an unproved limit argument; time interpolation and gradient estimates remain open.
+The heat-test extension is **proved** (`HeatSemigroup/TestClass.lean`,
+`HeatSemigroup/TestClassExtension.lean`). Evolved smooth tests `P_s φ` and their generator
+images have uniform essential bounds, and both weak-Γ pairings are integrable for arbitrary
+`L²` fields. For arbitrary `g`, `r > 0`, nonnegative `φ ∈ C_c^∞` and `s ≥ 0`, the inequality
+`0 ≤ -(1/2)∫(A P_s φ)Γ(T̄P_r g,T̄P_r g) + ∫ P_s φ Γ(T̄P_r g,T̄A P_r g)` holds
+(`HeatSemigroup.integral_weakGamma_operator_nonneg`, 2026-09-23). The time interpolation
+`r ↦ ∫ (P_{t-r} φ) Γ(T̄P_r f) dν` is monotone. It gives the integrated square gradient
+estimate `∫ φ Γ(T̄P_t f) dν ≤ ∫ (P_t φ) Γ(T̄f) dν` for every `f ∈ D(T̄)`, `t ≥ 0` and
+nonnegative `φ ∈ C_c^∞` (`HeatSemigroup.integral_mul_weakGamma_le`,
+[record](research/decisions/2026-09-23-heat-gradient-square-estimate.md)). Two further
+estimates are proved in tested form:
 
-**Next priority:** [complete the Buser comparison with constant π for every finite-dimensional
-log-concave law](research/decisions/2026-09-20-buser-handoff-prompt.md), then combine it with the
-proved Cheeger half. Generator identification, Bochner/gradient estimates, general-law passage
-and small-time heat bounds are internal proof milestones, not the final deliverable. This is
-an implementation target, not a completed result. Even its completion will leave the four KLS
-routes' open research conditions to resolve.
+- the reverse local Poincaré inequality
+  `2t ∫ φ Γ(T̄P_t f) ≤ ∫ (P_t φ) f² - ∫ φ (P_t f)²` for arbitrary `f ∈ L²`, with the bounded-data
+  `L^∞ → Lip` form;
+- Bakry's `L¹` self-improvement `∫ φ |T̄P_t f| ≤ ∫ (P_t φ) |T̄f|` for `f ∈ D(T̄)`
+  ([record](research/decisions/2026-09-23-heat-reverse-poincare-self-improvement.md)).
 
-The [current handoff](HANDOFF.md#current-operational-status-2026-09-22) and
-[status correction record](research/decisions/2026-09-20-current-status-alignment.md) supersede
-older pending-work summaries. The latest proof-round receipt is
-`20260922T110108.224405Z`, identified in
-`build/audit/heat-test-class-takeover/final-snapshot.json`. It records a local build and kernel
-replay for that snapshot. The subsequent documentation alignment leaves Lean sources and
-certificate status unchanged; it is not a fresh full verification or a remote CI result.
+The [a.e. continuation](research/decisions/2026-09-23-heat-almost-everywhere.md) proves
+`|T̄P_t f| ≤ M/√(2t)` for bounded initial data (`t > 0`), and
+`|T̄P_t f| ≤ P_t|T̄f|` for form-domain data (`t ≥ 0`), together with global gradient `L¹`
+contraction. The [small-time continuation](research/decisions/2026-09-23-heat-small-time-perimeter.md)
+proves `∫ |f-P_t f| ≤ √(2t) ∫ |T̄f|` on the form domain and
+`∫ |1_D-P_t 1_D| ≤ √(2t) P_ρ(D)` for smooth domains, using the actual relative-perimeter
+recovery sequence (including infinite perimeter in ENNReal and time zero).
+The coefficient needed for the sharp route, `2√(t/π)`, is now formalized in the
+smooth convex model via the Gaussian-profile BGL inequality and the coefficient
+continuation below. The smooth-model Buser assembly is proved in the later
+[bridge continuation](research/decisions/2026-09-25-heat-buser-bridge.md). The numerical
+general-law π bound is now proved through Gaussian Cheeger stability; a direct
+general-law heat/perimeter estimate is a separate statement.
+The [Gaussian scalar continuation](research/decisions/2026-09-24-gaussian-profile.md)
+constructs the actual density/quantile profile and proves `I I'' = -1` on `(0,1)`,
+its attained upper bound `1/sqrt(2*pi)`, endpoint limits, continuity and strict concavity
+on `[0,1]`. The [regularization continuation](research/decisions/2026-09-24-gaussian-regularization.md)
+adds interior smoothness, reflection, the midpoint value, shifted-profile bounds and
+pointwise epsilon convergence, and a globally smooth extension with bounded first two
+derivatives agreeing near the admissible range. The
+[tested chain-rule continuation](research/decisions/2026-09-24-heat-chain-rule.md)
+proves the identity on arbitrary `D(A)` data and the actual shifted Gaussian-profile
+specialization, including integrability of the generic pairings. It needs only a C1
+potential and bounded `psi`, with no bound on `A psi`. The
+[composition-domain continuation](research/decisions/2026-09-24-heat-composition-domain.md)
+now identifies `Phi(F) in D(A)` and its generator when Gamma is in L2, via the actual
+smooth graph core and self-adjointness. It proves that integrability for bounded
+positive-time heat data and derives the actual shifted Gaussian operator identity,
+including range preservation from the initial datum. The
+[time-differentiation continuation](research/decisions/2026-09-24-heat-composition-derivative.md)
+proves nonlinear differentiation along L2 curves, the actual Gaussian positive-time
+L2 derivative, and the tested interior heat-interpolation derivative with exact
+generator cancellation. The
+[strong-interpolation continuation](research/decisions/2026-09-24-heat-strong-interpolation.md)
+now proves the outer varying-datum product rule, strong L2 Gaussian interpolation,
+the unshifted positive profile, and its bounded-test squared derivative. The
+[weighted-Cauchy continuation](research/decisions/2026-09-24-heat-weighted-cauchy.md)
+proves positive-map quadratic preservation and combines it with L1 gradient
+self-improvement to obtain the Gaussian dissipation lower bound and the quantitative
+square differential inequality for bounded nonnegative tests. The
+[integrated-profile continuation](research/decisions/2026-09-24-heat-integrated-profile.md)
+fixes one continuous interpolation curve, integrates the bound with both time endpoints,
+and proves the a.e. regularized inequality retaining the terminal heat-profile square.
+The [profile-limit continuation](research/decisions/2026-09-24-heat-profile-limit.md)
+removes the epsilon/range margin by dominated L2 convergence and heat/closed-gradient
+linearity. For every `0 <= f <= 1`, it proves
+`2t Gamma(T P_t f) <= I(P_t f)^2 - (P_t I(f))^2` a.e. in the smooth convex model.
+The [pi-coefficient continuation](research/decisions/2026-09-25-heat-pi-coefficient.md)
+proves `|T P_t f| <= M/sqrt(pi*t)` and the `2 sqrt(t/pi)` whole-form-domain L1 bound,
+then transfers it through the actual recovery sequence to smooth-domain relative
+perimeter. The ENNReal bound includes zero time and infinite perimeter. Earlier
+numerical API statements are preserved as weaker bounds.
+The later [bridge continuation](research/decisions/2026-09-25-heat-buser-bridge.md)
+completes the smooth-model π Buser assembly at the exact extended literature optimum.
+The [affine continuation](research/decisions/2026-09-25-affine-smooth-buser.md)
+transports it to `inverseScale` for any law with a smooth convex tilted intrinsic
+representation. General-law heat/perimeter transfer remains open.
+The [approximation continuation](research/decisions/2026-09-22-heat-test-approximation.md)
+proves `r³ ‖T A P_r g‖² ≤ 4 ‖g‖²` and continuity of both heat fields in the initial datum.
+It constructs two-field approximants `P_{r/2}[fₙ]` with `fₙ ∈ C_c^∞`, but these heat values
+are not asserted to be compactly supported smooth data. At that point the higher-order core
+was still missing; the 2026-09-23 two-field core below supplies it.
+The subsequent [resolvent route review](research/decisions/2026-09-22-heat-test-extension-route.md)
+added no Lean proof: at that point density of `(I+A)C_c^∞` in the form domain was unproved,
+and its orthogonality condition involves `(I+A)²`, beyond the existing deficiency-element theorem.
+The [finite splitting construction](research/decisions/2026-09-22-wave-splitting-construction.md)
+now formalizes explicit flows, jointly smooth cells and common compact support. The
+[energy continuation](research/decisions/2026-09-22-wave-splitting-energy.md) proves Haar
+preservation of every finite derivative energy under coordinate sweeps, and zero-order split
+stability under an explicit coefficient bound. The [higher-order continuation](research/decisions/2026-09-23-wave-splitting-stability.md)
+proves the finite Leibniz bound and reaction, split, grid and cell stability at every finite order,
+including five, under explicit bounds on coefficient derivatives. The [localization continuation](research/decisions/2026-09-23-wave-splitting-localization.md)
+constructs a compact coefficient agreeing on the propagation ball and removes those global bounds
+from fixed-horizon stability for the original smooth coefficient. The [consistency continuation](research/decisions/2026-09-23-wave-splitting-consistency.md)
+proves the complete-step generator identity and the actual residual's joint smoothness, zero
+initial value and exact time-integral representation. The [generator bounds](research/decisions/2026-09-23-wave-generator-bounds.md)
+prove one-order energy loss for the full generator and two-order loss for its square and all
+ordered elementary pairs. The [residual continuation](research/decisions/2026-09-23-wave-splitting-residual.md)
+bounds the differentiated split products with their flow factors and proves the tame residual
+estimate `E_k(e_Y(t)) <= C t^2 E_(k+2)(Y)` for `0 <= t <= 1`, with an explicit mesh-independent
+constant. On actual grid cells it gives `E_k <= C δ^2`, for original smooth coefficients over a
+fixed horizon. The [weighted-energy continuation](research/decisions/2026-09-23-wave-splitting-weighted-energy.md)
+proves the weighted skew identity and the forced bound `sqrt W(cell) <= sqrt W(Y) + C δ`, with
+horizon-independent leading term. It also bounds the gradient compatibility defect `p - D u` and
+the weighted form energy of `u` on actual cells. The [time-average continuation](research/decisions/2026-09-23-wave-splitting-time-average.md)
+proves that the cellwise average `q` is `C_c^∞` and satisfies the exact identity for `J_cl q - h`.
+The [error continuation](research/decisions/2026-09-23-wave-splitting-average-error.md)
+proves `sqrt FE_w(J_cl q - h) <= sqrt(∫ w h^2)/L + C δ` on all meshes `N δ = L`, and hence
+classical form-range approximation for every compactly supported smooth `h`. The
+[form-range continuation](research/decisions/2026-09-23-wave-splitting-form-range.md) proves
+the norm and operator identifications and the class-level density: for every `z` in the form
+domain `D(T̄)` and `ε > 0` some `q ∈ C_c^∞` has `[q] ∈ D(A)`, `(I+A)[q] ∈ D(T̄)` and
+`‖(I+A)[q] - z‖_E < ε` in the graph norm (`HeatSemigroup/FormRange.lean`). The
+[frontend continuation](research/decisions/2026-09-23-heat-test-extension-frontend.md) proves
+the expansion `‖Je‖² + ‖TJe‖² = ‖e‖² + 3‖Te‖² + 3‖Ae‖² + ‖TAe‖²`. Hence every `F ∈ D(A)` with
+`AF ∈ D(T̄)` has a `C_c^∞` two-field approximation, and the heat-test frontend above follows.
+
+**Next priority:** resolve an outstanding dimension-free KLS route condition in the
+[four-route overview](research/progress/README.md#proof-progress-tree). The numerical
+Cheeger–Buser comparison is complete, but none of the four sufficient routes
+has yet proved the dimension-free KLS bound.
+
+The [current handoff](HANDOFF.md#current-result-nonsmooth-gaussian-cheeger-passage-2026-09-26)
+supersedes older pending-work summaries. The historical
+[status correction record](research/decisions/2026-09-20-current-status-alignment.md) and
+the tested-chain-rule verification receipt at `build/audit/heat-chain-rule/final-snapshot.json`
+remain dated records.
+The local verifier builds sources and replays local modules while trusting pinned third-party
+compiled imports; it is not a fresh replay of dependencies or a remote CI result.
 
 ## Proof progress tree
 

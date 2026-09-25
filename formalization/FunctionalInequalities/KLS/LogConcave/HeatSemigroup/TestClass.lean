@@ -13,6 +13,10 @@ The extension to arbitrary data `F = P_r g` is **not proved**. A separate transf
 retains explicit convergence of both fields `∇fₙ` and `-∇ℒfₙ`; the existing operator core for
 `A` does not provide the second convergence. No time interpolation or gradient estimate is
 claimed. All statements retain the current full-dimensional log-concave model.
+
+`exists_seq_smooth_tendsto_regularized_fields` constructs two-field approximants of the form
+`P_{r/2}[fₙ]` with `fₙ ∈ C_c^∞`. It does not remove the heat evolution from the approximants;
+the smooth-data Bochner theorem therefore does not yet apply to them.
 -/
 
 set_option autoImplicit false
@@ -75,6 +79,51 @@ theorem ae_abs_operator_le {t : ℝ} (ht : 0 ≤ t) (f : Lp ℝ 2 (ν : Measure 
     (HeatSemigroup.abs_le_const m B hν hi ht f hC (abs_le_const_smul_one_of_ae hf))
 
 end Bounds
+
+/-- Every positive-time heat datum admits two-field approximation by heat evolutions of
+smooth compactly supported initial data. The approximating **heat values** are not asserted
+to be smooth compactly supported functions, so this is not the higher-order core required
+by `integral_weakGamma_nonneg_of_mem_domain_of_tendsto`. -/
+theorem exists_seq_smooth_tendsto_regularized_fields
+    {ν : ProbabilityMeasure V} (m : Measure V) [m.IsAddHaarMeasure] (B : V →L[ℝ] V)
+    (hν : LogConcave ν) (hi : (interior (ν : Measure V).support).Nonempty)
+    (g : Lp ℝ 2 (ν : Measure V)) {r : ℝ} (hr : 0 < r) :
+    let T := hν.closedWeightedOperator m B hi
+    let u := fun (t : ℝ) (ht : 0 < t) (f : Lp ℝ 2 (ν : Measure V)) =>
+      T ⟨operator m B hν hi ht.le f, mem_closedWeightedOperator_domain_of_pos m B hν hi f ht⟩
+    let w := fun (t : ℝ) (ht : 0 < t) (f : Lp ℝ 2 (ν : Measure V)) =>
+      T ⟨adjointComp T ⟨operator m B hν hi ht.le f,
+        mem_adjointComp_domain_of_pos m B hν hi f ht⟩,
+        mem_closedWeightedOperator_domain_adjointComp_of_pos m B hν hi f ht _⟩
+    ∃ (f : ℕ → V → ℝ) (hf : ∀ n, ContDiff ℝ ∞ (f n))
+      (hfc : ∀ n, HasCompactSupport (f n)),
+      Tendsto (fun n => u (r / 2) (half_pos hr)
+        ((memLp_of_contDiff_hasCompactSupport ν (hf n) (hfc n)).toLp (f n))) atTop
+          (𝓝 (u r hr g)) ∧
+      Tendsto (fun n => w (r / 2) (half_pos hr)
+        ((memLp_of_contDiff_hasCompactSupport ν (hf n) (hfc n)).toLp (f n))) atTop
+          (𝓝 (w r hr g)) := by
+  dsimp only
+  obtain ⟨f, hf, hfc, hlim, _⟩ := hν.exists_seq_smooth_tendsto_graph m B hi
+    ⟨operator m B hν hi (half_pos hr).le g,
+      mem_closedWeightedOperator_domain_of_pos m B hν hi g (half_pos hr)⟩
+  refine ⟨f, hf, hfc, ?_, ?_⟩
+  · have h := Generated.tendsto_map_apply_of_pos _
+      (hν.closedWeightedOperator_isClosed m B hi)
+      (hν.dense_domain_closedWeightedOperator m B hi) hlim (half_pos hr)
+    have heq := Generated.add_time (hν.closedWeightedOperator m B hi)
+      (hν.closedWeightedOperator_isClosed m B hi)
+      (hν.dense_domain_closedWeightedOperator m B hi) (half_pos hr).le (half_pos hr).le g
+    simp only [add_halves] at heq
+    simpa only [operator, Generated.operator_apply, ← heq] using h
+  · have h := Generated.tendsto_map_adjointComp_apply_of_pos _
+      (hν.closedWeightedOperator_isClosed m B hi)
+      (hν.dense_domain_closedWeightedOperator m B hi) hlim (half_pos hr)
+    have heq := Generated.add_time (hν.closedWeightedOperator m B hi)
+      (hν.closedWeightedOperator_isClosed m B hi)
+      (hν.dense_domain_closedWeightedOperator m B hi) (half_pos hr).le (half_pos hr).le g
+    simp only [add_halves] at heq
+    simpa only [operator, Generated.operator_apply, ← heq] using h
 
 
 section GeneratorBounds

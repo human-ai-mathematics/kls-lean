@@ -1,5 +1,7 @@
 import FunctionalInequalities.Analysis.Semigroup.VonNeumann
 import Mathlib.MeasureTheory.Function.L2Space
+import FunctionalInequalities.L2.BoundedMultiplier
+import Mathlib.Analysis.Calculus.Deriv.Slope
 
 /-!
 # The weak carré du champ of square-integrable vector fields
@@ -27,7 +29,10 @@ What is proved:
   none is available;
 * the `L¹` stability estimates `integral_abs_sub_le` and `abs_integral_mul_sub_le`, with the
   consequence `tendsto_integral_mul`: convergence of the *fields* in `L²` gives convergence of
-  the tested weak `Γ` integrals. These are the engine for transporting a `Γ`-inequality proved
+  the tested weak `Γ` integrals; `tendsto_integral_mul_of_tendsto_multiplier` lets a uniformly
+  bounded multiplier converge in `L²` at the same time, and
+  `hasDerivWithinAt_integral_mul_apply_self` is the resulting product rule for
+  `s ↦ ∫ q s Γ(u s, u s) dμ`, with uniformly bounded difference quotients of `q`. These are the engine for transporting a `Γ`-inequality proved
   on a smaller class to its `L²` closure;
 * `integral_eq_integral_mul_adjointComp`: for `f ∈ D(T†T)` and `x ∈ D(T)`,
   `∫ Γ(T f, T x) dμ = ∫ (T†T f) x dμ`. This is the weak integration-by-parts interface in the
@@ -207,6 +212,136 @@ theorem tendsto_integral_mul {φ : α → ℝ} (hφ : AEStronglyMeasurable φ μ
   have h1 : Tendsto (fun n => ‖u n - u₀‖ * ‖v n‖ + ‖u₀‖ * ‖v n - v₀‖) atTop
       (𝓝 (0 * ‖v₀‖ + ‖u₀‖ * 0)) := (hu.mul hvn).add (tendsto_const_nhds.mul hv)
   simpa using h1.const_mul C
+
+/-- Bounded a.e.-convergent multipliers can vary together with both L2 fields.
+No L2 membership of their weak Gamma is required. -/
+theorem tendsto_integral_mul_of_ae {φ : ℕ → α → ℝ} {φ₀ : α → ℝ}
+    (hφ : ∀ n, AEStronglyMeasurable (φ n) μ) {C : ℝ} (hC0 : 0 ≤ C)
+    (hC : ∀ n, ∀ᵐ x ∂μ, |φ n x| ≤ C)
+    (hlim : ∀ᵐ x ∂μ, Tendsto (fun n ↦ φ n x) atTop (𝓝 (φ₀ x)))
+    {u v : ℕ → Lp H 2 μ} {u₀ v₀ : Lp H 2 μ}
+    (hu : Tendsto (fun n ↦ ‖u n - u₀‖) atTop (𝓝 0))
+    (hv : Tendsto (fun n ↦ ‖v n - v₀‖) atTop (𝓝 0)) :
+    Tendsto (fun n ↦ ∫ x, φ n x * apply (u n) (v n) x ∂μ) atTop
+      (𝓝 (∫ x, φ₀ x * apply u₀ v₀ x ∂μ)) := by
+  have hfixed : Tendsto (fun n ↦ ∫ x, φ n x * apply u₀ v₀ x ∂μ) atTop
+      (𝓝 (∫ x, φ₀ x * apply u₀ v₀ x ∂μ)) := by
+    apply tendsto_integral_of_dominated_convergence (fun x ↦ C * |apply u₀ v₀ x|)
+      (fun n ↦ (hφ n).mul (aestronglyMeasurable u₀ v₀))
+      ((integrable u₀ v₀).abs.const_mul C)
+    · intro n
+      filter_upwards [hC n] with x hx
+      simpa only [Real.norm_eq_abs, Pi.mul_apply, abs_mul] using
+        mul_le_mul_of_nonneg_right hx (abs_nonneg (apply u₀ v₀ x))
+    · filter_upwards [hlim] with x hx
+      exact hx.mul_const _
+  have hvn : Tendsto (fun n ↦ ‖v n‖) atTop (𝓝 ‖v₀‖) :=
+    (continuous_norm.tendsto _).comp (tendsto_iff_norm_sub_tendsto_zero.mpr hv)
+  have hbound : Tendsto (fun n ↦ C * (‖u n - u₀‖ * ‖v n‖ + ‖u₀‖ * ‖v n - v₀‖))
+      atTop (𝓝 0) := by
+    simpa using ((hu.mul hvn).add (tendsto_const_nhds.mul hv)).const_mul C
+  have hdiff : Tendsto (fun n ↦ (∫ x, φ n x * apply (u n) (v n) x ∂μ) -
+      ∫ x, φ n x * apply u₀ v₀ x ∂μ) atTop (𝓝 0) := by
+    refine squeeze_zero_norm (fun n ↦ ?_) hbound
+    rw [Real.norm_eq_abs]
+    exact abs_integral_mul_sub_le (hφ n) hC0 (hC n) (u n) u₀ (v n) v₀
+  simpa using hdiff.add hfixed
+
+/-- **Joint convergence of multipliers and fields.** On a finite measure, let the multipliers
+`qᵢ → q₀` converge in `L²` with a uniform a.e. bound `D`, and let the fields `uᵢ → u₀`,
+`vᵢ → v₀` converge in `L²`, along any filter. Then `∫ qᵢ Γ(uᵢ, vᵢ) dμ → ∫ q₀ Γ(u₀, v₀) dμ`.
+The multiplier convergence is only in `L²` while `Γ(u₀, v₀)` is only `L¹`; the uniform bound
+is what makes the pairing converge (`L2.tendsto_integral_mul_of_tendsto`). -/
+theorem tendsto_integral_mul_of_tendsto_multiplier [IsFiniteMeasure μ] {ι : Type*}
+    {l : Filter ι} {q : ι → Lp ℝ 2 μ} {q₀ : Lp ℝ 2 μ} (hq : Tendsto q l (𝓝 q₀)) {D : ℝ}
+    (hD0 : 0 ≤ D) (hD : ∀ᶠ i in l, ∀ᵐ x ∂μ, |q i x| ≤ D) (hD₀ : ∀ᵐ x ∂μ, |q₀ x| ≤ D)
+    {u v : ι → Lp H 2 μ} {u₀ v₀ : Lp H 2 μ} (hu : Tendsto u l (𝓝 u₀))
+    (hv : Tendsto v l (𝓝 v₀)) :
+    Tendsto (fun i => ∫ x, q i x * apply (u i) (v i) x ∂μ) l
+      (𝓝 (∫ x, q₀ x * apply u₀ v₀ x ∂μ)) := by
+  have hB := FunctionalInequalities.L2.tendsto_integral_mul_of_tendsto hq hD hD₀
+    (integrable u₀ v₀)
+  have hu' := tendsto_iff_norm_sub_tendsto_zero.mp hu
+  have hv' := tendsto_iff_norm_sub_tendsto_zero.mp hv
+  have hvn : Tendsto (fun i => ‖v i‖) l (𝓝 ‖v₀‖) := (continuous_norm.tendsto _).comp hv
+  have hA : Tendsto (fun i => D * (‖u i - u₀‖ * ‖v i‖ + ‖u₀‖ * ‖v i - v₀‖)) l (𝓝 0) := by
+    simpa using ((hu'.mul hvn).add (tendsto_const_nhds.mul hv')).const_mul D
+  have hdiff : Tendsto (fun i => (∫ x, q i x * apply (u i) (v i) x ∂μ) -
+      ∫ x, q i x * apply u₀ v₀ x ∂μ) l (𝓝 0) := by
+    refine squeeze_zero_norm' ?_ hA
+    filter_upwards [hD] with i hi
+    rw [Real.norm_eq_abs]
+    exact abs_integral_mul_sub_le (Lp.aestronglyMeasurable _) hD0 hi (u i) u₀ (v i) v₀
+  simpa using hdiff.add hB
+
+/-- **Product rule for a tested weak `Γ`.** On a finite measure, let `s ↦ q s ∈ L²` and
+`s ↦ u s ∈ L²(H)` have derivatives `q'` and `u'` at `r` within `S`, with `q r`, `q'` and the
+difference quotients of `q` near `r` a.e. bounded by one constant `D`. Then
+`s ↦ ∫ q s Γ(u s, u s) dμ` has derivative `∫ q' Γ(u r, u r) dμ + 2 ∫ q r Γ(u r, u') dμ` at `r`
+within `S`. The uniform bound on the difference quotients is what lets them converge against
+the `L¹` function `Γ(u r, u r)`. -/
+theorem hasDerivWithinAt_integral_mul_apply_self [IsFiniteMeasure μ] {q : ℝ → Lp ℝ 2 μ}
+    {u : ℝ → Lp H 2 μ} {S : Set ℝ} {r : ℝ} {q' : Lp ℝ 2 μ} {u' : Lp H 2 μ}
+    (hq : HasDerivWithinAt q q' S r) (hu : HasDerivWithinAt u u' S r) {D : ℝ} (hD0 : 0 ≤ D)
+    (hqb : ∀ᵐ x ∂μ, |q r x| ≤ D)
+    (hslope : ∀ᶠ s in 𝓝[S \ {r}] r, ∀ᵐ x ∂μ, |slope q r s x| ≤ D)
+    (hq'b : ∀ᵐ x ∂μ, |q' x| ≤ D) :
+    HasDerivWithinAt (fun s => ∫ x, q s x * apply (u s) (u s) x ∂μ)
+      ((∫ x, q' x * apply (u r) (u r) x ∂μ) + 2 * ∫ x, q r x * apply (u r) u' x ∂μ) S r := by
+  have hc : Tendsto u (𝓝[S \ {r}] r) (𝓝 (u r)) :=
+    hu.continuousWithinAt.tendsto.mono_left (nhdsWithin_mono _ Set.sdiff_subset)
+  rw [hasDerivWithinAt_iff_tendsto_slope] at hq hu ⊢
+  have h1 := tendsto_integral_mul_of_tendsto_multiplier hq hD0 hslope hq'b hc hc
+  have h2 := tendsto_integral_mul_of_tendsto_multiplier (tendsto_const_nhds (x := q r)) hD0
+    (Eventually.of_forall fun _ => hqb) hqb hu hc
+  have h3 := tendsto_integral_mul_of_tendsto_multiplier (tendsto_const_nhds (x := q r)) hD0
+    (Eventually.of_forall fun _ => hqb) hqb (tendsto_const_nhds (x := u r)) hu
+  have hlim : (∫ x, q' x * apply (u r) (u r) x ∂μ) + 2 * ∫ x, q r x * apply (u r) u' x ∂μ =
+      (∫ x, q' x * apply (u r) (u r) x ∂μ) + (∫ x, q r x * apply u' (u r) x ∂μ) +
+        ∫ x, q r x * apply (u r) u' x ∂μ := by
+    rw [comm u' (u r)]; ring
+  rw [hlim]
+  refine ((h1.add h2).add h3).congr' ?_
+  filter_upwards [hslope, self_mem_nhdsWithin] with s hs hsS
+  set c := (s - r)⁻¹ with hcdef
+  have hsl : ∀ᵐ x ∂μ, slope q r s x = c * (q s x - q r x) := by
+    rw [slope_def_module]
+    filter_upwards [Lp.coeFn_smul c (q s - q r), Lp.coeFn_sub (q s) (q r)] with x h1 h2
+    rw [h1, Pi.smul_apply, h2, Pi.sub_apply, smul_eq_mul]
+  have hslu : ∀ᵐ x ∂μ, slope u r s x = c • (u s x - u r x) := by
+    rw [slope_def_module]
+    filter_upwards [Lp.coeFn_smul c (u s - u r), Lp.coeFn_sub (u s) (u r)] with x h1 h2
+    rw [h1, Pi.smul_apply, h2, Pi.sub_apply]
+  have hqs : ∀ᵐ x ∂μ, |q s x| ≤ D + |s - r| * D := by
+    filter_upwards [hsl, hs, hqb] with x h1 h2 h3
+    have hne : s - r ≠ 0 := sub_ne_zero.mpr hsS.2
+    have heq : q s x = q r x + (s - r) * slope q r s x := by
+      rw [h1, hcdef]; field_simp; ring
+    rw [heq]
+    calc |q r x + (s - r) * slope q r s x| ≤ |q r x| + |s - r| * |slope q r s x| := by
+          rw [← abs_mul]; exact abs_add_le _ _
+      _ ≤ D + |s - r| * D := by gcongr
+  have i₀ := integrable_mul (Lp.aestronglyMeasurable (q s)) hqs (u s) (u s)
+  have i₀' := integrable_mul (Lp.aestronglyMeasurable (q r)) hqb (u r) (u r)
+  have i₁ := integrable_mul (Lp.aestronglyMeasurable (slope q r s)) hs (u s) (u s)
+  have i₂ := integrable_mul (Lp.aestronglyMeasurable (q r)) hqb (slope u r s) (u s)
+  have i₃ := integrable_mul (Lp.aestronglyMeasurable (q r)) hqb (u r) (slope u r s)
+  simp only [slope_def_field]
+  rw [div_eq_inv_mul, ← hcdef, ← integral_sub i₀ i₀', ← integral_const_mul]
+  have hsum : ∫ x, (slope q r s x * apply (u s) (u s) x + q r x * apply (slope u r s) (u s) x +
+      q r x * apply (u r) (slope u r s) x) ∂μ =
+      (∫ x, slope q r s x * apply (u s) (u s) x ∂μ) +
+        (∫ x, q r x * apply (slope u r s) (u s) x ∂μ) +
+        ∫ x, q r x * apply (u r) (slope u r s) x ∂μ := by
+    have i₁₂ : Integrable (fun x => slope q r s x * apply (u s) (u s) x +
+        q r x * apply (slope u r s) (u s) x) μ := i₁.add i₂
+    rw [integral_add i₁₂ i₃, integral_add i₁ i₂]
+  rw [← hsum]
+  refine integral_congr_ae ?_
+  filter_upwards [hsl, hslu] with x h1 h2
+  simp only [apply_def, h1, h2, inner_smul_left, inner_smul_right, inner_sub_left,
+    inner_sub_right, RCLike.conj_to_real]
+  ring
 
 /-! ### Pairing a square-integrable multiplier with an a.e. bounded field -/
 

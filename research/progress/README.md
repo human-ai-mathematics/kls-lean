@@ -10,6 +10,27 @@ These views describe our formalization work. Upstream mathematical proofs and co
 arguments remain separate from local Lean proofs. A completed auxiliary result is not necessarily
 a separately registered certificate. KLS remains open.
 
+As of 2026-09-26, the actual weighted-gradient heat semigroup has centered `L²` squared-norm
+decay at rate `exp(-2t/C)` and centered indicator correlation at rate `exp(-t/C)` under an
+explicit positive form-domain Poincaré constant `C`. The unit-gradient form optimum now equals
+the intrinsic literature constant, and indicator correlation gives a quantitative `L¹`
+displacement. The π Buser inequality is proved at the exact extended literature optimum
+for laws in any affine-support dimension whose intrinsic law has a smooth convex tilted
+representation. The numerical inequality now also holds for arbitrary nonsmooth intrinsic
+Borell laws, through Gaussian approximation and Cheeger test stability.
+An explicit Gaussian convolution of a Borell probability density is now proved
+measurable, finite, strictly positive and log-concave. Its normalized law is
+constructed, with a positive `C∞` density and `C∞` convex potential;
+the law is log-concave on compact sets. The normalized densities converge
+almost everywhere and in `L¹(volume)` to the source density, and the laws
+converge on every measurable set. The intrinsic literature Poincaré optimum
+of the actual Gaussian convolution is at most the source optimum plus
+`1/(2s)` for `s > 0`, including dimension zero and infinite optima.
+Cheeger test stability passes the smooth-model bound to the source, so the
+exact numerical π Buser comparison is proved for arbitrary finite-dimensional
+log-concave laws. This does not assert a perimeter limit for each smooth domain
+or close any dimension-free KLS route.
+
 ## KLS literature through July 2026
 
 <!-- BEGIN GENERATED LITERATURE -->
@@ -95,16 +116,16 @@ See the [full tables and normalization](LITERATURE.md#constant-conventions).
 ## Proof progress tree
 
 <!-- BEGIN GENERATED DATE -->
-Last updated: **2026-09-22**.
+Last updated: **2026-09-26**.
 
 ![✓ Formalized in Lean](badges/formalized.svg) · ![○ Not yet formalized](badges/pending.svg) · ![◐ Partially formalized](badges/partial.svg) · ![— Excluded: refuted](badges/excluded.svg)
 <!-- END GENERATED DATE -->
 Scalar sharp Sard, vector coarea through locally Lipschitz maps, the Cheeger infimum equality,
-and heat-semigroup construction and Markov properties are formalized in Lean. The full Buser
-comparison with π remains pending. **Next priority: [complete Buser with π for general log-concave
-laws](../decisions/2026-09-20-buser-handoff-prompt.md)**. Generator / Bochner proofs, gradient
-estimates, general-law passage and heat bounds are internal milestones toward that deliverable.
-These statuses record existing proofs; this documentation update adds no Lean proof or CI receipt.
+heat-semigroup construction, and the full numerical Cheeger–Buser comparison are formalized
+in Lean. The general π bound uses actual Gaussian smoothing and a Cheeger test stability
+argument; no individual-domain perimeter limit is asserted. **Next priority:** resolve a
+dimension-free [KLS route gate](#proof-progress-tree). The four active routes remain open.
+These statuses record local proofs and do not claim a remote CI receipt.
 Upstream mathematical proofs alone do not earn a ✓.
 
 One large diagram shows the four sufficient routes and their shared proof infrastructure.
@@ -140,14 +161,17 @@ flowchart LR
     REV["✓ h_S ≤ h_M"]
     EQ["✓ h_M = h_S"]
     FRONT["✓ Density Cheeger<br/>Identification"]
-    CB["○ NEXT: Cheeger–Buser<br/>Complete pi bound"]
+    CB["✓ Cheeger–Buser<br/>4 and pi bounds"]
     MINK["✓ Minkowski coarea"]
     end
-    subgraph HEATPROGRAM["Buser analytic program — dotted links are planned steps"]
+    subgraph HEATPROGRAM["Buser analytic program — dotted links show related work"]
     SEMI["✓ Weighted-gradient<br/>Heat semigroup"]
     MARKOV["✓ Heat semigroup<br/>Markov properties"]
+    DECAY["✓ Centered heat decay<br/>and literature gap"]
+    GAUSS["✓ Gaussian convolution<br/>Smooth potential"]
+    GSTAB["✓ Gaussian convolution<br/>Poincaré stability"]
     BE["◐ Generator / Bochner<br/>Gradient estimates"]
-    HEAT["○ Small-time heat bounds<br/>and pi Buser assembly"]
+    HEAT["◐ Small-time heat bounds<br/>and pi Buser assembly"]
     end
     subgraph ELDAN["Eldan localization"]
     EG["○ Tight-prefix<br/>Carleson estimate"]
@@ -183,7 +207,7 @@ flowchart LR
     VFULL["✓ C¹ vector coarea<br/>Rank-deficient part closed"]
     VLIP["✓ Vector coarea<br/>Lipschitz and local"]
     end
-    KLS["○ KLS<br/>Dimension-free bound"]
+    KLS["○ NEXT: KLS<br/>Dimension-free bound"]
     ANY{"OR<br/>Any completed route"}
     EG --> EAND
     EC --> EAND
@@ -234,22 +258,26 @@ flowchart LR
     VR4 -.-> VFULL
     SEMI -.-> MARKOV
     MARKOV -.-> BE
+    MARKOV -.-> DECAY
+    DECAY -.-> HEAT
     BE -.-> HEAT
+    GAUSS -.-> CB
+    GSTAB -.-> CB
     HEAT -.-> CB
     VFULL -.-> VLIP
     classDef done fill:#dbeafe,stroke:#2563eb,color:#1e3a8a;
-    class ENERGY,F4,MT,FP,FC,EQ,NORM,DENS,FRONT,ONE,CONST,FORMS,MEAS,GRAPH,REG,CRIT,C1,WHIT,LIP,GG,REC,FWD,SARD,SCI,CUT,REV,MINK,FLOG,VREG,VZERO,VR123,VR4,VFULL,SEMI,MARKOV,VLIP done;
+    class ENERGY,F4,MT,FP,FC,EQ,NORM,DENS,FRONT,CB,ONE,CONST,FORMS,MEAS,GRAPH,REG,CRIT,C1,WHIT,LIP,GG,REC,FWD,SARD,SCI,CUT,REV,MINK,FLOG,VREG,VZERO,VR123,VR4,VFULL,SEMI,MARKOV,DECAY,GAUSS,GSTAB,VLIP done;
     classDef partial fill:#fff3df,stroke:#c88719,color:#66420d;
-    class FAND,BE partial;
+    class FAND,BE,HEAT partial;
     classDef todo fill:#fee2e2,stroke:#dc2626,color:#991b1b;
-    class MG,EG,KLS,MC,EC,SC,FG,SG,MH,EAND,SAND,MAND,HEAT todo;
+    class MG,EG,MC,EC,SC,FG,SG,MH,EAND,SAND,MAND todo;
     classDef focus fill:#fee2e2,stroke:#dc2626,color:#991b1b,stroke-width:3px;
-    class CB focus;
+    class KLS focus;
     classDef logic fill:#fff,stroke:#555,color:#222;
     class ANY logic;
     click MG href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/src/chapters/50-kls-routes.tex" "Bounded CMH — Recovery envelope" _blank
     click EG href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/src/chapters/50-kls-routes.tex" "Tight-prefix — Carleson estimate" _blank
-    click KLS href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Statement.lean" "KLS — Dimension-free bound" _blank
+    click KLS href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Statement.lean" "NEXT: KLS — Dimension-free bound" _blank
     click ENERGY href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Energy/Cheeger/Basic.lean" "Canonical energy — = 2 × Cheeger energy" _blank
     click MC href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/src/chapters/50-kls-routes.tex" "Recovery-sequence — Sufficiency" _blank
     click F4 href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/ConditionalFiber.lean" "Fiber energy — ≤ 4 × gradient energy" _blank
@@ -265,7 +293,7 @@ flowchart LR
     click DENS href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Intrinsic.lean" "Log-concave density — Intrinsic support" _blank
     click MH href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/src/chapters/50-kls-routes.tex" "W₂ limit and — CMH comparison" _blank
     click FRONT href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex" "Density Cheeger — Identification" _blank
-    click CB href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex" "NEXT: Cheeger–Buser — Complete pi bound" _blank
+    click CB href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex" "Cheeger–Buser — 4 and pi bounds" _blank
     click ONE href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/Line/SharpPoincare.lean" "One-dimensional — Poincaré ≤ 4 Var" _blank
     click CONST href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/Poincare.lean" "Poincaré frontend — Equivalence" _blank
     click FORMS href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Energy/SmoothGradient/Dirichlet.lean" "Closed forms — Dirichlet property" _blank
@@ -297,8 +325,11 @@ flowchart LR
     click VFULL href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/research/decisions/2026-09-17-rank-deficient-coarea.md" "C¹ vector coarea — Rank-deficient part closed" _blank
     click SEMI href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Basic.lean" "Weighted-gradient — Heat semigroup" _blank
     click MARKOV href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Markov.lean" "Heat semigroup — Markov properties" _blank
+    click DECAY href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Decay.lean" "Centered heat decay — and literature gap" _blank
+    click GAUSS href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing.lean" "Gaussian convolution — Smooth potential" _blank
+    click GSTAB href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianPoincare.lean" "Gaussian convolution — Poincaré stability" _blank
     click BE href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/BakryEmery/Bochner.lean" "Generator / Bochner — Gradient estimates" _blank
-    click HEAT href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/research/decisions/2026-09-20-current-status-alignment.md" "Small-time heat bounds — and pi Buser assembly" _blank
+    click HEAT href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/SmoothBuser.lean" "Small-time heat bounds — and pi Buser assembly" _blank
     click VLIP href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/Lipschitz/Local.lean" "Vector coarea — Lipschitz and local" _blank
 ```
 <!-- END GENERATED TREE -->
@@ -314,8 +345,8 @@ flowchart LR
   Smooth recovery is an existing local Lean proof, without a separate ledger certificate.
 - Semigroup generation and the stated Markov properties on `L²` are proved. Dotted links in the
   Buser program show planned analytic work, not proved implications or an additional sufficient KLS route.
-- The complete Cheeger–Buser node remains pending: its Cheeger half is proved, while the Buser
-  result in affine dimension at most one has constant 12, not the target π. The full comparison
+- Both numerical Cheeger–Buser bounds are proved for every finite-dimensional log-concave
+  law, including zero-dimensional affine support and extended optima. This comparison
   feeds the Eldan route and does not alone prove KLS.
 - There are 26 registered certificates and one isolated `KLS.kls` target hole. The former WIP
   modules are removed; the target is outside every certificate closure.
@@ -378,7 +409,7 @@ The [full node register](STATUS.md) separately lists definitions and registered 
 | Log-concave density — Intrinsic support | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Intrinsic.lean) |
 | W₂ limit and — CMH comparison | ![○ Not yet formalized](badges/pending.svg) | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/src/chapters/50-kls-routes.tex) |
 | Density Cheeger — Identification | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex) |
-| NEXT: Cheeger–Buser — Complete pi bound | ![○ Not yet formalized](badges/pending.svg) | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex) |
+| Cheeger–Buser — 4 and pi bounds | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex) |
 | One-dimensional — Poincaré ≤ 4 Var | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/Line/SharpPoincare.lean) |
 | Poincaré frontend — Equivalence | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/Poincare.lean) |
 | Closed forms — Dirichlet property | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Energy/SmoothGradient/Dirichlet.lean) |
@@ -405,8 +436,11 @@ The [full node register](STATUS.md) separately lists definitions and registered 
 | C¹ vector coarea — Rank-deficient part closed | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/research/decisions/2026-09-17-rank-deficient-coarea.md) |
 | Weighted-gradient — Heat semigroup | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Basic.lean) |
 | Heat semigroup — Markov properties | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Markov.lean) |
+| Centered heat decay — and literature gap | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Decay.lean) |
+| Gaussian convolution — Smooth potential | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing.lean) |
+| Gaussian convolution — Poincaré stability | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianPoincare.lean) |
 | Generator / Bochner — Gradient estimates | ![◐ Partially formalized](badges/partial.svg) | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/BakryEmery/Bochner.lean) |
-| Small-time heat bounds — and pi Buser assembly | ![○ Not yet formalized](badges/pending.svg) | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/research/decisions/2026-09-20-current-status-alignment.md) |
+| Small-time heat bounds — and pi Buser assembly | ![◐ Partially formalized](badges/partial.svg) | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/SmoothBuser.lean) |
 | Vector coarea — Lipschitz and local | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/Lipschitz/Local.lean) |
 <!-- END GENERATED RESULTS -->
 
@@ -447,7 +481,7 @@ Every node has a link. If diagram links are disabled in your viewer, use this di
 | --- | --- |
 | Bounded CMH — Recovery envelope | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/src/chapters/50-kls-routes.tex) |
 | Tight-prefix — Carleson estimate | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/src/chapters/50-kls-routes.tex) |
-| KLS — Dimension-free bound | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Statement.lean) |
+| NEXT: KLS — Dimension-free bound | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Statement.lean) |
 | Canonical energy — = 2 × Cheeger energy | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Energy/Cheeger/Basic.lean) |
 | Recovery-sequence — Sufficiency | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/src/chapters/50-kls-routes.tex) |
 | Fiber energy — ≤ 4 × gradient energy | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/ConditionalFiber.lean) |
@@ -463,7 +497,7 @@ Every node has a link. If diagram links are disabled in your viewer, use this di
 | Log-concave density — Intrinsic support | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Intrinsic.lean) |
 | W₂ limit and — CMH comparison | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/src/chapters/50-kls-routes.tex) |
 | Density Cheeger — Identification | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex) |
-| NEXT: Cheeger–Buser — Complete pi bound | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex) |
+| Cheeger–Buser — 4 and pi bounds | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex) |
 | One-dimensional — Poincaré ≤ 4 Var | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/Line/SharpPoincare.lean) |
 | Poincaré frontend — Equivalence | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/Poincare.lean) |
 | Closed forms — Dirichlet property | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Energy/SmoothGradient/Dirichlet.lean) |
@@ -495,8 +529,11 @@ Every node has a link. If diagram links are disabled in your viewer, use this di
 | C¹ vector coarea — Rank-deficient part closed | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/research/decisions/2026-09-17-rank-deficient-coarea.md) |
 | Weighted-gradient — Heat semigroup | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Basic.lean) |
 | Heat semigroup — Markov properties | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Markov.lean) |
+| Centered heat decay — and literature gap | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Decay.lean) |
+| Gaussian convolution — Smooth potential | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing.lean) |
+| Gaussian convolution — Poincaré stability | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianPoincare.lean) |
 | Generator / Bochner — Gradient estimates | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/BakryEmery/Bochner.lean) |
-| Small-time heat bounds — and pi Buser assembly | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/research/decisions/2026-09-20-current-status-alignment.md) |
+| Small-time heat bounds — and pi Buser assembly | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/SmoothBuser.lean) |
 | Vector coarea — Lipschitz and local | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/Lipschitz/Local.lean) |
 <!-- END GENERATED LINKS -->
 

@@ -195,6 +195,41 @@ theorem prekopaLeindler {f g h : V → ℝ} (hf : Measurable f) (hg : Measurable
     ENNReal.ofReal_rpow_of_nonneg (hg0 y) ht1'.le, ← ENNReal.ofReal_mul (Real.rpow_nonneg (hf0 x) t)]
   exact ENNReal.ofReal_le_ofReal (hfgh x y)
 
+/-- The convolution integral of two measurable log-concave nonnegative densities is
+log-concave. The extended-real formulation also covers integrals equal to infinity;
+finiteness and smoothness are separate regularization obligations. -/
+theorem lintegral_mul_translate_logConcave
+    {p q : V → ENNReal} (hp : Measurable p) (hq : Measurable q)
+    (hpLC : ∀ x y : V, ∀ t : ℝ, 0 < t → t < 1 →
+      p x ^ t * p y ^ (1 - t) ≤ p (t • x + (1 - t) • y))
+    (hqLC : ∀ x y : V, ∀ t : ℝ, 0 < t → t < 1 →
+      q x ^ t * q y ^ (1 - t) ≤ q (t • x + (1 - t) • y))
+    (a b : V) {t : ℝ} (ht0 : 0 < t) (ht1 : t < 1) :
+    (∫⁻ z, p z * q (a - z) ∂(volume : Measure V)) ^ t *
+      (∫⁻ z, p z * q (b - z) ∂(volume : Measure V)) ^ (1 - t) ≤
+        ∫⁻ z, p z * q ((t • a + (1 - t) • b) - z) ∂(volume : Measure V) := by
+  have ht1' : 0 ≤ 1 - t := by linarith
+  have hmeas (x : V) : Measurable (fun z : V => p z * q (x - z)) :=
+    hp.mul (hq.comp (measurable_const.sub measurable_id))
+  refine isPL_volume ht0 ht1 _ _ _ (hmeas a) (hmeas b)
+    (hmeas (t • a + (1 - t) • b)) ?_
+  intro x y
+  have harg : t • (a - x) + (1 - t) • (b - y) =
+      (t • a + (1 - t) • b) - (t • x + (1 - t) • y) := by
+    simp only [smul_sub]
+    abel
+  calc
+    (p x * q (a - x)) ^ t * (p y * q (b - y)) ^ (1 - t)
+        = (p x ^ t * p y ^ (1 - t)) *
+            (q (a - x) ^ t * q (b - y) ^ (1 - t)) := by
+            rw [ENNReal.mul_rpow_of_nonneg _ _ ht0.le,
+              ENNReal.mul_rpow_of_nonneg _ _ ht1']
+            ac_rfl
+    _ ≤ p (t • x + (1 - t) • y) *
+        q (t • (a - x) + (1 - t) • (b - y)) :=
+          mul_le_mul' (hpLC x y t ht0 ht1) (hqLC (a - x) (b - y) t ht0 ht1)
+    _ = _ := by rw [harg]
+
 /-- **Multiplicative Brunn–Minkowski inequality**: a convex combination of two nonempty measurable
 sets carries at least the geometric mean of their volumes.  The combination set need not be
 measurable; the outer-measure bound is what is used. -/

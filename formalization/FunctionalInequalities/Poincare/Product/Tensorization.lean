@@ -27,20 +27,15 @@ variable {E F : Type*}
   [NormedAddCommGroup F] [InnerProductSpace ℝ F] [CompleteSpace F]
   [MeasurableSpace F] [BorelSpace F] [SecondCountableTopology F]
 
-/-- Fixed-constant tensorization inequality on the Hilbert product.
-The assumptions `Holds μ C` and `Holds ν C'` include probability and nonnegativity.
-
-Source: BGL Proposition 4.3.1, linked above, gives the same `max C C'` bound in its Markov-triple
-framework. The present theorem independently realizes that bound for `Admissible`; its Borel
-Hilbert hypotheses and a.e. section argument are stated and proved locally. -/
-theorem Holds.prod
-    {μ : Measure E} {ν : Measure F} {C C' : ℝ}
-    (hμ : Holds μ C) (hν : Holds ν C') :
-    Holds (prodMeasure μ ν) (max C C') := by
+/-- Anisotropic two-factor Poincaré bound, retaining each coordinate constant. -/
+theorem Holds.prod_components {μ : Measure E} {ν : Measure F} {C C' : ℝ}
+    (hμ : Holds μ C) (hν : Holds ν C')
+    {g : WithLp 2 (E × F) → ℝ} (hg : Admissible (prodMeasure μ ν) g) :
+    variance g (prodMeasure μ ν) ≤
+      C * (∫ p : E × F, ‖(gradient g (WithLp.toLp 2 p)).fst‖ ^ 2 ∂μ.prod ν) +
+      C' * (∫ p : E × F, ‖(gradient g (WithLp.toLp 2 p)).snd‖ ^ 2 ∂μ.prod ν) := by
   have := hμ.probability
   have := hν.probability
-  refine ⟨inferInstance, le_max_of_le_left hμ.constant_nonneg, ?_⟩
-  intro g hg
   have hun : MemLp (fun p : E × F ↦ g (WithLp.toLp 2 p)) 2 (μ.prod ν) := hg.memLp_uncurry
   have hdiff : Differentiable ℝ g := hg.smooth'.differentiable (by simp)
   have hvar : variance g (prodMeasure μ ν)
@@ -106,16 +101,39 @@ theorem Holds.prod
       _ = C' * ∫ x, ∫ y, ‖(gradient g (WithLp.toLp 2 (x, y))).snd‖ ^ 2 ∂ν ∂μ :=
           integral_const_mul C' _
       _ = C' * B := by rw [← hswap]
-  calc variance g (prodMeasure μ ν)
-      = variance (fun p : E × F ↦ g (WithLp.toLp 2 p)) (μ.prod ν) := hvar
+  calc
+    variance g (prodMeasure μ ν)
+        = variance (fun p : E × F ↦ g (WithLp.toLp 2 p)) (μ.prod ν) := hvar
     _ ≤ (∫ y, variance (fun x ↦ g (WithLp.toLp 2 (x, y))) μ ∂ν) +
         (∫ x, variance (fun y ↦ g (WithLp.toLp 2 (x, y))) ν ∂μ) := hVle
     _ ≤ C * A + C' * B := add_le_add hterm1 hterm2
-    _ ≤ max C C' * A + max C C' * B :=
-          add_le_add (mul_le_mul_of_nonneg_right (le_max_left _ _) hA)
-            (mul_le_mul_of_nonneg_right (le_max_right _ _) hB)
-    _ = max C C' * (A + B) := (mul_add _ _ _).symm
-    _ = max C C' * energy (prodMeasure μ ν) g := by rw [energy_prod_eq hg]
+
+/-- Fixed-constant tensorization inequality on the Hilbert product. -/
+theorem Holds.prod {μ : Measure E} {ν : Measure F} {C C' : ℝ}
+    (hμ : Holds μ C) (hν : Holds ν C') :
+    Holds (prodMeasure μ ν) (max C C') := by
+  have := hμ.probability
+  have := hν.probability
+  refine ⟨inferInstance, le_max_of_le_left hμ.constant_nonneg, ?_⟩
+  intro g hg
+  have hA : 0 ≤ ∫ p : E × F,
+      ‖(gradient g (WithLp.toLp 2 p)).fst‖ ^ 2 ∂μ.prod ν :=
+    integral_nonneg fun _ ↦ sq_nonneg _
+  have hB : 0 ≤ ∫ p : E × F,
+      ‖(gradient g (WithLp.toLp 2 p)).snd‖ ^ 2 ∂μ.prod ν :=
+    integral_nonneg fun _ ↦ sq_nonneg _
+  calc
+    variance g (prodMeasure μ ν) ≤
+      C * (∫ p : E × F, ‖(gradient g (WithLp.toLp 2 p)).fst‖ ^ 2 ∂μ.prod ν) +
+      C' * (∫ p : E × F, ‖(gradient g (WithLp.toLp 2 p)).snd‖ ^ 2 ∂μ.prod ν) :=
+        hμ.prod_components hν hg
+    _ ≤ max C C' * (∫ p : E × F, ‖(gradient g (WithLp.toLp 2 p)).fst‖ ^ 2 ∂μ.prod ν) +
+        max C C' * (∫ p : E × F, ‖(gradient g (WithLp.toLp 2 p)).snd‖ ^ 2 ∂μ.prod ν) :=
+      add_le_add (mul_le_mul_of_nonneg_right (le_max_left _ _) hA)
+        (mul_le_mul_of_nonneg_right (le_max_right _ _) hB)
+    _ = max C C' * energy (prodMeasure μ ν) g := by
+      rw [energy_prod_eq hg]
+      ring
 
 /-- Bound for the extended optimal constants, including infinite constants.
 

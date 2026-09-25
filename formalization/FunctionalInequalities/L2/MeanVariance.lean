@@ -184,6 +184,24 @@ theorem coe_variance (μ : ProbabilityMeasure α) (f : Lp ℝ 2 (μ : Measure α
     (variance μ f : ℝ) = ‖center μ f‖ ^ 2 := by
   rfl
 
+/-- Centering both arguments subtracts the product of their means from their inner product. -/
+theorem inner_center_center (μ : ProbabilityMeasure α)
+    (f g : Lp ℝ 2 (μ : Measure α)) :
+    inner ℝ (center μ f) (center μ g) =
+      inner ℝ f g - mean μ f * mean μ g := by
+  have hf : const μ (mean μ f) = mean μ f • const μ 1 := by
+    simpa using const_smul μ (mean μ f) 1
+  have hg : const μ (mean μ g) = mean μ g • const μ 1 := by
+    simpa using const_smul μ (mean μ g) 1
+  rw [center, center, hf, hg]
+  simp only [inner_sub_left, inner_sub_right,
+    real_inner_smul_left, real_inner_smul_right]
+  have hfmean : inner ℝ f (const μ 1) = mean μ f := rfl
+  have hgmean : inner ℝ (const μ 1) g = mean μ g := by rw [real_inner_comm]; rfl
+  have hunit : inner ℝ (const μ 1) (const μ 1) = 1 := mean_const μ 1
+  rw [hfmean, hgmean, hunit]
+  ring
+
 /-- Variance is nonnegative after coercion to the reals. -/
 theorem variance_nonneg (μ : ProbabilityMeasure α) (f : Lp ℝ 2 (μ : Measure α)) :
     0 ≤ (variance μ f : ℝ) :=
@@ -270,6 +288,41 @@ theorem variance_toLp (μ : ProbabilityMeasure α) {f : α → ℝ}
   rw [Real.coe_toNNReal _ (ProbabilityTheory.variance_nonneg f (μ : Measure α))]
   exact (coe_variance_eq_pointwise μ (hf.toLp f)).trans
     (ProbabilityTheory.variance_congr hf.coeFn_toLp)
+
+/-- The centered indicator has squared L2 norm `μ(s) (1-μ(s))`, including null and full sets. -/
+theorem norm_center_indicatorConstLp_sq (μ : ProbabilityMeasure α)
+    {s : Set α} (hs : MeasurableSet s) :
+    ‖center μ (indicatorConstLp 2 hs (measure_ne_top (μ : Measure α) s) (1 : ℝ))‖ ^ 2 =
+      (μ : Measure α).real s * (1 - (μ : Measure α).real s) := by
+  let χ := indicatorConstLp 2 hs (measure_ne_top (μ : Measure α) s) (1 : ℝ)
+  let p := (μ : Measure α).real s
+  have hp : mean μ χ = p := by
+    rw [mean, MeasureTheory.L2.inner_indicatorConstLp_one]
+    calc
+      (∫ x in s, const μ 1 x ∂(μ : Measure α)) =
+          ∫ _ in s, (1 : ℝ) ∂(μ : Measure α) :=
+        integral_congr_ae (ae_restrict_of_ae (const_coeFn μ 1))
+      _ = p := by simp [p]
+  have hχ : ‖χ‖ ^ 2 = p := by
+    rw [← real_inner_self_eq_norm_sq,
+      MeasureTheory.L2.real_inner_indicatorConstLp_one_indicatorConstLp_one]
+    simp [p]
+  have hone : ‖const μ 1‖ ^ 2 = 1 := by
+    rw [← real_inner_self_eq_norm_sq]
+    exact mean_const μ 1
+  have hconst : const μ p = p • const μ 1 := by
+    simpa using const_smul μ p 1
+  have hcp : ‖const μ p‖ ^ 2 = p ^ 2 := by
+    rw [hconst, norm_smul, Real.norm_eq_abs, mul_pow, hone]
+    simp
+  have hinner : inner ℝ χ (const μ p) = p ^ 2 := by
+    rw [hconst, real_inner_smul_right]
+    change p * mean μ χ = p ^ 2
+    rw [hp]
+    ring
+  change ‖χ - const μ (mean μ χ)‖ ^ 2 = p * (1 - p)
+  rw [hp, norm_sub_sq_real, hχ, hinner, hcp]
+  ring
 
 end FunctionalInequalities.L2
 

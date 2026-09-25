@@ -3,9 +3,9 @@
 
 The long routes reuse a small collection of shared and branch-specific endpoint interfaces.  This
 chapter records them once; it does not make every node a conjunctive premise of every route.
-The first three comparison bridges below are proved in Lean, including smooth/literature
-equivalence under intrinsic absolute continuity. The general log-concave comparison still needs
-the separate Borell input. Interfaces may evolve during formalization without a prior API freeze.
+The comparison bridges below are proved in Lean, including smooth/literature
+equivalence under intrinsic absolute continuity and the general log-concave Cheeger--Buser
+comparison. Interfaces may evolve during formalization without a prior API freeze.
 A published input or an upstream reviewed proof receives no \texttt{leanok} merely from its citation.
 
 \section{Three presentations of the Poincar\'e constant}
@@ -190,9 +190,9 @@ A published input or an upstream reviewed proof receives no \texttt{leanok} mere
   admissible class and the energy, hence the two infima.  The reference Haar measure is
   constructed inside the proof rather than assumed, so the statement carries neither a reference
   measure nor an affine origin, which is the last sentence of the theorem.  All three clauses being
-  local Lean proofs, the node now carries \texttt{leanok}.  This does \emph{not} make
-  \cref{thm:logconcave-cheeger-poincare-comparison} Lean-certified: its Buser half stays imported
-  mathematics in dimension $n\ge2$.
+  local Lean proofs, the node now carries \texttt{leanok}.  The separate
+  Cheeger--Buser comparison below is also a local Lean proof as of 2026-09-26;
+  the dimension-free KLS bound remains open.
 \end{proof}
 
 \begin{theorem}[Cheeger--Buser comparison for log-concave laws]
@@ -202,7 +202,8 @@ A published input or an upstream reviewed proof receives no \texttt{leanok} mere
         lem:covariance-test-core-density}
   \lean{FunctionalInequalities.KLS.LogConcave.literatureConstant_le_four_mul_inverseScale_sq,
         FunctionalInequalities.KLS.Isoperimetry.smoothTest_constant_le,
-        FunctionalInequalities.KLS.LogConcave.inverseScale_sq_le_of_finrank_le_one}
+        FunctionalInequalities.KLS.LogConcave.inverseScale_sq_le_pi_literature}
+  \leanok
   Every finite-dimensional log-concave probability law satisfies
   \[
     \CPLit(\mu)\le4\PsiKLS(\mu)^2,
@@ -211,6 +212,7 @@ A published input or an upstream reviewed proof receives no \texttt{leanok} mere
   \]
 \end{theorem}
 \begin{proof}
+  \leanok
   If $\mu$ is a Dirac law, then its affine support is a singleton, $\PsiKLS(\mu)=0$, and
   $\CPLit(\mu)=0$ because every test is $\mu$-almost everywhere constant.  Thus both inequalities
   hold directly.  Otherwise apply \cref{thm:klartag-density-frontend-identification}.  Cheeger's
@@ -220,13 +222,17 @@ A published input or an upstream reviewed proof receives no \texttt{leanok} mere
   formula, the multiplied Minkowski infimum bound and the Minkowski coarea inequality give
   $h_M^2\int(g-m)_+^2\le4\int_{\{g>m\}}\norm{\nabla g}^2$ for bounded $C^1$ Lipschitz $g$, a
   smooth cutoff extends this to every smooth test, and \cref{lem:relative-perimeter-cheeger-infimum}
-  transports it to $\CPLit(\mu)\le4\PsiKLS(\mu)^2$).  The second inequality, Buser's, remains
-  imported mathematics in dimension $n\ge2$, so the node carries no \texttt{leanok}.  In dimension
-  at most one it is a local Lean proof with the constant $12$ in place of $\pi$
-  (\texttt{KLS/LogConcave/Line/Buser.lean}, 2026-09-19: $h_M\ge2\rho(m)$ at a median by the hazard
-  bounds, $\rho\le2\rho(m)$, $\Var\ge1/(12\rho_{\max}^2)$ and the linear test give
-  $\PsiKLS(\mu)^2\le12\,\CPLit(\mu)$ whenever the affine support has dimension at most one); the
-  constant $\pi$ and every dimension $n\ge2$ remain imported mathematics.  Klartag's equation~(1.4), with the right-hand bound due to
+  transports it to $\CPLit(\mu)\le4\PsiKLS(\mu)^2$). The second inequality is now also a
+  local Lean proof (2026-09-26). The intrinsic Borell law is convolved with the actual normalized
+  Gaussian kernel. Its positive smooth convex potential gives the exact smooth-model $\pi$ bound;
+  its literature Poincaré constant is at most the source constant plus the Gaussian variance.
+  A finite lower bound on the approximants' Minkowski Cheeger constants passes through the
+  smooth Lipschitz test inequality under setwise convergence of laws, using weak convergence
+  only for bounded continuous gradients. The resulting source-law bound is optimized over
+  finite constants and transported through intrinsic coordinates. This includes zero-dimensional
+  affine support and zero or infinite optimal constants. The argument does not assert
+  convergence of the relative perimeter of each individual domain.
+  Klartag's equation~(1.4), with the right-hand bound due to
   De Ponti--Mondino, gives the second; see
   \cite{Milman2009Isoperimetric,Bobkov1999LogConcave,
         Klartag2023Logarithmic,DePontiMondino2021}.
@@ -271,8 +277,9 @@ A published input or an upstream reviewed proof receives no \texttt{leanok} mere
   a coefficient strictly smaller than $\pi$ in the zero-curvature case.
   We retain the convenient bound $\pi$ in Klartag's formula and make no optimality
   claim for it. Their sharp Buser estimate concerns the positive-curvature case.
-  The numerical inequalities are imported mathematics, not local Lean proofs; the frontend
-  transfer has an analytic proof in the appendix but is not yet Lean-certified.
+  The numerical inequalities above are local Lean proofs. The metric BV identification in
+  this paragraph remains a literature comparison; the Lean proof uses the proved
+  intrinsic Minkowski and relative-perimeter infimum equality instead.
 \end{proof}
 
 \begin{definition}[Isotropic probability law]

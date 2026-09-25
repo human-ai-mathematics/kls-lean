@@ -21,6 +21,11 @@ What is proved here:
 * `V4` = `dense_adjointComp_domain`: `D(T†T)` is dense;
 * `V5` = `sub_resolvent_eq_smul`: `f - J_s f = s • J_s (T†T f)` for `f ∈ D(T†T)`.
 
+Two further consequences of `V1` concern `J = I + T†T` on `{e ∈ D(T†T) : T†T e ∈ D(T)}`:
+the expansion `norm_add_adjointComp_sq_add_norm_sq` of its graph norm,
+`‖Je‖² + ‖T(Je)‖² = ‖e‖² + 3‖Te‖² + 3‖T†Te‖² + ‖T(T†Te)‖²`, and the resulting four-field
+convergence `tendsto_of_tendsto_add_adjointComp`.
+
 ## Unused route hypotheses (stronger statements, verbatim wrappers kept)
 
 Following the precedent of `Form.lean` (`S2` drops `0 < s`, `S3` drops `Dense`) and
@@ -105,6 +110,93 @@ theorem adjointComp_isFormalAdjoint {T : H₀ →ₗ.[ℝ] H₁} (hd : Dense (T.
   rw [inner_adjointComp hd x y.2.2, ← real_inner_comm ((x : H₀)) (adjointComp T y),
     inner_adjointComp hd y x.2.2]
   exact real_inner_comm _ _
+
+/-- **The graph norm of `(I + T†T) e`.** For `e ∈ D(T†T)` with `T†T e ∈ D(T)`,
+`‖e + T†T e‖² + ‖T e + T (T†T e)‖² = ‖e‖² + 3 ‖T e‖² + 3 ‖T†T e‖² + ‖T (T†T e)‖²`.
+
+Both cross terms are `V1`: `⟪e, T†T e⟫ = ‖T e‖²` and `⟪T e, T (T†T e)⟫ = ‖T†T e‖²`. Only
+density of `D(T)` is used. -/
+theorem norm_add_adjointComp_sq_add_norm_sq {T : H₀ →ₗ.[ℝ] H₁} (hd : Dense (T.domain : Set H₀))
+    (e : (adjointComp T).domain) (he : (adjointComp T e : H₀) ∈ T.domain) :
+    ‖(e : H₀) + adjointComp T e‖ ^ 2 + ‖T ⟨(e : H₀), e.2.2⟩ + T ⟨_, he⟩‖ ^ 2 =
+      ‖(e : H₀)‖ ^ 2 + 3 * ‖T ⟨(e : H₀), e.2.2⟩‖ ^ 2 + 3 * ‖adjointComp T e‖ ^ 2 +
+        ‖T ⟨_, he⟩‖ ^ 2 := by
+  have h₁ : ⟪(e : H₀), adjointComp T e⟫ = ‖T ⟨(e : H₀), e.2.2⟩‖ ^ 2 := by
+    rw [real_inner_comm, inner_adjointComp_self hd]
+  have h₂ : ⟪T ⟨(e : H₀), e.2.2⟩, T ⟨_, he⟩⟫ = ‖adjointComp T e‖ ^ 2 := by
+    rw [← inner_adjointComp hd e he, real_inner_self_eq_norm_sq]
+  rw [norm_add_sq_real, norm_add_sq_real, h₁, h₂]
+  ring
+
+open Filter Topology in
+/-- **Four-field convergence from the graph norm of `I + T†T`.** Let `xₙ, F ∈ D(T†T)` with
+`T†T xₙ, T†T F ∈ D(T)`. If `xₙ + T†T xₙ → F + T†T F` and
+`T xₙ + T (T†T xₙ) → T F + T (T†T F)`, then `xₙ → F`, `T xₙ → T F`, `T†T xₙ → T†T F` and
+`T (T†T xₙ) → T (T†T F)`. This is `norm_add_adjointComp_sq_add_norm_sq` applied to
+`xₙ - F`; only density of `D(T)` is used. -/
+theorem tendsto_of_tendsto_add_adjointComp {T : H₀ →ₗ.[ℝ] H₁} (hd : Dense (T.domain : Set H₀))
+    {x : ℕ → (adjointComp T).domain} (hx : ∀ n, (adjointComp T (x n) : H₀) ∈ T.domain)
+    (F : (adjointComp T).domain) (hF : (adjointComp T F : H₀) ∈ T.domain)
+    (h₁ : Tendsto (fun n => (x n : H₀) + adjointComp T (x n)) atTop
+      (𝓝 ((F : H₀) + adjointComp T F)))
+    (h₂ : Tendsto (fun n => T ⟨(x n : H₀), (x n).2.2⟩ + T ⟨_, hx n⟩) atTop
+      (𝓝 (T ⟨(F : H₀), F.2.2⟩ + T ⟨_, hF⟩))) :
+    Tendsto (fun n => (x n : H₀)) atTop (𝓝 (F : H₀)) ∧
+      Tendsto (fun n => T ⟨(x n : H₀), (x n).2.2⟩) atTop (𝓝 (T ⟨(F : H₀), F.2.2⟩)) ∧
+      Tendsto (fun n => adjointComp T (x n)) atTop (𝓝 (adjointComp T F)) ∧
+      Tendsto (fun n => T ⟨_, hx n⟩) atTop (𝓝 (T ⟨_, hF⟩)) := by
+  have hAe (n : ℕ) : adjointComp T (x n - F) = adjointComp T (x n) - adjointComp T F :=
+    LinearPMap.map_sub _ _ _
+  have he (n : ℕ) : (adjointComp T (x n - F) : H₀) ∈ T.domain := by
+    rw [hAe]; exact T.domain.sub_mem (hx n) hF
+  have hTe (n : ℕ) : T ⟨((x n - F : (adjointComp T).domain) : H₀), (x n - F).2.2⟩ =
+      T ⟨(x n : H₀), (x n).2.2⟩ - T ⟨(F : H₀), F.2.2⟩ := by
+    rw [← LinearPMap.map_sub]; rfl
+  have hTAe (n : ℕ) : T ⟨_, he n⟩ = T ⟨_, hx n⟩ - T ⟨_, hF⟩ := by
+    rw [← LinearPMap.map_sub]
+    congr 1
+    exact Subtype.ext (by simp only [hAe, Submodule.coe_sub])
+  set S : ℕ → ℝ := fun n =>
+    ‖((x n - F : (adjointComp T).domain) : H₀) + adjointComp T (x n - F)‖ ^ 2 +
+      ‖T ⟨_, (x n - F).2.2⟩ + T ⟨_, he n⟩‖ ^ 2 with hSdef
+  have hS : Tendsto S atTop (𝓝 0) := by
+    have ha (n : ℕ) : ((x n - F : (adjointComp T).domain) : H₀) + adjointComp T (x n - F) =
+        ((x n : H₀) + adjointComp T (x n)) - ((F : H₀) + adjointComp T F) := by
+      rw [hAe, Submodule.coe_sub]; abel
+    have hb (n : ℕ) : T ⟨_, (x n - F).2.2⟩ + T ⟨_, he n⟩ =
+        (T ⟨(x n : H₀), (x n).2.2⟩ + T ⟨_, hx n⟩) - (T ⟨(F : H₀), F.2.2⟩ + T ⟨_, hF⟩) := by
+      rw [hTe, hTAe]; abel
+    have h₁' := (tendsto_iff_norm_sub_tendsto_zero.mp h₁).pow 2
+    have h₂' := (tendsto_iff_norm_sub_tendsto_zero.mp h₂).pow 2
+    have hsum := h₁'.add h₂'
+    simp only [ne_eq, OfNat.ofNat_ne_zero, not_false_eq_true, zero_pow, add_zero] at hsum
+    refine hsum.congr fun n => ?_
+    simp only [hSdef, ha, hb]
+  have hkey (n : ℕ) := norm_add_adjointComp_sq_add_norm_sq hd (x n - F) (he n)
+  have hsq {a : ℕ → ℝ} (ha : ∀ n, 0 ≤ a n) (hle : ∀ n, a n ^ 2 ≤ S n) :
+      Tendsto a atTop (𝓝 0) := by
+    have hr : Tendsto (fun n => √(S n)) atTop (𝓝 0) := by
+      simpa using hS.sqrt
+    refine squeeze_zero ha (fun n => ?_) hr
+    rw [← Real.sqrt_sq (ha n)]
+    exact Real.sqrt_le_sqrt (hle n)
+  refine ⟨?_, ?_, ?_, ?_⟩
+  · refine tendsto_iff_norm_sub_tendsto_zero.mpr (hsq (fun n => norm_nonneg _) fun n => ?_)
+    rw [← Submodule.coe_sub]
+    nlinarith [hkey n, sq_nonneg ‖T ⟨_, (x n - F).2.2⟩‖, sq_nonneg ‖adjointComp T (x n - F)‖,
+      sq_nonneg ‖T ⟨_, he n⟩‖]
+  · refine tendsto_iff_norm_sub_tendsto_zero.mpr (hsq (fun n => norm_nonneg _) fun n => ?_)
+    rw [← hTe]
+    nlinarith [hkey n, sq_nonneg ‖((x n - F : (adjointComp T).domain) : H₀)‖,
+      sq_nonneg ‖adjointComp T (x n - F)‖, sq_nonneg ‖T ⟨_, he n⟩‖]
+  · refine tendsto_iff_norm_sub_tendsto_zero.mpr (hsq (fun n => norm_nonneg _) fun n => ?_)
+    rw [← hAe]
+    nlinarith [hkey n, sq_nonneg ‖((x n - F : (adjointComp T).domain) : H₀)‖,
+      sq_nonneg ‖T ⟨_, (x n - F).2.2⟩‖, sq_nonneg ‖T ⟨_, he n⟩‖]
+  · refine tendsto_iff_norm_sub_tendsto_zero.mpr (hsq (fun n => norm_nonneg _) fun n => ?_)
+    rw [← hTAe]
+    nlinarith [hkey n, sq_nonneg ‖((x n - F : (adjointComp T).domain) : H₀)‖,
+      sq_nonneg ‖T ⟨_, (x n - F).2.2⟩‖, sq_nonneg ‖adjointComp T (x n - F)‖]
 
 section Resolvent
 

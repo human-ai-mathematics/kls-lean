@@ -1,4 +1,5 @@
 import Mathlib.MeasureTheory.Function.L2Space
+import Mathlib.MeasureTheory.Integral.DominatedConvergence
 
 /-!
 # Multiplication of an `L²` class by an almost everywhere bounded multiplier
@@ -14,11 +15,15 @@ argument.
 `u : Lp ℝ 2 μ` to the class of `x ↦ u x • β x`. In both cases the multiplier is only assumed
 a.e. strongly measurable and a.e. bounded by a constant `M`, and the operator norm bound is
 `|M|`. No reverse inequality is claimed: `|M|` is a bound, not the operator norm.
+
+`tendsto_integral_mul_of_tendsto` is the corresponding convergence statement for testing: a
+family of multipliers that converges in `L²` and is uniformly a.e. bounded tests every
+integrable function, not only square-integrable ones.
 -/
 
 noncomputable section
 
-open MeasureTheory
+open MeasureTheory Filter Topology
 
 namespace FunctionalInequalities.L2
 
@@ -184,5 +189,116 @@ theorem inner_bddSmulL_left (hc : AEStronglyMeasurable c μ) (hM : ∀ᵐ x ∂�
   rw [h1, h2, real_inner_smul_left, real_inner_smul_right]
 
 end Symmetry
+
+section Testing
+
+open scoped RealInnerProductSpace
+
+private theorem continuous_clamp (M : ℝ) : Continuous fun y : ℝ => max (-M) (min M y) :=
+  continuous_const.max (continuous_const.min continuous_id)
+
+private theorem abs_sub_clamp_le {M y : ℝ} (hM : 0 ≤ M) : |y - max (-M) (min M y)| ≤ |y| := by
+  rcases le_total y 0 with h | h
+  · have h1 : y ≤ max (-M) (min M y) := le_max_of_le_right (le_min (by linarith) le_rfl)
+    have h2 : max (-M) (min M y) ≤ 0 := max_le (by linarith) (min_le_of_right_le h)
+    rw [abs_of_nonpos (by linarith), abs_of_nonpos h]; linarith
+  · have h1 : 0 ≤ max (-M) (min M y) := le_max_of_le_right (le_min hM h)
+    have h2 : max (-M) (min M y) ≤ y := max_le (by linarith) (min_le_right _ _)
+    rw [abs_of_nonneg (by linarith), abs_of_nonneg h]; linarith
+
+/-- Truncation at level `M`, `max (-M) (min M G)`, approximates an integrable `G` in `L¹`. -/
+theorem exists_clamp_integral_lt {G : α → ℝ} (hG : Integrable G μ) {ε : ℝ} (hε : 0 < ε) :
+    ∃ M : ℝ, 0 ≤ M ∧ ∫ x, |G x - max (-M) (min M (G x))| ∂μ < ε := by
+  have hlim : Tendsto (fun n : ℕ => ∫ x, |G x - max (-(n : ℝ)) (min n (G x))| ∂μ) atTop
+      (𝓝 (∫ x, (0 : ℝ) ∂μ)) := by
+    refine tendsto_integral_of_dominated_convergence (fun x => |G x|) (fun n => ?_) hG.abs
+      (fun n => Eventually.of_forall fun x => ?_) (Eventually.of_forall fun x => ?_)
+    · exact (hG.aestronglyMeasurable.sub
+        ((continuous_clamp _).comp_aestronglyMeasurable hG.aestronglyMeasurable)).norm
+    · rw [Real.norm_eq_abs, abs_abs]
+      exact abs_sub_clamp_le (Nat.cast_nonneg n)
+    · obtain ⟨N, hN⟩ := exists_nat_ge |G x|
+      refine tendsto_const_nhds.congr' ?_
+      filter_upwards [eventually_ge_atTop N] with n hn
+      have h1 : |G x| ≤ n := hN.trans (by exact_mod_cast hn)
+      rw [abs_le] at h1
+      rw [min_eq_right h1.2, max_eq_right h1.1, sub_self, abs_zero]
+  rw [integral_zero] at hlim
+  obtain ⟨n, hn⟩ := (hlim.eventually (gt_mem_nhds hε)).exists
+  exact ⟨n, n.cast_nonneg, hn⟩
+
+variable [IsFiniteMeasure μ]
+
+/-- **Uniformly bounded `L²` convergence tests integrable functions.** If `qᵢ → q₀` in `L²(μ)`
+along any filter and all of them are a.e. bounded by one constant `D`, then
+`∫ qᵢ G dμ → ∫ q₀ G dμ` for every integrable `G`, which need not be square integrable. The
+proof truncates `G` at a level `M` chosen from its `L¹` tail. -/
+theorem tendsto_integral_mul_of_tendsto {ι : Type*} {l : Filter ι} {q : ι → Lp ℝ 2 μ}
+    {q₀ : Lp ℝ 2 μ} (hq : Tendsto q l (𝓝 q₀)) {D : ℝ}
+    (hD : ∀ᶠ i in l, ∀ᵐ x ∂μ, |q i x| ≤ D) (hD₀ : ∀ᵐ x ∂μ, |q₀ x| ≤ D) {G : α → ℝ}
+    (hG : Integrable G μ) :
+    Tendsto (fun i => ∫ x, q i x * G x ∂μ) l (𝓝 (∫ x, q₀ x * G x ∂μ)) := by
+  rw [Metric.tendsto_nhds]
+  intro ε hε
+  set K := 2 * |D| + 1 with hK
+  have hKpos : 0 < K := by positivity
+  obtain ⟨M, hM0, hM⟩ := exists_clamp_integral_lt hG (ε := ε / (2 * K)) (by positivity)
+  set c : α → ℝ := fun x => max (-M) (min M (G x)) with hc
+  have hcm : AEStronglyMeasurable c μ :=
+    (continuous_clamp M).comp_aestronglyMeasurable hG.aestronglyMeasurable
+  have hcb : ∀ x, |c x| ≤ M := fun x => by
+    rw [abs_le]; exact ⟨le_max_left _ _, max_le (by linarith) (min_le_left _ _)⟩
+  have hcL : MemLp c 2 μ := MemLp.of_bound hcm M (Eventually.of_forall fun x => by
+    rw [Real.norm_eq_abs]; exact hcb x)
+  have hcI : Integrable c μ := hcL.integrable one_le_two
+  have hint (p : Lp ℝ 2 μ) (hp : ∀ᵐ x ∂μ, |p x| ≤ D) (g : α → ℝ) (hg : Integrable g μ) :
+      Integrable (fun x => p x * g x) μ :=
+    hg.bdd_mul (Lp.aestronglyMeasurable p) (by
+      filter_upwards [hp] with x hx; rwa [Real.norm_eq_abs])
+  set cL := hcL.toLp c
+  have hlim : Tendsto (fun i => ‖q i - q₀‖ * ‖cL‖) l (𝓝 0) := by
+    simpa using ((tendsto_iff_norm_sub_tendsto_zero.mp hq).mul_const ‖cL‖)
+  filter_upwards [hD, hlim.eventually (gt_mem_nhds (half_pos hε))] with i hi hi'
+  rw [Real.dist_eq]
+  have hinner : ⟪q i - q₀, cL⟫ = ∫ x, (q i x - q₀ x) * c x ∂μ := by
+    rw [L2.inner_def]
+    apply integral_congr_ae
+    filter_upwards [Lp.coeFn_sub (q i) q₀, hcL.coeFn_toLp] with x h1 h2
+    rw [h1, h2, Pi.sub_apply, real_inner_eq_re_inner, RCLike.re_to_real, RCLike.inner_apply,
+      conj_trivial, mul_comm]
+  have hsplit (p : Lp ℝ 2 μ) (hp : ∀ᵐ x ∂μ, |p x| ≤ D) :
+      ∫ x, p x * G x ∂μ = ∫ x, p x * c x ∂μ + ∫ x, p x * (G x - c x) ∂μ := by
+    rw [← integral_add (hint _ hp c hcI) (hint _ hp (fun x => G x - c x) (hG.sub hcI))]
+    congr 1; funext x; ring
+  have hsub (g : α → ℝ) (hg : Integrable g μ) :
+      ∫ x, (q i x - q₀ x) * g x ∂μ = ∫ x, q i x * g x ∂μ - ∫ x, q₀ x * g x ∂μ := by
+    rw [← integral_sub (hint _ hi g hg) (hint _ hD₀ g hg)]
+    congr 1; funext x; ring
+  have hdiff : ∫ x, q i x * G x ∂μ - ∫ x, q₀ x * G x ∂μ =
+      ∫ x, (q i x - q₀ x) * c x ∂μ + ∫ x, (q i x - q₀ x) * (G x - c x) ∂μ := by
+    rw [hsub c hcI, hsub (fun x => G x - c x) (hG.sub hcI), hsplit _ hi, hsplit _ hD₀]; ring
+  have h1 : |∫ x, (q i x - q₀ x) * c x ∂μ| < ε / 2 := by
+    rw [← hinner]
+    exact (abs_real_inner_le_norm _ _).trans_lt hi'
+  have h2 : |∫ x, (q i x - q₀ x) * (G x - c x) ∂μ| ≤ ε / 2 := by
+    calc |∫ x, (q i x - q₀ x) * (G x - c x) ∂μ|
+        ≤ ∫ x, |(q i x - q₀ x) * (G x - c x)| ∂μ := abs_integral_le_integral_abs
+      _ ≤ ∫ x, K * |G x - c x| ∂μ := by
+          apply integral_mono_of_nonneg (Eventually.of_forall fun x => abs_nonneg _)
+            ((hG.sub hcI).abs.const_mul K)
+          filter_upwards [hi, hD₀] with x hx hx₀
+          rw [abs_mul]
+          refine mul_le_mul_of_nonneg_right ?_ (abs_nonneg _)
+          calc |q i x - q₀ x| ≤ |q i x| + |q₀ x| := abs_sub _ _
+            _ ≤ K := by linarith [le_abs_self D]
+      _ = K * ∫ x, |G x - c x| ∂μ := integral_const_mul _ _
+      _ ≤ K * (ε / (2 * K)) := mul_le_mul_of_nonneg_left hM.le hKpos.le
+      _ = ε / 2 := by field_simp
+  rw [hdiff]
+  calc _ ≤ |∫ x, (q i x - q₀ x) * c x ∂μ| + |∫ x, (q i x - q₀ x) * (G x - c x) ∂μ| :=
+        abs_add_le _ _
+    _ < ε := by linarith
+
+end Testing
 
 end FunctionalInequalities.L2
