@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "last_updated": "2026-09-26",
+  "last_updated": "2026-09-27",
   "nodes": {
     "ass:cmh-recovery-envelope": {
       "description": "Seek a regular moment-map approximation of every centered log-concave law with a dimension-free CMH bound.",
@@ -55,10 +55,9 @@
       "blueprint": "conj:kls",
       "diagram": {
         "id": "KLS",
-        "label": "NEXT: KLS<br/>Dimension-free bound",
+        "label": "KLS<br/>Dimension-free bound",
         "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Statement.lean",
-        "shape": "box",
-        "focus": true
+        "shape": "box"
       }
     },
     "cor:absolutely-continuous-relaxation-two-cheeger": {
@@ -705,6 +704,23 @@
         "shape": "box"
       }
     },
+    "diagram:BV": {
+      "description": "Metric BV perimeter and half-mass Cheeger interfaces on the actual closed intrinsic support are defined; finite-space complement symmetry and the zero-dimensional convention are proved. General complement symmetry and the relaxed BV--Minkowski Cheeger identification remain open.",
+      "assessment": {
+        "state": "partial",
+        "evidence": {
+          "kind": "reviewed_progress",
+          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/research/decisions/2026-09-26-metric-bv-perimeter-interface.md"
+        },
+        "kind": "auxiliary"
+      },
+      "diagram": {
+        "id": "BV",
+        "label": "NEXT: Metric BV<br/>identification",
+        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Perimeter/MetricBV.lean",
+        "shape": "box"
+      }
+    },
     "diagram:EAND": {
       "description": "AND — Eldan route",
       "assessment": {
@@ -1086,7 +1102,8 @@
           "EQ",
           "FRONT",
           "CB",
-          "MINK"
+          "MINK",
+          "BV"
         ]
       },
       {

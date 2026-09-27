@@ -277,9 +277,16 @@ A published input or an upstream reviewed proof receives no \texttt{leanok} mere
   a coefficient strictly smaller than $\pi$ in the zero-curvature case.
   We retain the convenient bound $\pi$ in Klartag's formula and make no optimality
   claim for it. Their sharp Buser estimate concerns the positive-curvature case.
-  The numerical inequalities above are local Lean proofs. The metric BV identification in
-  this paragraph remains a literature comparison; the Lean proof uses the proved
-  intrinsic Minkowski and relative-perimeter infimum equality instead.
+  The numerical inequalities above are local Lean proofs. The metric BV test class
+  is the bounded-support \texttt{Lip\_b} class used by De Ponti--Mondino; the
+  sequential perimeter definition, actual closed-support law, finite-space complement
+  symmetry, and zero-dimensional half-mass test convention have local Lean interfaces
+  (2026-09-26). The equivalence with the unrestricted Lipschitz-test perimeter in
+  Ambrosio--Di Marino--Gigli is not a local Lean theorem. Complement symmetry on an
+  arbitrary unbounded support, their relaxation and recovery theorem (including Lemma~2.1),
+  and the final BV--Minkowski Cheeger-infimum equality remain literature comparisons.
+  The Lean proof of the numerical inequalities uses the proved intrinsic Minkowski and
+  relative-perimeter infimum equality instead.
 \end{proof}
 
 \begin{definition}[Isotropic probability law]

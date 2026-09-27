@@ -116,15 +116,17 @@ See the [full tables and normalization](LITERATURE.md#constant-conventions).
 ## Proof progress tree
 
 <!-- BEGIN GENERATED DATE -->
-Last updated: **2026-09-26**.
+Last updated: **2026-09-27**.
 
 ![✓ Formalized in Lean](badges/formalized.svg) · ![○ Not yet formalized](badges/pending.svg) · ![◐ Partially formalized](badges/partial.svg) · ![— Excluded: refuted](badges/excluded.svg)
 <!-- END GENERATED DATE -->
 Scalar sharp Sard, vector coarea through locally Lipschitz maps, the Cheeger infimum equality,
 heat-semigroup construction, and the full numerical Cheeger–Buser comparison are formalized
 in Lean. The general π bound uses actual Gaussian smoothing and a Cheeger test stability
-argument; no individual-domain perimeter limit is asserted. **Next priority:** resolve a
-dimension-free [KLS route gate](#proof-progress-tree). The four active routes remain open.
+argument; no individual-domain perimeter limit is asserted. **Current handoff:**
+complete the metric BV perimeter comparison, starting with general complement symmetry
+and the relaxed BV--Minkowski Cheeger-infimum bridge. The four dimension-free
+[KLS routes](#proof-progress-tree) remain open.
 These statuses record local proofs and do not claim a remote CI receipt.
 Upstream mathematical proofs alone do not earn a ✓.
 
@@ -163,6 +165,7 @@ flowchart LR
     FRONT["✓ Density Cheeger<br/>Identification"]
     CB["✓ Cheeger–Buser<br/>4 and pi bounds"]
     MINK["✓ Minkowski coarea"]
+    BV["◐ NEXT: Metric BV<br/>identification"]
     end
     subgraph HEATPROGRAM["Buser analytic program — dotted links show related work"]
     SEMI["✓ Weighted-gradient<br/>Heat semigroup"]
@@ -207,7 +210,7 @@ flowchart LR
     VFULL["✓ C¹ vector coarea<br/>Rank-deficient part closed"]
     VLIP["✓ Vector coarea<br/>Lipschitz and local"]
     end
-    KLS["○ NEXT: KLS<br/>Dimension-free bound"]
+    KLS["○ KLS<br/>Dimension-free bound"]
     ANY{"OR<br/>Any completed route"}
     EG --> EAND
     EC --> EAND
@@ -268,16 +271,14 @@ flowchart LR
     classDef done fill:#dbeafe,stroke:#2563eb,color:#1e3a8a;
     class ENERGY,F4,MT,FP,FC,EQ,NORM,DENS,FRONT,CB,ONE,CONST,FORMS,MEAS,GRAPH,REG,CRIT,C1,WHIT,LIP,GG,REC,FWD,SARD,SCI,CUT,REV,MINK,FLOG,VREG,VZERO,VR123,VR4,VFULL,SEMI,MARKOV,DECAY,GAUSS,GSTAB,VLIP done;
     classDef partial fill:#fff3df,stroke:#c88719,color:#66420d;
-    class FAND,BE,HEAT partial;
+    class BV,FAND,BE,HEAT partial;
     classDef todo fill:#fee2e2,stroke:#dc2626,color:#991b1b;
-    class MG,EG,MC,EC,SC,FG,SG,MH,EAND,SAND,MAND todo;
-    classDef focus fill:#fee2e2,stroke:#dc2626,color:#991b1b,stroke-width:3px;
-    class KLS focus;
+    class MG,EG,KLS,MC,EC,SC,FG,SG,MH,EAND,SAND,MAND todo;
     classDef logic fill:#fff,stroke:#555,color:#222;
     class ANY logic;
     click MG href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/src/chapters/50-kls-routes.tex" "Bounded CMH — Recovery envelope" _blank
     click EG href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/src/chapters/50-kls-routes.tex" "Tight-prefix — Carleson estimate" _blank
-    click KLS href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Statement.lean" "NEXT: KLS — Dimension-free bound" _blank
+    click KLS href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Statement.lean" "KLS — Dimension-free bound" _blank
     click ENERGY href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Energy/Cheeger/Basic.lean" "Canonical energy — = 2 × Cheeger energy" _blank
     click MC href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/src/chapters/50-kls-routes.tex" "Recovery-sequence — Sufficiency" _blank
     click F4 href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/ConditionalFiber.lean" "Fiber energy — ≤ 4 × gradient energy" _blank
@@ -312,6 +313,7 @@ flowchart LR
     click CUT href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Cheeger/DistanceCutoff.lean" "Distance cutoffs" _blank
     click REV href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Cheeger/Equality.lean" "h_S ≤ h_M" _blank
     click MINK href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Cheeger/MinkowskiContent.lean" "Minkowski coarea" _blank
+    click BV href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Perimeter/MetricBV.lean" "NEXT: Metric BV — identification" _blank
     click EAND href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/route-composition.yaml" "AND — Eldan route" _blank
     click SAND href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/route-composition.yaml" "AND — Spectral route" _blank
     click MAND href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/route-composition.yaml" "AND — CMH route" _blank
@@ -348,6 +350,9 @@ flowchart LR
 - Both numerical Cheeger–Buser bounds are proved for every finite-dimensional log-concave
   law, including zero-dimensional affine support and extended optima. This comparison
   feeds the Eldan route and does not alone prove KLS.
+- The metric BV perimeter and half-mass Cheeger interfaces are partially formalized.
+  General complement symmetry, the relaxation/recovery theorem, and identification with
+  the existing Minkowski Cheeger constant are not local Lean proofs.
 - There are 26 registered certificates and one isolated `KLS.kls` target hole. The former WIP
   modules are removed; the target is outside every certificate closure.
 - CMH sufficiency requires a regular recovery sequence; it is not an equivalence.
@@ -428,6 +433,7 @@ The [full node register](STATUS.md) separately lists definitions and registered 
 | Distance cutoffs | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Cheeger/DistanceCutoff.lean) |
 | h_S ≤ h_M | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Cheeger/Equality.lean) |
 | Minkowski coarea | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Cheeger/MinkowskiContent.lean) |
+| NEXT: Metric BV — identification | ![◐ Partially formalized](badges/partial.svg) | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Perimeter/MetricBV.lean) |
 | Fiber log-concavity | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/ConditionalFiber.lean) |
 | Vector coarea — Regular region | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/Vector/Coarea/Regular.lean) |
 | Vector slices — Zero derivative | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/Vector/Slice/Critical.lean) |
@@ -481,7 +487,7 @@ Every node has a link. If diagram links are disabled in your viewer, use this di
 | --- | --- |
 | Bounded CMH — Recovery envelope | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/src/chapters/50-kls-routes.tex) |
 | Tight-prefix — Carleson estimate | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/src/chapters/50-kls-routes.tex) |
-| NEXT: KLS — Dimension-free bound | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Statement.lean) |
+| KLS — Dimension-free bound | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Statement.lean) |
 | Canonical energy — = 2 × Cheeger energy | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Energy/Cheeger/Basic.lean) |
 | Recovery-sequence — Sufficiency | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/src/chapters/50-kls-routes.tex) |
 | Fiber energy — ≤ 4 × gradient energy | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/ConditionalFiber.lean) |
@@ -516,6 +522,7 @@ Every node has a link. If diagram links are disabled in your viewer, use this di
 | Distance cutoffs | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Cheeger/DistanceCutoff.lean) |
 | h_S ≤ h_M | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Cheeger/Equality.lean) |
 | Minkowski coarea | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Cheeger/MinkowskiContent.lean) |
+| NEXT: Metric BV — identification | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Perimeter/MetricBV.lean) |
 | AND — Eldan route | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/route-composition.yaml) |
 | AND — Spectral route | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/route-composition.yaml) |
 | AND — CMH route | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/route-composition.yaml) |

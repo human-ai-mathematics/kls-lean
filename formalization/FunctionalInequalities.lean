@@ -63,6 +63,7 @@ import FunctionalInequalities.Analysis.Lipschitz.VectorCoarea
 import FunctionalInequalities.Analysis.Lipschitz.Local
 import FunctionalInequalities.Analysis.Sard.Sharp
 import FunctionalInequalities.KLS.Geometry.Cheeger.Equality
+import FunctionalInequalities.KLS.Geometry.Cheeger.BVConstant
 import FunctionalInequalities.KLS.Geometry.Cheeger.Inequality
 import FunctionalInequalities.Energy.Euclidean.Slope.Comparison
 import FunctionalInequalities.Energy.Euclidean.Slope.Recovery

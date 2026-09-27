@@ -319,7 +319,7 @@
           },
           {
             "path": "formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex",
-            "sha256": "31521e80e991cc30a3e4b41305f3e49778c7fe4b3197ff9f9546cf89d55087b7"
+            "sha256": "82dc4d4f75e8638b581c9e250a5c3a7f802d2e446a3e80e670865ddb776a6d71"
           },
           {
             "path": "formalization/.lake/packages/mathlib/Mathlib/Analysis/InnerProductSpace/LaxMilgram.lean",
@@ -955,7 +955,7 @@
           },
           {
             "path": "formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex",
-            "sha256": "31521e80e991cc30a3e4b41305f3e49778c7fe4b3197ff9f9546cf89d55087b7"
+            "sha256": "82dc4d4f75e8638b581c9e250a5c3a7f802d2e446a3e80e670865ddb776a6d71"
           }
         ],
         "gaps": []
@@ -1626,7 +1626,7 @@
           },
           {
             "path": "formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex",
-            "sha256": "31521e80e991cc30a3e4b41305f3e49778c7fe4b3197ff9f9546cf89d55087b7"
+            "sha256": "82dc4d4f75e8638b581c9e250a5c3a7f802d2e446a3e80e670865ddb776a6d71"
           }
         ],
         "gaps": []
@@ -2602,7 +2602,7 @@
           },
           {
             "path": "formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex",
-            "sha256": "31521e80e991cc30a3e4b41305f3e49778c7fe4b3197ff9f9546cf89d55087b7"
+            "sha256": "82dc4d4f75e8638b581c9e250a5c3a7f802d2e446a3e80e670865ddb776a6d71"
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/Isoperimetry.lean",

@@ -1,5 +1,44 @@
 # KLS Lean repository handoff
 
+## Active placement plan: metric BV perimeter interface (2026-09-26)
+
+Object and scope: metric BV perimeter of Borel sets for a measure on a metric
+space with its Borel measurable structure, specialized to the actual probability
+law on the closed support of the intrinsic affine law. Its Lipschitz tests have
+bounded values and bounded support;
+the cost is the integral of the existing pointwise local metric slope, with
+`L¹` convergence of indicators and an extended-nonnegative liminf. Put the
+object and elementary properties in `KLS/Geometry/Perimeter/MetricBV.lean`,
+separate from the smooth-domain `relativePerimeter ρ Ω U`. Put the BV Cheeger
+infimum and BV–Minkowski identification in the `KLS/Geometry/Cheeger/` family,
+above metric perimeter and Minkowski content; transport to the already defined
+`Isoperimetry.constant μ` belongs at this comparison level. This creates new
+modules because metric BV and cross-object identification have different
+dependencies from the existing smooth relative-perimeter and Minkowski modules;
+it is not a length-based split. Existing public signatures remain unchanged.
+Validate exact signatures, a strict independent client for complement, zero
+dimension and final identification, transitive axioms, and the full frozen-source
+verifier. Keep log-concavity out of the generic identification unless a precise
+lemma requires it. Update Blueprint and progress only to the level actually
+proved; do not commit or push.
+
+Current result: `MetricBV.perimeter` is defined by `Lip_b` tests, actual `L¹`
+convergence, local-slope integrals and `ENNReal` liminf/inf. Its measure-facing
+interface requires `BorelSpace`, matching the literature's Borel metric measure
+space. The closed-support law is a probability measure obtained by restricting
+the actual intrinsic law.
+`MetricBV.perimeter_compl` is proved for finite metric spaces, and all sets have
+zero perimeter on a singleton. The half-mass BV Cheeger infimum is defined and
+proved `⊤` for zero-dimensional affine support. The independent strict client
+`research/audits/MetricBVInterfaceAudit.lean` compiles these exact signatures;
+its four transitive-axiom reports are standard. The general complement theorem,
+the equivalence with Ambrosio--Di Marino--Gigli's unrestricted Lipschitz-test
+perimeter,
+the half-mass/symmetric equality, Lemma 2.1, Theorem 3.6 recovery, and final
+identification with `Isoperimetry.constant` remain unproved; the Blueprint must
+retain its literature-only identification status. No numerical π-Buser theorem
+was changed.
+
 ## Precommit audit and placement plan (2026-09-26)
 
 Review the complete dirty tree before one commit: theorem statements and

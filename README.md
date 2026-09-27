@@ -12,7 +12,7 @@ recorded explicitly and checked against the original goal; see the
 [current lifecycle](research/ledger-schema.md#lifecycle). Earlier freeze records remain dated
 review snapshots.
 
-## Current status (2026-09-26)
+## Current status (2026-09-27)
 
 The ledger contains **26 Lean-certified nodes**. The former coarea, Sard, Cheeger-infimum
 and Energy WIP modules have been closed and removed. **One explicit target hole remains**:
@@ -31,6 +31,11 @@ log-concave probability law: `C_P^lit(μ) ≤ 4 Ψ_KLS(μ)²` and
 `Ψ_KLS(μ)² ≤ π C_P^lit(μ)`. The second bound uses actual Gaussian convolution,
 Cheeger test stability and intrinsic-coordinate transport; it includes zero-dimensional
 affine support and infinite optima. This does not prove a dimension-free KLS bound.
+The bounded-support metric BV perimeter and closed-support probability law now have
+Lean interfaces. Equivalence with the unrestricted Lipschitz-test perimeter, the
+general BV--Minkowski identification, and its Cheeger-infimum equality remain
+literature comparisons. The current formalization handoff is this BV bridge;
+the dimension-free KLS routes remain open.
 
 For the actual full-dimensional log-concave weighted-gradient heat semigroup, an explicit
 form-domain Poincaré inequality with `C > 0` now gives centered squared `L²` decay

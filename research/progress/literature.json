@@ -229,11 +229,15 @@
       "url": "https://arxiv.org/abs/1603.08412",
       "locator": "Lemma 3.2; Theorem 3.6",
       "result": "A Minkowski coarea inequality and identification of relaxed Minkowski content with BV perimeter.",
-      "remaining": "The general metric-space BV identification is not formalized; our result is the stated finite-dimensional C¹ Lipschitz specialization.",
+      "remaining": "The local Euclidean C¹ Lipschitz Minkowski coarea inequality and a bounded-support metric BV perimeter interface on the actual closed support are formalized. The equivalence with the paper's unrestricted Lipschitz-test definition, Lemma 2.1, Theorem 3.6 recovery, and the BV–Minkowski identification remain unformalized.",
       "local_results": [
         {
           "node": "diagram:MINK",
           "scope": "Minkowski coarea inequality in the local Euclidean scope"
+        },
+        {
+          "node": "diagram:BV",
+          "scope": "Bounded-support metric BV perimeter interface on the closed intrinsic support"
         }
       ]
     },
@@ -308,11 +312,15 @@
       "url": "https://arxiv.org/abs/1902.03835",
       "locator": "Cheeger–Buser comparison; log-concave specialization in Letwin, introduction",
       "result": "Provides the sharp reverse-comparison input used to normalize ψ² and C_P; in the log-concave convention, 1/4 ≤ ψ²/C_P ≤ π.",
-      "remaining": "The numerical comparison is formalized for finite-dimensional log-concave laws; the paper's general RCD(K,∞) theorem and a metric BV perimeter identification are not formalized here.",
+      "remaining": "The numerical comparison is formalized for finite-dimensional log-concave laws. The metric BV test class and zero-dimensional half-mass convention have local Lean interfaces, but general complement symmetry, the BV–Minkowski Cheeger identification, and the paper's RCD(K,∞) theorem remain unformalized.",
       "local_results": [
         {
           "node": "thm:logconcave-cheeger-poincare-comparison",
           "scope": "Both numerical inequalities for every finite-dimensional log-concave probability law, including zero-dimensional affine support and extended optima"
+        },
+        {
+          "node": "diagram:BV",
+          "scope": "Metric BV perimeter and half-mass Cheeger interfaces; general identification pending"
         }
       ],
       "additional_sources": [
