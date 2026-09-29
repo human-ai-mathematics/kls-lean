@@ -123,11 +123,17 @@ Last updated: **2026-09-29**.
 Scalar sharp Sard, vector coarea through locally Lipschitz maps, the Cheeger infimum equality,
 heat-semigroup construction, and the full numerical Cheeger–Buser comparison are formalized
 in Lean. The general π bound uses actual Gaussian smoothing and a Cheeger test stability
-argument; no individual-domain perimeter limit is asserted. **Current handoff:**
-the scoped metric BV comparison has passed independent review, including closed-support
-identification for finite-dimensional log-concave laws. The eight-hour continuation has accepted
-the exact test-class infima (global Lipschitz on finite-measure metric spaces, local Lipschitz
-on proper spaces), the normed-space relaxed lower Minkowski set infimum, and compact-local L1 relaxation on proper finite-measure spaces. Phase22 is independently accepted. Phase23 integrated upper-content bound is prepared but undelivered: control is paused because the Mac requires manual unlock. The renewed eight-hour window still ends at11:13:30 Asia/Shanghai on2026-09-29. Phase22 (the upper Minkowski content as the `limsup` of the lower content's radius quotient, lower `≤` upper, the monotone radius mass of thickenings, its Lebesgue-a.e. differentiability by the monotone differentiation theorem, and the derivative bound on the upper content of each thickening, for probability laws on normed groups; no absolute continuity, integrated bound or lower-to-upper identity) is independently accepted with 165 frozen workflow gates passed. Complement symmetry for finite Borel
+argument; no individual-domain perimeter limit is asserted.
+The scoped metric BV comparison includes closed-support identification for finite-dimensional
+log-concave laws, exact test-class relaxation infima, and relaxed lower Minkowski content.
+**Next step:** prove the integrated upper-content bound for thickenings and establish the
+remaining lower-to-upper recovery comparison. The current upper-content results prove
+lower content `≤` upper content, almost-everywhere differentiability of the monotone radius
+mass, and a derivative bound on the upper content of each thickening for probability laws on
+normed groups. Absolute continuity of the radius mass, an integrated upper-content bound,
+and a relaxed-upper identity are not yet proved locally.
+
+Complement symmetry for finite Borel
 measures, including the closed intrinsic support law, is formalized in Lean, and so is
 the equality of the half-mass and symmetric BV Cheeger constants on every probability
 metric space; for a finite measure, globally Lipschitz approximants converging in global
@@ -378,12 +384,17 @@ flowchart LR
 - Both numerical Cheeger–Buser bounds are proved for every finite-dimensional log-concave
   law, including zero-dimensional affine support and extended optima. This comparison
   feeds the Eldan route and does not alone prove KLS.
-- The metric BV perimeter and half-mass Cheeger interfaces are partially formalized.
-  Complement symmetry is formalized for finite Borel measures, including the closed
-  intrinsic support law, and the half-mass and symmetric BV Cheeger constants are proved
-  equal. Globally Lipschitz, globally `L¹`-convergent approximants bound the perimeter for
-  finite measures. The relaxation/recovery theorem and identification with the existing
-  Minkowski Cheeger constant remain unproved locally.
+- Metric BV relaxation and recovery are formalized within the stated measure and space
+  assumptions: globally Lipschitz relaxation for finite Borel measures on metric spaces,
+  and locally Lipschitz relaxation with global or compact-local `L¹` convergence on proper
+  spaces with finite measures. Minkowski recovery and the relaxed lower Minkowski set
+  infimum are formalized for probability laws on normed spaces.
+- The half-mass and symmetric BV Cheeger constants equal the Minkowski Cheeger constant
+  for probability laws on normed spaces. For finite-dimensional log-concave laws, the
+  constant on the closed intrinsic support equals `Isoperimetry.constant`. These are
+  equalities of infima; individual BV perimeters and Minkowski contents need not agree.
+  The general metric-measure comparison, the nonconvex-support identification, and the
+  `L¹_loc` result beyond proper spaces with finite measures remain open locally.
 - There are 26 registered certificates and one isolated `KLS.kls` target hole. The former WIP
   modules are removed; the target is outside every certificate closure.
 - CMH sufficiency requires a regular recovery sequence; it is not an equivalence.

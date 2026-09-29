@@ -240,7 +240,7 @@ law on `[0, 1]`, `dirac 0` with all constants `⊤`, and an actual log-concave D
 the bounded-support relaxation. Not claimed: nonconvex supports, the Ambrosio--Di Marino--Gigli
 unrestricted test-class equivalence, general metric-measure/RCD comparisons, the Buser route
 beyond existing proofs, and dimension-free KLS.
-Phase 17 (2026-09-29, eight-hour window, accepted by Codex):
+Phase 17 (2026-09-29, accepted by Codex):
 `KLS/Geometry/Perimeter/LocalLipschitzTests.lean` extends the finite-measure test-class bridge
 to genuinely locally Lipschitz approximants (Mathlib's `LocallyLipschitz`) on a proper metric
 space: `perimeter_le_liminf_of_locallyLipschitz` and
@@ -261,7 +261,7 @@ Ambrosio--Di Marino--Gigli's Remark 3.5 with global `L¹` convergence on proper 
 Definition 3.3 (globally Lipschitz, global `L¹`) was already covered one-sidedly by phase 3. Not
 claimed: `L¹_loc` convergence, the equality of their relaxation infimum with the perimeter used
 here, non-proper metric spaces.
-Phase 18 (2026-09-29, eight-hour window, accepted by Codex):
+Phase 18 (2026-09-29, accepted by Codex):
 `KLS/Geometry/Perimeter/TestClassRelaxation.lean` defines the actual sequence classes
 `LipschitzApproximatingSequence ν B` (globally Lipschitz terms, unrestricted values and
 supports, global `L¹` convergence to `1_B`; the class of Ambrosio--Di Marino--Gigli's
@@ -284,7 +284,7 @@ the locally Lipschitz relaxation of `{1}` for the two-atom law by `1`, empty cla
 transfer, zero measure, empty carrier, the closed-support law of the uniform law on `[0, 1]`, the
 intrinsic instance). Not claimed: `L¹_loc` convergence, the locally Lipschitz class on
 non-proper spaces, Theorem 3.6.
-Phase 19 (2026-09-29, eight-hour window, accepted by Codex):
+Phase 19 (2026-09-29, accepted by Codex):
 `KLS/Geometry/Perimeter/RelaxedMinkowski.lean` defines `MinkowskiApproximatingSequence ν B`
 (measurable sets converging to `B` in global indicator `L¹(ν)`; only measurability and
 convergence) and the relaxed lower Minkowski content `relaxedMinkowskiContent ν B`, the infimum
@@ -300,7 +300,7 @@ directions with actual sequences, zero perimeter for `Iic (1/2)` under the two-a
 dimension zero, `⊤` and empty-class transfers, and the rationals under the Gaussian law with
 relaxed content `0` but outer content `⊤`, so no pointwise equality is asserted). Not claimed:
 Lemma 2.1 or Theorem 3.6 of Ambrosio--Di Marino--Gigli in general metric measure spaces.
-Phase 20 (2026-09-29, eight-hour window, accepted by Codex): `LocalLipschitzTests.lean` now
+Phase 20 (2026-09-29, accepted by Codex): `LocalLipschitzTests.lean` now
 also covers bounded-ball convergence. For a finite Borel measure and a locally Lipschitz sequence
 `f n` with `∫⁻ ‖f n - 1_B‖ₑ dν → 0` on every closed ball (explicit hypothesis; no global `L¹`
 convergence, global Lipschitz constant or integrability of `f n`),
@@ -318,7 +318,7 @@ globally), the slope contraction `apply_clampUnit_comp_le`, and phase 17 on the 
 Lipschitz function of no assumed integrability; the clamp lemma without properness; empty
 carrier, zero measure, empty set, the compact-set corollary). Not claimed: the general non-proper
 or infinite-measure `L¹_loc` theorem.
-Phase 21 (2026-09-29, eight-hour window, independently accepted by Codex; last segment of this chat):
+Phase 21 (2026-09-29, independently accepted by Codex):
 `TestClassRelaxation.lean` defines `CompactLocallyLipschitzApproximatingSequence ν B` (locally
 Lipschitz terms with bare indicator-`L¹` convergence on every compact set; no integrability
 field) and `compactLocallyLipschitzRelaxation ν B`, the infimum of liminf slope integrals (`⊤`
@@ -333,7 +333,7 @@ proper law and the closed intrinsic support of every finite-dimensional law
 covered without convexity or log-concavity, separately from the Cheeger identification
 (`MetricBVLocalL1RelaxationAudit.lean`). Not claimed: any infinite-measure or non-proper
 literature result.
-Phase 22 (2026-09-29, renewed eight-hour window, fresh session; independently accepted):
+Phase 22 (2026-09-29, independently accepted):
 `Cheeger/UpperMinkowskiContent.lean` defines `upperMinkowskiContent ν B`, the `limsup` along
 `𝓝[>] 0` of the radius quotient whose `liminf` is `minkowskiContent`, with
 `minkowskiContent_le_upperMinkowskiContent`, zero upper content under zero mass increments and
