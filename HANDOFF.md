@@ -31,13 +31,328 @@ the actual intrinsic law.
 zero perimeter on a singleton. The half-mass BV Cheeger infimum is defined and
 proved `⊤` for zero-dimensional affine support. The independent strict client
 `research/audits/MetricBVInterfaceAudit.lean` compiles these exact signatures;
-its four transitive-axiom reports are standard. The general complement theorem,
-the equivalence with Ambrosio--Di Marino--Gigli's unrestricted Lipschitz-test
-perimeter,
-the half-mass/symmetric equality, Lemma 2.1, Theorem 3.6 recovery, and final
-identification with `Isoperimetry.constant` remain unproved; the Blueprint must
-retain its literature-only identification status. No numerical π-Buser theorem
-was changed.
+its four transitive-axiom reports are standard. As of 2026-09-28,
+`perimeter_compl_of_isFiniteMeasure` proves complement symmetry on every metric
+space with a finite Borel measure, including the actual closed intrinsic support
+law. Clamping and radial cutoffs preserve bounded support and make both errors
+vanish with the mass outside large balls. The Lebesgue-measure counterexample
+shows that the finite-measure hypothesis cannot simply be dropped. The new
+`MetricBVComplementAudit.lean` and independent Codex clients strictly compile
+with standard axioms only. See the [implementation handoff](research/handoffs/claude-bv-overnight.md)
+and [independent review](research/handoffs/codex-bv-overnight-review.md) for scope
+and dated snapshot evidence. `perimeter_empty` has also been generalized by
+removing its former finite-carrier assumption; other existing signatures remain unchanged.
+Ambrosio--Di Marino--Gigli's Definition 3.3 uses globally Lipschitz approximants with
+global `L¹` convergence, the class of the phase-3 bridge; phase 17 adds locally Lipschitz
+approximants on proper spaces (their Remark 3.5 variant, global `L¹`); phase 18 proves that
+the relaxation infimum over Definition 3.3's class equals this perimeter for every finite
+Borel measure on a metric space, and that the infimum over locally Lipschitz approximants
+equals it on proper spaces, in particular on the closed intrinsic support; phase 19 proves
+that the relaxed lower Minkowski set infimum equals this perimeter for probability laws on
+normed spaces. Phase 20 proves that locally Lipschitz approximants converging in `L¹` on every
+closed ball (equivalently on every compact set) also bound the perimeter on proper spaces with
+finite measures, through the clamped sequence; phase 21 packages the corresponding
+compact-local relaxation infimum, which equals this perimeter on proper spaces with finite
+measures, in particular on the closed intrinsic support. Phase 22 (independently accepted)
+defines the upper Minkowski content as the `limsup` of the lower content's radius quotient,
+proves lower `≤` upper, and proves that the real mass of the `s`-thickening of any set is
+monotone, differentiable at Lebesgue-almost every radius, with the upper content of the
+`s`-thickening at most its derivative at every differentiability radius (probability laws on
+normed groups). The remainder of Lemma 2.1 and Theorem 3.6 in general metric
+measure spaces, and the `L¹_loc` theorem beyond proper spaces and finite measures, remain
+unproved. Phase 12 identifies the symmetric and half-mass BV constants with the
+Minkowski constant on normed-space laws and, for the intrinsic coordinate law, with
+`Isoperimetry.constant`; phase 16 extends this to the closed-support constant
+`intrinsicHalfConstant` for finite-dimensional log-concave laws (convex intrinsic support).
+No numerical π-Buser theorem was changed.
+Phase 2 (2026-09-28, accepted by Codex): `halfConstant_eq_symmetricConstant`
+proves the half-mass and symmetric BV Cheeger constants equal for every probability
+measure on a metric space with Borel structure, with the closed intrinsic support
+instance `intrinsicHalfConstant_eq_symmetricConstant`; a symmetric test set of mass
+above one half is replaced by its complement. `MetricBVCheegerAudit.lean` checks the
+mass-one-half, above-half, empty-family and zero-dimensional cases, with conditional
+quotient checks for admissible sets of infinite perimeter (no such set is constructed).
+Phase 3 (2026-09-28, accepted by Codex): for a finite Borel measure,
+`exists_approximatingSequence_of_lipschitz` replaces any globally Lipschitz sequence
+converging to `1_B` in global `L¹` (constants, values and supports unrestricted) by the
+explicit truncated tests `Test.truncate x₀ n (f n)` with the same limit and no larger liminf
+cost, and `perimeter_le_liminf_of_lipschitz` bounds the perimeter by that liminf; the empty
+carrier and infinite costs are included (`MetricBVLipschitzAudit.lean`). This is not the
+literature equivalence with locally Lipschitz tests or `L¹_loc` convergence.
+Phase 4 (2026-09-28, accepted by Codex): `exists_test_lt_of_perimeter_lt` gives, for every
+Borel measure, set `B`, threshold `a > perimeter ν B` (possibly `⊤`) and `ε > 0`, a single
+test with `L¹` distance below `ε` and cost below `a` (`MetricBVRecoveryAudit.lean`); this is a
+prerequisite for diagonal recovery, not Minkowski recovery.
+Phase 5 (2026-09-28, accepted by Codex): for every Borel measure and every `B` with
+`perimeter ν B < ⊤`, `recoverySequence` selects from the epsilon recovery tests, with positive
+errors `ε n → 0` and threshold excesses `η n`, an actual `ApproximatingSequence ν B` whose terms
+have `L¹` distance below `ε n` and cost below `perimeter ν B + η n`;
+`tendsto_cost_recoverySequence` (for `η n → 0`) and `exists_recoverySequence` give costs
+converging to the perimeter in `ENNReal`, the lower bound coming from `perimeter_le_sequence`
+through `tendsto_cost_of_limsup_le` (`MetricBVRecoverySequenceAudit.lean`: empty carrier, zero
+perimeter, and the infinite-perimeter whole line for Lebesgue measure, where nothing is
+claimed). This is neither lower semicontinuity of the relaxation nor Minkowski recovery.
+Phase 6 (2026-09-28, accepted by Codex): `perimeter_le_liminf_of_tendsto` proves sequential
+lower semicontinuity of this exact perimeter for every Borel measure: if measurable sets `B n`
+satisfy `∫⁻ ‖1_{B n} - 1_B‖ₑ dν → 0`, then `perimeter ν B ≤ liminf (perimeter ν ∘ B)`, with
+infinite liminf, infinite target perimeter and empty approximation classes allowed (no perimeter
+is assumed finite; measurability of `B` is not needed). The proof chooses, below any level above
+the liminf, frequent indices with small set distance and their epsilon tests, joined by the
+triangle bound `indicatorDistance_le_add` (`MetricBVLowerSemicontinuityAudit.lean`: constant
+sequences, empty carrier, zero perimeter of null sets, the infinite whole line for Lebesgue
+measure). This is a relaxation property, not the BV--Minkowski comparison.
+Phase 7 (2026-09-28, accepted by Codex): `perimeter_le_minkowskiContent`
+(`KLS/Geometry/Perimeter/MetricBVMinkowski.lean`) proves the one-sided bridge
+`perimeter (ν : Measure V) B ≤ Isoperimetry.minkowskiContent ν B` for every probability law on a
+normed group with Borel structure and every measurable `B` (no inner product, completeness or
+finite dimension; empty set, top content and dimension zero included). Because the naive ramp
+`(1 - d(·, B)/r)₊` can have slope `1/r` on boundary mass, the proof uses the two-radius plateau
+ramp `plateauRamp B s t`, which is locally constant near `closure B` and outside `B^t`, with slope
+at most `(t - s)⁻¹` on the shell `{s ≤ d(·, B) ≤ t} ⊆ B^r \ B`; radii below the content
+quotient and the accepted Lipschitz bridge give the bound (`MetricBVMinkowskiAudit.lean`: an atom
+on the boundary of `[0, ∞)` has zero perimeter; finite content gives finite perimeter, no extra
+closure mass and a recovery sequence). One inequality only: the reverse inequality, the
+identification and the equality of Cheeger infima remain open.
+Phase 8 (2026-09-28, accepted by Codex): `KLS/Geometry/Cheeger/LocalSlopeCoarea.lean` proves
+the Minkowski coarea inequality with the actual local slope,
+`lintegral_minkowskiContent_superlevel_le_localSlope`:
+`∫ ν⁺({u ≥ t}) dt ≤ ∫ Energy.LocalSlope.apply u dν` for every probability law on a normed group
+with Borel structure and every globally Lipschitz `u` (no `ContDiff`, bounded values or bounded
+support). The layer-cake steps of the `C¹` proof are reused and the derivative bound is replaced by
+the proved growth-quotient bound `limsup_ofReal_ballSup_le_localSlope` (valid for every function);
+the `C¹` theorem, `minkowskiContent` and `ballSup` are unchanged. With phase 7,
+`lintegral_perimeter_superlevel_le_localSlope` and the `MetricBV.Test` forms
+`lintegral_minkowskiContent_superlevel_le_cost`, `lintegral_perimeter_superlevel_le_cost` bound the
+integrated superlevel content and BV perimeter by the test cost
+(`MetricBVMinkowskiCoareaAudit.lean`: constants, dimension zero, the unbounded identity on `ℝ`,
+`C¹` consistency, and the rationals under the Gaussian law with zero BV perimeter but infinite
+content, so the pointwise reverse inequality is false). A recovery prerequisite; not a pointwise
+content ≤ perimeter statement or a Cheeger identification.
+Phase 9 (2026-09-28, accepted by Codex): `exists_superlevel_selection`
+(`MetricBVMinkowski.lean`) selects, for a probability law on a normed group, a metric BV test `f`,
+any set `B`, `0 < δ < 1/2` and `ε > 0`, a level `t ∈ (δ, 1 - δ)` whose superlevel set
+`A = {t ≤ f}` is measurable with `minkowskiContent ν A ≤ cost f / (1 - 2δ) + ε` and
+`∫ ‖1_A - 1_B‖ₑ dν ≤ indicatorDistance f B / δ`. The level comes from the proved coarea inequality
+on `(δ, 1 - δ)` by positive slack (`exists_mem_Ioo_le_div_add_of_setLIntegral_le`, no
+measurability of the content in `t`); the error bound is pointwise
+(`enorm_indicator_superlevel_sub_le`) and integrated; tests have finite cost for finite measures
+(`cost_ne_top`) (`MetricBVSuperlevelSelectionAudit.lean`: endpoints, zero cost, zero error, the
+zero test, dimension zero, BV-perimeter form).
+Phase 10 (2026-09-28, accepted by Codex): for a probability law on a normed group and any `B`
+with `perimeter ν B < ⊤`, the explicit measurable sets `minkowskiRecoverySet ν hB n` (superlevel
+sets of epsilon recovery tests at widths `recoveryWidth n = 1/(n + 3)`, test error below
+`recoveryWidth n / (n + 1)`, cost and selection slacks `1/(n + 1)`) satisfy
+`∫ ‖1_{A_n} - 1_B‖ₑ dν ≤ 1/(n + 1) → 0` and
+`minkowskiContent ν A_n ≤ (perimeter + 1/(n + 1)) / (1 - 2 recoveryWidth n) + 1/(n + 1)`, and
+`tendsto_minkowskiContent_minkowskiRecoverySet` gives `minkowskiContent ν A_n → perimeter ν B`
+(also `perimeter ν A_n → perimeter ν B`). The lower bound is
+`perimeter_le_liminf_minkowskiContent` (lower semicontinuity with `perimeter ≤ content`), not a
+pointwise comparison with test costs (`MetricBVMinkowskiRecoveryAudit.lean`: measurable-`B`
+form, empty, null and full sets, dimension zero, infinite liminf contents at infinite
+perimeter). No mass constraint, pointwise `content = perimeter` or Cheeger infimum is claimed;
+the Cheeger identification remains open.
+Phase 11 (2026-09-28, accepted by Codex): mass continuity
+`tendsto_measure_of_tendsto_indicator` (`MetricBV.lean`; finite measure, measurable sets,
+`ν A ≤ ν B + ∫ ‖1_A - 1_B‖ₑ` both ways) gives `ν A_n → ν B` for the recovery sets of a
+measurable `B` of finite perimeter (`tendsto_measure_minkowskiRecoverySet`). If
+`0 < ν B < 1`, the masses eventually lie in `(0, 1)`
+(`eventually_measure_minkowskiRecoverySet_mem_Ioo`) and the symmetric quotients of
+`minkowskiConstant` and `symmetricConstant` converge,
+`minkowskiContent ν A_n / min (ν A_n) (1 - ν A_n) → perimeter ν B / min (ν B) (1 - ν B)` and
+likewise for `perimeter ν A_n` (`tendsto_minkowskiContent_div_min_minkowskiRecoverySet`,
+`tendsto_perimeter_div_min_minkowskiRecoverySet`, via `tendsto_div_min_one_sub`: continuity of
+`min` and `1 - ·`, nonzero finite limiting denominator; mass `1/2` needs no branch)
+(`MetricBVRatioRecoveryAudit.lean`: mass `0` outside the ratio theorem, half mass, the two-atom
+law `(δ₀ + δ₁)/2` with `B = Iic (1/2)`, no mass window in dimension zero). Masses `0` and `1` are
+excluded; no half-mass constraint on the recovery sets is asserted.
+Phase 12 (2026-09-28, independently accepted by Codex; scoped endpoint complete):
+`KLS/Geometry/Cheeger/BVIdentification.lean` proves `symmetricConstant_eq_minkowskiConstant`
+and `halfConstant_eq_minkowskiConstant`, `MetricBV.symmetricConstant ν =
+Isoperimetry.minkowskiConstant ν = MetricBV.halfConstant ν` for every probability law on a normed
+group with Borel structure, with both inequalities proved separately: termwise
+`perimeter ≤ content`, and each admissible BV quotient bounds the Minkowski infimum (`⊤` at
+infinite perimeter since the denominator is positive and finite; otherwise the limit of the
+Minkowski quotients of the eventually admissible recovery sets). Empty admissible families,
+`⊤` constants, zero ratios, dimension zero and mass `1/2` need no special case. With
+`constant_eq_minkowskiConstant_intrinsic`, both BV constants of the intrinsic coordinate law
+equal `Isoperimetry.constant μ` (`symmetricConstant_intrinsicMeasure_eq_constant`,
+`halfConstant_intrinsicMeasure_eq_constant`). `MetricBVCheegerIdentificationAudit.lean` checks
+both inequalities, dimension zero (all three constants `⊤`) and the two-atom law with
+`B = Iic (1/2)` (all three `0`). This is the local identification for the bounded-support
+relaxation only: `intrinsicHalfConstant` on the closed intrinsic support, the literature
+test-class equivalence, general metric-measure/RCD comparisons, and dimension-free KLS are not
+claimed; the chapter-45 prose now states exactly this.
+Phase 13 (2026-09-28, accepted by Codex; resumed workflow, partial progress toward the
+closed-support identification): `perimeter_closedSupportLaw_le` proves
+`perimeter (closedSupportLaw ν) (Subtype.val ⁻¹' B) ≤ perimeter (ν : Measure X) B` for every
+probability law on a second-countable metric space with Borel structure and every `B`, via the
+general `perimeter_comap_subtype_le` for measurable subsets and any measure: tests restrict
+(`Test.restrict`), their slopes do not increase along the isometric inclusion
+(`Energy.LocalSlope.apply_comp_le_of_isometry`), costs and indicator distances do not increase
+under `ν.comap Subtype.val` (`cost_restrict_le`, `indicatorDistance_restrict_le`), and actual
+approximating sequences restrict (`ApproximatingSequence.restrict`); an empty ambient class gives
+`⊤` on the right (`MetricBVSupportRestrictionAudit.lean`: the proper support `{0, 1}` of the
+two-atom law, where the trace of `Iic (1/2)` has perimeter `0`; empty set, whole space, top).
+Only this inequality is claimed: no reverse inequality, no closed-support constant equality.
+Phase 14 (2026-09-28, accepted by Codex): under an actual nonexpansive retraction
+`r : X → s` (`LipschitzWith 1 r`, `r z = z` on `s`) onto a measurable `s` with `ν sᶜ = 0`, for a
+finite Borel measure, `perimeter_eq_comap_subtype_of_retraction` proves
+`perimeter ν B = perimeter (ν.comap Subtype.val) (Subtype.val ⁻¹' B)`. The reverse inequality
+`perimeter_le_comap_subtype_of_retraction` composes actual trace approximating tests with `r`
+(globally Lipschitz, in general without bounded support, so not tests), uses the proved
+`Energy.LocalSlope.apply_comp_le_of_lipschitzWith_one` (collapsed points give zero secants), moves
+`L¹` errors and slope integrals to `s` by full mass, and restores tests through the finite-measure
+Lipschitz bridge; an empty trace class gives `⊤` (`MetricBVSupportRetractionAudit.lean`: the proper
+retract `projIcc 0 1` of `ℝ` for the uniform law on `[0, 1]`, the two-atom law and the zero
+measure; finiteness and vanishing transfer). This is a structural retraction theorem: equality for
+`closedSupportLaw` of arbitrary supports, the closed convex support projection and the
+`intrinsicHalfConstant` identification are not claimed.
+Phase 15 (2026-09-28, accepted by Codex): `KLS/Geometry/Perimeter/ConvexSupport.lean`
+discharges the retraction for convex supports. For a probability law on a real Hilbert space
+with Borel structure and second-countable topology whose closed support is convex,
+`perimeter_eq_closedSupportLaw_of_convex` proves
+`perimeter ν B = perimeter (closedSupportLaw ν) (Subtype.val ⁻¹' B)` for every `B`, assuming only
+`Convex ℝ (ν : Measure E).support`. The retraction is the actual nearest-point projection
+`nearestPoint` (existence of minimizers, variational inequality, fixed points
+`nearestPoint_coe`, `lipschitzWith_nearestPoint` from the two variational inequalities); the
+support is nonempty (nonzero law) and carries all mass (`Measure.measure_compl_support`); it may
+be unbounded or a single point (`MetricBVConvexSupportAudit.lean`: the uniform law on `[0, 1]`
+with support computed to be `Icc 0 1`, `dirac 0` with support `{0}` where every set has perimeter
+`0`, and sets with the same trace have equal perimeters). At phase 15, the `intrinsicHalfConstant` identification remained pending; phase 16 below
+completes it under the stated convexity/log-concavity hypotheses. Arbitrary non-convex supports
+remain outside the claim.
+Phase 16 (2026-09-28, accepted by Codex; scoped endpoint of the first coordination): in `BVIdentification.lean`, for a
+probability law on a real Hilbert space (Borel, second countable) with convex closed support,
+`halfConstant_closedSupportLaw_eq` and `symmetricConstant_closedSupportLaw_eq` prove
+`halfConstant (closedSupportLaw ν) = halfConstant ν` and likewise for `symmetricConstant`, through
+the proved correspondence of admissible sets: traces `Subtype.val ⁻¹' B` are measurable with mass
+`ν B` (`closedSupportLaw_preimage`, full mass of the support), images `Subtype.val '' A` are
+measurable with mass `closedSupportLaw ν A` and trace `A` (`image_closedSupportLaw`), and
+perimeters agree by phase 15; empty families, `⊤` perimeters, zero ratios, mass `1/2` and
+singleton supports need no special case. Hence `intrinsicHalfConstant_eq_constant`: for every
+finite-dimensional log-concave probability law `μ` (`hμ : LogConcave μ`, convexity of the
+intrinsic support from `hμ.intrinsicMeasure.convex_support`),
+`MetricBV.intrinsicHalfConstant μ = Isoperimetry.constant μ`, and the same for the symmetric
+closed-support constant; the structural form `intrinsicHalfConstant_eq_constant_of_convex` needs
+only convexity of the intrinsic support (`MetricBVIntrinsicIdentificationAudit.lean`: the uniform
+law on `[0, 1]`, `dirac 0` with all constants `⊤`, and an actual log-concave Dirac law). The
+`diagram:BV` node is marked formalized for exactly this log-concave/convex-support identification of
+the bounded-support relaxation. Not claimed: nonconvex supports, the Ambrosio--Di Marino--Gigli
+unrestricted test-class equivalence, general metric-measure/RCD comparisons, the Buser route
+beyond existing proofs, and dimension-free KLS.
+Phase 17 (2026-09-29, eight-hour window, accepted by Codex):
+`KLS/Geometry/Perimeter/LocalLipschitzTests.lean` extends the finite-measure test-class bridge
+to genuinely locally Lipschitz approximants (Mathlib's `LocallyLipschitz`) on a proper metric
+space: `perimeter_le_liminf_of_locallyLipschitz` and
+`exists_approximatingSequence_of_locallyLipschitz` give, for a finite Borel measure `ν`, any set
+`B` and locally Lipschitz `f n` with `∫⁻ ‖f n - 1_B‖ₑ dν → 0`, the explicit approximating
+sequence `Test.truncateOfLocallyLipschitz x₀ n (f n)` (clamp to `[0, 1]` times a radial cutoff)
+with no larger liminf slope integral, hence `perimeter ν B ≤ liminf ∫⁻ apply (f n) dν`. The
+pointwise slope and error bounds of the truncation hold for every real function
+(`apply_truncateFun_le`, `enorm_truncateFun_sub_le`); the truncation is globally Lipschitz
+because `f n` is Lipschitz on the compact closed ball carrying it
+(`LocallyLipschitzOn.exists_lipschitzOnWith_of_compact`) and pairs crossing the ball are
+controlled by `cutoff x₀ R x ≤ dist x y` (`lipschitzWith_truncateFun_of_locallyLipschitz`). No
+uniform Lipschitz constant, bounded values or bounded supports are assumed; the empty carrier,
+the zero measure and infinite slope integrals are included (`MetricBVLocalLipschitzAudit.lean`:
+`x ↦ x²`, locally but not globally Lipschitz, bounds the perimeter of `{1}` for the two-atom law
+by its slope integral `1`). Source scope: this is the locally Lipschitz variant of
+Ambrosio--Di Marino--Gigli's Remark 3.5 with global `L¹` convergence on proper spaces; their
+Definition 3.3 (globally Lipschitz, global `L¹`) was already covered one-sidedly by phase 3. Not
+claimed: `L¹_loc` convergence, the equality of their relaxation infimum with the perimeter used
+here, non-proper metric spaces.
+Phase 18 (2026-09-29, eight-hour window, accepted by Codex):
+`KLS/Geometry/Perimeter/TestClassRelaxation.lean` defines the actual sequence classes
+`LipschitzApproximatingSequence ν B` (globally Lipschitz terms, unrestricted values and
+supports, global `L¹` convergence to `1_B`; the class of Ambrosio--Di Marino--Gigli's
+Definition 3.3, with the one-point local Lipschitz constant `Energy.LocalSlope.apply`) and
+`LocallyLipschitzApproximatingSequence ν B` (Mathlib `LocallyLipschitz` terms, same
+convergence; the Remark 3.5 variant with global `L¹`), and the infima `lipschitzRelaxation`
+and `locallyLipschitzRelaxation` of the liminf slope integrals (`⊤` for an empty class; no
+perimeter or energy field). Inclusions give `locallyLipschitzRelaxation ≤ lipschitzRelaxation ≤
+perimeter` for every measure; `lipschitzRelaxation_eq_perimeter` holds for every finite Borel
+measure on a metric space (phase 3), and `locallyLipschitzRelaxation_eq_perimeter` for every
+finite Borel measure on a proper metric space (phase 17), with empty classes, infinite
+perimeter, the zero measure and the empty carrier passing through the infima. The closed
+support of a law on a proper space is proper (`ProperSpace.of_isClosed`), so both relaxations
+of `closedSupportLaw ν` equal its perimeter, and on the closed intrinsic support of every
+finite-dimensional probability law (`BVIdentification.lean`,
+`locallyLipschitzRelaxation_intrinsicClosedSupportLaw`) with no convexity or log-concavity; this
+test-class identity is distinct from the log-concave identification of the constant with
+`Isoperimetry.constant` (`MetricBVTestClassAudit.lean`: both directions used, `x ↦ x²` bounds
+the locally Lipschitz relaxation of `{1}` for the two-atom law by `1`, empty class `⊤`, `⊤`
+transfer, zero measure, empty carrier, the closed-support law of the uniform law on `[0, 1]`, the
+intrinsic instance). Not claimed: `L¹_loc` convergence, the locally Lipschitz class on
+non-proper spaces, Theorem 3.6.
+Phase 19 (2026-09-29, eight-hour window, accepted by Codex):
+`KLS/Geometry/Perimeter/RelaxedMinkowski.lean` defines `MinkowskiApproximatingSequence ν B`
+(measurable sets converging to `B` in global indicator `L¹(ν)`; only measurability and
+convergence) and the relaxed lower Minkowski content `relaxedMinkowskiContent ν B`, the infimum
+of `liminf (minkowskiContent ν (A n))` (`⊤` for an empty class; the existing liminf-radius outer
+content, not a limsup-radius upper content), for every probability law on a normed additive
+group with Borel structure. `relaxedMinkowskiContent_eq_perimeter` holds for every set (hence for
+every measurable set): `perimeter ≤` every liminf by phase-10 `perimeter_le_liminf_minkowskiContent`,
+and for finite perimeter the phase-10 recovery sets belong to the class with contents converging
+to the perimeter, infinite perimeter being handled by order. Consequences: the relaxed content of
+a measurable set is at most its outer content (constant sequence), and it is sequentially lower
+semicontinuous under indicator `L¹` convergence (`MetricBVRelaxedMinkowskiAudit.lean`: both
+directions with actual sequences, zero perimeter for `Iic (1/2)` under the two-atom law,
+dimension zero, `⊤` and empty-class transfers, and the rationals under the Gaussian law with
+relaxed content `0` but outer content `⊤`, so no pointwise equality is asserted). Not claimed:
+Lemma 2.1 or Theorem 3.6 of Ambrosio--Di Marino--Gigli in general metric measure spaces.
+Phase 20 (2026-09-29, eight-hour window, accepted by Codex): `LocalLipschitzTests.lean` now
+also covers bounded-ball convergence. For a finite Borel measure and a locally Lipschitz sequence
+`f n` with `∫⁻ ‖f n - 1_B‖ₑ dν → 0` on every closed ball (explicit hypothesis; no global `L¹`
+convergence, global Lipschitz constant or integrability of `f n`),
+`exists_approximatingSequence_of_locallyLipschitz_of_forall_closedBall` gives an actual
+approximating test sequence with no larger liminf slope integral on a proper space, and
+`perimeter_le_liminf_of_locallyLipschitz_of_forall_closedBall` the perimeter bound, with the
+compact-set premise as a corollary (`tendsto_setLIntegral_of_isCompact` proves that convergence
+on every closed ball gives convergence on every compact set; on a proper space closed balls are
+compact, so the two notions agree). The steps are separated: the finite-measure clamp lemma
+`tendsto_lintegral_clampUnit_of_forall_closedBall` (no properness; the clamp contracts errors and
+is bounded by one, a fixed radius captures all but half of each tolerance outside, and the ball
+integral is eventually below the other half — the un-clamped sequence is not claimed to converge
+globally), the slope contraction `apply_clampUnit_comp_le`, and phase 17 on the clamped sequence
+(`MetricBVLocalL1Audit.lean`: the local premise exercised with a perturbation by a locally
+Lipschitz function of no assumed integrability; the clamp lemma without properness; empty
+carrier, zero measure, empty set, the compact-set corollary). Not claimed: the general non-proper
+or infinite-measure `L¹_loc` theorem.
+Phase 21 (2026-09-29, eight-hour window, independently accepted by Codex; last segment of this chat):
+`TestClassRelaxation.lean` defines `CompactLocallyLipschitzApproximatingSequence ν B` (locally
+Lipschitz terms with bare indicator-`L¹` convergence on every compact set; no integrability
+field) and `compactLocallyLipschitzRelaxation ν B`, the infimum of liminf slope integrals (`⊤`
+for an empty class). Global-`L¹` sequences belong to the class, giving
+`compactLocallyLipschitzRelaxation ≤ locallyLipschitzRelaxation ≤ perimeter` for every measure;
+on a proper space with a finite measure the phase-20 bridge gives
+`compactLocallyLipschitzRelaxation_eq_perimeter`, with empty classes, `⊤`, the zero measure and
+the empty carrier passing through the infima. `forall_isCompact_iff_forall_closedBall` records the
+premise equivalence on proper spaces with both quantifiers intact. The closed-support law of a
+proper law and the closed intrinsic support of every finite-dimensional law
+(`compactLocallyLipschitzRelaxation_intrinsicClosedSupportLaw`, `BVIdentification.lean`) are
+covered without convexity or log-concavity, separately from the Cheeger identification
+(`MetricBVLocalL1RelaxationAudit.lean`). Not claimed: any infinite-measure or non-proper
+literature result.
+Phase 22 (2026-09-29, renewed eight-hour window, fresh session; independently accepted):
+`Cheeger/UpperMinkowskiContent.lean` defines `upperMinkowskiContent ν B`, the `limsup` along
+`𝓝[>] 0` of the radius quotient whose `liminf` is `minkowskiContent`, with
+`minkowskiContent_le_upperMinkowskiContent`, zero upper content under zero mass increments and
+for the empty set, and the radius mass `thickeningMass ν B s = (ν (thickening s B)).toReal`
+(nonnegative, at most one, monotone, zero for nonpositive radii, lossless `ofReal` conversion and
+the increment-quotient conversion with a positive denominator). At every radius `s` where the
+radius mass has a derivative `d`, `upperMinkowskiContent_thickening_le_of_hasDerivAt` bounds the
+upper content of `thickening s B` by `ENNReal.ofReal d` (the `t`-thickening of the
+`s`-thickening lies in the `(s + t)`-thickening; no content comparison is assumed), with the
+`deriv` form and `0 ≤ d`; `ae_differentiableAt_thickeningMass` is the monotone differentiation
+theorem, and `ae_upperMinkowskiContent_thickening_le_deriv` (also restricted to positive radii)
+combines them. Scope: probability laws on a normed group with a measurable structure, every set.
+`MinkowskiUpperThickeningAudit.lean` checks the combined a.e. statement, the pointwise bound,
+lower `≤` upper, the empty set, the bookkeeping, zero increments, the uniform law on `[0, 1]` with
+`B = {0}` (radius mass equal to the radius on `(0, 1]`, derivative `1`, upper content of the
+thickening exactly `1`, the bound attained) and the Dirac law at `0` (radius mass jumping at `0`,
+derivative `0` and zero upper content at every positive radius). Not claimed: absolute continuity
+of the radius mass, any integrated upper-content bound, lower-to-upper recovery or relaxed-upper
+identity, Lemma 2.1 in general metric measure spaces, RCD/Buser/KLS conclusions.
 
 ## Precommit audit and placement plan (2026-09-26)
 

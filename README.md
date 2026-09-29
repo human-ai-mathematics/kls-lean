@@ -12,7 +12,7 @@ recorded explicitly and checked against the original goal; see the
 [current lifecycle](research/ledger-schema.md#lifecycle). Earlier freeze records remain dated
 review snapshots.
 
-## Current status (2026-09-27)
+## Current status (2026-09-29)
 
 The ledger contains **26 Lean-certified nodes**. The former coarea, Sard, Cheeger-infimum
 and Energy WIP modules have been closed and removed. **One explicit target hole remains**:
@@ -32,10 +32,48 @@ log-concave probability law: `C_P^lit(μ) ≤ 4 Ψ_KLS(μ)²` and
 Cheeger test stability and intrinsic-coordinate transport; it includes zero-dimensional
 affine support and infinite optima. This does not prove a dimension-free KLS bound.
 The bounded-support metric BV perimeter and closed-support probability law now have
-Lean interfaces. Equivalence with the unrestricted Lipschitz-test perimeter, the
-general BV--Minkowski identification, and its Cheeger-infimum equality remain
-literature comparisons. The current formalization handoff is this BV bridge;
-the dimension-free KLS routes remain open.
+Lean interfaces. Complement symmetry is formalized for finite Borel measures on
+metric spaces, including the actual closed intrinsic support law; a Lebesgue-measure
+counterexample shows why the finiteness hypothesis cannot simply be dropped.
+The half-mass and symmetric BV Cheeger constants are proved equal on every probability
+metric space. For a finite measure, globally Lipschitz approximants converging in global
+`L¹` may replace bounded-support tests, bounding the perimeter by their liminf slope integral;
+on a proper metric space the same holds for locally Lipschitz approximants, even under `L¹` convergence on every closed
+ball only, and the relaxation
+infima over these two classes equal the perimeter (finite measures; the locally Lipschitz class
+on proper spaces, in particular on the closed intrinsic support of every finite-dimensional law); the infimum over
+locally Lipschitz approximants converging in `L¹` on every compact set equals it as well.
+Below any threshold above the perimeter, single tests arbitrarily close in `L¹` exist, and every
+finite perimeter is the limit of the costs of an explicitly selected approximating sequence.
+The perimeter is lower semicontinuous under global `L¹` convergence of measurable sets, and for
+every probability law on a normed group it is at most the outer Minkowski content of every
+measurable set (one inequality; the pointwise reverse fails in general). The Minkowski coarea
+inequality holds with the actual local slope for every globally Lipschitz function, bounding the
+integrated superlevel content and BV perimeter of every metric BV test by its cost; a
+quantitative superlevel selection gives, for every test, a measurable superlevel set with
+content at most `cost / (1 - 2δ) + ε` and indicator error at most the test's error over `δ`.
+For every set of finite BV perimeter, explicit measurable superlevel sets converge to it in
+`L¹` with Minkowski contents converging to its perimeter (Minkowski recovery); for measurable
+sets of mass strictly between `0` and `1` their masses converge and eventually stay in `(0, 1)`,
+and their symmetric Cheeger quotients converge to the BV quotient. Consequently the symmetric
+and half-mass BV Cheeger constants equal the Minkowski Cheeger constant for every probability law
+on a normed space, and for the intrinsic coordinate law they equal the isoperimetric constant
+`Isoperimetry.constant` (an equality of infima, not of individual perimeters and contents).
+Restriction to the closed measure support does not increase the metric BV perimeter (one
+inequality), with equality when a nonexpansive retraction onto a full-mass subset exists, in
+particular (via the nearest-point projection) for every law on a Hilbert space with convex support.
+Hence, for every finite-dimensional log-concave probability law, the metric BV Cheeger constant
+on the closed intrinsic support equals `Isoperimetry.constant` (convexity of the log-concave
+intrinsic support is used). The relaxed lower Minkowski content, an infimum over measurable sets converging in `L¹`, equals
+the perimeter for every probability law on a normed space (an equality of infima). The upper
+Minkowski content (the `limsup` of the same radius quotient) is at least the lower content; for
+every set, the real mass of its open `s`-thickening is monotone in `s`, differentiable at
+Lebesgue-almost every radius, and at every differentiability radius the upper content of that
+thickening is at most the derivative (no absolute continuity of the radius mass, integrated bound
+or lower-to-upper identity is claimed).
+Ambrosio--Di Marino--Gigli's `L¹_loc` variant beyond proper spaces with finite measures, their Theorem 3.6 in
+general metric measure spaces, nonconvex supports and general metric-measure BV--Minkowski comparisons remain
+literature comparisons; the dimension-free KLS routes remain open.
 
 For the actual full-dimensional log-concave weighted-gradient heat semigroup, an explicit
 form-domain Poincaré inequality with `C > 0` now gives centered squared `L²` decay
@@ -266,6 +304,7 @@ Probability pushforwards and L² pullbacks occupy their own layers. See [the nam
 | Proved ambient/intrinsic and smooth-test/relaxed comparisons | [Comparison guide](formalization/FunctionalInequalities/Poincare/Euclidean/README.md) |
 | Mathematical definitions and scope | [LEAN_DESIGN.md](LEAN_DESIGN.md) |
 | Current work and proof handoff | [HANDOFF.md](HANDOFF.md) |
+| Senior collaborator's Moment-map spectral route | [Spectral route handoff](research/handoffs/moment-map-spectral.md) |
 | Node statements and certification status | [research/a-series/ledger.yaml](research/a-series/ledger.yaml) |
 | Node-specific Lean entry points | [solutions/README.md](solutions/README.md) |
 | Review history | [research/decisions/](research/decisions/) and [research/explorations/](research/explorations/) |

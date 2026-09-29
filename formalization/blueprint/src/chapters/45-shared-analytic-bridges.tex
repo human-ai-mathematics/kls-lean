@@ -281,10 +281,52 @@ A published input or an upstream reviewed proof receives no \texttt{leanok} mere
   is the bounded-support \texttt{Lip\_b} class used by De Ponti--Mondino; the
   sequential perimeter definition, actual closed-support law, finite-space complement
   symmetry, and zero-dimensional half-mass test convention have local Lean interfaces
-  (2026-09-26). The equivalence with the unrestricted Lipschitz-test perimeter in
-  Ambrosio--Di Marino--Gigli is not a local Lean theorem. Complement symmetry on an
-  arbitrary unbounded support, their relaxation and recovery theorem (including Lemma~2.1),
-  and the final BV--Minkowski Cheeger-infimum equality remain literature comparisons.
+  (2026-09-26). Complement symmetry also holds for every finite measure on every metric
+  space, in particular for the closed-support law on an arbitrary unbounded support
+  (2026-09-28): the reflection of a test is clamped to $[0,1]$ and cut off radially, and the
+  errors are masses outside large balls. Finiteness is necessary, since for Lebesgue measure on
+  $\mathbb R$ the empty set has perimeter zero and the line has infinite perimeter. For a
+  finite measure, globally Lipschitz approximants with arbitrary constants, values and supports,
+  converging to the indicator in the global $L^1(\nu)$ distance, may replace bounded-support
+  tests: clamping to $[0,1]$ and a radial cutoff give tests with the same limit and no larger
+  liminf cost, so the perimeter is at most that liminf (2026-09-28). These are the approximants
+  of Definition~3.3 of \cite{AmbrosioDiMarinoGigli2017Minkowski} (globally Lipschitz, global
+  $L^1$ convergence). On a proper metric space the same bound holds for locally Lipschitz
+  approximants with global $L^1$ convergence (2026-09-29), the variant of their Remark~3.5: the
+  truncation is carried by a compact closed ball, on which a locally Lipschitz function is
+  Lipschitz. For every finite Borel measure the relaxation infimum over the approximants of
+  Definition~3.3 equals the perimeter used here, and on a proper space so does the infimum over
+  locally Lipschitz approximants with global $L^1$ convergence, in particular on the closed
+  intrinsic support of every finite-dimensional law (2026-09-29). On a proper space, locally Lipschitz approximants
+  converging in $L^1$ on every closed ball (equivalently on every compact set) also bound the
+  perimeter after clamping, and the infimum over such approximants equals the perimeter
+  (2026-09-29); the $L^1_{\mathrm{loc}}$ variant beyond proper spaces
+  and finite measures is not a local Lean theorem. The equality of the half-mass and symmetric BV Cheeger constants
+  holds for every probability measure on a metric space (2026-09-28), by replacing a test set
+  of mass above one half with its complement. For this bounded-support sequential relaxation the
+  BV--Minkowski Cheeger-infimum equality is a local Lean proof (2026-09-28) for every probability
+  law on a normed space: perimeter is at most outer Minkowski content, and measurable superlevel
+  sets of recovery tests, whose masses, contents and quotients converge, give the reverse
+  inequality; hence the symmetric and half-mass BV constants of the intrinsic coordinate law equal
+  $h_\mu$. This is an equality of infima. On the closed intrinsic support $K$ itself, when the
+  intrinsic law has convex support, the nearest-point projection onto $K$ is a nonexpansive
+  retraction, so each set and its trace on $K$ have equal perimeter and mass; for every
+  finite-dimensional log-concave law this gives $h_{\mathrm{BV}}(K,\nu)=h_\mu$ as a local Lean
+  proof (2026-09-28), for the bounded-support relaxation used here. The relaxed lower Minkowski
+  content, the infimum of the liminf of outer Minkowski contents over measurable sets converging
+  in $L^1$, equals the perimeter used here for every probability law on a normed space
+  (2026-09-29); this is an equality of infima, and the pointwise inequality between perimeter and
+  outer content can be strict. The upper Minkowski content, the $\limsup$ of the same radius
+  quotient, is at least the lower content; for every set the real mass of its open
+  $s$-thickening is monotone in $s$, hence differentiable at Lebesgue-almost every radius, and at
+  every radius where it has a derivative $d$ the upper content of that thickening is at most $d$
+  (2026-09-29, probability laws on normed groups): the $t$-thickening of the $s$-thickening lies
+  in the $(s+t)$-thickening, so each content quotient is bounded by the right difference quotient
+  of the radius mass. No absolute continuity of the radius mass is asserted (jumps and singular
+  variation remain possible), and the integrated upper-content bound and the lower-to-upper
+  identities are not local Lean theorems. Theorem~3.6 of Ambrosio--Di Marino--Gigli (with the
+  remainder of Lemma~2.1) in general metric measure spaces, nonconvex supports and general
+  metric-measure comparisons remain literature comparisons.
   The Lean proof of the numerical inequalities uses the proved intrinsic Minkowski and
   relative-perimeter infimum equality instead.
 \end{proof}

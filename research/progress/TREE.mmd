@@ -26,7 +26,7 @@ flowchart LR
     FRONT["✓ Density Cheeger<br/>Identification"]
     CB["✓ Cheeger–Buser<br/>4 and pi bounds"]
     MINK["✓ Minkowski coarea"]
-    BV["◐ NEXT: Metric BV<br/>identification"]
+    BV["✓ Closed-support BV<br/>identification (log-concave)"]
     end
     subgraph HEATPROGRAM["Buser analytic program — dotted links show related work"]
     SEMI["✓ Weighted-gradient<br/>Heat semigroup"]
@@ -130,9 +130,9 @@ flowchart LR
     HEAT -.-> CB
     VFULL -.-> VLIP
     classDef done fill:#dbeafe,stroke:#2563eb,color:#1e3a8a;
-    class ENERGY,F4,MT,FP,FC,EQ,NORM,DENS,FRONT,CB,ONE,CONST,FORMS,MEAS,GRAPH,REG,CRIT,C1,WHIT,LIP,GG,REC,FWD,SARD,SCI,CUT,REV,MINK,FLOG,VREG,VZERO,VR123,VR4,VFULL,SEMI,MARKOV,DECAY,GAUSS,GSTAB,VLIP done;
+    class ENERGY,F4,MT,FP,FC,EQ,NORM,DENS,FRONT,CB,ONE,CONST,FORMS,MEAS,GRAPH,REG,CRIT,C1,WHIT,LIP,GG,REC,FWD,SARD,SCI,CUT,REV,MINK,BV,FLOG,VREG,VZERO,VR123,VR4,VFULL,SEMI,MARKOV,DECAY,GAUSS,GSTAB,VLIP done;
     classDef partial fill:#fff3df,stroke:#c88719,color:#66420d;
-    class BV,FAND,BE,HEAT partial;
+    class FAND,BE,HEAT partial;
     classDef todo fill:#fee2e2,stroke:#dc2626,color:#991b1b;
     class MG,EG,KLS,MC,EC,SC,FG,SG,MH,EAND,SAND,MAND todo;
     classDef logic fill:#fff,stroke:#555,color:#222;
@@ -174,7 +174,7 @@ flowchart LR
     click CUT href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Cheeger/DistanceCutoff.lean" "Distance cutoffs" _blank
     click REV href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Cheeger/Equality.lean" "h_S ≤ h_M" _blank
     click MINK href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Cheeger/MinkowskiContent.lean" "Minkowski coarea" _blank
-    click BV href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Perimeter/MetricBV.lean" "NEXT: Metric BV — identification" _blank
+    click BV href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Cheeger/BVIdentification.lean" "Closed-support BV — identification (log-concave)" _blank
     click EAND href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/route-composition.yaml" "AND — Eldan route" _blank
     click SAND href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/route-composition.yaml" "AND — Spectral route" _blank
     click MAND href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/route-composition.yaml" "AND — CMH route" _blank

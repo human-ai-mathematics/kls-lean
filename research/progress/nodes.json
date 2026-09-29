@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "last_updated": "2026-09-27",
+  "last_updated": "2026-09-29",
   "nodes": {
     "ass:cmh-recovery-envelope": {
       "description": "Seek a regular moment-map approximation of every centered log-concave law with a dimension-free CMH bound.",
@@ -705,19 +705,20 @@
       }
     },
     "diagram:BV": {
-      "description": "Metric BV perimeter and half-mass Cheeger interfaces on the actual closed intrinsic support are defined; finite-space complement symmetry and the zero-dimensional convention are proved. General complement symmetry and the relaxed BV--Minkowski Cheeger identification remain open.",
+      "description": "Metric BV perimeter and half-mass Cheeger interfaces on the actual closed intrinsic support are defined. Complement symmetry is formalized for finite Borel measures on metric spaces, including the closed intrinsic support law; the zero-dimensional convention and an infinite-measure counterexample are proved. The half-mass and symmetric BV Cheeger constants are proved equal on every probability metric space. For a finite measure, globally Lipschitz approximants converging in global L1 may replace bounded-support tests and bound the perimeter, and on a proper metric space so may locally Lipschitz approximants (even under L1 convergence on every closed ball only, through clamping), the relaxation infima over both classes being equal to the perimeter (finite measures; the locally Lipschitz class on proper spaces with global or compact-set L1 convergence, in particular on the closed intrinsic support of every finite-dimensional law); epsilon recovery tests exist below every threshold above the perimeter, and every finite perimeter is the limit of the costs of an explicitly selected approximating sequence (for any Borel measure; nothing is claimed for infinite perimeter); the perimeter is sequentially lower semicontinuous under global L1 convergence of measurable set indicators for every Borel measure; for every probability law on a normed group it is at most the outer Minkowski content of every measurable set (one inequality, via two-radius plateau ramps), and the Minkowski coarea inequality holds with the actual local slope for every globally Lipschitz function, bounding the integrated superlevel content and BV perimeter of every test by its cost; every test has a quantitative superlevel selection with content at most cost/(1-2 delta) + epsilon and indicator error at most its L1 error over delta. For every set of finite BV perimeter, explicit measurable superlevel sets converge to it in L1 with Minkowski contents converging to its perimeter (Minkowski recovery), and the relaxed lower Minkowski content, the infimum of liminf outer contents over measurable sets converging in L1, equals the perimeter for every set; for measurable sets of mass strictly between 0 and 1 the recovery masses converge, eventually stay in (0, 1), and the symmetric Cheeger quotients converge to the BV quotient. The symmetric and half-mass BV Cheeger constants equal the Minkowski Cheeger constant for every probability law on a normed space, and for the intrinsic coordinate law they equal the isoperimetric constant (an equality of infima; the pointwise reverse inequality is false in general). Restriction to the closed measure support does not increase the metric BV perimeter of the trace of a set (one inequality, via restricted tests and the isometric-inclusion slope bound), with equality under an actual nonexpansive retraction onto a full-mass measurable subset, in particular, via the nearest-point projection, for every probability law on a Hilbert space with convex closed support, where the half-mass and symmetric BV Cheeger constants of the law and of its closed-support law agree. For every finite-dimensional log-concave probability law, the BV Cheeger constant on the closed intrinsic support therefore equals the isoperimetric constant. The upper Minkowski content, the limsup of the same radius quotient, is at least the lower content; for every set the real mass of its open s-thickening is monotone, hence differentiable at Lebesgue-almost every radius, and at every differentiability radius the upper content of that thickening is at most the derivative (probability laws on normed groups; no absolute continuity of the radius mass, integrated bound or lower-to-upper identity is claimed). This ✓ covers exactly that log-concave (convex-support) identification for the bounded-support relaxation; L1_loc convergence beyond proper spaces with finite measures, the literature relaxed Minkowski content theorem in general metric measure spaces, nonconvex supports, general metric-measure/RCD comparisons, the Buser route beyond existing proofs and dimension-free KLS are not claimed.",
       "assessment": {
-        "state": "partial",
+        "state": "formalized",
         "evidence": {
-          "kind": "reviewed_progress",
-          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/research/decisions/2026-09-26-metric-bv-perimeter-interface.md"
+          "kind": "local_strict_client",
+          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Cheeger/BVIdentification.lean",
+          "source_sha256": "ae2af87591f1658b83e77833e09df4d115a804c5cb08d5a87843f9a5fa5a4871"
         },
         "kind": "auxiliary"
       },
       "diagram": {
         "id": "BV",
-        "label": "NEXT: Metric BV<br/>identification",
-        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Perimeter/MetricBV.lean",
+        "label": "Closed-support BV<br/>identification (log-concave)",
+        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Cheeger/BVIdentification.lean",
         "shape": "box"
       }
     },

@@ -319,7 +319,7 @@
           },
           {
             "path": "formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex",
-            "sha256": "82dc4d4f75e8638b581c9e250a5c3a7f802d2e446a3e80e670865ddb776a6d71"
+            "sha256": "c363f05281728d609e02ae29e40534ee9411571e9d79db7ef83d3b89b4d3b6f2"
           },
           {
             "path": "formalization/.lake/packages/mathlib/Mathlib/Analysis/InnerProductSpace/LaxMilgram.lean",
@@ -955,7 +955,7 @@
           },
           {
             "path": "formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex",
-            "sha256": "82dc4d4f75e8638b581c9e250a5c3a7f802d2e446a3e80e670865ddb776a6d71"
+            "sha256": "c363f05281728d609e02ae29e40534ee9411571e9d79db7ef83d3b89b4d3b6f2"
           }
         ],
         "gaps": []
@@ -1486,7 +1486,7 @@
         "evidence": [
           {
             "path": "formalization/FunctionalInequalities/Energy/LocalSlope/Basic.lean",
-            "sha256": "eff71e85ef7e219f287069149de867f49846ca8aae758b6f7129872202f83219"
+            "sha256": "324be747b03eb4d1fd172a4760c7c528127a6e95337841ba4200e8db9c76029e"
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/Definitions.lean",
@@ -1550,7 +1550,7 @@
         "evidence": [
           {
             "path": "formalization/FunctionalInequalities/Energy/LocalSlope/Basic.lean",
-            "sha256": "eff71e85ef7e219f287069149de867f49846ca8aae758b6f7129872202f83219"
+            "sha256": "324be747b03eb4d1fd172a4760c7c528127a6e95337841ba4200e8db9c76029e"
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/Definitions.lean",
@@ -1626,7 +1626,7 @@
           },
           {
             "path": "formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex",
-            "sha256": "82dc4d4f75e8638b581c9e250a5c3a7f802d2e446a3e80e670865ddb776a6d71"
+            "sha256": "c363f05281728d609e02ae29e40534ee9411571e9d79db7ef83d3b89b4d3b6f2"
           }
         ],
         "gaps": []
@@ -2174,7 +2174,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/Energy/LocalSlope/Basic.lean",
-            "sha256": "eff71e85ef7e219f287069149de867f49846ca8aae758b6f7129872202f83219"
+            "sha256": "324be747b03eb4d1fd172a4760c7c528127a6e95337841ba4200e8db9c76029e"
           },
           {
             "path": "formalization/FunctionalInequalities/Energy/LocalSlope/Gradient.lean",
@@ -2602,7 +2602,7 @@
           },
           {
             "path": "formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex",
-            "sha256": "82dc4d4f75e8638b581c9e250a5c3a7f802d2e446a3e80e670865ddb776a6d71"
+            "sha256": "c363f05281728d609e02ae29e40534ee9411571e9d79db7ef83d3b89b4d3b6f2"
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/Isoperimetry.lean",
@@ -3426,7 +3426,7 @@
         "evidence": [
           {
             "path": "formalization/FunctionalInequalities/Energy/LocalSlope/Basic.lean",
-            "sha256": "eff71e85ef7e219f287069149de867f49846ca8aae758b6f7129872202f83219"
+            "sha256": "324be747b03eb4d1fd172a4760c7c528127a6e95337841ba4200e8db9c76029e"
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/Definitions.lean",

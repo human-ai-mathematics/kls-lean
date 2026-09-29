@@ -116,7 +116,7 @@ See the [full tables and normalization](LITERATURE.md#constant-conventions).
 ## Proof progress tree
 
 <!-- BEGIN GENERATED DATE -->
-Last updated: **2026-09-27**.
+Last updated: **2026-09-29**.
 
 ![✓ Formalized in Lean](badges/formalized.svg) · ![○ Not yet formalized](badges/pending.svg) · ![◐ Partially formalized](badges/partial.svg) · ![— Excluded: refuted](badges/excluded.svg)
 <!-- END GENERATED DATE -->
@@ -124,8 +124,36 @@ Scalar sharp Sard, vector coarea through locally Lipschitz maps, the Cheeger inf
 heat-semigroup construction, and the full numerical Cheeger–Buser comparison are formalized
 in Lean. The general π bound uses actual Gaussian smoothing and a Cheeger test stability
 argument; no individual-domain perimeter limit is asserted. **Current handoff:**
-complete the metric BV perimeter comparison, starting with general complement symmetry
-and the relaxed BV--Minkowski Cheeger-infimum bridge. The four dimension-free
+the scoped metric BV comparison has passed independent review, including closed-support
+identification for finite-dimensional log-concave laws. The eight-hour continuation has accepted
+the exact test-class infima (global Lipschitz on finite-measure metric spaces, local Lipschitz
+on proper spaces), the normed-space relaxed lower Minkowski set infimum, and compact-local L1 relaxation on proper finite-measure spaces. Phase22 is independently accepted. Phase23 integrated upper-content bound is prepared but undelivered: control is paused because the Mac requires manual unlock. The renewed eight-hour window still ends at11:13:30 Asia/Shanghai on2026-09-29. Phase22 (the upper Minkowski content as the `limsup` of the lower content's radius quotient, lower `≤` upper, the monotone radius mass of thickenings, its Lebesgue-a.e. differentiability by the monotone differentiation theorem, and the derivative bound on the upper content of each thickening, for probability laws on normed groups; no absolute continuity, integrated bound or lower-to-upper identity) is independently accepted with 165 frozen workflow gates passed. Complement symmetry for finite Borel
+measures, including the closed intrinsic support law, is formalized in Lean, and so is
+the equality of the half-mass and symmetric BV Cheeger constants on every probability
+metric space; for a finite measure, globally Lipschitz approximants converging in global
+`L¹` may replace bounded-support tests (on a proper metric space also locally Lipschitz
+approximants, even under `L¹` convergence on every closed ball only), epsilon recovery tests exist below every threshold
+above the perimeter, and every finite perimeter is the limit of the costs of an explicitly
+selected approximating sequence; the perimeter is lower semicontinuous under global `L¹`
+convergence of measurable sets and is at most the outer Minkowski content of every measurable
+set for every probability law (one inequality); the Minkowski coarea inequality holds with the
+actual local slope for every globally Lipschitz function, and every test has a quantitative
+superlevel selection (content at most `cost / (1 - 2δ) + ε`, indicator error at most its error
+over `δ`), and every set of finite BV perimeter has explicit measurable Minkowski recovery sets
+(`L¹` convergence, contents converging to the perimeter), whose masses and, for mass in
+`(0, 1)`, symmetric Cheeger quotients converge. Consequently the symmetric and half-mass BV
+Cheeger constants equal the Minkowski Cheeger constant for every probability law on a normed
+space, and for the intrinsic coordinate law they equal the isoperimetric constant (an equality of
+infima). Restriction to the closed measure support does not increase the metric BV perimeter
+(one inequality), with equality under a nonexpansive retraction onto a full-mass subset, in
+particular for every law on a Hilbert space with convex closed support; for every
+finite-dimensional log-concave law the BV Cheeger constant on the closed intrinsic support
+therefore equals the isoperimetric constant. The relaxation infimum over globally Lipschitz
+approximants equals this perimeter for finite measures, and over locally Lipschitz
+approximants on proper spaces (with global or compact-set `L¹` convergence), in particular on
+the closed intrinsic support, and the relaxed
+lower Minkowski set infimum equals it for probability laws on normed spaces; `L¹_loc`
+convergence beyond proper spaces with finite measures, and nonconvex supports remain open. The four dimension-free
 [KLS routes](#proof-progress-tree) remain open.
 These statuses record local proofs and do not claim a remote CI receipt.
 Upstream mathematical proofs alone do not earn a ✓.
@@ -165,7 +193,7 @@ flowchart LR
     FRONT["✓ Density Cheeger<br/>Identification"]
     CB["✓ Cheeger–Buser<br/>4 and pi bounds"]
     MINK["✓ Minkowski coarea"]
-    BV["◐ NEXT: Metric BV<br/>identification"]
+    BV["✓ Closed-support BV<br/>identification (log-concave)"]
     end
     subgraph HEATPROGRAM["Buser analytic program — dotted links show related work"]
     SEMI["✓ Weighted-gradient<br/>Heat semigroup"]
@@ -269,9 +297,9 @@ flowchart LR
     HEAT -.-> CB
     VFULL -.-> VLIP
     classDef done fill:#dbeafe,stroke:#2563eb,color:#1e3a8a;
-    class ENERGY,F4,MT,FP,FC,EQ,NORM,DENS,FRONT,CB,ONE,CONST,FORMS,MEAS,GRAPH,REG,CRIT,C1,WHIT,LIP,GG,REC,FWD,SARD,SCI,CUT,REV,MINK,FLOG,VREG,VZERO,VR123,VR4,VFULL,SEMI,MARKOV,DECAY,GAUSS,GSTAB,VLIP done;
+    class ENERGY,F4,MT,FP,FC,EQ,NORM,DENS,FRONT,CB,ONE,CONST,FORMS,MEAS,GRAPH,REG,CRIT,C1,WHIT,LIP,GG,REC,FWD,SARD,SCI,CUT,REV,MINK,BV,FLOG,VREG,VZERO,VR123,VR4,VFULL,SEMI,MARKOV,DECAY,GAUSS,GSTAB,VLIP done;
     classDef partial fill:#fff3df,stroke:#c88719,color:#66420d;
-    class BV,FAND,BE,HEAT partial;
+    class FAND,BE,HEAT partial;
     classDef todo fill:#fee2e2,stroke:#dc2626,color:#991b1b;
     class MG,EG,KLS,MC,EC,SC,FG,SG,MH,EAND,SAND,MAND todo;
     classDef logic fill:#fff,stroke:#555,color:#222;
@@ -313,7 +341,7 @@ flowchart LR
     click CUT href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Cheeger/DistanceCutoff.lean" "Distance cutoffs" _blank
     click REV href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Cheeger/Equality.lean" "h_S ≤ h_M" _blank
     click MINK href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Cheeger/MinkowskiContent.lean" "Minkowski coarea" _blank
-    click BV href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Perimeter/MetricBV.lean" "NEXT: Metric BV — identification" _blank
+    click BV href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Cheeger/BVIdentification.lean" "Closed-support BV — identification (log-concave)" _blank
     click EAND href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/route-composition.yaml" "AND — Eldan route" _blank
     click SAND href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/route-composition.yaml" "AND — Spectral route" _blank
     click MAND href "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/route-composition.yaml" "AND — CMH route" _blank
@@ -351,8 +379,11 @@ flowchart LR
   law, including zero-dimensional affine support and extended optima. This comparison
   feeds the Eldan route and does not alone prove KLS.
 - The metric BV perimeter and half-mass Cheeger interfaces are partially formalized.
-  General complement symmetry, the relaxation/recovery theorem, and identification with
-  the existing Minkowski Cheeger constant are not local Lean proofs.
+  Complement symmetry is formalized for finite Borel measures, including the closed
+  intrinsic support law, and the half-mass and symmetric BV Cheeger constants are proved
+  equal. Globally Lipschitz, globally `L¹`-convergent approximants bound the perimeter for
+  finite measures. The relaxation/recovery theorem and identification with the existing
+  Minkowski Cheeger constant remain unproved locally.
 - There are 26 registered certificates and one isolated `KLS.kls` target hole. The former WIP
   modules are removed; the target is outside every certificate closure.
 - CMH sufficiency requires a regular recovery sequence; it is not an equivalence.
@@ -433,7 +464,7 @@ The [full node register](STATUS.md) separately lists definitions and registered 
 | Distance cutoffs | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Cheeger/DistanceCutoff.lean) |
 | h_S ≤ h_M | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Cheeger/Equality.lean) |
 | Minkowski coarea | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Cheeger/MinkowskiContent.lean) |
-| NEXT: Metric BV — identification | ![◐ Partially formalized](badges/partial.svg) | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Perimeter/MetricBV.lean) |
+| Closed-support BV — identification (log-concave) | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Cheeger/BVIdentification.lean) |
 | Fiber log-concavity | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/ConditionalFiber.lean) |
 | Vector coarea — Regular region | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/Vector/Coarea/Regular.lean) |
 | Vector slices — Zero derivative | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/Vector/Slice/Critical.lean) |
@@ -522,7 +553,7 @@ Every node has a link. If diagram links are disabled in your viewer, use this di
 | Distance cutoffs | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Cheeger/DistanceCutoff.lean) |
 | h_S ≤ h_M | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Cheeger/Equality.lean) |
 | Minkowski coarea | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Cheeger/MinkowskiContent.lean) |
-| NEXT: Metric BV — identification | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Perimeter/MetricBV.lean) |
+| Closed-support BV — identification (log-concave) | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Cheeger/BVIdentification.lean) |
 | AND — Eldan route | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/route-composition.yaml) |
 | AND — Spectral route | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/route-composition.yaml) |
 | AND — CMH route | [Source](https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/route-composition.yaml) |

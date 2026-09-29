@@ -64,6 +64,14 @@ import FunctionalInequalities.Analysis.Lipschitz.Local
 import FunctionalInequalities.Analysis.Sard.Sharp
 import FunctionalInequalities.KLS.Geometry.Cheeger.Equality
 import FunctionalInequalities.KLS.Geometry.Cheeger.BVConstant
+import FunctionalInequalities.KLS.Geometry.Cheeger.LocalSlopeCoarea
+import FunctionalInequalities.KLS.Geometry.Perimeter.MetricBVMinkowski
+import FunctionalInequalities.KLS.Geometry.Cheeger.BVIdentification
+import FunctionalInequalities.KLS.Geometry.Perimeter.ConvexSupport
+import FunctionalInequalities.KLS.Geometry.Perimeter.LocalLipschitzTests
+import FunctionalInequalities.KLS.Geometry.Perimeter.TestClassRelaxation
+import FunctionalInequalities.KLS.Geometry.Perimeter.RelaxedMinkowski
+import FunctionalInequalities.KLS.Geometry.Cheeger.UpperMinkowskiContent
 import FunctionalInequalities.KLS.Geometry.Cheeger.Inequality
 import FunctionalInequalities.Energy.Euclidean.Slope.Comparison
 import FunctionalInequalities.Energy.Euclidean.Slope.Recovery
