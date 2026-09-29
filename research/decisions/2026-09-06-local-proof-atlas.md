@@ -1,7 +1,7 @@
 # Local proof atlas and literal KLS target
 
 Date: 2026-09-06 (Asia/Shanghai). The owner approved local implementation of the architecture
-review with “这个工作我们先在本地进行，开始吧”. Work remains on the existing local checkout;
+review with “Let us do this work locally first; go ahead”. Work remains on the existing local checkout;
 no commit, push, branch change, remote dispatch or publication is part of this change.
 
 ## Change and provenance

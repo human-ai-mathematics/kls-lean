@@ -1,41 +1,50 @@
-# Poincaré 基础：从概率测度到最优常数
+# Poincaré foundations: from probability measures to optimal constants
 
-这套基础为实 `L²` 上的 Poincaré 不等式提供可复用接口。给定概率测度 `μ` 和能量 `E`，它定义
-最优常数，并证明有限常数有效当且仅当它控制最优常数。具体欧氏实现选用仿射支撑上的光滑
-梯度能量，经 `L²` relaxation 后拉回原空间。
+These foundations provide reusable interfaces for Poincaré inequalities on real `L²`. Given a
+probability measure `μ` and energy `E`, they define the optimal constant and prove that a finite
+constant is valid exactly when it bounds the optimum. The concrete Euclidean implementation
+uses smooth-gradient energy on the affine support, relaxes it in `L²`, and pulls it back to the
+original space.
 
-**当前已证明闭二次型链，以及 ambient/intrinsic 与 smooth-test/relaxed 比较桥。** 已验收的
-Gaussian 和 tensorization 定理使用光滑测试接口，可以通过有限维比较桥转到所选常数。
-与 locally Lipschitz 文献常数的等价也已完成 Lean 证明：一般比较要求内禀绝对连续性；
-对于对数凹概率测度，该绝对连续性已被证明，因此无需另加这一假设。见
-[文献常数比较](LocalSlope/SmoothTestComparison.lean) 与
-[一般对数凹版本](../KLS/LogConcave/Poincare.lean)。完整 Borell 密度代表与矩定理已有独立证书；
-Cheeger 能量识别 `Ecan = 2 Ch`（局部斜率约定）已对任意有限维 Borel 概率律证明，
-包括奇异律；见 [Cheeger 识别](../Energy/Cheeger/Identification.lean)。
-这是松弛能量的恒等式，不提供原始测试能量的一致性或 Poincaré 有限界。维数无关 KLS 界仍开放。
+**The closed-quadratic-form chain and the ambient/intrinsic and smooth-test/relaxed comparison
+bridges are proved.** The accepted Gaussian and tensorization theorems use the smooth-test
+interface and transfer to the selected constant through the finite-dimensional bridges.
+Equivalence with the literature's locally Lipschitz constant is also proved in Lean. The general
+comparison assumes intrinsic absolute continuity; this is proved for log-concave probability
+measures, so no extra premise is needed in that case. See the
+[literature-constant comparison](LocalSlope/SmoothTestComparison.lean) and
+[general log-concave version](../KLS/LogConcave/Poincare.lean). The full Borell density
+representative and moment theorems have a separate certificate. Cheeger-energy identification
+`Ecan = 2 Ch` (local-slope convention) is proved for every finite-dimensional Borel probability
+law, including singular laws; see [Cheeger identification](../Energy/Cheeger/Identification.lean).
+This identifies relaxed energies; it supplies neither raw-test-energy agreement nor a finite
+Poincaré bound. The dimension-free KLS bound remains open.
 
-当前接口默认允许随数学设计调整，已证明的接口也不例外；证明工作不以接口冻结为前提。
-认证针对当前声明与证明。修改假设、结论、测试域或归一化时，应明确记录变化，同步依赖并
-重新检查原数学目标是否仍被覆盖。详见[生命周期约定](../../../research/ledger-schema.md#lifecycle)。
+Interfaces may evolve with the mathematical design, including already proved interfaces.
+Proof work does not require an interface freeze. Certification concerns the current statement
+and proof. Changes to assumptions, conclusions, test domains, or normalization must be recorded
+explicitly, propagated to dependents, and checked for continued coverage of the original
+mathematical target. See the [lifecycle conventions](../../../research/ledger-schema.md#lifecycle).
 
-## 从这里开始
+## Start here
 
-| 你要做的事 | 阅读入口 |
+| Purpose | Entry point |
 | --- | --- |
-| 使用新基础 | [Foundation.lean](Foundation.lean) |
-| 理解最优常数与有限能量域 | [L2/Energy.lean](L2/Energy.lean) |
-| 使用项目选定的欧氏常数 | [SmoothGradient/Intrinsic.lean](SmoothGradient/Intrinsic.lean) |
-| 使用仿射协方差常数 `C_P^aff`（定义；闭形式、环境平移不变性与各向同性归约另有定理，无 Poincaré 不等式） | [CovarianceGradient/Intrinsic.lean](CovarianceGradient/Intrinsic.lean)、[CovarianceGradient/Translation.lean](CovarianceGradient/Translation.lean)、[LipschitzGradient/Comparison.lean](LipschitzGradient/Comparison.lean) |
-| 看完整的使用与边界示例 | [PoincareFoundation.lean](../../../examples/PoincareFoundation.lean) |
-| 使用已证明的 Gaussian 定理 | [Gaussian/README.md](Gaussian/README.md) |
-| 查找全部模块和 import 规则 | [formalization/README.md](../../README.md) |
-| 查看剩余数学桥梁与 KLS 路线 | [Blueprint](../../blueprint/README.md) |
-| 使用已证明的常数比较桥 | [Euclidean/README.md](Euclidean/README.md) |
+| Use the new foundations | [Foundation.lean](Foundation.lean) |
+| Understand optimal constants and finite-energy domains | [L2/Energy.lean](L2/Energy.lean) |
+| Use the selected Euclidean constant | [SmoothGradient/Intrinsic.lean](SmoothGradient/Intrinsic.lean) |
+| Use the affine covariance constant `C_P^aff` (definition; separate theorems give its closed form, ambient translation invariance, and isotropic reduction, without a Poincaré inequality) | [CovarianceGradient/Intrinsic.lean](CovarianceGradient/Intrinsic.lean), [CovarianceGradient/Translation.lean](CovarianceGradient/Translation.lean), [LipschitzGradient/Comparison.lean](LipschitzGradient/Comparison.lean) |
+| See complete usage and boundary examples | [PoincareFoundation.lean](../../../examples/PoincareFoundation.lean) |
+| Use the proved Gaussian theorems | [Gaussian/README.md](Gaussian/README.md) |
+| Find all modules and import rules | [formalization/README.md](../../README.md) |
+| Review remaining mathematical bridges and KLS routes | [Blueprint](../../blueprint/README.md) |
+| Use the proved constant-comparison bridges | [Euclidean/README.md](Euclidean/README.md) |
 
-示例文件包含常数函数的方差、能量比较的方向、所选常数的使用、Dirac 原始能量反例、空测试类
-的 recovery 障碍，以及 Gaussian 的数值和退化情形。所有 `example` 都进入默认 `lake build`。
+The examples cover variance of constants, the direction of energy comparison, the selected
+constant, the Dirac raw-energy counterexample, the recovery obstruction for empty test classes,
+and numerical and degenerate Gaussian cases. Every `example` is included in the default `lake build`.
 
-## 一个可以直接使用的接口
+## A directly usable interface
 
 ```lean
 import FunctionalInequalities.Poincare.Foundation
@@ -52,42 +61,46 @@ example (μ : ProbabilityMeasure ℝ) (C : NNReal)
   (Poincare.SmoothGradient.Intrinsic.holds_iff_constant_le μ C).mpr h
 ```
 
-第一条适用于任意 Borel 概率测度，包括没有密度的测度。第二条说明如何使用一个已知的常数界；
-它不提供这个界本身。上述写法也适用于任意有限维实 Borel Hilbert 空间。
+The first result applies to every Borel probability measure, including measures without a density.
+The second shows how to use a known constant bound; it does not establish that bound.
+The same syntax works for arbitrary finite-dimensional real Borel Hilbert spaces.
 
-新接口使用 `ProbabilityMeasure`。已有 `μ : Measure E` 和 `[IsProbabilityMeasure μ]` 时，
-可用 `Probability.ofMeasure μ` 打包；再转回 `Measure E` 在定义上就是原测度。旧接口保留其
-`Measure` 与概率假设形式，调用者无需迁移已验收的证明。
+The new interface uses `ProbabilityMeasure`. Given `μ : Measure E` and
+`[IsProbabilityMeasure μ]`, package them with `Probability.ofMeasure μ`; coercing back to
+`Measure E` definitionally recovers the original measure. The legacy interface retains its
+`Measure` and probability-instance form, so callers need not migrate accepted proofs.
 
-## 数学对象与一般性
+## Mathematical objects and generality
 
-基础按职责分成三层：
+The foundations have three layers:
 
-1. `L2.mean`、`L2.center`、`L2.variance` 定义在实 `L²(μ)` 的几乎处处等价类上，适用于任意
-   可测空间上的概率测度。方差是中心化后的 `L²` 范数平方，取值于 `NNReal`。
-2. `Energy.Functional X` 是 `X → ENNReal`。有限域 `energy.domain` 携带排除 `⊤` 的证明，
-   `finiteValue` 才将该值转为 `NNReal`。无限能量不会被 `toNNReal` 静默转换为零后参与优化。
-3. `Poincare.TestFamily` 只记录测试类型、有限非负方差与能量。其最优常数是扩展 Rayleigh 商
-   的上确界；它不要求测度、光滑性、闭性或 Markov 性。
+1. `L2.mean`, `L2.center`, and `L2.variance` are defined on a.e. equivalence classes in real `L²(μ)` for probability measures on any measurable space. Variance is the squared `L²` norm after centering, with values in `NNReal`.
+2. `Energy.Functional X` is `X → ENNReal`. Its finite domain `energy.domain` carries a proof excluding `⊤`; only then does `finiteValue` convert the value to `NNReal`. Infinite energy is never silently converted to zero by `toNNReal` for optimization.
+3. `Poincare.TestFamily` records only a test type, finite nonnegative variance, and energy. Its optimum is the supremum of extended Rayleigh quotients; it assumes no measure, smoothness, closedness, or Markov property.
 
-在有限能量域上，`Poincare.L2Energy.constant μ energy` 与 `Poincare.L2Energy.Holds μ energy C` 满足
+On the finite-energy domain, `Poincare.L2Energy.constant μ energy` and
+`Poincare.L2Energy.Holds μ energy C` satisfy
 
 ```text
 Poincare.L2Energy.Holds μ energy C ↔ Poincare.L2Energy.constant μ energy ≤ (C : ENNReal).
 ```
 
-约定 `0 / 0 = 0`，正方差除以零能量为 `⊤`。空测试类的最优常数为零；有正方差、零能量测试时，
-最优常数为 `⊤`。这些边界由 [SmoothTest/Optimal.lean](SmoothTest/Optimal.lean) 中的定理明确覆盖。
+The conventions are `0 / 0 = 0` and positive variance divided by zero energy equals `⊤`.
+An empty test class has optimal constant zero; a test with positive variance and zero energy
+forces the optimum to `⊤`. The theorems in [SmoothTest/Optimal.lean](SmoothTest/Optimal.lean)
+explicitly cover these cases.
 
-[能量比较](L2/Comparison.lean) 的方向是：同一测度下，若 `lower ≤ upper`，则
-`Poincare.L2Energy.constant μ upper ≤ Poincare.L2Energy.constant μ lower`。增大能量会同时缩小有限域并增大
-保留下来的分母，故不需要假设两者有相同定义域。
+The [energy-comparison](L2/Comparison.lean) direction is: for the same measure, `lower ≤ upper`
+implies `Poincare.L2Energy.constant μ upper ≤ Poincare.L2Energy.constant μ lower`.
+Increasing energy both shrinks the finite domain and increases the retained denominators,
+so equality of the two domains is not required.
 
-## 从具体测试到闭二次型
+## From concrete tests to closed quadratic forms
 
-[PreEnergy](../Energy/Relaxation/Basic.lean) 记录具体测试、realization `toAmbient` 和有限能量。
-在 `x` 处的 sequential relaxation，是所有 realization 收敛到 `x` 的测试序列之能量 `liminf`
-的下确界。没有逼近序列时，值为 `⊤`。这个定义本身只用拓扑；下半连续性定理使用伪度量假设。
+[PreEnergy](../Energy/Relaxation/Basic.lean) records concrete tests, their realization
+`toAmbient`, and finite energy. Sequential relaxation at `x` is the infimum of energy `liminf`s
+over test sequences whose realizations converge to `x`. If no such sequence exists, its value
+is `⊤`. The definition needs only topology; lower semicontinuity uses a pseudometric assumption.
 
 ```text
 Relaxation/Basic
@@ -98,111 +111,131 @@ Relaxation/Basic
       → Relaxation/Quadratic → ClosedQuadratic
 ```
 
-[Relaxation/Approximation.lean](../Energy/Relaxation/Approximation.lean) 收集两处证明共用的选择步骤：
-严格的 relaxed-energy 上界可由任意小邻域内的具体测试实现；稠密 realization 提供逼近序列。
-它不要求最优测试存在，也不引入 closability 假设。
+[Relaxation/Approximation.lean](../Energy/Relaxation/Approximation.lean) collects the selection
+steps shared by two proofs: a strict relaxed-energy upper bound is realized by a concrete test
+in any sufficiently small neighborhood, and dense realization supplies approximating sequences.
+It assumes neither an optimal test nor closability.
 
-已证明的分析结论包括：
+The proved analytic results include:
 
-- 在任意伪度量环境中，sequential relaxation 下半连续，不要求二次性或密度。
-- 每个有限 relaxed-energy 点都有 recovery sequence，其能量收敛到 relaxed energy。
-- realization 稠密时，每个点都有 recovery sequence，包括能量为 `⊤` 的点。空测试类的例子
-  说明，此处不能删除密度前提。
-- 二次 pre-energy 的 relaxation 满足二次缩放和完整扩展 parallelogram identity；再加
-  realization 稠密性，就得到 `ClosedQuadratic`。
+- Sequential relaxation is lower semicontinuous in any pseudometric ambient space, without quadraticity or density.
+- Every finite-relaxed-energy point has a recovery sequence whose energies converge to the relaxed energy.
+- With dense realization, every point has a recovery sequence, including points of energy `⊤`. The empty-test-class example shows that density cannot be dropped here.
+- Relaxation of a quadratic pre-energy satisfies quadratic scaling and the full extended parallelogram identity. Adding dense realization gives `ClosedQuadratic`.
 
-`ClosedQuadratic` 包含零值、非零实数缩放、parallelogram identity、下半连续性与有限域稠密性。
-有限域已封装为实子模。零倍缩放单独处理，所以即使原向量能量为 `⊤`，缩放为零后仍得到零能量。
-通用二次闭包定理不要求 raw energy 在 realization 的纤维上一致。
+`ClosedQuadratic` includes the value at zero, scaling by nonzero real numbers, the parallelogram
+identity, lower semicontinuity, and density of the finite domain. The finite domain is packaged
+as a real submodule. Scaling by zero is handled separately, yielding zero energy even when the
+original vector has energy `⊤`. The generic quadratic-closure theorem does not require raw
+energy to agree on realization fibers.
 
-[Relaxation/Contraction.lean](../Energy/Relaxation/Contraction.lean) 另给条件性转移：若连续变换
-在具体测试的 realization 上满足 `RelaxedContractionBound`，它就在所有点降低 relaxed energy。
-具体光滑梯度实现已在 [Dirichlet.lean](../Energy/SmoothGradient/Dirichlet.lean) 中
-证明所有 normal contractions 的这个前提，并得到任意 Borel 概率律下的 Markov/Dirichlet 性。
+[Relaxation/Contraction.lean](../Energy/Relaxation/Contraction.lean) gives a separate conditional
+transfer: a continuous transformation satisfying `RelaxedContractionBound` on realizations of
+concrete tests decreases relaxed energy everywhere. The concrete smooth-gradient implementation
+proves this premise for every normal contraction in [Dirichlet.lean](../Energy/SmoothGradient/Dirichlet.lean),
+giving the Markov/Dirichlet property for every Borel probability law.
 
-## 欧氏实现与仿射支撑
+## Euclidean implementation and affine support
 
-[Energy.SmoothGradient.Test](../Energy/SmoothGradient/Basic.lean) 是全局 `C∞` 实函数，携带
-`L²(μ)` 和平方梯度可积性的证明，有限能量为 `∫ ‖gradient f x‖² ∂μ`。
-**本项目固定的 Mathlib v4.33.0 中，普通 `C∞` 写作 `ContDiff ℝ ∞`；`ContDiff ℝ ⊤` 表示解析性。**
+[Energy.SmoothGradient.Test](../Energy/SmoothGradient/Basic.lean) consists of globally `C∞`
+real functions with proofs of `L²(μ)` membership and integrability of the squared gradient.
+Finite energy is `∫ ‖gradient f x‖² ∂μ`.
+**In the project's pinned Mathlib v4.33.0, ordinary `C∞` is `ContDiff ℝ ∞`;
+`ContDiff ℝ ⊤` means analyticity.**
 
-光滑梯度 pre-energy 的二次性与 realization 稠密性均已证明。密度证明使用 Mathlib 中紧支撑
-光滑函数在 `L²` 的稠密性，再利用梯度连续且紧支撑获得能量可积性。这里说的是 `L²` 稠密性，
-没有额外声称 graph-norm core。
+Quadraticity of the smooth-gradient pre-energy and density of its realization are proved.
+Density uses Mathlib's density of compactly supported smooth functions in `L²`, with continuity
+and compact support of the gradient supplying energy integrability. This is `L²` density;
+no graph-norm-core assertion is added.
 
-具体闭二次型实现采用有限维实 Hilbert 空间、Borel measurable space 与 second-countable
-拓扑。它适用于任意概率测度，不要求密度、log-concavity、紧支撑或协方差非退化。
+The concrete closed quadratic form uses a finite-dimensional real Hilbert space with a Borel
+measurable space and second-countable topology. It applies to any probability measure, without
+a density, log-concavity, compact support, or nondegenerate covariance assumption.
 
-[AffineSupport.lean](../Probability/AffineSupport.lean) 取拓扑支撑的 affine span，并证明它闭、
-可测、满测度且最小。选一个支撑原点后，将测度表达在 affine support 的方向空间上。
-[intrinsicL2Equiv](../Energy/SmoothGradient/Intrinsic/Basic.lean) 是原 `L²` 与 intrinsic `L²` 之间的
-双向线性等距等价；在 intrinsic 空间计算 smooth-gradient relaxation，再沿等价拉回，得到
-`Energy.SmoothGradient.Intrinsic.energy` 及其闭二次型定理。
+[AffineSupport.lean](../Probability/AffineSupport.lean) takes the affine span of the topological
+support and proves closedness, measurability, full measure, and minimality. After choosing an
+origin in the support, the measure is represented on the direction space of its affine support.
+[intrinsicL2Equiv](../Energy/SmoothGradient/Intrinsic/Basic.lean) is a linear isometric
+equivalence between the original and intrinsic `L²` spaces. Compute smooth-gradient relaxation
+in the intrinsic space and pull it back along this equivalence to obtain
+`Energy.SmoothGradient.Intrinsic.energy` and its closed-quadratic-form theorem.
 
-这包含 proper affine support 与零维载体。它消除了法向方向，但不会自动消除仿射支撑内部的
-其他奇异性。ambient 与 intrinsic relaxation 能量相等现已证明；原始测试能量只在
-正交延拓构造中保证保持，不能对任意环境测试假定逐点一致。
+This includes proper affine supports and zero-dimensional carriers. It removes normal directions,
+but not automatically other singularities within the affine support. Equality of ambient and
+intrinsic relaxation energies is proved. Preservation of raw test energy is guaranteed in the
+orthogonal-extension construction; pointwise agreement for arbitrary ambient tests cannot be assumed.
 
-## 四个接口如何区分
+## Distinguishing the four interfaces
 
-| 接口 | 使用的测试或能量 | 当前状态 |
+| Interface | Tests or energy | Status |
 | --- | --- | --- |
-| `Poincare.SmoothTest.constant` | 全局光滑、`L²`、有限梯度能量测试 | Gaussian 与 tensorization 使用此接口 |
-| `Poincare.L2Energy.constant μ energy` | 任意扩展能量的有限域 | 通用优化器与 order law 已证明 |
-| `Poincare.SmoothGradient.Intrinsic.constant` | 项目选定的 intrinsic-affine relaxation | 能量、闭二次型与 order law 已证明 |
-| `Poincare.LocalSlope.Intrinsic.constant` | 内在律上的局部 Lipschitz / 局部斜率测试 | 定义与一般对数凹常数比较已完成 |
+| `Poincare.SmoothTest.constant` | Globally smooth `L²` tests with finite gradient energy | Used by Gaussian and tensorization results |
+| `Poincare.L2Energy.constant μ energy` | Finite domain of any extended energy | Generic optimizer and order law proved |
+| `Poincare.SmoothGradient.Intrinsic.constant` | Selected intrinsic-affine relaxation | Energy, closed quadraticity, and order law proved |
+| `Poincare.LocalSlope.Intrinsic.constant` | Locally Lipschitz/local-slope tests on the intrinsic law | Definition and general log-concave constant comparison completed |
 
-Blueprint 的 `C_P^can` 是第三行的简写。当前 Lean 名称使用 `SmoothGradient.Intrinsic`，说明能量类型和内在坐标；
-常数比较不声称局部斜率能量与梯度松弛逐点相等。协方差加权的 `C_P^aff` 是 CMH 路线的另一能量常数，不是同一
-测度上无权常数的别名。
+The Blueprint's `C_P^can` abbreviates the third row. The Lean name `SmoothGradient.Intrinsic`
+identifies the energy type and intrinsic coordinates. Constant comparison does not assert
+pointwise equality of local-slope energy and gradient relaxation. The covariance-weighted
+`C_P^aff` is a different energy constant for the CMH route, not an alias for the unweighted
+constant of the same measure.
 
-已证明的桥接顺序是 ambient/intrinsic 相等、smooth-test/relaxed 常数相等，然后在一般 log-concave
-情形下接通 locally Lipschitz 文献常数（`KLS/LogConcave/Poincare.lean`）。smooth-test/relaxed 桥可使用 relaxation 上界、逼近序列和
-`L²` 方差连续性，不依赖 raw/core agreement 或 Cheeger identification。
+The proved bridges proceed from ambient/intrinsic equality to smooth-test/relaxed constant
+equality, then to the locally Lipschitz literature constant for general log-concave laws
+(`KLS/LogConcave/Poincare.lean`). The smooth-test/relaxed bridge uses the relaxation upper bound,
+approximating sequences, and `L²` continuity of variance; it does not depend on raw/core
+agreement or Cheeger identification.
 
-前两步已有 [12 条已证明比较定理](Euclidean/README.md)，并由 `Foundation` 导出。
-两份证书包含全部结论，公理 guards 同时覆盖 12 条定理及新增的关键辅助定理。
+The first two steps have [12 proved comparison theorems](Euclidean/README.md), exported by
+`Foundation`. Two certificates package all conclusions; axiom guards cover the 12 theorems
+and the added key helpers.
 
-## 原始能量、一致性与剩余工作
+## Raw energy, agreement, and remaining work
 
-对 `μ = δ₀`，函数 `0` 与 `id` 表示同一个零 `L²` 元素，但原始梯度能量分别为 `0` 和 `1`。
-因此，对任意奇异测度都要求原始能量在 `L²` fibers 上一致是不成立的。
+For `μ = δ₀`, the functions `0` and `id` represent the same zero `L²` element, but have raw
+gradient energies `0` and `1`. Raw energy therefore cannot agree on `L²` fibers for arbitrary
+singular measures.
 
-[FormCore.lean](../Energy/Form/Core.lean) 明确区分：
+[FormCore.lean](../Energy/Form/Core.lean) distinguishes:
 
-- `RespectsAmbientFibers`：原始能量在同一 realization fiber 上一致；
-- `AgreesOnTests`：指定环境能量在每个测试上等于原始能量；
-- `SequentiallyGenerates`：该环境能量等于 sequential relaxation；
-- `IsSequentialCoreFor`：同时具有 agreement 与 generation。
+- `RespectsAmbientFibers`: raw energy agrees on each realization fiber;
+- `AgreesOnTests`: a specified ambient energy equals raw energy on every test;
+- `SequentiallyGenerates`: that ambient energy equals sequential relaxation;
+- `IsSequentialCoreFor`: both agreement and generation.
 
-最后一个是项目内的精确规格，尚未与文献 graph-norm core 建立等价。以上性质均不属于
-`ClosedQuadratic` 的字段。
+The last is the project's precise specification; equivalence with the literature's graph-norm
+core has not been established. None of these properties is a field of `ClosedQuadratic`.
 
-smooth-gradient 松弛及其内禀拉回的 Markov/Dirichlet witness 已在
-`Energy/SmoothGradient/Dirichlet.lean` 证明（对任意 Borel 概率律）；局部密度假设下的 raw/core agreement 已在
-`Energy/SmoothGradient/Core.lean` 证明（`LocalDensity`），无密度时对环境预能量不成立
-（`Energy/SmoothGradient/NormalDirection.lean`）。`Ecan = 2 Chμ` 已在
-`Energy/Cheeger/Basic.lean` 中对内禀律绝对连续的情形证明，采用局部斜率约定，因而覆盖全部对数凹律；
-任意奇异律的识别、自伴生成元、半群及 reciprocal spectral-gap 接口仍未完成。
-whitening 与仿射/各向同性归约已在 `KLS/LogConcave/Isotropic.lean` 证明；
-实轴上对数凹律的一维界 `C_P^lit(ν) ≤ 4·Var_ν` 已在
-`KLS/LogConcave/Line/SharpPoincare.lean` 证明，系数 12 的旧界另有独立证明。
-`LocalSlope/Basic.lean` 包含零维方向空间的常数为零。
-旧光滑测试常数、ambient relaxed 常数与所选 intrinsic-affine 常数的等价已经由 Lean 证明；
-locally Lipschitz 文献常数的定义、绝对连续情形及一般对数凹情形的比较也均已形式化。
-剩余工作由 Blueprint 中不同节点承载；`KLS/Statement.lean` 中的 `KLS.Conjecture`
-已给出维数无关目标的精确命题定义，但没有证明该命题。
+The Markov/Dirichlet witness for smooth-gradient relaxation and its intrinsic pullback is proved
+in `Energy/SmoothGradient/Dirichlet.lean` for arbitrary Borel probability laws. Raw/core agreement
+under local density assumptions (`LocalDensity`) is proved in `Energy/SmoothGradient/Core.lean`;
+without density it fails for the ambient pre-energy (`Energy/SmoothGradient/NormalDirection.lean`).
+The earlier status recorded here established `Ecan = 2 Chμ` in `Energy/Cheeger/Basic.lean` under
+intrinsic absolute continuity, using the local-slope convention and covering all log-concave laws;
+at that stage, identification for arbitrary singular laws, a self-adjoint generator, a semigroup,
+and reciprocal spectral-gap interfaces were incomplete. Whitening and affine/isotropic reduction
+are proved in `KLS/LogConcave/Isotropic.lean`. The one-dimensional log-concave bound
+`C_P^lit(ν) ≤ 4·Var_ν` is proved in `KLS/LogConcave/Line/SharpPoincare.lean`; the old coefficient-12
+bound has an independent proof. `LocalSlope/Basic.lean` includes the zero constant for a
+zero-dimensional direction space. Equivalence of the legacy smooth-test, ambient relaxed,
+and selected intrinsic-affine constants is proved in Lean. The literature's locally Lipschitz
+constant and its comparisons in the absolutely continuous and general log-concave cases are
+also formalized. Distinct Blueprint nodes track remaining work. `KLS.Conjecture` in
+`KLS/Statement.lean` precisely defines the dimension-free target but does not prove it.
 
-## 来源与检查
+## Sources and checks
 
-数学来源在声明附近分别记录：旧光滑测试接口说明历史手稿 Definition 2.1 的公式与本地测试域
-选择；光滑密度证明指向固定 Mathlib 的 `Lp.dense_hasCompactSupport_contDiff`；通用 relaxation
-与优化层是此项目已经证明的构造。文献识别与长路线的来源和状态由 Blueprint 另行记录。
+Mathematical sources are documented near the declarations. The legacy smooth-test interface
+explains the formula from historical manuscript Definition 2.1 and the local choice of test
+domain; smooth density cites `Lp.dense_hasCompactSupport_contDiff` in the pinned Mathlib.
+The generic relaxation and optimization layers are constructions proved in this project.
+The Blueprint separately records the sources and status of literature identifications and long routes.
 
-本文参考 [formech 的固定版本](https://github.com/lyw-ops/formech/tree/d0bb1913acc1f710ba6eadf1244b633abbc75fb9)
-组织“数学含义、具体例子、接口入口、范围与构建”。该参考仅影响书写方式，不提供 KLS 的数学依据。
+The organization into mathematical meaning, concrete examples, entry points, scope, and builds
+follows a [pinned formech revision](https://github.com/lyw-ops/formech/tree/d0bb1913acc1f710ba6eadf1244b633abbc75fb9).
+That reference influences presentation only; it is not mathematical evidence for KLS.
 
-从 `formalization/` 运行：
+Run from `formalization/`:
 
 ```sh
 lake build Examples
@@ -210,7 +243,8 @@ lake build solutions.FoundationAxiomAudit
 lake build
 ```
 
-[FoundationAxiomAudit.lean](../../../solutions/FoundationAxiomAudit.lean) 在默认构建中固定八个核心
-声明的传递公理集为 `propext`、`Classical.choice`、`Quot.sound`。它补充现有四个节点证书及
-Gaussian audit，不新增 ledger 节点。完整构建验证 Lean 证明；文献含义的一致性仍须结合上述
-接口边界审阅。
+In the default build, [FoundationAxiomAudit.lean](../../../solutions/FoundationAxiomAudit.lean)
+fixes the transitive axiom sets of eight core declarations to `propext`, `Classical.choice`,
+and `Quot.sound`. It supplements the four existing node certificates and Gaussian audit in
+this recorded batch without adding a ledger node. The complete build checks Lean proofs;
+alignment with the literature still requires reviewing the interface boundaries above.

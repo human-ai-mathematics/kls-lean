@@ -1,112 +1,105 @@
-# Lipschitz 向量 coarea 的路线探查：余维 m coarea 从 `C¹` 推到 Lipschitz
+# Route Investigation of Lipschitz Vector Coarea: m-Codimensional Coarea from `C¹` to Lipschitz
 
-2026-09-19。本轮是**路线探查**，紧随同日的尖锐 Sard 路线轮。**没有证明任何定理**，
-没有新增任何库模块，没有修改任何既有 `.lean`。交付物是：缺口的精确定位、
-标量侧路线在余维 m 下哪一步现成、哪一步缺、Mathlib 与本仓库的如实检索、
-带编号的义务清单（每条配精确 Lean 语句、行数与风险），以及只含 `#check` 的路线语句文件
-`research/audits/LipschitzVectorCoareaRouteStatements.lean`。
-**命题通过类型检查不是证明**；`L0`、`V1`、`V3`–`V5` **没有一条**在本仓库中被证明。
-不迁洞，不提交、不推送。直接洞仍 **8（1/2/5）**，证书仍 **24**。
+2026-09-19. This round is a **route probing**, following the sharp Sard route round on the same day. **No theorem is proved**, no new library modules are added, and no existing `.lean` is modified. The deliverables are: precise localization of gaps, identifying at which step the scalar side route is available and at which step missing, accurate retrieval of Mathlib and this repository, a numbered obligation list (each entry paired with an exact Lean statement, line number, and risk), and a route statement file containing only `#check` `research/audits/LipschitzVectorCoareaRouteStatements.lean`.
+**Type-checking a proposition is not a proof**; none of `L0`, `V1`, `V3`–`V5` is proved in this repository.
+No hole migration, no commit, no push. Direct holes remain **8 (1/2/5)**, and certification remains **24**.
 
-起点 `HEAD = origin/main = f108397aa6eafcde0a8ca99658e40c47b2926db3`；起点 passed 回执
-`build/verification/20260918T114131.124380Z/report.json`（尖锐 Sard 路线轮的最终回执）：
-10 个门、224 个本地模块内核重放、617 条目，快照 `cfd1dab59526eeca9f0584e76825a1d545bde07dd70c38709b2a0235a649f482`。
-起点工作区 drift 为空，并发会话未改动工作区。
+Origin `HEAD = origin/main = f108397aa6eafcde0a8ca99658e40c47b2926db3`; origin passed verification receipt
+`build/verification/20260918T114131.124380Z/report.json` (final verification receipt for sharp Sard route round):
+10 gates, 224 local module kernel replay, 617 entries, snapshot `cfd1dab59526eeca9f0584e76825a1d545bde07dd70c38709b2a0235a649f482`.
+The origin workspace drift is empty, and concurrent sessions have not modified the workspace.
 
-## 边界
+## Boundary
 
-对数凹 Cheeger–Buser 线（含 `KLS/WIP/CheegerInfimum.lean` 剩下的两个洞）归合作者**王浩丞**，
-本轮未触碰。尖锐有限正则 Sard（同日已另立路线）、Energy 的五个洞、无量纲 KLS 也都未触碰。
-本路线只到**整体 Lipschitz**（`LipschitzWith K u`）；局部 Lipschitz 版本 `M2` 明确不在本路线内。
+Log-concave Cheeger–Buser lines (including `KLS/WIP/CheegerInfimum.lean` remaining two proof holes) credited to author **Haocheng Wang**, not touched in this round. Sharp finite regular Sard (already established on the same day via a separate path), five holes in Energy, dimension-free KLS, all untouched.
+This route only reaches **global Lipschitz** (`LipschitzWith K u`); the local Lipschitz version `M2` is explicitly outside the scope of this route.
 
-## 一、缺口
+## 1. Gap
 
-`Analysis/RankDeficient/Coarea.lean` 的 `coarea_of_contDiff`（`R9`）是余维 m coarea 公式，
-对临界集无任何假设，但要求 **`C¹`**。Federer 的 coarea 公式对**仅 Lipschitz** 的映射就成立；
-标量侧早已走完 `C¹ → Lipschitz → 局部 Lipschitz`
-（`KLS/Geometry/{SmoothCoarea,LipschitzCoarea,LocallyLipschitzCoarea}.lean`）。
-**向量侧停在 `C¹`**——这就是目标 `L0`：把 `coarea_of_contDiff` 的 `ContDiff ℝ 1 u` 换成
-`LipschitzWith K u`，其余逐字不变。密度仍写 `coareaJacobian (fderiv ℝ u x)`：
-`fderiv` 在不可微点是垃圾值，而按 Rademacher 那是 Lebesgue 零测集，与标量 `L12` 用 `gradient` 的约定相同。
+The `Analysis/RankDeficient/Coarea.lean` `coarea_of_contDiff` (`R9`) is the coarea formula of codimension m,
+No assumptions are made on the critical set, but the requirement of **`C¹`** is imposed. Federer's coarea formula holds for mappings that are only Lipschitz;
+The scalar side already completed `C¹ → Lipschitz → locally Lipschitz`
+ (`KLS/Geometry/{SmoothCoarea,LipschitzCoarea,LocallyLipschitzCoarea}.lean`).
+**Vector side stops at `C¹`**—this is the target `L0`: replace `coarea_of_contDiff`'s `ContDiff ℝ 1 u` with
+`LipschitzWith K u`, the rest unchanged. Density still written `coareaJacobian (fderiv ℝ u x)`:
+`fderiv` At non-differentiable points, it is garbage values, and according to Rademacher, it is a Lebesgue null set, consistent with the scalar `L12` convention using `gradient`.
 
-## 二、标量侧怎么走的，以及余维 m 下哪一步缺
+## How does the scalar side proceed, and at which step is there a gap in dimension m?
 
-`KLS.coarea_of_lipschitz`（`L12`）分三步：
 
-1. `Analysis.exists_contDiff_pieces`（`L7`）把定义域切成可数个不交可测片，每片上有一个 `C¹`
-   函数与 `u` **一阶吻合**（值与导数都相等），补集 Lebesgue 零测；
-2. 每片上用 `C¹` 公式，一阶吻合使密度与切片都吻合；
-3. 可数可加求和，零测补集由「零测集在几乎每个水平上切片零测」删掉。
+`KLS.coarea_of_lipschitz` (`L12`) is divided into three steps:
 
-余维 m 下**后两步现成**：第 2 步是 `coarea_of_contDiff`；第 3 步是
-`Analysis.ae_hausdorffMeasure_inter_levelSet_eq_zero_vector`——取 `d = k`，其假设
-`μH[k + m] N = 0` 在 `k + m = n` 下经 `Analysis.hausdorffMeasure_finrank_eq_smul_volume` 正是
-「`N` Lebesgue 零测」（`V2`；约十行的推导，本轮**未落库**，只按类型确认可导出）。
-**第 1 步没有**：`L7` 背后整条 jet 与 Whitney 链条（`LipschitzJet.exists_compact_jets`、
-`WhitneyJet.exists_contDiff_extension`、`exists_contDiff_pieces`）一律写着 `u : V → ℝ`，
-向量层里没有任何东西顶替它们。**`V1`（向量 `C¹` 分片）是唯一真正新的成分。**
+1. `Analysis.exists_contDiff_pieces` (`L7`) divides the domain into countably many pairwise disjoint measurable pieces, each piece having a `C¹` function that is **first-order compatible** (matching values and derivatives) with the `u`, and the complement having Lebesgue measure zero;
+2. On each piece, the `C¹` formula is applied, and first-order compatibility ensures that the density and the slice match;
+3. The countable sum is taken, and the zero-measure complement is removed by "removing the zero-measure sets in almost every level slice".
 
-## 三、`V1` 怎么办：逐分量，而不是把 Whitney 扩张做成向量靶
+m-codimensional **second-to-last step is ready**: Step 2 is `coarea_of_contDiff`; Step 3 is
+`Analysis.ae_hausdorffMeasure_inter_levelSet_eq_zero_vector`—take `d = k`, whose assumption
+`μH[k + m] N = 0` under `k + m = n` via `Analysis.hausdorffMeasure_finrank_eq_smul_volume` is exactly
+«`N` Lebesgue null» (`V2`; about ten lines of derivation, not yet committed in this round, only type-checked for derivability).
+**Step 1 is absent**: behind `L7`, the entire jet and Whitney chain (`LipschitzJet.exists_compact_jets`,
+`WhitneyJet.exists_contDiff_extension`, `exists_contDiff_pieces`) all carry `u : V → ℝ`,
+there is nothing in the vector bundle replacing them. **`V1` (vector `C¹` piecewise) is the only truly new component.**
 
-取线性等距 `e : W ≃ₗᵢ[ℝ] EuclideanSpace ℝ (Fin m)`（`isometryEquivOfFinrankEq` 一线已在仓库中）。
-`u` 的每个坐标 `fun y => e (u y) i` 是标量 `K`-Lipschitz 函数（`V4'`），各自套用**已证的** `L7`
-得到自己的可数分割；`V3` 取这 `m` 个分割的可数公共加细（`ℕ^m` 可数，仍以 `ℕ` 编号，
-补集含于 `m` 个零测集之并）；在公共片上所有坐标同时与各自的 `C¹` 标量代表一阶吻合，
-`V4''` 由坐标可微得 `u` 可微，`V4` 把逐坐标吻合升级为 `u` 与 `e.symm ∘ (代表)` 的向量一阶吻合。
-于是 `V1` 不需要新的分析，只需要记账加微积分；`V5` 是标量 `L12` 装配的余维 m 逐字翻版，
-写成「由 `V1` 的结论推出 `L0`」的蕴涵，使 `L0 = V5 ∘ V1`。
+## Three. `V1` How to Proceed: Handle components individually, rather than turning the Whitney extension into a vector target
 
-**这是本轮最实质的判断，也是它可能错的地方**：若 `V3` 的公共加细在可测性或不交性上比预想麻烦，
-或 `V4` 在 `fderiv` 的分量化上遇到 Mathlib 缺口（`fderiv` 与 `e`、坐标投影的复合），
-`V1` 就要退回「把 Whitney 扩张做成向量靶」的重路线。本轮没有验证 `V3`、`V4`。
+Take a linear isometry `e : W ≃ₗᵢ[ℝ] EuclideanSpace ℝ (Fin m)` (`isometryEquivOfFinrankEq` already in repository).
+Each coordinate `fun y => e (u y) i` of `u` is a scalar `K`-Lipschitz function (`V4'`); apply the **proved** `L7` to each
+Obtain a countable partition for oneself; `V3` take a countable common refinement of these `m` partitions (`ℕ^m` countable, still indexed by `ℕ`,
+The complement is contained in the union of `m` zero-measure sets; on each common patch, all coordinates match their respective `C¹` scalar representatives to first order.
+`V4''` derives differentiability of `u` from coordinate differentiability; `V4` upgrades coordinatewise agreement to vector first-order agreement between `u` and `e.symm ∘ (representative)`.
+Thus `V1` does not require new analysis, only ledgering plus calculus; `V5` is a scalar `L12` assembly of codimension m, word-for-word replication,
+The implication "from `V1` to `L0`" establishes `L0 = V5 ∘ V1`.
 
-## 四、Mathlib 与本仓库有什么、缺什么
+**This is the most substantive judgment, and also where it might be wrong**: if `V3`'s common refinement has more difficulty with measurability or disjointness than anticipated,
+or if `V4` encounters gaps in Mathlib during its quantization over `fderiv` (the composition of `fderiv` and `e`, or coordinate projections),
+then `V1` will have to retreat to the "re-route Whitney extension as a vector target" approach. This round has not verified `V3` or `V4`.
 
-**Mathlib**：有 Rademacher（`LipschitzWith.ae_differentiableAt`）、`differentiableAt_pi`、
-`fderiv_pi` 一线、`LinearIsometryEquiv` 的微分性质；**没有任何 coarea 公式**。
-**本仓库**：`L7`（实值）、`coarea_of_contDiff`（`C¹`，余维 m）、余维 m 零切片
-`ae_hausdorffMeasure_inter_levelSet_eq_zero_vector`（已是 `V2` 需要的形状）、
-无正则性的切片可测性、`isometryEquivOfFinrankEq`。**缺的**：`V1`、`V3`、`V4`、`V4'`、`V4''`、`V5`、`L0`。
+## IV. What does Mathlib have and lack, and what does this repository have and lack?
 
-## 五、义务清单
+**Mathlib**: Has Rademacher (`LipschitzWith.ae_differentiableAt`), `differentiableAt_pi`, `fderiv_pi`, `LinearIsometryEquiv` with differential properties; **no coarea formula**.
+**This repository**: `L7` (real-valued), `coarea_of_contDiff` (`C¹`, codimension m), codimension m zero slice
+`ae_hausdorffMeasure_inter_levelSet_eq_zero_vector` (already the shape required by `V2`), measurability of slices without regularity, `isometryEquivOfFinrankEq`. **Missing**: `V1`, `V3`, `V4`, `V4'`, `V4''`, `V5`, `L0`.
 
-精确 Lean 语句在 `research/audits/LipschitzVectorCoareaRouteStatements.lean`，按本表编号排列；
-该文件只含 `#check`（5 条引用已证声明，10 条义务/诊断），无声明、无证明、无占位公理，
-以 `-DwarningAsError=true` 通过。**通过类型检查不是证明。**
+## Five. List of Responsibilities
 
-| 编号 | 内容 | 估计行数 | 风险 |
+Precise Lean statements at `research/audits/LipschitzVectorCoareaRouteStatements.lean`, numbered as per this table;
+This file contains only `#check` (5 references to proven statements, 10 obligations/diagnoses), no declarations, no proofs, no placeholder axioms,
+passed via `-DwarningAsError=true`. **Type checking passing is not a proof.**
+
+| Number | Content | Estimated lines | Risk |
 | --- | --- | --- | --- |
-| `L0` | **目标**：`coarea_of_contDiff` 的 `ContDiff ℝ 1` 换成 `LipschitzWith K` | — | 由 `V1`+`V5` 合成 |
-| `V1` | 向量 `C¹` 分片（`L7` 的向量版） | 80 | 中（由 `V3`+`V4`+`V4'`+`V4''` 合成） |
-| `V2` | Lebesgue 零测补集在几乎每个水平上 `hausdorffNormalized k` 零测 | 15 | 低（已确认可导出） |
-| `V3` | 有限多个可数分割的可数公共加细 | 80 | 中（记账） |
-| `V4'` | Lipschitz 映射的坐标是 Lipschitz | 15 | 低 |
-| `V4''` | 坐标可微 ⟹ 可微 | 20 | 低 |
-| `V4` | 逐坐标一阶吻合 ⟹ 向量一阶吻合 | 60 | 中（`fderiv` 分量化） |
-| `V5` | 装配：沿分片可数可加（照抄标量 `L12`） | 150 | 中 |
-| `M1` | 诊断：Lipschitz 不蕴含 `C¹` | — | 不是步骤 |
-| `M2` | 后续：局部 Lipschitz 版本，**明确不属于本路线** | — | 范围界定 |
+| `L0` | **Objective**: Replace `coarea_of_contDiff`'s `ContDiff ℝ 1` with `LipschitzWith K` | — | Composed from `V1` + `V5` |
+| `V1` | vector `C¹` slicing (vector version of `L7`) | 80 | center (composed from `V3`+`V4`+`V4'`+`V4''`) |
+| `V2` | Lebesgue null-measure complement on almost every level `hausdorffNormalized k` null-measure | 15 | Low (already certified derivable) |
+| `V3` | countable common refinement of finitely many countable partitions | 80 | middle (accounting) |
+| `V4'` | coordinates of a Lipschitz map are Lipschitz | 15 | low |
+| `V4''` | coordinate differentiable ⟹ differentiable | 20 | low |
+| `V4` | coordinate-wise first-order agreement ⟹ vector first-order agreement | 60 | middle (`fderiv` quantified) |
+| `V5` | Assembly: Along piecewise countably additive (verbatim scalar `L12`) | 150 | Medium |
+| `M1` | Diagnosis: Lipschitz does not imply `C¹` | — | Not a step |
+| `M2` | Later: local Lipschitz version, **explicitly not part of this route** | — | Scope definition |
 
-合计约 **420 行**。推荐顺序：`V4'`、`V4''`、`V4`、`V3`、`V1`、`V2`、`V5`、`L0`。
-没有单点判据：`V3`、`V4` 都是可绕开的记账；真正的分析（`L7`、`R9`、零切片）都已证。
+Total of approximately **420 lines**. Recommended order: `V4'`, `V4''`, `V4`, `V3`, `V1`, `V2`, `V5`, `L0`.
+No pointwise criterion: `V3`, `V4` are both bypassable accounting entries; the actual analysis (`L7`, `R9`, zero slice) has been proven.
 
-## 六、明确没证什么
+## VI. Clarify What Hasn't Been Proven
 
-* **本轮没有证明任何定理。** `L0`、`V1`–`V5` 均未证；`V2` 未落库。
-* 局部 Lipschitz 版本 `M2` 不在本路线内；向量值 Sard、临界值测度、Whitney 反例都不在本路线内。
-* Cheeger 两洞归王浩丞，Energy 五洞、尖锐 Sard 未触碰；无量纲 KLS 仍开。
+* This round proved no theorems. `L0`, `V1`–`V5` are all unproven; `V2` is not checked in.
+* The local Lipschitz version `M2` is outside the current path; vector-valued Sard, critical value measure, and Whitney counterexamples are also outside the current path.
+* Cheeger's two-hole result belongs to Haocheng Wang; Energy five holes, sharp Sard remain untouched; dimension-free KLS is still open.
 
-## 七、验证
+## VII. Verification
 
-`research/audits/LipschitzVectorCoareaRouteStatements.lean` 以 `lake env lean -DwarningAsError=true` 通过，
-15 个 `#check`，0 错误、0 警告，日志 `build/audit/lipschitz-vector-coarea-route/route-statements.log`；
-本地 import 闭包不含 WIP 文件。未修改任何库源码、未改聚合导入。
-根目录 `python3 research/verify.py` 于本轮结束时重跑，最终回执记于
-`build/audit/lipschitz-vector-coarea-route/final-snapshot.json`，快照与工作区逐条重算，drift 为空。
-详见 `research/explorations/2026-09-19-lipschitz-vector-coarea-route.json`。
+`research/audits/LipschitzVectorCoareaRouteStatements.lean` passed via `lake env lean -DwarningAsError=true`,
+15 `#check`s, 0 errors, 0 warnings, logs `build/audit/lipschitz-vector-coarea-route/route-statements.log`;
+local import closure excludes WIP files. No library source code modified, no changes to aggregate imports.
+Root directory `python3 research/verify.py` rerun at end of this round, final verification receipt recorded at
+`build/audit/lipschitz-vector-coarea-route/final-snapshot.json`, snapshot and workspace recalculated individually, drift is empty.
+See details in `research/explorations/2026-09-19-lipschitz-vector-coarea-route.json`.
 
-## 附记（2026-09-19，实现轮之后）
+## Note (2026-09-19, after implementation)
 
-`L0`、`V1`–`V5`、`V4'`、`V4''`、`M1` 全部证出（`Analysis/Lipschitz/{Componentwise,Refinement,VectorPieces,VectorCoarea}.lean`），
-`L0 = V5 ∘ V1` 如路线所计划；`V3` 用的是单射 `(Fin m → ℕ) ↪ ℕ` 而非等价（`m = 0` 时 `Fin 0 → ℕ` 是单点）。
-范围外的 `M2` 也随局部 Lipschitz 路线一并证出（`N0 = X5 ∘ L0`）。见 [实现记录](2026-09-19-coarea-sard-proofs.md)。
+`L0`, `V1`–`V5`, `V4'`, `V4''`, `M1` are all proven (`Analysis/Lipschitz/{Componentwise,Refinement,VectorPieces,VectorCoarea}.lean`),
+`L0 = V5 ∘ V1` as planned by the route; `V3` uses an injection `(Fin m → ℕ) ↪ ℕ` rather than equivalence (`m = 0` when `Fin 0 → ℕ` is a singleton).
+The `M2` outside the range is also proven together with the local Lipschitz route (`N0 = X5 ∘ L0`). See [implementation record](2026-09-19-coarea-sard-proofs.md).

@@ -1,39 +1,35 @@
-# Blueprint CI 回归：`checkdecls` 导入未构建的 `Dev` 库
+# Blueprint CI regression: `checkdecls` imports the unbuilt `Dev` library
 
-日期：2026-09-07（Asia/Shanghai）。对象：推送到 `origin/main` 的提交 `575c82c`。
+Date: 2026-09-07 (Asia/Shanghai). Subject: commit `575c82c`, pushed to `origin/main`.
 
-## 现象
+## Symptom
 
-`gh run list` 显示该提交的两个工作流结果不同：`Lean certification`（run 34136280187）成功，
-`Lean Blueprint`（run 34136280179）失败。失败步骤为 "Check Blueprint declaration links"，即
-`python3 formalization/blueprint/build.py checkdecls`，日志：
+`gh run list` showed different outcomes for the commit's two workflows: `Lean certification`
+(run 34136280187) succeeded; `Lean Blueprint` (run 34136280179) failed at "Check Blueprint
+declaration links", namely `python3 formalization/blueprint/build.py checkdecls`:
 
 ```text
 uncaught exception: unknown module prefix 'Dev'
 No directory 'Dev' or file 'Dev.olean' in the search path entries
 ```
 
-## 原因
+## Cause
 
-`575c82c` 在 `lakefile.toml` 新增了 `[[lean_lib]] Dev`（roots `Dev.Search`，LeanSearchClient
-查询草稿），并刻意把它排除在 `defaultTargets` 之外，以免联网的查询命令进入可复现构建。
-但固定版本的 `PatrickMassot/checkdecls` 的 `Main.lean` 会导入根包**全部** `lean_lib` 的根模块
-（`ws.root.leanLibs.flatMap (·.config.roots)`），不区分是否为默认目标。CI 只运行 `lake build`，
-`Dev.olean` 不存在，`importModules` 抛出异常。本地之前曾手动 `lake build Dev`，所以本地
-`checkdecls` 不会暴露此问题。
+`575c82c` added `[[lean_lib]] Dev` in `lakefile.toml` (root `Dev.Search`, a LeanSearchClient
+query draft), deliberately excluding it from `defaultTargets` to keep network queries out of
+reproducible builds. However, the pinned `PatrickMassot/checkdecls` `Main.lean` imports the
+roots of **all** `lean_lib`s in the root package (`ws.root.leanLibs.flatMap (·.config.roots)`),
+regardless of default-target status. CI only runs `lake build`; `Dev.olean` was absent and
+`importModules` threw an exception. A previous manual local `lake build Dev` concealed the
+issue from local `checkdecls`.
 
-## 处理
+## Resolution
 
-- 从 `lakefile.toml` 删除 `Dev` 库声明，保留 `formalization/Dev/Search.lean` 文件；在 lakefile
-  与该文件的说明中记录原因，改为用 `lake env lean Dev/Search.lean` 或编辑器直接加载。
-  `formalization/README.md` 的目录注释同步。
-- 本地复现 CI 步骤：从 Blueprint 章节的 `\lean{}` 锚点提取 136 条声明写入临时文件，运行
-  `lake exe checkdecls <file>`，退出码 0，无 "missing"。该临时清单与 plastex 生成的
-  `lean_decls` 不是同一文件，只用于确认导入阶段不再失败、且当前锚点（含本日新增的十二条）
-  都存在于已构建库中。
-- 未重新推送；远端 CI 对 `575c82c` 的失败记录保持原样。修复随下一次推送生效。
+- Remove the `Dev` library declaration from `lakefile.toml`, retaining `formalization/Dev/Search.lean`. Explain the reason in both the lakefile and that file's documentation; load it via `lake env lean Dev/Search.lean` or directly in the editor instead. Update the directory comment in `formalization/README.md`.
+- Reproduce the CI step locally: extract 136 declarations from Blueprint chapter `\lean{}` anchors into a temporary file and run `lake exe checkdecls <file>`. Exit code 0, no "missing" output. This temporary list is not the plastex-generated `lean_decls`; it only confirms that imports no longer fail and all current anchors (including the twelve added that day) exist in the built library.
+- No further push was made; the remote CI failure for `575c82c` remains unchanged. The fix takes effect on the next push.
 
-## 边界
+## Boundary
 
-这是构建配置问题，不涉及任何数学声明、证书或 ledger 状态。`Lean certification` 工作流与
-本地 `verify.py` 均未受影响。
+This is a build-configuration issue, with no mathematical statement, certificate, or ledger
+status change. Neither the `Lean certification` workflow nor local `verify.py` was affected.

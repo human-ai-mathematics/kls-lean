@@ -1,7 +1,7 @@
 # Blueprint review clarifications
 
 **Date:** 2026-09-06 (Asia/Shanghai). **Authorization:** after the screenshot review and the
-independent assessment of its five points, the owner instructed “按照你的理解来补”. Work is
+independent assessment of its five points, the owner instructed “fill in the gaps according to your assessment”. Work is
 local on `main`, based on `70ca1c19c4d207a31716c2e589c0b096521a5490`.
 
 This record follows [analytic bridge resolution](2026-09-06-analytic-bridge-resolution.md),

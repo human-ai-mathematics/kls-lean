@@ -1,17 +1,12 @@
-# Eilenberg 可测上界（带常数的 L1）
+# Eilenberg Measurable Upper Bound (with a Constant in L1)
 
-2026-09-15。本轮**证明了加权 coarea 路线的 L1**：Lipschitz 水平截面的 Hausdorff 测度具有
-可测支配函数，其 Lebesgue 积分被 `C · K · volume S` 控制，常数显式且为正。上一轮的 L2
-成为它的零测特例。不提交、不推送、不改历史决定。起始 HEAD 为
-`2965b32bc79bdb24921c633df12102450eaedcc4`；起始 passed 回执为
-`build/verification/20260914T211119.924157Z/report.json`（与 `build/verification/latest.json`
-逐字节相同），重新计算的完整快照与回执相等：414 个文件，SHA256
-`ca32490215e2f001aadbd83b7d18110d74ef39b971c12818a91b635e2b40ec18`。这里的逐字节核对指
-逐文件 SHA256（包括删除项）及完整快照结构一致，不是只看 HEAD。
+2026-09-15. This round **proves the L1 bound for the weighted coarea route**: the Hausdorff measure of Lipschitz level sections has a measurable dominating function, whose Lebesgue integral is controlled by `C · K · volume S`, with a positive, explicit constant. The previous L2 case becomes its zero-measure special instance. No commit, no push, no alteration of historical decisions. The starting HEAD is
+`2965b32bc79bdb24921c633df12102450eaedcc4`; the starting verification receipt is
+`build/verification/20260914T211119.924157Z/report.json` (bit-for-bit identical to `build/verification/latest.json`), and the recomputed full snapshot matches the receipt: 414 files, SHA256 `ca32490215e2f001aadbd83b7d18110d74ef39b971c12818a91b635e2b40ec18`. The bit-for-bit comparison here refers to consistent file-level SHA256 (including deleted items) and full snapshot structure, not merely the HEAD.
 
-## 本轮证明的内容
+## Content of this round of proof
 
-### `Analysis/HausdorffSlicing.lean`（只依赖 Mathlib，任意 `EMetricSpace`）
+### `Analysis/HausdorffSlicing.lean` (only relying on Mathlib, any `EMetricSpace`)
 
 ```lean
 theorem FunctionalInequalities.Analysis.exists_measurable_majorant
@@ -23,8 +18,7 @@ theorem FunctionalInequalities.Analysis.exists_measurable_majorant
       (∫⁻ t, F t ∂(volume : Measure ℝ)) ≤ 2 * (K : ℝ≥0∞) * μH[d + 1] S
 ```
 
-这是 Mathlib 直径规范下的 Eilenberg 不等式，常数为 `2`，**没有维数、没有向量空间结构、
-没有 `volume`**。两条新辅助引理：
+This is the Eilenberg inequality under the diameter convention of Mathlib, with constant `2`, **no dimension, no vector space structure, no `volume`**. Two new auxiliary lemmas:
 
 ```lean
 theorem FunctionalInequalities.Analysis.exists_measurable_majorant_of_eqOn
@@ -40,7 +34,7 @@ theorem FunctionalInequalities.Analysis.exists_cover_cost_lt
       ∑' i, ⨆ _ : (T i).Nonempty, Metric.ediam (T i) ^ d < c
 ```
 
-### `KLS/Geometry/SurfaceSlicing.lean`（归一化包装，常数显式）
+### `KLS/Geometry/SurfaceSlicing.lean` (Normalization packaging, constant explicit)
 
 ```lean
 def FunctionalInequalities.KLS.eilenbergConstant (V : Type u)
@@ -60,90 +54,68 @@ theorem FunctionalInequalities.KLS.exists_measurable_majorant
         ≤ (eilenbergConstant V : ℝ≥0∞) * (K : ℝ≥0∞) * volume S
 ```
 
-常数 `4 ω_{n-1} / ω_n` 是 Mathlib 常数 `2` 先按纤维测度归一化 `ω_{n-1}/2^{n-1}`、再按环境
-测度归一化 `2^n/ω_n` 的结果。**不声称尖锐**。审计客户端把它算成具体数字：
-`eilenbergConstant ℝ = 2`（`4·ω₀/ω₁ = 4/2`，用 `Γ(3/2) = √π/2`），
-`eilenbergConstant (EuclideanSpace ℝ (Fin 0)) = 4`。
+The constant `4 ω_{n-1} / ω_n` is the result of normalizing the Mathlib constant `2` first by fiber measure and then by ambient measure `ω_{n-1}/2^{n-1}` and `2^n/ω_n`, respectively. **No sharpness claimed**. The audit client computes it as a concrete number:
+`eilenbergConstant ℝ = 2` (`4·ω₀/ω₁ = 4/2`, using `Γ(3/2) = √π/2`),
+`eilenbergConstant (EuclideanSpace ℝ (Fin 0)) = 4`.
 
-与路线记录的 L1 相比：`∃ C : ℝ≥0, 0 < C ∧ …` 由 `eilenbergConstant` 与 `eilenbergConstant_pos`
-给出，并且**去掉**了 `[CompleteSpace V]`（从未使用）与 `[Nontrivial V]`（零维单独处理，见下），
-没有增加任何假设。客户端的 `target` 用带 `[CompleteSpace V]` 与 `[Nontrivial V]` 的原语句
-逐字复述并证明，`target_of_trivial` 证明去掉 `[Nontrivial V]` 的版本。
+Compared to the L1 record of the route: `∃ C : ℝ≥0, 0 < C ∧ …` given by `eilenbergConstant` and `eilenbergConstant_pos`,
+and **removing** `[CompleteSpace V]` (never used) and `[Nontrivial V]` (treated separately in dimension zero, see below),
+no additional assumptions are introduced. The client's `target` is proven by verbatim reproduction and proof using the primitive with `[CompleteSpace V]` and `[Nontrivial V]`, and `target_of_trivial` proves the version without `[Nontrivial V]`.
 
-## 证明设计
+## Proof design
 
-与上一轮同一套覆盖骨架，只把"总覆盖成本趋零"换成"总覆盖成本趋近 `μH[d+1] S`"：
-`Measure.mono_pre` 说每个尺度的下确界都 `≤ μH[d+1] S`，所以由 `exists_cover_cost_lt` 可在
-尺度 `(k+1)⁻¹` 上取到成本 `< μH[d+1] S + (k+1)⁻¹` 的覆盖。水平区间、可测支配函数、
-子类型索引的 `hausdorffMeasure_le_liminf_tsum` 逐点界、`lintegral_tsum` 与
-`lintegral_indicator_const` 的积分界、Fatou 全部不变，极限由
-`Tendsto (fun k ↦ 2K(μH[d+1] S + (k+1)⁻¹)) → 2K·μH[d+1] S` 给出。
+With the same covering skeleton as the previous round, only replacing "total coverage cost tends to zero" with "total coverage cost approaches `μH[d+1] S`":
+`Measure.mono_pre` says each scale's infimum is `≤ μH[d+1] S`, so by `exists_cover_cost_lt` a coverage with cost `< μH[d+1] S + (k+1)⁻¹` is attained at scale `(k+1)⁻¹`. The pointwise bound of the horizontal interval, the measurable dominating function, the sub-type index's `hausdorffMeasure_le_liminf_tsum`, the `lintegral_tsum` and `lintegral_indicator_const` integral bounds, and the Fatou lemma remain invariant; the limit is given by `Tendsto (fun k ↦ 2K(μH[d+1] S + (k+1)⁻¹)) → 2K·μH[d+1] S`.
 
-**退化情形用显式分支，不是排除。**
+**Degenerate cases use explicit branching, not exclusion.**
 
-* `K = 0`：`u` 在 `S` 上为常数，`exists_measurable_majorant_of_eqOn` 给出集中在单个水平上的
-  `∞` 支配函数，积分为 `⊤ · 0 = 0`，正是此时右端要求的值。这同时解决了
-  `μH[d+1] S = ⊤` 且 `K = 0` 的情形——那里覆盖论证根本取不到有限成本的覆盖。
-* `μH[d+1] S = ⊤` 且 `K ≠ 0`：右端为 `⊤`，取 `F ≡ ⊤`。
-* `d = 0`：仍然只对"区间含 `t`"的块求和（子类型索引），否则空块会贡献 `0^(0:ℝ) = 1`。
-* 零维（KLS 层）：自然数减法给 `surfaceMeasure V = hausdorffNormalized V 0`，空间是
-  `Subsingleton`，所以 `u` 在 `S` 上必为常数，同一条 `exists_measurable_majorant_of_eqOn`
-  以 `μ = surfaceMeasure V` 收尾。**没有**把零维 `ℋ⁰` 当成零测度；
-  上一轮客户端已算出 `surfaceMeasure (EuclideanSpace ℝ (Fin 0)) univ = 1`。
-* 正维（KLS 层）：`((n-1 : ℕ) : ℝ) + 1 = (n : ℝ)` 需要 `1 ≤ n`，所以维数分支是必要的。
+* `K = 0`: `u` is constant on `S`, and `exists_measurable_majorant_of_eqOn` provides concentration on a single level.
+  `∞` dominating function, integral is `⊤ · 0 = 0`, exactly the value required on the right-hand side at this time. This simultaneously resolves
+  The case of `μH[d+1] S = ⊤` and `K = 0`—there the covering argument simply cannot achieve finite cost coverings.
+* `μH[d+1] S = ⊤` and `K ≠ 0`: the right-hand side is `⊤`, take `F ≡ ⊤`.
+`d = 0`: Still only sums over blocks containing `t` (sub-type index), otherwise empty blocks will contribute `0^(0:ℝ) = 1`.
+* 0-dimensional (KLS layer): natural number subtraction gives `surfaceMeasure V = hausdorffNormalized V 0`, the space is
+  `Subsingleton`, so `u` is constant on `S`, along the same `exists_measurable_majorant_of_eqOn`
+  Close out with `μ = surfaceMeasure V`. There is **no** treatment of the zero-dimensional `ℋ⁰` as having zero measure;
+  The previous client has already computed `surfaceMeasure (EuclideanSpace ℝ (Fin 0)) univ = 1`.
+* Positive dimension (KLS layer): `((n-1 : ℕ) : ℝ) + 1 = (n : ℝ)` requires `1 ≤ n`, so the dimension branching is necessary.
 
-**没有循环论证。** 可测性仍然只对**构造出来的**支配函数成立，从未假设截面函数
-`fun t ↦ surfaceMeasure V (S ∩ {u = t})` 可测。L3–L5 的截面可测性仍未证明。
+**No circular argument.** Measurability still holds only for **constructively obtained** dominating functions, and never assumes the section functions.
+`fun t ↦ surfaceMeasure V (S ∩ {u = t})` measurable. The measurability of the cross sections of L3–L5 has not been proven.
 
-## L2 与上一轮声明的处理
+## L2 and the handling of the previous statement
 
-`ae_hausdorffMeasure_inter_levelSet_eq_zero` 与
-`KLS.ae_surfaceMeasure_inter_levelSet_eq_zero` 的**语句逐字未变**，证明改为 L1 的推论
-（右端为 `2K·0 = 0`，支配函数可测，`lintegral_eq_zero_iff` 适用）。
-`exists_cover_of_hausdorffMeasure_eq_zero` 语句逐字未变，改为 `exists_cover_cost_lt` 的推论。
-`exists_levelSlab` 语句逐字未变。
+`ae_hausdorffMeasure_inter_levelSet_eq_zero` and
+`KLS.ae_surfaceMeasure_inter_levelSet_eq_zero` statement literally unchanged, proof changed to a consequence of L1
+(right-hand side is `2K·0 = 0`, dominating function is measurable, `lintegral_eq_zero_iff` applies).
+`exists_cover_of_hausdorffMeasure_eq_zero` statement literally unchanged, changed to a consequence of `exists_cover_cost_lt`.
+`exists_levelSlab` statement literally unchanged.
 
-这四条由客户端**机器检查**：`preserved_*` 四条定理逐字复述上一轮决定记录里的语句，并用
-**具名参数**（`(u := u) (K := K) (N := N) (d := d)`）调用库声明，所以改名绑定变量或改变
-假设顺序都会在这里编译失败。改写过程中确实一度把 `exists_levelSlab` 的 `N` 写成 `S`，
-正是这项检查报出 `Invalid argument name N`，随后已改回 `N`，没有留下签名变动。
+These four are checked by the client machine: `preserved_*` The four theorems verbatim reproduce the statements from the previous round's decision record and invoke library declarations using **named arguments** (`(u := u) (K := K) (N := N) (d := d)`), so renaming bound variables or changing the order of assumptions would cause a compilation failure here. During rewriting, we indeed once wrote `exists_levelSlab`'s `N` as `S`, and it was precisely this check that reported `Invalid argument name N`, after which it was corrected back to `N`, with no signature change remaining.
 
-## 本轮没有做的事
+## What was not done in this round
 
-* **L3–L5 的截面可测性桥接**仍未证明：紧集纤维 Borel 可测性（L3，含开覆盖 content 的
-  尺度极限与 `mkMetric'` 的对接）、Borel 集纤维 a.e. 可测性（L4）、带可测权重版本（L5）。
-* **三个原始 coarea 洞**未动：`Analysis.aemeasurable_lintegral_levelSet`、
-  `Analysis.lintegral_enorm_gradient_mul_eq_lintegral_levelSet`、
-  `Isoperimetry.lintegral_enorm_gradient_mul_eq_lintegral_levelSet`。
-* 尖锐 `C^(finrank)` 的 `Analysis.sard`（已无下游消费者）及
-  `Analysis.ae_forall_fderiv_ne_zero` 仍带 `sorryAx`。
-* `smoothConstant_le_minkowskiConstant`、
-  `smoothConstant_mul_lintegral_min_superlevel_le`、两个 Cheeger 常数相等仍未证明。
-* 常数不声称尖锐；没有证明 `C = 1` 或任何下界。
-* 没有触及 L6/L6a/L7 的 Whitney 延拓与 C¹ 分片，也没有触及 L8–L12。
-* L1 不填任何原有 coarea 洞：直接洞按预期仍为 3/3/5，总数 11。
+* **Section measurability bridging of L3–L5** remains unproven: Borel measurability of fiber compact sets (L3, including open cover content of
+  Scale limit and connection to `mkMetric'`, Borel set fiber a.e. measurability (L4), version with measurable weights (L5).
+* **Three original coarea holes** unchanged: `Analysis.aemeasurable_lintegral_levelSet`,[, ]
+  `Analysis.lintegral_enorm_gradient_mul_eq_lintegral_levelSet`,
+  `Isoperimetry.lintegral_enorm_gradient_mul_eq_lintegral_levelSet`.
+* Sharp `C^(finrank)` `Analysis.sard` (now without downstream consumers) and
+  `Analysis.ae_forall_fderiv_ne_zero` still carries `sorryAx`.
+* `smoothConstant_le_minkowskiConstant`,
+  `smoothConstant_mul_lintegral_min_superlevel_le`, two Cheeger constants being equal has not been proven.
+Constants do not claim sharpness; no proof `C = 1` or lower bound is given.
+* Whitney's extension touching neither L6/L6a/L7 nor C¹ piecewise, nor L8–L12.
+* L1 does not fill any existing coarea holes: direct proof holes remain as 3/3/5, total count 11.
 
-## 验证
+## Verification
 
-* 两个库模块均以 `-DwarningAsError=true` 单独编译通过。
-* `build/audit/EilenbergMajorantAudit.lean` 以 `-DwarningAsError=true` 编译通过：
-  1 条语句 `#check`（逐字复述路线记录的 L1）与 12 条定理——`target`（带 `[CompleteSpace V]`
-  与 `[Nontrivial V]` 的原语句）、`target_of_trivial`、6 条独立消费者
-  （`null_slicing` 由 L1 独立重推的 L2、`ae_ne_top` 即 `volume S` 有限时几乎每个截面测度
-  **有限**（L2 给不出的结论）、`constant_on_set` 即 `K = 0` 迫使积分为零、
-  `univ_without_finiteness` 即 `S = univ` 无任何有限性假设、`eilenbergConstant_real = 2`、
-  `eilenbergConstant_euclidean_zero = 4`）、4 条 `preserved_*` 具名参数签名检查——
-  以及 23 条 `#print axioms`（11 条库声明 + 12 条客户端声明）。
-  全部 23 个声明只依赖 `propext`、`Classical.choice`、`Quot.sound`，**无 `sorryAx`**。
-* 重跑 `NullSlicingAudit`（上一轮客户端，未作修改）、`WeightedCoareaRouteStatements`、
-  `WeightedCoareaInfrastructure`、`AreaFormulaAudit`、`CheegerInfimumAudit`、
-  `MinkowskiConstantAudit`、`SuperlevelSardScope`、`SmoothSardAudit`、
-  `SmoothSardRouteStatements`，全部严格编译通过。
-* 三个 WIP 文件逐个实际编译成功，直接洞分别 **3/3/5，总数 11**。
-* 默认 `lake build` 与根目录 `python3 research/verify.py` 通过。最终回执为
-  `build/verification/latest.json`，与最终全部源码快照完全相等；证据 JSON 为
-  `research/explorations/2026-09-15-eilenberg-majorant.json`，最终核对另存
-  `build/audit/eilenberg-final-snapshot.json`。`build/` 被 gitignore，故 `build/audit`
-  的哈希由证据 JSON 单独绑定。
-* 证书仍 **24**，perimeter infrastructure 仍 **missing**（gap 列表按本轮更新：L1 与 L2
-  改为已证明，L3–L5 仍列为缺口）。
+* Both library modules are compiled separately and pass `-DwarningAsError=true`.
+* `build/audit/EilenbergMajorantAudit.lean` compiles successfully with `-DwarningAsError=true`:
+  1 statements `#check` (verbatim reproduction of the L1 route record) and 12 theorems—`target` (the original statement with `[CompleteSpace V]` and `[Nontrivial V]`), `target_of_trivial`, 6 independent consumers
+  (`null_slicing` independently rederived from L1 to L2, `ae_ne_top` i.e. `volume S` finite measure on each section almost surely (a conclusion not provided by L2), `constant_on_set` i.e. `K = 0` forces the integral to zero, `univ_without_finiteness` i.e. `S = univ` with no finite assumption, `eilenbergConstant_real = 2`, `eilenbergConstant_euclidean_zero = 4`, 4 statements `preserved_*` with named argument signature checks—and 23 statements `#print axioms` (11 library declarations + 12 client declarations).
+  All 23 declarations only depend on `propext`, `Classical.choice`, `Quot.sound`, **without `sorryAx`**.
+* Re-running `NullSlicingAudit` (previous client, unmodified), `WeightedCoareaRouteStatements`, `WeightedCoareaInfrastructure`, `AreaFormulaAudit`, `CheegerInfimumAudit`, `MinkowskiConstantAudit`, `SuperlevelSardScope`, `SmoothSardAudit`, `SmoothSardRouteStatements` all compile strictly successfully.
+* Three WIP files compile successfully in practice, with direct proof holes respectively **3/3/5, total 11**.
+* Default `lake build` and root directory `python3 research/verify.py` pass. Final verification receipt is `build/verification/latest.json`, identical to the final full source snapshot; evidence JSON is `research/explorations/2026-09-15-eilenberg-majorant.json`, and final reconciliation is saved separately as `build/audit/eilenberg-final-snapshot.json`. `build/` is gitignored, so the hash of `build/audit` is bound solely by the evidence JSON.
+* The certificate remains **24**, perimeter infrastructure remains **missing** (gap list updated in this round: L1 and L2 are now proven, L3–L5 remain listed as gaps).

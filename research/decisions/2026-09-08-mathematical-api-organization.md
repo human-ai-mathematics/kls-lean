@@ -1,133 +1,104 @@
-# 数学对象命名空间与参数组织迁移
+# Mathematical Object Namespace and Parameter Organization Migration
 
-基线：`main`，`19cd996817d1c31c6fe46e949e19a51cb7cc5ae2`，开始时工作区干净。
-用户批准直接实施；交付本地改动，不 commit 或 push。既有 decisions/explorations 保持原记录。
+Baseline: `main`, `19cd996817d1c31c6fe46e949e19a51cb7cc5ae2`, workspace starts clean.
+User approves direct implementation; delivers local changes, without commit or push. Existing decisions/explorations remains unchanged.
 
-## 迁移前清单与证据
+## Pre-migration Checklist and Evidence
 
-完整声明映射见 [机器可读映射](../api-migration/2026-09-08-name-map.json)。
-`build/api-refactor/baseline/` 保存全部 233 个跟踪文件及 SHA256；
-`baseline-build.log` 记录原默认构建通过（3349 jobs），`baseline-golden.log`
-确认原有 26 个声明的 golden 与该基线一致。`before-raw.json` 保存从 882 个公共声明入口
-展开的 1088 个本地声明类型及定义闭包；定理证明由编译、公理审计和最终 kernel 重放验证。
-原 StatementSnapshot 的 pretty printer 在长内在类型上截断，所以另存不截断的 `Expr` 表示；
-逐声明无损压缩文件位于 `baseline-expressions/`。不能把打印截断当成等价证据。
+Complete declaration mapping see [machine-readable mapping](../api-migration/2026-09-08-name-map.json)].
+`build/api-refactor/baseline/` preserves all 233 tracking files and SHA256;
+`baseline-build.log` records the original default build passing (3349 jobs]), `baseline-golden.log`
+confirms consistency between the original 26 declarations' golden and the baseline. `before-raw.json` preserves 1088 local declaration types and definitions expanded from 882 public declaration entry points; theorem proving is performed via compilation, axiom audit, and final kernel replay verification.
+The original StatementSnapshot's pretty printer truncates internally on type length, so a non-truncated `Expr` representation is saved instead; lossless compressed files per declaration are located at `baseline-expressions/`. Printing truncation cannot be considered equivalent evidence.
 
-## 对象与承载空间
+## Objects and Ambient Spaces
 
-- `Poincare.SmoothTest`：全局光滑、L² 且梯度平方可积的测试常数。
-- `Energy.SmoothGradient`：普通梯度预能量与松弛；`Intrinsic.energy` 通过内在坐标拉回原 L² 空间。
-- `Energy.CovarianceGradient`：协方差加权测试 `Test`、`Test.energy`、`preEnergy`、`relaxation`；
-  `Intrinsic.energy` 留在内在律的 L² 空间。对应常数在 `Poincare.CovarianceGradient.Intrinsic`。
-- `Energy.WeightedGradient`：外部选择 `B` 的 `B ∇`、`IsTest`、`operator` 和闭包，不假定 B 是协方差因子。
-- `Energy.LocalSlope`：点态局部斜率和平方积分；`Poincare.LocalSlope.Holds` 在给定坐标律上，
-  `Poincare.LocalSlope.Intrinsic.constant` 先取 intrinsicMeasure。
-- 概率推前在 `Probability`；L² 的 `Translation`、`LinearIsometry`、`ContinuousLinearEquiv`
-  分别提供 `pullback`、`pullbackInv` 和 `pullbackEquiv`。复用 Mathlib 的
-  `ProbabilityMeasure.map` 与 `Lp.compMeasurePreservingₗᵢ`，不建立另一套一般运输抽象。
+- `Poincare.SmoothTest`: Global smoothness, L², and integrable square of gradient test constants.
+- `Energy.SmoothGradient`: Ordinary gradient pre-energy and relaxation; `Intrinsic.energy` pulls back to the original L² space via intrinsic coordinates.
+- `Energy.CovarianceGradient`: Covariance-weighted test `Test`, `Test.energy`, `preEnergy`, `relaxation`; `Intrinsic.energy` remains in the L² space of intrinsic laws. Corresponding constants appear in `Poincare.CovarianceGradient.Intrinsic`.
+- `Energy.WeightedGradient`: External choice `B` of `B ∇`, `IsTest`, `operator`, and closure, without assuming B is a covariance factor.
+- `Energy.LocalSlope`: Pointwise local slopes and square integrals; `Poincare.LocalSlope.Holds` on given coordinate laws, `Poincare.LocalSlope.Intrinsic.constant` first takes intrinsic measure.
+- Probabilistic pushforward on `Probability`; L²'s `Translation`, `LinearIsometry`, `ContinuousLinearEquiv` respectively provide `pullback`, `pullbackInv`, and `pullbackEquiv`. Reuses Mathlib's `ProbabilityMeasure.map` and `Lp.compMeasurePreservingₗᵢ`, without establishing another general transport abstraction.
 
-## 参数调整清单
+## Parameter Adjustment Checklist
 
-第一阶段仅替换声明名称、命名空间与引用；构造所选择的测度、算子、参考 Haar 测度保持显式。
-`WeightedGradient.IsTest.memLp` 支持 `hf.memLp`，两种测试支持 `f.energy`、`f.toL2`。
-对数凹结论保留 `hμ.定理名` 的性质证明调用。随后对 section 作用域及冗余假设的任何调整，
-必须独立列出并对照实际 elaborated 参数，不能计入纯重命名比较。
+The first stage only replaces declaration names, namespaces, and references; constructs the selected measure, operator, and reference Haar measure is kept explicit.
+`WeightedGradient.IsTest.memLp` supports `hf.memLp`, two tests support `f.energy`, `f.toL2`.
+Log-concave results retain property-proof calls in the form `hμ.theorem_name`. Any subsequent adjustments to section scope or redundant hypotheses
+Must independently list and compare against actual elaborated parameters, and cannot be counted as pure renaming comparison.
 
-## 数学契约
+## Mathematical Contract
 
-协方差因子只断言 `∃ B, ∀ v, ⟪Σ v,v⟫ = ‖B v‖²`，故名为
-`Covariance.exists_inner_eq_norm_sq`；不增加平方、自伴、正性或唯一性结论。
-直接的环境律平移不变性获得 `constant_translateLaw`，内在表达式比较明确标出 intrinsicMeasure。
-普通梯度与协方差加权能量、环境空间与内在空间、闭二次形式与 Dirichlet 性质、
-零维与退化支撑、无限最优常数的区别保持。稳定节点 ID、证书入口、来源标签保持。
+The covariance factor only asserts `∃ B, ∀ v, ⟪Σ v,v⟫ = ‖B v‖²`, hence named `Covariance.exists_inner_eq_norm_sq`; it does not add any conclusions regarding square, self-adjointness, positivity, or uniqueness.
+The direct ambient law's translation invariance yields `constant_translateLaw`, and the intrinsic measure is explicitly indicated in the intrinsic expression.
+Differences in ordinary gradient versus covariance-weighted energy, ambient space versus intrinsic space, closed quadratic forms versus Dirichlet properties, zero-dimensional versus degenerate support, and distinction in infinite optimal constants are preserved. Stable node IDs, certificate entry points, and source tags remain unchanged.
 
 
-## 已审查的最终接口变化
+## Final Interface Changes Reviewed
 
-完整的实际参数顺序、显隐及实例清单在
-[parameters.json](../api-migration/2026-09-08-parameters.json)。比较来自迁移前完整 `Expr`
-和迁移后 `forallTelescope` 的实际声明；并非从 `variable` 文本推测。
-882 个库内源码声明入口合并为 881 个，其中 305 个入口的参数有变化：
+The complete list of actual parameter orders, visibility, and instance entries is in
+[parameters.json](../api-migration/2026-09-08-parameters.json). Compare actual declarations from before migration `Expr`
+and after migration `forallTelescope`; not inferred from `variable` text.
+882 source code declaration entries within the library are merged into 881, of which 305 have parameter changes:
 
-- 214 个仅删除冗余实例；68 个同时删除实例并调整参数排列。
-- 22 个仅调整排列。显式数学输入（概率律、权重、参考测度及证明）的用途不变。
-- 1 个是实数二阶矩引理与一般版本的合并：
-  `ConditionalFiber.memLp_id_two_iff` 和 `memLp_id_two_iff'` 统一为
-  `Probability.memLp_id_two_iff_lintegral_enorm_rpow_lt_top`。
-  实数特化获得任意宇宙的 Borel 范数空间载体；一般版本删去不需要的 Hilbert/有限维条件。
+- 214 entries only remove redundant instances; 68 entries remove instances and adjust parameter ordering.
+- 22 entries only adjust ordering. The usage of explicit mathematical input (probability laws, weights, reference measures, and proofs) remains unchanged.
+- 1 entries are a merger of the real-valued second moment lemma and the general version:
+  `ConditionalFiber.memLp_id_two_iff` and `memLp_id_two_iff'` are unified into
+  `Probability.memLp_id_two_iff_lintegral_enorm_rpow_lt_top`.
+  The real-valued specialization yields a Borel norm space carrier for any universe; the general version removes unnecessary Hilbert/finite-dimensional conditions.
 
-除该实数特化外，没有改变公共声明的宇宙参数个数，也没有改变非实例参数的显隐。
-`WeightedGradient.IsTest.smul` 和 `IsTest.weightedGradient_smul_ae` 的两个隐式参数
-从 `… m g …` 调整为 `… g m …`；完整参数序列（含实例的排列）见清单。
-从 `LogConcave`、绝对连续性、有限矩、可积性推论的证明参数都保留。
-三个证书入口（内在绝对连续性、Borell 密度、闭协方差形式）也删除了冗余的
-`[CompleteSpace E]`；有限维条件仍在，原带完备性假设的使用场景仍然覆盖。
-其余证书入口名称及全部 guards 保留。
+Aside from this real-valued specialization, the number of public declaration universe parameters remains unchanged, and the visibility of non-instance parameters remains unchanged.
+The two implicit parameters of `WeightedGradient.IsTest.smul` and `IsTest.weightedGradient_smul_ae` are adjusted from `… m g …` to `… g m …`; the complete parameter sequence (including instance ordering) is listed in the checklist.
+All proof parameters derived from `LogConcave`, absolute continuity, finite moments, and integrability are retained.
+Three certificate entry points (intrinsic absolute continuity, Borel density, closed covariance form) also remove redundant
+`[CompleteSpace E]`; the finite-dimensional conditions remain, and the original use cases with completeness assumptions are still covered.
+All other certificate entry point names and guards are preserved.
 
-新的分层模块包括 `Probability.Transport`、`Probability.IntrinsicTranslation`、
-`Probability.LocalDomination`、`Probability.Moments`、`L2.Transport`、
-`Energy.CovarianceGradient.IntrinsicTranslation` 和 `Poincare.CovarianceGradient.Transport`。
-协方差范数分解（包括内在版本）属于 `Probability.CovarianceFactorization`。
-完整模块移动与拆分分别见 [module-map.json](../api-migration/2026-09-08-module-map.json)
-和 [module-splits.json](../api-migration/2026-09-08-module-splits.json)。旧模块没有转发包装。
+The new layered modules include `Probability.Transport`, `Probability.IntrinsicTranslation`,
+`Probability.LocalDomination`, `Probability.Moments`, `L2.Transport`,
+`Energy.CovarianceGradient.IntrinsicTranslation`, and `Poincare.CovarianceGradient.Transport`.
+The covariance norm decomposition (including the intrinsic version) belongs to `Probability.CovarianceFactorization`.
+The complete module migration and splitting are detailed in [module-map.json](../api-migration/2026-09-08-module-map.json)
+and [module-splits.json](../api-migration/2026-09-08-module-splits.json). Old modules do not have forwarding wrappers.
 
-原有 22 处 `unusedSectionVars` 关闭项全部移除；最终默认构建没有这类警告。
-WeightedGradient 按微分、可测测试、Haar/Rademacher 分组；局部测度支配独立；
-AffineSupport 按几何、闭性、满测度和内在坐标分组；LipschitzApproximation
-把核的纯微分性质与 Haar 归一化分开。个别相邻引理假设较弱时保留局部 `omit`，
-检查器始终开启。没有打包环境假设的新结构或 typeclass。
+All closing terms in the original 22 at `unusedSectionVars` are removed; the final default build does not issue such warnings.
+WeightedGradient is grouped by differential, measurable test, and Haar/Rademacher; local measure domination is independent;
+AffineSupport is grouped by geometric, closedness, full measure, and intrinsic coordinates; LipschitzApproximation separates the pure differentiability property of the kernel from Haar normalization. Local `omit` is retained when individual adjacent lemmas have weak assumptions, and the checker is always enabled. No new structural or typeclass with bundled environment assumptions.
 
-## 语义比较结果
+## Semantic comparison results
 
-[审计总览](../api-migration/2026-09-08-review.json) 与逐声明记录提供以下证据：
+[Audit overview](../api-migration/2026-09-08-review.json) and per-declaration records provide the following evidence:
 
-1. **纯命名阶段**：1088 个本地声明的类型与定义闭包，经明确名称映射和绑定变量
-   alpha 重命名后全部相同；没有遗漏、新增或未解释差异。
-   独立的阶段映射保留在 `2026-09-08-renaming-stage-name-map.json`，避免用最终泛化映射
-   重新解释这一阶段。
-2. **最终源码**：189 个定义/结构的主体，经 `.ilean` 解析引用映射后全部相同。
-   882 个源码签名中，876 个相同；其余 6 个逐项审查：实数二阶矩合并、
-   内在范数分解把 section 中的显式 `μ` 写进定理头、一个完备性及三个有限维实例
-   从 section 移入对应定理头。没有改动公式、测试字段、能量归一化或松弛构造。
-3. **最终 elaboration**：保存 1085 个当前本地声明类型及定义闭包。
-   严格 `Expr` 比较中 708 个仍相同，375 个变化分别由实际参数调整（335）、
-   依赖这些接口的调用调整（36）、编译器生成证明重编号（4）解释。
-   另有 5 个旧生成证明辅助名不再出现、3 个新生成辅助名出现；这些都是 `._proof_N`
-   编译产物，不是公共数学入口的遗漏。二阶矩两个入口合并为一个单独记录。
-   不能把这些接口泛化称为整库“仅重命名”。
-4. **Statement golden**：基线 26 个声明先与原 checkout 核对通过，最终仍为 26 个；
-   roots、外部信任边界、toolchain 和 Lake 依赖锁定不变（roots 仅按名称映射）。
-   模块归属和同类型生成证明编号先对齐，剩余 10 个差异来自内在坐标辅助定义删除
-   冗余实例及其调用；`KLS.Conjecture` 的量词与源码主体未变。
-   详见 [golden-review.json](../api-migration/2026-09-08-golden-review.json)。
+1. **Pure naming phase**: 1088 local declarations have the same types and definition closures after alpha-renaming with explicit name mappings and variable bindings; all are identical, with no omissions, additions, or unexplained differences.
+Independent stage mappings are preserved in `2026-09-08-renaming-stage-name-map.json`, avoiding re-interpretation of this phase using the final generalization mapping.
+2. **Final source code**: 189 definitions/structures' bodies are identical after `.ilean` parsing and reference mapping. Among 882 source code signatures, 876 are identical; the remaining 6 are individually reviewed: second-order moment tensors are merged, intrinsic norm decompositions move explicit `μ` from the section into the theorem header, a completeness statement, and three finite-dimensional instances are moved from the section to their corresponding theorem headers. No modifications to formulas, test fields, energy normalization, or relaxation constructions are made.
+3. **Final elaboration**: preserves 1085 current local declaration types and definition closures. In strict `Expr` comparison, 708 remain identical, while 375 change due to actual parameter adjustments (335), call adjustments depending on these interfaces (36), and compiler-generated proof renumbering (4). Additionally, 5 old generated proof auxiliary names no longer appear, and 3 new generated auxiliary names appear; all are `._proof_N` compiler artifacts, not omissions from public mathematical entry points. Two second-order moment entry points are merged into a single record. These interfaces cannot be generalized as merely "renamed" across the entire library.
+4. **Statement golden**: The baseline 26 declarations initially pass verification against the original checkout, ultimately remaining 26 in number; roots, external trust boundaries, toolchain, and Lake dependencies remain locked (roots only under name mapping). Module ownership and same-type generated proof indices are aligned first; remaining 10 differences arise from removal of internal coordinate auxiliary definitions, redundant instances, and their calls; the quantifier count in `KLS.Conjecture` remains unchanged. See [golden-review.json](../api-migration/2026-09-08-golden-review.json).
 
-原始 `Expr` JSON 与逐声明无损压缩记录在 `build/api-refactor/`，包括
-`baseline-expressions.json`、`renamed-raw.json` 和 `final-expressions.json`。
-声明比较工具用于检查，不能代替 Lean 内核验证；定理证明体由完整构建、公理审计和
-最终 kernel 重放负责。
+Original `Expr` JSON and per-assertion lossless compression records in `build/api-refactor/`, including
+`baseline-expressions.json`, `renamed-raw.json`, and `final-expressions.json`.
+Assertion comparison tool used for verification, not replacing Lean kernel validation; theorem proofs are responsible by full build, axiom audit, and final kernel replay.
 
-基础设施原有 134 个来源哈希已核对（82 个仓库源条目、52 个外部依赖条目），没有基线
-不一致。根据实际声明的模块归属扩展拆分后的来源清单，再刷新 94 个条目；
-不是先重算哈希再跳过差异审查。71 份既有 decisions/explorations 逐字节保持不变。
+The infrastructure has 134 source hashes verified (82 repository source entries, 52 external dependency entries), with no baseline inconsistencies. Expand the source list based on the actual declared module ownership, then refresh 94 entries; do not first recalculate hashes before skipping difference review. 71 existing decisions/explorations are byte-for-byte identical.
 
-## 验收与最终收据
+## Acceptance and Final Receipt
 
-已完成的预验收：默认 `lake build` 通过（3359 jobs）；Python 测试 100 项全部通过；
-405 个旧公共名的 `#check_failure` 检查全部通过；Blueprint 结构检查为 87 个标签、
-4 条 active routes、0 错误，PDF/Web/checkdecls 均通过。37 页 PDF 已检查全页缩略图，
-并放大检查更新的前端、比较标题和 conditional-fiber 认证边界页面。
-默认构建新增 `examples.ApiOrganization`，覆盖 `f.energy`、`f.toL2`、`hf.memLp`、
-`hμ.定理名`、任意有限维载体、零维、零权重和运输方向；现有退化支撑、无限常数
-与全部证书示例继续构建。
+Pre-acceptance completed: default `lake build` passed (3359 jobs); all 100 Python tests passed;
+405 checks for the `#check_failure` old public names have all passed; Blueprint structure checks for 87 labels,
+4 active routes, 0 errors, PDF/Web/checkdecls all passed. 37 PDF pages have been checked for full page thumbnails,
+And magnify inspect the updated frontend, compare titles, and conditional-fiber certification boundary pages.
+Default build adds `examples.ApiOrganization`, overriding `f.energy`, `f.toL2`, `hf.memLp`,
+hμ.theorem name, any finite-dimensional carrier, zero-dimensional, zero weight and transport direction; existing degenerate support, infinite constant
+Continue building with all certificate examples.
 
-本记录审查并批准本轮 golden 与基础设施哈希更新。最终从根目录运行
-`python3 research/verify.py`；其不可变运行目录中的 `report.json` 是最终构建、
-声明/传递公理审计及全部当前模块 kernel 重放的验收依据。
-[`build/verification/latest.json`](../../build/verification/latest.json) 指向该最新尝试。
-本记录在最终验证前定稿；收据必须与包含本记录及全部控制文件的最终源码快照一致。
-不以 `git diff --check` 代替任何语义检查。
+This record reviews and approves the current round of golden and infrastructure hash updates. The final execution from the root directory
+`python3 research/verify.py`; the immutable runtime directory's `report.json` is the acceptance basis for the final build,
+statement/axiom audit, and full current module kernel replay.
+[`build/verification/latest.json`](../../build/verification/latest.json) points to this latest attempt.
+This record is finalized prior to final verification; the receipt must match the final source code snapshot including this record and all control files.
+No substitution of `git diff --check` for any semantic checks.
 
-有意保留稳定 ledger/Blueprint ID、证书入口中的历史拼写、Borel/Borell、L1/L2、
-weighted、ae、紧支撑和边界限定词。Blueprint 的 `C_P^can` 等既有数学记号仍用作
-对应对象的简写；公共 Lean API 以数学对象和承载空间命名。
-此次交付仅为本地工作区，不 commit、push 或发布网站；没有新增数学认证状态。
+Intentionally retain stable ledger/Blueprint ID, historical spelling in certificate entry, Borel/Borell, L1/L2,
+weighted, ae, compact support and boundary qualifiers. Blueprint's `C_P^can` and similar mathematical notations are still used as abbreviations for corresponding objects; public Lean API are named after mathematical objects and their ambient spaces.
+This delivery is for local workspace only, without commit, push, or website publication; no new mathematical certification states added.

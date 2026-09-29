@@ -3,7 +3,7 @@
 **Decision date:** 2026-09-04 (Asia/Shanghai).
 
 **User authorization:** after reviewing the canonical Basic direction and the need for a
-Blueprint, the repository user instructed: “行，那就先把Basic提交上去，然后我们先做一个Blueprint”.
+Blueprint, the repository user instructed: “All right, submit Basic first, then create a Blueprint”.
 
 **Repository baseline:** `509c42970dba78b9ffa31b793087a8fd1af57889` on `main`.  The
 canonical Basic was published separately at `ea82a666e796fd4707c3ef9381a4885039ed6609`; the sharp

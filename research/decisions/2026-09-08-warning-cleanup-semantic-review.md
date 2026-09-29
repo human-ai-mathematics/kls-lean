@@ -1,46 +1,38 @@
-# 警告清理与语义、数学审查
+# Warning cleanup and semantic/mathematical review
 
-在现有未提交的全库 API 迁移上继续工作。修改前统一验收通过，收据为
-`build/verification/20260908T142214.267284Z/report.json`；没有复现编译错误，
-但有 1 条弃用警告和 9 条自动辅助声明引用警告。
+Continue from the existing uncommitted library-wide API migration. Unified acceptance passed
+before editing, with receipt `build/verification/20260908T142214.267284Z/report.json`.
+No compilation error was reproduced, but there was one deprecation warning and nine warnings
+about references to automatically generated auxiliary declarations.
 
-## 修复
+## Fixes
 
-- `KLS/LogConcave/Isotropic.lean` 使用 `Set.mem_ofPred_eq` 替换弃用名称。
-  仅修改集合成员关系化简所用的引理，定理假设、结论及证明路线不变。
-- `research/verify.py` 通过环境中的准确名称调用 `Lean.collectAxioms`，与
-  `#print axioms` 使用相同的传递公理收集器。保留全部辅助声明及原有白名单，
-  不关闭警告、不跳过声明。查询前检查声明存在，避免不存在的名称被视作无公理。
-  三项 Lean 集成测试覆盖自动生成的辅助证明、传递非标准公理、缺失声明。
-- 更正 `KLS/Statement.lean` 和 `Poincare/LocalSlope/Basic.lean` 注释中的
-  `local-apply`，恢复 `local-slope`；局部斜率测试的 L² 条件正确引用
-  `Energy.LocalSlope.Admissible.memLp_two`。
+- Replace the deprecated name with `Set.mem_ofPred_eq` in `KLS/LogConcave/Isotropic.lean`. Only the lemma used to simplify set membership changes; assumptions, conclusion, and proof route are unchanged.
+- `research/verify.py` calls `Lean.collectAxioms` using exact names from the environment, the same transitive axiom collector as `#print axioms`. Retain all auxiliary declarations and the existing allowlist, without suppressing warnings or skipping declarations. Check existence before querying, so a missing name cannot appear axiom-free. Three Lean integration tests cover generated proof helpers, transitive nonstandard axioms, and missing declarations.
+- Correct `local-apply` back to `local-slope` in comments in `KLS/Statement.lean` and `Poincare/LocalSlope/Basic.lean`; the L² condition for local-slope tests correctly references `Energy.LocalSlope.Admissible.memLp_two`.
 
-## 语义与数学检查
+## Semantic and mathematical checks
 
-当前编译环境重新提取的 1085 项类型及定义闭包与上一轮迁移结果一致；
-修复前后的完整原始表达式输出逐字节相同。无需名称、参数或宇宙归一化，
-没有改变测试类、承载空间、假设、常数、归一化或定义主体。
-这项对比不包含定理证明主体；证明由构建、公理审计及内核重放另行检查。
-材料位于 `build/warning-cleanup/`。
+The 1085 types and definition closures re-extracted from the current compiled environment
+agree with the previous migration. Full raw-expression output is byte-identical before and
+after the fixes, without name, parameter, or universe normalization. Test classes, carriers,
+assumptions, constants, normalization, and definition bodies are unchanged. The comparison
+does not include theorem proof bodies, which are separately checked by compilation, axiom
+audit, and kernel replay. Artifacts are in `build/warning-cleanup/`.
 
-人工复核了以下语义边界，未发现需要修改的数学陈述：
+Manual review found no mathematical statement requiring changes in these boundaries:
 
-- KLS 的有限非负常数在维数和概率律之前量化；能量是内在仿射坐标上的
-  局部斜率平方积分，无 `1/2` 因子，保留有限二阶矩条件。
-- 零能量测试没有被排除；正方差除以零能量为无穷，零除以零为零。
-  没有可行有限界时文献常数为无穷；空逼近类给出无穷松弛能量，不能推出恢复序列。
-- Dirac 律上环境原始梯度能量仍可能依赖代表元；内在空间与松弛层没有被
-  替换成环境原始能量。零维、空乘积及退化高斯情形保留。
-- 一维高斯最优常数是方差 `v`；白化使用内在正定协方差。
-  仿射、协方差与各向同性形式的等价保留固定有限 `K` 和固定宇宙，
-  并不提供某个 `K` 的存在性证明。
+- KLS's finite nonnegative constant is quantified before dimension and probability law. Energy is the integral of squared local slope in intrinsic affine coordinates, without a `1/2` factor; finite second moments are retained.
+- Zero-energy tests are not excluded. Positive variance divided by zero energy is infinity; zero divided by zero is zero. The literature constant is infinite if no finite bound is valid. An empty approximation class gives infinite relaxation energy and does not imply a recovery sequence.
+- Raw ambient gradient energy for a Dirac law can still depend on the representative. Intrinsic space and relaxation have not been replaced by raw ambient energy. Dimension zero, empty products, and degenerate Gaussians remain covered.
+- The one-dimensional Gaussian optimum is variance `v`; whitening uses positive definite intrinsic covariance. Equivalence of affine, covariance, and isotropic formulations retains fixed finite `K` and a fixed universe; it does not prove existence of such a `K`.
 
-核对原始证据哈希和上述源码差异后，刷新了 4 条基础设施来源哈希。
-statement golden、账本认证状态、数学接口及第三方依赖均未在本次修改中变更。
+After checking original evidence hashes and these source differences, refresh four
+infrastructure source hashes. Statement golden files, ledger certification status,
+mathematical interfaces, and third-party dependencies are unchanged in this round.
 
-修复后的单独 `lake build` 已通过且无错误或警告。最终完整验收读取
-`build/verification/latest.json` 并核对当前源码快照，范围包括 Python 测试、
-statement golden、声明公理审计及全部 114 个本地模块的 kernel replay。
-内核重放信任固定版本的第三方编译依赖，不是干净环境中的独立重建。
-本次仅修改本地工作区，没有提交或推送。
+A separate `lake build` after the fixes passes without errors or warnings. Final full
+acceptance reads `build/verification/latest.json` and checks it against the current source
+snapshot, covering Python tests, statement golden files, declaration axiom audits, and kernel
+replay of all 114 local modules. Replay trusts pinned third-party compiled dependencies;
+it is not an independent clean-environment rebuild. Local working-tree edits only, no commit or push.

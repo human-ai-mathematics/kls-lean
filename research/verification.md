@@ -110,7 +110,7 @@ auxiliary registration does not add a ledger certificate. The
 Cheeger-infimum node remains **missing** exactly the integrated superlevel bound and reverse
 comparison. Coarea through L13, smooth Sard, Gauss–Green and recovery are available inputs;
 they must not be listed as missing proofs. The Cheeger–Buser workstream remains assigned to
-王浩丞; this alignment changes no theorem statement or proof body. *(2026-09-19: the workstream was reassigned to this session by the owner and its infimum node is now certified; see the Cheeger-line section.)* The proved recovery
+Haocheng Wang; this alignment changes no theorem statement or proof body. *(2026-09-19: the workstream was reassigned to this session by the owner and its infimum node is now certified; see the Cheeger-line section.)* The proved recovery
 module is added to the aggregate imports so the registered declaration is audited there.
 
 See [the semantic alignment record](decisions/2026-09-16-semantic-alignment.md) for the reviewed scopes and reproducible evidence.
@@ -253,7 +253,7 @@ No commit or push; the real Git index is unchanged.
 ## The Cheeger line taken over and closed: both infimum holes proved, `lem:relative-perimeter-cheeger-infimum` certified, Cheeger's inequality proved (2026-09-19)
 
 **Implementation and registration round; it changes both registration numbers recorded above.** At
-the owner's instruction (学长那个我们接手了) the log-concave Cheeger line formerly assigned to 王浩丞
+the owner's instruction (we are taking over the work previously assigned to our senior colleague) the log-concave Cheeger line formerly assigned to Haocheng Wang
 was taken over here. Direct holes fall from **7 (0/2/5) to 5 (0/0/5)** — only `Energy/WIP/Cheeger.lean`
 is left, and the `KLS/WIP/` directory is gone — and certificates rise from **24 to 25**.
 
@@ -382,7 +382,7 @@ dimension-free KLS bound remains open.
 
 **Verification.** Default `lake build` (3492 jobs) passed after the orphan artifacts were removed. All **58** audit clients (`research/audits` 51 + `build/audit` 7 live clients) rerun with `-DwarningAsError=true`, **0 failures**; **732 axiom reports, 5 `sorryAx` lines**, all five on the two Cheeger-infimum holes of `KLS/WIP/CheegerInfimum.lean` deliberately reported by `IsoperimetryCoareaAudit` and `LipschitzCoareaMigrationAudit`. The two remaining WIP modules compile with `2 + 5 = 7` `sorry` warnings, so direct holes are **7 (0/2/5)**. `pp.all` of `Analysis.sard` and `Analysis.ae_forall_fderiv_ne_zero` before and after the migration: `diff` empty. `check_ledger.py` **24** certificates, 0 errors. The root `python3 research/verify.py` was rerun at the end of the round; its receipt is identified in `build/audit/coarea-sard-proofs/final-snapshot.json`, with the snapshot recomputed file by file against the working tree and drift empty.
 
-**The log-concave Cheeger–Buser line belongs to 王浩丞 and is deliberately untouched here.**
+**The log-concave Cheeger–Buser line belongs to Haocheng Wang and is deliberately untouched here.**
 
 See [the implementation decision](decisions/2026-09-19-coarea-sard-proofs.md) and
 `research/explorations/2026-09-19-coarea-sard-proofs.json`. The final verification receipt is
@@ -425,7 +425,7 @@ No `.lean` library source was modified, no module was added to the library, the 
 untouched and no hole was migrated. The new client's local import closure contains **no**
 work-in-progress file; it compiles with `-DwarningAsError=true` with 0 errors and 0 warnings.
 
-**The log-concave Cheeger–Buser line belongs to 王浩丞 and is deliberately untouched here.**
+**The log-concave Cheeger–Buser line belongs to Haocheng Wang and is deliberately untouched here.**
 
 See [the locally Lipschitz vector coarea route decision](decisions/2026-09-19-locally-lipschitz-vector-coarea-route.md)
 and `research/explorations/2026-09-19-locally-lipschitz-vector-coarea-route.json`. The final
@@ -480,7 +480,7 @@ No `.lean` library source was modified, no module was added to the library, the 
 untouched and no hole was migrated. The new client's local import closure contains **no**
 work-in-progress file; it compiles with `-DwarningAsError=true` with 0 errors and 0 warnings.
 
-**The log-concave Cheeger–Buser line belongs to 王浩丞 and is deliberately untouched here.**
+**The log-concave Cheeger–Buser line belongs to Haocheng Wang and is deliberately untouched here.**
 
 See [the Lipschitz vector coarea route decision](decisions/2026-09-19-lipschitz-vector-coarea-route.md)
 and `research/explorations/2026-09-19-lipschitz-vector-coarea-route.json`. The final verification
@@ -548,7 +548,7 @@ No `.lean` library source was modified, no module was added to the library, the 
 untouched and no hole was migrated. The new client's local import closure contains **no**
 work-in-progress file; it compiles with `-DwarningAsError=true` with 0 errors and 0 warnings.
 
-**The log-concave Cheeger–Buser line belongs to 王浩丞 and is deliberately untouched here.**
+**The log-concave Cheeger–Buser line belongs to Haocheng Wang and is deliberately untouched here.**
 
 See [the sharp Sard route decision](decisions/2026-09-19-sharp-sard-route.md) and
 `research/explorations/2026-09-19-sharp-sard-route.json`. The final verification receipt is
@@ -619,7 +619,7 @@ does it too.
 
 The two Cheeger comparisons and the five Energy holes are untouched.
 
-**The log-concave Cheeger–Buser line belongs to 王浩丞 and is deliberately untouched here.**
+**The log-concave Cheeger–Buser line belongs to Haocheng Wang and is deliberately untouched here.**
 
 See [the regrouping decision](decisions/2026-09-17-analysis-regrouping.md),
 `research/explorations/2026-09-17-analysis-regrouping.json` and the path map
@@ -652,8 +652,8 @@ the first rule of `research/naming.md`. It is now `Analysis.det_eq_zero_of_not_s
 per counterexample; there is now a single `Pt`, and the client is regrouped so that all of `N1`
 comes before all of `N2` rather than interleaving.
 
-**A module-naming rule was added to `research/naming.md`** (§文件与声明作用域, new subsection
-「家族词归目录，不进文件名」): once a mathematical family has three or more modules, the family
+**A module-naming rule was added to `research/naming.md`** (§File and declaration scope, new subsection
+“Family names belong in directories, not filenames”): once a mathematical family has three or more modules, the family
 name belongs to the **directory** and the basename keeps only the distinguishing word.
 `Poincare/SmoothTest/`, `Energy/LocalSlope/`, `Energy/CovarianceGradient/` and
 `KLS/LogConcave/Line/` already do this.
@@ -689,7 +689,7 @@ committed `.lean` file was modified.
 
 The two Cheeger comparisons and the five Energy holes are untouched.
 
-**The log-concave Cheeger–Buser line belongs to 王浩丞 and is deliberately untouched here.**
+**The log-concave Cheeger–Buser line belongs to Haocheng Wang and is deliberately untouched here.**
 
 See [the N1 decision](decisions/2026-09-17-exponent-obstruction-n1.md), whose addendum
 records this move, and `build/audit/exponent-obstruction-n1/final-snapshot.json` for the receipt.
@@ -756,7 +756,7 @@ audit client now carries **11** standard-only axiom reports.
 
 The two Cheeger comparisons and the five Energy holes are untouched.
 
-**The log-concave Cheeger–Buser line belongs to 王浩丞 and is deliberately untouched here.**
+**The log-concave Cheeger–Buser line belongs to Haocheng Wang and is deliberately untouched here.**
 
 See [the N1 decision](decisions/2026-09-17-exponent-obstruction-n1.md) and
 `research/explorations/2026-09-17-exponent-obstruction-n1.json`. The final verification receipt is
@@ -836,7 +836,7 @@ new clients have **13** and **4** standard-only axiom reports.
 
 The two Cheeger comparisons and the five Energy holes are untouched.
 
-**The log-concave Cheeger–Buser line belongs to 王浩丞 and is deliberately untouched here.**
+**The log-concave Cheeger–Buser line belongs to Haocheng Wang and is deliberately untouched here.**
 
 See [the equidimensional Sard decision](decisions/2026-09-17-equidimensional-sard.md) and
 `research/explorations/2026-09-17-equidimensional-sard.json`. The final verification receipt is
@@ -904,7 +904,7 @@ has **14 standard-only axiom reports**.
 
 The two Cheeger comparisons and the five Energy holes are untouched.
 
-**The log-concave Cheeger–Buser line belongs to 王浩丞 and is deliberately untouched here.**
+**The log-concave Cheeger–Buser line belongs to Haocheng Wang and is deliberately untouched here.**
 
 See [the rank-deficient coarea decision](decisions/2026-09-17-rank-deficient-coarea.md) and
 `research/explorations/2026-09-17-rank-deficient-coarea.json`. The final verification receipt is
@@ -962,7 +962,7 @@ among them `route_R7`, which copies `R7` **verbatim** from
 
 Sharp finite-regularity Sard, the two Cheeger comparisons and the five Energy holes are untouched.
 
-**The log-concave Cheeger–Buser line belongs to 王浩丞 and is deliberately untouched here.**
+**The log-concave Cheeger–Buser line belongs to Haocheng Wang and is deliberately untouched here.**
 
 See [the R7 decision](decisions/2026-09-17-stratum-slicing-complete.md) and
 `research/explorations/2026-09-17-stratum-slicing-complete.json`. The final verification receipt is
@@ -1025,7 +1025,7 @@ route-statement file has **2 `#check`s and no declaration**.
 
 Sharp finite-regularity Sard, the two Cheeger comparisons and the five Energy holes are untouched.
 
-**The log-concave Cheeger–Buser line belongs to 王浩丞 and is deliberately untouched here.**
+**The log-concave Cheeger–Buser line belongs to Haocheng Wang and is deliberately untouched here.**
 
 See [the stratum slicing decision](decisions/2026-09-17-stratum-slicing.md) and
 `research/explorations/2026-09-17-stratum-slicing.json`. The final verification receipt is
@@ -1087,7 +1087,7 @@ were re-run and show **no new errors**.
 Sharp finite-regularity Sard, the two Cheeger comparisons and the five Energy holes are untouched,
 and no existing `.lean` file was modified.
 
-**The log-concave Cheeger–Buser line belongs to 王浩丞 and is deliberately untouched here.**
+**The log-concave Cheeger–Buser line belongs to Haocheng Wang and is deliberately untouched here.**
 
 See [the fibre finiteness and Fubini decision](decisions/2026-09-17-fibre-finite-fubini.md)
 and `research/explorations/2026-09-17-fibre-finite-fubini.json`. The final verification receipt is
@@ -1172,7 +1172,7 @@ re-run and show **no new errors**; that file too stays byte-unchanged.
 Sharp finite-regularity Sard, the two Cheeger comparisons and the five Energy holes are untouched,
 and no existing `.lean` file was modified.
 
-**The log-concave Cheeger–Buser line belongs to 王浩丞 and is deliberately untouched here.**
+**The log-concave Cheeger–Buser line belongs to Haocheng Wang and is deliberately untouched here.**
 
 See [the tangential Lipschitz decision](decisions/2026-09-17-tangential-lipschitz.md) and
 `research/explorations/2026-09-17-tangential-lipschitz.json`. The final verification receipt is
@@ -1236,7 +1236,7 @@ re-run and show **no new errors**; that file too stays byte-unchanged.
 Sharp finite-regularity Sard, the two Cheeger comparisons and the five Energy holes are untouched,
 and no existing `.lean` file was modified.
 
-**The log-concave Cheeger–Buser line belongs to 王浩丞 and is deliberately untouched here.**
+**The log-concave Cheeger–Buser line belongs to Haocheng Wang and is deliberately untouched here.**
 
 See [the right inverse decision](decisions/2026-09-17-right-inverse-bound.md) and
 `research/explorations/2026-09-17-right-inverse-bound.json`. The final verification receipt is
@@ -1311,7 +1311,7 @@ statements and found **no new errors**; that file too stays byte-unchanged.
 Sharp finite-regularity Sard, the two Cheeger comparisons and the five Energy holes are untouched,
 and no existing `.lean` file was modified.
 
-**The log-concave Cheeger–Buser line belongs to 王浩丞 and is deliberately untouched here.**
+**The log-concave Cheeger–Buser line belongs to Haocheng Wang and is deliberately untouched here.**
 
 See [the rank stratification decision](decisions/2026-09-17-rank-stratification.md) and
 `research/explorations/2026-09-17-rank-stratification.json`. The final verification receipt is
@@ -1390,7 +1390,7 @@ normalization-agnostic, so `A5` is **not** falsified — only its conclusion is 
 No `.lean` library source was modified, no module was added to the library, and no hole was
 migrated. The new client's local import closure is 28 modules with **no** work-in-progress file.
 
-**The log-concave Cheeger–Buser line belongs to 王浩丞 and is deliberately untouched here.**
+**The log-concave Cheeger–Buser line belongs to Haocheng Wang and is deliberately untouched here.**
 
 See [the rank-deficient route decision](decisions/2026-09-17-rank-deficient-route.md) and
 `research/explorations/2026-09-17-rank-deficient-route.json`. The final verification receipt is
@@ -1445,7 +1445,7 @@ route is a rank stratification with iterated slicing along the surviving directi
 of the degenerate case of Federer's coarea formula, for which neither this repository nor Mathlib
 has tools; a route-exploration round is recommended before attempting it.
 
-**The log-concave Cheeger–Buser line belongs to 王浩丞 and is deliberately untouched here.**
+**The log-concave Cheeger–Buser line belongs to Haocheng Wang and is deliberately untouched here.**
 
 See [the critical slicing decision](decisions/2026-09-17-vector-critical-slice.md) and
 `research/explorations/2026-09-17-vector-critical-slice.json`. The final verification receipt is
@@ -1503,7 +1503,7 @@ The module's local import closure is 13 modules with **no** work-in-progress fil
 **Next in the program**: a codimension-`m` Sard or critical-slice argument, and then the general
 codimension-`m` coarea formula.
 
-**The log-concave Cheeger–Buser line belongs to 王浩丞 and is deliberately untouched here.**
+**The log-concave Cheeger–Buser line belongs to Haocheng Wang and is deliberately untouched here.**
 
 See [the slice measurability decision](decisions/2026-09-17-vector-slice-measurable.md) and
 `research/explorations/2026-09-17-vector-slice-measurable.json`. The final verification receipt is
@@ -1559,7 +1559,7 @@ This round reviewed the area-formula route statements again and found **no furth
 open-cover costs and their upper semicontinuity in the level to a vector-valued map — then
 unconditional weighted slice measurability, and only then the critical case.
 
-**The log-concave Cheeger–Buser line belongs to 王浩丞 and is deliberately untouched here.**
+**The log-concave Cheeger–Buser line belongs to Haocheng Wang and is deliberately untouched here.**
 
 See [the Eilenberg decision](decisions/2026-09-17-vector-hausdorff-slicing.md) and
 `research/explorations/2026-09-17-vector-hausdorff-slicing.json`. The final verification receipt is
@@ -1615,7 +1615,7 @@ The module's local import closure is 21 modules with **no** work-in-progress fil
 **Next in the program**: the codimension-`m` Eilenberg slicing inequality, which is what would make
 slice measurability available without regularity and open the critical case.
 
-**The log-concave Cheeger–Buser line belongs to 王浩丞 and is deliberately untouched here.**
+**The log-concave Cheeger–Buser line belongs to Haocheng Wang and is deliberately untouched here.**
 
 See [the regular coarea decision](decisions/2026-09-17-vector-regular-coarea.md) and
 `research/explorations/2026-09-17-vector-regular-coarea.json`. The final verification receipt is
@@ -1671,7 +1671,7 @@ The two modules' local import closures are 11 and 20 modules, with **no** work-i
 **Next in the program**: codimension-`m` weighted slice measurability, then the countable cover and
 disjoint patching.
 
-**The log-concave Cheeger–Buser line belongs to 王浩丞 and is deliberately untouched here.**
+**The log-concave Cheeger–Buser line belongs to Haocheng Wang and is deliberately untouched here.**
 
 See [the local coarea decision](decisions/2026-09-17-vector-local-coarea.md) and
 `research/explorations/2026-09-17-vector-local-coarea.json`. The final verification receipt is
@@ -1732,7 +1732,7 @@ The module's local import closure is 18 modules with **no** work-in-progress fil
 **Next in the program**: the weighted codimension-`m` graph area formula, then Tonelli joining the
 two sides into the local coarea equality, then the countable patching.
 
-**The log-concave Cheeger–Buser line belongs to 王浩丞 and is deliberately untouched here.**
+**The log-concave Cheeger–Buser line belongs to Haocheng Wang and is deliberately untouched here.**
 
 See [the fibre change-of-variables decision](decisions/2026-09-17-vector-fiber-integral.md) and
 `research/explorations/2026-09-17-vector-fiber-integral.json`. The final verification receipt is
@@ -1796,7 +1796,7 @@ The module's local import closure is 16 modules with **no** work-in-progress fil
 measure-preserving splitting, and the weighted codimension-`m` area formula; then the assembly into
 the local coarea equality and the countable patching.
 
-**The log-concave Cheeger–Buser line belongs to 王浩丞 and is deliberately untouched here.**
+**The log-concave Cheeger–Buser line belongs to Haocheng Wang and is deliberately untouched here.**
 
 See [the charting decision](decisions/2026-09-17-vector-regular-chart.md) and
 `research/explorations/2026-09-17-vector-regular-chart.json`. The final verification receipt is
@@ -1872,7 +1872,7 @@ The module's local import closure is 9 modules with **no** work-in-progress file
 theorem, then the `m`-dimensional fibrewise change of variables on this round's measure-preserving
 splitting, then the assembly with `B2` and the countable patching.
 
-**The log-concave Cheeger–Buser line belongs to 王浩丞 and is deliberately untouched here.**
+**The log-concave Cheeger–Buser line belongs to Haocheng Wang and is deliberately untouched here.**
 
 See [the fibre Jacobian decision](decisions/2026-09-16-coarea-graph-jacobian.md) and
 `research/explorations/2026-09-16-coarea-graph-jacobian.json`. The final verification receipt is
@@ -1921,7 +1921,7 @@ The module's local import closure is 10 modules with **no** work-in-progress fil
 the scalar `L9` — on the open set where `coareaJacobian ≠ 0`, represent the fibres as a family of
 graphs by the parametric implicit function theorem and apply this round's normalized area formula.
 
-**The log-concave Cheeger–Buser line belongs to 王浩丞 and is deliberately untouched here.**
+**The log-concave Cheeger–Buser line belongs to Haocheng Wang and is deliberately untouched here.**
 Sharp finite-regularity Sard, Energy's five holes and dimension-free KLS also remain open.
 
 See [the `B1` completion decision](decisions/2026-09-16-vector-graph-area.md) and
@@ -1958,7 +1958,7 @@ in the codimension-one file. The limit lemmas `tendsto_aux` and `tendsto_aux'` t
 graph-independent, so they should be reusable and the remaining work should come in under that.
 Route obligations `A2`–`A5` and `B2` remain untouched.
 
-**The log-concave Cheeger–Buser line belongs to 王浩丞 and is deliberately untouched here.**
+**The log-concave Cheeger–Buser line belongs to Haocheng Wang and is deliberately untouched here.**
 Sharp finite-regularity Sard, Energy's five holes and dimension-free KLS also remain open.
 
 See [the fourth-phase decision](decisions/2026-09-16-vector-graph-sandwich.md) and
@@ -2000,7 +2000,7 @@ zero, a constant slope and a zero-dimensional parameter space.
 pays for itself on the lower bound, then `ε → 0` and the countable patching. One to two rounds.
 Route obligations `A2`–`A5` and `B2` remain untouched.
 
-**The log-concave Cheeger–Buser line belongs to 王浩丞 and is deliberately untouched here.**
+**The log-concave Cheeger–Buser line belongs to Haocheng Wang and is deliberately untouched here.**
 Sharp finite-regularity Sard, Energy's five holes and dimension-free KLS also remain open.
 
 See [the `B1` first-part decision](decisions/2026-09-16-vector-graph.md) and
@@ -2046,7 +2046,7 @@ two-sided comparison against an injective linear model — the high-risk gap of 
 the recommended main target, 600–1000 lines over two to three rounds) and `B2` (its normalized
 form). **Next is `B1`.**
 
-**The log-concave Cheeger–Buser line belongs to 王浩丞 and is deliberately untouched here.**
+**The log-concave Cheeger–Buser line belongs to Haocheng Wang and is deliberately untouched here.**
 Sharp finite-regularity Sard, Energy's five holes and dimension-free KLS also remain open.
 
 See [the `A1` decision](decisions/2026-09-16-normdet-continuity.md) and
@@ -2094,7 +2094,7 @@ of the coarea formula itself.
 The nine obligations `A0`–`A5`, `B1`, `B2` are stated exactly in the route statements file and
 type-check under `-DwarningAsError=true`. **None of them is claimed to hold in Lean.**
 
-**The log-concave Cheeger–Buser line belongs to 王浩丞 and is deliberately untouched here.**
+**The log-concave Cheeger–Buser line belongs to Haocheng Wang and is deliberately untouched here.**
 Sharp finite-regularity Sard, Energy's five holes and dimension-free KLS also remain open.
 
 See [the area formula route decision](decisions/2026-09-16-area-formula-route.md) and
@@ -2138,7 +2138,7 @@ graph, a subsingleton target and a zero-dimensional parameter space.
 type-check and explicitly **not** a proof, the Federer area formula for an injective `C¹`
 parametrization: `μH[k] (g '' s) = ∫⁻ y in s, ofReal (normDet (fderiv ℝ g y))`. That remains open.
 
-**The log-concave Cheeger–Buser line belongs to 王浩丞 and is deliberately untouched here.**
+**The log-concave Cheeger–Buser line belongs to Haocheng Wang and is deliberately untouched here.**
 Sharp finite-regularity Sard, Energy's five holes and dimension-free KLS also remain open.
 
 See [the graph Jacobian decision](decisions/2026-09-16-graph-jacobian.md) and
@@ -2184,7 +2184,7 @@ parametrized image as the integral of `normDet (fderiv)`. The repository already
 should reduce to it locally. Then the codimension-`m` regular case, then the critical part and the
 gluing.
 
-**The log-concave Cheeger–Buser line belongs to 王浩丞 and is deliberately untouched here.**
+**The log-concave Cheeger–Buser line belongs to Haocheng Wang and is deliberately untouched here.**
 Sharp finite-regularity Sard, Energy's five holes and dimension-free KLS also remain open.
 
 See [the linear area formula decision](decisions/2026-09-16-linear-area-formula.md) and
@@ -2232,7 +2232,7 @@ scalar chain `L1`–`L13` took about ten rounds; no faster schedule is promised.
 
 **The log-concave Cheeger–Buser line — the alignment of the isoperimetric-constant definitions
 through the two-way Poincaré comparison, including the two remaining holes of
-`KLS/WIP/CheegerInfimum.lean` — belongs to 王浩丞 and is deliberately untouched here.** Sharp
+`KLS/WIP/CheegerInfimum.lean` — belongs to Haocheng Wang and is deliberately untouched here.** Sharp
 finite-regularity Sard, Energy's five holes and dimension-free KLS also remain open.
 
 See [the coarea Jacobian decision](decisions/2026-09-16-coarea-jacobian.md) and
@@ -2271,7 +2271,7 @@ reports are standard-only.
 
 **The log-concave Cheeger–Buser line — the alignment of the isoperimetric-constant definitions
 through the two-way Poincaré comparison, including the two remaining holes of
-`KLS/WIP/CheegerInfimum.lean` — was handed to 王浩丞 on 2026-09-16 and is deliberately untouched
+`KLS/WIP/CheegerInfimum.lean` — was handed to Haocheng Wang on 2026-09-16 and is deliberately untouched
 here.** Sharp finite-regularity Sard, Energy's five holes and dimension-free KLS also remain open.
 
 See [the L13 decision](decisions/2026-09-16-locally-lipschitz-coarea.md) and
@@ -4013,9 +4013,9 @@ CI uses the same verification runner and uploads evidence as workflow artifacts.
 configuration locally does not run remote CI or publish any source. No successful CI run or
 remote publication is claimed by a local receipt.
 
-## 全库命名补充整理（2026-09-08）
+## Further library-wide naming cleanup (2026-09-08)
 
-全库声明作用域和文件归属已进一步整理：33 个公共短名、12 个模块路径，
-881 个公共签名及 1085 项展开后的类型/定义闭包核对一致。完整记录见
-[decisions/2026-09-08-library-naming.md](decisions/2026-09-08-library-naming.md)。
-最终验收读取 `build/verification/latest.json` 并核对当前源码快照；工作区改动尚未提交。
+Declaration scopes and file ownership were further organized across the library: 33 public short names and 12 module paths.
+Checks confirmed that 881 public signatures and 1085 elaborated type/definition closures agree. See the full record in
+[decisions/2026-09-08-library-naming.md](decisions/2026-09-08-library-naming.md).
+Final acceptance reads `build/verification/latest.json` and checks it against the current source snapshot; the working-tree changes have not yet been committed.

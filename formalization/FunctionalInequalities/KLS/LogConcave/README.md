@@ -1,65 +1,74 @@
-# 对数凹工具与表示定理
+# Log-concave tools and representation theorems
 
-本目录沿用 [Definitions.lean](../Definitions.lean) 中基于紧集的 `KLS.LogConcave` 定义。
-对数凹测度可以在环境空间中奇异；内禀结论使用仿射支撑的方向空间，并包含零维情形。
-具体假设和数学来源以各模块的声明与说明为准。
+This directory uses the compact-set definition of `KLS.LogConcave` from
+[Definitions.lean](../Definitions.lean). Log-concave measures may be singular in the ambient
+space. Intrinsic results use the direction space of the affine support and include dimension zero.
+Each module's declarations and documentation specify its exact assumptions and mathematical sources.
 
-## 阅读顺序
+## Reading order
 
-| 模块 | 内容 | 当前边界 |
+| Module | Contents | Scope |
 | --- | --- | --- |
-| [Transport.lean](Transport.lean) | 仿射等距传输、内禀坐标与支撑几何 | 已证明 |
-| [Borel.lean](Borel.lean) | 紧集与 Borel 集版本的对数凹等价 | 已证明；不预设密度或二阶矩 |
-| [Density/AbsoluteContinuity.lean](Density/AbsoluteContinuity.lean) | 小球估计、内禀绝对连续性及支撑边界结论 | 已证明；不构造完整对数凹密度代表 |
-| [Density/BorellRepresentation/Intrinsic.lean](Density/BorellRepresentation/Intrinsic.lean) | 密度代表、内部正性、局部界和矩结论 | 已证明；由 `Solutions.ThmBorellLogconcaveDensity.certificate` 打包 |
-| [Covariance.lean](Covariance.lean) | 仿射协方差预能量在对数凹律上的良定义契约：内禀二阶矩、Lipschitz 测试 a.e. 可微、能量只依赖 L² 类 | 已证明；定义节点 `def:affine-poincare-constant` 的契约，不含闭性或 Poincaré 结论 |
-| [WeightedGradient/Basic.lean](WeightedGradient/Basic.lean) | 全维对数凹律上加权梯度算子 `g ↦ B∇g` 的稠密定义、可闭性、光滑核闭包相等、松弛等于闭包范数平方；内禀律版本 | 已证明；由 `Solutions.LemCovarianceCoreClosure.certificate` 打包，不含 Poincaré、平移不变或 KLS 结论 |
-| [WeightedGradient/Closure.lean](WeightedGradient/Closure.lean) | 任意有界线性权重的闭梯度、闭性与稠密定义域；不依赖半群生成 | 已证明 |
-| [WeightedGradient/Energy.lean](WeightedGradient/Energy.lean) | 单位权重闭梯度的范数平方与 canonical／Cheeger 能量识别 | 已证明 |
-| [Cheeger.lean](Cheeger.lean) | 由内禀绝对连续性推出的对数凹 Cheeger 能量识别特化 | 已证明；一般律版本见 Energy/Cheeger/Identification |
-| [ClosedForm.lean](ClosedForm.lean) | 仿射协方差松弛是闭二次型、测试为序列核、内禀律平移下的等距与常数不变、与 ℝ + C_c^∞ 核上闭算子范数平方（CMH 闭形式）相等 | 已证明；由 `Solutions.ThmAffineCovarianceRelaxationClosed.certificate` 打包，不含 Poincaré 不等式、环境平移不变或 KLS |
-| [Translation.lean](Translation.lean) | 环境平移保持紧集对数凹；对数凹律的环境二阶矩与重心；平移到负重心得到零均值律 | 已证明；与 `Poincare/CovarianceGradient/Translation.lean` 的常数不变性一起由 `Solutions.LemAffinePoincareTranslationInvariance.certificate` 打包，不含 Poincaré 不等式、各向同性归约或 KLS |
-| [Isotropic.lean](Isotropic.lean) | 连续线性等价保持对数凹；三条 KLS 表述 `IsotropicBound`、`CovarianceBound`、`AffineBound` 及其两两等价；中心化、白化后的各向同性律；`AffineBound → Conjecture` | 已证明；由 `Solutions.ThmAffineIsotropicReduction.certificate` 打包，不断言任一表述对某个 K 成立 |
-| [Line/Density.lean](Line/Density.lean) | 实轴对数凹律的 Borell 密度结构 `LineDensity`；支撑内部为区间且承载全部质量；分布值严格在 (0,1) 的点落在支撑内部；`log ρ` 的弦下界、外推上界与中位数处的支撑指数 | 已证明；不含 Poincaré 结论 |
-| [Line/Hazard.lean](Line/Hazard.lean) | 四点不等式 `ρ a ρ e ≤ ρ b ρ c`；单调失效率 `ρ x μ(Ioi y) ≤ ρ y μ(Ioi x)` 及其镜像；中位数界 `2ρ(m)(1−F) ≤ ρ`、`2ρ(m)F ≤ ρ`；支撑线界 `ρ ≤ ρ(m) + k(F − 1/2)` | 已证明；使用 `Probability/Line/{Cdf,ExpIntegral}` |
-| [Line/Hardy.lean](Line/Hardy.lean) | 区间上的分部积分 Hardy 步骤；半直线上的有理端点有向并，锚点可取中位数同侧任意内点（常数仍为 `1/ρ(m)²`）；光滑测试 Poincaré 不等式 `SmoothTest.Holds ν (1/ρ(m))²` | 已证明；常数以中位数密度表达，不含方差 |
-| [Line/Variance.lean](Line/Variance.lean) | 比较函数 `φ(F x) − (x − m)` 的单调性；`∫(x−m)(F−1/2) dν ≥ 1/(12ρ(m))`；Bobkov 方差界 `1/(12ρ(m)²) ≤ Var` | 已证明；对均匀律取等 |
-| [Line/Poincare.lean](Line/Poincare.lean) | Bobkov 常数：`C_P^lit(ν) ≤ 12·Var_ν`（实与扩展方差两种形式）；零维仿射支撑时常数为零；`logConcave_dirac` | 已证明；独立于常数 4 的路线，作为历史推论保留 |
-| [Line/Isoperimetry.lean](Line/Isoperimetry.lean) | 一维等周（2026-09-19）：`LineDensity.mul_min_le_relativePerimeter`（`2ρ(m)·min(νU,1−νU) ≤ P_ρ(U)`，对任意光滑域，不用边界离散）、`two_mul_le_minkowskiConstant`（`2ρ(m) ≤ h_M`，经 `h_M = h_S`）、`le_two_mul`（`ρ ≤ 2ρ(m)`）、`one_div_le_evariance`（`Var ≥ 1/(12M²)`）、`interior_support_nonempty` |
-| [Line/Buser.lean](Line/Buser.lean) | Buser 半阶段一（2026-09-19）：`evariance_le_smoothTest_constant`（线性测试）、`Isoperimetry.minkowskiConstant_map`（等距搬运）、`LogConcave.inv_minkowskiConstant_sq_le`（直线上 `Ψ² ≤ 12·C_P^smooth`）、`LogConcave.inverseScale_sq_le_of_finrank_le_one`（仿射支撑维数 `≤ 1` 时 `Ψ_KLS² ≤ 12·C_P^lit`）；`n ≥ 2` 与常数 `π` 未证 |
-| [Line/Profile.lean](Line/Profile.lean) | 均值落在支撑内部；支撑线 `ρ ≤ A(1−F)+BF`（`A,B ≥ 0`）；仿射模型方差下界 `1/(√A+√B)⁴ ≤ Var`；轮廓界 `F(1−F) ≤ σρ` | 已证明；使用 `Probability/Line/AffineProfile.lean` 的仿射分位数模型 |
-| [Line/SharpHardy.lean](Line/SharpHardy.lean) | 截断测试 `clip a b f`、居中版本与尾积分 `G̃`；分部积分 `∫h² dμ = −∫_a^b f' G̃`；基态恒等式与边界项控制；`∫_a^b G̃²ρ/W² ≤ 4∫h² dμ`；`Var(clip) ≤ 4·Var_ν·∫f'² dν` | 已证明；区间 `[a,b] ⊆ Ω` 需跨越中位数 |
-| [Line/SharpPoincare.lean](Line/SharpPoincare.lean) | 尾项消失（锚定半直线 Hardy 界 + 积分的绝对连续性）；`(1+δ)` 分裂；`SmoothTest.Holds ν (4·Var)`；`C_P^lit(ν) ≤ 4·Var_ν`（实与扩展方差两种形式），`12` 作为推论 | 已证明；由 `Solutions.ThmOneDimensionalLogConcavePoincare.certificate` 打包，常数 4 在指数律取等，不断言高维结论 |
-| [Line/OfDensity.lean](Line/OfDensity.lean) | 反方向：有对数凹 Lebesgue 密度的实轴概率律是紧集对数凹 `LineDensity.logConcave` | 已证明；用 `Probability/Line/BrunnMinkowski.lean` 的一维 Prékopa–Leindler，与 `LogConcave.exists_lineDensity` 互逆 |
+| [Transport.lean](Transport.lean) | Affine-isometric transport, intrinsic coordinates, and support geometry | Proved |
+| [Borel.lean](Borel.lean) | Equivalence of compact-set and Borel-set log-concavity | Proved; no density or second-moment premise |
+| [Density/AbsoluteContinuity.lean](Density/AbsoluteContinuity.lean) | Small-ball estimates, intrinsic absolute continuity, and support-boundary results | Proved; does not construct a full log-concave density representative |
+| [Density/BorellRepresentation/Intrinsic.lean](Density/BorellRepresentation/Intrinsic.lean) | Density representative, positivity in the interior, local bounds, and moments | Proved; packaged by `Solutions.ThmBorellLogconcaveDensity.certificate` |
+| [Covariance.lean](Covariance.lean) | Well-definedness contract for the affine covariance pre-energy on log-concave laws: intrinsic second moments, a.e. differentiability of Lipschitz tests, and dependence of energy only on the L² class | Proved; contract for definition node `def:affine-poincare-constant`, without closedness or Poincaré conclusions |
+| [WeightedGradient/Basic.lean](WeightedGradient/Basic.lean) | Dense definition and closability of the weighted gradient operator `g ↦ B∇g` for full-dimensional log-concave laws, equality of smooth-core closures, relaxation as the squared norm of the closure, and intrinsic-law versions | Proved; packaged by `Solutions.LemCovarianceCoreClosure.certificate`, without Poincaré, translation-invariance, or KLS conclusions |
+| [WeightedGradient/Closure.lean](WeightedGradient/Closure.lean) | Closed gradient for arbitrary bounded linear weights, closedness, and dense domain; independent of semigroup generation | Proved |
+| [WeightedGradient/Energy.lean](WeightedGradient/Energy.lean) | Identification of the squared norm of the closed unit-weight gradient with canonical/Cheeger energy | Proved |
+| [Cheeger.lean](Cheeger.lean) | Log-concave specialization of Cheeger-energy identification via intrinsic absolute continuity | Proved; the general-law version is in Energy/Cheeger/Identification |
+| [ClosedForm.lean](ClosedForm.lean) | Affine covariance relaxation is a closed quadratic form; tests form a sequential core; isometry and constant invariance under intrinsic-law translation; equality with the squared norm of the closed operator on the ℝ + C_c^∞ core (the CMH closed form) | Proved; packaged by `Solutions.ThmAffineCovarianceRelaxationClosed.certificate`, without a Poincaré inequality, ambient translation invariance, or KLS |
+| [Translation.lean](Translation.lean) | Ambient translation preserves compact-set log-concavity; ambient second moments and barycenters of log-concave laws; translation by the negative barycenter gives a centered law | Proved; packaged with constant invariance from `Poincare/CovarianceGradient/Translation.lean` by `Solutions.LemAffinePoincareTranslationInvariance.certificate`, without a Poincaré inequality, isotropic reduction, or KLS |
+| [Isotropic.lean](Isotropic.lean) | Continuous linear equivalences preserve log-concavity; pairwise equivalence of `IsotropicBound`, `CovarianceBound`, and `AffineBound`; centered and whitened isotropic laws; `AffineBound → Conjecture` | Proved; packaged by `Solutions.ThmAffineIsotropicReduction.certificate`, without asserting that any formulation holds for some K |
+| [Line/Density.lean](Line/Density.lean) | Borell density structure `LineDensity` for real log-concave laws; the support interior is an interval carrying all mass; points with distribution value in (0,1) lie in that interior; chord lower bounds and extrapolation upper bounds for `log ρ`, and a supporting exponential at the median | Proved; no Poincaré conclusion |
+| [Line/Hazard.lean](Line/Hazard.lean) | Four-point inequality `ρ a ρ e ≤ ρ b ρ c`; monotone hazard inequality `ρ x μ(Ioi y) ≤ ρ y μ(Ioi x)` and its reflection; median bounds `2ρ(m)(1−F) ≤ ρ`, `2ρ(m)F ≤ ρ`; supporting-line bound `ρ ≤ ρ(m) + k(F − 1/2)` | Proved; uses `Probability/Line/{Cdf,ExpIntegral}` |
+| [Line/Hardy.lean](Line/Hardy.lean) | Integration-by-parts Hardy step on intervals; directed unions with rational endpoints on half-lines, with any interior anchor on the same side of the median (constant still `1/ρ(m)²`); smooth-test Poincaré inequality `SmoothTest.Holds ν (1/ρ(m))²` | Proved; constant expressed through median density, without variance |
+| [Line/Variance.lean](Line/Variance.lean) | Monotonicity of `φ(F x) − (x − m)`; `∫(x−m)(F−1/2) dν ≥ 1/(12ρ(m))`; Bobkov variance bound `1/(12ρ(m)²) ≤ Var` | Proved; equality for the uniform law |
+| [Line/Poincare.lean](Line/Poincare.lean) | Bobkov constant: `C_P^lit(ν) ≤ 12·Var_ν` (real and extended variance); zero constant for zero-dimensional affine support; `logConcave_dirac` | Proved independently of the constant-4 route; retained as a historical corollary |
+| [Line/Isoperimetry.lean](Line/Isoperimetry.lean) | One-dimensional isoperimetry (2026-09-19): `LineDensity.mul_min_le_relativePerimeter` (`2ρ(m)·min(νU,1−νU) ≤ P_ρ(U)` for any smooth domain, without boundary discreteness), `two_mul_le_minkowskiConstant` (`2ρ(m) ≤ h_M`, via `h_M = h_S`), `le_two_mul` (`ρ ≤ 2ρ(m)`), `one_div_le_evariance` (`Var ≥ 1/(12M²)`), `interior_support_nonempty` |
+| [Line/Buser.lean](Line/Buser.lean) | First stage of the Buser direction (2026-09-19): `evariance_le_smoothTest_constant` (linear test), `Isoperimetry.minkowskiConstant_map` (isometric transport), `LogConcave.inv_minkowskiConstant_sq_le` (`Ψ² ≤ 12·C_P^smooth` on the line), `LogConcave.inverseScale_sq_le_of_finrank_le_one` (`Ψ_KLS² ≤ 12·C_P^lit` for affine-support dimension `≤ 1`); `n ≥ 2` and constant `π` unproved at this stage |
+| [Line/Profile.lean](Line/Profile.lean) | The mean lies in the support interior; supporting line `ρ ≤ A(1−F)+BF` (`A,B ≥ 0`); affine-model variance bound `1/(√A+√B)⁴ ≤ Var`; profile bound `F(1−F) ≤ σρ` | Proved; uses the affine quantile model in `Probability/Line/AffineProfile.lean` |
+| [Line/SharpHardy.lean](Line/SharpHardy.lean) | Truncated test `clip a b f`, its centered version, and tail integral `G̃`; integration by parts `∫h² dμ = −∫_a^b f' G̃`; ground-state identity and boundary-term control; `∫_a^b G̃²ρ/W² ≤ 4∫h² dμ`; `Var(clip) ≤ 4·Var_ν·∫f'² dν` | Proved; `[a,b] ⊆ Ω` must straddle the median |
+| [Line/SharpPoincare.lean](Line/SharpPoincare.lean) | Vanishing tails (anchored half-line Hardy bounds and absolute continuity of the integral); `(1+δ)` splitting; `SmoothTest.Holds ν (4·Var)`; `C_P^lit(ν) ≤ 4·Var_ν` (real and extended variance), with `12` as a corollary | Proved; packaged by `Solutions.ThmOneDimensionalLogConcavePoincare.certificate`; constant 4 is attained by the exponential law, without asserting a higher-dimensional result |
+| [Line/OfDensity.lean](Line/OfDensity.lean) | Converse: a real probability law with a log-concave Lebesgue density is compact-set log-concave, `LineDensity.logConcave` | Proved using one-dimensional Prékopa–Leindler from `Probability/Line/BrunnMinkowski.lean`; converse to `LogConcave.exists_lineDensity` |
 
-局部依赖关系为：
+Local dependencies:
 
 ```text
 Definitions → Transport → AbsoluteContinuity → BorellRepresentation → Covariance → Translation ─┐
             → Borel ─────────────────────────────┘                  → WeightedGradient → ClosedForm   → Isotropic
 ```
 
-`Line/` 的局部依赖为 `Density → Hazard → {Hardy, Variance} → Poincare`；`Density` 使用
-`BorellRepresentation` 与 `Probability/Line/Cdf`，`Poincare` 另外使用 `Poincare.lean`（光滑测试
-与文献常数相等）及 `Isotropic`（全仿射支撑给出支撑内部非空）。
+The local `Line/` chain is `Density → Hazard → {Hardy, Variance} → Poincare`. `Density` uses
+`BorellRepresentation` and `Probability/Line/Cdf`; `Poincare` additionally uses `Poincare.lean`
+(equality of smooth-test and literature constants) and `Isotropic` (full affine support implies
+nonempty support interior).
 
-`WeightedGradient` 使用 `Energy/WeightedGradient/{Basic,Closable,Core}`：对数凹律
-只负责提供三条前提（`ν ≪ Haar`、支撑边界零测、Haar 在支撑内部紧集上被 `ν` 局部支配）。
+`WeightedGradient` uses `Energy/WeightedGradient/{Basic,Closable,Core}`. Log-concavity supplies
+only three premises: `ν ≪ Haar`, a null support boundary, and local domination of Haar by `ν`
+on compact subsets of the support interior.
 
-`Isotropic` 另外使用 `Energy/CovarianceGradient/LinearEquiv`（一般线性等价下的传输）、
-`Probability/CovarianceWhitening`（正定协方差的自伴逆平方根）与 `Poincare/LipschitzGradient/Comparison`
-（单位权 Lipschitz 梯度松弛与文献常数的桥）；对数凹只负责像律的对数凹性、全支撑与内禀协方差正定。
+`Isotropic` also uses `Energy/CovarianceGradient/LinearEquiv` (transport under general linear
+equivalences), `Probability/CovarianceWhitening` (self-adjoint inverse square root of positive
+definite covariance), and `Poincare/LipschitzGradient/Comparison` (the bridge from unit-weight
+Lipschitz-gradient relaxation to the literature constant). Log-concavity supplies log-concavity
+of the image law, full support, and positive definite intrinsic covariance.
 
-`Translation` 另外使用 `Poincare/CovarianceGradient/Translation`（平移后的仿射支撑、方向与内禀律的识别，
-以及对任意 Borel 律成立的常数不变性）与 `Transport` 的仿射等距传输；对数凹只负责平移律的对数凹性与环境二阶矩。
+`Translation` also uses `Poincare/CovarianceGradient/Translation` (identification of translated
+affine supports, directions, and intrinsic laws, and constant invariance for arbitrary Borel laws)
+and affine-isometric transport from `Transport`. Log-concavity supplies only log-concavity of
+the translated law and ambient second moments.
 
-`Covariance` 另外使用 `Energy/CovarianceGradient/Basic`，那里定义了对任意概率律
-的协方差加权 Lipschitz 梯度预能量；对数凹律只负责给出契约的前提（绝对连续性、支撑边界零测、矩）。
+`Covariance` also uses `Energy/CovarianceGradient/Basic`, which defines the covariance-weighted
+Lipschitz-gradient pre-energy for any probability law. Log-concavity supplies the contract's
+premises: absolute continuity, a null support boundary, and moments.
 
-`AbsoluteContinuity` 另外使用 `Probability/BallAverages`。`BorellRepresentation` 同时使用
-绝对连续性（密度代表的构造）和 Borel 集表述（Borell 尾引理与指数矩）。
+`AbsoluteContinuity` also uses `Probability/BallAverages`. `BorellRepresentation` uses both
+absolute continuity (to construct the density representative) and the Borel-set formulation
+(for Borell's tail lemma and exponential moments).
 
-## 导入与使用
+## Imports and use
 
 ```lean
 import FunctionalInequalities.KLS.LogConcave.Borel
@@ -69,13 +78,13 @@ import FunctionalInequalities.KLS.LogConcave.Density.AbsoluteContinuity
 #check FunctionalInequalities.KLS.LogConcave.intrinsic_absolutelyContinuous
 ```
 
-文献 Poincaré 常数的比较在
-[Poincare.lean](../../KLS/LogConcave/Poincare.lean) 中组合这些工具。
-现有声明名称保持不变；旧模块路径不保留转发文件。路径映射见
-[迁移记录](../../../../research/explorations/2026-09-07-logconcave-module-layout.md)。
+The literature Poincaré-constant comparison combines these tools in
+[Poincare.lean](../../KLS/LogConcave/Poincare.lean). Existing declaration names are unchanged;
+old module paths have no forwarding files. See the path map in the
+[migration record](../../../../research/explorations/2026-09-07-logconcave-module-layout.md).
 
-`Density/BorellRepresentation/` 分为
-[Basic](Density/BorellRepresentation/Basic.lean)（密度代表性质）、
-[Moments](Density/BorellRepresentation/Moments.lean)（尾界与矩）、
-[Construction](Density/BorellRepresentation/Construction.lean)（存在性构造）、
-[Intrinsic](Density/BorellRepresentation/Intrinsic.lean)（内蕴接口）。
+`Density/BorellRepresentation/` is divided into
+[Basic](Density/BorellRepresentation/Basic.lean) (properties of density representatives),
+[Moments](Density/BorellRepresentation/Moments.lean) (tails and moments),
+[Construction](Density/BorellRepresentation/Construction.lean) (existence construction), and
+[Intrinsic](Density/BorellRepresentation/Intrinsic.lean) (intrinsic interfaces).

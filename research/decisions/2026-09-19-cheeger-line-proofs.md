@@ -1,73 +1,72 @@
-# Cheeger 线证毕并注册：两洞关闭、`lem:relative-perimeter-cheeger-infimum` 成为第 25 个证书、Cheeger 不等式证出
+# Cheeger's inequality completed and registered: two holes closed, `lem:relative-perimeter-cheeger-infimum` becomes the 25th certificate, Cheeger's inequality proven
 
-2026-09-19，**实现 + 注册轮**。Owner 指示接手原属王浩丞的 Cheeger 线（学长那个我们接手了）。同日先写了两条路线
-（[两洞路线](2026-09-19-cheeger-infimum-route.md)、[Cheeger 不等式路线](2026-09-19-cheeger-inequality-route.md)），
-交两个并行的证明会话，本会话整合与注册。结果：
+2026-09-19, **implementation + registration cycle**. Owner indicates taking over the Cheeger geodesic previously assigned to our senior colleague, Haocheng Wang. On the same day, two routes were initially written.
+(the [two-hole route](2026-09-19-cheeger-infimum-route.md) and [Cheeger inequality route](2026-09-19-cheeger-inequality-route.md)),
+Intersecting two parallel proof sessions, this session integrates and registers. Result:
 
-* **两洞关闭**：`smoothConstant_mul_lintegral_min_superlevel_le`、`smoothConstant_le_minkowskiConstant` 在
-  `KLS/Geometry/CheegerEquality.lean` 证出；WIP 模块的七条公开声明以**逐字节相同的 `pp.all` 签名**迁入
-  （2223 行打印 `diff` 为空），`KLS/WIP/CheegerInfimum.lean` 删除，`KLS/WIP/` 目录随之消失
-  （原文冻结于 `build/audit/cheeger-line-proofs/CheegerInfimum.before.lean`）。
-* **第 25 个证书**：`solutions/LemRelativePerimeterCheegerInfimum.lean` 注册 `lem:relative-perimeter-cheeger-infimum`
-  （`certificate hρ : h_M = h_S`，任意带 Borell 密度的律；`intrinsic hμ hρ`：`h_μ = h_ν^{sm,rel}` 与 `Ψ_KLS(μ) = ψ_ν`，
-  即 `thm:klartag-density-frontend-identification` 的两条等周子句），4 条公理守卫。
-* **Cheeger 不等式**：`KLS/Geometry/CheegerInequality.lean`（含 `KLS/Geometry/Median.lean`）证出
-  `C_P^smooth(ν) ≤ 4/h_M(ν)²`（任意 Borel 律，`Isoperimetry.smoothTest_constant_le`）与
-  `C_P^lit(μ) ≤ 4Ψ_KLS(μ)²`（对数凹律，`LogConcave.literatureConstant_le_four_mul_inverseScale_sq`，Dirac 律两侧皆 0）。
-  Buser 半 `Ψ_KLS(μ)² ≤ π C_P^lit(μ)` **未证**，`thm:logconcave-cheeger-poincare-comparison` 加 `\lean{}` 与说明，不加 `\leanok`。
+* **Two-hole closure**: `smoothConstant_mul_lintegral_min_superlevel_le`, `smoothConstant_le_minkowskiConstant` in
+  `KLS/Geometry/CheegerEquality.lean` proved; seven public statements of the WIP module are migrated with **bit-identical `pp.all` signatures**
+  (the 2223-line printed `diff` is empty); `KLS/WIP/CheegerInfimum.lean` is deleted, and the `KLS/WIP/` directory disappears with it
+  (Original frozen at `build/audit/cheeger-line-proofs/CheegerInfimum.before.lean`).
+* **The 25th certificate**: `solutions/LemRelativePerimeterCheegerInfimum.lean` registered `lem:relative-perimeter-cheeger-infimum`
+  (`certificate hρ : h_M = h_S`, any law with Borell density; `intrinsic hμ hρ`: `h_μ = h_ν^{sm,rel}` and `Ψ_KLS(μ) = ψ_ν`,
+  That is (the two isoperimetric subclauses of) `thm:klartag-density-frontend-identification`, with four axiom checks.
+* **Cheeger inequality**: `KLS/Geometry/CheegerInequality.lean` (including `KLS/Geometry/Median.lean`) proved
+  `C_P^smooth(ν) ≤ 4/h_M(ν)²` (any Borel law, `Isoperimetry.smoothTest_constant_le`) and
+  `C_P^lit(μ) ≤ 4Ψ_KLS(μ)²` (log-concave law, `LogConcave.literatureConstant_le_four_mul_inverseScale_sq`, both sides are 0 for a Dirac law).
+  Buser half `Ψ_KLS(μ)² ≤ π C_P^lit(μ)` **unproven**, `thm:logconcave-cheeger-poincare-comparison` plus `\lean{}` with explanation, without `\leanok`.
 
-直接洞由 **7（0/2/5）降为 5（0/0/5）**，仅剩 `Energy/WIP/Cheeger.lean`；证书 **24 → 25**。不提交、不推送。
+Direct proof hole reduced from **7 (0/2/5)** to **5 (0/0/5)**, leaving only **`Energy/WIP/Cheeger.lean`**; certification **24 → 25**. No commit, no push.
 
-起点 `HEAD = origin/main = f108397aa6eafcde0a8ca99658e40c47b2926db3`；起点 passed 回执
-`build/verification/20260918T132358.171383Z/report.json`：10 个门、234 个模块重放、638 条目，快照 `d9cd7067e18cbebc3408d8e772fc539392533db8be44e91419f2bba370a7226a`。
+Start `HEAD = origin/main = f108397aa6eafcde0a8ca99658e40c47b2926db3`; start verification receipt
+`build/verification/20260918T132358.171383Z/report.json`: 10 gates, 234 module replays, 638 entries, snapshot `d9cd7067e18cbebc3408d8e772fc539392533db8be44e91419f2bba370a7226a`.
 
-## 边界
+## Boundary
 
-Energy 的五个洞（`Energy/WIP/Cheeger.lean`，奇异测度的 `𝓔^can = 2Ch`）未触碰；无量纲 KLS 仍开。
-不新增兼容 alias、不重述既有定理、不削弱已证结论；`thm:klartag-density-frontend-identification` 的文献 Poincaré 常数子句
-**未在该节点认证**（节点不标 `\leanok`，只加说明）。
+The five holes of energy (`Energy/WIP/Cheeger.lean`, singular measures' `𝓔^can = 2Ch`) remain untouched; dimension-free KLS is still open.
+No new compatibility aliases, no rephrasing of existing theorems, no weakening of previously proven conclusions; the literature statement on Poincaré constants in `thm:klartag-density-frontend-identification`
+**not certified at this node** (the node does not mark `\leanok`, only adds a note).
 
-## 两个证明会话
+## Two proof sessions
 
-规则同前（只新建文件、不 `lake build`、不改 Git、严格编译、逐字复述、不 import WIP、注释里不写转义词）。
+Rules as before (only create new files, do not `lake build`, do not modify Git, strict compilation, word-for-word reproduction, do not import WIP, comments do not contain escape words).
 
-| 路线 | 新库模块（行） | 审计客户端（行） | 兑现 |
+| route | new library module (rows) | audit client (rows) | settlement |
 | --- | --- | --- | --- |
-| 两洞 | `KLS/Geometry/CheegerEquality.lean` 568（七条迁入 + 五条新引理 `K1`、`K2`、`K4`、`K7`、`K8`） | `CheegerEqualityAudit.lean` 354 | `K0`–`K13`；**`K7` 按字面为假**，见下 |
-| Cheeger 不等式 | `KLS/Geometry/Median.lean` 167、`CheegerInequality.lean` 784（+27 整合 `P0`） | `CheegerInequalityAudit.lean` 210（+9 整合 `route_P0`） | `P1`–`P6`、`D1`；`P0` 整合时合成 |
+| two holes | `KLS/Geometry/CheegerEquality.lean` 568 (seven incoming + five new lemmas `K1`, `K2`, `K4`, `K7`, `K8`) | `CheegerEqualityAudit.lean` 354 | `K0`–`K13`; **`K7` literally false**, see below |
+| Cheeger inequality | `KLS/Geometry/Median.lean` 167, `CheegerInequality.lean` 784 (+27 integration `P0`) | `CheegerInequalityAudit.lean` 210 (+9 integration `route_P0`) | `P1`–`P6`, `D1`; `P0` integration combined |
 
-**`K7` 按字面为假**：`B = ∅` 时 `Metric.infDist x ∅ = 0`，截断恒为 1 而厚化为空，命题读作 `1 ≤ 0`；审计里
-`route_K7_empty_counterexample` 用 `EuclideanSpace ℝ (Fin 1)` 上的 Dirac 律证伪逐字形式，`route_K7` 证加 `B.Nonempty` 的版本；
-`K5` 只对正质量集合用它，下游不受影响。路线语句文件保持字节不变。
+**`K7` Literally false**: `B = ∅` when `Metric.infDist x ∅ = 0`, the truncation is always 1 while thickening is empty, and the statement reads as `1 ≤ 0`; in audits,
+`route_K7_empty_counterexample` uses a Dirac delta on `EuclideanSpace ℝ (Fin 1)` to falsify the literal form, `route_K7` proves the version with `B.Nonempty`;
+`K5` is only applied to positive mass sets, downstream is unaffected. The route statement file maintains byte integrity.
 
-**`P0` 的合成**：`Poincare.SmoothTest.constant_eq_intrinsicMeasure_and_localSlope`（对数凹律的内禀绝对连续性）把文献常数
-识别为内禀律的光滑测试常数，`Isoperimetry.constant_eq_minkowskiConstant_intrinsic` 给 `h_μ = h_M(ν)`，再用 `P1`。
-`P6` 复用了仓库既有的光滑截断 `Energy.Euclidean.LipschitzApproximation.scaled`，梯度能量的收敛用 `ℝ≥0∞` 控制收敛，方差用 Fatou。
+**Synthesis of `P0`**: `Poincare.SmoothTest.constant_eq_intrinsicMeasure_and_localSlope` (intrinsic absolute continuity of log-concave laws) identifies the literature constant as a smooth test constant for the intrinsic law, `Isoperimetry.constant_eq_minkowskiConstant_intrinsic` to `h_μ = h_M(ν)`, then using `P1`.
+`P6` reuses repository's existing smooth truncation `Energy.Euclidean.LipschitzApproximation.scaled`, and convergence of gradient energy uses `ℝ≥0∞` dominated convergence, while variance uses Fatou.
 
-## 注册与整合动作
+## Registration and Integration Actions
 
-1. 证书文件、ledger 节点（`kind: lemma`，`meta.scope` 追加）、`research/check_blueprint.py` 的 `CERTIFICATES`、
-   `lakefile.toml` 的 `Solutions` 根；Blueprint 第 60 章引理加 `\lean{…}`、`\leanok`（陈述注明 Lean 范围更强）、证明块 `\leanok`；
-   第 45 章 Klartag 节点加说明（两条等周子句已认证，Poincaré 子句未），Cheeger–Buser 定理加 `\lean{…}` 与说明、不加 `\leanok`。
-2. `check_ledger.py` 的转义词扫描是纯文本扫描传递导入源码：证书导入闭包中 13 个模块的 docstring 写着「contains no `sorry`」
-   「admit fewer covers」之类，改写为 hole / allow，不改任何代码。
-3. 三个曾 import 已删 WIP 的客户端（`research/audits` 的 `LipschitzCoareaMigrationAudit`、`IsoperimetryCoareaAudit`；
-   历史客户端 `build/audit/PerimeterInterfaceAudit`）改接 `KLS/Geometry/CheegerEquality.lean`；它们原先带 `sorryAx` 的 5 条报告变为标准。
-4. 聚合导入加入 `KLS.Geometry.CheegerEquality`、`KLS.Geometry.CheegerInequality`（`Median` 随之），补两段说明。
-5. `research/tasks.json`：`lem:relative-perimeter-cheeger-infimum` 的 infrastructure `missing → available`，证据换成新模块、审计与证书；
-   其余节点被钉住的文件哈希全部刷新；Klartag 与 Cheeger–Buser 节点注记。进度视图经临时 index 由 `research/progress/update.py` 重生成
-   （`STATUS.md` 25 证书）。
-6. 默认 `lake build`（3507 个作业）通过；`check_ledger.py` 25 节点 0 错误；`check_blueprint.py` 88 标签 0 错误。
+1. Certificate file, ledger node (`kind: lemma`, `meta.scope` appended), `research/check_blueprint.py`'s `CERTIFICATES`,
+   the `Solutions` root in `lakefile.toml`; Blueprint Chapter 60 Lemma plus `\lean{…}`, `\leanok` (statement notes stronger scope within Lean), proof block `\leanok`;
+   Chapter 45 Klartag node with annotations (two isoperimetric substatements certified, Poincaré substatement not yet), Cheeger–Buser theorem with `\lean{…}` and annotations, without `\leanok`.
+2. The escape word scanning of `check_ledger.py` is a pure text scanning pass-through import source: certificate import closure contains 13 modules' docstring writing «contains no `sorry`»
+   phrases such as “admit fewer covers” are rewritten using hole / allow, without changing code.
+3. Three previously imported WIP clients (`research/audits`'s `LipschitzCoareaMigrationAudit`, `IsoperimetryCoareaAudit`;
+   Historical client `build/audit/PerimeterInterfaceAudit`) reconnected `KLS/Geometry/CheegerEquality.lean`; they previously carried `sorryAx` of 5 reports are now standard.
+4. Aggregate import includes `KLS.Geometry.CheegerEquality`, `KLS.Geometry.CheegerInequality` (`Median` accordingly), together with two additional explanations.
+5. `research/tasks.json`: infrastructure `lem:relative-perimeter-cheeger-infimum` `missing → available`, evidence replaced with new module, audit, and certification;
+   The hash values of all other nodes are fully refreshed; Klartag and Cheeger–Buser node annotations. The progress view is regenerated temporarily via `research/progress/update.py`
+   (`STATUS.md`: 25 certificates).
+6. Default `lake build` (3507 jobs) passed; `check_ledger.py` 25 node 0 error; `check_blueprint.py` 88 label 0 error.
 
-## 明确没证什么
+## What remains unproved
 
-* Buser 半 `Ψ_KLS(μ)² ≤ π C_P^lit(μ)`：未证（Bakry–Émery 或 Lovász–Simonovits 局部化都不在 Mathlib）；Cheeger–Buser 节点不标 `\leanok`。
-* `thm:klartag-density-frontend-identification` 的文献 Poincaré 常数子句未在该节点认证。
-* Energy 五洞未触碰；无量纲 KLS 仍开。`K7` 的逐字形式为假已记录（并已形式化证伪）。
+* Buser half `Ψ_KLS(μ)² ≤ π C_P^lit(μ)`: unproven (Bakry–Émery or Lovász–Simonovits localization not in Mathlib); Cheeger–Buser node not labeled `\leanok`.
+* `thm:klartag-density-frontend-identification` literature Poincaré constant clause not certified at this node.
+* Energy five holes not touched; dimension-free KLS still open. `K7`'s literal form is false has been recorded (and formally falsified).
 
-## 验证
+## Verification
 
-默认 `lake build`（3507 个作业，含新证书的 `Solutions` 库）通过。全部 **62** 个审计客户端（`research/audits` 55 个 + `build/audit` 7 个活客户端）以 `-DwarningAsError=true` 重跑，**0 失败**；**791 条公理报告，0 条 `sorryAx`**——首次没有任何客户端报告洞。仅剩的 WIP 模块 `Energy/WIP/Cheeger.lean` 编译出 **5** 个 `sorry` 警告，直接洞 **5（0/0/5）**。七条迁移声明的 `pp.all` 前后 `diff` 为空。`check_ledger.py` **25** 个证书 0 错误；`check_blueprint.py` 88 标签 0 错误；`atlas.py check` 75 节点 25 证书无环；104 项单元测试通过。
-`pp.all` 七条声明前后 `diff` 为空。根目录 `python3 research/verify.py` 于本轮结束时重跑，最终回执记于
-`build/audit/cheeger-line-proofs/final-snapshot.json`，快照与工作区逐条重算，drift 为空。
-详见 `research/explorations/2026-09-19-cheeger-line-proofs.json`。
+Default `lake build` (3507 jobs, including new certificate `Solutions` library) passes. All **62** audit clients (**`research/audits` 55** + **`build/audit` 7** active clients) rerun with `-DwarningAsError=true` retries, **0 failures**; **791 axiom reports, 0 `sorryAx`**—no client reports a hole for the first time. The remaining WIP module `Energy/WIP/Cheeger.lean` compiles with **5** `sorry` warnings, direct proof hole **5 (0/0/5)**. The `pp.all` before and after of seven migration declarations are both `diff` empty. `check_ledger.py` **25** certificate 0 errors; `check_blueprint.py` 88 label 0 errors; `atlas.py check` 75 node 25 certificate has no cycle; 104 unit tests pass.
+`pp.all` Seven statements before and after `diff` are empty. The root directory `python3 research/verify.py` is rerun at the end of this round, and the final verification receipt is recorded at
+`build/audit/cheeger-line-proofs/final-snapshot.json`, snapshot and workspace recalculated line by line, drift is empty.
+See `research/explorations/2026-09-19-cheeger-line-proofs.json`.

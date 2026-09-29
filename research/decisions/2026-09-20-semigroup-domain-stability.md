@@ -52,7 +52,7 @@ compactly supported smooth functions, the operator-core claim, gradient commutat
 Gamma estimates or their L1 self-improvement, BGL, BV small-time bounds, general-law passage,
 and Buser. BE stays partial; the full Cheeger–Buser comparison and dimension-free KLS stay pending.
 
-| 已有证明 | 仅类型检查 | 仍是非形式化方案 |
+| Proved | Type-checked only | Still an informal plan |
 | --- | --- | --- |
 | D0–D4, including arbitrary weights and `t=0` | `∀ f t, 0<t → P_t f ∈ D(A)` | Uniform Yosida bounds and passage to the unbounded generator |
 | Existing G0/G1 and pointwise B0–B4 | `‖A(P_t f)‖ ≤ (1/exp(1))/t * ‖f‖`, with existential domain witness | Form-domain approximation, weak Gamma calculus and time interpolation |

@@ -270,7 +270,7 @@ module, and no research audit. Certificate import closures covered 174 of the 25
 audit import closures 225 and the aggregate closure 245; the union covered 252, and `Sard/Planar`
 was the one module in none of them. Its public `sard_plane` and `volume_image_nonflat_eq_zero`
 were consequently in no audited declaration closure, so only kernel replay — which accepts
-`sorryAx` — saw them. An isolated Lake工程 experiment confirmed that a `sorry` placed there passes
+`sorryAx` — saw them. An isolated Lake project experiment confirmed that a `sorry` placed there passes
 the ledger token guard, the full-scope build and `leanchecker`.
 
 Resolved by [research/audits/PlanarSardAudit.lean](../audits/PlanarSardAudit.lean), which restates

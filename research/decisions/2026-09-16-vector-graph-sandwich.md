@@ -1,61 +1,61 @@
-# B1 第四阶段：向量值图的两侧夹逼估计
+# B1, stage four: two-sided sandwich estimates for vector-valued graphs
 
-2026-09-16。本轮**证明新引理**，完成余维 m 图面积公式（义务 **B1**）的**第四阶段**，
-外加第五阶段所需的逼近分片。**面积公式本身仍未证明。**
-不迁洞，不提交、不推送。直接洞仍 **8（1/2/5）**，证书仍 **24**。
+2026-09-16. This round **proves new lemmas**, completing **stage four** of the codimension-m graph area formula (obligation **B1**),
+plus the approximation partition needed for stage five. **The area formula itself remains unproved.**
+No holes migrated, no commit or push. Direct holes remain **8 (1/2/5)**; certificates remain **24**.
 
-起点 `HEAD = origin/main = 34b92695ece4f636a1a7f1eafbbf41c685ee0348`；起点 passed 回执
-`build/verification/20260916T143055.790878Z/report.json`：10 个门、204 个本地模块内核重放、
-529 条目。
+Starting point: `HEAD = origin/main = 34b92695ece4f636a1a7f1eafbbf41c685ee0348`; starting passed receipt
+`build/verification/20260916T143055.790878Z/report.json`: 10 gates, kernel replay of 204 local modules,
+529 entries.
 
-## 边界
+## Boundary
 
-对数凹 Cheeger–Buser 线归合作者**王浩丞**，本轮未触碰。
+The log-concave Cheeger–Buser line belongs to collaborator **Haocheng Wang** and was untouched in this round.
 
-## 精确成果
+## Exact results
 
-`Analysis/VectorGraphSandwich.lean`（本地 import 闭包 9 个模块，**无 WIP**）：
+`Analysis/VectorGraphSandwich.lean` (local import closure of 9 modules, **no WIP**):
 
-* **`norm_add_sq_of_perp`**：`‖ι y + κ z‖² = ‖y‖² + ‖z‖²`。两个嵌入值域正交，
-  所以跨因子的勾股关系成立。这是本轮所有估计的共同来源。
-* `norm_sub_vectorGraphMap_sq`、**`norm_sub_le_norm_sub_vectorGraphMap`**：
-  图映射**从不把点拉近**。这正是一般路线要从它没有的逆映射里去取的下界输入。
-* `norm_le_norm_graphMapLinear`、`injective_graphMapLinear`：线性模型同样扩张、单射。
-* **`hausdorffMeasure_image_vectorGraphMap_le`**（上界）与
-  **`le_hausdorffMeasure_image_vectorGraphMap`**（下界）：与线性模型 ε-接近的图映射，
-  其像的 k 维测度与线性像在 `(1+ε)^k` 因子内两侧夹住。
-* **`exists_approximating_partition_vectorGraph`**：H 的可数可测分片，每片上图映射被
-  某个线性图映射 ε-逼近且导数与该斜率 ε-接近。这是第五阶段的输入。
+* **`norm_add_sq_of_perp`**: `‖ι y + κ z‖² = ‖y‖² + ‖z‖²`. The two embeddings have orthogonal ranges,
+  giving the Pythagorean identity across the factors. This is the common basis of all estimates in this round.
+* `norm_sub_vectorGraphMap_sq`, **`norm_sub_le_norm_sub_vectorGraphMap`**:
+  the graph map **never brings points closer together**. This supplies the lower-bound input that the general route would need from an inverse map it does not have.
+* `norm_le_norm_graphMapLinear`, `injective_graphMapLinear`: the linear model is likewise distance-expanding and injective.
+* **`hausdorffMeasure_image_vectorGraphMap_le`** (upper bound) and
+  **`le_hausdorffMeasure_image_vectorGraphMap`** (lower bound): if the graph map is ε-close to a linear model,
+  its image's k-dimensional measure is bounded on both sides by the linear image's measure within a factor `(1+ε)^k`.
+* **`exists_approximating_partition_vectorGraph`**: a countable measurable partition of H, on each piece of which the graph map
+  is ε-approximated by a linear graph map and its derivative is ε-close to that slope. This is the input for stage five.
 
-## 复用而非重造
+## Reuse
 
-两个方向都归结到同一条通用比较 `Analysis.hausdorffMeasure_image_le_of_norm_le`——
-它是余维一文件里已证的、**与图无关**的引理，本轮直接复用，没有重证。
-线性情形的面积公式则由 Mathlib 的线性面积公式给出。
+Both directions reduce to the same generic comparison, `Analysis.hausdorffMeasure_image_le_of_norm_le`,
+a **graph-independent** lemma already proved in the codimension-one file. It is reused directly, without reproving it.
+The linear case of the area formula comes from Mathlib's linear area formula.
 
-## 本轮没有做的事
+## Work not done in this round
 
-* **没有证明面积公式**：第五阶段（`ε → 0` 的极限与可数分片拼接，余维一文件里约 280 行）
-  未做。客户端里的 `exact_at_zero` 只是把两侧估计在 `ε = 0` 处夹死，
-  **那是夹逼退化正确，不是面积公式**。
-* 没有碰路线义务 A2–A5、B2。
-* 没有迁洞；没有碰尖锐 Sard、两条 Cheeger 比较、Energy 的五个洞。
-* 没有扩大证书或 Blueprint `leanok` 范围。
-* **没有提交、没有推送**，真实 Git index 未改动。
+* **No area formula was proved**: stage five (the `ε → 0` limit and assembly of countably many pieces, about 280 lines in the codimension-one file)
+  remains undone. The client's `exact_at_zero` merely makes the two-sided bounds coincide at `ε = 0`;
+  **this validates the degenerate sandwich, not the area formula**.
+* Route obligations A2–A5 and B2 were untouched.
+* No holes migrated; sharp Sard, the two Cheeger comparisons, and Energy's five holes were untouched.
+* No certificate or Blueprint `leanok` scope was expanded.
+* **No commit or push**; the real Git index was unchanged.
 
-## 下一轮：B1 的最后一步
+## Next round: the final step of B1
 
-以本轮的分片与两侧估计为输入，按余维一文件的 `graphMap_estimates`（132 行）与最终装配
-（148 行）的方式取 `ε → 0`。需要的极限引理 `tendsto_aux`、`tendsto_aux'` 在余维一文件里
-已是**与图无关**的通用引理，应可直接复用，所以余下工作量估计小于余维一的 280 行。
+Use this round's partition and two-sided estimates to take `ε → 0`, following `graphMap_estimates` (132 lines) and the final assembly
+(148 lines) in the codimension-one file. The required limit lemmas `tendsto_aux` and `tendsto_aux'` are already
+**graph-independent** generic lemmas there and should be reusable directly, so the remaining work is estimated below the codimension-one version's 280 lines.
 
-## 验证
+## Verification
 
-* 新模块与新客户端均以 `-DwarningAsError=true` 编译通过，无 `sorry`。
-* `research/audits/VectorGraphSandwichAudit.lean` 的 15 条公理报告只用
-  `propext`、`Classical.choice`、`Quot.sound`。
-* 重跑全部 32 个审计客户端（`research/audits` 25 个，`build/audit` 7 个），全部严格通过。
-* 三个 WIP 逐个编译，直接洞 **1/2/5，总数 8**，不变。
-* 默认 `lake build` 与根目录 `python3 research/verify.py` 通过；证据 JSON 为
-  `research/explorations/2026-09-16-vector-graph-sandwich.json`，最终核对另存
-  `build/audit/vector-graph-sandwich/final-snapshot.json`。
+* The new module and client compiled with `-DwarningAsError=true`, without `sorry`.
+* The 15 axiom reports in `research/audits/VectorGraphSandwichAudit.lean` use only
+  `propext`, `Classical.choice`, and `Quot.sound`.
+* All 32 audit clients were rerun (25 in `research/audits`, 7 in `build/audit`) and passed strictly.
+* Each of the three WIP files was compiled: direct holes remain **1/2/5, totaling 8**.
+* The default `lake build` and root `python3 research/verify.py` passed; evidence JSON is
+  `research/explorations/2026-09-16-vector-graph-sandwich.json`, with the final check separately saved in
+  `build/audit/vector-graph-sandwich/final-snapshot.json`.

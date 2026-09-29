@@ -1,13 +1,13 @@
-# 平坦点的一致二阶余项
+# Uniform second-order remainder for a flat point
 
-2026-09-14，承接[低维 Sard](2026-09-14-low-dimensional-sard.md)中精确提出的下一引理。
-起始回执 `build/verification/20260913T184752.039532Z/report.json` 为 passed，重新计算确认
-全部 387 个文件与 HEAD 完全匹配。HEAD 仍为 `2965b32`；保留此前全部未提交及未跟踪成果，
-不提交、不推送，历史决定不改写。
+2026-09-14, following the precise next lemma proposed in [low-dimensional Sard](2026-09-14-low-dimensional-sard.md).
+Starting verification receipt `build/verification/20260913T184752.039532Z/report.json` is passed, recalculate confirmation
+All 387 files match HEAD exactly. HEAD remains `2965b32`; all previously uncommitted and untracked results are preserved,
+No commit, no push, history is not rewritten.
 
-## 完成范围
+## Scope of completion
 
-新增 `formalization/FunctionalInequalities/Analysis/TaylorRemainder.lean`，唯一公开结果为：
+Add `formalization/FunctionalInequalities/Analysis/TaylorRemainder.lean`, the only public result being:
 
 ```lean
 variable {V : Type*} [NormedAddCommGroup V] [NormedSpace ℝ V]
@@ -19,76 +19,63 @@ theorem exists_uniform_quadratic_remainder {u : V → ℝ} {K : Set V}
         ∀ y : V, ‖y - x‖ < δ → |u y - u x| ≤ ε * ‖y - x‖ ^ 2
 ```
 
-完整命名为 `FunctionalInequalities.Analysis.exists_uniform_quadratic_remainder`。
-仅依赖 `propext / Classical.choice / Quot.sound`。没有直接洞、隐藏占位或新增公理。
+Complete name is `FunctionalInequalities.Analysis.exists_uniform_quadratic_remainder`.
+Relies only on `propext / Classical.choice / Quot.sound`. Has no direct proof hole, hidden placeholder, or new axioms.
 
-* 同一 δ 对 K 中全部满足两个零导数条件的 x 一致有效。
-* 不要求 K 的每个点都平坦；y 可在 K 外，包含 y=x。
-* 空 K、零维、常函数均覆盖，正则性恰为 C²，没有升到 C³ 或 C∞。
-* 搜索已有 API 后发现有限维性实际上不需要，所以给出**任意实赋范空间**版本。
-  不要求完备、内积、定义域测度或额外可测性。这覆盖原定有限维目标，没有缩小适用范围。
-* 新模块仅导入 Mathlib 的 ContDiff.Comp、MeanValue、HeineCantor；无本地导入，
-  不导入 Sard、KLS 或 WIP，也未迁移任何原有声明。
-  它是一般分析估计，不把 Sard 专属名称放进定理或建立额外框架。
+* The same δ is uniformly valid for all x in K satisfying the two zero derivative conditions.
+* It is not required that every point in K be flat; y may lie outside K, including the case y = x.
+* Empty K, zero-dimensional, and constant functions are all covered, with regularity exactly C², no extension to C³ or C∞.
+* After searching existing APIs, it was found that finite-dimensionality is actually unnecessary, so a version for any real normed space is provided.
+  Completeness, inner product, domain measure, or additional measurability are not required. This covers the originally intended finite-dimensional case without narrowing the scope of applicability.
+* The new module only imports Mathlib's ContDiff.Comp, MeanValue, and HeineCantor; there are no local imports,
+  no imports of Sard, KLS, or WIP, and no migration of any existing declarations.
+  It is a general analytic estimate, not incorporating the Sard-specific name in theorems or establishing any additional framework.
 
-## 实际证明与可复用 API
+## Actual Proofs and Reusable API
 
-上一轮提出积分型 Taylor 是可行路线；本轮搜索发现所需的非锐常数估计可更短地用两次
-`Convex.norm_image_sub_le_of_norm_fderiv_le`，因此没有重复实现 Taylor 积分公式。
+The previous round proposed integral-type Taylor as a feasible approach; this round's search found that the required non-sharp constant estimate can be achieved more concisely using two `Convex.norm_image_sub_le_of_norm_fderiv_le`, thus no redundant implementation of the Taylor integral formula was carried out.
 
-1. `hu.continuous_iteratedFDeriv` 给二阶导数连续。
-   `IsCompact.uniformContinuousAt_of_continuousAt` 给紧集上的**外部近邻**一致控制；
-   它比仅控制 K 内两点的 `UniformContinuousOn` 更强。
-   通过 `Metric.mem_uniformity_dist` 得 δ，使 x∈K 且 ‖z-x‖<δ 时二阶导数之差小于 ε。
-2. 固定平坦基点 x。由 D²u(x)=0，得到球 `ball x δ` 上 ‖D²u(z)‖≤ε。
-   `norm_iteratedFDeriv_one` 与 `norm_iteratedFDeriv_fderiv` 直接把这个范数换成
-   `‖fderiv ℝ (fderiv ℝ u) z‖`；没有引入 Hessian、内积或行列式框架。
-3. C² 给 u 可微、Du 可微。在该凸球上第一次用均值不等式，并使用 Du(x)=0，
-   得 ‖Du(z)‖≤ε‖z-x‖。
-4. 对线段 [x,y]，`norm_sub_le_of_mem_segment` 给 ‖z-x‖≤‖y-x‖<δ。
-   因而该线段上 ‖Du(z)‖≤ε‖y-x‖。第二次均值不等式得到
-   |u(y)-u(x)|≤ε‖y-x‖·‖y-x‖。
+1. `hu.continuous_iteratedFDeriv` The second-order derivative is continuous.
+   `IsCompact.uniformContinuousAt_of_continuousAt` Uniform control for external neighbors on compact sets;
+   This is stronger than `UniformContinuousOn`, which only controls pairs of points inside K.
+   By `Metric.mem_uniformity_dist` we obtain δ such that for x∈K and ‖z−x‖<δ, the difference of second derivatives is less than ε.
+2. Fix a flat base point x. Since D²u(x)=0, obtain ‖D²u(z)‖≤ε on `ball x δ`.
+   `norm_iteratedFDeriv_one` and `norm_iteratedFDeriv_fderiv` directly replace this norm with
+   `‖fderiv ℝ (fderiv ℝ u) z‖`; no introduction of Hessian, inner product, or determinant framework.
+3. C² function u is differentiable, Du is differentiable. On this convex ball, for the first time use the mean value inequality, and use Du(x)=0,
+   We have ‖Du(z)‖ ≤ ε‖z - x‖.
+4. For the segment [x,y], `norm_sub_le_of_mem_segment` gives ‖z-x‖≤‖y-x‖<δ.
+   Hence on this segment ∥Du(z)∥ ≤ ε∥y−x∥. The second mean inequality yields
+   |u(y)-u(x)|≤ε‖y-x‖·‖y-x‖.
 
-这是一致 o(r²) 振幅估计，**没有**断言任何高维像集已经零测。
+This is a consistent o(r²) amplitude estimate, **without** asserting that any high-dimensional image set has zero measure.
 
-## 验证与公理边界
+## Verification and Axiomatic Boundaries
 
-* 新模块使用 `lake env lean -DwarningAsError=true` 严格通过，独立模块构建通过。
-* `build/audit/QuadraticRemainderAudit.lean` 严格通过：9 个客户端与主定理共 10 条公理报告，
-  全部仅含标准三公理。覆盖无有限维/完备/内积/测度实例的一般空间、空 K、零维任意函数、
-  常函数；三次函数在零点的一二阶导数为零；K={0,1} 含非平坦点，且另证 x=1 不平坦；
-  K={0} 时实际取 y=δ/2≠0，在紧集外满足所需估计。
-* `SardLowDimAudit`、`AreaFormulaAudit` 和 `SuperlevelSardScope` 重新严格编译通过。
-  前两者无 sorryAx；最后一份分别确认一般 `Analysis.sard`、
-  `Analysis.ae_forall_fderiv_ne_zero`、`SmoothDomain.ae_exists_superlevel` 仍继承 sorryAx。
-* 三个 WIP 文件逐个实际普通模式编译，诊断仍为 3/3/5 个直接洞警告，无其他诊断。
-  **直接洞总数仍为 11**；证书仍为 **24**，perimeter infrastructure 仍为 **missing**。
-* 默认 `lake build` 已通过（3393 jobs），日志为 `build/audit/quadratic-lake-build.log`；根目录
-  `python3 research/verify.py` 的最终快照回执为 `build/verification/latest.json`。
-  独立客户端和日志在忽略的 build 目录，其证据哈希记录于
-  `research/explorations/2026-09-14-quadratic-remainder-audit.json`，不冒充正式证书。
-* 原一般 Sard 和全部 WIP 源码本轮未改。一般 Sard、加权 coarea、其可测性、
-  反方向 Cheeger 比较及常数相等仍未证明。本地回执不等于远端 CI。
+* The new module passes `lake env lean -DwarningAsError=true` strictly, and independent module builds pass.
+* `build/audit/QuadraticRemainderAudit.lean` passes strictly: 9 clients and the main theorem share 10 axioms, all containing only standard three axioms. Covers general spaces without finite-dimensional/completed/inner-product/metric instances, empty K, arbitrary functions in zero-dimensional spaces, constant functions; second-order derivatives at zero for cubic functions are zero; for K={0,1] with non-flat points, and separately proves x=1 is non-flat; for K={0}, actual value is y=δ/2≠0, and outside compact sets the required estimates hold.
+* `SardLowDimAudit`, `AreaFormulaAudit`, and `SuperlevelSardScope` are recompiled strictly. The first two have no sorryAx; the last one separately confirms that general `Analysis.sard`, `Analysis.ae_forall_fderiv_ne_zero`, and `SmoothDomain.ae_exists_superlevel` still inherit sorryAx.
+* Each of the three WIP files compiles successfully in regular mode; diagnostics remain 3/3/5 direct proof hole warnings, with no other diagnostics. **Total direct proof holes remain 11**; the certificate remains **24**, and perimeter infrastructure remains **missing**.
+* Default `lake build` has passed (3393 jobs), log is `build/audit/quadratic-lake-build.log`; the final snapshot verification receipt for root directory `python3 research/verify.py` is `build/verification/latest.json`.
+Independent clients and logs in ignored build directories, with evidence hashes recorded at `research/explorations/2026-09-14-quadratic-remainder-audit.json`, do not claim formal certificates.
+* The general Sard and all WIP source code remain unchanged in this round. General Sard, weighted coarea, its measurability, reverse Cheeger comparison, and constant equality remain unproven. Local verification receipt does not equal remote CI.
 
-## 下一项独立缺口：二维定量覆盖导致像零测
+## Next independent gap: two-dimensional quantitative coverage leads to zero measure
 
-建议下一步建立纯覆盖引理（尚未证明；命名以届时搜索为准）：
-对 `A : Set (Fin 2 → ℝ)`、任意 `f : (Fin 2 → ℝ) → ℝ`，假设 A 有界，并且
+Suggest the next step is to establish the pure covering lemma (not yet proven; name to be determined at the time of search):
+For `A : Set (Fin 2 → ℝ)`, any `f : (Fin 2 → ℝ) → ℝ`, assume A is bounded, and furthermore
 
 ```lean
 ∀ ε : ℝ, 0 < ε → ∃ δ : ℝ, 0 < δ ∧
   ∀ x ∈ A, ∀ y ∈ A, ‖y - x‖ < δ → |f y - f x| ≤ ε * ‖y - x‖ ^ 2
 ```
 
-则 `(volume : Measure ℝ) (f '' A) = 0`。
-不要求 A 或其像可测，不要求 f 在 A 外连续或可微。这里**维数二不可省略**。
-`build/audit/QuadraticCoverNextStatement.lean` 只检查此命题类型，没有证明声明或占位公理。
+Then `(volume : Measure ℝ) (f '' A) = 0`.
+No measurability of A or its image is required, nor is continuity or differentiability of f outside A required. The dimension two is not optional.
+`build/audit/QuadraticCoverNextStatement.lean` only checks the type of this statement, with no proof assertions or placeholder axioms.
 
-可将 A 放入一个方框，分成 O(r⁻²) 个小方格；每个与 A 相交的格子选一个 A 内代表，
-用上述估计将其像覆盖在长度 O(εr²) 的区间内，再取 ε→0 控制外测度。
-该定量有限覆盖、区间像覆盖和外测度估计仍需证明，单有可数覆盖 API 不足。
-本轮结果可把紧集 K 中的二阶平坦点子集送入这个接口，不必先假设该子集可测。
+One can place A inside a box, dividing it into O(r⁻²) small squares; for each square intersecting A, select a representative point from A, and use the above estimate to cover its image within an interval of length O(εr²), then take ε→0 to control the outer measure.
+The quantitative finite cover, interval image cover, and outer measure estimate still need to be proven; a countable cover API alone is insufficient.
+The current result allows sending a subset of second-order flat points in a compact set K through this interface, without first assuming measurability of the subset.
 
-即使完成这个覆盖引理，也只处理二维的二阶平坦层；非平坦层仍需有限阶隐函数图表、
-局部降维和可数拼接。更高维还需高阶平坦余项与覆盖，并处理高阶分层下降时的正则性损失。
-这不等于一般 Sard 已建立。
+Even after completing this covering lemma, it only handles two-dimensional second-order flat sheaves; non-flat sheaves still require finite-order implicit function charts, local dimension reduction, and countable gluing. Higher dimensions require higher-order flat remainder terms and covering, along with handling the regularity loss during higher-order stratified descent. This does not equate to general Sard having already established it.

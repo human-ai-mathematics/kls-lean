@@ -4,7 +4,7 @@ Date: 2026-09-06, Asia/Shanghai.
 
 ## Goal and authorization
 
-The owner accepted the prompt review with “可以，那就按照你的判断去执行”. This is a bounded
+The owner accepted the prompt review with “Yes, proceed according to your judgment”. This is a bounded
 local extension of the existing infrastructure. Existing implementation is reused. No commit,
 push, remote execution, API freeze, automatic worker or mathematical-state promotion is included.
 New infrastructure files may be explicitly staged locally; staging is not a commit or publication.

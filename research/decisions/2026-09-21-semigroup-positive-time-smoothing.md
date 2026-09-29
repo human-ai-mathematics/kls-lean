@@ -99,7 +99,7 @@ BGL, small-time BV bounds, general-law passage and Buser's inequality. Bakry–�
 the full Cheeger–Buser comparison and the dimension-free KLS bound stay pending, and the constant
 `π` is not approached.
 
-| 已有证明 | 仅类型检查 | 仍是非形式化方案 |
+| Proved | Type-checked only | Still an informal plan |
 | --- | --- | --- |
 | E0–E5, including arbitrary weights, the zero vector and `t = 0` for E0–E1; the bounded dissipation estimates and the two generic `LinearPMap` tools | the sharp generator bound `exp(1)·t·‖A(P_t g)‖ ≤ ‖g‖` | classical/smooth representatives, `Γ(P_t f) ≤ P_t Γ(f)`, BGL/BV, general-law passage, Buser |
 | Earlier `S0a` `D0`–`D4`, `F0`–`F4`, `G0`/`G1`, pointwise `B0`–`B4` | earlier route candidates remain candidates | time differentiation of `s ↦ P_s Γ(P_{t-s} f)` and interchange with derivatives, integrals and limits |

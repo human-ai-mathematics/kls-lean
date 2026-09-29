@@ -1,200 +1,187 @@
-# 2026-09-12 — 交给证明会话的提示词：填 `KLS/WIP/AnalyticPrerequisites.lean` 的 sorry
+# 2026-09-12 — Prompt for proof session: replace the sorry placeholders in `KLS/WIP/AnalyticPrerequisites.lean` with proofs
 
-复制下方代码块给证明会话。背景：同日的[陈述记录](2026-09-12-relative-perimeter-prerequisites-statement.md)
-把相对周长链条所缺的分析前提写成了 17 条与 KLS 无关的 Lean 陈述；本提示词按可行性分四层给出路线与 API。
-陈述本身**不许改**；发现为假或不可证的，保留 `sorry` 并在报告中说明。
+Copy the code block below to the proof session. Background: same day's [statement record](2026-09-12-relative-perimeter-prerequisites-statement.md)
+Wrote the missing analytical assumptions for the relative perimeter chain as 17 statements independent of KLS; this prompt provides a four-layered route and API based on feasibility.
+The statement itself must not be modified; if found false or unprovable, retain `sorry` and note it in the report.
 
 ```
-仓库：/Users/lyuyuwei/Documents/ChatGPT/KLS（Lean 4 / Mathlib v4.33.0，Mathlib 提交
-db584cd6d46c92f209a44c0f1c829460d327499d；Lake 根目录 formalization/）。
-本机 elan 与全部 Lean 工具链已是原生 arm64，lake 调 git 正常，不需要任何 git 包装脚本。
+Repository: /Users/lyuyuwei/Documents/ChatGPT/KLS (Lean 4 / Mathlib v4.33.0, Mathlib submission
+db584cd6d46c92f209a44c0f1c829460d327499d; Lake root directory formalization/).
+The local elan and all Lean toolchain components are natively arm64; git operations via lake work normally and no git wrapper scripts are required.
 
-任务：填写 formalization/FunctionalInequalities/KLS/WIP/AnalyticPrerequisites.lean 中的 sorry（17 条）。
-该文件是相对周长链条（Blueprint lem:relative-perimeter-smoothing、lem:relative-perimeter-cheeger-infimum）
-所缺分析前提的独立陈述：A 等周直径不等式（经 Prékopa–Leindler / Brunn–Minkowski）、B 正则水平集的 Lipschitz 图
-与 μH[n−1] 局部有限、C 光滑区域的 Gauss–Green、D 加权 coarea、E Sard。设计、来源与每条的可行性评估见
-research/decisions/2026-09-12-relative-perimeter-prerequisites-statement.md；先读它、目标 .lean 的模块文档，
-以及 research/naming.md。
+Task: Fill in sorry (in formalization/FunctionalInequalities/KLS/WIP/AnalyticPrerequisites.lean entry 17).
+This file is an independent statement of missing analytical premises for the relative perimeter chain (Blueprint lem:relative-perimeter-smoothing, lem:relative-perimeter-cheeger-infimum): A isodiametric inequality (via Prékopa–Leindler / Brunn–Minkowski), B Lipschitz graphs of regular level sets and μH[n−1] locally finite, C Gauss–Green for smooth domains, D weighted coarea, E Sard. Design, sources, and feasibility assessment of each are given in research/decisions/2026-09-12-relative-perimeter-prerequisites-statement.md; first read it, the target .lean module documentation, and research/naming.md.
 
-先读的仓库材料：
-- formalization/FunctionalInequalities/KLS/WIP/RelativePerimeter.lean：SmoothDomain、frontier_inter_eq、
-  addHaar_frontier（沿法向单调性的论证，可复用于 outwardNormal_eq）、mollifiedIndicator 与
-  mollifiedIndicator_contDiff_lipschitz_mem_Icc 的证明（卷积求导 API 的用法）。注意其 private 引理
-  （mollifiedIndicator_eq 等）不能跨文件引用，需要时在本文件重证为 private。
-- formalization/FunctionalInequalities/Probability/Line/BrunnMinkowski.lean：一维 Brunn–Minkowski 与
-  Prékopa–Leindler（prekopaLeindler 无有界性前提），以及 le_volume_combination 里"紧子集内正则 + iSup"的套路。
-- formalization/FunctionalInequalities/Probability/HaarLine.lean：lineEquiv、exists_lintegral_line（沿直线的 Fubini）。
-- formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation.lean：norm_gradient_le_of_lipschitz、
-  gradient_eq_of_hasFDerivAt、measurable_gradient、ae_differentiableAt_of_locallyLipschitz。
+Initial repository materials:
+- formalization/FunctionalInequalities/KLS/WIP/RelativePerimeter.lean: SmoothDomain, frontier_inter_eq,
+  Proof of addHaar_frontier (monotonicity along the normal direction, reusable for outwardNormal_eq), mollifiedIndicator, and
+  mollifiedIndicator_contDiff_lipschitz_mem_Icc (usage of convolution differentiation API). Note that its private lemmas
+  (mollifiedIndicator_eq, etc.) cannot be referenced across files and must be re-proved as private in this file when needed.
+- formalization/FunctionalInequalities/Probability/Line/BrunnMinkowski.lean: One-dimensional Brunn–Minkowski and Prékopa–Leindler (prekopaLeindler without boundedness assumptions), and the "regularity within compact subsets + iSup" pattern in le_volume_combination.
+- formalization/FunctionalInequalities/Probability/HaarLine.lean: lineEquiv, exists_lintegral_line (Fubini along a line).
+- formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation.lean: norm_gradient_le_of_lipschitz,
+  gradient_eq_of_hasFDerivAt, measurable_gradient, ae_differentiableAt_of_locallyLipschitz.
 
-规则：
-1. 不改任何 theorem/def 的陈述（类型），包括两个 def 的定义体。若确认某陈述为假或不可证，保留 sorry 并在报告中
-   说明反例/障碍。允许加 private 辅助引理与 import；允许新增非 private 的一般引理（命名遵守 research/naming.md），
-   但要在报告中列出。
-2. 只在这个文件内工作。不改 RelativePerimeter.lean / CheegerInfimum.lean。不加入 FunctionalInequalities.lean、
-   lakefile Solutions 根、research/a-series/ledger.yaml、research/check_blueprint.py、research/tasks.json、
-   Blueprint \lean{}/\leanok。不 git commit、不 git push。决定记录只追加：新建
-   research/decisions/2026-09-1X-relative-perimeter-prerequisites-proofs.md。
-3. 编译（在 formalization/ 下）：
+Rules:
+1. Do not alter any statement (type) of theorem/def, including the bodies of the two def definitions. If a statement is confirmed to be false or unprovable, retain sorry and document a counterexample/obstacle in the report. Allow addition of private auxiliary lemmas and import; allow adding general non-private lemmas (naming following research/naming.md), but list them in the report.
+2. Work only within this file. Do not modify RelativePerimeter.lean / CheegerInfimum.lean. Do not add FunctionalInequalities.lean, lakefile Solutions root, research/a-series/ledger.yaml, research/check_blueprint.py, research/tasks.json, Blueprint \lean{}/\leanok. Do not git commit, do not git push. Record decisions are only appended: new
+   research/decisions/2026-09-1X-relative-perimeter-prerequisites-proofs.md.
+3. Compile (in formalization/):
      lake build FunctionalInequalities.KLS.WIP.AnalyticPrerequisites
      lake env lean FunctionalInequalities/KLS/WIP/AnalyticPrerequisites.lean
-   目标：无错误；填完的声明不再有 "declaration uses 'sorry'"；无其他警告。注意：unusedSectionVars linter 对含
-   sorry 的声明不报告，所以每填完一条都可能新冒出该警告——用 `omit [...] in`（放在 docstring 之前）处理不再需要的
-   section 实例，需要的用 `include ... in`；不要为此改陈述。收尾用
+  Goal: no errors; filled declarations have no "declaration uses 'sorry"'; no other warnings. Note: unusedSectionVars linter does not report on declarations containing sorry, so a new such warning may appear after each completion—handle it with `omit [...] in` (placed before the docstring) for no longer needed section instances, and use `include ... in` for needed ones; do not modify the statements for this. Closeout with
      lake env lean -DwarningAsError=true FunctionalInequalities/KLS/WIP/AnalyticPrerequisites.lean
-   并对每个填完的顶层定理 #print axioms，只允许 propext / Classical.choice / Quot.sound。
-4. 语法：`∞` 需 `open scoped ContDiff`；`μH[d]` 需 `open MeasureTheory`；`⟪x, y⟫` 是 `open scoped RealInnerProductSpace`
-   下的 `inner ℝ x y`；`S + T`、`t • S` 需 `open scoped Pointwise`；`volume` 来自 measureSpaceOfInnerProductSpace；
-   `LinearMap.ker` 只接受 LinearMap，对 fderiv 写 `(fderiv ℝ φ x).toLinearMap`（文件里已如此）；`push_neg` 已废弃用 `push Not`。
+  and for each completed top-level theorem, run #print axioms, allowing only propext / Classical.choice / Quot.sound.
+4. Syntax: `∞` requires `open scoped ContDiff`; `μH[d]` requires `open MeasureTheory`; `⟪x, y⟫` is the `inner ℝ x y` under `open scoped RealInnerProductSpace`; `S + T` and `t • S` require `open scoped Pointwise`; `volume` comes from measureSpaceOfInnerProductSpace; `LinearMap.ker` only accepts LinearMap, for fderiv write `(fderiv ℝ φ x).toLinearMap` (as in the file); `push_neg` has been deprecated in favor of `push Not`.
 
-按层做，先易后难；卡住的留 sorry 并写明卡点。
+Do it layer by layer, starting with easier problems; leave stuck points with a "sorry" and clearly specify the bottleneck.
 
-第一层（给定同文件其他条后是组装，或纯 Mathlib；应全部完成）
-- KLS.SmoothDomain.norm_outwardNormal：展开 outwardNormal，`dif_pos hx`；`(U.exists_defining x hx).choose_spec.choose_spec`
-  给出 W、φ 的性质，特别是 `fderiv ℝ φ x ≠ 0`（x ∈ W）；`gradient` 与 `fderiv` 互为 `toDual` 像
-  （`gradient_eq_toDual_symm_fderiv`? 或用 LipschitzApproximation.norm_gradient_eq_norm_fderiv）⇒ `gradient φ x ≠ 0`；
-  `norm_smul`、`norm_inv`、`norm_norm`、`inv_mul_cancel₀`。
-- Analysis.ae_forall_fderiv_ne_zero ← sard：`ae_iff`；`{t | ¬ ∀ x, u x = t → Du x ≠ 0} = u '' {x | Du x = 0}`
-  （`Set.ext`，`Set.mem_image`，`not_forall`/`not_imp`/`not_not`），再 `measure_mono_null` + sard。
-- Analysis.volume_le_ofReal_mul_hausdorffMeasure ← isodiametric：`Measure.hausdorffMeasure_apply`（`μH[d] s = ⨆ r > 0, ⨅ (t : ℕ → Set X)
-  (_ : s ⊆ ⋃ n, t n) (_ : ∀ n, diam (t n) ≤ r), ∑' n, ⨆ (_ : (t n).Nonempty), diam (t n) ^ d`，diam 为 EMetric.diam）。
-  只需对 r = 1 的那个 ⨅ 证 `vol S ≤ ofReal(ω/2^n) * (⨅ ...)`：对每个覆盖 `vol S ≤ ∑' vol (t n)`（`measure_iUnion_le` + `measure_mono`）；
-  每个 `t n`：若 `EMetric.diam (t n) = ⊤` 则该项为 ⊤（n ≥ 1；n = 0 单独处理，此时 `0^0 = 1`、V 是一点、`vol S ≤ 1`），
-  否则 `t n` 有界（`Metric.isBounded_iff_ediam_ne_top`），`isodiametric` 给 `vol (t n) ≤ ofReal(ω (diam/2)^n)`，
-  再 `Metric.diam = (EMetric.diam).toReal`（`Metric.diam` 定义）与 `ENNReal.ofReal_rpow_of_nonneg`/`ENNReal.ofReal_pow`
-  换成 `ofReal(ω/2^n) * EMetric.diam^n`；`ENNReal.tsum_mul_left`、`le_iInf`、`le_iSup_of_le`。
-- Analysis.exists_hausdorffMeasure_levelSet_lt_top ← exists_lipschitzOnWith_levelSet_subset_image：取 N、K、s、g；
-  `measure_mono` 到 `g '' s`；`LipschitzOnWith.hausdorffMeasure_image_le hg (d := finrank − 1) hd`（需 `0 ≤ d`；n = 0 时
-  前提 `Dφ x ≠ 0` 不可能，先 `rcases Nat.eq_zero_or_pos`）给 `≤ K^d * μH[d] s`；`μH[d]` 在 `ker` 上：
-  `finrank ℝ ker = n − 1`（`LinearMap.finrank_range_add_finrank_ker`，range 为 ⊤ 因为非零泛函到 ℝ 满射：
-  `LinearMap.range_eq_top`/`finrank_top`/`Module.finrank_self`），于是 `μH[finrank ℝ ker]` 是 `IsAddHaarMeasure`
-  （instance `isAddHaarMeasure_hausdorffMeasure`，需要 ker 上的 MeasurableSpace/BorelSpace 实例：`Subtype.instMeasurableSpace`、
-  `Subtype.borelSpace`，以及 `FiniteDimensional`、`SecondCountableTopology`——有限维赋范空间自动有），
-  Haar ⇒ `IsFiniteMeasureOnCompacts`，有界集包含在紧闭球内（`Bornology.IsBounded.subset_closedBall` + `isCompact_closedBall`）⇒ 有限。
-  把 `(finrank ℝ V : ℝ) − 1` 与 `(finrank ℝ ker : ℝ)` 对齐用 `Nat.cast_sub`/`push_cast`。
-- Analysis.volume_rpow_add_le_volume_add_rpow ← volume_rpow_mul_le_volume_combination：标准齐次化。`a := vol S ^ (1/n)`、
-  `b := vol T ^ (1/n)`（紧 ⇒ 有限，`IsCompact.measure_lt_top`）。若 a = 0 或 b = 0：`x + T ⊆ S + T` 给 `vol T ≤ vol (S+T)`
-  （`measure_preimage_add`/`Set.singleton_add`），单调即可。否则 `S' := a⁻¹ • S`、`T' := b⁻¹ • T` 体积为 1
-  （`Measure.addHaar_smul volume r s : volume (r • s) = ofReal |r ^ finrank| * volume s`，`ENNReal.rpow_natCast`），
-  取 `t := a/(a+b)`（实数），乘法型 BM 给 `1 ≤ vol {t x' + (1−t) y'}`，而该组合集 = `(a+b)⁻¹ • (S + T)`
-  （`Set.ext`，`Set.mem_add`、`Set.mem_smul_set`、`smul_smul`、`smul_add`），再 `addHaar_smul` 回去。ENNReal/ℝ 之间用
-  `ENNReal.toReal`，`ENNReal.rpow_add`（非零非顶）、`ENNReal.rpow_mul`、`ENNReal.rpow_le_rpow_iff`。
-- Analysis.isodiametric ← volume_rpow_mul_le_volume_combination：`S ⊆ closure S`（`measure_mono subset_closure`），
-  `Metric.diam_closure`；`closure S` 紧（`hS.isCompact_closure`）故可测非空（S = ∅ 平凡）。`T := (-1 : ℝ) • closure S`
-  （体积相等：`Measure.addHaar_smul`，`|(-1)^n| = 1`），`t = 1/2`：组合集 ⊆ `closedBall 0 (diam S / 2)`
-  （`z = (x − y)/2`，`norm_sub_le`→`Metric.dist_le_diam_of_mem hS.isCompact_closure.isBounded hx hy`，`dist_eq_norm`）；
-  `InnerProductSpace.volume_closedBall`（需 `Nontrivial V`；n = 0 分支：`Module.finrank_zero_iff` ⇒ Subsingleton，
-  `vol S ≤ vol univ = 1`：`measureSpaceOfInnerProductSpace` 的 `volume` 是 `(stdOrthonormalBasis ℝ V).toBasis.addHaar`，
-  `Basis.addHaar_self` 给平行多面体测度 1，空基的平行多面体为 `{0} = univ`），`ω_n = √π^n / Γ(n/2+1)` 与
-  `KLS.unitBallVolume` 定义逐字相同（`unfold KLS.unitBallVolume`）。左边 `vol^{1/2} · vol^{1/2} = vol`：
-  `ENNReal.rpow_add`（vol 非零非顶；零时平凡），或 `ENNReal.rpow_add_of_nonneg`。
+Layer one (given the same file, after other entries are assembly, or pure Mathlib; all should be completed)
+- KLS.SmoothDomain.norm_outwardNormal: Expand outwardNormal, `dif_pos hx`; `(U.exists_defining x hx).choose_spec.choose_spec`
+  Given the properties of W and φ, particularly `fderiv ℝ φ x ≠ 0` (x ∈ W); `gradient` and `fderiv` are mutual `toDual` images
+  (`gradient_eq_toDual_symm_fderiv`? or use LipschitzApproximation.norm_gradient_eq_norm_fderiv) ⇒ `gradient φ x ≠ 0`;
+  `norm_smul`, `norm_inv`, `norm_norm`, `inv_mul_cancel₀`.
+- Analysis.ae_forall_fderiv_ne_zero ← sard: `ae_iff`; `{t | ¬ ∀ x, u x = t → Du x ≠ 0} = u '' {x | Du x = 0}`
+  (`Set.ext`, `Set.mem_image`, `not_forall`/[`not_imp`]/`not_not`), then `measure_mono_null` + sard.
+- Analysis.volume_le_ofReal_mul_hausdorffMeasure ← isodiametric: `Measure.hausdorffMeasure_apply` (`μH[d] s = ⨆ r > 0, ⨅ (t : ℕ → Set X)
+  (_ : s ⊆ ⋃ n, t n) (_ : ∀ n, diam (t n) ≤ r), ∑' n, ⨆ (_ : (t n).Nonempty), diam (t n) ^ d, diam is EMetric.diam).
+  It suffices to prove `vol S ≤ ofReal(ω/2^n) * (⨅ ...)` for r = 1: for each cover `vol S ≤ ∑' vol (t n)` (`measure_iUnion_le` + `measure_mono`);
+  Each `t n`: if `EMetric.diam (t n) = ⊤` then the item is ⊤ (n ≥ 1; n = 0 is handled separately, in which case `0^0 = 1`, V is a point, `vol S ≤ 1`).
+  Otherwise `t n` is bounded (`Metric.isBounded_iff_ediam_ne_top`), `isodiametric` is given to `vol (t n) ≤ ofReal(ω (diam/2)^n)`,
+  Again `Metric.diam = (EMetric.diam).toReal` (Definition `Metric.diam`) and `ENNReal.ofReal_rpow_of_nonneg`/`ENNReal.ofReal_pow`
+  Change to `ofReal(ω/2^n) * EMetric.diam^n`; `ENNReal.tsum_mul_left`, `le_iInf`, `le_iSup_of_le`.
+- Analysis.exists_hausdorffMeasure_levelSet_lt_top ← exists_lipschitzOnWith_levelSet_subset_image: take N, K, s, g;
+  `measure_mono` to `g '' s`; `LipschitzOnWith.hausdorffMeasure_image_le hg (d := finrank − 1) hd` (requires `0 ≤ d`; when n = 0
+  The premise `Dφ x ≠ 0` is impossible; first `rcases Nat.eq_zero_or_pos` gives `≤ K^d * μH[d] s`; `μH[d]` on `ker`:
+  `finrank ℝ ker = n − 1` (`LinearMap.finrank_range_add_finrank_ker`, range is ⊤ because the nonzero functional is surjective onto ℝ:
+  `LinearMap.range_eq_top`/`finrank_top`/`Module.finrank_self`), thus `μH[finrank ℝ ker]` is `IsAddHaarMeasure`
+  (instance `isAddHaarMeasure_hausdorffMeasure`, requires an instance of MeasurableSpace/BorelSpace on ker: `Subtype.instMeasurableSpace`,
+  `Subtype.borelSpace`, and `FiniteDimensional`, `SecondCountableTopology`——finite-dimensional normed spaces automatically have)
+  Haar ⇒ `IsFiniteMeasureOnCompacts`, bounded set contained in a compact ball (`Bornology.IsBounded.subset_closedBall` + `isCompact_closedBall`) ⇒ finite.
+  Align `(finrank ℝ V : ℝ) − 1` with `(finrank ℝ ker : ℝ)` using `Nat.cast_sub`/`push_cast`.
+- Analysis.volume_rpow_add_le_volume_add_rpow ← volume_rpow_mul_le_volume_combination: standard homogenization. `a := vol S ^ (1/n)`,
+  `b := vol T ^ (1/n)` (compact implies finite, `IsCompact.measure_lt_top`). If a = 0 or b = 0: `x + T ⊆ S + T` gives `vol T ≤ vol (S+T)`
+  (`measure_preimage_add`/`Set.singleton_add`), monotonicity suffices. Otherwise, the volumes of `S' := a⁻¹ • S` and `T' := b⁻¹ • T` are 1
+  (`Measure.addHaar_smul volume r s : volume (r • s) = ofReal |r ^ finrank| * volume s`,`ENNReal.rpow_natCast`),
+  Take `t := a/(a+b)` (real numbers), multiplicative BM gives `1 ≤ vol {t x' + (1−t) y'}`, and the combined set = `(a+b)⁻¹ • (S + T)`
+  (`Set.ext`, `Set.mem_add`, `Set.mem_smul_set`, `smul_smul`, `smul_add`), then go back to `addHaar_smul`. Between ENNReal/ℝ use
+  `ENNReal.toReal`, `ENNReal.rpow_add` (nonzero non-apex), `ENNReal.rpow_mul`, `ENNReal.rpow_le_rpow_iff`.
+- Analysis.isodiametric ← volume_rpow_mul_le_volume_combination：`S ⊆ closure S`(`measure_mono subset_closure`),
+  `Metric.diam_closure`；`closure S` compact (`hS.isCompact_closure`) hence measurable and nonempty (S = ∅ is trivial).`T := (-1 : ℝ) • closure S`
+  (Volume equal: `Measure.addHaar_smul`, `|(-1)^n| = 1`, `t = 1/2`: combinatorial set ⊆ `closedBall 0 (diam S / 2)`)
+  (`z = (x − y)/2`,`norm_sub_le`→`Metric.dist_le_diam_of_mem hS.isCompact_closure.isBounded hx hy`,`dist_eq_norm`)；
+  `InnerProductSpace.volume_closedBall` (requires `Nontrivial V`; n = 0 branches: `Module.finrank_zero_iff` ⇒ Subsingleton,
+  `vol S ≤ vol univ = 1`: `measureSpaceOfInnerProductSpace`'s `volume` is `(stdOrthonormalBasis ℝ V).toBasis.addHaar`,
+  `Basis.addHaar_self` Given the parallelotope measure 1, the empty base parallelotope is `{0} = univ`), `ω_n = √π^n / Γ(n/2+1)` and
+  `KLS.unitBallVolume` Definition is word-for-word identical (`unfold KLS.unitBallVolume`). Left side `vol^{1/2} · vol^{1/2} = vol`:
+  `ENNReal.rpow_add` (vol non-zero non-maximal; trivial at zero), or `ENNReal.rpow_add_of_nonneg`.
 - Analysis.hausdorffMeasure_finrank_eq_smul_volume ← volume_le_ofReal_mul_hausdorffMeasure：
-  (i) `μH[n]` 是 Haar（instance `isAddHaarMeasure_hausdorffMeasure`；注意实例的指标是 `(finrank ℝ E : ℝ)`，与陈述一致），
-  Haar 唯一性 `MeasureTheory.Measure.isAddLeftInvariant_eq_smul`（`Haar/Unique.lean`，`to_additive` 自 `isMulLeftInvariant_eq_smul`）
-  或 `Measure.addHaarMeasure_unique` 给 `μH[n] = c • volume`，`c := addHaarScalarFactor μH[n] volume`，`c ≠ 0, ⊤`
-  （`addHaarScalarFactor_pos_of_isAddHaarMeasure`，NNReal）。
-  (ii) 下界 `2^n/ω_n ≤ c`：把 (i) 代入上一条于 `closedBall 0 1`（体积 `ω_n`，`volume_closedBall`），除以 `ω_n`。
-  (iii) 上界 `c ≤ 2^n/ω_n`：对 `B := closedBall 0 1`、`ε > 0`，`Besicovitch.exists_disjoint_closedBall_covering_ae volume
-  (fun _ ↦ Ioo 0 ε) B ...`（`Mathlib/MeasureTheory/Covering/Besicovitch.lean`，需 `SFinite volume`；给出可数族两两不交的闭球
-  `closedBall (x i) (r i)`，`x i ∈ B`，`r i < ε`，`volume (B \ ⋃) = 0`）。则
-  `μH[n] B ≤ μH[n] (⋃) + μH[n] (B \ ⋃)`；第二项由 (i) 为 `c • 0 = 0`；第一项 `≤ ∑ μH[n] (closedBall) ≤ ∑ (2 r i)^n`
-  （单集覆盖，`Measure.hausdorffMeasure_le_liminf_tsum` 或直接 `hausdorffMeasure_apply` 的 ⨅ 取一元覆盖 + `EMetric.diam_closedBall`）
+  (i) `μH[n]` is Haar (instance `isAddHaarMeasure_hausdorffMeasure`; note the index of the instance is `(finrank ℝ E : ℝ)`, consistent with the statement),
+  Haar uniqueness `MeasureTheory.Measure.isAddLeftInvariant_eq_smul` (`Haar/Unique.lean`, `to_additive` from `isMulLeftInvariant_eq_smul`)
+  or `Measure.addHaarMeasure_unique` to `μH[n] = c • volume`, `c := addHaarScalarFactor μH[n] volume`, `c ≠ 0, ⊤`
+  (`addHaarScalarFactor_pos_of_isAddHaarMeasure`,NNReal).
+  (ii) Lower bound `2^n/ω_n ≤ c`: substitute (i) into the previous statement at `closedBall 0 1` (volume `ω_n`, `volume_closedBall`), divided by `ω_n`.
+  (iii) Upper bound `c ≤ 2^n/ω_n`: for `B := closedBall 0 1`, `ε > 0`, `Besicovitch.exists_disjoint_closedBall_covering_ae volume
+  (fun _ ↦ Ioo 0 ε) B ...`(`Mathlib/MeasureTheory/Covering/Besicovitch.lean`, requires SFinite volume; gives a countable family of pairwise disjoint closed balls
+  `closedBall (x i) (r i)`, `x i ∈ B`, `r i < ε`, `volume (B \ ⋃) = 0`). Then
+  `μH[n] B ≤ μH[n] (⋃) + μH[n] (B \ ⋃)`; the second term by (i) is `c • 0 = 0`; the first term `≤ ∑ μH[n] (closedBall) ≤ ∑ (2 r i)^n`
+  (single set cover, `Measure.hausdorffMeasure_le_liminf_tsum` or direct `hausdorffMeasure_apply` of ⨅ taking a unary cover + `EMetric.diam_closedBall`)
   `= (2^n/ω_n) ∑ volume (closedBall (x i) (r i)) = (2^n/ω_n) volume (⋃) ≤ (2^n/ω_n) volume (closedBall 0 (1+ε))`
-  （不交 `measure_iUnion`，`x i ∈ B, r i < ε` ⇒ 球 ⊆ `closedBall 0 (1+ε)`）。令 `ε → 0`（`volume_closedBall` 连续于半径），
-  与 (i) 比较得 `c · ω_n ≤ 2^n`。ENNReal 乘除：`ENNReal.mul_le_iff_le_inv`、`ENNReal.div_eq_inv_mul`。
-  最后 `Measure.ext`/`smul` 形式：`ENNReal.ofReal (2^n/ω_n) = (c : ℝ≥0∞)` 由两边不等式 + `le_antisymm`。
-- Analysis.volume_rpow_mul_le_volume_combination ← prekopaLeindler：与一维 `le_volume_combination` 同套路：先对紧 `K ⊆ S`、`L ⊆ T`
-  证，`t • K + (1−t) • L` 紧（`IsCompact.smul`、`IsCompact.add`）故可测，取 `f := K.indicator 1`、`g := L.indicator 1`、
-  `h := (t • K + (1−t) • L).indicator 1`（都可测：`measurable_one.indicator`），PL 前提逐点：`0^t = 0`（`Real.zero_rpow ht0.ne'`）、
-  `1^t = 1`；结论中 `∫⁻ ofReal (indicator 1) = vol`（`lintegral_indicator_one`）；再 `MeasurableSet.measure_eq_iSup_isCompact`
-  + `ENNReal.rpow` 单调 + `ENNReal.iSup_mul`/`ENNReal.mul_iSup`（rpow 与 iSup 交换：`ENNReal.rpow_iSup`? 一维文件里有
-  private `rpow_iSup`，可复制），组合集包含关系 `t • K + (1−t) • L ⊆ {t x + (1−t) y | x ∈ S, y ∈ T}`。
+  (Disjoint `measure_iUnion`, `x i ∈ B, r i < ε` ⇒ ball ⊆ `closedBall 0 (1+ε)`). Let `ε → 0` (`volume_closedBall` continuous on radius),
+  Comparing with (i) yields `c · ω_n ≤ 2^n`. ENNReal multiplication and division: `ENNReal.mul_le_iff_le_inv`, `ENNReal.div_eq_inv_mul`.
+  Final form: `Measure.ext`/`smul` `ENNReal.ofReal (2^n/ω_n) = (c : ℝ≥0∞)` by the inequalities on both sides + `le_antisymm`.
+- Analysis.volume_rpow_mul_le_volume_combination ← prekopaLeindler: Following the pattern of one-dimensional `le_volume_combination`: first for a compact `K ⊆ S`, `L ⊆ T`
+  Proof, `t • K + (1−t) • L` compact (`IsCompact.smul`, `IsCompact.add`), hence measurable; take `f := K.indicator 1`, `g := L.indicator 1`,
+  `h := (t • K + (1−t) • L).indicator 1` (all measurable: `measurable_one.indicator`), PL premise pointwise: `0^t = 0` (`Real.zero_rpow ht0.ne'`) ,
+  `1^t = 1`; Conclusion `∫⁻ ofReal (indicator 1) = vol` (`lintegral_indicator_one`); then `MeasurableSet.measure_eq_iSup_isCompact`
+  + `ENNReal.rpow` monotone + `ENNReal.iSup_mul`/`ENNReal.mul_iSup` (rpow and iSup commute: `ENNReal.rpow_iSup`? In a one-dimensional file there is
+  private `rpow_iSup`, copyable), the collection set contains relation `t • K + (1−t) • L ⊆ {t x + (1−t) y | x ∈ S, y ∈ T}`.
 
-第二层（Mathlib + 仓库输入，应能完成）
-- Analysis.prekopaLeindler（n 维）：对维数归纳。建议不在抽象 V 上归纳，而是：
-  (a) 先证 `Fin n → ℝ`（乘积 Lebesgue `volume`）上的版本 `prekopaLeindler_pi`，对 n 归纳：n = 0 平凡（一点空间，积分即取值，
-  `Fin 0 → ℝ` 上 `volume univ = 1`）；n+1 用 `MeasurableEquiv.piFinSuccAbove (fun _ ↦ ℝ) 0` 与
-  `MeasureTheory.volume_preserving_piFinSuccAbove`（`Mathlib/MeasureTheory/Constructions/Pi.lean`）把 `Fin (n+1) → ℝ` 拆成
-  `ℝ × (Fin n → ℝ)`，`lintegral_prod`（Tonelli，需 AEMeasurable）；对固定的 `x' y'`，切片函数 `s ↦ f (s, x')` 等满足一维 PL 前提
-  （用 `hfgh` 于 `(s, x')`、`(s', y')`），一维 PL（`Probability.Line.prekopaLeindler`）给切片积分的不等式；再对
-  `F x' := ∫⁻ s, ofReal (f (s, x'))` 等用 n 维归纳假设。**障碍**：一维 PL 陈述的是 ℝ 值函数 + `ENNReal.ofReal`，而切片积分
-  `F, G, H` 取值 ℝ≥0∞（可能为 ⊤，且不是 `ofReal` 形式）。先证一个 ℝ≥0∞ 值版本 `prekopaLeindler_ennreal`
-  （`f g h : ℝ → ℝ≥0∞` 可测，`f x ^ t * g y ^ (1−t) ≤ h (t x + (1−t) y)`）：由截断 `min (f x) N` 与 `ENNReal.toReal`
-  归约到 ℝ 值版本，再 `lintegral_iSup` 单调收敛（`Monotone`，`Measurable.min`）；同样处理 n 维的归纳假设，最好整个归纳都在
-  ℝ≥0∞ 值形式下进行，最后再特化到 `ofReal ∘ f`。可测性：`Measurable.lintegral_prod_right'`。
-  (b) 从 `Fin n → ℝ` 搬到 V：`(stdOrthonormalBasis ℝ V).repr : V ≃ₗᵢ[ℝ] EuclideanSpace ℝ (Fin n)`，
-  `measurePreserving_repr_symm`（见 `VolumeOfBalls.lean` 中 `volume_ball` 的证明）与
-  `EuclideanSpace.volume_preserving_measurableEquiv`（到 `Fin n → ℝ`）；线性等价保持 `t • x + (1−t) • y`
-  （`map_add`、`map_smul`），`lintegral_map_equiv`/`MeasurePreserving.lintegral_comp`。
-- Analysis.exists_lipschitzOnWith_levelSet_subset_image：Mathlib 的隐函数定理 `HasStrictFDerivAt.implicitFunction`
-  （`Analysis/Calculus/Implicit.lean`，需 `f'` 满射 + `ker f'` 闭补；对 `f' = fderiv ℝ φ x : V →L[ℝ] ℝ ≠ 0`，满射由
-  `LinearMap.range_eq_top` + 一维目标，闭补由 `ContinuousLinearMap.ker_closedComplemented_of_finiteDimensional_range`）：
-  `ψ := HasStrictFDerivAt.implicitFunction φ f' hφ' hsurj hker : ℝ → ker f' → V`，`implicitFunction_apply_image`
-  （`∀ᶠ y in 𝓝 x, ψ (φ y) (proj (y − x)) = y`）给出：N 内每个水平集点 y 是 `ψ (φ x) (proj (y − x))`，即
-  `g := ψ (φ x)`、`s := proj '' (N ∩ 水平集)`（有界，因 N 可取球，proj 连续线性）。`g` 的 Lipschitz：
-  `ImplicitContDiff.contDiffAt_implicitFunction`（`Analysis/Calculus/ImplicitContDiff.lean`）给 `ContDiffAt ℝ 1 (uncurry ψ) (φ x, 0)`，
-  再 `ContDiffAt.exists_lipschitzOnWith`（`ContDiff/RCLike.lean`）给某邻域上的 Lipschitz；缩小 N 使 `s` 落进该邻域。
-  `HasStrictFDerivAt`：由 `ContDiff ℝ 1 φ` 得 `hφ.contDiffAt.hasStrictFDerivAt le_rfl`。
-- KLS.SmoothDomain.outwardNormal_eq：设 `(W₁, φ₁)` 是 `choose` 出的对，`(W, φ)` 是给定的对，两者在 x 的邻域内有相同的
-  负集 `{φ₁ < 0} = U ∩ W₁ ∩ W = {φ < 0}`。证 `Dφ₁ x = λ • Dφ x`，`λ > 0`：对任意 v 与 `Dφ x v < 0`，沿 `x + t v`
-  一阶展开（`HasFDerivAt.lim` 或 `hasDerivAt_iff_tendsto_slope`，见 `frontier_inter_eq` 的证明）得小 t > 0 时 `φ (x + t v) < 0`
-  ⇒ `φ₁ (x + t v) < 0` ⇒ `Dφ₁ x v ≤ 0`（否则同样展开给正值）。于是半空间 `{Dφ x v < 0} ⊆ {Dφ₁ x v ≤ 0}`，线性代数：
-  取 `v₀` 使 `Dφ x v₀ = 1`，对任意 w 写 `w = (w − (Dφ x w) v₀) + (Dφ x w) v₀`，第一项在 `ker (Dφ x)` 上（其上 `Dφ₁ x = 0`，
-  由 `±` 两侧极限），得 `Dφ₁ x w = (Dφ₁ x v₀) (Dφ x w)`，`λ := Dφ₁ x v₀ ≥ 0`，`λ ≠ 0` 因 `Dφ₁ x ≠ 0`。
-  再 `gradient` 是 `fderiv` 的 `toDual.symm` 像（线性），`norm_smul`、正数归一化。写成 private 引理
-  `fderiv_eq_smul_fderiv_of_forall_lt_imp_le`。
+Layer two (Mathlib + repository input, should be able to complete)
+- Analysis.prekopaLeindler (n-dimensional): induction on dimension. It is suggested not to perform induction on an abstract V, but rather:
+  (a) First prove `prekopaLeindler_pi` on `Fin n → ℝ` (product Lebesgue `volume`) by induction on n. The n = 0 case is trivial (a one-point space, where integration is evaluation,
+  `Fin 0 → ℝ` above `volume univ = 1`); n+1 using `MeasurableEquiv.piFinSuccAbove (fun _ ↦ ℝ) 0` and
+  `MeasureTheory.volume_preserving_piFinSuccAbove`(`Mathlib/MeasureTheory/Constructions/Pi.lean`)splits `Fin (n+1) → ℝ` into
+  `ℝ × (Fin n → ℝ)`, `lintegral_prod` (Tonelli, requires AEMeasurable); for fixed `x' y'`, the slice function `s ↦ f (s, x')` satisfies the one-dimensional PL assumption
+  (Using `hfgh` in `(s, x')`, `(s', y')`), a one-dimensional PL (`Probability.Line.prekopaLeindler`) inequality for slice integrals; then for
+  `F x' := ∫⁻ s, ofReal (f (s, x'))` uses the n-dimensional induction hypothesis. **Barrier**: the one-dimensional PL statement is about ℝ-valued functions + `ENNReal.ofReal`, while the slice integral
+  `F, G, H` takes values in ℝ≥0∞ (possibly equal to ⊤, and not in `ofReal` form). First prove a version taking values in ℝ≥0∞ `prekopaLeindler_ennreal`
+  (measurable `f g h : ℝ → ℝ≥0∞`, with `f x ^ t * g y ^ (1−t) ≤ h (t x + (1−t) y)`): use truncation `min (f x) N` and `ENNReal.toReal`
+  Reduce to the ℝ-valued version, then `lintegral_iSup` monotone convergence (`Monotone`, `Measurable.min`); handle the n-dimensional induction hypothesis similarly, ideally performing the entire induction in
+  Under ℝ≥0∞ valued forms, finally specializing to `ofReal ∘ f`. Measurability: `Measurable.lintegral_prod_right'`.
+  (b) Move from `Fin n → ℝ` to V: `(stdOrthonormalBasis ℝ V).repr : V ≃ₗᵢ[ℝ] EuclideanSpace ℝ (Fin n)`,
+  `measurePreserving_repr_symm` (see the proof of `VolumeOfBalls.lean`'s `volume_ball`) and
+  `EuclideanSpace.volume_preserving_measurableEquiv` (to `Fin n → ℝ`); linear equivalence preserves `t • x + (1−t) • y`
+  (`map_add`,`map_smul`),`lintegral_map_equiv`/`MeasurePreserving.lintegral_comp`.
+- Analysis.exists_lipschitzOnWith_levelSet_subset_image: Implicit function theorem in Mathlib `HasStrictFDerivAt.implicitFunction`
+  (`Analysis/Calculus/Implicit.lean`, requires `f'` surjectivity + `ker f'` closed complement; for `f' = fderiv ℝ φ x : V →L[ℝ] ℝ ≠ 0`, surjectivity is given by
+  `LinearMap.range_eq_top` + one-dimensional target, closed complement by `ContinuousLinearMap.ker_closedComplemented_of_finiteDimensional_range`):
+  `ψ := HasStrictFDerivAt.implicitFunction φ f' hφ' hsurj hker : ℝ → ker f' → V`,`implicitFunction_apply_image`
+  (`∀ᶠ y in 𝓝 x, ψ (φ y) (proj (y − x)) = y`) Given: each point y in a level set of N is `ψ (φ x) (proj (y − x))`, that is
+  `g := ψ (φ x)`,s := proj '' (N ∩ level set) (bounded, since N can be taken to be a ball, proj is continuous linear). Lipschitz of `g`:
+  `ImplicitContDiff.contDiffAt_implicitFunction` (`Analysis/Calculus/ImplicitContDiff.lean`) to `ContDiffAt ℝ 1 (uncurry ψ) (φ x, 0)`,
+  Again `ContDiffAt.exists_lipschitzOnWith` (`ContDiff/RCLike.lean`) gives a Lipschitz condition on some neighborhood; shrink N so that `s` falls into that neighborhood.
+  `HasStrictFDerivAt`: From `ContDiff ℝ 1 φ` we obtain `hφ.contDiffAt.hasStrictFDerivAt le_rfl`.
+- KLS.SmoothDomain.outwardNormal_eq: Let `(W₁, φ₁)` be a pair from `choose`, and let `(W, φ)` be a given pair, such that both have the same in a neighborhood of x.
+  Negativity set `{φ₁ < 0} = U ∩ W₁ ∩ W = {φ < 0}`. Proof `Dφ₁ x = λ • Dφ x`, `λ > 0`: for any v and `Dφ x v < 0`, along `x + t v`
+  First-order expansion (`HasFDerivAt.lim` or `hasDerivAt_iff_tendsto_slope`, see proof in `frontier_inter_eq`) gives for small t > 0 `φ (x + t v) < 0`
+  ⇒ `φ₁ (x + t v) < 0` ⇒ `Dφ₁ x v ≤ 0` (otherwise expand similarly for positive values). Thus the half-space `{Dφ x v < 0} ⊆ {Dφ₁ x v ≤ 0}`, linear algebra:
+  Take `v₀` such that `Dφ x v₀ = 1`, for any w write `w = (w − (Dφ x w) v₀) + (Dφ x w) v₀`, the first term on `ker (Dφ x)` (on which `Dφ₁ x = 0`,
+  By (the limit from both sides of `±`), we obtain `Dφ₁ x w = (Dφ₁ x v₀) (Dφ x w)`, `λ := Dφ₁ x v₀ ≥ 0`, `λ ≠ 0` due to `Dφ₁ x ≠ 0`.
+  Again `gradient` is the `fderiv`-image of `toDual.symm` (linear), `norm_smul`, positive normalization. Written as a private lemma
+  `fderiv_eq_smul_fderiv_of_forall_lt_imp_le`.
 - KLS.SmoothDomain.setIntegral_gradient_eq_integral_smul_outwardNormal ← integral_divergence_eq_integral_inner_outwardNormal：
-  对每个 `e : V`，`F := fun x ↦ η x • e`（`ContDiff.smul_const`，`HasCompactSupport.smul_right`），
-  `divergence F x = fderiv ℝ η x e = ⟪gradient η x, e⟫`：`fderiv` 的 `smul_const` 规则 `fderiv_smul_const`，
-  `LinearMap.trace` 的秩一公式（`LinearMap.trace_smulRight`? 若无：`(fderiv ℝ η x).smulRight e` 的迹等于 `fderiv ℝ η x e`，
-  用 `LinearMap.trace_eq_matrix_trace` 对任一基或 `LinearMap.trace_eq_sum_inner`/正交基展开），`gradient` 与内积：
-  `HasGradientAt`/`gradient_eq`。两边取与 e 的内积：`integral_inner`（`∫ ⟪e, f x⟫ = ⟪e, ∫ f⟫`，需可积；被积函数紧支撑连续
-  ⇒ 可积，边界侧用 `IntegrableOn` + `outwardNormal` 在 frontier 上的连续性/有界性 + 局部有限），`ext_inner_right ℝ`。
+  For each `e : V`, `F := fun x ↦ η x • e` ( `ContDiff.smul_const`, `HasCompactSupport.smul_right` ),
+  `divergence F x = fderiv ℝ η x e = ⟪gradient η x, e⟫`: `fderiv`'s `smul_const` rule `fderiv_smul_const`,
+  the rank-one formula for `LinearMap.trace` (`LinearMap.trace_smulRight`? If unavailable, the trace of `(fderiv ℝ η x).smulRight e` equals `fderiv ℝ η x e`,
+  By `LinearMap.trace_eq_matrix_trace` for any basis or `LinearMap.trace_eq_sum_inner`/orthonormal basis expansion), `gradient` and inner product:
+  `HasGradientAt`/`gradient_eq`. Taking inner product with e on both sides: `integral_inner` (`∫ ⟪e, f x⟫ = ⟪e, ∫ f⟫`, integrable; the integrand has compact support and is continuous.
+  ⇒ integrable, on the boundary side using `IntegrableOn` + `outwardNormal` with continuity/boundedness on the frontier + locally finite), `ext_inner_right ℝ`.
 - KLS.SmoothDomain.gradient_mollifiedIndicator_eq ← setIntegral_gradient_eq_integral_smul_outwardNormal：
-  `mollifiedIndicator x = ∫_U η (x − y) dy`（`integral_indicator`/`setIntegral` 改写）；对 x 求导：卷积形式
-  `U.carrier.indicator 1 ⋆[lsmul ℝ ℝ, volume] φ.normed volume`（在本文件重证 RP 的 private `mollifiedIndicator_eq`），
-  `HasCompactSupport.hasFDerivAt_convolution_right` + `convolution_precompR_apply` 给
-  `fderiv (mollified) x v = ∫ 𝟙_U(y) · (fderiv η (x − y)) v dy`；另一边：`η_x := fun y ↦ φ.normed volume (x − y)`，
-  `ContDiff ℝ 1`（`contDiff_normed.comp (contDiff_const.sub contDiff_id)`）、紧支撑（`hasCompactSupport_normed` 经
-  `HasCompactSupport.comp_homeomorph` 或 `.comp_isClosedEmbedding`），`gradient η_x y = −gradient (φ.normed) (x − y)`
-  （`HasFDerivAt.comp` 与 `hasFDerivAt_const_sub`/`(hasFDerivAt_id).const_sub`，`fderiv_comp`），代入 C2，`integral_neg`。
-  两边在 `V` 中取值，用 `ext_inner_right ℝ` 逐分量比较更省事。
+  `mollifiedIndicator x = ∫_U η (x − y) dy` (`integral_indicator`/`setIntegral` rewrite); derivative with respect to x: convolution form
+  `U.carrier.indicator 1 ⋆[lsmul ℝ ℝ, volume] φ.normed volume` (in this document, a reproof of RP's private `mollifiedIndicator_eq`),
+  `HasCompactSupport.hasFDerivAt_convolution_right` + `convolution_precompR_apply` given
+  `fderiv (mollified) x v = ∫ 𝟙_U(y) · (fderiv η (x − y)) v dy`；the other side: `η_x := fun y ↦ φ.normed volume (x − y)`,
+  `ContDiff ℝ 1` (`contDiff_normed.comp (contDiff_const.sub contDiff_id)`), compact support (`hasCompactSupport_normed`)
+  `HasCompactSupport.comp_homeomorph` or `.comp_isClosedEmbedding`),`gradient η_x y = −gradient (φ.normed) (x − y)`
+  (`HasFDerivAt.comp` and `hasFDerivAt_const_sub`/`(hasFDerivAt_id).const_sub`/`fderiv_comp`, substitute into C2, `integral_neg`.)
+  Both sides take values in `V`; a pointwise comparison using `ext_inner_right ℝ` is more convenient.
 
-第三层（缺基础设施，尽力而为；预计留 sorry）
-- Analysis.sard：Milnor 的归纳证明（对 n 归纳；`C_i` = 前 i 阶导数全零的集合）。建议先做能做的：
-  (a) n = 0：`Subsingleton V`，像是单点，`measure_singleton`。
-  (b) n = 1：`V ≃L[ℝ] ℝ`（`ContinuousLinearEquiv.ofFinrankEq`/`LinearEquiv.toContinuousLinearEquiv`），Mathlib 同维数 Sard
-  `addHaar_image_eq_zero_of_det_fderivWithin_eq_zero`（`Function/Jacobian.lean`）对 `u ∘ e.symm : ℝ → ℝ`，行列式 = 导数。
-  (c) 一般 n：需要 Fubini（沿坐标切片，`volume_preserving_piFinSuccAbove`）、Taylor 余项（`taylor_mean_remainder`/
-  `ContDiff` 的 `isLittleO`）与紧集上的一致估计；Mathlib 无现成框架。若做不动，留 sorry 并写明已完成 (a)(b)。
-  注意陈述用锐指数 `ContDiff ℝ (finrank ℝ V) u`；`C^∞` 特例由 `hu.of_le le_top` 得到，但不要改陈述。
-- Analysis.aemeasurable_lintegral_levelSet 与 lintegral_enorm_gradient_mul_eq_lintegral_levelSet（coarea）：
-  Evans–Gariepy §3.4 的路线：Rademacher（`LipschitzWith.ae_differentiableAt`）；在 `{∇u ≠ 0}` 的开子集上用 B2 的隐函数把
-  u 局部拉直为坐标投影，同维数面积公式 `lintegral_image_eq_lintegral_abs_det_fderiv_mul`（`Function/Jacobian.lean`）+ Fubini
-  给局部 coarea（需 `ℋ^{n−1}` 于 Lipschitz 图 = `√(1+|∇g|²)` 加权 Lebesgue，见下 C1 的同一障碍）；`{∇u = 0}` 上左边为 0、
-  右边由 Sard（`C¹` Lipschitz 不够——EG 用 `C¹` 逼近 + Lipschitz 函数的 `ℋ^{n−1}(A ∩ {u = t})` 对 `A ⊆ {∇u = 0}` 的直接估计）；
-  Lipschitz 一般情形再由 `C¹` 逼近（Whitney 延拓，Mathlib 无）。**预计留 sorry**；若做，先做 `u` 为 `C¹` 且 `{∇u ≠ 0}` 上的局部版本
-  作为 private 引理。可测性那条独立于 coarea 恒等式，可先试：`t ↦ surfaceMeasure (A ∩ {u = t})` 的可测性经
-  `{(t, y) | u y = t}` 的乘积可测性 + Fubini 型论证（`Measurable.lintegral_prod_right`），但需要 `surfaceMeasure` 的 s-有限性
-  （`μH` 一般不是 s-有限的，限制到 `A` 有界紧片上则有限——用局部有限 + 可数并）。
-- KLS.SmoothDomain.integral_divergence_eq_integral_inner_outwardNormal（Gauss–Green，本文件最重）：
-  (a) 局部形式：F 支撑在某定义邻域 W 内，且 `{φ = 0} ∩ W` 是超平面 `P = (ℝ ∙ ν)ᗮ` 上 `C¹` 函数 `g` 的图（由 B2 + 沿 ν 的严格
-  单调性，见 RP 的 `addHaar_frontier`）。换元 `Φ (z, s) := z + (g z + s) • ν`（`P × ℝ → V`，`C¹` 微分同胚，雅可比行列式 1）：
-  `integral_image_eq_integral_abs_det_fderiv_smul` 把 `∫_U div F` 化为 `∫_{s<0} (div F) ∘ Φ`；沿 s 的 FTC
-  `intervalIntegral.integral_eq_sub_of_hasDerivAt` + Fubini（`Probability.exists_lintegral_line` 的 Bochner 版本，或
-  `MeasurePreserving.integral_prod` 经 `lineEquiv`）；剩下要证的是边界项 `∫_P G(z, g z) √(1+|∇g z|²) dz = ∫_{graph} G dℋ^{n−1}`
-  ——**Lipschitz 图的面积公式**，Mathlib 只有同维数面积公式。这是一条独立的、Mathlib 级的子义务；写成 private 或公开引理
-  `hausdorffMeasure_graph_eq`，做不动就把它作为唯一残留 sorry。
-  (b) 全局：`SmoothPartitionOfUnity.exists_isSubordinate`（`Geometry/Manifold/PartitionOfUnity.lean`，取 `𝓘(ℝ, V)` 模型）
-  或 `exists_smooth_zero_one_of_isClosed` 手工拼接：`tsupport F ∩ frontier U` 紧，有限个定义邻域覆盖，加上 `U` 内部与
-  `closure U` 外部（那里 F 的贡献分别是 `∫ div F = 0`：全空间紧支撑场的散度积分为零——这本身要证，用 Fubini + 一维 FTC，
-  Mathlib 的 `integral_divergence_of_hasFDerivAt_off_countable` 只对盒子，取足够大的盒子含 `tsupport F` 即可直接用它）。
-  `divergence` 对 `ψ • F` 的 Leibniz 律：`divergence (ψ • F) = ⟪∇ψ, F⟫ + ψ divergence F`（`fderiv_smul`，`LinearMap.trace` 线性 +
-  秩一迹）。
+Layer three (lacking infrastructure, doing one's best; expected to leave sorry)
+- Analysis.sard: Milnor's inductive proof (by induction on n; `C_i` = the set where all first i derivatives are identically zero). Suggestion to first do what is possible:
+  (a) n = 0：`Subsingleton V`, like a point, `measure_singleton`.
+  (b) n = 1：`V ≃L[ℝ] ℝ`(`ContinuousLinearEquiv.ofFinrankEq`/`LinearEquiv.toContinuousLinearEquiv`),Mathlib same-dimensional Sard
+  `addHaar_image_eq_zero_of_det_fderivWithin_eq_zero` (`Function/Jacobian.lean`) for `u ∘ e.symm : ℝ → ℝ`, determinant = derivative.
+  (c) In general n: requires Fubini (along coordinate slices, `volume_preserving_piFinSuccAbove`), Taylor remainder term (`taylor_mean_remainder`/)
+  `ContDiff`'s `isLittleO` together with a uniform estimate on compact sets; Mathlib lacks an existing framework. If not proceeding, leave sorry and note that (a)(b) have been completed.
+  Note the statement with sharp exponent `ContDiff ℝ (finrank ℝ V) u`; `C^∞` is a special case obtained from `hu.of_le le_top`, but do not modify the statement.
+- Analysis.aemeasurable_lintegral_levelSet and lintegral_enorm_gradient_mul_eq_lintegral_levelSet (coarea):
+  Evans–Gariepy §3.4 approach: Rademacher(`LipschitzWith.ae_differentiableAt`); on an open subset of `{∇u ≠ 0}` using the implicit function of B2 to
+  u is locally straightened to a coordinate projection, the same dimensional area formula `lintegral_image_eq_lintegral_abs_det_fderiv_mul` (`Function/Jacobian.lean`) + Fubini
+  Given local coarea (requiring `ℋ^{n−1}` for Lipschitz graph = `√(1+|∇g|²)` weighted Lebesgue, see below C1 with the same obstacle); `{∇u = 0}` on the left is 0,
+  The right-hand side is obtained by Sard (`C¹` Lipschitz is insufficient—EG uses `C¹` approximation + a `ℋ^{n−1}(A ∩ {u = t})` estimate of Lipschitz functions with respect to `A ⊆ {∇u = 0}`);
+  Lipschitz general case then approximated by `C¹` (Whitney extension, no support in Mathlib). **Expected to leave sorry**; if implemented, first implement `u` for `C¹` and the local version on `{∇u ≠ 0}`
+  As a private lemma. The measurability statement is independent of the coarea formula, one may first try: measurability of `t ↦ surfaceMeasure (A ∩ {u = t})`
+  The product measurability of `{(t, y) | u y = t}` + Fubini-type argument (`Measurable.lintegral_prod_right`), but requires the s-finiteness of `surfaceMeasure`
+  ( `μH` is generally not s-finite; it becomes finite when restricted to `A` bounded compact slices—by locally finite + countable union).
+- KLS.SmoothDomain.integral_divergence_eq_integral_inner_outwardNormal (Gauss–Green, most important in this document):
+  (a) Local form: F is supported inside a defining neighborhood W, and `{φ = 0} ∩ W` is the graph of a `C¹` function `g` on the hyperplane `P = (ℝ ∙ ν)ᗮ` (by B2 and strict
+  Monotonicity, see RP's `addHaar_frontier`. Change of variables `Φ (z, s) := z + (g z + s) • ν` ( `P × ℝ → V`, `C¹` diffeomorphism, Jacobian determinant 1 ):
+  `integral_image_eq_integral_abs_det_fderiv_smul` transform `∫_U div F` into `∫_{s<0} (div F) ∘ Φ`; along s by FTC
+  `intervalIntegral.integral_eq_sub_of_hasDerivAt` + Fubini (the Bochner version of `Probability.exists_lintegral_line`, or
+  `MeasurePreserving.integral_prod` by `lineEquiv`; what remains to be proven is the boundary term `∫_P G(z, g z) √(1+|∇g z|²) dz = ∫_{graph} G dℋ^{n−1}`
+  ——**Area formula for Lipschitz graphs**, Mathlib only has the area formula for same-dimensional areas. This is an independent, Mathlib-level sub-obligation; stated as a private or public lemma
+  `hausdorffMeasure_graph_eq`, just give up and treat it as the only remaining one sorry.
+  (global: `SmoothPartitionOfUnity.exists_isSubordinate` (`Geometry/Manifold/PartitionOfUnity.lean` , taking the `𝓘(ℝ, V)` model))
+  Or `exists_smooth_zero_one_of_isClosed` manual stitching: `tsupport F ∩ frontier U` compact, finitely many defined neighborhoods covering, plus `U` interior and
+  `closure U` External (there F's contribution is respectively `∫ div F = 0`: the divergence integral of a compactly supported field over the entire space is zero—this itself needs to be proven, using Fubini + one-dimensional FTC,
+  Mathlib's `integral_divergence_of_hasFDerivAt_off_countable` only applies to boxes, taking a sufficiently large box containing `tsupport F` is sufficient to use it directly).
+  `divergence` Leibniz rule for `ψ • F`: `divergence (ψ • F) = ⟪∇ψ, F⟫ + ψ divergence F` (`fderiv_smul`, `LinearMap.trace` linear +
+  (rank-one trace).
 
-第四层（若第三层的 C1 完成）
-- 无。C2、C3、B1、E2、A2a、A2 均已在第一/二层作为组装列出。
+Layer 4 (if C1 of layer 3 is completed)
+- None. C2, C3, B1, E2, A2a, A2 have already been listed as assemblies in layer 1/2.
 
-报告格式：每条义务一行：名称 | 完成/未完成 | 关键 API | 卡点。新增的非 private 引理单列。给出 `-DwarningAsError=true`
-编译摘要与 `#print axioms` 结果。不要声称未编译通过的内容已完成。若发现某条陈述为假，单列"陈述问题"并给反例，不改类型。
+Report format: one obligation per line: name | completed/not completed | key API | bottleneck. List additional non-private lemmas separately. Provide `-DwarningAsError=true`
+Compilation summary and `#print axioms` results. Do not claim that content not compiled successfully is considered completed. If a statement is found to be false, list "statement issue" and provide a counterexample, without changing the type.
 ```

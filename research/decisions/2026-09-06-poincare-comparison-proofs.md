@@ -7,7 +7,7 @@ based on `70ca1c19c4d207a31716c2e589c0b096521a5490`; no commit or publication is
 ## Authorization and retained statements
 
 After reading the independent assessment of the Fable review, the repository owner instructed:
-“可以，那就证明一下然后有需要的补上”. This authorizes proving the reviewed comparison batch and
+“Yes, prove it and add whatever is needed”. This authorizes proving the reviewed comparison batch and
 implementing the supported corrections. The approved statement surface is the twelve declarations
 recorded in `2026-09-06-poincare-comparison-statements.md`, with the same hypotheses and conclusions.
 No new literature-facing interface is declared frozen by this proof acceptance.

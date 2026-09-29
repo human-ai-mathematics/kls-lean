@@ -1,8 +1,8 @@
 # Evolving interfaces and current proof certification
 
 **Date:** 2026-09-06 (Asia/Shanghai). **Authorization:** the owner stated
-“由于我们处于起步状态，所以我并不打算冻结lean接口”, then approved the proposed
-interface-evolution policy with “可以，那就调整一下”.
+“Since we are still getting started, I do not intend to freeze the Lean interfaces”, then approved the proposed
+interface-evolution policy with “Yes, make that adjustment”.
 
 ## Current policy
 

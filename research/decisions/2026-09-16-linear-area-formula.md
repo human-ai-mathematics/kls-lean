@@ -1,78 +1,62 @@
-# 余维 m 纲领第 1 步：归一化线性面积公式与仿射纤维
+# m-Codimensional Program Step 1: Normalization of Linear Area Formula and Affine Fibers
 
-2026-09-16。本轮**证明新引理**，把 Mathlib 的线性面积公式搬到本仓库的归一化约定下，
-并由此识别线性映射纤维上的测度。**本轮不证明任何 coarea 公式，也不证明 C¹ 面积公式**，
-不迁洞，不提交、不推送。直接洞仍 **8（1/2/5）**，证书仍 **24**。
+2026-09-16. This round proves a new lemma, transferring the linear area formula from Mathlib to the normalized convention of this repository, and thereby identifying the measure on fibers of linear mappings. This round does **not** prove any coarea formula, nor does it prove the C¹ area formula; there is no filling of holes, no commit, no push. Direct proof holes remain **8 (1/2/5)**, and certification remains **24**.
 
-起点 `HEAD = origin/main = 34b92695ece4f636a1a7f1eafbbf41c685ee0348`；
-起点 passed 回执 `build/verification/20260916T122340.295044Z/report.json`：10 个门、
-200 个本地模块内核重放、510 条目，快照
-`c0e5cd2924db9e48eb1746067c434f410556f4907d36622c3c8664b4ac86c570`。
+Start `HEAD = origin/main = 34b92695ece4f636a1a7f1eafbbf41c685ee0348`;
+Start verification receipt `build/verification/20260916T122340.295044Z/report.json`: 10 gates,
+200 local module kernel replay, 510 entries, snapshot
+`c0e5cd2924db9e48eb1746067c434f410556f4907d36622c3c8664b4ac86c570`.
 
-## 边界
+## Boundary
 
-对数凹 Cheeger–Buser 线（等周常数几种定义的对齐直到与 Poincaré 常数的双向比较，含
-`KLS/WIP/CheegerInfimum.lean` 剩下的两个洞）归合作者**王浩丞**，本轮刻意未触碰。
+Log-concave Cheeger–Buser inequality (alignment of several definitions of isoperimetric constants with bidirectional comparison to Poincaré constants, containing `KLS/WIP/CheegerInfimum.lean` two remaining holes) belongs to collaborator **Haocheng Wang**, intentionally not touched in this round.
 
-## 为什么需要这一步
+## Why is this step needed?
 
-Mathlib 的 `LinearMap.hausdorffMeasure_image` 用的是**原始** `μH`；本仓库一切测度都是
-`KLS.hausdorffNormalized`，即经典的 `ω_d (diam/2)^d` 归一化。两者差一个常数因子，
-而余维 m coarea 公式右端的纤维积分必须是**没有残余常数**的，否则整条公式会带一个
-依赖维数的错误因子。本轮就是把这件事做干净。
+Mathlib's `LinearMap.hausdorffMeasure_image` uses **raw** `μH`; in this repository all measures are
+`KLS.hausdorffNormalized`, i.e., classical `ω_d (diam/2)^d` normalization. The two differ by a constant factor,
+and the fiber integral on the right-hand side of the coarea formula in dimension m must be **without residual constants**, otherwise the entire formula would carry an erroneous factor depending on dimension. This round aims to make this clear.
 
-## 精确成果
+## Exact Results
 
-`KLS/Geometry/LinearAreaFormula.lean`（本地 import 闭包 8 个模块，**无 WIP**）：
+`KLS/Geometry/LinearAreaFormula.lean` (local import closure 8 modules, **no WIP**):
 
-* `hausdorffNormalized_image_linearMap`：
-  `hausdorffNormalized V k (L '' s) = ofReal (normDet L) * hausdorffNormalized H k s`，
-  `k = finrank ℝ H`。两侧同乘同一归一化常数，故常数消掉，**norm determinant 就是精确的
-  体积因子**。
-* `adjoint_apply_linearIsometry`：线性等距嵌入的伴随是左逆。
-* `normDet_linearIsometry`：线性等距嵌入的 norm determinant 为 **1**。
-* `hausdorffNormalized_image_linearIsometry`：等距像保持归一化 k 维测度。
-* **`hausdorffNormalized_image_affine`**：平移过的等距切片，其归一化 k 维 Hausdorff 测度
-  **精确等于**参数空间上的 Lebesgue 测度，两边都没有残余常数。
-* **`hausdorffNormalized_fiber`**：线性映射的纤维是核的平移，按核的维数去量，
-  恰好是核上的 Lebesgue 测度。
+* `hausdorffNormalized_image_linearMap`:
+  `hausdorffNormalized V k (L '' s) = ofReal (normDet L) * hausdorffNormalized H k s`,
+  `k = finrank ℝ H`. Multiplying both sides by the same normalization constant eliminates the constant, so the **norm determinant is exactly the volume factor**.
+* `adjoint_apply_linearIsometry`: The adjoint of a linear isometry is a left inverse.
+* `normDet_linearIsometry`: The norm determinant of a linear isometry is **1**.
+* `hausdorffNormalized_image_linearIsometry`: The isometric image preserves the normalized k-dimensional measure.
+* **`hausdorffNormalized_image_affine`**: After translation, the normalized k-dimensional Hausdorff measure of the isometric slice is **exactly equal** to the Lebesgue measure on the parameter space, with no residual constants.
+* **`hausdorffNormalized_fiber`**: The fibers of a linear map are translations of the kernel, measured by the dimension of the kernel, and exactly correspond to the Lebesgue measure on the kernel.
 
-后两条是余维 m coarea 公式的纤维记账：`L` 满射时核的维数是 `n - m`，
-公式右端的内层积分正是在这些纤维上取的。
+The last two are fiber accounting for the coarea formula of codimension m: `L` the dimension of the kernel is `n - m`, when surjective,
+The inner integral on the right-hand side is exactly taken over these fibers.
 
-## 复用而非重造
+## Reuse rather than recreation
 
-平移不变性 `Analysis.hausdorffNormalized_image_add_left`、顶维恒等式
-`KLS.hausdorffNormalized_finrank_eq_volume` 都是仓库**已证**的结果，本轮直接使用，
-没有重证。Mathlib 的 `LinearMap.hausdorffMeasure_image` 同样直接使用。
-`normDet_linearIsometry` 由 `normDet_sq` 与等距的伴随左逆性质推出，不走矩阵。
+Translation invariance `Analysis.hausdorffNormalized_image_add_left` and the top-dimensional identity `KLS.hausdorffNormalized_finrank_eq_volume` are both repository **proven** results, directly used in this round, without reproof. Mathlib's `LinearMap.hausdorffMeasure_image` is also used directly. `normDet_linearIsometry` is derived from `normDet_sq` together with the adjoint left inverse property of isometries, without going through matrices.
 
-## 本轮没有做的事
+## What was not done in this round
 
-* **没有证明任何 coarea 公式**；向量值 coarea 等式仍未证明。
-* **没有证明 C¹ 面积公式**：本轮全部关于线性映射与仿射子空间。非线性的局部面积公式
-  （Federer 面积公式）仍未证明，也没有列为已达成。
-* 没有迁洞：直接洞仍 **8（1/2/5）**；没有碰尖锐 Sard、两条 Cheeger 比较、Energy 的五个洞。
-* 没有扩大证书或 Blueprint `leanok` 范围。
-* **没有提交、没有推送**，真实 Git index 未改动。
+* **No proof of any coarea formula**; the vector-valued coarea identity has not been proven.
+* **No proof of C¹ area formula**: This round covers only linear maps and affine subspaces. The local area formula for nonlinear maps (Federer area formula) has not been proven and is not considered achieved.
+* No filling of holes: direct holes remain **8 (1/2/5)**; no resolution of sharp Sard, two Cheeger comparisons, or five energy holes.
+* No expansion of certification or Blueprint `leanok` scope.
+* **No commit, no push**, the real Git index has not been modified.
 
-## 纲领的下一步
+## The Next Step of the Program Outline
 
-1. **非线性局部面积公式**：C¹ 参数化的像的 k 维测度等于 `normDet (fderiv)` 的积分。
-   仓库已有 C¹ **图**的版本（`Analysis.hausdorffNormalized_image_graphMap`）与
-   `RegularChart`/`ImplicitGraph`/`LocalInverse`；一般情形宜经局部图化归到它。
-2. 余维 m 正则情形（L9 的类比）：在 `coareaJacobian ≠ 0` 的开集上做纤维图族。
-3. 余维 m 临界部分（L10 的类比）与拼接。
+1. **Nonlinear local area formula**: The k-dimensional measure of the image of a C¹ parametrization equals the integral of `normDet (fderiv)`.
+   repository already has a version for C¹ **graphs** (`Analysis.hausdorffNormalized_image_graphMap`) and
+   `RegularChart`/[`ImplicitGraph`]/`LocalInverse`; in the general case it should be reduced locally to this.
+2. Regularity of codimension m (analogue of L9): construct a family of fiber graphs over an open set of `coareaJacobian ≠ 0`.
+3. Critical part of codimension m (analogue of L10) and gluing.
 
-## 验证
+## Verification
 
-* 新模块与新客户端均以 `-DwarningAsError=true` 编译通过，无 `sorry`。
-* `research/audits/LinearAreaFormulaAudit.lean` 的 14 条公理报告只用
-  `propext`、`Classical.choice`、`Quot.sound`；含顶维一致性（退回已证的
-  `hausdorffNormalized_finrank_eq_volume`）、零维参数空间、退化零映射、
-  以及满射时 `finrank (ker L) = n - m` 的维数记账。
-* 重跑全部 27 个审计客户端（`research/audits` 20 个，`build/audit` 7 个），全部严格通过。
-* 三个 WIP 逐个编译，直接洞 **1/2/5，总数 8**，不变。
-* 默认 `lake build` 与根目录 `python3 research/verify.py` 通过；证据 JSON 为
-  `research/explorations/2026-09-16-linear-area-formula.json`，最终核对另存
-  `build/audit/linear-area-formula/final-snapshot.json`。
+* The new module and new client both compile successfully with `-DwarningAsError=true`, without `sorry`.
+* The `research/audits/LinearAreaFormulaAudit.lean` 14 axiom reports only use `propext`, `Classical.choice`, and `Quot.sound`; include top-dimensional consistency (reverting the previously proven `hausdorffNormalized_finrank_eq_volume`), zero-dimensional parameter space, degenerate zero maps, and dimension accounting when surjective `finrank (ker L) = n - m`.
+* Re-run all 27 audit clients (`research/audits` 20 of them, `build/audit` 7 of them), all pass strictly.
+* Each of the three WIPs compiles individually, with direct proof holes **1/2/5, total count 8**, unchanged.
+* Default `lake build` and root directory `python3 research/verify.py` pass; JSON evidence is `research/explorations/2026-09-16-linear-area-formula.json`, final verification saved separately in `build/audit/linear-area-formula/final-snapshot.json`.

@@ -232,7 +232,7 @@ module-replay and declaration-audit counts and its source digest. An earlier run
 gates, started before the final source reflow, certifies only its own snapshot and is not quoted
 as evidence for the delivered one.
 
-| 已有证明 | 仅接口（假设显式可见） | 仍是非形式化方案 |
+| Proved | Interface only (explicit assumptions) | Still an informal plan |
 | --- | --- | --- |
 | `C0`–`C2` and `C4` in full; the cutoff estimate; the equivalence of the deficiency condition with orthogonality to `(A+1) C_c^∞`; the reduction of `hcore` to interior regularity | `C3` and `C5`, which need interior regularity of distributional solutions of `ℒ u = u` | interior elliptic regularity for `div(e^{-U} ∇ ·)`, essential self-adjointness of `ℒ` on `C_c^∞`, `Γ(P_t f) ≤ P_t Γ(f)`, the `Γ` time interpolation with the outer semigroup, BGL/BV, general-law passage, the constant `π`, Buser, KLS |
 

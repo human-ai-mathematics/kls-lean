@@ -1,95 +1,91 @@
-# 半群生成路线：`S7`（半群律与强连续）与 `S8`（生成元）路线轮
+# Semigroup Generation Path: `S7` (Semigroup Law and Strong Continuity) and `S8` (Generator) Path
 
-2026-09-19，紧接 [`S6` 轮](2026-09-19-yosida-limit-route.md)。本轮**只写定义与语句，不证明**；
-证明交给并行 Opus 会话，依赖关系决定分三批。不 commit、不推送。
+2026-09-19, follows [`S6` round](2026-09-19-yosida-limit-route.md). This round **only writes definitions and statements, no proofs**; proofs are delegated to parallel Opus sessions, dependency relations determine three batches. No commit, no push.
 
-## 定义模块（本轮已写并编译）
+## Definition module (this round has been written and compiled)
 
-`formalization/FunctionalInequalities/Analysis/Semigroup/Generated.lean`：把 `S6` 里存在量化的极限命名为算子。
+`formalization/FunctionalInequalities/Analysis/Semigroup/Generated.lean`: Name the limiting quantified operator in `S6` as an operator.
 
-| 声明 | 内容 |
+| Statement | Content |
 | --- | --- |
-| `semigroupApply T hT hd t f` | `t ≥ 0` 时取 `exists_limit_exp_neg_smul_yosida` 给出的极限（`Classical.choose`），`t < 0` 时取 `f` |
-| `semigroupApply_spec` | `t ≥ 0` ⟹ `exp(-t • L_s) f → semigroupApply t f`（ε–δ） |
-| `semigroupApply_of_not_nonneg` | `t < 0` 的约定值 |
+| `semigroupApply T hT hd t f` | `t ≥ 0` when `exists_limit_exp_neg_smul_yosida` is taken from `Classical.choose`, `t < 0` when `f` is taken |
+| `semigroupApply_spec` | `t ≥ 0` ⟹ `exp(-t • L_s) f → semigroupApply t f` (ε–δ) |
+| `semigroupApply_of_not_nonneg` | the agreed value of `t < 0` |
 
-形式上 `P_t f = exp(-t T†T) f`。`P_t` 的线性与压缩在路线里是待证义务（`P2`、`P3`），所以这里只定义函数，
-`ContinuousLinearMap` 版本留给证明模块打包。
+Formally `P_t f = exp(-t T†T) f`. The linearity and contraction of `P_t` along the path are pending proofs (`P2`, `P3`), so here we only define the function, the `ContinuousLinearMap` version is left for the proof module to package.
 
-## 语句文件
+## Statement file
 
-`research/audits/GeneratedSemigroupRouteStatements.lean`，只含 `#check`，11 条全部通过类型检查：
+`research/audits/GeneratedSemigroupRouteStatements.lean`, contains only `#check`, all 11 pass type checking:
 
-| 编号 | 内容 | 输入 | 风险 |
+| Number | Content | Input | Risk |
 | --- | --- | --- | --- |
-| `P1` | 极限唯一：满足 ε–δ 收敛的 `g` 等于 `P_t f` | `semigroupApply_spec` | 低 |
-| `P2` | `P_t` 线性 | `P1` | 低 |
-| `P3` | `‖P_t f‖ ≤ ‖f‖` | `S5` + 极限 | 低 |
-| `P4` | `⟪P_t f, g⟫ = ⟪f, P_t g⟫` | `yosida_symm` → `IsSelfAdjoint (L_s)` → `IsSelfAdjoint.exp` → `adjoint_inner_left`，取极限 | 中低：Mathlib 的 star = adjoint 结构 |
-| `P5` | `P_0 = 1` | `exp_zero` + `P1` | 低 |
-| `P6` | `P_{t+u} = P_t P_u` | `exp_add_of_commute` + `S5` + `P1` | 中 |
-| `P7` | `‖P_t f − f‖ → 0`（`t ↓ 0`） | `Y6`（`B = 0`）+ `Y5` + 稠密 + `P3` | 中 |
-| `P8` | `ContinuousOn (t ↦ P_t f) (Ici 0)` | `P6` + `P3` + `P7` | 中低 |
-| `G1` | `S6` 收敛在 `τ ∈ [0, t]` 上一致 | `Y6` 的界对 `τ ≤ t` 一致 + 稠密 + 压缩 | 中 |
-| `G2` | `‖e^{-tA} f − f + t·Af‖ ≤ C·t`，若 `‖e^{-τA}(Af) − Af‖ ≤ C` 于 `[0,t]` | `hasDerivAt_exp_smul_const'` + 中值不等式；不需 `A` 非负 | 中低 |
-| `G3` | `S8`：`f ∈ D(T†T)` ⟹ `‖(P_t f − f)/t + T†T f‖ → 0` | `P7` + `G1` + `G2` + `Y5` + `S5` | **中高**：本路线的核心组装 |
+| `P1` | Uniqueness of limit: the ε–δ convergence satisfies `g` equals `P_t f` | `semigroupApply_spec` | low |
+| `P2` | `P_t` linear | `P1` | low |
+| `P3` | `‖P_t f‖ ≤ ‖f‖` | `S5` + limit | low |
+| `P4` | `⟪P_t f, g⟫ = ⟪f, P_t g⟫` | `yosida_symm` → `IsSelfAdjoint (L_s)` → `IsSelfAdjoint.exp` → `adjoint_inner_left`, take limit | Medium to low: Mathlib's star = adjoint structure |
+| `P5` | `P_0 = 1` | `exp_zero` + `P1` | low |
+| `P6` | `P_{t+u} = P_t P_u` | `exp_add_of_commute` + `S5` + `P1` | Medium |
+| `P7` | `‖P_t f − f‖ → 0` (`t ↓ 0`) | `Y6` (`B = 0`)+ `Y5` + dense + `P3` | Medium |
+| `P8` | `ContinuousOn (t ↦ P_t f) (Ici 0)` | `P6` + `P3` + `P7` | medium-low |
+| `G1` | `S6` convergence is uniform over `τ ∈ [0, t]` | The `Y6` bound is uniform for `τ ≤ t`, plus density and contraction | Medium |
+| `G2` | `‖e^{-tA} f − f + t·Af‖ ≤ C·t`, if `‖e^{-τA}(Af) − Af‖ ≤ C` on `[0,t]` | `hasDerivAt_exp_smul_const'` + mean value inequality; no need for `A` non-negative | medium-low |
+| `G3` | `S8`: `f ∈ D(T†T)` ⟹ `‖(P_t f − f)/t + T†T f‖ → 0` | `P7` + `G1` + `G2` + `Y5` + `S5` | **High-Medium**: The core assembly of this route |
 
-`G3` 的证法刻意避开 Bochner 积分：不写 `P_t f − f = −∫₀ᵗ P_τ T†T f dτ`，而是对 `φ(τ) = e^{-τL_s} f − f + τ L_s f` 用中值不等式（`G2`），
-导数界靠 `Y5`（`L_s f ≈ T†T f`）、`G1`（`e^{-τL_s} g ≈ P_τ g` 对 `τ ≤ t` 一致）与 `P7`（`P_τ g ≈ g`），再令 `s ↓ 0`。
+The proof of `G3` deliberately avoids Bochner integral: it does not write `P_t f − f = −∫₀ᵗ P_τ T†T f dτ`, but instead applies the mean value inequality (`G2`) to `φ(τ) = e^{-τL_s} f − f + τ L_s f`,
+The derivative bound relies on `Y5` (`L_s f ≈ T†T f`), `G1` (`e^{-τL_s} g ≈ P_τ g` uniformly with respect to `τ ≤ t`), and `P7` (`P_τ g ≈ g`), then take `s ↓ 0`.
 
-## 分工（三批）
+## Division (three batches)
 
-1. 会话 A：`P1`–`P8`，新模块 `Analysis/Semigroup/SemigroupLaws.lean`，审计 `research/audits/SemigroupLawsAudit.lean`。
-2. 会话 B（与 A 并行）：`G2`，纯有界算子，新模块 `Analysis/Semigroup/ExpMeanValue.lean`，审计 `research/audits/ExpMeanValueAudit.lean`。
-3. 会话 C（A、B 之后）：`G1`、`G3`，新模块 `Analysis/Semigroup/Generator.lean`，审计 `research/audits/GeneratorAudit.lean`，
-   import A、B 的模块。
+1. Session A: `P1`–`P8`, new module `Analysis/Semigroup/SemigroupLaws.lean`, audit `research/audits/SemigroupLawsAudit.lean`.
+2. Session B (in parallel with A): `G2`, bounded operator, new module `Analysis/Semigroup/ExpMeanValue.lean`, audit `research/audits/ExpMeanValueAudit.lean`.
+3. Session C (after A, B): `G1`, `G3`, new module `Analysis/Semigroup/Generator.lean`, audit `research/audits/GeneratorAudit.lean`,
+   import modules from A, B.
 
-规则同前：只建新文件、只用 `lake env lean -DwarningAsError=true`、不 `lake build`、不 `verify.py`、不 git、不改既有文件、零 `sorry`。
+Rules as before: create only new files, use only `lake env lean -DwarningAsError=true`, do not `lake build`, do not `verify.py`, do not git, do not modify existing files, zero `sorry`.
 
-## 明确没做什么
+## Work excluded from this round
 
-`S7`–`S8` 证完，半群生成路线（缺口一）即告完成，但 Buser 半仍差 Markov 性（缺口二）、Bakry–Émery Γ 演算（缺口三）、
-小时间热估计（缺口四）。`thm:logconcave-cheeger-poincare-comparison` 无进展标记，`tasks.json` 未改（集成时统一登记）。
+Once `S7`–`S8` are proved, the semigroup generation route (gap one) will be complete, but the Buser half will still require Markov property (gap two), Bakry–Émery Γ calculus (gap three), and small-time heat estimate (gap four). `thm:logconcave-cheeger-poincare-comparison` No progress marked, `tasks.json` unchanged (registered uniformly during integration).
 
-## 追加：`P1`–`P8`、`G1`–`G3` 全部证出，`S7`、`S8` 关闭；半群生成路线 `S1`–`S8` 完成（同日，三批 Opus 会话约 13、4、8 分钟）
+## Append: `P1`–`P8`, `G1`–`G3` all proven, `S7`, `S8` closed; semigroup generation path `S1`–`S8` completed (same day, three batches of Opus sessions approximately 13, 4, 8 minutes)
 
-| 编号 | 声明 | 模块 |
+| Number | Statement | Module |
 | --- | --- | --- |
 | `P1` | `eq_semigroupApply_of_tendsto` | `SemigroupLaws.lean` |
-| `P2` | `semigroupApply_smul_add`（另有 `semigroupApply_sub` 等推论，及 `semigroupCLM` 打包） | `SemigroupLaws.lean` |
+| `P2` | `semigroupApply_smul_add` (with additional implications `semigroupApply_sub`, and `semigroupCLM` bundled) | `SemigroupLaws.lean` |
 | `P3` | `norm_semigroupApply_le` | `SemigroupLaws.lean` |
 | `P4` | `inner_semigroupApply_left` | `SemigroupLaws.lean` |
 | `P5` | `semigroupApply_zero` | `SemigroupLaws.lean` |
 | `P6` | `semigroupApply_add` | `SemigroupLaws.lean` |
-| `P7` | `exists_delta_norm_semigroupApply_sub_self_lt`（定量版 `norm_semigroupApply_sub_self_le`：`‖P_t f − f‖ ≤ t(‖T†T f‖ + 1)`） | `SemigroupLaws.lean` |
+| `P7` | `exists_delta_norm_semigroupApply_sub_self_lt` (quantitative version `norm_semigroupApply_sub_self_le`: `‖P_t f − f‖ ≤ t(‖T†T f‖ + 1)`) | `SemigroupLaws.lean` |
 | `P8` | `continuousOn_semigroupApply` | `SemigroupLaws.lean` |
 | `G1` | `exists_delta_norm_exp_neg_smul_yosida_sub_semigroupApply_lt` | `Generator.lean` |
-| `G2` | `norm_exp_neg_smul_sub_add_smul_le`（一般完备实范数空间；`InnerProductSpace` 未用，逐字包装 `route_G2`） | `ExpMeanValue.lean` |
-| `G3` = `S8` | `exists_delta_norm_inv_smul_semigroupApply_sub_self_add_adjointComp_lt`（定量版 `norm_semigroupApply_sub_self_add_smul_le`） | `Generator.lean` |
+| `G2` | `norm_exp_neg_smul_sub_add_smul_le` (general complete real normed space; `InnerProductSpace` unused, word-for-word packaging `route_G2`) | `ExpMeanValue.lean` |
+| `G3` = `S8` | `exists_delta_norm_inv_smul_semigroupApply_sub_self_add_adjointComp_lt` (quantitative version `norm_semigroupApply_sub_self_add_smul_le`) | `Generator.lean` |
 
-审计：`SemigroupLawsAudit.lean` 29 条、`ExpMeanValueAudit.lean` 5 条、`GeneratorAudit.lean` 8 条 `#print axioms`，
-**42 条全部只有 `propext, Classical.choice, Quot.sound`，0 条 `sorryAx`**；11 条路线语句逐 token 与路线文件一致（本会话独立重编译并机械比对）。
-四个新模块（`Generated`、`SemigroupLaws`、`ExpMeanValue`、`Generator`）已进聚合根，`lake build` 3532 jobs 通过，
-十四个半群审计 / 路线文件严格重编译均 exit 0。除 `G2` 的 `InnerProductSpace` 外没有路线假设可以去掉。
+Audit: `SemigroupLawsAudit.lean` 29 , `ExpMeanValueAudit.lean` 5 , `GeneratorAudit.lean` 8 `#print axioms`,
+**42 statements contain only `propext, Classical.choice, Quot.sound`, 0 `sorryAx`**; 11 route statements are token-by-token identical to the route file (recompiled independently and mechanically compared in this session).
+Four new modules (`Generated`, `SemigroupLaws`, `ExpMeanValue`, `Generator`) have been integrated into the aggregate root, `lake build` 3532 jobs have passed,
+Fourteen semigroup audit / route files undergo strict recompilation and exit 0. Except for `InnerProductSpace` of `G2`, no route assumptions can be removed.
 
-### 与草稿不同之处
+### Differences from draft
 
-* **`G3` 草稿的 ε 拆分给不出严格不等式**：按草稿的 ε/3 三分法除以 `t` 后只得 `≤ ε`，而语句要求 `< ε`。实际用 `ε/8 + ε/4 + ε/4 + ε/8 = 3ε/4`，
-  终点 `7ε/8 < ε`。路线文件未改。
-* `G1` 在 `D(T†T)` 上先证 `≤ ε` 形式（对辅助参数 `r` 取极限只能得非严格），一般 `g` 再由三个严格的 ε/3 恢复严格性。
-* `G2` 用不带撇的 `hasDerivAt_exp_smul_const` 后完全不需要交换引理，一次编译通过。
+* **`G3` Draft's ε splitting does not yield a strict inequality**: After dividing the ε/3 trisection by `t`, only `≤ ε` is obtained, while the statement requires `< ε`. Actually using `ε/8 + ε/4 + ε/4 + ε/8 = 3ε/4`,
+  endpoint `7ε/8 < ε`. Route file unchanged.
+* `G1` First prove `≤ ε` form on `D(T†T)` (taking limit over auxiliary parameter `r` yields only non-strict), generally `g` then restore strictness via three strict ε/3.
+* `G2` Using unprimed `hasDerivAt_exp_smul_const` completely eliminates the need for the exchange lemma, passing compilation once.
 
-### 半群生成路线（缺口一）完成
+### Semigroup generation route (gap one) completed
 
-`S1`–`S8` 全部是本地零洞 Lean 证明，`Analysis/Semigroup/` 下 14 个模块。对闭且稠定的 `T : H₀ →ₗ.[ℝ] H₁`，
-`semigroupApply T hT hd`（`semigroupCLM`）是 `H₀` 上的强连续自伴压缩半群，`P_0 = 1`、`P_{t+u} = P_t P_u`，
-生成元在 `D(T†T)` 上是 `−T†T`。**这只是 Buser 纲领四个前置里的第一个**：缺口二（Markov 性）、三（Bakry–Émery Γ 演算）、
-四（小时间热估计）原封未动，`thm:logconcave-cheeger-poincare-comparison` 无 `\leanok`，常数 π 未被触及。
-`tasks.json` 该节点 `infrastructure.status` 保持 `missing`，第一条 gap 追加「半群构造已完成」的说明，其余三条 gap 不变。
+`S1`–`S8` are all local hole-free Lean proofs, `Analysis/Semigroup/` below 14 modules. For closed and densely defined `T : H₀ →ₗ.[ℝ] H₁`,
+`semigroupApply T hT hd` (`semigroupCLM`) is a strongly continuous self-adjoint contraction semigroup on `H₀`, `P_0 = 1`, `P_{t+u} = P_t P_u`,
+The generator is `−T†T` on `D(T†T)`. This is only the first of the four preliminary statements in Buser's program: Gap Two (Markov property), Three (Bakry–Émery Γ calculus),
+Four (small time heat estimate) remains unchanged, `thm:logconcave-cheeger-poincare-comparison` no `\leanok`, the constant π is untouched.
+`tasks.json` This node `infrastructure.status` remains `missing`, the first gap is augmented with the note "semigroup construction is complete", the other three gaps remain unchanged.
 
-### 摩擦（供下一轮）
+### Friction (for the next round)
 
-`NormedSpace.exp_add_of_commute` 在 `H₀ →L[ℝ] H₀` 上缺 `NormedAlgebra ℚ` 实例，用 `exp_add_of_commute_of_mem_ball (𝕂 := ℝ)` +
-`expSeries_radius_eq_top ℝ _`。`abs_add` 不存在，用 `abs_add_le`。`IsSelfAdjoint.smul` 需 `show IsSelfAdjoint (-t) from star_trivial _`。
-`push_neg` 在本 pin 已弃用（`-DwarningAsError` 下报错），用 `rw [not_le]`。`div_add_div_same` 不存在。
-`field_simp` 独自关掉目标后再 `ring` 会报 "No goals"。
+`NormedSpace.exp_add_of_commute` lacks `NormedAlgebra ℚ` instance on `H₀ →L[ℝ] H₀`, use `exp_add_of_commute_of_mem_ball (𝕂 := ℝ)` + `expSeries_radius_eq_top ℝ _`. `abs_add` does not exist, use `abs_add_le`. `IsSelfAdjoint.smul` requires `show IsSelfAdjoint (-t) from star_trivial _`.
+`push_neg` is deprecated in this pin (reports error under `-DwarningAsError`), use `rw [not_le]`. `div_add_div_same` does not exist.
+`field_simp` closing the goal by itself and then `ring` will report "No goals".

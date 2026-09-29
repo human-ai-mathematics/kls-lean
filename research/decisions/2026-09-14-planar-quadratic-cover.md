@@ -1,13 +1,13 @@
-# 二维定量覆盖与二阶平坦层零测
+# Quantitative planar covering and null images of the second-order flat layer
 
-2026-09-14，承接[一致二阶余项](2026-09-14-uniform-quadratic-remainder.md)中精确提出的下一引理。
-起始回执 `build/verification/latest.json`（`20260913T190354.174769Z`）为 passed，重新计算确认
-全部 390 个文件与工作区逐字节一致，HEAD 仍为 `2965b32`。保留此前全部未提交及未跟踪成果，
-不提交、不推送，历史决定不改写。
+2026-09-14, proving the next lemma specified in the [uniform quadratic remainder record](2026-09-14-uniform-quadratic-remainder.md).
+Initial verification receipt `build/verification/latest.json` (`20260913T190354.174769Z`) is passed, recalculation confirmed.
+All 390 files and workspace are byte-for-byte identical, HEAD remains `2965b32`. Retain all prior uncommitted and untracked results,
+no commit, no push, historical decisions remain unchanged.
 
-## 完成范围
+## Scope of completion
 
-新增 `formalization/FunctionalInequalities/Analysis/QuadraticCover.lean`，三条公开结果：
+Add `formalization/FunctionalInequalities/Analysis/QuadraticCover.lean`, three public results:
 
 ```lean
 theorem volume_image_eq_zero_of_quadratic_oscillation
@@ -22,100 +22,91 @@ theorem volume_image_flat_eq_zero {u : (Fin 2 → ℝ) → ℝ} {K : Set (Fin 2 
       (u '' {x ∈ K | fderiv ℝ u x = 0 ∧ iteratedFDeriv ℝ 2 u x = 0}) = 0
 ```
 
-再由可数穷竭把紧集版本升到整个平面：
+Then by countable exhaustion lift the compact set version to the entire plane:
 
 ```lean
 theorem volume_image_flat_univ_eq_zero {u : (Fin 2 → ℝ) → ℝ} (hu : ContDiff ℝ 2 u) :
     (volume : Measure ℝ) (u '' {x | fderiv ℝ u x = 0 ∧ iteratedFDeriv ℝ 2 u x = 0}) = 0
 ```
 
-完整命名为 `FunctionalInequalities.Analysis.volume_image_eq_zero_of_quadratic_oscillation`、
-`FunctionalInequalities.Analysis.volume_image_flat_eq_zero` 与
-`FunctionalInequalities.Analysis.volume_image_flat_univ_eq_zero`。
-三者仅依赖 `propext / Classical.choice / Quot.sound`，没有直接洞、隐藏占位或新增公理。
+Fully named `FunctionalInequalities.Analysis.volume_image_eq_zero_of_quadratic_oscillation`,
+`FunctionalInequalities.Analysis.volume_image_flat_eq_zero` and
+`FunctionalInequalities.Analysis.volume_image_flat_univ_eq_zero`.
+The three depend only on `propext / Classical.choice / Quot.sound`, with no direct proof holes, hidden placeholders, or new axioms.
 
-* 覆盖引理的假设与上一轮提出的目标逐字一致：二维、`A` 有界、一致二次振幅控制。
-  没有增加可测性、连续性、可微性或紧性假设，`f` 在 `A` 外完全任意。
-  `A = ∅` 由 `R > 0` 的有界常数与空覆盖自动覆盖，不需要分支。
-* 平坦层定理是**子集版本**：平坦条件逐点施加在 `{x ∈ K | Du x = 0 ∧ D²u x = 0}` 上，
-  不假设整个 `K` 平坦，也不假设该子集可测。
-* 全平面版本用 `⋃ n : ℕ, closedBall 0 n` 穷竭、`Set.image_iUnion` 与 `measure_iUnion_null`，
-  紧性、有界性与可测性假设全部消失。这是后续拼装需要的形状，不引入新工具。
-* 新模块只导入 Mathlib 的 `Measure.Lebesgue.Basic`、`Normed.Group.Bounded` 和本仓库的
-  `Analysis/TaylorRemainder`。没有迁移任何已有声明，没有改动任何已有公开签名，
-  没有引入 Sard、KLS 或 WIP 依赖，也没有新建覆盖或外测度框架。
+* The assumptions of the covering lemma are identical to those proposed in the previous round: two-dimensional, `A` bounded, uniformly quadratic amplitude control.
+  No additional assumptions of measurability, continuity, differentiability, or compactness are made; `f` is completely arbitrary outside `A`.
+  `A = ∅` is automatically covered by the bounded constant of `R > 0` and the empty cover, without requiring branching.
+* The flatness theorem is a **subset version**: the flatness condition is applied pointwise on `{x ∈ K | Du x = 0 ∧ D²u x = 0}`,
+  without assuming the entire `K` is flat, nor that the subset is measurable.
+* The full plane version uses `⋃ n : ℕ, closedBall 0 n` exhaustion, `Set.image_iUnion` and `measure_iUnion_null`,
+  all assumptions of compactness, boundedness, and measurability vanish. This is the required shape for subsequent assembly, introducing no new tools.
+* The new module only imports Mathlib's `Measure.Lebesgue.Basic`, `Normed.Group.Bounded` and this repository's
+  `Analysis/TaylorRemainder`. No existing declarations are migrated, no existing public signatures are modified,
+  no dependencies on Sard, KLS, or WIP are introduced, and no new cover or outer measure framework is established.
 
-## 实际证明
+## Actual proof
 
-搜索 Mathlib 后确认：`Finset` 有限次可加性 `measure_biUnion_finset_le` 与
-`Real.volume_Icc` 已经够用，不需要 `OuterMeasure` 的自定义构造或 Vitali 型引理；
-可数覆盖 API 单独不足，因为格子数与 `ε` 的平衡必须是定量的。
+Search Mathlib confirms: `Finset` finite additivity `measure_biUnion_finset_le` and
+`Real.volume_Icc` are sufficient, no need for `OuterMeasure` custom constructions or Vitali-type lemmas;
+the countable cover API is insufficient alone, as the grid count and `ε` balance must be quantitative.
 
-固定 `ε > 0`，由假设取 `δ > 0`，令 `r = min δ 1`（同时保证 `r ≤ δ` 与 `r ≤ 1`）。
+Fix `ε > 0`, by assumption take `δ > 0`, let `r = min δ 1` (while ensuring `r ≤ δ` and `r ≤ 1`).
 
-1. `Bornology.IsBounded.exists_pos_norm_le` 给 `R > 0` 使 `A ⊆ {x | ‖x‖ ≤ R}`。
-   `Fin 2 → ℝ` 的 Pi 范数是分量上确界，所以 `norm_le_pi_norm` 直接给 `|x i| ≤ R`。
-2. 格子编号 `q x = (⌊x 0 / r⌋, ⌊x 1 / r⌋) : ℤ × ℤ`。
-   `Int.floor_le_floor`、`Int.floor_le_ceil` 与 `Int.floor_neg` 把 `|x i| ≤ R` 变成
-   `q x ∈ S := Finset.Icc (-M) M ×ˢ Finset.Icc (-M) M`，其中 `M = ⌈R / r⌉`。
-   这是**有限**指标集，`Int.card_Icc` 与 `Finset.card_product` 给 `#S = (2M+1)²`。
-3. 用 `choose` 对每个格子取一个代表 `g c`：只要该格子里有 `A` 的点，就有 `g c ∈ A ∧ q (g c) = c`；
-   否则 `g c` 是任意值。因此覆盖区间 `I c = Icc (f (g c) - ε r²) (f (g c) + ε r²)`
-   总是一个真区间，不需要 `dite` 分支，测度恒为 `ENNReal.ofReal (2 ε r²)`。
-4. 同格两点：`Int.abs_sub_lt_one_of_floor_eq_floor` 给 `|a/r - b/r| < 1`，
-   除法整理后得 `|a - b| < r`；`pi_norm_lt_iff` 与 `Fin.forall_fin_two` 把两个分量
-   合成 `‖y - g (q y)‖ < r ≤ δ`。于是假设适用，且 `‖y - g (q y)‖² ≤ r²`，
-   得 `f y ∈ I (q y)`。这就是 `f '' A ⊆ ⋃ c ∈ S, I c`，**不需要**任何可测性。
-5. `measure_mono`、`measure_biUnion_finset_le`、`Finset.sum_le_card_nsmul` 给
-   `volume (f '' A) ≤ #S • ofReal (2 ε r²) = ofReal ((2M+1)² · 2 ε r²)`。
-   `Int.ceil_lt_add_one` 给 `(2M+1) r ≤ 2R + 3r ≤ 2R + 3`，所以上界是
-   `ofReal (2 (2R+3)² ε)`，**与 `r`、`δ` 无关**。
-6. `ENNReal.le_of_forall_pos_le_add` 对每个 `η > 0` 取 `ε = η / (2 (2R+3)²)`，得零。
+1. `Bornology.IsBounded.exists_pos_norm_le` Assign `A ⊆ {x | ‖x‖ ≤ R}` to `R > 0`.
+   The Pi-norm of `Fin 2 → ℝ` is the component-wise supremum, so `norm_le_pi_norm` directly gives `|x i| ≤ R`.
+2. Lattice index `q x = (⌊x 0 / r⌋, ⌊x 1 / r⌋) : ℤ × ℤ`.
+   `Int.floor_le_floor`, `Int.floor_le_ceil`, and `Int.floor_neg` turn `|x i| ≤ R` into
+   `q x ∈ S := Finset.Icc (-M) M ×ˢ Finset.Icc (-M) M`, where `M = ⌈R / r⌉`.
+   This is a finite index set, `Int.card_Icc` and `Finset.card_product` give `#S = (2M+1)²`.
+3. Use `choose` to select a representative `g c` for each grid cell: whenever the cell contains a point of `A`, we have `g c ∈ A ∧ q (g c) = c`;
+   Otherwise `g c` is an arbitrary value. Thus the covered interval `I c = Icc (f (g c) - ε r²) (f (g c) + ε r²)`
+   Always a true interval, no need for `dite` branches, the measure is constantly `ENNReal.ofReal (2 ε r²)`.
+4. Two points in the same grid cell: `Int.abs_sub_lt_one_of_floor_eq_floor` given `|a/r - b/r| < 1`,
+   After division, we obtain `|a - b| < r`; `pi_norm_lt_iff` and `Fin.forall_fin_two` handle the two components
+   Synthesize `‖y - g (q y)‖ < r ≤ δ`. Thus assume applicable, and `‖y - g (q y)‖² ≤ r²`,
+   Get `f y ∈ I (q y)`. This is `f '' A ⊆ ⋃ c ∈ S, I c`, **without** any measurability.
+5. `measure_mono`, `measure_biUnion_finset_le`, `Finset.sum_le_card_nsmul` given
+   `volume (f '' A) ≤ #S • ofReal (2 ε r²) = ofReal ((2M+1)² · 2 ε r²)`.
+   `Int.ceil_lt_add_one` Given `(2M+1) r ≤ 2R + 3r ≤ 2R + 3`, the upper bound is
+   `ofReal (2 (2R+3)² ε)`, **independent of `r` and `δ`**.
+6. `ENNReal.le_of_forall_pos_le_add` For each `η > 0` take `ε = η / (2 (2R+3)²)`, obtain zero.
 
-维数二用在第 2 与第 5 步的乘积：格子数是 `O(r⁻²)`，每个像区间长 `O(ε r²)`，
-乘积才与 `r` 无关。三维同样论证给 `O(ε r⁻¹)`，发散，所以此引理不能照搬到高维。
+The two-dimensional case is used in the product of steps 2 and 5: the lattice count is `O(r⁻²)`, each image interval length `O(ε r²)`,
+the product then becomes independent of `r`. The three-dimensional case is similarly argued to give `O(ε r⁻¹)`, diverging, so this lemma cannot be directly extended to higher dimensions.
 
-平坦层定理只是把 `IsCompact.isBounded` 与
-`Analysis.exists_uniform_quadratic_remainder` 接到这个接口上：
-紧集的平坦子集有界，余项定理对该子集给出所需的一致二次振幅控制
-（余项定理允许 `y` 在 `K` 外，这里只用到 `y ∈ A` 的更弱情形）。
+The flatness theorem merely connects `IsCompact.isBounded` to `Analysis.exists_uniform_quadratic_remainder` at this interface: the flat subset of a compact set is bounded, and the remainder theorem provides the required uniform quadratic amplitude control for this subset (the remainder theorem allows `y` outside of `K`, here only the weaker case of `y ∈ A` is used).
 
-## 验证与公理边界
+## Verification and Axiomatic Boundaries
 
-* 新模块 `lake env lean -DwarningAsError=true` 严格通过（`build/audit/quadratic-cover-module-strict.log`），
-  `lake build FunctionalInequalities.Analysis.QuadraticCover` 通过（2551 jobs）。
-* `build/audit/QuadraticCoverAudit.lean` 严格通过：16 个客户端与 3 条主定理共 19 条公理报告，
-  全部仅含标准三公理。覆盖空集；单点集配完全任意（可能处处不连续）的 `f`；
-  任意有界集配常值 `f`，客户端内**没有**任何可测性实例或假设；
-  紧集上常函数的平坦层；全平面平坦层（无紧性、有界性、可测性假设）；
-  非常值三次函数 `x ↦ (x 0)³` 的平坦层与闭球实例。
-  `cubic_ball_layer_proper` 同时给出闭球内的非平坦点 `![1,0]` 与平坦点 `0`，
-  确认子集版本既非空也非全体，不能用“整个 `K` 平坦”替代。
-* `QuadraticRemainderAudit`、`SardLowDimAudit`、`AreaFormulaAudit`、`SuperlevelSardScope`
-  重新严格编译通过。`SuperlevelSardScope` 再次确认一般 `Analysis.sard`、
-  `Analysis.ae_forall_fderiv_ne_zero`、`SmoothDomain.ae_exists_superlevel` 仍继承 `sorryAx`。
-* 三个 WIP 文件逐个实际普通模式编译，诊断仍为 **3/3/5** 个直接洞警告，无其他诊断。
-  **直接洞总数仍为 11**；证书仍为 **24**，perimeter infrastructure 仍为 **missing**。
-* 默认 `lake build` 通过（3393 jobs），日志 `build/audit/quadratic-cover-lake-build.log`；
-  根目录 `python3 research/verify.py` 的最终快照回执为 `build/verification/latest.json`。
-  独立客户端与日志位于被忽略的 `build/` 目录，其证据哈希记录于
-  `research/explorations/2026-09-14-quadratic-cover-audit.json`，不冒充正式证书。
-* 本轮**没有**扩大任何证书或 `leanok` 范围。一般 Sard、加权 coarea、其可测性、
-  反方向 Cheeger 比较与常数相等仍未证明。本地回执不等于远端 CI。
+* New module `lake env lean -DwarningAsError=true` passes strictly (`build/audit/quadratic-cover-module-strict.log`),
+  `lake build FunctionalInequalities.Analysis.QuadraticCover` passes (2551 jobs).
+* `build/audit/QuadraticCoverAudit.lean` passes strictly: 16 clients and 3 main theorems produce 19 axiom reports,
+  all containing only standard three axioms. Covers empty set; singleton sets paired with completely arbitrary (possibly everywhere discontinuous) `f`; any bounded set paired with constant `f`, no measurable instances or assumptions present within client; flat layers of constant functions on compact sets; flat layer over the entire plane (without compactness, boundedness, or measurability assumptions); flat layers and closed ball instances of very non-constant cubic functions `x ↦ (x 0)³`.
+  `cubic_ball_layer_proper` also provides non-flat points `![1,0]` and flat points `0` within closed balls,
+  confirming that subset versions are neither empty nor the entire set, and cannot be replaced by "entire `K` is flat".
+* `QuadraticRemainderAudit`, `SardLowDimAudit`, `AreaFormulaAudit`, `SuperlevelSardScope`
+  are recompiled strictly. `SuperlevelSardScope` again confirms general `Analysis.sard`,
+  `Analysis.ae_forall_fderiv_ne_zero`, `SmoothDomain.ae_exists_superlevel` inherit `sorryAx`.
+* Three WIP files are individually compiled in ordinary mode, diagnostics remain **3/3/5** direct proof hole warnings, no other diagnostics.
+  **Total direct proof holes remain 11**; certificate remains **24**, perimeter infrastructure remains **missing**.
+* Default `lake build` passes (3393 jobs), log `build/audit/quadratic-cover-lake-build.log`;
+  final snapshot verification receipt for root directory `python3 research/verify.py` is `build/verification/latest.json`.
+  Independent client and log are located in the ignored `build/` directory, with evidence hashes recorded in
+  `research/explorations/2026-09-14-quadratic-cover-audit.json`, not claimed as formal certificates.
+* This round has **no** expansion of any certificate or `leanok` scope. General Sard, weighted coarea, their measurability, reverse Cheeger comparison, and constant equality remain unproven. Local verification does not equal remote CI.
 
-## 明确未完成
+## Explicitly incomplete work
 
-本轮只完成**二维二阶平坦层**。以下仍然全部未完成：
+This round only completes the **two-dimensional second-order flat layer**. The following has still not been completed:
 
-* **二维非平坦层**：`{x ∈ K | Du x = 0 ∧ D²u x ≠ 0}` 的像零测。
-  `build/audit/PlanarNonflatNextStatement.lean` 只检查此命题类型，无证明声明、无占位公理。
-  该层需要对某个一阶偏导数用隐函数定理得到 `C¹` 曲线，再降到一维 Sard；
-  当前仓库没有这个局部图表与降维拼接。
-* **一般 Sard**（`Analysis.sard`）：仍是 `WIP/AnalyticPrerequisites` 中的直接洞。
-  即使两个二维层都完成，还需要 σ-紧穷竭、任意有限维、高阶平坦余项与高阶覆盖，
-  以及高阶分层下降时的正则性损失处理。本轮结果**不是**一般 Sard，也不改变其状态。
-* **加权 coarea** 及其水平集可测性：两个未触动的直接洞。
-* **反方向 Cheeger 比较** `smoothConstant_le_minkowskiConstant` 与常数相等：仍未证明，
-  仍传递依赖 `sorryAx`；只有 `h_M ≤ h_S` 一个方向是证明过的。
+* **2D non-flat stratum**: The image of `{x ∈ K | Du x = 0 ∧ D²u x ≠ 0}` has zero measure.
+  `build/audit/PlanarNonflatNextStatement.lean` only checks this proposition type, with no proof assertion, no placeholder axioms.
+  This stratum requires applying the implicit function theorem to some first-order partial derivative to obtain `C¹` curve, then reducing to one dimension via Sard;
+  the current repository lacks the local chart and dimension-reduction gluing.
+* **General Sard** (`Analysis.sard`): Still a direct proof hole in `WIP/AnalyticPrerequisites`.
+  Even if both 2D sheaves are completed, additional requirements include σ-compact exhaustion, arbitrary finite-dimensional, higher-order flat remainder and higher-order coverings, and handling regularity loss during higher-order stratified descent. The current result is **not** general Sard, nor does it alter its status.
+* **Weighted coarea** and measurability of its level sets: Two untouched direct proof holes.
+* **Reverse Cheeger comparison** `smoothConstant_le_minkowskiConstant` equal to constant: still unproven, still depends on `sorryAx`; only one direction, `h_M ≤ h_S`, has been proven.
 
-整条链**没有**闭合，也不得据本轮结果暗示闭合。
+The entire chain is not closed, and no closure is implied by the result of this round.

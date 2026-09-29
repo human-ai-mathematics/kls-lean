@@ -1,14 +1,13 @@
-# 二维非平坦层与平面 Sard
+# 2D Non-flat Sheaves and the Plane Sard
 
-2026-09-14，承接[二维定量覆盖](2026-09-14-planar-quadratic-cover.md)中类型检查过的下一命题
-（`build/audit/PlanarNonflatNextStatement.lean` 的非平坦层）。起始回执
-`build/verification/latest.json`（`20260914T150543.429034Z`）为 passed，重新计算确认工作区逐字节一致。
-HEAD 仍为 `2965b32`，保留此前全部未提交及未跟踪成果，不提交、不推送，历史决定不改写。
+2026-09-14, taking over the next statement from the type-checked section in [two-dimensional quantitative coverage](2026-09-14-planar-quadratic-cover.md) (the non-flat stratum of `build/audit/PlanarNonflatNextStatement.lean`). Initial verification receipt
+`build/verification/latest.json` (`20260914T150543.429034Z`) is marked as passed, and the work area is recalculated to confirm byte-by-byte consistency.
+HEAD remains `2965b32`, preserving all prior uncommitted and untracked results, without submission or push; historical decisions are not rewritten.
 
-## 完成范围
+## Scope of completion
 
-`Analysis/QuadraticCover.lean` 增加一维覆盖引理；新增
-`formalization/FunctionalInequalities/Analysis/PlanarSard.lean`，公开结果两条：
+`Analysis/QuadraticCover.lean` Add a dimension covering lemma; new
+`formalization/FunctionalInequalities/Analysis/PlanarSard.lean`, public results two:
 
 ```lean
 theorem volume_image_eq_zero_of_quadratic_bound {A : Set ℝ} {f : ℝ → ℝ} {C : ℝ}
@@ -23,77 +22,72 @@ theorem sard_plane {u : (Fin 2 → ℝ) → ℝ} (hu : ContDiff ℝ 2 u) :
     (volume : Measure ℝ) (u '' {x | fderiv ℝ u x = 0}) = 0
 ```
 
-全名分别为 `FunctionalInequalities.Analysis.volume_image_eq_zero_of_quadratic_bound`、
-`…volume_image_nonflat_eq_zero`、`…sard_plane`。三者仅依赖
-`propext / Classical.choice / Quot.sound`，无直接洞、无占位、无新增公理。
+Full names respectively `FunctionalInequalities.Analysis.volume_image_eq_zero_of_quadratic_bound`,[,]
+`…volume_image_nonflat_eq_zero`, `…sard_plane`.Three depend only on
+`propext / Classical.choice / Quot.sound`, no direct proof hole, no placeholder, no new axioms.
 
-`sard_plane` 是 **C² 函数在平面上的 Sard 定理**：临界值集零测，临界集不假设可测、不假设有界、
-不假设紧。它**不是** `Analysis.sard`——后者是任意有限维的一般命题，仍是 WIP 中的直接洞。
+`sard_plane` is the **Sard's theorem for C² functions on the plane**: the set of critical values has measure zero, and the critical set does not assume measurability, does not assume boundedness, nor does it assume compactness. It is **not** `Analysis.sard`—the latter is a general statement for arbitrary finite-dimensional settings, still containing a direct proof hole in WIP.
 
-## 实际证明：不需要隐函数定理
+## Actual Proof: No Need for Implicit Function Theorem
 
-一维覆盖引理是二维版本的简化：常数固定，不需要 ε-δ 精化，因为格子数 `O(r⁻¹)` 已经压过
-像区间长度 `O(r²)`，总量 `O(r) → 0`。
+The one-dimensional covering lemma is a simplification of the two-dimensional version: with constant fixed, no need for ε-δ refinement, since the number of lattice points `O(r⁻¹)` already exceeds the interval length `O(r²)`, the total quantity `O(r) → 0`.
 
-非平坦层的关键是把它**塌成一维**，路线如下（`x₀` 处只要求 `D²u x₀ ≠ 0`，不要求临界）：
+The key to non-trivial sheaves is to collapse them into one dimension, following this route (at `x₀` we only require `D²u x₀ ≠ 0`, no critical point required):
 
-1. `T := fderiv ℝ (fderiv ℝ u) x₀ ≠ 0`（由 `iteratedFDeriv ℝ 2 u x₀ ≠ 0` 经范数相等得到），
-   取 `v₀, w` 使 `(T v₀) w ≠ 0`，令 `α := T.flip w`，则 `α ≠ 0`。
-2. **纯线性代数**：非零泛函 `α` 在某个基向量 `Pi.single i 1` 上非零；令 `j := 1 - i`。
-   若 `|α v| ≤ (|α eᵢ|/4)‖v‖`，则 `‖v‖ ≤ L |v j|`。用 `‖v‖ ≤ |v i| + |v j|` 与
-   `α v = v i · α eᵢ + v j · α e_j` 直接解出，常数显式。
-3. **带线性主部的中值不等式** `Convex.norm_image_sub_le_of_norm_fderiv_le'` 用在
-   `fderiv ℝ u` 上：球内 `‖D²u z − T‖ ≤ η` 时，对任意 `x, y`，
-   `‖Du y − Du x − T(y−x)‖ ≤ η‖y−x‖`。两点都临界时即 `‖T(y−x)‖ ≤ η‖y−x‖`，
-   配对 `w` 得 `|α(y−x)| ≤ η‖w‖‖y−x‖ ≤ ε‖y−x‖`。于是第 2 步给
-   `‖y − x‖ ≤ L |y j − x j|`：**临界集在球内是关于第 `j` 个坐标的 Lipschitz 图**。
-   这一步取代了隐函数定理；仓库已有的 `Analysis/ImplicitGraph.lean` 要求 `C^∞` 与内积结构，
-   对只有 `C¹` 的 `Du` 用不上，所以没有复用它，也没有新建隐函数框架。
-4. 临界点处的二次估计（两次凸集中值不等式，与平坦余项同构但保留真常数 `M = ‖T‖+1`）给
-   `|u y − u x| ≤ M‖y−x‖²`。与第 3 步合成：`|u y − u x| ≤ M L² |y j − x j|²`。
-5. Lipschitz 图同时给**单射性**：同一 `j` 坐标的两点距离为零，故相等。于是
-   `t ↦ u(代表点)` 在 `A := (· j) '' (临界集 ∩ 球)` 上良定义并满足一维二次界，
-   一维覆盖引理直接给出该球内像零测。
-6. `TopologicalSpace.isOpen_iUnion_countable`（二次可数即 Lindelöf）把逐点的球取可数子覆盖，
-   `measure_biUnion_null_iff` 合成全平面结论。不需要紧性，所以公开陈述里没有 `K`。
+1. `T := fderiv ℝ (fderiv ℝ u) x₀ ≠ 0` (obtained from `iteratedFDeriv ℝ 2 u x₀ ≠ 0` via norm equality),
+   Take `v₀, w` such that `(T v₀) w ≠ 0`, let `α := T.flip w`, then `α ≠ 0`.
+2. **Linear algebra**: a non-zero functional `α` is non-zero on some basis vector `Pi.single i 1`; let `j := 1 - i`.
+   If `|α v| ≤ (|α eᵢ|/4)‖v‖`, then `‖v‖ ≤ L |v j|`. Using `‖v‖ ≤ |v i| + |v j|` and
+   solve directly from `α v = v i · α eᵢ + v j · α e_j`, with explicit constants.
+3. **Mean value inequality with a linear principal part** `Convex.norm_image_sub_le_of_norm_fderiv_le'` used in
+   `fderiv ℝ u` upper: inside the ball `‖D²u z − T‖ ≤ η` when, for any `x, y`,
+   `‖Du y − Du x − T(y−x)‖ ≤ η‖y−x‖`. When both points are critical, it is `‖T(y−x)‖ ≤ η‖y−x‖`,
+   Pair `w` to `|α(y−x)| ≤ η‖w‖‖y−x‖ ≤ ε‖y−x‖`. Thus, Step 2 gives
+   `‖y − x‖ ≤ L |y j − x j|`: The critical set inside the ball is Lipschitz graph with respect to the `j`-th coordinate.
+   This step replaces the implicit function theorem; the existing warehouse `Analysis/ImplicitGraph.lean` requires `C^∞` and the inner product structure,
+   We don't need the `C¹` for the `Du`, so we didn't reuse it, nor did we build a new implicit function framework.
+4. Quadratic estimate at critical points (twice convex comparison inequality, isomorphic to flat remainder but retaining true constant `M = ‖T‖+1`) gives
+   `|u y − u x| ≤ M‖y−x‖²`. Combined with step 3: `|u y − u x| ≤ M L² |y j − x j|²`.
+5. The Lipschitz graph has the property of *injectivity*: if two points have the same `j` coordinate, their distance is zero, hence they are equal. Thus
+   t ↦ u (representative point) is well-defined on A := (· j) '' (critical set ∩ ball) and satisfies a quadratic one-dimensional bound,
+   The one-dimensional covering lemma directly gives the image of zero measure inside the ball.
+6. `TopologicalSpace.isOpen_iUnion_countable` (second-countable implies Lindelöf) takes a countable subcover of balls at each point,
+   `measure_biUnion_null_iff` Synthesizing the full plane conclusion. Tightness is not required, so the public statement does not include `K`.
 
-`sard_plane` 只是按 `D²u x = 0` 与 `≠ 0` 拆分临界集，两半分别用上一轮的
-`volume_image_flat_univ_eq_zero` 与本轮的 `volume_image_nonflat_eq_zero`。
+`sard_plane` is merely splitting the critical set according to `D²u x = 0` and `≠ 0`, applying the previous round's `volume_image_flat_univ_eq_zero` and this round's `volume_image_nonflat_eq_zero` to each half respectively.
 
-## 验证与公理边界
+## Verification and Axiomatic Boundaries
 
-* 两个模块 `lake env lean -DwarningAsError=true` 严格通过，`lake build` 目标模块通过。
-* `build/audit/PlanarSardAudit.lean` 严格通过：13 个客户端与 3 条主定理共 16 条公理报告，
-  全部仅含标准三公理。其中
-  `recorded_nonflat_obligation` 逐字给出上一轮记录的紧集版非平坦义务；
-  `nonflat_on_subset` 说明紧性其实不需要，任意（可能不可测的）子集都成立；
-  `constant_critical_univ` + `constant_sard` 给出临界集是**整个平面**（源侧测度无穷）而像仍零测的
-  非平凡实例；`square_critical` 证明 `x ↦ (x 0)²` 的临界集恰是直线 `{x 0 = 0}`，
-  `square_critical_line` 给出该直线上任意点，说明非平坦分支不是空转。
-* `QuadraticCoverAudit`、`QuadraticRemainderAudit`、`SardLowDimAudit`、`AreaFormulaAudit`、
-  `SuperlevelSardScope` 全部重新严格通过。`SuperlevelSardScope` 再次确认一般
-  `Analysis.sard`、`Analysis.ae_forall_fderiv_ne_zero`、`SmoothDomain.ae_exists_superlevel`
-  **仍继承 `sorryAx`**。
-* 三个 WIP 文件逐个实际编译，诊断仍为 **3/3/5** 个直接洞，无其他诊断。直接洞总数仍为 **11**；
-  证书仍为 **24**；perimeter infrastructure 仍为 **missing**。
-* 默认 `lake build` 通过（3393 jobs）。根目录 `python3 research/verify.py` 的最终快照回执为
-  `build/verification/latest.json`。证据哈希记录于
-  `research/explorations/2026-09-14-planar-sard-audit.json`，不冒充正式证书。
-* 本轮**没有**扩大任何证书或 `leanok` 范围。
+* Two modules `lake env lean -DwarningAsError=true` strictly pass, `lake build` target module passes.
+* `build/audit/PlanarSardAudit.lean` strictly passes: 13 clients and 3 main theorems produce 16 axiom reports in total, all containing only standard three axioms. Among them,
+  `recorded_nonflat_obligation` verbatim reproduces the compact set version of the non-flat obligation from the previous round;
+  `nonflat_on_subset` explains that compactness is actually unnecessary, and holds for any (possibly non-measurable) subset;
+  `constant_critical_univ` + `constant_sard` provide a nontrivial example where the critical set is the **entire plane** (source-side measure infinite) while the image remains zero measure;
+  `square_critical` proves that the critical set of `x ↦ (x 0)²` is exactly the line `{x 0 = 0}`,
+  `square_critical_line` shows that for any point on this line, the non-flat branch is nontrivial.
+* `QuadraticCoverAudit`, `QuadraticRemainderAudit`, `SardLowDimAudit`, `AreaFormulaAudit`, `SuperlevelSardScope` all pass strictly again. `SuperlevelSardScope` again confirms general
+  `Analysis.sard`, `Analysis.ae_forall_fderiv_ne_zero`, `SmoothDomain.ae_exists_superlevel`
+  **still inherit `sorryAx`**.
+* Three WIP files are individually compiled in practice, diagnosis remains **3/3/5** direct proof holes, no other diagnostics. Total direct proof hole count remains **11**;
+  certificate remains **24**; perimeter infrastructure remains **missing**.
+* Default `lake build` passes (3393 jobs]). The final snapshot verification receipt for root directory `python3 research/verify.py` is
+  `build/verification/latest.json`. Evidence hash is recorded at
+  `research/explorations/2026-09-14-planar-sard-audit.json`, not claimed as formal certificate.
+* This round **has no** expansion of any certificate or `leanok` scope.
 
-## 明确未完成
+## Explicitly incomplete work
 
-`sard_plane` 只覆盖**二维、C²、实值**。以下全部仍未完成：
+`sard_plane` Covers only **two-dimensional, C², real-valued**. The rest is still incomplete:
 
-* **一般 Sard**（`Analysis.sard`，任意有限维 `C^n`）：仍是 `WIP/AnalyticPrerequisites` 的直接洞，
-  两个消费者仍继承 `sorryAx`。平面情形**不能**推出它。
-* 下一项独立缺口已类型检查于 `build/audit/HigherSardNextStatement.lean`（无证明、无占位公理）：
-  (1) `n` 维覆盖引理——有界 `A ⊆ ℝⁿ`、一致 `o(‖y−x‖ⁿ)` 振幅控制推出像零测；
-  (2) 紧集中全平坦点（1 到 `n` 阶导数全为零）处的 `n` 阶一致余项。
-  两者合成才给出 `n` 维的顶层；中间各层还需要有限阶隐函数图表与逐阶降维，
-  且降维时正则性会损失，这正是 Whitney–Morse–Sard 的难点。
-* **加权 coarea** 及其水平集可测性：两个未触动的直接洞。
-* **反方向 Cheeger 比较** `smoothConstant_le_minkowskiConstant` 与常数相等：仍未证明，
-  仍传递依赖 `sorryAx`；只有 `h_M ≤ h_S` 一个方向是证明过的。
+* **General Sard** (`Analysis.sard`, finite-dimensional `C^n` in arbitrary dimension): still a direct hole in `WIP/AnalyticPrerequisites`,
+  Two consumers still inherit `sorryAx`. The planar case cannot imply this.
+* The next independent gap has been type-checked at `build/audit/HigherSardNextStatement.lean` (no proof, no placeholder axioms):
+  (1) `n` Dimensional covering lemma——bounded `A ⊆ ℝⁿ`, uniformly `o(‖y−x‖ⁿ)` amplitude control implies the image has measure zero;
+  (2) A uniform order-`n` remainder at fully flat points in a compact set (all derivatives from order 1 through `n` vanish).
+  Only together do they yield the `n`-dimensional top layer; the intermediate layers still require finite-order implicit function charts and successive dimension reduction.
+  And regularity is lost during dimension reduction, which is precisely the difficulty of Whitney–Morse–Sard.
+* **Weighted coarea** and its level set measurability: two untouched direct proof holes.
+* **Reverse Cheeger comparison** `smoothConstant_le_minkowskiConstant` equal to a constant: still unproven,
+  Still transitively dependent on `sorryAx`; only `h_M ≤ h_S` one direction has been proven.
 
-整条链**没有**闭合。
+The entire chain is not closed.

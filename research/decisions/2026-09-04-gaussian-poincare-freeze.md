@@ -8,7 +8,7 @@
 approval, Codex reported that the Lean statements, proof chain, normalization, zero-variance
 boundary and sharpness argument were semantically and mathematically correct, and separated
 proof completion from the still-draft lifecycle metadata. The user then instructed:
-“按照你说的那样去做优化和修正”. This ratifies the reviewed mathematical contract and asks
+“make the improvements and corrections you proposed”. This ratifies the reviewed mathematical contract and asks
 for its lifecycle closeout and the listed interface/documentation cleanups. It does not backdate
 a freeze to the earlier statement or proof stages.
 

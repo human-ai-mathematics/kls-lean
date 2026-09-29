@@ -1,86 +1,71 @@
-# L6a、L7、L12：Lipschitz 加权 coarea 完成
+# L6a, L7, L12: Lipschitz weighted coarea completion
 
-2026-09-16。起点 HEAD 与 origin/main 均为
-`dcc158d7d3b9e91f17d2ee0fd49b30cdb6f4f7d8`，本轮不提交、不推送、不改变真实 Git index。
-起点回执 `20260915T181325.091264Z` 通过，486 条目，快照
-`01eaccf7af20c08a011382e6c204b98c2613daa1e93f919da50c039cbee53e1c`，与起点源码一致。
-全部既有 Lean 文件、历史决定和旧审计客户端保持原字节。
+2026-09-16. Head starting point and origin/main are both
+`dcc158d7d3b9e91f17d2ee0fd49b30cdb6f4f7d8`, this round does notcommit, does not push, does not alter the true Git index.
+The starting point verification receipt `20260915T181325.091264Z` passes, 486 entry, snapshot
+`01eaccf7af20c08a011382e6c204b98c2613daa1e93f919da50c039cbee53e1c`, identical to the starting point source code.
+All existing Lean files, historical decisions, and old audit clients remain unchanged in bytes.
 
-## 精确成果
+## Exact Results
 
-* **L6a**：`Analysis.LipschitzJet.exists_compact_jets`，在
-  `Analysis/LipschitzJet.lean`。有限维实范数空间、任意加法 Haar 测度、任意全局 Lipschitz
-  实函数，有可数紧片覆盖几乎处处的点；每片上函数可微、环境导数字段连续、一阶余项一致。
-* **L7**：`Analysis.exists_contDiff_pieces`，在 `Analysis/LipschitzC1Pieces.lean`。
-  在有限维实内积空间中，有可数两两不交可测片，覆盖几乎处处的点；每片有一个全局 C¹
-  代表，并且原函数在片上可微，代表的值与**环境导数**都逐点等于原函数的值与环境导数。
-* **L12**：`KLS.coarea_of_lipschitz`，在 `KLS/Geometry/LipschitzCoarea.lean`。
-  任意全局 Lipschitz 实函数 u、可测 S、可测 `g : V → ℝ≥0∞`，给出切片积分的
-  `AEMeasurable` **及**原路线的完整带权 coarea 等式。
+* **L6a**: `Analysis.LipschitzJet.exists_compact_jets`, in `Analysis/LipschitzJet.lean`. In finite-dimensional real normed spaces, with an arbitrary additive Haar measure and any globally Lipschitz real function, there exists a countable compact slice cover almost everywhere; on each slice, the function is differentiable, the ambient derivative field is continuous, and the first-order remainder is uniform.
+* **L7**: `Analysis.exists_contDiff_pieces`, in `Analysis/LipschitzC1Pieces.lean`. In finite-dimensional real inner product spaces, there exists a countable collection of pairwise disjoint measurable slices covering almost every point; each slice has a global C¹ representative, and the antiderivative is differentiable on the slice, with the representative's value and the **ambient derivative** equal pointwise to the original function's value and ambient derivative.
+* **L12**: `KLS.coarea_of_lipschitz`, in `KLS/Geometry/LipschitzCoarea.lean`. For any globally Lipschitz real function u, measurable set S, and measurable `g : V → ℝ≥0∞`, the slice integral's `AEMeasurable` **and** the full weighted coarea formula for the original path are provided.
 
-没有加入 C¹、正维、有界域、有限体积、有限权重、可积性、正则值或 `SFinite surfaceMeasure`
-假设；空集、零维和权重恒为 ∞ 均在原语句范围内。surfaceMeasure 的原有归一化完全不变。
-公开定理不额外列出有限维已蕴涵的 CompleteSpace；新客户端的 `original_L6a`、
-`original_L7`、`original_L12` 和 `original_T2` **逐字保留原路线命题文本**，并给出证明。
-这些不是 `#check` 或新公理。
+No assumptions added regarding C¹, positive dimension, bounded domain, finite volume, finite weight, integrability, regular value, or `SFinite surfaceMeasure`; the empty set, zero-dimensional, and infinite weight are all within the original statement. The normalization of surfaceMeasure remains completely unchanged.
+Public theorems do not separately list the CompleteSpace implied by finite-dimensional cases; new client `original_L6a`, `original_L7`, `original_L12`, and `original_T2` **verbatim retain the original route statement** and provide proofs.
+These are neither `#check` nor new axioms.
 
-## L6a 的实现：直接一致化环境余项
+## Implementation of L6a: Direct Regularization of the Remainder in the Environment
 
-不需要另建一般 Lusin 定理，也没有误用 Lusin–Souslin。取固定可数稠密向量序列 q_i，定义
+No need to establish a general Lusin theorem, nor is Lusin–Souslin misused. Take a fixed countable dense vector sequence q_i, and define
 
-`goodSet u ε δ = {x | ∀i, ‖q_i‖<δ → ‖u(x+q_i)-u(x)-Du(x)q_i‖≤ε‖q_i‖}`。
+`goodSet u ε δ = {x | ∀i, ‖q_i‖<δ → ‖u(x+q_i)-u(x)-Du(x)q_i‖≤ε‖q_i‖}`.
 
-1. `measurable_fderiv_apply_const` 与 u 连续给出 goodSet 可测；它只量化可数序列。
-2. 对固定 x，向量变量上的条件为闭条件（开球条件蕴涵闭不等式），由稠密性推广到所有 h。
-3. 在可微点，每个 ε>0 都有某个半径 `1/(m+1)` 满足该条件；半径递减时 goodSet 递增。
-4. 对有限测度可测 A 中的可微点、每个精度 `1/(n+1)`，从递增覆盖选一个统一半径，
-   丢弃测度小于 d_n 的例外，预先选 `∑d_n<ε/2`。交遍所有精度后，再用紧内正则性，
-   丢弃小于 ε/2 的测度，得到紧集 C⊆A，且 `μ(A\C)<ε`。
-5. A 取可微点集与空间紧覆盖的交，ε 取 `1/(k+1)`，把 (m,k) 重新编码为自然数。
-   Rademacher 给可微点集补集零测；任意小的丢失测度给最终可数紧片的余集零测。
+1. `measurable_fderiv_apply_const` together with u being continuous provides goodSet measurability; it only quantifies countable sequences.
+2. For fixed x, the condition on vector variables is a closed condition (the open ball condition implies a closed inequality), and is extended to all h by density.
+3. At differentiable points, for each ε > 0, there exists some radius `1/(m+1)` satisfying the condition; as the radius decreases, goodSet increases.
+4. For differentiable points in a measurable set A with finite measure, for each precision `1/(n+1)`, select a uniform radius from an increasing cover,
+   discard exceptions with measure less than d_n, and pre-select `∑d_n<ε/2`. After intersecting over all precisions, then use tight inner regularity,
+   discard those with measure less than ε/2, obtaining a compact set C ⊆ A, and `μ(A\C)<ε`.
+5. A is taken as the intersection of the differentiable point set and a compact covering of the space, ε is taken as `1/(k+1)`, and (m,k) is reencoded as a natural number.
+Rademacher assigns measure zero to the complement of the differentiable point set; any small loss of measure is assigned zero measure to the complement of the final countable compact piece.
 
-这个方法得到更强的估计：base point x 在 C 上，而增量终点 x+h 可以在 C 外。
-因此导数连续性可直接推出：比较 x 与 y 处同一小增量 h 的两个余项，再用全局 Lipschitz
-界控制 `u(x+h)-u(y+h)` 和 `u(x)-u(y)`。在 `δ/2≤‖h‖<δ` 的球壳上得算子范数界；
-`ContinuousLinearMap.opNorm_le_of_shell` 给片上导数字段一致连续。
-这一步不要求片有内点，也不从片上的函数值相等推导环境导数相等。
+This method yields a stronger estimate: the base point x lies in C, while the increment endpoint x+h may lie outside of C.
+Thus, derivative continuity can be directly inferred: compare the two remainder terms at x and y for the same small increment h, and then use a global Lipschitz bound to control `u(x+h)-u(y+h)` and `u(x)-u(y)`. On the spherical shell in `δ/2≤‖h‖<δ`, we obtain a bound for the operator norm; `ContinuousLinearMap.opNorm_le_of_shell` provides uniform continuity of the derivative field on the patch.
+This step does not require the patch to have an interior point, nor does it derive equality of ambient derivatives from equality of function values on the patch.
 
-## L7 与 L12 的拼接
+## Gluing of L7 and L12
 
-L7 对每个紧 jet 应用已证明的 L6，再取 `disjointed` 差分片。差分片仍可测、位于原紧片，
-其并集不变，故精确值与导数等式和几乎处处覆盖均保留。
+L7 Apply the proven L6 to each compact jet, then take the `disjointed` difference slice. The difference slice remains measurable and lies within the original compact slice; its union remains invariant, so the exact value and derivative equality, as well as almost everywhere coverage, are preserved.
 
-L12 令 P_j=S∩第 j 片。L11 用于第 j 个 C¹ 代表；值相等识别切片，环境导数相等识别梯度。
-两侧分别使用可测不交可数并的 lintegral 可加性；L11 给每片切片积分的 AEMeasurable，
-允许交换外积分和可数和。原函数补集上剩余的体积零测部分，由 **L2 零测切片定理**处理，
-不能只靠 Rademacher。两边均用限制测度的 a.e. 集合相等移除余集，因此不需要控制无限权重。
-L12 的总体切片 AEMeasurable 也直接由既有 L5 提供。
+L12 Let P_j = S ∩ the j-th piece. L11 is used for the j-th C¹ representative; equal values identify slices, equal ambient derivatives identify gradients.
 
-## 审计
+On both sides, the lintegral additivity of measurable, disjoint, countable unions is used; L11 assigns AEMeasurable to each slice, allowing exchange of outer integral and countable sum. The volume-null remainder outside the differentiability pieces is handled by the **L2 null-measure slice theorem**, and cannot be solely based on Rademacher. On both sides, the restriction measure is used a.e. set equality removes the complement, so infinite weights are not required for control.
 
-`research/audits/LipschitzCoareaAudit.lean` 独立导入新无洞模块，证明原始 L6a、L7、L12、
-T2 四条命题，并逐字节比对原始决定中的命题文本。15 条新公理报告只有
-`propext`、`Classical.choice`、`Quot.sound`，无 `sorryAx`。
-边界客户端包括：实数范数函数（同时证明它在 0 不可微）、无界全空间上的任意权重、
-常数函数配恒 ∞ 权重（外切片积分为 0）、零维空间。
+The overall slice AEMeasurable of L12 is also directly provided by existing L5.
 
-三个新模块和客户端严格编译；23 个审计客户端（research/audits 16 个，已有 build/audit 7 个）
-全部重跑。三个 WIP 逐个重编译仍是 **2/2/5**。旧客户端有意报告仍存在的原始 WIP 洞；
-新客户端的 T2 证明与旧名字仍有 sorryAx 是不同的声明，不混为一谈。
-全部命令、日志哈希、原语句比较、来源保持检查在
-`research/explorations/2026-09-16-lipschitz-coarea.json`。最终默认构建、完整 verification、
-198 个本地模块内核重放和精确源码绑定以
-`build/audit/lipschitz-coarea/final-snapshot.json` 所指回执为准。
+## Audit
 
-## 当前边界与下一步
+`research/audits/LipschitzCoareaAudit.lean` Import a new hole-free module independently, prove the four statements of original L6a, L7, L12, and T2, and byte-by-byte compare the textual content of the statements in the original decision. 15 The report of new axioms includes only `propext`, `Classical.choice`, `Quot.sound`, without `sorryAx`.
+Boundary clients include: real norm function (also proving it is not differentiable at 0), any weight on unbounded full space, constant function with constant ∞ weight (outer slice integral is 0), zero-dimensional space.
 
-**L6a、L7、L12 已完成。Lipschitz 加权 coarea 的数学证明已完成。** 原始 T2 命题已由新客户端
-作为 L12 的 S=univ 特例证明，但旧的
-`Analysis.lintegral_enorm_gradient_mul_eq_lintegral_levelSet` 仍留在
-`KLS/WIP/AnalyticPrerequisites.lean` 中。本轮止于用户指定的 L12，没有迁移或改写旧入口。
+Three new modules and client compiled strictly; 23 audit clients (research/audits 16 of them, with build/audit 7 already existing)
+All rerun. Each WIP is individually recompiled and remains **2/2/5**. The old client intentionally reports existing raw WIP holes;
+The new client's T2 proof is distinct from the declaration under the old name, which still contains sorryAx; the two must not be conflated.
+All commands, log hashes, original statement comparisons, and source integrity checks are at
+`research/explorations/2026-09-16-lipschitz-coarea.json`. The final default build, complete verification,
+198 local module kernel replays and exact source code binding are based on
+`build/audit/lipschitz-coarea/final-snapshot.json`'s referenced verification receipt.
 
-**下一步是独立迁出 T2**：迁出前后机器比较 `pp.all` 签名，包括 CompleteSpace 和参数顺序，
-接到 L12 的全空间特例；随后重跑旧消费者公理审计，才能把直接洞计数从 9 降到 8。
-当前源码直接洞仍 **9（2/2/5）**，证书 **24**，perimeter infrastructure **missing**。
-尖锐有限正则性 Sard、两个 Cheeger 比较、Energy 的 5 个洞和维数无关 KLS 仍开放。
-本轮不增加 Blueprint leanok 或证书，不把 coarea 完成误标为 KLS 完成。
+## Current Boundary and Next Step
+
+**L6a, L7, L12 are completed. The mathematical proof of Lipschitz weighted coarea is completed.** The original T2 statement has been proven by the new client as the S=univ special case of L12, but the old
+`Analysis.lintegral_enorm_gradient_mul_eq_lintegral_levelSet` remains in
+`KLS/WIP/AnalyticPrerequisites.lean`. This round ends at the user-specified L12, with no migration or rewriting of the old entry.
+
+**The next step is to independently migrate T2**: compare signatures before and after migration, including CompleteSpace and parameter order, `pp.all`
+Receive the full space special case of L12; then rerun the previous consumer axioms audit in order to reduce the direct proof hole count from 9 to 8.
+Current source has a direct proof hole still **9 (2/2/5)**, certification **24**, perimeter infrastructure **missing**.
+Sharp finite regularity Sard, two Cheeger comparisons, energy's 5 hole and dimension-free KLS remains open.
+This round does not increase Blueprint leanok or certification, and does not mislabel completion of coarea as completion of KLS.

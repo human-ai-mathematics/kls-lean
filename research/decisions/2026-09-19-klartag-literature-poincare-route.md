@@ -1,109 +1,94 @@
-# Klartag 前端识别的文献 Poincaré 子句：路线探查
+# Klartag Frontend Recognition Literature: Poincaré Subclauses: Route Exploration
 
-2026-09-19。当日第十二轮，前十一轮已提交为 `2a882c8`（未推送）。本轮是**路线探查**，
-**没有证明任何定理**，没有改动任何既有 `.lean`；交付物是只含 `#check` 的路线语句文件
-`research/audits/KlartagLiteraturePoincareRouteStatements.lean`（4 条义务 + 6 条已证声明引用，共 10 个 `#check`）。
-**命题通过类型检查不是证明。** 直接洞仍 **0**，证书仍 **26**，无 WIP 模块。不提交、不推送。
+2026-09-19. On day twelve, the first eleven rounds had already commit been `2a882c8` (not pushed). This round is a **route exploration**,
+**no theorem is proven**, no modification is made to any existing `.lean`; the deliverable is a route statement file containing only `#check`
+`research/audits/KlartagLiteraturePoincareRouteStatements.lean` (4 obligations + 6 proven statement references, totaling 10 `#check`).
+**Proposition passing type checking is not a proof.** The direct proof hole remains **0**, the certificate remains **26**, no WIP modules. Not commit, not pushed.
 
-起点 `HEAD = 2a882c89f59faaf23eb59d321a211422f5b24e3e`，领先 `origin/main = f108397` 一个提交；
-起点 passed 回执 `build/verification/20260918T165957.183636Z/report.json`：10 个门、243 个模块重放、
-26 条本地声明，快照 `4e5cb9cb5ef74a51343cbcf334a7fd5b154555a7e5777567aa62db2da729c8dd`。
+Start `HEAD = 2a882c89f59faaf23eb59d321a211422f5b24e3e`, leads `origin/main = f108397` by one commit;
+Start verification receipt `build/verification/20260918T165957.183636Z/report.json`: 10 gates, 243 modules replayed,
+26 local declarations, snapshot `4e5cb9cb5ef74a51343cbcf334a7fd5b154555a7e5777567aa62db2da729c8dd`.
 
-## 为什么是这个节点
+## Why this node
 
-`atlas.py ready` 在回执刷新后，整张表里只有一个节点既不是 `research`、也不是 `blocked`、也不缺 Mathlib 基础设施：
+`atlas.py ready` After the verification receipt is refreshed, there is only one node in the entire table that is neither `research`, nor `blocked`, and also does not lack Mathlib infrastructure:
 
 ```
 inspect_infrastructure  thm:klartag-density-frontend-identification
-blocked                 thm:logconcave-cheeger-poincare-comparison — 依赖它
+blocked                 thm:logconcave-cheeger-poincare-comparison — depends on it
 ```
 
-`tasks.json` 记它为 `mathematics: local_argument`、`infrastructure.gaps: []`。它是 Cheeger–Buser 比较节点
-当前 `blocked` 的唯一列出依赖。
 
-## 目标与边界
+`tasks.json` denote it as `mathematics: local_argument`, `infrastructure.gaps: []`. It is the Cheeger–Buser comparison node
+the only listed dependency of current `blocked`.
 
-`thm:klartag-density-frontend-identification` 有三条结论。两条等周结论 `h_μ = h_ν^{sm,rel}` 与
-`Ψ_KLS(μ) = ψ_ν` 已由 `lem:relative-perimeter-cheeger-infimum` 认证
-（`Solutions.LemRelativePerimeterCheegerInfimum.intrinsic`，第 25 个证书）。**未认证的是第三条**，
-也是该节点不带 `\leanok` 的唯一原因：`C_P^lit(μ)` 等于使
+## Objectives and Boundaries
+
+`thm:klartag-density-frontend-identification` There are three conclusions. Two isoperimetric conclusions `h_μ = h_ν^{sm,rel}` and `Ψ_KLS(μ) = ψ_ν` have been certified by `lem:relative-perimeter-cheeger-infimum`
+(`Solutions.LemRelativePerimeterCheegerInfimum.intrinsic`, certificate number 25). **The third one is unverified**, and this is the sole reason the node lacks `\leanok`: `C_P^lit(μ)` equals the one that makes
 
 ```
 Var_ν(g) ≤ C ∫_V ‖∇g‖² dν
 ```
 
-对每个局部 Lipschitz 的 `g ∈ L²(ν)`（且 `∫_V ‖∇g‖² dν < ∞`）成立的有限 `C ≥ 0` 的下确界，
-`inf ∅ = +∞`，其中 `ν` 是 `V = (affineSupport μ).direction` 上的内蕴律。
+The infimum of the locally Lipschitz `g ∈ L²(ν)` (and `∫_V ‖∇g‖² dν < ∞`) over a finite `C ≥ 0`,
+`inf ∅ = +∞`, where `ν` is the intrinsic law on `V = (affineSupport μ).direction`.
 
-内容是检验能量的**梯度**描述。`C_P^lit`（`def:literature-poincare-constant`）是用**局部度量斜率**
-`|D f|`（`Energy.LocalSlope.apply`）定义的，不是用 `‖∇g‖`；该子句断言两种描述切出同一个可容许类、
-同一个能量，因而同一个最优常数。
+The content is a verification of the gradient description of energy. `C_P^lit` (`def:literature-poincare-constant`) is defined using the local metric slope `|D f|` (`Energy.LocalSlope.apply`), not using `‖∇g‖`; this clause asserts that the two descriptions yield the same admissible class, the same energy, and thus the same optimal constant.
 
-**不在范围内**：Buser 半 `Ψ_KLS² ≤ π C_P^lit`（`n ≥ 2` 与常数 π 仍是 imported mathematics，
-Mathlib 无 Bakry–Émery 加权热半群、无 Lovász–Simonovits 局部化）；无量纲 KLS。
-即便 `Q0` 证出，`thm:logconcave-cheeger-poincare-comparison` **仍不会**标 `\leanok`——
-它只是从 `blocked` 里去掉「依赖未认证」这一条。
+**Out of scope**: Buser half `Ψ_KLS² ≤ π C_P^lit` (`n ≥ 2` and constant π remain imported mathematics, Mathlib lacks Bakry–Émery weighted heat semigroup, lacks Lovász–Simonovits localization); dimension-free KLS.
+Even if `Q0` is proven, `thm:logconcave-cheeger-poincare-comparison` **still will not** mark `\leanok`—
+it merely removes the condition "depends on unauthenticated" from `blocked`.
 
-## 关键发现：这是装配轮，不是分析轮
+## Key Finding: This is an assembly round, not an analysis round
 
-四个分析步骤**已经全部证出**，在 `Energy/LocalSlope/Gradient.lean`，并已在
-`thm:smooth-lipschitz-constant-equivalence` 下认证（该证书的 `#check` 列表里就有这四条）：
+Four analytical steps have been fully proven, in `Energy/LocalSlope/Gradient.lean`, and have been certified in `thm:smooth-lipschitz-constant-equivalence` (these four are listed in the `#check` certificate).
 
-| 已证 | 内容 |
+| Proven | Content |
 | --- | --- |
-| `apply_eq_norm_gradient` | 逐点：可微点处斜率等于 `‖∇f(x)‖` |
-| `apply_ae_eq_norm_gradient` | Rademacher + `ν ≪ m` ⟹ 局部 Lipschitz 检验的几乎处处恒等 |
-| `energy_eq_lintegral_gradient` | 两个扩展能量相等，含 `⊤` |
-| `admissible_iff_memLp_gradient` | 既有可容许类**恰好**是 `LocallyLipschitz g ∧ MemLp g 2 ν ∧ MemLp (gradient g) 2 ν` |
+| `apply_eq_norm_gradient` | Pointwise: the slope at a differentiable point equals `‖∇f(x)‖` |
+| `apply_ae_eq_norm_gradient` | Rademacher + `ν ≪ m` ⟹ almost everywhere equality of local Lipschitz test |
+| `energy_eq_lintegral_gradient` | Two extended energies are equal, containing `⊤` |
+| `admissible_iff_memLp_gradient` | The class of admissible functions is exactly `LocallyLipschitz g ∧ MemLp g 2 ν ∧ MemLp (gradient g) 2 ν` |
 
-缺的只是把这些搬到最优常数上：`Poincare.LocalSlope.Holds` 是用 `Energy.LocalSlope.energy` 写的，
-把它改写成梯度形式（`Q1`），再对有效常数取下确界（`Q2`），就得到任意绝对连续律的子句；
-`LogConcave.intrinsic_absolutelyContinuous` 为每个有限维对数凹律提供前提，即 `Q0`。
+The missing piece is to transfer these to the optimal constant: `Poincare.LocalSlope.Holds` is written using `Energy.LocalSlope.energy`,
+rewritten in gradient form (`Q1`), and then taking the infimum over effective constants (`Q2`), yielding a clause for any absolutely continuous law;
+`LogConcave.intrinsic_absolutelyContinuous` serves as a premise for each finite-dimensional log-concave law, namely `Q0`.
 
-Haar 参考测度沿用 `Poincare.SmoothGradient.Intrinsic.constant_eq_localSlope` 的既定写法：
-`m` 是定理的显式参数、带 `[m.IsAddHaarMeasure]`，不是定义的字段，所以**不需要**在 direction 子模上
-选定一个测度。这避免了新增定义。
+The Haar reference measure follows the established notation in `Poincare.SmoothGradient.Intrinsic.constant_eq_localSlope`:
+`m` is an explicit parameter of the theorem, equipped with `[m.IsAddHaarMeasure]`, not a defined field, so **no** measure needs to be selected on the direction submodule. This avoids introducing new definitions.
 
-## 义务清单
+## Obligation List
 
-| 编号 | 内容 | 估计行数 | 风险 |
+| Number | Content | Estimated lines | Risk |
 | --- | --- | --- | --- |
-| `Q1` | `Holds ν C ↔` 梯度形式，`ν ≪ m` | 25 | 低（两条已证引理改写） |
-| `Q2` | 下确界相等，任意绝对连续内蕴律 | 20 | 低（`iInf` 沿双射搬运） |
-| `Q0` | **目标**：对数凹律的文献 Poincaré 子句 | 10 | 低（代入绝对连续性） |
-| `Q3` | 仿射原点无关性 | 0–15 | 低（预计由 `intrinsicMeasure` 的定义直接给出） |
+| `Q1` | `Holds ν C ↔` gradient form, `ν ≪ m` | 25 | low (two previously proven lemmas rewritten) |
+| `Q2` | infimums are equal, any absolutely continuous intrinsic law | 20 | low (`iInf` via bijection transport) |
+| `Q0` | **Goal**: Poincaré clause of log-concave laws | 10 | Low (substitution of absolute continuity) |
+| `Q3` | affine origin independence | 0–15 | low (expected from the definition of `intrinsicMeasure` directly) |
 
-合计约 **55–70 行**。推荐顺序：`Q1`、`Q2`、`Q0`、`Q3`。
+Total of approximately **55–70 rows**. Recommended order: `Q1`, `Q2`, `Q0`, `Q3`.
 
-`Q3` 是记账项而非分析项：Blueprint 那句「these quantities do not depend on the affine origin `a`」
-是关于节点陈述的，而 `Probability.intrinsicMeasure` 本来就不带原点选择。实现轮须**明确记录**
-它究竟是由定义直接给出、还是确实需要一条引理——两种结果都要如实写下，不要默认前者。
+`Q3` is a ledger entry, not an analytical item: Blueprint's statement "these quantities do not depend on the affine origin `a`" refers to node assertions, while `Probability.intrinsicMeasure` inherently does not involve a choice of origin. The implementation must explicitly record whether it is directly given by definition or actually requires a lemma—both outcomes must be stated truthfully, without defaulting to the former.
 
-## 风险
+## Risk
 
-* **唯一实质风险是 `Q1` 的 `iff` 方向性**：`energy_eq_lintegral_gradient` 与
-  `admissible_iff_memLp_gradient` 都带 `ν ≪ m` 前提，`Holds` 的量词是对**所有**可容许 `f`，
-  所以两边的检验类必须逐字对上。若 `Admissible` 的三个字段与梯度形式的三个前提在 `MemLp` 的
-  `AEStronglyMeasurable` 细节上不完全一致，`Q1` 会比估计长。
-* 本路线**不**新增任何定义。若实现时发现必须引入 `GradientHolds` 之类的新名字，
-  那是对本路线的偏离，须在实现记录里写明理由，并同步 Blueprint 的 `\lean{}` 清单
-  （`lake exe checkdecls` 会核对）。
-* `Q0` 落地后须更新：Blueprint 该节点加 `\leanok`、`tasks.json` 的 note 与
-  `infrastructure.status`、`atlas.py check` 的 evidence 哈希，然后重跑 `research/verify.py`。
-  是否新增第 27 个证书由 owner 决定——本子句属于既有节点，不一定要独立证书。
+* **The only substantive risk is `Q1` in the `iff` direction**: `energy_eq_lintegral_gradient` and `admissible_iff_memLp_gradient` both carry the `ν ≪ m` assumption, and the quantifier of `Holds` applies to **all** admissible `f`, so the test classes on both sides must match exactly. If the three fields of `Admissible` do not fully align with the three premises of the gradient form in the `MemLp` `AEStronglyMeasurable` details, then `Q1` will be longer than the estimate.
+* This path **does not** introduce any new definitions. If during implementation it is found that a new name such as `GradientHolds` must be introduced, this constitutes a deviation from this path, and the reason must be documented in the implementation record, and the `\lean{}` list in Blueprint must be synchronized ([`lake exe checkdecls` will verify]).
+* After `Q0` is deployed, it must be updated: add a `\leanok` and `tasks.json` note, and update the `infrastructure.status` and `atlas.py check` evidence hashes under the Blueprint node, then rerun `research/verify.py`. Whether a new 27 certificate is added is decided by the owner—this clause pertains to an existing node and does not necessarily require a separate certificate.
 
-## 验证
+## Verification
 
-路线文件以 `lake env lean -DwarningAsError=true` 通过：**10 个 `#check`，0 错误、0 警告**，
-不 import WIP 模块（仓库已无 WIP）。日志
-`build/audit/klartag-literature-poincare-route/route-statements.log`。
-回执在紧接的实现轮绑定。
+The route file passes `lake env lean -DwarningAsError=true`: **10 `#check` commands, 0 errors, 0 warnings**,
+do not import WIP module (repository has no WIP). Log
+`build/audit/klartag-literature-poincare-route/route-statements.log`.
+Verification receipt is bound in the next implementation round.
 
-## 附记（2026-09-19，实现轮之后）
+## Note (2026-09-19, after implementation)
 
-`Q1`、`Q2`、`Q0` 全部证出（`Poincare/LocalSlope/Gradient.lean`），没有新增定义，路线点名的
-`Q1` `iff` 风险没有发生。`Q3` 的结论是**由既有定义直接给出**：`Probability.intrinsicMeasure`
-不带原点选择；此外 `Q0` 的陈述里也没有参考测度（Haar 在证明内部构造）。
-`thm:klartag-density-frontend-identification` 已标 `\leanok`，
-`thm:logconcave-cheeger-poincare-comparison` 由 `blocked` 变为 `inspect_infrastructure`，
-但**仍不是**已认证——Buser 半未证。见[实现记录](2026-09-19-klartag-literature-poincare-proofs.md)。
+`Q1`, `Q2`, `Q0` all proved (`Poincare/LocalSlope/Gradient.lean`), no new definitions introduced, route point names specified,
+`Q1` `iff` risk did not occur. The conclusion of `Q3` is **directly given by existing definitions**: `Probability.intrinsicMeasure`
+without origin selection; furthermore, the statement of `Q0` contains no reference measure (Haar used internally in the proof).
+`thm:klartag-density-frontend-identification` has been marked `\leanok`,
+`thm:logconcave-cheeger-poincare-comparison` transformed from `blocked` to `inspect_infrastructure`,
+but **still not** certified—Buser half unproven. See [implementation record](2026-09-19-klartag-literature-poincare-proofs.md).

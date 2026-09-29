@@ -1,84 +1,74 @@
-# 下一步提示词：完成任意维对数凹律的 Buser 比较
+# Next prompt: Complete the Buser comparison for log-concave laws in any dimension
 
-2026-09-20，owner 调整优先级：**先完成完整 Buser，再推进依赖它的 KLS 路线**。
-这取代同日仅交付 Bakry–Émery 路线探查的任务范围；当前证明状态没有因此改变。
+2026-09-20, owner adjusts priority: **first complete the full Buser, then advance the KLS path dependent on it**.
+This replaces the scope of the prior-day task to probe the Bakry–Émery path; the current proof status is unchanged.
 
 ---
 
-请在 `/Users/lyuyuwei/Documents/ChatGPT/KLS` 继续实施 Lean 证明，主目标是完成
-Blueprint 节点 `thm:logconcave-cheeger-poincare-comparison` 中尚缺的 Buser 半：
+Continue the Lean proof at `/Users/lyuyuwei/Documents/ChatGPT/KLS`, with the main goal being to complete the missing Buser half in Blueprint node `thm:logconcave-cheeger-poincare-comparison`.
 
-**对每个有限维欧氏空间上的任意对数凹概率律 μ，证明**
+**For any log-concave probability measure μ on an arbitrary finite-dimensional Euclidean space, prove**
 
-`Ψ_KLS(μ)² ≤ π C_P^lit(μ)`。
+`Ψ_KLS(μ)² ≤ π C_P^lit(μ)`.
 
-以现有 Blueprint 和 `research/audits/BuserRouteStatements.lean` 中 B0 的精确命题为准。
-必须保持常数 π、任意维、非光滑位势、有边界或降维支撑、Dirac/零维情形和扩展非负实数约定。
-不能用一维常数 12、只对光滑严格凸密度成立的定理，或附带未消解分析假设的条件定理代替完成。
+Take the exact statements of B0 in `research/audits/BuserRouteStatements.lean` and the existing Blueprint as authoritative.
+Must preserve the constant π, arbitrary dimension, non-smooth potentials, boundaries, or dimension-reduced support, Dirac/zero-dimensional cases, and extended non-negative real number conventions.
+No use of one-dimensional constant 12, theorems valid only for smooth strictly convex densities, or conditional theorems with unresolved analytical assumptions.
 
-## 已有成果与工作入口
+## Existing Results and Entry Points
 
-先读 `AGENTS.md`、`HANDOFF.md` 的当前状态段和工作区改动。保护既有未提交文件，
-不要重新实施已经完成的半群生成或 Markov 性。
+First read the current state segment and workspace changes of `AGENTS.md` and `HANDOFF.md`. Protect existing uncommit files, and do not re-apply already completed semigroup generation or Markov property.
 
-- Cheeger 半 `C_P^lit ≤ 4 Ψ²` 已证：`KLS/Geometry/Cheeger/Inequality.lean`。
-- 仿射支撑维数至多一时的 Buser 常数 12 已证：`KLS/LogConcave/Line/Buser.lean`。
-- Cheeger infimum 等同性已证：`KLS/Geometry/Cheeger/{Infimum,Equality}.lean`。
-- 文献 Poincaré 梯度刻画已证：`Poincare/LocalSlope/Gradient.lean`。
-- S1–S8、`-T*T` 生成元及具体热半群已证：`Analysis/Semigroup/Generated/`、
-  `KLS/LogConcave/HeatSemigroup/Basic.lean`。
-- `L²` 上的保正、保常数、次 Markov、保积分、绝对值控制及有限本质界压缩已证：
-  `Analysis/Semigroup/Generated/Markov.lean`、`KLS/LogConcave/HeatSemigroup/Markov.lean`。
+- Cheeger half `C_P^lit ≤ 4 Ψ²` has been proven: `KLS/Geometry/Cheeger/Inequality.lean`.
+- Upper bound of affine support dimension one's Buser constant 12 has been proven: `KLS/LogConcave/Line/Buser.lean`.
+- Cheeger infimum equivalence has been proven: `KLS/Geometry/Cheeger/{Infimum,Equality}.lean`.
+- Literature Poincaré gradient characterization has been proven: `Poincare/LocalSlope/Gradient.lean`.
+- Generators S1–S8, `-T*T`, and specific heat semigroup have been proven: `Analysis/Semigroup/Generated/`, `KLS/LogConcave/HeatSemigroup/Basic.lean`.
+- Positivity, constancy preservation, sub-Markov, integral preservation, absolute value control, and finite essential bound contraction on `L²` have been proven: `Analysis/Semigroup/Generated/Markov.lean`, `KLS/LogConcave/HeatSemigroup/Markov.lean`.
 
-以上模块均位于 `formalization/FunctionalInequalities/` 下。已有审计入口是
-`research/audits/{HeatSemigroupAudit,HeatSemigroupMarkovAudit}.lean`。
-完整参数与假设以当前 `#check @...` 为准。全维定理可用于 intrinsic law；
-现有 `L²` 结果不自动等于已经构造了全 `L¹` 半群。
+All modules are located under `formalization/FunctionalInequalities/`. An existing audit entry is `research/audits/{HeatSemigroupAudit,HeatSemigroupMarkovAudit}.lean`.
+Complete parameters and assumptions are current as per `#check @...`. The full-dimensional theorem can be used for intrinsic law; the existing `L²` result does not automatically equal the one that has constructed the full `L¹` semigroup.
 
-## 实施方式：内部拆解，最终交付完整 Buser
+## Implementation approach: internal decomposition, final delivery of complete Buser
 
-先核查原始文献和现有 API，写出精确依赖与归一化，然后直接推进证明。
-路线记录和候选语句是中间产物，不能作为本任务的完成条件。
-采用有文献依据且能接上现有 API 的路线；下面是建议的半群路线，不要求机械照搬：
+First verify the original literature and existing API, write down precise dependencies and normalization, then proceed directly with the proof.
+Route records and candidate statements are intermediate products and cannot serve as completion criteria for this task.
+Adopt a route with literature support and capable of connecting to the existing API; the following is a suggested semigroup route, which does not require mechanical replication:
 
-1. **生成元、Bochner 与梯度估计。** 在光滑凸位势 `V`、
-   `dμ = Z⁻¹ exp(-V) dx`、`0 < Z < ∞`、`B = I` 的中间类上，
-   核查 `A = T*T ≥ 0` 与 `ℒ = Δ - ⟨∇V,∇·⟩ = -A` 的域和符号。
-   对精确测试函数证明成员关系及作用一致，处理所需的 core/闭包接口。
-   用扩散生成元 ℒ 的约定构造 Γ、Γ₂，并证明
-   `Γ₂(f) = ‖Hess f‖_HS² + Hess V(∇f,∇f) ≥ 0`。
-   继续补齐通向现有 `P_t` 的域稳定性、正则性、微分与极限接口，得到文献所需的梯度估计。
-   局部 Bochner 计算不是半群估计；`L²` 等价类不能未经正则性证明就选代表求经典梯度。
-2. **一般对数凹律。** 实现所采用的逼近或其他推广机制，证明闭形式、预解或半群的适当收敛，
-   以及所用不等式和常数的稳定性。支撑边界、非光滑位势、降维与零维必须落实。
-   不预设 Neumann 边条件或 RCD 身份已经成立，不把逼近有效性藏进最终定理假设。
-3. **小时间估计。** 证明 Buser 论证实际需要的热半群 L¹ 逼近界和梯度平滑界，
-   处理指标函数/BV 测试、所需的 L¹ 接口以及 metric BV、Minkowski 和 relative perimeter 的联系。
-   只实现终点需要的接口，避免无关的通用理论扩张。
-4. **拼装 π 比较。** 将谱隙、Poincaré 最优常数、`‖Tf‖²`、`E^can = 2 Ch` 与时间归一化精确对齐，
-   完成时间参数优化及退化情形处理，消解所有中间分析假设，给出 B0 的本地 Lean 证明。
-   再与既有 Cheeger 半组合，完成完整比较节点。
+1. **Generators, Bochner, and gradient estimates.** In smooth convex potential `V`,
+   On the intermediate class of `dμ = Z⁻¹ exp(-V) dx`, `0 < Z < ∞`, `B = I`,
+   Verify the domains and symbols of `A = T*T ≥ 0` and `ℒ = Δ - ⟨∇V,∇·⟩ = -A`.
+   Prove membership and action consistency for test functions with exactness, handling the required core/closure interface.
+   Construct Γ, Γ₂ using the convention of the diffusion generator ℒ, and prove
+   `Γ₂(f) = ‖Hess f‖_HS² + Hess V(∇f,∇f) ≥ 0`.
+   Continue to complete the domain stability, regularity, differential, and limit interfaces leading to existing `P_t`, obtaining the gradient estimates required by the literature.
+   Local Bochner calculations are not semigroup estimates; `L²` representatives from equivalence classes cannot be selected to compute classical gradients without a regularity proof.
+2. **General log-concave law.** The approximation or other extension mechanism employed proves appropriate convergence of closed forms, resolvent, or semigroups,
+   And the stability of the inequalities and constants used. The support boundary, nonsmooth potentials, dimension reduction, and zero-dimensional cases must be implemented.
+   Do not assume Neumann boundary conditions or RCD identity holds, nor hide the validity of approximation in the final theorem assumptions.
+3. **Small time estimate.** The proof of Buser's argument actually requires the L¹ approximation bound and gradient smoothing bound for the heat semigroup,
+   Handle indicator function/BV tests, the required L¹ interface, and the relationship among metric BV, Minkowski, and relative perimeter.
+   Implement only the interfaces needed for the endpoint, avoiding unnecessary generalization of theoretical frameworks.
+4. **Assembling π comparison.** Align the spectral gap, Poincaré optimal constant, `‖Tf‖²`, `E^can = 2 Ch`, and time normalization precisely,
+   Complete time parameter optimization and handling of degenerate cases, eliminate all intermediate analytical assumptions, and provide a local Lean proof for B0.
+   Together with the existing Cheeger semi-combination, complete the full comparison node.
 
-核查 Blueprint bibliography 中的 De Ponti–Mondino
-<https://arxiv.org/abs/1902.03835> 和 Klartag 的归一化；记录具体版本、定理编号、假设和常数。
-不要依据摘要或“标准论证”省略形式化桥梁。此前
-`research/decisions/2026-09-20-bakry-emery-handoff-prompt.md` 中的技术检查可作参考，
-但其中“只探查”“不改 Lean”“本轮不完成 Buser”的范围限制已被本提示词取代。
+Verify the normalization by De Ponti–Mondino <https://arxiv.org/abs/1902.03835> and Klartag in the Blueprint bibliography; record specific versions, theorem numbers, assumptions, and constants.
+Do not omit the formalization bridge based on abstracts or "standard arguments." The technical checks in `research/decisions/2026-09-20-bakry-emery-handoff-prompt.md` can be referenced,
+but the scope limitations of "only probing," "no modification of Lean," and "this round does not complete Buser" have been superseded by this prompt.
 
-## 完成标准
+## Completion Criteria
 
-- 新增证明零 `sorry`、零自定义占位公理，无隐藏的循环依赖、目标假设或范围削弱。
-  保留已有公共签名和数学边界，遵守当前目录与命名约定。
-- 独立审计客户端逐字重述并证明原始 B0，核查所有量词、常数、无限值和退化情形。
-  关键公开声明及最终比较的 `#print axioms` 只含标准公理，不依赖 `sorryAx`。
-- 受影响模块与审计客户端在 `-DwarningAsError=true` 下通过；运行 `lake build`、
-  ledger/Blueprint/atlas 检查及 `python3 research/verify.py`，绑定最终工作区快照。
-  既有 `KLS/Target.lean` 的孤立 KLS 目标洞不属于本任务，不得导入证明链。
-- 只有完整原始比较得到证明与验证后，才更新 Blueprint 完成标记及相应证书记录；
-  更新任务证据、当前摘要和进度视图，按 `AGENTS.md` 从暂存 canonical records 生成。
-  中间辅助结果可以如实登记，不能提前把完整 Buser 标为已完成。
-- 不升级 Lean/Mathlib，不提交、不推送。可持续完成内部子任务，不在每个阶段重新请求许可。
+- Add proof of zero `sorry`, zero custom placeholder axioms, no hidden cyclic dependencies, target assumptions, or scope weakening.
+  Retain existing public signatures and mathematical boundaries, conform to current directory and naming conventions.
+- Independently audit the client by verbatim restatement and proof of original B0, verify all quantifiers, constants, infinite values, and degenerate cases.
+  Key public declarations and final comparisons `#print axioms` contain only standard axioms, not relying on `sorryAx`.
+- Affected modules and the audit client pass under `-DwarningAsError=true`; run `lake build`,
+  ledger/Blueprint/atlas checks and `python3 research/verify.py`, bind the final workspace snapshot.
+  Existing `KLS/Target.lean` isolated KLS target holes are outside the scope of this task and must not be imported into the proof chain.
+- Only after complete original comparison is proven and verified, update Blueprint completion mark and corresponding certificate records;
+  update task evidence, current summary, and progress view, generated according to `AGENTS.md` from cached canonical records.
+  Intermediate auxiliary results may be truthfully recorded, but the full Buser must not be prematurely marked as completed.
+- Do not upgrade Lean/Mathlib, do not commit, do not push. Continuously complete internal subtasks without re-requesting permission at each stage.
 
-完成 Buser 仍不等于证明 KLS。若遇到真正无法消解的数学或 API 障碍，诚实报告
-已经证明的精确声明、未证义务、失败路线及最小缺口；不能把降级后的结果当作完成，
-也不要因为路线文件已写好或单个辅助引理已完成就主动结束实施。
+Completing Buser does not equal proving KLS. If encountering truly insurmountable mathematical or API barriers, honestly report the exact proven statements, unproven obligations, failed paths, and minimal gaps; do not consider degraded results as completion, nor prematurely terminate the implementation simply because the roadmap has been written or individual auxiliary lemmas have been completed.

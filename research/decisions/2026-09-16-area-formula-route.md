@@ -1,104 +1,96 @@
-# 非线性面积公式路线探查
+# Exploration of a Nonlinear Area Formula Path
 
-2026-09-16。本轮只做路线探查：**没有证明新定理，没有修改任何 `.lean` 库源码**，
-不迁洞、不提交、不推送。直接洞仍 **8（1/2/5）**，证书仍 **24**。
-新增文件只有本决定、一个**只含 `#check`** 的语句文件和证据 JSON。
+2026-09-16. This round only performs route exploration: **no new theorems are proven, no modifications to any `.lean` library source code are made**, no hole migration, no commit, no push. Direct proof holes remain **8 (1/2/5)**, certification remains **24**.
+New files include only this decision, one file containing only a **`#check`** statement, and a JSON evidence file.
 
-起点 `HEAD = origin/main = 34b92695ece4f636a1a7f1eafbbf41c685ee0348`；起点 passed 回执
-`build/verification/20260916T132852.139911Z/report.json`：10 个门、202 个本地模块内核重放、
-518 条目，快照 `8b8056f523c6324ccac139eb21d90c844d27d3ecb068625966e8c2f3c970bc52`。
+Start `HEAD = origin/main = 34b92695ece4f636a1a7f1eafbbf41c685ee0348`; start verification receipt
+`build/verification/20260916T132852.139911Z/report.json`: 10 gates, 202 local module kernel replay,
+518 entries, snapshot `8b8056f523c6324ccac139eb21d90c844d27d3ecb068625966e8c2f3c970bc52`.
 
-## 边界
+## Boundary
 
-对数凹 Cheeger–Buser 线归合作者**王浩丞**，本轮未触碰。
+The log-concave Cheeger–Buser line belongs to collaborator **Haocheng Wang** and is untouched this round.
 
-## 判断与建议
+## Judgments and Recommendations
 
-**目标 A0**（单射 C¹ 参数化的 Federer 面积公式）**在当前库上不是一轮能完成的**，
-而且走教科书的一般路线会撞上一处确切障碍。**建议改走图路线 B1**，
-即先证余维 m 的**图**面积公式，再由局部图化归到一般情形。
+**Goal A0** (injective C¹ parametrized Federer area formula) **cannot be completed in one round on the current library**,
+and following the textbook general route encounters a specific obstruction. **We recommend instead taking the route B1**,
+i.e., first prove the area formula for the graph of codimension m, then reduce the general case to this local graph case.
 
-理由是仓库已经用图路线走通过余维一，工具链齐备，而一般路线缺的正是 Mathlib 不提供的那块。
+The reason is that repository has already traversed the co-dimension one via the graph route with a complete toolchain, while the general path is missing exactly the piece that Mathlib does not provide.
 
-## 障碍定位（一般路线甲）
+## Obstacle Localization (General Route Alpha)
 
-教科书路线是：用 `exists_partition_approximatesLinearOn_of_hasFDerivWithinAt` 把定义域分成
-可数片，每片上 `g` 与某个固定线性 `A` 相差 ε，再对 `A` 两侧夹逼。分片引理在 Mathlib
-**存在且形状正好**，还保证每个 `A n` 确实是某点的微分。
+The textbook approach is: use `exists_partition_approximatesLinearOn_of_hasFDerivWithinAt` to partition the domain into countably many pieces, on each piece `g` differs from some fixed linear `A` by ε, then squeeze between the two sides of `A`. The piecewise lemma exists in Mathlib and has the exact form, and moreover guarantees that each `A n` is indeed a differential at some point.
 
-**确切障碍在夹逼的下界。** Mathlib 的 `ApproximatesLinearOn.antilipschitz` 签名要求线性模型
-是 `f' : E ≃L[𝕜] F`，即**连续线性等价**，也就是**同维**。降维时 `fderiv g y : H →L V` 单射
-但不是等价，该引理**用不上**。可用的替代是
-`ContinuousLinearMap.antilipschitz_of_injective_of_isClosed_range`，但它只给
-`∃ K, AntilipschitzWith K f`，常数由 `Classical.choose` 取得，**不具备**夹逼所需的
-「常数随 ε 趋于 `normDet A` 的倒数」这种定量控制。补齐这一步要自己做
-「经值域分解 `A = incl ∘ A₀`、把 `g` 投到 `range A` 上、再控制正交分量」的论证，
-这正是 A3，估计 250–500 行，风险高。
+**Exact barrier at the lower bound of squeezing.** Mathlib's `ApproximatesLinearOn.antilipschitz` signature requires a linear model
+is `f' : E ≃L[𝕜] F`, i.e. **continuous linear equivalence**, i.e. **same dimension**. When dimension is reduced, `fderiv g y : H →L V` is injective
+But not equivalent, this lemma is not usable. A usable alternative is
+`ContinuousLinearMap.antilipschitz_of_injective_of_isClosed_range`,  but it only gives
+`∃ K, AntilipschitzWith K f`, the constant is attained by `Classical.choose`, and **does not possess** the required squeezing property.
+A quantitative control of the constant as ε tends to the reciprocal of `normDet A`. Completing this step has to be done independently.
+Argument of "value range decomposition `A = incl ∘ A₀`, projecting `g` onto `range A`, then controlling the orthogonal components"
+This is exactly A3, estimated rows 250–500, high risk.
 
-Mathlib **没有**任何降维的面积公式（全库检索 “area formula” 无命中），
-也**没有** `normDet` 的连续性，所以被积函数的可测性 A1 也是真义务。
+Mathlib has no area formula for dimension reduction (full library search for "area formula" yields no hits),
+and has no `normDet` continuity, so the measurability of the integrand A1 is also a genuine obligation.
 
-## 为什么图路线更可行
+## Why graph paths are more feasible
 
-图映射 `y ↦ ι y + κ (γ y)` 有两条一般情形没有的好性质：
+The graph map `y ↦ ι y + κ (γ y)` has two good properties that generally do not hold:
 
-1. **天然单射**，不需要 `InjOn` 假设，也不需要处理重数；
-2. **有显式左逆**：参数投影 `ιᵀ` 满足 `ιᵀ ∘ graphMap = id`，
-   于是 A3 缺的那个定量下界可以直接算出来，不必经 `Classical.choose`。
+1. **Natural injection**, no `InjOn` assumption required, and no multiplicity handling needed;
+2. **Has an explicit left inverse**: the parameter projection `ιᵀ` satisfies `ιᵀ ∘ graphMap = id`,
+thus the quantitative lower bound missing in A3 can be directly computed, without going through `Classical.choose`.
 
-体积因子本轮之前已经备好：`Analysis.normDet_graphMapLinear` 给出
-`√det (1 + Aᵀ A)`，且 `Analysis.normDet_graphLinear` 已证它在余维一退回仓库原有的
-`graphJacobian`。纤维测度的归一化记账由 `KLS.hausdorffNormalized_fiber` 给出。
+The volume factor was ready prior to this round: `Analysis.normDet_graphMapLinear` given
+`√det (1 + Aᵀ A)`, and `Analysis.normDet_graphLinear` proves that it reduces to the repository’s `graphJacobian` in codimension one. The normalization ledger of fiber measures is given by `KLS.hausdorffNormalized_fiber`.
 
-**成本锚点**：仓库证余维一图面积公式用了 `Analysis/AreaFormula.lean` **957 行**，
-配套 `Analysis/ImplicitGraph.lean` **859 行**。余维 m 的类比不会更便宜。
+**Cost anchor**: repository proves the co-dimension one graph area formula using `Analysis/AreaFormula.lean` **957 lines**,
+accompanied by `Analysis/ImplicitGraph.lean` **859 lines**. The analogy for co-dimension m will not be cheaper.
 
-## 所需引理清单
+## List of required lemmas
 
-行数为**新增 Lean 证明的大致行数**，不含重用模块，不是完成承诺。
-精确 Lean 语句全部在 `research/audits/AreaFormulaRouteStatements.lean`，
-该文件**只有 `#check`**，无声明、无证明、无占位公理，以 `-DwarningAsError=true` 编译通过。
+The number of lines is an approximate count of new Lean proofs, excluding reused modules, and does not represent fulfillment of commitments.
+All precise Lean statements are in `research/audits/AreaFormulaRouteStatements.lean`,
+this file contains **only `#check`**, with no declarations, no proofs, no placeholder axioms, and compiles successfully with `-DwarningAsError=true`.
 
-| 编号 | 内容 | Mathlib 是否已有 | 估计行数 | 风险 |
+| Number | Content | Exists in Mathlib | Estimated lines | Risk |
 |---|---|---|---:|---|
-| A0 | 目标：单射 C¹ 参数化的面积公式 | **无** | — | — |
-| A1 | `normDet` 连续，故被积函数可测 | **无**（`measurable_fderiv` 有） | 60–120 | 中 |
-| A2 | 像一侧的可数可加性（需 `InjOn` 与像的可测性） | 无 | 80–160 | 中 |
-| A3 | 对**单射**线性模型的两侧夹逼 | **无**；`ApproximatesLinearOn.antilipschitz` 要求同维等价，用不上 | 250–500 | **高** |
-| A4 | 微分非单射部分的像零测 | 无 | 100–200 | 中 |
-| A5 | 局部面积公式拼成整体 | 无 | 80–160 | 中 |
-| B1 | **余维 m 图面积公式**（推荐主攻） | 无；余维一版本仓库已证，可作模板 | 600–1000 | 高 |
-| B2 | B1 的 `hausdorffNormalized` 归一化版本 | 无；常数消去模式本轮已有 | 20–40 | 低 |
+| A0 | Goal: Area formula for injective C¹ parametrizations | **None** | — | — |
+| A1 | `normDet` continuous, hence the integrand is measurable | **none** (`measurable_fderiv` has) | 60–120 | Medium |
+| A2 | Countable additivity on the image (requires `InjOn` and measurability of the image) | None | 80–160 | Medium |
+| A3 | Sandwiching of injective linear models | None; `ApproximatesLinearOn.antilipschitz` requires equivalent dimensionality, not applicable | 250–500 | High |
+| A4 | image of the differentiable non-injective part has zero measure | none | 100–200 | Medium |
+| A5 | Local area formula assembled into global | None | 80–160 | Medium |
+| B1 | **m-codimensional graph area formula** (recommended focus) | None; the repository has proved the codimension-one version and can serve as a template | 600–1000 | High |
+| B2 | Normalized version of B1 `hausdorffNormalized` | None; constant elimination pattern already present in this round | 20–40 | Low |
 
-走 B 路线仍需 A1、A2、A5；A3、A4 则可望避开或大幅简化——图映射的左逆显式，
-且图映射的微分恒为单射，所以 A4 在 B 路线下不出现。
+Following the B route still requires A1, A2, A5; A3, A4 can be avoided or greatly simplified—explicit left inverses of the graph map, and the differential of the graph map is always injective, so A4 does not appear in the B route.
 
-## 分阶段建议
+## Phased Recommendations
 
-1. **A1 + B2 的准备**：`normDet` 连续性与可测性，纯代数/拓扑，先行且低风险。
-2. **B1 主攻**：照 `Analysis/AreaFormula.lean` 的结构做余维 m 版本，预计 2–3 轮。
-3. **A5 + A2**：局部到整体的拼接与像侧可加性。
-4. 之后才回到余维 m coarea 的正则情形。
+1. **Preparation of A1 + B2**: `normDet` continuity and measurability, purely algebraic/topological, preliminary and low-risk.
+2. **Main focus of B1**: Construct the codimension m version following the structure of `Analysis/AreaFormula.lean`, planned over 2–3 rounds.
+3. **A5 + A2**: Gluing from local to global and additivity on the image side.
+4. Then return to the regular case of codimension m coarea.
 
-**不建议**现在去补 A3。它是一般路线的关键缺口，但 B 路线可以绕开；
-若将来确实需要一般单射 C¹ 映射的面积公式，再单独立项。
+**Not recommended** to fill in A3 now. It is a critical gap in the general route, but the B route can bypass it;
+if in the future a general C¹ injective mapping area formula is actually needed, then treat it as a separate item.
 
-## 本轮明确没有做的事
+## This round explicitly did not do
 
-* **没有证明任何定理**，也没有把上述任何一条标为已完成。
-* 没有修改任何 `.lean` 库源码；`research/audits/AreaFormulaRouteStatements.lean` 是
-  **只含 `#check`** 的新文件，不是证明。
-* 没有迁洞，没有扩大证书或 Blueprint `leanok` 范围。
-* **没有提交、没有推送**，真实 Git index 未改动。
+* **No theorem has been proven**, nor has any of the above statements been marked as completed.
+* No modifications have been made to any `.lean` library source code; `research/audits/AreaFormulaRouteStatements.lean` is
+  **containing only `#check`** and is not a proof.
+* No holes have been migrated, no expansion of certification or Blueprint `leanok` scope has occurred.
+* **No commit, no push**, the real Git index has not been changed.
 
-## 验证
+## Verification
 
-* `research/audits/AreaFormulaRouteStatements.lean` 以 `-DwarningAsError=true` 编译通过，
-  九条命题全部通过类型检查；新增结果的公理审计为空（**本轮没有新增结果**），
-  不是「已证面积公式」。
-* 重跑全部 29 个审计客户端（`research/audits` 22 个，`build/audit` 7 个），全部严格通过，
-  未作任何修改。
-* 三个 WIP 逐个编译，直接洞 **1/2/5，总数 8**，不变。
-* 默认 `lake build` 与根目录 `python3 research/verify.py` 通过；证据 JSON 为
-  `research/explorations/2026-09-16-area-formula-route.json`，最终核对另存
-  `build/audit/area-formula-route/final-snapshot.json`。
+* `research/audits/AreaFormulaRouteStatements.lean` compiles with `-DwarningAsError=true`, all nine statements pass type checking; the axiom audit for new results is empty (**no new results were added in this round**), not "proven area formula".
+* Re-runs all 29 audit clients (`research/audits` 22, `build/audit` 7), all strictly pass, with no modifications.
+* Each of the three WIPs compiles directly, direct proof hole **1/2/5, total 8**, unchanged.
+* Default `lake build` and root directory `python3 research/verify.py` pass; JSON evidence is
+  `research/explorations/2026-09-16-area-formula-route.json`, final verification saved
+  `build/audit/area-formula-route/final-snapshot.json`.

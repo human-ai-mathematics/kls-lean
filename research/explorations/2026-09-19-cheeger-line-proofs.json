@@ -7,7 +7,7 @@
  "incoming_snapshot": "d9cd7067e18cbebc3408d8e772fc539392533db8be44e91419f2bba370a7226a",
  "incoming_entries": 638,
  "incoming_replayed_modules": 234,
- "owner_instruction": "学长那个我们接手了，然后我们接着往下做 (the 2026-09-16 hand-off boundary to Wang Haocheng is lifted by the owner)",
+ "owner_instruction": "we are taking over the work previously assigned to our senior colleague; then continue with the next steps (the 2026-09-16 hand-off boundary to Wang Haocheng is lifted by the owner)",
  "proving_sessions": {
   "model": "Claude Opus (two concurrent general-purpose agents)",
   "routes": [

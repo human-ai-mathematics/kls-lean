@@ -1,33 +1,33 @@
-# Energy 文件导航
+# Energy module guide
 
-本目录按数学职责组织扩展非负能量、序列松弛和欧氏实现。整理依据是
-[模块放置规则](../../README.md#placement-rules)；数学定义、适用假设和证明边界见
-[Poincaré 基础指南](../Poincare/README.md)。
+This directory organizes extended nonnegative energies, sequential relaxation, and Euclidean
+implementations by mathematical responsibility. See the [module placement rules](../../README.md#placement-rules)
+and the [Poincaré foundation guide](../Poincare/README.md) for definitions, assumptions, and proof boundaries.
 
-## 阅读顺序
+## Reading order
 
-| 目的 | 入口与后续模块 |
+| Purpose | Entry point and subsequent modules |
 | --- | --- |
-| 一般能量与大小比较 | `Form/Functional.lean` → `Form/Comparison.lean` |
-| 从有限测试能量定义松弛 | `Relaxation/Basic.lean`（含沿连续映射的松弛比较 `sequentialRelaxation_comp_le` 与带常数因子的 `_comp_le_mul`）→ `Relaxation/Approximation.lean` |
-| 下半连续性与恢复序列 | `Relaxation/LowerSemicontinuous.lean`、`Relaxation/Recovery.lean` |
-| 二次性与闭包 | `Form/QuadraticPreEnergy.lean`、`Form/ClosedQuadratic.lean` → `Relaxation/Quadratic.lean` |
-| 核心与 Markov 性质 | `Form/Core.lean`、`Form/Dirichlet.lean`；条件性转移见 `Relaxation/Contraction.lean` |
-| 光滑梯度松弛的 Dirichlet 性 | `SmoothGradient/Dirichlet.lean`：磨光正规收缩 `NormalContraction.smoothed`、测试复合 `Test.compSmoothed`、`SmoothGradient.markovian`/`dirichlet` 与内禀版本 `Intrinsic.dirichlet`；对任意 Borel 概率律成立 |
-| 光滑梯度实现 | `SmoothGradient/Basic.lean` → `Quadratic.lean`、`Density.lean` → `Closed.lean`；`SmoothGradient/NormalDirection.lean`：真仿射支撑上的法向坐标是 L² 零类但原始能量为 1，环境预能量不满足 `RespectsAmbientFibers`；`SmoothGradient/Core.lean`：局部密度假设 `LocalDensity` 下的 raw/sequential-core 一致性 `preEnergy_agreesOnTests`、`preEnergy_isSequentialCoreFor` 及内禀律实例 |
-| 仿射支撑内的实现 | `SmoothGradient/Intrinsic/Basic.lean` → `Closed.lean` |
-| 两种实现的比较与 Lipschitz 逼近 | `SmoothGradient/Intrinsic/Comparison.lean`、`Euclidean/LipschitzApproximation/Approximation.lean` |
-| 局部斜率与渐近 Lipschitz 的 L² 松弛 | `LocalSlope/Relaxation.lean`：`AsymptoticLipschitz.{apply,energy,Admissible,preEnergy,relaxation}`、`LocalSlope.{preEnergy,relaxation}` 及无条件比较 `relaxation_le_asymptoticLipschitz`；两种约定在有限维 Borel 概率律上的相等见 `Cheeger/Identification.lean` |
-| 度量 Cheeger 能量与 `𝓔^can = 2·Ch` | `Cheeger/Basic.lean`：`Cheeger.{ofLocalSlope,ofAsymptoticLipschitz,energy,Intrinsic.energy}`；`Cheeger/Identification.lean` 对任意有限维 Borel 概率律证明 `SmoothGradient.relaxation = LocalSlope.relaxation` 与 `𝓔^can_μ = 2·Ch_μ`，允许奇异律和无限能量；证明依赖：`Euclidean/Slope/Comparison.lean`（光滑测试的渐近 Lipschitz 常数 = 梯度范数，三松弛夹逼）、`Euclidean/Slope/Recovery.lean`（全局 Lipschitz 测试的磨光恢复与截断工具）、`Euclidean/Slope/Density.lean`（局部斜率可测、McShane 补丁、光滑测试在局部斜率能量中稠密）、`Cheeger/Identification.lean`（五条恒等式，`thm:smooth-gradient-relaxation-two-cheeger` 第 26 个证书）；原 `WIP/Cheeger.lean` 已删除，`Energy/` 下不再有 WIP |
-| 协方差加权的 Lipschitz 梯度定义 | `CovarianceGradient/Basic.lean`：预能量、序列松弛、内禀律上的 `Energy.CovarianceGradient.Intrinsic.energy` |
-| 算子形式与可闭性 | `Relaxation/LinearPMap.lean`（任意可闭 `LinearPMap` 的松弛等于闭包范数平方 `normSqEnergy`；Hilbert 选择引理）→ `Euclidean/WeakDerivative.lean`（Lipschitz 函数分部积分）→ `WeightedGradient/Basic.lean`、`Closable.lean`、`Core.lean`（含 ℝ + C_c^∞ 核 `constantSmoothCore`） |
-| 平移不变性 | `CovarianceGradient/Translation.lean`：平移律、L² 拉回等距 `L2.Translation.pullbackEquiv`、方差与协方差不变、协方差松弛与最优常数不变 |
-| 一般线性等价传输 | `CovarianceGradient/LinearEquiv.lean`：像律 `KLS.LogConcave.mapContinuousLinearEquiv`、协方差算子经映射与伴随共轭、梯度复合公式、L² 拉回等距 `L2.ContinuousLinearEquiv.pullbackEquiv`、协方差松弛与最优常数不变、仿射支撑的像；白化的传输部分 |
-| 线性等距传输 | `CovarianceGradient/Isometry.lean`：等距像律 `Probability.mapLinearIsometryEquiv`、协方差算子共轭、梯度复合公式、L² 拉回等距 `mapL2`、协方差松弛与最优常数不变；与 Translation 合起来覆盖内禀坐标的任意仿射等距变换 |
+| General energies and comparisons | `Form/Functional.lean` → `Form/Comparison.lean` |
+| Relaxation of finite test energies | `Relaxation/Basic.lean` (including comparison along continuous maps, `sequentialRelaxation_comp_le`, and its constant-factor version `_comp_le_mul`) → `Relaxation/Approximation.lean` |
+| Lower semicontinuity and recovery sequences | `Relaxation/LowerSemicontinuous.lean`, `Relaxation/Recovery.lean` |
+| Quadraticity and closure | `Form/QuadraticPreEnergy.lean`, `Form/ClosedQuadratic.lean` → `Relaxation/Quadratic.lean` |
+| Cores and the Markov property | `Form/Core.lean`, `Form/Dirichlet.lean`; conditional transfer in `Relaxation/Contraction.lean` |
+| Dirichlet property of smooth-gradient relaxation | `SmoothGradient/Dirichlet.lean`: smoothed normal contractions `NormalContraction.smoothed`, test composition `Test.compSmoothed`, `SmoothGradient.markovian`/`dirichlet`, and the intrinsic version `Intrinsic.dirichlet`; valid for every Borel probability law |
+| Smooth-gradient implementation | `SmoothGradient/Basic.lean` → `Quadratic.lean`, `Density.lean` → `Closed.lean`; `SmoothGradient/NormalDirection.lean`: on a proper affine support, a normal coordinate represents the zero L² class but has raw energy 1, so the ambient pre-energy fails `RespectsAmbientFibers`; `SmoothGradient/Core.lean`: raw/sequential-core agreement `preEnergy_agreesOnTests`, `preEnergy_isSequentialCoreFor` under `LocalDensity`, with intrinsic-law instances |
+| Implementation within the affine support | `SmoothGradient/Intrinsic/Basic.lean` → `Closed.lean` |
+| Comparing the implementations and Lipschitz approximation | `SmoothGradient/Intrinsic/Comparison.lean`, `Euclidean/LipschitzApproximation/Approximation.lean` |
+| L² relaxation of local slope and asymptotic Lipschitz energy | `LocalSlope/Relaxation.lean`: `AsymptoticLipschitz.{apply,energy,Admissible,preEnergy,relaxation}`, `LocalSlope.{preEnergy,relaxation}`, and the unconditional comparison `relaxation_le_asymptoticLipschitz`; equality of the two conventions for finite-dimensional Borel probability laws is in `Cheeger/Identification.lean` |
+| Metric Cheeger energy and `𝓔^can = 2·Ch` | `Cheeger/Basic.lean`: `Cheeger.{ofLocalSlope,ofAsymptoticLipschitz,energy,Intrinsic.energy}`; `Cheeger/Identification.lean` proves `SmoothGradient.relaxation = LocalSlope.relaxation` and `𝓔^can_μ = 2·Ch_μ` for every finite-dimensional Borel probability law, including singular laws and infinite energies. Dependencies: `Euclidean/Slope/Comparison.lean` (asymptotic Lipschitz constant equals gradient norm for smooth tests; sandwich of three relaxations), `Euclidean/Slope/Recovery.lean` (mollified recovery for globally Lipschitz tests and truncation tools), `Euclidean/Slope/Density.lean` (measurability of local slope, McShane patches, and density of smooth tests in local-slope energy), `Cheeger/Identification.lean` (five identities; `thm:smooth-gradient-relaxation-two-cheeger`, the 26th certificate). The former `WIP/Cheeger.lean` was deleted; `Energy/` has no remaining WIP |
+| Covariance-weighted Lipschitz-gradient definitions | `CovarianceGradient/Basic.lean`: pre-energy, sequential relaxation, and `Energy.CovarianceGradient.Intrinsic.energy` on the intrinsic law |
+| Operator forms and closability | `Relaxation/LinearPMap.lean` (relaxation of any closable `LinearPMap` equals the squared norm of its closure, `normSqEnergy`; Hilbert selection lemma) → `Euclidean/WeakDerivative.lean` (integration by parts for Lipschitz functions) → `WeightedGradient/Basic.lean`, `Closable.lean`, `Core.lean` (including the ℝ + C_c^∞ core `constantSmoothCore`) |
+| Translation invariance | `CovarianceGradient/Translation.lean`: translated laws, L² pullback isometry `L2.Translation.pullbackEquiv`, invariance of variance and covariance, and invariance of covariance relaxation and its optimal constant |
+| Transport by general linear equivalences | `CovarianceGradient/LinearEquiv.lean`: image law `KLS.LogConcave.mapContinuousLinearEquiv`, covariance conjugation by the map and its adjoint, gradient composition formula, L² pullback isometry `L2.ContinuousLinearEquiv.pullbackEquiv`, invariance of covariance relaxation and its optimal constant, and images of affine supports; the transport component of whitening |
+| Transport by linear isometries | `CovarianceGradient/Isometry.lean`: isometric image law `Probability.mapLinearIsometryEquiv`, covariance conjugation, gradient composition formula, L² pullback isometry `mapL2`, and invariance of covariance relaxation and its optimal constant; together with Translation, this covers arbitrary affine isometries of intrinsic coordinates |
 
-表格是阅读路线；精确的依赖关系以各文件的 `import` 为准。
+The table gives a reading route; each file's `import` statements specify the exact dependencies.
 
-## 导入示例
+## Import examples
 
 ```lean
 import FunctionalInequalities.Energy.Relaxation.Recovery
@@ -35,24 +35,25 @@ import FunctionalInequalities.Energy.SmoothGradient.Closed
 import FunctionalInequalities.Energy.SmoothGradient.Intrinsic.Closed
 ```
 
-库内模块导入实际需要的具体文件。下游完整使用示例可从
-`FunctionalInequalities.Poincare.Foundation` 和
-[`examples/PoincareFoundation.lean`](../../../examples/PoincareFoundation.lean) 开始。
+Library modules import the specific files they need. For complete downstream examples, start with
+`FunctionalInequalities.Poincare.Foundation` and
+[`examples/PoincareFoundation.lean`](../../../examples/PoincareFoundation.lean).
 
-## 后续文件放置
+## Placement of future files
 
-- 同一主题的基础定义放在 `Basic.lean`，后续文件以职责命名；目录提供共同前缀。
-- 通用能量与闭二次型接口放在 `Form/`；一般松弛定理放在 `Relaxation/`。
-- 具体实现放在对应欧氏主题目录；跨实现的比较保留在 `Euclidean/`。
-- 按数学职责和依赖拆分，不按证明状态、任务编号或日期拆分。
+- Put foundational definitions for a topic in `Basic.lean`; name subsequent files by responsibility. The directory supplies the shared prefix.
+- Put generic energy and closed-quadratic-form interfaces in `Form/`, and general relaxation theorems in `Relaxation/`.
+- Put concrete implementations in the corresponding Euclidean topic directory; keep comparisons across implementations in `Euclidean/`.
+- Split by mathematical responsibility and dependencies, not proof status, task number, or date.
 
-文件路径与声明命名空间各自独立。本次整理保留所有数学声明，闭二次性仍不自动提供
-Dirichlet 性质或原始测试能量与松弛能量的一致性。旧导入路径的逐项替换见
-[迁移记录](../../../research/explorations/2026-09-07-energy-module-layout.md)。
+File paths and declaration namespaces are independent. This reorganization preserves all
+mathematical declarations. Closed quadraticity still does not automatically provide the Dirichlet
+property or agreement of raw test energy with relaxed energy. For individual replacements of old
+import paths, see the [migration record](../../../research/explorations/2026-09-07-energy-module-layout.md).
 
-`Euclidean/LipschitzApproximation/` 按职责分为
-[Basic](Euclidean/LipschitzApproximation/Basic.lean)（梯度与截断）、
-[Measurable](Euclidean/LipschitzApproximation/Measurable.lean)（可测性）、
-[Kernel](Euclidean/LipschitzApproximation/Kernel.lean)（核与卷积估计）、
-[Approximation](Euclidean/LipschitzApproximation/Approximation.lean)（加权逼近）。
-客户端按所需接口导入最早一层。
+`Euclidean/LipschitzApproximation/` is divided by responsibility into
+[Basic](Euclidean/LipschitzApproximation/Basic.lean) (gradients and truncation),
+[Measurable](Euclidean/LipschitzApproximation/Measurable.lean) (measurability),
+[Kernel](Euclidean/LipschitzApproximation/Kernel.lean) (kernels and convolution estimates), and
+[Approximation](Euclidean/LipschitzApproximation/Approximation.lean) (weighted approximation).
+Clients import the earliest layer providing their required interface.

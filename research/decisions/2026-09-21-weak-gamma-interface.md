@@ -238,7 +238,7 @@ edit, so that its snapshot is the delivered one; the receipt is identified in
 `build/audit/weak-gamma-interface/final-snapshot.json`. An earlier receipt of the same day
 certifies its own, earlier snapshot and is not quoted as verification of this one.
 
-| 已有证明 | 仅接口（假设显式可见） | 仍是非形式化方案 |
+| Proved | Interface only (explicit assumptions) | Still an informal plan |
 | --- | --- | --- |
 | `W0` in full; `W1` product/chain rules and the weak generator identity; `W2` classical and weak, with all integrability discharged; the three integrated heat-flow statements; second-order positive-time regularity; the `W3` limit-transfer theorems, including the `P_t g` form | the weak `Γ₂` inequality for `F = P_t g`, which needs the two stated `L²` convergences of the smooth fields | `Γ(P_t f) ≤ P_t Γ(f)`, `|T(P_t f)| ≤ P_t |Tf|`, the `Γ` time interpolation `s ↦ P_s Γ(P_{t-s} f)`, BGL/BV, general-law passage, the constant `π`, Buser, KLS |
 

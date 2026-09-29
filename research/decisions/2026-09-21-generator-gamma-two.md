@@ -244,7 +244,7 @@ a temporary Git index that preserves the real staging area, and the root
 `python3 research/verify.py` is rerun at the **end** of the round so that its snapshot is the
 delivered one.
 
-| 已有证明 | 仅接口（假设显式可见） | 仍是非形式化方案 |
+| Proved | Interface only (explicit assumptions) | Still an informal plan |
 | --- | --- | --- |
 | `G0`–`G3` in full; the generator form on `C_c^∞`; its transfer along first-order graph convergence for `A`; the two-field conclusion under the same hypotheses; stability and non-vacuity of the approximation class | the heat-flow weak `Γ₂` inequality, which needs `hcore`: `C_c^∞(V)` is an operator core of `A` | essential self-adjointness of `ℒ` on `C_c^∞`, interior `H²` regularity, `Γ(P_t f) ≤ P_t Γ(f)`, the `Γ` time interpolation, BGL/BV, general-law passage, the constant `π`, Buser, KLS |
 

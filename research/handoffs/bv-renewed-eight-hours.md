@@ -1,6 +1,6 @@
 # Renewed eight-hour window and Claude rollover
 
-User said "干足8个小时" after the locked-host pause. Codex explicitly interpreted this
+User said "work for a full eight hours" after the locked-host pause. Codex explicitly interpreted this
 as a fresh eight-hour window. Start 2026-09-29 03:13:30 Asia/Shanghai; finish
 2026-09-29 11:13:30 (UTC 2026-09-29T03:13:30Z). Begin wrap-up 10:43:30.
 These times override the earlier window in all historical assignments. Record

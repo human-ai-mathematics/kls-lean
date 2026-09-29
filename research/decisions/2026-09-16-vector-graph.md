@@ -1,66 +1,66 @@
-# B1 第一部分：向量值图的 C¹ 基础设施
+# B1, first part: C¹ infrastructure for vector-valued graphs
 
-2026-09-16。本轮**证明新引理**，按余维一文件的结构做余维 m 图面积公式（义务 **B1**）的
-**第二、三阶段**。**面积公式本身仍未证明。** 不迁洞，不提交、不推送。
-直接洞仍 **8（1/2/5）**，证书仍 **24**。
+2026-09-16. This round **proves new lemmas**, following the codimension-one file's structure to implement
+**stages two and three** of the codimension-m graph area formula (obligation **B1**). **The area formula itself remains unproved.** No holes migrated, no commit or push.
+Direct holes remain **8 (1/2/5)**; certificates remain **24**.
 
-起点 `HEAD = origin/main = 34b92695ece4f636a1a7f1eafbbf41c685ee0348`；起点 passed 回执
-`build/verification/20260916T140115.179862Z/report.json`：10 个门、203 个本地模块内核重放、
-525 条目。
+Starting point: `HEAD = origin/main = 34b92695ece4f636a1a7f1eafbbf41c685ee0348`; starting passed receipt
+`build/verification/20260916T140115.179862Z/report.json`: 10 gates, kernel replay of 203 local modules,
+525 entries.
 
-## 边界
+## Boundary
 
-对数凹 Cheeger–Buser 线归合作者**王浩丞**，本轮未触碰。
+The log-concave Cheeger–Buser line belongs to collaborator **Haocheng Wang** and was untouched in this round.
 
-## 照搬的结构
+## Structure followed
 
-`Analysis/AreaFormula.lean`（余维一，957 行）分五个阶段：线性模型 → C¹ 图映射 →
-线性逼近 → 两侧估计 → 面积公式。本轮做**第二、三阶段**的余维 m 版本。
+`Analysis/AreaFormula.lean` (codimension one, 957 lines) has five stages: linear model → C¹ graph map →
+linear approximation → two-sided estimates → area formula. This round implements the codimension-m versions of **stages two and three**.
 
-## 精确成果
+## Exact results
 
-`Analysis/VectorGraph.lean`（本地 import 闭包 8 个模块，**无 WIP**）：
+`Analysis/VectorGraph.lean` (local import closure of 8 modules, **no WIP**):
 
-* `vectorGraphMap ι κ γ = fun y => ι y + κ (γ y)`：`K` 值斜率的图映射。
-* `graphProj_apply_of_perp`、**`graphProj_vectorGraphMap`**：参数收缩 `ιᵀ` 从图上任一点
-  还原参数。**这正是一般路线 A3 缺的那个显式左逆**，而且对**任意**斜率成立。
-* **`vectorGraphMap_injective`**：单射，**不需要任何关于 `γ` 的假设**，
-  所以没有 `InjOn` 前提，也不必处理重数。
-* **`hasFDerivAt_vectorGraphMap`**：导数就是上一轮的 `graphMapLinear ι κ (fderiv ℝ γ y)`，
-  所以上一轮算出的体积因子逐点就是对的那个。
-* **`approximatesLinearOn_vectorGraphMap`**：导数在球上变化不超过 ε 时，图映射与中心处的
-  线性图映射 ε-接近。余维 m 的估计**比余维一更干净**：第二个因子是等距，范数直接消掉，
-  不必像余维一那样绕 `innerSL`／梯度。
-* `image_vectorGraphMap_eq`、`measurableSet_image_vectorGraphMap`：像是闭条件与收缩原像的交，
-  故可测。
-* **`hausdorffMeasure_image_graphMapLinear`**：**B1 的线性情形**。
-  它直接由 Mathlib 的线性面积公式与上一轮的 `normDet_graphMapLinear` 得到，
-  **不需要**余维一文件里那套 shear／dilate 论证（那部分约 160 行）。
-* `measurable_vectorGraphJacobian`：沿 `C¹` 斜率的体积因子可测，**消费上一轮的 A1**，
-  所以 B1 右端确实是一个 lintegral。
+* `vectorGraphMap ι κ γ = fun y => ι y + κ (γ y)`: the graph map for a `K`-valued graphing function.
+* `graphProj_apply_of_perp`, **`graphProj_vectorGraphMap`**: the parameter contraction `ιᵀ` recovers the parameter from any graph point.
+  **This is precisely the explicit left inverse missing in general route A3**, and it holds for **any** graphing function.
+* **`vectorGraphMap_injective`**: injective, with **no assumptions on `γ`**,
+  so no `InjOn` premise or multiplicity handling is needed.
+* **`hasFDerivAt_vectorGraphMap`**: the derivative is the preceding round's `graphMapLinear ι κ (fderiv ℝ γ y)`,
+  so the previously computed volume factor is the correct pointwise factor.
+* **`approximatesLinearOn_vectorGraphMap`**: if the derivative varies by at most ε on a ball, the graph map is ε-close to the
+  linear graph map at the center. The codimension-m estimate is **cleaner than in codimension one**: the second factor is an isometry, so its norm cancels directly,
+  without the codimension-one detour through `innerSL`/gradients.
+* `image_vectorGraphMap_eq`, `measurableSet_image_vectorGraphMap`: the image is the intersection of a closed condition and a contraction preimage,
+  hence measurable.
+* **`hausdorffMeasure_image_graphMapLinear`**: **the linear case of B1**.
+  It follows directly from Mathlib's linear area formula and the preceding round's `normDet_graphMapLinear`,
+  **without** the shear/dilate argument from the codimension-one file (about 160 lines).
+* `measurable_vectorGraphJacobian`: the volume factor along a `C¹` graphing function is measurable, **using A1 from the preceding round**,
+  so B1's right-hand side is indeed a lintegral.
 
-## 本轮没有做的事
+## Work not done in this round
 
-* **没有证明面积公式**：余维一文件的第四、五阶段（两侧估计与取极限，约 450 行）
-  是 B1 的剩余部分，本轮未做。
-* 没有碰路线义务 A2–A5、B2。
-* 没有迁洞；没有碰尖锐 Sard、两条 Cheeger 比较、Energy 的五个洞。
-* 没有扩大证书或 Blueprint `leanok` 范围。
-* **没有提交、没有推送**，真实 Git index 未改动。
+* **No area formula was proved**: stages four and five of the codimension-one file (two-sided estimates and the limit, about 450 lines)
+  remain for B1 and were not done here.
+* Route obligations A2–A5 and B2 were untouched.
+* No holes migrated; sharp Sard, the two Cheeger comparisons, and Energy's five holes were untouched.
+* No certificate or Blueprint `leanok` scope was expanded.
+* **No commit or push**; the real Git index was unchanged.
 
-## 下一轮
+## Next round
 
-B1 的第四、五阶段：以 `approximatesLinearOn_vectorGraphMap` 为输入做两侧 Hausdorff 估计
-（上界用 Lipschitz 像界，下界用左逆 `ιᵀ` 给出的反 Lipschitz 界——这里正是显式左逆兑现价值的
-地方），再按余维一文件的方式取 ε → 0 并拼接可数分片。预计 1–2 轮。
+Stages four and five of B1: use `approximatesLinearOn_vectorGraphMap` to obtain two-sided Hausdorff estimates
+(the upper bound from the Lipschitz image bound, the lower bound from the antilipschitz bound given by the left inverse `ιᵀ`,
+where the explicit left inverse becomes useful). Then follow the codimension-one file to take ε → 0 and assemble countably many pieces. Estimated 1–2 rounds.
 
-## 验证
+## Verification
 
-* 新模块与新客户端均以 `-DwarningAsError=true` 编译通过，无 `sorry`。
-* `research/audits/VectorGraphAudit.lean` 的 20 条公理报告只用
-  `propext`、`Classical.choice`、`Quot.sound`；含余维零、常斜率平坦图、零维参数空间。
-* 重跑全部 31 个审计客户端（`research/audits` 24 个，`build/audit` 7 个），全部严格通过。
-* 三个 WIP 逐个编译，直接洞 **1/2/5，总数 8**，不变。
-* 默认 `lake build` 与根目录 `python3 research/verify.py` 通过；证据 JSON 为
-  `research/explorations/2026-09-16-vector-graph.json`，最终核对另存
-  `build/audit/vector-graph/final-snapshot.json`。
+* The new module and client compiled with `-DwarningAsError=true`, without `sorry`.
+* The 20 axiom reports in `research/audits/VectorGraphAudit.lean` use only
+  `propext`, `Classical.choice`, and `Quot.sound`; cases include codimension zero, a flat graph with constant graphing function, and zero-dimensional parameter space.
+* All 31 audit clients were rerun (24 in `research/audits`, 7 in `build/audit`) and passed strictly.
+* Each of the three WIP files was compiled: direct holes remain **1/2/5, totaling 8**.
+* The default `lake build` and root `python3 research/verify.py` passed; evidence JSON is
+  `research/explorations/2026-09-16-vector-graph.json`, with the final check separately saved in
+  `build/audit/vector-graph/final-snapshot.json`.

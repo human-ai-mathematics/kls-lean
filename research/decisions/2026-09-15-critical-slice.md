@@ -1,16 +1,13 @@
-# C¹ 函数临界部分的截面零测（L10）
+# Null slices of the critical set of a C¹ function (L10)
 
-2026-09-15。本轮**证明了加权 coarea 路线的 L10**：`C¹` 实函数的临界集与几乎每个水平集的交
-具有零 `surfaceMeasure`。这是 L1 的第一个真正下游消费者。不提交、不推送、不改历史决定。
-起始 HEAD 为 `2965b32bc79bdb24921c633df12102450eaedcc4`；起始 passed 回执为
-`build/verification/20260915T035117.865459Z/report.json`（与 `build/verification/latest.json`
-逐字节相同），重新计算的完整快照与回执相等：424 个文件，SHA256
-`2fb5014b1bbfb1bbd8b05a41cbc7a5e45529fc97783da9305036597d7be7ce9d`。这里的逐字节核对指
-逐文件 SHA256（包括删除项）及完整快照结构一致，不是只看 HEAD。
+2026-09-15. This round **proves L10 of the weighted coarea route**: the critical set of a real-valued `C¹` function has zero `surfaceMeasure` on almost every level set. This is the first true downstream consumer of L1. No commit, no push, no alteration of historical decisions.
+The starting HEAD is `2965b32bc79bdb24921c633df12102450eaedcc4`; the starting verification receipt is
+`build/verification/20260915T035117.865459Z/report.json` (bit-for-bit identical to `build/verification/latest.json`), and the recomputed full snapshot matches the receipt: 424 files, SHA256 `2fb5014b1bbfb1bbd8b05a41cbc7a5e45529fc97783da9305036597d7be7ce9d`. The bit-for-bit comparison here refers to per-file SHA256 (including deleted entries) and consistent full snapshot structure, not merely the HEAD.
 
-## 本轮证明的内容
+## Content of this round of proof
 
-新模块 `formalization/FunctionalInequalities/KLS/Geometry/CriticalSlice.lean`：
+New module `formalization/FunctionalInequalities/KLS/Geometry/CriticalSlice.lean`:
+
 
 ```lean
 theorem FunctionalInequalities.KLS.isClosed_critical {u : V → ℝ} (hu : ContDiff ℝ 1 u) :
@@ -33,83 +30,75 @@ theorem FunctionalInequalities.KLS.ae_surfaceMeasure_critical_inter_levelSet_eq_
       surfaceMeasure V ({x : V | fderiv ℝ u x = 0} ∩ {x | u x = t}) = 0
 ```
 
-与路线记录的 L10 相比只去掉了从未使用的 `[CompleteSpace V]`，没有增加任何假设：
-`u` **不要求** Lipschitz、有界或紧支撑；临界集**不要求**可测（它自动是闭集）；
-`V` 允许零维。客户端 `target` 用带 `[CompleteSpace V]` 的原语句逐字复述并证明。
+Compared to the L10 route record, only removed `[CompleteSpace V]` that was never used, with no additional assumptions:
+`u` Does not require Lipschitz, bounded, or compact support; the critical set does not require measurability (it is automatically a closed set);
+`V` Allows zero-dimensional. Client `target` uses the primitive statement with `[CompleteSpace V]` verbatim and proves it.
 
-## 这不是 Sard 定理
+## This is not the Sard theorem
 
-**必须分清两件事**，本轮只做了后者：
+**Must distinguish between two things**, this round only addressed the latter:
 
-* **Sard**：临界**值**集 `u '' {fderiv = 0}` 在 `ℝ` 中 Lebesgue 零测。一般需要 `C^(finrank)`
-  正则性，在本仓库仍是直接洞 `Analysis.sard`（本轮未动、无下游消费者、仍带 `sorryAx`）。
-* **L10**：每个水平集中**临界那一部分**的余维一测度为零，几乎每个水平成立。对**仅 `C¹`** 的
-  函数在任意维数都成立。
+* **Sard**: The critical value set `u '' {fderiv = 0}` has Lebesgue measure zero in `ℝ`. General regularity is required `C^(finrank)`;
+  in this repository, it remains a direct proof hole `Analysis.sard` (no changes made, no downstream consumers, still carries `sorryAx`).
+* **L10**: For each level set, the codimension-one measure of the critical portion is zero, almost every level. It holds for any dimension for functions that are only `C¹`.
 
-L10 **不蕴含** Sard：一个 `C¹` 函数完全可以有正测度的临界值集，L10 对此没有任何断言，
-只说那些水平上临界部分的 `ℋ^{n-1}` 测度是零。客户端的 `constant_exceptional_level` 把区别
-做成具体计算：常数函数的临界集是全空间，故它在所取到的那个水平上的截面就是整条直线，
-`surfaceMeasure ℝ ≠ 0`。所以 L10 的"几乎处处"不能加强成"处处"，临界集本身也不带任何小性。
+L10 **does not imply** Sard: a `C¹` function can entirely have a critical value set of positive measure, and L10 makes no assertion about this, only stating that the `ℋ^{n-1}` measure of the critical parts at each level is zero. The client's `constant_exceptional_level` makes the distinction through concrete computation: the critical set of a constant function is the entire space, so its section at that level is the entire line, `surfaceMeasure ℝ ≠ 0`. Thus, L10's "almost everywhere" cannot be strengthened to "everywhere," and the critical set itself carries no smallness.
 
-## 证明设计
+## Proof design
 
-**L1 的第一个真正下游消费者。** 临界集上导数为零，而 Mathlib 的
-`exists_partition_approximatesLinearOn_of_hasFDerivWithinAt` 的逼近线性映射取自导数的值
-（其结论的最后一条给出 `∃ y ∈ s, A n = f' y`），所以在临界集上这些线性映射**全为零**，
-`ApproximatesLinearOn u 0 (C ∩ T n) ε` 就直接是 `LipschitzOnWith ε u (C ∩ T n)`。
-该引理同时给出**两两不交的可测**分片，所以不需要再做 `disjointed`。
+**The first true downstream consumer of L1.** The derivative is zero on the critical set, and the approximating linear map from Mathlib's `exists_partition_approximatesLinearOn_of_hasFDerivWithinAt` takes the value of the derivative (the final conclusion of which yields `∃ y ∈ s, A n = f' y`), so these linear maps are **identically zero** on the critical set, and `ApproximatesLinearOn u 0 (C ∩ T n) ε` is directly `LipschitzOnWith ε u (C ∩ T n)`.
+This lemma also provides a measurable, pairwise disjoint partition, so no further `disjointed` is needed.
 
-固定球半径 `R` 与尺度 `ε = (k+1)⁻¹`：
+Fix a ball radius `R` and scale `ε = (k+1)⁻¹`:
 
-1. 取上述分片，令 `D n := C ∩ closedBall 0 R ∩ T n`（可测、两两不交、并为 `C ∩ ball`）。
-2. 对每个 `D n` 用 **L1**（`KLS.exists_measurable_majorant`）得可测支配函数 `F n`，
-   `∫⁻ F n ≤ eilenbergConstant V · ε · volume (D n)`。
-3. `G k := fun t ↦ ∑' n, F n t` 可测（`ENNReal.tsum_eq_iSup_sum` 加有限和可测性），
-   由可数次可加性支配 `C ∩ ball ∩ {u = t}` 的截面测度；由 `lintegral_tsum`、
-   `ENNReal.tsum_mul_left` 与不交可测集的 `measure_iUnion`，
-   `∫⁻ G k ≤ eilenbergConstant V · volume (closedBall 0 R) · (k+1)⁻¹`。
-4. `H := fun t ↦ ⨅ k, G k t` 仍可测、仍支配，且 `∫⁻ H ≤ ∫⁻ G k` 对每个 `k` 成立；
-   右端趋于 `0`（`volume (closedBall 0 R) < ∞` 是关键，所以**必须**先局部化到球），
-   由 `ge_of_tendsto'` 得 `∫⁻ H = 0`，再由 `lintegral_eq_zero_iff` 得 `H = 0` 几乎处处。
-5. 对 `R` 取可数并（`Metric.iUnion_closedBall_nat`）去掉球：`ae_all_iff` 加
-   `measure_iUnion_null`。
+1. Take the above partition, and let `D n := C ∩ closedBall 0 R ∩ T n` (measurable, pairwise disjoint, and their union is `C ∩ ball`).
+2. For each `D n` use **L1** (`KLS.exists_measurable_majorant`) to obtain a measurable dominating function `F n`,
+   `∫⁻ F n ≤ eilenbergConstant V · ε · volume (D n)`.
+3. `G k := fun t ↦ ∑' n, F n t` measurable (`ENNReal.tsum_eq_iSup_sum` plus finite sum measurability),
+   A section measure dominated by countable additivity `C ∩ ball ∩ {u = t}`; by `lintegral_tsum`,
+   `ENNReal.tsum_mul_left` and the `measure_iUnion` of pairwise disjoint measurable sets,
+   `∫⁻ G k ≤ eilenbergConstant V · volume (closedBall 0 R) · (k+1)⁻¹`.
+4. `H := fun t ↦ ⨅ k, G k t` is still measurable, still dominates the slice measure, and `∫⁻ H ≤ ∫⁻ G k` holds for each `k`;
+   The right-hand side tends to `0` (`volume (closedBall 0 R) < ∞` is key, so **must** be localized to a ball first),
+   By `ge_of_tendsto'` we get `∫⁻ H = 0`, and then by `lintegral_eq_zero_iff` we get `H = 0` almost everywhere.
+5. Take the countable union of `R` (`Metric.iUnion_closedBall_nat`) and remove the ball: `ae_all_iff` plus
+   `measure_iUnion_null`.
 
-**没有循环论证**：可测性只用在构造出来的支配函数上，临界截面函数本身的可测性从未被假设
-（L3/L4 也未被使用——临界集是闭集但不紧，球内的交才是紧的，而这里不需要紧性）。
+**No circular reasoning**: measurability is only used on the constructed dominating functions, and the measurability of the critical section function itself is never assumed.
+(L3/L4) is also not used— the critical set is a closed set but not compact; the intersection within the ball is compact, but compactness is not required here.
 
-## 本轮没有做的事
+## What was not done in this round
 
-* **没有证明 Sard**：尖锐 `C^(finrank)` 的 `Analysis.sard` 与
-  `Analysis.ae_forall_fderiv_ne_zero` 仍带 `sorryAx`，仍是直接洞。
-* **没有证明 L8/L9/L11**：正则部分的 C¹ coarea（L9）、开域带权图面积（L8）与
-  一般 C¹ 带权 coarea（L11）都未动。L10 只处理**临界**部分，把正则部分留给 L9。
-* **加权 coarea 等式仍是直接洞**：`Analysis.lintegral_enorm_gradient_mul_eq_lintegral_levelSet`
-  与 `Isoperimetry.lintegral_enorm_gradient_mul_eq_lintegral_levelSet`。
-  直接洞按预期仍为 **2/3/5，总数 10**。
-* `smoothConstant_le_minkowskiConstant`、
-  `smoothConstant_mul_lintegral_min_superlevel_le`、两个 Cheeger 常数相等仍未证明。
-* Eilenberg 常数的尖锐性仍未证明。
+* **No proof of Sard**: Sharp `C^(finrank)` of `Analysis.sard` and
+  `Analysis.ae_forall_fderiv_ne_zero` still carry `sorryAx`, remains a direct proof hole.
+* **No proof of L8/L9/L11**: The C¹ coarea (L9) of the regular part, the weighted area of open domains (L8), and the general C¹ weighted coarea (L11) remain unchanged. L10 only handles the **critical** part, leaving the regular part to L9.
+* **Weighted coarea equation remains a direct proof hole**: `Analysis.lintegral_enorm_gradient_mul_eq_lintegral_levelSet`
+  and `Isoperimetry.lintegral_enorm_gradient_mul_eq_lintegral_levelSet`.
+  The direct proof hole remains as expected: **2/3/5, total count 10**.
+* `smoothConstant_le_minkowskiConstant`,
+  `smoothConstant_mul_lintegral_min_superlevel_le`, and equality of the two Cheeger constants remain unproven.
+* Sharpness of the Eilenberg constant remains unproven.
 
-## 验证
+## Verification
 
-* `KLS/Geometry/CriticalSlice.lean` 以 `-DwarningAsError=true` 单独编译通过。
-* `build/audit/CriticalSliceAudit.lean` 以 `-DwarningAsError=true` 编译通过：1 条语句 `#check`
-  （逐字复述路线记录的 L10）与 7 条定理——`target`、`target_of_not_completeSpace`、
-  `ae_slice_eq_regular`（L11 将消费的形式：几乎每个截面可以先丢掉临界集再算）、
-  `surfaceMeasure_real_singleton`、`constant_exceptional_level`（例外水平的截面测度非零）、
-  `not_lipschitz`（`Real.exp`，`C¹` 但非全局 Lipschitz）、一条 `preserved_*` 具名参数签名
-  检查——以及 11 条 `#print axioms`。全部 11 个声明只依赖 `propext`、`Classical.choice`、
-  `Quot.sound`，**无 `sorryAx`**。
-* 重跑 `LevelSetMeasurableAudit`、`BorelSliceAudit`、`CompactSliceAudit`、
-  `EilenbergMajorantAudit`、`NullSlicingAudit`、`WeightedCoareaRouteStatements`、
-  `WeightedCoareaInfrastructure`、`AreaFormulaAudit`、`CheegerInfimumAudit`、
-  `MinkowskiConstantAudit`、`SuperlevelSardScope`、`SmoothSardAudit`、
-  `SmoothSardRouteStatements`，全部严格编译通过，未作任何修改；`LevelSetMeasurableAudit`
-  再次确认迁出的结果无 `sorryAx` 而加权 coarea 等式与 `Analysis.sard` 仍带 `sorryAx`。
-* 三个 WIP 文件逐个实际编译成功，直接洞分别 **2/3/5，总数 10**。
-* 默认 `lake build` 与根目录 `python3 research/verify.py` 通过。最终回执为
-  `build/verification/latest.json`，与最终全部源码快照完全相等；证据 JSON 为
-  `research/explorations/2026-09-15-critical-slice.json`，最终核对另存
-  `build/audit/critical-final-snapshot.json`。`build/` 被 gitignore，故 `build/audit`
-  的哈希由证据 JSON 单独绑定。
-* 证书仍 **24**，perimeter infrastructure 仍 **missing**。
+* `KLS/Geometry/CriticalSlice.lean` compiles successfully with `-DwarningAsError=true` alone.
+* `build/audit/CriticalSliceAudit.lean` compiles with `-DwarningAsError=true`: 1 statements `#check`
+  (The literal reproduction of the route record L10) and 7 theorem——`target`, `target_of_not_completeSpace`,
+  `ae_slice_eq_regular` (L11: The form of consumption: almost every section can first discard the critical set before proceeding),
+  `surfaceMeasure_real_singleton`, `constant_exceptional_level` (the measure of level sets is non-zero),
+  `not_lipschitz` (`Real.exp`, `C¹` but not globally Lipschitz), a `preserved_*` named argument signature
+  Check—along with 11 and `#print axioms`. All 11 statements depend only on `propext` and `Classical.choice`,
+  `Quot.sound`, **no `sorryAx`**.
+* Retrace `LevelSetMeasurableAudit`, `BorelSliceAudit`, `CompactSliceAudit`,
+  `EilenbergMajorantAudit`, `NullSlicingAudit`, `WeightedCoareaRouteStatements`,
+  `WeightedCoareaInfrastructure`, `AreaFormulaAudit`, `CheegerInfimumAudit`,
+  `MinkowskiConstantAudit`, `SuperlevelSardScope`, `SmoothSardAudit`,
+  `SmoothSardRouteStatements`, all strictly compiled successfully, no modifications made; `LevelSetMeasurableAudit`
+  Again confirm the migration result has no `sorryAx` and the weighted coarea equation with `Analysis.sard` still carries `sorryAx`.
+* Three WIP files were successfully compiled in practice, with direct proof holes respectively **2/3/5**, total **10**.
+* Default `lake build` is connected to the root directory `python3 research/verify.py`. Final verification receipt is
+  `build/verification/latest.json`, exactly equal to the final complete source code snapshot; evidence JSON is
+  `research/explorations/2026-09-15-critical-slice.json`, final verification and save
+  `build/audit/critical-final-snapshot.json`. `build/` is gitignored, hence `build/audit`
+  The hash is bound solely by evidence JSON.
+* Certification still **24**, perimeter infrastructure still **missing**.

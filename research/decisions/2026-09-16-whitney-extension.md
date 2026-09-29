@@ -1,74 +1,61 @@
-# L6：紧集一阶 Whitney jet 的 C¹ 延拓完成
+# L6: C¹ Extension Completion of First-Order Whitney Jets on Compact Sets
 
-2026-09-16。本轮起点 HEAD/origin/main 均为
-`dcc158d7d3b9e91f17d2ee0fd49b30cdb6f4f7d8`。起点回执
-`20260915T171518.856116Z` 通过，479 条目，快照
-`b531c9e4be6397d1d3e5893b4c57eb166ae63ded45f9064f1c4d5c039bb7f124`，与起点源码一致。
-保留所有既有 Lean 文件和历史决定的原字节；不提交、不推送，不改真实 Git index。
+2026-09-16. The current round start HEAD/origin/main consists of
+`dcc158d7d3b9e91f17d2ee0fd49b30cdb6f4f7d8`. Start verification receipt
+`20260915T171518.856116Z` passed, 479 item, snapshot
+`b531c9e4be6397d1d3e5893b4c57eb166ae63ded45f9064f1c4d5c039bb7f124`, consistent with the start source code.
+Retain all existing Lean files and historical decisions in original bytes; do not commit, do not push, do not modify the real Git index.
 
-## 精确结论
+## Exact Conclusion
 
-`FunctionalInequalities.Analysis.WhitneyJet.exists_contDiff_extension`，位于
-`formalization/FunctionalInequalities/Analysis/WhitneyConstruction.lean`：有限维实内积空间中，
-S 紧、F 在 S 上连续，且 (f,F) 满足原始 L6 的一致一阶余项条件，则存在全局 C¹ 函数 v，
-在 S 上精确等于 f，且每一点的**环境导数** `fderiv ℝ v x = F x`。
+`FunctionalInequalities.Analysis.WhitneyJet.exists_contDiff_extension`, located at
+`formalization/FunctionalInequalities/Analysis/WhitneyConstruction.lean`: in a finite-dimensional real inner product space,
+S is compact, F is continuous on S, and (f,F) satisfies the raw L6 uniform first-order remainder condition, then there exists a global C¹ function v,
+equal to f exactly on S, and possessing the **ambient derivative** `fderiv ℝ v x = F x` at each point.
 
-没有增加非空、正维、内点、凸性、有限集假设。公开定理甚至不需要原始语句的
-`ContinuousOn f S`（余项已蕴涵此连续性），也不需要额外列出 CompleteSpace、
-MeasurableSpace、BorelSpace。`research/audits/WhitneyConstructionAudit.lean` 的
-`original_L6` 逐字保留原始 L6 的命题文本和全部实例、假设，并给出证明。
-这是原路线所要求的**紧集**延拓；没有另外声称任意非紧闭集上的局部 Whitney 条件版本。
+No additional assumptions of non-empty, positive-dimensional, interior points, convexity, or finite set are introduced. The public theorem even does not require the raw energy `ContinuousOn f S` (the remainder already entails this continuity), nor does it need to explicitly list CompleteSpace, MeasurableSpace, or BorelSpace. `research/audits/WhitneyConstructionAudit.lean`'s `original_L6` verbatim retains the original L6 proposition text and all instances and assumptions, and provides a proof.
+This is the required **compact set** extension along the original route; no additional claim is made regarding a local Whitney condition version on any non-compact closed set.
 
-结合既有 `Analysis.uniform_jet_remainder_of_contDiff`，原始一致余项条件的必要性与
-充分性现在都有证明。旧 FirstOrderJet 和 WhitneyExtension 审计客户端中的“未证明”文字
-是各自历史轮次的快照，不改写那些已经绑定哈希的来源；当前状态以本决定及新客户端为准。
+Combined with the existing `Analysis.uniform_jet_remainder_of_contDiff`, the necessity and sufficiency of the raw consistency remainder condition are now both proven. The "unproven" text in the existing FirstOrderJet and WhitneyExtension audit clients is a snapshot from their historical versions and does not overwrite sources that are already bound to hashes; the current state is governed by this decision and the new client.
 
-## 构造与估计
+## Construction and Estimation
 
-四个新模块均只通过分析模块依赖 Mathlib，不导入 KLS 或 WIP。
+All four new modules rely solely on analyzing module dependencies in Mathlib, without importing KLS or WIP.
 
-1. **WhitneyCover**：令 `r(x)=min(1,dist(x,S))/20`。Vitali 抽取得到两两不交的小球，
-   五倍球覆盖整个补集。八倍闭球仍在补集内，并在补集的子空间拓扑上局部有限。
-   与 `ball y (r(y))` 相交的八倍球，其中心 z 满足
-   `r(y)/2 ≤ r(z) ≤ 2r(y)`、`dist(z,y) ≤ 20r(y)`。
-   Haar 体积比较给局部基数界 `N=81^finrank`。封顶半径允许处理无界补集；不声称常数尖锐。
-2. **WhitneyBump**：缩放一个内半径 5、外半径 8 的光滑 bump。
-   值在 [0,1]，五倍球内为 1，支撑在八倍闭球内；存在统一 M>0，导数范数 ≤M/r。
-   由基础 bump 导数的紧支撑和连续性取界，链式法则给缩放；零维也适用。
-3. **WhitneyPartition**：按上述覆盖求和并归一化。和至少为 1；得到非负光滑权重 φ，
-   局部有限、和为 1，且存在 K>0，`‖Dφ_z(y)‖ ≤ K/r(y)`。明确证明局部邻域上等于
-   一个至多 N 项的有限和，再求导；没有把点态有限重叠误当成局部有限性。
-4. **WhitneyConstruction**：对每个中心选 S 上最近点 p_z，令
-   `w(y)=∑ φ_z(y) (f(p_z)+F(p_z)(y-p_z))`。补集上 w 光滑。
-   当 d=dist(y,S)<1/2 时 r(y)=d/20；相关 p_z 距 y 至多 3d，距 y 的最近点 a 至多 4d。
-   F 的紧集上一致连续性和 jet 余项给仿射差 ≤7ηd。
-   值误差用非负权重和 1；导数误差用 `∑Dφ_z=0` 消去公共仿射值。
-   两项分别得到 `7ηd` 和 `η+140NKη`，取 `η=ε/(8+140NK)`，即给出所需
-   `εd` 和 `ε` 两项一致估计。既有边界拼接定理据此构造全局 C¹ 延拓。
-   空集分支直接取常数 0，不使用不存在的最近点。
+1. **WhitneyCover**: Let `r(x)=min(1,dist(x,S))/20`. Vitali extraction yields a collection of pairwise disjoint balls,
+   The five-fold ball covers the complement. The eight-fold closed ball remains within the complement and is locally finite with respect to the subspace topology of the complement.
+   The eight-fold ball intersecting `ball y (r(y))`, whose center z satisfies
+   `r(y)/2 ≤ r(z) ≤ 2r(y)`, `dist(z,y) ≤ 20r(y)`.
+   Haar volume comparison provides local cardinality bounds `N=81^finrank`. Cap radius allows handling unbounded complements; does not claim constant sharpness.
+2. **WhitneyBump**: Scale a smooth bump with inner radius 5 and outer radius 8.
+   The value lies in [0,1], five times the ball is 1, supported within eight times closed ball; there exists a uniform M > 0, with derivative norm ≤ M/r.
+   By bounding the derivative of the basic bump with compact support and continuity, the chain rule gives scaling; the zero-dimensional case also holds.
+3. **WhitneyPartition**: Sum over the above cover and normalize. The sum is at least 1; we obtain non-negative smooth weights φ,
+   Locally finite, summing to 1, and there exists K > 0, `‖Dφ_z(y)‖ ≤ K/r(y)`. A clear proof shows equality on local neighborhoods.
+   A finite sum with at most N terms, then take derivative; not mistaking pointwise finite overlap for local finiteness.
+4. **WhitneyConstruction**: For each center, choose the closest point p_z on S, and let
+   `w(y)=∑ φ_z(y) (f(p_z)+F(p_z)(y-p_z))`. w-smooth on the complement.
+   When d = dist(y, S) < 1/2, then r(y) = d/20; related p_z is at most 3d from y, and the closest point a to y is at most 4d.
+   Uniform continuity and jet remainder on compact sets of F gives affine difference ≤7ηd.
+   Value error uses non-negative weights and 1; derivative error uses `∑Dφ_z=0` to eliminate common affine values.
+   The two terms yield `7ηd` and `η+140NKη`, take `η=ε/(8+140NK)`, i.e., giving the desired result
+   `εd` and `ε` provide consistent estimates. A global C¹ extension is constructed from this boundary gluing theorem.
+   The empty set branch directly takes a constant 0, without using the non-existent nearest point.
 
-## 验证与证据
+## Verification and Evidence
 
-四个新模块及新客户端用 `-DwarningAsError=true` 编译；新客户端 13 条公理报告仅有
-`propext`、`Classical.choice`、`Quot.sound`，无 `sorryAx`。客户端含原始完整 L6、空集、
-单点任意环境导数、零维，以及平方函数在无限紧区间上的 jet。
-22 个审计客户端全部重跑（research/audits 15 个，已有 build/audit 7 个），三个 WIP
-逐个重编译仍为 2/2/5。LevelSetMeasurableAudit 的 4 个、IsoperimetryCoareaAudit 的 6 个、
-SuperlevelSardScope 的 2 个 sorryAx 报告是刻意保留的开放洞审计。
+Four new modules and new client compiled with `-DwarningAsError=true`; new client 13 reports only axioms `propext`, `Classical.choice`, `Quot.sound`, none of `sorryAx`. The client includes raw complete L6, empty set, derivative at an arbitrary environment point, zero-dimensional, and the jet of a square function over an infinite compact interval.
+22 audit clients were all re-run (research/audits 15, with build/audit 7 already completed), and three WIPs were individually recompiled and remain as 2/2/5. The LevelSetMeasurableAudit has 4 entries, IsoperimetryCoareaAudit has 6 entries, and SuperlevelSardScope has 2 sorryAx reports intentionally retained as open holes in audit.
 
-逐项日志、命令、哈希和源码保持核对记录在
-`research/explorations/2026-09-16-whitney-extension.json`。最终默认构建、完整验证、
-195 个本地模块内核重放及精确源码绑定以
-`build/audit/whitney-extension/final-snapshot.json` 指向的回执为准。
-进度图使用临时 Git index 和临时对象目录生成，真实 index 不变。
+Per-item logs, commands, hashes, and source code are kept in sync with `research/explorations/2026-09-16-whitney-extension.json`. The final default build, full verification, reexecution of the 195 local module kernels, and precise source code binding are taken as conclusive against the receipt pointed to by `build/audit/whitney-extension/final-snapshot.json`.
+The progress diagram is generated using a temporary Git index and a temporary object directory, while the actual index remains unchanged.
 
-## 后续边界
+## Future boundary
 
-**L6 已完成；L6a、L7、L12 和 Lipschitz coarea 未完成。** 下一步是原始 L6a：
-从 Lipschitz 函数提取可数紧集，覆盖几乎处处的点，每片同时保留可微性、导数连续性和
-一致一阶余项。然后逐片调用本轮 L6 得 L7 的精确 C¹ 分片，再接 L12。
-L6a 的精确量词仍见原始 weighted-coarea-route 决定；Lusin–Souslin 并不是所需的 Lusin 提取。
+**L6 completed; L6a, L7, L12, and Lipschitz coarea not completed.** Next step is raw L6a:
+Extract a countable compact set from Lipschitz functions, covering almost every point, preserving simultaneously differentiability, continuity of derivatives, and uniformly first-order remainder. Then invoke the current L6 piecewise to obtain the exact C¹ piecewise of L7, followed by L12.
+The exact quantifiers of L6a remain as determined in the original weighted-coarea-route; Lusin–Souslin is not required for the Lusin extraction.
 
-直接洞 **9（2/2/5）**，证书 **24**，perimeter infrastructure **missing**，均不变。
-尖锐有限正则性 Sard、两个 Cheeger 比较、维数无关 KLS 仍开放。进度图 WHIT 合并节点
-还包含未完成的精确 C¹ 分片，因此保持 ◐，不把整个 Whitney–Lusin 路线标成完成。
+Direct proof hole **9 (2/2/5)**, certificate **24**, perimeter infrastructure **missing**, all remain unchanged.
+Sharp finite regularity Sard, two Cheeger comparisons, dimension-free KLS still open. Progress chart WHIT merged nodes
+Also includes unfinished exact C¹ piecewise, thus retains ◐, does not mark the entire Whitney–Lusin path as complete.

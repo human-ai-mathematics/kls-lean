@@ -1,78 +1,83 @@
-# B1 收口：余维 m 的 C¹ 图面积公式
+# B1 completion: the C¹ graph area formula in codimension m
 
-2026-09-16。本轮**证明新定理**，完成义务 **B1** 的第五阶段，
-**余维 m 的 C¹ 图面积公式在原始与归一化两种约定下都已证明**。
-不迁洞，不提交、不推送。直接洞仍 **8（1/2/5）**，证书仍 **24**。
+2026-09-16. This round **proves new theorems**, completing the fifth stage of obligation **B1**.
+**The codimension-m C¹ graph area formula is proved with both raw and normalized measures.**
+No hole migration, commit, or push. Direct holes remain **8 (1/2/5)**; certificates remain **24**.
 
-起点 `HEAD = origin/main = 34b92695ece4f636a1a7f1eafbbf41c685ee0348`；起点 passed 回执
-`build/verification/20260916T144943.423764Z/report.json`：10 个门、205 个本地模块内核重放、
-533 条目。
+Starting point: `HEAD = origin/main = 34b92695ece4f636a1a7f1eafbbf41c685ee0348`; starting passed receipt:
+`build/verification/20260916T144943.423764Z/report.json`: 10 gates, 205 local modules replayed by the kernel,
+533 entries.
 
-## 边界
+## Boundary
 
-对数凹 Cheeger–Buser 线归合作者**王浩丞**，本轮未触碰。
+The log-concave Cheeger–Buser line belongs to collaborator **Haocheng Wang** and was untouched.
 
-## 精确成果
+## Exact results
 
-`Analysis/VectorGraphArea.lean`（本地 import 闭包 10 个模块，**无 WIP**）：
+`Analysis/VectorGraphArea.lean` (10 modules in its local import closure, **no WIP**):
 
-* **`hausdorffMeasure_image_vectorGraphMap`**：
-  `μH[k] (graph '' s) = ∫⁻ y in s, ofReal (normDet (graphMapLinear ι κ (Dγ y))) ∂μH[k]`。
-* **`hausdorffNormalized_image_vectorGraphMap`**：归一化版本，右端对 **Lebesgue 测度**积分。
-  这是余维 m coarea 纲领实际要消费的形式。
+* **`hausdorffMeasure_image_vectorGraphMap`**:
+  `μH[k] (graph '' s) = ∫⁻ y in s, ofReal (normDet (graphMapLinear ι κ (Dγ y))) ∂μH[k]`.
+* **`hausdorffNormalized_image_vectorGraphMap`**: the normalized version, integrating against **Lebesgue measure** on the right.
+  This is the version needed by the codimension-m coarea program.
 
-`s` 只需可测：**不要求有限测度、有界或单射**——图映射按构造就是单射。
+Only measurability of `s` is required: **no finite-measure, boundedness, or injectivity assumption**; the graph map is injective by construction.
 
-## 一处与余维一不同的真障碍
+## A genuine obstacle absent in codimension one
 
-余维一的证明用到「Jacobian `√(1+‖a‖²)` 对斜率**全局 1-Lipschitz**」，从而导数接近就推出
-Jacobian 接近。**余维 m 的 `√det(1+AᵀA)` 不是一致 Lipschitz 的**：在二维参数空间上取
-`A = t·id`，它像 `1+t²` 那样增长，导数随 `t` 无界。
+The codimension-one proof uses the fact that the Jacobian `√(1+‖a‖²)` is **globally 1-Lipschitz** in the slope,
+so close derivatives imply close Jacobians. In **codimension m, `√det(1+AᵀA)` is not uniformly Lipschitz**:
+on a two-dimensional parameter space, `A = t·id` gives growth like `1+t²`, with derivative unbounded in `t`.
 
-所以上一轮的分片不够用。本轮改为让分片**直接控制 Jacobian**
-（`exists_approximating_partition_with_jacobian`），由 Jacobian 的连续性（上一轮 A1 的结论
-经 `continuous_graphMapLinear_normDet`）提供。此后完全照余维一的结构走，
-极限引理 `tendsto_aux`、`tendsto_aux'` 与图无关，**原样复用未重证**。
+The preceding partition was therefore insufficient. This round makes the partition **control the Jacobian directly**
+via `exists_approximating_partition_with_jacobian`, using Jacobian continuity (the preceding A1 result,
+through `continuous_graphMapLinear_normDet`). The rest follows the codimension-one structure.
+The limit lemmas `tendsto_aux` and `tendsto_aux'` do not depend on the graph and are **reused unchanged, without reproving them**.
 
-## 路线语句 B1 的一处错误，必须记下
+## An error in route statement B1 that must be recorded
 
-上一轮路线探查写的 **B1 语句是错的**：它把左边的**原始** `μH[k]` 与右边的 **Lebesgue**
-测度配在一起。两者差一个归一化常数——`Analysis.hausdorffMeasure_finrank_eq_smul_volume`
-给出 `μH[k] = (2^k/ω_k) • volume`，而 `2^k = ω_k` 只在 `k ≤ 1` 成立（`ω_0=1`、`ω_1=2`）。
-**所以该语句在 `k ≥ 2` 时按字面是假的**，本轮证的不是它。
+The **B1 statement from the preceding route exploration is false**: it pairs **raw** `μH[k]` on the left with
+**Lebesgue** measure on the right. They differ by a normalization constant:
+`Analysis.hausdorffMeasure_finrank_eq_smul_volume` gives `μH[k] = (2^k/ω_k) • volume`, whereas
+`2^k = ω_k` only for `k ≤ 1` (`ω_0=1`, `ω_1=2`). **The literal statement is therefore false for `k ≥ 2`**;
+it is not the statement proved this round.
 
-正确的两种配对都已证明并审计：
-* `corrected_B1`：原始配原始（`μH` 与 `μH`）；
-* `route_B2`：归一化配 Lebesgue——**路线里的 B2 写对了**，逐字兑现。
+Both correct pairings are proved and audited:
 
-按不改写历史证据的惯例，`research/audits/AreaFormulaRouteStatements.lean` **保持原字节**，
-更正记在本决定与 `research/audits/VectorGraphAreaAudit.lean` 中。
+* `corrected_B1`: raw with raw (`μH` with `μH`);
+* `route_B2`: normalized with Lebesgue. **B2 was stated correctly in the route** and is fulfilled verbatim.
 
-## 这是什么，不是什么
+Following the convention of preserving historical evidence, `research/audits/AreaFormulaRouteStatements.lean`
+**keeps its original bytes**. The correction is recorded here and in `research/audits/VectorGraphAreaAudit.lean`.
 
-这是**图**的面积公式。**不是** Federer 面积公式 `A0`（任意单射 C¹ 参数化），
-后者与 `A2`–`A5` 仍然开放。路线当初推荐图版本，正是因为图映射按构造单射且有显式左逆。
+## Scope of this result
 
-## 本轮没有做的事
+This is an area formula for **graphs**. It is **not** the Federer area formula `A0` for arbitrary injective C¹ parametrizations;
+that result and `A2`–`A5` remain open. The route recommended the graph version precisely because graph maps are injective
+by construction and have an explicit left inverse.
 
-* 没有证明 `A0`、`A2`–`A5`；没有证明任何 coarea 公式。
-* 没有迁洞；没有碰尖锐 Sard、两条 Cheeger 比较、Energy 的五个洞。
-* 没有扩大证书或 Blueprint `leanok` 范围。
-* **没有提交、没有推送**，真实 Git index 未改动。
+## Work excluded from this round
 
-## 纲领现状与下一步
+* No proof of `A0`, `A2`–`A5`, or any coarea formula.
+* No hole migration; sharp Sard, the two Cheeger comparisons, and the five Energy holes are untouched.
+* No expansion of certificate or Blueprint `leanok` scope.
+* **No commit or push**; the real Git index is unchanged.
 
-余维 m coarea 纲领已完成：coarea Jacobian、线性面积公式与仿射纤维、任意余维图 Jacobian、
-A1、以及 **B1/B2 图面积公式**。下一步是余维 m coarea 的**正则情形**（标量 L9 的类比）：
-在 `coareaJacobian ≠ 0` 的开集上用带参数隐函数定理把纤维表示成图族，再用本轮的 B2。
+## Program status and next step
 
-## 验证
+Completed in the codimension-m coarea program: the coarea Jacobian, linear area formula and affine fibers,
+graph Jacobian in arbitrary codimension, A1, and **B1/B2 graph area formulas**.
+Next is the **regular case** of codimension-m coarea (analogous to scalar L9): on the open set where
+`coareaJacobian ≠ 0`, use a parametric implicit function theorem to represent fibers as a family of graphs,
+then apply B2 from this round.
 
-* 新模块与新客户端均以 `-DwarningAsError=true` 编译通过，无 `sorry`。
-* `research/audits/VectorGraphAreaAudit.lean` 的 10 条公理报告只用
-  `propext`、`Classical.choice`、`Quot.sound`；含全空间（无有限性）与零维参数空间。
-* 重跑全部 33 个审计客户端（`research/audits` 26 个，`build/audit` 7 个），全部严格通过。
-* 三个 WIP 逐个编译，直接洞 **1/2/5，总数 8**，不变。
-* 默认 `lake build` 与根目录 `python3 research/verify.py` 通过；证据 JSON 为
-  `research/explorations/2026-09-16-vector-graph-area.json`，最终核对另存
-  `build/audit/vector-graph-area/final-snapshot.json`。
+## Validation
+
+* The new module and client compile with `-DwarningAsError=true`, without `sorry`.
+* The 10 axiom reports in `research/audits/VectorGraphAreaAudit.lean` use only
+  `propext`, `Classical.choice`, and `Quot.sound`; cases include the whole space (without finiteness) and zero-dimensional parameter spaces.
+* All 33 audit clients were rerun (26 in `research/audits`, 7 in `build/audit`) and passed strict checks.
+* The three WIP files were compiled separately: direct holes remain **1/2/5, total 8**.
+* Default `lake build` and root-level `python3 research/verify.py` pass. Evidence JSON:
+  `research/explorations/2026-09-16-vector-graph-area.json`; final snapshot check:
+  `build/audit/vector-graph-area/final-snapshot.json`.

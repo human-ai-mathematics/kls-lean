@@ -1,41 +1,53 @@
-# 从光滑测试接到所选 Poincaré 常数
+# From smooth tests to the selected Poincaré constant
 
-这批已证明的比较定理接通三个对象：光滑测试常数、ambient relaxation
-常数，以及项目选定的 intrinsic-affine relaxation 常数。已有 Gaussian 和有限维 tensorization
-结论现在可以通过等式用于所选常数。
+This batch of proved comparison theorems connects three objects: the smooth-test constant,
+the ambient-relaxation constant, and the project's selected intrinsic-affine-relaxation constant.
+The existing Gaussian and finite-dimensional tensorization results can now be transferred to
+the selected constant through these equalities.
 
-**12 条比较定理均已证明，两份证书通过传递公理检查，ledger 状态为
-`proved / checked_by: lean`。** 原有声明的假设和类型保持不变，现由
-`Poincare.Foundation` 与 root aggregate 导出。后续批次已进一步证明一般对数凹
-测度的文献 locally Lipschitz 常数比较，以及内禀律绝对连续时的 Cheeger 能量识别；
-任意奇异律的无条件 Cheeger 识别、Cheeger–Buser 比较和 KLS 仍未证明。
+**All 12 comparison theorems are proved. Both certificates pass transitive axiom checks, and
+the ledger status is `proved / checked_by: lean`.** The original assumptions and types are
+unchanged; the declarations are now exported by `Poincare.Foundation` and the root aggregate.
+Later batches also proved the comparison with the literature's locally Lipschitz constant for
+general log-concave measures, and Cheeger-energy identification when the intrinsic law is
+absolutely continuous. Unconditional Cheeger identification for arbitrary singular laws,
+Cheeger–Buser comparison, and KLS remain unproved in this recorded status.
 
-一般对数凹版本位于 [Poincare.lean](../../KLS/LogConcave/Poincare.lean)：从现有
-`KLS.LogConcave μ` 推出 光滑测试、内在光滑梯度和局部斜率 常数相等，进而得到 selected 常数等式。
-内禀绝对连续性由 [AbsoluteContinuity.lean](../../KLS/LogConcave/Density/AbsoluteContinuity.lean) 证明，未作为额外假设。
-包含环境奇异和零维支撑；完整 Borell 密度代表、局部界及矩定理也已由后续证书完成。见
-[本地证明记录](../../../../research/decisions/2026-09-06-general-logconcave-comparison.md)。
+The general log-concave version is in [Poincare.lean](../../KLS/LogConcave/Poincare.lean):
+the existing `KLS.LogConcave μ` implies equality of the smooth-test, intrinsic smooth-gradient,
+and local-slope constants, hence equality with the selected constant. Intrinsic absolute
+continuity is proved in [AbsoluteContinuity.lean](../../KLS/LogConcave/Density/AbsoluteContinuity.lean),
+not imposed as an extra assumption. This covers ambient singularity and zero-dimensional support.
+The full Borell density representative, local bounds, and moment theorems were also completed by
+later certificates. See the [local proof record](../../../../research/decisions/2026-09-06-general-logconcave-comparison.md).
 
-公共命名按数学角色组织：`Poincare.SmoothGradient.Intrinsic.constant` 是所选常数，
-`Poincare.SmoothGradient.Ambient.constant` 是环境空间上的松弛常数，`Poincare.L2Energy.constant μ energy`
-是通用优化器；`Poincare.CovarianceGradient.Intrinsic.constant` 是 CMH 路线使用的仿射协方差常数 `C_P^aff`，见
-[Intrinsic.lean](../CovarianceGradient/Intrinsic.lean)；[Translation.lean](../CovarianceGradient/Translation.lean) 证明它在环境平移下不变（对任意 Borel 律）；[Comparison.lean](../LipschitzGradient/Comparison.lean) 证明单位权 Lipschitz 梯度松弛的最优常数等于 legacy 与文献常数，故单位协方差时 `C_P^aff` 与前三者相等，一般时 `C_P^lit ≤ ‖Σ‖ C_P^aff`。对 `hμ : KLS.LogConcave μ`，直接使用 `hμ.intrinsicSmooth_constant_eq_localSlope`。
-名称整理的范围与保留长名的理由见 [命名约定](../../../../research/naming.md)。
+Public names reflect mathematical roles: `Poincare.SmoothGradient.Intrinsic.constant` is the
+selected constant, `Poincare.SmoothGradient.Ambient.constant` is the relaxation constant on the
+ambient space, and `Poincare.L2Energy.constant μ energy` is the generic optimizer.
+`Poincare.CovarianceGradient.Intrinsic.constant` is the affine covariance constant `C_P^aff`
+used by the CMH route; see [Intrinsic.lean](../CovarianceGradient/Intrinsic.lean).
+[Translation.lean](../CovarianceGradient/Translation.lean) proves its invariance under ambient
+translation for arbitrary Borel laws. [Comparison.lean](../LipschitzGradient/Comparison.lean)
+proves that the optimal constant of unit-weight Lipschitz-gradient relaxation equals the legacy
+and literature constants. Thus, for identity covariance, `C_P^aff` equals the preceding three
+constants; in general, `C_P^lit ≤ ‖Σ‖ C_P^aff`. For `hμ : KLS.LogConcave μ`, use
+`hμ.intrinsicSmooth_constant_eq_localSlope` directly. See the [naming conventions](../../../../research/naming.md)
+for the scope of the naming cleanup and reasons for retaining longer names.
 
-## 阅读入口
+## Entry points
 
-| 目的 | 文件 | 内容 |
+| Purpose | File | Contents |
 | --- | --- | --- |
-| 先看几何比较和退化情形 | [LemAmbientIntrinsicPoincareComparison.lean](../../../../solutions/LemAmbientIntrinsicPoincareComparison.lean) | 5 条声明、4 个应用 |
-| 看抽象比较和 Gaussian 的未来用法 | [LemLegacyRelaxedPoincareComparison.lean](../../../../solutions/LemLegacyRelaxedPoincareComparison.lean) | 7 条比较声明、8 个应用 |
-| 任意具体 pre-energy 的常数比较 | [Poincare/Relaxation.lean](../Relaxation.lean) | 原始测试族定义、有限常数等价、扩展最优常数等式 |
-| 比较两种坐标下的能量 | [Energy/SmoothGradient/Intrinsic/Comparison.lean](../../Energy/SmoothGradient/Intrinsic/Comparison.lean) | 测试限制、测试延拓、relaxation 等式 |
-| 从能量等式得到常数等式 | [Comparison.lean](../SmoothGradient/Comparison.lean) | 两种 relaxed `Holds` 与常数比较 |
-| 接到旧光滑测试接口 | [Comparison.lean](../SmoothTest/Comparison.lean) | 原始测试域识别及两级常数比较 |
+| Geometric comparison and degenerate cases | [LemAmbientIntrinsicPoincareComparison.lean](../../../../solutions/LemAmbientIntrinsicPoincareComparison.lean) | 5 declarations, 4 applications |
+| Abstract comparison and future Gaussian use | [LemLegacyRelaxedPoincareComparison.lean](../../../../solutions/LemLegacyRelaxedPoincareComparison.lean) | 7 comparison declarations, 8 applications |
+| Constant comparison for any concrete pre-energy | [Poincare/Relaxation.lean](../Relaxation.lean) | Raw test-family definition, finite-constant equivalence, equality of extended optimal constants |
+| Comparing energies in two coordinate systems | [Energy/SmoothGradient/Intrinsic/Comparison.lean](../../Energy/SmoothGradient/Intrinsic/Comparison.lean) | Test restriction, test extension, relaxation equality |
+| From energy equality to constant equality | [Comparison.lean](../SmoothGradient/Comparison.lean) | Comparison of the two relaxed `Holds` predicates and constants |
+| Connection to the legacy smooth-test interface | [Comparison.lean](../SmoothTest/Comparison.lean) | Identification of the raw test domain and two levels of constant comparison |
 
-## 要表达的数学结论
+## Mathematical statements
 
-给定任意概率律 `μ` 和实 `L²(μ)` 上的具体有限 pre-energy `P`，定义
+For any probability law `μ` and concrete finite pre-energy `P` on real `L²(μ)`, define
 
 ```text
 TestFamily.ofPreEnergy μ P
@@ -44,15 +56,19 @@ TestFamily.ofPreEnergy μ P
   energy   = P.energy
 ```
 
-抽象比较定理证明：对每个 `C : NNReal`，原始测试族上的不等式与 relaxation
-有限能量域上的不等式等价，两个 `ENNReal` 最优常数也相等。这里不要求密度、二次性或
-raw/core agreement。测试类可以为空，常数可以是零，最优常数可以是无穷。
+The abstract comparison theorem proves that, for every `C : NNReal`, the inequality on the raw
+test family is equivalent to the inequality on the finite-energy domain of the relaxation.
+The two `ENNReal` optimal constants are equal as well. No density, quadraticity, or raw/core
+agreement is required. The test class may be empty, the constant may be zero, and the optimal
+constant may be infinite.
 
-有限维欧氏实现证明：ambient smooth-gradient relaxation 与已经拉回原 `L²(μ)` 的
-intrinsic-affine relaxation 完全相等。因此二者的有限能量域、有效有限常数和扩展最优
-常数一致。测度允许奇异、proper affine support 或零维支撑，不要求二阶矩或 log-concavity。
+The finite-dimensional Euclidean implementation proves exact equality between ambient
+smooth-gradient relaxation and intrinsic-affine relaxation pulled back to the original `L²(μ)`.
+Their finite-energy domains, valid finite constants, and extended optimal constants therefore
+agree. Measures may be singular or have proper affine support or zero-dimensional support;
+neither second moments nor log-concavity are required.
 
-最后一组将 SmoothTest 的 `Admissible` 与 `Energy.SmoothGradient.Test` 对齐，得到
+The final group identifies SmoothTest `Admissible` with `Energy.SmoothGradient.Test`, giving
 
 ```text
 Poincare.SmoothTest.constant μ
@@ -60,13 +76,15 @@ Poincare.SmoothTest.constant μ
   = Poincare.SmoothGradient.Intrinsic.constant μ.
 ```
 
-这里略去了 `ProbabilityMeasure → Measure` 的 coercion。真正的有限常数接口明确使用
-`C : NNReal` 和旧接口的 `(C : ℝ)`；没有将无穷最优常数转成实数。两种测试都要求普通
-`ContDiff ℝ ∞`、`L²` 及平方梯度可积，归一化始终是 `Var ≤ C ∫ ‖gradient‖²`。
+The `ProbabilityMeasure → Measure` coercion is omitted here. The actual finite-constant
+interface explicitly uses `C : NNReal` and `(C : ℝ)` in the legacy interface; it never converts
+an infinite optimal constant to a real number. Both test classes require ordinary `ContDiff ℝ ∞`,
+`L²`, and an integrable squared gradient. The normalization is always `Var ≤ C ∫ ‖gradient‖²`.
 
-## 一个可直接使用的调用方式
+## A directly usable invocation
 
-以下调用已在第二份证书入口中编译检查，使用已证明的 Gaussian 定理与比较桥：
+The following invocation was compilation-checked in the second certificate entry point, using
+the proved Gaussian theorem and comparison bridge:
 
 ```lean
 import FunctionalInequalities.Poincare.SmoothTest.Comparison
@@ -80,39 +98,38 @@ open FunctionalInequalities
       (Poincare.SmoothTest.holds_gaussianReal m v))
 ```
 
-这里 `v` 是方差，包括 `v = 0` 的 Dirac 情形。比较桥把 SmoothTest Gaussian 的有效常数与
-精确最优值传到所选接口。入口还检查任意维数、空测试类型及无穷常数的传递。
+Here `v` is the variance, including the Dirac case `v = 0`. The bridge transfers valid constants
+and the exact optimum of the SmoothTest Gaussian result to the selected interface. The entry
+point also checks transfer for arbitrary dimension, empty test types, and infinite constants.
 
-## 证明与来源
+## Proofs and sources
 
-1. 限制 ambient 测试到 affine support：梯度投影到切向方向，原始能量只能减小。
-2. 将 intrinsic 测试沿正交投影延拓：消除法向变化，保持原始能量。这一步不能使用现有
-   `Probability.intrinsicMap` 的支撑外分支，因为该映射只保证可测。
-3. 对逼近序列逐项应用这两个构造，利用已有 intrinsic `L²` 等距等价，得到能量等式。
-4. 对任意 pre-energy，relaxation 在原始测试上不增能量，给出一个常数比较方向；反向在
-   每个有限能量点使用 recovery sequence 和 `L²` 方差连续性。这样也处理 `C = 0`，且不
-   需要无限能量点的 recovery 或稠密性。
-5. 用 `L2.coe_variance_eq_pointwise`、代表元的几乎处处相等和相同梯度积分识别旧测试域。
-   有效有限常数因而是 relaxed 最优常数的有限上界；最优值有限时取其 `toNNReal`，
-   无穷时有效集合为空，得到 legacy 下确界等式。无需另行假设最优值取到。
+1. Restrict an ambient test to the affine support: its gradient projects onto the tangent direction, so raw energy can only decrease.
+2. Extend an intrinsic test along orthogonal projection: this eliminates normal variation and preserves raw energy. The off-support branch of the existing `Probability.intrinsicMap` cannot be used here, since that map is only guaranteed to be measurable.
+3. Apply both constructions termwise to approximating sequences and use the existing intrinsic `L²` isometric equivalence to obtain energy equality.
+4. For any pre-energy, relaxation does not increase energy on raw tests, giving one direction of constant comparison. For the converse, use a recovery sequence and `L²` continuity of variance at each finite-energy point. This also handles `C = 0`, without recovery at infinite-energy points or a density assumption.
+5. Identify the legacy test domain using `L2.coe_variance_eq_pointwise`, almost-everywhere equality of representatives, and identical gradient integrals. Valid finite constants are then finite upper bounds for the relaxed optimum. Use its `toNNReal` when finite; when infinite, the valid set is empty. This gives the legacy infimum equality without separately assuming attainment.
 
-数学规格来自本地 Blueprint 的
-`thm:ambient-intrinsic-relaxation-equality`、`cor:ambient-intrinsic-constant-equality`、
-`thm:legacy-relaxed-holds-equivalence`、`thm:legacy-canonical-constant-comparison`。
-抽象 pre-energy 版本和具体 helper 切分是本地设计。历史手稿 Definition 2.1 只提供
-方差与梯度能量的归一化；它不是这些比较声明在任意 Borel 测度下的直接出处。
+The mathematical specifications come from the local Blueprint nodes
+`thm:ambient-intrinsic-relaxation-equality`, `cor:ambient-intrinsic-constant-equality`,
+`thm:legacy-relaxed-holds-equivalence`, and `thm:legacy-canonical-constant-comparison`.
+The abstract pre-energy version and the division into concrete helpers are local design choices.
+Definition 2.1 of the historical manuscript supplies only the variance/gradient-energy
+normalization; it is not a direct source for these comparison statements for arbitrary Borel measures.
 
-这些定理不要求同一个原始测试的能量等于 relaxed energy。文献 locally Lipschitz 常数
-等式已由后续模块接通，whitening 与仿射/各向同性归约亦已证明。
-光滑梯度松弛的 Markov/Dirichlet 性适用于任意 Borel 概率律；
-`Ecan = 2 Ch` 采用局部斜率约定，已在内禀律绝对连续时证明，因而覆盖全部对数凹律。
-任意奇异律的无条件识别仍未完成。`LogConcave`
-及 KLS 主命题已有公开定义，KLS 本身未获证明。书写延续项目采用的 formech 风格：先给用途与例子，
-再说明精确范围、来源和未完成部分。
+These theorems do not require the raw energy of a test to equal its relaxed energy. Later modules
+connect the literature's locally Lipschitz constant, and whitening and affine/isotropic reduction
+have also been proved. The Markov/Dirichlet property of smooth-gradient relaxation applies to
+every Borel probability law. In this recorded status, `Ecan = 2 Ch` uses the local-slope convention
+and is proved when the intrinsic law is absolutely continuous, covering all log-concave laws;
+unconditional identification for arbitrary singular laws remains incomplete. `LogConcave` and
+the main KLS proposition have public definitions, but KLS itself is unproved. The presentation
+follows the project's formech style: purpose and examples first, then exact scope, sources,
+and remaining work.
 
-## 构建与状态
+## Build and status
 
-从 `formalization/` 运行：
+Run from `formalization/`:
 
 ```sh
 lake build solutions.LemAmbientIntrinsicPoincareComparison
@@ -120,9 +137,10 @@ lake build solutions.LemLegacyRelaxedPoincareComparison
 lake build
 ```
 
-默认构建检查二十四份证书、公理 guards 和使用示例；这批比较模块没有证明占位。
-新增的方差连续性与连续测试映射的 relaxation 比较也有公理 guards。
-两个节点的数学规格在 [ledger](../../../../research/a-series/ledger.yaml)，原草案设计保留在
-[历史记录](../../../../research/decisions/2026-09-06-poincare-comparison-statements.md)，
-证明、签名审计与本轮 Blueprint 修正在
-[验收记录](../../../../research/decisions/2026-09-06-poincare-comparison-proofs.md)。
+The default build in this recorded status checks 24 certificates, axiom guards, and usage examples.
+This comparison batch has no proof placeholders. The added variance-continuity theorem and
+relaxation comparisons for continuous test maps also have axiom guards. The two nodes' mathematical
+specifications are in the [ledger](../../../../research/a-series/ledger.yaml). The original draft
+design is retained in the [historical record](../../../../research/decisions/2026-09-06-poincare-comparison-statements.md);
+proofs, signature audits, and the batch's Blueprint corrections are in the
+[acceptance record](../../../../research/decisions/2026-09-06-poincare-comparison-proofs.md).

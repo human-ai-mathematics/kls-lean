@@ -1,132 +1,116 @@
-# 2026-09-11 — 交给证明会话的提示词：填 `KLS/ConditionalFiber/EnergyComparison.lean` 的 sorry
+# 2026-09-11 — Prompt for proof session: replace the sorry placeholders in `KLS/ConditionalFiber/EnergyComparison.lean` with proofs
 
-以下提示词可直接复制给另一个模型/会话。
+The following prompt can be directly copied to another model/session.
 
 ---
 
 ```
-仓库：/Users/lyuyuwei/Documents/ChatGPT/KLS（Lean 4 / Mathlib v4.33.0，Mathlib 提交
-db584cd6d46c92f209a44c0f1c829460d327499d；Lake 根目录 formalization/）。
+Repository: /Users/lyuyuwei/Documents/ChatGPT/KLS (Lean 4 / Mathlib v4.33.0, Mathlib submission
+db584cd6d46c92f209a44c0f1c829460d327499d; Lake root directory formalization/)
 
-任务：填写 formalization/FunctionalInequalities/KLS/ConditionalFiber/EnergyComparison.lean 中的 2 条
-sorry。该文件是 Blueprint 节点 lem:conditional-fiber-energy-comparison
-（formalization/blueprint/src/chapters/50-kls-routes.tex，L383–397）的陈述骨架；设计与逐句对齐见
-research/decisions/2026-09-11-conditional-fiber-energy-comparison-statement.md。先读这两个文件、
-formalization/FunctionalInequalities/KLS/ConditionalFiber.lean、
-formalization/FunctionalInequalities/KLS/ConditionalFiber/Closed.lean、
-formalization/FunctionalInequalities/Energy/LocalSlope/{Basic,Gradient}.lean、
-formalization/FunctionalInequalities/Poincare/LocalSlope/Basic.lean 的模块文档。
+Task: Fill in formalization/FunctionalInequalities/KLS/ConditionalFiber/EnergyComparison.lean's 2 entry
+sorry. This file is the statement skeleton for Blueprint node lem:conditional-fiber-energy-comparison (formalization/blueprint/src/chapters/50-kls-routes.tex, L383–397); design and sentence-by-sentence alignment see research/decisions/2026-09-11-conditional-fiber-energy-comparison-statement.md. First read these two files,
+formalization/FunctionalInequalities/KLS/ConditionalFiber.lean,
+formalization/FunctionalInequalities/KLS/ConditionalFiber/Closed.lean,
+formalization/FunctionalInequalities/Energy/LocalSlope/{Basic,Gradient}.lean,
+formalization/FunctionalInequalities/Poincare/LocalSlope/Basic.lean's module documentation.
 
-规则：
-1. 不改 EnergyComparison.lean 里两个 theorem（或 FiberBound）的类型。若确认某条为假或不可证，不要改类型：
-   在报告里写明反例/障碍并保留 sorry。允许加 private 辅助引理、允许加 import、允许在必要时把大证明拆成
-   本文件内的多条私有引理。
-2. 命名遵守 research/naming.md。
-3. 只在这个文件内工作。不要加进 formalization/FunctionalInequalities.lean、lakefile 的 Solutions 根、
-   research/a-series/ledger.yaml、research/check_blueprint.py 的 CERTIFICATES、research/tasks.json、
-   Blueprint 的 \lean{}/\leanok。不 git commit、不 git push。决定记录只追加（新建
-   research/decisions/2026-09-1X-conditional-fiber-energy-comparison-proofs.md）。
-4. 编译命令（在 formalization/ 下）：
+Rules:
+1. Do not modify the type of the two theorem (or FiberBound) in EnergyComparison.lean. If a statement is confirmed to be false or unprovable, do not change its type:
+  In the report, document a counterexample/barrier and retain sorry. Allow adding private auxiliary lemmas, allow importing, and allow splitting large proofs into multiple private lemmas within this file.
+2. Naming follows research/naming.md.
+3. Work only within this file. Do not add to formalization/FunctionalInequalities.lean, lakefile's Solutions root, research/a-series/ledger.yaml, research/check_blueprint.py's CERTIFICATES, research/tasks.json, or Blueprint's \lean{}/\leanok. Do not git commit or git push. Decisions are recorded only by appending (creating new entries to    research/decisions/2026-09-1X-conditional-fiber-energy-comparison-proofs.md).).
+4. Compilation command (in formalization/):
      lake env lean FunctionalInequalities/KLS/ConditionalFiber/EnergyComparison.lean
-   目标：无错误，填完后不再出现 "declaration uses 'sorry'"，无 unusedSectionVars 等其他警告。全部完成后
+  Goal: No errors, no "declaration uses 'sorry'" after completion, no unusedSectionVars or other warnings. After full completion,
      lake env lean -DwarningAsError=true FunctionalInequalities/KLS/ConditionalFiber/EnergyComparison.lean
-   并对填完的每个顶层定理 #print axioms，只允许 propext / Classical.choice / Quot.sound。
-5. 若本机 lake 报 `external command 'git' exited with code 1`（CommandLineTools 的 x86_64 lake 与 arm64
-   xcrun 不兼容）：在 PATH 前插入一个只 `exec /Library/Developer/CommandLineTools/usr/bin/git "$@"` 的
-   包装脚本所在目录，并设置 GIT_EXEC_PATH=/Library/Developer/CommandLineTools/usr/libexec/git-core、
-   GIT_TEMPLATE_DIR=/Library/Developer/CommandLineTools/usr/share/git-core/templates。不要改仓库内容
-   或系统 git 配置。
+  for each top-level theorem, run #print axioms, allowing only propext / Classical.choice / Quot.sound.
+5. If the local lake reports `external command 'git' exited with code 1` (CommandLineTools' x86_64 lake is incompatible with arm64 xcrun): prepend to PATH a wrapper script containing only `exec /Library/Developer/CommandLineTools/usr/bin/git "$@"`, and set GIT_EXEC_PATH=/Library/Developer/CommandLineTools/usr/libexec/git-core, GIT_TEMPLATE_DIR=/Library/Developer/CommandLineTools/usr/share/git-core/templates. Do not modify repository content or system git configuration.
 
-两条义务，建议顺序：先做 energy_le_of_fiberBound（更难，是核心分析论证），
-literatureConstant_le_of_fiberBound 主要是把它和一个抽象合成引理粘起来。
+Two obligations, recommended order: first tackle energy_le_of_fiberBound (more difficult, core analytical argument),
+literatureConstant_le_of_fiberBound mainly involves linking it to an abstract composition lemma.
 
-## 义务 1：`energy_le_of_fiberBound`
+## Obligation 1: `energy_le_of_fiberBound`
 
-目标：`energy μ ρ f ≤ κ * Energy.LocalSlope.energy μ f ∧ energy μ ρ f ≠ ⊤`。
+Objective: `energy μ ρ f ≤ κ * Energy.LocalSlope.energy μ f ∧ energy μ ρ f ≠ ⊤`.
 
-建议路线（对应 Blueprint 证明段落 "A finite upper bound... Dividing the assumed fiber inequality..."）：
+Suggested route (corresponding to Blueprint proof segment "A finite upper bound... Dividing the assumed fiber inequality..."):
 
-1. 展开 `energy μ ρ f = energyWithKernel μ ρ (kernel μ ρ) f
-   = (finrank ℝ E : ENNReal) * ∫⁻ b, energyAt (kernel μ ρ) b f ∂baseLaw μ ρ`（`energy`、`energyWithKernel` 的
-   定义已展开一半，见 ConditionalFiber.lean）。
-2. 逐纤维不等式（a.e. `b`，`Nondegenerate` 时）：
-   - `hf.locallyLipschitz` 沿方向 `b.1.1` 限制到直线 `t ↦ f (reconstruct b t)` 仍是（一元）局部 Lipschitz
-     （`reconstruct b` 是仿射，`LocallyLipschitz.comp`／直接展开定义）。
-   - 用 Rademacher 沿这条直线：类比 `Energy.LocalSlope.Gradient.apply_ae_eq_norm_gradient`（一维版本，或者
-     直接对 `f` 本身用该引理得到 `apply f x = ofReal ‖gradient f x‖` a.e.，再证明一元切片的局部斜率
-     `apply (fun t ↦ f (reconstruct b t)) t = ofReal |⟪gradient f (reconstruct b t), b.1.1⟫|`——链式法则，
-     `HasFDerivAt.comp`／`fderiv_comp`，`reconstruct b` 的导数是 `t ↦ t • b.1.1` 方向）。这一步目前仓库里没有
-     现成引理，需要新写（可放在本文件，或如果通用则放 Energy/LocalSlope/Gradient.lean，但规则 3 要求不改
-     共享文件，故先放本文件的 private 引理）。
-   - 应用 Blueprint 假设 `hfiber` 于该 `b`：`Poincare.LocalSlope.Intrinsic.constant ⟨kernel μ ρ b,_⟩ ≤
-     κ * evariance id (kernel μ ρ b)`。`Intrinsic.constant` 是 `⨅ C : {C // Holds ...}, C` 的下确界；要把它
-     转成"对这一个具体测试 `t ↦ f(reconstruct b t)` 的不等式"，需要形如
+1. Expand `energy μ ρ f = energyWithKernel μ ρ (kernel μ ρ) f
+   = (finrank ℝ E : ENNReal) * ∫⁻ b, energyAt (kernel μ ρ) b f ∂baseLaw μ ρ` (the definitions of `energy` and `energyWithKernel` are
+   already partly unfolded; see ConditionalFiber.lean).
+2. Fiberwise inequality (a.e. `b`, when `Nondegenerate` holds):
+   - `hf.locallyLipschitz` restricted along direction `b.1.1` to the line `t ↦ f (reconstruct b t)` remains (univariate) locally Lipschitz
+     (`reconstruct b` is affine, (`LocallyLipschitz.comp`)/direct expansion definition).
+   - Use Rademacher along this line: analogy `Energy.LocalSlope.Gradient.apply_ae_eq_norm_gradient` (one-dimensional version, or
+     Apply the lemma directly to `f` itself to obtain `apply f x = ofReal ‖gradient f x‖` a.e. then prove the local slope of univariate slice.
+     `apply (fun t ↦ f (reconstruct b t)) t = ofReal |⟪gradient f (reconstruct b t), b.1.1⟫|`——chain rule,
+     `HasFDerivAt.comp`/`fderiv_comp`, the derivative of `reconstruct b` is in the `t ↦ t • b.1.1` direction). This step is currently not available in the repository.
+     Existing lemma, needs to be newly written (can be placed in this file, or if general, placed in Energy/LocalSlope/Gradient.lean, but rule 3 requires no modification
+     Shared file, so place the private lemmas of this file first.
+   - Apply the Blueprint assumption `hfiber` to this `b`: `Poincare.LocalSlope.Intrinsic.constant ⟨kernel μ ρ b,_⟩ ≤
+     κ * evariance id (kernel μ ρ b)`.`Intrinsic.constant` is the infimum of ⨅ C : {C // Holds ...}, C; to do so
+     Convert to "inequality for this specific test `t ↦ f(reconstruct b t)`", requires a form like
      "`Poincare.LocalSlope.Intrinsic.constant ν ≤ X → ∀ g, Admissible ν g → evariance g ν ≤ X * energy ν g`"
-     的引理（当前 Poincare/LocalSlope/Basic.lean 没有；`Intrinsic.constant` 本身用 `intrinsicMeasure`，对
-     `ν : ProbabilityMeasure ℝ` 需要先确认 `intrinsicMeasure ν` 与 `ν` 本身重合，或者绕过 `Intrinsic.constant`
-     直接用 `Poincare.LocalSlope.Holds` 的定义展开——这是本义务里最需要小心处理的一步，可能需要一条新的
-     private 引理，例如用 `iInf` 的下确界性质：`Intrinsic.constant ν ≤ X` 且 `Holds` 对 `C` 单调（`C ≤ C' →
-     Holds ν C → Holds ν C'`——检查 Poincare/LocalSlope/Basic.lean 是否已有；若无需要证）配合
-     `ENNReal.le_iInf_iff`／取标准的"任意 `ε>0` 存在 `C < X+ε` 使 `Holds C`"再让 `ε→0`（配合 `evariance`
-     关于 `f` 的具体一个测试是不依赖 `ε` 的常数，可以直接用 `ENNReal.le_of_forall_pos_le_add` 或
-     `le_iInf_iff` 之类，把整条不等式在 `f` 固定后转成 `evariance ... ≤ X * energy ...` 而不产生 `ε` 剩余项——
-     注意 `X = κ * evariance id (kernel μ ρ b)` 本身可能是 `⊤`（不太可能，因 `Nondegenerate` 给了
-     `MemLp id 2`），一般情形请显式处理 `X = 0` 与 `X = ⊤` 的退化分支）。
-   - 除以 `evariance id (kernel μ ρ b) > 0`（`Nondegenerate` 的第三个字段给出 `≠ 0`；`ENNReal` 上除法用
-     `ENNReal.div_le_iff` 一类），得到 `energyAt (kernel μ ρ) b f ≤ κ * ∫⁻ t, ⟪∇f(reconstruct b t), b.1.1⟫² d(kernel μ ρ b)`。
-3. 把第 2 步的逐纤维界代入第 1 步的 `∫⁻ b ... ∂baseLaw`，得到
-   `energy μ ρ f ≤ κ * finrank ℝ E * ∫⁻ b, ∫⁻ t, ⟪∇f(reconstruct b t), b.1.1⟫² d(kernel μ ρ b) ∂baseLaw μ ρ`。
-   用 `compProd_baseLaw_kernel`（`baseLaw μ ρ ⊗ₘ kernel μ ρ = jointLaw μ ρ`）把双重积分写成对 `jointLaw` 的
-   单个 lintegral（`Measure.lintegral_compProd`），再用 `jointLaw μ ρ = (ρ.prod μ).map coordinates`（定义）
-   与 `reconstruct_coordinates`（`reconstruct (coordinates p).1 (coordinates p).2 = p.2`）把被积函数换回
-   `p = (θ, x) ↦ ⟪∇f x, θ⟫²`（`lintegral_map`）。这一步和 `lintegral_baseLaw` 的证明手法几乎一样，但那条
-   引理是对 `F : Direction E × E → ENNReal`（只依赖 `b`）的，这里被积函数还依赖 `t`/`x`，需要单独写（可以
-   仿照 `lintegral_baseLaw` 的证明改写，或者证一条通用的 "jointLaw 的 lintegral = 对 (θ,x) 的双重 lintegral"
-   private 引理再各自调用）。
-4. 对 `(ρ.prod μ)` 用 Tonelli（`lintegral_prod`／`lintegral_lintegral_swap`）把 `∫_θ∫_x` 换成
-   `∫_x∫_θ`，再用 `Admissible.frame_identity`（`finrank ℝ E * ∫_θ ⟪θ,u⟫⟪θ,v⟫ dρ = ⟪u,v⟫`，取
-   `u = v = ∇f x`）把 `finrank ℝ E * ∫_θ ⟪∇f x,θ⟫² dρ(θ)` 化成 `‖∇f x‖²`，得到
-   `energy μ ρ f ≤ κ * ∫⁻ x, ‖∇f x‖² dμ`。
-5. 用 `Energy.LocalSlope.Gradient.energy_eq_lintegral_gradient μ m hac f hf.locallyLipschitz`（已证，
-   Energy/LocalSlope/Gradient.lean）把 `∫⁻ x, ‖∇f x‖² dμ` 等同于 `Energy.LocalSlope.energy μ f`，得到目标
-   不等式。`≠ ⊤` 由 `hf.finite_energy`（`Energy.LocalSlope.Admissible` 的字段）与 `κ * (有限) ≠ ⊤`
-   （`ENNReal.mul_ne_top`）给出（`κ` 是 `NNReal`，`(κ:ENNReal) ≠ ⊤` 总成立）。
+     The lemma (current Poincare/LocalSlope/Basic.lean has none; `Intrinsic.constant` itself uses `intrinsicMeasure`, for
+     `ν : ProbabilityMeasure ℝ` needs to first confirm that `intrinsicMeasure ν` and `ν` coincide, or bypass `Intrinsic.constant`
+     Directly expand using the definition of `Poincare.LocalSlope.Holds` — this is the step most requiring careful handling in the present obligation, possibly requiring a new
+     private lemma, for example using the infimum property of `iInf`: `Intrinsic.constant ν ≤ X` and monotonicity of `Holds` in `C` (`C ≤ C' →
+     Holds ν C → Holds ν C'`) — check Poincare/LocalSlope/Basic.lean whether it already exists; if not, needs to be proven (in conjunction with)
+     `ENNReal.le_iInf_iff`/ Take the standard "for any `ε>0` there exists `C < X+ε` such that `Holds C`" and then let `ε→0` (in conjunction with `evariance`
+     A specific test regarding `f` does not depend on the constant from `ε` and can be directly used with `ENNReal.le_of_forall_pos_le_add` or
+     `le_iInf_iff` and similar, transform the entire inequality into `evariance ... ≤ X * energy ...` upon fixing `f`, without generating `ε` residual terms——
+     Note `X = κ * evariance id (kernel μ ρ b)` itself might be `⊤` (unlikely, since `Nondegenerate` provided
+     (`MemLp id 2`), in general cases, explicitly handle the degenerate branches of `X = 0` and `X = ⊤`).
+   - Divide by `evariance id (kernel μ ρ b) > 0` (the third field of `Nondegenerate` provides `≠ 0`; division on `ENNReal` uses
+     `ENNReal.div_le_iff` (a class), obtain `energyAt (kernel μ ρ) b f ≤ κ * ∫⁻ t, ⟪∇f(reconstruct b t), b.1.1⟫² d(kernel μ ρ b)`.
+3. Plug the fiberwise bound from step 2 into the `∫⁻ b ... ∂baseLaw` in step 1, obtaining
+   `energy μ ρ f ≤ κ * finrank ℝ E * ∫⁻ b, ∫⁻ t, ⟪∇f(reconstruct b t), b.1.1⟫² d(kernel μ ρ b) ∂baseLaw μ ρ`.
+   Use `compProd_baseLaw_kernel` (`baseLaw μ ρ ⊗ₘ kernel μ ρ = jointLaw μ ρ`) to write the double integral as a integral over `jointLaw`
+   A single lintegral (`Measure.lintegral_compProd`), then using `jointLaw μ ρ = (ρ.prod μ).map coordinates` (definition)
+   Switch the integrand back to `reconstruct_coordinates` (`reconstruct (coordinates p).1 (coordinates p).2 = p.2`)
+   `p = (θ, x) ↦ ⟪∇f x, θ⟫²` (`lintegral_map`). This step is almost identical in proof technique to `lintegral_baseLaw`, but that line
+   The lemma depends on `F : Direction E × E → ENNReal` (which only relies on `b`), here the integrand also depends on `t`/`x`, requiring a separate treatment (can
+   Following the proof of `lintegral_baseLaw`, or prove a general statement: "jointLaw's lintegral = double lintegral over (θ, x)"
+   (private lemma called individually).
+4. Apply Tonelli to `(ρ.prod μ)` (`lintegral_prod`/`lintegral_lintegral_swap`) to change `∫_θ∫_x` to
+   `∫_x∫_θ`, then use `Admissible.frame_identity` (`finrank ℝ E * ∫_θ ⟪θ,u⟫⟪θ,v⟫ dρ = ⟪u,v⟫`, take
+   (`u = v = ∇f x`) transforms `finrank ℝ E * ∫_θ ⟪∇f x,θ⟫² dρ(θ)` into `‖∇f x‖²`, obtaining
+   `energy μ ρ f ≤ κ * ∫⁻ x, ‖∇f x‖² dμ`.
+5. Using `Energy.LocalSlope.Gradient.energy_eq_lintegral_gradient μ m hac f hf.locallyLipschitz` (already proven,
+   (Energy/LocalSlope/Gradient.lean) identifies `∫⁻ x, ‖∇f x‖² dμ` with `Energy.LocalSlope.energy μ f`, obtaining the target
+   inequality. `≠ ⊤` follows from `hf.finite_energy` (a field of `Energy.LocalSlope.Admissible`) and `κ * (finite) ≠ ⊤`
+    (`ENNReal.mul_ne_top`) given  (`κ` is `NNReal`, `(κ:ENNReal) ≠ ⊤` always holds).
 
-第 2 步的"逐纤维 Poincaré 界转成具体测试不等式"是本义务里最不确定的一步；如果发现
-`Poincare.LocalSlope.Intrinsic.constant`／`Holds` 目前缺一条恰好形状的辅助引理，请在本文件内新增
-private 引理（不改 Poincare/LocalSlope/Basic.lean），并在报告里注明"这条辅助引理其实该搬到共享文件"，
-留给注册阶段处理。
+The transformation of the "fiber-wise Poincaré inequality into concrete test inequality" in step 2 is the most uncertain step in this obligation; if it is found that
+`Poincare.LocalSlope.Intrinsic.constant`/`Holds` currently lacks a helper lemma of the exact form required, please add a private lemma (without modifying Poincare/LocalSlope/Basic.lean) within this document, and note in the report that "this helper lemma should actually be moved to a shared file," to be handled during the registration phase.
 
-## 义务 2：`literatureConstant_le_of_fiberBound`
+## Obligation 2: `literatureConstant_le_of_fiberBound`
 
-目标：`Poincare.LocalSlope.Intrinsic.constant μ ≤ κ * C`，由义务 1 与 `hform` 推出。
+Goal: `Poincare.LocalSlope.Intrinsic.constant μ ≤ κ * C`, deduced from obligations 1 and `hform`.
 
-建议路线（对应 Blueprint "The final multiplication by C is the abstract implication in
-lem:finite-energy-factor-poincare"）：
+Suggested route (corresponding to Blueprint "The final multiplication by C is the abstract implication in lem:finite-energy-factor-poincare"): ")
 
-- `Poincare.LocalSlope.Intrinsic.constant μ` 用 `Probability.intrinsicMeasure μ`；先确认在本引理的前提
-  （`μ` 已经 `≪ m`、正维数、finrank ℝ E 全维）下，`intrinsicMeasure μ` 与 `μ` 本身在恰当的坐标同构下重合
-  （可能已有 `thm:affine-isotropic-reduction`/`thm:ambient-intrinsic-relaxation-equality` 一类的既有等价可以
-  复用，也可能这里更省事的做法是不绕道 `intrinsicMeasure`，直接展开 `Poincare.LocalSlope.Holds`/
-  `Intrinsic.constant` 的定义证明所需不等式）。
-- 核心步骤和 Poincare/L2Comparison.lean 里 `Holds.of_energy_le_mul`/`constant_le_mul_of_energy_le_mul` 的
-  证明结构几乎一样（那两条是对 `Energy.Functional (Lp ℝ 2 μ)` 版本证的），但 `Poincare.LocalSlope.Holds`
-  是对裸函数 `f : E → ℝ` 直接量化的（不是 `Energy.Functional`/`TestFamily` 包装），所以不能直接调用那两条，
-  需要照抄其证明思路重新写一遍（`Holds ν C := ∀ f, Admissible ν f → evariance f ν ≤ C * energy ν f`；用
-  `hform`（`Var_μ(f) ≤ C·D_{μ,ρ}(f)` 于 `domain μ ρ`）与义务 1（`D_{μ,ρ}(f) ≤ κ·(gradient energy)(f)`）
-  链接：对每个 `Energy.LocalSlope.Admissible μ f` 的（对应 `Lp` 类）`f`，先用义务 1 得到
-  `f`（或其 `Lp` 代表元）落在 `domain μ ρ` 里，再用 `hform` 与义务 1 的两条不等式相乘/传递，得到
-  `evariance f μ ≤ (κ*C) * Energy.LocalSlope.energy μ f`，即 `Poincare.LocalSlope.Holds μ (κ*C)`，再用
-  `Intrinsic.constant` 的 `iInf_le` 得到结论）。
-- 注意 `Energy.LocalSlope.Admissible`（裸函数版本）与 `domain μ ρ`/`form μ ρ`（`Lp` 类版本）之间需要
-  `MemLp.toLp` 搭桥（`ConditionalFiber.form_toLp` 已证：`form μ ρ (hf₂.toLp f) = energy μ ρ f`），
-  以及 `L2.variance μ (hf₂.toLp f)` 与裸函数版本 `evariance f μ` 的关系（可能已有 `L2.variance` 相关引理，
-  检索 L2/MeanVariance.lean）。
+- `Poincare.LocalSlope.Intrinsic.constant μ` use `Probability.intrinsicMeasure μ`; first verify under the premise of this lemma
+  ( `μ` already `≪ m`, positive dimension, finrank ℝ E full dimension ) under the appropriate coordinate isomorphism, `intrinsicMeasure μ` and `μ` coincide
+  (There might already be `thm:affine-isotropic-reduction`/`thm:ambient-intrinsic-relaxation-equality` class of equivalent statements)
+  Reuse, or perhaps a more straightforward approach here would be not to detour `intrinsicMeasure`, directly expand `Poincare.LocalSlope.Holds`/
+  (Proof of the inequality required by the definition of `Intrinsic.constant`).
+- Core steps and Poincare/L2Comparison.lean with `Holds.of_energy_le_mul`/`constant_le_mul_of_energy_le_mul`
+  The proof structure is almost the same (those two are for the `Energy.Functional (Lp ℝ 2 μ)` version), but `Poincare.LocalSlope.Holds`
+  It is a direct quantification of the bare function `f : E → ℝ`, not `Energy.Functional`/`TestFamily` wrapping, so it cannot directly invoke those two,
+  Need to copy its proof idea and rewrite it (`Holds ν C := ∀ f, Admissible ν f → evariance f ν ≤ C * energy ν f`; use
+  `hform` (`Var_μ(f) ≤ C·D_{μ,ρ}(f)` at `domain μ ρ`) and duty 1 (`D_{μ,ρ}(f) ≤ κ·(gradient energy)(f)`)
+  Link: For each `Energy.LocalSlope.Admissible μ f` (corresponding to `Lp` class) `f`, first obtain using obligation 1
+  `f` (or its `Lp` representative) lies in `domain μ ρ`, and then multiplying/propagating the two inequalities from `hform` and obligation 1, we obtain
+  `evariance f μ ≤ (κ*C) * Energy.LocalSlope.energy μ f`, i.e. `Poincare.LocalSlope.Holds μ (κ*C)`, then use
+  (`Intrinsic.constant`)'s (`iInf_le`) yields the conclusion).
+- Note `Energy.LocalSlope.Admissible` (naked function version) and `domain μ ρ`/[`form μ ρ`] (`Lp` class version) between
+  `MemLp.toLp` Bridging (`ConditionalFiber.form_toLp` proven: `form μ ρ (hf₂.toLp f) = energy μ ρ f`),
+  And the relationship between `L2.variance μ (hf₂.toLp f)` and the bare function version `evariance f μ` (possibly with a related lemma `L2.variance`,
+  (Search L2/MeanVariance.lean).
 
-如果这条路线证下来比直接照抄 `Poincare.L2Comparison` 的证明更繁琐，也可以先证一条"裸函数版
-`Holds.of_energy_le_mul`"通用引理（放在本文件的 private 区），再用它得到目标；只要不改
-`Poincare.LocalSlope`/`Poincare.L2Energy` 的既有定义即可。
+If the route proved turns out more cumbersome than directly copying the proof of `Poincare.L2Comparison`, we may first prove a general lemma in the "bare function version" `Holds.of_energy_le_mul` (placed in the private section of this file), then use it to obtain the target; as long as we do not alter the existing definitions of `Poincare.LocalSlope`/`Poincare.L2Energy`.
 
-请在完成后的报告里，对每条列出：完成/未完成、用到的关键 API、以及如果某条陈述你怀疑有误
-（缺前提、方向反了等），具体反例。
+In the final report, for each statement listed: completed/not completed, key APIs used, and if you suspect a statement is incorrect (lacking premises, wrong direction, etc.), provide a specific counterexample. ```
 ```

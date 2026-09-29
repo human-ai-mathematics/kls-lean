@@ -1,15 +1,15 @@
-# n 阶一致余项与 n 维顶层
+# n-th order uniform remainder and n-dimensional top layer
 
-2026-09-15，承接[平面 Sard](2026-09-14-planar-sard.md)中类型检查过的两条下一义务
-（`build/audit/HigherSardNextStatement.lean`）。起始回执
-`build/verification/latest.json`（`20260914T154144.742286Z`）为 passed，重新计算确认工作区逐字节一致。
-HEAD 仍为 `2965b32`，保留此前全部未提交及未跟踪成果，不提交、不推送，历史决定不改写。
+2026-09-15, following the two next obligations typechecked in [planar Sard](2026-09-14-planar-sard.md)
+(`build/audit/HigherSardNextStatement.lean`). Start verification receipt
+`build/verification/latest.json` (`20260914T154144.742286Z`) is passed, recompute verification of the workspace byte-by-byte consistency.
+HEAD remains `2965b32`, retains all previous uncommit and untraced achievements, does not commit, does not push, historical decisions are not rewritten.
 
-## 完成范围
+## Scope of completion
 
-上一轮记录的两条义务**逐字证明**，并合成 `n` 维顶层。
+Prove verbatim the two obligations from the previous record, and synthesize `n` at the topmost level.
 
-`Analysis/TaylorRemainder.lean` 推广为任意阶：
+`Analysis/TaylorRemainder.lean` Generalization to arbitrary order:
 
 ```lean
 theorem exists_uniform_pow_remainder {u : V → ℝ} {K : Set V} {n : ℕ}
@@ -19,7 +19,7 @@ theorem exists_uniform_pow_remainder {u : V → ℝ} {K : Set V} {n : ℕ}
         ∀ y : V, ‖y - x‖ < δ → |u y - u x| ≤ ε * ‖y - x‖ ^ n
 ```
 
-`Analysis/QuadraticCover.lean` 推广为任意维：
+`Analysis/QuadraticCover.lean` Generalization to arbitrary dimension:
 
 ```lean
 theorem volume_image_eq_zero_of_oscillation_pow {n : ℕ} {A : Set (Fin n → ℝ)}
@@ -39,71 +39,49 @@ theorem volume_image_flat_pow_univ_eq_zero {n : ℕ} {u : (Fin n → ℝ) → �
       (u '' {x | ∀ k : ℕ, 1 ≤ k → k ≤ n → iteratedFDeriv ℝ k u x = 0}) = 0
 ```
 
-四条新结果仅依赖 `propext / Classical.choice / Quot.sound`，无直接洞、无占位、无新增公理。
+The four new results depend only on `propext / Classical.choice / Quot.sound`, with no direct holes, placeholders, or new axioms.
 
-**没有新增重复证明**：原 `exists_uniform_quadratic_remainder` 与
-`volume_image_eq_zero_of_quadratic_oscillation` 改为一般结果的推论，
-两者**语句逐字未变**（已逐行 diff 核对），全部既有客户端不改动即通过。
-余项的阶从 2 升到任意 `n` 后，二阶证明整段被归纳取代，模块净行数没有膨胀。
+**No new duplicate proofs**: The original `exists_uniform_quadratic_remainder` and `volume_image_eq_zero_of_quadratic_oscillation` are now derived as corollaries of the general result, with both statements unchanged word for word (line-by-line diff verified), and all existing client code passes without modification. The order of the remainder term is raised from 2 to any `n`, and the second-order proof is entirely replaced by induction, with no net increase in module line count.
 
-## 实际证明
+## Actual proof
 
-**余项（对阶数归纳）**。零阶就是紧集上的一致连续（`IsCompact.uniformContinuousAt_of_continuousAt`
-的外部近邻版本）。归纳步：`fderiv ℝ f` 是 `C^m`，它在 `x` 处 `1..m` 阶导数为零等价于
-`f` 在 `x` 处 `2..m+1` 阶导数为零（`norm_iteratedFDeriv_fderiv`），又 `f` 的一阶导数为零给
-`fderiv ℝ f x = 0`，于是球内 `‖fderiv ℝ f z‖ ≤ ε‖z-x‖^m`，一次凸集中值不等式把幂次抬到 `m+1`。
-常数**不退化**，始终是同一个 `ε`。
+**Remainder (induction by order)**. Zeroth order is uniform continuity on a compact set (external neighbor version of `IsCompact.uniformContinuousAt_of_continuousAt`). Inductive step: `fderiv ℝ f` is `C^m`, its `x`-th derivative at `1..m` is zero if and only if `f` has zero `x`-th derivative at `2..m+1` (`norm_iteratedFDeriv_fderiv`), and since the first derivative of `f` is zero, it gives `fderiv ℝ f x = 0`; thus, inside the ball, `‖fderiv ℝ f z‖ ≤ ε‖z-x‖^m`, the convex inequality in a single convex set raises the power to `m+1`.
+The constant is **non-degenerate**, always the same `ε`.
 
-归纳要在**向量值**函数上进行（`fderiv f` 取值在 `V →L[ℝ] F`），所以内部辅助定理把
-`W` 与 `F` 放在同一 universe；公开的实值定理对 `n = m+1` 先降一阶到
-`fderiv ℝ u : V → (V →L[ℝ] ℝ)` 再套辅助定理，因此**没有** universe 限制，
-对任意实赋范空间成立，不要求有限维、完备、内积或测度。
+Induction is carried out on vector-valued functions (`fderiv f` taking values in `V →L[ℝ] F`), so the internal auxiliary lemma places `W` and `F` in the same universe; the public real-valued theorem first reduces `n = m+1` one order down to `fderiv ℝ u : V → (V →L[ℝ] ℝ)` before applying the auxiliary lemma, thus there is **no** universe restriction, holding for any real normed space, without requiring finite-dimensionality, completeness, inner product, or measure.
 
-**覆盖（对维数一般化）**。格子编号从 `ℤ × ℤ` 换成 `Fin n → ℤ`，指标集用
-`Fintype.piFinset`，基数 `(2M+1)^n` 由 `Fintype.card_piFinset` 与 `Finset.prod_const` 给出。
-总量 `(2M+1)^n · 2εr^n = 2ε((2M+1)r)^n ≤ 2ε(2R+3)^n`，与 `r` 无关。
-维数与幂次必须相等：格子数 `O(r⁻ⁿ)` 与像区间长 `O(εrⁿ)` 恰好抵消。
-二维版本现在就是 `n = 2` 的实例；`Fin.forall_fin_two` 被 `congrFun` 取代，证明反而更短。
-`n = 0`（空积基数为 1）与 `n = 1` 都被同一证明覆盖，无分支。
+**Covering (generalization to dimension)**. The lattice index changes from `ℤ × ℤ` to `Fin n → ℤ`, the index set is denoted by `Fintype.piFinset`, and the cardinality `(2M+1)^n` is given by `Fintype.card_piFinset` and `Finset.prod_const`.
+The total quantity `(2M+1)^n · 2εr^n = 2ε((2M+1)r)^n ≤ 2ε(2R+3)^n` is independent of `r`.
+The dimension and exponent must be equal: the number of lattices `O(r⁻ⁿ)` cancels exactly with the length of the image interval `O(εrⁿ)`.
+The two-dimensional version is now an instance of `n = 2`; `Fin.forall_fin_two` is replaced by `congrFun`, and the proof becomes shorter.
+`n = 0` (with empty product cardinality 1) and `n = 1` are both covered by the same proof, with no branching.
 
-## 验证与公理边界
+## Verification and Axiomatic Boundaries
 
-* 三个模块 `lake env lean -DwarningAsError=true` 严格通过。
-* `build/audit/HigherSardAudit.lean` 严格通过：13 个客户端与 5 条主定理共 17 条公理报告，
-  全部仅含标准三公理。其中 `recorded_pow_cover` 与 `recorded_pow_remainder`
-  逐字给出上一轮登记的两条义务；`pow_remainder_general` 在无维数的任意赋范空间上使用余项；
-  `dim_zero`（平坦条件空洞、集合为全空间）、`dim_one`、`dim_three` 覆盖小维与非小维；
-  `flat_two_unchanged` 确认平面二阶层接口未变；
-  `constant_fully_flat` + `constant_sard_pow` 给出任意维常函数处处全平坦、
-  平坦集是**整个 `ℝⁿ`** 而像仍零测的非平凡实例。
-* `QuadraticRemainderAudit`、`QuadraticCoverAudit`、`PlanarSardAudit`、`SardLowDimAudit`、
-  `AreaFormulaAudit`、`SuperlevelSardScope` 全部重新严格通过，**未作任何改动**。
-  `SuperlevelSardScope` 再次确认一般 `Analysis.sard`、`Analysis.ae_forall_fderiv_ne_zero`、
-  `SmoothDomain.ae_exists_superlevel` **仍继承 `sorryAx`**。
-* 三个 WIP 文件逐个实际编译，诊断仍为 **3/3/5** 个直接洞，无其他诊断。直接洞总数仍为 **11**；
-  证书仍为 **24**；perimeter infrastructure 仍为 **missing**。
-* 默认 `lake build` 通过（3393 jobs）。根目录 `python3 research/verify.py` 的最终快照回执为
-  `build/verification/latest.json`。证据哈希记录于
-  `research/explorations/2026-09-15-higher-order-flat-layer.json`，不冒充正式证书。
-* 本轮**没有**扩大任何证书或 `leanok` 范围。
+* Three modules `lake env lean -DwarningAsError=true` pass strictly.
+* `build/audit/HigherSardAudit.lean` passes strictly: 13 clients and 5 main theorems produce 17 axiom reports in total, all containing only standard three axioms. Among them, `recorded_pow_cover` and `recorded_pow_remainder` verbatim reproduce the two obligations from the previous round; `pow_remainder_general` uses remainder terms on any normed space of arbitrary dimension; `dim_zero` (flatness condition void, set being the whole space), `dim_one`, and `dim_three` cover both low and non-low dimensions; `flat_two_unchanged` confirms the two-level planar interface remains unchanged; `constant_fully_flat` + `constant_sard_pow` provide instances of any-dimensional constant functions being flat everywhere, and flat sets being the **entire `ℝⁿ`** while the image remains zero-measure and nontrivial.
+* `QuadraticRemainderAudit`, `QuadraticCoverAudit`, `PlanarSardAudit`, `SardLowDimAudit`, `AreaFormulaAudit`, and `SuperlevelSardScope` all pass strictly again, **with no modifications made**. `SuperlevelSardScope` reconfirms general `Analysis.sard`, `Analysis.ae_forall_fderiv_ne_zero`, and `SmoothDomain.ae_exists_superlevel` **still inherit `sorryAx`**.
+* Each of the three WIP files is compiled in practice, with diagnostics still showing **3/3/5** direct proof holes, no other diagnostics. Total direct proof hole count remains **11**; certificate count remains **24**; perimeter infrastructure remains **missing**.
+* Default `lake build` passes (3393 jobs). The final snapshot verification receipt for the root directory `python3 research/verify.py` is `build/verification/latest.json`. Evidence hash is recorded at `research/explorations/2026-09-15-higher-order-flat-layer.json`, without claiming formal certification.
+* This round **does not** expand any certificate or `leanok` scope.
 
-## 明确未完成
+## Explicitly incomplete work
 
-本轮只完成 `n` 维的**顶层**（全平坦层）。以下全部仍未完成：
+This round only completes the `n`-dimensional **top layer** (fully flat layer). The following have all not yet been completed:
 
-* **中间各层**：`1 ≤ j < n` 时
-  `{x ∈ K | 1..j 阶导数全为零 ∧ (j+1) 阶导数 ≠ 0}` 的像零测。
-  已类型检查于 `build/audit/IntermediateLayerNextStatement.lean`（无证明、无占位公理）。
-  平面情形 `n = 2, j = 1` 已证，用的是"临界集局部是某坐标上的 Lipschitz 图、
-  再塌到一维"的初等路线。一般 `n` 时同样的估计只给出 `(n-1)` 维的 Lipschitz 图，
-  还需要在该图上做 `(n-1)` 维的 Sard，并处理限制后正则性下降——
-  这正是 Whitney–Morse–Sard 的难点，本轮**没有**触及。
-* **`n` 维 Sard**（把所有层叠起来）：同文件第二条，未证明。
-* **一般 Sard**（`Analysis.sard`，任意有限维赋范空间）：仍是
-  `WIP/AnalyticPrerequisites` 的直接洞，两个消费者仍继承 `sorryAx`。
-  即使 `n` 维 `Fin n → ℝ` 版本完成，也还需要有限维空间与 `Fin n → ℝ` 的线性同构传递。
-* **加权 coarea** 及其水平集可测性：两个未触动的直接洞。
-* **反方向 Cheeger 比较** `smoothConstant_le_minkowskiConstant` 与常数相等：仍未证明，
-  仍传递依赖 `sorryAx`；只有 `h_M ≤ h_S` 一个方向是证明过的。
+* **Intermediate layers**: `1 ≤ j < n` when
+  The image of \{x ∈ K | 1..j-th derivatives are all zero ∧ (j+1)-th derivative ≠ 0\} has zero measure.
+  Type-checked at `build/audit/IntermediateLayerNextStatement.lean` (no proof, no placeholder axioms).
+  The planar case `n = 2, j = 1` has been proven, using the fact that the critical set is locally the graph of a Lipschitz function in some coordinate.
+  A elementary path "collapsing down to one dimension". In general `n` the same estimate only yields a Lipschitz graph in `(n-1)` dimensions,
+  Still need to do `(n-1)`-dimensional Sard on this diagram and handle the drop in regularity after restriction—
+  This is exactly the difficulty of Whitney–Morse–Sard, and this round has not touched it.
+* **`n` Dimension Sard** (stacking all layers): As in Section 2 of the same document, unproven.
+* **General Sard** (`Analysis.sard`, any finite-dimensional normed space): is still
+  The direct proof hole of `WIP/AnalyticPrerequisites`, two consumers still inherit `sorryAx`.
+  Even after the `n`-dimensional `Fin n → ℝ` version is completed, it still requires the linear isomorphism action to transit between finite-dimensional spaces and `Fin n → ℝ`.
+* **Weighted coarea** and its level set measurability: two untouched direct proof holes.
+* **Reverse Cheeger comparison** `smoothConstant_le_minkowskiConstant` equal to a constant: still unproven,
+  Still transitively dependent on `sorryAx`; only `h_M ≤ h_S` one direction has been proven.
 
-整条链**没有**闭合。
+The entire chain is not closed.

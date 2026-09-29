@@ -1,133 +1,127 @@
-# 纤维上的小 Lipschitz 估计：秩亏路线的 R4（不归点）
+# A small Lipschitz estimate on fibers: R4 (non-branching) routes of rank deficiency
 
-2026-09-17。本轮**证明新定理**：秩亏路线义务清单上的 **`R4`**——上一轮标记的**不归点**。
-连同 `R1`、`R2`、`R3`，十三条编号里已兑现 **四条**。
-**只证了 `R4`**；`R0`、`R5`–`R10`、`N1`、`N2` 仍未证，
-**余维 m coarea 的秩亏部分仍然开着**。本轮**没有证明任何 coarea 公式、任何切片定理、任何 Sard 定理**。
-不迁洞，不提交、不推送。直接洞仍 **8（1/2/5）**，证书仍 **24**。
+2026-09-17. This round's **proof of a new theorem**: the **`R4`** on the rank-deficient path obligation list—marked as a **non-terminal point** in the previous round.
+Together with `R1`, `R2`, `R3`, four out of the thirteen numbered items have been fulfilled.
+**Only `R4` is proven**; `R0`, `R5`–`R10`, `N1`, `N2` remain unproven,
+the rank-deficient part with coarea dimension m is still open. This round **proves no coarea formula, no slice theorem, no Sard theorem**.
+No hole migration, no commit, no push. The direct proof hole remains **8 (1/2/5)**, and the certification remains **24**.
 
-起点 `HEAD = origin/main = 34b92695ece4f636a1a7f1eafbbf41c685ee0348`；起点 passed 回执
-`build/verification/20260917T054703.943157Z/report.json`：10 个门、217 个本地模块内核重放、
-581 条目，快照
-`3b4bf8210086a351b6cef33b7a2be98ff069fbe0f0f5a07c8ad57e230be74425`，起点工作区 drift 为空。
+Start `HEAD = origin/main = 34b92695ece4f636a1a7f1eafbbf41c685ee0348`; start verification receipt
+`build/verification/20260917T054703.943157Z/report.json`: 10 gates, 217 local module kernel replay,
+581 entries, snapshot
+`3b4bf8210086a351b6cef33b7a2be98ff069fbe0f0f5a07c8ad57e230be74425`, start workspace drift is empty.
 
-## 并发会话在本轮中途提交了工作区——如实记录
+## A concurrent session committed the worktree during this round: explicit record
 
-本轮写完 Lean 之后、收尾之前，**并发会话把整个工作区提交了**：
-`HEAD = origin/main` 由 `34b9269…` 变为
+After finishing this round of Lean and before closing out, the concurrent session commited the entire workspace:
+`HEAD = origin/main` from `34b9269…` to
 `e7c4403352011b6c3ed6dc02f0af3eef6cbb300e`
-（`feat: complete scalar coarea and advance vector coarea foundations [skip ci]`，138 个文件）。
-该提交**吸收了本会话前四轮的全部成果**（含 `RankStratification.lean`、`RightInverseBound.lean`
-及其审计与记录），因此那几轮的「未提交」状态已经不再成立——**是合作者提交的，不是本会话**。
+(`feat: complete scalar coarea and advance vector coarea foundations [skip ci]`, 138 files).
+The commit **absorbs all the results from the first four rounds of this session** (including `RankStratification.lean`, `RightInverseBound.lean`)
+And its audit and record-keeping), therefore the "not commit" states from those rounds are no longer valid—**it belongs to collaborator commit, not to this session**.
 
-该提交还做了一次「submission review」，改动了**两个我此前写的文件**：
+The commit also conducted a "submission review", modifying two files that I had previously written:
 
-* `research/audits/RankDeficientRouteStatements.lean`：在文件头加了一段状态说明
-  （`R1`/`R2` 与 `R3` 两版已证，`R0`、`R4`–`R10`、`N1`、`N2` 仍开），并注明
-  **下面的命题一条未改**。文件仍然只含 `#check`，仍无声明、无证明、无占位公理。
-* `research/audits/RightInverseBoundAudit.lean`：`constant_map` 的文档串措辞澄清。
+* `research/audits/RankDeficientRouteStatements.lean`: Added a status statement at the file header
+  (Proofs established in versions `R1`/`R2` and `R3`; proofs for `R0`, `R4`–`R10`, `N1`, `N2` remain open), and noted
+  **No changes to any of the following statements**. The file still contains only `#check`, with no declarations, no proofs, no placeholder axioms.
+* `research/audits/RightInverseBoundAudit.lean`: Clarified wording in the documentation of `constant_map`.
 
-**这两处不是本轮所为，本轮也没有回退它们。** 因此本轮不能再说该路线语句文件「保持原字节」——
-准确的说法是：**本轮未改动它**，它相对当前 `HEAD` 干净。
-本轮的验证与哈希核对全部在新的 `HEAD = e7c4403…` 之上重做。
+**These two changes were not made by this round, and this round has not rolled them back.** Therefore, this round cannot claim that the route statement file "preserves its original bytes"—
+the accurate statement is: **this round did not modify it**, and it remains clean relative to the current `HEAD`.
+All verification and hash checks for this round are being redone on the new `HEAD = e7c4403…`.
 
-## 边界
+## Boundary
 
-对数凹 Cheeger–Buser 线（含 `KLS/WIP/CheegerInfimum.lean` 剩下的两个洞）归合作者**王浩丞**，
-本轮未触碰。尖锐有限正则 Sard、Energy 的五个洞、无量纲 KLS 也都未触碰。
+Log-concave Cheeger–Buser lines (including `KLS/WIP/CheegerInfimum.lean` remaining two holes) credited to author **Haocheng Wang**,
+this round untouched. Sharp finite regular Sard, Energy's five holes, dimension-free KLS also untouched.
 
-## 「不归点」到底意味着什么——先把话说准
+## What does "a point with no return" actually mean—let's get the facts straight first
 
-上一轮把 `R4` 标为不归点，理由是：`R2 + R3` 就位后 `R4` 是自足的，
-**它若做不出来或常数不一致，整条路线就是错的**。
-现在 `R4` **证出来了，常数也确实与 `ε` 无关**。
+The previous round marked `R4` as non-terminal, reasoning that: after `R2 + R3` is in place, `R4` is self-sufficient,
+**if it cannot be established or if the constants are inconsistent, the entire path is wrong**.
+Now `R4` **has been proven, and the constants are indeed independent of `ε`**.
 
-这只说明**路线没有在它的关键分析步骤上被证伪**。
-它**不**说明 `R0` 成立，也**不**说明剩下的 `R5`–`R8` 能做出来：
-量纲已经对上、估计已经成立，但把它接成切片零测性还需要
-纤维的有限 `ℋ^{n−r}` 测度（`R5`）、靶空间正交分解上的 Fubini（`R6`）、
-以及真正的重活——逐层局部装配（`R7`，估计 450–600 行，高风险）。
-**本轮没有证明秩亏部分的任何一寸。**
+This only shows that the route has not been falsified at its key analytical steps.
+It does not show that `R0` holds, nor that the remaining `R5`–`R8` can be carried out:
+the dimensions match, the estimates hold, but connecting them into slice zero-measure still requires
+the finite `ℋ^{n−r}` measure of the fiber (`R5`), Fubini on the target space orthogonal decomposition (`R6`),
+and the real work—layer-by-layer local assembly (`R7`, estimates 450–600 run, high risk).
+**This round provides no proof of any part of the rank deficiency.**
 
-## 精确成果
+## Exact Results
 
-新模块 `formalization/FunctionalInequalities/Analysis/TangentialLipschitz.lean`
-（137 行，本地 import 闭包 **3 个模块**、无 WIP；依赖同轮的
-`Analysis/RankStratification.lean` 与 `Analysis/RightInverseBound.lean`）。
+New module `formalization/FunctionalInequalities/Analysis/TangentialLipschitz.lean`
+ (137 line, local import closure **3 modules**, no WIP; depends on the same round's
+`Analysis/RankStratification.lean` and `Analysis/RightInverseBound.lean`).
 
-* **`norm_comp_apply_sub_le_of_approximatesLinearOn`**：同一纤维里两点的弦
-  `b − a` 满足 `‖P (A (b − a))‖ ≤ ‖P‖ ε ‖b − a‖`。
-  **这是纤维假设唯一用到的地方，也是与导数为零情形的分水岭**：
-  弦**不在**核里，只是离核不超过 `‖P‖ ε ‖b − a‖`。
-* **`exists_lipschitzOnWith_of_ker_bound`**（`R4`）：
-  若线性模型 `A` 在 `ker (P ∘ A)` 上死掉（`R2` 的结论），
-  且被 `P ∘ A` 几乎零化的向量以常数 `C` 靠近该核（`R3` 的结论），
-  则对每个纤维，`Q ∘ f` 在 `S ∩ {P ∘ f = s}` 上是 `c ε`-Lipschitz 的，
-  **`c = ‖Q‖ (1 + ‖A‖ C ‖P‖)` 只依赖线性数据，不依赖 `ε`、不依赖 `f`、不依赖 `S`、不依赖纤维**。
+* **`norm_comp_apply_sub_le_of_approximatesLinearOn`**: chord between two points in the same fiber
+  `b − a` satisfies `‖P (A (b − a))‖ ≤ ‖P‖ ε ‖b − a‖`.
+  **This is the only place where the fiber assumption is used, and also the dividing line between the case where the derivative is zero**
+  The string is not in the core; it is at most `‖P‖ ε ‖b − a‖` away from the core.
+* **`exists_lipschitzOnWith_of_ker_bound`** (`R4`):
+  If the linear model `A` dies on `ker (P ∘ A)` (by the conclusion of `R2`),
+  and vectors almost annihilated by `P ∘ A` lie close to that kernel with constant `C` (the conclusion of `R3`),
+  Then for each fiber, `Q ∘ f` is `c ε`-Lipschitz on `S ∩ {P ∘ f = s}`,
+  **`c = ‖Q‖ (1 + ‖A‖ C ‖P‖)` Only depends on linear data, does not depend on `ε`, does not depend on `f`, does not depend on `S`, does not depend on fiber**.
 
-  估计链：由上一条得弦几乎在核里 ⟹ 由 `R3` 换成真正的核元素 `w`，`‖(b−a) − w‖ ≤ C‖P(A(b−a))‖`
-  ⟹ 由 `R2` 得 `A w = 0`，故 `‖A (b−a)‖ ≤ ‖A‖ C ‖P‖ ε ‖b−a‖`
-  ⟹ 回代逼近不等式界住 `‖f b − f a‖`，再作用 `Q`。
+  Estimate chain: from the previous step, the chord is almost in the core ⟹ by `R3` replace with actual core elements `w`, `‖(b−a) − w‖ ≤ C‖P(A(b−a))‖`
+⟹ by `R2` obtain `A w = 0`, hence `‖A (b−a)‖ ≤ ‖A‖ C ‖P‖ ε ‖b−a‖`
+⟹ substitute back and bound the approximation inequality by `‖f b − f a‖`, then apply `Q`.
 
-  **与 `ε` 无关是全部要点**：Eilenberg 论证里 `ε → 0` 的每个尺度用不同的逼近分片，
-  随分片增长的常数毫无用处。这一点直接体现在语句形状 `∃ c, ∀ ε, …` 上。
+  **Irrelevant to `ε` is the key point**: In Eilenberg's argument, each scale of `ε → 0` uses a different piecewise approximation,
+the constant growing with the partition is utterly useless. This is directly evident in the sentence form `∃ c, ∀ ε, …`.
 
-* **`exists_lipschitzOnWith_fibre`**：`R2 + R3 + R4` 在秩层上的合成——
-  `P ∘ A` 满射且 `finrank W₁ = rank A` 时两个假设自动成立。
-  **这是三条已证义务的推论，不是新义务，尤其不是 `R7`**：
-  它不涉及测度、Hausdorff 维数、切片，也不构造逼近分片。
+* **`exists_lipschitzOnWith_fibre`**: `R2 + R3 + R4` composition on sheaves of ranks——
+  `P ∘ A` surjective and `finrank W₁ = rank A` when both assumptions are automatically satisfied.
+  **This is a deduction from three already established obligations, not a new obligation, especially not `R7`**
+  It does not involve measures, Hausdorff dimension, slicing, nor construct approximation piecewise.
 
-`R4` 本身**不用内积、不用测度、不用完备性、不用有限维**；`f` 任意、`S` 任意。
+`R4` itself does not use inner product, does not use measure, does not use completeness, does not use finite dimensionality; `f` arbitrary, `S` arbitrary.
 
-## `R2` 的假设是必需的——给出反例，不是断言
+## The assumption of `R2` is necessary—provide a counterexample, not assert it
 
-`ker_hypothesis_necessary`：取 `A =` 平面上的恒等、`P =` 第一坐标、`Q =` 第二坐标。
+`ker_hypothesis_necessary`: Take the identity, `A =` first coordinate, `P =` second coordinate, in the plane `Q =`.
 
-* `R3` 的假设**成立**（`P ∘ A` 满射到 `ℝ`）；
-* `R2` 的假设**不成立**（第二个基向量被 `P ∘ A` 零化而不被 `A` 零化）；
-* `R4` 的结论**不成立**：取 `ε = 0`、`f = A`，结论会逼出第二坐标沿第二坐标轴为常值，而它不是。
+* The assumption of `R3` holds (`P ∘ A` is surjective onto `ℝ`);
+* The assumption of `R2` does not hold (the second basis vector is annihilated by `P ∘ A` but not by `A`);
+* The conclusion of `R4` does not hold: take `ε = 0` and `f = A`, the conclusion would force the second coordinate along the second coordinate axis to be constant, which it is not.
 
-所以 `R4` 不是关于逼近本身的陈述，它恰恰断言线性模型沿纤维方向死掉。
+So `R4` is not a statement about approximation itself; it precisely asserts that linear models die along the fiber direction.
 
-## `R3` 的假设**没有**被断言为必需
+## The assumptions of `R3` are not asserted to be necessary
 
-`R3` 提供的是**常数**，不是限制：有限维下它的结论对每个线性映射都成立
-（本轮**没有**证这一点，也没有用到）。另一端由
-`zero_model_recovers_vanishing_derivative` 记下：秩零层 `A = 0` 时两个假设都以 `C = 0` 成立，
-常数塌成 `‖Q‖`，`R4` 恰好退回已证的导数为零情形——那里 `f` 自己就是 `ε`-Lipschitz 的。
-**`R4` 在 `r = 0` 层没有添加任何东西。**
+`R3` provides constants, not restrictions: in finite dimensions, its conclusions hold for each linear map
+(This round does not prove this point nor uses it). The other end by
+`zero_model_recovers_vanishing_derivative` Note: when the rank-zero stratum `A = 0` both assumptions hold `C = 0`,
+Constants collapse to `‖Q‖`, `R4` precisely reverts to the already proven case of derivative zero—there `f` is itself `ε`-Lipschitz.
+**`R4` Nothing is added in `r = 0` layer.**
 
-## 边界情形
+## Boundary cases
 
-空集；`ε = 0` 配真实线性模型；零维投影靶空间 `W₂`（`Q = 0`，一切 `0`-Lipschitz）；
-秩零模型 `A = 0`。
+Empty set; `ε = 0` equipped with a real linear model; zero-dimensional projection target space `W₂` (`Q = 0`, all `0`-Lipschitz);
+rank-zero model `A = 0`.
 
-## 本轮没有做的事
+## What was not done in this round
 
-* **没有证明 `R0`**：秩亏部分一寸未动。
-* **没有证明 `R5`**（纤维的有限 `ℋ^{n−r}` 测度）、**`R6`**（靶空间分解上的 Fubini）、
-  **`R7`**（逐层局部装配，高风险重活）、`R8`–`R10`、`N1`、`N2`。
-* **没有证明任何 coarea 公式**，也没有改进已证的余维 m coarea 的适用范围。
-* **没有证明任何 Sard 定理**；对临界**值**集合的测度什么也没断言。
-* 没有修改任何既有 `.lean`（包括 `FunctionalInequalities.lean`、
-  `RankDeficientRouteStatements.lean` 与 `AreaFormulaRouteStatements.lean`，
-  后两者本轮未被本会话改动——前者由并发会话在提交中加了状态说明，见上）；
-  没有迁洞；没有扩大证书或 Blueprint `leanok` 范围；没有新增兼容 alias；没有削弱已证结论。
-* **没有提交、没有推送**，真实 Git index 未改动。
+* **No proof `R0`**: The rank-deficient part remained unchanged by a inch.
+* **No proof `R5`** (finite `ℋ^{n−r}` measure of the fiber), **`R6`** (Fubini on target space decomposition), **`R7`** (layer-by-layer local assembly, high-risk reactivation), `R8`–`R10`, `N1`, `N2`.
+* **No proof of any coarea formula**, nor any improvement to the applicability range of the m-codimensional coarea formula already established.
+* **No proof of any Sard theorem**; no assertion made regarding the measure of the critical value set.
+* No modification to any existing `.lean` (including `FunctionalInequalities.lean`, `RankDeficientRouteStatements.lean`, and `AreaFormulaRouteStatements.lean`, the latter two unchanged in this session—former added state annotations by concurrent session in commit, see above); no hole migration; no expansion of certificate or Blueprint `leanok` scope; no new compatible alias added; no weakening of established conclusions.
+* **No commit, no push**, the real Git index remained unchanged.
 
-## 下一步
+## Next step
 
-按原顺序是 **`R5` 与 `R6`**（彼此独立，可并行，各约 150 行、中风险），
-然后是 `R7`。`R7` 仍是唯一的高风险项。
+In original order is **`R5` and `R6`** (independent, parallel, each about 150 lines, medium risk),
+then `R7`. `R7` remains the only high-risk item.
 
-## 验证
+## Verification
 
-* 新模块与新客户端均以 `-DwarningAsError=true` 编译通过，无 `sorry`、无 `axiom`、无占位。
-* `research/audits/TangentialLipschitzAudit.lean` 的 **10 条公理报告**只用
-  `propext`、`Classical.choice`、`Quot.sound`。
-* 重跑全部 **44 个既有审计客户端**加新客户端共 **45 个**，全部严格通过，0 失败；
-  公理报告 604 条，其中 12 条 `sorryAx` 仍全部落在四个**故意**报告未决 WIP 结果的客户端里。
-* 三个 WIP 逐个实际编译，直接洞 **1/2/5，总数 8**，不变；`research/check_ledger.py` 报 **24** 个证书。
-* 默认 `lake build` 与根目录 `python3 research/verify.py` 通过；证据 JSON 为
-  `research/explorations/2026-09-17-tangential-lipschitz.json`，
-  最终核对另存 `build/audit/tangential-lipschitz/final-snapshot.json`。
+* The new module and new client both compile successfully with `-DwarningAsError=true`, with no `sorry`, no `axiom`, and no placeholders.
+* The **10 axiom report** for `research/audits/TangentialLipschitzAudit.lean` only uses `propext`, `Classical.choice`, and `Quot.sound`.
+* Re-running all **44 existing audit clients** plus the new client, a total of **45**, all pass strictly, with 0 failures; the axiom report contains 604 entries, of which 12 entries `sorryAx` remain entirely within the four clients that intentionally report unresolved WIP results.
+* Each of the three WIPs is compiled in practice, with direct proof holes **1/2/5, total 8**, unchanged; `research/check_ledger.py` issues **24** certificates.
+* Default `lake build` and root directory `python3 research/verify.py` pass; the JSON evidence is
+  `research/explorations/2026-09-17-tangential-lipschitz.json`,
+  and the final verification is saved as `build/audit/tangential-lipschitz/final-snapshot.json`.

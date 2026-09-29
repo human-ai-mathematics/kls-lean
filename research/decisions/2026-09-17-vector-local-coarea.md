@@ -1,92 +1,86 @@
-# 加权的余维 m 图面积公式，与一张图上的局部 coarea 等式
+# Weighted m-Codimensional Graph Area Formula, and a Local Coarea Formula on a Graph
 
-2026-09-17。本轮**证明新定理**：请求的**加权余维 m 图面积公式**，
-以及它与前两轮件拼起来的直接结果——**一张图上的局部 coarea 等式**，
-进而**每个正则点的邻域上的 coarea 等式**。
-**这不是余维 m 的正则 coarea 公式**，缺口在最后写明。
-不迁洞，不提交、不推送。直接洞仍 **8（1/2/5）**，证书仍 **24**。
+2026-09-17. This round's **proof of a new theorem**: the requested **weighted co-dimension m graph area formula**,
+and its direct consequence when combined with the results from the previous two rounds—the **local coarea identity on a graph**,
+and then the **coarea identity on a neighborhood of each regular point**.
+**This is not the regular coarea formula of co-dimension m**; the gap is explicitly stated at the end.
+No hole-filling, no commit, no push. The direct proof hole remains **8 (1/2/5)**, and the certification remains **24**.
 
-起点 `HEAD = origin/main = 34b92695ece4f636a1a7f1eafbbf41c685ee0348`；起点 passed 回执
-`build/verification/20260916T165144.989890Z/report.json`：10 个门、209 个本地模块内核重放、
-549 条目，快照
-`b2c11a93ec5bfe245ad6791cd300eeebae4e1e1d74fb979909db61c7f11505f6`。
-起点工作区 drift 为空，并发会话未改动工作区。
+Start `HEAD = origin/main = 34b92695ece4f636a1a7f1eafbbf41c685ee0348`; start verification receipt
+`build/verification/20260916T165144.989890Z/report.json`: 10 gates, 209 local module kernel replay,
+549 entries, snapshot
+`b2c11a93ec5bfe245ad6791cd300eeebae4e1e1d74fb979909db61c7f11505f6`.
+The start workspace drift is empty, and concurrent session has not modified the workspace.
 
-## 边界
+## Boundary
 
-对数凹 Cheeger–Buser 线（含 `KLS/WIP/CheegerInfimum.lean` 剩下的两个洞）归合作者**王浩丞**，
-本轮未触碰。尖锐有限正则 Sard、Energy 的五个洞、无量纲 KLS 也都未触碰。
+Log-concave Cheeger–Buser lines (including `KLS/WIP/CheegerInfimum.lean` remaining two holes) credited to author **Haocheng Wang**,
+this round untouched. Sharp finite regular Sard, Energy's five holes, dimension-free KLS also untouched.
 
-## 精确成果
+## Exact Results
 
-### 一、加权的余维 m 图面积公式
+### 1. Weighted m-Codimensional Graph Area Formula
 
-新模块 `formalization/FunctionalInequalities/Analysis/VectorGraphIntegral.lean`
-（92 行，本地 import 闭包 11 个模块，**无 WIP**），
-`OpenGraphIntegral.lean` / `GraphIntegral.lean` 的余维 m 类比。
+New module `formalization/FunctionalInequalities/Analysis/VectorGraphIntegral.lean`
+ (92 line, local import closure 11 modules, **no WIP**),
+`OpenGraphIntegral.lean` / `GraphIntegral.lean` co-dimension m analogy.
 
-* **`map_vectorGraphMap_withDensity`**：把 `B2`（集合测度的等式）升级为**测度的等式**——
-  图参数化把 Jacobian 加权的 Lebesgue 测度前推为限制在图上的归一化曲面测度。
-  用到的两条性质仓库都已证：图映射**按构造单射**，其像可测。
-* **`setLIntegral_image_vectorGraphMap`**：**加权的余维 m 图面积公式**。
-  任意可测 `ℝ≥0∞` 权重在一片 C¹ 图上的曲面积分，等于该权重对图面积密度的 Lebesgue 积分。
-  `B2` 是 `f = 1` 的情形，审计里逐字取回。
-  **无可积性、无有限性、无有界性**；参数集只需可测。
+* **`map_vectorGraphMap_withDensity`**: Upgrade `B2` (the equality for set measures) to an **equality of measures**—
+  The parametrization maps the Jacobian-weighted Lebesgue measure to the normalized surface measure restricted to the graph.
+  Two properties repository used here have already been proven: the graph map is **constructively injective**, and its image is measurable.
+* **`setLIntegral_image_vectorGraphMap`**: **Weighted (m-codimensional) graph area formula**.
+  The surface integral of any measurable `ℝ≥0∞` weight over a C¹ graph equals the Lebesgue integral of that weight against the graph area density.
+  `B2` is the case of `f = 1`; in the audit, the word-by-word recovery is performed.
+  **No integrability, no finiteness, no boundedness**; the parameter set only needs to be measurable.
 
-### 二、一张图上的局部 coarea 等式
+### II. Local coarea formula on a single graph
 
-新模块 `formalization/FunctionalInequalities/Analysis/VectorLocalCoarea.lean`
-（158 行，本地 import 闭包 20 个模块，**无 WIP**）。三件输入各出自一轮：
+New module `formalization/FunctionalInequalities/Analysis/VectorLocalCoarea.lean`
+(158 line, local import closure 20 modules, **no WIP**). Each of the three inputs originates from one round:
 
-* 环境一侧 `setLIntegral_coareaJacobian_levelGraphFamily`（上一轮）；
-* 纤维一侧 `setLIntegral_image_vectorGraphMap`（本轮第一部分）；
-* 切片描述 `slice_eq_image_vectorGraphMap`（图化那一轮）。
+* Environment side `setLIntegral_coareaJacobian_levelGraphFamily` (previous round);
+* Fiber side `setLIntegral_image_vectorGraphMap` (first part of this round);
+* Slice description `slice_eq_image_vectorGraphMap` (visualized in the previous round).
 
-水平变量上的 Tonelli 把三者接起来：
+The Tonelli on the level variable ties the three together:
 
-* **`setLIntegral_coarea_levelGraphFamily`**：标量 `setLIntegral_coarea_graph_family` 的余维 m 类比。
-* **`exists_vector_coarea_neighborhood`**：**每个微分满射的点都有一个开邻域，
-  在它的任意 Borel 子集上、对任意可测 `ℝ≥0∞` 权重，coarea 等式成立**，
-  曲面测度取维数 `finrank V - finrank W`（即 `n - m`）。
-  邻域与权重无关。这是标量 `KLS.exists_regular_coarea_neighborhood` 的余维 m 类比。
+* **`setLIntegral_coarea_levelGraphFamily`**: m-dimensional co-dimension analog of a scalar `setLIntegral_coarea_graph_family`.
+* **`exists_vector_coarea_neighborhood`**: *Every point of a differential surjection has an open neighborhood,*
+  *on any Borel subset of which, for any measurable `ℝ≥0∞` weight, the coarea formula holds*,
+  *with surface measure of dimension `finrank V - finrank W` (i.e., `n - m`).*
+  *The neighborhood is independent of the weight.* This is the m-dimensional co-dimension analog of a scalar `KLS.exists_regular_coarea_neighborhood`.
 
-假设只有：`u` 在开集 `O` 上 C¹，且在该点微分满射。`O` 外无正则性要求；
-无有限性、有界性、可积性、正则值、SFinite。
+Assume only: `u` is C¹ on the open set `O`, and the differential is surjective at that point. `O` has no regularity requirements; no finiteness, boundedness, integrability, regular value, SFinite.
 
-## m = 1 退回已证结果
+## m = 1 revert proven result
 
-* `codimension_one_graphArea`：从余维 m 的加权公式取回仓库已证的
-  `Analysis.setLIntegral_image_graphMap`。
-* `codimension_one_coarea_density`：局部 coarea 等式里的环境密度在 `m = 1` 时就是
-  `‖gradient u x‖ₑ`（经已证的 `coareaJacobian_fderiv`），即标量 `L9` 的被积函数。
+* `codimension_one_graphArea`: Retrieve repository from the weighted formula of co-dimension m, which is already established `Analysis.setLIntegral_image_graphMap`.
+* `codimension_one_coarea_density`: The ambient density in the local coarea equation becomes `‖gradient u x‖ₑ` when `m = 1` (as established in `coareaJacobian_fderiv`), i.e., the integrand of the scalar `L9`.
 
-## 本轮没有做的事
+## What was not done in this round
 
-**这不是余维 m 的正则 coarea 公式。** 还差两件：
+This is not the regular coarea formula for codimension m. Two more items are missing:
 
-1. **余维 m 的加权切片可测性**：`t ↦ ∫⁻ over S ∩ {u = t}` 的 `AEMeasurable`，
-   标量对应物是 `KLS/Geometry/OpenSliceMeasurable.lean`。
-   没有它就不能在拼接时把求和与外层积分交换（`lintegral_tsum` 需要可测性）。
-2. **可数覆盖 + 不交拼接**：把上面的邻域形式装配成整个正则开集上的等式，
-   标量对应物是 `KLS/Geometry/RegularCoarea.lean` 里的装配段。
+1. **Measurability of weighted slices of codimension m**: `t ↦ ∫⁻ over S ∩ {u = t}`'s `AEMeasurable`,
+   the scalar counterpart is `KLS/Geometry/OpenSliceMeasurable.lean`.
+   Without it, the sum and outer integral cannot be interchanged during gluing (`lintegral_tsum` requires measurability).
 
-此外：没有碰临界部分、尖锐 Sard、两条 Cheeger 比较、Energy 的五个洞；
-没有迁洞；没有扩大证书或 Blueprint `leanok` 范围；没有新增兼容 alias；没有削弱已证结论。
-**没有提交、没有推送**，真实 Git index 未改动。
+2. **Countable cover + non-overlapping gluing**: Assembling the above neighborhood forms into an equation over the entire regular open set,
+   the scalar counterpart is the patch in `KLS/Geometry/RegularCoarea.lean`.
 
-## 路线语句复核
+Moreover: no encounter with critical parts, no sharp Sard, no two Cheeger comparisons, five holes in the energy;
+no migration holes; no expansion of certification or Blueprint `leanok` scope; no new compatible alias; no weakening of already proven conclusions.
+**No commit, no push**, the real Git index remains unchanged.
 
-本轮重跑但**未发现新的**路线语句错误。已记录的两处仍是 `B1` 与已证伪的 `A0`。
-`research/audits/AreaFormulaRouteStatements.lean` 继续**保持原字节**。
+## Route statement verification
 
-## 验证
+This round of re-execution found no new route statement errors. The two recorded issues remain `B1` and the falsified `A0`.
+`research/audits/AreaFormulaRouteStatements.lean` continues to preserve the original bytes.
 
-* 两个新模块与新客户端均以 `-DwarningAsError=true` 编译通过，无 `sorry`、无 `axiom`、无占位。
-* `research/audits/VectorLocalCoareaAudit.lean` 的 **15 条公理报告**只用
-  `propext`、`Classical.choice`、`Quot.sound`；含 `B2` 的取回、全空间、恒为 `∞` 的权重、
-  零维参数空间、零维靶空间（此时每点都正则）、以及 m = 1 的两条退回。
-* 重跑全部 **37 个审计客户端**（`research/audits` 30 个，`build/audit` 7 个），全部严格通过。
-* 三个 WIP 逐个实际编译，直接洞 **1/2/5，总数 8**，不变；`research/check_ledger.py` 报 24 个证书。
-* 默认 `lake build` 与根目录 `python3 research/verify.py` 通过；证据 JSON 为
-  `research/explorations/2026-09-17-vector-local-coarea.json`，最终核对另存
-  `build/audit/vector-local-coarea/final-snapshot.json`。
+## Verification
+
+* Two new modules and new clients compile successfully with `-DwarningAsError=true`, with no `sorry`, no `axiom`, and no placeholders.
+* The **15 Axiom Report** for `research/audits/VectorLocalCoareaAudit.lean` uses only `propext`, `Classical.choice`, and `Quot.sound`; includes retrieval of `B2`, full space, weight always equal to `∞`, zero-dimensional parameter space, zero-dimensional target space (in this case, every point is regular), and two backsteps for m = 1.
+* All 37 audit clients are rerun (`research/audits` 30 and `build/audit` 7), all passing strictly.
+* Three WIPs are compiled in practice, each with direct proof hole 1/2/5, total count 8, unchanged; `research/check_ledger.py` reports 24 certificates.
+* Default `lake build` and root directory `python3 research/verify.py` pass; JSON evidence is `research/explorations/2026-09-17-vector-local-coarea.json`, final verification saved as `build/audit/vector-local-coarea/final-snapshot.json`.

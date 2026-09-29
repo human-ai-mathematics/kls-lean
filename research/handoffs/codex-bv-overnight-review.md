@@ -15,7 +15,7 @@ Pre-existing changes: modified `README.md`, untracked `research/handoffs/`.
 Preserve the senior collaborator handoff and the separate
 `/private/tmp/kls-affine-w2-liminf` checkout. No commit or push is authorized.
 
-Claude's existing desktop session `形式化证明` accepted the assignment and
+Claude's existing desktop session `Formalization proof` (translated session title) accepted the assignment and
 reported that it independently checked this baseline. Session locator:
 `claude.ai/epitaxy/local_d1e2bdc0-cd48-4a0d-bd17-cd7026232899`.
 Implementation checkpoint: `research/handoffs/claude-bv-overnight.md`.

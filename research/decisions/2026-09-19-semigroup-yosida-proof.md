@@ -1,81 +1,83 @@
-# 半群生成路线：`S5` 证出（有界非负算子的指数是压缩）
+# Semigroup generation route: `S5` proved (the exponential of a bounded nonnegative operator is a contraction)
 
-2026-09-19，紧接[`S1`–`S4` 轮](2026-09-19-semigroup-form-proofs.md)与
-[交接清单](2026-09-19-semigroup-handoff.md)第二节。`S5` **证出**；`S6`–`S8` 未动。
-直接洞仍 **0**，证书仍 **26**。不提交、不推送，聚合根与 `tasks.json` 均未改（见「记账」）。
+2026-09-19, following the [`S1`–`S4` round](2026-09-19-semigroup-form-proofs.md) and
+Section 2 of the [handoff checklist](2026-09-19-semigroup-handoff.md). `S5` is **proved**; `S6`–`S8` are unchanged.
+Direct proof holes remain **0**, certificates **26**. No commit or push; the aggregate root and `tasks.json` are unchanged (see “Bookkeeping”).
 
-起点 `HEAD = origin/main = 7986adf`（工作区含前几轮未提交的半群模块）。
+Starting point: `HEAD = origin/main = 7986adf` (the worktree contains uncommitted semigroup modules from previous rounds).
 
-## 结果
+## Result
 
-新模块 `formalization/FunctionalInequalities/Analysis/Semigroup/Yosida.lean`，
-命名空间 `FunctionalInequalities.Analysis.Semigroup`（一般实 Hilbert 空间内容，无测度、无对数凹、无 KLS 量）：
+New module: `formalization/FunctionalInequalities/Analysis/Semigroup/Yosida.lean`,
+namespace `FunctionalInequalities.Analysis.Semigroup` (general real Hilbert spaces; no measures, log-concavity, or KLS quantities):
 
-| 义务 | 声明 | 说明 |
+| Obligation | Declaration | Description |
 | --- | --- | --- |
-| 引理 | `hasDerivAt_exp_smul_apply` | 轨道 `t ↦ exp (t • A) f` 的导数是 `A (exp (t • A) f)` |
-| 引理 | `antitone_normSq_exp_smul_neg` | `L` 非负 ⟹ `t ↦ ‖exp (t • (-L)) f‖²` 在**整个 ℝ** 上单调不增 |
-| `S5` 加强版 | `norm_exp_neg_smul_apply_le` | 只假设非负性，`t ≥ 0` ⟹ `‖exp (-t • L) f‖ ≤ ‖f‖` |
-| `S5` 原文 | `route_S5` | 路线语句逐字包装，接收自伴假设后丢弃 |
+| Lemma | `hasDerivAt_exp_smul_apply` | The orbit `t ↦ exp (t • A) f` has derivative `A (exp (t • A) f)` |
+| Lemma | `antitone_normSq_exp_smul_neg` | Nonnegative `L` implies `t ↦ ‖exp (t • (-L)) f‖²` is nonincreasing on **all of ℝ** |
+| Stronger `S5` | `norm_exp_neg_smul_apply_le` | Assuming only nonnegativity, `t ≥ 0` implies `‖exp (-t • L) f‖ ≤ ‖f‖` |
+| Original `S5` | `route_S5` | Wraps the route statement verbatim, accepting but discarding self-adjointness |
 
-## 证法：与交接清单推荐一致
+## Proof: follows the handoff recommendation
 
-按交接清单的导数单调性走：令 `u t = exp (t • (-L)) f`，`φ t = ‖u t‖² = ⟪u t, u t⟫`。
+Use the derivative monotonicity argument in the handoff: let `u t = exp (t • (-L)) f` and `φ t = ‖u t‖² = ⟪u t, u t⟫`.
 
-* `hasDerivAt_exp_smul_const'`（**带撇的版本**，算子在左）给 `u' t = -L (u t)`，
-  再用 `HasDerivAt.clm_apply` 作用到常向量 `f`。选带撇版本的好处是导数**字面上**就是 `-L (u t)`，
-  不需要任何 `L` 与 `exp` 交换的引理（`Commute.exp_right` 之类）。
-* `HasDerivAt.inner ℝ` 给 `φ' t = ⟪u t, -L (u t)⟫ + ⟪-L (u t), u t⟫ = -2⟪L (u t), u t⟫ ≤ 0`。
-* `antitone_of_deriv_nonpos` 给 `Antitone φ`，在 `0 ≤ t` 处取值：`φ t ≤ φ 0 = ‖f‖²`
-  （`NormedSpace.exp_zero`、`one_apply_eq_self`），`sq_le_sq₀` 开方。
+* `hasDerivAt_exp_smul_const'` (the **primed version**, with the operator on the left) gives `u' t = -L (u t)`;
+  apply it to the constant vector `f` using `HasDerivAt.clm_apply`. The primed version makes the derivative
+  **literally** `-L (u t)`, so no commutation lemma for `L` and `exp` (such as `Commute.exp_right`) is needed.
+* `HasDerivAt.inner ℝ` gives `φ' t = ⟪u t, -L (u t)⟫ + ⟪-L (u t), u t⟫ = -2⟪L (u t), u t⟫ ≤ 0`.
+* `antitone_of_deriv_nonpos` gives `Antitone φ`. At `0 ≤ t`, obtain `φ t ≤ φ 0 = ‖f‖²`
+  using `NormedSpace.exp_zero` and `one_apply_eq_self`, then take square roots with `sq_le_sq₀`.
 
-**没走**谱半径、连续泛函演算、算子范数 `‖exp (-t • L)‖ ≤ 1`——三条交接清单标记的死路一条也没碰。
-结论保持逐点形式，绕开 CLM 范数实例菱形。
+The proof uses **none** of the three dead ends flagged in the handoff: spectral radius, continuous functional calculus,
+or the operator norm bound `‖exp (-t • L)‖ ≤ 1`. The conclusion stays pointwise, avoiding the CLM norm instance diamond.
 
-### 两处小摩擦
+### Two minor obstacles
 
-* `convert h using 1` 在导数处留下一个 `AddCommGroup ℝ` 的实例相等目标
-  （`Real.instAddCommGroup = Real.instRCLike.toDivisionRing.toAddCommGroup`），
-  因为 `HasDerivAt.inner` 经 `RCLike ℝ` 取到的实例与直接的不同。改用 `HasDerivAt.congr_deriv`
-  只比较导数值，问题消失。
-* 该版 Mathlib 已弃用 `ContinuousLinearMap.neg_apply` 与 `ContinuousLinearMap.one_apply`，
-  `-DwarningAsError` 下弃用即报错；改用根命名空间的 `neg_apply` 与 `one_apply_eq_self`。
+* At the derivative step, `convert h using 1` leaves an `AddCommGroup ℝ` instance equality goal
+  (`Real.instAddCommGroup = Real.instRCLike.toDivisionRing.toAddCommGroup`), because the instance obtained by
+  `HasDerivAt.inner` through `RCLike ℝ` differs from the direct instance. Using `HasDerivAt.congr_deriv`
+  compares only derivative values and resolves the issue.
+* This Mathlib version deprecates `ContinuousLinearMap.neg_apply` and `ContinuousLinearMap.one_apply`.
+  Deprecations are errors under `-DwarningAsError`; use root-namespace `neg_apply` and `one_apply_eq_self`.
 
-## 路线假设未被使用：自伴性
+## Unused route assumption: self-adjointness
 
-路线假设 `∀ f g, ⟪L f, g⟫ = ⟪f, L g⟫`。证明**一次都没用到**：`φ'` 的两项
-`⟪u, -L u⟫` 与 `⟪-L u, u⟫` 都等于 `-⟪L u, u⟫`，靠的只是**实内积的对称性**（`real_inner_comm`）。
-于是模块证的是严格更强的 `norm_exp_neg_smul_apply_le`（任意有界非负 `L`），
-`route_S5` 与审计里的 `route_S5` 均按原样接收该假设后丢弃——**记录下来，不静默吸收**，
-与 `S2` 丢 `0 < s`、`S3` 丢 `Dense` 同一处理方式。
+The route assumes `∀ f g, ⟪L f, g⟫ = ⟪f, L g⟫`. The proof **never uses it**: both terms of `φ'`,
+`⟪u, -L u⟫` and `⟪-L u, u⟫`, equal `-⟪L u, u⟫` by **symmetry of the real inner product** (`real_inner_comm`).
+The module therefore proves the strictly stronger `norm_exp_neg_smul_apply_le` for arbitrary bounded nonnegative `L`.
+Both the module and audit versions of `route_S5` accept the original assumption and discard it. This is
+**recorded explicitly**, as with dropping `0 < s` in `S2` and `Dense` in `S3`.
 
-`0 ≤ t` **是**必需的：`φ` 在整个 ℝ 上递减意味着 `t < 0` 时 `‖exp (-t • L) f‖ ≥ ‖f‖`，方向相反。
+The condition `0 ≤ t` **is necessary**: since `φ` decreases on all of ℝ, for `t < 0` one has
+`‖exp (-t • L) f‖ ≥ ‖f‖`, the reverse inequality.
 
-## 明确没做什么
+## Explicit limits
 
-`S6`（Yosida 指数的强收敛）、`S7`（半群律与强连续）、`S8`（生成元）未证，`S6` 风险仍标高。
-本条只是半群构造中的一步；**不是** Markov 性、**不是** Bakry–Émery Γ 演算、**不是** Buser 不等式的任何一步。
-`thm:logconcave-cheeger-poincare-comparison` 无 `\leanok`，`tasks.json` 的缺口条目未改动
-（缺口一仍整体未填）。没有新增证书，Blueprint 未改。
+`S6` (strong convergence of Yosida exponentials), `S7` (semigroup law and strong continuity), and `S8` (generator)
+remain unproved; `S6` remains high risk. This is one step in semigroup construction, **not** Markovianity,
+Bakry–Émery Γ calculus, or any step of the Buser inequality.
+`thm:logconcave-cheeger-poincare-comparison` has no `\leanok`; the gap entries in `tasks.json` are unchanged
+(the first gap remains open as a whole). No new certificate or Blueprint change.
 
-## 记账（留给主会话集成）
+## Bookkeeping (for integration by the main session)
 
-本轮**没有**改 `formalization/FunctionalInequalities.lean`、`lakefile.toml`、`research/tasks.json`
-或任何 Blueprint `.tex`，也未 `git add/commit/push`。为了让审计客户端能 import，
-用 `lake build FunctionalInequalities.Analysis.Semigroup.Yosida` 单独生成了 olean，不改任何文件。
+This round did **not** change `formalization/FunctionalInequalities.lean`, `lakefile.toml`, `research/tasks.json`,
+or any Blueprint `.tex`, and did not run `git add/commit/push`. To let the audit client import the module,
+`lake build FunctionalInequalities.Analysis.Semigroup.Yosida` generated its olean separately without changing any source files.
 
-集成时需要：
+Integration requires:
 
-1. 聚合根 `FunctionalInequalities.lean` 加 `import FunctionalInequalities.Analysis.Semigroup.Yosida`
-   （否则 `lake build` 与 CI 不构建它，仓库不应再多一个游离模块）。
-2. `tasks.json` 的证据条目登记 `Analysis/Semigroup/Yosida.lean` 与
-   `research/audits/SemigroupYosidaAudit.lean` 的 sha256，然后跑 `verify.py`。
-3. 交接清单第二节的 `S5` 条目可标「已证」，并把「自伴假设未用」记入。
+1. Add `import FunctionalInequalities.Analysis.Semigroup.Yosida` to the aggregate root `FunctionalInequalities.lean`
+   (otherwise `lake build` and CI do not build it; the repository should not gain another orphan module).
+2. Register the sha256 evidence for `Analysis/Semigroup/Yosida.lean` and
+   `research/audits/SemigroupYosidaAudit.lean` in `tasks.json`, then run `verify.py`.
+3. Mark `S5` in Section 2 of the handoff as proved and record that self-adjointness was unused.
 
-## 验证
+## Validation
 
-模块与审计均以 `lake env lean -DwarningAsError=true` 通过，**0 错误 0 警告**。
-审计客户端 `research/audits/SemigroupYosidaAudit.lean` 把 `S5` 逐字重述为 `route_S5` 并消解，
-另给不带自伴假设的 `route_S5_of_nonneg`，以及两个边界情形（`t = 0` 时是等式、`L = 0`）。
-路线文件与审计里的 `S5` 文本经 `diff` 逐 token 比对一致。
-**8 条 `#print axioms` 报告，全部只有 `propext, Classical.choice, Quot.sound`，0 条 `sorryAx`。**
+The module and audit pass `lake env lean -DwarningAsError=true` with **0 errors and 0 warnings**.
+The audit client `research/audits/SemigroupYosidaAudit.lean` restates `S5` verbatim as `route_S5` and proves it;
+it also gives `route_S5_of_nonneg` without self-adjointness and two boundary cases (equality at `t = 0`, and `L = 0`).
+The `S5` text in the route file and audit was compared token by token with `diff` and matches.
+**All 8 `#print axioms` reports contain only `propext, Classical.choice, Quot.sound`, with 0 occurrences of `sorryAx`.**

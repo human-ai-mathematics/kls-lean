@@ -2,7 +2,7 @@
  "version": 1,
  "date": "2026-09-17",
  "what": "Analysis/ module regrouping: the family word moves from the basename into the directory. FILE LAYER ONLY - no declaration was renamed, added, removed or reproved, and no namespace changed. 43 of the 50 Analysis modules use the flat namespace FunctionalInequalities.Analysis, and the three nested ones (Analysis.WhitneyCover, Analysis.WhitneyJet, Analysis.LipschitzJet) were left untouched, so ledger nodes, Blueprint declarations, the statement snapshot and every axiom report are unaffected.",
- "rule": "research/naming.md, 文件与声明作用域 / 家族词归目录，不进文件名",
+ "rule": "research/naming.md, File and declaration scope / Family names belong in directories, not filenames",
  "why_a_map": "about 434 textual Analysis/<File>.lean citations live in dated decision and exploration records, which this project does not rewrite. This map keeps them resolvable, exactly as 2026-09-08-module-map.json and 2026-09-08-library-naming-module-map.json did for the earlier declaration and module renames.",
  "modules_moved": 32,
  "modules_left_flat": 18,

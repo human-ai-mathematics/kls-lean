@@ -1,115 +1,112 @@
-# N1 证出：小 Lipschitz 方法实际给出的指数
+# N1 Prove: The actual exponential given by the small Lipschitz method
 
-2026-09-17（同日，在 `2026-09-17-equidimensional-sard.md` 那一轮之后）。
-本轮**证明新定理**：秩亏路线的诊断项 **`N1`**。
-连同 `R0`–`R10`，十三条编号里已兑现 **十二条**；
-剩下的 `N2` 已在上一轮**证明为假**，其修正版已证。
+2026-09-17 (on the same day, following `2026-09-17-equidimensional-sard.md`'s round).
+This round proves a new theorem: the diagnostic term of rank-deficient paths **`N1`**.
+Together with `R0`–`R10`, twelve out of thirteen numbered statements have been verified;
+the remaining `N2` was proven false in the previous round, and its corrected version has now been established.
 
-**`N1` 是诊断，不是纲领的进展。** 它证出的恰恰是「这条路走不通」的那个陈述：
-指数是 `k + r` 而不是 `k`。见下「为什么证出 N1 不是进展」。
-不迁洞，不提交、不推送。直接洞仍 **8（1/2/5）**，证书仍 **24**。
+**`N1` is a diagnosis, not an advancement of the program.** It proves exactly the statement that "this path does not work":
+The exponential is `k + r`, not `k`. See below "why proving N1 is not an advancement."
+No hole, no commit, no push. The direct proof hole remains **8 (1/2/5)**, and the certificate remains **24**.
 
-起点 `HEAD = origin/main = e7c4403352011b6c3ed6dc02f0af3eef6cbb300e`；
-上一轮收尾 passed 回执 `build/verification/20260917T084846.473181Z/report.json`：
-10 个门、223 个本地模块内核重放、608 条目，快照
-`bbc6729f41d7c11b2ef7b9a3c919b5f40ad495a2edf549280f42183dfcd6125b`，drift 为空。
-本轮期间并发会话（王浩丞那条线）**未改动工作区，也未提交**。
+Start `HEAD = origin/main = e7c4403352011b6c3ed6dc02f0af3eef6cbb300e`;
+Previous round closeout verification receipt `build/verification/20260917T084846.473181Z/report.json`:
+10 gates, 223 local module kernel replay, 608 entries, snapshot
+`bbc6729f41d7c11b2ef7b9a3c919b5f40ad495a2edf549280f42183dfcd6125b`, drift is empty.
+During this round, concurrent sessions (Haocheng Wang's line) **did not modify workspace, and also did not commit**.
 
-## 边界
+## Boundary
 
-对数凹 Cheeger–Buser 线（含 `KLS/WIP/CheegerInfimum.lean` 剩下的两个洞）归合作者**王浩丞**，
-本轮未触碰。尖锐有限正则 Sard（直接洞 `Analysis.sard`）、Energy 的五个洞、无量纲 KLS
-也都未触碰。**本轮与 Sard 无关**：`N1` 只谈某个映射的纤维的 Hausdorff 测度，
-对临界值集合一字未提。
+Log-concave Cheeger–Buser lines (including `KLS/WIP/CheegerInfimum.lean` remaining two holes) credited to author **Haocheng Wang**,
+this round untouched. Sharp finite regular Sard (direct proof hole `Analysis.sard`), five holes of Energy, dimension-free KLS
+all untouched. **This round is unrelated to Sard**: `N1` only discusses the Hausdorff measure of a fiber of some map,
+mentioning nothing about the critical value set.
 
-## 精确成果
+## Exact Results
 
-新模块 `formalization/FunctionalInequalities/Analysis/ExponentObstruction.lean`
-（179 行，本地 import 闭包 2 个模块、无 WIP，无 `sorry`、无 `axiom`）。
+New module `formalization/FunctionalInequalities/Analysis/ExponentObstruction.lean`
+(ROW 179, local import closure of 2 modules, no WIP, no `sorry`, no `axiom`).
 
-* **`hausdorffMeasure_truncated_add_le`**：`μH[((n − m : ℕ) : ℝ) + m] S ≤ μH[n] S`。
-  `ℕ` 的截断减法满足 `(n − m) + m ≥ n`（无论 `m ≤ n` 与否），Hausdorff 测度对指数递减。
-  这一条使整个证明**不需要** `finrank ℝ W₂ ≤ finrank ℝ V`——
-  正是 `N2` 栽在截断减法上的那一点，`N1` 挺住了。
-* **`exists_measurable_majorant_of_lipschitz_pieces`**（单个尺度）：
-  给定 `S` 的可数可测分片、每片上 `Q ∘ u` 为 `ε`-Lipschitz，
-  对每片用已证的余维 `m₂` Eilenberg 优函数 `exists_measurable_majorant_vector`，
-  把优函数求和。得到一个**可测**优函数 `G ≥ τ ↦ μH[n − m₂](S ∩ {Q∘u = τ})`，
-  且 `∫⁻ G ≤ C · ε^{m₂} · μH[n] S`。
-  切片函数本身不可测（`u` 没有任何正则性假设），所以必须走优函数。
-  分片的**可测性与不交性**在这里唯一一次被用到：可数可加性把
-  `∑ᵢ μH[n−m₂+m₂](S ∩ Tᵢ)` 合成 `μH[n−m₂+m₂](S)`。
-* **`ae_hausdorffMeasure_inter_levelSet_eq_zero_of_lipschitz_pieces`（`N1`）**：
-  对 `ε_j = (j+1)⁻¹` 取优函数 `G_j`，取逐点下确界 `H = ⨅ⱼ Gⱼ`（可测、仍是优函数），
-  则 `∫⁻ H ≤ C · ε_j^{m₂} · μH[n] S` 对每个 `j` 成立；
-  `m₂ > 0` 且 `μH[n] S < ∞` 使右端趋于 `0`，故 `∫⁻ H = 0`，
-  `H` 可测故几乎处处为零，切片被它控制，于是几乎每个 `τ` 上切片零测。
+* **`hausdorffMeasure_truncated_add_le`**: `μH[((n − m : ℕ) : ℝ) + m] S ≤ μH[n] S`.
+  Truncated subtraction in `ℕ` satisfies `(n − m) + m ≥ n` regardless of whether `m ≤ n`; Hausdorff measure decreases with the exponent.
+  This axiom makes the entire proof **not require** `finrank ℝ W₂ ≤ finrank ℝ V`——
+  It is precisely `N2` that holds at the point on truncated subtraction, `N1` withstands.
+* **`exists_measurable_majorant_of_lipschitz_pieces`** (single scale):
+  Given `S`'s countably measurable piecewise, each piece with `Q ∘ u` being `ε`-Lipschitz,
+  For each slice using the proven co-dimension `m₂` Eilenberg good function `exists_measurable_majorant_vector`,
+  Sum the convex function. Obtain a measurable convex function `G ≥ τ ↦ μH[n − m₂](S ∩ {Q∘u = τ})`,
+  and `∫⁻ G ≤ C · ε^{m₂} · μH[n] S`.
+  The slice function itself is not measurable (`u` without any regularity assumptions), so one must resort to a majorizing function.
+  The measurability and disjointness of piecewise are used here only once: the countable additivity gives
+  `∑ᵢ μH[n−m₂+m₂](S ∩ Tᵢ)` composition `μH[n−m₂+m₂](S)`.
+* **`ae_hausdorffMeasure_inter_levelSet_eq_zero_of_lipschitz_pieces` (`N1`)**:
+  For `ε_j = (j+1)⁻¹`, take majorants `G_j`, then the pointwise infimum `H = ⨅ⱼ Gⱼ` (measurable and still a majorant),
+  Then `∫⁻ H ≤ C · ε_j^{m₂} · μH[n] S` holds for each `j`;
+  `m₂ > 0` and `μH[n] S < ∞` make the right-hand side tend to `0`, so `∫⁻ H = 0`,
+  Since `H` is measurable, it vanishes almost everywhere; it dominates the slices, so the slice is null for almost every `τ`.
 
-审计 `research/audits/ExponentObstructionAudit.lean`（244 行，闭包 5 个模块、无 WIP）
-现有 **11 条标准三公理报告**，其中 `route_N1` 是路线命题的**逐字复制并证明**
-（脚本核对，去空白后与路线文件逐字相同）。
+Audit `research/audits/ExponentObstructionAudit.lean` (row 244, closure 5 modules, no WIP)
+Currently **11 standard three-axiom reports**, among which `route_N1` is a word-for-word replication and proof of the route statement
+(script verification, after removing blanks, exactly identical to the route document).
 
-## 为什么证出 `N1` 不是进展
+## Why proving `N1` is not progress
 
-路线记录早就把 `N1` 定性为**障碍的陈述**，本轮只是把它兑现成定理，不改变这个定性。
+The route record had already qualified `N1` as a **statement of an obstacle**, and this round merely formalized it as a theorem without changing this characterization.
 
-* **指数是 `k + r`，不是 `k`。** 路线里 `W₂` 是秩 `r` 的像的正交补，`dim W₂ = m − r`，
-  于是 `N1` 给出的指数 `n − dim W₂ = k + r`。
-  审计的 `N1_exponent_is_k_add_r` 把这条算术单列出来，免得被误读。
-* **弱在没用的方向上。** `r ≥ 1` 时，`μH[k+r]` 零测**推不出** `μH[k]` 的任何信息：
-  在指数 `k = n − r` 上，任何正 Lebesgue 测度集合的 Hausdorff 测度都是 `∞`
-  （`N1_null_at_higher_exponent_says_nothing_at_k`，即上一轮证出的修正版 `N2` 的特例）。
-* **`R0` 不依赖它。** `R0` 已由分层路线独立证出，办法是改在**纤维内部**切片
-  （`Analysis/StratumSlicing.lean`），那里 `k + (m − r) = n − r` 才是对的指数。
-  `Analysis/ExponentObstruction.lean` 没有任何下游消费者。
+* **The exponent is `k + r`, not `k`.** The route `W₂` is the orthogonal complement of the image of rank `r`, `dim W₂ = m − r`,
+  hence the exponent `n − dim W₂ = k + r` given by `N1`.
+  The audit's `N1_exponent_is_k_add_r` lists this arithmetic separately to prevent misinterpretation.
+* **Weakness is in directions with no use.** When `r ≥ 1`, `μH[k+r]` zero measure **does not imply** any information about `μH[k]`:
+  On the exponent `k = n − r`, the Hausdorff measure of any Lebesgue measure set is `∞`
+  (`N1_null_at_higher_exponent_says_nothing_at_k`, i.e., a special case of the corrected version `N2` proven in the previous round).
+* **`R0` does not depend on it.** `R0` has already been independently proven via stratified routes by slicing **within the fiber**
+  (`Analysis/StratumSlicing.lean`), where `k + (m − r) = n − r` is indeed the correct exponent.
+  `Analysis/ExponentObstruction.lean` has no downstream consumers.
 
-## 侧条件是必需的
+## Side conditions are necessary
 
-`0 < finrank ℝ W₂` 不是装饰。审计的 `N1_needs_positive_codimension`
-否定的是**删掉这条假设之后**的 `N1`（`Type` 实例；路线的 `Type*` 版蕴含它），
-反例为 `V = W = ℝ`、`W₂` 零维、`Q = 0`、`u = id`、`S = [0,1]`：
-分片假设平凡成立（`Q ∘ u` 是常值），而唯一的纤维就是整个 `S`，`μH[1] S = 1 ≠ 0`。
-零维时 Eilenberg 常数 `ε^{dim W₂} = 1`，没有东西趋于零。
+`0 < finrank ℝ W₂` is not decorative. The audit of `N1_needs_positive_codimension`
+Negates the `N1` after **removing this assumption** (`Type` instance; the route's `Type*` version entails it),
+counterexamples are `V = W = ℝ`, `W₂` zero-dimensional, `Q = 0`, `u = id`, `S = [0,1]`:
+The piecewise assumption holds trivially (`Q ∘ u` is constant), and the only fiber is the entire `S`, `μH[1] S = 1 ≠ 0`.
+In zero dimension, the Eilenberg constant `ε^{dim W₂} = 1`, nothing tends to zero.
 
-`S` 可测这一条也是真用到的，见上。
+`S` Measurability is also genuinely used, see above.
 
-## 明确没证什么
+## What remains unproved
 
-* **没有证明任何 Sard 定理**，与 `Analysis.sard` 这个直接洞无关，其状态未变。
-* **`N2` 仍未证，且已知为假**；已证的是它的修正版（上一轮）。
-* 不迁洞、不新增证书、不扩大 Blueprint `leanok` 范围、不新增兼容 alias、
-  不削弱已证结论、不增加不必要的假设。无量纲 KLS 仍开。
-* 未修改任何既有 `.lean` 文件（本轮只新增一个模块，并扩写**本轮自己**上一步新建的
-  `ExponentObstructionAudit.lean`）；路线语句文件 `RankDeficientRouteStatements.lean`
-  仍**字节不变**。
+* **No proof of any Sard theorem**, unrelated to `Analysis.sard` this direct proof hole, its status remains unchanged.
+* **`N2` remains unproven and is known to be false**; what has been proven is its corrected version (from the previous round).
+* No migration holes, no new certificate, no expansion of Blueprint `leanok` scope, no new compatible alias,
+  no weakening of already proven conclusions, no addition of unnecessary assumptions. dimension-free KLS remains open.
+* No modification to any existing `.lean` file (this round only adds one module, and expands **this round's own** previous step newly created `ExponentObstructionAudit.lean`); the route statement file `RankDeficientRouteStatements.lean`
+  remains **byte-for-byte unchanged**.
 
-## 验证
+## Verification
 
-* 新模块与审计客户端均以 `-DwarningAsError=true` 通过。
-* 重跑 **52 个**审计客户端（`research/audits` 45 个、`build/audit` 7 个），
-  全部严格通过，**0 失败**。
-* 全库公理报告 **672 条**（上一轮 665 + 本轮 7），其中 **12 条 `sorryAx` 未变**，
-  仍全部落在四个**故意**报告未决 WIP 结果的客户端里。
-* 三个 WIP 逐个实际编译，直接洞 **1/2/5，总数 8**，不变；`check_ledger.py` 报 **24** 个证书。
-* 默认 `lake build` 与根目录 `python3 research/verify.py` 通过；
-  证据 JSON 为 `research/explorations/2026-09-17-exponent-obstruction-n1.json`，
-  本地日志在 `build/audit/exponent-obstruction-n1/`，
-  最终核对另存 `build/audit/exponent-obstruction-n1/final-snapshot.json`。
-* **没有提交、没有推送**，真实 Git index 未改动。
+* The new module and audit client have both passed `-DwarningAsError=true`.
+* Retested **52** audit clients (`research/audits` 45 and `build/audit` 7), all strictly passed, **0 failures**.
+* The full library axioms report **672** entries (previous round 665 + current round 7), of which **12** entries `sorryAx` remain unchanged, still all within the four intentionally reported WIP pending results clients.
+* Each of the three WIPs was compiled in practice, direct proof hole **1/2/5**, total count **8**, unchanged; `check_ledger.py` issued **24** certificates.
+* Default `lake build` and root directory `python3 research/verify.py` passed;
+  JSON evidence is `research/explorations/2026-09-17-exponent-obstruction-n1.json`,
+  local logs are at `build/audit/exponent-obstruction-n1/`,
+  final reconciliation saved to `build/audit/exponent-obstruction-n1/final-snapshot.json`.
+* No commit, no push; the real Git index was not modified.
 
 ---
 
-## 附记（2026-09-17，同日稍后补记，正文未改写）
+## Addendum (2026-09-17, later the same day; main text unchanged)
 
-同日的文件管理一轮把上文提到的两处位置/名字做了调整，**数学内容与类型一字未改**：
+On the same day, a round of file management adjusted the two mentioned locations/names, **the mathematical content and types remained unchanged**:
 
-* 修正版 `N2` 从审计客户端挪进模块，现为
-  `Analysis.hausdorffMeasure_finrank_sub_eq_top`（`Analysis/ExponentObstruction.lean`），
-  原名 `ExponentObstructionAudit.hausdorffMeasure_finrank_sub_eq_top_of_finrank_pos`。
-  模块因此新增 `import Analysis.LevelSet`，本地 import 闭包由 2 变 **4**，仍无 WIP。
-  审计只留路线记账项 `N2_repair_is_free_on_the_route` 与反例 `route_N2_is_false`。
-* `ExponentObstructionAudit` 原先把零维空间声明了**两次**（`Pt₀` 与 `Pt`），已并为一个 `Pt`；
-  客户端重排为 `N1` 全部在前、`N2` 全部在后。
+* Revised version `N2` has been moved from audit client to module, now is
+  `Analysis.hausdorffMeasure_finrank_sub_eq_top` ( `Analysis/ExponentObstruction.lean` ),
+  previously named `ExponentObstructionAudit.hausdorffMeasure_finrank_sub_eq_top_of_finrank_pos`.
+  The module thus gains `import Analysis.LevelSet`, local import closure changes from 2 to **4**, still no WIP.
+  Audit retains only route accounting item `N2_repair_is_free_on_the_route` and counterexample `route_N2_is_false`.
+* `ExponentObstructionAudit` originally declared zero-dimensional space twice ( `Pt₀` and `Pt` ), now merged into one `Pt`;
+  client has been reorganized with `N1` all at the front and `N2` all at the back.
 
-上文其余记载不变：`N1` 仍是已证的诊断项，指数仍是 `k + r` 而非 `k`，
-证出它仍**不是纲领的进展**；`N2` 仍未证且已知为假；`Analysis.sard` 仍是直接洞。
+The rest of the above records remain unchanged: `N1` is still a verified diagnostic item, the exponent remains `k + r` rather than `k`,
+it is still **not progress toward the program**; `N2` remains unproven and known to be false; `Analysis.sard` is still a direct proof hole.

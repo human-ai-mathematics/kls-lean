@@ -1,117 +1,108 @@
-# 2026-09-12 — 相对周长链条的分析前提：独立 Lean 陈述（仅陈述，无证明）
+# 2026-09-12 — Analytical prerequisites for relative perimeter chains: Independent Lean statements (only statements, no proofs)
 
-承接同日的[可行性判断与提示词](2026-09-12-relative-perimeter-prerequisites-statement-prompt.md)。
-本轮把 `lem:relative-perimeter-smoothing` → `lem:relative-perimeter-cheeger-infimum` 链条所缺的分析前提
-写成**与 KLS 无关**的 Lean 陈述，全部证明体为 `sorry`，放进一个新的 WIP 模块。未注册、未提交、未推送，
-未改动任何既有文件的既有声明（`RelativePerimeter.lean` 的 5 条与 `CheegerInfimum.lean` 的 9 条 `sorry`
-类型原样保留）。
+Take over the [feasibility judgment and prompt](2026-09-12-relative-perimeter-prerequisites-statement-prompt.md) on the same day.
+In this round, write the missing analytical premises for the chain `lem:relative-perimeter-smoothing` → `lem:relative-perimeter-cheeger-infimum` as a **KLS-independent** Lean statement, with all proof bodies being `sorry`, and place them into a new WIP module. No registration, no commit, no push, and no modification to any existing declarations (the `RelativePerimeter.lean` 5 clause and the `CheegerInfimum.lean` 9 clause of `sorry` are retained in their original types).
 
-## 决定
+## Decision
 
-- 新文件 `formalization/FunctionalInequalities/KLS/WIP/AnalyticPrerequisites.lean`，17 条 `sorry`，
-  两个 `def`（`Analysis.divergence`、`KLS.SmoothDomain.outwardNormal`，均有真实定义体）。
-  一般命题放在命名空间 `FunctionalInequalities.Analysis`（五个 section：`Isodiametric`、`LipschitzGraph`、
-  `LevelSet`、`Coarea`、`Sard`，另有 `Divergence`），只有 Gauss–Green 一组放在 `FunctionalInequalities.KLS.SmoothDomain`
-  下，因为散度定理需要一个区域。
-- 只导入 `FunctionalInequalities.KLS.WIP.RelativePerimeter`（取 `SmoothDomain`、`unitBallVolume`、
-  `surfaceMeasure`、`mollifiedIndicator`）与 `Mathlib.LinearAlgebra.Trace`（散度用迹定义）。
-- A 组选 **Brunn–Minkowski 路线**而非 Steiner 对称化（理由见下）。
-- B 组**拒绝**「限制到水平集的 `μH[n−1]` 是局部有限测度」这种写法（它是假的），改为逐点陈述。
-- E 组用 Sard 的**锐指数** `C^n`（`n = finrank`）而不是 `C^∞`：更强且是教科书原形；仓库需要的 `C^∞` 情形由
-  `ContDiff.of_le` 得到。
+- New file `formalization/FunctionalInequalities/KLS/WIP/AnalyticPrerequisites.lean`, 17 item `sorry`,
+  Two `def` (`Analysis.divergence`, `KLS.SmoothDomain.outwardNormal`, both having real definition bodies).
+  General statements are placed in the namespace `FunctionalInequalities.Analysis` (five sections: `Isodiametric`, `LipschitzGraph`,
+  `LevelSet`, `Coarea`, `Sard`, along with `Divergence`), only the Gauss–Green set is placed at `FunctionalInequalities.KLS.SmoothDomain`
+  Below, because the divergence theorem requires a region.
+- Only import `FunctionalInequalities.KLS.WIP.RelativePerimeter` (taking `SmoothDomain`, `unitBallVolume`,
+  `surfaceMeasure`, `mollifiedIndicator` and `Mathlib.LinearAlgebra.Trace` (divergence defined using trace).
+- Group A chooses the **Brunn–Minkowski path** instead of Steiner symmetrization (reason see below).
+- Group B **rejects** the statement that "the `μH[n−1]` restricted to level sets is a locally finite measure" (which is false), and instead adopts a pointwise assertion.
+- E group uses Sard's **sharp index** `C^n` (`n = finrank`) instead of `C^∞`: stronger and textbook original; the repository-required `C^∞` case is given by
+  `ContDiff.of_le` obtained.
 
-## 陈述清单（17 条 + 2 个定义）
+## Statement list (17 items + 2 definitions)
 
-下表「对应」列指 `RelativePerimeter.lean`（RP）与 `CheegerInfimum.lean`（CI）中的既有 `sorry`。
-「可行性」列写明钉住的 Mathlib（v4.33.0，`db584cd6`）已有什么、缺什么。
+The following table's "Corresponds to" column refers to `RelativePerimeter.lean` (RP) and `CheegerInfimum.lean` (CI) having `sorry`.
+The "Feasibility" column lists what is present and what is missing in the pinned Mathlib (v4.33.0, `db584cd6`).
 
-### A. 等周直径不等式（section `Isodiametric`）
+### A. Isoperimetric diameter inequality (section `Isodiametric`)
 
-| 全名（省略 `FunctionalInequalities.`） | 内容 | 来源 | 对应 | 可行性 |
+| Full name (omitted `FunctionalInequalities.`) | Content | Source | Corresponds to | Feasibility |
 |---|---|---|---|---|
-| `Analysis.prekopaLeindler` | `V` 上的 n 维 Prékopa–Leindler：`(∫f)^t (∫g)^{1−t} ≤ ∫h`，`f x^t g y^{1−t} ≤ h(t x + (1−t) y)`，与一维版 `Probability.Line.prekopaLeindler` 逐字同型（`*` 换 `•`） | Prékopa 1971/73，Leindler 1972；Gardner, *The Brunn–Minkowski inequality*, Bull. AMS 39 (2002) §7 | 无直接对应；A 组中间产物 | 一维基例已证（`Probability/Line/BrunnMinkowski.lean`）。归纳需要 `V ≃ W × ℝ` 的正交分解与沿直线的 Fubini，仓库有 `Probability.lineEquiv`/`exists_lintegral_line`；Mathlib 无任何维数 ≥ 2 的 PL。中等偏重 |
-| `Analysis.volume_rpow_mul_le_volume_combination` | 乘法型 Brunn–Minkowski：`vol S^t · vol T^{1−t} ≤ vol{t x + (1−t) y}`，`S, T` 可测非空，右端外测度；组合集写法与 `KLS.LogConcave` 一致 | Gardner 2002 §4；Schneider, *Convex Bodies* §7.1 | 无直接对应 | 由 PL 取指示函数 + 内正则（紧子集）得到，与一维 `le_volume_combination` 同套路。中等 |
-| `Analysis.volume_rpow_add_le_volume_add_rpow` | 加法型 Brunn–Minkowski：`vol S^{1/n} + vol T^{1/n} ≤ vol(S+T)^{1/n}`，`S, T` 紧非空，`[Nontrivial V]`（`n = 0` 时 `1/0 = 0`、`x^0 = 1` 会使不等式为假） | 同上 | 无直接对应 | 由乘法型经齐次性得到。中等偏易 |
-| `Analysis.isodiametric` | `vol S ≤ ofReal(ω_n (diam S/2)^n)`，`S` 有界任意（外测度）；用 `Metric.diam` + `Bornology.IsBounded`，因为无界集的 `Metric.diam` 为 0 | Bieberbach 1915（n=2），Urysohn 1924；Evans–Gariepy §2.2 Thm 1；Federer 2.10.33 | `KLS.hausdorffNormalized_finrank_eq_volume`（RP:119）的核心输入 | Mathlib 无。路线：`vol S ≤ vol(closure S)`，`½S + ½(−S) ⊆ closedBall 0 (diam/2)`，乘法型 BM（`t = ½`，`vol(−S) = vol S`），`InnerProductSpace.volume_closedBall`。给定 BM 后是短证明 |
-| `Analysis.volume_le_ofReal_mul_hausdorffMeasure` | `vol S ≤ ofReal(ω_n/2^n) · μH[n] S`（归一化恒等式的一半） | Evans–Gariepy §2.2 Thm 2 的第一半 | 同上 | 由 `isodiametric` 对 `μH` 的覆盖定义（`mkMetric`）逐覆盖求和即得。易（给定 A1） |
-| `Analysis.hausdorffMeasure_finrank_eq_smul_volume` | `μH[n] = ofReal(2^n/ω_n) • volume`，`V` 显式 | Evans–Gariepy §2.2 Thm 2；Federer 2.10.35 | **是 `KLS.hausdorffNormalized_finrank_eq_volume` 的一般形式**：展开 `hausdorffNormalized` 后 `smul_smul` + `ENNReal.ofReal_mul` 即得。未改 RP 中该定理的类型 | Haar 唯一性（`isAddHaarMeasure_hausdorffMeasure`、`isAddLeftInvariant_eq_smul`）给 `μH[n] = c • volume`；下界 `c ≥ 2^n/ω_n` 由上一条；上界另需 Vitali/Besicovitch 覆盖（`Besicovitch.exists_disjoint_closedBall_covering_ae` 在 Mathlib 中已有）。中等 |
+| `Analysis.prekopaLeindler` | n-dimensional Prékopa–Leindler on `V`: `(∫f)^t (∫g)^{1−t} ≤ ∫h`, `f x^t g y^{1−t} ≤ h(t x + (1−t) y)`, and the one-dimensional version `Probability.Line.prekopaLeindler` is word-for-word isomorphic (replacing `*` with `•`) | Prékopa 1971/73, Leindler 1972; Gardner, *The Brunn–Minkowski inequality*, Bull. AMS 39 (2002) §7 | No direct correspondence; Intermediate products of Group A | One-dimensional base case has been proven (`Probability/Line/BrunnMinkowski.lean`). Induction requires `V ≃ W × ℝ`'s orthogonal decomposition and Fubini along lines, warehouse has `Probability.lineEquiv`/`exists_lintegral_line`; Mathlib has no PL for dimension ≥ 2. Moderate emphasis |
+| `Analysis.volume_rpow_mul_le_volume_combination` | Multiplicative Brunn–Minkowski: `vol S^t · vol T^{1−t} ≤ vol{t x + (1−t) y}`, `S, T` measurable and non-empty, outer measure on the right-hand side; combinatorial set notation consistent with `KLS.LogConcave` | Gardner 2002 §4; Schneider, *Convex Bodies* §7.1 | No direct correspondence | Derived from PL taking indicator functions + inner regularity (on compact subsets), following the same pattern as one-dimensional `le_volume_combination`. Intermediate |
+| `Analysis.volume_rpow_add_le_volume_add_rpow` | Additive Brunn–Minkowski: `vol S^{1/n} + vol T^{1/n} ≤ vol(S+T)^{1/n}`, `S, T` compact and non-empty, `[Nontrivial V]` (when `n = 0` `1/0 = 0` and `x^0 = 1` make the inequality false) | Same as above | No direct correspondence | Obtained from the multiplicative type via homogeneity. Moderate difficulty |
+| `Analysis.isodiametric` | `vol S ≤ ofReal(ω_n (diam S/2)^n)` for any bounded `S` (outer measure); use `Metric.diam` + `Bornology.IsBounded`, since unbounded sets have `Metric.diam` equal to 0 | Bieberbach 1915 (n=2), Urysohn 1924; Evans–Gariepy §2.2 Thm 1; Federer 2.10.33 | Core input for `KLS.hausdorffNormalized_finrank_eq_volume` (RP:119) | Absent from Mathlib. Route: `vol S ≤ vol(closure S)`, `½S + ½(−S) ⊆ closedBall 0 (diam/2)`, multiplicative BM (`t = ½`, `vol(−S) = vol S`), and `InnerProductSpace.volume_closedBall`. Short given BM |
+| `Analysis.volume_le_ofReal_mul_hausdorffMeasure` | `vol S ≤ ofReal(ω_n/2^n) · μH[n] S` (half of the normalization identity) | Evans–Gariepy §2.2 Thm 2 first half | Same as above | By summing over the coverings defined by `isodiametric` for `μH` (`mkMetric`), we obtain the result. Easy (given A1) |
+| `Analysis.hausdorffMeasure_finrank_eq_smul_volume` | `μH[n] = ofReal(2^n/ω_n) • volume`, with explicit `V` | Evans–Gariepy §2.2 Thm 2; Federer 2.10.35 | **General form of `KLS.hausdorffNormalized_finrank_eq_volume`**: unfold `hausdorffNormalized`, then use `smul_smul` + `ENNReal.ofReal_mul`. The type of the RP theorem is unchanged | Haar uniqueness (`isAddHaarMeasure_hausdorffMeasure`, `isAddLeftInvariant_eq_smul`) gives `μH[n] = c • volume`; the preceding result gives `c ≥ 2^n/ω_n`. The upper bound additionally requires Vitali/Besicovitch covering (`Besicovitch.exists_disjoint_closedBall_covering_ae` is in Mathlib). Medium |
 
-**Steiner vs. Brunn–Minkowski。** 选 BM 路线，因为：(i) 一维基例已经在仓库里且无有界性前提；(ii) 中间产物
-（n 维 PL、两种 BM）本身是 Mathlib 级别的独立贡献，而 Steiner 对称化的中间引理（保测性、直径不增、
-n 次迭代的可测性保持）在 Lean 里既重又无复用价值；(iii) BM 路线的最后一步只用 `volume_closedBall` 与
-`t = ½`，不需要「等号仅在球取到」。代价是 A 组比 Steiner 多两条中间陈述，但它们承重（对数凹理论里迟早要用 BM）。
+**Steiner vs. Brunn–Minkowski.** Choose the BM route because: (i) the one-dimensional base case is already in the repository and does not require boundedness assumptions; (ii) the intermediate products (n-dimensional PL, two versions of BM) are themselves independent contributions at the Mathlib level, while the intermediate lemmas of Steiner symmetrization (measure preservation, diameter non-increase, measurability preservation under n iterations) in Lean are both redundant and lack reusability; (iii) the final step of the BM route only uses `volume_closedBall` and `t = ½`, without requiring "equality attained only at balls". The cost is that the A group has two additional intermediate statements, but they are justified (the log-concave theory will eventually require BM).
 
-**承重说明（重申第一节的判断）。** A 组不解锁任何下游节点：`hausdorffNormalized_finrank_eq_volume` 在全仓库
-无使用点，`relativePerimeter` 只用 `ℋ^{n−1}`。写进来是因为 `surfaceMeasure` 的归一化约定必须由一条陈述而不是
-注释钉住，而这条陈述的一般形式就是 A2。
+**Load-bearing explanation (reaffirming the judgment from Section 1).** Group A does not unlock any downstream nodes: `hausdorffNormalized_finrank_eq_volume` throughout the warehouse
+no usage points, `relativePerimeter` only uses `ℋ^{n−1}`. It is written in because `surfaceMeasure`'s normalization convention must be anchored by a statement rather than a comment, and the general form of that statement is A2.
 
-### B. C¹ 超曲面的面积测度局部有限（section `LipschitzGraph`、`LevelSet`）
+### B. The area measure of C¹ hypersurfaces is locally finite (section `LipschitzGraph`, `LevelSet`)
 
-| 全名 | 内容 | 来源 | 对应 | 可行性 |
+| Full name | Content | Source | Corresponds to | Feasibility |
 |---|---|---|---|---|
-| `Analysis.exists_lipschitzOnWith_levelSet_subset_image` | `φ` 为 `C¹`，`Dφ x ≠ 0`：存在 `N ∈ 𝓝 x`、有界 `s ⊆ ker(Dφ x)`、Lipschitz 于 `s` 的 `g : ker(Dφ x) → V`，使 `N ∩ {φ = φ x} ⊆ g '' s`。只需 `[NormedSpace ℝ V] [CompleteSpace V]`，不需有限维 | 隐函数定理的 Lipschitz 图形式（任何分析教材） | 无直接对应；B1 的路线 | Mathlib 有 `HasStrictFDerivAt.implicitFunction`（`Analysis/Calculus/Implicit.lean`，`ImplicitFunctionData`），给出 `C¹` 隐函数；`C¹` ⇒ 局部 Lipschitz 由 `ContDiff` + 有界导数得到。中等 |
-| `Analysis.exists_hausdorffMeasure_levelSet_lt_top` | 同前提：`∃ N ∈ 𝓝 x, μH[n−1] (N ∩ {φ = φ x}) < ⊤` | Evans–Gariepy §2.4.1 / Federer 2.10.11（Lipschitz 像的 `ℋ^k` 界） | **`SmoothDomain.isLocallyFiniteMeasure_hausdorff_frontier`（RP:418）的一般命题**：边界点取定义邻域 `(W, φ)`，`frontier ∩ W = {φ = 0} ∩ W`（`frontier_inter_eq`），`N ∩ W` 即所需邻域；非边界点用闭 frontier 的补集 | 给定 B2 后：`LipschitzOnWith.hausdorffMeasure_image_le`（已有）+ `μH[k]` 在 `k` 维内积空间（`ker` 作为子模的诱导结构）上是 Haar 测度（`isAddHaarMeasure_hausdorffMeasure`，已有）故在有界集上有限 + `LinearMap.finrank_range_add_finrank_ker` 得 `finrank ker = n − 1`。易 |
+| `Analysis.exists_lipschitzOnWith_levelSet_subset_image` | `φ` is `C¹`, `Dφ x ≠ 0`: there exists `N ∈ 𝓝 x`, a bounded `s ⊆ ker(Dφ x)`, Lipschitz on `s`, `g : ker(Dφ x) → V`, such that `N ∩ {φ = φ x} ⊆ g '' s`. Only requires `[NormedSpace ℝ V] [CompleteSpace V]`, no need for finite dimension | Implicit function theorem's Lipschitz graph form (any analysis textbook) | No direct correspondence; B1's path | Mathlib has `HasStrictFDerivAt.implicitFunction` (`Analysis/Calculus/Implicit.lean`, `ImplicitFunctionData`), providing `C¹` implicit function; `C¹` ⇒ local Lipschitz by `ContDiff` + bounded derivative. Medium |
+| `Analysis.exists_hausdorffMeasure_levelSet_lt_top` | Same hypotheses: `∃ N ∈ 𝓝 x, μH[n−1] (N ∩ {φ = φ x}) < ⊤` | Evans–Gariepy §2.4.1 / Federer 2.10.11 (`ℋ^k` bound for Lipschitz images) | **General statement underlying `SmoothDomain.isLocallyFiniteMeasure_hausdorff_frontier` (RP:418)**: at boundary points take a defining neighborhood `(W, φ)`; `frontier ∩ W = {φ = 0} ∩ W` (`frontier_inter_eq`), so use `N ∩ W`. Away from the boundary, use the complement of the closed frontier | Given B2: `LipschitzOnWith.hausdorffMeasure_image_le` (available), and `μH[k]` is Haar on a `k`-dimensional inner product space (`ker` with its induced submodule structure), by `isAddHaarMeasure_hausdorffMeasure` (available), hence finite on bounded sets. `LinearMap.finrank_range_add_finrank_ker` gives `finrank ker = n − 1`. Easy |
 
-**为什么是逐点陈述。** 「`μH[n−1].restrict {x ∈ W | φ x = c}` 是 `IsLocallyFiniteMeasure`」对开集 `W` 内的正则水平集
-是**假**的：`n = 2`，`W = {x > 0}`，`φ(x, y) = y − sin(1/x)`，`Dφ ≠ 0` 处处成立，但水平集在原点每个邻域内长度无穷。
-它对光滑区域的闭 frontier 成立，是因为每个 frontier 点都有自己的定义邻域；这正是 RP:418 那条成立而其「一般化」
-不成立的原因。
+**Why pointwise statements.** "`μH[n−1].restrict {x ∈ W | φ x = c}` is `IsLocallyFiniteMeasure`" is **false** for regular level sets inside an open set `W`: `n = 2`, `W = {x > 0}`, `φ(x, y) = y − sin(1/x)`, `Dφ ≠ 0` hold everywhere, yet the level sets have infinite length in every neighborhood of the origin.
+It holds for smooth regions with closed frontier because each frontier point has its own defined neighborhood; this is exactly the reason why RP:418 holds but its "generalization" does not.
 
-### C. Gauss–Green / 散度定理（namespace `KLS.SmoothDomain`，section `Normal`、`GaussGreen`）
+### C. Gauss–Green / Divergence Theorem (namespace `KLS.SmoothDomain`, section `Normal`, `GaussGreen`)
 
-| 全名 | 内容 | 来源 | 对应 | 可行性 |
+| Full name | Content | Source | Corresponds to | Feasibility |
 |---|---|---|---|---|
-| `Analysis.divergence`（def） | `div F x := tr (fderiv ℝ F x)`，用 `LinearMap.trace`，与基无关；不可微处为 0 | — | — | 定义 |
-| `KLS.SmoothDomain.outwardNormal`（def） | 边界点处取 `exists_defining` 选出的定义函数 `φ`，值 `‖∇φ x‖⁻¹ • ∇φ x`；边界外为 0 | — | — | 定义（`Classical.choose`） |
-| `KLS.SmoothDomain.outwardNormal_eq` | 对**任意**定义对 `(W, φ)`，`outwardNormal x = ‖∇φ x‖⁻¹ • ∇φ x`（良定义性） | 两个定义函数的梯度在公共零集上平行且同向（都在 `U` 内为负） | 无直接对应；C1–C3 的前提 | 需要「两个 `C¹` 函数有相同的局部零集且同侧 ⇒ 梯度正比例」，可由 B2 的图表示或沿法向的一维单调性（RP 中 `addHaar_frontier` 已用过的论证）得到。中等 |
-| `KLS.SmoothDomain.norm_outwardNormal` | frontier 上 `‖ν‖ = 1` | — | 同上 | 直接由定义与 `fderiv ≠ 0`。易 |
-| `KLS.SmoothDomain.integral_divergence_eq_integral_inner_outwardNormal` | `∫_U div F = ∫_{∂U} ⟪F, ν⟫ dℋ^{n−1}`，`F` 为 `C¹` 紧支撑向量场，`ℋ^{n−1} = surfaceMeasure V`（标准归一化），`U`、`∂U` 可无界 | Maggi, *Sets of Finite Perimeter*, Ch. 9（`C¹` 边界开集的 Gauss–Green）；Evans–Gariepy §5.8 | 无直接对应；C 组主定理 | Mathlib 的 `integral_divergence_of_hasFDerivAt_off_countable` 只对 `Fin (n+1) → ℝ` 中的盒子。路线：单位分解（`SmoothPartitionOfUnity`，Mathlib 有）+ 图坐标下换元（`integral_image_eq_integral_abs_det_fderiv_smul`）或沿法向的一维分部积分 + Fubini；面积元 `√(1+|∇g|²)` 与 `ℋ^{n−1}` 的对应还需要 Lipschitz 图上的面积公式（Mathlib 只有同维数面积公式）。**本链条最重的一条** |
-| `KLS.SmoothDomain.setIntegral_gradient_eq_integral_smul_outwardNormal` | `∫_U ∇η = ∫_{∂U} η ν dℋ^{n−1}`，`η` 为 `C¹` 紧支撑标量，即 `D𝟙_U = −ν ℋ^{n−1}⌊∂U` | Maggi Ch. 9；Ambrosio–Fusco–Pallara §3.3 | 无直接对应；C1 的标量形式 | 由 C1 对 `F = η • e`（`e` 取正交基）逐分量得到。易（给定 C1） |
-| `KLS.SmoothDomain.gradient_mollifiedIndicator_eq` | `∇(η ⋆ 𝟙_U)(x) = −∫_{∂U} η(x−y) ν(y) dℋ^{n−1}(y)`，`η = φ.normed volume` | 同上 | **是 `SmoothDomain.enorm_gradient_mollified_le`（RP:580）背后的精确公式**：取范数、`‖ν‖ = 1`、`norm_integral_le_lintegral_norm` 即得 | 由 C2 对 `η_x := η(x − ·)`（`∇η_x(y) = −(∇η)(x−y)`）与 RP 中已有的 `hasFDerivAt_convolution_right`/`convolution_precompR_apply` 得到。易（给定 C2） |
+| `Analysis.divergence` (def) | `div F x := tr (fderiv ℝ F x)`, using `LinearMap.trace`, independent of basis; at non-differentiable points is 0 | — | — | definition |
+| `KLS.SmoothDomain.outwardNormal` (def) | Take the defined function `φ` selected by `exists_defining` at boundary points, value `‖∇φ x‖⁻¹ • ∇φ x`; outside the boundary is 0 | — | — | Definition (`Classical.choose`) |
+| `KLS.SmoothDomain.outwardNormal_eq` | For any defined pair `(W, φ)`, `outwardNormal x = ‖∇φ x‖⁻¹ • ∇φ x` (well-definedness) | The gradients of two defined functions are parallel and point in the same direction on their common zero set (both negative within `U`) | No direct correspondence; requires premises of C1–C3 | Requires "two `C¹` functions having the same local zero set and same side ⇒ gradients are positively proportional", which can be obtained from the graphical representation in B2 or one-dimensional monotonicity along the normal direction (an argument previously used in RP `addHaar_frontier`). Moderate |
+| `KLS.SmoothDomain.norm_outwardNormal` | frontier above `‖ν‖ = 1` | — | Same as above | Directly from definition and `fderiv ≠ 0`. Easy |
+| `KLS.SmoothDomain.integral_divergence_eq_integral_inner_outwardNormal` | `∫_U div F = ∫_{∂U} ⟪F, ν⟫ dℋ^{n−1}`, for a compactly supported `C¹` vector field `F`, with `ℋ^{n−1} = surfaceMeasure V` (standard normalization); `U` and `∂U` may be unbounded | Maggi, *Sets of Finite Perimeter*, Ch. 9 (Gauss–Green for open sets with `C¹` boundary); Evans–Gariepy §5.8 | No direct counterpart; main theorem of group C | Mathlib’s `integral_divergence_of_hasFDerivAt_off_countable` only treats boxes in `Fin (n+1) → ℝ`. Route: partition of unity (`SmoothPartitionOfUnity`, available) + change of variables in graph coordinates (`integral_image_eq_integral_abs_det_fderiv_smul`), or one-dimensional integration by parts in the normal direction + Fubini. Identifying `√(1+|∇g|²)` with `ℋ^{n−1}` still requires an area formula for Lipschitz graphs (Mathlib only has the equal-dimensional formula). **The heaviest item in this chain** |
+| `KLS.SmoothDomain.setIntegral_gradient_eq_integral_smul_outwardNormal` | `∫_U ∇η = ∫_{∂U} η ν dℋ^{n−1}`, `η` are `C¹` compactly supported scalars, i.e. `D𝟙_U = −ν ℋ^{n−1}⌊∂U` | Maggi Ch. 9; Ambrosio–Fusco–Pallara §3.3 | No direct correspondence; C1 scalar form | Obtained by component-wise projection onto C1 for `F = η • e` (taking an orthogonal basis for `e`). Easy (given C1) |
+| `KLS.SmoothDomain.gradient_mollifiedIndicator_eq` | `∇(η ⋆ 𝟙_U)(x) = −∫_{∂U} η(x−y) ν(y) dℋ^{n−1}(y)`, `η = φ.normed volume` | Same as above | **is the exact formula behind `SmoothDomain.enorm_gradient_mollified_le` (RP:580)**: take norm, `‖ν‖ = 1`, `norm_integral_le_lintegral_norm` to obtain | From C2 on `η_x := η(x − ·)` (`∇η_x(y) = −(∇η)(x−y)`) and the existing `hasFDerivAt_convolution_right`/[`convolution_precompR_apply`] in RP. Easy (given C2) |
 
-### D. 加权 coarea 公式（section `Coarea`）
+### D. Weighted coarea formula (section `Coarea`)
 
-| 全名 | 内容 | 来源 | 对应 | 可行性 |
+| Full name | Content | Source | Corresponds to | Feasibility |
 |---|---|---|---|---|
-| `Analysis.aemeasurable_lintegral_levelSet` | `t ↦ ∫_{u = t} g dℋ^{n−1}` 关于 Lebesgue 测度 a.e. 可测（`u` Lipschitz，`g` 可测） | Evans–Gariepy §3.4（coarea 定理的可测性部分）；Federer 3.2.12 | 无直接对应；经典定理的组成部分，`lintegral` 形式下不影响 D1 的意义但下游 Fubini 需要 | Mathlib 无。中等 |
-| `Analysis.lintegral_enorm_gradient_mul_eq_lintegral_levelSet` | `∫ ‖∇u‖ g dvol = ∫_ℝ ∫_{u=t} g dℋ^{n−1} dt`，`u` **只需 Lipschitz**，`gradient` 在不可微处为 0（Rademacher 零测） | Evans–Gariepy §3.4 Thm 2 及其加权推论；Federer 3.2.12；Maggi Ch. 13 | **强于 `KLS.Isoperimetry.lintegral_enorm_gradient_mul_eq_lintegral_levelSet`（CI:112）**：去掉 `ContDiff ℝ 1 u`；后者是直接特化 | Mathlib 有：Rademacher（`LipschitzWith.ae_differentiableAt`）、同维数面积公式（`lintegral_image_eq_lintegral_abs_det_fderiv_mul`）、`μH` 的 Lipschitz 像界。缺：coarea 本身。标准证明（EG）需要 `{∇u ≠ 0}` 上的局部拉直/`C¹` 逼近 + 面积公式 + 对 Lipschitz 的逼近论证。**重** |
+| `Analysis.aemeasurable_lintegral_levelSet` | `t ↦ ∫_{u = t} g dℋ^{n−1}` On Lebesgue measure a.e. measurable (`u` Lipschitz, `g` measurable) | Evans–Gariepy §3.4 (measurability part of the coarea theorem); Federer 3.2.12 | No direct correspondence; part of classical theorems, `lintegral` in form does not affect the meaning of D1 but downstream Fubini requires it | Mathlib has none. Intermediate |
+| `Analysis.lintegral_enorm_gradient_mul_eq_lintegral_levelSet` | `∫ ‖∇u‖ g dvol = ∫_ℝ ∫_{u=t} g dℋ^{n−1} dt`, `u` **only requires Lipschitz**, `gradient` is 0 (Rademacher null) at non-differentiable points | Evans–Gariepy §3.4 Thm 2 and its weighted corollary; Federer 3.2.12; Maggi Ch. 13 | **Stronger than `KLS.Isoperimetry.lintegral_enorm_gradient_mul_eq_lintegral_levelSet` (CI:112)**: removes `ContDiff ℝ 1 u`; the latter is a direct specialization | Mathlib has: Rademacher (`LipschitzWith.ae_differentiableAt`), area formula in equal dimension (`lintegral_image_eq_lintegral_abs_det_fderiv_mul`), and bound for Lipschitz images (`μH`). Missing: coarea itself. Standard proof (EG) requires local flattening on `{∇u ≠ 0}` + `C¹` approximation + area formula + approximation argument for Lipschitz. **Heavy** |
 
-### E. Sard 定理（section `Sard`）
+### E. Sard's Theorem (section `Sard`)
 
-| 全名 | 内容 | 来源 | 对应 | 可行性 |
+| Full name | Content | Source | Corresponds to | Feasibility |
 |---|---|---|---|---|
-| `Analysis.sard` | `u : V → ℝ` 为 `C^n`（`n = finrank ℝ V`，Lean 中 `ContDiff ℝ (Module.finrank ℝ V) u`），`volume (u '' {Du = 0}) = 0`；只需 `[NormedSpace ℝ V] [FiniteDimensional ℝ V]`，`V` 上不需测度 | Sard 1942；Federer 3.4.3；Milnor, *Topology from the Differentiable Viewpoint* §3（`C^∞` 证明）；Whitney 1935（`C^{n−1}` 反例） | 无直接对应；E2 的来源 | Mathlib 只有同维数版本 `addHaar_image_eq_zero_of_det_fderivWithin_eq_zero`（`Function/Jacobian.lean`）。Milnor 的对维数归纳证明需要 Fubini 与 Taylor 余项估计，Mathlib 材料齐备但无现成框架。**重** |
-| `Analysis.ae_forall_fderiv_ne_zero` | 同前提：`∀ᵐ t, ∀ x, u x = t → Du x ≠ 0`（a.e. `t` 是正则值） | 同上 | **给出 `SmoothDomain.ae_exists_superlevel`（CI:87）**：正则值 `t` 处，`U = {t < u}` 开，`frontier ⊆ {u = t}`（已证 `frontier_superlevel_subset`），定义函数 `φ = t − u`、`W = V` | 由 `sard` 取补集即得。易（给定 E1） |
+| `Analysis.sard` | `u : V → ℝ` is `C^n` (`n = finrank ℝ V`, in Lean `ContDiff ℝ (Module.finrank ℝ V) u`), `volume (u '' {Du = 0}) = 0`; only requires `[NormedSpace ℝ V] [FiniteDimensional ℝ V]`, no measure needed on `V` | Sard 1942; Federer 3.4.3; Milnor, *Topology from the Differentiable Viewpoint* §3 (`C^∞` proof); Whitney 1935 (`C^{n−1}` counterexample) | No direct correspondence; source of E2 | Mathlib has only the same-dimensional version `addHaar_image_eq_zero_of_det_fderivWithin_eq_zero` (`Function/Jacobian.lean`). Milnor's induction proof on dimension requires Fubini and Taylor remainder estimates, Mathlib has the materials but no ready-made framework. **Heavy** |
+| `Analysis.ae_forall_fderiv_ne_zero` | Under the same premise: `∀ᵐ t, ∀ x, u x = t → Du x ≠ 0` ( a.e. `t` is a regular value) | Same as above | **Prove `SmoothDomain.ae_exists_superlevel` (CI: 87)**: at a regular value `t`, `U = {t < u}` is open, `frontier ⊆ {u = t}` (already proved `frontier_superlevel_subset`), define functions `φ = t − u` and `W = V` | By taking the complement of `sard`, we obtain the result. Trivial (given E1) |
 
-## 对应关系总表
+## Correspondence Summary Table
 
-| 既有 `sorry` | 本轮陈述 | 关系 |
+| Existing `sorry` | Current statement | Relation |
 |---|---|---|
-| RP:119 `hausdorffNormalized_finrank_eq_volume` | `Analysis.hausdorffMeasure_finrank_eq_smul_volume`（← `isodiametric` ← BM ← PL） | 一般形式，`smul_smul` 即得；**不承重** |
-| RP:418 `SmoothDomain.isLocallyFiniteMeasure_hausdorff_frontier` | `Analysis.exists_hausdorffMeasure_levelSet_lt_top`（← `exists_lipschitzOnWith_levelSet_subset_image`） | 一般命题；组装需 `frontier_inter_eq` |
-| RP:580 `SmoothDomain.enorm_gradient_mollified_le` | `SmoothDomain.gradient_mollifiedIndicator_eq`（← C2 ← C1） | 精确公式，取范数即得 |
-| CI:87 `SmoothDomain.ae_exists_superlevel` | `Analysis.ae_forall_fderiv_ne_zero`（← `sard`） | 组装需 `frontier_superlevel_subset` |
-| CI:112 `Isoperimetry.lintegral_enorm_gradient_mul_eq_lintegral_levelSet` | `Analysis.lintegral_enorm_gradient_mul_eq_lintegral_levelSet` | 直接特化（去掉 `C¹`） |
+| RP:119 `hausdorffNormalized_finrank_eq_volume` | `Analysis.hausdorffMeasure_finrank_eq_smul_volume` (← `isodiametric` ← BM ← PL) | General form, `smul_smul` immediately obtained; **not load-bearing** |
+| RP:418 `SmoothDomain.isLocallyFiniteMeasure_hausdorff_frontier` | `Analysis.exists_hausdorffMeasure_levelSet_lt_top` (← `exists_lipschitzOnWith_levelSet_subset_image`) | General statement; assembly requires `frontier_inter_eq` |
+| RP:580 `SmoothDomain.enorm_gradient_mollified_le` | `SmoothDomain.gradient_mollifiedIndicator_eq` (← C2 ← C1) | Exact formula, take norm to obtain |
+| CI:87 `SmoothDomain.ae_exists_superlevel` | `Analysis.ae_forall_fderiv_ne_zero` (← `sard`) | Assembly requires `frontier_superlevel_subset` |
+| CI:112 `Isoperimetry.lintegral_enorm_gradient_mul_eq_lintegral_levelSet` | `Analysis.lintegral_enorm_gradient_mul_eq_lintegral_levelSet` | direct specialization (removing `C¹`) |
 
-**未被本轮覆盖的既有 `sorry`（9 条）**，因为它们不是「一般分析前提」而是仓库内的分析工作或纯组装：
-RP 的 `lintegral_enorm_gradient_mollified_homothety_le`、`exists_smooth_recovery_sequence`（组装）；
-CI 的 `lintegral_enorm_gradient_distanceCutoff_le`（Rademacher + 水平集上梯度 a.e. 为零；Mathlib 已有 Rademacher）、
-`exists_smooth_approximation_lipschitz`（磨光收敛）、`lintegral_minkowskiContent_superlevel_le`（ADG 2017 Lemma 3.2）、
-`smoothConstant_mul_lintegral_min_superlevel_le`、`minkowskiConstant_mul_lintegral_min_superlevel_le`、
-`minkowskiConstant_le_smoothConstant`、`smoothConstant_le_minkowskiConstant`（组装）。
+**Uncovered existing `sorry` (9 items) in this round**, since they are not "general analysis premises" but rather analysis work or pure assembly within the repository:
+RP's `lintegral_enorm_gradient_mollified_homothety_le`, `exists_smooth_recovery_sequence` (assembly);
+CI's `lintegral_enorm_gradient_distanceCutoff_le` (Rademacher + gradient on level sets a.e is zero; Mathlib already has Rademacher),
+`exists_smooth_approximation_lipschitz` (smoothing convergence), `lintegral_minkowskiContent_superlevel_le` (ADG 2017 Lemma 3.2),
+`smoothConstant_mul_lintegral_min_superlevel_le`, `minkowskiConstant_mul_lintegral_min_superlevel_le`,
+`minkowskiConstant_le_smoothConstant`, `smoothConstant_le_minkowskiConstant` (assembly).
 
-## 不以这种形式陈述的内容（及理由）
+## Content not stated in this form (and reasons)
 
-1. **B 组的「局部有限测度」形式**：假命题，见上；已改为逐点形式。
-2. **没有重述** `hausdorffNormalized_finrank_eq_volume` 与 `ae_exists_superlevel`：二者分别由 A2、E2 经几行推出，重述只会制造重复义务。
-3. **C 组无法完全脱离仓库对象**：Gauss–Green 需要一个区域类，仓库已有 `SmoothDomain`，重新定义「`C¹` 边界开集」只会产生第二个平行概念。若日后转正，`divergence`、`outwardNormal` 与 C1–C3 应随 `SmoothDomain` 一起搬到 `KLS/Isoperimetry/SmoothDomain.lean`；A、B、D、E 四组应搬到独立的 `FunctionalInequalities/Analysis/` 目录（或直接上游到 Mathlib）。
-4. **A 组不承重**（见第一节）。仍然写入，因为它钉住 `surfaceMeasure` 的归一化约定；若 owner 认为约定检查可以用注释代替，可以整组删除而不影响任何下游。
-5. **Sard 的 `C^n` 而非 `C^∞`**：更强、教科书原形、Mathlib PR 的自然目标；仓库只用 `C^∞` 特例。若审阅认为应与提示词逐字一致，改为 `ContDiff ℝ ∞ u` 是纯弱化，不影响任何下游。
-6. **D 组只需 Lipschitz**：比 CI:112 的 `C¹ ∧ Lipschitz` 更一般，也是 Evans–Gariepy 的原形。加权 coarea 对局部 Lipschitz（如 `C¹` 无 Lipschitz 界）也成立，但需要 McShane 延拓论证；本轮不写，因为 CI 的消费者都是全局 Lipschitz 的。
+1. **B group's "locally finite measure" form**: false statement, see above; has been changed to pointwise form.
+2. **No restatement** `hausdorffNormalized_finrank_eq_volume` and `ae_exists_superlevel`: the two are each derived from A2, E2 after a few lines; restating would only create redundant obligations.
+3. **Group C cannot fully detach from warehouse objects**: Gauss–Green requires a region class, and the warehouse already has `SmoothDomain`; redefining the "`C¹` boundary open set" would only produce a second parallel concept. If promoted later, `divergence`, `outwardNormal`, and C1–C3 should be moved together with `SmoothDomain` to `KLS/Isoperimetry/SmoothDomain.lean`; groups A, B, D, and E should be moved to a separate `FunctionalInequalities/Analysis/` directory (or directly upstream to Mathlib).
+4. **Group A does not bear load** (see Section 1). Still written, as it anchors the normalization convention of `surfaceMeasure`; if the owner considers the convention check can be replaced by comments, the entire group can be deleted without affecting any downstream.
+5. **Sard's `C^n` rather than `C^∞`**: stronger, textbook original form, natural goal of Mathlib PR; the repository only uses the `C^∞` special case. If review deems it necessary to match the prompt word for word, changing to `ContDiff ℝ ∞ u` is purely weakening and does not affect any downstream.
+6. **Group D only requires Lipschitz**: More general than CI:112's `C¹ ∧ Lipschitz`, and is the original form of Evans–Gariepy. The weighted coarea formula holds for locally Lipschitz functions (e.g., `C¹` without Lipschitz bounds), but requires McShane extension arguments; we omit it here since the consumers of CI are all globally Lipschitz.
 
-## 编译
+## Compilation
 
-在 `formalization/` 下（原生 arm64 工具链，无 git 包装脚本）：
+Under `formalization/` (native arm64 toolchain, no git wrapper script):
 
 ```
 lake build FunctionalInequalities.KLS.WIP.AnalyticPrerequisites   # Build completed successfully
@@ -119,34 +110,32 @@ lake env lean FunctionalInequalities/KLS/WIP/AnalyticPrerequisites.lean
 lake env lean -DwarningAsError=true FunctionalInequalities/KLS/WIP/AnalyticPrerequisites.lean
 ```
 
-两次 `lake env lean` 均恰好输出 17 条 `declaration uses 'sorry'`，无其他警告或错误。
-两个 `def` 的 section 变量都被定义体使用，未加任何 `omit` 或 `set_option linter.unusedSectionVars`。
-`#check` 复核：`sard` 的阶数为 `↑(Module.finrank ℝ V)`；`hausdorffMeasure_finrank_eq_smul_volume` 的 `V` 显式；
-`exists_lipschitzOnWith_levelSet_subset_image` 只带 `NormedAddCommGroup`、`NormedSpace ℝ`、`CompleteSpace`；
-Gauss–Green 的内积显示为 `inner ℝ (F x) (U.outwardNormal x)`。
+Both `lake env lean` outputs exactly 17 `declaration uses 'sorry'`s, with no other warnings or errors.
+Both section variables of `def` are used within the definition body, with no additional `omit` or `set_option linter.unusedSectionVars`.
+`#check` verification: the order of `sard` is `↑(Module.finrank ℝ V)`; the `V` of `hausdorffMeasure_finrank_eq_smul_volume` is explicitly given;
+`exists_lipschitzOnWith_levelSet_subset_image` carries only `NormedAddCommGroup`, `NormedSpace ℝ`, and `CompleteSpace`;
+The inner product of Gauss–Green is displayed as `inner ℝ (F x) (U.outwardNormal x)`.
 
-编译中遇到的两处调整：`LinearMap.ker` 在此 Mathlib 版本只接受 `LinearMap`，对 `fderiv ℝ φ x : V →L[ℝ] ℝ`
-须写 `(fderiv ℝ φ x).toLinearMap`（直接类型上升会在 `isDefEq` 超时）；`divergence` 同样用 `.toLinearMap`。
+Two adjustments encountered during compilation: `LinearMap.ker` in this Mathlib version only accepts `LinearMap`, and for `fderiv ℝ φ x : V →L[ℝ] ℝ` it must be written as `(fderiv ℝ φ x).toLinearMap` (direct type lifting will timeout at `isDefEq`); `divergence` is likewise replaced with `.toLinearMap`.
 
-## 工具链发现（对后续仅陈述轮次有用）
+## Toolchain Discovery (useful only for subsequent round statements)
 
-- `unusedSectionVars` linter **跳过证明体含 `sorry` 的声明**：这就是为什么 RP:418、RP:580、CI:87 等带着未用的
-  `[CompleteSpace V]`、`[SecondCountableTopology V]` 却在 `-DwarningAsError=true` 下无警告。后果：仅陈述文件可以用宽松的
-  `variable` 块；但每填完一条 `sorry`，该声明的未用 section 实例会立刻被报告，需要逐条加 `omit ... in`。这也是提示词里
-  「`unusedSectionVars` 逐轮报告」现象的机制。两个有真实定义体的 `def` 不受此保护，因此各自放在只含所需实例的 section。
-- 此 Mathlib 的 `LinearMap.ker` 只接受 `LinearMap`；对 `fderiv ℝ φ x : V →L[ℝ] ℝ` 须写 `(fderiv ℝ φ x).toLinearMap`，
-  直接的类型上升 `(… : V →ₗ[ℝ] ℝ)` 会在 `isDefEq` 中耗尽 200000 心跳而不是报类型错误。
+- `unusedSectionVars` linter **skips proofs containing `sorry` declarations**: this is why RP:418, RP:580, CI:87 and so on have unused
+  `[CompleteSpace V]`, `[SecondCountableTopology V]` however show no warnings under `-DwarningAsError=true`. Consequence: only statement files can use a lenient approach.
+  `variable` blocks; but after each `sorry` is filled, unused section instances of this declaration will be immediately reported and require individual addition of `omit ... in`. This is also a hint in the prompt
+  The mechanism of the «`unusedSectionVars` round-by-round report» phenomenon. Two `def`s with actual defined bodies are not protected by this, and thus each is placed in a section containing only the required instances.
+- This Mathlib's `LinearMap.ker` only accepts `LinearMap`; for `fderiv ℝ φ x : V →L[ℝ] ℝ` we must write `(fderiv ℝ φ x).toLinearMap`,
+  A direct type ascription `(… : V →ₗ[ℝ] ℝ)` exhausts 200000 heartbeats in `isDefEq` instead of producing a type error.
 
-## 后续
+## Next steps
 
-证明会话的提示词见同日的
-[sorry 提示词](2026-09-12-relative-perimeter-prerequisites-sorry-prompt.md)（四层：组装与纯 Mathlib；中等；缺基础设施；空）。
-HANDOFF、`research/verification.md`、`KLS/README.md` 与两个伴随 WIP 模块的模块文档已加指向本模块的说明；
-`tasks.json` 中两个节点的 `infrastructure: missing` 分类不变，因为义务是有类型的，不是已证的。
+Hints for proof sessions see the same day's
+[sorry prompt](2026-09-12-relative-perimeter-prerequisites-sorry-prompt.md) (four levels: assembly and pure Mathlib; intermediate; lacks infrastructure; empty).
+HANDOFF, `research/verification.md`, `KLS/README.md` and the module documentation for two associated WIP modules have been updated with references to this module;
+`tasks.json` has the same `infrastructure: missing` classification between two nodes because obligations are typed, not proven.
 
-## 未做
+## Not done
 
-- 未注册：`FunctionalInequalities.lean` 聚合导入、lakefile `Solutions` 根、`research/a-series/ledger.yaml`、
-  `research/check_blueprint.py` 的 `CERTIFICATES`、`research/tasks.json`、Blueprint 的 `\lean{}`/`\leanok` 均未动。
-- 未 `git commit`、未 `git push`。
-- 未尝试证明任何一条；未为可证性弱化任何一条。伴随 WIP 模块只改了模块文档，声明与证明体未动。
+- Unregistered: `FunctionalInequalities.lean` aggregate import, lakefile `Solutions` root, `research/a-series/ledger.yaml`, `research/check_blueprint.py`'s `CERTIFICATES`, `research/tasks.json`, Blueprint's `\lean{}`/[`\leanok`] remained unchanged.
+- Not `git commit`, not `git push`.
+- No attempt was made to prove any statement; no weakening of provability was applied to any statement. The WIP module only updated the module documentation; the declarations and proofs remained unchanged.

@@ -1,30 +1,34 @@
-# 公共命名整理与全库检查
+# Public naming cleanup and library-wide review
 
-日期：2026-09-07。用户批准将冗长构造名整理为数学角色命名，并要求检查其他部分。
-本次直接迁移现有声明与调用，没有新增兼容别名，没有移动目录、模块、证书文件或
-Blueprint 节点。仅本地修改，未 commit/push，未运行远端 CI。
+Date: 2026-09-07. The user approved replacing verbose construction names with names expressing
+mathematical roles and requested a review of the rest of the library. Existing declarations
+and calls are migrated directly, without compatibility aliases or moving directories, modules,
+certificate files, or Blueprint nodes. Local edits only; no commit/push or remote CI.
 
-## 范围与取舍
+## Scope and choices
 
-扫描 Lean 库中 498 条具名公共定义、结构和定理声明（另有 36 条私有声明），并检查
-solutions、examples、Blueprint 与当前文档。重复构造串主要集中在所选能量与常数，
-以及 ambient/selected、legacy/relaxed、general log-concave 比较。通用 L² 优化器也有
-相同的前缀重复，统一纳入 `Poincare.L2Energy`。
+Scanned 498 named public definitions, structures, and theorem declarations in the Lean library
+(plus 36 private declarations), and reviewed solutions, examples, Blueprint, and current guides.
+Repeated construction phrases concentrate in selected energy/constants and ambient/selected,
+legacy/relaxed, and general log-concave comparisons. The generic L² optimizer has the same
+prefix repetition and is included under `Poincare.L2Energy`.
 
-实际迁移 29 个公共声明。`Energy.Canonical.energy` 保留原来的内禀仿射光滑梯度松弛
-定义；`Poincare.Canonical.constant` 是所选最优值，`Poincare.Ambient.constant` 是环境
-松弛最优值，`Poincare.L2Energy.constant μ energy` 是参数化优化器。名字本身没有加入
-Cheeger、Dirichlet、谱隙或 KLS 结论。
+29 public declarations are migrated. `Energy.Canonical.energy` retains the original intrinsic
+affine smooth-gradient relaxation; `Poincare.Canonical.constant` is the selected optimum,
+`Poincare.Ambient.constant` the ambient-relaxation optimum, and
+`Poincare.L2Energy.constant μ energy` the parameterized optimizer. Names add no Cheeger,
+Dirichlet, spectral-gap, or KLS conclusion.
 
-其余部分的审核结果与长期规则见 [命名约定](../naming.md)。恢复序列的有限性条件、
-Gaussian 半直线与密度权重、逼近的紧支撑/加权/L¹/L²、测度论的支撑/内部/闭球条件
-均有实际区分作用，保留其描述性名称；没有按字符数统一截短。
+See [naming conventions](../naming.md) for the other findings and lasting rules. Finiteness
+conditions for recovery, Gaussian half-lines and density weights, compact-support/weighted/L¹/L²
+approximation distinctions, and support/interior/closed-ball measure-theoretic conditions
+are meaningful and retain descriptive names; names are not uniformly shortened by character count.
 
-## 精确映射
+## Exact map
 
-下表省略共同前缀 `FunctionalInequalities`。原模块文件路径不变。
+The shared prefix `FunctionalInequalities` is omitted. Original module paths are unchanged.
 
-| 旧声明 | 新声明 |
+| Old declaration | New declaration |
 | --- | --- |
 | `Poincare.Euclidean.intrinsicAffineSmoothGradientRelaxationConstant` | `Poincare.Canonical.constant` |
 | `Poincare.Euclidean.IntrinsicAffineSmoothGradientRelaxationHolds` | `Poincare.Canonical.Holds` |
@@ -56,52 +60,59 @@ Gaussian 半直线与密度权重、逼近的紧支撑/加权/L¹/L²、测度�
 | `Poincare.HoldsL2Energy.of_energy_le_mul` | `Poincare.L2Energy.Holds.of_energy_le_mul` |
 | `Poincare.constantOfL2Energy_le_mul_of_energy_le_mul` | `Poincare.L2Energy.constant_le_mul_of_energy_le_mul` |
 
-## 数学内容与调用约定
+## Mathematical content and calling conventions
 
-三个 `KLS.LogConcave` 比较定理将概率律参数 `μ` 从显式改为隐式，直接从
-`hμ : KLS.LogConcave μ` 推断；量词、假设和结论保持不变。默认构建中的证书现在实际
-使用 `hμ.canonical_eq_literature`，并保留一般 `Fin n` 和 `Fin 0` 的 typed applications。
+Three `KLS.LogConcave` comparison theorems make the law `μ` implicit rather than explicit,
+inferring it from `hμ : KLS.LogConcave μ`; quantifiers, assumptions, and conclusions are
+unchanged. Default-build certificates now call `hμ.canonical_eq_literature` and retain typed
+applications for general `Fin n` and `Fin 0`.
 
-重命名前后分别用现有 `StatementSnapshot` 工具展开 29 个入口的本地依赖闭包。
-`build/naming/compare.py` 对全部 123 个声明检查类型与定义体：仅替换精确名称（含生成
-的从属名字）、规范打印空白及依赖排序，并单独允许上述三个 μ 参数的推断标记变化。
-其余内容、宇宙参数、模块位置和外部依赖全部一致。定理证明体不属于这个文本快照；
-它们由默认构建与最终 kernel 重放验证。
+Before and after renaming, the existing `StatementSnapshot` tool expands the local dependency
+closures of all 29 entries. `build/naming/compare.py` checks types and definition bodies for
+123 declarations, replacing only exact names (including generated subordinate names),
+normalizing printed whitespace and dependency order, and separately permitting the three μ
+inference-marker changes above. Everything else—universes, module locations, external
+dependencies—agrees. Theorem proof bodies are outside this text snapshot; default compilation
+and final kernel replay verify them.
 
-`build/naming/RemovedNames.lean` 对全部 29 个旧名执行 `#check_failure`，进程成功退出；
-日志中的 `Unknown identifier` 是预期结果，确认导入当前库后旧名没有作为别名存续。
-当前 Lean 调用及公理 guards 均已迁移。
+`build/naming/RemovedNames.lean` runs `#check_failure` for all 29 old names and exits successfully.
+`Unknown identifier` in its log is expected and confirms that old names do not survive as aliases
+after importing the current library. Current Lean calls and axiom guards are migrated.
 
-## 同步与保护
+## Synchronization and protected files
 
-Blueprint 声明锚点、公理 guards、examples 和当前指南同步新名。三条 ledger statement
-只替换其中引用的 Lean 符号；节点数量、生命周期、checked_by、数学分类与证书入口不变。
-8 条基础设施来源哈希更新到已审查的迁移文件。route sidecar 完全不变。
+Blueprint anchors, axiom guards, examples, and current guides use the new names. Three ledger
+statements only replace referenced Lean symbols; node count, lifecycle, checked_by,
+mathematical classification, and certificate entry points are unchanged. Eight infrastructure
+source hashes are updated to the reviewed migration files. The route sidecar is wholly unchanged.
 
-进入本轮时的 KLS Definitions、Statement、golden、route sidecar 和全部既有
- decisions/explorations 共 59 个受保护文件，哈希逐一不变。原暂存区补丁逐字节不变。
-保护检查见 `build/naming/change-audit.json`；名字映射和展开输入在同目录。
+All 59 protected entry files—KLS Definitions, Statement, golden files, route sidecar, and
+existing decisions/explorations—retain their hashes. The original staged patch is byte-identical.
+See `build/naming/change-audit.json`; name maps and expanded inputs are in the same directory.
 
-## 验证事实
+## Verification facts
 
-HEAD：`70ca1c19c4d207a31716c2e589c0b096521a5490`。
-进入本轮的源码快照：
-`91762f2379b2b510176237d0b9c3d0192e55320fe0582cd0add724cea613927a`。
-本记录写入前的预检快照：
-`2b4cc8a837e7bc23cdd967daf83b8f5e82aab666dbccaac87597b73670b801d0`。
+HEAD: `70ca1c19c4d207a31716c2e589c0b096521a5490`.
+Entry source snapshot:
+`91762f2379b2b510176237d0b9c3d0192e55320fe0582cd0add724cea613927a`.
+Precheck snapshot before writing this record:
+`2b4cc8a837e7bc23cdd967daf83b8f5e82aab666dbccaac87597b73670b801d0`.
 
-本阶段实际通过：ledger、Blueprint、atlas 结构检查；97 项 Python 测试；默认
-`lake build`（3268 jobs）；123 项展开声明比较；29 个旧名移除检查；`git diff --check`。
-图谱保持 74 个数学节点、87 个导航标签、10 个证书、4 条活动路线，无依赖环。
-对应日志和比较结果位于 `build/naming/build.log`、`tests.log`、`semantic-audit.json`
-及 `removed-names.log`。
+Passed at this stage: ledger, Blueprint, and atlas structure checks; 97 Python tests; default
+`lake build` (3268 jobs); 123 expanded declaration comparisons; 29 removed-name checks;
+`git diff --check`. The atlas retains 74 mathematical nodes, 87 navigation labels,
+10 certificates, and 4 active routes, without cycles. Logs and results:
+`build/naming/build.log`, `tests.log`, `semantic-audit.json`, and `removed-names.log`.
 
-初次迁移构建发现公理消息中的旧全限定名和一个跨命名空间的未限定引用；已修复，
-未通过删除公理 guard 或加入兼容别名处理。后续默认构建已通过。
+The first migration build found old fully qualified names in axiom messages and an unqualified
+cross-namespace reference. Both were fixed without deleting guards or adding compatibility
+aliases; the subsequent default build passed.
 
-完成本记录后运行 `python3 research/verify.py`，对包含本记录的最终快照验证默认构建、
-全部测试、KLS golden、公理审计与所有本地模块 kernel 重放。实际最终结果和源码
-SHA256 记录在生成的 `build/verification/<UTC timestamp>/report.json`，随后导出 atlas。
-本记录不预先宣称该最终运行通过，也不回写最终哈希而使验证收据失效。
+After this record, run `python3 research/verify.py` on the final snapshot including it, checking
+the default build, all tests, KLS golden files, axiom audits, and kernel replay of all local
+modules. Generated `build/verification/<UTC timestamp>/report.json` records actual final
+outcomes and source SHA256, followed by atlas export. This record does not claim a final pass
+in advance or write the final hash back into source, invalidating the receipt.
 
-本地重放信任钉住的第三方编译导入；未做外部独立检查或隔离源码重建，未核实远端 CI。
+Local replay trusts pinned third-party compiled imports; no external independent check,
+isolated source rebuild, or verification of remote CI was performed.

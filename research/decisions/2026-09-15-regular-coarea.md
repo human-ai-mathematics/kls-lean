@@ -1,15 +1,15 @@
-# 正则开域 C¹ 带权 coarea（L9）
+# Regular open domain C¹ weighted coarea (L9)
 
-2026-09-15。本轮完整证明 L9 的两个合取分量。不提交、不推送，不迁出 WIP 洞，不改历史决定。
-起始 HEAD `2965b32bc79bdb24921c633df12102450eaedcc4`；起始回执
-`build/verification/20260915T082341.547238Z/report.json` 为 passed，完整快照逐项一致：
-430 个条目，SHA256 `d9ffd66ef3308d3469af51177aff4ca5a3adabbe2a8e20fb370fb6a36df26289`，
-182 个重放模块。上轮证据绑定的 20 个 `build/audit` 文件哈希也全部一致。
+2026-09-15. Complete proof of the two conjunction components of L9 in this round. Not commit, not push, not migrate out WIP hole, not alter historical decisions.
+Start HEAD `2965b32bc79bdb24921c633df12102450eaedcc4`; start verification receipt
+`build/verification/20260915T082341.547238Z/report.json` is passed, full snapshot item-by-item consistent:
+430 entries, SHA256 `d9ffd66ef3308d3469af51177aff4ca5a3adabbe2a8e20fb370fb6a36df26289`,
+182 replayed modules. All 20 `build/audit` file hashes bound by the preceding round’s evidence also match.
 
-## 精确结果
+## Exact Results
 
-`KLS.coarea_of_contDiffOn_of_fderiv_ne_zero`，位于
-`formalization/FunctionalInequalities/KLS/Geometry/RegularCoarea.lean`：
+`KLS.coarea_of_contDiffOn_of_fderiv_ne_zero`, located at
+`formalization/FunctionalInequalities/KLS/Geometry/RegularCoarea.lean`:
 
 ```lean
 IsOpen O → ContDiffOn ℝ 1 u O → (∀ x ∈ O, fderiv ℝ u x ≠ 0) →
@@ -19,74 +19,75 @@ AEMeasurable (fun t : ℝ => ∫⁻ y in S ∩ {x | u x = t}, g y ∂(surfaceMea
   ∫⁻ t, ∫⁻ y in S ∩ {x | u x = t}, g y ∂(surfaceMeasure V)
 ```
 
-空间假设为有限维实内积空间及其 Borel 可测结构。实现省去可推导的 `CompleteSpace V`；
-独立客户端 `RegularCoareaAudit.target` 保留用户的全部实例参数，并逐字复述完整目标。
-它与原 `WeightedCoareaRouteStatements` 中 L9 的文本除空白外完全一致，且有实际证明。
-没有增加全局 C¹/Lipschitz、有界性、有限体积、可积性、连通性、非零维或 SFinite 假设。
-Mathlib `gradient` 与仓库归一化 `surfaceMeasure` 未变；既有 Lean 文件和签名未修改。
+The space is assumed to be a finite-dimensional real inner product space equipped with its Borel measurable structure. Implementation omits derivable `CompleteSpace V`;
+Independent client `RegularCoareaAudit.target` retains all user instance parameters and verbatim reproduces the full goal.
+It matches exactly the text of L9 in the original `WeightedCoareaRouteStatements`, excluding whitespace, and is accompanied by actual proof.
+No additional global C¹/Lipschitz, boundedness, finite volume, integrability, connectivity, non-zero dimension, or SFinite assumptions are introduced.
+Mathlib `gradient` and repository normalization `surfaceMeasure` remain unchanged; neither existing Lean files nor signatures have been modified.
 
-## 证明路线与同维换元的实现选择
+## Proof path and implementation choice of dimension-preserving change of variables
 
-1. `Analysis/LocalInverse.lean` 只依赖 Mathlib：`exists_contDiffOn_localInverse` 在任意指定
-   开域内构造局部同胚，正向和反向在各自整个开域上 C¹。使用 `restrContDiff` 限制到双向
-   C¹ 的开集，而非仅断言逆函数在中心可微。
-2. `Analysis/RegularChart.lean` 保留联合参数 `(y,t)`。`exists_regularChart` 对
-   `Φ(x) = P x + u(x)e` 用逆函数定理，`levelChartHeight(y,t)` 为局部逆的法向坐标；
-   `levelChart_inverse` 同时证明逆像等于图点和 `u(图点) = t`，对联合开域的所有参数成立。
-3. 体积换元使用**等价的逐纤维路线**，没有新增 n 维行列式恒等式：既有
-   `measurePreserving_splitHomeomorph` 经 `WithLp 2 (H × ℝ)` 的线性等距同构，严格证明
-   内积诱导的正交分解保体积；然后在每条垂直实纤维上用 Mathlib
-   `lintegral_image_eq_lintegral_abs_deriv_mul`。该定理本身是用户建议的
-   `lintegral_image_eq_lintegral_abs_det_fderiv_mul` 的一维特化。纯 Mathlib 新模块
-   `Analysis/FiberIntegral.lean` 用 Tonelli 装配任意 Borel 分片上的垂直换元，并证明
-   `continuous_deriv_snd`，明确给出 Jacobian 对联合参数的可测性。
-4. `abs_deriv_mul_norm_gradient` 证明
-   `|∂t ψ| * ‖∇u‖ = sqrt(1 + ‖∇y ψ‖²)`。链式法则给出
-   `(∂t ψ) * ⟪∇u,e⟫ = 1`，水平方向给出
-   `∇u = ⟪∇u,e⟫ • (ι(-∇y ψ)+e)`。使用绝对值，允许任意导数符号。
-   ENNReal 版本只转换非负实数的乘积，再结合乘法结合律乘上 `g`；不除以权重，
-   不用有限值减法，不消去 `⊤`。零权重、`0 * ⊤`、无限体积和无限截面均保留原有含义。
-5. 对联合高度在参数小球上用 L8 模块的 `exists_contDiff_one_eqOn_ball` 取全局 C¹
-   代表，在这个球内应用已证的全局带权图面积公式。这里没有假定高度在整个原开域上
-   可延拓；只在更小的内部球上相等。任意 Borel 参数片的像与每个水平的图像等式均证明。
-   `setLIntegral_coarea_graph_family` 得到局部 coarea。
-6. 对原 `u` 再作同样的内部局部代表处理。`exists_regular_coarea_neighborhood` 将结果
-   转回原函数及原梯度，并用正交补的维数公式将 `hausdorffNormalized` 包装为
-   `surfaceMeasure`。第二可数性取可数开覆盖；`disjointed` 构造不交 Borel 分片；两边
-   用 `lintegral_iUnion` 和 `lintegral_tsum` 拼接。
-7. 可测性独立先证于 `KLS/Geometry/OpenSliceMeasurable.lean`。每个内部球上取全局 C¹
-   代表，在紧闭球上获得 Lipschitz 常数，对分片应用 L5，再作可数求和。**不将 L5 的全局
-   连续性加到 L9**；无正则点假设也能证明这一可测性分量。Tonelli 只用于体积测度，
-   未给环境 `surfaceMeasure` 安装 SFinite 实例。
+1. `Analysis/LocalInverse.lean` Depends only on Mathlib: `exists_contDiffOn_localInverse` for any specified
+   Construct a local homeomorphism within an open domain, with forward and backward directions being C¹ over their respective entire open domains. Restrict using `restrContDiff` to both directions
+   An open set of C¹, not merely asserting that the inverse function is differentiable at the center.
+2. `Analysis/RegularChart.lean` Keep joint parameter `(y,t)`. `exists_regularChart` for
+   `Φ(x) = P x + u(x)e` By the inverse function theorem, `levelChartHeight(y,t)` are the normal coordinates of a local inverse;
+   `levelChart_inverse` proves both that the inverse is the graph point and that `u(graph point) = t`, for every parameter in the joint open domain.
+3. Volume change uses **equivalent fiber-wise paths**, without introducing a new n-dimensional determinant identity: already has
+   `measurePreserving_splitHomeomorph` under the linear isometric isomorphism of `WithLp 2 (H × ℝ)`, strict proof
+   The inner product-induced orthogonal decomposition preserves volume; then on each vertical real fiber, use Mathlib
+   `lintegral_image_eq_lintegral_abs_deriv_mul`. The theorem itself is user-suggested
+   the one-dimensional specialization of `lintegral_image_eq_lintegral_abs_det_fderiv_mul`. The new module depending only on Mathlib
+   `Analysis/FiberIntegral.lean` uses Tonelli to assemble vertical changes of variables on arbitrary Borel pieces, and prove
+   `continuous_deriv_snd`, explicitly provides the measurability of the Jacobian with respect to the joint parameters.
+4. `abs_deriv_mul_norm_gradient` proof
+   `|∂t ψ| * ‖∇u‖ = sqrt(1 + ‖∇y ψ‖²)`. The chain rule gives
+   `(∂t ψ) * ⟪∇u,e⟫ = 1`, provided in the horizontal direction
+   `∇u = ⟪∇u,e⟫ • (ι(-∇y ψ)+e)`. Use absolute values to allow arbitrary derivative signs.
+   The ENNReal version only converts the product of non-negative real numbers, then combines it using the associative law by multiplying by `g`; it does not divide by weights.
+   No finite value subtraction, no elimination of `⊤`. Zero weight, `0 * ⊤`, infinite volume, and infinite cross-section retain their original meanings.
+5. Use the L8 module of joint height on the parameter ball with `exists_contDiff_one_eqOn_ball` for global C¹
+   Representation, apply the already proven global weighted graph area formula within this ball. Here, no assumption is made about the height being defined over the entire original open domain.
+   Extensible; equal only on smaller internal balls. The image of any Borel parameter slice proves equality with each level's image.
+   `setLIntegral_coarea_graph_family` obtain local coarea.
+6. Perform the same internal local representation treatment on the original `u`. `exists_regular_coarea_neighborhood` yields the result
+   Return the original function and original gradient, and package `hausdorffNormalized` using the dimension formula of the orthogonal complement as
+   `surfaceMeasure`. Second countability takes countable open cover; `disjointed` constructs disjoint Borel pieces; both sides
+   Concatenate `lintegral_iUnion` and `lintegral_tsum`.
+7. Measurability is proved independently first in `KLS/Geometry/OpenSliceMeasurable.lean`.
+   On each interior ball, take a global C¹ representative, obtain a Lipschitz constant on a compact closed ball,
+   apply L5 piecewise, then sum countably. **Do not add L5's global continuity assumption to L9**.
+   This measurability component also holds without the regular-point hypothesis. Tonelli is used only for volume;
+   no SFinite instance is installed for the ambient `surfaceMeasure`.
 
-没有使用 L10、Sard、WIP、Whitney 延拓或本轮目标自身作为前提。
-`ImplicitGraph.lean`、`GraphIntegral.lean` 及所有既有 Lean 文件原样保留。
+No use of L10, Sard, WIP, Whitney extension, or the current goal itself as premises.
+`ImplicitGraph.lean`, `GraphIntegral.lean` and all existing Lean files are preserved verbatim.
 
-## 验证与证据
+## Verification and Evidence
 
-* 五个新模块严格编译通过。新模块共 16 条定理和 2 个定义。
-* `build/audit/RegularCoareaAudit.lean` 严格编译通过：完整 L9；无限权重；空集上无限
-  权重两边均为零；零维下正则域必空及完整 L9 实例；`u = id`、`S = ℝ` 时两边实际为
-  `⊤`；二维正交分解中每个实仿射直线截面均为 `⊤`；
-  `jump x = if 0 < x then x else 1` 于 `(0,∞)` 的完整无限权重实例，并独立证明
-  `jump` 不连续，明确排除依赖全局 C¹ 的误读。
-* 全部 29 条新声明与客户端声明的公理输出只含 `propext`、`Classical.choice`、
-  `Quot.sound`，无 `sorryAx`。新模块导入闭包无 WIP、CriticalSlice 或 Sard 模块。
-* 用户指定的 15 个既有客户端全部严格重跑通过，包括各自的 `preserved_*` 具名参数
-  检查；三个 WIP 文件逐个实际编译通过，直接洞 2/3/5，总数 10。
-* 默认 `lake build` 与根目录 `python3 research/verify.py` 是最终验收步骤。
-  本轮机器证据为 `research/explorations/2026-09-15-regular-coarea.json`，它先于最终
-  验证写入并被最终回执哈希绑定。最终 `build/verification/latest.json` 与最终源码
-  快照完全相等的核对，另存 `build/audit/l9-final-snapshot.json`。`build/audit` 被忽略，
-  因而其客户端及日志由本轮证据 JSON 单独记录哈希；最终核对再逐项检查。
+Five new modules passed strict compilation. The new modules contain 16 theorems and 2 definitions.
+`build/audit/RegularCoareaAudit.lean` Strictly compiled passing: complete L9; infinite weights; infinite on empty set
+  Weights on both sides are zero; a regular domain in zero dimension must be empty and a complete L9 instance; when `u = id` and `S = ℝ`, the actual values on both sides are
+  `⊤`; each real affine linear section in the two-dimensional orthogonal decomposition is `⊤`;
+  `jump x = if 0 < x then x else 1` at the complete infinite-weight instance of `(0,∞)`, and independently proved
+  `jump` Discontinuous, explicitly excludes misinterpretation relying on global C¹.
+* All 29 new statements and client statement axioms output contain only `propext`, `Classical.choice`,
+  `Quot.sound`, no `sorryAx`. New module imports of closure have no WIP, CriticalSlice, or Sard modules.
+* The user-specified 15 existing client instances were all strictly rerun successfully, including their respective `preserved_*` named arguments
+  Check; three WIP files compiled successfully one by one, direct proof hole 2/3/5, total 10.
+* The default `lake build` and root directory `python3 research/verify.py` are the final verification steps.
+  This round of machine evidence is `research/explorations/2026-09-15-regular-coarea.json`, which precedes the final
+  Write verification and finally hashed acknowledgment. Final `build/verification/latest.json` and final source code
+  Snapshot exact equality check, save `build/audit/l9-final-snapshot.json`. `build/audit` is ignored,
+  Hence, its client and logs are separately hashed by the current evidence JSON; final verification follows item-by-item inspection.
 
-## 精确未完成边界
+## Exact Incomplete Boundary
 
-本轮只完成 L9。L11（一般 C¹ coarea）、L12（Lipschitz coarea）、L6/L6a/L7 的 Whitney
-C¹ 延拓与精确分片仍未证明。两个原有等式
-`Analysis.lintegral_enorm_gradient_mul_eq_lintegral_levelSet` 与
-`Isoperimetry.lintegral_enorm_gradient_mul_eq_lintegral_levelSet` 仍是直接洞，未迁出。
-尖锐 `C^(finrank)` 的 `Analysis.sard` 仍为直接洞且无下游消费者；Eilenberg 常数尖锐性、
-`smoothConstant_le_minkowskiConstant`、`smoothConstant_mul_lintegral_min_superlevel_le`
-及两个 Cheeger 常数相等仍未证明。证书仍 24，perimeter infrastructure 仍 missing，
-没有扩展 Blueprint leanok 或认证范围。
+This round only completes L9. L11 (general C¹ coarea), L12 (Lipschitz coarea), L6/L6a/L7 Whitney
+C¹ extension and exact piecewise remain unproven. Two original equations
+`Analysis.lintegral_enorm_gradient_mul_eq_lintegral_levelSet` and
+`Isoperimetry.lintegral_enorm_gradient_mul_eq_lintegral_levelSet` is still a direct proof hole, not migrated out.
+Sharp `C^(finrank)` `Analysis.sard` remains a direct hole without downstream consumers; sharpness of the Eilenberg constant,
+`smoothConstant_le_minkowskiConstant`, `smoothConstant_mul_lintegral_min_superlevel_le`
+And the equality of two Cheeger constants has not been proven. Certification is still 24, the perimeter infrastructure is still missing,
+No extension of Blueprint leanok or certification scope.

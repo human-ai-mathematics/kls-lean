@@ -99,7 +99,7 @@ smooth functions, the operator-core claim, gradient commutation, the square esti
 passage and Buser's inequality. Bakry–Émery stays partial; the full Cheeger–Buser comparison and
 the dimension-free KLS bound stay pending, and the constant `π` is not approached.
 
-| 已有证明 | 仅类型检查 | 仍是非形式化方案 |
+| Proved | Type-checked only | Still an informal plan |
 | --- | --- | --- |
 | F0–F4, including arbitrary weights, `t = 0` and the zero vector; the six resolvent graph-norm theorems | `∀ g t, 0 < t → P_t g ∈ D(T)` for arbitrary `g` | Classical representatives, `Γ(P_t f) ≤ P_t Γ(f)`, BGL/BV, general-law passage, Buser |
 | Existing `S0a` `D0`–`D4`, `G0`/`G1`, pointwise `B0`–`B4` | Earlier route candidates remain candidates | Time differentiation of `s ↦ P_s Γ(P_{t-s} f)` and interchange with derivatives, integrals and limits |

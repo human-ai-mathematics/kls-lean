@@ -1,61 +1,65 @@
-# KLS 目标改为带 `sorry` 的 theorem；规则：未证断言不得只以 `def : Prop` 存在
+# KLS target exposed as a theorem with `sorry`; unproved assertions must not exist only as `def : Prop`
 
-2026-09-19。owner 决定。起点工作区含当日未提交的半群模块（`S1`–`S5`）。
+2026-09-19. Owner decision. The starting worktree contains the day's uncommitted semigroup modules (`S1`–`S5`).
 
-## 决定
+## Decision
 
-1. 新增叶子模块 `formalization/FunctionalInequalities/KLS/Target.lean`：
-   `theorem FunctionalInequalities.KLS.kls : Conjecture := by sorry`。
-   这是仓库**唯一有意保留的直接洞**，作用是让最终目标在 Lean 里可见，而不只在 Blueprint 里。
-2. `def KLS.Conjecture : Prop`（`KLS/Statement.lean`）**保留**，作为这句话的名字，
-   供以它为结论或假设的已证定理引用（`conjecture_of_affineBound`、证书 `ThmAffineIsotropicReduction`、
-   `StatementChecks`、golden 语句快照）。四处引用与证书均不改动。
-3. **规则**（自本记录起）：
-   * `def X : Prop` 只允许用来给一句话命名，它零断言。
-   * 任何未证的**断言**必须以 `theorem … := by sorry` 出现在 Lean 里，不得只以 def 的形式「存在」。
-   * 带 `sorry` 的目标定理必须是叶子模块，只被聚合根 import。
+1. Add the leaf module `formalization/FunctionalInequalities/KLS/Target.lean`:
+   `theorem FunctionalInequalities.KLS.kls : Conjecture := by sorry`.
+   This is the repository's **sole intentionally retained direct hole**, making the final target visible in Lean as well as Blueprint.
+2. **Keep** `def KLS.Conjecture : Prop` in `KLS/Statement.lean` as the name of the proposition,
+   for proved theorems using it as a conclusion or hypothesis (`conjecture_of_affineBound`, certificate `ThmAffineIsotropicReduction`,
+   `StatementChecks`, and the golden statement snapshot). All four references and certificates remain unchanged.
+3. **Rule**, effective from this record:
+   * `def X : Prop` may only name a proposition; it asserts nothing.
+   * Any unproved **assertion** must appear in Lean as `theorem … := by sorry`, not merely “exist” as a def.
+   * A target theorem containing `sorry` must live in a leaf module imported only by the aggregate root.
 
-## 为什么不是「删掉 def」
+## Why the def is retained
 
-`def : Prop` 不是在假设 KLS 成立；Mathlib 对 `RiemannHypothesis`、`FermatLastTheorem` 用的是同一写法。
-引用它的四处全是 `… → Conjecture`，KLS 在**结论**位置：这些是无条件已证的约化，
-即便 KLS 为假它们也为真（那时它们说的是 `AffineBound K` 对一切 `K` 为假）。
-仓库里没有任何 `Conjecture → …` 形式的条件结果。
-删 def 会迫使四处把整句公式内联复制，失去单一来源并需要重建 golden 快照，代价更大且更容易走样。
+`def : Prop` does not assume KLS is true; Mathlib uses the same pattern for `RiemannHypothesis` and `FermatLastTheorem`.
+All four references have the form `… → Conjecture`, with KLS in the **conclusion**. These are unconditionally proved reductions,
+which remain true even if KLS is false (in that case they say `AffineBound K` is false for every `K`).
+There is no conditional result of the form `Conjecture → …` in the repository.
+Deleting the def would require copying the full formula inline at four sites, losing a single source of truth and rebuilding
+the golden snapshot, at greater cost and with more risk of drift.
 
-## 门禁约束（决定了文件放哪、标签怎么写）
+## Validation constraints determining placement and labels
 
-* `research/check_ledger.py` 禁止任何证书的 import 闭包出现 `sorry`，所以 `Target.lean` 不能被
-  库内任何模块或证书 import；只有聚合根 `FunctionalInequalities.lean` import 它。
-* `research/verify.py` 的 `declaration-audit` 门对 Blueprint 每个 `\lean{…}` 里的声明做公理审计，
-  出现 `sorryAx` 即失败。所以 `conj:kls` 的 `\lean` 仍只列 `KLS.Conjecture`，`kls` 只在正文提及。
-* `lake build` 通过：lakefile 未开 `warningAsError`，`sorry` 是警告。CI 的 `lake build` 同理。
-* 单文件检查 `lake env lean -DwarningAsError=true KLS/Target.lean` **会**失败，这是预期的；
-  该文件不适用零警告约定。
+* `research/check_ledger.py` forbids `sorry` in any certificate's import closure, so `Target.lean` cannot be imported
+  by any internal library module or certificate. Only aggregate root `FunctionalInequalities.lean` imports it.
+* The `declaration-audit` gate of `research/verify.py` audits the axioms of each declaration in Blueprint `\lean{…}` tags
+  and fails on `sorryAx`. Thus `conj:kls` still lists only `KLS.Conjecture` in `\lean`; `kls` is mentioned only in prose.
+* `lake build` passes: the lakefile does not enable `warningAsError`, so `sorry` is a warning. The same applies to CI's `lake build`.
+* The single-file check `lake env lean -DwarningAsError=true KLS/Target.lean` **will fail**, as expected;
+  the zero-warning convention does not apply to this file.
 
-## 口径变更
+## Reporting change
 
-此前记录「0 直接洞、26 证书」。自本记录起口径为：**1 个有意的直接洞（`KLS.kls`），0 个无意的直接洞，26 证书**。
-后续审计不得把这 1 个洞当作回归。
+Earlier records reported “0 direct holes, 26 certificates”. From this record onward, report:
+**1 intentional direct hole (`KLS.kls`), 0 unintended direct holes, 26 certificates**.
+Subsequent audits must not treat this one hole as a regression.
 
-## 规则细化：另三个 `conjectural` 节点为何不补 theorem（同日，owner 决定）
+## Rule refinement: why the other three `conjectural` nodes receive no theorem (same day, owner decision)
 
-规则第 3 条的精确表述：**凡已有精确 Lean 命题的未证断言，必须以 `theorem … := by sorry` 出现。**
-没有精确命题的节点不得为凑规则而发明语句或写占位定义——那是伪造，违背规则的初衷。
-`tasks.json` 里另三个 `conjectural` 节点均属此类，本轮**不写任何 Lean**，只在各自 `note` 记录原因与前置条件：
+The precise formulation of rule 3 is: **every unproved assertion with an existing precise Lean proposition must appear as `theorem … := by sorry`.**
+For nodes without such a proposition, do not invent statements or placeholder definitions merely to satisfy the rule;
+that would fabricate content and defeat its purpose. The other three `conjectural` nodes in `tasks.json` all fall into this category.
+This round **writes no Lean for them**, recording the reason and prerequisites in their respective `note` fields instead:
 
-| 节点 | 性质 | 为何暂无 Lean 语句 | 陈述它需要先建什么 |
+| Node | Kind | Why no Lean statement exists yet | Prerequisites for stating it |
 | --- | --- | --- | --- |
-| `q:smooth-gradient-raw-core-agreement` | 开放式问题（"determine when"） | Blueprint 明写不定义性地假设任何图范数/序列核等价；图范数有限能量域尚未构造；任何 theorem 都得由我们替 owner 发明一个具体命题 | owner 选定精确表述；`Energy.Functional` 域上的图范数稠密性定义 |
-| `ass:tight-prefix-carleson` | 对手稿对象的假设 | `S_t, r_t, D_t, τ_η` 是 Eldan 随机局部化的两色量；仓库与 pinned Mathlib 都没有 SDE/Itô（Mathlib 有 Brownian 运动、滤子、停时，无随机积分） | 随机局部化定义模块（过程、停时、两色量） |
-| `q:mm-spectral-occupation` | 开放式问题 | `g_t, H_t, A_t` 是沿随机局部化的第一特征函数量，同样缺 SDE/Itô；另需固定光滑强对数凹逼近方案 | 同上，加逼近方案的形式化 |
+| `q:smooth-gradient-raw-core-agreement` | Open-ended question (“determine when”) | Blueprint explicitly avoids assuming graph-norm/sequential-core equivalence by definition; the graph-norm finite-energy domain has not been constructed. A theorem would require us to invent a concrete proposition for the owner | The owner selects a precise formulation; define graph-norm density on the `Energy.Functional` domain |
+| `ass:tight-prefix-carleson` | Assumption about manuscript objects | `S_t, r_t, D_t, τ_η` are two-color quantities from Eldan stochastic localization. Neither the repository nor pinned Mathlib has SDE/Itô theory (Mathlib has Brownian motion, filtrations, and stopping times, but no stochastic integration) | Stochastic-localization definitions: process, stopping times, two-color quantities |
+| `q:mm-spectral-occupation` | Open-ended question | `g_t, H_t, A_t` are first-eigenfunction quantities along stochastic localization, again requiring SDE/Itô theory; a smooth strongly log-concave approximation scheme must also be fixed | The same prerequisites, plus formalization of the approximation scheme |
 
-与 KLS 的区别：`KLS.Conjecture` 早已是一条精确的 `def : Prop`，补 theorem 只是换一种呈现；这三个节点补 theorem 则是新造数学内容。
+The difference from KLS is that `KLS.Conjecture` was already a precise `def : Prop`; adding its theorem changes presentation.
+Adding theorems for these three nodes would create new mathematical content.
 
-## 改动清单
+## Changes
 
-* 新增 `formalization/FunctionalInequalities/KLS/Target.lean`
-* `formalization/FunctionalInequalities.lean` 加 import
-* `formalization/blueprint/src/chapters/00-orientation-and-status.tex` `conj:kls` 后追加说明段
-* `research/tasks.json` `conj:kls` 的 `note` 追加
-* `formalization/FunctionalInequalities/KLS/README.md` 表格加一行；`formalization/README.md` 状态行追加
+* Add `formalization/FunctionalInequalities/KLS/Target.lean`.
+* Add its import to `formalization/FunctionalInequalities.lean`.
+* Append an explanatory paragraph after `conj:kls` in `formalization/blueprint/src/chapters/00-orientation-and-status.tex`.
+* Append to the `note` of `conj:kls` in `research/tasks.json`.
+* Add a table row in `formalization/FunctionalInequalities/KLS/README.md` and extend the status line in `formalization/README.md`.

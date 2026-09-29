@@ -1,54 +1,53 @@
-# 2026-09-11 — `lem:conditional-fiber-energy-comparison`：注册为第二十二个证书
+# 2026-09-11 — `lem:conditional-fiber-energy-comparison`: Register as the 22nd certificate
 
-## 决定
+## Decision
 
-按 atlas `ready` 的顺序继续：同日证明落地（见
-[证明记录](2026-09-11-conditional-fiber-energy-comparison-proofs.md)）后，把该节点注册为 Lean 证书。
-陈述与证明文件 `formalization/FunctionalInequalities/KLS/ConditionalFiber/EnergyComparison.lean` 未再改动
-（两条 `theorem` 与 `FiberBound` 的类型与陈述记录一致）。未 `git commit`、未 `git push`（用户指令）。
+Proceed in order according to atlas `ready`: on the same day, after proving the landing (see
+[proof record](2026-09-11-conditional-fiber-energy-comparison-proofs.md)), register this node as a Lean certificate.
+Statement and proof document `formalization/FunctionalInequalities/KLS/ConditionalFiber/EnergyComparison.lean` has not been modified
+(two entries `theorem` and `FiberBound` have consistent types and statement records). No `git commit`, no `git push` (user instruction).
 
-## 新增与修改
+## New and Modifications
 
-- 证书 `solutions/LemConditionalFiberEnergyComparison.lean`：`Solutions.LemConditionalFiberEnergyComparison.certificate μ ρ hρ m hac hfiber`
-  打包 (1) 每个 `Energy.LocalSlope.Admissible μ f` 的 `energy μ ρ f ≤ κ * Energy.LocalSlope.energy μ f ∧ energy μ ρ f ≠ ⊤`；
-  (2) 每个 `C : NNReal`，`domain μ ρ` 上的形式差界推出 `Poincare.LocalSlope.Intrinsic.constant μ ≤ κ * C`。
-  五个 `example`：Blueprint 范围（对数凹、二阶矩——定理均未用）、梯度形式 `κ * ∫⁻ ofReal ‖∇f‖ ^ 2`、
-  有限能量测试落在 `domain μ ρ`、`EuclideanSpace ℝ (Fin (n+1))` 上以 `volume` 为 Haar 参考、`Fin 0` 上球面概率律不存在。
-  三条公理守卫（证书与两条库定理），均为 `propext / Classical.choice / Quot.sound`。
-- `formalization/lakefile.toml`：`Solutions` 根新增 `solutions.LemConditionalFiberEnergyComparison`。
-- `formalization/FunctionalInequalities.lean`：导入 `KLS.ConditionalFiber.EnergyComparison`，模块文档加一句。
-- `research/a-series/ledger.yaml`：新增节点 `lem:conditional-fiber-energy-comparison`（`kind: lemma`，`proved / lean`），
-  `meta.scope` 追加条件纤维形式与比较；共二十二个节点。
-- `research/check_blueprint.py`：`CERTIFICATES` 新增映射。
-- `formalization/blueprint/route-composition.yaml`：该节点 claim `open → proved`，Lean 证据
-  （`kls-lean`、ledger 节点、证书声明）。
-- `research/tasks.json`：节点 `unchecked → available`，登记本文件、`ConditionalFiber.lean`、
-  `Energy/LocalSlope/{Basic,Gradient}.lean`、`Energy/Euclidean/LipschitzApproximation.lean`、
-  `Poincare/LocalSlope/Basic.lean`、`Probability/AffineSupport.lean`、`L2/MeanVariance.lean`、证书及十四个所用 Mathlib
-  文件的哈希；`note` 记录证明路线。`prop:weighted-spectator-obstruction` 的证据 `50-kls-routes.tex` 哈希因本次 Blueprint
-  编辑而过期，已刷新（该评估针对 Eldan 随机局部化对象缺失，与本次编辑的条件纤维段落无关，评估内容不变）。
-- Blueprint `50-kls-routes.tex`：章首 `leanok` 说明加入本引理；引理块加 `\lean{FiberBound, energy_le_of_fiberBound,
-  literatureConstant_le_of_fiberBound, certificate}` 与 `\leanok`，尾部补 Lean 读法（`FiberBound`、Haar 参考测度、
-  二阶矩来自可容许框架、不固定 `κ`）；证明块 `\leanok`，原句"analytic proof, not an application already elaborated in Lean"
-  替换为本地 Lean 路线段；"Pinned provenance" 段改为：比较引理已有 Lean 证书，`12` 特化仍无证书。
-  `00-orientation-and-status.tex`：条件纤维路线一句加入比较引理已认证。推论 `cor:conditional-fiber-twelve-bound`
-  的陈述与证明文字未改（仍记 `12`，仍无 Lean 证书）。
-- 当前指南：`HANDOFF.md`（新节、二十二计数、证书表、路线状态与下一步、边界句）、`README.md`、
-  `research/verification.md`（计数与新节）、`formalization/README.md`、`formalization/FunctionalInequalities/KLS/README.md`
-  （新行）、`formalization/blueprint/README.md`、`solutions/README.md`（计数与新节）、`research/naming.md`（新行）。
-  statement golden、`STATEMENT_CHECKS`、`FoundationAxiomAudit` 未动。
+- Certificate `solutions/LemConditionalFiberEnergyComparison.lean`: `Solutions.LemConditionalFiberEnergyComparison.certificate μ ρ hρ m hac hfiber`
+  Package (1) each `Energy.LocalSlope.Admissible μ f`'s `energy μ ρ f ≤ κ * Energy.LocalSlope.energy μ f ∧ energy μ ρ f ≠ ⊤`;
+  (2) Each `C : NNReal`, the form gap bound on `domain μ ρ` implies `Poincare.LocalSlope.Intrinsic.constant μ ≤ κ * C`.
+  Five `example`: Blueprint scope (log-concave, second moment—no theorems used), gradient form `κ * ∫⁻ ofReal ‖∇f‖ ^ 2`,
+  Finite energy tests lie on `domain μ ρ`, `EuclideanSpace ℝ (Fin (n+1))` with `volume` as Haar reference, and there is no spherical probability law on `Fin 0`.
+  Three axioms guard (certifications and two library theorems), all being `propext / Classical.choice / Quot.sound`.
+- `formalization/lakefile.toml`: `Solutions` adds `solutions.LemConditionalFiberEnergyComparison`.
+- `formalization/FunctionalInequalities.lean`: Import `KLS.ConditionalFiber.EnergyComparison`, add one sentence in the module documentation.
+- `research/a-series/ledger.yaml`: add node `lem:conditional-fiber-energy-comparison` (`kind: lemma`, `proved / lean`),
+  `meta.scope` Additional conditional fiber forms and comparisons; a total of twenty-two nodes.
+- `research/check_blueprint.py`: `CERTIFICATES` new mapping.
+- `formalization/blueprint/route-composition.yaml`: This node claims `open → proved`, Lean evidence
+  (`kls-lean`, ledger node, certificate assertion).
+- `research/tasks.json`: node `unchecked → available`, register this file, `ConditionalFiber.lean`,
+  `Energy/LocalSlope/{Basic,Gradient}.lean`, `Energy/Euclidean/LipschitzApproximation.lean`,
+  `Poincare/LocalSlope/Basic.lean`, `Probability/AffineSupport.lean`, `L2/MeanVariance.lean`, certificates and fourteen used Mathlib
+  File hash; `note` records proof path. `prop:weighted-spectator-obstruction` evidence `50-kls-routes.tex` hash due to this Blueprint
+  Edited and expired, refreshed (this assessment pertains to the absence of Eldan random localization objects, unrelated to the conditional fiber section of this edit; assessment content remains unchanged).
+- Blueprint `50-kls-routes.tex`: add this lemma to the chapter-opening `leanok` explanation; add `\lean{FiberBound, energy_le_of_fiberBound,
+  literatureConstant_le_of_fiberBound, certificate}` and `\leanok`, with a trailing explanation of the Lean formulation (FiberBound, Haar reference measure,
+  Second moments come from an admissible framework, not fixed `κ`; proof block `\leanok`, original statement "analytic proof, not an application already elaborated in Lean"
+  Replace with local Lean route segment; modify the "Pinned provenance" segment to: Compare lemma with existing Lean certification, `12` specialization still lacks certification.
+  `00-orientation-and-status.tex`: The conditional fiber path statement includes a comparison lemma, now certified. Corollary `cor:conditional-fiber-twelve-bound`
+  The statement and proof text remain unchanged (still record `12`, still without Lean certification).
+- Current guide: `HANDOFF.md` (new section, twenty-two counting, certificate table, route status and next steps, boundary sentence), `README.md`,
+  `research/verification.md` (counting and new section), `formalization/README.md`, `formalization/FunctionalInequalities/KLS/README.md`
+   (newline), `formalization/blueprint/README.md`, `solutions/README.md` (count and new section), `research/naming.md` (newline).
+  statement golden, `STATEMENT_CHECKS`, `FoundationAxiomAudit` unchanged.
 
-## 检查
+## Check
 
-- `python3 research/check_ledger.py`：22 节点，0 错误。`python3 research/check_blueprint.py`：87 标签，0 错误。
-- `python3 research/atlas.py check`：74 数学节点，22 证书，无环。
-- `python3 -m unittest discover -s research/tests -p 'test_*.py'`：103 项通过（注册前基线中 `test_verify.AxiomAuditTests`
-  三项与 `test_statement_snapshot` 的失败是本机 lake/git 环境问题，在 git 包装脚本环境下全部通过）。
-- `lake build`（默认目标）成功；`solutions.LemConditionalFiberEnergyComparison` 已构建。
-- `python3 research/verify.py` 的收据在本记录与全部指南编辑之后生成，其源码 SHA 记录在收据自身，不写回本文件。
+- `python3 research/check_ledger.py`: 22 node, 0 error. `python3 research/check_blueprint.py`: 87 label, 0 error.
+- `python3 research/atlas.py check`: 74 mathematical node, 22 certification, acyclic.
+- `python3 -m unittest discover -s research/tests -p 'test_*.py'`: 103 item passed (baseline before registration contains `test_verify.AxiomAuditTests` three items with `test_statement_snapshot` failure is a local lake/git environment issue, all passed in git packaging script environment).
+- `lake build` (default target) succeeded; `solutions.LemConditionalFiberEnergyComparison` was built.
+- The receipt for `python3 research/verify.py` was generated after this record and all guide edits, with its source code SHA recorded in the receipt itself, not written back to this file.
 
-## 证据边界
+## Evidence Boundary
 
-本地 kernel 重放信任第三方编译导入；未做隔离重建、远端 CI、commit 或 push。下游
-`cor:conditional-fiber-twelve-bound`（需要对数凹律的 a.e. 条件纤维对数凹且非退化，以 `κ = 4` 实例化 `FiberBound`）
-与 `q:conditional-fiber-frame` 未获得新证明；注册后 atlas 应把该推论从 `blocked` 提到 `inspect_infrastructure`。
+Local kernel replay trusts third-party compiled import; no isolation reconstruction, remote CI, commit, or push. Downstream
+`cor:conditional-fiber-twelve-bound` (requires log-concavity axiom a.e. conditional fiber is log-concave and non-degenerate, instantiated with `κ = 4` as `FiberBound`)
+No new proof obtained from `q:conditional-fiber-frame`; after registration, atlas should move this lemma from `blocked` to `inspect_infrastructure`.

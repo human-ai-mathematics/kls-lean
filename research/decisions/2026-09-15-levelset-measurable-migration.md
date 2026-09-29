@@ -1,18 +1,18 @@
-# 迁出水平集可测性：第一个 coarea 洞闭合
+# Migrating level-set measurability: the first coarea hole is closed
 
-2026-09-15。本轮把直接洞 `Analysis.aemeasurable_lintegral_levelSet` 从
-`KLS/WIP/AnalyticPrerequisites.lean` **迁出**到无洞模块
-`KLS/Geometry/LevelSetMeasurable.lean`，`pp.all` 签名**逐字节不变**，并由上一轮证明的 L5 给出
-证明。直接洞由 **11（3/3/5）降到 10（2/3/5）**。不提交、不推送、不改历史决定。
-起始 HEAD 为 `2965b32bc79bdb24921c633df12102450eaedcc4`；起始 passed 回执为
-`build/verification/20260915T033803.710026Z/report.json`（与 `build/verification/latest.json`
-逐字节相同），重新计算的完整快照与回执相等：421 个文件，SHA256
-`8abb1b22ab2ebac05aac28d7ac32536dba0dc2d40da4a1e1109f285d50ed60f8`。这里的逐字节核对指
-逐文件 SHA256（包括删除项）及完整快照结构一致，不是只看 HEAD。
+2026-09-15. This round **moves** the direct hole `Analysis.aemeasurable_lintegral_levelSet` from
+`KLS/WIP/AnalyticPrerequisites.lean` to the hole-free module `KLS/Geometry/LevelSetMeasurable.lean`,
+with a **byte-identical** `pp.all` signature, and supplies the proof using L5 from the preceding round.
+Direct holes decrease from **11 (3/3/5) to 10 (2/3/5)**. No commit, push, or changes to historical decisions.
+Starting HEAD: `2965b32bc79bdb24921c633df12102450eaedcc4`; starting passed receipt:
+`build/verification/20260915T033803.710026Z/report.json` (byte-identical to `build/verification/latest.json`).
+The recomputed full snapshot matches the receipt: 421 files, SHA256
+`8abb1b22ab2ebac05aac28d7ac32536dba0dc2d40da4a1e1109f285d50ed60f8`.
+This comparison checks per-file SHA256, including deletions, and the complete snapshot structure, not just HEAD.
 
-## 迁出的内容与签名核对
+## Migrated content and signature comparison
 
-新模块 `formalization/FunctionalInequalities/KLS/Geometry/LevelSetMeasurable.lean`：
+New module `formalization/FunctionalInequalities/KLS/Geometry/LevelSetMeasurable.lean`:
 
 ```lean
 theorem FunctionalInequalities.Analysis.aemeasurable_lintegral_levelSet
@@ -25,72 +25,72 @@ theorem FunctionalInequalities.Analysis.aemeasurable_lintegral_levelSet
   simpa using h
 ```
 
-**签名逐字节不变**，这一点是机器核对的，不是肉眼判断：迁出前在导入 WIP 的环境里以
-`set_option pp.all true` 打印 `@FunctionalInequalities.Analysis.aemeasurable_lintegral_levelSet`
-并存为 `build/audit/migration-signature-before.log`，迁出后在导入新模块的环境里同样打印存为
-`build/audit/migration-signature-after.log`，两者 `diff` 为空。
-签名包括同一个 universe、同样六个实例参数及其顺序（含**证明并不使用**的 `CompleteSpace V`）、
-同样的隐式绑定 `u`、`K`、`g` 与同样的假设名 `hu`、`hg`、同样的结论。
+**Byte-identical signatures**, verified mechanically rather than visually: before migration, print
+`@FunctionalInequalities.Analysis.aemeasurable_lintegral_levelSet` with `set_option pp.all true` in an environment
+importing WIP, saving it to `build/audit/migration-signature-before.log`. After migration, print it in an environment
+importing the new module, saving it to `build/audit/migration-signature-after.log`. Their `diff` is empty.
+The signature includes the same universe, six instance parameters in the same order (including the **unused**
+`CompleteSpace V`), implicit binders `u`, `K`, `g`, hypothesis names `hu`, `hg`, and conclusion.
 
-为保持接口不变而保留未使用的 section 变量，这里按仓库既有做法（`Geometry/RegularSuperlevel.lean`
-迁出 `ae_exists_superlevel` 时的写法）用 `set_option linter.unusedSectionVars false in` 静音
-linter，**而不是**用 `omit` 收窄签名。文档注释也原样保留。
+Unused section variables are retained to preserve the interface. Following the repository's existing practice
+when moving `ae_exists_superlevel` into `Geometry/RegularSuperlevel.lean`, use
+`set_option linter.unusedSectionVars false in` to silence the linter, **without** narrowing the signature with `omit`.
+The docstring is also unchanged.
 
-声明保留 `FunctionalInequalities.Analysis` 命名空间（公共名不能变），而文件放在 `KLS/Geometry/`
-下，因为语句里出现 `KLS.surfaceMeasure`，不属于 KLS 无关的 `Analysis/` 层；被替换的 WIP 文件
-本身就是同样的安排。
+The declaration retains namespace `FunctionalInequalities.Analysis` (the public name must not change),
+while the file lives under `KLS/Geometry/` because its statement uses `KLS.surfaceMeasure` and does not belong
+in the KLS-independent `Analysis/` layer. The replaced WIP file used the same arrangement.
 
-`KLS/WIP/AnalyticPrerequisites.lean` 只删除了这一条声明并相应更新了文件头注释，
-**没有改动其余任何声明**：`lintegral_enorm_gradient_mul_eq_lintegral_levelSet`、`sard`、
-`ae_forall_fderiv_ne_zero` 的语句、证明与位置全部不变。
+`KLS/WIP/AnalyticPrerequisites.lean` only loses this declaration and updates its module header.
+**No other declaration changes**: the statements, proofs, and positions of
+`lintegral_enorm_gradient_mul_eq_lintegral_levelSet`, `sard`, and `ae_forall_fderiv_ne_zero` are unchanged.
 
-## 洞数变化与仍然开着的洞
+## Hole counts and remaining holes
 
-* `AnalyticPrerequisites.lean`：**3 → 2** 个直接洞。
-* `KLS/WIP/CheegerInfimum.lean`：3（不变）。`Energy/WIP/Cheeger.lean`：5（不变）。
-* 总计 **11 → 10**。这是本轮唯一的数字变化；证书仍 **24**，perimeter infrastructure 仍
-  **missing**。
+* `AnalyticPrerequisites.lean`: **3 → 2** direct holes.
+* `KLS/WIP/CheegerInfimum.lean`: 3 (unchanged). `Energy/WIP/Cheeger.lean`: 5 (unchanged).
+* Total: **11 → 10**. This is the only count change this round; certificates remain **24**,
+  and perimeter infrastructure remains **missing**.
 
-`build/audit/LevelSetMeasurableAudit.lean` **同时导入**新模块与 WIP 文件，所以下列报告出自
-同一个环境，迁出的名字在其中只解析到一条声明：
+`build/audit/LevelSetMeasurableAudit.lean` imports **both** the new module and WIP file, so the reports below
+come from one environment, where the migrated name resolves to exactly one declaration:
 
-* `Analysis.aemeasurable_lintegral_levelSet`：`propext, Classical.choice, Quot.sound`，
-  **无 `sorryAx`**。
-* `Analysis.lintegral_enorm_gradient_mul_eq_lintegral_levelSet`（加权 coarea **等式**）：
-  仍含 `sorryAx`，仍是直接洞。
-* `Analysis.sard`（尖锐 `C^(finrank)`）：仍含 `sorryAx`，仍是直接洞，仍无下游消费者。
-* `Analysis.ae_forall_fderiv_ne_zero`：仍由 `sard` 继承 `sorryAx`。
+* `Analysis.aemeasurable_lintegral_levelSet`: `propext, Classical.choice, Quot.sound`, **no `sorryAx`**.
+* `Analysis.lintegral_enorm_gradient_mul_eq_lintegral_levelSet` (weighted coarea **equality**):
+  still contains `sorryAx` and remains a direct hole.
+* `Analysis.sard` (sharp `C^(finrank)`): still contains `sorryAx`, remains a direct hole, and has no downstream consumers.
+* `Analysis.ae_forall_fderiv_ne_zero`: still inherits `sorryAx` from `sard`.
 
-客户端还把这两条语句各写成一条定理并分别以具名参数调用库声明：
-`client_aemeasurable_lintegral_levelSet` 编译且无 `sorryAx`；`client_coarea_statement` 编译但
-**带 `sorryAx`**——它只是复述那条尚未证明的等式，不是它的证明。
+The client also restates the two statements as theorems and calls the library declarations with named arguments:
+`client_aemeasurable_lintegral_levelSet` compiles without `sorryAx`; `client_coarea_statement` compiles
+**with `sorryAx`**. It merely restates the unproved equality and does not prove it.
 
-## 本轮没有做的事
+## Work excluded from this round
 
-* **没有证明加权 coarea 等式**。`Analysis.lintegral_enorm_gradient_mul_eq_lintegral_levelSet`
-  与 `Isoperimetry.lintegral_enorm_gradient_mul_eq_lintegral_levelSet` 仍是直接洞，
-  目标 T2/T3 与 L6–L12（含 L6 的 Whitney C¹ 延拓）完全未动。
-* 没有证明尖锐 `C^(finrank)` 的 `Analysis.sard`。
-* 没有证明 `smoothConstant_le_minkowskiConstant`、
-  `smoothConstant_mul_lintegral_min_superlevel_le` 或两个 Cheeger 常数相等。
-* 没有证明 Eilenberg 常数的尖锐性。
-* 没有新增数学内容：本轮不含任何新定理，只有一次迁出与接线。
-* 没有扩大证书或 Blueprint `leanok` 范围。
+* **No proof of weighted coarea equality**. `Analysis.lintegral_enorm_gradient_mul_eq_lintegral_levelSet`
+  and `Isoperimetry.lintegral_enorm_gradient_mul_eq_lintegral_levelSet` remain direct holes.
+  Targets T2/T3 and L6–L12, including the Whitney C¹ extension in L6, are untouched.
+* No proof of sharp `C^(finrank)` `Analysis.sard`.
+* No proof of `smoothConstant_le_minkowskiConstant`,
+  `smoothConstant_mul_lintegral_min_superlevel_le`, or equality of the two Cheeger constants.
+* No proof of sharpness of the Eilenberg constant.
+* No new mathematical content: this round contains no new theorem, only one migration and interface connection.
+* No expansion of certificate or Blueprint `leanok` scope.
 
-## 验证
+## Validation
 
-* `KLS/Geometry/LevelSetMeasurable.lean` 以 `-DwarningAsError=true` 单独编译通过。
-* `build/audit/LevelSetMeasurableAudit.lean` 以 `-DwarningAsError=true` 编译通过，
-  6 条 `#print axioms` 给出上节的边界。
-* 签名 `diff` 为空（`migration-signature-before.log` 与 `migration-signature-after.log`）。
-* 重跑 `BorelSliceAudit`、`CompactSliceAudit`、`EilenbergMajorantAudit`、`NullSlicingAudit`、
-  `WeightedCoareaRouteStatements`、`WeightedCoareaInfrastructure`、`AreaFormulaAudit`、
-  `CheegerInfimumAudit`、`MinkowskiConstantAudit`、`SuperlevelSardScope`、`SmoothSardAudit`、
-  `SmoothSardRouteStatements`，全部严格编译通过，未作任何修改。
-* 三个 WIP 文件逐个实际编译成功，直接洞分别 **2/3/5，总数 10**。
-* 默认 `lake build` 与根目录 `python3 research/verify.py` 通过。最终回执为
-  `build/verification/latest.json`，与最终全部源码快照完全相等；证据 JSON 为
-  `research/explorations/2026-09-15-levelset-measurable-migration.json`，最终核对另存
-  `build/audit/migration-final-snapshot.json`。`build/` 被 gitignore，故 `build/audit`
-  的哈希由证据 JSON 单独绑定；迁出前的 WIP 文件原样存为
-  `build/audit/migration-AnalyticPrerequisites.before.lean`。
+* `KLS/Geometry/LevelSetMeasurable.lean` compiles separately with `-DwarningAsError=true`.
+* `build/audit/LevelSetMeasurableAudit.lean` compiles with `-DwarningAsError=true`;
+  its 6 `#print axioms` reports establish the boundaries above.
+* Signature `diff` is empty (`migration-signature-before.log` and `migration-signature-after.log`).
+* Reran `BorelSliceAudit`, `CompactSliceAudit`, `EilenbergMajorantAudit`, `NullSlicingAudit`,
+  `WeightedCoareaRouteStatements`, `WeightedCoareaInfrastructure`, `AreaFormulaAudit`,
+  `CheegerInfimumAudit`, `MinkowskiConstantAudit`, `SuperlevelSardScope`, `SmoothSardAudit`,
+  and `SmoothSardRouteStatements`; all passed strict compilation unchanged.
+* The three WIP files compile separately, with **2/3/5 direct holes, total 10**.
+* Default `lake build` and root-level `python3 research/verify.py` pass. Final receipt:
+  `build/verification/latest.json`, matching the complete final source snapshot exactly. Evidence JSON:
+  `research/explorations/2026-09-15-levelset-measurable-migration.json`; final snapshot check:
+  `build/audit/migration-final-snapshot.json`. Since `build/` is gitignored, the evidence JSON separately binds
+  the hashes under `build/audit`. The original WIP file is saved unchanged as
+  `build/audit/migration-AnalyticPrerequisites.before.lean`.

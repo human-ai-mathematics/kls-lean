@@ -1,98 +1,91 @@
-# 余维 m 的加权切片可测性，与余维 m 正则 coarea 公式
+# m-dimensional coarea formula for weighted slice measurability
 
-2026-09-17。本轮**证明新定理**：请求的**余维 m 加权切片可测性**，
-以及它立刻装配出的 **余维 m 正则情形 coarea 公式**——标量 `L9` 的类比。
-不迁洞，不提交、不推送。直接洞仍 **8（1/2/5）**，证书仍 **24**。
+2026-09-17. This round of **proving a new theorem**: the requested **m-codimensional m-weighted slice measurability**, and its immediate derivation of the **m-codimensional regular case coarea formula**—analogous to `L9`. No hole-filling, no commit, no push. The direct proof hole remains **8 (1/2/5)**, the certification remains **24**.
 
-起点 `HEAD = origin/main = 34b92695ece4f636a1a7f1eafbbf41c685ee0348`；起点 passed 回执
-`build/verification/20260916T170802.272750Z/report.json`：10 个门、211 个本地模块内核重放、
-554 条目，快照
-`90d7047331fbb80fe9b65b48b4eeaee61329c47dd97dcb372a0089ea6ccf8ad4`。
-起点工作区 drift 为空，并发会话未改动工作区。
+Start `HEAD = origin/main = 34b92695ece4f636a1a7f1eafbbf41c685ee0348`; start verification receipt
+`build/verification/20260916T170802.272750Z/report.json`: 10 gates, 211 local module kernel replay,
+554 entries, snapshot
+`90d7047331fbb80fe9b65b48b4eeaee61329c47dd97dcb372a0089ea6ccf8ad4`.
+The start workspace drift is empty, and concurrent session has not modified the workspace.
 
-## 边界
+## Boundary
 
-对数凹 Cheeger–Buser 线（含 `KLS/WIP/CheegerInfimum.lean` 剩下的两个洞）归合作者**王浩丞**，
-本轮未触碰。尖锐有限正则 Sard、Energy 的五个洞、无量纲 KLS 也都未触碰。
+Log-concave Cheeger–Buser lines (including `KLS/WIP/CheegerInfimum.lean` remaining two holes) credited to author **Haocheng Wang**,
+this round untouched. Sharp finite regular Sard, Energy's five holes, dimension-free KLS also untouched.
 
-## 走的不是标量那条路，必须说清
+## Not taking the scalar path, must clarify
 
-标量情形的切片可测性（`KLS/Geometry/OpenSliceMeasurable.lean`）对**任意** Borel `S ⊆ O`
-成立，**不需要正则点假设**，它经由 `KLS/Geometry/SurfaceSlicing.lean` 的 **Eilenberg 切片不等式**。
-**余维 m 的 Eilenberg 不等式本仓库没有**，Mathlib 也不提供。
+Slice measurability in the scalar case (`KLS/Geometry/OpenSliceMeasurable.lean`) holds for any Borel `S ⊆ O`, without the need for regular point assumptions, via `KLS/Geometry/SurfaceSlicing.lean`'s Eilenberg slice inequality. The Eilenberg inequality of codimension m is not present repository, and Mathlib does not provide it.
 
-所以本轮**改走图**：在一张水平族的图上，切片积分就是参数–水平乘积上**某一个可测函数的 Tonelli 截面**，
-可测性因此是直接的，**完全不用任何切片不等式**。
-代价是：本轮的切片可测性**只在微分满射处成立**。
-这对正则情形足够，但**不覆盖临界部分**——见「没有做的事」。
+So this round's "change of chart": on a family of level charts, the slice integral is simply the Tonelli section of some measurable function over the parameter–level product,
+so measurability is immediate, **no slice inequalities are needed at all**.
+The cost is that the slice measurability of this round **holds only at differential surjective points**.
+This suffices for the regular case, but **fails to cover the critical part**—see "Things not done".
 
-## 精确成果
+## Exact Results
 
-新模块 `formalization/FunctionalInequalities/Analysis/VectorRegularCoarea.lean`
-（211 行，本地 import 闭包 21 个模块，**无 WIP**）。
+New module `formalization/FunctionalInequalities/Analysis/VectorRegularCoarea.lean`
+ (211 line, local import closure 21 modules, **no WIP**).
 
-* **`measurable_setLIntegral_inter_levelSet_levelGraphFamily`**：
-  一张图上的**加权切片可测性**。用上一轮的切片描述与加权面积公式把
-  `t ↦ ∫⁻ over (Ψ''A) ∩ {u = t}, g` 写成 `t ↦ ∫⁻ y, (A.indicator F) (y, t)`，
-  `F` 在 `H × W` 上可测，于是 `Measurable.lintegral_prod_left'` 直接给出可测性。
-* **`exists_vector_coarea_neighborhood_measurable`**：邻域形式，等式与可测性一并给出。
-* **`coarea_of_contDiffOn_of_coareaJacobian_ne_zero`**：**余维 m 正则情形的 coarea 公式**。
-  在微分处处满射的开集 `O` 上，对**任意** Borel `S ⊆ O` 与**任意**可测 `ℝ≥0∞` 权重：
-  水平函数**可测**，且
-  `∫⁻_S coareaJacobian(Du)·g dx = ∫⁻_t ∫⁻_{S ∩ {u = t}} g dℋ^{n-m} dt`，
-  纤维测度是余维的归一化 Hausdorff 测度 `hausdorffNormalized V (finrank V − finrank W)`。
-  装配方式与标量 `L9` 相同：可数覆盖、`disjointed` 不交化、逐片用邻域形式、`lintegral_tsum` 交换。
+* **`measurable_setLIntegral_inter_levelSet_levelGraphFamily`**:
+  Weighted slice measurability on a graph. Using the slice description from the previous round and the weighted area formula to
+  `t ↦ ∫⁻ over (Ψ''A) ∩ {u = t}, g` written as `t ↦ ∫⁻ y, (A.indicator F) (y, t)`,
+  `F` is measurable on `H × W`, so `Measurable.lintegral_prod_left'` directly yields measurability.
+* **`exists_vector_coarea_neighborhood_measurable`**: neighborhood form, given together with the equality and measurability.
+* **`coarea_of_contDiffOn_of_coareaJacobian_ne_zero`**: **The coarea formula in the regularity case of codimension m**.
+  On an open set `O` where the differential is everywhere surjective, for **any** Borel `S ⊆ O` and **any** measurable `ℝ≥0∞` weight:
+  The level function is measurable, and
+  `∫⁻_S coareaJacobian(Du)·g dx = ∫⁻_t ∫⁻_{S ∩ {u = t}} g dℋ^{n-m} dt`,
+  The fiber measure is the normalization of the Hausdorff measure with respect to the codimension. `hausdorffNormalized V (finrank V − finrank W)`
+  Assemble as in scalar `L9`: a countable cover, disjointification with `disjointed`, the neighborhood formula on each piece, and interchange via `lintegral_tsum`.
 
-  注意结论给的是 **`Measurable`**，比标量 `L9` 的 `AEMeasurable` **更强**；
-  这是走图路线的副产品。
+  The conclusion provided is **`Measurable`**, which is stronger than the scalar `L9`'s `AEMeasurable`;
+this is a byproduct of the path-following approach.
 
-假设只有：`u` 在开集 `O` 上 C¹，且 `O` 上处处 `coareaJacobian (fderiv ℝ u x) ≠ 0`（即微分满射）。
-**无有限性、有界性、可积性、正则值、SFinite**，`O` 外无正则性。
+Assume only: `u` is C¹ on the open set `O`, and `O` is everywhere `coareaJacobian (fderiv ℝ u x) ≠ 0` (i.e. a differential surjection).
+**No finiteness, boundedness, integrability, regular value, SFinite**, no regularity outside `O`.
 
-## m = 1 逐字退回已证的标量 L9
+## m = 1 literal rollback of proven scalar L9
 
-审计客户端的 `scalar_L9` **逐字重写**仓库已证的
-`KLS.coarea_of_contDiffOn_of_fderiv_ne_zero` 的语句——梯度范数、`surfaceMeasure V`、
-`AEMeasurable`——并**从余维 m 的定理把它兑现**。桥梁三条都已证：
-`coareaJacobian_fderiv`（密度退回 `‖gradient u x‖ₑ`）、
-`finrank ℝ V − finrank ℝ ℝ = finrank ℝ V − 1` 使纤维测度就是 `surfaceMeasure V`、
-以及 `coareaJacobian_ne_zero_of_fderiv_ne_zero`（实值非零微分即满射）。
+The audit client's `scalar_L9` **verbatim rewrite**repository of proven statements—gradient norm, `KLS.coarea_of_contDiffOn_of_fderiv_ne_zero`,
+`surfaceMeasure V`, `AEMeasurable`—and **fulfills the theorem of codimension m**. All three bridges are proven:
+`coareaJacobian_fderiv` (density reverts to `‖gradient u x‖ₑ`),
+`finrank ℝ V − finrank ℝ ℝ = finrank ℝ V − 1` makes fiber measure equal to `surfaceMeasure V`,
+and `coareaJacobian_ne_zero_of_fderiv_ne_zero` (real-valued nonzero differential is surjective).
 
-## 本轮没有做的事
+## What was not done in this round
 
-* **没有证明一般的余维 m coarea 公式**（标量 `L11`–`L13` 的类比）。
-  它需要处理**临界集**，而这需要余维 m 的 Sard 或临界切片论证，两者都没有。
-* **没有证明不带正则性假设的切片可测性**。
-  标量情形靠 Eilenberg 切片不等式做到这一点；**余维 m 的 Eilenberg 不等式没有证**。
-  没有它就无法把临界部分纳入。
-* 没有碰临界部分、尖锐有限正则 Sard、两条 Cheeger 比较、Energy 的五个洞。
-* 没有迁洞；没有扩大证书或 Blueprint `leanok` 范围；没有新增兼容 alias；没有削弱已证结论。
-* **没有提交、没有推送**，真实 Git index 未改动。
+* **No proof of the general coarea formula of codimension m** (analogous to scalar `L11`–`L13`).
+  It requires handling the **critical set**, which would require a codimension m Sard or critical slice argument, neither of which is available.
+* **No proof of slice measurability without regularity assumptions**.
+  The scalar case uses the Eilenberg slice inequality to achieve this; **the Eilenberg inequality for codimension m has not been proven**.
+  Without it, the critical part cannot be included.
+* No attention to the critical part, sharp finite regular Sard, two Cheeger comparisons, five holes in energy.
+* No migration of holes; no extension of certificates or Blueprint `leanok`; no new compatible aliases; no weakening of already proven conclusions.
+* **No commit, no push**, the real Git index has not been modified.
 
-## 路线语句复核
+## Route statement verification
 
-本轮重跑但**未发现新的**路线语句错误。已记录的两处仍是 `B1` 与已证伪的 `A0`。
-`research/audits/AreaFormulaRouteStatements.lean` 继续**保持原字节**。
+This round of re-execution found no new route statement errors. The two recorded issues remain `B1` and the falsified `A0`.
+`research/audits/AreaFormulaRouteStatements.lean` continues to preserve the original bytes.
 
-## 余维 m 纲领现状
+## Current status of the m-codimensional program
 
-已证：coarea Jacobian 与正则集刻画、线性面积公式与仿射纤维、A1、B1/B2 图面积公式、
-纤维 Jacobian 恒等式、保测分裂、带参数隐函数图化、纤维方向 m 维换元、
-加权图面积公式、局部 coarea 等式，以及本轮的**正则情形 coarea 公式**。
+Proved: coarea Jacobian and regular set characterization, linear area formula and affine fiber, A1, B1/B2 graph area formula, fiber Jacobian identity, measure-preserving splitting, parametrized implicit function graphization, fiber direction m-dimensional change of variables, weighted graph area formula, local coarea equation, and the regular case coarea formula in this round.
 
-仍开放：余维 m 的 Eilenberg 切片不等式；不带正则性的切片可测性；
-余维 m 的 Sard／临界切片；因而一般的余维 m coarea 公式。
-Federer 面积公式 `A0`（已证伪其路线语句的写法）与 `A2`–`A5` 也仍开放。
+Still open: the Eilenberg slice inequality for codimension m; measurability of slices without regularity;
+the Sard/critical slice for codimension m; hence the general codimension m coarea formula.
+Federer's area formula `A0` (its route statement has been falsified) and `A2`–`A5` are also still open.
 
-## 验证
+## Verification
 
-* 新模块与新客户端均以 `-DwarningAsError=true` 编译通过，无 `sorry`、无 `axiom`、无占位。
-* `research/audits/VectorRegularCoareaAudit.lean` 的 **11 条公理报告**只用
-  `propext`、`Classical.choice`、`Quot.sound`；含空集、全空间（无有限性）、恒为 `∞` 的权重、
-  零维靶空间（此时每点都正则）、以及 m = 1 逐字退回标量 `L9`
-  （最后一条报告是仓库已证的标量 `L9` 本身，供对照）。
-* 重跑全部 **38 个审计客户端**（`research/audits` 31 个，`build/audit` 7 个），全部严格通过。
-* 三个 WIP 逐个实际编译，直接洞 **1/2/5，总数 8**，不变；`research/check_ledger.py` 报 24 个证书。
-* 默认 `lake build` 与根目录 `python3 research/verify.py` 通过；证据 JSON 为
-  `research/explorations/2026-09-17-vector-regular-coarea.json`，最终核对另存
-  `build/audit/vector-regular-coarea/final-snapshot.json`。
+* The new module and new client have been compiled successfully with `-DwarningAsError=true`, with no `sorry`, no `axiom`, and no placeholders.
+* The **11 Axiom Report** of `research/audits/VectorRegularCoareaAudit.lean` only uses
+  `propext`, `Classical.choice`, `Quot.sound`; including the empty set, the full space (without finiteness), and weights that are constantly `∞`;
+  Zero-dimensional target space (in this case, each point is regular), and m = 1 character-by-character retreat scalar `L9`
+  (The last report is for the repository’s proved scalar `L9` itself, for comparison).
+* Reran all **38 audit clients** (31 in `research/audits`, 7 in `build/audit`); all passed strict compilation.
+* Three WIPs are compiled individually, direct proof hole **1/2/5**, total **8**, unchanged; `research/check_ledger.py` reports 24 certificates.
+* Default `lake build` and root directory `python3 research/verify.py` are connected; evidence JSON is
+  `research/explorations/2026-09-17-vector-regular-coarea.json`, final verification and save
+  `build/audit/vector-regular-coarea/final-snapshot.json`.

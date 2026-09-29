@@ -1,94 +1,93 @@
-# 余维 m 的临界切片：导数为零的那一部分
+# Critical slices of codimension m: the part where the derivative is zero
 
-2026-09-17。本轮**证明新定理**：余维 m 情形下**导数为零**那部分临界集的切片零测性，
-以及由它把正则情形的 coarea 公式延拓到全空间的结果
-（假设「微分不满射处导数即为零」）。
-**这不是完整的临界集**（`m ≥ 2` 时严格更小），**也不是任何 Sard 定理**；
-差距不是断言而是**给出反例**。
-不迁洞，不提交、不推送。直接洞仍 **8（1/2/5）**，证书仍 **24**。
+2026-09-17. This round of **proving a new theorem**: the slice zero-measure property of the critical set where the derivative is zero in the case of codimension m, and the extension of the coarea formula from the regular case to the entire space
+(assuming "the derivative is zero at points where the differential is not surjective").
+This is **not a complete critical set** (it is strictly smaller than `m ≥ 2`), **nor any Sard theorem**;
+the gap is not asserted but **provided by counterexamples**.
+No hole-filling, no commit, no pushing. The direct proof hole remains **8 (1/2/5)**, and the certification remains **24**.
 
-起点 `HEAD = origin/main = 34b92695ece4f636a1a7f1eafbbf41c685ee0348`；起点 passed 回执
-`build/verification/20260917T034956.058840Z/report.json`：10 个门、214 个本地模块内核重放、
-566 条目，快照
-`e87a9add07bbc20692efd7891719dcf6b8cdf6d1bf027fe3f36fd05b7f90b019`。
-起点工作区 drift 为空，并发会话未改动工作区。
+Start `HEAD = origin/main = 34b92695ece4f636a1a7f1eafbbf41c685ee0348`; start verification receipt
+`build/verification/20260917T034956.058840Z/report.json`: 10 gates, 214 local module kernel replay,
+566 entries, snapshot
+`e87a9add07bbc20692efd7891719dcf6b8cdf6d1bf027fe3f36fd05b7f90b019`.
+The start workspace drift is empty, and concurrent sessions have not modified the workspace.
 
-## 边界
+## Boundary
 
-对数凹 Cheeger–Buser 线（含 `KLS/WIP/CheegerInfimum.lean` 剩下的两个洞）归合作者**王浩丞**，
-本轮未触碰。尖锐有限正则 Sard、Energy 的五个洞、无量纲 KLS 也都未触碰。
+Log-concave Cheeger–Buser lines (including `KLS/WIP/CheegerInfimum.lean` remaining two holes) credited to author **Haocheng Wang**,
+this round untouched. Sharp finite regular Sard, Energy's five holes, dimension-free KLS also untouched.
 
-## 精确成果
+## Exact Results
 
-新模块 `formalization/FunctionalInequalities/Analysis/VectorCriticalSlice.lean`
-（275 行，本地 import 闭包 28 个模块，**无 WIP**）。
+New module `formalization/FunctionalInequalities/Analysis/VectorCriticalSlice.lean`
+ (275 line, local import closure 28 modules, **no WIP**).
 
-* **`exists_lipschitzOnWith_zeroDeriv_cover`**：Mathlib 的逼近分片把
-  `{x | fderiv ℝ u x = 0}` 覆盖成可数个两两不交的可测片，`u` 在每片上 `ε`-Lipschitz。
-  逼近用的线性映射是导数的取值，在该集合上为零，所以线性部分脱落，逼近变成真正的 Lipschitz 估计。
-  **这一步正是对仅仅秩亏的导数失效的地方。**
-* **`ae_hausdorffMeasure_zeroDeriv_inter_levelSet_eq_zero`**（及归一化版本）：
-  `m ≥ 1` 时，**几乎每个水平与 `{Du = 0}` 的交是 `ℋ^{n−m}` 零测的**。
-  论证与标量一字不差，只是换用上两轮的余维 m Eilenberg 界，常数变成
-  `volume (closedBall 0 1) · ε^m`，而 `ε^m → 0` 正因为 `m ≥ 1`。
-  `0 < finrank W` 是真假设：靶空间为零维时每个导数都为零、该集合是全空间。
-* **`coarea_of_contDiff_of_critical_eq_zeroDeriv`**：
-  在**「微分不满射处导数即为零」**的假设下，把已证的正则情形 coarea 公式延拓到全空间——
-  可测性来自上一轮**不带正则性**的切片可测性，临界部分的贡献两侧都为零。
+* **`exists_lipschitzOnWith_zeroDeriv_cover`**: Mathlib's approximation piecewise
+  `{x | fderiv ℝ u x = 0}` covers into countably many pairwise disjoint measurable pieces, `u` each piece is `ε`-Lipschitz.
+  The linear mapping used for approximation takes the value of the derivative, and is zero on this set, so the linear part vanishes, and the approximation becomes a true Lipschitz estimate.
+  This step precisely addresses the locations where the derivative fails due to rank deficiency.
+* **`ae_hausdorffMeasure_zeroDeriv_inter_levelSet_eq_zero`** (and its normalized version):
+  At `m ≥ 1`, **almost every intersection with the level set of `{Du = 0}` has measure zero with respect to `ℋ^{n−m}`**.
+  The argument and scalar are identical, except that the constant is replaced by the two previous rounds' co-dimension m Eilenberg bound,
+  `volume (closedBall 0 1) · ε^m`, while `ε^m → 0` is due to `m ≥ 1`.
+  `0 < finrank W` is a true assumption: when the target space is zero-dimensional, each derivative is zero, and the set is the entire space.
+* **`coarea_of_contDiff_of_critical_eq_zeroDeriv`**:
+  Under the assumption that "the derivative is zero at differential non-surjective points," extend the already-proven regular case coarea formula to the entire space—
+  Measurability comes from the slice measurability in the previous round without regularity, and the contribution from the critical part is zero on both sides.
 
-## m = 1 逐字退回已证的标量 L10 与 L11
+## m = 1 Literally retract the proven scalar L10 and L11
 
-`m = 1` 时「不满射」与「为零」对实值微分是同一件事，所以上面的假设**自动成立**。审计里：
-* `scalar_L10` 逐字取回 `KLS.ae_surfaceMeasure_critical_inter_levelSet_eq_zero`；
-* `scalar_L11` 逐字取回 `KLS.coarea_of_contDiff`。
+`m = 1` At the time "non-surjective" and "zero" are the same thing regarding real differential forms, the above assumption holds automatically. In auditing:
+* `scalar_L10` retrieves each word from `KLS.ae_surfaceMeasure_critical_inter_levelSet_eq_zero`;
+* `scalar_L11` retrieves each word from `KLS.coarea_of_contDiff`.
 
-两者都多要一个 `1 ≤ finrank V`——与前两轮同样的**如实记下的差别**：
-余维 m 的陈述带假设「纤维维数 + 余维 = 环境维数」。
+Both require an additional `1 ≤ finrank V`—the same *accurate difference recorded* as in the previous two rounds:
+The statement of codimension m assumes the hypothesis "fiber dimension + codimension = ambient dimension".
 
-## 差距是给出的，不是断言的
+## The gap is given, not asserted.
 
-`m ≥ 2` 时 coarea 的临界集是 `{x | fderiv ℝ u x 不满射}`，**严格大于**导数为零的集合。
-审计的 `rank_deficient_witness` 给出反例：平面上秩一的线性映射
-（沿第一坐标轴的正交投影），其导数**处处非零**且**处处不满射**——
-于是导数为零的集合是空集，而 coarea 的临界集是全空间，
-`coarea_of_contDiff_of_critical_eq_zeroDeriv` 的假设在每一点都不成立。
+For `m ≥ 2`, the coarea critical set is `{x | fderiv ℝ u x is not surjective}`, **strictly larger** than the set where the derivative vanishes.
+The audit `rank_deficient_witness` provides a counterexample: a rank-one linear map in the plane
+(the orthogonal projection along the first coordinate axis), whose derivative is **nowhere zero** and **nowhere surjective**——
+Thus the set where the derivative is zero is empty, and the critical set of coarea is the entire space,
+The assumption of `coarea_of_contDiff_of_critical_eq_zeroDeriv` does not hold at any point.
 
-**本轮对秩亏部分什么也没证。** 那部分需要沿存活方向的迭代切片，
-与本轮用的「小 Lipschitz 常数」技巧是两回事——后者严格依赖导数为零。
+**This round has proven nothing about the rank-deficient part.** That part requires iterative slicing along the survival direction,
+and is entirely different from the "small Lipschitz constant" technique used in this round— the latter strictly depends on the zero derivative.
 
-## 本轮没有做的事
+## What was not done in this round
 
-* **没有证明任何 Sard 定理**；对临界**值**集合的测度什么也没断言，
-  仅仅 C¹ 的映射其临界值集合完全可以有正测度。
-* **没有证明一般的余维 m coarea 公式**：秩亏部分未覆盖。
-* 没有修改 `KLS/Geometry/CriticalSlice.lean` 或 `KLS/Geometry/SmoothCoarea.lean`——
-  余维 m 版本是并列的新模块。
-* 没有碰尖锐有限正则 Sard、两条 Cheeger 比较、Energy 的五个洞；
-  没有迁洞；没有扩大证书或 Blueprint `leanok` 范围；没有新增兼容 alias；没有削弱已证结论。
-* **没有提交、没有推送**，真实 Git index 未改动。
+* **No proof of any Sard theorem**; no assertion is made about the measure of the critical value set,
+  merely that the set of critical values for a C¹ map can have positive measure.
+* **No proof of the general coarea formula of codimension m**: the rank-deficient part is not covered.
+* No modification to `KLS/Geometry/CriticalSlice.lean` or `KLS/Geometry/SmoothCoarea.lean`—
+  the codimension m version is a parallel new module.
+* No touch of the sharp finite positive regular Sard, the two Cheeger comparisons, or five energy holes;
+  no hole migration; no extension of the certificate or Blueprint `leanok`; no new compatible alias added; no weakening of already proven conclusions.
+* **No commit, no push**, the real Git index is unchanged.
 
-## 路线语句复核
+## Route statement verification
 
-本轮重跑但**未发现新的**路线语句错误。已记录的两处仍是 `B1` 与已证伪的 `A0`。
-`research/audits/AreaFormulaRouteStatements.lean` 继续**保持原字节**。
+This round of re-execution found no new route statement errors. The two recorded issues remain `B1` and the falsified `A0`.
+`research/audits/AreaFormulaRouteStatements.lean` continues to preserve the original bytes.
 
-## 剩余工作
+## Remaining work
 
-**秩亏部分**是余维 m coarea 仅存的结构性缺口。可能的路线：
-按秩分层 `{rank Du ≤ r}`，在每层上用逼近分片把 `u` 的像挤进一个 `r` 维仿射子空间附近，
-再沿存活的 `m − r` 个方向用 Eilenberg 界——但需要同时沿 `r` 个「好」方向切片，
-即迭代切片；这正是 Federer coarea 公式退化部分的难点，
-仓库与 Mathlib 目前都没有相应工具。若要立项，建议先做一轮路线探查。
+**Rank-deficient parts** are the only structural gaps left by the coarea formula of dimension m. Possible approaches:
+Layer by rank `{rank Du ≤ r}`, and on each layer use approximation piecewise to squeeze the image of `u` near an affine subspace of dimension `r`,
+then along the surviving `m − r` directions use Eilenberg's bound—however, it requires slicing simultaneously along `r` "good" directions,
+i.e., iterative slicing; this is precisely the difficulty in the degenerate part of Federer's coarea formula,
+repository and Mathlib currently lack corresponding tools. If a project is to be initiated, a round of route exploration should be conducted first.
 
-## 验证
+## Verification
 
-* 新模块与新客户端均以 `-DwarningAsError=true` 编译通过，无 `sorry`、无 `axiom`、无占位。
-* `research/audits/VectorCriticalSliceAudit.lean` 的 **17 条公理报告**只用
-  `propext`、`Classical.choice`、`Quot.sound`；含常值映射（整体临界）、零维靶空间下导数恒零、
-  秩亏反例，以及 m = 1 逐字退回 `L10` 与 `L11`
-  （最后两条报告是仓库已证的标量 `L10`、`L11` 本身，供对照）。
-* 重跑全部 **41 个审计客户端**（`research/audits` 34 个，`build/audit` 7 个），全部严格通过。
-* 三个 WIP 逐个实际编译，直接洞 **1/2/5，总数 8**，不变；`research/check_ledger.py` 报 24 个证书。
-* 默认 `lake build` 与根目录 `python3 research/verify.py` 通过；证据 JSON 为
-  `research/explorations/2026-09-17-vector-critical-slice.json`，最终核对另存
-  `build/audit/vector-critical-slice/final-snapshot.json`。
+* The new module and new client have been compiled successfully with `-DwarningAsError=true`, with no `sorry`, no `axiom`, and no placeholders.
+* The **17 Axiom Report** of `research/audits/VectorCriticalSliceAudit.lean` only uses
+  `propext`, `Classical.choice`, `Quot.sound`; contains constant maps (global critical), derivative identically zero in zero-dimensional target space,
+  Rank-deficient counterexample, and for m = 1 step-by-step rollback of `L10` and `L11`
+  (The last two reports are repository-proved scalar `L10`, `L11`, for reference.)
+* Reran all **41 audit clients** (34 in `research/audits`, 7 in `build/audit`); all passed strict compilation.
+* Three WIPs are compiled individually, direct proof hole **1/2/5**, total **8**, unchanged; `research/check_ledger.py` reports 24 certificates.
+* Default `lake build` and root directory `python3 research/verify.py` are connected; evidence JSON is
+  `research/explorations/2026-09-17-vector-critical-slice.json`, final verification and save
+  `build/audit/vector-critical-slice/final-snapshot.json`.

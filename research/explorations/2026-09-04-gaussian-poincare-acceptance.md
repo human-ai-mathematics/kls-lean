@@ -12,7 +12,7 @@ work present as uncommitted working-tree changes.
 The node is accepted locally as **proved / checked_by: lean**. All 20 mathematical declarations
 already had completed Lean proofs before the current approval. After Codex reported that their
 semantics and mathematics were correct and identified the remaining lifecycle and structural
-work, the user instructed “按照你说的那样去做优化和修正”. The accompanying
+work, the user instructed “make the improvements and corrections you proposed”. The accompanying
 [statement freeze](../decisions/2026-09-04-gaussian-poincare-freeze.md) records that approval at
 the current point in time; it does not reinterpret the earlier candidate and statement-stage
 records as having been proved or frozen then.

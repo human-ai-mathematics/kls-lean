@@ -1,14 +1,15 @@
-# Sard 的零维与一维基础情形，以及旧路线勘误
+# Sard's zero-dimensional and one-dimensional base cases, and corrections to the old route
 
-日期：2026-09-14。HEAD `2965b32bc79bdb24921c633df12102450eaedcc4`。
-起始独立回执 `build/verification/20260913T182956.860385Z/report.json` 为 passed；
-重新计算确认其全部 384 个文件、HEAD 与快照完全一致，快照 SHA256 为
-`5da779982b20637487bfaf6fbb8aa98ea7c1671485373d9aae6c4b4204077817`。
-全部未提交及未跟踪成果保留；本轮不提交、不推送。历史决定不改写。
+Date: 2026-09-14. HEAD `2965b32bc79bdb24921c633df12102450eaedcc4`.
+Initial independent verification `build/verification/20260913T182956.860385Z/report.json` is passed;
+recomputed confirms all 384 files, HEAD, and snapshot are identical, snapshot SHA256 is
+`5da779982b20637487bfaf6fbb8aa98ea7c1671485373d9aae6c4b4204077817`.
+All uncommitted and untracked results are retained; no commit or push in this round. Historical decisions are not rewritten.
 
-## 已完成的独立定理
+## Completed Independent Theorems
 
-新模块 `formalization/FunctionalInequalities/Analysis/Sard.lean` 中：
+In the new module `formalization/FunctionalInequalities/Analysis/Sard.lean`:
+
 
 ```lean
 variable {V : Type v} [NormedAddCommGroup V] [NormedSpace ℝ V]
@@ -20,92 +21,81 @@ theorem sard_of_finrank_le_one {u : V → ℝ}
     (volume : Measure ℝ) (u '' {x | fderiv ℝ u x = 0}) = 0
 ```
 
-完整命名为 `FunctionalInequalities.Analysis.sard_of_finrank_le_one`。
-只有 `propext / Classical.choice / Quot.sound`，无直接洞或传递 `sorryAx`。
-没有新增辅助公开定理，没有复制 Mathlib 的零导数像集结论。
-模块仅导入 Mathlib 的 Jacobian、ContDiff.Basic、FiniteDimension；本地导入闭包为空，
-不导入 KLS 或 WIP，没有迁移、兼容别名或证书聚合导入变更。
+Complete name is `FunctionalInequalities.Analysis.sard_of_finrank_le_one`.
+Only `propext / Classical.choice / Quot.sound`, no direct proof hole or transitive `sorryAx`.
+No new auxiliary public theorems added, no copying of Mathlib's zero derivative image set conclusions.
+The module only imports Mathlib's Jacobian, ContDiff.Basic, FiniteDimension; local closure imports are empty,
+no import of KLS or WIP, no migration, no compatibility aliasing, no certificate aggregation import changes.
 
-* 零维：`Module.finrank_zero_iff` 给 `Subsingleton V`；任意子集在 `u` 下的像都包含在
-  单点 `{u 0}` 内，由 `measure_mono_null` 得零测。这一分支没有用 `hu` 推出可微性，
-  不额外要求 C¹，甚至其像集论证适用于任意函数。
-* 一维：`ContinuousLinearEquiv.ofFinrankEq` 给 `e : ℝ ≃L[ℝ] V`。
-  取 `f = u ∘ e`、`S = {z | fderiv ℝ u (e z) = 0}`。
-  由 C¹ 得到 `u` 处处可微，再用链式法则给每个 `z ∈ S` 的
-  `HasFDerivAt f (0 : ℝ →L[ℝ] ℝ) z`。
-  转为 within 导数，应用 `addHaar_image_eq_zero_of_det_fderivWithin_eq_zero volume`；
-  指定零导数的行列式用 `simp`。最后用 `e.symm`/满射性给
-  `f '' S = u '' {x | fderiv ℝ u x = 0}`。
-* 测度始终是目标 ℝ 上的 Lebesgue 测度。不需要定义域的测度结构、内积、等距性、
-  紧支撑、有界性或临界集／临界值像集可测性。结论确实是**临界值像集零测**。
+* Dimension 0: `Module.finrank_zero_iff` to `Subsingleton V`; the image of any subset under `u` is contained in the single point `{u 0}`, and by `measure_mono_null` it has zero measure. This branch does not use `hu` to establish differentiability, does not require C¹, and even its image set argument applies to any function.
+* Dimension 1: `ContinuousLinearEquiv.ofFinrankEq` to `e : ℝ ≃L[ℝ] V`.
+  Take `f = u ∘ e` and `S = {z | fderiv ℝ u (e z) = 0}`.
+  By C¹, we obtain differentiability of `u`, and then apply the chain rule to each `z ∈ S`'s `HasFDerivAt f (0 : ℝ →L[ℝ] ℝ) z`.
+  Convert to within derivative, apply `addHaar_image_eq_zero_of_det_fderivWithin_eq_zero volume`;
+  specify the determinant of zero derivative using `simp`. Finally, use `e.symm` / surjectivity to obtain `f '' S = u '' {x | fderiv ℝ u x = 0}`.
+* The measure is always Lebesgue measure on the target ℝ. No need for a measure structure on the domain, inner product, isometry, compact support, boundedness, or measurability of the image of critical sets/critical values. The conclusion is indeed that the set of critical values has zero measure.
 
-## 对上一轮的勘误
+## Correction for the previous round
 
-[正则超水平集决定](2026-09-14-regular-superlevel-smooth-domain.md) 保留原文；其末段低维路线
-由本决定取代。连续线性等价足够，不需要 `LinearIsometryEquiv.measurePreserving`。
-原来的 `fderiv ℝ u x : V →L[ℝ] ℝ` 不是自映射，不能直接谈其行列式；本轮只在 ℝ → ℝ
-的零导数上使用同维 Jacobian 定理，完全不需要“行列式零当且仅当导数零”辅助引理。
+[Regular superlevel set decision](2026-09-14-regular-superlevel-smooth-domain.md) retains original text; its final low-dimensional path
+is replaced by this decision. Continuous linear equivalence is sufficient, without needing `LinearIsometryEquiv.measurePreserving`.
+The original `fderiv ℝ u x : V →L[ℝ] ℝ` is not a self-map, so its determinant cannot be directly discussed; in this round, the zero derivative on ℝ → ℝ uses the same-dimensional Jacobian theorem, completely without needing the auxiliary lemma "determinant zero if and only if derivative zero".
 
-原 `build/audit/AreaFormulaAudit.lean` 已补上
-`import FunctionalInequalities.Analysis.Divergence`；测试内容完整保留，没有关闭检查。
-`WIP/CheegerInfimum.lean` 仅把 `ae_exists_superlevel` 的 docstring `u - t` 改为 `t - u`，
-匹配构造实际采用的负子水平集约定；声明及证明未改。
-HANDOFF、LEAN_DESIGN、两个当前 README、verification 和 tasks 的当前状态已更新。
-旧的日期轮次不作为现状；历史决定未改写。
+Original `build/audit/AreaFormulaAudit.lean` has been filled in;
+`import FunctionalInequalities.Analysis.Divergence`; test content fully preserved, without disabling checks.
+`WIP/CheegerInfimum.lean` only changed the docstring `ae_exists_superlevel` `u - t` to `t - u`,
+aligning with the actual negative sublevel set convention used in construction; declarations and proofs unchanged.
+HANDOFF, LEAN_DESIGN, two current READMEs, verification, and tasks current statuses have been updated.
+Old date cycles are not considered current; historical decisions unchanged.
 
-## 独立验证及边界
+## Independent Verification and Boundaries
 
-* 新模块与 `Analysis/AreaFormula`、`Analysis/Divergence`、`KLS/Geometry/SmoothDomain`
-  均重新运行 `lake env lean -DwarningAsError=true`，无诊断。
-* `build/audit/SardLowDimAudit.lean` 严格通过：7 个客户端和目标定理共 8 条报告，全部标准三公理。
-  覆盖一般一维实赋范空间、`Fin 0 → ℝ` 上的任意函数、ℝ 上 C¹ 函数、常函数、平方函数，
-  以及独立证明平方函数在零点临界且不是常函数。一般空间客户端没有内积或测度实例。
-* 修复的 AreaFormulaAudit 严格通过，6 条报告全部标准三公理。
-  另外重跑 SuperlevelDomainAudit、SuperlevelSardScope、SardBaseRouteReview、BoundaryChartAudit、
-  CheegerInfimumAudit、CutoffRouteReview、DilationAudit、DistanceCutoffAudit、GaussGreenAudit、
-  MinkowskiCoareaAudit、MinkowskiConstantAudit、MollifiedBoundaryScope、PerimeterInterfaceAudit、
-  RecoveryAudit、SubgraphDivergenceAudit；合计 16 个既有客户端全都严格通过。
-* SuperlevelSardScope 分别报告 `Analysis.sard`、`Analysis.ae_forall_fderiv_ne_zero`、
-  `SmoothDomain.ae_exists_superlevel` 的公理；**三者都仍含 `sorryAx`**。
-  `frontier_superlevel_subset` 仍只有标准三公理。
-* 三个 WIP 文件逐个实际普通模式编译，只有 **3 / 3 / 5** 个直接洞警告，无其他诊断。
-  低维新增结果没有消去原来的 **11** 个洞。
-* 默认 `lake build` 已通过（3393 jobs）。根目录 `python3 research/verify.py` 的最终结果以
-  `build/verification/latest.json` 为准；验证后另行比对所有最终文件和新增模块的重放范围。
-  审计客户端位于忽略的 build 目录，不冒充正式证书；其源文件和日志的哈希留在
-  `research/explorations/2026-09-14-sard-low-dimensional-audit.json`。
-* 正式证书仍为 **24**；周长 infrastructure 仍为 **missing**。
-  一般 Sard、加权 coarea、水平集积分可测性、反方向 `h_S ≤ h_M`、Cheeger 常数相等
-  与整条比较链均未证明。本地验证不代表远程 CI。
+* New module and `Analysis/AreaFormula`, `Analysis/Divergence`, `KLS/Geometry/SmoothDomain` all re-run `lake env lean -DwarningAsError=true` with no diagnostics.
+* `build/audit/SardLowDimAudit.lean` strictly passes: 7 clients and target theorem collectively report 8 statements, all standard three axioms.
+  Covers general one-dimensional real normed spaces, arbitrary functions on `Fin 0 → ℝ`, C¹ functions on ℝ, constant functions, square functions,
+  and independently proves the square function is critical at zero and not constant. General space clients have no inner product or measure instances.
+* The repaired AreaFormulaAudit strictly passes, all 6 reports follow standard three axioms.
+  Additionally, rerun SuperlevelDomainAudit, SuperlevelSardScope, SardBaseRouteReview, BoundaryChartAudit,
+  CheegerInfimumAudit, CutoffRouteReview, DilationAudit, DistanceCutoffAudit, GaussGreenAudit,
+  MinkowskiCoareaAudit, MinkowskiConstantAudit, MollifiedBoundaryScope, PerimeterInterfaceAudit,
+RecoveryAudit, SubgraphDivergenceAudit; all 16 existing clients strictly pass.
+* SuperlevelSardScope reports axioms for `Analysis.sard`, `Analysis.ae_forall_fderiv_ne_zero`, and `SmoothDomain.ae_exists_superlevel`; **all three still contain `sorryAx`**.
+  `frontier_superlevel_subset` still only has standard three axioms.
+* Each of the three WIP files is compiled in ordinary mode; only **3 / 3 / 5** direct proof hole warnings, no other diagnostics.
+  New low-dimensional results do not eliminate the original **11** holes.
+* Default `lake build` passes (3393 jobs). The final result of root directory `python3 research/verify.py` is taken as `build/verification/latest.json`; post-verification, all final files and newly added modules' replay scopes are cross-compared.
+  Audit clients are located in ignored build directories and do not claim formal certification; their source files and log hashes remain in `research/explorations/2026-09-14-sard-low-dimensional-audit.json`.
+* Formal certification remains **24**; the perimeter infrastructure remains **missing**.
+  General Sard, weighted coarea, level set measurability, reverse `h_S ≤ h_M`, Cheeger constant equality, and full comparison chain have not been proven. Local verification does not imply remote CI.
 
-## 与一般 Sard 之间仍有什么缺口
+## What gaps remain between general Sard and this?
 
-现有工具已经提供链式法则、连续／高阶导数、逆／隐函数、二可数空间的可数邻域子覆盖。
-Mathlib `Analysis/Calculus/TaylorIntegral.lean` **已有多维**
-`map_add_eq_sum_add_integral_iteratedFDeriv`，不能把多维 Taylor 本身列为完全缺失。
-`ContDiff.continuous_iteratedFDeriv` 给高阶导数连续性；
-`Topology/Bases.lean` 的 `countable_cover_nhdsWithin` 给可数覆盖工具。
-本仓库 `Analysis/ImplicitGraph.lean` 的现有几何接口面向 C∞ 正则水平集，
-不能不加论证地当作仅 C^n 临界分层所需的全部有限阶接口。
+Existing tools already provide the chain rule, continuous/higher-order derivatives, inverse/implicit function theorems, and countable neighborhood covers for second-countable spaces.
+Mathlib `Analysis/Calculus/TaylorIntegral.lean` **has multi-dimensional**
+`map_add_eq_sum_add_integral_iteratedFDeriv`, it is not appropriate to list the multi-dimensional Taylor expansion as completely missing.
+`ContDiff.continuous_iteratedFDeriv` provides continuity of higher-order derivatives;
+`Topology/Bases.lean`'s `countable_cover_nhdsWithin` provides countable cover tools.
+This repository `Analysis/ImplicitGraph.lean`'s current geometric interface is oriented toward C∞ regular level sets,
+and it cannot be taken for granted that all finite-order interfaces required for C^n critical stratifications are fully provided without justification.
 
-仍需构造并控制 `C_j = {x | D^k u(x)=0, 1≤k≤j}` 的层次：
+Still need to construct and control the layers of `C_j = {x | D^k u(x)=0, 1≤k≤j}`:
 
-1. 对非平坦部分 `C_j \ C_{j+1}`，由某个 j 阶导数分量的一阶导数非零构造局部超曲面，
-   将临界值问题降到低一维，随后作可数拼接。**必须追踪正则性损失**：
-   从 C^n 函数的 j 阶导数得到的图表通常仅 C^(n-j)，当 j>1 时不够直接对
-   `u ∘ chart` 套用要求 C^(n-1) 的归纳假设。高阶平坦性下的粗糙复合／延拓论证
-   （或能避开该损失的替代论证）仍需建立；有隐函数定理不等于已完成下降。
-2. 对最终平坦部分 C_n，从 Taylor 工具导出在紧集上**一致**的 o(r^n) 振幅控制，
-   再和 O(r^(-n)) 个小块的有限覆盖计数结合，用目标区间的长度控制外测度，
-   最后可数穷尽。现有可数覆盖 API 本身不提供这个定量零测论证。
+1. For the non-flat part `C_j \ C_{j+1}`, construct a local hypersurface from the first derivative of a component of some j-th order derivative, which is non-zero,
+   Reduce the critical value problem to one lower dimension, then perform countable gluing. **Must track regularity loss**:
+   The charts obtained from the j-th order derivatives of functions on C^n are typically only C^(n-j), which is insufficient for direct use when j > 1.
+   apply the induction hypothesis, which requires C^(n-1), to `u ∘ chart`. The rough composition/extension argument under higher-order flatness
+   (Or an alternative argument avoiding this loss) still needs to be established; having the implicit function theorem does not equal completing the descent.
+2. For the final flat part C_n, derive **uniform** o(r^n) oscillation control on compact sets from Taylor tools,
+   Together with the finite covering count of O(r^(-n)) small pieces, use the length of the target interval to control the outer measure,
+   Finally countable exhaustion. The existing countable cover API itself does not provide this quantitative zero-measure argument.
 
-因此不能由低维结果和“有归纳路线”推断一般 Sard 的证明基础已经闭合。
+Therefore, the general Sard proof foundation cannot be concluded from low-dimensional results and "inductive routes".
 
-### 最小下一引理：平坦点的一致二阶余项（尚未证明）
+### Minimum Next Lemma: Uniform Second-Order Remainder for Flat Points (Unproven)
 
-建议先做独立的 `Analysis.exists_uniform_quadratic_remainder`（命名待实际 API 搜索）。
-假设一般有限维实赋范空间 V、`u : V → ℝ` 为 C²、`K : Set V` 紧。
-精确结论为：
+Suggest first doing an independent `Analysis.exists_uniform_quadratic_remainder` (to be named upon actual API search).
+Assume a general finite-dimensional real normed space V, `u : V → ℝ` is C², `K : Set V` is compact.
+The precise conclusion is:
 
 ```lean
 ∀ ε : ℝ, 0 < ε → ∃ δ : ℝ, 0 < δ ∧
@@ -113,11 +103,9 @@ Mathlib `Analysis/Calculus/TaylorIntegral.lean` **已有多维**
     ∀ y : V, ‖y - x‖ < δ → |u y - u x| ≤ ε * ‖y - x‖ ^ 2
 ```
 
-没有要求 K 所有点平坦；量词对 K 中满足两个零导数条件的 x 统一使用同一个 δ。
-y 不必属于 K。空 K、零维及 y=x 都包括在内；没有定义域测度或内积假设。
-`build/audit/SardNextStatement.lean` **仅严格检查此命题的类型**和已有 Taylor API，
-没有声明已证明的定理，不使用 `sorry` 或公理占位。
+No requirement for K to be pointwise flat; the quantifier uniformly uses the same δ for x in K satisfying the two zero derivative conditions.
+y need not belong to K. Empty K, zero-dimensional, and y = x are all included; no domain measure or inner product assumptions are made.
+`build/audit/SardNextStatement.lean` **Only strictly verify the type of this proposition** and the existing Taylor API,
+no declared theorems are asserted, and `sorry` or axiom placeholders are not used.
 
-可从 C² 的积分型 Taylor（取一阶多项式、二阶余项）、二阶导数在 K 邻域的一致控制
-和线段积分估计证明，不需要任何 WIP 结果。它是二维平坦层覆盖论证所需的独立估计，
-**本身尚不给临界值零测**，也不解决非平坦层下降或一般维数。
+It can be proven using the integral-type Taylor expansion (first-order polynomial, second-order remainder), uniform control of second derivatives in a K-neighborhood, and estimates for line integrals, without relying on any WIP results. It is an independent estimate required for the two-dimensional flat layer covering argument, **it does not yet prove that critical values form a null set**, and it does not address descent in non-flat layers or in general dimensions.

@@ -1,97 +1,97 @@
-# Analysis/ 重组：家族词从文件名移进目录
+# Regrouping Analysis/: moving family names from filenames into directories
 
-2026-09-17（同日，在文件管理那一轮之后）。本轮**不证明任何定理，也不改任何声明**：
-把 `formalization/FunctionalInequalities/Analysis/` 的 50 个平铺模块中的 **32 个**
-按数学家族移进子目录，basename 去掉家族词。
-规则来自上一轮补进 `research/naming.md` 的「家族词归目录，不进文件名」。
+2026-09-17 (same day, after the file-management round). This round **proves no theorem and changes no declaration**:
+**32 of the 50** flat modules under `formalization/FunctionalInequalities/Analysis/` move into mathematical-family
+subdirectories, dropping the family word from each basename. The rule comes from the preceding addition to
+`research/naming.md`: “Family names belong in directories, not filenames”.
 
-**这是纯文件层改动。** 没有任何声明被改名、新增、删除或重证；没有任何 namespace 变动。
-不迁洞，不提交、不推送。直接洞仍 **8（1/2/5）**，证书仍 **24**。
+**This is purely a file-layout change.** No declaration is renamed, added, deleted, or reproved; no namespace changes.
+No hole migration, commit, or push. Direct holes remain **8 (1/2/5)**; certificates remain **24**.
 
-起点 `HEAD = origin/main = e7c4403352011b6c3ed6dc02f0af3eef6cbb300e`；
-上一轮收尾 passed 回执 `build/verification/20260917T101245.968268Z/report.json`，
-10 个门、224 个本地模块内核重放、611 条目，快照
-`52d3c1c3f3c115e85b1413681603573777cfe83a587446a703261579eb85095a`，drift 为空。
-本轮期间并发会话未改动工作区，也未提交。
+Starting point: `HEAD = origin/main = e7c4403352011b6c3ed6dc02f0af3eef6cbb300e`;
+preceding final passed receipt: `build/verification/20260917T101245.968268Z/report.json`,
+10 gates, 224 local modules replayed by the kernel, 611 entries, snapshot
+`52d3c1c3f3c115e85b1413681603573777cfe83a587446a703261579eb85095a`, with no drift.
+Concurrent sessions neither changed the worktree nor committed during this round.
 
-## 边界
+## Boundary
 
-对数凹 Cheeger–Buser 线归合作者**王浩丞**，本轮未触碰；
-尖锐有限正则 Sard、Energy 的五个洞、无量纲 KLS 也都未触碰。
-本轮**与任何数学内容无关**。
+The log-concave Cheeger–Buser line belongs to collaborator **Haocheng Wang** and is untouched,
+as are sharp finite-regularity Sard, the five Energy holes, and dimension-free KLS.
+This round **changes no mathematical content**.
 
-## 为什么声明名不受影响
+## Why declaration names are unaffected
 
-50 个模块里 **43 个**用扁平的 `namespace FunctionalInequalities.Analysis`；
-另外三个嵌套 namespace（`Analysis.WhitneyCover`、`Analysis.WhitneyJet`、`Analysis.LipschitzJet`）
-**一个字都没动**。namespace 与目录无关，所以声明全名不随目录变化。
-因此 ledger 节点、Blueprint 声明、statement snapshot 的 golden、
-以及全部公理报告都**不受重组影响**——这一点由公理报告数不变直接验证。
+**43 of the 50** modules use the flat `namespace FunctionalInequalities.Analysis`.
+The other three nested namespaces (`Analysis.WhitneyCover`, `Analysis.WhitneyJet`, `Analysis.LipschitzJet`)
+are **entirely unchanged**. Namespaces are independent of directories, so moving files does not change declaration names.
+Ledger nodes, Blueprint declarations, statement-snapshot goldens, and all axiom reports are therefore
+**unaffected by regrouping**, directly checked by unchanged axiom-report counts.
 
-特别注意 `WhitneyCover` 既是模块名又是 namespace 名：
-模块 `Analysis.WhitneyCover` 迁到 `Analysis.Whitney.Cover`，
-而 namespace `FunctionalInequalities.Analysis.WhitneyCover` 保持原样。
-重写脚本因此**只改 `import` 行**与文档里的 `Analysis/<File>.lean` 路径串，
-不做任何全局标识符替换；改前统计的 148 处 `FunctionalInequalities.Analysis.<被迁模块>`
-中，126 处在 import 行，其余 22 处全是该 namespace 及其声明，逐条核对后原样保留。
+In particular, `WhitneyCover` is both a module name and a namespace name:
+module `Analysis.WhitneyCover` moves to `Analysis.Whitney.Cover`,
+while namespace `FunctionalInequalities.Analysis.WhitneyCover` remains unchanged.
+The rewrite script therefore changes **only `import` lines** and `Analysis/<File>.lean` path strings in documentation,
+with no global identifier replacement. Of the 148 pre-edit occurrences of `FunctionalInequalities.Analysis.<moved module>`,
+126 were import lines; the remaining 22 were the namespace and its declarations, individually checked and preserved.
 
-## 分组
+## Groups
 
-* **`Whitney/`**（5）Bump、Construction、Cover、Extension、Partition
-* **`Sard/`**（4）Basic、Planar、Smooth、Equidimensional
-* **`Vector/`**（11）CriticalSlice、FiberIntegral、HausdorffSlicing、LocalCoarea、
-  RegularChart、RegularCoarea、SliceMeasurable，外加再嵌一层的
+* **`Whitney/`** (5): Bump, Construction, Cover, Extension, Partition
+* **`Sard/`** (4): Basic, Planar, Smooth, Equidimensional
+* **`Vector/`** (11): CriticalSlice, FiberIntegral, HausdorffSlicing, LocalCoarea,
+  RegularChart, RegularCoarea, SliceMeasurable, plus the nested
   `Vector/Graph/{Basic,Area,Integral,Sandwich}`
-* **`RankDeficient/`**（8）Stratification、RightInverseBound、TangentialLipschitz、
-  RegularFibreFinite、TargetSplitFubini、StratumSlicing、Coarea、ExponentObstruction
-* **`Graph/`**（4）Integral、Jacobian、Implicit、OpenIntegral
+* **`RankDeficient/`** (8): Stratification, RightInverseBound, TangentialLipschitz,
+  RegularFibreFinite, TargetSplitFubini, StratumSlicing, Coarea, ExponentObstruction
+* **`Graph/`** (4): Integral, Jacobian, Implicit, OpenIntegral
 
-**`Sard/Equidimensional` 是按数学对象分的，不是按出身。** 它是路线义务 `R10`，
-但它讲的是同维 Sard 引理，而 `naming.md` 要求「文件按主要数学对象归属」。
-这一取舍如实记在这里。
+**`Sard/Equidimensional` is classified by mathematical object, not provenance.** It is route obligation `R10`,
+but its subject is the equidimensional Sard lemma, and `naming.md` assigns files by their main mathematical object.
+That choice is explicitly recorded here.
 
-**18 个留在平铺**：AreaFormula、CoareaGraphJacobian、CoareaJacobian、Divergence、
-FiberIntegral、FirstOrderJet、HausdorffContent、HausdorffSlicing、LevelSet、
-LipschitzC1Pieces、LipschitzJet、LocalInverse、NormDetContinuity、PartitionOfUnity、
-QuadraticCover、RegularChart、SubgraphDivergence、TaylorRemainder。
-其中 `CoareaGraphJacobian` **故意不进 `Graph/`**：叫 `Graph/CoareaJacobian` 会造出
-第二个 basename 为 `CoareaJacobian` 的模块，读起来比它消掉的重复更糟。
-`Divergence`/`SubgraphDivergence`、`HausdorffContent`/`HausdorffSlicing`、
-`LipschitzC1Pieces`/`LipschitzJet` 都只有两个模块，不到规则的三个门槛。
+**18 remain flat**: AreaFormula, CoareaGraphJacobian, CoareaJacobian, Divergence,
+FiberIntegral, FirstOrderJet, HausdorffContent, HausdorffSlicing, LevelSet,
+LipschitzC1Pieces, LipschitzJet, LocalInverse, NormDetContinuity, PartitionOfUnity,
+QuadraticCover, RegularChart, SubgraphDivergence, TaylorRemainder.
+`CoareaGraphJacobian` **deliberately stays outside `Graph/`**: `Graph/CoareaJacobian` would create a second module
+with basename `CoareaJacobian`, making reading harder than the duplication it removes.
+`Divergence`/`SubgraphDivergence`, `HausdorffContent`/`HausdorffSlicing`, and
+`LipschitzC1Pieces`/`LipschitzJet` each have only two modules, below the rule's threshold of three.
 
-## 路径映射表
+## Path mapping
 
-`research/api-migration/2026-09-17-analysis-module-map.json`，32 条模块映射 + 32 条文件路径映射。
-它存在的理由：**约 434 处历史 decision 与 exploration 按旧路径引用这些文件，本项目不改写历史记录**，
-映射表让那些引用保持可解析。做法照搬 2026-09-08 那两次
-（`2026-09-08-module-map.json`、`2026-09-08-library-naming-module-map.json`）。
+`research/api-migration/2026-09-17-analysis-module-map.json`: 32 module mappings and 32 file-path mappings.
+The reason for this map is that **about 434 references in historical decisions and explorations use old paths;
+the project does not rewrite historical records**. The map keeps those references resolvable, following the two
+2026-09-08 migrations (`2026-09-08-module-map.json`, `2026-09-08-library-naming-module-map.json`).
 
-## 改了哪些文件
+## Changed files
 
-* 移动 **32** 个模块。
-* 重写 **70** 条 `import` 行与 **44** 处文档路径串，共 **61** 个 `.lean` 文件
-  （`formalization/`、`research/audits/`，以及 `build/audit/` 里**每轮重跑的那 7 个活客户端**）。
-* `build/audit/` 里 38 个 `.before.lean` 与历史路线评审**保持冻结**，旧 import 原样保留：
-  它们是历史快照，不参与重跑。
-* `research/tasks.json`：29 条 evidence 路径改写，59 条哈希刷新。
+* Move **32** modules.
+* Rewrite **70** `import` lines and **44** documentation path strings across **61** `.lean` files
+  (`formalization/`, `research/audits/`, and the **7 active clients rerun every round** under `build/audit/`).
+* The 38 `.before.lean` files and historical route reviews under `build/audit/` **remain frozen**, including old imports:
+  they are historical snapshots and are not rerun.
+* `research/tasks.json`: rewrite 29 evidence paths and refresh 59 hashes.
 
-## 一处必须如实说明：路线语句文件不再字节不变
+## Required disclosure: the route statement file is no longer byte-identical
 
-`research/audits/RankDeficientRouteStatements.lean` 此前各轮都记为**字节不变**。
-本轮它**变了 5 行**：1 行 `import`（`Analysis.VectorCriticalSlice` → `Analysis.Vector.CriticalSlice`）
-与 4 处文档里的路径串。这是模块搬家对**任何**引用者的不可避免影响。
+Earlier rounds recorded `research/audits/RankDeficientRouteStatements.lean` as **byte-identical**.
+This round changes **5 lines**: one `import` (`Analysis.VectorCriticalSlice` → `Analysis.Vector.CriticalSlice`)
+and four documentation path strings. Moving modules inevitably affects **every** consumer.
 
-**15 条 `#check` 命题逐字未变**，已用脚本逐块与 `HEAD` 对比确认全部 byte-identical。
-文件顶部那条过时的状态说明也未改动，仍归其维护者。
-此前各轮记录里「字节不变」的说法对**那些轮**依然成立，本轮在此更正其现状。
+**All 15 `#check` propositions remain verbatim unchanged**, mechanically compared block by block with `HEAD`
+and confirmed byte-identical. The outdated status note at the top of the file is also unchanged and remains its maintainer's responsibility.
+Earlier byte-identity claims remain valid **for those rounds**; this record updates the current situation.
 
-## 验证
+## Validation
 
-* 默认 `lake build` 通过（3426 jobs）。
-* 重跑 **52 个**审计客户端，全部 `-DwarningAsError=true` 严格通过，**0 失败**。
-* 全库公理报告 **672 条**、`sorryAx` **12 条**，与重组前**逐数字一致**——
-  这是「没动数学」最直接的证据。
-* 三个 WIP 逐个实际编译，直接洞 **1/2/5，总数 8**；`check_ledger.py` 报 **24** 个证书。
-* 根目录 `python3 research/verify.py` 通过；本地日志在 `build/audit/analysis-regrouping/`，
-  最终核对另存 `build/audit/analysis-regrouping/final-snapshot.json`。
-* **没有提交、没有推送**，真实 Git index 未改动。
+* Default `lake build` passes (3426 jobs).
+* All **52** audit clients were rerun and passed strict `-DwarningAsError=true` checks, with **0 failures**.
+* Library-wide axiom reports: **672**, with **12** occurrences of `sorryAx`, **exactly matching** pre-regrouping counts.
+  This is the most direct evidence that the mathematics was unchanged.
+* The three WIP files compile separately: **1/2/5 direct holes, total 8**; `check_ledger.py` reports **24** certificates.
+* Root-level `python3 research/verify.py` passes; local logs: `build/audit/analysis-regrouping/`;
+  final snapshot check: `build/audit/analysis-regrouping/final-snapshot.json`.
+* **No commit or push**; the real Git index is unchanged.

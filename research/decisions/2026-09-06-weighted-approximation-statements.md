@@ -1,120 +1,107 @@
-# 加权光滑逼近：statement 与 Claude 证明交接
+# Weighted Smooth Approximation: Statement and Claude Proof Handoff
 
-日期：2026-09-06。用户要求“推进第一个数学任务，只写 statement，留 sorry，我让 Claude
-去解决 sorry”。本批只准备 `lem:covariance-test-core-density` 的四条候选陈述；没有编写
-证明或向其他 Agent 发送任务。节点为 **`drafted / checked_by: null`**，四个证明体均为
-`by sorry`。这不是证明验收，也不要求先冻结接口。
+Date: 2026-09-06. User request: "Advance the first mathematical task, write only statement, leave sorry, I'll have Claude handle sorry". This batch contains only `lem:covariance-test-core-density`'s four candidate statements; no proofs are written or tasks sent to other Agents. Node is **`drafted / checked_by: null`**, all four proof bodies are `by sorry`. This is not proof verification, nor does it require prior interface freezing.
 
-## 阅读入口与来源
+## Reading Entry and Source
 
-1. 先读仓库 [HANDOFF](../../HANDOFF.md)，尤其是权威层级、接口演进与追加式记录规则。
-2. 数学来源是本地 [Blueprint Appendix A](../../formalization/blueprint/src/chapters/60-analytic-comparison-proofs.tex)
-   的 `lem:covariance-test-core-density` 及其紧随的证明。它是已有的本地分析论证，
-   `tasks.json` 仍将数学状态标为 `local_argument`，没有将其冒充某篇已核对论文的定理。
-3. 主合同和四个证明洞位于
-   [LipschitzApproximation.lean](../../formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation.lean)。
-4. 默认构建入口
+1. First read the repository [HANDOFF](../../HANDOFF.md), especially the authority hierarchy, interface evolution, and append-only record rules.
+2. The mathematical origin is local [Blueprint Appendix A](../../formalization/blueprint/src/chapters/60-analytic-comparison-proofs.tex)
+   of `lem:covariance-test-core-density` and its immediately following proof. It is an existing local analytical argument,
+   `tasks.json` will still mark the mathematical state as `local_argument`, without attributing it to a paper that has not been checked.
+3. The main contract and four proof holes are located at
+   [LipschitzApproximation.lean](../../formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation.lean).
+4. Default build entry
    [LemCovarianceTestCoreDensity.lean](../../solutions/LemCovarianceTestCoreDensity.lean)
-   只导入该模块并 `#check` 四条完整签名，没有 `certificate` 包装。
+   only imports this module and `#check` four complete signatures, without `certificate` wrapping.
 
-声明均位于 `FunctionalInequalities.Energy.Euclidean.LipschitzApproximation` 命名空间。
-先读主结果 `exists_smooth_weighted_L2_approximation`，证明时按以下顺序推进。
+Statements are located in the `FunctionalInequalities.Energy.Euclidean.LipschitzApproximation` namespace.
+First read the main result `exists_smooth_weighted_L2_approximation`, and proceed with the proof in the following order.
 
-## 四个证明义务
+## Four proof obligations
 
-| 顺序 | 声明 | 输入与输出 | 建议路线 |
+| Order | Statement | Input and output | Suggested route |
 | --- | --- | --- | --- |
-| 1 | `exists_compactSupport_weighted_L2_approximation` | 局部 Lipschitz 的 g，g 与 B∇g 属于 L²(ν)；得到紧支撑、全局 Lipschitz 的序列，函数与加权梯度均在 L² 中收敛 | 光滑截断 χ_R g；估计截断梯度误差与 L² 尾项 |
-| 2 | `exists_smooth_compactSupport_L2_approximation` | 紧支撑且 Lipschitz 常数为 K 的 g；得到 C∞ 紧支撑序列，保持 K，函数与完整梯度均在 L² 中收敛 | 非负归一化紧支撑卷积核、梯度的几乎处处收敛、有界控制收敛 |
-| 3 | `exists_smooth_weighted_L2_approximation` | 与步骤 1 相同的输入；得到 C∞ 紧支撑序列，同时逼近 g 与 B∇g | 用 B 的连续性把步骤 2 转为加权估计，再与步骤 1 作对角选取 |
-| 4 | `exists_smooth_bounded_L1_approximation` | 全局 K-Lipschitz 且 a ≤ g ≤ b；得到同一区间、同一 K 的 C∞ 序列，函数与梯度均在 L¹ 中收敛 | 不截断，直接作非负归一化卷积；不要求紧支撑 |
+| 1 | `exists_compactSupport_weighted_L2_approximation` | Locally Lipschitz g, with g and B∇g in L²(ν); obtain a compactly supported, globally Lipschitz sequence with function and weighted gradient converging in L² | Smooth cutoff χ_R g; estimate the cutoff gradient error and L² tail term |
+| 2 | `exists_smooth_compactSupport_L2_approximation` | Compactly supported g with Lipschitz constant K; obtain a compactly supported C∞ sequence preserving K, with function and full gradient converging in L² | Nonnegative normalized compactly supported convolution kernel, a.e. gradient convergence, bounded dominated convergence |
+| 3 | `exists_smooth_weighted_L2_approximation` | Same input as step 1; obtain a compactly supported C∞ sequence approximating g and B∇g simultaneously | Use continuity of B to turn step 2 into a weighted estimate, then combine with step 1 by diagonal selection |
+| 4 | `exists_smooth_bounded_L1_approximation` | Globally K-Lipschitz with a ≤ g ≤ b; obtain a C∞ sequence in the same interval with the same K, with function and gradient converging in L¹ | No cutoff; directly use nonnegative normalized convolution; no compact-support requirement |
 
-步骤 2、4 同时将原函数及原梯度的 `MemLp` 作为结论；它们应从全局 Lipschitz 性、
-有界性与概率测度推出。所有步骤都明确要求逼近项的相应 `MemLp`。
-收敛用差值的 `eLpNorm` 趋于零表达，不通过可能被全定义化为零的实积分表示。
+Steps 2 and 4 also conclude `MemLp` for the original function and gradient, deriving these from global Lipschitzness,
+boundedness, and the probability measure. Every step explicitly requires the corresponding `MemLp` for approximation terms.
+Convergence is expressed by the `eLpNorm` of the difference tending to zero, rather than by a real integral that may be totalized to zero.
 
-## 数学范围与用法
+## Mathematical scope and usage
 
-空间 E 是任意有限维完备实内积空间，带 Borel 可测结构及第二可数拓扑；ν 是概率律，
-m 是满足 `Measure.IsAddHaarMeasure m` 的参考测度，并假设 ν ≪ m。这里采用任意正归一化
-的 Lebesgue/Haar 参考测度，避免把声明局限于坐标实现。卷积核需相对于实际 m 归一化。
-零维也在量化范围内，不增加正维前提。
+E is any finite-dimensional complete real inner product space with a Borel measurable structure and second-countable topology; ν is a probability law.
+The reference measure m satisfies `Measure.IsAddHaarMeasure m`, and ν ≪ m is assumed. Any positive normalization of Lebesgue/Haar measure is allowed,
+so the statement is not restricted to coordinate implementations. The convolution kernel must be normalized relative to the actual m.
+Dimension zero is included, without adding a positive-dimension assumption.
 
-主 L² 陈述只要求 B∇g 平方可积。B 是任意连续线性自映射，允许零算子和有核算子；
-有限维中这覆盖数学来源中的任意线性映射。不能为了套用已有光滑测试接口而给原函数
-增加完整梯度的 L² 假设，也不能要求 B 可逆或正定。ν 不要求对数凹、二阶矩有限、
-密度有正下界，证明不依赖平移前后的密度比较。
+The main L² statement requires only square integrability of B∇g. B is an arbitrary continuous linear endomorphism, including zero and operators with nontrivial kernel;
+in finite dimensions this covers the linear maps in the mathematical source. Do not add an L² assumption on the full gradient merely to apply an existing smooth-test interface,
+and do not require B to be invertible or positive definite. No log-concavity, finite second moments, or positive lower density bound is required for ν;
+the proof does not rely on comparing densities before and after translation.
 
-例如，B 取恒等映射得到通常的函数及梯度 L² 逼近；B 取正交投影保留退化权重情形。
-步骤 4 取 a=0、b=1 得到 Blueprint 的保值域版本。任意有界全局 Lipschitz 函数都可
-选择一个包含其值域的闭区间。保留同一个 K 和任意 [a,b] 是对卷积步骤的明确局部规格，
-不是给主结论附加更强的输入假设。
+Taking B to be the identity gives ordinary function-and-gradient L² approximation; orthogonal projections retain degenerate weights.
+Taking a=0 and b=1 in step 4 gives Blueprint's range-preserving version. Any bounded globally Lipschitz function has its range in some closed interval.
+Preserving the same K and allowing arbitrary [a,b] states the convolution step's local specification explicitly, without adding stronger input assumptions to the main conclusion.
 
-`gradient` 沿用 Mathlib 的标准 Hilbert 梯度，不可微处按其定义为零。局部 Lipschitz
-函数的几乎处处可微性，以及其与卷积/弱导数的对应，仍是需要证明的内容。
-`open scoped ContDiff` 下的 `ContDiff ℝ ∞` 表示普通 C∞；不要换成解析性的
-`ContDiff ℝ ⊤`。本批没有定义新的梯度、能量或测试类。
+`gradient` is Mathlib's standard Hilbert gradient, defined to be zero at nondifferentiable points. Almost-everywhere differentiability of locally Lipschitz functions
+and its connection with convolution/weak derivatives remain proof obligations.
+Under `open scoped ContDiff`, `ContDiff ℝ ∞` means ordinary C∞; do not replace it with analyticity,
+`ContDiff ℝ ⊤`. This batch introduces no new gradient, energy, or test class.
 
-## Mathlib 起点与尚缺的拼接
+## Mathlib starting points and missing connections
 
-当前工具链为 Lean/Mathlib v4.33.0，Mathlib commit 为
-`db584cd6d46c92f209a44c0f1c829460d327499d`。以下名字已在本地源码中核对，供定位使用；
-它们不是四条目标已经有现成证明的声明：
+Current toolchain is Lean/Mathlib v4.33.0, Mathlib commit is
+`db584cd6d46c92f209a44c0f1c829460d327499d`. The following names have been verified in local source code for reference and localization:
+They are not among the four target statements that already have existing proofs.
 
-- `Mathlib/Analysis/Calculus/Rademacher.lean`：`LipschitzWith.ae_differentiableAt`，
-  以及 `integral_inv_smul_sub_mul_tendsto_integral_lineDeriv_mul` 系列。
-- `Mathlib/Analysis/Calculus/BumpFunction/Convolution.lean`：
-  `ContDiffBump.convolution_tendsto_right_of_continuous` 与
-  `ContDiffBump.ae_convolution_tendsto_right_of_locallyIntegrable`。
-- `Mathlib/Analysis/Calculus/ContDiff/Convolution.lean`：
-  `HasCompactSupport.hasFDerivAt_convolution_right` 的可微性结论有其自身正则性假设；
-  单独调用它不能替代把导数转移到仅 Lipschitz 的函数上的分析论证。
-- `Mathlib/Analysis/Calculus/BumpFunction/` 提供光滑截断与归一化核的基础设施；
-  `SmoothApprox.lean` 中的函数值逼近本身不提供所需的梯度逼近。
+- `Mathlib/Analysis/Calculus/Rademacher.lean`: `LipschitzWith.ae_differentiableAt`,
+  together with the `integral_inv_smul_sub_mul_tendsto_integral_lineDeriv_mul` series.
+- `Mathlib/Analysis/Calculus/BumpFunction/Convolution.lean`:
+  `ContDiffBump.convolution_tendsto_right_of_continuous` and
+  `ContDiffBump.ae_convolution_tendsto_right_of_locallyIntegrable`.
+- `Mathlib/Analysis/Calculus/ContDiff/Convolution.lean`:
+  The differentiability conclusion of `HasCompactSupport.hasFDerivAt_convolution_right` rests on its own regularity assumptions;
+  invoking it alone cannot substitute for an analysis argument that transfers derivatives to functions with only Lipschitz continuity.
+- `Mathlib/Analysis/Calculus/BumpFunction/` provides the infrastructure for smooth truncation and normalization kernels;
+  the function value approximation in `SmoothApprox.lean` does not inherently provide the required gradient approximation.
 
-关键工作包括：截断函数的全局 Lipschitz 控制、可测性与 a.e. 梯度恒等式、
-Lipschitz 平滑化的梯度收敛、通过 ν ≪ m 转移零测集，以及带权 L²/L¹ 的控制收敛。
-这不是对整个 Mathlib 的“缺失定理”穷举；可继续寻找更直接的现有 API。
-`tasks.json` 的基础设施仍为 `missing`，仅追加了本次交接位置的说明。
+Key work includes: global Lipschitz control of truncation functions, measurability and a.e, gradient identity, gradient convergence under Lipschitz smoothing, transfer of zero-measure sets via ν ≪ m, and dominated convergence in weighted L²/L¹ norms.
+This is not an exhaustive enumeration of missing theorems in the entire Mathlib; further exploration of more direct existing APIs is warranted.
+The infrastructure for `tasks.json` remains `missing`, with only additional annotations added for the current handover position.
 
-## 给 Claude 的任务边界
+## Task Boundary for Claude
 
-完成上述四个定理体，可添加有明确用途的证明辅助引理。不要把“存在所需逼近序列”
-改为一个输入假设，不要削弱主陈述以换取编译成功。若实际发现陈述需要改动，应记录
-数学原因、变化后的输入输出及原目标是否仍被覆盖，并同步 ledger；接口不要求永久冻结。
+Complete the four theorem bodies by adding proof-aiding lemmas with clear stated purposes. Do not reframe "existence of a required approximating sequence" as an input assumption. Do not weaken the main statements to ensure compilation success. If it is actually discovered that the statement must be modified, record the mathematical rationale, the updated input-output specification, and whether the original goal remains covered, and synchronize the ledger. Interfaces are not required to be permanently frozen.
 
-本批不处理下一个 `lem:covariance-core-closure`，也不证明局部斜率与梯度的对应、
-文献 Poincaré 常数比较、Dirichlet 性质或 KLS。本模块未加入已认证库的聚合导入，
-已有六个证书的声明与导入未变。Blueprint 标签、路线状态、数学分类与 golden 未改动。
+This batch does not process the next `lem:covariance-core-closure`, nor does it prove the correspondence between local slopes and gradients, comparison of Poincaré constants, Dirichlet properties, or KLS. This module does not include aggregated imports from certified libraries. Six certificate declarations and imports remain unchanged. Blueprint labels, route status, mathematical classification, and golden are unchanged.
 
-证明完成后，应编译相关模块及默认目标，检查新增声明与证书的传递公理、移除本批
-四个 `sorry`，再按实际覆盖范围建立节点证书和追加验收记录。草稿入口通过 ledger
-和默认 Lake target 导航；当前没有添加草稿的 Blueprint `\lean{}` 锚点。验证器会审计
-所有这些锚点，不能把草稿声明链接过去后忽略其 `sorryAx`，也不能为本任务放宽检查器。
+After proof completion, compile the relevant modules and default target, verify the transitive axioms of new declarations and certificates, remove the four `sorry`, then establish node certificates and append verification records according to the actual coverage scope. Draft entry access is navigated via ledger and the default Lake target; currently, no draft Blueprint `\lean{}` anchor point has been added. The validator will audit all such anchors and must not ignore its `sorryAx` after linking draft declarations, nor relax the checker for this task.
 
-## 本地检查记录
+## Local Check Record
 
-Git HEAD：`70ca1c19c4d207a31716c2e589c0b096521a5490`。以下检查针对已有未提交修改加上
-本批 statement/登记/指南修改的工作树，记录文件自身写入前的 source SHA256 为
-`56a786c6abb35d83567e06c801005c59afb011b6e0eb8e23f44ee170101dd965`。
-逐文件哈希保存在 `build/draft-statements/20260906-weighted-approximation/checked-source.json`。
+Git HEAD: `70ca1c19c4d207a31716c2e589c0b096521a5490`. The following check targets the working tree with existing uncommitted modifications, plus the batch statement/registration/guide modifications, recording the source SHA256 of the file prior to its write as
+`56a786c6abb35d83567e06c801005c59afb011b6e0eb8e23f44ee170101dd965`.
+Hashes are saved file by file in `build/draft-statements/20260906-weighted-approximation/checked-source.json`.
 
-| 检查 | 实际结果 |
+| Check | Actual Result |
 | --- | --- |
-| `lake build solutions.LemCovarianceTestCoreDensity`（在 formalization 下） | 最终通过，2889 jobs；四条完整签名保留有限维、Haar 与绝对连续等预期参数 |
-| `python3 research/check_ledger.py` | 通过，7 个 ledger 节点，其中 6 proved、1 drafted |
-| `python3 research/check_blueprint.py` | 通过，86 标签、4 条活动路线 |
-| `python3 research/atlas.py check` | 通过，73 个数学节点、6 个证书，无环 |
-| `python3 -m unittest discover -s research/tests -p 'test_*.py'` | 97 项通过 |
-| `lake build`（在 formalization 下） | 通过，3247 jobs；本批恰好四条 `declaration uses sorry` 警告 |
-| 对四条声明执行 `#print axioms` | 全部包含 `sorryAx`，明确为未证明 |
-| `python3 research/statement_snapshot.py check` | 通过，公开陈述及定义闭包与原 golden 一致 |
+| `lake build solutions.LemCovarianceTestCoreDensity` (under formalization) | Final pass, 2889 jobs; four complete signatures preserved with expected parameters: finite-dimensional, Haar, and absolutely continuous |
+| `python3 research/check_ledger.py` | Passed, 7 ledger nodes, of which 6 were proved, 1 were drafted |
+| `python3 research/check_blueprint.py` | Passed, 86 labels, 4 active routes |
+| `python3 research/atlas.py check` | Passed, 73 mathematical nodes, 6 certificates, acyclic |
+| `python3 -m unittest discover -s research/tests -p 'test_*.py'` | 97 items passed |
+| `lake build` (under formalization) | Passed, 3247 jobs; exactly four `declaration uses sorry` warnings in this batch |
+| Execution of `#print axioms` on four statements | All included `sorryAx`, explicitly marked as unproven |
+| `python3 research/statement_snapshot.py check` | Passed, public statements and definitions of closure consistent with the original golden version |
 
-日志位于 `build/draft-statements/20260906-weighted-approximation/`，为忽略的本地输出。
-最初的模块编译暴露了 Haar 类命名空间及 C∞ notation scope 问题；已修正，再运行上述
-目标及默认构建通过。编译通过在本批只表示陈述 elaboration 成功。
+Log located at `build/draft-statements/20260906-weighted-approximation/`, considered local output to be ignored.
+Initial module compilation revealed issues with the Haar namespace and C∞ notation scope; these have been resolved, and subsequent runs of the target and default builds passed.
+Passing in this batch only indicates successful elaboration of statements.
 
-本次没有运行完整 `verify.py`、全模块 leanchecker 重放、隔离重建或远端 CI。
-上一轮完整验证收据 `build/verification/20260906T115425.436083Z/report.json` 的源码快照
-先于本次修改，不能用于认证当前工作树。没有 commit/push，也没有更新先前暂存内容。
-历史 decisions/explorations 保持原样。
+The full `verify.py` was not executed, full module leanchecker replay, isolated rebuild, or remote CI was not run.
+The previous full verification receipt `build/verification/20260906T115425.436083Z/report.json`'s source snapshot
+pre-dates the current modifications and cannot be used to certify the current working tree. No commit/push was present, and no prior stash was updated.
+Historical decisions/explorations remains unchanged.

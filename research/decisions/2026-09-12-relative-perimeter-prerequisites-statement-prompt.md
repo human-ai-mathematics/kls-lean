@@ -1,142 +1,130 @@
-# 2026-09-12 — 等周直径不等式的可行性判断，与下一步（仅陈述）的提示词
+# 2026-09-12 — Feasibility judgment of isoperimetric diameter inequalities, and next step (only statement) prompt
 
-## 一、等周直径不等式在 Mathlib 里缺多少
+## 1. How much is missing from the isodiametric inequality in Mathlib?
 
-### Mathlib 已有
+### Mathlib already has
 
-- `MeasureTheory.hausdorffMeasure_pi_real`：在 `ι → ℝ` 上 `μH[card ι] = volume`。
-  **但那是 sup 范数**，Hausdorff 测度依赖度量，故不能直接搬到欧氏（内积）范数上。
-- `Mathlib/MeasureTheory/Measure/Hausdorff.lean` 中的实例：对任意有限维实赋范空间 `E`，
-  `μH[finrank ℝ E]` **是一个可加 Haar 测度**（`IsAddHaarMeasure`）。
-- Haar 唯一性（`Measure.isAddLeftInvariant_eq_smul`、`addHaarScalarFactor_pos_of_isAddHaarMeasure`），
-  `LipschitzWith.hausdorffMeasure_image_le`、等距不变性、`Measure.addHaar_smul`、球体积。
+- `MeasureTheory.hausdorffMeasure_pi_real`: on `ι → ℝ` with `μH[card ι] = volume`.
+  **But that is the sup norm**, Hausdorff measure depends on a metric, so it cannot be directly transferred to the Euclidean (inner product) norm.
+- Instance in `Mathlib/MeasureTheory/Measure/Hausdorff.lean`: for any finite-dimensional real normed space `E`,
+  `μH[finrank ℝ E]` **is an additive Haar measure** (`IsAddHaarMeasure`).
+- Haar uniqueness (`Measure.isAddLeftInvariant_eq_smul`, `addHaarScalarFactor_pos_of_isAddHaarMeasure`),
+  `LipschitzWith.hausdorffMeasure_image_le`, isometry invariance, `Measure.addHaar_smul`, volume of a ball.
 
-因此 **`μH[n] = c • volume`（存在唯一的 `c ∈ (0,∞)`）是免费的**，本仓库这次已经用过同一套路。
+Therefore **`μH[n] = c • volume` (existence of a unique `c ∈ (0,∞)`) is free**, and this repository has already used the same pattern before.
 
-### Mathlib 完全没有（全库搜索零命中）
+### Mathlib has absolutely nothing (zero hits in full library search)
 
-- 等周直径不等式（isodiametric）、Steiner 对称化；
-- 任意维数的 Brunn–Minkowski 与 Prékopa–Leindler（本仓库本轮只做了**一维**的，
-  见 `Probability/Line/BrunnMinkowski.lean`）。
+- Isodiametric diameter inequality (isodiametric), Steiner symmetrization;
+- Brunn–Minkowski and Prékopa–Leindler in arbitrary dimensions (this repository currently only implements the one-dimensional case, see `Probability/Line/BrunnMinkowski.lean`).
 
-### 判断
+### Judgment
 
-缺口**不是**「从零建一套理论」，而是精确的一件事：**把常数钉成 `c = 2ⁿ/ωₙ`**，
-即证明 `volume S ≤ ωₙ (diam S / 2)ⁿ`。两条经典路线：
+A gap is not "building a theory from scratch," but rather a precise thing: **fixing constants into `c = 2ⁿ/ωₙ`**,
+i.e., proving `volume S ≤ ωₙ (diam S / 2)ⁿ`. Two classic approaches:
 
-1. **Steiner 对称化**：n 次对称化，需要保测性、直径不增、可测性保持。经典但在 Lean 里很重。
-2. **经 Brunn–Minkowski**：`vol S ≤ vol(½(S − S)) ≤ vol(B(0, diam S / 2)) = ωₙ (diam S/2)ⁿ`，
-   中间一步正是 n 维 Brunn–Minkowski。而 n 维 Brunn–Minkowski 的标准证法是对维数归纳 + n 维
-   Prékopa–Leindler，**后者的一维基例本仓库本轮刚刚证完**（`Probability.Line.prekopaLeindler`，
-   无有界性前提）。所以路线 2 有现成的起点，且中间产物（n 维 PL / BM）本身是 Mathlib 级的独立贡献。
+1. **Steiner symmetrization**: n-fold symmetrization, requires measure preservation, diameter non-increase, and measurability preservation. Classical, but heavy in Lean.
+2. **Via Brunn–Minkowski**: `vol S ≤ vol(½(S − S)) ≤ vol(B(0, diam S / 2)) = ωₙ (diam S/2)ⁿ`,
+   a key intermediate step is the n-dimensional Brunn–Minkowski. The standard proof of the n-dimensional Brunn–Minkowski uses induction on dimension + the n-dimensional Prékopa–Leindler, **whose one-dimensional base case has just been proven in the current round of our repository** (`Probability.Line.prekopaLeindler`, without boundedness assumptions). Thus, the route 2 has a ready-made starting point, and the intermediate results (n-dimensional PL / BM) themselves constitute an independent contribution at the Mathlib level.
 
-### 但必须说清楚：它**不解锁**任何东西
+### But it must be made clear: it unlocks nothing.
 
-`hausdorffNormalized_finrank_eq_volume`（`KLS/WIP/RelativePerimeter.lean:119`）
-在**全仓库没有任何使用点**，模块文档自己写着它是
-"an obligation recording the convention"。`relativePerimeter` 用的是
-`surfaceMeasure = hausdorffNormalized (n−1)`，n 维那条从不被调用。
+`hausdorffNormalized_finrank_eq_volume` (`KLS/WIP/RelativePerimeter.lean:119`)
+In the **entire repository with no usage points**, the module documentation states that it is
+"an obligation recording the convention". `relativePerimeter` uses
+`surfaceMeasure = hausdorffNormalized (n−1)`, the n-dimensional one that is never called.
 
-所以：等周直径不等式是这条链上**最自足、最可做**的一块，但也是**最不承重**的一块。
-真正卡住 `lem:relative-perimeter-smoothing` → … → `thm:logconcave-cheeger-poincare-comparison`
-（4 个下游节点）的是另外四条：C^∞ 超曲面上 `ℋ^{n−1}` 的局部有限性、Gauss–Green（Mathlib 的散度定理
-只覆盖长方体）、加权 coarea 公式、一般维数 Sard。
+Thus: the isodiametric inequality is the most self-contained and most actionable piece in this chain, but also the most structurally weak.
+What truly bottlenecks `lem:relative-perimeter-smoothing` → … → `thm:logconcave-cheeger-poincare-comparison`
+(with 4 downstream nodes) are the other four: the local finiteness of `ℋ^{n−1}` on C^∞ hypersurfaces, Gauss–Green (the divergence theorem in Mathlib covering only rectangular boxes), the weighted coarea formula, and the general dimension Sard.
 
-（更正：上一轮口头建议「先做等周直径不等式」时，我高估了它的承重程度。以本节为准。）
+(Correction: In the previous oral suggestion to "first prove the isodiametric inequality," I overestimated its foundational weight. Take this section as the authoritative reference.)
 
-## 二、下一步（仅陈述）的提示词
+## Step two (only statements) prompts
 
-据此，下一步值得做的不是单挑等周，而是把这条链**全部缺失的分析前提**写成精确的 Lean 陈述，
-让它们从 `tasks.json` 里的散文缺口变成有类型的义务，各自可被独立攻克（或直接作为 Mathlib PR 的目标）。
-本轮**只写陈述，不写证明**。
+Thus, the next step worth taking is not to tackle isoperimetry alone, but to translate the entire chain of missing analytical premises into precise Lean statements, turning the prose gaps in `tasks.json` into typed obligations, each of which can be independently addressed (or directly targeted as Mathlib PRs).
+This round involves only statements, not proofs.
 
 ---
 
 ```
-仓库：/Users/lyuyuwei/Documents/ChatGPT/KLS（Lean 4 / Mathlib v4.33.0，Mathlib 提交
-db584cd6d46c92f209a44c0f1c829460d327499d；Lake 根目录 formalization/）。
-本机 elan 与全部 Lean 工具链已是原生 arm64，lake 调 git 正常，不需要任何 git 包装脚本。
+Repository: /Users/lyuyuwei/Documents/ChatGPT/KLS (Lean 4 / Mathlib v4.33.0, Mathlib submission
+db584cd6d46c92f209a44c0f1c829460d327499d; Lake root directory formalization/).
+The local elan and all Lean toolchain components are natively arm64; git operations via lake work normally and no git wrapper scripts are required.
 
-任务（**仅陈述，不证明**）：把相对周长链条所缺的分析前提写成独立、精确的 Lean 陈述，
-全部证明体为 `sorry`，放进新的 WIP 模块。这些陈述必须**与 KLS 无关、可独立成立**，
-即写成一般的测度论/几何分析命题，而不是夹带本仓库对象的特化形式。
+Task (only statement, no proof): Write the missing analytical assumptions of the relative perimeter chain as independent and precise Lean statements,
+all proofs to be `sorry`, placed in a new WIP module. These statements must be **independent of KLS and stand on their own**,
+i.e., formulated as general measure theory/geometric analysis propositions, not as specialized forms involving objects from this repository.
 
-背景（先读）：
-- research/decisions/2026-09-12-relative-perimeter-prerequisites-statement-prompt.md（本文件第一节：
-  等周直径不等式的可行性判断，以及「哪些承重、哪些不承重」）
-- research/decisions/2026-09-11-relative-perimeter-smoothing-statement.md 与 -proofs.md
-- research/decisions/2026-09-11-relative-perimeter-cheeger-infimum-statement.md 与 -proofs.md
-- research/decisions/2026-09-12-cheeger-infimum-sorry-progress.md（最近一轮进展与逐条卡点）
-- formalization/FunctionalInequalities/KLS/WIP/RelativePerimeter.lean（`SmoothDomain`、
-  `hausdorffNormalized`、`surfaceMeasure`、`relativePerimeter`，以及 5 条 sorry）
-- formalization/FunctionalInequalities/KLS/WIP/CheegerInfimum.lean（9 条 sorry，含 Sard 与 coarea）
-- research/verification.md（tasks.json 字段语义与 infrastructure 三种 status）
+Background (read first):
+- research/decisions/2026-09-12-relative-perimeter-prerequisites-statement-prompt.md (Section 1 of this document: feasibility judgment of isoperimetric diameter inequalities, and "which parts bear weight, which do not")
+- research/decisions/2026-09-11-relative-perimeter-smoothing-statement.md and -proofs.md
+- research/decisions/2026-09-11-relative-perimeter-cheeger-infimum-statement.md and -proofs.md
+- research/decisions/2026-09-12-cheeger-infimum-sorry-progress.md (latest round of progress and per-item bottlenecks)
+- formalization/FunctionalInequalities/KLS/WIP/RelativePerimeter.lean (`SmoothDomain`, `hausdorffNormalized`, `surfaceMeasure`, `relativePerimeter`, and 5 with sorry)
+- formalization/FunctionalInequalities/KLS/WIP/CheegerInfimum.lean (9 with sorry, including Sard and coarea)
+- research/verification.md (tasks.json field semantics and infrastructure three statuses)
 - research/naming.md
 
-要写的陈述，五组（组名即建议的 section）：
+The statements to be written, five groups (the group name suggests the section):
 
-A. 等周直径不等式
-   A1. 一般有限维实内积空间 `V` 上：`volume S ≤ ENNReal.ofReal (unitBallVolume n * (diam S / 2) ^ n)`，
-       `n = finrank ℝ V`，`S` 任意（外测度形式，不要求可测）。注意 `diam` 为 `Metric.diam`，
-       无界集给 `0`，需在陈述里处理（限制 `Bornology.IsBounded S` 或用 `EMetric.diam`，二选一并说明）。
-   A2. 由 A1 推出 `μH[(n : ℝ)] = ENNReal.ofReal (2 ^ n / unitBallVolume n) • volume`，
-       或等价地本仓库已有的 `hausdorffNormalized_finrank_eq_volume`。**不要**改动
-       `RelativePerimeter.lean` 中该定理的类型；在新模块里写 A2 的一般形式，并在文档里
-       注明二者的关系。
-   A3.（可选，若你判断路线 2 更可取）n 维 Prékopa–Leindler 与 n 维 Brunn–Minkowski 的陈述，
-       并在文档里写明一维基例已是 `FunctionalInequalities.Probability.Line.prekopaLeindler`。
+A. Isoperimetric diameter inequality
+  A1. On a general finite-dimensional real inner product space `V`: `volume S ≤ ENNReal.ofReal (unitBallVolume n * (diam S / 2) ^ n)`,
+       `n = finrank ℝ V`, `S` arbitrary (in outer measure form, no measurability required). Note `diam` is `Metric.diam`,
+       unbounded sets give `0`, must be handled in the statement (restrict `Bornology.IsBounded S` or use `EMetric.diam`, choose one and specify).
+  A2. Derived from A1 yields `μH[(n : ℝ)] = ENNReal.ofReal (2 ^ n / unitBallVolume n) • volume`,
+       or equivalently the one already in this repository `hausdorffNormalized_finrank_eq_volume`. **Do not** alter
+       the type of this theorem in `RelativePerimeter.lean`; write the general form of A2 in a new module, and document the relationship between the two.
+  A3. (Optional, if you judge the path 2 more promising) the statements of n-dimensional Prékopa–Leindler and n-dimensional Brunn–Minkowski,
+       and explicitly note that the one-dimensional base case is already `FunctionalInequalities.Probability.Line.prekopaLeindler`.
 
-B. C^∞ 超曲面的面积测度局部有限
-   `SmoothDomain.isLocallyFiniteMeasure_hausdorff_frontier` 现有类型见 RelativePerimeter.lean:418。
-   本轮要写的是**它所依赖的一般命题**：局部为 C^∞ 图像（或 C^∞ 定义函数的正则零水平集）的子集，
-   其 `μH[n−1]` 在紧集上有限。用 Lipschitz 图像的 `μH` 上界（`LipschitzWith.hausdorffMeasure_image_le`）
-   把它归约到 `ℝ^{n−1}` 的有界集。
+B. The area measure of C^∞ hypersurfaces is locally finite
+  `SmoothDomain.isLocallyFiniteMeasure_hausdorff_frontier` See RelativePerimeter.lean:418 for existing types.
+  This round focuses on the **general proposition it relies on**: a subset locally represented as the image of a C^∞ map (or the regular zero level set of a C^∞ defined function),
+  whose `μH[n−1]` is finite on compact sets. Reduce it to a bounded set using the Lipschitz image's `μH` upper bound (`LipschitzWith.hausdorffMeasure_image_le`).
+  `ℝ^{n−1}`
 
-C. Gauss–Green / 散度定理（超出长方体）
-   `SmoothDomain.enorm_gradient_mollified_le` 现有类型见 RelativePerimeter.lean:580。
-   本轮要写的一般命题：对光滑域 `U` 与 C^∞ 紧支撑向量场 `F`，
-   `∫ div F over U = ∫ ⟪F, ν⟫ over ∂U`（`ν` 外法向，面积测度为标准 `ℋ^{n−1}`），
-   以及由此得到的「光滑域指示函数的分布梯度 = 带外法向的面积测度」形式。
-   Mathlib 现有的 `MeasureTheory/Integral/DivergenceTheorem.lean` 只覆盖长方体，需在文档里点明。
+C. Gauss–Green / Divergence theorem (beyond rectangular box)
+   `SmoothDomain.enorm_gradient_mollified_le` The existing types are seen in RelativePerimeter.lean: 580.
+   The general statement to be written this round: for a smooth domain `U` and a C^∞ vector field with compact support `F`,
+   `∫ div F over U = ∫ ⟪F, ν⟫ over ∂U` (`ν` is the outward normal, and the area measure is standard `ℋ^{n−1}`),
+   and thus we obtain the form: "the distribution gradient of the smooth domain indicator function = the area measure with outward normal."
+   Mathlib's existing `MeasureTheory/Integral/DivergenceTheorem.lean` currently only covers rectangles, which should be explicitly noted in the documentation.
 
-D. 加权 coarea 公式
-   `Isoperimetry.lintegral_enorm_gradient_mul_eq_lintegral_levelSet` 现有类型见 CheegerInfimum.lean。
-   本轮要写的一般命题：对 C¹（或 Lipschitz）的 `u : V → ℝ` 与可测权 `w ≥ 0`，
-   `∫ w ‖∇u‖ dvolume = ∫_ℝ (∫_{u = t} w dℋ^{n−1}) dt`。
+D. Weighted coarea formula
+  `Isoperimetry.lintegral_enorm_gradient_mul_eq_lintegral_levelSet` See CheegerInfimum.lean for existing types.
+  Current statement to be written: for a C¹ (or Lipschitz) `u : V → ℝ` and measurable weight `w ≥ 0`,
+  `∫ w ‖∇u‖ dvolume = ∫_ℝ (∫_{u = t} w dℋ^{n−1}) dt`.
 
-E. Sard 定理（一般维数）
-   `SmoothDomain.ae_exists_superlevel` 现有类型见 CheegerInfimum.lean。
-   本轮要写的一般命题：C^∞ 映射的临界值集合是 Lebesgue 零测（本仓库只需 `V → ℝ` 的情形，
-   即 a.e. `t` 是正则值）。Mathlib 只有同维数的 `addHaar_image_eq_zero_of_det_fderivWithin_eq_zero`。
+E. Sard's theorem (general dimension)
+  `SmoothDomain.ae_exists_superlevel` See CheegerInfimum.lean for existing types.
+  Current statement to be written: The set of critical values of a C^∞ map has Lebesgue measure zero (this repository only requires `V → ℝ`, i.e., a.e. `t` is a regular value). Mathlib only has the case of equal dimensions `addHaar_image_eq_zero_of_det_fderivWithin_eq_zero`.
 
-规则：
-1. **只写陈述**。每条 `theorem`/`def` 的证明体一律 `sorry`。不要尝试证明任何一条，
-   也不要为了让某条「看起来可证」而弱化它。
-2. 陈述要独立于 KLS：用一般的 `V`（有限维实内积空间，Borel，第二可数）与一般假设，
-   不要出现 `ProbabilityMeasure`、`IsBorellDensity`、`SmoothDomain` 之外的仓库专有对象，
-   除非该组本来就是关于 `SmoothDomain` 的（B、C 两组可以用它）。
-3. **不改动任何既有文件的既有声明**（包括 `RelativePerimeter.lean` 与 `CheegerInfimum.lean` 里
-   那 14 条 `sorry` 的类型）。本轮只新增文件。
-4. 新文件放在 `formalization/FunctionalInequalities/KLS/WIP/` 下（建议
-   `AnalyticPrerequisites.lean`，或按五组拆成若干文件，由你判断）。
-   **不注册**：不加进 `FunctionalInequalities.lean` 聚合导入、lakefile `Solutions` 根、
-   `research/a-series/ledger.yaml`、`research/check_blueprint.py` 的 `CERTIFICATES`、
-   `research/tasks.json`、Blueprint 的 `\lean{}`/`\leanok`。
-5. 决定记录只追加：新建 `research/decisions/2026-09-1X-relative-perimeter-prerequisites-statement.md`，
-   写明每条陈述的来源（教科书/文献）、与仓库现有 sorry 的对应关系、以及你对每条可行性的评估
-   （Mathlib 已有什么、缺什么）。
-6. 不 git commit、不 git push。
+Rules:
+1. **Only state the statements**. The proof body of each `theorem`/`def` is solely `sorry`. Do not attempt to prove any of them,
+   Nor should we weaken it just because it "looks provable".
+2. The statement should be independent of KLS: using a general `V` (a finite-dimensional real inner product space, Borel, second countable) and general assumptions,
+   Do not appear `ProbabilityMeasure`, `IsBorellDensity`, `SmoothDomain` or any other repository-specific objects.
+   Unless this group is inherently about `SmoothDomain` (groups B and C can use it).
+3. **Do not modify any existing declarations in existing files** (including `RelativePerimeter.lean` and `CheegerInfimum.lean` in
+   That 14 type of `sorry`). This round only adds files.
+4. New file placed under `formalization/FunctionalInequalities/KLS/WIP/` (recommended
+   `AnalyticPrerequisites.lean`, or split into several files by five groups, as you judge.
+   **Not registered**: Not included in `FunctionalInequalities.lean` aggregate import, lakefile `Solutions` root,
+   `research/a-series/ledger.yaml`, `research/check_blueprint.py`'s `CERTIFICATES`,
+   `research/tasks.json`, Blueprint's `\lean{}`/`\leanok`.
+5. The record is appended only: new `research/decisions/2026-09-1X-relative-perimeter-prerequisites-statement.md`,
+   Specify the source of each statement (textbook/literature), its correspondence to the existing sorry in the repository, and your assessment of the feasibility of each.
+   (What Mathlib has, what it lacks).
+6. Do not git commit, do not git push.
 
-编译（在 formalization/ 下）：
-  lake build FunctionalInequalities.KLS.WIP.<新模块名>   # 先产生 olean
-  lake env lean FunctionalInequalities/KLS/WIP/<新模块>.lean
-目标：除 `declaration uses 'sorry'` 外无任何输出；再跑
-  lake env lean -DwarningAsError=true FunctionalInequalities/KLS/WIP/<新模块>.lean
-确认无警告（`omit ... in` 必须放在 docstring **之前**；`unusedSectionVars` 是逐轮报告的，
-需要多轮编译才收敛）。
+Compile (in formalization/):
+  lake build FunctionalInequalities.KLS.WIP.<new module name>   # First generate olean
+  lake env lean FunctionalInequalities/KLS/WIP/<new module>.lean
+Goal: No output except `declaration uses 'sorry'`; then run
+  lake env lean -DwarningAsError=true FunctionalInequalities/KLS/WIP/<new module>.lean
+Confirm no warnings (`omit ... in` must appear before the docstring; `unusedSectionVars` is reported per iteration, requiring multiple compilations to converge).
 
-完成后的报告请列出：五组各写了哪些陈述及其全名；每条与 `RelativePerimeter.lean` /
-`CheegerInfimum.lean` 中哪条 `sorry` 对应（或说明不对应）；每条的可行性评估与建议路线；
-A 组你选了 Steiner 还是 Brunn–Minkowski 路线及理由；以及若你认为某条**不应当以这种形式陈述**
-（比如更适合直接向 Mathlib 提 PR、或本仓库根本不需要），请明说并给理由，不要勉强写进去。
+The final report should list: five groups, each specifying which statements were made and their full names; for each statement, indicate which `RelativePerimeter.lean` / `CheegerInfimum.lean` entry `sorry` it corresponds to (or explain if it does not correspond); a feasibility assessment and recommended path for each;
+Group A: did you choose the Steiner or Brunn–Minkowski path and the reason; and if you believe any statement should not be presented in this form (for example, better suited for a direct PR to Mathlib, or fundamentally unnecessary for this repository), clearly state that and provide the reason—do not force inclusion.
 ```

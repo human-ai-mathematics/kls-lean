@@ -1,36 +1,36 @@
-# 2026-09-12 — 外法向接口复核、状态收尾与发布
+# 2026-09-12 — Outward-normal interface review, status closeout, and publication
 
-Owner 在独立复核后要求收尾、提交并推送。承接[证明记录](2026-09-12-outward-normal-interfaces-proofs.md)，
-本轮同步当前文档、重新评估任务基础设施证据，并保留远端已有文档提交。
-陈述轮和证明轮的记录保持为历史快照，不将“曾有 28 个 hole”改写成从未存在。
+After an independent review, the owner requested closeout, commit, and push. Following the [proof record](2026-09-12-outward-normal-interfaces-proofs.md),
+this round synchronizes current documentation, reassesses task infrastructure evidence, and preserves documentation commits already on the remote.
+The statement and proof records remain historical snapshots; the earlier 28 holes are not rewritten as though they never existed.
 
-## 已复核的结果与边界
+## Reviewed results and boundaries
 
-四条接口的 elaborated 类型与陈述轮缓存逐字相同；原有声明、定义和其他证明没有改动。
-目标构建通过，独立严格客户端检验了连续性、可测性、紧集上边界测度有限，以及 C2 将使用的
-`integral_inner` 交换步骤。四条目标与四条客户端定理的传递公理均只有
-`propext / Classical.choice / Quot.sound`。
+The elaborated types of all four interfaces are identical verbatim to the statement-round cache; existing declarations, definitions, and other proofs are unchanged.
+The target build passed, and an independent strict client checked continuity, measurability, finite boundary measure on compact sets, and the
+`integral_inner` interchange step needed by C2. The transitive axioms of all four targets and all four client theorems are only
+`propext / Classical.choice / Quot.sound`.
 
-零维经 `Subsingleton V` 推出边界为空处理；局部有限性从已证的点态正则水平集引理得到，
-没有调用旧的含 `sorry` 的 raw Hausdorff 边界局部有限性定理。无界区域没有被排除。
-四个 WIP 模块仍共 24 个直接 hole：RelativePerimeter 5、CheegerInfimum 9、
-AnalyticPrerequisites 5、Energy/WIP/Cheeger 5。AnalyticPrerequisites 共 21 条义务，
-16 个已填证明体，其中 14 个没有传递 `sorryAx`。
+Dimension zero is handled by deriving an empty boundary from `Subsingleton V`; local finiteness follows from the proved pointwise regular-level-set lemma,
+without invoking the older raw Hausdorff boundary local-finiteness theorem containing `sorry`. Unbounded domains are not excluded.
+The four WIP modules still have 24 direct holes in total: RelativePerimeter 5, CheegerInfimum 9,
+AnalyticPrerequisites 5, Energy/WIP/Cheeger 5. AnalyticPrerequisites has 21 obligations,
+16 filled proof bodies, of which 14 have no transitive `sorryAx`.
 
-C1/C2、coarea 和 Sard 仍未完成；旧 perimeter 模块的几何输入接入仍需处理导入方向。
-因此任务基础设施继续是 `missing`，没有把 WIP 登记为证书或增加 Blueprint lean/leanok。
+C1/C2, coarea, and Sard remain incomplete; connecting geometric inputs to the old perimeter module still requires resolving the import direction.
+Task infrastructure therefore remains `missing`; WIP has not been registered as a certificate, and no Blueprint lean/leanok markers were added.
 
-## linter 处理
+## Linter handling
 
-保留证明轮已有的、仅作用于 `isLocallyFiniteMeasure_surfaceMeasure_frontier` 的
-`set_option linter.unusedSectionVars false in`，作为已复核的签名兼容例外。
-它只抑制冗余 section 参数的风格警告，不影响 elaboration、内核检查或公理收集。
-删除冗余 `[CompleteSpace V]` 会改变现有参数表，本轮保持已审核接口；不为消除风格提示
-添加无数学用途的证明步骤。此例外取代早先证明提示词对该风格选项的一概限制。
+Retain the proof round's existing `set_option linter.unusedSectionVars false in`, scoped only to
+`isLocallyFiniteMeasure_surfaceMeasure_frontier`, as a reviewed signature-compatibility exception.
+It suppresses only the style warning for redundant section parameters; it does not affect elaboration, kernel checking, or axiom collection.
+Removing the redundant `[CompleteSpace V]` would change the existing parameter list, so this round preserves the reviewed interface.
+Do not add mathematically unnecessary proof steps merely to eliminate a style warning. This exception supersedes the earlier proof prompt's blanket restriction on that style option.
 
-## 验证与发布顺序
+## Verification and publication order
 
-先完成目标构建与严格客户端，提交本轮源码和文档；再合并 `origin/main` 已有周报提交，
-在最终内容上运行 `python3 research/verify.py`，通过后完成合并提交并正常推送。
-不改写远端历史，不推送 legacy remotes。忽略目录中的审计脚本和日志不纳入提交。
-完整验证回执由 `build/verification/latest.json` 指向；本记录不预先声称未来运行成功。
+First complete the target build and strict client, then commit this round's source and documentation. Next merge the existing weekly-report commit from `origin/main`,
+run `python3 research/verify.py` on the final content, and, after it passes, complete the merge commit and push normally.
+Do not rewrite remote history or push to legacy remotes. Audit scripts and logs in ignored directories are excluded from the commit.
+The full verification receipt is referenced by `build/verification/latest.json`; this record does not claim in advance that a future run will succeed.

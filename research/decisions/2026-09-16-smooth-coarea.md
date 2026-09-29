@@ -1,18 +1,16 @@
-# 一般 C¹ 函数的带权 coarea（L11），目标 T3 随之证明
+# Weighted coarea (L11) for general C¹ functions, proof of target T3
 
-2026-09-16。本轮**证明了加权 coarea 路线的 L11**，并由此在审计客户端**证明了第三个原始目标
-T3 的完整语句**——即直接洞 `KLS.Isoperimetry.lintegral_enorm_gradient_mul_eq_lintegral_levelSet`
-的语句。**没有修改任何 WIP 文件**：迁出是单独的决定，所以直接洞数不变，那个洞仍然是洞。
-不提交、不推送，不改写历史决定。
+2026-09-16. This round **proves the L11 weighted coarea route**, and thereby in the audit client **proves the full statement of the third original goal T3**—that is, the statement of the direct proof hole `KLS.Isoperimetry.lintegral_enorm_gradient_mul_eq_lintegral_levelSet`. **No WIP files were modified**: migration was a separate decision, so the number of direct proof holes remained unchanged, and that hole remains a hole. Not commit, not pushed, not rewriting historical decisions.
 
-起始 HEAD 为 `737abc396576abfaa596a284e46a706e8e5fd383`；起始 passed 回执为
-`build/verification/20260915T113452.444474Z/report.json`，与起始工作区完全一致：
-450 个文件，SHA256 `856a6b6bd93a8fea3099878a5b65b2cfc4ecfdb0fd1407b60e976f8036f5ad60`。
-起始工作区含上一轮尚未提交的四处证据收尾改动，本轮在其之上继续。
+HEAD starts at `737abc396576abfaa596a284e46a706e8e5fd383`; initial verification receipt is
+`build/verification/20260915T113452.444474Z/report.json`, identical to the initial workspace:
+450 files, SHA256 `856a6b6bd93a8fea3099878a5b65b2cfc4ecfdb0fd1407b60e976f8036f5ad60`.
+The initial workspace contains four evidence closeouts from the previous round that were not yet commit, and this round continues upon them.
 
-## 本轮证明的内容
+## Content of this round of proof
 
-新模块 `formalization/FunctionalInequalities/KLS/Geometry/SmoothCoarea.lean`：
+New module `formalization/FunctionalInequalities/KLS/Geometry/SmoothCoarea.lean`:
+
 
 ```lean
 theorem FunctionalInequalities.KLS.isOpen_regular {u : V → ℝ} (hu : ContDiff ℝ 1 u) :
@@ -27,33 +25,32 @@ theorem FunctionalInequalities.KLS.coarea_of_contDiff {S : Set V} {u : V → ℝ
       ∫⁻ t, ∫⁻ y in S ∩ {x | u x = t}, g y ∂(surfaceMeasure V) ∂(volume : Measure ℝ)
 ```
 
-与路线记录的 L11 相比只去掉了从未使用的 `[CompleteSpace V]`，没有增加任何假设：
-`u` **不要求** Lipschitz、有界或紧支撑；`S` 只要可测，不要求有界或有限体积；
-`g` 允许无界、不可积或恒为 `⊤`；**对导数没有任何非退化要求**——临界集可以是整个空间。
-客户端 `target` 用带 `[CompleteSpace V]` 的原语句逐字复述并证明。
+Compared to route record L11, only removed `[CompleteSpace V]` that was never used, with no additional assumptions:
+`u` Does not require Lipschitz, bounded, or compact support; `S` Only requires measurability, without requiring boundedness or finite volume;
+`g` Allows unbounded, non-integrable, or constantly equal to `⊤`; **no non-degeneracy requirements on the derivative**—the critical set can be the entire space.
+Client `target` uses the primitive statement with `[CompleteSpace V]` verbatim and proves it.
 
-## 两半如何接上，以及为什么两半都必需
+## How to connect the two halves, and why both halves are necessary
 
-令 `C = {x | fderiv ℝ u x = 0}`、`R = Cᶜ`。`C` 闭（`isClosed_critical`，L10 轮已证），
-故 `R` 开（`isOpen_regular`）。
+Let `C = {x | fderiv ℝ u x = 0}`, `R = Cᶜ`. `C` is closed (`isClosed_critical`, already proven in L10),
+hence `R` is open (`isOpen_regular`).
 
-* **左端**：`S = (S ∩ R) ∪ (S ∩ C)` 不交可测，而 `C` 上 `gradient u = 0`，
-  故被积函数在 `S ∩ C` 上恒为零，`∫⁻_S ‖∇u‖ₑ·g = ∫⁻_{S∩R} ‖∇u‖ₑ·g`。
-* **右端**：由 **L10**，几乎每个水平 `t` 满足 `surfaceMeasure V (C ∩ {u = t}) = 0`，
-  于是 `(S∩R)∩{u=t}` 与 `S∩{u=t}` 在 `surfaceMeasure V` 下 a.e. 相等
-  （`ae_eq_set` 加 `Measure.restrict_congr_set`），两个切片积分对几乎每个 `t` 相等。
-* **中间**：对开集 `R` 与可测子集 `S ∩ R` 调用 **L9**，得等式与 `AEMeasurable`。
-* 同一条 a.e. 相等把 L9 的 `AEMeasurable` 分量搬到完整切片函数上（`AEMeasurable.congr`），
-  并把右端的两个积分接起来（`lintegral_congr_ae`）。
+* **Left end**: `S = (S ∩ R) ∪ (S ∩ C)` pairwise disjoint measurable, and `C` on `gradient u = 0`,
+  Hence the integrand is identically zero on `S ∩ C`, `∫⁻_S ‖∇u‖ₑ·g = ∫⁻_{S∩R} ‖∇u‖ₑ·g`.
+* **Right end**: By **L10**, almost every level `t` satisfies `surfaceMeasure V (C ∩ {u = t}) = 0`,
+  Thus `(S∩R)∩{u=t}` and `S∩{u=t}` are equal under `surfaceMeasure V` a.e.
+  ( `ae_eq_set` + `Measure.restrict_congr_set` ), the two slice integrals are equal almost everywhere with respect to `t`.
+* **Intermediate**: For an open set `R` and a measurable subset `S ∩ R`, invoke **L9** to obtain the equality and `AEMeasurable`.
+* The same a.e. equality moves the `AEMeasurable` component of L9 to the full slice function (`AEMeasurable.congr`),
+  And connect the two integrals on the right-hand side (`lintegral_congr_ae`).
 
-**L9 与 L10 缺一不可**：L9 只覆盖导数非零的开域，L10 只说临界部分的切片零测；
-两者都不单独给出 L11。
+**L9 and L10 are indispensable**: L9 only covers open domains where the derivative is non-zero, L10 only states that slices of critical parts have zero measure; neither provides L11 alone.
 
-## 目标 T3 的语句已证明，但洞未填
+## The statement of target T3 has been proven, but the hole remains unfilled.
 
-客户端 `SmoothCoareaAudit.target_T3` 逐字复述并证明了路线的 T3，
-`SmoothCoareaAudit.wip_isoperimetry_statement` 逐字复述并以**具名参数**证明了
-`KLS/WIP/CheegerInfimum.lean` 中
+Client `SmoothCoareaAudit.target_T3` verbatim repeats and proves the T3 of the route,
+`SmoothCoareaAudit.wip_isoperimetry_statement` verbatim repeats and proves it with **named arguments**
+in `KLS/WIP/CheegerInfimum.lean`
 
 ```lean
 theorem Isoperimetry.lintegral_enorm_gradient_mul_eq_lintegral_levelSet
@@ -63,46 +60,44 @@ theorem Isoperimetry.lintegral_enorm_gradient_mul_eq_lintegral_levelSet
       ∫⁻ t, ∫⁻ y in {x | u x = t}, g y ∂(surfaceMeasure V) ∂(volume : Measure ℝ)
 ```
 
-的语句：它由 L11 取 `S = univ` 并化简 `Set.univ_inter` 得到，**`hK` 这条 Lipschitz 假设
-完全没有参与**——该声明本来就假设了 `ContDiff ℝ 1 u`。
+The statement: it is obtained from L11 taking `S = univ` and simplifying `Set.univ_inter`, **`hK` this Lipschitz assumption**
+has not participated at all—this claim originally assumes `ContDiff ℝ 1 u`.
 
-**本轮没有动 WIP**，所以：
+**This round did not move WIP**, so:
 
-* 直接洞仍为 **2/3/5，总数 10**；该声明仍带 `sorry`。
-* 准确说法是"**它的语句已在无洞模块基础上被证明，迁出即可闭合**"，
-  不能说"C¹ coarea 洞已填"。迁出会把 `KLS/WIP/CheegerInfimum.lean` 从 3 洞降到 2 洞，
-  总数 10 → 9，按仓库惯例（见 2026-09-15 的两次迁出决定）是单独一轮。
+* Direct proof holes remain as **2/3/5**, total count **10**; this statement still carries **`sorry`**.
+* The correct phrasing is "its statement has been proven based on the **hole-free** module and can be closed upon migration", not "the C¹ coarea hole has been filled". Migration will reduce **`KLS/WIP/CheegerInfimum.lean`** from a **3** hole to a **2** hole, total count **10** → **9**, following the **repository** convention (see the two migration decisions in **2026-09-15**).
 
-## 本轮没有做的事
+## What was not done in this round
 
-* **没有证明 Lipschitz 情形**：`Analysis.lintegral_enorm_gradient_mul_eq_lintegral_levelSet`
-  是对**全局 Lipschitz**（不假设 C¹）的 `u` 陈述的，仍是直接洞。它需要 **L12**，
-  而 L12 需要 **L7** 的精确 C¹ 分片，L7 需要 **L6** 的闭集 Whitney 一阶 jet 延拓——
-  L6/L6a/L7 全部未证明，本轮未动。
-* 没有证明尖锐 `C^(finrank)` 的 `Analysis.sard`（仍带 `sorryAx`，仍无下游消费者）。
-* 没有证明 Eilenberg 常数的尖锐性、`smoothConstant_le_minkowskiConstant`、
-  `smoothConstant_mul_lintegral_min_superlevel_le`、两个 Cheeger 常数相等。
-* 没有扩大证书或 Blueprint `leanok` 范围；证书仍 **24**，
-  perimeter infrastructure 仍 **missing**。
-* 没有修改任何已有 `.lean` 源码（只新增一个模块与一个客户端）。
-* **没有提交、没有推送。**
+* **No proof in Lipschitz case**: `Analysis.lintegral_enorm_gradient_mul_eq_lintegral_levelSet`
+  is stated for **globally Lipschitz** `u`, without assuming C¹, and remains a direct hole. It requires **L12**,
+  And L12 requires the precise C¹ piecewise structure of L7, L7 requires the Whitney first-order jet extension of a closed set from L6—
+  L6/L6a/L7 All unproven, no movement this round.
+* No proof of sharpness `C^(finrank)` of `Analysis.sard` (still with `sorryAx`, still no downstream consumers).
+* No proof of the sharpness of the Eilenberg constant, `smoothConstant_le_minkowskiConstant`,
+  `smoothConstant_mul_lintegral_min_superlevel_le`, the two Cheeger constants are equal.
+* No expansion of certification or Blueprint `leanok` scope; the certification remains **24**,
+  perimeter infrastructure still **missing**.
+* No modification made to any existing `.lean` source code (only added one module and one client).
+* **No commit, no push.**
 
-## 验证
+## Verification
 
-* `KLS/Geometry/SmoothCoarea.lean` 以 `-DwarningAsError=true` 单独编译通过。
-* `research/audits/SmoothCoareaAudit.lean`（直接放进受版本控制的路径）以
-  `-DwarningAsError=true` 编译通过：1 条语句 `#check`（逐字复述路线记录的 L11）与 11 条定理
-  ——`target`、`target_of_not_completeSpace`、`target_T3`、`wip_isoperimetry_statement`、
-  `top_weight`（`g ≡ ⊤`）、`empty_set`、`everywhere_critical`（常数函数，临界集是全空间）、
-  `constant_function`（**独立于 L11** 地核对 `⊤ · 0` 边界：常数函数在所取水平上的切片是整条
-  直线、表面测度无穷，而等式两端都是 `0`，因为例外水平集 Lebesgue 零测）、
-  两条 `preserved_*` 具名参数签名检查——以及 12 条 `#print axioms`。
-  全部 12 个声明只依赖 `propext`、`Classical.choice`、`Quot.sound`，**无 `sorryAx`**。
-* 重跑其余 16 个审计客户端（`research/audits/` 10 条含本轮新增 + `build/audit/` 6 条），
-  全部严格编译通过，未作任何修改；`LevelSetMeasurableAudit`、`SuperlevelSardScope` 中的
-  `sorryAx` 是刻意报告仍开的洞。
-* 三个 WIP 文件逐个实际编译成功，直接洞分别 **2/3/5，总数 10**。
-* 默认 `lake build` 与根目录 `python3 research/verify.py` 通过。最终回执为
-  `build/verification/latest.json`，与最终全部源码快照完全一致；证据 JSON 为
-  `research/explorations/2026-09-16-smooth-coarea.json`，最终核对另存
-  `build/audit/smoothcoarea-final-snapshot.json`。
+* `KLS/Geometry/SmoothCoarea.lean` compiles successfully with `-DwarningAsError=true` alone.
+* `research/audits/SmoothCoareaAudit.lean` (directly into version-controlled path) to
+  `-DwarningAsError=true` Compilation passed: 1 statements `#check` (verbatim reproduction of route record L11) and 11 theorems
+  ——`target`, `target_of_not_completeSpace`, `target_T3`, `wip_isoperimetry_statement`,
+  `top_weight` (`g ≡ ⊤`), `empty_set`, `everywhere_critical` (constant function, critical set is the entire space),
+  `constant_function` (independently of L11) core-certifying `⊤ · 0` boundary: the slice of a constant function on the chosen level is the entire
+  The measure of lines and surfaces is infinite, while both sides of the equation are `0`, because exceptional level sets have Lebesgue measure zero).
+  Two `preserved_*` named argument signature checks—along with 12 `#print axioms`.
+  All  12 statements depend only on `propext`, `Classical.choice`, `Quot.sound`; **not on `sorryAx`**.
+* Retest the remaining 16 audit client instances (`research/audits/` 10 entries containing the newly added ones + `build/audit/` 6 entries),
+  All strictly compiled successfully, no modifications made; `LevelSetMeasurableAudit`, `SuperlevelSardScope` among the
+  `sorryAx` is intentionally reported as an open hole.
+* Three WIP files were successfully compiled in practice, with direct proof holes respectively **2/3/5**, total **10**.
+* Default `lake build` is connected to the root directory `python3 research/verify.py`. Final verification receipt is
+  `build/verification/latest.json`, exactly consistent with the final full code snapshot; evidence JSON is
+  `research/explorations/2026-09-16-smooth-coarea.json`, final verification and save
+  `build/audit/smoothcoarea-final-snapshot.json`.

@@ -1,33 +1,32 @@
-# 2026-09-13 — 全局 Gauss–Green：有限光滑单位分解拼接与下游闭合
+# 2026-09-13 — Global Gauss–Green: Finite Smooth Partition of Unity Stitching and Downstream Closure
 
-Owner 要求用已证明的图表内局部公式，通过有限光滑单位分解拼接，消除全局向量场 Gauss–Green 的
-`sorry`，并核验两个下游公式不再传递依赖 `sorryAx`；直接实施证明与验证，本轮不提交、不推送。承接
-[子图散度记录](2026-09-13-subgraph-divergence-and-local-gauss-green.md)、
-[边界图表与面积接口记录](2026-09-13-boundary-chart-and-area-interface.md)、
-[Gauss–Green 面积公式记录](2026-09-12-gauss-green-area-formula.md)与
-[接口接入记录](2026-09-12-perimeter-interface-integration.md)。此前未提交的模块拆分、周长接口证明、
-图面积公式、边界图表、子图散度公式与局部 Gauss–Green 全部保留，未重置、未覆盖、未重复实现；
-历史记录保持原文与原计数。
+Owner requires the use of locally proven chart-based formulas, connected via finite smooth partition of unity, to eliminate the global vector field Gauss–Green
+`sorry`, and to verify that the two downstream formulas no longer transmit dependencies `sorryAx`; direct implementation and verification are carried out, with no commit or push in this round. Acceptance of
+[subgraph divergence record](2026-09-13-subgraph-divergence-and-local-gauss-green.md),
+[boundary chart and area interface record](2026-09-13-boundary-chart-and-area-interface.md),
+[Gauss–Green area formula record](2026-09-12-gauss-green-area-formula.md), and
+[interface connection record](2026-09-12-perimeter-interface-integration.md). Previous unsubmitted modules, perimeter interface proofs,
+graph area formula, boundary charts, subgraph divergence formulas, and local Gauss–Green are all retained, without reset, coverage, or redundant implementation;
+historical records maintain their original text and count.
 
-## 结论先说
+## Conclusion first
 
-| 目标 | 状态 | 传递公理 |
+| Goal | Status | Transitive Axioms |
 | --- | --- | --- |
-| 1. 全局向量场 Gauss–Green `KLS.SmoothDomain.integral_divergence_eq_integral_inner_outwardNormal` | **完成** | 标准三条 |
-| 2. 有限光滑分解接口 `Analysis.exists_finset_sum_eq_of_isOpen_cover` | **完成** | 标准三条 |
-| 2'. 可积性接口 `integrableOn_inner_outwardNormal`、散度的连续性/紧支撑/有限可加性 | **完成** | 标准三条 |
-| 3. 标量形式 `setIntegral_gradient_eq_integral_smul_outwardNormal` | **完成**（归约，不再含洞） | 标准三条 |
-| 3'. 磨光 indicator 梯度 `gradient_mollifiedIndicator_eq` | **完成**（归约，不再含洞） | 标准三条 |
-| coarea、Sard、恢复序列、Cheeger 下确界、奇异测度比较 | 未动 | 仍含 `sorryAx` |
+| 1. Global vector field Gauss–Green `KLS.SmoothDomain.integral_divergence_eq_integral_inner_outwardNormal` | **Completed** | Standard three conditions |
+| 2. Finite smooth decomposition interface `Analysis.exists_finset_sum_eq_of_isOpen_cover` | **Completed** | Standard three lines |
+| 2'. Integrability interface `integrableOn_inner_outwardNormal`, continuity of divergence/compact support/finitely additive | **Completed** | Standard three |
+| 3. Scalar form `setIntegral_gradient_eq_integral_smul_outwardNormal` | **Completed** (reduced, no holes) | Standard three lines |
+| 3'. Polishing indicator gradient `gradient_mollifiedIndicator_eq` | **Completed** (reduction, no holes) | Standard three rules |
+| coarea, Sard, recovery sequence, Cheeger infimum, singular measure comparison | unchanged | still contains `sorryAx` |
 
-证书数仍是 24，没有新增 ledger 节点，没有 Blueprint `\lean`/`\leanok` 锚点，
-`lem:relative-perimeter-smoothing` 的 infrastructure 状态仍为 `missing`。
-WIP 直接 hole 从 20 降到 **19**（`RelativePerimeter` 3、`AnalyticPrerequisites` 4→**3**、
-`CheegerInfimum` 8、`Energy/WIP/Cheeger` 5）。**完成全局 Gauss–Green 不等于相对周长链完成。**
+The certificate count remains 24, no new ledger nodes have been added, no Blueprint `\lean`/[`\leanok`] anchor points,
+the infrastructure status of `lem:relative-perimeter-smoothing` remains `missing`.
+WIP direct hole decreased from 20 to **19** (`RelativePerimeter` 3, `AnalyticPrerequisites` 4 → **3**, `CheegerInfimum` 8, `Energy/WIP/Cheeger` 5). **Completing the global Gauss–Green does not equal completing the relative perimeter chain.**
 
-## 1. 陈述未变
+## 1. Statement unchanged
 
-`FunctionalInequalities/KLS/Geometry/GaussGreen.lean`：
+`FunctionalInequalities/KLS/Geometry/GaussGreen.lean`:
 
 ```
 theorem KLS.SmoothDomain.integral_divergence_eq_integral_inner_outwardNormal
@@ -36,42 +35,41 @@ theorem KLS.SmoothDomain.integral_divergence_eq_integral_inner_outwardNormal
       = ∫ x in frontier U.carrier, ⟪F x, U.outwardNormal x⟫ ∂(surfaceMeasure V)
 ```
 
-名称、命名空间、假设、`surfaceMeasure` 归一化与外法向方向都与此前的 `sorry` 版本逐字相同。
-**没有**增加区域有界、边界总测度有限、`F` 更高阶光滑或 `V` 非零维的假设，也没有削弱结论。
+Names, namespaces, assumptions, `surfaceMeasure` normalization and outer normal direction are identical to the previous `sorry` version word for word.
+**No** additional assumptions of bounded domains, finite total boundary measure, `F` higher-order smoothness, or `V` nonzero dimension are introduced, and no weakening of the conclusion is made.
 
-## 2. 三类局部块的完整覆盖
+## 2. Complete coverage of three types of local blocks
 
-覆盖的是紧集 `K = tsupport F`，索引类型是 `Bool ⊕ ↥(frontier U.carrier)`，三族开集：
+Covers a compact set `K = tsupport F`, indexed type is `Bool ⊕ ↥(frontier U.carrier)`, three families of open sets:
 
-* **图表柱**：对每个边界点 `z`，`exists_boundaryChart` 给一张图表，本轮新增的
-  `BoundaryChart.self_mem_cylinder`（`graphCoord x₀ x₀ = 0 ∈ param`，`graphHeight x₀ x₀ = 0 < depth`）
-  保证 `z` 落在自己的柱内；
-* **区域内部** `U.carrier`（开）；
-* **区域外部** `(closure U.carrier)ᶜ`（开）。
+* **Bar chart**: For each boundary point `z`, `exists_boundaryChart` provides a chart, this round's new addition of
+  `BoundaryChart.self_mem_cylinder` (`graphCoord x₀ x₀ = 0 ∈ param`, `graphHeight x₀ x₀ = 0 < depth`)
+  ensures that `z` falls within its own bar;
+* **Interior region** `U.carrier` (open);
+* **Exterior region** `(closure U.carrier)ᶜ` (open).
 
-覆盖性来自开集 `U` 的 `interior U = U`：任一点若不在 `U`、也不在 `frontier U`，则不在 `closure U`。
-**不能只用边界柱**——支撑可能整个落在内部或外部，两个独立客户端（下文 Client 1、2）就是这两种情形。
+Coverage comes from the openness of `U` `interior U = U`: if a point is not in `U` and not in `frontier U`, then it is not in `closure U`.
+**One cannot rely solely on boundary cylinders**—the support might lie entirely inside or outside; two independent clients (discussed below, Client 1, 2) represent these two cases.
 
-三块分别处理，都在 `KLS/Geometry/GaussGreen.lean` 内：
+Treated in three parts, all within `KLS/Geometry/GaussGreen.lean`:
 
-* **图表块**：直接调用已证的
-  `BoundaryChart.integral_divergence_eq_integral_inner_outwardNormal`；
-* **内部块** `integral_divergence_eq_integral_inner_outwardNormal_of_tsupport_subset_carrier`：
-  `tsupport Gᵢ ⊆ U.carrier` 使 `Gᵢ` 与 `divergence Gᵢ` 在 `U` 外为零，于是
-  `∫_U div Gᵢ = ∫_V div Gᵢ = 0`（`setIntegral_eq_integral_of_forall_compl_eq_zero` 加
-  `Analysis.integral_divergence_eq_zero`）；通量侧为零，因为开集 `U` 与 `frontier U` 不交，
-  故 `Gᵢ` 在边界上恒为零；
-* **外部块** `…_of_tsupport_subset_compl_closure`：`U ⊆ closure U` 与
-  `frontier U ⊆ closure U` 使两侧被积函数都恒为零。
+* **Chart block**: Directly invoke already proven
+  `BoundaryChart.integral_divergence_eq_integral_inner_outwardNormal`;
+* **Interior block** `integral_divergence_eq_integral_inner_outwardNormal_of_tsupport_subset_carrier`:
+  `tsupport Gᵢ ⊆ U.carrier` makes `Gᵢ` and `divergence Gᵢ` zero outside `U`, thus
+  `∫_U div Gᵢ = ∫_V div Gᵢ = 0` (`setIntegral_eq_integral_of_forall_compl_eq_zero` plus
+  (`Analysis.integral_divergence_eq_zero`); the flux side is zero because the open set `U` and `frontier U` are disjoint,
+  Hence `Gᵢ` is identically zero on the boundary;
+* **External block** `…_of_tsupport_subset_compl_closure`: `U ⊆ closure U` and
+  `frontier U ⊆ closure U` Makes both integrand functions on both sides identically zero.
 
-零维空间、空支撑与空边界都由同一条路径覆盖：`Subsingleton V` 时 `frontier U = ∅`，单位分解在
-`tsupport F = ∅` 上的求和条件是空条件，分解式 `F = Σᵢ Gᵢ` 在支撑外由 `F x = 0` 成立。
-全程没有 `Nonempty`、`Nontrivial` 或维数下界假设。
+Zero-dimensional spaces, empty supports, and empty boundaries are all covered by the same path: `Subsingleton V` at `frontier U = ∅`, the summation condition of the partition of unity on `tsupport F = ∅` is the empty condition, and the decomposition `F = Σᵢ Gᵢ` holds by `F x = 0` outside the support.
+No `Nonempty`, `Nontrivial`, or dimension lower bound assumptions are made throughout.
 
-## 3. 单位分解：接口与"全局等式"这一关键点
+## 3. Partition of unity: interfaces and the key point of "global equation"
 
-`FunctionalInequalities/Analysis/PartitionOfUnity.lean`，`Analysis.exists_finset_sum_eq_of_isOpen_cover`：
-对有限维实赋范空间 `V`、紧支撑 `C^n` 映射 `F : V → E` 与 `tsupport F` 的开覆盖 `W`，
+`FunctionalInequalities/Analysis/PartitionOfUnity.lean`, `Analysis.exists_finset_sum_eq_of_isOpen_cover`:
+For a finite-dimensional real normed space `V`, a compactly supported map `C^n` from `F : V → E` to `tsupport F`, and an open cover `W`,
 
 ```
 ∃ (s : Finset γ) (G : γ → V → E),
@@ -79,117 +77,110 @@ theorem KLS.SmoothDomain.integral_divergence_eq_integral_inner_outwardNormal
   (∀ i, tsupport (G i) ⊆ W i) ∧ ∀ x, ∑ i ∈ s, G i x = F x
 ```
 
-三点是刻意写进陈述的：
+Three points are deliberately included in the statement:
 
-1. **`tsupport (G i) ⊆ W i`，不是 `support (G i) ⊆ W i`**。闭支撑的包含才让 `G i` 在 `W i` 外的
-   每一点的**邻域**上为零，从而 `fderiv ℝ (G i)` 也为零——这正是三类局部块各自需要的局部化条件；
-2. **`∀ x` 的全局等式**，不是只在 `tsupport F` 上的逐点等式。只在支撑上成立的等式不能求导；
-   本轮因此**不**走"先在 `K` 上分解再求导、再消去 `Σ ∇χᵢ = 0`"的路线，而是让散度直接对**全局
-   函数等式**使用 `fderiv` 的有限可加性，分解导数项根本不出现；
-3. **有限求和**，不是 `finsum`。有限性来自
-   `LocallyFinite.finite_nonempty_inter_compact` 作用在紧集 `tsupport F` 上：支撑与 `tsupport F`
-   不相交的指标给出的 `G i` 是**处处**为零的函数，不只是在支撑上为零。
+1. **`tsupport (G i) ⊆ W i`, not `support (G i) ⊆ W i`**. The inclusion of closed supports is what makes `G i` zero on a neighborhood of every point outside `W i`, thereby making `fderiv ℝ (G i)` also zero—this is exactly the localizing condition required by each of the three local blocks;
+2. **The global identity of `∀ x`** is not merely a pointwise identity on `tsupport F`. An identity valid only on the support cannot be differentiated;
+this round therefore **does not** follow the route of "first decomposing on `K`, then differentiating, and then eliminating `Σ ∇χᵢ = 0`", but instead directly applies the finite additivity of `fderiv` to the global function identity, with the derivative terms never appearing in the decomposition;
+3. **Finite sum**, not `finsum`. Finiteness arises from
+the action of `LocallyFinite.finite_nonempty_inter_compact` on a compact set `tsupport F`: the indices corresponding to disjoint support from `tsupport F` yield a `G i` that is **everywhere** zero, not just zero on the support.
 
-路线是 Mathlib 的 `SmoothPartitionOfUnity.exists_isSubordinate`，取流形 `V` 以自身为模型
-（`𝓘(ℝ, V)`；`V` 是 Hausdorff、σ-紧、有限维），`contMDiff_iff_contDiff` 把流形意义的 `C^∞` 换成
-`ContDiff ℝ ∞`，再取 `G i = χ i • F`。没有自己重建 bump 函数或覆盖引理。
+The path is Mathlib's `SmoothPartitionOfUnity.exists_isSubordinate`, taking manifold `V` as its model
+(`𝓘(ℝ, V)`; `V` is Hausdorff, σ-compact, finite-dimensional), `contMDiff_iff_contDiff` replaces the manifold meaning of `C^∞` with `ContDiff ℝ ∞`, then takes `G i = χ i • F`. It does not rebuild bump functions or cover lemmas itself.
 
-## 4. 可积性与有限求和：全部证明，没有假设
+## 4. Integrability and finite summation: full proof, no assumptions
 
-`Analysis/Divergence.lean` 新增（并把 `fderiv_eq_zero_of_notMem_tsupport` 从
-`Analysis/SubgraphDivergence.lean` **下移**到此处，名称与陈述不变，原处不留重复证明也不留别名）：
+`Analysis/Divergence.lean` Added (and moves `fderiv_eq_zero_of_notMem_tsupport` from
+`Analysis/SubgraphDivergence.lean` **downward** to this location, name and statement unchanged, original location left without duplicate proof or alternative name):
 
-* `traceLM`：`(V →L[ℝ] V) →ₗ[ℝ] ℝ` 的迹泛函，有限维上自动连续（`continuous_traceLM`）；
-* `continuous_divergence`：`C¹` 场的散度连续（`traceLM ∘ fderiv`）；
-* `divergence_eq_zero_of_notMem_tsupport` 与 `hasCompactSupport_divergence`；
-* `divergence_finset_sum`：逐点可微时散度对有限族可加（`HasFDerivAt.sum` 加迹的线性）。
+* `traceLM`: trace functional of `(V →L[ℝ] V) →ₗ[ℝ] ℝ`, automatically continuous on finite-dimensional spaces (`continuous_traceLM`);
+* `continuous_divergence`: divergence of `C¹` field is continuous (`traceLM ∘ fderiv`);
+* `divergence_eq_zero_of_notMem_tsupport` and `hasCompactSupport_divergence`;
+* `divergence_finset_sum`: when pointwise differentiable, divergence is additive over finite families ((`HasFDerivAt.sum`) linearity of trace).
 
-`KLS/Geometry/GaussGreen.lean` 新增：
+`KLS/Geometry/GaussGreen.lean` new:
 
-* `norm_outwardNormal_le_one`：外法向处处是压缩（边界上为单位向量，边界外为零）；
-* `integrableOn_inner_outwardNormal`：连续紧支撑向量场的通量被积函数在 `frontier U` 上对
-  `surfaceMeasure` 可积。控制项是 `‖G x‖`，用 `abs_real_inner_le_norm` 与 `‖ν‖ ≤ 1`；
-  测度侧只用到 `measurable_outwardNormal` 与 `isLocallyFiniteMeasure_surfaceMeasure_frontier`，
-  **没有**用任何关于 `surfaceMeasure (frontier U)` 总量的界，所以无界边界仍在范围内。
+* `norm_outwardNormal_le_one`: The outer normal is everywhere compressive (unit vector on the boundary, zero outside the boundary);
+* `integrableOn_inner_outwardNormal`: The flux integral of the continuously compactly supported vector field is integrable on `frontier U` with respect to `surfaceMeasure`. The control term is `‖G x‖`, using `abs_real_inner_le_norm` and `‖ν‖ ≤ 1`; the measure side only requires `measurable_outwardNormal` and `isLocallyFiniteMeasure_surfaceMeasure_frontier`, **no** bound on the total quantity of `surfaceMeasure (frontier U)`, so unbounded boundaries remain within the scope.
 
-于是两次 `integral_finsetSum` 的可积性前提都被实际证明：体积侧由"连续 + 紧支撑"给出
-`IntegrableOn (divergence (G i)) U.carrier volume`，边界侧由上面那条给出。
-被积函数的逐点分解分别是 `Analysis.divergence_finset_sum`（体积侧）与 `sum_inner`（边界侧）。
-Lean 的全定义积分确实会让不可积项给 0，但本轮没有借此省略任何一步可积性检查。
+Thus the integrability assumptions for both `integral_finsetSum` are actually proven: the volume side is given by "continuous + compact support"
+`IntegrableOn (divergence (G i)) U.carrier volume`, the boundary side is given by the previous one.
+Pointwise decompositions of the integrand are `Analysis.divergence_finset_sum` (volume side) and `sum_inner` (boundary side).
+The full-definition integral in Lean indeed would cause non-integrable terms to go into 0, but in this round, no step of integrability check was omitted for that purpose.
 
-## 5. 模块组织与迁移
+## 5. Module Organization and Migration
 
-* 通用件下沉：`Analysis/PartitionOfUnity.lean`（新）与 `Analysis/Divergence.lean`（扩充）；
-  `fderiv_eq_zero_of_notMem_tsupport` 从 `SubgraphDivergence` 下移到 `Divergence`。
-* `SmoothDomain` 的全局结论放在应用层新模块 `KLS/Geometry/GaussGreen.lean`，位于
-  `KLS/Geometry/LocalGaussGreen.lean` 之上、`KLS/WIP/AnalyticPrerequisites.lean` 之下。
-* **最小拆分迁移**：`isLocallyFiniteMeasure_surfaceMeasure_frontier` 与
-  `integrableOn_smul_outwardNormal` 由 `AnalyticPrerequisites` 原样迁入同一新模块（同命名空间、
-  同名称、同陈述），因为它们是本轮证明要用到的无洞边界可积性接口。**没有**兼容别名、
-  重复证明或转发声明；唯一的消费者 `AnalyticPrerequisites` 改为导入新模块。
-* `Analysis/PartitionOfUnity.lean` 与 `KLS/Geometry/GaussGreen.lean` 都不导入 coarea、Sard 或
-  任何含洞模块。依赖方向仍无环：
+* General components move to the foundational layer: `Analysis/PartitionOfUnity.lean` (new) and `Analysis/Divergence.lean` (extended);
+  `fderiv_eq_zero_of_notMem_tsupport` Move from `SubgraphDivergence` to `Divergence`.
+The global conclusion of `SmoothDomain` is placed in the application layer new module `KLS/Geometry/GaussGreen.lean`, located at
+  Above `KLS/Geometry/LocalGaussGreen.lean` and below `KLS/WIP/AnalyticPrerequisites.lean`.
+* **Minimum splitting migration**: `isLocallyFiniteMeasure_surfaceMeasure_frontier` and
+  `integrableOn_smul_outwardNormal` moves unchanged from `AnalyticPrerequisites` into the same new module (same namespace,
+  (Same name, same statement), since they are the hole-free boundary integrability interface required by this round of proof. **No** compatible aliases,
+  Repeated proof or forwarding of declarations; the only consumer `AnalyticPrerequisites` is changed to import a new module.
+* `Analysis/PartitionOfUnity.lean` and `KLS/Geometry/GaussGreen.lean` neither import coarea, Sard or
+  Any module with a hole. The directional dependence is still acyclic:
   `Analysis/{AreaFormula, ImplicitGraph, SubgraphDivergence, GraphIntegral, PartitionOfUnity}`
-  → `KLS/Geometry/{BoundaryChart, LocalGaussGreen, GaussGreen}` → `KLS/WIP/AnalyticPrerequisites`。
-* 没有新增公理、没有隐藏 `sorry`、没有削弱结论、没有增加实质假设。陈述未发现问题，因而未改题。
+  → `KLS/Geometry/{BoundaryChart, LocalGaussGreen, GaussGreen}` → `KLS/WIP/AnalyticPrerequisites`.
+* No new axioms, no hidden `sorry`, no weakening of conclusions, no increase in substantive assumptions. No issues found in the statement, thus the problem remains unchanged.
 
-## 6. 计数订正
+## 6. Count correction
 
-`AnalyticPrerequisites` 现有 **6 条公开定理、0 条定义**：3 条已填证明体
-（`ae_forall_fderiv_ne_zero`、`setIntegral_gradient_eq_integral_smul_outwardNormal`、
-`gradient_mollifiedIndicator_eq`），3 条直接 `sorry`
-（`aemeasurable_lintegral_levelSet`、`lintegral_enorm_gradient_mul_eq_lintegral_levelSet`、`sard`）；
-已填的 3 条里 **2 条**无传递 `sorryAx`，只有 `ae_forall_fderiv_ne_zero` 因 `sard` 仍含 `sorryAx`。
-迁移前是 9 条公开定理、5 条已填、4 条洞、2 条无 `sorryAx`；更早（`outwardNormal` 迁出前）是
-13 条公开定理与 1 条定义。历史记录保持原文。
+`AnalyticPrerequisites` There are currently 6 public theorems, 0 definitions: 3 have been filled with proofs
+(`ae_forall_fderiv_ne_zero`, `setIntegral_gradient_eq_integral_smul_outwardNormal`,
+`gradient_mollifiedIndicator_eq`), 3 have direct `sorry`
+(`aemeasurable_lintegral_levelSet`, `lintegral_enorm_gradient_mul_eq_lintegral_levelSet`, `sard`);
+among the filled 3 entries, **2** lack transitivity of `sorryAx`, only `ae_forall_fderiv_ne_zero` due to `sard` still contains `sorryAx`.
+Before migration: 9 public theorems, 5 filled, 4 holes, 2 without `sorryAx`; earlier (before `outwardNormal` migration):
+13 public theorems and 1 definitions. Historical records are preserved as originally written.
 
-## 7. 验证
+## 7. Verification
 
-* **传递公理**：`KLS.SmoothDomain.integral_divergence_eq_integral_inner_outwardNormal`、
-  两条局部块引理、`integrableOn_inner_outwardNormal`、`integrableOn_smul_outwardNormal`、
-  `isLocallyFiniteMeasure_surfaceMeasure_frontier`、
-  `Analysis.exists_finset_sum_eq_of_isOpen_cover`、`Analysis.divergence_finset_sum`、
-  `Analysis.continuous_divergence`，以及下游的
-  `setIntegral_gradient_eq_integral_smul_outwardNormal` 与 `gradient_mollifiedIndicator_eq` ——
-  全部只有 `propext / Classical.choice / Quot.sound`。
-* **独立客户端**：`build/audit/GaussGreenAudit.lean`（忽略目录，`lake env lean` 直接 elaborate，
-  不进 `lake build`、重放集合或认证闭包）。十一条客户端定理，传递公理都只有标准三条：
-  1. `client_support_inside`：支撑完全落在 `U` 内时，由 Gauss–Green 反推 `∫_U div F = 0`；
-  2. `client_support_outside`：支撑完全落在 `closure U` 外时，边界通量为零；
-  3. `client_halfSpace_global`：半空间 `{⟪a,x⟫<0}`（`‖a‖=1`）上**不带支撑限制**地使用全局公式，
-     外法向是具体的 `+a`——这是与上一轮图表局部客户端的实质区别；
-  4. `client_halfSpace_flux_sign`：边界通量非负则总散度非负，**方向约定的符号检验**；
-  5/6. `client_interval_normal_left` / `_right`：一维区间 `(α,β)` 的外法向在左端是 `-1`、
-     右端是 `+1`；
-  7. `client_interval_endpoints`：全局公式在 `(α,β)` 上给出 `∫_α^β F' = F β - F α`，
-     两端法向符号都被检验（`ℋ^0` 上的两点积分逐点算出，`surfaceMeasure ℝ = μH[0]`，
-     `unitBallVolume 0 = 1`）；
-  8. `client_empty_frontier`：`U = univ` 时边界为空，公式退化为全空间散度定理（任意维数）；
-  9. `client_subsingleton`：零维空间上边界必空、两侧都为零，无 `Nontrivial` 假设；
-  10/11. `client_scalar_form`、`client_mollified_gradient`：两个下游公式，符号为
-     `∫_U ∇η = ∫_∂U η n` 与磨光 indicator 梯度的负号，均保持原样。
-  上三轮的 `AreaFormulaAudit.lean`、`BoundaryChartAudit.lean`、`PerimeterInterfaceAudit.lean`、
-  `SubgraphDivergenceAudit.lean` 重新运行，结论与公理不变。
-* **严格模式**：`Analysis/{Divergence, PartitionOfUnity, SubgraphDivergence, GraphIntegral,
-  ImplicitGraph, AreaFormula, LevelSet}`、`KLS/Geometry/{SurfaceMeasure, BoundaryChart,
-  LocalGaussGreen, GaussGreen}` 与五个审计客户端在 `lake env lean -DwarningAsError=true` 下退出 0。
-* **含 hole 的 WIP**：四个文件普通模式实际重新 elaborate，退出 0，诊断恰好是预期的
-  3 / 3 / 8 / 5 条 `declaration uses 'sorry'`，无其他警告或错误。**这不是严格模式通过。**
-* 完成默认 `lake build`（3393 jobs），并从仓库根运行 `python3 research/verify.py`；
-  `lem:relative-perimeter-smoothing` 的 infrastructure 证据哈希按本轮源码重算并加入两个新模块，
-  note 与 gaps 同步更新，状态仍为 `missing`。最终回执由 `build/verification/latest.json` 指向，
-  与最终源码快照匹配。
+* **Transitive Axioms**: `KLS.SmoothDomain.integral_divergence_eq_integral_inner_outwardNormal`,
+  Two local block lemmas, `integrableOn_inner_outwardNormal`, `integrableOn_smul_outwardNormal`,
+  `isLocallyFiniteMeasure_surfaceMeasure_frontier`,
+  `Analysis.exists_finset_sum_eq_of_isOpen_cover`, `Analysis.divergence_finset_sum`,
+  `Analysis.continuous_divergence`, and downstream's
+  `setIntegral_gradient_eq_integral_smul_outwardNormal` and `gradient_mollifiedIndicator_eq` ——
+  Everything is only `propext / Classical.choice / Quot.sound`.
+* **Independent client**: `build/audit/GaussGreenAudit.lean` (ignore directory, `lake env lean` directly elaborate,
+  Not advancing `lake build`, replay sets, or certification closure). Eleven client theorems, transitive axioms have only the standard three:
+  1. `client_support_inside`: When the support is completely contained within `U`, the Gauss–Green theorem is used to derive `∫_U div F = 0`;
+  2. `client_support_outside`: When the support is completely outside `closure U`, the boundary flux is zero;
+  3. `client_halfSpace_global`: Using global formulas on the half-space `{⟪a,x⟫<0}` (`‖a‖=1`), without support restrictions,
+     The outer normal is concrete `+a`—this is the substantive difference from the previous round of local client charts;
+  4. `client_halfSpace_flux_sign`: If the boundary flux is non-negative, then the total divergence is non-negative, **sign check under direction convention**;
+  5/6. `client_interval_normal_left` / `_right`: The outer normal to the one-dimensional interval `(α,β)` at the left endpoint is `-1`,
+     The right-hand side is `+1`;
+  7. `client_interval_endpoints`: The global formula is given on `(α,β)` `∫_α^β F' = F β - F α`,
+     The normal signs at both ends are checked (pointwise integrals at two points on `ℋ^0`, `surfaceMeasure ℝ = μH[0]`,
+     `unitBallVolume 0 = 1`);
+  8. `client_empty_frontier`: When `U = univ`, the boundary is empty, and the formula degenerates into the divergence theorem over the entire space (in any dimension);
+  9. `client_subsingleton`: On zero-dimensional spaces, the boundary must be empty, and both sides are zero, without `Nontrivial` assumptions;
+  10/11. `client_scalar_form`, `client_mollified_gradient`: two downstream formulas, denoted by
+     `∫_U ∇η = ∫_∂U η n` is kept unchanged along with the negative sign of the smoothed indicator gradient.
+  The three previous rounds' `AreaFormulaAudit.lean`, `BoundaryChartAudit.lean`, `PerimeterInterfaceAudit.lean`,
+  `SubgraphDivergenceAudit.lean` rerun, conclusion and axioms remain unchanged.
+* **Strict mode**: `Analysis/{Divergence, PartitionOfUnity, SubgraphDivergence, GraphIntegral,
+  ImplicitGraph, AreaFormula, LevelSet}` and `KLS/Geometry/{SurfaceMeasure, BoundaryChart,
+  LocalGaussGreen, GaussGreen}`, together with five audit clients, exit 0 under `lake env lean -DwarningAsError=true`.
+* **WIP with a hole**: four files in normal mode actually re-elaborated, exit 0, diagnosis is exactly as expected
+  3 / 3 / 8 / 5 entries `declaration uses 'sorry'`, no other warnings or errors. **This is not a strict mode pass.**
+Complete default `lake build` (3393 jobs), and run `python3 research/verify.py` from the repository root;
+  The infrastructure evidence hashes for `lem:relative-perimeter-smoothing` are recomputed from this round’s sources, and the two new modules are added,
+  note Synchronized with gaps, status remains `missing`. Final verification receipt pointed by `build/verification/latest.json`,
+  Matches the final code snapshot.
 
-证据都信任固定版本的第三方编译依赖，不代表独立重建 Mathlib、远端 CI 或 Blueprint 排版通过。
-审计脚本与日志留在忽略的 `build/`。本轮按 owner 要求不提交、不推送。
+Evidence of trust in fixed-version third-party compiled dependencies does not imply independent reconstruction of Mathlib, remote CI, or Blueprint formatting passes.
+Audit scripts and logs remain in the ignored `build/`. This round does not submit or push as required by the owner.
 
-## 距离相对周长链完成还剩什么
+## What remains in the completion of the distance-relative perimeter chain
 
-1. **加权 coarea 公式**与其可测性（`Analysis.lintegral_enorm_gradient_mul_eq_lintegral_levelSet`、
-   `Analysis.aemeasurable_lintegral_levelSet`）。Mathlib 只有等维的 Jacobian 面积公式。
-2. **实值函数的 Sard 定理**（`Analysis.sard`）。Mathlib 只有等维版本
-   `addHaar_image_eq_zero_of_det_fderivWithin_eq_zero`。
-3. **磨光外扩的梯度积分估计与相对周长恢复序列**：现在可以用已闭合的
-   `gradient_mollifiedIndicator_eq` 与面积测度的局部有限性推进，但本轮未动。
-4. `RelativePerimeter` 3 条、`CheegerInfimum` 8 条、`Energy/WIP/Cheeger` 5 条洞仍在，
-   奇异律的 Cheeger 比较仍开放。
+1. **Weighted coarea formula** and its measurability (`Analysis.lintegral_enorm_gradient_mul_eq_lintegral_levelSet`,
+   `Analysis.aemeasurable_lintegral_levelSet`). Mathlib only has the Jacobian area formula for equal-dimensional cases.
+2. **Sard's theorem for real-valued functions** (`Analysis.sard`). Mathlib only has the equal-dimensional version
+   `addHaar_image_eq_zero_of_det_fderivWithin_eq_zero`.
+3. **Gradient integral estimates for smoothed outer expansions and recovery of relative perimeter sequences**: now it can be advanced using the already closed
+   `gradient_mollifiedIndicator_eq` and the local finiteness of the area measure, but no progress has been made in this round.
+4. Gaps in `RelativePerimeter` 3 and `CheegerInfimum` 8 and `Energy/WIP/Cheeger` 5 remain,
+   the Cheeger comparison for singularities is still open.

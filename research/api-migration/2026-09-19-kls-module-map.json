@@ -2,7 +2,7 @@
   "version": 1,
   "date": "2026-09-19",
   "what": "KLS module regrouping. Repeated family words move from basenames into ConditionalFiber, Geometry/Cheeger, Geometry/Coarea, and Geometry/Surface directories. This is a file-layer-only migration: declarations, namespaces, theorem statements, and proofs are unchanged except for import and current-path documentation updates.",
-  "rule": "research/naming.md, 文件与声明作用域 / 家族词归目录，不进文件名",
+  "rule": "research/naming.md, File and declaration scope / Family names belong in directories, not filenames",
   "modules_moved": 12,
   "module_map": {
     "FunctionalInequalities.KLS.ConditionalFiber": "FunctionalInequalities.KLS.ConditionalFiber.Basic",

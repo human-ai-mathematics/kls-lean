@@ -1,99 +1,90 @@
-# 逐层局部切片 R7：局部包与靶空间分解已证，**R7 本身未证**
+# Layer-wise local slicing R7: Local bundles and target space decomposition proven, **R7 itself unproven**
 
-2026-09-17。本轮的目标是 `R7`。**`R7` 没有证出来**，`R0` 也依然开着。
-本轮证出的是 `R7` 的两个部件：**局部包**（把已证的 `R2`、`R3`、`R4` 装配成一个带**统一常数**的邻域）
-与**靶空间分解的积分形式**（换元 + Tonelli）。剩下的缺口**精确写成 `R7b`、`R7c`**，
-只含 `#check`，一条未证。
-本轮**没有证明任何 coarea 公式、任何关于临界集的切片定理、任何 Sard 定理**。
-不迁洞，不提交、不推送。直接洞仍 **8（1/2/5）**，证书仍 **24**。
+2026-09-17. The goal of this round is `R7`. **`R7` has not been proven**, and `R0` remains open.
+This round proves two components of `R7`: the **local patch** (assembling the already proven `R2`, `R3`, `R4` into a neighborhood with a **uniform constant**) and the **integral form of target space decomposition** (change of variables + Tonelli). The remaining gaps are precisely written as `R7b`, `R7c`, containing only `#check`, one unproven statement.
+This round **does not prove any coarea formula, any slicing theorem for critical sets, or any Sard theorem**.
+No hole migration, no commit, no push. The direct proof hole remains **8 (1/2/5)**, and the certification remains **24**.
 
-起点 `HEAD = origin/main = e7c4403352011b6c3ed6dc02f0af3eef6cbb300e`；起点 passed 回执
-`build/verification/20260917T065323.126590Z/report.json`：10 个门、220 个本地模块内核重放、
-592 条目，快照
-`b9df57d18dfff53fae863419fc7ad261a19b37889026c1d14a1cc8c57969f03a`。
-起点工作区 drift 为空。本轮并发会话未改动工作区。
+Start `HEAD = origin/main = e7c4403352011b6c3ed6dc02f0af3eef6cbb300e`; start verification receipt
+`build/verification/20260917T065323.126590Z/report.json`: 10 gates, 220 local module kernel replay,
+592 entries, snapshot
+`b9df57d18dfff53fae863419fc7ad261a19b37889026c1d14a1cc8c57969f03a`.
+Start workspace drift is empty. No changes to workspace in this round of concurrent session.
 
-## 边界
+## Boundary
 
-对数凹 Cheeger–Buser 线（含 `KLS/WIP/CheegerInfimum.lean` 剩下的两个洞）归合作者**王浩丞**，
-本轮未触碰。尖锐有限正则 Sard、Energy 的五个洞、无量纲 KLS 也都未触碰。
+Log-concave Cheeger–Buser lines (including `KLS/WIP/CheegerInfimum.lean` remaining two holes) credited to author **Haocheng Wang**,
+this round untouched. Sharp finite regular Sard, Energy's five holes, dimension-free KLS also untouched.
 
-## 本轮修改了一个既有 `.lean`——如实记下
+## This round modified an existing `.lean`—record it faithfully
 
-`formalization/FunctionalInequalities/Analysis/TangentialLipschitz.lean`（上一 `R4` 轮的模块，
-尚未提交）被改为**先给出显式常数**的形式
-`lipschitzOnWith_of_ker_bound`，原来的存在形式 `exists_lipschitzOnWith_of_ker_bound`
-（即路线的 `R4` 语句）**原样保留**并由显式形式直接导出。
-这是**严格加强**，没有削弱任何已证结论，也没有改动 `R4` 的路线语句。
+`formalization/FunctionalInequalities/Analysis/TangentialLipschitz.lean` (from the previous `R4` round of module,
+not yet commit) is changed into the form of **explicitly providing constants**
+`lipschitzOnWith_of_ker_bound`, while the original existence form `exists_lipschitzOnWith_of_ker_bound`
+(i.e., the route's `R4` statement) is **retained exactly** and directly derived from the explicit form.
+This is a **strict strengthening**, neither weakening any previously proven conclusions nor altering the route statement of `R4`.
 
-原因是硬性的：装配需要**同一个常数**在逼近分片的所有片上成立，
-而存在形式的常数依赖于每片的线性模型 `fderiv ℝ u y`，取不出统一界。
-这也是上一轮把 `R3` 的**邻域一致版**列为硬需求的理由在此兑现的地方。
+The reason is rigid: assembly requires the **same constant** to hold on all pieces in the piecewise approximation.
+The existential constant depends on each piece’s linear model `fderiv ℝ u y`, so no uniform bound can be extracted.
+This is also where the rationale for listing the *neighborhood-consistent version* of `R3` as a hard requirement in the previous round is fulfilled.
 
-## 证了什么
+## What is proved
 
-新模块 `formalization/FunctionalInequalities/Analysis/StratumSlicing.lean`
-（209 行，本地 import 闭包 25 个模块、无 WIP）。
+New module `formalization/FunctionalInequalities/Analysis/StratumSlicing.lean`
+ (209 line, local import closure 25 modules, no WIP).
 
-* **`exists_stratum_local_data`（局部包）**：设 `x₀` 在秩 `r` 层上，
-  `K = range (Du x₀)`，`P`、`Q` 分别是到 `K`、`Kᗮ` 的正交投影。则存在
-  `x₀` 的开邻域 `U`（闭包紧）与**一个**常数 `c`，使得
-  * 在 `closure U` 上 `P ∘ u` 处处正则（`coareaJacobian ≠ 0`）；
-  * 对层上落在 `U` 里的**每一个** `y`、**每一个** `ε`、**每一个**被 `fderiv ℝ u y`
-    以 `ε` 逼近的集合 `S`、**每一条**纤维 `s`，
-    `Q ∘ u` 在 `S ∩ {P ∘ u = s}` 上是 `c ε`-Lipschitz 的。
+* **`exists_stratum_local_data` (local bundle)**: Let `x₀` be on a rank `r` stratum,
+  `K = range (Du x₀)`, `P`, and `Q` are orthogonal projections onto `K` and `Kᗮ`. Then there exists
+  an open neighborhood `U` of `x₀` with compact closure and **one** constant `c`, such that
+  * `P ∘ u` is regular everywhere on `closure U` (`coareaJacobian ≠ 0`);
+  * For **every** `y` in the stratum lying in `U`, **every** `ε`, **every** set `S`
+    approximated by `fderiv ℝ u y` within `ε`, and **every** fiber `s`,
+    `Q ∘ u` is `c ε`-Lipschitz on `S ∩ {P ∘ u = s}`.
 
-  **`c` 对 `y` 的一致性是全部难点**：逼近分片在每片上给出不同的线性模型，
-  而 `R4` 的常数通过 `‖fderiv ℝ u y‖` 与右逆界依赖于该模型。
-  统一常数由 `R2`（核引理）、`R3` 的**邻域一致版**、以及 `‖fderiv ℝ u‖` 在点附近的界给出。
+  **Uniformity of `c` over `y` is the main difficulty**: piecewise approximation provides different linear models on each piece, and the constant of `R4` through `‖fderiv ℝ u y‖` and the right inverse bound depends on this model.
+The unified constant is given by `R2` (the kernel lemma), the **neighborhood version** of `R3`, and the bound of `‖fderiv ℝ u‖` near a point.
 
-* **`lintegral_split_target`（靶空间分解的积分形式）**：
-  靶空间上的积分等于沿正交分解的累次积分。这是 `R6` 对零测集所做的事的**积分版本**，
-  也是逐尺度估计最终要被积分到的形状。用 Mathlib 的
-  `LinearIsometryEquiv.measurePreserving`、`WithLp.volume_preserving_toLp` 与 Tonelli，
-  只要求被积函数几乎处处可测。
+* **`lintegral_split_target` (integral form of target space decomposition)**:
+  The integral over the target space equals the iterated integral along an orthogonal decomposition. This is the **integral version** of `R6`'s action on null sets, and also the shape that successive-scale estimates are ultimately integrated against. Using Mathlib's `LinearIsometryEquiv.measurePreserving`, `WithLp.volume_preserving_toLp`, and Tonelli, it is only required that the integrand be measurable almost everywhere.
 
-* 配套的 `fderiv_clm_comp`（连续线性后复合的链式法则）、`surjective_proj_comp`
-  （基点处正则分量确实是淹没）、`finrank_tangentRange_eq`（层上维数相等）。
+* Supporting lemmas `fderiv_clm_comp` (the chain rule for continuous-linear postcomposition) and `surjective_proj_comp`
+  (the regular component at the base point is indeed immersive), `finrank_tangentRange_eq` (the dimension of the layer is equal).
 
-## 没证什么——`R7` 本身
+## Nothing proven—`R7` itself
 
-**`R7` 未证。** 缺的是两步，精确写在只含 `#check` 的
-`research/audits/StratumSlicingRouteStatements.lean` 里，**一条未证**：
+**`R7` unproven.** Missing are two steps, precisely written in `#check` under `research/audits/StratumSlicingRouteStatements.lean`, **one unproven**:
 
-* **`R7b`（逐尺度估计）**：在固定尺度 `ε` 上，层片在整个靶空间上的纤维测度总量
-  被 `ε^{m−r}` 乘以正则分量 coareaJacobian 的积分控制，常数与 `ε` 无关。
-  要走的路是：对 `u` **本身**做一次逼近分片（一套分片同时供两个分量使用）；
-  在每片上用局部包得到纤维方向的 `c ε`-Lipschitz；在**纤维内部**用
-  `Analysis/VectorHausdorffSlicing.lean` 的 Eilenberg 界，取指数 `k`、靶维数 `m − r`，
-  此时 `k + (m − r) = n − r` 恰好；再沿纤维参数积分，用**已证的**正则 coarea 公式
-  把纤维测度换成 coareaJacobian 的普通积分；最后用 `lintegral_split_target` 读成靶空间上的积分。
-* **`R7c`（`ε → 0`）**：这种形状的界在每个尺度上成立、右端有限、指数为正（即 `r < m`），
-  就逼出积分为零，进而几乎处处为零。这是仓库里已经用过两次的模式
-  （`VectorHausdorffSlicing.lean` 与 `VectorCriticalSlice.lean`）。
+* **`R7b` (scale-by-scale estimate)**: On a fixed scale `ε`, the total fiber measure of the stratum over the entire target space
+  The integral multiplied by `ε^{m−r}` is controlled by the regular component coareaJacobian; the constant is independent of `ε`.
+  The path is: perform a approximation partitioning on `u` itself (a set of partitions serving two components simultaneously);
+  On each piece, obtain a fiber-direction `c ε`-Lipschitz using local packages; in the **interior of the fiber** using
+  The Eilenberg bound of `Analysis/VectorHausdorffSlicing.lean`, taking the exponential `k` and target dimension `m − r`,
+  At this point `k + (m − r) = n − r` holds exactly; then integrate along the fiber parameter using the **already proven** regular coarea formula
+  Replace the fiber measure with a regular integral of the coarea Jacobian; finally read off the integral over the target space using `lintegral_split_target`.
+* **`R7c` (`ε → 0`)**: This bound has the shape valid at each scale, finite at the right end, and positive exponent (i.e. `r < m`),
+  Forces the integral to be zero, hence almost everywhere zero. This is a pattern already used twice in repository
+  (`VectorHausdorffSlicing.lean` and `VectorCriticalSlice.lean`).
 
-在这两条做完之前，**`R7` 开着，`R0` 开着，一般余维 m coarea 公式开着**。
+Before these two are completed, **`R7` is open, `R0` is open, the general coarea formula for codimension m is open**.
 
-## 本轮还没做的事
+## What hasn't been done in this round
 
-* **没有证明 `R0`**；`R8`–`R10`、`N1`、`N2` 也都未证。
-* **没有证明任何 coarea 公式**；已证公式的适用范围没有扩大一分。
-* **没有证明任何 Sard 定理**；对临界**值**集合的测度什么也没断言。
-* 除上面记下的 `TangentialLipschitz.lean` 加强外，没有修改任何其他既有 `.lean`
-  （`FunctionalInequalities.lean`、`RankDeficientRouteStatements.lean`、
-  `AreaFormulaRouteStatements.lean` 均未动）；没有迁洞；没有扩大证书或 Blueprint `leanok` 范围；
-  没有新增兼容 alias；没有削弱已证结论。
-* **没有提交、没有推送**，真实 Git index 未改动。
+* **No proof `R0`**; `R8`–`R10`, `N1`, `N2` are also unproven.
+* **No proof of any coarea formula**; the scope of proven formulas has not been expanded in the slightest.
+* **No proof of any Sard theorem**; nothing is asserted about the measure of the critical value set.
+* Aside from the strengthening of `TangentialLipschitz.lean` noted above, no other existing `.lean` has been modified
+  (`FunctionalInequalities.lean`, `RankDeficientRouteStatements.lean`, `AreaFormulaRouteStatements.lean` remain unchanged); no holes have been migrated; no extension of certification or Blueprint `leanok` scope; no new compatible alias added; no weakening of established conclusions.
+* **No commit, no push**, the real Git index remains unchanged.
 
-## 验证
+## Verification
 
-* 新模块与两个新客户端均以 `-DwarningAsError=true` 编译通过，无 `sorry`、无 `axiom`、无占位。
-* `research/audits/StratumSlicingAudit.lean` 的 **11 条公理报告**只用
-  `propext`、`Classical.choice`、`Quot.sound`。
-  `research/audits/StratumSlicingRouteStatements.lean` 只含 **2 条 `#check`**，无声明。
-* 重跑全部 **47 个既有审计客户端**加两个新客户端共 **49 个**，全部严格通过，0 失败；
-  公理报告 629 条，其中 12 条 `sorryAx` 仍全部落在四个**故意**报告未决 WIP 结果的客户端里。
-* 三个 WIP 逐个实际编译，直接洞 **1/2/5，总数 8**，不变；`research/check_ledger.py` 报 **24** 个证书。
-* 默认 `lake build` 与根目录 `python3 research/verify.py` 通过；证据 JSON 为
-  `research/explorations/2026-09-17-stratum-slicing.json`，
-  最终核对另存 `build/audit/stratum-slicing/final-snapshot.json`。
+* The new module and two new clients have been compiled successfully with `-DwarningAsError=true`, with no `sorry`, no `axiom`, and no placeholders.
+* The **11 Axiom Report** of `research/audits/StratumSlicingAudit.lean` only uses
+  `propext`, `Classical.choice`, `Quot.sound`.
+  `research/audits/StratumSlicingRouteStatements.lean` Contains only **2 `#check`**, no declarations.
+* Retest all **47** existing audit clients plus two new clients, totaling **49**; all strictly passed, 0 failed;
+  The axioms report 629 items, among which 12 items `sorryAx` are still entirely within the client side of four intentionally reported unresolved WIP results.
+* Three WIPs are compiled individually, direct proof hole **1/2/5**, total **8**, unchanged; `research/check_ledger.py` reports **24** certificates.
+* Default `lake build` and root directory `python3 research/verify.py` are connected; evidence JSON is
+  `research/explorations/2026-09-17-stratum-slicing.json`,
+  Final verification and save `build/audit/stratum-slicing/final-snapshot.json`.

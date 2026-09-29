@@ -1,7 +1,7 @@
 # Lean design: Poincaré certificates
 
-命名空间已表达的内容不再重复进声明短名；见[短名补充记录](research/decisions/2026-09-08-namespace-short-names.md)。
-比较名称也只写一次共有操作，见[比较短名记录](research/decisions/2026-09-08-comparison-short-names.md)。
+Do not repeat namespace context in declaration short names; see the [short-name supplement](research/decisions/2026-09-08-namespace-short-names.md).
+Comparison names also state the shared operation only once; see the [comparison short-name record](research/decisions/2026-09-08-comparison-short-names.md).
 
 This document records the implemented Lean architecture and semantic contracts for the Issue #2
 linear-test lower bound, Issue #6 two-factor Poincaré tensorization, Issue #7 finite-product

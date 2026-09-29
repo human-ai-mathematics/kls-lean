@@ -1,51 +1,54 @@
-# 加权光滑逼近：本地验收与证书登记
+# Weighted smooth approximation: local acceptance and certificate registration
 
-日期：2026-09-06。用户在“先验收这批证明，再准备常数比较 statement”的建议后回复
-“可以”。本记录接受 `lem:covariance-test-core-density` 当前四条证明，并接通已有验收流程。
-起点 HEAD 为 `70ca1c19c4d207a31716c2e589c0b096521a5490`，包括此前未提交工作。
-本次不 commit/push，不改写历史 decisions/explorations 或先前暂存内容。
+Date: 2026-09-06. The user agreed to “accept these proofs first, then prepare the constant-comparison
+statements”. This record accepts the current four proofs of `lem:covariance-test-core-density`
+and connects them to the existing acceptance workflow. Starting HEAD:
+`70ca1c19c4d207a31716c2e589c0b096521a5490`, including earlier uncommitted work.
+No commit/push, rewriting of historical decisions/explorations, or changes to prior staging.
 
-## 来源与范围复核
+## Source and scope review
 
-读取 [statement 交接](2026-09-06-weighted-approximation-statements.md)、
-[证明完成记录](2026-09-06-weighted-approximation-proofs.md)、Blueprint Appendix A，以及
-四条公开声明和实现。此次未修改四条声明的签名，也未添加数学输入；实现仅移除三个
-经当前 Lean linter 确认无效的 `beta_reduce`。不禁用 linter。
+Read the [statement handoff](2026-09-06-weighted-approximation-statements.md),
+[proof-completion record](2026-09-06-weighted-approximation-proofs.md), Blueprint Appendix A,
+and the four public declarations and implementations. Their signatures are unchanged, with
+no added mathematical inputs. The implementation only removes three `beta_reduce` steps
+confirmed ineffective by the current Lean linter; the linter is not disabled.
 
-主结论仍只要求 g 与 B∇g 属于 L²(ν)，B 允许退化；ν 对任意正归一化 Haar 参考测度绝对
-连续，包含零维。辅助结论保留紧支撑、同一 Lipschitz 常数以及 bounded-L1 的任意闭区间。
-完整梯度平方可积没有被添加为主结论的前提。局部斜率、文献常数及闭算子结论不在本批中。
+The main result still only requires g and B∇g in L²(ν), allowing degenerate B; ν is absolutely
+continuous with respect to an arbitrary positively normalized Haar reference, including
+dimension zero. Helpers retain compact support, the same Lipschitz constant, and arbitrary
+closed intervals in bounded-L1. Integrability of the full squared gradient is not added to
+the main conclusion's premises. Local slope, literature constants, and closed-operator
+conclusions are outside this batch.
 
-实现使用 Rademacher、缩放截断、非负归一化核与控制收敛。卷积梯度收敛通过可微点的
-仿射模型及核导数质量估计实现；它不需要按原书面路线额外构造弱导数。实现路线变化
-不改变目标数学范围。
+The implementation uses Rademacher, scaled cutoffs, nonnegative normalized kernels, and
+dominated convergence. Convolution-gradient convergence uses the affine model at differentiable
+points and kernel-derivative mass estimates; no additional weak-derivative construction from
+the original written route is needed. This change of proof route preserves the target scope.
 
-## 登记
+## Registration
 
-- `solutions/LemCovarianceTestCoreDensity.lean` 的唯一
-  `Solutions.LemCovarianceTestCoreDensity.certificate` 显式合取打包全部四个合同，
-  每个分量直接使用相应库定理。保留四条库声明的检查，并为新证书加传递公理 guard。
-- ledger 中该节点改为 `proved / checked_by: lean`；只更新已过时的草稿措辞与验收来源，
-  原六个节点不变。已有 `lem:covariance-test-core-density` Blueprint 标签直接承载证书
-  链接及 `leanok`，不增加导航节点。
-- 在 `check_blueprint.py` 既有显式映射中登记新证书，没有改变验证算法或放宽验收条件。
-  `tasks.json` 的数学分类仍是 `local_argument`，基础设施改为 `available`，带已实现库与
-  证书源码哈希；TeX 证据哈希随新增认证锚点更新。没有修改任何长路线状态。
-- 当前指南同步为七个证明证书，并保留未证明的文献常数比较及 Borell 密度输入。
+- The unique `Solutions.LemCovarianceTestCoreDensity.certificate` in `solutions/LemCovarianceTestCoreDensity.lean` explicitly conjoins all four contracts, using the corresponding library theorem for each component. Retain checks of all four library declarations and add a transitive axiom guard for the certificate.
+- Set the ledger node to `proved / checked_by: lean`, updating only obsolete draft wording and acceptance provenance; the original six nodes are unchanged. The existing Blueprint label `lem:covariance-test-core-density` carries the certificate link and `leanok`, without a new navigation node.
+- Register the certificate in the existing explicit `check_blueprint.py` map, without changing the verification algorithm or weakening acceptance. The `tasks.json` mathematical classification remains `local_argument`; infrastructure becomes `available`, with implemented-library and certificate source hashes. Update TeX evidence hashes for the new certification anchors. No long-route status changes.
+- Synchronize current guides to seven proof certificates, retaining the unproved literature-constant comparison and Borell-density input.
 
-## 已核实与最终收据
+## Verified checks and final receipt
 
-本地复核四条声明的传递公理均恰为 `propext`、`Classical.choice`、`Quot.sound`。
-对入口及本地导入闭包的逃逸标记扫描通过。移除无效 tactic 并增加证书后的
-`lake build solutions.LemCovarianceTestCoreDensity` 通过，3032 jobs；新证书 guard 通过。
-ledger、Blueprint、atlas 检查通过：7 个已证明 ledger 节点、7 个证书、73 个数学节点、
-86 个导航标签、4 条活动路线，无依赖环。
+The four declarations' transitive axioms are locally confirmed to be exactly `propext`,
+`Classical.choice`, and `Quot.sound`. Escape-marker scans of the entry point and local import
+closure pass. After removing ineffective tactics and adding the certificate,
+`lake build solutions.LemCovarianceTestCoreDensity` passes with 3032 jobs; the new certificate
+guard passes. Ledger, Blueprint, and atlas checks pass: 7 proved ledger nodes, 7 certificates,
+73 mathematical nodes, 86 navigation labels, 4 active routes, no dependency cycles.
 
-本记录及指南编辑完成后运行 `python3 research/verify.py`。其生成的
-`build/verification/<UTC timestamp>/report.json` 才记录最终实际结果、逐门日志、完整证书
-打印、公理覆盖、局部 kernel 重放及源码 SHA256。本记录不预先声称该完整运行成功，
-也不将生成后的最终源码哈希回写到本文件。后续新增 statement 会改变工作树，必须把
-验收快照与后续草稿快照区分；若再次运行验证，以相应收据的源码哈希为准。
+After editing this record and the guides, run `python3 research/verify.py`. Its generated
+`build/verification/<UTC timestamp>/report.json` records actual final outcomes, per-gate logs,
+complete certificate printing, axiom coverage, local kernel replay, and source SHA256.
+This record does not claim success of that full run in advance or write the generated final
+source hash back into itself. Subsequent statements change the working tree: distinguish the
+acceptance snapshot from later draft snapshots, and use each subsequent receipt's source hash
+when verification is rerun.
 
-这里的重放仍信任钉住的第三方编译导入，不是隔离源码重建或外部独立检查。
-没有运行远端 CI，也没有发布。
+Replay still trusts pinned third-party compiled imports; it is not an isolated source rebuild
+or external independent check. No remote CI or publication was performed.

@@ -13,7 +13,7 @@ sub-issue of #1.
 
 The user supplied the completed library proofs through the separately recorded proof stage,
 then requested several semantic and structural reviews. Following those reviews, the user said
-“我觉得OK了，你最后再检查一下语义是否对齐，我们就可以开始下一步了”. The final two
+“I think it is ready; make one final check that the semantics align, then we can move to the next step”. The final two
 independent read-only reviews passed. The accompanying
 [freeze record](../decisions/2026-09-03-finite-tensorization-freeze.md) records this approval
 of the current 45-declaration surface, exact ledger claim, encodings, and specialization checks.

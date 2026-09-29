@@ -1,85 +1,89 @@
-# 2026-09-12 — 同步上游研究与文献
+# 2026-09-12 — Upstream research and literature synchronization
 
-本轮是研究同步，不新增 Lean 定理、`sorry`、证书或已证明节点，不修改已有证明。
-截至本轮开始，工作区干净；已有四条边界接口证明属于此前工作。
+This round synchronizes research. It adds no Lean theorem, `sorry`, certificate, or proved node,
+and changes no existing proof. The working tree was clean at the start; the four existing
+boundary-interface proofs belong to earlier work.
 
-## 来源与版本
+## Sources and revisions
 
-- 上游仓库现名为 [kls-conjecture-search](https://github.com/numina-functional-inequalities/kls-conjecture-search)。
-- 旧研究固定版本：`8185e46ffb040e04fea076953e5bcaeb4157d71a`（2026-09-01）。
-- 新研究固定版本：`34b5fcd57fef17089e781616005fe6d3641bd11e`（2026-09-10），本轮只读查询确认是当前 `main`。
-- [六个提交的比较](https://github.com/numina-functional-inequalities/kls-conjecture-search/compare/8185e46ffb040e04fea076953e5bcaeb4157d71a...34b5fcd57fef17089e781616005fe6d3641bd11e)。包含模板迁移、两轮研究入库、手稿和网站改进；记录日期不等于合并日期。
-- 账本迁移至 `research/program/ledger.yaml`，搜索路线迁移至 `research/program/portfolio.yaml`。
-- 本地 route source 的稳定 ID `kls-exploration` 保留，仓库 URL、revision、ledger 和路线 provenance 路径更新。历史决定和证书的旧版本来源不改写。
+- The upstream repository is now named [kls-conjecture-search](https://github.com/numina-functional-inequalities/kls-conjecture-search).
+- Previous research pin: `8185e46ffb040e04fea076953e5bcaeb4157d71a` (2026-09-01).
+- New research pin: `34b5fcd57fef17089e781616005fe6d3641bd11e` (2026-09-10), confirmed by a read-only query as `main` during this round.
+- [Six-commit comparison](https://github.com/numina-functional-inequalities/kls-conjecture-search/compare/8185e46ffb040e04fea076953e5bcaeb4157d71a...34b5fcd57fef17089e781616005fe6d3641bd11e): template migration, two research batches, manuscript and website improvements. Record dates are not merge dates.
+- The ledger moved to `research/program/ledger.yaml`, and the search portfolio to `research/program/portfolio.yaml`.
+- The local route source retains stable ID `kls-exploration`; repository URL, revision, ledger, and route-provenance paths are updated. Historical decisions and certificates retain their old revision sources.
 
-读取了固定版本的数学模块、账本、portfolio、参考文献和两轮研究总结。
-[选定原始账本记录](../upstream/2026-09-12-kls-research.json)保留 20 条未经改写的 YAML 记录与源账本 SHA-256；
-这是可复查的来源摘录，不是第二份 Lean 账本，也不直接参与任务调度。
-本轮没有对上游每份证明档重新执行独立数学审查。
+The pinned mathematical modules, ledger, portfolio, bibliography, and two research summaries
+were read. The [selected raw ledger records](../upstream/2026-09-12-kls-research.json) preserve
+20 unmodified YAML records and the source ledger's SHA-256. This is a reviewable source excerpt,
+not a second Lean ledger, and does not directly drive task scheduling. This round did not
+independently re-audit the mathematics of every upstream proof document.
 
-## 认证语义
+## Certification semantics
 
-上游当前 138 个节点中有 86 个 `proved`、46 个 `open`、4 个 `defined`、2 个 `refuted`。
-这些数量不可与本地 24 个 Lean 证书直接比较：上游包含文献、自然语言证明及带假设的蕴含。
+At this snapshot, upstream has 138 nodes: 86 `proved`, 46 `open`, 4 `defined`, and 2 `refuted`.
+These counts cannot be compared directly with the 24 local Lean certificates: upstream includes
+literature, natural-language proofs, and implications with hypotheses.
 
-- `proofs.mode: agent` 表示上游自然语言审查记录，不表示 Lean 核验。
-- 上游 `proved` 加非空 `assumes` 表示证明了一个条件性命题。
-  本地 `prop:spectral-sufficiency` 和 `cor:cmh-recovery-sequence-suffices` 继续为 `conditional`；
-  其显式开放前提仍由现有 Blueprint/route 依赖表达，没有升级成无条件结果。
-- 文献预印本的陈述、上游审查、数值实验、Lean 证书是不同证据。
-- 四条足以推出 KLS 的路线仍是逻辑 OR；新增精确模型或短时间结果不成为关闭 KLS 的新分支。
+- `proofs.mode: agent` records upstream natural-language review, not Lean verification.
+- Upstream `proved` with nonempty `assumes` means a conditional proposition has been proved. Local `prop:spectral-sufficiency` and `cor:cmh-recovery-sequence-suffices` remain `conditional`; the existing Blueprint/route dependencies retain their explicit open premises, without promotion to unconditional results.
+- Preprint statements, upstream reviews, numerical experiments, and Lean certificates are different kinds of evidence.
+- The four sufficient routes to KLS remain a logical OR. New exact models or short-time results do not create a new completed branch to KLS.
 
-## 文献更新
+## Literature updates
 
-两篇均固定到 v1，并加入 Blueprint 文献表和路线章。
+Both papers are pinned to v1 and added to the Blueprint bibliography and route chapter.
 
-| 来源 | 原文陈述 | 本地边界 |
+| Source | Original statement | Local boundary |
 | --- | --- | --- |
-| [Chen–Klartag, 2607.23307v1](https://arxiv.org/abs/2607.23307v1) | 各向同性对数凹律的 sharp thin-shell：`Var(|X|²) ≤ 8n`；另有三阶矩张量界 | 未 Lean 形式化；thin-shell 本身不解决 KLS |
-| [Letwin, 2607.24164v1](https://arxiv.org/abs/2607.24164v1) | 对称二次型的 Poincaré 系数 2；`ψ_n ≤ C (log n)^(1/4)`，`n ≥ 2` | 未 Lean 形式化；按 `1/4 ≤ ψ²/C_P ≤ π`，推出 `C_P ≤ C' sqrt(log n)`，不是维数无关界 |
+| [Chen–Klartag, 2607.23307v1](https://arxiv.org/abs/2607.23307v1) | Sharp thin-shell bound for isotropic log-concave laws: `Var(|X|²) ≤ 8n`; also a third-moment tensor bound | Not formalized in Lean; thin-shell alone does not solve KLS |
+| [Letwin, 2607.24164v1](https://arxiv.org/abs/2607.24164v1) | Poincaré coefficient 2 for symmetric quadratic forms; `ψ_n ≤ C (log n)^(1/4)`, `n ≥ 2` | Not formalized in Lean; `1/4 ≤ ψ²/C_P ≤ π` yields `C_P ≤ C' sqrt(log n)`, not a dimension-free bound |
 
-不把 Letwin 的 `ψ` 指数直接写成 `C_P` 指数；也不把上游条件于 Letwin 的较弱路线终点叫作新的文献最强界。
+Do not copy Letwin's exponent for `ψ` directly to `C_P`, or describe the weaker upstream route
+endpoint conditional on Letwin as a new best literature bound.
 
-## 新增研究与剩余缺口
+## Added research and remaining gaps
 
-[Wave four 总结](https://github.com/numina-functional-inequalities/kls-conjecture-search/blob/34b5fcd57fef17089e781616005fe6d3641bd11e/research/explorations/2026-08-31-orchestrator-kls-angles-wave-w4.md)
-与 [wave five 数学总结](https://github.com/numina-functional-inequalities/kls-conjecture-search/blob/34b5fcd57fef17089e781616005fe6d3641bd11e/research/explorations/2026-09-06-orchestrator-kls-cone-lift-wave-w5.md)
-提供证明档与审查路径；最新账本优先于较早波次的暂定状态。
+The [wave-four summary](https://github.com/numina-functional-inequalities/kls-conjecture-search/blob/34b5fcd57fef17089e781616005fe6d3641bd11e/research/explorations/2026-08-31-orchestrator-kls-angles-wave-w4.md)
+and [wave-five mathematical summary](https://github.com/numina-functional-inequalities/kls-conjecture-search/blob/34b5fcd57fef17089e781616005fe6d3641bd11e/research/explorations/2026-09-06-orchestrator-kls-cone-lift-wave-w5.md)
+provide proof and review paths; the latest ledger takes precedence over provisional statuses
+from earlier waves.
 
-| 路线 | 新接入的上游记录 | 已获得的范围 | 尚未获得 |
+| Route | Newly incorporated upstream records | Established scope | Still missing |
 | --- | --- | --- | --- |
-| 谱局部化 | `lem:mm-restart-deweighting`、`lem:mm-smallgap-fourth-moment` | restart 去权、带既有维数界输入的小谱隙四阶矩控制 | 本地随机过程、停止时刻、特征函数和生成元基础 |
-| 谱局部化 | `lem:mm-stopped-window-source`、`prop:mm-window-occupation` | **条件于 `thm:letwin-qcts`** 的短时间链与 `C_P ≤ C log² n` | 统一正时间的 occupation；KLS 仍开放 |
-| Screened localization | `prop:split-screened-supply` | regular split class 上的 screened supply 估计 | 任意测度/切集的 universal gate |
-| CMH | `lem:cmh-linear-spectral-resolution` | 弱 column equation 与闭形式意义的谱分解 | 一般强算子域结论；不能省掉 `Tr Q ∈ L²` 问题 |
-| CMH | `lem:linear-sector-third-moment`、`cor:gate-zero-third-moment` | Stein 列能量分解为常数、方向三阶矩和正交高阶余项 | 普遍控制高阶余项的矩阵界 |
-| CMH | `conj:gate-zero-sharp` | 明确提出 `E[H Σ⁻¹ H] ≼ 2Σ` | 仍为 conjecture；即使精确模型满足也不能升级 |
-| 指数锥 | `def:exponential-cone`、`prop:cone-moment-map`、`prop:cone-linear-sector`、`cor:cube-cone-gate-zero` | 显式 moment map/Stein 核，轴向值 `1+n/β ≤ 2`，cube cone 的矩阵界 | 一般 gate zero、全 CMH 不等式、统一 recovery envelope |
-| 条件纤维 | `lem:fiber-root-degree-two` | `m ≥ 3` 时 root-frame 的二次商空间最小值 `(m+2)(m+3)/(5m²) > 1/5` | 全 `L²` 谱隙、三次证书、普遍 frame 构造 |
+| Spectral localization | `lem:mm-restart-deweighting`, `lem:mm-smallgap-fourth-moment` | Restart deweighting and small-spectral-gap fourth-moment control using an existing dimension-dependent bound | Local foundations for stochastic processes, stopping times, eigenfunctions, and generators |
+| Spectral localization | `lem:mm-stopped-window-source`, `prop:mm-window-occupation` | Short-time chain and `C_P ≤ C log² n`, **conditional on `thm:letwin-qcts`** | Occupation uniformly over positive times; KLS remains open |
+| Screened localization | `prop:split-screened-supply` | Screened-supply estimate for the regular split class | Universal gate for arbitrary measures/cuts |
+| CMH | `lem:cmh-linear-spectral-resolution` | Weak column equation and spectral resolution in the closed-form sense | General strong operator-domain conclusion; the `Tr Q ∈ L²` issue cannot be omitted |
+| CMH | `lem:linear-sector-third-moment`, `cor:gate-zero-third-moment` | Stein-column energy decomposition into constant, directional third-moment, and orthogonal higher-order remainder terms | A matrix bound universally controlling the higher-order remainder |
+| CMH | `conj:gate-zero-sharp` | Explicit conjecture `E[H Σ⁻¹ H] ≼ 2Σ` | Still a conjecture; exact models satisfying it do not promote its status |
+| Exponential cones | `def:exponential-cone`, `prop:cone-moment-map`, `prop:cone-linear-sector`, `cor:cube-cone-gate-zero` | Explicit moment map/Stein kernel, axial value `1+n/β ≤ 2`, and cube-cone matrix bound | General gate zero, full CMH inequality, uniform recovery envelope |
+| Conditional fibers | `lem:fiber-root-degree-two` | Root-frame quadratic quotient-space minimum `(m+2)(m+3)/(5m²) > 1/5` for `m ≥ 3` | Full `L²` spectral gap, cubic certificate, universal frame construction |
 
-上游的 264 个精确锥样本是数值/有限模型证据，不作为普遍不等式的证明。
-指数锥的 sharp 线性部分也不是整个 CMH 常数。
-二次多项式结果只排除该双对偶框架中的二次 refuter；不能推广为完整 frame 定理。
+The 264 exact upstream cone samples are numerical/finite-model evidence, not a proof of a
+universal inequality. The sharp linear sector of exponential cones is not the entire CMH
+constant. The quadratic-polynomial result only excludes quadratic refuters in that bidual
+framework; it cannot be generalized to a complete frame theorem.
 
-## 后续形式化队列
+## Subsequent formalization queue
 
-这是范围建议，不表示基础设施已就绪。本轮只给现有任务添加研究更新说明，保持原数学分类、
-假设与 infrastructure 状态；新对象进入正式 Blueprint 数学节点前，先做陈述与依赖审计。
+These are scope proposals, not claims of infrastructure readiness. This round only adds
+research-update notes to existing tasks, retaining their mathematical classification,
+assumptions, and infrastructure status. Audit statements and dependencies before adding new
+objects as formal Blueprint mathematical nodes.
 
-1. **继续当前周长链。** 四条外法向/边界积分接口已有证明；优先接通 Gauss–Green 和现有光滑逼近，
-   再处理 coarea、Sard、恢复序列及 Cheeger 下确界比较。这些是已有形式化任务。
-2. **单独评估 `lem:fiber-root-degree-two`。** 原始声明在上游 `modules/kls/45-conditional-fiber-frame.tex`；
-   审查 isotropic simplex、root frame、二次多项式商空间、条件重采样归一化和有限维谱计算。
-   现有纤维闭形式可复用，但上述模型不能视作已存在。
-3. **CMH 先做最小定义依赖表。** moment map、canonical Stein 核、闭生成元、弱 column equation
-   必须分开；不得用一个强域假设悄悄替换上游只证明的弱形式。锥模型作为独立校准任务。
-4. **随机局部化作为较大独立工作包。** 先定义过程与停止时刻，再考虑 wave-four window 链；
-   Letwin 输入在 Lean 中必须证明或保持显式假设，不能通过来源引用充当公理。
+1. **Continue the current perimeter chain.** Four outward-normal/boundary-integral interfaces are proved. First connect Gauss–Green and existing smooth approximation, then coarea, Sard, recovery sequences, and Cheeger-infimum comparison. These are existing formalization tasks.
+2. **Assess `lem:fiber-root-degree-two` separately.** The original statement is in upstream `modules/kls/45-conditional-fiber-frame.tex`. Review the isotropic simplex, root frame, quadratic-polynomial quotient space, conditional-resampling normalization, and finite-dimensional spectral calculation. The existing fiber closed form is reusable, but those models must not be assumed to exist locally.
+3. **Start CMH with a minimal definition dependency table.** Keep moment maps, canonical Stein kernels, closed generators, and weak column equations separate. Do not silently replace the upstream weak formulation with a strong-domain premise. Treat cone models as a separate calibration task.
+4. **Treat stochastic localization as a larger independent work package.** Define processes and stopping times before the wave-four window chain. The Letwin input must be proved in Lean or retained as an explicit assumption; a source citation cannot serve as an axiom.
 
-当前不自动创建任务、发送 Slack 消息、提交或推送。新的研究路线也不替换正在进行的周长证明。
+This round does not automatically create tasks, send Slack messages, commit, or push. New
+research routes do not replace the perimeter proof already in progress.
 
-## 本轮验证范围
+## Verification scope of this round
 
-执行 Blueprint/Atlas 结构检查、Python 回归检查、本地完整验证，以及更新后 Blueprint 的构建检查。
-完整验证的机器回执位于 `build/verification/latest.json`；它绑定实际源码快照，本文不预先宣称通过。
-生成的 Atlas 仍只调度已有本地数学节点；新增上游摘录不产生 `leanok` 或 Lean 证书。
+Run Blueprint/Atlas structure checks, Python regression checks, full local verification, and
+a build check of the updated Blueprint. The full verification receipt is
+`build/verification/latest.json`; it binds the actual source snapshot, and this document does
+not claim a pass in advance. The generated Atlas still schedules only existing local
+mathematical nodes; upstream excerpts add neither `leanok` nor Lean certificates.

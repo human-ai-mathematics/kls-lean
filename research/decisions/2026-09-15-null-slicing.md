@@ -1,24 +1,17 @@
-# 零测集的 Lipschitz 水平切片
+# Lipschitz level slices of the zero measure set
 
-2026-09-15。本轮**证明了加权 coarea 路线的 L2**：体积零集在 Lipschitz 映射下的水平截面
-几乎处处具有零 surfaceMeasure。不提交、不推送、不改历史决定。起始 HEAD 为
-`2965b32bc79bdb24921c633df12102450eaedcc4`；起始 passed 回执为
-`build/verification/20260914T194849.197366Z/report.json`（与 `build/verification/latest.json`
-逐字节相同，SHA256 `cc265566fc376ff989c601791ca62964f9240578b7f6a439e49de20569738aaa`），
-重新计算的完整快照与回执相等：410 个文件，SHA256
-`0fb70f2270d6c2f6c52ba89931a3ffcf80b8c5d9a4eea3ef671a99157283c53b`。这里的逐字节核对指
-逐文件 SHA256（包括删除项）及完整快照结构一致，不是只看 HEAD。
+2026-09-15. This round **proves L2 of the weighted coarea route**: the level sets of volume zero sets under Lipschitz maps almost everywhere have zero surface measure. No commit, no push, no alteration of historical decisions. The starting HEAD is
+`2965b32bc79bdb24921c633df12102450eaedcc4`; the starting verification receipt is
+`build/verification/20260914T194849.197366Z/report.json` (byte-for-byte identical to `build/verification/latest.json`, SHA256 `cc265566fc376ff989c601791ca62964f9240578b7f6a439e49de20569738aaa`), and the recomputed full snapshot matches the receipt: 410 files, SHA256 `0fb70f2270d6c2f6c52ba89931a3ffcf80b8c5d9a4eea3ef671a99157283c53b`. The byte-for-byte comparison refers to consistent file-level SHA256 (including deleted items) and full snapshot structure, not merely the HEAD.
 
-## 本轮证明的内容
+## Content of this round of proof
 
-新增两个模块，共两条主结论和两条辅助引理，全部只依赖标准三条公理，无 `sorry`、
-无新公理、无占位定义。
+Add two modules, together with two main conclusions and two auxiliary lemmas, all relying only on the standard three axioms, no `sorry`, no new axioms, no placeholder definitions.
 
 ### `formalization/FunctionalInequalities/Analysis/HausdorffSlicing.lean`
 
-只依赖 Mathlib（`Mathlib.MeasureTheory.Measure.Hausdorff`、
-`Mathlib.MeasureTheory.Measure.Lebesgue.Basic`、`Mathlib.MeasureTheory.Integral.Lebesgue.Add`），
-对**任意** `EMetricSpace` 成立，不需要向量空间、内积、有限维或 Haar 测度：
+Only depends on Mathlib (`Mathlib.MeasureTheory.Measure.Hausdorff`, `Mathlib.MeasureTheory.Measure.Lebesgue.Basic`, `Mathlib.MeasureTheory.Integral.Lebesgue.Add`),
+holds for any `EMetricSpace`, no need for vector space, inner product, finite dimension, or Haar measure:
 
 ```lean
 theorem FunctionalInequalities.Analysis.exists_cover_of_hausdorffMeasure_eq_zero
@@ -44,7 +37,7 @@ theorem FunctionalInequalities.Analysis.ae_hausdorffMeasure_inter_levelSet_eq_ze
 
 ### `formalization/FunctionalInequalities/KLS/Geometry/SurfaceSlicing.lean`
 
-由既有 `KLS.surfaceMeasure` 定义给出的归一化包装。测度与结论都没有替换：
+Normalized packaging given by the existing `KLS.surfaceMeasure` definition. No replacement of measures or conclusions:
 
 ```lean
 theorem FunctionalInequalities.KLS.ae_surfaceMeasure_inter_levelSet_eq_zero
@@ -55,106 +48,98 @@ theorem FunctionalInequalities.KLS.ae_surfaceMeasure_inter_levelSet_eq_zero
     ∀ᵐ t ∂(volume : Measure ℝ), surfaceMeasure V (N ∩ {x | u x = t}) = 0
 ```
 
-与路线记录的 L2 语句相比，只**去掉**了 `[CompleteSpace V]`（证明从未使用它，有限维内积空间
-本来就完备），没有增加任何假设：`N` 不要求可测、有界、非空或非零测度以外的任何性质，
-`u` 只在 `N` 上 Lipschitz，`K` 任意（含 `K = 0`），`V` 允许零维。
-`build/audit/NullSlicingAudit.lean` 的 `target` 用**带** `[CompleteSpace V]` 的原语句逐字
-复述并证明，所以路线记录中的 L2 已经闭合。
+Compared to the L2 statement in the route record, only `[CompleteSpace V]` was removed (the proof never used it, and finite-dimensional inner product spaces are already complete), with no additional assumptions: `N` does not require measurability, boundedness, non-emptiness, or non-zero measure beyond these properties, `u` is only Lipschitz on `N`, `K` is arbitrary (including `K = 0`), and `V` allows zero-dimensional cases. The `build/audit/NullSlicingAudit.lean` `target` is proven by verbatim restatement and proof of the original statement with `[CompleteSpace V]`, so the L2 statement in the route record is now closed.
 
-## 证明设计
+## Proof design
 
-**不是 Rademacher。** Rademacher 只给"不可微点集的体积为零"，对单个水平集的余维一测度
-没有任何结论；本轮结论对任何在 `N` 上 Lipschitz 的 `u` 成立，甚至不要求 `u` 可测。
+**Not Rademacher.** Rademacher only gives "the volume of the set of non-differentiable points is zero," regarding the co-dimension one measure of a single level set.
+No conclusions; the current statement holds for any Lipschitz `u` on `N`, even without requiring `u` to be measurable.
 
-**覆盖 + 可测支配函数 + Fatou。** 对每个尺度 `k`：
+**Covering + measurable dominating function + Fatou.** For each scale `k`:
 
-1. 由 `Measure.hausdorffMeasure_apply` 的下确界表达式，从 `μH[d+1] N = 0` 取出可数覆盖
-   `T k : ℕ → Set X`，直径 `≤ (k+1)⁻¹`，总 `(d+1)` 维覆盖成本 `< (k+1)⁻¹`。
-   Mathlib 的成本里自带 `⨆ _ : (T i).Nonempty` 保护，所以空块的成本是 `0`，
-   `d + 1 = 0` 的病态情形不会出现（本轮 `0 ≤ d`）。
-2. 对每个与 `N` 相交的覆盖块，取块内 `N` 中的一个点 `p`，令水平轴上的区间为
-   `Metric.closedBall (u p) (K · diam)`；由**只在 `N` 上**使用的 Lipschitz 估计，
-   该块与 `N` 的交在 `u` 下的像落在此区间内，区间长度 `≤ 2 K · diam`。
-   与 `N` 不相交的块取空区间。
-3. 支配函数 `F k t := ∑' i, (J k i).indicator (fun _ => ediam (T k i) ^ d) t`
-   **逐项可测**（常数 × 可测集的 indicator），故 `F k` 可测；这一步用
-   `ENNReal.tsum_eq_iSup_sum` 加有限和的可测性，不引入新的导入。
-4. 逐点上界：对固定 `t`，以子类型 `{i // t ∈ J k i}` 为索引调用
-   `Measure.hausdorffMeasure_le_liminf_tsum`，得
-   `μH[d] (N ∩ {u = t}) ≤ liminf (F · t)`。用子类型而不是全体 `ℕ` 是必须的：
-   `d = 0` 时空块会贡献 `0 ^ (0 : ℝ) = 1`，对全体求和会得到 `⊤`。
-5. 积分上界：`lintegral_tsum` 与 `lintegral_indicator_const` 给
-   `∫⁻ F k ≤ 2 K (k+1)⁻¹`。`K = 0` 时每个区间是单点，右端为 `0`，不需要分支。
-6. Fatou（`lintegral_liminf_le'`）作用在**已证明可测**的 `F k` 上，
-   `∫⁻ liminf (F · t) = 0`，再由 `lintegral_eq_zero_iff`（前提是 `liminf` 可测，
-   由 `Measurable.liminf` 给出）得 `liminf (F · t) = 0` 几乎处处，逐点上界收尾。
+1. From the infimum expression of `Measure.hausdorffMeasure_apply`, extract a countable cover from `μH[d+1] N = 0`
+   `T k : ℕ → Set X`, diameter `≤ (k+1)⁻¹`, total `(d+1)`-dimensional covering cost `< (k+1)⁻¹`.
+   The cost of Mathlib includes built-in `⨆ _ : (T i).Nonempty` protection, so the cost of an empty block is `0`,
+   The pathological cases of `d + 1 = 0` do not occur (in this round `0 ≤ d`).
+2. For each covering block intersecting `N`, pick a point `p` in `N` within the block, and set the interval on the horizontal axis to
+   `Metric.closedBall (u p) (K · diam)`; Lipschitz estimate used only on `N`,
+   The image under `u` of the piece intersected with `N` lies in this interval, whose length is `≤ 2 K · diam`.
+   Blocks disjoint from `N` take the empty interval.
+3. Dominating function `F k t := ∑' i, (J k i).indicator (fun _ => ediam (T k i) ^ d) t`
+   **Pointwise measurable** (constant × indicator of measurable set), hence `F k` is measurable; this step uses
+   `ENNReal.tsum_eq_iSup_sum` The measurability of a finite sum does not introduce new imports.
+4. Pointwise bound: for fixed `t`, use the subtype `{i // t ∈ J k i}` as the index when applying
+   `Measure.hausdorffMeasure_le_liminf_tsum`, get
+   `μH[d] (N ∩ {u = t}) ≤ liminf (F · t)`. Using subtypes instead of the entire `ℕ` is necessary:
+   `d = 0` spacetime blocks contribute `0 ^ (0 : ℝ) = 1`, and summing over the entire set yields `⊤`.
+5. Integral bound: `lintegral_tsum` and `lintegral_indicator_const` give
+   `∫⁻ F k ≤ 2 K (k+1)⁻¹`. At `K = 0`, each interval is a single point with right endpoint `0`, no branching is needed.
+6. Fatou (`lintegral_liminf_le'`)acts on **proven measurable** `F k`s,
+   `∫⁻ liminf (F · t) = 0`, and then by `lintegral_eq_zero_iff` (provided that `liminf` is measurable,
+   (By `Measurable.liminf`) we obtain `liminf (F · t) = 0` almost everywhere, pointwise upper bound closeout.
 
-**没有循环论证。** 全过程从未假设截面函数
-`fun t => μH[d] (N ∩ {u = t})` 可测，也没有从它的 `lintegral = 0` 推出 a.e. 零：
-`lintegral_eq_zero_iff` 只用在**构造出来的**可测支配函数上。L3–L5 的截面可测性仍未证明。
+**No circular reasoning.** The entire process never assumes the section function.
+`fun t => μH[d] (N ∩ {u = t})` measurable, and also does not derive a.e from its `lintegral = 0`. Zero:
+`lintegral_eq_zero_iff` Only applied to the measurable dominating functions constructed. The measurability of the sections of L3–L5 has not yet been proven.
 
-**零维单独处理，不把零维 surfaceMeasure 当成零测度。** `finrank ℝ V = 0` 时自然数减法给
-`surfaceMeasure V = hausdorffNormalized V 0 = hausdorffNormalized V (finrank ℝ V)`，
-由既有 `KLS.hausdorffNormalized_finrank_eq_volume` 等于 Lebesgue 测度；截面是 `N` 的子集，
-单调性对**每个** `t` 给零。审计客户端另外算出
-`surfaceMeasure (EuclideanSpace ℝ (Fin 0)) univ = 1`，即零维纤维测度是单点的单位质量，
-`ℋ⁰` 不是零测度。正维时 `((finrank - 1 : ℕ) : ℝ) + 1 = (finrank : ℝ)` 需要 `1 ≤ finrank`，
-所以维数分支是必要的，不是装饰。
+**Handle zero-dimensional case separately, not treating zero-dimensional surface measure as zero measure.** `finrank ℝ V = 0` when natural number subtraction gives
+`surfaceMeasure V = hausdorffNormalized V 0 = hausdorffNormalized V (finrank ℝ V)`,
+by existing `KLS.hausdorffNormalized_finrank_eq_volume` equals Lebesgue measure; the section is a subset of `N`,
+monotonicity gives zero for **each** `t`. The audit client separately computes
+`surfaceMeasure (EuclideanSpace ℝ (Fin 0)) univ = 1`, i.e., the zero-dimensional fiber measure is unit mass at a point,
+`ℋ⁰` is not zero measure. In positive dimensions `((finrank - 1 : ℕ) : ℝ) + 1 = (finrank : ℝ)` requires `1 ≤ finrank`,
+so the dimension branching is necessary, not decorative.
 
-**一维的 `ℋ⁰` 保留计数效应。** 客户端算出
-`surfaceMeasure ℝ ({0} ∩ {x | id x = 0}) = 1`：`N = {0}`、`u = id` 时水平 `t = 0`
-的截面测度是 `1`，所以"几乎处处"是实质的，不能加强成"处处"。
-平面上 `surfaceMeasure (EuclideanSpace ℝ (Fin 2)) (segment ℝ 0 e) ≠ 0`（`e ≠ 0`）
-说明正余维时纤维测度同样不恒为零。
+**One-dimensional `ℋ⁰` preserves counting effects.** The client computes
+`surfaceMeasure ℝ ({0} ∩ {x | id x = 0}) = 1`: `N = {0}` and `u = id` when the horizontal `t = 0`
+has a cross-sectional measure of `1`, so "almost everywhere" is substantive, and cannot be strengthened to "everywhere".
+In the plane `surfaceMeasure (EuclideanSpace ℝ (Fin 2)) (segment ℝ 0 e) ≠ 0` (`e ≠ 0`)
+demonstrates that the fiber measure is non-zero in the positive codimension case.
 
-## 放置决定
+## Placement Determines
 
-原始 Hausdorff 引理放 `Analysis/HausdorffSlicing.lean`，**本地导入闭包为空**，只依赖
-Mathlib，与路线记录第 6 节"L1/L2/L3 的底层覆盖可在 `Analysis/HausdorffSlicing.lean` 用原始
-`μH` 表述"的建议一致（文件名按已实现内容取 `HausdorffSlicing`）。归一化包装放
-`KLS/Geometry/SurfaceSlicing.lean`，导入 `Analysis/HausdorffSlicing.lean` 与
-`KLS/Geometry/SmoothDomain.lean`（后者提供约定检查 `hausdorffNormalized_finrank_eq_volume`）。
+Original Hausdorff lemma placed `Analysis/HausdorffSlicing.lean`, **local import closure is empty**, relying only on Mathlib, consistent with the suggestion in Section 6 of the route record "the underlying cover of L1/L2/L3 can be expressed in `Analysis/HausdorffSlicing.lean` using raw `μH`" (filename taken according to implemented content `HausdorffSlicing`). Normalization packaging placed `KLS/Geometry/SurfaceSlicing.lean`, importing `Analysis/HausdorffSlicing.lean` and `KLS/Geometry/SmoothDomain.lean` (the latter providing agreement checking `hausdorffNormalized_finrank_eq_volume`).
 
-没有迁移任何已有声明，没有修改任何已有公开签名，没有改动任何 `.lean` 库文件的现有内容，
-没有扩大证书或 Blueprint `leanok` 范围，没有把新模块加入 `FunctionalInequalities.lean`
-认证聚合导入（与 WIP 及其他非聚合模块的现有做法一致；两个新模块仍由 `verify.py` 的
-`lake build +Module` 与 `leanchecker` 全量重放覆盖）。
+No migration of existing declarations, no modification of any existing public signatures, no changes to the current content of any `.lean` library files,
+no expansion of certificate or Blueprint `leanok` scope, no addition of new modules to `FunctionalInequalities.lean`
+Certification aggregation import (consistent with WIP and existing non-aggregated module practices; the two new modules are still fully replayed by `verify.py`'s
+`lake build +Module` and `leanchecker`).
 
-## 本轮没有做的事
+## What was not done in this round
 
-* **L3–L5 的截面可测性桥接**仍未证明：紧集纤维的 Borel 可测性（L3）、Borel 集纤维的
-  a.e. 可测性（L4）、带可测权重的版本（L5）都还没有。L2 本身**不给**可测性。
-* **三个原始 coarea 洞**未动：`Analysis.aemeasurable_lintegral_levelSet`、
-  `Analysis.lintegral_enorm_gradient_mul_eq_lintegral_levelSet`、
-  `Isoperimetry.lintegral_enorm_gradient_mul_eq_lintegral_levelSet`。
-* 尖锐 `C^(finrank)` 的 `Analysis.sard`（已无下游消费者）及
-  `Analysis.ae_forall_fderiv_ne_zero` 仍带 `sorryAx`。
-* `smoothConstant_le_minkowskiConstant`、
-  `smoothConstant_mul_lintegral_min_superlevel_le`、两个 Cheeger 常数相等仍未证明。
-* 带常数的一般 L1（Eilenberg 可测上界，右端 `C K volume S`）没有证明：本轮只做零测特例，
-  证明里用的是"总覆盖成本趋零"，没有给出任何有限正维数常数 `C`。
-* 没有触及 L6/L6a/L7 的 Whitney 延拓与 C¹ 分片，也没有触及 L8–L12。
+* **Section measurability bridge for L3–L5** remains unproven: Borel measurability of fiber of compact sets (L3), fiber of Borel sets
+  a.e. measurability (L4), and the version with measurable weights (L5) are still missing. L2 itself does not provide measurability.
+* **Three original coarea holes** unchanged: `Analysis.aemeasurable_lintegral_levelSet`,[, ]
+  `Analysis.lintegral_enorm_gradient_mul_eq_lintegral_levelSet`,
+  `Isoperimetry.lintegral_enorm_gradient_mul_eq_lintegral_levelSet`.
+* Sharp `C^(finrank)` `Analysis.sard` (now without downstream consumers) and
+  `Analysis.ae_forall_fderiv_ne_zero` still carries `sorryAx`.
+* `smoothConstant_le_minkowskiConstant`,
+  `smoothConstant_mul_lintegral_min_superlevel_le`, two Cheeger constants being equal has not been proven.
+* The general L1 with a constant (Eilenberg measurable upper bound, right end `C K volume S`) has no proof: this round only handles the zero-measure special case,
+  The proof uses "total coverage cost tending to zero," without providing any finite positive dimensional constant `C`.
+* Whitney's extension without touching L6/L6a/L7 for C¹ piecewise, and without touching L8–L12.
 
-## 验证
+## Verification
 
-* `FunctionalInequalities/Analysis/HausdorffSlicing.lean` 与
-  `FunctionalInequalities/KLS/Geometry/SurfaceSlicing.lean` 均以
-  `-DwarningAsError=true` 单独编译通过。
-* `build/audit/NullSlicingAudit.lean` 以 `-DwarningAsError=true` 编译通过：1 个语句
-  `#check`（逐字复述路线记录的 L2）、1 条 `target` 定理（带 `[CompleteSpace V]` 的原语句）、
-  9 条独立消费者/退化情形定理（无 `N` 可测性的子集用法、`K = 0`、
-  任意 `ℝ≥0∞` 权重的切片积分形式、零维、零维单位质量、一维及其例外水平、
-  只在 `N` 上 Lipschitz 的不连续 `u`、平面非退化线段），以及 14 条 `#print axioms`。
-  全部 14 个声明只依赖 `propext`、`Classical.choice`、`Quot.sound`，**无 `sorryAx`**。
-* 重跑 `WeightedCoareaRouteStatements`、`WeightedCoareaInfrastructure`、`AreaFormulaAudit`、
-  `CheegerInfimumAudit`、`MinkowskiConstantAudit`、`SuperlevelSardScope`、`SmoothSardAudit`、
-  `SmoothSardRouteStatements`，全部以 `-DwarningAsError=true` 严格编译通过，未作任何修改。
-* 三个 WIP 文件逐个实际编译成功，诊断中的直接洞分别 **3/3/5，总数 11**——L2 不填任何原有
-  coarea 洞，所以这个数字按预期不变。
-* 默认 `lake build` 与根目录 `python3 research/verify.py` 通过。最终回执为
-  `build/verification/latest.json`，与最终全部源码快照完全相等；证据 JSON 为
-  `research/explorations/2026-09-15-null-slicing.json`，忽略目录中的最终核对另存
-  `build/audit/nullslicing-final-snapshot.json`，避免给回执自身制造循环哈希。
-  `build/audit` 不在常规源码快照中，故由证据 JSON 单独绑定其哈希。
-* 证书仍 **24**，perimeter infrastructure 仍 **missing**（gap 列表按本轮更新：
-  L2 从"缺失"改为"已证明"，L3–L5 仍列为缺口）。
+* `FunctionalInequalities/Analysis/HausdorffSlicing.lean` and
+  `FunctionalInequalities/KLS/Geometry/SurfaceSlicing.lean` all with
+  `-DwarningAsError=true` Compiles independently.
+* `build/audit/NullSlicingAudit.lean` compiles with `-DwarningAsError=true`: 1 statements
+  `#check` (verbatim record of route logs L2), 1 theorem `target` (with original statement `[CompleteSpace V]`),
+  9 Theorem of l independent consumers/degenerate case (without usage of `N` measurable subsets, `K = 0`,
+  Slice integral forms with arbitrary `ℝ≥0∞` weights, zero-dimensional, zero-dimensional unit mass, one-dimensional and exceptional level cases,
+  Lipschitz on only `N`, discontinuous `u` (planar non-degenerate segments), and 14 conditions `#print axioms`.
+  All  14 statements depend only on `propext`, `Classical.choice`, `Quot.sound`; **not on `sorryAx`**.
+* Retrace `WeightedCoareaRouteStatements`, `WeightedCoareaInfrastructure`, `AreaFormulaAudit`,
+  `CheegerInfimumAudit`, `MinkowskiConstantAudit`, `SuperlevelSardScope`, `SmoothSardAudit`,
+  `SmoothSardRouteStatements`, all strictly compiled and passed with `-DwarningAsError=true`, with no modifications made.
+* Three WIP files were successfully compiled in practice, with direct proof holes diagnosed as **3/3/5**, total count **11**——L2 leaves no original entries
+  coarea hole, so this number remains as expected.
+* Default `lake build` is connected to the root directory `python3 research/verify.py`. Final verification receipt is
+  `build/verification/latest.json`, exactly equal to the final complete source code snapshot; evidence JSON is
+  `research/explorations/2026-09-15-null-slicing.json`, ignore the final verification save in the directory
+  `build/audit/nullslicing-final-snapshot.json`, avoid creating cyclic hashes for the verification receipt itself.
+  `build/audit` Not present in regular source code snapshots, hence its hash is separately bound by evidence JSON.
+* Certification still **24**, perimeter infrastructure still **missing** (gap list updated in this round:
+  L2 changed from "missing" to "proven", L3–L5 remain as gaps).

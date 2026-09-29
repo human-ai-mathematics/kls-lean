@@ -1,65 +1,58 @@
-# 2026-09-11 — `thm:one-dimensional-logconcave-poincare`：常数从 12 加强到 4
+# 2026-09-11 — `thm:one-dimensional-logconcave-poincare`: strengthening the constant from 12 to 4
 
-## 决定
+## Decision
 
-- Blueprint 节点 `thm:one-dimensional-logconcave-poincare` 的陈述由 `C_P^lit(ν) ≤ 12 Var_ν(T)` 改为
-  `C_P^lit(ν) ≤ 4 Var_ν(T)`；这是**陈述变更**（加强），不是新节点。Bobkov 的 12 作为推论保留，并保留其
-  独立证明（`KLS/LogConcave/Line/Poincare.lean` 不改动）。
-- 证据来源：合作者审计 `research/explorations/2026-09-11-poincare-constant-4-audit.md`（用户于 2026-09-11 提供，
-  逐步核对无误，见 2026-09-10 决定记录补记一、二对文献状态的核实：4 在 Alonso-Gutiérrez–Bastero p.11 只引不证）。
-  本地 Lean 证明按该审计的 x 坐标版本组织，不引入分位数函数。
-- 常数 4 在指数律取等，不再有更小的普适常数可断言。
-- 不提交、不推送（用户指令）。
+- Change Blueprint node `thm:one-dimensional-logconcave-poincare` from `C_P^lit(ν) ≤ 12 Var_ν(T)` to `C_P^lit(ν) ≤ 4 Var_ν(T)`. This is a **statement change** (strengthening), not a new node. Retain Bobkov's 12 as a corollary and its independent proof (`KLS/LogConcave/Line/Poincare.lean` unchanged).
+- Evidence: collaborator audit `research/explorations/2026-09-11-poincare-constant-4-audit.md`, supplied by the user on 2026-09-11 and checked step by step. See supplements one and two of the 2026-09-10 decision for the literature check: Alonso-Gutiérrez–Bastero p.11 cites 4 without proving it. Organize the local Lean proof by the audit's x-coordinate version, without introducing a quantile function.
+- Constant 4 is attained by the exponential law; no smaller universal constant can be asserted.
+- No commit or push, per user instruction.
 
-## Lean 陈述（formech 风格）
+## Lean statements (formech style)
 
-主张（`Solutions.ThmOneDimensionalLogConcavePoincare.certificate`）：对每个 `ν : ProbabilityMeasure ℝ`、
-`hν : KLS.LogConcave ν`：
+Claim (`Solutions.ThmOneDimensionalLogConcavePoincare.certificate`): for every
+`ν : ProbabilityMeasure ℝ` and `hν : KLS.LogConcave ν`:
 
-1. `Poincare.LocalSlope.Intrinsic.constant ν ≤ ENNReal.ofReal (4 * variance id ν)`；
-2. `Poincare.LocalSlope.Intrinsic.constant ν ≤ 4 * evariance id ν`。
+1. `Poincare.LocalSlope.Intrinsic.constant ν ≤ ENNReal.ofReal (4 * variance id ν)`;
+2. `Poincare.LocalSlope.Intrinsic.constant ν ≤ 4 * evariance id ν`.
 
-类型化应用：常数有限；`≤ ENNReal.ofReal (12 * variance id ν)`（由 4 推出）；Dirac 律常数 `≤ 0`；支撑内部非空时
-`Poincare.SmoothTest.Holds ν (4 * variance id ν)`。
+Typed applications: finiteness of the constant; `≤ ENNReal.ofReal (12 * variance id ν)` derived
+from 4; Dirac-law constant `≤ 0`; and `Poincare.SmoothTest.Holds ν (4 * variance id ν)` when
+the support interior is nonempty.
 
-不主张：更小常数、高维界、Cheeger 不等式、原始能量上的结论、`cor:conditional-fiber-twelve-bound` 的加强
-（该推论仍记 `12C`，属于 50 章，另一会话正在编辑，留作后续）。
+Non-claims: a smaller constant, higher-dimensional bounds, Cheeger inequality, raw-energy
+conclusions, or strengthening `cor:conditional-fiber-twelve-bound` (still `12C`, in chapter 50,
+being edited by another session and left for later).
 
-有限范围：无。零维：仿射支撑为一点时方向空间为 `⊥`，常数为 0（沿用 `Line/Poincare.lean` 的处理）。
+Additional finiteness restrictions: none. Dimension zero: singleton affine support has
+direction space `⊥` and constant 0, reusing `Line/Poincare.lean`.
 
-## 逐句对齐（Blueprint ↔ Lean）
+## Clause-by-clause alignment (Blueprint ↔ Lean)
 
-| Blueprint | Lean | 结论 |
+| Blueprint | Lean | Assessment |
 |---|---|---|
-| 支撑线 `ρ ≤ A(1−F)+BF`，`A,B ≥ 0` | `d.le_affine_of_supergradient`、`d.affine_pos_of_bound`、`Probability.Line.nonneg_of_affine_pos` | 一致；Lean 用 `x₀ ∈ Ω` 处的支撑指数 `d.exists_supergradient` |
-| `q∘F` 1-Lipschitz，`Var_{[0,1]}(q) ≤ σ²` | `d.variance_ge_of_affine_bound` 内部：`Var Ψ(X) ≤ E(Ψ X − Ψ E)² ≤ E(X−E)²`，均值 `E ∈ Ω`（`LogConcave.mean_mem_interior_support`） | 一致；Lean 用均值代替任意锚点 |
-| `Var_{[0,1]}(q) ≥ (√A+√B)^{-4}` | `Probability.Line.one_div_le_variance_affineQuantile`（闭形式 `variance_affineQuantile` + `mul_mul_log_sub_sq_le`，后者经 `t ≤ sinh t`） | 一致 |
-| 轮廓界 `F(1−F) ≤ σρ` | `d.cdf_mul_one_sub_cdf_le_sd_mul`（ε 扰动 `A+ε, B+ε` 后取极限） | 一致 |
-| 截断测试、`∫h² = −∫_a^b f'G̃` | `KLS.clip`、`clipCentered`、`tailIntegral`、`d.integral_sq_clipCentered_eq` | 一致 |
-| 基态恒等式与边界项 | `d.groundState_inequality`（在更大区间 `[c,e]` 上）、`d.boundaryTerm_le_of_le`、`d.neg_boundaryTerm_le_of_ge`、`d.integral_sq_div_le`（`F c → 0`、`F e → 1` 的 ε 论证） | Lean 更强：明确给出边界项 `h(a)²F(c) + h(b)²(1−F(e))` |
-| `Var(f_ab) ≤ 4σ²∫f'²` | `d.variance_clip_le`（AM–GM `−f'G̃ ≤ G̃²ρ/(8W²) + 2f'²W²/ρ` + 轮廓界） | 一致 |
-| 尾项消失 | `d.setIntegral_Iic_sq_sub_le_of_le`、`d.setIntegral_Ioi_sq_sub_le_of_le`（`Hardy.lean` 中中位数版本的推广，锚点 `p` 在中位数同侧、常数仍为 `1/ρ(m)²`）+ `Probability.exists_pos_forall_setIntegral_le`（积分对测度的绝对连续性）+ `exists_cdf_eq` 选 `F a = t` | 一致；审计原稿用 `f(a)²F(a)` 与 `∫_{Iic a} f²` 的双情形（Ω 下有界/无界）论证，Lean 改用锚定 Hardy 界，避免情形分裂 |
-| `(1+δ)` 分裂并取极限 | `Probability.add_sq_le_split`、`d.variance_le_four_variance_mul`（`le_of_forall_pos_le_add`） | 一致；审计原稿用 Minkowski，Lean 用无平方根的 δ 分裂 |
-| 光滑测试最优值 = 文献最优值 | `LogConcave.smoothTest_constant_eq_localSlope`（已认证） | 一致 |
+| Supporting line `ρ ≤ A(1−F)+BF`, `A,B ≥ 0` | `d.le_affine_of_supergradient`, `d.affine_pos_of_bound`, `Probability.Line.nonneg_of_affine_pos` | Aligned; Lean uses supporting exponent `d.exists_supergradient` at `x₀ ∈ Ω` |
+| `q∘F` is 1-Lipschitz, `Var_{[0,1]}(q) ≤ σ²` | Inside `d.variance_ge_of_affine_bound`: `Var Ψ(X) ≤ E(Ψ X − Ψ E)² ≤ E(X−E)²`, mean `E ∈ Ω` (`LogConcave.mean_mem_interior_support`) | Aligned; Lean uses the mean instead of an arbitrary anchor |
+| `Var_{[0,1]}(q) ≥ (√A+√B)^{-4}` | `Probability.Line.one_div_le_variance_affineQuantile` (closed form `variance_affineQuantile` plus `mul_mul_log_sub_sq_le`, the latter via `t ≤ sinh t`) | Aligned |
+| Profile bound `F(1−F) ≤ σρ` | `d.cdf_mul_one_sub_cdf_le_sd_mul` (perturb `A+ε, B+ε`, then take limits) | Aligned |
+| Truncated tests, `∫h² = −∫_a^b f'G̃` | `KLS.clip`, `clipCentered`, `tailIntegral`, `d.integral_sq_clipCentered_eq` | Aligned |
+| Ground-state identity and boundary terms | `d.groundState_inequality` on larger `[c,e]`, `d.boundaryTerm_le_of_le`, `d.neg_boundaryTerm_le_of_ge`, `d.integral_sq_div_le` (ε argument with `F c → 0`, `F e → 1`) | Lean is stronger: explicitly gives boundary term `h(a)²F(c) + h(b)²(1−F(e))` |
+| `Var(f_ab) ≤ 4σ²∫f'²` | `d.variance_clip_le` (AM–GM `−f'G̃ ≤ G̃²ρ/(8W²) + 2f'²W²/ρ` plus profile bound) | Aligned |
+| Vanishing tails | `d.setIntegral_Iic_sq_sub_le_of_le`, `d.setIntegral_Ioi_sq_sub_le_of_le` (generalizations of median versions in `Hardy.lean`, with anchor `p` on the same side of the median and unchanged `1/ρ(m)²`) plus `Probability.exists_pos_forall_setIntegral_le` (absolute continuity of the integral with respect to measure) and `exists_cdf_eq` selecting `F a = t` | Aligned; the audit split bounded/unbounded-below Ω cases using `f(a)²F(a)` and `∫_{Iic a} f²`; Lean avoids this split with anchored Hardy bounds |
+| `(1+δ)` splitting and limits | `Probability.add_sq_le_split`, `d.variance_le_four_variance_mul` (`le_of_forall_pos_le_add`) | Aligned; the audit used Minkowski, Lean uses δ splitting without square roots |
+| Smooth-test optimum = literature optimum | `LogConcave.smoothTest_constant_eq_localSlope` (certified) | Aligned |
 
-## 证明中的数学修正
+## Mathematical correction during the proof
 
-- 第一版计划在 `[a,b]` 上直接截断基态恒等式，边界项符号相反（`Ξ(a) ≥ 0 ≥ Ξ(b)`），不可行；改为在包含
-  `[a,b]` 的更大区间 `[c,e] ⊆ Ω` 上积分，并用 `G̃ = h(a)F`（`x ≤ a`）、`G̃ = −h(b)(1−F)`（`x ≥ b`）控制
-  `Ξ(c) ≤ h(a)²F(c)`、`−Ξ(e) ≤ h(b)²(1−F(e))`，再令 `F(c) → 0`、`F(e) → 1`。
+- The first plan truncated the ground-state identity directly on `[a,b]`, but boundary signs were reversed (`Ξ(a) ≥ 0 ≥ Ξ(b)`), so it failed. Instead integrate over a larger `[c,e] ⊆ Ω` containing `[a,b]`, use `G̃ = h(a)F` for `x ≤ a` and `G̃ = −h(b)(1−F)` for `x ≥ b` to bound `Ξ(c) ≤ h(a)²F(c)` and `−Ξ(e) ≤ h(b)²(1−F(e))`, then let `F(c) → 0` and `F(e) → 1`.
 
-## 文件
+## Files
 
-- 新：`Probability/Line/AffineProfile.lean`、`KLS/LogConcave/Line/Profile.lean`、`Line/SharpHardy.lean`、
-  `Line/SharpPoincare.lean`。
-- 改：`Probability/Line/Cdf.lean`（`exists_cdf_eq` 一般 `t`、`cdf_pos/lt_one_of_mem_interior_support`）、
-  `KLS/LogConcave/Line/Hazard.lean`（`le_add_mul_cdf_sub_of_mem`，中位数版本为推论）、
-  `KLS/LogConcave/Line/Hardy.lean`（四条半直线/区间 Hardy 引理推广为 `_of_le` 版本，原名保留为 `p = m` 的包装）。
-- 证书：`solutions/ThmOneDimensionalLogConcavePoincare.lean` 主张改为 4，新增 9 条公理守卫。
-- 登记：ledger 陈述/来源、`tasks.json`（新增证据文件与哈希）、Blueprint `\lean{}` 与陈述/证明、
-  `route-composition.yaml` 出版参考、`FunctionalInequalities.lean` 导入、各 README/HANDOFF/verification/naming。
+- New: `Probability/Line/AffineProfile.lean`, `KLS/LogConcave/Line/Profile.lean`, `Line/SharpHardy.lean`, `Line/SharpPoincare.lean`.
+- Modified: `Probability/Line/Cdf.lean` (`exists_cdf_eq` for general `t`, `cdf_pos/lt_one_of_mem_interior_support`), `KLS/LogConcave/Line/Hazard.lean` (`le_add_mul_cdf_sub_of_mem`, median version as a corollary), `KLS/LogConcave/Line/Hardy.lean` (four half-line/interval Hardy lemmas generalized to `_of_le`; old names retained as `p = m` wrappers).
+- Certificate: `solutions/ThmOneDimensionalLogConcavePoincare.lean` changes its claim to 4 and adds 9 axiom guards.
+- Registration: ledger statement/source, `tasks.json` (new evidence files and hashes), Blueprint `\lean{}` and statement/proof, publication reference in `route-composition.yaml`, imports in `FunctionalInequalities.lean`, and README/HANDOFF/verification/naming documents.
 
-## 后续
+## Next
 
-- `cor:conditional-fiber-twelve-bound`（50 章）可由 `12C` 加强为 `4C`；待另一会话的 ConditionalFiber 工作完成后处理。
-- KLS 1995 原文中常数 4 的位置仍未核对；本地证明已不依赖该出处。
+- `cor:conditional-fiber-twelve-bound` (chapter 50) can strengthen `12C` to `4C` after the other session finishes ConditionalFiber work.
+- The location of constant 4 in the original KLS 1995 paper remains unchecked; the local proof no longer depends on that attribution.

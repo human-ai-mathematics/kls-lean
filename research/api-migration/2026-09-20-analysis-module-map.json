@@ -4,7 +4,7 @@
   "batch": "analysis",
   "title": "Analysis family directories: Coarea, Graph, Hausdorff, Lipschitz, Sard, Whitney and Vector",
   "decision": "research/decisions/2026-09-20-formalization-directory-organization.md",
-  "rule": "research/naming.md, section 家族词归目录，不进目录名",
+  "rule": "research/naming.md, section Family names belong in directories, not filenames",
   "invariants": [
     "Only module paths change.",
     "Namespaces, declaration names, theorem statements, proofs, hypotheses, dimensional scope and certificate status are unchanged.",

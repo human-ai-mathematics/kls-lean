@@ -1,110 +1,91 @@
-# 协方差核闭包：statement、语义对齐与证明
+# Covariance Kernel Closure: Statement, Semantic Alignment, and Proof
 
-日期：2026-09-08（Asia/Shanghai）。基线：`575c82c` 之上的未提交工作树，紧接
-[仿射常数定义记录](2026-09-07-affine-poincare-constant-definition.md)。Lean/Mathlib 为 v4.33.0，
-Mathlib 提交 `db584cd6d46c92f209a44c0f1c829460d327499d`。用户指示："暂时先不提交，接着做"，
-即按 atlas 继续下一个节点。本决定不做 commit、push、远端 CI 或发布。
+Date: 2026-09-08 (Asia/Shanghai). Base: uncommitted working tree on top of `575c82c`, immediately followed by
+[affine constant definition record](2026-09-07-affine-poincare-constant-definition.md). Lean/Mathlib is v4.33.0,
+Mathlib commit `db584cd6d46c92f209a44c0f1c829460d327499d`. User instruction: "Temporarily do not commit, proceed next",
+i.e., continue to the next node via atlas. This decision does not involve commit, push, remote CI, or release.
 
-## 节点选择
+## Node Selection
 
-`def:affine-poincare-constant` 认证后 atlas 没有 `formalize` 项，剩余叶节点均为
-`inspect_infrastructure` 的定理。`lem:covariance-core-closure` 是 `thm:affine-covariance-relaxation-closed`
-唯一未认证前提，进而解锁 `lem:affine-poincare-translation-invariance`、`thm:affine-isotropic-reduction`
-与两个 CMH 路线节点，因此优先。
+After `def:affine-poincare-constant` certification, atlas has no `formalize` items, and all remaining leaf nodes are
+theorems of `inspect_infrastructure`. `lem:covariance-core-closure` is the only unverified premise of `thm:affine-covariance-relaxation-closed`,
+thereby unlocking `lem:affine-poincare-translation-invariance`, `thm:affine-isotropic-reduction`, and two CMH path nodes, thus prioritized.
 
-## Statement 设计
+## Statement Design
 
-Blueprint：ν = ρ dx 全维对数凹律，Σ ⪰ 0 常自伴算子，T g = Σ^{1/2}∇g 在全局 Lipschitz L²(ν)
-函数上稠密定义且可闭，图闭包等于 ℝ + C_c^∞(V) 限制的图闭包，‖Tg‖² 的序列松弛为
-Q(f) = ‖T̄f‖²（f ∈ Dom T̄）、+∞（否则）。
+Blueprint: ν = ρ dx is log-concave in full dimension, Σ ⪰ 0 is a constant self-adjoint operator, T g = Σ^{1/2}∇g is densely defined and closable on globally Lipschitz L²(ν) functions, the graph closure equals the graph closure of the restriction to ℝ + C_c^∞(V), and the sequence relaxation of ‖Tg‖² is given by Q(f) = ‖T̄f‖² (f ∈ Dom T̄), +∞ otherwise.
 
-Lean 分五个模块，先通用后具体。
+Lean is divided into five modules, starting with general and progressing to specific.
 
-| 模块 | 声明 | 内容 |
+| module | declaration | content |
 | --- | --- | --- |
-| [Energy/Relaxation/LinearPMap.lean](../../formalization/FunctionalInequalities/Energy/Relaxation/LinearPMap.lean) | `Energy.exists_mem_of_isClosed_of_frequently_norm_le` | Hilbert 选择引理：闭子空间 G ⊆ X × H 含 (xₙ, yₙ)，xₙ → x₀，‖yₙ‖ ≤ L 频繁成立，则 G 含 (x₀, y₀) 且 ‖y₀‖ ≤ L；用尾部凸包的最小范数元与平行四边形律，不用弱拓扑 |
-| | `Energy.PreEnergy.ofLinearPMap T` | 预能量 f ↦ ‖T f‖²，实现为包含映射；`ofLinearPMap_quadratic`、`ofLinearPMap_denseRealization_iff` |
-| | `sequentialRelaxation_ofLinearPMap_of_mem` / `_of_notMem` / `_toAmbient` | 可闭 T：松弛在 Dom T̄ 上等于 ‖T̄ f‖²，之外为 ⊤，测试上等于原能量 |
-| | `Energy.isClosable_of_graph_closure_snd_eq_zero`、`mem_graph_topologicalClosure_iff`、`IsClosable.closure_domRestrict_eq`、`_of_le` | 可闭性判据、图闭包的序列刻画、图范数稠密核的闭包相等及单调性 |
-| [Energy/Euclidean/WeakDerivative.lean](../../formalization/FunctionalInequalities/Energy/Euclidean/WeakDerivative.lean) | `integral_fderiv_apply_eq_zero`、`integral_mul_fderiv_apply`、`integral_mul_inner_gradient` | 紧支撑 C¹ 函数方向导数的 Haar 积分为零（平移不变性 + 参数积分求导）；光滑分部积分；全局 Lipschitz g 的弱导数恒等式 ∫φ⟪∇g,w⟫ = −∫ g (Dφ)w（磨光 + 控制收敛） |
-| [Energy/Euclidean/CovarianceGradient/Operator.lean](../../formalization/FunctionalInequalities/Energy/Euclidean/CovarianceGradient/Operator.lean) | `weightedGradient B g`、`IsGradientTest ν B g`、`gradientGraph`、`gradientOperator ν B hac` | 测试：全局 Lipschitz、L²(ν)、B∇g ∈ L²(ν;V)；图 {([g],[B∇g])} 在 ν ≪ Haar 下是子模（Rademacher 给 a.e. 线性），在支撑边界零测下是函数图（代表元无关）；`Submodule.toLinearPMap` 给出算子；域与取值刻画 |
-| | `covarianceRelaxation_eq_sequentialRelaxation_ofLinearPMap` | 若 ∀v, ⟪Σv,v⟫ = ‖Bv‖²，则定义节点的协方差松弛等于该算子的松弛 |
-| | `gradientOperator_apply_eq_zero_of_subsingleton`、`domain_gradientOperator_eq_top_of_subsingleton` | 零维：算子为零，域为全空间 |
-| [Energy/Euclidean/CovarianceGradient/Closable.lean](../../formalization/FunctionalInequalities/Energy/Euclidean/CovarianceGradient/Closable.lean) | `Probability.LocallyDominates ν m` | 支撑内部每个紧集上 m|_K ≤ C·ν|_K |
-| | `gradientOperator_isClosable` | 前提 ν ≪ m、ν(∂supp) = 0、LocallyDominates：算子可闭 |
-| [Energy/Euclidean/CovarianceGradient/Core.lean](../../formalization/FunctionalInequalities/Energy/Euclidean/CovarianceGradient/Core.lean) | `smoothCore ν`、`dense_smoothCore`、`dense_domain_gradientOperator` | 光滑紧支撑类构成子模、在 L²(ν) 稠密（Mathlib），故域稠密，对任意律成立 |
-| | `closure_domRestrict_smoothCore`、`closure_domRestrict_eq_of_smoothCore_le` | 由已证 `exists_smooth_weighted_L2_approximation`：光滑核与全域同闭包；夹在中间的任何核亦然 |
-| [KLS/LogConcave/CovarianceClosure.lean](../../formalization/FunctionalInequalities/KLS/LogConcave/CovarianceClosure.lean) | `hν.absolutelyContinuous_haar`、`hν.frontier_support_eq_zero`、`hν.locallyDominates` | 全维对数凹律满足三条前提；局部支配由 Borell 密度紧集正下界得到 |
-| | `hν.gradientOperator m B hi`、`_isClosable`、`dense_domain_`、`closure_domRestrict_eq_of_smoothCore_le`、`sequentialRelaxation_gradientOperator_of_mem/_of_notMem/_toAmbient`、`covarianceRelaxation_eq` | Blueprint 五条结论的对数凹版本 |
-| | `hμ.intrinsicGradientOperator m B`、`_isClosable`、`dense_domain_`、`closure_domRestrict_`、`hμ.affine_energy_eq` | 任意对数凹 μ 的内禀律版本，含零维；`Energy.Affine.energy μ` 与算子松弛相等 |
+| [Energy/Relaxation/LinearPMap.lean](../../formalization/FunctionalInequalities/Energy/Relaxation/LinearPMap.lean) | `Energy.exists_mem_of_isClosed_of_frequently_norm_le` | Hilbert selection lemma: if a closed subspace G ⊆ X × H contains (xₙ, yₙ) with xₙ → x₀ and ‖yₙ‖ ≤ L frequently, then G contains (x₀, y₀) and ‖y₀‖ ≤ L; using the minimal norm element of the tail convex hull and the parallelogram law, without weak topology |
+| | `Energy.PreEnergy.ofLinearPMap T` | Pre-energy f ↦ ‖T f‖², realized via the inclusion map; `ofLinearPMap_quadratic`, `ofLinearPMap_denseRealization_iff` |
+| | `sequentialRelaxation_ofLinearPMap_of_mem` / `_of_notMem` / `_toAmbient` | Closable T: the relaxation on Dom T̄ equals ‖T̄ f‖², outside is ⊤, and the test upper equals the original energy |
+| | `Energy.isClosable_of_graph_closure_snd_eq_zero`, `mem_graph_topologicalClosure_iff`, `IsClosable.closure_domRestrict_eq`, `_of_le` | closability criterion, sequential characterization of graph closure, equality of closure of graph norm dense kernels, and monotonicity |
+| [Energy/Euclidean/WeakDerivative.lean](../../formalization/FunctionalInequalities/Energy/Euclidean/WeakDerivative.lean) | `integral_fderiv_apply_eq_zero`, `integral_mul_fderiv_apply`, `integral_mul_inner_gradient` | The Haar integral of directional derivatives of C¹ functions with compact support is zero (translation invariance + parameter integral differentiation); smooth partial integration; weak derivative identity for globally Lipschitz g: ∫φ⟪∇g,w⟫ = −∫ g (Dφ)w (smoothing + dominated convergence) |
+| [Energy/Euclidean/CovarianceGradient/Operator.lean](../../formalization/FunctionalInequalities/Energy/Euclidean/CovarianceGradient/Operator.lean) | `weightedGradient B g`, `IsGradientTest ν B g`, `gradientGraph`, `gradientOperator ν B hac` | Test: globally Lipschitz, L²(ν), B∇g ∈ L²(ν;V); the graph {([g],[B∇g])} is a submodule under ν ≪ Haar (Rademacher gives a.e. linear), and is a function graph on the boundary of support with zero measure; `Submodule.toLinearPMap` gives the operator; characterization of domain and range |
+| | `covarianceRelaxation_eq_sequentialRelaxation_ofLinearPMap` | If ∀v, ⟪Σv,v⟫ = ‖Bv‖², then the covariance relaxation of the node equals the relaxation of the operator |
+| | `gradientOperator_apply_eq_zero_of_subsingleton`, `domain_gradientOperator_eq_top_of_subsingleton` | Zero-dimensional: the operator is zero, the domain is the full space |
+| [Energy/Euclidean/CovarianceGradient/Closable.lean](../../formalization/FunctionalInequalities/Energy/Euclidean/CovarianceGradient/Closable.lean) | `Probability.LocallyDominates ν m` | On each compact subset inside the support, m|_K ≤ C·ν|_K |
+| | `gradientOperator_isClosable` | Premise ν ≪ m, ν(∂supp) = 0, LocallyDominates: the operator is closable |
+| [Energy/Euclidean/CovarianceGradient/Core.lean](../../formalization/FunctionalInequalities/Energy/Euclidean/CovarianceGradient/Core.lean) | `smoothCore ν`, `dense_smoothCore`, `dense_domain_gradientOperator` | The class of smooth compactly supported functions forms a submodule, dense in L²(ν) (Mathlib), hence the domain is dense, and the law holds for any rule |
+| | `closure_domRestrict_smoothCore`, `closure_domRestrict_eq_of_smoothCore_le` | By previously proven `exists_smooth_weighted_L2_approximation`: the smooth kernel and the full space have the same closure; any kernel in between also shares this property |
+| [KLS/LogConcave/CovarianceClosure.lean](../../formalization/FunctionalInequalities/KLS/LogConcave/CovarianceClosure.lean) | `hν.absolutelyContinuous_haar`, `hν.frontier_support_eq_zero`, `hν.locallyDominates` | The full-dimensional log-concave law satisfies three premises; local domination is obtained from Borell density of compact sets with positive lower bound |
+| | `hν.gradientOperator m B hi`, `_isClosable`, `dense_domain_`, `closure_domRestrict_eq_of_smoothCore_le`, `sequentialRelaxation_gradientOperator_of_mem/_of_notMem/_toAmbient`, `covarianceRelaxation_eq` | Log-concave version of the five conclusions of Blueprint |
+| | `hμ.intrinsicGradientOperator m B`, `_isClosable`, `dense_domain_`, `closure_domRestrict_`, `hμ.affine_energy_eq` | Intrinsic version of the law for any log-concave μ, including zero-dimensional; `Energy.Affine.energy μ` equals the operator relaxation |
 
-证书 `Solutions.LemCovarianceCoreClosure.certificate`：对全维对数凹 ν、任意 Haar m 与任意 B，打包
-域稠密、可闭、核独立（任何 smoothCore ≤ S ≤ Dom 的 S）、Dom T̄ 上松弛 = ‖T̄f‖²、其外 = ⊤。
-三个 `example`：Fin n 上任意对数凹律的内禀律、Fin 0（算子为零且域为 ⊤）、与 `Energy.Affine.energy` 的等式。
+Certificate `Solutions.LemCovarianceCoreClosure.certificate`: for full-dimensional log-concave ν, any Haar m, and any B, the domain is dense, closable, and core-independent (for any smooth core ≤ S ≤ Dom of S), the relaxation on Dom Ṫ is ‖Ṫf‖², and outside is ⊤.
+Three `example`: the intrinsic law of any log-concave law on Fin n, Fin 0 (operator zero and domain ⊤), and the equality of `Energy.Affine.energy`.
 
-**主张什么。** 上表全部声明及证书。**不主张什么。** 不主张 Q 的 Poincaré 不等式、平移不变性、
-各向同性归约、Σ^{1/2} 的存在性（下游节点用谱定理构造 B）、raw/core agreement 之外的任何
-Dirichlet/Markov 性质、`Energy.Affine.energy` 与 `Energy.Canonical.energy` 的比较，或 KLS。
-**有限范围与零维。** 空间有限维；测试全局 Lipschitz；B 任意（含零与奇异）；零维方向空间包含
-在每条结论中，此时算子为零、域为全空间、松弛恒为零。
+**What is claimed.** The table above lists all assertions and certifications. **What is not claimed.** No claim is made regarding the Poincaré inequality or translation invariance of Q,
+Isotropic reduction, existence of Σ^{1/2} (downstream nodes construct B using spectral theorem), any agreement beyond raw/core
+the Dirichlet/Markov property, comparison of `Energy.Affine.energy` with `Energy.Canonical.energy`, or KLS.
+**Finite range and zero-dimensional.** The space is finite-dimensional; test global Lipschitz; B is arbitrary (including zero and singular); the direction space of zero-dimensional contains
+In each conclusion, at this point the operator is zero, the domain is the entire space, and the relaxation is always zero.
 
-## 语义对齐
+## Semantic alignment
 
-| Blueprint 子句 | Lean | 结论 |
+| Blueprint clause | Lean | Conclusion |
 | --- | --- | --- |
-| ν = ρ dx 全维对数凹律 | `hν : LogConcave ν`、`hi : (interior ν.support).Nonempty`；密度由 Borell 表示内部产生，不作前提 | 一致（Lean 前提更弱：不需给定 ρ） |
-| Σ ⪰ 0 常自伴，T g = Σ^{1/2}∇g | 任意 `B : V →L[ℝ] V`，T g = B∇g；Σ = B†B | Lean 更强（B 任意），记录；Σ^{1/2} 的存在性留给消费者 |
-| 在全局 Lipschitz L²(ν) 函数上稠密定义 | `IsGradientTest`（另要求 B∇g ∈ L²，与 Blueprint 的 T 定义域一致）；`dense_domain_gradientOperator` 对任意律成立 | 一致（稠密性更一般） |
-| 可闭 | `gradientOperator_isClosable`，前提 ν ≪ m、ν(∂supp)=0、LocallyDominates；对数凹全维律满足 | 一致 |
-| 图闭包等于 ℝ + C_c^∞(V) 限制的图闭包 | `closure_domRestrict_eq_of_smoothCore_le`：任何含光滑紧支撑类、含于域的子模 S；ℝ + C_c^∞ 是其中之一 | Lean 更强（任意中间核），记录；ℝ + C_c^∞ 未单独命名为 Lean 对象 |
-| Q(f) = ‖T̄f‖² 于 Dom T̄，+∞ 于其外 | `sequentialRelaxation_gradientOperator_of_mem` / `_of_notMem`，通用形式对任何可闭算子成立 | 一致（Lean 更一般） |
-| 证明末句：零维时函数皆常数、梯度为零 | `domain_gradientOperator_eq_top_of_subsingleton`、`gradientOperator_apply_eq_zero_of_subsingleton` | 一致 |
-| 证明中"光滑紧支撑函数在 L²(ν) 稠密" | Mathlib `Lp.dense_hasCompactSupport_contDiff` | 一致 |
-| 证明中的弱紧性论证（弱收敛子列、图弱闭） | 改为 Hilbert 选择引理（尾部凸包最小范数元 + 平行四边形律），无弱拓扑 | 结论相同，证法不同，记录 |
+| ν = ρ dx full log-concave law | `hν : LogConcave ν`, `hi : (interior ν.support).Nonempty`; density generated internally by Borell representation, no assumption made | uniform (Lean premise is weaker: no need to assume ρ) |
+| Σ ⪰ 0 symmetric and self-adjoint, T g = Σ^{1/2}∇g | for any `B : V →L[ℝ] V`, T g = B∇g; Σ = B†B | Lean is stronger (for arbitrary B), recorded; the existence of Σ^{1/2} is left to the consumer |
+| Densely defined on globally Lipschitz L²(ν) functions | `IsGradientTest` (also requires B∇g ∈ L², matching Blueprint's domain of T); `dense_domain_gradientOperator` holds for any law | Aligned (density is more general) |
+| closable | `gradientOperator_isClosable`, under the condition ν ≪ m, ν(∂supp)=0, LocallyDominates; the log-concave full dimension law is satisfied | uniformly |
+| Graph closure equals the graph closure of ℝ + C_c^∞(V) restriction | `closure_domRestrict_eq_of_smoothCore_le`: any submodule S containing smooth compactly supported classes and contained in the domain; ℝ + C_c^∞ is one of them | Lean is stronger (any intermediate kernel), recorded; ℝ + C_c^∞ is not individually named as a Lean object |
+| Q(f) = ‖T̄f‖² on Dom T̄, +∞ elsewhere | `sequentialRelaxation_gradientOperator_of_mem` / `_of_notMem` , general form holds for any closable operator | Uniform (Lean is more general) |
+| Final proof sentence: in dimension zero all functions are constant and gradients vanish | `domain_gradientOperator_eq_top_of_subsingleton`, `gradientOperator_apply_eq_zero_of_subsingleton` | Aligned |
+| Proof of "smooth compactly supported functions are dense in L²(ν)" | Mathlib `Lp.dense_hasCompactSupport_contDiff` | Uniform |
+| Weak compactness argument in proof (weak convergence subsequence, graph weak closed) | Replaced with Hilbert selection lemma (tail convex hull minimal norm element + parallelogram law), no weak topology | Same conclusion, different proof method, recorded |
 
-未发现 Lean 弱于 Blueprint 之处。Blueprint 的 \uses 中 `thm:borell-logconcave-density` 在 Lean 中确有
-使用（`exists_isBorellDensity_of_interior_support_nonempty` 与 `exists_bounds_of_isCompact` 给出局部支配），
-`lem:covariance-test-core-density` 用于核闭包相等。
+No weakening of Lean statements relative to Blueprint was found. The `thm:borell-logconcave-density` in Blueprint's \uses is indeed used in Lean (`exists_isBorellDensity_of_interior_support_nonempty` and `exists_bounds_of_isCompact` provide local domination), and `lem:covariance-test-core-density` is used for equality of nuclear closures.
 
-## 证明路线
+## Proof path
 
-- **选择引理。** Pₙ = {(x_j,y_j) : j ≥ n}，Cₙ = closure(convexHull(snd '' Pₙ))，zₙ 为 Cₙ 的最小范数元
-  （`exists_norm_eq_iInf_of_complete_convex`）。‖zₙ‖ 单调有界 → S ≤ L；中点 (zₙ+zₘ)/2 ∈ Cₙ 与平行四边形律
-  给 ‖zₙ − zₘ‖² ≤ 2(‖zₘ‖² − ‖zₙ‖²)，故 Cauchy → z₀。取凸组合 pₙ ∈ convexHull Pₙ ⊆ G 使 (pₙ).2 逼近 zₙ，
-  (pₙ).1 落在 x₀ 的收缩闭球（`LinearMap.image_convexHull`），G 闭 ⇒ (x₀,z₀) ∈ G。
-- **松弛识别。** ≤：(x, T̄x) ∈ closure(graph T)（`IsClosable.graph_closure_eq_closure_graph`），取图点序列。
-  ≥ 与 ⊤：liminf < L² 给出频繁 ‖T fₙ‖ ≤ L（`frequently_lt_of_liminf_lt`），选择引理给 (x, y₀) ∈ graph T̄。
-- **弱导数。** 紧支撑 C¹ 的 u：F(t) = ∫ u(t•w + x) dm 为常数（`integral_add_left_eq_self`），
-  `hasDerivAt_integral_of_dominated_loc_of_deriv_le` 求导得 ∫ (Du) w = 0；乘积法则给光滑分部积分；
-  Lipschitz g 用 `mollify m (radius j) g`：`tendsto_gradient_mollify`（可微点）+ Rademacher + 一致界 K，
-  `norm_mollify_sub_le` 给一致收敛，两边控制收敛后由极限唯一性得恒等式。
-- **可闭性。** (0, y) ∈ closure(graph)：fₙ → 0，T fₙ → y。对 tsupport φ ⊆ Ω 的 φ ∈ C_c^∞：局部支配把 L²(ν) 收敛
-  变为 supp φ 上的 L¹(m) 控制（`eLpNorm_le_eLpNorm_mul_rpow_measure_univ`），∫ φ•(T fₙ) → ∫ φ•y；
-  ∫ φ•B∇gₙ = B(∫ φ•∇gₙ)，‖∫ φ•∇gₙ‖² = −∫ gₙ (Dφ)(∫φ•∇gₙ) ≤ ‖∫φ•∇gₙ‖·∫‖gₙ‖‖Dφ‖，再由局部支配 → 0。
-  故 ∫ φ•y dm = 0，`IsOpen.ae_eq_zero_of_integral_contDiff_smul_eq_zero` 给 y = 0 m-a.e. 于 Ω，
-  ν ≪ m 与 ν(Ωᶜ) = 0 给 y = 0。
-- **核与稠密。** 光滑紧支撑 ⇒ Lipschitz（`lipschitzWith_of_nnnorm_fderiv_le`）、有界 ⇒ 测试；
-  Mathlib 稠密性；`exists_smooth_weighted_L2_approximation` 给图范数逼近。
-- **对数凹前提。** ν ≪ Haar（已证）；∂supp 为凸集边界，Haar 零测（`Convex.addHaar_frontier`）；
-  Borell 密度 ρ ≥ a > 0 于紧集 K ⇒ m(s ∩ K) ≤ a⁻¹ ∫_{s∩K} ρ dm = a⁻¹ ν(s ∩ K)。
+- **Selection Lemma.** Pₙ = {(x_j,y_j) : j ≥ n}, Cₙ = closure(convexHull(snd '' Pₙ)), zₙ is the element of minimal norm in Cₙ (`exists_norm_eq_iInf_of_complete_convex`). ‖zₙ‖ is monotone bounded → S ≤ L; the midpoint (zₙ+zₘ)/2 ∈ Cₙ and the parallelogram law gives ‖zₙ − zₘ‖² ≤ 2(‖zₘ‖² − ‖zₙ‖²), hence Cauchy → z₀. Take a convex combination pₙ ∈ convexHull Pₙ ⊆ G such that (pₙ).2 approximates zₙ, and (pₙ).1 lies in the contraction closed ball about x₀ (`LinearMap.image_convexHull`); G is closed ⇒ (x₀,z₀) ∈ G.
+- **Relaxation identification.** ≤: (x, T̄x) ∈ closure(graph T) (`IsClosable.graph_closure_eq_closure_graph`), take a sequence of graph points.
+  ≥ and ⊤: liminf < L² yields frequent ‖T fₙ‖ ≤ L (`frequently_lt_of_liminf_lt`), the selection lemma gives (x, y₀) ∈ graph T̄.
+- **Weak derivative.** A compactly supported C¹ function u: F(t) = ∫ u(t•w + x) dm is constant (`integral_add_left_eq_self`), `hasDerivAt_integral_of_dominated_loc_of_deriv_le` differentiation yields ∫ (Du) w = 0; the product rule gives smooth partial integration; for Lipschitz g, use `mollify m (radius j) g`: `tendsto_gradient_mollify` (at differentiable points) + Rademacher + uniform bound K, `norm_mollify_sub_le` gives uniform convergence, and after applying dominated convergence to both sides, uniqueness of the limit yields the identity.
+- **closability.** (0, y) ∈ closure(graph): fₙ → 0, T fₙ → y. For a test function φ ∈ C_c^∞ with support tsupport ⊆ Ω: local domination turns L²(ν) convergence into L¹(m) control on supp φ (`eLpNorm_le_eLpNorm_mul_rpow_measure_univ`), ∫ φ•(T fₙ) → ∫ φ•y; ∫ φ•B∇gₙ = B(∫ φ•∇gₙ), ‖∫ φ•∇gₙ‖² = −∫ gₙ (Dφ)(∫φ•∇gₙ) ≤ ‖∫φ•∇gₙ‖·∫‖gₙ‖‖Dφ‖, and by local domination → 0. Hence ∫ φ•y dm = 0, `IsOpen.ae_eq_zero_of_integral_contDiff_smul_eq_zero` gives y = 0 m-a.e on Ω, ν ≪ m and ν(Ωᶜ) = 0 gives y = 0.
+- **Kernel and dense.** Smooth compact support ⇒ Lipschitz (`lipschitzWith_of_nnnorm_fderiv_le`), bounded ⇒ test; Mathlib density; `exists_smooth_weighted_L2_approximation` gives graph norm approximation.
+- **Log-concave premise.** ν ≪ Haar (already proved); ∂supp is the boundary of a convex set, Haar null (`Convex.addHaar_frontier`); Borell density ρ ≥ a > 0 on compact set K ⇒ m(s ∩ K) ≤ a⁻¹ ∫_{s∩K} ρ dm = a⁻¹ ν(s ∩ K).
 
-## 元数据同步
+## Metadata Synchronization
 
-- ledger 新增 `lem:covariance-core-closure`（proved / lean，`solutions/LemCovarianceCoreClosure.lean`），
-  十四个 proved 节点；`check_blueprint.CERTIFICATES` 新增映射；lakefile `Solutions` 根新增证书模块。
-- Blueprint 引理块锚定十四条声明与证书，声明与证明标 `leanok`；块尾补充 B 替代 Σ^{1/2}、任意中间核、
-  与仿射松弛等式的说明；`\uses` 未改。
-- 根聚合模块导入 `KLS.LogConcave.CovarianceClosure`；`Poincare/Foundation.lean` 导入五个新 Energy 模块并
-  更新文档要点。
-- tasks.json：节点改为 `available`，登记新模块、`LipschitzApproximation.lean`、`BorellRepresentation.lean`
-  与 Mathlib `LinearPMap`、`Projection/Minimal`、`ParametricIntegral`、`AEEqOfIntegralContDiff`、
-  `SmoothApprox`、`MeanValue` 的哈希；被本次编辑触及的其他任务证据哈希同步刷新。
-- 当前指南：HANDOFF、README、`verification.md`、`solutions/README.md`、`formalization/README.md`、
-  `blueprint/README.md`、`Energy/README.md`、`KLS/LogConcave/README.md`、`naming.md`。
-  statement golden、`STATEMENT_CHECKS`、路线配置未动。
+- ledger adds `lem:covariance-core-closure` (proved / lean, `solutions/LemCovarianceCoreClosure.lean`),
+  fourteen proved nodes; `check_blueprint.CERTIFICATES` adds a mapping; lakefile `Solutions` root adds a certificate module.
+- Blueprint lemma block anchors fourteen statements and certificates, statements and proofs marked `leanok`; tail supplements B instead of Σ^{1/2}, arbitrary intermediate kernels,
+  and affine relaxation equality explanations; `\uses` unchanged.
+- Root aggregation module imports `KLS.LogConcave.CovarianceClosure`; `Poincare/Foundation.lean` imports five new Energy modules and
+  updates document highlights.
+- tasks.json: node changed to `available`, registers new modules, `LipschitzApproximation.lean`, `BorellRepresentation.lean`
+  and Mathlib `LinearPMap`, `Projection/Minimal`, `ParametricIntegral`, `AEEqOfIntegralContDiff`, `SmoothApprox`, `MeanValue` hashes;
+  evidence hash of other tasks touched by this edit is synchronized.
+- Current guide: HANDOFF, README, `verification.md`, `solutions/README.md`, `formalization/README.md`, `blueprint/README.md`, `Energy/README.md`, `KLS/LogConcave/README.md`, `naming.md`.
+  statement golden, `STATEMENT_CHECKS`, route configuration unchanged.
 
-## 证据边界
+## Evidence Boundary
 
-`lake build` 通过，证书与十一条库级声明有标准公理守卫。最终验证收据由 `python3 research/verify.py`
-在本记录及所有指南编辑之后生成，其源码 SHA 记录在收据自身，不写回本文件。本地 kernel 重放信任
-第三方编译导入；未做隔离重建、远端 CI 或发布。
+`lake build` passed, certificate and eleven library-level statements have standard axioms guarding. Final verification receipt generated by `python3 research/verify.py`
+after this record and all guide edits, with its source code SHA recorded in the receipt itself, not written back to this file. Local kernel replay trusts
+third-party compiled imports; no isolated rebuild, remote CI, or release performed.

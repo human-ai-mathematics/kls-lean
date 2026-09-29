@@ -18,7 +18,7 @@ The complete old-to-new map is
 
 ## Rationale
 
-This applies the repository rule “家族词归目录，不进文件名”. In particular, the former
+This applies the repository rule “Family names belong in directories, not filenames”. In particular, the former
 `Yosida.lean` was not about the Yosida approximation itself: it proves a generic contraction
 bound for exponentials of bounded nonnegative operators, so its mathematical home is
 `Exponential/Contraction.lean`.

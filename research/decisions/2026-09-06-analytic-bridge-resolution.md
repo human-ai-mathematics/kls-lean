@@ -1,6 +1,6 @@
 # Relative perimeter, covariance core, and the fiber constant
 
-**Date:** 2026-09-06. **Authorization:** the owner asked “那就解决这些问题” after the proposal
+**Date:** 2026-09-06. **Authorization:** the owner asked “then resolve these issues” after the proposal
 to parameterize the fiber comparison and supply the covariance-core and relative-perimeter
 arguments. This record appends to, rather than rewrites, the earlier Fable review and proof
 acceptance. Work remains local on `main`; no commit or push is included.

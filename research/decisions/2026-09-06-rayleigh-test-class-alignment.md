@@ -1,7 +1,7 @@
 # Rayleigh test-class alignment in the Cheeger--Buser proof
 
 **Date:** 2026-09-06 (Asia/Shanghai). This continues the owner's preceding instruction
-“按照你的理解来补”, following [the review clarifications](2026-09-06-blueprint-review-clarifications.md).
+“fill in the gaps according to your assessment”, following [the review clarifications](2026-09-06-blueprint-review-clarifications.md).
 The new screenshot was checked against the source before its suggestion was incorporated.
 Work remains local on `main`; no commit or push is included.
 

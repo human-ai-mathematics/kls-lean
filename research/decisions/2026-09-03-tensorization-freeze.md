@@ -3,7 +3,7 @@
 **Approval date:** 2026-09-03 (Asia/Shanghai).
 
 **Human reviewer/approver:** the repository user in Codex task
-`01a065af-7638-70e0-98d1-dc77718ee3e9`, whose instruction was “同步验收” following
+`01a065af-7638-70e0-98d1-dc77718ee3e9`, whose instruction was “synchronize acceptance” following
 the report of the completed proof, semantic review, compilation, and dependency audit.
 The authenticated repository account for this acceptance is `lyw-ops`.
 **Recorder and technical reviewer:** Codex, with independent geometry/admissibility and

@@ -1,97 +1,92 @@
-# 纤维方向的 m 维换元
+# m-dimensional change of variables in fiber direction
 
-2026-09-17。本轮**证明新定理**，完成余维 m coarea 正则情形的**第三个子块**：
-**纤维方向的 m 维换元**，以及它的直接兑现——**局部 coarea 等式的环境一侧**。
-**仍然没有证明任何 coarea 公式。**
-不迁洞，不提交、不推送。直接洞仍 **8（1/2/5）**，证书仍 **24**。
+2026-09-17. This round of **proving a new theorem**, completes the **third subblock** of the m-codimensional coarea regular case:
+**m-dimensional change of variables in the fiber direction**, and its direct realization—the **ambient side of the local coarea equation**.
+**No coarea formula has been proven yet.**
+No hole-filling, no commit, no push. The direct proof hole remains **8 (1/2/5)**, the certification remains **24**.
 
-起点 `HEAD = origin/main = 34b92695ece4f636a1a7f1eafbbf41c685ee0348`；起点 passed 回执
-`build/verification/20260916T163322.273570Z/report.json`：10 个门、208 个本地模块内核重放、
-545 条目，快照
-`9f415ea90a30a962ef13bff80995e84f7d3d30c3110785b7f4b3752ace00370d`。
-起点工作区 drift 为空，并发会话未改动工作区。
+Start `HEAD = origin/main = 34b92695ece4f636a1a7f1eafbbf41c685ee0348`; start verification receipt
+`build/verification/20260916T163322.273570Z/report.json`: 10 gates, 208 local module kernel replay,
+545 entries, snapshot
+`9f415ea90a30a962ef13bff80995e84f7d3d30c3110785b7f4b3752ace00370d`.
+The start workspace drift is empty, and concurrent session has not modified the workspace.
 
-## 边界
+## Boundary
 
-对数凹 Cheeger–Buser 线（含 `KLS/WIP/CheegerInfimum.lean` 剩下的两个洞）归合作者**王浩丞**，
-本轮未触碰。尖锐有限正则 Sard、Energy 的五个洞、无量纲 KLS 也都未触碰。
+Log-concave Cheeger–Buser lines (including `KLS/WIP/CheegerInfimum.lean` remaining two holes) credited to author **Haocheng Wang**,
+this round untouched. Sharp finite regular Sard, Energy's five holes, dimension-free KLS also untouched.
 
-## 一处 Mathlib 缺口，必须先补
+## A Gap in Mathlib Must Be Fixed First
 
-Mathlib 的换元公式 `lintegral_image_eq_lintegral_abs_det_fderiv_mul` 是**自映射**的陈述：
-`f : E → E`，体积因子 `|det (f' x)|`。纤维映射 `t ↦ ψ (y, t)` 从**水平空间 `W`** 走到
-**法因子 `K`**，两者是同维但**不同**的空间，那个行列式**根本不合式**。
+The change-of-variable formula `lintegral_image_eq_lintegral_abs_det_fderiv_mul` in Mathlib is a statement of a self-map:
+`f : E → E`, volume factor `|det (f' x)|`. The fiber map `t ↦ ψ (y, t)` goes from the **level space `W`** to the **normal factor `K`**, which are both the same dimension but distinct spaces, and that determinant is not closed.
 
-* **`lintegral_image_eq_lintegral_normDet_fderiv_mul`**（本轮新证）：
-  同维两空间之间的换元公式，体积因子是 `LinearMap.normDet`——它本来就定义在不同空间之间。
-  证明把目标空间用一个线性等距等价拉回来：等距保测度、其范数行列式为 `1`，所以什么都不多出来；
-  选取的等距**只出现在证明里，不进入任何陈述**。
-  `f` 只需在 `s` 上逐点有 within 导数并在 `s` 上单射，权重是任意 `ℝ≥0∞` 函数，
-  **无可积性、无有限性、无连续性假设**。
+* **`lintegral_image_eq_lintegral_normDet_fderiv_mul`** (new proof in this round):
+  The change-of-variables formula between two spaces of the same dimension has a volume factor of `LinearMap.normDet`—it is inherently defined between different spaces.
+  The proof brings the target space back via a linear isometry: isometries preserve measure, and the determinant of its norm is `1`, so nothing is added;
+  the chosen isometry **appears only in the proof and does not enter any statement**.
+  `f` only needs pointwise derivatives within `s` and injectivity on `s`, with an arbitrary `ℝ≥0∞` weight function,
+  **no integrability, no finiteness, no continuity assumptions**.
 
-**同维假设不可去**：审计的 `equal_dimension_necessary` 给出反例——
-`ℝ` 到平面的直线映射在单位区间上，左端为 `0`（像落在真子空间里），右端为 `1`（等距的体积因子是 `1`）。
+**The dimension assumption is not removable**: the audit `equal_dimension_necessary` provides a counterexample—
+the linear map from `ℝ` to the plane restricted to the unit interval, with left-hand side `0` (image lying in a proper subspace), and right-hand side `1` (the isometric volume factor is `1`).
 
-## 精确成果
+## Exact Results
 
-新模块 `formalization/FunctionalInequalities/Analysis/VectorFiberIntegral.lean`
-（266 行，本地 import 闭包 18 个模块，**无 WIP**）。它是 `FiberIntegral.lean` 的余维 m 类比。
+New module `formalization/FunctionalInequalities/Analysis/VectorFiberIntegral.lean`
+ (266 line, local import closure of 18 modules, **no WIP**). It is an m-codimensional analogy of `FiberIntegral.lean`.
 
-* **`fderiv_snd_eq`、`continuous_normDet_fderiv_snd`**：水平方向导数就是联合导数限制在水平因子上，
-  其体积因子对两个坐标连续（被积函数可测性由此而来）。
-* **`setLIntegral_image_vectorVerticalMap`**：**余维 m 的竖直换元**。对 `T (y,t) = (y, ψ (y,t))`，
-  在任意单射 Borel 片上
-  `∫⁻ over T''A = ∫⁻_A normDet (Dₜψ) · f ∘ T`。
-  水平空间 `W` 与法因子 `K` **全程保持区分**。
-* **`splitVectorEquiv`**：正交分裂作为连续线性等价，逆是两个分量收缩，显式。
-* **`setLIntegral_image_levelGraphMap`**：沿着水平族的图映射的换元——
-  把竖直换元用上上轮已证的**保测分裂**搬到环境空间 `V` 上。
-* **`setLIntegral_coareaJacobian_levelGraphFamily`**：**局部 coarea 等式的环境一侧**。
-  在水平族的任一 Borel 片上，环境 coarea 密度对任意权重的积分等于
-  **图面积密度**对参数–水平域的积分——右端正是已证的归一化面积公式 `B2` 所消费的密度。
-  换元是上面的竖直换元，密度的更换是上一轮纤维 Jacobian 恒等式的逐点应用。
+* **`fderiv_snd_eq`, `continuous_normDet_fderiv_snd`**: The horizontal directional derivative is the joint derivative restricted to the horizontal factor,
+  Its volume factor is continuous in two coordinates (the measurability of the integrand stems from this).
+* **`setLIntegral_image_vectorVerticalMap`**: **Vertical change of variables of codimension m**. For `T (y,t) = (y, ψ (y,t))`,
+  On any injective Borel sheet
+  `∫⁻ over T''A = ∫⁻_A normDet (Dₜψ) · f ∘ T`.
+  The level space `W` and the normal factor `K` are fully distinguished throughout.
+* **`splitVectorEquiv`**: Orthogonal splitting as a continuous linear equivalence, inverse is contraction of the two components, explicit.
+* **`setLIntegral_image_levelGraphMap`**: change of variables for the graph map along the level family——
+  Transfer the vertical change of variables, using the already-proved **measure-preserving splitting** in the upper layer, to the ambient space `V`.
+* **`setLIntegral_coareaJacobian_levelGraphFamily`**: **the ambient side of the local coarea formula**.
+  On any Borel slice of the level family, the ambient coarea density integrated against any weight equals
+  The integral of the **graph area density** over the parameter–level domain—exactly matches the normalized area formula `B2` that has been proven and consumed.
+  The substitution is the vertical substitution above, and the change of density is pointwise application of the fiber Jacobian identity from the previous round.
 
-## m = 1 退回已证结果
+## m = 1 revert proven result
 
-审计的 `codimension_one_verticalMap` 从本轮的余维 m 陈述**逐字导出**仓库已证的
-`Analysis.setLIntegral_image_verticalMap`（其本身的证明是一维 Jacobian 定理），
-桥梁是 `normDet_fderiv_eq_abs_deriv`：一维体积因子就是导数的绝对值。
+The audit `codimension_one_verticalMap` derives literally from the current codimension-m statement **verbatim** repository already proven
+`Analysis.setLIntegral_image_verticalMap` (its own proof is a one-dimensional Jacobian theorem),
+Bridges are `normDet_fderiv_eq_abs_deriv`: the one-dimensional volume factor is the absolute value of the derivative.
 
-## 本轮没有做的事
+## What was not done in this round
 
-* **没有证明任何 coarea 公式**；余维 m 正则情形**仍未完成**。
-* 纤维一侧的**加权**余维 m 面积公式（`setLIntegral_image_graphMap` 的类比）**没有证**——
-  上一轮的纤维测度只有权重一。
-* 没有做水平变量上的 Tonelli 装配，没有做局部到整体的可数拼接，
-  没有做余维 m 的加权切片可测性。
-* 没有迁洞；没有扩大证书或 Blueprint `leanok` 范围；没有新增兼容 alias；没有削弱已证结论。
-* 没有增加不必要的假设：没有有界、有限体积、可积性、正则值、SFinite。
-* **没有提交、没有推送**，真实 Git index 未改动。
+* No proof of any coarea formula; the codimension-m-regular case remains incomplete.
+* No proof of the weighted codimension-m-area formula (analogous to `setLIntegral_image_graphMap`) — the fiber measure in the previous round had only unit weight.
+* No Tonelli composition on level variables, no countable gluing from local to global, no measurability of weighted codimension-m-slices.
+* No migration of holes; no expansion of certification or Blueprint `leanok` scope; no new compatible aliases added; no weakening of established conclusions.
+* No unnecessary assumptions added: no boundedness, finite volume, integrability, regular values, SFinite.
+* No commit, no push; the actual Git index remains unchanged.
 
-## 路线语句复核
+## Route statement verification
 
-本轮重跑但**未发现新的**路线语句错误。已记录的两处仍是 `B1` 与已证伪的 `A0`；
-`A5` 两侧错配一致故不为假。
-`research/audits/AreaFormulaRouteStatements.lean` 继续**保持原字节**。
+This round of re-execution found no new route statement errors. The two recorded issues remain `B1` and the falsified `A0`;
+`A5` has consistent mismatching on both sides, thus not false.
+`research/audits/AreaFormulaRouteStatements.lean` continues to preserve the original bytes.
 
-## 剩余工作（余维 m 正则情形）
+## Remaining work (regular case of codimension m)
 
-1. **加权的余维 m 图面积公式**：`setLIntegral_image_graphMap` 的类比，
-   把 `B2` 从「图的测度」升级到「图上的加权积分」；
-2. 水平变量上的 Tonelli，把本轮的环境一侧与第 1 步的纤维一侧接起来，
-   得到局部 coarea 等式（标量对应物 `setLIntegral_coarea_graph_family`）；
-3. 可数覆盖 + 不交拼接，加上余维 m 的加权切片可测性
-   （标量对应物 `OpenSliceMeasurable.lean`），得到
-   `coarea_of_contDiffOn_of_coareaJacobian_ne_zero`。
+1. **Weighted co-dimension m graph area formula**: `setLIntegral_image_graphMap` analogy,
+   promoting `B2` from "measure of the graph" to "weighted integral over the graph";
+2. Tonelli on level variables, connects the ambient side of this round to the fiber side of step 1,
+   yielding a local coarea formula (scalar counterpart `setLIntegral_coarea_graph_family`);
+3. Countable cover + disjoint gluing, together with measurability of weighted slices of co-dimension m
+   (scalar counterpart `OpenSliceMeasurable.lean`), yields
+   `coarea_of_contDiffOn_of_coareaJacobian_ne_zero`.
 
-## 验证
+## Verification
 
-* 新模块与新客户端均以 `-DwarningAsError=true` 编译通过，无 `sorry`、无 `axiom`、无占位。
-* `research/audits/VectorFiberIntegralAudit.lean` 的 **16 条公理报告**只用
-  `propext`、`Classical.choice`、`Quot.sound`；含零维纤维、全空间（无有限性）、
-  线性等距保测度的自洽检查、m = 1 退回标量竖直换元、以及同维假设的反例。
-* 重跑全部 **36 个审计客户端**（`research/audits` 29 个，`build/audit` 7 个），全部严格通过。
-* 三个 WIP 逐个实际编译，直接洞 **1/2/5，总数 8**，不变；`research/check_ledger.py` 报 24 个证书。
-* 默认 `lake build` 与根目录 `python3 research/verify.py` 通过；证据 JSON 为
-  `research/explorations/2026-09-17-vector-fiber-integral.json`，最终核对另存
-  `build/audit/vector-fiber-integral/final-snapshot.json`。
+* The new module and new client both compile successfully with `-DwarningAsError=true`, with no `sorry`, no `axiom`, and no placeholders.
+* The **16 Axiom Report** for `research/audits/VectorFiberIntegralAudit.lean` only uses `propext`, `Classical.choice`, and `Quot.sound`; includes zero-dimensional fibers, the full space (without finiteness), self-consistency checks under linear isometries preserving measure, m = 1 returning scalar vertical substitution, and counterexamples under the assumption of equal dimension.
+* All **36 audit clients** are rerun (`research/audits` 29 and `build/audit` 7), all passing strictly.
+* Each of the three WIPs is compiled in practice, with direct proof holes **1/2/5, total count 8**, unchanged; `research/check_ledger.py` issues 24 certificates.
+* Default `lake build` and root directory `python3 research/verify.py` pass; the JSON evidence is
+  `research/explorations/2026-09-17-vector-fiber-integral.json`, and the final verification is saved as
+  `build/audit/vector-fiber-integral/final-snapshot.json`.

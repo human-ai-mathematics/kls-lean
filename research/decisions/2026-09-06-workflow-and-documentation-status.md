@@ -1,8 +1,8 @@
 # Workflow policy and current documentation status
 
 **Date:** 2026-09-06 (Asia/Shanghai). **Authorization:** the owner instructed
-“将我提到的这一点写进交接文档，然后修改文档状态滞后的问题”, referring to the preceding policy
-“后面我们除了大的推送其他的都不用CL”. Work is local on `main`.
+“Record the point I mentioned in the handoff, then correct the outdated documentation status”, referring to the preceding policy
+“From now on, use CL only for large pushes”. Work is local on `main`.
 
 ## Workflow policy
 

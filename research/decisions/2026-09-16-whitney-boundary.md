@@ -1,40 +1,40 @@
-# 开始 L6：紧集 jet 的边界拼接
+# Start L6: Boundary Gluing of Jet Compact Sets
 
-2026-09-16。A 先完成：`20260915T170113.583163Z`，10 gates、190 个本地模块重放，
-475 条目，快照 `051483acb993b037ccccd2682cb0c735a9d373ce20cc399defc54a384b10fa09`。
-B 开始时 HEAD 与 origin/main 都是 `dcc158d7d3b9e91f17d2ee0fd49b30cdb6f4f7d8`。
-不提交、不推送，原始 FirstOrderJet 两文件、其他既有 Lean 文件和历史决定均不改。
+2026-09-16. A completes first: `20260915T170113.583163Z`, 10 gates, 190 local module replays,
+475 entries, snapshot `051483acb993b037ccccd2682cb0c735a9d373ce20cc399defc54a384b10fa09`.
+B starts with HEAD and origin/main both being `dcc158d7d3b9e91f17d2ee0fd49b30cdb6f4f7d8`.
+Not commit, not push, raw FirstOrderJet two files, other existing Lean files and historical decisions unchanged.
 
-## 已完成的是边界分析步骤
+## The completed step is boundary analysis
 
-新文件 `formalization/FunctionalInequalities/Analysis/WhitneyExtension.lean`，命名空间
-`FunctionalInequalities.Analysis.WhitneyJet`。只经 FirstOrderJet 依赖 Mathlib，不依赖 KLS/WIP。
+New file `formalization/FunctionalInequalities/Analysis/WhitneyExtension.lean`, namespace
+`FunctionalInequalities.Analysis.WhitneyJet`. Depends on Mathlib only through FirstOrderJet, does not depend on KLS/WIP.
 
-* `affine f F a y = f a + F a (y-a)`，是给定 jet 的仿射多项式。
-* `norm_affine_sub_le`：两个仿射多项式的差由 jet 余项与导数差控制。
-* `dist_nearest_le`：若 a 是 y 在 S 上的最近点，x∈S，则 dist(a,x) ≤ 2 dist(y,x)。
-* `hasFDerivWithinAt`：余项条件给出集合内的导数；**不**识别稀疏集上的 fderivWithin，
-  也**不**声称原函数在环境空间可微。
-* `hasFDerivAt_of_nearby_affine`：候选函数在 S 上等于 f，补集上相对最近点仿射 jet
-  有 o(dist(y,S)) 误差，则它在 S 的每一点的环境导数正好是 F。
-* `continuousAt_of_nearby_field`：导数字段在 S 上等于 F，且补集上与最近点的 F
-  之差一致为 o(1)，则字段在 S 的每一点连续。
-* `contDiff_of_nearby_jet`：结合补集上的可微性和导数连续性，得全局 C¹ 与精确导数。
-* `exists_contDiff_of_compl_approx`：只输入补集上 C¹ 的 w；令 v 在 S 上取 f、在 Sᶜ
-  上取 w，导数字段同样分段拼接。上述两种估计确保 v 全局 C¹，且精确实现 f、F。
-  **w 在 S 上可以不连续、值可以错误**，所以没有假设已存在全局延拓。
+* `affine f F a y = f a + F a (y-a)`, is an affine polynomial given a jet.
+* `norm_affine_sub_le`: The difference between two affine polynomials is controlled by the jet remainder and the difference of derivatives.
+`dist_nearest_le`: If a is the closest point of y over S, x ∈ S, then dist(a,x) ≤ 2 dist(y,x).
+`hasFDerivWithinAt`: The remainder condition provides the derivative within the set; **does not** identify the fderivWithin on sparse sets,
+  Also does not claim the original function is differentiable in the ambient space.
+`hasFDerivAt_of_nearby_affine`: The candidate function equals f on S and the affine jet at the relative nearest point on the complement
+  With an error of o(dist(y,S)), its ambient derivative at every point of S is exactly F.
+`continuousAt_of_nearby_field`: The derivative field on S equals F, and on the complement it equals F with respect to the nearest point.
+  The difference is consistently o(1), then the field is continuous at every point of S.
+`contDiff_of_nearby_jet`: By combining the differentiability on the complement and the continuity of the derivative, we obtain global C¹ and exact derivative.
+`exists_contDiff_of_compl_approx`: Only input the w that is C¹ on the complement; let v take the value f on S and on Sᶜ
+  Take w, the derivative field is also piecewise concatenated. These two estimates ensure that v is globally C¹ and exactly realizes f, F.
+  **w can be discontinuous and have incorrect values on S**, so there is no assumption of the existence of a global extension.
 
-这些局部分析定理仅需要实范数空间和 S 紧；**不需要有限维、非空、有内点、正维**。
-紧性用于最近点存在与闭性；边界处只需 F 在 S 上连续。原始 L6 的
-`ContinuousOn f S` 无须参与这个步骤（余项已给出集合内可微性），原始目标未改写。
-证明在 x∈S 时选最近点 a，并用 dist(a,x) ≤ 2 dist(y,x)。值误差拆成三项：
-候选值误差、f 在 x,a 间的余项、F a-F x 作用于 y-a；取各自 ε/4 得总误差 ε dist(y,x)。
-导数连续性用三角不等式和 ε/3。最后调用 `contDiff_one_iff_hasFDerivAt`。
+These local analysis theorems only require real normed spaces and S compactness; **no need for finite dimensionality, nonemptiness, interior point, or positive dimension**.
+compactness is used for the existence and closedness of nearest points; continuity of F on S suffices at the boundary. The original L6
+`ContinuousOn f S` does not need to participate in this step (the remainder is already given for interior differentiability), the original objective remains unchanged.
+At point x∈S, select nearest point a, and use dist(a,x) ≤ 2 dist(y,x). The value error is split into three terms:
+candidate value error, the remainder of f between x and a, and the action of F_a - F_x on y-a; taking each ε/4 yields total error ε dist(y,x).
+Derivative continuity uses the triangle inequality and ε/3. Finally invoke `contDiff_one_iff_hasFDerivAt`.
 
-## 尚未完成的精确命题
+## Unfinished Precise Statements
 
-下面只是客户端里的 **命题类型检查**。它不是新公理，不是声明占位，也不是已经证明的引理。
-原始 L6 的全部假设保持不变；证明它即可调用 `exists_contDiff_of_compl_approx` 得原始 L6。
+The following is only the **statement type checking** in the client. It is not a new axiom, not a declaration placeholder, and not a previously proven lemma.
+All assumptions of original L6 remain unchanged; proving it allows invocation of `exists_contDiff_of_compl_approx` to obtain original L6.
 
 ```lean
 #check (∀ {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V]
@@ -51,31 +51,24 @@ B 开始时 HEAD 与 origin/main 都是 `dcc158d7d3b9e91f17d2ee0fd49b30cdb6f4f7d
             ‖fderiv ℝ w y - F a‖ ≤ ε)
 ```
 
-## 下一步构造及验收点
+## Next-step construction and acceptance points
 
-在 Sᶜ 上构造 Whitney 球/立方体覆盖，尺度 rᵢ 与到 S 的距离可比；选择最近点 pᵢ∈S，
-并构造光滑单位分解 φᵢ。必须证明局部有限性、定量重叠界和导数界 O(1/rᵢ)，
-不能只调用没有这些量化估计的一般单位分解接口。
-令 `w(y) = ∑ᵢ φᵢ(y) * affine f F pᵢ y`。对 y 的最近点 a，
-`∑φᵢ=1` 给值误差；导数比较中用 `∑Dφᵢ=0` 消去共同的 affine f F a y 项。
-剩下的两类导数误差是 `∑φᵢ(F pᵢ-F a)` 与
-`∑Dφᵢ * (affine f F pᵢ y - affine f F a y)`。
-刚证明的 affine 比较、jet 余项和导数连续性分别控制它们，必须得出上述**两项**估计。
-空集单独取常数候选；不得增加 S 有内点、凸、有限或 V 正维的假设。
+Construct a Whitney ball/cube cover on Sᶜ with scale rᵢ comparable to distance to S; choose the nearest point pᵢ ∈ S, and construct a smooth partition of unity φᵢ. It must be proven that the cover is locally finite, with quantitative overlap bounds and derivative bounds O(1/rᵢ), and it is not sufficient to invoke the general partition of unity interface lacking these quantitative estimates.
+Let `w(y) = ∑ᵢ φᵢ(y) * affine f F pᵢ y`. For the nearest point a to y,
+`∑φᵢ=1` gives value error; in the derivative comparison, use `∑Dφᵢ=0` to cancel the common affine term f F a y.
+The remaining two types of derivative errors are `∑φᵢ(F pᵢ-F a)` and
+`∑Dφᵢ * (affine f F pᵢ y - affine f F a y)`.
+The recently proved affine comparison, jet remainder, and derivative continuity individually control these, and must collectively yield the above **two** estimates.
+The empty set is treated separately with a constant candidate; no additional assumptions about S having interior points, convexity, finiteness, or V having positive dimension are allowed.
 
-## 检查与状态
+## Check and Status
 
-`research/audits/WhitneyExtensionAudit.lean` 严格编译并审计 7 条库引理及 6 条客户端定理，
-13 条公理报告仅含 propext、Classical.choice、Quot.sound。客户端包含：空集、单点任意
-环境导数、零维，以及在 S 上取错值的补集候选。额外反例证明：常数函数在单点内可以
-以 id 为 within-derivative，但其环境 fderiv 仍为 0；不能由稀疏集合上值相等推导导数相等。
-没有新占位洞、没有新公理，没有扩大证书/Blueprint leanok 范围。
+`research/audits/WhitneyExtensionAudit.lean` Strictly compile and audit 7 library lemma and 6 client theorems,
+13 axiom reports contain only propext, Classical.choice, Quot.sound. Client includes: empty set, arbitrary point ambient derivative, zero-dimensional, and the complement candidate with incorrect value on S. Additional counterexamples prove: a constant function can have id as within-derivative within a point, but its ambient fderiv remains 0; the equality of derivatives cannot be derived from equal values on a sparse set. No new form holes, no new axioms, no expansion of certificate/Blueprint leanok scope.
 
-A 已重跑的 20 个客户端和 3 个 WIP 源码均原字节保留；B 的新模块与客户端另行严格编译。
-最终默认构建、完整 verification 与 191 个模块的重放以最终回执为准，精确路径和快照核对
-存于 `build/audit/whitney-boundary/final-snapshot.json`，逐项证据存于
-`research/explorations/2026-09-16-whitney-boundary.json`。
+A The 20 client and 3 WIP source codes have been re-run with byte-level preservation; B's new module and client are separately and strictly compiled.
+The final default build, complete verification, and replay of 191 modules are finalized based on the final verification receipt, with exact paths and snapshots cross-checked and stored in `build/audit/whitney-boundary/final-snapshot.json`, and individual evidence stored in `research/explorations/2026-09-16-whitney-boundary.json`.
 
-**L6 未完成，L6a/L7/L12/Lipschitz coarea 未完成。** 直接洞仍 9（2/2/5），证书 24，
-perimeter infrastructure missing；尖锐有限正则性 Sard、Cheeger 两项比较、维数无关 KLS 均开放。
-进度图以 ◐ 表示部分边界工作，不能把它看成完整 L6 或完整 Whitney–Lusin 路线完成。
+**L6 incomplete, L6a/L7/L12/Lipschitz coarea incomplete.** Direct proof hole still 9 (2/2/5), certification 24,
+perimeter infrastructure missing; sharp finite regularity for Sard and Cheeger, two comparisons, dimension-free KLS remain open.
+Progress chart marked with ◐ for partial boundary work, cannot regard it as complete L6 or complete Whitney–Lusin pathway completion.

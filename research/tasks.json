@@ -359,15 +359,15 @@
           },
           {
             "path": "research/decisions/2026-09-19-semigroup-generation-route.md",
-            "sha256": "e617f1907a33d4d519af822172c3c51c13871bd7ea7b585d7964493e91c32c51"
+            "sha256": "81357a5cee6382b250a1f00b03f00055baf1ff463404a0e2210f827cf337d36a"
           },
           {
             "path": "research/decisions/2026-09-19-semigroup-form-proofs.md",
-            "sha256": "c0f18196c11aff6f216ce0d8ae6093c1005563addddbff9e97247391c92ca829"
+            "sha256": "22547a76c3e1253355bd9011ac8b31c58894a762ef8bab19be50ea64f9a3082f"
           },
           {
             "path": "research/decisions/2026-09-19-semigroup-yosida-proof.md",
-            "sha256": "d6eb9906e3b24f9ffa3c0dde0f0f81e2d8d91c878352ffc4cfcc326dec069c36"
+            "sha256": "8ea297a925c040d9e84ffc6bf86e96ffc0023b9c0716ecf78a813611ccfd5953"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/Semigroup/AdjointComp.lean",
@@ -395,7 +395,7 @@
           },
           {
             "path": "research/decisions/2026-09-19-von-neumann-route.md",
-            "sha256": "e50d31a7bfa19bf37a1e2905d2c91526dbb1c059728d79d94616cfc13aedd954"
+            "sha256": "c68b146adbe7e6898e4e6c14fbeb02c13ae8449612f2e99686518c1cf9f19cec"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Yosida/Approximation.lean",
@@ -435,7 +435,7 @@
           },
           {
             "path": "research/decisions/2026-09-19-yosida-limit-route.md",
-            "sha256": "3ba40ab9bbc0457af35fab8d39865a5e8eb69ef78c928d914fe28ea3bf43690b"
+            "sha256": "ab4cbaf499fac75a6effb656204a9fcce36635dea5424b3f26c6875fa7e67ab8"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Basic.lean",
@@ -471,7 +471,7 @@
           },
           {
             "path": "research/decisions/2026-09-19-generated-semigroup-route.md",
-            "sha256": "aa0e3538a2696beb35ecc6dd3caa7c0c6ae80854b44500a45e07e221a855dc1b"
+            "sha256": "729b06bc58eac3d795fed27073fad940581c6e5af690ee769e2c9538a626cc60"
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/LogConcave/WeightedGradient/Closure.lean",
@@ -487,7 +487,7 @@
           },
           {
             "path": "research/decisions/2026-09-19-heat-semigroup-specialisation.md",
-            "sha256": "8acc75317ec4cbf9b73aae060547f4216c9ee10f97bfcb3d175f1af958283fcc"
+            "sha256": "e6a9af287e5112768f0888e1fe4d9b07d2a4b4b10a715e27fff5049e013f0523"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Markov.lean",
@@ -535,7 +535,7 @@
           },
           {
             "path": "research/decisions/2026-09-20-generator-identification.md",
-            "sha256": "f6e2ec2d472a47deecbd75428cfbf713ab66ae3c2a5b3fe5c6f075e2e5c5c37a"
+            "sha256": "49d6c09fe1f020392e8ef5d88f94e641fd555d050e20d7e22f411b07a100393c"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/Gamma.lean",
@@ -551,7 +551,7 @@
           },
           {
             "path": "research/decisions/2026-09-20-bochner-identification.md",
-            "sha256": "841158be446b2d2712b2f0e876626775b971a776b1714712947408123aa9fa2d"
+            "sha256": "abacb6970fbaafcf3cefcd71834daf736fd140270b01b57707dd2b1328ea8cab"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Domain.lean",
@@ -575,7 +575,7 @@
           },
           {
             "path": "research/decisions/2026-09-20-semigroup-form-domain-stability.md",
-            "sha256": "aabdf9dc9013ee38b306fea76f330ca76eadf5e429e2edb64e37ec45fe72c2de"
+            "sha256": "8f89f62facb162749270f285e91e807d53f0d799f3db572004a3bdfd69c8da75"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/Semigroup/Exponential/Dissipation.lean",
@@ -607,7 +607,7 @@
           },
           {
             "path": "research/decisions/2026-09-21-weak-gamma-interface.md",
-            "sha256": "861559f39331e3f71b08737293d877729e8a7d770dc387635b11dc76cdd56258"
+            "sha256": "d9695a50f1f1baf1e29aac496652fb6210f6e09d187a87212258b29bd65139f7"
           },
           {
             "path": "research/audits/SemigroupSmoothingAudit.lean",
@@ -615,11 +615,11 @@
           },
           {
             "path": "research/decisions/2026-09-21-semigroup-positive-time-smoothing.md",
-            "sha256": "8c648ade4f6dc3394a7e3bc689e3c89d91db9fd0130b154755ca02c0e467cd06"
+            "sha256": "7065bd7b891f362d1cf3ec1fd1bf18144623efbdbbaeeacbf98d2f5cf2a3eee4"
           },
           {
             "path": "research/decisions/2026-09-20-semigroup-domain-stability.md",
-            "sha256": "d76f0c2e2158d45f9ab53834fc86cd3158e639cc8b04c43106b47fe35ce0c839"
+            "sha256": "31a76608ef7bea9922780d40a2bfbf9bdcf6c523014092ae4a7f2ac9d0510bd9"
           },
           {
             "path": "research/decisions/2026-09-20-semigroup-layout.md",
@@ -647,7 +647,7 @@
           },
           {
             "path": "research/decisions/2026-09-21-generator-gamma-two.md",
-            "sha256": "547cb99e607555c2c9fddc1ae3145e3215e218e56e82cf4776c520fa8db0751e"
+            "sha256": "69583f43b0a524ef01b3d9465c40eea09dafcf7bc2756c0f62db13473366794b"
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/OperatorCore.lean",
@@ -659,7 +659,7 @@
           },
           {
             "path": "research/decisions/2026-09-22-operator-core-criterion.md",
-            "sha256": "25cb0199d9b1c3dad012825e04211f6f86d3108c3ecf0aa6378a86901fcc606b"
+            "sha256": "d551fcb6e8439bf28e4b0f971d666e96419c92d1636d161e3d9c432efad1b260"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/Mollification.lean",
@@ -1234,11 +1234,11 @@
           },
           {
             "path": "research/decisions/2026-09-19-energy-slope-route.md",
-            "sha256": "36d4c13e16633294a5880beffbb400315f0538b7be47e0b1f7fe2101ca5ef33d"
+            "sha256": "77753e99a2bebef47f22c9d0982475ae76f26f928a283e8919dfc99f83598bab"
           },
           {
             "path": "research/decisions/2026-09-19-energy-slope-proofs.md",
-            "sha256": "d09bfeefebe821626b44fa196cf427c674141a2dd5cbfe1b6f4a2aa5e15cdde6"
+            "sha256": "e2b21dada96bd97e47f96ab8a2a7db35602edd32edc97ac627afd6d7bae9035a"
           },
           {
             "path": "formalization/blueprint/src/chapters/30-open-canonical-bridges.tex",
@@ -2746,7 +2746,7 @@
           },
           {
             "path": "research/decisions/2026-09-15-weighted-coarea-route.md",
-            "sha256": "54fbf7cb046bd494b712cb06de494791138018c8f22f83d694df3139ea8f9856"
+            "sha256": "9836995d55441b357cc144bcb51e057d7989677eb2b5e5ccf37aae94142b2283"
           },
           {
             "path": "research/audits/WeightedCoareaRouteStatements.lean",
@@ -2766,7 +2766,7 @@
           },
           {
             "path": "research/decisions/2026-09-15-null-slicing.md",
-            "sha256": "fd60450014d080db4b07d3467c1260149240e7e4cf2fa54974351280127fabf2"
+            "sha256": "1c771c5ff1b9f033ac62ffd95290597713aeb749ab677d05e8e3680124dbc2af"
           },
           {
             "path": "research/audits/NullSlicingAudit.lean",
@@ -2774,7 +2774,7 @@
           },
           {
             "path": "research/decisions/2026-09-15-eilenberg-majorant.md",
-            "sha256": "7da6d4749e76ea8286787699314d2096416cbe313f3566933dc4aa9c40752316"
+            "sha256": "ca7a44e1cb33dcfc5de1fd4df264ad15646888fb4969f69936c733fa2cbbe26e"
           },
           {
             "path": "research/audits/EilenbergMajorantAudit.lean",
@@ -2786,7 +2786,7 @@
           },
           {
             "path": "research/decisions/2026-09-15-compact-slice-measurable.md",
-            "sha256": "91552cc2686c5530f307fc4890249e35c298f87419cccf5a46ba0bce6b15f86f"
+            "sha256": "5a3c3ebc17ca9ac4fe01f5cfa819a46f074e5a69a1d9bfe148abbf140bc7e146"
           },
           {
             "path": "research/audits/CompactSliceAudit.lean",
@@ -2794,7 +2794,7 @@
           },
           {
             "path": "research/decisions/2026-09-15-borel-slice-measurable.md",
-            "sha256": "3ec33e9f6242ae957d384bddad23363a5fb1d93e233132cfed75de02fd575c84"
+            "sha256": "2d01ebcd4c176cce169e1b172f5f486256b10fd87f305f66db1e64f33b47d986"
           },
           {
             "path": "research/audits/BorelSliceAudit.lean",
@@ -2806,7 +2806,7 @@
           },
           {
             "path": "research/decisions/2026-09-15-levelset-measurable-migration.md",
-            "sha256": "ec13b73713941467d393a6e18af059e0e21cb4c8a8a330d71e8a90cb6ecfb1fe"
+            "sha256": "0ad9b7817c05ca5079f02ca71c71977c7cc20a22ba40767c12771ecc08d0b9c5"
           },
           {
             "path": "research/audits/LevelSetMeasurableAudit.lean",
@@ -2818,7 +2818,7 @@
           },
           {
             "path": "research/decisions/2026-09-15-critical-slice.md",
-            "sha256": "f582e581ff93eff6174e9b09532a7071482e3e6557f0a57ef6223363e9a38cc3"
+            "sha256": "de41db4aef162c115659a484b5a06bcf2f68ac4153ca039b232f6b3aa9bdede2"
           },
           {
             "path": "research/audits/CriticalSliceAudit.lean",
@@ -2830,7 +2830,7 @@
           },
           {
             "path": "research/decisions/2026-09-15-open-graph-area.md",
-            "sha256": "21b903d343732a07f7ce896c8aed7bfa136adf7d7f2c49ef1e0c597e4bcc9ae2"
+            "sha256": "4067a4d4c996898c969520a1da341d4321ff80efd843e580296ce2b19211717d"
           },
           {
             "path": "research/audits/OpenGraphAudit.lean",
@@ -2858,7 +2858,7 @@
           },
           {
             "path": "research/decisions/2026-09-15-regular-coarea.md",
-            "sha256": "7594469553a2f2835bfd25744b44a2dbb9597dacdac7fd5a8be50f0ddeab9241"
+            "sha256": "08dce2af0179be1d43667668f2c7030dca19978515e8c43035152aa10d61b2e0"
           },
           {
             "path": "research/audits/RegularCoareaAudit.lean",
@@ -2870,7 +2870,7 @@
           },
           {
             "path": "research/decisions/2026-09-16-smooth-coarea.md",
-            "sha256": "f239ff6178da1c7bb52991dafe268ee175cd80b7d5793bfc744cc026692fc784"
+            "sha256": "f781bff33d3d9342670f07b28a6f46d837b68de0ad9c78db1acb3f3882b572d1"
           },
           {
             "path": "research/audits/SmoothCoareaAudit.lean",
@@ -2882,7 +2882,7 @@
           },
           {
             "path": "research/decisions/2026-09-16-isoperimetry-coarea-migration.md",
-            "sha256": "5ef4f5d2c75bbafca460fd0bf25d9c09ba33dc7afe0b4560d52c2b243d95ee4c"
+            "sha256": "e6021ffb4671164c3df486546f9e9475efb3e307ad261af155e9c73f5d8d4e90"
           },
           {
             "path": "research/audits/IsoperimetryCoareaAudit.lean",
@@ -2898,7 +2898,7 @@
           },
           {
             "path": "research/decisions/2026-09-16-first-order-jet.md",
-            "sha256": "cee6f5af12170c283130ee0b8c1c9263be6610687161faeaa72c6a99c78004d7"
+            "sha256": "15687af56a42a352a93ba4d95132a15f3ec87a27105454849cbc9b50e42994f4"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/Whitney/Extension.lean",
@@ -2910,7 +2910,7 @@
           },
           {
             "path": "research/decisions/2026-09-16-whitney-boundary.md",
-            "sha256": "554cef678d04f328d6c0faa5e0eb3201f68cfc1abfa42cf730ee22ba6f19363d"
+            "sha256": "0316731828c3395083dac1815cea848fbbacbaf642ed7a262ab69b8c31570d06"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/Whitney/Cover.lean",
@@ -2934,7 +2934,7 @@
           },
           {
             "path": "research/decisions/2026-09-16-whitney-extension.md",
-            "sha256": "9dc9ce21e9e734213d1978ca7df12b8543aa71b6fc187bae38a23ce5b4ee6970"
+            "sha256": "30e4d23007c60533837bd7a2d959a123c2e6292d1b38f1a27d224e8907a6e375"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/Lipschitz/Jet.lean",
@@ -2958,7 +2958,7 @@
           },
           {
             "path": "research/decisions/2026-09-16-lipschitz-coarea.md",
-            "sha256": "257a228052b9b791079fb10c769b2ee1a677a27e6290aab48ef86916abbb45eb"
+            "sha256": "ecfce00b3de3f49d48b495e5084c6a3161aabbcdaae8e3e993643b976bb4e14b"
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/Geometry/Coarea/LocallyLipschitz.lean",
@@ -3178,11 +3178,11 @@
           },
           {
             "path": "research/naming.md",
-            "sha256": "28f4bb7ea7387cf4ae6430e7f3ac72f39929c9f3bf739b317897260b8f6532ba"
+            "sha256": "05da544919661bee5637f9e003751639fb04b67fa3b94f68eaf0ff7275ec3657"
           },
           {
             "path": "research/api-migration/2026-09-17-analysis-module-map.json",
-            "sha256": "ce902c3f723488523d23c95e04e2620c053b9ab454034030aaa28f91161fbcc2"
+            "sha256": "8258e103b4bf5b05611d32d13713728402f352f3e415e7d3002515b179a7c254"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/Sard/Chart.lean",
@@ -3206,7 +3206,7 @@
           },
           {
             "path": "research/decisions/2026-09-19-sharp-sard-route.md",
-            "sha256": "fdfe98f8760d31618eca4b822595efe1d70efd32bfa238552150bd11abfd3db1"
+            "sha256": "9fbf59c07dc3fcb8115cddc647e4d54b613b17881b776e72814dc02c4f5a51c8"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/Lipschitz/Componentwise.lean",
@@ -3234,7 +3234,7 @@
           },
           {
             "path": "research/decisions/2026-09-19-lipschitz-vector-coarea-route.md",
-            "sha256": "da605fd19938365593e0885a0e8aace688056895db1fe23414fa7aa68d8168b7"
+            "sha256": "d3bddb18c2aa7c522daf2e93936068276b7602de2520c81c5e4537f126a4ab17"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/Lipschitz/Extension.lean",
@@ -3258,11 +3258,11 @@
           },
           {
             "path": "research/decisions/2026-09-19-locally-lipschitz-vector-coarea-route.md",
-            "sha256": "d13403f17d2949a42fbcd45bb7263b6bc186f84701c4facbfbfdb94372078709"
+            "sha256": "0728290e483d7a8e723c61f20bef754bd51b989d0ae80ad5bd038a2f61cd9b0b"
           },
           {
             "path": "research/decisions/2026-09-19-coarea-sard-proofs.md",
-            "sha256": "4819db0d8d94dffefa14c72c472acd6d11b0e8216fcf449ba9d329dbb6f34e1b"
+            "sha256": "72f6584ad07ecedf77c8d7a22461f09325fec7eb05a61165799ad114cc474c78"
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/Geometry/Cheeger/Equality.lean",
@@ -3298,15 +3298,15 @@
           },
           {
             "path": "research/decisions/2026-09-19-cheeger-infimum-route.md",
-            "sha256": "e9a15a66488d7e3f08621044fe83eb6ba3a1af2051d7cde1c0556db9554176d4"
+            "sha256": "9e40cce9d5d719c16f7c55e3f6f85f3724147951938d2f3c4d0fcf849169f339"
           },
           {
             "path": "research/decisions/2026-09-19-cheeger-inequality-route.md",
-            "sha256": "21b74a6dff38d4038732c759003ac87bb0409c0e093a4ef068a1aec984033a92"
+            "sha256": "10aa9f9f6a0299361b85c1946004c710886a23bb6fa5998b52034cb0f61d178c"
           },
           {
             "path": "research/decisions/2026-09-19-cheeger-line-proofs.md",
-            "sha256": "b44a1172ba4f77806ad3dbd1e2a2caee90ac8fd0d59616c88a0c11cbd7424ed9"
+            "sha256": "df7d2495655b10d603fd932910dabca2851218767bdf95bddb18438efaa5246d"
           }
         ],
         "gaps": []
@@ -3398,15 +3398,15 @@
           },
           {
             "path": "research/decisions/2026-09-19-cheeger-infimum-route.md",
-            "sha256": "e9a15a66488d7e3f08621044fe83eb6ba3a1af2051d7cde1c0556db9554176d4"
+            "sha256": "9e40cce9d5d719c16f7c55e3f6f85f3724147951938d2f3c4d0fcf849169f339"
           },
           {
             "path": "research/decisions/2026-09-19-cheeger-inequality-route.md",
-            "sha256": "21b74a6dff38d4038732c759003ac87bb0409c0e093a4ef068a1aec984033a92"
+            "sha256": "10aa9f9f6a0299361b85c1946004c710886a23bb6fa5998b52034cb0f61d178c"
           },
           {
             "path": "research/decisions/2026-09-19-cheeger-line-proofs.md",
-            "sha256": "b44a1172ba4f77806ad3dbd1e2a2caee90ac8fd0d59616c88a0c11cbd7424ed9"
+            "sha256": "df7d2495655b10d603fd932910dabca2851218767bdf95bddb18438efaa5246d"
           }
         ],
         "gaps": []

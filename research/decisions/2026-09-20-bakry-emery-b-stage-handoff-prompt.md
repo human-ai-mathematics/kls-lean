@@ -1,91 +1,86 @@
-# 下一步提示词：Bakry–Émery B 阶段——Γ、凸 Hessian 与局部 Bochner 恒等式
+# Next prompt: Bakry–Émery B stage——Γ, convex Hessian, and local Bochner identity
 
-请在 `/Users/lyuyuwei/Documents/ChatGPT/KLS` 继续 Bakry–Émery 路线。本轮目标是实际完成
-`research/audits/BakryEmeryRouteStatements.lean` 中的 B0–B4，即有限维欧氏空间上光滑
-凸位势的局部 Γ/Γ₂ 与 Bochner 计算。
+Continue the Bakry–Émery route at `/Users/lyuyuwei/Documents/ChatGPT/KLS`. The current goal is to actually complete B0–B4 in `research/audits/BakryEmeryRouteStatements.lean`, i.e., the local Γ/Γ₂ and Bochner calculations for smooth convex potentials on finite-dimensional Euclidean spaces.
 
-本轮不处理半群正则性、梯度交换、一般对数凹测度逼近、小时间 BV 估计或最终 Buser
-拼装；不得因为完成局部 Bochner 就把 π 比较或完整 Bakry–Émery 路线标为 proved。
+This round does not address semigroup regularity, gradient commutation, general log-concave measure approximation, small-time BV estimates, or final Buser assembly; it is not permissible to mark π comparison or the complete Bakry–Émery pathway as proved merely because local Bochner has been completed.
 
-## 1. 先核对当前基线
+## 1. First verify the current baseline
 
-先读：
+First read:
 
 - `AGENTS.md`
-- `HANDOFF.md` 顶部 `Current operational status (2026-09-20)`
+- `HANDOFF.md` top `Current operational status (2026-09-20)`
 - `research/decisions/2026-09-20-bakry-emery-route.md`
 - `research/decisions/2026-09-20-generator-identification.md`
 - `research/audits/BakryEmeryRouteStatements.lean`
 - `research/audits/BakryEmeryGeneratorAudit.lean`
 
-重点检查现有模块：
+Focus check existing modules:
 
 - `formalization/FunctionalInequalities/Analysis/BakryEmery/Basic.lean`
 - `formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts.lean`
 - `formalization/FunctionalInequalities/Analysis/Semigroup/AdjointClosure.lean`
 - `formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Generator.lean`
 
-当前已证，不要重复实现：
+Currently proven, do not repeat implementation:
 
 - `weightedLaplacian U f = Δf - ⟪∇U,∇f⟫`
-- G0：加权分部积分
-- G1：对 `f ∈ C_c∞`，`[f] ∈ D(T̄†T̄)` 且
+- G0: Weighted integration by parts
+- G1: For `f ∈ C_c∞`, `[f] ∈ D(T̄†T̄)` and
   `T̄†T̄[f] = [-weightedLaplacian U f]`
-- B2：`bilinearIteratedFDerivTwo_symm`
-- `B = I` 的闭梯度能量与 canonical energy、`2 Ch` 的桥梁
-- 半群生成和当前 `L²` Markov 性
+- B2: `bilinearIteratedFDerivTwo_symm`
+- Bridge between the closed gradient energy of `B = I` and canonical energy, and `2 Ch`'s generator
+- Semigroup generation and current `L²` Markov property
 
-这里扩散生成元始终是
+Here the diffusion generator is always
 
 ```text
 ℒf = weightedLaplacian U f = Δf - ⟪∇U,∇f⟫,
 ```
 
-而非负算子是 `A = T̄†T̄ = -ℒ`（只在已经识别的光滑测试函数上作此等同）。
-保持符号一致，不要把 `A` 和 `ℒ` 混写。
+A non-negative operator is `A = T̄†T̄ = -ℒ` (only on already-recognized smooth test functions for this equivalence).
+Maintain symbol consistency and do not mix `A` and `ℒ`.
 
-先检查当前 dirty worktree，保留所有既有修改；不 reset、clean、覆盖或删除他人工作。
-本轮不提交、不推送。
+First check the current dirty worktree, retain all existing modifications; do not reset, clean, overwrite, or delete others' work.
+This round does not commit, does not push.
 
-## 2. 本轮精确目标
+## 2. This round's precise objective
 
-建议新增：
+Suggest adding:
 
 - `formalization/FunctionalInequalities/Analysis/BakryEmery/Gamma.lean`
 - `formalization/FunctionalInequalities/Analysis/BakryEmery/Bochner.lean`
 - `research/audits/BakryEmeryBochnerAudit.lean`
 - `research/decisions/2026-09-20-bochner-identification.md`
 
-并把新模块加入必要的聚合 import。不要为了方便另造一套 Laplacian、gradient 或 Hessian
-定义；直接复用当前 `weightedLaplacian`、`gradient`、
-`bilinearIteratedFDerivTwo` 和 `stdOrthonormalBasis`。
+And add the new module to the necessary aggregate imports. Do not create a new set of Laplacian, gradient, or Hessian definitions for convenience; directly reuse the current `weightedLaplacian`, `gradient`, `bilinearIteratedFDerivTwo`, and `stdOrthonormalBasis`.
 
-### B0：Γ 的乘积恒等式
+### B0: Product identity of Γ
 
-定义局部 carré du champ，推荐直接采用其几何表达：
+Define the local carré du champ, recommend using its geometric expression:
 
 ```lean
 def gamma (f g : E → ℝ) (x : E) : ℝ :=
   inner ℝ (gradient f x) (gradient g x)
 ```
 
-证明 `BakryEmeryRouteStatements.lean` 中 B0 的精确命题：
+Prove the exact statement of B0 in `BakryEmeryRouteStatements.lean`:
 
 ```text
 (ℒ(fg) - f ℒg - g ℒf) / 2 = ⟪∇f,∇g⟫.
 ```
 
-要求：
+Requirements:
 
-- `U f g ∈ C²` 的现有候选范围必须能直接实例化；
-- 不添加紧支撑、可积性、凸性、正维数或非空基假设；
-- 明确核对除以 `2` 的归一化，不能留下 factor `2` 偏差；
-- 可以先证明 gradient product rule 和 Laplacian product rule 等可复用引理；
-- 若另定义 algebraic Γ，应证明它与上述 `gamma` 相等，不能把等同性直接塞进定义。
+- The current candidate range for `U f g ∈ C²` must be instantiable directly;
+- Do not add assumptions of compact support, integrability, convexity, positive dimension, or non-empty base;
+- Explicitly verify normalization by dividing out `2`, and ensure no factor `2` bias remains;
+- It is permissible to first prove reusable lemmas such as the gradient product rule and Laplacian product rule;
+- If an algebraic Γ is defined separately, it must be proven equal to the above `gamma`; equivalence cannot be directly inserted into the definition.
 
-### B1：凸性推出 Hessian 半正定
+### B1: Convexity Implies Hessian Positive Semi-Definite
 
-证明精确候选：
+Proof of exact candidate:
 
 ```lean
 ContDiff ℝ 2 U →
@@ -93,30 +88,30 @@ ConvexOn ℝ Set.univ U →
 ∀ x v, 0 ≤ bilinearIteratedFDerivTwo ℝ U x v v
 ```
 
-先搜索 pinned Mathlib 是否已有“二阶可微凸函数 Hessian 半正定”的可用定理。若缺失，
-推荐路线：
+First search pinned Mathlib for existing theorems on "second-order differentiable convex functions with positive semidefinite Hessian". If none exists,
+recommend the following route:
 
-1. 固定 `x v`，限制到直线 `t ↦ U (x + t • v)`；
-2. 从 `ConvexOn ℝ Set.univ U` 得到一元函数的凸性；
-3. 由一元凸函数导数单调或二阶导非负得到结论；
-4. 精确连接该一元二阶导数与
-   `bilinearIteratedFDerivTwo ℝ U x v v`。
+1. Fix `x v`, and restrict to the line `t ↦ U (x + t • v)`;
+2. From `ConvexOn ℝ Set.univ U` obtain the convexity of a univariate function;
+3. By the monotonicity of the derivative or non-negativity of the second derivative of a univariate convex function, obtain the conclusion;
+4. Precisely connect the second derivative of this univariate function to
+   `bilinearIteratedFDerivTwo ℝ U x v v`.
 
-不得把 Hessian 非负作为新假设，也不得只证明坐标轴方向。
+Do not assume the Hessian is non-negative as a new hypothesis, nor prove only along the coordinate axis directions.
 
-### B2：复用既有 Hessian 对称性
+### B2: Reuse Existing Hessian Symmetry
 
-不要重新证明另一份版本。直接使用：
+Do not reprove another version. Use directly:
 
 ```lean
 Analysis.BakryEmery.bilinearIteratedFDerivTwo_symm
 ```
 
-在新审计中用它精确关闭路线 B2。
+Use it to precisely close route B2 in the new audit.
 
-### B3：固定标准正交基下的 Bochner 恒等式
+### B3: Bochner's identity under a fixed standard orthonormal basis
 
-证明 `BakryEmeryRouteStatements.lean` 中 B3 的精确候选：
+Proof of the exact candidate B3 in `BakryEmeryRouteStatements.lean`:
 
 ```text
 ℒ(‖∇f‖²)/2 - ⟪∇f, ∇(ℒf)⟫
@@ -125,27 +120,27 @@ Analysis.BakryEmery.bilinearIteratedFDerivTwo_symm
   + D²U(∇f,∇f).
 ```
 
-其中：
+Among them:
 
-- `eᵢ = stdOrthonormalBasis ℝ E i`；
-- 保留候选中的 `ContDiff ℝ 3 U`、`ContDiff ℝ 3 f` 接口；
-- 不添加紧支撑、积分、概率测度、凸性或正维数假设；
-- 定理必须覆盖零维空间，有限和为空时自然退化；
-- 正确使用 B2 处理混合导数交换；
-- 第三阶导数项必须真实抵消，不能通过加强结论或隐藏假设绕过；
-- 漂移项的符号必须最终给出 `+ D²U(∇f,∇f)`。
+- `eᵢ = stdOrthonormalBasis ℝ E i`;
+- Retain the `ContDiff ℝ 3 U`, `ContDiff ℝ 3 f` interfaces among candidates;
+- Do not add assumptions on compact support, integration, probability measure, convexity, or positive dimension;
+- The theorem must cover zero-dimensional spaces, naturally degenerating when the finite sum is empty;
+- Correctly use B2 to handle the exchange of mixed derivatives;
+- The third-order derivative terms must genuinely cancel out, not circumvented by strengthening the conclusion or hiding assumptions;
+- The sign of the drift term must ultimately yield `+ D²U(∇f,∇f)`.
 
-建议把证明拆为可审计的局部引理，例如：
+Suggest splitting the proof into auditable local lemmas, for example:
 
-- gradient/方向导数与 Hessian 的关系；
-- `gradient (fun y ↦ ‖gradient f y‖²)` 的坐标表达；
-- `Laplacian.laplacian (fun y ↦ ‖gradient f y‖²)` 的展开；
-- `gradient (Laplacian.laplacian f)` 的展开；
-- `gradient (fun y ↦ ⟪gradient U y, gradient f y⟫)` 的展开；
-- 三阶导数交换与抵消；
-- 剩余平方项和位势 Hessian 项的整理。
+- relationship between gradient/directional derivative and Hessian;
+- coordinate expression of `gradient (fun y ↦ ‖gradient f y‖²)`;
+- expansion of `Laplacian.laplacian (fun y ↦ ‖gradient f y‖²)`;
+- expansion of `gradient (Laplacian.laplacian f)`;
+- expansion of `gradient (fun y ↦ ⟪gradient U y, gradient f y⟫)`;
+- exchange and cancellation of third-order derivatives;
+- organization of remaining squared terms and potential Hessian terms.
 
-可以定义：
+We can define:
 
 ```lean
 def hessianSqStdBasis (f : E → ℝ) (x : E) : ℝ :=
@@ -155,13 +150,11 @@ def hessianSqStdBasis (f : E → ℝ) (x : E) : ℝ :=
       (stdOrthonormalBasis ℝ E j)) ^ 2
 ```
 
-但在没有证明基无关性之前，不得把它公开描述成已经构造好的 invariant
-Hilbert–Schmidt norm。若本轮顺便证明任意正交基下的和相同，可以再引入不变记号；
-否则明确保留 `StdBasis` 名称和限制。
+But before proving basis independence, it must not be publicly described as already constructed invariant Hilbert–Schmidt norm. If, by the way, we can prove that the sum is the same in any orthogonal basis, we may introduce an invariant notation; otherwise, clearly retain the name and restrictions `StdBasis`.
 
-### Γ₂ 定义
+### Γ₂ definition
 
-推荐定义：
+Recommended definition:
 
 ```lean
 def gammaTwo (U f : E → ℝ) (x : E) : ℝ :=
@@ -169,15 +162,15 @@ def gammaTwo (U f : E → ℝ) (x : E) : ℝ :=
     gamma f (weightedLaplacian U f) x
 ```
 
-随后证明它等于 B3 左端以及上述坐标右端。
+Then it is shown to equal the left end of B3 and the right end of the above coordinates.
 
-不要为了使用 B0 而无故把正则性提高到 `C⁴`。这里
-`gamma f (weightedLaplacian U f)` 可直接按 gradient 的几何定义解释；
-在 B3 的 `C³` 假设下证明所需可微性。
+Do not arbitrarily increase regularity for the sake of using B0 to `C⁴`. Here
+`gamma f (weightedLaplacian U f)` can be directly interpreted according to the geometric definition of gradient;
+prove the required differentiability under the `C³` assumption in B3.
 
-### B4：凸位势下 Γ₂ 非负
+### B4: Convex potential under Γ₂ non-negative
 
-由 B3、B1 和平方和非负推出精确候选：
+By B3, B1, and the non-negativity of the sum of squares, we obtain the exact candidate:
 
 ```lean
 ContDiff ℝ 3 U →
@@ -186,28 +179,28 @@ ContDiff ℝ 3 f →
 ∀ x, 0 ≤ gammaTwo U f x
 ```
 
-同时提供能直接关闭路线文件中“展开形式”B4 的定理。
+Also provides a theorem that directly closes the "expanded form" B4 in the route file.
 
-不得把 `Γ₂ ≥ 0` 当作假设，或通过把它放进结构字段来制造结论。
+Do not treat `Γ₂ ≥ 0` as an assumption, nor derive conclusions by including it in structure fields.
 
-## 3. 明确非目标和接口边界
+## 3. Clear non-target and interface boundaries
 
-本轮完成的是点态、有限维、光滑函数的微分恒等式。不得声称已经得到：
+This round completes the differential identities for pointwise, finite-dimensional, smooth functions. It must not be claimed that we have already obtained:
 
-- `‖∇P_t f‖² ≤ P_t(‖∇f‖²)`；
-- `‖∇P_t f‖ ≤ P_t(‖∇f‖)`；
-- `P_t f` 的光滑代表；
-- `D(A)` 或闭梯度域在半群下稳定；
-- 对时间求导、积分与极限交换；
-- 一般非光滑对数凹律、带边界支撑或低维支撑的结果；
-- `C_c∞` 是 `A` 的 operator core；
-- 完整 Buser 或常数 π。
+- `‖∇P_t f‖² ≤ P_t(‖∇f‖²)`;
+- `‖∇P_t f‖ ≤ P_t(‖∇f‖)`;
+- smooth representatives of `P_t f`;
+- `D(A)` or the closed gradient domain is stable under the semigroup;
+- interchange of time derivative, integration, and limit;
+- general non-smooth log-concave laws, results with boundary or low-dimensional support;
+- `C_c∞` is the operator core of `A`;
+- complete Buser or constant π.
 
-尤其不要对任意 `L²` 代表直接调用经典 `gradient`。半群连接留给后续 S 阶段。
+Especially do not directly call classic `gradient` for any `L²`. Semigroup connections are left for the subsequent S stage.
 
-## 4. 审计要求
+## 4. Audit requirements
 
-新增 `research/audits/BakryEmeryBochnerAudit.lean`，至少包含：
+Add `research/audits/BakryEmeryBochnerAudit.lean`, at least containing:
 
 - `route_B0`
 - `route_B1`
@@ -215,58 +208,54 @@ ContDiff ℝ 3 f →
 - `route_B3`
 - `route_B4`
 
-这些命题必须逐字覆盖 `research/audits/BakryEmeryRouteStatements.lean` 中的候选范围，
-而不是较弱替代品。每个 route theorem 应由实际库声明直接证明。
+These statements must literally cover the candidate ranges in `research/audits/BakryEmeryRouteStatements.lean`, not weaker alternatives. Each route theorem should be directly proved from actual library declarations.
 
-审计还应包含少量边界检查：
+The audit should also include a few boundary checks:
 
-- `U = 0` 时退化为欧氏 Bochner 恒等式；
-- 仿射 `f` 时 Hessian 平方项为零；
-- 零维空间不需要额外假设；
-- B4 的非负性没有符号反转。
+- `U = 0` degenerates into the Euclidean Bochner identity;
+- Affine `f` implies the Hessian square term vanishes;
+- No additional assumptions are needed in zero-dimensional spaces;
+- The non-negativity of B4 has no sign reversal.
 
-对所有新增公开定义和定理运行 `#print axioms`。允许的依赖仅限 Mathlib 常见基础公理，
-不得出现：
+Run `#print axioms` for all newly added public definitions and theorems. Dependencies allowed are limited to Mathlib's common foundational axioms, and the following are not permitted:
 
 - `sorryAx`
-- 新 `axiom`
+- new `axiom`
 - `admit`
-- 占位证明
-- 将待证结论藏入假设、结构字段或 typeclass
-- 通过改变路线候选范围来“证明”较弱命题
+- placeholder proof
+- Hide the conclusion to be proven inside assumptions, structural fields, or typeclass
+- "Prove" a weaker statement by changing the range of route candidates
 
-同步更新 `BakryEmeryRouteStatements.lean` 的 existing-interface `#check` 和 B0–B4 注释，
-但保留原候选命题作为精确签名审计。
+Synchronize the existing-interface `BakryEmeryRouteStatements.lean` and B0–B4 annotations with `#check`,
+But retain the original candidate proposition as precise signature audit.
 
-## 5. 决策记录
+## 5. Decision record
 
-新增 `research/decisions/2026-09-20-bochner-identification.md`，记录：
+Add `research/decisions/2026-09-20-bochner-identification.md`, record:
 
-- B0–B4 的最终公开声明；
-- 实际使用的 Mathlib 微分 API；
-- Γ、Γ₂ 的符号和因子归一化；
-- B3 中第三阶导数如何抵消；
-- 固定标准正交基与 basis-independent Hilbert–Schmidt 表述的边界；
-- 零维情况；
-- 公理审计与复现命令；
-- 下一阶段仍缺少的半群正则性、域稳定性、时间微分和极限交换。
+- Final public statements of B0–B4;
+- Actual Mathlib differential API used;
+- Notation and factor normalization of Γ, Γ₂;
+- How third-order derivatives cancel in B3;
+- Boundary between fixed standard orthonormal basis and basis-independent Hilbert–Schmidt expressions;
+- Zero-dimensional case;
+- Axiom certification and reproduction commands;
+- Missing semi-group regularity, domain stability, time differentiation, and limit exchange in the next stage.
 
-给出三栏表：
+Provide a three-column table:
 
-| 已有证明 | 仅类型检查 | 仍是非形式化方案 |
+| Proved | Type-checked only | Still an informal plan |
 | --- | --- | --- |
-| G0、G1、B2、E0，以及本轮完成的 B0、B1、B3、B4 | 尚未证明但已精确写出的后续接口 | S0、平方 Γ 估计、`L¹` 梯度交换、一般测度逼近及 Buser 拼装 |
+| G0, G1, B2, E0, and the current round's completed B0, B1, B3, B4 | Not yet proven but precisely written subsequent interfaces | S0, square Γ estimate, `L¹` gradient exchange, general measure approximation and Buser tiling |
 
-完成后 B0–B4 可以放入“已有证明”；S0、平方 Γ 估计、`L¹` 梯度交换、
-一般测度逼近及 Buser 拼装仍必须留在后两栏或非形式化栏。
+After completion, B0–B4 can be placed in "Existing Proofs"; S0, square Γ estimate, `L¹` gradient exchange, general measure approximation, and Buser tiling must remain in the last two columns or the non-formalized column.
 
-不得把 `thm:logconcave-cheeger-poincare-comparison`、Buser 节点或整个
-Bakry–Émery 基础设施标为 proved。若同步进度文档，必须遵守 `AGENTS.md`：
-从暂存的 canonical records 运行 `python3 research/progress/update.py`，保留其他未提交修改。
+Do not label `thm:logconcave-cheeger-poincare-comparison`, Buser nodes, or the entire Bakry–Émery infrastructure as proved. If synchronizing progress documentation, must adhere to `AGENTS.md`:
+Run `python3 research/progress/update.py` from the cached canonical records, retaining other uncommit modified entries.
 
-## 6. 验收命令
+## 6. Acceptance command
 
-从 `formalization/` 运行：
+Run from `formalization/`:
 
 ```bash
 lake env lean -DwarningAsError=true \
@@ -282,13 +271,13 @@ lake env lean -DwarningAsError=true \
   ../research/audits/BakryEmeryRouteStatements.lean
 ```
 
-并运行：
+And run:
 
 ```bash
 lake build
 ```
 
-再从仓库根运行：
+Run from repository root:
 
 ```bash
 git diff --check
@@ -299,18 +288,18 @@ python3 -m unittest discover -s research/tests
 python3 research/verify.py
 ```
 
-严格的新文件编译应为零错误、零警告。完整 `lake build` 中
-`KLS/Target.lean` 的既有目标洞警告可以保留，但不得新增其他 `sorry` 或警告。
+A strict new file compilation should have zero errors and zero warnings. Complete `lake build`
+`KLS/Target.lean`'s existing target hole warnings may be retained, but no new `sorry` or warnings may be added.
 
-## 7. 最终汇报
+## 7. Final Report
 
-最终用中文说明：
+Final explanation in Medium:
 
-1. B0–B4 分别由哪些声明完成；
-2. Bochner 公式的符号和 factor `1/2` 是否与扩散生成元约定一致；
-3. Hessian 平方目前是固定标准基表达，还是已经证明了基无关性；
-4. 公理审计和全部验证结果；
-5. 真正剩余的半群接口缺口；
-6. 推荐的下一最小证明任务。
+1. Statements B0–B4 are completed by which declarations;
+2. Does the symbol and factor in Bochner's formula agree with the diffusion generator convention `1/2`?;
+3. Is the Hessian square currently expressed in a fixed standard basis, or has basis independence been proven;
+4. Axiom audit and all verification results;
+5. The remaining actual semi-group interface gaps;
+6. Recommended next minimal proof task.
 
-不要提交、不要推送。
+Do not commit, do not push.

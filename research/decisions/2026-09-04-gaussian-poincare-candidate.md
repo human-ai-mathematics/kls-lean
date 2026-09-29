@@ -1,17 +1,19 @@
-# 一维 Gaussian Poincaré：候选声明审阅包
+# One-dimensional Gaussian Poincaré: candidate-statement review package
 
-日期：2026-09-04（Asia/Shanghai）。
-基线：`10e4c707491830ebe9d07f7bfc5e65efeddc7e2e`，分支 `main`。
-节点：`lem:poincare-gaussian-one-dimensional`。
-状态：**drafted / checked_by: null；尚未冻结或证明。**
+Date: 2026-09-04 (Asia/Shanghai).
+Baseline: `10e4c707491830ebe9d07f7bfc5e65efeddc7e2e`, branch `main`.
+Node: `lem:poincare-gaussian-one-dimensional`.
+Status: **drafted / checked_by: null; not yet frozen or proved.**
 
-用户本轮要求：“那就这么干，依旧先做statement，标清楚来源，做好用户体验，学习formech的风格”。
-本文件落实陈述准备授权，不把它解释为对尚未展示的完整签名的批准。20 项新数学声明
-全部保留 `by sorry`。本轮不创建 GitHub Issue，不提交或推送。
+The user's request this round was: “Proceed that way: write the statements first again, clearly
+identify sources, make the material easy to use, and follow formech's style.” This document
+implements authorization to prepare statements; it does not interpret that as approval of
+complete signatures not yet shown. All 20 new mathematical declarations retain `by sorry`.
+This round creates no GitHub issue, commit, or push.
 
-## 先看目标与例子
+## Targets and examples first
 
-两个主入口都覆盖任意实均值 m 和非负方差 v：
+Both main entry points cover every real mean m and nonnegative variance v:
 
 ```lean
 theorem holds_gaussianReal (m : ℝ) (v : NNReal) :
@@ -21,52 +23,58 @@ theorem constant_gaussianReal (m : ℝ) (v : NNReal) :
     constant (ProbabilityTheory.gaussianReal m v) = (v : ENNReal)
 ```
 
-命名空间为 `FunctionalInequalities.Poincare`。前者表示 v 是有效常数，后者表示 v
-也是最优常数。例子：标准 Gaussian 的常数为 1；均值 3、方差 4 的常数为 4；
-方差 0 时是均值处的点质量，常数为 0。所有例子均通过同一通用接口检查。
+The namespace is `FunctionalInequalities.Poincare`. The first says v is valid; the second
+says v is optimal. Examples: the standard Gaussian has constant 1; mean 3 and variance 4 give
+constant 4; variance 0 gives a point mass at the mean with constant 0. All examples are checked
+through the same generic interface.
 
-阅读入口：
+Entry points:
 
-- [数学说明、例子、文件树与构建步骤](../../formalization/FunctionalInequalities/Poincare/Gaussian/README.md)。
-- [逐项来源、Mathlib API 和依赖路线](../explorations/2026-09-04-gaussian-poincare-design.md)。
-- [Lean 实际输出的 20 项完整签名](../explorations/2026-09-04-gaussian-poincare-signatures.txt)。
-- [唯一 statement 入口及 7 项类型应用](../../solutions/LemPoincareGaussianOneDimensional.lean)。
-- [本轮验证与语义审阅记录](../explorations/2026-09-04-gaussian-poincare-validation.md)。
+- [Mathematical explanation, examples, file tree, and build steps](../../formalization/FunctionalInequalities/Poincare/Gaussian/README.md).
+- [Sources for each item, Mathlib APIs, and dependency route](../explorations/2026-09-04-gaussian-poincare-design.md).
+- [All 20 complete signatures printed by Lean](../explorations/2026-09-04-gaussian-poincare-signatures.txt).
+- [Sole statement entry point and 7 type applications](../../solutions/LemPoincareGaussianOneDimensional.lean).
+- [Verification and semantic review for this round](../explorations/2026-09-04-gaussian-poincare-validation.md).
 
-## 请审阅的接口选择
+## Interface choices for review
 
-1. 继续使用现有 `Admissible`：全局光滑、Gaussian L²、平方梯度能量可积。
-2. 两个主结论不加正方差假设；只有密度证明的辅助接口使用 `v ≠ 0`。
-3. 锐常数是方差 v。下界使用恒等函数，最优常数沿用 `ENNReal` 下确界。
-4. 20 项声明由 2 个主结果与 18 个辅助接口组成。有限区间估计使用全局 C¹；
-   Tonelli 接口允许非负被积函数取无穷，实积分步骤显式保留可积性。
-5. 库文件分为 `Gaussian/Density.lean` 与 `Gaussian/Real.lean`；通用区间辅助引理
-   先放在 Real 内。solution 只检查类型，证明完成后再组装一个 named certificate。
+1. Retain existing `Admissible`: global smoothness, Gaussian L², and integrable squared-gradient energy.
+2. Neither main conclusion assumes positive variance; only density-proof helpers use `v ≠ 0`.
+3. The sharp constant is variance v. The lower bound uses the identity function; the optimum retains the `ENNReal` infimum.
+4. The 20 declarations comprise 2 main results and 18 helpers. Finite-interval estimates use global C¹; Tonelli interfaces allow infinite nonnegative integrands; real-integral steps retain explicit integrability.
+5. Split library files into `Gaussian/Density.lean` and `Gaussian/Real.lean`; initially place generic interval helpers in Real. The solution only checks types; assemble a named certificate after proving the statements.
 
-这些是候选契约。审阅可调整辅助接口；一旦批准冻结，独立证明阶段应保持批准的完整
-签名、语义定义和 ledger 陈述。如需改变，先追加问题记录供人工处理。
+These are candidate contracts. Review may adjust helpers. Once a freeze is approved, the
+independent proof phase must preserve the approved full signatures, semantic definitions,
+and ledger statement. Record any required change as a new issue for human handling first.
 
-## 来源与项目扩展
+## Sources and project extensions
 
-手稿的 [Gaussian covariance family](https://github.com/numina-functional-inequalities/kls-exploration/blob/cd4a894a0faf40c0180f80b1a31eec1fdb6cb576/modules/03-tier1-gaussian.tex#L10-L37)
-是中心、正定协方差 Gaussian 的来源；本次取其一维 Poincaré 部分。归一化来自
-[Definition 2.1](https://github.com/numina-functional-inequalities/kls-exploration/blob/cd4a894a0faf40c0180f80b1a31eec1fdb6cb576/modules/01-definitions.tex#L17-L25)，线性测试下界见
-[Remark 3.8](https://github.com/numina-functional-inequalities/kls-exploration/blob/cd4a894a0faf40c0180f80b1a31eec1fdb6cb576/modules/02-results-toolkit.tex#L108-L117)。
+The manuscript's [Gaussian covariance family](https://github.com/numina-functional-inequalities/kls-exploration/blob/cd4a894a0faf40c0180f80b1a31eec1fdb6cb576/modules/03-tier1-gaussian.tex#L10-L37)
+is the source for centered Gaussians with positive definite covariance; this round takes its
+one-dimensional Poincaré part. Normalization comes from
+[Definition 2.1](https://github.com/numina-functional-inequalities/kls-exploration/blob/cd4a894a0faf40c0180f80b1a31eec1fdb6cb576/modules/01-definitions.tex#L17-L25);
+the linear-test lower bound is in
+[Remark 3.8](https://github.com/numina-functional-inequalities/kls-exploration/blob/cd4a894a0faf40c0180f80b1a31eec1fdb6cb576/modules/02-results-toolkit.tex#L108-L117).
 
-任意均值、零方差、精确光滑有限能量测试域和 `ENNReal` 编码是项目内的扩展或选择。
-直接密度/区间积分路线是本地推导；手稿的上界通过 Bakry–Émery/LSI 得到。
-每条 Lean docstring 标注具体归属，不把辅助引理假称为文献中的原定理。
+Arbitrary means, zero variance, the exact smooth finite-energy test domain, and the `ENNReal`
+encoding are local extensions or choices. The direct density/interval-integral route is a
+local derivation; the manuscript obtains the upper bound through Bakry–Émery/LSI.
+Each Lean docstring identifies its provenance; helpers are not misrepresented as original
+literature theorems.
 
-Formech 仅作为阅读体验参考：数学含义、文件图、量词、例子、模型边界、可复制构建命令。
-固定参考与具体采用方式见来源/API 记录；逐条引用与冻结流程沿用 KLS 自己的规范。
+Formech is only a presentation reference: mathematical meaning, file diagram, quantifiers,
+examples, model boundaries, and copyable build commands. The source/API record specifies the
+pinned reference and how it is used. Itemwise attribution and freezing follow KLS's own rules.
 
-## 完整源码签名
+## Complete source signatures
 
-以下按源文件列出全部候选签名，省略统一的 `:= by sorry`。所有新声明位于
-`FunctionalInequalities.Poincare`；`Admissible.` 和 `Holds.` 是相应子命名空间。
-实际 elaboration 输出另见完整签名快照，包含隐式参数、类型类及 universe 信息。
+All candidate signatures are listed by source file below, omitting the shared `:= by sorry`.
+Every new declaration is in `FunctionalInequalities.Poincare`; `Admissible.` and `Holds.`
+denote the respective subnamespaces. The full signature snapshot separately records actual
+elaboration output, including implicit parameters, typeclasses, and universes.
 
-### Density.lean（7 项）
+### Density.lean (7 declarations)
 
 ```lean
 theorem hasDerivAt_gaussianPDFReal (m : ℝ) {v : NNReal} (hv : v ≠ 0) (x : ℝ) :
@@ -97,7 +105,7 @@ theorem integrable_gaussianReal_iff (m : ℝ) {v : NNReal} (hv : v ≠ 0) (f : �
       Integrable (fun x ↦ gaussianPDFReal m v x * f x) volume
 ```
 
-### Real.lean（13 项）
+### Real.lean (13 declarations)
 
 ```lean
 theorem interval_sq_sub_le_integral_sq_deriv (f : ℝ → ℝ) (hf : ContDiff ℝ 1 f)
@@ -155,9 +163,9 @@ theorem constant_gaussianReal (m : ℝ) (v : NNReal) :
     constant (gaussianReal m v) = (v : ENNReal)
 ```
 
-## 完整 ledger 快照
+## Complete ledger snapshot
 
-下面是本轮实际新增的节点。`checked_by: null` 是有意保留的未认证状态。
+The node actually added in this round is shown below. `checked_by: null` deliberately retains uncertified status.
 
 ```json
 {
@@ -171,11 +179,13 @@ theorem constant_gaussianReal (m : ℝ) (v : NNReal) :
 }
 ```
 
-## 审阅版本标识与下一步
+## Review-version identifiers and next steps
 
-- 完整编译签名文件 SHA-256：`8103fa2acdfa4f2ed7df32b3d72496c65863de9c34da8b3c8c3148a893c763ca`。
-- ledger 的 `statement` 字符串 SHA-256（UTF-8，不附加换行）：`07fa78f7a1a97217da6726a4f09fe043191413447e9a01715f850d9a38625574`。
+- SHA-256 of the complete compiled-signature file: `8103fa2acdfa4f2ed7df32b3d72496c65863de9c34da8b3c8c3148a893c763ca`.
+- SHA-256 of the ledger `statement` string (UTF-8, no appended newline): `07fa78f7a1a97217da6726a4f09fe043191413447e9a01715f850d9a38625574`.
 
-这两个标识固定本轮候选版本，**不是人工冻结记录**。20 项声明、7 项类型应用以及
-未来证书命题的类型检查已经通过；三项旧节点继续保持已证。验证细节以链接的本轮记录为准。
-用户审阅后，若批准这些完整契约，再追加冻结记录并交给独立证明阶段。
+These identifiers pin this candidate revision; **they are not a human freeze record**.
+Type checking passed for the 20 declarations, 7 type applications, and the future certificate
+proposition. The three older nodes remain proved. Consult the linked verification record for
+details. After user review, if the full contracts are approved, append a freeze record and
+hand the work to the independent proof phase.

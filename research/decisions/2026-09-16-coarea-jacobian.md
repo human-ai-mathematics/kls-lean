@@ -1,82 +1,85 @@
-# 余维 m coarea 的线性代数层：coarea Jacobian
+# Linear algebra for codimension-m coarea: the coarea Jacobian
 
-2026-09-16。本轮**证明新引理**，建立 `Analysis.coareaJacobian` 及其基本理论，作为
-**向量值（余维 m）coarea 纲领的第一轮**。**本轮不证明任何 coarea 公式**，不迁洞，
-不提交、不推送。直接洞仍 **8（1/2/5）**，证书仍 **24**。
+2026-09-16. This round **proves new lemmas**, defining `Analysis.coareaJacobian` and its basic theory as the
+**first round of the vector-valued (codimension-m) coarea program**. **No coarea formula is proved this round**;
+no hole migration, commit, or push. Direct holes remain **8 (1/2/5)**; certificates remain **24**.
 
-起点 `HEAD = 34b92695ece4f636a1a7f1eafbbf41c685ee0348`，`origin/main` 同；
-起点 passed 回执 `build/verification/20260916T120611.840573Z/report.json`：10 个门、
-199 个本地模块内核重放、506 条目，快照
-`edbda70a4b2d1c0fa48ceabdaa0a88c1d5daa66cc6dcff34e9e14a017aff9762`。
+Starting point: `HEAD = 34b92695ece4f636a1a7f1eafbbf41c685ee0348`, also `origin/main`;
+starting passed receipt: `build/verification/20260916T120611.840573Z/report.json`: 10 gates,
+199 local modules replayed by the kernel, 506 entries, snapshot
+`edbda70a4b2d1c0fa48ceabdaa0a88c1d5daa66cc6dcff34e9e14a017aff9762`.
 
-注意起点 HEAD **不再是** `dcc158d`：并发会话提交了 `34b9269 docs: add KLS literature map
-through July 2026`（纯文档，未推送）。本轮不碰它的内容。
+The starting HEAD is **no longer** `dcc158d`: a concurrent session committed `34b9269 docs: add KLS literature map
+through July 2026` (documentation only, not pushed). This round leaves its content untouched.
 
-## 边界
+## Boundary
 
-对数凹 Cheeger–Buser 线（等周常数几种定义的对齐直到与 Poincaré 常数的双向比较，含
-`KLS/WIP/CheegerInfimum.lean` 剩下的两个洞）归合作者**王浩丞**，本轮刻意未触碰。
+The log-concave Cheeger–Buser line (aligning definitions of the isoperimetric constant through the two-sided
+comparison with the Poincaré constant, including the two remaining holes in `KLS/WIP/CheegerInfimum.lean`)
+belongs to collaborator **Haocheng Wang** and was deliberately untouched.
 
-## 关键发现：Mathlib 已有矩形体积因子
+## Key finding: Mathlib already has the rectangular volume factor
 
-`Mathlib/Analysis/InnerProductSpace/NormDet.lean` 已经给出
-`LinearMap.normDet f = √det(fᵀ ∘ f)`（"norm determinant"），并且已证
-`normDet_sq`、`normDet_nonneg`、`normDet_eq_prod_singularValues`、
-`normDet_eq_zero_iff_ker_ne_bot`，以及**它就是 Hausdorff 测度的体积因子**
-（`LinearMap.hausdorffMeasure_image`）。
+`Mathlib/Analysis/InnerProductSpace/NormDet.lean` already defines
+`LinearMap.normDet f = √det(fᵀ ∘ f)` (the “norm determinant”), with proofs of
+`normDet_sq`, `normDet_nonneg`, `normDet_eq_prod_singularValues`,
+`normDet_eq_zero_iff_ker_ne_bot`, and that **it is the Hausdorff-measure volume factor**
+(`LinearMap.hausdorffMeasure_image`).
 
-`normDet` 是**面积**公式的 Jacobian（从有限维空间出发的映射）。coarea Jacobian 是它的伴随
-对偶：`coareaJacobian L = normDet Lᵀ`。本轮据此定义，而**不是**重新推导行列式理论。
-这意味着余维 m 纲领的线性代数层基本不用自己造。
+`normDet` is the Jacobian for the **area** formula (maps from finite-dimensional spaces).
+The coarea Jacobian is its adjoint dual: `coareaJacobian L = normDet Lᵀ`.
+This round uses that definition **without rebuilding determinant theory**, so little new linear algebra is needed for the codimension-m program.
 
-## 精确成果
+## Exact results
 
-`Analysis/CoareaJacobian.lean`（**只依赖 Mathlib**，本地 import 闭包只有它自己）：
+`Analysis/CoareaJacobian.lean` (**depends only on Mathlib**; its local import closure contains only itself):
 
 ```lean
 def coareaJacobian (L : V →L[ℝ] W) : ℝ :=
   LinearMap.normDet (LinearMap.adjoint (L : V →ₗ[ℝ] W))
 ```
 
-* `coareaJacobian_nonneg`。
-* `coareaJacobian_sq`：`J² = det (L ∘ₗ Lᵀ)`，行列式在**目标**上，所以是 `m × m` 的 Gram
-  行列式，不是 `n × n` 的。这是定义性质。
-* `adjoint_one`：实值泛函的伴随把 `1` 送到 Riesz 代表元。
-* `coareaJacobian_eq_norm_toDual_symm`：实值泛函的 coarea Jacobian 是其 Riesz 代表元的范数。
-* **`coareaJacobian_fderiv`**：`coareaJacobian (fderiv ℝ u x) = ‖gradient u x‖`。
-* `ker_adjoint`：`ker Lᵀ = (range L)ᗮ`。
-* `coareaJacobian_eq_zero_iff` / `coareaJacobian_ne_zero_iff`：
-  **`J ≠ 0 ↔ L 满射`**。这是余维 m 公式要分裂的正则集，`W = ℝ` 时退化为梯度非零。
+* `coareaJacobian_nonneg`.
+* `coareaJacobian_sq`: `J² = det (L ∘ₗ Lᵀ)`. The determinant is on the **target**, hence an `m × m`
+  Gram determinant, not `n × n`. This is a defining property.
+* `adjoint_one`: the adjoint of a real-valued functional sends `1` to its Riesz representative.
+* `coareaJacobian_eq_norm_toDual_symm`: the coarea Jacobian of a real-valued functional is the norm of its Riesz representative.
+* **`coareaJacobian_fderiv`**: `coareaJacobian (fderiv ℝ u x) = ‖gradient u x‖`.
+* `ker_adjoint`: `ker Lᵀ = (range L)ᗮ`.
+* `coareaJacobian_eq_zero_iff` / `coareaJacobian_ne_zero_iff`:
+  **`J ≠ 0 ↔ L is surjective`**. This identifies the regular set for the codimension-m formula; for `W = ℝ`, it becomes nonvanishing gradient.
 
-## 为什么 `coareaJacobian_fderiv` 是本轮的重点
+## Why `coareaJacobian_fderiv` is central to this round
 
-它说明**已经证明并审计过的标量理论就是本密度的 `m = 1` 情形**：L11/L12/L13 的被积函数
-`‖gradient u x‖` 逐点等于新定义的 coarea Jacobian。因此后续余维 m 的工作不需要改写、
-重述或削弱任何既有结论，标量链条原样保留。这条兼容性是证出来的，不是宣称的。
+It shows that **the already proved and audited scalar theory is the `m = 1` case of this density**:
+the integrand `‖gradient u x‖` in L11/L12/L13 equals the newly defined coarea Jacobian pointwise.
+Subsequent codimension-m work therefore requires no rewriting, restating, or weakening of existing conclusions;
+the scalar chain remains unchanged. This compatibility is proved, not merely asserted.
 
-## 本轮没有做的事
+## Work excluded from this round
 
-* **没有证明任何 coarea 公式**，向量值 coarea 等式仍未证明，也没有列为已达成。
-* 没有做降维映射的面积公式、余维 m 的 L1–L12、也没有余维 m 的隐函数正规形。
-* 没有迁洞：直接洞仍 **8（1/2/5）**；没有碰尖锐 Sard、两条 Cheeger 比较、Energy 的五个洞。
-* 没有扩大证书或 Blueprint `leanok` 范围。
-* **没有提交、没有推送**，真实 Git index 未改动。
+* **No coarea formula is proved**. The vector-valued coarea equality remains unproved and is not marked complete.
+* No area formula for dimension-reducing maps, codimension-m L1–L12, or codimension-m implicit-function normal form.
+* No hole migration: direct holes remain **8 (1/2/5)**; sharp Sard, the two Cheeger comparisons, and the five Energy holes are untouched.
+* No expansion of certificate or Blueprint `leanok` scope.
+* **No commit or push**; the real Git index is unchanged.
 
-## 下一步（纲领内，未承诺时间）
+## Next steps (within the program, without a time commitment)
 
-1. 降维映射的面积公式：把 `LinearMap.hausdorffMeasure_image` 提升到 C¹ 映射的局部版本。
-2. 余维 m 的正则情形（L9 的类比）：在 `J ≠ 0` 的开集上用带参数隐函数定理做纤维图族。
-3. 余维 m 的临界部分（L10 的类比）与拼接。
-标量情形走完 L1–L13 用了约十轮；本纲领不承诺更快。
+1. Area formula for dimension-reducing maps: lift `LinearMap.hausdorffMeasure_image` to a local C¹ version.
+2. Codimension-m regular case (analogous to L9): use a parametric implicit function theorem on the open set `J ≠ 0` to construct families of fiber graphs.
+3. Codimension-m critical part (analogous to L10), then assemble the pieces.
 
-## 验证
+The scalar L1–L13 chain took about ten rounds; this program makes no promise of being faster.
 
-* 新模块与新客户端均以 `-DwarningAsError=true` 编译通过，无 `sorry`。
-* `research/audits/CoareaJacobianAudit.lean` 的 17 条公理报告只用
-  `propext`、`Classical.choice`、`Quot.sound`；含恒等映射、零映射、subsingleton 目标
-  和 `EuclideanSpace ℝ (Fin 2)` 上的正交投影等边界客户端。
-* 重跑全部 26 个审计客户端（`research/audits` 19 个，`build/audit` 7 个），全部严格通过。
-* 三个 WIP 逐个编译，直接洞 **1/2/5，总数 8**，与上一轮一致。
-* 默认 `lake build` 与根目录 `python3 research/verify.py` 通过；证据 JSON 为
-  `research/explorations/2026-09-16-coarea-jacobian.json`，最终核对另存
-  `build/audit/coarea-jacobian/final-snapshot.json`。
+## Validation
+
+* The new module and client compile with `-DwarningAsError=true`, without `sorry`.
+* The 17 axiom reports in `research/audits/CoareaJacobianAudit.lean` use only
+  `propext`, `Classical.choice`, and `Quot.sound`; boundary clients include identity and zero maps,
+  subsingleton targets, and orthogonal projection on `EuclideanSpace ℝ (Fin 2)`.
+* All 26 audit clients were rerun (19 in `research/audits`, 7 in `build/audit`) and passed strict checks.
+* The three WIP files were compiled separately: direct holes remain **1/2/5, total 8**, as in the preceding round.
+* Default `lake build` and root-level `python3 research/verify.py` pass. Evidence JSON:
+  `research/explorations/2026-09-16-coarea-jacobian.json`; final snapshot check:
+  `build/audit/coarea-jacobian/final-snapshot.json`.

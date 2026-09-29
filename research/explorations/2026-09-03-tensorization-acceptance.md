@@ -8,7 +8,7 @@
 ## Approval and delivered scope
 
 The user supplied the completed candidate proofs, requested compilation and semantic review,
-and then instructed “同步验收”. The [freeze record](../decisions/2026-09-03-tensorization-freeze.md)
+and then instructed “synchronize acceptance”. The [freeze record](../decisions/2026-09-03-tensorization-freeze.md)
 records this acceptance-time human approval, the baseline, both complete public declaration
 types, and the verbatim ledger statement. It does not assert a historical freeze before the
 candidate proofs were supplied. The earlier statement-phase records remain unchanged.

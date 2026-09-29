@@ -5,7 +5,7 @@
 **Human reviewer/approver:** the repository user in Codex task
 `01a065af-7638-70e0-98d1-dc77718ee3e9`. After the candidate implementation, source review,
 semantic audit, directory cleanup, and complete review package were presented, the user said:
-“我觉得OK了，你最后再检查一下语义是否对齐，我们就可以开始下一步了”. The requested
+“I think it is ready; make one final check that the semantics align, then we can move to the next step”. The requested
 final review passed in two independent read-only audits. This instruction ratifies the reviewed
 candidate at acceptance time. It does not backdate a freeze to the earlier skeleton or proof stage.
 

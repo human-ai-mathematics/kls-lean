@@ -1,7 +1,7 @@
-# 待审 Issue 草稿：一维 Gaussian Poincaré 锐常数
+# Issue draft for review: sharp one-dimensional Gaussian Poincaré constant
 
-本文件仅供用户审阅；尚未发布 GitHub Issue，尚未新增 ledger 节点、Lean 骨架或证明。
-是否立项、采用何种实现路线及后续执行方式，由用户审阅后决定。
+This file is for user review only; no GitHub issue has been published and no ledger node, Lean skeleton, or proof has been added.
+The user will decide whether to start the project, which implementation route to adopt, and how to proceed after reviewing it.
 
 **Proposed title:** Lean: certify the one-dimensional Gaussian Poincaré inequality with the sharp constant
 

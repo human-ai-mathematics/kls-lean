@@ -1,142 +1,132 @@
-# 余维 m coarea 正则情形的纤维 Jacobian 恒等式
+# Jacobian identity for fibers in the m-codimensional coarea regular case
 
-2026-09-16。本轮**证明新定理**，交付余维 m coarea 正则情形的一个**可审计子块**：
-**两侧密度的匹配**（线性形式与 C¹ 形式）以及**正交分裂的保测性**。
-**没有证明任何 coarea 公式。** 不迁洞，不提交、不推送。
-直接洞仍 **8（1/2/5）**，证书仍 **24**。
+2026-09-16. This round of **proving a new theorem** delivers an **auditable subblock** in the case of regularity of coarea dimension m:
+**Matching of densities** (linear forms and C¹ forms) and **measure-preserving orthogonality splitting**.
+**No proof of any coarea formula**. No filling of holes, no commit, no push-forward.
+Direct proof holes remain **8 (1/2/5)**, certificates remain **24**.
 
-起点 `HEAD = origin/main = 34b92695ece4f636a1a7f1eafbbf41c685ee0348`；起点 passed 回执
-`build/verification/20260916T150413.981186Z/report.json`：10 个门、206 个本地模块内核重放、
-537 条目，快照
-`95ebf9f762031e9b1d6eb46b0d239bc4ea979b0c3d8a8fc7ef87cfe18a8ea756`。
+Start `HEAD = origin/main = 34b92695ece4f636a1a7f1eafbbf41c685ee0348`; start verification receipt
+`build/verification/20260916T150413.981186Z/report.json`: 10 gates, 206 local module kernel replay,
+537 entries, snapshot
+`95ebf9f762031e9b1d6eb46b0d239bc4ea979b0c3d8a8fc7ef87cfe18a8ea756`.
 
-## 边界
+## Boundary
 
-对数凹 Cheeger–Buser 线（等周常数定义的对齐直到与 Poincaré 常数的双向比较，
-含 `KLS/WIP/CheegerInfimum.lean` 剩下的两个洞）归合作者**王浩丞**，本轮未触碰。
-尖锐有限正则 Sard、Energy 的五个洞、无量纲 KLS 也都未触碰。
+Log-concave Cheeger–Buser lines (isoperimetric constants defined in alignment with Poincaré constants via bidirectional comparison, with `KLS/WIP/CheegerInfimum.lean` two remaining holes) consolidated by author **Haocheng Wang**, untouched in this round. Sharp finite regular Sard, Energy's five holes, dimension-free KLS also untouched.
 
-## 为什么这一轮不是完整的正则情形
+## Why this round is not the complete regular case
 
-标量 `L9`（`KLS.coarea_of_contDiffOn_of_fderiv_ne_zero`）的证明链有四段：
+The proof chain for scalar `L9` (`KLS.coarea_of_contDiffOn_of_fderiv_ne_zero`) has four segments:
 
-1. **图化**：`ImplicitGraph.lean`（859 行）+ `RegularChart.lean`（164 行），把 `u` 的近旁水平集
-   同时参数化成一族图，水平值本身是坐标；
-2. **保测分裂**：`SubgraphDivergence.lean`（859 行）里的 `splitHomeomorph` 与
-   `measurePreserving_splitHomeomorph`，把 `V` 换成 `H × ℝ`；
-3. **纤维方向换元**：`FiberIntegral.lean` + Mathlib 的一维 Jacobian 定理；
-4. **逐点密度匹配**：`abs_deriv_mul_norm_gradient`，把 `|∂ψ/∂t| · ‖∇u‖` 换成图面积密度；
-   之后是可数覆盖与不交拼接。
+1. **Graphification**: `ImplicitGraph.lean` (row 859) + `RegularChart.lean` (row 164), parametrizing the level sets near `u` simultaneously as a family of graphs, with the level value itself as coordinate;
+2. **Measure-preserving splitting**: `SubgraphDivergence.lean` (row 859)'s `splitHomeomorph` and `measurePreserving_splitHomeomorph`, replacing `V` with `H × ℝ`;
+3. **Fiber direction change of variables**: `FiberIntegral.lean` + the one-dimensional Jacobian theorem in Mathlib;
+4. **Pointwise density matching**: `abs_deriv_mul_norm_gradient`, replacing `|∂ψ/∂t| · ‖∇u‖` with graph area density; then a countable cover and non-overlapping gluing.
 
-余维 m 版本的第 1 段需要**带参数的隐函数定理取值在 m 维空间**，第 3 段需要 m 维换元，
-两者都不是一轮能写完的；照上面的行数锚点，第 1、2 段本身就在一千七百行量级。
-所以本轮**不去做半个链条**，而是把其中**唯一纯粹是新数学、且与图化机器无关**的一段
-——第 4 段的逐点密度匹配——连同第 2 段的**线性/测度骨架**一并做到完。
-这两块都不依赖尚不存在的图化机器，任何后续实现都必须用到它们。
+The m-codimensional version of section 1 requires the **parametrized implicit function theorem taking values in m-dimensional space**, section 3 requires an m-dimensional change of variables, neither of which can be completed in a single pass; according to the row count anchor above, sections 1 and 2 themselves are on the order of one thousand seven hundred lines.
+Thus, this round **does not attempt half a chain**, but instead completes the only segment that is purely new mathematics and unrelated to graphical machinery—
+section 4's pointwise density matching—along with section 2's **linear/measure skeleton**.
+Neither of these components depends on a yet-nonexistent graphical machine; any subsequent implementation must use them.
 
-## 精确成果
+## Exact Results
 
-新模块 `formalization/FunctionalInequalities/Analysis/CoareaGraphJacobian.lean`
-（本地 import 闭包 9 个模块，**无 WIP**）。
+New module `formalization/FunctionalInequalities/Analysis/CoareaGraphJacobian.lean`
+(Local import closure of 9 modules, **no WIP**).
 
-### 线性代数
+### Linear algebra
 
-* **`det_id_add_comp_comm`**：Weinstein–Aronszajn 恒等式的**线性映射形式**
-  `det (1 + X ∘ Y) = det (1 + Y ∘ X)`，两边的 `1` 在**不同的空间**上。
-  Mathlib 只有矩阵版本 `Matrix.det_one_add_mul_comm`。
-  这一条正是「靶空间上的 Gram 行列式换成参数空间上的 Gram 行列式」，
-  也就是 coarea Jacobian 换成 area Jacobian 的那一步。
-* **`normDet_adjoint`**：维数相等时 `normDet Aᵀ = normDet A`，退化情形一并覆盖。
-* **`coareaJacobian_eq_normDet`**：维数相等时 coarea Jacobian 就是 area Jacobian。
+* **`det_id_add_comp_comm`**: Linear mapping form of the Weinstein–Aronszajn identity
+  `det (1 + X ∘ Y) = det (1 + Y ∘ X)`, the `1` on both sides live in different spaces.
+  Mathlib only has the matrix version `Matrix.det_one_add_mul_comm`.
+  This step precisely corresponds to "replacing the Gram determinant on the target space with the Gram determinant on the parameter space",
+  i.e., replacing the coarea Jacobian with the area Jacobian.
+* **`normDet_adjoint`**: When dimensions are equal, `normDet Aᵀ = normDet A`, degenerate cases are included.
+* **`coareaJacobian_eq_normDet`**: When dimensions are equal, the coarea Jacobian is equal to the area Jacobian.
 
-### 分裂
+### Splitting
 
-* **`IsVectorGraphSplitting`**：`IsGraphSplitting` 的余维 m 类比，法方向是整个空间 `K`
-  而不是一个单位向量；两条公理是正交与张成。
-* **`isVectorGraphSplitting_orthogonal`**：任意子空间与其正交补给出一个分裂。
-* **`finrank_orthogonal_ker_eq`**：`L` 满射时 `finrank (ker L)ᗮ = finrank W`，
-  即**正则点上余维假设自动成立**。
-* **`IsVectorGraphSplitting.comp_adjoint`**：`L ∘ Lᵀ = P ∘ Pᵀ + Q ∘ Qᵀ`（张成假设用在这里）。
-* **`splitVectorIsometry`、`measurePreserving_split`**：
-  `(y, z) ↦ ι y + κ z` 是 `H × K` 到 `V` 的**保 Lebesgue 测度**映射，
-  经 `WithLp 2` 的线性等距实现，无常数残留。这是后续 Tonelli 的骨架。
+* **`IsVectorGraphSplitting`**: `IsGraphSplitting`'s m-codimension analogy, the normal direction is the entire space `K`
+  rather than a unit vector; the two axioms are orthogonality and spanning.
+* **`isVectorGraphSplitting_orthogonal`**: Any subspace together with its orthogonal complement gives a splitting.
+* **`finrank_orthogonal_ker_eq`**: When `L` is surjective, `finrank (ker L)ᗮ = finrank W`,
+  i.e., the **regular point codimension assumption holds automatically**.
+* **`IsVectorGraphSplitting.comp_adjoint`**: `L ∘ Lᵀ = P ∘ Pᵀ + Q ∘ Qᵀ` (the spanning assumption is used here).
+* **`splitVectorIsometry`, `measurePreserving_split`**:
+  `(y, z) ↦ ι y + κ z` is a **Lebesgue measure-preserving** map from `H × K` to `V`,
+  realized via a linear isometry of `WithLp 2`, with no constant residue. This is the skeleton for subsequent Tonelli.
 
-### 纤维 Jacobian 恒等式
+### Fiber Jacobian identity
 
-* **`coareaJacobian_eq_normDet_mul_normDet_graphMapLinear`**（线性形式）：
-  在分裂下，若斜率 `A` 使图落在 `ker L` 内（方程 `(L ∘ κ) ∘ A = -(L ∘ ι)`），且
-  `finrank K = finrank W`，则
-  `coareaJacobian L = normDet (L ∘ κ) * normDet (graphMapLinear ι κ A)`。
-* **`normDet_fderiv_mul_coareaJacobian`**（C¹ 形式，标量 `abs_deriv_mul_norm_gradient` 的类比）：
-  沿 C¹ 水平族 `u (ι y + κ (ψ (y, t))) = t`，
-  `normDet (Dₜψ) * coareaJacobian (fderiv ℝ u x) = normDet (graphMapLinear ι κ (D_yψ))`。
-  隐函数微分同时给出斜率方程与 `(L ∘ κ) ∘ Dₜψ = 1`。
-  `u` 只要求在该点可微；无有限性、无有界性、无正则值假设。
+* **`coareaJacobian_eq_normDet_mul_normDet_graphMapLinear`** (linear form):
+  Under splitting, if the slope `A` causes the graph to lie within `ker L` (equation `(L ∘ κ) ∘ A = -(L ∘ ι)`), and
+  `finrank K = finrank W`, then
+  `coareaJacobian L = normDet (L ∘ κ) * normDet (graphMapLinear ι κ A)`.
+* **`normDet_fderiv_mul_coareaJacobian`** (C¹ form, scalar `abs_deriv_mul_norm_gradient` analogy):
+  Along the C¹ level-set family `u (ι y + κ (ψ (y, t))) = t`,
+  `normDet (Dₜψ) * coareaJacobian (fderiv ℝ u x) = normDet (graphMapLinear ι κ (D_yψ))`.
+  Implicit function differentiation simultaneously provides the slope equation and `(L ∘ κ) ∘ Dₜψ = 1`.
+  `u` only requires differentiability at that point; no finiteness, no boundedness, no regular value assumption.
 
-### m = 1 退回已证结果
+### m = 1 revert proven result
 
-* **`graphMapLinear_eq_graphLinear`**、**`normDet_graphMapLinear_eq_graphJacobian`**：
-  一维法方向下新的图模型就是仓库原有的 `graphLinear`，体积因子就是已证的 `graphJacobian`。
-* **`abs_deriv_mul_norm_gradient_of_vectorGraphSplitting`**：
-  `m = 1` 时上面的 C¹ 恒等式**逐字**就是标量的
-  `|∂ψ/∂t| · ‖∇u‖ = graphJacobian (∇_y ψ)`。
-  与 `Analysis.coareaJacobian_fderiv` 一起，确认新密度在 `m = 1` 时退回 `‖gradient u x‖`。
+* **`graphMapLinear_eq_graphLinear`**, **`normDet_graphMapLinear_eq_graphJacobian`**:
+  The new graphical model under the one-dimensional direction is the original repository `graphLinear`, with the volume factor being the previously established `graphJacobian`.
+* **`abs_deriv_mul_norm_gradient_of_vectorGraphSplitting`**:
+  When `m = 1`, the above C¹ identity is literally the scalar `|∂ψ/∂t| · ‖∇u‖ = graphJacobian (∇_y ψ)`.
+  Together with `Analysis.coareaJacobian_fderiv`, it confirms that the new density recedes to `‖gradient u x‖` when `m = 1`.
 
-## 余维假设 `finrank K = finrank W` 是必要的，不是方便
+## The co-dimension assumption `finrank K = finrank W` is necessary, not convenient
 
-审计客户端不是断言而是**给出反例**：
-`fails_without_codimension` 证明只要 `finrank W < finrank K` 且 `L` 满射，
-等式右端恒为 `0`（法向体积因子的秩不足）而左端不为 `0`；
-`necessity` 把它落实到具体数据——`ℝ²` 的零子空间作参数空间、其正交补（整个平面）作法方向、
-`ℝ` 作靶空间——正交、张成与斜率方程都成立，唯独余维假设不成立，恒等式随之不成立。
+The audit client does not assert but rather provides a counterexample:
+`fails_without_codimension` proves that as long as `finrank W < finrank K` and `L` are surjective,
+the right-hand side is always `0` (deficiency in the rank of the normal volume factor) while the left-hand side is not `0`;
+`necessity` implements this on concrete data—taking the zero subspace of `ℝ²` as the parameter space, its orthogonal complement (the entire plane) as the normal direction,
+`ℝ` as the target space—orthogonality, span, and slope equations all hold, yet the codimension assumption fails, rendering the identity invalid.
 
-## 路线语句文件的第二处错误：`A0` 按字面为假，如实报告并更正
+## Second error in route statement file: `A0` is literally false, reported accurately and corrected
 
-上一轮在 `B1` 上发现的归一化错配，**`A0` 里一模一样**：
-`research/audits/AreaFormulaRouteStatements.lean` 的 `A0`（路线的目标，Federer 面积公式）
-把左边的**原始** `μH[finrank H]` 与右边的 **Lebesgue** 测度配在一起。
-审计客户端的 `route_A0_false` **把这条语句证伪**：取平面上的恒等映射与闭单位球，
-左端是原始 `μH[2]`，右端是 Lebesgue 测度，两者差 `2² / ω₂ = 4 / π`
-（`unitBallVolume_two` 证 `ω₂ = π`，`normalization_constant_ne_one` 证 `4/π ≠ 1`）。
-正确的配对仍是原始配原始，或 `hausdorffNormalized` 配 Lebesgue，与 `B1` 的更正一致。
+The normalization mismatch discovered in the previous round on `B1` is **exactly the same** in `A0`:
+`research/audits/AreaFormulaRouteStatements.lean`'s `A0` (the goal of the route, Federer's area formula)
+pairs the left-hand **original** `μH[finrank H]` with the right-hand Lebesgue measure.
+The audit client's `route_A0_false` **refutes this statement**: take the identity map on the plane and the closed unit ball,
+the left-hand side is the original `μH[2]`, the right-hand side is Lebesgue measure, their difference is `2² / ω₂ = 4 / π`
+(`unitBallVolume_two` proves `ω₂ = π`, `normalization_constant_ne_one` proves `4/π ≠ 1`).
+The correct pairing remains original to original, or `hausdorffNormalized` paired with Lebesgue, consistent with the correction in `B1`.
 
-`A5` 写了同样的错配，但**假设与结论两侧一致**，常数相消，
-所以 `A5` 不因此为假；只是它的假设不是真正的局部面积公式，
-按字面无法与 `A0` 的本意接起来。`A1`、`A2`、`A3`、`A4`、`B2` 的测度配对一致，不受影响。
+`A5` wrote the same mismatch, but **assuming the hypothesis and conclusion sides are consistent**, constants cancel out,
+so `A5` is not thereby false; its assumption is not actually a true local area formula,
+and literally cannot be connected to the intended meaning of `A0`. `A1`, `A2`, `A3`, `A4`, `B2` have consistent measure pairings, unaffected.
 
-按不改写历史证据的惯例，`research/audits/AreaFormulaRouteStatements.lean` **保持原字节**，
-更正记在本决定与 `research/audits/CoareaGraphJacobianAudit.lean` 中。
+By convention not altering historical evidence, `research/audits/AreaFormulaRouteStatements.lean` **preserve original bytes**,
+corrections are recorded in this decision and `research/audits/CoareaGraphJacobianAudit.lean`.
 
-## 本轮没有做的事
+## What was not done in this round
 
-* **没有证明任何 coarea 公式**，余维 m 的正则情形**没有完成**。
-* 没有做带参数的隐函数图化（余维 m 的 `ImplicitGraph`/`RegularChart`），
-  没有做纤维方向的 m 维换元，没有做局部到整体的拼接。
-* 没有碰临界部分、尖锐 Sard、两条 Cheeger 比较、Energy 的五个洞。
-* 没有迁洞；没有扩大证书或 Blueprint `leanok` 范围；没有新增兼容 alias。
-* **没有提交、没有推送**，真实 Git index 未改动。
+* **No proof of any coarea formula**, the regular case of codimension m is **incomplete**.
+* No parametric implicit function graphing (codimension m `ImplicitGraph`/`RegularChart`),
+  no m-dimensional change of variables in the fiber direction, no patching from local to global.
+* No handling of critical parts, sharp Sard, two Cheeger comparisons, five holes in Energy.
+* No migration of holes; no expansion of certificate or Blueprint `leanok` scope; no new compatible alias added.
+* **No commit, no push**, the real Git index unchanged.
 
-## 剩余工作（余维 m 正则情形）
+## Remaining work (regular case of codimension m)
 
-1. 余维 m 的局部图化：带参数隐函数定理给出 `ψ : H × W → K` 与其开定义域，
-   使 `u (ι y + κ ψ(y,t)) = t`；标量对应物是 `exists_regularChart` 与 `levelChart_inverse`。
-2. 纤维方向的 m 维换元：对固定 `y`，`t ↦ ψ(y,t)` 的像上做 Mathlib 的
-   `lintegral_image_eq_lintegral_abs_det_fderiv_mul`，本轮的 `measurePreserving_split` 提供
-   `V ≅ H × K` 的 Tonelli 骨架。
-3. 把 1、2 与本轮的 `normDet_fderiv_mul_coareaJacobian` 和已证的 `B2`
-   `hausdorffNormalized_image_vectorGraphMap` 接起来，得到局部形式；
-4. 可数覆盖 + 不交拼接，得到 `coarea_of_contDiffOn_of_coareaJacobian_ne_zero`；
-   还需要余维 m 的加权切片可测性（标量对应物 `OpenSliceMeasurable.lean`）。
+1. Local graphization of codimension m: the parametric implicit function theorem gives `ψ : H × W → K` together with its open domain of definition,
+   Let `u (ι y + κ ψ(y,t)) = t`; the scalar counterpart is `exists_regularChart` and `levelChart_inverse`.
+2. The m-dimensional change of variables in the fiber direction: for fixed `y`, apply Mathlib’s change-of-variables theorem on the image of `t ↦ ψ(y,t)`,
+   `lintegral_image_eq_lintegral_abs_det_fderiv_mul`, this round's `measurePreserving_split` provides
+   The Tonelli skeleton of `V ≅ H × K`.
+3. The 1, 2, and the current `normDet_fderiv_mul_coareaJacobian` along with the previously proven `B2`
+   connect `hausdorffNormalized_image_vectorGraphMap` to obtain the local form;
+4. Countable cover + disjoint gluing yields `coarea_of_contDiffOn_of_coareaJacobian_ne_zero`;
+   Still needs the m-dimensional weighted slice measurability (scalar counterpart `OpenSliceMeasurable.lean`).
 
-## 验证
+## Verification
 
-* 新模块与新客户端均以 `-DwarningAsError=true` 编译通过，无 `sorry`、无 `axiom`、无占位。
-* `research/audits/CoareaGraphJacobianAudit.lean` 的 **30 条公理报告**只用
-  `propext`、`Classical.choice`、`Quot.sound`；
-  含零维参数空间、全空间水平族（无有限性）、正则点数据、余维假设的反例，
-  以及路线语句 `A0` 的证伪。
-* 重跑全部 **34 个审计客户端**（`research/audits` 27 个，`build/audit` 7 个），全部严格通过。
-* 三个 WIP 逐个实际编译，直接洞 **1/2/5，总数 8**，不变；`research/check_ledger.py` 报 24 个证书。
-* 默认 `lake build` 与根目录 `python3 research/verify.py` 通过；证据 JSON 为
-  `research/explorations/2026-09-16-coarea-graph-jacobian.json`，最终核对另存
-  `build/audit/coarea-graph-jacobian/final-snapshot.json`。
+* The new module and new client both compile successfully with `-DwarningAsError=true`, with no `sorry`, no `axiom`, and no placeholders.
+* The **30 Axiom Report** for `research/audits/CoareaGraphJacobianAudit.lean` only uses `propext`, `Classical.choice`, and `Quot.sound`; it includes counterexamples with a zero-dimensional parameter space, a full space level-set family (without finiteness), regular point data, and a codimension assumption, as well as the falsification of the route statement `A0`.
+* All **34 audit clients** are rerun (`research/audits` 27 and `build/audit` 7), all passing strictly.
+* Each of the three WIPs is compiled in practice, with direct proof holes **1/2/5, total count 8**, unchanged; `research/check_ledger.py` reports 24 certificates.
+* The default `lake build` and root directory `python3 research/verify.py` pass; the JSON evidence is
+  `research/explorations/2026-09-16-coarea-graph-jacobian.json`, and the final verification is saved separately as
+  `build/audit/coarea-graph-jacobian/final-snapshot.json`.

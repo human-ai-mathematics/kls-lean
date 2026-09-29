@@ -1,26 +1,21 @@
-# 下一步提示词：Bakry–Émery S0a——生成元域刻画、半群域稳定与闭梯度接口
+# Next prompt: Bakry–Émery S0a——generator domain characterization, semigroup domain stability and closed gradient interface
 
-请在 `/Users/lyuyuwei/Documents/ChatGPT/KLS` 继续 Buser 的 Bakry–Émery 路线。本轮做一个
-独立、可验证的半群接口切口：在当前抽象生成半群上证明生成元域的反向刻画，并由此得到
-`D(T†T)` 在 `P_t` 下的稳定性和生成元交换，再专门化到现有
-`KLS.LogConcave.heatSemigroup`。
+Continue Buser's Bakry–Émery route at `/Users/lyuyuwei/Documents/ChatGPT/KLS`. In this round, make an independent, verifiable semigroup interface cut-off: prove the reverse characterization of the generator domain on the currently abstract semigroup, and thereby obtain `D(T†T)` under `P_t` in terms of stability and generator commutativity, and then specialize to the existing `KLS.LogConcave.heatSemigroup`.
 
-本轮不是完整的正时间 PDE 平滑性：只从 `f ∈ D(T†T)` 出发证明
-`P_t f ∈ D(T†T)`。不得把它写成对任意 `L²` 输入已有 `P_t f ∈ D(T†T)`，也不得声称已经
-构造了 `P_t f` 的经典光滑代表、证明了梯度交换或完成了 Buser。
+This round does not establish full positive-time PDE regularity: it only proves `f ∈ D(T†T)` to `P_t f ∈ D(T†T)`. It must not be written as proving the existence of `P_t f ∈ D(T†T)` for arbitrary `L²` inputs, nor must it claim that a classical smooth representative of `P_t f` has been constructed, that gradient exchange has been proven, or that Buser has been completed.
 
-## 1. 先核对当前工作区
+## 1. First verify the current workspace
 
-先读：
+First read:
 
 - `AGENTS.md`
-- `HANDOFF.md` 顶部 `Current operational status (2026-09-20)`
+- `HANDOFF.md` top `Current operational status (2026-09-20)`
 - `research/decisions/2026-09-20-bakry-emery-route.md`
 - `research/decisions/2026-09-20-generator-identification.md`
 - `research/decisions/2026-09-20-bochner-identification.md`
 - `research/audits/BakryEmeryRouteStatements.lean`
 
-重点检查：
+Key checks:
 
 - `formalization/FunctionalInequalities/Analysis/Semigroup/AdjointComp.lean`
 - `formalization/FunctionalInequalities/Analysis/Semigroup/VonNeumann.lean`
@@ -32,131 +27,129 @@
 - `formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Basic.lean`
 - `formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Generator.lean`
 
-检查当前 dirty worktree，保留所有既有修改；不 reset、clean、覆盖或删除他人工作。本轮
-不提交、不推送。
+Check the current dirty worktree, retain all existing modifications; do not reset, clean, overwrite, or delete others' work. This round
+no commit, no push.
 
-## 2. 当前已证基线
+## 2. Current baseline proven
 
-设 `T : H₀ →ₗ.[ℝ] H₁` 闭且稠密定义，
+Suppose `T : H₀ →ₗ.[ℝ] H₁` closed and densely defined,
 
 ```text
 A = adjointComp T = T†T,
 P_t = semigroupApply T hT hd t.
 ```
 
-已经存在：
+Already exists:
 
-- `isSelfAdjoint_adjointComp`：`A` 自伴；
-- `dense_adjointComp_domain`：`D(A)` 稠密；
-- `inner_semigroupApply_left`：`P_t` 自伴；
-- `semigroupApply_add`：`P_(t+u) = P_t P_u`；
-- `norm_semigroupApply_le`：`P_t` 是压缩；
-- `exists_delta_norm_inv_smul_semigroupApply_sub_self_add_adjointComp_lt`：
-  对 `f ∈ D(A)`，
+- `isSelfAdjoint_adjointComp`: `A` self-adjoint;
+- `dense_adjointComp_domain`: `D(A)` dense;
+- `inner_semigroupApply_left`: `P_t` self-adjoint;
+- `semigroupApply_add`: `P_(t+u) = P_t P_u`;
+- `norm_semigroupApply_le`: `P_t` is a contraction;
+- `exists_delta_norm_inv_smul_semigroupApply_sub_self_add_adjointComp_lt`:
+  for `f ∈ D(A)`,
 
   ```text
   h⁻¹ • (P_h f - f) → -Af    (h ↓ 0).
   ```
 
-- `mem_domain_of_mem_adjointComp_domain`：`D(A) ⊆ D(T)`；
-- `heatSemigroup_generator`：上述生成元极限已专门化到闭加权梯度。
+- `mem_domain_of_mem_adjointComp_domain`: `D(A) ⊆ D(T)`;
+- `heatSemigroup_generator`: The above generator limit has been specialized to a closed weighted gradient.
 
-G0/G1 与 B0–B4 已完成，但本轮不要重复 Bochner 计算。
+G0/G1 Completed with B0–B4, but do not repeat the Bochner calculation in this round.
 
-所有完整参数、命名空间、隐式实例和 `LinearPMap` subtype 形状以当前 `#check @...` 为准，
-不要凭本文简写猜测。
+All complete parameters, namespaces, implicit instances, and `LinearPMap` subtype shapes are governed by the current `#check @...`,
+do not infer from abbreviations in this document.
 
-## 3. 第一目标：生成元域的反向刻画
+## 3. First goal: reverse characterization of the generator domain
 
-当前只证明了
+Only proved so far
 
 ```text
 f ∈ D(A)  ⟹  h⁻¹ • (P_h f - f) → -Af.
 ```
 
-本轮先证明反向：若某个 `y : H₀` 的右差商在 `h ↓ 0` 时收敛到 `z : H₀`，则
+This round first proves the reverse: if the right difference quotient of some `y : H₀` converges to `z : H₀` at `h ↓ 0`, then
 
 ```text
-y ∈ D(A)  且  A y = -z.
+y ∈ D(A)  and  A y = -z.
 ```
 
-建议新增：
+
+Suggest adding:
 
 ```text
 formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Domain.lean
 ```
 
-候选公开声明可命名为：
+Candidate public declarations may be named as:
 
 ```text
 mem_adjointComp_domain_of_generator_limit
 adjointComp_eq_neg_of_generator_limit
 ```
 
-或将成员关系和作用值放在一个返回 `∃ hy : y ∈ D(A), ...` 的定理中。具体 Lean 陈述应沿用
-当前生成元文件的 `ε`–`δ` 右极限形状，例如：
+Or place the membership relation and action value in a theorem returning `∃ hy : y ∈ D(A), ...`. The specific Lean statement should follow the right-limit shape of `ε`–`δ` in the current generator file, for example:
 
 ```text
 ∀ ε > 0, ∃ δ > 0, ∀ h > 0, h < δ,
   ‖h⁻¹ • (P_h y - y) - z‖ < ε.
 ```
 
-注意现有正向定理写成
+Note the current forward theorem written as
 
 ```text
 ‖h⁻¹ • (P_h f - f) + Af‖ < ε,
 ```
 
-所以反向结论必须是 `Ay = -z`，不要发生符号反转。
+So the reverse conclusion must be `Ay = -z`, no symbol reversal should occur.
 
-### 推荐证明路线
+### Recommended proof path
 
-固定任意 `x ∈ D(A)`：
+Fix any `x ∈ D(A)`:
 
-1. 用 `inner_semigroupApply_left` 把
+1. Use `inner_semigroupApply_left` to
 
    ```text
    ⟪h⁻¹ • (P_h y - y), x⟫
    ```
 
-   改写成
+   Rewrite to
 
    ```text
    ⟪y, h⁻¹ • (P_h x - x)⟫.
    ```
 
-2. 左边由假设趋于 `⟪z,x⟫`；右边由现有生成元定理趋于 `⟪y,-Ax⟫`。
-3. 得到对所有 `x ∈ D(A)`：
+2. The left side tends to `⟪z,x⟫` by assumption; the right side tends to `⟪y,-Ax⟫` by the existing generator theorem.
+3. We obtain for all `x ∈ D(A)`:
 
    ```text
    ⟪-z,x⟫ = ⟪y,Ax⟫.
    ```
 
-4. 用 `LinearPMap.mem_adjoint_domain_of_exists` / `adjoint_apply_eq` 一类现有接口证明
-   `y ∈ D(A†)` 且 `A†y = -z`。
-5. 用 `isSelfAdjoint_adjointComp` 把 `A† = A`，得到 `y ∈ D(A)` 和 `Ay = -z`。
+4. Prove using `LinearPMap.mem_adjoint_domain_of_exists` / `adjoint_apply_eq` class of existing interfaces
+   `y ∈ D(A†)` and `A†y = -z`.
+5. Use `isSelfAdjoint_adjointComp` to derive `A† = A`, obtaining `y ∈ D(A)` and `Ay = -z`.
 
-不得把反向刻画本身作为新假设，也不得定义一个结构并把目标结论藏入字段。若内积极限的
-搬运没有现成拓扑 API，可以按当前仓库风格做显式 `ε`–`δ` 估计；不要引入未经证明的抽象
-生成元定理。
+Do not treat the reverse characterization itself as a new assumption, nor define a structure and hide the target conclusion within a field. If there is no ready-made topological API for transporting the inner limit, perform explicit repository-style `ε`–`δ` estimates; do not introduce an unproven abstract generator theorem.
 
-## 4. 第二目标：`D(A)` 的半群稳定与交换
+## 4. Second objective: semigroup stability and commutativity of `D(A)`
 
-对任意 `f : D(A)`、`t ≥ 0`，证明：
+For any `f : D(A)`, `t ≥ 0`, prove:
 
 ```text
 P_t f ∈ D(A),
 A(P_t f) = P_t(Af).
 ```
 
-建议公开声明：
+Suggest a public statement:
 
 ```text
 semigroupApply_mem_adjointComp_domain
 adjointComp_semigroupApply
 ```
 
-推荐从第 3 节的反向刻画推出，而不是重新做一套 Yosida 图极限：
+It is recommended to derive it from the reverse characterization in Section 3, rather than redoing a Yosida graph limit:
 
 ```text
 h⁻¹(P_h(P_t f) - P_t f)
@@ -164,158 +157,153 @@ h⁻¹(P_h(P_t f) - P_t f)
   → -P_t(Af).
 ```
 
-这里使用：
+Here we use:
 
-- `semigroupApply_add`；
-- `semigroupApply_sub`、`semigroupApply_smul`；
-- `norm_semigroupApply_le`；
-- `P_h P_t = P_t P_h`，应从同一参数的半群加法和 `h+t=t+h` 精确推出；
-- 已有的 `f ∈ D(A)` 零时刻生成元极限。
+- `semigroupApply_add`;
+- `semigroupApply_sub`, `semigroupApply_smul`;
+- `norm_semigroupApply_le`;
+- `P_h P_t = P_t P_h`, should be exactly derived from the additive semigroup of the same parameter and `h+t=t+h`;
+- the existing `f ∈ D(A)` generator limit at zero time.
 
-随后由反向刻画得到成员关系和
+Then, by reverse characterization, we obtain the membership relation and
 
 ```text
 A(P_t f) = P_t(Af).
 ```
 
-定理应覆盖 `t = 0`，不需要人为增加 `0 < t`。若 subtype 的成员证明不同导致项表面不相等，
-使用 proof irrelevance / `Subtype.ext`，不要增加无关假设。
+Theorem should cover `t = 0`, without requiring artificial addition of `0 < t`. If the members of subtype have different proofs leading to surface-level inequality of terms, use proof irrelevance / `Subtype.ext`, and do not add irrelevant assumptions.
 
-## 5. 第三目标：任意时刻的右时间导数
+## 5. Third goal: the right-time derivative at any time
 
-对 `f ∈ D(A)`、`t ≥ 0`，证明精确的 `ε`–`δ` 版本：
+For `f ∈ D(A)`, `t ≥ 0`, prove the exact `ε`–`δ` version:
 
 ```text
 h⁻¹ • (P_(t+h) f - P_t f) → -A(P_t f)
                          = -P_t(Af)    (h ↓ 0).
 ```
 
-建议声明：
+Suggested declaration:
 
 ```text
 exists_delta_norm_inv_smul_semigroupApply_add_sub_add_adjointComp_lt
 ```
 
-或采用项目中更简洁且不歧义的名称。必须明确这是右导数；不要把只对 `h > 0` 的结论写成
-已经证明了整个实轴上的 Fréchet 可微性。
+Or use a more concise and unambiguous name within the project. It must be clearly specified that this is the right derivative; do not state that the conclusion holds for `h > 0` as if it had proven Fréchet differentiability over the entire real axis.
 
-这一步是后续插值量
+This step is for the subsequent interpolation quantity.
 
 ```text
 s ↦ P_s Γ(P_(t-s) f)
 ```
 
-时间微分的纯半群先决条件，但本轮不定义或微分该插值量。
+The pure semigroup prerequisites for time derivatives, but this round does not define or differentiate this interpolation quantity.
 
-## 6. 第四目标：专门化到现有 `heatSemigroup`
+## 6. Fourth goal: specialize to existing `heatSemigroup`
 
-建议新增：
+Suggest adding:
 
 ```text
 formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Domain.lean
 ```
 
-设
+Let
 
 ```text
 T̄ = hν.closedWeightedOperator m B hi,
 A  = adjointComp T̄.
 ```
 
-证明与抽象定理逐字对应的包装：
+Proof and abstract theorem packaging with literal correspondence:
 
-- `heatSemigroup_mem_generator_domain`：`f ∈ D(A)` 时 `P_t f ∈ D(A)`；
-- `heatSemigroup_generator_comm`：`A(P_t f)=P_t(Af)`；
-- `heatSemigroup_mem_closedWeightedOperator_domain`：由 `D(A) ⊆ D(T̄)` 得
-  `P_t f ∈ D(T̄)`；
-- `heatSemigroup_right_derivative`：任意 `t ≥ 0` 的右导数。
+- `heatSemigroup_mem_generator_domain`: `f ∈ D(A)` implies `P_t f ∈ D(A)`;
+- `heatSemigroup_generator_comm`: `A(P_t f)=P_t(Af)`;
+- `heatSemigroup_mem_closedWeightedOperator_domain`: by `D(A) ⊆ D(T̄)` we get
+  `P_t f ∈ D(T̄)`;
+- `heatSemigroup_right_derivative`: the right derivative of any `t ≥ 0`.
 
-至少对一般权重 `B` 保持抽象包装；不要无故限制到 `B = I`。与经典
-`weightedLaplacian` 的等同仍只在 G1 已证明的 `C_c∞` 输入上使用。
+At least maintain abstract packaging for general weights `B`; do not arbitrarily restrict to `B = I`. Equivalence with classical
+`weightedLaplacian` is still only used on `C_c∞` inputs where G1 has been proven.
 
-本轮所得“梯度”只能解释为闭梯度
+The current "gradient" can only be interpreted as a closed gradient.
 
 ```text
 T̄(P_t f),
 ```
 
-不能直接写成某个任意 `L²` 代表的经典 `gradient`。
+Cannot be directly written as a classical `L²` represented by an arbitrary `gradient`.
 
-## 7. 明确不属于本轮的更强结论
+## 7. Clear exclusion of stronger conclusions not in this round
 
-以下都保持未证：
+The following remain unproven:
 
-1. 对任意 `f : H₀`、`t > 0`，`P_t f ∈ D(A)`；
-2. `‖A P_t f‖ ≤ C/t · ‖f‖`；
-3. 对任意 `f ∈ D(T)`，`P_t f ∈ D(T)` 及
-   `‖T(P_t f)‖ ≤ ‖Tf‖`；
-4. `P_t[f]` 存在 `C∞` 或 `C³` 的经典代表；
-5. `P_t` 保持 `C_c∞`，或 `C_c∞` 是 `A` 的 operator core；
-6. `Γ(P_t f) ≤ P_t Γ(f)`；
-7. `‖∇P_t f‖ ≤ P_t ‖∇f‖`；
-8. BGL 反向估计、小时间 BV 估计、一般测度逼近和最终 Buser。
+1. For any `f : H₀`, `t > 0`, `P_t f ∈ D(A)`;
+2. `‖A P_t f‖ ≤ C/t · ‖f‖`;
+3. For any `f ∈ D(T)`, `P_t f ∈ D(T)` and
+   `‖T(P_t f)‖ ≤ ‖Tf‖`;
+4. `P_t[f]` has a classical representative of `C∞` or `C³`;
+5. `P_t` preserves `C_c∞`, or `C_c∞` is the operator core of `A`;
+6. `Γ(P_t f) ≤ P_t Γ(f)`;
+7. `‖∇P_t f‖ ≤ P_t ‖∇f‖`;
+8. BGL reverse estimation, small-time BV estimation, general measure approximation and final Buser.
 
-其中第 1–2 项是真正的“正时间解析平滑”，需要额外的 Yosida 指数一致估计或等价功能演算，
-不能从本轮的域稳定性自动推出。第 3 项是 form-domain 稳定性，也比 `D(A)` 输入上的结论强。
+Among the terms 1–2, the true "positive-time analytic smoothing" requires additional Yosida index uniform estimates or equivalent functional calculus, and cannot be deduced automatically from the current domain stability. The term 3 corresponds to form-domain stability, which is stronger than the conclusion `D(A)` on the input side.
 
-## 8. 候选后续接口只做类型检查
+## 8. The candidate subsequent interface performs only type checking
 
-在审计文件中额外保留以下下一阶段候选，但不要用假设把它们伪装成证明：
+In audit documents, retain the following candidates for the next stage, but do not use assumptions to disguise them as proofs:
 
 ```text
 ∀ f t, 0 < t → P_t f ∈ D(A)
 ```
 
-以及带显式常数的
+and with explicit constants
 
 ```text
 ‖A(P_t f)‖ ≤ C / t * ‖f‖.
 ```
 
-在证明具体常数前先从标量函数 `λ ↦ λ exp(-tλ)` 的最优界反推正确归一化；如果当前无
-谱函数演算，只记录所缺的 Yosida 一致估计，不要猜常数。
+Before proving specific constants, reverse-engineer the correct normalization from the optimal bound of scalar functions `λ ↦ λ exp(-tλ)`; if spectral function calculus is not available, only record the missing Yosida uniform estimate, do not guess the constants.
 
-## 9. 审计与交付物
+## 9. Audit and Deliverables
 
-新增：
+New:
 
 - `research/audits/SemigroupDomainStabilityAudit.lean`
 - `research/decisions/2026-09-20-semigroup-domain-stability.md`
 
-审计至少逐字重述并关闭：
+Audit at least verbatim and close out:
 
 ```text
-D0  右差商极限存在 ⟹ y ∈ D(A) 且 Ay = -z
+D0  The right difference quotient limit exists ⟹ y ∈ D(A) and Ay = -z
 D1  f ∈ D(A) ⟹ P_t f ∈ D(A)
 D2  A(P_t f) = P_t(Af)
-D3  t ≥ 0 处的右导数为 -A(P_t f)
-D4  heatSemigroup 的 D1–D3 包装及 D(A) ⊆ D(T̄)
+D3  The right derivative at t ≥ 0 is -A(P_t f)
+D4  The D1–D3 packaging of heatSemigroup and D(A) ⊆ D(T̄)
 ```
 
-对所有新增公开声明运行 `#print axioms`。只允许 Mathlib 常见基础公理；不得出现：
+Run `#print axioms` for all newly added public declarations. Only allow Mathlib common foundational axioms; do not appear:
 
 - `sorryAx`
-- 新 `axiom`
+- New `axiom`
 - `sorry` / `admit`
-- 占位证明
-- 把结论藏入结构字段、typeclass 或额外假设
-- 把 `D(A)` 输入偷偷加强成测试函数并仍声称完成一般域稳定
+- Placeholder proof
+- Hide the conclusion in structural fields, typeclass, or additional assumptions
+- Stealthily strengthen the `D(A)` input into a test function and still claim completion of general domain stability
 
-决策记录必须列出：
+The decision record must list:
 
-- 实际声明与证明依赖；
-- 反向生成元刻画中自伴性的使用位置；
-- `A` 与半群交换的符号；
-- 哪些结论只对 `D(A)` 输入成立；
-- 与正时间任意输入平滑、form-domain 稳定和经典代表之间的严格边界；
-- 下一阶段需要的 Yosida 一致估计或弱 Γ 接口。
+- Actual statements and proofs depend on;
+- Usage position of self-adjointness in reverse generator characterization;
+- `A` and semigroup commutativity symbols;
+- Which conclusions hold only for `D(A)` input;
+- Strict boundary between smooth arbitrary input, form-domain stability, and classical representatives in positive time;
+- Yosida uniform estimates or weak Γ interface needed in the next stage.
 
-给出“已有证明／仅类型检查／仍是非形式化方案”三栏表。本轮完成不改变完整
-Cheeger–Buser 节点的 pending 状态，`BE` 节点仍应是 partial。
+Provide a three-column table of "existing proof / type check only / still non-formalized scheme". In this round, do not change the pending status of the Cheeger–Buser nodes, and the `BE` node should remain partial.
 
-## 10. 验收
+## 10. Acceptance
 
-从 `formalization/` 运行：
+Run from `formalization/`:
 
 ```bash
 lake env lean -DwarningAsError=true \
@@ -330,7 +318,7 @@ lake env lean -DwarningAsError=true \
 lake build
 ```
 
-从仓库根运行：
+Run from repository root:
 
 ```bash
 git diff --check
@@ -341,23 +329,19 @@ python3 -m unittest discover -s research/tests
 python3 research/verify.py
 ```
 
-新文件必须在 `-DwarningAsError=true` 下零错误、零警告。完整构建中
-`KLS/Target.lean` 的既有目标洞警告可以保留，不得新增其他 `sorry` 或警告。
+New files must have zero errors and zero warnings under `-DwarningAsError=true`. In a full build, warnings from existing target holes in `KLS/Target.lean` may be retained, and no other `sorry` or warnings may be introduced.
 
-若同步进度文档，按 `AGENTS.md` 从暂存的 canonical records 运行
-`python3 research/progress/update.py`；保留他人修改，不把 `BE`、完整 Buser 或 KLS 标成
-proved。
+If synchronizing progress documents, run from `AGENTS.md` stored canonical records `python3 research/progress/update.py`; retain others' modifications, without marking `BE`, complete Buser, or KLS as proved.
 
-## 11. 最终汇报
+## 11. Final Report
 
-最终用中文说明：
+Final explanation in Chinese:
 
-1. D0–D4 分别由哪些声明完成；
-2. 反向生成元刻画为何需要 `P_t` 和 `A` 的自伴性；
-3. `A(P_t f)=P_t(Af)` 的符号与 subtype 成员关系如何处理；
-4. 是否只证明了 `D(A)` 输入上的域稳定；
-5. 公理审计、严格编译和完整验证结果；
-6. 下一步应选“任意输入正时间进入 `D(A)`”还是“`D(T)` form-domain 稳定”，以及所缺的
-   最小估计。
+1. Which statements complete D0–D4;
+2. Why reverse generators characterization requires the self-adjointness of `P_t` and `A`;
+3. How is the notation of `A(P_t f)=P_t(Af)` handled with respect to subtype membership;
+4. Has only domain stability on inputs of `D(A)` been proven;
+5. Axiom audit, strict compilation, and complete verification results;
+6. Whether to select "any input with positive time entering `D(A)`" or "`D(T)` form-domain stability" next, and the missing minimal estimate.
 
-不要提交、不要推送。
+Do not commit, do not push.

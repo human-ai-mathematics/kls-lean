@@ -1,71 +1,67 @@
-# 半群生成路线：已完成部分与交接清单
+# Semigroup-generated paths: Completed portions and handover checklist
 
-2026-09-19。本文件划分**本会话已证**与**移交他处**的边界，并给出后者的精确规格。
-起点与终点均为 `HEAD = origin/main = 7986adf`（工作区未提交）。
+2026-09-19. This document draws the boundary between "proven in this session" and "transferred elsewhere", and provides an exact specification for the latter.
+Both start and end points are `HEAD = origin/main = 7986adf` (the workspace is not commit).
 
-## 一、已证（高置信，已验证）
+## 1. Proven (high confidence, verified)
 
-模块 `Analysis/Semigroup/{Form,Resolvent}.lean`，审计 `research/audits/SemigroupFormAudit.lean`。
+Module `Analysis/Semigroup/{Form,Resolvent}.lean`, audit `research/audits/SemigroupFormAudit.lean`.
 
-| 编号 | 声明 | 备注 |
+| Number | Statement | Notes |
 | --- | --- | --- |
-| `S1` | `completeSpace_graph` | 一行：`IsClosed` 按定义即图闭 |
-| `S2` | `min_one_mul_graphNormSq_le` | **不需要 `0 < s`**，对任意实 `s` 成立 |
-| `S3` | `existsUnique_weakResolvent` | **不需要 `Dense`**；用正交投影，非 Lax–Milgram |
-| `S4` | `norm_le_of_weakResolvent`、`inner_nonneg_of_weakResolvent` | 弱方程取 `v = u` |
-| 路线外 | `resolventCLM` + 压缩/自伴/非负三条 | `J_s = (1 + sT*T)⁻¹` 打包成 `H₀ →L[ℝ] H₀` |
+| `S1` | `completeSpace_graph` | one line: `IsClosed` by definition is graph closed |
+| `S2` | `min_one_mul_graphNormSq_le` | **Does not require `0 < s`**, holds for any real `s` |
+| `S3` | `existsUnique_weakResolvent` | **Does not need `Dense`**; uses orthogonal projection, not Lax–Milgram |
+| `S4` | `norm_le_of_weakResolvent`, `inner_nonneg_of_weakResolvent` | weak equation takes `v = u` |
+| off-the-route | `resolventCLM` + contraction/self-adjoint/non-negative three | `J_s = (1 + sT*T)⁻¹` packaged into `H₀ →L[ℝ] H₀` |
 
-**23 条 `#print axioms` 全部只有 `propext, Classical.choice, Quot.sound`，0 条 `sorryAx`。**
-`lake build` 3519 jobs 通过；回执 `20260919T084529.261763Z`，10/10 门、246 模块重放。
+**23 statement `#print axioms` all only `propext, Classical.choice, Quot.sound`, 0 statements `sorryAx`.**
+`lake build` 3519 jobs passed; verification receipt `20260919T084529.261763Z`, 10/10 gates, 246 module replay.
 
-## 二、交接：`S5`（边界情形，中等置信）
+## 2. Handover: `S5` (boundary case, moderate confidence)
 
-**目标**：`L` 有界、非负、自伴 ⟹ `‖NormedSpace.exp (-t • L) f‖ ≤ ‖f‖`（`t ≥ 0`）。
+**Goal**: `L` bounded, non-negative, self-adjoint ⟹ `‖NormedSpace.exp (-t • L) f‖ ≤ ‖f‖` (`t ≥ 0`).
 
-**推荐证法（导数单调性）**：令 `φ(t) = ‖exp(-t • L) f‖²`，则
-`φ'(t) = -2⟪L exp(-t•L) f, exp(-t•L) f⟫ ≤ 0`，故 `φ` 在 `[0,∞)` 上递减，`φ(t) ≤ φ(0) = ‖f‖²`。
+**Recommended proof (monotonicity of derivative)**: Let `φ(t) = ‖exp(-t • L) f‖²`, then
+`φ'(t) = -2⟪L exp(-t•L) f, exp(-t•L) f⟫ ≤ 0`, hence `φ` is decreasing on `[0,∞)`, `φ(t) ≤ φ(0) = ‖f‖²`.
 
-* **已确认存在**：`hasDerivAt_exp_smul_const`（`Mathlib/Analysis/SpecialFunctions/Exponential.lean`）、
-  `NormedSpace.exp_add_of_commute`、`AntitoneOn` 由导数非正的判据。
-* **已确认不存在**：`IsSelfAdjoint.spectralRadius_eq_nnnorm`。**不要走谱半径那条路**——
-  本会话查过，这个名字在 pinned Mathlib 里没有，改走连续泛函演算需要额外考古。
-* 主要摩擦：把内积的乘积法则与 `hasDerivAt_exp_smul_const` 接起来。
+* **Confirmed existence**: `hasDerivAt_exp_smul_const` (`Mathlib/Analysis/SpecialFunctions/Exponential.lean`), `NormedSpace.exp_add_of_commute`, `AntitoneOn` by the criterion of non-positive derivative.
+* **Confirmed non-existence**: `IsSelfAdjoint.spectralRadius_eq_nnnorm`. Do not take the spectral radius route—
+  this session has checked, the name is not present in pinned Mathlib; instead, a continuous functional calculus approach would require additional historical investigation.
+* Main friction: connecting the product rule of the inner product with `hasDerivAt_exp_smul_const`.
 
-我对这一条的判断是**能做但不是「有把握」**，所以没有动手，留给接手方。
+My judgment on this is **it's possible but not "confident"**, so I didn't start working on it, leaving it for the next person.
 
-## 三、交接：`S6`–`S8`（低置信，`S6` 是真正的坎）
+## Three, Handover: `S6`–`S8` (Low confidence, `S6` is the real bottleneck)
 
-* **`S6`**（`exp(-t L_s)` 随 `s ↓ 0` 强收敛）：本路线从一开始就标为**高风险**，Mathlib 无先例。
-  经典证法用 `‖exp(-tL_s)f - exp(-tL_r)f‖ ≤ t‖L_s f - L_r f‖`（两个交换的压缩半群之差），
-  再证 `L_s f → T*T f` 于 `D(T*T)` 上、并用稠性与一致有界性推广。
-  **注意**：这一步真正需要 `Dense (T.domain)` 与伴随算子 `T*`——而 `S1`–`S4` 都不需要，
-  所以接手方要先补 `T*T` 的自伴性与 `D(T*T)` 的稠性（Mathlib 有 `LinearPMap.adjoint`，
-  但没有 von Neumann 的 `T*T` 自伴性定理，可能要自己证）。
-* **`S7`**、**`S8`**：依赖 `S6`，在其之后是套路。
+* **`S6`** (`exp(-t L_s)` with `s ↓ 0` strong convergence): This approach is initially labeled as **high risk**, with no precedent in Mathlib.
+  The classical proof uses `‖exp(-tL_s)f - exp(-tL_r)f‖ ≤ t‖L_s f - L_r f‖` (the difference of two commuting bounded semigroups),
+  then proves `L_s f → T*T f` on `D(T*T)`, and extends it using density and uniform boundedness.
+  **Note**: This step genuinely requires `Dense (T.domain)` and the adjoint operator `T*`—these assumptions were not needed for `S1`–`S4`,
+  so the successor must first establish the self-adjointness of `T*T` and the density of `D(T*T)` (Mathlib has `LinearPMap.adjoint`,
+  but lacks von Neumann's `T*T` self-adjointness theorem, which may need to be proven independently).
+* **`S7`**, **`S8`**: Depend on `S6`, and thereafter follow a standard pattern.
 
-**现成可用的起点**：`resolventCLM T hT hs` 已经是打包好的 `J_s`，
-Yosida 近似直接写成 `L_s := s⁻¹ • (ContinuousLinearMap.id ℝ H₀ - resolventCLM T hT hs)`。
+**Ready-to-use starting point**: `resolventCLM T hT hs` is already a packaged `J_s`,
+Yosida approximation is directly written as `L_s := s⁻¹ • (ContinuousLinearMap.id ℝ H₀ - resolventCLM T hT hs)`.
 
-**2026-09-19 晚追加：`S6` 的两项前置已证。** von Neumann 定理（`T†T` 自伴、`D(T†T)` 稠密、`(1 + sT†T)J_s = 1`、`f − J_s f = s·J_s(T†T f)`）在 `Analysis/Semigroup/VonNeumann.lean`，预解极限（`J_s → 1` 强收敛、`J_s J_r = J_r J_s`）在 `Analysis/Semigroup/ResolventLimit.lean`，`T†T` 的定义在 `AdjointComp.lean`；见 [von Neumann 路线记录](2026-09-19-von-neumann-route.md)。`S6` 语句里的交换性假设由 `R3` 直接消掉。`S6` 本身仍未证。
+**Evening addendum, 2026-09-19: two prerequisites of `S6` are proved.** The von Neumann results (self-adjointness of `T†T`, density of `D(T†T)`, `(1 + sT†T)J_s = 1`, and `f − J_s f = s·J_s(T†T f)`) are in `Analysis/Semigroup/VonNeumann.lean`; the resolvent limits (strong convergence `J_s → 1` and `J_s J_r = J_r J_s`) are in `Analysis/Semigroup/ResolventLimit.lean`; `T†T` is defined in `AdjointComp.lean`. See the [von Neumann route record](2026-09-19-von-neumann-route.md). `R3` directly discharges the commutativity assumption in `S6`. `S6` itself remains unproved.
 
-**2026-09-19 夜追加：`S6` 已证。** `exp(-t L_s) f` 随 `s ↓ 0` 强收敛（`Analysis/Semigroup/YosidaLimit.lean`），核心是 `‖e^{-tA}f − e^{-tB}f‖ ≤ t‖Af − Bf‖`（`SemigroupLimit.lean`）。**注意**：本清单与路线文件里 `S6` 的抽象写法（只假设非负与交换）被证明为假（`YosidaFamily.lean` 的 `Y0`），修正版多一个稠密集上 Cauchy 的假设；见 [Yosida 极限路线记录](2026-09-19-yosida-limit-route.md)。`S7`、`S8` 仍开放。
+**2026-09-19 Night addition: `S6` is proven.** `exp(-t L_s) f` follows `s ↓ 0` strong convergence (`Analysis/Semigroup/YosidaLimit.lean`), and the core is `‖e^{-tA}f − e^{-tB}f‖ ≤ t‖Af − Bf‖` (`SemigroupLimit.lean`). **Note**: The abstract formulation (only assuming non-negativity and commutativity) of the entry in the route document `S6` has been proven false (`YosidaFamily.lean`'s `Y0`), with the corrected version adding the assumption of Cauchy on a dense subset; see [Yosida limit route record](2026-09-19-yosida-limit-route.md). `S7` and `S8` remain open.
 
-**2026-09-19 深夜追加：`S7`、`S8` 已证，路线 `S1`–`S8` 完成。** `P_t = semigroupApply`（`Generated.lean`），半群律、压缩、对称、强连续在 `SemigroupLaws.lean`，生成元 `−T†T` 在 `Generator.lean`（经 `ExpMeanValue.lean` 的中值界，不用 Bochner 积分）；见 [生成半群路线记录](2026-09-19-generated-semigroup-route.md)。第三节交接的 `S6`–`S8` 至此全部关闭。缺口二/三/四（下一节）原封未动。
+**2026-09-19 Late addition: `S7`, `S8` proven, route `S1`–`S8` completed.** `P_t = semigroupApply` (`Generated.lean`), semigroup law, contraction, symmetry, strong continuity in `SemigroupLaws.lean`, generator `−T†T` in `Generator.lean` (via the mean value bound from `ExpMeanValue.lean`, without Bochner integral); see [Generation semigroup route record](2026-09-19-generated-semigroup-route.md). Section III handover `S6`–`S8` fully closed. Gaps II/III/IV (next section) remain unchanged.
 
-**2026-09-19 追加：`T` 已具体化。** `KLS/LogConcave/HeatSemigroup.lean` 把抽象半群套到加权梯度的闭包上：`heatSemigroup hν m B hi ht` 是 `L²(ν)` 上的 `P_t`，全部半群律、生成元、以及 `⟪T̄†T̄ f, f⟫ = ‖T̄ f‖²`（Dirichlet 形式 = 闭能量）都已转移；`intrinsicHeatSemigroup` 覆盖任意对数凹律。缺口一至此关闭。缺口二的交接提示词：[markov-handoff-prompt](2026-09-19-markov-handoff-prompt.md)。
+**2026-09-19 Append: `T` has been instantiated.** `KLS/LogConcave/HeatSemigroup.lean` Maps the abstract semigroup to the closure of weighted gradients: `heatSemigroup hν m B hi ht` is `L²(ν)` on `P_t`, with all semigroup laws, generators, and `⟪T̄†T̄ f, f⟫ = ‖T̄ f‖²` (Dirichlet form = closed energy) transferred; `intrinsicHeatSemigroup` covers any log-concave law. Gap one is hereby closed. Handoff prompt for gap two: [markov-handoff-prompt](2026-09-19-markov-handoff-prompt.md).
 
-## 四、交接：缺口二/三/四（纲领级）
+## Four. Handover: Gaps Two/Three/Four (Programmatic Level)
 
-见[基础设施评估](2026-09-19-buser-infrastructure-assessment.md)。其中**缺口三的正则化**是本会话
-唯一明确表示**无法预估代价**的一段：一般对数凹测度的位势 `V` 不光滑、支撑可能有边界或降维，
-Bochner 公式用不上，必须走「光滑严格对数凹逼近 + Neumann 边条件 + 极限过渡」。
-这是整个 Buser 纲领里真正的数学内容所在。
+See [infrastructure assessment](2026-09-19-buser-infrastructure-assessment.md). Among them, the **regularization of gap three** is the only part explicitly stating that **the cost is unestimable**: generally, the potential of a log-concave measure `V` is not smooth, its support may have a boundary or undergo dimension reduction, the Bochner formula does not apply, and one must instead proceed via "smooth strictly log-concave approximation + Neumann boundary conditions + limit transition". This is the actual mathematical content at the heart of the Buser program.
 
-## 五、一个可以大幅降本的决定（尚未采纳）
+## Five. A Decision That Could Significantly Reduce Costs (Not Yet Adopted)
 
-Blueprint 里该比较节点的**唯一**下游消费者是 `cor:tight-window-consumption`，
-它要的是「无量纲边界下界」，**不需要常数 π**。把目标从 `Ψ² ≤ π C_P` 放松为
-`Ψ² ≤ C·C_P`（`C` 显式、不必最优）是正当的，且便宜得多——π 要走 Bakry–Émery 的精细形式。
-阶段一在一维拿的已经是 12 而不是 π，是同一个取舍。**此决定属 owner，尚未写入 `tasks.json`。**
+The only downstream consumer of the comparison node in Blueprint is `cor:tight-window-consumption`,
+which requires the "infimum boundary" of dimension-free, and does **not** need the constant π. Relaxing the target from `Ψ² ≤ π C_P` to
+`Ψ² ≤ C·C_P` (with `C` explicitly stated, without requiring optimality) is justified and much cheaper—π must instead take the refined form of Bakry–Émery.
+Phase one already uses 12 in one dimension rather than π, representing the same trade-off. **This decision is the owner's, and has not yet been written into `tasks.json`.**
 
-**2026-09-19 晚，owner 决定：不采纳。** 目标保持 `Ψ² ≤ π·C_P`，常数 π 不放松。因此 Buser 半的 `n ≥ 2` 路线只能走半群 / Bakry–Émery（De Ponti–Mondino 的锐形式），局部化路线给不出 π，不再作为替代方案考虑；一维已证的常数 12 仍只是阶段性结果，不是该节点的证明。下一块 Lean 工作相应地是 `S6` 的前置：von Neumann 定理（`T*T` 自伴、`D(T*T)` 稠密）。
+**2026-09-19 Evening, owner decides: not adopted.** The goal remains `Ψ² ≤ π·C_P`, with the constant π unchanged. Thus, the Buser half's `n ≥ 2` path can only follow the semigroup / Bakry–Émery (sharp form by De Ponti–Mondino), while localized paths fail to yield π and are no longer considered as alternative options; the one-dimensional constant 12 proven so far remains a partial result, not a proof for this node. The next piece of Lean work accordingly becomes the prerequisite for `S6`: the von Neumann theorem (`T*T` self-adjoint, `D(T*T)` dense).
