@@ -72,6 +72,7 @@ import FunctionalInequalities.KLS.Geometry.Perimeter.LocalLipschitzTests
 import FunctionalInequalities.KLS.Geometry.Perimeter.TestClassRelaxation
 import FunctionalInequalities.KLS.Geometry.Perimeter.RelaxedMinkowski
 import FunctionalInequalities.KLS.Geometry.Cheeger.UpperMinkowskiContent
+import FunctionalInequalities.KLS.Geometry.Perimeter.UpperMinkowskiRecovery
 import FunctionalInequalities.KLS.Geometry.Cheeger.Inequality
 import FunctionalInequalities.Energy.Euclidean.Slope.Comparison
 import FunctionalInequalities.Energy.Euclidean.Slope.Recovery

@@ -719,9 +719,10 @@ python3 formalization/blueprint/build.py web
 The final three commands may be replaced by
 `python3 formalization/blueprint/build.py all`. Generated files are written to
 `formalization/blueprint/lean_decls`, `formalization/blueprint/print/`, and
-`formalization/blueprint/web/`; all are intentionally untracked. The dedicated
-[`blueprint.yml`](../.github/workflows/blueprint.yml) workflow repeats these gates and uploads the
-PDF and web tree as artifacts without deploying Pages.
+`formalization/blueprint/web/`; all are intentionally untracked. Build these artifacts locally
+on demand. Remote CI runs only Lean certification (`research/verify.py --lean-only`):
+Lean builds, strict audit clients, transitive axiom checks and local-module kernel replay.
+Documentation/metadata checks and Python tests remain in the full local verifier.
 
 ## Build and validation
 

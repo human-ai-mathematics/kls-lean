@@ -1299,7 +1299,7 @@
     "FunctionalInequalities.Poincare.LocalSlope.Intrinsic.constant"
   ],
   "decision": {
-    "path": "research/decisions/2026-09-20-formalization-directory-organization.md",
-    "sha256": "c9ecd836c12886c1424549753bb7143a6d3f18e53d33ac78d50940dcaab4d570"
+    "path": "research/decisions/2026-09-29-statement-snapshot-decision-translation.md",
+    "sha256": "7b042c1d20480f0bab8ab6cd781e339b2d99c5900c9d35c6820e466782e72678"
   }
 }

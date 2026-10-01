@@ -1,12 +1,10 @@
 name: Lean certification
 
 on:
+  workflow_dispatch:
   push:
-    paths:
-      - '**/*.lean'
-  pull_request:
-    paths:
-      - '**/*.lean'
+    tags:
+      - 'milestone/**'
 
 permissions:
   contents: read
@@ -41,6 +39,7 @@ jobs:
           sources += list(Path('FunctionalInequalities').rglob('*.lean'))
           sources += list(Path('../solutions').rglob('*.lean'))
           sources += list(Path('../examples').rglob('*.lean'))
+          sources += list(Path('../research/audits').rglob('*.lean'))
           modules = set()
           for source in sources:
               for imports in re.findall(r'(?m)^(?:public )?import ([\w. ]+)', source.read_text()):
@@ -49,13 +48,16 @@ jobs:
               raise SystemExit('No Mathlib imports found; refusing an unbounded cache download')
           subprocess.run(['lake', 'exe', 'cache', 'get', *sorted(modules)], check=True)
           PY
-      - name: Verify source snapshot, task atlas, Lean declarations, and local kernel replay
-        run: python3 research/verify.py
+      - name: Build Lean, audit proof axioms, and replay local modules
+        run: python3 research/verify.py --lean-only
       - name: Upload verification evidence
         if: always()
         uses: actions/upload-artifact@v6
         with:
           name: kls-verification
-          path: build/verification/
+          path: |
+            build/verification/**/*.json
+            build/verification/**/*.log
+            build/verification/**/*.lean
           if-no-files-found: warn
           retention-days: 14

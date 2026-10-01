@@ -7,8 +7,13 @@ import FunctionalInequalities.KLS.Geometry.Cheeger.LocalSlopeCoarea
 
 One inequality between two existing objects: the metric BV perimeter `MetricBV.perimeter` is at
 most the outer Minkowski content `Isoperimetry.minkowskiContent` of a measurable set, for every
-probability law on a normed group (`perimeter_le_minkowskiContent`). This is not an
-identification of the two quantities or of their Cheeger infima.
+finite Borel measure on a metric space (`perimeter_le_minkowskiContent`; 2026-09-30: generic metric
+and finite-measure scope; the ratio-recovery section, whose symmetric quotients use `1 - ν B`, stays
+at probability laws). This is not an
+identification of the two quantities or of their Cheeger infima. The finite-target bridge
+`perimeter_le_minkowskiContent_of_measure_lt_top` also permits arbitrary Borel measures,
+including infinite total mass, with measurable finite-mass targets; recovery below still
+retains its finite-total-mass hypotheses until separately extended.
 
 The naive ramp `(1 - d(·, B) / r)₊` equals `1` on `closure B` but may have slope `1 / r` at
 boundary points of `B`, which can carry mass. The two-radius plateau ramp `plateauRamp B s t`
@@ -178,15 +183,15 @@ end PlateauRamp
 
 section Bridge
 
-variable {V : Type*} [NormedAddCommGroup V] [MeasurableSpace V] [BorelSpace V]
+variable {V : Type*} [MetricSpace V] [MeasurableSpace V] [BorelSpace V]
 
 /-- The metric BV perimeter of a measurable set is at most its outer Minkowski content, for every
-probability law. Below any level `a` above the content, radii `r_k → 0` with content quotient
+Borel measure and measurable finite-mass target. Below any level `a` above the content, radii `r_k → 0` with content quotient
 below `a` carry plateau ramps with `L¹` error at most `a r_k` and slope integral at most
-`a (1 + 1/(k+1))`; the finite-measure Lipschitz bridge then bounds the perimeter by `a`. Top
+`a (1 + 1/(k+1))`; the finite-target Lipschitz bridge then bounds the perimeter by `a`. Top
 content is a trivial bound and the empty set has perimeter zero. -/
-theorem perimeter_le_minkowskiContent (ν : ProbabilityMeasure V) {B : Set V}
-    (hBm : MeasurableSet B) :
+theorem perimeter_le_minkowskiContent_of_measure_lt_top (ν : Measure V) {B : Set V}
+    (hBm : MeasurableSet B) (hνB : ν B < ⊤) :
     perimeter (ν : Measure V) B ≤ Isoperimetry.minkowskiContent ν B := by
   rcases Set.eq_empty_or_nonempty B with rfl | hB
   · rw [perimeter_empty]
@@ -237,7 +242,7 @@ theorem perimeter_le_minkowskiContent (ν : ProbabilityMeasure V) {B : Set V}
   have hmass : ∀ k, (ν : Measure V) (Metric.thickening (r k) B \ B) ≤
       a * ENNReal.ofReal (r k) := fun k => by
     rw [measure_sdiff (Metric.self_subset_thickening (hr0 k) B) hBm.nullMeasurableSet
-      (measure_ne_top _ _)]
+      hνB.ne]
     calc (ν : Measure V) (Metric.thickening (r k) B) - (ν : Measure V) B
         = ((ν : Measure V) (Metric.thickening (r k) B) - (ν : Measure V) B) /
             ENNReal.ofReal (r k) * ENNReal.ofReal (r k) :=
@@ -280,15 +285,22 @@ theorem perimeter_le_minkowskiContent (ν : ProbabilityMeasure V) {B : Set V}
   calc perimeter (ν : Measure V) B
       ≤ liminf (fun k => ∫⁻ x, Energy.LocalSlope.apply (plateauRamp B (s k) (t k)) x
           ∂(ν : Measure V)) atTop :=
-        perimeter_le_liminf_of_lipschitz (ν : Measure V) hlip hconv
+        perimeter_le_liminf_of_lipschitz_of_measure_lt_top ν hBm hνB hlip hconv
     _ ≤ liminf (fun k : ℕ => a * ENNReal.ofReal (1 + 1 / ((k : ℝ) + 1))) atTop :=
         liminf_le_liminf (Eventually.of_forall hcost)
     _ = a := hlim.liminf_eq
 
+/-- The metric BV perimeter is at most lower Minkowski content for a finite Borel measure
+and every measurable target. This retained interface follows from the finite-target bridge. -/
+theorem perimeter_le_minkowskiContent (ν : Measure V) [IsFiniteMeasure ν] {B : Set V}
+    (hBm : MeasurableSet B) :
+    perimeter (ν : Measure V) B ≤ Isoperimetry.minkowskiContent ν B :=
+  perimeter_le_minkowskiContent_of_measure_lt_top ν hBm (measure_lt_top ν B)
+
 /-- Integrated BV-perimeter coarea upper bound for a globally Lipschitz function: the
 superlevel sets are closed, so each perimeter is at most the Minkowski content, and the local-slope
 Minkowski coarea inequality applies. -/
-theorem lintegral_perimeter_superlevel_le_localSlope (ν : ProbabilityMeasure V) {u : V → ℝ}
+theorem lintegral_perimeter_superlevel_le_localSlope (ν : Measure V) [IsFiniteMeasure ν] {u : V → ℝ}
     {K : ℝ≥0} (hK : LipschitzWith K u) :
     ∫⁻ t, perimeter (ν : Measure V) {x | t ≤ u x} ∂(volume : Measure ℝ) ≤
       ∫⁻ x, Energy.LocalSlope.apply u x ∂(ν : Measure V) :=
@@ -298,14 +310,14 @@ theorem lintegral_perimeter_superlevel_le_localSlope (ν : ProbabilityMeasure V)
 
 /-- The local-slope Minkowski coarea inequality for a metric BV test: the right side is its
 cost. -/
-theorem lintegral_minkowskiContent_superlevel_le_cost (ν : ProbabilityMeasure V) (f : Test V) :
+theorem lintegral_minkowskiContent_superlevel_le_cost (ν : Measure V) [IsFiniteMeasure ν] (f : Test V) :
     ∫⁻ t, Isoperimetry.minkowskiContent ν {x | t ≤ f x} ∂(volume : Measure ℝ) ≤
       cost (ν : Measure V) f := by
   obtain ⟨K, hK⟩ := f.lipschitz
   exact Isoperimetry.lintegral_minkowskiContent_superlevel_le_localSlope ν hK
 
 /-- Integrated BV-perimeter coarea upper bound for a metric BV test. -/
-theorem lintegral_perimeter_superlevel_le_cost (ν : ProbabilityMeasure V) (f : Test V) :
+theorem lintegral_perimeter_superlevel_le_cost (ν : Measure V) [IsFiniteMeasure ν] (f : Test V) :
     ∫⁻ t, perimeter (ν : Measure V) {x | t ≤ f x} ∂(volume : Measure ℝ) ≤
       cost (ν : Measure V) f := by
   obtain ⟨K, hK⟩ := f.lipschitz
@@ -373,13 +385,13 @@ theorem exists_mem_Ioo_le_div_add_of_setLIntegral_le {φ : ℝ → ℝ≥0∞} {
     ENNReal.mul_pos (ENNReal.ofReal_pos.2 hε).ne' hL0
   exact absurd hlow (not_le.2 (ENNReal.lt_add_right hC hpos.ne'))
 
-variable {V : Type*} [NormedAddCommGroup V] [MeasurableSpace V] [BorelSpace V]
+variable {V : Type*} [MetricSpace V] [MeasurableSpace V] [BorelSpace V]
 
 /-- Quantitative superlevel selection for a metric BV test, from the local-slope coarea
 inequality restricted to `(δ, 1 - δ)`: a measurable superlevel set with content at most
 `cost f / (1 - 2δ) + ε` and `L¹` indicator error at most `indicatorDistance f B / δ`. The set `B`
 need not be measurable. -/
-theorem exists_superlevel_selection (ν : ProbabilityMeasure V) (f : Test V) (B : Set V)
+theorem exists_superlevel_selection (ν : Measure V) [IsFiniteMeasure ν] (f : Test V) (B : Set V)
     {δ ε : ℝ} (hδ : 0 < δ) (hδ2 : δ < 1 / 2) (hε : 0 < ε) :
     ∃ t ∈ Set.Ioo δ (1 - δ), MeasurableSet {x | t ≤ f x} ∧
       Isoperimetry.minkowskiContent ν {x | t ≤ f x} ≤
@@ -403,12 +415,12 @@ end SuperlevelSelection
 
 section MinkowskiRecovery
 
-variable {V : Type*} [NormedAddCommGroup V] [MeasurableSpace V] [BorelSpace V]
+variable {V : Type*} [MetricSpace V] [MeasurableSpace V] [BorelSpace V]
 
 /-- Lower bound for Minkowski recovery: for measurable sets converging to `B` in `L¹(ν)`, the
 perimeter of `B` is at most the liminf of their Minkowski contents (lower semicontinuity and
 `perimeter ≤ content`). No finiteness is assumed. -/
-theorem perimeter_le_liminf_minkowskiContent (ν : ProbabilityMeasure V) {B : Set V}
+theorem perimeter_le_liminf_minkowskiContent (ν : Measure V) [IsFiniteMeasure ν] {B : Set V}
     {A : ℕ → Set V} (hA : ∀ n, MeasurableSet (A n))
     (hconv : Tendsto (fun n => ∫⁻ x, ‖(A n).indicator (1 : V → ℝ) x - B.indicator 1 x‖ₑ
       ∂(ν : Measure V)) atTop (𝓝 0)) :
@@ -439,14 +451,14 @@ theorem tendsto_recoveryWidth : Tendsto recoveryWidth atTop (𝓝 0) := by
 
 /-- The `n`-th epsilon recovery test: indicator error below `recoveryWidth n / (n + 1)` and cost
 below `perimeter ν B + 1/(n + 1)`. -/
-def minkowskiRecoveryTest (ν : ProbabilityMeasure V) {B : Set V}
+def minkowskiRecoveryTest (ν : Measure V) [IsFiniteMeasure ν] {B : Set V}
     (hB : perimeter (ν : Measure V) B < ⊤) (n : ℕ) : Test V :=
   recoveryTest hB (ε := ENNReal.ofReal (recoveryWidth n / ((n : ℝ) + 1)))
     (η := ENNReal.ofReal (1 / ((n : ℝ) + 1)))
     (ENNReal.ofReal_pos.2 (div_pos (recoveryWidth_pos n) (by positivity)))
     (ENNReal.ofReal_pos.2 (by positivity))
 
-theorem exists_minkowskiRecoveryLevel (ν : ProbabilityMeasure V) {B : Set V}
+theorem exists_minkowskiRecoveryLevel (ν : Measure V) [IsFiniteMeasure ν] {B : Set V}
     (hB : perimeter (ν : Measure V) B < ⊤) (n : ℕ) :
     ∃ t ∈ Set.Ioo (recoveryWidth n) (1 - recoveryWidth n),
       MeasurableSet {x | t ≤ minkowskiRecoveryTest ν hB n x} ∧
@@ -461,22 +473,22 @@ theorem exists_minkowskiRecoveryLevel (ν : ProbabilityMeasure V) {B : Set V}
     (by positivity)
 
 /-- The selected level of the `n`-th recovery test. -/
-def minkowskiRecoveryLevel (ν : ProbabilityMeasure V) {B : Set V}
+def minkowskiRecoveryLevel (ν : Measure V) [IsFiniteMeasure ν] {B : Set V}
     (hB : perimeter (ν : Measure V) B < ⊤) (n : ℕ) : ℝ :=
   Classical.choose (exists_minkowskiRecoveryLevel ν hB n)
 
 /-- The `n`-th Minkowski recovery set: a closed superlevel set of the `n`-th recovery test. -/
-def minkowskiRecoverySet (ν : ProbabilityMeasure V) {B : Set V}
+def minkowskiRecoverySet (ν : Measure V) [IsFiniteMeasure ν] {B : Set V}
     (hB : perimeter (ν : Measure V) B < ⊤) (n : ℕ) : Set V :=
   {x | minkowskiRecoveryLevel ν hB n ≤ minkowskiRecoveryTest ν hB n x}
 
-theorem measurableSet_minkowskiRecoverySet (ν : ProbabilityMeasure V) {B : Set V}
+theorem measurableSet_minkowskiRecoverySet (ν : Measure V) [IsFiniteMeasure ν] {B : Set V}
     (hB : perimeter (ν : Measure V) B < ⊤) (n : ℕ) :
     MeasurableSet (minkowskiRecoverySet ν hB n) :=
   (Classical.choose_spec (exists_minkowskiRecoveryLevel ν hB n)).2.1
 
 /-- The indicator error of the `n`-th recovery set is at most `1 / (n + 1)`. -/
-theorem lintegral_enorm_minkowskiRecoverySet_sub_le (ν : ProbabilityMeasure V) {B : Set V}
+theorem lintegral_enorm_minkowskiRecoverySet_sub_le (ν : Measure V) [IsFiniteMeasure ν] {B : Set V}
     (hB : perimeter (ν : Measure V) B < ⊤) (n : ℕ) :
     ∫⁻ x, ‖(minkowskiRecoverySet ν hB n).indicator (1 : V → ℝ) x - B.indicator 1 x‖ₑ
         ∂(ν : Measure V) ≤ ENNReal.ofReal (1 / ((n : ℝ) + 1)) := by
@@ -494,7 +506,7 @@ theorem lintegral_enorm_minkowskiRecoverySet_sub_le (ν : ProbabilityMeasure V) 
 
 /-- The Minkowski content of the `n`-th recovery set is at most
 `(perimeter + 1/(n + 1)) / (1 - 2 recoveryWidth n) + 1/(n + 1)`. -/
-theorem minkowskiContent_minkowskiRecoverySet_le (ν : ProbabilityMeasure V) {B : Set V}
+theorem minkowskiContent_minkowskiRecoverySet_le (ν : Measure V) [IsFiniteMeasure ν] {B : Set V}
     (hB : perimeter (ν : Measure V) B < ⊤) (n : ℕ) :
     Isoperimetry.minkowskiContent ν (minkowskiRecoverySet ν hB n) ≤
       (perimeter (ν : Measure V) B + ENNReal.ofReal (1 / ((n : ℝ) + 1))) /
@@ -504,7 +516,7 @@ theorem minkowskiContent_minkowskiRecoverySet_le (ν : ProbabilityMeasure V) {B 
   gcongr
   exact (cost_recoveryTest_lt hB _ _).le
 
-theorem tendsto_indicator_minkowskiRecoverySet (ν : ProbabilityMeasure V) {B : Set V}
+theorem tendsto_indicator_minkowskiRecoverySet (ν : Measure V) [IsFiniteMeasure ν] {B : Set V}
     (hB : perimeter (ν : Measure V) B < ⊤) :
     Tendsto (fun n => ∫⁻ x, ‖(minkowskiRecoverySet ν hB n).indicator (1 : V → ℝ) x -
       B.indicator 1 x‖ₑ ∂(ν : Measure V)) atTop (𝓝 0) := by
@@ -514,7 +526,7 @@ theorem tendsto_indicator_minkowskiRecoverySet (ν : ProbabilityMeasure V) {B : 
     (lintegral_enorm_minkowskiRecoverySet_sub_le ν hB)
 
 /-- Minkowski recovery: the contents of the recovery sets converge to the perimeter of `B`. -/
-theorem tendsto_minkowskiContent_minkowskiRecoverySet (ν : ProbabilityMeasure V) {B : Set V}
+theorem tendsto_minkowskiContent_minkowskiRecoverySet (ν : Measure V) [IsFiniteMeasure ν] {B : Set V}
     (hB : perimeter (ν : Measure V) B < ⊤) :
     Tendsto (fun n => Isoperimetry.minkowskiContent ν (minkowskiRecoverySet ν hB n)) atTop
       (𝓝 (perimeter (ν : Measure V) B)) := by
@@ -544,7 +556,7 @@ theorem tendsto_minkowskiContent_minkowskiRecoverySet (ν : ProbabilityMeasure V
     _ = perimeter (ν : Measure V) B := hup.limsup_eq
 
 /-- The perimeters of the recovery sets also converge to the perimeter of `B`. -/
-theorem tendsto_perimeter_minkowskiRecoverySet (ν : ProbabilityMeasure V) {B : Set V}
+theorem tendsto_perimeter_minkowskiRecoverySet (ν : Measure V) [IsFiniteMeasure ν] {B : Set V}
     (hB : perimeter (ν : Measure V) B < ⊤) :
     Tendsto (fun n => perimeter (ν : Measure V) (minkowskiRecoverySet ν hB n)) atTop
       (𝓝 (perimeter (ν : Measure V) B)) := by
@@ -559,7 +571,7 @@ theorem tendsto_perimeter_minkowskiRecoverySet (ν : ProbabilityMeasure V) {B : 
         (tendsto_minkowskiContent_minkowskiRecoverySet ν hB).limsup_eq
 
 /-- Existence form of Minkowski recovery for finite perimeter. -/
-theorem exists_minkowskiRecovery (ν : ProbabilityMeasure V) {B : Set V}
+theorem exists_minkowskiRecovery (ν : Measure V) [IsFiniteMeasure ν] {B : Set V}
     (hB : perimeter (ν : Measure V) B < ⊤) :
     ∃ A : ℕ → Set V, (∀ n, MeasurableSet (A n)) ∧
       Tendsto (fun n => ∫⁻ x, ‖(A n).indicator (1 : V → ℝ) x - B.indicator 1 x‖ₑ
@@ -569,6 +581,117 @@ theorem exists_minkowskiRecovery (ν : ProbabilityMeasure V) {B : Set V}
   ⟨minkowskiRecoverySet ν hB, measurableSet_minkowskiRecoverySet ν hB,
     tendsto_indicator_minkowskiRecoverySet ν hB,
     tendsto_minkowskiContent_minkowskiRecoverySet ν hB⟩
+
+/-- At a measurable finite-mass target, global indicator L1 convergence gives eventual
+finite mass of the approximating sets; therefore their lower contents bound the perimeter
+in liminf for every Borel measure. A finite initial segment may have infinite mass. -/
+theorem perimeter_le_liminf_minkowskiContent_of_measure_lt_top (ν : Measure V) {B : Set V} (hB : MeasurableSet B) (hνB : ν B < ⊤)
+    {A : ℕ → Set V} (hA : ∀ n, MeasurableSet (A n))
+    (hconv : Tendsto (fun n => ∫⁻ x, ‖(A n).indicator (1 : V → ℝ) x - B.indicator 1 x‖ₑ ∂ν)
+      atTop (𝓝 0)) :
+    perimeter ν B ≤ liminf (fun n => Isoperimetry.minkowskiContent ν (A n)) atTop := by
+  have hfin : ∀ᶠ n in atTop, ν (A n) < ⊤ := by
+    filter_upwards [hconv.eventually_lt_const (by norm_num : (0 : ℝ≥0∞) < 1)] with n hn
+    exact (measure_le_add_lintegral_indicator_sub ν (hA n) hB).trans_lt
+      (ENNReal.add_lt_top.2 ⟨hνB, hn.trans (by norm_num)⟩)
+  exact (perimeter_le_liminf_of_tendsto ν hA hconv).trans
+    (liminf_le_liminf (hfin.mono fun n hn => perimeter_le_minkowskiContent_of_measure_lt_top ν (hA n) hn))
+
+/-- Quantitative positive-superlevel selection for tests under finiteness on bounded
+Borel sets; the carrier need not be proper and the target need not be measurable. -/
+theorem exists_superlevel_selection_of_finite_on_bounded (ν : Measure V)
+    (hν : ∀ s : Set V, Bornology.IsBounded s → MeasurableSet s → ν s < ⊤)
+    (f : Test V) (B : Set V) {δ ε : ℝ} (hδ : 0 < δ) (hδ2 : δ < 1/2) (hε : 0 < ε) :
+    ∃ t ∈ Set.Ioo δ (1 - δ), MeasurableSet {x | t ≤ f x} ∧
+      Isoperimetry.minkowskiContent ν {x | t ≤ f x} ≤ cost ν f / ENNReal.ofReal (1 - 2*δ) + ENNReal.ofReal ε ∧
+      ∫⁻ x, ‖{x | t ≤ f x}.indicator (1 : V → ℝ) x - B.indicator 1 x‖ₑ ∂ν ≤
+        indicatorDistance ν f B / ENNReal.ofReal δ := by
+  have hab : δ < 1 - δ := by linarith
+  obtain ⟨K, hK⟩ := f.lipschitz
+  have hpos : Bornology.IsBounded {x | 0 < f x} :=
+    f.boundedSupport.subset fun x hx => (show f x ≠ 0 from ne_of_gt hx)
+  have hcoarea : ∫⁻ t in Set.Ioo δ (1 - δ), Isoperimetry.minkowskiContent ν {x | t ≤ f x} ≤ cost ν f :=
+    (lintegral_mono' (Measure.restrict_mono (by
+      intro t ht; exact hδ.trans ht.1) le_rfl) le_rfl).trans
+      (Isoperimetry.setLIntegral_minkowskiContent_superlevel_le_localSlope_of_bounded_positive ν hν hK hpos)
+  have hcfin : cost ν f ≠ ⊤ := cost_ne_top_of_support_measure ν f
+    (hν _ f.boundedSupport.closure isClosed_closure.measurableSet).ne
+  obtain ⟨t, ht, hc⟩ := exists_mem_Ioo_le_div_add_of_setLIntegral_le hab hcfin hcoarea hε
+  have hL : 1 - δ - δ = 1 - 2*δ := by ring
+  rw [hL] at hc
+  exact ⟨t, ht, measurableSet_le measurable_const hK.continuous.measurable, hc,
+    lintegral_enorm_indicator_superlevel_sub_le ν f B hδ ht.1.le ht.2.le⟩
+/-- Actual lower-content recovery at a measurable finite-mass, finite-perimeter target
+under finiteness on bounded Borel sets. Recovery sets are bounded measurable superlevels
+with finite mass and finite lower content term by term; indicators converge in global L1
+and their lower contents converge to the target perimeter. -/
+theorem exists_minkowskiRecovery_of_finite_on_bounded (ν : Measure V)
+    (hν : ∀ s : Set V, Bornology.IsBounded s → MeasurableSet s → ν s < ⊤)
+    {B : Set V} (hBm : MeasurableSet B) (hνB : ν B < ⊤) (hB : perimeter ν B < ⊤) :
+    ∃ A : ℕ → Set V, (∀ n, MeasurableSet (A n)) ∧
+      (∀ n, Bornology.IsBounded (A n)) ∧ (∀ n, ν (A n) < ⊤) ∧
+      (∀ n, Isoperimetry.minkowskiContent ν (A n) < ⊤) ∧ Tendsto (fun n => ∫⁻ x, ‖(A n).indicator (1 : V → ℝ) x - B.indicator 1 x‖ₑ ∂ν)
+        atTop (𝓝 0) ∧
+      Tendsto (fun n => Isoperimetry.minkowskiContent ν (A n)) atTop (𝓝 (perimeter ν B)) := by
+  let f : ℕ → Test V := fun n => recoveryTest hB
+    (ε := ENNReal.ofReal (recoveryWidth n / ((n : ℝ) + 1)))
+    (η := ENNReal.ofReal (1 / ((n : ℝ) + 1)))
+    (ENNReal.ofReal_pos.2 (div_pos (recoveryWidth_pos n) (by positivity)))
+    (ENNReal.ofReal_pos.2 (by positivity))
+  have hs := fun n => exists_superlevel_selection_of_finite_on_bounded ν hν (f n) B (recoveryWidth_pos n)
+    (recoveryWidth_lt_half n) (show 0 < 1 / ((n : ℝ) + 1) by positivity)
+  choose t ht hAm hc he using hs
+  let A : ℕ → Set V := fun n => {x | t n ≤ f n x}
+  have hA : ∀ n, MeasurableSet (A n) := hAm
+  have hbnd : ∀ n, Bornology.IsBounded (A n) := fun n =>
+    (f n).boundedSupport.subset fun x hx =>
+      ne_of_gt ((recoveryWidth_pos n).trans_le ((ht n).1.le.trans hx))
+  have hmass : ∀ n, ν (A n) < ⊤ := fun n => hν _ (hbnd n) (hA n)
+  have herr : ∀ n, ∫⁻ x, ‖(A n).indicator (1 : V → ℝ) x - B.indicator 1 x‖ₑ ∂ν ≤
+      ENNReal.ofReal (1 / ((n : ℝ) + 1)) := by
+    intro n
+    refine (he n).trans ?_
+    calc indicatorDistance ν (f n) B / ENNReal.ofReal (recoveryWidth n)
+        ≤ ENNReal.ofReal (recoveryWidth n / ((n : ℝ) + 1)) /
+            ENNReal.ofReal (recoveryWidth n) :=
+          ENNReal.div_le_div_right (indicatorDistance_recoveryTest_lt hB _ _).le _
+      _ = ENNReal.ofReal (1 / ((n : ℝ) + 1)) := by
+        rw [← ENNReal.ofReal_div_of_pos (recoveryWidth_pos n)]
+        congr 1
+        field_simp [(recoveryWidth_pos n).ne']
+  have hη : Tendsto (fun n : ℕ => ENNReal.ofReal (1 / ((n : ℝ) + 1))) atTop (𝓝 0) := by
+    simpa using ENNReal.tendsto_ofReal tendsto_one_div_add_atTop_nhds_zero_nat
+  have hconv : Tendsto (fun n => ∫⁻ x, ‖(A n).indicator (1 : V → ℝ) x - B.indicator 1 x‖ₑ ∂ν)
+      atTop (𝓝 0) :=
+    tendsto_of_tendsto_of_tendsto_of_le_of_le tendsto_const_nhds hη (fun _ => zero_le) herr
+  have hbound : ∀ n, Isoperimetry.minkowskiContent ν (A n) ≤
+      (perimeter ν B + ENNReal.ofReal (1 / ((n : ℝ) + 1))) /
+        ENNReal.ofReal (1 - 2 * recoveryWidth n) + ENNReal.ofReal (1 / ((n : ℝ) + 1)) := by
+    intro n
+    refine (hc n).trans ?_
+    gcongr
+    exact (cost_recoveryTest_lt hB _ _).le
+  have hcontentFin : ∀ n, Isoperimetry.minkowskiContent ν (A n) < ⊤ := by
+    intro n
+    have hdenpos : 0 < 1 - 2 * recoveryWidth n := by linarith [recoveryWidth_lt_half n]
+    exact (hbound n).trans_lt (ENNReal.add_lt_top.2
+      ⟨ENNReal.div_lt_top (ENNReal.add_lt_top.2 ⟨hB, ENNReal.ofReal_lt_top⟩).ne
+        (ENNReal.ofReal_pos.2 hdenpos).ne', ENNReal.ofReal_lt_top⟩)
+  have hnum : Tendsto (fun n : ℕ => perimeter ν B + ENNReal.ofReal (1 / ((n : ℝ) + 1)))
+      atTop (𝓝 (perimeter ν B)) := by
+    simpa using (tendsto_const_nhds (x := perimeter ν B)).add hη
+  have hden : Tendsto (fun n : ℕ => ENNReal.ofReal (1 - 2 * recoveryWidth n)) atTop (𝓝 1) := by
+    simpa using ENNReal.tendsto_ofReal
+      ((tendsto_const_nhds (x := (1 : ℝ))).sub (tendsto_recoveryWidth.const_mul 2))
+  have hup : Tendsto (fun n : ℕ => (perimeter ν B + ENNReal.ofReal (1 / ((n : ℝ) + 1))) /
+      ENNReal.ofReal (1 - 2 * recoveryWidth n) + ENNReal.ofReal (1 / ((n : ℝ) + 1)))
+      atTop (𝓝 (perimeter ν B)) := by
+    simpa using (ENNReal.Tendsto.div hnum (Or.inr one_ne_zero) hden
+      (Or.inl ENNReal.one_ne_top)).add hη
+  refine ⟨A, hA, hbnd, hmass, hcontentFin, hconv, ?_⟩
+  exact tendsto_of_le_liminf_of_limsup_le (perimeter_le_liminf_minkowskiContent_of_measure_lt_top ν hBm hνB hA hconv)
+    ((limsup_le_limsup (Eventually.of_forall hbound)).trans_eq hup.limsup_eq)
+
 
 end MinkowskiRecovery
 
@@ -586,21 +709,22 @@ theorem tendsto_div_min_one_sub {ι : Type*} {l : Filter ι} {a m : ι → ℝ�
     ne_top_of_le_ne_top ENNReal.one_ne_top ((min_le_right _ _).trans tsub_le_self)
   exact ENNReal.Tendsto.div ha (Or.inr hpos) hmin (Or.inl htop)
 
-variable {V : Type*} [NormedAddCommGroup V] [MeasurableSpace V] [BorelSpace V]
+variable {V : Type*} [MetricSpace V] [MeasurableSpace V] [BorelSpace V]
 
 /-- The masses of the Minkowski recovery sets of a measurable `B` converge to `ν B`. -/
 theorem tendsto_measure_minkowskiRecoverySet (ν : ProbabilityMeasure V) {B : Set V}
     (hBm : MeasurableSet B) (hB : perimeter (ν : Measure V) B < ⊤) :
-    Tendsto (fun n => (ν : Measure V) (minkowskiRecoverySet ν hB n)) atTop
+    Tendsto (fun n => (ν : Measure V) (minkowskiRecoverySet (ν : Measure V) hB n)) atTop
       (𝓝 ((ν : Measure V) B)) :=
-  tendsto_measure_of_tendsto_indicator (ν : Measure V) (measurableSet_minkowskiRecoverySet ν hB)
-    hBm (tendsto_indicator_minkowskiRecoverySet ν hB)
+  tendsto_measure_of_tendsto_indicator (ν : Measure V)
+    (measurableSet_minkowskiRecoverySet (ν : Measure V) hB) hBm
+    (tendsto_indicator_minkowskiRecoverySet (ν : Measure V) hB)
 
 /-- For `0 < ν B < 1`, the recovery sets eventually have mass strictly between `0` and `1`. -/
 theorem eventually_measure_minkowskiRecoverySet_mem_Ioo (ν : ProbabilityMeasure V) {B : Set V}
     (hBm : MeasurableSet B) (hB : perimeter (ν : Measure V) B < ⊤) (h0 : 0 < (ν : Measure V) B)
     (h1 : (ν : Measure V) B < 1) :
-    ∀ᶠ n in atTop, (ν : Measure V) (minkowskiRecoverySet ν hB n) ∈ Set.Ioo 0 1 :=
+    ∀ᶠ n in atTop, (ν : Measure V) (minkowskiRecoverySet (ν : Measure V) hB n) ∈ Set.Ioo 0 1 :=
   (tendsto_measure_minkowskiRecoverySet ν hBm hB).eventually (Ioo_mem_nhds h0 h1)
 
 /-- Symmetric Minkowski quotients of the recovery sets converge to the symmetric BV quotient of
@@ -608,22 +732,22 @@ theorem eventually_measure_minkowskiRecoverySet_mem_Ioo (ν : ProbabilityMeasure
 theorem tendsto_minkowskiContent_div_min_minkowskiRecoverySet (ν : ProbabilityMeasure V)
     {B : Set V} (hBm : MeasurableSet B) (hB : perimeter (ν : Measure V) B < ⊤)
     (h0 : 0 < (ν : Measure V) B) (h1 : (ν : Measure V) B < 1) :
-    Tendsto (fun n => Isoperimetry.minkowskiContent ν (minkowskiRecoverySet ν hB n) /
-        min ((ν : Measure V) (minkowskiRecoverySet ν hB n))
-          (1 - (ν : Measure V) (minkowskiRecoverySet ν hB n))) atTop
+    Tendsto (fun n => Isoperimetry.minkowskiContent (ν : Measure V) (minkowskiRecoverySet (ν : Measure V) hB n) /
+        min ((ν : Measure V) (minkowskiRecoverySet (ν : Measure V) hB n))
+          (1 - (ν : Measure V) (minkowskiRecoverySet (ν : Measure V) hB n))) atTop
       (𝓝 (perimeter (ν : Measure V) B / min ((ν : Measure V) B) (1 - (ν : Measure V) B))) :=
-  tendsto_div_min_one_sub (tendsto_minkowskiContent_minkowskiRecoverySet ν hB)
+  tendsto_div_min_one_sub (tendsto_minkowskiContent_minkowskiRecoverySet (ν : Measure V) hB)
     (tendsto_measure_minkowskiRecoverySet ν hBm hB) h0 h1
 
 /-- Symmetric BV quotients of the recovery sets converge to that of `B`. -/
 theorem tendsto_perimeter_div_min_minkowskiRecoverySet (ν : ProbabilityMeasure V)
     {B : Set V} (hBm : MeasurableSet B) (hB : perimeter (ν : Measure V) B < ⊤)
     (h0 : 0 < (ν : Measure V) B) (h1 : (ν : Measure V) B < 1) :
-    Tendsto (fun n => perimeter (ν : Measure V) (minkowskiRecoverySet ν hB n) /
-        min ((ν : Measure V) (minkowskiRecoverySet ν hB n))
-          (1 - (ν : Measure V) (minkowskiRecoverySet ν hB n))) atTop
+    Tendsto (fun n => perimeter (ν : Measure V) (minkowskiRecoverySet (ν : Measure V) hB n) /
+        min ((ν : Measure V) (minkowskiRecoverySet (ν : Measure V) hB n))
+          (1 - (ν : Measure V) (minkowskiRecoverySet (ν : Measure V) hB n))) atTop
       (𝓝 (perimeter (ν : Measure V) B / min ((ν : Measure V) B) (1 - (ν : Measure V) B))) :=
-  tendsto_div_min_one_sub (tendsto_perimeter_minkowskiRecoverySet ν hB)
+  tendsto_div_min_one_sub (tendsto_perimeter_minkowskiRecoverySet (ν : Measure V) hB)
     (tendsto_measure_minkowskiRecoverySet ν hBm hB) h0 h1
 
 end RatioRecovery

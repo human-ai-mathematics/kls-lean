@@ -27,62 +27,62 @@ open FunctionalInequalities.KLS.MetricBV
 variable {V : Type*} [NormedAddCommGroup V] [MeasurableSpace V] [BorelSpace V]
 
 theorem identity (ν : ProbabilityMeasure V) (B : Set V) :
-    relaxedMinkowskiContent ν B = perimeter (ν : Measure V) B := by
-  exact relaxedMinkowskiContent_eq_perimeter ν B
+    relaxedMinkowskiContent (ν : Measure V) B = perimeter (ν : Measure V) B := by
+  exact relaxedMinkowskiContent_eq_perimeter (ν : Measure V) B
 
 /-- The requested form, with `B` measurable. -/
 theorem identityMeasurable (ν : ProbabilityMeasure V) {B : Set V} (_hB : MeasurableSet B) :
-    relaxedMinkowskiContent ν B = perimeter (ν : Measure V) B := by
-  exact relaxedMinkowskiContent_eq_perimeter ν B
+    relaxedMinkowskiContent (ν : Measure V) B = perimeter (ν : Measure V) B := by
+  exact relaxedMinkowskiContent_eq_perimeter (ν : Measure V) B
 
 theorem bothInequalities (ν : ProbabilityMeasure V) (B : Set V) :
-    perimeter (ν : Measure V) B ≤ relaxedMinkowskiContent ν B ∧
-      relaxedMinkowskiContent ν B ≤ perimeter (ν : Measure V) B :=
-  ⟨perimeter_le_relaxedMinkowskiContent ν B, relaxedMinkowskiContent_le_perimeter ν B⟩
+    perimeter (ν : Measure V) B ≤ relaxedMinkowskiContent (ν : Measure V) B ∧
+      relaxedMinkowskiContent (ν : Measure V) B ≤ perimeter (ν : Measure V) B :=
+  ⟨perimeter_le_relaxedMinkowskiContent (ν : Measure V) B, relaxedMinkowskiContent_le_perimeter (ν : Measure V) B⟩
 
 /-- Direction one with an actual sequence: the constant sequence of a measurable set. -/
 theorem constantSequence (ν : ProbabilityMeasure V) {B : Set V} (hB : MeasurableSet B) :
-    ((MinkowskiApproximatingSequence.const ν hB).1 = fun _ => B) ∧
-      relaxedMinkowskiContent ν B ≤ Isoperimetry.minkowskiContent ν B ∧
-      perimeter (ν : Measure V) B ≤ Isoperimetry.minkowskiContent ν B :=
-  ⟨rfl, relaxedMinkowskiContent_le_minkowskiContent ν hB,
-    (perimeter_le_relaxedMinkowskiContent ν B).trans
-      (relaxedMinkowskiContent_le_minkowskiContent ν hB)⟩
+    ((MinkowskiApproximatingSequence.const (ν : Measure V) hB).1 = fun _ => B) ∧
+      relaxedMinkowskiContent (ν : Measure V) B ≤ Isoperimetry.minkowskiContent (ν : Measure V) B ∧
+      perimeter (ν : Measure V) B ≤ Isoperimetry.minkowskiContent (ν : Measure V) B :=
+  ⟨rfl, relaxedMinkowskiContent_le_minkowskiContent (ν : Measure V) hB,
+    (perimeter_le_relaxedMinkowskiContent (ν : Measure V) B).trans
+      (relaxedMinkowskiContent_le_minkowskiContent (ν : Measure V) hB)⟩
 
 /-- Direction two with an actual sequence: the Minkowski recovery sets of a set of finite
 perimeter form a member of the class, and bound the relaxed content by the perimeter. -/
 theorem recoverySequence (ν : ProbabilityMeasure V) {B : Set V}
     (hB : perimeter (ν : Measure V) B < ⊤) :
-    relaxedMinkowskiContent ν B ≤
-      liminf (fun n => Isoperimetry.minkowskiContent ν (minkowskiRecoverySet ν hB n)) atTop ∧
-      liminf (fun n => Isoperimetry.minkowskiContent ν (minkowskiRecoverySet ν hB n)) atTop =
+    relaxedMinkowskiContent (ν : Measure V) B ≤
+      liminf (fun n => Isoperimetry.minkowskiContent (ν : Measure V) (minkowskiRecoverySet (ν : Measure V) hB n)) atTop ∧
+      liminf (fun n => Isoperimetry.minkowskiContent (ν : Measure V) (minkowskiRecoverySet (ν : Measure V) hB n)) atTop =
         perimeter (ν : Measure V) B :=
-  ⟨relaxedMinkowskiContent_le_liminf ν B
-      ⟨minkowskiRecoverySet ν hB, measurableSet_minkowskiRecoverySet ν hB,
-        tendsto_indicator_minkowskiRecoverySet ν hB⟩,
-    (tendsto_minkowskiContent_minkowskiRecoverySet ν hB).liminf_eq⟩
+  ⟨relaxedMinkowskiContent_le_liminf (ν : Measure V) B
+      ⟨minkowskiRecoverySet (ν : Measure V) hB, measurableSet_minkowskiRecoverySet (ν : Measure V) hB,
+        tendsto_indicator_minkowskiRecoverySet (ν : Measure V) hB⟩,
+    (tendsto_minkowskiContent_minkowskiRecoverySet (ν : Measure V) hB).liminf_eq⟩
 
 /-- Sequential lower semicontinuity of the relaxed content. -/
 theorem lowerSemicontinuity (ν : ProbabilityMeasure V) {B : Set V} {A : ℕ → Set V}
     (hA : ∀ n, MeasurableSet (A n))
     (hconv : Tendsto (fun n => ∫⁻ x, ‖(A n).indicator (1 : V → ℝ) x - B.indicator 1 x‖ₑ
       ∂(ν : Measure V)) atTop (𝓝 0)) :
-    relaxedMinkowskiContent ν B ≤ liminf (fun n => relaxedMinkowskiContent ν (A n)) atTop := by
-  exact relaxedMinkowskiContent_le_liminf_of_tendsto ν hA hconv
+    relaxedMinkowskiContent (ν : Measure V) B ≤ liminf (fun n => relaxedMinkowskiContent (ν : Measure V) (A n)) atTop := by
+  exact relaxedMinkowskiContent_le_liminf_of_tendsto (ν : Measure V) hA hconv
 
 /-- Infinite perimeter transfers; an empty class forces infinite perimeter. -/
 theorem topCases (ν : ProbabilityMeasure V) (B : Set V) :
-    (perimeter (ν : Measure V) B = ⊤ → relaxedMinkowskiContent ν B = ⊤) ∧
-      (IsEmpty (MinkowskiApproximatingSequence ν B) → perimeter (ν : Measure V) B = ⊤) := by
-  refine ⟨fun h => (relaxedMinkowskiContent_eq_perimeter ν B).trans h, fun h => ?_⟩
+    (perimeter (ν : Measure V) B = ⊤ → relaxedMinkowskiContent (ν : Measure V) B = ⊤) ∧
+      (IsEmpty (MinkowskiApproximatingSequence (ν : Measure V) B) → perimeter (ν : Measure V) B = ⊤) := by
+  refine ⟨fun h => (relaxedMinkowskiContent_eq_perimeter (ν : Measure V) B).trans h, fun h => ?_⟩
   have := h
-  exact (relaxedMinkowskiContent_eq_perimeter ν B).symm.trans
-    (relaxedMinkowskiContent_eq_top_of_isEmpty ν B)
+  exact (relaxedMinkowskiContent_eq_perimeter (ν : Measure V) B).symm.trans
+    (relaxedMinkowskiContent_eq_top_of_isEmpty (ν : Measure V) B)
 
 /-- The zero-dimensional space: every relaxed content is `0`. -/
 theorem zeroDimensional (ν : ProbabilityMeasure (Fin 0 → ℝ)) (B : Set (Fin 0 → ℝ)) :
-    relaxedMinkowskiContent ν B = 0 :=
-  (relaxedMinkowskiContent_eq_perimeter ν B).trans (perimeter_eq_zero_of_subsingleton _ _)
+    relaxedMinkowskiContent (ν : Measure (Fin 0 → ℝ)) B = 0 :=
+  (relaxedMinkowskiContent_eq_perimeter (ν : Measure (Fin 0 → ℝ)) B).trans (perimeter_eq_zero_of_subsingleton _ _)
 
 /-- The two-atom law `(δ₀ + δ₁)/2` on `ℝ`. -/
 def twoAtom : ProbabilityMeasure ℝ :=
@@ -99,13 +99,13 @@ theorem twoAtom_apply {S : Set ℝ} (hS : MeasurableSet S) (h0 : (0 : ℝ) ∈ S
 /-- Zero perimeter: `Iic (1/2)` under the two-atom law has zero outer content, hence zero relaxed
 content and zero perimeter, through the constant sequence. -/
 theorem zeroPerimeter :
-    relaxedMinkowskiContent twoAtom (Set.Iic (1 / 2 : ℝ)) = 0 ∧
+    relaxedMinkowskiContent (twoAtom : Measure ℝ) (Set.Iic (1 / 2 : ℝ)) = 0 ∧
       perimeter (twoAtom : Measure ℝ) (Set.Iic (1 / 2 : ℝ)) = 0 := by
   set B : Set ℝ := Set.Iic (1 / 2) with hBdef
   have hBm : MeasurableSet B := measurableSet_Iic
   have hmass : (twoAtom : Measure ℝ) B = 2⁻¹ :=
     twoAtom_apply hBm (by norm_num [hBdef]) (by norm_num [hBdef])
-  have hc : Isoperimetry.minkowskiContent twoAtom B = 0 := by
+  have hc : Isoperimetry.minkowskiContent (twoAtom : Measure ℝ) B = 0 := by
     refine le_antisymm ?_ bot_le
     refine liminf_le_of_frequently_le' (Eventually.frequently ?_)
     filter_upwards [Ioo_mem_nhdsGT (show (0 : ℝ) < 1 / 2 by norm_num)] with r hr
@@ -120,16 +120,16 @@ theorem zeroPerimeter :
         (by simp only [Set.mem_Iio]; linarith [hr.1])
         (by simp only [Set.mem_Iio, not_lt]; linarith [hr.2])).le
     rw [hmass, tsub_eq_zero_of_le hthick, ENNReal.zero_div]
-  have hr : relaxedMinkowskiContent twoAtom B = 0 :=
-    le_antisymm ((relaxedMinkowskiContent_le_minkowskiContent twoAtom hBm).trans_eq hc) bot_le
-  exact ⟨hr, (relaxedMinkowskiContent_eq_perimeter twoAtom B).symm.trans hr⟩
+  have hr : relaxedMinkowskiContent (twoAtom : Measure ℝ) B = 0 :=
+    le_antisymm ((relaxedMinkowskiContent_le_minkowskiContent (twoAtom : Measure ℝ) hBm).trans_eq hc) bot_le
+  exact ⟨hr, (relaxedMinkowskiContent_eq_perimeter (twoAtom : Measure ℝ) B).symm.trans hr⟩
 
 /-- The pointwise inequality is strict in general: the rationals under the standard Gaussian law
 are null, so their relaxed content and perimeter vanish, while their closure is the whole line,
 so their outer Minkowski content is infinite. -/
 theorem strictGap :
     ∃ (ν : ProbabilityMeasure ℝ) (B : Set ℝ), MeasurableSet B ∧
-      relaxedMinkowskiContent ν B = 0 ∧ Isoperimetry.minkowskiContent ν B = ⊤ := by
+      relaxedMinkowskiContent (ν : Measure ℝ) B = 0 ∧ Isoperimetry.minkowskiContent (ν : Measure ℝ) B = ⊤ := by
   let ν : ProbabilityMeasure ℝ := ⟨ProbabilityTheory.gaussianReal 0 1, inferInstance⟩
   set B : Set ℝ := Set.range ((↑) : ℚ → ℝ) with hBdef
   have hBc : B.Countable := Set.countable_range _
@@ -150,7 +150,7 @@ theorem strictGap :
     simp only [perimeter_empty, liminf_const] at h
     exact le_antisymm h bot_le
   · by_contra hne
-    have hcl := Isoperimetry.measure_closure_eq_of_minkowskiContent_ne_top ν hne
+    have hcl := Isoperimetry.measure_closure_eq_of_minkowskiContent_ne_top (ν : Measure ℝ) hne
     rw [hBdef, Rat.denseRange_cast.closure_range, ← hBdef, h0, measure_univ] at hcl
     exact one_ne_zero hcl
 

@@ -131,6 +131,37 @@ Distinguish source checks, kernel replay, certificate registration and remote CI
 alone never advances mathematical proof status. Preserve unrelated work; commit and push only
 when authorized.
 
+### Remote CI at verification milestones
+
+Ordinary branch pushes and PR updates do not run remote CI, including Lean changes. Keep the
+local checks above; before milestone certification, run `python3 research/verify.py` from the
+repository root and resolve failures locally. A meaningful remote run establishes clean-runner
+evidence for a new certificate, a faithfully formalized paper main theorem, or a snapshot being
+shared or released. Changes to the toolchain, dependencies or verification machinery can also
+justify a manual reproducibility check. Do not rerun a successful unchanged SHA without a
+specific verification reason.
+
+Run Lean certification either manually with `gh workflow run lean.yml --ref <branch-or-tag>`
+or by explicitly pushing a `milestone/<name>` tag for the intended commit. Choose one trigger
+per milestone. Confirm the run's actual `head_sha` and conclusion before recording remote
+evidence; an unrun or failed snapshot is not remotely verified. Manual dispatch becomes
+available once the workflow is present on the default branch.
+
+Lean certification is the only remote workflow. Build Blueprint PDF/web artifacts locally
+when needed, following the [formalization guide](../formalization/README.md#lean-blueprint).
+There is no periodic CI schedule, and `[skip ci]` is not part of this policy. Local receipts,
+remote certification and Blueprint artifacts remain separate evidence.
+
+Remote certification runs `python3 research/verify.py --lean-only`: it builds all current
+library, solution and example modules, strictly compiles the independent Lean audit clients,
+audits transitive axioms of all local declarations except the exact open target `KLS.kls`,
+and replays the local modules in the kernel. A wrapper depending on the target is rejected.
+The Lean receipt is bound to Lean sources, pinned dependencies and verification tooling;
+documentation, Blueprint/task metadata, statement-baseline records and Python tests are
+checked by the full local command, not remote CI. Remote success does not certify those
+local metadata gates or prove KLS. Evidence artifacts contain reports, logs and generated
+Lean clients; compiled module copies stay on the runner.
+
 `research/verify.py` strictly compiles every live, nonignored `research/audits/**/*.lean`
 file from the source snapshot as an independent client, including files outside the default
 Lake targets. Warnings are errors, and printed axiom reports must use only standard axioms.

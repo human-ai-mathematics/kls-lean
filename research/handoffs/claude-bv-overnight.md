@@ -1,10 +1,8 @@
 # Metric BV overnight handoff (Claude, directed by Codex)
 
-**Status:** phases1–22 independently accepted by Codex. Phase23 integrated upper
-content bound is prepared in the Codex review; NOT DELIVERED. Control paused: Mac locked, manual unlock required. Active session
-KLS BV phase 22 upper Minkowski thickenings, local_6d6d02c3-742c-45fa-a063-333eea0a2862.
-Renewed window ends11:13:30 Asia/Shanghai on2026-09-29; wrap-up10:43:30.
-Acceptance prose postdates phase22 frozen receipt. Old sessions remain retired.
+**Status:** phases1–27 and their integrations independently accepted (HEAD `443f352`, uncommitted).
+Phase 28 / Stage A of the four-hour ADMG finite-measure run is independently accepted; Stages A–B
+(phases 28–29) are independently accepted; the final integration is recorded in the section below.
 
 ## Resumption notes for a new conversation
 
@@ -19,6 +17,1024 @@ HANDOFF/README/`diagram:BV` in `research/progress/nodes.json`/progress-hub prose
 with `GIT_INDEX_FILE` and `GIT_OBJECT_DIRECTORY` pointing at an isolated copy (then
 `update.py --check`), refresh `research/tasks.json` hashes only for edited pinned files, freeze,
 run `python3 research/verify.py`, and put the READY signal in an ignored `build/audit/…/receipt.md`.
+
+## Final integration of the finite-measure run (2026-09-30 evening, after acceptance of Stages A–B)
+
+Stage B accepted (Codex: fresh 352-module filtered rebuild, the delivered client and the
+independent `JointRecovery` client, fifteen standard-only reports, snapshot `b44aecf2…9003f`
+unchanged). Final integration started 22:10 Asia/Shanghai; no proof expansion. Edits: the stale
+probability-only introductions of the six migrated owners (docstrings only; recompiled strictly,
+full build); HANDOFF head and a phases-28–29 paragraph with the corrected source mapping; root
+README; progress-hub next step (finite-on-bounded-sets generality pending); chapter 45 (Remark 3.4
+bounded-support reduction, Definition 3.3 global `L¹`, Remark 3.5 not the working definition,
+Theorem 3.6's finite-measure Borel target versus our arbitrary-target statements); the `ADMG2017`
+literature row and the `diagram:BV` description (same corrections; date 2026-09-30 already). Pins
+refreshed only for the pinned files whose bytes changed in this run (chapter 45, and the modules
+`Cheeger/MinkowskiContent`, `Cheeger/Equality`, `Cheeger/Inequality`, `Cheeger/MinkowskiConstant`,
+`Cheeger/Stability`, `LogConcave/Line/Buser`: instance migration with unchanged theorem statements
+apart from the inserted coercion, and proof-term ascriptions; reassessed as valid evidence). Views
+regenerated from an isolated index/object store with only `research/tasks.json` and chapter 45
+added. The Stage B receipt received an appended correction note (the receipt body is frozen
+evidence). Codex-owned files, the moment-map handoff and unrelated work untouched. The frozen full
+verifier and its before/after snapshot hashes are recorded only in
+`build/audit/admg-finite-four-hour/final/receipt.md`.
+
+## Phase 29 / Stage B (2026-09-30 evening, four-hour ADMG finite-measure run)
+
+### Baseline
+
+Stage A independently accepted (Codex: 352-module filtered rebuild, strict scaling client and two
+independent finite-measure clients, seventeen standard-only reports, snapshot `d7be45a3…0de3`
+unchanged). Stage B released 22:03 Asia/Shanghai within the original window (stop expansion
+00:00:35, wrap-up 00:45:35, hard stop 01:15:35). HEAD `443f352`, nothing staged. Corrections
+requested with the release and applied: the Stage A receipt no longer asserts that the raw
+`.git/index` difference is stat-cache data (only the equality of the staged entries with HEAD is
+verified; the cause is unproved); the probability-only wording of the introductions of the
+migrated owners (`Cheeger/UpperMinkowskiContent`, `Perimeter/MetricBVMinkowski`,
+`Perimeter/UpperMinkowskiRecovery`, `Perimeter/RelaxedMinkowski`, `Cheeger/LocalSlopeCoarea`,
+`Cheeger/MinkowskiContent`) is stale and is logged here for the final documentation sync.
+
+### Placement plan (recorded before editing)
+
+Object and role: exposure and audit of the finite-Borel-measure recovery and relaxation
+identities. After the Stage A migration the owners already state, at `(ν : Measure V)
+[IsFiniteMeasure ν]` on an arbitrary metric space with Borel structure and for every target `B`:
+`exists_minkowskiRecovery` (lower recovery with actual indicator `L¹(ν)` convergence and lower
+contents tending to the perimeter), `exists_upperMinkowskiRecovery` (upper recovery),
+`relaxedMinkowskiContent_eq_perimeter` and `relaxedUpperMinkowskiContent_eq_perimeter` (both
+relaxed identities over the same measurable class), `perimeter_le_liminf_minkowskiContent`,
+`perimeter_le_liminf_upperMinkowskiContent`, the infinite/empty-class branches, and the zero measure
+lemmas. Their proofs are direct finite-measure proofs (only `measure_ne_top`, `measure_lt_top`
+and finite constant integrals were used), so no new object, wrapper or normalization detour is
+added: Stage B exposes them through a substantive client and records the exact scope. Only if a
+gap appears is production edited (none found).
+Destination: `research/audits/MetricBVFiniteRecoveryAudit.lean` (client only). Scope: arbitrary
+metric space with Borel structure, finite Borel measure, arbitrary target `B` (no measurability of
+`B` for the recoveries and identities). Cases: the zero measure with an arbitrary target and the
+empty carrier (`Empty`), a non-unit atom on the non-vector metric space `ℕ`, empty/full sets,
+infinite perimeter (relaxed contents `⊤`, every member of the class has `liminf` `⊤`) and the
+empty class (conditional; no empty class is constructed), scaled recovery consistency
+(`c • ν`, with `perimeter_smul`), and the old probability instances through the coercion.
+Source mapping (Ambrosio--Di Marino--Gigli, arXiv:1603.08412): Lemma 3.2 (Minkowski coarea)
+↦ `lintegral_minkowskiContent_superlevel_le_localSlope` at finite measures (local-slope form, open
+thickenings); Definition 3.3 (global `L¹` convergence, the article's working definition) ↦ the
+approximating classes; Remark 3.4 (bounded-support reduction) ↦ the bounded-support `Test` class;
+Remark 3.5 (alternate locally-Lipschitz/local-convergence definitions, explicitly not the working
+definition) ↦ the locally Lipschitz and compact-local relaxation classes of phases 17–21; Lemma 2.1
+↦ the upper content of thickenings, integrated bound, selection and recoveries (phases 22–26);
+Theorem 3.6 (relaxed Minkowski content equals the perimeter, for Borel sets of finite measure
+under Borel measures finite on bounded sets) ↦ `relaxedMinkowskiContent_eq_perimeter` and
+`relaxedUpperMinkowskiContent_eq_perimeter` for arbitrary targets under finite total mass with
+global indicator `L¹` convergence of measurable approximants. The published generality (finite on
+bounded sets, possibly infinite total mass) is not claimed, nor is any RCD or KLS consequence.
+(Corrected at the final integration after Codex's source cross-check: the earlier text cited
+Remark 3.5 for the bounded-support reduction and described the article as using local
+convergence.)
+Validation: strict compilation of the client with fresh workflow-filtered dependencies (the full
+build is current), `#print axioms` standard three, `git diff --check`, receipt
+`build/audit/admg-finite-four-hour/stage-b/receipt.md`. Documentation synchronization and the
+frozen full verifier are reserved for the final integration.
+
+### Stage B stage status
+
+- [x] client, receipt, READY_FOR_CODEX_REVIEW (frozen 22:05 Asia/Shanghai; no production edit was needed)
+- [ ] final integration (documentation sync including the stale probability-only introductions,
+  isolated-index views, frozen full verifier): after Codex acceptance
+
+### Stage B result
+
+No production edit: the Stage A migration already states the finite-measure recoveries and
+identities with direct proofs. Client `research/audits/MetricBVFiniteRecoveryAudit.lean`:
+`lowerRecovery` (`exists_minkowskiRecovery` at `(ν : Measure X) [IsFiniteMeasure ν]`, arbitrary
+target, measurable sets converging in indicator `L¹(ν)`, lower contents tending to the perimeter),
+`upperRecovery` (`exists_upperMinkowskiRecovery`), `relaxedIdentities` (both relaxed identities and
+their equality), `lowerBoundAnySequence` (lower and upper contents), `infiniteBranch` (relaxed
+contents `⊤` iff perimeter `⊤`; every member of the class has `liminf` `⊤`; empty class forces
+`⊤`, conditional), `zeroMeasureArbitraryTarget` (zero perimeter and relaxed contents, both
+recoveries with contents tending to `0`), `emptyCarrier` (`Empty`: every measure is zero, the
+identity holds with value `0`), `emptyAndFull`, `scaledRecovery` (`c • ν` recovers
+`c * perimeter ν B` with convergence in `L¹(c • ν)`), `probabilityInstances` (regression through
+the coercion), `natAtom_mass` and `natAtomSingleton` (`3 • dirac 0` on `ℕ`, total mass `3`: zero
+perimeter and contents of `{0}`, relaxed identity, upper recovery). Twelve `#print axioms`
+reports, all `[propext, Classical.choice, Quot.sound]`; full default `lake build` current;
+`git diff --check` clean; nothing staged.
+
+## Phase 28 / Stage A (2026-09-30 evening, four-hour ADMG finite-measure run)
+
+### Baseline
+
+New user authorization: `research/handoffs/2026-09-30-four-hour-admg-finite.md`, window
+2026-09-30 21:15:35 – 2026-10-01 01:15:35 Asia/Shanghai (stop expansion 00:00:35, wrap-up 00:45:35).
+Started 21:17. HEAD `443f352`, nothing staged, raw `.git/index` `3810238c…26f4c1` (Codex baseline
+`build/audit/admg-finite-four-hour/baseline.json`, snapshot `a64ee5c6…`), dirty work preserved.
+Old signatures saved: `build/audit/admg-finite-four-hour/stage-a/api-before.txt` (214 declarations
+of the six content-chain owners and `Perimeter/MetricBV.lean`).
+
+### Placement plan and API map (recorded before editing)
+
+Object and role: the finite-Borel-measure layer of the Minkowski content chain. (1) Argument
+migration: `minkowskiContent`, `upperMinkowskiContent`, `thickeningMass`,
+`MinkowskiApproximatingSequence`, `relaxedMinkowskiContent`, `relaxedUpperMinkowskiContent` take a
+`Measure V` (no finiteness in the definitions); theorems take `(ν : Measure V) [IsFiniteMeasure ν]`
+where their proofs use finiteness (`measure_ne_top`, finite constant integrals), with the
+instance omitted where unused; only `thickeningMass_le_one` keeps `[IsProbabilityMeasure ν]`; the
+ratio-recovery section of `MetricBVMinkowski` (masses in `(0, 1)`, Cheeger quotients) and the
+Cheeger-constant modules stay at `ProbabilityMeasure`. Old probability statements are preserved as
+instances: a client passing `ν : ProbabilityMeasure V` elaborates to `↑ν` with
+`IsFiniteMeasure ↑ν` found by instance resolution, so existing consumers and clients are expected
+to recompile without edits; the before/after `#check` outputs record the exact change
+(`ProbabilityMeasure V` argument ↦ `Measure V` argument plus `[IsFiniteMeasure ν]`, or no instance
+where finiteness is not needed). No alias, no duplicate content/perimeter object, no parallel API.
+(2) Scaling with a nonnegative real scalar `c : ℝ≥0` (positive finite scalars; `c = 0` handled
+where the statement remains true and stated separately otherwise): `cost (c • ν) f = c * cost ν f`,
+`indicatorDistance (c • ν) f B = c * indicatorDistance ν f B`, the approximating classes of `c • ν`
+and `ν` coincide for `c ≠ 0`, `perimeter (c • ν) B = c * perimeter ν B` for `c ≠ 0` (including the
+empty class and `⊤`), `minkowskiContent (c • ν) B = c * minkowskiContent ν B` and the same for the
+upper content (monotone continuous image of `liminf`/`limsup`, all `c : ℝ≥0`),
+`thickeningMass (c • ν) B s = c * thickeningMass ν B s`. (3) Zero measure: perimeter, both
+contents, both relaxed contents and the radius mass vanish. (4) Normalization: a finite nonzero
+measure is `c • ν` with `c : ℝ≥0`, `c ≠ 0` and `ν` a probability measure
+(`FiniteMeasure.self_eq_mass_smul_normalize`). Infinite total mass is outside this run; `⊤ - ⊤`
+never enters (all masses finite).
+Exact scope / non-claims: metric space with a measurable (Borel where the original had it)
+structure; finite Borel measures. Not claimed: the finite-measure recovery and relaxed identities
+(Stage B), locally finite or infinite-mass measures, the full published Theorem 3.6.
+Owners and destination: the existing six owners (`Cheeger/MinkowskiContent`, `LocalSlopeCoarea`,
+`UpperMinkowskiContent`, `Perimeter/MetricBVMinkowski`, `UpperMinkowskiRecovery`,
+`RelaxedMinkowski`) for the migration; the BV scaling and zero-measure facts for costs, distances,
+classes and perimeter in `Perimeter/MetricBV.lean` (the perimeter owner, new section `Scaling`);
+content scaling in the content owners; normalization in `Perimeter/RelaxedMinkowski.lean`?—no:
+normalization is a measure-theoretic tool used by Stage B at the perimeter integration boundary,
+placed with the BV scaling section (import `Mathlib.MeasureTheory.Measure.FiniteMeasure`).
+Imports: `Mathlib.MeasureTheory.Measure.FiniteMeasure` in `Perimeter/MetricBV.lean` (for
+`FiniteMeasure.normalize`); no local dependency change. Extend (same owners, same objects).
+Validation: strict compilation of the edited owners, full default `lake build` (all consumers),
+strict recompilation of every existing client of the chain, a new client
+`research/audits/MetricBVFiniteScalingAudit.lean` (finite-measure signatures, zero measure,
+non-unit mass with an explicit scalar, atomic/empty/full cases, infinite perimeter, old
+probability instances), `#print axioms` standard three, `git diff --check`; receipt
+`build/audit/admg-finite-four-hour/stage-a/receipt.md`.
+
+### Stage A stage status
+
+- [x] argument migration compiled (six owners, full build, existing clients)
+- [x] scaling, zero-measure and normalization facts
+- [x] client, API map after, receipt, READY_FOR_CODEX_REVIEW (frozen 21:53 Asia/Shanghai)
+- [ ] Stage B (finite-measure recovery and relaxed identities): only after Codex acceptance
+- [ ] documentation synchronization and frozen full verifier: reserved for the final integration
+
+### Stage A exact changes
+
+Argument migration (six owners): `(ν : ProbabilityMeasure V)` ↦ `(ν : Measure V) [IsFiniteMeasure ν]`
+in theorems, `(ν : Measure V)` with no finiteness in the definitions `minkowskiContent`,
+`upperMinkowskiContent`, `thickeningMass`, `MinkowskiApproximatingSequence`,
+`relaxedMinkowskiContent`, `relaxedUpperMinkowskiContent`, `MinkowskiApproximatingSequence.const` (the
+choice-based recovery definitions
+`minkowskiRecoveryTest/Level/Set`, `upperRecoveryRadius/Set` keep `[IsFiniteMeasure ν]` because
+their existence theorems need it); `thickeningMass_le_one` keeps `[IsProbabilityMeasure ν]`; the
+ratio-recovery section of `MetricBVMinkowski` and the Cheeger-constant modules stay at
+`ProbabilityMeasure` (their statements now carry the coercion where a migrated definition is
+applied). Probability-specific steps replaced by finite-measure steps: the two constant-integral
+finiteness facts in the layer-cake proofs (`lintegral_const` with `measure_ne_top`) only. Exact
+before/after `#check` outputs and classification in `build/audit/admg-finite-four-hour/stage-a/`
+(`api-before.txt`, `api-after.txt`, `api-map.md`): 112 unchanged, 83 theorems migrated with
+`[IsFiniteMeasure ν]`, 3 definitions migrated without finiteness, 6 def-style migrations without
+finiteness, 5 choice-based recovery definitions keeping `[IsFiniteMeasure ν]`, 1 kept at probability
+laws, 4 kept at `ProbabilityMeasure` with the coercion inserted, 0 other, 26 new, 0 removed. Theorems whose proofs do not use finiteness still carry
+`[IsFiniteMeasure ν]` where it came with the migration (finite-measure scope of this run; no
+premise was erased, and the probability statements are instances).
+Consumer edits (proof-term call sites only, explicit `(ν : Measure V)`): `Cheeger/MinkowskiConstant`,
+`Cheeger/Equality`, `Cheeger/Stability`, `Cheeger/Inequality`, `Cheeger/BVIdentification`,
+`LogConcave/Line/Buser`, and the audits `MetricBVMinkowskiAudit`, `MetricBVMinkowskiCoareaAudit`,
+`MetricBVMinkowskiRecoveryAudit`, `MetricBVRatioRecoveryAudit`, `MetricBVRelaxedMinkowskiAudit`,
+`MetricBVSuperlevelSelectionAudit`, `MetricBVSupportRestrictionAudit`, `MinkowskiRelaxedUpperAudit`,
+`MinkowskiUpperBVRecoveryAudit`, `MinkowskiUpperIntegratedAudit`, `MinkowskiUpperRecoveryAudit`,
+`MinkowskiUpperThickeningAudit`, `MinkowskiMetricChainAudit` (bare probability arguments inside proof
+terms of migrated theorems time out in coercion search; statements are unchanged). Four
+heat-semigroup modules and `HeatSpectralDecayAudit`, touched by an over-broad batch pattern, were
+restored to their exact previous contents (Git-verified clean).
+
+New declarations. `Perimeter/MetricBV.lean`, section `Scaling` (import
+`Mathlib.MeasureTheory.Measure.FiniteMeasure`), scalars `c : ℝ≥0`:
+```lean
+theorem cost_smul (c : ℝ≥0) (ν : Measure X) (f : Test X) : cost (c • ν) f = c * cost ν f
+theorem indicatorDistance_smul (c) (ν) (f) (B) : indicatorDistance (c • ν) f B = c * indicatorDistance ν f B
+@[simp] theorem cost_zero_measure (f) : cost (0 : Measure X) f = 0
+@[simp] theorem indicatorDistance_zero_measure (f) (B) : indicatorDistance (0 : Measure X) f B = 0
+def ApproximatingSequence.smul (c : ℝ≥0) {ν B} (f : ApproximatingSequence ν B) : ApproximatingSequence (c • ν) B
+def ApproximatingSequence.smulInv {c : ℝ≥0} (hc : c ≠ 0) {ν B} (f : ApproximatingSequence (c • ν) B) : ApproximatingSequence ν B
+theorem perimeter_smul_le (c) (hc : c ≠ 0) (ν) (B) : perimeter (c • ν) B ≤ c * perimeter ν B
+theorem perimeter_smul (c) (hc : c ≠ 0) (ν) (B) : perimeter (c • ν) B = c * perimeter ν B
+theorem perimeter_zero_measure (B) : perimeter (0 : Measure X) B = 0
+theorem exists_probability_smul (μ : Measure X) [IsFiniteMeasure μ] (hμ : μ ≠ 0) :
+    ∃ (c : ℝ≥0) (ν : ProbabilityMeasure X), c ≠ 0 ∧ μ = c • (ν : Measure X)
+```
+`Cheeger/MinkowskiContent.lean` (generic section): `liminf_coe_mul`, `limsup_coe_mul` (local
+`ℝ≥0∞` tools: `liminf/limsup (c * u) = c * liminf/limsup u`, via the monotone continuous map),
+`minkowskiContent_smul (c : ℝ≥0) (ν : Measure V) (B) : minkowskiContent (c • ν) B = c * minkowskiContent ν B`
+(all `c`, all measures), `minkowskiContent_zero_measure`. `Cheeger/UpperMinkowskiContent.lean`:
+`upperMinkowskiContent_smul`, `upperMinkowskiContent_zero_measure`, `thickeningMass_smul`,
+`thickeningMass_zero_measure`. `Perimeter/RelaxedMinkowski.lean`, section `Scaling`:
+`MinkowskiApproximatingSequence.smul`, `.smulInv (hc : c ≠ 0)`, `relaxedMinkowskiContent_smul_le`,
+`relaxedMinkowskiContent_smul (hc : c ≠ 0)`, `relaxedUpperMinkowskiContent_smul_le`,
+`relaxedUpperMinkowskiContent_smul (hc : c ≠ 0)`, `relaxedMinkowskiContent_zero_measure`,
+`relaxedUpperMinkowskiContent_zero_measure`. Scalar scope: contents scale for every `c : ℝ≥0`
+(including `0`); perimeter and relaxed contents for `c ≠ 0` (`ENNReal.mul_iInf'`, the empty class
+giving `⊤ = c * ⊤`); the zero measure is treated by its own lemmas; infinite scalars are not
+used. The perimeter proof scales the class both ways and uses `c⁻¹ • c • ν = ν`.
+
+### Stage A independent client (`research/audits/MetricBVFiniteScalingAudit.lean`)
+
+`finiteSignatures` (the chain at a finite Borel measure), `scaling` (all eight laws at `c ≠ 0`),
+the class transports `transportBV`, `transportBVInv`, `transportMink`, `transportMinkInv` with
+`transportTerms`, `zeroScalar`, `zeroMeasure` (all quantities vanish), `infiniteBranch` (infinite
+perimeter stays infinite, finite stays finite), `normalization` (finite nonzero measure as
+`c • ν` with the perimeter and both contents expressed through `ν`), `probabilityInstances`
+(old statements at probability laws through the coercion, including the probability-only radius
+bound), `emptyAndFull`, `doubleAtom` (mass `2`, zero perimeter and contents of the atom). Ten
+`#print axioms` reports, all `[propext, Classical.choice, Quot.sound]`.
+
+Validation: strict compilation (warnings as errors) of the seven edited owners and six edited
+library consumers, exit 0 with empty logs; full default `lake build` (3675 jobs) passed; twenty-six
+research audits (all clients of the chain plus the new one and the restored heat-spectral audit)
+recompile strictly with standard-only reports; `git diff --check` clean; nothing staged. Logs,
+exit codes and hashes in `build/audit/admg-finite-four-hour/stage-a/`.
+
+Not claimed: the finite-measure recovery and relaxed identities (Stage B), locally finite or
+infinite-mass measures, the full published Theorem 3.6, any docs/progress synchronization or full
+verifier at this freeze.
+
+## Final integration of phase 27 (2026-09-30 afternoon, after acceptance)
+
+Phase 27 accepted (Codex: 352-module filtered view, metric audit plus independent clients, nineteen
+standard-only reports, snapshot `bbdaa98e…` unchanged). Final integration started 14:42
+Asia/Shanghai; no phase 28, no mathematical expansion. Edits: the stale introduction of
+`Cheeger/LocalSlopeCoarea.lean` (docstring only; now describes the generic open-ball route and the
+retained normed closed-ball helpers; recompiled strictly, full build passed); HANDOFF head and a
+phase-27 paragraph; root README (metric scope of the bridge, the relaxed lower content and the
+whole chain); progress-hub next step (final verification/handoff; a later authorized release may
+extend to finite Borel measures); chapter 45 with its four refreshed `research/tasks.json` pins;
+the `ADMG2017` literature row; the `diagram:BV` description (metric scope; evidence source unchanged,
+no ledger promotion). The `api-map.md` summary in the ignored audit directory gained a
+reconciliation note (91 + 5 def-style = 96 instance-only changes) without altering
+`api-before.txt`/`api-after.txt`. Views regenerated from an isolated index/object store with only
+`research/tasks.json` and chapter 45 added. Codex-owned files, the moment-map handoff, the CI-policy
+edits and historical records untouched. The frozen full verifier and its before/after snapshot
+hashes are recorded only in `build/audit/admg-metric-continuation/final/receipt.md`.
+
+First frozen run (14:44:06, snapshot `c50043cd…64ca67`, no drift) failed at the first gate
+`atlas-ledger-blueprint`: `research/tasks.json` pins `Cheeger/MinkowskiContent.lean` as infrastructure
+evidence of `lem:relative-perimeter-smoothing` with its pre-phase-27 hash (`82413123…`). Reassessed:
+the module was generalized in place (instance argument only; every referenced declaration keeps its
+statement), so the evidence remains valid and the single pin is refreshed to the current hash; no
+other pinned file among the six owners exists. Views regenerated and checked again; second freeze
+and rerun recorded in the receipt.
+
+## Phase 27 (2026-09-30 daytime, ADMG metric continuation; new bounded task)
+
+### Baseline
+
+New user authorization (continue formalizing only existing published papers; the overnight
+window is closed and not reused). Assignment: `research/handoffs/2026-09-30-admg-metric-continuation.md`.
+Started 14:22 Asia/Shanghai. HEAD `443f352`, nothing staged, `.git/index` `935d3c0e…75977d`
+(stat-cache drift recorded separately; staged content is HEAD); the six owner modules carry the
+accepted hashes (`UpperMinkowskiContent` `53e8aff9…`, `UpperMinkowskiRecovery` `74c3c40d…`,
+`RelaxedMinkowski` `5e9dfba2…`). Codex baseline in ignored `build/audit/admg-metric-continuation/`
+(`baseline.json`, snapshot `ccb8cab2…`).
+
+### Placement plan and API map (recorded before editing)
+
+Object and role: generalization of the Minkowski content chain from normed additive groups to
+arbitrary metric spaces with a Borel probability measure, in place, keeping every established
+name: lower content `minkowskiContent` and its closure lemma; the whole upper-content module
+(upper content, radius mass, derivative and integrated bounds, selection, recovery); the
+local-slope coarea inequality `lintegral_minkowskiContent_superlevel_le_localSlope`; the BV–Minkowski
+bridge `perimeter_le_minkowskiContent`, superlevel selection, lower recovery
+`exists_minkowskiRecovery` and ratio recovery; the upper recovery and the relaxed lower/upper
+identities. Source: Ambrosio--Di Marino--Gigli §§2–3 (Lemma 2.1, Theorem 3.6); the probability
+case stays narrower than their locally finite scope.
+Dependency review: the only vector-space argument in the chain is `lipschitzWith_ballSup`
+(translation `z + (y - x)`), used for the measurability of the closed-ball supremum `ballSup` in
+the layer-cake proof. On an arbitrary metric space the closed-ball supremum of a Lipschitz
+function is not continuous (two components `[0, 1] ∪ [2, 3] ⊂ ℝ`, `u = 0` on the first and
+`1` on the second, `r = 1`: the supremum jumps at the centre `1`), so its continuity is neither
+assumed nor claimed. ADMG (3.1)–(3.2) use the supremum over OPEN balls, which is lower
+semicontinuous, hence Borel, and satisfies the same near-neighbour witness and the one-sided
+slope bound with strict distances. Decision: a genuinely distinct helper `openBallSup u r x :=
+sSup (u '' ball x r)` (generic metric section of `Cheeger/MinkowskiContent.lean`) with
+`bddAbove_image_ball`, `le_openBallSup`, `openBallSup_le_add`, `lowerSemicontinuous_openBallSup`,
+`measurable_openBallSup` and `thickening_superlevel_subset_openBallSup`; the closed-ball
+`ballSup` API and the `C¹` theorem keep their normed scope unchanged (not redefined, not
+duplicated: open and closed balls are different objects).
+Generic sections use only `[MetricSpace V]` (with `[MeasurableSpace V]`/`[BorelSpace V]` where
+the original had them); differential sections keep their structures. Modules and changes:
+`Cheeger/MinkowskiContent.lean` (generic section for `minkowskiContent`,
+`measure_closure_eq_of_minkowskiContent_ne_top` and the open-ball helper; normed sections after);
+`Cheeger/LocalSlopeCoarea.lean` (generic `limsup_ofReal_openBallSup_le_localSlope`, a
+majorant-parametrized layer-cake lemma `lintegral_minkowskiContent_superlevel_le_limsup_of_majorant`
+that also re-proves the existing closed-ball statement in its normed scope, and the metric
+`lintegral_minkowskiContent_superlevel_le_localSlope`); `Cheeger/UpperMinkowskiContent.lean`,
+`Perimeter/MetricBVMinkowski.lean`, `Perimeter/UpperMinkowskiRecovery.lean`,
+`Perimeter/RelaxedMinkowski.lean` (instance variable `[NormedAddCommGroup V]` → `[MetricSpace V]`;
+proofs use only thickenings, `infDist`, indicators and filters).
+API map: for every generalized declaration the elaborated interface changes exactly in the
+instance argument `[NormedAddCommGroup V]` ↦ `[MetricSpace V]` (old instances resolve through
+`NormedAddCommGroup.toMetricSpace`, so all existing consumers keep compiling without edits);
+declarations kept at normed scope: `ballSup`, `bddAbove_image_closedBall`, `le_ballSup`,
+`ballSup_le_add`, `lipschitzWith_ballSup`, `thickening_superlevel_subset`,
+`limsup_ofReal_ballSup_le`, `lintegral_minkowskiContent_superlevel_le` (`C¹`),
+`limsup_ofReal_ballSup_le_localSlope`, `lintegral_minkowskiContent_superlevel_le_limsup`. The exact
+before/after `#check` outputs are saved in `build/audit/admg-metric-continuation/api-before.txt`
+and `api-after.txt`. No alias, no duplicate content/perimeter object, no signature change beyond
+the instance argument, no unrelated migration.
+Validation scope: strict compilation of the six modules; full default `lake build` (all consumers
+rebuild); a new metric-only client `research/audits/MinkowskiMetricChainAudit.lean` (generic
+`[MetricSpace V] [MeasurableSpace V] [BorelSpace V]` statements of the coarea inequality, the
+one-sided bridge, the lower and upper recoveries and both relaxed identities; a non-vector-space
+example on `ℕ` with its discrete metric and a Dirac law; atomic, empty, zero and infinite
+boundaries); recompilation of the existing clients of the six modules; `#print axioms` standard
+three; `git diff --check`; receipt under `build/audit/admg-metric-continuation/`. The full frozen
+verifier and documentation synchronization are reserved for after acceptance (and before any
+finite-measure extension).
+
+### Phase 27 stage status
+
+- [x] open-ball helper and generic coarea
+- [x] generic sections in the other five owners; full build; existing clients
+- [x] metric-only client, API map after, receipt, READY_FOR_CODEX_REVIEW (frozen 14:37 Asia/Shanghai)
+- [ ] documentation synchronization and frozen full verifier: reserved for after acceptance
+
+### Phase 27 exact changes
+
+`Cheeger/MinkowskiContent.lean`: new `section Generic` with `variable {V : Type u} [MetricSpace V]`:
+the open-ball helper (`openBallSup u r x := sSup (u '' ball x r)`, `bddAbove_image_ball`,
+`le_openBallSup`, `openBallSup_le_add`, `lowerSemicontinuous_openBallSup`, `measurable_openBallSup`
+with `[MeasurableSpace V] [OpensMeasurableSpace V]`, `thickening_superlevel_subset_openBallSup`),
+then `variable [MeasurableSpace V]`, `minkowskiContent` and
+`measure_closure_eq_of_minkowskiContent_ne_top` (statement and proof unchanged; instance
+argument now `[MetricSpace V]`). The normed variable block, the closed-ball `BallSup` section
+(including `lipschitzWith_ballSup` with its translation argument), `limsup_ofReal_ballSup_le`
+and the `C¹` coarea theorem follow unchanged.
+`Cheeger/LocalSlopeCoarea.lean`: `section Generic` (`[MetricSpace V]`) with
+`limsup_ofReal_openBallSup_le_localSlope`, the majorant-parametrized layer cake
+`lintegral_minkowskiContent_superlevel_le_limsup_of_majorant` (arbitrary positive radii `r n → 0`,
+measurable majorants `w n` with the near-neighbour witness and `w n x ≤ u x + K r n`; the former
+proof body verbatim with `ballSup u (r n)` replaced by `w n`), its open-ball instance
+`lintegral_minkowskiContent_superlevel_le_limsup_openBallSup`, and the metric
+`lintegral_minkowskiContent_superlevel_le_localSlope` (same statement, instance now `[MetricSpace V]`);
+`section ClosedBall` (`[NormedAddCommGroup V]`) keeps `limsup_ofReal_ballSup_le_localSlope` and
+`lintegral_minkowskiContent_superlevel_le_limsup` with unchanged statements, the latter now an
+instance of the majorant lemma through `lipschitzWith_ballSup`.
+`Cheeger/UpperMinkowskiContent.lean`, `Perimeter/MetricBVMinkowski.lean` (four sections),
+`Perimeter/UpperMinkowskiRecovery.lean`, `Perimeter/RelaxedMinkowski.lean`: the instance variable
+`[NormedAddCommGroup V]` replaced by `[MetricSpace V]`; no proof needed any change (thickenings,
+`infDist`, indicators, filters only). Header docstrings updated to the metric scope.
+API map (`build/audit/admg-metric-continuation/api-before.txt`, `api-after.txt`, `api-map.md`,
+137 declarations after): 96 declarations change exactly in the instance argument
+`[NormedAddCommGroup V] ↦ [MetricSpace V]` (five of them are `def`s printed in arrow style, the same
+change), 31 are byte-identical (the closed-ball helpers, `limsup_ofReal_ballSup_le`, the `C¹`
+theorem, `limsup_ofReal_ballSup_le_localSlope`, `lintegral_minkowskiContent_superlevel_le_limsup`,
+the plateau-ramp lemmas and other instance-free statements), 10 are new (the open-ball helper, the
+open-ball slope bound, the majorant layer cake and its open-ball instance), none removed. No
+alias, no duplicate content/perimeter object, no `sorry`, no new axiom, no conclusion-bearing
+premise. Old instances resolve through `NormedAddCommGroup.toMetricSpace`: the full default
+`lake build` (3675 jobs) and all twelve existing clients of the six modules recompile strictly
+without any edit (standard-only reports: 9, 11, 10, 11, 10, 12, 12, 14, 12, 10, 11, 11).
+
+### Phase 27 metric-only client (`research/audits/MinkowskiMetricChainAudit.lean`)
+
+`[MetricSpace V] [MeasurableSpace V] [BorelSpace V]` only: `openBallMajorant`, `coarea`, `bridge`,
+`integratedAndSelection`, `finiteContentRecovery`, `recoveries` (lower and upper), `relaxedIdentities`,
+`emptyAndFull`, `zeroAndInfinite`, `atom` (Dirac law at any point: both contents and the perimeter
+vanish), `natExample` (the natural numbers with their discrete metric, not a vector space: Dirac
+law at `0`, contents and perimeter of `{0}` zero, relaxed identity, upper recovery) and
+`nat_thickening_one` (the unit thickening of `{0}` in `ℕ` is `{0}`). Twelve `#print axioms`
+reports, all `[propext, Classical.choice, Quot.sound]`; no warnings.
+
+Not claimed: finite or locally finite measures (ADMG's scope), pointwise equality of contents and
+perimeter, continuity of the closed-ball supremum on metric spaces (false in general, see the
+counterexample above), general RCD or KLS statements. Documentation/progress synchronization and
+the frozen full verifier are reserved for after acceptance.
+
+## Final integration (2026-09-30, after acceptance of Stages A–C)
+
+Stage C accepted (Codex: 352-module filtered view, production + audit + independent client exit 0,
+seventeen standard-only reports, unchanged snapshot). Final integration started 02:37
+Asia/Shanghai: no mathematical expansion. Edits: the stale intros of
+`Cheeger/UpperMinkowskiContent.lean` and `Perimeter/UpperMinkowskiRecovery.lean` (docstrings only;
+recompiled strictly; no declaration changed); HANDOFF head paragraph and a phases-24–26 paragraph;
+root README status sentence; progress-hub next-step paragraph (final verification/handoff, no
+new overnight target); chapter 45 prose (2026-09-30) with its four refreshed `research/tasks.json`
+pins; the `ADMG2017` literature row; the `diagram:BV` description and `last_updated`
+`2026-09-30` in `nodes.json` (evidence source unchanged; no ledger promotion); views regenerated
+from an isolated index/object store with only `research/tasks.json` and chapter 45 added. Scope
+kept to probability laws on normed groups with Borel structure; general metric/RCD, pointwise
+equality, new Cheeger-quotient claims and KLS remain unproved. Historical records, the
+concurrent CI-policy edits, the moment-map handoff, Codex-owned files and the real index are
+untouched. The frozen full verifier and its before/after snapshot hashes are recorded only in
+`build/audit/upper-recovery-overnight/final/receipt.md`.
+
+Final read-only review (Codex, during the first frozen run) found the root README heading still
+dated 2026-09-29 and asked for exact index language. After that run finished (passed, 169 gates,
+snapshot `5c650519…358955`, no drift), the heading was corrected to 2026-09-30 and the tree was
+re-frozen for a second run. Index: the raw `.git/index` file hash differs from Codex's baseline
+`de27891b…8bb5d` (now `935d3c0e…75977d`) through stat-cache refreshes by read-only Git calls; all
+975 staged entries (mode, blob, path) equal the HEAD tree, `git diff --cached` is empty and
+`git write-tree` of the index reproduces HEAD's tree `ac698b35…`; the index was neither restored
+nor reset.
+
+## Stage C / phase 26 (2026-09-30, eight-hour upper-recovery window)
+
+### Baseline
+
+Stage B independently accepted after the prose correction (Codex: 352 modules rebuilt, fresh
+filtered view, production + audit + `BVRecoveryReview` exit 0, sixteen standard-only reports,
+snapshot `459eaed0…` unchanged; `stage-b/codex/checks.json`). Stage C started 02:30 Asia/Shanghai.
+HEAD `443f352`, nothing staged, `.git/index` `de27891b…8bb5d` unchanged; accepted Stage A/B
+production files (`7a91fdbc…`, `c7317478…`) not edited in Stage C. Deadline 09:07:29, expansion
+cutoff 07:22:29, wrap-up 08:37:29.
+
+### Placement plan (recorded before editing)
+
+Object and role: the relaxed upper Minkowski content `relaxedUpperMinkowskiContent ν B`, the
+infimum over the existing class `MinkowskiApproximatingSequence ν B` (measurable approximants with
+actual indicator `L¹(ν)` convergence, reused unchanged) of the `liminf` of the genuine
+`Isoperimetry.upperMinkowskiContent` (object definition with elementary properties), and its
+identification with the metric BV perimeter (identification bridge): for every target `B`,
+`relaxedUpperMinkowskiContent ν B = perimeter ν B`, hence `= relaxedMinkowskiContent ν B`.
+Lower bound: `perimeter ≤ liminf upper (A n)` for every member of the class (Stage B
+`perimeter_le_liminf_upperMinkowskiContent`, the accepted lower semicontinuity), then `le_iInf`.
+Reverse: at infinite perimeter by order; at finite perimeter the Stage B recovery
+`exists_upperMinkowskiRecovery` is a member of the class whose upper contents tend to the
+perimeter (`Tendsto.liminf_eq`). Termwise `relaxedMinkowskiContent ≤ relaxedUpperMinkowskiContent`
+from lower `≤` upper. Corollaries: empty class gives `⊤` (`iInf_of_empty`) and hence infinite
+perimeter; the `⊤` and `0` characterizations through the identity; the constant sequence of a
+measurable set gives `relaxedUpperMinkowskiContent ν B ≤ upperMinkowskiContent ν B`; a sequence
+in the class with convergent upper contents bounds the relaxed upper content by the limit.
+Exact scope / non-claims: probability laws on a normed additive group with Borel structure
+(the scope of the class and of the perimeter); every target `B`. Not redefined: `perimeter`,
+`minkowskiContent`, `upperMinkowskiContent`, `relaxedMinkowskiContent`, the class. Not claimed:
+pointwise `upperMinkowskiContent ν B = perimeter ν B` (false in general, as for the lower content),
+Cheeger-quotient identifications, general metric/RCD, KLS.
+Existing owner and consumers: `Perimeter/RelaxedMinkowski.lean` owns the class and the relaxed
+lower content; consumed only by the root aggregator and `MetricBVRelaxedMinkowskiAudit.lean`;
+not pinned in `research/tasks.json`.
+Destination module and namespace: extend `Perimeter/RelaxedMinkowski.lean`, namespace
+`FunctionalInequalities.KLS.MetricBV`, new section `RelaxedUpper`.
+Required imports / dependency direction: add `Perimeter.UpperMinkowskiRecovery` (Stage B), which
+imports the lower bridge and the upper-content owner; no cycle (nothing below imports
+`RelaxedMinkowski`). The import closure of `RelaxedMinkowski` grows by the Stage B chain; its two
+consumers are the aggregator and its audit.
+Extend, split or create, and why: extend (workflow §3.1: same object family — relaxed contents over
+the same approximating class — same role and prerequisite level; the plan places the relaxation
+comparison at the perimeter integration boundary and asks to reuse the actual class).
+Public API changes and affected clients: additions and one import; existing signatures unchanged.
+Validation scope: strict compilation of the module and the new client
+`research/audits/MinkowskiRelaxedUpperAudit.lean` (both inequalities and the identity for an
+arbitrary target, equality with the relaxed lower content, the `⊤`/`0` characterizations, the empty
+class, the constant-sequence bound, the convergent-sequence bound, empty/full/null targets and
+the uniform law), `#print axioms` standard three; full default `lake build`; `git diff --check`;
+receipt under ignored `build/audit/upper-recovery-overnight/stage-c/`. Full verifier and the
+documentation/progress synchronization are reserved for the final integration after acceptance.
+
+### Stage C stage status
+
+- [x] module extension, client (frozen 02:35 Asia/Shanghai)
+- [x] receipt `build/audit/upper-recovery-overnight/stage-c/receipt.md` and READY_FOR_CODEX_REVIEW
+- [ ] docs, pins, views, stale upper-module intro, full verifier: reserved for the final integration
+
+### Stage C exact declarations
+
+New section `RelaxedUpper` at the end of `Perimeter/RelaxedMinkowski.lean` (new import
+`Perimeter.UpperMinkowskiRecovery`; header docstring extended; namespace
+`FunctionalInequalities.KLS.MetricBV`; `{V} [NormedAddCommGroup V] [MeasurableSpace V] [BorelSpace V]`,
+the Borel instance omitted where unused):
+
+```lean
+def relaxedUpperMinkowskiContent (ν : ProbabilityMeasure V) (B : Set V) : ENNReal :=
+  ⨅ A : MinkowskiApproximatingSequence ν B, liminf (fun n => Isoperimetry.upperMinkowskiContent ν (A.1 n)) atTop
+theorem relaxedUpperMinkowskiContent_le_liminf (ν) (B) (A : MinkowskiApproximatingSequence ν B) :
+    relaxedUpperMinkowskiContent ν B ≤ liminf (fun n => Isoperimetry.upperMinkowskiContent ν (A.1 n)) atTop
+theorem relaxedUpperMinkowskiContent_eq_top_of_isEmpty (ν) (B) [IsEmpty (MinkowskiApproximatingSequence ν B)] :
+    relaxedUpperMinkowskiContent ν B = ⊤
+theorem relaxedMinkowskiContent_le_relaxedUpperMinkowskiContent (ν) (B) : relaxedMinkowskiContent ν B ≤ relaxedUpperMinkowskiContent ν B
+theorem perimeter_le_relaxedUpperMinkowskiContent (ν) (B) : perimeter (ν : Measure V) B ≤ relaxedUpperMinkowskiContent ν B
+theorem relaxedUpperMinkowskiContent_le_perimeter (ν) (B) : relaxedUpperMinkowskiContent ν B ≤ perimeter (ν : Measure V) B
+theorem relaxedUpperMinkowskiContent_eq_perimeter (ν) (B) : relaxedUpperMinkowskiContent ν B = perimeter (ν : Measure V) B
+theorem relaxedUpperMinkowskiContent_eq_relaxedMinkowskiContent (ν) (B) : relaxedUpperMinkowskiContent ν B = relaxedMinkowskiContent ν B
+theorem perimeter_eq_top_of_isEmpty (ν) (B) [IsEmpty (MinkowskiApproximatingSequence ν B)] : perimeter (ν : Measure V) B = ⊤
+theorem relaxedUpperMinkowskiContent_eq_top_iff (ν) (B) : relaxedUpperMinkowskiContent ν B = ⊤ ↔ perimeter (ν : Measure V) B = ⊤
+theorem relaxedUpperMinkowskiContent_eq_zero_iff (ν) (B) : relaxedUpperMinkowskiContent ν B = 0 ↔ perimeter (ν : Measure V) B = 0
+theorem relaxedUpperMinkowskiContent_le_upperMinkowskiContent (ν) {B} (hB : MeasurableSet B) :
+    relaxedUpperMinkowskiContent ν B ≤ Isoperimetry.upperMinkowskiContent ν B
+theorem relaxedUpperMinkowskiContent_le_of_tendsto (ν) {B} {A : ℕ → Set V} (hA : ∀ n, MeasurableSet (A n))
+    (hconv : Tendsto (fun n => ∫⁻ x, ‖(A n).indicator (1 : V → ℝ) x - B.indicator 1 x‖ₑ ∂ν) atTop (𝓝 0)) {c : ENNReal}
+    (hlim : Tendsto (fun n => Isoperimetry.upperMinkowskiContent ν (A n)) atTop (𝓝 c)) : relaxedUpperMinkowskiContent ν B ≤ c
+```
+
+Proof shape: the definition reuses `MinkowskiApproximatingSequence` unchanged (measurable
+approximants, actual indicator `L¹(ν)` convergence) with the genuine upper content; the lower
+bound is `le_iInf` over Stage B's `perimeter_le_liminf_upperMinkowskiContent` (accepted lower
+semicontinuity plus `perimeter ≤ lower ≤ upper`); the reverse is `le_top` at infinite perimeter
+and, at finite perimeter, the Stage B recovery `exists_upperMinkowskiRecovery` as a member of the
+class with `Tendsto.liminf_eq`; the identity with the relaxed lower content is through the two
+perimeter identities; the empty class through `iInf_of_empty`; the constant-sequence bound
+through `MinkowskiApproximatingSequence.const` and `liminf_const`. `perimeter`, both contents, the
+relaxed lower content and the class are not redefined; no existing signature changed.
+
+### Stage C independent client (`research/audits/MinkowskiRelaxedUpperAudit.lean`)
+
+`identity`, `bothInequalities`, `lowerAndUpperRelaxations`, `memberBound`, `topAndZero`,
+`emptyClass` (conditional on emptiness; no empty class is constructed), `constantSequence`,
+`convergentSequence`, `realizedByRecovery` (the Stage B sets realize the infimum at finite
+perimeter), `emptySet`, `fullSet`, `nullSet` (client-local zero-test computation), `infiniteBoundary`
+(every member has `liminf` `⊤` at infinite perimeter) and `uniformNullTarget`. All fourteen
+`#print axioms` reports are `[propext, Classical.choice, Quot.sound]`; module and client compile
+strictly with no warnings; full default `lake build` passed; `git diff --check` passed; nothing
+staged.
+
+Not claimed: pointwise `upperMinkowskiContent ν B = perimeter ν B`, Cheeger-quotient
+identifications, general metric/RCD, KLS; no docs/progress synchronization and no full verifier
+yet (reserved for the final integration after acceptance).
+
+## Stage B / phase 25 (2026-09-30, eight-hour upper-recovery window)
+
+### Baseline
+
+Stage A independently accepted (Codex acceptance record
+`build/audit/upper-recovery-overnight/stage-a/codex/acceptance.json`, snapshot `d412f40a…`,
+production `7a91fdbc…7f839a2`, 351 modules rebuilt, three strict files exit 0). Stage B delivered
+02:17 Asia/Shanghai after a user-side access block (not productive time); implementation started
+02:19. HEAD `443f352`, nothing staged, `.git/index` `de27891b…8bb5d` unchanged; the accepted Stage A
+production file is not edited in Stage B. Deadline 09:07:29, expansion cutoff 07:22:29, wrap-up
+08:37:29 Asia/Shanghai.
+
+### Placement plan (recorded before editing)
+
+Object and role: actual upper-content recovery of the metric BV perimeter (an identification
+bridge between `MetricBV.perimeter`, the lower `minkowskiContent` recovery sets and
+`upperMinkowskiContent`): for every target `B` with `perimeter ν B < ⊤` (the scope of the existing
+`exists_minkowskiRecovery`, no measurability of `B`), measurable open sets `U n` with
+`∫⁻ ‖1_{U n} - 1_B‖ₑ dν → 0` and `upperMinkowskiContent ν (U n) → perimeter ν B` in `ℝ≥0∞`.
+Construction: `A n := minkowskiRecoverySet ν hB n` (measurable; its explicit quantitative bound
+`minkowskiContent_minkowskiRecoverySet_le` gives `minkowskiContent ν (A n) ≠ ⊤` termwise, never
+inferred from convergence); Stage A's `exists_upperRecovery` on `A n`, from whose sequence one
+index is taken with indicator error `≤ ofReal (1/(n+1))` (from the `L¹` limit) and upper content
+`≤ minkowskiContent ν (A n) + ofReal (1/(n+1))` (from `limsup ≤ content < content + slack`,
+`eventually_lt_of_limsup_lt`); `U n` is that thickening. Diagonal indicator error by the pointwise
+triangle inequality `‖1_U - 1_B‖ₑ ≤ ‖1_U - 1_A‖ₑ + ‖1_A - 1_B‖ₑ` (`edist_triangle`) and
+`lintegral_add_left` (the first summand is measurable), so the error is at most
+`ofReal (1/(n+1)) + error (A n, B) → 0`. Upper bound: `limsup upper (U n) ≤ lim (content (A n) +
+ofReal (1/(n+1))) = perimeter ν B` (`tendsto_minkowskiContent_minkowskiRecoverySet`). Lower bound:
+`perimeter ν B ≤ liminf perimeter (U n)` (existing `perimeter_le_liminf_of_tendsto`, BV lower
+semicontinuity under indicator `L¹` convergence of measurable sets) `≤ liminf minkowskiContent (U n)`
+(`perimeter_le_minkowskiContent`, the `U n` measurable) `≤ liminf upper (U n)`
+(`minkowskiContent_le_upperMinkowskiContent`); then `tendsto_of_le_liminf_of_limsup_le`.
+Exact scope / non-claims: probability laws on a normed additive group with Borel structure (the
+scope of the lower recovery and of `perimeter_le_minkowskiContent`); every target `B` with finite
+perimeter. The infinite-perimeter boundary is exact: no recovery is claimed there; the lower
+bound `perimeter ν B ≤ liminf upper (A n)` is stated separately for every measurable sequence
+converging in indicator `L¹`, for every `B` (it is trivial when the perimeter is `⊤`). Not claimed:
+any relaxation identity (Stage C), pointwise equality of contents and perimeter, general
+metric/RCD, KLS.
+Existing owner and consumers: `Perimeter/MetricBVMinkowski.lean` owns the lower recovery
+(`minkowskiRecoverySet` and its limits) and is imported by `RelaxedMinkowski`, `BVIdentification`
+and the Cheeger identification chain; `Cheeger/UpperMinkowskiContent.lean` owns the upper content
+(imports `Mathlib.Analysis.Calculus.Monotone`).
+Destination module and namespace: new `KLS/Geometry/Perimeter/UpperMinkowskiRecovery.lean`,
+namespace `FunctionalInequalities.KLS.MetricBV` (the perimeter integration boundary, mirroring the
+lower pair `MetricBVMinkowski`/`RelaxedMinkowski`); explicit `upperRecoverySet ν hB n` by choice
+from a step theorem, in the style of `minkowskiRecoverySet`, plus the existence theorem.
+Required imports / dependency direction: `Perimeter.MetricBVMinkowski` and
+`Cheeger.UpperMinkowskiContent`; nothing imports the new module except the root aggregator.
+Extend, split or create, and why: create (workflow §3.2): extending `MetricBVMinkowski` would pull
+the monotone-differentiation dependency into every consumer of the lower bridge, and the upper
+recovery is a distinct responsibility (the plan places BV recovery at the perimeter integration
+boundary and requires actual responsibility separation for a new module; Stage C's relaxed upper
+identity can extend this module or mirror `RelaxedMinkowski`).
+Public API changes and affected clients: additions only; root aggregator gains one import.
+Validation scope: strict compilation of the new module and the client
+`research/audits/MinkowskiUpperBVRecoveryAudit.lean` (the recovery with full signature for an
+arbitrary finite-perimeter target, the step lemma, termwise finiteness from the quantitative
+bound, the diagonal error bound, the lower bound for arbitrary measurable `L¹`-convergent
+sequences including the `⊤` perimeter case, empty/full/null/zero-perimeter cases, and a uniform
+interval example); `#print axioms` standard three; full default `lake build`; `git diff --check`;
+receipt under ignored `build/audit/upper-recovery-overnight/stage-b/`. Full verifier and canonical
+documentation sync (including the stale intro of the upper module) reserved for the final
+integration.
+
+### Stage B stage status
+
+- [x] module, aggregator import, client (frozen 02:26 Asia/Shanghai)
+- [x] receipt `build/audit/upper-recovery-overnight/stage-b/receipt.md` and READY_FOR_CODEX_REVIEW
+- [ ] docs, pins, views, stale upper-module intro, full verifier: reserved for the final integration
+
+### Stage B exact declarations
+
+New `KLS/Geometry/Perimeter/UpperMinkowskiRecovery.lean` (imports `Perimeter.MetricBVMinkowski`
+and `Cheeger.UpperMinkowskiContent`; namespace `FunctionalInequalities.KLS.MetricBV`; root
+aggregator gains its import; the accepted Stage A file is untouched):
+
+```lean
+theorem lintegral_enorm_indicator_sub_le_add {X} [MeasurableSpace X] (ν : Measure X) {U A : Set X}
+    (hU : MeasurableSet U) (hA : MeasurableSet A) (B : Set X) :
+    ∫⁻ x, ‖U.indicator (1 : X → ℝ) x - B.indicator 1 x‖ₑ ∂ν ≤
+      ∫⁻ x, ‖U.indicator (1 : X → ℝ) x - A.indicator 1 x‖ₑ ∂ν + ∫⁻ x, ‖A.indicator (1 : X → ℝ) x - B.indicator 1 x‖ₑ ∂ν
+-- {V} [NormedAddCommGroup V] [MeasurableSpace V] [BorelSpace V]
+theorem perimeter_le_liminf_upperMinkowskiContent (ν : ProbabilityMeasure V) (B : Set V) {A : ℕ → Set V}
+    (hA : ∀ n, MeasurableSet (A n)) (hconv : Tendsto (fun n => ∫⁻ x, ‖(A n).indicator (1 : V → ℝ) x - B.indicator 1 x‖ₑ ∂ν) atTop (𝓝 0)) :
+    perimeter (ν : Measure V) B ≤ liminf (fun n => Isoperimetry.upperMinkowskiContent ν (A n)) atTop
+theorem liminf_upperMinkowskiContent_eq_top_of_perimeter_eq_top (ν) {B} (hB : perimeter ν B = ⊤) {A} (hA) (hconv) :
+    liminf (fun n => Isoperimetry.upperMinkowskiContent ν (A n)) atTop = ⊤
+theorem exists_thickening_approx (ν) {A : Set V} (hA : MeasurableSet A) (hfin : Isoperimetry.minkowskiContent ν A ≠ ⊤) {δ : ℝ} (hδ : 0 < δ) :
+    ∃ s : ℝ, 0 < s ∧ ∫⁻ x, ‖(thickening s A).indicator (1 : V → ℝ) x - A.indicator 1 x‖ₑ ∂ν ≤ ENNReal.ofReal δ ∧
+      Isoperimetry.upperMinkowskiContent ν (thickening s A) ≤ Isoperimetry.minkowskiContent ν A + ENNReal.ofReal δ
+-- section UpperRecovery, variable (ν : ProbabilityMeasure V) {B : Set V} (hB : perimeter (ν : Measure V) B < ⊤)
+theorem minkowskiContent_minkowskiRecoverySet_ne_top (n : ℕ) : Isoperimetry.minkowskiContent ν (minkowskiRecoverySet ν hB n) ≠ ⊤
+theorem exists_upperRecoveryStep (n : ℕ) : ∃ s : ℝ, 0 < s ∧ (error of thickening s (A n) against A n ≤ ofReal (1/(n+1))) ∧
+    Isoperimetry.upperMinkowskiContent ν (thickening s (A n)) ≤ Isoperimetry.minkowskiContent ν (A n) + ofReal (1/(n+1))
+def upperRecoveryRadius (n : ℕ) : ℝ := Classical.choose (exists_upperRecoveryStep ν hB n)
+def upperRecoverySet (n : ℕ) : Set V := thickening (upperRecoveryRadius ν hB n) (minkowskiRecoverySet ν hB n)
+theorem upperRecoveryRadius_pos / isOpen_upperRecoverySet / measurableSet_upperRecoverySet (n)
+theorem lintegral_enorm_upperRecoverySet_sub_minkowskiRecoverySet_le (n) : … ≤ ENNReal.ofReal (1 / ((n : ℝ) + 1))
+theorem upperMinkowskiContent_upperRecoverySet_le (n) :
+    Isoperimetry.upperMinkowskiContent ν (upperRecoverySet ν hB n) ≤ Isoperimetry.minkowskiContent ν (minkowskiRecoverySet ν hB n) + ENNReal.ofReal (1 / ((n : ℝ) + 1))
+theorem lintegral_enorm_upperRecoverySet_sub_le (n) :
+    ∫⁻ x, ‖(upperRecoverySet ν hB n).indicator (1 : V → ℝ) x - B.indicator 1 x‖ₑ ∂ν ≤
+      ENNReal.ofReal (1 / ((n : ℝ) + 1)) + ∫⁻ x, ‖(minkowskiRecoverySet ν hB n).indicator (1 : V → ℝ) x - B.indicator 1 x‖ₑ ∂ν
+theorem tendsto_indicator_upperRecoverySet : Tendsto (fun n => ∫⁻ x, ‖(upperRecoverySet ν hB n).indicator (1 : V → ℝ) x - B.indicator 1 x‖ₑ ∂ν) atTop (𝓝 0)
+theorem tendsto_upperMinkowskiContent_upperRecoverySet :
+    Tendsto (fun n => Isoperimetry.upperMinkowskiContent ν (upperRecoverySet ν hB n)) atTop (𝓝 (perimeter (ν : Measure V) B))
+theorem exists_upperMinkowskiRecovery : ∃ U : ℕ → Set V, (∀ n, MeasurableSet (U n)) ∧
+    Tendsto (fun n => ∫⁻ x, ‖(U n).indicator (1 : V → ℝ) x - B.indicator 1 x‖ₑ ∂ν) atTop (𝓝 0) ∧
+    Tendsto (fun n => Isoperimetry.upperMinkowskiContent ν (U n)) atTop (𝓝 (perimeter (ν : Measure V) B))
+```
+
+Proof shape: termwise finiteness is `minkowskiContent_minkowskiRecoverySet_le` with
+`ENNReal.div_lt_top` (numerator finite by `hB`, denominator `ofReal (1 - 2·recoveryWidth n) ≠ 0`
+by `recoveryWidth_lt_half`), never inferred from convergence; the step takes one index of the
+Stage-A sequence with error `≤ ofReal δ` (`ENNReal.tendsto_nhds_zero`) and upper content
+`< content + ofReal δ` (`eventually_lt_of_limsup_lt`, `ENNReal.lt_add_right`); the diagonal error
+is the pointwise triangle inequality `enorm_add_le` after `sub_add_sub_cancel` with
+`lintegral_add_left` (first summand measurable); `L¹` convergence by squeezing against
+`ofReal (1/(n+1)) + error (A n, B) → 0`; the upper bound by `limsup_le_limsup` against
+`content (A n) + ofReal (1/(n+1)) → perimeter` (`tendsto_minkowskiContent_minkowskiRecoverySet`);
+the lower bound by `perimeter_le_liminf_of_tendsto`, `perimeter_le_minkowskiContent` and
+`minkowskiContent_le_upperMinkowskiContent` (`liminf_le_liminf`); the limit by
+`tendsto_of_le_liminf_of_limsup_le`. Target `B` arbitrary (the scope of the lower recovery). No
+existing definition or signature changed.
+
+### Stage B independent client (`research/audits/MinkowskiUpperBVRecoveryAudit.lean`)
+
+`recovery` (arbitrary finite-perimeter target), `explicitSets` (radii positive, open, measurable,
+step bound, both limits), `termwiseFiniteness`, `step`, `diagonalError`, `lowerBound` (every target,
+every measurable `L¹`-convergent sequence), `infiniteBoundary` (`liminf = ⊤` at infinite
+perimeter), `zeroPerimeter`, `emptySet`, `fullSet` (perimeter `0` by complement symmetry),
+`perimeter_eq_zero_of_measure_eq_zero` (client-local: a measurable null set has zero perimeter,
+by the constant zero test sequence) with `nullSet`, and `uniformNullTarget` (uniform law on `[0, 1]`,
+`B = {0}`: perimeter `0`, recovery with upper contents `→ 0`). All twelve `#print axioms` reports
+are `[propext, Classical.choice, Quot.sound]`; module and client compile strictly with no
+warnings; full default `lake build` passed; `git diff --check` passed; nothing staged.
+
+Not claimed: any relaxation identity (Stage C), pointwise equality of contents and perimeter,
+recovery at infinite perimeter, general metric/RCD, KLS; no docs/progress synchronization yet.
+
+Review correction (02:3x Asia/Shanghai, before acceptance): Codex found the docstring of
+`liminf_upperMinkowskiContent_eq_top_of_perimeter_eq_top` overstated its consequence ("no
+recovery with finite upper contents exists"). `liminf = ⊤` only excludes a finite limiting value
+(or uniformly bounded contents); a sequence with every term finite and tending to `⊤` is not
+excluded. The docstring and the header sentence now say that no such sequence can have a finite
+limiting upper content (terms may be finite while tending to `⊤`); the theorem and proofs are
+unchanged. Module re-frozen at the hash recorded in the refreshed receipt.
+
+## Stage A / phase 24 (2026-09-30, eight-hour upper-recovery window)
+
+### Baseline
+
+Window: 2026-09-30 01:07:29 to 09:07:29 Asia/Shanghai (UTC 2026-09-29T17:07:29Z to
+2026-09-30T01:07:29Z); expansion stops 07:22:29, wrap-up 08:37:29; old windows superseded.
+Implementation started 01:15 Asia/Shanghai in the same Fable 5.1 session. Baseline: HEAD
+`443f352`, nothing staged, `.git/index` SHA-256 `de27891b…8bb5d`, dirty tree preserved exactly as
+recorded by Codex in the ignored `build/audit/upper-recovery-overnight/baseline.json` (phase-23
+production module `4af52a8c…9a525c`, identical to the accepted 166-gate report; the four
+acceptance/progress prose files differ from that receipt as Codex recorded). Untracked
+`.clinerules/`, `.cursor/` and the plan file are third-party/coordinator files, not edited by
+Claude. Codex owns `codex-bv-overnight-review.md`.
+
+### Placement plan (recorded before editing)
+
+Object and role: (1) the quantitative small-radius selection, a consequence of the existing
+integrated theorem `setLIntegral_upperMinkowskiContent_thickening_le` (substantive property of
+`upperMinkowskiContent`): for `r > 0` and `ε > 0` there is `s ∈ (0, r)` with
+`upperMinkowskiContent ν (thickening s B) ≤ (ν (thickening r B) - ν B) / ENNReal.ofReal r +
+ENNReal.ofReal ε`; proof by contradiction against the constant lower bound of the lower integral
+(`lintegral_mono` needs no measurability, so the radius-content function is never assumed
+measurable), with `ENNReal.div_mul_cancel` for the `ENNReal` arithmetic (the increment is finite,
+`ofReal r` is positive and finite). (2) Lower-to-upper recovery for a measurable `B` with finite
+lower content: radii `r n ∈ (0, 1/(n+1))` at which the lower-content quotient is below
+`minkowskiContent ν B + n⁻¹` (`frequently_lt_of_liminf_lt` along `𝓝[>] 0`, so `r n → 0⁺` and the
+quotients tend to the lower content by `Tendsto.liminf_le_liminf_comp`), then selected
+`s n ∈ (0, r n)` by (1) with slack `1/(n+1)`; the thickenings are open hence measurable, the
+indicator error `∫⁻ ‖1_{B^{s n}} - 1_B‖ₑ dν = ν (B^{s n} \ B) = ν (B^{s n}) - ν B ≤
+ν (B^{r n}) - ν B = q (r n) · ofReal (r n) ≤ (content + n⁻¹) · ofReal (1/(n+1)) → 0` because the
+lower content is finite (no `ν (closure B) = ν B` assumption; the vanishing increment is derived),
+and `limsup upperMinkowskiContent ν (B^{s n}) ≤ minkowskiContent ν B`. Equality with the lower
+content is not claimed. The infinite-content case is kept separate: only the trivial `≤ ⊤` bound
+is stated; no `toReal` is used.
+Exact scope / non-claims: probability laws on a normed additive group with a measurable
+structure for (1) and every set `B`; `[OpensMeasurableSpace V]` (Borel scope) and
+`MeasurableSet B` for the measurability of thickenings and the set-difference identity in (2).
+Not claimed: measurability of the radius-content function, `ν (closure B) = ν B`, equality of the
+limsup with the lower content, any BV/perimeter statement (Stage B), any relaxation identity
+(Stage C), general metric/RCD, KLS.
+Existing owner and consumers: `KLS/Geometry/Cheeger/UpperMinkowskiContent.lean` (phases 22–23),
+imported only by the root aggregator. The existing positive-slack selection lemma
+`MetricBV.exists_mem_Ioo_le_div_add_of_setLIntegral_le` lives in
+`Perimeter/MetricBVMinkowski.lean`, above the content layer; importing that bridge into the
+content owner would invert the dependency direction, so the selection argument is re-proved
+here as a private helper in the same style (recorded duplication of a one-use tool; no
+migration of the existing lemma).
+Destination module and namespace: extend `Cheeger/UpperMinkowskiContent.lean`, namespace
+`FunctionalInequalities.KLS.Isoperimetry`, new sections `Selection` and `Recovery` after
+`Integrated`.
+Required imports / dependency direction: none new; no local module imports this one.
+Extend, split or create, and why: extend (same object, next property, same prerequisite level;
+plan: "Stage-A content estimates belong with the existing upper-content owner").
+Public API changes and affected clients: additions only.
+Validation scope: strict compilation of the module and the new client
+`research/audits/MinkowskiUpperRecoveryAudit.lean` (full signatures: selection for every set,
+recovery for measurable finite-content sets with all five components, the quotient-realizing
+radii, the empty set, the full set, zero content, a boundary atom, radius endpoints, the
+infinite-content separation and the uniform-interval example); `#print axioms` standard three;
+full default `lake build`; proportional checks now, the frozen full verifier after integration;
+receipt under ignored `build/audit/upper-recovery-overnight/stage-a/`.
+
+### Stage A stage status
+
+- [x] selection, recovery, client (frozen 01:25 Asia/Shanghai; READY_FOR_CODEX_REVIEW in the receipt
+  `build/audit/upper-recovery-overnight/stage-a/receipt.md`)
+- [ ] docs, pins, views: deferred to the final integration, since the plan synchronizes
+  HANDOFF/root/Blueprint/progress only to accepted scope
+- [ ] frozen full verifier: deferred to the final integration per the plan (proportional strict
+  checks done now: strict module and client compilation, full default `lake build`)
+
+### Stage A exact declarations
+
+New sections `Selection` and `Recovery` at the end of `KLS/Geometry/Cheeger/UpperMinkowskiContent.lean`
+(no new import; `variable (ν : ProbabilityMeasure V) (B : Set V)`; `[OpensMeasurableSpace V]` only
+from `lintegral_enorm_indicator_thickening_sub` on):
+
+```lean
+private theorem exists_mem_Ioo_le_div_add {φ : ℝ → ℝ≥0∞} {r : ℝ} (hr : 0 < r) {C : ℝ≥0∞} (hC : C ≠ ⊤)
+    (hφ : ∫⁻ t in Ioo 0 r, φ t ≤ C) {ε : ℝ} (hε : 0 < ε) :
+    ∃ t ∈ Ioo 0 r, φ t ≤ C / ENNReal.ofReal r + ENNReal.ofReal ε
+theorem exists_upperMinkowskiContent_thickening_le_div_add {r ε : ℝ} (hr : 0 < r) (hε : 0 < ε) :
+    ∃ s ∈ Ioo 0 r, upperMinkowskiContent ν (Metric.thickening s B) ≤
+      ((ν : Measure V) (Metric.thickening r B) - (ν : Measure V) B) / ENNReal.ofReal r + ENNReal.ofReal ε
+theorem measure_thickening_sub_eq_div_mul {r : ℝ} (hr : 0 < r) :
+    (ν : Measure V) (Metric.thickening r B) - (ν : Measure V) B =
+      ((ν : Measure V) (Metric.thickening r B) - (ν : Measure V) B) / ENNReal.ofReal r * ENNReal.ofReal r
+theorem exists_radii_tendsto_minkowskiContent (hfin : minkowskiContent ν B ≠ ⊤) :
+    ∃ r : ℕ → ℝ, (∀ n : ℕ, r n ∈ Ioo 0 (1 / ((n : ℝ) + 1))) ∧
+      (∀ n : ℕ, ((ν : Measure V) (Metric.thickening (r n) B) - (ν : Measure V) B) / ENNReal.ofReal (r n) ≤
+        minkowskiContent ν B + (n : ℝ≥0∞)⁻¹) ∧
+      Tendsto r atTop (𝓝[>] 0) ∧
+      Tendsto (fun n => ((ν : Measure V) (Metric.thickening (r n) B) - (ν : Measure V) B) / ENNReal.ofReal (r n))
+        atTop (𝓝 (minkowskiContent ν B))
+theorem lintegral_enorm_indicator_thickening_sub (hB : MeasurableSet B) {s : ℝ} (hs : 0 < s) :
+    ∫⁻ x, ‖(Metric.thickening s B).indicator (1 : V → ℝ) x - B.indicator 1 x‖ₑ ∂(ν : Measure V) =
+      (ν : Measure V) (Metric.thickening s B) - (ν : Measure V) B
+theorem exists_upperRecovery (hB : MeasurableSet B) (hfin : minkowskiContent ν B ≠ ⊤) :
+    ∃ s : ℕ → ℝ, (∀ n, 0 < s n) ∧ Tendsto s atTop (𝓝 0) ∧
+      (∀ n, MeasurableSet (Metric.thickening (s n) B)) ∧
+      Tendsto (fun n => ∫⁻ x, ‖(Metric.thickening (s n) B).indicator (1 : V → ℝ) x - B.indicator 1 x‖ₑ ∂(ν : Measure V))
+        atTop (𝓝 0) ∧
+      limsup (fun n => upperMinkowskiContent ν (Metric.thickening (s n) B)) atTop ≤ minkowskiContent ν B
+```
+
+Proof shape: the private selection helper is the positive-slack argument of
+`MetricBV.exists_mem_Ioo_le_div_add_of_setLIntegral_le` (a constant lower bound of the lower
+integral by `setLIntegral_mono'`, `ENNReal.div_mul_cancel`, `ENNReal.lt_add_right`; `φ` not
+measurable), applied to the phase-23 integrated theorem with the finite increment. The radii:
+`frequently_lt_of_liminf_lt` along `𝓝[>] 0` (the lower content is the liminf, strictly below
+`content + n⁻¹` because it is finite) intersected with `Ioo 0 (1/(n+1)) ∈ 𝓝[>] 0`, then `choose`;
+`r n → 0⁺` by squeezing; the quotients tend to the lower content by
+`Tendsto.liminf_le_liminf_comp` (lower bound) and `limsup_le_limsup` against `content + n⁻¹ →
+content` (upper bound). The indicator error is `ν (B^s \ B) = ν (B^s) - ν B` (`self_subset_thickening`,
+`lintegral_indicator`, `measure_sdiff`; `B` measurable, the thickening open). The recovery selects
+`s n ∈ (0, r n)` with slack `1/(n+1)`, bounds the error by the increment at `r n`, which equals
+`q (r n) · ofReal (r n) ≤ (content + n⁻¹) · ofReal (1/(n+1)) → 0` (`ENNReal.Tendsto.mul`, using
+`content ≠ ⊤`), and bounds the limsup by the limit of `q (r n) + ofReal (1/(n+1))`, which is the
+lower content. No existing definition or signature changed.
+
+### Stage A independent client (`research/audits/MinkowskiUpperRecoveryAudit.lean`)
+
+`selection` (every set, radius and slack; selected radius strictly inside `(0, r)`),
+`realizingRadii`, `recovery` (all five components), `indicatorError`, `emptySet` and `fullSet`
+(lower content `0`, recovery applies), `zeroContent` (upper contents of the recovery thickenings
+tend to `0`), `infiniteContentSeparation` (`minkowskiContent = ⊤`: only the trivial bound; no
+`toReal`), `boundaryAtom` (Dirac at `0`, `B = [0, ∞)`: both contents `0`, recovery applies),
+`uniformSelection` (uniform law on `[0, 1]`, `B = {0}`: the bound reads `1 + ε` and the selected
+thickening has upper content exactly `1`) and `uniformAttained` (lower content `1`, recovery
+thickenings with upper content eventually exactly `1`, so the `limsup` equals the lower content).
+All eleven `#print axioms` reports are `[propext, Classical.choice, Quot.sound]`; the module and the
+client compile strictly with no warnings; the full default `lake build` (3674 jobs) passed;
+`git diff --check` passed; nothing is staged.
+
+Not claimed: equality of the `limsup` with the lower content in general, `ν (closure B) = ν B`,
+measurability of the radius-content function, any BV/perimeter (Stage B) or relaxation (Stage C)
+statement, general metric/RCD, KLS; no docs/progress synchronization yet (accepted scope only).
+
+## Phase 23 (2026-09-29 evening, user-authorized single-phase continuation)
+
+### Baseline
+
+New user authorization (no eight-hour window, no automatic extension): implement only phase 23
+(the integrated upper content of thickenings), then freeze for independent Codex review.
+Session resumed 19:47 Asia/Shanghai. Fresh Git baseline: phases 1–22 are committed, HEAD
+`443f352` ("docs: translate repository documentation into English"). Observed baseline at
+19:47: `git status` reported no modified or untracked entries; by 19:56 (plan time) the only
+entry was `research/handoffs/codex-bv-overnight-review.md`, modified by Codex (its dispatch
+record; never edited by Claude). Nothing staged, SHA-256 of `.git/index`
+`d766e08d…4f90a3`. SHA-256 at start: `Cheeger/UpperMinkowskiContent.lean` `cb5d15f0…bf91a5`
+(identical to the phase-22 receipt), chapter 45 `c363f052…d3b6f2`, `research/tasks.json`
+`8dfae241…3782d0`, `literature.json` `098cd6f1…2aca7f`, `nodes.json` `b2f46f52…4630c3`,
+`research/progress/README.md` `b11328d9…02c7d5`, `README.md` `c593e01d…8af9cc`, `HANDOFF.md`
+`f340a774…43f49b`; not edited: `codex-bv-overnight-review.md` (`c005746f…461bb7` at start),
+`moment-map-spectral.md` `7106fbc3…b8bee5`. The old dirty baseline and the old window times
+are not reused.
+
+### Placement plan (recorded before editing)
+
+Object and role: the integrated upper content of thickenings (substantive property of the
+existing `upperMinkowskiContent` and `thickeningMass`): for every probability law `ν` on a normed
+additive group with a measurable structure, every set `B` and every `r > 0`,
+`∫⁻ s in Ioo 0 r, upperMinkowskiContent ν (thickening s B) ≤ ν (thickening r B) - ν B`
+(`ENNReal` lower integral; the integrand need not be measurable, `lintegral_mono_ae` needs no
+measurability). Route: the phase-22 a.e. bound `upperMinkowskiContent ν (thickening s B) ≤
+ENNReal.ofReal (deriv F s)` with `F = thickeningMass ν B`; the monotone differentiation theorem
+in its Radon–Nikodym form (`Monotone.ae_hasDerivAt`: a.e. the derivative equals
+`(rnDeriv μ_F volume s).toReal`, where `μ_F` is the Lebesgue–Stieltjes measure of the
+right-continuous modification `hF.stieltjesFunction`), so `ENNReal.ofReal (deriv F s) ≤
+rnDeriv μ_F volume s` a.e. (`ENNReal.ofReal_toReal_le`, valid even where the density is
+infinite); the Radon–Nikodym inequality `∫⁻ s in Ioo 0 r, rnDeriv μ_F volume s ≤ μ_F (Ioo 0 r)`
+(no absolute continuity: only `withDensity (rnDeriv) ≤ μ_F`); and the endpoint passages
+`μ_F (Ioo 0 r) = ENNReal.ofReal (leftLim g r - g 0)` for `g = hF.stieltjesFunction = rightLim F`,
+with `leftLim g r ≤ F r` (each `g s = rightLim F s ≤ F r` for `s < r`, then the left limit) and
+`(ν B).toReal ≤ g 0` (each `F s ≥ (ν B).toReal` for `s > 0` by `self_subset_thickening`, then the
+right limit at `0`), hence `μ_F (Ioo 0 r) ≤ ENNReal.ofReal (F r - (ν B).toReal) =
+ν (thickening r B) - ν B`. No continuity of the radius mass at `0` or `r` is assumed; only these
+one-sided-limit inequalities are used, and the open thickening at the endpoint `r` enters only
+through `F r`. The interval `(0, r)` is handled directly, so no `a ↓ 0` monotone convergence is
+needed. Corollaries: the empty set and zero mass increments (right side `0`), a.e. finiteness of
+the upper content of thickenings (from the phase-22 pointwise bound), and the derivative
+integral bound `∫⁻ s in Ioo 0 r, ENNReal.ofReal (deriv F s) ≤ ν (thickening r B) - ν B` stated on
+its own.
+Exact scope / non-claims: same scope as phase 22 (probability laws on a normed additive group with
+a measurable structure; every set `B`, in particular every measurable `B`; `r > 0`). Not claimed:
+measurability of `s ↦ upperMinkowskiContent ν (thickening s B)`, integrability of the derivative,
+absolute continuity of the radius mass, equality in the integrated bound, the lower-to-upper
+recovery or relaxed-upper identity, Lemma 2.1 of Ambrosio--Di Marino--Gigli in general metric
+measure spaces, RCD/Buser/KLS conclusions.
+Existing owner and consumers: `KLS/Geometry/Cheeger/UpperMinkowskiContent.lean` (phase 22, the
+upper-content companion; imported only by the root aggregator).
+Destination module and namespace: extend the same module, namespace
+`FunctionalInequalities.KLS.Isoperimetry`, new section after the a.e. differentiability results.
+Required imports / dependency direction: none new (`Mathlib.Analysis.Calculus.Monotone` already
+brings the Stieltjes measure and the Radon–Nikodym derivative); no local module imports this one.
+Extend, split or create, and why: extend (same object, same role and prerequisite level; the
+integrated bound is the next property of the same radius mass, workflow §3.1).
+Public API changes and affected clients: additions only; no existing definition or signature
+changes; no aggregator change.
+Validation scope: strict compilation of the module and of a new client
+`research/audits/MinkowskiUpperIntegratedAudit.lean` (the integrated bound for every law and
+set, the measurable-set form, the empty set, zero increments, infinite-integrand handling through
+the a.e. finiteness corollary, and the uniform law on `[0, 1]` with `B = {0}` where the integral
+over `(0, r)` equals `ENNReal.ofReal r = ν (ball 0 r) - ν {0}` for `0 < r ≤ 1`, so the bound is
+attained); `#print axioms` standard three; full default `lake build`; progress views from an
+isolated index/object store with only chapter 45 and `research/tasks.json` added;
+`update.py --check`, `test_views.py`, `check_blueprint.py`, `git diff --check`; frozen
+`python3 research/verify.py`; receipt under the ignored
+`build/audit/minkowski-upper-integrated/receipt.md`.
+
+### Concurrent unrelated changes (observed, not authored by Claude)
+
+During this phase, before the freeze, unrelated CI-policy edits appeared in the working tree and
+are preserved exactly: `.github/workflows/blueprint.yml` deleted; `.github/workflows/lean.yml`
+(`fa1e7ae2…81b0b1`; manual dispatch and `milestone/**` tags instead of path
+filters); `AGENTS.md` (`92422bbf…4aca7d`; remote CI only at verification milestones, no
+`[skip ci]`); `research/workflow.md` (`2f9925af…0bdb0c`; the "Remote CI at
+verification milestones" section); `formalization/README.md` (`44a2debe…520656`;
+Blueprint artifacts built locally); one root `README.md` paragraph about Blueprint/CI (the
+root README, `4eca8770…8e9d54`, otherwise carries only Claude's phase-23 sentence); and
+Codex's dispatch record in `codex-bv-overnight-review.md`
+(`c005746f…461bb7`). Claude did not revert, edit or
+claim any of these; they are part of the frozen snapshot the verifier certifies. No CI, push or
+commit action is taken.
+
+### Pre-existing baseline metadata defect (separate from the phase-23 proof; repaired under user authorization)
+
+The first frozen full-verifier run on the phase-23 snapshot (`3992f3f7…0439b5`, frozen 19:57:10,
+report `build/verification/20260929T115711.018636Z/report.json`) failed on exactly one gate,
+`statement-golden`: "snapshot decision record changed; append a new record instead of rewriting
+it". Cause: commit `443f352` (18:34 +0800, "docs: translate repository documentation into
+English") translated the historical decision record pinned by
+`research/a-series/statement-snapshot/golden.json`
+(`research/decisions/2026-09-20-formalization-directory-organization.md`, pinned SHA-256
+`c9ecd836…d570`, now `5b60e087…8930b`), so the gate fails on every snapshot at `HEAD`; the runs
+`20260928T193145` (phase 22) and `20260929T061540` on pre-translation snapshots passed all 165
+gates. The failing gate stopped the verifier before `declaration-audit` and `leanchecker`
+(164 gates recorded, 163 passed, including all 155 strict research-audit clients with the new
+`MinkowskiUpperIntegratedAudit`, `atlas-ledger-blueprint`, `python-tests` and
+`statement-snapshot`); the snapshot hash recomputed before and after that run was identical
+(no drift). The semantic comparison `statement_snapshot.compare_snapshot(current, golden)` is
+`[]` (26 declarations unchanged; confirmed independently by Codex).
+
+Repair, directed by Codex at 20:03 within the authorized review and executed by Claude: a new English decision record
+`research/decisions/2026-09-29-statement-snapshot-decision-translation.md` (translation-only
+provenance, old and current hashes, the empty semantic comparison), then the existing workflow
+`python3 research/statement_snapshot.py update --decision <that record>`; the resulting
+`golden.json` diff is exactly the `decision` field (all semantic fields verified equal by a JSON
+comparison against the saved previous golden), and `statement_snapshot.py check` passes. The
+translated historical record and the checker are untouched. Codex's own client
+`build/audit/minkowski-upper-integrated/codex/EndpointAudit.lean` (ignored path, not edited by
+Claude) is reported by Codex as passing with standard axioms. The full verifier is re-run on the
+repaired frozen snapshot; its result is recorded only in the receipt.
+
+### Phase 23 stage status
+
+- [x] module extension, client, docs, pins, views
+- [ ] full verifier on the frozen snapshot (result recorded only in the receipt
+  `build/audit/minkowski-upper-integrated/receipt.md`)
+
+### Phase 23 exact declarations
+
+New section `Integrated` at the end of `KLS/Geometry/Cheeger/UpperMinkowskiContent.lean`
+(no new import; `variable (ν : ProbabilityMeasure V) (B : Set V)`; module docstring updated):
+
+```lean
+theorem toReal_measure_le_rightLim_thickeningMass_zero :
+    ((ν : Measure V) B).toReal ≤ Function.rightLim (thickeningMass ν B) 0
+theorem leftLim_rightLim_thickeningMass_le (r : ℝ) :
+    Function.leftLim (Function.rightLim (thickeningMass ν B)) r ≤ thickeningMass ν B r
+theorem stieltjesMeasure_thickeningMass_Ioo_le (r : ℝ) :
+    (monotone_thickeningMass ν B).stieltjesFunction.measure (Ioo 0 r) ≤ (ν : Measure V) (Metric.thickening r B) - (ν : Measure V) B
+theorem setLIntegral_ofReal_deriv_thickeningMass_le (r : ℝ) :
+    ∫⁻ s in Ioo 0 r, ENNReal.ofReal (deriv (thickeningMass ν B) s) ≤ (ν : Measure V) (Metric.thickening r B) - (ν : Measure V) B
+theorem setLIntegral_upperMinkowskiContent_thickening_le (r : ℝ) :
+    ∫⁻ s in Ioo 0 r, upperMinkowskiContent ν (Metric.thickening s B) ≤ (ν : Measure V) (Metric.thickening r B) - (ν : Measure V) B
+theorem setLIntegral_Ioc_upperMinkowskiContent_thickening_le (r : ℝ) :
+    ∫⁻ s in Ioc 0 r, upperMinkowskiContent ν (Metric.thickening s B) ≤ (ν : Measure V) (Metric.thickening r B) - (ν : Measure V) B
+theorem setLIntegral_upperMinkowskiContent_thickening_lt_top (r : ℝ) :
+    ∫⁻ s in Ioo 0 r, upperMinkowskiContent ν (Metric.thickening s B) < ⊤
+theorem ae_upperMinkowskiContent_thickening_lt_top :
+    ∀ᵐ s ∂(volume : Measure ℝ), upperMinkowskiContent ν (Metric.thickening s B) < ⊤
+theorem setLIntegral_upperMinkowskiContent_thickening_eq_zero_of_measure_thickening_le {r : ℝ}
+    (hr : (ν : Measure V) (Metric.thickening r B) ≤ (ν : Measure V) B) :
+    ∫⁻ s in Ioo 0 r, upperMinkowskiContent ν (Metric.thickening s B) = 0
+theorem setLIntegral_upperMinkowskiContent_thickening_empty (r : ℝ) :
+    ∫⁻ s in Ioo 0 r, upperMinkowskiContent ν (Metric.thickening s (∅ : Set V)) = 0
+```
+
+Proof shape: the endpoint passages are `ge_of_tendsto`/`le_of_tendsto` along
+`Monotone.tendsto_rightLim`/`tendsto_leftLim` with `self_subset_thickening` (every positive
+thickening contains `B`) and `Monotone.rightLim_le` (`rightLim F s ≤ F r` for `s < r`); the
+Stieltjes mass of `(0, r)` is `StieltjesFunction.measure_Ioo` (`ofReal (leftLim g r - g 0)`,
+`g = rightLim F` by `Monotone.stieltjesFunction_eq`), bounded by `ofReal (F r - (ν B).toReal) =
+ν (thickening r B) - ν B`; the derivative integral bound uses `Monotone.ae_hasDerivAt` (a.e.
+`deriv F s = (rnDeriv μ_F volume s).toReal`), `ENNReal.ofReal_toReal_le` (so an infinite
+density on a null set is harmless), `withDensity_apply` and `Measure.withDensity_rnDeriv_le`
+(no absolute continuity); the main theorem composes it with the phase-22 a.e. bound through
+`lintegral_mono_ae` (no measurability of the integrand). Stated for every radius `r` (for
+`r ≤ 0` the interval is empty), hence for `r > 0`, and for every set, hence for measurable `B`.
+The `Ioc` form uses `Ioo_ae_eq_Ioc`. No existing definition or signature changed.
+
+### Phase 23 independent client (`research/audits/MinkowskiUpperIntegratedAudit.lean`)
+
+`integratedBound`, `assignmentForm` (Borel space, measurable `B`, `r > 0`: the assignment
+statement, hypotheses unused), `halfOpenForm`, `derivativeIntegral` (the derivative integral
+bound, the Stieltjes mass bound and both endpoint passages), `emptySet`, `zeroIncrements`,
+`ennrealValues` (finite integral, a.e. finite integrand, bound at most one), `nonpositiveRadius`,
+the uniform law on `[0, 1]` with `B = {0}` (`thickening_ball_real`, `uniform_ball`,
+`uniform_singleton`, `uniform_thickeningMass`, `uniform_hasDerivAt`, `uniform_upperContent`:
+upper content of the `s`-thickening exactly `1` on `(0, 1)`), `uniformAttained` (for `0 < r ≤ 1`
+both sides equal `ENNReal.ofReal r`) and `uniformBoundConsistent` (equality of the two sides,
+the bound attained). All ten `#print axioms` reports are `[propext, Classical.choice, Quot.sound]`;
+the module compiles strictly with no warnings; the full default `lake build` (3674 jobs) passed.
+
+Metadata: chapter 45 (integrated bound, route, non-claims), the `ADMG2017` literature row,
+`diagram:BV` description in `nodes.json` (`last_updated` already `2026-09-29`; evidence source
+unchanged), HANDOFF (head paragraph and a phase-23 paragraph, marked awaiting independent
+review), root README (one sentence), progress hub next-step paragraph; the four chapter-45 pins in
+`research/tasks.json` refreshed (no other pinned file edited; the module is not pinned); views
+regenerated from an isolated index/object store (adding only `research/tasks.json` and chapter
+45); `update.py --check`, `test_views.py` (4 tests), `check_blueprint.py` (0 errors) and
+`git diff --check` passed; the real index hash `d766e08d…` is unchanged and nothing is staged.
+
+Not claimed: measurability or integrability of the integrand or of the derivative, absolute
+continuity of the radius mass, equality in the integrated bound in general, the lower-to-upper
+recovery or relaxed-upper identity, Lemma 2.1 in general metric measure spaces, RCD/Buser/KLS
+conclusions, remote CI or a ledger certificate.
 
 ## Phase 22 (2026-09-29, renewed eight-hour window; fresh implementation session)
 

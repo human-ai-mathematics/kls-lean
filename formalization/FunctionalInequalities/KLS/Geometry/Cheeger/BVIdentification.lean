@@ -57,7 +57,7 @@ omit [BorelSpace V] in
 theorem minkowskiConstant_le_div (ν : ProbabilityMeasure V) {A : Set V} (hA : MeasurableSet A)
     (h0 : 0 < (ν : Measure V) A) (h1 : (ν : Measure V) A < 1) :
     Isoperimetry.minkowskiConstant ν ≤
-      Isoperimetry.minkowskiContent ν A / min ((ν : Measure V) A) (1 - (ν : Measure V) A) := by
+      Isoperimetry.minkowskiContent (ν : Measure V) A / min ((ν : Measure V) A) (1 - (ν : Measure V) A) := by
   unfold Isoperimetry.minkowskiConstant
   exact iInf_le_of_le A (iInf_le_of_le hA (iInf_le_of_le h0 (iInf_le _ h1)))
 
@@ -66,7 +66,7 @@ theorem symmetricConstant_le_minkowskiConstant (ν : ProbabilityMeasure V) :
     symmetricConstant ν ≤ Isoperimetry.minkowskiConstant ν := by
   unfold symmetricConstant Isoperimetry.minkowskiConstant
   exact iInf_mono fun B => iInf_mono fun hB => iInf_mono fun _ => iInf_mono fun _ =>
-    ENNReal.div_le_div_right (perimeter_le_minkowskiContent ν hB) _
+    ENNReal.div_le_div_right (perimeter_le_minkowskiContent (ν : Measure V) hB) _
 
 /-- The Minkowski Cheeger constant is at most the BV one: each admissible BV quotient is either
 `⊤` (infinite perimeter, positive finite denominator) or the limit of Minkowski quotients of the
@@ -83,7 +83,7 @@ theorem minkowskiConstant_le_symmetricConstant (ν : ProbabilityMeasure V) :
   · have hB : perimeter (ν : Measure V) B < ⊤ := lt_top_iff_ne_top.2 hfin
     refine ge_of_tendsto (tendsto_minkowskiContent_div_min_minkowskiRecoverySet ν hBm hB h0 h1) ?_
     filter_upwards [eventually_measure_minkowskiRecoverySet_mem_Ioo ν hBm hB h0 h1] with n hn
-    exact minkowskiConstant_le_div ν (measurableSet_minkowskiRecoverySet ν hB n) hn.1 hn.2
+    exact minkowskiConstant_le_div ν (measurableSet_minkowskiRecoverySet (ν : Measure V) hB n) hn.1 hn.2
 
 /-- BV--Minkowski Cheeger identification: the symmetric metric BV constant equals the Minkowski
 Cheeger constant for every probability law on a normed group. -/

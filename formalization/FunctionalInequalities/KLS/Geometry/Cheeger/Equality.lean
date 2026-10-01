@@ -318,11 +318,11 @@ theorem smoothConstant_le_minkowskiConstant {ν : ProbabilityMeasure V} {ρ : V 
     ne_top_of_le_ne_top ENNReal.one_ne_top ((min_le_left _ _).trans prob_le_one)
   rw [ENNReal.le_div_iff_mul_le (Or.inl hm0) (Or.inl hmtop)]
   -- An infinite Minkowski content needs no argument.
-  rcases eq_or_ne (minkowskiContent ν B) ⊤ with hc | hc
+  rcases eq_or_ne (minkowskiContent (ν : Measure V) B) ⊤ with hc | hc
   · rw [hc]
     exact le_top
   have hcl : (ν : Measure V) (closure B) = (ν : Measure V) B :=
-    measure_closure_eq_of_minkowskiContent_ne_top ν hc
+    measure_closure_eq_of_minkowskiContent_ne_top (ν : Measure V) hc
   have hBne : B.Nonempty := nonempty_of_measure_ne_zero (ne_of_gt hpos)
   set e : ℝ → ℝ≥0∞ :=
     fun r ↦ (ν : Measure V) (Metric.thickening r B) - (ν : Measure V) B with hedef
@@ -418,7 +418,7 @@ theorem smoothConstant_le_minkowskiConstant {ν : ProbabilityMeasure V} {ρ : V 
     _ ≤ liminf (fun r : ℝ ↦ e r / ENNReal.ofReal r) (𝓝[>] 0) := by
         refine liminf_le_liminf ?_
         filter_upwards [self_mem_nhdsWithin] with r hr using hmain r hr
-    _ = minkowskiContent ν B := rfl
+    _ = minkowskiContent (ν : Measure V) B := rfl
 
 /-- Blueprint `lem:relative-perimeter-cheeger-infimum`: for a probability law with a Borell density
 relative to Lebesgue measure, the Minkowski Cheeger infimum over Borel sets equals the

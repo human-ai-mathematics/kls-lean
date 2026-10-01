@@ -77,7 +77,7 @@ theorem minkowskiConstant_mul_lintegral_le (ν : ProbabilityMeasure V) {u : V �
     measure_mono fun x hx => le_trans h hx
   have hkey : ∀ t ∈ Set.Ioi (0 : ℝ),
       minkowskiConstant ν * (ν : Measure V) {x | t ≤ u x} ≤
-        minkowskiContent ν {x | t ≤ u x} := by
+        minkowskiContent (ν : Measure V) {x | t ≤ u x} := by
     intro t ht
     have hsub : {x | t ≤ u x} ⊆ {x | 0 < u x} := fun x hx =>
       lt_of_lt_of_le (Set.mem_Ioi.mp ht) hx
@@ -95,19 +95,19 @@ theorem minkowskiConstant_mul_lintegral_le (ν : ProbabilityMeasure V) {u : V �
         = minkowskiConstant ν *
             min ((ν : Measure V) {x | t ≤ u x}) (1 - (ν : Measure V) {x | t ≤ u x}) := by
           rw [hmin]
-      _ ≤ minkowskiContent ν {x | t ≤ u x} :=
+      _ ≤ minkowskiContent (ν : Measure V) {x | t ≤ u x} :=
           minkowskiConstant_mul_min_le ν (measurableSet_le measurable_const humeas)
   calc minkowskiConstant ν * ∫⁻ x, ENNReal.ofReal (u x) ∂(ν : Measure V)
       = minkowskiConstant ν * ∫⁻ t in Set.Ioi (0 : ℝ), (ν : Measure V) {x | t ≤ u x} := by
         rw [lintegral_eq_lintegral_meas_le _ (Eventually.of_forall hu0) humeas.aemeasurable]
     _ = ∫⁻ t in Set.Ioi (0 : ℝ), minkowskiConstant ν * (ν : Measure V) {x | t ≤ u x} :=
         (lintegral_const_mul _ hanti.measurable).symm
-    _ ≤ ∫⁻ t in Set.Ioi (0 : ℝ), minkowskiContent ν {x | t ≤ u x} :=
+    _ ≤ ∫⁻ t in Set.Ioi (0 : ℝ), minkowskiContent (ν : Measure V) {x | t ≤ u x} :=
         setLIntegral_mono' measurableSet_Ioi hkey
-    _ ≤ ∫⁻ t, minkowskiContent ν {x | t ≤ u x} ∂(volume : Measure ℝ) :=
+    _ ≤ ∫⁻ t, minkowskiContent (ν : Measure V) {x | t ≤ u x} ∂(volume : Measure ℝ) :=
         setLIntegral_le_lintegral _ _
     _ ≤ ∫⁻ x, ‖gradient u x‖ₑ ∂(ν : Measure V) :=
-        lintegral_minkowskiContent_superlevel_le ν hu hK
+        lintegral_minkowskiContent_superlevel_le (ν : Measure V) hu hK
 
 /-! ### The square of the positive part -/
 

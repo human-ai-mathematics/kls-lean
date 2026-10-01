@@ -18,7 +18,14 @@ globally Lipschitz bridge gives `lipschitzRelaxation_eq_perimeter` on every metr
 a proper space the locally Lipschitz bridge gives `locallyLipschitzRelaxation_eq_perimeter`. The
 closed support of a probability law on a proper space is proper, so both relaxations of the
 closed-support law equal its perimeter (`locallyLipschitzRelaxation_closedSupportLaw`).
-Convergence in `L¹_loc` and non-proper spaces for the locally Lipschitz class are not addressed.
+For a measurable finite-mass target the global-Lipschitz identity holds for every Borel measure,
+without finite total mass or properness (`lipschitzRelaxation_eq_perimeter_of_measure_lt_top`),
+by the target-tail cutoff estimates of ADMG Remark 3.4. This is a test-class relaxation identity,
+not a Minkowski relaxation identity. On a proper space the same holds at measurable finite-mass
+targets for every Borel measure for the locally Lipschitz class with global `L¹` convergence
+(`locallyLipschitzRelaxation_eq_perimeter_of_measure_lt_top`) and with convergence on every
+compact set (`compactLocallyLipschitzRelaxation_eq_perimeter_of_measure_lt_top`), the alternative
+classes of ADMG Remark 3.5. Non-proper spaces for the locally Lipschitz classes are not addressed.
 -/
 
 noncomputable section
@@ -105,6 +112,23 @@ for every finite Borel measure on a metric space. -/
 theorem lipschitzRelaxation_eq_perimeter (ν : Measure X) [IsFiniteMeasure ν] (B : Set X) :
     lipschitzRelaxation ν B = perimeter ν B :=
   le_antisymm (lipschitzRelaxation_le_perimeter ν B) (perimeter_le_lipschitzRelaxation ν B)
+
+/-- At a measurable finite-mass target, the globally Lipschitz bridge bounds the perimeter
+without requiring finite total mass. -/
+theorem perimeter_le_lipschitzRelaxation_of_measure_lt_top (ν : Measure X) {B : Set X}
+    (hB : MeasurableSet B) (hνB : ν B < ⊤) :
+    perimeter ν B ≤ lipschitzRelaxation ν B :=
+  le_iInf fun f => perimeter_le_liminf_of_lipschitz_of_measure_lt_top ν hB hνB f.2.1 f.2.2
+
+/-- The global-L1, globally Lipschitz relaxation of ADMG Definition 3.3 equals the
+bounded-support metric BV perimeter at every measurable finite-mass target, for every Borel
+measure on a metric space. This bounded-support reduction does not assume finite total mass,
+properness, or finiteness on bounded sets, and it does not identify a Minkowski relaxation. -/
+theorem lipschitzRelaxation_eq_perimeter_of_measure_lt_top (ν : Measure X) {B : Set X}
+    (hB : MeasurableSet B) (hνB : ν B < ⊤) :
+    lipschitzRelaxation ν B = perimeter ν B :=
+  le_antisymm (lipschitzRelaxation_le_perimeter ν B)
+    (perimeter_le_lipschitzRelaxation_of_measure_lt_top ν hB hνB)
 
 /-- On a proper space with a finite measure the perimeter is at most the locally Lipschitz
 relaxation (the locally Lipschitz bridge). -/
@@ -223,6 +247,32 @@ theorem compactLocallyLipschitzRelaxation_eq_perimeter [ProperSpace X] (ν : Mea
     compactLocallyLipschitzRelaxation ν B = perimeter ν B :=
   le_antisymm (compactLocallyLipschitzRelaxation_le_perimeter ν B)
     (perimeter_le_compactLocallyLipschitzRelaxation ν B)
+
+/-- At a measurable finite-mass target, for every Borel measure on a proper space, the perimeter
+is at most the compact-local relaxation (ADMG Remark 3.5 without finite total mass). -/
+theorem perimeter_le_compactLocallyLipschitzRelaxation_of_measure_lt_top [ProperSpace X]
+    (ν : Measure X) {B : Set X} (hB : MeasurableSet B) (hνB : ν B < ⊤) :
+    perimeter ν B ≤ compactLocallyLipschitzRelaxation ν B :=
+  le_iInf fun f =>
+    perimeter_le_liminf_of_locallyLipschitz_of_forall_isCompact_of_measure_lt_top ν hB hνB f.2.1 f.2.2
+
+/-- The compact-local locally Lipschitz relaxation equals the bounded-support perimeter at every
+measurable finite-mass target, for every Borel measure on a proper metric space. -/
+theorem compactLocallyLipschitzRelaxation_eq_perimeter_of_measure_lt_top [ProperSpace X]
+    (ν : Measure X) {B : Set X} (hB : MeasurableSet B) (hνB : ν B < ⊤) :
+    compactLocallyLipschitzRelaxation ν B = perimeter ν B :=
+  le_antisymm (compactLocallyLipschitzRelaxation_le_perimeter ν B)
+    (perimeter_le_compactLocallyLipschitzRelaxation_of_measure_lt_top ν hB hνB)
+
+/-- The locally Lipschitz relaxation with global `L¹` convergence equals the bounded-support
+perimeter at every measurable finite-mass target, for every Borel measure on a proper metric
+space. -/
+theorem locallyLipschitzRelaxation_eq_perimeter_of_measure_lt_top [ProperSpace X]
+    (ν : Measure X) {B : Set X} (hB : MeasurableSet B) (hνB : ν B < ⊤) :
+    locallyLipschitzRelaxation ν B = perimeter ν B :=
+  le_antisymm (locallyLipschitzRelaxation_le_perimeter ν B)
+    ((perimeter_le_compactLocallyLipschitzRelaxation_of_measure_lt_top ν hB hνB).trans
+      (compactLocallyLipschitzRelaxation_le_locallyLipschitzRelaxation ν B))
 
 /-- On a proper space, the compact-local relaxation of the closed-support law is its perimeter. -/
 theorem compactLocallyLipschitzRelaxation_closedSupportLaw [SecondCountableTopology X]

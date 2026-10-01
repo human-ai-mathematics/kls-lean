@@ -12,7 +12,7 @@ recorded explicitly and checked against the original goal; see the
 [current lifecycle](research/ledger-schema.md#lifecycle). Earlier freeze records remain dated
 review snapshots.
 
-## Current status (2026-09-29)
+## Current status (2026-10-01)
 
 The ledger contains **26 Lean-certified nodes**. The former coarea, Sard, Cheeger-infimum
 and Energy WIP modules have been closed and removed. **One explicit target hole remains**:
@@ -46,7 +46,7 @@ locally Lipschitz approximants converging in `L¹` on every compact set equals i
 Below any threshold above the perimeter, single tests arbitrarily close in `L¹` exist, and every
 finite perimeter is the limit of the costs of an explicitly selected approximating sequence.
 The perimeter is lower semicontinuous under global `L¹` convergence of measurable sets, and for
-every probability law on a normed group it is at most the outer Minkowski content of every
+every probability law on a metric space it is at most the outer Minkowski content of every
 measurable set (one inequality; the pointwise reverse fails in general). The Minkowski coarea
 inequality holds with the actual local slope for every globally Lipschitz function, bounding the
 integrated superlevel content and BV perimeter of every metric BV test by its cost; a
@@ -65,15 +65,57 @@ particular (via the nearest-point projection) for every law on a Hilbert space w
 Hence, for every finite-dimensional log-concave probability law, the metric BV Cheeger constant
 on the closed intrinsic support equals `Isoperimetry.constant` (convexity of the log-concave
 intrinsic support is used). The relaxed lower Minkowski content, an infimum over measurable sets converging in `L¹`, equals
-the perimeter for every probability law on a normed space (an equality of infima). The upper
+the perimeter for every probability law on a metric space (an equality of infima). The upper
 Minkowski content (the `limsup` of the same radius quotient) is at least the lower content; for
 every set, the real mass of its open `s`-thickening is monotone in `s`, differentiable at
 Lebesgue-almost every radius, and at every differentiability radius the upper content of that
-thickening is at most the derivative (no absolute continuity of the radius mass, integrated bound
-or lower-to-upper identity is claimed).
-Ambrosio--Di Marino--Gigli's `L¹_loc` variant beyond proper spaces with finite measures, their Theorem 3.6 in
-general metric measure spaces, nonconvex supports and general metric-measure BV--Minkowski comparisons remain
-literature comparisons; the dimension-free KLS routes remain open.
+thickening is at most the derivative, and the upper content of the `s`-thickening integrated over
+`s ∈ (0, r)` is at most the mass increment `ν(B^r) - ν(B)` for every set and radius (inequalities
+only; no measurability of the content, integrability of the derivative or absolute continuity of
+the radius mass is assumed). Every measurable set of finite lower content is recovered by
+thickenings converging in `L¹` with `limsup` of upper contents at most its lower content; every
+set of finite BV perimeter is recovered by measurable sets converging in `L¹` whose upper contents
+tend to its perimeter; and the relaxed upper Minkowski content (the infimum of liminf upper
+contents over the same measurable approximating class) equals the perimeter for every set, hence
+the relaxed lower content (equalities of infima; the pointwise upper content is not identified
+with the perimeter). Since 2026-09-30 this content chain (both contents, the local-slope
+Minkowski coarea inequality, the bridge, both recoveries and both relaxed identities) holds on
+arbitrary metric spaces with a Borel probability law, the generic coarea using the lower
+semicontinuous open-ball supremum, and since the evening of 2026-09-30 for every finite Borel
+measure (scaling by nonnegative real scalars, the zero measure, normalization, both recoveries and
+both relaxed identities at finite total mass, arbitrary targets).
+A supporting estimate bounds each
+bounded-support test's local-slope cost by its Lipschitz constant times closed-support mass;
+finite mass on bounded Borel sets therefore suffices for finite test cost, including infinite
+total mass. The actual globally Lipschitz, global-L1 relaxation now equals the
+bounded-support perimeter at every measurable finite-mass target for any Borel
+measure on a metric space: the cutoff adds only original indicator error and
+target mass outside expanding balls. This establishes the bounded-support
+reduction. The direct local-slope coarea upper bound is now proved for positive
+levels under finite mass of a positive-support neighborhood, and for all levels
+of nonnegative functions under that premise. Perimeter is at most lower content
+at measurable finite-mass targets for any Borel measure. The full Lemma 3.2 chain
+now retains the actual right-radius liminf of integrated open-ball growth
+between the positive-level content integral and original local-slope integral,
+under its finite-neighborhood and nonnegativity hypotheses. Actual lower and upper recovery and
+both relaxed-content/perimeter identities are now proved at Theorem 3.6's
+finite-mass Borel target scope under Borel measures finite on bounded sets,
+including infinite total mass and nonproper metric spaces. Recovery sets are
+bounded with finite mass and finite contents, and upper recovery sets are open;
+all indicator convergence is global L1. A finite-mass target with finite lower
+content has a finite-mass positive neighborhood, which permits actual radius-local
+lower-to-upper recovery even for unbounded targets. These are equalities of
+infima, with infinite perimeter included and finite prefixes of infinite mass
+allowed by the unchanged approximation class.
+Lemma 2.1's equality of the relaxed lower and upper contents now also holds for every Borel
+measure at measurable finite-mass targets, through near-minimum selection and global-L1 lower
+semicontinuity of the relaxed upper content; no perimeter identity is claimed at that
+generality. On proper metric spaces, the Remark 3.5 locally Lipschitz classes with global L1
+or compact-set L1 convergence have relaxation infima equal to the bounded-support perimeter at
+measurable finite-mass targets for every Borel measure.
+The locally Lipschitz classes on nonproper spaces, nonconvex ambient/support transfer and
+general metric-measure/RCD comparisons remain literature comparisons; the dimension-free KLS
+routes remain open.
 
 For the actual full-dimensional log-concave weighted-gradient heat semigroup, an explicit
 form-domain Poincaré inequality with `C > 0` now gives centered squared `L²` decay
@@ -398,8 +440,8 @@ python3 -m unittest discover -s research/tests -p 'test_*.py'
 ```
 
 To validate declaration links and build both rendered Blueprint formats, follow the exact local
-commands in the [formalization guide](formalization/README.md#lean-blueprint). CI publishes the
-PDF and web tree as workflow artifacts; it deliberately does not deploy GitHub Pages.
+commands in the [formalization guide](formalization/README.md#lean-blueprint). Blueprint artifacts
+are built locally on demand; remote CI runs only Lean certification.
 
 The `Solutions` default target builds all twenty-six proved certificates and the twenty-five named
 definition checks of `StatementChecks.lean`, including the zero-dimensional and Euclidean checks for

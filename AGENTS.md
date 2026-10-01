@@ -29,9 +29,16 @@
 - Use the established progress notation: `✓` for completed local Lean proofs, `◐` for partial
   local formalization, and `○` for pending work. Keep upstream mathematical or conditional-proof
   provenance separate; it must not turn a pending local formalization into a completed result.
-- Commits containing only non-Lean files must not trigger CI. Automatic workflow path filters
-  select `**/*.lean`; commits with Lean changes retain normal CI. Never add `[skip ci]` to a
-  commit containing Lean changes merely because it also updates progress documentation.
+- Run remote CI only at meaningful verification milestones: a new certificate, a faithfully
+  formalized paper main theorem, or validation before sharing/release. Lean certification runs
+  on explicit manual dispatch or a pushed `milestone/**` tag; ordinary branch pushes and PR
+  updates do not trigger it. Lean certification is the only remote workflow; build Blueprint
+  locally when its artifacts are needed.
+  Remote CI uses `research/verify.py --lean-only`; documentation/metadata and Python checks
+  remain in the full local verifier. Preserve strict Lean audits and local-module replay.
+  Do not use `[skip ci]` to control this policy or add routine scheduled full builds.
+  Keep change-appropriate local checks; report remote verification only for the exact SHA
+  with a successful run. See `research/workflow.md` for the CI procedure.
 
 # Formalization classification and layout
 

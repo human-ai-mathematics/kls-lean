@@ -137,7 +137,7 @@ theorem twoAtomRestriction :
     rw [twoAtom_apply_eq, Measure.dirac_apply' _ hBm, Measure.dirac_apply' _ hBm]
     simp [hBdef]
     norm_num
-  have hc : Isoperimetry.minkowskiContent twoAtom B = 0 := by
+  have hc : Isoperimetry.minkowskiContent (twoAtom : Measure ℝ) B = 0 := by
     refine le_antisymm ?_ bot_le
     refine liminf_le_of_frequently_le' (Eventually.frequently ?_)
     filter_upwards [Ioo_mem_nhdsGT (show (0 : ℝ) < 1 / 2 by norm_num)] with r hr
@@ -159,7 +159,7 @@ theorem twoAtomRestriction :
       (measure_mono hsub).trans hIio.le
     rw [hmass, tsub_eq_zero_of_le hthick, ENNReal.zero_div]
   have hp : perimeter (twoAtom : Measure ℝ) B = 0 :=
-    le_antisymm ((perimeter_le_minkowskiContent twoAtom hBm).trans_eq hc) bot_le
+    le_antisymm ((perimeter_le_minkowskiContent (twoAtom : Measure ℝ) hBm).trans_eq hc) bot_le
   have h := perimeter_closedSupportLaw_le twoAtom B
   rw [hp] at h
   exact le_antisymm h bot_le

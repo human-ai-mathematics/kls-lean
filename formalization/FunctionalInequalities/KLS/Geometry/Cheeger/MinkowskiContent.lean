@@ -9,13 +9,19 @@ import Mathlib.Topology.MetricSpace.Thickening
 /-!
 # Outer Minkowski content and the Minkowski coarea inequality
 
-Hole-free coordinate-space companion of `KLS/Isoperimetry.lean`: `minkowskiContent` is
-`boundaryContent` written on the ambient space itself, with open thickenings, `ENNReal`
-truncated subtraction and a right-neighbourhood `liminf` at `r ↓ 0`.
+Hole-free companion of `KLS/Isoperimetry.lean`: `minkowskiContent` is `boundaryContent` written on
+an arbitrary metric space with a Borel measure (finite Borel measures wherever a statement needs
+finiteness; the probability statements are instances), with open thickenings, `ENNReal` truncated
+subtraction and a right-neighbourhood `liminf` at `r ↓ 0` (2026-09-30: generic metric scope and
+finite-measure scope, with scaling by nonnegative real scalars and the zero measure; on
+the coordinate space it is the ambient form of `boundaryContent`).  The open-ball supremum
+`openBallSup` is the lower semicontinuous majorant used by the metric coarea inequality in
+`LocalSlopeCoarea.lean`; the closed-ball `ballSup` and the `C¹` coarea theorem keep their normed
+scope.
 
 The module proves `lintegral_minkowskiContent_superlevel_le`, the Minkowski coarea inequality of
 Ambrosio--Di Marino--Gigli 2017, Lemma 3.2: for a `C¹` globally Lipschitz `u`,
-`∫ ν⁺({u ≥ t}) dt ≤ ∫ ‖∇u‖ dν`.  The law is an arbitrary probability measure; no density,
+`∫ ν⁺({u ≥ t}) dt ≤ ∫ ‖∇u‖ dν`.  The measure is an arbitrary finite measure; no density,
 no absolute continuity, no positive dimension and no boundedness of `u` are assumed.
 
 Read `minkowskiContent`, then the local supremum `ballSup` with its Lipschitz property and
@@ -33,21 +39,178 @@ namespace FunctionalInequalities.KLS.Isoperimetry
 
 universe u
 
-variable {V : Type u} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [CompleteSpace V]
-  [MeasurableSpace V] [BorelSpace V] [SecondCountableTopology V] [FiniteDimensional ℝ V]
+section Generic
 
-/-! ### Outer Minkowski content on the coordinate space -/
+variable {V : Type u} [MetricSpace V]
 
-/-- Outer Minkowski content `ν⁺(B) = liminf_{r ↓ 0} (ν(B^r) - ν(B)) / r` on the coordinate space,
-with open thickenings; the coordinate-space form of `boundaryContent`. -/
-def minkowskiContent (ν : ProbabilityMeasure V) (B : Set V) : ℝ≥0∞ :=
+/-! ### Local suprema over open balls
+
+The majorant of Ambrosio--Di Marino--Gigli (3.1): the supremum of `u` over the *open* ball.  On an
+arbitrary metric space the closed-ball supremum `ballSup` below need not be continuous (two
+components `[0, 1] ∪ [2, 3] ⊆ ℝ`, `u = 0` on the first and `1` on the second, radius `1`: the
+supremum jumps at the centre `1`), while the open-ball supremum is lower semicontinuous, hence
+Borel, and satisfies the same near-neighbour witness.  The two are different objects; the
+closed-ball API keeps its normed-group scope.
+-/
+
+section OpenBallSup
+
+variable {u : V → ℝ} {K : ℝ≥0} {r : ℝ}
+
+/-- The supremum of `u` over the open ball of radius `r` around `x`. -/
+def openBallSup (u : V → ℝ) (r : ℝ) (x : V) : ℝ := sSup (u '' Metric.ball x r)
+
+/-- A Lipschitz function is bounded above on an open ball by its value at the centre. -/
+theorem bddAbove_image_ball (hK : LipschitzWith K u) (r : ℝ) (x : V) :
+    BddAbove (u '' Metric.ball x r) := by
+  refine ⟨u x + K * r, ?_⟩
+  rintro a ⟨y, hy, rfl⟩
+  have hd : dist (u y) (u x) ≤ K * dist y x := hK.dist_le_mul y x
+  rw [Real.dist_eq] at hd
+  have hyx : dist y x ≤ r := (Metric.mem_ball.1 hy).le
+  have h2 : |u y - u x| ≤ (K : ℝ) * r := hd.trans (by gcongr)
+  linarith [(abs_le.mp h2).2]
+
+/-- The centre value is below the open-ball supremum (positive radius). -/
+theorem le_openBallSup (hK : LipschitzWith K u) (hr : 0 < r) (x : V) :
+    u x ≤ openBallSup u r x :=
+  le_csSup (bddAbove_image_ball hK r x) ⟨x, Metric.mem_ball_self hr, rfl⟩
+
+/-- The open-ball supremum exceeds the centre value by at most `K r`. -/
+theorem openBallSup_le_add (hK : LipschitzWith K u) (hr : 0 < r) (x : V) :
+    openBallSup u r x ≤ u x + K * r := by
+  refine csSup_le ⟨u x, x, Metric.mem_ball_self hr, rfl⟩ ?_
+  rintro a ⟨y, hy, rfl⟩
+  have hd : dist (u y) (u x) ≤ K * dist y x := hK.dist_le_mul y x
+  rw [Real.dist_eq] at hd
+  have hyx : dist y x ≤ r := (Metric.mem_ball.1 hy).le
+  have h2 : |u y - u x| ≤ (K : ℝ) * r := hd.trans (by gcongr)
+  linarith [(abs_le.mp h2).2]
+
+/-- The open-ball supremum is lower semicontinuous on every metric space: a point of the open ball
+above a level stays in the open balls of nearby centres. -/
+theorem lowerSemicontinuous_openBallSup (hK : LipschitzWith K u) (hr : 0 < r) :
+    LowerSemicontinuous (openBallSup u r) := by
+  intro x t ht
+  obtain ⟨a, ⟨z, hz, rfl⟩, hta⟩ := (lt_csSup_iff (bddAbove_image_ball hK r x)
+    ⟨u x, x, Metric.mem_ball_self hr, rfl⟩).1 ht
+  have hzx : dist z x < r := Metric.mem_ball.1 hz
+  filter_upwards [Metric.ball_mem_nhds x (sub_pos.2 hzx)] with y hy
+  have hzy : z ∈ Metric.ball y r := by
+    rw [Metric.mem_ball] at hy ⊢
+    calc dist z y ≤ dist z x + dist x y := dist_triangle _ _ _
+      _ < r := by rw [dist_comm x y]; linarith
+  exact hta.trans_le (le_csSup (bddAbove_image_ball hK r y) ⟨z, hzy, rfl⟩)
+
+/-- The open-ball supremum of a Lipschitz function is Borel measurable. -/
+theorem measurable_openBallSup [MeasurableSpace V] [OpensMeasurableSpace V] (hK : LipschitzWith K u) (hr : 0 < r) :
+    Measurable (openBallSup u r) :=
+  (lowerSemicontinuous_openBallSup hK hr).measurable
+
+/-- Near-neighbour witness with open balls: a point of the open `r`-thickening of a closed
+superlevel set either lies in the set or has an open-ball supremum reaching the level. -/
+theorem thickening_superlevel_subset_openBallSup (hK : LipschitzWith K u) (r : ℝ) (t : ℝ) :
+    Metric.thickening r {x : V | t ≤ u x} ⊆
+      {x : V | u x < t ∧ t ≤ openBallSup u r x} ∪ {x : V | t ≤ u x} := by
+  intro x hx
+  by_cases hxt : t ≤ u x
+  · exact Or.inr hxt
+  refine Or.inl ⟨not_le.mp hxt, ?_⟩
+  obtain ⟨z, hz, hdz⟩ := Metric.mem_thickening_iff.mp hx
+  refine hz.trans (le_csSup (bddAbove_image_ball hK r x) ⟨z, ?_, rfl⟩)
+  rw [Metric.mem_ball, dist_comm]
+  exact hdz
+
+end OpenBallSup
+
+variable [MeasurableSpace V]
+
+/-! ### Outer Minkowski content on a metric space -/
+
+/-- Outer Minkowski content `ν⁺(B) = liminf_{r ↓ 0} (ν(B^r) - ν(B)) / r` of a probability law on a
+metric space, with open thickenings; on the coordinate space this is the coordinate-space form of
+`boundaryContent`. -/
+def minkowskiContent (ν : Measure V) (B : Set V) : ℝ≥0∞ :=
   liminf (fun r : ℝ ↦
     ((ν : Measure V) (Metric.thickening r B) - (ν : Measure V) B) / ENNReal.ofReal r) (𝓝[>] 0)
 
-omit [InnerProductSpace ℝ V] [CompleteSpace V] [BorelSpace V] [SecondCountableTopology V]
-  [FiniteDimensional ℝ V] in
+/-- `liminf` commutes with multiplication by a finite constant on `ℝ≥0∞` (a local tool used for
+the scaling of contents). -/
+theorem liminf_coe_mul {ι : Type*} {l : Filter ι} [l.NeBot] (c : ℝ≥0) (u : ι → ℝ≥0∞) :
+    liminf (fun i => (c : ℝ≥0∞) * u i) l = c * liminf u l := by
+  have hmono : Monotone fun x : ℝ≥0∞ => (c : ℝ≥0∞) * x := fun _ _ h => mul_le_mul' le_rfl h
+  have h := hmono.map_liminf_of_continuousAt (F := l) u
+    (ENNReal.continuous_const_mul ENNReal.coe_ne_top).continuousAt
+  simpa [Function.comp_def] using h.symm
+
+/-- `limsup` commutes with multiplication by a finite constant on `ℝ≥0∞` (a local tool). -/
+theorem limsup_coe_mul {ι : Type*} {l : Filter ι} [l.NeBot] (c : ℝ≥0) (u : ι → ℝ≥0∞) :
+    limsup (fun i => (c : ℝ≥0∞) * u i) l = c * limsup u l := by
+  have hmono : Monotone fun x : ℝ≥0∞ => (c : ℝ≥0∞) * x := fun _ _ h => mul_le_mul' le_rfl h
+  have h := hmono.map_limsup_of_continuousAt (F := l) u
+    (ENNReal.continuous_const_mul ENNReal.coe_ne_top).continuousAt
+  simpa [Function.comp_def] using h.symm
+
+/-- **Content scaling**: `minkowskiContent (c • ν) B = c * minkowskiContent ν B` for every
+`c : ℝ≥0` (finite scalar; the increment is scaled before the truncated subtraction). -/
+theorem minkowskiContent_smul (c : ℝ≥0) (ν : Measure V) (B : Set V) :
+    minkowskiContent (c • ν) B = c * minkowskiContent ν B := by
+  unfold minkowskiContent
+  rw [← liminf_coe_mul]
+  refine liminf_congr (Eventually.of_forall fun r => ?_)
+  simp only [Measure.smul_apply, ENNReal.smul_def, smul_eq_mul]
+  rw [← ENNReal.mul_sub (fun _ _ => ENNReal.coe_ne_top), mul_div_assoc]
+
+/-- The zero measure has zero lower content. -/
+theorem minkowskiContent_zero_measure (B : Set V) : minkowskiContent (0 : Measure V) B = 0 := by
+  simpa using minkowskiContent_smul (0 : ℝ≥0) (0 : Measure V) B
+
+/-- Finite target mass and finite lower content imply some positive thickening has finite
+mass, even if the target is unbounded and the measure has infinite total mass. -/
+theorem exists_measure_thickening_lt_top (ν : Measure V) {B : Set V} (hνB : ν B < ⊤)
+    (hcontent : minkowskiContent ν B < ⊤) :
+    ∃ R : ℝ, 0 < R ∧ ν (Metric.thickening R B) < ⊤ := by
+  have ha : minkowskiContent ν B < minkowskiContent ν B + 1 :=
+    ENNReal.lt_add_right hcontent.ne one_ne_zero
+  have hf : ∃ᶠ r in 𝓝[>] (0 : ℝ),
+      (ν (Metric.thickening r B) - ν B) / ENNReal.ofReal r < minkowskiContent ν B + 1 :=
+    frequently_lt_of_liminf_lt (by isBoundedDefault) ha
+  obtain ⟨R, hq, hR⟩ := (hf.and_eventually self_mem_nhdsWithin).exists
+  have hqfin : (ν (Metric.thickening R B) - ν B) / ENNReal.ofReal R < ⊤ :=
+    hq.trans (ENNReal.add_lt_top.2 ⟨hcontent, by norm_num⟩)
+  have hinc : ν (Metric.thickening R B) - ν B < ⊤ := by
+    have he := ENNReal.div_mul_cancel (b := ν (Metric.thickening R B) - ν B)
+      (ENNReal.ofReal_pos.2 hR).ne' ENNReal.ofReal_ne_top
+    rw [← he]
+    exact ENNReal.mul_lt_top hqfin ENNReal.ofReal_lt_top
+  exact ⟨R, hR, le_tsub_add.trans_lt (ENNReal.add_lt_top.2 ⟨hinc, hνB⟩)⟩
+
+/-- Restriction preserves the lower content when a positive thickening is contained in
+the measurable restriction region. No mass-finiteness assumption is needed. -/
+theorem minkowskiContent_restrict_of_thickening_subset (ν : Measure V) {B U : Set V} (hU : MeasurableSet U)
+    {δ : ℝ} (hδ : 0 < δ) (hsub : Metric.thickening δ B ⊆ U) :
+    minkowskiContent (ν.restrict U) B = minkowskiContent ν B := by
+  have hB : B ⊆ U := (Metric.self_subset_thickening hδ B).trans hsub
+  unfold minkowskiContent
+  apply liminf_congr
+  filter_upwards [Ioo_mem_nhdsGT hδ] with r hr
+  have ht : Metric.thickening r B ⊆ U := (Metric.thickening_mono hr.2.le B).trans hsub
+  rw [Measure.restrict_apply' hU, Measure.restrict_apply' hU,
+    Set.inter_eq_left.2 ht, Set.inter_eq_left.2 hB]
+/-- The whole carrier has zero lower content for every measure, including infinite total mass.
+This fact about truncated content does not assert zero bounded-support perimeter. -/
+theorem minkowskiContent_univ (ν : Measure V) : minkowskiContent ν (Set.univ : Set V) = 0 := by
+  unfold minkowskiContent
+  have he : (fun r : ℝ => (ν (Metric.thickening r (Set.univ : Set V)) - ν Set.univ) /
+      ENNReal.ofReal r) =ᶠ[𝓝[>] (0 : ℝ)] fun _ => 0 := by
+    filter_upwards [self_mem_nhdsWithin] with r hr
+    have ht : Metric.thickening r (Set.univ : Set V) = Set.univ :=
+      Set.eq_univ_of_univ_subset (Metric.self_subset_thickening hr Set.univ)
+    simp [ht]
+  rw [liminf_congr he, liminf_const]
+
 /-- Finite Minkowski content forces the closure to carry no extra mass. -/
-theorem measure_closure_eq_of_minkowskiContent_ne_top (ν : ProbabilityMeasure V) {B : Set V}
+theorem measure_closure_eq_of_minkowskiContent_ne_top (ν : Measure V) [IsFiniteMeasure ν] {B : Set V}
     (h : minkowskiContent ν B ≠ ⊤) :
     (ν : Measure V) (closure B) = (ν : Measure V) B := by
   by_contra hne
@@ -83,7 +246,12 @@ theorem measure_closure_eq_of_minkowskiContent_ne_top (ν : ProbabilityMeasure V
   rw [hliminf_top] at hmono2
   exact h (top_le_iff.mp hmono2)
 
-/-! ### Local suprema of a Lipschitz function -/
+end Generic
+
+variable {V : Type u} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [CompleteSpace V]
+  [MeasurableSpace V] [BorelSpace V] [SecondCountableTopology V] [FiniteDimensional ℝ V]
+
+/-! ### Local suprema of a Lipschitz function over closed balls (normed scope) -/
 
 section BallSup
 
@@ -223,7 +391,7 @@ set_option linter.unusedSectionVars false in
 /-- Minkowski coarea inequality (Ambrosio–Di Marino–Gigli 2017, Lemma 3.2) for a `C¹` Lipschitz
 function, with closed superlevel sets and the Euclidean gradient: `∫ ν⁺({u ≥ t}) dt ≤ ∫ ‖∇u‖ dν`.
 No density is assumed. -/
-theorem lintegral_minkowskiContent_superlevel_le (ν : ProbabilityMeasure V) {u : V → ℝ}
+theorem lintegral_minkowskiContent_superlevel_le (ν : Measure V) [IsFiniteMeasure ν] {u : V → ℝ}
     (hu : ContDiff ℝ 1 u) {K : ℝ≥0} (hK : LipschitzWith K u) :
     ∫⁻ t, minkowskiContent ν {x | t ≤ u x} ∂(volume : Measure ℝ) ≤
       ∫⁻ x, ‖gradient u x‖ₑ ∂(ν : Measure V) := by
@@ -308,7 +476,8 @@ theorem lintegral_minkowskiContent_superlevel_le (ν : ProbabilityMeasure V) {u 
     rw [div_le_iff₀ (hrpos n)]
     linarith [ballSup_le_add hK (hrpos n).le x]
   have hgfin : ∫⁻ _ : V, ENNReal.ofReal (K : ℝ) ∂(ν : Measure V) ≠ ⊤ := by
-    simp [lintegral_const, measure_univ]
+    rw [lintegral_const]
+    exact ENNReal.mul_ne_top ENNReal.ofReal_ne_top (measure_ne_top _ _)
   calc ∫⁻ t, minkowskiContent ν {x | t ≤ u x} ∂(volume : Measure ℝ)
       ≤ ∫⁻ t, liminf (fun n => G n t) atTop ∂(volume : Measure ℝ) := lintegral_mono step1
     _ ≤ liminf (fun n => ∫⁻ t, G n t ∂(volume : Measure ℝ)) atTop := lintegral_liminf_le hGmeas

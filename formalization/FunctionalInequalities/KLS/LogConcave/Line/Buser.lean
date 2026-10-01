@@ -109,7 +109,7 @@ theorem minkowskiConstant_map (e : V ≃ₗᵢ[ℝ] W) (ν : ProbabilityMeasure 
     intro B hB
     rw [hcoe, Measure.map_apply e.continuous.measurable hB]
   have hcontent : ∀ B : Set W, MeasurableSet B →
-      minkowskiContent ν ((e : V → W) ⁻¹' B) = minkowskiContent ν' B := by
+      minkowskiContent (ν : Measure V) ((e : V → W) ⁻¹' B) = minkowskiContent (ν' : Measure W) B := by
     intro B hB
     unfold minkowskiContent
     congr 1
@@ -124,7 +124,7 @@ theorem minkowskiConstant_map (e : V ≃ₗᵢ[ℝ] W) (ν : ProbabilityMeasure 
       ext x; simp
     have hmass' : (ν' : Measure W) ((e.symm : W → V) ⁻¹' B) = (ν : Measure V) B := by
       rw [← hmass _ hBmeas, hpre]
-    have hcont' : minkowskiContent ν' ((e.symm : W → V) ⁻¹' B) = minkowskiContent ν B := by
+    have hcont' : minkowskiContent (ν' : Measure W) ((e.symm : W → V) ⁻¹' B) = minkowskiContent (ν : Measure V) B := by
       rw [← hcontent _ hBmeas, hpre]
     refine iInf_le_of_le ((e.symm : W → V) ⁻¹' B) ?_
     refine iInf_le_of_le hBmeas ?_

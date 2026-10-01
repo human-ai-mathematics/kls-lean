@@ -292,7 +292,8 @@ A published input or an upstream reviewed proof receives no \texttt{leanok} mere
   liminf cost, so the perimeter is at most that liminf (2026-09-28). These are the approximants
   of Definition~3.3 of \cite{AmbrosioDiMarinoGigli2017Minkowski} (globally Lipschitz, global
   $L^1$ convergence). On a proper metric space the same bound holds for locally Lipschitz
-  approximants with global $L^1$ convergence (2026-09-29), the variant of their Remark~3.5: the
+  approximants with global $L^1$ convergence (2026-09-29), a variant discussed in their Remark~3.5
+  (not the article's working definition, which is the global $L^1$ class of Definition~3.3): the
   truncation is carried by a compact closed ball, on which a locally Lipschitz function is
   Lipschitz. For every finite Borel measure the relaxation infimum over the approximants of
   Definition~3.3 equals the perimeter used here, and on a proper space so does the infimum over
@@ -323,10 +324,82 @@ A published input or an upstream reviewed proof receives no \texttt{leanok} mere
   (2026-09-29, probability laws on normed groups): the $t$-thickening of the $s$-thickening lies
   in the $(s+t)$-thickening, so each content quotient is bounded by the right difference quotient
   of the radius mass. No absolute continuity of the radius mass is asserted (jumps and singular
-  variation remain possible), and the integrated upper-content bound and the lower-to-upper
-  identities are not local Lean theorems. Theorem~3.6 of Ambrosio--Di Marino--Gigli (with the
-  remainder of Lemma~2.1) in general metric measure spaces, nonconvex supports and general
-  metric-measure comparisons remain literature comparisons.
+  variation remain possible). Integrating over the radii, for every set $B$ and every $r>0$ the
+  upper content of the $s$-thickening integrated over $s\in(0,r)$ is at most $\nu(B^r)-\nu(B)$
+  (2026-09-29): almost everywhere the derivative is the density of the Lebesgue--Stieltjes
+  measure of the right-continuous modification of the radius mass, whose integral over $(0,r)$
+  is at most that measure's mass of $(0,r)$, and one-sided limits at the endpoints bound this
+  mass by the increment; only inequalities are used, with no measurability of the content, no
+  integrability of the derivative and no absolute continuity. From the integrated bound, a
+  quantitative selection of a radius $s\in(0,r)$ with upper content of $B^s$ at most the
+  lower-content quotient at $r$ plus any slack recovers every measurable set of finite lower
+  content by thickenings converging in $L^1$ with $\limsup$ of upper contents at most the lower
+  content (2026-09-30; the vanishing increments follow from the finite lower content, without
+  $\nu(\overline B)=\nu(B)$); every set of finite BV perimeter is recovered by measurable sets
+  converging in $L^1$ whose upper contents tend to the perimeter, through the lower recovery sets
+  and BV lower semicontinuity below the upper content; and the relaxed upper Minkowski content,
+  the infimum of $\liminf$ upper contents over the same measurable approximating class, equals
+  the perimeter used here for every set, hence the relaxed lower content (2026-09-30, equalities
+  of infima; the pointwise upper content is not identified with the perimeter). Since 2026-09-30
+  this content chain (both Minkowski contents, the local-slope Minkowski coarea inequality, the
+  bridge, both recoveries and both relaxed identities) is a local Lean result on an arbitrary
+  metric space with a Borel probability law: the generic coarea inequality uses the supremum over
+  open balls of \cite[(3.1)]{AmbrosioDiMarinoGigli2017Minkowski}, which is lower semicontinuous on
+  every metric space, whereas the closed-ball supremum of the earlier normed-space proof need not
+  be continuous there. Since the evening of 2026-09-30 the chain is stated for every finite Borel
+  measure on a metric space: the content, recovery and relaxation declarations take a finite
+  measure (probability laws are instances), costs, distances, approximating classes, perimeter and
+  both contents scale by nonnegative real scalars, the zero measure and the normalization of a
+  finite nonzero measure are explicit, and the lower and upper recoveries and both relaxed
+  identities hold for arbitrary targets under finite total mass. In the article the
+  bounded-support reduction is Remark~3.4, Definition~3.3 uses global $L^1$ convergence, and
+  Remark~3.5 discusses alternate local-convergence definitions that are not its working
+  definition; its Theorem~3.6 concerns Borel sets of finite measure under Borel measures finite on
+  bounded sets; both relaxed-content identities and actual recoveries are now proved at
+  that generality; the full coarea radius-liminf statement is now also formalized.
+  A supporting result proved in the present continuation establishes Remark~3.4's
+  bounded-support reduction for every measurable finite-mass target under any Borel measure on
+  a metric space: cutoff error and additional slope cost are bounded by the original global
+  indicator $L^1$ error and target mass outside expanding balls. Fixed radii give actual
+  bounded-support approximants, and the globally Lipschitz relaxation of Definition~3.3 equals
+  the bounded-support perimeter, without finite total mass or properness.
+  Further supporting results preserve lower content under restriction whenever a positive
+  thickening lies in the restriction region, prove the direct positive-superlevel coarea upper
+  bound under finite mass of a positive-support neighborhood (the all-level bound for
+  nonnegative functions), and prove perimeter at most lower content at measurable finite-mass
+  targets under any Borel measure. Under finiteness on bounded Borel sets, quantitative
+  selection now gives actual bounded measurable lower-recovery sets of finite mass and
+  finite lower content, converging in global indicator $L^1$ with lower contents converging
+  to target perimeter. The existing relaxed lower-content infimum equals perimeter at
+  measurable finite-mass targets, including infinite perimeter; a finite prefix may carry
+  infinite mass because convergence gives eventual finite approximating-set mass.
+  Finite target mass and finite lower content also imply a finite-mass positive
+  neighborhood; restriction to it and a tail of small radii transfer genuine upper
+  contents and original global indicator $L^1$ convergence, proving the lower-to-upper
+  recovery of Lemma~2.1 at finite-mass Borel targets. A diagonal choice gives bounded
+  open finite-mass upper recovery with finite upper content term by term and upper
+  contents converging to finite target perimeter. The actual relaxed upper-content
+  infimum equals perimeter, hence the lower relaxation, at Theorem~3.6's scope,
+  including infinite perimeter by order and allowing infinite-mass finite prefixes.
+  The full Lemma~3.2 chain is also formalized with its actual right-radius
+  $\liminf$ of integrated open-ball growth between the positive-level content
+  integral and the original local-slope integral. Nonnegativity makes growth vanish
+  outside the positive-support neighborhood at small radii, so restriction to that
+  finite region preserves the actual middle quantity. No function integrability
+  hypothesis is added. Lemma~2.1's relaxed-upper-content bound by lower content is
+  exposed for measurable finite-mass targets under any Borel measure, using actual
+  radius recovery in the finite-content branch and order at infinity.
+  Lemma~2.1's equality of the relaxed lower and upper contents is also proved for every
+  Borel measure at measurable finite-mass targets (2026-10-01), by near-minimum selection
+  and global-$L^1$ lower semicontinuity of the relaxed upper content; this equality of infima
+  identifies neither relaxation with the perimeter beyond the scopes above. On a proper
+  metric space, Remark~3.5's locally Lipschitz classes with global $L^1$ convergence and with
+  convergence on every compact set have relaxation infima equal to the bounded-support
+  perimeter at measurable finite-mass targets for every Borel measure (2026-10-01): sharper
+  truncation estimates replace mass outside a ball by the indicator error on a closed ball and
+  the target outside it, and radii are chosen diagonally. Nonconvex ambient/support transfer,
+  the locally Lipschitz classes on nonproper spaces and general metric-measure comparisons
+  remain pending.
   The Lean proof of the numerical inequalities uses the proved intrinsic Minkowski and
   relative-perimeter infimum equality instead.
 \end{proof}

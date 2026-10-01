@@ -21,8 +21,8 @@ open FunctionalInequalities.KLS.MetricBV
 variable {V : Type*} [NormedAddCommGroup V] [MeasurableSpace V] [BorelSpace V]
 
 theorem bridge (ν : ProbabilityMeasure V) {B : Set V} (hBm : MeasurableSet B) :
-    perimeter (ν : Measure V) B ≤ Isoperimetry.minkowskiContent ν B := by
-  exact perimeter_le_minkowskiContent ν hBm
+    perimeter (ν : Measure V) B ≤ Isoperimetry.minkowskiContent (ν : Measure V) B := by
+  exact perimeter_le_minkowskiContent (ν : Measure V) hBm
 
 theorem rampLipschitz {X : Type*} [MetricSpace X] (B : Set X) {s t : ℝ} (hst : s < t) :
     LipschitzWith (Real.toNNReal (t - s)⁻¹) (plateauRamp B s t) := by
@@ -48,21 +48,21 @@ theorem rampSlopeZeroOnClosure {X : Type*} [MetricSpace X] {B : Set X} (hB : B.N
   exact le_antisymm h bot_le
 
 theorem emptySet (ν : ProbabilityMeasure V) :
-    perimeter (ν : Measure V) ∅ ≤ Isoperimetry.minkowskiContent ν ∅ := by
-  exact perimeter_le_minkowskiContent ν MeasurableSet.empty
+    perimeter (ν : Measure V) ∅ ≤ Isoperimetry.minkowskiContent (ν : Measure V) ∅ := by
+  exact perimeter_le_minkowskiContent (ν : Measure V) MeasurableSet.empty
 
 /-- Top content: the bound is trivial and consistent. -/
 theorem topContent (ν : ProbabilityMeasure V) {B : Set V} (hBm : MeasurableSet B)
-    (h : Isoperimetry.minkowskiContent ν B = ⊤) :
+    (h : Isoperimetry.minkowskiContent (ν : Measure V) B = ⊤) :
     perimeter (ν : Measure V) B ≤ ⊤ := by
-  exact h ▸ perimeter_le_minkowskiContent ν hBm
+  exact h ▸ perimeter_le_minkowskiContent (ν : Measure V) hBm
 
 /-- The zero-dimensional coordinate space `Fin 0 → ℝ`. -/
 theorem zeroDimensional (ν : ProbabilityMeasure (Fin 0 → ℝ))
     {B : Set (Fin 0 → ℝ)} (hBm : MeasurableSet B) :
-    perimeter (ν : Measure (Fin 0 → ℝ)) B ≤ Isoperimetry.minkowskiContent ν B ∧
+    perimeter (ν : Measure (Fin 0 → ℝ)) B ≤ Isoperimetry.minkowskiContent (ν : Measure (Fin 0 → ℝ)) B ∧
       perimeter (ν : Measure (Fin 0 → ℝ)) B = 0 := by
-  exact ⟨perimeter_le_minkowskiContent ν hBm, perimeter_eq_zero_of_subsingleton _ _⟩
+  exact ⟨perimeter_le_minkowskiContent (ν : Measure (Fin 0 → ℝ)) hBm, perimeter_eq_zero_of_subsingleton _ _⟩
 
 /-- An atom on the boundary of the half-line `[0, ∞)`: the Minkowski content is zero, so the
 metric BV perimeter is zero, although the naive distance ramp has slope `1/r` at `0`. -/
@@ -74,22 +74,22 @@ theorem diracHalfLine :
   have hzero : ∀ r : ℝ, ((ν : Measure ℝ) (Metric.thickening r (Set.Ici 0)) -
       (ν : Measure ℝ) (Set.Ici 0)) / ENNReal.ofReal r = 0 := fun r => by
     rw [h1, tsub_eq_zero_of_le prob_le_one, ENNReal.zero_div]
-  have hc : Isoperimetry.minkowskiContent ν (Set.Ici 0) = 0 := by
+  have hc : Isoperimetry.minkowskiContent (ν : Measure ℝ) (Set.Ici 0) = 0 := by
     unfold Isoperimetry.minkowskiContent
     simp only [hzero, liminf_const]
-  have h := perimeter_le_minkowskiContent ν (measurableSet_Ici : MeasurableSet (Set.Ici (0 : ℝ)))
+  have h := perimeter_le_minkowskiContent (ν : Measure ℝ) (measurableSet_Ici : MeasurableSet (Set.Ici (0 : ℝ)))
   rw [hc] at h
   exact le_antisymm h bot_le
 
 /-- Finite content yields finite perimeter, no extra closure mass, and a recovery sequence. -/
 theorem finiteContent (ν : ProbabilityMeasure V) {B : Set V} (hBm : MeasurableSet B)
-    (h : Isoperimetry.minkowskiContent ν B < ⊤) :
+    (h : Isoperimetry.minkowskiContent (ν : Measure V) B < ⊤) :
     perimeter (ν : Measure V) B < ⊤ ∧ (ν : Measure V) (closure B) = (ν : Measure V) B ∧
       ∃ g : ApproximatingSequence (ν : Measure V) B,
         Tendsto (fun n => cost (ν : Measure V) (g.1 n)) atTop
           (𝓝 (perimeter (ν : Measure V) B)) := by
-  have hp := (perimeter_le_minkowskiContent ν hBm).trans_lt h
-  exact ⟨hp, Isoperimetry.measure_closure_eq_of_minkowskiContent_ne_top ν h.ne,
+  have hp := (perimeter_le_minkowskiContent (ν : Measure V) hBm).trans_lt h
+  exact ⟨hp, Isoperimetry.measure_closure_eq_of_minkowskiContent_ne_top (ν : Measure V) h.ne,
     exists_recoverySequence _ B hp⟩
 
 #print axioms bridge

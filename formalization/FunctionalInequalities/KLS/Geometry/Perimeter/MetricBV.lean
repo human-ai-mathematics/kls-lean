@@ -3,6 +3,7 @@ import Mathlib.MeasureTheory.Integral.Lebesgue.Basic
 import Mathlib.MeasureTheory.Measure.Support
 import Mathlib.MeasureTheory.Measure.Restrict
 import Mathlib.MeasureTheory.Measure.ProbabilityMeasure
+import Mathlib.MeasureTheory.Measure.FiniteMeasure
 import Mathlib.Topology.Bornology.Basic
 import Mathlib.Order.LiminfLimsup
 import Mathlib.Data.Fintype.EquivFin
@@ -20,6 +21,9 @@ an explicitly selected approximating sequence (`recoverySequence`, `exists_recov
 Infinite perimeter may come from an empty approximation class; no recovery sequence is claimed.
 The perimeter is sequentially lower semicontinuous under global `L¹(ν)` convergence of measurable
 set indicators (`perimeter_le_liminf_of_tendsto`), by a diagonal choice of epsilon tests.
+Every test's cost is bounded by its Lipschitz constant times the mass of its closed function
+support (`cost_le_mul_measure_closure_support`); finite mass of that closed support suffices for
+finite cost (`cost_ne_top_of_support_measure`), including measures with infinite total mass.
 
 Complement symmetry holds on finite spaces for every measure (`perimeter_compl`) and on every
 metric space for every finite measure (`perimeter_compl_of_isFiniteMeasure`), through the
@@ -33,7 +37,11 @@ Lipschitz functions, with arbitrary constants, values and supports, converging t
 `L¹(ν)` is matched by the explicit truncated tests `Test.truncate x₀ n (f n)` with the same limit
 and no larger liminf cost (`exists_approximatingSequence_of_lipschitz`), so the perimeter is
 bounded by its liminf slope integral (`perimeter_le_liminf_of_lipschitz`). This is a statement
-about global Lipschitz functions and global `L¹` convergence only.
+about global Lipschitz functions and global `L¹` convergence only. For a measurable target of
+finite mass the same reduction holds for every Borel measure, including infinite total mass
+(`exists_approximatingSequence_of_lipschitz_of_measure_lt_top`): stronger cutoff estimates use
+the original indicator error and target mass outside the inner ball, both tending to zero.
+Fixed radii `n` suffice, and the original finite-measure arbitrary-target signatures remain.
 -/
 
 noncomputable section
@@ -284,14 +292,45 @@ def Test.zero : Test X where
 @[simp] theorem cost_zero (ν : Measure X) : cost ν Test.zero = 0 := by
   simp [cost, Test.zero, Energy.LocalSlope.apply_const]
 
-/-- For a finite measure every test has finite cost: its slope is bounded by its Lipschitz
-constant. -/
-theorem cost_ne_top (ν : Measure X) [IsFiniteMeasure ν] (f : Test X) : cost ν f ≠ ⊤ := by
+omit [MeasurableSpace X] [BorelSpace X] in
+private theorem localSlope_eq_zero_outside_closure_support (f : Test X) {x : X}
+    (hx : x ∉ closure (Function.support f)) : Energy.LocalSlope.apply f x = 0 := by
+  obtain ⟨r, hr, hball⟩ := Metric.isOpen_iff.1 isClosed_closure.isOpen_compl x hx
+  have hx0 : f x = 0 := by
+    simpa only [Function.mem_support, not_not] using
+      (show x ∉ Function.support f from fun h => hx (subset_closure h))
+  refine Energy.LocalSlope.apply_eq_zero_of_eqOn_ball hr fun y hy => ?_
+  have hy0 : f y = 0 := by
+    simpa only [Function.mem_support, not_not] using
+      (show y ∉ Function.support f from fun h =>
+        hball (by simpa only [Metric.mem_ball, dist_comm] using hy) (subset_closure h))
+  rw [hx0, hy0]
+
+/-- The test cost is controlled by the mass of its closed function support, even when the
+measure has infinite total mass. Boundary points of the function support are retained. -/
+theorem cost_le_mul_measure_closure_support (ν : Measure X) (f : Test X) {K : ℝ≥0}
+    (hK : LipschitzWith K f) : cost ν f ≤ K * ν (closure (Function.support f)) := by
+  have hbound : ∀ x, Energy.LocalSlope.apply f x ≤
+      (closure (Function.support f)).indicator (fun _ => (K : ENNReal)) x := by
+    intro x
+    by_cases hx : x ∈ closure (Function.support f)
+    · rw [Set.indicator_of_mem hx]
+      exact Energy.LocalSlope.apply_le_of_lipschitzWith hK x
+    · rw [localSlope_eq_zero_outside_closure_support f hx, Set.indicator_of_notMem hx]
+  exact (lintegral_mono hbound).trans_eq
+    (lintegral_indicator_const isClosed_closure.measurableSet _)
+
+/-- Finite mass of the closed function support suffices for finite test cost; no finiteness
+of the measure on the whole space is required. -/
+theorem cost_ne_top_of_support_measure (ν : Measure X) (f : Test X)
+    (hf : ν (closure (Function.support f)) ≠ ⊤) : cost ν f ≠ ⊤ := by
   obtain ⟨K, hK⟩ := f.lipschitz
-  refine ne_top_of_le_ne_top (b := ∫⁻ _, (K : ENNReal) ∂ν) ?_
-    (lintegral_mono fun x => Energy.LocalSlope.apply_le_of_lipschitzWith hK x)
-  rw [lintegral_const]
-  exact ENNReal.mul_ne_top ENNReal.coe_ne_top (measure_ne_top ν _)
+  exact ne_top_of_le_ne_top (ENNReal.mul_ne_top ENNReal.coe_ne_top hf)
+    (cost_le_mul_measure_closure_support ν f hK)
+
+/-- For a finite measure every test has finite cost. -/
+theorem cost_ne_top (ν : Measure X) [IsFiniteMeasure ν] (f : Test X) : cost ν f ≠ ⊤ :=
+  cost_ne_top_of_support_measure ν f (measure_ne_top ν _)
 
 /-- The empty set has zero perimeter for every measure, witnessed by the zero test. -/
 theorem perimeter_empty (ν : Measure X) : perimeter ν (∅ : Set X) = 0 := by
@@ -836,6 +875,221 @@ theorem perimeter_le_liminf_of_lipschitz (ν : Measure X) [IsFiniteMeasure ν]
   obtain ⟨g, hg⟩ := exists_approximatingSequence_of_lipschitz ν hf hconv
   exact (perimeter_le_sequence ν B g).trans hg
 
+/-! ### Finite-mass targets without finite total mass -/
+
+omit [MeasurableSpace X] [BorelSpace X] in
+private theorem apply_truncate_le_clamp (x₀ : X) (R : ℝ) {f : X → ℝ}
+    (hf : ∃ K : ℝ≥0, LipschitzWith K f) (x : X) :
+    Energy.LocalSlope.apply (Test.truncate x₀ R f hf) x ≤
+      Energy.LocalSlope.apply f x +
+        (Metric.ball x₀ R)ᶜ.indicator (fun y => ENNReal.ofReal (clampUnit (f y))) x := by
+  set c := clampUnit (f x)
+  have hc0 : 0 ≤ c := clampUnit_nonneg _
+  have hsec : Energy.LocalSlope.apply (Test.truncate x₀ R f hf) x ≤
+      Energy.LocalSlope.apply f x +
+        Energy.LocalSlope.apply (fun y => c * cutoff x₀ R y) x := by
+    refine Energy.LocalSlope.apply_le_add zero_lt_one fun y _ => ?_
+    change |cutoff x₀ R y * clampUnit (f y) - cutoff x₀ R x * clampUnit (f x)| ≤
+      dist (f y) (f x) + dist (c * cutoff x₀ R y) (c * cutoff x₀ R x)
+    have key : cutoff x₀ R y * clampUnit (f y) - cutoff x₀ R x * clampUnit (f x) =
+        cutoff x₀ R y * (clampUnit (f y) - clampUnit (f x)) +
+          (c * cutoff x₀ R y - c * cutoff x₀ R x) := by dsimp [c]; ring
+    rw [key]
+    refine (abs_add_le _ _).trans (add_le_add ?_ ?_)
+    · rw [abs_mul, abs_of_nonneg (cutoff_nonneg x₀ R y)]
+      exact (mul_le_of_le_one_left (abs_nonneg _) (cutoff_le_one x₀ R y)).trans
+        (by simpa only [Real.dist_eq] using abs_clampUnit_sub_le (f y) (f x))
+    · rw [Real.dist_eq]
+  refine hsec.trans (add_le_add le_rfl ?_)
+  by_cases hx : x ∈ Metric.ball x₀ R
+  · have hr : 0 < R - dist x x₀ := by rw [Metric.mem_ball] at hx; linarith
+    rw [Energy.LocalSlope.apply_eq_zero_of_eqOn_ball hr fun y hy => ?_]
+    · exact zero_le
+    · have hy' : dist y x₀ ≤ R := by
+        have := dist_triangle y x x₀
+        linarith
+      rw [cutoff_eq_one hy', cutoff_eq_one (le_of_lt (Metric.mem_ball.mp hx))]
+  · rw [Set.indicator_of_mem (Set.mem_compl hx)]
+    have hlip : LipschitzWith ⟨c, hc0⟩ (fun y => c * cutoff x₀ R y) :=
+      LipschitzWith.of_dist_le_mul fun a b => by
+        rw [Real.dist_eq, ← mul_sub, abs_mul, abs_of_nonneg hc0]
+        exact mul_le_mul_of_nonneg_left (abs_cutoff_sub_le x₀ R a b) hc0
+    exact (Energy.LocalSlope.apply_le_of_lipschitzWith hlip x).trans_eq
+      (ENNReal.coe_nnreal_eq ⟨c, hc0⟩)
+
+omit [MetricSpace X] [MeasurableSpace X] [BorelSpace X] in
+private theorem ofReal_clampUnit_le_indicator_error (f : X → ℝ) (B : Set X) (x : X) :
+    ENNReal.ofReal (clampUnit (f x)) ≤ ‖f x - B.indicator (1 : X → ℝ) x‖ₑ +
+      B.indicator (1 : X → ENNReal) x := by
+  by_cases hx : x ∈ B
+  · simp only [Set.indicator_of_mem hx, Pi.one_apply]
+    exact (ENNReal.ofReal_le_one.2 (clampUnit_le_one _)).trans (le_add_left le_rfl)
+  · rw [Set.indicator_of_notMem hx, Set.indicator_of_notMem hx, sub_zero, add_zero,
+      Real.enorm_eq_ofReal_abs]
+    apply ENNReal.ofReal_le_ofReal
+    simpa only [clampUnit_of_mem (by norm_num : (0 : ℝ) ≤ 0) (by norm_num : (0 : ℝ) ≤ 1),
+      sub_zero, abs_of_nonneg (clampUnit_nonneg _)] using abs_clampUnit_sub_le (f x) 0
+
+omit [MeasurableSpace X] [BorelSpace X] in
+private theorem apply_truncate_le_indicator_error (x₀ : X) (R : ℝ) {f : X → ℝ}
+    (hf : ∃ K : ℝ≥0, LipschitzWith K f) (B : Set X) (x : X) :
+    Energy.LocalSlope.apply (Test.truncate x₀ R f hf) x ≤
+      Energy.LocalSlope.apply f x +
+        (‖f x - B.indicator (1 : X → ℝ) x‖ₑ + (B \ Metric.ball x₀ R).indicator 1 x) := by
+  refine (apply_truncate_le_clamp x₀ R hf x).trans (add_le_add le_rfl ?_)
+  by_cases hx : x ∈ Metric.ball x₀ R
+  · rw [Set.indicator_of_notMem (show x ∉ (Metric.ball x₀ R)ᶜ from fun h => h hx)]
+    exact zero_le
+  · rw [Set.indicator_of_mem (Set.mem_compl hx)]
+    by_cases hb : x ∈ B <;> simpa [hb, hx] using ofReal_clampUnit_le_indicator_error f B x
+
+omit [MeasurableSpace X] [BorelSpace X] in
+/-- The cutoff error is controlled by the original indicator error and the target outside the
+inner ball, rather than by all the mass outside that ball. -/
+theorem enorm_truncate_sub_le_target_tail (x₀ : X) (R : ℝ) {f : X → ℝ}
+    (hf : ∃ K : ℝ≥0, LipschitzWith K f) (B : Set X) (x : X) :
+    ‖Test.truncate x₀ R f hf x - B.indicator (1 : X → ℝ) x‖ₑ ≤
+      ‖f x - B.indicator (1 : X → ℝ) x‖ₑ + (B \ Metric.ball x₀ R).indicator 1 x := by
+  have hu0 := cutoff_nonneg x₀ R x
+  have hu1 := cutoff_le_one x₀ R x
+  have hc0 := clampUnit_nonneg (f x)
+  have hc1 := clampUnit_le_one (f x)
+  change ‖cutoff x₀ R x * clampUnit (f x) - B.indicator (1 : X → ℝ) x‖ₑ ≤ _
+  by_cases hb : x ∈ B
+  · simp only [Set.indicator_of_mem hb, Pi.one_apply]
+    by_cases hx : x ∈ Metric.ball x₀ R
+    · rw [cutoff_eq_one (le_of_lt (Metric.mem_ball.mp hx)), one_mul,
+        Set.indicator_of_notMem (show x ∉ B \ Metric.ball x₀ R from fun h => h.2 hx), add_zero,
+        Real.enorm_eq_ofReal_abs, Real.enorm_eq_ofReal_abs]
+      apply ENNReal.ofReal_le_ofReal
+      simpa only [clampUnit_of_mem zero_le_one le_rfl] using abs_clampUnit_sub_le (f x) 1
+    · rw [Set.indicator_of_mem (show x ∈ B \ Metric.ball x₀ R from ⟨hb, hx⟩), Pi.one_apply]
+      refine (show ‖cutoff x₀ R x * clampUnit (f x) - 1‖ₑ ≤ 1 from ?_).trans
+        (le_add_left le_rfl)
+      rw [Real.enorm_eq_ofReal_abs]
+      exact ENNReal.ofReal_le_one.2 (abs_le.2 ⟨by nlinarith, by nlinarith⟩)
+  · simp only [Set.indicator_of_notMem hb, sub_zero,
+      Set.indicator_of_notMem (show x ∉ B \ Metric.ball x₀ R from fun h => hb h.1), add_zero,
+      Real.enorm_eq_ofReal_abs, Real.enorm_eq_ofReal_abs,
+      abs_of_nonneg (mul_nonneg hu0 hc0)]
+    apply ENNReal.ofReal_le_ofReal
+    exact (mul_le_of_le_one_left hc0 hu1).trans (by
+      simpa only [clampUnit_of_mem (by norm_num : (0 : ℝ) ≤ 0) (by norm_num : (0 : ℝ) ≤ 1),
+        sub_zero, abs_of_nonneg hc0] using abs_clampUnit_sub_le (f x) 0)
+
+/-- The cutoff adds at most the original indicator L1 error and the target mass outside
+the inner ball to the slope integral. No finite-total-mass hypothesis is needed. -/
+theorem cost_truncate_le_target_tail (ν : Measure X) (x₀ : X) (R : ℝ) {f : X → ℝ}
+    (hf : ∃ K : ℝ≥0, LipschitzWith K f) {B : Set X} (hB : MeasurableSet B) :
+    cost ν (Test.truncate x₀ R f hf) ≤
+      (∫⁻ x, Energy.LocalSlope.apply f x ∂ν) +
+        ((∫⁻ x, ‖f x - B.indicator (1 : X → ℝ) x‖ₑ ∂ν) + ν (B \ Metric.ball x₀ R)) := by
+  obtain ⟨K, hK⟩ := hf
+  have he : Measurable (fun x => ‖f x - B.indicator (1 : X → ℝ) x‖ₑ) :=
+    (hK.continuous.measurable.sub (measurable_one.indicator hB)).enorm
+  have ht : MeasurableSet (B \ Metric.ball x₀ R) := hB.diff Metric.isOpen_ball.measurableSet
+  calc cost ν (Test.truncate x₀ R f ⟨K, hK⟩)
+      ≤ ∫⁻ x, Energy.LocalSlope.apply f x +
+          (‖f x - B.indicator (1 : X → ℝ) x‖ₑ + (B \ Metric.ball x₀ R).indicator 1 x) ∂ν :=
+        lintegral_mono (apply_truncate_le_indicator_error x₀ R ⟨K, hK⟩ B)
+    _ = (∫⁻ x, Energy.LocalSlope.apply f x ∂ν) +
+        ∫⁻ x, (‖f x - B.indicator (1 : X → ℝ) x‖ₑ +
+          (B \ Metric.ball x₀ R).indicator 1 x) ∂ν :=
+      lintegral_add_right _ (he.add (measurable_one.indicator ht))
+    _ = _ := by
+      rw [lintegral_add_right _ (measurable_one.indicator ht), lintegral_indicator_one ht]
+
+/-- The indicator L1 error after truncation is at most the original error plus target
+mass outside the inner ball, for every Borel measure. -/
+theorem indicatorDistance_truncate_le_target_tail (ν : Measure X) (x₀ : X) (R : ℝ) {f : X → ℝ}
+    (hf : ∃ K : ℝ≥0, LipschitzWith K f) {B : Set X} (hB : MeasurableSet B) :
+    indicatorDistance ν (Test.truncate x₀ R f hf) B ≤
+      (∫⁻ x, ‖f x - B.indicator (1 : X → ℝ) x‖ₑ ∂ν) + ν (B \ Metric.ball x₀ R) := by
+  have ht : MeasurableSet (B \ Metric.ball x₀ R) := hB.diff Metric.isOpen_ball.measurableSet
+  calc indicatorDistance ν (Test.truncate x₀ R f hf) B
+      ≤ ∫⁻ x, ‖f x - B.indicator (1 : X → ℝ) x‖ₑ + (B \ Metric.ball x₀ R).indicator 1 x ∂ν :=
+        lintegral_mono (enorm_truncate_sub_le_target_tail x₀ R hf B)
+    _ = _ := by
+      rw [lintegral_add_right _ (measurable_one.indicator ht), lintegral_indicator_one ht]
+
+/-- A measurable target of finite mass has vanishing mass outside expanding balls,
+even when the measure has infinite total mass. -/
+theorem tendsto_measure_diff_ball (ν : Measure X) (x₀ : X) {B : Set X} (hB : MeasurableSet B)
+    (hνB : ν B ≠ ⊤) :
+    Tendsto (fun n : ℕ => ν (B \ Metric.ball x₀ (n : ℝ))) atTop (𝓝 0) := by
+  have hanti : Antitone fun n : ℕ => B \ Metric.ball x₀ (n : ℝ) := fun m n hmn =>
+    Set.sdiff_subset_sdiff_right (Metric.ball_subset_ball (by exact_mod_cast hmn))
+  have hinter : (⋂ n : ℕ, B \ Metric.ball x₀ (n : ℝ)) = ∅ := by
+    apply Set.eq_empty_iff_forall_notMem.2
+    intro x hx
+    obtain ⟨n, hn⟩ := exists_nat_gt (dist x x₀)
+    exact (Set.mem_iInter.1 hx n).2 (Metric.mem_ball.2 hn)
+  have h := tendsto_measure_iInter_atTop (μ := ν)
+    (fun n => (hB.diff Metric.isOpen_ball.measurableSet).nullMeasurableSet) hanti
+    ⟨0, ne_top_of_le_ne_top hνB (measure_mono Set.sdiff_subset)⟩
+  rwa [hinter, measure_empty] at h
+
+/-- Fixed radii n suffice for the truncated sequence to converge in global L1 to a
+measurable finite-mass target. No finite-total-mass hypothesis is needed. -/
+theorem tendsto_indicatorDistance_truncate_of_measure_lt_top (ν : Measure X) (x₀ : X) {B : Set X}
+    (hB : MeasurableSet B) (hνB : ν B < ⊤) {f : ℕ → X → ℝ}
+    (hf : ∀ n, ∃ K : ℝ≥0, LipschitzWith K (f n))
+    (hconv : Tendsto (fun n => ∫⁻ x, ‖f n x - B.indicator (1 : X → ℝ) x‖ₑ ∂ν)
+      atTop (𝓝 0)) :
+    Tendsto (fun n : ℕ => indicatorDistance ν (Test.truncate x₀ n (f n) (hf n)) B)
+      atTop (𝓝 0) := by
+  refine tendsto_of_tendsto_of_tendsto_of_le_of_le tendsto_const_nhds
+    (by simpa using hconv.add (tendsto_measure_diff_ball ν x₀ hB hνB.ne)) (fun _ => zero_le) fun n => ?_
+  exact indicatorDistance_truncate_le_target_tail ν x₀ n (hf n) hB
+
+/-- For a measurable finite-mass target and an actual global L1-convergent Lipschitz
+sequence, fixed-radius truncation does not increase the liminf slope integral. -/
+theorem liminf_cost_truncate_le_of_measure_lt_top (ν : Measure X) (x₀ : X) {B : Set X}
+    (hB : MeasurableSet B) (hνB : ν B < ⊤) {f : ℕ → X → ℝ}
+    (hf : ∀ n, ∃ K : ℝ≥0, LipschitzWith K (f n))
+    (hconv : Tendsto (fun n => ∫⁻ x, ‖f n x - B.indicator (1 : X → ℝ) x‖ₑ ∂ν)
+      atTop (𝓝 0)) :
+    liminf (fun n : ℕ => cost ν (Test.truncate x₀ n (f n) (hf n))) atTop ≤
+      liminf (fun n => ∫⁻ x, Energy.LocalSlope.apply (f n) x ∂ν) atTop := by
+  calc liminf (fun n : ℕ => cost ν (Test.truncate x₀ n (f n) (hf n))) atTop
+      ≤ liminf (fun n : ℕ => (∫⁻ x, Energy.LocalSlope.apply (f n) x ∂ν) +
+          ((∫⁻ x, ‖f n x - B.indicator (1 : X → ℝ) x‖ₑ ∂ν) +
+            ν (B \ Metric.ball x₀ (n : ℝ)))) atTop :=
+        liminf_le_liminf (Eventually.of_forall fun n => cost_truncate_le_target_tail ν x₀ n (hf n) hB)
+    _ = _ := ENNReal.liminf_add_of_right_tendsto_zero
+        (by simpa using hconv.add (tendsto_measure_diff_ball ν x₀ hB hνB.ne)) _
+
+/-- The bounded-support reduction of ADMG Remark 3.4 at a measurable finite-mass target,
+for every Borel measure: globally Lipschitz approximants are matched by actual tests
+with the same global L1 limit and no larger liminf slope integral. Empty carriers
+and infinite costs are included. -/
+theorem exists_approximatingSequence_of_lipschitz_of_measure_lt_top (ν : Measure X) {B : Set X}
+    (hB : MeasurableSet B) (hνB : ν B < ⊤) {f : ℕ → X → ℝ}
+    (hf : ∀ n, ∃ K : ℝ≥0, LipschitzWith K (f n))
+    (hconv : Tendsto (fun n => ∫⁻ x, ‖f n x - B.indicator (1 : X → ℝ) x‖ₑ ∂ν)
+      atTop (𝓝 0)) :
+    ∃ g : ApproximatingSequence ν B,
+      liminf (fun n => cost ν (g.1 n)) atTop ≤
+        liminf (fun n => ∫⁻ x, Energy.LocalSlope.apply (f n) x ∂ν) atTop := by
+  rcases isEmpty_or_nonempty X with hX | ⟨⟨x₀⟩⟩
+  · refine ⟨⟨fun _ => Test.zero, ?_⟩, ?_⟩
+    · simp [indicatorDistance, Measure.eq_zero_of_isEmpty ν]
+    · simp
+  · exact ⟨⟨fun n => Test.truncate x₀ n (f n) (hf n),
+      tendsto_indicatorDistance_truncate_of_measure_lt_top ν x₀ hB hνB hf hconv⟩,
+      liminf_cost_truncate_le_of_measure_lt_top ν x₀ hB hνB hf hconv⟩
+
+/-- Every globally Lipschitz sequence converging in global L1 to a measurable finite-mass
+target bounds the metric BV perimeter, without requiring finite total mass. -/
+theorem perimeter_le_liminf_of_lipschitz_of_measure_lt_top (ν : Measure X) {B : Set X}
+    (hB : MeasurableSet B) (hνB : ν B < ⊤) {f : ℕ → X → ℝ}
+    (hf : ∀ n, ∃ K : ℝ≥0, LipschitzWith K (f n))
+    (hconv : Tendsto (fun n => ∫⁻ x, ‖f n x - B.indicator (1 : X → ℝ) x‖ₑ ∂ν)
+      atTop (𝓝 0)) :
+    perimeter ν B ≤ liminf (fun n => ∫⁻ x, Energy.LocalSlope.apply (f n) x ∂ν) atTop := by
+  obtain ⟨g, hg⟩ := exists_approximatingSequence_of_lipschitz_of_measure_lt_top ν hB hνB hf hconv
+  exact (perimeter_le_sequence ν B g).trans hg
+
 end LipschitzBridge
 
 /-- On a one-point metric space every set has zero metric BV perimeter. -/
@@ -1026,5 +1280,106 @@ theorem perimeter_closedSupportLaw_le (ν : ProbabilityMeasure X) (B : Set X) :
   perimeter_comap_subtype_le _ (ν : Measure X).isClosed_support.measurableSet B
 
 end ClosedSupport
+
+/-! ### Scaling by a nonnegative real scalar, the zero measure and normalization
+
+Costs and indicator distances are linear in the measure; the approximating class of `c • ν` is
+the class of `ν` for `c ≠ 0`; hence `perimeter (c • ν) B = c * perimeter ν B` for every nonzero
+`c : ℝ≥0`, including the empty class (`⊤`).  The zero measure has zero perimeter for every set.
+A finite nonzero measure is `c • ν` with `c : ℝ≥0` nonzero and `ν` a probability measure
+(`exists_probability_smul`); scalars are always finite reals, so `⊤ - ⊤` never enters.
+-/
+
+section Scaling
+
+/-- `liminf` commutes with multiplication by a finite constant on `ℝ≥0∞` (a local tool). -/
+private theorem liminf_coe_mul {ι : Type*} {l : Filter ι} [l.NeBot] (c : ℝ≥0) (u : ι → ℝ≥0∞) :
+    liminf (fun i => (c : ℝ≥0∞) * u i) l = c * liminf u l := by
+  have hmono : Monotone fun x : ℝ≥0∞ => (c : ℝ≥0∞) * x := fun _ _ h => mul_le_mul' le_rfl h
+  have h := hmono.map_liminf_of_continuousAt (F := l) u
+    (ENNReal.continuous_const_mul ENNReal.coe_ne_top).continuousAt
+  simpa [Function.comp_def] using h.symm
+
+theorem cost_smul (c : ℝ≥0) (ν : Measure X) (f : Test X) : cost (c • ν) f = c * cost ν f := by
+  simp only [cost, lintegral_smul_measure, ENNReal.smul_def, smul_eq_mul]
+
+theorem indicatorDistance_smul (c : ℝ≥0) (ν : Measure X) (f : Test X) (B : Set X) :
+    indicatorDistance (c • ν) f B = c * indicatorDistance ν f B := by
+  simp only [indicatorDistance, lintegral_smul_measure, ENNReal.smul_def, smul_eq_mul]
+
+@[simp] theorem cost_zero_measure (f : Test X) : cost (0 : Measure X) f = 0 := by
+  simp [cost]
+
+@[simp] theorem indicatorDistance_zero_measure (f : Test X) (B : Set X) :
+    indicatorDistance (0 : Measure X) f B = 0 := by
+  simp [indicatorDistance]
+
+/-- An approximating sequence for `ν` approximates for `c • ν` (any `c : ℝ≥0`). -/
+def ApproximatingSequence.smul (c : ℝ≥0) {ν : Measure X} {B : Set X}
+    (f : ApproximatingSequence ν B) : ApproximatingSequence (c • ν) B :=
+  ⟨f.1, by
+    have h := ENNReal.Tendsto.const_mul (a := (c : ℝ≥0∞)) f.2 (Or.inr ENNReal.coe_ne_top)
+    simpa [indicatorDistance_smul] using h⟩
+
+/-- An approximating sequence for `c • ν` with `c ≠ 0` approximates for `ν`. -/
+def ApproximatingSequence.smulInv {c : ℝ≥0} (hc : c ≠ 0) {ν : Measure X} {B : Set X}
+    (f : ApproximatingSequence (c • ν) B) : ApproximatingSequence ν B :=
+  ⟨f.1, by
+    have hc' : (c : ℝ≥0∞) ≠ 0 := ENNReal.coe_ne_zero.2 hc
+    have h := ENNReal.Tendsto.const_mul (a := (c : ℝ≥0∞)⁻¹) f.2
+      (Or.inr (ENNReal.inv_ne_top.2 hc'))
+    simp only [indicatorDistance_smul, ← mul_assoc, ENNReal.inv_mul_cancel hc' ENNReal.coe_ne_top,
+      one_mul, mul_zero] at h
+    exact h⟩
+
+theorem perimeter_smul_le (c : ℝ≥0) (hc : c ≠ 0) (ν : Measure X) (B : Set X) :
+    perimeter (c • ν) B ≤ c * perimeter ν B := by
+  unfold perimeter
+  rw [ENNReal.mul_iInf' (fun h => absurd h ENNReal.coe_ne_top)
+    (fun h => absurd (ENNReal.coe_eq_zero.1 h) hc)]
+  refine le_iInf fun f => (iInf_le _ (f.smul c)).trans (le_of_eq ?_)
+  simp only [ApproximatingSequence.smul, cost_smul]
+  exact liminf_coe_mul c _
+
+/-- **Perimeter scaling**: `perimeter (c • ν) B = c * perimeter ν B` for every nonzero `c : ℝ≥0`
+and every set `B` (also when the class is empty and both sides are `⊤`). -/
+theorem perimeter_smul (c : ℝ≥0) (hc : c ≠ 0) (ν : Measure X) (B : Set X) :
+    perimeter (c • ν) B = c * perimeter ν B := by
+  refine le_antisymm (perimeter_smul_le c hc ν B) ?_
+  have hc' : (c : ℝ≥0∞) ≠ 0 := ENNReal.coe_ne_zero.2 hc
+  have h := perimeter_smul_le c⁻¹ (inv_ne_zero hc) (c • ν) B
+  rw [smul_smul, inv_mul_cancel₀ hc, one_smul] at h
+  calc (c : ℝ≥0∞) * perimeter ν B ≤ c * ((c⁻¹ : ℝ≥0) * perimeter (c • ν) B) :=
+        mul_le_mul' le_rfl h
+    _ = perimeter (c • ν) B := by
+        rw [← mul_assoc, ENNReal.coe_inv hc, ENNReal.mul_inv_cancel hc' ENNReal.coe_ne_top, one_mul]
+
+/-- The zero measure has zero perimeter for every set: the zero test approximates at zero cost. -/
+theorem perimeter_zero_measure (B : Set X) : perimeter (0 : Measure X) B = 0 := by
+  refine le_antisymm ?_ bot_le
+  have h := perimeter_le_sequence (0 : Measure X) B ⟨fun _ => Test.zero, by simp⟩
+  simpa using h
+
+omit [MetricSpace X] [BorelSpace X] in
+/-- **Normalization**: a finite nonzero measure is a nonzero nonnegative real multiple of a
+probability measure. -/
+theorem exists_probability_smul (μ : Measure X) [IsFiniteMeasure μ] (hμ : μ ≠ 0) :
+    ∃ (c : ℝ≥0) (ν : ProbabilityMeasure X), c ≠ 0 ∧ μ = c • (ν : Measure X) := by
+  have : Nonempty X := by
+    by_contra h
+    rw [not_nonempty_iff] at h
+    exact hμ (Measure.eq_zero_of_isEmpty μ)
+  set μ' : FiniteMeasure X := ⟨μ, inferInstance⟩ with hμ'
+  have hne : μ' ≠ 0 := by
+    intro h
+    apply hμ
+    have := congrArg FiniteMeasure.toMeasure h
+    simpa [hμ'] using this
+  refine ⟨μ'.mass, μ'.normalize, (FiniteMeasure.mass_nonzero_iff μ').2 hne, ?_⟩
+  have h := congrArg FiniteMeasure.toMeasure (FiniteMeasure.self_eq_mass_smul_normalize μ')
+  rw [FiniteMeasure.toMeasure_smul] at h
+  exact h
+
+end Scaling
 
 end FunctionalInequalities.KLS.MetricBV

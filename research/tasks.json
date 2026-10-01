@@ -315,11 +315,11 @@
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/LogConcave/Line/Buser.lean",
-            "sha256": "7afd6ed59e096d8a5beac3f446bb33cadccff5f0be85dd65ad23754d45bf3980"
+            "sha256": "aaed1fe0027aa80b9aa20183c5d712d9f76f6acf2656e249ff17effb874d8b67"
           },
           {
             "path": "formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex",
-            "sha256": "c363f05281728d609e02ae29e40534ee9411571e9d79db7ef83d3b89b4d3b6f2"
+            "sha256": "94821b9afa36310d70e8add459900de268f3169d765b9832fd0887215f0f9033"
           },
           {
             "path": "formalization/.lake/packages/mathlib/Mathlib/Analysis/InnerProductSpace/LaxMilgram.lean",
@@ -939,7 +939,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/Geometry/Cheeger/Stability.lean",
-            "sha256": "590dff793ba5bc212b9dafe4b1fe8ad0e129b53c6c18fb0c597317ebdff798b1"
+            "sha256": "8b550dffe79a254ff2df31c1daf1d77835d14a2de859e1ed1435bf772c00df99"
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianBuser.lean",
@@ -955,7 +955,7 @@
           },
           {
             "path": "formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex",
-            "sha256": "c363f05281728d609e02ae29e40534ee9411571e9d79db7ef83d3b89b4d3b6f2"
+            "sha256": "94821b9afa36310d70e8add459900de268f3169d765b9832fd0887215f0f9033"
           }
         ],
         "gaps": []
@@ -1626,7 +1626,7 @@
           },
           {
             "path": "formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex",
-            "sha256": "c363f05281728d609e02ae29e40534ee9411571e9d79db7ef83d3b89b4d3b6f2"
+            "sha256": "94821b9afa36310d70e8add459900de268f3169d765b9832fd0887215f0f9033"
           }
         ],
         "gaps": []
@@ -2602,7 +2602,7 @@
           },
           {
             "path": "formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex",
-            "sha256": "c363f05281728d609e02ae29e40534ee9411571e9d79db7ef83d3b89b4d3b6f2"
+            "sha256": "94821b9afa36310d70e8add459900de268f3169d765b9832fd0887215f0f9033"
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/Isoperimetry.lean",
@@ -2730,11 +2730,11 @@
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/Geometry/Cheeger/MinkowskiContent.lean",
-            "sha256": "8241312332cd36b2ddea8a763358f0e7d6f27b4073a41edc5e34e63a14f70a69"
+            "sha256": "d83f12c4122c2dda32eade8b0c72158479ce5ace467bf6dea5b2a3e2a1d40edf"
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/Geometry/Cheeger/MinkowskiConstant.lean",
-            "sha256": "d0bb14fc454dc1d59e6e09306d26d96bb4f453f971bddb5bd684ea4bb1907bf2"
+            "sha256": "cdbacc42a1a73eb20f6bcf4cfffd6e84500dd067767e884f612131677eb8a7ca"
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/Geometry/Cheeger/Infimum.lean",
@@ -3266,11 +3266,11 @@
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/Geometry/Cheeger/Equality.lean",
-            "sha256": "3135a91f181c04c03b519ae75126d0b2b3504ecf5367fb4659d1a0439b4bde5f"
+            "sha256": "6553c219c0d33e09a71c3341568bdccf75474a5693d3ea8a9b7a503ff0457008"
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/Geometry/Cheeger/Inequality.lean",
-            "sha256": "9f7b7e89eeb6a4eede94c0ef3437acd5e43e8808ddf2ab0119754b649d01ce19"
+            "sha256": "3f0b16019b0b45391f29e1cc19b3b066dcb0ff64773478d89eeac4ad79e24f76"
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/Geometry/Cheeger/Median.lean",
@@ -3326,7 +3326,7 @@
         "evidence": [
           {
             "path": "formalization/FunctionalInequalities/KLS/Geometry/Cheeger/Equality.lean",
-            "sha256": "3135a91f181c04c03b519ae75126d0b2b3504ecf5367fb4659d1a0439b4bde5f"
+            "sha256": "6553c219c0d33e09a71c3341568bdccf75474a5693d3ea8a9b7a503ff0457008"
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/Geometry/Cheeger/Infimum.lean",
@@ -3370,7 +3370,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/Geometry/Cheeger/Inequality.lean",
-            "sha256": "9f7b7e89eeb6a4eede94c0ef3437acd5e43e8808ddf2ab0119754b649d01ce19"
+            "sha256": "3f0b16019b0b45391f29e1cc19b3b066dcb0ff64773478d89eeac4ad79e24f76"
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/Geometry/Cheeger/Median.lean",

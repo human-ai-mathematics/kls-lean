@@ -54,27 +54,27 @@ variable {V : Type*} [NormedAddCommGroup V] [MeasurableSpace V] [BorelSpace V]
 theorem selection (ν : ProbabilityMeasure V) (f : Test V) (B : Set V) {δ ε : ℝ} (hδ : 0 < δ)
     (hδ2 : δ < 1 / 2) (hε : 0 < ε) :
     ∃ t ∈ Set.Ioo δ (1 - δ), MeasurableSet {x | t ≤ f x} ∧
-      Isoperimetry.minkowskiContent ν {x | t ≤ f x} ≤
+      Isoperimetry.minkowskiContent (ν : Measure V) {x | t ≤ f x} ≤
         cost (ν : Measure V) f / ENNReal.ofReal (1 - 2 * δ) + ENNReal.ofReal ε ∧
       ∫⁻ x, ‖{x | t ≤ f x}.indicator (1 : V → ℝ) x - B.indicator 1 x‖ₑ ∂(ν : Measure V) ≤
         indicatorDistance (ν : Measure V) f B / ENNReal.ofReal δ := by
-  exact exists_superlevel_selection ν f B hδ hδ2 hε
+  exact exists_superlevel_selection (ν : Measure V) f B hδ hδ2 hε
 
 /-- The requested form, with `B` measurable. -/
 theorem selectionMeasurable (ν : ProbabilityMeasure V) (f : Test V) {B : Set V}
     (_hB : MeasurableSet B) {δ ε : ℝ} (hδ : 0 < δ) (hδ2 : δ < 1 / 2) (hε : 0 < ε) :
     ∃ t ∈ Set.Ioo δ (1 - δ), MeasurableSet {x | t ≤ f x} ∧
-      Isoperimetry.minkowskiContent ν {x | t ≤ f x} ≤
+      Isoperimetry.minkowskiContent (ν : Measure V) {x | t ≤ f x} ≤
         cost (ν : Measure V) f / ENNReal.ofReal (1 - 2 * δ) + ENNReal.ofReal ε ∧
       ∫⁻ x, ‖{x | t ≤ f x}.indicator (1 : V → ℝ) x - B.indicator 1 x‖ₑ ∂(ν : Measure V) ≤
         indicatorDistance (ν : Measure V) f B / ENNReal.ofReal δ := by
-  exact exists_superlevel_selection ν f B hδ hδ2 hε
+  exact exists_superlevel_selection (ν : Measure V) f B hδ hδ2 hε
 
 /-- Zero cost: the selected superlevel set has content at most `ε`. -/
 theorem zeroCost (ν : ProbabilityMeasure V) (f : Test V) (hf : cost (ν : Measure V) f = 0)
     (B : Set V) {δ ε : ℝ} (hδ : 0 < δ) (hδ2 : δ < 1 / 2) (hε : 0 < ε) :
-    ∃ t ∈ Set.Ioo δ (1 - δ), Isoperimetry.minkowskiContent ν {x | t ≤ f x} ≤ ENNReal.ofReal ε := by
-  obtain ⟨t, ht, -, hc, -⟩ := exists_superlevel_selection ν f B hδ hδ2 hε
+    ∃ t ∈ Set.Ioo δ (1 - δ), Isoperimetry.minkowskiContent (ν : Measure V) {x | t ≤ f x} ≤ ENNReal.ofReal ε := by
+  obtain ⟨t, ht, -, hc, -⟩ := exists_superlevel_selection (ν : Measure V) f B hδ hδ2 hε
   rw [hf, ENNReal.zero_div, zero_add] at hc
   exact ⟨t, ht, hc⟩
 
@@ -84,7 +84,7 @@ theorem zeroError (ν : ProbabilityMeasure V) (f : Test V) (B : Set V)
     (hε : 0 < ε) :
     ∃ t ∈ Set.Ioo δ (1 - δ),
       ∫⁻ x, ‖{x | t ≤ f x}.indicator (1 : V → ℝ) x - B.indicator 1 x‖ₑ ∂(ν : Measure V) = 0 := by
-  obtain ⟨t, ht, -, -, he⟩ := exists_superlevel_selection ν f B hδ hδ2 hε
+  obtain ⟨t, ht, -, -, he⟩ := exists_superlevel_selection (ν : Measure V) f B hδ hδ2 hε
   rw [hf, ENNReal.zero_div] at he
   exact ⟨t, ht, le_antisymm he bot_le⟩
 
@@ -92,7 +92,7 @@ theorem zeroError (ν : ProbabilityMeasure V) (f : Test V) (B : Set V)
 theorem zeroTest (ν : ProbabilityMeasure V) (B : Set V) {δ ε : ℝ} (hδ : 0 < δ)
     (hδ2 : δ < 1 / 2) (hε : 0 < ε) :
     ∃ t ∈ Set.Ioo δ (1 - δ), {x | t ≤ (Test.zero : Test V) x} = ∅ ∧
-      Isoperimetry.minkowskiContent ν {x | t ≤ (Test.zero : Test V) x} ≤ ENNReal.ofReal ε := by
+      Isoperimetry.minkowskiContent (ν : Measure V) {x | t ≤ (Test.zero : Test V) x} ≤ ENNReal.ofReal ε := by
   obtain ⟨t, ht, hc⟩ := zeroCost ν Test.zero (cost_zero _) B hδ hδ2 hε
   refine ⟨t, ht, ?_, hc⟩
   refine Set.eq_empty_of_forall_notMem fun x hx => ?_
@@ -102,7 +102,7 @@ theorem zeroTest (ν : ProbabilityMeasure V) (B : Set V) {δ ε : ℝ} (hδ : 0 
 /-- The zero-dimensional space: every test has zero cost. -/
 theorem zeroDimensional (ν : ProbabilityMeasure (Fin 0 → ℝ)) (f : Test (Fin 0 → ℝ))
     (B : Set (Fin 0 → ℝ)) {δ ε : ℝ} (hδ : 0 < δ) (hδ2 : δ < 1 / 2) (hε : 0 < ε) :
-    ∃ t ∈ Set.Ioo δ (1 - δ), Isoperimetry.minkowskiContent ν {x | t ≤ f x} ≤ ENNReal.ofReal ε := by
+    ∃ t ∈ Set.Ioo δ (1 - δ), Isoperimetry.minkowskiContent (ν : Measure (Fin 0 → ℝ)) {x | t ≤ f x} ≤ ENNReal.ofReal ε := by
   refine zeroCost ν f ?_ B hδ hδ2 hε
   simp [cost, FunctionalInequalities.Energy.LocalSlope.apply_eq_zero_of_subsingleton]
 
@@ -114,8 +114,8 @@ theorem perimeterForm (ν : ProbabilityMeasure V) (f : Test V) (B : Set V) {δ �
         cost (ν : Measure V) f / ENNReal.ofReal (1 - 2 * δ) + ENNReal.ofReal ε ∧
       ∫⁻ x, ‖{x | t ≤ f x}.indicator (1 : V → ℝ) x - B.indicator 1 x‖ₑ ∂(ν : Measure V) ≤
         indicatorDistance (ν : Measure V) f B / ENNReal.ofReal δ := by
-  obtain ⟨t, ht, hm, hc, he⟩ := exists_superlevel_selection ν f B hδ hδ2 hε
-  exact ⟨t, ht, (perimeter_le_minkowskiContent ν hm).trans hc, he⟩
+  obtain ⟨t, ht, hm, hc, he⟩ := exists_superlevel_selection (ν : Measure V) f B hδ hδ2 hε
+  exact ⟨t, ht, (perimeter_le_minkowskiContent (ν : Measure V) hm).trans hc, he⟩
 
 #print axioms pointwiseError
 #print axioms integratedError

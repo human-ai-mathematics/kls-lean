@@ -8,7 +8,8 @@ import unittest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from verify import (axiom_audit_code, build_replay_inputs, check_research_audits,
-                    parse_axioms, prepare_replay, undiscovered_lean_sources)
+                    library_axiom_audit_code, parse_axioms, prepare_replay,
+                    undiscovered_lean_sources, verification_snapshot)
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -244,6 +245,45 @@ class AxiomAuditTests(unittest.TestCase):
         reports, errors = parse_axioms(result.stdout, names)
         self.assertEqual(reports, {})
         self.assertIn("missing axiom report: AuditMissing", errors)
+
+
+class LeanOnlyBoundaryTests(unittest.TestCase):
+    def test_prose_does_not_change_lean_receipt_but_proof_inputs_do(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            subprocess.run(["git", "init", "-q", str(root)], check=True)
+            subprocess.run(["git", "-c", "user.name=Fixture", "-c", "user.email=fixture@example.org",
+                            "commit", "--allow-empty", "-qm", "fixture"], cwd=root, check=True)
+            proof = root / "Example.lean"
+            prose = root / "README.md"
+            proof.write_text("example : True := trivial\n")
+            prose.write_text("draft\n")
+            before = verification_snapshot(root, lean_only=True)["sha256"]
+            prose.write_text("updated\n")
+            self.assertEqual(verification_snapshot(root, lean_only=True)["sha256"], before)
+            proof.write_text("example : False := by sorry\n")
+            self.assertNotEqual(verification_snapshot(root, lean_only=True)["sha256"], before)
+
+    def run_library_audit(self, source):
+        env = dict(os.environ)
+        env.pop("LEAN_PATH", None)
+        return subprocess.run(["lake", "env", "lean", "--stdin"], cwd=ROOT / "formalization",
+                              input="import Lean\n" + source + library_axiom_audit_code([]).removeprefix("import Lean"),
+                              text=True, capture_output=True, timeout=60, env=env)
+
+    def test_open_target_is_excluded_but_a_dependent_wrapper_fails(self):
+        source = "theorem FunctionalInequalities.KLS.kls : False := by sorry\n"
+        clean = self.run_library_audit(source + "theorem FunctionalInequalities.checked : True := trivial\n")
+        self.assertEqual(clean.returncode, 0, clean.stdout + clean.stderr)
+        wrapper = self.run_library_audit(source +
+            "theorem FunctionalInequalities.wrapper : False := FunctionalInequalities.KLS.kls\n")
+        self.assertNotEqual(wrapper.returncode, 0)
+        self.assertIn("unexpected axioms [sorryAx]", wrapper.stdout + wrapper.stderr)
+
+    def test_unlisted_nonstandard_axiom_is_rejected(self):
+        result = self.run_library_audit("axiom FunctionalInequalities.unlisted : False\n")
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("unexpected axioms", result.stdout + result.stderr)
 
 
 if __name__ == "__main__":

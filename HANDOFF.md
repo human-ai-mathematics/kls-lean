@@ -1,5 +1,113 @@
 # KLS Lean repository handoff
 
+## Publication and Lean CI scope (2026-10-01)
+
+The current publication batch collects the accepted metric BV/Minkowski work below,
+including Theorem 3.6 at finite-mass Borel targets under measures finite on bounded sets,
+Lemma 2.1's relaxed-content equality for arbitrary Borel measures at finite-mass targets,
+and the proper-space locally Lipschitz relaxation identities. No ledger certificate is
+added; KLS remains open. The older continuation sections retain their dated evidence.
+
+Remote verification uses `python3 research/verify.py --lean-only` on manual dispatch or
+`milestone/**` tags. It builds and replays current Lean modules, strictly checks audit clients
+and audits all local declarations except the exact open target `KLS.kls`. The cache input
+inventory includes audit clients, repairing the missing Mathlib import behind the earlier
+remote failure. Full local verification retains documentation/metadata, statement-baseline
+and Python checks. Verification evidence and the pushed commit are reported separately.
+
+The remaining mathematical boundaries are locally Lipschitz classes on nonproper spaces,
+nonconvex support transfer and general metric-measure/RCD comparisons. No broader endpoint
+or dimension-free KLS proof is asserted by this publication.
+
+## Renewed eight-hour continuation (2026-10-01, UTC 04:29:36–12:29:36)
+
+Claude prepared the statements and proof plans. The GPT gpt-5.6-luna worker implemented proof
+bodies only, through bounded task manifests. Claude validated each candidate strictly and
+integrated it. Records are in the ignored `build/audit/admg-api-proof-renewal-20261001/`
+(`receipts/`, `gpt/`, `claude/`). New, additive results:
+
+- Lemma 2.1, second clause, for every Borel measure at measurable finite-mass targets:
+  `relaxedUpperMinkowskiContent_eq_relaxedMinkowskiContent_of_measure_lt_top`. It is proved
+  through `exists_upperApproximation_lt` and the global-L1 lower semicontinuity
+  `relaxedUpperMinkowskiContent_le_liminf_of_tendsto`, which needs no premise on the measure or
+  the target (`Perimeter/RelaxedMinkowski.lean`). No perimeter identity is claimed for arbitrary
+  measures.
+- Remark 3.5 on proper metric spaces, for every Borel measure at measurable finite-mass targets:
+  - Target-tail truncation estimates for `truncateFun` and `Test.truncateOfLocallyLipschitz`.
+  - The diagonal compact-local bound
+    `perimeter_le_liminf_of_locallyLipschitz_of_forall_isCompact_of_measure_lt_top` and its
+    global-L1 corollary (`Perimeter/LocalLipschitzTests.lean`).
+  - The identities `locallyLipschitzRelaxation_eq_perimeter_of_measure_lt_top` and
+    `compactLocallyLipschitzRelaxation_eq_perimeter_of_measure_lt_top`
+    (`Perimeter/TestClassRelaxation.lean`).
+  The measure hypothesis is weaker than the paper's standing finiteness on bounded sets.
+  Nonproper spaces for these classes are not addressed.
+- Strict audits:
+  - `MinkowskiLemma21ArbitraryMeasureAudit` and `MetricBVLocalLipschitzTargetTailAudit`,
+    including counting measure on ℝ and the infinite-mass-target boundary.
+  - Four clients promoted from the external review: `MetricBVDefinitionClassAudit` (literal
+    Definition 3.3 composition), `MetricBVNonproperTargetAudit` (nonproper infinite-mass carrier,
+    unbounded positive-mass target), `MetricBVHypothesisBoundaryAudit` and
+    `MinkowskiInfiniteMassGenericAudit`.
+
+All pre-existing declaration types in the edited modules are unchanged; there are no aliases.
+The frozen full-verifier receipt for this snapshot is in that directory's `receipts/`. No
+ledger certificate, commit, push or remote CI. KLS remains open. The section below is the
+accepted 2026-09-30 history.
+
+## Active eight-hour continuation (2026-09-30 night)
+
+The finite-total-mass ADMG chain through phases 28–29 was accepted and closed.
+The user has authorized a new eight-hour continuation of the published
+finite-on-bounded-sets setting; see
+[the execution plan](research/handoffs/2026-09-30-eight-hour-locally-finite.md).
+The window is 22:52:18 through 06:52:18 Asia/Shanghai, with theorem expansion
+ending at 05:07:18. Theorem 3.6's finite-mass Borel targets and global L1
+convergence are retained. Both relaxed-content endpoints and both recoveries are
+now proved at that target/measure scope; the full coarea radius chain is also proved.
+The support-cost estimate is proved: each test's local-slope cost is bounded by
+its Lipschitz constant times closed-support mass. The finite-target cutoff is
+also proved for every Borel measure on a metric space: original global indicator
+L1 error plus `nu(B minus ball)` controls both cutoff error and the added cost.
+Fixed radii `n` give an actual bounded-support sequence with the same global L1
+limit and no larger liminf cost. Thus the actual globally Lipschitz relaxation
+of Definition 3.3 equals the bounded-support perimeter at every measurable
+finite-mass target, without finite total mass or properness. This is Remark
+3.4's bounded-support reduction; the lower Minkowski endpoint follows below.
+Strict clients cover infinite-total-mass Lebesgue measure, an unbounded null
+Borel target, zero measure, an empty carrier, old finite-measure scope and an
+infinite-mass-target counterexample. Stage A passed a fresh 352-module filtered
+build and 21 standard-only axiom reports; Stage B's separate filtered review is
+recorded in ignored `build/audit/admg-locally-finite-eight-hour/`.
+The direct positive-level coarea upper bound now uses finite mass of a
+positive-support neighborhood; for nonnegative functions it also bounds the
+all-level content integral by the actual slope integral. Radius-local restriction
+preserves the genuine lower content. The one-sided perimeter/content bridge is
+proved for every measurable finite-mass target under any Borel measure. The full
+Lemma 3.2 intervening radius liminf is now proved. Quantitative selection and
+actual lower recovery now hold under finiteness on bounded Borel sets: bounded
+measurable recovery sets have finite mass/content term by term, their indicators
+converge in global L1 and their lower contents converge to target perimeter.
+The existing set-approximation infimum equals the perimeter at every measurable
+finite-mass target, including infinite perimeter. Its lower bound proves eventual
+finite approximating-set mass, preserving finite prefixes with infinite mass.
+Finite target mass and finite lower content now imply a finite-mass positive
+neighborhood. Restriction to it, followed by a tail of small radii, proves actual
+lower-to-upper recovery with original global indicator L1 convergence and upper
+content control. A diagonal choice gives bounded open finite-mass upper-recovery
+sets whose upper contents converge to finite target perimeter. The actual upper
+relaxation equals perimeter, hence the lower relaxation, including infinite
+perimeter by order. No termwise mass premise is inserted into the class.
+The full Lemma 3.2 chain bounds the positive-level content integral by the actual
+right-radius liminf of integrated open-ball growth and then by the original
+local-slope integral. Growth vanishes outside the finite positive-support
+neighborhood at small radii, so restriction preserves the actual middle quantity;
+no integrability of the function is assumed. Lemma 2.1's relaxed-upper <= lower
+content bound is exposed for measurable finite-mass targets under any Borel measure.
+Next: fresh strict coarea/signature review, then freeze mathematics and execute
+the full verifier with matching before/after snapshots. No new ledger certificate or remote verification is
+claimed. All prior dirty work and the real index are preserved; no commit or push.
+
 ## Active placement plan: metric BV perimeter interface (2026-09-26)
 
 Object and scope: metric BV perimeter of Borel sets for a measure on a metric
@@ -58,7 +166,33 @@ defines the upper Minkowski content as the `limsup` of the lower content's radiu
 proves lower `≤` upper, and proves that the real mass of the `s`-thickening of any set is
 monotone, differentiable at Lebesgue-almost every radius, with the upper content of the
 `s`-thickening at most its derivative at every differentiability radius (probability laws on
-normed groups). The remainder of Lemma 2.1 and Theorem 3.6 in general metric
+normed groups). Phase 23 (independently accepted by Codex) integrates this bound: for every set and
+radius `r`, the upper content of the `s`-thickening integrated over `s ∈ (0, r)` is at most
+`ν(B^r) - ν(B)`, through the Radon–Nikodym form of the monotone differentiation theorem and
+one-sided limits at the endpoints, with no measurability, integrability or absolute-continuity
+assumption. Phases 24–26 (2026-09-30, independently accepted) complete the lower-to-upper
+comparison in the same scope: a quantitative small-radius selection and the recovery of every
+measurable set of finite lower content by thickenings converging in `L¹` with `limsup` of upper
+contents at most the lower content; the upper-content recovery of every target of finite BV
+perimeter (measurable sets converging in `L¹` with upper contents tending to the perimeter); and
+the relaxed upper Minkowski content, the infimum of liminf upper contents over the same measurable
+approximating class, which equals the metric BV perimeter for every set and hence the relaxed
+lower content (equalities of infima; pointwise equality is not claimed). Phase 27 (2026-09-30
+daytime, independently accepted) generalizes this content chain in place from normed additive
+groups to arbitrary metric spaces with a Borel probability law: lower and upper Minkowski contents,
+the local-slope Minkowski coarea inequality (through the lower semicontinuous open-ball
+supremum, since the closed-ball supremum need not be continuous on a metric space), the
+one-sided bridge, the lower and upper recoveries and both relaxed identities, with every
+established name kept and the closed-ball and `C¹` helpers retaining their normed scope. Phases
+28–29 (2026-09-30 evening, independently accepted) extend the chain to finite Borel measures:
+the content, upper-content, recovery and relaxation declarations take a finite measure (the
+probability statements are instances), with scaling of costs, distances, classes, perimeter and
+contents by nonnegative real scalars, the zero measure, normalization of a finite nonzero measure,
+and the lower and upper recoveries and both relaxed identities at finite total mass for arbitrary
+targets. Borel measures finite on bounded sets with possibly infinite total mass, the generality
+of the article, remain pending. The
+remainder of
+Lemma 2.1 and Theorem 3.6 in general metric
 measure spaces, and the `L¹_loc` theorem beyond proper spaces and finite measures, remain
 unproved. Phase 12 identifies the symmetric and half-mass BV constants with the
 Minkowski constant on normed-space laws and, for the intrinsic coordinate law, with
@@ -353,6 +487,95 @@ thickening exactly `1`, the bound attained) and the Dirac law at `0` (radius mas
 derivative `0` and zero upper content at every positive radius). Not claimed: absolute continuity
 of the radius mass, any integrated upper-content bound, lower-to-upper recovery or relaxed-upper
 identity, Lemma 2.1 in general metric measure spaces, RCD/Buser/KLS conclusions.
+Phase 23 (2026-09-29 evening, user-authorized single phase; independently accepted by Codex): the
+section `Integrated` of `Cheeger/UpperMinkowskiContent.lean` proves
+`setLIntegral_upperMinkowskiContent_thickening_le`: for every set `B` and every radius `r`,
+`∫⁻ s in Ioo 0 r, upperMinkowskiContent ν (thickening s B) ≤ ν (thickening r B) - ν B` (for
+`r ≤ 0` the left side is `0`), with the `Ioc` form, finiteness of the integral, a.e. finiteness of
+the integrand, zero increments and the empty set. The route is inequality only: the phase-22 a.e.
+derivative bound; `Monotone.ae_hasDerivAt`, which identifies the derivative a.e. with the
+truncated Radon–Nikodym density of the Lebesgue–Stieltjes measure of the right-continuous
+modification of the radius mass (`setLIntegral_ofReal_deriv_thickeningMass_le`, using only
+`withDensity_rnDeriv_le`); and the endpoint passages `stieltjesMeasure_thickeningMass_Ioo_le`
+from `toReal_measure_le_rightLim_thickeningMass_zero` (every positive thickening contains `B`)
+and `leftLim_rightLim_thickeningMass_le` (`rightLim F s ≤ F r` for `s < r`). No measurability of
+the content, integrability of the derivative, continuity of the radius mass at the endpoints or
+absolute continuity is assumed; measurability of `B` and `r > 0` are not needed.
+`MinkowskiUpperIntegratedAudit.lean` checks the bound for every law, set and radius, the
+assignment form (measurable `B`, `r > 0`), the `Ioc` form, the derivative integral bound with its
+endpoint ingredients, the empty set, zero increments, nonpositive radii, `ENNReal` values (finite
+integral, a.e. finite integrand, bound at most one) and the uniform law on `[0, 1]` with
+`B = {0}`, where for `0 < r ≤ 1` both sides equal `ENNReal.ofReal r` (the bound is attained). Not
+claimed: measurability or integrability of the integrand, absolute continuity of the radius mass,
+equality in general, the lower-to-upper recovery or relaxed-upper identity, Lemma 2.1 in general
+metric measure spaces, RCD/Buser/KLS conclusions.
+Phases 24–26 (2026-09-30, eight-hour upper-recovery run; each stage independently accepted by
+Codex). Stage A (`Cheeger/UpperMinkowskiContent.lean`, sections `Selection` and `Recovery`):
+`exists_upperMinkowskiContent_thickening_le_div_add` selects, for every set, `r > 0` and `ε > 0`, a
+radius `s ∈ (0, r)` with upper content of `B^s` at most `(ν(B^r) - ν(B)) / r + ε` (from the
+integrated bound; the radius-content function is never assumed measurable);
+`exists_radii_tendsto_minkowskiContent` and `exists_upperRecovery` give, for every measurable `B`
+with finite lower content, positive radii `s n → 0` whose open thickenings converge to `B` in
+indicator `L¹(ν)` with `limsup` of upper contents at most `minkowskiContent ν B`; the vanishing
+increments are derived from the finite lower content (no `ν(closure B) = ν(B)`). Stage B (new
+`Perimeter/UpperMinkowskiRecovery.lean`): `exists_upperMinkowskiRecovery`, with the explicit
+`upperRecoverySet ν hB n` (thickenings of the lower recovery sets at Stage-A radii with slack
+`1/(n+1)`; termwise finiteness from the explicit quantitative content bound), for every target of
+finite perimeter: measurable sets converging in `L¹` with upper contents tending to
+`perimeter ν B`; `perimeter_le_liminf_upperMinkowskiContent` (BV lower semicontinuity below the
+upper content, every target and every measurable `L¹`-convergent sequence) and the exact
+infinite boundary `liminf_upperMinkowskiContent_eq_top_of_perimeter_eq_top`. Stage C
+(`Perimeter/RelaxedMinkowski.lean`, section `RelaxedUpper`): `relaxedUpperMinkowskiContent ν B`, the
+infimum of liminf upper contents over the same `MinkowskiApproximatingSequence` class, with
+`relaxedUpperMinkowskiContent_eq_perimeter` for every set,
+`relaxedUpperMinkowskiContent_eq_relaxedMinkowskiContent`, empty class `⊤`
+(`perimeter_eq_top_of_isEmpty`), the `⊤`/`0` characterizations and the constant- and
+convergent-sequence bounds. Clients `MinkowskiUpperRecoveryAudit.lean`,
+`MinkowskiUpperBVRecoveryAudit.lean` and `MinkowskiRelaxedUpperAudit.lean` (eleven, twelve and
+fourteen standard-only reports). Scope: probability laws on normed additive groups with Borel
+structure. Not claimed: pointwise equality of contents and perimeter, new Cheeger-quotient
+identifications, general metric/RCD results, KLS.
+Phase 27 (2026-09-30 daytime, ADMG metric continuation; independently accepted by Codex): the
+six owners `Cheeger/MinkowskiContent.lean`, `Cheeger/LocalSlopeCoarea.lean`,
+`Cheeger/UpperMinkowskiContent.lean`, `Perimeter/MetricBVMinkowski.lean`,
+`Perimeter/UpperMinkowskiRecovery.lean` and `Perimeter/RelaxedMinkowski.lean` now take
+`[MetricSpace V]` in their generic sections (96 declarations change exactly in that instance
+argument, 31 are unchanged, 10 are new, none removed; old instances resolve through
+`NormedAddCommGroup.toMetricSpace`, so every consumer and all twelve existing clients recompile
+unchanged). The only vector-space argument was the translation in `lipschitzWith_ballSup`; the
+closed-ball supremum is not continuous on a general metric space (two components with a jump), so
+the generic coarea uses the new open-ball supremum `openBallSup` (bounded, lower semicontinuous,
+measurable, near-neighbour witness) through a majorant-parametrized layer cake
+`lintegral_minkowskiContent_superlevel_le_limsup_of_majorant`, of which the retained closed-ball
+layer cake is an instance in its normed scope. `MinkowskiMetricChainAudit.lean` (twelve
+standard-only reports) checks the whole chain on `[MetricSpace V] [MeasurableSpace V] [BorelSpace V]`,
+an atom at any point, the empty/full/zero/infinite boundaries and a non-vector-space example on
+`ℕ`. Scope: Borel probability laws only; finite and locally finite measures, pointwise
+content/perimeter equality, general RCD and KLS remain unproved.
+Phases 28–29 (2026-09-30 evening, four-hour finite-measure run; each stage independently accepted
+by Codex). Stage A: the argument migration `(ν : ProbabilityMeasure V)` ↦ `(ν : Measure V)
+[IsFiniteMeasure ν]` across `Cheeger/MinkowskiContent`, `LocalSlopeCoarea`, `UpperMinkowskiContent`,
+`Perimeter/MetricBVMinkowski`, `UpperMinkowskiRecovery`, `RelaxedMinkowski` (definitions without
+finiteness; `thickeningMass_le_one` and the ratio-recovery section stay at probability laws; the
+exact before/after map is `build/audit/admg-finite-four-hour/stage-a/api-map.md`), plus scaling
+`cost_smul`, `indicatorDistance_smul`, `ApproximatingSequence.smul/smulInv`, `perimeter_smul`
+(`c ≠ 0`, empty class included), `minkowskiContent_smul`, `upperMinkowskiContent_smul`,
+`thickeningMass_smul`, `relaxedMinkowskiContent_smul`, `relaxedUpperMinkowskiContent_smul`, the
+zero-measure lemmas and `exists_probability_smul` (normalization), in `Perimeter/MetricBV.lean`
+and the content owners (`MetricBVFiniteScalingAudit.lean`, ten standard-only reports). Stage B:
+no production edit; the migrated chain already proves `exists_minkowskiRecovery`,
+`exists_upperMinkowskiRecovery`, `relaxedMinkowskiContent_eq_perimeter` and
+`relaxedUpperMinkowskiContent_eq_perimeter` for every finite Borel measure and every target
+(`MetricBVFiniteRecoveryAudit.lean`, twelve standard-only reports: zero measure with arbitrary
+target, empty carrier, mass-3 atom on `ℕ`, empty/full, infinite perimeter, scaled recovery,
+probability instances). Source mapping (arXiv:1603.08412): Lemma 3.2 ↦ the local-slope coarea
+inequality; Definition 3.3 (global `L¹`) ↦ the approximating classes; Remark 3.4 (bounded-support
+reduction) ↦ the bounded-support test class; Remark 3.5 (alternate local-convergence definitions,
+not the article's working definition) ↦ the locally Lipschitz/compact-local relaxation classes of
+phases 17–21; Lemma 2.1 ↦ the thickening upper-content results; Theorem 3.6 (Borel sets of finite
+measure under measures finite on bounded sets) ↦ the two relaxed identities for arbitrary targets
+under finite total mass. Not claimed: measures finite on bounded sets with infinite total mass,
+the published Theorem 3.6 in that generality, RCD, KLS.
 
 ## Precommit audit and placement plan (2026-09-26)
 

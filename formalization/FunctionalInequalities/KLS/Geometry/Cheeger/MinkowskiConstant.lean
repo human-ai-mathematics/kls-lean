@@ -45,7 +45,7 @@ variable {V : Type u} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [Complete
 /-- The Minkowski Cheeger infimum `h_M` over Borel sets of intermediate mass; `⊤` if none. -/
 def minkowskiConstant (ν : ProbabilityMeasure V) : ℝ≥0∞ :=
   ⨅ (B : Set V) (_ : MeasurableSet B) (_ : 0 < (ν : Measure V) B) (_ : (ν : Measure V) B < 1),
-    minkowskiContent ν B / min ((ν : Measure V) B) (1 - (ν : Measure V) B)
+    minkowskiContent (ν : Measure V) B / min ((ν : Measure V) B) (1 - (ν : Measure V) B)
 
 omit [InnerProductSpace ℝ V] [CompleteSpace V] [BorelSpace V] [SecondCountableTopology V]
   [FiniteDimensional ℝ V] in
@@ -75,7 +75,7 @@ ranges over sets of intermediate mass, is not applied to an inadmissible set. -/
 theorem minkowskiConstant_mul_min_le (ν : ProbabilityMeasure V) {B : Set V}
     (hB : MeasurableSet B) :
     minkowskiConstant ν * min ((ν : Measure V) B) (1 - (ν : Measure V) B) ≤
-      minkowskiContent ν B := by
+      minkowskiContent (ν : Measure V) B := by
   rcases eq_or_ne (min ((ν : Measure V) B) (1 - (ν : Measure V) B)) 0 with h0 | h0
   · rw [h0, mul_zero]
     exact zero_le
@@ -88,7 +88,7 @@ theorem minkowskiConstant_mul_min_le (ν : ProbabilityMeasure V) {B : Set V}
     refine lt_of_le_of_ne prob_le_one fun h ↦ h0 ?_
     simp [h]
   have hiInf : minkowskiConstant ν ≤
-      minkowskiContent ν B / min ((ν : Measure V) B) (1 - (ν : Measure V) B) := by
+      minkowskiContent (ν : Measure V) B / min ((ν : Measure V) B) (1 - (ν : Measure V) B) := by
     simp only [minkowskiConstant]
     refine le_trans (iInf_le _ B) ?_
     rw [iInf_pos hB, iInf_pos hBpos, iInf_pos hBlt]
@@ -157,7 +157,7 @@ theorem minkowskiConstant_mul_lintegral_min_superlevel_le (ν : ProbabilityMeasu
   have hpt : ∀ᵐ t ∂(volume : Measure ℝ),
       minkowskiConstant ν *
           min ((ν : Measure V) {x | t < u x}) (1 - (ν : Measure V) {x | t < u x}) ≤
-        minkowskiContent ν {x | t ≤ u x} := by
+        minkowskiContent (ν : Measure V) {x | t ≤ u x} := by
     filter_upwards [ae_measure_superlevel_lt_eq_le (ν : Measure V) humeas] with t ht
     rw [ht]
     exact minkowskiConstant_mul_min_le ν (measurableSet_le measurable_const humeas)
@@ -167,11 +167,11 @@ theorem minkowskiConstant_mul_lintegral_min_superlevel_le (ν : ProbabilityMeasu
       = ∫⁻ t in Set.Ioo (0 : ℝ) 1, minkowskiConstant ν *
           min ((ν : Measure V) {x | t < u x}) (1 - (ν : Measure V) {x | t < u x}) :=
         (lintegral_const_mul _ (measurable_min_measure_superlevel ν u)).symm
-    _ ≤ ∫⁻ t in Set.Ioo (0 : ℝ) 1, minkowskiContent ν {x | t ≤ u x} :=
+    _ ≤ ∫⁻ t in Set.Ioo (0 : ℝ) 1, minkowskiContent (ν : Measure V) {x | t ≤ u x} :=
         lintegral_mono_ae (ae_restrict_of_ae hpt)
-    _ ≤ ∫⁻ t, minkowskiContent ν {x | t ≤ u x} ∂(volume : Measure ℝ) :=
+    _ ≤ ∫⁻ t, minkowskiContent (ν : Measure V) {x | t ≤ u x} ∂(volume : Measure ℝ) :=
         setLIntegral_le_lintegral _ _
     _ ≤ ∫⁻ x, ‖gradient u x‖ₑ ∂(ν : Measure V) :=
-        lintegral_minkowskiContent_superlevel_le ν hu hK
+        lintegral_minkowskiContent_superlevel_le (ν : Measure V) hu hK
 
 end FunctionalInequalities.KLS.Isoperimetry

@@ -30,37 +30,37 @@ theorem growthBound (u : V → ℝ) (x : V) {r : ℕ → ℝ} (hrpos : ∀ n, 0 
 variable [MeasurableSpace V] [BorelSpace V]
 
 theorem layerCake (ν : ProbabilityMeasure V) {u : V → ℝ} {K : ℝ≥0} (hK : LipschitzWith K u) :
-    ∫⁻ t, Isoperimetry.minkowskiContent ν {x | t ≤ u x} ∂(volume : Measure ℝ) ≤
+    ∫⁻ t, Isoperimetry.minkowskiContent (ν : Measure V) {x | t ≤ u x} ∂(volume : Measure ℝ) ≤
       ∫⁻ x, limsup (fun n : ℕ => ENNReal.ofReal
         ((Isoperimetry.ballSup u (1 / ((n : ℝ) + 1)) x - u x) / (1 / ((n : ℝ) + 1)))) atTop
         ∂(ν : Measure V) := by
-  exact Isoperimetry.lintegral_minkowskiContent_superlevel_le_limsup ν hK
+  exact Isoperimetry.lintegral_minkowskiContent_superlevel_le_limsup (ν : Measure V) hK
 
 theorem slopeCoarea (ν : ProbabilityMeasure V) {u : V → ℝ} {K : ℝ≥0} (hK : LipschitzWith K u) :
-    ∫⁻ t, Isoperimetry.minkowskiContent ν {x | t ≤ u x} ∂(volume : Measure ℝ) ≤
+    ∫⁻ t, Isoperimetry.minkowskiContent (ν : Measure V) {x | t ≤ u x} ∂(volume : Measure ℝ) ≤
       ∫⁻ x, FunctionalInequalities.Energy.LocalSlope.apply u x ∂(ν : Measure V) := by
-  exact Isoperimetry.lintegral_minkowskiContent_superlevel_le_localSlope ν hK
+  exact Isoperimetry.lintegral_minkowskiContent_superlevel_le_localSlope (ν : Measure V) hK
 
 theorem lipschitzPerimeter (ν : ProbabilityMeasure V) {u : V → ℝ} {K : ℝ≥0}
     (hK : LipschitzWith K u) :
     ∫⁻ t, perimeter (ν : Measure V) {x | t ≤ u x} ∂(volume : Measure ℝ) ≤
       ∫⁻ x, FunctionalInequalities.Energy.LocalSlope.apply u x ∂(ν : Measure V) := by
-  exact lintegral_perimeter_superlevel_le_localSlope ν hK
+  exact lintegral_perimeter_superlevel_le_localSlope (ν : Measure V) hK
 
 theorem testContent (ν : ProbabilityMeasure V) (f : Test V) :
-    ∫⁻ t, Isoperimetry.minkowskiContent ν {x | t ≤ f x} ∂(volume : Measure ℝ) ≤
+    ∫⁻ t, Isoperimetry.minkowskiContent (ν : Measure V) {x | t ≤ f x} ∂(volume : Measure ℝ) ≤
       cost (ν : Measure V) f := by
-  exact lintegral_minkowskiContent_superlevel_le_cost ν f
+  exact lintegral_minkowskiContent_superlevel_le_cost (ν : Measure V) f
 
 theorem testPerimeter (ν : ProbabilityMeasure V) (f : Test V) :
     ∫⁻ t, perimeter (ν : Measure V) {x | t ≤ f x} ∂(volume : Measure ℝ) ≤
       cost (ν : Measure V) f := by
-  exact lintegral_perimeter_superlevel_le_cost ν f
+  exact lintegral_perimeter_superlevel_le_cost (ν : Measure V) f
 
 /-- Constants: the superlevel sets are `∅` or the whole space, and the integral vanishes. -/
 theorem constantFunction (ν : ProbabilityMeasure V) (c : ℝ) :
-    ∫⁻ t, Isoperimetry.minkowskiContent ν {_x : V | t ≤ c} ∂(volume : Measure ℝ) = 0 := by
-  have h := Isoperimetry.lintegral_minkowskiContent_superlevel_le_localSlope ν
+    ∫⁻ t, Isoperimetry.minkowskiContent (ν : Measure V) {_x : V | t ≤ c} ∂(volume : Measure ℝ) = 0 := by
+  have h := Isoperimetry.lintegral_minkowskiContent_superlevel_le_localSlope (ν : Measure V)
     (LipschitzWith.const (α := V) c)
   simp only [FunctionalInequalities.Energy.LocalSlope.apply_const, lintegral_zero] at h
   exact le_antisymm h bot_le
@@ -68,17 +68,17 @@ theorem constantFunction (ν : ProbabilityMeasure V) (c : ℝ) :
 /-- The zero-dimensional coordinate space: every Lipschitz function has zero slope. -/
 theorem zeroDimensional (ν : ProbabilityMeasure (Fin 0 → ℝ)) {u : (Fin 0 → ℝ) → ℝ} {K : ℝ≥0}
     (hK : LipschitzWith K u) :
-    ∫⁻ t, Isoperimetry.minkowskiContent ν {x | t ≤ u x} ∂(volume : Measure ℝ) = 0 := by
-  have h := Isoperimetry.lintegral_minkowskiContent_superlevel_le_localSlope ν hK
+    ∫⁻ t, Isoperimetry.minkowskiContent (ν : Measure (Fin 0 → ℝ)) {x | t ≤ u x} ∂(volume : Measure ℝ) = 0 := by
+  have h := Isoperimetry.lintegral_minkowskiContent_superlevel_le_localSlope (ν : Measure (Fin 0 → ℝ)) hK
   simp only [FunctionalInequalities.Energy.LocalSlope.apply_eq_zero_of_subsingleton,
     lintegral_zero] at h
   exact le_antisymm h bot_le
 
 /-- The unbounded identity on `ℝ` (unbounded values and support) for an arbitrary law. -/
 theorem identityLine (ν : ProbabilityMeasure ℝ) :
-    ∫⁻ t, Isoperimetry.minkowskiContent ν {x : ℝ | t ≤ x} ∂(volume : Measure ℝ) ≤ 1 := by
+    ∫⁻ t, Isoperimetry.minkowskiContent (ν : Measure ℝ) {x : ℝ | t ≤ x} ∂(volume : Measure ℝ) ≤ 1 := by
   have hK : LipschitzWith 1 (fun x : ℝ => x) := LipschitzWith.id
-  refine (Isoperimetry.lintegral_minkowskiContent_superlevel_le_localSlope ν hK).trans ?_
+  refine (Isoperimetry.lintegral_minkowskiContent_superlevel_le_localSlope (ν : Measure ℝ) hK).trans ?_
   calc ∫⁻ x, FunctionalInequalities.Energy.LocalSlope.apply (fun x : ℝ => x) x ∂(ν : Measure ℝ)
       ≤ ∫⁻ _, (1 : ℝ≥0∞) ∂(ν : Measure ℝ) := lintegral_mono fun x => by
         simpa using FunctionalInequalities.Energy.LocalSlope.apply_le_of_lipschitzWith hK x
@@ -89,9 +89,9 @@ gradient integral, so the new bound recovers `lintegral_minkowskiContent_superle
 theorem c1Consistency {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
     [MeasurableSpace E] [BorelSpace E] (ν : ProbabilityMeasure E) {u : E → ℝ}
     (hu : ContDiff ℝ 1 u) {K : ℝ≥0} (hK : LipschitzWith K u) :
-    ∫⁻ t, Isoperimetry.minkowskiContent ν {x | t ≤ u x} ∂(volume : Measure ℝ) ≤
+    ∫⁻ t, Isoperimetry.minkowskiContent (ν : Measure E) {x | t ≤ u x} ∂(volume : Measure ℝ) ≤
       ∫⁻ x, ‖gradient u x‖ₑ ∂(ν : Measure E) := by
-  refine (Isoperimetry.lintegral_minkowskiContent_superlevel_le_localSlope ν hK).trans_eq ?_
+  refine (Isoperimetry.lintegral_minkowskiContent_superlevel_le_localSlope (ν : Measure E) hK).trans_eq ?_
   refine lintegral_congr fun x => ?_
   rw [FunctionalInequalities.Energy.LocalSlope.apply_eq_norm_gradient u x
     (hu.differentiable one_ne_zero x), ofReal_norm]
@@ -101,7 +101,7 @@ null set, hence of zero BV perimeter, while their closure is the whole line, so 
 content is infinite. -/
 theorem pointwiseReverseFails :
     ∃ (ν : ProbabilityMeasure ℝ) (B : Set ℝ), MeasurableSet B ∧
-      perimeter (ν : Measure ℝ) B = 0 ∧ Isoperimetry.minkowskiContent ν B = ⊤ := by
+      perimeter (ν : Measure ℝ) B = 0 ∧ Isoperimetry.minkowskiContent (ν : Measure ℝ) B = ⊤ := by
   let ν : ProbabilityMeasure ℝ := ⟨ProbabilityTheory.gaussianReal 0 1, inferInstance⟩
   set B : Set ℝ := Set.range ((↑) : ℚ → ℝ) with hBdef
   have hBc : B.Countable := Set.countable_range _
@@ -121,7 +121,7 @@ theorem pointwiseReverseFails :
     simp only [perimeter_empty, liminf_const] at h
     exact le_antisymm h bot_le
   · by_contra hne
-    have hcl := Isoperimetry.measure_closure_eq_of_minkowskiContent_ne_top ν hne
+    have hcl := Isoperimetry.measure_closure_eq_of_minkowskiContent_ne_top (ν : Measure ℝ) hne
     rw [hBdef, Rat.denseRange_cast.closure_range, ← hBdef, h0, measure_univ] at hcl
     exact one_ne_zero hcl
 

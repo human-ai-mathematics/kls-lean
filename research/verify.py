@@ -171,14 +171,57 @@ def undiscovered_lean_sources(root: Path, snapshot: dict) -> list[str]:
                   if p.is_file() and str(p.relative_to(root)) not in live)
 
 
-def run_verification(root: Path) -> int:
+def verification_snapshot(root: Path, *, lean_only: bool = False) -> dict:
+    snapshot = atlas.source_snapshot(root)
+    if lean_only:
+        # Bind Lean evidence to proof inputs and their tooling, not prose or ledger status.
+        inputs = {"formalization/lean-toolchain", "formalization/lakefile.toml",
+                  "formalization/lake-manifest.json", "research/verify.py", "research/atlas.py"}
+        files = {name: digest for name, digest in snapshot["files"].items()
+                 if name in inputs or name.endswith(".lean")}
+        snapshot = {**snapshot, "files": files, "sha256": atlas.digest(files)}
+    return snapshot
+
+
+def library_axiom_audit_code(modules: list[str]) -> str:
+    """Audit actual local declarations without relying on documentation inventories."""
+    imports = "\n".join("import " + module for module in sorted(set(modules) | {"Lean"}))
+    names = ", ".join(json.dumps(module) for module in modules)
+    return imports + f'''
+run_cmd do
+  let env ← Lean.getEnv
+  let modules : Array String := #[{names}]
+  let allowed : Array Lean.Name := #[`propext, `Classical.choice, `Quot.sound]
+  let mut count : Nat := 0
+  for (name, _) in env.constants.toList do
+    let localDecl := match env.getModuleIdxFor? name with
+      | some idx => modules.contains env.header.moduleNames[idx.toNat]!.toString
+      | none => (`FunctionalInequalities).isPrefixOf name ||
+          (`solutions).isPrefixOf name || (`examples).isPrefixOf name
+    if !localDecl then continue
+    -- This exact open conjecture is the repository's sole intentional target hole.
+    -- Every other declaration, including a wrapper around it, is still audited.
+    if name == `FunctionalInequalities.KLS.kls then continue
+    count := count + 1
+    let axioms ← Lean.collectAxioms name
+    let rendered := String.intercalate ", " (axioms.toList.map Lean.Name.toString)
+    Lean.logInfo m!"'{{name}}' depends on axioms: [{{rendered}}]"
+    unless axioms.all (allowed.contains ·) do
+      throwError "{{name}}: unexpected axioms [{{rendered}}]"
+  if count == 0 then throwError "No local declarations audited"
+  Lean.logInfo m!"Audited {{count}} local declarations; KLS.kls remains open."
+'''
+
+
+def run_verification(root: Path, *, lean_only: bool = False) -> int:
     started = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S.%fZ")
     artifact = Path("build/verification") / started
     output_dir = root / artifact
     output_dir.mkdir(parents=True, exist_ok=False)
-    before = atlas.source_snapshot(root)
+    before = verification_snapshot(root, lean_only=lean_only)
     report = {"version": 1, "started_utc": started, "artifact": str(artifact / "report.json"),
-              "snapshot": before, "status": "failed", "gates": [], "errors": [],
+              "snapshot": before, "scope": "lean-only" if lean_only else "full",
+              "status": "failed", "gates": [], "errors": [],
               "trust_scope": "Local source build and local-module kernel replay; pinned third-party compiled imports are trusted. No fresh replay, external checker or isolated rebuild."}
 
     def run(name: str, command: list[str], *, cwd: Path = root, code: str | None = None,
@@ -212,10 +255,11 @@ def run_verification(root: Path) -> int:
         hidden = undiscovered_lean_sources(root, before)
         internal_gate("source-discovery", [f"Lean source missing from snapshot: {p}" for p in hidden],
                       "Checked production and audit directories against the source snapshot")
-        derived, errors = atlas.build_atlas(root, snapshot=before)
-        internal_gate("atlas-ledger-blueprint", errors, "Structural and task metadata checks")
-        (output_dir / "atlas.json").write_text(json.dumps(derived, ensure_ascii=False, indent=2) + "\n")
-        run("python-tests", [sys.executable, "-m", "unittest", "discover", "-s", "research/tests", "-p", "test_*.py"])
+        if not lean_only:
+            derived, errors = atlas.build_atlas(root, snapshot=before)
+            internal_gate("atlas-ledger-blueprint", errors, "Structural and task metadata checks")
+            (output_dir / "atlas.json").write_text(json.dumps(derived, ensure_ascii=False, indent=2) + "\n")
+            run("python-tests", [sys.executable, "-m", "unittest", "discover", "-s", "research/tests", "-p", "test_*.py"])
         run("lake-build", ["lake", "build"], cwd=root / "formalization")
         view = output_dir / "local-olean"
         replay = build_replay_inputs(root, before, view, run)
@@ -234,34 +278,48 @@ def run_verification(root: Path) -> int:
         report["checked_lean_path"] = paths
         report["research_audits"] = check_research_audits(
             root, before, run, lean=lean, lean_path=checked_path)
-        code = statement_snapshot.snapshot_code(root)
-        (output_dir / "StatementSnapshot.lean").write_text(code)
-        output = run("statement-snapshot", [lean, "--stdin"],
-                     cwd=root / "formalization", code=code, lean_path=checked_path)
-        statement = statement_snapshot.parse_snapshot(output, root)
-        (output_dir / "statement-snapshot.json").write_text(json.dumps(statement, indent=2, ensure_ascii=False) + "\n")
-        internal_gate("statement-golden", statement_snapshot.check_snapshot(root, statement),
-                      f"Compared {len(statement['declarations'])} local declarations with the explicit baseline")
-        report["statement_snapshot"] = {"local_declarations": len(statement["declarations"]),
-                                        "external_leaves": len(statement["external"]),
-                                        "golden_sha256": statement_snapshot.sha256(root / statement_snapshot.DIRECTORY / "golden.json")}
-        imports = {"FunctionalInequalities", "solutions.StatementChecks"}
-        imports.update(c["module"] for c in derived["certificates"].values())
-        declarations = {d for n in derived["nodes"].values() for d in n["lean"]["declarations"]}
-        declarations.update(c["declaration"] for c in derived["certificates"].values())
-        declarations.update(d["name"] for d in statement["declarations"])
-        declarations.update(STATEMENT_CHECKS)
-        code = "\n".join("import " + m for m in sorted(imports)) + "\n"
-        code += axiom_audit_code(declarations)
-        code += "set_option pp.all true\n"
-        code += "\n".join("#print " + c["declaration"] for c in derived["certificates"].values()) + "\n"
-        (output_dir / "DeclarationAudit.lean").write_text(code)
-        output = run("declaration-audit", [lean, "--stdin"], cwd=root / "formalization",
-                     code=code, lean_path=checked_path)
-        reports, errors = parse_axioms(output, declarations)
-        report["axioms"] = reports
-        if errors:
-            raise RuntimeError("\n".join(errors))
+        if lean_only:
+            code = library_axiom_audit_code(replay["modules"])
+            (output_dir / "DeclarationAudit.lean").write_text(code)
+            output = run("declaration-audit", [lean, "--stdin"], cwd=formalization,
+                         code=code, lean_path=checked_path)
+            names = set(re.findall(r"'([^']+)' depends on axioms:", output))
+            reports, errors = parse_axioms(output, names)
+            if not reports:
+                errors.append("No local declaration axiom reports")
+            report["axioms"] = reports
+            report["excluded_open_targets"] = ["FunctionalInequalities.KLS.kls"]
+            if errors:
+                raise RuntimeError("\n".join(errors))
+        else:
+            code = statement_snapshot.snapshot_code(root)
+            (output_dir / "StatementSnapshot.lean").write_text(code)
+            output = run("statement-snapshot", [lean, "--stdin"],
+                         cwd=root / "formalization", code=code, lean_path=checked_path)
+            statement = statement_snapshot.parse_snapshot(output, root)
+            (output_dir / "statement-snapshot.json").write_text(json.dumps(statement, indent=2, ensure_ascii=False) + "\n")
+            internal_gate("statement-golden", statement_snapshot.check_snapshot(root, statement),
+                          f"Compared {len(statement['declarations'])} local declarations with the explicit baseline")
+            report["statement_snapshot"] = {"local_declarations": len(statement["declarations"]),
+                                            "external_leaves": len(statement["external"]),
+                                            "golden_sha256": statement_snapshot.sha256(root / statement_snapshot.DIRECTORY / "golden.json")}
+            imports = {"FunctionalInequalities", "solutions.StatementChecks"}
+            imports.update(c["module"] for c in derived["certificates"].values())
+            declarations = {d for n in derived["nodes"].values() for d in n["lean"]["declarations"]}
+            declarations.update(c["declaration"] for c in derived["certificates"].values())
+            declarations.update(d["name"] for d in statement["declarations"])
+            declarations.update(STATEMENT_CHECKS)
+            code = "\n".join("import " + m for m in sorted(imports)) + "\n"
+            code += axiom_audit_code(declarations)
+            code += "set_option pp.all true\n"
+            code += "\n".join("#print " + c["declaration"] for c in derived["certificates"].values()) + "\n"
+            (output_dir / "DeclarationAudit.lean").write_text(code)
+            output = run("declaration-audit", [lean, "--stdin"], cwd=root / "formalization",
+                         code=code, lean_path=checked_path)
+            reports, errors = parse_axioms(output, declarations)
+            report["axioms"] = reports
+            if errors:
+                raise RuntimeError("\n".join(errors))
         output = run("leanchecker", [str(Path(toolchain) / "bin/leanchecker"), "--verbose", "FunctionalInequalities", "solutions", "examples"],
                      cwd=formalization, lean_path=os.pathsep.join(paths))
         replayed = sorted(set(re.findall(r"(?m)^replaying (\S+)\s*$", output)))
@@ -272,14 +330,14 @@ def run_verification(root: Path) -> int:
         report["status"] = "passed"
     except (OSError, ValueError, KeyError, RuntimeError, subprocess.SubprocessError) as exc:
         report["errors"].append(str(exc))
-    after = atlas.source_snapshot(root)
+    after = verification_snapshot(root, lean_only=lean_only)
     if after["sha256"] != before["sha256"]:
         report["status"] = "failed"
         report["errors"].append("Sources changed during verification; rerun on a coherent snapshot.")
         report["after_snapshot"] = after
     serialized = json.dumps(report, ensure_ascii=False, indent=2) + "\n"
     (output_dir / "report.json").write_text(serialized)
-    latest = root / "build/verification/latest.json"
+    latest = root / ("build/verification/latest-lean.json" if lean_only else "build/verification/latest.json")
     pending = latest.with_suffix(".tmp")
     pending.write_text(serialized)
     pending.replace(latest)
@@ -292,5 +350,7 @@ def run_verification(root: Path) -> int:
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--root", type=Path, default=atlas.ROOT)
+    parser.add_argument("--lean-only", action="store_true",
+                        help="build, strictly audit and replay Lean; leave documentation/metadata checks local")
     args = parser.parse_args()
-    raise SystemExit(run_verification(args.root.resolve()))
+    raise SystemExit(run_verification(args.root.resolve(), lean_only=args.lean_only))

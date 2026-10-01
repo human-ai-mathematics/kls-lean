@@ -19,8 +19,17 @@ new input is global Lipschitz continuity of the truncation: on a proper space th
 controlled by `cutoff x₀ R x ≤ dist x y`. No uniform Lipschitz constant, boundedness or bounded
 support of the approximants is assumed; the empty carrier, the zero measure, infinite slope
 integrals and every `ENNReal` convention are included. This is the locally Lipschitz variant
-(Ambrosio--Di Marino--Gigli, Remark 3.5) with global `L¹` convergence on proper spaces; `L¹_loc`
-convergence and the identification of the relaxation infimum are not addressed here.
+(Ambrosio--Di Marino--Gigli, Remark 3.5) with global `L¹` convergence on proper spaces. The
+bounded-ball and compact-set convergence bounds below cover `L¹_loc` convergence, and the
+identification of the relaxation infima is in `TestClassRelaxation.lean`.
+
+For a measurable finite-mass target the finite-measure premise is removed: sharper target-tail
+truncation estimates (`apply_truncateFun_le_target_tail`, `enorm_truncateFun_sub_le_target_tail`)
+replace the mass outside a ball by the indicator error on a closed ball and the target outside
+it, so for every Borel measure on a proper space locally Lipschitz approximants converging on
+every compact set bound the perimeter
+(`perimeter_le_liminf_of_locallyLipschitz_of_forall_isCompact_of_measure_lt_top`), by a diagonal
+choice of radii; global `L¹` convergence is a special case.
 -/
 
 noncomputable section
@@ -123,6 +132,169 @@ theorem enorm_truncateFun_sub_le (x₀ : X) (R : ℝ) (f : X → ℝ) (B : Set X
   · rw [Set.indicator_of_mem (Set.mem_compl hx), Pi.one_apply]
     exact ENNReal.ofReal_le_one.mpr (by linarith)
 
+/-- Target-tail slope bound: the truncation's slope exceeds the original slope by at most the
+original indicator error on the closed ball of radius `R + 1` and the target outside the inner
+ball. The cutoff is locally constant off the annulus, and on the annulus the clamped value is
+controlled by the indicator error and the target. No measure or regularity of `f` is involved. -/
+theorem apply_truncateFun_le_target_tail (x₀ : X) (R : ℝ)
+    (f : X → ℝ) (B : Set X) (x : X) :
+    Energy.LocalSlope.apply (truncateFun x₀ R f) x ≤
+      Energy.LocalSlope.apply f x +
+        ((Metric.closedBall x₀ (R + 1)).indicator
+            (fun y => ‖f y - B.indicator (1 : X → ℝ) y‖ₑ) x +
+          (B \ Metric.ball x₀ R).indicator 1 x) := by
+  set c := clampUnit (f x)
+  have hc0 : 0 ≤ c := clampUnit_nonneg _
+  have hsec : Energy.LocalSlope.apply (truncateFun x₀ R f) x ≤
+      Energy.LocalSlope.apply f x +
+        Energy.LocalSlope.apply (fun y => c * cutoff x₀ R y) x := by
+    refine Energy.LocalSlope.apply_le_add zero_lt_one fun y _ => ?_
+    change |cutoff x₀ R y * clampUnit (f y) - cutoff x₀ R x * clampUnit (f x)| ≤
+      dist (f y) (f x) + dist (c * cutoff x₀ R y) (c * cutoff x₀ R x)
+    have key : cutoff x₀ R y * clampUnit (f y) - cutoff x₀ R x * clampUnit (f x) =
+        cutoff x₀ R y * (clampUnit (f y) - clampUnit (f x)) +
+          (c * cutoff x₀ R y - c * cutoff x₀ R x) := by
+      dsimp [c]
+      ring
+    rw [key]
+    refine (abs_add_le _ _).trans (add_le_add ?_ ?_)
+    · rw [abs_mul, abs_of_nonneg (cutoff_nonneg x₀ R y)]
+      exact (mul_le_of_le_one_left (abs_nonneg _)
+        (cutoff_le_one x₀ R y)).trans
+        (by simpa only [Real.dist_eq] using abs_clampUnit_sub_le (f y) (f x))
+    · rw [Real.dist_eq]
+  refine hsec.trans (add_le_add le_rfl ?_)
+  by_cases hx : x ∈ Metric.ball x₀ R
+  · have hr : 0 < R - dist x x₀ := by
+      rw [Metric.mem_ball] at hx
+      linarith
+    rw [Energy.LocalSlope.apply_eq_zero_of_eqOn_ball hr fun y hy => ?_]
+    · exact zero_le
+    · have hy' : dist y x₀ ≤ R := by
+        have htri := dist_triangle y x x₀
+        linarith
+      rw [cutoff_eq_one hy', cutoff_eq_one (le_of_lt (Metric.mem_ball.mp hx))]
+  · by_cases hxc : x ∈ Metric.closedBall x₀ (R + 1)
+    · have hlip : LipschitzWith (⟨c, hc0⟩ : ℝ≥0)
+          (fun y => c * cutoff x₀ R y) :=
+        LipschitzWith.of_dist_le_mul fun a b => by
+          rw [Real.dist_eq, ← mul_sub, abs_mul, abs_of_nonneg hc0]
+          exact mul_le_mul_of_nonneg_left (abs_cutoff_sub_le x₀ R a b) hc0
+      have hq : Energy.LocalSlope.apply (fun y => c * cutoff x₀ R y) x ≤
+          ENNReal.ofReal c := by
+        exact (Energy.LocalSlope.apply_le_of_lipschitzWith hlip x).trans_eq
+          (ENNReal.coe_nnreal_eq (⟨c, hc0⟩ : ℝ≥0))
+      have hclamp : ENNReal.ofReal c ≤
+          ‖f x - B.indicator (1 : X → ℝ) x‖ₑ +
+            B.indicator (1 : X → ENNReal) x := by
+        by_cases hb : x ∈ B
+        · simp only [Set.indicator_of_mem hb, Pi.one_apply]
+          exact (ENNReal.ofReal_le_one.2 (clampUnit_le_one _)).trans
+            (le_add_left le_rfl)
+        · rw [Set.indicator_of_notMem hb, Set.indicator_of_notMem hb,
+            sub_zero, add_zero, Real.enorm_eq_ofReal_abs]
+          apply ENNReal.ofReal_le_ofReal
+          simpa only [clampUnit_of_mem (by norm_num : (0 : ℝ) ≤ 0)
+            (by norm_num : (0 : ℝ) ≤ 1), sub_zero,
+            abs_of_nonneg (clampUnit_nonneg _)] using
+            abs_clampUnit_sub_le (f x) 0
+      rw [Set.indicator_of_mem hxc]
+      by_cases hb : x ∈ B
+      · calc
+          Energy.LocalSlope.apply (fun y => c * cutoff x₀ R y) x ≤
+              ENNReal.ofReal c := hq
+          _ ≤ ‖f x - B.indicator (1 : X → ℝ) x‖ₑ +
+              B.indicator (1 : X → ENNReal) x := hclamp
+          _ = ‖f x - B.indicator (1 : X → ℝ) x‖ₑ +
+              (B \ Metric.ball x₀ R).indicator 1 x := by
+            simp only [Set.indicator_of_mem hb, Pi.one_apply]
+            rw [Set.indicator_of_mem
+              (show x ∈ B \ Metric.ball x₀ R from ⟨hb, hx⟩), Pi.one_apply]
+      · calc
+          Energy.LocalSlope.apply (fun y => c * cutoff x₀ R y) x ≤
+              ENNReal.ofReal c := hq
+          _ ≤ ‖f x - B.indicator (1 : X → ℝ) x‖ₑ +
+              B.indicator (1 : X → ENNReal) x := hclamp
+          _ = ‖f x - B.indicator (1 : X → ℝ) x‖ₑ +
+              (B \ Metric.ball x₀ R).indicator 1 x := by
+            simp only [Set.indicator_of_notMem hb,
+              Set.indicator_of_notMem (show x ∉ B \ Metric.ball x₀ R from
+                fun h => hb h.1), add_zero]
+    · have hdist : R + 1 < dist x x₀ := by
+        rw [Metric.mem_closedBall] at hxc
+        exact not_le.mp hxc
+      have hr : 0 < dist x x₀ - (R + 1) := by
+        linarith
+      rw [Energy.LocalSlope.apply_eq_zero_of_eqOn_ball hr fun y hy => ?_]
+      · exact zero_le
+      · have hy' : R + 1 ≤ dist y x₀ := by
+          have htri := dist_triangle x y x₀
+          have hxy : dist x y = dist y x := dist_comm _ _
+          linarith
+        rw [cutoff_eq_zero hy', cutoff_eq_zero (le_of_lt hdist)]
+
+/-- Target-tail error bound: the truncation's pointwise distance to an indicator is at most the
+original error on the closed ball of radius `R + 1` plus the target outside the inner ball. -/
+theorem enorm_truncateFun_sub_le_target_tail (x₀ : X) (R : ℝ)
+    (f : X → ℝ) (B : Set X) (x : X) :
+    ‖truncateFun x₀ R f x - B.indicator (1 : X → ℝ) x‖ₑ ≤
+      (Metric.closedBall x₀ (R + 1)).indicator
+          (fun y => ‖f y - B.indicator (1 : X → ℝ) y‖ₑ) x +
+        (B \ Metric.ball x₀ R).indicator 1 x := by
+  by_cases hx : dist x x₀ ≤ R + 1
+  · rw [Set.indicator_of_mem (Metric.mem_closedBall.2 hx)]
+    change
+      ‖cutoff x₀ R x * clampUnit (f x) - B.indicator (1 : X → ℝ) x‖ₑ ≤
+        ‖f x - B.indicator (1 : X → ℝ) x‖ₑ +
+          (B \ Metric.ball x₀ R).indicator 1 x
+    have hu0 := cutoff_nonneg x₀ R x
+    have hu1 := cutoff_le_one x₀ R x
+    have hc0 := clampUnit_nonneg (f x)
+    have hc1 := clampUnit_le_one (f x)
+    by_cases hb : x ∈ B
+    · simp only [Set.indicator_of_mem hb, Pi.one_apply]
+      by_cases hball : x ∈ Metric.ball x₀ R
+      · rw [cutoff_eq_one (le_of_lt (Metric.mem_ball.mp hball)), one_mul,
+          Set.indicator_of_notMem
+            (show x ∉ B \ Metric.ball x₀ R from fun h => h.2 hball), add_zero,
+          Real.enorm_eq_ofReal_abs, Real.enorm_eq_ofReal_abs]
+        apply ENNReal.ofReal_le_ofReal
+        simpa only [clampUnit_of_mem zero_le_one le_rfl] using
+          abs_clampUnit_sub_le (f x) 1
+      · rw [Set.indicator_of_mem
+            (show x ∈ B \ Metric.ball x₀ R from ⟨hb, hball⟩), Pi.one_apply]
+        refine (show ‖cutoff x₀ R x * clampUnit (f x) - 1‖ₑ ≤ 1 from ?_).trans
+          (le_add_left le_rfl)
+        rw [Real.enorm_eq_ofReal_abs]
+        exact ENNReal.ofReal_le_one.2 (abs_le.2 ⟨by nlinarith, by nlinarith⟩)
+    · simp only [Set.indicator_of_notMem hb, sub_zero,
+        Set.indicator_of_notMem
+          (show x ∉ B \ Metric.ball x₀ R from fun h => hb h.1), add_zero,
+        Real.enorm_eq_ofReal_abs, Real.enorm_eq_ofReal_abs,
+        abs_of_nonneg (mul_nonneg hu0 hc0)]
+      apply ENNReal.ofReal_le_ofReal
+      exact (mul_le_of_le_one_left hc0 hu1).trans (by
+        simpa only [clampUnit_of_mem (by norm_num : (0 : ℝ) ≤ 0)
+          (by norm_num : (0 : ℝ) ≤ 1), sub_zero, abs_of_nonneg hc0] using
+          abs_clampUnit_sub_le (f x) 0)
+  · have hdist : R + 1 ≤ dist x x₀ := le_of_not_ge hx
+    have hball : x ∉ Metric.ball x₀ R := by
+      intro h
+      have h' := Metric.mem_ball.mp h
+      linarith
+    have hclosed : x ∉ Metric.closedBall x₀ (R + 1) := by
+      exact fun h => hx (Metric.mem_closedBall.mp h)
+    rw [truncateFun_eq_zero x₀ R f hdist,
+      Set.indicator_of_notMem hclosed]
+    by_cases hb : x ∈ B
+    · have htail : x ∈ B \ Metric.ball x₀ R := ⟨hb, hball⟩
+      rw [Set.indicator_of_mem hb, Pi.one_apply,
+        Set.indicator_of_mem htail, Pi.one_apply]
+      norm_num
+    · have htail : x ∉ B \ Metric.ball x₀ R := fun h => hb h.1
+      rw [Set.indicator_of_notMem hb, Set.indicator_of_notMem htail]
+      norm_num
+
 /-- On a proper space the truncation of a locally Lipschitz function is globally Lipschitz: `f`
 is Lipschitz on the compact closed ball carrying the truncation, the product secant bound holds
 inside it, and a pair crossing it is controlled by `cutoff_le_dist_of_le`. -/
@@ -217,6 +389,79 @@ theorem indicatorDistance_truncateOfLocallyLipschitz_le (ν : Measure X) (x₀ :
     _ = _ := by
         rw [lintegral_add_right _ (measurable_one.indicator Metric.isOpen_ball.measurableSet.compl),
           lintegral_indicator_one Metric.isOpen_ball.measurableSet.compl]
+
+/-- The cost of the truncated test is at most the slope integral of the original plus the
+indicator error on the closed ball of radius `R + 1` and the target mass outside the inner
+ball, for every Borel measure (no finiteness of the measure). -/
+theorem cost_truncateOfLocallyLipschitz_le_target_tail (ν : Measure X) (x₀ : X) (R : ℝ)
+    {f : X → ℝ} (hf : LocallyLipschitz f) {B : Set X} (hB : MeasurableSet B) :
+    cost ν (Test.truncateOfLocallyLipschitz x₀ R f hf) ≤
+      (∫⁻ x, Energy.LocalSlope.apply f x ∂ν) +
+        ((∫⁻ x in Metric.closedBall x₀ (R + 1), ‖f x - B.indicator (1 : X → ℝ) x‖ₑ ∂ν) +
+          ν (B \ Metric.ball x₀ R)) := by
+  unfold cost
+  rw [coe_truncateOfLocallyLipschitz]
+  have he : Measurable (fun x => ‖f x - B.indicator (1 : X → ℝ) x‖ₑ) :=
+    (hf.continuous.measurable.sub (measurable_one.indicator hB)).enorm
+  have ht : MeasurableSet (B \ Metric.ball x₀ R) :=
+    hB.diff Metric.isOpen_ball.measurableSet
+  have hc :
+      Measurable
+        ((Metric.closedBall x₀ (R + 1)).indicator
+          (fun y => ‖f y - B.indicator (1 : X → ℝ) y‖ₑ)) :=
+    he.indicator Metric.isClosed_closedBall.measurableSet
+  calc
+    ∫⁻ x, Energy.LocalSlope.apply (truncateFun x₀ R f) x ∂ν
+        ≤ ∫⁻ x,
+            Energy.LocalSlope.apply f x +
+              ((Metric.closedBall x₀ (R + 1)).indicator
+                  (fun y => ‖f y - B.indicator (1 : X → ℝ) y‖ₑ) x +
+                (B \ Metric.ball x₀ R).indicator 1 x) ∂ν :=
+      lintegral_mono fun x =>
+        apply_truncateFun_le_target_tail x₀ R f B x
+    _ =
+        (∫⁻ x, Energy.LocalSlope.apply f x ∂ν) +
+          ∫⁻ x,
+            ((Metric.closedBall x₀ (R + 1)).indicator
+                (fun y => ‖f y - B.indicator (1 : X → ℝ) y‖ₑ) x +
+              (B \ Metric.ball x₀ R).indicator 1 x) ∂ν :=
+      lintegral_add_right _
+        (hc.add (measurable_one.indicator ht))
+    _ =
+        (∫⁻ x, Energy.LocalSlope.apply f x ∂ν) +
+          ((∫⁻ x in Metric.closedBall x₀ (R + 1),
+              ‖f x - B.indicator (1 : X → ℝ) x‖ₑ ∂ν) +
+            ν (B \ Metric.ball x₀ R)) := by
+      rw [lintegral_add_right _ (measurable_one.indicator ht),
+        lintegral_indicator Metric.isClosed_closedBall.measurableSet,
+        lintegral_indicator_one ht]
+
+/-- The `L¹` distance of the truncated test to a measurable target is at most the indicator
+error on the closed ball of radius `R + 1` plus the target mass outside the inner ball, for every
+Borel measure. -/
+theorem indicatorDistance_truncateOfLocallyLipschitz_le_target_tail (ν : Measure X) (x₀ : X) (R : ℝ)
+    {f : X → ℝ} (hf : LocallyLipschitz f) {B : Set X} (hB : MeasurableSet B) :
+    indicatorDistance ν (Test.truncateOfLocallyLipschitz x₀ R f hf) B ≤
+      (∫⁻ x in Metric.closedBall x₀ (R + 1), ‖f x - B.indicator (1 : X → ℝ) x‖ₑ ∂ν) +
+        ν (B \ Metric.ball x₀ R) := by
+  have he : Measurable (fun x => ‖f x - B.indicator (1 : X → ℝ) x‖ₑ) :=
+    (hf.continuous.measurable.sub (measurable_one.indicator hB)).enorm
+  have ht : MeasurableSet (B \ Metric.ball x₀ R) :=
+    hB.diff Metric.isOpen_ball.measurableSet
+  unfold indicatorDistance
+  rw [coe_truncateOfLocallyLipschitz]
+  calc
+    ∫⁻ x, ‖truncateFun x₀ R f x - B.indicator (1 : X → ℝ) x‖ₑ ∂ν
+        ≤ ∫⁻ x, ((Metric.closedBall x₀ (R + 1)).indicator
+            (fun y => ‖f y - B.indicator (1 : X → ℝ) y‖ₑ) x +
+          (B \ Metric.ball x₀ R).indicator 1 x) ∂ν :=
+      lintegral_mono fun x => enorm_truncateFun_sub_le_target_tail x₀ R f B x
+    _ = (∫⁻ x in Metric.closedBall x₀ (R + 1),
+          ‖f x - B.indicator (1 : X → ℝ) x‖ₑ ∂ν) +
+        ν (B \ Metric.ball x₀ R) := by
+      rw [lintegral_add_right _ (measurable_one.indicator ht),
+        lintegral_indicator Metric.isClosed_closedBall.measurableSet,
+        lintegral_indicator_one ht]
 
 /-- The explicit truncated sequence converges to the indicator in `L¹(ν)`. -/
 theorem tendsto_indicatorDistance_truncateOfLocallyLipschitz (ν : Measure X) [IsFiniteMeasure ν]
@@ -431,5 +676,100 @@ theorem perimeter_le_liminf_of_locallyLipschitz_of_forall_isCompact (ν : Measur
     hloc _ (isCompact_closedBall x₀ r)
 
 end BoundedBall
+
+section TargetTail
+
+/-! ### Measurable finite-mass targets under arbitrary Borel measures
+
+ADMG Remark 3.5 on proper spaces without finite total mass: locally Lipschitz approximants
+converging to a measurable finite-mass target in `L¹(ν)` on every compact set (or globally) bound
+the bounded-support perimeter. A diagonal choice pairs the radius `k` with an index where the
+error on the closed ball of radius `k + 1` is below `1/(k+1)`; the remaining error is the target
+mass outside the ball of radius `k`. No finiteness of `ν` on bounded or compact sets is used. -/
+
+variable {X : Type*} [MetricSpace X] [MeasurableSpace X] [BorelSpace X] [ProperSpace X]
+
+/-- Compact-local `L¹` convergence of locally Lipschitz approximants to a measurable finite-mass
+target bounds the perimeter by their liminf slope integral, for every Borel measure on a proper
+space. The empty carrier is included; no global `L¹` convergence, integrability or bounded
+support of the approximants is assumed. -/
+theorem perimeter_le_liminf_of_locallyLipschitz_of_forall_isCompact_of_measure_lt_top
+    (ν : Measure X) {B : Set X} (hB : MeasurableSet B) (hνB : ν B < ⊤) {f : ℕ → X → ℝ}
+    (hf : ∀ n, LocallyLipschitz (f n))
+    (hloc : ∀ K : Set X, IsCompact K → Tendsto (fun n =>
+      ∫⁻ x in K, ‖f n x - B.indicator (1 : X → ℝ) x‖ₑ ∂ν) atTop (𝓝 0)) :
+    perimeter ν B ≤ liminf (fun n => ∫⁻ x, Energy.LocalSlope.apply (f n) x ∂ν) atTop := by
+  rcases isEmpty_or_nonempty X with hX | ⟨⟨x₀⟩⟩
+  · have hB' : B = ∅ := Set.eq_empty_of_isEmpty B
+    rw [hB', perimeter_empty]
+    exact zero_le
+  · refine le_of_forall_gt_imp_ge_of_dense fun a ha => ?_
+    have hfreq : ∃ᶠ n in atTop,
+        ∫⁻ x, Energy.LocalSlope.apply (f n) x ∂ν < a :=
+      frequently_lt_of_liminf_lt (by isBoundedDefault) ha
+    have hε0 : ∀ k : ℕ, 0 < (((k + 1 : ℕ) : ENNReal))⁻¹ := fun k =>
+      ENNReal.inv_pos.2 (ENNReal.natCast_ne_top _)
+    have hεlim : Tendsto (fun k : ℕ => (((k + 1 : ℕ) : ENNReal))⁻¹)
+        atTop (𝓝 0) :=
+      ENNReal.tendsto_inv_nat_nhds_zero.comp (tendsto_add_atTop_nat 1)
+    have hidx : ∀ k : ℕ, ∃ n,
+        (∫⁻ x, Energy.LocalSlope.apply (f n) x ∂ν) < a ∧
+          (∫⁻ x in Metric.closedBall x₀ ((k : ℝ) + 1),
+            ‖f n x - B.indicator (1 : X → ℝ) x‖ₑ ∂ν) <
+            (((k + 1 : ℕ) : ENNReal))⁻¹ := fun k =>
+      (hfreq.and_eventually
+        ((hloc (Metric.closedBall x₀ ((k : ℝ) + 1))
+          (isCompact_closedBall x₀ ((k : ℝ) + 1))).eventually
+            (gt_mem_nhds (hε0 k)))).exists
+    choose m hm using hidx
+    let g : ℕ → Test X := fun k =>
+      Test.truncateOfLocallyLipschitz x₀ (k : ℝ) (f (m k)) (hf (m k))
+    have htail : Tendsto (fun k : ℕ => ν (B \ Metric.ball x₀ (k : ℝ)))
+        atTop (𝓝 0) :=
+      tendsto_measure_diff_ball ν x₀ hB hνB.ne
+    have hδ : Tendsto
+        (fun k : ℕ => (((k + 1 : ℕ) : ENNReal))⁻¹ +
+          ν (B \ Metric.ball x₀ (k : ℝ))) atTop (𝓝 0) := by
+      simpa using hεlim.add htail
+    have hd : ∀ k : ℕ, indicatorDistance ν (g k) B ≤
+        (((k + 1 : ℕ) : ENNReal))⁻¹ + ν (B \ Metric.ball x₀ (k : ℝ)) := by
+      intro k
+      exact
+        (indicatorDistance_truncateOfLocallyLipschitz_le_target_tail
+          ν x₀ (k : ℝ) (hf (m k)) hB).trans
+          (add_le_add (hm k).2.le le_rfl)
+    let s : ApproximatingSequence ν B :=
+      ⟨g, tendsto_of_tendsto_of_tendsto_of_le_of_le
+        tendsto_const_nhds hδ (fun _ => zero_le) hd⟩
+    have hcost : ∀ k : ℕ, cost ν (g k) ≤
+        a + ((((k + 1 : ℕ) : ENNReal))⁻¹ +
+          ν (B \ Metric.ball x₀ (k : ℝ))) := by
+      intro k
+      exact
+        (cost_truncateOfLocallyLipschitz_le_target_tail
+          ν x₀ (k : ℝ) (hf (m k)) hB).trans
+          (add_le_add (hm k).1.le (add_le_add (hm k).2.le le_rfl))
+    calc
+      perimeter ν B ≤ liminf (fun k => cost ν (s.1 k)) atTop :=
+        perimeter_le_sequence ν B s
+      _ ≤ liminf
+          (fun k => a + ((((k + 1 : ℕ) : ENNReal))⁻¹ +
+            ν (B \ Metric.ball x₀ (k : ℝ)))) atTop :=
+        liminf_le_liminf (Eventually.of_forall hcost)
+      _ = liminf (fun _ : ℕ => a) atTop :=
+        ENNReal.liminf_add_of_right_tendsto_zero hδ _
+      _ = a := liminf_const a
+
+/-- Global `L¹` convergence of locally Lipschitz approximants to a measurable finite-mass target
+bounds the perimeter by their liminf slope integral, for every Borel measure on a proper space. -/
+theorem perimeter_le_liminf_of_locallyLipschitz_of_measure_lt_top (ν : Measure X) {B : Set X}
+    (hB : MeasurableSet B) (hνB : ν B < ⊤) {f : ℕ → X → ℝ} (hf : ∀ n, LocallyLipschitz (f n))
+    (hconv : Tendsto (fun n => ∫⁻ x, ‖f n x - B.indicator (1 : X → ℝ) x‖ₑ ∂ν) atTop (𝓝 0)) :
+    perimeter ν B ≤ liminf (fun n => ∫⁻ x, Energy.LocalSlope.apply (f n) x ∂ν) atTop :=
+  perimeter_le_liminf_of_locallyLipschitz_of_forall_isCompact_of_measure_lt_top ν hB hνB hf
+    fun K _ => tendsto_of_tendsto_of_tendsto_of_le_of_le tendsto_const_nhds hconv
+      (fun _ => zero_le) fun _ => setLIntegral_le_lintegral K _
+
+end TargetTail
 
 end FunctionalInequalities.KLS.MetricBV

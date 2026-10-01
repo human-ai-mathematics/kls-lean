@@ -1523,3 +1523,468 @@ paused early pending manual unlock. This blocked interval is not productive work
 The renewed deadline remains 11:13:30 Asia/Shanghai, wrap-up 10:43:30; no automatic
 extension is authorized. Resume by inspecting the same session before dispatching
 phase23, avoiding duplicate messages. No proof files or real index changed here.
+
+## Phase23 resumed dispatch (2026-09-29)
+
+The user newly authorized Claude implementation followed by Codex independent
+review. The current checkout was clean at `443f352`; the old timed work window
+does not govern this new single-stage assignment. The existing phase22 session
+`local_6d6d02c3-742c-45fa-a063-333eea0a2862` was observed Idle at its phase22
+receipt. Phase23 was then visibly delivered as message3; the UI showed Running
+and Claude acknowledged the clean baseline and began inspecting the assignment.
+Clipboard delivery initially timed out, but the full prompt was observed in the
+composer before Send was clicked once; no duplicate task was sent.
+
+The mathematical target and validation gates are those in the Phase23 assignment
+above. Claude must freeze at `READY_FOR_CODEX_REVIEW`; independent acceptance is
+pending. No commit or push is authorized by this continuation.
+
+
+## Phase23 independently accepted (2026-09-29)
+
+Claude delivered `READY_FOR_CODEX_REVIEW` and paused writing. Codex read the added
+proofs and the ten-report client. The existing Lean section is byte-for-byte
+preserved; the two production/client sources contain no `sorry`, `admit`, new
+`axiom` or `unsafe`. The theorem has the full normed additive group / measurable
+space / probability law scope, for every set and real radius. The endpoint
+inequalities use one-sided limits, not continuity; the Stieltjes density integral
+is bounded by its measure without assuming absolute continuity. No conclusion is
+hidden in the premises. The uniform-interval client attains the bound.
+
+Codex separately wrote and strictly compiled
+`build/audit/minkowski-upper-integrated/codex/EndpointAudit.lean`, using the
+verifier's filtered `local-olean` view and direct Lean (not a Lake-restored path).
+Its four standard-only axiom reports cover the full signature and an atom at
+exact distance one: the open thickening at radius one has zero mass, and both
+the open and half-open radius integrals vanish. The final log is `codex/endpoint.log`
+in the same audit directory. These are independent client checks, not an extra
+ledger certificate.
+
+The first full run failed solely because HEAD `443f352` translated a pinned
+historical decision. Codex independently compared all 26 statement declarations
+and semantic fields against the golden: no differences. Codex directed Claude
+to append a new English decision and update only the golden's `decision` field.
+The checker and translated historical file remain unchanged. This is a
+pre-existing metadata repair, separate from the phase23 theorem.
+
+The repaired full report
+`build/verification/20260929T120330.733299Z/report.json` passes all 166 gates,
+including 155 strict audit clients, statement snapshot, declaration audit and
+kernel replay. Codex read the report, checked every exit code and empty errors,
+and recomputed an exact current snapshot match before writing acceptance:
+`5d28b28dedfcc892be5b740934db1e55e27337a7b5c9581d753c9e98165f455f`.
+The production module hash is
+`4af52a8ce4868017539b13a5804ad6c2a120095abe7129dd60b3e00b5e9a525c`.
+This acceptance entry and acceptance-only edits in the Claude handoff, root
+HANDOFF and progress-hub prose postdate that frozen report; no Lean or canonical
+progress input changed afterward. The receipt's attribution of the repair was
+clarified to Codex direction rather than a separate user message.
+
+Concurrent CI-policy/documentation edits were preserved and are not phase23
+work. The real index remains unstaged. No commit, push or remote CI was performed.
+The remaining lower-to-upper recovery / relaxed-upper comparison is the next
+proof cut; it is not claimed here. General metric/RCD results and dimension-free
+KLS remain outside this acceptance.
+
+## Upper-recovery eight-hour run started (2026-09-30)
+
+The user approved execution of
+`2026-09-30-eight-hour-upper-recovery-plan.md`. Start 01:07:29 Asia/Shanghai;
+expansion cutoff 07:22:29, wrap-up 08:37:29, hard stop 09:07:29. Old windows are
+superseded. Baseline saved in ignored `build/audit/upper-recovery-overnight/`
+as `baseline.json` and `baseline.patch`. HEAD remains `443f352`; index SHA256
+`de27891ba2fffda4cb072c5286c464111f34abe716cc537db7c7b59629a8bb5d`.
+All existing dirty and untracked work is preserved.
+
+Startup checked the phase-23 report: passed, 166 gates, empty errors. Its
+production hash still matches
+`4af52a8ce4868017539b13a5804ad6c2a120095abe7129dd60b3e00b5e9a525c`.
+Among the report's recorded files only HANDOFF, Claude handoff, Codex review and
+progress-hub README differ; those acceptance prose changes postdate the receipt.
+New untracked planning/configuration files also exist. This is not a new verifier
+run or a claim that the entire current tree equals the old frozen snapshot.
+
+Claude session `local_6d6d02c3-742c-45fa-a063-333eea0a2862` was observed Idle at
+its phase-23 frozen delivery. Stage A (phase 24) was delivered as message 9, and
+Running plus Stop were observed. Clipboard paste reported a timeout, but the full
+prompt was observed in the composer before Send was clicked once; no duplicate
+dispatch. The same session has sufficient displayed context capacity (34%).
+Only Stage A is authorized to Claude now; B/C require independent acceptance and
+coordinator release. Stage-A receipt: `build/audit/upper-recovery-overnight/stage-a/`.
+The unrelated issue-handling session was observed Idle and was not messaged.
+
+Heartbeat `kls-claude` was updated from PAUSED to ACTIVE every eight minutes and
+retargeted to this coordinator chat `01a0ee14-65a8-7f80-91a8-77dc57eb0aaf`.
+It must remain quiet on unchanged state, release only reviewed stages, preserve
+the final validation window, and pause at completion/deadline or a genuine
+unrecoverable blocker. No commit, push, remote CI or production edit by Codex.
+
+## Stage A independently accepted; Stage B prepared (2026-09-30)
+
+Claude was observed Idle at its Stage-A READY delivery. Codex reviewed the full
+Selection and Recovery proofs and the eleven-report audit, then rebuilt all 351
+current library/solution/example modules using the verifier's exact replay-scope
+builder and copied a fresh filtered module view. Direct Lean (not Lake-restored
+paths), with warnings as errors, compiled the production module, Claude's client,
+and Codex's own `RecoveryReview.lean`; all exit codes were zero. The latter proves
+simultaneous small radius, arbitrarily small actual indicator L1 error and upper
+content below any strict threshold above the finite lower content, including
+finiteness of the selected upper content. All 14 printed transitive-axiom reports
+are standard-only. Logs and machine-readable acceptance are under
+`build/audit/upper-recovery-overnight/stage-a/codex/`.
+
+The source snapshot was unchanged across the independent check. Production SHA256
+is `7a91fdbc321904e44dbbb7968e23c4305b1ba23e58f91f435f1674a277f839a2`;
+removing only the newly appended sections reproduces the exact phase-23 hash.
+No old definition/signature/proof/import changed; no sorry/admit/axiom/unsafe
+tokens occur in the production or audit source. Real index fingerprint is unchanged.
+
+Mathematical acceptance: quantitative selection needs no content measurability;
+the lower-liminf realizing radii give genuine L1 recovery and an upper-content
+limsup bound. The n=0 inverse slack is infinite but harmless for convergence at
+infinity; no infinity is erased by toReal. Open-measurable structure suffices for
+this recovery, a legitimate generality improvement over the planned Borel scope.
+Empty/full/zero-content sets, a boundary atom and an attained uniform-interval
+example are covered. Infinite lower content is excluded from this recovery;
+the trivial infinite bound in the audit is not an infinite-content recovery claim.
+
+Full frozen verifier and canonical documentation integration remain final-run
+obligations, not completed by these checks. The module introduction still says
+it stops before recovery: correct that stale prose at final integration.
+No ledger certificate or remote CI claim. Stage B is approved for dispatch: construct
+actual measurable upper-content recovery converging to finite BV perimeter,
+with a genuine diagonal estimate and lower bound. Stage C still waits for B's
+independent acceptance. Preserve the same deadline and constraints.
+
+### Stage B dispatch blocked by locked host
+
+The attempted composer action returned an explicit locked-Mac error before any
+prompt state or send could be observed. No Send was clicked; Stage B is NOT
+DELIVERED. Do not infer a running implementation from the approved assignment.
+Claude was last observed Idle at its Stage-A delivery. Do not attempt automatic
+unlock or bypass. Upon recovery inspect the same session and composer before
+delivery to avoid duplicates. The prepared assignment is the Stage-B section in
+the plan and the acceptance immediately above. Consecutive failed UI checks: 1.
+The deadline remains 09:07:29 Asia/Shanghai; blocked time is not productive work.
+
+### Coordination paused at the failure threshold (01:47 Asia/Shanghai)
+
+The 01:39 scheduled inspection again explicitly reported a locked Mac. The
+01:47 scheduled inspection was rejected by automatic approval review because
+this was the third consecutive locked-host check and the failure threshold
+requires pausing. No bypass, alternative control channel or unlock was attempted.
+This last result is an approval rejection, not a fresh observation of the host.
+Heartbeat `kls-claude` was successfully changed to PAUSED. Stage A remains
+independently accepted; Stage B remains undelivered, and final documentation
+integration/full frozen verification remain unfinished. User restoration and
+continuation are needed; the original deadline is not automatically extended.
+
+Read-only preparation during the block confirmed that the explicit
+`minkowskiRecoverySet` has a finite content bound for every term at finite
+perimeter; Stage B should use that bound rather than infer termwise finiteness
+from convergence. Existing recovery permits arbitrary target sets; preserve that
+scope. Reuse the actual `MinkowskiApproximatingSequence` for Stage C. No production
+proofs or index were edited during this blocked period.
+
+### User-authorized resumption and Stage B delivery (02:17 Asia/Shanghai)
+
+The user requested continuation and prevention of locking during Agent work.
+Claude became accessible and was observed Idle at Stage A with an empty composer.
+Stage B was delivered once as message 11; Running and Stop were visibly observed.
+The clipboard operation timed out, but the complete text was verified in the
+composer before Send. No duplicate assignment. Failure counter reset to zero.
+Heartbeat `kls-claude` is ACTIVE again, with the original 09:07:29 deadline.
+
+Created temporary `caffeinate -di -t` process PID 7815, expiring at the deadline.
+`pmset -g assertions` confirms both idle system-sleep and display-sleep prevention.
+No persistent setting, password or authentication policy was changed; manual
+locking and separate screen-saver lock policies remain possible. If completed
+early, stop only this verified task-owned process. Record:
+`build/audit/upper-recovery-overnight/keep-awake.json`.
+The blocked interval is not claimed as productive proof work.
+
+## Stage B independently accepted (2026-09-30, approximately 02:30)
+
+Codex reviewed the new bridge and its client after Claude froze. A documentation
+claim was returned for correction: `liminf = top` excludes a finite limiting
+value, not termwise finite contents diverging to infinity. Claude corrected the
+two sentences, refreshed evidence and re-froze (message 14); the theorem is sound
+at its stated scope. Corrected production SHA256:
+`c73174787b65c25cd8a712df63ac5083fb588a325d8164e4911ace7995ce37c8`.
+
+Independent checks rebuilt all 352 current library/solution/example modules and
+created a fresh filtered dependency view. Direct Lean with warnings as errors
+compiled the new production module, Claude's twelve-report audit and Codex's
+`BVRecoveryReview.lean` (four reports); all exited zero, standard axioms only.
+Codex independently derives termwise finiteness of the recovered upper contents,
+convergence of the recovered sets' BV perimeters, and the precise infinite-limit
+consequence. Target sets remain arbitrary. Logs and `checks.json` are in
+`build/audit/upper-recovery-overnight/stage-b/codex/`.
+Snapshot unchanged during checks:
+`459eaed0bb6ee672e0c62f9227d9b6424a3c56e891d6f64087cc7273676d6ac3`.
+
+The diagonal triangle estimate uses a measurable first summand, so no hidden
+measurability of the target was inserted. Each lower recovery term's finite
+content follows from its explicit bound, not convergence. The lower bound uses
+the actual BV lower semicontinuity and lower-to-upper domination. Stage A remains
+at its accepted hash and the aggregator adds only the new bridge import. No
+sorry/admit/new axiom/unsafe; index fingerprint unchanged. This is independent
+stage acceptance, not the final full verifier or a ledger/remote certificate.
+Stage C may now be dispatched; final documentation and frozen verification remain.
+
+Stage C was delivered as message 15 in the same Claude session; Running and
+Stop were observed. Clipboard timeout was resolved by inspecting the complete
+composer before clicking Send once. No duplicate dispatch.
+
+## Stage C independently accepted (2026-09-30, approximately 02:36)
+
+Claude was observed Idle at Stage-C READY. Codex inspected the actual infimum
+definition, unchanged `MinkowskiApproximatingSequence`, both inequalities and all
+corollaries. The finite branch uses Stage-B recovery as an actual member of the
+same class; the infinite branch uses order, without dropping infinity or adding
+a target-measurability hypothesis. Existing lower-relaxation declarations are
+unchanged; the import direction has no cycle.
+
+Fresh rebuild and filtered dependency view for all 352 current modules; direct
+strict compilation of production, Claude's fourteen-report audit and Codex's
+three-report `RelaxationReview.lean` all exited zero, standard axioms only.
+Codex's client unfolds the entire sequence class and infimum, derives attainment
+at finite relaxed value and transports complement symmetry to the relaxation
+without asserting it for pointwise upper content. No sorry/admit/axiom/unsafe.
+Evidence: `build/audit/upper-recovery-overnight/stage-c/codex/`.
+Snapshot unchanged during verification:
+`1c4eea387d07ab37c607be12f8a810a3352415af6d4b327af754a4066a886757`.
+Production SHA256 `5e9dfba2885fbcb1d1f89675a8427da6884306d8261c6b4267628de5c47f6809`.
+Real index unchanged. Full frozen verification, documentation synchronization
+and final independent integration review remain; no further proof expansion.
+
+Final integration was delivered as message 17 and visibly Running. Claude owns
+shared documentation until final freeze. No more mathematical expansion; final
+receipt expected at `build/audit/upper-recovery-overnight/final/receipt.md`.
+
+## Final integration independently accepted (2026-09-30, approximately 03:00)
+
+All scoped stages A/B/C and their final integration are accepted. Claude was
+observed Idle at READY_FOR_FINAL_CODEX_REVIEW, with no background task. Codex
+independently read the final report
+`build/verification/20260929T184716.713492Z/report.json`: passed, 169 gates with
+zero exit codes, no errors, 158 strict research-audit clients, 352 local modules
+kernel-replayed, and 367 audited declarations using only standard axioms.
+The trust boundary remains local-source builds and local-module kernel replay
+with pinned third-party compiled imports trusted; no independent external
+checker, fresh third-party replay, new ledger certificate or remote CI is claimed.
+
+Before this acceptance note, the current source snapshot exactly matched the
+final report: `7d73733f4f7c58479261bce183a0eb89c6da9040134e189385ce8b7f59d4adb0`.
+Codex recompiled its three independent clients (RecoveryReview, BVRecoveryReview,
+RelaxationReview) with warnings as errors against that report's filtered
+current-source dependency view: all exit zero, with no snapshot drift.
+Evidence: `build/audit/upper-recovery-overnight/final/codex-final-checks.json`
+and the three adjacent logs. This acceptance note postdates the verified snapshot;
+it does not change any Lean proof, canonical progress record or generated view.
+
+Root date is now 2026-09-30. English HANDOFF, Blueprint chapter 45, canonical
+progress and literature records and generated views describe accepted scope;
+general metric/RCD and dimension-free KLS remain open. Final integration changed
+only module introductory prose after the stage reviews. The preserved baseline
+CI-policy files, tooling configuration and unrelated records match their baseline
+hashes; the moment-map handoff retains its recorded hash. Index bytes changed from
+`de27891b...` to `935d3c0e...`, but all 975 staged mode/object/path entries equal
+HEAD and there are no staged changes. Stat-cache refresh is a plausible explanation,
+not independently established from an archived baseline index. No index restoration,
+commit, push, reset, clean or remote CI was performed by this coordination run.
+
+Accepted scope: probability laws on Borel normed additive groups; small-radius
+selection and measurable finite-lower-content recovery; actual indicator L1
+upper-content recovery for every finite-BV-perimeter target; equality of the
+same-class relaxed upper and lower Minkowski contents with BV perimeter, including
+the infinite-value branch. No pointwise content/perimeter equality is asserted.
+The authorized bounded work is complete early. Stop the heartbeat and the verified
+task-owned temporary sleep assertion; do not expand scope or fill the remaining
+window. Locked/idle intervals are not counted as productive work.
+
+## Phase 27 independently accepted (2026-09-30 daytime, approximately 14:43)
+
+Claude's frozen phase27 delivery was observed Idle at READY_FOR_CODEX_REVIEW
+(message24; refresh of the selected session resolved a stale Running display).
+Codex reviewed the new open-ball supremum and persistent strict-radius witness
+for lower semicontinuity, Borel measurability, near-neighbour bound, the slope
+limsup estimate, and the majorant layer-cake/Fatou argument. No closed-ball
+continuity assumption was smuggled into metric scope. Closed-ball normed helpers
+and C1 signatures remain unchanged. The 96 generalized signatures differ by the
+normed-group to metric instance; five def-style differences in the API map are
+indeed this same change. Ten new declarations and no removals are recorded.
+
+The actual arbitrary-target L1 recovery and same-class relaxed infimum now hold
+for Borel probability measures on arbitrary metric spaces, with no completeness,
+properness, dimension or vector-space premise. Infinite perimeter is handled by
+order/lower semicontinuity; no claim excludes termwise finite contents tending
+to infinity. This is a restricted measure case of ADMG, not its full theorem for
+measures finite on bounded sets, and not pointwise content/perimeter equality.
+
+Codex rebuilt the 352 current library/solution/example modules and created a
+fresh filtered local-olean view. Direct Lean with warnings as errors compiled
+MinkowskiMetricChainAudit and two separate metric-only clients: BVRecoveryReview
+and RelaxationReview. These independently derive termwise finite recovered
+contents, convergence of recovered BV perimeters, the precise infinite-limit
+boundary, the fully unfolded infimum identity, finite infimum realization and
+relaxation complement symmetry. All three exit zero; 19 axiom reports use only
+propext, Classical.choice and Quot.sound. The first audit includes a genuine
+non-vector-space example on the natural numbers. Snapshot unchanged:
+`bbdaa98ed1e7c0d7af2d444978439e60e512d722ef81fdf554a581475b5da3d8`.
+Evidence: `build/audit/admg-metric-continuation/codex/checks.json` and logs.
+
+Only the six scoped owner files and Claude checkpoint changed among baseline
+files; the real index hash is unchanged from the daytime baseline. Prior dirty
+work remains preserved. Final integration may proceed: correct the stale
+LocalSlopeCoarea introductory explanation (it still describes only closed-ball
+majorants), synchronize current English documentation and canonical progress,
+then freeze and run the full verifier. No phase28 is released. This acceptance
+note postdates the independent snapshot; full final verification is pending.
+
+## Phase 27 final integration accepted (2026-09-30, approximately 14:58)
+
+Claude was observed Idle at READY_FOR_FINAL_CODEX_REVIEW with no remaining
+background task. Codex independently checked the final report
+`build/verification/20260930T064546.415410Z/report.json`: passed, 170 zero-exit
+gates, empty errors, 159 strict audit clients, 352 local kernel-replayed modules,
+and 367 declaration-axiom reports restricted to propext/Classical.choice/Quot.sound.
+The exact current source snapshot matched the report before this note:
+`14357812135d34b4d2910fda9172414edd121a7e784f3760206c36e8aa4614ba`.
+Both independent metric-only clients were recompiled strictly against its final
+filtered dependency view, exit zero, with the snapshot unchanged. Evidence:
+`build/audit/admg-metric-continuation/final/codex-final-checks.json` and logs.
+
+The first run failed on a stale MinkowskiContent infrastructure pin. The pin
+refresh is justified by the reviewed API generalization and retained C1 helper
+statements; the task diff changes only that pin and four chapter45 pins. No
+certificate status or checker was weakened. The corrected open-ball introduction
+and English current documentation retain exactly arbitrary metric/Borel
+probability scope; finite and locally finite measure generality remains pending.
+
+Trust remains local-source build and local-module kernel replay with pinned
+third-party compiled imports trusted; no fresh third-party replay or external
+checker. Audit elaboration and kernel replay are separate scopes; this is not a
+new ledger certificate, remote CI result or a universal no-sorry library claim.
+The deliberate KLS target remains open. Unrelated baseline files and the
+moment-map handoff are preserved. All 975 staged mode/object/path entries equal
+HEAD; the raw index hash is now
+`3810238c6f0f0659bc7ed117e669098e18057745b3243a0c454be9095426f4c1`,
+not byte-identical to the daytime baseline. Stat-cache refresh is plausible but
+not independently proved by comparison with saved baseline index bytes.
+
+This acceptance note postdates the verified snapshot. No proof, canonical record
+or generated view is edited after final verification. Phase27 and its integration
+are COMPLETE; stop the heartbeat and verified task-owned caffeinate PID19020.
+Phase28 is not released. No commit/push/reset/clean/remote CI performed.
+
+## 2026-09-30 22:03 Asia/Shanghai — phase28 Stage A independently ACCEPTED
+
+Reviewed the frozen Stage-A delivery and live Idle/READY state. The measure argument
+migration preserves the existing content objects and the genuine indicator-L1
+classes. Finiteness is used in the constant dominating integral and finite mass
+continuity steps; probability-specific radius bound and ratio/Cheeger APIs retain
+their probability scope. NNReal scaling uses finite continuous multiplication,
+nonzero inverse transport and the empty-infimum side conditions. Zero measure uses
+the zero test / constant empty set, not a nonexistent probability normalization.
+No infinite scalar or infinite-total-mass recovery is accepted.
+
+Independently rebuilt 352 current-source local dependency modules through the
+workflow-filtered view, then strictly compiled the submitted scaling client and
+two separate Codex clients. All three passed, with 17 standard-only declaration
+axiom reports. Snapshot unchanged during these checks:
+`d7be45a3e457ded3545826823b40451f0e8ba4f0c2cd1c662d65568eebca0de3`.
+Evidence: `build/audit/admg-finite-four-hour/stage-a/codex/checks.json` and logs.
+The independent clients already derive finite-measure recovered perimeters,
+termwise finite upper contents, the exact infinite-limit obstruction, and the
+unfolded relaxed-upper infimum. These show the migration contains substantial
+Stage-B mathematics; B must audit and expose that scope without duplicate APIs.
+
+Baseline comparison finds only the seven owners, six expected consumers,
+existing audit coercion edits and Claude's handoff changed among baseline paths.
+Heat-semigroup files, moment-map work, issue8 policy and Codex-owned files match
+the saved baseline. All real-index mode/object/path entries match the saved
+baseline. Raw index bytes differ; the receipt's assertion that this is stat-cache
+data is not independently established and must be qualified in the next receipt.
+Reviewed Equality/Buser coercion repairs retain the primed law and correct carrier.
+
+Release Stage B / phase29 for exact finite-measure recovery/relaxation integration
+and edge clients, including a non-vector metric space, arbitrary targets, zero
+measure and non-unit atoms. No additional mathematical scope. Correct obsolete
+probability-only source introductions during final English documentation sync.
+Stage A accepted; Stage B and final integration are not yet accepted. This review
+entry is a post-check snapshot edit. No commit/push or remote CI.
+
+## 2026-09-30 22:10 Asia/Shanghai — phase29 Stage B independently ACCEPTED
+
+The frozen B delivery adds an audit client, not duplicate production definitions.
+The existing finite-measure chain proves actual lower and upper recovery for
+arbitrary finite-perimeter targets, both relaxed identities for every target,
+and the correct infinite-perimeter order branch. The new client exercises Empty,
+zero measure, a mass-3 atom on Nat, probability instances, scaling and empty/full
+sets. Empty-class statements remain conditional, with no claimed example.
+
+A fresh workflow-filtered build of 352 local modules and strict compilation of
+the delivered client plus Codex's JointRecovery.lean passed. The independent
+client derives simultaneous lower AND upper recovery on one actual measurable
+L1-convergent sequence, checks zero-measure L1 explicitly, and checks the lower
+infimum with its class unfolded. Fifteen standard-only axiom reports; snapshot
+unchanged: `b44aecf235a7885c65a4c0bbfb9f20da7525f3b7f1d2a29dc33a6bad9e39003f`.
+Evidence: `build/audit/admg-finite-four-hour/stage-b/codex/checks.json`.
+Reviewer setup initially pointed to the nonempty A view and was rejected by the
+empty-view guard; corrected to a fresh B view before these checks. A checks.json
+and client logs remain intact, but its prebuild snapshot/log were overwritten;
+see B reviewer-setup-note.txt. No production edits resulted.
+
+Source cross-check https://arxiv.org/html/1603.08412 identifies two documentation
+corrections required in final integration: bounded-support reduction is Remark
+3.4, not Remark 3.5; Definition 3.3 itself uses global L1 convergence. Remark 3.5
+discusses alternate locally-Lipschitz/local-convergence definitions, explicitly
+not the working definition. The pending measure extension is finite-on-bounded
+sets with possibly infinite total mass, not a claim that the paper uses only
+local convergence. Keep the Borel finite-mass target statement of published
+Theorem 3.6 distinct from our extended arbitrary-target Lean statement.
+
+Release FINAL INTEGRATION ONLY: exact English source introductions, root/HANDOFF,
+Blueprint and canonical progress sync through an isolated index; freeze and run
+full research/verify.py with snapshot comparison; final/receipt.md and
+READY_FOR_FINAL_CODEX_REVIEW. No further theorem expansion or new stage.
+This acceptance note postdates the verified snapshot. Final integration remains
+unaccepted; local proof/review is not a new ledger certificate or remote CI.
+
+## 2026-09-30 22:25 Asia/Shanghai — phases28–29 final integration ACCEPTED
+
+Confirmed Claude Idle and READY_FOR_FINAL_CODEX_REVIEW with no background work.
+Independently inspected report build/verification/20260930T141345.099338Z/report.json:
+passed, 172 gates all exit zero, no errors, 161 strict audit clients, 352 local
+kernel-replayed modules and 367 standard-only declaration axiom reports. Current
+source exactly matched its snapshot before this acceptance note:
+`34503176ae212af9d63f1ac4099b4f2ed0ddea8c56a639ca7cd3fd1de225c6f6`.
+Three independent Codex clients were strictly recompiled against the final
+workflow-filtered dependency view, all exit zero, snapshot unchanged. Evidence:
+`build/audit/admg-finite-four-hour/final/codex/checks.json` and client logs.
+
+Reviewed root/HANDOFF, progress summary and chapter45: finite Borel measure scope,
+actual L1 lower/upper recovery and both relaxed infima, with zero measure and
+arbitrary target cases, are accurately delimited. Corrected paper mapping names
+Remark3.4 and global-L1 Definition3.3; the article's Borel finite-mass targets and
+finite-on-bounded-sets measure generality remain distinguished. Infinite total
+mass, pointwise content equality, RCD and dimension-free KLS remain unproved here.
+No new certificate or ledger promotion is inferred from completion of this scope.
+Pinned-file refreshes correspond to reviewed measure migration/coercion edits
+and chapter45 synchronization; no checker or golden was changed during this run.
+The baseline comparison preserves moment-map, issue8 policy, unrelated files and
+all real-index mode/object/path entries; raw index byte differences have no
+independently established cause. All changes remain uncommitted and unpushed.
+
+Trust is local-source build plus local-module kernel replay with pinned compiled
+third-party dependencies trusted, not a fresh replay of third-party sources,
+external checker or clean isolated rebuild. The deliberate KLS target hole remains
+outside certificate closures; kernel replay alone is not a universal no-sorry claim.
+
+This acceptance note is a post-receipt source edit. No proof, canonical record or
+generated view is changed after the final verified snapshot. The frozen progress
+next-step text describes the now-completed final verification/handoff; this dated
+entry closes that step. The bounded four-hour scope is COMPLETE early (about70
+minutes elapsed, not four hours of work). Stop this automation and the verified
+task-owned caffeinate27681; do not dispatch a further phase without authorization.

@@ -116,7 +116,7 @@ See the [full tables and normalization](LITERATURE.md#constant-conventions).
 ## Proof progress tree
 
 <!-- BEGIN GENERATED DATE -->
-Last updated: **2026-09-29**.
+Last updated: **2026-10-01**.
 
 ![✓ Formalized in Lean](badges/formalized.svg) · ![○ Not yet formalized](badges/pending.svg) · ![◐ Partially formalized](badges/partial.svg) · ![— Excluded: refuted](badges/excluded.svg)
 <!-- END GENERATED DATE -->
@@ -126,12 +126,31 @@ in Lean. The general π bound uses actual Gaussian smoothing and a Cheeger test 
 argument; no individual-domain perimeter limit is asserted.
 The scoped metric BV comparison includes closed-support identification for finite-dimensional
 log-concave laws, exact test-class relaxation infima, and relaxed lower Minkowski content.
-**Next step:** prove the integrated upper-content bound for thickenings and establish the
-remaining lower-to-upper recovery comparison. The current upper-content results prove
-lower content `≤` upper content, almost-everywhere differentiability of the monotone radius
-mass, and a derivative bound on the upper content of each thickening for probability laws on
-normed groups. Absolute continuity of the radius mass, an integrated upper-content bound,
-and a relaxed-upper identity are not yet proved locally.
+**Next step:** assess the locally Lipschitz classes on nonproper spaces and the remaining
+general metric-measure/RCD comparison bridges. The extended ADMG sections 2–3 finite-target
+scope (2026-10-01) is frozen and locally verified. Lemma 2.1's equality of the relaxed lower and upper
+contents now holds for every Borel measure at measurable finite-mass targets, and on proper
+spaces the Remark 3.5 locally Lipschitz classes (global or compact-set L1) give the
+bounded-support perimeter at such targets for every Borel measure. Remark 3.4's bounded-support reduction,
+Lemma 2.1's actual radius recovery, both recoveries and both relaxed identities
+are proved at measurable finite-mass Borel targets for measures finite on bounded
+Borel sets, including infinite total mass and nonproper spaces. The full Lemma 3.2
+chain retains the actual right-radius liminf of integrated open-ball growth under
+finite positive-support-neighborhood mass and nonnegativity. No new ledger
+certificate or remote CI is claimed. The locally Lipschitz classes on nonproper
+spaces, nonconvex support transfer and general RCD comparisons are
+outside this completed proof scope; the dimension-free KLS routes remain open.
+The content chain proves lower content `≤` upper content, almost-everywhere differentiability of
+the monotone radius mass, the derivative and integrated bounds on the upper content of
+thickenings, the local-slope Minkowski coarea inequality, the recovery of every measurable set of
+finite lower content and of every set of finite BV perimeter by measurable sets converging in
+`L¹`, and the equality of the relaxed upper Minkowski content with the perimeter and with the
+relaxed lower content, on arbitrary metric spaces with a finite Borel measure (phases 24–29,
+independently accepted; the generic coarea uses the lower semicontinuous open-ball supremum;
+scaling, the zero measure and normalization are explicit). The upper-content chain for measures finite on bounded sets
+with infinite total mass is proved at measurable finite-mass targets (above); pointwise
+equality of the upper content with the perimeter, general RCD comparisons and the
+dimension-free KLS routes are not proved locally.
 
 Complement symmetry for finite Borel
 measures, including the closed intrinsic support law, is formalized in Lean, and so is
