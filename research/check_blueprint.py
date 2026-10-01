@@ -20,7 +20,7 @@ from typing import Any, Literal
 
 ROOT = Path(__file__).resolve().parents[1]
 BLUEPRINT = ROOT / "formalization/blueprint"
-ROUTES = BLUEPRINT / "route-composition.yaml"
+ROUTES = ROOT / "research/explorations/route-composition.yaml"
 LEDGER = ROOT / "research/a-series/ledger.yaml"
 
 # Version 1 is intentionally frozen.  It remains accepted so an old, pinned
@@ -1336,7 +1336,7 @@ def check_blueprint(
     errors: list[str] = []
     blueprint_index = _index_blueprint_tex(root, blueprint / "src/chapters", errors)
     validation = _validate_routes(
-        blueprint / "route-composition.yaml", blueprint_index, root, errors
+        root / "research/explorations/route-composition.yaml", blueprint_index, root, errors
     )
     _validate_or_targets(validation, blueprint_index, errors)
     _validate_certificates(blueprint_index, ledger, errors)

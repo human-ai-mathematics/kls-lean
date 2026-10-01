@@ -33,8 +33,10 @@ def generate():
     paths = subprocess.check_output(['git', 'ls-files'], cwd=ROOT, text=True).splitlines()
     paths = [p for p in paths if p.startswith('formalization/blueprint/src/chapters/') and p.endswith('.tex')]
     paths += ['research/a-series/ledger.yaml', 'research/tasks.json',
-              'formalization/blueprint/route-composition.yaml',
-              'research/upstream/2026-09-12-kls-research.json']
+              'research/explorations/route-composition.yaml',
+              'research/upstream/2026-09-12-kls-research.json',
+              'research/progress/nodes.json', 'research/explorations/portfolio.json',
+              'research/progress/literature.json']
     inputs = {p: staged(p) for p in sorted(paths)}
     with tempfile.TemporaryDirectory(prefix='kls-progress-') as directory:
         root = Path(directory)
@@ -49,17 +51,20 @@ def generate():
     ledger = json.loads(inputs['research/a-series/ledger.yaml'])
     ledger = {n['id']: n for n in ledger['nodes']}
     tasks = json.loads(inputs['research/tasks.json'])['nodes']
-    routes = json.loads(inputs['formalization/blueprint/route-composition.yaml'])
+    routes = json.loads(inputs['research/explorations/route-composition.yaml'])
     upstream = json.loads(inputs['research/upstream/2026-09-12-kls-research.json'])
     claims = {c['node']: c for c in routes['claims']}
     cert_by_label = {c['label']: ledger[i] for i, c in certificates.items()}
     digest = hashlib.sha256(b''.join(name.encode() + b'\0' + data for name, data in inputs.items())).hexdigest()
-    out = ['# Formalization progress register', '', '[Progress hub](README.md) · [Route diagrams](README.md#proof-progress-tree)', '',
+    out = ['# Supporting formalization node register', '', '[Primary paper register](LITERATURE.md) · [Literature overview](README.md)', '',
            f'**{len(nodes)} local Blueprint nodes · {len(certificates)} registered Lean certificates.**', '',
            'Generated from the canonical records of the Git index used for this run, identified',
            'by the canonical input digest below. These are recorded proof/definition statuses,',
            'not a fresh Lean run or a remote CI receipt. A missing local proof means only that this',
-           'register does not certify it; unregistered auxiliary progress appears in the diagram directory below.', '',
+           'register does not certify it; unregistered auxiliary progress appears in the inventory below.', '',
+           'This inventory includes retained exploratory statements. It is not the active work queue;',
+           'select future tasks by the source-paper priorities in LITERATURE.md. Exploratory route',
+           'composition is maintained separately in [research/explorations](../explorations/ROUTES.md).', '',
            views.status_legend(), '',
            'Upstream status is shown only where an explicit upstream mapping exists; no mapping is inferred',
            'from a similar title. Upstream `proved` does not mean Lean-proved.', '',
@@ -68,15 +73,21 @@ def generate():
            'See the linked statement for full hypotheses and scope.', '',
            '| Node ID | Plain-English description | Upstream / mathematical record | Our Lean record | Certificate / statement |',
            '| --- | --- | --- | --- | --- |']
-    catalog = json.loads((ROOT / 'research/progress/nodes.json').read_text())
-    portfolio = json.loads((ROOT / 'research/progress/portfolio.json').read_text())
-    bibliography = json.loads((ROOT / 'research/progress/literature.json').read_text())
+    catalog = json.loads(inputs['research/progress/nodes.json'])
+    portfolio = json.loads(inputs['research/explorations/portfolio.json'])
+    bibliography = json.loads(inputs['research/progress/literature.json'])
     records = views.resolve(catalog, nodes, claims)
     views.validate_routes(catalog, records, routes)
-    tree = views.render_tree(catalog, records)
-    readme = views.render_readme((ROOT / 'research/progress/README.md').read_text(), tree, catalog, records, portfolio)
-    literature_outputs, literature_overview = literature.render(bibliography, records, nodes)
+    route_tree = views.render_tree(catalog, records)
+    route_readme = views.render_routes((ROOT / 'research/explorations/ROUTES.md').read_text(),
+                                      route_tree, catalog, records, portfolio,
+                                      badge_prefix='../progress/badges')
+    literature_outputs, literature_overview = literature.render(bibliography, records, nodes, certificates)
+    tree = literature_outputs['LITERATURE.mmd']
+    readme = (ROOT / 'research/progress/README.md').read_text()
+    readme = views.replace_block(readme, 'DATE', 'Progress view updated: **'+catalog['last_updated']+'**.')
     readme = views.replace_block(readme, 'LITERATURE', literature_overview)
+    readme = views.replace_block(readme, 'PRIORITIES', literature.render_priorities(bibliography))
     descriptions = {r['blueprint']: r['description'] for r in records.values() if 'blueprint' in r}
     if descriptions.keys() != nodes.keys():
         raise ValueError('Update nodes.json to match the Blueprint node inventory.')
@@ -122,8 +133,8 @@ def generate():
         else:
             out += ['', 'See the linked statement and task record for the remaining proof obligation.']
         out += ['', link('research/tasks.json', 'Task record'), '']
-    out += ['## Diagram-level progress', '',
-            'Generated from the same resolved records as the README diagram and result table.',
+    out += ['## Supporting and exploratory node inventory', '',
+            'Generated from the same resolved records as the separate exploratory diagram.',
             'Blueprint mappings derive status from staged proof annotations. Auxiliary assessments',
             'retain their evidence source; generating this view does not run Lean.', '',
             '| Diagram node | Description | Our Lean record | Source |', '| --- | --- | --- | --- |']
@@ -138,12 +149,14 @@ def generate():
             f'{len(upstream["records"])} records; this register is not an inventory of the entire upstream ledger.', '',
             f'Canonical input digest: `{digest}`.',
             f'Diagram digest: `{hashlib.sha256(diagram.encode()).hexdigest()}`.',
+            f'Exploratory diagram digest: `{hashlib.sha256(route_tree.encode()).hexdigest()}`.',
             f'View input digest: `{hashlib.sha256(json.dumps([catalog, portfolio, bibliography], sort_keys=True).encode()).hexdigest()}`.', '',
             'Regenerate with `python3 research/progress/update.py` after staging the intended source and',
             'metadata updates; unstaged unrelated metadata is then deliberately excluded. When the',
             'intended records are deliberately left unstaged, run the generator and `--check` with a',
             'temporary `GIT_INDEX_FILE` holding exactly those records, and verify the digest above.', '']
     return {'STATUS.md': '\n'.join(out), 'README.md': readme, 'TREE.mmd': tree,
+            '../explorations/ROUTES.md': route_readme, '../explorations/ROUTES.mmd': route_tree,
             **literature_outputs, **views.render_badges()}
 
 

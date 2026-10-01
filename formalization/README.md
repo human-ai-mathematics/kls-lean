@@ -683,8 +683,9 @@ formalization. It separates four things that prose can otherwise blur:
   the certified Dirichlet/normal
   contraction, the certified one-dimensional `4 Var` bound, `2 Ch_μ`, affine normalization, the
   imported Cheeger comparison, and the optional stronger raw-test/core question;
-- four sufficient long-route alternatives that share this analytic infrastructure. No
-  probabilistic or logical independence is asserted.
+- four retained exploratory alternatives that share this analytic infrastructure. They are
+  [non-target research records](../research/explorations/ROUTES.md); future work follows the
+  [paper register](../research/progress/LITERATURE.md). No independence is asserted.
 
 The Blueprint is not a second proof-status database. Lean declarations and the
 [ledger](../research/a-series/ledger.yaml) remain authoritative. A `\lean{...}` annotation maps a
@@ -695,9 +696,10 @@ may instead be open, conditional, imported, or proved with upstream agent review
 marks an explicit unresolved statement choice, such as the test domain or normalization; the
 nearby text must identify that choice. Possible future API changes alone do not justify it, and
 removing it does not certify a proof.
-Successful PDF or web rendering alone certifies none of these claims. The route sidecar records
+Successful PDF or web rendering alone certifies none of these claims. The
+[exploratory sidecar](../research/explorations/route-composition.yaml) records
 recursive AND/OR composition, pinned provenance, and active or historical branch disposition; it
-is likewise not a proof certificate.
+is likewise not a proof certificate or the current work queue.
 
 The helper script accounts for the Lake package living in `formalization/` rather than at the Git
 root. With `xelatex`, `latexmk`, and Graphviz's `dot` available, run the following from the

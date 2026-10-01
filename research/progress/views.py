@@ -20,15 +20,15 @@ BADGE_COLORS = {
 }
 
 
-def status_cell(state):
+def status_cell(state, badge_prefix='badges'):
     """Local SVG badges work as Markdown images; alt text preserves the status."""
     if state == 'logic':
         return STATES[state]
-    return f'![{STATES[state]}](badges/{state}.svg)'
+    return f'![{STATES[state]}]({badge_prefix}/{state}.svg)'
 
 
-def status_legend():
-    return " · ".join(status_cell(state) for state in BADGE_COLORS)
+def status_legend(badge_prefix='badges'):
+    return " · ".join(status_cell(state, badge_prefix) for state in BADGE_COLORS)
 
 
 def render_badges():
@@ -147,9 +147,9 @@ def replace_block(text, name, content):
     return re.sub(re.escape(start) + r'.*?' + re.escape(end), lambda _: start+'\n'+content.strip()+'\n'+end, text, flags=re.S)
 
 
-def render_readme(template, tree, catalog, records, portfolio):
+def render_routes(template, tree, catalog, records, portfolio, badge_prefix='badges'):
     text = replace_block(template, 'TREE', '```mermaid\n'+tree+'```')
-    text = replace_block(text, 'DATE', 'Last updated: **'+catalog['last_updated']+'**.\n\n'+status_legend())
+    text = replace_block(text, 'DATE', 'Last updated: **'+catalog['last_updated']+'**.\n\n'+status_legend(badge_prefix))
     rows = ['| Family | Approach | Upstream state | Our Lean formalization | Objective / remaining work |', '| --- | --- | --- | --- | --- |']
     families = {'fam:eldan-localization':'Eldan', 'fam:mm-spectral':'Spectral', 'fam:mm-cmh':'CMH', 'fam:conditional-fiber':'Conditional fibers', 'fam:novel-routes':'Parked probes'}
     ids = set()
@@ -161,7 +161,7 @@ def render_readme(template, tree, catalog, records, portfolio):
         if not a.get('local_record') and state == 'formalized':
             raise ValueError('A formalized approach needs an explicit local proof mapping')
         upstream = a['state'] + ('; '+a['scope_note'] if a.get('scope_note') else '')
-        rows.append(f'| {families[a["family"]]} | [`{a["id"]}`]({portfolio["source"]}) | {cell(upstream)} | {status_cell(state)} | {cell(a["objective"])} |')
+        rows.append(f'| {families[a["family"]]} | [`{a["id"]}`]({portfolio["source"]}) | {cell(upstream)} | {status_cell(state, badge_prefix)} | {cell(a["objective"])} |')
     intro = f'**{len(ids)} approaches in the [pinned upstream portfolio]({portfolio["source"]})** (`{portfolio["revision"][:7]}`).\nUpstream activity and local Lean formalization are separate. Supporting results appear below.\n'
     text = replace_block(text, 'APPROACHES', intro+'\n'+'\n'.join(rows))
     rows = ['| Result / step | Our Lean formalization | Source |', '| --- | --- | --- |']
@@ -172,7 +172,7 @@ def render_readme(template, tree, catalog, records, portfolio):
         d = r['diagram']; title = cell(d['label'].replace('<br/>',' — '))
         links.append(f'| {title} | [Source]({d["source"]}) |')
         if r.get('assessment',{}).get('kind') not in ('route','logic') and r.get('blueprint') != 'conj:kls':
-            rows.append(f'| {title} | {status_cell(r["state"])} | [Source]({d["source"]}) |')
+            rows.append(f'| {title} | {status_cell(r["state"], badge_prefix)} | [Source]({d["source"]}) |')
     text = replace_block(text, 'RESULTS', '\n'.join(rows))
     return replace_block(text, 'LINKS', '\n'.join(links))
 

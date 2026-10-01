@@ -298,7 +298,7 @@ def build_atlas(root: Path = ROOT, *, snapshot: dict | None = None) -> tuple[dic
     errors.extend(validate_tasks(tasks, nodes, root))
     certificates, cert_errors = certificate_map(root)
     errors.extend(cert_errors)
-    routes = load_json(root / "formalization/blueprint/route-composition.yaml")
+    routes = load_json(root / "research/explorations/route-composition.yaml")
     claims = {c["node"]: c for c in routes["claims"]}
     for name, node in nodes.items():
         for dep in node["dependencies"]:

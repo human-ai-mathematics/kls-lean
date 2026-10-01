@@ -7,6 +7,25 @@ Record recurring layout and naming issues in the [technical-debt register](techn
 with evidence, affected consumers, and an acceptance check. Separate confirmed debt, review
 candidates, and accepted exceptions; close entries only after verification.
 
+## 0. Select a literature target
+
+Use [the paper register](progress/LITERATURE.md) and its current source-review priorities as
+the primary work plan. Before implementing a proof, identify the paper/version, theorem locator,
+exact hypotheses, constants and normalization, intended Lean statement, existing supporting
+declarations and verification scope. Record this in the current task or handoff. A reusable
+infrastructure task must name the paper theorem it supports and the precise missing interface.
+
+Exploratory routes in [the separate research register](explorations/ROUTES.md) are non-targets.
+The Blueprint and `atlas.py` retain them for statement/dependency audits; their pending nodes
+and dispatch classifications are not the current work queue. `active` in exploratory composition
+means a logical branch is retained, not that its open gate should be formalized next.
+Retain proved auxiliary results and conditional implications with their actual scope.
+
+Paper coverage requires a faithfully matched main theorem, proof, registered certificate and
+exact-statement verification evidence. Completed supporting declarations cannot supply a missing
+main-theorem statement or certificate. Keep current handoffs short and move superseded execution
+records to dated `research/decisions/` files.
+
 ## 1. Classify by mathematical responsibility
 
 For each proposed group of declarations, identify its primary object, necessary mathematical
@@ -130,6 +149,20 @@ run change that snapshot; do not present the old receipt as fresh verification o
 Distinguish source checks, kernel replay, certificate registration and remote CI. File cleanup
 alone never advances mathematical proof status. Preserve unrelated work; commit and push only
 when authorized.
+
+### Local pre-push gate
+
+The tracked `.githooks/pre-push` runs the full local verifier, including `lake build`, ledger
+checks and transitive axiom checks for every local declaration except the exact open target
+`FunctionalInequalities.KLS.kls`. This catches dependent wrappers and is stronger than a text
+search for `sorry`. It retains the full local metadata and Python checks.
+
+Enable it for a checkout with `git config core.hooksPath .githooks`, after preserving any
+existing hook configuration. Hook installation is opt-in. It verifies a clean tracked checkout
+and accepts outgoing HEAD branches or tags at HEAD; check out another outgoing commit first.
+Ref deletion needs no proof run. Unrelated untracked editor configuration is left alone;
+untracked Lean clients still enter the verifier's source-discovery checks. The hook provides
+local evidence for its recorded working snapshot, not a remote certificate.
 
 ### Remote CI at verification milestones
 

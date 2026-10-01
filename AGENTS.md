@@ -1,29 +1,39 @@
 # Project documentation maintenance
 
+- Formalize published KLS literature. Select work by a named source, pinned version and target
+  theorem, retaining its hypotheses, constants, normalization and dimensional scope. Develop
+  supporting infrastructure only for an identified literature target. Temporary exploratory
+  routes and unproved research hypotheses are not formalization targets.
 - Keep progress documentation together in `research/progress/`: `README.md` directly displays
-  the English Mermaid diagrams on the GitHub directory page; `STATUS.md` is the generated node register.
-  The root README retains the entry link and current-status summary.
-- When proof progress changes, review the complete diagram, its date, and the root current-status
+  the English literature map and current paper priorities; `LITERATURE.md` is the primary
+  paper-by-paper register and `STATUS.md` is the generated supporting node register.
+  The root README retains the literature entry link and a concise current-status summary.
+- Mark a paper target covered only when its main theorem is faithfully stated in Lean, proved
+  without nonstandard axioms, and registered with a certificate and verification evidence for
+  the exact statement. Supporting lemmas and restricted or conditional counterparts do not
+  certify a paper. Keep current handoffs short; retain history in dated `research/decisions/`.
+- When proof progress changes, review the source-paper mapping, diagram, date and root current-status
   summary. After staging the intended proof/metadata changes, regenerate all progress views with
   `python3 research/progress/update.py` and include it in the same commit. The generator reads
   canonical records from the Git index to exclude unrelated unstaged changes.
 - Base completion markers on the current theorem statements and verification evidence. Preserve
   assumptions, dimensional scope, and the distinction between a proved result, a completed route,
   and a ledger certificate. Do not mark a wrapper proved if it still depends on `sorryAx`.
-- Keep the next-step highlight aligned with the current handoff. The dimension-free KLS bound
+- Keep the literature priorities and next source-review/proof step aligned with the current handoff.
+  A pending node in the Blueprint/atlas is an inventory entry, not authorization to choose an
+  exploratory route as the next task. The dimension-free KLS bound
   stays open until that exact statement is proved and verified.
-- Keep the route overview complete for the four active branches in
-  `formalization/blueprint/route-composition.yaml`. Draw arrows from prerequisites toward
-  conclusions and ultimately KLS, with AND within each route and OR between sufficient routes.
-  Distinguish upstream mathematical results, conditional implications, and local Lean proofs;
-  keep refuted branches and restricted model calculations outside the active implication chain.
-- Keep one large combined Mermaid diagram and a row-by-row upstream approach table on the same page.
-  Maintain `research/progress/nodes.json` and the pinned portfolio inventory; generate the README
-  blocks, `STATUS.md`, and `TREE.mmd` with `update.py`. Do not edit generated blocks directly.
+- Preserve exploratory routes separately in `research/explorations/ROUTES.md`, clearly marked
+  as non-targets. Their composition and pinned portfolio live in that directory. `active` in
+  route metadata means membership in the retained logical composition, not an active proof task.
+  Preserve mathematical prerequisites, AND/OR structure, provenance and refutations there;
+  do not restore the four-route tree or approach table to the primary progress view.
+- Maintain `research/progress/nodes.json`, `literature.json` and the exploratory inventories;
+  generate primary and exploratory views with `update.py`. Do not edit generated blocks directly.
   Derive mapped node statuses from Blueprint records; record evidence for auxiliary assessments.
   Label completed local results "Formalized in Lean"; distinguish full approach goals from supporting results.
-- Maintain links for every diagram node and the fallback link directory. Review the route
-  diagram and the approach table after proof updates or source-file moves.
+- Maintain source links for literature nodes and declaration/certificate links in the paper
+  register. Review affected supporting and exploratory links after source-file moves.
 - Keep the progress tree and its surrounding documentation in English. Preserve unrelated work
   when preparing documentation commits.
 - Use the established progress notation: `✓` for completed local Lean proofs, `◐` for partial

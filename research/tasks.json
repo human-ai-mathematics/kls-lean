@@ -111,8 +111,8 @@
         "blueprint:def:conditional-fiber-form"
       ],
       "assumptions": [],
-      "priority": 5,
-      "note": "Implement the explicit Blueprint definition; it supplies no closedness, Markov-form, Poincare or frame-bound theorem. The six displayed well-definedness contracts (iterated base integral, a.e. finite conditional second moment, joint measurability, conditional-version independence, Borel-representative independence and L2 identification) are proved in ConditionalFiber.lean, so the definition node carries leanok; it remains a definition, not a ledger theorem. The admissible frame has positive dimension; zero-dimensional checks assert exclusion, not existence of a sphere probability law.",
+      "priority": 9,
+      "note": "Retained exploratory non-target. Do not select this node from atlas dispatch; future work must name a published-literature theorem. Implement the explicit Blueprint definition; it supplies no closedness, Markov-form, Poincare or frame-bound theorem. The six displayed well-definedness contracts (iterated base integral, a.e. finite conditional second moment, joint measurability, conditional-version independence, Borel-representative independence and L2 identification) are proved in ConditionalFiber.lean, so the definition node carries leanok; it remains a definition, not a ledger theorem. The admissible frame has positive dimension; zero-dimensional checks assert exclusion, not existence of a sphere probability law.",
       "infrastructure": {
         "status": "available",
         "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
@@ -1117,8 +1117,8 @@
         "blueprint:ass:tight-prefix-carleson"
       ],
       "assumptions": [],
-      "priority": 5,
-      "note": "Research task with explicit stopping criteria; no ordinary proof-hole retry loop. The new screened-supply result applies only to the regular split class; it does not discharge this universal gate. See research/decisions/2026-09-12-upstream-research-sync.md. 2026-09-19: no Lean statement, deliberately. The quantities S_t, r_t, D_t and the tight stopping time tau_eta are two-color quantities of Eldan stochastic localization; neither the repository nor the pinned Mathlib has the SDE/Ito framework (Mathlib has Brownian motion, filtrations and stopping times but no stochastic integral or SDE), so the assumption cannot be stated faithfully and a placeholder definition would be a fabrication. Prerequisite: a stochastic-localization definitions module. Rule: research/decisions/2026-09-19-kls-target-theorem.md."
+      "priority": 9,
+      "note": "Retained exploratory non-target. Do not select this node from atlas dispatch; future work must name a published-literature theorem. Research task with explicit stopping criteria; no ordinary proof-hole retry loop. The new screened-supply result applies only to the regular split class; it does not discharge this universal gate. See research/decisions/2026-09-12-upstream-research-sync.md. 2026-09-19: no Lean statement, deliberately. The quantities S_t, r_t, D_t and the tight stopping time tau_eta are two-color quantities of Eldan stochastic localization; neither the repository nor the pinned Mathlib has the SDE/Ito framework (Mathlib has Brownian motion, filtrations and stopping times but no stochastic integral or SDE), so the assumption cannot be stated faithfully and a placeholder definition would be a fabrication. Prerequisite: a stochastic-localization definitions module. Rule: research/decisions/2026-09-19-kls-target-theorem.md."
     },
     "q:mm-spectral-occupation": {
       "mathematics": "conjectural",
@@ -1126,8 +1126,8 @@
         "blueprint:q:mm-spectral-occupation"
       ],
       "assumptions": [],
-      "priority": 5,
-      "note": "Research task with explicit stopping criteria; no ordinary proof-hole retry loop. The 2026-09-12 upstream sync adds a reviewed short-window chain and a C_P <= C log^2 n endpoint conditional on Letwin v1; universal-time occupation remains open. See research/decisions/2026-09-12-upstream-research-sync.md. 2026-09-19: no Lean statement, deliberately. g_t, H_t, A_t are first-eigenfunction quantities along stochastic localization on smooth strongly log-concave approximants; the same missing SDE/Ito framework as ass:tight-prefix-carleson applies, and the node is a question rather than a claim. Prerequisite: a stochastic-localization definitions module plus a fixed formulation of the approximation scheme. Rule: research/decisions/2026-09-19-kls-target-theorem.md."
+      "priority": 9,
+      "note": "Retained exploratory non-target. Do not select this node from atlas dispatch; future work must name a published-literature theorem. Research task with explicit stopping criteria; no ordinary proof-hole retry loop. The 2026-09-12 upstream sync adds a reviewed short-window chain and a C_P <= C log^2 n endpoint conditional on Letwin v1; universal-time occupation remains open. See research/decisions/2026-09-12-upstream-research-sync.md. 2026-09-19: no Lean statement, deliberately. g_t, H_t, A_t are first-eigenfunction quantities along stochastic localization on smooth strongly log-concave approximants; the same missing SDE/Ito framework as ass:tight-prefix-carleson applies, and the node is a question rather than a claim. Prerequisite: a stochastic-localization definitions module plus a fixed formulation of the approximation scheme. Rule: research/decisions/2026-09-19-kls-target-theorem.md."
     },
     "ass:cmh-recovery-envelope": {
       "mathematics": "conjectural",
@@ -1135,8 +1135,8 @@
         "blueprint:ass:cmh-recovery-envelope"
       ],
       "assumptions": [],
-      "priority": 5,
-      "note": "Research task with explicit stopping criteria; no ordinary proof-hole retry loop. Wave five adds weak linear spectral resolution and exact exponential-cone models, not a uniform CMH recovery envelope. See research/decisions/2026-09-12-upstream-research-sync.md."
+      "priority": 9,
+      "note": "Retained exploratory non-target. Do not select this node from atlas dispatch; future work must name a published-literature theorem. Research task with explicit stopping criteria; no ordinary proof-hole retry loop. Wave five adds weak linear spectral resolution and exact exponential-cone models, not a uniform CMH recovery envelope. See research/decisions/2026-09-12-upstream-research-sync.md."
     },
     "q:conditional-fiber-frame": {
       "mathematics": "conjectural",
@@ -1144,8 +1144,8 @@
         "blueprint:q:conditional-fiber-frame"
       ],
       "assumptions": [],
-      "priority": 5,
-      "note": "Research task with explicit stopping criteria; no ordinary proof-hole retry loop. Wave five proves an upstream degree-two simplex root-frame calculation, not the all-function frame bound. Audit its simplex law and polynomial quotient as a separate formalization candidate. See research/decisions/2026-09-12-upstream-research-sync.md."
+      "priority": 9,
+      "note": "Retained exploratory non-target. Do not select this node from atlas dispatch; future work must name a published-literature theorem. Research task with explicit stopping criteria; no ordinary proof-hole retry loop. Wave five proves an upstream degree-two simplex root-frame calculation, not the all-function frame bound. Audit its simplex law and polynomial quotient as a separate formalization candidate. See research/decisions/2026-09-12-upstream-research-sync.md."
     },
     "ass:weighted-package": {
       "mathematics": "refuted",
@@ -1153,8 +1153,8 @@
         "blueprint:ass:weighted-package"
       ],
       "assumptions": [],
-      "priority": 5,
-      "note": "Historical package refuted in pinned upstream review; exclude from active proof search. The obstruction is not a refutation of KLS."
+      "priority": 9,
+      "note": "Retained exploratory non-target. Do not select this node from atlas dispatch; future work must name a published-literature theorem. Historical package refuted in pinned upstream review; exclude from active proof search. The obstruction is not a refutation of KLS."
     },
     "thm:smooth-gradient-relaxation-two-cheeger": {
       "mathematics": "local_argument",
@@ -1944,8 +1944,8 @@
       "assumptions": [
         "ass:tight-prefix-carleson"
       ],
-      "priority": 5,
-      "note": "Formalize the implication retaining the named open premise. Certifying this implication must not discharge the premise or unconditional KLS.",
+      "priority": 9,
+      "note": "Retained exploratory non-target. Do not select this node from atlas dispatch; future work must name a published-literature theorem. Formalize the implication retaining the named open premise. Certifying this implication must not discharge the premise or unconditional KLS.",
       "infrastructure": {
         "status": "unchecked",
         "mathlib_revision": null,
@@ -1959,15 +1959,15 @@
         "blueprint:prop:weighted-spectator-obstruction"
       ],
       "assumptions": [],
-      "priority": 5,
-      "note": "Infrastructure inspected on 2026-09-11 and recorded as missing. The proposition refutes ass:weighted-package, whose objects (Eldan's stochastic localization process, the excess e_t of a balanced finite-perimeter cut along the process, the weighted covariance A_t, the stopping time tau_eta and the paired absorptive weighted Stein-trace estimate) have no Lean statement in this repository; the Stein-trace estimate is not even displayed locally. The witness computation on an isotropic product of centered one-sided exponentials evaluates these process quantities at positive times, so it is not a purely static product/cylinder computation. The upstream proof dossier is not in this repository. The node stays proved / checked_by: agent upstream and is not a Lean certificate.",
+      "priority": 9,
+      "note": "Retained exploratory non-target. Do not select this node from atlas dispatch; future work must name a published-literature theorem. Infrastructure inspected on 2026-09-11 and recorded as missing. The proposition refutes ass:weighted-package, whose objects (Eldan's stochastic localization process, the excess e_t of a balanced finite-perimeter cut along the process, the weighted covariance A_t, the stopping time tau_eta and the paired absorptive weighted Stein-trace estimate) have no Lean statement in this repository; the Stein-trace estimate is not even displayed locally. The witness computation on an isotropic product of centered one-sided exponentials evaluates these process quantities at positive times, so it is not a purely static product/cylinder computation. The upstream proof dossier is not in this repository. The node stays proved / checked_by: agent upstream and is not a Lean certificate.",
       "infrastructure": {
         "status": "missing",
         "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
         "evidence": [
           {
             "path": "formalization/blueprint/src/chapters/50-kls-routes.tex",
-            "sha256": "b77abb304519f1bf5da13452c7c9dc4990f1c296d2c560c016a33a671435a93f"
+            "sha256": "5e458cc9301e0c5a4fdf56df35677674f4bf6b19c4588cc272cedb1cda713082"
           },
           {
             "path": "formalization/.lake/packages/mathlib/Mathlib/Probability/BrownianMotion/Basic.lean",
@@ -1997,8 +1997,8 @@
       "assumptions": [
         "q:mm-spectral-occupation"
       ],
-      "priority": 5,
-      "note": "Formalize the implication retaining the named open premise. Certifying this implication must not discharge the premise or unconditional KLS. At the new upstream pin, proved plus assumes=[q:mm-spectral-occupation] encodes this same conditional implication; the local route state stays conditional. See research/decisions/2026-09-12-upstream-research-sync.md.",
+      "priority": 9,
+      "note": "Retained exploratory non-target. Do not select this node from atlas dispatch; future work must name a published-literature theorem. Formalize the implication retaining the named open premise. Certifying this implication must not discharge the premise or unconditional KLS. At the new upstream pin, proved plus assumes=[q:mm-spectral-occupation] encodes this same conditional implication; the local route state stays conditional. See research/decisions/2026-09-12-upstream-research-sync.md.",
       "infrastructure": {
         "status": "unchecked",
         "mathlib_revision": null,
@@ -2012,8 +2012,8 @@
         "blueprint:thm:cmh-recovery-affine-poincare-bound"
       ],
       "assumptions": [],
-      "priority": 5,
-      "note": "Inspected on 2026-09-08: this node packages two pinned upstream results (lem:affine-poincare-w2-liminf and thm:cmh-implies-affine-poincare) that are agent-reviewed, not Lean-certified. The only locally available ingredients are the implemented affine constant Poincare.CovarianceGradient.Intrinsic.constant, its certified closed-form identification (thm:affine-covariance-relaxation-closed) and translation invariance; a formalization would additionally need Lean definitions of the quadratic Wasserstein distance and its convergence for laws on a Euclidean space, of the CMH constant with the pinned source's regular compact-target moment-map class, canonical moment-map kernel and weak zero-flux closed Stein-generator convention, and proofs of the two upstream results themselves. Not a Lean certificate. The upstream sync adds CMH linear-sector and cone results, but supplies no local Lean moment-map, Stein-generator or Wasserstein infrastructure. See research/decisions/2026-09-12-upstream-research-sync.md.",
+      "priority": 9,
+      "note": "Retained exploratory non-target. Do not select this node from atlas dispatch; future work must name a published-literature theorem. Inspected on 2026-09-08: this node packages two pinned upstream results (lem:affine-poincare-w2-liminf and thm:cmh-implies-affine-poincare) that are agent-reviewed, not Lean-certified. The only locally available ingredients are the implemented affine constant Poincare.CovarianceGradient.Intrinsic.constant, its certified closed-form identification (thm:affine-covariance-relaxation-closed) and translation invariance; a formalization would additionally need Lean definitions of the quadratic Wasserstein distance and its convergence for laws on a Euclidean space, of the CMH constant with the pinned source's regular compact-target moment-map class, canonical moment-map kernel and weak zero-flux closed Stein-generator convention, and proofs of the two upstream results themselves. Not a Lean certificate. The upstream sync adds CMH linear-sector and cone results, but supplies no local Lean moment-map, Stein-generator or Wasserstein infrastructure. See research/decisions/2026-09-12-upstream-research-sync.md.",
       "infrastructure": {
         "status": "missing",
         "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
@@ -2059,8 +2059,8 @@
       "assumptions": [
         "ass:cmh-recovery-envelope"
       ],
-      "priority": 5,
-      "note": "Formalize the implication retaining the named open premise. Certifying this implication must not discharge the premise or unconditional KLS.",
+      "priority": 9,
+      "note": "Retained exploratory non-target. Do not select this node from atlas dispatch; future work must name a published-literature theorem. Formalize the implication retaining the named open premise. Certifying this implication must not discharge the premise or unconditional KLS.",
       "infrastructure": {
         "status": "unchecked",
         "mathlib_revision": null,
@@ -2074,8 +2074,8 @@
         "blueprint:lem:conditional-fiber-form"
       ],
       "assumptions": [],
-      "priority": 5,
-      "note": "Proved in Lean on 2026-09-11. KLS/ConditionalFiber/Closed.lean packages the form of def:conditional-fiber-form as the extended functional KLS.ConditionalFiber.functional mu rho on L^2(mu) and proves Energy.Dirichlet mu (functional mu rho): dense finite domain, lower semicontinuity, the extended quadratic identities and the normal-contraction (Markov) property, for every Borel probability law mu on a finite-dimensional inner-product space and every probability law rho on the unit sphere (no log-concavity, density, second moment or frame identity is used; the Blueprint scope is a typed application in the certificate). The route is the jump representation energyAt_eq_jump_div: on a nondegenerate fiber the normalized variance is the squared jump integral against the two-point measure (kappa b) x (kappa b) divided by 2 Var(id), by the new two-point variance identity Probability.two_mul_evariance_eq_lintegral_prod (Probability/TwoPointVariance.lean, valid in [0, infinity] without square integrability). Symmetry and reversibility are read as this representation and the swap invariance twoPointMeasure_swap. Closedness pushes an almost-everywhere convergent subsequence (TendstoInMeasure.exists_seq_tendsto_ae) through the joint law and the disintegration (Measure.ae_ae_of_ae_compProd) and applies Fatou (lintegral_liminf_le) on the two-point space and on the base law; Lipschitz tests have energy at most d L^2 (energy_le_of_lipschitzWith), so the smooth compactly supported core (WeightedGradient.dense_smoothCore) lies in the finite domain. No comparison with a gradient energy, no fiber Poincare input, no frame bound and no Poincare inequality is claimed.",
+      "priority": 9,
+      "note": "Retained exploratory non-target. Do not select this node from atlas dispatch; future work must name a published-literature theorem. Proved in Lean on 2026-09-11. KLS/ConditionalFiber/Closed.lean packages the form of def:conditional-fiber-form as the extended functional KLS.ConditionalFiber.functional mu rho on L^2(mu) and proves Energy.Dirichlet mu (functional mu rho): dense finite domain, lower semicontinuity, the extended quadratic identities and the normal-contraction (Markov) property, for every Borel probability law mu on a finite-dimensional inner-product space and every probability law rho on the unit sphere (no log-concavity, density, second moment or frame identity is used; the Blueprint scope is a typed application in the certificate). The route is the jump representation energyAt_eq_jump_div: on a nondegenerate fiber the normalized variance is the squared jump integral against the two-point measure (kappa b) x (kappa b) divided by 2 Var(id), by the new two-point variance identity Probability.two_mul_evariance_eq_lintegral_prod (Probability/TwoPointVariance.lean, valid in [0, infinity] without square integrability). Symmetry and reversibility are read as this representation and the swap invariance twoPointMeasure_swap. Closedness pushes an almost-everywhere convergent subsequence (TendstoInMeasure.exists_seq_tendsto_ae) through the joint law and the disintegration (Measure.ae_ae_of_ae_compProd) and applies Fatou (lintegral_liminf_le) on the two-point space and on the base law; Lipschitz tests have energy at most d L^2 (energy_le_of_lipschitzWith), so the smooth compactly supported core (WeightedGradient.dense_smoothCore) lies in the finite domain. No comparison with a gradient energy, no fiber Poincare input, no frame bound and no Poincare inequality is claimed.",
       "infrastructure": {
         "status": "available",
         "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
@@ -2158,8 +2158,8 @@
         "blueprint:lem:conditional-fiber-energy-comparison"
       ],
       "assumptions": [],
-      "priority": 5,
-      "note": "Proved in Lean on 2026-09-11. KLS/ConditionalFiber/EnergyComparison.lean states the fiber hypothesis as FiberBound mu rho kappa (for baseLaw-almost every nondegenerate fiber, Poincare.LocalSlope.Intrinsic.constant of the fiber law <= kappa * evariance id) and proves energy_le_of_fiberBound (energy mu rho f <= kappa * Energy.LocalSlope.energy mu f, finite, for every Energy.LocalSlope.Admissible test) and literatureConstant_le_of_fiberBound (a form-gap bound C on domain mu rho gives Poincare.LocalSlope.Intrinsic.constant mu <= kappa * C), for mu absolutely continuous with respect to a Haar measure and an admissible frame rho. The route: Poincare.LocalSlope.Holds transports across a measure-preserving isometric equivalence (MeasurePreserving.lintegral_comp_emb, Function.Surjective.iSup_comp on the local-slope definition), so for a law with full affine support the intrinsic constant is the infimum of its coordinate constants and ENNReal.iInf_mul turns a finite bound on that infimum into the per-test inequality; full support follows from Measure.addHaar_affineSubspace for mu and from nonzero variance for the real fibers (Submodule.finrank_lt on a proper direction of R). The line slice t -> f(z + t theta) has local slope |<theta, grad f>| at Rademacher points (HasFDerivAt.comp_hasDerivAt, HasDerivAt.hasGradientAt, the existing apply_eq_norm_gradient); the Rademacher null set and square integrability pass through the joint law and Measure.ae_ae_of_ae_compProd; Measure.lintegral_compProd, lintegral_map with reconstruct_coordinates, lintegral_prod_symm and the frame identity (ofReal_integral_eq_lintegral_ofReal) give kappa times the gradient energy, identified with the local-slope energy by energy_eq_lintegral_gradient. The second conclusion is proved directly on Poincare.LocalSlope.Holds through form_toLp, L2.variance_toLp and ofReal_variance. No value of kappa, no log-concavity, no fiber Poincare input and no KLS statement is claimed.",
+      "priority": 9,
+      "note": "Retained exploratory non-target. Do not select this node from atlas dispatch; future work must name a published-literature theorem. Proved in Lean on 2026-09-11. KLS/ConditionalFiber/EnergyComparison.lean states the fiber hypothesis as FiberBound mu rho kappa (for baseLaw-almost every nondegenerate fiber, Poincare.LocalSlope.Intrinsic.constant of the fiber law <= kappa * evariance id) and proves energy_le_of_fiberBound (energy mu rho f <= kappa * Energy.LocalSlope.energy mu f, finite, for every Energy.LocalSlope.Admissible test) and literatureConstant_le_of_fiberBound (a form-gap bound C on domain mu rho gives Poincare.LocalSlope.Intrinsic.constant mu <= kappa * C), for mu absolutely continuous with respect to a Haar measure and an admissible frame rho. The route: Poincare.LocalSlope.Holds transports across a measure-preserving isometric equivalence (MeasurePreserving.lintegral_comp_emb, Function.Surjective.iSup_comp on the local-slope definition), so for a law with full affine support the intrinsic constant is the infimum of its coordinate constants and ENNReal.iInf_mul turns a finite bound on that infimum into the per-test inequality; full support follows from Measure.addHaar_affineSubspace for mu and from nonzero variance for the real fibers (Submodule.finrank_lt on a proper direction of R). The line slice t -> f(z + t theta) has local slope |<theta, grad f>| at Rademacher points (HasFDerivAt.comp_hasDerivAt, HasDerivAt.hasGradientAt, the existing apply_eq_norm_gradient); the Rademacher null set and square integrability pass through the joint law and Measure.ae_ae_of_ae_compProd; Measure.lintegral_compProd, lintegral_map with reconstruct_coordinates, lintegral_prod_symm and the frame identity (ofReal_integral_eq_lintegral_ofReal) give kappa times the gradient energy, identified with the local-slope energy by energy_eq_lintegral_gradient. The second conclusion is proved directly on Poincare.LocalSlope.Holds through form_toLp, L2.variance_toLp and ofReal_variance. No value of kappa, no log-concavity, no fiber Poincare input and no KLS statement is claimed.",
       "infrastructure": {
         "status": "available",
         "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
@@ -2278,8 +2278,8 @@
         "blueprint:cor:conditional-fiber-twelve-bound"
       ],
       "assumptions": [],
-      "priority": 5,
-      "note": "Proved in Lean on 2026-09-11 and registered on 2026-09-12. KLS/LogConcave/ConditionalFiber.lean proves ae_conditionalFiber_logConcave (for baseLaw-almost every base point the chosen conditional kernel kernel mu rho b is a compact-set log-concave law on R) and derives conditionalFiber_fiberBound_four (FiberBound mu rho 4), conditionalFiber_energy_le_four_mul, conditionalFiber_literatureConstant_le_four_mul and the literal 12 versions with the _of_four suffix. Three pieces of new infrastructure close the gaps recorded on 2026-09-11. (1) Probability/Line/BrunnMinkowski.lean proves compact one-dimensional Brunn-Minkowski (translate K by inf L and L by sup K inside K + L; the two translates meet in a single point, so measure_union_add_inter with translation invariance gives vol K + vol L <= vol (K + L)), its inner-regular convex-combination form, and the fully general one-dimensional Prekopa-Leindler inequality (layer cake lintegral_eq_lintegral_meas_lt, the level-set inclusion t {f > s} + (1-t) {g > s} subset {h > s}, normalization of both factors to supremum one by homogeneity, truncation with monotone convergence for unbounded factors, and a two-term ENNReal AM-GM proved from NNReal.geom_mean_le_arith_mean2_weighted). KLS/LogConcave/Line/OfDensity.lean applies it to indicator multiples of a Borell density and gives LineDensity.logConcave, the converse of the existing LogConcave.exists_lineDensity. (2) Probability/Line/Haar.lean builds the linear equivalence (R theta)-perp x R = E, (z, s) -> z + s theta, and proves exists_lintegral_line: for a unit theta there is a positive finite c with c * integral G dm = double integral of G(z + s theta) against addHaar and volume (ContinuousLinearEquiv.isAddHaarMeasure_map, Measure.isAddLeftInvariant_eq_smul, addHaarScalarFactor_pos_of_isAddHaarMeasure); c depends on theta and is never evaluated, and the proof never needs measurability of theta -> c. (3) KLS/ConditionalFiber/SliceKernel.lean defines sliceMass, SliceGood, sliceDensity and the Markov kernel sliceKernel (Kernel.withDensity of the normalized line density on the good set, Kernel.piecewise with a Dirac law elsewhere) and proves compProd_baseLaw_sliceKernel (baseLaw ⊗ₘ sliceKernel = jointLaw) by reducing both sides, for each fixed direction, to the same iterated integral through exists_lintegral_line; finiteness of the slice mass almost everywhere is the case G = 1 of that identity. ae_sliceKernel_eq is then ProbabilityTheory.eq_condKernel_of_measure_eq_compProd. Assembly: absolute continuity gives full affine support (affineSupport_eq_top_of_absolutelyContinuous, made public in EnergyComparison.lean without a type change) and hence a Borell density; on a good base point the normalized line density is a Borell density of the slice kernel (upper semicontinuity by UpperSemicontinuous.comp and Continuous.comp_upperSemicontinuous, log-concavity along the affine reconstruction map), so LineDensity.logConcave applies; the remaining base points carry a Dirac law and KLS.logConcave_dirac covers them, so no exceptional set is discarded. The Blueprint corollary is restated with the sharp constant 4; 12 is the immediate weakening. No frame bound, no Poincare inequality for mu and no KLS statement is claimed; q:conditional-fiber-frame remains open.",
+      "priority": 9,
+      "note": "Retained exploratory non-target. Do not select this node from atlas dispatch; future work must name a published-literature theorem. Proved in Lean on 2026-09-11 and registered on 2026-09-12. KLS/LogConcave/ConditionalFiber.lean proves ae_conditionalFiber_logConcave (for baseLaw-almost every base point the chosen conditional kernel kernel mu rho b is a compact-set log-concave law on R) and derives conditionalFiber_fiberBound_four (FiberBound mu rho 4), conditionalFiber_energy_le_four_mul, conditionalFiber_literatureConstant_le_four_mul and the literal 12 versions with the _of_four suffix. Three pieces of new infrastructure close the gaps recorded on 2026-09-11. (1) Probability/Line/BrunnMinkowski.lean proves compact one-dimensional Brunn-Minkowski (translate K by inf L and L by sup K inside K + L; the two translates meet in a single point, so measure_union_add_inter with translation invariance gives vol K + vol L <= vol (K + L)), its inner-regular convex-combination form, and the fully general one-dimensional Prekopa-Leindler inequality (layer cake lintegral_eq_lintegral_meas_lt, the level-set inclusion t {f > s} + (1-t) {g > s} subset {h > s}, normalization of both factors to supremum one by homogeneity, truncation with monotone convergence for unbounded factors, and a two-term ENNReal AM-GM proved from NNReal.geom_mean_le_arith_mean2_weighted). KLS/LogConcave/Line/OfDensity.lean applies it to indicator multiples of a Borell density and gives LineDensity.logConcave, the converse of the existing LogConcave.exists_lineDensity. (2) Probability/Line/Haar.lean builds the linear equivalence (R theta)-perp x R = E, (z, s) -> z + s theta, and proves exists_lintegral_line: for a unit theta there is a positive finite c with c * integral G dm = double integral of G(z + s theta) against addHaar and volume (ContinuousLinearEquiv.isAddHaarMeasure_map, Measure.isAddLeftInvariant_eq_smul, addHaarScalarFactor_pos_of_isAddHaarMeasure); c depends on theta and is never evaluated, and the proof never needs measurability of theta -> c. (3) KLS/ConditionalFiber/SliceKernel.lean defines sliceMass, SliceGood, sliceDensity and the Markov kernel sliceKernel (Kernel.withDensity of the normalized line density on the good set, Kernel.piecewise with a Dirac law elsewhere) and proves compProd_baseLaw_sliceKernel (baseLaw ⊗ₘ sliceKernel = jointLaw) by reducing both sides, for each fixed direction, to the same iterated integral through exists_lintegral_line; finiteness of the slice mass almost everywhere is the case G = 1 of that identity. ae_sliceKernel_eq is then ProbabilityTheory.eq_condKernel_of_measure_eq_compProd. Assembly: absolute continuity gives full affine support (affineSupport_eq_top_of_absolutelyContinuous, made public in EnergyComparison.lean without a type change) and hence a Borell density; on a good base point the normalized line density is a Borell density of the slice kernel (upper semicontinuity by UpperSemicontinuous.comp and Continuous.comp_upperSemicontinuous, log-concavity along the affine reconstruction map), so LineDensity.logConcave applies; the remaining base points carry a Dirac law and KLS.logConcave_dirac covers them, so no exceptional set is discarded. The Blueprint corollary is restated with the sharp constant 4; 12 is the immediate weakening. No frame bound, no Poincare inequality for mu and no KLS statement is claimed; q:conditional-fiber-frame remains open.",
       "infrastructure": {
         "status": "available",
         "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",

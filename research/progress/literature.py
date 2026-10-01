@@ -23,6 +23,12 @@ def validate(catalog, records):
                 raise ValueError(f'{p["id"]}: invalid local result mapping')
             if records[item['node']]['state'] in ('logic', 'excluded'):
                 raise ValueError(f'{p["id"]}: a route junction or refutation is not a proved result')
+        targets = p.get('target_declarations', [])
+        if targets and not p.get('target_review'):
+            raise ValueError(f'{p["id"]}: target declarations need a scope review')
+        for target in targets:
+            if not target.get('name') or not target.get('source', '').startswith('formalization/'):
+                raise ValueError(f'{p["id"]}: invalid target declaration')
     shown = [i for g in catalog['diagram_groups'] for i in g['papers']]
     if len(shown) != len(set(shown)) or any(i not in papers for i in shown):
         raise ValueError('Invalid literature diagram inventory')
@@ -32,6 +38,15 @@ def validate(catalog, records):
     for e in catalog['diagram_edges']:
         if e['from'] not in shown or e['to'] not in shown or e['kind'] not in ('chronology', 'context'):
             raise ValueError('Invalid literature edge; these are not proof implications')
+    ranks = set()
+    for priority in catalog.get('priorities', []):
+        rank = priority.get('rank')
+        if type(rank) is not int or rank < 1 or rank in ranks:
+            raise ValueError('Literature priorities need unique positive ranks')
+        ranks.add(rank)
+        if (not priority.get('papers') or any(i not in papers for i in priority['papers'])
+                or not priority.get('target') or not priority.get('next_step')):
+            raise ValueError('Literature priorities need source papers, target and next step')
     return papers
 
 
@@ -68,13 +83,32 @@ def render_tree(catalog, papers):
     return '\n'.join(lines) + '\n'
 
 
-def render(catalog, records, blueprint):
+def supporting_certificates(paper, records, certificates):
+    """Report existing fragment certificates; never promote them to paper coverage."""
+    labels = {records[item['node']].get('blueprint') for item in paper['local_results']}
+    return {key: cert for key, cert in certificates.items() if cert['label'] in labels}
+
+
+def render_priorities(catalog):
+    papers = {p['id']: p for p in catalog['papers']}
+    lines = ['These are source-review and proof priorities, not claims that the targets are proved.',
+             'Every proof task must first pin its paper version, theorem, hypotheses and constants.', '',
+             '| Priority | Sources / target | Next action |', '| --- | --- | --- |']
+    for priority in sorted(catalog.get('priorities', []), key=lambda p: p['rank']):
+        sources = ', '.join(f'[{papers[i]["authors"]}]({papers[i]["url"]})' for i in priority['papers'])
+        lines.append(f'| {priority["rank"]} | {sources}<br/>{views.cell(priority["target"])} | '
+                     f'{views.cell(priority["next_step"])} |')
+    return '\n'.join(lines)
+
+
+def render(catalog, records, blueprint, certificates=None):
+    certificates = {} if certificates is None else certificates
     papers = validate(catalog, records)
     tree = render_tree(catalog, papers)
     c = views.cell
     header = [
         '# KLS literature and local formalization', '',
-        '[Progress hub](README.md) · [Current proof routes](README.md#proof-progress-tree) · [Node register](STATUS.md)', '',
+        '**Primary progress register** · [Literature overview](README.md) · [Supporting node register](STATUS.md)', '',
         f'**Literature through July 2026 · Sources checked {catalog["checked_on"]} · {len(papers)} selected sources.**', '',
         catalog['scope'], '',
         'The literature has advanced to an inverse-Cheeger bound of order `(log n)^(1/4)` in the',
@@ -85,6 +119,15 @@ def render(catalog, records, blueprint):
         'restricted counterparts, never an entire paper; ○ means the selected main result is not',
         'locally formalized.** A ✓ beside an individual local result is derived from the existing',
         'Blueprint/progress records. It is not a new certificate or a certification of the source paper.', '',
+        '## When a paper is covered', '',
+        'A selected paper target is covered only after its main theorem has a faithful Lean statement',
+        '(including hypotheses, constants, normalization and dimensional scope), a proof without',
+        'nonstandard axioms, and a registered certificate with verification evidence for that exact',
+        'statement. A source review must identify the paper version and theorem being matched.',
+        'Supporting lemmas, restricted cases and conditional reductions do not meet this criterion.',
+        '**No complete paper target is currently registered as covered.** Existing fragment certificates',
+        'are listed explicitly below; an unregistered proved target is still awaiting certification.', '',
+        '## Current literature priorities', '', render_priorities(catalog), '',
         '## Constant conventions', '',
         'For isotropic log-concave laws, use `Var(f) ≤ C_P ∫‖∇f‖² dμ`, with no factor 1/2.',
         'Write `h` for the Cheeger lower-bound constant with denominator `min(μ(A), 1−μ(A))`,',
@@ -108,8 +151,8 @@ def render(catalog, records, blueprint):
     tables = []
     for group in catalog['groups']:
         tables += [f'## {group["title"]}', '',
-                   '| Source and version | Main result / role | Our Lean coverage | Remaining scope |',
-                   '| --- | --- | --- | --- |']
+                   '| Source and target theorem | Main result / role | Lean statements | Local coverage | Certificate | Remaining scope |',
+                   '| --- | --- | --- | --- | --- | --- |']
         for p in catalog['papers']:
             if p['group'] != group['id']:
                 continue
@@ -119,8 +162,37 @@ def render(catalog, records, blueprint):
                 state = records[item['node']]['state']
                 mark = views.STATES[state][0]
                 local.append(f'{mark} [{c(item["scope"])}]({result_link(item["node"], records, blueprint)})')
-            tables.append(f'| {source} | {c(p["result"])} | '+ '<br/>'.join(local) +f' | {c(p["remaining"])} |')
+            statements = (f'[Statement inventory](#{p["id"].lower()}-lean-statements)'
+                          if p['local_results'] or p.get('target_declarations')
+                          else 'No local target statement registered')
+            certs = supporting_certificates(p, records, certificates)
+            certificate = 'No paper-target certificate'
+            if certs:
+                certificate += '<br/>Supporting only: ' + ', '.join(
+                    f'[`{c(key)}`](../../{cert["module"].replace(".", "/")}.lean)'
+                    for key, cert in sorted(certs.items()))
+            tables.append(f'| {source} | {c(p["result"])} | {statements} | '+ '<br/>'.join(local)
+                          + f' | {certificate} | {c(p["remaining"])} |')
         tables.append('')
+    statements = ['## Local Lean statement inventory', '',
+                  'The links below retain the actual declarations and their full hypotheses.',
+                  'Mappings labelled supporting are not the complete paper target.', '']
+    for p in catalog['papers']:
+        if not p['local_results'] and not p.get('target_declarations'):
+            continue
+        statements += [f'### {p["id"]} Lean statements', '']
+        for target in p.get('target_declarations', []):
+            statements.append(f'- Selected target: [`{target["name"]}`](../../{target["source"]}).')
+        if p.get('target_review'):
+            statements += [f'- [Target scope review](../../{p["target_review"]}); no registered target certificate.']
+        for item in p['local_results']:
+            record = records[item['node']]
+            declarations = blueprint[record['blueprint']]['lean']['declarations'] if record.get('blueprint') else []
+            statements.append(f'- Supporting scope: [{item["scope"]}]({result_link(item["node"], records, blueprint)}).')
+            statements += [f'  Declaration: `{name}`.' for name in declarations]
+            if not declarations:
+                statements.append('  This auxiliary assessment links to source; it has no separate Blueprint declaration inventory or ledger certificate.')
+        statements.append('')
     footer = [
         '## What the July papers would require here', '',
         'Both July results need a local moment-measure construction and its regularity theory.',
@@ -128,8 +200,7 @@ def render(catalog, records, blueprint):
         'tensor estimates. The quadratic-form paper additionally needs its matrix inequality,',
         'Stein/H⁻¹ argument and the conversion through the directional third-moment parameter.',
         'These are missing mathematical developments, despite our existing density, closed-form',
-        'and Euclidean calculus infrastructure. The existing CMH and spectral route propositions',
-        'are conditional research routes and do not certify either paper.', '',
+        'and Euclidean calculus infrastructure. Existing supporting tools do not certify either paper.', '',
         '## Source and coverage notes', '',
         '- July statements are pinned to `2607.23307v1` and `2607.24164v1`. Both are preprints;',
         '  this map checks bibliographic data, main statements and normalization, not every proof step.',
@@ -140,7 +211,7 @@ def render(catalog, records, blueprint):
         '  Book metadata was checked on the publisher pages; detailed book-page correspondences',
         '  use the existing source audits, rather than a fresh reading of the complete monographs.',
         '- General auxiliary progress, such as locally Lipschitz coarea and smooth recovery, is listed',
-        '  in the [proof route map](README.md#proof-progress-tree); it is not automatically credited',
+        '  in the [supporting node register](STATUS.md); it is not automatically credited',
         '  as a completed fragment of every paper that could use it.',
         '- No percentage of a paper is reported: result counts do not measure proof coverage.', '',
         '### Additional primary-source metadata', '',
@@ -156,7 +227,7 @@ def render(catalog, records, blueprint):
               'The [paper-by-paper literature register](LITERATURE.md) records statements, publication',
               'versions, exact local coverage and remaining work. The general KLS-bound milestones',
               'in this diagram are all still pending locally; completed supporting results appear in',
-              'the register and proof map. Dashed edges mean chronology or related methods, not proof.', '',
+              'the paper and node registers. Dashed edges mean chronology or related methods, not proof.', '',
               '```mermaid', tree.rstrip(), '```', '',
               '| Latest source | Literature result | Our Lean status |', '| --- | --- | --- |']
     for key in ('ChenKlartag2026', 'Letwin2026'):
@@ -165,4 +236,4 @@ def render(catalog, records, blueprint):
     readme += ['', 'Here ψ is the inverse Cheeger constant, so its logarithmic exponent is half the',
                'Poincaré exponent. The sharp thin-shell result does not resolve dimension-free KLS.',
                'See the [full tables and normalization](LITERATURE.md#constant-conventions).']
-    return {'LITERATURE.md': '\n'.join(header + tables + footer), 'LITERATURE.mmd': tree}, '\n'.join(readme)
+    return {'LITERATURE.md': '\n'.join(header + tables + statements + footer), 'LITERATURE.mmd': tree}, '\n'.join(readme)

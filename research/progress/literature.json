@@ -5,20 +5,20 @@
   "scope": "Selected foundational sources, the main general KLS bound milestones, and the connected moment-map, slicing and thin-shell developments through July 2026; not an exhaustive bibliography or a paper-by-paper proof verification.",
   "groups": [
     {
-      "id": "frontier",
-      "title": "General KLS bounds and stochastic localization"
+      "id": "foundations",
+      "title": "Analytic foundations and selected local coverage"
     },
     {
-      "id": "thin_shell",
-      "title": "Thin shell and slicing"
+      "id": "frontier",
+      "title": "General KLS bounds and stochastic localization"
     },
     {
       "id": "moment",
       "title": "Moment measures and Stein kernels"
     },
     {
-      "id": "foundations",
-      "title": "Analytic foundations and selected local coverage"
+      "id": "thin_shell",
+      "title": "Thin shell and slicing"
     },
     {
       "id": "surveys",
@@ -239,7 +239,22 @@
           "node": "diagram:BV",
           "scope": "Published finite-mass target / finite-on-bounded measure scope: bounded-support reduction, full coarea radius chain, lower-to-upper recovery, both actual recoveries and both relaxed identities; convex closed-support Cheeger identification"
         }
-      ]
+      ],
+      "target_declarations": [
+        {
+          "name": "FunctionalInequalities.KLS.MetricBV.lipschitzRelaxation_eq_perimeter_of_measure_lt_top",
+          "source": "formalization/FunctionalInequalities/KLS/Geometry/Perimeter/TestClassRelaxation.lean"
+        },
+        {
+          "name": "FunctionalInequalities.KLS.MetricBV.relaxedMinkowskiContent_eq_perimeter_of_finite_on_bounded",
+          "source": "formalization/FunctionalInequalities/KLS/Geometry/Perimeter/RelaxedMinkowski.lean"
+        },
+        {
+          "name": "FunctionalInequalities.KLS.MetricBV.relaxedUpperMinkowskiContent_eq_perimeter_of_finite_on_bounded",
+          "source": "formalization/FunctionalInequalities/KLS/Geometry/Perimeter/RelaxedMinkowski.lean"
+        }
+      ],
+      "target_review": "research/decisions/2026-10-01-issue-8.md#admg-target-review"
     },
     {
       "id": "LeeVempala2024",
@@ -582,6 +597,54 @@
       "from": "Fathi2019",
       "to": "Letwin2026",
       "kind": "context"
+    }
+  ],
+  "priorities": [
+    {
+      "rank": 1,
+      "papers": [
+        "BGL2014"
+      ],
+      "target": "Audit the strongly log-concave Bakry–Émery C_P ≤ 1/ρ endpoint and select a separate Brascamp–Lieb source statement.",
+      "next_step": "Pin the exact source theorem, positive-curvature assumptions and normalization; assess the existing Γ₂ and semigroup interfaces before proof work."
+    },
+    {
+      "rank": 2,
+      "papers": [
+        "KLS1995"
+      ],
+      "target": "Localization lemma and the dimension-dependent trace/covariance bound.",
+      "next_step": "Separate the localization theorem from the Poincaré consequence; audit denominator and constant conventions before defining either Lean target."
+    },
+    {
+      "rank": 3,
+      "papers": [
+        "Milman2009"
+      ],
+      "target": "Concentration implies a Cheeger bound under the source convexity hypotheses.",
+      "next_step": "Pin the main theorem and its concentration/curvature assumptions; compare its analytic inputs with the current finite-dimensional Cheeger–Buser API."
+    },
+    {
+      "rank": 4,
+      "papers": [
+        "Eldan2013",
+        "LeeVempala2024",
+        "Chen2021",
+        "KlartagLehec2022",
+        "Klartag2023"
+      ],
+      "target": "Published stochastic-localization theorems and quantitative KLS bounds.",
+      "next_step": "Reuse Mathlib probability foundations; build an isolated audited client of pinned external stochastic APIs before selecting the missing vector/matrix SDE bridges."
+    },
+    {
+      "rank": 5,
+      "papers": [
+        "KlartagLehecThin2025",
+        "ChenKlartag2026",
+        "Letwin2026"
+      ],
+      "target": "Selected 2025–2026 thin-shell and quadratic-form results.",
+      "next_step": "Retain exact preprint versions and assess moment-measure, stochastic and matrix-estimate dependencies; do not credit exploratory hypotheses as completed paper theorems."
     }
   ]
 }
