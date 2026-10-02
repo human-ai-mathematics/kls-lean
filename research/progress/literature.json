@@ -395,9 +395,18 @@
             "label": "Cheeger constant on the line",
             "statement": "For log-concave μ on R: 1/(3Var) ≤ Is²(μ) ≤ 2/Var, with equality cases the uniform and two-sided exponential laws; Is(μ) = 2f(m) at the median.",
             "uses": [],
-            "relation": "same",
-            "declarations": [],
-            "note": "Locally only weaker bounds are proved: Ψ² ≤ 12 C_P on the line and Ψ² ≤ π C_P in general, which with C_P ≤ 4 Var do not give the constant 3."
+            "relation": "partial",
+            "declarations": [
+              {
+                "name": "FunctionalInequalities.KLS.LineDensity.minkowskiConstant_eq_two_mul",
+                "source": "formalization/FunctionalInequalities/KLS/LogConcave/Line/CheegerVariance.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.LogConcave.inv_minkowskiConstant_sq_le_three_mul_evariance",
+                "source": "formalization/FunctionalInequalities/KLS/LogConcave/Line/CheegerVariance.lean"
+              }
+            ],
+            "note": "Formalized: Is(μ) = 2f(m) at a median, and the lower bound 1/(3 Var) ≤ Is² as Is⁻² ≤ 3 Var for every log-concave law on the line. Not formalized: the upper bound Is² ≤ 2/Var and the equality cases."
           },
           {
             "id": "C42",

@@ -110,4 +110,15 @@ Nothing is pushed.
   criterion, pointwise bound, a.e. bound, paper statement); the proof is the paper's, through the
   existing hazard-rate lemmas `mul_measureReal_Ioi_le` and `mul_cdf_le`. Proofs by the GPT worker,
   rechecked independently; no warnings.
+  Full local verifier for the Lemma 42 / Lemma A.2 tree: 184 gates, 358 replayed modules
+  (`build/verification/20261002T195728.117787Z/report.json`); committed as `4212bb7`.
+- Extra block: Bobkov 1999 Proposition 4.1, partial, in `KLS/LogConcave/Line/CheegerVariance.lean`
+  (namespaces `KLS.LineDensity` and `KLS.LogConcave`; owner: the one-dimensional log-concave
+  family). Proved: `Is(μ) = 2 f(m)` at a median, through the half-line test set `(-∞, m]`, and the
+  lower bound `1/(3 Var) ≤ Is²`, written `Is⁻² ≤ 3 Var` for every log-concave law on the line. The
+  lower bound composes two existing results (`two_mul_le_minkowskiConstant`, `one_div_le_variance`);
+  the earlier map note said the constant 3 was out of reach and is corrected. The upper bound
+  `Is² ≤ 2/Var` and the equality cases are not formalized, so the map entry is ◐. Eight statements
+  by Claude (two of them split out after a failed round). Proofs by the GPT worker; Claude closed one
+  `positivity` side goal left in the last round and removed a dead `<;> positivity`.
 

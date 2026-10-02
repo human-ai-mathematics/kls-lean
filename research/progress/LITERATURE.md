@@ -268,7 +268,7 @@ flowchart LR
     Bobkov1999_L31["✓ Lemma 3.1 (Borell)<br/>Borell's lemma"]
     Bobkov1999_L32["○ Lemma 3.2<br/>Functional Gaussian isoperimetry"]
     Bobkov1999_L33["○ Lemma 3.3<br/>Gaussian isoperimetry gives log-Sobolev"]
-    Bobkov1999_P41["○ Proposition 4.1<br/>Cheeger constant on the line"]
+    Bobkov1999_P41["◐ Proposition 4.1<br/>Cheeger constant on the line"]
     Bobkov1999_C42["○ Corollary 4.2<br/>Hensley-type section ratio"]
     Bobkov1999_C43["⇑ Corollary 4.3<br/>Spectral gap on the line"]
     Bobkov1999_P44["○ Proposition 4.4<br/>Log-Sobolev constant on the line"]
@@ -290,8 +290,10 @@ flowchart LR
     Bobkov1999_L31 --> Bobkov1999_P51
     classDef lemma_formalized fill:#dbeafe,stroke:#2563eb,color:#1e3a8a;
     class Bobkov1999_L31 lemma_formalized;
+    classDef lemma_partial fill:#fff3df,stroke:#c88719,color:#66420d;
+    class Bobkov1999_P41 lemma_partial;
     classDef lemma_pending fill:#fee2e2,stroke:#dc2626,color:#991b1b;
-    class Bobkov1999_T11,Bobkov1999_T12,Bobkov1999_T13,Bobkov1999_P21,Bobkov1999_C22,Bobkov1999_C23,Bobkov1999_L32,Bobkov1999_L33,Bobkov1999_P41,Bobkov1999_C42,Bobkov1999_P44,Bobkov1999_P51,Bobkov1999_P52 lemma_pending;
+    class Bobkov1999_T11,Bobkov1999_T12,Bobkov1999_T13,Bobkov1999_P21,Bobkov1999_C22,Bobkov1999_C23,Bobkov1999_L32,Bobkov1999_L33,Bobkov1999_C42,Bobkov1999_P44,Bobkov1999_P51,Bobkov1999_P52 lemma_pending;
     classDef lemma_improved fill:#dcfce7,stroke:#15803d,color:#14532d;
     class Bobkov1999_C43 lemma_improved;
     style Bobkov1999_T11 stroke-width:3px
@@ -308,7 +310,7 @@ flowchart LR
 | Lemma 3.1 (Borell) | For symmetric convex B with θ = μ(B) > 1/2 and t ≥ 1: 1 − μ(tB) ≤ (1 − θ)((1 − θ)/θ)^((t−1)/2). | ✓ Formalized in Lean | [`one_sub_measure_smul_le`](../../formalization/FunctionalInequalities/KLS/LogConcave/Tail.lean) | For every log-concave law on a finite-dimensional real normed space. The Lean statement assumes B measurable, which the paper's μ(B) presupposes (a convex set need not be Borel). |
 | Lemma 3.2 | If μ⁺(A) ≥ cI(μ(A)) for the Gaussian isoperimetric function I, then c[I(∫f) − ∫I(f)] ≤ ∫&#124;∇f&#124; for locally Lipschitz f with values in [0, 1]. | ○ Not yet formalized | — |  |
 | Lemma 3.3 | Inequality (3.10) implies (c²/2)Ent(f²) ≤ ∫&#124;∇f&#124;² dμ. | ○ Not yet formalized | — |  |
-| Proposition 4.1 | For log-concave μ on R: 1/(3Var) ≤ Is²(μ) ≤ 2/Var, with equality cases the uniform and two-sided exponential laws; Is(μ) = 2f(m) at the median. | ○ Not yet formalized | — | Locally only weaker bounds are proved: Ψ² ≤ 12 C_P on the line and Ψ² ≤ π C_P in general, which with C_P ≤ 4 Var do not give the constant 3. |
+| Proposition 4.1 | For log-concave μ on R: 1/(3Var) ≤ Is²(μ) ≤ 2/Var, with equality cases the uniform and two-sided exponential laws; Is(μ) = 2f(m) at the median. | ◐ Partial or statement only | [`minkowskiConstant_eq_two_mul`](../../formalization/FunctionalInequalities/KLS/LogConcave/Line/CheegerVariance.lean)<br/>[`inv_minkowskiConstant_sq_le_three_mul_evariance`](../../formalization/FunctionalInequalities/KLS/LogConcave/Line/CheegerVariance.lean) | Formalized: Is(μ) = 2f(m) at a median, and the lower bound 1/(3 Var) ≤ Is² as Is⁻² ≤ 3 Var for every log-concave law on the line. Not formalized: the upper bound Is² ≤ 2/Var and the equality cases. |
 | Corollary 4.2 | For a convex body satisfying the isotropy condition, central sections by hyperplanes cutting B into equal volumes have ratio at most √6. | ○ Not yet formalized | — |  |
 | Corollary 4.3 | For log-concave μ on R: 1/(12 Var) ≤ λ₁ ≤ 1/Var, i.e. Var ≤ C_P ≤ 12 Var. | ⇑ Stronger result or alternative route | [`localSlope_constant_le_four_variance`](../../formalization/FunctionalInequalities/KLS/LogConcave/Line/SharpPoincare.lean)<br/>[`localSlope_constant_le_twelve_variance_of_four`](../../formalization/FunctionalInequalities/KLS/LogConcave/Line/SharpPoincare.lean)<br/>[`evariance_le_smoothTest_constant`](../../formalization/FunctionalInequalities/KLS/LogConcave/Line/Buser.lean) | Sharper upper constant C_P ≤ 4 Var, proved by a different argument that does not use Proposition 4.1; the paper's 12 Var follows as a corollary, and Var ≤ C_P is the linear test. |
 | Proposition 4.4 | For log-concave μ on R: 1/(24‖ξ − Eξ‖²_ψ) ≤ ρ ≤ 8/(3‖ξ − Eξ‖²_ψ) with ψ(x) = exp(x²) − 1. | ○ Not yet formalized | — |  |

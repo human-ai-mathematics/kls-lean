@@ -83,6 +83,7 @@ import FunctionalInequalities.Energy.Euclidean.Slope.Density
 import FunctionalInequalities.Energy.Cheeger.Identification
 import FunctionalInequalities.KLS.LogConcave.Line.Buser
 import FunctionalInequalities.KLS.LogConcave.Line.DensityBound
+import FunctionalInequalities.KLS.LogConcave.Line.CheegerVariance
 import FunctionalInequalities.Poincare.LocalSlope.Gradient
 import FunctionalInequalities.Analysis.Semigroup.Resolvent.Form
 import FunctionalInequalities.Analysis.Semigroup.Resolvent.Basic
