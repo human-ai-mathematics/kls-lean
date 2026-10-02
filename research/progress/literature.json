@@ -1252,7 +1252,289 @@
       "locator": "Main deviation estimate",
       "result": "Quantitative radial concentration across thin-shell and large-deviation scales for isotropic log-concave laws.",
       "remaining": "Radial deviation estimates and their thin-shell/isoperimetric consequences are not locally formalized.",
-      "local_results": []
+      "local_results": [],
+      "lemma_map": {
+        "source_version": "arXiv:1011.0943v3",
+        "source_url": "https://arxiv.org/abs/1011.0943v3",
+        "reviewed_on": "2026-10-03",
+        "standing_assumptions": "C, c, c_1, c_2, C' denote universal positive constants independent of n and all other parameters, changing between occurrences. X is an isotropic random vector in R^n (E X = 0, E X tensor X = Id) with log-concave density; X is psi_alpha with constant b_alpha (alpha in [1,2]) if (E|<X,y>|^p)^{1/p} <= b_alpha p^{1/alpha} (E|<X,y>|^2)^{1/2} for all p >= 2 and y (always true for alpha = 1 with b_1 <= C, and b_alpha >= 2^{-1/alpha}). A in M_n(R) with ||A||_HS^2 = n, eta = n/(||A||_op^2 b_alpha^2), G_n an independent standard Gaussian vector and Y = (AX + G_n)/sqrt 2 with density g. Throughout the proofs eta (hence n) is assumed larger than a universal constant. SO(n) carries the bi-invariant metric |B|^2 = ||B||_HS^2/2 on antisymmetric B; Z^+_q(w) is the one-sided L_q-centroid body h(y) = (2 int <x,y>_+^q w)^{1/q}, Z_q(w) the standard one with h(y) = (int |<x,y>|^q w)^{1/q}, K_q(w) Ball's body with gauge (q int_0^infty t^{q-1} w(tx) dt)^{-1/q}, and d(K,L) = inf{C_2/C_1 : C_1 L in K in C_2 L} the geometric distance.",
+        "omitted": "Every numbered statement (Theorems 1.1, 1.2, 1.5, 2.1, 2.5, 3.1, 4.1; Lemmas 2.2, 2.3, A.1-A.4; Corollaries 1.4, 2.4; Proposition 2.6; Remarks 1.3, 3.2, 3.3) is listed; no numbered statement is purely expository. Not listed: the unnumbered Theorem in Section 2.2 (K. Ball, Klartag: K_q(w) gauge is a possibly non-even norm), the unnumbered conjectures in the Introduction (Anttila-Ball-Perissinaki thin shell, Bobkov-Koldobsky, KLS in Poincare form; none has a Lean declaration other than the target hole FunctionalInequalities.KLS.kls, which is deliberately not mapped), and cited displayed facts used in proofs: Paouris' estimates (1.3)-(1.5), Klartag's and Fleury's bounds, Borell's concavity (1.18), the SO(n) log-Sobolev inequality (1.19) and reverse Holder bound (1.20), the inclusions (2.2)-(2.3) and (2.7), the polar identity (2.8), Prekopa-Leindler, Bobkov's Cheeger-variance theorem, and Klartag's Gaussian-convolution reduction [KlartagCLP, Prop. 4.1]. The unnumbered definitions of isotropy and log-concavity are listed (DISO, DLC) because Lean declarations state them.",
+        "items": [
+          {
+            "id": "DISO",
+            "locator": "Section 1 (unnumbered definition of isotropy)",
+            "label": "Isotropic random vector",
+            "statement": "A random vector X in R^n (and its density) is isotropic if E X = 0 and E X tensor X = Id, i.e. barycenter at the origin and identity covariance; then E|AX|^2 = ||A||_HS^2 for every n by n matrix A.",
+            "uses": [],
+            "relation": "same",
+            "declarations": [
+              {
+                "name": "FunctionalInequalities.KLS.Isotropic",
+                "source": "formalization/FunctionalInequalities/KLS/Isotropic.lean"
+              }
+            ],
+            "note": "Unnumbered definition, listed because a Lean declaration states it. Lean states the three conditions (MemLp id 2, zero mean, centered covariance operator equal to the identity) coordinate-free on a finite-dimensional real inner-product space and for arbitrary probability laws; in orthonormal coordinates this is the paper's definition. The paper always adds a log-concave density; that hypothesis is DLC."
+          },
+          {
+            "id": "DLC",
+            "locator": "Section 1 (unnumbered definition of log-concavity)",
+            "label": "Log-concave density",
+            "statement": "A function g : R^n -> R_+ is log-concave if -log g : R^n -> R union {+infinity} is convex; the paper's random vectors X have log-concave densities with respect to Lebesgue measure on R^n.",
+            "uses": [],
+            "relation": "partial",
+            "declarations": [
+              {
+                "name": "FunctionalInequalities.KLS.LogConcave",
+                "source": "formalization/FunctionalInequalities/KLS/Definitions.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.IsBorellDensity.compactLogConcave",
+                "source": "formalization/FunctionalInequalities/KLS/LogConcave/Density/FromBorell.lean"
+              }
+            ],
+            "note": "Unnumbered definition, listed because Lean states a counterpart. Lean's LogConcave is Borell's compact-set inequality mu(tK0+(1-t)K1) >= mu(K0)^t mu(K1)^(1-t) for probability laws on a finite-dimensional normed space (degenerate supports allowed). IsBorellDensity.compactLogConcave proves that a law with a pointwise log-concave density is LogConcave (Prekopa-Leindler); the paper's full-dimensional density hypothesis is therefore a special case, but log-concavity of functions itself is not a separate Lean definition."
+          },
+          {
+            "id": "T11",
+            "locator": "Theorem 1.1",
+            "label": "Deviation and thin-shell estimates",
+            "statement": "If X is isotropic in R^n with log-concave density and psi_alpha (alpha in [1,2]) with constant b_alpha, and A in M_n(R) has ||A||_HS^2 = n, then P(||AX| - sqrt n| >= t sqrt n) <= C exp(-c eta^{alpha/2} min(t^{2+alpha}, t)) for all t >= 0, where eta = n/(||A||_op^2 b_alpha^2) (1.8), with universal c, C > 0. In particular sqrt(Var|AX|) <= C n^{1/2} eta^{-alpha/(2(2+alpha))} (1.9); the text adds the one-sided forms (1.10) without the prefactor C and (1.11) with max(t^{2+alpha}, log(c_2/(1-t))), and for alpha = 1, A = Id the thin-shell bound sqrt(Var|X|) <= C n^{1/3} (1.12).",
+            "uses": [
+              "T41",
+              "T31",
+              "DISO",
+              "DLC"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": "Main theorem: it is the headline estimate of the abstract and of the register entry (Main deviation estimate), and contains the thin-shell bound sigma_n <= C n^{1/3} cited downstream (Eldan 2013, Lee-Vempala). The authors call the moment estimates of Theorem 1.2 the main result and say Theorem 1.1 is essentially equivalent to them; logically (1.7) is derived in Section 4 from Theorem 4.1 for Y = (AX+G_n)/sqrt 2 via Klartag's reduction [KlartagCLP, Prop. 4.1], (1.10) via the moment reduction (4.7) from Theorem 3.1, and (1.11) additionally uses Paouris' small-ball estimate (1.5), so the full Theorem 1.2 depends on Theorem 1.1 rather than conversely. No Lean counterpart: radial moments, psi_alpha, deviation and thin-shell bounds are not formalized. Marked main as the register's target (the deviation estimate); the authors call Theorem 1.2 their main result, and its proof uses this theorem.",
+            "main": true
+          },
+          {
+            "id": "T12",
+            "locator": "Theorem 1.2",
+            "label": "Moment estimates for |AX|",
+            "statement": "Under the hypotheses of Theorem 1.1, for 1 <= |p-2| <= c_1 eta^{alpha/(2(alpha+2))} one has |(E|AX|^p)^{1/p}/(E|AX|^2)^{1/2} - 1| <= C |p-2|/eta^{alpha/(alpha+2)}, and for c_1 eta^{alpha/(2(alpha+2))} <= |p-2| <= c_2 eta^{alpha/2} one has |(E|AX|^p)^{1/p}/(E|AX|^2)^{1/2} - 1| <= C (|p-2|/eta^{alpha/2})^{1/(alpha+1)}, with the L_0-norm read as exp(E log|AX|).",
+            "uses": [
+              "T31",
+              "T11"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": "Called the main result by the authors. Proved in Section 4: positive moments for p >= 3 from Theorem 3.1 via (4.7); the small-range positive moments via Fleury's Lemma 6 applied to the deviations of Theorem 1.1; negative moments by integrating (4.8), which combines (1.11)-type bounds with Paouris' small-ball estimate. No Lean counterpart."
+          },
+          {
+            "id": "R13",
+            "locator": "Remark 1.3",
+            "label": "Scale-invariant normalization",
+            "statement": "The assumption ||A||_HS^2 = n is only cosmetic: scaling X, all deviation estimates hold around (E|AX|^2)^{1/2} = ||A||_HS with the scale-invariant parameter eta = ||A||_HS^2/(b_alpha^2 ||A||_op^2).",
+            "uses": [
+              "T11",
+              "T12"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": "Reformulation remark, no separate proof. No Lean counterpart."
+          },
+          {
+            "id": "C14",
+            "locator": "Corollary 1.4",
+            "label": "Cheeger bound n^{-5/12}",
+            "statement": "If mu is a probability measure on R^n with isotropic log-concave density, then its Cheeger constant satisfies D_Che(mu) >= c n^{-5/12} for a universal c > 0 (improving to c n^{-3/8} when the density is psi_2).",
+            "uses": [
+              "T11",
+              "DISO",
+              "DLC"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": "Proved by combining Bobkov's theorem D_Che(mu)^2 >= c/(E|X| sqrt(Var|X|)) (cited, not proved) with the thin-shell bound (1.12). Not mapped: Lean's literatureConstant_le_four_mul_inverseScale_sq and inverseScale_sq_le_pi_literature compare the Poincare and Minkowski-Cheeger constants of a fixed log-concave law, but neither Bobkov's variance bound nor any dimension-dependent lower bound on the Cheeger constant is formalized, so no Lean statement states or restricts this corollary."
+          },
+          {
+            "id": "T15",
+            "locator": "Theorem 1.5",
+            "label": "Improved log-Lipschitz bound",
+            "statement": "Under the hypotheses of Theorem 1.1, with Y = (AX + G_n)/sqrt 2 and h_{k,p}(u) = vol(S^{k-1}) int_0^infty t^{p+k-1} pi_{u(E_0)} g(t u(theta_0)) dt on SO(n) (g the density of Y), if p >= -k+1 then the log-Lipschitz constant satisfies L_{k,p} <= C ||A||_op b_alpha max(k,p)^{1/alpha+1/2}.",
+            "uses": [
+              "C24"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": "Introduction version of Corollary 2.4 (which uses ||A||_op >= 1, automatic when ||A||_HS^2 = n). No Lean counterpart; SO(n) Riemannian structure and h_{k,p} are not formalized."
+          },
+          {
+            "id": "T21",
+            "locator": "Theorem 2.1",
+            "label": "Log-Lipschitz via centroid bodies",
+            "statement": "For Y with log-concave density g on R^n and barycenter 0, integers 1 <= k <= n, real p >= -k+1, E_0 in G_{n,k} and theta_0 in S(E_0), the log-Lipschitz constant of h_{k,p} on SO(n) (metric |B|^2 = ||B||_HS^2/2) is at most C max(k,p) d(Z^+_{max(k,p)}(g), B_2^n), where Z^+_q is the one-sided L_q-centroid body h_{Z^+_q(w)}(y) = (2 int <x,y>_+^q w)^{1/q} and d is the geometric distance.",
+            "uses": [
+              "T25",
+              "L22"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": "Proof via Type-1/2/3 movements using K. Ball's K_q(w) norm theorem (unnumbered, cited from Ball and Klartag), the inclusions (2.3) between the Z^+_q (uses Lemma 2.2), projection and Theorem 2.5. No Lean counterpart."
+          },
+          {
+            "id": "L22",
+            "locator": "Lemma 2.2 (Grunbaum)",
+            "label": "Grunbaum half-line mass bound",
+            "statement": "If X_1 is a real random variable with log-concave density and barycenter at the origin, then 1/e <= P(X_1 >= 0) <= 1 - 1/e.",
+            "uses": [],
+            "relation": "same",
+            "declarations": [],
+            "note": "Cited from Grunbaum (simplified proofs in Fradelizi, Bobkov); no proof in the paper. No Lean counterpart."
+          },
+          {
+            "id": "L23",
+            "locator": "Lemma 2.3",
+            "label": "Centroid bodies of Gaussian convolution",
+            "statement": "Let X be isotropic in R^n with log-concave density, A in M_n(R), Y = (AX + G_n)/sqrt 2 with density g. Then for all q >= 2: Z^+_q(g) contains c sqrt q B_2^n, and if X is psi_alpha (alpha in [1,2]) with constant b_alpha then Z^+_q(g) is contained in (C_1 ||A||_op b_alpha q^{1/alpha} + C_2 sqrt q) B_2^n.",
+            "uses": [
+              "L22",
+              "DISO",
+              "DLC"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": "Lower bound uses P(<AX,theta> >= 0) >= 1/e from Lemma 2.2 and Gaussian moments. No Lean counterpart."
+          },
+          {
+            "id": "C24",
+            "locator": "Corollary 2.4",
+            "label": "Distance and Lipschitz bound",
+            "statement": "Under the hypotheses of Lemma 2.3 with X psi_alpha (alpha in [1,2]) with constant b_alpha, d(Z^+_q(g), B_2^n) <= C_1 (1 + ||A||_op b_alpha q^{1/alpha - 1/2}); consequently, when ||A||_op >= 1, L_{k,p} <= C_2 ||A||_op b_alpha max(k,p)^{1/alpha+1/2}.",
+            "uses": [
+              "L23",
+              "T21"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": "Immediate from Lemma 2.3 and Theorem 2.1. No Lean counterpart."
+          },
+          {
+            "id": "T25",
+            "locator": "Theorem 2.5",
+            "label": "Distance of K_{m+p} to ball",
+            "statement": "If w is log-concave on R^m with 0 < int w < infinity and barycenter at the origin, then for every p >= -m+1, d(K_{m+p}(w), B_2^m) <= C max(m/(m+p), 1) d(Z^+_{max(p,m)}(w), B_2^m).",
+            "uses": [
+              "P26"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": "Uses the cited inclusions (2.7) between K_q bodies, the polar identity Z^+_q(K_{m+q}(w)) = Z^+_q(w) (2.8), Proposition 2.6 and Stirling's formula. No Lean counterpart."
+          },
+          {
+            "id": "P26",
+            "locator": "Proposition 2.6",
+            "label": "Comparing K_{m+q} and Z^+_q",
+            "statement": "With w as in Theorem 2.5 and any q >= 1, C_1 Z^+_q(K_{m+q}(w)) is contained in vol(K_{m+q}(w))^{1/q} K_{m+q}(w), which is contained in C_2 (Gamma(m+q+1)/(Gamma(m) Gamma(q+1)))^{1/q} Z^+_q(K_{m+q}(w)).",
+            "uses": [
+              "A1",
+              "A2",
+              "A3"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": "Proof in the Appendix; the non-even (non-centrally-symmetric) case is the new part. No Lean counterpart."
+          },
+          {
+            "id": "T31",
+            "locator": "Theorem 3.1",
+            "label": "Moment estimates for Y",
+            "statement": "Let X be isotropic in R^n with log-concave density, psi_alpha (alpha in [1,2]) with constant b_alpha, A in M_n(R) with ||A||_HS^2 = n, and Y = (AX + G_n)/sqrt 2 with G_n an independent standard Gaussian. Then for |p| <= c eta^{alpha/2}, 1 - C (|p-2|/eta^{alpha/2})^{1/(alpha+1)} <= (E|Y|^p)^{1/p}/(E|Y|^2)^{1/2} <= 1 + C (|p-2|/eta^{alpha/2})^{1/(alpha+1)}.",
+            "uses": [
+              "C24",
+              "DISO",
+              "DLC"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": "Proof: Fleury's passage to SO(n) and Grassmann averaging, entropy decomposition of d/dp log (E|Y|^p)^{1/p}, the SO(n) log-Sobolev inequality and Herbst reverse Holder bound (cited), Borell's concavity of q -> log(int t^q w/Gamma(q+1)) (cited), Stirling, Corollary 2.4, optimization of k, and Fleury's argument near p = 0. No Lean counterpart."
+          },
+          {
+            "id": "R32",
+            "locator": "Remark 3.2",
+            "label": "Sharpness of exponent balance",
+            "statement": "For alpha = 1 and A = Id, if L_{k,p} <= C p^beta k^gamma for 2 <= p <= k, the proof recovers the sharp large deviation P(|X| >= C sqrt n) <= exp(-sqrt n) if and only if beta + gamma = 3/2; the paper's bounds give beta = 0, gamma = 3/2.",
+            "uses": [
+              "T31",
+              "C24"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": "Proof-analysis remark, not proved in detail; speculates that beta = 1, gamma = 1/2 should hold. No Lean counterpart."
+          },
+          {
+            "id": "R33",
+            "locator": "Remark 3.3 (using Bobkov)",
+            "label": "Bobkov concavity alternative",
+            "statement": "The Stirling computation behind (3.11) can be avoided using Bobkov's result that for any log-concave density w on R_+, q -> log(int_0^infty t^q w(t) dt / q^q) is concave on R_+.",
+            "uses": [],
+            "relation": "same",
+            "declarations": [],
+            "note": "Cited result of Bobkov; no proof in the paper. No Lean counterpart."
+          },
+          {
+            "id": "T41",
+            "locator": "Theorem 4.1",
+            "label": "Deviation estimates for Y",
+            "statement": "Under the hypotheses of Theorem 3.1, P(|Y| >= (1+t) sqrt n) <= exp(-c eta^{alpha/2} min(t^{2+alpha}, t)) for all t >= 0, and P(|Y| <= (1-t) sqrt n) <= C exp(-c eta^{alpha/2} max(t^{2+alpha}, log(c_2/(1-t)))) for all t in [0,1].",
+            "uses": [
+              "T31"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": "Markov-Chebyshev with optimized p from Theorem 3.1, plus Borell's lemma (cited) for t >= t_0. No Lean counterpart."
+          },
+          {
+            "id": "A1",
+            "locator": "Lemma A.1",
+            "label": "Support of Z^+_q(K)",
+            "statement": "For a convex body K in R^m, theta in S^{m-1} and f_theta the marginal of 1_K on span(theta): (f_theta(0)/||f_theta||_infty)^{1/q} (Gamma(m) Gamma(q+1)/Gamma(m+q+1))^{1/q} h_K(theta) <= h_{Z^+_q(K)}(theta)/(2 vol(K intersect H^+_theta))^{1/q} <= h_K(theta).",
+            "uses": [],
+            "relation": "same",
+            "declarations": [],
+            "note": "Left inequality follows Paouris [Lemma 4.1 of Small-Diameter] using (m-1)^{-1}-concavity of marginals; only sketched. No Lean counterpart."
+          },
+          {
+            "id": "A2",
+            "locator": "Lemma A.2",
+            "label": "Log-concave density at zero",
+            "statement": "If mu = f(x)dx is a log-concave probability measure on R and eps <= int_0^infty f <= 1 - eps for some eps > 0, then f(0) >= eps ||f||_infty.",
+            "uses": [],
+            "relation": "same",
+            "declarations": [],
+            "note": "Folklore (Fradelizi); proof via log-concavity of the distribution function and its tail (Prekopa-Leindler). No Lean counterpart."
+          },
+          {
+            "id": "A3",
+            "locator": "Lemma A.3",
+            "label": "Half-space mass of K_{m+q}",
+            "statement": "If w is log-concave on R^m with barycenter at the origin, then for every theta in S^{m-1}, (vol(K_{m+q}(w) intersect H^+_theta)/vol(K_{m+q}(w)))^{1/q} >= c > 0.",
+            "uses": [
+              "L22"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": "Uses the cited inclusions (2.7), Stirling and Lemma 2.2 for the marginal of w. No Lean counterpart."
+          },
+          {
+            "id": "A4",
+            "locator": "Lemma A.4",
+            "label": "Lower bound for Z^+_2",
+            "statement": "If g : R^m -> R_+ is a log-concave isotropic density, then Z^+_2(g) contains c B_2^m, e.g. with c = (3 e^2 (1 + (e-1)^3))^{-1/2}.",
+            "uses": [
+              "L22",
+              "DISO",
+              "DLC"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": "Proof compares one-dimensional moments via (2.7) and uses Lemma 2.2. No Lean counterpart."
+          }
+        ]
+      }
     },
     {
       "id": "Eldan2013",
@@ -2205,7 +2487,229 @@
       "diagram": "2015 · Cordero-Erausquin–Klartag<br/>Moment-measure existence",
       "additional_sources": [
         "https://webusers.imj-prg.fr/~dario.cordero/Docs/articles/2015_moment_measures.pdf"
-      ]
+      ],
+      "lemma_map": {
+        "source_version": "arXiv:1304.0630v1",
+        "source_url": "https://arxiv.org/abs/1304.0630v1",
+        "reviewed_on": "2026-10-03",
+        "standing_assumptions": "n ≥ 1. Convex functions ψ: R^n → R ∪ {+∞} are allowed to take the value +∞ (convexity is required where both values are finite; exp(−∞) = 0). For convex ψ with 0 < ∫ e^{−ψ} < ∞, μ_ψ is the measure with density e^{−ψ} on R^n and ∇ψ is defined almost everywhere in the interior of {ψ < +∞}. The Legendre transform is ψ*(y) = sup_{ψ(x)<∞} [x·y − ψ(x)]; ∂ψ is the subgradient; D²f is the Aleksandrov Hessian of a convex f; Supp(μ) is the closed support, conv its convex hull, H^{n−1} the (n−1)-dimensional Hausdorff measure, κ_n the volume of the Euclidean unit ball, S^{n−1} the unit sphere. Cited, unproved inputs: integrability of e^{−ψ} iff liminf_{|x|→∞} ψ(x)/|x| > 0 (display (7), from Klartag, Lemma 2.1), (13), Prékopa's inequality (17) and Dubuc's characterisation of its equality cases, the Brenier map and McCann's weak regularity (20), the Rogers–Shephard inequality, Fradelizi's inequality ψ(0) ≤ inf ψ + n at the barycenter, the functional Santaló inequality of Artstein–Klartag–Milman, Rockafellar's Theorem 10.9 and Berman–Berndtsson Lemma 2.7. Numbering: Theorem, Proposition, Lemma, Corollary, Remark, Notation, Fact and Conjecture share one global counter (theo); Definition has its own counter; no section-relative numbering and no appendix; no Corollary, Notation, Fact, Conjecture or Claim occurs. The printed numbers Definitions 1–2 and Theorem/Proposition/Lemma/Remark 1–17 were computed from the LaTeX counters and checked against the PDF text.",
+        "omitted": "All 19 numbered statements of v1 are listed except Remark 11, a purely expository heuristic (the measure in Theorem 8 might become a distribution acting through the asymptotic slope of φ when ψ0 is not essentially continuous). Unnumbered displayed claims are not listed: the integrability criterion (7) and (13), the Legendre identity (12), the support identity (16) (stated without proof), the Prékopa inequality (17) for Legendre transforms (deduced from Prékopa's theorem), the example moment measures (simplex, Gaussian, sphere, cube (5)), the Monge–Ampère equation (4), the one-dimensional formula, the end-of-Section-2 observations on conv(Supp μ), and the Section 5 discussion of cone-volume and surface-area variants. Reviewed Lean candidates with no item mapped: FunctionalInequalities.KLS.LogConcave (KLS/Definitions.lean), FunctionalInequalities.KLS.IsBorellDensity and its lemmas (KLS/LogConcave/Density/BorellRepresentation/Basic.lean, Density/Bounds.lean), FunctionalInequalities.Probability.Line.prekopaLeindler (Probability/Line/BrunnMinkowski.lean) and FunctionalInequalities.Analysis.prekopaLeindler (Probability/BrunnMinkowski.lean); the finite-dimensional Prékopa–Leindler inequality is an available ingredient for (17) (with f = e^{−u0*}, g = e^{−u1*}, h = e^{−[(1−λ)u0+λu1]*}) but states neither (17) nor any numbered item.",
+        "items": [
+          {
+            "id": "D1",
+            "locator": "Definition 1",
+            "label": "Moment measure of a convex function",
+            "statement": "For a convex ψ: R^n → R ∪ {+∞} with 0 < ∫ e^{−ψ} < ∞, the moment measure μ of ψ is the push-forward of μ_ψ = e^{−ψ(x)} dx under ∇ψ, i.e. ∫ b dμ = ∫ b(∇ψ(x)) e^{−ψ(x)} dx (display (2)) for every Borel b that is nonnegative or μ-integrable.",
+            "uses": [],
+            "relation": "same",
+            "declarations": [],
+            "note": "Translation of ψ leaves μ unchanged; adding λ to ψ multiplies μ by e^{−λ}. No Lean declaration: the library has no extended-real convex potentials, Legendre transforms, gradient push-forwards or moment measures."
+          },
+          {
+            "id": "D2",
+            "locator": "Definition 2",
+            "label": "Essentially-continuous convex function",
+            "statement": "A convex ψ: R^n → R ∪ {+∞} is essentially continuous if it is lower semicontinuous and its set of discontinuity points has zero H^{n−1}-measure; equivalently {ψ < ∞} = A ∪ B with A open convex and B ⊆ ∂A, H^{n−1}(B) = 0.",
+            "uses": [],
+            "relation": "same",
+            "declarations": [],
+            "note": "Every finite convex function is essentially continuous; in dimension one the notion equals continuity. No Lean declaration: the library has no extended-real convex potentials, Legendre transforms, gradient push-forwards or moment measures."
+          },
+          {
+            "id": "P1",
+            "locator": "Proposition 1",
+            "label": "Necessary conditions on moment measures",
+            "statement": "If ψ: R^n → R ∪ {+∞} is convex and essentially continuous with 0 < ∫ e^{−ψ} < ∞, then its moment measure is not supported in any hyperplane and its barycenter lies at the origin.",
+            "uses": [
+              "L4",
+              "L6"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": "Proof: barycenter 0 from the 'furthermore' part of Lemma 4; support not in a hyperplane through 0 by Lemma 6, hence not in any hyperplane since the barycenter is 0. These are the necessity half of the bijection announced before Theorem 2. No Lean declaration: the library has no extended-real convex potentials, Legendre transforms, gradient push-forwards or moment measures."
+          },
+          {
+            "id": "T2",
+            "locator": "Theorem 2",
+            "label": "Existence and uniqueness of moment measures",
+            "statement": "Let μ be a Borel measure on R^n with 0 < μ(R^n) < ∞, not supported in a lower-dimensional subspace, and with barycenter at the origin (in particular with finite first moments). Then there is an essentially continuous convex ψ: R^n → R ∪ {+∞} whose moment measure is μ, and such ψ is unique up to translation.",
+            "uses": [
+              "P7",
+              "T8",
+              "P10",
+              "P12"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": "Main item: the paper calls it 'Our main result' and the title, abstract and Section 4 ('Existence and Uniqueness') are devoted to it; with Proposition 1 it gives the bijection between essentially continuous convex functions modulo translation and such measures. Uniqueness: for two potentials ψ0, ψ1, apply Theorem 8 to each against ψ_{1/2} = ((ψ0* + ψ1*)/2)* (integrability by Proposition 7), get equality in Prékopa's inequality (17), and conclude by Dubuc's equality characterisation. Existence: normalise μ to a probability, take the maximiser φ of Proposition 12, set ψ = φ*; Jensen and the Kantorovich dual problem (**) with the variation φ + t b (Berman–Berndtsson Lemma 2.7) give (∇ψ)_# e^{−ψ} = μ, and Proposition 10 gives essential continuity. No Lean declaration: the library has no extended-real convex potentials, Legendre transforms, gradient push-forwards or moment measures. The Prékopa–Leindler theorems FunctionalInequalities.Analysis.prekopaLeindler and FunctionalInequalities.Probability.Line.prekopaLeindler would supply (17) only after the Legendre-transform reduction.",
+            "main": true
+          },
+          {
+            "id": "L3",
+            "locator": "Lemma 3",
+            "label": "Essential continuity along lines",
+            "statement": "If ψ: R^n → R ∪ {+∞} is convex and essentially continuous, 0 ≠ θ ∈ R^n and H = θ^⊥, then for H^{n−1}-almost every y ∈ H the function t ↦ ψ(y + tθ) is continuous on R (with values in R ∪ {+∞}) and locally Lipschitz in the interior of the interval where it is finite.",
+            "uses": [],
+            "relation": "same",
+            "declarations": [],
+            "note": "Proof: the projection of the H^{n−1}-null discontinuity set onto H is H^{n−1}-null; convexity gives local Lipschitz continuity. No Lean declaration: the library has no extended-real convex potentials, Legendre transforms, gradient push-forwards or moment measures."
+          },
+          {
+            "id": "L4",
+            "locator": "Lemma 4",
+            "label": "Log-concave gradients are integrable",
+            "statement": "If ρ: R^n → [0, ∞) is integrable and log-concave, then ∫ |∇ρ| < ∞. If moreover ρ = e^{−ψ} with ψ essentially continuous, then ∫ ∂^i ρ = 0 for i = 1, ..., n.",
+            "uses": [
+              "L3"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": "Proof: on each line t ↦ ρ(y,t) is unimodal, so ∫|∂_t ρ| dt ≤ 2 sup_t ρ(y,t), and the marginal infimum ψ1(y) = inf_t ψ(y,t) is convex with exp(−ψ1) integrable by (7); the vanishing integral follows from Lemma 3 and Fubini. Gives finite first moments of the moment measure. No Lean declaration: KLS/LogConcave/Density gives bounded Borell densities and exponential moments of the law, not integrability of ∇ρ."
+          },
+          {
+            "id": "L5",
+            "locator": "Lemma 5",
+            "label": "Integration by parts inequality",
+            "statement": "If ψ: R^n → R ∪ {+∞} is convex with 0 < ∫ e^{−ψ} < ∞, then x·∇ψ(x) is μ_ψ-integrable; if ψ is moreover essentially continuous, then ∫ x·∇ψ(x) dμ_ψ(x) ≤ n ∫ e^{−ψ}.",
+            "uses": [
+              "L4"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": "Proof: ∇ψ(x)·(x − x0) ≥ ψ(x) − ψ(x0) is bounded below; the divergence theorem on smooth convex compact K ∋ x0 inside {ψ < ∞} bounds the integral by n∫e^{−ψ}; Lemma 4 handles ∇ψ·x0. The paper notes equality holds but neither uses nor proves it. No Lean declaration: the library has no extended-real convex potentials, Legendre transforms, gradient push-forwards or moment measures."
+          },
+          {
+            "id": "L6",
+            "locator": "Lemma 6",
+            "label": "Support not in a subspace",
+            "statement": "If ψ: R^n → R ∪ {+∞} is convex and essentially continuous with 0 < ∫ e^{−ψ} < ∞ and μ is its moment measure, then Supp(μ) is not contained in any proper linear subspace E ⊊ R^n.",
+            "uses": [
+              "L3"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": "Proof: if Supp(μ) ⊆ θ^⊥ then ∂_θ ρ = 0 a.e.; by Lemma 3, ρ is constant on almost every line in direction θ, so ∫ρ ∈ {0, ∞} by Fubini, a contradiction. No Lean declaration: the library has no extended-real convex potentials, Legendre transforms, gradient push-forwards or moment measures."
+          },
+          {
+            "id": "P7",
+            "locator": "Proposition 7",
+            "label": "Legendre transform is moment-integrable",
+            "statement": "If ψ: R^n → R ∪ {+∞} is convex with 0 < ∫ e^{−ψ} < ∞, φ = ψ* and μ is the moment measure of ψ, then φ is μ-integrable.",
+            "uses": [
+              "L5"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": "Proof: φ(∇ψ(x)) = x·∇ψ(x) − ψ(x) μ_ψ-a.e. (12); x·∇ψ ∈ L¹(μ_ψ) by Lemma 5, and ψ ∈ L¹(μ_ψ) since ψ is bounded below and ψe^{−ψ} ≤ 2e^{−ψ/2} with (7) (display (15)). No essential continuity is assumed. No Lean declaration: the library has no extended-real convex potentials, Legendre transforms, gradient push-forwards or moment measures."
+          },
+          {
+            "id": "T8",
+            "locator": "Theorem 8",
+            "label": "Above-tangent form of Prékopa's inequality",
+            "statement": "Let e^{−ψ0}, e^{−ψ1} be log-concave on R^n with 0 < ∫ e^{−ψ0} < ∞, ψ1 not identically +∞, and ψ0 essentially continuous; with φ_i = ψ_i*, log ∫ e^{−ψ0} − log ∫ e^{−ψ1} ≥ ∫ (φ0 − φ1) dμ̄ (display (18)), where μ̄ is the moment measure of ψ0 normalised to a probability.",
+            "uses": [
+              "L3",
+              "L5",
+              "L9"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": "Printed title 'Prékopa's theorem revisited'. Proof: Brenier map T = ∇f from e^{−ψ0} to e^{−ψ1}1_L (L a large ball), McCann's a.e. Monge–Ampère equation (20), log s ≤ s − 1 and the Legendre inequalities give (21); the integration by parts ∫(Δf − ∇ψ0·∇f) dμ_ψ0 ≤ 0 follows line by line from Lemma 9 using Lemma 3, and Lemma 5 controls the remaining term. Expresses −μ̄ as a subgradient of the convex functional J(u) = −log ∫ e^{−u*}. No Lean declaration: the library has no extended-real convex potentials, Legendre transforms, gradient push-forwards or moment measures."
+          },
+          {
+            "id": "L9",
+            "locator": "Lemma 9",
+            "label": "One-dimensional integration by parts",
+            "statement": "If ρ = e^{−ψ} is an integrable, continuous, log-concave function on R, dμ_ψ = ρ dx, and f: R → R is convex and Lipschitz, then ∫ (f'' − f'ψ') dμ_ψ ≤ 0, with f'' the Aleksandrov (a.e.) second derivative.",
+            "uses": [],
+            "relation": "same",
+            "declarations": [],
+            "note": "Proof: Lebesgue–Stieltjes integration by parts for the bounded nondecreasing right derivative V = f', using that V' dx is the absolutely continuous part of dV. No Lean declaration: the one-dimensional integration-by-parts results in KLS/LogConcave/Line/SharpHardy.lean concern clipped Poincaré tests, not convex f."
+          },
+          {
+            "id": "P10",
+            "locator": "Proposition 10",
+            "label": "Prékopa inequality forces essential continuity",
+            "statement": "Let ψ: R^n → R ∪ {+∞} be lower semicontinuous and convex with ∫ e^{−ψ} = 1, μ its moment measure and φ = ψ*. If for every μ-integrable convex φ1 with ψ1 = φ1* one has log ∫ e^{−ψ} − log ∫ e^{−ψ1} ≥ ∫ (φ − φ1) dμ, then ψ is essentially continuous.",
+            "uses": [
+              "L4",
+              "P7"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": "Converse to Theorem 8. Proof: near x0 in A = {x ∈ ∂{ψ<∞} : ψ(x) < ∞} write the boundary as a Lipschitz graph; test with φ_ε = max{φ, φ + ε(y·θ) − 1}: the right side is o(ε) by first moments (Lemma 4), while ∫e^{−ψ_ε} gains at least ε c0^{n−1} e^{−(k0+1)} H^{n−1}(A^{k0}), forcing H^{n−1}(A^{k0}) = 0. μ-integrability of φ_ε uses Proposition 7. No Lean declaration: the library has no extended-real convex potentials, Legendre transforms, gradient push-forwards or moment measures."
+          },
+          {
+            "id": "P12",
+            "locator": "Proposition 12",
+            "label": "Existence of a variational maximiser",
+            "statement": "Let μ be a probability measure on R^n satisfying the assumptions of Theorem 2 and I_μ(f) = log ∫ e^{−f*} − ∫ f dμ for μ-integrable f: R^n → R ∪ {+∞}. Then there is a μ-integrable convex φ with ∫ e^{−φ*} = 1 and I_μ(φ) = sup_f I_μ(f) (display (38)), the supremum over all μ-integrable f.",
+            "uses": [
+              "L15",
+              "L17"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": "Variational problem of Berman–Berndtsson. Proof: truncate a maximising sequence below, replace by biconjugates, normalise φ_ℓ(0) = inf φ_ℓ = 0; Lemma 15 and log t = o(t^{1/n}) bound sup_ℓ ∫e^{−φ_ℓ*} and sup_ℓ ∫φ_ℓ dμ; Lemma 17 extracts a limit with I_μ(φ) ≥ limsup I_μ(φ_ℓj). No Lean declaration: the library has no extended-real convex potentials, Legendre transforms, gradient push-forwards or moment measures."
+          },
+          {
+            "id": "R13",
+            "locator": "Remark 13",
+            "label": "Maximiser and Prékopa connection",
+            "statement": "By Prékopa's inequality the functional f ↦ I_μ(f) is concave, and strictly concave modulo affine functions, on convex functions finite near 0; and if μ is the moment measure of ψ0 then Theorem 8 forces φ0 = ψ0* to be a maximiser in (38).",
+            "uses": [
+              "T8"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": "Not purely expository: it asserts the concavity of I_μ (from (17)) and the maximising property of ψ0* (from Theorem 8), without separate proof. No Lean declaration: the library has no extended-real convex potentials, Legendre transforms, gradient push-forwards or moment measures."
+          },
+          {
+            "id": "L14",
+            "locator": "Lemma 14",
+            "label": "Volume–integral lower bound",
+            "statement": "Let μ be a probability measure on R^n satisfying the assumptions of Theorem 2. There is c_μ > 0 such that every μ-integrable convex φ: R^n → R ∪ {+∞} with e^{−φ} integrable and φ(0) = 0 satisfies (∫ e^{−φ})^{1/n} (∫ [φ − inf φ] dμ + 1) ≥ c_μ; one may take c_μ = κ_n^{1/n} m_μ / (4 e^{1/n}) with m_μ = inf_{θ ∈ S^{n−1}} ∫ |x·θ| dμ(x) > 0.",
+            "uses": [],
+            "relation": "same",
+            "declarations": [],
+            "note": "Proof: with K = {φ ≤ 1}, Rogers–Shephard gives Vol(K − K) ≤ 4^n Vol(K), so K − K has inradius at most R_φ = 4κ_n^{−1/n} Vol(K)^{1/n}; convexity gives φ(x) ≥ |x·θ0|/R_φ + inf φ − 1 and ∫e^{−φ} ≥ Vol(K)/e. No Lean declaration: the library has no extended-real convex potentials, Legendre transforms, gradient push-forwards or moment measures."
+          },
+          {
+            "id": "L15",
+            "locator": "Lemma 15",
+            "label": "Coercivity of the variational functional",
+            "statement": "Let μ be a probability measure on R^n satisfying the assumptions of Theorem 2, φ: R^n → R ∪ {+∞} μ-integrable and convex with φ(0) = 0, and ψ = φ*. Then ∫ φ dμ ≥ (c_μ / (2π)) (∫ e^{−ψ})^{1/n} − (n + 1), with c_μ the constant of Lemma 14.",
+            "uses": [
+              "L14"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": "Proof: ∫φ dμ ≥ 0 via a subgradient at 0 and the zero barycenter; after translating ψ to have barycenter 0, Fradelizi's inequality gives inf φ = −ψ(0) ≥ −n, Lemma 14 applies, and the functional Santaló inequality ∫e^{−ψ} ∫e^{−φ} ≤ (2π)^n of Artstein–Klartag–Milman concludes. No Lean declaration: the library has no extended-real convex potentials, Legendre transforms, gradient push-forwards or moment measures."
+          },
+          {
+            "id": "L16",
+            "locator": "Lemma 16",
+            "label": "Pointwise bound by the integral",
+            "statement": "Let μ be a finite Borel measure on R^n and K the interior of conv(Supp(μ)). For every x0 ∈ K there is C_{μ,x0} > 0 such that φ(x0) ≤ C_{μ,x0} ∫ φ dμ for every nonnegative μ-integrable convex φ: R^n → R ∪ {+∞}.",
+            "uses": [],
+            "relation": "same",
+            "declarations": [],
+            "note": "Proof: m_{μ,x0} = inf_θ μ{(x − x0)·θ > 0} > 0 by Fatou and compactness of S^{n−1}; integrate the supporting-hyperplane bound over a half-space; C_{μ,x0} = 1/m_{μ,x0}. No Lean declaration: the library has no extended-real convex potentials, Legendre transforms, gradient push-forwards or moment measures."
+          },
+          {
+            "id": "L17",
+            "locator": "Lemma 17",
+            "label": "Compactness of normalised potentials",
+            "statement": "Let μ satisfy the assumptions of Theorem 2 and let φ_ℓ: R^n → [0, ∞] be μ-integrable convex with φ_ℓ(0) = 0 and sup_ℓ ∫ φ_ℓ dμ < ∞. Then a subsequence φ_ℓj and a nonnegative μ-integrable convex φ satisfy ∫ φ dμ ≤ liminf_j ∫ φ_ℓj dμ and ∫ e^{−φ*} ≥ limsup_j ∫ e^{−φ_ℓj*}.",
+            "uses": [
+              "L16"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": "Proof: Lemma 16 gives pointwise bounds on K = int conv(Supp μ); Rockafellar Theorem 10.9 gives a pointwise convergent subsequence on K; extend φ radially to ∂K, use Fatou and monotone convergence for the first inequality, and a finite dense max-affine approximation of φ* for the second. No Lean declaration: the library has no extended-real convex potentials, Legendre transforms, gradient push-forwards or moment measures."
+          }
+        ]
+      }
     },
     {
       "id": "AlonsoBastero2015",
@@ -3246,7 +3750,150 @@
       "result": "Constructs Stein kernels using moment maps, connecting Hessian geometry to probabilistic identities.",
       "remaining": "The canonical moment-map Stein kernel is not locally formalized.",
       "local_results": [],
-      "diagram": "2019 · Fathi<br/>Stein kernels"
+      "diagram": "2019 · Fathi<br/>Stein kernels",
+      "lemma_map": {
+        "source_version": "arXiv:1804.04699v3",
+        "source_url": "https://arxiv.org/abs/1804.04699v3",
+        "reviewed_on": "2026-10-03",
+        "standing_assumptions": "Probability measures on R^d; gamma is the standard Gaussian measure (gamma_1 in dimension one). A Stein kernel tau_mu : R^d -> M_d(R) for mu satisfies int x . f dmu = int <tau_mu, nabla f>_HS dmu for smooth vector-valued f (display (1) prints dnu for dmu), with tests in H^1(mu) when tau_mu is in L^2(mu) and mu has finite second moments; the Stein discrepancy is S(mu)^2 = inf_tau int |tau - Id|_HS^2 dmu. The moment map of a centered mu is a convex phi with (nabla phi)_# e^{-phi} dx = mu, equivalently the toric Kahler-Einstein equation e^{-phi} = rho(nabla phi) det(nabla^2 phi) (display (3)); phi^* is its Legendre transform. W_p is the p-Kantorovich-Wasserstein distance with Euclidean cost (the printed formula omits the 1/p power); mu_n is the law of n^{-1/2} sum_{i<=n} X_i for i.i.d. X_i ~ mu. Isotropic means centered with identity covariance.",
+        "omitted": "Remark 2.2 is omitted as purely expository (it compares this kernel with the Courtade-Fathi-Pananjady construction and notes their earlier existence result under a Poincare inequality); the unnumbered Section 4 derivation of the weighted Poincare inequality Var_nu(f) <= int <tau nabla f, nabla f> dnu from Brascamp-Lieb and the unnumbered Section 5 transport of Stein kernels to non-Gaussian reference measures are not listed, as no Lean declaration states them; the paper has no numbered Definitions, Lemmas, Examples, Conjectures or appendix statements.",
+        "items": [
+          {
+            "id": "T21",
+            "locator": "Theorem 2.1 (Cordero-Erausquin and Klartag 2015)",
+            "label": "Existence of moment maps",
+            "statement": "If mu is a centered measure on R^d with finite first moment, not supported on a hyperplane, then there is a convex function phi such that mu is the pushforward of the probability measure with density e^{-phi} under nabla phi; phi is called the moment map of mu.",
+            "uses": [],
+            "relation": "same",
+            "declarations": [],
+            "main": false,
+            "note": "Quoted from Cordero-Erausquin and Klartag without proof; the probability normalisation of e^{-phi} is implicit. No Lean counterpart: the library has no moment maps or Monge-Ampere objects."
+          },
+          {
+            "id": "T22",
+            "locator": "Theorem 2.2 (Berman and Berndtson 2013)",
+            "label": "Smoothness of moment maps",
+            "statement": "If mu is supported on a compact (bounded) open convex set with a smooth density rho satisfying C^{-1} <= rho <= C on its support for some C > 0, then the moment map phi of Theorem 2.1 is smooth and finite on all of R^d.",
+            "uses": [
+              "T21"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "main": false,
+            "note": "Quoted from Berman and Berndtsson without proof (Caffarelli regularity). Equivalently phi solves the toric Kahler-Einstein equation e^{-phi} = rho(nabla phi) det(nabla^2 phi), display (3) of the PDF. No Lean counterpart."
+          },
+          {
+            "id": "T23",
+            "locator": "Theorem 2.3",
+            "label": "Moment map yields Stein kernel",
+            "statement": "If mu has a Lebesgue density rho and the solution phi of e^{-phi} = rho(nabla phi) det(nabla^2 phi) is C^2 and finite on all of R^d, then tau = Hess phi(nabla phi^*) = (Hess phi^*)^{-1} is a Stein kernel for mu with respect to the standard Gaussian, and S(mu)^2 <= int |Hess phi - Id|_HS^2 e^{-phi} dx. In particular this applies when mu is supported on a compact convex set with density bounded above and below by positive constants.",
+            "uses": [
+              "T21",
+              "T22"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "main": true,
+            "note": "Proof: Gaussian-type integration by parts against e^{-phi} (no boundary term since phi grows linearly, Klartag 2007 Lemma 2.1), test f = g(nabla phi), then the change of variables y = nabla phi^*(x). Main theorem: it is the construction announced first in the abstract, carries the LaTeX label main_thm_stein, and every later result (Corollary 2.4, Theorems 3.3 and 3.4, Section 4) is obtained from this kernel. No Lean counterpart: there is no Stein kernel, Stein discrepancy or moment map in the library; the scalar weighted integration by parts FunctionalInequalities.KLS.LogConcave.integral_inner_gradient_eq is a different identity (scalar Dirichlet form, compactly supported tests) and does not state this item."
+          },
+          {
+            "id": "R21",
+            "locator": "Remark 2.1",
+            "label": "Kernel is symmetric positive",
+            "statement": "The Stein kernel of Theorem 2.3 takes values in symmetric positive definite matrices; in dimension one this explains why the explicit one-dimensional Stein kernel formula is nonnegative.",
+            "uses": [
+              "T23"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "main": false,
+            "note": "Immediate from tau = Hess phi(nabla phi^*) with phi convex and C^2, Hess phi > 0. No Lean counterpart."
+          },
+          {
+            "id": "C24",
+            "locator": "Corollary 2.4",
+            "label": "Bounded kernel, uniformly convex case",
+            "statement": "If mu = e^{-V} dx with Hess V >= epsilon Id for some epsilon > 0, then mu has a Stein kernel tau with positive symmetric values and ||tau||_op <= epsilon^{-1} everywhere.",
+            "uses": [
+              "T23"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "main": false,
+            "note": "Kernel of Theorem 2.3; the bound ||Hess phi||_op <= 1/epsilon is Klartag's (2014) contraction estimate for moment maps, quoted without proof. No Lean counterpart."
+          },
+          {
+            "id": "P31",
+            "locator": "Proposition 3.1",
+            "label": "Stein kernel bounds W_p",
+            "statement": "If tau is a Stein kernel for a probability measure mu on R^d, then for every p >= 2, W_p(mu, gamma) <= C_p (int ||tau - Id||_HS^p dmu)^{1/p} with C_p = (int |x|^p dgamma_1)^{1/p} = O(p).",
+            "uses": [],
+            "relation": "same",
+            "declarations": [],
+            "main": false,
+            "note": "Proved in Section 3.2 via the Ornstein-Uhlenbeck interpolation of Ledoux-Nourdin-Peccati (Proposition 3.4 there), Jensen, and the moment bound E||AZ||^p <= C_p^p ||A||_HS^p for symmetric A (Marcinkiewicz-Zygmund with sharp constant). The printed definition of W_p omits the 1/p power; the intended distance is (inf_pi int ||x-y||^p dpi)^{1/p}. No Lean counterpart (no Wasserstein distances in the library)."
+          },
+          {
+            "id": "P32",
+            "locator": "Proposition 3.2",
+            "label": "Klartag moment-map Hessian estimate",
+            "statement": "If mu is a log-concave probability measure supported on an open bounded convex set with density bounded above and below, then its essentially continuous moment map phi is C^2 and, for all p >= 1 and theta in S^{d-1}, int |<Hess phi(nabla phi^*) theta, theta>|^p dmu <= 8^p p^{2p} (int (x . theta)^2 dmu)^p.",
+            "uses": [
+              "T21",
+              "T22"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "main": false,
+            "note": "Due to Klartag (2014); Section 3.1 reproves it via Kolesnikov's curvature bound Ric >= 1/2 for (R^d, Hess phi, e^{-phi}) under the regularity of Theorem 2.2, the eigenfunction identities L partial_e phi = -partial_e phi and Gamma(partial_e phi) = partial_ee phi, the reverse local Poincare bound Gamma(P_t f) <= P_t(f^2)/(2(e^t-1)) (BGL Theorem 4.7.2) at t = ln 2, and log-Sobolev hypercontractivity of eigenfunctions (BGL Section 5.3). No Lean counterpart: the library's Bakry-Emery files work with the Euclidean metric and a fixed potential, not the Hessian metric of a moment map."
+          },
+          {
+            "id": "R31",
+            "locator": "Remark 3.1",
+            "label": "Continuous density suffices",
+            "statement": "Klartag's results assume C^infinity smoothness via Berman-Berndtsson; since only C^2 smoothness of phi is needed, continuity of the density suffices.",
+            "uses": [
+              "P32",
+              "T22"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "main": false,
+            "note": "Regularity relaxation asserted without proof; it underlies the continuous-density hypotheses of Theorems 3.3 and 3.4. No Lean counterpart."
+          },
+          {
+            "id": "T33",
+            "locator": "Theorem 3.3",
+            "label": "Log-concave CLT rate in W_p",
+            "statement": "Let mu be an isotropic log-concave probability measure on R^d with strictly positive continuous density on its support, and mu_n the law of n^{-1/2}(X_1 + ... + X_n) for i.i.d. X_i ~ mu. Then for every p >= 2, W_p(mu_n, gamma) <= C~(p) d n^{-1/2}, with C~(p) depending only on p and growing like p^4.",
+            "uses": [
+              "T23",
+              "P32",
+              "P31",
+              "R31"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "main": false,
+            "note": "Proof for compact support and density bounded below: the kernel of Theorem 2.3, its conditional averaging as a Stein kernel for mu_n (Courtade-Fathi-Pananjady Theorem 3.2), Jensen and Rosenthal (K_p = O(p)), Proposition 3.2 with isotropy (int (x.theta)^2 dmu = 1), then Proposition 3.1; explicit constant 2 K_p (1 + 8^p p^{2p})^{1/p} C_p; the general case by convex compact truncation. No Lean counterpart; FunctionalInequalities.KLS.LogConcave is only the log-concavity predicate, does not restrict this rate statement, and is not mapped."
+          },
+          {
+            "id": "T34",
+            "locator": "Theorem 3.4",
+            "label": "Uniformly log-concave CLT rate",
+            "statement": "Let mu = e^{-V} be isotropic with strictly positive continuous density on its support and Hess V >= epsilon Id for some epsilon > 0; with mu_n as in Theorem 3.3, for every p >= 2, W_p(mu_n, gamma) <= C(p) sqrt(d) / (epsilon n^{1/2}), with C(p) growing like p^4.",
+            "uses": [
+              "C24",
+              "T23",
+              "P31"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "main": false,
+            "note": "Proof omitted in the paper: same argument as Theorem 3.3 with the operator-norm bound of Corollary 2.4 replacing Proposition 3.2. The sqrt(d) dependence is sharp (product measures). No Lean counterpart."
+          }
+        ]
+      }
     },
     {
       "id": "Chen2021",

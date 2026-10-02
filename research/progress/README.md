@@ -178,6 +178,58 @@ flowchart LR
     class Milman2009_more lemma_more;
 ```
 
+### Guédon–Milman (arXiv:1011.0943v3)
+
+21 statements: 1 ✓, 1 ◐, 19 ○. [Full map](LITERATURE.md#guedonmilman2011-lemma-map).
+
+```mermaid
+flowchart LR
+    GuedonMilman2011_DISO["✓ Section 1 (unnumbered definition of isotropy)<br/>Isotropic random vector"]
+    GuedonMilman2011_DLC["◐ Section 1 (unnumbered definition of log-concavity)<br/>Log-concave density"]
+    GuedonMilman2011_T11["○ Theorem 1.1<br/>Deviation and thin-shell estimates"]
+    GuedonMilman2011_T21["○ Theorem 2.1<br/>Log-Lipschitz via centroid bodies"]
+    GuedonMilman2011_L22["○ Lemma 2.2 (Grunbaum)<br/>Grunbaum half-line mass bound"]
+    GuedonMilman2011_L23["○ Lemma 2.3<br/>Centroid bodies of Gaussian convolution"]
+    GuedonMilman2011_C24["○ Corollary 2.4<br/>Distance and Lipschitz bound"]
+    GuedonMilman2011_T25["○ Theorem 2.5<br/>Distance of K_{m+p} to ball"]
+    GuedonMilman2011_P26["○ Proposition 2.6<br/>Comparing K_{m+q} and Z^+_q"]
+    GuedonMilman2011_T31["○ Theorem 3.1<br/>Moment estimates for Y"]
+    GuedonMilman2011_T41["○ Theorem 4.1<br/>Deviation estimates for Y"]
+    GuedonMilman2011_A1["○ Lemma A.1<br/>Support of Z^+_q(K)"]
+    GuedonMilman2011_A2["○ Lemma A.2<br/>Log-concave density at zero"]
+    GuedonMilman2011_A3["○ Lemma A.3<br/>Half-space mass of K_{m+q}"]
+    GuedonMilman2011_T41 --> GuedonMilman2011_T11
+    GuedonMilman2011_T31 --> GuedonMilman2011_T11
+    GuedonMilman2011_DISO --> GuedonMilman2011_T11
+    GuedonMilman2011_DLC --> GuedonMilman2011_T11
+    GuedonMilman2011_T25 --> GuedonMilman2011_T21
+    GuedonMilman2011_L22 --> GuedonMilman2011_T21
+    GuedonMilman2011_L22 --> GuedonMilman2011_L23
+    GuedonMilman2011_DISO --> GuedonMilman2011_L23
+    GuedonMilman2011_DLC --> GuedonMilman2011_L23
+    GuedonMilman2011_L23 --> GuedonMilman2011_C24
+    GuedonMilman2011_T21 --> GuedonMilman2011_C24
+    GuedonMilman2011_P26 --> GuedonMilman2011_T25
+    GuedonMilman2011_A1 --> GuedonMilman2011_P26
+    GuedonMilman2011_A2 --> GuedonMilman2011_P26
+    GuedonMilman2011_A3 --> GuedonMilman2011_P26
+    GuedonMilman2011_C24 --> GuedonMilman2011_T31
+    GuedonMilman2011_DISO --> GuedonMilman2011_T31
+    GuedonMilman2011_DLC --> GuedonMilman2011_T31
+    GuedonMilman2011_T31 --> GuedonMilman2011_T41
+    GuedonMilman2011_L22 --> GuedonMilman2011_A3
+    GuedonMilman2011_more["+7 further statements in the paper register"]
+    classDef lemma_formalized fill:#dbeafe,stroke:#2563eb,color:#1e3a8a;
+    class GuedonMilman2011_DISO lemma_formalized;
+    classDef lemma_partial fill:#fff3df,stroke:#c88719,color:#66420d;
+    class GuedonMilman2011_DLC lemma_partial;
+    classDef lemma_pending fill:#fee2e2,stroke:#dc2626,color:#991b1b;
+    class GuedonMilman2011_T11,GuedonMilman2011_T21,GuedonMilman2011_L22,GuedonMilman2011_L23,GuedonMilman2011_C24,GuedonMilman2011_T25,GuedonMilman2011_P26,GuedonMilman2011_T31,GuedonMilman2011_T41,GuedonMilman2011_A1,GuedonMilman2011_A2,GuedonMilman2011_A3 lemma_pending;
+    style GuedonMilman2011_T11 stroke-width:3px
+    classDef lemma_more fill:#f8fafc,stroke:#94a3b8,color:#334155,stroke-dasharray:4 3;
+    class GuedonMilman2011_more lemma_more;
+```
+
 ### Eldan (arXiv:1203.0893v5)
 
 28 statements: 28 ○. [Full map](LITERATURE.md#eldan2013-lemma-map).
@@ -319,6 +371,49 @@ flowchart LR
     class AGS2013_more lemma_more;
 ```
 
+### Cordero-Erausquin–Klartag (arXiv:1304.0630v1)
+
+18 statements: 18 ○. [Full map](LITERATURE.md#corderoklartag2015-lemma-map).
+
+```mermaid
+flowchart LR
+    CorderoKlartag2015_T2["○ Theorem 2<br/>Existence and uniqueness of moment measures"]
+    CorderoKlartag2015_L3["○ Lemma 3<br/>Essential continuity along lines"]
+    CorderoKlartag2015_L4["○ Lemma 4<br/>Log-concave gradients are integrable"]
+    CorderoKlartag2015_L5["○ Lemma 5<br/>Integration by parts inequality"]
+    CorderoKlartag2015_P7["○ Proposition 7<br/>Legendre transform is moment-integrable"]
+    CorderoKlartag2015_T8["○ Theorem 8<br/>Above-tangent form of Prékopa's inequality"]
+    CorderoKlartag2015_L9["○ Lemma 9<br/>One-dimensional integration by parts"]
+    CorderoKlartag2015_P10["○ Proposition 10<br/>Prékopa inequality forces essential continuity"]
+    CorderoKlartag2015_P12["○ Proposition 12<br/>Existence of a variational maximiser"]
+    CorderoKlartag2015_L14["○ Lemma 14<br/>Volume–integral lower bound"]
+    CorderoKlartag2015_L15["○ Lemma 15<br/>Coercivity of the variational functional"]
+    CorderoKlartag2015_L16["○ Lemma 16<br/>Pointwise bound by the integral"]
+    CorderoKlartag2015_L17["○ Lemma 17<br/>Compactness of normalised potentials"]
+    CorderoKlartag2015_P7 --> CorderoKlartag2015_T2
+    CorderoKlartag2015_T8 --> CorderoKlartag2015_T2
+    CorderoKlartag2015_P10 --> CorderoKlartag2015_T2
+    CorderoKlartag2015_P12 --> CorderoKlartag2015_T2
+    CorderoKlartag2015_L3 --> CorderoKlartag2015_L4
+    CorderoKlartag2015_L4 --> CorderoKlartag2015_L5
+    CorderoKlartag2015_L5 --> CorderoKlartag2015_P7
+    CorderoKlartag2015_L3 --> CorderoKlartag2015_T8
+    CorderoKlartag2015_L5 --> CorderoKlartag2015_T8
+    CorderoKlartag2015_L9 --> CorderoKlartag2015_T8
+    CorderoKlartag2015_L4 --> CorderoKlartag2015_P10
+    CorderoKlartag2015_P7 --> CorderoKlartag2015_P10
+    CorderoKlartag2015_L15 --> CorderoKlartag2015_P12
+    CorderoKlartag2015_L17 --> CorderoKlartag2015_P12
+    CorderoKlartag2015_L14 --> CorderoKlartag2015_L15
+    CorderoKlartag2015_L16 --> CorderoKlartag2015_L17
+    CorderoKlartag2015_more["+5 further statements in the paper register"]
+    classDef lemma_pending fill:#fee2e2,stroke:#dc2626,color:#991b1b;
+    class CorderoKlartag2015_T2,CorderoKlartag2015_L3,CorderoKlartag2015_L4,CorderoKlartag2015_L5,CorderoKlartag2015_P7,CorderoKlartag2015_T8,CorderoKlartag2015_L9,CorderoKlartag2015_P10,CorderoKlartag2015_P12,CorderoKlartag2015_L14,CorderoKlartag2015_L15,CorderoKlartag2015_L16,CorderoKlartag2015_L17 lemma_pending;
+    style CorderoKlartag2015_T2 stroke-width:3px
+    classDef lemma_more fill:#f8fafc,stroke:#94a3b8,color:#334155,stroke-dasharray:4 3;
+    class CorderoKlartag2015_more lemma_more;
+```
+
 ### Ambrosio–Di Marino–Gigli (arXiv:1603.08412v1)
 
 11 statements: 6 ✓, 1 ◐, 4 ○. [Full map](LITERATURE.md#admg2017-lemma-map).
@@ -414,6 +509,26 @@ flowchart LR
     style LeeVempala2024_T12 stroke-width:3px
     classDef lemma_more fill:#f8fafc,stroke:#94a3b8,color:#334155,stroke-dasharray:4 3;
     class LeeVempala2024_more lemma_more;
+```
+
+### Fathi (arXiv:1804.04699v3)
+
+10 statements: 10 ○. [Full map](LITERATURE.md#fathi2019-lemma-map).
+
+```mermaid
+flowchart LR
+    Fathi2019_T21["○ Theorem 2.1 (Cordero-Erausquin and Klartag 2015)<br/>Existence of moment maps"]
+    Fathi2019_T22["○ Theorem 2.2 (Berman and Berndtson 2013)<br/>Smoothness of moment maps"]
+    Fathi2019_T23["○ Theorem 2.3<br/>Moment map yields Stein kernel"]
+    Fathi2019_T21 --> Fathi2019_T22
+    Fathi2019_T21 --> Fathi2019_T23
+    Fathi2019_T22 --> Fathi2019_T23
+    Fathi2019_more["+7 further statements in the paper register"]
+    classDef lemma_pending fill:#fee2e2,stroke:#dc2626,color:#991b1b;
+    class Fathi2019_T21,Fathi2019_T22,Fathi2019_T23 lemma_pending;
+    style Fathi2019_T23 stroke-width:3px
+    classDef lemma_more fill:#f8fafc,stroke:#94a3b8,color:#334155,stroke-dasharray:4 3;
+    class Fathi2019_more lemma_more;
 ```
 
 ### Chen (arXiv:2011.13661v2)

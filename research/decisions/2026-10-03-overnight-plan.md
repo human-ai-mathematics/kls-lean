@@ -55,3 +55,6 @@ Nothing is pushed.
   of 9), Klartag–Lehec slicing 2025 (13 items) and Chen–Klartag 2026 (17 items). A filtering bug of mine
   had dropped appendix-numbered lemmas (`Lemma A.1` …) from Letwin 2026 in commit `53c23ed`; the map is
   restored from the agent's builder to all 23 items and the filter is fixed. All 34 diagrams render.
+- Block 2 extended again: Guédon–Milman 2011 (21 items; main taken as the register's deviation
+  estimate, Theorem 1.1, with the authors' Theorem 1.2 noted), Cordero-Erausquin–Klartag 2015 (18 items)
+  and Fathi 2019 (10 items). Twenty sources mapped; all 40 diagrams render.
