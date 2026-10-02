@@ -74,6 +74,7 @@ import FunctionalInequalities.KLS.Geometry.Perimeter.RelaxedMinkowski
 import FunctionalInequalities.KLS.Geometry.Cheeger.UpperMinkowskiContent
 import FunctionalInequalities.KLS.Geometry.Perimeter.UpperMinkowskiRecovery
 import FunctionalInequalities.KLS.Geometry.Cheeger.Inequality
+import FunctionalInequalities.KLS.Geometry.Cheeger.BuserProfile
 import FunctionalInequalities.Energy.Euclidean.Slope.Comparison
 import FunctionalInequalities.Energy.Euclidean.Slope.Recovery
 import FunctionalInequalities.Energy.Euclidean.Slope.Density

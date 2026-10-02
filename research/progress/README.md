@@ -637,7 +637,7 @@ flowchart LR
 
 ### De Ponti–Mondino (arXiv:1902.03835v2)
 
-12 statements: 5 ◐, 7 ○. [Full map](LITERATURE.md#depontimondino2021-lemma-map).
+12 statements: 2 ✓, 5 ◐, 5 ○. [Full map](LITERATURE.md#depontimondino2021-lemma-map).
 
 ```mermaid
 flowchart LR
@@ -648,6 +648,8 @@ flowchart LR
     DePontiMondino2021_P31["○ Proposition 3.1 (Bakry–Gentil–Ledoux)<br/>Isoperimetric gradient bound for the heat flow"]
     DePontiMondino2021_E46["◐ Theorem 1.1 proof, (46)<br/>Spectral heat decay"]
     DePontiMondino2021_E48["◐ Theorem 1.1 proof, (48)<br/>L¹ heat displacement with J_K"]
+    DePontiMondino2021_L32["✓ Lemma 3.2<br/>Monotone auxiliary function (K > 0)"]
+    DePontiMondino2021_L33["✓ Lemma 3.3<br/>Monotone auxiliary function (K < 0)"]
     DePontiMondino2021_P41["◐ Proposition 4.1<br/>Coarea inequality"]
     DePontiMondino2021_T42["◐ Theorem 4.2<br/>Cheeger inequality on metric measure spaces"]
     DePontiMondino2021_D22 --> DePontiMondino2021_T11
@@ -655,11 +657,15 @@ flowchart LR
     DePontiMondino2021_E46 --> DePontiMondino2021_T11
     DePontiMondino2021_E48 --> DePontiMondino2021_T11
     DePontiMondino2021_T11 --> DePontiMondino2021_C12
+    DePontiMondino2021_L32 --> DePontiMondino2021_C12
+    DePontiMondino2021_L33 --> DePontiMondino2021_C12
     DePontiMondino2021_D21 --> DePontiMondino2021_D22
     DePontiMondino2021_D22 --> DePontiMondino2021_P31
     DePontiMondino2021_P31 --> DePontiMondino2021_E48
     DePontiMondino2021_P41 --> DePontiMondino2021_T42
-    DePontiMondino2021_more["+3 further statements in the paper register"]
+    DePontiMondino2021_more["+1 further statements in the paper register"]
+    classDef lemma_formalized fill:#dbeafe,stroke:#2563eb,color:#1e3a8a;
+    class DePontiMondino2021_L32,DePontiMondino2021_L33 lemma_formalized;
     classDef lemma_partial fill:#fff3df,stroke:#c88719,color:#66420d;
     class DePontiMondino2021_C12,DePontiMondino2021_E46,DePontiMondino2021_E48,DePontiMondino2021_P41,DePontiMondino2021_T42 lemma_partial;
     classDef lemma_pending fill:#fee2e2,stroke:#dc2626,color:#991b1b;

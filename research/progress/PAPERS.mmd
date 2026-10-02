@@ -452,6 +452,8 @@ flowchart LR
     DePontiMondino2021_P31["○ Proposition 3.1 (Bakry–Gentil–Ledoux)<br/>Isoperimetric gradient bound for the heat flow"]
     DePontiMondino2021_E46["◐ Theorem 1.1 proof, (46)<br/>Spectral heat decay"]
     DePontiMondino2021_E48["◐ Theorem 1.1 proof, (48)<br/>L¹ heat displacement with J_K"]
+    DePontiMondino2021_L32["✓ Lemma 3.2<br/>Monotone auxiliary function (K > 0)"]
+    DePontiMondino2021_L33["✓ Lemma 3.3<br/>Monotone auxiliary function (K < 0)"]
     DePontiMondino2021_P41["◐ Proposition 4.1<br/>Coarea inequality"]
     DePontiMondino2021_T42["◐ Theorem 4.2<br/>Cheeger inequality on metric measure spaces"]
     DePontiMondino2021_D22 --> DePontiMondino2021_T11
@@ -459,11 +461,13 @@ flowchart LR
     DePontiMondino2021_E46 --> DePontiMondino2021_T11
     DePontiMondino2021_E48 --> DePontiMondino2021_T11
     DePontiMondino2021_T11 --> DePontiMondino2021_C12
+    DePontiMondino2021_L32 --> DePontiMondino2021_C12
+    DePontiMondino2021_L33 --> DePontiMondino2021_C12
     DePontiMondino2021_D21 --> DePontiMondino2021_D22
     DePontiMondino2021_D22 --> DePontiMondino2021_P31
     DePontiMondino2021_P31 --> DePontiMondino2021_E48
     DePontiMondino2021_P41 --> DePontiMondino2021_T42
-    DePontiMondino2021_more["+3 further statements in the paper register"]
+    DePontiMondino2021_more["+1 further statements in the paper register"]
     end
     subgraph P_KlartagLehec2022["Klartag–Lehec · arXiv:2203.15551v2"]
     direction LR
@@ -839,7 +843,7 @@ flowchart LR
     Letwin2026_D26 --> Letwin2026_LA7
     end
     classDef lemma_formalized fill:#dbeafe,stroke:#2563eb,color:#1e3a8a;
-    class Milman2009_R23,GuedonMilman2011_DISO,AGS2013_S21,AGS2013_E37,ADMG2017_L21a,ADMG2017_L21b,ADMG2017_L32,ADMG2017_D33,ADMG2017_R34,ADMG2017_T36,KlartagLehec2022_D3,Letwin2026_DISO lemma_formalized;
+    class Milman2009_R23,GuedonMilman2011_DISO,AGS2013_S21,AGS2013_E37,ADMG2017_L21a,ADMG2017_L21b,ADMG2017_L32,ADMG2017_D33,ADMG2017_R34,ADMG2017_T36,DePontiMondino2021_L32,DePontiMondino2021_L33,KlartagLehec2022_D3,Letwin2026_DISO lemma_formalized;
     classDef lemma_partial fill:#fff3df,stroke:#c88719,color:#66420d;
     class Milman2009_DChe,Milman2009_DPoin,Milman2009_T11,Milman2009_T14,Milman2009_C26,Milman2009_L31,Milman2009_C32,GuedonMilman2011_DLC,AGS2013_E21a,AGS2013_E63,AGS2013_S83,ADMG2017_R35,LeeVempala2024_Dpsi,LeeVempala2024_L22,Chen2021_D2,Chen2021_CH,DePontiMondino2021_C12,DePontiMondino2021_E46,DePontiMondino2021_E48,DePontiMondino2021_P41,DePontiMondino2021_T42,KlartagLehec2022_DLC,KlartagLehec2022_MOM,KlartagLehec2022_D5,KlartagLehec2022_DPSI,KlartagLehec2022_E7,KlartagLehec2022_E14,KlartagLehec2022_UP,JambulapatiLeeVempala2022_D3,Klartag2023_D13,Klartag2023_Dpsi,Klartag2023_E14,Klartag2023_E17,Klartag2023_E24,Klartag2023_E37,Letwin2026_DCP,Letwin2026_DPSI,Letwin2026_ECMP,Letwin2026_CONJ lemma_partial;
     classDef lemma_pending fill:#fee2e2,stroke:#dc2626,color:#991b1b;

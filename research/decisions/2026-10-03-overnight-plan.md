@@ -58,6 +58,14 @@ Nothing is pushed.
 - Block 2 extended again: Guédon–Milman 2011 (21 items; main taken as the register's deviation
   estimate, Theorem 1.1, with the authors' Theorem 1.2 noted), Cordero-Erausquin–Klartag 2015 (18 items)
   and Fathi 2019 (10 items). Twenty sources mapped; all 40 diagrams render.
+- Block 1 done: De Ponti–Mondino Lemmas 3.2 and 3.3 in `KLS/Geometry/Cheeger/BuserProfile.lean`
+  (namespace `KLS.Isoperimetry`, Mathlib-only imports, no existing API changed). Placement: owner
+  Cheeger/Buser family; defs `buserRatioPos`/`buserRatioNeg` are the paper's f₁, f₂; the three paper
+  statements are stated strictly. All 17 statements were written by Claude (twelve helpers, two
+  substitution identities, two representation lemmas, three paper statements); the GPT worker wrote
+  every proof body, one statement at a time against fixed headers, after a first all-at-once attempt
+  failed. Accepted proofs were rechecked independently: identical statements, no forbidden token,
+  standard axioms only; Claude removed three linter warnings (an unneeded `<;>` and two no-op `ring`).
 - Block 2 complete: Klartag 2014 (26 items) and Bizeul 2025 (13 items, including the lettered quoted
   Theorems A–C; the filter now accepts lettered numbers). 22 of 27 register sources have lemma maps; the
   remaining five are two surveys, two monographs and Borell 1974 (not downloaded). All 44 diagrams render.

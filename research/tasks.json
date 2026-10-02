@@ -3270,7 +3270,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/Geometry/Cheeger/Inequality.lean",
-            "sha256": "3f0b16019b0b45391f29e1cc19b3b066dcb0ff64773478d89eeac4ad79e24f76"
+            "sha256": "4bf010ffd96f3ea515847c4bc2e33ad77c2daa8d719f21ac144b90f914e118e6"
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/Geometry/Cheeger/Median.lean",
@@ -3370,7 +3370,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/Geometry/Cheeger/Inequality.lean",
-            "sha256": "3f0b16019b0b45391f29e1cc19b3b066dcb0ff64773478d89eeac4ad79e24f76"
+            "sha256": "4bf010ffd96f3ea515847c4bc2e33ad77c2daa8d719f21ac144b90f914e118e6"
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/Geometry/Cheeger/Median.lean",

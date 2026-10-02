@@ -26,8 +26,8 @@ authorization. Exact results, scopes and certificates are in the
 
 ## Next
 
-1. Formalize De Ponti–Mondino Lemmas 3.2 and 3.3 (elementary monotonicity of explicit functions)
-   The remaining unmapped sources are books, surveys or not downloaded.
+1. Owner decision on stochastic calculus (see below); it gates every priority-4 paper. De Ponti–Mondino
+   Lemmas 3.2 and 3.3 are formalized in `KLS/Geometry/Cheeger/BuserProfile.lean`.
 2. Blocked: the priority-1 Bakry–Émery `C_P ≤ 1/ρ` target waits for the Bakry–Gentil–Ledoux text.
 
 ## Open owner decisions

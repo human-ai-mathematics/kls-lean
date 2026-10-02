@@ -4652,8 +4652,17 @@
             "statement": "f₁(x) = √x / arctan(√(e^(Tx) − 1)) is increasing on (0, ∞) with f₁ ≥ 1/√T.",
             "uses": [],
             "relation": "same",
-            "declarations": [],
-            "note": ""
+            "declarations": [
+              {
+                "name": "FunctionalInequalities.KLS.Isoperimetry.strictMonoOn_buserRatioPos",
+                "source": "formalization/FunctionalInequalities/KLS/Geometry/Cheeger/BuserProfile.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.Isoperimetry.one_div_sqrt_le_buserRatioPos",
+                "source": "formalization/FunctionalInequalities/KLS/Geometry/Cheeger/BuserProfile.lean"
+              }
+            ],
+            "note": "Both claims, with f₁ = buserRatioPos T; monotonicity is stated strictly, which implies the paper's \"increasing\"."
           },
           {
             "id": "L33",
@@ -4662,8 +4671,13 @@
             "statement": "f₂(x) = √x / log(e^(Tx) + √(e^(2Tx) − 1)) is decreasing on (0, ∞).",
             "uses": [],
             "relation": "same",
-            "declarations": [],
-            "note": ""
+            "declarations": [
+              {
+                "name": "FunctionalInequalities.KLS.Isoperimetry.strictAntiOn_buserRatioNeg",
+                "source": "formalization/FunctionalInequalities/KLS/Geometry/Cheeger/BuserProfile.lean"
+              }
+            ],
+            "note": "With f₂ = buserRatioNeg T; stated strictly, which implies the paper's \"decreasing\". The logarithm is identified with arcosh(e^{Tx})."
           },
           {
             "id": "R34",
