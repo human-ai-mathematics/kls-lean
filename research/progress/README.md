@@ -338,8 +338,8 @@ in Lean. The general π bound uses actual Gaussian smoothing and a Cheeger test 
 argument; no individual-domain perimeter limit is asserted.
 The scoped metric BV comparison includes closed-support identification for finite-dimensional
 log-concave laws, exact test-class relaxation infima, and relaxed lower Minkowski content.
-**Next step:** a milestone run for the accepted ADMG Theorem 3.6 paper-target certificate, then
-De Ponti–Mondino Lemmas 3.2 and 3.3 (see the [paper lemma map](#paper-lemma-map)).
+**Next step:** De Ponti–Mondino Lemmas 3.2 and 3.3; the ADMG Theorem 3.6 paper-target
+certificate is remotely certified (see the [paper lemma map](#paper-lemma-map)).
 The priority-1 Bakry–Émery target waits for the Bakry–Gentil–Ledoux source text.
 The locally Lipschitz classes on nonproper spaces and the general metric-measure/RCD
 comparison bridges remain open. The extended ADMG sections 2–3 finite-target

@@ -7,10 +7,10 @@ authorization. Exact results, scopes and certificates are in the
 
 ## State
 
-- Remote Lean certification last passed for `6ca1824` ([run 36846629874](https://github.com/numina-functional-inequalities/kls-lean/actions/runs/36846629874)).
-  Later local commits have no remote receipt yet.
-- The full local verifier passed 184 gates for the working tree containing the new certificate
-  (`build/verification/20261002T095750.910817Z/report.json`), before documentation-only edits.
+- Remote Lean certification passed for `b9c8a39` on tag `milestone/admg-theorem-3-6`
+  ([run 37017009088](https://github.com/numina-functional-inequalities/kls-lean/actions/runs/37017009088),
+  2026-10-02). The full local verifier also passed 184 gates for that commit
+  (`build/verification/20261002T134816.216230Z/report.json`).
 - 27 ledger certificates. `FunctionalInequalities.KLS.kls` in `KLS/Target.lean` is the one
   intentional hole, outside every certificate closure. Dimension-free KLS is open.
 - Covered papers: Ambrosio–Di Marino–Gigli Theorem 3.6, certificate
@@ -22,11 +22,9 @@ authorization. Exact results, scopes and certificates are in the
 
 ## Next
 
-1. Push the local commits and tag a `milestone/**` release to obtain the remote receipt for the
-   first covered paper (owner decision on timing).
-2. Formalize De Ponti–Mondino Lemmas 3.2 and 3.3 (elementary monotonicity of explicit functions)
+1. Formalize De Ponti–Mondino Lemmas 3.2 and 3.3 (elementary monotonicity of explicit functions)
    and extend the lemma maps (AGS 2013, Eldan 2013, Chen 2021).
-3. Blocked: the priority-1 Bakry–Émery `C_P ≤ 1/ρ` target waits for the Bakry–Gentil–Ledoux text.
+2. Blocked: the priority-1 Bakry–Émery `C_P ≤ 1/ρ` target waits for the Bakry–Gentil–Ledoux text.
 
 ## Open owner decisions
 

@@ -1,7 +1,8 @@
 # ADMG Theorem 3.6 paper-target certificate
 
-Date: 2026-10-02. Status: accepted by the owner on 2026-10-02 after semantic review; committed
-locally, remote milestone run pending.
+Date: 2026-10-02. Status: accepted by the owner on 2026-10-02 after semantic review; committed as
+`b9c8a39` and remotely certified by [run 37017009088](https://github.com/numina-functional-inequalities/kls-lean/actions/runs/37017009088)
+on tag `milestone/admg-theorem-3-6`.
 
 ## Placement plan
 
@@ -61,7 +62,8 @@ paper. Its notes were points 1–3 above. It also suggested a note on σ-finiten
 needed: a metric space is the countable union of the balls `B_n(x₀)`, so finiteness on bounded
 sets already gives σ-finiteness, as the paper states, and the theorem uses no further hypothesis.
 
-## Remaining step
+## Remote certification
 
-Push and tag `milestone/<name>` to run remote Lean certification for the exact commit, and record
-the run in the handoff. Until then ADMG coverage rests on the local receipt.
+Lean certification run 37017009088 passed for the exact commit `b9c8a39` (tag
+`milestone/admg-theorem-3-6`, 2026-10-02). The full local verifier passed 184 gates for the same
+commit (`build/verification/20261002T134816.216230Z/report.json`).
