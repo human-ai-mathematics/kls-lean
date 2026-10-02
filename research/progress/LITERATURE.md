@@ -853,6 +853,236 @@ flowchart LR
 
 Not listed: Remarks 3.1, 4.1 and 4.4 are expository (literature context, Euclidean background and a cited counterexample) and are not separate formalization targets.
 
+### LeeVempala2024 lemma map
+
+Source: [Lee–Vempala, arXiv:1612.01507v3](https://arxiv.org/abs/1612.01507v3), reviewed 2026-10-03.
+
+Standing assumptions: Log-concave densities p on R^n with mean mu and covariance matrix A; isotropic means mean 0 and A = I. psi_p is the KLS constant, the reciprocal of the Cheeger constant: 1/psi_p = inf_S p(boundary S)/min(p(S), p(R^n minus S)) (Conjecture 1 display), so upper bounds on psi_p are lower bounds on expansion; psi_n in Appendix A is the supremum over isotropic laws on R^n (implicit). The repository's Isoperimetry.constant is 1/psi_p on the affine support (outer Minkowski content) and Isoperimetry.inverseScale is psi_p. kappa_p and rho_p are the log-Cheeger and log-Sobolev constants (Definitions 10, 9); D is the diameter of the support. c, C are universal constants and a <~ b means a <= C b; ||.||_op is the spectral norm. From Section 3 on the support of p is truncated to a ball of radius R > n (justified by Lemma 24 and Theorem 25), W_t is a standard n-dimensional Wiener process and p_t, mu_t, A_t are the localization of Definition 26 with control matrix C_t = I. The Stieltjes potential u(X) is defined by display (1.1), Tr((uI - X)^{-q}) = Phi with X <= uI, which the paper cites as Definition 1.1.
+
+```mermaid
+flowchart LR
+    LeeVempala2024_Dpsi["◐ Conjecture 1, defining display of psi_p<br/>KLS constant psi_p"]
+    LeeVempala2024_C1["○ Conjecture 1 (Kannan-Lovasz-Simonovits)<br/>KLS conjecture"]
+    LeeVempala2024_T2["○ Theorem 2 (Kannan-Lovasz-Simonovits)<br/>KLS trace bound"]
+    LeeVempala2024_C3["○ Conjecture 3 (thin shell)<br/>Thin-shell conjecture"]
+    LeeVempala2024_C4["○ Conjecture 4 (slicing, isotropic constant)<br/>Slicing conjecture"]
+    LeeVempala2024_T5["⇑ Theorem 5 (Poincare constant; Maz'ya, Cheeger)<br/>Cheeger implies Poincare"]
+    LeeVempala2024_T6["○ Theorem 6 (Lipschitz concentration; Gromov-Milman)<br/>Lipschitz concentration via psi_p"]
+    LeeVempala2024_T7["○ Theorem 7 (Guedon-Milman, Paouris)<br/>Norm deviation bound"]
+    LeeVempala2024_T8["○ Theorem 8 (central limit theorem; Anttila-Ball-Perissinaki)<br/>CLT for convex sets"]
+    LeeVempala2024_D9["○ Definition 9<br/>Log-Sobolev constant rho_p"]
+    LeeVempala2024_D10["○ Definition 10<br/>Log-Cheeger constant kappa_p"]
+    LeeVempala2024_T11["○ Theorem 11 (Kannan-Lovasz-Montenegro)<br/>Previous log-Cheeger bound"]
+    LeeVempala2024_T12["○ Theorem 12<br/>KLS constant n^{1/4} bound"]
+    LeeVempala2024_C13["○ Corollary 13<br/>Slicing and thin-shell n^{1/4}"]
+    LeeVempala2024_C14["○ Corollary 14<br/>Ball walk warm-start mixing"]
+    LeeVempala2024_T15["○ Theorem 15<br/>Log-Sobolev bound 1/D"]
+    LeeVempala2024_T16["○ Theorem 16<br/>Lipschitz large deviation"]
+    LeeVempala2024_T17["○ Theorem 17<br/>Small ball probability"]
+    LeeVempala2024_T18["○ Theorem 18<br/>Ball walk from any start"]
+    LeeVempala2024_L19["○ Lemma 19 (Ito's formula)<br/>Ito's formula"]
+    LeeVempala2024_L20["○ Lemma 20 (reflection principle)<br/>Reflection principle"]
+    LeeVempala2024_T21["○ Theorem 21 (Dambis, Dubins-Schwarz)<br/>Time change of martingales"]
+    LeeVempala2024_L22["◐ Lemma 22 (Dinghas, Prekopa, Leindler)<br/>Log-concavity is preserved"]
+    LeeVempala2024_L23["○ Lemma 23 (log-concave moments)<br/>Reverse Holder moments"]
+    LeeVempala2024_L24["○ Lemma 24 (log-concave concentration)<br/>Norm tail bound"]
+    LeeVempala2024_T25["○ Theorem 25 (E. Milman, Theorem 1.8)<br/>Half-measure sets suffice"]
+    LeeVempala2024_D26["○ Definition 26<br/>Stochastic localization with C_t = I"]
+    LeeVempala2024_L27["○ Lemma 27<br/>Density is a martingale"]
+    LeeVempala2024_L28["○ Lemma 28<br/>Covariance SDE"]
+    LeeVempala2024_L29["○ Lemma 29<br/>Mass of a half set"]
+    LeeVempala2024_T30["○ Theorem 30 (Cousins-Vempala)<br/>Gaussian-tilted isoperimetry"]
+    LeeVempala2024_L31["○ Lemma 31<br/>Covariance control gives KLS"]
+    LeeVempala2024_L32["○ Lemma 32<br/>Third-moment vector bound"]
+    LeeVempala2024_L33["○ Lemma 33<br/>Third-moment tensor bound"]
+    LeeVempala2024_L34["○ Lemma 34<br/>Ito formula for Tr A_t^2"]
+    LeeVempala2024_L35["○ Lemma 35<br/>Potential Tr A_t^2 stays bounded"]
+    LeeVempala2024_T36["○ Theorem 36<br/>Isotropic log-isoperimetry 1/D"]
+    LeeVempala2024_L37["○ Lemma 37<br/>Spectral norm stays bounded"]
+    LeeVempala2024_L38["○ Lemma 38<br/>Ito formula for Stieltjes potential"]
+    LeeVempala2024_L39["○ Lemma 39<br/>Anisotropic third-moment bound"]
+    LeeVempala2024_L40["○ Lemma 40<br/>Drift and diffusion of u_t"]
+    LeeVempala2024_L41["○ Lemma 41<br/>Derivatives of the Stieltjes potential"]
+    LeeVempala2024_L42["○ Lemma 42 (Eldan)<br/>Trace shift inequality"]
+    LeeVempala2024_L43["○ Lemma 43<br/>Quadratic variation of p_t(E)"]
+    LeeVempala2024_L44["○ Lemma 44<br/>log(1/g_t) stays controlled"]
+    LeeVempala2024_L45["○ Lemma 45<br/>g sqrt(log 1/g) is preserved"]
+    LeeVempala2024_T46["○ Theorem 46 (Ledoux, Theorem 1.1)<br/>Gaussian-tilted log-isoperimetry"]
+    LeeVempala2024_T47["○ Theorem 47 (Ledoux)<br/>Log-isoperimetry implies log-Sobolev"]
+    LeeVempala2024_T48["○ Theorem 48<br/>Log-Sobolev for bounded isotropic laws"]
+    LeeVempala2024_T49["○ Theorem 49 (Paouris, Theorem 1.3)<br/>Small ball under subgaussian tails"]
+    LeeVempala2024_T50["○ Theorem 50<br/>Speedy walk log-Cheeger"]
+    LeeVempala2024_L51["○ Lemma 51<br/>Local conductance facts"]
+    LeeVempala2024_T52["○ Theorem 52<br/>Gaussian-tilted three-set inequality"]
+    LeeVempala2024_L53["○ Lemma 53 (Kannan-Lovasz-Montenegro, Lemma 6.4)<br/>One-step coupling"]
+    LeeVempala2024_L54["○ Lemma 54<br/>Log-Sobolev lower-bound example"]
+    LeeVempala2024_L55["○ Lemma 55<br/>Ball walk lower bound"]
+    LeeVempala2024_CL56["○ Claim 56<br/>Slices stay radially unimodal"]
+    LeeVempala2024_L57["○ Lemma 57<br/>Isotropic-only third-moment bound"]
+    LeeVempala2024_L58["○ Lemma 58<br/>Spectral norm bound, isotropic KLS"]
+    LeeVempala2024_Dpsi --> LeeVempala2024_C1
+    LeeVempala2024_Dpsi --> LeeVempala2024_T2
+    LeeVempala2024_Dpsi --> LeeVempala2024_T5
+    LeeVempala2024_Dpsi --> LeeVempala2024_T6
+    LeeVempala2024_Dpsi --> LeeVempala2024_T8
+    LeeVempala2024_Dpsi --> LeeVempala2024_D10
+    LeeVempala2024_D9 --> LeeVempala2024_T11
+    LeeVempala2024_D10 --> LeeVempala2024_T11
+    LeeVempala2024_L35 --> LeeVempala2024_T12
+    LeeVempala2024_L31 --> LeeVempala2024_T12
+    LeeVempala2024_D26 --> LeeVempala2024_T12
+    LeeVempala2024_T12 --> LeeVempala2024_C13
+    LeeVempala2024_T12 --> LeeVempala2024_C14
+    LeeVempala2024_T36 --> LeeVempala2024_T15
+    LeeVempala2024_T48 --> LeeVempala2024_T15
+    LeeVempala2024_T12 --> LeeVempala2024_T16
+    LeeVempala2024_T36 --> LeeVempala2024_T16
+    LeeVempala2024_L37 --> LeeVempala2024_T17
+    LeeVempala2024_L28 --> LeeVempala2024_T17
+    LeeVempala2024_L32 --> LeeVempala2024_T17
+    LeeVempala2024_L43 --> LeeVempala2024_T17
+    LeeVempala2024_D26 --> LeeVempala2024_T17
+    LeeVempala2024_T49 --> LeeVempala2024_T17
+    LeeVempala2024_T50 --> LeeVempala2024_T18
+    LeeVempala2024_L19 --> LeeVempala2024_L27
+    LeeVempala2024_D26 --> LeeVempala2024_L27
+    LeeVempala2024_L19 --> LeeVempala2024_L28
+    LeeVempala2024_L27 --> LeeVempala2024_L28
+    LeeVempala2024_L27 --> LeeVempala2024_L29
+    LeeVempala2024_T21 --> LeeVempala2024_L29
+    LeeVempala2024_L20 --> LeeVempala2024_L29
+    LeeVempala2024_Dpsi --> LeeVempala2024_T30
+    LeeVempala2024_T25 --> LeeVempala2024_L31
+    LeeVempala2024_L27 --> LeeVempala2024_L31
+    LeeVempala2024_D26 --> LeeVempala2024_L31
+    LeeVempala2024_T30 --> LeeVempala2024_L31
+    LeeVempala2024_L29 --> LeeVempala2024_L31
+    LeeVempala2024_L22 --> LeeVempala2024_L32
+    LeeVempala2024_L23 --> LeeVempala2024_L32
+    LeeVempala2024_L22 --> LeeVempala2024_L33
+    LeeVempala2024_L23 --> LeeVempala2024_L33
+    LeeVempala2024_L19 --> LeeVempala2024_L34
+    LeeVempala2024_L28 --> LeeVempala2024_L34
+    LeeVempala2024_L27 --> LeeVempala2024_L34
+    LeeVempala2024_L34 --> LeeVempala2024_L35
+    LeeVempala2024_L33 --> LeeVempala2024_L35
+    LeeVempala2024_L32 --> LeeVempala2024_L35
+    LeeVempala2024_L19 --> LeeVempala2024_L35
+    LeeVempala2024_T21 --> LeeVempala2024_L35
+    LeeVempala2024_L20 --> LeeVempala2024_L35
+    LeeVempala2024_L27 --> LeeVempala2024_T36
+    LeeVempala2024_D26 --> LeeVempala2024_T36
+    LeeVempala2024_T46 --> LeeVempala2024_T36
+    LeeVempala2024_L45 --> LeeVempala2024_T36
+    LeeVempala2024_L40 --> LeeVempala2024_L37
+    LeeVempala2024_T21 --> LeeVempala2024_L37
+    LeeVempala2024_L20 --> LeeVempala2024_L37
+    LeeVempala2024_L41 --> LeeVempala2024_L38
+    LeeVempala2024_L19 --> LeeVempala2024_L38
+    LeeVempala2024_L28 --> LeeVempala2024_L38
+    LeeVempala2024_L42 --> LeeVempala2024_L38
+    LeeVempala2024_T5 --> LeeVempala2024_L39
+    LeeVempala2024_L22 --> LeeVempala2024_L39
+    LeeVempala2024_L38 --> LeeVempala2024_L40
+    LeeVempala2024_L32 --> LeeVempala2024_L40
+    LeeVempala2024_L39 --> LeeVempala2024_L40
+    LeeVempala2024_L27 --> LeeVempala2024_L43
+    LeeVempala2024_L23 --> LeeVempala2024_L43
+    LeeVempala2024_L43 --> LeeVempala2024_L44
+    LeeVempala2024_L19 --> LeeVempala2024_L44
+    LeeVempala2024_T21 --> LeeVempala2024_L44
+    LeeVempala2024_L20 --> LeeVempala2024_L44
+    LeeVempala2024_L44 --> LeeVempala2024_L45
+    LeeVempala2024_L37 --> LeeVempala2024_L45
+    LeeVempala2024_L43 --> LeeVempala2024_L45
+    LeeVempala2024_L19 --> LeeVempala2024_L45
+    LeeVempala2024_T47 --> LeeVempala2024_T48
+    LeeVempala2024_T36 --> LeeVempala2024_T48
+    LeeVempala2024_L51 --> LeeVempala2024_T50
+    LeeVempala2024_L53 --> LeeVempala2024_T50
+    LeeVempala2024_T52 --> LeeVempala2024_T50
+    LeeVempala2024_L45 --> LeeVempala2024_T50
+    LeeVempala2024_D26 --> LeeVempala2024_T50
+    LeeVempala2024_T46 --> LeeVempala2024_T52
+    LeeVempala2024_CL56 --> LeeVempala2024_L55
+    LeeVempala2024_L39 --> LeeVempala2024_L57
+    LeeVempala2024_T5 --> LeeVempala2024_L57
+    LeeVempala2024_L57 --> LeeVempala2024_L58
+    LeeVempala2024_L40 --> LeeVempala2024_L58
+    LeeVempala2024_L37 --> LeeVempala2024_L58
+    classDef lemma_partial fill:#fff3df,stroke:#c88719,color:#66420d;
+    class LeeVempala2024_Dpsi,LeeVempala2024_L22 lemma_partial;
+    classDef lemma_pending fill:#fee2e2,stroke:#dc2626,color:#991b1b;
+    class LeeVempala2024_C1,LeeVempala2024_T2,LeeVempala2024_C3,LeeVempala2024_C4,LeeVempala2024_T6,LeeVempala2024_T7,LeeVempala2024_T8,LeeVempala2024_D9,LeeVempala2024_D10,LeeVempala2024_T11,LeeVempala2024_T12,LeeVempala2024_C13,LeeVempala2024_C14,LeeVempala2024_T15,LeeVempala2024_T16,LeeVempala2024_T17,LeeVempala2024_T18,LeeVempala2024_L19,LeeVempala2024_L20,LeeVempala2024_T21,LeeVempala2024_L23,LeeVempala2024_L24,LeeVempala2024_T25,LeeVempala2024_D26,LeeVempala2024_L27,LeeVempala2024_L28,LeeVempala2024_L29,LeeVempala2024_T30,LeeVempala2024_L31,LeeVempala2024_L32,LeeVempala2024_L33,LeeVempala2024_L34,LeeVempala2024_L35,LeeVempala2024_T36,LeeVempala2024_L37,LeeVempala2024_L38,LeeVempala2024_L39,LeeVempala2024_L40,LeeVempala2024_L41,LeeVempala2024_L42,LeeVempala2024_L43,LeeVempala2024_L44,LeeVempala2024_L45,LeeVempala2024_T46,LeeVempala2024_T47,LeeVempala2024_T48,LeeVempala2024_T49,LeeVempala2024_T50,LeeVempala2024_L51,LeeVempala2024_T52,LeeVempala2024_L53,LeeVempala2024_L54,LeeVempala2024_L55,LeeVempala2024_CL56,LeeVempala2024_L57,LeeVempala2024_L58 lemma_pending;
+    classDef lemma_improved fill:#dcfce7,stroke:#15803d,color:#14532d;
+    class LeeVempala2024_T5 lemma_improved;
+    style LeeVempala2024_T12 stroke-width:3px
+```
+
+| Item | Statement | Status | Lean declarations | Note |
+| --- | --- | --- | --- | --- |
+| Conjecture 1, defining display of psi_p | For a log-concave density p on R^n, 1/psi_p = inf over S of p(boundary S)/min(p(S), p(R^n minus S)), where p(boundary S) is the boundary measure (written as the integral of p over the boundary); psi_p is the reciprocal of the Cheeger constant, so upper bounds on psi_p are lower bounds on expansion. | ◐ Partial or statement only | [`constant`](../../formalization/FunctionalInequalities/KLS/Isoperimetry.lean)<br/>[`inverseScale`](../../formalization/FunctionalInequalities/KLS/Isoperimetry.lean) | Lean Isoperimetry.constant is h_mu = 1/psi_p, an infimum over measurable sets of mass in (0, 1) of the outer Minkowski content (liminf over open thickenings) divided by min(mu(B), 1 - mu(B)), computed on the affine support with its induced metric; Isoperimetry.inverseScale is Psi = h_mu^{-1} = psi_p, valued in [0, infinity]. The paper leaves the boundary measure and the admissible class of S unspecified, and uses the display only for densities on R^n. |
+| Conjecture 1 (Kannan-Lovasz-Simonovits) | For every log-concave density p on R^n with covariance matrix A, 1/psi_p >= c/sqrt(&#124;&#124;A&#124;&#124;_op) for a universal constant c > 0; equivalently psi_p <= C for every isotropic log-concave p. | ○ Not yet formalized | — | Open conjecture, not proved in the paper. Deliberately not mapped to FunctionalInequalities.KLS.kls. |
+| Theorem 2 (Kannan-Lovasz-Simonovits) | For every log-concave density p on R^n with covariance matrix A, psi_p <= C sqrt(Tr A) for a universal constant C; for isotropic p this is psi_p = O(sqrt n). | ○ Not yet formalized | — | Quoted from KLS95, not proved here. No Lean declaration bounds Psi by the covariance, even on the line (Line/Buser.lean gives Psi^2 <= 12 C_P and Line/Poincare.lean gives C_P <= 12 Var, in separate declarations). |
+| Conjecture 3 (thin shell) | For X drawn from an isotropic log-concave density on R^n, sigma_p^2 = E[(&#124;&#124;X&#124;&#124; - sqrt n)^2] <= C for a universal constant C. | ○ Not yet formalized | — | Open conjecture; the text recalls sigma_p <= C psi_p and the Guedon-Milman bound sigma_p <= C n^{1/3}. No Lean counterpart. |
+| Conjecture 4 (slicing, isotropic constant) | Every convex body of unit volume in R^n has a hyperplane section of volume at least a universal constant; equivalently L_K <= C for every unit-volume convex body K with covariance L_K^2 I. | ○ Not yet formalized | — | Open conjecture; the text recalls L_p <= C sigma_p <= C psi_p (Eldan-Klartag, Ball). No Lean counterpart. |
+| Theorem 5 (Poincare constant; Maz'ya, Cheeger) | For every isotropic log-concave density p on R^n and every smooth g, Var_p g <= C psi_p^2 E_p &#124;&#124;grad g&#124;&#124;^2 for a universal constant C. | ⇑ Stronger result or alternative route | [`literatureConstant_le_four_mul_inverseScale_sq`](../../formalization/FunctionalInequalities/KLS/Geometry/Cheeger/Inequality.lean) | Quoted, not proved here; used in Lemmas 39 and 57 for non-isotropic laws as well. Lean proves C_P^lit(mu) <= 4 Psi(mu)^2 for every finite-dimensional log-concave law (no isotropy, explicit constant 4, Dirac laws included), which implies the theorem when psi_p is read as Isoperimetry.inverseScale and smooth g with finite energy are admissible local-slope tests. |
+| Theorem 6 (Lipschitz concentration; Gromov-Milman) | For every L-Lipschitz g on R^n and isotropic log-concave p, P(&#124;g(x) - E g&#124; >= psi_p L t) <= exp(-c t) for a universal c > 0. | ○ Not yet formalized | — | Quoted for context, not proved or used. No Lean counterpart. |
+| Theorem 7 (Guedon-Milman, Paouris) | For every isotropic log-concave p on R^n and t >= 0, P(&#124; &#124;&#124;x&#124;&#124; - sqrt n &#124; >= t) <= exp(-c min(t^3/n, t)). | ○ Not yet formalized | — | Quoted for comparison with Theorem 16; not proved or used. |
+| Theorem 8 (central limit theorem; Anttila-Ball-Perissinaki) | For an isotropic symmetric convex set K with marginal densities g_theta of vol(K cap {x^T theta = s}) and g the standard Gaussian density, there are universal c_1, c_2 > 0 such that for every delta > 0 the set of theta in S^{n-1} with &#124;int_{-t}^t g_theta - int_{-t}^t g&#124; <= c_1(delta + psi_K/sqrt n) for all t has measure at least 1 - n e^{-c_2 delta^2 n}. | ○ Not yet formalized | — | Quoted for context; not proved or used. The printed vol of a subset of S^{n-1} is the normalized spherical measure. |
+| Definition 9 | For a density p, rho_p is the largest rho such that (rho/2) int f^2 log f^2 dp <= int &#124;&#124;grad f&#124;&#124;^2 dp for every smooth f with int f^2 dp = 1. | ○ Not yet formalized | — | No log-Sobolev constant is defined in the Lean library. |
+| Definition 10 | For a density p on R^n, kappa_p = inf over S of p(boundary S)/(min(p(S), p(R^n minus S)) sqrt(log(1/p(S)))). | ○ Not yet formalized | — | The defining display is typeset after the definition environment. The text asserts rho_p = Theta(kappa_p^2) citing Ledoux; only kappa_p^2 <~ rho_p follows from Theorem 47 as quoted. No Lean counterpart. |
+| Theorem 11 (Kannan-Lovasz-Montenegro) | For a log-concave density p on R^n with support of diameter D, kappa_p >= c/D and rho_p >= c/D^2. | ○ Not yet formalized | — | Quoted; superseded by Theorem 15 in the isotropic case. |
+| **Theorem 12** (main) | For every log-concave density p on R^n with covariance matrix A, psi_p <= C (Tr(A^2))^{1/4} for a universal constant C; in particular psi_p <= C n^{1/4} for isotropic p, where psi_p is the reciprocal of the Cheeger constant of Conjecture 1. | ○ Not yet formalized | — | Main theorem (the psi_n = O(n^{1/4}) bound). Proof (Section 4.3): Lemma 35 keeps Tr A_t^2 <= 8 Tr A_0^2, hence &#124;&#124;A_t&#124;&#124;_op <= sqrt(8 Tr A_0^2), on [0, c_1/sqrt(Tr A_0^2)] with probability 0.99; Lemma 31 with T = min(1/(64 sqrt 8), c_1)/sqrt(Tr A_0^2) gives psi_p = O(T^{-1/2}). Requires the stochastic-localization calculus of Section 3; the Lean library has no stochastic calculus and no declaration states this bound, even for n = 1. |
+| Corollary 13 | For every isotropic log-concave density p on R^n, the isotropic constant L_p and the thin-shell constant sigma_p are O(n^{1/4}). | ○ Not yet formalized | — | Called immediate: combine Theorem 12 with the quoted comparisons L_p <= C sigma_p <= C psi_p (Eldan-Klartag; sigma_p <= C psi_p is folklore). The printed statement says any log-concave p, but L_p and sigma_p are defined for isotropic p. |
+| Corollary 14 | The ball walk for an isotropic log-concave density on R^n mixes from a warm start in O*(n^{2.5}) steps. | ○ Not yet formalized | — | From Theorem 12 and the quoted O*(n^2 psi_p^2) warm-start bound of KLS97; no proof given. |
+| Theorem 15 | For every isotropic log-concave density p with support of diameter D, kappa_p >= c/sqrt D and rho_p >= c/D for a universal constant c > 0. | ○ Not yet formalized | — | The paper's main log-Sobolev result (called our main theorem in Section 1.3); tight by Lemma 54. kappa_p follows from Theorem 36, rho_p is Theorem 48. |
+| Theorem 16 | For every L-Lipschitz g on R^n, isotropic log-concave p and t > 0, P(&#124;g(x) - gbar&#124; >= L t) <= exp(-c t^2/(t + sqrt n)), where gbar is the median or mean of g under p and c > 0 is universal. | ○ Not yet formalized | — | Proof in Section 6.1: Theorem 12 gives a first tail estimate; truncation to balls makes the law almost isotropic with bounded diameter, and Theorem 36 then bounds d alpha_t/dt for alpha_t = log(1/p(E_t)). The printed gbar(x) means the constant gbar; renormalization of almost isotropic laws is asserted without proof. |
+| Theorem 17 | If for some k >= 1, psi_p <= C (Tr A^k)^{1/(2k)} for every log-concave p with covariance A, then for every isotropic log-concave p on R^n and 0 <= epsilon <= c_1, P(&#124;&#124;x&#124;&#124;_2^2 <= epsilon n) <= epsilon^{c_2 n^{1-1/k}/k} with universal c_1, c_2 > 0. | ○ Not yet formalized | — | Proved in Section 6.2: on an event of probability 7/10, &#124;&#124;A_t&#124;&#124;_op <= 2 (Lemma 37), Tr A_t >~ n and p_t(E) >= e^{-O(nt)} p(E), and Paouris' Theorem 49 for the t-strongly log-concave p_t; with the k = 2 case of Theorem 12 it gives epsilon^{c sqrt n} (unnumbered remark). The printed proof says the diameter can be taken as 2 sqrt n by truncation. |
+| Theorem 18 | The ball walk with step size delta = Theta(1/sqrt n) on an isotropic convex body K in R^n of diameter D mixes in O(n^2 D log log D) proper steps from any starting point at distance n^{-O(1)} from the boundary of K. | ○ Not yet formalized | — | Follows from Theorem 50 and Theorem 1.2 of Kannan-Lovasz-Montenegro (quoted); no further proof is written. |
+| Lemma 19 (Ito's formula) | For a semimartingale x and a C^2 function f, df(x_t) = sum_i (partial_i f)(x_t) dx^i + (1/2) sum_{i,j} (partial_ij f)(x_t) d[x^i, x^j]_t. | ○ Not yet formalized | — | Standard stochastic calculus, quoted without proof. The Lean library has no stochastic calculus. |
+| Lemma 20 (reflection principle) | For a standard one-dimensional Wiener process W and a, t >= 0, P(sup_{0<=s<=t} W(s) >= a) = 2 P(W(t) >= a). | ○ Not yet formalized | — | Standard, quoted without proof. No Lean counterpart. |
+| Theorem 21 (Dambis, Dubins-Schwarz) | Every continuous local martingale M_t can be written as M_t = M_0 + W_{[M]_t} for all t >= 0 for some Wiener process W. | ○ Not yet formalized | — | Quoted without proof; as printed it omits the possible enlargement of the probability space when [M]_infinity < infinity. No Lean counterpart. |
+| Lemma 22 (Dinghas, Prekopa, Leindler) | The convolution of two log-concave functions is log-concave; in particular every linear image and every marginal of a log-concave density is log-concave. | ◐ Partial or statement only | [`mapContinuousLinearEquiv`](../../formalization/FunctionalInequalities/KLS/LogConcave/Isotropic.lean) | Quoted. Lean proves only the invertible linear case in measure form: the image of a compact-set (Borell) log-concave law under a continuous linear equivalence of finite-dimensional inner-product spaces is log-concave. Convolution and marginals (non-invertible maps) are not stated; the Prekopa-Leindler inequality itself is in Probability/BrunnMinkowski.lean but does not state this lemma. |
+| Lemma 23 (log-concave moments) | For a log-concave density p on R^n and k >= 1, E_p &#124;&#124;x&#124;&#124;^k <= (2k)^k (E_p &#124;&#124;x&#124;&#124;^2)^{k/2}. | ○ Not yet formalized | — | Folklore, quoted from Lovasz-Vempala. No Lean counterpart. |
+| Lemma 24 (log-concave concentration) | For every isotropic log-concave density p on R^n and t > 0, P_p(&#124;&#124;x&#124;&#124; > t sqrt n) <= e^{-t+1}. | ○ Not yet formalized | — | Quoted from Lovasz-Vempala; used only to justify truncating the support in Section 3.1. |
+| Theorem 25 (E. Milman, Theorem 1.8) | The Cheeger constant of every log-concave density is attained (up to the infimum) on subsets of measure 1/2. | ○ Not yet formalized | — | Quoted from Milman 2009 via concavity of the isoperimetric profile; not proved here. Used in Lemma 31 and Section 3.1. No Lean counterpart; the Lean halfConstant of MetricBV is a different (mass at most 1/2) normalization. |
+| Definition 26 | For a log-concave p (with support in a ball of radius R > n), c_0 = 0 and dc_t = dW_t + mu_t dt, where p_t(x) = e^{c_t^T x - t&#124;&#124;x&#124;&#124;^2/2} p(x)/int e^{c_t^T y - t&#124;&#124;y&#124;&#124;^2/2} p(y) dy, mu_t = E_{p_t} x and A_t = Cov(p_t). | ○ Not yet formalized | — | Eldan's localization with identity control matrix: the Gaussian factor e^{-t&#124;&#124;x&#124;&#124;^2/2} is deterministic and the SDE is n-dimensional with additive noise and bounded drift mu_t that is Lipschitz in c_t (derivative A_t); existence and uniqueness are cited from Oksendal Sec. 5.2. The truncation to a ball is justified by Lemma 24 and Theorem 25. No Lean counterpart. |
+| Lemma 27 | For every x in R^n, dp_t(x) = (x - mu_t)^T dW_t p_t(x). | ○ Not yet formalized | — | Proved in Section 4.4 by Ito's formula for q_t(x) = e^{c_t^T x - t&#124;&#124;x&#124;&#124;^2/2} p(x) and for V_t^{-1}, V_t = int q_t. The proofs then use that p_t(x), p_t(E) and the boundary measure p_t(boundary E) are true martingales and interchange d with spatial integrals, which the bounded support makes valid but is not argued. |
+| Lemma 28 | dA_t = int (x - mu_t)(x - mu_t)^T ((x - mu_t)^T dW_t) p_t(x) dx - A_t^2 dt; in particular d mu_t = A_t dW_t. | ○ Not yet formalized | — | Proved in Section 4.4 by Ito's formula for A_t as a function of mu_t and p_t. |
+| Lemma 29 | For every E with p(E) = 1/2 and t >= 0, P(1/4 <= p_t(E) <= 3/4) >= 9/10 - P(int_0^t &#124;&#124;A_s&#124;&#124;_op ds >= 1/64). | ○ Not yet formalized | — | d[g]_t <= &#124;&#124;A_t&#124;&#124;_op dt for g_t = p_t(E), then Dambis-Dubins-Schwarz, the reflection principle and P(N(0,1) > 2) <= 0.0228. |
+| Theorem 30 (Cousins-Vempala) | If f is integrable log-concave and h = f e^{-t&#124;&#124;x&#124;&#124;^2/2}/int f e^{-t&#124;&#124;y&#124;&#124;^2/2}, then h is log-concave and h(boundary S) >= c sqrt t min(h(S), h(R^n minus S)) for every measurable S, i.e. psi_h <= C/sqrt t. | ○ Not yet formalized | — | Quoted from CV2014 (also used by Eldan); not proved here, but implied by Theorem 46. In Lean it would follow from inverseScale_sq_le_pi_literature (Psi^2 <= pi C_P) and a Brascamp-Lieb or Bakry-Emery bound C_P <= 1/t for t-strongly log-concave laws, which the library does not state; not mapped. |
+| Lemma 31 | If p is log-concave and T > 0 satisfies P(int_0^T &#124;&#124;A_s&#124;&#124;_op ds <= 1/64) >= 3/4 for the localization of Definition 26 started at p, then psi_p = O(T^{-1/2}). | ○ Not yet formalized | — | For E with p(E) = 1/2: p(boundary E) = E p_T(boundary E) >~ sqrt T E min(p_T(E), p_T(E^c)) by Theorem 30, and Lemma 29 bounds the last expectation below. The martingale identity for the boundary measure needs only the inequality E p_T(boundary E) <= p(boundary E) (Fatou), which is the direction used. The display in the proof writes int_0^t for int_0^T. |
+| Lemma 32 | For log-concave p with mean mu and covariance A and every PSD C, &#124;&#124;E_p (x - mu)(x - mu)^T C (x - mu)&#124;&#124;_2 <= C' &#124;&#124;A&#124;&#124;_op^{1/2} Tr(A^{1/2} C A^{1/2}) for a universal C'. | ○ Not yet formalized | — | Rank-one case by Cauchy-Schwarz and fourth moments of one-dimensional log-concave marginals, then spectral decomposition of C. Deterministic. |
+| Lemma 33 | For log-concave p with mean mu and covariance A, E_{x,y ~ p} &#124;<x - mu, y - mu>&#124;^3 <= C (Tr A^2)^{3/2} for a universal C. | ○ Not yet formalized | — | Deterministic: one-dimensional reverse Holder in y, then Lemma 23 for A^{1/2} x. |
+| Lemma 34 | d Tr A_t^2 = 2 E_{p_t}[(x - mu_t)^T A_t (x - mu_t)(x - mu_t)^T] dW_t - 2 Tr(A_t^3) dt + E_{x,y ~ p_t}[((x - mu_t)^T (y - mu_t))^3] dt. | ○ Not yet formalized | — | Proved in Section 4.4 from the matrix Ito formula and d[A_ij, A_ji]_t. |
+| Lemma 35 | For log-concave p with covariance A and its localization, there is a universal c_1 > 0 such that P(max_{t in [0,T]} Tr A_t^2 >= 8 Tr A_0^2) <= 0.01 with T = c_1/sqrt(Tr A_0^2). | ○ Not yet formalized | — | Drift <= C' Phi_t^{3/2} by Lemma 33, martingale part &#124;&#124;v_t&#124;&#124; <~ Phi_t^{5/4} by Lemma 32 (the printed inequality drops the constant), then Ito for f(a) = -(a + Phi_0)^{-1/2}, Dambis-Dubins-Schwarz and the reflection principle. |
+| Theorem 36 | For an isotropic log-concave p with support of diameter D and measurable S (with p(S) <= 1/2), p(boundary S) >= c (log(1/p(S))/D + sqrt(log(1/p(S))/D)) p(S) for a universal c > 0. | ○ Not yet formalized | — | Labelled lem:expand_p but typeset as a theorem. The printed statement omits p(S) <= 1/2, which the proof needs through Lemma 45. Proof in Section 5.5: martingale property, Theorem 46 at time T and Lemma 45, with the two admissible choices of T. |
+| Lemma 37 | If for some k >= 1, psi_p <= C (Tr A^k)^{1/(2k)} for every log-concave p with covariance A, there is a universal c such that for the localization of an isotropic log-concave p and 0 <= T <= 1/(c k n^{1/k}), P(max_{t in [0,T]} &#124;&#124;A_t&#124;&#124;_op >= 2) <= 2 exp(-1/(cT)). | ○ Not yet formalized | — | Potential Psi_t = -(u_t + 1)^{-3} for the Stieltjes potential u of display (1.1) with Phi = 2^{-k} n and q = ceil k, then Dambis-Dubins-Schwarz and reflection. The statement leaves isotropy of p implicit (u_0 = 3/2 uses A_0 = I). The remark after it records that Theorem 12 gives the hypothesis with k = 2. |
+| Lemma 38 | For u_t = u(A_t) with u defined by Tr((uI - X)^{-q}) = Phi, X <= uI, du_t = alpha_t^T dW_t + beta_t dt with alpha_t = kappa_t^{-1} E_{tilde p_t}[x^T (uI - A_t)^{-(q+1)} x x] and beta_t/(q+1) bounded by the three displayed third-moment terms, kappa_t = Tr((uI - A_t)^{-(q+1)}) and tilde p_t the centred p_t. | ○ Not yet formalized | — | Matrix Ito formula with the Hessian of Lemma 41 and Lemma 42 to merge the first Hessian term. The printed reference Definition 1.1 is display (1.1). |
+| Lemma 39 | Under the hypothesis of Lemma 37, for log-concave p with mean mu and covariance A and PSD B1, B2, B3, &#124;E_{x,y ~ p} prod_{i=1}^3 (x - mu)^T B_i (y - mu)&#124; <= C Tr(A^{1/2} B1 A^{1/2}) (Tr (A^{1/2} B2 A^{1/2})^k)^{1/k} &#124;&#124;A^{1/2} B3 A^{1/2}&#124;&#124;_op. | ○ Not yet formalized | — | Uses Theorem 5 for the non-isotropic law of B2^{1/2} x together with the anisotropic KLS hypothesis (the printed exponent -1/2k is a sign typo for 1/2k); the reduction to isotropic p and diagonal B1 is by linear change of variables. |
+| Lemma 40 | Under the hypothesis of Lemma 37 and q = ceil k, du_t = alpha_t^T dW_t + beta_t dt with &#124;&#124;alpha_t&#124;&#124;_2 <= C u_t^{3/2} and beta_t <= C k u_t^4 Phi^{1/k}. | ○ Not yet formalized | — | Deterministic estimates of the coefficients of Lemma 38. |
+| Lemma 41 | Du(X)[H] = Tr((uI - X)^{-(q+1)} H)/Tr((uI - X)^{-(q+1)}), and D^2 u(X)[H1, H2] is given by the displayed four-term formula. | ○ Not yet formalized | — | Implicit differentiation of display (1.1). Deterministic matrix calculus. |
+| Lemma 42 (Eldan) | For positive definite A, symmetric Delta and alpha, beta >= 0, Tr(A^alpha Delta A^beta Delta) <= Tr(A^{alpha+beta} Delta^2). | ○ Not yet formalized | — | Attributed to Eldan 2013 and proved here by diagonalization and weighted AM-GM. Deterministic. |
+| Lemma 43 | For fixed E and g_t = p_t(E), g_t is a martingale with d[g]_t <= D^2 g_t^2 dt and d[g]_t <= 30 &#124;&#124;A_t&#124;&#124;_op g_t^2 log^2(e/g_t) dt, where D is the diameter of the support. | ○ Not yet formalized | — | First bound from the support diameter, second from Holder with ell = log(e/g_t) and Lemma 23. |
+| Lemma 44 | For T, gamma >= 0, with probability at least 1 - 4 exp(-gamma^2/(2 T D^2)), for all 0 <= t <= T, log(1/g_0) - gamma <= log(1/g_t) <= log(1/g_0) + D^2 t/2 + gamma. | ○ Not yet formalized | — | The proof cites (5.3) in Lemma 29; the bound is (5.3) of Lemma 43 (cross-reference error in the source). |
+| Lemma 45 | There is a universal c such that for measurable E with p_0(E) <= 1/2 and 0 <= T <= c max(D^{-2} log(1/p_0(E)), 1/(log(1/p_0(E)) + D)), E[p_T(E) sqrt(log(1/p_T(E))) 1_{p_T(E) <= 1/2}] >= p_0(E) sqrt(log(1/p_0(E)))/5. | ○ Not yet formalized | — | Two cases on T; the second applies Lemma 37 with k = 2 (hence relies on Theorem 12) using D >= sqrt n for isotropic laws; the proof cites (5.4) of Lemma 29 for Lemma 43 and mixes D and sqrt n in the time bound. |
+| Theorem 46 (Ledoux, Theorem 1.1) | If f is integrable log-concave, t >= 0 and h = f e^{-t&#124;&#124;x&#124;&#124;^2/2}/int f e^{-t&#124;&#124;y&#124;&#124;^2/2}, then for every S with h(S) <= 1/2, h(boundary S) >= c sqrt t h(S) sqrt(log(1/h(S))). | ○ Not yet formalized | — | Quoted from Ledoux 1999 and reproved by the KLS localization lemma (reduction to one-dimensional needles e^{-gamma x - t x^2/2} on intervals) and three Gaussian tail cases. Implies Theorem 30. No Lean counterpart. |
+| Theorem 47 (Ledoux) | If mu is absolutely continuous on R^n and mu(boundary A) >= phi mu(A) sqrt(log(1/mu(A))) for every open A with mu(A) <= 1/2, then int &#124;grad f&#124;^2 dmu >= c phi^2 int f^2 log f^2 dmu for every f with int f^2 dmu = 1. | ○ Not yet formalized | — | Quoted, not proved. |
+| Theorem 48 | For an isotropic log-concave p with support of diameter D and every f with int f^2 p = 1, int &#124;grad f&#124;^2 p >= (c/D) int f^2 log f^2 p. | ○ Not yet formalized | — | Immediate from Theorems 47 and 36; tight by Lemma 54 (remark after it). |
+| Theorem 49 (Paouris, Theorem 1.3) | If p is log-concave with covariance A and subgaussian constant beta, i.e. E<x, theta>^{2k} <= beta^{2k} E g^{2k} for all theta and k, then for every y and 0 <= epsilon <= c_1, P(&#124;&#124;x - y&#124;&#124;^2 <= epsilon Tr A) <= epsilon^{c_2 beta^{-2} &#124;&#124;A&#124;&#124;_op^{-1} Tr A}. | ○ Not yet formalized | — | Quoted from Paouris 2012 (printed with the hypothesis written for unit theta implicitly and b for beta). |
+| Theorem 50 | For the speedy walk with steps delta <= C on an isotropic convex body K of diameter D, every subset of measure s with e^{-O(D/delta^2)} <= s <= 1/2 has expansion psi(s) >= c (delta/sqrt n)(sqrt(log(1/s)/D) + log(1/s)/D). | ○ Not yet formalized | — | Standard three-set partition, the martingale property of p_t, Theorem 52 at time T and Lemma 45. Here psi(s) denotes the Markov-chain expansion, not the KLS constant. |
+| Lemma 51 | For a convex body K the local conductance ell(x) = vol(K cap (x + delta B_n))/vol(delta B_n) is log-concave and proportional to the speedy-walk stationary density; if K contains a unit ball, K' = {ell >= 3/4} has vol(K') >= (1 - 2 delta sqrt n) vol(K). | ○ Not yet formalized | — | Stated without proof (standard facts from the ball-walk literature). |
+| Theorem 52 | For h as in Theorem 46 and a partition S1, S2, S3 of R^n with h(S1) <= h(S2) such that every u in S1, v in S2 has &#124;&#124;u - v&#124;&#124; >= d or d_h(u, v) >= d_h, h(S3) >= c min(d_h/sqrt n, d sqrt(t log(1/h(S1)))) h(S1). | ○ Not yet formalized | — | Proof sketch: localization reduces to needles, then Theorem 46 or Lemma 3.8 of KLS97. |
+| Lemma 53 (Kannan-Lovasz-Montenegro, Lemma 6.4) | For x, y in K with &#124;&#124;x - y&#124;&#124; <= delta/sqrt n, d_TV(P_x, P_y) < 1 - d_ell(x, y). | ○ Not yet formalized | — | Quoted. |
+| Lemma 54 | For every 2 sqrt n <= D <= n/2 there is an isotropic log-concave distribution of diameter D whose log-Cheeger constant is O(1/sqrt D) and log-Sobolev constant O(1/D). | ○ Not yet formalized | — | Truncated cone K_D; a slab S of measure e^{-Omega(D)} with expansion at most 2. The log-Sobolev part uses rho = Theta(kappa^2), cited from Ledoux. K_D is only asserted to be nearly isotropic. |
+| Lemma 55 | For every 2 sqrt n <= D <= n/2 there is an isotropic convex body of diameter D on which the ball walk needs Omega~(n^2 D) proper steps to mix. | ○ Not yet formalized | — | Drift argument on the truncated cone from the slab start, using Claim 56; the proof takes delta = 1/sqrt n and D < 0.99 n. |
+| Claim 56 | Started from the uniform law on the slab S, the ball-walk distribution on the cone at every time is spherically symmetric and unimodal on every cross-section. | ○ Not yet formalized | — | Proved inside the proof of Lemma 55 by a one-step monotonicity argument. |
+| Lemma 57 | If psi_n <= C n^{1/(2k)} for all n for some k >= 2, then for log-concave p with mean mu, covariance A and PSD B1, B2, B3, the trilinear moment of Lemma 39 is at most C (log n)^{1-1/k} Tr(A^{1/2}B1A^{1/2}) (Tr(A^{1/2}B2A^{1/2})^k)^{1/k} &#124;&#124;A^{1/2}B3A^{1/2}&#124;&#124;_op. | ○ Not yet formalized | — | Appendix A: dyadic eigenvalue decomposition of B2 and the isotropic KLS bound for rank-r_i projections. psi_n (the supremum of psi_p over isotropic log-concave p on R^n) is not formally defined in the paper. |
+| Lemma 58 | If psi_n <= C n^{1/(2k)} for all n for some k >= 2, there is a universal c such that for 0 <= T <= 1/(c k (log n)^{1-1/k} n^{1/k}), P(max_{t in [0,T]} &#124;&#124;A_t&#124;&#124;_op >= 2) <= 2 exp(-1/(cT)). | ○ Not yet formalized | — | Stated as the result of replacing Lemma 39 by Lemma 57 in Section 5.1; no separate proof. |
+
+Not listed: The three unnumbered remarks (after Theorem 17: the k = 2 case recovers Paouris' small-ball bound epsilon^{c sqrt n}; after Lemma 37: Theorem 12 verifies its hypothesis with k = 2; after Theorem 48: the 1/D log-Sobolev bound is tight by Section 8) are expository and summarized in the notes of Theorems 17, 48 and Lemma 37; the acknowledgement is unnumbered. Unnumbered displays (the quadratic-variation conventions of Section 2.1, d log p_t(x) after Lemma 27, the Stieltjes potential (1.1), the Markov-chain log-Sobolev constant rho(P) of Section 1.2 and the Euclidean-norm tail after Theorem 16) are not listed, except the defining display of psi_p in Conjecture 1, which Lean states.
+
 ### Chen2021 lemma map
 
 Source: [Chen, arXiv:2011.13661v2](https://arxiv.org/abs/2011.13661v2), reviewed 2026-10-03.
@@ -987,6 +1217,187 @@ flowchart LR
 | Theorem 4.2 | On a complete metric space with a measure finite on bounded sets: λ₁ ≥ h²/4 if m(X) < ∞, and λ₀ ≥ h²/4 if m(X) = ∞. | ◐ Partial or statement only | [`literatureConstant_le_four_mul_inverseScale_sq`](../../formalization/FunctionalInequalities/KLS/Geometry/Cheeger/Inequality.lean) | Finite-dimensional log-concave probability laws only, as C_P ≤ 4Ψ². |
 
 Not listed: Remark 1.3 (discreteness of the spectrum) is expository.
+
+### KlartagLehec2022 lemma map
+
+Source: [Klartag–Lehec, arXiv:2203.15551v2](https://arxiv.org/abs/2203.15551v2), reviewed 2026-10-03.
+
+Standing assumptions: Log-concave probability measures on R^n, n ≥ 2 and n larger than a universal constant WLOG; c, C, C₁, C_q etc. are universal constants (C_q, C_p depending only on q, p) changing from line to line; log is natural. ψ_μ is the inverse Cheeger constant (the display before (7)), ψ_n = sup ψ_μ over isotropic log-concave μ on R^n (8) (G_n in Eldan, ψ_n^{-1} in Chen), C_P(μ) the Poincaré constant (5), σ_μ the thin-shell constant n σ_μ² = Var_μ(|x|²) (4), σ_n = sup σ_μ, κ_n² = sup_X sup_θ ‖E⟨X, θ⟩ X ⊗ X‖_HS² over isotropic log-concave X (23). From Section 2 on, μ is isotropic log-concave with smooth positive density ρ; μ_s = μ ∗ γ_s, P_s f = f ∗ γ_s, Q_s φ = P_s(φρ)/P_s ρ; L = Δ + ∇log ρ · ∇ (closure in L²(μ)) with spectral resolution −L = ∫λ dE_λ and spectral measures ν_f. Stochastic localization in the Lee–Vempala form: tilt process (18) dθ_t = dW_t + a(t, θ_t) dt, p_t ∝ e^{⟨θ_t, x⟩ − t|x|²/2} ρ, dp_t = p_t⟨x − a_t, dW_t⟩ (19), barycenter a_t, covariance A_t, time reversal t = 1/s; ‖A‖_q = Tr[A^q]^{1/q}, ‖·‖_op the operator norm. The repository's Isoperimetry.inverseScale plays the role of ψ_μ.
+
+```mermaid
+flowchart LR
+    KlartagLehec2022_DLC["◐ Section 1, definition of log-concavity<br/>Log-concave probability measure"]
+    KlartagLehec2022_MOM["◐ Section 1 (cited [BGVV, Lemma 2.2.1])<br/>Finite moments of all orders"]
+    KlartagLehec2022_D3["✓ Equation (3)<br/>Isotropic probability measure"]
+    KlartagLehec2022_D5["◐ Equation (5)<br/>Poincaré constant C_P"]
+    KlartagLehec2022_DPSI["◐ Section 1, display before (7)<br/>Isoperimetric constant 1/ψ_μ"]
+    KlartagLehec2022_E7["◐ Equation (7) (Cheeger; Buser–Ledoux)<br/>Cheeger and Buser–Ledoux comparison"]
+    KlartagLehec2022_T11["○ Theorem 1.1<br/>Polylogarithmic KLS bound"]
+    KlartagLehec2022_E14["◐ Equation (14)<br/>Weighted integration by parts"]
+    KlartagLehec2022_P21["○ Proposition 2.1<br/>Spectral mass below λ bound"]
+    KlartagLehec2022_L22["○ Lemma 2.2 (via Klartag–Putterman Lemma 2.1)<br/>Localization martingale second moment"]
+    KlartagLehec2022_L23["○ Lemma 2.3 (after Eldan)<br/>Small-time Schatten moments of A_t"]
+    KlartagLehec2022_L24["○ Lemma 2.4 (after Chen Lemma 8)<br/>Cubic growth of E‖A_t‖₂²"]
+    KlartagLehec2022_C25["○ Corollary 2.5<br/>Barycenter second moment bound"]
+    KlartagLehec2022_R26["○ Remark 2.6<br/>Deterministic Kim–Milman coupling"]
+    KlartagLehec2022_L31["○ Lemma 3.1 (Klartag–Putterman)<br/>Heat-flow norm lower bound"]
+    KlartagLehec2022_L32["○ Lemma 3.2<br/>Projection lower bound for ⟨Af,f⟩"]
+    KlartagLehec2022_R33["○ Remark 3.3<br/>Conjectured operator bound P_sQ_s ≥ e^{sL}"]
+    KlartagLehec2022_L41["○ Lemma 4.1<br/>Bounded martingale representation"]
+    KlartagLehec2022_UP["◐ Proof of Lemma 4.2 (well known)<br/>Uniformly log-concave Poincaré inequality"]
+    KlartagLehec2022_L42["○ Lemma 4.2 (after Jiang–Lee–Vempala)<br/>Cubic inner-product moment bound"]
+    KlartagLehec2022_R43["○ Remark 4.3<br/>Constant in Lemma 4.2"]
+    KlartagLehec2022_R44["○ Remark 4.4<br/>Improved exponent in Chen's lemma"]
+    KlartagLehec2022_L51["○ Lemma 5.1<br/>Scaling bound for κ_X"]
+    KlartagLehec2022_L52["○ Lemma 5.2<br/>Operator-norm tail at small times"]
+    KlartagLehec2022_L53["○ Lemma 5.3 (folklore)<br/>Martingale deviation inequality"]
+    KlartagLehec2022_C54["○ Corollary 5.4<br/>Small-time operator-norm moments"]
+    KlartagLehec2022_R55["○ Remark 5.5<br/>Recovering Eldan's inequality"]
+    KlartagLehec2022_R62["○ Remark 6.2<br/>H^{-1} reformulation via e^{sL}"]
+    KlartagLehec2022_DLC --> KlartagLehec2022_MOM
+    KlartagLehec2022_DLC --> KlartagLehec2022_DPSI
+    KlartagLehec2022_D5 --> KlartagLehec2022_E7
+    KlartagLehec2022_DPSI --> KlartagLehec2022_E7
+    KlartagLehec2022_P21 --> KlartagLehec2022_T11
+    KlartagLehec2022_L22 --> KlartagLehec2022_T11
+    KlartagLehec2022_C25 --> KlartagLehec2022_T11
+    KlartagLehec2022_E7 --> KlartagLehec2022_T11
+    KlartagLehec2022_D3 --> KlartagLehec2022_T11
+    KlartagLehec2022_D5 --> KlartagLehec2022_T11
+    KlartagLehec2022_DPSI --> KlartagLehec2022_T11
+    KlartagLehec2022_L31 --> KlartagLehec2022_P21
+    KlartagLehec2022_L32 --> KlartagLehec2022_P21
+    KlartagLehec2022_C54 --> KlartagLehec2022_L23
+    KlartagLehec2022_L42 --> KlartagLehec2022_L24
+    KlartagLehec2022_L23 --> KlartagLehec2022_C25
+    KlartagLehec2022_L24 --> KlartagLehec2022_C25
+    KlartagLehec2022_L31 --> KlartagLehec2022_R33
+    KlartagLehec2022_P21 --> KlartagLehec2022_R33
+    KlartagLehec2022_D5 --> KlartagLehec2022_UP
+    KlartagLehec2022_L41 --> KlartagLehec2022_L42
+    KlartagLehec2022_L42 --> KlartagLehec2022_R43
+    KlartagLehec2022_L24 --> KlartagLehec2022_R44
+    KlartagLehec2022_L51 --> KlartagLehec2022_L52
+    KlartagLehec2022_L53 --> KlartagLehec2022_L52
+    KlartagLehec2022_L52 --> KlartagLehec2022_C54
+    KlartagLehec2022_C54 --> KlartagLehec2022_R55
+    classDef lemma_formalized fill:#dbeafe,stroke:#2563eb,color:#1e3a8a;
+    class KlartagLehec2022_D3 lemma_formalized;
+    classDef lemma_partial fill:#fff3df,stroke:#c88719,color:#66420d;
+    class KlartagLehec2022_DLC,KlartagLehec2022_MOM,KlartagLehec2022_D5,KlartagLehec2022_DPSI,KlartagLehec2022_E7,KlartagLehec2022_E14,KlartagLehec2022_UP lemma_partial;
+    classDef lemma_pending fill:#fee2e2,stroke:#dc2626,color:#991b1b;
+    class KlartagLehec2022_T11,KlartagLehec2022_P21,KlartagLehec2022_L22,KlartagLehec2022_L23,KlartagLehec2022_L24,KlartagLehec2022_C25,KlartagLehec2022_R26,KlartagLehec2022_L31,KlartagLehec2022_L32,KlartagLehec2022_R33,KlartagLehec2022_L41,KlartagLehec2022_L42,KlartagLehec2022_R43,KlartagLehec2022_R44,KlartagLehec2022_L51,KlartagLehec2022_L52,KlartagLehec2022_L53,KlartagLehec2022_C54,KlartagLehec2022_R55,KlartagLehec2022_R62 lemma_pending;
+    style KlartagLehec2022_T11 stroke-width:3px
+```
+
+| Item | Statement | Status | Lean declarations | Note |
+| --- | --- | --- | --- | --- |
+| Section 1, definition of log-concavity | A probability density ρ on R^n is log-concave if {ρ > 0} is convex and log ρ is concave on it; a probability measure on R^n is log-concave if it is supported in an affine subspace and has a log-concave density there. | ◐ Partial or statement only | [`LogConcave`](../../formalization/FunctionalInequalities/KLS/Definitions.lean)<br/>[`exists_isBorellDensity`](../../formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Intrinsic.lean) | Lean defines log-concavity by Borell's compact-set inequality μ(tK₀+(1−t)K₁) ≥ μ(K₀)^t μ(K₁)^(1−t) on any finite-dimensional real normed space; exists_isBorellDensity proves only the direction from this to a log-concave density of the intrinsic law on the affine support. The converse (density ⇒ Borell inequality, Prékopa–Leindler) is not stated in Lean. |
+| Section 1 (cited [BGVV, Lemma 2.2.1]) | Every log-concave probability measure on R^n has finite moments of all orders. | ◐ Partial or statement only | [`intrinsic_integrable_norm_pow`](../../formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Intrinsic.lean)<br/>[`memLp_id_two`](../../formalization/FunctionalInequalities/KLS/LogConcave/Translation.lean) | Lean proves integrability of ‖v‖^p for every natural p for the intrinsic law on the affine-support direction (via an exponential moment), and the ambient second moment MemLp id 2 only; an ambient all-orders statement is not stated. |
+| Equation (3) | A probability measure μ on R^n with finite second moments is isotropic if ∫x_i dμ = 0 and ∫x_i x_j dμ = δ_ij for i, j = 1, …, n, i.e. it is centered with identity covariance. | ✓ Formalized in Lean | [`Isotropic`](../../formalization/FunctionalInequalities/KLS/Isotropic.lean) | Lean states the three conditions (MemLp id 2, zero mean, centered covariance operator equal to the identity) coordinate-free on any finite-dimensional real inner-product space; in orthonormal coordinates this is (3). |
+| Equation (5) | For a Borel probability measure μ on R^n, C_P(μ) is the smallest C ≥ 0 such that Var_μ(f) ≤ C ∫&#124;∇f&#124;² dμ for every locally Lipschitz f ∈ L²(μ). | ◐ Partial or statement only | [`constant`](../../formalization/FunctionalInequalities/Poincare/LocalSlope/Basic.lean) | Lean takes the infimum (in [0, ∞]) of finite constants valid for all finite-energy L² tests, with &#124;∇f&#124; replaced by the pointwise local slope, computed for the intrinsic law on the affine support; for locally Lipschitz tests the slope equals &#124;∇f&#124; almost everywhere, but agreement with the ambient definition (5) for singular laws is not stated. |
+| Section 1, display before (7) | For μ with log-concave density ρ on R^n, 1/ψ_μ = inf over open A ⊆ R^n with smooth boundary and 0 < μ(A) < 1 of ∫_{∂A} ρ / min{μ(A), 1 − μ(A)}; ψ_μ is the inverse Cheeger constant (larger is worse). | ◐ Partial or statement only | [`constant`](../../formalization/FunctionalInequalities/KLS/Isoperimetry.lean) | Lean's constant is the infimum over measurable sets of mass in (0, 1) of the outer Minkowski boundary content (open thickenings, induced metric on the affine support) over min{μ(B), 1 − μ(B)}, with value ⊤ in dimension zero; Isoperimetry.inverseScale = constant⁻¹ plays the role of ψ_μ. Agreement with the smooth-boundary surface-integral convention is not stated in Lean. |
+| Equation (7) (Cheeger; Buser–Ledoux) | For every absolutely continuous log-concave probability measure μ on R^n, 1/4 ≤ ψ_μ²/C_P(μ) ≤ 9; the left inequality (Cheeger) does not need log-concavity. | ◐ Partial or statement only | [`literatureConstant_le_four_mul_inverseScale_sq`](../../formalization/FunctionalInequalities/KLS/Geometry/Cheeger/Inequality.lean)<br/>[`inverseScale_sq_le_pi_literature`](../../formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianBuser.lean) | Lean proves C_P ≤ 4Ψ² and Ψ² ≤ π C_P (Ψ = Isoperimetry.inverseScale) for every finite-dimensional log-concave law, including singular and Dirac laws, in the Lean conventions of D5 and DPSI; the Buser constant π is sharper than 9. Cheeger without log-concavity is not stated in this form. |
+| **Theorem 1.1** (main) | For every n ≥ 2, ψ_n ≤ C (log n)^α, where ψ_n = sup ψ_μ over isotropic log-concave probability measures μ on R^n (equation (8)) and C, α > 0 are universal constants; the proof gives α = 5. | ○ Not yet formalized | — | Main theorem. The proof shows σ_n ≤ C(log n)^4 (unnumbered), then applies Eldan's inequality (10)/(24), which is cited (its hard half is re-derived in Remark 5.5 only modulo a cited implication), and the H^{-1} inequality (44) cited from Barthe–Klartag Proposition 10; it also yields L_n ≤ C(log n)^4 in (12). Via (7) it gives C_P(μ) ≤ C(log n)^10 for isotropic log-concave μ. Reduction to a smooth positive density with σ_μ > σ_n/2 (41) is by Gaussian convolution and re-isotropization. No Lean statement. |
+| Equation (14) | For μ with smooth positive density ρ and L u = Δu + ∇(log ρ)·∇u, ∫(Lu)v dμ = −∫∇u·∇v dμ for smooth u, v with one of them compactly supported. | ◐ Partial or statement only | [`integral_inner_gradient_eq`](../../formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Generator.lean) | Lean: for ν = m.tilted(−U) with U ∈ C¹ (so ρ ∝ e^{−U}, L = Δ − ⟨∇U, ∇·⟩), f ∈ C² compactly supported and g ∈ C¹, ∫⟨∇f, ∇g⟩ dν = ∫(−ℒf) g dν; only the case where the operator falls on the compactly supported function is stated. |
+| Proposition 2.1 | Let μ be a probability measure on R^n with smooth positive density, and f ∈ L²(μ) with ∫f dμ = 0 and ‖f‖_{L²(μ)} = 1. Then for all s, λ > 0, ⟨E_λ f, f⟩_{L²(μ)} ≤ C(‖Q_s f‖_{L²(μ_s)} + sλ) with a universal C; the proof gives C = 4. | ○ Not yet formalized | — | E_λ is the spectral resolution of −L and Q_s φ = P_s(φρ)/P_sρ. The proof actually gives the stronger squared form ⟨E_λ f, f⟩ ≤ 4(‖Q_s f‖²_{L²(μ_s)} + sλ) (note ‖Q_s f‖ ≤ 1), which is the form used in (46). Section 3 assumes μ log-concave; the printed statement omits it, while the proof relies on Lemma 3.1 and on Klartag–Putterman facts (Q_s is a contraction with Q_s 1 = 1). Stochastic localization is not used here. |
+| Lemma 2.2 (via Klartag–Putterman Lemma 2.1) | For φ ∈ L¹(μ), s > 0 and t = 1/s, the process M_t = ∫φ p_t of Eldan's stochastic localization (19) started at the isotropic log-concave smooth density ρ satisfies E M_t² = ‖Q_s φ‖²_{L²(μ_s)}. | ○ Not yet formalized | — | Uses Q_sφ(y) = ∫φ p_{t,ty} and that θ_t/t has law μ_s = μ ∗ γ_s (both cited from Klartag–Putterman). Applied coordinatewise it gives (21): E&#124;a_t&#124;² = ‖Q_s x‖²_{L²(μ_s)}. |
+| Lemma 2.3 (after Eldan) | There is a universal C such that for t ≤ (C κ_n² log n)^{-1} and q ≥ 1, E‖A_t‖_q^q ≤ C_q n, where A_t is the localization covariance, ‖A‖_q = Tr[A^q]^{1/q}, κ_n is given by (23), and C_q depends only on q. | ○ Not yet formalized | — | Carries two LaTeX labels (lem_eldan, lem_1135), one printed number. Proved at the end of Section 5 from Corollary 5.4 and ‖A‖_q^q ≤ n‖A‖_op^q. |
+| Lemma 2.4 (after Chen Lemma 8) | For 0 ≤ t₁ ≤ t₂ the localization covariance satisfies E‖A_{t₂}‖₂² ≤ (t₂/t₁)³ E‖A_{t₁}‖₂². | ○ Not yet formalized | — | Proof: Itô's formula (37) for Tr(A_t²), the almost sure bound (38) Σ&#124;H_ij&#124;² ≤ (3/t) Tr(A_t²) from Lemma 4.2 (p_t is t-uniformly log-concave), then Grönwall. The case t₁ = 0 is vacuous as printed. |
+| Corollary 2.5 | With t₁ = (C κ_n² log n)^{-1}, the localization barycenter satisfies E&#124;a_t&#124;² ≤ C₁ n t max{1, t³/t₁³} for all t > 0, with universal C, C₁. | ○ Not yet formalized | — | Integrates (22) d/dt E&#124;a_t&#124;² = E‖A_t‖₂² with a₀ = 0, using Lemma 2.3 (q = 2) on [0, t₁] and Lemma 2.4 beyond t₁. |
+| Remark 2.6 | The deterministic evolution (25) dθ_t = ½(a(t, θ_t) + θ_t/t) dt (the Kim–Milman map) is an alternative coupling: for 0 < t₁ < t₂, if θ_{t₁}/t₁ has law μ_{1/t₁}, then running (18) or (25) on [t₁, t₂] gives θ_{t₂}/t₂ with law μ_{1/t₂}. | ○ Not yet formalized | — | Also speculates that all stochastic processes could be replaced by heat-semigroup differentiation and integration by parts. The coupling claim is cited from Klartag–Putterman. |
+| Lemma 3.1 (Klartag–Putterman) | Let μ be log-concave with smooth positive density and g ∈ H¹(μ) with ∫g² dμ = 1 and E = ∫&#124;∇g&#124;² dμ. Then ‖Q_s g‖²_{L²(μ_s)} ≥ exp(−sE) for all s > 0. | ○ Not yet formalized | — | Proof: log-convexity of s ↦ ‖Q_s g‖² (its −log has non-increasing derivative R_g(s), with R_g(0) = E), cited from Klartag–Putterman Section 2 and Lemma 2.5, plus density of C_c^∞ in H¹(μ) (Barthe–Klartag appendix). |
+| Lemma 3.2 | Let A be a self-adjoint positive semi-definite operator on L²(μ) with ‖A‖ ≤ 1, f ∈ L²(μ) with ‖f‖ = 1, ε, β ∈ (0, 1], and g ∈ L²(μ) with ⟨Ag, g⟩ ≥ (1 − ε)β and β = ‖g‖² = ⟨f, g⟩. Then ⟨Af, f⟩ ≥ β/4 − ε. | ○ Not yet formalized | — | Pure Hilbert-space spectral argument with r = 1 − 4ε/β; when ε > β/4 the conclusion is trivial, which the proof leaves implicit. |
+| Remark 3.3 | Proposition 2.1 would improve if P_s Q_s ≥ e^{sL} for all s > 0 (31), for which no counterexample is known; (31) holds weakly: Tr φ(P_s Q_s) ≥ Tr φ(e^{sL}) (32) for every continuous increasing φ : [0, 1] → [0, ∞) vanishing near 0. | ○ Not yet formalized | — | The weak form (32) is sketched from Lemma 3.1 (⟨P_sQ_s f, f⟩ ≥ exp(s⟨Lf, f⟩) for unit f ∈ Dom(L)) plus unspecified spectral theory; (31) itself is an open question. |
+| Lemma 4.1 | If μ is a centered 1-uniformly log-concave probability measure on R^n and (B_t) a standard Brownian motion with B₀ = 0, there is an adapted process (Q_t) of symmetric matrices with 0 ≤ Q_t ≤ Id for all t ∈ [0, 1] almost surely and ∫₀¹ Q_t dB_t of law μ. | ○ Not yet formalized | — | t-uniformly log-concave means density exp(−φ(x) − t&#124;x&#124;²/2) with φ convex. Proof via the Brenier map and Caffarelli's contraction theorem, heat smoothing P_{1−t}T and the Itô representation of the martingale (P_{1−t}T)(B_t); alternatively Eldan–Lehec with a time change. |
+| Proof of Lemma 4.2 (well known) | A 1-uniformly log-concave random vector satisfies the Poincaré inequality with constant 1; by scaling, a t-uniformly log-concave one has C_P ≤ 1/t. | ◐ Partial or statement only | [`holds_stdGaussian`](../../formalization/FunctionalInequalities/Poincare/Gaussian/Multivariate.lean)<br/>[`holds_stdGaussian_map_smul`](../../formalization/FunctionalInequalities/Poincare/Gaussian/Multivariate.lean) | Lean covers only the Gaussian case φ = 0: the standard Gaussian has smooth-test Poincaré constant 1, and its image under x ↦ r x has constant r² (r = t^{−1/2} gives 1/t), in any finite dimension. The proof of Lemma 4.2 actually uses the sharper Cordero-Erausquin–Fradelizi–Maurey bound 1/2 for functions with centered gradient, which is not in Lean. |
+| Lemma 4.2 (after Jiang–Lee–Vempala) | If t > 0, μ is a centered t-uniformly log-concave probability measure on R^n and X, Y are independent with law μ, then E⟨X, Y⟩³ ≤ (3/t) E⟨X, Y⟩² = (3/t) Tr(A²), where A is the covariance matrix of μ. | ○ Not yet formalized | — | Reduce to t = 1 by scaling; Itô's formula (34) along X_t = ∫₀ᵗ Q_s dB_s, Cauchy–Schwarz, the Cordero-Erausquin–Fradelizi–Maurey Poincaré constant 1/2 for &#124;QY&#124;², and Q_t⁴ ≤ Q_t². |
+| Remark 4.3 | The constant 3 in Lemma 4.2 directly controls the exponent of the logarithm in Theorem 1.1 and is probably not optimal; in dimension one the inequality of Lemma 4.2 holds with constant 2. | ○ Not yet formalized | — | The one-dimensional constant-2 claim is stated without proof. |
+| Remark 4.4 | Using the Cordero-Erausquin–Fradelizi–Maurey inequality, the exponent in Chen's Lemma 8 improves from 2q to q − 1 for q ≥ 3, and with it the case q = 3 of Chen's Lemma 8 can replace Lemma 2.4 in the proof of Theorem 1.1. | ○ Not yet formalized | — | Stated without proof. |
+| Lemma 5.1 | If X is a centered log-concave random vector in R^n, then κ_X² ≤ ‖Cov(X)‖_op³ κ_n², where κ_X² = sup_{θ ∈ S^{n−1}} ‖E⟨X, θ⟩ X ⊗ X‖_HS² and κ_n² is its supremum over isotropic log-concave X in R^n. | ○ Not yet formalized | — | Proof: homogeneity of degree 6 and adding an independent symmetric Gaussian Y with covariance Id − Cov(X) to make X + Y isotropic without changing third moments; uses that convolution preserves log-concavity. |
+| Lemma 5.2 | There is a universal C such that for every t ≤ (C κ_n² log n)^{-1}, the localization covariance satisfies P(‖A_t‖_op ≥ 2) ≤ exp(−(Ct)^{-1}). | ○ Not yet formalized | — | Proof: Itô's formula for Φ_t = β^{-1} log Tr e^{βA_t} with β = 2 log n, reverse Hölder for log-concave measures, a stopping time at ‖A_t‖_op = 2 and Lemma 5.3; the explicit window used is t ≤ (32 κ_n² log n)^{-1}. |
+| Lemma 5.3 (folklore) | If (M_t) is a continuous martingale with M₀ = 0 and [M]_t ≤ σ² almost surely for a fixed t > 0 and σ > 0, then P(M_t ≥ u) ≤ exp(−u²/(2σ²)) for all u ≥ 0. | ○ Not yet formalized | — | Proof: the exponential local martingale is a supermartingale by Fatou's lemma, then Markov's inequality. |
+| Corollary 5.4 | There is a universal C such that for t ≤ (C κ_n² log n)^{-1} and p ≥ 1, E‖A_t‖_op^p ≤ C_p, with C_p depending only on p. | ○ Not yet formalized | — | Uses ‖A_t‖_op ≤ 1/t almost surely (p_t is t-uniformly log-concave) together with Lemma 5.2: E‖A_t‖_op^p ≤ 2^p + C^p p!. |
+| Remark 5.5 | Corollary 5.4 with p = 1 gives E∫₀^{t₁}‖A_t‖_op dt ≤ C′t₁ ≤ Ĉ/log n for t₁ = (C κ_n² log n)^{-1}, which implies ψ_μ² ≤ C̃ t₁^{-1}; hence ψ_n² ≤ C₁ κ_n² log n, the hard half of (24). | ○ Not yet formalized | — | The implication from the integrated operator-norm bound to the isoperimetric bound is cited (Klartag's exposition of Chen, page 9), not proved. |
+| Remark 6.2 | For centered f ∈ L²(μ), ‖f‖²_{H^{-1}(μ)} = ∫₀^∞ ⟨e^{sL} f, f⟩ ds, so (44) reads Var_μ(f) ≤ 2∫₀^∞ ‖e^{sL}∇f‖² ds (52); with Var_μ(f) = 2∫₀^∞ ‖∇e^{sL}f‖² ds (53) this gives, for log-concave μ, ∫₀^∞ ‖∇e^{sL}f‖² ds ≤ ∫₀^∞ ‖e^{sL}∇f‖² ds (54). | ○ Not yet formalized | — | Contrasts (54) with the Bakry–Émery pointwise bound &#124;∇e^{sL}f&#124;² ≤ e^{sL}&#124;∇f&#124;²; the pointwise inequality &#124;∇e^{sL}f&#124;² ≤ &#124;e^{sL}∇f&#124;² is suspected false. Relies on the cited H^{-1} inequality (44) of Barthe–Klartag. No Lean statement. |
+
+Not listed: Remark 6.1 (non-optimality of the exponent and possible improvements) is purely expository and is not an item. Apart from the items for (3), (5), (7) and (14), the numbered equations (1)–(54) are definitions, cited results (Chen's bound (11), Eldan–Klartag (2), Eldan (10)/(24), the H^{-1} inequality (44)) or proof steps recorded inside the items that use them; claims outside numbered statement environments are listed only where a local Lean declaration states them (DLC, MOM, D3, D5, DPSI, E7, E14, UP). The thin-shell bound σ_μ² ≤ 4C_P(μ) (6), the definitions (4), (8), (23), finiteness of C_P for log-concave laws (Bobkov; KLS), and the unnumbered σ_n ≤ C(log n)^4 have no local Lean statement and are not listed. There is no appendix; Theorem, Lemma, Proposition, Corollary, Remark and Definition share the section-reset counter (Question has its own, unused), and no Definition, Conjecture, Question, Speculation or Problem environment is printed.
+
+### Klartag2023 lemma map
+
+Source: [Klartag, arXiv:2303.14938v2](https://arxiv.org/abs/2303.14938v2), reviewed 2026-10-03.
+
+Standing assumptions: Probability measures on ℝⁿ; log-concave means a log-concave density on an affine subspace; isotropic means mean 0 and covariance Id. C_P is the optimal Poincaré constant for locally Lipschitz tests, ψ_μ the inverse Cheeger (isoperimetric) constant with min{μ(A), 1 − μ(A)} denominator, ψ_n = sup ψ_μ over isotropic log-concave μ on ℝⁿ, λ(μ) = 1/C_P(μ) the spectral gap. t-uniformly log-concave: the density relative to μ proportional to e^{t|x|²/2} is log-concave (∇²ψ ≥ t·Id). From Section 2 on μ is regular (smooth positive e^{−ψ} with ε·Id ≤ ∇²ψ ≤ Id/ε and polynomial growth of ψ and its derivatives). C, c denote universal constants. Numbered displays used as proof inputs, and the unnumbered definition of ψ_μ (stated by a Lean declaration), are listed alongside all thirteen numbered statement environments.
+
+```mermaid
+flowchart LR
+    Klartag2023_D13["◐ Equation (1.3)<br/>Poincaré constant C_P"]
+    Klartag2023_Dpsi["◐ §1, display defining 1/ψ_μ (unnumbered)<br/>Isoperimetric constant ψ_μ"]
+    Klartag2023_E14["◐ Equation (1.4) (Cheeger; Buser–Ledoux; De Ponti–Mondino)<br/>Cheeger–Buser comparison"]
+    Klartag2023_E17["◐ Equation (1.7) (log-concave Lichnerowicz; Brascamp–Lieb)<br/>Log-concave Lichnerowicz inequality"]
+    Klartag2023_T11["○ Theorem 1.1<br/>Slicing bound √log n"]
+    Klartag2023_T12["○ Theorem 1.2<br/>KLS bound √log n"]
+    Klartag2023_T13["○ Theorem 1.3 (improved log-concave Lichnerowicz inequality)<br/>Improved log-concave Lichnerowicz"]
+    Klartag2023_L21["○ Lemma 2.1<br/>Regular approximation"]
+    Klartag2023_L22["○ Lemma 2.2<br/>Eigenfunctions are tempered"]
+    Klartag2023_E24["◐ Equation (2.4)<br/>Weighted integration by parts"]
+    Klartag2023_P23["○ Proposition 2.3<br/>Eigenfunction has preferred direction"]
+    Klartag2023_E37["◐ Equation (3.7) (subadditivity, Courtade)<br/>Poincaré constant of θ_t"]
+    Klartag2023_L31["○ Lemma 3.1<br/>Variance decomposition along localization"]
+    Klartag2023_C32["○ Corollary 3.2<br/>Spectral gap from localized gaps"]
+    Klartag2023_P41["○ Proposition 4.1<br/>H^{-1} Lichnerowicz variant"]
+    Klartag2023_R42["○ Remark 4.2<br/>Varentropy via H^{-1} inequality"]
+    Klartag2023_P43["○ Proposition 4.3 (localized Bochner formula)<br/>Localized Bochner formula"]
+    Klartag2023_L51["○ Lemma 5.1<br/>Gaussian convolution–multiplication swap"]
+    Klartag2023_C52["○ Corollary 5.2<br/>Gaussian convolution keeps uniform log-concavity"]
+    Klartag2023_D13 --> Klartag2023_E14
+    Klartag2023_Dpsi --> Klartag2023_E14
+    Klartag2023_T12 --> Klartag2023_T11
+    Klartag2023_E14 --> Klartag2023_T12
+    Klartag2023_C32 --> Klartag2023_T12
+    Klartag2023_L21 --> Klartag2023_T13
+    Klartag2023_P23 --> Klartag2023_T13
+    Klartag2023_E17 --> Klartag2023_T13
+    Klartag2023_D13 --> Klartag2023_L21
+    Klartag2023_L51 --> Klartag2023_L21
+    Klartag2023_C52 --> Klartag2023_L21
+    Klartag2023_E24 --> Klartag2023_P23
+    Klartag2023_D13 --> Klartag2023_E37
+    Klartag2023_E37 --> Klartag2023_L31
+    Klartag2023_L31 --> Klartag2023_C32
+    Klartag2023_P23 --> Klartag2023_P41
+    Klartag2023_E24 --> Klartag2023_R42
+    Klartag2023_L51 --> Klartag2023_C52
+    classDef lemma_partial fill:#fff3df,stroke:#c88719,color:#66420d;
+    class Klartag2023_D13,Klartag2023_Dpsi,Klartag2023_E14,Klartag2023_E17,Klartag2023_E24,Klartag2023_E37 lemma_partial;
+    classDef lemma_pending fill:#fee2e2,stroke:#dc2626,color:#991b1b;
+    class Klartag2023_T11,Klartag2023_T12,Klartag2023_T13,Klartag2023_L21,Klartag2023_L22,Klartag2023_P23,Klartag2023_L31,Klartag2023_C32,Klartag2023_P41,Klartag2023_R42,Klartag2023_P43,Klartag2023_L51,Klartag2023_C52 lemma_pending;
+    style Klartag2023_T12 stroke-width:3px
+```
+
+| Item | Statement | Status | Lean declarations | Note |
+| --- | --- | --- | --- | --- |
+| Equation (1.3) | C_P(X) is the infimum of C ≥ 0 with Var f(X) ≤ C·E&#124;∇f(X)&#124;² for every locally Lipschitz f: ℝⁿ → ℝ with E&#124;∇f(X)&#124;² < ∞; C_P(μ) = C_P(X) for X with law μ. | ◐ Partial or statement only | [`constant`](../../formalization/FunctionalInequalities/Poincare/LocalSlope/Basic.lean) | Intrinsic.constant is the extended (ENNReal) optimum of the local-slope Poincaré inequality for the intrinsic law on the affine support of a finite-dimensional law, with local slope in place of the a.e. gradient. Agreement with the paper's ambient a.e.-gradient formulation is not stated as a separate Lean theorem; for log-concave laws it equals the smooth-test optimum (KLS.LogConcave.smoothTest_constant_eq_localSlope). |
+| §1, display defining 1/ψ_μ (unnumbered) | For μ with log-concave density ρ, 1/ψ_μ = inf over open A ⊆ ℝⁿ with smooth boundary and 0 < μ(A) < 1 of ∫_{∂A}ρ / min{μ(A), 1 − μ(A)}; this is finite and positive (Bobkov). | ◐ Partial or statement only | [`constant`](../../formalization/FunctionalInequalities/KLS/Isoperimetry.lean)<br/>[`inverseScale`](../../formalization/FunctionalInequalities/KLS/Isoperimetry.lean) | Isoperimetry.constant is h_μ = 1/ψ_μ and Isoperimetry.inverseScale is ψ_μ, defined with outer Minkowski content over measurable sets of mass in (0, 1) on the affine support, with value ⊤ (resp. 0) in dimension zero. Agreement with the smooth-boundary surface-integral convention is not stated in Lean; positivity and finiteness (Bobkov) are not stated. |
+| Equation (1.4) (Cheeger; Buser–Ledoux; De Ponti–Mondino) | For every μ with a log-concave density, 1/4 ≤ ψ_μ²/C_P(μ) ≤ π. | ◐ Partial or statement only | [`literatureConstant_le_four_mul_inverseScale_sq`](../../formalization/FunctionalInequalities/KLS/Geometry/Cheeger/Inequality.lean)<br/>[`inverseScale_sq_le_pi_literature`](../../formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianBuser.lean) | Both halves are proved for every finite-dimensional log-concave law, including degenerate and zero-dimensional ones, as C_P ≤ 4Ψ² and Ψ² ≤ π·C_P with Ψ = Isoperimetry.inverseScale (Minkowski-content convention). Partial only because Ψ is not identified in Lean with the paper's smooth-boundary ψ_μ. |
+| Equation (1.7) (log-concave Lichnerowicz; Brascamp–Lieb) | If t > 0 and μ is t-uniformly log-concave (μ has density ∝ e^{−t&#124;x&#124;²/2} times a log-concave function), then C_P(μ) ≤ 1/t. | ◐ Partial or statement only | [`holds_stdGaussian_map_smul`](../../formalization/FunctionalInequalities/Poincare/Gaussian/Multivariate.lean)<br/>[`gaussianLaw_smoothTest_holds`](../../formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianPoincare.lean) | Only Gaussian instances are formalized: the law of r·G for a standard Gaussian G (which is 1/r²-uniformly log-concave) satisfies the smooth-test Poincaré inequality with constant r², and the normalized kernel ∝ exp(−s&#124;x&#124;²) (2s-uniformly log-concave) with constant 1/(2s). These are smooth-test constants; the general uniformly log-concave case is not formalized. |
+| Theorem 1.1 | For n ≥ 2, L_n ≤ C·√(log n) for a universal constant C > 0; equivalently every convex body in ℝⁿ of volume one has a hyperplane section of (n−1)-volume at least c/√(log n). | ○ Not yet formalized | — | Immediate from Theorem 1.2 and (1.6). |
+| **Theorem 1.2** (main) | For n ≥ 2, ψ_n ≤ C·√(log n) for a universal constant C > 0, i.e. every isotropic log-concave probability measure on ℝⁿ has ψ_μ ≤ C√(log n) (equivalently C_P(μ) ≤ C' log n by (1.4)). | ○ Not yet formalized | — | Main theorem (abstract and title). Proof: choose μ with ψ_μ ≥ ψ_n/2, take t = cψ_n^{−2}/log n so that E√‖A_t‖ ≤ C by (3.13), check t ≤ c̄λ₀ via (1.4), apply Corollary 3.2 to get λ₀^{−1} ≤ C/√t ≤ C̃ψ_n√(log n), and close with ψ_n² ≤ 4ψ_μ² ≤ C̃λ₀^{−1} from (1.4). Dimension-dependent; not mapped to any Lean declaration. |
+| Theorem 1.3 (improved log-concave Lichnerowicz inequality) | If t > 0 and μ is a t-uniformly log-concave probability measure on ℝⁿ, then C_P(μ) ≤ √(‖Cov(μ)‖_op / t) ≤ 1/t. | ○ Not yet formalized | — | Reduction to regular μ by Lemma 2.1; then (2.7)–(2.8) with ∇²ψ ≥ t give λ²‖Cov‖ ≥ t. The right inequality is ‖Cov(μ)‖ ≤ C_P(μ) ≤ 1/t via (2.6) on linear functions and (1.7) (the printed last step reads 1/λ ≤ t, a typo for ≤ 1/t). No local statement. |
+| Lemma 2.1 | If μ is an absolutely continuous log-concave probability measure on ℝⁿ and 0 < ε < t, there is a regular log-concave ν (smooth positive density e^{−ψ} with ε'·Id ≤ ∇²ψ ≤ Id/ε' for some ε' > 0 and ψ and all derivatives of polynomial growth) with C_P(ν) ≥ C_P(μ) − ε and ‖Cov(μ) − Cov(ν)‖_op < ε; if μ is t-uniformly log-concave then ν is (t − ε)-uniformly log-concave. | ○ Not yet formalized | — | ν is the normalization of (ρ ∗ γ_δ)·γ_{1/δ}. The local GaussianSmoothing.smoothedProbabilityLaw_literatureConstant_le bounds the Poincaré constant of a Gaussian convolution from above (C_P(μ ∗ γ) ≤ C_P(μ) + 1/(2s)); the lemma needs the lower bound for convolution followed by Gaussian multiplication, so it is not a restricted case. The printed proof says 'covariance of ν ... close to that of ν' for 'of μ'. |
+| Lemma 2.2 | For regular log-concave μ, every eigenfunction of L_μ = Δ − ∇ψ·∇ is μ-tempered: smooth, with every partial derivative bounded by C e^{−a&#124;x&#124;}/√ρ(x). | ○ Not yet formalized | — | Proof in the Appendix via the Schrödinger operator −Δ + V, V = &#124;∇ψ&#124;²/4 − Δψ/2, and exponential decay of its eigenfunctions (Agmon et al.), plus Green's representation for derivatives. |
+| Equation (2.4) | For regular log-concave μ = e^{−ψ}dx and μ-tempered u, v, ∫(Lu)v dμ = −∫⟨∇u, ∇v⟩ dμ with Lu = Δu − ∇ψ·∇u. | ◐ Partial or statement only | [`integral_inner_gradient_tilted`](../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts.lean) | Lean proves ∫⟨∇f, ∇g⟩ dμ = ∫(−ℒf)g dμ for μ = m.tilted(−U) with C¹ potential U, C² compactly supported f and C¹ g on a finite-dimensional space: compact support of one factor replaces μ-temperedness and no convexity is needed. |
+| Proposition 2.3 | For regular log-concave μ = e^{−ψ}dx and an L²(μ)-normalized eigenfunction f ∈ F_μ of −L with eigenvalue λ(μ): &#124;∫∇f dμ&#124;² ≥ λ^{−1}∫⟨(∇²ψ)∇f, ∇f⟩ dμ, and &#124;∫∇f dμ&#124;² = λ²&#124;∫f(x)x dμ(x)&#124;² ≤ λ²‖Cov(μ)‖_op. | ○ Not yet formalized | — | Bochner formula plus the Poincaré inequality (2.6) applied to each ∂ⁱf; the identity uses (2.4) with g(x) = ⟨x, θ⟩ and Cauchy–Schwarz. |
+| Equation (3.7) (subadditivity, Courtade) | C_P(θ_t) = C_P(tX + W_t) ≤ C_P(tX) + C_P(W_t) = t²/λ₀ + t, using subadditivity of C_P for independent sums, C_P(tX) = t²C_P(X) and C_P(W_t) = t. | ◐ Partial or statement only | [`constant_conv_le_add`](../../formalization/FunctionalInequalities/Poincare/Convolution.lean)<br/>[`map_smul`](../../formalization/FunctionalInequalities/Poincare/SmoothTest/Transport.lean)<br/>[`holds_stdGaussian_map_smul`](../../formalization/FunctionalInequalities/Poincare/Gaussian/Multivariate.lean) | Lean has the three ingredients for smooth-test constants: subadditivity under convolution of probability laws (constant_conv_le_add), the scaling bound Holds μ C → Holds (μ.map (r•)) (r²C), and Holds for r·G with constant r². The paper's locally Lipschitz constant agrees with the smooth-test one for log-concave laws (KLS.LogConcave.smoothTest_constant_eq_localSlope), which covers tX + W_t; the composed bound (3.7) is not stated as one theorem. |
+| Lemma 3.1 | For regular log-concave μ, t > 0 and f ∈ L²(μ), E Var_{p_t}(f) ≤ Var_{p₀}(f) ≤ (2 + t/λ₀)·E Var_{p_t}(f), where λ₀ = λ(μ) = 1/C_P(μ). | ○ Not yet formalized | — | Law of total variance from (3.5), then the Poincaré inequality for θ_t (3.7) applied to θ ↦ M_f(t, θ) with &#124;∇_θ M_f&#124;² ≤ ‖A(t, θ)‖·Var_{p_{t,θ}}(f) and ‖A‖ ≤ 1/t from (3.2). Only the fixed-time law of θ_t and (3.5) are used. |
+| Corollary 3.2 | For regular log-concave μ, A > 0 and 0 < t < Aλ₀: λ₀^{−1} ≤ C(A + 1)·E λ_t^{−1} ≤ C(A + 1)·E√‖A_t‖_op / √t, with C universal, λ_t = λ(μ_{t,θ_t}) and A_t = A(t, θ_t). | ○ Not yet formalized | — | Apply Lemma 3.1 to a near-extremal 1-Lipschitz f from (3.10) and use the Poincaré inequality for each p_t; the second inequality is (3.2). |
+| Proposition 4.1 | If t > 0 and μ is regular, t-uniformly log-concave and centered, and R = sup over θ ∈ S^{n−1} of ‖⟨·, θ⟩‖²_{H^{−1}(μ)}, then λ(μ) ≥ (t/R)^{1/3}. | ○ Not yet formalized | — | Proof from (2.7), (2.8), (2.12) and the definition of the H^{−1}(μ) norm. |
+| Remark 4.2 | For regular log-concave μ = e^{−ψ}dx, −∫⟨L^{−1}∇ψ, ∇ψ⟩ dμ = n, and with the H^{−1}-inequality Var_μ(f) ≤ ‖∇f‖²_{H^{−1}(μ)} (for Lipschitz f with ∫∇f dμ = 0) this gives the Bobkov–Madiman/Nguyen varentropy bound Var_μ(ψ) ≤ n. | ○ Not yet formalized | — | Substantive remark (alternative proof of the varentropy inequality), so it is listed. |
+| Proposition 4.3 (localized Bochner formula) | For regular log-concave μ = e^{−ψ}dx, u ∈ F_μ and t > 0, almost surely u ∈ F_{μ_t}, and ∫(Lu)² dμ + t∫&#124;∇u&#124;² dμ = E∫(L_t u)² dμ_t, where μ_t has density p_t and L_t = L_{μ_t}. | ○ Not yet formalized | — | Bochner formula for μ_t with ∇²ψ_t = ∇²ψ + t·Id, then (3.5) and Fubini. Uses only the fixed-time law of p_t. |
+| Lemma 5.1 | For s, t > 0, p = st/(s + t), q = t²/(s + t), r = t/(s + t), S_r f(x) = rⁿf(rx), and measurable f with fγ_t integrable, (fγ_t) ∗ γ_s = S_r[(f ∗ γ_p)γ_q], γ_s the N(0, s·Id) density. | ○ Not yet formalized | — | Completing the square. |
+| Corollary 5.2 | For s, t > 0 and an absolutely continuous 1/t-uniformly log-concave probability measure μ on ℝⁿ, μ ∗ γ_s is 1/(t + s)-uniformly log-concave. | ○ Not yet formalized | — | Lemma 5.1 plus Prékopa–Leindler. The local GaussianSmoothing.smoothedProbabilityLaw_logConcave (log-concavity of the Gaussian convolution of a log-concave law) is the excluded limit t = ∞, not a restricted case. |
+
+Not listed: No numbered statement environment is omitted; Remark 4.2 is substantive and is listed. The remaining numbered displays (1.1), (1.2) (Hensley–Fradelizi and Grünbaum facts quoted as background), (1.8) and (3.18) (restating or concluding listed items), the definitions (2.1)–(2.3) and the intermediate proof steps (2.7)–(2.12), (3.1), (3.3), (3.6), (3.8), (3.9), (3.11), (3.12), (3.15)–(3.17), (4.1)–(4.4) and (5.1)–(5.3) are absorbed into the listed items. Unnumbered or display-level claims are listed only where a local Lean declaration states them; 10 others are not listed.
 
 ## Local Lean statement inventory
 

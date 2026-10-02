@@ -227,6 +227,59 @@ flowchart LR
     ADMG2017_R34 --> ADMG2017_T36
     ADMG2017_more["+4 further statements in the paper register"]
     end
+    subgraph P_LeeVempala2024["Lee–Vempala · arXiv:1612.01507v3"]
+    direction LR
+    LeeVempala2024_Dpsi["◐ Conjecture 1, defining display of psi_p<br/>KLS constant psi_p"]
+    LeeVempala2024_T5["⇑ Theorem 5 (Poincare constant; Maz'ya, Cheeger)<br/>Cheeger implies Poincare"]
+    LeeVempala2024_T12["○ Theorem 12<br/>KLS constant n^{1/4} bound"]
+    LeeVempala2024_L19["○ Lemma 19 (Ito's formula)<br/>Ito's formula"]
+    LeeVempala2024_L20["○ Lemma 20 (reflection principle)<br/>Reflection principle"]
+    LeeVempala2024_T21["○ Theorem 21 (Dambis, Dubins-Schwarz)<br/>Time change of martingales"]
+    LeeVempala2024_L22["◐ Lemma 22 (Dinghas, Prekopa, Leindler)<br/>Log-concavity is preserved"]
+    LeeVempala2024_L23["○ Lemma 23 (log-concave moments)<br/>Reverse Holder moments"]
+    LeeVempala2024_T25["○ Theorem 25 (E. Milman, Theorem 1.8)<br/>Half-measure sets suffice"]
+    LeeVempala2024_D26["○ Definition 26<br/>Stochastic localization with C_t = I"]
+    LeeVempala2024_L27["○ Lemma 27<br/>Density is a martingale"]
+    LeeVempala2024_L28["○ Lemma 28<br/>Covariance SDE"]
+    LeeVempala2024_L29["○ Lemma 29<br/>Mass of a half set"]
+    LeeVempala2024_T30["○ Theorem 30 (Cousins-Vempala)<br/>Gaussian-tilted isoperimetry"]
+    LeeVempala2024_L31["○ Lemma 31<br/>Covariance control gives KLS"]
+    LeeVempala2024_L32["○ Lemma 32<br/>Third-moment vector bound"]
+    LeeVempala2024_L33["○ Lemma 33<br/>Third-moment tensor bound"]
+    LeeVempala2024_L34["○ Lemma 34<br/>Ito formula for Tr A_t^2"]
+    LeeVempala2024_L35["○ Lemma 35<br/>Potential Tr A_t^2 stays bounded"]
+    LeeVempala2024_Dpsi --> LeeVempala2024_T5
+    LeeVempala2024_L35 --> LeeVempala2024_T12
+    LeeVempala2024_L31 --> LeeVempala2024_T12
+    LeeVempala2024_D26 --> LeeVempala2024_T12
+    LeeVempala2024_L19 --> LeeVempala2024_L27
+    LeeVempala2024_D26 --> LeeVempala2024_L27
+    LeeVempala2024_L19 --> LeeVempala2024_L28
+    LeeVempala2024_L27 --> LeeVempala2024_L28
+    LeeVempala2024_L27 --> LeeVempala2024_L29
+    LeeVempala2024_T21 --> LeeVempala2024_L29
+    LeeVempala2024_L20 --> LeeVempala2024_L29
+    LeeVempala2024_Dpsi --> LeeVempala2024_T30
+    LeeVempala2024_T25 --> LeeVempala2024_L31
+    LeeVempala2024_L27 --> LeeVempala2024_L31
+    LeeVempala2024_D26 --> LeeVempala2024_L31
+    LeeVempala2024_T30 --> LeeVempala2024_L31
+    LeeVempala2024_L29 --> LeeVempala2024_L31
+    LeeVempala2024_L22 --> LeeVempala2024_L32
+    LeeVempala2024_L23 --> LeeVempala2024_L32
+    LeeVempala2024_L22 --> LeeVempala2024_L33
+    LeeVempala2024_L23 --> LeeVempala2024_L33
+    LeeVempala2024_L19 --> LeeVempala2024_L34
+    LeeVempala2024_L28 --> LeeVempala2024_L34
+    LeeVempala2024_L27 --> LeeVempala2024_L34
+    LeeVempala2024_L34 --> LeeVempala2024_L35
+    LeeVempala2024_L33 --> LeeVempala2024_L35
+    LeeVempala2024_L32 --> LeeVempala2024_L35
+    LeeVempala2024_L19 --> LeeVempala2024_L35
+    LeeVempala2024_T21 --> LeeVempala2024_L35
+    LeeVempala2024_L20 --> LeeVempala2024_L35
+    LeeVempala2024_more["+40 further statements in the paper register"]
+    end
     subgraph P_Chen2021["Chen · arXiv:2011.13661v2"]
     direction LR
     Chen2021_D2["◐ Equation (2)<br/>Isoperimetric coefficient ψ(p)"]
@@ -289,21 +342,92 @@ flowchart LR
     DePontiMondino2021_P41 --> DePontiMondino2021_T42
     DePontiMondino2021_more["+3 further statements in the paper register"]
     end
+    subgraph P_KlartagLehec2022["Klartag–Lehec · arXiv:2203.15551v2"]
+    direction LR
+    KlartagLehec2022_DLC["◐ Section 1, definition of log-concavity<br/>Log-concave probability measure"]
+    KlartagLehec2022_MOM["◐ Section 1 (cited [BGVV, Lemma 2.2.1])<br/>Finite moments of all orders"]
+    KlartagLehec2022_D3["✓ Equation (3)<br/>Isotropic probability measure"]
+    KlartagLehec2022_D5["◐ Equation (5)<br/>Poincaré constant C_P"]
+    KlartagLehec2022_DPSI["◐ Section 1, display before (7)<br/>Isoperimetric constant 1/ψ_μ"]
+    KlartagLehec2022_E7["◐ Equation (7) (Cheeger; Buser–Ledoux)<br/>Cheeger and Buser–Ledoux comparison"]
+    KlartagLehec2022_T11["○ Theorem 1.1<br/>Polylogarithmic KLS bound"]
+    KlartagLehec2022_E14["◐ Equation (14)<br/>Weighted integration by parts"]
+    KlartagLehec2022_P21["○ Proposition 2.1<br/>Spectral mass below λ bound"]
+    KlartagLehec2022_L22["○ Lemma 2.2 (via Klartag–Putterman Lemma 2.1)<br/>Localization martingale second moment"]
+    KlartagLehec2022_L23["○ Lemma 2.3 (after Eldan)<br/>Small-time Schatten moments of A_t"]
+    KlartagLehec2022_L24["○ Lemma 2.4 (after Chen Lemma 8)<br/>Cubic growth of E‖A_t‖₂²"]
+    KlartagLehec2022_C25["○ Corollary 2.5<br/>Barycenter second moment bound"]
+    KlartagLehec2022_L31["○ Lemma 3.1 (Klartag–Putterman)<br/>Heat-flow norm lower bound"]
+    KlartagLehec2022_L32["○ Lemma 3.2<br/>Projection lower bound for ⟨Af,f⟩"]
+    KlartagLehec2022_L41["○ Lemma 4.1<br/>Bounded martingale representation"]
+    KlartagLehec2022_UP["◐ Proof of Lemma 4.2 (well known)<br/>Uniformly log-concave Poincaré inequality"]
+    KlartagLehec2022_L42["○ Lemma 4.2 (after Jiang–Lee–Vempala)<br/>Cubic inner-product moment bound"]
+    KlartagLehec2022_L51["○ Lemma 5.1<br/>Scaling bound for κ_X"]
+    KlartagLehec2022_L52["○ Lemma 5.2<br/>Operator-norm tail at small times"]
+    KlartagLehec2022_L53["○ Lemma 5.3 (folklore)<br/>Martingale deviation inequality"]
+    KlartagLehec2022_C54["○ Corollary 5.4<br/>Small-time operator-norm moments"]
+    KlartagLehec2022_DLC --> KlartagLehec2022_MOM
+    KlartagLehec2022_DLC --> KlartagLehec2022_DPSI
+    KlartagLehec2022_D5 --> KlartagLehec2022_E7
+    KlartagLehec2022_DPSI --> KlartagLehec2022_E7
+    KlartagLehec2022_P21 --> KlartagLehec2022_T11
+    KlartagLehec2022_L22 --> KlartagLehec2022_T11
+    KlartagLehec2022_C25 --> KlartagLehec2022_T11
+    KlartagLehec2022_E7 --> KlartagLehec2022_T11
+    KlartagLehec2022_D3 --> KlartagLehec2022_T11
+    KlartagLehec2022_D5 --> KlartagLehec2022_T11
+    KlartagLehec2022_DPSI --> KlartagLehec2022_T11
+    KlartagLehec2022_L31 --> KlartagLehec2022_P21
+    KlartagLehec2022_L32 --> KlartagLehec2022_P21
+    KlartagLehec2022_C54 --> KlartagLehec2022_L23
+    KlartagLehec2022_L42 --> KlartagLehec2022_L24
+    KlartagLehec2022_L23 --> KlartagLehec2022_C25
+    KlartagLehec2022_L24 --> KlartagLehec2022_C25
+    KlartagLehec2022_D5 --> KlartagLehec2022_UP
+    KlartagLehec2022_L41 --> KlartagLehec2022_L42
+    KlartagLehec2022_L51 --> KlartagLehec2022_L52
+    KlartagLehec2022_L53 --> KlartagLehec2022_L52
+    KlartagLehec2022_L52 --> KlartagLehec2022_C54
+    KlartagLehec2022_more["+6 further statements in the paper register"]
+    end
+    subgraph P_Klartag2023["Klartag · arXiv:2303.14938v2"]
+    direction LR
+    Klartag2023_D13["◐ Equation (1.3)<br/>Poincaré constant C_P"]
+    Klartag2023_Dpsi["◐ §1, display defining 1/ψ_μ (unnumbered)<br/>Isoperimetric constant ψ_μ"]
+    Klartag2023_E14["◐ Equation (1.4) (Cheeger; Buser–Ledoux; De Ponti–Mondino)<br/>Cheeger–Buser comparison"]
+    Klartag2023_E17["◐ Equation (1.7) (log-concave Lichnerowicz; Brascamp–Lieb)<br/>Log-concave Lichnerowicz inequality"]
+    Klartag2023_T12["○ Theorem 1.2<br/>KLS bound √log n"]
+    Klartag2023_E24["◐ Equation (2.4)<br/>Weighted integration by parts"]
+    Klartag2023_E37["◐ Equation (3.7) (subadditivity, Courtade)<br/>Poincaré constant of θ_t"]
+    Klartag2023_L31["○ Lemma 3.1<br/>Variance decomposition along localization"]
+    Klartag2023_C32["○ Corollary 3.2<br/>Spectral gap from localized gaps"]
+    Klartag2023_D13 --> Klartag2023_E14
+    Klartag2023_Dpsi --> Klartag2023_E14
+    Klartag2023_E14 --> Klartag2023_T12
+    Klartag2023_C32 --> Klartag2023_T12
+    Klartag2023_D13 --> Klartag2023_E37
+    Klartag2023_E37 --> Klartag2023_L31
+    Klartag2023_L31 --> Klartag2023_C32
+    Klartag2023_more["+10 further statements in the paper register"]
+    end
     classDef lemma_formalized fill:#dbeafe,stroke:#2563eb,color:#1e3a8a;
-    class Milman2009_R23,AGS2013_S21,AGS2013_E37,ADMG2017_L21a,ADMG2017_L21b,ADMG2017_L32,ADMG2017_D33,ADMG2017_R34,ADMG2017_T36 lemma_formalized;
+    class Milman2009_R23,AGS2013_S21,AGS2013_E37,ADMG2017_L21a,ADMG2017_L21b,ADMG2017_L32,ADMG2017_D33,ADMG2017_R34,ADMG2017_T36,KlartagLehec2022_D3 lemma_formalized;
     classDef lemma_partial fill:#fff3df,stroke:#c88719,color:#66420d;
-    class Milman2009_DChe,Milman2009_DPoin,Milman2009_T11,Milman2009_T14,Milman2009_C26,Milman2009_L31,Milman2009_C32,AGS2013_E21a,AGS2013_E63,AGS2013_S83,ADMG2017_R35,Chen2021_D2,Chen2021_CH,DePontiMondino2021_C12,DePontiMondino2021_E46,DePontiMondino2021_E48,DePontiMondino2021_P41,DePontiMondino2021_T42 lemma_partial;
+    class Milman2009_DChe,Milman2009_DPoin,Milman2009_T11,Milman2009_T14,Milman2009_C26,Milman2009_L31,Milman2009_C32,AGS2013_E21a,AGS2013_E63,AGS2013_S83,ADMG2017_R35,LeeVempala2024_Dpsi,LeeVempala2024_L22,Chen2021_D2,Chen2021_CH,DePontiMondino2021_C12,DePontiMondino2021_E46,DePontiMondino2021_E48,DePontiMondino2021_P41,DePontiMondino2021_T42,KlartagLehec2022_DLC,KlartagLehec2022_MOM,KlartagLehec2022_D5,KlartagLehec2022_DPSI,KlartagLehec2022_E7,KlartagLehec2022_E14,KlartagLehec2022_UP,Klartag2023_D13,Klartag2023_Dpsi,Klartag2023_E14,Klartag2023_E17,Klartag2023_E24,Klartag2023_E37 lemma_partial;
     classDef lemma_pending fill:#fee2e2,stroke:#dc2626,color:#991b1b;
-    class KLS1995_L21,KLS1995_C22,KLS1995_L26,KLS1995_T27,KLS1995_T51,KLS1995_T52,Bobkov1999_T11,Bobkov1999_P21,Milman2009_T15,Milman2009_T18,Milman2009_L21,Milman2009_L22,Milman2009_T24,Milman2009_P25,Milman2009_C27,Milman2009_T29,Milman2009_P210,Milman2009_L61,Milman2009_L62,Milman2009_P64,Milman2009_C65,Milman2009_L66,Milman2009_P68,Milman2009_L69,Milman2009_T610,Milman2009_L613,Milman2009_T614,Milman2009_TA1,Milman2009_TA2,Milman2009_TA3,Milman2009_TA4,Eldan2013_T11,Eldan2013_L16,Eldan2013_P17,Eldan2013_L21,Eldan2013_L24,Eldan2013_L25,Eldan2013_P26,Eldan2013_P31,Eldan2013_L32,Eldan2013_C33,Eldan2013_L41,Eldan2013_T42,AGS2013_L21,AGS2013_P22,AGS2013_P31,AGS2013_P32,AGS2013_P33,AGS2013_P34,AGS2013_T35,AGS2013_D42,AGS2013_D46,AGS2013_R47,AGS2013_D48,AGS2013_D49,AGS2013_R410,AGS2013_D411,AGS2013_L51,AGS2013_P52,AGS2013_T61,AGS2013_R62,AGS2013_D63,AGS2013_P65,AGS2013_P66,AGS2013_P71,AGS2013_L72,AGS2013_T73,AGS2013_T74,Chen2021_T1,Chen2021_L1,Chen2021_L2,Chen2021_L3,Chen2021_L4,Chen2021_L5,Chen2021_L6,Chen2021_L7,Chen2021_L8,Chen2021_L9,Chen2021_L10,Chen2021_L11,Chen2021_L12,Chen2021_L13a,Chen2021_L13b,DePontiMondino2021_T11,DePontiMondino2021_D21,DePontiMondino2021_D22,DePontiMondino2021_P31 lemma_pending;
+    class KLS1995_L21,KLS1995_C22,KLS1995_L26,KLS1995_T27,KLS1995_T51,KLS1995_T52,Bobkov1999_T11,Bobkov1999_P21,Milman2009_T15,Milman2009_T18,Milman2009_L21,Milman2009_L22,Milman2009_T24,Milman2009_P25,Milman2009_C27,Milman2009_T29,Milman2009_P210,Milman2009_L61,Milman2009_L62,Milman2009_P64,Milman2009_C65,Milman2009_L66,Milman2009_P68,Milman2009_L69,Milman2009_T610,Milman2009_L613,Milman2009_T614,Milman2009_TA1,Milman2009_TA2,Milman2009_TA3,Milman2009_TA4,Eldan2013_T11,Eldan2013_L16,Eldan2013_P17,Eldan2013_L21,Eldan2013_L24,Eldan2013_L25,Eldan2013_P26,Eldan2013_P31,Eldan2013_L32,Eldan2013_C33,Eldan2013_L41,Eldan2013_T42,AGS2013_L21,AGS2013_P22,AGS2013_P31,AGS2013_P32,AGS2013_P33,AGS2013_P34,AGS2013_T35,AGS2013_D42,AGS2013_D46,AGS2013_R47,AGS2013_D48,AGS2013_D49,AGS2013_R410,AGS2013_D411,AGS2013_L51,AGS2013_P52,AGS2013_T61,AGS2013_R62,AGS2013_D63,AGS2013_P65,AGS2013_P66,AGS2013_P71,AGS2013_L72,AGS2013_T73,AGS2013_T74,LeeVempala2024_T12,LeeVempala2024_L19,LeeVempala2024_L20,LeeVempala2024_T21,LeeVempala2024_L23,LeeVempala2024_T25,LeeVempala2024_D26,LeeVempala2024_L27,LeeVempala2024_L28,LeeVempala2024_L29,LeeVempala2024_T30,LeeVempala2024_L31,LeeVempala2024_L32,LeeVempala2024_L33,LeeVempala2024_L34,LeeVempala2024_L35,Chen2021_T1,Chen2021_L1,Chen2021_L2,Chen2021_L3,Chen2021_L4,Chen2021_L5,Chen2021_L6,Chen2021_L7,Chen2021_L8,Chen2021_L9,Chen2021_L10,Chen2021_L11,Chen2021_L12,Chen2021_L13a,Chen2021_L13b,DePontiMondino2021_T11,DePontiMondino2021_D21,DePontiMondino2021_D22,DePontiMondino2021_P31,KlartagLehec2022_T11,KlartagLehec2022_P21,KlartagLehec2022_L22,KlartagLehec2022_L23,KlartagLehec2022_L24,KlartagLehec2022_C25,KlartagLehec2022_L31,KlartagLehec2022_L32,KlartagLehec2022_L41,KlartagLehec2022_L42,KlartagLehec2022_L51,KlartagLehec2022_L52,KlartagLehec2022_L53,KlartagLehec2022_C54,Klartag2023_T12,Klartag2023_L31,Klartag2023_C32 lemma_pending;
     classDef lemma_improved fill:#dcfce7,stroke:#15803d,color:#14532d;
-    class Bobkov1999_C43 lemma_improved;
+    class Bobkov1999_C43,LeeVempala2024_T5 lemma_improved;
     style KLS1995_T51 stroke-width:3px
     style Bobkov1999_T11 stroke-width:3px
     style Milman2009_T15 stroke-width:3px
     style Eldan2013_T11 stroke-width:3px
     style AGS2013_T74 stroke-width:3px
     style ADMG2017_T36 stroke-width:3px
+    style LeeVempala2024_T12 stroke-width:3px
     style Chen2021_T1 stroke-width:3px
     style DePontiMondino2021_T11 stroke-width:3px
+    style KlartagLehec2022_T11 stroke-width:3px
+    style Klartag2023_T12 stroke-width:3px
     classDef lemma_more fill:#f8fafc,stroke:#94a3b8,color:#334155,stroke-dasharray:4 3;
-    class KLS1995_more,Bobkov1999_more,Milman2009_more,Eldan2013_more,AGS2013_more,ADMG2017_more,Chen2021_more,DePontiMondino2021_more lemma_more;
+    class KLS1995_more,Bobkov1999_more,Milman2009_more,Eldan2013_more,AGS2013_more,ADMG2017_more,LeeVempala2024_more,Chen2021_more,DePontiMondino2021_more,KlartagLehec2022_more,Klartag2023_more lemma_more;

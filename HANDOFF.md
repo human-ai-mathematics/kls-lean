@@ -16,8 +16,9 @@ authorization. Exact results, scopes and certificates are in the
 - Covered papers: Ambrosio–Di Marino–Gigli Theorem 3.6, certificate
   `thm:relaxed-minkowski-content-perimeter`, accepted by the owner on 2026-10-02
   ([review record](research/decisions/2026-10-02-admg-theorem-3-6-certificate.md)).
-- Paper lemma maps cover KLS 1995, Bobkov 1999, E. Milman 2009, AGS 2013, Eldan 2013, ADMG 2017,
-  De Ponti–Mondino 2021 and Chen 2021 ([progress page](research/progress/README.md#paper-lemma-map)). Source PDFs are kept
+- Paper lemma maps cover eleven sources: KLS 1995, Bobkov 1999, E. Milman 2009, AGS 2013, Eldan
+  2013, ADMG 2017, De Ponti–Mondino 2021, Chen 2021, Klartag–Lehec 2022, Klartag 2023 and
+  Lee–Vempala 2024 ([progress page](research/progress/README.md#paper-lemma-map)). Source PDFs are kept
   outside the repository.
 
 ## Next

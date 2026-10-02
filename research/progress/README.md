@@ -349,6 +349,73 @@ flowchart LR
     class ADMG2017_more lemma_more;
 ```
 
+### Lee–Vempala (arXiv:1612.01507v3)
+
+59 statements: 2 ◐, 56 ○, 1 ⇑. [Full map](LITERATURE.md#leevempala2024-lemma-map).
+
+```mermaid
+flowchart LR
+    LeeVempala2024_Dpsi["◐ Conjecture 1, defining display of psi_p<br/>KLS constant psi_p"]
+    LeeVempala2024_T5["⇑ Theorem 5 (Poincare constant; Maz'ya, Cheeger)<br/>Cheeger implies Poincare"]
+    LeeVempala2024_T12["○ Theorem 12<br/>KLS constant n^{1/4} bound"]
+    LeeVempala2024_L19["○ Lemma 19 (Ito's formula)<br/>Ito's formula"]
+    LeeVempala2024_L20["○ Lemma 20 (reflection principle)<br/>Reflection principle"]
+    LeeVempala2024_T21["○ Theorem 21 (Dambis, Dubins-Schwarz)<br/>Time change of martingales"]
+    LeeVempala2024_L22["◐ Lemma 22 (Dinghas, Prekopa, Leindler)<br/>Log-concavity is preserved"]
+    LeeVempala2024_L23["○ Lemma 23 (log-concave moments)<br/>Reverse Holder moments"]
+    LeeVempala2024_T25["○ Theorem 25 (E. Milman, Theorem 1.8)<br/>Half-measure sets suffice"]
+    LeeVempala2024_D26["○ Definition 26<br/>Stochastic localization with C_t = I"]
+    LeeVempala2024_L27["○ Lemma 27<br/>Density is a martingale"]
+    LeeVempala2024_L28["○ Lemma 28<br/>Covariance SDE"]
+    LeeVempala2024_L29["○ Lemma 29<br/>Mass of a half set"]
+    LeeVempala2024_T30["○ Theorem 30 (Cousins-Vempala)<br/>Gaussian-tilted isoperimetry"]
+    LeeVempala2024_L31["○ Lemma 31<br/>Covariance control gives KLS"]
+    LeeVempala2024_L32["○ Lemma 32<br/>Third-moment vector bound"]
+    LeeVempala2024_L33["○ Lemma 33<br/>Third-moment tensor bound"]
+    LeeVempala2024_L34["○ Lemma 34<br/>Ito formula for Tr A_t^2"]
+    LeeVempala2024_L35["○ Lemma 35<br/>Potential Tr A_t^2 stays bounded"]
+    LeeVempala2024_Dpsi --> LeeVempala2024_T5
+    LeeVempala2024_L35 --> LeeVempala2024_T12
+    LeeVempala2024_L31 --> LeeVempala2024_T12
+    LeeVempala2024_D26 --> LeeVempala2024_T12
+    LeeVempala2024_L19 --> LeeVempala2024_L27
+    LeeVempala2024_D26 --> LeeVempala2024_L27
+    LeeVempala2024_L19 --> LeeVempala2024_L28
+    LeeVempala2024_L27 --> LeeVempala2024_L28
+    LeeVempala2024_L27 --> LeeVempala2024_L29
+    LeeVempala2024_T21 --> LeeVempala2024_L29
+    LeeVempala2024_L20 --> LeeVempala2024_L29
+    LeeVempala2024_Dpsi --> LeeVempala2024_T30
+    LeeVempala2024_T25 --> LeeVempala2024_L31
+    LeeVempala2024_L27 --> LeeVempala2024_L31
+    LeeVempala2024_D26 --> LeeVempala2024_L31
+    LeeVempala2024_T30 --> LeeVempala2024_L31
+    LeeVempala2024_L29 --> LeeVempala2024_L31
+    LeeVempala2024_L22 --> LeeVempala2024_L32
+    LeeVempala2024_L23 --> LeeVempala2024_L32
+    LeeVempala2024_L22 --> LeeVempala2024_L33
+    LeeVempala2024_L23 --> LeeVempala2024_L33
+    LeeVempala2024_L19 --> LeeVempala2024_L34
+    LeeVempala2024_L28 --> LeeVempala2024_L34
+    LeeVempala2024_L27 --> LeeVempala2024_L34
+    LeeVempala2024_L34 --> LeeVempala2024_L35
+    LeeVempala2024_L33 --> LeeVempala2024_L35
+    LeeVempala2024_L32 --> LeeVempala2024_L35
+    LeeVempala2024_L19 --> LeeVempala2024_L35
+    LeeVempala2024_T21 --> LeeVempala2024_L35
+    LeeVempala2024_L20 --> LeeVempala2024_L35
+    LeeVempala2024_more["+40 further statements in the paper register"]
+    classDef lemma_partial fill:#fff3df,stroke:#c88719,color:#66420d;
+    class LeeVempala2024_Dpsi,LeeVempala2024_L22 lemma_partial;
+    classDef lemma_pending fill:#fee2e2,stroke:#dc2626,color:#991b1b;
+    class LeeVempala2024_T12,LeeVempala2024_L19,LeeVempala2024_L20,LeeVempala2024_T21,LeeVempala2024_L23,LeeVempala2024_T25,LeeVempala2024_D26,LeeVempala2024_L27,LeeVempala2024_L28,LeeVempala2024_L29,LeeVempala2024_T30,LeeVempala2024_L31,LeeVempala2024_L32,LeeVempala2024_L33,LeeVempala2024_L34,LeeVempala2024_L35 lemma_pending;
+    classDef lemma_improved fill:#dcfce7,stroke:#15803d,color:#14532d;
+    class LeeVempala2024_T5 lemma_improved;
+    style LeeVempala2024_T12 stroke-width:3px
+    classDef lemma_more fill:#f8fafc,stroke:#94a3b8,color:#334155,stroke-dasharray:4 3;
+    class LeeVempala2024_more lemma_more;
+```
+
 ### Chen (arXiv:2011.13661v2)
 
 19 statements: 2 ◐, 17 ○. [Full map](LITERATURE.md#chen2021-lemma-map).
@@ -433,6 +500,100 @@ flowchart LR
     style DePontiMondino2021_T11 stroke-width:3px
     classDef lemma_more fill:#f8fafc,stroke:#94a3b8,color:#334155,stroke-dasharray:4 3;
     class DePontiMondino2021_more lemma_more;
+```
+
+### Klartag–Lehec (arXiv:2203.15551v2)
+
+28 statements: 1 ✓, 7 ◐, 20 ○. [Full map](LITERATURE.md#klartaglehec2022-lemma-map).
+
+```mermaid
+flowchart LR
+    KlartagLehec2022_DLC["◐ Section 1, definition of log-concavity<br/>Log-concave probability measure"]
+    KlartagLehec2022_MOM["◐ Section 1 (cited [BGVV, Lemma 2.2.1])<br/>Finite moments of all orders"]
+    KlartagLehec2022_D3["✓ Equation (3)<br/>Isotropic probability measure"]
+    KlartagLehec2022_D5["◐ Equation (5)<br/>Poincaré constant C_P"]
+    KlartagLehec2022_DPSI["◐ Section 1, display before (7)<br/>Isoperimetric constant 1/ψ_μ"]
+    KlartagLehec2022_E7["◐ Equation (7) (Cheeger; Buser–Ledoux)<br/>Cheeger and Buser–Ledoux comparison"]
+    KlartagLehec2022_T11["○ Theorem 1.1<br/>Polylogarithmic KLS bound"]
+    KlartagLehec2022_E14["◐ Equation (14)<br/>Weighted integration by parts"]
+    KlartagLehec2022_P21["○ Proposition 2.1<br/>Spectral mass below λ bound"]
+    KlartagLehec2022_L22["○ Lemma 2.2 (via Klartag–Putterman Lemma 2.1)<br/>Localization martingale second moment"]
+    KlartagLehec2022_L23["○ Lemma 2.3 (after Eldan)<br/>Small-time Schatten moments of A_t"]
+    KlartagLehec2022_L24["○ Lemma 2.4 (after Chen Lemma 8)<br/>Cubic growth of E‖A_t‖₂²"]
+    KlartagLehec2022_C25["○ Corollary 2.5<br/>Barycenter second moment bound"]
+    KlartagLehec2022_L31["○ Lemma 3.1 (Klartag–Putterman)<br/>Heat-flow norm lower bound"]
+    KlartagLehec2022_L32["○ Lemma 3.2<br/>Projection lower bound for ⟨Af,f⟩"]
+    KlartagLehec2022_L41["○ Lemma 4.1<br/>Bounded martingale representation"]
+    KlartagLehec2022_UP["◐ Proof of Lemma 4.2 (well known)<br/>Uniformly log-concave Poincaré inequality"]
+    KlartagLehec2022_L42["○ Lemma 4.2 (after Jiang–Lee–Vempala)<br/>Cubic inner-product moment bound"]
+    KlartagLehec2022_L51["○ Lemma 5.1<br/>Scaling bound for κ_X"]
+    KlartagLehec2022_L52["○ Lemma 5.2<br/>Operator-norm tail at small times"]
+    KlartagLehec2022_L53["○ Lemma 5.3 (folklore)<br/>Martingale deviation inequality"]
+    KlartagLehec2022_C54["○ Corollary 5.4<br/>Small-time operator-norm moments"]
+    KlartagLehec2022_DLC --> KlartagLehec2022_MOM
+    KlartagLehec2022_DLC --> KlartagLehec2022_DPSI
+    KlartagLehec2022_D5 --> KlartagLehec2022_E7
+    KlartagLehec2022_DPSI --> KlartagLehec2022_E7
+    KlartagLehec2022_P21 --> KlartagLehec2022_T11
+    KlartagLehec2022_L22 --> KlartagLehec2022_T11
+    KlartagLehec2022_C25 --> KlartagLehec2022_T11
+    KlartagLehec2022_E7 --> KlartagLehec2022_T11
+    KlartagLehec2022_D3 --> KlartagLehec2022_T11
+    KlartagLehec2022_D5 --> KlartagLehec2022_T11
+    KlartagLehec2022_DPSI --> KlartagLehec2022_T11
+    KlartagLehec2022_L31 --> KlartagLehec2022_P21
+    KlartagLehec2022_L32 --> KlartagLehec2022_P21
+    KlartagLehec2022_C54 --> KlartagLehec2022_L23
+    KlartagLehec2022_L42 --> KlartagLehec2022_L24
+    KlartagLehec2022_L23 --> KlartagLehec2022_C25
+    KlartagLehec2022_L24 --> KlartagLehec2022_C25
+    KlartagLehec2022_D5 --> KlartagLehec2022_UP
+    KlartagLehec2022_L41 --> KlartagLehec2022_L42
+    KlartagLehec2022_L51 --> KlartagLehec2022_L52
+    KlartagLehec2022_L53 --> KlartagLehec2022_L52
+    KlartagLehec2022_L52 --> KlartagLehec2022_C54
+    KlartagLehec2022_more["+6 further statements in the paper register"]
+    classDef lemma_formalized fill:#dbeafe,stroke:#2563eb,color:#1e3a8a;
+    class KlartagLehec2022_D3 lemma_formalized;
+    classDef lemma_partial fill:#fff3df,stroke:#c88719,color:#66420d;
+    class KlartagLehec2022_DLC,KlartagLehec2022_MOM,KlartagLehec2022_D5,KlartagLehec2022_DPSI,KlartagLehec2022_E7,KlartagLehec2022_E14,KlartagLehec2022_UP lemma_partial;
+    classDef lemma_pending fill:#fee2e2,stroke:#dc2626,color:#991b1b;
+    class KlartagLehec2022_T11,KlartagLehec2022_P21,KlartagLehec2022_L22,KlartagLehec2022_L23,KlartagLehec2022_L24,KlartagLehec2022_C25,KlartagLehec2022_L31,KlartagLehec2022_L32,KlartagLehec2022_L41,KlartagLehec2022_L42,KlartagLehec2022_L51,KlartagLehec2022_L52,KlartagLehec2022_L53,KlartagLehec2022_C54 lemma_pending;
+    style KlartagLehec2022_T11 stroke-width:3px
+    classDef lemma_more fill:#f8fafc,stroke:#94a3b8,color:#334155,stroke-dasharray:4 3;
+    class KlartagLehec2022_more lemma_more;
+```
+
+### Klartag (arXiv:2303.14938v2)
+
+19 statements: 6 ◐, 13 ○. [Full map](LITERATURE.md#klartag2023-lemma-map).
+
+```mermaid
+flowchart LR
+    Klartag2023_D13["◐ Equation (1.3)<br/>Poincaré constant C_P"]
+    Klartag2023_Dpsi["◐ §1, display defining 1/ψ_μ (unnumbered)<br/>Isoperimetric constant ψ_μ"]
+    Klartag2023_E14["◐ Equation (1.4) (Cheeger; Buser–Ledoux; De Ponti–Mondino)<br/>Cheeger–Buser comparison"]
+    Klartag2023_E17["◐ Equation (1.7) (log-concave Lichnerowicz; Brascamp–Lieb)<br/>Log-concave Lichnerowicz inequality"]
+    Klartag2023_T12["○ Theorem 1.2<br/>KLS bound √log n"]
+    Klartag2023_E24["◐ Equation (2.4)<br/>Weighted integration by parts"]
+    Klartag2023_E37["◐ Equation (3.7) (subadditivity, Courtade)<br/>Poincaré constant of θ_t"]
+    Klartag2023_L31["○ Lemma 3.1<br/>Variance decomposition along localization"]
+    Klartag2023_C32["○ Corollary 3.2<br/>Spectral gap from localized gaps"]
+    Klartag2023_D13 --> Klartag2023_E14
+    Klartag2023_Dpsi --> Klartag2023_E14
+    Klartag2023_E14 --> Klartag2023_T12
+    Klartag2023_C32 --> Klartag2023_T12
+    Klartag2023_D13 --> Klartag2023_E37
+    Klartag2023_E37 --> Klartag2023_L31
+    Klartag2023_L31 --> Klartag2023_C32
+    Klartag2023_more["+10 further statements in the paper register"]
+    classDef lemma_partial fill:#fff3df,stroke:#c88719,color:#66420d;
+    class Klartag2023_D13,Klartag2023_Dpsi,Klartag2023_E14,Klartag2023_E17,Klartag2023_E24,Klartag2023_E37 lemma_partial;
+    classDef lemma_pending fill:#fee2e2,stroke:#dc2626,color:#991b1b;
+    class Klartag2023_T12,Klartag2023_L31,Klartag2023_C32 lemma_pending;
+    style Klartag2023_T12 stroke-width:3px
+    classDef lemma_more fill:#f8fafc,stroke:#94a3b8,color:#334155,stroke-dasharray:4 3;
+    class Klartag2023_more lemma_more;
 ```
 <!-- END GENERATED LEMMAS -->
 

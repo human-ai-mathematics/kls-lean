@@ -43,3 +43,7 @@ Nothing is pushed.
   decision left to the owner.
 - Block 4 prepared: the stale Buser docstrings in `KLS/Geometry/Cheeger/Inequality.lean` are fixed
   (docstrings only, pins refreshed); committed with the next verified Lean change.
+- Block 2 extended: lemma maps for Lee–Vempala 2024 (arXiv v3, 59 items: 1 ⇑ for the quoted Cheeger
+  inequality, which Lean proves without isotropy and with constant 4; 2 ◐), Klartag–Lehec 2022
+  (28 items: 1 ✓, 7 ◐) and Klartag 2023 (19 items: 6 ◐). Lee–Vempala uses the C_t = I localization,
+  relevant to the stochastic-calculus decision. All 22 diagrams render.
