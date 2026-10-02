@@ -66,6 +66,12 @@ Nothing is pushed.
   every proof body, one statement at a time against fixed headers, after a first all-at-once attempt
   failed. Accepted proofs were rechecked independently: identical statements, no forbidden token,
   standard axioms only; Claude removed three linter warnings (an unneeded `<;>` and two no-op `ring`).
+  Full local verifier: 184 gates passed, 354 replayed modules
+  (`build/verification/20261002T181356.800303Z/report.json`). Committed locally; not a paper target,
+  so no milestone tag.
+- Numbering cross-check of the 14 later maps by an independent GPT reading of each PDF: all agree.
+  The only difference, Cordero-Erausquin–Klartag Definitions 1–2 (separate counter), is in our map
+  and was checked against the PDF.
 - Block 2 complete: Klartag 2014 (26 items) and Bizeul 2025 (13 items, including the lettered quoted
   Theorems A–C; the filter now accepts lettered numbers). 22 of 27 register sources have lemma maps; the
   remaining five are two surveys, two monographs and Borell 1974 (not downloaded). All 44 diagrams render.
