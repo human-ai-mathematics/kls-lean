@@ -51,3 +51,7 @@ Nothing is pushed.
   2025 (37 items, all ○) and Letwin 2026 (16 items: 1 ✓, 4 ◐). The Letwin main proof cites a bound
   `C_P ≤ C κ_n √log n` "by tracing" Klartag 2023 that the preprint does not prove (noted in the map).
   All 28 diagrams render.
+- Block 2 extended again: Guan 2024 (11 items: 1 ⇑, the quoted Buser–Ledoux inequality with π in place
+  of 9), Klartag–Lehec slicing 2025 (13 items) and Chen–Klartag 2026 (17 items). A filtering bug of mine
+  had dropped appendix-numbered lemmas (`Lemma A.1` …) from Letwin 2026 in commit `53c23ed`; the map is
+  restored from the agent's builder to all 23 items and the filter is fixed. All 34 diagrams render.

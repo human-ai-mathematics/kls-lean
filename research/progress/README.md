@@ -688,6 +688,81 @@ flowchart LR
     class Klartag2023_more lemma_more;
 ```
 
+### Guan (arXiv:2412.09075v1)
+
+11 statements: 10 ○, 1 ⇑. [Full map](LITERATURE.md#guan2024-lemma-map).
+
+```mermaid
+flowchart LR
+    Guan2024_T11["○ Theorem 1.1<br/>Iterated-logarithm slicing bound"]
+    Guan2024_T12["○ Theorem 1.2<br/>Thin cell versus isoperimetry"]
+    Guan2024_L21["○ Lemma 2.1<br/>Two-sided bound for E Tr(A_t^2)"]
+    Guan2024_L22["○ Lemma 2.2<br/>Exponential-to-quadratic gluing function"]
+    Guan2024_L23["○ Lemma 2.3<br/>Marginals keep uniform log-concavity"]
+    Guan2024_L24["○ Lemma 2.4<br/>Growth of E F_t"]
+    Guan2024_L41["○ Lemma 4.1<br/>Gaussian convolution identities"]
+    Guan2024_L42["○ Lemma 4.2<br/>Dyadic Cauchy–Schwarz integral bound"]
+    Guan2024_L43["○ Lemma 4.3<br/>Low-spectrum coordinate mass bound"]
+    Guan2024_BL["⇑ Proof of Theorem 1.2, Buser–Ledoux inequality (Buser 1982; Ledoux 2004)<br/>Buser–Ledoux comparison"]
+    Guan2024_T12 --> Guan2024_T11
+    Guan2024_L21 --> Guan2024_T12
+    Guan2024_L43 --> Guan2024_T12
+    Guan2024_BL --> Guan2024_T12
+    Guan2024_L22 --> Guan2024_L21
+    Guan2024_L24 --> Guan2024_L21
+    Guan2024_L22 --> Guan2024_L24
+    Guan2024_L23 --> Guan2024_L24
+    Guan2024_L41 --> Guan2024_L43
+    Guan2024_L42 --> Guan2024_L43
+    Guan2024_more["+1 further statements in the paper register"]
+    classDef lemma_pending fill:#fee2e2,stroke:#dc2626,color:#991b1b;
+    class Guan2024_T11,Guan2024_T12,Guan2024_L21,Guan2024_L22,Guan2024_L23,Guan2024_L24,Guan2024_L41,Guan2024_L42,Guan2024_L43 lemma_pending;
+    classDef lemma_improved fill:#dcfce7,stroke:#15803d,color:#14532d;
+    class Guan2024_BL lemma_improved;
+    style Guan2024_T11 stroke-width:3px
+    classDef lemma_more fill:#f8fafc,stroke:#94a3b8,color:#334155,stroke-dasharray:4 3;
+    class Guan2024_more lemma_more;
+```
+
+### Klartag–Lehec (arXiv:2412.15044v1)
+
+13 statements: 13 ○. [Full map](LITERATURE.md#klartaglehecslicing2025-lemma-map).
+
+```mermaid
+flowchart LR
+    KlartagLehecSlicing2025_T12["○ Theorem 1.2<br/>Isotropic constant uniformly bounded"]
+    KlartagLehecSlicing2025_L21["○ Lemma 2.1<br/>Drift orthogonality identity"]
+    KlartagLehecSlicing2025_L22["○ Lemma 2.2<br/>Projection increases expected covariance"]
+    KlartagLehecSlicing2025_L23["○ Lemma 2.3 (Guan)<br/>Guan's bound on E Tr A_t²"]
+    KlartagLehecSlicing2025_P24["○ Proposition 2.4<br/>Reduction to non-collapsing localization"]
+    KlartagLehecSlicing2025_L25["○ Lemma 2.5<br/>Marginals inherit maximal isotropic constant"]
+    KlartagLehecSlicing2025_L26["○ Lemma 2.6<br/>Large-eigenvalue subspace at time c0"]
+    KlartagLehecSlicing2025_L31["○ Lemma 3.1<br/>Föllmer drift energy is Fisher information"]
+    KlartagLehecSlicing2025_C32["○ Corollary 3.2<br/>Entropy as integrated drift energy"]
+    KlartagLehecSlicing2025_L33["○ Lemma 3.3<br/>Properties of the matrix process Γ_r"]
+    KlartagLehecSlicing2025_L34["○ Lemma 3.4 (Eldan and Mikulincer)<br/>Shannon–Stam deficit stability bound"]
+    KlartagLehecSlicing2025_L35["○ Lemma 3.5 (Ball and Nguyen)<br/>Entropy jump at most 2n"]
+    KlartagLehecSlicing2025_P24 --> KlartagLehecSlicing2025_T12
+    KlartagLehecSlicing2025_L31 --> KlartagLehecSlicing2025_T12
+    KlartagLehecSlicing2025_C32 --> KlartagLehecSlicing2025_T12
+    KlartagLehecSlicing2025_L33 --> KlartagLehecSlicing2025_T12
+    KlartagLehecSlicing2025_L34 --> KlartagLehecSlicing2025_T12
+    KlartagLehecSlicing2025_L35 --> KlartagLehecSlicing2025_T12
+    KlartagLehecSlicing2025_L22 --> KlartagLehecSlicing2025_P24
+    KlartagLehecSlicing2025_L25 --> KlartagLehecSlicing2025_P24
+    KlartagLehecSlicing2025_L26 --> KlartagLehecSlicing2025_P24
+    KlartagLehecSlicing2025_L23 --> KlartagLehecSlicing2025_L26
+    KlartagLehecSlicing2025_L31 --> KlartagLehecSlicing2025_C32
+    KlartagLehecSlicing2025_L21 --> KlartagLehecSlicing2025_L33
+    KlartagLehecSlicing2025_C32 --> KlartagLehecSlicing2025_L35
+    KlartagLehecSlicing2025_more["+1 further statements in the paper register"]
+    classDef lemma_pending fill:#fee2e2,stroke:#dc2626,color:#991b1b;
+    class KlartagLehecSlicing2025_T12,KlartagLehecSlicing2025_L21,KlartagLehecSlicing2025_L22,KlartagLehecSlicing2025_L23,KlartagLehecSlicing2025_P24,KlartagLehecSlicing2025_L25,KlartagLehecSlicing2025_L26,KlartagLehecSlicing2025_L31,KlartagLehecSlicing2025_C32,KlartagLehecSlicing2025_L33,KlartagLehecSlicing2025_L34,KlartagLehecSlicing2025_L35 lemma_pending;
+    style KlartagLehecSlicing2025_T12 stroke-width:3px
+    classDef lemma_more fill:#f8fafc,stroke:#94a3b8,color:#334155,stroke-dasharray:4 3;
+    class KlartagLehecSlicing2025_more lemma_more;
+```
+
 ### Klartag–Lehec (arXiv:2507.15495v2)
 
 37 statements: 37 ○. [Full map](LITERATURE.md#klartaglehecthin2025-lemma-map).
@@ -750,9 +825,46 @@ flowchart LR
     class KlartagLehecThin2025_more lemma_more;
 ```
 
+### Chen–Klartag (arXiv:2607.23307v1)
+
+17 statements: 17 ○. [Full map](LITERATURE.md#chenklartag2026-lemma-map).
+
+```mermaid
+flowchart LR
+    ChenKlartag2026_T11["○ Theorem 1.1<br/>Sharp thin-shell variance bound"]
+    ChenKlartag2026_T14["○ Theorem 1.4<br/>Sharp H^{-1} coordinate bound"]
+    ChenKlartag2026_T15["○ Theorem 1.5<br/>Second trace moment of H"]
+    ChenKlartag2026_L31["○ Lemma 3.1<br/>Exact identity LH+H = A+Q"]
+    ChenKlartag2026_L32["○ Lemma 3.2<br/>Pointwise formula for L tr(H²)"]
+    ChenKlartag2026_L33["○ Lemma 3.3<br/>Integrated trace identity"]
+    ChenKlartag2026_L34["○ Lemma 3.4<br/>Poincaré bound for entries of H"]
+    ChenKlartag2026_L35["○ Lemma 3.5<br/>Cyclic identity q_2 ≥ d_2"]
+    ChenKlartag2026_LA1["○ Lemma A.1<br/>Energy cutoffs and finite-energy domain"]
+    ChenKlartag2026_LA2["○ Lemma A.2<br/>Vanishing integral of LG"]
+    ChenKlartag2026_LA3["○ Lemma A.3<br/>Euclidean integration-by-parts identities"]
+    ChenKlartag2026_T14 --> ChenKlartag2026_T11
+    ChenKlartag2026_T15 --> ChenKlartag2026_T14
+    ChenKlartag2026_L33 --> ChenKlartag2026_T15
+    ChenKlartag2026_L34 --> ChenKlartag2026_T15
+    ChenKlartag2026_L35 --> ChenKlartag2026_T15
+    ChenKlartag2026_L31 --> ChenKlartag2026_L32
+    ChenKlartag2026_L32 --> ChenKlartag2026_L33
+    ChenKlartag2026_LA2 --> ChenKlartag2026_L33
+    ChenKlartag2026_L33 --> ChenKlartag2026_L34
+    ChenKlartag2026_LA1 --> ChenKlartag2026_L34
+    ChenKlartag2026_LA3 --> ChenKlartag2026_L34
+    ChenKlartag2026_LA1 --> ChenKlartag2026_LA2
+    ChenKlartag2026_more["+6 further statements in the paper register"]
+    classDef lemma_pending fill:#fee2e2,stroke:#dc2626,color:#991b1b;
+    class ChenKlartag2026_T11,ChenKlartag2026_T14,ChenKlartag2026_T15,ChenKlartag2026_L31,ChenKlartag2026_L32,ChenKlartag2026_L33,ChenKlartag2026_L34,ChenKlartag2026_L35,ChenKlartag2026_LA1,ChenKlartag2026_LA2,ChenKlartag2026_LA3 lemma_pending;
+    style ChenKlartag2026_T11 stroke-width:3px
+    classDef lemma_more fill:#f8fafc,stroke:#94a3b8,color:#334155,stroke-dasharray:4 3;
+    class ChenKlartag2026_more lemma_more;
+```
+
 ### Letwin (arXiv:2607.24164v1)
 
-16 statements: 1 ✓, 4 ◐, 11 ○. [Full map](LITERATURE.md#letwin2026-lemma-map).
+23 statements: 1 ✓, 4 ◐, 18 ○. [Full map](LITERATURE.md#letwin2026-lemma-map).
 
 ```mermaid
 flowchart LR
@@ -772,6 +884,13 @@ flowchart LR
     Letwin2026_L27["○ Lemma 2.7 (Fathi [29, Theorem 2.3])<br/>Moment map gives Stein kernel"]
     Letwin2026_P28["○ Proposition 2.8 (Barthe and Klartag [7, Proposition 10])<br/>H^{-1} variance inequality"]
     Letwin2026_L29["○ Lemma 2.9<br/>Stein kernel bounds H^{-1} norm"]
+    Letwin2026_LA1["○ Lemma A.1<br/>Reduction to regular measures"]
+    Letwin2026_LA2["○ Lemma A.2<br/>Reduction to invertible M"]
+    Letwin2026_LA3["○ Lemma A.3<br/>Integration by parts under nu"]
+    Letwin2026_LA4["○ Lemma A.4<br/>Cutoffs with small generator"]
+    Letwin2026_LA5["○ Lemma A.5<br/>Mean zero of L f"]
+    Letwin2026_LA6["○ Lemma A.6<br/>Brascamp-Lieb for nu"]
+    Letwin2026_LA7["○ Lemma A.7<br/>Extended Stein identity"]
     Letwin2026_DISO --> Letwin2026_DPSI
     Letwin2026_DCP --> Letwin2026_ECMP
     Letwin2026_DPSI --> Letwin2026_ECMP
@@ -791,22 +910,39 @@ flowchart LR
     Letwin2026_T25 --> Letwin2026_T12
     Letwin2026_P28 --> Letwin2026_T12
     Letwin2026_L29 --> Letwin2026_T12
+    Letwin2026_LA1 --> Letwin2026_T12
+    Letwin2026_LA2 --> Letwin2026_T12
     Letwin2026_L21 --> Letwin2026_L22
+    Letwin2026_LA1 --> Letwin2026_L22
     Letwin2026_L22 --> Letwin2026_L23
+    Letwin2026_LA3 --> Letwin2026_L23
     Letwin2026_DISO --> Letwin2026_L23
     Letwin2026_L22 --> Letwin2026_L24
     Letwin2026_L22 --> Letwin2026_T25
     Letwin2026_L23 --> Letwin2026_T25
     Letwin2026_L24 --> Letwin2026_T25
+    Letwin2026_LA3 --> Letwin2026_T25
+    Letwin2026_LA5 --> Letwin2026_T25
+    Letwin2026_LA6 --> Letwin2026_T25
     Letwin2026_L22 --> Letwin2026_L27
     Letwin2026_D26 --> Letwin2026_L27
     Letwin2026_D26 --> Letwin2026_L29
+    Letwin2026_LA7 --> Letwin2026_L29
+    Letwin2026_DISO --> Letwin2026_LA1
+    Letwin2026_L22 --> Letwin2026_LA3
+    Letwin2026_LA1 --> Letwin2026_LA3
+    Letwin2026_L22 --> Letwin2026_LA4
+    Letwin2026_LA1 --> Letwin2026_LA4
+    Letwin2026_LA4 --> Letwin2026_LA5
+    Letwin2026_L22 --> Letwin2026_LA6
+    Letwin2026_LA1 --> Letwin2026_LA6
+    Letwin2026_D26 --> Letwin2026_LA7
     classDef lemma_formalized fill:#dbeafe,stroke:#2563eb,color:#1e3a8a;
     class Letwin2026_DISO lemma_formalized;
     classDef lemma_partial fill:#fff3df,stroke:#c88719,color:#66420d;
     class Letwin2026_DCP,Letwin2026_DPSI,Letwin2026_ECMP,Letwin2026_CONJ lemma_partial;
     classDef lemma_pending fill:#fee2e2,stroke:#dc2626,color:#991b1b;
-    class Letwin2026_T11,Letwin2026_T12,Letwin2026_L21,Letwin2026_L22,Letwin2026_L23,Letwin2026_L24,Letwin2026_T25,Letwin2026_D26,Letwin2026_L27,Letwin2026_P28,Letwin2026_L29 lemma_pending;
+    class Letwin2026_T11,Letwin2026_T12,Letwin2026_L21,Letwin2026_L22,Letwin2026_L23,Letwin2026_L24,Letwin2026_T25,Letwin2026_D26,Letwin2026_L27,Letwin2026_P28,Letwin2026_L29,Letwin2026_LA1,Letwin2026_LA2,Letwin2026_LA3,Letwin2026_LA4,Letwin2026_LA5,Letwin2026_LA6,Letwin2026_LA7 lemma_pending;
     style Letwin2026_T11 stroke-width:3px
 ```
 <!-- END GENERATED LEMMAS -->
