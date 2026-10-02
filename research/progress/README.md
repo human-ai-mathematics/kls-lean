@@ -122,7 +122,7 @@ See the [full tables and normalization](LITERATURE.md#constant-conventions).
 ## Proof progress tree
 
 <!-- BEGIN GENERATED DATE -->
-Last updated: **2026-10-01**.
+Last updated: **2026-10-02**.
 
 ![✓ Formalized in Lean](badges/formalized.svg) · ![○ Not yet formalized](badges/pending.svg) · ![◐ Partially formalized](badges/partial.svg) · ![— Excluded: refuted](badges/excluded.svg)
 <!-- END GENERATED DATE -->
@@ -132,8 +132,10 @@ in Lean. The general π bound uses actual Gaussian smoothing and a Cheeger test 
 argument; no individual-domain perimeter limit is asserted.
 The scoped metric BV comparison includes closed-support identification for finite-dimensional
 log-concave laws, exact test-class relaxation infima, and relaxed lower Minkowski content.
-**Next step:** assess the locally Lipschitz classes on nonproper spaces and the remaining
-general metric-measure/RCD comparison bridges. The extended ADMG sections 2–3 finite-target
+**Next step:** pin and audit the priority-1 literature target, the strong-curvature
+Bakry–Émery Poincaré bound `C_P ≤ 1/ρ` (see [literature priorities](#literature-priorities)).
+The locally Lipschitz classes on nonproper spaces and the general metric-measure/RCD
+comparison bridges remain open. The extended ADMG sections 2–3 finite-target
 scope (2026-10-01) is frozen and locally verified. Lemma 2.1's equality of the relaxed lower and upper
 contents now holds for every Borel measure at measurable finite-mass targets, and on proper
 spaces the Remark 3.5 locally Lipschitz classes (global or compact-set L1) give the

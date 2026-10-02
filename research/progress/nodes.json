@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "last_updated": "2026-10-01",
+  "last_updated": "2026-10-02",
   "nodes": {
     "ass:cmh-recovery-envelope": {
       "description": "Seek a regular moment-map approximation of every centered log-concave law with a dimension-free CMH bound.",

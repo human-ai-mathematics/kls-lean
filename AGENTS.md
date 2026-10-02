@@ -7,11 +7,13 @@
 - Keep progress documentation together in `research/progress/`: `LITERATURE.md` is the primary
   paper-by-paper register (target theorem, Lean statements, status, certificate); `README.md`
   directly displays the literature priorities and the English Mermaid diagrams on the GitHub
-  directory page; `STATUS.md` is the generated node register. The root README retains the
-  entry link and current-status summary.
+  directory page; `STATUS.md` is the generated node register. The root README stays a one-page
+  summary: statement, what is proved, what is not, where to look and how to verify.
 - Mark a paper covered only when its main theorem is faithfully stated in Lean, proved without
   nonstandard axioms, and registered with a certificate and verification evidence for that exact
   statement. Supporting lemmas and restricted or conditional counterparts do not cover a paper.
+- Keep `HANDOFF.md` limited to the current state; move superseded sections to dated files in
+  `research/decisions/` without changing their claims.
 - When proof progress changes, review the source-paper mapping in `literature.json`, the complete
   diagram, its date, and the root current-status
   summary. After staging the intended proof/metadata changes, regenerate all progress views with

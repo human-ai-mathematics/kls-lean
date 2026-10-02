@@ -23,6 +23,12 @@ combined route diagram and approach table restored in `6c3437f` stay on
 - The four routes remain on the progress page as exploratory research records sharing the
   analytic infrastructure. They are not formalization targets in their own right.
 
+- Issue #8 section 1, last item: the root README is a one-page summary (statement, what is
+  proved, what is not, where to look, how to verify). `HANDOFF.md` holds only the current state;
+  its previous dated sections are preserved, with relative links rebased, in
+  [2026-10-02-handoff-history.md](2026-10-02-handoff-history.md). The superseded README prose
+  remains available at commit `6c3437f`.
+
 No Lean source, Blueprint statement, ledger record or certificate changed. No new paper
 coverage or certificate is claimed.
 

@@ -5,9 +5,16 @@ the distinction between known mathematics, local arguments, open research, and L
 This workflow runs locally and does not commit, push, dispatch agents, or publish artifacts.
 Public interfaces remain editable under [the lifecycle](ledger-schema.md#lifecycle).
 
+## Current task selection (2026-10-02)
+
+Use the [current handoff](../HANDOFF.md) and the
+[published literature priorities](progress/README.md#literature-priorities). The dated sections
+below preserve earlier evidence and then-current task descriptions; their next steps and counts
+do not override the current handoff.
+
 ## Current status and receipt scope (2026-09-22)
 
-For today's proved scope and next task, use the [current operational handoff](../HANDOFF.md#current-operational-status-2026-09-22)
+For the proved scope and next task as of 2026-09-22, use the [archived operational handoff](decisions/2026-10-02-handoff-history.md)
 and [status alignment record](decisions/2026-09-20-current-status-alignment.md). There are 26
 certificates and one deliberate, isolated KLS target hole. The older dated reports below retain
 their historical counts. Semigroup generation and the stated `L²` Markov properties are now
