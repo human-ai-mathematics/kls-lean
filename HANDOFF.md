@@ -16,9 +16,10 @@ authorization. Exact results, scopes and certificates are in the
 - Covered papers: Ambrosio–Di Marino–Gigli Theorem 3.6, certificate
   `thm:relaxed-minkowski-content-perimeter`, accepted by the owner on 2026-10-02
   ([review record](research/decisions/2026-10-02-admg-theorem-3-6-certificate.md)).
-- Paper lemma maps cover twenty sources: KLS 1995, Bobkov 1999, E. Milman 2009, Guédon–Milman 2011,
-  AGS 2013, Eldan 2013, Cordero-Erausquin–Klartag 2015, ADMG 2017, Fathi 2019, De Ponti–Mondino 2021, Chen 2021, Klartag–Lehec 2022, Jambulapati–Lee–Vempala
-  2022, Klartag 2023, Guan 2024, Lee–Vempala 2024, Klartag–Lehec 2025 (slicing and thin shell),
+- Paper lemma maps cover all 22 downloaded research sources (all but Borell 1974, Bakry–Gentil–Ledoux,
+  Alonso-Gutiérrez–Bastero and the two surveys): KLS 1995, Bobkov 1999, E. Milman 2009, Guédon–Milman
+  2011, AGS 2013, Eldan 2013, Klartag 2014, Cordero-Erausquin–Klartag 2015, ADMG 2017, Fathi 2019, De Ponti–Mondino 2021, Chen 2021, Klartag–Lehec 2022, Jambulapati–Lee–Vempala
+  2022, Klartag 2023, Guan 2024, Lee–Vempala 2024, Bizeul 2025, Klartag–Lehec 2025 (slicing and thin shell),
   Chen–Klartag 2026 and Letwin 2026
   ([progress page](research/progress/README.md#paper-lemma-map)). Source PDFs are kept
   outside the repository.
@@ -26,7 +27,7 @@ authorization. Exact results, scopes and certificates are in the
 ## Next
 
 1. Formalize De Ponti–Mondino Lemmas 3.2 and 3.3 (elementary monotonicity of explicit functions)
-   and extend the lemma maps to the remaining downloaded sources.
+   The remaining unmapped sources are books, surveys or not downloaded.
 2. Blocked: the priority-1 Bakry–Émery `C_P ≤ 1/ρ` target waits for the Bakry–Gentil–Ledoux text.
 
 ## Open owner decisions

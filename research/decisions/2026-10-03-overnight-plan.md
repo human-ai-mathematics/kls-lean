@@ -58,3 +58,6 @@ Nothing is pushed.
 - Block 2 extended again: Guédon–Milman 2011 (21 items; main taken as the register's deviation
   estimate, Theorem 1.1, with the authors' Theorem 1.2 noted), Cordero-Erausquin–Klartag 2015 (18 items)
   and Fathi 2019 (10 items). Twenty sources mapped; all 40 diagrams render.
+- Block 2 complete: Klartag 2014 (26 items) and Bizeul 2025 (13 items, including the lettered quoted
+  Theorems A–C; the filter now accepts lettered numbers). 22 of 27 register sources have lemma maps; the
+  remaining five are two surveys, two monographs and Borell 1974 (not downloaded). All 44 diagrams render.

@@ -2470,7 +2470,360 @@
       "diagram": "2014 · Klartag<br/>Moment-measure geometry",
       "additional_sources": [
         "https://www.weizmann.ac.il/math/klartag/publications-0"
-      ]
+      ],
+      "lemma_map": {
+        "source_version": "arXiv:1309.2767v1",
+        "source_url": "https://arxiv.org/abs/1309.2767v1",
+        "reviewed_on": "2026-10-03",
+        "standing_assumptions": "mu is a log-concave probability measure on R^n with barycenter at the origin, supported on a bounded open convex set K (convex body), with density e^{-rho}, rho : K -> R convex, C^infinity, and bounded with all derivatives (condition (1)); psi : R^n -> R is the convex function, unique up to translation (normalised to be centered in Section 2), whose moment measure is mu, i.e. (nabla psi)_# e^{-psi(x)} dx = mu; under (1) psi is finite and C^infinity (condition (2), quoted from Wang-Zhu, Donaldson and Berman-Berndtsson) and solves the transport equation e^{-rho(nabla psi)} det Hess psi = e^{-psi} (display (3)). phi = psi^* is the Legendre transform, smooth with positive definite Hessian on K, (phi^{ij}) = (Hess phi)^{-1} and Einstein summation is used. M_mu^* = (R^n, Hess psi, e^{-psi} dx) and M_mu = (K, Hess phi, mu) are isomorphic weighted Riemannian manifolds via nabla psi. R(K) = sup_{x in K} |x| is the outer radius. Section 2 allows arbitrary centered convex psi with compactly supported moment measures; Section 4 allows a general potential V in place of psi and an open K; Section 3, Lemma 5.5 and Corollary 5.7 add the strict-convexity condition (star): smooth boundary of K with positive Gauss curvature and Hess rho >= eps_0 Id.",
+        "omitted": "Remark 4.8 is omitted as purely expository (the stochastic language is a matter of taste and the arguments can be rephrased analytically, as in Grigor'yan Sections 7.4 and 8.4). The unnumbered Introduction properties (i)-(iii) of M_mu (stochastic completeness, Bakry-Emery-Ricci tensor at least half the metric after Kolesnikov Theorem 4.3, and first nonzero eigenvalue -1 with linear eigenfunctions), the quoted regularity facts (1) => (2), and the unnumbered Section 6 transport of the Brascamp-Lieb inequality to Var_mu(f) <= int phi^{ij} f_i f_j dmu are not listed, as no Lean declaration states them. The paper has no numbered Definitions, Facts, Claims, Conjectures or appendix statements; its five theorem-like environments share the section-wise theorem counter.",
+        "items": [
+          {
+            "id": "T11",
+            "locator": "Theorem 1.1",
+            "label": "Laplacian bound for moment map",
+            "statement": "Let mu be a log-concave probability measure on R^n with barycenter at the origin, supported on a bounded open convex set K with density e^{-rho}, rho convex, C^infinity, and bounded with all its derivatives on K (condition (1)), and let psi be the smooth convex function whose moment measure is mu. Then Delta psi(x) <= 2 R(K)^2 for every x in R^n, where R(K) = sup_{x in K} |x|.",
+            "uses": [
+              "C57",
+              "P21"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "main": true,
+            "note": "Main theorem: it is the first statement of the paper, the result announced in the abstract (bounding the second derivatives of the toric Kahler-Einstein solution), and Section 5 is its proof; Corollary 1.2 and Proposition 6.1 are applications. Proof: under the strict-convexity assumptions (smooth K with positive Gauss curvature, Hess rho >= eps_0 Id), Corollary 5.7 at t = log 2 gives Tr (Hess phi)^{-1}(z) <= 2 Tr Cov(X_t^{(z)}) <= 2 R(K)^2 and Hess psi(x) = (Hess phi)^{-1}(nabla psi(x)); the general case follows by approximating mu by such measures mu_l, using Proposition 2.1 to get psi_l -> psi pointwise, Rockafellar Theorem 24.5 for the gradients, and the divergence theorem on small balls. Smoothness of psi (condition (2)) and the transport equation (3) are quoted from Wang-Zhu, Donaldson and Berman-Berndtsson. No Lean counterpart: the library has no moment measures, Legendre-dual Hessian metrics or Monge-Ampere equations."
+          },
+          {
+            "id": "C12",
+            "locator": "Corollary 1.2",
+            "label": "Payne-Weinberger type Poincare bound",
+            "statement": "Under the hypotheses of Theorem 1.1, every mu-integrable smooth f : K -> R satisfies int f^2 dmu - (int f dmu)^2 <= 2 R(K)^2 int_K |nabla f|^2 dmu.",
+            "uses": [
+              "T11"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "main": false,
+            "note": "Proved at the end of Section 6: the Brascamp-Lieb inequality for e^{-psi}, transported by nabla psi, gives Var_mu(f) <= int phi^{ij} f_i f_j dmu (display (90)), and Theorem 1.1 yields (Hess phi)^{-1} <= 2 R(K)^2 Id. The constant 2 R(K)^2 is not optimal (Payne-Weinberger give 4 R(K)^2 / pi^2 for symmetric convex bodies). No Lean counterpart: no Lean theorem bounds Poincare.LocalSlope.Intrinsic.constant by an outer radius; such a statement would read Intrinsic.constant mu <= 2 R(K)^2 for laws with LogConcave mu and the regularity (1), and through Intrinsic.constant_eq_iInf_gradient_of_logConcave it would follow from this gradient form only after extending from smooth to locally Lipschitz tests. The definition alone does not state the item, so it is not mapped."
+          },
+          {
+            "id": "P21",
+            "locator": "Proposition 2.1",
+            "label": "Continuity of the moment measure",
+            "statement": "Let Omega be a compact subset of R^n and let psi, psi_1, psi_2, ... : R^n -> R be centered convex functions (int e^{-psi} = 1 and barycenter of e^{-psi} dx at the origin) whose moment measures mu, mu_1, mu_2, ... are supported in Omega. Then psi_l -> psi pointwise on R^n if and only if mu_l -> mu weakly, i.e. int b dmu_l -> int b dmu for every continuous b : Omega -> R.",
+            "uses": [
+              "L22",
+              "L23"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "main": false,
+            "note": "(i) => (ii): local uniform convergence (Rockafellar Theorem 10.8), gradient convergence (Theorem 24.5) and dominated convergence via the linear lower bound from Lemma 2.2. (ii) => (i): nondegeneracy of mu (Cordero-Erausquin-Klartag Proposition 1), the uniform two-sided linear bounds of Lemma 2.3 with L = sup_{Omega} |x|, Arzela-Ascoli, the direction (i) => (ii), and uniqueness of moment-measure potentials (Cordero-Erausquin-Klartag). No Lean counterpart."
+          },
+          {
+            "id": "L22",
+            "locator": "Lemma 2.2",
+            "label": "Linear growth of centered potentials",
+            "statement": "If psi : R^n -> R is a centered convex function, then psi(x) >= n ||x||_psi + psi(0) - 2n for every x in R^n, where ||.||_psi is the Minkowski functional of K(psi) = {x : psi(x) <= 2n + inf psi}.",
+            "uses": [],
+            "relation": "same",
+            "declarations": [],
+            "main": false,
+            "note": "Proof: Fradelizi's inequality psi(0) <= n + inf psi for centered log-concave densities, then convexity along the ray through x / ||x||_psi. Stated as well known, proof given for completeness. No Lean counterpart."
+          },
+          {
+            "id": "L23",
+            "locator": "Lemma 2.3",
+            "label": "Two-sided linear bounds",
+            "statement": "Let L, eps > 0 and let psi : R^n -> R be a centered, L-Lipschitz convex function with int |nabla psi(x) . theta| e^{-psi(x)} dx >= eps for every theta in S^{n-1}. Then alpha |x| - beta <= psi(x) <= L |x| + gamma for all x in R^n, with alpha, beta, gamma > 0 depending only on L, eps and n.",
+            "uses": [
+              "L22"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "main": false,
+            "note": "Proof: Fubini along lines gives int |nabla psi . theta| e^{-psi} = 2 int_{theta^perp} e^{-m_theta}, a convexity argument bounds this by 2^n e^{2n} / |I_theta|, so K(psi) is contained in B(0, C_n / eps); Lemma 2.2 then gives the lower bound and integrability gives psi(0) bounded above and below. No Lean counterpart."
+          },
+          {
+            "id": "P31",
+            "locator": "Proposition 3.1",
+            "label": "Hessian of psi is bounded",
+            "statement": "Under the hypotheses of Theorem 1.1, assume further (condition (star)) that K has smooth boundary with everywhere positive Gauss curvature and Hess rho >= eps_0 Id on K for some eps_0 > 0. Then sup_{x in R^n} ||Hess psi(x)||_op < +infinity.",
+            "uses": [
+              "L32",
+              "L33",
+              "C34"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "main": false,
+            "note": "A preliminary weak form of Theorem 1.1, needed in Lemma 5.5. Proof follows Caffarelli's contraction theorem: the maximum principle for the second difference delta_{theta theta}^{(eps)} psi, whose supremum is attained by Corollary 3.4, combined with the concavity inequality log det B <= log det A + Tr[A^{-1} B] - n and the transport equation, yields delta_{theta theta}^{(eps)} psi <= 4 eps^2 / eps_0. No Lean counterpart."
+          },
+          {
+            "id": "L32",
+            "locator": "Lemma 3.2 (Berman and Berndtsson)",
+            "label": "Legendre dual is bounded",
+            "statement": "Under the assumptions of Section 3, sup_{x in K} phi(x) < +infinity, where phi = psi^* is the Legendre transform.",
+            "uses": [],
+            "relation": "same",
+            "declarations": [],
+            "main": false,
+            "note": "Attributed to Berman-Berndtsson, proof reproduced: Morrey-Sobolev embedding on the convex domain K with int_K |nabla phi|^p dx < infinity for some p > n, from int_K |nabla phi|^p dmu = int |x|^p e^{-psi(x)} dx (pushforward) and boundedness of rho. Uses only the exponential decay of e^{-psi}, display (8). No Lean counterpart."
+          },
+          {
+            "id": "L33",
+            "locator": "Lemma 3.3",
+            "label": "Gradient approaches support function gradient",
+            "statement": "Under the assumptions of Section 3 (including (star)), lim_{R -> infinity} sup_{|x| >= R} |nabla psi(x) - nabla h_K(x)| = 0, where h_K(x) = sup_{y in K} x . y is the support function of K.",
+            "uses": [
+              "L32"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "main": false,
+            "note": "Analogue of Caffarelli's Lemma 4. Proof: with M = sup_K |phi| (Lemma 3.2), Legendre duality gives (nabla h_K(x) - nabla psi(x)) . x/|x| <= 2M/|x|, and positive Gauss curvature of the boundary converts this into |nabla h_K(x) - nabla psi(x)| <= alpha_K sqrt(2M/|x|) for |x| >= R_K. No Lean counterpart."
+          },
+          {
+            "id": "C34",
+            "locator": "Corollary 3.4",
+            "label": "Second difference attains supremum",
+            "statement": "Under the assumptions of Section 3 (including (star)), for each fixed 0 < eps < 1 the supremum of delta_{theta theta}^{(eps)} psi(x) = psi(x + eps theta) + psi(x - eps theta) - 2 psi(x) over x in R^n and theta in S^{n-1} is attained.",
+            "uses": [
+              "L33"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "main": false,
+            "note": "Proof: Lemma 3.3 and the 0-homogeneity and continuity of nabla h_K show the second difference tends to 0 uniformly as |x| -> infinity, and it is nonnegative and continuous. No Lean counterpart."
+          },
+          {
+            "id": "R35",
+            "locator": "Remark 3.5",
+            "label": "Explicit operator norm bound",
+            "statement": "The proof of Proposition 3.1 gives sup_{x in R^n} ||Hess psi(x)||_op <= 4 / eps_0; arguing as in Caffarelli's erratum, the bound improves to 1 / eps_0.",
+            "uses": [
+              "P31"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "main": false,
+            "note": "The bound 4 / eps_0 is proved in the proof of Proposition 3.1; the improvement to 1 / eps_0 is asserted with details omitted. No Lean counterpart."
+          },
+          {
+            "id": "P41",
+            "locator": "Proposition 4.1",
+            "label": "Stochastic completeness criterion",
+            "statement": "Let K be an open subset of R^n and V, psi : R^n -> R, rho : K -> R smooth with psi convex, inf_{|x| >= R} psi(x) -> +infinity as R -> infinity, e^{-rho(nabla psi(x))} det Hess psi(x) = e^{-V(x)} on R^n, and inf_{x in K} nabla rho(x) . x > -infinity. Then the weighted Riemannian manifold (R^n, Hess psi, e^{-V(x)} dx) is stochastically complete.",
+            "uses": [
+              "P45"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "main": false,
+            "note": "Stochastic completeness is defined as non-explosion of the Ito diffusion dY = sqrt(2) (Hess psi(Y))^{-1/2} dB - nabla rho(nabla psi(Y)) dt with generator L; the proposition is stated to follow from Proposition 4.5. Generalises Kolesnikov's setting. No Lean counterpart: no Riemannian metrics or SDEs in the library."
+          },
+          {
+            "id": "R42",
+            "locator": "Remark 4.2",
+            "label": "Log-concave case is stochastically complete",
+            "statement": "When V = psi the manifold of Proposition 4.1 is M_mu^* = (R^n, Hess psi, e^{-psi} dx); if mu is log-concave with barycenter at the origin then nabla rho(x) . x >= rho(x) - rho(0) >= -n on K, so M_mu^* is stochastically complete whenever mu also satisfies condition (1).",
+            "uses": [
+              "P41"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "main": false,
+            "note": "Uses Fradelizi's inequality rho(0) <= n + inf_K rho and convexity of rho. This is property (i) of the Introduction; Section 5 transfers it to M_mu = (K, Hess phi, mu) via the isomorphism nabla psi. No Lean counterpart."
+          },
+          {
+            "id": "L43",
+            "locator": "Lemma 4.3",
+            "label": "Laplacian in moment coordinates",
+            "statement": "Under the assumptions of Proposition 4.1, the Laplacian of (R^n, Hess psi, e^{-V} dx) is L u = psi^{ij} u_{ij} - sum_j rho_j(nabla psi(x)) u_j for every smooth u : R^n -> R, where (psi^{ij}) = (Hess psi)^{-1}.",
+            "uses": [],
+            "relation": "same",
+            "declarations": [],
+            "main": false,
+            "note": "Proof: logarithmic derivative of the transport equation e^{-rho(nabla psi)} det Hess psi = e^{-V} gives psi^{ij}_i = -psi^{jl} V_l + rho_j(nabla psi), substituted into L u = psi^{ij} u_{ij} - (psi^{ij}_j + psi^{ij} V_j) u_i (display (55)). No Lean counterpart: FunctionalInequalities.Analysis.BakryEmery.weightedLaplacian is the Euclidean-metric operator Delta f - <nabla U, nabla f>, not this Hessian-metric Laplacian, and is not mapped."
+          },
+          {
+            "id": "L44",
+            "locator": "Lemma 4.4",
+            "label": "L psi bounded above",
+            "statement": "Under the assumptions of Proposition 4.1 there is A >= 0 with (L psi)(x) <= A for every x in R^n; one may take A = max{0, n - inf_{y in K} nabla rho(y) . y}.",
+            "uses": [
+              "L43"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "main": false,
+            "note": "Proof: by Lemma 4.3, L psi = n - sum_j rho_j(nabla psi) psi_j, and nabla psi(x) lies in K. No Lean counterpart."
+          },
+          {
+            "id": "P45",
+            "locator": "Proposition 4.5",
+            "label": "Global non-exploding diffusion",
+            "statement": "Under the assumptions of Proposition 4.1, for every z in R^n there is a unique process (Y_t)_{t >= 0} adapted to the Brownian filtration, almost surely continuous, with Y_t = z + int_0^t sqrt(2) (Hess psi(Y_s))^{-1/2} dB_s - int_0^t nabla rho(nabla psi(Y_s)) ds for all t >= 0.",
+            "uses": [
+              "L44"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "main": false,
+            "note": "Proof: local solutions up to the exit times T_k of {psi < k} (Kallenberg Theorem 21.3), Dynkin's formula with L psi <= A from Lemma 4.4, and Markov's inequality give P(T_k <= t) <= (2At + psi(z) + alpha)/(k + alpha) -> 0. No Lean counterpart."
+          },
+          {
+            "id": "L46",
+            "locator": "Lemma 4.6",
+            "label": "Symmetric smooth heat kernel",
+            "statement": "Under the assumptions of Proposition 4.1, with nu = e^{-V(x)} dx, there is a smooth function p_t(x, y) (x, y in R^n, t > 0), symmetric in x and y, such that for every y in R^n and t > 0 the random vector Y_t^{(y)} of Proposition 4.5 has density x -> p_t(x, y) with respect to nu.",
+            "uses": [
+              "P45"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "main": false,
+            "note": "Proof: existence of the minimal heat kernel (Grigor'yan Theorems 7.13 and 7.20), then Ito's formula for v(t_0 - t, Y_t) with v the heat extension of a compactly supported test, the bounded local martingale being a martingale. The author notes it is standard but found no precise reference. No Lean counterpart; the library's heat semigroup KLS/LogConcave/HeatSemigroup is the Euclidean-metric L^2 semigroup and has no kernel."
+          },
+          {
+            "id": "C47",
+            "locator": "Corollary 4.7",
+            "label": "Stationarity of nu",
+            "statement": "Under the assumptions of Proposition 4.1, if Z is distributed according to nu = e^{-V(x)} dx and is independent of the Brownian motion, then Y_t^{(Z)} is distributed according to nu for every t >= 0.",
+            "uses": [
+              "L46"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "main": false,
+            "note": "Proof: Fubini with the symmetry of p_t and int p_t(x, z) dnu(z) = 1 (stochastic completeness). Implicitly nu is a probability measure. No Lean counterpart."
+          },
+          {
+            "id": "L51",
+            "locator": "Lemma 5.1",
+            "label": "Laplacian of M_mu",
+            "statement": "Under the hypotheses of Theorem 1.1, the operator L u(x) = phi^{ij}(x) u_{ij}(x) - x^i u_i(x) on smooth u : K -> R, with (phi^{ij}) = (Hess phi)^{-1} and phi = psi^*, is the Laplacian of the weighted Riemannian manifold M_mu = (K, Hess phi, mu): int_K phi^{ij} u_i v_j dmu = -int_K v L u dmu whenever one of the smooth u, v is compactly supported.",
+            "uses": [
+              "L43"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "main": false,
+            "note": "Proof: the dual transport equation det Hess phi(x) = e^{x . nabla phi(x) - phi(x) - rho(x)} gives phi^{ij}_j = x^i - phi^{ij} rho_j, then integration by parts as in Lemma 4.3. In particular L x^i = -x^i (Section 6). No Lean counterpart: FunctionalInequalities.KLS.LogConcave.integral_inner_gradient_eq is weighted integration by parts for the Euclidean Dirichlet form int <nabla f, nabla g> dnu with nu = m.tilted(-U); it does not state or restrict this Hessian-metric identity (the two coincide only if Hess phi = Id, which the dual transport equation excludes for a probability measure on a bounded K), so it is not mapped."
+          },
+          {
+            "id": "L52",
+            "locator": "Lemma 5.2",
+            "label": "Power of phi^{11} supersolution",
+            "statement": "Under the hypotheses of Theorem 1.1, fix eps > 0 and let f(x) = phi^{11}(x) on K. Then L(f^eps) + eps f^eps >= 0 on K, with L the Laplacian of Lemma 5.1.",
+            "uses": [],
+            "relation": "same",
+            "declarations": [],
+            "main": false,
+            "note": "Proof: differentiating the logarithm of the dual transport equation twice gives L f = phi^{1j}_k phi^{1k}_j - phi^{11} + rho_{il} phi^{1i} phi^{1l} >= phi^{1j}_k phi^{1k}_j - f by convexity of rho; the chain rule for t -> t^eps and the Hilbert-Schmidt versus operator norm bound phi^{1j}_k phi^{1k}_j >= phi^{11}_j phi^{11j} / phi^{11} finish. Related to Gamma_2 >= Gamma/2 (property (ii), Kolesnikov); for eps >= 1/2 it follows from Bakry's Lemma 2.4. No Lean counterpart: FunctionalInequalities.Analysis.BakryEmery.gammaTwo and its Bochner bounds are for the Euclidean metric with drift nabla U, not the Hessian metric, and do not restrict this item."
+          },
+          {
+            "id": "L53",
+            "locator": "Lemma 5.3",
+            "label": "Mean and second moment",
+            "statement": "Under the hypotheses of Theorem 1.1, for z in K let X_t = X_t^{(z)} solve dX_t = sqrt(2) (Hess phi(X_t))^{-1/2} dB_t - X_t dt, X_0 = z. Then E X_t = e^{-t} z for all t >= 0, and for every theta in S^{n-1}, e^{2t} E (X_t . theta)^2 >= (z . theta)^2 + 2 int_0^t e^{2s} E[(Hess phi)^{-1}(X_s) theta . theta] ds.",
+            "uses": [
+              "P45",
+              "R42"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "main": false,
+            "note": "The process exists for all time by Section 4 (stochastic completeness of M_mu^*, Remark 4.2, transported to M_mu by the isomorphism nabla psi). Proof: e^t X_t is a bounded local martingale since K is bounded; for the second moment, the local martingale part of e^{2t}(X_t . e_1)^2 is bounded above, hence a submartingale by Fatou. No Lean counterpart."
+          },
+          {
+            "id": "R54",
+            "locator": "Remark 5.4",
+            "label": "Equality in second moment",
+            "statement": "Once Theorem 1.1 is established, equality holds in the second-moment inequality of Lemma 5.3, since the local martingale there is then bounded and hence a martingale.",
+            "uses": [
+              "T11",
+              "L53"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "main": false,
+            "note": "A posteriori strengthening; not used later. No Lean counterpart."
+          },
+          {
+            "id": "L55",
+            "locator": "Lemma 5.5",
+            "label": "Reverse bound along diffusion",
+            "statement": "Under the hypotheses of Theorem 1.1, assume that K has smooth boundary with everywhere positive Gauss curvature and Hess rho >= eps_0 Id on K for some eps_0 > 0. For z in K, X_t = X_t^{(z)} and f = phi^{11}, f(z) <= e^t (E f^eps(X_t))^{1/eps} for all t, eps > 0.",
+            "uses": [
+              "P31",
+              "L52",
+              "L53"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "main": false,
+            "note": "Proof: Proposition 3.1 gives f <= M on K; Ito's formula for e^{eps t} f^eps(X_t) and Lemma 5.2 make the local martingale part bounded above, hence a submartingale. The strict-convexity assumptions are used only for the bound M, which Theorem 1.1 later supplies with M = 2 R(K)^2. No Lean counterpart."
+          },
+          {
+            "id": "R56",
+            "locator": "Remark 5.6",
+            "label": "Small epsilon limit",
+            "statement": "Only the case eps = 1 of Lemma 5.5 is used, although small eps is stronger; as eps -> 0 the right-hand side of Lemma 5.5 tends to exp(t + E log f(X_t)).",
+            "uses": [
+              "L55"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "main": false,
+            "note": "The limit is asserted as not too difficult, without proof. No Lean counterpart."
+          },
+          {
+            "id": "C57",
+            "locator": "Corollary 5.7",
+            "label": "Inverse Hessian bounded by covariance",
+            "statement": "Under the hypotheses of Theorem 1.1, assume that K has smooth boundary with everywhere positive Gauss curvature and Hess rho >= eps_0 Id on K for some eps_0 > 0. Then (Hess phi)^{-1}(z) <= e^{2t} / (2(e^t - 1)) Cov(X_t^{(z)}) as symmetric matrices, for every z in K and t > 0.",
+            "uses": [
+              "L53",
+              "L55"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "main": false,
+            "note": "Proof: Lemma 5.3 and Lemma 5.5 with eps = 1 give e^{2t} E(X_t . e_1)^2 >= (z . e_1)^2 + 2 phi^{11}(z) int_0^t e^s ds, and E X_t = e^{-t} z converts the second moment into a variance. No Lean counterpart."
+          },
+          {
+            "id": "C58",
+            "locator": "Corollary 5.8",
+            "label": "Covariance bound without strict convexity",
+            "statement": "If mu is a log-concave probability measure with barycenter at the origin satisfying condition (1), then (Hess phi)^{-1}(z) <= e^{2t} / (2(e^t - 1)) Cov(X_t^{(z)}) as symmetric matrices, for every z in K and t > 0.",
+            "uses": [
+              "T11",
+              "L52",
+              "L53",
+              "C57"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "main": false,
+            "note": "Proof: as for Corollary 5.7, with the bound Hess psi <= M Id in the proof of Lemma 5.5 taken from Theorem 1.1 (M = 2 R(K)^2) instead of Proposition 3.1, so the strict-convexity assumptions are removed. No Lean counterpart."
+          },
+          {
+            "id": "P61",
+            "locator": "Proposition 6.1",
+            "label": "Moments of inverse Hessian",
+            "statement": "Under the hypotheses of Theorem 1.1, fix theta in S^{n-1} and let V = int (x . theta)^2 dmu(x). Then for every p >= 1, (int_K |((Hess phi)^{-1} theta . theta) / V|^p dmu)^{1/p} <= 4 p^2.",
+            "uses": [
+              "C58",
+              "C47",
+              "R42"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "main": false,
+            "note": "Proof: Corollary 5.8 at t = log 2 gives phi^{11}(z) <= 2 E(X_t^{(z)} . e_1)^2; stationarity of mu (Corollary 4.7 transported to M_mu) and Holder give E|phi^{11}(Z)|^p <= 2^p E|Z . e_1|^{2p}; Berwald's inequality for log-concave measures gives (E|Z . e_1|^{2p})^{1/(2p)} <= (2p / sqrt 2) sqrt V. Presented as a modest step towards bounding (Hess phi)^{-1} by Cov(mu) for KLS. No Lean counterpart."
+          }
+        ]
+      }
     },
     {
       "id": "CorderoKlartag2015",
@@ -5789,7 +6142,166 @@
       "locator": "Main alternative proof",
       "result": "An alternative proof of slicing via small-ball estimates and Guan’s localization bound.",
       "remaining": "The small-ball argument and slicing conclusion are not locally formalized.",
-      "local_results": []
+      "local_results": [],
+      "lemma_map": {
+        "source_version": "arXiv:2501.06854v1",
+        "source_url": "https://arxiv.org/abs/2501.06854v1",
+        "reviewed_on": "2026-10-03",
+        "standing_assumptions": "X is a random vector in R^n; isotropic means E X = 0 and E XXᵀ = I_n; b-subgaussian means (E|(X − E X)·θ|^p)^{1/p} ≤ b√p for all p ≥ 1 and unit θ; t-strongly log-concave means log-concave relative to a Gaussian of variance 1/t. C_P(X) is the optimal Poincaré constant for locally Lipschitz f and Ψ_n² its supremum over isotropic log-concave X in R^n. Convex isotropic position: Vol(K) = 1, barycenter 0, ∫_K xxᵀ = L_K² I_n; L_n = sup L_K and L̃_n = sup_f sup_x f(x)^{1/n} over isotropic log-concave densities. Stochastic localization: f_{t,θ} ∝ e^{−t|x|²/2 + θ·x} f, dθ_t = a_{t,θ_t} dt + dB_t, with barycenter a_t and covariance A_t of μ_t. Constants c, c_0, c_1, C_0, C_1 = 8C_0², c_2, C_2 are universal. Numbering: one shared counter for Theorem, Definition, Lemma, Proposition, Corollary, Remark etc. (only Theorem, Lemma, Corollary and Remark occur, numbered 1–10, no section prefix); cited results use a separate lettered counter (Theorems A–C); no appendix.",
+        "omitted": "All 13 numbered statements of v1 are listed (Theorems A–C, Theorem 1, Lemmas 2, 4, 5, 6, 8, 9, 10, Corollary 3, Remark 7); none is purely expository. Unnumbered displayed claims are covered in the items that use them: the easy direction (4) of the Dafnis–Paouris equivalence (Corollary 3), the Section 2.1 reduction to y = 0 and small diameter (Theorem 1), the tilt density (10) and SDE (11), the density SDE (12) and martingale identity (13), the Lichnerowicz bound A_t ≤ Id/t (14) (Lemma 10), and the M-position estimate (19) (Theorem C). No Lean declaration states any item: Isotropic and LogConcave are hypothesis predicates only, Poincare.LocalSlope.Intrinsic.constant is the per-measure Poincaré constant rather than Ψ_n², and the Cheeger/Buser comparisons literatureConstant_le_four_mul_inverseScale_sq and inverseScale_sq_le_pi_literature concern Cheeger–Poincaré relations that this paper does not use.",
+        "items": [
+          {
+            "id": "TA",
+            "locator": "Theorem A (Paouris)",
+            "label": "Subgaussian small ball bound",
+            "statement": "If X is a b-subgaussian log-concave vector in R^n with covariance A, there is a universal c > 0 such that for every ε < c and y ∈ R^n, P(‖X − y‖² ≤ ε Tr A) ≤ ε^{c Tr(A)/(b² ‖A‖_op ‖A^{-1}‖_op)}.",
+            "uses": [],
+            "relation": "same",
+            "declarations": [],
+            "note": "Cited from Paouris (2012); not proved here."
+          },
+          {
+            "id": "TB",
+            "locator": "Theorem B (Lee–Vempala)",
+            "label": "Small ball with KLS loss",
+            "statement": "For isotropic log-concave X in R^n there is a universal c_B > 0 such that for every y ∈ R^n and ε < c_B, P(‖X − y‖² ≤ εn) ≤ ε^{c_B n/(Ψ_n² log n)}, where Ψ_n² is the supremum of Poincaré constants of isotropic log-concave vectors in R^n.",
+            "uses": [],
+            "relation": "same",
+            "declarations": [],
+            "note": "Cited from Lee–Vempala; not proved here. Ψ_n² is the paper's sup of C_P over isotropic log-concave laws, which Lean does not define as a supremum (Poincare.LocalSlope.Intrinsic.constant is only the per-measure C_P), so nothing is mapped."
+          },
+          {
+            "id": "T1",
+            "locator": "Theorem 1",
+            "label": "Optimal small ball estimate",
+            "statement": "For isotropic log-concave X in R^n there is a universal c_0 > 0 such that for every ε < c_0 and y ∈ R^n, P(‖X − y‖² ≤ εn) ≤ ε^{c_0 n}.",
+            "uses": [
+              "TA",
+              "L4",
+              "L5",
+              "L6",
+              "L8",
+              "L9",
+              "L10"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": "Main item: the new result of the note (it removes the log n factor of Theorem B); Theorem C is then deduced from it in Section 3.2. Proof: Section 2.1 reduction (uses Lemma 5) to y = 0 and support of diameter √(C_1 n), C_1 = 8C_0²; then stochastic localization at time c_1 with Lemmas 8–10, 9, 6, 4. Printed constant c_0 = min(c, c_1^6/(256 e^{C_1}), c c_1^8 n/512) contains a stray n in the third term (should be c c_1^8/512). The Lean predicates FunctionalInequalities.KLS.Isotropic and FunctionalInequalities.KLS.LogConcave name its hypotheses only; no Lean statement asserts a small ball bound, so nothing is mapped.",
+            "main": true
+          },
+          {
+            "id": "L2",
+            "locator": "Lemma 2",
+            "label": "Equivalent slicing formulations",
+            "statement": "Bourgain's slicing conjecture is equivalent to sup_n L_n < ∞ and to sup_n L̃_n < ∞, where L_n is the supremum of L_K over convex bodies in convex isotropic position and L̃_n the supremum of sup_x f(x)^{1/n} over isotropic log-concave densities f on R^n.",
+            "uses": [],
+            "relation": "same",
+            "declarations": [],
+            "note": "Stated as well known with reference to Klartag's survey; no proof given. Isotropic constants are outside the Lean library."
+          },
+          {
+            "id": "TC",
+            "locator": "Theorem C (Klartag–Lehec)",
+            "label": "Slicing conjecture",
+            "statement": "sup_{n ∈ N} L_n < ∞.",
+            "uses": [
+              "T1"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": "Cited from Klartag–Lehec and re-proved in Section 3.2: an extremal K with L_K = L_n is in M-position, Vol(K ∩ √(C_2 n) B_2^n) > c_2^n (Bourgain–Klartag–Milman, cited), while Theorem 1 for the uniform law on L_K^{-1}K gives Vol(K ∩ L_K √(c_3 n) B_2^n) ≤ c_3^{c_0 n}; with c_3 = min(c_0, c_2^{1/c_0}) this yields L_n² < C_2/c_3."
+          },
+          {
+            "id": "C3",
+            "locator": "Corollary 3",
+            "label": "Bootstrapped small ball",
+            "statement": "For isotropic log-concave X in R^n there is a universal C'' > 0 such that for all ε > 0 and y ∈ R^n, P(‖X − y‖² ≤ ε² n) ≤ (C''ε)^n.",
+            "uses": [
+              "TC",
+              "L2"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": "No separate proof: from Theorem C via Lemma 2 (bounded L̃_n) and P ≤ (C')^n Vol(ε√n B_2^n) as in display (4)."
+          },
+          {
+            "id": "L4",
+            "locator": "Lemma 4",
+            "label": "Projected Paouris estimate",
+            "statement": "If X is b-subgaussian log-concave with covariance A, then for all y ∈ R^n and ε < c (the constant of Theorem A), P(‖X − y‖² ≤ ε Tr A) ≤ (4n‖A‖_op ε/Tr A)^{c Tr(A)³/(8n² b² ‖A‖_op²)}.",
+            "uses": [
+              "TA"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": "Proof projects onto the span of the top k = ⌊Tr A/(2λ_1)⌋ ∨ 1 eigenvectors, where λ_k ≥ Tr A/(2n), and applies Theorem A to X_E. The printed final exponent drops b² (it is restored in the statement)."
+          },
+          {
+            "id": "L5",
+            "locator": "Lemma 5 (Borell's lemma)",
+            "label": "Borell moment comparison",
+            "statement": "There is a constant C_0 > 1 such that every log-concave real random variable Y and every p ≥ 2 satisfy (E|Y|^p)^{2/p} ≤ C_0 E|Y|².",
+            "uses": [],
+            "relation": "same",
+            "declarations": [],
+            "note": "Classical; quoted without proof."
+          },
+          {
+            "id": "L6",
+            "locator": "Lemma 6",
+            "label": "Strong log-concavity gives subgaussianity",
+            "statement": "A t-strongly log-concave random vector (log-concave relative to the Gaussian of variance 1/t) is 1/√t-subgaussian.",
+            "uses": [],
+            "relation": "same",
+            "declarations": [],
+            "note": "Proof via Hargé's inequality Cov_γ(f, g) ≤ 0 for log-concave f and convex g, applied with g(x) = (x·θ)^p after reducing to t = 1 and E X = 0."
+          },
+          {
+            "id": "R7",
+            "locator": "Remark 7",
+            "label": "Weaker subgaussian constant suffices",
+            "statement": "A c''/√t-subgaussian bound with a universal c'' would suffice; by Prékopa–Leindler each marginal X·θ of a strongly log-concave X is strongly log-concave, so one-dimensional Caffarelli contraction or a log-Sobolev inequality with Herbst's argument also gives it.",
+            "uses": [
+              "L6"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": "Proof sketch only."
+          },
+          {
+            "id": "L8",
+            "locator": "Lemma 8 (Guan)",
+            "label": "Guan trace lower bound",
+            "statement": "If the stochastic localization starts at an isotropic log-concave μ, there is a universal c_1 > 0 with E Tr(A_{c_1}) ≥ c_1 n.",
+            "uses": [],
+            "relation": "same",
+            "declarations": [],
+            "note": "Cited from Guan (2024), whose proof uses Klartag's improved Lichnerowicz inequality; not proved here."
+          },
+          {
+            "id": "L9",
+            "locator": "Lemma 9",
+            "label": "Set shrinkage along localization",
+            "statement": "If μ has support of diameter D and (μ_t) is its stochastic localization, then for every measurable S, t ≥ 0 and λ > 1, μ(S) ≤ e^{D² t/2} μ_t(S)^{1/λ} with probability at least 1 − 1/λ.",
+            "uses": [],
+            "relation": "same",
+            "declarations": [],
+            "note": "From d[g]_t ≤ D² g_t² dt for g_t = μ_t(S), Itô's formula E log(1/g_t) ≤ log(1/g_0) + D² t/2 (display (17)) and Markov's inequality."
+          },
+          {
+            "id": "L10",
+            "locator": "Lemma 10",
+            "label": "Large covariance trace event",
+            "statement": "Under the reduced setting of Section 3.1 (isotropic log-concave μ with support of diameter √(C_1 n)), the event E_0 = {Tr A_{c_1} ≥ c_1 n/2} has P(E_0) ≥ c_1²/2.",
+            "uses": [
+              "L8"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": "Proof: split E Tr A_{c_1} ≥ c_1 n over E_0 and its complement using the almost sure bound A_{c_1} ≤ Id/c_1 (display (14), log-concave Lichnerowicz)."
+          }
+        ]
+      }
     },
     {
       "id": "KlartagLehecSurvey2025",

@@ -371,6 +371,58 @@ flowchart LR
     class AGS2013_more lemma_more;
 ```
 
+### Klartag (arXiv:1309.2767v1)
+
+26 statements: 26 ○. [Full map](LITERATURE.md#klartag2014moment-lemma-map).
+
+```mermaid
+flowchart LR
+    Klartag2014Moment_T11["○ Theorem 1.1<br/>Laplacian bound for moment map"]
+    Klartag2014Moment_P21["○ Proposition 2.1<br/>Continuity of the moment measure"]
+    Klartag2014Moment_L22["○ Lemma 2.2<br/>Linear growth of centered potentials"]
+    Klartag2014Moment_L23["○ Lemma 2.3<br/>Two-sided linear bounds"]
+    Klartag2014Moment_P31["○ Proposition 3.1<br/>Hessian of psi is bounded"]
+    Klartag2014Moment_L32["○ Lemma 3.2 (Berman and Berndtsson)<br/>Legendre dual is bounded"]
+    Klartag2014Moment_L33["○ Lemma 3.3<br/>Gradient approaches support function gradient"]
+    Klartag2014Moment_C34["○ Corollary 3.4<br/>Second difference attains supremum"]
+    Klartag2014Moment_P41["○ Proposition 4.1<br/>Stochastic completeness criterion"]
+    Klartag2014Moment_R42["○ Remark 4.2<br/>Log-concave case is stochastically complete"]
+    Klartag2014Moment_L43["○ Lemma 4.3<br/>Laplacian in moment coordinates"]
+    Klartag2014Moment_L44["○ Lemma 4.4<br/>L psi bounded above"]
+    Klartag2014Moment_P45["○ Proposition 4.5<br/>Global non-exploding diffusion"]
+    Klartag2014Moment_L52["○ Lemma 5.2<br/>Power of phi^{11} supersolution"]
+    Klartag2014Moment_L53["○ Lemma 5.3<br/>Mean and second moment"]
+    Klartag2014Moment_L55["○ Lemma 5.5<br/>Reverse bound along diffusion"]
+    Klartag2014Moment_C57["○ Corollary 5.7<br/>Inverse Hessian bounded by covariance"]
+    Klartag2014Moment_C57 --> Klartag2014Moment_T11
+    Klartag2014Moment_P21 --> Klartag2014Moment_T11
+    Klartag2014Moment_L22 --> Klartag2014Moment_P21
+    Klartag2014Moment_L23 --> Klartag2014Moment_P21
+    Klartag2014Moment_L22 --> Klartag2014Moment_L23
+    Klartag2014Moment_L32 --> Klartag2014Moment_P31
+    Klartag2014Moment_L33 --> Klartag2014Moment_P31
+    Klartag2014Moment_C34 --> Klartag2014Moment_P31
+    Klartag2014Moment_L32 --> Klartag2014Moment_L33
+    Klartag2014Moment_L33 --> Klartag2014Moment_C34
+    Klartag2014Moment_P45 --> Klartag2014Moment_P41
+    Klartag2014Moment_P41 --> Klartag2014Moment_R42
+    Klartag2014Moment_L43 --> Klartag2014Moment_L44
+    Klartag2014Moment_L44 --> Klartag2014Moment_P45
+    Klartag2014Moment_P45 --> Klartag2014Moment_L53
+    Klartag2014Moment_R42 --> Klartag2014Moment_L53
+    Klartag2014Moment_P31 --> Klartag2014Moment_L55
+    Klartag2014Moment_L52 --> Klartag2014Moment_L55
+    Klartag2014Moment_L53 --> Klartag2014Moment_L55
+    Klartag2014Moment_L53 --> Klartag2014Moment_C57
+    Klartag2014Moment_L55 --> Klartag2014Moment_C57
+    Klartag2014Moment_more["+9 further statements in the paper register"]
+    classDef lemma_pending fill:#fee2e2,stroke:#dc2626,color:#991b1b;
+    class Klartag2014Moment_T11,Klartag2014Moment_P21,Klartag2014Moment_L22,Klartag2014Moment_L23,Klartag2014Moment_P31,Klartag2014Moment_L32,Klartag2014Moment_L33,Klartag2014Moment_C34,Klartag2014Moment_P41,Klartag2014Moment_R42,Klartag2014Moment_L43,Klartag2014Moment_L44,Klartag2014Moment_P45,Klartag2014Moment_L52,Klartag2014Moment_L53,Klartag2014Moment_L55,Klartag2014Moment_C57 lemma_pending;
+    style Klartag2014Moment_T11 stroke-width:3px
+    classDef lemma_more fill:#f8fafc,stroke:#94a3b8,color:#334155,stroke-dasharray:4 3;
+    class Klartag2014Moment_more lemma_more;
+```
+
 ### Cordero-Erausquin–Klartag (arXiv:1304.0630v1)
 
 18 statements: 18 ○. [Full map](LITERATURE.md#corderoklartag2015-lemma-map).
@@ -876,6 +928,37 @@ flowchart LR
     style KlartagLehecSlicing2025_T12 stroke-width:3px
     classDef lemma_more fill:#f8fafc,stroke:#94a3b8,color:#334155,stroke-dasharray:4 3;
     class KlartagLehecSlicing2025_more lemma_more;
+```
+
+### Bizeul (arXiv:2501.06854v1)
+
+13 statements: 13 ○. [Full map](LITERATURE.md#bizeul2025-lemma-map).
+
+```mermaid
+flowchart LR
+    Bizeul2025_TA["○ Theorem A (Paouris)<br/>Subgaussian small ball bound"]
+    Bizeul2025_T1["○ Theorem 1<br/>Optimal small ball estimate"]
+    Bizeul2025_L4["○ Lemma 4<br/>Projected Paouris estimate"]
+    Bizeul2025_L5["○ Lemma 5 (Borell's lemma)<br/>Borell moment comparison"]
+    Bizeul2025_L6["○ Lemma 6<br/>Strong log-concavity gives subgaussianity"]
+    Bizeul2025_L8["○ Lemma 8 (Guan)<br/>Guan trace lower bound"]
+    Bizeul2025_L9["○ Lemma 9<br/>Set shrinkage along localization"]
+    Bizeul2025_L10["○ Lemma 10<br/>Large covariance trace event"]
+    Bizeul2025_TA --> Bizeul2025_T1
+    Bizeul2025_L4 --> Bizeul2025_T1
+    Bizeul2025_L5 --> Bizeul2025_T1
+    Bizeul2025_L6 --> Bizeul2025_T1
+    Bizeul2025_L8 --> Bizeul2025_T1
+    Bizeul2025_L9 --> Bizeul2025_T1
+    Bizeul2025_L10 --> Bizeul2025_T1
+    Bizeul2025_TA --> Bizeul2025_L4
+    Bizeul2025_L8 --> Bizeul2025_L10
+    Bizeul2025_more["+5 further statements in the paper register"]
+    classDef lemma_pending fill:#fee2e2,stroke:#dc2626,color:#991b1b;
+    class Bizeul2025_TA,Bizeul2025_T1,Bizeul2025_L4,Bizeul2025_L5,Bizeul2025_L6,Bizeul2025_L8,Bizeul2025_L9,Bizeul2025_L10 lemma_pending;
+    style Bizeul2025_T1 stroke-width:3px
+    classDef lemma_more fill:#f8fafc,stroke:#94a3b8,color:#334155,stroke-dasharray:4 3;
+    class Bizeul2025_more lemma_more;
 ```
 
 ### Klartag–Lehec (arXiv:2507.15495v2)
