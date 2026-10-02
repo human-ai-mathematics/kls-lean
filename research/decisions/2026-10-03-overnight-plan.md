@@ -92,3 +92,22 @@ Nothing is pushed.
   (identical statements, standard axioms only). Claude dropped three hypotheses the proofs never
   used (`Measurable g`, `MeasurableSet A`, a redundant `L¹` bound) from helper statements and fixed
   four linter warnings; the paper statement is unchanged.
+  Full local verifier for that tree: 184 gates, 356 replayed modules
+  (`build/verification/20261002T193253.509165Z/report.json`); committed as `925245d`.
+- Extra block: Lee–Vempala 2024 Lemma 42 (Eldan's trace inequality
+  `Tr(A^α Δ A^β Δ) ≤ Tr(A^{α+β} Δ²)`) in `Analysis/MatrixTrace.lean` (namespace `Analysis`,
+  Mathlib-only imports). Placement: a single flat module, since no matrix family exists and the
+  naming rule asks for a directory only from three modules. `A^α` is Mathlib's functional calculus
+  `cfc (· ^ α) A`, so no new definition is introduced. Four statements by Claude (scalar
+  rearrangement, diagonal form, the eigenbasis formula for `cfc`, the paper statement); proofs by the
+  GPT worker, rechecked independently. Claude restored the module docstring that the worker had
+  dropped and removed three unused simp arguments. This is the first deterministic lemma of the
+  stochastic-localization papers to be formalized.
+- Extra block: Guédon–Milman 2011 Lemma A.2 (`f(0) ≥ ε ‖f‖_∞` when `ε ≤ ∫_0^∞ f ≤ 1 − ε`) in
+  `KLS/LogConcave/Line/DensityBound.lean` (namespace `KLS.LineDensity`; owner: the one-dimensional
+  log-concave family; imports `Line/Buser.lean` for `interior_support_nonempty`). `f` is the Borell
+  representative `d.ρ` and `‖f‖_∞` the essential supremum. Four statements by Claude (interior
+  criterion, pointwise bound, a.e. bound, paper statement); the proof is the paper's, through the
+  existing hazard-rate lemmas `mul_measureReal_Ioi_le` and `mul_cdf_le`. Proofs by the GPT worker,
+  rechecked independently; no warnings.
+

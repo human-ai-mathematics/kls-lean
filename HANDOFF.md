@@ -28,8 +28,10 @@ authorization. Exact results, scopes and certificates are in the
 
 1. Owner decision on stochastic calculus (see below); it gates every priority-4 paper. De Ponti–Mondino
    Lemmas 3.2 and 3.3 are formalized in `KLS/Geometry/Cheeger/BuserProfile.lean`, Bobkov's
-   Lemma 3.1 (Borell's lemma) in `KLS/LogConcave/Tail.lean`, and E. Milman's Lemma 4.1
-   (Paley–Zygmund quantile bound) in `Probability/Quantile.lean`.
+   Lemma 3.1 (Borell's lemma) in `KLS/LogConcave/Tail.lean`, E. Milman's Lemma 4.1
+   (Paley–Zygmund quantile bound) in `Probability/Quantile.lean`, Lee–Vempala's Lemma 42
+   (Eldan's trace inequality) in `Analysis/MatrixTrace.lean`, and Guédon–Milman's Lemma A.2 in
+   `KLS/LogConcave/Line/DensityBound.lean`.
 2. Blocked: the priority-1 Bakry–Émery `C_P ≤ 1/ρ` target waits for the Bakry–Gentil–Ledoux text.
 
 ## Open owner decisions

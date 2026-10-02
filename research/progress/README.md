@@ -184,7 +184,7 @@ flowchart LR
 
 ### Guédon–Milman (arXiv:1011.0943v3)
 
-21 statements: 1 ✓, 1 ◐, 19 ○. [Full map](LITERATURE.md#guedonmilman2011-lemma-map).
+21 statements: 2 ✓, 1 ◐, 18 ○. [Full map](LITERATURE.md#guedonmilman2011-lemma-map).
 
 ```mermaid
 flowchart LR
@@ -200,7 +200,7 @@ flowchart LR
     GuedonMilman2011_T31["○ Theorem 3.1<br/>Moment estimates for Y"]
     GuedonMilman2011_T41["○ Theorem 4.1<br/>Deviation estimates for Y"]
     GuedonMilman2011_A1["○ Lemma A.1<br/>Support of Z^+_q(K)"]
-    GuedonMilman2011_A2["○ Lemma A.2<br/>Log-concave density at zero"]
+    GuedonMilman2011_A2["✓ Lemma A.2<br/>Log-concave density at zero"]
     GuedonMilman2011_A3["○ Lemma A.3<br/>Half-space mass of K_{m+q}"]
     GuedonMilman2011_T41 --> GuedonMilman2011_T11
     GuedonMilman2011_T31 --> GuedonMilman2011_T11
@@ -224,11 +224,11 @@ flowchart LR
     GuedonMilman2011_L22 --> GuedonMilman2011_A3
     GuedonMilman2011_more["+7 further statements in the paper register"]
     classDef lemma_formalized fill:#dbeafe,stroke:#2563eb,color:#1e3a8a;
-    class GuedonMilman2011_DISO lemma_formalized;
+    class GuedonMilman2011_DISO,GuedonMilman2011_A2 lemma_formalized;
     classDef lemma_partial fill:#fff3df,stroke:#c88719,color:#66420d;
     class GuedonMilman2011_DLC lemma_partial;
     classDef lemma_pending fill:#fee2e2,stroke:#dc2626,color:#991b1b;
-    class GuedonMilman2011_T11,GuedonMilman2011_T21,GuedonMilman2011_L22,GuedonMilman2011_L23,GuedonMilman2011_C24,GuedonMilman2011_T25,GuedonMilman2011_P26,GuedonMilman2011_T31,GuedonMilman2011_T41,GuedonMilman2011_A1,GuedonMilman2011_A2,GuedonMilman2011_A3 lemma_pending;
+    class GuedonMilman2011_T11,GuedonMilman2011_T21,GuedonMilman2011_L22,GuedonMilman2011_L23,GuedonMilman2011_C24,GuedonMilman2011_T25,GuedonMilman2011_P26,GuedonMilman2011_T31,GuedonMilman2011_T41,GuedonMilman2011_A1,GuedonMilman2011_A3 lemma_pending;
     style GuedonMilman2011_T11 stroke-width:3px
     classDef lemma_more fill:#f8fafc,stroke:#94a3b8,color:#334155,stroke-dasharray:4 3;
     class GuedonMilman2011_more lemma_more;
@@ -502,7 +502,7 @@ flowchart LR
 
 ### Lee–Vempala (arXiv:1612.01507v3)
 
-59 statements: 2 ◐, 56 ○, 1 ⇑. [Full map](LITERATURE.md#leevempala2024-lemma-map).
+59 statements: 1 ✓, 2 ◐, 55 ○, 1 ⇑. [Full map](LITERATURE.md#leevempala2024-lemma-map).
 
 ```mermaid
 flowchart LR
@@ -525,6 +525,7 @@ flowchart LR
     LeeVempala2024_L33["○ Lemma 33<br/>Third-moment tensor bound"]
     LeeVempala2024_L34["○ Lemma 34<br/>Ito formula for Tr A_t^2"]
     LeeVempala2024_L35["○ Lemma 35<br/>Potential Tr A_t^2 stays bounded"]
+    LeeVempala2024_L42["✓ Lemma 42 (Eldan)<br/>Trace shift inequality"]
     LeeVempala2024_Dpsi --> LeeVempala2024_T5
     LeeVempala2024_L35 --> LeeVempala2024_T12
     LeeVempala2024_L31 --> LeeVempala2024_T12
@@ -555,7 +556,9 @@ flowchart LR
     LeeVempala2024_L19 --> LeeVempala2024_L35
     LeeVempala2024_T21 --> LeeVempala2024_L35
     LeeVempala2024_L20 --> LeeVempala2024_L35
-    LeeVempala2024_more["+40 further statements in the paper register"]
+    LeeVempala2024_more["+39 further statements in the paper register"]
+    classDef lemma_formalized fill:#dbeafe,stroke:#2563eb,color:#1e3a8a;
+    class LeeVempala2024_L42 lemma_formalized;
     classDef lemma_partial fill:#fff3df,stroke:#c88719,color:#66420d;
     class LeeVempala2024_Dpsi,LeeVempala2024_L22 lemma_partial;
     classDef lemma_pending fill:#fee2e2,stroke:#dc2626,color:#991b1b;

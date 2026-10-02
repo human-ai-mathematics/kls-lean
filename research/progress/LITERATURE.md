@@ -559,7 +559,7 @@ flowchart LR
     GuedonMilman2011_R33["○ Remark 3.3 (using Bobkov)<br/>Bobkov concavity alternative"]
     GuedonMilman2011_T41["○ Theorem 4.1<br/>Deviation estimates for Y"]
     GuedonMilman2011_A1["○ Lemma A.1<br/>Support of Z^+_q(K)"]
-    GuedonMilman2011_A2["○ Lemma A.2<br/>Log-concave density at zero"]
+    GuedonMilman2011_A2["✓ Lemma A.2<br/>Log-concave density at zero"]
     GuedonMilman2011_A3["○ Lemma A.3<br/>Half-space mass of K_{m+q}"]
     GuedonMilman2011_A4["○ Lemma A.4<br/>Lower bound for Z^+_2"]
     GuedonMilman2011_T41 --> GuedonMilman2011_T11
@@ -596,11 +596,11 @@ flowchart LR
     GuedonMilman2011_DISO --> GuedonMilman2011_A4
     GuedonMilman2011_DLC --> GuedonMilman2011_A4
     classDef lemma_formalized fill:#dbeafe,stroke:#2563eb,color:#1e3a8a;
-    class GuedonMilman2011_DISO lemma_formalized;
+    class GuedonMilman2011_DISO,GuedonMilman2011_A2 lemma_formalized;
     classDef lemma_partial fill:#fff3df,stroke:#c88719,color:#66420d;
     class GuedonMilman2011_DLC lemma_partial;
     classDef lemma_pending fill:#fee2e2,stroke:#dc2626,color:#991b1b;
-    class GuedonMilman2011_T11,GuedonMilman2011_T12,GuedonMilman2011_R13,GuedonMilman2011_C14,GuedonMilman2011_T15,GuedonMilman2011_T21,GuedonMilman2011_L22,GuedonMilman2011_L23,GuedonMilman2011_C24,GuedonMilman2011_T25,GuedonMilman2011_P26,GuedonMilman2011_T31,GuedonMilman2011_R32,GuedonMilman2011_R33,GuedonMilman2011_T41,GuedonMilman2011_A1,GuedonMilman2011_A2,GuedonMilman2011_A3,GuedonMilman2011_A4 lemma_pending;
+    class GuedonMilman2011_T11,GuedonMilman2011_T12,GuedonMilman2011_R13,GuedonMilman2011_C14,GuedonMilman2011_T15,GuedonMilman2011_T21,GuedonMilman2011_L22,GuedonMilman2011_L23,GuedonMilman2011_C24,GuedonMilman2011_T25,GuedonMilman2011_P26,GuedonMilman2011_T31,GuedonMilman2011_R32,GuedonMilman2011_R33,GuedonMilman2011_T41,GuedonMilman2011_A1,GuedonMilman2011_A3,GuedonMilman2011_A4 lemma_pending;
     style GuedonMilman2011_T11 stroke-width:3px
 ```
 
@@ -624,7 +624,7 @@ flowchart LR
 | Remark 3.3 (using Bobkov) | The Stirling computation behind (3.11) can be avoided using Bobkov's result that for any log-concave density w on R_+, q -> log(int_0^infty t^q w(t) dt / q^q) is concave on R_+. | ○ Not yet formalized | — | Cited result of Bobkov; no proof in the paper. No Lean counterpart. |
 | Theorem 4.1 | Under the hypotheses of Theorem 3.1, P(&#124;Y&#124; >= (1+t) sqrt n) <= exp(-c eta^{alpha/2} min(t^{2+alpha}, t)) for all t >= 0, and P(&#124;Y&#124; <= (1-t) sqrt n) <= C exp(-c eta^{alpha/2} max(t^{2+alpha}, log(c_2/(1-t)))) for all t in [0,1]. | ○ Not yet formalized | — | Markov-Chebyshev with optimized p from Theorem 3.1, plus Borell's lemma (cited) for t >= t_0. No Lean counterpart. |
 | Lemma A.1 | For a convex body K in R^m, theta in S^{m-1} and f_theta the marginal of 1_K on span(theta): (f_theta(0)/&#124;&#124;f_theta&#124;&#124;_infty)^{1/q} (Gamma(m) Gamma(q+1)/Gamma(m+q+1))^{1/q} h_K(theta) <= h_{Z^+_q(K)}(theta)/(2 vol(K intersect H^+_theta))^{1/q} <= h_K(theta). | ○ Not yet formalized | — | Left inequality follows Paouris [Lemma 4.1 of Small-Diameter] using (m-1)^{-1}-concavity of marginals; only sketched. No Lean counterpart. |
-| Lemma A.2 | If mu = f(x)dx is a log-concave probability measure on R and eps <= int_0^infty f <= 1 - eps for some eps > 0, then f(0) >= eps &#124;&#124;f&#124;&#124;_infty. | ○ Not yet formalized | — | Folklore (Fradelizi); proof via log-concavity of the distribution function and its tail (Prekopa-Leindler). No Lean counterpart. |
+| Lemma A.2 | If mu = f(x)dx is a log-concave probability measure on R and eps <= int_0^infty f <= 1 - eps for some eps > 0, then f(0) >= eps &#124;&#124;f&#124;&#124;_infty. | ✓ Formalized in Lean | [`ofReal_mul_eLpNorm_top_le`](../../formalization/FunctionalInequalities/KLS/LogConcave/Line/DensityBound.lean) | Folklore (Fradelizi). Lean takes f to be the Borell representative of a LineDensity (continuous on the interior of the support, which contains 0 here) and ‖f‖_∞ the essential supremum eLpNorm f ⊤; the proof uses the existing hazard-rate monotonicity, the paper's route. |
 | Lemma A.3 | If w is log-concave on R^m with barycenter at the origin, then for every theta in S^{m-1}, (vol(K_{m+q}(w) intersect H^+_theta)/vol(K_{m+q}(w)))^{1/q} >= c > 0. | ○ Not yet formalized | — | Uses the cited inclusions (2.7), Stirling and Lemma 2.2 for the marginal of w. No Lean counterpart. |
 | Lemma A.4 | If g : R^m -> R_+ is a log-concave isotropic density, then Z^+_2(g) contains c B_2^m, e.g. with c = (3 e^2 (1 + (e-1)^3))^{-1/2}. | ○ Not yet formalized | — | Proof compares one-dimensional moments via (2.7) and uses Lemma 2.2. No Lean counterpart. |
 
@@ -1182,7 +1182,7 @@ flowchart LR
     LeeVempala2024_L39["○ Lemma 39<br/>Anisotropic third-moment bound"]
     LeeVempala2024_L40["○ Lemma 40<br/>Drift and diffusion of u_t"]
     LeeVempala2024_L41["○ Lemma 41<br/>Derivatives of the Stieltjes potential"]
-    LeeVempala2024_L42["○ Lemma 42 (Eldan)<br/>Trace shift inequality"]
+    LeeVempala2024_L42["✓ Lemma 42 (Eldan)<br/>Trace shift inequality"]
     LeeVempala2024_L43["○ Lemma 43<br/>Quadratic variation of p_t(E)"]
     LeeVempala2024_L44["○ Lemma 44<br/>log(1/g_t) stays controlled"]
     LeeVempala2024_L45["○ Lemma 45<br/>g sqrt(log 1/g) is preserved"]
@@ -1289,10 +1289,12 @@ flowchart LR
     LeeVempala2024_L57 --> LeeVempala2024_L58
     LeeVempala2024_L40 --> LeeVempala2024_L58
     LeeVempala2024_L37 --> LeeVempala2024_L58
+    classDef lemma_formalized fill:#dbeafe,stroke:#2563eb,color:#1e3a8a;
+    class LeeVempala2024_L42 lemma_formalized;
     classDef lemma_partial fill:#fff3df,stroke:#c88719,color:#66420d;
     class LeeVempala2024_Dpsi,LeeVempala2024_L22 lemma_partial;
     classDef lemma_pending fill:#fee2e2,stroke:#dc2626,color:#991b1b;
-    class LeeVempala2024_C1,LeeVempala2024_T2,LeeVempala2024_C3,LeeVempala2024_C4,LeeVempala2024_T6,LeeVempala2024_T7,LeeVempala2024_T8,LeeVempala2024_D9,LeeVempala2024_D10,LeeVempala2024_T11,LeeVempala2024_T12,LeeVempala2024_C13,LeeVempala2024_C14,LeeVempala2024_T15,LeeVempala2024_T16,LeeVempala2024_T17,LeeVempala2024_T18,LeeVempala2024_L19,LeeVempala2024_L20,LeeVempala2024_T21,LeeVempala2024_L23,LeeVempala2024_L24,LeeVempala2024_T25,LeeVempala2024_D26,LeeVempala2024_L27,LeeVempala2024_L28,LeeVempala2024_L29,LeeVempala2024_T30,LeeVempala2024_L31,LeeVempala2024_L32,LeeVempala2024_L33,LeeVempala2024_L34,LeeVempala2024_L35,LeeVempala2024_T36,LeeVempala2024_L37,LeeVempala2024_L38,LeeVempala2024_L39,LeeVempala2024_L40,LeeVempala2024_L41,LeeVempala2024_L42,LeeVempala2024_L43,LeeVempala2024_L44,LeeVempala2024_L45,LeeVempala2024_T46,LeeVempala2024_T47,LeeVempala2024_T48,LeeVempala2024_T49,LeeVempala2024_T50,LeeVempala2024_L51,LeeVempala2024_T52,LeeVempala2024_L53,LeeVempala2024_L54,LeeVempala2024_L55,LeeVempala2024_CL56,LeeVempala2024_L57,LeeVempala2024_L58 lemma_pending;
+    class LeeVempala2024_C1,LeeVempala2024_T2,LeeVempala2024_C3,LeeVempala2024_C4,LeeVempala2024_T6,LeeVempala2024_T7,LeeVempala2024_T8,LeeVempala2024_D9,LeeVempala2024_D10,LeeVempala2024_T11,LeeVempala2024_T12,LeeVempala2024_C13,LeeVempala2024_C14,LeeVempala2024_T15,LeeVempala2024_T16,LeeVempala2024_T17,LeeVempala2024_T18,LeeVempala2024_L19,LeeVempala2024_L20,LeeVempala2024_T21,LeeVempala2024_L23,LeeVempala2024_L24,LeeVempala2024_T25,LeeVempala2024_D26,LeeVempala2024_L27,LeeVempala2024_L28,LeeVempala2024_L29,LeeVempala2024_T30,LeeVempala2024_L31,LeeVempala2024_L32,LeeVempala2024_L33,LeeVempala2024_L34,LeeVempala2024_L35,LeeVempala2024_T36,LeeVempala2024_L37,LeeVempala2024_L38,LeeVempala2024_L39,LeeVempala2024_L40,LeeVempala2024_L41,LeeVempala2024_L43,LeeVempala2024_L44,LeeVempala2024_L45,LeeVempala2024_T46,LeeVempala2024_T47,LeeVempala2024_T48,LeeVempala2024_T49,LeeVempala2024_T50,LeeVempala2024_L51,LeeVempala2024_T52,LeeVempala2024_L53,LeeVempala2024_L54,LeeVempala2024_L55,LeeVempala2024_CL56,LeeVempala2024_L57,LeeVempala2024_L58 lemma_pending;
     classDef lemma_improved fill:#dcfce7,stroke:#15803d,color:#14532d;
     class LeeVempala2024_T5 lemma_improved;
     style LeeVempala2024_T12 stroke-width:3px
@@ -1342,7 +1344,7 @@ flowchart LR
 | Lemma 39 | Under the hypothesis of Lemma 37, for log-concave p with mean mu and covariance A and PSD B1, B2, B3, &#124;E_{x,y ~ p} prod_{i=1}^3 (x - mu)^T B_i (y - mu)&#124; <= C Tr(A^{1/2} B1 A^{1/2}) (Tr (A^{1/2} B2 A^{1/2})^k)^{1/k} &#124;&#124;A^{1/2} B3 A^{1/2}&#124;&#124;_op. | ○ Not yet formalized | — | Uses Theorem 5 for the non-isotropic law of B2^{1/2} x together with the anisotropic KLS hypothesis (the printed exponent -1/2k is a sign typo for 1/2k); the reduction to isotropic p and diagonal B1 is by linear change of variables. |
 | Lemma 40 | Under the hypothesis of Lemma 37 and q = ceil k, du_t = alpha_t^T dW_t + beta_t dt with &#124;&#124;alpha_t&#124;&#124;_2 <= C u_t^{3/2} and beta_t <= C k u_t^4 Phi^{1/k}. | ○ Not yet formalized | — | Deterministic estimates of the coefficients of Lemma 38. |
 | Lemma 41 | Du(X)[H] = Tr((uI - X)^{-(q+1)} H)/Tr((uI - X)^{-(q+1)}), and D^2 u(X)[H1, H2] is given by the displayed four-term formula. | ○ Not yet formalized | — | Implicit differentiation of display (1.1). Deterministic matrix calculus. |
-| Lemma 42 (Eldan) | For positive definite A, symmetric Delta and alpha, beta >= 0, Tr(A^alpha Delta A^beta Delta) <= Tr(A^{alpha+beta} Delta^2). | ○ Not yet formalized | — | Attributed to Eldan 2013 and proved here by diagonalization and weighted AM-GM. Deterministic. |
+| Lemma 42 (Eldan) | For positive definite A, symmetric Delta and alpha, beta >= 0, Tr(A^alpha Delta A^beta Delta) <= Tr(A^{alpha+beta} Delta^2). | ✓ Formalized in Lean | [`trace_rpow_mul_rpow_mul_le`](../../formalization/FunctionalInequalities/Analysis/MatrixTrace.lean) | Attributed to Eldan 2013. Lean states it for real square matrices over any finite index type, with A^α the continuous functional calculus cfc (· ^ α) A; the proof diagonalizes A and uses (a^α − b^α)(a^β − b^β) ≥ 0 in place of weighted AM-GM. Deterministic. |
 | Lemma 43 | For fixed E and g_t = p_t(E), g_t is a martingale with d[g]_t <= D^2 g_t^2 dt and d[g]_t <= 30 &#124;&#124;A_t&#124;&#124;_op g_t^2 log^2(e/g_t) dt, where D is the diameter of the support. | ○ Not yet formalized | — | First bound from the support diameter, second from Holder with ell = log(e/g_t) and Lemma 23. |
 | Lemma 44 | For T, gamma >= 0, with probability at least 1 - 4 exp(-gamma^2/(2 T D^2)), for all 0 <= t <= T, log(1/g_0) - gamma <= log(1/g_t) <= log(1/g_0) + D^2 t/2 + gamma. | ○ Not yet formalized | — | The proof cites (5.3) in Lemma 29; the bound is (5.3) of Lemma 43 (cross-reference error in the source). |
 | Lemma 45 | There is a universal c such that for measurable E with p_0(E) <= 1/2 and 0 <= T <= c max(D^{-2} log(1/p_0(E)), 1/(log(1/p_0(E)) + D)), E[p_T(E) sqrt(log(1/p_T(E))) 1_{p_T(E) <= 1/2}] >= p_0(E) sqrt(log(1/p_0(E)))/5. | ○ Not yet formalized | — | Two cases on T; the second applies Lemma 37 with k = 2 (hence relies on Theorem 12) using D >= sqrt n for isotropic laws; the proof cites (5.4) of Lemma 29 for Lemma 43 and mixes D and sqrt n in the time bound. |

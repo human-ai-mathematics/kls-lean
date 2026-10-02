@@ -1514,8 +1514,13 @@
             "statement": "If mu = f(x)dx is a log-concave probability measure on R and eps <= int_0^infty f <= 1 - eps for some eps > 0, then f(0) >= eps ||f||_infty.",
             "uses": [],
             "relation": "same",
-            "declarations": [],
-            "note": "Folklore (Fradelizi); proof via log-concavity of the distribution function and its tail (Prekopa-Leindler). No Lean counterpart."
+            "declarations": [
+              {
+                "name": "FunctionalInequalities.KLS.LineDensity.ofReal_mul_eLpNorm_top_le",
+                "source": "formalization/FunctionalInequalities/KLS/LogConcave/Line/DensityBound.lean"
+              }
+            ],
+            "note": "Folklore (Fradelizi). Lean takes f to be the Borell representative of a LineDensity (continuous on the interior of the support, which contains 0 here) and ‖f‖_∞ the essential supremum eLpNorm f ⊤; the proof uses the existing hazard-rate monotonicity, the paper's route."
           },
           {
             "id": "A3",
@@ -3889,8 +3894,13 @@
             "statement": "For positive definite A, symmetric Delta and alpha, beta >= 0, Tr(A^alpha Delta A^beta Delta) <= Tr(A^{alpha+beta} Delta^2).",
             "uses": [],
             "relation": "same",
-            "declarations": [],
-            "note": "Attributed to Eldan 2013 and proved here by diagonalization and weighted AM-GM. Deterministic."
+            "declarations": [
+              {
+                "name": "FunctionalInequalities.Analysis.trace_rpow_mul_rpow_mul_le",
+                "source": "formalization/FunctionalInequalities/Analysis/MatrixTrace.lean"
+              }
+            ],
+            "note": "Attributed to Eldan 2013. Lean states it for real square matrices over any finite index type, with A^α the continuous functional calculus cfc (· ^ α) A; the proof diagonalizes A and uses (a^α − b^α)(a^β − b^β) ≥ 0 in place of weighted AM-GM. Deterministic."
           },
           {
             "id": "L43",
