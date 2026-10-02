@@ -82,3 +82,13 @@ Nothing is pushed.
 - Block 2 complete: Klartag 2014 (26 items) and Bizeul 2025 (13 items, including the lettered quoted
   Theorems A–C; the filter now accepts lettered numbers). 22 of 27 register sources have lemma maps; the
   remaining five are two surveys, two monographs and Borell 1974 (not downloaded). All 44 diagrams render.
+- Extra block: E. Milman 2009 Lemma 4.1 (Paley–Zygmund quantile bound) in `Probability/Quantile.lean`
+  (namespace `Probability`, Mathlib-only imports; owner: probability tools; new module, since no
+  existing file holds quantiles of a general probability space). `lowerQuantile μ g δ` is the paper's
+  `Q_δ` with the real infimum; the docstring records the degenerate case `f = 0`, `1 − ε < 0`, where
+  the paper's `−∞` makes its literal inequality fail and the real convention gives `0`. Eight
+  statements by Claude. The worker failed the main statement as one step, so Claude split it into
+  four helpers. Proofs came from the GPT worker one at a time and were rechecked independently
+  (identical statements, standard axioms only). Claude dropped three hypotheses the proofs never
+  used (`Measurable g`, `MeasurableSet A`, a redundant `L¹` bound) from helper statements and fixed
+  four linter warnings; the paper statement is unchanged.

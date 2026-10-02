@@ -57,6 +57,7 @@ import FunctionalInequalities.KLS.LogConcave.ConditionalFiber
 import FunctionalInequalities.Probability.Line.BrunnMinkowski
 import FunctionalInequalities.Probability.Line.Haar
 import FunctionalInequalities.Probability.Line.GaussianProfile
+import FunctionalInequalities.Probability.Quantile
 import FunctionalInequalities.Energy.LocalSlope.Relaxation
 import FunctionalInequalities.Energy.Cheeger.Basic
 import FunctionalInequalities.KLS.LogConcave.Cheeger

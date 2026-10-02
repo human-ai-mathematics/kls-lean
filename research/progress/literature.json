@@ -842,8 +842,13 @@
             "statement": "If ‖f‖₂ ≤ D‖f‖₁ then the (1 − ε) quantile of |f| is at least θ‖f‖₁ with ε = (1 − θ)²/D².",
             "uses": [],
             "relation": "same",
-            "declarations": [],
-            "note": ""
+            "declarations": [
+              {
+                "name": "FunctionalInequalities.Probability.mul_eLpNorm_one_le_lowerQuantile",
+                "source": "formalization/FunctionalInequalities/Probability/Quantile.lean"
+              }
+            ],
+            "note": "Stated with the paper's hypotheses (D > 0, θ ∈ (0, 1)) and Q_δ as the real infimum; in the degenerate case f = 0 with 1 − ε < 0 the paper's quantile is −∞ and the real convention gives 0."
           },
           {
             "id": "P42",

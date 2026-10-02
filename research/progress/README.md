@@ -100,7 +100,7 @@ flowchart LR
 
 ### E. Milman (arXiv:0712.4092v5)
 
-60 statements: 1 ✓, 7 ◐, 52 ○. [Full map](LITERATURE.md#milman2009-lemma-map).
+60 statements: 2 ✓, 7 ◐, 51 ○. [Full map](LITERATURE.md#milman2009-lemma-map).
 
 ```mermaid
 flowchart LR
@@ -121,6 +121,7 @@ flowchart LR
     Milman2009_P210["○ Proposition 2.10 (Maz'ya, Federer–Fleming, Bobkov–Houdré)<br/>L¹-type Poincaré versus isoperimetry"]
     Milman2009_L31["◐ Lemma 3.1 (Bakry–Ledoux)<br/>Reverse local Poincaré inequality"]
     Milman2009_C32["◐ Corollary 3.2 (Ledoux)<br/>L¹ heat displacement"]
+    Milman2009_L41["✓ Lemma 4.1<br/>Paley–Zygmund-type quantile bound"]
     Milman2009_L61["○ Lemma 6.1<br/>Profile lower semicontinuity from above"]
     Milman2009_L62["○ Lemma 6.2<br/>Profile lower semicontinuity from within"]
     Milman2009_P64["○ Proposition 6.4 (Maz'ya, Federer–Fleming, Bobkov–Houdré)<br/>Profile versus capacity"]
@@ -169,9 +170,9 @@ flowchart LR
     Milman2009_L69 --> Milman2009_T610
     Milman2009_T18 --> Milman2009_T610
     Milman2009_T614 --> Milman2009_L613
-    Milman2009_more["+29 further statements in the paper register"]
+    Milman2009_more["+28 further statements in the paper register"]
     classDef lemma_formalized fill:#dbeafe,stroke:#2563eb,color:#1e3a8a;
-    class Milman2009_R23 lemma_formalized;
+    class Milman2009_R23,Milman2009_L41 lemma_formalized;
     classDef lemma_partial fill:#fff3df,stroke:#c88719,color:#66420d;
     class Milman2009_DChe,Milman2009_DPoin,Milman2009_T11,Milman2009_T14,Milman2009_C26,Milman2009_L31,Milman2009_C32 lemma_partial;
     classDef lemma_pending fill:#fee2e2,stroke:#dc2626,color:#991b1b;

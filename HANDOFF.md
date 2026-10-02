@@ -27,8 +27,9 @@ authorization. Exact results, scopes and certificates are in the
 ## Next
 
 1. Owner decision on stochastic calculus (see below); it gates every priority-4 paper. De Ponti–Mondino
-   Lemmas 3.2 and 3.3 are formalized in `KLS/Geometry/Cheeger/BuserProfile.lean`, and Bobkov's
-   Lemma 3.1 (Borell's lemma) in `KLS/LogConcave/Tail.lean`.
+   Lemmas 3.2 and 3.3 are formalized in `KLS/Geometry/Cheeger/BuserProfile.lean`, Bobkov's
+   Lemma 3.1 (Borell's lemma) in `KLS/LogConcave/Tail.lean`, and E. Milman's Lemma 4.1
+   (Paley–Zygmund quantile bound) in `Probability/Quantile.lean`.
 2. Blocked: the priority-1 Bakry–Émery `C_P ≤ 1/ρ` target waits for the Bakry–Gentil–Ledoux text.
 
 ## Open owner decisions
