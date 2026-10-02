@@ -22,6 +22,14 @@ combined route diagram and approach table restored in `6c3437f` stay on
   (`priorities`). These rank future work; they do not claim the targets are proved.
 - The four routes remain on the progress page as exploratory research records sharing the
   analytic infrastructure. They are not formalization targets in their own right.
+- Paper lemma maps (`lemma_map` in `literature.json`) list every numbered statement of a pinned
+  source version with its dependencies and Lean declarations. ✓/◐/○ are derived from the
+  declarations (a body containing `sorry` gives ◐); ⇑ marks a reviewed stronger statement or a
+  different route and needs a written note. The progress page shows each paper's main-theorem
+  proof chain plus every statement with local progress; full maps are in `LITERATURE.md`.
+- Reviewing the KLS 1995 source showed that its main theorem is the convex-body bound
+  ψ(K) ≥ ln 2 / M₁(K) and that the localization lemma is quoted from Lovász–Simonovits (1993);
+  the priority-2 entry was corrected accordingly.
 
 - Issue #8 section 1, last item: the root README is a one-page summary (statement, what is
   proved, what is not, where to look, how to verify). `HANDOFF.md` holds only the current state;

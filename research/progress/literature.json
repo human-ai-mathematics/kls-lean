@@ -56,14 +56,202 @@
       "date": "1995",
       "publication": "Journal article",
       "url": "https://link.springer.com/article/10.1007/BF02574061",
-      "locator": "Localization lemma; historical dimension bound, also reviewed in Klartag–Lehec lecture notes",
-      "result": "Introduces the conjecture and localization; the classical dimension-scale bound is ψₙ = O(n^(1/2)), hence C_P = O(n).",
-      "remaining": "The high-dimensional localization theorem and this general dimension bound are not locally formalized.",
+      "locator": "Theorem 5.1 (Main Theorem); needle reduction of Section 2",
+      "result": "For every convex body K, ψ(K) ≥ ln 2 / M₁(K), with M₁ the mean distance to the centroid; for isotropic bodies this is the dimension-scale bound ψₙ = O(n^(1/2)). States the KLS conjecture. The localization lemma is quoted from Lovász–Simonovits (1993) and extended to exponential needles.",
+      "remaining": "No statement of the paper is formalized. The localization lemma (Lemma 2.1) is only cited, so a Lean proof needs Lovász–Simonovits (1993) or a later proof. The paper proves no Poincaré or covariance bound; with the local Cheeger inequality, Theorem 5.1 would give C_P ≤ (16 / ln² 2) E‖X − EX‖² for convex bodies, the factor 2 coming from the product denominator, once the paper's boundary measure is matched with the local outer Minkowski content.",
       "local_results": [],
       "diagram": "1995 · KLS<br/>ψₙ = O(n^(1/2))",
       "additional_sources": [
         "https://arxiv.org/abs/2406.01324"
-      ]
+      ],
+      "lemma_map": {
+        "source_version": "Discrete Comput. Geom. 13 (1995), 541–559",
+        "source_url": "https://link.springer.com/article/10.1007/BF02574061",
+        "reviewed_on": "2026-10-02",
+        "standing_assumptions": "Convex bodies in R^n with Lebesgue (uniform) measure; the isoperimetric coefficient ψ(K) uses the product denominator vol(S)·vol(K∖S)/vol(K) of (1.1), within a factor 2 of the min-denominator form (1.2).",
+        "omitted": "Remark 2.8 is a normalization comment. The paper proves no Poincaré or trace-of-covariance bound; those appear in later literature.",
+        "items": [
+          {
+            "id": "L21",
+            "locator": "Lemma 2.1 (Lovász–Simonovits)",
+            "label": "Localization lemma",
+            "statement": "For lower semicontinuous integrable g, h on R^n with positive integrals, some needle (segment with a linear weight to the power n−1) has positive g- and h-integrals.",
+            "uses": [],
+            "relation": "same",
+            "declarations": [],
+            "note": "Cited from Lovász–Simonovits (1993); its proof is not in this paper."
+          },
+          {
+            "id": "C22",
+            "locator": "Corollary 2.2",
+            "label": "Four-function needle reduction",
+            "statement": "For nonnegative continuous f1..f4 and α, β > 0, an inequality between products of integral powers holds on every convex body iff it holds on every needle.",
+            "uses": [
+              "L21"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": ""
+          },
+          {
+            "id": "R23",
+            "locator": "Remark 2.3",
+            "label": "Semicontinuous extension",
+            "statement": "Corollary 2.2 extends to upper semicontinuous f1, f2 and lower semicontinuous f3, f4.",
+            "uses": [
+              "C22"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": ""
+          },
+          {
+            "id": "C24",
+            "locator": "Corollary 2.4",
+            "label": "Needle with an equality constraint",
+            "statement": "On a bounded open convex T, if ∫g > 0 and ∫h = 0 for bounded lower semicontinuous g and continuous h, some needle in T has positive g-integral and zero h-integral.",
+            "uses": [
+              "L21"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": ""
+          },
+          {
+            "id": "R25",
+            "locator": "Remark 2.5",
+            "label": "Non-strict version",
+            "statement": "Strict inequalities in Corollary 2.4 may be replaced by non-strict ones.",
+            "uses": [
+              "C24"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": ""
+          },
+          {
+            "id": "L26",
+            "locator": "Lemma 2.6",
+            "label": "One-dimensional log-concave reduction",
+            "statement": "On an interval, a four-function inequality holds for every log-concave weight iff it holds for every exponential weight on every subinterval.",
+            "uses": [
+              "C22"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": ""
+          },
+          {
+            "id": "T27",
+            "locator": "Theorem 2.7",
+            "label": "Exponential needles",
+            "statement": "For nonnegative continuous f1..f4 on R^n, the four-function inequality holds for every compactly supported log-concave F iff it holds on every exponential needle.",
+            "uses": [
+              "C22",
+              "L26"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": ""
+          },
+          {
+            "id": "T31",
+            "locator": "Theorem 3.1",
+            "label": "Reverse Hölder for linear functions",
+            "statement": "For 0 < p < q there is C(p, q), independent of n and K, with ‖f‖_q ≤ C(p, q)‖f‖_p for every linear f on a convex body K.",
+            "uses": [
+              "T27"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": ""
+          },
+          {
+            "id": "T41",
+            "locator": "Theorem 4.1",
+            "label": "Isotropic body contains and is contained in balls",
+            "statement": "An isotropic convex body satisfies √((n+2)/n) B ⊆ K ⊆ √(n(n+2)) B.",
+            "uses": [
+              "C24",
+              "R25"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": ""
+          },
+          {
+            "id": "T51",
+            "locator": "Theorem 5.1 (Main Theorem)",
+            "label": "Isoperimetric coefficient bound",
+            "statement": "For every convex body K, ψ(K) ≥ ln 2 / M₁(K), where M₁ is the mean distance to the centroid.",
+            "uses": [
+              "T52"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": "Convex bodies only; the later log-concave version is quoted as Theorem 5.11 of Milman (2009).",
+            "main": true
+          },
+          {
+            "id": "T52",
+            "locator": "Theorem 5.2",
+            "label": "Three-set partition form",
+            "statement": "If K = K1 ∪ K2 ∪ K3 with dist(K1, K2) ≥ ε > 0, then ε·vol(K1)·vol(K2) ≤ vol(K)·vol(K3)·M₁(K)/ln 2.",
+            "uses": [
+              "T27"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": ""
+          },
+          {
+            "id": "T53",
+            "locator": "Theorem 5.3",
+            "label": "Bound by the mean chord length",
+            "statement": "ψ(K) ≥ 1/χ(K), where χ(K) averages the longest chord of K centred at each point.",
+            "uses": [
+              "T27"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": ""
+          },
+          {
+            "id": "CKLS",
+            "locator": "Conjecture (§5)",
+            "label": "KLS conjecture",
+            "statement": "ψ(K) is of order 1/√a(K), where a(K) is the largest eigenvalue of the inertia matrix.",
+            "uses": [
+              "T54"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": "The repository states a covariance-normalized Poincaré version for log-concave laws (KLS.Conjecture); it is not a literal form of this convex-body conjecture."
+          },
+          {
+            "id": "T54",
+            "locator": "Theorem 5.4",
+            "label": "Upper bound by hyperplane cuts",
+            "statement": "ψ(K) ≤ 10/√a(K) for every convex body K.",
+            "uses": [
+              "L55"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": ""
+          },
+          {
+            "id": "L55",
+            "locator": "Lemma 5.5",
+            "label": "Hyperplane cut through the centroid",
+            "statement": "For b(K) = 0 and a unit vector u, the two halves of K cut by u^⊥ satisfy a product-volume bound against the section area and β = E(u·x)².",
+            "uses": [],
+            "relation": "same",
+            "declarations": [],
+            "note": ""
+          }
+        ]
+      }
     },
     {
       "id": "Bobkov1999",
@@ -81,7 +269,204 @@
           "node": "thm:one-dimensional-logconcave-poincare",
           "scope": "One-dimensional upper bound, now strengthened locally to 4 Var; the independent 12 Var proof is retained"
         }
-      ]
+      ],
+      "lemma_map": {
+        "source_version": "Ann. Probab. 27 (1999), no. 4, 1903–1921 (author PDF)",
+        "source_url": "https://www-users.cse.umn.edu/~bobko001/papers/1999_AOP_Isop.pdf",
+        "reviewed_on": "2026-10-02",
+        "standing_assumptions": "Absolutely continuous log-concave probability measures on R^n; μ⁺ is the Minkowski boundary measure; Is(μ) is the min-denominator Cheeger constant h, λ₁ = 1/C_P is the spectral gap and ρ the log-Sobolev constant.",
+        "omitted": "The displayed consequences (1.8), (2.7), (2.8) and (2.10) are recorded with the statements they follow from.",
+        "items": [
+          {
+            "id": "T11",
+            "locator": "Theorem 1.1",
+            "label": "Perimeter, entropy and ball mass",
+            "statement": "For log-concave μ on R^n, every measurable A, x₀ and r > 0: 2rμ⁺(A) ≥ μ(A)log(1/μ(A)) + (1 − μ(A))log(1/(1 − μ(A))) + log μ{|x − x₀| ≤ r}.",
+            "uses": [
+              "P21"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": "",
+            "main": true
+          },
+          {
+            "id": "T12",
+            "locator": "Theorem 1.2 (Kannan–Lovász–Simonovits)",
+            "label": "Cheeger bound by the L² radius",
+            "statement": "Is(μ) ≥ 1/(K‖|x − x₀|‖_{L²(μ)}) with x₀ the barycenter and K universal; hence λ₁ ≥ 1/(4K²‖|x − x₀|‖²_{L²}) by Cheeger.",
+            "uses": [
+              "T11",
+              "L31"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": "The proof gives Is(μ) ≥ 1/(6r) with r the 2/3-quantile of |x − x₀| (3.3)."
+          },
+          {
+            "id": "T13",
+            "locator": "Theorem 1.3",
+            "label": "Gaussian isoperimetry, log-Sobolev and Gaussian moments",
+            "statement": "For log-concave μ, Gaussian-type isoperimetry, a log-Sobolev inequality and ∫exp(ε|x|²)dμ < ∞ are equivalent, with ρ ≥ 1/(K‖|x − x₀|‖²_ψ) for ψ(u) = exp(u²) − 1.",
+            "uses": [
+              "T11",
+              "L31",
+              "L32",
+              "L33"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": ""
+          },
+          {
+            "id": "P21",
+            "locator": "Proposition 2.1",
+            "label": "Functional form of Theorem 1.1",
+            "statement": "For locally Lipschitz f with values in [0, 1] and a symmetric convex body B: 2∫‖∇f‖_{B°}dμ ≥ Ent(f) + Ent(1 − f) + log μ(B(x₀)).",
+            "uses": [],
+            "relation": "same",
+            "declarations": [],
+            "note": "Proved by the Prékopa–Leindler inequality."
+          },
+          {
+            "id": "C22",
+            "locator": "Corollary 2.2",
+            "label": "Measures supported in a ball",
+            "statement": "If μ is concentrated in a ball of radius r, then 2r∫|∇f|dμ ≥ Ent(f) + Ent(1 − f) and 2rμ⁺(A) ≥ μ(A)log(1/μ(A)) + (1 − μ(A))log(1/(1 − μ(A))); hence Is(μ) ≥ log 2/r and λ₁ ≥ log²2/(4r²).",
+            "uses": [
+              "P21"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": ""
+          },
+          {
+            "id": "C23",
+            "locator": "Corollary 2.3",
+            "label": "Log-Sobolev versus spectral gap in a ball",
+            "statement": "If μ is concentrated in a ball of radius r, then λ₁/(1 + 2r√λ₁) ≤ ρ ≤ λ₁, so ρ ≥ 1/(10r²).",
+            "uses": [
+              "C22"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": ""
+          },
+          {
+            "id": "L31",
+            "locator": "Lemma 3.1 (Borell)",
+            "label": "Borell's lemma",
+            "statement": "For symmetric convex B with θ = μ(B) > 1/2 and t ≥ 1: 1 − μ(tB) ≤ (1 − θ)((1 − θ)/θ)^((t−1)/2).",
+            "uses": [],
+            "relation": "same",
+            "declarations": [],
+            "note": ""
+          },
+          {
+            "id": "L32",
+            "locator": "Lemma 3.2",
+            "label": "Functional Gaussian isoperimetry",
+            "statement": "If μ⁺(A) ≥ cI(μ(A)) for the Gaussian isoperimetric function I, then c[I(∫f) − ∫I(f)] ≤ ∫|∇f| for locally Lipschitz f with values in [0, 1].",
+            "uses": [],
+            "relation": "same",
+            "declarations": [],
+            "note": ""
+          },
+          {
+            "id": "L33",
+            "locator": "Lemma 3.3",
+            "label": "Gaussian isoperimetry gives log-Sobolev",
+            "statement": "Inequality (3.10) implies (c²/2)Ent(f²) ≤ ∫|∇f|² dμ.",
+            "uses": [
+              "L32"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": ""
+          },
+          {
+            "id": "P41",
+            "locator": "Proposition 4.1",
+            "label": "Cheeger constant on the line",
+            "statement": "For log-concave μ on R: 1/(3Var) ≤ Is²(μ) ≤ 2/Var, with equality cases the uniform and two-sided exponential laws; Is(μ) = 2f(m) at the median.",
+            "uses": [],
+            "relation": "same",
+            "declarations": [],
+            "note": "Locally only weaker bounds are proved: Ψ² ≤ 12 C_P on the line and Ψ² ≤ π C_P in general, which with C_P ≤ 4 Var do not give the constant 3."
+          },
+          {
+            "id": "C42",
+            "locator": "Corollary 4.2",
+            "label": "Hensley-type section ratio",
+            "statement": "For a convex body satisfying the isotropy condition, central sections by hyperplanes cutting B into equal volumes have ratio at most √6.",
+            "uses": [
+              "P41"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": ""
+          },
+          {
+            "id": "C43",
+            "locator": "Corollary 4.3",
+            "label": "Spectral gap on the line",
+            "statement": "For log-concave μ on R: 1/(12 Var) ≤ λ₁ ≤ 1/Var, i.e. Var ≤ C_P ≤ 12 Var.",
+            "uses": [
+              "P41"
+            ],
+            "relation": "stronger",
+            "declarations": [
+              {
+                "name": "FunctionalInequalities.KLS.LogConcave.localSlope_constant_le_four_variance",
+                "source": "formalization/FunctionalInequalities/KLS/LogConcave/Line/SharpPoincare.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.LogConcave.localSlope_constant_le_twelve_variance_of_four",
+                "source": "formalization/FunctionalInequalities/KLS/LogConcave/Line/SharpPoincare.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.evariance_le_smoothTest_constant",
+                "source": "formalization/FunctionalInequalities/KLS/LogConcave/Line/Buser.lean"
+              }
+            ],
+            "note": "Sharper upper constant C_P ≤ 4 Var, proved by a different argument that does not use Proposition 4.1; the paper's 12 Var follows as a corollary, and Var ≤ C_P is the linear test."
+          },
+          {
+            "id": "P44",
+            "locator": "Proposition 4.4",
+            "label": "Log-Sobolev constant on the line",
+            "statement": "For log-concave μ on R: 1/(24‖ξ − Eξ‖²_ψ) ≤ ρ ≤ 8/(3‖ξ − Eξ‖²_ψ) with ψ(x) = exp(x²) − 1.",
+            "uses": [
+              "P41"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": ""
+          },
+          {
+            "id": "P51",
+            "locator": "Proposition 5.1",
+            "label": "Cheeger bound for norms",
+            "statement": "For a random vector X with log-concave law in a normed space, Is(μ_X) ≥ 1/(6r) with r the 2/3-quantile of ‖X‖, where μ_X is the law of ‖X‖.",
+            "uses": [
+              "L31"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": ""
+          },
+          {
+            "id": "P52",
+            "locator": "Proposition 5.2",
+            "label": "Small-ball monotonicity",
+            "statement": "With F(t) = P(‖X‖ ≤ t), the function F(t)/t^(1/(2e)) is nondecreasing where 0 < F(t) ≤ e/(e + 1).",
+            "uses": [],
+            "relation": "same",
+            "declarations": [],
+            "note": ""
+          }
+        ]
+      }
     },
     {
       "id": "Milman2009",
@@ -94,7 +479,767 @@
       "locator": "Main equivalence theorem",
       "result": "Under convexity, isoperimetry, spectral gap and concentration control one another up to universal constants.",
       "remaining": "The full equivalence remains open locally; our forward infimum comparison is supporting infrastructure, not this theorem.",
-      "local_results": []
+      "local_results": [],
+      "lemma_map": {
+        "source_version": "arXiv:0712.4092v5",
+        "source_url": "https://arxiv.org/abs/0712.4092v5",
+        "reviewed_on": "2026-10-02",
+        "standing_assumptions": "Metric probability spaces; \"convexity assumptions\" mean total-variation limits of weighted Riemannian manifolds with Ric + Hess ψ ≥ 0. D_Che is the min-denominator Cheeger constant h and D_Poin = 1/√C_P, so D_Poin ≥ D_Che/2 is C_P ≤ 4Ψ². Attributed statements are quoted from the cited authors.",
+        "omitted": "Remarks 3.3, 4.4, 5.13, 6.3 and 6.7 are expository; the unnumbered regularity theorems for isoperimetric minimizers in the appendix are quoted background.",
+        "items": [
+          {
+            "id": "DChe",
+            "locator": "Definition (§1.1, Cheeger)",
+            "label": "Cheeger constant D_Che",
+            "statement": "Best D with Ĩ(t) ≥ D t on [0, 1/2], where Ĩ is the isoperimetric profile.",
+            "uses": [],
+            "relation": "partial",
+            "declarations": [
+              {
+                "name": "FunctionalInequalities.KLS.Isoperimetry.constant",
+                "source": "formalization/FunctionalInequalities/KLS/Isoperimetry.lean"
+              }
+            ],
+            "note": "Finite-dimensional laws on their affine support, with outer Minkowski content."
+          },
+          {
+            "id": "DPoin",
+            "locator": "Definition (§1.1, Poincaré)",
+            "label": "Poincaré constant D_Poin",
+            "statement": "Best D with D‖f − Ef‖₂ ≤ ‖|∇f|‖₂ for Lipschitz-on-balls f.",
+            "uses": [],
+            "relation": "partial",
+            "declarations": [
+              {
+                "name": "FunctionalInequalities.Poincare.LocalSlope.Intrinsic.constant",
+                "source": "formalization/FunctionalInequalities/Poincare/LocalSlope/Basic.lean"
+              }
+            ],
+            "note": "Stored as C_P = D_Poin^(−2) for finite-dimensional laws."
+          },
+          {
+            "id": "DExp",
+            "locator": "Definition (§1.1, exponential concentration)",
+            "label": "Exponential concentration D_Exp",
+            "statement": "Best D with μ(|f − Ef| ≥ t) ≤ e·exp(−Dt) for 1-Lipschitz f.",
+            "uses": [],
+            "relation": "same",
+            "declarations": [],
+            "note": ""
+          },
+          {
+            "id": "DFM",
+            "locator": "Definition (§1.3, first moment)",
+            "label": "First-moment concentration D_FM",
+            "statement": "Best D with ‖f − Ef‖₁ ≤ 1/D for 1-Lipschitz f.",
+            "uses": [],
+            "relation": "same",
+            "declarations": [],
+            "note": ""
+          },
+          {
+            "id": "T11",
+            "locator": "Theorem 1.1 (Maz'ya, Cheeger)",
+            "label": "Cheeger inequality",
+            "statement": "D_Poin ≥ D_Che/2.",
+            "uses": [
+              "DChe",
+              "DPoin"
+            ],
+            "relation": "partial",
+            "declarations": [
+              {
+                "name": "FunctionalInequalities.KLS.LogConcave.literatureConstant_le_four_mul_inverseScale_sq",
+                "source": "formalization/FunctionalInequalities/KLS/Geometry/Cheeger/Inequality.lean"
+              }
+            ],
+            "note": "Proved as C_P ≤ 4Ψ² for finite-dimensional log-concave laws; the paper states it on general metric probability spaces."
+          },
+          {
+            "id": "T12",
+            "locator": "Theorem 1.2 (Gromov–Milman)",
+            "label": "Poincaré implies exponential concentration",
+            "statement": "D_Exp ≥ c·D_Poin for a universal c.",
+            "uses": [
+              "DExp",
+              "DPoin"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": ""
+          },
+          {
+            "id": "T13",
+            "locator": "Theorem 1.3 (Buser)",
+            "label": "Buser inequality on closed manifolds",
+            "statement": "For uniform measure on a closed manifold with Ric ≥ 0, D_Che ≥ c·D_Poin.",
+            "uses": [],
+            "relation": "same",
+            "declarations": [],
+            "note": ""
+          },
+          {
+            "id": "T14",
+            "locator": "Theorem 1.4 (Ledoux)",
+            "label": "Buser–Ledoux inequality",
+            "statement": "Under smooth convexity assumptions, D_Che ≥ c·D_Poin.",
+            "uses": [
+              "L31"
+            ],
+            "relation": "partial",
+            "declarations": [
+              {
+                "name": "FunctionalInequalities.KLS.LogConcave.inverseScale_sq_le_pi_literature",
+                "source": "formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianBuser.lean"
+              }
+            ],
+            "note": "Euclidean case only, as Ψ² ≤ π C_P, i.e. c = 1/√π, for every finite-dimensional log-concave law including nonsmooth ones; weighted manifolds are not covered."
+          },
+          {
+            "id": "T15",
+            "locator": "Theorem 1.5 (Main Theorem)",
+            "label": "Cheeger, Poincaré and concentration are equivalent",
+            "statement": "Under convexity assumptions, D_Che ≃ D_Poin ≃ D_Exp ≃ D_FM up to universal constants.",
+            "uses": [
+              "T24",
+              "C26",
+              "C27",
+              "T610",
+              "L613"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": "",
+            "main": true
+          },
+          {
+            "id": "T16",
+            "locator": "Theorem 1.6",
+            "label": "Lipschitz-distance form of D_Che",
+            "statement": "D_Che ≃ inf over A with μ(A) ≥ 1/2 of 1/∫d(x, A)dμ.",
+            "uses": [
+              "L22",
+              "L21",
+              "T15"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": ""
+          },
+          {
+            "id": "T17",
+            "locator": "Theorem 1.7",
+            "label": "Stability of D_Che for convex domains",
+            "statement": "If vol(K ∩ L) ≥ v_K vol(K) and ≥ v_L vol(L), then D_Che(K) ≥ c·v_K²/log(1 + 1/v_L)·D_Che(L).",
+            "uses": [
+              "L51",
+              "L52"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": ""
+          },
+          {
+            "id": "T18",
+            "locator": "Theorem 1.8 (Bavard–Pansu, …, Bobkov)",
+            "label": "Concavity of the isoperimetric profile",
+            "statement": "Under generalized smooth convexity the isoperimetric profile is concave on (0, 1); I^(n/(n−1)) is concave for uniform measures.",
+            "uses": [
+              "TA1",
+              "TA2",
+              "TA3",
+              "TA4"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": ""
+          },
+          {
+            "id": "L21",
+            "locator": "Lemma 2.1",
+            "label": "Mean versus median in Orlicz norms",
+            "statement": "½‖f − Ef‖_N ≤ ‖f − Mf‖_N ≤ 3‖f − Ef‖_N for every Orlicz norm.",
+            "uses": [],
+            "relation": "same",
+            "declarations": [],
+            "note": ""
+          },
+          {
+            "id": "L22",
+            "locator": "Lemma 2.2 (Maz'ya, Federer–Fleming, Bobkov–Houdré)",
+            "label": "Cheeger as an L¹ Poincaré inequality",
+            "statement": "Cheeger's inequality with D_Che holds iff D_Che‖f − Mf‖₁ ≤ ‖|∇f|‖₁ for all f.",
+            "uses": [
+              "DChe"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": ""
+          },
+          {
+            "id": "R23",
+            "locator": "Remark 2.3",
+            "label": "Metric gradient",
+            "statement": "On metric probability spaces |∇f|(x) is the limsup of |f(y) − f(x)|/d(x, y) as y → x, and 0 at isolated points.",
+            "uses": [],
+            "relation": "same",
+            "declarations": [
+              {
+                "name": "FunctionalInequalities.Energy.LocalSlope.apply",
+                "source": "formalization/FunctionalInequalities/Energy/LocalSlope/Basic.lean"
+              }
+            ],
+            "note": "Same convention, including isolated points.",
+            "kind": "definition"
+          },
+          {
+            "id": "T24",
+            "locator": "Theorem 2.4",
+            "label": "All (p, q) Poincaré inequalities are equivalent",
+            "statement": "Under convexity assumptions, D_{p,q} ≤ C p′ D_{p′,q′} for 1 ≤ p ≤ q ≤ ∞ and 1 ≤ p′ ≤ q′ ≤ ∞.",
+            "uses": [
+              "T29",
+              "T18",
+              "P25",
+              "C65"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": ""
+          },
+          {
+            "id": "P25",
+            "locator": "Proposition 2.5",
+            "label": "Monotonicity of (p, q) constants",
+            "statement": "If 1/p − 1/q = 1/p′ − 1/q′ with p ≤ p′, q ≤ q′, then D_{p′,q′} ≥ (p/p′) D_{p,q}, without convexity.",
+            "uses": [],
+            "relation": "same",
+            "declarations": [],
+            "note": ""
+          },
+          {
+            "id": "C26",
+            "locator": "Corollary 2.6",
+            "label": "Maz'ya–Cheeger inequality, new proof",
+            "statement": "D_Poin ≥ D_Che/2.",
+            "uses": [
+              "P25",
+              "L22"
+            ],
+            "relation": "partial",
+            "declarations": [
+              {
+                "name": "FunctionalInequalities.KLS.LogConcave.literatureConstant_le_four_mul_inverseScale_sq",
+                "source": "formalization/FunctionalInequalities/KLS/Geometry/Cheeger/Inequality.lean"
+              }
+            ],
+            "note": "Same Lean result as Theorem 1.1, by a different proof; finite-dimensional log-concave laws only."
+          },
+          {
+            "id": "C27",
+            "locator": "Corollary 2.7",
+            "label": "Gromov–Milman inequality, new proof",
+            "statement": "D_Exp ≥ c·D_Poin.",
+            "uses": [
+              "L21",
+              "P25"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": ""
+          },
+          {
+            "id": "R28",
+            "locator": "Remark 2.8",
+            "label": "Concentration from (r, r) Poincaré",
+            "statement": "D_Exp ≥ c_r D_{r,r} for every r ≥ 1.",
+            "uses": [
+              "C27"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": ""
+          },
+          {
+            "id": "T29",
+            "locator": "Theorem 2.9",
+            "label": "Poincaré versus profile decay",
+            "statement": "Under smooth convexity, a (p, q) Poincaré inequality is equivalent to Ĩ(t) ≥ D′ t^r with r = 1 + 1/p − 1/q in [1/2, 2], with comparable constants.",
+            "uses": [
+              "C32",
+              "L21",
+              "P25",
+              "P210"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": ""
+          },
+          {
+            "id": "P210",
+            "locator": "Proposition 2.10 (Maz'ya, Federer–Fleming, Bobkov–Houdré)",
+            "label": "L¹-type Poincaré versus isoperimetry",
+            "statement": "For 0 < r ≤ 1, the (1/r, 1) Poincaré inequality is equivalent to Ĩ(t) ≥ D t^r, without convexity.",
+            "uses": [],
+            "relation": "same",
+            "declarations": [],
+            "note": ""
+          },
+          {
+            "id": "R211",
+            "locator": "Remark 2.11",
+            "label": "Uniform measures strengthen the results",
+            "statement": "For uniform measures, concavity of I^(n/(n−1)) upgrades the main theorem to an (n/(n−1), 1) Poincaré inequality.",
+            "uses": [
+              "T18",
+              "P210"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": ""
+          },
+          {
+            "id": "L31",
+            "locator": "Lemma 3.1 (Bakry–Ledoux)",
+            "label": "Reverse local Poincaré inequality",
+            "statement": "Under Ric + Hess ψ ≥ −K, c(t)|∇P_t f|² ≤ P_t(f²) − (P_t f)² pointwise, with c(t) = 2t when K = 0.",
+            "uses": [],
+            "relation": "partial",
+            "declarations": [
+              {
+                "name": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.two_mul_integral_mul_weakGamma_le",
+                "source": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/ReversePoincare.lean"
+              }
+            ],
+            "note": "K = 0 for smooth convex potentials on Euclidean spaces, integrated against nonnegative C_c^∞ tests (a.e. form for bounded data)."
+          },
+          {
+            "id": "C32",
+            "locator": "Corollary 3.2 (Ledoux)",
+            "label": "L¹ heat displacement",
+            "statement": "‖f − P_t f‖₁ ≤ √(2t)‖|∇f|‖₁.",
+            "uses": [
+              "L31"
+            ],
+            "relation": "partial",
+            "declarations": [
+              {
+                "name": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.integral_abs_indicator_sub_operator_le",
+                "source": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Perimeter.lean"
+              }
+            ],
+            "note": "Indicator data of smooth domains with relative perimeter, smooth convex potential; a sharper coefficient 2√(t/π) is also proved."
+          },
+          {
+            "id": "L41",
+            "locator": "Lemma 4.1",
+            "label": "Paley–Zygmund-type quantile bound",
+            "statement": "If ‖f‖₂ ≤ D‖f‖₁ then the (1 − ε) quantile of |f| is at least θ‖f‖₁ with ε = (1 − θ)²/D².",
+            "uses": [],
+            "relation": "same",
+            "declarations": [],
+            "note": ""
+          },
+          {
+            "id": "P42",
+            "locator": "Proposition 4.2",
+            "label": "Optimal 1-Lipschitz functions behave like linear ones",
+            "statement": "An essentially optimal 1-Lipschitz f₀ for first-moment concentration has ‖f₀‖_Ψ₁ ≤ C₀‖f₀‖₁ and a quantile lower bound.",
+            "uses": [
+              "C27",
+              "L613",
+              "L21",
+              "L41"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": ""
+          },
+          {
+            "id": "C43",
+            "locator": "Corollary 4.3",
+            "label": "Slow tail decay suffices",
+            "statement": "An arbitrarily slow uniform tail decay of 1-Lipschitz functions implies the main theorem's statements with constants depending only on the decay.",
+            "uses": [
+              "P42"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": ""
+          },
+          {
+            "id": "L51",
+            "locator": "Lemma 5.1",
+            "label": "Going down to a large convex subset",
+            "statement": "If L ⊆ K is convex with vol(L) ≥ v vol(K), then D_FM(L) ≥ c/log(1 + 1/v)·D_Exp(K).",
+            "uses": [
+              "P42",
+              "L21"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": ""
+          },
+          {
+            "id": "L52",
+            "locator": "Lemma 5.2",
+            "label": "Going up to a convex superset",
+            "statement": "If L ⊆ K are convex with vol(L) ≥ v vol(K), then D_Che(K) ≥ v² D_Che(L).",
+            "uses": [
+              "C611",
+              "C612",
+              "T18",
+              "T610"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": ""
+          },
+          {
+            "id": "C53",
+            "locator": "Corollary 5.3",
+            "label": "Stability under Banach–Mazur-close bodies",
+            "statement": "If d_G(K, L) ≤ 1 + s/n for 1 ≤ s ≤ C₁n, then D_Che(K) and D_Che(L) agree up to a factor C₂ s.",
+            "uses": [
+              "L51",
+              "L52"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": ""
+          },
+          {
+            "id": "L54",
+            "locator": "Lemma 5.4",
+            "label": "Log-concave version of Lemmas 5.1–5.2",
+            "statement": "Lemmas 5.1 and 5.2 hold for absolutely continuous log-concave measures with density domination dμ_K/dx ≥ v dμ_L/dx.",
+            "uses": [
+              "L51",
+              "L52"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": ""
+          },
+          {
+            "id": "T55",
+            "locator": "Theorem 5.5",
+            "label": "Total-variation stability of D_Che",
+            "statement": "If d_TV(μ₁, μ₂) ≤ 1 − ε for log-concave μ₁, μ₂, their Cheeger constants agree up to c(ε) = c′ε²/log(1 + 1/ε).",
+            "uses": [
+              "L54"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": ""
+          },
+          {
+            "id": "E56",
+            "locator": "Example 5.6",
+            "label": "Optimality of the stability exponent",
+            "statement": "Products of cubes and ℓ₁-balls show the quadratic dependence in Theorem 1.7 is necessary.",
+            "uses": [
+              "T17"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": ""
+          },
+          {
+            "id": "E57",
+            "locator": "Example 5.7",
+            "label": "Optimality of Corollary 5.3",
+            "statement": "Truncated ℓ₁-balls show the linear dependence on s in Corollary 5.3 is necessary.",
+            "uses": [
+              "C53"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": ""
+          },
+          {
+            "id": "R58",
+            "locator": "Remark 5.8",
+            "label": "Sharper stability near the Euclidean ball",
+            "statement": "Near B₂ⁿ the bound in Corollary 5.3 improves to 1/(C₂√s).",
+            "uses": [
+              "L51",
+              "C53"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": ""
+          },
+          {
+            "id": "T59",
+            "locator": "Theorem 5.9",
+            "label": "Lipschitz-on-average transport",
+            "statement": "If T pushes μ to ν and ν satisfies convexity assumptions, then D_Che(ν) ≥ c/∫‖DT‖_op dμ·D_Che(μ).",
+            "uses": [
+              "L22",
+              "L21"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": ""
+          },
+          {
+            "id": "T510",
+            "locator": "Theorem 5.10 (Payne–Weinberger, Li–Yau)",
+            "label": "Diameter bound for convex domains",
+            "statement": "For locally convex smooth K with Ric ≥ 0, D_Poin ≥ π/(2 diam K), and π/diam K in Euclidean space.",
+            "uses": [],
+            "relation": "same",
+            "declarations": [],
+            "note": ""
+          },
+          {
+            "id": "T511",
+            "locator": "Theorem 5.11 (Kannan–Lovász–Simonovits)",
+            "label": "KLS first-moment bound",
+            "statement": "For log-concave μ on R^n, D_Che(μ) ≥ c/∫|x − x₀|dμ for every x₀.",
+            "uses": [],
+            "relation": "same",
+            "declarations": [],
+            "note": ""
+          },
+          {
+            "id": "T512",
+            "locator": "Theorem 5.12",
+            "label": "First-moment bound under convexity assumptions",
+            "statement": "Under convexity assumptions, D_Che ≥ c/∫d(x, x₀)dμ for every x₀.",
+            "uses": [
+              "T15"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": ""
+          },
+          {
+            "id": "T514",
+            "locator": "Theorem 5.14 (Kannan–Lovász–Simonovits)",
+            "label": "Mean chord bound",
+            "statement": "For log-concave μ with bounded support B, D_Che(μ) ≥ c/∫θ_B dμ, θ_B the longest symmetric chord.",
+            "uses": [],
+            "relation": "same",
+            "declarations": [],
+            "note": ""
+          },
+          {
+            "id": "T515",
+            "locator": "Theorem 5.15 (Bobkov)",
+            "label": "Variance-of-norm bound",
+            "statement": "For log-concave μ, D_Che(μ) ≥ c/Var_μ(|x − x₀|²)^(1/4).",
+            "uses": [
+              "T514",
+              "T512",
+              "T55"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": ""
+          },
+          {
+            "id": "T516",
+            "locator": "Theorem 5.16 (Sodin)",
+            "label": "Uniform bound for ℓ_p balls",
+            "statement": "Normalized ℓ_pⁿ balls with p ∈ [1, 2] have D_Che bounded below uniformly in n.",
+            "uses": [],
+            "relation": "same",
+            "declarations": [],
+            "note": ""
+          },
+          {
+            "id": "L61",
+            "locator": "Lemma 6.1",
+            "label": "Profile lower semicontinuity from above",
+            "statement": "If μ_m tends to μ from above, liminf of I_{μ_m}(t) is at least the lower limit of I_μ near t.",
+            "uses": [],
+            "relation": "same",
+            "declarations": [],
+            "note": ""
+          },
+          {
+            "id": "L62",
+            "locator": "Lemma 6.2",
+            "label": "Profile lower semicontinuity from within",
+            "statement": "The same conclusion when μ_m tends to μ from within.",
+            "uses": [],
+            "relation": "same",
+            "declarations": [],
+            "note": ""
+          },
+          {
+            "id": "P64",
+            "locator": "Proposition 6.4 (Maz'ya, Federer–Fleming, Bobkov–Houdré)",
+            "label": "Profile versus capacity",
+            "statement": "inf over [a, b] of I ≤ Cap₁(a, b) ≤ inf over [a, b) of I.",
+            "uses": [],
+            "relation": "same",
+            "declarations": [],
+            "note": ""
+          },
+          {
+            "id": "C65",
+            "locator": "Corollary 6.5",
+            "label": "Profile symmetry",
+            "statement": "If I is lower semicontinuous at t and 1 − t, then I(t) = I(1 − t).",
+            "uses": [
+              "P64"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": ""
+          },
+          {
+            "id": "L66",
+            "locator": "Lemma 6.6",
+            "label": "Upper semicontinuity under concavity",
+            "statement": "If μ_m → μ in total variation with concave profiles, the lower limit of I_μ near t dominates limsup I_{μ_m}(t).",
+            "uses": [],
+            "relation": "same",
+            "declarations": [],
+            "note": ""
+          },
+          {
+            "id": "P68",
+            "locator": "Proposition 6.8",
+            "label": "Convergence of profiles",
+            "statement": "Under total-variation convergence from above or within, with concave profiles, I_{μ_m}(t) converges to the lower limit of I_μ near t.",
+            "uses": [
+              "L61",
+              "L62",
+              "L66"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": ""
+          },
+          {
+            "id": "L69",
+            "locator": "Lemma 6.9",
+            "label": "Hölder continuity of the profile",
+            "statement": "For densities bounded above on balls, the profile is absolutely continuous and locally (n−1)/n-Hölder.",
+            "uses": [],
+            "relation": "same",
+            "declarations": [],
+            "note": ""
+          },
+          {
+            "id": "T610",
+            "locator": "Theorem 6.10",
+            "label": "Approximation preserves concavity",
+            "statement": "Smooth convex approximations from above or within give pointwise profile convergence, so the limit profile is concave.",
+            "uses": [
+              "P68",
+              "L69",
+              "T18"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": ""
+          },
+          {
+            "id": "C611",
+            "locator": "Corollary 6.11",
+            "label": "Convex bodies satisfy the assumptions",
+            "statement": "Uniform measures on convex domains satisfy the convexity assumptions, with I and I^(n/(n−1)) concave.",
+            "uses": [
+              "T610"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": ""
+          },
+          {
+            "id": "C612",
+            "locator": "Corollary 6.12",
+            "label": "Log-concave measures satisfy the assumptions",
+            "statement": "Absolutely continuous log-concave measures on R^n satisfy the convexity assumptions, with concave profile.",
+            "uses": [
+              "T610",
+              "TA4"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": ""
+          },
+          {
+            "id": "L613",
+            "locator": "Lemma 6.13",
+            "label": "Borell-type tail bound",
+            "statement": "If μ_m(B(x₀, R)) = θ > 1/2, then μ_m(M ∖ B(x₀, tR)) ≤ θ((1 − θ)/θ)^((t+1)/2) for t ≥ 1.",
+            "uses": [
+              "T614"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": ""
+          },
+          {
+            "id": "T614",
+            "locator": "Theorem 6.14 (Cordero-Erausquin–McCann–Schmuckenschläger)",
+            "label": "Riemannian Prékopa–Leindler",
+            "statement": "Under Ric + Hess ψ ≥ 0, the weighted Prékopa–Leindler inequality holds along geodesic interpolation.",
+            "uses": [],
+            "relation": "same",
+            "declarations": [],
+            "note": ""
+          },
+          {
+            "id": "TA1",
+            "locator": "Theorem A.1 (Bavard–Pansu, …, Bayle–Rosales)",
+            "label": "Concavity for uniform measures",
+            "statement": "For locally convex smooth domains in manifolds with Ric ≥ 0, I and I^(n/(n−1)) are concave.",
+            "uses": [],
+            "relation": "same",
+            "declarations": [],
+            "note": ""
+          },
+          {
+            "id": "TA2",
+            "locator": "Theorem A.2 (Bayle, Morgan)",
+            "label": "Concavity for weighted manifolds",
+            "statement": "Under Ric + Hess ψ ≥ 0 the profile is concave.",
+            "uses": [],
+            "relation": "same",
+            "declarations": [],
+            "note": ""
+          },
+          {
+            "id": "TA3",
+            "locator": "Theorem A.3 (after Sternberg–Zumbrun, Bayle)",
+            "label": "Concavity on locally convex domains",
+            "statement": "On locally convex C² domains with Ric + Hess ψ ≥ 0 the profile is concave.",
+            "uses": [],
+            "relation": "same",
+            "declarations": [],
+            "note": ""
+          },
+          {
+            "id": "TA4",
+            "locator": "Theorem A.4 (Bobkov)",
+            "label": "One-dimensional log-concave profile",
+            "statement": "For absolutely continuous log-concave μ on R, the isoperimetric profile is concave on (0, 1).",
+            "uses": [],
+            "relation": "same",
+            "declarations": [],
+            "note": ""
+          },
+          {
+            "id": "RA5",
+            "locator": "Remark A.5",
+            "label": "Half-lines are minimizers",
+            "statement": "In dimension one the minimizers are half-lines, so I(t) = min(F′∘F⁻¹(t), F′∘F⁻¹(1 − t)).",
+            "uses": [
+              "TA4"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": ""
+          }
+        ]
+      }
     },
     {
       "id": "GuedonMilman2011",
@@ -254,7 +1399,194 @@
           "source": "formalization/FunctionalInequalities/KLS/Geometry/Perimeter/RelaxedMinkowski.lean"
         }
       ],
-      "target_review": "research/decisions/2026-10-02-literature-register.md#admg-target-review"
+      "target_review": "research/decisions/2026-10-02-literature-register.md#admg-target-review",
+      "lemma_map": {
+        "source_version": "arXiv:1603.08412v1",
+        "source_url": "https://arxiv.org/abs/1603.08412v1",
+        "reviewed_on": "2026-10-02",
+        "standing_assumptions": "Metric space with a Borel measure finite on bounded Borel sets; contents are defined for Borel sets of finite measure.",
+        "omitted": "Remarks 3.1, 4.1 and 4.4 are expository (literature context, Euclidean background and a cited counterexample) and are not separate formalization targets.",
+        "items": [
+          {
+            "id": "L21a",
+            "locator": "Lemma 2.1, (2.2)",
+            "label": "Lower content bounds relaxed upper content",
+            "statement": "For a Borel set A of finite measure, the relaxed upper Minkowski content is at most the lower Minkowski content.",
+            "uses": [],
+            "relation": "same",
+            "declarations": [
+              {
+                "name": "FunctionalInequalities.KLS.MetricBV.relaxedUpperMinkowskiContent_le_minkowskiContent_of_measure_lt_top",
+                "source": "formalization/FunctionalInequalities/KLS/Geometry/Perimeter/RelaxedMinkowski.lean"
+              }
+            ],
+            "note": "Holds for every Borel measure; the standing finiteness on bounded sets is not needed."
+          },
+          {
+            "id": "L21b",
+            "locator": "Lemma 2.1, second clause",
+            "label": "Relaxed lower and upper contents agree",
+            "statement": "The relaxed lower and upper Minkowski contents coincide.",
+            "uses": [
+              "L21a"
+            ],
+            "relation": "same",
+            "declarations": [
+              {
+                "name": "FunctionalInequalities.KLS.MetricBV.relaxedUpperMinkowskiContent_eq_relaxedMinkowskiContent_of_measure_lt_top",
+                "source": "formalization/FunctionalInequalities/KLS/Geometry/Perimeter/RelaxedMinkowski.lean"
+              }
+            ],
+            "note": "Measurable finite-mass targets under every Borel measure."
+          },
+          {
+            "id": "L32",
+            "locator": "Lemma 3.2, (3.3)",
+            "label": "Minkowski coarea inequality",
+            "statement": "For a nonnegative Lipschitz f with a finite-mass neighbourhood of {f > 0}, the integrated lower content of superlevel sets is at most the liminf of the integrated open-ball growth, which is at most the slope integral.",
+            "uses": [],
+            "relation": "same",
+            "declarations": [
+              {
+                "name": "FunctionalInequalities.KLS.Isoperimetry.setLIntegral_minkowskiContent_superlevel_coarea_of_finite_neighborhood",
+                "source": "formalization/FunctionalInequalities/KLS/Geometry/Cheeger/LocalSlopeCoarea.lean"
+              }
+            ],
+            "note": "Both inequalities of the chain, with the actual open-ball supremum semigroup."
+          },
+          {
+            "id": "D33",
+            "locator": "Definition 3.3",
+            "label": "Perimeter by Lipschitz relaxation",
+            "statement": "Per(A) is the infimum of liminf of slope integrals over Lipschitz approximants converging to the indicator of A in L¹.",
+            "uses": [],
+            "relation": "same",
+            "kind": "definition",
+            "declarations": [
+              {
+                "name": "FunctionalInequalities.KLS.MetricBV.lipschitzRelaxation",
+                "source": "formalization/FunctionalInequalities/KLS/Geometry/Perimeter/TestClassRelaxation.lean"
+              }
+            ],
+            "note": "The library perimeter uses bounded-support tests; lipschitzRelaxation_eq_perimeter_of_measure_lt_top identifies the two at finite-mass targets."
+          },
+          {
+            "id": "R34",
+            "locator": "Remark 3.4",
+            "label": "Truncation and bounded-support reduction",
+            "statement": "Only approximants with values in [0, 1] and bounded positivity set need to be considered in Definition 3.3.",
+            "uses": [
+              "D33"
+            ],
+            "relation": "same",
+            "declarations": [
+              {
+                "name": "FunctionalInequalities.KLS.MetricBV.exists_approximatingSequence_of_lipschitz_of_measure_lt_top",
+                "source": "formalization/FunctionalInequalities/KLS/Geometry/Perimeter/MetricBV.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.MetricBV.lipschitzRelaxation_eq_perimeter_of_measure_lt_top",
+                "source": "formalization/FunctionalInequalities/KLS/Geometry/Perimeter/TestClassRelaxation.lean"
+              }
+            ],
+            "note": "Measurable finite-mass targets under every Borel measure."
+          },
+          {
+            "id": "R35",
+            "locator": "Remark 3.5",
+            "label": "Locally Lipschitz variants agree",
+            "statement": "The locally Lipschitz variants of the perimeter (L¹ or L¹_loc convergence) agree with Definition 3.3 on proper spaces, and on complete separable spaces by a non-elementary argument.",
+            "uses": [
+              "D33",
+              "R34"
+            ],
+            "relation": "partial",
+            "declarations": [
+              {
+                "name": "FunctionalInequalities.KLS.MetricBV.locallyLipschitzRelaxation_eq_perimeter_of_measure_lt_top",
+                "source": "formalization/FunctionalInequalities/KLS/Geometry/Perimeter/TestClassRelaxation.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.MetricBV.compactLocallyLipschitzRelaxation_eq_perimeter_of_measure_lt_top",
+                "source": "formalization/FunctionalInequalities/KLS/Geometry/Perimeter/TestClassRelaxation.lean"
+              }
+            ],
+            "note": "Proper spaces only. The complete separable case, cited from Di Marino's thesis, is not formalized."
+          },
+          {
+            "id": "T36",
+            "locator": "Theorem 3.6",
+            "label": "Relaxed Minkowski content equals perimeter",
+            "main": true,
+            "statement": "For every Borel set A with finite measure, the relaxed lower Minkowski content equals Per(A) of Definition 3.3.",
+            "uses": [
+              "L32",
+              "D33",
+              "R34"
+            ],
+            "relation": "same",
+            "declarations": [
+              {
+                "name": "FunctionalInequalities.KLS.MetricBV.relaxedMinkowskiContent_eq_perimeter_of_finite_on_bounded",
+                "source": "formalization/FunctionalInequalities/KLS/Geometry/Perimeter/RelaxedMinkowski.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.MetricBV.lipschitzRelaxation_eq_perimeter_of_measure_lt_top",
+                "source": "formalization/FunctionalInequalities/KLS/Geometry/Perimeter/TestClassRelaxation.lean"
+              }
+            ],
+            "note": "The exact statement is the composition of these two declarations under the standing assumption. No single declaration states it yet and no certificate is registered, so the paper is not covered."
+          },
+          {
+            "id": "P42",
+            "locator": "Proposition 4.2",
+            "label": "Coarea with lower content",
+            "statement": "Under the regularity assumption (4.2), the total variation of a nonnegative Lipschitz f equals the integrated lower content of its superlevel sets; lower content equals perimeter for almost every level, and lower and upper contents agree for unit-slope functions.",
+            "uses": [
+              "L32",
+              "T36"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": "Needs the BV total variation of functions and the Fleming–Rishel coarea formula (4.1), which the paper cites."
+          },
+          {
+            "id": "R43",
+            "locator": "Remark 4.3",
+            "label": "Distance-function level sets",
+            "statement": "Under a length assumption and (4.2), almost every level set of a distance function has equal lower content, upper content and perimeter, and has a Minkowski content.",
+            "uses": [
+              "P42"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": ""
+          },
+          {
+            "id": "P51",
+            "locator": "Proposition 5.1",
+            "label": "Doubling coarea with Hausdorff gauge",
+            "statement": "For a doubling measure and nonnegative Lipschitz f with finite-mass positivity set, the integrated gauge-Hausdorff measure of B ∩ {f = t} is bounded by the asymptotic Lipschitz integral and by twice the slope integral over B.",
+            "uses": [],
+            "relation": "same",
+            "declarations": [],
+            "note": "Needs the Carathéodory gauge measure and Vitali covering for doubling measures."
+          },
+          {
+            "id": "C52",
+            "locator": "Corollary 5.2",
+            "label": "Perimeter lower bound on level sets",
+            "statement": "On complete doubling spaces satisfying (4.2), almost every superlevel set has finite perimeter with perimeter measure at least half the gauge-Hausdorff measure on its essential boundary.",
+            "uses": [
+              "P51",
+              "P42"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": ""
+          }
+        ]
+      }
     },
     {
       "id": "LeeVempala2024",
@@ -340,7 +1672,182 @@
       ],
       "additional_sources": [
         "https://arxiv.org/html/2607.24164v1#S1"
-      ]
+      ],
+      "lemma_map": {
+        "source_version": "arXiv:1902.03835v2",
+        "source_url": "https://arxiv.org/abs/1902.03835v2",
+        "reviewed_on": "2026-10-02",
+        "standing_assumptions": "RCD(K, ∞) metric measure spaces; h(X) is the min-denominator Cheeger constant and λ₁ = 1/C_P the spectral gap (λ₀ the bottom of the spectrum when m(X) = ∞). Finite-dimensional log-concave laws on Euclidean spaces are RCD(0, ∞) with m(X) = 1. Unnumbered proof steps (46) and (48) are listed because local Lean results state them.",
+        "omitted": "Remark 1.3 (discreteness of the spectrum) is expository.",
+        "items": [
+          {
+            "id": "T11",
+            "locator": "Theorem 1.1",
+            "label": "Sharp implicit Buser inequality",
+            "statement": "On RCD(K, ∞) spaces with m(X) = 1, h(X) ≥ sup over t > 0 of (1 − e^(−λ₁t))/J_K(t), sharp for the Gaussian when K > 0; with m(X) = ∞, h(X) ≥ 2 sup (1 − e^(−λ₀t))/J_K(t). Here J₀(t) = 2√t/√π.",
+            "uses": [
+              "D22",
+              "P31",
+              "E46",
+              "E48"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": "No implicit (supremum over t) form is stated locally; only the explicit π bound of Corollary 1.2 is proved, in the Euclidean log-concave case.",
+            "main": true
+          },
+          {
+            "id": "C12",
+            "locator": "Corollary 1.2",
+            "label": "Explicit Buser inequalities",
+            "statement": "For K > 0 and K/λ₁ ≥ c: λ₁ ≤ (π/2c)h²; for K = 0 and m(X) = 1: λ₁ ≤ (4/π)h² inf_T T/(1 − e^(−T))² < πh²; explicit bounds for K < 0 and for infinite measure.",
+            "uses": [
+              "T11",
+              "L32",
+              "L33"
+            ],
+            "relation": "partial",
+            "declarations": [
+              {
+                "name": "FunctionalInequalities.KLS.LogConcave.inverseScale_sq_le_pi_literature",
+                "source": "formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianBuser.lean"
+              }
+            ],
+            "note": "The K = 0, m(X) = 1 case in its weaker displayed form λ₁ ≤ πh², i.e. Ψ² ≤ π C_P, for every finite-dimensional log-concave law; the sharper constant (4/π) inf_T T/(1 − e^(−T))², the K ≠ 0 cases and infinite measure are not formalized."
+          },
+          {
+            "id": "D21",
+            "locator": "Definition 2.1",
+            "label": "CD(K, ∞) condition",
+            "statement": "Entropy is K-convex along some W₂-geodesic between any two measures of finite entropy.",
+            "uses": [],
+            "relation": "same",
+            "declarations": [],
+            "note": ""
+          },
+          {
+            "id": "D22",
+            "locator": "Definition 2.2",
+            "label": "RCD(K, ∞) condition",
+            "statement": "CD(K, ∞) together with a quadratic Cheeger energy.",
+            "uses": [
+              "D21"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": ""
+          },
+          {
+            "id": "P31",
+            "locator": "Proposition 3.1 (Bakry–Gentil–Ledoux)",
+            "label": "Isoperimetric gradient bound for the heat flow",
+            "statement": "For f with values in [0, 1]: |D(H_t f)|² ≤ j_K(t)([I(H_t f)]² − [H_t(I(f))]²) with I the Gaussian isoperimetric profile; hence ‖|D H_t f|‖_∞ ≤ √(2/π)√(j_K(t))‖f‖_∞, with j₀(t) = 1/(2t).",
+            "uses": [
+              "D22"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": "Not stated locally. The local reverse Poincaré inequality gives |∇P_t f| ≤ ‖f‖_∞/√(2t), a weaker constant for the L^∞ gradient bound."
+          },
+          {
+            "id": "E46",
+            "locator": "Theorem 1.1 proof, (46)",
+            "label": "Spectral heat decay",
+            "statement": "For mean-zero f ∈ L²: ‖H_t f‖₂ ≤ e^(−λ₁t)‖f‖₂.",
+            "uses": [],
+            "relation": "partial",
+            "declarations": [
+              {
+                "name": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.norm_center_operator_sq_le_exp_of_literature_le",
+                "source": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Decay.lean"
+              }
+            ],
+            "note": "Squared form with C = 1/λ₁ for the weighted-gradient heat semigroup of a smooth convex tilted law."
+          },
+          {
+            "id": "E48",
+            "locator": "Theorem 1.1 proof, (48)",
+            "label": "L¹ heat displacement with J_K",
+            "statement": "‖f − H_t f‖₁ ≤ J_K(t)‖|Df|‖₁ for bounded Lipschitz f.",
+            "uses": [
+              "P31"
+            ],
+            "relation": "partial",
+            "declarations": [
+              {
+                "name": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.integral_abs_indicator_sub_operator_le_pi",
+                "source": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Perimeter.lean"
+              }
+            ],
+            "note": "K = 0 coefficient J₀(t) = 2√(t/π), for indicator data of smooth domains with relative perimeter under a smooth convex potential."
+          },
+          {
+            "id": "L32",
+            "locator": "Lemma 3.2",
+            "label": "Monotone auxiliary function (K > 0)",
+            "statement": "f₁(x) = √x / arctan(√(e^(Tx) − 1)) is increasing on (0, ∞) with f₁ ≥ 1/√T.",
+            "uses": [],
+            "relation": "same",
+            "declarations": [],
+            "note": ""
+          },
+          {
+            "id": "L33",
+            "locator": "Lemma 3.3",
+            "label": "Monotone auxiliary function (K < 0)",
+            "statement": "f₂(x) = √x / log(e^(Tx) + √(e^(2Tx) − 1)) is decreasing on (0, ∞).",
+            "uses": [],
+            "relation": "same",
+            "declarations": [],
+            "note": ""
+          },
+          {
+            "id": "R34",
+            "locator": "Remark 3.4",
+            "label": "Bound under a lower bound on K/λ₁",
+            "statement": "If K/λ₁ ≥ −c, an explicit lower bound for h(X) in terms of √λ₁ and c follows from Theorem 1.1 and Lemma 3.3.",
+            "uses": [
+              "T11",
+              "L33"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": ""
+          },
+          {
+            "id": "P41",
+            "locator": "Proposition 4.1",
+            "label": "Coarea inequality",
+            "statement": "On a complete metric space with a measure finite on bounded sets, for bounded Lipschitz u ≥ 0 with M = sup u: ∫₀^M Per({u > t})dt ≤ ∫|∇u|dm, and almost every {u > t} has finite perimeter.",
+            "uses": [],
+            "relation": "partial",
+            "declarations": [
+              {
+                "name": "FunctionalInequalities.KLS.MetricBV.lintegral_perimeter_superlevel_le_localSlope",
+                "source": "formalization/FunctionalInequalities/KLS/Geometry/Perimeter/MetricBVMinkowski.lean"
+              }
+            ],
+            "note": "Finite measures and closed superlevel sets {u ≥ t}, for every globally Lipschitz u; the local-finiteness case is not stated in this form."
+          },
+          {
+            "id": "T42",
+            "locator": "Theorem 4.2",
+            "label": "Cheeger inequality on metric measure spaces",
+            "statement": "On a complete metric space with a measure finite on bounded sets: λ₁ ≥ h²/4 if m(X) < ∞, and λ₀ ≥ h²/4 if m(X) = ∞.",
+            "uses": [
+              "P41"
+            ],
+            "relation": "partial",
+            "declarations": [
+              {
+                "name": "FunctionalInequalities.KLS.LogConcave.literatureConstant_le_four_mul_inverseScale_sq",
+                "source": "formalization/FunctionalInequalities/KLS/Geometry/Cheeger/Inequality.lean"
+              }
+            ],
+            "note": "Finite-dimensional log-concave probability laws only, as C_P ≤ 4Ψ²."
+          }
+        ]
+      }
     },
     {
       "id": "KlartagLehec2022",
@@ -613,8 +2120,8 @@
       "papers": [
         "KLS1995"
       ],
-      "target": "Localization lemma and the dimension-dependent trace/covariance bound.",
-      "next_step": "Separate the localization theorem from the Poincaré consequence; audit denominator and constant conventions before defining either Lean target."
+      "target": "Theorem 5.1, ψ(K) ≥ ln 2 / M₁(K) for convex bodies, through the needle reduction (Corollary 2.2, Lemma 2.6, Theorem 2.7). With the local Cheeger inequality it gives C_P ≲ E‖X − EX‖² for convex bodies.",
+      "next_step": "Pin a proof of the cited localization lemma (Lovász–Simonovits 1993 or a modern account) and choose a Lean form for needles; keep the product denominator of (1.1) distinct from the min-denominator constant."
     },
     {
       "rank": 3,

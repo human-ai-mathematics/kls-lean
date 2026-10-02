@@ -49,5 +49,43 @@ class LiteratureTests(unittest.TestCase):
             literature.validate(damaged, records)
 
 
+class LemmaMapTests(unittest.TestCase):
+    SOURCE = (
+        'theorem proved_one : True := trivial\n\n'
+        '/-- doc -/\ntheorem open_one : True := by\n  sorry\n\n'
+        'noncomputable def object_one : Nat := 0\n')
+
+    def item(self, ident, names=(), relation='same', **extra):
+        return {'id': ident, 'locator': ident, 'label': ident, 'statement': 's', 'uses': [],
+                'relation': relation, 'declarations': [{'name': f'NS.{n}', 'source': 'formalization/A.lean'}
+                                                       for n in names], **extra}
+
+    def read(self, path):
+        return self.SOURCE
+
+    def test_states_follow_declarations_and_relation(self):
+        state = lambda *a, **k: literature.lemma_state(self.item('x', *a, **k), self.read)
+        self.assertEqual(state(), 'pending')
+        self.assertEqual(state(['proved_one']), 'formalized')
+        self.assertEqual(state(['proved_one', 'open_one']), 'partial')
+        self.assertEqual(state(['proved_one'], relation='partial'), 'partial')
+        self.assertEqual(state(['object_one'], relation='stronger'), 'improved')
+        self.assertIsNone(literature.declaration_body(self.SOURCE, 'NS.proved'))
+
+    def test_lemma_map_validation(self):
+        def paper(items):
+            return {'id': 'P', 'lemma_map': {'source_version': 'v1', 'source_url': 'https://x',
+                                             'reviewed_on': '2026-10-02', 'items': items}}
+        good = [self.item('a', ['proved_one']), self.item('b', main=True, uses=['a'])]
+        self.assertEqual(set(literature.validate_lemma_map(paper(good), self.read)), {'a', 'b'})
+        cases = {'exactly one main': [self.item('a')],
+                 'unknown dependency': [self.item('a', main=True, uses=['z'])],
+                 'not found': [self.item('a', ['missing'], main=True)],
+                 'needs a note': [self.item('a', ['proved_one'], relation='stronger', main=True)]}
+        for message, items in cases.items():
+            with self.assertRaisesRegex(ValueError, message):
+                literature.validate_lemma_map(paper(items), self.read)
+
+
 if __name__ == '__main__':
     unittest.main()

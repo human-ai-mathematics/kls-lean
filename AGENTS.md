@@ -39,7 +39,9 @@
 - Keep the progress tree and its surrounding documentation in English. Preserve unrelated work
   when preparing documentation commits.
 - Use the established progress notation: `✓` for completed local Lean proofs, `◐` for partial
-  local formalization, and `○` for pending work. Keep upstream mathematical or conditional-proof
+  local formalization, and `○` for pending work. In paper lemma maps (`lemma_map` in
+  `literature.json`), `⇑` marks a reviewed stronger statement or a different proof route; list
+  every numbered statement of the pinned source version, and let ✓/◐/○ follow the declarations. Keep upstream mathematical or conditional-proof
   provenance separate; it must not turn a pending local formalization into a completed result.
 - Run remote CI only at meaningful verification milestones: a new certificate, a faithfully
   formalized paper main theorem, or validation before sharing/release. Lean certification runs

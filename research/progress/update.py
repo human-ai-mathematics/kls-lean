@@ -75,9 +75,11 @@ def generate():
     views.validate_routes(catalog, records, routes)
     tree = views.render_tree(catalog, records)
     readme = views.render_readme((ROOT / 'research/progress/README.md').read_text(), tree, catalog, records, portfolio)
-    literature_outputs, literature_overview = literature.render(bibliography, records, nodes, certificates)
+    literature_outputs, literature_overview = literature.render(
+        bibliography, records, nodes, certificates, read_source=lambda path: staged(path).decode())
     readme = views.replace_block(readme, 'LITERATURE', literature_overview)
     readme = views.replace_block(readme, 'PRIORITIES', literature.render_priorities(bibliography))
+    readme = views.replace_block(readme, 'LEMMAS', literature.render_lemma_hub(literature_outputs, bibliography, lambda path: staged(path).decode()))
     descriptions = {r['blueprint']: r['description'] for r in records.values() if 'blueprint' in r}
     if descriptions.keys() != nodes.keys():
         raise ValueError('Update nodes.json to match the Blueprint node inventory.')

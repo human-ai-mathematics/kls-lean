@@ -31,11 +31,217 @@ Every proof task must first pin its paper version, theorem, hypotheses and const
 | Priority | Sources / target | Next action |
 | --- | --- | --- |
 | 1 | [Bakry–Gentil–Ledoux](https://link.springer.com/book/10.1007/978-3-319-00227-9)<br/>Audit the strongly log-concave Bakry–Émery C_P ≤ 1/ρ endpoint and select a separate Brascamp–Lieb source statement. | Pin the exact source theorem, positive-curvature assumptions and normalization; assess the existing Γ₂ and semigroup interfaces before proof work. |
-| 2 | [Kannan–Lovász–Simonovits](https://link.springer.com/article/10.1007/BF02574061)<br/>Localization lemma and the dimension-dependent trace/covariance bound. | Separate the localization theorem from the Poincaré consequence; audit denominator and constant conventions before defining either Lean target. |
+| 2 | [Kannan–Lovász–Simonovits](https://link.springer.com/article/10.1007/BF02574061)<br/>Theorem 5.1, ψ(K) ≥ ln 2 / M₁(K) for convex bodies, through the needle reduction (Corollary 2.2, Lemma 2.6, Theorem 2.7). With the local Cheeger inequality it gives C_P ≲ E‖X − EX‖² for convex bodies. | Pin a proof of the cited localization lemma (Lovász–Simonovits 1993 or a modern account) and choose a Lean form for needles; keep the product denominator of (1.1) distinct from the min-denominator constant. |
 | 3 | [E. Milman](https://arxiv.org/abs/0712.4092)<br/>Concentration implies a Cheeger bound under the source convexity hypotheses. | Pin the main theorem and its concentration/curvature assumptions; compare its analytic inputs with the current finite-dimensional Cheeger–Buser API. |
 | 4 | [Eldan](https://arxiv.org/abs/1203.0893), [Lee–Vempala](https://annals.math.princeton.edu/2024/199-3/p02), [Chen](https://arxiv.org/abs/2011.13661), [Klartag–Lehec](https://arxiv.org/html/2203.15551v2), [Klartag](https://arxiv.org/html/2303.14938v2)<br/>Published stochastic-localization theorems and quantitative KLS bounds. | Reuse Mathlib probability foundations; build an isolated audited client of pinned external stochastic APIs before selecting the missing vector/matrix SDE bridges. |
 | 5 | [Klartag–Lehec](https://arxiv.org/abs/2507.15495v2), [Chen–Klartag](https://arxiv.org/html/2607.23307v1), [Letwin](https://arxiv.org/html/2607.24164v1)<br/>Selected 2025–2026 thin-shell and quadratic-form results. | Retain exact preprint versions and assess moment-measure, stochastic and matrix-estimate dependencies; do not credit exploratory hypotheses as completed paper theorems. |
 <!-- END GENERATED PRIORITIES -->
+
+## Paper lemma map
+
+Numbered statements of the reviewed papers, with the same Lean status notation as the route
+diagrams. Full tables, sources and notes are in the [paper register](LITERATURE.md#paper-lemma-maps).
+
+<!-- BEGIN GENERATED LEMMAS -->
+Each diagram shows a paper's main theorem (thick border, rightmost) with the statements its
+proof uses, plus every statement with local Lean progress. Arrows run from a statement to
+the results that use it. Full maps, statements and notes are in the paper register.
+
+✓ Formalized in Lean · ◐ Partial or statement only · ○ Not yet formalized · ⇑ Stronger result or alternative route
+
+### Kannan–Lovász–Simonovits (Discrete Comput. Geom. 13 (1995), 541–559)
+
+15 statements: 15 ○. [Full map](LITERATURE.md#kls1995-lemma-map).
+
+```mermaid
+flowchart LR
+    KLS1995_L21["○ Lemma 2.1 (Lovász–Simonovits)<br/>Localization lemma"]
+    KLS1995_C22["○ Corollary 2.2<br/>Four-function needle reduction"]
+    KLS1995_L26["○ Lemma 2.6<br/>One-dimensional log-concave reduction"]
+    KLS1995_T27["○ Theorem 2.7<br/>Exponential needles"]
+    KLS1995_T51["○ Theorem 5.1 (Main Theorem)<br/>Isoperimetric coefficient bound"]
+    KLS1995_T52["○ Theorem 5.2<br/>Three-set partition form"]
+    KLS1995_L21 --> KLS1995_C22
+    KLS1995_C22 --> KLS1995_L26
+    KLS1995_C22 --> KLS1995_T27
+    KLS1995_L26 --> KLS1995_T27
+    KLS1995_T52 --> KLS1995_T51
+    KLS1995_T27 --> KLS1995_T52
+    KLS1995_more["+9 further statements in the paper register"]
+    classDef lemma_pending fill:#fee2e2,stroke:#dc2626,color:#991b1b;
+    class KLS1995_L21,KLS1995_C22,KLS1995_L26,KLS1995_T27,KLS1995_T51,KLS1995_T52 lemma_pending;
+    style KLS1995_T51 stroke-width:3px
+    classDef lemma_more fill:#f8fafc,stroke:#94a3b8,color:#334155,stroke-dasharray:4 3;
+    class KLS1995_more lemma_more;
+```
+
+### Bobkov (Ann. Probab. 27 (1999), no. 4, 1903–1921 (author PDF))
+
+15 statements: 14 ○, 1 ⇑. [Full map](LITERATURE.md#bobkov1999-lemma-map).
+
+```mermaid
+flowchart LR
+    Bobkov1999_T11["○ Theorem 1.1<br/>Perimeter, entropy and ball mass"]
+    Bobkov1999_P21["○ Proposition 2.1<br/>Functional form of Theorem 1.1"]
+    Bobkov1999_C43["⇑ Corollary 4.3<br/>Spectral gap on the line"]
+    Bobkov1999_P21 --> Bobkov1999_T11
+    Bobkov1999_more["+12 further statements in the paper register"]
+    classDef lemma_pending fill:#fee2e2,stroke:#dc2626,color:#991b1b;
+    class Bobkov1999_T11,Bobkov1999_P21 lemma_pending;
+    classDef lemma_improved fill:#dcfce7,stroke:#15803d,color:#14532d;
+    class Bobkov1999_C43 lemma_improved;
+    style Bobkov1999_T11 stroke-width:3px
+    classDef lemma_more fill:#f8fafc,stroke:#94a3b8,color:#334155,stroke-dasharray:4 3;
+    class Bobkov1999_more lemma_more;
+```
+
+### E. Milman (arXiv:0712.4092v5)
+
+60 statements: 1 ✓, 7 ◐, 52 ○. [Full map](LITERATURE.md#milman2009-lemma-map).
+
+```mermaid
+flowchart LR
+    Milman2009_DChe["◐ Definition (§1.1, Cheeger)<br/>Cheeger constant D_Che"]
+    Milman2009_DPoin["◐ Definition (§1.1, Poincaré)<br/>Poincaré constant D_Poin"]
+    Milman2009_T11["◐ Theorem 1.1 (Maz'ya, Cheeger)<br/>Cheeger inequality"]
+    Milman2009_T14["◐ Theorem 1.4 (Ledoux)<br/>Buser–Ledoux inequality"]
+    Milman2009_T15["○ Theorem 1.5 (Main Theorem)<br/>Cheeger, Poincaré and concentration are equivalent"]
+    Milman2009_T18["○ Theorem 1.8 (Bavard–Pansu, …, Bobkov)<br/>Concavity of the isoperimetric profile"]
+    Milman2009_L21["○ Lemma 2.1<br/>Mean versus median in Orlicz norms"]
+    Milman2009_L22["○ Lemma 2.2 (Maz'ya, Federer–Fleming, Bobkov–Houdré)<br/>Cheeger as an L¹ Poincaré inequality"]
+    Milman2009_R23["✓ Remark 2.3<br/>Metric gradient"]
+    Milman2009_T24["○ Theorem 2.4<br/>All (p, q) Poincaré inequalities are equivalent"]
+    Milman2009_P25["○ Proposition 2.5<br/>Monotonicity of (p, q) constants"]
+    Milman2009_C26["◐ Corollary 2.6<br/>Maz'ya–Cheeger inequality, new proof"]
+    Milman2009_C27["○ Corollary 2.7<br/>Gromov–Milman inequality, new proof"]
+    Milman2009_T29["○ Theorem 2.9<br/>Poincaré versus profile decay"]
+    Milman2009_P210["○ Proposition 2.10 (Maz'ya, Federer–Fleming, Bobkov–Houdré)<br/>L¹-type Poincaré versus isoperimetry"]
+    Milman2009_L31["◐ Lemma 3.1 (Bakry–Ledoux)<br/>Reverse local Poincaré inequality"]
+    Milman2009_C32["◐ Corollary 3.2 (Ledoux)<br/>L¹ heat displacement"]
+    Milman2009_L61["○ Lemma 6.1<br/>Profile lower semicontinuity from above"]
+    Milman2009_L62["○ Lemma 6.2<br/>Profile lower semicontinuity from within"]
+    Milman2009_P64["○ Proposition 6.4 (Maz'ya, Federer–Fleming, Bobkov–Houdré)<br/>Profile versus capacity"]
+    Milman2009_C65["○ Corollary 6.5<br/>Profile symmetry"]
+    Milman2009_L66["○ Lemma 6.6<br/>Upper semicontinuity under concavity"]
+    Milman2009_P68["○ Proposition 6.8<br/>Convergence of profiles"]
+    Milman2009_L69["○ Lemma 6.9<br/>Hölder continuity of the profile"]
+    Milman2009_T610["○ Theorem 6.10<br/>Approximation preserves concavity"]
+    Milman2009_L613["○ Lemma 6.13<br/>Borell-type tail bound"]
+    Milman2009_T614["○ Theorem 6.14 (Cordero-Erausquin–McCann–Schmuckenschläger)<br/>Riemannian Prékopa–Leindler"]
+    Milman2009_TA1["○ Theorem A.1 (Bavard–Pansu, …, Bayle–Rosales)<br/>Concavity for uniform measures"]
+    Milman2009_TA2["○ Theorem A.2 (Bayle, Morgan)<br/>Concavity for weighted manifolds"]
+    Milman2009_TA3["○ Theorem A.3 (after Sternberg–Zumbrun, Bayle)<br/>Concavity on locally convex domains"]
+    Milman2009_TA4["○ Theorem A.4 (Bobkov)<br/>One-dimensional log-concave profile"]
+    Milman2009_DChe --> Milman2009_T11
+    Milman2009_DPoin --> Milman2009_T11
+    Milman2009_L31 --> Milman2009_T14
+    Milman2009_T24 --> Milman2009_T15
+    Milman2009_C26 --> Milman2009_T15
+    Milman2009_C27 --> Milman2009_T15
+    Milman2009_T610 --> Milman2009_T15
+    Milman2009_L613 --> Milman2009_T15
+    Milman2009_TA1 --> Milman2009_T18
+    Milman2009_TA2 --> Milman2009_T18
+    Milman2009_TA3 --> Milman2009_T18
+    Milman2009_TA4 --> Milman2009_T18
+    Milman2009_DChe --> Milman2009_L22
+    Milman2009_T29 --> Milman2009_T24
+    Milman2009_T18 --> Milman2009_T24
+    Milman2009_P25 --> Milman2009_T24
+    Milman2009_C65 --> Milman2009_T24
+    Milman2009_P25 --> Milman2009_C26
+    Milman2009_L22 --> Milman2009_C26
+    Milman2009_L21 --> Milman2009_C27
+    Milman2009_P25 --> Milman2009_C27
+    Milman2009_C32 --> Milman2009_T29
+    Milman2009_L21 --> Milman2009_T29
+    Milman2009_P25 --> Milman2009_T29
+    Milman2009_P210 --> Milman2009_T29
+    Milman2009_L31 --> Milman2009_C32
+    Milman2009_P64 --> Milman2009_C65
+    Milman2009_L61 --> Milman2009_P68
+    Milman2009_L62 --> Milman2009_P68
+    Milman2009_L66 --> Milman2009_P68
+    Milman2009_P68 --> Milman2009_T610
+    Milman2009_L69 --> Milman2009_T610
+    Milman2009_T18 --> Milman2009_T610
+    Milman2009_T614 --> Milman2009_L613
+    Milman2009_more["+29 further statements in the paper register"]
+    classDef lemma_formalized fill:#dbeafe,stroke:#2563eb,color:#1e3a8a;
+    class Milman2009_R23 lemma_formalized;
+    classDef lemma_partial fill:#fff3df,stroke:#c88719,color:#66420d;
+    class Milman2009_DChe,Milman2009_DPoin,Milman2009_T11,Milman2009_T14,Milman2009_C26,Milman2009_L31,Milman2009_C32 lemma_partial;
+    classDef lemma_pending fill:#fee2e2,stroke:#dc2626,color:#991b1b;
+    class Milman2009_T15,Milman2009_T18,Milman2009_L21,Milman2009_L22,Milman2009_T24,Milman2009_P25,Milman2009_C27,Milman2009_T29,Milman2009_P210,Milman2009_L61,Milman2009_L62,Milman2009_P64,Milman2009_C65,Milman2009_L66,Milman2009_P68,Milman2009_L69,Milman2009_T610,Milman2009_L613,Milman2009_T614,Milman2009_TA1,Milman2009_TA2,Milman2009_TA3,Milman2009_TA4 lemma_pending;
+    style Milman2009_T15 stroke-width:3px
+    classDef lemma_more fill:#f8fafc,stroke:#94a3b8,color:#334155,stroke-dasharray:4 3;
+    class Milman2009_more lemma_more;
+```
+
+### Ambrosio–Di Marino–Gigli (arXiv:1603.08412v1)
+
+11 statements: 6 ✓, 1 ◐, 4 ○. [Full map](LITERATURE.md#admg2017-lemma-map).
+
+```mermaid
+flowchart LR
+    ADMG2017_L21a["✓ Lemma 2.1, (2.2)<br/>Lower content bounds relaxed upper content"]
+    ADMG2017_L21b["✓ Lemma 2.1, second clause<br/>Relaxed lower and upper contents agree"]
+    ADMG2017_L32["✓ Lemma 3.2, (3.3)<br/>Minkowski coarea inequality"]
+    ADMG2017_D33["✓ Definition 3.3<br/>Perimeter by Lipschitz relaxation"]
+    ADMG2017_R34["✓ Remark 3.4<br/>Truncation and bounded-support reduction"]
+    ADMG2017_R35["◐ Remark 3.5<br/>Locally Lipschitz variants agree"]
+    ADMG2017_T36["✓ Theorem 3.6<br/>Relaxed Minkowski content equals perimeter"]
+    ADMG2017_L21a --> ADMG2017_L21b
+    ADMG2017_D33 --> ADMG2017_R34
+    ADMG2017_D33 --> ADMG2017_R35
+    ADMG2017_R34 --> ADMG2017_R35
+    ADMG2017_L32 --> ADMG2017_T36
+    ADMG2017_D33 --> ADMG2017_T36
+    ADMG2017_R34 --> ADMG2017_T36
+    ADMG2017_more["+4 further statements in the paper register"]
+    classDef lemma_formalized fill:#dbeafe,stroke:#2563eb,color:#1e3a8a;
+    class ADMG2017_L21a,ADMG2017_L21b,ADMG2017_L32,ADMG2017_D33,ADMG2017_R34,ADMG2017_T36 lemma_formalized;
+    classDef lemma_partial fill:#fff3df,stroke:#c88719,color:#66420d;
+    class ADMG2017_R35 lemma_partial;
+    style ADMG2017_T36 stroke-width:3px
+    classDef lemma_more fill:#f8fafc,stroke:#94a3b8,color:#334155,stroke-dasharray:4 3;
+    class ADMG2017_more lemma_more;
+```
+
+### De Ponti–Mondino (arXiv:1902.03835v2)
+
+12 statements: 5 ◐, 7 ○. [Full map](LITERATURE.md#depontimondino2021-lemma-map).
+
+```mermaid
+flowchart LR
+    DePontiMondino2021_T11["○ Theorem 1.1<br/>Sharp implicit Buser inequality"]
+    DePontiMondino2021_C12["◐ Corollary 1.2<br/>Explicit Buser inequalities"]
+    DePontiMondino2021_D21["○ Definition 2.1<br/>CD(K, ∞) condition"]
+    DePontiMondino2021_D22["○ Definition 2.2<br/>RCD(K, ∞) condition"]
+    DePontiMondino2021_P31["○ Proposition 3.1 (Bakry–Gentil–Ledoux)<br/>Isoperimetric gradient bound for the heat flow"]
+    DePontiMondino2021_E46["◐ Theorem 1.1 proof, (46)<br/>Spectral heat decay"]
+    DePontiMondino2021_E48["◐ Theorem 1.1 proof, (48)<br/>L¹ heat displacement with J_K"]
+    DePontiMondino2021_P41["◐ Proposition 4.1<br/>Coarea inequality"]
+    DePontiMondino2021_T42["◐ Theorem 4.2<br/>Cheeger inequality on metric measure spaces"]
+    DePontiMondino2021_D22 --> DePontiMondino2021_T11
+    DePontiMondino2021_P31 --> DePontiMondino2021_T11
+    DePontiMondino2021_E46 --> DePontiMondino2021_T11
+    DePontiMondino2021_E48 --> DePontiMondino2021_T11
+    DePontiMondino2021_T11 --> DePontiMondino2021_C12
+    DePontiMondino2021_D21 --> DePontiMondino2021_D22
+    DePontiMondino2021_D22 --> DePontiMondino2021_P31
+    DePontiMondino2021_P31 --> DePontiMondino2021_E48
+    DePontiMondino2021_P41 --> DePontiMondino2021_T42
+    DePontiMondino2021_more["+3 further statements in the paper register"]
+    classDef lemma_partial fill:#fff3df,stroke:#c88719,color:#66420d;
+    class DePontiMondino2021_C12,DePontiMondino2021_E46,DePontiMondino2021_E48,DePontiMondino2021_P41,DePontiMondino2021_T42 lemma_partial;
+    classDef lemma_pending fill:#fee2e2,stroke:#dc2626,color:#991b1b;
+    class DePontiMondino2021_T11,DePontiMondino2021_D21,DePontiMondino2021_D22,DePontiMondino2021_P31 lemma_pending;
+    style DePontiMondino2021_T11 stroke-width:3px
+    classDef lemma_more fill:#f8fafc,stroke:#94a3b8,color:#334155,stroke-dasharray:4 3;
+    class DePontiMondino2021_more lemma_more;
+```
+<!-- END GENERATED LEMMAS -->
 
 ## KLS literature through July 2026
 
@@ -132,8 +338,9 @@ in Lean. The general π bound uses actual Gaussian smoothing and a Cheeger test 
 argument; no individual-domain perimeter limit is asserted.
 The scoped metric BV comparison includes closed-support identification for finite-dimensional
 log-concave laws, exact test-class relaxation infima, and relaxed lower Minkowski content.
-**Next step:** pin and audit the priority-1 literature target, the strong-curvature
-Bakry–Émery Poincaré bound `C_P ≤ 1/ρ` (see [literature priorities](#literature-priorities)).
+**Next step:** prepare a certificate for ADMG Theorem 3.6 in the paper's own Definition 3.3
+form, the first paper target close to coverage (see the [paper lemma map](#paper-lemma-map)).
+The priority-1 Bakry–Émery target waits for the Bakry–Gentil–Ledoux source text.
 The locally Lipschitz classes on nonproper spaces and the general metric-measure/RCD
 comparison bridges remain open. The extended ADMG sections 2–3 finite-target
 scope (2026-10-01) is frozen and locally verified. Lemma 2.1's equality of the relaxed lower and upper

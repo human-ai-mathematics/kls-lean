@@ -50,6 +50,155 @@ def validate(catalog, records):
     return papers
 
 
+LEMMA_MARKS = {'formalized': '✓', 'partial': '◐', 'pending': '○', 'improved': '⇑'}
+LEMMA_LABELS = {'formalized': 'Formalized in Lean', 'partial': 'Partial or statement only',
+                'pending': 'Not yet formalized', 'improved': 'Stronger result or alternative route'}
+LEMMA_STYLES = {'formalized': 'fill:#dbeafe,stroke:#2563eb,color:#1e3a8a',
+                'partial': 'fill:#fff3df,stroke:#c88719,color:#66420d',
+                'pending': 'fill:#fee2e2,stroke:#dc2626,color:#991b1b',
+                'improved': 'fill:#dcfce7,stroke:#15803d,color:#14532d'}
+RELATIONS = ('same', 'partial', 'stronger', 'alternative')
+_DECLARATION_END = re.compile(r'^(?:@\[|/--|/-!|theorem |lemma |def |noncomputable |instance |'
+                              r'structure |abbrev |private |protected |omit |variable |section|end |namespace )')
+
+
+def declaration_body(source, name):
+    """Return the text of one declaration, from its keyword to the next top-level item."""
+    lines = source.splitlines()
+    parts = name.split('.')
+    for k in range(len(parts)):  # longest written suffix first, e.g. `def Intrinsic.constant`
+        written = re.escape('.'.join(parts[k:]))
+        head = re.compile(rf'^(?:noncomputable |private |protected )*(?:theorem|lemma|def|abbrev|structure) {written}(?:\s|$)')
+        for i, line in enumerate(lines):
+            if head.match(line):
+                end = next((j for j in range(i + 1, len(lines)) if _DECLARATION_END.match(lines[j])), len(lines))
+                return '\n'.join(lines[i:end])
+    return None
+
+
+def lemma_state(item, read_source):
+    """Derive a lemma status; a textual sorry check is a view, verify.py stays authoritative."""
+    if not item['declarations']:
+        return 'pending'
+    for target in item['declarations']:
+        if re.search(r'\bsorry\b', declaration_body(read_source(target['source']), target['name'])):
+            return 'partial'
+    if item['relation'] == 'partial':
+        return 'partial'
+    return 'improved' if item['relation'] in ('stronger', 'alternative') else 'formalized'
+
+
+def validate_lemma_map(paper, read_source):
+    lemma_map = paper['lemma_map']
+    for key in ('source_version', 'source_url', 'reviewed_on', 'items'):
+        if not lemma_map.get(key):
+            raise ValueError(f'{paper["id"]}: lemma map needs {key}')
+    items = {i['id']: i for i in lemma_map['items']}
+    if len(items) != len(lemma_map['items']):
+        raise ValueError(f'{paper["id"]}: duplicate lemma ID')
+    if sum(bool(i.get('main')) for i in items.values()) != 1:
+        raise ValueError(f'{paper["id"]}: a lemma map needs exactly one main theorem')
+    for i in items.values():
+        if not re.fullmatch(r'[A-Za-z][A-Za-z0-9]*', i['id']) or '"' in i['label']:
+            raise ValueError(f'{paper["id"]}: invalid lemma ID or label')
+        if not all(i.get(k) for k in ('locator', 'label', 'statement')) or i['relation'] not in RELATIONS:
+            raise ValueError(f'{paper["id"]}/{i["id"]}: missing locator, label, statement or relation')
+        if any(u not in items or u == i['id'] for u in i['uses']):
+            raise ValueError(f'{paper["id"]}/{i["id"]}: unknown dependency')
+        if i['relation'] in ('stronger', 'alternative') and not i.get('note'):
+            raise ValueError(f'{paper["id"]}/{i["id"]}: a stronger or alternative result needs a note')
+        for target in i['declarations']:
+            if not target['source'].startswith('formalization/'):
+                raise ValueError(f'{paper["id"]}/{i["id"]}: declarations must be library sources')
+            if declaration_body(read_source(target['source']), target['name']) is None:
+                raise ValueError(f'{paper["id"]}/{i["id"]}: {target["name"]} not found in {target["source"]}')
+    return items
+
+
+def hub_items(paper, states):
+    """The main theorem's proof chain plus every item with local progress."""
+    items = {i['id']: i for i in paper['lemma_map']['items']}
+    chain, stack = set(), [i for i in items if items[i].get('main')]
+    while stack:
+        i = stack.pop()
+        if i not in chain:
+            chain.add(i)
+            stack += items[i]['uses']
+    return chain | {i for i, s in states.items() if s != 'pending'}
+
+
+def render_lemma_graph(paper, states, indent='    ', keep=None):
+    """Nodes and edges of one paper; styling is separate so several papers share one diagram."""
+    items = [i for i in paper['lemma_map']['items'] if keep is None or i['id'] in keep]
+    shown = {i['id'] for i in items}
+    lines = [f'{indent}{paper["id"]}_{i["id"]}["{LEMMA_MARKS[states[i["id"]]]} {i["locator"]}<br/>{i["label"]}"]'
+             for i in items]
+    lines += [f'{indent}{paper["id"]}_{u} --> {paper["id"]}_{i["id"]}' for i in items for u in i['uses'] if u in shown]
+    hidden = len(paper['lemma_map']['items']) - len(items)
+    if hidden:
+        lines.append(f'{indent}{paper["id"]}_more["+{hidden} further statements in the paper register"]')
+    return lines
+
+
+def render_lemma_styles(graphs, indent='    '):
+    """Class styling for (paper, states, shown ids) triples, with a thick border on each main theorem."""
+    lines = []
+    for state, style in LEMMA_STYLES.items():
+        members = [f'{p["id"]}_{i["id"]}' for p, states, shown in graphs for i in p['lemma_map']['items']
+                   if states[i['id']] == state and i['id'] in shown]
+        if members:
+            lines += [f'{indent}classDef lemma_{state} {style};', f'{indent}class {",".join(members)} lemma_{state};']
+    lines += [f'{indent}style {p["id"]}_{i["id"]} stroke-width:3px'
+              for p, _, _ in graphs for i in p['lemma_map']['items'] if i.get('main')]
+    more = [f'{p["id"]}_more' for p, _, shown in graphs if len(shown) < len(p['lemma_map']['items'])]
+    if more:
+        lines += [f'{indent}classDef lemma_more fill:#f8fafc,stroke:#94a3b8,color:#334155,stroke-dasharray:4 3;',
+                  f'{indent}class {",".join(more)} lemma_more;']
+    return lines
+
+
+def lemma_legend():
+    return ' · '.join(f'{LEMMA_MARKS[s]} {LEMMA_LABELS[s]}' for s in LEMMA_MARKS)
+
+
+def render_lemma_maps(catalog, read_source):
+    """Return the per-paper register sections and the combined hub diagram."""
+    papers = [p for p in catalog['papers'] if p.get('lemma_map')]
+    sections = ['## Paper lemma maps', '',
+                'Each map lists the numbered statements of one pinned source and the Lean declarations',
+                'that state them. ✓, ◐ and ○ are derived from the declarations: no declaration is ○, a',
+                'declaration whose body contains `sorry` or a recorded partial scope is ◐. ⇑ marks a',
+                'reviewed stronger statement or a different proof route; dropping a hypothesis the paper',
+                'never uses stays ✓. A paper is covered only by its certified main theorem (thick border).',
+                '', lemma_legend(), '']
+    hub, graphs = ['flowchart LR'], []
+    for paper in papers:
+        lemma_map = paper['lemma_map']
+        states = {i['id']: lemma_state(i, read_source) for i in lemma_map['items']}
+        sections += [f'### {paper["id"]} lemma map', '',
+                     f'Source: [{paper["authors"]}, {lemma_map["source_version"]}]({lemma_map["source_url"]}),'
+                     f' reviewed {lemma_map["reviewed_on"]}.', '']
+        if lemma_map.get('standing_assumptions'):
+            sections += [f'Standing assumptions: {lemma_map["standing_assumptions"]}', '']
+        sections += ['```mermaid', 'flowchart LR', *render_lemma_graph(paper, states),
+                     *render_lemma_styles([(paper, states, set(states))]), '```', '',
+                     '| Item | Statement | Status | Lean declarations | Note |', '| --- | --- | --- | --- | --- |']
+        for i in lemma_map['items']:
+            state = states[i['id']]
+            names = '<br/>'.join(f'[`{t["name"].rsplit(".", 1)[-1]}`](../../{t["source"]})' for t in i['declarations'])
+            locator = f'**{i["locator"]}** (main)' if i.get('main') else i['locator']
+            sections.append(f'| {locator} | {views.cell(i["statement"])} | {LEMMA_MARKS[state]} {LEMMA_LABELS[state]} | '
+                            f'{names or "—"} | {views.cell(i.get("note", ""))} |')
+        if lemma_map.get('omitted'):
+            sections += ['', f'Not listed: {lemma_map["omitted"]}']
+        sections.append('')
+        hub += [f'    subgraph P_{paper["id"]}["{paper["authors"]} · {lemma_map["source_version"]}"]', '    direction LR',
+                *render_lemma_graph(paper, states, keep=hub_items(paper, states)), '    end']
+        graphs.append((paper, states, hub_items(paper, states)))
+    hub += render_lemma_styles(graphs)
+    return sections, '\n'.join(hub) + '\n', papers
+
+
 def coverage(paper, records):
     """A matching local fragment cannot certify a whole article."""
     return 'partial' if any(records[i['node']]['state'] in ('formalized', 'partial')
@@ -101,9 +250,16 @@ def render_priorities(catalog):
     return '\n'.join(lines)
 
 
-def render(catalog, records, blueprint, certificates=None):
+def render(catalog, records, blueprint, certificates=None, read_source=None):
     certificates = {} if certificates is None else certificates
     papers = validate(catalog, records)
+    if read_source is not None:
+        for paper in papers.values():
+            if paper.get('lemma_map'):
+                validate_lemma_map(paper, read_source)
+        lemma_sections, lemma_hub, lemma_papers = render_lemma_maps(catalog, read_source)
+    else:
+        lemma_sections, lemma_hub, lemma_papers = [], '', []
     tree = render_tree(catalog, papers)
     c = views.cell
     header = [
@@ -237,4 +393,30 @@ def render(catalog, records, blueprint, certificates=None):
     readme += ['', 'Here ψ is the inverse Cheeger constant, so its logarithmic exponent is half the',
                'Poincaré exponent. The sharp thin-shell result does not resolve dimension-free KLS.',
                'See the [full tables and normalization](LITERATURE.md#constant-conventions).']
-    return {'LITERATURE.md': '\n'.join(header + tables + statements + footer), 'LITERATURE.mmd': tree}, '\n'.join(readme)
+    outputs = {'LITERATURE.md': '\n'.join(header + tables + lemma_sections + statements + footer),
+               'LITERATURE.mmd': tree}
+    if lemma_hub:
+        outputs['PAPERS.mmd'] = lemma_hub
+    return outputs, '\n'.join(readme)
+
+
+def render_lemma_hub(outputs, catalog, read_source):
+    """Hub block: one left-to-right diagram per reviewed paper, stacked vertically."""
+    papers = [p for p in catalog['papers'] if p.get('lemma_map')]
+    if not papers:
+        return 'No paper lemma map has been reviewed yet.'
+    lines = ['Each diagram shows a paper\'s main theorem (thick border, rightmost) with the statements its',
+             'proof uses, plus every statement with local Lean progress. Arrows run from a statement to',
+             'the results that use it. Full maps, statements and notes are in the paper register.', '',
+             lemma_legend(), '']
+    for paper in papers:
+        lemma_map = paper['lemma_map']
+        states = {i['id']: lemma_state(i, read_source) for i in lemma_map['items']}
+        keep = hub_items(paper, states)
+        counts = ', '.join(f'{sum(s == k for s in states.values())} {LEMMA_MARKS[k]}'
+                           for k in LEMMA_MARKS if any(s == k for s in states.values()))
+        lines += [f'### {paper["authors"]} ({lemma_map["source_version"]})', '',
+                  f'{len(states)} statements: {counts}. [Full map](LITERATURE.md#{paper["id"].lower()}-lemma-map).', '',
+                  '```mermaid', 'flowchart LR', *render_lemma_graph(paper, states, keep=keep),
+                  *render_lemma_styles([(paper, states, keep)]), '```', '']
+    return '\n'.join(lines).rstrip()

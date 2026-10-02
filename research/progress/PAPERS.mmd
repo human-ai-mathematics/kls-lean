@@ -1,0 +1,149 @@
+flowchart LR
+    subgraph P_KLS1995["Kannan–Lovász–Simonovits · Discrete Comput. Geom. 13 (1995), 541–559"]
+    direction LR
+    KLS1995_L21["○ Lemma 2.1 (Lovász–Simonovits)<br/>Localization lemma"]
+    KLS1995_C22["○ Corollary 2.2<br/>Four-function needle reduction"]
+    KLS1995_L26["○ Lemma 2.6<br/>One-dimensional log-concave reduction"]
+    KLS1995_T27["○ Theorem 2.7<br/>Exponential needles"]
+    KLS1995_T51["○ Theorem 5.1 (Main Theorem)<br/>Isoperimetric coefficient bound"]
+    KLS1995_T52["○ Theorem 5.2<br/>Three-set partition form"]
+    KLS1995_L21 --> KLS1995_C22
+    KLS1995_C22 --> KLS1995_L26
+    KLS1995_C22 --> KLS1995_T27
+    KLS1995_L26 --> KLS1995_T27
+    KLS1995_T52 --> KLS1995_T51
+    KLS1995_T27 --> KLS1995_T52
+    KLS1995_more["+9 further statements in the paper register"]
+    end
+    subgraph P_Bobkov1999["Bobkov · Ann. Probab. 27 (1999), no. 4, 1903–1921 (author PDF)"]
+    direction LR
+    Bobkov1999_T11["○ Theorem 1.1<br/>Perimeter, entropy and ball mass"]
+    Bobkov1999_P21["○ Proposition 2.1<br/>Functional form of Theorem 1.1"]
+    Bobkov1999_C43["⇑ Corollary 4.3<br/>Spectral gap on the line"]
+    Bobkov1999_P21 --> Bobkov1999_T11
+    Bobkov1999_more["+12 further statements in the paper register"]
+    end
+    subgraph P_Milman2009["E. Milman · arXiv:0712.4092v5"]
+    direction LR
+    Milman2009_DChe["◐ Definition (§1.1, Cheeger)<br/>Cheeger constant D_Che"]
+    Milman2009_DPoin["◐ Definition (§1.1, Poincaré)<br/>Poincaré constant D_Poin"]
+    Milman2009_T11["◐ Theorem 1.1 (Maz'ya, Cheeger)<br/>Cheeger inequality"]
+    Milman2009_T14["◐ Theorem 1.4 (Ledoux)<br/>Buser–Ledoux inequality"]
+    Milman2009_T15["○ Theorem 1.5 (Main Theorem)<br/>Cheeger, Poincaré and concentration are equivalent"]
+    Milman2009_T18["○ Theorem 1.8 (Bavard–Pansu, …, Bobkov)<br/>Concavity of the isoperimetric profile"]
+    Milman2009_L21["○ Lemma 2.1<br/>Mean versus median in Orlicz norms"]
+    Milman2009_L22["○ Lemma 2.2 (Maz'ya, Federer–Fleming, Bobkov–Houdré)<br/>Cheeger as an L¹ Poincaré inequality"]
+    Milman2009_R23["✓ Remark 2.3<br/>Metric gradient"]
+    Milman2009_T24["○ Theorem 2.4<br/>All (p, q) Poincaré inequalities are equivalent"]
+    Milman2009_P25["○ Proposition 2.5<br/>Monotonicity of (p, q) constants"]
+    Milman2009_C26["◐ Corollary 2.6<br/>Maz'ya–Cheeger inequality, new proof"]
+    Milman2009_C27["○ Corollary 2.7<br/>Gromov–Milman inequality, new proof"]
+    Milman2009_T29["○ Theorem 2.9<br/>Poincaré versus profile decay"]
+    Milman2009_P210["○ Proposition 2.10 (Maz'ya, Federer–Fleming, Bobkov–Houdré)<br/>L¹-type Poincaré versus isoperimetry"]
+    Milman2009_L31["◐ Lemma 3.1 (Bakry–Ledoux)<br/>Reverse local Poincaré inequality"]
+    Milman2009_C32["◐ Corollary 3.2 (Ledoux)<br/>L¹ heat displacement"]
+    Milman2009_L61["○ Lemma 6.1<br/>Profile lower semicontinuity from above"]
+    Milman2009_L62["○ Lemma 6.2<br/>Profile lower semicontinuity from within"]
+    Milman2009_P64["○ Proposition 6.4 (Maz'ya, Federer–Fleming, Bobkov–Houdré)<br/>Profile versus capacity"]
+    Milman2009_C65["○ Corollary 6.5<br/>Profile symmetry"]
+    Milman2009_L66["○ Lemma 6.6<br/>Upper semicontinuity under concavity"]
+    Milman2009_P68["○ Proposition 6.8<br/>Convergence of profiles"]
+    Milman2009_L69["○ Lemma 6.9<br/>Hölder continuity of the profile"]
+    Milman2009_T610["○ Theorem 6.10<br/>Approximation preserves concavity"]
+    Milman2009_L613["○ Lemma 6.13<br/>Borell-type tail bound"]
+    Milman2009_T614["○ Theorem 6.14 (Cordero-Erausquin–McCann–Schmuckenschläger)<br/>Riemannian Prékopa–Leindler"]
+    Milman2009_TA1["○ Theorem A.1 (Bavard–Pansu, …, Bayle–Rosales)<br/>Concavity for uniform measures"]
+    Milman2009_TA2["○ Theorem A.2 (Bayle, Morgan)<br/>Concavity for weighted manifolds"]
+    Milman2009_TA3["○ Theorem A.3 (after Sternberg–Zumbrun, Bayle)<br/>Concavity on locally convex domains"]
+    Milman2009_TA4["○ Theorem A.4 (Bobkov)<br/>One-dimensional log-concave profile"]
+    Milman2009_DChe --> Milman2009_T11
+    Milman2009_DPoin --> Milman2009_T11
+    Milman2009_L31 --> Milman2009_T14
+    Milman2009_T24 --> Milman2009_T15
+    Milman2009_C26 --> Milman2009_T15
+    Milman2009_C27 --> Milman2009_T15
+    Milman2009_T610 --> Milman2009_T15
+    Milman2009_L613 --> Milman2009_T15
+    Milman2009_TA1 --> Milman2009_T18
+    Milman2009_TA2 --> Milman2009_T18
+    Milman2009_TA3 --> Milman2009_T18
+    Milman2009_TA4 --> Milman2009_T18
+    Milman2009_DChe --> Milman2009_L22
+    Milman2009_T29 --> Milman2009_T24
+    Milman2009_T18 --> Milman2009_T24
+    Milman2009_P25 --> Milman2009_T24
+    Milman2009_C65 --> Milman2009_T24
+    Milman2009_P25 --> Milman2009_C26
+    Milman2009_L22 --> Milman2009_C26
+    Milman2009_L21 --> Milman2009_C27
+    Milman2009_P25 --> Milman2009_C27
+    Milman2009_C32 --> Milman2009_T29
+    Milman2009_L21 --> Milman2009_T29
+    Milman2009_P25 --> Milman2009_T29
+    Milman2009_P210 --> Milman2009_T29
+    Milman2009_L31 --> Milman2009_C32
+    Milman2009_P64 --> Milman2009_C65
+    Milman2009_L61 --> Milman2009_P68
+    Milman2009_L62 --> Milman2009_P68
+    Milman2009_L66 --> Milman2009_P68
+    Milman2009_P68 --> Milman2009_T610
+    Milman2009_L69 --> Milman2009_T610
+    Milman2009_T18 --> Milman2009_T610
+    Milman2009_T614 --> Milman2009_L613
+    Milman2009_more["+29 further statements in the paper register"]
+    end
+    subgraph P_ADMG2017["Ambrosio–Di Marino–Gigli · arXiv:1603.08412v1"]
+    direction LR
+    ADMG2017_L21a["✓ Lemma 2.1, (2.2)<br/>Lower content bounds relaxed upper content"]
+    ADMG2017_L21b["✓ Lemma 2.1, second clause<br/>Relaxed lower and upper contents agree"]
+    ADMG2017_L32["✓ Lemma 3.2, (3.3)<br/>Minkowski coarea inequality"]
+    ADMG2017_D33["✓ Definition 3.3<br/>Perimeter by Lipschitz relaxation"]
+    ADMG2017_R34["✓ Remark 3.4<br/>Truncation and bounded-support reduction"]
+    ADMG2017_R35["◐ Remark 3.5<br/>Locally Lipschitz variants agree"]
+    ADMG2017_T36["✓ Theorem 3.6<br/>Relaxed Minkowski content equals perimeter"]
+    ADMG2017_L21a --> ADMG2017_L21b
+    ADMG2017_D33 --> ADMG2017_R34
+    ADMG2017_D33 --> ADMG2017_R35
+    ADMG2017_R34 --> ADMG2017_R35
+    ADMG2017_L32 --> ADMG2017_T36
+    ADMG2017_D33 --> ADMG2017_T36
+    ADMG2017_R34 --> ADMG2017_T36
+    ADMG2017_more["+4 further statements in the paper register"]
+    end
+    subgraph P_DePontiMondino2021["De Ponti–Mondino · arXiv:1902.03835v2"]
+    direction LR
+    DePontiMondino2021_T11["○ Theorem 1.1<br/>Sharp implicit Buser inequality"]
+    DePontiMondino2021_C12["◐ Corollary 1.2<br/>Explicit Buser inequalities"]
+    DePontiMondino2021_D21["○ Definition 2.1<br/>CD(K, ∞) condition"]
+    DePontiMondino2021_D22["○ Definition 2.2<br/>RCD(K, ∞) condition"]
+    DePontiMondino2021_P31["○ Proposition 3.1 (Bakry–Gentil–Ledoux)<br/>Isoperimetric gradient bound for the heat flow"]
+    DePontiMondino2021_E46["◐ Theorem 1.1 proof, (46)<br/>Spectral heat decay"]
+    DePontiMondino2021_E48["◐ Theorem 1.1 proof, (48)<br/>L¹ heat displacement with J_K"]
+    DePontiMondino2021_P41["◐ Proposition 4.1<br/>Coarea inequality"]
+    DePontiMondino2021_T42["◐ Theorem 4.2<br/>Cheeger inequality on metric measure spaces"]
+    DePontiMondino2021_D22 --> DePontiMondino2021_T11
+    DePontiMondino2021_P31 --> DePontiMondino2021_T11
+    DePontiMondino2021_E46 --> DePontiMondino2021_T11
+    DePontiMondino2021_E48 --> DePontiMondino2021_T11
+    DePontiMondino2021_T11 --> DePontiMondino2021_C12
+    DePontiMondino2021_D21 --> DePontiMondino2021_D22
+    DePontiMondino2021_D22 --> DePontiMondino2021_P31
+    DePontiMondino2021_P31 --> DePontiMondino2021_E48
+    DePontiMondino2021_P41 --> DePontiMondino2021_T42
+    DePontiMondino2021_more["+3 further statements in the paper register"]
+    end
+    classDef lemma_formalized fill:#dbeafe,stroke:#2563eb,color:#1e3a8a;
+    class Milman2009_R23,ADMG2017_L21a,ADMG2017_L21b,ADMG2017_L32,ADMG2017_D33,ADMG2017_R34,ADMG2017_T36 lemma_formalized;
+    classDef lemma_partial fill:#fff3df,stroke:#c88719,color:#66420d;
+    class Milman2009_DChe,Milman2009_DPoin,Milman2009_T11,Milman2009_T14,Milman2009_C26,Milman2009_L31,Milman2009_C32,ADMG2017_R35,DePontiMondino2021_C12,DePontiMondino2021_E46,DePontiMondino2021_E48,DePontiMondino2021_P41,DePontiMondino2021_T42 lemma_partial;
+    classDef lemma_pending fill:#fee2e2,stroke:#dc2626,color:#991b1b;
+    class KLS1995_L21,KLS1995_C22,KLS1995_L26,KLS1995_T27,KLS1995_T51,KLS1995_T52,Bobkov1999_T11,Bobkov1999_P21,Milman2009_T15,Milman2009_T18,Milman2009_L21,Milman2009_L22,Milman2009_T24,Milman2009_P25,Milman2009_C27,Milman2009_T29,Milman2009_P210,Milman2009_L61,Milman2009_L62,Milman2009_P64,Milman2009_C65,Milman2009_L66,Milman2009_P68,Milman2009_L69,Milman2009_T610,Milman2009_L613,Milman2009_T614,Milman2009_TA1,Milman2009_TA2,Milman2009_TA3,Milman2009_TA4,DePontiMondino2021_T11,DePontiMondino2021_D21,DePontiMondino2021_D22,DePontiMondino2021_P31 lemma_pending;
+    classDef lemma_improved fill:#dcfce7,stroke:#15803d,color:#14532d;
+    class Bobkov1999_C43 lemma_improved;
+    style KLS1995_T51 stroke-width:3px
+    style Bobkov1999_T11 stroke-width:3px
+    style Milman2009_T15 stroke-width:3px
+    style ADMG2017_T36 stroke-width:3px
+    style DePontiMondino2021_T11 stroke-width:3px
+    classDef lemma_more fill:#f8fafc,stroke:#94a3b8,color:#334155,stroke-dasharray:4 3;
+    class KLS1995_more,Bobkov1999_more,Milman2009_more,ADMG2017_more,DePontiMondino2021_more lemma_more;

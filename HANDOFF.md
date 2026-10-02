@@ -46,11 +46,18 @@ Work follows the published literature
 [decision record](research/decisions/2026-10-02-literature-register.md). The four-route diagram
 on the progress page is kept as an exploratory record; its pending nodes are not the work queue.
 
-Next: pin and audit the priority-1 target, the strong-curvature Bakry–Émery Poincaré bound
-`C_P ≤ 1/ρ`, and select a Brascamp–Lieb source statement separately. Record the paper version,
-theorem locator, hypotheses, constants and normalization, then compare them with the existing
-Γ₂ and heat-semigroup APIs before adding statements. The existing Γ₂ results for convex
-potentials do not prove the positive-curvature endpoint.
+Paper lemma maps (numbered statements of a pinned source version, each mapped to Lean
+declarations with ✓/◐/○/⇑) now cover Kannan–Lovász–Simonovits 1995, Bobkov 1999, E. Milman 2009,
+Ambrosio–Di Marino–Gigli 2017 and De Ponti–Mondino 2021; see the
+[paper lemma map](research/progress/README.md#paper-lemma-map). Source PDFs are kept outside the
+repository.
+
+Next: prepare a certificate for ADMG Theorem 3.6 stated against Definition 3.3
+(`lipschitzRelaxation`). The exact statement is already proved by composition in
+`research/audits/MetricBVDefinitionClassAudit.lean`; it needs a library declaration, Blueprint
+and ledger registration, and owner semantic review before a milestone tag. The priority-1
+Bakry–Émery `C_P ≤ 1/ρ` target waits for the Bakry–Gentil–Ledoux text; the existing Γ₂ results
+for convex potentials do not prove the positive-curvature endpoint.
 
 Open owner decisions: how to obtain stochastic calculus for priorities 4–5 (build here or build
 on external Lean efforts), Mathlib upstreaming after an API cleanup, and the remaining CI
