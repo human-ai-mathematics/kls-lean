@@ -1266,7 +1266,342 @@
       "result": "Introduces stochastic localization and transfers thin-shell control to KLS with logarithmic losses.",
       "remaining": "The stochastic process, its covariance estimates and the transfer theorem are not locally formalized.",
       "local_results": [],
-      "diagram": "2013 · Eldan<br/>Stochastic localization"
+      "diagram": "2013 · Eldan<br/>Stochastic localization",
+      "lemma_map": {
+        "source_version": "arXiv:1203.0893v5",
+        "source_url": "https://arxiv.org/abs/1203.0893v5",
+        "reviewed_on": "2026-10-03",
+        "standing_assumptions": "Universal constants c, C change from line to line. G_n^{-1} = inf over isotropic log-concave measures mu on R^n and Borel A with mu(A) <= 1/2 of mu^+(A)/mu(A), with mu^+ the lower Minkowski boundary measure of the closed eps-extension A_eps (the printed definition omits y in A); sigma_n^2 = sup E(|X| - sqrt n)^2 and K_n = sup ||E[X tensor X X_1]||_HS over isotropic log-concave X; kappa = liminf log sigma_n / log n, tau_n = max(1, max_j sigma_j j^{-kappa}). From Section 2 on the isotropic log-concave density f is assumed WLOG to satisfy supp f in n B_n (justified only by citing concentration bounds). Gamma_t(f) = f_t = f F_t is the stochastic localization driven by an n-dimensional standard Wiener process W_t, with barycenter a_t, covariance A_t, B_t = int_0^t A_s^{-1} ds; ||A||_OP is the largest eigenvalue of a positive semidefinite A.",
+        "omitted": "Remarks 1.4 (connection to the hyperplane conjecture and Ball-Nguyen), 2.2 (heuristic discrete-step interpretation) and 2.7 (comparison with Lehec's drift construction) are expository and listed here instead of as items. Unnumbered displayed claims are covered inside the items that use them: the Ledoux Cheeger/spectral-gap comparison (4), the bounds (14)-(15) and the W_2 convergence (16) after Proposition 2.6, the Gaussian worked example at the end of Section 2, and the dA_t computation in Section 3. There is no appendix.",
+        "items": [
+          {
+            "id": "C11",
+            "locator": "Conjecture 1.1 (Kannan-Lovasz-Simonovits)",
+            "label": "KLS conjecture",
+            "statement": "There is a universal constant C with G_n < C for all n, where G_n^{-1} is the infimum of mu^+(A)/mu(A) over isotropic log-concave measures mu on R^n and Borel A with mu(A) <= 1/2.",
+            "uses": [],
+            "relation": "same",
+            "declarations": [],
+            "note": "Stated as an open conjecture, not proved in the paper. Deliberately not mapped to FunctionalInequalities.KLS.kls; the paper's G_n is the uniform Minkowski-Cheeger constant of isotropic laws."
+          },
+          {
+            "id": "C12",
+            "locator": "Conjecture 1.2 (Anttila-Ball-Perissinaki, Bobkov-Koldobsky)",
+            "label": "Thin-shell conjecture",
+            "statement": "There is a universal constant C with sigma_n < C for all n, where sigma_n^2 = sup E[(|X| - sqrt n)^2] over isotropic log-concave random vectors X in R^n.",
+            "uses": [],
+            "relation": "same",
+            "declarations": [],
+            "note": "Open conjecture, used only as a hypothesis in the corollary discussion after Theorem 1.1. No Lean counterpart."
+          },
+          {
+            "id": "T11",
+            "locator": "Theorem 1.1",
+            "label": "Thin shell implies Cheeger polylog",
+            "statement": "There is a universal constant C > 0 such that for all n >= 2, G_n <= C sqrt((log n) sum_{k=1}^n sigma_k^2 / k). In particular sigma_k <= k^kappa for all k gives G_n <= C sqrt(log n) n^kappa, and the thin-shell conjecture gives G_n <= C log n.",
+            "uses": [
+              "L16",
+              "P17"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": "Main theorem: the title result, thin shell implies the Cheeger (equivalently, via Ledoux's comparison (4), spectral gap) constant up to polylog. Proof is the two-line combination of Lemma 1.6 and Proposition 1.7. The spectral-gap reading uses the unnumbered comparison (4) quoted from Ledoux; the Lean Cheeger half literatureConstant_le_four_mul_inverseScale_sq (KLS/Geometry/Cheeger/Inequality.lean) gives only the direction C_P <= 4 Psi^2 of that comparison and is not a restricted case of this theorem, so no declaration is mapped.",
+            "main": true
+          },
+          {
+            "id": "R13",
+            "locator": "Remark 1.3 (using Guedon-E. Milman)",
+            "label": "Polylog bound with GM thin shell",
+            "statement": "Combined with the Guedon-E. Milman bound sigma_n <= C n^{1/3}, Theorem 1.1 gives G_n <= C n^{1/3} sqrt(log n), improving the bound G_n <= C n^{5/12} obtained from Guedon-Milman and Bobkov.",
+            "uses": [
+              "T11"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": "Corollary of T11 plus an external thin-shell estimate that is not proved in the paper."
+          },
+          {
+            "id": "R15",
+            "locator": "Remark 1.5 (Bobkov)",
+            "label": "Bobkov variance bound",
+            "statement": "For every log-concave random vector X and smooth phi, Var[phi(X)] / E[|grad phi(X)|^2] <= C E[|X|] sqrt(Var[|X|]); under the thin-shell hypothesis this gives G_n <= C n^{1/4}.",
+            "uses": [],
+            "relation": "same",
+            "declarations": [],
+            "note": "Quoted from Bobkov for comparison only; not proved and not used in the proofs."
+          },
+          {
+            "id": "L16",
+            "locator": "Lemma 1.6",
+            "label": "K_n bounded by thin shell",
+            "statement": "There is a universal constant C > 0 such that for all n >= 2, K_n <= C sqrt(sum_{k=1}^n sigma_k^2 / k), where K_n = sup over isotropic log-concave mu and unit theta of the Hilbert-Schmidt norm of int x tensor x <x,theta> dmu.",
+            "uses": [],
+            "relation": "same",
+            "declarations": [],
+            "note": "Proved in Section 6 by projecting onto k-dimensional eigenspaces of A = E[X tensor X <X,theta>] and Cauchy-Schwarz with Var|P X|^2 <= C k sigma_k^2. Purely deterministic; the opening sentence of Section 6 mistakenly says the bound is in terms of tau_n and kappa."
+          },
+          {
+            "id": "P17",
+            "locator": "Proposition 1.7",
+            "label": "Cheeger bounded by K_n polylog",
+            "statement": "There is a universal constant C > 0 such that for all n >= 2, G_n <= C K_n sqrt(log n).",
+            "uses": [
+              "L24",
+              "P31",
+              "C33",
+              "L41",
+              "T42"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": "Core result of Section 4. For an isotropic f and E with f-mass 1/2, the martingale property (Lemma 2.4(iv)), the event F of Proposition 3.1, Lemma 4.1 at time T and Corollary 3.3 give f(E_{Theta/delta} minus E) >= c with delta = 1/(K_n sqrt(log n)); Theorem 4.2 converts this concentration bound into the isoperimetric bound."
+          },
+          {
+            "id": "R18",
+            "locator": "Remark 1.8",
+            "label": "K_n controlled by ellipsoids",
+            "statement": "There is a universal c > 0 with K_n^{-1} >= c inf_mu inf_E mu^+(E)/mu(E), the infimum over isotropic log-concave mu and ellipsoids E with mu(E) <= 1/2; that is, K_n <= C R_n.",
+            "uses": [
+              "F61"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": "Restates the second inequality chain of Fact 6.1; with Proposition 1.7 it reduces the Cheeger constant to ellipsoids up to sqrt(log n)."
+          },
+          {
+            "id": "T12",
+            "locator": "Theorem 1.2",
+            "label": "Dimension-sensitive Brunn-Minkowski stability",
+            "statement": "For every epsilon > 0 there is C(epsilon) such that for convex bodies K, T in R^n of volume 1 with barycenters at the origin and Cov(uniform on K) = L_K Id, with V = Vol_n((K+T)/2) and delta = C(epsilon) L_K V^5 tau_n n^{2(kappa - kappa^2) + epsilon}, one has Vol_n(K_delta cap T) >= 1 - epsilon.",
+            "uses": [
+              "L52"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": "Second main result, independent of Theorem 1.1. kappa = liminf log sigma_n / log n and tau_n = max(1, max_j sigma_j / j^kappa). The statement says covariance L_K Id but the proof uses L_K^2 Id and concludes Vol_n(K minus T_delta) <= 2 epsilon with delta = L_K Theta / sqrt(epsilon); the roles of K and T in the conclusion differ between statement and proof."
+          },
+          {
+            "id": "R19",
+            "locator": "Remark 1.9 (using Eldan-Klartag Theorem 1.4)",
+            "label": "Comparison with Eldan-Klartag bound",
+            "statement": "By Theorem 1.4 of Eldan-Klartag, the estimate of Theorem 1.2 also holds with delta = C(epsilon) sqrt(tau_n) n^{1/4 + kappa/2} V^{5/2}; the bound of Theorem 1.2 is tight up to C(epsilon) n^epsilon under thin shell, as shown by the cube and the cube truncated by the ball of radius sqrt n.",
+            "uses": [
+              "T12"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": "Quoted external bound and an asserted tightness example; neither is proved in the paper."
+          },
+          {
+            "id": "R110",
+            "locator": "Remark 1.10 (using Guedon-E. Milman)",
+            "label": "Brunn-Minkowski stability with GM",
+            "statement": "With sigma_n <= C n^{1/3}, Theorem 1.2 holds with delta = C(epsilon) n^{4/9 + epsilon} V^5 L_K; without the volume assumption on (K+T)/2, even with equal covariances, the best possible bound is delta = C sqrt(n) L_K, as for a cube and a ball.",
+            "uses": [
+              "T12"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": "Specialisation kappa = 1/3 of T12 plus an asserted optimality example."
+          },
+          {
+            "id": "R111",
+            "locator": "Remark 1.11 (Figalli-Maggi-Pratelli)",
+            "label": "FMP quantitative stability",
+            "statement": "Figalli-Maggi-Pratelli prove Vol_n((K + x_0) symmetric-difference T)^2 <= n^7 (Vol_n((K+T)/2) - 1) for some x_0.",
+            "uses": [],
+            "relation": "same",
+            "declarations": [],
+            "note": "Quoted for comparison; not used. The quoted exponent is as printed in the paper."
+          },
+          {
+            "id": "L21",
+            "locator": "Lemma 2.1",
+            "label": "Linear-tilt localization SDE",
+            "statement": "For the solution (c_t, B_t) of the SDE (11) on [0, t_0], F_t(x) = V_t^{-1} exp(<c_t,x> - <B_t x,x>/2) satisfies F_0 = 1 and dF_t(x) = <x - a_t, A_t^{-1/2} dW_t> F_t(x) for every x, where a_t and A_t are the barycenter and covariance of f F_t.",
+            "uses": [],
+            "relation": "same",
+            "declarations": [],
+            "note": "Proof is Ito's formula for G_t(x), V_t^{-1} and the product V_t^{-1} G_t(x), with an interchange of stochastic differential and spatial integral justified by the compact-support assumption supp f in n B_n."
+          },
+          {
+            "id": "R23",
+            "locator": "Remark 2.3 (using Kallianpur-Xiong Theorem 5.2.2)",
+            "label": "Direct infinite SDE definition",
+            "statement": "The process F_t may alternatively be defined directly by the infinite system of SDEs dF_t(x) = <x - a_t, A_t^{-1/2} dW_t> F_t(x), with existence and uniqueness following from Kallianpur-Xiong Theorem 5.2.2 after verifying its hypotheses.",
+            "uses": [
+              "L21"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": "Asserted without proof (the paper notes extra work is needed); not used later."
+          },
+          {
+            "id": "L24",
+            "locator": "Lemma 2.4",
+            "label": "Basic properties of localization",
+            "statement": "(i) Gamma_t(f) is almost surely well defined, finite and log-concave for all t > 0 (the explosion time t_0 is infinite); (ii) int f_t = 1; (iii) the semigroup property Gamma_{s+t}(f) ~ det(A_s)^{-1/2} Gamma_t(sqrt(det A_s) Gamma_s(f) o L^{-1}) o L with L(x) = A_s^{-1/2}(x - a_s); (iv) for every x the process f_t(x) is a martingale.",
+            "uses": [
+              "L21",
+              "L25"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": "(ii) and (iv) follow from (13); t_0 = infinity uses Lemma 2.5 and a restart argument at the hitting times of ||A_t^{-1}||_OP = c(n)^{-1}, i.e. a strong Markov renewal argument. (iii) is equality in law. Martingale (not merely local martingale) status is asserted from (13) without a separate integrability argument."
+          },
+          {
+            "id": "L25",
+            "locator": "Lemma 2.5",
+            "label": "Covariance nondegenerate at small times",
+            "statement": "For every n there is c(n) > 0 such that P(A_t >= c(n) Id for all 0 <= t <= c(n)) >= c(n).",
+            "uses": [],
+            "relation": "same",
+            "declarations": [],
+            "note": "Proved in Section 6 with dimension-dependent constants: a lower bound on A_f(c,B) for |c| < c_4 and B <= Id from log-concave density and exponential moment bounds (Lovasz-Vempala Theorem 5.14, Lemma 5.7), Ito's formula for |c_t|^2, Dambis-Dubins-Schwarz and stopping times T_1, T_2."
+          },
+          {
+            "id": "P26",
+            "locator": "Proposition 2.6",
+            "label": "Gaussian-tilted concentration and variance",
+            "statement": "There is a universal Theta > 0 such that if phi is convex, K > 0 and dmu = Z exp(-phi(x) - |x|^2/(2K^2)) dx is a probability measure with barycenter 0, then (i) mu(A_{K Theta}) >= 0.95 for every Borel A with 0.1 <= mu(A) <= 0.9, and (ii) int <x,theta>^2 dmu <= Theta K^2 for every unit theta.",
+            "uses": [],
+            "relation": "same",
+            "declarations": [],
+            "note": "Proof via the parallelogram law and the Prekopa-Leindler inequality, then log-concavity of the tail function for (ii). Lean has Prekopa-Leindler (prekopaLeindler in Probability/BrunnMinkowski.lean) as an ingredient, but no declaration states this proposition, so nothing is mapped. The proof applies (i) to a half-space of measure 1/2. The printed display has |x|^2 twice where |y|^2 is meant."
+          },
+          {
+            "id": "P31",
+            "locator": "Proposition 3.1",
+            "label": "Covariance operator norm bound",
+            "statement": "There are universal C, c > 0 such that for n >= 2 and isotropic log-concave f, with A_t the covariance of Gamma_t(f): (i) the event F = {||A_t||_OP < C K_n^2 (log n) e^{-ct} for all t > 0} has P(F) >= 1 - n^{-10}; (ii) E[Tr A_t] <= n for all t > 0; (iii) on F, for every t > 1/(K_n^2 log n), f_t(x) = exp(-|x/(C K_n sqrt(log n))|^2 - phi_t(x)) with phi_t convex.",
+            "uses": [
+              "L21",
+              "L24",
+              "L32",
+              "P26"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": "Proof: dA_t formula by Ito, the dominating process tilde A_t without drift, Ito for S_t = Tr(tilde A_t^p) with p = ceil(log n), Dambis-Dubins-Schwarz and the reflection principle on [0, 1/(K_n^2 log n)], then the deterministic bound (14) A_t <= Theta ||B_t^{-1}||_OP Id from P26(ii) and exponential growth of B_t. The proof only establishes ||A_t||_OP <= C' on the initial interval and C delta^{-2} e^{(delta^2 - t)/Theta} afterwards; the prefactor K_n^2 log n arises as delta^{-2}."
+          },
+          {
+            "id": "L32",
+            "locator": "Lemma 3.2",
+            "label": "Bounds on the xi vectors",
+            "statement": "For the vectors xi_{i,j} of (19) one has (i) |xi_{i,i}| < C for a universal C and every i, and (ii) sum_j |xi_{i,j}|^2 <= K_n^2 for every i.",
+            "uses": [],
+            "relation": "same",
+            "declarations": [],
+            "note": "Deterministic: after normalising f_t to the isotropic tilde f_t, (i) is Cauchy-Schwarz with the universal fourth-moment bound for isotropic log-concave marginals (Lovasz-Vempala Lemma 5.7) and (ii) is the definition of K_n."
+          },
+          {
+            "id": "C33",
+            "locator": "Corollary 3.3",
+            "label": "Concentration for localized measure",
+            "statement": "There are universal c, Theta > 0 such that on the event F, with delta = 1/(K_n sqrt(log n)), every t > delta^2 and every measurable E with 0.1 <= int_E f_t <= 0.9 satisfy int_{E_{Theta/delta} minus E} f_t >= c.",
+            "uses": [
+              "P26",
+              "P31"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": "Immediate from P31(iii) and P26(i) with K = C K_n sqrt(log n)."
+          },
+          {
+            "id": "L41",
+            "locator": "Lemma 4.1",
+            "label": "Mass of E stays balanced",
+            "statement": "If f is isotropic log-concave, int_E f = 1/2 and g(t) = int_E f_t, then there is a universal T > 0 with P(0.1 <= g(t) <= 0.9) > 0.5 for all t in [0, T].",
+            "uses": [
+              "L21"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": "dg = <int_{E_t} y tilde f_t(y) dy, dW_t> with integrand of norm at most 1 by isotropy, so d[g]_t/dt <= 1, E[(g(t) - 1/2)^2] <= t by Ito, and Chebyshev's inequality."
+          },
+          {
+            "id": "T42",
+            "locator": "Theorem 4.2 (E. Milman, Theorem 2.1 of Mil2)",
+            "label": "Concentration implies isoperimetry",
+            "statement": "If a log-concave probability measure mu has constants 0 < lambda < 1/2 and Theta > 0 with mu(E_Theta) >= 1 - lambda for all measurable E with mu(E) >= 1/2, then mu^+(E)/mu(E) >= (1 - 2 lambda)/Theta for all measurable E with mu(E) <= 1/2.",
+            "uses": [],
+            "relation": "same",
+            "declarations": [],
+            "note": "Quoted from E. Milman in a weakened form and not proved here; it is the only deep non-stochastic input of Theorem 1.1. No Lean counterpart."
+          },
+          {
+            "id": "R43",
+            "locator": "Remark 4.3 (Bakry-Emery, Gross)",
+            "label": "Bakry-Emery alternative route",
+            "statement": "Proposition 2.6 can be replaced by the Bakry-Emery result that a density of the form (12), log-concave relative to a Gaussian, has a corresponding Cheeger constant, which would bound the surface area of every set under f_t directly and avoid Theorem 4.2.",
+            "uses": [
+              "P26",
+              "T42"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": "Alternative proof sketch, asserted without proof."
+          },
+          {
+            "id": "L51",
+            "locator": "Lemma 5.1 (variant of Eldan-Klartag Lemma 6.5)",
+            "label": "Covariance comparison via sup-convolution",
+            "statement": "There are universal C, C_1 > 0 such that for log-concave probability densities f, g on R^n, with A = Cov(f)^{-1/2} Cov(g) Cov(f)^{-1/2} - Id and eigenvalues delta_i ordered so that |delta_i - 1| decreases, |delta_i - 1| <= C K(f,g)^4 for all i and |delta_i - 1| <= C K(f,g) tau_n i^{kappa - 1/2} for (log K(f,g))^{C_1} <= i <= n, where K(f,g) = int sup_y sqrt(f(x+y) g(x-y)) dx.",
+            "uses": [],
+            "relation": "same",
+            "declarations": [],
+            "note": "Stated without proof as a variant of a lemma of Eldan-Klartag. As printed the subtraction of Id and the quantity |delta_i - 1| are inconsistent, and the use in Lemma 5.2 (with K^5 and j^kappa/sqrt j) does not match the printed exponents; recorded as printed."
+          },
+          {
+            "id": "L52",
+            "locator": "Lemma 5.2",
+            "label": "Coupled localization Wasserstein bound",
+            "statement": "For epsilon > 0 and log-concave densities f, g with f isotropic and g centred, there are subdensities tilde f <= f, tilde g <= g with equal mass at least 1 - epsilon and W_2(tilde f, tilde g) <= C epsilon^{-6} tau_n K(f,g)^5 n^{2(kappa - kappa^2) + epsilon}.",
+            "uses": [
+              "L21",
+              "L24",
+              "P31",
+              "L51"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": "Coupled localizations of f and g driven by the same W_t with the drift matrix A_t of f, the sup-convolution martingale S_t, Doob's maximal inequality, optional stopping, a trace inequality of Tam, Hoelder and the convergence of f_t to a point mass. The final display of the proof gives W_2^2 <= C epsilon^{-11} K^{10} tau_n^2 n^{4 kappa - 4 kappa^2 + epsilon}, whose square root carries epsilon^{-11/2}; this implies the stated epsilon^{-6} for epsilon <= 1."
+          },
+          {
+            "id": "R53",
+            "locator": "Remark 5.3",
+            "label": "Improved bound under Gaussian log-concavity",
+            "statement": "If instead f and g are log-concave with respect to the Gaussian measure, the same argument with Proposition 2.6 gives W_2(tilde f, tilde g) <= C(epsilon) K(f,g) sqrt(log n).",
+            "uses": [
+              "P26",
+              "L52"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": "Asserted without proof."
+          },
+          {
+            "id": "F61",
+            "locator": "Fact 6.1",
+            "label": "K_n Q_n R_n comparison",
+            "statement": "There are universal C_1, C_2 with K_n <= C_1 Q_n <= C_2 R_n, where Q_n^2 = sup Var[Q(X)]/E|grad Q(X)|^2 over isotropic log-concave X and quadratic forms Q, and R_n^{-1} = inf mu^+(E)/mu(E) over isotropic log-concave mu and ellipsoids E with mu(E) <= 1/2.",
+            "uses": [],
+            "relation": "same",
+            "declarations": [],
+            "note": "The left inequality is proved by duality for the Hilbert-Schmidt norm and Cauchy-Schwarz (giving K_n <= sqrt 2 Q_n); the right inequality is called standard (coarea formula and Cauchy-Schwarz) and not proved."
+          },
+          {
+            "id": "R62",
+            "locator": "Remark 6.2",
+            "label": "Conjectured K_n versus sigma_n",
+            "statement": "The author suspects that K_n <= C sigma_n for a universal C but cannot prove it.",
+            "uses": [],
+            "relation": "same",
+            "declarations": [],
+            "note": "Open question; recorded so that the paper's conjectural claims are complete."
+          }
+        ]
+      }
     },
     {
       "id": "AGS2013",
@@ -1284,7 +1619,533 @@
           "node": "cor:absolutely-continuous-relaxation-two-cheeger",
           "scope": "Intrinsic absolutely-continuous E^can = 2 Ch in the local-slope convention"
         }
-      ]
+      ],
+      "lemma_map": {
+        "source_version": "arXiv:1111.3730v3",
+        "source_url": "https://arxiv.org/abs/1111.3730v3",
+        "reviewed_on": "2026-10-03",
+        "standing_assumptions": "q ∈ (1, ∞) with dual exponent p = q/(q − 1). Section 3: (X, d) compact, f Lipschitz, no reference measure. Sections 4–5: (X, d) complete and separable, m a nonnegative σ-finite Borel measure. Section 6: m finite. Section 7: (X, d) compact and m a finite Borel measure; Section 8 relaxes this to bounded complete separable spaces with finite m and to locally finite spaces.",
+        "omitted": "Nothing numbered is omitted: the source has 33 numbered statements (Lemma 2.1 to Theorem 7.4; Section 8 and the introduction have none, and there is no appendix). Unnumbered expository passages are omitted: the introduction's outline, the independence-of-q conjecture in Section 5, the Orlicz–Wasserstein outlook of Section 8.4, and the acknowledgement. Unnumbered displayed claims are listed only where a local Lean declaration states them; 21 other unnumbered claims (Sections 1–8) are not listed.",
+        "items": [
+          {
+            "id": "S21",
+            "locator": "Section 2.1 (slope)",
+            "label": "Slope of a function",
+            "statement": "For f : X → R on a metric space, the slope (local Lipschitz constant) is |∇f|(x) = limsup_{y→x} |f(y) − f(x)|/d(y, x).",
+            "uses": [],
+            "relation": "same",
+            "declarations": [
+              {
+                "name": "FunctionalInequalities.Energy.LocalSlope.apply",
+                "source": "formalization/FunctionalInequalities/Energy/LocalSlope/Basic.lean"
+              }
+            ],
+            "note": "Lean takes values in [0, ∞] on any metric space and is 0 at isolated points, where the paper's limsup is left unspecified.",
+            "kind": "definition"
+          },
+          {
+            "id": "E21a",
+            "locator": "(2.1a)",
+            "label": "Subadditivity of the slope",
+            "statement": "For Lipschitz f, g : X → R and α, β ∈ R: |∇(αf + βg)| ≤ |α||∇f| + |β||∇g|.",
+            "uses": [
+              "S21"
+            ],
+            "relation": "partial",
+            "declarations": [
+              {
+                "name": "FunctionalInequalities.Energy.LocalSlope.apply_le_add",
+                "source": "formalization/FunctionalInequalities/Energy/LocalSlope/Basic.lean"
+              }
+            ],
+            "note": "Lean proves |∇g|(x) ≤ |∇a|(x) + |∇b|(x) whenever every secant of g near x is bounded by the sum of the secants of a and b; this gives the case α = β = 1 (for any functions), but scalar homogeneity |∇(αf)| = |α||∇f| is not stated with it."
+          },
+          {
+            "id": "L21",
+            "locator": "Lemma 2.1",
+            "label": "One-dimensional Sobolev criterion",
+            "statement": "If f : (0,1) → R, q ∈ [1, ∞] and 0 ≤ g ∈ L^q(0,1) satisfy |f(s) − f(t)| ≤ |∫_s^t g| for L²-a.e. (s, t) ∈ (0,1)², then f ∈ W^{1,q}(0,1) and |f′| ≤ g a.e.",
+            "uses": [],
+            "relation": "same",
+            "declarations": [],
+            "note": ""
+          },
+          {
+            "id": "P22",
+            "locator": "Proposition 2.2 (Lisini, superposition principle)",
+            "label": "Lifting W_p curves to path measures",
+            "statement": "If (X, d) is complete and separable with d bounded, p ∈ (1, ∞) and μ_t ∈ AC^p([0,T]; (P(X), W_p)), there is π ∈ P(C([0,1], X)) concentrated on AC^p([0,1], X) with (e_t)_#π = μ_t for all t and ∫|γ̇_t|^p dπ = |μ̇_t|^p for a.e. t.",
+            "uses": [],
+            "relation": "same",
+            "declarations": [],
+            "note": "Quoted from Lisini (2007); no proof in the paper."
+          },
+          {
+            "id": "P31",
+            "locator": "Proposition 3.1",
+            "label": "Monotonicity of D^±",
+            "statement": "For compact (X, d), Lipschitz f and every x: D⁺(x, t) ≤ D⁻(x, s) for 0 ≤ t < s; hence D^±(x, ·) are nondecreasing and coincide outside a countable subset of [0, ∞).",
+            "uses": [],
+            "relation": "same",
+            "declarations": [],
+            "note": "The printed proof says nonincreasing; nondecreasing is what is stated and proved."
+          },
+          {
+            "id": "P32",
+            "locator": "Proposition 3.2",
+            "label": "Semicontinuity of D^±",
+            "statement": "For compact (X, d) and Lipschitz f, D⁺ is upper semicontinuous and D⁻ is lower semicontinuous on X × [0, ∞).",
+            "uses": [],
+            "relation": "same",
+            "declarations": [],
+            "note": ""
+          },
+          {
+            "id": "P33",
+            "locator": "Proposition 3.3",
+            "label": "Time derivative of Q_t f",
+            "statement": "For compact (X, d) and Lipschitz f, t ↦ Q_t f is Lipschitz from [0, ∞) to C(X) and, for every x, d/dt Q_t f(x) = −(1/q)[D^±(x, t)/t]^p for all t > 0 outside a countable set.",
+            "uses": [
+              "P31"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": ""
+          },
+          {
+            "id": "E37",
+            "locator": "(3.7)",
+            "label": "Asymptotic Lipschitz constant",
+            "statement": "Lip_a(f, x) = inf_{r>0} Lip(f, B_r(x)) = lim_{r↓0} Lip(f, B_r(x)); it satisfies Lip(f) ≥ Lip_a(f, x) ≥ |∇f|*(x), the upper semicontinuous envelope of the slope, with equality in length spaces.",
+            "uses": [
+              "S21"
+            ],
+            "relation": "same",
+            "declarations": [
+              {
+                "name": "FunctionalInequalities.Energy.AsymptoticLipschitz.apply",
+                "source": "formalization/FunctionalInequalities/Energy/LocalSlope/Relaxation.lean"
+              }
+            ],
+            "note": "The definition is the same (open balls, values in [0, ∞]); the comparison with the u.s.c. envelope of the slope is not stated in Lean, only the pointwise bound LocalSlope.apply_le_asymptoticLipschitz.",
+            "kind": "definition"
+          },
+          {
+            "id": "P34",
+            "locator": "Proposition 3.4",
+            "label": "Asymptotic Lipschitz bound for Q_t f",
+            "statement": "For compact (X, d), Lipschitz f and (x, t) ∈ X × (0, ∞): Lip_a(Q_t f, x) ≤ [D⁺(x, t)/t]^{p−1}; in particular Lip(Q_t f) ≤ p Lip(f).",
+            "uses": [
+              "P32",
+              "E37"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": ""
+          },
+          {
+            "id": "T35",
+            "locator": "Theorem 3.5",
+            "label": "Hopf–Lax subsolution of Hamilton–Jacobi",
+            "statement": "For compact (X, d), Lipschitz f and every x: d/dt Q_t f(x) + (1/q)|∇Q_t f|^q(x) ≤ 0 for all t ∈ (0, ∞) outside a countable set.",
+            "uses": [
+              "P33",
+              "P34"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": ""
+          },
+          {
+            "id": "T36",
+            "locator": "Theorem 3.6 (cf. Ambrosio–Gigli–Savaré 2011, Proposition 3.6)",
+            "label": "Hopf–Lax supersolution in geodesic spaces",
+            "statement": "If (X, d) is also geodesic, equality holds in Proposition 3.4, hence d/dt Q_t f(x) + (1/q)|∇Q_t f|^q(x) = 0 for every x and all t > 0 outside a countable set.",
+            "uses": [
+              "P33",
+              "P34"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": "Stated without proof (analogous to the cited q = 2 argument); not used later."
+          },
+          {
+            "id": "D41",
+            "locator": "Definition 4.1 (Cheeger)",
+            "label": "q-relaxed upper gradient",
+            "statement": "g ∈ L^q(X, m) is a q-relaxed upper gradient of f ∈ L^q(X, m) if f_n → f in L^q with upper gradients g_n of f_n converging weakly in L^q to some g̃ ≤ g m-a.e.; |∇f|_C,q is the one of minimal L^q norm.",
+            "uses": [],
+            "relation": "same",
+            "declarations": [],
+            "note": "",
+            "kind": "definition"
+          },
+          {
+            "id": "D42",
+            "locator": "Definition 4.2",
+            "label": "Minimal q-relaxed slope",
+            "statement": "g ∈ L^q(X, m) is a q-relaxed slope of f ∈ L^q(X, m) if Lipschitz f_n → f in L^q with |∇f_n| converging weakly in L^q to some g̃ ≤ g m-a.e.; |∇f|_*,q is the one of minimal L^q norm.",
+            "uses": [
+              "S21",
+              "E21a"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": "Well posed: by Mazur's lemma and (2.1a) the q-relaxed slopes form a closed convex set, and L^q is uniformly convex. Lean defines no relaxed-slope function, only relaxed energies.",
+            "kind": "definition"
+          },
+          {
+            "id": "P43",
+            "locator": "Proposition 4.3 (cf. Ambrosio–Gigli–Savaré 2011)",
+            "label": "Strong density in energy",
+            "statement": "If f ∈ L^q(X, m) has a q-relaxed slope, there are Lipschitz f_n with ∫|f_n − f|^q dm + ∫||∇f_n| − |∇f|_*,q|^q dm → 0.",
+            "uses": [
+              "D42"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": "Proof only sketched (uniform convexity, as in the cited q = 2 case). Not mapped: the generic Lean recovery sequences of Energy/Relaxation/Recovery.lean give energy convergence only, with no relaxed-slope function to converge to."
+          },
+          {
+            "id": "R44",
+            "locator": "Remark 4.4",
+            "label": "Integrability of f versus gradient",
+            "statement": "The L^q integrability of f could be decoupled from that of the gradient or replaced by m-a.e. convergence; by locality and truncation the relaxed definitions extend beyond L^q, see (6.2).",
+            "uses": [
+              "D41",
+              "D42"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": "Mainly expository."
+          },
+          {
+            "id": "R45",
+            "locator": "Remark 4.5 (Fuglede)",
+            "label": "Fuglede's observation",
+            "statement": "If Mod_q(Γ) = 0 and ε > 0, there is ρ ∈ L^q(X, m) with ‖ρ‖_q < ε and ∫_γ ρ = ∞ for every γ ∈ Γ.",
+            "uses": [],
+            "relation": "same",
+            "declarations": [],
+            "note": ""
+          },
+          {
+            "id": "D46",
+            "locator": "Definition 4.6",
+            "label": "Test plans and q-negligible curves",
+            "statement": "A p-test plan is π ∈ P(C([0,1], X)) concentrated on AC^p with ∫∫_0^1 |γ̇_t|^p dt dπ < ∞ and (e_t)_#π ≤ C(π) m for all t; a Borel set of curves is q-negligible if it is π-null for every p-test plan.",
+            "uses": [],
+            "relation": "same",
+            "declarations": [],
+            "note": "",
+            "kind": "definition"
+          },
+          {
+            "id": "R47",
+            "locator": "Remark 4.7",
+            "label": "Representative independence along curves",
+            "statement": "If m-measurable f, g agree m-a.e. and T ⊂ [0,1] is countable, then f∘γ = g∘γ on T and L¹-a.e. on (0,1) for q-a.e. γ.",
+            "uses": [
+              "D46"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": ""
+          },
+          {
+            "id": "D48",
+            "locator": "Definition 4.8",
+            "label": "q-weak upper gradient",
+            "statement": "A Borel g : X → [0, ∞] is a q-weak upper gradient of f : X → R if |f(γ_1) − f(γ_0)| ≤ ∫_γ g for q-a.e. curve γ.",
+            "uses": [
+              "D46"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": "",
+            "kind": "definition"
+          },
+          {
+            "id": "D49",
+            "locator": "Definition 4.9",
+            "label": "Sobolev along q-a.e. curve",
+            "statement": "f : X → R is Sobolev along q-a.e. curve if for q-a.e. γ, f∘γ agrees a.e. in [0,1] and at 0, 1 with an absolutely continuous f_γ.",
+            "uses": [
+              "D46"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": "",
+            "kind": "definition"
+          },
+          {
+            "id": "R410",
+            "locator": "Remark 4.10 (equivalence with Ambrosio–Gigli–Savaré 2011)",
+            "label": "Weak upper gradients give Sobolev curves",
+            "statement": "If g is a q-weak upper gradient of f with ∫_γ g < ∞ for q-a.e. γ (e.g. g ∈ L^q), then f is Sobolev along q-a.e. curve and |d/dt(f∘γ)| ≤ g∘γ |γ̇| a.e. for π-a.e. γ, for every p-test plan π (4.11).",
+            "uses": [
+              "L21",
+              "D46",
+              "R47",
+              "D48",
+              "D49"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": ""
+          },
+          {
+            "id": "D411",
+            "locator": "Definition 4.11",
+            "label": "Minimal q-weak upper gradient",
+            "statement": "For f Sobolev along q-a.e. curve, |∇f|_w,q is the q-weak upper gradient with |∇f|_w,q ≤ g m-a.e. for every q-weak upper gradient g; it exists and is unique up to m-null sets when m is σ-finite.",
+            "uses": [
+              "D48",
+              "D49"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": "Existence is proved after the definition by minimizing ∫θ arctan g dm.",
+            "kind": "definition"
+          },
+          {
+            "id": "R412",
+            "locator": "Remark 4.12",
+            "label": "Mod_q-null sets are q-negligible",
+            "statement": "For Borel Γ and a p-test plan π: π(Γ) ≤ C(π)^{1/q} Mod_q(Γ)^{1/q} (∫∫|γ̇|^p)^{1/p}; hence every q-upper gradient is a q-weak upper gradient and |∇f|_w,q ≤ |∇f|_S,q m-a.e. (4.14).",
+            "uses": [
+              "D46",
+              "D48",
+              "D411"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": ""
+          },
+          {
+            "id": "L51",
+            "locator": "Lemma 5.1 (Cheeger; cf. Ambrosio–Gigli–Savaré 2011, Lemma 4.4)",
+            "label": "Pointwise minimality of relaxed slope",
+            "statement": "If g_1, g_2 are q-relaxed slopes of f, so is min{g_1, g_2}; hence |∇f|_*,q ≤ g m-a.e. for every q-relaxed slope g of f.",
+            "uses": [
+              "D42"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": "Proof by reference to the cited sources."
+          },
+          {
+            "id": "P52",
+            "locator": "Proposition 5.2 (Cheeger; cf. Ambrosio–Gigli–Savaré 2011, Proposition 4.8)",
+            "label": "Locality and chain rule",
+            "statement": "If f ∈ L^q(X, m) has a q-relaxed slope: (a) |∇h|_*,q = |∇f|_*,q m-a.e. on {h = f} for every h with a q-relaxed slope; (b) |∇φ(f)|_*,q ≤ |φ′(f)||∇f|_*,q for C¹ Lipschitz φ, with equality for nondecreasing φ.",
+            "uses": [
+              "D42",
+              "L51"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": "Proof by reference to the cited q = 2 case."
+          },
+          {
+            "id": "T53",
+            "locator": "Theorem 5.3",
+            "label": "Stability of weak upper gradients",
+            "statement": "If f_n are m-measurable and Sobolev along q-a.e. curve with q-weak upper gradients g_n ∈ L^q, f_n → f ∈ R m-a.e. and g_n ⇀ g weakly in L^q, then g is a q-weak upper gradient of f and f is Sobolev along q-a.e. curve.",
+            "uses": [
+              "D46",
+              "R47",
+              "D48",
+              "D49"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": ""
+          },
+          {
+            "id": "E63",
+            "locator": "(6.3)",
+            "label": "Cheeger q-functional",
+            "statement": "For finite m, Ch_q(f) = (1/q)∫|∇f|_*,q^q dm on L²(X, m), set to +∞ outside 𝒞.",
+            "uses": [],
+            "relation": "partial",
+            "declarations": [
+              {
+                "name": "FunctionalInequalities.Energy.Cheeger.energy",
+                "source": "formalization/FunctionalInequalities/Energy/Cheeger/Basic.lean"
+              }
+            ],
+            "note": "Only q = 2, on a finite-dimensional real inner-product space with a Borel probability law. Lean defines Ch directly as one half of the sequential L²-lower-semicontinuous relaxation of ∫|∇f|² over locally Lipschitz L² tests of finite slope energy; agreement with the relaxed-slope definition (via Proposition 4.3, Theorem 6.1, (5.1) and the reduction to Lipschitz tests) is not stated in Lean.",
+            "kind": "definition"
+          },
+          {
+            "id": "T61",
+            "locator": "Theorem 6.1",
+            "label": "Cheeger functional convex and lsc",
+            "statement": "For complete separable (X, d), finite m and q ∈ (1, ∞), Ch_q is convex and lower semicontinuous on L²(X, m).",
+            "uses": [
+              "D42",
+              "E63",
+              "P52"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": "Only lower semicontinuity, for q = 2 on a finite-dimensional real inner-product space with a Borel probability law; convexity is not stated. In Lean the functional is by definition a sequential L² relaxation (see E63), so lower semicontinuity holds by construction rather than by the paper's weak-compactness argument. Not mapped: the local relaxation is lower semicontinuous by construction, which does not state this theorem."
+          },
+          {
+            "id": "R62",
+            "locator": "Remark 6.2",
+            "label": "Lsc of weighted energies",
+            "statement": "For every α > 0, f ↦ ∫|∇f|_*,q^q / |f|^α dm is lower semicontinuous on 𝒞 in L²(X, m).",
+            "uses": [
+              "T61",
+              "P52"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": ""
+          },
+          {
+            "id": "D63",
+            "locator": "Definition 6.3",
+            "label": "q-Laplacian",
+            "statement": "For f ∈ L²(X, m) with ∂⁻Ch_q(f) ≠ ∅, −Δ_q f is the element of minimal L² norm of ∂⁻Ch_q(f); D(Δ_q) is the set of such f.",
+            "uses": [
+              "E63"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": "",
+            "kind": "definition"
+          },
+          {
+            "id": "R64",
+            "locator": "Remark 6.4",
+            "label": "Laplacian is homogeneous, not linear",
+            "statement": "Even for q = 2, Δ_q need not be linear; v ∈ ∂⁻Ch_q(f) implies λ^{q−1}v ∈ ∂⁻Ch_q(λf), so Δ_q and the gradient flow are (q − 1)-homogeneous.",
+            "uses": [
+              "D63"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": ""
+          },
+          {
+            "id": "P65",
+            "locator": "Proposition 6.5",
+            "label": "Integration by parts inequality",
+            "statement": "For f ∈ D(Δ_q) and g ∈ D(Ch_q): −∫ g Δ_q f dm ≤ ∫ |∇g|_*,q |∇f|_*,q^{q−1} dm, with equality for g = φ(f), φ ∈ C¹(R) with bounded derivative on the image of f.",
+            "uses": [
+              "D63",
+              "P52",
+              "D42"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": ""
+          },
+          {
+            "id": "P66",
+            "locator": "Proposition 6.6",
+            "label": "Properties of the Ch_q gradient flow",
+            "statement": "For the gradient flow (f_t) of Ch_q from f_0 ∈ L²(X, m): ∫f_t dm = ∫f_0 dm; f_0 ≤ C (resp. ≥ c) implies f_t ≤ C (resp. ≥ c); and if 0 < c ≤ f_0 ≤ C and Φ ∈ C²([c, C]), then t ↦ ∫Φ(f_t) dm is locally absolutely continuous with derivative −∫Φ″(f_t)|∇f_t|_*,q^q dm a.e.",
+            "uses": [
+              "P65",
+              "P52"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": "Not mapped: the Lean heat semigroup of KLS/LogConcave/HeatSemigroup/Markov.lean (mass preservation, sub-Markov bounds) is generated by the closed weighted-gradient form, and no Lean statement identifies it with the gradient flow of Cheeger.energy."
+          },
+          {
+            "id": "P71",
+            "locator": "Proposition 7.1",
+            "label": "Entropy dissipation along W_p curves",
+            "statement": "For compact (X, d), finite m and μ_t = f_t m ∈ AC^p([0,1], (P(X), W_p)) with c ≤ f_t ≤ C and f_0 Sobolev along q-a.e. curve with |∇f_0|_w,q ∈ L^q, every convex Φ ∈ C²([c, C]) satisfies ∫Φ(f_0) − ∫Φ(f_t) ≤ (1/q)∫∫_0^t (Φ″(f_0)|∇f_0|_w,q)^q f_s ds dm + (1/p)∫_0^t |μ̇_s|^p ds.",
+            "uses": [
+              "P22",
+              "D46",
+              "R410",
+              "D411"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": ""
+          },
+          {
+            "id": "L72",
+            "locator": "Lemma 7.2 (Kuwada)",
+            "label": "Kuwada's lemma",
+            "statement": "For compact (X, d), finite m and the gradient flow (f_t) of Ch_q from f_0 with c ≤ f_0 ≤ C and ∫f_0 dm = 1, μ_t = f_t m is W_p-absolutely continuous and |μ̇_t|^p ≤ ∫ |∇f_t|_*,q^q / f_t^{p−1} dm for a.e. t.",
+            "uses": [
+              "P33",
+              "T35",
+              "P65",
+              "P66"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": "The idea is credited to Kuwada (2010)."
+          },
+          {
+            "id": "T73",
+            "locator": "Theorem 7.3",
+            "label": "Weak gradient equals relaxed slope",
+            "statement": "For compact (X, d) and finite m, if f : X → R is Borel, Sobolev along q-a.e. curve and |∇f|_w,q ∈ L^q(X, m), then f ∈ 𝒞 and |∇f|_*,q = |∇f|_w,q m-a.e.",
+            "uses": [
+              "P66",
+              "L72",
+              "P71",
+              "R62",
+              "P52"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": ""
+          },
+          {
+            "id": "T74",
+            "locator": "Theorem 7.4",
+            "label": "Equivalence of weak gradients",
+            "statement": "For compact (X, d), finite m and f ∈ L^q(X, m), the following are equivalent: f has a q-relaxed upper gradient; a q-relaxed slope; a q-upper gradient in L^q; a q-weak upper gradient in L^q. The four minimal gradients |∇f|_C,q, |∇f|_*,q, |∇f|_S,q and |∇f|_w,q then coincide m-a.e.",
+            "uses": [
+              "T73",
+              "R410"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": "Section 8 extends it to bounded complete separable spaces with finite m and to locally finite spaces (S81, S82). No Lean declaration states weak, Mod_q or test-plan gradients.",
+            "main": true
+          },
+          {
+            "id": "S83",
+            "locator": "Section 8.3, (8.3)",
+            "label": "Density with asymptotic Lipschitz constants",
+            "statement": "Under the hypotheses of Theorem 7.3 there are Lipschitz f_n → f m-a.e. with |∇f_n| → |∇f|_w,q in L^q, and even with Lip_a(f_n, ·) → |∇f|_w,q in L^q: the Cheeger energy relaxed from Lip_a coincides with Ch_q.",
+            "uses": [
+              "T73",
+              "L72",
+              "E37"
+            ],
+            "relation": "partial",
+            "declarations": [
+              {
+                "name": "Solutions.ThmSmoothGradientRelaxationTwoCheeger.conventions_agree",
+                "source": "solutions/ThmSmoothGradientRelaxationTwoCheeger.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Energy.LocalSlope.relaxation_eq_asymptoticLipschitz",
+                "source": "formalization/FunctionalInequalities/Energy/Cheeger/Identification.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Energy.Cheeger.energy_eq_ofAsymptoticLipschitz",
+                "source": "formalization/FunctionalInequalities/Energy/Cheeger/Identification.lean"
+              }
+            ],
+            "note": "Lean proves the energy-level identity (relaxation of ∫Lip_a² equals relaxation of ∫|∇f|², and the two Cheeger conventions agree) only for q = 2 and Borel probability laws on finite-dimensional real inner-product spaces, by a different route (McShane patches and mollification, not Hopf–Lax); weak upper gradients and the L^q convergence of Lip_a(f_n) are not stated. The paper only sketches the argument."
+          }
+        ]
+      }
     },
     {
       "id": "BGL2014",
@@ -1652,7 +2513,255 @@
       "diagram": "2020/21 · Chen<br/>ψₙ = n^o(1)",
       "additional_sources": [
         "https://link.springer.com/article/10.1007/s00039-021-00558-4"
-      ]
+      ],
+      "lemma_map": {
+        "source_version": "arXiv:2011.13661v2",
+        "source_url": "https://arxiv.org/abs/2011.13661v2",
+        "reviewed_on": "2026-10-03",
+        "standing_assumptions": "Log-concave probability densities p on R^d (absolutely continuous, hence full-dimensional). ψ(p) is the Cheeger isoperimetric coefficient of (2), a lower-bound quantity (larger is better), with p⁺ the lower outer Minkowski content over closed ε-neighbourhoods; ρ(p) = ‖Cov_p‖_op; log is natural; KLS reads ψ(p) ≥ c/√ρ(p). ψ_d of (7) is the infimum of ψ(p)√ρ(p) over compactly supported log-concave densities on R^d. The repository's Isoperimetry.constant is ψ on the affine support and Isoperimetry.inverseScale is Ψ = 1/ψ, so Chen's lower bounds on ψ are upper bounds on Ψ. The localization statements (Lemmas 3–8) assume compact support and invertible covariance A, with d ≥ 3 where stated; q = ⌈1/β⌉ + 1 ≥ 3 for 0 < β ≤ 1/2; c denotes unspecified universal constants.",
+        "omitted": "Figure 1 (proof diagram), the expository introduction (consequences for slicing, thin-shell, concentration and MCMC, and the cited bounds of Bourgain, Klartag, Eldan–Klartag and Eldan), the remark after Lemma 6 and the Notation paragraph are not items. Displays (1), (5)–(6), (8)–(14), (17), (19)–(22), (24), (27)–(28), (30)–(33) and (35) are definitions or proof steps recorded with the statements they define or prove. Appendix A contains only the proofs of Lemma 3 and (15)–(16); the paper has no numbered Definition, Proposition, Corollary or Remark environments, and a lemma commented out in the LaTeX source is not printed. Unnumbered displayed claims and cited tools are listed only where a local Lean declaration states them; 14 others (equations, cited SDE, Itô and Brascamp–Lieb tools) are not listed.",
+        "items": [
+          {
+            "id": "CJ1",
+            "locator": "Conjecture 1 (Kannan–Lovász–Simonovits)",
+            "label": "KLS conjecture",
+            "statement": "There is a universal constant c > 0 such that every log-concave density p on R^d satisfies ψ(p) ≥ c/√ρ(p), where ρ(p) = ‖Cov_p‖_op is the spectral norm of the covariance and ψ is the coefficient of (2).",
+            "uses": [],
+            "relation": "same",
+            "declarations": [],
+            "note": "Quoted and open. The repository names a covariance-normalized Poincaré form (KLS.Conjecture, C_P ≤ C‖Cov‖_op); it is equivalent to this form through the proved comparisons C_P ≤ 4Ψ² and Ψ² ≤ π C_P, but no Lean declaration states Conjecture 1 itself and none is mapped."
+          },
+          {
+            "id": "D2",
+            "locator": "Equation (2)",
+            "label": "Isoperimetric coefficient ψ(p)",
+            "statement": "For a density p on R^d, ψ(p) = inf over S ⊂ R^d of p⁺(∂S)/min(p(S), p(S^c)), where p⁺(∂S) = liminf as ε → 0⁺ of (p({x : d(x, S) ≤ ε}) − p(S))/ε.",
+            "uses": [],
+            "relation": "partial",
+            "declarations": [
+              {
+                "name": "FunctionalInequalities.KLS.Isoperimetry.constant",
+                "source": "formalization/FunctionalInequalities/KLS/Isoperimetry.lean"
+              }
+            ],
+            "note": "Lean takes measurable sets of mass in (0, 1), open thickenings and the induced metric on the affine support of an arbitrary finite-dimensional law, with value ⊤ in dimension zero; Isoperimetry.inverseScale is Ψ = 1/ψ. Agreement with the closed-neighbourhood, all-subsets convention of (2) is not stated in Lean.",
+            "kind": "definition"
+          },
+          {
+            "id": "T1",
+            "locator": "Theorem 1",
+            "label": "Almost constant KLS lower bound",
+            "statement": "There is a universal constant c such that for every log-concave density p on R^d and every integer ℓ ≥ 1, ψ(p) ≥ 1/([c·ℓ(log(d) + 1)]^{ℓ/2} d^{16/ℓ} √ρ(p)), where ρ(p) = ‖Cov_p‖_op.",
+            "uses": [
+              "L1"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": "Main theorem; the d^{-o(1)} form is its unnumbered corollary C1. Proof: truncate p to a ball B about its mean with p(B^c) ≤ 0.2, so ψ(p) ≥ ψ(ϱ)/2 for the compactly supported truncation ϱ (via P0), then apply Lemma 1; the needed ρ(ϱ) ≤ ρ(p)/p(B) ≤ 1.25 ρ(p) is used tacitly. In repository notation Ψ ≤ [cℓ(log d + 1)]^{ℓ/2} d^{16/ℓ}√ρ, and Cheeger's C_P ≤ 4Ψ² converts it to a Poincaré bound. No Lean statement.",
+            "main": true
+          },
+          {
+            "id": "C1",
+            "locator": "Theorem 1, unnumbered corollary",
+            "label": "Subpolynomial form d^{-o(1)}",
+            "statement": "Taking ℓ = ⌈(log(d)/log log(d))^{1/2}⌉ in Theorem 1 gives a constant c' with ψ(p) ≥ d^{−c'(log log(d)/log(d))^{1/2}}/√ρ(p), i.e. ψ(p)√ρ(p) ≥ exp(−c'√(log d · log log d)) = d^{−o(1)}, for d large enough that log log d > 0.",
+            "uses": [
+              "T1"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": "The register's ψₙ ≤ exp(C√(log n log log n)) = n^{o(1)} is this bound in the inverse-scale convention."
+          },
+          {
+            "id": "L1",
+            "locator": "Lemma 1",
+            "label": "Main bound for compact support",
+            "statement": "There is a universal constant c such that every log-concave density p on R^d with compact support and every integer ℓ ≥ 1 satisfy ψ(p) ≥ 1/([c·ℓ(log(d) + 1)]^{ℓ/2} d^{16/ℓ} √ρ(p)).",
+            "uses": [
+              "L2"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": "Induction on ℓ: assuming ψ_k ≥ 1/(α_ℓ(log d + 1)^{ℓ/2} k^{β_ℓ}) for k ≤ d, Lemma 2 with α = α_ℓ(log d + 1)^{ℓ/2} and q ≤ 2/β_ℓ yields the step ℓ + 1; the bounds (24) give the stated form."
+          },
+          {
+            "id": "L2",
+            "locator": "Lemma 2",
+            "label": "One bootstrap step",
+            "statement": "If ψ_k ≥ 1/(αk^β) for all k ≤ d, with 0 ≤ β ≤ 1/2 and α ≥ 1, then for q = ⌈1/β⌉ + 1 there is a universal constant c with ψ_d ≥ 1/(c·q^{1/2} α log(d)^{1/2} d^{β − β/(8q)}).",
+            "uses": [
+              "L3",
+              "L4",
+              "L5"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": "q requires β > 0 (Lemma 5 assumes 0 < β). For d ≥ 3: for p(E) = 1/2, p(∂E) ≥ E p_{T₂}(∂E) ≥ (1/8)T₂^{1/2}‖A‖^{−1/2} min(p(E), p(E^c)) using GI, Lemmas 4–5 and B_t = tA^{−1} (the martingale identity for the boundary measure needs Fatou, giving the correct inequality direction). As printed, the right side is undefined at d = 1 (log 1 = 0); the d = 1, 2 cases from (3) hold with log(d) read as log(d) + 1, which is how Lemma 1 uses it."
+          },
+          {
+            "id": "L3",
+            "locator": "Lemma 3",
+            "label": "Localization SDE well-posed",
+            "statement": "If p is a density on R^d with compact support and invertible covariance A, the SDE dc_t = A^{−1/2}dW_t + A^{−1}μ_t dt, dB_t = A^{−1}dt, c₀ = 0, B₀ = 0, with p_t(x) ∝ exp(c_tᵀx − xᵀB_t x/2)p(x) and μ_t its mean, has a unique solution on [0, T] for every T > 0, and for each x, p_t(x) is a martingale with dp_t(x) = (x − μ_t)ᵀA^{−1/2}dW_t p_t(x).",
+            "uses": [],
+            "relation": "same",
+            "declarations": [],
+            "note": "Log-concavity is not assumed. Proved in Appendix A: Lipschitz coefficients from compact support, then Itô's formula for G_t(x) = exp(c_tᵀx − xᵀB_tx/2)p(x), V_t = ∫G_t and V_t^{−1}."
+          },
+          {
+            "id": "L4",
+            "locator": "Lemma 4 (Lee–Vempala, Lemma 29)",
+            "label": "Half-mass set stays balanced",
+            "statement": "Under the assumptions of Lemma 3, for every measurable E with p(E) = 1/2 and every t > 0, P(1/4 ≤ p_t(E) ≤ 3/4) ≥ 9/10 − P(∫₀ᵗ ‖A^{−1/2}A_sA^{−1/2}‖_op ds ≥ 1/64).",
+            "uses": [
+              "L3"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": "The integrand is printed with A_t; read A_s. Proof: d[g]_t ≤ ‖Q_t‖_op dt for g_t = p_t(E) by Cauchy–Schwarz, then Dambis–Dubins–Schwarz, the reflection principle and P(N > 2) < 0.023."
+          },
+          {
+            "id": "L5",
+            "locator": "Lemma 5",
+            "label": "Spectral norm control",
+            "statement": "Under the assumptions of Lemma 3, if ψ_k ≥ 1/(αk^β) for all k ≤ d with 0 < β ≤ 1/2 and α ≥ 1, then for q = ⌈1/β⌉ + 1, d ≥ 3 and T₂ = 1/(c·qα²log(d)d^{2β−β/(4q)}) with c universal, P(∫₀^{T₂} ‖A^{−1/2}A_tA^{−1/2}‖_op dt ≥ 1/64) < 4/10.",
+            "uses": [
+              "L7",
+              "L8"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": "The proof takes T₁ = 1/(32768qα²log(d)d^{2β}) and T₂ = d^{β/(4q)}T₁/40, i.e. c = 1310720: probability ≤ 3/10 on [0, T₁] by Lemma 7 and ≤ 1/10 on [T₁, T₂] by (18), Lemma 8 and Markov. Log-concavity of p, not part of Lemma 3, is needed through Lemma 6."
+          },
+          {
+            "id": "L6",
+            "locator": "Lemma 6",
+            "label": "Potential drift and diffusion bounds",
+            "statement": "Under the assumptions of Lemma 5, dΓ_t = v_tᵀdW_t + δ_t dt with ‖v_t‖₂ ≤ 16qΓ_t^{1+1/(2q)} and δ_t ≤ min{64q²α²log(d)d^{2β−1/q}Γ_t^{1+1/q}, 2q²Γ_t/t}.",
+            "uses": [
+              "L9",
+              "L10",
+              "L11",
+              "L12"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": "The 1/t bound is new relative to Lee–Vempala: ϱ_t, the law of A^{−1/2}(X − μ_t), is log-concave (linear images of log-concave laws) and more log-concave than N(0, I_d/t)."
+          },
+          {
+            "id": "L7",
+            "locator": "Lemma 7",
+            "label": "Potential stays small up to T₁",
+            "statement": "Under the assumptions of Lemma 6, with h(a) = −(a + 1)^{−1/q} and T₁ = 1/(32768qα²log(d)d^{2β}), P(max_{t∈[0,T₁]} h(Γ_t) ≥ −(d + 1)^{−1/q}/2) ≤ exp(−(2/3)q log(d)) ≤ 3/10.",
+            "uses": [
+              "L6"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": "Γ₀ = d. Itô's formula for the concave h drops the correction; the proof gives exp(−(2/3)qα²log(d)d^{2β−2/q}), which implies the printed bound since βq ≥ 1 and α ≥ 1; d ≥ 3 and q ≥ 2 give ≤ 3/10."
+          },
+          {
+            "id": "L8",
+            "locator": "Lemma 8",
+            "label": "Polynomial growth of E Γ^{1/q}",
+            "statement": "Under the assumptions of Lemma 6, with f(a) = a^{1/q}, E f(Γ_{t₂}) ≤ E f(Γ_{t₁})(t₂/t₁)^{2q} for all t₂ > t₁ > 0.",
+            "uses": [
+              "L6"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": "Itô's formula for the concave f, the bound δ_t ≤ 2q²Γ_t/t and the asserted martingale property of ∫Γ_t^{1/q−1}v_tᵀdW_t give d E f(Γ_t) ≤ (2q/t)E f(Γ_t)dt, integrated by Grönwall."
+          },
+          {
+            "id": "L9",
+            "locator": "Lemma 9",
+            "label": "Vector third-moment bound",
+            "statement": "If p is log-concave with mean μ and covariance A, then for all positive semi-definite B, C, ‖∫B^{1/2}(x − μ)(x − μ)ᵀC(x − μ)p(x)dx‖₂ ≤ 16‖A^{1/2}BA^{1/2}‖_op^{1/2} Tr(A^{1/2}CA^{1/2}).",
+            "uses": [],
+            "relation": "same",
+            "declarations": [],
+            "note": "Eigen-decomposition of C, Cauchy–Schwarz and (29) with a = 4, b = 2."
+          },
+          {
+            "id": "L10",
+            "locator": "Lemma 10",
+            "label": "Tensor bound from the hypothesis",
+            "statement": "If ψ_k ≥ 1/(αk^β) for all k ≤ d with 0 ≤ β ≤ 1/2 and α ≥ 1, and p is log-concave on R^d with invertible covariance A, then for q ≥ 1/(2β), T_p(A^{q−2}, I_d, I_d) ≤ 128α²log(d)d^{2β−1/q}Tr(A^q)^{1+1/q}.",
+            "uses": [
+              "L12",
+              "L13b"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": "Standardize to the isotropic law ϱ, swap exponents by Lemma 12, expand A^q in eigenvectors and apply Lemma 13(2), then Hölder (called Cauchy–Schwarz). Effectively β > 0. Lemma 13 is applied to ϱ, which has compact support in the application."
+          },
+          {
+            "id": "L11",
+            "locator": "Lemma 11",
+            "label": "Tensor bound under a Gaussian factor",
+            "statement": "If τ > 0 and p is log-concave, more log-concave than N(0, τ^{−1}I_d), with invertible covariance A, then for q ≥ 3, T_p(A^{q−2}, I_d, I_d) ≤ (4/τ)Tr(A^q).",
+            "uses": [
+              "L12"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": "Eigen-decomposition of A, Brascamp–Lieb for the quadratics xᵀΔ_ix, Cauchy–Schwarz, Lemma 12 to raise A^{q−3}, then rearrangement."
+          },
+          {
+            "id": "L12",
+            "locator": "Lemma 12 (Lee–Vempala, arXiv v2 Lemma 43)",
+            "label": "Tensor exponent swap",
+            "statement": "If p is log-concave on R^d, δ ∈ [0, 1] and A, B, C are positive semi-definite, then T_p(B^{1/2}A^δB^{1/2}, B^{1/2}A^{1−δ}B^{1/2}, C) ≤ T_p(B^{1/2}AB^{1/2}, B, C).",
+            "uses": [],
+            "relation": "same",
+            "declarations": [],
+            "note": "The proof does not use log-concavity, only finite third moments: both sides are sums of traces Tr(A^δΔ_iA^{1−δ}Δ_i) and Tr(AΔ_iΔ_i)."
+          },
+          {
+            "id": "L13a",
+            "locator": "Lemma 13, part 1 (Lee–Vempala, arXiv v2 Lemma 41; Eldan Lemma 6)",
+            "label": "Δ-trace bound for projections",
+            "statement": "If p is an isotropic log-concave density on R^d, v a unit vector and Δ = E(Xᵀv)XXᵀ, then Tr(ΔPΔ) ≤ 16ψ_{min(2r,d)}^{−2} for every orthogonal projection P of rank r.",
+            "uses": [
+              "CH"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": "Cauchy–Schwarz and Cheeger's inequality for the quadratic xᵀΔPx, which depends on a projection of rank ≤ min(2r, d). The ψ_k hypothesis of the lemma is not needed for this part; ψ_k is defined over compactly supported densities, which holds in the application."
+          },
+          {
+            "id": "L13b",
+            "locator": "Lemma 13, part 2",
+            "label": "Δ-trace bound for PSD weights",
+            "statement": "If ψ_k ≥ 1/(αk^β) for all k ≤ d with 0 < β ≤ 1/2 and α ≥ 1, then with p, v, Δ as in part 1, Tr(ΔAΔ) ≤ 128α²log(d)(Tr A^{1/(2β)})^{2β} for every positive semi-definite A.",
+            "uses": [
+              "L13a"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": "Groups the eigenvalues of A into J = ⌈log d⌉ exponential blocks plus a small remainder, applies part 1 and the hypothesis to each block, then Hölder."
+          },
+          {
+            "id": "CH",
+            "locator": "Proof of Lemma 13, step (ii) (Maz'ya; Cheeger; Milman Theorem 1.1)",
+            "label": "Cheeger's inequality",
+            "statement": "For a probability density with isoperimetric coefficient ψ, Var(g) ≤ 4ψ^{−2}E‖∇g‖² for locally Lipschitz g; equivalently the Poincaré constant satisfies C_P ≤ 4/ψ².",
+            "uses": [],
+            "relation": "partial",
+            "declarations": [
+              {
+                "name": "FunctionalInequalities.KLS.LogConcave.literatureConstant_le_four_mul_inverseScale_sq",
+                "source": "formalization/FunctionalInequalities/KLS/Geometry/Cheeger/Inequality.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.Isoperimetry.minkowskiConstant_sq_mul_evariance_le",
+                "source": "formalization/FunctionalInequalities/KLS/Geometry/Cheeger/Inequality.lean"
+              }
+            ],
+            "note": "Lean proves C_P ≤ 4Ψ² (Ψ = 1/ψ) for finite-dimensional log-concave laws, and h² Var(g) ≤ 4∫‖∇g‖² for bounded C¹ Lipschitz g under every probability law with the Minkowski constant h. Chen applies it to an unbounded quadratic on a marginal; that instance is not separately stated in Lean."
+          }
+        ]
+      }
     },
     {
       "id": "DePontiMondino2021",

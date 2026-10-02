@@ -16,19 +16,20 @@ authorization. Exact results, scopes and certificates are in the
 - Covered papers: Ambrosio–Di Marino–Gigli Theorem 3.6, certificate
   `thm:relaxed-minkowski-content-perimeter`, accepted by the owner on 2026-10-02
   ([review record](research/decisions/2026-10-02-admg-theorem-3-6-certificate.md)).
-- Paper lemma maps cover KLS 1995, Bobkov 1999, E. Milman 2009, ADMG 2017 and De Ponti–Mondino
-  2021 ([progress page](research/progress/README.md#paper-lemma-map)). Source PDFs are kept
+- Paper lemma maps cover KLS 1995, Bobkov 1999, E. Milman 2009, AGS 2013, Eldan 2013, ADMG 2017,
+  De Ponti–Mondino 2021 and Chen 2021 ([progress page](research/progress/README.md#paper-lemma-map)). Source PDFs are kept
   outside the repository.
 
 ## Next
 
 1. Formalize De Ponti–Mondino Lemmas 3.2 and 3.3 (elementary monotonicity of explicit functions)
-   and extend the lemma maps (AGS 2013, Eldan 2013, Chen 2021).
+   and extend the lemma maps to the remaining downloaded sources.
 2. Blocked: the priority-1 Bakry–Émery `C_P ≤ 1/ρ` target waits for the Bakry–Gentil–Ledoux text.
 
 ## Open owner decisions
 
-- Stochastic calculus for priorities 4–5: build it here or build on external Lean efforts.
+- Stochastic calculus for priorities 4–5: build it here or build on external Lean efforts; evidence
+  and a recommendation are in [the options record](research/decisions/2026-10-03-stochastic-calculus-options.md).
 - Upstreaming generic infrastructure to Mathlib after an API cleanup.
 - CI cost: project build cache or a self-hosted runner while the repository is private
   (no scheduled runs; the opt-in [milestone gate](research/workflow.md#local-milestone-gate) exists).

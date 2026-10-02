@@ -178,6 +178,147 @@ flowchart LR
     class Milman2009_more lemma_more;
 ```
 
+### Eldan (arXiv:1203.0893v5)
+
+28 statements: 28 ○. [Full map](LITERATURE.md#eldan2013-lemma-map).
+
+```mermaid
+flowchart LR
+    Eldan2013_T11["○ Theorem 1.1<br/>Thin shell implies Cheeger polylog"]
+    Eldan2013_L16["○ Lemma 1.6<br/>K_n bounded by thin shell"]
+    Eldan2013_P17["○ Proposition 1.7<br/>Cheeger bounded by K_n polylog"]
+    Eldan2013_L21["○ Lemma 2.1<br/>Linear-tilt localization SDE"]
+    Eldan2013_L24["○ Lemma 2.4<br/>Basic properties of localization"]
+    Eldan2013_L25["○ Lemma 2.5<br/>Covariance nondegenerate at small times"]
+    Eldan2013_P26["○ Proposition 2.6<br/>Gaussian-tilted concentration and variance"]
+    Eldan2013_P31["○ Proposition 3.1<br/>Covariance operator norm bound"]
+    Eldan2013_L32["○ Lemma 3.2<br/>Bounds on the xi vectors"]
+    Eldan2013_C33["○ Corollary 3.3<br/>Concentration for localized measure"]
+    Eldan2013_L41["○ Lemma 4.1<br/>Mass of E stays balanced"]
+    Eldan2013_T42["○ Theorem 4.2 (E. Milman, Theorem 2.1 of Mil2)<br/>Concentration implies isoperimetry"]
+    Eldan2013_L16 --> Eldan2013_T11
+    Eldan2013_P17 --> Eldan2013_T11
+    Eldan2013_L24 --> Eldan2013_P17
+    Eldan2013_P31 --> Eldan2013_P17
+    Eldan2013_C33 --> Eldan2013_P17
+    Eldan2013_L41 --> Eldan2013_P17
+    Eldan2013_T42 --> Eldan2013_P17
+    Eldan2013_L21 --> Eldan2013_L24
+    Eldan2013_L25 --> Eldan2013_L24
+    Eldan2013_L21 --> Eldan2013_P31
+    Eldan2013_L24 --> Eldan2013_P31
+    Eldan2013_L32 --> Eldan2013_P31
+    Eldan2013_P26 --> Eldan2013_P31
+    Eldan2013_P26 --> Eldan2013_C33
+    Eldan2013_P31 --> Eldan2013_C33
+    Eldan2013_L21 --> Eldan2013_L41
+    Eldan2013_more["+16 further statements in the paper register"]
+    classDef lemma_pending fill:#fee2e2,stroke:#dc2626,color:#991b1b;
+    class Eldan2013_T11,Eldan2013_L16,Eldan2013_P17,Eldan2013_L21,Eldan2013_L24,Eldan2013_L25,Eldan2013_P26,Eldan2013_P31,Eldan2013_L32,Eldan2013_C33,Eldan2013_L41,Eldan2013_T42 lemma_pending;
+    style Eldan2013_T11 stroke-width:3px
+    classDef lemma_more fill:#f8fafc,stroke:#94a3b8,color:#334155,stroke-dasharray:4 3;
+    class Eldan2013_more lemma_more;
+```
+
+### Ambrosio–Gigli–Savaré (arXiv:1111.3730v3)
+
+38 statements: 2 ✓, 3 ◐, 33 ○. [Full map](LITERATURE.md#ags2013-lemma-map).
+
+```mermaid
+flowchart LR
+    AGS2013_S21["✓ Section 2.1 (slope)<br/>Slope of a function"]
+    AGS2013_E21a["◐ (2.1a)<br/>Subadditivity of the slope"]
+    AGS2013_L21["○ Lemma 2.1<br/>One-dimensional Sobolev criterion"]
+    AGS2013_P22["○ Proposition 2.2 (Lisini, superposition principle)<br/>Lifting W_p curves to path measures"]
+    AGS2013_P31["○ Proposition 3.1<br/>Monotonicity of D^±"]
+    AGS2013_P32["○ Proposition 3.2<br/>Semicontinuity of D^±"]
+    AGS2013_P33["○ Proposition 3.3<br/>Time derivative of Q_t f"]
+    AGS2013_E37["✓ (3.7)<br/>Asymptotic Lipschitz constant"]
+    AGS2013_P34["○ Proposition 3.4<br/>Asymptotic Lipschitz bound for Q_t f"]
+    AGS2013_T35["○ Theorem 3.5<br/>Hopf–Lax subsolution of Hamilton–Jacobi"]
+    AGS2013_D42["○ Definition 4.2<br/>Minimal q-relaxed slope"]
+    AGS2013_D46["○ Definition 4.6<br/>Test plans and q-negligible curves"]
+    AGS2013_R47["○ Remark 4.7<br/>Representative independence along curves"]
+    AGS2013_D48["○ Definition 4.8<br/>q-weak upper gradient"]
+    AGS2013_D49["○ Definition 4.9<br/>Sobolev along q-a.e. curve"]
+    AGS2013_R410["○ Remark 4.10 (equivalence with Ambrosio–Gigli–Savaré 2011)<br/>Weak upper gradients give Sobolev curves"]
+    AGS2013_D411["○ Definition 4.11<br/>Minimal q-weak upper gradient"]
+    AGS2013_L51["○ Lemma 5.1 (Cheeger; cf. Ambrosio–Gigli–Savaré 2011, Lemma 4.4)<br/>Pointwise minimality of relaxed slope"]
+    AGS2013_P52["○ Proposition 5.2 (Cheeger; cf. Ambrosio–Gigli–Savaré 2011, Proposition 4.8)<br/>Locality and chain rule"]
+    AGS2013_E63["◐ (6.3)<br/>Cheeger q-functional"]
+    AGS2013_T61["○ Theorem 6.1<br/>Cheeger functional convex and lsc"]
+    AGS2013_R62["○ Remark 6.2<br/>Lsc of weighted energies"]
+    AGS2013_D63["○ Definition 6.3<br/>q-Laplacian"]
+    AGS2013_P65["○ Proposition 6.5<br/>Integration by parts inequality"]
+    AGS2013_P66["○ Proposition 6.6<br/>Properties of the Ch_q gradient flow"]
+    AGS2013_P71["○ Proposition 7.1<br/>Entropy dissipation along W_p curves"]
+    AGS2013_L72["○ Lemma 7.2 (Kuwada)<br/>Kuwada's lemma"]
+    AGS2013_T73["○ Theorem 7.3<br/>Weak gradient equals relaxed slope"]
+    AGS2013_T74["○ Theorem 7.4<br/>Equivalence of weak gradients"]
+    AGS2013_S83["◐ Section 8.3, (8.3)<br/>Density with asymptotic Lipschitz constants"]
+    AGS2013_S21 --> AGS2013_E21a
+    AGS2013_P31 --> AGS2013_P33
+    AGS2013_S21 --> AGS2013_E37
+    AGS2013_P32 --> AGS2013_P34
+    AGS2013_E37 --> AGS2013_P34
+    AGS2013_P33 --> AGS2013_T35
+    AGS2013_P34 --> AGS2013_T35
+    AGS2013_S21 --> AGS2013_D42
+    AGS2013_E21a --> AGS2013_D42
+    AGS2013_D46 --> AGS2013_R47
+    AGS2013_D46 --> AGS2013_D48
+    AGS2013_D46 --> AGS2013_D49
+    AGS2013_L21 --> AGS2013_R410
+    AGS2013_D46 --> AGS2013_R410
+    AGS2013_R47 --> AGS2013_R410
+    AGS2013_D48 --> AGS2013_R410
+    AGS2013_D49 --> AGS2013_R410
+    AGS2013_D48 --> AGS2013_D411
+    AGS2013_D49 --> AGS2013_D411
+    AGS2013_D42 --> AGS2013_L51
+    AGS2013_D42 --> AGS2013_P52
+    AGS2013_L51 --> AGS2013_P52
+    AGS2013_D42 --> AGS2013_T61
+    AGS2013_E63 --> AGS2013_T61
+    AGS2013_P52 --> AGS2013_T61
+    AGS2013_T61 --> AGS2013_R62
+    AGS2013_P52 --> AGS2013_R62
+    AGS2013_E63 --> AGS2013_D63
+    AGS2013_D63 --> AGS2013_P65
+    AGS2013_P52 --> AGS2013_P65
+    AGS2013_D42 --> AGS2013_P65
+    AGS2013_P65 --> AGS2013_P66
+    AGS2013_P52 --> AGS2013_P66
+    AGS2013_P22 --> AGS2013_P71
+    AGS2013_D46 --> AGS2013_P71
+    AGS2013_R410 --> AGS2013_P71
+    AGS2013_D411 --> AGS2013_P71
+    AGS2013_P33 --> AGS2013_L72
+    AGS2013_T35 --> AGS2013_L72
+    AGS2013_P65 --> AGS2013_L72
+    AGS2013_P66 --> AGS2013_L72
+    AGS2013_P66 --> AGS2013_T73
+    AGS2013_L72 --> AGS2013_T73
+    AGS2013_P71 --> AGS2013_T73
+    AGS2013_R62 --> AGS2013_T73
+    AGS2013_P52 --> AGS2013_T73
+    AGS2013_T73 --> AGS2013_T74
+    AGS2013_R410 --> AGS2013_T74
+    AGS2013_T73 --> AGS2013_S83
+    AGS2013_L72 --> AGS2013_S83
+    AGS2013_E37 --> AGS2013_S83
+    AGS2013_more["+8 further statements in the paper register"]
+    classDef lemma_formalized fill:#dbeafe,stroke:#2563eb,color:#1e3a8a;
+    class AGS2013_S21,AGS2013_E37 lemma_formalized;
+    classDef lemma_partial fill:#fff3df,stroke:#c88719,color:#66420d;
+    class AGS2013_E21a,AGS2013_E63,AGS2013_S83 lemma_partial;
+    classDef lemma_pending fill:#fee2e2,stroke:#dc2626,color:#991b1b;
+    class AGS2013_L21,AGS2013_P22,AGS2013_P31,AGS2013_P32,AGS2013_P33,AGS2013_P34,AGS2013_T35,AGS2013_D42,AGS2013_D46,AGS2013_R47,AGS2013_D48,AGS2013_D49,AGS2013_R410,AGS2013_D411,AGS2013_L51,AGS2013_P52,AGS2013_T61,AGS2013_R62,AGS2013_D63,AGS2013_P65,AGS2013_P66,AGS2013_P71,AGS2013_L72,AGS2013_T73,AGS2013_T74 lemma_pending;
+    style AGS2013_T74 stroke-width:3px
+    classDef lemma_more fill:#f8fafc,stroke:#94a3b8,color:#334155,stroke-dasharray:4 3;
+    class AGS2013_more lemma_more;
+```
+
 ### Ambrosio–Di Marino–Gigli (arXiv:1603.08412v1)
 
 11 statements: 6 ✓, 1 ◐, 4 ○. [Full map](LITERATURE.md#admg2017-lemma-map).
@@ -206,6 +347,58 @@ flowchart LR
     style ADMG2017_T36 stroke-width:3px
     classDef lemma_more fill:#f8fafc,stroke:#94a3b8,color:#334155,stroke-dasharray:4 3;
     class ADMG2017_more lemma_more;
+```
+
+### Chen (arXiv:2011.13661v2)
+
+19 statements: 2 ◐, 17 ○. [Full map](LITERATURE.md#chen2021-lemma-map).
+
+```mermaid
+flowchart LR
+    Chen2021_D2["◐ Equation (2)<br/>Isoperimetric coefficient ψ(p)"]
+    Chen2021_T1["○ Theorem 1<br/>Almost constant KLS lower bound"]
+    Chen2021_L1["○ Lemma 1<br/>Main bound for compact support"]
+    Chen2021_L2["○ Lemma 2<br/>One bootstrap step"]
+    Chen2021_L3["○ Lemma 3<br/>Localization SDE well-posed"]
+    Chen2021_L4["○ Lemma 4 (Lee–Vempala, Lemma 29)<br/>Half-mass set stays balanced"]
+    Chen2021_L5["○ Lemma 5<br/>Spectral norm control"]
+    Chen2021_L6["○ Lemma 6<br/>Potential drift and diffusion bounds"]
+    Chen2021_L7["○ Lemma 7<br/>Potential stays small up to T₁"]
+    Chen2021_L8["○ Lemma 8<br/>Polynomial growth of E Γ^{1/q}"]
+    Chen2021_L9["○ Lemma 9<br/>Vector third-moment bound"]
+    Chen2021_L10["○ Lemma 10<br/>Tensor bound from the hypothesis"]
+    Chen2021_L11["○ Lemma 11<br/>Tensor bound under a Gaussian factor"]
+    Chen2021_L12["○ Lemma 12 (Lee–Vempala, arXiv v2 Lemma 43)<br/>Tensor exponent swap"]
+    Chen2021_L13a["○ Lemma 13, part 1 (Lee–Vempala, arXiv v2 Lemma 41; Eldan Lemma 6)<br/>Δ-trace bound for projections"]
+    Chen2021_L13b["○ Lemma 13, part 2<br/>Δ-trace bound for PSD weights"]
+    Chen2021_CH["◐ Proof of Lemma 13, step (ii) (Maz'ya; Cheeger; Milman Theorem 1.1)<br/>Cheeger's inequality"]
+    Chen2021_L1 --> Chen2021_T1
+    Chen2021_L2 --> Chen2021_L1
+    Chen2021_L3 --> Chen2021_L2
+    Chen2021_L4 --> Chen2021_L2
+    Chen2021_L5 --> Chen2021_L2
+    Chen2021_L3 --> Chen2021_L4
+    Chen2021_L7 --> Chen2021_L5
+    Chen2021_L8 --> Chen2021_L5
+    Chen2021_L9 --> Chen2021_L6
+    Chen2021_L10 --> Chen2021_L6
+    Chen2021_L11 --> Chen2021_L6
+    Chen2021_L12 --> Chen2021_L6
+    Chen2021_L6 --> Chen2021_L7
+    Chen2021_L6 --> Chen2021_L8
+    Chen2021_L12 --> Chen2021_L10
+    Chen2021_L13b --> Chen2021_L10
+    Chen2021_L12 --> Chen2021_L11
+    Chen2021_CH --> Chen2021_L13a
+    Chen2021_L13a --> Chen2021_L13b
+    Chen2021_more["+2 further statements in the paper register"]
+    classDef lemma_partial fill:#fff3df,stroke:#c88719,color:#66420d;
+    class Chen2021_D2,Chen2021_CH lemma_partial;
+    classDef lemma_pending fill:#fee2e2,stroke:#dc2626,color:#991b1b;
+    class Chen2021_T1,Chen2021_L1,Chen2021_L2,Chen2021_L3,Chen2021_L4,Chen2021_L5,Chen2021_L6,Chen2021_L7,Chen2021_L8,Chen2021_L9,Chen2021_L10,Chen2021_L11,Chen2021_L12,Chen2021_L13a,Chen2021_L13b lemma_pending;
+    style Chen2021_T1 stroke-width:3px
+    classDef lemma_more fill:#f8fafc,stroke:#94a3b8,color:#334155,stroke-dasharray:4 3;
+    class Chen2021_more lemma_more;
 ```
 
 ### De Ponti–Mondino (arXiv:1902.03835v2)
