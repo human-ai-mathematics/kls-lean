@@ -279,7 +279,7 @@ Upstream revision: `34b5fcd57fef17089e781616005fe6d3641bd11e`. The selected upst
 
 Canonical input digest: `a3f8b5b7da3444cc830bf503e10f861c54a2828915ff156c3356245509c1f421`.
 Diagram digest: `3a58c212c513f9beb337f812162a28a91abe255f4d3bb45a7cb601eb5b8a293e`.
-View input digest: `478ce89c2be8a37c57ef185f617ee7f147fef43f0a23dc4044083d92975dee1e`.
+View input digest: `594cb646ea28b7249c1059d02786cc32d0ace6b60f2a1cff5ad122afcd4722e9`.
 
 Regenerate with `python3 research/progress/update.py` after staging the intended source and
 metadata updates; unstaged unrelated metadata is then deliberately excluded. When the

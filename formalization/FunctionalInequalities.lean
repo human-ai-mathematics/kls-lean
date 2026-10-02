@@ -31,6 +31,7 @@ import FunctionalInequalities.KLS.Statement
 import FunctionalInequalities.KLS.Target
 import FunctionalInequalities.KLS.LogConcave.Poincare
 import FunctionalInequalities.KLS.LogConcave.Borel
+import FunctionalInequalities.KLS.LogConcave.Tail
 import FunctionalInequalities.KLS.Isotropic
 import FunctionalInequalities.KLS.Isoperimetry
 import FunctionalInequalities.KLS.Geometry.Perimeter.Recovery

@@ -69,6 +69,13 @@ Nothing is pushed.
   Full local verifier: 184 gates passed, 354 replayed modules
   (`build/verification/20261002T181356.800303Z/report.json`). Committed locally; not a paper target,
   so no milestone tag.
+- Extra block (time remained): Bobkov 1999 Lemma 3.1 (Borell's lemma) in `KLS/LogConcave/Tail.lean`
+  (namespace `KLS.LogConcave`, imports only `KLS/LogConcave/Borel.lean`; owner: log-concave laws, tail
+  estimates). Five statements by Claude (the convex-combination inclusion, the log-concavity step in
+  real form, `B ⊆ tB`, the real-power algebra and the paper statement); proofs by the GPT worker, one at
+  a time; rechecked independently (identical statements, standard axioms). The Lean statement assumes
+  `B` measurable, which the paper's `μ(B)` presupposes. Claude added `omit … in` to the two geometric
+  lemmas to remove unused-variable warnings.
 - Numbering cross-check of the 14 later maps by an independent GPT reading of each PDF: all agree.
   The only difference, Cordero-Erausquin–Klartag Definitions 1–2 (separate counter), is in our map
   and was checked against the PDF.

@@ -265,7 +265,7 @@ flowchart LR
     Bobkov1999_P21["○ Proposition 2.1<br/>Functional form of Theorem 1.1"]
     Bobkov1999_C22["○ Corollary 2.2<br/>Measures supported in a ball"]
     Bobkov1999_C23["○ Corollary 2.3<br/>Log-Sobolev versus spectral gap in a ball"]
-    Bobkov1999_L31["○ Lemma 3.1 (Borell)<br/>Borell's lemma"]
+    Bobkov1999_L31["✓ Lemma 3.1 (Borell)<br/>Borell's lemma"]
     Bobkov1999_L32["○ Lemma 3.2<br/>Functional Gaussian isoperimetry"]
     Bobkov1999_L33["○ Lemma 3.3<br/>Gaussian isoperimetry gives log-Sobolev"]
     Bobkov1999_P41["○ Proposition 4.1<br/>Cheeger constant on the line"]
@@ -288,8 +288,10 @@ flowchart LR
     Bobkov1999_P41 --> Bobkov1999_C43
     Bobkov1999_P41 --> Bobkov1999_P44
     Bobkov1999_L31 --> Bobkov1999_P51
+    classDef lemma_formalized fill:#dbeafe,stroke:#2563eb,color:#1e3a8a;
+    class Bobkov1999_L31 lemma_formalized;
     classDef lemma_pending fill:#fee2e2,stroke:#dc2626,color:#991b1b;
-    class Bobkov1999_T11,Bobkov1999_T12,Bobkov1999_T13,Bobkov1999_P21,Bobkov1999_C22,Bobkov1999_C23,Bobkov1999_L31,Bobkov1999_L32,Bobkov1999_L33,Bobkov1999_P41,Bobkov1999_C42,Bobkov1999_P44,Bobkov1999_P51,Bobkov1999_P52 lemma_pending;
+    class Bobkov1999_T11,Bobkov1999_T12,Bobkov1999_T13,Bobkov1999_P21,Bobkov1999_C22,Bobkov1999_C23,Bobkov1999_L32,Bobkov1999_L33,Bobkov1999_P41,Bobkov1999_C42,Bobkov1999_P44,Bobkov1999_P51,Bobkov1999_P52 lemma_pending;
     classDef lemma_improved fill:#dcfce7,stroke:#15803d,color:#14532d;
     class Bobkov1999_C43 lemma_improved;
     style Bobkov1999_T11 stroke-width:3px
@@ -303,7 +305,7 @@ flowchart LR
 | Proposition 2.1 | For locally Lipschitz f with values in [0, 1] and a symmetric convex body B: 2∫‖∇f‖_{B°}dμ ≥ Ent(f) + Ent(1 − f) + log μ(B(x₀)). | ○ Not yet formalized | — | Proved by the Prékopa–Leindler inequality. |
 | Corollary 2.2 | If μ is concentrated in a ball of radius r, then 2r∫&#124;∇f&#124;dμ ≥ Ent(f) + Ent(1 − f) and 2rμ⁺(A) ≥ μ(A)log(1/μ(A)) + (1 − μ(A))log(1/(1 − μ(A))); hence Is(μ) ≥ log 2/r and λ₁ ≥ log²2/(4r²). | ○ Not yet formalized | — |  |
 | Corollary 2.3 | If μ is concentrated in a ball of radius r, then λ₁/(1 + 2r√λ₁) ≤ ρ ≤ λ₁, so ρ ≥ 1/(10r²). | ○ Not yet formalized | — |  |
-| Lemma 3.1 (Borell) | For symmetric convex B with θ = μ(B) > 1/2 and t ≥ 1: 1 − μ(tB) ≤ (1 − θ)((1 − θ)/θ)^((t−1)/2). | ○ Not yet formalized | — |  |
+| Lemma 3.1 (Borell) | For symmetric convex B with θ = μ(B) > 1/2 and t ≥ 1: 1 − μ(tB) ≤ (1 − θ)((1 − θ)/θ)^((t−1)/2). | ✓ Formalized in Lean | [`one_sub_measure_smul_le`](../../formalization/FunctionalInequalities/KLS/LogConcave/Tail.lean) | For every log-concave law on a finite-dimensional real normed space. The Lean statement assumes B measurable, which the paper's μ(B) presupposes (a convex set need not be Borel). |
 | Lemma 3.2 | If μ⁺(A) ≥ cI(μ(A)) for the Gaussian isoperimetric function I, then c[I(∫f) − ∫I(f)] ≤ ∫&#124;∇f&#124; for locally Lipschitz f with values in [0, 1]. | ○ Not yet formalized | — |  |
 | Lemma 3.3 | Inequality (3.10) implies (c²/2)Ent(f²) ≤ ∫&#124;∇f&#124;² dμ. | ○ Not yet formalized | — |  |
 | Proposition 4.1 | For log-concave μ on R: 1/(3Var) ≤ Is²(μ) ≤ 2/Var, with equality cases the uniform and two-sided exponential laws; Is(μ) = 2f(m) at the median. | ○ Not yet formalized | — | Locally only weaker bounds are proved: Ψ² ≤ 12 C_P on the line and Ψ² ≤ π C_P in general, which with C_P ≤ 4 Var do not give the constant 3. |

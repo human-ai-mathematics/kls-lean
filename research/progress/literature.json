@@ -359,8 +359,13 @@
             "statement": "For symmetric convex B with θ = μ(B) > 1/2 and t ≥ 1: 1 − μ(tB) ≤ (1 − θ)((1 − θ)/θ)^((t−1)/2).",
             "uses": [],
             "relation": "same",
-            "declarations": [],
-            "note": ""
+            "declarations": [
+              {
+                "name": "FunctionalInequalities.KLS.LogConcave.one_sub_measure_smul_le",
+                "source": "formalization/FunctionalInequalities/KLS/LogConcave/Tail.lean"
+              }
+            ],
+            "note": "For every log-concave law on a finite-dimensional real normed space. The Lean statement assumes B measurable, which the paper's μ(B) presupposes (a convex set need not be Borel)."
           },
           {
             "id": "L32",

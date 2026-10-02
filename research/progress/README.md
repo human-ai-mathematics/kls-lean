@@ -77,15 +77,18 @@ flowchart LR
 
 ### Bobkov (Ann. Probab. 27 (1999), no. 4, 1903–1921 (author PDF))
 
-15 statements: 14 ○, 1 ⇑. [Full map](LITERATURE.md#bobkov1999-lemma-map).
+15 statements: 1 ✓, 13 ○, 1 ⇑. [Full map](LITERATURE.md#bobkov1999-lemma-map).
 
 ```mermaid
 flowchart LR
     Bobkov1999_T11["○ Theorem 1.1<br/>Perimeter, entropy and ball mass"]
     Bobkov1999_P21["○ Proposition 2.1<br/>Functional form of Theorem 1.1"]
+    Bobkov1999_L31["✓ Lemma 3.1 (Borell)<br/>Borell's lemma"]
     Bobkov1999_C43["⇑ Corollary 4.3<br/>Spectral gap on the line"]
     Bobkov1999_P21 --> Bobkov1999_T11
-    Bobkov1999_more["+12 further statements in the paper register"]
+    Bobkov1999_more["+11 further statements in the paper register"]
+    classDef lemma_formalized fill:#dbeafe,stroke:#2563eb,color:#1e3a8a;
+    class Bobkov1999_L31 lemma_formalized;
     classDef lemma_pending fill:#fee2e2,stroke:#dc2626,color:#991b1b;
     class Bobkov1999_T11,Bobkov1999_P21 lemma_pending;
     classDef lemma_improved fill:#dcfce7,stroke:#15803d,color:#14532d;
