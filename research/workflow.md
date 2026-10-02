@@ -156,6 +156,17 @@ shared or released. Changes to the toolchain, dependencies or verification machi
 justify a manual reproducibility check. Do not rerun a successful unchanged SHA without a
 specific verification reason.
 
+#### Local milestone gate
+
+The tracked `.githooks/pre-push` hook runs the full local verifier only when a push includes a
+`milestone/**` tag; branch pushes, other tags and deletions pass through without checks. It
+requires the tag to point at the checked-out HEAD and tracked files to match HEAD (untracked
+files are ignored), then runs `python3 research/verify.py`. This catches local failures before a
+remote run is spent; failures that only the clean runner can expose still need remote CI.
+Enable it once per checkout with `git config core.hooksPath .githooks`, after preserving any
+existing hook configuration. `git push --no-verify` bypasses it; a bypassed or local receipt is
+not remote evidence.
+
 Run Lean certification either manually with `gh workflow run lean.yml --ref <branch-or-tag>`
 or by explicitly pushing a `milestone/<name>` tag for the intended commit. Choose one trigger
 per milestone. Confirm the run's actual `head_sha` and conclusion before recording remote

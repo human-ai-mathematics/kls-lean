@@ -54,7 +54,9 @@ potentials do not prove the positive-curvature endpoint.
 
 Open owner decisions: how to obtain stochastic calculus for priorities 4–5 (build here or build
 on external Lean efforts), Mathlib upstreaming after an API cleanup, and the remaining CI
-proposals in issue #8 (local pre-push gate, build cache, scheduled run).
+proposals in issue #8 (build cache, self-hosted runner). A scheduled CI run is declined: it
+would add remote runs outside milestones. The opt-in milestone-only pre-push gate is described in
+[workflow.md](research/workflow.md#local-milestone-gate).
 
 ## Delivery
 

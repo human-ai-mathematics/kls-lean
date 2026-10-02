@@ -39,7 +39,10 @@ coverage or certificate is claimed.
   stay blocked until this is decided.
 - Upstreaming generic infrastructure (coarea, sharp Sard, heat semigroup, Cheeger–Buser) to
   Mathlib, after an API cleanup.
-- The local pre-push gate and the remaining CI cost proposals.
+- The remaining CI cost proposals (project build cache, self-hosted runner while the
+  repository is private). The owner keeps remote CI for milestones and Lean code only, so the
+  weekly scheduled run and a split fast job are not adopted. A milestone-only local pre-push
+  gate was added on 2026-10-02; see [workflow.md](../workflow.md#local-milestone-gate).
 
 ## ADMG target review
 
