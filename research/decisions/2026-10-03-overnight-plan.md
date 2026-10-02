@@ -47,3 +47,7 @@ Nothing is pushed.
   inequality, which Lean proves without isotropy and with constant 4; 2 ◐), Klartag–Lehec 2022
   (28 items: 1 ✓, 7 ◐) and Klartag 2023 (19 items: 6 ◐). Lee–Vempala uses the C_t = I localization,
   relevant to the stochastic-calculus decision. All 22 diagrams render.
+- Block 2 extended again: Jambulapati–Lee–Vempala 2022 (27 items: 1 ◐), Klartag–Lehec thin shell
+  2025 (37 items, all ○) and Letwin 2026 (16 items: 1 ✓, 4 ◐). The Letwin main proof cites a bound
+  `C_P ≤ C κ_n √log n` "by tracing" Klartag 2023 that the preprint does not prove (noted in the map).
+  All 28 diagrams render.

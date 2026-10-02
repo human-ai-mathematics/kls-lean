@@ -564,6 +564,98 @@ flowchart LR
     class KlartagLehec2022_more lemma_more;
 ```
 
+### Jambulapati–Lee–Vempala (arXiv:2208.11644v2)
+
+27 statements: 1 ◐, 26 ○. [Full map](LITERATURE.md#jambulapatileevempala2022-lemma-map).
+
+```mermaid
+flowchart LR
+    JambulapatiLeeVempala2022_T2["○ Theorem 2<br/>Improved thin-shell and KLS bounds"]
+    JambulapatiLeeVempala2022_D3["◐ Definition 3<br/>Thin-shell, κ and KLS constants"]
+    JambulapatiLeeVempala2022_D4["○ Definition 4<br/>Eldan and LV stochastic localization"]
+    JambulapatiLeeVempala2022_L5["○ Lemma 5 (Eldan 2013, Proposition 1.7 and Lemma 1.6)<br/>Eldan thin-shell to KLS reduction"]
+    JambulapatiLeeVempala2022_D6["○ Definition 6<br/>Three-matrix tensor T_μ"]
+    JambulapatiLeeVempala2022_L8["○ Lemma 8 (Klartag–Lehec 2022, Eqns 45 and 47)<br/>Klartag–Lehec mean-growth criterion"]
+    JambulapatiLeeVempala2022_L9["○ Lemma 9 (Cordero-Erausquin–Fradelizi–Maurey 2004, Lemma 2)<br/>Improved Poincaré for centered gradients"]
+    JambulapatiLeeVempala2022_L10["○ Lemma 10 (Eldan 2013; Eldan–Lehec 2014, Lemma 6)<br/>Eldan process properties"]
+    JambulapatiLeeVempala2022_L11["○ Lemma 11 (Lee–Vempala 2016, p. 12, Lemma 28 and Definition 26)<br/>LV process properties"]
+    JambulapatiLeeVempala2022_L12["○ Lemma 12 (Jiang–Lee–Vempala 2020, Lemmas 39–41)<br/>Properties of T_μ"]
+    JambulapatiLeeVempala2022_L13["○ Lemma 13 (Klartag–Lehec 2022, Lemma 5.2)<br/>Early-time LV covariance control"]
+    JambulapatiLeeVempala2022_L14["○ Lemma 14<br/>Eldan decomposition, strongly log-concave"]
+    JambulapatiLeeVempala2022_L15["○ Lemma 15<br/>Tensor bound with constant 2√2"]
+    JambulapatiLeeVempala2022_L16["○ Lemma 16<br/>LV decomposition, strongly log-concave"]
+    JambulapatiLeeVempala2022_L17["○ Lemma 17<br/>Growth of Tr A_t^q"]
+    JambulapatiLeeVempala2022_L18["○ Lemma 18<br/>Conditional tensor bound for spiked covariance"]
+    JambulapatiLeeVempala2022_L19["○ Lemma 19<br/>Early-time bound on Tr Ā_t^q"]
+    JambulapatiLeeVempala2022_L20["○ Lemma 20<br/>Late-time bound on Tr A_t^q"]
+    JambulapatiLeeVempala2022_L21["○ Lemma 21<br/>Improved growth of E‖a_t‖²"]
+    JambulapatiLeeVempala2022_T22["○ Theorem 22<br/>Thin-shell bound with explicit exponent"]
+    JambulapatiLeeVempala2022_L24["○ Lemma 24 (Klartag–Lehec 2022, Remark 4.4)<br/>Tensor bound with constant 2"]
+    JambulapatiLeeVempala2022_L25["○ Lemma 25 (Juditsky–Nemirovski 2008, Proposition 3.1)<br/>Hessian of matrix trace functions"]
+    JambulapatiLeeVempala2022_L26["○ Lemma 26<br/>Divided-difference bound for (x⁺)^q"]
+    JambulapatiLeeVempala2022_L27["○ Lemma 27<br/>Itô drift of Tr φ(A_t−bI)"]
+    JambulapatiLeeVempala2022_T22 --> JambulapatiLeeVempala2022_T2
+    JambulapatiLeeVempala2022_L5 --> JambulapatiLeeVempala2022_T2
+    JambulapatiLeeVempala2022_D3 --> JambulapatiLeeVempala2022_L5
+    JambulapatiLeeVempala2022_D3 --> JambulapatiLeeVempala2022_L8
+    JambulapatiLeeVempala2022_D4 --> JambulapatiLeeVempala2022_L8
+    JambulapatiLeeVempala2022_D4 --> JambulapatiLeeVempala2022_L10
+    JambulapatiLeeVempala2022_D4 --> JambulapatiLeeVempala2022_L11
+    JambulapatiLeeVempala2022_D3 --> JambulapatiLeeVempala2022_L12
+    JambulapatiLeeVempala2022_D6 --> JambulapatiLeeVempala2022_L12
+    JambulapatiLeeVempala2022_D3 --> JambulapatiLeeVempala2022_L13
+    JambulapatiLeeVempala2022_D4 --> JambulapatiLeeVempala2022_L13
+    JambulapatiLeeVempala2022_L10 --> JambulapatiLeeVempala2022_L14
+    JambulapatiLeeVempala2022_D4 --> JambulapatiLeeVempala2022_L14
+    JambulapatiLeeVempala2022_L14 --> JambulapatiLeeVempala2022_L15
+    JambulapatiLeeVempala2022_L9 --> JambulapatiLeeVempala2022_L15
+    JambulapatiLeeVempala2022_D6 --> JambulapatiLeeVempala2022_L15
+    JambulapatiLeeVempala2022_L11 --> JambulapatiLeeVempala2022_L16
+    JambulapatiLeeVempala2022_D4 --> JambulapatiLeeVempala2022_L16
+    JambulapatiLeeVempala2022_L27 --> JambulapatiLeeVempala2022_L17
+    JambulapatiLeeVempala2022_L24 --> JambulapatiLeeVempala2022_L17
+    JambulapatiLeeVempala2022_L11 --> JambulapatiLeeVempala2022_L17
+    JambulapatiLeeVempala2022_L16 --> JambulapatiLeeVempala2022_L17
+    JambulapatiLeeVempala2022_L16 --> JambulapatiLeeVempala2022_L18
+    JambulapatiLeeVempala2022_L9 --> JambulapatiLeeVempala2022_L18
+    JambulapatiLeeVempala2022_L17 --> JambulapatiLeeVempala2022_L18
+    JambulapatiLeeVempala2022_D6 --> JambulapatiLeeVempala2022_L18
+    JambulapatiLeeVempala2022_L27 --> JambulapatiLeeVempala2022_L19
+    JambulapatiLeeVempala2022_L12 --> JambulapatiLeeVempala2022_L19
+    JambulapatiLeeVempala2022_L13 --> JambulapatiLeeVempala2022_L19
+    JambulapatiLeeVempala2022_L11 --> JambulapatiLeeVempala2022_L19
+    JambulapatiLeeVempala2022_D3 --> JambulapatiLeeVempala2022_L19
+    JambulapatiLeeVempala2022_L19 --> JambulapatiLeeVempala2022_L20
+    JambulapatiLeeVempala2022_L27 --> JambulapatiLeeVempala2022_L20
+    JambulapatiLeeVempala2022_L24 --> JambulapatiLeeVempala2022_L20
+    JambulapatiLeeVempala2022_L12 --> JambulapatiLeeVempala2022_L20
+    JambulapatiLeeVempala2022_L17 --> JambulapatiLeeVempala2022_L20
+    JambulapatiLeeVempala2022_L11 --> JambulapatiLeeVempala2022_L21
+    JambulapatiLeeVempala2022_L18 --> JambulapatiLeeVempala2022_L21
+    JambulapatiLeeVempala2022_L20 --> JambulapatiLeeVempala2022_L21
+    JambulapatiLeeVempala2022_L15 --> JambulapatiLeeVempala2022_L21
+    JambulapatiLeeVempala2022_L8 --> JambulapatiLeeVempala2022_T22
+    JambulapatiLeeVempala2022_L21 --> JambulapatiLeeVempala2022_T22
+    JambulapatiLeeVempala2022_L5 --> JambulapatiLeeVempala2022_T22
+    JambulapatiLeeVempala2022_L15 --> JambulapatiLeeVempala2022_T22
+    JambulapatiLeeVempala2022_D3 --> JambulapatiLeeVempala2022_T22
+    JambulapatiLeeVempala2022_L9 --> JambulapatiLeeVempala2022_L24
+    JambulapatiLeeVempala2022_L12 --> JambulapatiLeeVempala2022_L24
+    JambulapatiLeeVempala2022_D6 --> JambulapatiLeeVempala2022_L24
+    JambulapatiLeeVempala2022_L11 --> JambulapatiLeeVempala2022_L27
+    JambulapatiLeeVempala2022_L25 --> JambulapatiLeeVempala2022_L27
+    JambulapatiLeeVempala2022_L26 --> JambulapatiLeeVempala2022_L27
+    JambulapatiLeeVempala2022_D6 --> JambulapatiLeeVempala2022_L27
+    JambulapatiLeeVempala2022_more["+3 further statements in the paper register"]
+    classDef lemma_partial fill:#fff3df,stroke:#c88719,color:#66420d;
+    class JambulapatiLeeVempala2022_D3 lemma_partial;
+    classDef lemma_pending fill:#fee2e2,stroke:#dc2626,color:#991b1b;
+    class JambulapatiLeeVempala2022_T2,JambulapatiLeeVempala2022_D4,JambulapatiLeeVempala2022_L5,JambulapatiLeeVempala2022_D6,JambulapatiLeeVempala2022_L8,JambulapatiLeeVempala2022_L9,JambulapatiLeeVempala2022_L10,JambulapatiLeeVempala2022_L11,JambulapatiLeeVempala2022_L12,JambulapatiLeeVempala2022_L13,JambulapatiLeeVempala2022_L14,JambulapatiLeeVempala2022_L15,JambulapatiLeeVempala2022_L16,JambulapatiLeeVempala2022_L17,JambulapatiLeeVempala2022_L18,JambulapatiLeeVempala2022_L19,JambulapatiLeeVempala2022_L20,JambulapatiLeeVempala2022_L21,JambulapatiLeeVempala2022_T22,JambulapatiLeeVempala2022_L24,JambulapatiLeeVempala2022_L25,JambulapatiLeeVempala2022_L26,JambulapatiLeeVempala2022_L27 lemma_pending;
+    style JambulapatiLeeVempala2022_T2 stroke-width:3px
+    classDef lemma_more fill:#f8fafc,stroke:#94a3b8,color:#334155,stroke-dasharray:4 3;
+    class JambulapatiLeeVempala2022_more lemma_more;
+```
+
 ### Klartag (arXiv:2303.14938v2)
 
 19 statements: 6 ◐, 13 ○. [Full map](LITERATURE.md#klartag2023-lemma-map).
@@ -594,6 +686,128 @@ flowchart LR
     style Klartag2023_T12 stroke-width:3px
     classDef lemma_more fill:#f8fafc,stroke:#94a3b8,color:#334155,stroke-dasharray:4 3;
     class Klartag2023_more lemma_more;
+```
+
+### Klartag–Lehec (arXiv:2507.15495v2)
+
+37 statements: 37 ○. [Full map](LITERATURE.md#klartaglehecthin2025-lemma-map).
+
+```mermaid
+flowchart LR
+    KlartagLehecThin2025_T11["○ Theorem 1.1<br/>Thin-shell variance bound"]
+    KlartagLehecThin2025_T14["○ Theorem 1.4<br/>H^{-1} bound for coordinates"]
+    KlartagLehecThin2025_L21["○ Lemma 2.1<br/>Pathwise flow and its derivative"]
+    KlartagLehecThin2025_D22["○ Definition 2.2<br/>Flow map G_{t,w}"]
+    KlartagLehecThin2025_L23["○ Lemma 2.3<br/>Continuity and adaptedness of flow"]
+    KlartagLehecThin2025_L24["○ Lemma 2.4<br/>Lipschitz bound for the flow"]
+    KlartagLehecThin2025_P25["○ Proposition 2.5<br/>Law of the driven flow"]
+    KlartagLehecThin2025_C26["○ Corollary 2.6<br/>Large-time limit is the tilt"]
+    KlartagLehecThin2025_L41["○ Lemma 4.1<br/>Monotone normalized flow distance"]
+    KlartagLehecThin2025_P42["○ Proposition 4.2<br/>Wasserstein bound via parallel coupling"]
+    KlartagLehecThin2025_C43["○ Corollary 4.3<br/>Infinitesimal Wasserstein bound"]
+    KlartagLehecThin2025_L44["○ Lemma 4.4<br/>H^{-1} norm via W_2"]
+    KlartagLehecThin2025_C45["○ Corollary 4.5<br/>H^{-1} sum via derivative"]
+    KlartagLehecThin2025_P46["○ Proposition 4.6<br/>Product-integral Hilbert–Schmidt bound"]
+    KlartagLehecThin2025_L47["○ Lemma 4.7<br/>Majorization Gronwall comparison"]
+    KlartagLehecThin2025_C410["○ Corollary 4.10<br/>H^{-1} bound by eigenvalues"]
+    KlartagLehecThin2025_P51["○ Proposition 5.1<br/>Few large eigenvalues, stopped"]
+    KlartagLehecThin2025_L52["○ Lemma 5.2 (Guan)<br/>Guan's three-tensor bound"]
+    KlartagLehecThin2025_L53["○ Lemma 5.3<br/>Itô drift of trace functionals"]
+    KlartagLehecThin2025_L54["○ Lemma 5.4<br/>Gronwall drift bound for f"]
+    KlartagLehecThin2025_L55["○ Lemma 5.5<br/>Existence of test functions f_{D,r}"]
+    KlartagLehecThin2025_C61["○ Corollary 6.1<br/>Stopping-time tail and moment"]
+    KlartagLehecThin2025_T62["○ Theorem 6.2<br/>Exponential eigenvalue integral bound"]
+    KlartagLehecThin2025_T14 --> KlartagLehecThin2025_T11
+    KlartagLehecThin2025_C410 --> KlartagLehecThin2025_T14
+    KlartagLehecThin2025_T62 --> KlartagLehecThin2025_T14
+    KlartagLehecThin2025_L21 --> KlartagLehecThin2025_D22
+    KlartagLehecThin2025_D22 --> KlartagLehecThin2025_L23
+    KlartagLehecThin2025_L23 --> KlartagLehecThin2025_L24
+    KlartagLehecThin2025_D22 --> KlartagLehecThin2025_P25
+    KlartagLehecThin2025_P25 --> KlartagLehecThin2025_C26
+    KlartagLehecThin2025_D22 --> KlartagLehecThin2025_L41
+    KlartagLehecThin2025_C26 --> KlartagLehecThin2025_P42
+    KlartagLehecThin2025_L41 --> KlartagLehecThin2025_P42
+    KlartagLehecThin2025_P42 --> KlartagLehecThin2025_C43
+    KlartagLehecThin2025_L24 --> KlartagLehecThin2025_C43
+    KlartagLehecThin2025_L21 --> KlartagLehecThin2025_C43
+    KlartagLehecThin2025_L44 --> KlartagLehecThin2025_C45
+    KlartagLehecThin2025_C43 --> KlartagLehecThin2025_C45
+    KlartagLehecThin2025_L47 --> KlartagLehecThin2025_P46
+    KlartagLehecThin2025_C45 --> KlartagLehecThin2025_C410
+    KlartagLehecThin2025_P46 --> KlartagLehecThin2025_C410
+    KlartagLehecThin2025_L54 --> KlartagLehecThin2025_P51
+    KlartagLehecThin2025_L55 --> KlartagLehecThin2025_P51
+    KlartagLehecThin2025_L53 --> KlartagLehecThin2025_L54
+    KlartagLehecThin2025_L52 --> KlartagLehecThin2025_L54
+    KlartagLehecThin2025_P51 --> KlartagLehecThin2025_C61
+    KlartagLehecThin2025_C61 --> KlartagLehecThin2025_T62
+    KlartagLehecThin2025_more["+14 further statements in the paper register"]
+    classDef lemma_pending fill:#fee2e2,stroke:#dc2626,color:#991b1b;
+    class KlartagLehecThin2025_T11,KlartagLehecThin2025_T14,KlartagLehecThin2025_L21,KlartagLehecThin2025_D22,KlartagLehecThin2025_L23,KlartagLehecThin2025_L24,KlartagLehecThin2025_P25,KlartagLehecThin2025_C26,KlartagLehecThin2025_L41,KlartagLehecThin2025_P42,KlartagLehecThin2025_C43,KlartagLehecThin2025_L44,KlartagLehecThin2025_C45,KlartagLehecThin2025_P46,KlartagLehecThin2025_L47,KlartagLehecThin2025_C410,KlartagLehecThin2025_P51,KlartagLehecThin2025_L52,KlartagLehecThin2025_L53,KlartagLehecThin2025_L54,KlartagLehecThin2025_L55,KlartagLehecThin2025_C61,KlartagLehecThin2025_T62 lemma_pending;
+    style KlartagLehecThin2025_T11 stroke-width:3px
+    classDef lemma_more fill:#f8fafc,stroke:#94a3b8,color:#334155,stroke-dasharray:4 3;
+    class KlartagLehecThin2025_more lemma_more;
+```
+
+### Letwin (arXiv:2607.24164v1)
+
+16 statements: 1 ✓, 4 ◐, 11 ○. [Full map](LITERATURE.md#letwin2026-lemma-map).
+
+```mermaid
+flowchart LR
+    Letwin2026_DISO["✓ Section 1, definition of isotropic (unnumbered)<br/>Isotropic random vector"]
+    Letwin2026_DCP["◐ Equation (1.1), definition of C_P(mu)<br/>Poincare constant C_P"]
+    Letwin2026_DPSI["◐ Section 1, displays defining 1/psi_mu and psi_n (unnumbered)<br/>Isoperimetric and KLS constants"]
+    Letwin2026_ECMP["◐ Section 1, unnumbered display (Cheeger; Buser, Ledoux; De Ponti and Mondino)<br/>Cheeger and Buser comparison"]
+    Letwin2026_CONJ["◐ Section 1, statement of the KLS conjecture (unnumbered)<br/>KLS conjecture"]
+    Letwin2026_T11["○ Theorem 1.1<br/>KLS constant O(log^{1/4} n)"]
+    Letwin2026_T12["○ Theorem 1.2<br/>Quadratic-form Poincare inequality"]
+    Letwin2026_L21["○ Lemma 2.1 (Cordero-Erausquin and Klartag [21, Theorem 2])<br/>Existence of moment maps"]
+    Letwin2026_L22["○ Lemma 2.2 (Klartag [41])<br/>Regularity of the moment map"]
+    Letwin2026_L23["○ Lemma 2.3<br/>Hessian of phi has mean Id"]
+    Letwin2026_L24["○ Lemma 2.4<br/>Twice-differentiated Monge-Ampere equation"]
+    Letwin2026_T25["○ Theorem 2.5<br/>Key moment-map Hessian bound"]
+    Letwin2026_D26["○ Definition 2.6<br/>Stein kernel"]
+    Letwin2026_L27["○ Lemma 2.7 (Fathi [29, Theorem 2.3])<br/>Moment map gives Stein kernel"]
+    Letwin2026_P28["○ Proposition 2.8 (Barthe and Klartag [7, Proposition 10])<br/>H^{-1} variance inequality"]
+    Letwin2026_L29["○ Lemma 2.9<br/>Stein kernel bounds H^{-1} norm"]
+    Letwin2026_DISO --> Letwin2026_DPSI
+    Letwin2026_DCP --> Letwin2026_ECMP
+    Letwin2026_DPSI --> Letwin2026_ECMP
+    Letwin2026_DISO --> Letwin2026_CONJ
+    Letwin2026_DCP --> Letwin2026_CONJ
+    Letwin2026_DPSI --> Letwin2026_CONJ
+    Letwin2026_ECMP --> Letwin2026_CONJ
+    Letwin2026_T12 --> Letwin2026_T11
+    Letwin2026_ECMP --> Letwin2026_T11
+    Letwin2026_DISO --> Letwin2026_T11
+    Letwin2026_DCP --> Letwin2026_T11
+    Letwin2026_DPSI --> Letwin2026_T11
+    Letwin2026_L21 --> Letwin2026_T12
+    Letwin2026_L22 --> Letwin2026_T12
+    Letwin2026_L27 --> Letwin2026_T12
+    Letwin2026_D26 --> Letwin2026_T12
+    Letwin2026_T25 --> Letwin2026_T12
+    Letwin2026_P28 --> Letwin2026_T12
+    Letwin2026_L29 --> Letwin2026_T12
+    Letwin2026_L21 --> Letwin2026_L22
+    Letwin2026_L22 --> Letwin2026_L23
+    Letwin2026_DISO --> Letwin2026_L23
+    Letwin2026_L22 --> Letwin2026_L24
+    Letwin2026_L22 --> Letwin2026_T25
+    Letwin2026_L23 --> Letwin2026_T25
+    Letwin2026_L24 --> Letwin2026_T25
+    Letwin2026_L22 --> Letwin2026_L27
+    Letwin2026_D26 --> Letwin2026_L27
+    Letwin2026_D26 --> Letwin2026_L29
+    classDef lemma_formalized fill:#dbeafe,stroke:#2563eb,color:#1e3a8a;
+    class Letwin2026_DISO lemma_formalized;
+    classDef lemma_partial fill:#fff3df,stroke:#c88719,color:#66420d;
+    class Letwin2026_DCP,Letwin2026_DPSI,Letwin2026_ECMP,Letwin2026_CONJ lemma_partial;
+    classDef lemma_pending fill:#fee2e2,stroke:#dc2626,color:#991b1b;
+    class Letwin2026_T11,Letwin2026_T12,Letwin2026_L21,Letwin2026_L22,Letwin2026_L23,Letwin2026_L24,Letwin2026_T25,Letwin2026_D26,Letwin2026_L27,Letwin2026_P28,Letwin2026_L29 lemma_pending;
+    style Letwin2026_T11 stroke-width:3px
 ```
 <!-- END GENERATED LEMMAS -->
 

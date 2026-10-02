@@ -1323,6 +1323,137 @@ flowchart LR
 
 Not listed: Remark 6.1 (non-optimality of the exponent and possible improvements) is purely expository and is not an item. Apart from the items for (3), (5), (7) and (14), the numbered equations (1)–(54) are definitions, cited results (Chen's bound (11), Eldan–Klartag (2), Eldan (10)/(24), the H^{-1} inequality (44)) or proof steps recorded inside the items that use them; claims outside numbered statement environments are listed only where a local Lean declaration states them (DLC, MOM, D3, D5, DPSI, E7, E14, UP). The thin-shell bound σ_μ² ≤ 4C_P(μ) (6), the definitions (4), (8), (23), finiteness of C_P for log-concave laws (Bobkov; KLS), and the unnumbered σ_n ≤ C(log n)^4 have no local Lean statement and are not listed. There is no appendix; Theorem, Lemma, Proposition, Corollary, Remark and Definition share the section-reset counter (Question has its own, unused), and no Definition, Conjecture, Question, Speculation or Problem environment is printed.
 
+### JambulapatiLeeVempala2022 lemma map
+
+Source: [Jambulapati–Lee–Vempala, arXiv:2208.11644v2](https://arxiv.org/abs/2208.11644v2), reviewed 2026-10-03.
+
+Standing assumptions: Distributions on ℝⁿ, n ≥ 2; a ≲ b means a = O(b) with a universal implied constant (C, c universal unless they depend on q as stated). A log-concave density is nonnegative, integrates to 1 and has concave logarithm; α-strongly log-concave means p(x) = e^{−α‖x‖²/2} q(x) with q log-concave. Isotropic means mean 0 and covariance I. σ_n, κ_n and ψ_n are the suprema of σ_μ, κ_μ and ψ_μ (Definition 3) over isotropic log-concave μ on ℝⁿ. γ is the best constant in display (1.3), T_μ(I, I, I) ≤ (γ/α) Tr A² for every α-strongly log-concave μ with covariance A. a_t, A_t denote the mean and covariance of the stochastic-localization density p_t (Definition 4), and W_t is a standard Brownian motion in ℝⁿ.
+
+```mermaid
+flowchart LR
+    JambulapatiLeeVempala2022_T1["○ Theorem 1 (Klartag–Lehec 2022)<br/>Klartag–Lehec polylog bounds"]
+    JambulapatiLeeVempala2022_T2["○ Theorem 2<br/>Improved thin-shell and KLS bounds"]
+    JambulapatiLeeVempala2022_D3["◐ Definition 3<br/>Thin-shell, κ and KLS constants"]
+    JambulapatiLeeVempala2022_D4["○ Definition 4<br/>Eldan and LV stochastic localization"]
+    JambulapatiLeeVempala2022_L5["○ Lemma 5 (Eldan 2013, Proposition 1.7 and Lemma 1.6)<br/>Eldan thin-shell to KLS reduction"]
+    JambulapatiLeeVempala2022_D6["○ Definition 6<br/>Three-matrix tensor T_μ"]
+    JambulapatiLeeVempala2022_L7["○ Lemma 7 (Chen 2021, Lemma 11)<br/>Chen tensor bound"]
+    JambulapatiLeeVempala2022_L8["○ Lemma 8 (Klartag–Lehec 2022, Eqns 45 and 47)<br/>Klartag–Lehec mean-growth criterion"]
+    JambulapatiLeeVempala2022_L9["○ Lemma 9 (Cordero-Erausquin–Fradelizi–Maurey 2004, Lemma 2)<br/>Improved Poincaré for centered gradients"]
+    JambulapatiLeeVempala2022_L10["○ Lemma 10 (Eldan 2013; Eldan–Lehec 2014, Lemma 6)<br/>Eldan process properties"]
+    JambulapatiLeeVempala2022_L11["○ Lemma 11 (Lee–Vempala 2016, p. 12, Lemma 28 and Definition 26)<br/>LV process properties"]
+    JambulapatiLeeVempala2022_L12["○ Lemma 12 (Jiang–Lee–Vempala 2020, Lemmas 39–41)<br/>Properties of T_μ"]
+    JambulapatiLeeVempala2022_L13["○ Lemma 13 (Klartag–Lehec 2022, Lemma 5.2)<br/>Early-time LV covariance control"]
+    JambulapatiLeeVempala2022_L14["○ Lemma 14<br/>Eldan decomposition, strongly log-concave"]
+    JambulapatiLeeVempala2022_L15["○ Lemma 15<br/>Tensor bound with constant 2√2"]
+    JambulapatiLeeVempala2022_L16["○ Lemma 16<br/>LV decomposition, strongly log-concave"]
+    JambulapatiLeeVempala2022_L17["○ Lemma 17<br/>Growth of Tr A_t^q"]
+    JambulapatiLeeVempala2022_L18["○ Lemma 18<br/>Conditional tensor bound for spiked covariance"]
+    JambulapatiLeeVempala2022_L19["○ Lemma 19<br/>Early-time bound on Tr Ā_t^q"]
+    JambulapatiLeeVempala2022_L20["○ Lemma 20<br/>Late-time bound on Tr A_t^q"]
+    JambulapatiLeeVempala2022_L21["○ Lemma 21<br/>Improved growth of E‖a_t‖²"]
+    JambulapatiLeeVempala2022_T22["○ Theorem 22<br/>Thin-shell bound with explicit exponent"]
+    JambulapatiLeeVempala2022_T23["○ Theorem 23<br/>Sub-logarithmic bound without gap"]
+    JambulapatiLeeVempala2022_L24["○ Lemma 24 (Klartag–Lehec 2022, Remark 4.4)<br/>Tensor bound with constant 2"]
+    JambulapatiLeeVempala2022_L25["○ Lemma 25 (Juditsky–Nemirovski 2008, Proposition 3.1)<br/>Hessian of matrix trace functions"]
+    JambulapatiLeeVempala2022_L26["○ Lemma 26<br/>Divided-difference bound for (x⁺)^q"]
+    JambulapatiLeeVempala2022_L27["○ Lemma 27<br/>Itô drift of Tr φ(A_t−bI)"]
+    JambulapatiLeeVempala2022_T22 --> JambulapatiLeeVempala2022_T2
+    JambulapatiLeeVempala2022_L5 --> JambulapatiLeeVempala2022_T2
+    JambulapatiLeeVempala2022_D3 --> JambulapatiLeeVempala2022_L5
+    JambulapatiLeeVempala2022_D6 --> JambulapatiLeeVempala2022_L7
+    JambulapatiLeeVempala2022_D3 --> JambulapatiLeeVempala2022_L8
+    JambulapatiLeeVempala2022_D4 --> JambulapatiLeeVempala2022_L8
+    JambulapatiLeeVempala2022_D4 --> JambulapatiLeeVempala2022_L10
+    JambulapatiLeeVempala2022_D4 --> JambulapatiLeeVempala2022_L11
+    JambulapatiLeeVempala2022_D3 --> JambulapatiLeeVempala2022_L12
+    JambulapatiLeeVempala2022_D6 --> JambulapatiLeeVempala2022_L12
+    JambulapatiLeeVempala2022_D3 --> JambulapatiLeeVempala2022_L13
+    JambulapatiLeeVempala2022_D4 --> JambulapatiLeeVempala2022_L13
+    JambulapatiLeeVempala2022_L10 --> JambulapatiLeeVempala2022_L14
+    JambulapatiLeeVempala2022_D4 --> JambulapatiLeeVempala2022_L14
+    JambulapatiLeeVempala2022_L14 --> JambulapatiLeeVempala2022_L15
+    JambulapatiLeeVempala2022_L9 --> JambulapatiLeeVempala2022_L15
+    JambulapatiLeeVempala2022_D6 --> JambulapatiLeeVempala2022_L15
+    JambulapatiLeeVempala2022_L11 --> JambulapatiLeeVempala2022_L16
+    JambulapatiLeeVempala2022_D4 --> JambulapatiLeeVempala2022_L16
+    JambulapatiLeeVempala2022_L27 --> JambulapatiLeeVempala2022_L17
+    JambulapatiLeeVempala2022_L24 --> JambulapatiLeeVempala2022_L17
+    JambulapatiLeeVempala2022_L11 --> JambulapatiLeeVempala2022_L17
+    JambulapatiLeeVempala2022_L16 --> JambulapatiLeeVempala2022_L17
+    JambulapatiLeeVempala2022_L16 --> JambulapatiLeeVempala2022_L18
+    JambulapatiLeeVempala2022_L9 --> JambulapatiLeeVempala2022_L18
+    JambulapatiLeeVempala2022_L17 --> JambulapatiLeeVempala2022_L18
+    JambulapatiLeeVempala2022_D6 --> JambulapatiLeeVempala2022_L18
+    JambulapatiLeeVempala2022_L27 --> JambulapatiLeeVempala2022_L19
+    JambulapatiLeeVempala2022_L12 --> JambulapatiLeeVempala2022_L19
+    JambulapatiLeeVempala2022_L13 --> JambulapatiLeeVempala2022_L19
+    JambulapatiLeeVempala2022_L11 --> JambulapatiLeeVempala2022_L19
+    JambulapatiLeeVempala2022_D3 --> JambulapatiLeeVempala2022_L19
+    JambulapatiLeeVempala2022_L19 --> JambulapatiLeeVempala2022_L20
+    JambulapatiLeeVempala2022_L27 --> JambulapatiLeeVempala2022_L20
+    JambulapatiLeeVempala2022_L24 --> JambulapatiLeeVempala2022_L20
+    JambulapatiLeeVempala2022_L12 --> JambulapatiLeeVempala2022_L20
+    JambulapatiLeeVempala2022_L17 --> JambulapatiLeeVempala2022_L20
+    JambulapatiLeeVempala2022_L11 --> JambulapatiLeeVempala2022_L21
+    JambulapatiLeeVempala2022_L18 --> JambulapatiLeeVempala2022_L21
+    JambulapatiLeeVempala2022_L20 --> JambulapatiLeeVempala2022_L21
+    JambulapatiLeeVempala2022_L15 --> JambulapatiLeeVempala2022_L21
+    JambulapatiLeeVempala2022_L8 --> JambulapatiLeeVempala2022_T22
+    JambulapatiLeeVempala2022_L21 --> JambulapatiLeeVempala2022_T22
+    JambulapatiLeeVempala2022_L5 --> JambulapatiLeeVempala2022_T22
+    JambulapatiLeeVempala2022_L15 --> JambulapatiLeeVempala2022_T22
+    JambulapatiLeeVempala2022_D3 --> JambulapatiLeeVempala2022_T22
+    JambulapatiLeeVempala2022_T22 --> JambulapatiLeeVempala2022_T23
+    JambulapatiLeeVempala2022_L8 --> JambulapatiLeeVempala2022_T23
+    JambulapatiLeeVempala2022_L21 --> JambulapatiLeeVempala2022_T23
+    JambulapatiLeeVempala2022_L15 --> JambulapatiLeeVempala2022_T23
+    JambulapatiLeeVempala2022_L9 --> JambulapatiLeeVempala2022_L24
+    JambulapatiLeeVempala2022_L12 --> JambulapatiLeeVempala2022_L24
+    JambulapatiLeeVempala2022_D6 --> JambulapatiLeeVempala2022_L24
+    JambulapatiLeeVempala2022_L11 --> JambulapatiLeeVempala2022_L27
+    JambulapatiLeeVempala2022_L25 --> JambulapatiLeeVempala2022_L27
+    JambulapatiLeeVempala2022_L26 --> JambulapatiLeeVempala2022_L27
+    JambulapatiLeeVempala2022_D6 --> JambulapatiLeeVempala2022_L27
+    classDef lemma_partial fill:#fff3df,stroke:#c88719,color:#66420d;
+    class JambulapatiLeeVempala2022_D3 lemma_partial;
+    classDef lemma_pending fill:#fee2e2,stroke:#dc2626,color:#991b1b;
+    class JambulapatiLeeVempala2022_T1,JambulapatiLeeVempala2022_T2,JambulapatiLeeVempala2022_D4,JambulapatiLeeVempala2022_L5,JambulapatiLeeVempala2022_D6,JambulapatiLeeVempala2022_L7,JambulapatiLeeVempala2022_L8,JambulapatiLeeVempala2022_L9,JambulapatiLeeVempala2022_L10,JambulapatiLeeVempala2022_L11,JambulapatiLeeVempala2022_L12,JambulapatiLeeVempala2022_L13,JambulapatiLeeVempala2022_L14,JambulapatiLeeVempala2022_L15,JambulapatiLeeVempala2022_L16,JambulapatiLeeVempala2022_L17,JambulapatiLeeVempala2022_L18,JambulapatiLeeVempala2022_L19,JambulapatiLeeVempala2022_L20,JambulapatiLeeVempala2022_L21,JambulapatiLeeVempala2022_T22,JambulapatiLeeVempala2022_T23,JambulapatiLeeVempala2022_L24,JambulapatiLeeVempala2022_L25,JambulapatiLeeVempala2022_L26,JambulapatiLeeVempala2022_L27 lemma_pending;
+    style JambulapatiLeeVempala2022_T2 stroke-width:3px
+```
+
+| Item | Statement | Status | Lean declarations | Note |
+| --- | --- | --- | --- | --- |
+| Theorem 1 (Klartag–Lehec 2022) | σ_n ≲ log⁴ n and ψ_n ≲ log⁵ n, with universal implied constants. | ○ Not yet formalized | — | Quoted background result; not proved in this paper. Section 1.2 re-derives it heuristically as σ_n ≲ log^{γ+1} n with γ = 3. |
+| **Theorem 2** (main) | There is a universal constant C such that for all n ≥ 2, σ_n ≤ C·log^{2.2226} n and ψ_n ≤ C·log^{3.2226} n, where σ_n and ψ_n are the suprema of the thin-shell and KLS constants over isotropic log-concave distributions on ℝⁿ. | ○ Not yet formalized | — | The σ_n part is Theorem 22 with γ = 2√2 (Lemma 15) and the optimized q ≈ 3.058, giving η = (1 + 7√2 + √(53 − 4√2))/8 ≈ 2.22252; the ψ_n part adds one logarithm via ψ_n ≲ σ_n log n (Lemma 5). Not stated in Lean. |
+| Definition 3 | For a distribution μ on ℝⁿ: σ_μ² = Var_μ(‖x‖²)/n, κ_μ² = sup_{‖θ‖=1} ‖E_μ[⟨x,θ⟩ x xᵀ]‖_F², and 1/ψ_μ = inf over open A ⊆ ℝⁿ with smooth boundary of ∫_{∂A} dμ / min(μ(A), 1 − μ(A)); σ_n, κ_n, ψ_n are the suprema of σ_μ, κ_μ, ψ_μ over isotropic log-concave μ on ℝⁿ. | ◐ Partial or statement only | [`constant`](../../formalization/FunctionalInequalities/KLS/Isoperimetry.lean)<br/>[`inverseScale`](../../formalization/FunctionalInequalities/KLS/Isoperimetry.lean)<br/>[`Isotropic`](../../formalization/FunctionalInequalities/KLS/Isotropic.lean) | Only the KLS-constant clause and the isotropy notion are represented. Isoperimetry.constant is h_μ = 1/ψ_μ and Isoperimetry.inverseScale is ψ_μ, defined with outer Minkowski content over measurable sets of mass in (0, 1) on the affine support (value ⊤, resp. 0, in dimension zero); agreement with the smooth-boundary surface-measure convention is not stated in Lean. KLS.Isotropic is mean zero, identity covariance and finite second moment. σ_μ, κ_μ and the dimensional suprema σ_n, κ_n, ψ_n are not defined in Lean. |
+| Definition 4 | For a log-concave density p on ℝⁿ, Eldan's process is dp_t(x) = p_t(x)(x − a_t)ᵀ A_t^{−1/2} dW_t and the Lee–Vempala (LV) process is dp_t(x) = p_t(x)(x − a_t)ᵀ dW_t, both with p_0 = p, where a_t and A_t are the mean and covariance of p_t; both are martingales in the space of densities. | ○ Not yet formalized | — | Stochastic-calculus definition; outside the Lean library scope. |
+| Lemma 5 (Eldan 2013, Proposition 1.7 and Lemma 1.6) | ψ_n² ≲ κ_n² log n ≲ σ_n² log² n, with universal implied constants. | ○ Not yet formalized | — | Quoted; proved by Eldan via stochastic localization. |
+| Definition 6 | For a log-concave distribution μ on ℝⁿ with mean a and symmetric matrices A_1, A_2, A_3, T_μ(A_1, A_2, A_3) = E_{x,y∼μ} ∏_{i=1}^{3} (x − a)ᵀ A_i (y − a) with x, y independent; the same notation T_p is used for a density p. | ○ Not yet formalized | — |  |
+| Lemma 7 (Chen 2021, Lemma 11) | For every α-strongly log-concave μ with covariance A and every q ≥ 3, T_μ(A^{q−2}, I, I) ≤ (4/α) Tr A^q. | ○ Not yet formalized | — | Quoted; superseded in this paper by the constant 2/α of Lemma 24. |
+| Lemma 8 (Klartag–Lehec 2022, Eqns 45 and 47) | For a log-concave density p on ℝⁿ with LV process p_t and mean a_t, σ_p² ≲ ∫_{λ_1}^{∞} min_{t_λ > 0} { E‖a_{t_λ}‖²/(nλ²) + 1/(λ t_λ) } dλ, where λ_1 = Ω(ψ_p^{−2}) and the expectation is over the LV process. | ○ Not yet formalized | — | Quoted; relies on the LV stochastic localization and the heat-flow argument of Klartag–Lehec. |
+| Lemma 9 (Cordero-Erausquin–Fradelizi–Maurey 2004, Lemma 2) | For any α-strongly log-concave μ and any smooth f ∈ L²(μ) with ∫ f dμ = 0 and ∫ ∇f dμ = 0, ∫ f² dμ ≤ (1/(2α)) ∫ ‖∇f‖² dμ. | ○ Not yet formalized | — | Quoted. The factor 1/(2α) (half the Brascamp–Lieb/Bakry–Émery constant) needs the extra centering ∫∇f dμ = 0; no Lean declaration states it. |
+| Lemma 10 (Eldan 2013; Eldan–Lehec 2014, Lemma 6) | For Eldan's process with mean a_t and covariance A_t: da_t = A_t^{1/2} dW_t; dA_t = E_{x∼p_t}(x − a_t)(x − a_t)ᵀ(x − a_t)ᵀ A_t^{−1/2} dW_t − A_t dt; and if p_0 is 1-strongly log-concave then ‖A_t‖_op ≤ e^{−t}. | ○ Not yet formalized | — | Quoted stochastic-calculus facts. |
+| Lemma 11 (Lee–Vempala 2016, p. 12, Lemma 28 and Definition 26) | For the LV process with mean a_t and covariance A_t: da_t = A_t dW_t; dA_t = E_{x∼p_t}(x − a_t)(x − a_t)ᵀ(x − a_t)ᵀ dW_t − A_t² dt; and p_t(x) ∝ exp(c_tᵀx − (t/2)‖x‖²) p_0(x) for a random process c_t. | ○ Not yet formalized | — | Quoted stochastic-calculus facts; in particular p_t is (α + t)-strongly log-concave when p_0 is α-strongly log-concave. |
+| Lemma 12 (Jiang–Lee–Vempala 2020, Lemmas 39–41) | For log-concave μ with covariance A and symmetric M, N: T_μ(M_1, M_2, M_3) ≥ 0 for positive definite M_i; T_μ(M, I, I) ≲ κ_n² Tr&#124;A^{1/2} M A^{1/2}&#124; ‖A‖_op²; T_μ(M, N, I) ≤ T_μ(&#124;M&#124;^s, I, I)^{1/s} T_μ(&#124;N&#124;^t, I, I)^{1/t} for s, t ≥ 1 with 1/s + 1/t = 1; and T_μ(N^{1/2}M^βN^{1/2}, N^{1/2}M^{1−β}N^{1/2}, C) ≤ T_μ(N^{1/2}MN^{1/2}, N, C) for PSD M, N, C and β ∈ [0, 1]. | ○ Not yet formalized | — | Quoted; the paper writes the interpolation exponent as α, renamed β here to avoid a clash with the convexity parameter. |
+| Lemma 13 (Klartag–Lehec 2022, Lemma 5.2) | For the LV process from an isotropic log-concave p_0 on ℝⁿ with covariance A_t, and T ≤ 1/(cκ_n² log n) for a large enough universal c, P[‖A_t‖_op ≥ 2 for some 0 ≤ t ≤ T] ≤ exp(−1/(cT)). | ○ Not yet formalized | — | Quoted. The printed event reads "‖A_t‖_op ≥ 2 for 0 ≤ t ≤ T"; it is used as the probability that the bound fails at some time in [0, T]. |
+| Lemma 14 | For any 1-strongly log-concave μ on ℝⁿ with mean 0 and covariance A, μ is the law of ∫_0^∞ Q_t dW_t for an adapted process of positive definite matrices with 0 ⪯ Q_t ⪯ e^{−t/2} I and E Q_t² = e^{−t} A. | ○ Not yet formalized | — | Strengthens Klartag–Lehec Lemma 4.1 by the identity E Q_t² = e^{−t}A; Q_t = A_t^{1/2} from Eldan's process. Stochastic ingredient. |
+| Lemma 15 | For any α-strongly log-concave μ on ℝⁿ with covariance A, T_μ(I, I, I) ≤ (2√2/α) Tr A²; hence the best constant γ in (1.3) satisfies γ ≤ 2√2. | ○ Not yet formalized | — | Improves the Klartag–Lehec constant 3. The proof applies Itô's formula along x_t = ∫_0^t Q_s dW_s. |
+| Lemma 16 | For any α-strongly log-concave μ on ℝⁿ with mean 0 and covariance A, μ is the law of ∫_0^∞ Q_t dW_t for an adapted process of positive definite matrices with 0 ⪯ Q_t ⪯ (α + t)^{−1} I and E Q_t ⪯ A. | ○ Not yet formalized | — | Q_t = A_t from the LV process. Stochastic ingredient. |
+| Lemma 17 | For α-strongly log-concave μ with covariance A, LV process covariance A_t and any q ≥ 3, E Tr A_t^q ≤ (1 + t/α)^{q(q−1)} Tr A^q; in particular the Q_t of Lemma 16 satisfies E Tr Q_t^q ≤ (1 + t/α)^{q(q−1)} Tr A^q. | ○ Not yet formalized | — | Proof: Lemma 27 with b = 0, then Lemma 24 for the (α + t)-strongly log-concave p_t, then Grönwall. |
+| Lemma 18 | Let μ be α-strongly log-concave with covariance A, 3 ≤ q ≤ 8 and ζ > 0 with Tr A^q ≤ α^{−(q−2)} ζ^{−1} Tr A². Then T_μ(I, I, I) ≤ 12 α^{−1} ζ^{−1/(2(q²−2))} Tr A²; equivalently, without the hypothesis, T_μ(I, I, I) ≤ 12 α^{−3} (α^q Tr A^q)^c (α² Tr A²)^{1−c} with c = 1/(2(q²−2)). | ○ Not yet formalized | — | The final step bounds 3√2 · 2.8 ≤ 12. Implicitly needs ζ ≥ 1 so that the crossover time s* = ζ^{1/(q²−2)} − 1 is nonnegative. |
+| Lemma 19 | For the LV process from an isotropic log-concave p_0 on ℝⁿ supported in a ball of radius n, with Ā_t = (A_t − I)^+ and t_1 = 1/(cκ_n² log n) for a large enough c depending only on q, for all 0 ≤ t ≤ t_1 and q ≥ 3, E Tr Ā_t^q ≤ 1 + (Cqκ_n² t)^{q/2} n for a universal constant C > 0. | ○ Not yet formalized | — | Proof uses Lemma 13 with t_1 ≈ (qκ_n² log n)^{−1} to make the failure probability at most n^{−(2q+1)}, and the support assumption to bound ‖A_t‖_op ≤ n². |
+| Lemma 20 | Under the setting of Lemma 19 with 3 ≤ q ≤ 4, E Tr A_t^q ≲ n for t_1 ≤ t ≤ t̂ := t_1 log^{1/(2q−2)} n, and E Tr A_t^q ≲ (t/t_1)^{q(q−1)} n / log^{q/2} n for t ≥ t̂, where t_1 = 1/(cκ_n² log n). | ○ Not yet formalized | — | The first estimate is derived for t ≤ κ_n^{−2}; for t ≥ t̂ the proof restarts Lemma 17 from p_{t̂}, which is t̂-strongly log-concave. |
+| Lemma 21 | Under the setting of Lemma 19 and for 3 ≤ q ≤ 4, E‖a_t‖² ≲ nt + n t^{γ+1}/(t*)^γ for all t > 0, where t* := κ_n^{−2(q²−q)/(q²−2)} log^{−(2q²−3q)/(2(q²−2))} n and γ ≤ 2√2 is the constant of (1.3). | ○ Not yet formalized | — | Uses Lemma 18 (second form, with α = t for p_t) up to t*, where E Tr A_t² ≲ n, and Lemma 15 after t*; d/dt E‖a_t‖² = Tr A_t² by Itô's formula. |
+| Theorem 22 | σ_n ≲ log^η n with η = min_{3≤q≤4} (1 + γ(q² − 5q/4)/(q² − 2)) / (1 + γ(q − 2)/(q² − 2)), γ the constant of (1.3); with γ = 2√2 and q = (112 − 16√2 + √(5630 − 1892√2))/47 this gives η ≤ (1 + 7√2 + √(53 − 4√2))/8 ≤ 2.2226. | ○ Not yet formalized | — | The proof starts from an isotropic log-concave p_0 with σ_{p_0}² ≥ σ_n²/2 supported in a ball of radius n (truncation step not detailed) and solves 2η ≤ max{η + 1, αη + β}. Numerically η ≈ 2.222516 at q ≈ 3.0580. |
+| Theorem 23 | If ψ_n ≲ σ_n, then σ_n ≲ log^η n with η = min_{3≤q≤4} (γ(q²/2 − 3q/4)/(q² − 2)) / (1 + γ(q − 2)/(q² − 2)); with γ = 2√2 and q = 3 this gives η ≤ (63√2 − 36)/82 ≤ 0.6476. | ○ Not yet formalized | — | Conditional on the no-gap hypothesis; the proof also uses κ_n ≲ σ_n under that hypothesis. The unconstrained optimum q ≈ 2.4588 is outside the range of Lemma 21. |
+| Lemma 24 (Klartag–Lehec 2022, Remark 4.4) | For any α-strongly log-concave μ with covariance A and any q ≥ 3, T_μ(A^{q−2}, I, I) ≤ (2/α) Tr A^q. | ○ Not yet formalized | — | Improves Lemma 7 by a factor 2; proof given for completeness. |
+| Lemma 25 (Juditsky–Nemirovski 2008, Proposition 3.1) | If f is twice differentiable on (α, β) and (f′(b) − f′(a))/(b − a) ≤ θ (f″(b) + f″(a))/2 + φ for all α ≤ a < b < β, then for every symmetric X with spectrum in (α, β) and every symmetric H, ∂² Tr f(X)/∂X²&#124;_{H,H} ≤ θ Tr(f″(X)H²) + φ Tr H². | ○ Not yet formalized | — | Quoted. |
+| Lemma 26 | For φ(x) = x^q on x ≥ 0 and φ(x) = 0 otherwise, with q ≥ 3, every a < b satisfies (φ′(b) − φ′(a))/(b − a) ≤ (φ″(b) + φ″(a))/2. | ○ Not yet formalized | — |  |
+| Lemma 27 | For log-concave μ on ℝⁿ, its LV process with covariance A_t, φ as in Lemma 26 and q ∈ {2} ∪ [3, ∞): d Tr φ(A_t − bI) = E_{x∼p_t}(x − a_t)ᵀφ′(A_t − bI)(x − a_t)(x − a_t)ᵀ dW_t − Tr(φ′(A_t − bI)A_t²) dt + ½ T_{p_t}(φ″(A_t − bI), I, I) dt, and hence d/dt E Tr φ(A_t − bI) ≤ ½ T_{p_t}(φ″(A_t − bI), I, I). | ○ Not yet formalized | — | Printed as an identity although the second-order term is only bounded via Lemma 25, so the first display is effectively an inequality for the drift. Stochastic ingredient. |
+
+Not listed: All 27 numbered statement environments (one shared counter for Theorem, Definition and Lemma across sections and appendices) are listed. The numbered displays (1.1)–(1.3), (2.1)–(2.3), (3.1)–(3.3), (B.1), (B.2) are proof steps or the definition of γ and are absorbed into the listed items or the standing assumptions; Section 1.2 (heuristic re-derivation of the Klartag–Lehec bound) and Appendix A (localization heuristic and computer search suggesting γ ≈ 0.37 in dimension one) contain only unnumbered expository claims.
+
 ### Klartag2023 lemma map
 
 Source: [Klartag, arXiv:2303.14938v2](https://arxiv.org/abs/2303.14938v2), reviewed 2026-10-03.
@@ -1398,6 +1529,229 @@ flowchart LR
 | Corollary 5.2 | For s, t > 0 and an absolutely continuous 1/t-uniformly log-concave probability measure μ on ℝⁿ, μ ∗ γ_s is 1/(t + s)-uniformly log-concave. | ○ Not yet formalized | — | Lemma 5.1 plus Prékopa–Leindler. The local GaussianSmoothing.smoothedProbabilityLaw_logConcave (log-concavity of the Gaussian convolution of a log-concave law) is the excluded limit t = ∞, not a restricted case. |
 
 Not listed: No numbered statement environment is omitted; Remark 4.2 is substantive and is listed. The remaining numbered displays (1.1), (1.2) (Hensley–Fradelizi and Grünbaum facts quoted as background), (1.8) and (3.18) (restating or concluding listed items), the definitions (2.1)–(2.3) and the intermediate proof steps (2.7)–(2.12), (3.1), (3.3), (3.6), (3.8), (3.9), (3.11), (3.12), (3.15)–(3.17), (4.1)–(4.4) and (5.1)–(5.3) are absorbed into the listed items. Unnumbered or display-level claims are listed only where a local Lean declaration states them; 10 others are not listed.
+
+### KlartagLehecThin2025 lemma map
+
+Source: [Klartag–Lehec, arXiv:2507.15495v2](https://arxiv.org/abs/2507.15495v2), reviewed 2026-10-03.
+
+Standing assumptions: Log-concave measures may be degenerate (log-concave density on an affine subspace); isotropic means barycenter 0 and Cov = Id; C, c denote universal constants that change from line to line. From Section 2 on, μ is a compactly supported probability measure on R^n whose support affinely spans R^n, with logarithmic Laplace transform Λ_t(θ) = log ∫ exp(⟨θ, x⟩ − t|x|²/2) dμ(x), tilts dμ_{t,θ}/dμ = exp(⟨x, θ⟩ − t|x|²/2 − Λ_t(θ)), μ_θ = μ_{0,θ}, barycenter a(t, θ) = ∇Λ_t(θ) and covariance A(t, θ) = ∇²Λ_t(θ), bounded by a constant C_μ. B is a standard Brownian motion in R^n with B_0 = 0 and (F_t) its natural filtration. Section 3 writes K for the interior of the convex hull of supp μ. Section 4 adds log-concavity, giving A(t, θ) ≤ Id/t (display (36)); Sections 5–6 assume μ isotropic, compactly supported and log-concave, with θ_t = G_{t,B}(0), stochastic localization μ_t = μ_{t,θ_t}, a_t = a(t, θ_t), A_t = A(t, θ_t) with eigenvalues λ_1(t) ≥ ... ≥ λ_n(t) > 0 and eigenvectors u_i(t). ‖f‖_{H^{-1}(μ)} = sup{∫ f g dμ : g ∈ C_c^∞, ∫|∇g|² dμ ≤ 1} for centered f ∈ L²(μ); |M| is the Hilbert–Schmidt norm and W_p the L^p Wasserstein distance. Numbering: one shared counter within sections for Theorem, Definition, Lemma, Proposition, Corollary and Remark (no Question, Conjecture, Speculation or Problem occurs; no appendix).
+
+```mermaid
+flowchart LR
+    KlartagLehecThin2025_T11["○ Theorem 1.1<br/>Thin-shell variance bound"]
+    KlartagLehecThin2025_C12["○ Corollary 1.2<br/>Thin shell for the norm"]
+    KlartagLehecThin2025_C13["○ Corollary 1.3<br/>Stretched-exponential thin-shell deviation"]
+    KlartagLehecThin2025_T14["○ Theorem 1.4<br/>H^{-1} bound for coordinates"]
+    KlartagLehecThin2025_L21["○ Lemma 2.1<br/>Pathwise flow and its derivative"]
+    KlartagLehecThin2025_D22["○ Definition 2.2<br/>Flow map G_{t,w}"]
+    KlartagLehecThin2025_L23["○ Lemma 2.3<br/>Continuity and adaptedness of flow"]
+    KlartagLehecThin2025_L24["○ Lemma 2.4<br/>Lipschitz bound for the flow"]
+    KlartagLehecThin2025_P25["○ Proposition 2.5<br/>Law of the driven flow"]
+    KlartagLehecThin2025_C26["○ Corollary 2.6<br/>Large-time limit is the tilt"]
+    KlartagLehecThin2025_P31["○ Proposition 3.1<br/>Flow maps are expanding diffeomorphisms"]
+    KlartagLehecThin2025_D32["○ Definition 3.2<br/>Time-shifted flow map"]
+    KlartagLehecThin2025_L33["○ Lemma 3.3 (Semigroup property)<br/>Semigroup property of flows"]
+    KlartagLehecThin2025_L34["○ Lemma 3.4<br/>Barycenter map onto K"]
+    KlartagLehecThin2025_D35["○ Definition 3.5<br/>Martingale diffeomorphisms S_{t,w}"]
+    KlartagLehecThin2025_T36["○ Theorem 3.6<br/>Martingale diffeomorphism process"]
+    KlartagLehecThin2025_R37["○ Remark 3.7<br/>Boundary extension of S_t"]
+    KlartagLehecThin2025_L38["○ Lemma 3.8<br/>Barycenter process is martingale"]
+    KlartagLehecThin2025_R39["○ Remark 3.9<br/>Stochastic localization as martingale"]
+    KlartagLehecThin2025_R310["○ Remark 3.10<br/>Generator of S_t(ξ)"]
+    KlartagLehecThin2025_L41["○ Lemma 4.1<br/>Monotone normalized flow distance"]
+    KlartagLehecThin2025_P42["○ Proposition 4.2<br/>Wasserstein bound via parallel coupling"]
+    KlartagLehecThin2025_C43["○ Corollary 4.3<br/>Infinitesimal Wasserstein bound"]
+    KlartagLehecThin2025_L44["○ Lemma 4.4<br/>H^{-1} norm via W_2"]
+    KlartagLehecThin2025_C45["○ Corollary 4.5<br/>H^{-1} sum via derivative"]
+    KlartagLehecThin2025_P46["○ Proposition 4.6<br/>Product-integral Hilbert–Schmidt bound"]
+    KlartagLehecThin2025_L47["○ Lemma 4.7<br/>Majorization Gronwall comparison"]
+    KlartagLehecThin2025_R48["○ Remark 4.8<br/>Jensen form of the bound"]
+    KlartagLehecThin2025_R49["○ Remark 4.9<br/>Tilt distances under Gaussian convolution"]
+    KlartagLehecThin2025_C410["○ Corollary 4.10<br/>H^{-1} bound by eigenvalues"]
+    KlartagLehecThin2025_P51["○ Proposition 5.1<br/>Few large eigenvalues, stopped"]
+    KlartagLehecThin2025_L52["○ Lemma 5.2 (Guan)<br/>Guan's three-tensor bound"]
+    KlartagLehecThin2025_L53["○ Lemma 5.3<br/>Itô drift of trace functionals"]
+    KlartagLehecThin2025_L54["○ Lemma 5.4<br/>Gronwall drift bound for f"]
+    KlartagLehecThin2025_L55["○ Lemma 5.5<br/>Existence of test functions f_{D,r}"]
+    KlartagLehecThin2025_C61["○ Corollary 6.1<br/>Stopping-time tail and moment"]
+    KlartagLehecThin2025_T62["○ Theorem 6.2<br/>Exponential eigenvalue integral bound"]
+    KlartagLehecThin2025_T14 --> KlartagLehecThin2025_T11
+    KlartagLehecThin2025_T11 --> KlartagLehecThin2025_C12
+    KlartagLehecThin2025_T11 --> KlartagLehecThin2025_C13
+    KlartagLehecThin2025_C410 --> KlartagLehecThin2025_T14
+    KlartagLehecThin2025_T62 --> KlartagLehecThin2025_T14
+    KlartagLehecThin2025_L21 --> KlartagLehecThin2025_D22
+    KlartagLehecThin2025_D22 --> KlartagLehecThin2025_L23
+    KlartagLehecThin2025_L23 --> KlartagLehecThin2025_L24
+    KlartagLehecThin2025_D22 --> KlartagLehecThin2025_P25
+    KlartagLehecThin2025_P25 --> KlartagLehecThin2025_C26
+    KlartagLehecThin2025_L21 --> KlartagLehecThin2025_P31
+    KlartagLehecThin2025_D22 --> KlartagLehecThin2025_P31
+    KlartagLehecThin2025_D22 --> KlartagLehecThin2025_D32
+    KlartagLehecThin2025_D22 --> KlartagLehecThin2025_L33
+    KlartagLehecThin2025_D32 --> KlartagLehecThin2025_L33
+    KlartagLehecThin2025_L34 --> KlartagLehecThin2025_D35
+    KlartagLehecThin2025_D22 --> KlartagLehecThin2025_D35
+    KlartagLehecThin2025_D32 --> KlartagLehecThin2025_D35
+    KlartagLehecThin2025_P31 --> KlartagLehecThin2025_T36
+    KlartagLehecThin2025_L34 --> KlartagLehecThin2025_T36
+    KlartagLehecThin2025_D35 --> KlartagLehecThin2025_T36
+    KlartagLehecThin2025_L38 --> KlartagLehecThin2025_T36
+    KlartagLehecThin2025_L33 --> KlartagLehecThin2025_T36
+    KlartagLehecThin2025_L23 --> KlartagLehecThin2025_T36
+    KlartagLehecThin2025_T36 --> KlartagLehecThin2025_R37
+    KlartagLehecThin2025_P25 --> KlartagLehecThin2025_L38
+    KlartagLehecThin2025_L38 --> KlartagLehecThin2025_R39
+    KlartagLehecThin2025_T36 --> KlartagLehecThin2025_R310
+    KlartagLehecThin2025_D22 --> KlartagLehecThin2025_L41
+    KlartagLehecThin2025_C26 --> KlartagLehecThin2025_P42
+    KlartagLehecThin2025_L41 --> KlartagLehecThin2025_P42
+    KlartagLehecThin2025_P42 --> KlartagLehecThin2025_C43
+    KlartagLehecThin2025_L24 --> KlartagLehecThin2025_C43
+    KlartagLehecThin2025_L21 --> KlartagLehecThin2025_C43
+    KlartagLehecThin2025_L44 --> KlartagLehecThin2025_C45
+    KlartagLehecThin2025_C43 --> KlartagLehecThin2025_C45
+    KlartagLehecThin2025_L47 --> KlartagLehecThin2025_P46
+    KlartagLehecThin2025_P46 --> KlartagLehecThin2025_R48
+    KlartagLehecThin2025_C26 --> KlartagLehecThin2025_R49
+    KlartagLehecThin2025_L41 --> KlartagLehecThin2025_R49
+    KlartagLehecThin2025_C45 --> KlartagLehecThin2025_C410
+    KlartagLehecThin2025_P46 --> KlartagLehecThin2025_C410
+    KlartagLehecThin2025_L54 --> KlartagLehecThin2025_P51
+    KlartagLehecThin2025_L55 --> KlartagLehecThin2025_P51
+    KlartagLehecThin2025_L53 --> KlartagLehecThin2025_L54
+    KlartagLehecThin2025_L52 --> KlartagLehecThin2025_L54
+    KlartagLehecThin2025_P51 --> KlartagLehecThin2025_C61
+    KlartagLehecThin2025_C61 --> KlartagLehecThin2025_T62
+    classDef lemma_pending fill:#fee2e2,stroke:#dc2626,color:#991b1b;
+    class KlartagLehecThin2025_T11,KlartagLehecThin2025_C12,KlartagLehecThin2025_C13,KlartagLehecThin2025_T14,KlartagLehecThin2025_L21,KlartagLehecThin2025_D22,KlartagLehecThin2025_L23,KlartagLehecThin2025_L24,KlartagLehecThin2025_P25,KlartagLehecThin2025_C26,KlartagLehecThin2025_P31,KlartagLehecThin2025_D32,KlartagLehecThin2025_L33,KlartagLehecThin2025_L34,KlartagLehecThin2025_D35,KlartagLehecThin2025_T36,KlartagLehecThin2025_R37,KlartagLehecThin2025_L38,KlartagLehecThin2025_R39,KlartagLehecThin2025_R310,KlartagLehecThin2025_L41,KlartagLehecThin2025_P42,KlartagLehecThin2025_C43,KlartagLehecThin2025_L44,KlartagLehecThin2025_C45,KlartagLehecThin2025_P46,KlartagLehecThin2025_L47,KlartagLehecThin2025_R48,KlartagLehecThin2025_R49,KlartagLehecThin2025_C410,KlartagLehecThin2025_P51,KlartagLehecThin2025_L52,KlartagLehecThin2025_L53,KlartagLehecThin2025_L54,KlartagLehecThin2025_L55,KlartagLehecThin2025_C61,KlartagLehecThin2025_T62 lemma_pending;
+    style KlartagLehecThin2025_T11 stroke-width:3px
+```
+
+| Item | Statement | Status | Lean declarations | Note |
+| --- | --- | --- | --- | --- |
+| **Theorem 1.1** (main) | If X is an isotropic log-concave random vector in R^n (mean zero, Cov(X) = Id), then Var(&#124;X&#124;²) = E(&#124;X&#124;² − n)² ≤ C n with a universal constant C > 0. | ○ Not yet formalized | — | Main item: the paper calls it its main result and it is the thin-shell conjecture in the variance form; the abstract's form E(&#124;X&#124; − √n)² ≤ C is the immediate Corollary 1.2. Derived from Theorem 1.4 via the cited Bochner-type inequality ‖f‖²_{L²(μ)} ≤ Σ‖∂_i f‖²_{H^{-1}(μ)} (display (6), Barthe–Klartag and Klartag 2010) applied to f = &#124;x&#124;² − n, giving display (7). Tight up to C (C = 2 Gaussian, 4/5 cube). No Lean declaration: FunctionalInequalities.KLS.Isotropic only encodes the isotropy hypothesis (finite second moment, zero mean, identity covariance), and no repository statement bounds Var(&#124;X&#124;²), even in dimension 1. |
+| Corollary 1.2 | If X is an isotropic log-concave random vector in R^n, then Var(&#124;X&#124;) ≤ E(&#124;X&#124; − √n)² ≤ C with a universal constant C. | ○ Not yet formalized | — | Follows from Theorem 1.1 and E(&#124;X&#124; − √n)² ≤ n^{-1} E(&#124;X&#124;² − n)²; this is the normalization displayed in the abstract. |
+| Corollary 1.3 | For every isotropic log-concave X in R^n and every t > 0, P(&#124;&#124;X&#124; − √n&#124; ≥ t) ≤ P(&#124;&#124;X&#124;² − n&#124;/√n ≥ t) ≤ C exp(−c√t), with universal constants C, c > 0. | ○ Not yet formalized | — | No proof is written; the paper combines Theorem 1.1 with the Bourgain / Nazarov–Sodin–Volberg reverse Hölder inequalities for polynomials of log-concave vectors. Stated to be suboptimal for large t. |
+| Theorem 1.4 | If μ is an isotropic log-concave probability measure on R^n, then Σ_{i=1}^n ‖x_i‖²_{H^{-1}(μ)} ≤ C n with a universal constant C, where ‖f‖_{H^{-1}(μ)} = sup{∫ f g dμ : g ∈ C_c^∞(R^n), ∫&#124;∇g&#124;² dμ ≤ 1}. | ○ Not yet formalized | — | Proof in Section 6: the compactly supported case follows from Corollary 4.10 with t = 1 and Theorem 6.2; the general case uses weak lower semicontinuity of μ ↦ ‖x_i‖²_{H^{-1}(μ)} = sup_φ ∫(2x_iφ − &#124;∇φ&#124;²) dμ and approximation by re-isotropized restrictions to balls. |
+| Lemma 2.1 | For μ compactly supported with affinely spanning support and any continuous path w with values in R^n, the equation θ_t = x + w_t + ∫_0^t a(s, θ_s) ds has a unique solution for every x ∈ R^n; θ_t(x) is jointly continuous in (t, x) and smooth in x, and M_t(x) = θ_t'(x) is jointly continuous, C¹ in t > 0, and the unique solution of M_0 = Id, dM_t/dt = A(t, θ_t(x)) M_t. | ○ Not yet formalized | — | Proof by Picard–Lindelöf (Hartman) using the uniform bounds &#124;a&#124; ≤ C_μ and 0 ≤ A ≤ C_μ Id from compact support. Deterministic, no stochastic calculus. |
+| Definition 2.2 | For t ≥ 0, x ∈ R^n and a continuous path w, G_{t,w}(x) is the value at time t of the unique solution of θ_t = x + w_t + ∫_0^t a(s, θ_s) ds from Lemma 2.1. | ○ Not yet formalized | — |  |
+| Lemma 2.3 | The map (x, w) ↦ (G_{t,w}(x))_{t≥0} into C([0, ∞), R^n) (topology of locally uniform convergence) is continuous, and for fixed t ≥ 0 and x the map w ↦ G_{t,w}(x) is F_t-measurable for the natural filtration of the coordinate process. | ○ Not yet formalized | — | Proof by Gronwall: &#124;G_{t,w}(x) − G_{t,w̃}(x̃)&#124; ≤ e^{C_μ t}(&#124;x − x̃&#124; + sup_{s≤t}&#124;w_s − w̃_s&#124;). |
+| Lemma 2.4 | For t ≥ 0 and every continuous path w, the map G_{t,w}: R^n → R^n is e^{C_μ t}-Lipschitz, where C_μ bounds the covariance of all tilts of μ. | ○ Not yet formalized | — | Read off from the Gronwall estimate in the proof of Lemma 2.3. |
+| Proposition 2.5 | Fix x ∈ R^n and let X have law μ_x (the exponential tilt dμ_x/dμ ∝ e^{⟨x,·⟩}) and be independent of the standard Brownian motion B; then the process (G_{t,B}(x))_{t≥0} has the same law as (x + B_t + tX)_{t≥0}. | ○ Not yet formalized | — | Proved through non-linear filtering: E[X &#124; G_t] = a(t, x + tX + B_t) (Cameron–Martin), and the innovation process is a Brownian motion by Lévy's characterization; the x = 0 case is the Girsanov argument of Klartag–Lehec 2022, Proposition 6.7. Uses Brownian motion and martingale theory. |
+| Corollary 2.6 | For every x ∈ R^n, G_{t,B}(x)/t converges almost surely as t → ∞ and the limit has law μ_x. | ○ Not yet formalized | — | Using one Brownian motion for all x gives the parallel coupling of the tilts μ_{x1} and μ_{x2}. |
+| Proposition 3.1 | For every t ≥ 0 and every continuous path w, the map G_{t,w}: R^n → R^n is a diffeomorphism and is expanding: &#124;G_{t,w}(x) − G_{t,w}(y)&#124; ≥ &#124;x − y&#124;. | ○ Not yet formalized | — | Section 3 is a digression not used for the thin-shell proof. Invertibility by solving the integral equation backwards; expansion from convexity of Λ_t. |
+| Definition 3.2 | For t_1, t_2 ≥ 0, a continuous path w and x ∈ R^n, G_{t_1,t_2,w}(x) = θ_{t_2}, where θ_t = x + w_t + ∫_0^t a(t_1 + s, θ_s) ds; this is the flow of Definition 2.2 for the reference measure μ_{t_1,0}. | ○ Not yet formalized | — |  |
+| Lemma 3.3 (Semigroup property) | For every continuous path w and t_1, t_2 ≥ 0, G_{t_1+t_2,w} = G_{t_1,t_2,σ_{t_1}(w)} ∘ G_{t_1,w}, where (σ_{t_1}(w))_t = w_{t+t_1} − w_{t_1} is the shift. | ○ Not yet formalized | — | Proof by concatenating solutions. |
+| Lemma 3.4 | For a compactly supported μ with affinely spanning support and every t ≥ 0, θ ↦ ∇Λ_t(θ) is a diffeomorphism from R^n onto K, the interior of the convex hull of the support of μ. | ○ Not yet formalized | — | Standard; the paper cites Eldan–Klartag, Lemma 2.1, and proves it by strong convexity and Legendre duality. The printed display of Λ*(ξ) writes Λ(ξ) for Λ(θ). |
+| Definition 3.5 | For a continuous path w and t ≥ 0, S_{t,w} = ∇Λ_t ∘ G_{t,w} ∘ (∇Λ_0)^{-1}, and for t_1, t_2 ≥ 0, S_{t_1,t_2,w} = ∇Λ_{t_1+t_2} ∘ G_{t_1,t_2,w} ∘ (∇Λ_{t_1})^{-1}; with S_t = S_{t,B} and S_{t_1,t_2} = S_{t_1,t_2,B}. | ○ Not yet formalized | — |  |
+| Theorem 3.6 | For μ compactly supported with affinely spanning support and K the interior of the convex hull of its support: (a) almost surely every S_t: K → K is a diffeomorphism with S_0 = Id; (b) for fixed ξ ∈ K, (S_t(ξ)) is a martingale converging almost surely to S_∞(ξ), whose law is the unique exponential tilt of μ with barycenter ξ; (c) (S_t(ξ)) is a time-inhomogeneous Markov process with E[f(S_{t_1+t_2}(ξ)) &#124; F_{t_1}] = P_{t_1,t_2} f(S_{t_1}(ξ)) for bounded continuous f, where P_{t_1,t_2} f(ξ) = E f(S_{t_1,t_2}(ξ)). | ○ Not yet formalized | — | Digression; not used in the thin-shell proof. Uses Brownian motion, martingales and the Markov property. |
+| Remark 3.7 | Under mild regularity assumptions and strict convexity of K, S_t extends to a homeomorphism of the closure of K with S_t = Id on ∂K for all t ≥ 0, almost surely. | ○ Not yet formalized | — | Claim stated without proof in the paper. |
+| Lemma 3.8 | For x ∈ R^n, with θ_t = G_{t,B}(x) and a_t = a(t, θ_t), the process (a_t) is a martingale and its limit as t → ∞ has law μ_x. | ○ Not yet formalized | — | Via a_t = E[X &#124; G_t] for X ~ μ_x independent of B and martingale convergence. |
+| Remark 3.9 | For every bounded test function φ, the process ∫ φ dμ_{t,θ_t} is a martingale, so the measure-valued process (μ_{t,θ_t}) is a martingale; it is Eldan's stochastic localization of μ. | ○ Not yet formalized | — | Stated without proof; also introduces terminology. |
+| Remark 3.10 | The Markov process (S_t(ξ)) is a time-inhomogeneous diffusion with generator L_t f(ξ) = ½ Tr[∇²Λ_t((∇Λ_t)^{-1}(ξ)) ∇²f(ξ)] for suitable f: K → R. | ○ Not yet formalized | — | Proof omitted in the paper. |
+| Lemma 4.1 | If μ (compactly supported, affinely spanning support) is log-concave, then for every continuous path w and x, y ∈ R^n, &#124;G_{t,w}(x) − G_{t,w}(y)&#124;/t is non-increasing in t ∈ (0, ∞). | ○ Not yet formalized | — | Uses the log-concave Lichnerowicz bound A(t, θ) ≤ Id/t (displays (36)-(37), cited). |
+| Proposition 4.2 | If μ is log-concave (with the standing compact-support assumption) and θ_t^x = G_{t,B}(x), then for all x, y ∈ R^n, 1 ≤ p < ∞ and t > 0, W_p(μ_x, μ_y) ≤ t^{-1}(E&#124;θ_t^x − θ_t^y&#124;^p)^{1/p}. | ○ Not yet formalized | — | Optimal-transport coupling statement; the coupling is the parallel coupling of Corollary 2.6. |
+| Corollary 4.3 | If μ is log-concave (compactly supported) and M_t = G_{t,B}'(0), then for every v ∈ R^n and t > 0, limsup_{ε→0+} W_2(μ, μ_{εv})/ε ≤ (E&#124;M_t v&#124;²)^{1/2}/t. | ○ Not yet formalized | — | Dominated convergence using Lemma 2.4. |
+| Lemma 4.4 | For a centered compactly supported probability measure μ on R^n and every v ∈ R^n, ‖⟨x, v⟩‖_{H^{-1}(μ)} ≤ limsup_{ε→0+} W_2(μ, μ_{εv})/ε. | ○ Not yet formalized | — | No log-concavity needed. The last display of the proof writes ⟨x, u⟩ for ⟨x, v⟩. |
+| Corollary 4.5 | If μ is centered, compactly supported and log-concave, then for every t > 0, Σ_{i=1}^n ‖x_i‖²_{H^{-1}(μ)} ≤ t^{-2} E&#124;M_t&#124;², where M_t = G_{t,B}'(0) and &#124;M&#124; = (Tr M*M)^{1/2} is the Hilbert–Schmidt norm. | ○ Not yet formalized | — |  |
+| Proposition 4.6 | If (A_t)_{t≥0} is a continuous path of symmetric positive-definite n×n matrices with eigenvalues λ_1(t) ≥ ... ≥ λ_n(t) > 0 and M solves M_0 = Id, dM_t/dt = A_t M_t, then &#124;M_t&#124;²_{HS} ≤ Σ_{i=1}^n exp(2∫_0^t λ_i(s) ds) for every t > 0. | ○ Not yet formalized | — | Deterministic matrix inequality; proof uses the von Neumann trace inequality and the min-max principle (both cited, unnumbered). |
+| Lemma 4.7 | Let μ_1(t), ..., μ_n(t) and λ_1(t) ≥ ... ≥ λ_n(t) be non-negative continuous functions on [0, ∞) with Σ_{i≤k} μ_i(t) ≤ Σ_{i≤k}[1 + 2∫_0^t μ_i(s)λ_i(s) ds] for all t ≥ 0 and k ≤ n; then Σ_{i≤k} μ_i(t) ≤ Σ_{i≤k} exp(2∫_0^t λ_i(s) ds) for all t ≥ 0 and k ≤ n. | ○ Not yet formalized | — | Elementary induction on k. The final display of the proof writes λ_i(t) inside the ds-integral for λ_i(s). |
+| Remark 4.8 | Under the hypotheses of Proposition 4.6, Jensen's inequality gives &#124;M_t&#124;² ≤ t^{-1}∫_0^t Tr[e^{2tA_s}] ds. | ○ Not yet formalized | — | The paper notes that the sharper Proposition 4.6 is what the proof needs. |
+| Remark 4.9 | For a log-concave probability measure μ on R^n, the standard Gaussian γ, θ_1, θ_2 ∈ R^n and p ≥ 1, W_p(μ_{θ_1}, μ_{θ_2}) ≤ W_p((μ*γ)_{θ_1}, (μ*γ)_{θ_2}). | ○ Not yet formalized | — | Proof omitted; the paper indicates it follows from the parallel couplings and A_t ≤ Id/t. Tilts are implicitly assumed to exist. |
+| Corollary 4.10 | If μ is compactly supported, centered and log-concave, then for every fixed t > 0, Σ_{i=1}^n ‖x_i‖²_{H^{-1}(μ)} ≤ t^{-2} E[Σ_{i=1}^n exp(2∫_0^t λ_i(s) ds)], where λ_1(s) ≥ ... ≥ λ_n(s) > 0 are the eigenvalues of A_s = ∇²Λ_s(G_{s,B}(0)). | ○ Not yet formalized | — | Main novelty of the paper (parallel coupling + transport interpretation of H^{-1}). |
+| Proposition 5.1 | Let μ be isotropic, compactly supported and log-concave, A_t its stochastic-localization covariance process with eigenvalues λ_1(t) ≥ ... ≥ λ_n(t), and τ any stopping time for the Brownian filtration; then for every t > 0, Σ_{i=1}^n P(λ_i(t∧τ) ≥ 3) ≤ C n exp(−t^{−α}) with universal C, α > 0, and the proof gives α = 1/8. | ○ Not yet formalized | — | Multi-scale iteration with t_k = 2^{−8k}t, D_k = t_k^{−1/4}, r_k ∈ [2, 3]; also uses the qualitative bound P(τ_* ≤ t) = o(t^k) for τ_* = inf{t : ‖A_t‖_op ≥ 2} (display (59), cited). The τ ≡ ∞ case essentially follows from Guan. |
+| Lemma 5.2 (Guan) | Let t > 0 and X be a centered t-uniformly log-concave random vector in R^n with covariance eigenvalues λ_1, ..., λ_n, orthonormal eigenvectors v_1, ..., v_n and X_i = ⟨X, v_i⟩; then for 1 ≤ k ≤ n and u > 0, Σ_{i,j=1}^n (E X_i X_j X_k)² 1{max(λ_i, λ_j) ≤ u} ≤ 4 t^{−1/2} u^{3/2} λ_k. | ○ Not yet formalized | — | Proof uses the improved Lichnerowicz inequality C_P(Y) ≤ √(u/t) (Klartag 2023) for Y = Proj_E X and Prékopa–Leindler (both cited, unnumbered). No Lean declaration: Poincare.LocalSlope.Intrinsic.constant could express C_P(Y), but no repository theorem states the improved Lichnerowicz bound or this lemma. |
+| Lemma 5.3 | For every C² function f: [0, ∞) → R and stopping time τ, d/dt E Tr f(A_{t∧τ}) = ½ Σ_{i,j} E[&#124;ξ_{ij}(t)&#124;² (f'(λ_i(t)) − f'(λ_j(t)))/(λ_i(t) − λ_j(t)) 1{t<τ}] − E[Σ_i λ_i(t)² f'(λ_i(t)) 1{t<τ}], where ξ_{ij}(t) = ∫⟨x − a_t, u_i(t)⟩⟨x − a_t, u_j(t)⟩(x − a_t) dμ_t(x) and the quotient means f''(λ_i) when λ_i = λ_j. | ○ Not yet formalized | — | Uses the stochastic differential equation dA_t = Σ_i H_{i,t} dB_{i,t} − A_t² dt (display (65), cited), Itô's formula and the Daleckii–Krein formula; stochastic calculus. |
+| Lemma 5.4 | Let f: [0, ∞) → [0, ∞) be C², increasing, with f(x) = x² for x ≥ r and f'' ≤ D² f, where D > 1 and r ∈ [2, 3]; then for every stopping time τ and t > 0, d/dt E Tr f(A_{t∧τ}) ≤ C(1/t + D²/√t) E Tr f(A_{t∧τ}) with a universal C. | ○ Not yet formalized | — | The pathwise inequality (73) is credited to Guan and re-proved; uses λ_i(t) ≤ 1/t and t-uniform log-concavity of μ_t. |
+| Lemma 5.5 | For every D > 1 and r ∈ [2, 3] there is a C², positive, increasing f = f_{D,r}: [0, ∞) → R with f(x) = e^{D(x−r)} for x ≤ r − 1/D, f(x) = x² for x ≥ r, and f'' ≤ (12D)² f on [0, ∞). | ○ Not yet formalized | — | Elementary construction; the last step is left as an exercise in the paper. |
+| Corollary 6.1 | For μ isotropic, compactly supported and log-concave, τ_k = inf{t > 0 : λ_k(t) ≥ 3}, k = 1, ..., n, and t > 0: P(τ_k ≤ t) ≤ C_1 (n/k) exp(−t^{−α}) and E τ_k^{−2} ≤ C_2 (1 + log(n/k))^β, with universal constants, α = 1/8 and β = 16. | ○ Not yet formalized | — |  |
+| Theorem 6.2 | If μ is an isotropic, compactly supported, log-concave probability measure on R^n and λ_i(t) are the eigenvalues of A_t = ∇²Λ_t(G_{t,B}(0)) as in Corollary 4.10, then E[Σ_{i=1}^n exp(2∫_0^1 λ_i(t) dt)] ≤ C n with a universal C. | ○ Not yet formalized | — | Variant of Guan's bound E Tr A_t² ≤ Cn; uses λ_k(t) ≤ 1/t (display (36)) and summability of (1 + log(n/k))^16. |
+
+Not listed: All 37 numbered statements of v2 are listed (no numbered statement is purely expository; Remarks 3.7, 3.9, 3.10, 4.8 and 4.9 each assert a mathematical claim, mostly without proof). Unnumbered displayed claims are covered in the items that use them: the Gaussian and cube examples (2), the cited Bochner-type H^{-1} inequality (6) and its consequence (7) used for Theorem 1.1, the uniform tilt bounds (11)-(13), the log-concave Lichnerowicz bound (36)-(37), the von Neumann trace inequality (50) used for Proposition 4.6, Guan's estimate E Tr A_t² ≤ Cn (56), the short-time operator-norm bounds (58)-(59), the covariance SDE (65), and the conditions (71) and (75)-(76) on f. Equation numbers were recomputed from the LaTeX and checked against the PDF.
+
+### Letwin2026 lemma map
+
+Source: [Letwin, arXiv:2607.24164v1](https://arxiv.org/abs/2607.24164v1), reviewed 2026-10-03.
+
+Standing assumptions: Probability measures on R^n, n >= 2; log-concave means a log-concave density on the affine hull of the support (Borell); isotropic means mean 0 and covariance Id. C_P is the optimal Poincare constant for locally Lipschitz tests, psi_mu the inverse isoperimetric (Cheeger) constant with min{mu(A), 1 - mu(A)} denominator over smooth-boundary open sets, psi_n = sup psi_mu over isotropic log-concave mu on R^n. Throughout Section 2 and Appendix A (except Lemmas A.1, A.2 and the general Stein-kernel statements Definition 2.6, Proposition 2.8, Lemmas 2.9 and A.7) mu is regular: dmu = e^{-V} 1_K dx with K bounded open convex and V smooth convex near the closure of K; phi is its moment map, nu = e^{-phi} dy, (phi^{ij}) = (Hess phi)^{-1}, L f = phi^{ij} d_ij f - (V_i o grad phi) d_i f, Einstein summation. C denotes absolute constants. All 18 numbered environments share one per-section counter (Theorem 1.1-1.2; Lemma 2.1-2.4, Theorem 2.5, Definition 2.6, Lemma 2.7, Proposition 2.8, Lemma 2.9; Lemma A.1-A.7) and are listed; the unnumbered definitions, the comparison display and the conjecture statement of Section 1 are listed because Lean declarations state them.
+
+```mermaid
+flowchart LR
+    Letwin2026_DISO["✓ Section 1, definition of isotropic (unnumbered)<br/>Isotropic random vector"]
+    Letwin2026_DCP["◐ Equation (1.1), definition of C_P(mu)<br/>Poincare constant C_P"]
+    Letwin2026_DPSI["◐ Section 1, displays defining 1/psi_mu and psi_n (unnumbered)<br/>Isoperimetric and KLS constants"]
+    Letwin2026_ECMP["◐ Section 1, unnumbered display (Cheeger; Buser, Ledoux; De Ponti and Mondino)<br/>Cheeger and Buser comparison"]
+    Letwin2026_CONJ["◐ Section 1, statement of the KLS conjecture (unnumbered)<br/>KLS conjecture"]
+    Letwin2026_T11["○ Theorem 1.1<br/>KLS constant O(log^{1/4} n)"]
+    Letwin2026_T12["○ Theorem 1.2<br/>Quadratic-form Poincare inequality"]
+    Letwin2026_L21["○ Lemma 2.1 (Cordero-Erausquin and Klartag [21, Theorem 2])<br/>Existence of moment maps"]
+    Letwin2026_L22["○ Lemma 2.2 (Klartag [41])<br/>Regularity of the moment map"]
+    Letwin2026_L23["○ Lemma 2.3<br/>Hessian of phi has mean Id"]
+    Letwin2026_L24["○ Lemma 2.4<br/>Twice-differentiated Monge-Ampere equation"]
+    Letwin2026_T25["○ Theorem 2.5<br/>Key moment-map Hessian bound"]
+    Letwin2026_D26["○ Definition 2.6<br/>Stein kernel"]
+    Letwin2026_L27["○ Lemma 2.7 (Fathi [29, Theorem 2.3])<br/>Moment map gives Stein kernel"]
+    Letwin2026_P28["○ Proposition 2.8 (Barthe and Klartag [7, Proposition 10])<br/>H^{-1} variance inequality"]
+    Letwin2026_L29["○ Lemma 2.9<br/>Stein kernel bounds H^{-1} norm"]
+    Letwin2026_DISO --> Letwin2026_DPSI
+    Letwin2026_DCP --> Letwin2026_ECMP
+    Letwin2026_DPSI --> Letwin2026_ECMP
+    Letwin2026_DISO --> Letwin2026_CONJ
+    Letwin2026_DCP --> Letwin2026_CONJ
+    Letwin2026_DPSI --> Letwin2026_CONJ
+    Letwin2026_ECMP --> Letwin2026_CONJ
+    Letwin2026_T12 --> Letwin2026_T11
+    Letwin2026_ECMP --> Letwin2026_T11
+    Letwin2026_DISO --> Letwin2026_T11
+    Letwin2026_DCP --> Letwin2026_T11
+    Letwin2026_DPSI --> Letwin2026_T11
+    Letwin2026_L21 --> Letwin2026_T12
+    Letwin2026_L22 --> Letwin2026_T12
+    Letwin2026_L27 --> Letwin2026_T12
+    Letwin2026_D26 --> Letwin2026_T12
+    Letwin2026_T25 --> Letwin2026_T12
+    Letwin2026_P28 --> Letwin2026_T12
+    Letwin2026_L29 --> Letwin2026_T12
+    Letwin2026_L21 --> Letwin2026_L22
+    Letwin2026_L22 --> Letwin2026_L23
+    Letwin2026_DISO --> Letwin2026_L23
+    Letwin2026_L22 --> Letwin2026_L24
+    Letwin2026_L22 --> Letwin2026_T25
+    Letwin2026_L23 --> Letwin2026_T25
+    Letwin2026_L24 --> Letwin2026_T25
+    Letwin2026_L22 --> Letwin2026_L27
+    Letwin2026_D26 --> Letwin2026_L27
+    Letwin2026_D26 --> Letwin2026_L29
+    classDef lemma_formalized fill:#dbeafe,stroke:#2563eb,color:#1e3a8a;
+    class Letwin2026_DISO lemma_formalized;
+    classDef lemma_partial fill:#fff3df,stroke:#c88719,color:#66420d;
+    class Letwin2026_DCP,Letwin2026_DPSI,Letwin2026_ECMP,Letwin2026_CONJ lemma_partial;
+    classDef lemma_pending fill:#fee2e2,stroke:#dc2626,color:#991b1b;
+    class Letwin2026_T11,Letwin2026_T12,Letwin2026_L21,Letwin2026_L22,Letwin2026_L23,Letwin2026_L24,Letwin2026_T25,Letwin2026_D26,Letwin2026_L27,Letwin2026_P28,Letwin2026_L29 lemma_pending;
+    style Letwin2026_T11 stroke-width:3px
+```
+
+| Item | Statement | Status | Lean declarations | Note |
+| --- | --- | --- | --- | --- |
+| Section 1, definition of isotropic (unnumbered) | A random vector X in R^n (or its law mu) is isotropic if E X = 0 and Cov(X) = Id. | ✓ Formalized in Lean | [`Isotropic`](../../formalization/FunctionalInequalities/KLS/Isotropic.lean) | Lean states the three conditions (MemLp id 2, zero mean, centered covariance operator equal to the identity) coordinate-free on any finite-dimensional real inner-product space; in orthonormal coordinates this is the paper's definition (finite second moments are implicit in the paper). |
+| Equation (1.1), definition of C_P(mu) | C_P(mu) is the infimum of C >= 0 such that Var_mu f(X) <= C E_mu &#124;grad f(X)&#124;^2 for every locally Lipschitz f: R^n -> R with E_mu &#124;grad f&#124;^2 <= 1; testing linear functions gives C_P(mu) >= 1 for isotropic mu. | ◐ Partial or statement only | [`constant`](../../formalization/FunctionalInequalities/Poincare/LocalSlope/Basic.lean) | Intrinsic.constant is the extended (ENNReal) optimum of the local-slope Poincare inequality for the intrinsic law on the affine support of a finite-dimensional law, with local slope in place of the a.e. gradient. Agreement with the paper's ambient gradient formulation is not a separate Lean theorem; for log-concave laws it equals the smooth-test optimum. The bound C_P >= 1 for isotropic laws is not stated in Lean. |
+| Section 1, displays defining 1/psi_mu and psi_n (unnumbered) | For mu with log-concave density rho, 1/psi_mu = inf over open A with smooth boundary and 0 < mu(A) < 1 of the integral of rho over the boundary of A divided by min{mu(A), 1 - mu(A)}; psi_n = sup psi_mu over isotropic log-concave probability measures mu on R^n. | ◐ Partial or statement only | [`constant`](../../formalization/FunctionalInequalities/KLS/Isoperimetry.lean)<br/>[`inverseScale`](../../formalization/FunctionalInequalities/KLS/Isoperimetry.lean) | Isoperimetry.constant is h_mu = 1/psi_mu and Isoperimetry.inverseScale is psi_mu, defined with outer Minkowski content over measurable sets of mass in (0, 1) on the affine support (value top, resp. 0, in dimension zero). Agreement with the smooth-boundary surface-integral convention is not stated in Lean, and psi_n (the supremum over isotropic laws) has no Lean declaration. |
+| Section 1, unnumbered display (Cheeger; Buser, Ledoux; De Ponti and Mondino) | For every log-concave probability measure mu on R^n with a density, 1/4 <= psi_mu^2 / C_P(mu) <= pi. | ◐ Partial or statement only | [`literatureConstant_le_four_mul_inverseScale_sq`](../../formalization/FunctionalInequalities/KLS/Geometry/Cheeger/Inequality.lean)<br/>[`inverseScale_sq_le_pi_literature`](../../formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianBuser.lean) | Quoted, not proved in the paper. Lean proves both halves for every finite-dimensional log-concave law, including degenerate and zero-dimensional ones, as C_P <= 4 Psi^2 and Psi^2 <= pi C_P with Psi = Isoperimetry.inverseScale (Minkowski-content convention). Partial only because Psi is not identified in Lean with the smooth-boundary psi_mu. The proof of Theorem 1.1 uses only the Buser direction psi_n^2 <= C sup C_P(mu). |
+| Section 1, statement of the KLS conjecture (unnumbered) | There is an absolute constant C > 0 such that every isotropic log-concave probability measure mu on R^n, in every dimension, satisfies C_P(mu) <= C; equivalently sup_{n >= 2} psi_n <= C. | ◐ Partial or statement only | [`Conjecture`](../../formalization/FunctionalInequalities/KLS/Statement.lean) | Conjecture is a definition (a Prop), not a proof. It is the covariance-normalized form: one NNReal constant C with C_P^lit(mu) <= C &#124;&#124;Cov(mu)&#124;&#124;_op for every n (including n = 0) and every log-concave law with finite second moment, singular affine supports included. For isotropic laws &#124;&#124;Cov&#124;&#124; = 1 gives the paper's form; the affine/isotropic equivalence is proved separately in Lean (KLS/LogConcave/Isotropic.lean), and the psi_n form needs ECMP. The paper does not prove the conjecture. |
+| **Theorem 1.1** (main) | For every n >= 2, psi_n <= C log^{1/4} n for an absolute constant C > 0, where psi_n = sup psi_mu over isotropic log-concave probability measures on R^n; equivalently C_P(mu) <= C' sqrt(log n) for every isotropic log-concave mu on R^n. | ○ Not yet formalized | — | Main theorem: it is the title and abstract claim and the only bound on the KLS constant psi_n; Theorem 1.2 is the new quadratic-form inequality from which it is derived. Proof (Section 1): for M = E<X,theta> X (x) X, Cauchy-Schwarz and Theorem 1.2 give &#124;&#124;M&#124;&#124;_HS^4 <= 8 &#124;&#124;M&#124;&#124;_HS^2, so Eldan's parameter kappa_n <= 2 sqrt 2; then the bound C_P(mu) <= C kappa_n sqrt(log n) is attributed to tracing Klartag 2023 (Theorem 1.3, Corollary 3.2 and the discussion after (3.13)) - the paper says it is not the final bound Klartag states and does not prove it - and finally psi_n^2 <= C sup C_P(mu). That traced bound is the unverified external step of this review. No Lean statement of psi_n or of this bound exists; the Lean Buser comparison covers only the last step. Unrefereed July 2026 preprint; the AI disclosure credits ChatGPT with the Appendix A regularity arguments. |
+| Theorem 1.2 | If X ~ mu is an isotropic log-concave random vector in R^n and M is any symmetric n x n matrix, then Var(<MX,X>) <= 2 E&#124;grad <MX,X>&#124;^2 = 8 Tr(M^2) (equation (1.2)). | ○ Not yet formalized | — | Proof (end of Section 2): reduce to the regular class (Lemma A.1) and invertible M (Lemma A.2); push mu forward by &#124;M&#124;^{1/2} to eta, whose Stein kernel &#124;M&#124;^{1/2} tau_mu &#124;M&#124;^{1/2} has E&#124;&#124;tau_eta&#124;&#124;_HS^2 <= 2 Tr(M^2) by Theorem 2.5 with B = &#124;M&#124;; apply Proposition 2.8 to F(z) = <sgn(M) z, z> - Tr M and Lemma 2.9 to each partial derivative. Sharpness of the constant 2 (isotropic exponential vector, M = Id) is asserted as an exercise. The paper calls it the KLS conjecture for quadratic forms. No Lean statement; neither Stein kernels, moment measures nor H^{-1} norms are formalized. |
+| Lemma 2.1 (Cordero-Erausquin and Klartag [21, Theorem 2]) | If mu is a Borel measure on R^n with 0 < mu(R^n) < infinity, support not contained in a proper linear subspace and barycenter at the origin, then there is an essentially continuous convex phi: R^n -> R cup {+infinity} with (grad phi)_#(e^{-phi(y)} dy) = mu, unique up to translation phi_1(y) = phi_0(y - y_0). | ○ Not yet formalized | — | Quoted, not proved. Moment-measure construction; not formalized. |
+| Lemma 2.2 (Klartag [41]) | Under the regularity assumptions of Lemma A.1, the moment map phi of Lemma 2.1 is finite and smooth on R^n with positive definite Hessian everywhere, grad phi: R^n -> K is a diffeomorphism, and the Monge-Ampere equation rho(grad phi) det Hess phi = e^{-phi}, i.e. log det Hess phi = -phi + V(grad phi), holds pointwise. | ○ Not yet formalized | — | Quoted from Klartag 2014, not proved. The proofs also use Klartag 2014, Theorem 1 (0 <= Hess phi <= 2 sup_K &#124;x&#124;^2 Id, so grad phi and Hess phi are bounded), the weighted operator L f = phi^{ij} d_ij f - (V_i o grad phi) d_i f, which is symmetric on L^2(nu) with integration-by-parts formula (2.2) [41, Equations 53-55], and the product rule (2.3). Not formalized. |
+| Lemma 2.3 | Under the regularity assumptions of Lemma A.1 (isotropic dmu = e^{-V} 1_K dx, K bounded open convex, V smooth convex near the closure of K), moment map phi and nu = e^{-phi} dy, E_{Y~nu} Hess phi(Y) = Id. | ○ Not yet formalized | — | Proof: integration by parts (2.1) with f = d_i phi, g = 1, and isotropy of mu = (grad phi)_# nu. Not formalized. |
+| Lemma 2.4 | Under the regularity assumptions, for all i, j: L(d_ij phi) + d_ij phi = (Hess phi Hess V(grad phi) Hess phi)_ij + phi^{ac} phi^{bd} d_abi phi d_cdj phi, and both matrices on the right are positive semidefinite at every point. | ○ Not yet formalized | — | Proof: differentiate log det Hess phi = -phi + V(grad phi) twice (Jacobi's formula); positivity from convexity of V and a Hilbert-Schmidt Gram-matrix representation. Not formalized. |
+| Theorem 2.5 | Under the regularity assumptions of Lemma A.1 (isotropic dmu = e^{-V} 1_K dx, K bounded open convex, V smooth convex near the closure of K), moment map phi and nu = e^{-phi} dy, every symmetric n x n matrix B satisfies E_{Y~nu} Tr(B Hess phi(Y) B Hess phi(Y)) <= 2 Tr(B^2). | ○ Not yet formalized | — | Proof: for B >= 0, apply L to Tr(B Hess phi B Hess phi), substitute Lemma 2.4, integrate using Lemma A.5 (c = 2), compare third-derivative terms pointwise ((b_i - b_j)^2 identity), and apply the Brascamp-Lieb inequality (Lemma A.6) to B^{1/2} Hess phi B^{1/2}, whose mean is B by Lemma 2.3; general B via &#124;B&#124;. Matrix inequalities: traces of products of PSD matrices, Hilbert-Schmidt Gram matrices. Not formalized. |
+| Definition 2.6 | For a centered random vector W ~ lambda in R^n, a measurable matrix-valued tau_lambda with entries locally integrable under lambda (up to lambda-a.e. equality) is a Stein kernel if E[W_i f(W)] = E[sum_j tau_lambda(W)_ij d_j f(W)] for every f in C_c^infinity(R^n) and every i (equation (2.18)); it is symmetric if tau_lambda(u) is symmetric for lambda-a.e. u. | ○ Not yet formalized | — | Not formalized. |
+| Lemma 2.7 (Fathi [29, Theorem 2.3]) | Under the regularity assumptions, tau_mu(x) = Hess phi((grad phi)^{-1}(x)) is a symmetric Stein kernel for mu that is positive definite mu-a.e., and tau_mu(X) = Hess phi(Y) in the coupling Y ~ nu, X = grad phi(Y). | ○ Not yet formalized | — | Quoted from Fathi 2019; the paper's proof only checks symmetry, positivity and the coupling identity, citing Fathi for the Stein identity. Not formalized. |
+| Proposition 2.8 (Barthe and Klartag [7, Proposition 10]) | If W ~ lambda is log-concave and f: R^n -> R is locally Lipschitz with f, d_i f in L^2(lambda) and E d_i f(W) = 0 for every i, then Var f(W) <= sum_i &#124;&#124;d_i f&#124;&#124;_{H^{-1}(lambda)}^2, where &#124;&#124;g&#124;&#124;_{H^{-1}(lambda)} = sup E[g h] over locally Lipschitz h in L^2(lambda) with E&#124;grad h&#124;^2 <= 1 (equation (2.19)). | ○ Not yet formalized | — | Quoted, not proved; lambda need not be isotropic. Not formalized. |
+| Lemma 2.9 | If W ~ lambda is centered, log-concave, full-dimensional with finite second moments and tau_lambda is a symmetric Stein kernel with E&#124;&#124;tau_lambda(W)&#124;&#124;_HS^2 < infinity, then &#124;&#124;x -> <x,v>&#124;&#124;_{H^{-1}(lambda)}^2 <= E&#124;tau_lambda(W) v&#124;^2 for every v in R^n. | ○ Not yet formalized | — | Proof: Stein identity plus Cauchy-Schwarz on C_c^infinity tests, extended by Lemma A.7. Not formalized. |
+
+Not listed: The paper has no Remark, Corollary, Fact, Claim or Conjecture environment. Omitted unnumbered material: the expository discussion after Theorem 1.2 (sharpness of the constant 2 for the isotropic exponential vector with M = Id, recorded in the note of T12, and the Bobkov-Chistyakov-Gotze second-order correlation consequence), Eldan's parameter kappa_n (defined inside the proof of Theorem 1.1, recorded in the note of T11), the Notation and AI Disclosure subsections, the footnote to Theorem 2.5, and the motivating remarks before Lemma 2.3 and before the proof of Theorem 1.2. Numbered displays (1.2)-(2.22) are recorded with the statements they belong to: (1.2) in T12, (2.1) in LA3, (2.2)-(2.3) in the note of L22, (2.4)-(2.6) in L24, (2.7)-(2.17) in T25, (2.18) in D26, (2.19)-(2.20) in P28, (2.21)-(2.22) in T12 and LA2. Unnumbered or display-level claims are listed only where a local Lean declaration states them; 7 others are not listed.
 
 ## Local Lean statement inventory
 
