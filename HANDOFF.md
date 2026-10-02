@@ -1,6 +1,6 @@
 # Current KLS handoff
 
-Updated 2026-10-02. This file holds the current state only; earlier sections are preserved in the
+Updated 2026-10-03. This file holds the current state only; earlier sections are preserved in the
 [handoff history](research/decisions/2026-10-02-handoff-history.md) and are not current task
 authorization. Exact results, scopes and certificates are in the
 [paper register](research/progress/LITERATURE.md) and the [node register](research/progress/STATUS.md).
@@ -11,6 +11,10 @@ authorization. Exact results, scopes and certificates are in the
   ([run 37017009088](https://github.com/numina-functional-inequalities/kls-lean/actions/runs/37017009088),
   2026-10-02). The full local verifier also passed 184 gates for that commit
   (`build/verification/20261002T134816.216230Z/report.json`).
+- Local `main` is 16 commits ahead of `origin/main` and unpushed (overnight work of 2026-10-03, see
+  the [overnight log](research/decisions/2026-10-03-overnight-plan.md)). The last full local verifier
+  passed 184 gates, 361 replayed modules, for the tree of `c25dc9c`
+  (`build/verification/20261002T221208.729681Z/report.json`); only documentation changed afterwards.
 - 27 ledger certificates. `FunctionalInequalities.KLS.kls` in `KLS/Target.lean` is the one
   intentional hole, outside every certificate closure. Dimension-free KLS is open.
 - Covered papers: Ambrosio–Di Marino–Gigli Theorem 3.6, certificate
@@ -26,21 +30,24 @@ authorization. Exact results, scopes and certificates are in the
 
 ## Next
 
-1. Owner decision on stochastic calculus (see below); it gates every priority-4 paper. De Ponti–Mondino
-   Lemmas 3.2 and 3.3 are formalized in `KLS/Geometry/Cheeger/BuserProfile.lean`, Bobkov's
-   Lemma 3.1 (Borell's lemma) in `KLS/LogConcave/Tail.lean`, E. Milman's Lemma 4.1
-   (Paley–Zygmund quantile bound) in `Probability/Quantile.lean`, Lee–Vempala's Lemma 42
-   (Eldan's trace inequality) in `Analysis/MatrixTrace.lean`, Guédon–Milman's Lemma A.2 in
-   `KLS/LogConcave/Line/DensityBound.lean`, part of Bobkov's Proposition 4.1 (`Is = 2f(m)`,
-   `1/(3 Var) ≤ Is²`) in `KLS/LogConcave/Line/CheegerVariance.lean`, Klartag–Lehec's thin-shell
-   Lemma 4.7 in `Analysis/Majorization.lean`, and Grünbaum's lemma (Guédon–Milman Lemma 2.2) in
-   `KLS/LogConcave/Line/Grunbaum.lean`.
+1. Owner decision on stochastic calculus (see below); it gates every priority-4 paper.
 2. Blocked: the priority-1 Bakry–Émery `C_P ≤ 1/ρ` target waits for the Bakry–Gentil–Ledoux text.
+3. Supporting lemmas formalized on 2026-10-03, none of them a paper main theorem: De Ponti–Mondino
+   Lemmas 3.2–3.3, Bobkov Lemma 3.1 (Borell) and part of Proposition 4.1, E. Milman Lemma 4.1,
+   Lee–Vempala Lemma 42, Guédon–Milman Lemmas 2.2 (Grünbaum) and A.2, Klartag–Lehec 2025
+   Lemma 4.7. Module list, relations and an independent statement review are in the
+   [overnight log](research/decisions/2026-10-03-overnight-plan.md) and the
+   [review record](research/decisions/2026-10-03-overnight-statement-review.md).
 
 ## Open owner decisions
 
 - Stochastic calculus for priorities 4–5: build it here or build on external Lean efforts; evidence
   and a recommendation are in [the options record](research/decisions/2026-10-03-stochastic-calculus-options.md).
+- Push timing for the 16 local commits. None of them adds a paper-target certificate, so the
+  milestone policy does not call for a remote CI run.
+- E. Milman Lemma 4.1 is recorded as `same`, although the real-infimum quantile differs from the
+  paper's `−∞` in the degenerate case `f = 0`, `1 − ε < 0`, where the paper's statement is literally
+  false. The reviewer called it `partial`; accept the convention or relabel the entry.
 - Upstreaming generic infrastructure to Mathlib after an API cleanup.
 - CI cost: project build cache or a self-hosted runner while the repository is private
   (no scheduled runs; the opt-in [milestone gate](research/workflow.md#local-milestone-gate) exists).

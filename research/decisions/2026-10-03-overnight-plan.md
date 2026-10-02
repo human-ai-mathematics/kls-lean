@@ -147,4 +147,59 @@ Nothing is pushed.
   first suggested in Claude's own hint), dropped one unused hypothesis from a helper, removed five
   linter warnings and three `ring` → `ring_nf` information messages, and restored seven docstrings
   the worker had edited.
+  Full local verifier for the Grünbaum tree: 184 gates, 361 replayed modules
+  (`build/verification/20261002T221208.729681Z/report.json`); committed as `c25dc9c`.
+- Independent statement review of the nine paper statements formalized tonight:
+  [review record](2026-10-03-overnight-statement-review.md). Six are faithful. Lemma 4.7 is stronger,
+  as recorded. Bobkov 4.1 is partial, as recorded. De Ponti–Mondino 3.3 is strict where the paper says
+  "decreasing", which the map note already covers. Milman 4.1 differs only in the documented
+  degenerate quantile case; this is listed as an owner decision.
+
+## Morning report (block 5)
+
+All blocks done; nothing was pushed, tagged or sent to remote CI, and no accepted certificate
+changed. Local `main` is 16 commits ahead of `origin/main`.
+
+**Lemma maps.** Twenty-two of the twenty-seven register sources now have numbered-statement maps,
+with numbering checked against the PDFs and an independent GPT reading. The five without maps are
+two surveys, two monographs and Borell 1974 (not downloaded).
+
+**Lean results.** Statements by Claude, proofs by the GPT worker, one statement at a time, each
+rechecked locally (identical statements, no forbidden tokens, standard axioms only). Each commit
+was verified with the full local verifier.
+
+| Commit | Paper statement | Module | Map |
+| --- | --- | --- | --- |
+| `6a8a60d` | De Ponti–Mondino 2021, Lemmas 3.2–3.3 | `KLS/Geometry/Cheeger/BuserProfile.lean` | ✓ ✓ |
+| `61c8991` | Bobkov 1999, Lemma 3.1 (Borell) | `KLS/LogConcave/Tail.lean` | ✓ |
+| `925245d` | E. Milman 2009, Lemma 4.1 (Paley–Zygmund quantile) | `Probability/Quantile.lean` | ✓ |
+| `4212bb7` | Lee–Vempala 2024, Lemma 42 (Eldan's trace inequality) | `Analysis/MatrixTrace.lean` | ✓ |
+| `4212bb7` | Guédon–Milman 2011, Lemma A.2 | `KLS/LogConcave/Line/DensityBound.lean` | ✓ |
+| `63cfb96` | Bobkov 1999, Proposition 4.1 (`Is = 2f(m)`, `1/(3Var) ≤ Is²`) | `KLS/LogConcave/Line/CheegerVariance.lean` | ◐ |
+| `75632e1` | Klartag–Lehec 2025 (thin shell), Lemma 4.7 | `Analysis/Majorization.lean` | ⇑ |
+| `c25dc9c` | Guédon–Milman 2011, Lemma 2.2 (Grünbaum) | `KLS/LogConcave/Line/Grunbaum.lean` | ✓ |
+
+None of these is a paper main theorem, so no paper is newly covered and no milestone tag is due.
+
+**Source findings.**
+- Bizeul 2025 Lemma 5 is false as printed: it claims one constant for every `p ≥ 2`. The paper
+  uses it only at `p = 4`.
+- Bobkov 1999 Proposition 4.1: the old map note said the constant 3 was out of reach locally. It
+  follows by composing two existing results.
+- Letwin 2026 cites a bound "by tracing" Klartag 2023 that the preprint does not prove (noted
+  earlier).
+
+**Process notes.**
+- Large proof steps failed with the worker. Splitting them into statements of a few lines each,
+  with exact Mathlib names in the hints, made every block succeed.
+- The worker sometimes deletes or edits docstrings. Integration now restores the docstrings from
+  the statement file, and a script compares every theorem docstring.
+
+**Open owner decisions.** Listed in `HANDOFF.md`:
+- stochastic calculus;
+- push timing;
+- the Milman 4.1 degenerate-case convention;
+- Mathlib upstreaming;
+- CI cost;
+- the Bakry–Gentil–Ledoux text from Nicolas.
 
