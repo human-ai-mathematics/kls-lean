@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "last_updated": "2026-10-02",
+  "last_updated": "2026-10-01",
   "nodes": {
     "ass:cmh-recovery-envelope": {
       "description": "Seek a regular moment-map approximation of every centered log-concave law with a dimension-free CMH bound.",
@@ -728,7 +728,7 @@
         "state": "pending",
         "evidence": {
           "kind": "reviewed_progress",
-          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/research/explorations/route-composition.yaml",
+          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/route-composition.yaml",
           "baseline_commit": "b7b458c"
         },
         "kind": "route"
@@ -736,7 +736,7 @@
       "diagram": {
         "id": "EAND",
         "label": "AND<br/>Eldan route",
-        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/research/explorations/route-composition.yaml",
+        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/route-composition.yaml",
         "shape": "diamond"
       },
       "route_branch": "eldan-tight-prefix"
@@ -747,7 +747,7 @@
         "state": "pending",
         "evidence": {
           "kind": "reviewed_progress",
-          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/research/explorations/route-composition.yaml",
+          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/route-composition.yaml",
           "baseline_commit": "b7b458c"
         },
         "kind": "route"
@@ -755,7 +755,7 @@
       "diagram": {
         "id": "SAND",
         "label": "AND<br/>Spectral route",
-        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/research/explorations/route-composition.yaml",
+        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/route-composition.yaml",
         "shape": "diamond"
       },
       "route_branch": "moment-map-spectral-full-damping"
@@ -766,7 +766,7 @@
         "state": "pending",
         "evidence": {
           "kind": "reviewed_progress",
-          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/research/explorations/route-composition.yaml",
+          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/route-composition.yaml",
           "baseline_commit": "b7b458c"
         },
         "kind": "route"
@@ -774,7 +774,7 @@
       "diagram": {
         "id": "MAND",
         "label": "AND<br/>CMH route",
-        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/research/explorations/route-composition.yaml",
+        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/route-composition.yaml",
         "shape": "diamond"
       },
       "route_branch": "moment-map-cmh-recovery"
@@ -803,7 +803,7 @@
         "state": "partial",
         "evidence": {
           "kind": "reviewed_progress",
-          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/research/explorations/route-composition.yaml",
+          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/route-composition.yaml",
           "baseline_commit": "b7b458c"
         },
         "kind": "route"
@@ -811,7 +811,7 @@
       "diagram": {
         "id": "FAND",
         "label": "AND<br/>Fiber route",
-        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/research/explorations/route-composition.yaml",
+        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/route-composition.yaml",
         "shape": "diamond"
       },
       "route_branch": "conditional-fiber-frame"
@@ -822,7 +822,7 @@
         "state": "logic",
         "evidence": {
           "kind": "reviewed_progress",
-          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/research/explorations/route-composition.yaml",
+          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/route-composition.yaml",
           "baseline_commit": "b7b458c"
         },
         "kind": "logic"
@@ -830,7 +830,7 @@
       "diagram": {
         "id": "ANY",
         "label": "OR<br/>Any completed route",
-        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/research/explorations/route-composition.yaml",
+        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/route-composition.yaml",
         "shape": "diamond"
       }
     },
@@ -1457,6 +1457,5 @@
         "kind": "context"
       }
     ]
-  },
-  "diagram_role": "exploratory_non_target"
+  }
 }

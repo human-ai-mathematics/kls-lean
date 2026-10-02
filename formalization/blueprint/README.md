@@ -1,12 +1,10 @@
 # KLS Lean Blueprint
 
-The [published literature register](../../research/progress/LITERATURE.md) selects this
-repository's formalization targets. This Blueprint retains the current `L²`/energy foundation,
-supporting analytic statements and their dependency/evidence annotations. Its four exploratory
-route alternatives are research context, not formalization targets; see the separate
-[exploratory register](../../research/explorations/ROUTES.md). They share analytic infrastructure;
-no logical or probabilistic independence is asserted. The composition sidecar is now
-[research/explorations/route-composition.yaml](../../research/explorations/route-composition.yaml).
+This Blueprint is the live dependency map for the canonical `L²`/energy foundation and the
+remaining route to KLS. It is deliberately narrower than the upstream mathematical manuscript:
+it records only interfaces that this repository intends to formalize, together with four audited
+sufficient-route alternatives. The alternatives share analytic infrastructure; no logical or
+probabilistic independence is asserted.
 
 Public Lean interfaces may evolve throughout this exploratory stage. Proof work does not
 require a prior freeze, and certification does not promise signature stability. The graph
@@ -58,8 +56,7 @@ covariance-core closure and the closed affine covariance form are now Lean-certi
 statement already has a local proof, `KLS.RelativePerimeter.exists_smooth_recovery_sequence`,
 in `KLS/Geometry/Perimeter/Recovery.lean`; that existing proof is now registered in Blueprint,
 without adding a separate ledger certificate.
-Both Cheeger-infimum comparisons and the finite-dimensional log-concave numerical
-Cheeger–Buser comparisons are now proved in Lean; general RCD comparisons remain separate.
+The reverse Cheeger-infimum comparison and the Cheeger–Buser theorem remain unproved in Lean.
 The separate abstract
 relaxation and finite-factor comparison lemmas in the appendix have actual Lean proofs. The
 Dirichlet property of the smooth-gradient relaxation (`thm:smooth-gradient-relaxation-dirichlet`)

@@ -5,18 +5,6 @@ the distinction between known mathematics, local arguments, open research, and L
 This workflow runs locally and does not commit, push, dispatch agents, or publish artifacts.
 Public interfaces remain editable under [the lifecycle](ledger-schema.md#lifecycle).
 
-## Current task-selection policy (2026-10-02)
-
-Use the [published literature register](progress/LITERATURE.md#current-literature-priorities)
-and [current handoff](../HANDOFF.md). The user's issue #8 decision makes source-paper theorems
-and their explicitly needed infrastructure the work plan. Exploratory routes, including atlas
-pending/dispatch entries, are retained non-target audit records. Their composition lives in
-[research/explorations](explorations/route-composition.yaml).
-
-The dated sections below preserve earlier evidence and then-current task descriptions.
-Use the current source and exact-SHA receipts for today's proof status; historical next steps,
-counts and no-commit instructions do not override the current handoff.
-
 ## Current status and receipt scope (2026-09-22)
 
 For today's proved scope and next task, use the [current operational handoff](../HANDOFF.md#current-operational-status-2026-09-22)

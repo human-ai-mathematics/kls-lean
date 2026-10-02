@@ -27,8 +27,7 @@ class BlueprintFixture(unittest.TestCase):
         self.chapters = self.root / "formalization/blueprint/src/chapters"
         self.chapters.mkdir(parents=True)
         (self.root / "research/a-series").mkdir(parents=True)
-        (self.root / "research/explorations").mkdir(parents=True)
-        self.routes_path = self.root / "research/explorations/route-composition.yaml"
+        self.routes_path = self.root / "formalization/blueprint/route-composition.yaml"
         self.ledger_path = self.root / "research/a-series/ledger.yaml"
         self.chapter = self.chapters / "blueprint.tex"
 

@@ -2,7 +2,6 @@
 import json
 from pathlib import Path
 import unittest
-from unittest.mock import patch
 import update
 import views
 
@@ -31,13 +30,13 @@ class ProgressViewsTests(unittest.TestCase):
             node['proof_leanok'] = complete
             records = views.resolve(catalog, {'x': node}, {})
             tree = views.render_tree(catalog, records)
-            readme = views.render_routes(template, tree, catalog, records, portfolio)
+            readme = views.render_readme(template, tree, catalog, records, portfolio)
             self.assertIn(f'X["{marker} Example"]', tree)
             self.assertIn(f'| Example | {views.status_cell(records["x"]["state"])} |', readme)
 
     def test_missing_route_input_is_rejected(self):
         catalog = json.loads((HERE / 'nodes.json').read_text())
-        routes = json.loads(update.staged('research/explorations/route-composition.yaml'))
+        routes = json.loads(update.staged('formalization/blueprint/route-composition.yaml'))
         catalog['diagram']['edges'] = [e for e in catalog['diagram']['edges'] if e['from'] != 'EG']
         with self.assertRaisesRegex(ValueError, 'missing required route inputs'):
             views.validate_routes(catalog, catalog['nodes'], routes)
@@ -46,34 +45,12 @@ class ProgressViewsTests(unittest.TestCase):
         outputs = update.generate()
         for name, content in outputs.items():
             self.assertEqual((HERE / name).read_text(), content, name)
-        original = outputs['../explorations/ROUTES.md']
+        original = outputs['README.md']
         damaged = original.replace('✓ Affine / isotropic', '○ Affine / isotropic', 1)
         self.assertNotEqual(original, damaged)
         # Generated tree replacement must repair the damaged block independently of its old content.
-        repaired = views.replace_block(damaged, 'TREE', '```mermaid\n'+outputs['../explorations/ROUTES.mmd']+'```')
+        repaired = views.replace_block(damaged, 'TREE', '```mermaid\n'+outputs['TREE.mmd']+'```')
         self.assertEqual(original, repaired)
-
-    def test_primary_tree_uses_papers_and_exploratory_routes_stay_separate(self):
-        outputs = update.generate()
-        self.assertIn('L_KLS1995', outputs['TREE.mmd'])
-        self.assertNotIn('ANY --> KLS', outputs['TREE.mmd'])
-        self.assertNotIn('BEGIN GENERATED APPROACHES', outputs['README.md'])
-        self.assertIn('ANY --> KLS', outputs['../explorations/ROUTES.mmd'])
-        self.assertIn('not formalization targets', outputs['../explorations/ROUTES.md'])
-        self.assertIn('../progress/badges/', outputs['../explorations/ROUTES.md'])
-
-    def test_unstaged_view_metadata_cannot_change_generated_claims(self):
-        expected = update.generate()
-        original_read = Path.read_text
-        canonical = {'nodes.json', 'portfolio.json', 'literature.json'}
-
-        def poisoned_working_copy(path, *args, **kwargs):
-            if path.parent in {HERE, HERE.parent / 'explorations'} and path.name in canonical:
-                return 'unrelated unstaged content, deliberately invalid JSON'
-            return original_read(path, *args, **kwargs)
-
-        with patch.object(Path, 'read_text', poisoned_working_copy):
-            self.assertEqual(update.generate(), expected)
 
 
 if __name__ == '__main__':
