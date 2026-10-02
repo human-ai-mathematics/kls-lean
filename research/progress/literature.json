@@ -1372,7 +1372,7 @@
       "date": "2016 preprint / 2017 publication",
       "publication": "Journal article",
       "url": "https://arxiv.org/abs/1603.08412",
-      "locator": "Lemma 3.2; Theorem 3.6",
+      "locator": "Theorem 3.6 with Definition 3.3; Lemma 3.2",
       "result": "A Minkowski coarea inequality and identification of relaxed Minkowski content with BV perimeter.",
       "remaining": "The complete lower/upper content, recovery and relaxation chain is formalized for finite Borel measures on arbitrary metric spaces. The new continuation proves the globally Lipschitz/global L1 bounded-support reduction of Remark 3.4 for every measurable finite-mass target under any Borel measure, the direct positive-level local-slope coarea upper bound under finite mass of a positive-support neighborhood (all levels for nonnegative functions), and perimeter at most lower content at measurable finite-mass targets. Under finiteness on bounded Borel sets, actual bounded measurable lower-recovery sets have finite mass and finite lower content term by term; indicators converge globally in L1 and lower contents converge to perimeter. The existing relaxed lower-content set infimum equals the perimeter at Theorem 3.6's measurable finite-mass target scope, including infinite perimeter and infinite total mass; convergence ensures eventual finite approximating-set masses without changing the class or excluding infinite-mass finite prefixes. Finite target mass and finite lower content imply a finite-mass positive neighborhood. Actual lower-to-upper radius recovery holds there, and a diagonal sequence gives bounded open upper-recovery sets with finite masses/contents and original global indicator L1 convergence. The existing relaxed upper infimum equals perimeter, hence the lower relaxation, at the published finite-mass target scope, including infinite perimeter by order. The full Lemma 3.2 chain is formalized with the actual right-radius liminf of integrated open-ball growth under nonnegativity and finite positive-support-neighborhood mass. Lemma 2.1 exposes the actual relaxed-upper <= lower-content bound at finite-mass Borel targets under any measure. Lemma 2.1's relaxed lower/upper-content equality is also formalized for every Borel measure at measurable finite-mass targets, and on proper metric spaces Remark 3.5's locally Lipschitz classes with global or compact-set L1 convergence have relaxation infima equal to the bounded-support perimeter at measurable finite-mass targets for every Borel measure (2026-10-01). The locally Lipschitz classes on nonproper spaces, nonconvex ambient/support transfer and general RCD comparisons remain pending. These local Lean results do not add ledger certificates; remote Lean verification is a separate check.",
       "local_results": [
@@ -1527,6 +1527,10 @@
             "relation": "same",
             "declarations": [
               {
+                "name": "Solutions.ThmRelaxedMinkowskiContentPerimeter.certificate",
+                "source": "solutions/ThmRelaxedMinkowskiContentPerimeter.lean"
+              },
+              {
                 "name": "FunctionalInequalities.KLS.MetricBV.relaxedMinkowskiContent_eq_perimeter_of_finite_on_bounded",
                 "source": "formalization/FunctionalInequalities/KLS/Geometry/Perimeter/RelaxedMinkowski.lean"
               },
@@ -1535,7 +1539,7 @@
                 "source": "formalization/FunctionalInequalities/KLS/Geometry/Perimeter/TestClassRelaxation.lean"
               }
             ],
-            "note": "The exact statement is the composition of these two declarations under the standing assumption. No single declaration states it yet and no certificate is registered, so the paper is not covered."
+            "note": "Exact Definition 3.3 form, registered as the paper-target certificate thm:relaxed-minkowski-content-perimeter; the two library identities compose under the standing assumption."
           },
           {
             "id": "P42",
@@ -1586,7 +1590,8 @@
             "note": ""
           }
         ]
-      }
+      },
+      "target_certificate": "thm:relaxed-minkowski-content-perimeter"
     },
     {
       "id": "LeeVempala2024",

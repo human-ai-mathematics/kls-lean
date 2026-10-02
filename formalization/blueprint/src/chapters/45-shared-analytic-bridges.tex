@@ -404,6 +404,45 @@ A published input or an upstream reviewed proof receives no \texttt{leanok} mere
   relative-perimeter infimum equality instead.
 \end{proof}
 
+\begin{theorem}[Perimeter as relaxed Minkowski content]
+  \label{thm:relaxed-minkowski-content-perimeter}
+  \lean{FunctionalInequalities.KLS.MetricBV.relaxedMinkowskiContent_eq_perimeter_of_finite_on_bounded,
+        FunctionalInequalities.KLS.MetricBV.lipschitzRelaxation_eq_perimeter_of_measure_lt_top,
+        FunctionalInequalities.KLS.MetricBV.relaxedUpperMinkowskiContent_eq_perimeter_of_finite_on_bounded,
+        Solutions.ThmRelaxedMinkowskiContentPerimeter.certificate}
+  \leanok
+  This is Theorem~3.6 of \cite{AmbrosioDiMarinoGigli2017Minkowski} (arXiv:1603.08412v1), with
+  the perimeter of its Definition~3.3.  Let $(X,\mathsf d)$ be a metric space and $\mathfrak m$ a
+  Borel measure that is finite on bounded Borel sets.  For a Borel set $A$ with
+  $\mathfrak m(A)<\infty$ let
+  \[
+    \mathcal M_-(A)=\liminf_{r\downarrow 0}\frac{\mathfrak m(A^r)-\mathfrak m(A)}{r},\qquad
+    A^r=\{x:\mathsf d_A(x)<r\},
+  \]
+  and define the relaxed lower Minkowski content and the perimeter by
+  \[
+    \mathcal M_-^\ast(A)=\inf\Bigl\{\liminf_{h\to\infty}\mathcal M_-(A_h):
+      \mathfrak m(A_h\,\triangle\,A)\to 0\Bigr\},\qquad
+    \operatorname{Per}(A)=\inf\Bigl\{\liminf_{h\to\infty}\int_X|\nabla f_h|\,d\mathfrak m:
+      f_h\in\operatorname{Lip}(X),\ \int_X|f_h-\chi_A|\,d\mathfrak m\to 0\Bigr\},
+  \]
+  with Borel approximating sets, $|\nabla f|$ the local slope (zero at isolated points) and
+  $\inf\emptyset=\infty$.  Then $\mathcal M_-^\ast(A)=\operatorname{Per}(A)$.  The same holds for
+  the relaxed upper content, defined with $\limsup$; together these give the second clause of
+  Lemma~2.1 of the paper.  These are equalities of infima, not identities between the content
+  and the perimeter of an individual set.
+\end{theorem}
+\begin{proof}
+  \leanok
+  The relaxed lower and upper contents both equal the bounded-support metric BV perimeter at
+  measurable finite-mass targets, under the finiteness of $\mathfrak m$ on bounded Borel sets:
+  perimeter is at most the lower content, perimeter is lower semicontinuous under indicator
+  $L^1$ convergence, and actual recovery sets have finite mass and contents converging to the
+  perimeter.  The truncation and bounded-support reduction of Remark~3.4 identifies the
+  Definition~3.3 relaxation with the same perimeter at finite-mass targets, for every Borel
+  measure.  The certificate composes the two identities.
+\end{proof}
+
 \begin{definition}[Isotropic probability law]
   \label{def:isotropic-law}
   \lean{FunctionalInequalities.KLS.Isotropic}

@@ -48,6 +48,13 @@ class LiteratureTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'source papers'):
             literature.validate(damaged, records)
 
+    def test_only_a_registered_target_certificate_covers_a_paper(self):
+        paper = {'local_results': [], 'target_certificate': 'thm:target'}
+        self.assertEqual(literature.coverage(paper, {}, {}), 'pending')
+        certificates = {'node': {'label': 'thm:target', 'module': 'solutions.Target'}}
+        self.assertEqual(literature.coverage(paper, {}, certificates), 'formalized')
+        self.assertEqual(literature.coverage({'local_results': []}, {}, certificates), 'pending')
+
 
 class LemmaMapTests(unittest.TestCase):
     SOURCE = (

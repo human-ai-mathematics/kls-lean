@@ -752,10 +752,10 @@ lake build Examples solutions.FoundationAxiomAudit
 ```
 
 The default targets build the library, `Solutions`, and `Examples`. `Solutions` contains all
-twenty-six certificate entry points, plus `solutions/GaussianAxiomAudit.lean`,
+twenty-seven certificate entry points, plus `solutions/GaussianAxiomAudit.lean`,
 `solutions/FoundationAxiomAudit.lean` and `solutions/StatementChecks.lean`. `Examples` compiles
 `examples/PoincareFoundation.lean` and `examples/ApiOrganization.lean` from the repository root.
-All twenty-six certified nodes and their local import closures are proof-complete.
+All twenty-seven certified nodes and their local import closures are proof-complete.
 The ledger checker scans proved certificates and their local imports for forbidden tokens. Lean
 compilation checks the proofs; the guarded audits fix the Gaussian certificate and 27 foundation and comparison
 declarations to the transitive axiom set `propext`, `Classical.choice`, and `Quot.sound`.

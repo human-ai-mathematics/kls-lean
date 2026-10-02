@@ -61,7 +61,7 @@ Their types preserve the reviewed generality, including empty test classes, zero
 support, zero finite constants and infinite optima. Gaussian transport through these bridges is
 now proved. See the [comparison guide](../formalization/FunctionalInequalities/Poincare/Euclidean/README.md).
 
-The `Solutions` default target builds all twenty-six certificates plus `GaussianAxiomAudit.lean` and
+The `Solutions` default target builds all twenty-seven certificates plus `GaussianAxiomAudit.lean` and
 `FoundationAxiomAudit.lean`. The latter guards 27 foundation and comparison declarations together
 with the Dirac and normal-direction raw-energy obstructions; each new
 certificate also has its own axiom guard. These checks require exactly `propext`, `Classical.choice`
@@ -96,7 +96,7 @@ node is `proved / checked_by: lean`; see the
 [acceptance record](../research/decisions/2026-09-06-weighted-approximation-acceptance.md).
 
 `StatementChecks.lean` is a default-build target for the literal KLS proposition and its domain
-and boundary encodings. It is not a ledger proof certificate. All twenty-six mathematical certificates,
+and boundary encodings. It is not a ledger proof certificate. All twenty-seven mathematical certificates,
 the twenty-five named definition sanity checks, the six conditional-fiber contracts and the five
 affine covariance contracts have default-build transitive axiom guards. Existing
 Dirac representative examples and Gaussian comparisons are reused. A concrete Gaussian literature
@@ -408,3 +408,15 @@ to the same functional. The absolutely continuous certificate is recovered witho
 the coordinate form, dimension zero and the Euclidean family are exercised; four axiom guards. The node
 is `proved / checked_by: lean`. Read the [route](../research/decisions/2026-09-19-energy-slope-route.md)
 and the [registration record](../research/decisions/2026-09-19-energy-slope-proofs.md).
+
+## Relaxed Minkowski content certificate (paper target)
+
+[`ThmRelaxedMinkowskiContentPerimeter.lean`](ThmRelaxedMinkowskiContentPerimeter.lean) certifies
+`thm:relaxed-minkowski-content-perimeter`, Theorem 3.6 of Ambrosio–Di Marino–Gigli
+(arXiv:1603.08412v1) against the paper's own Definition 3.3. For a Borel measure on a metric space
+that is finite on bounded Borel sets and a measurable set of finite mass, the relaxed lower Minkowski
+content equals the infimum of liminf slope integrals over globally Lipschitz approximants converging
+in `L¹`; `upper` gives the same for the relaxed upper content. The certificate composes two existing
+library identities. Typed applications cover finite measures and Lebesgue measure on Euclidean
+spaces; four axiom guards. It is the first paper-target certificate. Read the
+[review record](../research/decisions/2026-10-02-admg-theorem-3-6-certificate.md).

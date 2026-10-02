@@ -102,6 +102,10 @@ CERTIFICATES: dict[str, tuple[str, str]] = {
         "thm:smooth-gradient-relaxation-two-cheeger",
         "Solutions.ThmSmoothGradientRelaxationTwoCheeger.certificate",
     ),
+    "thm:relaxed-minkowski-content-perimeter": (
+        "thm:relaxed-minkowski-content-perimeter",
+        "Solutions.ThmRelaxedMinkowskiContentPerimeter.certificate",
+    ),
     "lem:relative-perimeter-cheeger-infimum": (
         "lem:relative-perimeter-cheeger-infimum",
         "Solutions.LemRelativePerimeterCheegerInfimum.certificate",

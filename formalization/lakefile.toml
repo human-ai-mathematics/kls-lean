@@ -48,6 +48,7 @@ roots = [
   "solutions.CorAbsolutelyContinuousRelaxationTwoCheeger",
   "solutions.LemRelativePerimeterCheegerInfimum",
   "solutions.ThmSmoothGradientRelaxationTwoCheeger",
+  "solutions.ThmRelaxedMinkowskiContentPerimeter",
 ]
 
 [[lean_lib]]

@@ -14,8 +14,8 @@ formalization targets in their own right.
 A paper is **covered** only when its main theorem is stated faithfully in Lean (same hypotheses,
 constants, normalization and dimensional scope), proved without nonstandard axioms, and
 registered with a certificate and verification evidence for that exact statement. Supporting
-lemmas, restricted cases and conditional reductions do not cover a paper. **No paper is covered
-yet.** Upstream mathematical proofs and conditional arguments remain separate from local Lean
+lemmas, restricted cases and conditional reductions do not cover a paper. **Covered so far:
+Ambrosio–Di Marino–Gigli, Theorem 3.6.** Upstream mathematical proofs and conditional arguments remain separate from local Lean
 proofs. KLS remains open.
 
 The current analytic frontier is summarized under [Proof progress tree](#proof-progress-tree):
@@ -338,8 +338,8 @@ in Lean. The general π bound uses actual Gaussian smoothing and a Cheeger test 
 argument; no individual-domain perimeter limit is asserted.
 The scoped metric BV comparison includes closed-support identification for finite-dimensional
 log-concave laws, exact test-class relaxation infima, and relaxed lower Minkowski content.
-**Next step:** prepare a certificate for ADMG Theorem 3.6 in the paper's own Definition 3.3
-form, the first paper target close to coverage (see the [paper lemma map](#paper-lemma-map)).
+**Next step:** a milestone run for the accepted ADMG Theorem 3.6 paper-target certificate, then
+De Ponti–Mondino Lemmas 3.2 and 3.3 (see the [paper lemma map](#paper-lemma-map)).
 The priority-1 Bakry–Émery target waits for the Bakry–Gentil–Ledoux source text.
 The locally Lipschitz classes on nonproper spaces and the general metric-measure/RCD
 comparison bridges remain open. The extended ADMG sections 2–3 finite-target
@@ -629,7 +629,7 @@ flowchart LR
   equalities of infima; individual BV perimeters and Minkowski contents need not agree.
   The general metric-measure comparison, the nonconvex-support identification, and the
   `L¹_loc` result beyond proper spaces with finite measures remain open locally.
-- There are 26 registered certificates and one isolated `KLS.kls` target hole. The former WIP
+- There are 27 registered certificates and one isolated `KLS.kls` target hole. The former WIP
   modules are removed; the target is outside every certificate closure.
 - CMH sufficiency requires a regular recovery sequence; it is not an equivalence.
 - Refuted packages and parked probes remain outside the active implication chain. The pinned

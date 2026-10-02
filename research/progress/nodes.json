@@ -1067,6 +1067,10 @@
         "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/Lipschitz/Local.lean",
         "shape": "box"
       }
+    },
+    "thm:relaxed-minkowski-content-perimeter": {
+      "description": "Ambrosio–Di Marino–Gigli Theorem 3.6: relaxed lower (and upper) Minkowski content equals the Definition 3.3 perimeter at finite-mass Borel sets, for measures finite on bounded sets.",
+      "blueprint": "thm:relaxed-minkowski-content-perimeter"
     }
   },
   "diagram": {

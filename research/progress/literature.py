@@ -24,7 +24,7 @@ def validate(catalog, records):
             if records[item['node']]['state'] in ('logic', 'excluded'):
                 raise ValueError(f'{p["id"]}: a route junction or refutation is not a proved result')
         targets = p.get('target_declarations', [])
-        if targets and not p.get('target_review'):
+        if (targets or p.get('target_certificate')) and not p.get('target_review'):
             raise ValueError(f'{p["id"]}: target declarations need a scope review')
         for target in targets:
             if not target.get('name') or not target.get('source', '').startswith('formalization/'):
@@ -108,8 +108,8 @@ def validate_lemma_map(paper, read_source):
         if i['relation'] in ('stronger', 'alternative') and not i.get('note'):
             raise ValueError(f'{paper["id"]}/{i["id"]}: a stronger or alternative result needs a note')
         for target in i['declarations']:
-            if not target['source'].startswith('formalization/'):
-                raise ValueError(f'{paper["id"]}/{i["id"]}: declarations must be library sources')
+            if not target['source'].startswith(('formalization/', 'solutions/')):
+                raise ValueError(f'{paper["id"]}/{i["id"]}: declarations must be library or certificate sources')
             if declaration_body(read_source(target['source']), target['name']) is None:
                 raise ValueError(f'{paper["id"]}/{i["id"]}: {target["name"]} not found in {target["source"]}')
     return items
@@ -199,8 +199,16 @@ def render_lemma_maps(catalog, read_source):
     return sections, '\n'.join(hub) + '\n', papers
 
 
-def coverage(paper, records):
-    """A matching local fragment cannot certify a whole article."""
+def paper_certificate(paper, certificates):
+    """The registered certificate of the paper's selected main theorem, if any."""
+    label = paper.get('target_certificate')
+    return next(((key, cert) for key, cert in certificates.items() if label and cert['label'] == label), None)
+
+
+def coverage(paper, records, certificates=None):
+    """Only a registered paper-target certificate covers a paper; a fragment never does."""
+    if paper_certificate(paper, certificates or {}):
+        return 'formalized'
     return 'partial' if any(records[i['node']]['state'] in ('formalized', 'partial')
                             for i in paper['local_results']) else 'pending'
 
@@ -230,6 +238,17 @@ def render_tree(catalog, papers):
     for i in shown:
         lines.append(f'    click L_{i} href "{papers[i]["url"]}" "Primary source" _blank')
     return '\n'.join(lines) + '\n'
+
+
+def covered_sentence(catalog, certificates):
+    covered = [p for p in catalog['papers'] if paper_certificate(p, certificates)]
+    if not covered:
+        return '**No complete paper target is currently registered as covered.**'
+    def target(p):
+        mains = [i['locator'] for i in p.get('lemma_map', {}).get('items', []) if i.get('main')]
+        return mains[0] if mains else p['locator']
+    names = ', '.join(f'{p["authors"]} ({target(p)})' for p in covered)
+    return f'**Covered by a registered paper-target certificate: {names}.**'
 
 
 def supporting_certificates(paper, records, certificates):
@@ -281,8 +300,9 @@ def render(catalog, records, blueprint, certificates=None, read_source=None):
         'nonstandard axioms, and a registered certificate with verification evidence for that exact',
         'statement. A source review must identify the paper version and theorem being matched.',
         'Supporting lemmas, restricted cases and conditional reductions do not meet this criterion.',
-        '**No complete paper target is currently registered as covered.** Existing fragment certificates',
-        'are listed explicitly below; an unregistered proved target is still awaiting certification.', '',
+        covered_sentence(catalog, certificates),
+        'Existing fragment certificates are listed explicitly below; an unregistered proved target',
+        'is still awaiting certification.', '',
         '## Current literature priorities', '', render_priorities(catalog), '',
         '## Constant conventions', '',
         'For isotropic log-concave laws, use `Var(f) ≤ C_P ∫‖∇f‖² dμ`, with no factor 1/2.',
@@ -313,7 +333,7 @@ def render(catalog, records, blueprint, certificates=None, read_source=None):
             if p['group'] != group['id']:
                 continue
             source = f'[{c(p["authors"])} — {c(p["title"])}]({p["url"]})<br/>{c(p["date"])} · {c(p["publication"])}<br/>{c(p["locator"])}'
-            local = [views.status_cell(coverage(p, records))]
+            local = [views.status_cell(coverage(p, records, certificates))]
             for item in p['local_results']:
                 state = records[item['node']]['state']
                 mark = views.STATES[state][0]
@@ -322,7 +342,12 @@ def render(catalog, records, blueprint, certificates=None, read_source=None):
                           if p['local_results'] or p.get('target_declarations')
                           else 'No local target statement registered')
             certs = supporting_certificates(p, records, certificates)
+            own = paper_certificate(p, certificates)
             certificate = 'No paper-target certificate'
+            if own:
+                certs.pop(own[0], None)
+                certificate = (f'**Paper-target certificate:** '
+                               f'[`{c(own[0])}`](../../{own[1]["module"].replace(".", "/")}.lean)')
             if certs:
                 certificate += '<br/>Supporting only: ' + ', '.join(
                     f'[`{c(key)}`](../../{cert["module"].replace(".", "/")}.lean)'
@@ -389,7 +414,7 @@ def render(catalog, records, blueprint, certificates=None, read_source=None):
               '| Latest source | Literature result | Our Lean status |', '| --- | --- | --- |']
     for key in ('ChenKlartag2026', 'Letwin2026'):
         p = papers[key]
-        readme.append(f'| [{p["authors"]}, {p["date"]}]({p["url"]}) · {p["publication"]} | {c(p["result"])} | {views.status_cell(coverage(p, records))} |')
+        readme.append(f'| [{p["authors"]}, {p["date"]}]({p["url"]}) · {p["publication"]} | {c(p["result"])} | {views.status_cell(coverage(p, records, certificates))} |')
     readme += ['', 'Here ψ is the inverse Cheeger constant, so its logarithmic exponent is half the',
                'Poincaré exponent. The sharp thin-shell result does not resolve dimension-free KLS.',
                'See the [full tables and normalization](LITERATURE.md#constant-conventions).']

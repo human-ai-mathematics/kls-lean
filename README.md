@@ -17,7 +17,7 @@ one intentional `sorry` and lies outside every certificate import closure.
 
 ## What is proved
 
-There are **26 registered Lean certificates**, plus proved auxiliary results. Highlights:
+There are **27 registered Lean certificates**, plus proved auxiliary results. Highlights:
 
 - the one-dimensional upper bound `C_P^lit ≤ 4 Var` for log-concave laws on the line;
 - finite Poincaré tensorization and the sharp one-dimensional Gaussian constant;
@@ -27,16 +27,18 @@ There are **26 registered Lean certificates**, plus proved auxiliary results. Hi
   calculus with `Γ₂ ≥ 0` for smooth convex potentials;
 - both numerical Cheeger–Buser comparisons `C_P^lit ≤ 4 Ψ²` and `Ψ² ≤ π C_P^lit` for every
   finite-dimensional log-concave law, including degenerate affine supports;
-- metric BV relaxation and Minkowski recovery, including ADMG Theorem 3.6's relaxed
-  Minkowski/perimeter identities at finite-mass Borel targets for measures finite on bounded sets.
+- metric BV relaxation and Minkowski recovery; Ambrosio–Di Marino–Gigli Theorem 3.6 (relaxed
+  Minkowski content equals the Definition 3.3 perimeter, for measures finite on bounded sets) is
+  certified as a paper target.
 
 ## What is not proved
 
 - Any published high-dimensional KLS bound (KLS 1995, Eldan, Lee–Vempala, Chen, Klartag–Lehec,
   Klartag, Letwin) or the stochastic-localization machinery they use.
-- Any complete paper: **no paper is covered yet**. A paper is covered only when its main theorem
-  is stated faithfully in Lean, proved without nonstandard axioms, and certified for that exact
-  statement. Supporting lemmas, restricted cases and conditional reductions do not count.
+- Any complete paper other than Ambrosio–Di Marino–Gigli (Theorem 3.6, the first covered paper).
+  A paper is covered only when its main theorem is stated faithfully in Lean, proved without
+  nonstandard axioms, and certified for that exact statement. Supporting lemmas, restricted cases
+  and conditional reductions do not count.
 - General RCD comparisons, nonproper locally Lipschitz BV variants and nonconvex support transfer.
 
 ## Where to look

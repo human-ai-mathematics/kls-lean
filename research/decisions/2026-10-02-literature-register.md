@@ -65,6 +65,7 @@ The register names `lipschitzRelaxation_eq_perimeter_of_measure_lt_top`
 statements retain measurable finite-mass targets and the bounded-set finiteness premise, with no
 properness or finite-total-mass premise. They identify infima; they do not assert pointwise
 equality of content and perimeter. All three were proved in the `6ca1824` snapshot, whose
-remote Lean certification passed. No ADMG paper-target certificate is registered, so the paper
-is not marked covered. Other results in Section 4 and nonproper locally Lipschitz variants
+remote Lean certification passed. The paper-target certificate
+`thm:relaxed-minkowski-content-perimeter` was added later the same day; see
+[its review record](2026-10-02-admg-theorem-3-6-certificate.md). Other results in Section 4 and nonproper locally Lipschitz variants
 remain separate.
