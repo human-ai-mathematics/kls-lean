@@ -2,34 +2,40 @@
 
 | View | Purpose |
 | --- | --- |
-| [Route diagrams](#proof-progress-tree) | Complete route diagram and current analytic work |
+| [Literature register](LITERATURE.md) | **Primary progress view.** Paper by paper: target theorem, local Lean statements, local status and certificates |
+| [Route diagrams](#proof-progress-tree) | Exploratory proof routes and the shared analytic infrastructure behind them |
 | [Progress table](STATUS.md) | Local node IDs, mathematical provenance, recorded Lean status, certificates, dependencies, and gaps |
-| [Literature register](LITERATURE.md) | Published results and preprints through July 2026, with source-by-source local Lean coverage |
 
-These views describe our formalization work. Upstream mathematical proofs and conditional
-arguments remain separate from local Lean proofs. A completed auxiliary result is not necessarily
-a separately registered certificate. KLS remains open.
+The project goal is to formalize as much of the published KLS literature as possible. Work is
+selected by a named paper, pinned version and target theorem. The four routes in the diagram
+below are exploratory research records that share our analytic infrastructure; they are not
+formalization targets in their own right.
 
-As of 2026-09-26, the actual weighted-gradient heat semigroup has centered `L²` squared-norm
-decay at rate `exp(-2t/C)` and centered indicator correlation at rate `exp(-t/C)` under an
-explicit positive form-domain Poincaré constant `C`. The unit-gradient form optimum now equals
-the intrinsic literature constant, and indicator correlation gives a quantitative `L¹`
-displacement. The π Buser inequality is proved at the exact extended literature optimum
-for laws in any affine-support dimension whose intrinsic law has a smooth convex tilted
-representation. The numerical inequality now also holds for arbitrary nonsmooth intrinsic
-Borell laws, through Gaussian approximation and Cheeger test stability.
-An explicit Gaussian convolution of a Borell probability density is now proved
-measurable, finite, strictly positive and log-concave. Its normalized law is
-constructed, with a positive `C∞` density and `C∞` convex potential;
-the law is log-concave on compact sets. The normalized densities converge
-almost everywhere and in `L¹(volume)` to the source density, and the laws
-converge on every measurable set. The intrinsic literature Poincaré optimum
-of the actual Gaussian convolution is at most the source optimum plus
-`1/(2s)` for `s > 0`, including dimension zero and infinite optima.
-Cheeger test stability passes the smooth-model bound to the source, so the
-exact numerical π Buser comparison is proved for arbitrary finite-dimensional
-log-concave laws. This does not assert a perimeter limit for each smooth domain
-or close any dimension-free KLS route.
+A paper is **covered** only when its main theorem is stated faithfully in Lean (same hypotheses,
+constants, normalization and dimensional scope), proved without nonstandard axioms, and
+registered with a certificate and verification evidence for that exact statement. Supporting
+lemmas, restricted cases and conditional reductions do not cover a paper. **No paper is covered
+yet.** Upstream mathematical proofs and conditional arguments remain separate from local Lean
+proofs. KLS remains open.
+
+The current analytic frontier is summarized under [Proof progress tree](#proof-progress-tree):
+the numerical π Cheeger–Buser comparison holds for every finite-dimensional log-concave law,
+and metric BV relaxation and recovery are proved within their stated measure and space scope.
+
+## Literature priorities
+
+<!-- BEGIN GENERATED PRIORITIES -->
+These are source-review and proof priorities, not claims that the targets are proved.
+Every proof task must first pin its paper version, theorem, hypotheses and constants.
+
+| Priority | Sources / target | Next action |
+| --- | --- | --- |
+| 1 | [Bakry–Gentil–Ledoux](https://link.springer.com/book/10.1007/978-3-319-00227-9)<br/>Audit the strongly log-concave Bakry–Émery C_P ≤ 1/ρ endpoint and select a separate Brascamp–Lieb source statement. | Pin the exact source theorem, positive-curvature assumptions and normalization; assess the existing Γ₂ and semigroup interfaces before proof work. |
+| 2 | [Kannan–Lovász–Simonovits](https://link.springer.com/article/10.1007/BF02574061)<br/>Localization lemma and the dimension-dependent trace/covariance bound. | Separate the localization theorem from the Poincaré consequence; audit denominator and constant conventions before defining either Lean target. |
+| 3 | [E. Milman](https://arxiv.org/abs/0712.4092)<br/>Concentration implies a Cheeger bound under the source convexity hypotheses. | Pin the main theorem and its concentration/curvature assumptions; compare its analytic inputs with the current finite-dimensional Cheeger–Buser API. |
+| 4 | [Eldan](https://arxiv.org/abs/1203.0893), [Lee–Vempala](https://annals.math.princeton.edu/2024/199-3/p02), [Chen](https://arxiv.org/abs/2011.13661), [Klartag–Lehec](https://arxiv.org/html/2203.15551v2), [Klartag](https://arxiv.org/html/2303.14938v2)<br/>Published stochastic-localization theorems and quantitative KLS bounds. | Reuse Mathlib probability foundations; build an isolated audited client of pinned external stochastic APIs before selecting the missing vector/matrix SDE bridges. |
+| 5 | [Klartag–Lehec](https://arxiv.org/abs/2507.15495v2), [Chen–Klartag](https://arxiv.org/html/2607.23307v1), [Letwin](https://arxiv.org/html/2607.24164v1)<br/>Selected 2025–2026 thin-shell and quadratic-form results. | Retain exact preprint versions and assess moment-measure, stochastic and matrix-estimate dependencies; do not credit exploratory hypotheses as completed paper theorems. |
+<!-- END GENERATED PRIORITIES -->
 
 ## KLS literature through July 2026
 
@@ -39,7 +45,7 @@ or close any dimension-free KLS route.
 The [paper-by-paper literature register](LITERATURE.md) records statements, publication
 versions, exact local coverage and remaining work. The general KLS-bound milestones
 in this diagram are all still pending locally; completed supporting results appear in
-the register and proof map. Dashed edges mean chronology or related methods, not proof.
+the paper and node registers. Dashed edges mean chronology or related methods, not proof.
 
 ```mermaid
 flowchart TB
@@ -609,6 +615,9 @@ Every node has a link. If diagram links are disabled in your viewer, use this di
 
 ## Where the records come from
 
+- [Literature records](literature.json) own the paper inventory, target theorem locators,
+  selected target declarations, local result mappings and the literature priorities. Paper
+  status is derived from the mapped node records; certificates are reported as supporting only.
 - [Node records](nodes.json) own English descriptions, diagram labels, source links, layout,
   and evidence-backed assessments for auxiliary results. Nodes with a `blueprint` mapping obtain
   their proof status from the staged Blueprint; they cannot override it here.
@@ -620,7 +629,7 @@ Every node has a link. If diagram links are disabled in your viewer, use this di
 - [Pinned portfolio](portfolio.json) owns the upstream approach inventory and explicit local-node
   mappings. Approach completion is never inferred from upstream activity alone.
 
-`update.py` resolves these inputs once and generates the README diagram, both progress tables,
+`update.py` resolves these inputs once and generates the literature register and priorities, the README diagram, both progress tables,
 node links, `STATUS.md`, `TREE.mmd`, and local SVG status badges. Generated blocks and badges
 must not be edited by hand. Table badges use blue for formalized, red for pending, orange for
 partial, and gray for excluded results; text labels preserve the meaning without color.
@@ -632,7 +641,8 @@ claim a new kernel audit. See the [verification guide](../verification.md) for p
 1. Update the proof, Blueprint/ledger annotations, and task metadata with the appropriate evidence.
    Update the corresponding `nodes.json` description and links if the statement or source moved.
    Auxiliary results without a Blueprint node need an updated assessment and evidence reference.
-2. Review the selected diagram dependencies against route composition. Update the next-step
+2. Review the paper mappings, target declarations and priorities in `literature.json`.
+   Review the selected diagram dependencies against route composition. Update the next-step
    highlight and `last_updated` in `nodes.json`. Maintain `portfolio.json` when synchronizing upstream.
 3. Stage only the intended canonical proof and metadata changes, then run:
 

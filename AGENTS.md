@@ -1,18 +1,28 @@
 # Project documentation maintenance
 
-- Keep progress documentation together in `research/progress/`: `README.md` directly displays
-  the English Mermaid diagrams on the GitHub directory page; `STATUS.md` is the generated node register.
-  The root README retains the entry link and current-status summary.
-- When proof progress changes, review the complete diagram, its date, and the root current-status
+- Formalize published KLS literature. Select work by a named source, pinned version and target
+  theorem, retaining its hypotheses, constants, normalization and dimensional scope. Develop
+  supporting infrastructure for an identified literature target. Exploratory routes and unproved
+  research hypotheses are research records, not formalization targets in their own right.
+- Keep progress documentation together in `research/progress/`: `LITERATURE.md` is the primary
+  paper-by-paper register (target theorem, Lean statements, status, certificate); `README.md`
+  directly displays the literature priorities and the English Mermaid diagrams on the GitHub
+  directory page; `STATUS.md` is the generated node register. The root README retains the
+  entry link and current-status summary.
+- Mark a paper covered only when its main theorem is faithfully stated in Lean, proved without
+  nonstandard axioms, and registered with a certificate and verification evidence for that exact
+  statement. Supporting lemmas and restricted or conditional counterparts do not cover a paper.
+- When proof progress changes, review the source-paper mapping in `literature.json`, the complete
+  diagram, its date, and the root current-status
   summary. After staging the intended proof/metadata changes, regenerate all progress views with
   `python3 research/progress/update.py` and include it in the same commit. The generator reads
   canonical records from the Git index to exclude unrelated unstaged changes.
 - Base completion markers on the current theorem statements and verification evidence. Preserve
   assumptions, dimensional scope, and the distinction between a proved result, a completed route,
   and a ledger certificate. Do not mark a wrapper proved if it still depends on `sorryAx`.
-- Keep the next-step highlight aligned with the current handoff. The dimension-free KLS bound
+- Keep the literature priorities and the next-step highlight aligned with the current handoff. The dimension-free KLS bound
   stays open until that exact statement is proved and verified.
-- Keep the route overview complete for the four active branches in
+- Keep the exploratory route overview complete for the four active branches in
   `formalization/blueprint/route-composition.yaml`. Draw arrows from prerequisites toward
   conclusions and ultimately KLS, with AND within each route and OR between sufficient routes.
   Distinguish upstream mathematical results, conditional implications, and local Lean proofs;

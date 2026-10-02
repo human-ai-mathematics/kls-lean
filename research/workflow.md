@@ -7,6 +7,21 @@ Record recurring layout and naming issues in the [technical-debt register](techn
 with evidence, affected consumers, and an acceptance check. Separate confirmed debt, review
 candidates, and accepted exceptions; close entries only after verification.
 
+## 0. Select a literature target
+
+Use [the paper register](progress/LITERATURE.md) and the
+[literature priorities](progress/README.md#literature-priorities) as the work plan. Before
+implementing a proof, identify the paper and version, theorem locator, exact hypotheses,
+constants and normalization, the intended Lean statement, existing supporting declarations and
+the verification scope. Record this in the current task or handoff. An infrastructure task names
+the paper theorem it supports and the precise missing interface.
+
+The four routes in the [progress diagrams](progress/README.md#proof-progress-tree) are
+exploratory research records; their pending nodes are not by themselves the work queue. Paper
+coverage requires a faithfully matched main theorem, proof, registered certificate and
+exact-statement verification evidence; completed supporting declarations cannot supply a missing
+main-theorem statement or certificate.
+
 ## 1. Classify by mathematical responsibility
 
 For each proposed group of declarations, identify its primary object, necessary mathematical
