@@ -980,7 +980,7 @@ flowchart LR
 
 ### Klartag–Lehec (arXiv:2507.15495v2)
 
-37 statements: 37 ○. [Full map](LITERATURE.md#klartaglehecthin2025-lemma-map).
+37 statements: 36 ○, 1 ⇑. [Full map](LITERATURE.md#klartaglehecthin2025-lemma-map).
 
 ```mermaid
 flowchart LR
@@ -998,7 +998,7 @@ flowchart LR
     KlartagLehecThin2025_L44["○ Lemma 4.4<br/>H^{-1} norm via W_2"]
     KlartagLehecThin2025_C45["○ Corollary 4.5<br/>H^{-1} sum via derivative"]
     KlartagLehecThin2025_P46["○ Proposition 4.6<br/>Product-integral Hilbert–Schmidt bound"]
-    KlartagLehecThin2025_L47["○ Lemma 4.7<br/>Majorization Gronwall comparison"]
+    KlartagLehecThin2025_L47["⇑ Lemma 4.7<br/>Majorization Gronwall comparison"]
     KlartagLehecThin2025_C410["○ Corollary 4.10<br/>H^{-1} bound by eigenvalues"]
     KlartagLehecThin2025_P51["○ Proposition 5.1<br/>Few large eigenvalues, stopped"]
     KlartagLehecThin2025_L52["○ Lemma 5.2 (Guan)<br/>Guan's three-tensor bound"]
@@ -1034,7 +1034,9 @@ flowchart LR
     KlartagLehecThin2025_C61 --> KlartagLehecThin2025_T62
     KlartagLehecThin2025_more["+14 further statements in the paper register"]
     classDef lemma_pending fill:#fee2e2,stroke:#dc2626,color:#991b1b;
-    class KlartagLehecThin2025_T11,KlartagLehecThin2025_T14,KlartagLehecThin2025_L21,KlartagLehecThin2025_D22,KlartagLehecThin2025_L23,KlartagLehecThin2025_L24,KlartagLehecThin2025_P25,KlartagLehecThin2025_C26,KlartagLehecThin2025_L41,KlartagLehecThin2025_P42,KlartagLehecThin2025_C43,KlartagLehecThin2025_L44,KlartagLehecThin2025_C45,KlartagLehecThin2025_P46,KlartagLehecThin2025_L47,KlartagLehecThin2025_C410,KlartagLehecThin2025_P51,KlartagLehecThin2025_L52,KlartagLehecThin2025_L53,KlartagLehecThin2025_L54,KlartagLehecThin2025_L55,KlartagLehecThin2025_C61,KlartagLehecThin2025_T62 lemma_pending;
+    class KlartagLehecThin2025_T11,KlartagLehecThin2025_T14,KlartagLehecThin2025_L21,KlartagLehecThin2025_D22,KlartagLehecThin2025_L23,KlartagLehecThin2025_L24,KlartagLehecThin2025_P25,KlartagLehecThin2025_C26,KlartagLehecThin2025_L41,KlartagLehecThin2025_P42,KlartagLehecThin2025_C43,KlartagLehecThin2025_L44,KlartagLehecThin2025_C45,KlartagLehecThin2025_P46,KlartagLehecThin2025_C410,KlartagLehecThin2025_P51,KlartagLehecThin2025_L52,KlartagLehecThin2025_L53,KlartagLehecThin2025_L54,KlartagLehecThin2025_L55,KlartagLehecThin2025_C61,KlartagLehecThin2025_T62 lemma_pending;
+    classDef lemma_improved fill:#dcfce7,stroke:#15803d,color:#14532d;
+    class KlartagLehecThin2025_L47 lemma_improved;
     style KlartagLehecThin2025_T11 stroke-width:3px
     classDef lemma_more fill:#f8fafc,stroke:#94a3b8,color:#334155,stroke-dasharray:4 3;
     class KlartagLehecThin2025_more lemma_more;

@@ -121,4 +121,17 @@ Nothing is pushed.
   `Is² ≤ 2/Var` and the equality cases are not formalized, so the map entry is ◐. Eight statements
   by Claude (two of them split out after a failed round). Proofs by the GPT worker; Claude closed one
   `positivity` side goal left in the last round and removed a dead `<;> positivity`.
+  Full local verifier for the Bobkov tree: 184 gates, 359 replayed modules
+  (`build/verification/20261002T202845.720871Z/report.json`); committed as `63cfb96`.
+- Extra block: Klartag–Lehec 2025 (thin shell) Lemma 4.7, the majorization Gronwall comparison, in
+  `Analysis/Majorization.lean` (namespace `Analysis`, Mathlib-only imports; a flat module, since no
+  family exists). Ten statements by Claude, the induction step split four times after failed rounds
+  (Abel summation, primitives on `[0, T]`, the derivative of the comparison quantity, and a generic
+  "nonpositive derivative" lemma). The proof follows the paper. The hypothesis `μᵢ ≥ 0` is never used,
+  so Lean drops it (map entry ⇑). Proofs by the GPT worker; Claude patched the last induction-step
+  candidate (one redundant tactic block, one missing `ring`), replaced a deprecated name, and restored
+  the module docstring and one theorem docstring that the worker had changed.
+- Source note: Bizeul 2025 Lemma 5 (Borell's moment comparison) is false as printed, with one constant
+  for every `p ≥ 2` (two-sided exponential laws); the paper uses it only at `p = 4`. Recorded in the
+  map note.
 

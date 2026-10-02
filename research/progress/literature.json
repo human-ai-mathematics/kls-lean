@@ -6287,7 +6287,7 @@
             "uses": [],
             "relation": "same",
             "declarations": [],
-            "note": "Classical; quoted without proof."
+            "note": "Classical; quoted without proof. As printed, with one constant for every p ≥ 2, the statement is false: for a two-sided exponential Y, (E|Y|^p)^{2/p} / E|Y|² = Γ(p+1)^{2/p}/2 grows like p²/(2e²). The paper uses it only with p = 4 (the covariance bound after (eq_290)), where it holds; the standard form is (E|Y|^p)^{1/p} ≤ C p (E|Y|²)^{1/2}."
           },
           {
             "id": "L6",
@@ -6709,9 +6709,14 @@
             "label": "Majorization Gronwall comparison",
             "statement": "Let μ_1(t), ..., μ_n(t) and λ_1(t) ≥ ... ≥ λ_n(t) be non-negative continuous functions on [0, ∞) with Σ_{i≤k} μ_i(t) ≤ Σ_{i≤k}[1 + 2∫_0^t μ_i(s)λ_i(s) ds] for all t ≥ 0 and k ≤ n; then Σ_{i≤k} μ_i(t) ≤ Σ_{i≤k} exp(2∫_0^t λ_i(s) ds) for all t ≥ 0 and k ≤ n.",
             "uses": [],
-            "relation": "same",
-            "declarations": [],
-            "note": "Elementary induction on k. The final display of the proof writes λ_i(t) inside the ds-integral for λ_i(s)."
+            "relation": "stronger",
+            "declarations": [
+              {
+                "name": "FunctionalInequalities.Analysis.sum_le_sum_exp",
+                "source": "formalization/FunctionalInequalities/Analysis/Majorization.lean"
+              }
+            ],
+            "note": "Elementary induction on k, formalized along the paper's proof. Lean drops the hypothesis μ_i ≥ 0, which the proof never uses, so the statement is slightly stronger; indices are 0, …, n − 1 and λ_i is written ℓ i. The final display of the proof writes λ_i(t) inside the ds-integral for λ_i(s)."
           },
           {
             "id": "R48",

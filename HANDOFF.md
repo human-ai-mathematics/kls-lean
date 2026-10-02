@@ -31,8 +31,9 @@ authorization. Exact results, scopes and certificates are in the
    Lemma 3.1 (Borell's lemma) in `KLS/LogConcave/Tail.lean`, E. Milman's Lemma 4.1
    (Paley–Zygmund quantile bound) in `Probability/Quantile.lean`, Lee–Vempala's Lemma 42
    (Eldan's trace inequality) in `Analysis/MatrixTrace.lean`, Guédon–Milman's Lemma A.2 in
-   `KLS/LogConcave/Line/DensityBound.lean`, and part of Bobkov's Proposition 4.1 (`Is = 2f(m)`,
-   `1/(3 Var) ≤ Is²`) in `KLS/LogConcave/Line/CheegerVariance.lean`.
+   `KLS/LogConcave/Line/DensityBound.lean`, part of Bobkov's Proposition 4.1 (`Is = 2f(m)`,
+   `1/(3 Var) ≤ Is²`) in `KLS/LogConcave/Line/CheegerVariance.lean`, and Klartag–Lehec's thin-shell
+   Lemma 4.7 in `Analysis/Majorization.lean`.
 2. Blocked: the priority-1 Bakry–Émery `C_P ≤ 1/ρ` target waits for the Bakry–Gentil–Ledoux text.
 
 ## Open owner decisions

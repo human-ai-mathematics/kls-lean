@@ -123,6 +123,7 @@ import FunctionalInequalities.KLS.LogConcave.WeightedGradient.Multiplier
 import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.OperatorCore
 import FunctionalInequalities.Analysis.Mollification
 import FunctionalInequalities.Analysis.MatrixTrace
+import FunctionalInequalities.Analysis.Majorization
 import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.InteriorRegularity
 import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.GammaTwo
 import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.TestClass
