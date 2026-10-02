@@ -551,7 +551,7 @@ flowchart LR
     GuedonMilman2011_C14["○ Corollary 1.4<br/>Cheeger bound n^{-5/12}"]
     GuedonMilman2011_T15["○ Theorem 1.5<br/>Improved log-Lipschitz bound"]
     GuedonMilman2011_T21["○ Theorem 2.1<br/>Log-Lipschitz via centroid bodies"]
-    GuedonMilman2011_L22["○ Lemma 2.2 (Grunbaum)<br/>Grunbaum half-line mass bound"]
+    GuedonMilman2011_L22["✓ Lemma 2.2 (Grunbaum)<br/>Grunbaum half-line mass bound"]
     GuedonMilman2011_L23["○ Lemma 2.3<br/>Centroid bodies of Gaussian convolution"]
     GuedonMilman2011_C24["○ Corollary 2.4<br/>Distance and Lipschitz bound"]
     GuedonMilman2011_T25["○ Theorem 2.5<br/>Distance of K_{m+p} to ball"]
@@ -598,11 +598,11 @@ flowchart LR
     GuedonMilman2011_DISO --> GuedonMilman2011_A4
     GuedonMilman2011_DLC --> GuedonMilman2011_A4
     classDef lemma_formalized fill:#dbeafe,stroke:#2563eb,color:#1e3a8a;
-    class GuedonMilman2011_DISO,GuedonMilman2011_A2 lemma_formalized;
+    class GuedonMilman2011_DISO,GuedonMilman2011_L22,GuedonMilman2011_A2 lemma_formalized;
     classDef lemma_partial fill:#fff3df,stroke:#c88719,color:#66420d;
     class GuedonMilman2011_DLC lemma_partial;
     classDef lemma_pending fill:#fee2e2,stroke:#dc2626,color:#991b1b;
-    class GuedonMilman2011_T11,GuedonMilman2011_T12,GuedonMilman2011_R13,GuedonMilman2011_C14,GuedonMilman2011_T15,GuedonMilman2011_T21,GuedonMilman2011_L22,GuedonMilman2011_L23,GuedonMilman2011_C24,GuedonMilman2011_T25,GuedonMilman2011_P26,GuedonMilman2011_T31,GuedonMilman2011_R32,GuedonMilman2011_R33,GuedonMilman2011_T41,GuedonMilman2011_A1,GuedonMilman2011_A3,GuedonMilman2011_A4 lemma_pending;
+    class GuedonMilman2011_T11,GuedonMilman2011_T12,GuedonMilman2011_R13,GuedonMilman2011_C14,GuedonMilman2011_T15,GuedonMilman2011_T21,GuedonMilman2011_L23,GuedonMilman2011_C24,GuedonMilman2011_T25,GuedonMilman2011_P26,GuedonMilman2011_T31,GuedonMilman2011_R32,GuedonMilman2011_R33,GuedonMilman2011_T41,GuedonMilman2011_A1,GuedonMilman2011_A3,GuedonMilman2011_A4 lemma_pending;
     style GuedonMilman2011_T11 stroke-width:3px
 ```
 
@@ -616,7 +616,7 @@ flowchart LR
 | Corollary 1.4 | If mu is a probability measure on R^n with isotropic log-concave density, then its Cheeger constant satisfies D_Che(mu) >= c n^{-5/12} for a universal c > 0 (improving to c n^{-3/8} when the density is psi_2). | ○ Not yet formalized | — | Proved by combining Bobkov's theorem D_Che(mu)^2 >= c/(E&#124;X&#124; sqrt(Var&#124;X&#124;)) (cited, not proved) with the thin-shell bound (1.12). Not mapped: Lean's literatureConstant_le_four_mul_inverseScale_sq and inverseScale_sq_le_pi_literature compare the Poincare and Minkowski-Cheeger constants of a fixed log-concave law, but neither Bobkov's variance bound nor any dimension-dependent lower bound on the Cheeger constant is formalized, so no Lean statement states or restricts this corollary. |
 | Theorem 1.5 | Under the hypotheses of Theorem 1.1, with Y = (AX + G_n)/sqrt 2 and h_{k,p}(u) = vol(S^{k-1}) int_0^infty t^{p+k-1} pi_{u(E_0)} g(t u(theta_0)) dt on SO(n) (g the density of Y), if p >= -k+1 then the log-Lipschitz constant satisfies L_{k,p} <= C &#124;&#124;A&#124;&#124;_op b_alpha max(k,p)^{1/alpha+1/2}. | ○ Not yet formalized | — | Introduction version of Corollary 2.4 (which uses &#124;&#124;A&#124;&#124;_op >= 1, automatic when &#124;&#124;A&#124;&#124;_HS^2 = n). No Lean counterpart; SO(n) Riemannian structure and h_{k,p} are not formalized. |
 | Theorem 2.1 | For Y with log-concave density g on R^n and barycenter 0, integers 1 <= k <= n, real p >= -k+1, E_0 in G_{n,k} and theta_0 in S(E_0), the log-Lipschitz constant of h_{k,p} on SO(n) (metric &#124;B&#124;^2 = &#124;&#124;B&#124;&#124;_HS^2/2) is at most C max(k,p) d(Z^+_{max(k,p)}(g), B_2^n), where Z^+_q is the one-sided L_q-centroid body h_{Z^+_q(w)}(y) = (2 int <x,y>_+^q w)^{1/q} and d is the geometric distance. | ○ Not yet formalized | — | Proof via Type-1/2/3 movements using K. Ball's K_q(w) norm theorem (unnumbered, cited from Ball and Klartag), the inclusions (2.3) between the Z^+_q (uses Lemma 2.2), projection and Theorem 2.5. No Lean counterpart. |
-| Lemma 2.2 (Grunbaum) | If X_1 is a real random variable with log-concave density and barycenter at the origin, then 1/e <= P(X_1 >= 0) <= 1 - 1/e. | ○ Not yet formalized | — | Cited from Grunbaum (simplified proofs in Fradelizi, Bobkov); no proof in the paper. No Lean counterpart. |
+| Lemma 2.2 (Grunbaum) | If X_1 is a real random variable with log-concave density and barycenter at the origin, then 1/e <= P(X_1 >= 0) <= 1 - 1/e. | ✓ Formalized in Lean | [`exp_neg_one_le_measureReal_Ici`](../../formalization/FunctionalInequalities/KLS/LogConcave/Line/Grunbaum.lean) | Lean states it for a log-concave law on the line whose support has nonempty interior (equivalently, one with a log-concave density) and mean 0. Proof: the tail is log-concave and lies below its tangent exponential at 0; the layer-cake formula and the barycenter condition give P(X > 0) ≥ 1/e, and the reflected law gives P(X < 0) ≥ 1/e. |
 | Lemma 2.3 | Let X be isotropic in R^n with log-concave density, A in M_n(R), Y = (AX + G_n)/sqrt 2 with density g. Then for all q >= 2: Z^+_q(g) contains c sqrt q B_2^n, and if X is psi_alpha (alpha in [1,2]) with constant b_alpha then Z^+_q(g) is contained in (C_1 &#124;&#124;A&#124;&#124;_op b_alpha q^{1/alpha} + C_2 sqrt q) B_2^n. | ○ Not yet formalized | — | Lower bound uses P(<AX,theta> >= 0) >= 1/e from Lemma 2.2 and Gaussian moments. No Lean counterpart. |
 | Corollary 2.4 | Under the hypotheses of Lemma 2.3 with X psi_alpha (alpha in [1,2]) with constant b_alpha, d(Z^+_q(g), B_2^n) <= C_1 (1 + &#124;&#124;A&#124;&#124;_op b_alpha q^{1/alpha - 1/2}); consequently, when &#124;&#124;A&#124;&#124;_op >= 1, L_{k,p} <= C_2 &#124;&#124;A&#124;&#124;_op b_alpha max(k,p)^{1/alpha+1/2}. | ○ Not yet formalized | — | Immediate from Lemma 2.3 and Theorem 2.1. No Lean counterpart. |
 | Theorem 2.5 | If w is log-concave on R^m with 0 < int w < infinity and barycenter at the origin, then for every p >= -m+1, d(K_{m+p}(w), B_2^m) <= C max(m/(m+p), 1) d(Z^+_{max(p,m)}(w), B_2^m). | ○ Not yet formalized | — | Uses the cited inclusions (2.7) between K_q bodies, the polar identity Z^+_q(K_{m+q}(w)) = Z^+_q(w) (2.8), Proposition 2.6 and Stirling's formula. No Lean counterpart. |

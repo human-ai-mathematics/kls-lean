@@ -134,4 +134,17 @@ Nothing is pushed.
 - Source note: Bizeul 2025 Lemma 5 (Borell's moment comparison) is false as printed, with one constant
   for every `p ≥ 2` (two-sided exponential laws); the paper uses it only at `p = 4`. Recorded in the
   map note.
+  Full local verifier for the Lemma 4.7 tree: 184 gates, 360 replayed modules
+  (`build/verification/20261002T211956.816361Z/report.json`); committed as `75632e1`.
+- Extra block: Guédon–Milman 2011 Lemma 2.2 (Grünbaum: `1/e ≤ P(X ≥ 0) ≤ 1 − 1/e` for a log-concave
+  density with barycenter 0) in `KLS/LogConcave/Line/Grunbaum.lean` (namespace `KLS.LogConcave`;
+  owner: the one-dimensional log-concave family). Route: the tail is log-concave (Borel formulation),
+  so it lies below its tangent exponential at 0; the layer-cake formula turns the barycenter condition
+  into `∫₀^∞ G = ∫_{−∞}^0 (1 − G)`, which with the tangent bound gives `G(0) ≥ 1/e`; the law reflected
+  by `x ↦ −x` gives the other side. Sixteen statements by Claude, split three times after failed
+  rounds (integral comparison, layer cake, positivity and reflection). Proofs by the GPT worker,
+  which added two private slope helpers. Claude corrected one wrong lemma name (`Real.ofReal_le_enorm`,
+  first suggested in Claude's own hint), dropped one unused hypothesis from a helper, removed five
+  linter warnings and three `ring` → `ring_nf` information messages, and restored seven docstrings
+  the worker had edited.
 

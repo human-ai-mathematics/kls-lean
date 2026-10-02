@@ -1401,8 +1401,13 @@
             "statement": "If X_1 is a real random variable with log-concave density and barycenter at the origin, then 1/e <= P(X_1 >= 0) <= 1 - 1/e.",
             "uses": [],
             "relation": "same",
-            "declarations": [],
-            "note": "Cited from Grunbaum (simplified proofs in Fradelizi, Bobkov); no proof in the paper. No Lean counterpart."
+            "declarations": [
+              {
+                "name": "FunctionalInequalities.KLS.LogConcave.exp_neg_one_le_measureReal_Ici",
+                "source": "formalization/FunctionalInequalities/KLS/LogConcave/Line/Grunbaum.lean"
+              }
+            ],
+            "note": "Lean states it for a log-concave law on the line whose support has nonempty interior (equivalently, one with a log-concave density) and mean 0. Proof: the tail is log-concave and lies below its tangent exponential at 0; the layer-cake formula and the barycenter condition give P(X > 0) ≥ 1/e, and the reflected law gives P(X < 0) ≥ 1/e."
           },
           {
             "id": "L23",

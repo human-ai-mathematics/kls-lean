@@ -188,7 +188,7 @@ flowchart LR
 
 ### Guédon–Milman (arXiv:1011.0943v3)
 
-21 statements: 2 ✓, 1 ◐, 18 ○. [Full map](LITERATURE.md#guedonmilman2011-lemma-map).
+21 statements: 3 ✓, 1 ◐, 17 ○. [Full map](LITERATURE.md#guedonmilman2011-lemma-map).
 
 ```mermaid
 flowchart LR
@@ -196,7 +196,7 @@ flowchart LR
     GuedonMilman2011_DLC["◐ Section 1 (unnumbered definition of log-concavity)<br/>Log-concave density"]
     GuedonMilman2011_T11["○ Theorem 1.1<br/>Deviation and thin-shell estimates"]
     GuedonMilman2011_T21["○ Theorem 2.1<br/>Log-Lipschitz via centroid bodies"]
-    GuedonMilman2011_L22["○ Lemma 2.2 (Grunbaum)<br/>Grunbaum half-line mass bound"]
+    GuedonMilman2011_L22["✓ Lemma 2.2 (Grunbaum)<br/>Grunbaum half-line mass bound"]
     GuedonMilman2011_L23["○ Lemma 2.3<br/>Centroid bodies of Gaussian convolution"]
     GuedonMilman2011_C24["○ Corollary 2.4<br/>Distance and Lipschitz bound"]
     GuedonMilman2011_T25["○ Theorem 2.5<br/>Distance of K_{m+p} to ball"]
@@ -228,11 +228,11 @@ flowchart LR
     GuedonMilman2011_L22 --> GuedonMilman2011_A3
     GuedonMilman2011_more["+7 further statements in the paper register"]
     classDef lemma_formalized fill:#dbeafe,stroke:#2563eb,color:#1e3a8a;
-    class GuedonMilman2011_DISO,GuedonMilman2011_A2 lemma_formalized;
+    class GuedonMilman2011_DISO,GuedonMilman2011_L22,GuedonMilman2011_A2 lemma_formalized;
     classDef lemma_partial fill:#fff3df,stroke:#c88719,color:#66420d;
     class GuedonMilman2011_DLC lemma_partial;
     classDef lemma_pending fill:#fee2e2,stroke:#dc2626,color:#991b1b;
-    class GuedonMilman2011_T11,GuedonMilman2011_T21,GuedonMilman2011_L22,GuedonMilman2011_L23,GuedonMilman2011_C24,GuedonMilman2011_T25,GuedonMilman2011_P26,GuedonMilman2011_T31,GuedonMilman2011_T41,GuedonMilman2011_A1,GuedonMilman2011_A3 lemma_pending;
+    class GuedonMilman2011_T11,GuedonMilman2011_T21,GuedonMilman2011_L23,GuedonMilman2011_C24,GuedonMilman2011_T25,GuedonMilman2011_P26,GuedonMilman2011_T31,GuedonMilman2011_T41,GuedonMilman2011_A1,GuedonMilman2011_A3 lemma_pending;
     style GuedonMilman2011_T11 stroke-width:3px
     classDef lemma_more fill:#f8fafc,stroke:#94a3b8,color:#334155,stroke-dasharray:4 3;
     class GuedonMilman2011_more lemma_more;
