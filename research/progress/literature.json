@@ -2877,9 +2877,18 @@
             "uses": [
               "T472"
             ],
-            "relation": "same",
-            "declarations": [],
-            "note": "Let t → ∞ in (4.7.5) of Theorem 4.7.2, using Theorem 3.3.23 (μ finite when ρ > 0) and ergodicity P_∞ f = ∫f dμ (Sect. 1.8). Formally the case n = ∞ of Theorem 4.8.4."
+            "relation": "partial",
+            "declarations": [
+              {
+                "name": "FunctionalInequalities.Analysis.Semigroup.Generated.norm_sq_sub_norm_apply_sq_le",
+                "source": "formalization/FunctionalInequalities/Analysis/Semigroup/Generated/Curvature.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.LogConcave.literatureConstant_le_inv_of_tendsto",
+                "source": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Curvature.lean"
+              }
+            ],
+            "note": "Let t → ∞ in (4.7.5) of Theorem 4.7.2, using Theorem 3.3.23 (μ finite when ρ > 0) and ergodicity P_∞ f = ∫f dμ (Sect. 1.8). Formally the case n = ∞ of Theorem 4.8.4. The semigroup argument is formalized abstractly (finite-time bound ‖f‖² − ‖P_t f‖² ≤ (1 − e^{-2ρt})/ρ ‖Tf‖² under ρ‖Ty‖² ≤ ‖Ay‖²) and for the Euclidean model with ergodicity assumed; no general Markov-Triple CD(ρ, ∞) framework."
           },
           {
             "id": "C482",
@@ -2889,9 +2898,14 @@
             "uses": [
               "P481"
             ],
-            "relation": "same",
-            "declarations": [],
-            "note": "Proof: L = Δ − ∇W·∇ with Γ(f) = |∇f|² (Sect. 1.11.3) and Γ₂(f) = |∇∇f|² + ∇∇W(∇f, ∇f) ≥ ρΓ(f) ((1.16.5)), so CD(ρ, ∞) holds and Proposition 4.8.1 applies. Also a consequence of Theorem 4.9.1. The weighted Riemannian analogue under Ric_g + ∇∇W ≥ ρg is stated without a separate proof.",
+            "relation": "partial",
+            "declarations": [
+              {
+                "name": "FunctionalInequalities.KLS.LogConcave.literatureConstant_le_inv_of_tendsto",
+                "source": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Curvature.lean"
+              }
+            ],
+            "note": "Proof: L = Δ − ∇W·∇ with Γ(f) = |∇f|² (Sect. 1.11.3) and Γ₂(f) = |∇∇f|² + ∇∇W(∇f, ∇f) ≥ ρΓ(f) ((1.16.5)), so CD(ρ, ∞) holds and Proposition 4.8.1 applies. Also a consequence of Theorem 4.9.1. The weighted Riemannian analogue under Ric_g + ∇∇W ≥ ρg is stated without a separate proof. Formalized only under an explicit ergodicity hypothesis (Var(P_t u) → 0 for u in the form domain), for e^{-U} dm on a finite-dimensional real inner product space with C² potential and Hessian ≥ ρ > 0, as C_P(ν) ≤ 1/ρ for the literature Poincaré constant. Ergodicity (T̄h = 0 ⇒ h constant) is open, so the corollary itself is not proved.",
             "main": true
           },
           {

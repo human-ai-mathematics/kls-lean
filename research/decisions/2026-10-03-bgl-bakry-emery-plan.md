@@ -89,3 +89,22 @@ Everything in `KLS/LogConcave/HeatSemigroup/` and `Analysis/BakryEmery/` is at c
   and `neg` forms with `simpa`/`convert` hit an instance mismatch. Claude added two missing
   Mathlib imports to the statement file, removed a redundant nested `section` that repeated the
   same variables, and removed a dead `ring`.
+- Steps 3–4, heat-semigroup part, done: `KLS/LogConcave/HeatSemigroup/Curvature.lean` (8 statements
+  by Claude). It proves:
+  - the curvature bound `ρ ‖T̄ y‖² ≤ ‖A y‖²`, first on `C_c^∞` and then on `D(A)` via the operator
+    core;
+  - centering identities in `D(T̄)`;
+  - the finite-time bound `Var(u) - Var(P_t u) ≤ (1 - e^{-2ρt})/ρ · ‖T̄ u‖²`;
+  - `gap ⇒ C_P ≤ C`;
+  - `literatureConstant_le_inv_of_tendsto`: with `∇∇U ≥ ρ > 0` **and the ergodicity hypothesis**
+    `Var(P_t u) → 0`, `C_P(ν) ≤ 1/ρ`.
+
+  Proofs by the GPT worker. Claude patched three mechanical errors in otherwise correct candidates
+  (a `3 ≤ ∞` cast, an unqualified lemma name, a `const_smul` rewrite) and spliced one correct proof
+  that the driver had mangled while splicing a fragment. The driver now compares directives as
+  multisets and strips headers from returned fragments. The BGL map marks Proposition 4.8.1 and
+  Corollary 4.8.2 partial (◐).
+- Remaining for Corollary 4.8.2 itself: ergodicity in this model, i.e. `T̄ h = 0` implies `h`
+  constant (equivalently `Var(P_t u) → 0`). Proposed route: a Poincaré inequality on cubes from the
+  proved one-dimensional log-concave bound and finite tensorization, then local constancy of `h`
+  on every cube (the density of `ν` is bounded below on compact sets).

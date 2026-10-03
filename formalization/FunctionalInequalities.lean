@@ -128,6 +128,7 @@ import FunctionalInequalities.Analysis.Mollification
 import FunctionalInequalities.Analysis.MatrixTrace
 import FunctionalInequalities.Analysis.Majorization
 import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.InteriorRegularity
+import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Curvature
 import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.GammaTwo
 import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.TestClass
 import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.FormRange

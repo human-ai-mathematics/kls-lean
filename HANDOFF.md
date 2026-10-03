@@ -11,27 +11,30 @@ authorization. Exact results, scopes and certificates are in the
   ([run 37017009088](https://github.com/numina-functional-inequalities/kls-lean/actions/runs/37017009088),
   2026-10-02). The full local verifier also passed 184 gates for that commit
   (`build/verification/20261002T134816.216230Z/report.json`).
-- Local `main` is 16 commits ahead of `origin/main` and unpushed (overnight work of 2026-10-03, see
-  the [overnight log](research/decisions/2026-10-03-overnight-plan.md)). The last full local verifier
-  passed 184 gates, 361 replayed modules, for the tree of `c25dc9c`
-  (`build/verification/20261002T221208.729681Z/report.json`); only documentation changed afterwards.
+- `origin/main` = `b5ba50c` (pushed 2026-10-03, after the overnight work). Local `main` adds the
+  BGL Chapter 4 map and the Bakry–Émery curvature work (3 commits, unpushed); the last full local
+  verifier result is recorded in the newest commit message.
 - 27 ledger certificates. `FunctionalInequalities.KLS.kls` in `KLS/Target.lean` is the one
   intentional hole, outside every certificate closure. Dimension-free KLS is open.
 - Covered papers: Ambrosio–Di Marino–Gigli Theorem 3.6, certificate
   `thm:relaxed-minkowski-content-perimeter`, accepted by the owner on 2026-10-02
   ([review record](research/decisions/2026-10-02-admg-theorem-3-6-certificate.md)).
-- Paper lemma maps cover all 22 downloaded research sources (all but Borell 1974, Bakry–Gentil–Ledoux,
-  Alonso-Gutiérrez–Bastero and the two surveys): KLS 1995, Bobkov 1999, E. Milman 2009, Guédon–Milman
+- Paper lemma maps cover 23 sources (all but Borell 1974, Alonso-Gutiérrez–Bastero and the two
+  surveys; Bakry–Gentil–Ledoux 2014 is mapped for Chapter 4 only): KLS 1995, Bobkov 1999, E. Milman 2009, Guédon–Milman
   2011, AGS 2013, Eldan 2013, Klartag 2014, Cordero-Erausquin–Klartag 2015, ADMG 2017, Fathi 2019, De Ponti–Mondino 2021, Chen 2021, Klartag–Lehec 2022, Jambulapati–Lee–Vempala
   2022, Klartag 2023, Guan 2024, Lee–Vempala 2024, Bizeul 2025, Klartag–Lehec 2025 (slicing and thin shell),
-  Chen–Klartag 2026 and Letwin 2026
+  Chen–Klartag 2026, Letwin 2026 and Bakry–Gentil–Ledoux 2014 (Chapter 4)
   ([progress page](research/progress/README.md#paper-lemma-map)). Source PDFs are kept
   outside the repository.
 
 ## Next
 
 1. Owner decision on stochastic calculus (see below); it gates every priority-4 paper.
-2. Blocked: the priority-1 Bakry–Émery `C_P ≤ 1/ρ` target waits for the Bakry–Gentil–Ledoux text.
+2. Priority 1, Bakry–Émery `C_P ≤ 1/ρ` (BGL 2014 Corollary 4.8.2; the book was supplied on
+   2026-10-03): the curvature layer, abstract energy decay and the heat-semigroup bound are
+   formalized. `KLS.LogConcave.literatureConstant_le_inv_of_tendsto` proves `C_P ≤ 1/ρ` assuming
+   ergodicity (`Var(P_t u) → 0`). The remaining piece is ergodicity, i.e. `T̄ h = 0 ⇒ h` constant
+   ([plan and route](research/decisions/2026-10-03-bgl-bakry-emery-plan.md)).
 3. Supporting lemmas formalized on 2026-10-03, none of them a paper main theorem: De Ponti–Mondino
    Lemmas 3.2–3.3, Bobkov Lemma 3.1 (Borell) and part of Proposition 4.1, E. Milman Lemma 4.1,
    Lee–Vempala Lemma 42, Guédon–Milman Lemmas 2.2 (Grünbaum) and A.2, Klartag–Lehec 2025
@@ -43,8 +46,7 @@ authorization. Exact results, scopes and certificates are in the
 
 - Stochastic calculus for priorities 4–5: build it here or build on external Lean efforts; evidence
   and a recommendation are in [the options record](research/decisions/2026-10-03-stochastic-calculus-options.md).
-- Push timing for the 16 local commits. None of them adds a paper-target certificate, so the
-  milestone policy does not call for a remote CI run.
+- Push timing for the local commits after `b5ba50c`. None adds a paper-target certificate.
 - E. Milman Lemma 4.1 is recorded as `same`, although the real-infimum quantile differs from the
   paper's `−∞` in the degenerate case `f = 0`, `1 − ε < 0`, where the paper's statement is literally
   false. The reviewer called it `partial`; accept the convention or relabel the entry.
