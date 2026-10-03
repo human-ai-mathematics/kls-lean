@@ -2466,7 +2466,7 @@
       "date": "2014",
       "publication": "Monograph",
       "url": "https://link.springer.com/book/10.1007/978-3-319-00227-9",
-      "locator": "Proposition 4.3.1; Gaussian Poincaré and Dirichlet-form background",
+      "locator": "Corollary 4.8.2 (Poincaré P(1/ρ) for e^{-W} dx with ∇∇W ≥ ρ Id); Propositions 4.1.1 and 4.3.1 as background",
       "result": "Tensorization and Gaussian functional inequalities within the diffusion/Dirichlet-form framework.",
       "remaining": "The full diffusion, semigroup and Γ-calculus theory is not covered by our selected results.",
       "local_results": [
@@ -2482,7 +2482,581 @@
           "node": "cert:gaussian-one-dimensional",
           "scope": "Exact one-dimensional Gaussian constant"
         }
-      ]
+      ],
+      "lemma_map": {
+        "source_version": "Springer 2014, Grundlehren der mathematischen Wissenschaften 348 (DOI 10.1007/978-3-319-00227-9), Chapter 4",
+        "source_url": "https://link.springer.com/book/10.1007/978-3-319-00227-9",
+        "reviewed_on": "2026-10-03",
+        "standing_assumptions": "Unless stated otherwise, the Full Markov Triple (E, μ, Γ) of Sect. 3.4 (called a Markov Triple): state space E, invariant reversible measure μ (a probability measure wherever a Poincaré inequality is stated), carré du champ Γ on an algebra A₀ of bounded measurable functions (smooth compactly supported functions in examples) with extended algebra A ⊃ A₀ for the Γ-calculus, Dirichlet form E(f) = ∫Γ(f) dμ with domain D(E) (A₀ dense in it), diffusion generator L with domain D(L), Markov semigroup P_t = e^{tL} with kernels p_t(x, dy), and Γ₂(f) = ½(LΓ(f) − 2Γ(f, Lf)). Var_μ(f) = ∫f² dμ − (∫f dμ)²; P(C) means Var_μ(f) ≤ C E(f) for f ∈ D(E) (Definition 4.2.1); CD(ρ, n) means Γ₂(f) ≥ ρΓ(f) + (Lf)²/n on A₀ (Definition 3.3.14), with CD(ρ, ∞) for n = ∞. Sect. 4.5.2 uses Diffusion Markov Triples, Sect. 4.6 allows infinite μ for local inequalities, Sect. 4.7 needs no invariant probability, and Sects. 4.10.1–4.10.2 use the minimal triple of Sect. 3.1. Repository counterparts (not identified with these notions): Poincare.SmoothTest.constant and Poincare.LocalSlope.Intrinsic.constant are ENNReal optimal constants over smooth L² finite-energy (resp. locally Lipschitz local-slope) tests with Γ(f) = |∇f|² on finite-dimensional real inner product spaces, and no Dirichlet-domain equivalence is asserted; the heat semigroup model in formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup takes a full-dimensional log-concave law ν = m.tilted (−U) with smooth convex potential U, the closed weighted gradient T̄ and P_t = exp(−tT̄†T̄), whose generator is ℒf = Δf − ⟨∇U, ∇f⟩ on C_c^∞.",
+        "omitted": "This map covers Chapter 4 only; Chapters 1–3, 5–9, the appendices and the Notes and References of Sect. 4.11 are out of scope. All 46 numbered statements of Chapter 4 are listed. No numbered display or unnumbered claim is listed as a separate item; each is recorded in the note of the statement it follows from or accompanies: (4.1.1) with Proposition 4.1.1; (4.2.1) with Definition 4.2.1; (4.2.2)–(4.2.3) with Theorem 4.2.5; (4.2.4) and the Γ ≤ aΓ₁ comparison with Proposition 4.2.7; (4.4.1) and (4.4.3) with Proposition 4.4.1; (4.4.4)–(4.4.6) and the tensorized deviation bound with Proposition 4.4.2; (4.5.1)–(4.5.5) with Propositions 4.5.3–4.5.5; (4.6.1)–(4.6.5) with Remark 4.6.1, Theorem 4.6.2 and Proposition 4.6.4; (4.6.6)–(4.6.7) (Payne–Weinberger, quoted) with Theorem 4.6.3; (4.7.1)–(4.7.4) with Remark 4.7.1; (4.7.5)–(4.7.7) with Theorem 4.7.2; the Γ₂ formula for e^{−W}dx with Corollary 4.8.2; (4.8.1) (Lichnerowicz; Obata quoted) with Theorem 4.8.4; (4.8.2)–(4.8.3) with Proposition 4.8.3; (4.9.1)–(4.9.3) with Lemma 4.9.2 and Theorem 4.9.1; (4.9.4)–(4.9.6) with Theorem 4.9.3; (4.10.1) with Remark 4.10.1; (4.10.2)–(4.10.6) with Propositions 4.10.3–4.10.4 and Theorem 4.10.5; the example c_α e^{−|x|^α} with Corollary 4.10.9. Page numbers are the printed pages where each statement begins.",
+        "items": [
+          {
+            "id": "P411",
+            "locator": "Proposition 4.1.1 (Poincaré inequality for the Gaussian measure), p. 180",
+            "label": "Gaussian Poincaré inequality",
+            "statement": "For the standard Gaussian measure μ on ℝⁿ and every f in the Dirichlet domain D(E): ∫f² dμ − (∫f dμ)² ≤ E(f) = ∫|∇f|² dμ, i.e. P(1). For a centered Gaussian with covariance matrix Q, Var_μ(f) ≤ ∫ Q∇f·∇f dμ for every smooth f.",
+            "uses": [],
+            "relation": "partial",
+            "declarations": [
+              {
+                "name": "FunctionalInequalities.Poincare.SmoothTest.holds_stdGaussian",
+                "source": "formalization/FunctionalInequalities/Poincare/Gaussian/Multivariate.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Poincare.SmoothTest.holds_gaussianReal",
+                "source": "formalization/FunctionalInequalities/Poincare/Gaussian/Real.lean"
+              }
+            ],
+            "note": "The one-dimensional case (4.1.1) is proved by the Hermite expansion (Sect. 2.7.1); the n-dimensional case by multiple Hermite polynomials or tensorization (Proposition 4.3.1, see the remark after Remark 4.3.3); the covariance form by a change of variables. Affine functions are extremal. P(1) for the standard Gaussian on any finite-dimensional real inner product space, for smooth L² tests of finite energy (a dense class, as Definition 4.2.1 allows). The covariance clause is covered only in dimension one (holds_gaussianReal, with arbitrary variance v)."
+          },
+          {
+            "id": "D421",
+            "locator": "Definition 4.2.1 (Poincaré inequality), p. 181",
+            "label": "Poincaré inequality P(C)",
+            "statement": "A Markov Triple (E, μ, Γ) with μ a probability measure satisfies a Poincaré (spectral gap) inequality P(C), C > 0, if Var_μ(f) ≤ C E(f) for all f ∈ D(E); the best such C is the Poincaré constant.",
+            "uses": [],
+            "relation": "same",
+            "declarations": [],
+            "note": "Variance (4.2.1). It suffices to check P(C) on a dense subfamily of D(E), typically A₀. Under P(C) the spectrum of −L lies in {0} ∪ [1/C, ∞) (Sect. A.4)."
+          },
+          {
+            "id": "R422",
+            "locator": "Remark 4.2.2, p. 182",
+            "label": "Poincaré inequalities are tight",
+            "statement": "Under a Poincaré inequality, E(f) = 0 forces f to be μ-a.e. constant (tightness, strengthening ergodicity and connexity); a non-tight form ∫f² dμ ≤ a(∫f dμ)² + C E(f) on a probability space forces a ≥ 1 and reduces to the case a = 1.",
+            "uses": [
+              "D421"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": "Refers to Definition 3.1.11 (ergodicity), Definition 3.3.7 (connexity), Sect. 1.8 and the Nash-type inequalities of Sect. 7.4.1."
+          },
+          {
+            "id": "L423",
+            "locator": "Lemma 4.2.3, p. 182",
+            "label": "Poincaré for functions vanishing outside A",
+            "statement": "Under P(C), if f ∈ D(E) vanishes outside a set A ∈ F with μ(A) < 1, then ∫ f² dμ ≤ (C/(1 − μ(A))) E(f).",
+            "uses": [
+              "D421"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": "Proof by Cauchy–Schwarz: (∫f dμ)² ≤ μ(A)∫f² dμ, so (1 − μ(A))∫f² dμ ≤ Var_μ(f)."
+          },
+          {
+            "id": "R424",
+            "locator": "Remark 4.2.4, p. 183",
+            "label": "Faber–Krahn-type inequalities",
+            "statement": "Inequalities ∫_A f² dμ ≤ Θ(μ(A)) E(f) for f ∈ D(E) supported in A, with a function Θ of the measure of A, hold in various contexts, e.g. the Faber–Krahn inequalities associated with Nash inequalities.",
+            "uses": [
+              "L423"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": "Cross-references Remark 6.2.4 and Remark 8.2.2. The function symbol in front of μ(A) is lost in the extracted text; Θ is a placeholder."
+          },
+          {
+            "id": "T425",
+            "locator": "Theorem 4.2.5 (Exponential decay in variance), p. 183",
+            "label": "Variance decay equivalent to Poincaré",
+            "statement": "For a Markov Triple with semigroup (P_t)_{t≥0}, the following are equivalent: (i) P(C); (ii) Var_μ(P_t f) ≤ e^{−2t/C} Var_μ(f) for all f ∈ L²(μ) and t ≥ 0; (iii) for every f ∈ L²(μ) there is c(f) > 0 with Var_μ(P_t f) ≤ c(f) e^{−2t/C} for all t ≥ 0.",
+            "uses": [
+              "D421",
+              "L426"
+            ],
+            "relation": "partial",
+            "declarations": [
+              {
+                "name": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.norm_center_operator_sq_le_exp",
+                "source": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Decay.lean"
+              }
+            ],
+            "note": "(ii)⇒(i) by a first-order expansion at t = 0; (i)⇒(ii) from d/dt Var_μ(P_t f) = −2E(P_t f) (4.2.2) and Gronwall; (iii)⇒(ii) by Lemma 4.2.6. Uses Proposition 3.1.6 and Remark 3.1.7 (P_t maps L² into D(Lᵏ)). The unnumbered consequence (4.2.3), ∫(f − P_t f)² dμ ≤ 2t E(f) for f ∈ D(E), is recorded here. Only (i) ⇒ (ii), for the heat semigroup of a full-dimensional log-concave law with the Poincaré hypothesis on the form domain."
+          },
+          {
+            "id": "L426",
+            "locator": "Lemma 4.2.6, p. 184",
+            "label": "Log-convexity of the L² norm",
+            "statement": "For every non-zero f ∈ L²(μ), the map t ↦ log ‖P_t f‖₂ is convex on ℝ₊.",
+            "uses": [],
+            "relation": "same",
+            "declarations": [],
+            "note": "With Λ(t) = ∫(P_t f)² dμ, Λ″(t) = 4∫(LP_t f)² dμ and Cauchy–Schwarz gives Λ′² ≤ ΛΛ″."
+          },
+          {
+            "id": "P427",
+            "locator": "Proposition 4.2.7 (Bounded perturbation), p. 185",
+            "label": "Bounded perturbation",
+            "statement": "If (E, μ, Γ) satisfies P(C) and μ₁ is a probability measure with density h with respect to μ such that 1/b ≤ h ≤ b for some b > 0, then μ₁ satisfies P(b³C) with respect to Γ.",
+            "uses": [
+              "D421"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": "Proof via the duplication formula (4.2.4), Var_ν(f) = ½∬(f(x) − f(y))² dν(x)dν(y). The text adds that Lemma 5.1.7 improves b³ to b², and to e^{osc(k)} when h = e^k. The preceding unnumbered observation (Γ ≤ aΓ₁ and P(C) for Γ give P(aC) for Γ₁) is recorded here."
+          },
+          {
+            "id": "P431",
+            "locator": "Proposition 4.3.1 (Stability under products), p. 185",
+            "label": "Tensorization of Poincaré inequalities",
+            "statement": "If (E₁, μ₁, Γ₁) and (E₂, μ₂, Γ₂) satisfy Poincaré inequalities with constants C₁ and C₂, then the product Markov Triple (E₁ × E₂, μ₁ ⊗ μ₂, Γ₁ ⊕ Γ₂) satisfies a Poincaré inequality with constant max(C₁, C₂).",
+            "uses": [
+              "D421",
+              "L432"
+            ],
+            "relation": "partial",
+            "declarations": [
+              {
+                "name": "FunctionalInequalities.Poincare.SmoothTest.Holds.prod",
+                "source": "formalization/FunctionalInequalities/Poincare/Product/Tensorization.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Poincare.SmoothTest.constant_prod_le",
+                "source": "formalization/FunctionalInequalities/Poincare/Product/Tensorization.lean"
+              }
+            ],
+            "note": "Product Dirichlet form E(f) = ∫E₁(f) dμ₂ + ∫E₂(f) dμ₁ and the variance decomposition Var(f) = Var_{μ₁}(g) + ∫∫(f − g)² dμ₂ dμ₁ with g = ∫f dμ₂. Exact constant max(C₁, C₂), but for the Euclidean carré du champ on Hilbert spaces and smooth tests rather than general Markov Triples; finite products and the reverse bound are proved separately (constant_pi_eq, constant_prod_eq)."
+          },
+          {
+            "id": "L432",
+            "locator": "Lemma 4.3.2, p. 186",
+            "label": "Partial integration and Dirichlet energy",
+            "statement": "If f(x₁, x₂) is measurable in x₂ and f(·, x₂) ∈ D(E₁) for every x₂ ∈ E₂, then g(x₁) = ∫ f(x₁, x₂) dμ₂(x₂) lies in D(E₁) and E₁(g) ≤ ∫ E₁(f(·, x₂)) dμ₂(x₂).",
+            "uses": [],
+            "relation": "same",
+            "declarations": [],
+            "note": "Only sketched in the book: convexity of the Dirichlet form and Jensen's inequality, 'under suitable integrability properties'."
+          },
+          {
+            "id": "R433",
+            "locator": "Remark 4.3.3, p. 187",
+            "label": "Tensorization via heat kernels",
+            "statement": "With ν_t(dx, dy) = p_t(x, dy)μ(dx), ∬(f(x) − f(y))² dν_t = 2(∫f² dμ − ∫f P_t f dμ), and P(C) is equivalent to ∬(f(x) − f(y))² dν_t ≥ (1 − e^{−t/C}) ∬(f(x) − f(y))² dμ(x)dμ(y) for all t ≥ 0; this condition is stable under products since ν_t = ν_t¹ ⊗ ν_t², giving another proof of Proposition 4.3.1.",
+            "uses": [
+              "T425"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": "The following paragraph notes that Proposition 4.3.1 recovers Proposition 4.1.1 from (4.1.1)."
+          },
+          {
+            "id": "P441",
+            "locator": "Proposition 4.4.1, p. 188",
+            "label": "Exponential measure on half-line",
+            "statement": "For dμ(x) = e^{−x}dx on ℝ₊ and every f in the Dirichlet domain for Γ(f) = f′², Var_μ(f) ≤ 4 ∫_{ℝ₊} f′² dμ.",
+            "uses": [],
+            "relation": "same",
+            "declarations": [],
+            "note": "Proof: reduce to f(0) = 0, then ∫f² dμ = 2∫ff′ dμ and Cauchy–Schwarz. The book notes that this Dirichlet domain generates a sub-Markov semigroup (no ESA). Recorded here: the Laguerre form (4.4.1) Var_μ(f) ≤ ∫x f′² dμ, and P(4) for ½e^{−|x|}dx on ℝ (4.4.3) via h = |x|; the constant 4 is optimal (Proposition 4.4.2 with f = |x|)."
+          },
+          {
+            "id": "P442",
+            "locator": "Proposition 4.4.2 (Exponential integrability), p. 190",
+            "label": "Exponential integrability of Lipschitz functions",
+            "statement": "If μ satisfies P(C) for some C > 0, then every 1-Lipschitz f (‖Γ(f)‖_∞ ≤ 1) satisfies ∫ e^{sf} dμ < ∞ for every s < 2/√C; more precisely ∫ e^{sf} dμ ≤ e^{s∫f dμ} ∏_{ℓ≥0} (1 − Cs²/4^{ℓ+1})^{−2^ℓ} (4.4.4).",
+            "uses": [
+              "D421"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": "Proof: apply P(C) to e^{sf/2} and iterate s → s/2; integrability of Lipschitz functions by truncation. Recorded here: (4.4.5) ∫e^{s(f − ∫f dμ)} dμ ≤ (2 + s√C)/(2 − s√C), the concentration bound (4.4.6) μ(f ≥ ∫f dμ + r) ≤ 3e^{−r/(√C‖f‖_Lip)}, and its dimension-free tensorized form via Proposition 4.3.1. The bound s < 2/√C is read from the proof (1 − Cs²/4 > 0); the extracted statement is garbled."
+          },
+          {
+            "id": "R443",
+            "locator": "Remark 4.4.3, p. 190",
+            "label": "Lipschitz functions lie in D(E)",
+            "statement": "Lipschitz functions lie a priori in A or D(E); part of Proposition 4.4.2 is that they belong to L²(μ), hence to D(E), and the proof (by truncation in D(E)) adapts to A by smooth truncation.",
+            "uses": [
+              "P442"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": ""
+          },
+          {
+            "id": "P444",
+            "locator": "Proposition 4.4.4 (Contraction principle), p. 192",
+            "label": "Contraction principle",
+            "statement": "If (μ, Γ) satisfies P(C) on E and F : E → ℝ is 1-Lipschitz with respect to Γ, then the image measure μ_F of μ by F satisfies P(C) with respect to the usual carré du champ g′² on ℝ.",
+            "uses": [
+              "D421"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": "Var_{μ_F}(g) = Var_μ(g ∘ F) and Γ(g ∘ F) = g′(F)² Γ(F) ≤ g′(F)²."
+          },
+          {
+            "id": "R445",
+            "locator": "Remark 4.4.5, p. 193",
+            "label": "Concentration versus Poincaré",
+            "statement": "Exponential integrability (Proposition 4.4.2) or the tail bound (4.4.6) do not imply a Poincaré inequality in general, but under CD(0, ∞) the concentration bound (4.4.6) implies P(C′) with a proportional constant.",
+            "uses": [
+              "P442",
+              "T451",
+              "T472"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": "Forward reference to Sect. 8.7, based on the reverse local inequalities of Theorem 4.7.2; no proof in this chapter."
+          },
+          {
+            "id": "T451",
+            "locator": "Theorem 4.5.1 (Muckenhoupt's criterion), p. 194",
+            "label": "Muckenhoupt criterion",
+            "statement": "Let μ be a Borel probability measure on ℝ with Lebesgue density p and median m, and set B₊ = sup_{x>m} μ([x, ∞)) ∫_m^x dt/p(t) and B₋ = sup_{x<m} μ((−∞, x]) ∫_x^m dt/p(t). Then μ satisfies a Poincaré inequality for Γ(f) = f′² iff B = max(B₊, B₋) < ∞, and B ≤ 2C ≤ 8B where C is the Poincaré constant of μ.",
+            "uses": [
+              "L423"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": "Sufficiency (C ≤ 4B) by a weighted Cauchy–Schwarz with k = √h₊·p, proved with suprema over the smallest closed interval carrying μ (general case left to the reader); necessity (B ≤ 2C) by Lemma 4.2.3 with A = [m, ∞) and test functions ∫_m^x 1_{[m,r]}/(p + ε)."
+          },
+          {
+            "id": "P452",
+            "locator": "Proposition 4.5.2, p. 195",
+            "label": "Integrable Hardy weights suffice",
+            "statement": "If μ has density p and median m, and ∫_m^∞ h₊ p dx < ∞ and ∫_{−∞}^m h₋ p dx < ∞, where h₊(x) = ∫_m^x dt/p(t) (x ≥ m) and h₋(x) = ∫_x^m dt/p(t) (x ≤ m), then μ satisfies a Poincaré inequality with constant C = max(∫_m^∞ h₊ p dx, ∫_{−∞}^m h₋ p dx).",
+            "uses": [],
+            "relation": "same",
+            "declarations": [],
+            "note": "Proof by Cauchy–Schwarz on (f(x) − f(m))², as for Proposition 4.4.1."
+          },
+          {
+            "id": "P453",
+            "locator": "Proposition 4.5.3, p. 198",
+            "label": "Dirichlet Poincaré on an interval",
+            "statement": "For Lf = f″ + (w′/w)f′ on a bounded interval I with w smooth, w ≥ a > 0 and invariant probability dμ = w dx, there is C > 0 with ∫_I f² dμ ≤ C ∫_I f′² dμ for all smooth f compactly supported in I (4.5.1); the best constant is 1/λ₀, where −λ₀ is the lowest eigenvalue of L with Dirichlet boundary conditions.",
+            "uses": [],
+            "relation": "same",
+            "declarations": [],
+            "note": "Proof via the Friedrichs extension and the discrete spectrum (Sect. 2.6); positivity and simplicity of λ₀ are stated without proof. Diffusion (not Full) Markov Triples in Sect. 4.5.2."
+          },
+          {
+            "id": "P454",
+            "locator": "Proposition 4.5.4, p. 199",
+            "label": "Neumann Poincaré on an interval",
+            "statement": "In the setting of Proposition 4.5.3, there is C > 0 with Var_μ(f) ≤ C ∫_I f′² dμ for every smooth f on I (restriction of a smooth function on a neighbourhood of I) (4.5.2); the best constant is 1/λ₁, where −λ₁ is the first non-zero eigenvalue of L with Neumann boundary conditions.",
+            "uses": [
+              "P453"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": "As for Proposition 4.5.3 plus an approximation by functions with vanishing boundary derivatives; details left to the reader."
+          },
+          {
+            "id": "P455",
+            "locator": "Proposition 4.5.5, p. 199",
+            "label": "Sharp constants on [0, 1]",
+            "statement": "For Lf = f″ on [0, 1] with Lebesgue measure: (i) ∫f² dx ≤ π^{−2}∫f′² dx if f(0) = f(1) = 0, sharp for sin(πx); (ii) Var(f) ≤ π^{−2}∫f′² dx for all smooth f, sharp for cos(πx); (iii) Var(f) ≤ (4π²)^{−1}∫f′² dx if f(0) = f(1), sharp for a cos(2πx) + b sin(2πx) + c (Wirtinger).",
+            "uses": [],
+            "relation": "same",
+            "declarations": [],
+            "note": "(iii) by Fourier series; (i) from (iii) by odd reflection and periodization; (ii) by even reflection (the text says 'from (i)', but the even extension satisfies the periodic condition of (iii)). (i) is the Dirichlet case of Proposition 4.5.3, (ii) the Neumann case of Proposition 4.5.4."
+          },
+          {
+            "id": "R461",
+            "locator": "Remark 4.6.1, p. 201",
+            "label": "Local Poincaré equals Neumann Poincaré",
+            "statement": "On ℝⁿ (or a manifold with a measure locally equivalent to Lebesgue measure) and K compact with smooth boundary, the local Poincaré inequality (4.6.1), ∫_K (f − m_K)² dμ ≤ C_K ∫_K Γ(f) dμ, is the Poincaré inequality on K with Neumann boundary conditions; the Dirichlet-type inequality (4.10.1) on a larger L ⊃ K gives the weaker form (4.6.2).",
+            "uses": [
+              "P454"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": "Approximation argument only sketched (normal coordinates near the boundary)."
+          },
+          {
+            "id": "T462",
+            "locator": "Theorem 4.6.2 (Lyapunov's criterion), p. 202",
+            "label": "Lyapunov criterion",
+            "statement": "Let (E, μ, Γ) be a Markov Triple with μ a probability measure satisfying the completeness property (Definition 3.3.9). If J : E → [1, ∞) in A satisfies 1 ≤ −LJ/(λJ) + b1_K with λ, b > 0, where K satisfies the local Poincaré inequality (4.6.2) ∫_K (f − m_K)² dμ ≤ C_{K,L} ∫_L Γ(f) dμ for some L ⊃ K, then μ satisfies P(C) with C = 1/λ + bC_{K,L}.",
+            "uses": [],
+            "relation": "same",
+            "declarations": [],
+            "note": "Proof: −∫(LJ/J)g² dμ = ∫Γ(g²/J, J) dμ ≤ ∫Γ(g) dμ by the diffusion property and Cauchy–Schwarz (1.4.3), with m = m_K; completeness justifies the integration by parts. Examples: the Gaussian with J = 1 + |x|², the exponential law with J = e^{c|x|}."
+          },
+          {
+            "id": "T463",
+            "locator": "Theorem 4.6.3 (Kannan–Lovász–Simonovits–Bobkov Theorem), p. 203",
+            "label": "Log-concave measures satisfy Poincaré",
+            "statement": "Every log-concave probability measure dμ = e^{−W}dx on ℝⁿ (W smooth and convex) satisfies a Poincaré inequality with respect to Γ(f) = |∇f|².",
+            "uses": [
+              "T462"
+            ],
+            "relation": "partial",
+            "declarations": [
+              {
+                "name": "FunctionalInequalities.KLS.LogConcave.localSlope_constant_le_four_variance",
+                "source": "formalization/FunctionalInequalities/KLS/LogConcave/Line/SharpPoincare.lean"
+              }
+            ],
+            "note": "Proof via Theorem 4.6.2 with J = e^{c|x|} for |x| ≥ R; the key fact liminf_{|x|→∞} x·∇W/|x| > 0 for convex W with ∫e^{−W} < ∞ is left as an exercise; the dimension dependence of the constant is poor. Applied to uniform measures on convex bodies (4.6.6); the Payne–Weinberger bound C ≤ D²/π² (4.6.7) is quoted without proof. Dimension one only, with the explicit constant 4 Var; the general Rⁿ statement is not formalized."
+          },
+          {
+            "id": "P464",
+            "locator": "Proposition 4.6.4, p. 205",
+            "label": "Glueing local Poincaré constants",
+            "statement": "If K, L ⊂ E are measurable with μ(K ∩ L) > 0 and μ(K ∪ L) < ∞, then the local Poincaré constants of (4.6.1) satisfy C_{K∪L} ≤ (μ(K ∪ L)/μ(K ∩ L)) max(C_K, C_L).",
+            "uses": [
+              "L465"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": "μ need not be a probability measure; the local inequalities are assumed on a class A₁ of functions."
+          },
+          {
+            "id": "L465",
+            "locator": "Lemma 4.6.5, p. 205",
+            "label": "Mean-square glueing lemma",
+            "statement": "In a measure space with μ(K ∩ L) > 0 and μ(K ∪ L) < ∞, every measurable f with ∫_{K∪L} f² dμ < ∞ and ∫_{K∪L} f dμ = 0 satisfies (1/μ(K))(∫_K f dμ)² + (1/μ(L))(∫_L f dμ)² ≤ (1 − μ(K ∩ L)/μ(K ∪ L)) ∫_{K∪L} f² dμ.",
+            "uses": [],
+            "relation": "same",
+            "declarations": [],
+            "note": "Cauchy–Schwarz on K \\ L, L \\ K and K ∩ L; the final optimization is left as 'tedious details'."
+          },
+          {
+            "id": "R471",
+            "locator": "Remark 4.7.1, p. 209",
+            "label": "Gaussian heat kernel inequalities",
+            "statement": "Since the Brownian and Ornstein–Uhlenbeck heat kernels are Gaussian, the local inequalities (4.7.2) P_t(f²) − (P_t f)² ≤ (1 − e^{−2t})P_tΓ(f) and (4.7.4) 2tΓ(P_t f) ≤ P_t(f²) − (P_t f)² ≤ 2tP_tΓ(f) are variants of Proposition 4.1.1 with other means and variances.",
+            "uses": [
+              "P411"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": "The semigroup-interpolation proofs of (4.7.1)–(4.7.4) precede the remark; the point is the approach via commutation and Γ₂."
+          },
+          {
+            "id": "T472",
+            "locator": "Theorem 4.7.2 (Local Poincaré inequalities), p. 209",
+            "label": "Local Poincaré under CD(ρ, ∞)",
+            "statement": "For a Markov Triple with semigroup (P_t) and ρ ∈ ℝ, the following are equivalent: (i) CD(ρ, ∞); (ii) Γ(P_t f) ≤ e^{−2ρt} P_tΓ(f); (iii) P_t(f²) − (P_t f)² ≤ ((1 − e^{−2ρt})/ρ) P_tΓ(f); (iv) P_t(f²) − (P_t f)² ≥ ((e^{2ρt} − 1)/ρ) Γ(P_t f); each for all f ∈ A₀ and t ≥ 0, the constants being read as 2t when ρ = 0.",
+            "uses": [],
+            "relation": "partial",
+            "declarations": [
+              {
+                "name": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.integral_mul_weakGamma_le",
+                "source": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/GradientEstimate.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.two_mul_integral_mul_weakGamma_le",
+                "source": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/ReversePoincare.lean"
+              }
+            ],
+            "note": "(i)⇔(ii) is Corollary 3.3.19; (ii)⇒(iii),(iv) by the interpolation s ↦ P_s((P_{t−s}f)²); (iii) or (iv)⇒(i) by a second-order expansion at t = 0. Consequence (4.7.7): Γ(P_t f) ≤ ρ/(e^{2ρt} − 1) for measurable |f| ≤ 1. Assertions (ii) and (iv) at ρ = 0 only, integrated against nonnegative C_c^∞ tests, for e^{-U} with smooth convex U."
+          },
+          {
+            "id": "R473",
+            "locator": "Remark 4.7.3, p. 211",
+            "label": "Gradient bound with constant K",
+            "statement": "The implications (ii)⇒(iii),(iv) of Theorem 4.7.2 persist if Γ(P_t f) ≤ Ke^{−2ρt}P_tΓ(f) with some K ≥ 1, giving e.g. P_t(f²) − (P_t f)² ≤ (K(1 − e^{−2ρt})/ρ) P_tΓ(f); only K = 1 returns CD(ρ, ∞).",
+            "uses": [
+              "T472"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": "Relevant for hypocoercive examples (Remark 3.3.22)."
+          },
+          {
+            "id": "R474",
+            "locator": "Remark 4.7.4, p. 211",
+            "label": "Small-time characterization of CD(ρ, ∞)",
+            "statement": "Each assertion of Theorem 4.7.2 is equivalent to the existence of t₀ > 0 and c(t) = 2t − 2ρt² + o(t²) such that P_t(f²) − (P_t f)² ≤ c(t)P_tΓ(f) (respectively ≥ c(t)Γ(P_t f)) for all t ∈ (0, t₀) and f ∈ A₀.",
+            "uses": [
+              "T472"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": "Read off from the proof of Theorem 4.7.2. The book states the same c(t) for both directions; the expansion of (e^{2ρt} − 1)/ρ in (iv) is 2t + 2ρt² + o(t²), so the reverse case as printed needs review."
+          },
+          {
+            "id": "P481",
+            "locator": "Proposition 4.8.1 (Poincaré inequality under CD(ρ, ∞)), p. 212",
+            "label": "Poincaré under CD(ρ, ∞)",
+            "statement": "Under the curvature condition CD(ρ, ∞) with ρ > 0, the Markov Triple satisfies P(1/ρ): Var_μ(f) ≤ (1/ρ) E(f) for every f ∈ D(E).",
+            "uses": [
+              "T472"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": "Let t → ∞ in (4.7.5) of Theorem 4.7.2, using Theorem 3.3.23 (μ finite when ρ > 0) and ergodicity P_∞ f = ∫f dμ (Sect. 1.8). Formally the case n = ∞ of Theorem 4.8.4."
+          },
+          {
+            "id": "C482",
+            "locator": "Corollary 4.8.2, p. 212",
+            "label": "Strongly log-concave measures: P(1/ρ)",
+            "statement": "Let dμ = e^{−W}dx be a probability measure on the Borel sets of ℝⁿ, where W : ℝⁿ → ℝ is smooth with ∇∇W ≥ ρ Id for some ρ > 0. Then μ satisfies P(1/ρ): Var_μ(f) ≤ (1/ρ) ∫|∇f|² dμ.",
+            "uses": [
+              "P481"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": "Proof: L = Δ − ∇W·∇ with Γ(f) = |∇f|² (Sect. 1.11.3) and Γ₂(f) = |∇∇f|² + ∇∇W(∇f, ∇f) ≥ ρΓ(f) ((1.16.5)), so CD(ρ, ∞) holds and Proposition 4.8.1 applies. Also a consequence of Theorem 4.9.1. The weighted Riemannian analogue under Ric_g + ∇∇W ≥ ρg is stated without a separate proof.",
+            "main": true
+          },
+          {
+            "id": "P483",
+            "locator": "Proposition 4.8.3, p. 214",
+            "label": "Dual form of Poincaré",
+            "statement": "A Markov Triple satisfies P(C) for some C > 0 iff E(f) = ∫Γ(f) dμ ≤ C ∫(Lf)² dμ for every f ∈ D(L) (4.8.2).",
+            "uses": [
+              "D421"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": "⇒ by Cauchy–Schwarz ∫f(−Lf) dμ ≤ Var_μ(f)^{1/2}‖Lf‖₂ and P(C); ⇐ via Λ(t) = ∫(P_t f)² dμ with Λ″ ≥ −(2/C)Λ′, as in the proof of Lemma 4.2.6. Under ESA, (4.8.2) is equivalent to E(f) ≤ C∫Γ₂(f) dμ on A₀ (4.8.3)."
+          },
+          {
+            "id": "T484",
+            "locator": "Theorem 4.8.4 (Poincaré inequality under CD(ρ, n)), p. 215",
+            "label": "Poincaré under CD(ρ, n)",
+            "statement": "Under the curvature-dimension condition CD(ρ, n) with ρ > 0 and n > 1, the Markov Triple satisfies P(C) with C = (n − 1)/(ρn).",
+            "uses": [
+              "P483"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": "Integrate CD(ρ, n) and use ∫Γ₂(f) dμ = ∫(Lf)² dμ to get (4.8.2) with C = (n − 1)/(ρn). Includes the Lichnerowicz bound λ₁ ≥ ρn/(n − 1) (4.8.1), sharp on the sphere Sⁿ (CD(n − 1, n))."
+          },
+          {
+            "id": "T491",
+            "locator": "Theorem 4.9.1 (Brascamp–Lieb inequality), p. 215",
+            "label": "Brascamp–Lieb inequality",
+            "statement": "For a probability measure dμ = e^{−W}dx on ℝⁿ with W smooth and strictly convex, Var_μ(f) ≤ ∫(∇∇W)^{−1}(∇f, ∇f) dμ for every smooth compactly supported f.",
+            "uses": [
+              "L492"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": "Proof only sketched: vector-valued operator on H = L²(μ)ⁿ, commutation ∇Lf = (L − ∇∇W)∇f (4.9.2), Lemma 4.9.2 with A₁ = ε + M and A₂ = ε + M − L, g_ε = (ε − L)^{−1/2}f and ε → 0. Improves Corollary 4.8.2 when ∇∇W ≥ ρ Id."
+          },
+          {
+            "id": "L492",
+            "locator": "Lemma 4.9.2, p. 216",
+            "label": "Operator monotonicity of inversion",
+            "statement": "Let A₁, A₂ be symmetric operators on a common dense domain D₀ of a Hilbert space H with ε⟨u, u⟩ ≤ ⟨A₁u, u⟩ ≤ ⟨A₂u, u⟩ for some ε > 0 and all u ∈ D₀. Then the Friedrichs extensions have bounded inverses of norm at most 1/ε, and ⟨A₂^{−1}u, u⟩ ≤ ⟨A₁^{−1}u, u⟩ for every u ∈ H.",
+            "uses": [],
+            "relation": "same",
+            "declarations": [],
+            "note": "Reduce to u = A₂v with v ∈ D(A₂) ⊂ D(A₁); with B = A₂ − A₁ ≥ 0 the claim is ⟨A₁^{−1}Bv, Bv⟩ + ⟨Bv, v⟩ ≥ 0."
+          },
+          {
+            "id": "T493",
+            "locator": "Theorem 4.9.3, p. 218",
+            "label": "Riemannian Brascamp–Lieb inequality",
+            "statement": "On a weighted Riemannian manifold with L = Δ_g − ∇W·∇ and reversible probability μ with density e^{−W}, if Ric(L) = Ric_g + ∇∇W is positive definite everywhere, then Var_μ(f) ≤ ∫ Ric(L)^{−1}(∇f, ∇f) dμ for every smooth compactly supported f.",
+            "uses": [
+              "T491",
+              "L492"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": "Proof only indicated: as for Theorem 4.9.1 with 1-forms and the commutation dLf = (L − Ric(L))df. Recorded here: the consequence (4.9.4) Var_μ(f) ≤ ∫|∇f|²/ρ(x) dμ and the Feynman–Kac (Bismut) representation (4.9.5)–(4.9.6) of Sect. 4.9.2, which uses Proposition 3.2.5."
+          },
+          {
+            "id": "R4101",
+            "locator": "Remark 4.10.1, p. 221",
+            "label": "Dirichlet eigenvalue and exit time",
+            "statement": "For the Laplacian on a relatively compact open O ⊂ ℝⁿ with Dirichlet conditions and the Brownian exit time T, E_x(e^{λT}) < ∞ for λ < λ₀ and E_x(e^{λT}) = ∞ for λ ≥ λ₀, where λ₀ is the bottom of the spectrum of −Δ with Dirichlet conditions.",
+            "uses": [],
+            "relation": "same",
+            "declarations": [],
+            "note": "Heuristic martingale argument with the positive ground state; not a complete proof. The spectral reading of (4.10.1) ∫f² dμ ≤ C E(f), with best constant 1/λ₀, is recorded here."
+          },
+          {
+            "id": "P4102",
+            "locator": "Proposition 4.10.2, p. 222",
+            "label": "Hyperbolic space spectral bound",
+            "statement": "On hyperbolic space Hⁿ (n ≥ 2) in the upper half-space model with dμ = x_n^{−n}dx and Γ(f) = x_n²|∇f|², every smooth compactly supported f satisfies ∫ f² dμ ≤ (4/(n − 1)²) E(f).",
+            "uses": [],
+            "relation": "same",
+            "declarations": [],
+            "note": "Proof as for Proposition 4.4.1, from L x_n = −(n − 2)x_n, Γ(x_n) = x_n² and Cauchy–Schwarz (the written argument divides by n − 2). Optimality of 4/(n − 1)² is asserted ('one may check')."
+          },
+          {
+            "id": "P4103",
+            "locator": "Proposition 4.10.3, p. 223",
+            "label": "Essential spectrum and finite-rank defect",
+            "statement": "If σ_ess(−L) ⊂ [σ₀, ∞) with σ₀ > 0, then for every r > 1/σ₀ there is a finite-dimensional subspace F ⊂ L²(μ) with ∫f² dμ ≤ r E(f) + ∫(Π_F f)² dμ for all f ∈ D(E) (4.10.2), Π_F the orthogonal projection onto F; conversely, if (4.10.2) holds for some r > 0 and some finite-dimensional F, then σ_ess(−L) ⊂ [1/r, ∞).",
+            "uses": [],
+            "relation": "same",
+            "declarations": [],
+            "note": "Converse by Weyl's criterion (Theorem A.4.4) and weak convergence of orthonormal sequences. Minimal Markov triple setting (Sect. 3.1)."
+          },
+          {
+            "id": "P4104",
+            "locator": "Proposition 4.10.4, p. 224",
+            "label": "Discrete spectrum gives weighted Nash",
+            "statement": "If σ_ess(−L) = ∅, there exist a positive w ∈ L²(μ) and β : (0, ∞) → (0, ∞) with ∫f² dμ ≤ r E(f) + β(r)(∫|f|w dμ)² for all r > 0 and f ∈ D(E) (4.10.3); equivalently, there are a positive w ∈ L²(μ) and an increasing concave Φ : (0, ∞) → (0, ∞) with Φ(r)/r → 0 as r → ∞ such that ∫f² dμ ≤ Φ(E(f)) whenever ∫|f|w dμ = 1 (4.10.4).",
+            "uses": [
+              "P4103"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": "w = Σα_k|f_k| over an eigenbasis, β(r) = n(r)α_{n(r)}^{−2}, Φ(r) = inf_{s>0}(rs + β(s)). Generalized weighted Nash inequalities, Sect. 7.4.3."
+          },
+          {
+            "id": "T4105",
+            "locator": "Theorem 4.10.5, p. 225",
+            "label": "Weighted Nash with kernel: σ_ess bound",
+            "statement": "If for some r > 0 and positive w ∈ L²(μ), ∫f² dμ ≤ r E(f) + (∫|f|w dμ)² for all f ∈ D(E) (4.10.5), and P_t has an L²-density kernel for some t > 0, then σ_ess(−L) ⊂ [1/r, ∞). In particular, if (4.10.3) holds for every r > 0 with some β(r) and P_t has an L²-density kernel for some t > 0, then the spectrum of −L is discrete.",
+            "uses": [
+              "P4103"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": "Due to F.-Y. Wang. Compactness of the closure of P_t(G_w), G_w = {|g| ≤ w}, plus Weyl's criterion as in Proposition 4.10.3. The kernel hypothesis may be replaced by operator-norm approximation by kernel operators."
+          },
+          {
+            "id": "D4106",
+            "locator": "Definition 4.10.6 (Persson operator), p. 227",
+            "label": "Persson operator",
+            "statement": "Given an increasing sequence (A_k) of measurable sets with ∪A_k = E and μ(A_k) < ∞, L is Persson with respect to (A_k) if λ_ess = inf σ_ess(−L) equals sup_k λ_k, where λ_k = inf{E(f) : f ∈ D(E), f = 0 on A_k, ∫f² dμ = 1}.",
+            "uses": [],
+            "relation": "same",
+            "declarations": [],
+            "note": "The sequence (λ_k) is increasing; for a Persson operator, λ_k → ∞ gives a discrete spectrum."
+          },
+          {
+            "id": "P4107",
+            "locator": "Proposition 4.10.7, p. 227",
+            "label": "Criterion for Persson operators",
+            "statement": "If for each k there is ψ_k ∈ D(E) with values in [0, 1], ψ_k = 0 on A_k, ψ_k = 1 on A_{k+1}^c and Γ(ψ_k) bounded, and the embedding H¹(A_k) → L²(A_k, μ) is compact for each k, then L is Persson with respect to (A_k).",
+            "uses": [
+              "D4106"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": "λ_ess ≤ sup λ_k holds for every exhaustion; the reverse inequality uses Weyl's criterion (Theorem A.4.4), compactness and the cutoffs ψ_k."
+          },
+          {
+            "id": "T4108",
+            "locator": "Theorem 4.10.8, p. 229",
+            "label": "Persson: discreteness iff weighted Nash",
+            "statement": "If L is Persson, the spectrum of −L is discrete iff there is a positive w ∈ L²(μ) such that for every r > 0 some β(r) > 0 gives ∫f² dμ ≤ r E(f) + β(r)(∫|f|w dμ)² for all f ∈ D(E).",
+            "uses": [
+              "D4106",
+              "P4104"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": "⇐: choose k(r) with β(r)∫_{A_k^c} w² dμ ≤ ½ to get λ_{k(r)} ≥ 1/(2r); ⇒ is Proposition 4.10.4."
+          },
+          {
+            "id": "C4109",
+            "locator": "Corollary 4.10.9, p. 229",
+            "label": "Discrete spectrum criterion on ℝⁿ",
+            "statement": "For L = Δ − ∇W·∇ on ℝⁿ (dμ = e^{−W}dx) with lim_{|x|→∞}(−ΔW(x) + ½|∇W|²(x)) = ∞, the spectrum of −L is discrete; the same holds on an open O ⊂ ℝⁿ if L is essentially self-adjoint on C_c^∞(O) and the limit holds at the boundary of O.",
+            "uses": [
+              "D4106",
+              "P4107"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": "The Laplacian symbols are lost in the extracted text and are restored from the proof (R = −½ΔW + ¼|∇W|²). Proof: balls A_k, Proposition 4.10.7 with Rellich–Kondrachov (Theorem 6.4.3), ground-state transform f = g e^{W/2}; ESA on ℝⁿ by Corollary 3.2.2. The open-set proof uses an exhaustion {J ≤ k} not defined in the text. Example: c_α e^{−|x|^α}dx, α > 1, has discrete spectrum."
+          }
+        ]
+      }
     },
     {
       "id": "Klartag2014Moment",

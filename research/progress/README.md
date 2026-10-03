@@ -379,6 +379,31 @@ flowchart LR
     class AGS2013_more lemma_more;
 ```
 
+### Bakry–Gentil–Ledoux (Springer 2014, Grundlehren der mathematischen Wissenschaften 348 (DOI 10.1007/978-3-319-00227-9), Chapter 4)
+
+46 statements: 5 ◐, 41 ○. [Full map](LITERATURE.md#bgl2014-lemma-map).
+
+```mermaid
+flowchart LR
+    BGL2014_P411["◐ Proposition 4.1.1 (Poincaré inequality for the Gaussian measure), p. 180<br/>Gaussian Poincaré inequality"]
+    BGL2014_T425["◐ Theorem 4.2.5 (Exponential decay in variance), p. 183<br/>Variance decay equivalent to Poincaré"]
+    BGL2014_P431["◐ Proposition 4.3.1 (Stability under products), p. 185<br/>Tensorization of Poincaré inequalities"]
+    BGL2014_T463["◐ Theorem 4.6.3 (Kannan–Lovász–Simonovits–Bobkov Theorem), p. 203<br/>Log-concave measures satisfy Poincaré"]
+    BGL2014_T472["◐ Theorem 4.7.2 (Local Poincaré inequalities), p. 209<br/>Local Poincaré under CD(ρ, ∞)"]
+    BGL2014_P481["○ Proposition 4.8.1 (Poincaré inequality under CD(ρ, ∞)), p. 212<br/>Poincaré under CD(ρ, ∞)"]
+    BGL2014_C482["○ Corollary 4.8.2, p. 212<br/>Strongly log-concave measures: P(1/ρ)"]
+    BGL2014_T472 --> BGL2014_P481
+    BGL2014_P481 --> BGL2014_C482
+    BGL2014_more["+39 further statements in the paper register"]
+    classDef lemma_partial fill:#fff3df,stroke:#c88719,color:#66420d;
+    class BGL2014_P411,BGL2014_T425,BGL2014_P431,BGL2014_T463,BGL2014_T472 lemma_partial;
+    classDef lemma_pending fill:#fee2e2,stroke:#dc2626,color:#991b1b;
+    class BGL2014_P481,BGL2014_C482 lemma_pending;
+    style BGL2014_C482 stroke-width:3px
+    classDef lemma_more fill:#f8fafc,stroke:#94a3b8,color:#334155,stroke-dasharray:4 3;
+    class BGL2014_more lemma_more;
+```
+
 ### Klartag (arXiv:1309.2767v1)
 
 26 statements: 26 ○. [Full map](LITERATURE.md#klartag2014moment-lemma-map).
