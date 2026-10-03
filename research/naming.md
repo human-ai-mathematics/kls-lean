@@ -202,6 +202,14 @@ arbitrary-weight scope. The final cleanup also migrates the construction, law an
 with an explicit old/new name map. Parameter order and mathematical scope are preserved. See the [layout record](decisions/2026-09-20-semigroup-layout.md) and
 [complete migration map](api-migration/2026-09-20-semigroup-layout-map.json).
 
+The curvature layer (2026-10-03) keeps the same split. Pointwise and integrated `Γ₂ ≥ ρ Γ` for a
+potential with `∇∇U ≥ ρ` live in `BakryEmery/Curvature.lean` (`mul_gamma_le_gammaTwo`,
+`integral_gammaTwo_eq`, `mul_integral_gamma_le`). Abstract energy decay under
+`ρ ‖T y‖² ≤ ‖A y‖²` lives in `Semigroup/Generated/Curvature.lean` (`norm_map_apply_sq_le_exp`,
+`norm_sq_sub_norm_apply_sq_le`). The heat-semigroup specialization lives in
+`KLS/LogConcave/HeatSemigroup/Curvature.lean`. The curvature hypothesis is always written
+`∀ x v, ρ * ‖v‖ ^ 2 ≤ bilinearIteratedFDerivTwo ℝ U x v v`, never as a new definition.
+
 The completed family migration and candidate decisions are recorded in
 [the final cleanup](decisions/2026-09-20-final-cleanup.md), with the
 [48-name API map](api-migration/2026-09-20-final-cleanup-map.json). Generic resolvent, Yosida

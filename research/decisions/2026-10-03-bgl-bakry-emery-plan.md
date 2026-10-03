@@ -58,3 +58,34 @@ Everything in `KLS/LogConcave/HeatSemigroup/` and `Analysis/BakryEmery/` is at c
   principle matches were rejected: coordinate projections and scalings are not Proposition 4.4.4.
   Extraction uncertainties are flagged in the item notes (Proposition 4.4.2, Remarks 4.2.4 and 4.7.4,
   Proposition 4.5.5, Corollary 4.10.9). All 24 register diagrams render (Mermaid 11).
+- Driver finding: the proof driver compared only theorem headers. During this block the worker
+  replaced the section variable `(m : Measure E) [m.IsAddHaarMeasure]` with
+  `{m : Measure E} [IsProbabilityMeasure m]`, which would have made the integrated statements
+  vacuous for a Haar measure. Claude restored the line; the two helper proofs accepted under it
+  compile unchanged with the original line. The driver now rejects any change to
+  `variable`/`omit`/`include`/`namespace`/`section` lines.
+- Audit of the modules committed on 2026-10-03 for the same issue. Extra directives found:
+  `set_option maxHeartbeats 800000 in` (`Analysis/MatrixTrace.lean`) and two `open` lines
+  (`Analysis/Majorization.lean`), both harmless. The worker also added `include d` in
+  `KLS/LogConcave/Line/DensityBound.lean` (applies to `mem_interior_support_of_measureReal_Ioi`) and
+  in `KLS/LogConcave/Line/CheegerVariance.lean` (applies to `measure_Iio_eq_ofReal_cdf`,
+  `thickening_Iic_quotient_eq` and `LineDensity.inv_minkowskiConstant_sq_le_three_mul_evariance`).
+  These helpers are in the `LineDensity` namespace, and Claude's statements omitted the density
+  `d`; without it they are false (two atoms). Their docstrings already describe laws with a
+  density, so `include d` repairs Claude's statements rather than changing the intended meaning. The
+  paper-level theorems all take `d` (or `LogConcave` plus nonempty interior) explicitly, and the
+  lemma-map relations are unchanged.
+- Step 2 done: `Analysis/BakryEmery/Curvature.lean` (8 statements by Claude, 4 of them split out
+  after failed rounds). `∇∇U ≥ ρ ≥ 0` gives convexity; pointwise `ρ Γ(f) ≤ Γ₂(f)`; for
+  `μ = m.tilted (-U)` and compactly supported `C³` functions `f`, `∫ Γ₂(f) dμ = ∫ (ℒf)² dμ` and
+  `ρ ∫ Γ(f) dμ ≤ ∫ (ℒf)² dμ`. Proofs by the GPT worker. Claude restored a section variable the
+  worker had changed (see above), one docstring, and added three `omit … in` lines for unused
+  instances.
+- Step 4, abstract part, done: `Analysis/Semigroup/Generated/Curvature.lean` (8 statements by
+  Claude). For `T` closed and densely defined with `ρ ‖T y‖² ≤ ‖A y‖²` on `D(A)`:
+  `‖T (P_t f)‖² ≤ e^{-2ρt} ‖T f‖²` on `D(T)`, and, for `ρ > 0`,
+  `‖f‖² - ‖P_t f‖² ≤ (1 - e^{-2ρt})/ρ · ‖T f‖²`. The Grönwall and derivative steps were split out
+  after failed rounds. On `ℝ` the worker needed the `HasDerivAt.fun_mul`/`fun_neg` forms; the `mul`
+  and `neg` forms with `simpa`/`convert` hit an instance mismatch. Claude added two missing
+  Mathlib imports to the statement file, removed a redundant nested `section` that repeated the
+  same variables, and removed a dead `ring`.

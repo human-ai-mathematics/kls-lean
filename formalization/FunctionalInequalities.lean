@@ -19,6 +19,7 @@ import FunctionalInequalities.Analysis.Semigroup.Generated.Domain
 import FunctionalInequalities.Analysis.Semigroup.Generated.FormDomain
 import FunctionalInequalities.Analysis.Semigroup.Generated.Smoothing
 import FunctionalInequalities.Analysis.Semigroup.Generated.TimeDerivative
+import FunctionalInequalities.Analysis.Semigroup.Generated.Curvature
 import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Domain
 import FunctionalInequalities.Poincare.SmoothTest.Basic
 import FunctionalInequalities.Poincare.Foundation
@@ -108,6 +109,7 @@ import FunctionalInequalities.KLS.LogConcave.WeightedGradient.Energy
 import FunctionalInequalities.KLS.LogConcave.WeightedGradient.Poincare
 import FunctionalInequalities.Analysis.BakryEmery.Calculus
 import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts
+import FunctionalInequalities.Analysis.BakryEmery.Curvature
 import FunctionalInequalities.Analysis.BakryEmery.Gamma
 import FunctionalInequalities.Analysis.BakryEmery.Bochner
 import FunctionalInequalities.Analysis.Semigroup.AdjointClosure
