@@ -20,6 +20,7 @@ import FunctionalInequalities.Analysis.Semigroup.Generated.FormDomain
 import FunctionalInequalities.Analysis.Semigroup.Generated.Smoothing
 import FunctionalInequalities.Analysis.Semigroup.Generated.TimeDerivative
 import FunctionalInequalities.Analysis.Semigroup.Generated.Curvature
+import FunctionalInequalities.Analysis.Semigroup.Generated.Convergence
 import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Domain
 import FunctionalInequalities.Poincare.SmoothTest.Basic
 import FunctionalInequalities.Poincare.Foundation
@@ -81,6 +82,7 @@ import FunctionalInequalities.KLS.Geometry.Cheeger.BuserProfile
 import FunctionalInequalities.Energy.Euclidean.Slope.Comparison
 import FunctionalInequalities.Energy.Euclidean.Slope.Recovery
 import FunctionalInequalities.Energy.Euclidean.Slope.Density
+import FunctionalInequalities.Energy.Euclidean.ZeroGradient
 import FunctionalInequalities.Energy.Cheeger.Identification
 import FunctionalInequalities.KLS.LogConcave.Line.Buser
 import FunctionalInequalities.KLS.LogConcave.Line.DensityBound
@@ -123,6 +125,8 @@ import FunctionalInequalities.L2.BoundedMultiplier
 import FunctionalInequalities.L2.PositiveMap
 import FunctionalInequalities.L2.Composition
 import FunctionalInequalities.KLS.LogConcave.WeightedGradient.Multiplier
+import FunctionalInequalities.KLS.LogConcave.WeightedGradient.Kernel
+import FunctionalInequalities.KLS.LogConcave.Density.Tilted
 import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.OperatorCore
 import FunctionalInequalities.Analysis.Mollification
 import FunctionalInequalities.Analysis.MatrixTrace

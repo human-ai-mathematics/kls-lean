@@ -106,6 +106,10 @@ CERTIFICATES: dict[str, tuple[str, str]] = {
         "thm:relaxed-minkowski-content-perimeter",
         "Solutions.ThmRelaxedMinkowskiContentPerimeter.certificate",
     ),
+    "thm:bakry-emery-poincare": (
+        "thm:bakry-emery-poincare",
+        "Solutions.ThmBakryEmeryPoincare.certificate",
+    ),
     "lem:relative-perimeter-cheeger-infimum": (
         "lem:relative-perimeter-cheeger-infimum",
         "Solutions.LemRelativePerimeterCheegerInfimum.certificate",

@@ -2468,7 +2468,7 @@
       "url": "https://link.springer.com/book/10.1007/978-3-319-00227-9",
       "locator": "Corollary 4.8.2 (Poincaré P(1/ρ) for e^{-W} dx with ∇∇W ≥ ρ Id); Propositions 4.1.1 and 4.3.1 as background",
       "result": "Tensorization and Gaussian functional inequalities within the diffusion/Dirichlet-form framework.",
-      "remaining": "The full diffusion, semigroup and Γ-calculus theory is not covered by our selected results.",
+      "remaining": "Corollary 4.8.2 is certified in a reviewed stronger form (thm:bakry-emery-poincare): C² potential, any normalization, any finite-dimensional real inner product space, through the semigroup route in the Euclidean heat model. The general Markov-triple, diffusion and Γ-calculus framework of the book is not formalized: Proposition 4.8.1 under CD(ρ, ∞) stays partial, and CD(ρ, n), Theorem 4.8.4, Riemannian versions and log-Sobolev inequalities are not covered. Coverage refers to the selected Corollary 4.8.2 only.",
       "local_results": [
         {
           "node": "cert:binary-tensorization",
@@ -2481,12 +2481,16 @@
         {
           "node": "cert:gaussian-one-dimensional",
           "scope": "Exact one-dimensional Gaussian constant"
+        },
+        {
+          "node": "thm:bakry-emery-poincare",
+          "scope": "Corollary 4.8.2 in a reviewed stronger form: e^{-W} dx with W ∈ C², ∇∇W ≥ ρ Id, on any finite-dimensional real inner product space"
         }
       ],
       "lemma_map": {
         "source_version": "Springer 2014, Grundlehren der mathematischen Wissenschaften 348 (DOI 10.1007/978-3-319-00227-9), Chapter 4",
         "source_url": "https://link.springer.com/book/10.1007/978-3-319-00227-9",
-        "reviewed_on": "2026-10-03",
+        "reviewed_on": "2026-10-04",
         "standing_assumptions": "Unless stated otherwise, the Full Markov Triple (E, μ, Γ) of Sect. 3.4 (called a Markov Triple): state space E, invariant reversible measure μ (a probability measure wherever a Poincaré inequality is stated), carré du champ Γ on an algebra A₀ of bounded measurable functions (smooth compactly supported functions in examples) with extended algebra A ⊃ A₀ for the Γ-calculus, Dirichlet form E(f) = ∫Γ(f) dμ with domain D(E) (A₀ dense in it), diffusion generator L with domain D(L), Markov semigroup P_t = e^{tL} with kernels p_t(x, dy), and Γ₂(f) = ½(LΓ(f) − 2Γ(f, Lf)). Var_μ(f) = ∫f² dμ − (∫f dμ)²; P(C) means Var_μ(f) ≤ C E(f) for f ∈ D(E) (Definition 4.2.1); CD(ρ, n) means Γ₂(f) ≥ ρΓ(f) + (Lf)²/n on A₀ (Definition 3.3.14), with CD(ρ, ∞) for n = ∞. Sect. 4.5.2 uses Diffusion Markov Triples, Sect. 4.6 allows infinite μ for local inequalities, Sect. 4.7 needs no invariant probability, and Sects. 4.10.1–4.10.2 use the minimal triple of Sect. 3.1. Repository counterparts (not identified with these notions): Poincare.SmoothTest.constant and Poincare.LocalSlope.Intrinsic.constant are ENNReal optimal constants over smooth L² finite-energy (resp. locally Lipschitz local-slope) tests with Γ(f) = |∇f|² on finite-dimensional real inner product spaces, and no Dirichlet-domain equivalence is asserted; the heat semigroup model in formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup takes a full-dimensional log-concave law ν = m.tilted (−U) with smooth convex potential U, the closed weighted gradient T̄ and P_t = exp(−tT̄†T̄), whose generator is ℒf = Δf − ⟨∇U, ∇f⟩ on C_c^∞.",
         "omitted": "This map covers Chapter 4 only; Chapters 1–3, 5–9, the appendices and the Notes and References of Sect. 4.11 are out of scope. All 46 numbered statements of Chapter 4 are listed. No numbered display or unnumbered claim is listed as a separate item; each is recorded in the note of the statement it follows from or accompanies: (4.1.1) with Proposition 4.1.1; (4.2.1) with Definition 4.2.1; (4.2.2)–(4.2.3) with Theorem 4.2.5; (4.2.4) and the Γ ≤ aΓ₁ comparison with Proposition 4.2.7; (4.4.1) and (4.4.3) with Proposition 4.4.1; (4.4.4)–(4.4.6) and the tensorized deviation bound with Proposition 4.4.2; (4.5.1)–(4.5.5) with Propositions 4.5.3–4.5.5; (4.6.1)–(4.6.5) with Remark 4.6.1, Theorem 4.6.2 and Proposition 4.6.4; (4.6.6)–(4.6.7) (Payne–Weinberger, quoted) with Theorem 4.6.3; (4.7.1)–(4.7.4) with Remark 4.7.1; (4.7.5)–(4.7.7) with Theorem 4.7.2; the Γ₂ formula for e^{−W}dx with Corollary 4.8.2; (4.8.1) (Lichnerowicz; Obata quoted) with Theorem 4.8.4; (4.8.2)–(4.8.3) with Proposition 4.8.3; (4.9.1)–(4.9.3) with Lemma 4.9.2 and Theorem 4.9.1; (4.9.4)–(4.9.6) with Theorem 4.9.3; (4.10.1) with Remark 4.10.1; (4.10.2)–(4.10.6) with Propositions 4.10.3–4.10.4 and Theorem 4.10.5; the example c_α e^{−|x|^α} with Corollary 4.10.9. Page numbers are the printed pages where each statement begins.",
         "items": [
@@ -2886,9 +2890,13 @@
               {
                 "name": "FunctionalInequalities.KLS.LogConcave.literatureConstant_le_inv_of_tendsto",
                 "source": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Curvature.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.LogConcave.norm_center_sq_le_inv_mul",
+                "source": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Curvature.lean"
               }
             ],
-            "note": "Let t → ∞ in (4.7.5) of Theorem 4.7.2, using Theorem 3.3.23 (μ finite when ρ > 0) and ergodicity P_∞ f = ∫f dμ (Sect. 1.8). Formally the case n = ∞ of Theorem 4.8.4. The semigroup argument is formalized abstractly (finite-time bound ‖f‖² − ‖P_t f‖² ≤ (1 − e^{-2ρt})/ρ ‖Tf‖² under ρ‖Ty‖² ≤ ‖Ay‖²) and for the Euclidean model with ergodicity assumed; no general Markov-Triple CD(ρ, ∞) framework."
+            "note": "Let t → ∞ in (4.7.5) of Theorem 4.7.2, using Theorem 3.3.23 (μ finite when ρ > 0) and ergodicity P_∞ f = ∫f dμ (Sect. 1.8). Formally the case n = ∞ of Theorem 4.8.4. The semigroup argument is formalized abstractly (finite-time bound ‖f‖² − ‖P_t f‖² ≤ (1 − e^{-2ρt})/ρ ‖Tf‖² under ρ‖Ty‖² ≤ ‖Ay‖²) and for the Euclidean heat model, where ergodicity is now proved (2026-10-04: tendsto_norm_center_apply) and P(1/ρ) holds on the whole form domain (norm_center_sq_le_inv_mul); no general Markov-Triple CD(ρ, ∞) framework, so the relation stays partial."
           },
           {
             "id": "C482",
@@ -2898,14 +2906,26 @@
             "uses": [
               "P481"
             ],
-            "relation": "partial",
+            "relation": "stronger",
             "declarations": [
               {
-                "name": "FunctionalInequalities.KLS.LogConcave.literatureConstant_le_inv_of_tendsto",
+                "name": "Solutions.ThmBakryEmeryPoincare.certificate",
+                "source": "solutions/ThmBakryEmeryPoincare.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.LogConcave.literatureConstant_le_inv_of_eq_tilted",
+                "source": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Curvature.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.LogConcave.smoothTest_holds_inv_of_eq_tilted",
+                "source": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Curvature.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.LogConcave.norm_center_sq_le_inv_mul",
                 "source": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Curvature.lean"
               }
             ],
-            "note": "Proof: L = Δ − ∇W·∇ with Γ(f) = |∇f|² (Sect. 1.11.3) and Γ₂(f) = |∇∇f|² + ∇∇W(∇f, ∇f) ≥ ρΓ(f) ((1.16.5)), so CD(ρ, ∞) holds and Proposition 4.8.1 applies. Also a consequence of Theorem 4.9.1. The weighted Riemannian analogue under Ric_g + ∇∇W ≥ ρg is stated without a separate proof. Formalized only under an explicit ergodicity hypothesis (Var(P_t u) → 0 for u in the form domain), for e^{-U} dm on a finite-dimensional real inner product space with C² potential and Hessian ≥ ρ > 0, as C_P(ν) ≤ 1/ρ for the literature Poincaré constant. Ergodicity (T̄h = 0 ⇒ h constant) is open, so the corollary itself is not proved.",
+            "note": "Proof: L = Δ − ∇W·∇ with Γ(f) = |∇f|² (Sect. 1.11.3) and Γ₂(f) = |∇∇f|² + ∇∇W(∇f, ∇f) ≥ ρΓ(f) ((1.16.5)), so CD(ρ, ∞) holds and Proposition 4.8.1 applies. Also a consequence of Theorem 4.9.1. The weighted Riemannian analogue under Ric_g + ∇∇W ≥ ρg is stated without a separate proof. Local Lean proof (2026-10-04), a reviewed stronger statement: for ν = volume.tilted (−W) on any finite-dimensional real inner product space (ℝⁿ as EuclideanSpace ℝ (Fin n), n = 0 included), W of class C² (the book: smooth) and ρ‖v‖² ≤ D²W(x)(v, v), ρ > 0, the literature Poincaré constant satisfies C_P(ν) ≤ 1/ρ (literatureConstant_le_inv_of_eq_tilted) and Var_ν(f) ≤ ρ⁻¹ ∫‖∇f‖² dν for smooth L² tests with L² gradient (smoothTest_holds_inv_of_eq_tilted). The tilted law has density e^{−W}/∫e^{−W}, so the book's normalized e^{−W} dx is the case ∫e^{−W} = 1. The Dirichlet-domain form Var(u) ≤ ρ⁻¹‖T̄u‖² holds for every u in the domain of the closed unit gradient, the closure of C_c^∞ in the energy norm, i.e. the book's D(E) (norm_center_sq_le_inv_mul, heat model ν = m.tilted (−U) for any Haar m), and the literature constant equals the optimal constant on that domain (closedWeightedOperator_id_constant_eq_literature). Route: ergodicity from ker T̄ = constants (WeightedGradient/Kernel.lean, Energy/Euclidean/ZeroGradient.lean) and strong convergence on (ker T)ᗮ (Analysis/Semigroup/Generated/Convergence.lean); log-concavity and full support of the tilted law (Density/Tilted.lean). Registered as the paper-target certificate thm:bakry-emery-poincare (owner review accepted 2026-10-04, relation stronger); the certificate's gaussian witness constructs the scaled Gaussian law and discharges every hypothesis, so the statement is not vacuous.",
             "main": true
           },
           {
@@ -3070,7 +3090,19 @@
             "note": "The Laplacian symbols are lost in the extracted text and are restored from the proof (R = −½ΔW + ¼|∇W|²). Proof: balls A_k, Proposition 4.10.7 with Rellich–Kondrachov (Theorem 6.4.3), ground-state transform f = g e^{W/2}; ESA on ℝⁿ by Corollary 3.2.2. The open-set proof uses an exhaustion {J ≤ k} not defined in the text. Example: c_α e^{−|x|^α}dx, α > 1, has discrete spectrum."
           }
         ]
-      }
+      },
+      "target_declarations": [
+        {
+          "name": "FunctionalInequalities.KLS.LogConcave.literatureConstant_le_inv_of_eq_tilted",
+          "source": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Curvature.lean"
+        },
+        {
+          "name": "FunctionalInequalities.KLS.LogConcave.smoothTest_holds_inv_of_eq_tilted",
+          "source": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Curvature.lean"
+        }
+      ],
+      "target_review": "research/decisions/2026-10-04-bgl-corollary-4-8-2-candidate.md",
+      "target_certificate": "thm:bakry-emery-poincare"
     },
     {
       "id": "Klartag2014Moment",
@@ -8127,8 +8159,8 @@
       "papers": [
         "BGL2014"
       ],
-      "target": "Audit the strongly log-concave Bakry–Émery C_P ≤ 1/ρ endpoint and select a separate Brascamp–Lieb source statement.",
-      "next_step": "Pin the exact source theorem, positive-curvature assumptions and normalization; assess the existing Γ₂ and semigroup interfaces before proof work."
+      "target": "Corollary 4.8.2 (strongly log-concave Bakry–Émery C_P ≤ 1/ρ) is certified as thm:bakry-emery-poincare (2026-10-04); select a separate Brascamp–Lieb source statement.",
+      "next_step": "Commit the certified corollary after the full local verifier; then pin a Brascamp–Lieb source theorem, its assumptions and normalization, and assess reuse of the heat-semigroup and Γ₂ interfaces before proof work."
     },
     {
       "rank": 2,

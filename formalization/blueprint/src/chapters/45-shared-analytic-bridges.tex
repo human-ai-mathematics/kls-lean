@@ -861,5 +861,39 @@ equality and the resulting optimality are not formalized in this repository.  Th
 route uses two estimates that are sharp for the exponential and uniform laws respectively;
 these sharpness assertions are also informal background.
 
-These nodes are deliberately modest.  They do not provide a self-adjoint generator, identify a
+The preceding nodes are deliberately modest.  They do not provide a self-adjoint generator, identify a
 form gap with the reciprocal of an operator eigenvalue, or prove any of the four long-route gates.
+
+\begin{theorem}[Bakry--\'Emery Poincar\'e bound]
+  \label{thm:bakry-emery-poincare}
+  \lean{FunctionalInequalities.KLS.LogConcave.literatureConstant_le_inv_of_eq_tilted,
+        FunctionalInequalities.KLS.LogConcave.smoothTest_holds_inv_of_eq_tilted,
+        FunctionalInequalities.KLS.LogConcave.norm_center_sq_le_inv_mul,
+        Solutions.ThmBakryEmeryPoincare.certificate}
+  \leanok
+  \uses{def:log-concave-law,def:literature-poincare-constant}
+  This is Corollary~4.8.2 of \cite{BakryGentilLedoux2014}, in a reviewed stronger form.  Let $V$
+  be a finite-dimensional real inner product space with Lebesgue measure, $W:V\to\R$ of class
+  $C^2$ with $\nabla^2W(x)(v,v)\ge\rho\norm v^2$ for all $x,v$ and some $\rho>0$, and
+  $\nu=e^{-W}dx/\int e^{-W}$ a probability measure.  Then
+  \[
+    \CPLit(\nu)\le\rho^{-1},
+  \]
+  and $\Var_\nu(f)\le\rho^{-1}\int\norm{\nabla f}^2\,d\nu$ for every smooth $f\in L^2(\nu)$ with
+  $\norm{\nabla f}\in L^2(\nu)$.  The book assumes $V=\R^n$, $W$ smooth and $\int e^{-W}=1$.
+  The certificate also constructs the scaled Gaussian $e^{-\rho\norm x^2/2}dx/Z$ as a probability
+  measure and applies the bound to it, so the hypotheses are satisfiable in every dimension,
+  including dimension zero.  Sharpness of $\rho^{-1}$ and the general Markov-triple
+  $CD(\rho,\infty)$ statement (Proposition~4.8.1) are not claimed.
+\end{theorem}
+\begin{proof}
+  \leanok
+  The proof follows the book's semigroup route in the Euclidean heat model with generator
+  $-\bar T^\dagger\bar T$, where $\bar T$ is the closure of the weighted gradient on $C_c^\infty$.
+  The Hessian bound gives $\Gamma_2\ge\rho\Gamma$ and the finite-time decay
+  $\Var(u)-\Var(P_tu)\le\rho^{-1}(1-e^{-2\rho t})\norm{\bar Tu}^2$.  Ergodicity follows from
+  $\ker\bar T=$ constants (weak gradient and translation invariance) and strong convergence of
+  the semigroup on $(\ker\bar T)^\perp$, so $\Var(P_tu)\to0$ and $\Var(u)\le\rho^{-1}\norm{\bar Tu}^2$
+  on the form domain.  The optimal constant on the form domain equals the literature constant.
+  Log-concavity and full-dimensional support of $\nu$ are derived from the hypotheses.
+\end{proof}

@@ -108,3 +108,16 @@ Everything in `KLS/LogConcave/HeatSemigroup/` and `Analysis/BakryEmery/` is at c
   constant (equivalently `Var(P_t u) → 0`). Proposed route: a Poincaré inequality on cubes from the
   proved one-dimensional log-concave bound and finite tensorization, then local constancy of `h`
   on every cube (the density of `ν` is bounded below on compact sets).
+- 2026-10-03/04 (two eight-hour windows, uncommitted): ergodicity is proved in the model and the
+  corollary follows. The abstract step `P_t g → 0` for `g ⊥ ker T` is in
+  `Generated/Convergence.lean`. The kernel route was taken instead of cube Poincaré:
+  - zero weak gradient ⇒ a.e. constant, by differentiating translates under the integral and a
+    Fubini argument (`Energy/Euclidean/ZeroGradient.lean`);
+  - the weak gradient of `D(T̄)` and `T̄ h = 0 ⇒ h = mean` (`WeightedGradient/Kernel.lean`);
+  - `ker T̄` = constants, `Var(P_t u) → 0`, `Var(u) ≤ ρ⁻¹‖T̄u‖²` on `D(T̄)`, and `C_P ≤ 1/ρ` without
+    `herg`, in `HeatSemigroup/Curvature.lean`;
+  - the `volume.tilted (-W)` form, with log-concavity and full support from `Density/Tilted.lean`.
+  Statements by Claude, proofs by the GPT worker, with logged mechanical patches. Records:
+  [window 1](../handoffs/2026-10-03-eight-hour-bgl-ergodicity.md),
+  [window 2](../handoffs/2026-10-03-renewed-eight-hour-bgl-ergodicity.md),
+  [certificate candidate](2026-10-04-bgl-corollary-4-8-2-candidate.md) (not registered).

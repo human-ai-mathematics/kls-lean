@@ -61,7 +61,7 @@ Their types preserve the reviewed generality, including empty test classes, zero
 support, zero finite constants and infinite optima. Gaussian transport through these bridges is
 now proved. See the [comparison guide](../formalization/FunctionalInequalities/Poincare/Euclidean/README.md).
 
-The `Solutions` default target builds all twenty-seven certificates plus `GaussianAxiomAudit.lean` and
+The `Solutions` default target builds all twenty-eight certificates plus `GaussianAxiomAudit.lean` and
 `FoundationAxiomAudit.lean`. The latter guards 27 foundation and comparison declarations together
 with the Dirac and normal-direction raw-energy obstructions; each new
 certificate also has its own axiom guard. These checks require exactly `propext`, `Classical.choice`
@@ -96,7 +96,7 @@ node is `proved / checked_by: lean`; see the
 [acceptance record](../research/decisions/2026-09-06-weighted-approximation-acceptance.md).
 
 `StatementChecks.lean` is a default-build target for the literal KLS proposition and its domain
-and boundary encodings. It is not a ledger proof certificate. All twenty-seven mathematical certificates,
+and boundary encodings. It is not a ledger proof certificate. All twenty-eight mathematical certificates,
 the twenty-five named definition sanity checks, the six conditional-fiber contracts and the five
 affine covariance contracts have default-build transitive axiom guards. Existing
 Dirac representative examples and Gaussian comparisons are reused. A concrete Gaussian literature
@@ -420,3 +420,15 @@ in `L¹`; `upper` gives the same for the relaxed upper content. The certificate 
 library identities. Typed applications cover finite measures and Lebesgue measure on Euclidean
 spaces; four axiom guards. It is the first paper-target certificate. Read the
 [review record](../research/decisions/2026-10-02-admg-theorem-3-6-certificate.md).
+
+## Bakry–Émery Poincaré certificate (paper target)
+
+[`ThmBakryEmeryPoincare.lean`](ThmBakryEmeryPoincare.lean) certifies `thm:bakry-emery-poincare`,
+Corollary 4.8.2 of Bakry–Gentil–Ledoux (2014), in a reviewed stronger form. For
+`ν = volume.tilted (-W)` on any finite-dimensional real inner product space, with `W` of class `C²`
+and `∇∇W ≥ ρ Id`, `ρ > 0`, the literature Poincaré constant satisfies `C_P(ν) ≤ 1/ρ`; `smoothTest`
+gives `Var_ν(f) ≤ ρ⁻¹ ∫ ‖∇f‖² dν` on smooth tests. The book assumes `ℝⁿ`, smooth `W` and
+`∫ e^{-W} = 1`. `gaussian` constructs the scaled Gaussian law as a probability measure and applies
+both statements with every hypothesis discharged, so the hypotheses are satisfiable in every
+dimension, including zero; three axiom guards. It is the second paper-target certificate. Read the
+[review record](../research/decisions/2026-10-04-bgl-corollary-4-8-2-candidate.md).

@@ -210,6 +210,22 @@ potential with `∇∇U ≥ ρ` live in `BakryEmery/Curvature.lean` (`mul_gamma_
 `KLS/LogConcave/HeatSemigroup/Curvature.lean`. The curvature hypothesis is always written
 `∀ x v, ρ * ‖v‖ ^ 2 ≤ bilinearIteratedFDerivTwo ℝ U x v v`, never as a new definition.
 
+Strong convergence (2026-10-03) lives in `Semigroup/Generated/Convergence.lean`: for `T` closed
+and densely defined between real Hilbert spaces and `A = T†T`, `ker A = ker T` on the operator
+domain (`adjointComp_eq_zero_iff`), and `P_t g → 0` for every `g` orthogonal to `ker T`
+(`tendsto_apply_of_inner_eq_zero`, via `tendsto_apply_of_mem_closure_range`). It identifies no
+concrete kernel and gives no rate; the heat-model kernel and ergodicity belong to the
+`KLS/LogConcave` owners.
+
+The heat-model kernel and ergodicity (2026-10-04) are split by object. A locally integrable
+function with zero weak gradient is a.e. constant in `Energy/Euclidean/ZeroGradient.lean`
+(`exists_ae_eq_const_of_integral_mul_fderiv_eq_zero`). The weak gradient of `D(T̄)` and
+`T̄ h = 0 ⇒ h = mean` live in `KLS/LogConcave/WeightedGradient/Kernel.lean`
+(`integral_mul_fderiv_eq_neg_integral_mul_inner`, `eq_const_mean_of_closedWeightedOperator_eq_zero`).
+Tilted Haar laws (integrable density, Borell density, log-concavity from a convex potential, full
+support) live in `KLS/LogConcave/Density/Tilted.lean`. The kernel iff, ergodicity and the
+Corollary 4.8.2 statements extend `HeatSemigroup/Curvature.lean`.
+
 The completed family migration and candidate decisions are recorded in
 [the final cleanup](decisions/2026-09-20-final-cleanup.md), with the
 [48-name API map](api-migration/2026-09-20-final-cleanup-map.json). Generic resolvent, Yosida

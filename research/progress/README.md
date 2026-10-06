@@ -30,7 +30,7 @@ Every proof task must first pin its paper version, theorem, hypotheses and const
 
 | Priority | Sources / target | Next action |
 | --- | --- | --- |
-| 1 | [Bakry–Gentil–Ledoux](https://link.springer.com/book/10.1007/978-3-319-00227-9)<br/>Audit the strongly log-concave Bakry–Émery C_P ≤ 1/ρ endpoint and select a separate Brascamp–Lieb source statement. | Pin the exact source theorem, positive-curvature assumptions and normalization; assess the existing Γ₂ and semigroup interfaces before proof work. |
+| 1 | [Bakry–Gentil–Ledoux](https://link.springer.com/book/10.1007/978-3-319-00227-9)<br/>Corollary 4.8.2 (strongly log-concave Bakry–Émery C_P ≤ 1/ρ) is certified as thm:bakry-emery-poincare (2026-10-04); select a separate Brascamp–Lieb source statement. | Commit the certified corollary after the full local verifier; then pin a Brascamp–Lieb source theorem, its assumptions and normalization, and assess reuse of the heat-semigroup and Γ₂ interfaces before proof work. |
 | 2 | [Kannan–Lovász–Simonovits](https://link.springer.com/article/10.1007/BF02574061)<br/>Theorem 5.1, ψ(K) ≥ ln 2 / M₁(K) for convex bodies, through the needle reduction (Corollary 2.2, Lemma 2.6, Theorem 2.7). With the local Cheeger inequality it gives C_P ≲ E‖X − EX‖² for convex bodies. | Pin a proof of the cited localization lemma (Lovász–Simonovits 1993 or a modern account) and choose a Lean form for needles; keep the product denominator of (1.1) distinct from the min-denominator constant. |
 | 3 | [E. Milman](https://arxiv.org/abs/0712.4092)<br/>Concentration implies a Cheeger bound under the source convexity hypotheses. | Pin the main theorem and its concentration/curvature assumptions; compare its analytic inputs with the current finite-dimensional Cheeger–Buser API. |
 | 4 | [Eldan](https://arxiv.org/abs/1203.0893), [Lee–Vempala](https://annals.math.princeton.edu/2024/199-3/p02), [Chen](https://arxiv.org/abs/2011.13661), [Klartag–Lehec](https://arxiv.org/html/2203.15551v2), [Klartag](https://arxiv.org/html/2303.14938v2)<br/>Published stochastic-localization theorems and quantitative KLS bounds. | Reuse Mathlib probability foundations; build an isolated audited client of pinned external stochastic APIs before selecting the missing vector/matrix SDE bridges. |
@@ -381,7 +381,7 @@ flowchart LR
 
 ### Bakry–Gentil–Ledoux (Springer 2014, Grundlehren der mathematischen Wissenschaften 348 (DOI 10.1007/978-3-319-00227-9), Chapter 4)
 
-46 statements: 7 ◐, 39 ○. [Full map](LITERATURE.md#bgl2014-lemma-map).
+46 statements: 6 ◐, 39 ○, 1 ⇑. [Full map](LITERATURE.md#bgl2014-lemma-map).
 
 ```mermaid
 flowchart LR
@@ -391,12 +391,14 @@ flowchart LR
     BGL2014_T463["◐ Theorem 4.6.3 (Kannan–Lovász–Simonovits–Bobkov Theorem), p. 203<br/>Log-concave measures satisfy Poincaré"]
     BGL2014_T472["◐ Theorem 4.7.2 (Local Poincaré inequalities), p. 209<br/>Local Poincaré under CD(ρ, ∞)"]
     BGL2014_P481["◐ Proposition 4.8.1 (Poincaré inequality under CD(ρ, ∞)), p. 212<br/>Poincaré under CD(ρ, ∞)"]
-    BGL2014_C482["◐ Corollary 4.8.2, p. 212<br/>Strongly log-concave measures: P(1/ρ)"]
+    BGL2014_C482["⇑ Corollary 4.8.2, p. 212<br/>Strongly log-concave measures: P(1/ρ)"]
     BGL2014_T472 --> BGL2014_P481
     BGL2014_P481 --> BGL2014_C482
     BGL2014_more["+39 further statements in the paper register"]
     classDef lemma_partial fill:#fff3df,stroke:#c88719,color:#66420d;
-    class BGL2014_P411,BGL2014_T425,BGL2014_P431,BGL2014_T463,BGL2014_T472,BGL2014_P481,BGL2014_C482 lemma_partial;
+    class BGL2014_P411,BGL2014_T425,BGL2014_P431,BGL2014_T463,BGL2014_T472,BGL2014_P481 lemma_partial;
+    classDef lemma_improved fill:#dcfce7,stroke:#15803d,color:#14532d;
+    class BGL2014_C482 lemma_improved;
     style BGL2014_C482 stroke-width:3px
     classDef lemma_more fill:#f8fafc,stroke:#94a3b8,color:#334155,stroke-dasharray:4 3;
     class BGL2014_more lemma_more;
@@ -1272,7 +1274,7 @@ See the [full tables and normalization](LITERATURE.md#constant-conventions).
 ## Proof progress tree
 
 <!-- BEGIN GENERATED DATE -->
-Last updated: **2026-10-02**.
+Last updated: **2026-10-04**.
 
 ![✓ Formalized in Lean](badges/formalized.svg) · ![○ Not yet formalized](badges/pending.svg) · ![◐ Partially formalized](badges/partial.svg) · ![— Excluded: refuted](badges/excluded.svg)
 <!-- END GENERATED DATE -->

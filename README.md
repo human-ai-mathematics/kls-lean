@@ -17,14 +17,18 @@ one intentional `sorry` and lies outside every certificate import closure.
 
 ## What is proved
 
-There are **27 registered Lean certificates**, plus proved auxiliary results. Highlights:
+There are **28 registered Lean certificates**, plus proved auxiliary results. Highlights:
 
 - the one-dimensional upper bound `C_P^lit ≤ 4 Var` for log-concave laws on the line;
 - finite Poincaré tensorization and the sharp one-dimensional Gaussian constant;
 - scalar and vector weighted coarea (C¹, Lipschitz, locally Lipschitz) and sharp scalar Sard;
 - canonical energy `E^can = 2 Ch` for every Borel probability law; the weighted-gradient heat
   semigroup with its Markov and positive-time smoothing properties; the Bakry–Émery `Γ`/`Γ₂`
-  calculus with `Γ₂ ≥ 0` for smooth convex potentials;
+  calculus with `Γ₂ ≥ 0` for smooth convex potentials; ergodicity of the heat semigroup
+  (`ker T̄` = constants);
+- the Bakry–Émery bound `C_P ≤ 1/ρ` for `e^{-W} dx` with `W ∈ C²`, `∇∇W ≥ ρ > 0`
+  (Bakry–Gentil–Ledoux Corollary 4.8.2, in a reviewed stronger form) is certified as a paper
+  target;
 - both numerical Cheeger–Buser comparisons `C_P^lit ≤ 4 Ψ²` and `Ψ² ≤ π C_P^lit` for every
   finite-dimensional log-concave law, including degenerate affine supports;
 - metric BV relaxation and Minkowski recovery; Ambrosio–Di Marino–Gigli Theorem 3.6 (relaxed
@@ -35,7 +39,8 @@ There are **27 registered Lean certificates**, plus proved auxiliary results. Hi
 
 - Any published high-dimensional KLS bound (KLS 1995, Eldan, Lee–Vempala, Chen, Klartag–Lehec,
   Klartag, Letwin) or the stochastic-localization machinery they use.
-- Any complete paper other than Ambrosio–Di Marino–Gigli (Theorem 3.6, the first covered paper).
+- Any complete paper other than Ambrosio–Di Marino–Gigli (Theorem 3.6) and Bakry–Gentil–Ledoux
+  (Corollary 4.8.2 only; the book's general Markov-triple framework is not formalized).
   A paper is covered only when its main theorem is stated faithfully in Lean, proved without
   nonstandard axioms, and certified for that exact statement. Supporting lemmas, restricted cases
   and conditional reductions do not count.
