@@ -1117,6 +1117,34 @@ addressed.
   Lemma~3.6 for tensor fields, $T_d$ of a constant vanishes for $d\ge1$, and homogeneity of $T_{d+1}$.
 \end{proof}
 
+\begin{lemma}[Convex potential of the suspension]
+  \label{lem:bkl-suspension-convexity}
+  \lean{FunctionalInequalities.KLS.LogConcave.Suspension.potential,
+        FunctionalInequalities.KLS.LogConcave.Suspension.convexOn_potential,
+        FunctionalInequalities.KLS.LogConcave.Suspension.exists_copies,
+        FunctionalInequalities.KLS.LogConcave.Suspension.continuous_potential}
+  \leanok
+  A step of Proposition~7.1 of \cite{BizeulKlartagLehec2026}, equations~(109)--(110).
+  Let $V,f\in C^2(E;\mathbb R)$, $\nabla^2V\ge a\,\mathrm{Id}$,
+  $\norm{D^2f(x)}_{\mathrm{op}}\le M$, and $\beta\ge0$.
+  For every positive $N\in\mathbb N$ satisfying $\beta M/\sqrt N\le a$ and every
+  $\sigma\in\mathbb R$, the continuous potential
+  \[
+    W_N(s,x_1,\ldots,x_N)=\sum_i V(x_i)+
+       \beta\left|\sigma s-\frac{1}{\sqrt N}\sum_i f(x_i)\right|
+  \]
+  is convex. If $a>0$ and $M\ge0$, a positive finite $N$ satisfying this
+  condition exists. The paper uses $\sigma=\sqrt{1+2/\beta^2}$ and $\beta>0$.
+  This proves neither the identification with the joint law nor its isotropy,
+  the mixed cumulant identity, or Proposition~7.1.
+\end{lemma}
+\begin{proof}
+  \leanok
+  The Hessian bound implies convexity of $V\pm\beta f/\sqrt N$.
+  Express $W_N$ as the maximum of their finite sums plus the corresponding
+  linear term in $s$. Choose $N>(\beta M/a)^2+1$ for the existence claim.
+\end{proof}
+
 \begin{lemma}[Regular laws]
   \label{lem:bkl-regular-law}
   \lean{FunctionalInequalities.KLS.RegularPotential,

@@ -68,13 +68,19 @@ authorization. Exact results, scopes and certificates are in the
 
 1. Owner decision: optional remote Lean certification of the BKL commits (manual dispatch or a
    `milestone/**` tag); no BKL paper target is covered, so no milestone is due.
-2. **BKL Theorem 3.1 is certified** (`thm:bkl-taylor-criterion`, `solutions/ThmBklTaylorCriterion.lean`,
+2. **Current focus: the BKL formalization. Theorem 3.1 is certified**
+   (`thm:bkl-taylor-criterion`, `solutions/ThmBklTaylorCriterion.lean`,
    uncommitted; block record `build/reviews/2026-10-07-bkl-operator-route/`): the exact source statement,
    proved by the operator route (iterates in `D(A)`, `KLS/LogConcave/HeatSemigroup/PoissonIterate/`;
    approximate eigenfunction). Next for Theorem 1.1: Theorem 4.1 (Eldan localization; stochastic
    calculus decision below), Proposition 7.1 (suspension), the regular approximation; the Letwin theorem
    stays an explicit dependency of Lemma 4.2. Nonvacuity: dimension 0 and the standard Gaussian on `ℝ¹`
    (R = 8, `KLS/LogConcave/GaussianTaylor.lean`).
+   The next proof target is Proposition 7.1: equations (109)–(110), continuity and convexity of the
+   suspension potential and the positive finite copy number, are now formalized in
+   `KLS/LogConcave/Suspension.lean`; the next missing interfaces are the joint-law identification,
+   isotropy and (111)–(112). Proposition 7.1 remains partial. See
+   [the suspension record](research/decisions/2026-10-07-bkl-suspension.md).
 3. Owner decision recorded below: per-paper folders after this block.
 
 ## Decided, pending execution

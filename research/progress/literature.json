@@ -8050,7 +8050,7 @@
       "url": "https://arxiv.org/abs/2610.05474v1",
       "locator": "Theorem 1.1 (through Theorems 3.1 and 4.1 and Proposition 7.1); first dependencies Lemmas 2.1, 2.2, 3.4, 3.6, Corollaries 3.5, 3.7 and conditional Lemma 4.2",
       "result": "Claims C_P(μ) ≤ C for every isotropic log-concave μ in every dimension (the KLS conjecture with a universal constant): Taylor coefficients of tilt averages bounded by cumulant bounds along Eldan localization give the criterion of Theorem 3.1. Not peer reviewed.",
-      "remaining": "Theorem 3.1 is formalized in the source form and certified (thm:bkl-taylor-criterion) by the operator route: the iterates are built in the generator domain D(A) and an approximate first eigenfunction at λ = 1/C_P replaces (19); (32)–(36), (47), Lemmas 3.2–3.4, 3.3 for every q, 3.8, 3.9 and Corollaries 3.5, 3.7 hold for these iterates (reviewed stronger forms), with the weak Hessian, the curvature form of (16), (48) and Lemma 3.6 on D(A). Lemma 2.2 is formalized in the source form, Lemma 3.6 also on 𝒜; the regular-law adapter derives the probability normalization, Gaussian tails and all exponential moments from (12). Lemma 2.1 (operator-domain inverse, componentwise lift; temperate functions in the generator domain), (15) and (16) on 𝒜, steps of Proposition 7.1 (linear functions, continuity of T_d on L²) and Lemma 4.2 conditionally on the Letwin bound have restricted or conditional counterparts. Theorems 1.1 and 4.1, Lemmas 4.3, 5.1 and 5.2, Proposition 7.1, Lemma 2.1 on 𝒜 (smooth representatives and the pointwise equation), the existence of a first eigenfunction (19), Eldan localization, the regular approximation and the Letwin theorem are not formalized. Theorem 3.1 is a certified supporting theorem; the paper is not covered until Theorem 1.1 is.",
+      "remaining": "Theorem 3.1 is formalized in the source form and certified (thm:bkl-taylor-criterion) by the operator route: the iterates are built in the generator domain D(A) and an approximate first eigenfunction at λ = 1/C_P replaces (19); (32)–(36), (47), Lemmas 3.2–3.4, 3.3 for every q, 3.8, 3.9 and Corollaries 3.5, 3.7 hold for these iterates (reviewed stronger forms), with the weak Hessian, the curvature form of (16), (48) and Lemma 3.6 on D(A). Lemma 2.2 is formalized in the source form, Lemma 3.6 also on 𝒜; the regular-law adapter derives the probability normalization, Gaussian tails and all exponential moments from (12). Lemma 2.1 (operator-domain inverse, componentwise lift; temperate functions in the generator domain), (15) and (16) on 𝒜, steps of Proposition 7.1 (linear functions, continuity of T_d on L², convexity of the suspension potential under (110) and choice of finite N) and Lemma 4.2 conditionally on the Letwin bound have restricted or conditional counterparts. Theorems 1.1 and 4.1, Lemmas 4.3, 5.1 and 5.2, Proposition 7.1, Lemma 2.1 on 𝒜 (smooth representatives and the pointwise equation), the existence of a first eigenfunction (19), Eldan localization, the regular approximation and the Letwin theorem are not formalized. Theorem 3.1 is a certified supporting theorem; the paper is not covered until Theorem 1.1 is.",
       "local_results": [
         {
           "node": "lem:bkl-partial-symmetrization",
@@ -8127,6 +8127,10 @@
         {
           "node": "thm:bkl-taylor-criterion",
           "scope": "Theorem 3.1 in the source form (paper-target certificate; Theorem 1.1 not covered)"
+        },
+        {
+          "node": "lem:bkl-suspension-convexity",
+          "scope": "Proposition 7.1, (109)–(110): continuous convex suspension potential and existence of a positive finite N; joint law, isotropy and (112) remain open"
         }
       ],
       "diagram": "4 Oct 2026 · Bizeul–Klartag–Lehec<br/>C_P ≤ C claimed (preprint)",
@@ -8600,9 +8604,21 @@
               {
                 "name": "FunctionalInequalities.Analysis.BakryEmery.exists_norm_taylorTensor_le",
                 "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Tilt/SquareIntegrable.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.LogConcave.Suspension.convexOn_potential",
+                "source": "formalization/FunctionalInequalities/KLS/LogConcave/Suspension.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.LogConcave.Suspension.exists_copies",
+                "source": "formalization/FunctionalInequalities/KLS/LogConcave/Suspension.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.LogConcave.Suspension.continuous_potential",
+                "source": "formalization/FunctionalInequalities/KLS/LogConcave/Suspension.lean"
               }
             ],
-            "note": "Proved steps: the continuity of T_d on L²(μ) used in the proof (‖T_d f‖ ≤ C_d‖f‖₂ for a probability measure with all exponential moments; T_d is linear on L²), and the linear-function step: for a nonzero finite measure with all exponential moments, F_⟨v,·⟩ = DΛ_μ(·)v and T_d⟨v,·⟩ = κ_{d+1}(v, ·, …, ·)/d!. The suspension, the log-concavity of the maximum of convex potentials, the mixed cumulant identity (112), the limit β → ∞ and the density argument are not proved."
+            "note": "Proved steps: the continuity of T_d on L²(μ) used in the proof (‖T_d f‖ ≤ C_d‖f‖₂ for a probability measure with all exponential moments; T_d is linear on L²), and the linear-function step: for a nonzero finite measure with all exponential moments, F_⟨v,·⟩ = DΛ_μ(·)v and T_d⟨v,·⟩ = κ_{d+1}(v, ·, …, ·)/d!. Equations (109)–(110): the suspension potential W_N = Σ V(x_i) + β|σs − Σ f(x_i)/√N| is continuous and convex when V,f are C², D²V ≥ a Id, ‖D²f‖op ≤ M, β ≥ 0 and βM/√N ≤ a; a positive finite N exists for a > 0 and M ≥ 0. The source scale σ = √(1 + 2/β²) is a specialization. The joint-law identification, isotropy, mixed cumulant identity (112), limit β → ∞ and density argument are not proved."
           },
           {
             "id": "E12",
@@ -8880,7 +8896,7 @@
         "BKL2026"
       ],
       "target": "Theorem 1.1 through Theorems 3.1 (certified, thm:bkl-taylor-criterion), 4.1 and Proposition 7.1: Section 3 is formalized by the operator route; Lemma 2.2, Lemma 3.6 (⇑), Corollary 3.7 (⇑), Lemmas 3.2–3.4, 3.8, 3.9 for the D(A) iterates (⇑) and the regular-law adapter for (12) are formalized; Lemma 2.1 on 𝒜, (19), steps of Proposition 7.1 and Lemma 4.2 conditional on the Letwin bound are partial, restricted or conditional counterparts.",
-      "next_step": "Theorem 4.1 (cumulant bounds via Eldan localization: Lemmas 4.3, 5.1, 5.2; stochastic calculus decision open), Proposition 7.1 (suspension) and the regular approximation, which with the certified Theorem 3.1 give Theorem 1.1; the Letwin theorem stays an explicit dependency of Lemma 4.2. Lemma 2.1 on 𝒜 and (19) remain partial and are not needed by the operator route."
+      "next_step": "Current focus: complete BKL Proposition 7.1, starting with the joint-law identification and mixed cumulant identity (111)–(112); convexity (109)–(110) and the finite-N choice are formalized. Then the regular approximation and Theorem 4.1 (Eldan localization) connect to the certified Theorem 3.1. Letwin stays a prerequisite of Lemma 4.2. Lemma 2.1 on 𝒜 and (19) are not needed by the operator route."
     },
     {
       "rank": 2,

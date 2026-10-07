@@ -175,6 +175,7 @@ import FunctionalInequalities.Analysis.BakryEmery.Tilt.Tensor
 import FunctionalInequalities.Analysis.BakryEmery.Bochner.Tensor
 import FunctionalInequalities.Analysis.BakryEmery.TensorEnergy
 import FunctionalInequalities.KLS.LogConcave.Regular
+import FunctionalInequalities.KLS.LogConcave.Suspension
 
 /-!
 # Functional inequalities

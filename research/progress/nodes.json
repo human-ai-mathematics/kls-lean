@@ -1151,6 +1151,10 @@
     "lem:bkl-poincare-temperate": {
       "description": "Bizeul–Klartag–Lehec (20), (32), Lemma 3.2 in the heat model: Poincaré on the class 𝒜, ‖∇h‖² ≤ C‖ℒh‖², α² ≥ 1/C for a pair, and Lemma 3.2 with λ = 1/C.",
       "blueprint": "lem:bkl-poincare-temperate"
+    },
+    "lem:bkl-suspension-convexity": {
+      "description": "The finite-copy suspension potential (109) is continuous and convex under the Hessian condition (110); a positive finite copy number exists (a supporting step of BKL Proposition 7.1).",
+      "blueprint": "lem:bkl-suspension-convexity"
     }
   },
   "diagram": {

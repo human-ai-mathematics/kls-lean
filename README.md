@@ -41,6 +41,9 @@ There are **29 registered Lean certificates**, plus proved auxiliary results. Hi
   (Lemmas 3.2–3.4, 3.6, 3.8, 3.9, Corollaries 3.5, 3.7) are formalized for these iterates. The
   paper's main Theorem 1.1 is **not** proved: Theorem 4.1 (Eldan localization), Proposition 7.1,
   the regular approximation and the Letwin theorem remain.
+  Current work focuses on Proposition 7.1: the convexity of its suspension potential (109)–(110)
+  and the choice of a positive finite copy number are formalized; the joint law and mixed
+  cumulant identity remain open.
 
 ## What is not proved
 
