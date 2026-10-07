@@ -198,6 +198,31 @@ theorem tendsto_of_tendsto_add_adjointComp {T : H₀ →ₗ.[ℝ] H₁} (hd : De
     nlinarith [hkey n, sq_nonneg ‖((x n - F : (adjointComp T).domain) : H₀)‖,
       sq_nonneg ‖T ⟨_, (x n - F).2.2⟩‖, sq_nonneg ‖adjointComp T (x n - F)‖]
 
+open Filter Topology in
+/-- Graph convergence for `T†T` gives convergence of `T`: if `xₙ → y` and `T†T xₙ → T†T y`, then
+`T xₙ → T y`, because `‖T (xₙ - y)‖² = ⟪T†T (xₙ - y), xₙ - y⟫`. -/
+theorem tendsto_apply_of_tendsto_adjointComp {T : H₀ →ₗ.[ℝ] H₁}
+    (hd : Dense (T.domain : Set H₀)) {x : ℕ → (adjointComp T).domain}
+    {y : (adjointComp T).domain} (h0 : Tendsto (fun n => (x n : H₀)) atTop (𝓝 (y : H₀)))
+    (h1 : Tendsto (fun n => adjointComp T (x n)) atTop (𝓝 (adjointComp T y))) :
+    Tendsto (fun n => T ⟨(x n : H₀), (x n).2.2⟩) atTop (𝓝 (T ⟨(y : H₀), y.2.2⟩)) := by
+  rw [tendsto_iff_norm_sub_tendsto_zero]
+  have key (n : ℕ) : ‖T ⟨(x n : H₀), (x n).2.2⟩ - T ⟨(y : H₀), y.2.2⟩‖ ^ 2 ≤
+      ‖adjointComp T (x n) - adjointComp T y‖ * ‖(x n : H₀) - y‖ := by
+    have hTe : T ⟨((x n - y : (adjointComp T).domain) : H₀), (x n - y).2.2⟩ =
+        T ⟨(x n : H₀), (x n).2.2⟩ - T ⟨(y : H₀), y.2.2⟩ := by
+      rw [← LinearPMap.map_sub]; rfl
+    have hAe : adjointComp T (x n - y) = adjointComp T (x n) - adjointComp T y :=
+      LinearPMap.map_sub _ _ _
+    rw [← hTe, ← inner_adjointComp_self hd, hAe, Submodule.coe_sub]
+    exact real_inner_le_norm _ _
+  have hlim : Tendsto (fun n => ‖adjointComp T (x n) - adjointComp T y‖ * ‖(x n : H₀) - y‖)
+      atTop (𝓝 0) := by
+    simpa using (tendsto_iff_norm_sub_tendsto_zero.1 h1).mul
+      (tendsto_iff_norm_sub_tendsto_zero.1 h0)
+  have hsq := squeeze_zero (fun n => by positivity) key hlim
+  simpa [Real.sqrt_sq (norm_nonneg _)] using hsq.sqrt
+
 section Resolvent
 
 variable [CompleteSpace H₁]

@@ -1288,3 +1288,50 @@ form taken by the variance estimate for isotropic $\mu$), then
   \cref{lem:bkl-generator-temperate}); components in an orthonormal basis for tensors; integration by parts
   against $h-\int h$ and $ab\le\frac t2a^2+\frac1{2t}b^2$; then~(33).
 \end{proof}
+
+\begin{lemma}[Approximate first eigenfunctions]
+  \label{lem:bkl-approximate-eigenfunction}
+  \lean{FunctionalInequalities.Analysis.Semigroup.Generated.exists_approx_eigenvector_of_gap,
+        FunctionalInequalities.KLS.LogConcave.exists_centered_approx_eigenfunction}
+  \leanok
+  \uses{lem:bkl-centered-inverse}
+  Let $T$ be closed and densely defined between real Hilbert spaces, $A=T^*T$, $\lambda>0$ with
+  $\lambda\norm y^2\le\norm{Ty}^2$ on $D(T)\cap(\ker T)^\perp$.  If a unit $y$ there has
+  $\norm{Ty}^2\le\lambda(1+\eta)$, the solution $z\in D(A)$ of $(A+\lambda)z=2\lambda y$ is orthogonal to
+  $\ker T$, $\norm{y-z}\le\sqrt{\eta/8}$ and $\norm{Az-\lambda z}\le\lambda\sqrt{\eta/2}$.  In the heat
+  model with $0<\CPLit(\nu)=C<\infty$, every $\eta>0$ admits a centered $f\in D(A)$ with $\norm f_2=1$ and
+  $\norm{Af-C^{-1}f}_2\le C^{-1}\eta$.  This replaces the first eigenfunction~(19) of
+  \cite{BizeulKlartagLehec2026} in the operator route to its Theorem~3.1; no compactness is used and no
+  eigenfunction is asserted to exist.
+\end{lemma}
+\begin{proof}
+  \leanok
+  The weak resolvent equation gives $Az=\lambda(2y-z)$; pairing $Az-\lambda z$ with $y-z$ and the gap at
+  $y/2-z$ give $8\lambda\norm{y-z}^2\le\norm{Ty}^2-\lambda$.  In the heat model, optimality of $C$
+  (\cref{lem:bkl-centered-inverse} and the converse gap comparison) yields a centered near-optimal $y$;
+  normalize $z$.
+\end{proof}
+
+\begin{lemma}[Weak Hessian, Bochner, (48) and Lemma~3.6 on the generator domain]
+  \label{lem:bkl-generator-domain}
+  \lean{FunctionalInequalities.KLS.LogConcave.compLp_innerSL_mem_closedWeightedOperator_domain,
+        FunctionalInequalities.KLS.LogConcave.compLp_innerSL_closedWeightedOperator_comm,
+        FunctionalInequalities.KLS.LogConcave.sum_norm_sq_closedWeightedOperator_add_le,
+        FunctionalInequalities.KLS.LogConcave.tiltAverage_adjointComp_eq,
+        FunctionalInequalities.KLS.LogConcave.taylorTensor_adjointComp_eq}
+  \leanok
+  \uses{lem:bkl-bochner-temperate,lem:bkl-tilt-generator,lem:bkl-taylor-l2}
+  In the heat model $\nu=m.\mathrm{tilted}(-U)$ with all exponential moments and $F\in D(A)$,
+  $A=\bar T^*\bar T=-\mathcal L$: for $U$ of temperate growth, each component
+  $\partial_iF=\langle e_i,\bar TF\rangle$ lies in $D(\bar T)$, the weak Hessian
+  $\langle e_j,\bar T\partial_iF\rangle$ is symmetric, and under $\nabla^2U\ge\rho$,
+  $\sum_i\norm{\bar T\partial_iF}^2+\rho\norm{\bar TF}^2\le\norm{AF}^2$ (the curvature form of~(16) used
+  in Lemma~3.4 of \cite{BizeulKlartagLehec2026}); for $U\in C^1$, $F_{AF}(z)=\langle z,F_{\bar TF}(z)\rangle$
+  (48) and $T_{d+1}(AF)=S_{d+1}T_d(\bar TF)$ (Lemma~3.6).  The iterates are not constructed here.
+\end{lemma}
+\begin{proof}
+  \leanok
+  $C_c^\infty$ is an operator core of $A$; the smooth identities pass to graph-norm limits, using the
+  closedness of $\bar T$, $\norm{\bar Tu}^2=\langle Au,u\rangle$, the continuity of tilt averages and
+  Taylor tensors on $L^2$, and convexity of $U$ from log-concavity for the Cauchy step.
+\end{proof}

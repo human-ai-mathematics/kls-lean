@@ -1108,6 +1108,14 @@
       "description": "Bizeul–Klartag–Lehec (16): ∫(ℒu)² dμ = ∫‖∇²u‖²_HS dμ + ∫⟨∇²V ∇u, ∇u⟩ dμ for scalar u of temperate growth, and its curvature lower bound.",
       "blueprint": "lem:bkl-bochner-temperate"
     },
+    "lem:bkl-approximate-eigenfunction": {
+      "description": "Approximate first eigenfunctions without compactness: for A = T†T with gap λ on (ker T)ᗮ, explicit near-eigenvectors; in the heat model a centered unit f ∈ D(A) with ‖Af − C_P⁻¹f‖ ≤ C_P⁻¹η for every η > 0 (operator route to Bizeul–Klartag–Lehec Theorem 3.1, replacing (19)).",
+      "blueprint": "lem:bkl-approximate-eigenfunction"
+    },
+    "lem:bkl-generator-domain": {
+      "description": "On the generator domain D(A) of the heat model: weak Hessian in D(T̄), its symmetry, the curvature form of Bizeul–Klartag–Lehec (16), the tilt identity (48) and Lemma 3.6.",
+      "blueprint": "lem:bkl-generator-domain"
+    },
     "lem:bkl-corollary-3-7": {
       "description": "Bizeul–Klartag–Lehec Corollary 3.7: S_{d+1}T_d(∇₀h) = T_{d+1}(−ℒh) = αT_{d+1}(∇₀g) whenever −ℒh = α∇₀g, for tensor fields of temperate growth.",
       "blueprint": "lem:bkl-corollary-3-7"

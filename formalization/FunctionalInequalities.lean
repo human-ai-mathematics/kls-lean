@@ -149,6 +149,10 @@ import FunctionalInequalities.Analysis.Tensor.Coefficients
 import FunctionalInequalities.Analysis.Semigroup.Generated.Inverse
 import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Inverse
 import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Temperate
+import FunctionalInequalities.Analysis.Semigroup.Generated.ApproximateEigenvector
+import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.ApproximateEigenfunction
+import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Hessian
+import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Tilt
 import FunctionalInequalities.Analysis.BakryEmery.IteratedDerivative
 import FunctionalInequalities.Analysis.BakryEmery.Tilt.Basic
 import FunctionalInequalities.Analysis.BakryEmery.Cumulant

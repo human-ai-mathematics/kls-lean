@@ -8050,7 +8050,7 @@
       "url": "https://arxiv.org/abs/2610.05474v1",
       "locator": "Theorem 1.1 (through Theorems 3.1 and 4.1 and Proposition 7.1); first dependencies Lemmas 2.1, 2.2, 3.4, 3.6, Corollaries 3.5, 3.7 and conditional Lemma 4.2",
       "result": "Claims C_P(μ) ≤ C for every isotropic log-concave μ in every dimension (the KLS conjecture with a universal constant): Taylor coefficients of tilt averages bounded by cumulant bounds along Eldan localization give the criterion of Theorem 3.1. Not peer reviewed.",
-      "remaining": "Lemma 2.2 is formalized in the source form; Lemma 3.6 (scalar and tensor-valued u ∈ 𝒜) and Corollary 3.7 (for any pair satisfying (30)) in reviewed stronger forms; Lemmas 3.2 and 3.4, Lemma 3.3 for q = 2, Corollary 3.5, (35)–(36) and the steps (61) and p_1 ≤ λ²K of Lemma 3.9 as partial counterparts (the generalized implication for supplied pairs/sequences satisfying the relations (30) and (33) that each uses); the regular-law adapter derives the probability normalization, Gaussian tails and all exponential moments from (12). Lemma 2.1 (operator-domain inverse in the heat model, with the componentwise tensor lift; temperate functions lie in the generator domain with A[f] = [−ℒf]), (15) and (16) on 𝒜, steps of Proposition 7.1 (linear functions, continuity of T_d on L²) and Lemma 4.2 conditionally on the Letwin bound have restricted or conditional counterparts. Theorems 1.1, 3.1 and 4.1, Lemma 2.1 on 𝒜 (smooth representatives and the pointwise equation), the first eigenfunction and the construction of the iterates h_i, Lemma 3.3 for q ≥ 3, Lemma 3.8, the bound (60) of Lemma 3.9, Eldan localization, the regular approximation and the Letwin theorem are not formalized. Supporting results do not cover the paper.",
+      "remaining": "Lemma 2.2 is formalized in the source form; Lemma 3.6 (scalar and tensor-valued u ∈ 𝒜) and Corollary 3.7 (for any pair satisfying (30)) in reviewed stronger forms; Lemmas 3.2 and 3.4, Lemma 3.3 for q = 2, Corollary 3.5, (35)–(36) and the steps (61) and p_1 ≤ λ²K of Lemma 3.9 as partial counterparts (the generalized implication for supplied pairs/sequences satisfying the relations (30) and (33) that each uses); the regular-law adapter derives the probability normalization, Gaussian tails and all exponential moments from (12). Lemma 2.1 (operator-domain inverse in the heat model, with the componentwise tensor lift; temperate functions lie in the generator domain with A[f] = [−ℒf]), (15) and (16) on 𝒜, steps of Proposition 7.1 (linear functions, continuity of T_d on L²) and Lemma 4.2 conditionally on the Letwin bound have restricted or conditional counterparts. On the generator domain D(A), the weak Hessian, the curvature form of (16), (48) and Lemma 3.6 are proved, and approximate first eigenfunctions at λ = 1/C_P exist (operator route to Theorem 3.1). Theorems 1.1, 3.1 and 4.1, Lemma 2.1 on 𝒜 (smooth representatives and the pointwise equation), the first eigenfunction and the construction of the iterates h_i, Lemma 3.3 for q ≥ 3, Lemma 3.8, the bound (60) of Lemma 3.9, Eldan localization, the regular approximation and the Letwin theorem are not formalized. Supporting results do not cover the paper.",
       "local_results": [
         {
           "node": "lem:bkl-partial-symmetrization",
@@ -8111,6 +8111,14 @@
         {
           "node": "lem:bkl-bochner-temperate",
           "scope": "Integrated Bochner formula (16) and its curvature form on the scalar class 𝒜"
+        },
+        {
+          "node": "lem:bkl-approximate-eigenfunction",
+          "scope": "Approximate first eigenfunctions at λ = 1/C_P in the heat model (operator-route replacement for (19); no eigenfunction asserted)"
+        },
+        {
+          "node": "lem:bkl-generator-domain",
+          "scope": "Weak Hessian, curvature form of (16), (48) and Lemma 3.6 on the generator domain D(A) (operator route)"
         }
       ],
       "diagram": "4 Oct 2026 · Bizeul–Klartag–Lehec<br/>C_P ≤ C claimed (preprint)",
@@ -8221,7 +8229,7 @@
             ],
             "relation": "same",
             "declarations": [],
-            "note": "Stated as a consequence of Song–Zhang Theorem 5.1; Section 3 gives a self-contained proof via the iterates h_i of the first eigenfunction."
+            "note": "Stated as a consequence of Song–Zhang Theorem 5.1; Section 3 gives a self-contained proof via the iterates h_i of the first eigenfunction. Operator route (owner decision 2026-10-07, research/decisions/2026-10-07-bkl-operator-route.md): the iterates are to be built in D(A) and (19) replaced by an approximate eigenfunction (exists_centered_approx_eigenfunction), with the same statement and an enlarged universal constant; not yet stated in Lean."
           },
           {
             "id": "L32",
@@ -8372,9 +8380,13 @@
               {
                 "name": "FunctionalInequalities.Analysis.BakryEmery.taylorTensor_one_neg_weightedLaplacian_of_hasTemperateGrowth",
                 "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Tilt/Temperate.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.LogConcave.taylorTensor_adjointComp_eq",
+                "source": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Tilt.lean"
               }
             ],
-            "note": "Formalized in a reviewed stronger form (Codex review 3, 2026-10-07): for scalar and tensor-valued u ∈ 𝒜 (Mathlib HasTemperateGrowth; values in any finite-dimensional real normed space F, whose indices trail and are not symmetrized), with ℒu = Δu − Du(∇V) componentwise, the derivative index of T_d(Du) after its d Taylor indices (uncurryRight) and S_{d+1} on these d + 1 arguments, every d ≥ 0, for μ = m.tilted(−V) with V ∈ C¹, ∇V of polynomial growth and all exponential moments. The source assumes μ regular (a Id ≤ ∇²V ≤ b Id, every derivative of V polynomially bounded), which implies these hypotheses; that implication is reviewed, not a Lean adapter. A zero measure (e^{−V} not integrable) makes the identities trivial. The scalar case is also proved for compactly supported C² u. The symmetry of ∇ⁿF needed for S_{d+1} is proved for C^∞ maps (iteratedFDeriv_comp_perm_of_contDiff); Mathlib states it only for analytic maps."
+            "note": "Formalized in a reviewed stronger form (Codex review 3, 2026-10-07): for scalar and tensor-valued u ∈ 𝒜 (Mathlib HasTemperateGrowth; values in any finite-dimensional real normed space F, whose indices trail and are not symmetrized), with ℒu = Δu − Du(∇V) componentwise, the derivative index of T_d(Du) after its d Taylor indices (uncurryRight) and S_{d+1} on these d + 1 arguments, every d ≥ 0, for μ = m.tilted(−V) with V ∈ C¹, ∇V of polynomial growth and all exponential moments. The source assumes μ regular (a Id ≤ ∇²V ≤ b Id, every derivative of V polynomially bounded), which implies these hypotheses; that implication is reviewed, not a Lean adapter. A zero measure (e^{−V} not integrable) makes the identities trivial. The scalar case is also proved for compactly supported C² u. The symmetry of ∇ⁿF needed for S_{d+1} is proved for C^∞ maps (iteratedFDeriv_comp_perm_of_contDiff); Mathlib states it only for analytic maps. Also for every F in the generator domain D(A) of the heat model ν = m.tilted(−U), U ∈ C¹, all exponential moments (taylorTensor_adjointComp_eq, operator route of 2026-10-07)."
           },
           {
             "id": "C37",
@@ -8632,9 +8644,21 @@
               {
                 "name": "FunctionalInequalities.Analysis.BakryEmery.integral_hessian_add_le_norm_sq_weightedLaplacianVec",
                 "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Bochner/Tensor.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.LogConcave.compLp_innerSL_mem_closedWeightedOperator_domain",
+                "source": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Hessian.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.LogConcave.compLp_innerSL_closedWeightedOperator_comm",
+                "source": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Hessian.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.LogConcave.sum_norm_sq_closedWeightedOperator_add_le",
+                "source": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Hessian.lean"
               }
             ],
-            "note": "Formalized in a reviewed stronger form (Codex review 4): proved for scalar u of temperate growth and μ = m.tilted(−V) with V of temperate growth and all exponential moments (convexity and the Hessian bounds of a regular measure are not needed), together with the curvature form ∫‖∇²u‖²_HS + ρ∫‖∇u‖² ≤ ∫(Lu)² under ∇²V ≥ ρ used in Lemma 3.4; ‖∇²u‖²_HS is written in the standard orthonormal basis (hessianSqStdBasis). Tensor fields: ∫‖ℒu‖² = ∫Σ_{i,j}‖∇²u(e_i,e_j)‖² + ∫Σ_{i,j}∇²V(e_i,e_j)⟨Du(e_i), Du(e_j)⟩ and the tensor curvature form are proved (TensorBochner.lean)."
+            "note": "Formalized in a reviewed stronger form (Codex review 4): proved for scalar u of temperate growth and μ = m.tilted(−V) with V of temperate growth and all exponential moments (convexity and the Hessian bounds of a regular measure are not needed), together with the curvature form ∫‖∇²u‖²_HS + ρ∫‖∇u‖² ≤ ∫(Lu)² under ∇²V ≥ ρ used in Lemma 3.4; ‖∇²u‖²_HS is written in the standard orthonormal basis (hessianSqStdBasis). Tensor fields: ∫‖ℒu‖² = ∫Σ_{i,j}‖∇²u(e_i,e_j)‖² + ∫Σ_{i,j}∇²V(e_i,e_j)⟨Du(e_i), Du(e_j)⟩ and the tensor curvature form are proved (TensorBochner.lean). On the generator domain D(A) of the heat model (U of temperate growth, all exponential moments): the weak first derivatives lie in D(T̄), the weak Hessian is symmetric and Σ_i‖T̄∂_iF‖² + ρ‖T̄F‖² ≤ ‖AF‖² under ∇²U ≥ ρ (operator route of 2026-10-07; the identity form of (16) on D(A) is not stated)."
           },
           {
             "id": "E48",
@@ -8657,9 +8681,13 @@
               {
                 "name": "FunctionalInequalities.Analysis.BakryEmery.tiltAverage_neg_weightedLaplacianVec",
                 "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Tilt/Tensor.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.LogConcave.tiltAverage_adjointComp_eq",
+                "source": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Tilt.lean"
               }
             ],
-            "note": "Formalized in a reviewed stronger form (Codex review 4): for scalar and tensor-valued u ∈ 𝒜 (vector form F_{−ℒu}(z) = F_{Du}(z) z, ℒu = Δu − Du(∇V)), μ = m.tilted(−V) with V ∈ C¹, ∇V of polynomial growth and all exponential moments (the source assumes μ regular; that implication is reviewed, not a Lean adapter), by integration by parts under each tilt with a scaled bump cutoff and dominated convergence; also for compactly supported C² scalar u."
+            "note": "Formalized in a reviewed stronger form (Codex review 4): for scalar and tensor-valued u ∈ 𝒜 (vector form F_{−ℒu}(z) = F_{Du}(z) z, ℒu = Δu − Du(∇V)), μ = m.tilted(−V) with V ∈ C¹, ∇V of polynomial growth and all exponential moments (the source assumes μ regular; that implication is reviewed, not a Lean adapter), by integration by parts under each tilt with a scaled bump cutoff and dominated convergence; also for compactly supported C² scalar u. Also for every F ∈ D(A) in the heat model, as an identity of L² classes (tiltAverage_adjointComp_eq, operator route of 2026-10-07)."
           }
         ]
       }
@@ -8789,8 +8817,8 @@
       "papers": [
         "BKL2026"
       ],
-      "target": "Theorem 1.1 through Theorem 3.1: Lemma 2.2, Lemma 3.6 (⇑), Corollary 3.7 (⇑) and the regular-law adapter for (12) are formalized; Lemma 3.2 (with λ = 1/C_P in the heat model), Lemma 3.3 for q = 2, Lemma 3.4, Corollary 3.5, (35)–(36) and (61) for supplied iterates, Lemma 2.1 (operator domain, componentwise tensor lift; A[f] = [−ℒf] on 𝒜), (15)–(16) on 𝒜, steps of Proposition 7.1 and Lemma 4.2 conditional on the Letwin bound are partial, restricted or conditional counterparts.",
-      "next_step": "Lemma 2.1 on the class 𝒜 (existence of a temperate representative of the inverse for g ∈ 𝒜₀; the identification A[u] = [−ℒu] and the bounds behind (20) and (32) are proved) and the first-eigenfunction facts of Section 2; these construct the iterates h_i, which the proved Lemma 3.4/Corollary 3.5 statements take as hypotheses. Then Lemma 3.3 for q ≥ 3 (via (42) and the tensor bound (24)) and Lemma 3.8 through the coefficient-array bridge to Lemma 2.2, and the summation (60) of Lemma 3.9. Eldan localization and the Letwin theorem stay explicit dependencies."
+      "target": "Theorem 1.1 through Theorem 3.1: Lemma 2.2, Lemma 3.6 (⇑), Corollary 3.7 (⇑) and the regular-law adapter for (12) are formalized; Lemma 3.2 (with λ = 1/C_P in the heat model), Lemma 3.3 for q = 2, Lemma 3.4, Corollary 3.5, (35)–(36) and (61) for supplied iterates, Lemma 2.1 (operator domain, componentwise tensor lift; A[f] = [−ℒf] on 𝒜), (15)–(16) on 𝒜, on the generator domain D(A) the weak Hessian, the curvature form of (16), (48), Lemma 3.6 and approximate first eigenfunctions (operator route), steps of Proposition 7.1 and Lemma 4.2 conditional on the Letwin bound are partial, restricted or conditional counterparts.",
+      "next_step": "Operator route to the exact statement of Theorem 3.1 (owner decision 2026-10-07): build the iterates h_i componentwise in D(A) from an approximate eigenfunction at λ = 1/C_P (step 1 proved: weak Hessian, curvature form of (16), (48) and Lemma 3.6 on D(A), approximate eigenfunctions), restate Lemmas 3.2–3.4 and Corollary 3.5 for them, then Lemma 3.3 for q ≥ 3 (via (42) and (24)), Lemma 3.8 through the coefficient-array bridge to Lemma 2.2, (60) of Lemma 3.9 and the final summation with the enlarged constant. Lemma 2.1 on 𝒜 and (19) stay partial; Eldan localization and the Letwin theorem stay explicit dependencies."
     },
     {
       "rank": 2,

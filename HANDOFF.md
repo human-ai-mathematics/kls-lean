@@ -66,11 +66,16 @@ authorization. Exact results, scopes and certificates are in the
 
 1. Owner decision: optional remote Lean certification of the BKL commits (manual dispatch or a
    `milestone/**` tag); no BKL paper target is covered, so no milestone is due.
-2. BKL priority 1 (Theorem 3.1 route): Lemma 2.1 on the class `𝒜` (existence of a temperate
-   representative of the inverse for `g ∈ 𝒜₀`; the identification and the bounds are proved) and the
-   first-eigenfunction facts of Section 2
-   (compact resolvent, an eigenfunction attaining `λ₁`). They construct the iterates `h_i`, which the
-   proved Lemma 3.4/Corollary 3.5 statements take as hypotheses.
+2. BKL priority 1 (Theorem 3.1), **operator route** (owner decision 2026-10-07,
+   [record](research/decisions/2026-10-07-bkl-operator-route.md)): prove the exact statement of
+   Theorem 3.1 with the iterates `h_i` built in `D(A)` and an approximate eigenfunction at
+   `λ = 1/C_P` (errors justified in the record; universal constant enlarged). **Step 1 proved**
+   (uncommitted): approximate eigenfunctions (`exists_centered_approx_eigenfunction`), weak Hessian
+   and the curvature form of (16) on `D(A)` (`HeatSemigroup/Hessian.lean`), (48) and Lemma 3.6 on
+   `D(A)` (`HeatSemigroup/Tilt.lean`); audit clients
+   `BKLApproximateEigenfunctionAudit.lean`, `BKLWeakHessianAudit.lean`, `BKLGeneratorTiltAudit.lean`. Next, step 2: the iterates in `D(A)` and Lemmas 3.2–3.4,
+   Corollary 3.5 for them (reassessed plan: about a week to Theorem 3.1). Lemma 2.1 on `𝒜` and
+   (19) stay partial.
 3. Then Lemma 3.3 for `q ≥ 3` (via (42) and the tensor bound (24)), Lemma 3.8 (through the
    coefficient-array bridge to Lemma 2.2) and the summation (60) of Lemma 3.9; Theorem
    4.1 needs Eldan localization, and the Letwin theorem stays an explicit dependency of Lemma 4.2.

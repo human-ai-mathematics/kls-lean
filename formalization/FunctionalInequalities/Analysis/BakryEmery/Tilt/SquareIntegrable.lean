@@ -555,4 +555,152 @@ theorem exists_norm_coordTensor_taylorTensor_le (μ : Measure E) [IsProbabilityM
       _ = ((Real.sqrt n) ^ d * C) * (eLpNorm f 2 μ).toReal := by
         rw [mul_assoc]
 
+/-! ### Tilt averages of `L²` classes -/
+
+section Lp
+
+
+
+omit [CompleteSpace E] [FiniteDimensional ℝ E] [BorelSpace E] in
+/-- Tilt averages only see the `μ`-class of a function: every tilt `μ_z` is absolutely
+continuous with respect to `μ`. -/
+theorem tiltAverage_congr_ae {G : Type*} [NormedAddCommGroup G] [NormedSpace ℝ G]
+    [CompleteSpace G] (μ : Measure E) {f g : E → G} (hfg : f =ᵐ[μ] g) (z : E) :
+    tiltAverage μ f z = tiltAverage μ g z := by
+  unfold tiltAverage expTilt
+  exact integral_congr_ae ((tilted_absolutelyContinuous μ _).ae_le hfg)
+
+omit [CompleteSpace E] [FiniteDimensional ℝ E] [BorelSpace E] in
+/-- Taylor tensors only see the `μ`-class of a function. -/
+theorem taylorTensor_congr_ae {G : Type*} [NormedAddCommGroup G] [NormedSpace ℝ G]
+    [CompleteSpace G] (μ : Measure E) {f g : E → G} (hfg : f =ᵐ[μ] g) (d : ℕ) :
+    taylorTensor μ f d = taylorTensor μ g d := by
+  unfold taylorTensor
+  rw [show tiltAverage μ f = tiltAverage μ g from funext (tiltAverage_congr_ae μ hfg)]
+
+omit [CompleteSpace E] [FiniteDimensional ℝ E] in
+/-- With all exponential moments, `e^{⟪z, ·⟫} ∈ L²(μ)`. -/
+theorem memLp_exp_inner (μ : Measure E)
+    (hexp : ∀ r : ℝ, Integrable (fun x => Real.exp (r * ‖x‖)) μ) (z : E) :
+    MemLp (fun x => Real.exp ⟪z, x⟫) 2 μ := by
+  have hc : Continuous fun x : E => Real.exp ⟪z, x⟫ := by fun_prop
+  refine (memLp_two_iff_integrable_sq hc.aestronglyMeasurable).2 ?_
+  refine (hexp (2 * ‖z‖)).mono' (hc.pow 2).aestronglyMeasurable (ae_of_all _ fun x => ?_)
+  rw [Real.norm_of_nonneg (by positivity), ← Real.exp_nat_mul]
+  apply Real.exp_le_exp.2
+  have := real_inner_le_norm z x
+  push_cast
+  nlinarith
+
+omit [CompleteSpace E] [FiniteDimensional ℝ E] in
+/-- Square-integrable functions are integrable against every exponential tilt of a finite measure
+with all exponential moments. -/
+theorem integrable_expTilt_of_memLp {G : Type*} [NormedAddCommGroup G] [NormedSpace ℝ G]
+    (μ : Measure E) [IsFiniteMeasure μ]
+    (hexp : ∀ r : ℝ, Integrable (fun x => Real.exp (r * ‖x‖)) μ) {g : E → G}
+    (hg : MemLp g 2 μ) (z : E) : Integrable g (expTilt μ z) := by
+  have hc : Continuous fun x : E => Real.exp ⟪z, x⟫ := by fun_prop
+  have hez : Integrable (fun x => Real.exp ⟪z, x⟫) μ := by
+    refine (hexp ‖z‖).mono' hc.aestronglyMeasurable (ae_of_all _ fun x => ?_)
+    rw [Real.norm_eq_abs, abs_of_pos (Real.exp_pos _)]
+    exact Real.exp_le_exp.2 (real_inner_le_norm z x)
+  unfold expTilt
+  rw [integrable_tilted_iff hez]
+  refine (integrable_exp_mul_norm_of_memLp μ hexp hg.norm ‖z‖).mono'
+    (hc.aestronglyMeasurable.smul hg.aestronglyMeasurable) (ae_of_all _ fun x => ?_)
+  rw [norm_smul, Real.norm_eq_abs, abs_of_pos (Real.exp_pos _), norm_norm]
+  gcongr
+  exact real_inner_le_norm z x
+
+omit [CompleteSpace E] [FiniteDimensional ℝ E] in
+/-- The tilt average of a class `g ∈ L²(μ)` at `z` is `(∫ e^{⟪z, x⟫} dμ)⁻¹ ⟪e^{⟪z, ·⟫}, g⟫`. -/
+theorem tiltAverage_Lp_eq_inner (μ : Measure E)
+    (hexp : ∀ r : ℝ, Integrable (fun x => Real.exp (r * ‖x‖)) μ) (g : Lp ℝ 2 μ) (z : E) :
+    tiltAverage μ (⇑g) z =
+      (∫ x, Real.exp ⟪z, x⟫ ∂μ)⁻¹ * ⟪(memLp_exp_inner μ hexp z).toLp _, g⟫ := by
+  rw [tiltAverage, expTilt, integral_tilted, L2.inner_def, ← integral_const_mul]
+  apply integral_congr_ae
+  filter_upwards [(memLp_exp_inner μ hexp z).coeFn_toLp] with x hx
+  rw [hx, smul_eq_mul, RCLike.inner_apply, conj_trivial, div_eq_mul_inv]
+  ring
+
+omit [CompleteSpace E] [FiniteDimensional ℝ E] in
+/-- For fixed `z`, `g ↦ F_g(z)` is continuous on `L²(μ)`. -/
+theorem continuous_tiltAverage_Lp (μ : Measure E)
+    (hexp : ∀ r : ℝ, Integrable (fun x => Real.exp (r * ‖x‖)) μ) (z : E) :
+    Continuous fun g : Lp ℝ 2 μ => tiltAverage μ (⇑g) z := by
+  simp_rw [tiltAverage_Lp_eq_inner μ hexp _ z]
+  exact continuous_const.mul (continuous_const.inner continuous_id)
+
+omit [FiniteDimensional ℝ E] in
+/-- Pairing the tilt average of a vector class `G ∈ L²(μ; E)` with `w` is the tilt average of the
+scalar class `⟪w, G⟫`. -/
+theorem inner_tiltAverage_Lp (μ : Measure E) [IsFiniteMeasure μ]
+    (hexp : ∀ r : ℝ, Integrable (fun x => Real.exp (r * ‖x‖)) μ) (G : Lp E 2 μ) (w z : E) :
+    ⟪w, tiltAverage μ (⇑G) z⟫ = tiltAverage μ (⇑((innerSL ℝ w).compLpL 2 μ G)) z := by
+  rw [tiltAverage_congr_ae μ ((innerSL ℝ w).coeFn_compLpL G) z]
+  unfold tiltAverage
+  simp only [innerSL_apply_apply]
+  exact (integral_inner (integrable_expTilt_of_memLp μ hexp (Lp.memLp G) z) w).symm
+
+/-- The tilt average of a vector class `G ∈ L²(μ; E)` is smooth. -/
+theorem contDiff_tiltAverage_Lp (μ : Measure E) [IsFiniteMeasure μ] [NeZero μ]
+    (hexp : ∀ r : ℝ, Integrable (fun x => Real.exp (r * ‖x‖)) μ) (G : Lp E 2 μ) :
+    ContDiff ℝ ∞ (tiltAverage μ (⇑G)) := by
+  let b := stdOrthonormalBasis ℝ E
+  have h : tiltAverage μ (⇑G) =
+      fun z => ∑ i, tiltAverage μ (⇑((innerSL ℝ (b i)).compLpL 2 μ G)) z • b i := by
+    funext z
+    simp_rw [← inner_tiltAverage_Lp μ hexp G _ z]
+    exact (b.sum_repr' _).symm
+  rw [h]
+  exact ContDiff.sum fun i _ =>
+    (contDiff_tiltAverage_of_memLp μ hexp (Lp.memLp _)).smul contDiff_const
+
+omit [FiniteDimensional ℝ E] [BorelSpace E] in
+/-- Lemma 3.6 from the tilt identity: if `F_g(w) = ⟪w, F_G(w)⟫` for every `w` with `F_G` smooth,
+then `T_{d+1} g = S_{d+1} T_d G`. This is the tensor part of the proof of
+`taylorTensor_neg_weightedLaplacian`, isolated from the smooth compactly supported setting. -/
+theorem taylorTensor_succ_of_eq_inner (μ : Measure E) {g : E → ℝ} {G : E → E}
+    (hG : ContDiff ℝ ∞ (tiltAverage μ G))
+    (hEq : tiltAverage μ g = fun w => ⟪w, tiltAverage μ G w⟫) (d : ℕ) :
+    taylorTensor μ g (d + 1) = symmetrizeML (appendInner (taylorTensor μ G d)) := by
+  set Φ := tiltAverage μ G with hΦ
+  ext h
+  simp only [taylorTensor, symmetrizeML, appendInner,
+    smul_apply,
+    sum_apply,
+    ContinuousMultilinearMap.domDomCongr_apply,
+    ContinuousMultilinearMap.uncurryRight_apply,
+    ContinuousLinearMap.compContinuousMultilinearMap_coe]
+  rw [hEq, ← hΦ]
+  rw [iteratedFDeriv_inner_self_apply hG d 0 h]
+  simp only [inner_zero_left, zero_add, Function.comp_apply]
+  change
+    ((d + 1).factorial : ℝ)⁻¹ •
+        ∑ k : Fin (d + 1), ⟪h k, (iteratedFDeriv ℝ d Φ 0) (k.removeNth h)⟫ =
+      ((d + 1).factorial : ℝ)⁻¹ •
+        ∑ σ : Equiv.Perm (Fin (d + 1)),
+          ⟪((d.factorial : ℝ)⁻¹ • iteratedFDeriv ℝ d Φ 0) (Fin.init (h ∘ σ)),
+            h (σ (Fin.last d))⟫
+  have hs : (∑ σ : Equiv.Perm (Fin (d + 1)),
+        ⟪(iteratedFDeriv ℝ d Φ 0) (Fin.init (h ∘ σ)), h (σ (Fin.last d))⟫) =
+      (d.factorial : ℝ) *
+        ∑ k : Fin (d + 1), ⟪(iteratedFDeriv ℝ d Φ 0) (k.removeNth h), h k⟫ := by
+    apply sum_perm_inner_init_last
+    intro τ v
+    exact iteratedFDeriv_comp_perm_of_contDiff hG d 0 v τ
+  have hsum : (∑ σ : Equiv.Perm (Fin (d + 1)),
+        ⟪((d.factorial : ℝ)⁻¹ • iteratedFDeriv ℝ d Φ 0) (Fin.init (h ∘ σ)),
+          h (σ (Fin.last d))⟫) =
+      ∑ k : Fin (d + 1), ⟪(iteratedFDeriv ℝ d Φ 0) (k.removeNth h), h k⟫ := by
+    simp_rw [smul_apply, real_inner_smul_left]
+    rw [← Finset.mul_sum, hs]
+    field_simp [Nat.factorial_ne_zero]
+  rw [hsum]
+  congr 1
+  exact Finset.sum_congr rfl fun k _ => real_inner_comm _ _
+
+end Lp
+
 end FunctionalInequalities.Analysis.BakryEmery
