@@ -1111,6 +1111,30 @@
     "lem:bkl-corollary-3-7": {
       "description": "Bizeul–Klartag–Lehec Corollary 3.7: S_{d+1}T_d(∇₀h) = T_{d+1}(−ℒh) = αT_{d+1}(∇₀g) whenever −ℒh = α∇₀g, for tensor fields of temperate growth.",
       "blueprint": "lem:bkl-corollary-3-7"
+    },
+    "lem:bkl-regular-law": {
+      "description": "Bizeul–Klartag–Lehec (12): a regular potential gives a probability law with Gaussian tails and all exponential moments, to which the tilt, integration-by-parts, Bochner and inverse results apply.",
+      "blueprint": "lem:bkl-regular-law"
+    },
+    "lem:bkl-energy-recursion": {
+      "description": "Bizeul–Klartag–Lehec Lemma 3.4 and Corollary 3.5: the energy inequality (45) for a pair satisfying (30) and (33), and summability of the energies.",
+      "blueprint": "lem:bkl-energy-recursion"
+    },
+    "lem:bkl-third-cumulant-conditional": {
+      "description": "Bizeul–Klartag–Lehec Lemma 4.2 conditionally on the Letwin quadratic-form bound: R_3 ≤ 8 Id for centered isotropic laws with all exponential moments.",
+      "blueprint": "lem:bkl-third-cumulant-conditional"
+    },
+    "lem:bkl-near-symmetric-gradient": {
+      "description": "Bizeul–Klartag–Lehec Lemma 3.2: ∇₀h_{i+1} is within χ_i/λ (squared L² distance) of a field symmetric in its first two indices, for a pair satisfying (30) with α² ≥ λ > 0.",
+      "blueprint": "lem:bkl-near-symmetric-gradient"
+    },
+    "lem:bkl-generator-temperate": {
+      "description": "Bizeul–Klartag–Lehec Lemma 2.1 step: the L² class of a function of temperate growth lies in the generator domain with A[f] = [−ℒf]; a centered temperate solution of −ℒu = g is the centered inverse of [g].",
+      "blueprint": "lem:bkl-generator-temperate"
+    },
+    "lem:bkl-poincare-temperate": {
+      "description": "Bizeul–Klartag–Lehec (20), (32), Lemma 3.2 in the heat model: Poincaré on the class 𝒜, ‖∇h‖² ≤ C‖ℒh‖², α² ≥ 1/C for a pair, and Lemma 3.2 with λ = 1/C.",
+      "blueprint": "lem:bkl-poincare-temperate"
     }
   },
   "diagram": {

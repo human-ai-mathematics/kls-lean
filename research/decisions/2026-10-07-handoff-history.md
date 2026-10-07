@@ -78,3 +78,19 @@ Follow [research/workflow.md](../workflow.md): select work by paper and target t
 run change-appropriate checks, stage canonical metadata and regenerate progress with
 `python3 research/progress/update.py`. Remote CI is Lean-only, on manual dispatch or a
 `milestone/**` tag.
+
+---
+
+# Superseded "Next" items of the 2026-10-07 handoff (after the eight-hour block)
+
+Archived on 2026-10-07 during the four-hour BKL continuation, when items 2 and 3 of the current
+handoff's "Next" list were replaced. Text unchanged; historical, not current task authorization.
+
+2. BKL priority 1 (Theorem 3.1 route): Lemma 2.1 on the class `𝒜` (smooth representatives,
+   pointwise equation, the tensor lift) and the first-eigenfunction facts of Section 2 (compact
+   resolvent, an eigenfunction attaining `λ₁`); they construct the iterates `h_i` used by
+   Lemmas 3.2–3.4 and 3.8.
+3. Lemma 4.2 conditionally on the Letwin bound: a frozen candidate
+   (`build/reviews/2026-10-07-bkl-eight-hour/workers/N-ThirdCumulant.frozen.lean`) has two open steps
+   (the second derivative of the tilt average at `0`, and the Cauchy–Schwarz conclusion); it is not in
+   the library. Theorem 4.1 needs Eldan localization; the Letwin theorem stays an explicit dependency.

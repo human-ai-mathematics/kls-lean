@@ -8,16 +8,17 @@ authorization. Exact results, scopes and certificates are in the
 
 ## State
 
-- `main` = `origin/main` = `36e7c78` (BGL ergodicity and the BGL Corollary 4.8.2 certificate).
-  Remote Lean certification passed for it
+- `main` = `origin/main`: the two 2026-10-07 BKL commits (eight-hour and four-hour blocks) on top of
+  `36e7c78` (BGL ergodicity and the BGL Corollary 4.8.2 certificate). Remote Lean certification passed
+  for `36e7c78` only
   ([run 37516844384](https://github.com/numina-functional-inequalities/kls-lean/actions/runs/37516844384),
-  2026-10-07).
+  2026-10-07); the BKL commits are verified locally (receipts in the block evidence), not remotely.
 - 28 ledger certificates. `FunctionalInequalities.KLS.kls` in `KLS/Target.lean` is the one
   intentional hole, outside every certificate closure. Dimension-free KLS is open.
 - Covered papers: Ambrosio–Di Marino–Gigli Theorem 3.6 (`thm:relaxed-minkowski-content-perimeter`)
   and Bakry–Gentil–Ledoux 2014 Corollary 4.8.2 (`thm:bakry-emery-poincare`, relation `⇑`, that
   corollary only).
-- **Uncommitted working tree (2026-10-07 eight-hour block):** first dependencies of
+- **Committed (2026-10-07 eight-hour block):** first dependencies of
   Bizeul–Klartag–Lehec, arXiv:2610.05474v1 (pinned PDF SHA-256 `86824722…bb0db`). Execution record,
   worker provenance, Codex reviews and the final report:
   `build/reviews/2026-10-07-bkl-eight-hour/` ([dated log](research/decisions/2026-10-07-bkl-foundations.md)).
@@ -37,26 +38,48 @@ authorization. Exact results, scopes and certificates are in the
     maps (`Analysis/Tensor/{Multilinear,Coefficients}.lean`).
   - Audit client `research/audits/BKLFoundationsAudit.lean` (nonvacuity on the constructed Gaussian,
     nonzero tensors, `d = 0`, `n = 0`). No paper is newly covered.
+- **Committed (2026-10-07 four-hour block, on top of the above):** evidence in
+  `build/reviews/2026-10-07-bkl-four-hour/` ([dated log](research/decisions/2026-10-07-bkl-four-hour.md)).
+  - Lemma 4.2 conditionally on the Letwin bound (`LetwinQuadraticBound`, an explicit premise) for
+    centered isotropic laws with all exponential moments, relation partial
+    (`Analysis/BakryEmery/Cumulant.lean`); the uniform law on `[−√3, √3]` and a skewed two-point law
+    (`κ₃ = 3/2`) discharge every premise (`research/audits/BKLThirdCumulantWitnessAudit.lean`).
+  - Regular potentials (12): `KLS.RegularPotential` derives the probability normalization, Gaussian
+    tails, all exponential moments and growth of `∇V`; the tensor Lemma 3.6, curvature form of (16) and
+    Lemma 2.1 (operator domain, `C = 1/a`, also componentwise) hold for regular laws
+    (`KLS/LogConcave/Regular.lean`).
+  - Lemmas 3.2–3.4 (3.3 for `q = 2` only), Corollary 3.5, (35)–(36) and steps of Lemma 3.9 as
+    partial counterparts for supplied iterates: (39), (46), (47) and (45) for every pair satisfying
+    (30) and (33), summability and `v_N → 0` for sequences of tensor iterates, the energy drops
+    `v_i − v_{i+1} = ‖∫∇h_i‖²`, the near-symmetric gradient under `α² ≥ λ > 0`, (61), and
+    `p₁ ≤ λ²K` for a centered eigenfunction (`Analysis/BakryEmery/TensorEnergy.lean`).
+  - Lemma 2.1, componentwise tensor lift (operator domain) with Parseval in `L²(ν; G)`
+    (`L2/Components.lean`, `KLS/LogConcave/HeatSemigroup/Inverse.lean`).
+  - Lemma 2.1 on `𝒜`, bridge part: temperate functions lie in the generator domain with
+    `A[f] = [−ℒf]`, so a centered temperate solution is the operator-domain inverse; Poincaré on `𝒜`,
+    `‖∇h‖² ≤ C‖ℒh‖²`, the source's (32), and Lemmas 3.2 and 3.3 (`q = 2`) with the bound `C χ` for
+    supplied pairs, `C ≥ C_P` (`KLS/LogConcave/HeatSemigroup/Temperate.lean`).
+  - Audit client `research/audits/BKLRegularLawAudit.lean` (the scaled Gaussian as a regular
+    potential; consumers of every new endpoint, including a sharp instance of the `p₁` bound).
 
 ## Next
 
-1. Owner decision on the new BKL work: commit/push and optional remote certification (no
-   authorization was extended to it).
-2. BKL priority 1 (Theorem 3.1 route): Lemma 2.1 on the class `𝒜` (smooth representatives,
-   pointwise equation, the tensor lift) and the first-eigenfunction facts of Section 2 (compact
-   resolvent, an eigenfunction attaining `λ₁`); they construct the iterates `h_i` used by
-   Lemmas 3.2–3.4 and 3.8.
-3. Lemma 4.2 conditionally on the Letwin bound: a frozen candidate
-   (`build/reviews/2026-10-07-bkl-eight-hour/workers/N-ThirdCumulant.frozen.lean`) has two open steps
-   (the second derivative of the tilt average at `0`, and the Cauchy–Schwarz conclusion); it is not in
-   the library. Theorem 4.1 needs Eldan localization; the Letwin theorem stays an explicit dependency.
+1. Owner decision: optional remote Lean certification of the BKL commits (manual dispatch or a
+   `milestone/**` tag); no BKL paper target is covered, so no milestone is due.
+2. BKL priority 1 (Theorem 3.1 route): Lemma 2.1 on the class `𝒜` (existence of a temperate
+   representative of the inverse for `g ∈ 𝒜₀`; the identification and the bounds are proved) and the
+   first-eigenfunction facts of Section 2
+   (compact resolvent, an eigenfunction attaining `λ₁`). They construct the iterates `h_i`, which the
+   proved Lemma 3.4/Corollary 3.5 statements take as hypotheses.
+3. Then Lemma 3.3 for `q ≥ 3` (via (42) and the tensor bound (24)), Lemma 3.8 (through the
+   coefficient-array bridge to Lemma 2.2) and the summation (60) of Lemma 3.9; Theorem
+   4.1 needs Eldan localization, and the Letwin theorem stays an explicit dependency of Lemma 4.2.
 
 ## Open owner decisions
 
 - Stochastic calculus for Theorem 4.1 and priorities 5–6: build it here or build on external Lean
   efforts; evidence and a recommendation are in
   [the options record](research/decisions/2026-10-03-stochastic-calculus-options.md).
-- Commit and push of the 2026-10-07 BKL working tree.
 - E. Milman Lemma 4.1 is recorded as `same`, although the real-infimum quantile differs from the
   paper's `−∞` in the degenerate case `f = 0`, `1 − ε < 0`; accept the convention or relabel it.
 - Upstreaming generic infrastructure to Mathlib after an API cleanup (the `C^∞` symmetry of

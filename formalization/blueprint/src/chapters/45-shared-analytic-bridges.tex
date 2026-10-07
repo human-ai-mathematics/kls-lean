@@ -932,7 +932,9 @@ addressed.
   \lean{FunctionalInequalities.Analysis.Semigroup.Generated.exists_adjointComp_eq_of_gap,
         FunctionalInequalities.KLS.LogConcave.existsUnique_centered_adjointComp_eq,
         FunctionalInequalities.KLS.LogConcave.centered_adjointComp_bounds,
-        FunctionalInequalities.KLS.LogConcave.norm_centered_gradient_le}
+        FunctionalInequalities.KLS.LogConcave.norm_centered_gradient_le,
+        FunctionalInequalities.L2.sum_norm_sq_compLp_innerSL,
+        FunctionalInequalities.KLS.LogConcave.existsUnique_centered_adjointComp_eq_components}
   \leanok
   \uses{def:log-concave-law,def:literature-poincare-constant}
   A restricted counterpart of Lemma~2.1 of \cite{BizeulKlartagLehec2026}.  In the heat model
@@ -940,14 +942,18 @@ addressed.
   $A=\bar T^\dagger\bar T=-\mathcal L$ be the closed generator.  If $\CPLit(\nu)\le C$, every
   centered $g\in L^2(\nu)$ has exactly one centered preimage $u$ in the operator domain of $A$, and
   $\norm u\le C\norm g$, $\norm{\bar Tu}^2=\langle g,u\rangle\le C\norm g^2$ (BKL~(20)) and
-  $\norm{\nabla_0u}\le\sqrt C\norm g$ (BKL~(24)).  The source's class $\mathcal A$ of smooth
-  functions of polynomial growth, smooth representatives, the pointwise equation and the tensor
-  lift are not proved.
+  $\norm{\nabla_0u}\le\sqrt C\norm g$ (BKL~(24)).  Componentwise tensor lift: for a finite-dimensional
+  real inner product space $G$ with orthonormal basis $(b_k)$ and centered $g\in L^2(\nu;G)$ there is
+  exactly one family of centered $u_k$ in the operator domain with $Au_k=\langle b_k,g\rangle$, and
+  $\sum_k\norm{u_k}^2\le C^2\norm g^2$ (Parseval identifies $\sum_k\norm{\langle b_k,g\rangle}^2$ with
+  $\norm g^2$).  The source's class $\mathcal A$ of smooth functions of polynomial growth, smooth
+  representatives and the pointwise equation are not proved.
 \end{lemma}
 \begin{proof}
   \leanok
   The gap inequality on $(\ker\bar T)^\perp$ makes the range of the self-adjoint operator $A$
-  closed and dense in $(\ker\bar T)^\perp$; the kernel of $\bar T$ is the constants.
+  closed and dense in $(\ker\bar T)^\perp$; the kernel of $\bar T$ is the constants.  The tensor lift
+  applies the scalar result to each component.
 \end{proof}
 
 \begin{lemma}[Tilt averages of the generator]
@@ -1109,4 +1115,176 @@ addressed.
 \begin{proof}
   \leanok
   Lemma~3.6 for tensor fields, $T_d$ of a constant vanishes for $d\ge1$, and homogeneity of $T_{d+1}$.
+\end{proof}
+
+\begin{lemma}[Regular laws]
+  \label{lem:bkl-regular-law}
+  \lean{FunctionalInequalities.KLS.RegularPotential,
+        FunctionalInequalities.KLS.RegularPotential.isProbabilityMeasure,
+        FunctionalInequalities.KLS.RegularPotential.integrable_exp_mul_norm,
+        FunctionalInequalities.KLS.RegularPotential.exists_norm_gradient_le,
+        FunctionalInequalities.KLS.RegularPotential.logConcave_law,
+        FunctionalInequalities.KLS.RegularPotential.taylorTensor_neg_weightedLaplacianVec,
+        FunctionalInequalities.KLS.RegularPotential.integral_hessian_add_le_norm_sq_weightedLaplacianVec,
+        FunctionalInequalities.KLS.RegularPotential.existsUnique_centered_adjointComp_eq,
+        FunctionalInequalities.KLS.RegularPotential.existsUnique_centered_adjointComp_eq_components}
+  \leanok
+  \uses{lem:bkl-tilt-generator,lem:bkl-bochner-temperate,lem:bkl-centered-inverse}
+  The regularity assumption~(12) of \cite{BizeulKlartagLehec2026}: $V$ is smooth with all derivatives
+  of polynomial growth and $a\le\nabla^2V\le b$ with $a>0$ (the source's $b>0$ follows in positive
+  dimension; in dimension $0$ any $b$ is allowed).  The law is the probability measure
+  $\mathrm{volume}.\mathrm{tilted}(-V)$, of density $e^{-V}/Z$ with $Z=\int e^{-V}dx$; the source's
+  normalized potential is $V+\log Z$.  From~(12) alone it follows that $V$ grows at least quadratically, $e^{-V}$
+  is integrable with $Z>0$, the law is a log-concave probability measure with full-dimensional support,
+  it has all exponential moments $\int e^{r|x|}$, and $\nabla V$ has polynomial growth.  Consequently
+  the tensor-valued Lemma~3.6, the curvature form of~(16) with constant $a$, and the operator-domain
+  part of Lemma~2.1 with $\norm u\le a^{-1}\norm g$ (also componentwise for tensor data, with
+  $\sum_k\norm{u_k}^2\le a^{-2}\norm g^2$) hold for every regular law with no further analytic
+  premise (the test fields remain of temperate growth and the data $g\in L^2$ centered).
+\end{lemma}
+\begin{proof}
+  \leanok
+  Taylor's formula with the Hessian lower bound gives $V(x)\ge V(0)+DV(0)x+\tfrac a2|x|^2$; Gaussian
+  domination gives the integrability statements; the temperate-growth assumption bounds $\nabla V$.
+\end{proof}
+
+\begin{lemma}[Energy recursion]
+  \label{lem:bkl-energy-recursion}
+  \lean{FunctionalInequalities.Analysis.BakryEmery.gradCoord,
+        FunctionalInequalities.Analysis.BakryEmery.integral_norm_sq_weightedLaplacianVec_eq_of_poisson,
+        FunctionalInequalities.Analysis.BakryEmery.integral_norm_sq_gradCoord_gradCoord_eq,
+        FunctionalInequalities.Analysis.BakryEmery.integral_norm_sq_gradCoord_gradCoord_eq_add,
+        FunctionalInequalities.Analysis.BakryEmery.integral_norm_sq_weightedLaplacianVec_ge,
+        FunctionalInequalities.Analysis.BakryEmery.summable_and_tendsto_zero_of_energy,
+        FunctionalInequalities.Analysis.BakryEmery.summable_and_tendsto_zero_of_poisson_chain,
+        FunctionalInequalities.Analysis.BakryEmery.integral_norm_sq_gradCoord_sub_eq_of_normalized,
+        FunctionalInequalities.Analysis.BakryEmery.integral_norm_sq_gradCoord_eq_add_sum,
+        FunctionalInequalities.Analysis.BakryEmery.norm_sq_integral_gradCoord_eq,
+        FunctionalInequalities.Analysis.BakryEmery.norm_sq_integral_gradient_le_of_eigen}
+  \leanok
+  \uses{lem:bkl-ibp-temperate,lem:bkl-bochner-temperate,lem:bkl-tilt-generator}
+  Partial counterpart of Lemma~3.4 and Corollary~3.5 of \cite{BizeulKlartagLehec2026}: the
+  generalized implication for supplied iterates.  Let $\mu=m.\mathrm{tilted}(-V)$ with $V$ of temperate growth, all exponential
+  moments and $\nabla^2V\ge a$.  Gradients of tensor fields add a first index, with the
+  Hilbert--Schmidt norm.  For tensor fields $g,h$ of temperate growth with $-\mathcal Lh=\alpha\nabla_0g$
+  (relation~(30)) and $\int\norm{\nabla h}^2=\int\norm{\nabla_0g}^2$ (normalization~(33)), the
+  identities~(39), (46), (47) hold and
+  $\int\norm{\mathcal Lh}^2+\int\norm{\nabla^2g-\alpha\nabla h}^2+a\int\norm{\nabla g}^2\le\int\norm{\mathcal Lg}^2$
+  (inequality~(45)).  If $a>0$, nonnegative sequences satisfying~(45) have summable energies tending
+  to $0$; in particular this holds for every sequence of tensor iterates $h_k$ with values in spaces
+  $G_k$ linked by linear isometries $\mathbb R^n\otimes G_k\cong G_{k+1}$ whose consecutive pairs
+  satisfy~(30) and~(33).  Under~(33) alone, $v_i-v_{i+1}=\abs{\int\nabla h_i\,d\mu}^2$~(35) for a pair
+  and $v_0=v_N+\sum_{k<N}\abs{\int\nabla h_k\,d\mu}^2$ along a sequence (the form of~(36); these use that
+  $\mu$ is a probability measure).  For a pair satisfying~(30), Lemma~3.6 gives
+  $\int\nabla h\,d\mu=\alpha\,T_1(\nabla_0g)$, hence $\abs{\int\nabla h}^2=\alpha^2\abs{T_1(\nabla_0g)}^2$ in
+  Hilbert--Schmidt norms (the identity~(61) used in Lemma~3.9); and for a supplied centered
+  eigenfunction $\mathcal Lf=-\lambda f$ and covariance at most $K\ge0$,
+  $\abs{\int\nabla f}^2\le\lambda^2K\norm f_2^2$ (the bound on $p_1$ in the proof of Lemma~3.9).  The existence of the source's iterates (Lemma~2.1 on $\mathcal A$ and
+  the first eigenfunction) is not proved.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Integration by parts~(15) for the pair, the tensor Bochner formula~(16) with the curvature bound,
+  and telescoping.
+\end{proof}
+
+\begin{lemma}[Third cumulant under the Letwin bound]
+  \label{lem:bkl-third-cumulant-conditional}
+  \lean{FunctionalInequalities.Analysis.BakryEmery.LetwinQuadraticBound,
+        FunctionalInequalities.Analysis.BakryEmery.fderiv_logLaplace_zero_apply,
+        FunctionalInequalities.Analysis.BakryEmery.taylorTensor_two_inner_eq_of_centered,
+        FunctionalInequalities.Analysis.BakryEmery.cumulant_three_eq_integral,
+        FunctionalInequalities.Analysis.BakryEmery.sum_sq_cumulant_three_le_of_letwin}
+  \leanok
+  \uses{lem:bkl-linear-cumulant}
+  Lemma~4.2 of \cite{BizeulKlartagLehec2026}, conditionally on the Letwin quadratic-form bound, which
+  stays an explicit hypothesis.  For a centered isotropic probability measure with all exponential
+  moments, $\kappa_3(u,v,w)=\int\langle u,x\rangle\langle v,x\rangle\langle w,x\rangle\,d\mu$, and if
+  $\mathrm{Var}_\mu\langle Mx,x\rangle\le8\norm M_{HS}^2$ for every self-adjoint $M$ (the Letwin bound, the
+form taken by the variance estimate for isotropic $\mu$), then
+  $\sum_{j,k}\kappa_3(u,e_j,e_k)^2\le 8|u|^2$, i.e.\ $R_3\le8\,\mathrm{Id}$.  The unconditional Lemma~4.2 is
+  not proved.
+\end{lemma}
+\begin{proof}
+  \leanok
+  The cumulant formula for linear functions and centering, then Cauchy--Schwarz between
+  $\langle u,x\rangle$ and the centered quadratic form of $M=\sum_{j,k}\kappa_3(u,e_j,e_k)\,e_j\otimes e_k$.
+\end{proof}
+
+\begin{lemma}[Near-symmetric gradient]
+  \label{lem:bkl-near-symmetric-gradient}
+  \lean{FunctionalInequalities.Analysis.BakryEmery.gradCoord_gradCoord_symm,
+        FunctionalInequalities.Analysis.BakryEmery.exists_symm_integral_norm_sq_sub_le,
+        FunctionalInequalities.Analysis.BakryEmery.norm_sub_symmetrizeFirstTwo_le,
+        FunctionalInequalities.Analysis.BakryEmery.integral_norm_sq_sub_symmetrizeFirstTwo_le}
+  \leanok
+  \uses{lem:bkl-ibp-temperate,lem:bkl-energy-recursion}
+  Partial counterpart of Lemma~3.2 of \cite{BizeulKlartagLehec2026}: the generalized implication for a
+  supplied pair.  Let $\mu=m.\mathrm{tilted}(-V)$ be a probability measure with $V$ of temperate growth
+  and all exponential moments, and $g,h$ tensor fields of temperate growth with
+  $-\mathcal Lh=\alpha\nabla_0g$ (relation~(30)).  If $\lambda>0$ and $\lambda\le\alpha^2$ whenever
+  $\alpha\ne0$ (the source's~(32) with $\lambda=\lambda_1$), there is a tensor field $\tilde T$ symmetric in
+  its first two indices with $\norm{\nabla_0h-\tilde T}_2^2\le\chi/\lambda$, where
+  $\chi=\norm{\nabla^2g-\alpha\nabla h}_2^2$; this is the square of~(38).  The normalization~(33) is not
+  needed.  Since $S_2$ (the average over the transposition of the first two indices) is the nearest
+  tensor symmetric in those indices, also $\norm{\nabla_0h-S_2\nabla_0h}_2^2\le\chi/\lambda$: Lemma~3.3 in the
+  case $q=2$ (with constant $1$).  The source's iterates and the bound~(32) are not constructed here.
+\end{lemma}
+\begin{proof}
+  \leanok
+  For $\alpha\ne0$ take $\tilde T=\alpha^{-1}\nabla_0(\nabla g)$, symmetric since $\nabla^2g$ is a Hessian;
+  then $\nabla_0h-\tilde T=-\alpha^{-1}(F-\int F\,d\mu)$ with $F=\nabla^2g-\alpha\nabla h$, and centering
+  decreases the $L^2(\mu)$ norm.  For $\alpha=0$, $\mathcal Lh=0$ and~(15) give $\nabla h=0$ in $L^2(\mu)$, and
+  $\tilde T=0$.
+\end{proof}
+
+\begin{lemma}[The generator on the class $\mathcal A$]
+  \label{lem:bkl-generator-temperate}
+  \lean{FunctionalInequalities.KLS.LogConcave.exists_toLp_mem_closedWeightedOperator_domain_of_hasTemperateGrowth,
+        FunctionalInequalities.KLS.LogConcave.exists_toLp_mem_adjointComp_domain_of_hasTemperateGrowth,
+        FunctionalInequalities.KLS.LogConcave.centered_inverse_eq_toLp_of_hasTemperateGrowth}
+  \leanok
+  \uses{lem:bkl-centered-inverse,lem:bkl-ibp-temperate}
+  A step of Lemma~2.1 of \cite{BizeulKlartagLehec2026} relating its class $\mathcal A$ to the operator
+  domain.  In the heat model $\nu=m.\mathrm{tilted}(-U)$ ($\nu$ log-concave with full-dimensional
+  support) with $U$ of temperate growth and all exponential moments, the $L^2(\nu)$ class of every $f$
+  of temperate growth lies in the domain of the closed unit gradient with $\bar T[f]=[\nabla f]$, and in
+  the domain of $A=\bar T^\dagger\bar T$ with $A[f]=[-\mathcal Lf]$.  Consequently, if $\CPLit(\nu)\le C$
+  and a centered $u$ of temperate growth solves $-\mathcal Lu=g$ pointwise, the centered operator-domain
+  inverse of $[g]$ is $[u]$.  The existence of such a $u$ for $g\in\mathcal A_0$ (smoothness and growth of
+  the inverse) is not proved.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Cutoffs $\chi_R f\in C_c^\infty$ converge to $f$ in the graph norm of $\bar T$ by dominated convergence;
+  closedness gives the first statement.  Integration by parts~(15) against compactly supported smooth
+  tests and the core property of $C_c^\infty$ give $\langle[-\mathcal Lf],x\rangle=\langle[\nabla f],\bar Tx\rangle$
+  for $x\in D(\bar T)$, hence the second; uniqueness of the centered inverse gives the third.
+\end{proof}
+
+\begin{lemma}[Poincaré on $\mathcal A$ and the spectral bound of the iterates]
+  \label{lem:bkl-poincare-temperate}
+  \lean{FunctionalInequalities.KLS.LogConcave.integral_sq_sub_integral_le_of_hasTemperateGrowth,
+        FunctionalInequalities.KLS.LogConcave.integral_norm_sq_sub_integral_le_of_hasTemperateGrowth,
+        FunctionalInequalities.KLS.LogConcave.integral_norm_sq_gradCoord_le_of_hasTemperateGrowth,
+        FunctionalInequalities.KLS.LogConcave.one_le_mul_sq_of_poisson,
+        FunctionalInequalities.KLS.LogConcave.exists_symm_integral_norm_sq_sub_le_mul,
+        FunctionalInequalities.KLS.LogConcave.integral_norm_sq_sub_symmetrizeFirstTwo_le_mul}
+  \leanok
+  \uses{lem:bkl-generator-temperate,lem:bkl-near-symmetric-gradient}
+  In the heat model $\nu=m.\mathrm{tilted}(-U)$ ($\nu$ log-concave with full-dimensional support, $U$ of
+  temperate growth, all exponential moments) with $\CPLit(\nu)\le C$ (so $\lambda_1\ge1/C$ in the notation
+  of \cite{BizeulKlartagLehec2026}): $\mathrm{Var}_\nu f\le C\int\abs{\nabla f}^2d\nu$ for $f$ of temperate
+  growth, $\int\norm{h-\int h}^2\le C\int\norm{\nabla h}^2$ for tensor fields of temperate growth, and
+  $\int\norm{\nabla h}^2\le C\int\norm{\mathcal Lh}^2$ (the energy bound corresponding to~(20)).  For a supplied pair with
+  $-\mathcal Lh=\alpha\nabla_0g$~(30), $\norm{\nabla h}_2=\norm{\nabla_0g}_2$~(33) and $\nabla h\ne0$ in
+  $L^2$, $1\le C\alpha^2$ (the source's~(32) when $C=\CPLit(\nu)$); and Lemma~3.2 holds with the bound
+  $C\chi$ ($\lambda=1/C\le\lambda_1$ for $C>0$, equality for $C=\CPLit(\nu)$) and no further premise: $\nabla_0h$ lies within squared $L^2$ distance $C\chi$ of a field symmetric in its first two
+  indices.  The source's iterates are not constructed.
+\end{lemma}
+\begin{proof}
+  \leanok
+  The gap inequality of the closed gradient applied to $[f]$ (in its domain by
+  \cref{lem:bkl-generator-temperate}); components in an orthonormal basis for tensors; integration by parts
+  against $h-\int h$ and $ab\le\frac t2a^2+\frac1{2t}b^2$; then~(33).
 \end{proof}

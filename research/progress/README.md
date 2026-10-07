@@ -30,7 +30,7 @@ Every proof task must first pin its paper version, theorem, hypotheses and const
 
 | Priority | Sources / target | Next action |
 | --- | --- | --- |
-| 1 | [Bizeul–Klartag–Lehec](https://arxiv.org/abs/2610.05474v1)<br/>Theorem 1.1 through Theorem 3.1: Lemma 2.2, Lemma 3.6 (⇑) and Corollary 3.7 (⇑) are formalized; Lemma 2.1 (operator domain), (15)–(16) on 𝒜 and steps of Proposition 7.1 are proved restricted counterparts. | Lemma 2.1 on the class 𝒜 (smooth representatives, the pointwise equation, the tensor lift) and the first-eigenfunction facts of Section 2, which define the iterates h_i of Lemmas 3.2–3.4; then Corollary 3.7 and Lemma 3.8 through the coefficient-array bridge to Lemma 2.2. Eldan localization and the Letwin dependency stay explicit. |
+| 1 | [Bizeul–Klartag–Lehec](https://arxiv.org/abs/2610.05474v1)<br/>Theorem 1.1 through Theorem 3.1: Lemma 2.2, Lemma 3.6 (⇑), Corollary 3.7 (⇑) and the regular-law adapter for (12) are formalized; Lemma 3.2 (with λ = 1/C_P in the heat model), Lemma 3.3 for q = 2, Lemma 3.4, Corollary 3.5, (35)–(36) and (61) for supplied iterates, Lemma 2.1 (operator domain, componentwise tensor lift; A[f] = [−ℒf] on 𝒜), (15)–(16) on 𝒜, steps of Proposition 7.1 and Lemma 4.2 conditional on the Letwin bound are partial, restricted or conditional counterparts. | Lemma 2.1 on the class 𝒜 (existence of a temperate representative of the inverse for g ∈ 𝒜₀; the identification A[u] = [−ℒu] and the bounds behind (20) and (32) are proved) and the first-eigenfunction facts of Section 2; these construct the iterates h_i, which the proved Lemma 3.4/Corollary 3.5 statements take as hypotheses. Then Lemma 3.3 for q ≥ 3 (via (42) and the tensor bound (24)) and Lemma 3.8 through the coefficient-array bridge to Lemma 2.2, and the summation (60) of Lemma 3.9. Eldan localization and the Letwin theorem stay explicit dependencies. |
 | 2 | [Bakry–Gentil–Ledoux](https://link.springer.com/book/10.1007/978-3-319-00227-9)<br/>Corollary 4.8.2 (strongly log-concave Bakry–Émery C_P ≤ 1/ρ) is certified as thm:bakry-emery-poincare and committed in 36e7c78 (remote run 37516844384 succeeded); select a separate Brascamp–Lieb source statement. | Pin a Brascamp–Lieb source theorem, its assumptions and normalization, and assess reuse of the heat-semigroup and Γ₂ interfaces before proof work. |
 | 3 | [Kannan–Lovász–Simonovits](https://link.springer.com/article/10.1007/BF02574061)<br/>Theorem 5.1, ψ(K) ≥ ln 2 / M₁(K) for convex bodies, through the needle reduction (Corollary 2.2, Lemma 2.6, Theorem 2.7). With the local Cheeger inequality it gives C_P ≲ E‖X − EX‖² for convex bodies. | Pin a proof of the cited localization lemma (Lovász–Simonovits 1993 or a modern account) and choose a Lean form for needles; keep the product denominator of (1.1) distinct from the min-denominator constant. |
 | 4 | [E. Milman](https://arxiv.org/abs/0712.4092)<br/>Concentration implies a Cheeger bound under the source convexity hypotheses. | Pin the main theorem and its concentration/curvature assumptions; compare its analytic inputs with the current finite-dimensional Cheeger–Buser API. |
@@ -1191,7 +1191,7 @@ flowchart LR
 
 ### Bizeul–Klartag–Lehec (arXiv:2610.05474v1)
 
-23 statements: 2 ✓, 2 ◐, 14 ○, 5 ⇑. [Full map](LITERATURE.md#bkl2026-lemma-map).
+25 statements: 3 ✓, 9 ◐, 8 ○, 5 ⇑. [Full map](LITERATURE.md#bkl2026-lemma-map).
 
 ```mermaid
 flowchart LR
@@ -1199,20 +1199,22 @@ flowchart LR
     BKL2026_L21["◐ Lemma 2.1, p. 7<br/>Centered inverse of the generator"]
     BKL2026_L22["✓ Lemma 2.2, p. 9<br/>Partial symmetrization of tensors"]
     BKL2026_T31["○ Theorem 3.1, p. 10<br/>Taylor-coefficient criterion"]
-    BKL2026_L32["○ Lemma 3.2, p. 11<br/>Near-symmetric gradient"]
-    BKL2026_L33["○ Lemma 3.3, p. 12<br/>Approximate symmetry of iterates"]
-    BKL2026_L34["○ Lemma 3.4, p. 13<br/>Bochner step"]
-    BKL2026_C35["○ Corollary 3.5, p. 13<br/>Vanishing of v_N"]
+    BKL2026_L32["◐ Lemma 3.2, p. 11<br/>Near-symmetric gradient"]
+    BKL2026_EQ3536["◐ Equations (35)–(36), p. 11 (unnumbered)<br/>Energy drops"]
+    BKL2026_L33["◐ Lemma 3.3, p. 12<br/>Approximate symmetry of iterates"]
+    BKL2026_L34["◐ Lemma 3.4, p. 13<br/>Bochner step"]
+    BKL2026_C35["◐ Corollary 3.5, p. 13<br/>Vanishing of v_N"]
     BKL2026_L36["⇑ Lemma 3.6, p. 14<br/>Taylor tensors of the generator"]
     BKL2026_C37["⇑ Corollary 3.7, p. 15<br/>Taylor tensors of the iterates"]
     BKL2026_L38["○ Lemma 3.8, p. 15<br/>Taylor-tensor recursion"]
-    BKL2026_L39["○ Lemma 3.9, p. 16<br/>Summation bound"]
+    BKL2026_L39["◐ Lemma 3.9, p. 16<br/>Summation bound"]
     BKL2026_T41["○ Theorem 4.1, p. 18<br/>Cumulant bounds"]
-    BKL2026_L42["○ Lemma 4.2, p. 18<br/>Third cumulant"]
+    BKL2026_L42["◐ Lemma 4.2, p. 18<br/>Third cumulant"]
     BKL2026_L43["○ Lemma 4.3, p. 20<br/>Cumulant dynamics"]
     BKL2026_L51["○ Lemma 5.1, p. 22<br/>Drift inequality"]
     BKL2026_L52["○ Lemma 5.2, p. 24<br/>Integrated drift bound"]
     BKL2026_P71["◐ Proposition 7.1, p. 28<br/>Suspension"]
+    BKL2026_E12["✓ Section 2, (12), p. 5 (unnumbered)<br/>Regular log-concave measures"]
     BKL2026_E2628["✓ Equations (26)–(28), p. 9 (unnumbered)<br/>Tilts, tilt averages and Taylor tensors"]
     BKL2026_EQ15["⇑ Equation (15), p. 6 (unnumbered)<br/>Integration by parts on 𝒜"]
     BKL2026_EQ16["⇑ Equation (16), p. 6 (unnumbered)<br/>Integrated Bochner formula on 𝒜"]
@@ -1231,6 +1233,7 @@ flowchart LR
     BKL2026_L38 --> BKL2026_T31
     BKL2026_L39 --> BKL2026_T31
     BKL2026_L21 --> BKL2026_L32
+    BKL2026_L34 --> BKL2026_EQ3536
     BKL2026_L32 --> BKL2026_L33
     BKL2026_L21 --> BKL2026_L33
     BKL2026_L32 --> BKL2026_L34
@@ -1254,11 +1257,11 @@ flowchart LR
     BKL2026_E2628 --> BKL2026_E48
     BKL2026_more["+1 further statements in the paper register"]
     classDef lemma_formalized fill:#dbeafe,stroke:#2563eb,color:#1e3a8a;
-    class BKL2026_L22,BKL2026_E2628 lemma_formalized;
+    class BKL2026_L22,BKL2026_E12,BKL2026_E2628 lemma_formalized;
     classDef lemma_partial fill:#fff3df,stroke:#c88719,color:#66420d;
-    class BKL2026_L21,BKL2026_P71 lemma_partial;
+    class BKL2026_L21,BKL2026_L32,BKL2026_EQ3536,BKL2026_L33,BKL2026_L34,BKL2026_C35,BKL2026_L39,BKL2026_L42,BKL2026_P71 lemma_partial;
     classDef lemma_pending fill:#fee2e2,stroke:#dc2626,color:#991b1b;
-    class BKL2026_T11,BKL2026_T31,BKL2026_L32,BKL2026_L33,BKL2026_L34,BKL2026_C35,BKL2026_L38,BKL2026_L39,BKL2026_T41,BKL2026_L42,BKL2026_L43,BKL2026_L51,BKL2026_L52 lemma_pending;
+    class BKL2026_T11,BKL2026_T31,BKL2026_L38,BKL2026_T41,BKL2026_L43,BKL2026_L51,BKL2026_L52 lemma_pending;
     classDef lemma_improved fill:#dcfce7,stroke:#15803d,color:#14532d;
     class BKL2026_L36,BKL2026_C37,BKL2026_EQ15,BKL2026_EQ16,BKL2026_E48 lemma_improved;
     style BKL2026_T11 stroke-width:3px

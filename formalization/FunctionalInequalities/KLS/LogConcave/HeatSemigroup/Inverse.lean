@@ -1,5 +1,6 @@
 import FunctionalInequalities.Analysis.Semigroup.Generated.Inverse
 import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Curvature
+import FunctionalInequalities.L2.Components
 
 /-!
 # The centered inverse of the heat-model generator
@@ -11,8 +12,11 @@ Bizeul–Klartag–Lehec (arXiv:2610.05474v1), Lemma 2.1, operator-domain part. 
 centered preimage `u` in its operator domain, with `‖u‖ ≤ C ‖g‖`, `‖T̄u‖² = ⟪g, u⟫ ≤ C ‖g‖²`
 (BKL (20)) and the centered-gradient bound `‖∇₀u‖ ≤ √C ‖g‖` (BKL (24)). With `C = C_P(ν)` these are
 the source's constants `λ⁻¹`, `λ⁻¹` and `λ^{-1/2}` (in dimension `0`, `C_P = 0` and every centered
-function vanishes). This is a restricted counterpart of the source lemma: the polynomial-growth
-class `𝒜`, smooth representatives, the pointwise equation and the tensor lift are not proved here.
+function vanishes). For `G`-valued centered data the inverse lifts componentwise: in an orthonormal
+basis of a finite-dimensional `G`, exactly one centered family `u_k` solves `A u_k = ⟪b k, g⟫`, with
+`Σ_k ‖u_k‖² ≤ C² ‖g‖²` (the source's tensor version, operator-domain part). This is a restricted
+counterpart of the source lemma: the polynomial-growth class `𝒜`, smooth representatives and the
+pointwise equation are not proved here.
 -/
 
 noncomputable section
@@ -383,5 +387,102 @@ theorem existsUnique_centered_adjointComp_eq_of_hessian {ρ : ℝ} (hρ : 0 < ρ
     refine ⟨u, ⟨hu.1, hu.2, hbound⟩, ?_⟩
     intro v hv
     exact huniq v ⟨hv.1, hv.2.1⟩
+
+section Components
+
+variable {G : Type*} [NormedAddCommGroup G] [InnerProductSpace ℝ G] [FiniteDimensional ℝ G]
+  {ι : Type*} [Fintype ι]
+
+include hνU hU in
+/-- **BKL Lemma 2.1, operator-domain part, componentwise tensor lift.** If `C_P(ν) ≤ C`, then for
+every centered `g ∈ L²(ν; G)` and orthonormal basis `b` of `G` there is exactly one family of centered
+`u_k` in the generator domain with `A u_k = ⟪b k, g⟫`, and `Σ_k ‖u_k‖² ≤ C² ‖g‖²`. -/
+theorem existsUnique_centered_adjointComp_eq_components {C : NNReal}
+    (hC : Poincare.LocalSlope.Intrinsic.constant ν ≤ (C : ENNReal))
+    (b : OrthonormalBasis ι ℝ G) (g : Lp G 2 (ν : Measure V))
+    (hg : ∫ x, g x ∂(ν : Measure V) = 0) :
+    ∃! u : ι → (adjointComp (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi)).domain,
+      (∀ k, L2.mean ν (u k : Lp ℝ 2 (ν : Measure V)) = 0) ∧
+        (∀ k, adjointComp (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi) (u k) =
+          (innerSL ℝ (b k)).compLp g) ∧
+          ∑ k, ‖(u k : Lp ℝ 2 (ν : Measure V))‖ ^ 2 ≤ (C : ℝ) ^ 2 * ‖g‖ ^ 2 := by
+  classical
+  have hgk (k : ι) :
+      L2.mean ν ((innerSL ℝ (b k)).compLp g) = 0 := by
+    rw [L2.mean_compLp_innerSL, hg]
+    simp
+  have hs (k : ι) :
+      ∃! u :
+          (adjointComp
+            (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi)).domain,
+        L2.mean ν (u : Lp ℝ 2 (ν : Measure V)) = 0 ∧
+          adjointComp
+              (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi) u =
+            (innerSL ℝ (b k)).compLp g :=
+    existsUnique_centered_adjointComp_eq m hν hi hνU hU hC
+      ((innerSL ℝ (b k)).compLp g) (hgk k)
+  let u : ι →
+      (adjointComp
+        (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi)).domain :=
+    fun k => Classical.choose ((hs k).exists)
+  have hu (k : ι) :
+      L2.mean ν (u k : Lp ℝ 2 (ν : Measure V)) = 0 ∧
+        adjointComp
+            (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi)
+            (u k) =
+          (innerSL ℝ (b k)).compLp g :=
+    Classical.choose_spec ((hs k).exists)
+  have hbound (k : ι) :
+      ‖(u k : Lp ℝ 2 (ν : Measure V))‖ ^ 2 ≤
+        (C : ℝ) ^ 2 * ‖(innerSL ℝ (b k)).compLp g‖ ^ 2 := by
+    have hk :=
+      (centered_adjointComp_bounds m hν hi hνU hU hC
+        (u k) (hu k).1).1
+    rw [(hu k).2] at hk
+    calc
+      ‖(u k : Lp ℝ 2 (ν : Measure V))‖ ^ 2 ≤
+          ((C : ℝ) * ‖(innerSL ℝ (b k)).compLp g‖) ^ 2 :=
+        (sq_le_sq₀ (norm_nonneg _)
+          (mul_nonneg C.2 (norm_nonneg _))).2 hk
+      _ = (C : ℝ) ^ 2 * ‖(innerSL ℝ (b k)).compLp g‖ ^ 2 :=
+        mul_pow _ _ _
+  refine ⟨u, ⟨fun k => (hu k).1, fun k => (hu k).2, ?_⟩, ?_⟩
+  · calc
+      ∑ k, ‖(u k : Lp ℝ 2 (ν : Measure V))‖ ^ 2 ≤
+          ∑ k, (C : ℝ) ^ 2 * ‖(innerSL ℝ (b k)).compLp g‖ ^ 2 :=
+        Finset.sum_le_sum (fun k _ => hbound k)
+      _ = (C : ℝ) ^ 2 *
+          ∑ k, ‖(innerSL ℝ (b k)).compLp g‖ ^ 2 :=
+        (Finset.mul_sum _ _ _).symm
+      _ = (C : ℝ) ^ 2 * ‖g‖ ^ 2 := by
+        rw [L2.sum_norm_sq_compLp_innerSL b g]
+  · intro v hv
+    funext k
+    exact (hs k).unique ⟨hv.1 k, hv.2.1 k⟩ (hu k)
+
+include hν hi hνU hU in
+/-- The componentwise lift under the curvature bound `∇∇U ≥ ρ > 0`, with `C = ρ⁻¹`. -/
+theorem existsUnique_centered_adjointComp_eq_components_of_hessian {ρ : ℝ} (hρ : 0 < ρ)
+    (hH : ∀ x v, ρ * ‖v‖ ^ 2 ≤ bilinearIteratedFDerivTwo ℝ U x v v)
+    (b : OrthonormalBasis ι ℝ G) (g : Lp G 2 (ν : Measure V))
+    (hg : ∫ x, g x ∂(ν : Measure V) = 0) :
+    ∃! u : ι → (adjointComp (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi)).domain,
+      (∀ k, L2.mean ν (u k : Lp ℝ 2 (ν : Measure V)) = 0) ∧
+        (∀ k, adjointComp (hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi) (u k) =
+          (innerSL ℝ (b k)).compLp g) ∧
+          ∑ k, ‖(u k : Lp ℝ 2 (ν : Measure V))‖ ^ 2 ≤ ρ⁻¹ ^ 2 * ‖g‖ ^ 2 := by
+  let C : NNReal := ⟨ρ⁻¹, (inv_pos.mpr hρ).le⟩
+  have hCeq : ENNReal.ofReal ρ⁻¹ = (C : ENNReal) :=
+    ENNReal.ofReal_eq_coe_nnreal (inv_pos.mpr hρ).le
+  have hC : Poincare.LocalSlope.Intrinsic.constant ν ≤ (C : ENNReal) := by
+    have h := literatureConstant_le_inv m hν hi hνU hU hρ hH
+    rw [hCeq] at h
+    exact h
+  have hCval : (C : ℝ) = ρ⁻¹ := rfl
+  simpa only [hCval] using
+    (existsUnique_centered_adjointComp_eq_components
+      (C := C) m hν hi hνU hU hC b g hg)
+
+end Components
 
 end FunctionalInequalities.KLS.LogConcave

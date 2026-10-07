@@ -8048,9 +8048,9 @@
       "date": "4 October 2026",
       "publication": "Preprint (v1)",
       "url": "https://arxiv.org/abs/2610.05474v1",
-      "locator": "Theorem 1.1 (through Theorems 3.1 and 4.1 and Proposition 7.1); first dependencies Lemmas 2.1, 2.2 and 3.6",
+      "locator": "Theorem 1.1 (through Theorems 3.1 and 4.1 and Proposition 7.1); first dependencies Lemmas 2.1, 2.2, 3.4, 3.6, Corollaries 3.5, 3.7 and conditional Lemma 4.2",
       "result": "Claims C_P(μ) ≤ C for every isotropic log-concave μ in every dimension (the KLS conjecture with a universal constant): Taylor coefficients of tilt averages bounded by cumulant bounds along Eldan localization give the criterion of Theorem 3.1. Not peer reviewed.",
-      "remaining": "Lemma 2.2 is formalized in the source form; Lemma 3.6 (scalar and tensor-valued u ∈ 𝒜) and Corollary 3.7 (for any pair satisfying (30)) in reviewed stronger forms. Lemma 2.1 (operator-domain inverse in the heat model), (15) and (16) on 𝒜, and steps of Proposition 7.1 (linear functions, continuity of T_d on L²) have restricted counterparts. Theorems 1.1, 3.1 and 4.1, Lemmas 3.2–3.4 and 3.8–3.9, Eldan localization and the Letwin dependency are not formalized. Supporting results do not cover the paper.",
+      "remaining": "Lemma 2.2 is formalized in the source form; Lemma 3.6 (scalar and tensor-valued u ∈ 𝒜) and Corollary 3.7 (for any pair satisfying (30)) in reviewed stronger forms; Lemmas 3.2 and 3.4, Lemma 3.3 for q = 2, Corollary 3.5, (35)–(36) and the steps (61) and p_1 ≤ λ²K of Lemma 3.9 as partial counterparts (the generalized implication for supplied pairs/sequences satisfying the relations (30) and (33) that each uses); the regular-law adapter derives the probability normalization, Gaussian tails and all exponential moments from (12). Lemma 2.1 (operator-domain inverse in the heat model, with the componentwise tensor lift; temperate functions lie in the generator domain with A[f] = [−ℒf]), (15) and (16) on 𝒜, steps of Proposition 7.1 (linear functions, continuity of T_d on L²) and Lemma 4.2 conditionally on the Letwin bound have restricted or conditional counterparts. Theorems 1.1, 3.1 and 4.1, Lemma 2.1 on 𝒜 (smooth representatives and the pointwise equation), the first eigenfunction and the construction of the iterates h_i, Lemma 3.3 for q ≥ 3, Lemma 3.8, the bound (60) of Lemma 3.9, Eldan localization, the regular approximation and the Letwin theorem are not formalized. Supporting results do not cover the paper.",
       "local_results": [
         {
           "node": "lem:bkl-partial-symmetrization",
@@ -8059,6 +8059,10 @@
         {
           "node": "lem:bkl-centered-inverse",
           "scope": "Lemma 2.1, operator-domain part in the heat model (restricted)"
+        },
+        {
+          "node": "lem:bkl-generator-temperate",
+          "scope": "Temperate functions in the generator domain, A[f] = [−ℒf]; identification of the centered inverse with temperate solutions"
         },
         {
           "node": "lem:bkl-tilt-generator",
@@ -8071,6 +8075,26 @@
         {
           "node": "lem:bkl-corollary-3-7",
           "scope": "Corollary 3.7 for every pair of temperate tensor fields satisfying (30) (reviewed stronger form)"
+        },
+        {
+          "node": "lem:bkl-regular-law",
+          "scope": "Regular laws (12): derived probability normalization, exponential moments, growth; the general identities for regular laws"
+        },
+        {
+          "node": "lem:bkl-poincare-temperate",
+          "scope": "Poincaré on 𝒜, (20)-type bound, (32) and Lemma 3.2 with λ = 1/C for supplied pairs in the heat model"
+        },
+        {
+          "node": "lem:bkl-near-symmetric-gradient",
+          "scope": "Lemma 3.2 for a supplied pair satisfying (30) (partial: iterates not constructed)"
+        },
+        {
+          "node": "lem:bkl-energy-recursion",
+          "scope": "Lemma 3.4 and Corollary 3.5 for supplied iterates satisfying (30), (33) (partial: iterates not constructed)"
+        },
+        {
+          "node": "lem:bkl-third-cumulant-conditional",
+          "scope": "Lemma 4.2 conditional on the Letwin bound, all exponential moments"
         },
         {
           "node": "lem:bkl-taylor-coefficients",
@@ -8095,7 +8119,7 @@
         "source_url": "https://arxiv.org/abs/2610.05474v1",
         "reviewed_on": "2026-10-07",
         "standing_assumptions": "Probability measures on Rⁿ, n ≥ 1. Log-concave means a log-concave density; isotropic means mean 0 and covariance Id. C_P(μ) is the least constant in Var f ≤ C∫|∇f|² for locally Lipschitz f ∈ L²(μ). A measure is regular if dμ = e^{−V}dx with a Id ≤ ∇²V ≤ b Id (0 < a ≤ b) and every derivative of V of polynomial growth; 𝒜 is the algebra of smooth functions all of whose derivatives grow polynomially and 𝒜₀ its mean-zero part; L = Δ − ⟨∇V, ∇⟩ and λ₁ = 1/C_P. Tensors carry the Hilbert–Schmidt norm |·|; S_q averages over the permutations of the first q indices. μ_z, F_f and T_d are defined in (26)–(28). PDF SHA-256 86824722318f2213daf5ae624391b41f76bb4d41118b1657db9ab00d2d1bb0db; printed and PDF page numbers coincide.",
-        "omitted": "All 19 numbered statements (Theorems 1.1, 3.1, 4.1; Lemmas 2.1, 2.2, 3.2–3.4, 3.6, 3.8, 3.9, 4.2, 4.3, 5.1, 5.2; Corollaries 3.5, 3.7; Remark 3.10; Proposition 7.1) are listed. The unnumbered interfaces that Lean declarations state are listed: (26)–(28), (48), (15), (16). Other unnumbered material —  the spectral facts of Section 2, the regular approximation, Eldan localization (67)–(79), the compact-support reduction of Sections 4 and 6, and the assembly on p. 30 — is recorded in the notes of the statements that use it and in build/reviews/2026-10-07-new-kls-papers/statement-map.csv.",
+        "omitted": "All 19 numbered statements (Theorems 1.1, 3.1, 4.1; Lemmas 2.1, 2.2, 3.2–3.4, 3.6, 3.8, 3.9, 4.2, 4.3, 5.1, 5.2; Corollaries 3.5, 3.7; Remark 3.10; Proposition 7.1) are listed. The unnumbered interfaces that Lean declarations state are listed: (12), (26)–(28), (48), (15), (16), (35)–(36). Other unnumbered material —  the spectral facts of Section 2, the regular approximation, Eldan localization (67)–(79), the compact-support reduction of Sections 4 and 6, and the assembly on p. 30 — is recorded in the notes of the statements that use it and in build/reviews/2026-10-07-new-kls-papers/statement-map.csv.",
         "items": [
           {
             "id": "T11",
@@ -8131,9 +8155,33 @@
               {
                 "name": "FunctionalInequalities.KLS.LogConcave.norm_centered_gradient_le",
                 "source": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Inverse.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.LogConcave.existsUnique_centered_adjointComp_eq_components",
+                "source": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Inverse.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.RegularPotential.existsUnique_centered_adjointComp_eq",
+                "source": "formalization/FunctionalInequalities/KLS/LogConcave/Regular.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.RegularPotential.existsUnique_centered_adjointComp_eq_components",
+                "source": "formalization/FunctionalInequalities/KLS/LogConcave/Regular.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.LogConcave.exists_toLp_mem_adjointComp_domain_of_hasTemperateGrowth",
+                "source": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Temperate.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.LogConcave.centered_inverse_eq_toLp_of_hasTemperateGrowth",
+                "source": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Temperate.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.LogConcave.integral_norm_sq_gradCoord_le_of_hasTemperateGrowth",
+                "source": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Temperate.lean"
               }
             ],
-            "note": "Restricted operator-domain counterpart: in the heat model ν = m.tilted(−U), U ∈ C², log-concave with full-dimensional support, and any C ≥ C_P(ν), every centered g ∈ L²(ν) has exactly one centered u in the domain of the closed generator A = T̄†T̄ = −ℒ with Au = g, ‖u‖ ≤ C‖g‖, ‖T̄u‖² = ⟨g, u⟩ ≤ C‖g‖² and ‖∇₀u‖ ≤ √C‖g‖ (generic part: Analysis/Semigroup/Generated/Inverse.lean). C = C_P recovers λ⁻¹ in positive dimension. The class 𝒜, smooth representatives, the pointwise equation, preservation of 𝒜₀ and the tensor lift are not proved."
+            "note": "Restricted operator-domain counterpart: in the heat model ν = m.tilted(−U), U ∈ C², log-concave with full-dimensional support, and any C ≥ C_P(ν), every centered g ∈ L²(ν) has exactly one centered u in the domain of the closed generator A = T̄†T̄ = −ℒ with Au = g, ‖u‖ ≤ C‖g‖, ‖T̄u‖² = ⟨g, u⟩ ≤ C‖g‖² and ‖∇₀u‖ ≤ √C‖g‖ (generic part: Analysis/Semigroup/Generated/Inverse.lean). C = C_P recovers λ⁻¹ in positive dimension. The existence of a smooth temperate inverse for every g ∈ 𝒜₀ (preservation of 𝒜₀) is not proved; the tensor version is proved only as the componentwise operator-domain counterpart below, not as a smooth 𝒜₀-preserving tensor inverse. On 𝒜 the energy bound corresponding to (20) holds: ∫‖∇h‖² ≤ C ∫‖ℒh‖² for temperate tensor fields, with the Poincaré inequality on 𝒜 (integral_sq_sub_integral_le_of_hasTemperateGrowth). Bridge to the class 𝒜 (2026-10-07): for U of temperate growth with all exponential moments, the L² class of every f of temperate growth lies in D(T̄) with T̄[f] = [∇f] and in D(A) with A[f] = [−ℒf]; hence a centered temperate solution of −ℒu = g is the centered operator-domain inverse of [g]. The existence of a temperate solution for g ∈ 𝒜₀ is not proved. Componentwise tensor lift (2026-10-07): for G-valued centered g ∈ L²(ν; G) and an orthonormal basis b of G, exactly one family of centered u_k in the generator domain with A u_k = ⟨b_k, g⟩, and Σ_k‖u_k‖² ≤ C²‖g‖² (existsUnique_centered_adjointComp_eq_components; the Parseval identity for the components is FunctionalInequalities.L2.sum_norm_sq_compLp_innerSL). For a regular potential (12) the scalar and componentwise inverses hold with C = 1/a (RegularPotential.existsUnique_centered_adjointComp_eq, RegularPotential.existsUnique_centered_adjointComp_eq_components). The existence of smooth (temperate) representatives of the inverse on 𝒜 remains open."
           },
           {
             "id": "L22",
@@ -8183,9 +8231,47 @@
             "uses": [
               "L21"
             ],
-            "relation": "same",
-            "declarations": [],
-            "note": ""
+            "relation": "partial",
+            "declarations": [
+              {
+                "name": "FunctionalInequalities.Analysis.BakryEmery.exists_symm_integral_norm_sq_sub_le",
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/TensorEnergy.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.BakryEmery.gradCoord_gradCoord_symm",
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/TensorEnergy.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.LogConcave.exists_symm_integral_norm_sq_sub_le_mul",
+                "source": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Temperate.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.LogConcave.one_le_mul_sq_of_poisson",
+                "source": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Temperate.lean"
+              }
+            ],
+            "note": "Partial counterpart (generalized implication for a supplied pair): for temperate tensor fields g, h with −ℒh = α∇₀g (30) under μ = m.tilted(−V) (V temperate, all exponential moments, μ a probability measure), any λ > 0 with λ ≤ α² when α ≠ 0 (the source's (32) with λ = λ₁, which needs Lemma 2.1 on 𝒜), there is T symmetric in its first two indices (T = α⁻¹∇₀(∇g), or 0 when α = 0) with ‖∇₀h − T‖²₂ ≤ χ/λ — the square of (38) — and ‖∇₀h − T‖² integrable; the normalization (33) is not needed. The source iterates are not constructed. In the heat model ν = m.tilted(−U) (U temperate, all exponential moments, C ≥ C_P(ν), so λ₁ ≥ 1/C) the premise is discharged: for a temperate pair satisfying (30) and (33) with ∇h ≠ 0, 1 ≤ Cα² (the source's (32) when C = C_P), and Lemma 3.2 holds with the bound Cχ (λ = 1/C ≤ λ₁ for C > 0, equality for C = C_P) and no further premise (exists_symm_integral_norm_sq_sub_le_mul)."
+          },
+          {
+            "id": "EQ3536",
+            "locator": "Equations (35)–(36), p. 11 (unnumbered)",
+            "label": "Energy drops",
+            "statement": "p_i := v_i − v_{i+1} = |∫∇h_i dμ|² (35) and λ₁ = v_{N+1} + Σ_{i≤N} p_i (36).",
+            "uses": [
+              "L34"
+            ],
+            "relation": "partial",
+            "declarations": [
+              {
+                "name": "FunctionalInequalities.Analysis.BakryEmery.integral_norm_sq_gradCoord_sub_eq_of_normalized",
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/TensorEnergy.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.BakryEmery.integral_norm_sq_gradCoord_eq_add_sum",
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/TensorEnergy.lean"
+              }
+            ],
+            "note": "Partial counterpart for supplied iterates: under the normalization (33) alone, v_i − v_{i+1} = ‖∫∇h_i‖² for a pair, and v_0 = v_N + Σ_{k<N}‖∫∇h_k‖² along any sequence of temperate tensor fields (values in G k), for μ = m.tilted(−V) a probability measure with all exponential moments. The value v_1 = λ₁ of the source needs the first eigenfunction, which is not constructed."
           },
           {
             "id": "L33",
@@ -8196,9 +8282,18 @@
               "L32",
               "L21"
             ],
-            "relation": "same",
-            "declarations": [],
-            "note": ""
+            "relation": "partial",
+            "declarations": [
+              {
+                "name": "FunctionalInequalities.Analysis.BakryEmery.integral_norm_sq_sub_symmetrizeFirstTwo_le",
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/TensorEnergy.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.LogConcave.integral_norm_sq_sub_symmetrizeFirstTwo_le_mul",
+                "source": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Temperate.lean"
+              }
+            ],
+            "note": "Case q = 2 only, for a supplied pair satisfying (30) (and (33) in the heat-model form): ‖∇₀h − S₂∇₀h‖²₂ ≤ χ/λ under λ ≤ α², and ≤ Pχ in the heat model with P ≥ C_P (λ = 1/P for P > 0) — the source bound with coefficient 1 in place of its universal C_src² ≥ 1 — since S₂ is the nearest tensor symmetric in the first two indices (norm_sub_symmetrizeFirstTwo_le). The cases q ≥ 3, which use (42) and the bound (24) for the inverse, are not formalized."
           },
           {
             "id": "L34",
@@ -8209,9 +8304,18 @@
               "L32",
               "EQ16"
             ],
-            "relation": "same",
-            "declarations": [],
-            "note": "The scalar curvature inequality behind it, ∫‖∇²u‖²_HS + a∫|∇u|² ≤ ∫(Lu)² on 𝒜, is proved (integral_hessianSq_add_le_of_hasTemperateGrowth); the lemma itself needs the tensor-valued iterates h_i (the tensor curvature form is integral_hessian_add_le_norm_sq_weightedLaplacianVec)."
+            "relation": "partial",
+            "declarations": [
+              {
+                "name": "FunctionalInequalities.Analysis.BakryEmery.integral_norm_sq_weightedLaplacianVec_ge",
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/TensorEnergy.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.BakryEmery.integral_norm_sq_gradCoord_gradCoord_eq",
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/TensorEnergy.lean"
+              }
+            ],
+            "note": "Partial counterpart (Codex reviews RE and final, 2026-10-07: the generalized implication for supplied iterates; the source sequence is not constructed): for every pair g = h_i, h = h_{i+1} of temperate tensor fields satisfying the Poisson relation (30) −ℒh = α∇₀g and the normalization (33), with ∇²V ≥ a, the orthogonality ⟨∇²g, ∇h⟩ = α‖∇h‖², (39), (46), (47) and (45) are derived from (15)/(16) (no division by α, so α = 0 is included); derivative energies use the coordinate gradient gradCoord (PiLp 2, Hilbert–Schmidt over the derivative and all trailing indices, derivative index first). The construction of the source iterates (Lemma 2.1 on 𝒜, the first eigenfunction, the normalization (31)) is not addressed."
           },
           {
             "id": "C35",
@@ -8221,9 +8325,18 @@
             "uses": [
               "L34"
             ],
-            "relation": "same",
-            "declarations": [],
-            "note": ""
+            "relation": "partial",
+            "declarations": [
+              {
+                "name": "FunctionalInequalities.Analysis.BakryEmery.summable_and_tendsto_zero_of_energy",
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/TensorEnergy.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.BakryEmery.summable_and_tendsto_zero_of_poisson_chain",
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/TensorEnergy.lean"
+              }
+            ],
+            "note": "Partial counterpart (Codex reviews RE and final: the generalized implication for supplied iterates): for nonnegative sequences satisfying (45) with a > 0, Σ v_i < ∞, Σ χ_i < ∞ and v_N → 0; and for every sequence of temperate tensor iterates h_k (values in G k, linked by linear isometries PiLp 2 (Fin n → G k) ≃ G (k+1)) satisfying (30) and (33), the energies ‖∇h_k‖² are summable and tend to 0. The existence of the source iterates is not addressed."
           },
           {
             "id": "L36",
@@ -8302,9 +8415,22 @@
             "uses": [
               "L36"
             ],
-            "relation": "same",
-            "declarations": [],
-            "note": ""
+            "relation": "partial",
+            "declarations": [
+              {
+                "name": "FunctionalInequalities.Analysis.BakryEmery.integral_fderiv_apply_eq_smul_taylorTensor_one",
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/TensorEnergy.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.BakryEmery.norm_sq_integral_gradCoord_eq",
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/TensorEnergy.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.BakryEmery.norm_sq_integral_gradient_le_of_eigen",
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/TensorEnergy.lean"
+              }
+            ],
+            "note": "Step (61) for a supplied pair: if −ℒh = α∇₀g (30) with h temperate under μ = m.tilted(−V) (V temperate, all exponential moments), then ∫Dh = αT_1(∇₀g) and ‖∫∇h‖² = α²Σ_i‖T_1(∇₀g)(e_i)‖² (Hilbert–Schmidt), i.e. p_{i+1} = α²|T_1(∇₀h_i)|² when combined with (35) and (33). The first step for a supplied eigenfunction is also proved: if ℒf = −λf, ∫f = 0 and ∫⟨e, x − b⟩² ≤ K|e|² (K ≥ 0 is assumed for convenience; it is redundant), then |∫∇f|² ≤ λ²K‖f‖² (p_1 ≤ λ₁² for ‖f‖ = 1, Cov ≤ Id); audited on the Gaussian with f = ⟨c, ·⟩, which attains equality (the audit proves the inequality; mean zero and covariance ≤ 1/ρ derived from (15) and the Poincaré inequality on 𝒜). The existence of the first eigenfunction, the use of (54) (which follows from the minimal choice of N, (45) and (46)) and the summation (60) are not formalized."
           },
           {
             "id": "R310",
@@ -8337,9 +8463,18 @@
             "label": "Third cumulant",
             "statement": "For isotropic log-concave μ: R^μ_3 ≤ 8 Id.",
             "uses": [],
-            "relation": "same",
-            "declarations": [],
-            "note": "Uses Letwin (2026) Theorem 1.2 (Var⟨MX, X⟩ ≤ 8|M|²), an explicit unformalized dependency."
+            "relation": "partial",
+            "declarations": [
+              {
+                "name": "FunctionalInequalities.Analysis.BakryEmery.sum_sq_cumulant_three_le_of_letwin",
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Cumulant.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.BakryEmery.cumulant_three_eq_integral",
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Cumulant.lean"
+              }
+            ],
+            "note": "Conditional counterpart (Codex review N, 2026-10-07): for a centered isotropic probability law with all exponential moments that satisfies LetwinQuadraticBound — the quadratic-form estimate of Letwin (2026) Theorem 1.2, Var⟨MX, X⟩ ≤ 8|M|²_HS for self-adjoint M, an explicit premise that is not proved — Σ_{j,k} κ_3(u, e_j, e_k)² ≤ 8|u|² (= ⟨R_3 u, u⟩ ≤ 8|u|², (65)); the third cumulant of a centered law is its third moment. Nonvacuity (research/audits/BKLThirdCumulantWitnessAudit.lean): every premise is discharged for the uniform law on [−√3, √3] and for the skewed two-point law (1/5)δ₂ + (4/5)δ_{−1/2} (κ₃(1,1,1) = 3/2). General isotropic log-concave laws (only some exponential moments) and the Letwin theorem itself are not covered."
           },
           {
             "id": "L43",
@@ -8394,6 +8529,33 @@
               }
             ],
             "note": "Proved steps: the continuity of T_d on L²(μ) used in the proof (‖T_d f‖ ≤ C_d‖f‖₂ for a probability measure with all exponential moments; T_d is linear on L²), and the linear-function step: for a nonzero finite measure with all exponential moments, F_⟨v,·⟩ = DΛ_μ(·)v and T_d⟨v,·⟩ = κ_{d+1}(v, ·, …, ·)/d!. The suspension, the log-concavity of the maximum of convex potentials, the mixed cumulant identity (112), the limit β → ∞ and the density argument are not proved."
+          },
+          {
+            "id": "E12",
+            "locator": "Section 2, (12), p. 5 (unnumbered)",
+            "label": "Regular log-concave measures",
+            "statement": "μ is regular if its density is e^{−V}, V smooth with every partial derivative of polynomial growth and a Id ≤ ∇²V ≤ b Id with a, b > 0; the paper reduces Theorem 1.1 to regular μ by approximation.",
+            "uses": [],
+            "relation": "same",
+            "declarations": [
+              {
+                "name": "FunctionalInequalities.KLS.RegularPotential.integrable_exp_mul_norm",
+                "source": "formalization/FunctionalInequalities/KLS/LogConcave/Regular.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.RegularPotential.isProbabilityMeasure",
+                "source": "formalization/FunctionalInequalities/KLS/LogConcave/Regular.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.RegularPotential.taylorTensor_neg_weightedLaplacianVec",
+                "source": "formalization/FunctionalInequalities/KLS/LogConcave/Regular.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.RegularPotential.integral_hessian_add_le_norm_sq_weightedLaplacianVec",
+                "source": "formalization/FunctionalInequalities/KLS/LogConcave/Regular.lean"
+              }
+            ],
+            "note": "Same (Codex reviews RE and final): RegularPotential V a b records only the assumptions of (12) (HasTemperateGrowth, 0 < a, a‖v‖² ≤ ∇²V(v,v) ≤ b‖v‖²) on any finite-dimensional real inner product space (the source's b > 0 follows in positive dimension; in dimension 0 any b is allowed); derived in Lean: strong convexity, Gaussian domination of e^{−V}, integrability and positive normalizer, the probability law volume.tilted(−V) (density e^{−V}/Z; the paper's normalized potential is V + log Z), all exponential moments, polynomial growth of ∇V, log-concavity and full support; the scalar/tensor (48)–(50), (15), (16) with curvature a, and the operator-domain Lemma 2.1 with C = 1/a then hold with every analytic premise discharged. The regular approximation of general log-concave laws is not proved."
           },
           {
             "id": "E2628",
@@ -8627,8 +8789,8 @@
       "papers": [
         "BKL2026"
       ],
-      "target": "Theorem 1.1 through Theorem 3.1: Lemma 2.2, Lemma 3.6 (⇑) and Corollary 3.7 (⇑) are formalized; Lemma 2.1 (operator domain), (15)–(16) on 𝒜 and steps of Proposition 7.1 are proved restricted counterparts.",
-      "next_step": "Lemma 2.1 on the class 𝒜 (smooth representatives, the pointwise equation, the tensor lift) and the first-eigenfunction facts of Section 2, which define the iterates h_i of Lemmas 3.2–3.4; then Corollary 3.7 and Lemma 3.8 through the coefficient-array bridge to Lemma 2.2. Eldan localization and the Letwin dependency stay explicit."
+      "target": "Theorem 1.1 through Theorem 3.1: Lemma 2.2, Lemma 3.6 (⇑), Corollary 3.7 (⇑) and the regular-law adapter for (12) are formalized; Lemma 3.2 (with λ = 1/C_P in the heat model), Lemma 3.3 for q = 2, Lemma 3.4, Corollary 3.5, (35)–(36) and (61) for supplied iterates, Lemma 2.1 (operator domain, componentwise tensor lift; A[f] = [−ℒf] on 𝒜), (15)–(16) on 𝒜, steps of Proposition 7.1 and Lemma 4.2 conditional on the Letwin bound are partial, restricted or conditional counterparts.",
+      "next_step": "Lemma 2.1 on the class 𝒜 (existence of a temperate representative of the inverse for g ∈ 𝒜₀; the identification A[u] = [−ℒu] and the bounds behind (20) and (32) are proved) and the first-eigenfunction facts of Section 2; these construct the iterates h_i, which the proved Lemma 3.4/Corollary 3.5 statements take as hypotheses. Then Lemma 3.3 for q ≥ 3 (via (42) and the tensor bound (24)) and Lemma 3.8 through the coefficient-array bridge to Lemma 2.2, and the summation (60) of Lemma 3.9. Eldan localization and the Letwin theorem stay explicit dependencies."
     },
     {
       "rank": 2,

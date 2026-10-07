@@ -124,6 +124,7 @@ import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Gamma
 import FunctionalInequalities.L2.BoundedMultiplier
 import FunctionalInequalities.L2.PositiveMap
 import FunctionalInequalities.L2.Composition
+import FunctionalInequalities.L2.Components
 import FunctionalInequalities.KLS.LogConcave.WeightedGradient.Multiplier
 import FunctionalInequalities.KLS.LogConcave.WeightedGradient.Kernel
 import FunctionalInequalities.KLS.LogConcave.Density.Tilted
@@ -147,6 +148,7 @@ import FunctionalInequalities.Analysis.Tensor.Multilinear
 import FunctionalInequalities.Analysis.Tensor.Coefficients
 import FunctionalInequalities.Analysis.Semigroup.Generated.Inverse
 import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Inverse
+import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Temperate
 import FunctionalInequalities.Analysis.BakryEmery.IteratedDerivative
 import FunctionalInequalities.Analysis.BakryEmery.Tilt
 import FunctionalInequalities.Analysis.BakryEmery.Cumulant
@@ -156,6 +158,8 @@ import FunctionalInequalities.Analysis.BakryEmery.TemperateIBP
 import FunctionalInequalities.Analysis.BakryEmery.TemperateBochner
 import FunctionalInequalities.Analysis.BakryEmery.TensorTilt
 import FunctionalInequalities.Analysis.BakryEmery.TensorBochner
+import FunctionalInequalities.Analysis.BakryEmery.TensorEnergy
+import FunctionalInequalities.KLS.LogConcave.Regular
 
 /-!
 # Functional inequalities

@@ -38,7 +38,10 @@ There are **28 registered Lean certificates**, plus proved auxiliary results. Hi
   symmetrization, `|A| ≤ 4^d |S_{2d} A|`) in the source form; Lemma 3.6 (the tilt identities (48)–(50)
   for scalar and tensor-valued `u ∈ 𝒜`), Corollary 3.7 and the identities (15)–(16) on `𝒜` in reviewed
   stronger forms; restricted counterparts of Lemma 2.1 (operator-domain inverse of the heat-model
-  generator) and of steps of Proposition 7.1. These are supporting results, not paper certificates.
+  generator, its componentwise tensor lift, and the identification `A[f] = [−ℒf]` on `𝒜`) and of steps
+  of Proposition 7.1; the regular-law adapter for (12); Lemmas 3.2 and 3.4, Lemma 3.3 for `q = 2`,
+  Corollary 3.5 and (32), (35)–(36), (61) for supplied iterates; Lemma 4.2 conditionally on the Letwin bound. These are supporting
+  results, not paper certificates; the source's iterates are not constructed.
 
 ## What is not proved
 
