@@ -8,12 +8,14 @@ authorization. Exact results, scopes and certificates are in the
 
 ## State
 
-- `main` = `origin/main`: the two 2026-10-07 BKL commits (eight-hour and four-hour blocks) on top of
-  `36e7c78` (BGL ergodicity and the BGL Corollary 4.8.2 certificate). Remote Lean certification passed
-  for `36e7c78` only
+- `origin/main` = `ca59365` (path-only family-directory move, on top of the two 2026-10-07 BKL commits
+  and `36e7c78`, BGL ergodicity and the BGL Corollary 4.8.2 certificate). Local `main` = `b401a9f`
+  (step 1 of the BKL operator route, unpushed); the Theorem 3.1 block is staged on top, uncommitted.
+  Remote Lean certification passed for `36e7c78` only
   ([run 37516844384](https://github.com/numina-functional-inequalities/kls-lean/actions/runs/37516844384),
-  2026-10-07); the BKL commits are verified locally (receipts in the block evidence), not remotely.
-- 28 ledger certificates. `FunctionalInequalities.KLS.kls` in `KLS/Target.lean` is the one
+  2026-10-07); later commits are verified locally (receipts in the block evidence), not remotely.
+- 29 ledger certificates (the 29th, `thm:bkl-taylor-criterion` = BKL Theorem 3.1, from the uncommitted
+  2026-10-07 eight-hour block). `FunctionalInequalities.KLS.kls` in `KLS/Target.lean` is the one
   intentional hole, outside every certificate closure. Dimension-free KLS is open.
 - Covered papers: Ambrosio–Di Marino–Gigli Theorem 3.6 (`thm:relaxed-minkowski-content-perimeter`)
   and Bakry–Gentil–Ledoux 2014 Corollary 4.8.2 (`thm:bakry-emery-poincare`, relation `⇑`, that
@@ -66,19 +68,22 @@ authorization. Exact results, scopes and certificates are in the
 
 1. Owner decision: optional remote Lean certification of the BKL commits (manual dispatch or a
    `milestone/**` tag); no BKL paper target is covered, so no milestone is due.
-2. BKL priority 1 (Theorem 3.1), **operator route** (owner decision 2026-10-07,
-   [record](research/decisions/2026-10-07-bkl-operator-route.md)): prove the exact statement of
-   Theorem 3.1 with the iterates `h_i` built in `D(A)` and an approximate eigenfunction at
-   `λ = 1/C_P` (errors justified in the record; universal constant enlarged). **Step 1 proved**
-   (uncommitted): approximate eigenfunctions (`exists_centered_approx_eigenfunction`), weak Hessian
-   and the curvature form of (16) on `D(A)` (`HeatSemigroup/Hessian.lean`), (48) and Lemma 3.6 on
-   `D(A)` (`HeatSemigroup/Tilt.lean`); audit clients
-   `BKLApproximateEigenfunctionAudit.lean`, `BKLWeakHessianAudit.lean`, `BKLGeneratorTiltAudit.lean`. Next, step 2: the iterates in `D(A)` and Lemmas 3.2–3.4,
-   Corollary 3.5 for them (reassessed plan: about a week to Theorem 3.1). Lemma 2.1 on `𝒜` and
-   (19) stay partial.
-3. Then Lemma 3.3 for `q ≥ 3` (via (42) and the tensor bound (24)), Lemma 3.8 (through the
-   coefficient-array bridge to Lemma 2.2) and the summation (60) of Lemma 3.9; Theorem
-   4.1 needs Eldan localization, and the Letwin theorem stays an explicit dependency of Lemma 4.2.
+2. **BKL Theorem 3.1 is certified** (`thm:bkl-taylor-criterion`, `solutions/ThmBklTaylorCriterion.lean`,
+   uncommitted; block record `build/reviews/2026-10-07-bkl-operator-route/`): the exact source statement,
+   proved by the operator route (iterates in `D(A)`, `KLS/LogConcave/HeatSemigroup/PoissonIterate/`;
+   approximate eigenfunction). Next for Theorem 1.1: Theorem 4.1 (Eldan localization; stochastic
+   calculus decision below), Proposition 7.1 (suspension), the regular approximation; the Letwin theorem
+   stays an explicit dependency of Lemma 4.2. Nonvacuity: dimension 0 and the standard Gaussian on `ℝ¹`
+   (R = 8, `KLS/LogConcave/GaussianTaylor.lean`).
+3. Owner decision recorded below: per-paper folders after this block.
+
+## Decided, pending execution
+
+- Per-paper folders (owner, 2026-10-07): after the current BKL block, move audit clients and route
+  statements to `research/audits/{BKL,Letwin,SongZhang}/` and paper-specific library modules (the
+  BKL Poisson iterates, Lemmas 3.2–3.9, Theorem 3.1) to a per-paper folder such as `KLS/BKL/`;
+  generic tools stay in their object families. Amend `research/naming.md` rule 5 and record a
+  module map; path-only migration with full verification.
 
 ## Open owner decisions
 

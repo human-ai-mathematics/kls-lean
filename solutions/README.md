@@ -61,7 +61,7 @@ Their types preserve the reviewed generality, including empty test classes, zero
 support, zero finite constants and infinite optima. Gaussian transport through these bridges is
 now proved. See the [comparison guide](../formalization/FunctionalInequalities/Poincare/Euclidean/README.md).
 
-The `Solutions` default target builds all twenty-eight certificates plus `GaussianAxiomAudit.lean` and
+The `Solutions` default target builds all twenty-nine certificates plus `GaussianAxiomAudit.lean` and
 `FoundationAxiomAudit.lean`. The latter guards 27 foundation and comparison declarations together
 with the Dirac and normal-direction raw-energy obstructions; each new
 certificate also has its own axiom guard. These checks require exactly `propext`, `Classical.choice`
@@ -96,7 +96,7 @@ node is `proved / checked_by: lean`; see the
 [acceptance record](../research/decisions/2026-09-06-weighted-approximation-acceptance.md).
 
 `StatementChecks.lean` is a default-build target for the literal KLS proposition and its domain
-and boundary encodings. It is not a ledger proof certificate. All twenty-eight mathematical certificates,
+and boundary encodings. It is not a ledger proof certificate. All twenty-nine mathematical certificates,
 the twenty-five named definition sanity checks, the six conditional-fiber contracts and the five
 affine covariance contracts have default-build transitive axiom guards. Existing
 Dirac representative examples and Gaussian comparisons are reused. A concrete Gaussian literature
@@ -432,3 +432,15 @@ gives `Var_ν(f) ≤ ρ⁻¹ ∫ ‖∇f‖² dν` on smooth tests. The book ass
 both statements with every hypothesis discharged, so the hypotheses are satisfiable in every
 dimension, including zero; three axiom guards. It is the second paper-target certificate. Read the
 [review record](../research/decisions/2026-10-04-bgl-corollary-4-8-2-candidate.md).
+
+## Bizeul–Klartag–Lehec Theorem 3.1 certificate
+
+[`ThmBklTaylorCriterion.lean`](ThmBklTaylorCriterion.lean) certifies `thm:bkl-taylor-criterion`,
+Theorem 3.1 of Bizeul–Klartag–Lehec (arXiv:2610.05474v1), in the source form: there is a universal
+`K` with `C_P(μ) ≤ K R²` for every regular potential on `ℝⁿ` (BKL (12)) whose law is centered with
+`Cov ≤ Id` and every `R ≥ 1` satisfying the Taylor bound (29) in the Hilbert–Schmidt norm. The proof
+goes through the operator domain of the heat-model generator and an approximate first
+eigenfunction (`research/decisions/2026-10-07-bkl-operator-route.md`); the library constant is
+explicit but not part of the claim. `dimZero` and `gaussian` discharge every hypothesis in dimensions zero and one (the standard
+Gaussian on `ℝ¹` satisfies (29) with `R = 8`); four axiom guards. This certifies a supporting theorem of the paper; its main Theorem 1.1 is not
+covered.

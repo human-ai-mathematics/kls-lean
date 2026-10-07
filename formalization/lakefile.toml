@@ -50,6 +50,7 @@ roots = [
   "solutions.ThmSmoothGradientRelaxationTwoCheeger",
   "solutions.ThmRelaxedMinkowskiContentPerimeter",
   "solutions.ThmBakryEmeryPoincare",
+  "solutions.ThmBklTaylorCriterion",
 ]
 
 [[lean_lib]]

@@ -2,7 +2,7 @@
 
 [Progress hub](README.md) · [Route diagrams](README.md#proof-progress-tree)
 
-**94 local Blueprint nodes · 28 registered Lean certificates.**
+**96 local Blueprint nodes · 29 registered Lean certificates.**
 
 Generated from the canonical records of the Git index used for this run, identified
 by the canonical input digest below. These are recorded proof/definition statuses,
@@ -67,6 +67,7 @@ See the linked statement for full hypotheses and scope.
 | `lem:bkl-near-symmetric-gradient` | Bizeul–Klartag–Lehec Lemma 3.2: ∇₀h_{i+1} is within χ_i/λ (squared L² distance) of a field symmetric in its first two indices, for a pair satisfying (30) with α² ≥ λ > 0. | Local Lean result; no upstream mapping | ![✓ Formalized in Lean](badges/formalized.svg) | [Statement](../../formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex#L1214) |
 | `lem:bkl-partial-symmetrization` | Bizeul–Klartag–Lehec Lemma 2.2: &#124;A&#124; ≤ 4^d &#124;S_{2d} A&#124; for tensors symmetric in their first d and next 2d indices. | Local Lean result; no upstream mapping | ![✓ Formalized in Lean](badges/formalized.svg) | [Statement](../../formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex#L908) |
 | `lem:bkl-poincare-temperate` | Bizeul–Klartag–Lehec (20), (32), Lemma 3.2 in the heat model: Poincaré on the class 𝒜, ‖∇h‖² ≤ C‖ℒh‖², α² ≥ 1/C for a pair, and Lemma 3.2 with λ = 1/C. | Local Lean result; no upstream mapping | ![✓ Formalized in Lean](badges/formalized.svg) | [Statement](../../formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex#L1265) |
+| `lem:bkl-poisson-iterates` | Bizeul–Klartag–Lehec Section 3 in D(A): the iterates (30)–(31) and (32)–(36), (47), Lemmas 3.2, 3.3 (every q), 3.4, 3.8, 3.9 (route form), Corollaries 3.5 and 3.7. | Local Lean result; no upstream mapping | ![✓ Formalized in Lean](badges/formalized.svg) | [Statement](../../formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex#L1339) |
 | `lem:bkl-regular-law` | Bizeul–Klartag–Lehec (12): a regular potential gives a probability law with Gaussian tails and all exponential moments, to which the tilt, integration-by-parts, Bochner and inverse results apply. | Local Lean result; no upstream mapping | ![✓ Formalized in Lean](badges/formalized.svg) | [Statement](../../formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex#L1120) |
 | `lem:bkl-taylor-coefficients` | Coefficient arrays of Taylor tensors in an orthonormal basis: symmetric Hilbert–Schmidt tensors; symmetrizeML is S_k; operator norm ≤ Hilbert–Schmidt norm. | Local Lean result; no upstream mapping | ![✓ Formalized in Lean](badges/formalized.svg) | [Statement](../../formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex#L1013) |
 | `lem:bkl-taylor-l2` | Tilt averages of L² functions are smooth and ‖T_d f‖ ≤ C_d ‖f‖₂ (Bizeul–Klartag–Lehec Section 3 and Proposition 7.1). | Local Lean result; no upstream mapping | ![✓ Formalized in Lean](badges/formalized.svg) | [Statement](../../formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex#L1035) |
@@ -94,6 +95,7 @@ See the linked statement for full hypotheses and scope.
 | `thm:affine-isotropic-reduction` | Show that isotropic, covariance-scaled, and affine-energy KLS bounds are equivalent, including lower-dimensional laws. | Local classification: local_argument | ![✓ Formalized in Lean](badges/formalized.svg) | [Statement](../../formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex#L660) · [Lean certificate](../../solutions/ThmAffineIsotropicReduction.lean) |
 | `thm:ambient-intrinsic-relaxation-equality` | Show that ambient and intrinsic smooth-gradient relaxations agree on the same L² space. | Local Lean result; no upstream mapping | ![✓ Formalized in Lean](badges/formalized.svg) | [Statement](../../formalization/blueprint/src/chapters/30-open-canonical-bridges.tex#L295) |
 | `thm:bakry-emery-poincare` | Bakry–Gentil–Ledoux Corollary 4.8.2: C_P ≤ 1/ρ for e^{-W} dx with ∇∇W ≥ ρ Id, W ∈ C², on any finite-dimensional real inner product space. | Local Lean result; no upstream mapping | ![✓ Formalized in Lean](badges/formalized.svg) | [Statement](../../formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex#L867) · [Lean certificate](../../solutions/ThmBakryEmeryPoincare.lean) |
+| `thm:bkl-taylor-criterion` | Bizeul–Klartag–Lehec Theorem 3.1: C_P(μ) ≤ K R² for centered regular log-concave μ with Cov μ ≤ Id and &#124;T_d f&#124; ≤ R^d‖f‖₂ (29); paper-target certificate. | Local Lean result; no upstream mapping | ![✓ Formalized in Lean](badges/formalized.svg) | [Statement](../../formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex#L1376) · [Lean certificate](../../solutions/ThmBklTaylorCriterion.lean) |
 | `thm:borell-logconcave-density` | Represent a log-concave law by an intrinsic log-concave density, positive with locally bounded reciprocal inside its convex support. | Local classification: published | ![✓ Formalized in Lean](badges/formalized.svg) | [Statement](../../formalization/blueprint/src/chapters/00-orientation-and-status.tex#L95) · [Lean certificate](../../solutions/ThmBorellLogconcaveDensity.lean) |
 | `thm:cmh-recovery-affine-poincare-bound` | Bound the affine Poincaré constant of a W₂ limit by the limiting CMH constants of a regular recovery sequence. | Local classification: local_argument | ![○ Not yet formalized](badges/pending.svg) | [Statement](../../formalization/blueprint/src/chapters/50-kls-routes.tex#L176) |
 | `thm:compact-borell-logconcavity-equivalence` | Show that compact-set log-concavity is equivalent to the Borel-set formulation using inner measure. | Local classification: published | ![✓ Formalized in Lean](badges/formalized.svg) | [Statement](../../formalization/blueprint/src/chapters/00-orientation-and-status.tex#L33) · [Lean certificate](../../solutions/ThmCompactBorellLogconcavityEquivalence.lean) |
@@ -295,9 +297,9 @@ retain their evidence source; generating this view does not run Lean.
 Upstream revision: `34b5fcd57fef17089e781616005fe6d3641bd11e`. The selected upstream snapshot contains
 20 records; this register is not an inventory of the entire upstream ledger.
 
-Canonical input digest: `269524804d33ef122fee5f157c3acb0df193721c1cd5d4ff603197f6780bfb91`.
+Canonical input digest: `32ef62c6f5bec3b20316fb2abdf6d3f125cc7c02d3fd72e47cfe18e10faadfef`.
 Diagram digest: `4418f6b18bdd9752397b07a9beb487c91f75cb8280c09fc10825e343cf89da2c`.
-View input digest: `34f6bbbed0de5cb4e01a85a03d10c7cbd40810a2e8ec7d2a53098fcd9a7d061b`.
+View input digest: `c088cd063377c44187eced09e635ebaff4390251ee66128288c084077e53b303`.
 
 Regenerate with `python3 research/progress/update.py` after staging the intended source and
 metadata updates; unstaged unrelated metadata is then deliberately excluded. When the

@@ -1335,3 +1335,71 @@ form taken by the variance estimate for isotropic $\mu$), then
   closedness of $\bar T$, $\norm{\bar Tu}^2=\langle Au,u\rangle$, the continuity of tilt averages and
   Taylor tensors on $L^2$, and convexity of $U$ from log-concavity for the Cauchy step.
 \end{proof}
+
+\begin{lemma}[The Poisson iterates in the generator domain]
+  \label{lem:bkl-poisson-iterates}
+  \lean{FunctionalInequalities.KLS.LogConcave.PoissonIterate.iter_mem_domain_and_mean_eq_zero,
+        FunctionalInequalities.KLS.LogConcave.PoissonIterate.genField_iter_succ,
+        FunctionalInequalities.KLS.LogConcave.PoissonIterate.energy_iter_succ,
+        FunctionalInequalities.KLS.LogConcave.PoissonIterate.inv_le_scale_sq,
+        FunctionalInequalities.KLS.LogConcave.PoissonIterate.energy_iter_zero_eq,
+        FunctionalInequalities.KLS.LogConcave.PoissonIterate.normSq_gradField_gradField_iter,
+        FunctionalInequalities.KLS.LogConcave.PoissonIterate.normSq_genField_iter_succ_add_defect_le,
+        FunctionalInequalities.KLS.LogConcave.PoissonIterate.tendsto_energy_iter_zero,
+        FunctionalInequalities.KLS.LogConcave.PoissonIterate.exists_symm_normSq_grad0_iter_succ_sub_le,
+        FunctionalInequalities.KLS.LogConcave.PoissonIterate.normSq_grad0_iter_sub_symField_le,
+        FunctionalInequalities.KLS.LogConcave.PoissonIterate.symmetrize_taylorField_grad0_iter_succ,
+        FunctionalInequalities.KLS.LogConcave.PoissonIterate.norm_taylorField_grad0_iter_sq_le,
+        FunctionalInequalities.KLS.LogConcave.PoissonIterate.sum_meanGradSq_iter_le}
+  \leanok
+  \uses{lem:bkl-generator-domain,lem:bkl-centered-inverse,lem:bkl-partial-symmetrization}
+  Let $\nu=m.\mathrm{tilted}(-U)$ be the heat model ($\nu$ log-concave with full-dimensional support,
+  $m$ a Haar measure) with $\CPLit(\nu)\le C$, $C>0$, and let $h_1\in D(A)$ be centered.  The iterates
+  $h_{i+1}=\alpha_{i+1}(-\mathcal L)^{-1}\nabla_0h_i$ of~(30)--(31) of \cite{BizeulKlartagLehec2026},
+  built componentwise in $D(A)$, satisfy, for $U\in C^2$: (30), (33), (46), (35)--(36) and (32) with
+  $\lambda=1/C$.  If moreover $U$ has temperate growth and $\nu$ has all exponential moments: (47);
+  Lemma~3.4 under $\nabla^2U\ge a$ (any real $a$); Corollary~3.5 under $\nabla^2U\ge a$ with $a>0$;
+  Lemma~3.2 with bound $C\chi_i$; Lemma~3.3 for every $2\le q\le i$ under $0<\alpha_j^2\le\beta/C$ on the
+  relevant steps, with the constant $4q^4\max(1,\beta)^qC$; Corollary~3.7 for $d\ge1$; Lemma~3.8 under
+  the Taylor bound~(29) (componentwise, Hilbert--Schmidt norm, $R\ge1$) and $0<\alpha_j^2\le\beta/C$ for
+  all earlier steps, with the explicit constant $2^{20}\max(1,\beta)^2$; and Lemma~3.9 in the form
+  $\sum_{k<N}p_k\le\norm{\mathcal Lh_1}^2+(\beta/C)\sum_{k<N-1}\abs{T_1(\nabla_0h_k)}^2$ under
+  $\int\langle v,x\rangle^2d\nu\le\norm v^2$ and $\alpha_j^2\le\beta/C$ for $j+1<N$.
+\end{lemma}
+\begin{proof}
+  \leanok
+  As in Section~3 of the source, with the identities of \cref{lem:bkl-generator-domain} in place of
+  their versions on $\mathcal A$, the centered inverse of \cref{lem:bkl-centered-inverse}, and
+  Lemma~2.2 (\cref{lem:bkl-partial-symmetrization}) for Lemma~3.8.
+\end{proof}
+
+\begin{theorem}[Taylor-coefficient criterion]
+  \label{thm:bkl-taylor-criterion}
+  \lean{FunctionalInequalities.KLS.RegularPotential.poincare_le_of_taylor,
+        FunctionalInequalities.KLS.LogConcave.PoissonIterate.taylorCriterion,
+        FunctionalInequalities.KLS.LogConcave.PoissonIterate.le_of_iterate_bounds,
+        Solutions.ThmBklTaylorCriterion.certificate}
+  \leanok
+  \uses{lem:bkl-poisson-iterates,lem:bkl-approximate-eigenfunction,lem:bkl-regular-law}
+  This is Theorem~3.1 of \cite{BizeulKlartagLehec2026}.  There is a universal constant $K>0$ such that
+  for every regular log-concave probability measure $\mu=e^{-V}dx/\int e^{-V}$ on $\R^n$ (BKL~(12)),
+  centered with $\mathrm{Cov}\,\mu\le\mathrm{Id}$, and every $R\ge1$ with
+  $\abs{T_df}\le R^d\norm f_{L^2(\mu)}$ for all $f\in L^2(\mu)$ and $d\ge1$ (29) (Hilbert--Schmidt
+  norm),
+  \[
+    \CPLit(\mu)\le KR^2.
+  \]
+  The certificate states it in this source form and discharges every hypothesis in dimension zero
+  and, for the standard Gaussian on $\R$ with $R=8$, in dimension one.
+  The proof follows Section~3 of the source through the operator domain of the generator and an
+  approximate first eigenfunction; only the value of $K$ differs.  Theorem~1.1 of the paper is not
+  claimed.
+\end{theorem}
+\begin{proof}
+  \leanok
+  With $\lambda=1/\CPLit(\mu)$, an approximate eigenfunction $f$ with $\norm{Af-\lambda f}\le\lambda/10$
+  (\cref{lem:bkl-approximate-eigenfunction}) starts the iterates of \cref{lem:bkl-poisson-iterates};
+  then $v_1\in[\lambda,1.1\lambda]$, $\sum\chi_i\le1.21\lambda^2$, $\alpha_i^2\le3\lambda$ before the
+  first index with $v_{N+1}<\lambda/2$, and the recursion~(63) with the dyadic summation gives a
+  contradiction unless $\lambda R^2$ is bounded below by a universal constant.
+\end{proof}

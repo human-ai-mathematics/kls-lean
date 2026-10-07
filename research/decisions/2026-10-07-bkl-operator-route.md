@@ -127,3 +127,34 @@ Estimate: about four to six further sessions of the same size, so roughly one we
 time to Theorem 3.1, which is within the original one-to-two-week estimate. The largest risk is
 item 1 (dependent index types for the recursion). Theorem 1.1 still needs Theorem 4.1 (Eldan
 localization), Proposition 7.1 and the regular approximation, and those estimates are unchanged.
+
+## Theorem 3.1 certified (eight-hour block, 2026-10-07 evening)
+
+Block goal `research/handoffs/2026-10-07-eight-hour-bkl-operator-route.md`; execution record
+`build/reviews/2026-10-07-bkl-operator-route/`. The route statements
+`research/audits/BKLIterateRouteStatements.lean` (13 propositions: I1–I8, S1–S2, J1–J2 and the exact
+source statement M of Theorem 3.1) were reviewed independently (all true; deviations only as recorded
+above; two self-review corrections before dispatch: S2 needs `d ≥ 1`, and J1 carries the explicit
+constant `2^20 max(1,β)²` so that it cannot depend on the measure). All are proved:
+
+| Item | Module (`KLS/LogConcave/HeatSemigroup/PoissonIterate/`) | Audit client |
+| --- | --- | --- |
+| Definitions (total operators, component fields) | `Basic.lean` | — |
+| I1–I3, I7: domain, (30), (33), (46), (35)–(36), (32) | `Domain.lean` | `BKLIterateDomainAudit.lean` |
+| I4–I6, I8: (47), Lemma 3.4, Corollary 3.5, Lemma 3.2 | `Defect.lean` | `BKLIterateDefectAudit.lean` |
+| (44) averaging over permutations | `Permutation.lean` | `BKLPermutationAudit.lean` |
+| S1: Lemma 3.3, every `q` | `Symmetry.lean` | `BKLIterateSymmetryAudit.lean` |
+| S2, J2: Corollary 3.7, Lemma 3.9 | `Taylor.lean` | `BKLIterateTaylorAudit.lean` |
+| J1: Lemma 3.8 | `TaylorRecursion.lean` | `BKLIterateTaylorRecursionAudit.lean` |
+| M: Theorem 3.1 (final argument, heat-model criterion, regular laws) | `Criterion.lean` | `BKLTaylorCriterionAudit.lean` |
+
+Generic tools: `Analysis/Tensor/BasisChange.lean` (the Hilbert–Schmidt norm of coefficient arrays does
+not depend on the orthonormal basis) and `Analysis/DyadicSummation.lean`. The certificate
+`solutions/ThmBklTaylorCriterion.lean` restates M, proves it by
+`KLS.RegularPotential.poincare_le_of_taylor` and discharges all hypotheses in dimension zero and,
+for the standard Gaussian on `ℝ¹` with `R = 8` (`KLS/LogConcave/GaussianTaylor.lean`), in dimension one. The
+library constant is `K = 100 (9·2^20)²`. Theorem 3.1 is now `✓` in the lemma map; Lemmas 3.2–3.4, 3.3,
+3.8, 3.9 and Corollaries 3.5, 3.7 are `⇑` (iterates in `D(A)` from any centered start, `λ = 1/C` with
+`C ≥ C_P`, general `β`). The paper is **not** covered: its main Theorem 1.1 still needs Theorem 4.1,
+Proposition 7.1, the regular approximation and the Letwin theorem. The in-block independent statement review was done by a separate Claude reviewer; the Codex
+acceptance review followed after the block (`build/reviews/2026-10-07-bkl-operator-route/codex/`).

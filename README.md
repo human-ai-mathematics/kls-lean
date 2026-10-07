@@ -17,7 +17,7 @@ one intentional `sorry` and lies outside every certificate import closure.
 
 ## What is proved
 
-There are **28 registered Lean certificates**, plus proved auxiliary results. Highlights:
+There are **29 registered Lean certificates**, plus proved auxiliary results. Highlights:
 
 - the one-dimensional upper bound `C_P^lit ≤ 4 Var` for log-concave laws on the line;
 - finite Poincaré tensorization and the sharp one-dimensional Gaussian constant;
@@ -34,14 +34,13 @@ There are **28 registered Lean certificates**, plus proved auxiliary results. Hi
 - metric BV relaxation and Minkowski recovery; Ambrosio–Di Marino–Gigli Theorem 3.6 (relaxed
   Minkowski content equals the Definition 3.3 perimeter, for measures finite on bounded sets) is
   certified as a paper target.
-- first dependencies of Bizeul–Klartag–Lehec (arXiv:2610.05474v1): Lemma 2.2 (partial tensor
-  symmetrization, `|A| ≤ 4^d |S_{2d} A|`) in the source form; Lemma 3.6 (the tilt identities (48)–(50)
-  for scalar and tensor-valued `u ∈ 𝒜`), Corollary 3.7 and the identities (15)–(16) on `𝒜` in reviewed
-  stronger forms; restricted counterparts of Lemma 2.1 (operator-domain inverse of the heat-model
-  generator, its componentwise tensor lift, and the identification `A[f] = [−ℒf]` on `𝒜`) and of steps
-  of Proposition 7.1; the regular-law adapter for (12); Lemmas 3.2 and 3.4, Lemma 3.3 for `q = 2`,
-  Corollary 3.5 and (32), (35)–(36), (61) for supplied iterates; Lemma 4.2 conditionally on the Letwin bound. These are supporting
-  results, not paper certificates; the source's iterates are not constructed.
+- Bizeul–Klartag–Lehec (arXiv:2610.05474v1) **Theorem 3.1** (the Taylor-coefficient criterion:
+  `C_P(μ) ≤ K R²` for centered regular log-concave `μ` with `Cov μ ≤ Id` and `|T_d f| ≤ R^d ‖f‖₂`) is
+  certified in the source form (`thm:bkl-taylor-criterion`), proved through the operator domain of
+  the generator with an approximate first eigenfunction; Lemma 2.2 and the Section 3 lemmas
+  (Lemmas 3.2–3.4, 3.6, 3.8, 3.9, Corollaries 3.5, 3.7) are formalized for these iterates. The
+  paper's main Theorem 1.1 is **not** proved: Theorem 4.1 (Eldan localization), Proposition 7.1,
+  the regular approximation and the Letwin theorem remain.
 
 ## What is not proved
 

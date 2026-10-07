@@ -153,6 +153,17 @@ import FunctionalInequalities.Analysis.Semigroup.Generated.ApproximateEigenvecto
 import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.ApproximateEigenfunction
 import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Hessian
 import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Tilt
+import FunctionalInequalities.Analysis.Tensor.BasisChange
+import FunctionalInequalities.Analysis.DyadicSummation
+import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.PoissonIterate.Basic
+import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.PoissonIterate.Domain
+import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.PoissonIterate.Permutation
+import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.PoissonIterate.Defect
+import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.PoissonIterate.Taylor
+import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.PoissonIterate.Symmetry
+import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.PoissonIterate.TaylorRecursion
+import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.PoissonIterate.Criterion
+import FunctionalInequalities.KLS.LogConcave.GaussianTaylor
 import FunctionalInequalities.Analysis.BakryEmery.IteratedDerivative
 import FunctionalInequalities.Analysis.BakryEmery.Tilt.Basic
 import FunctionalInequalities.Analysis.BakryEmery.Cumulant

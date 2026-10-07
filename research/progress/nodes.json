@@ -1116,6 +1116,14 @@
       "description": "On the generator domain D(A) of the heat model: weak Hessian in D(T̄), its symmetry, the curvature form of Bizeul–Klartag–Lehec (16), the tilt identity (48) and Lemma 3.6.",
       "blueprint": "lem:bkl-generator-domain"
     },
+    "lem:bkl-poisson-iterates": {
+      "description": "Bizeul–Klartag–Lehec Section 3 in D(A): the iterates (30)–(31) and (32)–(36), (47), Lemmas 3.2, 3.3 (every q), 3.4, 3.8, 3.9 (route form), Corollaries 3.5 and 3.7.",
+      "blueprint": "lem:bkl-poisson-iterates"
+    },
+    "thm:bkl-taylor-criterion": {
+      "description": "Bizeul–Klartag–Lehec Theorem 3.1: C_P(μ) ≤ K R² for centered regular log-concave μ with Cov μ ≤ Id and |T_d f| ≤ R^d‖f‖₂ (29); paper-target certificate.",
+      "blueprint": "thm:bkl-taylor-criterion"
+    },
     "lem:bkl-corollary-3-7": {
       "description": "Bizeul–Klartag–Lehec Corollary 3.7: S_{d+1}T_d(∇₀h) = T_{d+1}(−ℒh) = αT_{d+1}(∇₀g) whenever −ℒh = α∇₀g, for tensor fields of temperate growth.",
       "blueprint": "lem:bkl-corollary-3-7"
