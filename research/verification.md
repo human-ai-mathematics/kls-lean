@@ -42,7 +42,7 @@ checks and progress regeneration do not constitute a new Lean or remote CI recei
 
 Implementation round; no registration number changes (26 certificates, one deliberate target hole).
 `Analysis/BakryEmery/Gamma.lean` defines `Γ(f, g) = ⟪∇f, ∇g⟫` and `Γ₂(f) = ℒ(Γ(f, f))/2 - Γ(f, ℒf)`
-for `ℒf = Δf - ⟪∇U, ∇f⟫` and proves the product identity `B0`; `Analysis/BakryEmery/Bochner.lean`
+for `ℒf = Δf - ⟪∇U, ∇f⟫` and proves the product identity `B0`; `Analysis/BakryEmery/Bochner/Basic.lean`
 proves `B1` (convex `C²` potentials have positive semidefinite Hessians), `B3`
 (`Γ₂(f) = ∑ᵢ∑ⱼ (D²f(eᵢ, eⱼ))² + D²U(∇f, ∇f)` in the fixed standard orthonormal basis, `C³` `f`,
 `C²` `U`) and `B4` (`Γ₂ ≥ 0` for convex potentials). Pointwise statements for smooth functions only:
@@ -63,7 +63,7 @@ No commit or push.
 Implementation round; no registration number changes (26 certificates, one deliberate target hole).
 For `(ν : Measure V) = m.tilted (-U)` with `U ∈ C¹` and the closed unit-weight gradient `T̄`:
 weighted integration by parts `∫ ⟪∇f, ∇g⟫ dν = ∫ (-ℒf) g dν`, `ℒf = Δf - ⟪∇U, ∇f⟫`
-(`Analysis/BakryEmery/IntegrationByParts.lean`), and for every `f ∈ C_c^∞`, `[f] ∈ D(T̄†T̄)` with
+(`Analysis/BakryEmery/IntegrationByParts/Basic.lean`), and for every `f ∈ C_c^∞`, `[f] ∈ D(T̄†T̄)` with
 `T̄†T̄ [f] = [-ℒf]` (`KLS/LogConcave/HeatSemigroup/Generator.lean`, through the closure lemma of
 `Analysis/Semigroup/AdjointClosure.lean` and the adjoint's defining property). Per-test statements
 only: no operator-core claim, no `Γ₂`/Bochner, no gradient estimate, no Buser step.

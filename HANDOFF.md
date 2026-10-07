@@ -26,13 +26,13 @@ authorization. Exact results, scopes and certificates are in the
     `Analysis/Tensor/{Symmetrization,Coordinate}.lean`.
   - Lemma 3.6 for scalar and tensor-valued `u ∈ 𝒜` (Mathlib `HasTemperateGrowth`) and Corollary 3.7
     (for every pair satisfying the relation (30)), both in reviewed stronger forms (relation `⇑`):
-    `Analysis/BakryEmery/{Tilt,TemperateTilt,TensorTilt}.lean`.
+    `Analysis/BakryEmery/Tilt/{Basic,Temperate,Tensor}.lean`.
   - (15) and (16) on `𝒜` for scalar and tensor fields, with the curvature form used in Lemma 3.4
-    (`Analysis/BakryEmery/{TemperateIBP,TemperateBochner,TensorBochner}.lean`), and (48) (all `⇑`).
+    (`Analysis/BakryEmery/{IntegrationByParts,Bochner}/Temperate.lean`, `Analysis/BakryEmery/Bochner/Tensor.lean`), and (48) (all `⇑`).
   - Restricted counterparts: Lemma 2.1, operator-domain inverse in the heat model
     (`Analysis/Semigroup/Generated/Inverse.lean`, `KLS/LogConcave/HeatSemigroup/Inverse.lean`); steps of
     Proposition 7.1 (linear functions; continuity of `T_d` on `L²`, also in the Hilbert–Schmidt norm)
-    (`Analysis/BakryEmery/{Cumulant,SquareIntegrableTilt}.lean`).
+    (`Analysis/BakryEmery/Cumulant.lean`, `Analysis/BakryEmery/Tilt/SquareIntegrable.lean`).
   - Infrastructure: symmetry of iterated derivatives of `C^∞` maps (Mathlib has it only for analytic
     maps), the Leibniz rule with a linear factor, Hilbert–Schmidt coefficient arrays of multilinear
     maps (`Analysis/Tensor/{Multilinear,Coefficients}.lean`).

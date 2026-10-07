@@ -4,7 +4,7 @@ import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Generator
 # Scope audit for the generator identification `G0`/`G1` on smooth tests
 
 This client imports the three new modules of the round
-(`Analysis/BakryEmery/IntegrationByParts.lean`, `Analysis/Semigroup/AdjointClosure.lean`,
+(`Analysis/BakryEmery/IntegrationByParts/Basic.lean`, `Analysis/Semigroup/AdjointClosure.lean`,
 `KLS/LogConcave/HeatSemigroup/Generator.lean`, the last through its imports) and discharges the
 two route obligations `G0` and `G1` of `research/audits/BakryEmeryRouteStatements.lean`. The
 propositions are restated **verbatim** from that file as `route_G0` and `route_G1`; the proofs are

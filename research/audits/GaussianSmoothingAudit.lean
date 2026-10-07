@@ -1,4 +1,4 @@
-import FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing
+import FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Basic
 
 /-! Independent full-signature clients for the proved Gaussian convolution properties.
 The clients do not assert smoothness or convergence. -/

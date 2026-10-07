@@ -177,7 +177,10 @@ in the [Semigroup map](api-migration/2026-09-19-semigroup-module-map.json) and K
 [KLS map](api-migration/2026-09-19-kls-module-map.json). The 2026-09-20 library-wide reorganization
 has three batches: [Analysis](api-migration/2026-09-20-analysis-module-map.json),
 [Energy/Probability/Poincare](api-migration/2026-09-20-foundation-module-map.json), and
-[KLS](api-migration/2026-09-20-kls-module-map.json). Historical decisions and explorations retain
+[KLS](api-migration/2026-09-20-kls-module-map.json). The 2026-10-07 batch forms
+`Analysis/BakryEmery/{Tilt,Bochner,IntegrationByParts}/` and
+`KLS/LogConcave/Density/GaussianSmoothing/` ([map](api-migration/2026-10-07-family-directories-map.json)).
+Historical decisions and explorations retain
 their original paths without retrospective migration; each reorganization must provide a path
 map so old references remain resolvable.
 

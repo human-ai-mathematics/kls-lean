@@ -1,4 +1,4 @@
-import FunctionalInequalities.Analysis.BakryEmery.Tilt
+import FunctionalInequalities.Analysis.BakryEmery.Tilt.Basic
 import FunctionalInequalities.Analysis.BakryEmery.Gamma
 import Mathlib.Analysis.Distribution.TemperateGrowth
 import Mathlib.Analysis.Calculus.BumpFunction.InnerProduct
@@ -10,7 +10,7 @@ Bizeul–Klartag–Lehec (arXiv:2610.05474v1), Lemma 3.6 for scalar functions of
 every derivative of polynomial growth; Mathlib's `Function.HasTemperateGrowth`). The measure is
 `μ = m.tilted (-V)` with `V ∈ C¹`, `∇V` of polynomial growth (true for the source's regular measures,
 whose Hessian is bounded) and all exponential moments. The compactly supported case is
-`Analysis/BakryEmery/Tilt.lean`; here a scaled bump cutoff `χ_R(x) = φ(x / R)` and dominated
+`Analysis/BakryEmery/Tilt/Basic.lean`; here a scaled bump cutoff `χ_R(x) = φ(x / R)` and dominated
 convergence remove the support condition from the integrated generator identity `∫ ℒu dμ_z = 0`.
 -/
 

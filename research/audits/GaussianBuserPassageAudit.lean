@@ -1,4 +1,4 @@
-import FunctionalInequalities.KLS.LogConcave.Density.GaussianBuser
+import FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Buser
 
 /-! Independent full-signature clients for Cheeger stability and general π-Buser. -/
 

@@ -984,7 +984,7 @@
         "state": "formalized",
         "evidence": {
           "kind": "local_strict_client",
-          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing.lean",
+          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/Basic.lean",
           "source_sha256": "9199aaa957d191f45223c56230a98bec575ea52b4f3611f0205a11749c5525b1"
         },
         "kind": "auxiliary"
@@ -992,7 +992,7 @@
       "diagram": {
         "id": "GAUSS",
         "label": "Gaussian convolution<br/>Smooth potential",
-        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing.lean",
+        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/Basic.lean",
         "shape": "box"
       }
     },
@@ -1002,7 +1002,7 @@
         "state": "formalized",
         "evidence": {
           "kind": "local_strict_client",
-          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianPoincare.lean",
+          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/Poincare.lean",
           "source_sha256": "b320880143ac5c424f9d78bd96f9792c20f68df97f3c8520ae089fcee3f1ce09"
         },
         "kind": "auxiliary"
@@ -1010,7 +1010,7 @@
       "diagram": {
         "id": "GSTAB",
         "label": "Gaussian convolution<br/>Poincaré stability",
-        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianPoincare.lean",
+        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/Poincare.lean",
         "shape": "box"
       }
     },
@@ -1020,7 +1020,7 @@
         "state": "partial",
         "evidence": {
           "kind": "reviewed_progress",
-          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/BakryEmery/Bochner.lean",
+          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/BakryEmery/Bochner/Basic.lean",
           "baseline_commit": "f8e4ca8b63a53b2de070f02d93a3d3f7674a4648"
         },
         "kind": "auxiliary"
@@ -1028,7 +1028,7 @@
       "diagram": {
         "id": "BE",
         "label": "Generator / Bochner<br/>Gradient estimates",
-        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/BakryEmery/Bochner.lean",
+        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/BakryEmery/Bochner/Basic.lean",
         "shape": "box"
       }
     },

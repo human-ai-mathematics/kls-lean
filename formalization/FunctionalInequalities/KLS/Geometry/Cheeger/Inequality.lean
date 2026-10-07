@@ -45,7 +45,7 @@ Read the module in this order.
   resulting bound on the smooth-test constant and its degenerate case.
 
 The Buser half `Ψ_KLS(μ)² ≤ π C_P(μ)` is not part of this module; it is
-`LogConcave.inverseScale_sq_le_pi_literature` in `KLS/LogConcave/Density/GaussianBuser.lean`.  Nothing here depends on the weighted coarea formula, on Sard's theorem, on the relative
+`LogConcave.inverseScale_sq_le_pi_literature` in `KLS/LogConcave/Density/GaussianSmoothing/Buser.lean`.  Nothing here depends on the weighted coarea formula, on Sard's theorem, on the relative
 perimeter or on any work-in-progress layer.
 -/
 
@@ -799,7 +799,7 @@ every log-concave law has), the isoperimetric constant `h_μ` is the Minkowski c
 intrinsic law (`Isoperimetry.constant_eq_minkowskiConstant_intrinsic`), and
 `Isoperimetry.smoothTest_constant_le` gives the bound on the coordinate space.  Dirac laws are
 included with both sides `0`.  The Buser half `Ψ_KLS(μ)² ≤ π C_P^lit(μ)` is
-`inverseScale_sq_le_pi_literature` (`KLS/LogConcave/Density/GaussianBuser.lean`). -/
+`inverseScale_sq_le_pi_literature` (`KLS/LogConcave/Density/GaussianSmoothing/Buser.lean`). -/
 theorem literatureConstant_le_four_mul_inverseScale_sq {μ : ProbabilityMeasure E}
     (hμ : LogConcave μ) :
     Poincare.LocalSlope.Intrinsic.constant μ ≤ 4 * Isoperimetry.inverseScale μ ^ 2 := by

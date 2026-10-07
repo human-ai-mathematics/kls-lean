@@ -1,6 +1,6 @@
 import FunctionalInequalities.KLS.Geometry.Cheeger.Stability
-import FunctionalInequalities.KLS.LogConcave.Density.GaussianApproximation
-import FunctionalInequalities.KLS.LogConcave.Density.GaussianPoincare
+import FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Approximation
+import FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Poincare
 import FunctionalInequalities.KLS.LogConcave.SmoothBuser
 
 /-!

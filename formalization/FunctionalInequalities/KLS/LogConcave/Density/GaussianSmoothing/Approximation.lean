@@ -1,4 +1,4 @@
-import FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing
+import FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Basic
 import Mathlib.MeasureTheory.Integral.PeakFunction
 import Mathlib.MeasureTheory.Integral.Bochner.ContinuousLinearMap
 import Mathlib.Analysis.SpecialFunctions.Pow.Asymptotics

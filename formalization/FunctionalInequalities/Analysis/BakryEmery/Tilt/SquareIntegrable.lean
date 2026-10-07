@@ -1,4 +1,4 @@
-import FunctionalInequalities.Analysis.BakryEmery.Tilt
+import FunctionalInequalities.Analysis.BakryEmery.Tilt.Basic
 import Mathlib.Analysis.Calculus.ContDiff.Bounds
 
 /-!

@@ -1,4 +1,4 @@
-import FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing
+import FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Basic
 import FunctionalInequalities.KLS.LogConcave.Poincare
 import FunctionalInequalities.Poincare.Convolution
 import FunctionalInequalities.Poincare.Gaussian.Multivariate

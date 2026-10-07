@@ -15,8 +15,9 @@ This module constructs the normalized Gaussian convolution law of a Borell
 density. Its continuous positive density has a continuous convex logarithmic
 potential and is log-concave as a probability law. The actual normalized density
 and potential are smooth. Poincare upper stability and the numerical Cheeger
-passage are proved in the later `GaussianPoincare` and `GaussianBuser` modules;
-this module does not assert individual-domain perimeter convergence.
+passage are proved in the later `GaussianSmoothing/Poincare` and
+`GaussianSmoothing/Buser` modules; this module does not assert
+individual-domain perimeter convergence.
 -/
 
 set_option autoImplicit false

@@ -1,4 +1,4 @@
-import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts
+import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.Basic
 import Mathlib.MeasureTheory.Measure.Tilted
 import FunctionalInequalities.Analysis.BakryEmery.IteratedDerivative
 import FunctionalInequalities.Analysis.Tensor.Coefficients

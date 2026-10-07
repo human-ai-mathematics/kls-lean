@@ -604,7 +604,7 @@
             "declarations": [
               {
                 "name": "FunctionalInequalities.KLS.LogConcave.inverseScale_sq_le_pi_literature",
-                "source": "formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianBuser.lean"
+                "source": "formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/Buser.lean"
               }
             ],
             "note": "Euclidean case only, as Ψ² ≤ π C_P, i.e. c = 1/√π, for every finite-dimensional log-concave law including nonsmooth ones; weighted manifolds are not covered."
@@ -5228,7 +5228,7 @@
             "declarations": [
               {
                 "name": "FunctionalInequalities.KLS.LogConcave.inverseScale_sq_le_pi_literature",
-                "source": "formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianBuser.lean"
+                "source": "formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/Buser.lean"
               }
             ],
             "note": "The K = 0, m(X) = 1 case in its weaker displayed form λ₁ ≤ πh², i.e. Ψ² ≤ π C_P, for every finite-dimensional log-concave law; the sharper constant (4/π) inf_T T/(1 − e^(−T))², the K ≠ 0 cases and infinite measure are not formalized."
@@ -5509,7 +5509,7 @@
               },
               {
                 "name": "FunctionalInequalities.KLS.LogConcave.inverseScale_sq_le_pi_literature",
-                "source": "formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianBuser.lean"
+                "source": "formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/Buser.lean"
               }
             ],
             "note": "Lean proves C_P ≤ 4Ψ² and Ψ² ≤ π C_P (Ψ = Isoperimetry.inverseScale) for every finite-dimensional log-concave law, including singular and Dirac laws, in the Lean conventions of D5 and DPSI; the Buser constant π is sharper than 9. Cheeger without log-concavity is not stated in this form."
@@ -6241,7 +6241,7 @@
               },
               {
                 "name": "FunctionalInequalities.KLS.LogConcave.inverseScale_sq_le_pi_literature",
-                "source": "formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianBuser.lean"
+                "source": "formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/Buser.lean"
               }
             ],
             "note": "Both halves are proved for every finite-dimensional log-concave law, including degenerate and zero-dimensional ones, as C_P ≤ 4Ψ² and Ψ² ≤ π·C_P with Ψ = Isoperimetry.inverseScale (Minkowski-content convention). Partial only because Ψ is not identified in Lean with the paper's smooth-boundary ψ_μ."
@@ -6260,7 +6260,7 @@
               },
               {
                 "name": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.gaussianLaw_smoothTest_holds",
-                "source": "formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianPoincare.lean"
+                "source": "formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/Poincare.lean"
               }
             ],
             "note": "Only Gaussian instances are formalized: the law of r·G for a standard Gaussian G (which is 1/r²-uniformly log-concave) satisfies the smooth-test Poincaré inequality with constant r², and the normalized kernel ∝ exp(−s|x|²) (2s-uniformly log-concave) with constant 1/(2s). These are smooth-test constants; the general uniformly log-concave case is not formalized."
@@ -6339,7 +6339,7 @@
             "declarations": [
               {
                 "name": "FunctionalInequalities.Analysis.BakryEmery.integral_inner_gradient_tilted",
-                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts.lean"
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/Basic.lean"
               }
             ],
             "note": "Lean proves ∫⟨∇f, ∇g⟩ dμ = ∫(−ℒf)g dμ for μ = m.tilted(−U) with C¹ potential U, C² compactly supported f and C¹ g on a finite-dimensional space: compact support of one factor replaces μ-temperedness and no convexity is needed."
@@ -6613,7 +6613,7 @@
             "declarations": [
               {
                 "name": "FunctionalInequalities.KLS.LogConcave.inverseScale_sq_le_pi_literature",
-                "source": "formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianBuser.lean"
+                "source": "formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/Buser.lean"
               }
             ],
             "note": "Unnumbered cited claim, listed because a Lean declaration states it. Lean proves Isoperimetry.inverseScale μ ^ 2 ≤ π · Poincare.LocalSlope.Intrinsic.constant μ for every log-concave μ (KLS.LogConcave, any affine-support dimension, extended values), with π < 9 and no isotropy. It implies the cited inequality once ψ_μ (smooth open sets, surface integral of ρ) is bounded by Lean's Minkowski-content inverse scale over measurable sets, and λ_μ^{-1} is identified with the intrinsic literature Poincaré constant; these classical identifications are not formalized. The Cheeger half literatureConstant_le_four_mul_inverseScale_sq is not used by the paper."
@@ -7558,7 +7558,7 @@
             "uses": [],
             "relation": "same",
             "declarations": [],
-            "note": "Refines the cited inequality LH + H ≥ 0 (display (12), Klartag 2023 moment measures Lemma 5.2); proved by differentiating log of the Monge–Ampère equation (5) twice. Not mapped to FunctionalInequalities.Analysis.BakryEmery.gammaTwo_nonneg (Analysis/BakryEmery/Bochner.lean): that is the Euclidean Bochner bound Γ₂ ≥ 0 for a convex potential, whereas L here carries the Riemannian metric ∇²ψ and the identity is specific to the Monge–Ampère potential."
+            "note": "Refines the cited inequality LH + H ≥ 0 (display (12), Klartag 2023 moment measures Lemma 5.2); proved by differentiating log of the Monge–Ampère equation (5) twice. Not mapped to FunctionalInequalities.Analysis.BakryEmery.gammaTwo_nonneg (Analysis/BakryEmery/Bochner/Basic.lean): that is the Euclidean Bochner bound Γ₂ ≥ 0 for a convex potential, whereas L here carries the Riemannian metric ∇²ψ and the identity is specific to the Monge–Ampère potential."
           },
           {
             "id": "L32",
@@ -7685,7 +7685,7 @@
             "uses": [],
             "relation": "same",
             "declarations": [],
-            "note": "Proved with Euclidean cutoffs ζ_R(x) = ζ(x/R) and dominated convergence. Not mapped to FunctionalInequalities.Analysis.BakryEmery.integral_inner_gradient_tilted (Analysis/BakryEmery/IntegrationByParts.lean) or FunctionalInequalities.KLS.LogConcave.integral_inner_gradient_eq (Generator.lean): those state ∫ ⟪∇f, ∇g⟫ dν = ∫ (−ℒf) g dν for compactly supported C² f against a tilted Haar law, a tool for the cutoff step, while the lemma concerns the non-compactly-supported functions ψ_i, ψ_ij and the passage R → ∞."
+            "note": "Proved with Euclidean cutoffs ζ_R(x) = ζ(x/R) and dominated convergence. Not mapped to FunctionalInequalities.Analysis.BakryEmery.integral_inner_gradient_tilted (Analysis/BakryEmery/IntegrationByParts/Basic.lean) or FunctionalInequalities.KLS.LogConcave.integral_inner_gradient_eq (Generator.lean): those state ∫ ⟪∇f, ∇g⟫ dν = ∫ (−ℒf) g dν for compactly supported C² f against a tilted Haar law, a tool for the cutoff step, while the lemma concerns the non-compactly-supported functions ψ_i, ψ_ij and the passage R → ∞."
           }
         ]
       }
@@ -7778,7 +7778,7 @@
               },
               {
                 "name": "FunctionalInequalities.KLS.LogConcave.inverseScale_sq_le_pi_literature",
-                "source": "formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianBuser.lean"
+                "source": "formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/Buser.lean"
               }
             ],
             "note": "Quoted, not proved in the paper. Lean proves both halves for every finite-dimensional log-concave law, including degenerate and zero-dimensional ones, as C_P <= 4 Psi^2 and Psi^2 <= pi C_P with Psi = Isoperimetry.inverseScale (Minkowski-content convention). Partial only because Psi is not identified in Lean with the smooth-boundary psi_mu. The proof of Theorem 1.1 uses only the Buser direction psi_n^2 <= C sup C_P(mu)."
@@ -8351,27 +8351,27 @@
             "declarations": [
               {
                 "name": "FunctionalInequalities.Analysis.BakryEmery.taylorTensor_neg_weightedLaplacian",
-                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Tilt.lean"
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Tilt/Basic.lean"
               },
               {
                 "name": "FunctionalInequalities.Analysis.BakryEmery.taylorTensor_one_neg_weightedLaplacian",
-                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Tilt.lean"
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Tilt/Basic.lean"
               },
               {
                 "name": "FunctionalInequalities.Analysis.BakryEmery.taylorTensor_neg_weightedLaplacianVec",
-                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/TensorTilt.lean"
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Tilt/Tensor.lean"
               },
               {
                 "name": "FunctionalInequalities.Analysis.BakryEmery.taylorTensor_one_neg_weightedLaplacianVec",
-                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/TensorTilt.lean"
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Tilt/Tensor.lean"
               },
               {
                 "name": "FunctionalInequalities.Analysis.BakryEmery.taylorTensor_neg_weightedLaplacian_of_hasTemperateGrowth",
-                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/TemperateTilt.lean"
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Tilt/Temperate.lean"
               },
               {
                 "name": "FunctionalInequalities.Analysis.BakryEmery.taylorTensor_one_neg_weightedLaplacian_of_hasTemperateGrowth",
-                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/TemperateTilt.lean"
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Tilt/Temperate.lean"
               }
             ],
             "note": "Formalized in a reviewed stronger form (Codex review 3, 2026-10-07): for scalar and tensor-valued u ∈ 𝒜 (Mathlib HasTemperateGrowth; values in any finite-dimensional real normed space F, whose indices trail and are not symmetrized), with ℒu = Δu − Du(∇V) componentwise, the derivative index of T_d(Du) after its d Taylor indices (uncurryRight) and S_{d+1} on these d + 1 arguments, every d ≥ 0, for μ = m.tilted(−V) with V ∈ C¹, ∇V of polynomial growth and all exponential moments. The source assumes μ regular (a Id ≤ ∇²V ≤ b Id, every derivative of V polynomially bounded), which implies these hypotheses; that implication is reviewed, not a Lean adapter. A zero measure (e^{−V} not integrable) makes the identities trivial. The scalar case is also proved for compactly supported C² u. The symmetry of ∇ⁿF needed for S_{d+1} is proved for C^∞ maps (iteratedFDeriv_comp_perm_of_contDiff); Mathlib states it only for analytic maps."
@@ -8388,7 +8388,7 @@
             "declarations": [
               {
                 "name": "FunctionalInequalities.Analysis.BakryEmery.symmetrizeML_taylorTensor_centeredFDeriv",
-                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/TensorTilt.lean"
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Tilt/Tensor.lean"
               }
             ],
             "note": "Formalized in a reviewed stronger form (Codex strategy 11): for every tensor field h of temperate growth and every g, α with −ℒh = α∇₀g (the relation (30) defining h_{i+1} from h_i, with ∇₀u = Du − ∫Du, centeredFDeriv), every d ≥ 1, the symmetrization S_{d+1} acting on the first d + 1 indices and the trailing indices untouched. The existence and normalization (31) of the source iterates (Lemma 2.1 on 𝒜) are separate, unproved obligations."
@@ -8525,7 +8525,7 @@
               },
               {
                 "name": "FunctionalInequalities.Analysis.BakryEmery.exists_norm_taylorTensor_le",
-                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/SquareIntegrableTilt.lean"
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Tilt/SquareIntegrable.lean"
               }
             ],
             "note": "Proved steps: the continuity of T_d on L²(μ) used in the proof (‖T_d f‖ ≤ C_d‖f‖₂ for a probability measure with all exponential moments; T_d is linear on L²), and the linear-function step: for a nonzero finite measure with all exponential moments, F_⟨v,·⟩ = DΛ_μ(·)v and T_d⟨v,·⟩ = κ_{d+1}(v, ·, …, ·)/d!. The suspension, the log-concavity of the maximum of convex potentials, the mixed cumulant identity (112), the limit β → ∞ and the density argument are not proved."
@@ -8567,22 +8567,22 @@
             "declarations": [
               {
                 "name": "FunctionalInequalities.Analysis.BakryEmery.taylorTensor",
-                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Tilt.lean"
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Tilt/Basic.lean"
               },
               {
                 "name": "FunctionalInequalities.Analysis.BakryEmery.contDiff_tiltAverage",
-                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Tilt.lean"
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Tilt/Basic.lean"
               },
               {
                 "name": "FunctionalInequalities.Analysis.BakryEmery.contDiff_tiltAverage_of_memLp",
-                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/SquareIntegrableTilt.lean"
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Tilt/SquareIntegrable.lean"
               },
               {
                 "name": "FunctionalInequalities.Analysis.BakryEmery.slotPerm_coordTensor_taylorTensor",
-                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Tilt.lean"
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Tilt/Basic.lean"
               }
             ],
-            "note": "expTilt μ z = μ.tilted ⟨z, ·⟩ is the source density when 0 < ∫e^{⟨z,x⟩}dμ < ∞; taylorTensor is the continuous multilinear map (1/d!)∇^dF_f(0), whose default operator norm is not the source Hilbert–Schmidt norm. Smoothness of F_f is proved for every f ∈ L²(μ) under all exponential moments (SquareIntegrableTilt.lean), with ∇^d of the Laplace-type integral given by weighted moments. In an orthonormal basis the coefficient array of T_d f (coordTensor, Analysis/Tensor/Coefficients.lean) is a symmetric element of Coord n d with the Hilbert–Schmidt norm, which bounds the operator norm (norm_le_norm_coordTensor); symmetrizeML is S_d of the array."
+            "note": "expTilt μ z = μ.tilted ⟨z, ·⟩ is the source density when 0 < ∫e^{⟨z,x⟩}dμ < ∞; taylorTensor is the continuous multilinear map (1/d!)∇^dF_f(0), whose default operator norm is not the source Hilbert–Schmidt norm. Smoothness of F_f is proved for every f ∈ L²(μ) under all exponential moments (Tilt/SquareIntegrable.lean), with ∇^d of the Laplace-type integral given by weighted moments. In an orthonormal basis the coefficient array of T_d f (coordTensor, Analysis/Tensor/Coefficients.lean) is a symmetric element of Coord n d with the Hilbert–Schmidt norm, which bounds the operator norm (norm_le_norm_coordTensor); symmetrizeML is S_d of the array."
           },
           {
             "id": "EQ15",
@@ -8594,15 +8594,15 @@
             "declarations": [
               {
                 "name": "FunctionalInequalities.Analysis.BakryEmery.integral_weightedLaplacian_mul_eq_neg_of_hasTemperateGrowth",
-                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/TemperateIBP.lean"
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/Temperate.lean"
               },
               {
                 "name": "FunctionalInequalities.Analysis.BakryEmery.integral_weightedLaplacian_mul_comm_of_hasTemperateGrowth",
-                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/TemperateIBP.lean"
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/Temperate.lean"
               },
               {
                 "name": "FunctionalInequalities.Analysis.BakryEmery.integral_inner_weightedLaplacianVec_eq_neg",
-                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/TensorBochner.lean"
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Bochner/Tensor.lean"
               }
             ],
             "note": "Formalized in a reviewed stronger form (Codex review 4) for scalar u, v and for tensor fields (values in a finite-dimensional real inner product space, ⟨∇u, ∇v⟩ = Σ_i ⟨Du(e_i), Dv(e_i)⟩) of temperate growth, μ = m.tilted(−V) with V ∈ C¹, ∇V of polynomial growth and all exponential moments (the source assumes μ regular; the implication is reviewed, not a Lean adapter)."
@@ -8619,19 +8619,19 @@
             "declarations": [
               {
                 "name": "FunctionalInequalities.Analysis.BakryEmery.integral_weightedLaplacian_sq_eq_of_hasTemperateGrowth",
-                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/TemperateBochner.lean"
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Bochner/Temperate.lean"
               },
               {
                 "name": "FunctionalInequalities.Analysis.BakryEmery.integral_hessianSq_add_le_of_hasTemperateGrowth",
-                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/TemperateBochner.lean"
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Bochner/Temperate.lean"
               },
               {
                 "name": "FunctionalInequalities.Analysis.BakryEmery.integral_norm_sq_weightedLaplacianVec_eq",
-                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/TensorBochner.lean"
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Bochner/Tensor.lean"
               },
               {
                 "name": "FunctionalInequalities.Analysis.BakryEmery.integral_hessian_add_le_norm_sq_weightedLaplacianVec",
-                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/TensorBochner.lean"
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Bochner/Tensor.lean"
               }
             ],
             "note": "Formalized in a reviewed stronger form (Codex review 4): proved for scalar u of temperate growth and μ = m.tilted(−V) with V of temperate growth and all exponential moments (convexity and the Hessian bounds of a regular measure are not needed), together with the curvature form ∫‖∇²u‖²_HS + ρ∫‖∇u‖² ≤ ∫(Lu)² under ∇²V ≥ ρ used in Lemma 3.4; ‖∇²u‖²_HS is written in the standard orthonormal basis (hessianSqStdBasis). Tensor fields: ∫‖ℒu‖² = ∫Σ_{i,j}‖∇²u(e_i,e_j)‖² + ∫Σ_{i,j}∇²V(e_i,e_j)⟨Du(e_i), Du(e_j)⟩ and the tensor curvature form are proved (TensorBochner.lean)."
@@ -8648,15 +8648,15 @@
             "declarations": [
               {
                 "name": "FunctionalInequalities.Analysis.BakryEmery.tiltAverage_neg_weightedLaplacian",
-                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Tilt.lean"
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Tilt/Basic.lean"
               },
               {
                 "name": "FunctionalInequalities.Analysis.BakryEmery.tiltAverage_neg_weightedLaplacian_of_hasTemperateGrowth",
-                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/TemperateTilt.lean"
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Tilt/Temperate.lean"
               },
               {
                 "name": "FunctionalInequalities.Analysis.BakryEmery.tiltAverage_neg_weightedLaplacianVec",
-                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/TensorTilt.lean"
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Tilt/Tensor.lean"
               }
             ],
             "note": "Formalized in a reviewed stronger form (Codex review 4): for scalar and tensor-valued u ∈ 𝒜 (vector form F_{−ℒu}(z) = F_{Du}(z) z, ℒu = Δu − Du(∇V)), μ = m.tilted(−V) with V ∈ C¹, ∇V of polynomial growth and all exponential moments (the source assumes μ regular; that implication is reviewed, not a Lean adapter), by integration by parts under each tilt with a scaled bump cutoff and dominated convergence; also for compactly supported C² scalar u."

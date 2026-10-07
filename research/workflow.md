@@ -33,7 +33,7 @@ make it fit a directory.
 | --- | --- | --- |
 | Reusable analytic or algebraic tool | Lowest existing mathematical family that owns the object; avoid application assumptions | Hessian and directional-derivative tools in `Analysis/BakryEmery/Calculus.lean` |
 | Object definition and elementary properties | The object's family, below substantial applications and estimates | Classical weighted operator in `BakryEmery/Laplacian.lean` |
-| Substantive theorem or property | A topic module inside the owning family | `IntegrationByParts.lean`, `Gamma.lean`, `Bochner.lean` |
+| Substantive theorem or property | A topic module inside the owning family | `IntegrationByParts/`, `Gamma.lean`, `Bochner/` |
 | Concrete specialization | The concrete family's module; import the abstract result | `KLS/LogConcave/HeatSemigroup/Domain.lean` |
 | Identification between two objects | Place at their integration boundary, with a descriptive topic name | Closed-form normalization in `WeightedGradient/Energy.lean` |
 | Counterexample or obstruction | The family of the statement being refuted; independent from the successful construction | `Semigroup/Exponential/Counterexample.lean` |

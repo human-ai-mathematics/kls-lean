@@ -1,4 +1,4 @@
-import FunctionalInequalities.Analysis.BakryEmery.TemperateTilt
+import FunctionalInequalities.Analysis.BakryEmery.Tilt.Temperate
 
 /-!
 # Integration by parts for tests of temperate growth

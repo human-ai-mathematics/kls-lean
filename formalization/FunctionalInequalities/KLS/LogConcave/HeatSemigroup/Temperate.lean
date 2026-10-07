@@ -1,7 +1,7 @@
 import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Generator
 import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Inverse
-import FunctionalInequalities.Analysis.BakryEmery.TemperateIBP
-import FunctionalInequalities.Analysis.BakryEmery.TemperateBochner
+import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.Temperate
+import FunctionalInequalities.Analysis.BakryEmery.Bochner.Temperate
 import FunctionalInequalities.Analysis.BakryEmery.TensorEnergy
 
 /-!

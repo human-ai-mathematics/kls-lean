@@ -1,11 +1,11 @@
-import FunctionalInequalities.Analysis.BakryEmery.Bochner
+import FunctionalInequalities.Analysis.BakryEmery.Bochner.Basic
 import Mathlib.Analysis.Calculus.IteratedDeriv.Lemmas
 
 /-!
 # Scope audit for the local `Γ`/`Γ₂` calculus: `B0`–`B4`
 
 This client imports the two new modules of the round (`Analysis/BakryEmery/Gamma.lean`,
-`Analysis/BakryEmery/Bochner.lean`) and discharges the five route obligations `B0`–`B4` of
+`Analysis/BakryEmery/Bochner/Basic.lean`) and discharges the five route obligations `B0`–`B4` of
 `research/audits/BakryEmeryRouteStatements.lean`. The propositions are restated **verbatim** from
 that file as `route_B0`–`route_B4`; each proof is one `exact` (after weakening `ContDiff ℝ 2 U`
 or `ContDiff ℝ 3 U` to what the library theorem needs: `B0` uses no regularity of `U`, `B3` and

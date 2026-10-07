@@ -1,5 +1,5 @@
 import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Basic
-import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts
+import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.Basic
 import FunctionalInequalities.Analysis.Semigroup.AdjointClosure
 
 /-!

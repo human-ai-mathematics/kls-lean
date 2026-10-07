@@ -1,4 +1,4 @@
-import FunctionalInequalities.KLS.LogConcave.Density.GaussianPoincare
+import FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Poincare
 
 /-! Independent full-signature clients for actual Gaussian-convolution Poincaré stability. -/
 

@@ -1,4 +1,4 @@
-import FunctionalInequalities.Analysis.BakryEmery.IntegratedBochner
+import FunctionalInequalities.Analysis.BakryEmery.Bochner.Integrated
 import FunctionalInequalities.Energy.WeightedGradient.Leibniz
 import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Domain
 import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Generator

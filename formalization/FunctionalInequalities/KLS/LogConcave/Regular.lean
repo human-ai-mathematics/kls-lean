@@ -1,4 +1,4 @@
-import FunctionalInequalities.Analysis.BakryEmery.TensorBochner
+import FunctionalInequalities.Analysis.BakryEmery.Bochner.Tensor
 import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Inverse
 import Mathlib.Analysis.SpecialFunctions.Gaussian.FourierTransform
 

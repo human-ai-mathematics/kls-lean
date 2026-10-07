@@ -1,4 +1,4 @@
-import FunctionalInequalities.Analysis.BakryEmery.TemperateTilt
+import FunctionalInequalities.Analysis.BakryEmery.Tilt.Temperate
 
 /-!
 # Lemma 3.6 for tensor-valued functions, and Corollary 3.7

@@ -104,6 +104,7 @@ below establishes a false theorem.
 | LD-012 | Resolved | P3 | Packaging ignore rules hide Lean source families | Rooted ignore patterns and independent source-discovery gate |
 | LD-013 | Resolved | P2 | Generic Energy modules obtain Energy declarations only through a Poincare module | Move the Energy-namespace lemma to its family; make the approximation import explicit |
 | LD-014 | Resolved | P2 | `Analysis/Sard/Planar` is outside the certificate, audit and aggregate scopes | Add a research audit client with axiom reports |
+| LD-015 | Resolved | P3 | Tilt, Bochner and Gaussian-smoothing families repeat the family term in flat basenames | Path-only family directories with a module map |
 
 ### LD-001 — navigation after migrations
 
@@ -276,6 +277,16 @@ the ledger token guard, the full-scope build and `leanchecker`.
 Resolved by [research/audits/PlanarSardAudit.lean](../audits/PlanarSardAudit.lean), which restates
 both theorems, records that the sharp `Analysis.sard` already covers the planar case, and prints
 five standard-only axiom reports. This adds no certificate and changes no proof status.
+
+### LD-015 — family terms in flat basenames (2026-10-07)
+
+A basename scan after the 2026-10-07 BKL blocks found four tilt and four Bochner modules flat in
+`Analysis/BakryEmery/` and four `GaussianSmoothing`-namespace modules flat in
+`KLS/LogConcave/Density/`, against rule 1 of the family-directory convention; `TemperateIBP`
+abbreviated `IntegrationByParts`. Resolved by a path-only move of 14 modules; see the
+[decision](../decisions/2026-10-07-family-directories.md) and
+[module map](../api-migration/2026-10-07-family-directories-map.json), which also list the
+flagged prefixes reviewed and left in place. No declaration, statement or status changed.
 
 ## Reviewed candidates (original evidence and review questions)
 

@@ -1,5 +1,5 @@
-import FunctionalInequalities.Analysis.BakryEmery.TemperateIBP
-import FunctionalInequalities.Analysis.BakryEmery.Bochner
+import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.Temperate
+import FunctionalInequalities.Analysis.BakryEmery.Bochner.Basic
 import FunctionalInequalities.Analysis.BakryEmery.Curvature
 
 /-!

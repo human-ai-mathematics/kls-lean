@@ -1,5 +1,5 @@
-import FunctionalInequalities.Analysis.BakryEmery.Bochner
-import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts
+import FunctionalInequalities.Analysis.BakryEmery.Bochner.Basic
+import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.Basic
 
 /-!
 # The curvature condition `CD(ρ, ∞)` for a potential with Hessian bounded below

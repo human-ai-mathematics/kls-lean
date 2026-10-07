@@ -1,4 +1,4 @@
-import FunctionalInequalities.Analysis.BakryEmery.SquareIntegrableTilt
+import FunctionalInequalities.Analysis.BakryEmery.Tilt.SquareIntegrable
 
 /-!
 # The logarithmic Laplace transform and cumulant tensors

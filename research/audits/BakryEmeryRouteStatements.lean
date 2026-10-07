@@ -3,9 +3,9 @@ import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Markov
 import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Generator
 import FunctionalInequalities.KLS.LogConcave.WeightedGradient.Energy
 import FunctionalInequalities.Analysis.BakryEmery.Calculus
-import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts
+import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.Basic
 import FunctionalInequalities.Analysis.BakryEmery.Gamma
-import FunctionalInequalities.Analysis.BakryEmery.Bochner
+import FunctionalInequalities.Analysis.BakryEmery.Bochner.Basic
 import FunctionalInequalities.Analysis.Semigroup.AdjointClosure
 import FunctionalInequalities.Energy.Cheeger.Identification
 import FunctionalInequalities.Poincare.LocalSlope.Gradient
@@ -183,7 +183,7 @@ signature audit.
 /-! ## B1 -- convexity gives a positive-semidefinite Hessian
 
 This exact proposition is now discharged by
-`Analysis.BakryEmery.bilinearIteratedFDerivTwo_nonneg_of_convexOn` (`Analysis/BakryEmery/Bochner.lean`),
+`Analysis.BakryEmery.bilinearIteratedFDerivTwo_nonneg_of_convexOn` (`Analysis/BakryEmery/Bochner/Basic.lean`),
 through the line restriction `t ↦ U (x + t v)`, `ConvexOn.monotoneOn_deriv` and
 `Monotone.deriv_nonneg`; see `research/audits/BakryEmeryBochnerAudit.lean` (`route_B1`).
 -/
@@ -214,7 +214,7 @@ named basis-independent Hilbert--Schmidt norm for this Hessian representation is
 available, so basis independence must be proved before exposing the invariant notation.
 
 This exact proposition is now discharged by `Analysis.BakryEmery.bochner_stdBasis`
-(`Analysis/BakryEmery/Bochner.lean`; `Γ₂` form `Analysis.BakryEmery.gammaTwo_eq_hessianSqStdBasis_add`,
+(`Analysis/BakryEmery/Bochner/Basic.lean`; `Γ₂` form `Analysis.BakryEmery.gammaTwo_eq_hessianSqStdBasis_add`,
 which needs only `C²` for `U`), with the double sum named `Analysis.BakryEmery.hessianSqStdBasis`
 and **still tied to the standard basis**; see `research/audits/BakryEmeryBochnerAudit.lean`
 (`route_B3`).  The third-order terms cancel through

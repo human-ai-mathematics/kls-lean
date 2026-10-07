@@ -1,5 +1,5 @@
-import FunctionalInequalities.Analysis.BakryEmery.TensorTilt
-import FunctionalInequalities.Analysis.BakryEmery.TemperateBochner
+import FunctionalInequalities.Analysis.BakryEmery.Tilt.Tensor
+import FunctionalInequalities.Analysis.BakryEmery.Bochner.Temperate
 
 /-!
 # Integration by parts and the Bochner formula for tensor fields of temperate growth

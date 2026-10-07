@@ -1,4 +1,4 @@
-import FunctionalInequalities.KLS.LogConcave.Density.GaussianApproximation
+import FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Approximation
 
 /-! Independent full-signature client for pointwise Gaussian approximation. -/
 

@@ -1,4 +1,4 @@
-import FunctionalInequalities.Analysis.BakryEmery.TensorBochner
+import FunctionalInequalities.Analysis.BakryEmery.Bochner.Tensor
 
 /-!
 # The energy recursion of BKL Lemma 3.4 and Corollary 3.5
