@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "last_updated": "2026-10-04",
+  "last_updated": "2026-10-07",
   "nodes": {
     "ass:cmh-recovery-envelope": {
       "description": "Seek a regular moment-map approximation of every centered log-concave law with a dimension-free CMH bound.",
@@ -1075,6 +1075,42 @@
     "thm:bakry-emery-poincare": {
       "description": "Bakry–Gentil–Ledoux Corollary 4.8.2: C_P ≤ 1/ρ for e^{-W} dx with ∇∇W ≥ ρ Id, W ∈ C², on any finite-dimensional real inner product space.",
       "blueprint": "thm:bakry-emery-poincare"
+    },
+    "lem:bkl-partial-symmetrization": {
+      "description": "Bizeul–Klartag–Lehec Lemma 2.2: |A| ≤ 4^d |S_{2d} A| for tensors symmetric in their first d and next 2d indices.",
+      "blueprint": "lem:bkl-partial-symmetrization"
+    },
+    "lem:bkl-centered-inverse": {
+      "description": "Bizeul–Klartag–Lehec Lemma 2.1, operator-domain part: unique centered inverse of the heat-model generator with the bounds (20) and (24).",
+      "blueprint": "lem:bkl-centered-inverse"
+    },
+    "lem:bkl-tilt-generator": {
+      "description": "Bizeul–Klartag–Lehec (48) and Lemma 3.6: F_{-ℒu}(z) = ⟨z, F_{∇u}(z)⟩ and T_{d+1}(-ℒu) = S_{d+1} T_d(∇u), restricted test class.",
+      "blueprint": "lem:bkl-tilt-generator"
+    },
+    "lem:bkl-linear-cumulant": {
+      "description": "Taylor tensors of linear functions are cumulants: T_d⟨v,·⟩ = κ_{d+1}(v, ·)/d! (step of Bizeul–Klartag–Lehec Proposition 7.1).",
+      "blueprint": "lem:bkl-linear-cumulant"
+    },
+    "lem:bkl-taylor-coefficients": {
+      "description": "Coefficient arrays of Taylor tensors in an orthonormal basis: symmetric Hilbert–Schmidt tensors; symmetrizeML is S_k; operator norm ≤ Hilbert–Schmidt norm.",
+      "blueprint": "lem:bkl-taylor-coefficients"
+    },
+    "lem:bkl-taylor-l2": {
+      "description": "Tilt averages of L² functions are smooth and ‖T_d f‖ ≤ C_d ‖f‖₂ (Bizeul–Klartag–Lehec Section 3 and Proposition 7.1).",
+      "blueprint": "lem:bkl-taylor-l2"
+    },
+    "lem:bkl-ibp-temperate": {
+      "description": "Bizeul–Klartag–Lehec (15): ∫(ℒu)v dμ = −∫⟨∇u, ∇v⟩ dμ = ∫u(ℒv) dμ for scalar u, v of temperate growth.",
+      "blueprint": "lem:bkl-ibp-temperate"
+    },
+    "lem:bkl-bochner-temperate": {
+      "description": "Bizeul–Klartag–Lehec (16): ∫(ℒu)² dμ = ∫‖∇²u‖²_HS dμ + ∫⟨∇²V ∇u, ∇u⟩ dμ for scalar u of temperate growth, and its curvature lower bound.",
+      "blueprint": "lem:bkl-bochner-temperate"
+    },
+    "lem:bkl-corollary-3-7": {
+      "description": "Bizeul–Klartag–Lehec Corollary 3.7: S_{d+1}T_d(∇₀h) = T_{d+1}(−ℒh) = αT_{d+1}(∇₀g) whenever −ℒh = α∇₀g, for tensor fields of temperate growth.",
+      "blueprint": "lem:bkl-corollary-3-7"
     }
   },
   "diagram": {

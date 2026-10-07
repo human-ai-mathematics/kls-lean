@@ -34,11 +34,17 @@ There are **28 registered Lean certificates**, plus proved auxiliary results. Hi
 - metric BV relaxation and Minkowski recovery; Ambrosio–Di Marino–Gigli Theorem 3.6 (relaxed
   Minkowski content equals the Definition 3.3 perimeter, for measures finite on bounded sets) is
   certified as a paper target.
+- first dependencies of Bizeul–Klartag–Lehec (arXiv:2610.05474v1): Lemma 2.2 (partial tensor
+  symmetrization, `|A| ≤ 4^d |S_{2d} A|`) in the source form; Lemma 3.6 (the tilt identities (48)–(50)
+  for scalar and tensor-valued `u ∈ 𝒜`), Corollary 3.7 and the identities (15)–(16) on `𝒜` in reviewed
+  stronger forms; restricted counterparts of Lemma 2.1 (operator-domain inverse of the heat-model
+  generator) and of steps of Proposition 7.1. These are supporting results, not paper certificates.
 
 ## What is not proved
 
 - Any published high-dimensional KLS bound (KLS 1995, Eldan, Lee–Vempala, Chen, Klartag–Lehec,
-  Klartag, Letwin) or the stochastic-localization machinery they use.
+  Klartag, Letwin) or the stochastic-localization machinery they use, including the October 2026
+  preprints claiming the dimension-free bound (Bizeul–Klartag–Lehec, Song–Zhang).
 - Any complete paper other than Ambrosio–Di Marino–Gigli (Theorem 3.6) and Bakry–Gentil–Ledoux
   (Corollary 4.8.2 only; the book's general Markov-triple framework is not formalized).
   A paper is covered only when its main theorem is stated faithfully in Lean, proved without
@@ -74,5 +80,5 @@ python3 research/progress/update.py --check
 audit of every local declaration except `KLS.kls`, kernel replay, statement baselines and
 metadata checks. Remote CI runs its Lean-only scope (`--lean-only`) on manual dispatch
 (`gh workflow run lean.yml`) or a pushed `milestone/**` tag; ordinary pushes do not trigger it.
-[Run 36846629874](https://github.com/numina-functional-inequalities/kls-lean/actions/runs/36846629874)
-passed for commit `6ca1824`; it does not certify later commits or prove KLS.
+[Run 37516844384](https://github.com/numina-functional-inequalities/kls-lean/actions/runs/37516844384)
+passed for commit `36e7c78`; it does not certify later commits or prove KLS.

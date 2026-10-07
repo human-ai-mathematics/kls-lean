@@ -9,6 +9,7 @@ flowchart TB
     L_JambulapatiLeeVempala2022["2022 · Jambulapati–Lee–Vempala<br/>ψₙ = O((log n)^3.2226)"]
     L_Klartag2023["2023 · Klartag<br/>ψₙ = O((log n)^(1/2))"]
     L_Letwin2026["27 July 2026 · Letwin<br/>ψₙ = O((log n)^(1/4))"]
+    L_BKL2026["4 Oct 2026 · Bizeul–Klartag–Lehec<br/>C_P ≤ C claimed (preprint)"]
     end
     subgraph L_shell["Related breakthroughs — do not imply dimension-free KLS"]
     direction LR
@@ -38,9 +39,10 @@ flowchart TB
     L_Klartag2014Moment -. "related input / method" .-> L_ChenKlartag2026
     L_Klartag2014Moment -. "related input / method" .-> L_Letwin2026
     L_Fathi2019 -. "related input / method" .-> L_Letwin2026
+    L_Letwin2026 -. "later milestone" .-> L_BKL2026
     classDef literature fill:#eef2ff,stroke:#64748b,color:#172554;
     classDef recent fill:#fff4dc,stroke:#b7791f,color:#663c00;
-    class L_KLS1995,L_Eldan2013,L_LeeVempala2024,L_Chen2021,L_KlartagLehec2022,L_JambulapatiLeeVempala2022,L_Klartag2023,L_Letwin2026,L_Guan2024,L_KlartagLehecSlicing2025,L_KlartagLehecThin2025,L_ChenKlartag2026,L_CorderoKlartag2015,L_Klartag2014Moment,L_Fathi2019 literature;
+    class L_KLS1995,L_Eldan2013,L_LeeVempala2024,L_Chen2021,L_KlartagLehec2022,L_JambulapatiLeeVempala2022,L_Klartag2023,L_Letwin2026,L_BKL2026,L_Guan2024,L_KlartagLehecSlicing2025,L_KlartagLehecThin2025,L_ChenKlartag2026,L_CorderoKlartag2015,L_Klartag2014Moment,L_Fathi2019 literature;
     class L_ChenKlartag2026,L_Letwin2026 recent;
     click L_KLS1995 href "https://link.springer.com/article/10.1007/BF02574061" "Primary source" _blank
     click L_Eldan2013 href "https://arxiv.org/abs/1203.0893" "Primary source" _blank
@@ -50,6 +52,7 @@ flowchart TB
     click L_JambulapatiLeeVempala2022 href "https://arxiv.org/html/2208.11644v2" "Primary source" _blank
     click L_Klartag2023 href "https://arxiv.org/html/2303.14938v2" "Primary source" _blank
     click L_Letwin2026 href "https://arxiv.org/html/2607.24164v1" "Primary source" _blank
+    click L_BKL2026 href "https://arxiv.org/abs/2610.05474v1" "Primary source" _blank
     click L_Guan2024 href "https://arxiv.org/html/2412.09075v1" "Primary source" _blank
     click L_KlartagLehecSlicing2025 href "https://arxiv.org/abs/2412.15044" "Primary source" _blank
     click L_KlartagLehecThin2025 href "https://arxiv.org/abs/2507.15495v2" "Primary source" _blank

@@ -2,7 +2,7 @@
   "version": 1,
   "checked_on": "2026-09-16",
   "literature_cutoff": "2026-07-31",
-  "scope": "Selected foundational sources, the main general KLS bound milestones, and the connected moment-map, slicing and thin-shell developments through July 2026; not an exhaustive bibliography or a paper-by-paper proof verification.",
+  "scope": "Selected foundational sources, the main general KLS bound milestones, and the connected moment-map, slicing and thin-shell developments through July 2026; not an exhaustive bibliography or a paper-by-paper proof verification; the October 2026 Bizeul–Klartag–Lehec preprint is added after the cutoff as the pinned current formalization target.",
   "groups": [
     {
       "id": "foundations",
@@ -8039,6 +8039,468 @@
           }
         ]
       }
+    },
+    {
+      "id": "BKL2026",
+      "group": "frontier",
+      "authors": "Bizeul–Klartag–Lehec",
+      "title": "Presenting a proof of the Kannan–Lovász–Simonovits conjecture",
+      "date": "4 October 2026",
+      "publication": "Preprint (v1)",
+      "url": "https://arxiv.org/abs/2610.05474v1",
+      "locator": "Theorem 1.1 (through Theorems 3.1 and 4.1 and Proposition 7.1); first dependencies Lemmas 2.1, 2.2 and 3.6",
+      "result": "Claims C_P(μ) ≤ C for every isotropic log-concave μ in every dimension (the KLS conjecture with a universal constant): Taylor coefficients of tilt averages bounded by cumulant bounds along Eldan localization give the criterion of Theorem 3.1. Not peer reviewed.",
+      "remaining": "Lemma 2.2 is formalized in the source form; Lemma 3.6 (scalar and tensor-valued u ∈ 𝒜) and Corollary 3.7 (for any pair satisfying (30)) in reviewed stronger forms. Lemma 2.1 (operator-domain inverse in the heat model), (15) and (16) on 𝒜, and steps of Proposition 7.1 (linear functions, continuity of T_d on L²) have restricted counterparts. Theorems 1.1, 3.1 and 4.1, Lemmas 3.2–3.4 and 3.8–3.9, Eldan localization and the Letwin dependency are not formalized. Supporting results do not cover the paper.",
+      "local_results": [
+        {
+          "node": "lem:bkl-partial-symmetrization",
+          "scope": "Lemma 2.2 in the source form, d ≥ 0, every n and k ≥ 3d"
+        },
+        {
+          "node": "lem:bkl-centered-inverse",
+          "scope": "Lemma 2.1, operator-domain part in the heat model (restricted)"
+        },
+        {
+          "node": "lem:bkl-tilt-generator",
+          "scope": "Lemma 3.6 and (48) for scalar and tensor-valued u ∈ 𝒜 (reviewed stronger form)"
+        },
+        {
+          "node": "lem:bkl-linear-cumulant",
+          "scope": "Linear-function step of Proposition 7.1"
+        },
+        {
+          "node": "lem:bkl-corollary-3-7",
+          "scope": "Corollary 3.7 for every pair of temperate tensor fields satisfying (30) (reviewed stronger form)"
+        },
+        {
+          "node": "lem:bkl-taylor-coefficients",
+          "scope": "Hilbert–Schmidt coefficient arrays of Taylor tensors; symmetrizeML = S_k"
+        },
+        {
+          "node": "lem:bkl-taylor-l2",
+          "scope": "Smoothness of tilt averages and continuity of T_d on L²(μ)"
+        },
+        {
+          "node": "lem:bkl-ibp-temperate",
+          "scope": "Integration by parts (15) for scalar tests of temperate growth"
+        },
+        {
+          "node": "lem:bkl-bochner-temperate",
+          "scope": "Integrated Bochner formula (16) and its curvature form on the scalar class 𝒜"
+        }
+      ],
+      "diagram": "4 Oct 2026 · Bizeul–Klartag–Lehec<br/>C_P ≤ C claimed (preprint)",
+      "lemma_map": {
+        "source_version": "arXiv:2610.05474v1",
+        "source_url": "https://arxiv.org/abs/2610.05474v1",
+        "reviewed_on": "2026-10-07",
+        "standing_assumptions": "Probability measures on Rⁿ, n ≥ 1. Log-concave means a log-concave density; isotropic means mean 0 and covariance Id. C_P(μ) is the least constant in Var f ≤ C∫|∇f|² for locally Lipschitz f ∈ L²(μ). A measure is regular if dμ = e^{−V}dx with a Id ≤ ∇²V ≤ b Id (0 < a ≤ b) and every derivative of V of polynomial growth; 𝒜 is the algebra of smooth functions all of whose derivatives grow polynomially and 𝒜₀ its mean-zero part; L = Δ − ⟨∇V, ∇⟩ and λ₁ = 1/C_P. Tensors carry the Hilbert–Schmidt norm |·|; S_q averages over the permutations of the first q indices. μ_z, F_f and T_d are defined in (26)–(28). PDF SHA-256 86824722318f2213daf5ae624391b41f76bb4d41118b1657db9ab00d2d1bb0db; printed and PDF page numbers coincide.",
+        "omitted": "All 19 numbered statements (Theorems 1.1, 3.1, 4.1; Lemmas 2.1, 2.2, 3.2–3.4, 3.6, 3.8, 3.9, 4.2, 4.3, 5.1, 5.2; Corollaries 3.5, 3.7; Remark 3.10; Proposition 7.1) are listed. The unnumbered interfaces that Lean declarations state are listed: (26)–(28), (48), (15), (16). Other unnumbered material —  the spectral facts of Section 2, the regular approximation, Eldan localization (67)–(79), the compact-support reduction of Sections 4 and 6, and the assembly on p. 30 — is recorded in the notes of the statements that use it and in build/reviews/2026-10-07-new-kls-papers/statement-map.csv.",
+        "items": [
+          {
+            "id": "T11",
+            "locator": "Theorem 1.1, p. 2",
+            "label": "Dimension-free Poincaré constant",
+            "statement": "There is a universal C such that every isotropic log-concave probability measure μ on Rⁿ (every n ≥ 1) has C_P(μ) ≤ C; equivalently ‖Cov μ‖_op ≤ C_P(μ) ≤ C‖Cov μ‖_op for every log-concave μ (6).",
+            "uses": [
+              "T31",
+              "T41",
+              "P71"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": "Main theorem (title and abstract). Proof (p. 30): Theorem 4.1 with b = K^d (d!)² and Proposition 7.1 give |T_d f|² ≤ (2K)^d‖f‖² for d ≥ 2, d = 1 by isotropy, then Theorem 3.1 with R = √(2K) after the regular approximation of Section 2. The local target KLS.kls stays open; the left inequality of (6) is FunctionalInequalities.Covariance.lambdaMax_le_constant (linear tests). No declaration is listed, so the item stays ○.",
+            "main": true
+          },
+          {
+            "id": "L21",
+            "locator": "Lemma 2.1, p. 7",
+            "label": "Centered inverse of the generator",
+            "statement": "For regular μ (a Id ≤ ∇²V ≤ b Id, every derivative of V of polynomial growth) and g ∈ 𝒜₀ (smooth, polynomial growth, mean zero) there is a unique u ∈ 𝒜₀ with -Lu = g; ‖u‖ ≤ λ⁻¹‖g‖ and ∫|∇u|² = ∫gu ≤ λ⁻¹‖g‖² (20); the bounds (23)–(24) for ∇₀u; the componentwise tensor version.",
+            "uses": [],
+            "relation": "partial",
+            "declarations": [
+              {
+                "name": "FunctionalInequalities.KLS.LogConcave.existsUnique_centered_adjointComp_eq",
+                "source": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Inverse.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.LogConcave.centered_adjointComp_bounds",
+                "source": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Inverse.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.LogConcave.norm_centered_gradient_le",
+                "source": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Inverse.lean"
+              }
+            ],
+            "note": "Restricted operator-domain counterpart: in the heat model ν = m.tilted(−U), U ∈ C², log-concave with full-dimensional support, and any C ≥ C_P(ν), every centered g ∈ L²(ν) has exactly one centered u in the domain of the closed generator A = T̄†T̄ = −ℒ with Au = g, ‖u‖ ≤ C‖g‖, ‖T̄u‖² = ⟨g, u⟩ ≤ C‖g‖² and ‖∇₀u‖ ≤ √C‖g‖ (generic part: Analysis/Semigroup/Generated/Inverse.lean). C = C_P recovers λ⁻¹ in positive dimension. The class 𝒜, smooth representatives, the pointwise equation, preservation of 𝒜₀ and the tensor lift are not proved."
+          },
+          {
+            "id": "L22",
+            "locator": "Lemma 2.2, p. 9",
+            "label": "Partial symmetrization of tensors",
+            "statement": "Let d ≥ 1 and T a tensor with at least 3d indices, invariant under the permutations of its first d indices and of its next 2d indices. Then |T| ≤ 4^d |S_{2d} T| (Hilbert–Schmidt norms; S_q averages over the permutations of the first q indices).",
+            "uses": [],
+            "relation": "same",
+            "declarations": [
+              {
+                "name": "FunctionalInequalities.Analysis.Tensor.norm_le_four_pow_mul_norm_symmetrize",
+                "source": "formalization/FunctionalInequalities/Analysis/Tensor/Coordinate.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.Tensor.norm_le_four_pow_mul_norm_blockAverage",
+                "source": "formalization/FunctionalInequalities/Analysis/Tensor/Symmetrization.lean"
+              }
+            ],
+            "note": "Source form on Coord n k = EuclideanSpace ℝ (Fin k → Fin n) (Hilbert–Schmidt norm), every n including 0, every k ≥ 3d, trailing indices fixed; d = 0 is included (the source assumes d ≥ 1, a hypothesis its proof never uses). The proof is the source one: identity (25) for every family indexed by d-subsets (sum_norm_sq_sum_subset_eq), the factor C(2d, d) (norm_le_choose_mul_norm_blockAverage, for every orthogonal permutation representation) and C(2d, d) ≤ 4^d."
+          },
+          {
+            "id": "T31",
+            "locator": "Theorem 3.1, p. 10",
+            "label": "Taylor-coefficient criterion",
+            "statement": "Let μ be a centered regular log-concave measure with Cov μ ≤ Id and R ≥ 1 with |T_d f| ≤ R^d‖f‖_{L²(μ)} for all f ∈ L²(μ) and d ≥ 1 (29). Then C_P(μ) ≤ C R².",
+            "uses": [
+              "L21",
+              "L22",
+              "L32",
+              "L33",
+              "L34",
+              "C35",
+              "L36",
+              "C37",
+              "L38",
+              "L39"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": "Stated as a consequence of Song–Zhang Theorem 5.1; Section 3 gives a self-contained proof via the iterates h_i of the first eigenfunction."
+          },
+          {
+            "id": "L32",
+            "locator": "Lemma 3.2, p. 11",
+            "label": "Near-symmetric gradient",
+            "statement": "With χ_i = ‖∇²h_i − α_{i+1}∇h_{i+1}‖², there is a tensor field T̃ symmetric in its first two indices with ‖∇₀h_{i+1} − T̃‖ ≤ √(χ_i/λ₁).",
+            "uses": [
+              "L21"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": ""
+          },
+          {
+            "id": "L33",
+            "locator": "Lemma 3.3, p. 12",
+            "label": "Approximate symmetry of iterates",
+            "statement": "For 2 ≤ q ≤ i and 0 < α_j² ≤ 2λ₁ (i − q + 2 ≤ j ≤ i): ‖∇₀h_i − S_q∇₀h_i‖² ≤ (C^q/λ₁) Σ_{j=i−q+1}^{i−1} χ_j.",
+            "uses": [
+              "L32",
+              "L21"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": ""
+          },
+          {
+            "id": "L34",
+            "locator": "Lemma 3.4, p. 13",
+            "label": "Bochner step",
+            "statement": "‖Lh_i‖² ≥ ‖Lh_{i+1}‖² + χ_i + a v_i (the only substantial use of log-concavity).",
+            "uses": [
+              "L32",
+              "EQ16"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": "The scalar curvature inequality behind it, ∫‖∇²u‖²_HS + a∫|∇u|² ≤ ∫(Lu)² on 𝒜, is proved (integral_hessianSq_add_le_of_hasTemperateGrowth); the lemma itself needs the tensor-valued iterates h_i (the tensor curvature form is integral_hessian_add_le_norm_sq_weightedLaplacianVec)."
+          },
+          {
+            "id": "C35",
+            "locator": "Corollary 3.5, p. 13",
+            "label": "Vanishing of v_N",
+            "statement": "v_N → 0 as N → ∞ (summation of Lemma 3.4 when a > 0).",
+            "uses": [
+              "L34"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": ""
+          },
+          {
+            "id": "L36",
+            "locator": "Lemma 3.6, p. 14",
+            "label": "Taylor tensors of the generator",
+            "statement": "For u ∈ 𝒜 (scalar or tensor-valued): T_1(−Lu) = ∫∇u dμ (49) and T_{d+1}(−Lu) = S_{d+1} T_d(∇u) for d ≥ 1 (50).",
+            "uses": [
+              "E2628",
+              "E48"
+            ],
+            "relation": "stronger",
+            "declarations": [
+              {
+                "name": "FunctionalInequalities.Analysis.BakryEmery.taylorTensor_neg_weightedLaplacian",
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Tilt.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.BakryEmery.taylorTensor_one_neg_weightedLaplacian",
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Tilt.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.BakryEmery.taylorTensor_neg_weightedLaplacianVec",
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/TensorTilt.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.BakryEmery.taylorTensor_one_neg_weightedLaplacianVec",
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/TensorTilt.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.BakryEmery.taylorTensor_neg_weightedLaplacian_of_hasTemperateGrowth",
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/TemperateTilt.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.BakryEmery.taylorTensor_one_neg_weightedLaplacian_of_hasTemperateGrowth",
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/TemperateTilt.lean"
+              }
+            ],
+            "note": "Formalized in a reviewed stronger form (Codex review 3, 2026-10-07): for scalar and tensor-valued u ∈ 𝒜 (Mathlib HasTemperateGrowth; values in any finite-dimensional real normed space F, whose indices trail and are not symmetrized), with ℒu = Δu − Du(∇V) componentwise, the derivative index of T_d(Du) after its d Taylor indices (uncurryRight) and S_{d+1} on these d + 1 arguments, every d ≥ 0, for μ = m.tilted(−V) with V ∈ C¹, ∇V of polynomial growth and all exponential moments. The source assumes μ regular (a Id ≤ ∇²V ≤ b Id, every derivative of V polynomially bounded), which implies these hypotheses; that implication is reviewed, not a Lean adapter. A zero measure (e^{−V} not integrable) makes the identities trivial. The scalar case is also proved for compactly supported C² u. The symmetry of ∇ⁿF needed for S_{d+1} is proved for C^∞ maps (iteratedFDeriv_comp_perm_of_contDiff); Mathlib states it only for analytic maps."
+          },
+          {
+            "id": "C37",
+            "locator": "Corollary 3.7, p. 15",
+            "label": "Taylor tensors of the iterates",
+            "statement": "S_{d+1} T_d(∇₀h_{i+1}) = T_{d+1}(−Lh_{i+1}) = α_{i+1} T_{d+1}(∇₀h_i).",
+            "uses": [
+              "L36"
+            ],
+            "relation": "stronger",
+            "declarations": [
+              {
+                "name": "FunctionalInequalities.Analysis.BakryEmery.symmetrizeML_taylorTensor_centeredFDeriv",
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/TensorTilt.lean"
+              }
+            ],
+            "note": "Formalized in a reviewed stronger form (Codex strategy 11): for every tensor field h of temperate growth and every g, α with −ℒh = α∇₀g (the relation (30) defining h_{i+1} from h_i, with ∇₀u = Du − ∫Du, centeredFDeriv), every d ≥ 1, the symmetrization S_{d+1} acting on the first d + 1 indices and the trailing indices untouched. The existence and normalization (31) of the source iterates (Lemma 2.1 on 𝒜) are separate, unproved obligations."
+          },
+          {
+            "id": "L38",
+            "locator": "Lemma 3.8, p. 15",
+            "label": "Taylor-tensor recursion",
+            "statement": "For d ≥ 1 and 2d ≤ i ≤ N: |T_d(∇₀h_i)|² ≤ (Cλ₁)^d |T_{2d}(∇₀h_{i−d})|² + (C^d R^{2d}/λ₁) Σ_{j=i−2d+1}^{i−1} χ_j.",
+            "uses": [
+              "C37",
+              "L33",
+              "L22"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": ""
+          },
+          {
+            "id": "L39",
+            "locator": "Lemma 3.9, p. 16",
+            "label": "Summation bound",
+            "statement": "Σ_{i ≤ N} p_i ≤ λ₁² + 2λ₁ Σ_{i<N} |T_1(∇₀h_i)|².",
+            "uses": [
+              "L36"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": ""
+          },
+          {
+            "id": "R310",
+            "locator": "Remark 3.10, p. 18",
+            "label": "Analytic continuation",
+            "statement": "The Taylor bound (29) continues F_f analytically to a complex ball of radius 1/R; no complex-analytic proof of Theorem 3.1 is known.",
+            "uses": [],
+            "relation": "same",
+            "declarations": [],
+            "note": "Not on the proof path."
+          },
+          {
+            "id": "T41",
+            "locator": "Theorem 4.1, p. 18",
+            "label": "Cumulant bounds",
+            "statement": "There is a universal K ≥ 1 such that every isotropic log-concave μ on Rⁿ and m ≥ 2 satisfy R^μ_m ≤ K^{m−1}((m−1)!)² Id, where ⟨R_m u, u⟩ = |κ_m(u, ·, …, ·)|² and κ_m = ∇^mΛ_μ(0).",
+            "uses": [
+              "L42",
+              "L43",
+              "L51",
+              "L52"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": "Proof along Eldan stochastic localization for compactly supported μ, then approximation; no local stochastic calculus. The cumulant tensors κ_m are defined locally (Analysis/BakryEmery/Cumulant.lean, cumulant)."
+          },
+          {
+            "id": "L42",
+            "locator": "Lemma 4.2, p. 18",
+            "label": "Third cumulant",
+            "statement": "For isotropic log-concave μ: R^μ_3 ≤ 8 Id.",
+            "uses": [],
+            "relation": "same",
+            "declarations": [],
+            "note": "Uses Letwin (2026) Theorem 1.2 (Var⟨MX, X⟩ ≤ 8|M|²), an explicit unformalized dependency."
+          },
+          {
+            "id": "L43",
+            "locator": "Lemma 4.3, p. 20",
+            "label": "Cumulant dynamics",
+            "statement": "For m ≥ 3, along Eldan’s process dκ_m(t) = κ_{m+1}(t)(·, …, ·, A_t^{−1/2}dB_t) − (mκ_m(t) + L_m(t))dt.",
+            "uses": [],
+            "relation": "same",
+            "declarations": [],
+            "note": ""
+          },
+          {
+            "id": "L51",
+            "locator": "Lemma 5.1, p. 22",
+            "label": "Drift inequality",
+            "statement": "For m ≥ 3 the drift of E_m(t) = |κ_m(t)(u)|²_t satisfies E_m ≥ ½E_{m+1} − Cm²E_m − 2⟨κ_m(u), L_m(u)⟩_t.",
+            "uses": [
+              "L43",
+              "L42"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": ""
+          },
+          {
+            "id": "L52",
+            "locator": "Lemma 5.2, p. 24",
+            "label": "Integrated drift bound",
+            "statement": "For m ≥ 3 with ∫E E_m < ∞ and ∫E|L_m(u)|²_t < ∞: the integrated bound (92).",
+            "uses": [
+              "L51"
+            ],
+            "relation": "same",
+            "declarations": [],
+            "note": ""
+          },
+          {
+            "id": "P71",
+            "locator": "Proposition 7.1, p. 28",
+            "label": "Suspension",
+            "statement": "For d ≥ 2: if R^ν_{d+1} ≤ b Id for every isotropic log-concave ν in every dimension, then every isotropic regular log-concave μ has |T_d f|² ≤ 2b/(d!)²‖f‖² for all f ∈ L²(μ).",
+            "uses": [],
+            "relation": "partial",
+            "declarations": [
+              {
+                "name": "FunctionalInequalities.Analysis.BakryEmery.taylorTensor_inner_eq_cumulant",
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Cumulant.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.BakryEmery.exists_norm_taylorTensor_le",
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/SquareIntegrableTilt.lean"
+              }
+            ],
+            "note": "Proved steps: the continuity of T_d on L²(μ) used in the proof (‖T_d f‖ ≤ C_d‖f‖₂ for a probability measure with all exponential moments; T_d is linear on L²), and the linear-function step: for a nonzero finite measure with all exponential moments, F_⟨v,·⟩ = DΛ_μ(·)v and T_d⟨v,·⟩ = κ_{d+1}(v, ·, …, ·)/d!. The suspension, the log-concavity of the maximum of convex potentials, the mixed cumulant identity (112), the limit β → ∞ and the density argument are not proved."
+          },
+          {
+            "id": "E2628",
+            "locator": "Equations (26)–(28), p. 9 (unnumbered)",
+            "label": "Tilts, tilt averages and Taylor tensors",
+            "statement": "μ_z has density e^{⟨x,z⟩ − Λ_μ(z)}, F_f(z) = ∫ f dμ_z and T_d f = (1/d!)∇^dF_f(0).",
+            "uses": [],
+            "relation": "same",
+            "declarations": [
+              {
+                "name": "FunctionalInequalities.Analysis.BakryEmery.taylorTensor",
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Tilt.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.BakryEmery.contDiff_tiltAverage",
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Tilt.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.BakryEmery.contDiff_tiltAverage_of_memLp",
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/SquareIntegrableTilt.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.BakryEmery.slotPerm_coordTensor_taylorTensor",
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Tilt.lean"
+              }
+            ],
+            "note": "expTilt μ z = μ.tilted ⟨z, ·⟩ is the source density when 0 < ∫e^{⟨z,x⟩}dμ < ∞; taylorTensor is the continuous multilinear map (1/d!)∇^dF_f(0), whose default operator norm is not the source Hilbert–Schmidt norm. Smoothness of F_f is proved for every f ∈ L²(μ) under all exponential moments (SquareIntegrableTilt.lean), with ∇^d of the Laplace-type integral given by weighted moments. In an orthonormal basis the coefficient array of T_d f (coordTensor, Analysis/Tensor/Coefficients.lean) is a symmetric element of Coord n d with the Hilbert–Schmidt norm, which bounds the operator norm (norm_le_norm_coordTensor); symmetrizeML is S_d of the array."
+          },
+          {
+            "id": "EQ15",
+            "locator": "Equation (15), p. 6 (unnumbered)",
+            "label": "Integration by parts on 𝒜",
+            "statement": "For u, v ∈ 𝒜: ∫(Lu)v dμ = −∫⟨∇u, ∇v⟩ dμ = ∫u(Lv) dμ.",
+            "uses": [],
+            "relation": "stronger",
+            "declarations": [
+              {
+                "name": "FunctionalInequalities.Analysis.BakryEmery.integral_weightedLaplacian_mul_eq_neg_of_hasTemperateGrowth",
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/TemperateIBP.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.BakryEmery.integral_weightedLaplacian_mul_comm_of_hasTemperateGrowth",
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/TemperateIBP.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.BakryEmery.integral_inner_weightedLaplacianVec_eq_neg",
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/TensorBochner.lean"
+              }
+            ],
+            "note": "Formalized in a reviewed stronger form (Codex review 4) for scalar u, v and for tensor fields (values in a finite-dimensional real inner product space, ⟨∇u, ∇v⟩ = Σ_i ⟨Du(e_i), Dv(e_i)⟩) of temperate growth, μ = m.tilted(−V) with V ∈ C¹, ∇V of polynomial growth and all exponential moments (the source assumes μ regular; the implication is reviewed, not a Lean adapter)."
+          },
+          {
+            "id": "EQ16",
+            "locator": "Equation (16), p. 6 (unnumbered)",
+            "label": "Integrated Bochner formula on 𝒜",
+            "statement": "For u ∈ 𝒜: ∫(Lu)² dμ = ∫‖∇²u‖²_HS dμ + ∫⟨∇²V ∇u, ∇u⟩ dμ.",
+            "uses": [
+              "EQ15"
+            ],
+            "relation": "stronger",
+            "declarations": [
+              {
+                "name": "FunctionalInequalities.Analysis.BakryEmery.integral_weightedLaplacian_sq_eq_of_hasTemperateGrowth",
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/TemperateBochner.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.BakryEmery.integral_hessianSq_add_le_of_hasTemperateGrowth",
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/TemperateBochner.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.BakryEmery.integral_norm_sq_weightedLaplacianVec_eq",
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/TensorBochner.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.BakryEmery.integral_hessian_add_le_norm_sq_weightedLaplacianVec",
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/TensorBochner.lean"
+              }
+            ],
+            "note": "Formalized in a reviewed stronger form (Codex review 4): proved for scalar u of temperate growth and μ = m.tilted(−V) with V of temperate growth and all exponential moments (convexity and the Hessian bounds of a regular measure are not needed), together with the curvature form ∫‖∇²u‖²_HS + ρ∫‖∇u‖² ≤ ∫(Lu)² under ∇²V ≥ ρ used in Lemma 3.4; ‖∇²u‖²_HS is written in the standard orthonormal basis (hessianSqStdBasis). Tensor fields: ∫‖ℒu‖² = ∫Σ_{i,j}‖∇²u(e_i,e_j)‖² + ∫Σ_{i,j}∇²V(e_i,e_j)⟨Du(e_i), Du(e_j)⟩ and the tensor curvature form are proved (TensorBochner.lean)."
+          },
+          {
+            "id": "E48",
+            "locator": "Equation (48), p. 14 (unnumbered)",
+            "label": "Tilted generator identity",
+            "statement": "F_{−Lu}(z) = ⟨z, F_{∇u}(z)⟩ for every z.",
+            "uses": [
+              "E2628"
+            ],
+            "relation": "stronger",
+            "declarations": [
+              {
+                "name": "FunctionalInequalities.Analysis.BakryEmery.tiltAverage_neg_weightedLaplacian",
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Tilt.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.BakryEmery.tiltAverage_neg_weightedLaplacian_of_hasTemperateGrowth",
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/TemperateTilt.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.BakryEmery.tiltAverage_neg_weightedLaplacianVec",
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/TensorTilt.lean"
+              }
+            ],
+            "note": "Formalized in a reviewed stronger form (Codex review 4): for scalar and tensor-valued u ∈ 𝒜 (vector form F_{−ℒu}(z) = F_{Du}(z) z, ℒu = Δu − Du(∇V)), μ = m.tilted(−V) with V ∈ C¹, ∇V of polynomial growth and all exponential moments (the source assumes μ regular; that implication is reviewed, not a Lean adapter), by integration by parts under each tilt with a scaled bump cutoff and dominated convergence; also for compactly supported C² scalar u."
+          }
+        ]
+      }
     }
   ],
   "diagram_groups": [
@@ -8053,7 +8515,8 @@
         "KlartagLehec2022",
         "JambulapatiLeeVempala2022",
         "Klartag2023",
-        "Letwin2026"
+        "Letwin2026",
+        "BKL2026"
       ]
     },
     {
@@ -8151,19 +8614,32 @@
       "from": "Fathi2019",
       "to": "Letwin2026",
       "kind": "context"
+    },
+    {
+      "from": "Letwin2026",
+      "to": "BKL2026",
+      "kind": "chronology"
     }
   ],
   "priorities": [
     {
       "rank": 1,
       "papers": [
-        "BGL2014"
+        "BKL2026"
       ],
-      "target": "Corollary 4.8.2 (strongly log-concave Bakry–Émery C_P ≤ 1/ρ) is certified as thm:bakry-emery-poincare (2026-10-04); select a separate Brascamp–Lieb source statement.",
-      "next_step": "Commit the certified corollary after the full local verifier; then pin a Brascamp–Lieb source theorem, its assumptions and normalization, and assess reuse of the heat-semigroup and Γ₂ interfaces before proof work."
+      "target": "Theorem 1.1 through Theorem 3.1: Lemma 2.2, Lemma 3.6 (⇑) and Corollary 3.7 (⇑) are formalized; Lemma 2.1 (operator domain), (15)–(16) on 𝒜 and steps of Proposition 7.1 are proved restricted counterparts.",
+      "next_step": "Lemma 2.1 on the class 𝒜 (smooth representatives, the pointwise equation, the tensor lift) and the first-eigenfunction facts of Section 2, which define the iterates h_i of Lemmas 3.2–3.4; then Corollary 3.7 and Lemma 3.8 through the coefficient-array bridge to Lemma 2.2. Eldan localization and the Letwin dependency stay explicit."
     },
     {
       "rank": 2,
+      "papers": [
+        "BGL2014"
+      ],
+      "target": "Corollary 4.8.2 (strongly log-concave Bakry–Émery C_P ≤ 1/ρ) is certified as thm:bakry-emery-poincare and committed in 36e7c78 (remote run 37516844384 succeeded); select a separate Brascamp–Lieb source statement.",
+      "next_step": "Pin a Brascamp–Lieb source theorem, its assumptions and normalization, and assess reuse of the heat-semigroup and Γ₂ interfaces before proof work."
+    },
+    {
+      "rank": 3,
       "papers": [
         "KLS1995"
       ],
@@ -8171,7 +8647,7 @@
       "next_step": "Pin a proof of the cited localization lemma (Lovász–Simonovits 1993 or a modern account) and choose a Lean form for needles; keep the product denominator of (1.1) distinct from the min-denominator constant."
     },
     {
-      "rank": 3,
+      "rank": 4,
       "papers": [
         "Milman2009"
       ],
@@ -8179,7 +8655,7 @@
       "next_step": "Pin the main theorem and its concentration/curvature assumptions; compare its analytic inputs with the current finite-dimensional Cheeger–Buser API."
     },
     {
-      "rank": 4,
+      "rank": 5,
       "papers": [
         "Eldan2013",
         "LeeVempala2024",
@@ -8191,7 +8667,7 @@
       "next_step": "Reuse Mathlib probability foundations; build an isolated audited client of pinned external stochastic APIs before selecting the missing vector/matrix SDE bridges."
     },
     {
-      "rank": 5,
+      "rank": 6,
       "papers": [
         "KlartagLehecThin2025",
         "ChenKlartag2026",

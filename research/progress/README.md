@@ -30,11 +30,12 @@ Every proof task must first pin its paper version, theorem, hypotheses and const
 
 | Priority | Sources / target | Next action |
 | --- | --- | --- |
-| 1 | [Bakry–Gentil–Ledoux](https://link.springer.com/book/10.1007/978-3-319-00227-9)<br/>Corollary 4.8.2 (strongly log-concave Bakry–Émery C_P ≤ 1/ρ) is certified as thm:bakry-emery-poincare (2026-10-04); select a separate Brascamp–Lieb source statement. | Commit the certified corollary after the full local verifier; then pin a Brascamp–Lieb source theorem, its assumptions and normalization, and assess reuse of the heat-semigroup and Γ₂ interfaces before proof work. |
-| 2 | [Kannan–Lovász–Simonovits](https://link.springer.com/article/10.1007/BF02574061)<br/>Theorem 5.1, ψ(K) ≥ ln 2 / M₁(K) for convex bodies, through the needle reduction (Corollary 2.2, Lemma 2.6, Theorem 2.7). With the local Cheeger inequality it gives C_P ≲ E‖X − EX‖² for convex bodies. | Pin a proof of the cited localization lemma (Lovász–Simonovits 1993 or a modern account) and choose a Lean form for needles; keep the product denominator of (1.1) distinct from the min-denominator constant. |
-| 3 | [E. Milman](https://arxiv.org/abs/0712.4092)<br/>Concentration implies a Cheeger bound under the source convexity hypotheses. | Pin the main theorem and its concentration/curvature assumptions; compare its analytic inputs with the current finite-dimensional Cheeger–Buser API. |
-| 4 | [Eldan](https://arxiv.org/abs/1203.0893), [Lee–Vempala](https://annals.math.princeton.edu/2024/199-3/p02), [Chen](https://arxiv.org/abs/2011.13661), [Klartag–Lehec](https://arxiv.org/html/2203.15551v2), [Klartag](https://arxiv.org/html/2303.14938v2)<br/>Published stochastic-localization theorems and quantitative KLS bounds. | Reuse Mathlib probability foundations; build an isolated audited client of pinned external stochastic APIs before selecting the missing vector/matrix SDE bridges. |
-| 5 | [Klartag–Lehec](https://arxiv.org/abs/2507.15495v2), [Chen–Klartag](https://arxiv.org/html/2607.23307v1), [Letwin](https://arxiv.org/html/2607.24164v1)<br/>Selected 2025–2026 thin-shell and quadratic-form results. | Retain exact preprint versions and assess moment-measure, stochastic and matrix-estimate dependencies; do not credit exploratory hypotheses as completed paper theorems. |
+| 1 | [Bizeul–Klartag–Lehec](https://arxiv.org/abs/2610.05474v1)<br/>Theorem 1.1 through Theorem 3.1: Lemma 2.2, Lemma 3.6 (⇑) and Corollary 3.7 (⇑) are formalized; Lemma 2.1 (operator domain), (15)–(16) on 𝒜 and steps of Proposition 7.1 are proved restricted counterparts. | Lemma 2.1 on the class 𝒜 (smooth representatives, the pointwise equation, the tensor lift) and the first-eigenfunction facts of Section 2, which define the iterates h_i of Lemmas 3.2–3.4; then Corollary 3.7 and Lemma 3.8 through the coefficient-array bridge to Lemma 2.2. Eldan localization and the Letwin dependency stay explicit. |
+| 2 | [Bakry–Gentil–Ledoux](https://link.springer.com/book/10.1007/978-3-319-00227-9)<br/>Corollary 4.8.2 (strongly log-concave Bakry–Émery C_P ≤ 1/ρ) is certified as thm:bakry-emery-poincare and committed in 36e7c78 (remote run 37516844384 succeeded); select a separate Brascamp–Lieb source statement. | Pin a Brascamp–Lieb source theorem, its assumptions and normalization, and assess reuse of the heat-semigroup and Γ₂ interfaces before proof work. |
+| 3 | [Kannan–Lovász–Simonovits](https://link.springer.com/article/10.1007/BF02574061)<br/>Theorem 5.1, ψ(K) ≥ ln 2 / M₁(K) for convex bodies, through the needle reduction (Corollary 2.2, Lemma 2.6, Theorem 2.7). With the local Cheeger inequality it gives C_P ≲ E‖X − EX‖² for convex bodies. | Pin a proof of the cited localization lemma (Lovász–Simonovits 1993 or a modern account) and choose a Lean form for needles; keep the product denominator of (1.1) distinct from the min-denominator constant. |
+| 4 | [E. Milman](https://arxiv.org/abs/0712.4092)<br/>Concentration implies a Cheeger bound under the source convexity hypotheses. | Pin the main theorem and its concentration/curvature assumptions; compare its analytic inputs with the current finite-dimensional Cheeger–Buser API. |
+| 5 | [Eldan](https://arxiv.org/abs/1203.0893), [Lee–Vempala](https://annals.math.princeton.edu/2024/199-3/p02), [Chen](https://arxiv.org/abs/2011.13661), [Klartag–Lehec](https://arxiv.org/html/2203.15551v2), [Klartag](https://arxiv.org/html/2303.14938v2)<br/>Published stochastic-localization theorems and quantitative KLS bounds. | Reuse Mathlib probability foundations; build an isolated audited client of pinned external stochastic APIs before selecting the missing vector/matrix SDE bridges. |
+| 6 | [Klartag–Lehec](https://arxiv.org/abs/2507.15495v2), [Chen–Klartag](https://arxiv.org/html/2607.23307v1), [Letwin](https://arxiv.org/html/2607.24164v1)<br/>Selected 2025–2026 thin-shell and quadratic-form results. | Retain exact preprint versions and assess moment-measure, stochastic and matrix-estimate dependencies; do not credit exploratory hypotheses as completed paper theorems. |
 <!-- END GENERATED PRIORITIES -->
 
 ## Paper lemma map
@@ -1187,12 +1188,89 @@ flowchart LR
     class Letwin2026_T11,Letwin2026_T12,Letwin2026_L21,Letwin2026_L22,Letwin2026_L23,Letwin2026_L24,Letwin2026_T25,Letwin2026_D26,Letwin2026_L27,Letwin2026_P28,Letwin2026_L29,Letwin2026_LA1,Letwin2026_LA2,Letwin2026_LA3,Letwin2026_LA4,Letwin2026_LA5,Letwin2026_LA6,Letwin2026_LA7 lemma_pending;
     style Letwin2026_T11 stroke-width:3px
 ```
+
+### Bizeul–Klartag–Lehec (arXiv:2610.05474v1)
+
+23 statements: 2 ✓, 2 ◐, 14 ○, 5 ⇑. [Full map](LITERATURE.md#bkl2026-lemma-map).
+
+```mermaid
+flowchart LR
+    BKL2026_T11["○ Theorem 1.1, p. 2<br/>Dimension-free Poincaré constant"]
+    BKL2026_L21["◐ Lemma 2.1, p. 7<br/>Centered inverse of the generator"]
+    BKL2026_L22["✓ Lemma 2.2, p. 9<br/>Partial symmetrization of tensors"]
+    BKL2026_T31["○ Theorem 3.1, p. 10<br/>Taylor-coefficient criterion"]
+    BKL2026_L32["○ Lemma 3.2, p. 11<br/>Near-symmetric gradient"]
+    BKL2026_L33["○ Lemma 3.3, p. 12<br/>Approximate symmetry of iterates"]
+    BKL2026_L34["○ Lemma 3.4, p. 13<br/>Bochner step"]
+    BKL2026_C35["○ Corollary 3.5, p. 13<br/>Vanishing of v_N"]
+    BKL2026_L36["⇑ Lemma 3.6, p. 14<br/>Taylor tensors of the generator"]
+    BKL2026_C37["⇑ Corollary 3.7, p. 15<br/>Taylor tensors of the iterates"]
+    BKL2026_L38["○ Lemma 3.8, p. 15<br/>Taylor-tensor recursion"]
+    BKL2026_L39["○ Lemma 3.9, p. 16<br/>Summation bound"]
+    BKL2026_T41["○ Theorem 4.1, p. 18<br/>Cumulant bounds"]
+    BKL2026_L42["○ Lemma 4.2, p. 18<br/>Third cumulant"]
+    BKL2026_L43["○ Lemma 4.3, p. 20<br/>Cumulant dynamics"]
+    BKL2026_L51["○ Lemma 5.1, p. 22<br/>Drift inequality"]
+    BKL2026_L52["○ Lemma 5.2, p. 24<br/>Integrated drift bound"]
+    BKL2026_P71["◐ Proposition 7.1, p. 28<br/>Suspension"]
+    BKL2026_E2628["✓ Equations (26)–(28), p. 9 (unnumbered)<br/>Tilts, tilt averages and Taylor tensors"]
+    BKL2026_EQ15["⇑ Equation (15), p. 6 (unnumbered)<br/>Integration by parts on 𝒜"]
+    BKL2026_EQ16["⇑ Equation (16), p. 6 (unnumbered)<br/>Integrated Bochner formula on 𝒜"]
+    BKL2026_E48["⇑ Equation (48), p. 14 (unnumbered)<br/>Tilted generator identity"]
+    BKL2026_T31 --> BKL2026_T11
+    BKL2026_T41 --> BKL2026_T11
+    BKL2026_P71 --> BKL2026_T11
+    BKL2026_L21 --> BKL2026_T31
+    BKL2026_L22 --> BKL2026_T31
+    BKL2026_L32 --> BKL2026_T31
+    BKL2026_L33 --> BKL2026_T31
+    BKL2026_L34 --> BKL2026_T31
+    BKL2026_C35 --> BKL2026_T31
+    BKL2026_L36 --> BKL2026_T31
+    BKL2026_C37 --> BKL2026_T31
+    BKL2026_L38 --> BKL2026_T31
+    BKL2026_L39 --> BKL2026_T31
+    BKL2026_L21 --> BKL2026_L32
+    BKL2026_L32 --> BKL2026_L33
+    BKL2026_L21 --> BKL2026_L33
+    BKL2026_L32 --> BKL2026_L34
+    BKL2026_EQ16 --> BKL2026_L34
+    BKL2026_L34 --> BKL2026_C35
+    BKL2026_E2628 --> BKL2026_L36
+    BKL2026_E48 --> BKL2026_L36
+    BKL2026_L36 --> BKL2026_C37
+    BKL2026_C37 --> BKL2026_L38
+    BKL2026_L33 --> BKL2026_L38
+    BKL2026_L22 --> BKL2026_L38
+    BKL2026_L36 --> BKL2026_L39
+    BKL2026_L42 --> BKL2026_T41
+    BKL2026_L43 --> BKL2026_T41
+    BKL2026_L51 --> BKL2026_T41
+    BKL2026_L52 --> BKL2026_T41
+    BKL2026_L43 --> BKL2026_L51
+    BKL2026_L42 --> BKL2026_L51
+    BKL2026_L51 --> BKL2026_L52
+    BKL2026_EQ15 --> BKL2026_EQ16
+    BKL2026_E2628 --> BKL2026_E48
+    BKL2026_more["+1 further statements in the paper register"]
+    classDef lemma_formalized fill:#dbeafe,stroke:#2563eb,color:#1e3a8a;
+    class BKL2026_L22,BKL2026_E2628 lemma_formalized;
+    classDef lemma_partial fill:#fff3df,stroke:#c88719,color:#66420d;
+    class BKL2026_L21,BKL2026_P71 lemma_partial;
+    classDef lemma_pending fill:#fee2e2,stroke:#dc2626,color:#991b1b;
+    class BKL2026_T11,BKL2026_T31,BKL2026_L32,BKL2026_L33,BKL2026_L34,BKL2026_C35,BKL2026_L38,BKL2026_L39,BKL2026_T41,BKL2026_L42,BKL2026_L43,BKL2026_L51,BKL2026_L52 lemma_pending;
+    classDef lemma_improved fill:#dcfce7,stroke:#15803d,color:#14532d;
+    class BKL2026_L36,BKL2026_C37,BKL2026_EQ15,BKL2026_EQ16,BKL2026_E48 lemma_improved;
+    style BKL2026_T11 stroke-width:3px
+    classDef lemma_more fill:#f8fafc,stroke:#94a3b8,color:#334155,stroke-dasharray:4 3;
+    class BKL2026_more lemma_more;
+```
 <!-- END GENERATED LEMMAS -->
 
 ## KLS literature through July 2026
 
 <!-- BEGIN GENERATED LITERATURE -->
-**27 selected sources, from foundational results to July 2026.**
+**28 selected sources, from foundational results to July 2026.**
 
 The [paper-by-paper literature register](LITERATURE.md) records statements, publication
 versions, exact local coverage and remaining work. The general KLS-bound milestones
@@ -1211,6 +1289,7 @@ flowchart TB
     L_JambulapatiLeeVempala2022["2022 · Jambulapati–Lee–Vempala<br/>ψₙ = O((log n)^3.2226)"]
     L_Klartag2023["2023 · Klartag<br/>ψₙ = O((log n)^(1/2))"]
     L_Letwin2026["27 July 2026 · Letwin<br/>ψₙ = O((log n)^(1/4))"]
+    L_BKL2026["4 Oct 2026 · Bizeul–Klartag–Lehec<br/>C_P ≤ C claimed (preprint)"]
     end
     subgraph L_shell["Related breakthroughs — do not imply dimension-free KLS"]
     direction LR
@@ -1240,9 +1319,10 @@ flowchart TB
     L_Klartag2014Moment -. "related input / method" .-> L_ChenKlartag2026
     L_Klartag2014Moment -. "related input / method" .-> L_Letwin2026
     L_Fathi2019 -. "related input / method" .-> L_Letwin2026
+    L_Letwin2026 -. "later milestone" .-> L_BKL2026
     classDef literature fill:#eef2ff,stroke:#64748b,color:#172554;
     classDef recent fill:#fff4dc,stroke:#b7791f,color:#663c00;
-    class L_KLS1995,L_Eldan2013,L_LeeVempala2024,L_Chen2021,L_KlartagLehec2022,L_JambulapatiLeeVempala2022,L_Klartag2023,L_Letwin2026,L_Guan2024,L_KlartagLehecSlicing2025,L_KlartagLehecThin2025,L_ChenKlartag2026,L_CorderoKlartag2015,L_Klartag2014Moment,L_Fathi2019 literature;
+    class L_KLS1995,L_Eldan2013,L_LeeVempala2024,L_Chen2021,L_KlartagLehec2022,L_JambulapatiLeeVempala2022,L_Klartag2023,L_Letwin2026,L_BKL2026,L_Guan2024,L_KlartagLehecSlicing2025,L_KlartagLehecThin2025,L_ChenKlartag2026,L_CorderoKlartag2015,L_Klartag2014Moment,L_Fathi2019 literature;
     class L_ChenKlartag2026,L_Letwin2026 recent;
     click L_KLS1995 href "https://link.springer.com/article/10.1007/BF02574061" "Primary source" _blank
     click L_Eldan2013 href "https://arxiv.org/abs/1203.0893" "Primary source" _blank
@@ -1252,6 +1332,7 @@ flowchart TB
     click L_JambulapatiLeeVempala2022 href "https://arxiv.org/html/2208.11644v2" "Primary source" _blank
     click L_Klartag2023 href "https://arxiv.org/html/2303.14938v2" "Primary source" _blank
     click L_Letwin2026 href "https://arxiv.org/html/2607.24164v1" "Primary source" _blank
+    click L_BKL2026 href "https://arxiv.org/abs/2610.05474v1" "Primary source" _blank
     click L_Guan2024 href "https://arxiv.org/html/2412.09075v1" "Primary source" _blank
     click L_KlartagLehecSlicing2025 href "https://arxiv.org/abs/2412.15044" "Primary source" _blank
     click L_KlartagLehecThin2025 href "https://arxiv.org/abs/2507.15495v2" "Primary source" _blank
@@ -1274,7 +1355,7 @@ See the [full tables and normalization](LITERATURE.md#constant-conventions).
 ## Proof progress tree
 
 <!-- BEGIN GENERATED DATE -->
-Last updated: **2026-10-04**.
+Last updated: **2026-10-07**.
 
 ![✓ Formalized in Lean](badges/formalized.svg) · ![○ Not yet formalized](badges/pending.svg) · ![◐ Partially formalized](badges/partial.svg) · ![— Excluded: refuted](badges/excluded.svg)
 <!-- END GENERATED DATE -->

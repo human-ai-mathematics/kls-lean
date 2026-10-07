@@ -2,7 +2,7 @@
 
 [Progress hub](README.md) · [Route diagrams](README.md#proof-progress-tree)
 
-**77 local Blueprint nodes · 28 registered Lean certificates.**
+**86 local Blueprint nodes · 28 registered Lean certificates.**
 
 Generated from the canonical records of the Git index used for this run, identified
 by the canonical input digest below. These are recorded proof/definition statuses,
@@ -55,6 +55,15 @@ See the linked statement for full hypotheses and scope.
 | `def:smooth-gradient-relaxation` | Extend smooth-gradient energy to L² by sequential relaxation. | Local definition; no upstream mapping | ![✓ Formalized in Lean](badges/formalized.svg) (definition) | [Statement](../../formalization/blueprint/src/chapters/20-smooth-gradient-and-affine.tex#L39) |
 | `lem:affine-poincare-translation-invariance` | Show that translating a log-concave law preserves log-concavity and its affine Poincaré constant. | Local classification: local_argument | ![✓ Formalized in Lean](badges/formalized.svg) | [Statement](../../formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex#L608) · [Lean certificate](../../solutions/LemAffinePoincareTranslationInvariance.lean) |
 | `lem:ambient-intrinsic-covariance` | Identify ambient covariance with intrinsic covariance on the support and zero on normal directions, preserving the operator norm. | Local classification: local_argument | ![✓ Formalized in Lean](badges/formalized.svg) | [Statement](../../formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex#L460) · [Lean certificate](../../solutions/LemAmbientIntrinsicCovariance.lean) |
+| `lem:bkl-bochner-temperate` | Bizeul–Klartag–Lehec (16): ∫(ℒu)² dμ = ∫‖∇²u‖²_HS dμ + ∫⟨∇²V ∇u, ∇u⟩ dμ for scalar u of temperate growth, and its curvature lower bound. | Local Lean result; no upstream mapping | ![✓ Formalized in Lean](badges/formalized.svg) | [Statement](../../formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex#L1073) |
+| `lem:bkl-centered-inverse` | Bizeul–Klartag–Lehec Lemma 2.1, operator-domain part: unique centered inverse of the heat-model generator with the bounds (20) and (24). | Local Lean result; no upstream mapping | ![✓ Formalized in Lean](badges/formalized.svg) | [Statement](../../formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex#L930) |
+| `lem:bkl-corollary-3-7` | Bizeul–Klartag–Lehec Corollary 3.7: S_{d+1}T_d(∇₀h) = T_{d+1}(−ℒh) = αT_{d+1}(∇₀g) whenever −ℒh = α∇₀g, for tensor fields of temperate growth. | Local Lean result; no upstream mapping | ![✓ Formalized in Lean](badges/formalized.svg) | [Statement](../../formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex#L1098) |
+| `lem:bkl-ibp-temperate` | Bizeul–Klartag–Lehec (15): ∫(ℒu)v dμ = −∫⟨∇u, ∇v⟩ dμ = ∫u(ℒv) dμ for scalar u, v of temperate growth. | Local Lean result; no upstream mapping | ![✓ Formalized in Lean](badges/formalized.svg) | [Statement](../../formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex#L1050) |
+| `lem:bkl-linear-cumulant` | Taylor tensors of linear functions are cumulants: T_d⟨v,·⟩ = κ_{d+1}(v, ·)/d! (step of Bizeul–Klartag–Lehec Proposition 7.1). | Local Lean result; no upstream mapping | ![✓ Formalized in Lean](badges/formalized.svg) | [Statement](../../formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex#L991) |
+| `lem:bkl-partial-symmetrization` | Bizeul–Klartag–Lehec Lemma 2.2: &#124;A&#124; ≤ 4^d &#124;S_{2d} A&#124; for tensors symmetric in their first d and next 2d indices. | Local Lean result; no upstream mapping | ![✓ Formalized in Lean](badges/formalized.svg) | [Statement](../../formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex#L908) |
+| `lem:bkl-taylor-coefficients` | Coefficient arrays of Taylor tensors in an orthonormal basis: symmetric Hilbert–Schmidt tensors; symmetrizeML is S_k; operator norm ≤ Hilbert–Schmidt norm. | Local Lean result; no upstream mapping | ![✓ Formalized in Lean](badges/formalized.svg) | [Statement](../../formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex#L1007) |
+| `lem:bkl-taylor-l2` | Tilt averages of L² functions are smooth and ‖T_d f‖ ≤ C_d ‖f‖₂ (Bizeul–Klartag–Lehec Section 3 and Proposition 7.1). | Local Lean result; no upstream mapping | ![✓ Formalized in Lean](badges/formalized.svg) | [Statement](../../formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex#L1029) |
+| `lem:bkl-tilt-generator` | Bizeul–Klartag–Lehec (48) and Lemma 3.6: F_{-ℒu}(z) = ⟨z, F_{∇u}(z)⟩ and T_{d+1}(-ℒu) = S_{d+1} T_d(∇u), restricted test class. | Local Lean result; no upstream mapping | ![✓ Formalized in Lean](badges/formalized.svg) | [Statement](../../formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex#L953) |
 | `lem:conditional-fiber-energy-comparison` | Turn an assumed fiber Poincaré bound with coefficient κ into a gradient-energy comparison and a κC global bound. | Local classification: local_argument | ![✓ Formalized in Lean](badges/formalized.svg) | [Statement](../../formalization/blueprint/src/chapters/50-kls-routes.tex#L387) · [Lean certificate](../../solutions/LemConditionalFiberEnergyComparison.lean) |
 | `lem:conditional-fiber-form` | Establish closed quadratic and Markov properties of the conditional-fiber energy under the stated density and moment assumptions. | Upstream: proved | ![✓ Formalized in Lean](badges/formalized.svg) | [Statement](../../formalization/blueprint/src/chapters/50-kls-routes.tex#L308) · [Lean certificate](../../solutions/LemConditionalFiberForm.lean) |
 | `lem:covariance-core-closure` | Close the transformed gradient operator and identify its Lipschitz and smooth-core closures for log-concave densities. | Local classification: local_argument | ![✓ Formalized in Lean](badges/formalized.svg) | [Statement](../../formalization/blueprint/src/chapters/60-analytic-comparison-proofs.tex#L52) · [Lean certificate](../../solutions/LemCovarianceCoreClosure.lean) |
@@ -278,9 +287,9 @@ retain their evidence source; generating this view does not run Lean.
 Upstream revision: `34b5fcd57fef17089e781616005fe6d3641bd11e`. The selected upstream snapshot contains
 20 records; this register is not an inventory of the entire upstream ledger.
 
-Canonical input digest: `a5eed00c525ae1158ebc2959efb7e3d452aa3b43e43a8c87a43458af353a3316`.
+Canonical input digest: `89b213a972ae9ab09f6bb1a4c75d2bbfa8daefea15b7d4223a1a608fd1b789ff`.
 Diagram digest: `3a58c212c513f9beb337f812162a28a91abe255f4d3bb45a7cb601eb5b8a293e`.
-View input digest: `2012d43c8074c0a785e559891a315dd1c6257e81d7603b058903104a7db42e37`.
+View input digest: `0cac1572672ebff61222ac000dd7c0612e87521949edacef830c239ff38b8507`.
 
 Regenerate with `python3 research/progress/update.py` after staging the intended source and
 metadata updates; unstaged unrelated metadata is then deliberately excluded. When the

@@ -141,6 +141,21 @@ import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.GradientEstimate
 import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.ReversePoincare
 import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.GaussianProfile
 import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.SelfImprovement
+import FunctionalInequalities.Analysis.Tensor.Symmetrization
+import FunctionalInequalities.Analysis.Tensor.Coordinate
+import FunctionalInequalities.Analysis.Tensor.Multilinear
+import FunctionalInequalities.Analysis.Tensor.Coefficients
+import FunctionalInequalities.Analysis.Semigroup.Generated.Inverse
+import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Inverse
+import FunctionalInequalities.Analysis.BakryEmery.IteratedDerivative
+import FunctionalInequalities.Analysis.BakryEmery.Tilt
+import FunctionalInequalities.Analysis.BakryEmery.Cumulant
+import FunctionalInequalities.Analysis.BakryEmery.TemperateTilt
+import FunctionalInequalities.Analysis.BakryEmery.SquareIntegrableTilt
+import FunctionalInequalities.Analysis.BakryEmery.TemperateIBP
+import FunctionalInequalities.Analysis.BakryEmery.TemperateBochner
+import FunctionalInequalities.Analysis.BakryEmery.TensorTilt
+import FunctionalInequalities.Analysis.BakryEmery.TensorBochner
 
 /-!
 # Functional inequalities

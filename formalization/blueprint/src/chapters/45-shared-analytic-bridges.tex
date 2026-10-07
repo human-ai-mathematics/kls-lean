@@ -897,3 +897,216 @@ form gap with the reciprocal of an operator eigenvalue, or prove any of the four
   on the form domain.  The optimal constant on the form domain equals the literature constant.
   Log-concavity and full-dimensional support of $\nu$ are derived from the hypotheses.
 \end{proof}
+
+\section{First dependencies of the Bizeul--Klartag--Lehec proof}
+
+The following records state the first proved dependencies of \cite{BizeulKlartagLehec2026}
+(arXiv:2610.05474v1).  Lemma~2.2 is formalized in the source's form; Lemma~2.1, Lemma~3.6 and
+Proposition~7.1 have proved restricted counterparts only.  Theorem~3.1 and Theorem~1.1 are not
+addressed.
+
+\begin{lemma}[Partial symmetrization of tensors]
+  \label{lem:bkl-partial-symmetrization}
+  \lean{FunctionalInequalities.Analysis.Tensor.norm_le_four_pow_mul_norm_symmetrize,
+        FunctionalInequalities.Analysis.Tensor.norm_le_four_pow_mul_norm_blockAverage,
+        FunctionalInequalities.Analysis.Tensor.norm_le_choose_mul_norm_blockAverage,
+        FunctionalInequalities.Analysis.Tensor.sum_norm_sq_sum_subset_eq}
+  \leanok
+  This is Lemma~2.2 of \cite{BizeulKlartagLehec2026}.  Let $d\ge0$, $k\ge3d$, and let $A$ be a
+  real tensor with $k$ indices in $\{1,\dots,n\}$, with the Hilbert--Schmidt norm.  If $A$ is
+  invariant under the permutations of its first $d$ indices and under those of its next $2d$
+  indices, then $\abs A\le4^d\abs{S_{2d}A}$, where $S_{2d}$ averages over the permutations of the
+  first $2d$ indices and fixes the trailing ones.  The Lean statement holds for every $n$, including
+  $n=0$, and the case $d=0$ is included; the representation form holds for every orthogonal
+  representation of a finite permutation group with the sharper factor $\binom{2d}{d}$.
+\end{lemma}
+\begin{proof}
+  \leanok
+  The source's proof: the subset-sum identity~(25) holds for every family of vectors indexed by
+  $d$-subsets of a $3d$-set (Vandermonde), its inner sums are $\binom{2d}{d}$ times translates of
+  $S_{2d}A$, and $\binom{2d}{d}\le4^d$.
+\end{proof}
+
+\begin{lemma}[Centered inverse of the generator, operator-domain part]
+  \label{lem:bkl-centered-inverse}
+  \lean{FunctionalInequalities.Analysis.Semigroup.Generated.exists_adjointComp_eq_of_gap,
+        FunctionalInequalities.KLS.LogConcave.existsUnique_centered_adjointComp_eq,
+        FunctionalInequalities.KLS.LogConcave.centered_adjointComp_bounds,
+        FunctionalInequalities.KLS.LogConcave.norm_centered_gradient_le}
+  \leanok
+  \uses{def:log-concave-law,def:literature-poincare-constant}
+  A restricted counterpart of Lemma~2.1 of \cite{BizeulKlartagLehec2026}.  In the heat model
+  $\nu=m.\mathrm{tilted}(-U)$ with $U\in C^2$, $\nu$ log-concave with full-dimensional support, let
+  $A=\bar T^\dagger\bar T=-\mathcal L$ be the closed generator.  If $\CPLit(\nu)\le C$, every
+  centered $g\in L^2(\nu)$ has exactly one centered preimage $u$ in the operator domain of $A$, and
+  $\norm u\le C\norm g$, $\norm{\bar Tu}^2=\langle g,u\rangle\le C\norm g^2$ (BKL~(20)) and
+  $\norm{\nabla_0u}\le\sqrt C\norm g$ (BKL~(24)).  The source's class $\mathcal A$ of smooth
+  functions of polynomial growth, smooth representatives, the pointwise equation and the tensor
+  lift are not proved.
+\end{lemma}
+\begin{proof}
+  \leanok
+  The gap inequality on $(\ker\bar T)^\perp$ makes the range of the self-adjoint operator $A$
+  closed and dense in $(\ker\bar T)^\perp$; the kernel of $\bar T$ is the constants.
+\end{proof}
+
+\begin{lemma}[Tilt averages of the generator]
+  \label{lem:bkl-tilt-generator}
+  \lean{FunctionalInequalities.Analysis.BakryEmery.tiltAverage_neg_weightedLaplacian,
+        FunctionalInequalities.Analysis.BakryEmery.taylorTensor_neg_weightedLaplacian,
+        FunctionalInequalities.Analysis.BakryEmery.taylorTensor_one_neg_weightedLaplacian,
+        FunctionalInequalities.Analysis.BakryEmery.tiltAverage_neg_weightedLaplacian_of_hasTemperateGrowth,
+        FunctionalInequalities.Analysis.BakryEmery.taylorTensor_neg_weightedLaplacian_of_hasTemperateGrowth,
+        FunctionalInequalities.Analysis.BakryEmery.taylorTensor_one_neg_weightedLaplacian_of_hasTemperateGrowth,
+        FunctionalInequalities.Analysis.BakryEmery.taylorTensor_neg_weightedLaplacianVec,
+        FunctionalInequalities.Analysis.BakryEmery.taylorTensor_one_neg_weightedLaplacianVec,
+        FunctionalInequalities.Analysis.BakryEmery.iteratedFDeriv_comp_perm_of_contDiff}
+  \leanok
+  Lemma~3.6 of \cite{BizeulKlartagLehec2026}, in a reviewed stronger form.  Let
+  $\mu=m.\mathrm{tilted}(-V)$ with $V\in C^1$ and all exponential moments, $\mu_z$ its
+  exponential tilts, $F_f(z)=\int f\,d\mu_z$ and $T_df=\frac1{d!}\nabla^dF_f(0)$.  For a scalar
+  $u$ that is either a compactly supported $C^2$ function, or of temperate growth (smooth with every
+  derivative polynomially bounded, the source's class $\mathcal A$) when $\nabla V$ is polynomially
+  bounded: $F_{-\mathcal Lu}(z)=\langle z,F_{\nabla u}(z)\rangle$ for every $z$ (BKL~(48)),
+  $T_1(-\mathcal Lu)=\int\nabla u\,d\mu$ (49) and $T_{d+1}(-\mathcal Lu)=S_{d+1}T_d(\nabla u)$ for
+  every $d$ (50), the original index of $T_d(\nabla u)$ placed after its Taylor indices.  The same
+  holds for tensor-valued $u\in\mathcal A$ with values in a finite-dimensional real normed space $F$,
+  with $\mathcal Lu=\Delta u-Du(\nabla V)$ componentwise: $T_{d+1}(-\mathcal Lu)$ is $S_{d+1}$ of the
+  $F$-valued $(d+1)$-linear map $T_d(Du)$ with the derivative index after the Taylor indices, the
+  indices carried by $F$ trailing and not symmetrized.  The source's regular measures satisfy these
+  hypotheses (reviewed, not a Lean adapter); the Lean statement drops convexity and the Hessian
+  bounds and includes $d=0$.  The tensors are continuous multilinear maps; their operator norm is
+  not the source's Hilbert--Schmidt norm (see \cref{lem:bkl-taylor-coefficients}).
+\end{lemma}
+\begin{proof}
+  \leanok
+  Integration by parts under each tilt gives~(48); for tests of temperate growth, a scaled bump
+  cutoff and dominated convergence remove the support condition.  Differentiating under the integral sign shows
+  that $F_{\nabla u}$ is smooth; the Leibniz rule with a linear factor and the symmetry of
+  iterated derivatives of $C^\infty$ maps (proved here, since Mathlib states it only for analytic
+  maps) give~(49) and~(50); the tensor-valued case follows from the scalar one through continuous
+  linear functionals on $F$.
+\end{proof}
+
+\begin{lemma}[Taylor tensors of linear functions are cumulants]
+  \label{lem:bkl-linear-cumulant}
+  \lean{FunctionalInequalities.Analysis.BakryEmery.taylorTensor_inner_eq_cumulant,
+        FunctionalInequalities.Analysis.BakryEmery.tiltAverage_inner_eq_fderiv_logLaplace}
+  \leanok
+  A step of the proof of Proposition~7.1 of \cite{BizeulKlartagLehec2026}.  For a nonzero finite
+  measure $\mu$ with all exponential moments and $\Lambda_\mu(z)=\log\int e^{\langle z,x\rangle}d\mu$,
+  $F_{\langle v,\cdot\rangle}=D\Lambda_\mu(\cdot)v$ and
+  $T_d\langle v,\cdot\rangle=\kappa_{d+1}(v,\cdot,\dots,\cdot)/d!$ with
+  $\kappa_m=\nabla^m\Lambda_\mu(0)$.  Proposition~7.1 itself is not addressed.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Differentiation under the integral sign of the Laplace transform and of its logarithm.
+\end{proof}
+
+\begin{lemma}[Coefficient arrays of Taylor tensors]
+  \label{lem:bkl-taylor-coefficients}
+  \lean{FunctionalInequalities.Analysis.Tensor.coordTensor_symmetrizeML,
+        FunctionalInequalities.Analysis.Tensor.coordTensor_appendInner,
+        FunctionalInequalities.Analysis.Tensor.norm_le_norm_coordTensor,
+        FunctionalInequalities.Analysis.BakryEmery.slotPerm_coordTensor_taylorTensor}
+  \leanok
+  \uses{lem:bkl-partial-symmetrization,lem:bkl-tilt-generator}
+  The tensor conventions of Section~2 of \cite{BizeulKlartagLehec2026}.  In an orthonormal basis
+  $(b_i)$ of $E$, a real $k$-linear map $\Phi$ has the coefficient array
+  $(\Phi(b_{i_1},\dots,b_{i_k}))_i$, a tensor with the Hilbert--Schmidt norm.  The array of the full
+  symmetrization of $\Phi$ is $S_k$ of the array of $\Phi$; pairing a vector-valued $d$-linear map with
+  a last argument places the original index after the Taylor indices; the operator norm of $\Phi$ is
+  at most the Hilbert--Schmidt norm of its array; and the arrays of Taylor tensors $T_df$ are
+  symmetric whenever $F_f$ is smooth, so Lemma~2.2 applies to them.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Multilinear expansion in the basis, Cauchy--Schwarz and Parseval; symmetry of iterated
+  derivatives of $C^\infty$ maps.
+\end{proof}
+
+\begin{lemma}[Taylor tensors on $L^2$]
+  \label{lem:bkl-taylor-l2}
+  \lean{FunctionalInequalities.Analysis.BakryEmery.contDiff_tiltAverage_of_memLp,
+        FunctionalInequalities.Analysis.BakryEmery.iteratedFDeriv_integral_exp_inner_smul,
+        FunctionalInequalities.Analysis.BakryEmery.taylorTensor_add,
+        FunctionalInequalities.Analysis.BakryEmery.exists_norm_taylorTensor_le}
+  \leanok
+  \uses{lem:bkl-tilt-generator}
+  For a probability measure $\mu$ with all exponential moments and $f\in L^2(\mu)$, the tilt average
+  $F_f$ is smooth, $\nabla^d$ of $z\mapsto\int e^{\langle z,x\rangle}g\,d\mu$ is the weighted moment
+  $\int e^{\langle z,x\rangle}\prod_j\langle x,h_j\rangle g\,d\mu$, $f\mapsto T_df$ is linear, and
+  $\norm{T_df}\le C_d\norm f_{L^2(\mu)}$ (operator norm).  This is the continuity of $T_d$ on $L^2$
+  used in Proposition~7.1 of \cite{BizeulKlartagLehec2026} and needed to state hypothesis~(29) of its
+  Theorem~3.1.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Differentiation under the integral sign with exponential domination; the Leibniz bound for
+  $F_f=(1/D)\,N_f$ at $0$, the moment formula and Cauchy--Schwarz.
+\end{proof}
+
+\begin{lemma}[Integration by parts on the class $\mathcal A$]
+  \label{lem:bkl-ibp-temperate}
+  \lean{FunctionalInequalities.Analysis.BakryEmery.integral_weightedLaplacian_mul_eq_neg_of_hasCompactSupport,
+        FunctionalInequalities.Analysis.BakryEmery.integral_weightedLaplacian_mul_eq_neg_of_hasTemperateGrowth,
+        FunctionalInequalities.Analysis.BakryEmery.integral_weightedLaplacian_mul_comm_of_hasTemperateGrowth,
+        FunctionalInequalities.Analysis.BakryEmery.integral_inner_weightedLaplacianVec_eq_neg}
+  \leanok
+  \uses{lem:bkl-tilt-generator}
+  Equation~(15) of \cite{BizeulKlartagLehec2026} for scalar functions.  Let $\mu=m.\mathrm{tilted}(-V)$
+  with $V\in C^1$, $\nabla V$ of polynomial growth and all exponential moments.  For $u\in C^2$ and
+  a compactly supported $w\in C^2$, $\int(\mathcal Lu)w\,d\mu=-\int\langle\nabla u,\nabla w\rangle\,d\mu$;
+  for $u,v$ of temperate growth (the class $\mathcal A$),
+  $\int(\mathcal Lu)v\,d\mu=-\int\langle\nabla u,\nabla v\rangle\,d\mu=\int u(\mathcal Lv)\,d\mu$.  For
+  tensor fields of temperate growth with values in a finite-dimensional real inner product space,
+  $\int\langle\mathcal Lu,v\rangle\,d\mu=-\int\sum_i\langle Du(e_i),Dv(e_i)\rangle\,d\mu$.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Locality of $\mathcal L$ reduces the compact case to the existing integration by parts for a
+  compactly supported first factor; a scaled bump cutoff and dominated convergence give the
+  temperate case.
+\end{proof}
+
+\begin{lemma}[Integrated Bochner formula on the class $\mathcal A$]
+  \label{lem:bkl-bochner-temperate}
+  \lean{FunctionalInequalities.Analysis.BakryEmery.integral_gammaTwo_eq_of_hasTemperateGrowth,
+        FunctionalInequalities.Analysis.BakryEmery.integral_weightedLaplacian_sq_eq_of_hasTemperateGrowth,
+        FunctionalInequalities.Analysis.BakryEmery.integral_hessianSq_add_le_of_hasTemperateGrowth,
+        FunctionalInequalities.Analysis.BakryEmery.integral_norm_sq_weightedLaplacianVec_eq,
+        FunctionalInequalities.Analysis.BakryEmery.integral_hessian_add_le_norm_sq_weightedLaplacianVec}
+  \leanok
+  \uses{lem:bkl-ibp-temperate}
+  Equation~(16) of \cite{BizeulKlartagLehec2026} for scalar functions.  Let $\mu=m.\mathrm{tilted}(-V)$
+  with $V$ of temperate growth and all exponential moments.  For $u$ of temperate growth,
+  $\int\Gamma_2(u)\,d\mu=\int(\mathcal Lu)^2d\mu$ and
+  $\int(\mathcal Lu)^2d\mu=\int\norm{\nabla^2u}_{HS}^2d\mu+\int\nabla^2V(\nabla u,\nabla u)\,d\mu$; if
+  $\nabla^2V\ge\rho$, then $\int\norm{\nabla^2u}_{HS}^2d\mu+\rho\int\norm{\nabla u}^2d\mu\le\int(\mathcal Lu)^2d\mu$,
+  the inequality behind Lemma~3.4.  For tensor fields of temperate growth (componentwise $\mathcal L$),
+  $\int\norm{\mathcal Lu}^2d\mu=\int\sum_{i,j}\norm{\nabla^2u(e_i,e_j)}^2d\mu
+  +\int\sum_{i,j}\nabla^2V(e_i,e_j)\langle Du(e_i),Du(e_j)\rangle\,d\mu$, with the same curvature form.
+\end{lemma}
+\begin{proof}
+  \leanok
+  The class of functions of temperate growth is closed under $\nabla$, $\Delta$, $\mathcal L$ and
+  $\Gamma$; $\int\mathcal L\Gamma(u,u)\,d\mu=0$ and~(15) for $(u,\mathcal Lu)$ give the first identity,
+  and the pointwise Bochner formula gives the second.
+\end{proof}
+
+\begin{corollary}[Taylor tensors of the iterates]
+  \label{lem:bkl-corollary-3-7}
+  \lean{FunctionalInequalities.Analysis.BakryEmery.symmetrizeML_taylorTensor_centeredFDeriv}
+  \leanok
+  \uses{lem:bkl-tilt-generator}
+  Corollary~3.7 of \cite{BizeulKlartagLehec2026}, in a reviewed stronger form.  Let $h$ be a tensor
+  field of temperate growth and $g$, $\alpha$ such that $-\mathcal Lh=\alpha\nabla_0g$, where
+  $\nabla_0u=Du-\int Du\,d\mu$ (the relation~(30) defining $h_{i+1}$ from $h_i$).  Then for $d\ge1$,
+  $S_{d+1}T_d(\nabla_0h)=T_{d+1}(-\mathcal Lh)=\alpha\,T_{d+1}(\nabla_0g)$.  The existence and the
+  normalization~(31) of the source's iterates, which use Lemma~2.1 on $\mathcal A$, are not proved.
+\end{corollary}
+\begin{proof}
+  \leanok
+  Lemma~3.6 for tensor fields, $T_d$ of a constant vanishes for $d\ge1$, and homogeneity of $T_{d+1}$.
+\end{proof}
