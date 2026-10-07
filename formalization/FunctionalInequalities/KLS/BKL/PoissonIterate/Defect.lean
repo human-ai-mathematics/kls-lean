@@ -1,4 +1,4 @@
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.PoissonIterate.Domain
+import FunctionalInequalities.KLS.BKL.PoissonIterate.Domain
 import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Hessian
 import FunctionalInequalities.Analysis.BakryEmery.TensorEnergy
 

@@ -1,5 +1,5 @@
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.PoissonIterate.Defect
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.PoissonIterate.Permutation
+import FunctionalInequalities.KLS.BKL.PoissonIterate.Defect
+import FunctionalInequalities.KLS.BKL.PoissonIterate.Permutation
 
 /-!
 # Approximate symmetry of the BKL iterates: Lemma 3.3

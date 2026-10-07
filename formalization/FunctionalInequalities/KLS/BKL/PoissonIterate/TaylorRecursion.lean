@@ -1,5 +1,5 @@
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.PoissonIterate.Taylor
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.PoissonIterate.Symmetry
+import FunctionalInequalities.KLS.BKL.PoissonIterate.Taylor
+import FunctionalInequalities.KLS.BKL.PoissonIterate.Symmetry
 
 /-!
 # Lemma 3.8 of BKL for the iterates in `D(A)`

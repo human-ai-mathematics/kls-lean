@@ -8243,14 +8243,14 @@
             "declarations": [
               {
                 "name": "FunctionalInequalities.KLS.RegularPotential.poincare_le_of_taylor",
-                "source": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/PoissonIterate/Criterion.lean"
+                "source": "formalization/FunctionalInequalities/KLS/BKL/PoissonIterate/Criterion.lean"
               },
               {
                 "name": "Solutions.ThmBklTaylorCriterion.certificate",
                 "source": "solutions/ThmBklTaylorCriterion.lean"
               }
             ],
-            "note": "Formalized in the source form and certified (thm:bkl-taylor-criterion, solutions/ThmBklTaylorCriterion.lean): ∃ K, for every regular potential V on ℝⁿ (RegularPotential, BKL (12)) with centered law, Cov ≤ Id, R ≥ 1 and (29) in the Hilbert–Schmidt norm of the standard basis, C_P ≤ K R². Proved by the operator route (research/decisions/2026-10-07-bkl-operator-route.md): iterates in D(A) and an approximate first eigenfunction instead of (19); the library constant K = 100 (9·2^20)² differs from the source's. Hypotheses discharged in dimension zero and, for the standard Gaussian on ℝ¹ with R = 8, in dimension one (KLS/LogConcave/GaussianTaylor.lean)."
+            "note": "Formalized in the source form and certified (thm:bkl-taylor-criterion, solutions/ThmBklTaylorCriterion.lean): ∃ K, for every regular potential V on ℝⁿ (RegularPotential, BKL (12)) with centered law, Cov ≤ Id, R ≥ 1 and (29) in the Hilbert–Schmidt norm of the standard basis, C_P ≤ K R². Proved by the operator route (research/decisions/2026-10-07-bkl-operator-route.md): iterates in D(A) and an approximate first eigenfunction instead of (19); the library constant K = 100 (9·2^20)² differs from the source's. Hypotheses discharged in dimension zero and, for the standard Gaussian on ℝ¹ with R = 8, in dimension one (KLS/BKL/GaussianTaylor.lean)."
           },
           {
             "id": "L32",
@@ -8280,7 +8280,7 @@
               },
               {
                 "name": "FunctionalInequalities.KLS.LogConcave.PoissonIterate.exists_symm_normSq_grad0_iter_succ_sub_le",
-                "source": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/PoissonIterate/Defect.lean"
+                "source": "formalization/FunctionalInequalities/KLS/BKL/PoissonIterate/Defect.lean"
               }
             ],
             "note": "Partial counterpart (generalized implication for a supplied pair): for temperate tensor fields g, h with −ℒh = α∇₀g (30) under μ = m.tilted(−V) (V temperate, all exponential moments, μ a probability measure), any λ > 0 with λ ≤ α² when α ≠ 0 (the source's (32) with λ = λ₁, which needs Lemma 2.1 on 𝒜), there is T symmetric in its first two indices (T = α⁻¹∇₀(∇g), or 0 when α = 0) with ‖∇₀h − T‖²₂ ≤ χ/λ — the square of (38) — and ‖∇₀h − T‖² integrable; the normalization (33) is not needed. The source iterates on 𝒜 are not constructed (the operator route below constructs them in D(A)). In the heat model ν = m.tilted(−U) (U temperate, all exponential moments, C ≥ C_P(ν), so λ₁ ≥ 1/C) the premise is discharged: for a temperate pair satisfying (30) and (33) with ∇h ≠ 0, 1 ≤ Cα² (the source's (32) when C = C_P), and Lemma 3.2 holds with the bound Cχ (λ = 1/C ≤ λ₁ for C > 0, equality for C = C_P) and no further premise (exists_symm_integral_norm_sq_sub_le_mul). Operator route (2026-10-07, research/decisions/2026-10-07-bkl-operator-route.md): for the iterates (30)–(31) built componentwise in the operator domain D(A) of the heat-model generator from any centered h₁ ∈ D(A), with λ = 1/C for any C ≥ C_P(ν) (λ = λ₁ when C = C_P): Lemma 3.2 with bound C χ_i."
@@ -8305,11 +8305,11 @@
               },
               {
                 "name": "FunctionalInequalities.KLS.LogConcave.PoissonIterate.energy_sub_energy_iter_succ",
-                "source": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/PoissonIterate/Domain.lean"
+                "source": "formalization/FunctionalInequalities/KLS/BKL/PoissonIterate/Domain.lean"
               },
               {
                 "name": "FunctionalInequalities.KLS.LogConcave.PoissonIterate.energy_iter_zero_eq",
-                "source": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/PoissonIterate/Domain.lean"
+                "source": "formalization/FunctionalInequalities/KLS/BKL/PoissonIterate/Domain.lean"
               }
             ],
             "note": "Partial counterpart for supplied iterates: under the normalization (33) alone, v_i − v_{i+1} = ‖∫∇h_i‖² for a pair, and v_0 = v_N + Σ_{k<N}‖∫∇h_k‖² along any sequence of temperate tensor fields (values in G k), for μ = m.tilted(−V) a probability measure with all exponential moments. The value v_1 = λ₁ of the source needs the first eigenfunction, which is not constructed (the operator route below uses v₁ ∈ [λ, 1.1λ] for an approximate eigenfunction). Operator route (2026-10-07, research/decisions/2026-10-07-bkl-operator-route.md): for the iterates (30)–(31) built componentwise in the operator domain D(A) of the heat-model generator from any centered h₁ ∈ D(A), with λ = 1/C for any C ≥ C_P(ν) (λ = λ₁ when C = C_P): (35) and (36), with v₁ in place of λ₁."
@@ -8335,7 +8335,7 @@
               },
               {
                 "name": "FunctionalInequalities.KLS.LogConcave.PoissonIterate.normSq_grad0_iter_sub_symField_le",
-                "source": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/PoissonIterate/Symmetry.lean"
+                "source": "formalization/FunctionalInequalities/KLS/BKL/PoissonIterate/Symmetry.lean"
               }
             ],
             "note": "Case q = 2 only, for a supplied pair satisfying (30) (and (33) in the heat-model form): ‖∇₀h − S₂∇₀h‖²₂ ≤ χ/λ under λ ≤ α², and ≤ Pχ in the heat model with P ≥ C_P (λ = 1/P for P > 0) — the source bound with coefficient 1 in place of its universal C_src² ≥ 1 — since S₂ is the nearest tensor symmetric in the first two indices (norm_sub_symmetrizeFirstTwo_le). On 𝒜 (supplied pairs) the cases q ≥ 3 are not formalized; the operator route below proves every q. Operator route (2026-10-07, research/decisions/2026-10-07-bkl-operator-route.md): for the iterates (30)–(31) built componentwise in the operator domain D(A) of the heat-model generator from any centered h₁ ∈ D(A), with λ = 1/C for any C ≥ C_P(ν) (λ = λ₁ when C = C_P): Lemma 3.3 for every 2 ≤ q ≤ i under 0 < α_j² ≤ β/C (the source has 2λ₁), with the constant 4q⁴max(1,β)^q C; (42), (43) and (44) are proved on the way."
@@ -8361,11 +8361,11 @@
               },
               {
                 "name": "FunctionalInequalities.KLS.LogConcave.PoissonIterate.normSq_genField_iter_succ_add_defect_le",
-                "source": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/PoissonIterate/Defect.lean"
+                "source": "formalization/FunctionalInequalities/KLS/BKL/PoissonIterate/Defect.lean"
               },
               {
                 "name": "FunctionalInequalities.KLS.LogConcave.PoissonIterate.normSq_gradField_gradField_iter",
-                "source": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/PoissonIterate/Defect.lean"
+                "source": "formalization/FunctionalInequalities/KLS/BKL/PoissonIterate/Defect.lean"
               }
             ],
             "note": "Partial counterpart (Codex reviews RE and final, 2026-10-07: the generalized implication for supplied iterates; the source sequence is not constructed): for every pair g = h_i, h = h_{i+1} of temperate tensor fields satisfying the Poisson relation (30) −ℒh = α∇₀g and the normalization (33), with ∇²V ≥ a, the orthogonality ⟨∇²g, ∇h⟩ = α‖∇h‖², (39), (46), (47) and (45) are derived from (15)/(16) (no division by α, so α = 0 is included); derivative energies use the coordinate gradient gradCoord (PiLp 2, Hilbert–Schmidt over the derivative and all trailing indices, derivative index first). The construction of the source iterates (Lemma 2.1 on 𝒜, the first eigenfunction, the normalization (31)) is not addressed. Operator route (2026-10-07, research/decisions/2026-10-07-bkl-operator-route.md): for the iterates (30)–(31) built componentwise in the operator domain D(A) of the heat-model generator from any centered h₁ ∈ D(A), with λ = 1/C for any C ≥ C_P(ν) (λ = λ₁ when C = C_P): Lemma 3.4 and (47) (curvature a of ∇²U, any real a)."
@@ -8390,11 +8390,11 @@
               },
               {
                 "name": "FunctionalInequalities.KLS.LogConcave.PoissonIterate.tendsto_energy_iter_zero",
-                "source": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/PoissonIterate/Defect.lean"
+                "source": "formalization/FunctionalInequalities/KLS/BKL/PoissonIterate/Defect.lean"
               },
               {
                 "name": "FunctionalInequalities.KLS.LogConcave.PoissonIterate.sum_defect_iter_le",
-                "source": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/PoissonIterate/Defect.lean"
+                "source": "formalization/FunctionalInequalities/KLS/BKL/PoissonIterate/Defect.lean"
               }
             ],
             "note": "Partial counterpart (Codex reviews RE and final: the generalized implication for supplied iterates): for nonnegative sequences satisfying (45) with a > 0, Σ v_i < ∞, Σ χ_i < ∞ and v_N → 0; and for every sequence of temperate tensor iterates h_k (values in G k, linked by linear isometries PiLp 2 (Fin n → G k) ≃ G (k+1)) satisfying (30) and (33), the energies ‖∇h_k‖² are summable and tend to 0. The existence of the source iterates on 𝒜 is not addressed (the operator route below constructs them in D(A)). Operator route (2026-10-07, research/decisions/2026-10-07-bkl-operator-route.md): for the iterates (30)–(31) built componentwise in the operator domain D(A) of the heat-model generator from any centered h₁ ∈ D(A), with λ = 1/C for any C ≥ C_P(ν) (λ = λ₁ when C = C_P): Corollary 3.5 and Σχ_i ≤ ‖Lh₁‖²."
@@ -8457,7 +8457,7 @@
               },
               {
                 "name": "FunctionalInequalities.KLS.LogConcave.PoissonIterate.symmetrize_taylorField_grad0_iter_succ",
-                "source": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/PoissonIterate/Taylor.lean"
+                "source": "formalization/FunctionalInequalities/KLS/BKL/PoissonIterate/Taylor.lean"
               }
             ],
             "note": "Formalized in a reviewed stronger form (Codex strategy 11): for every tensor field h of temperate growth and every g, α with −ℒh = α∇₀g (the relation (30) defining h_{i+1} from h_i, with ∇₀u = Du − ∫Du, centeredFDeriv), every d ≥ 1, the symmetrization S_{d+1} acting on the first d + 1 indices and the trailing indices untouched. The existence and normalization (31) of the source iterates on 𝒜 (Lemma 2.1 on 𝒜) remain unproved there; the operator route below proves Corollary 3.7 for the iterates in D(A). Operator route (2026-10-07, research/decisions/2026-10-07-bkl-operator-route.md): for the iterates (30)–(31) built componentwise in the operator domain D(A) of the heat-model generator from any centered h₁ ∈ D(A), with λ = 1/C for any C ≥ C_P(ν) (λ = λ₁ when C = C_P): Corollary 3.7 for d ≥ 1, as coefficient arrays."
@@ -8476,7 +8476,7 @@
             "declarations": [
               {
                 "name": "FunctionalInequalities.KLS.LogConcave.PoissonIterate.norm_taylorField_grad0_iter_sq_le",
-                "source": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/PoissonIterate/TaylorRecursion.lean"
+                "source": "formalization/FunctionalInequalities/KLS/BKL/PoissonIterate/TaylorRecursion.lean"
               }
             ],
             "note": "Operator route (2026-10-07, research/decisions/2026-10-07-bkl-operator-route.md): for the iterates (30)–(31) built componentwise in the operator domain D(A) of the heat-model generator from any centered h₁ ∈ D(A), with λ = 1/C for any C ≥ C_P(ν) (λ = λ₁ when C = C_P): Lemma 3.8 under (29) and α_j² ≤ β/C, with the explicit constant 2^20 max(1,β)² in place of the source's universal C."
@@ -8505,7 +8505,7 @@
               },
               {
                 "name": "FunctionalInequalities.KLS.LogConcave.PoissonIterate.sum_meanGradSq_iter_le",
-                "source": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/PoissonIterate/Taylor.lean"
+                "source": "formalization/FunctionalInequalities/KLS/BKL/PoissonIterate/Taylor.lean"
               }
             ],
             "note": "Step (61) for a supplied pair: if −ℒh = α∇₀g (30) with h temperate under μ = m.tilted(−V) (V temperate, all exponential moments), then ∫Dh = αT_1(∇₀g) and ‖∫∇h‖² = α²Σ_i‖T_1(∇₀g)(e_i)‖² (Hilbert–Schmidt), i.e. p_{i+1} = α²|T_1(∇₀h_i)|² when combined with (35) and (33). The first step for a supplied eigenfunction is also proved: if ℒf = −λf, ∫f = 0 and ∫⟨e, x − b⟩² ≤ K|e|² (K ≥ 0 is assumed for convenience; it is redundant), then |∫∇f|² ≤ λ²K‖f‖² (p_1 ≤ λ₁² for ‖f‖ = 1, Cov ≤ Id); audited on the Gaussian with f = ⟨c, ·⟩, which attains equality (the audit proves the inequality; mean zero and covariance ≤ 1/ρ derived from (15) and the Poincaré inequality on 𝒜). On 𝒜 the existence of the first eigenfunction, the use of (54) and the summation (60) are not formalized; the operator route below proves (60) in the route form and its use (via (54) with α² ≤ 3λ) in the final argument of Theorem 3.1. Operator route (2026-10-07, research/decisions/2026-10-07-bkl-operator-route.md): for the iterates (30)–(31) built componentwise in the operator domain D(A) of the heat-model generator from any centered h₁ ∈ D(A), with λ = 1/C for any C ≥ C_P(ν) (λ = λ₁ when C = C_P): Lemma 3.9 in the form Σ_{k<N} p_k ≤ ‖Lh₁‖² + (β/C) Σ |T₁(∇₀h_k)|² under Cov ≤ Id (for an exact eigenfunction ‖Lh₁‖² = λ₁², β = 2 is the source)."
@@ -8552,7 +8552,7 @@
                 "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Cumulant.lean"
               }
             ],
-            "note": "Conditional counterpart (Codex review N, 2026-10-07): for a centered isotropic probability law with all exponential moments that satisfies LetwinQuadraticBound — the quadratic-form estimate of Letwin (2026) Theorem 1.2, Var⟨MX, X⟩ ≤ 8|M|²_HS for self-adjoint M, an explicit premise that is not proved — Σ_{j,k} κ_3(u, e_j, e_k)² ≤ 8|u|² (= ⟨R_3 u, u⟩ ≤ 8|u|², (65)); the third cumulant of a centered law is its third moment. Nonvacuity (research/audits/BKLThirdCumulantWitnessAudit.lean): every premise is discharged for the uniform law on [−√3, √3] and for the skewed two-point law (1/5)δ₂ + (4/5)δ_{−1/2} (κ₃(1,1,1) = 3/2). General isotropic log-concave laws (only some exponential moments) and the Letwin theorem itself are not covered."
+            "note": "Conditional counterpart (Codex review N, 2026-10-07): for a centered isotropic probability law with all exponential moments that satisfies LetwinQuadraticBound — the quadratic-form estimate of Letwin (2026) Theorem 1.2, Var⟨MX, X⟩ ≤ 8|M|²_HS for self-adjoint M, an explicit premise that is not proved — Σ_{j,k} κ_3(u, e_j, e_k)² ≤ 8|u|² (= ⟨R_3 u, u⟩ ≤ 8|u|², (65)); the third cumulant of a centered law is its third moment. Nonvacuity (research/audits/BKL/ThirdCumulantWitnessAudit.lean): every premise is discharged for the uniform law on [−√3, √3] and for the skewed two-point law (1/5)δ₂ + (4/5)δ_{−1/2} (κ₃(1,1,1) = 3/2). General isotropic log-concave laws (only some exponential moments) and the Letwin theorem itself are not covered."
           },
           {
             "id": "L43",
@@ -8606,16 +8606,16 @@
                 "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Tilt/SquareIntegrable.lean"
               },
               {
-                "name": "FunctionalInequalities.KLS.LogConcave.Suspension.convexOn_potential",
-                "source": "formalization/FunctionalInequalities/KLS/LogConcave/Suspension.lean"
+                "name": "FunctionalInequalities.KLS.BKL.Suspension.convexOn_potential",
+                "source": "formalization/FunctionalInequalities/KLS/BKL/Suspension.lean"
               },
               {
-                "name": "FunctionalInequalities.KLS.LogConcave.Suspension.exists_copies",
-                "source": "formalization/FunctionalInequalities/KLS/LogConcave/Suspension.lean"
+                "name": "FunctionalInequalities.KLS.BKL.Suspension.exists_copies",
+                "source": "formalization/FunctionalInequalities/KLS/BKL/Suspension.lean"
               },
               {
-                "name": "FunctionalInequalities.KLS.LogConcave.Suspension.continuous_potential",
-                "source": "formalization/FunctionalInequalities/KLS/LogConcave/Suspension.lean"
+                "name": "FunctionalInequalities.KLS.BKL.Suspension.continuous_potential",
+                "source": "formalization/FunctionalInequalities/KLS/BKL/Suspension.lean"
               }
             ],
             "note": "Proved steps: the continuity of T_d on L²(μ) used in the proof (‖T_d f‖ ≤ C_d‖f‖₂ for a probability measure with all exponential moments; T_d is linear on L²), and the linear-function step: for a nonzero finite measure with all exponential moments, F_⟨v,·⟩ = DΛ_μ(·)v and T_d⟨v,·⟩ = κ_{d+1}(v, ·, …, ·)/d!. Equations (109)–(110): the suspension potential W_N = Σ V(x_i) + β|σs − Σ f(x_i)/√N| is continuous and convex when V,f are C², D²V ≥ a Id, ‖D²f‖op ≤ M, β ≥ 0 and βM/√N ≤ a; a positive finite N exists for a > 0 and M ≥ 0. The source scale σ = √(1 + 2/β²) is a specialization. The joint-law identification, isotropy, mixed cumulant identity (112), limit β → ∞ and density argument are not proved."

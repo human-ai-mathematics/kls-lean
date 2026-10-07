@@ -1,13 +1,13 @@
-import FunctionalInequalities.KLS.LogConcave.GaussianTaylor
+import FunctionalInequalities.KLS.BKL.GaussianTaylor
 
 /-!
 # Audit: nonvacuity of BKL Theorem 3.1 in dimension one
 
 Bizeul–Klartag–Lehec (arXiv:2610.05474v1), Theorem 3.1, is the route statement `M`
-(`KLS.RegularPotential.poincare_le_of_taylor`, audited in `BKLTaylorCriterionAudit.lean`). This
+(`KLS.RegularPotential.poincare_le_of_taylor`, audited in `BKL/TaylorCriterionAudit.lean`). This
 client restates its hypotheses for `n = 1`, `V x = ‖x‖² / 2`, `a = b = 1` and `R = 8`, in the
 text of `M` with these values substituted, and discharges them by the library theorems of
-`KLS/LogConcave/GaussianTaylor.lean`:
+`KLS/BKL/GaussianTaylor.lean`:
 
 * `regular`: the standard Gaussian potential is regular (`regularPotential_half_norm_sq`);
 * `hypotheses`: the law is centered, `∫ ⟪v, x⟫² dγ ≤ ‖v‖²`, and the Taylor bound (29) holds

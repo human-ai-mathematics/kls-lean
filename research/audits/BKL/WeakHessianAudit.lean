@@ -3,7 +3,7 @@ import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Hessian
 /-!
 # Audit: the weak Hessian on `D(A)` and the curvature form of BKL (16) (route obligation `O3`)
 
-The two `O3` propositions of `research/audits/BKLOperatorRouteStatements.lean` (operator route
+The two `O3` propositions of `research/audits/BKL/OperatorRouteStatements.lean` (operator route
 to Bizeul–Klartag–Lehec, arXiv:2610.05474v1, Theorem 3.1; decision record
 `research/decisions/2026-10-07-bkl-operator-route.md`), restated verbatim and discharged by the
 library theorems of `KLS/LogConcave/HeatSemigroup/Hessian.lean`:

@@ -17,7 +17,7 @@ noncomputable section
 open scoped ContDiff
 open FunctionalInequalities.Analysis.BakryEmery
 
-namespace FunctionalInequalities.KLS.LogConcave.Suspension
+namespace FunctionalInequalities.KLS.BKL.Suspension
 
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
 
@@ -129,4 +129,4 @@ theorem continuous_potential {V f : E → ℝ} (hV : Continuous V) (hf : Continu
   unfold potential
   fun_prop
 
-end FunctionalInequalities.KLS.LogConcave.Suspension
+end FunctionalInequalities.KLS.BKL.Suspension

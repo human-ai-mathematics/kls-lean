@@ -155,15 +155,15 @@ import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Hessian
 import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Tilt
 import FunctionalInequalities.Analysis.Tensor.BasisChange
 import FunctionalInequalities.Analysis.DyadicSummation
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.PoissonIterate.Basic
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.PoissonIterate.Domain
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.PoissonIterate.Permutation
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.PoissonIterate.Defect
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.PoissonIterate.Taylor
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.PoissonIterate.Symmetry
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.PoissonIterate.TaylorRecursion
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.PoissonIterate.Criterion
-import FunctionalInequalities.KLS.LogConcave.GaussianTaylor
+import FunctionalInequalities.KLS.BKL.PoissonIterate.Basic
+import FunctionalInequalities.KLS.BKL.PoissonIterate.Domain
+import FunctionalInequalities.KLS.BKL.PoissonIterate.Permutation
+import FunctionalInequalities.KLS.BKL.PoissonIterate.Defect
+import FunctionalInequalities.KLS.BKL.PoissonIterate.Taylor
+import FunctionalInequalities.KLS.BKL.PoissonIterate.Symmetry
+import FunctionalInequalities.KLS.BKL.PoissonIterate.TaylorRecursion
+import FunctionalInequalities.KLS.BKL.PoissonIterate.Criterion
+import FunctionalInequalities.KLS.BKL.GaussianTaylor
 import FunctionalInequalities.Analysis.BakryEmery.IteratedDerivative
 import FunctionalInequalities.Analysis.BakryEmery.Tilt.Basic
 import FunctionalInequalities.Analysis.BakryEmery.Cumulant
@@ -175,7 +175,7 @@ import FunctionalInequalities.Analysis.BakryEmery.Tilt.Tensor
 import FunctionalInequalities.Analysis.BakryEmery.Bochner.Tensor
 import FunctionalInequalities.Analysis.BakryEmery.TensorEnergy
 import FunctionalInequalities.KLS.LogConcave.Regular
-import FunctionalInequalities.KLS.LogConcave.Suspension
+import FunctionalInequalities.KLS.BKL.Suspension
 
 /-!
 # Functional inequalities

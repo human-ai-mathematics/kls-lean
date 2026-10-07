@@ -1,4 +1,4 @@
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.PoissonIterate.Basic
+import FunctionalInequalities.KLS.BKL.PoissonIterate.Basic
 
 /-!
 # The BKL iterates lie in `D(A)`: domain, (30), (33), (46), (35)–(36) and (32)

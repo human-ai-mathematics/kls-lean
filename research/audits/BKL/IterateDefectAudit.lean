@@ -1,13 +1,13 @@
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.PoissonIterate.Defect
+import FunctionalInequalities.KLS.BKL.PoissonIterate.Defect
 
 /-!
 # Audit: (47), Lemma 3.4, Corollary 3.5 and Lemma 3.2 for the BKL iterates (route `I4`–`I6`, `I8`)
 
-The propositions `I4`, `I5`, `I6` and `I8` of `research/audits/BKLIterateRouteStatements.lean`
+The propositions `I4`, `I5`, `I6` and `I8` of `research/audits/BKL/IterateRouteStatements.lean`
 (operator route to Bizeul–Klartag–Lehec, arXiv:2610.05474v1, Theorem 3.1; decision record
 `research/decisions/2026-10-07-bkl-operator-route.md`), restated verbatim with the same `variable`
 block and notation, and discharged by the library theorems of
-`KLS/LogConcave/HeatSemigroup/PoissonIterate/Defect.lean`:
+`KLS/BKL/PoissonIterate/Defect.lean`:
 
 * `i4`: the Pythagorean identity (47), `‖∇²h_{k+1}‖² = ‖L h_{k+2}‖² + χ_{k+1}`
   (`normSq_gradField_gradField_iter`);

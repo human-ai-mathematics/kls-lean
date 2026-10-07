@@ -1,5 +1,5 @@
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.PoissonIterate.Defect
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.PoissonIterate.TaylorRecursion
+import FunctionalInequalities.KLS.BKL.PoissonIterate.Defect
+import FunctionalInequalities.KLS.BKL.PoissonIterate.TaylorRecursion
 import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.ApproximateEigenfunction
 import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Curvature
 import FunctionalInequalities.KLS.LogConcave.Regular

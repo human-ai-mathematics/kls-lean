@@ -1,13 +1,13 @@
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.PoissonIterate.Symmetry
+import FunctionalInequalities.KLS.BKL.PoissonIterate.Symmetry
 
 /-!
 # Audit: BKL Lemma 3.3 for the iterates (route `S1`)
 
-The proposition `S1` of `research/audits/BKLIterateRouteStatements.lean` (operator route to
+The proposition `S1` of `research/audits/BKL/IterateRouteStatements.lean` (operator route to
 Bizeul–Klartag–Lehec, arXiv:2610.05474v1, Theorem 3.1; decision record
 `research/decisions/2026-10-07-bkl-operator-route.md`), restated verbatim with the same `variable`
 block and notation, and discharged by the library theorem `normSq_grad0_iter_sub_symField_le` of
-`KLS/LogConcave/HeatSemigroup/PoissonIterate/Symmetry.lean`:
+`KLS/BKL/PoissonIterate/Symmetry.lean`:
 
 * `s1`: Lemma 3.3 for every `q` with `2 ≤ q ≤ k + 1`, under `0 < α_j² ≤ β/C` on the steps
   `k + 1 - q ≤ j < k`: `‖∇₀h_{k+1} - S_q ∇₀h_{k+1}‖² ≤ 4 q⁴ max(1, β)^q C Σ χ_j`.

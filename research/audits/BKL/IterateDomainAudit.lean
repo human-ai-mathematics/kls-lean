@@ -1,13 +1,13 @@
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.PoissonIterate.Domain
+import FunctionalInequalities.KLS.BKL.PoissonIterate.Domain
 
 /-!
 # Audit: the BKL iterates in `D(A)`, (30), (33), (46), (35)–(36) and (32) (route `I1`–`I3`, `I7`)
 
-The propositions `I1`, `I2`, `I3` and `I7` of `research/audits/BKLIterateRouteStatements.lean`
+The propositions `I1`, `I2`, `I3` and `I7` of `research/audits/BKL/IterateRouteStatements.lean`
 (operator route to Bizeul–Klartag–Lehec, arXiv:2610.05474v1, Theorem 3.1; decision record
 `research/decisions/2026-10-07-bkl-operator-route.md`), restated verbatim with the same `variable`
 block and notation, and discharged by the library theorems of
-`KLS/LogConcave/HeatSemigroup/PoissonIterate/Domain.lean`:
+`KLS/BKL/PoissonIterate/Domain.lean`:
 
 * `i1`: every component of `iter T̄ f k` (the source's `h_{k+1}`) lies in `D(A)` and is centered
   (`iter_mem_domain_and_mean_eq_zero`);

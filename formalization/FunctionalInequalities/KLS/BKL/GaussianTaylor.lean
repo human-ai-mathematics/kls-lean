@@ -1,4 +1,4 @@
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.PoissonIterate.Criterion
+import FunctionalInequalities.KLS.BKL.PoissonIterate.Criterion
 import Mathlib.Analysis.Complex.ExponentialBounds
 import Mathlib.Analysis.SpecialFunctions.Gaussian.FourierTransform
 import Mathlib.RingTheory.Polynomial.Hermite.Gaussian
@@ -7,7 +7,7 @@ import Mathlib.RingTheory.Polynomial.Hermite.Gaussian
 # Nonvacuity of BKL Theorem 3.1: the standard Gaussian on `ℝ¹`
 
 Bizeul–Klartag–Lehec (arXiv:2610.05474v1), Theorem 3.1, is formalized as
-`KLS.RegularPotential.poincare_le_of_taylor` (`HeatSemigroup/PoissonIterate/Criterion.lean`). This
+`KLS.RegularPotential.poincare_le_of_taylor` (`KLS/BKL/PoissonIterate/Criterion.lean`). This
 module shows that its hypotheses are jointly satisfiable in positive dimension: for the standard
 Gaussian `γ = volume.tilted (-‖·‖²/2)` on `ℝ¹ = EuclideanSpace ℝ (Fin 1)` every hypothesis is
 discharged, with the explicit Taylor constant `R = 8`.

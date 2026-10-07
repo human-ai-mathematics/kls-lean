@@ -1,4 +1,4 @@
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.PoissonIterate.Basic
+import FunctionalInequalities.KLS.BKL.PoissonIterate.Basic
 
 /-!
 # Permutations of index positions and the bound (44) of BKL Lemma 3.3

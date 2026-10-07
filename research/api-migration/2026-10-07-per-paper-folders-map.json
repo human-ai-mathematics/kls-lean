@@ -1,0 +1,48 @@
+{
+  "version": 1,
+  "date": "2026-10-07",
+  "batch": "per-paper-folders",
+  "title": "Per-paper folders: BKL-specific library modules and BKL audit clients",
+  "decision": "research/decisions/2026-10-07-per-paper-folders.md",
+  "rule": "research/naming.md, section Family names belong in directories, not filenames (rule 5 amendment)",
+  "invariants": [
+    "Only module and file paths change.",
+    "Namespaces, declaration names, statements, proofs, hypotheses and certificate status are unchanged; audit-client namespaces keep their BKL… names.",
+    "No compatibility shim or alias module is kept for an old path.",
+    "Historical research/decisions/**, research/handoffs/**, research/api-migration/** and dated records keep their original paths; this map resolves them."
+  ],
+  "count": 29,
+  "modules": {
+    "FunctionalInequalities.KLS.LogConcave.GaussianTaylor": "FunctionalInequalities.KLS.BKL.GaussianTaylor",
+    "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.PoissonIterate.Basic": "FunctionalInequalities.KLS.BKL.PoissonIterate.Basic",
+    "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.PoissonIterate.Criterion": "FunctionalInequalities.KLS.BKL.PoissonIterate.Criterion",
+    "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.PoissonIterate.Defect": "FunctionalInequalities.KLS.BKL.PoissonIterate.Defect",
+    "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.PoissonIterate.Domain": "FunctionalInequalities.KLS.BKL.PoissonIterate.Domain",
+    "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.PoissonIterate.Permutation": "FunctionalInequalities.KLS.BKL.PoissonIterate.Permutation",
+    "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.PoissonIterate.Symmetry": "FunctionalInequalities.KLS.BKL.PoissonIterate.Symmetry",
+    "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.PoissonIterate.Taylor": "FunctionalInequalities.KLS.BKL.PoissonIterate.Taylor",
+    "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.PoissonIterate.TaylorRecursion": "FunctionalInequalities.KLS.BKL.PoissonIterate.TaylorRecursion",
+    "FunctionalInequalities.KLS.LogConcave.Suspension": "FunctionalInequalities.KLS.BKL.Suspension"
+  },
+  "audits": {
+    "research/audits/BKLApproximateEigenfunctionAudit.lean": "research/audits/BKL/ApproximateEigenfunctionAudit.lean",
+    "research/audits/BKLBasisChangeAudit.lean": "research/audits/BKL/BasisChangeAudit.lean",
+    "research/audits/BKLDyadicSummationAudit.lean": "research/audits/BKL/DyadicSummationAudit.lean",
+    "research/audits/BKLFoundationsAudit.lean": "research/audits/BKL/FoundationsAudit.lean",
+    "research/audits/BKLGaussianTaylorAudit.lean": "research/audits/BKL/GaussianTaylorAudit.lean",
+    "research/audits/BKLGeneratorTiltAudit.lean": "research/audits/BKL/GeneratorTiltAudit.lean",
+    "research/audits/BKLIterateDefectAudit.lean": "research/audits/BKL/IterateDefectAudit.lean",
+    "research/audits/BKLIterateDomainAudit.lean": "research/audits/BKL/IterateDomainAudit.lean",
+    "research/audits/BKLIterateRouteStatements.lean": "research/audits/BKL/IterateRouteStatements.lean",
+    "research/audits/BKLIterateSymmetryAudit.lean": "research/audits/BKL/IterateSymmetryAudit.lean",
+    "research/audits/BKLIterateTaylorAudit.lean": "research/audits/BKL/IterateTaylorAudit.lean",
+    "research/audits/BKLIterateTaylorRecursionAudit.lean": "research/audits/BKL/IterateTaylorRecursionAudit.lean",
+    "research/audits/BKLOperatorRouteStatements.lean": "research/audits/BKL/OperatorRouteStatements.lean",
+    "research/audits/BKLPermutationAudit.lean": "research/audits/BKL/PermutationAudit.lean",
+    "research/audits/BKLRegularLawAudit.lean": "research/audits/BKL/RegularLawAudit.lean",
+    "research/audits/BKLSuspensionAudit.lean": "research/audits/BKL/SuspensionAudit.lean",
+    "research/audits/BKLTaylorCriterionAudit.lean": "research/audits/BKL/TaylorCriterionAudit.lean",
+    "research/audits/BKLThirdCumulantWitnessAudit.lean": "research/audits/BKL/ThirdCumulantWitnessAudit.lean",
+    "research/audits/BKLWeakHessianAudit.lean": "research/audits/BKL/WeakHessianAudit.lean"
+  }
+}

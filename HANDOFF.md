@@ -38,14 +38,14 @@ authorization. Exact results, scopes and certificates are in the
   - Infrastructure: symmetry of iterated derivatives of `C^∞` maps (Mathlib has it only for analytic
     maps), the Leibniz rule with a linear factor, Hilbert–Schmidt coefficient arrays of multilinear
     maps (`Analysis/Tensor/{Multilinear,Coefficients}.lean`).
-  - Audit client `research/audits/BKLFoundationsAudit.lean` (nonvacuity on the constructed Gaussian,
+  - Audit client `research/audits/BKL/FoundationsAudit.lean` (nonvacuity on the constructed Gaussian,
     nonzero tensors, `d = 0`, `n = 0`). No paper is newly covered.
 - **Committed (2026-10-07 four-hour block, on top of the above):** evidence in
   `build/reviews/2026-10-07-bkl-four-hour/` ([dated log](research/decisions/2026-10-07-bkl-four-hour.md)).
   - Lemma 4.2 conditionally on the Letwin bound (`LetwinQuadraticBound`, an explicit premise) for
     centered isotropic laws with all exponential moments, relation partial
     (`Analysis/BakryEmery/Cumulant.lean`); the uniform law on `[−√3, √3]` and a skewed two-point law
-    (`κ₃ = 3/2`) discharge every premise (`research/audits/BKLThirdCumulantWitnessAudit.lean`).
+    (`κ₃ = 3/2`) discharge every premise (`research/audits/BKL/ThirdCumulantWitnessAudit.lean`).
   - Regular potentials (12): `KLS.RegularPotential` derives the probability normalization, Gaussian
     tails, all exponential moments and growth of `∇V`; the tensor Lemma 3.6, curvature form of (16) and
     Lemma 2.1 (operator domain, `C = 1/a`, also componentwise) hold for regular laws
@@ -61,7 +61,7 @@ authorization. Exact results, scopes and certificates are in the
     `A[f] = [−ℒf]`, so a centered temperate solution is the operator-domain inverse; Poincaré on `𝒜`,
     `‖∇h‖² ≤ C‖ℒh‖²`, the source's (32), and Lemmas 3.2 and 3.3 (`q = 2`) with the bound `C χ` for
     supplied pairs, `C ≥ C_P` (`KLS/LogConcave/HeatSemigroup/Temperate.lean`).
-  - Audit client `research/audits/BKLRegularLawAudit.lean` (the scaled Gaussian as a regular
+  - Audit client `research/audits/BKL/RegularLawAudit.lean` (the scaled Gaussian as a regular
     potential; consumers of every new endpoint, including a sharp instance of the `p₁` bound).
 
 ## Next
@@ -71,25 +71,24 @@ authorization. Exact results, scopes and certificates are in the
 2. **Current focus: the BKL formalization. Theorem 3.1 is certified**
    (`thm:bkl-taylor-criterion`, `solutions/ThmBklTaylorCriterion.lean`,
    uncommitted; block record `build/reviews/2026-10-07-bkl-operator-route/`): the exact source statement,
-   proved by the operator route (iterates in `D(A)`, `KLS/LogConcave/HeatSemigroup/PoissonIterate/`;
+   proved by the operator route (iterates in `D(A)`, `KLS/BKL/PoissonIterate/`;
    approximate eigenfunction). Next for Theorem 1.1: Theorem 4.1 (Eldan localization; stochastic
    calculus decision below), Proposition 7.1 (suspension), the regular approximation; the Letwin theorem
    stays an explicit dependency of Lemma 4.2. Nonvacuity: dimension 0 and the standard Gaussian on `ℝ¹`
-   (R = 8, `KLS/LogConcave/GaussianTaylor.lean`).
+   (R = 8, `KLS/BKL/GaussianTaylor.lean`).
    The next proof target is Proposition 7.1: equations (109)–(110), continuity and convexity of the
    suspension potential and the positive finite copy number, are now formalized in
-   `KLS/LogConcave/Suspension.lean`; the next missing interfaces are the joint-law identification,
+   `KLS/BKL/Suspension.lean`; the next missing interfaces are the joint-law identification,
    isotropy and (111)–(112). Proposition 7.1 remains partial. See
    [the suspension record](research/decisions/2026-10-07-bkl-suspension.md).
-3. Owner decision recorded below: per-paper folders after this block.
+3. Per-paper folders are in place (see "Recent layout"); new BKL modules go to `KLS/BKL/` and BKL audits
+   to `research/audits/BKL/`.
 
-## Decided, pending execution
+## Recent layout
 
-- Per-paper folders (owner, 2026-10-07): after the current BKL block, move audit clients and route
-  statements to `research/audits/{BKL,Letwin,SongZhang}/` and paper-specific library modules (the
-  BKL Poisson iterates, Lemmas 3.2–3.9, Theorem 3.1) to a per-paper folder such as `KLS/BKL/`;
-  generic tools stay in their object families. Amend `research/naming.md` rule 5 and record a
-  module map; path-only migration with full verification.
+- Per-paper folders (owner, 2026-10-07): BKL-specific modules in `KLS/BKL/`, BKL audit clients in
+  `research/audits/BKL/` ([record](research/decisions/2026-10-07-per-paper-folders.md)); `TensorEnergy`
+  stays until the BKL part of `HeatSemigroup/Temperate.lean` is split off.
 
 ## Open owner decisions
 

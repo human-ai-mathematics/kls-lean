@@ -1,4 +1,4 @@
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.PoissonIterate.Permutation
+import FunctionalInequalities.KLS.BKL.PoissonIterate.Permutation
 
 /-!
 # Audit: the permutation bound (44) of BKL Lemma 3.3
@@ -7,7 +7,7 @@ Bizeul–Klartag–Lehec (arXiv:2610.05474v1), Lemma 3.3, p. 12–13, (44): for 
 field `u` with `k` indices, `‖u - S_q u‖² ≤ q⁴ Σ_{ℓ+1<q} ‖u - τ_ℓ u‖²`, where `S_q` averages over
 the permutations of the first `q` index positions and `τ_ℓ` swaps positions `ℓ` and `ℓ + 1`.
 The library theorem is `normSq_sub_symField_le` of
-`KLS/LogConcave/HeatSemigroup/PoissonIterate/Permutation.lean`; this client restates it and
+`KLS/BKL/PoissonIterate/Permutation.lean`; this client restates it and
 specializes it to `k = q = 2`, where the only adjacent transposition is `swap 0 1`.
 
 This is a supporting combinatorial lemma; it does not prove Lemma 3.3 or Theorem 3.1.

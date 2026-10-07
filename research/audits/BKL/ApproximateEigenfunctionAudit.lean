@@ -4,7 +4,7 @@ import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.ApproximateEigenfunct
 /-!
 # Audit: approximate eigenvectors of `T†T` and approximate first eigenfunctions (BKL route, O1–O2)
 
-The obligations `O1` and `O2` of `research/audits/BKLOperatorRouteStatements.lean` (operator route
+The obligations `O1` and `O2` of `research/audits/BKL/OperatorRouteStatements.lean` (operator route
 to Bizeul–Klartag–Lehec, arXiv:2610.05474v1, Theorem 3.1; see
 `research/decisions/2026-10-07-bkl-operator-route.md`) are restated **verbatim** and proved from
 the library:

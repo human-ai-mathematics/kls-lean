@@ -1,4 +1,4 @@
-import FunctionalInequalities.KLS.LogConcave.GaussianTaylor
+import FunctionalInequalities.KLS.BKL.GaussianTaylor
 
 /-!
 # Lean certificate: `thm:bkl-taylor-criterion`

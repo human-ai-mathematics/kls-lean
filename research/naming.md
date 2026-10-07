@@ -194,6 +194,16 @@ map so old references remain resolvable.
 Existing directories based on namespace or domain rather than family are exceptions to rule 5
 and remain unchanged: `Poincare/Euclidean/`, `Poincare/FiniteProduct/`, `Poincare/LipschitzGradient/`.
 
+**Per-paper folders (owner decision 2026-10-07, amendment to rule 5).** Constructions that only
+make sense for one paper's proof — its iterates, its numbered lemmas stated for those objects, its
+main-theorem assembly and witnesses — live in a per-paper library folder under `KLS/` (currently
+`KLS/BKL/`), and that paper's audit clients and route statements in `research/audits/<Paper>/`
+(currently `research/audits/BKL/`, with the paper prefix dropped from filenames). Generic tools
+used by a paper (Bochner, tilts, tensors, semigroups, summation lemmas, the heat-model generator)
+stay in their object families, and an object-family module must never import a per-paper module.
+Folders for other papers (Letwin, Song–Zhang) are created only with their first module. File moves
+keep namespaces; see the [per-paper map](api-migration/2026-10-07-per-paper-folders-map.json).
+
 Directories group files without changing mathematical identity. Pure file moves preserve every
 existing namespace, including `FunctionalInequalities.Analysis` and its object subnamespaces;
 do not flatten them or rename solely because a directory changes. Namespace/public-name changes

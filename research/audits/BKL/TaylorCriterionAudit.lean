@@ -1,12 +1,12 @@
-import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.PoissonIterate.Criterion
+import FunctionalInequalities.KLS.BKL.PoissonIterate.Criterion
 
 /-!
 # Audit: BKL Theorem 3.1 for regular laws (route statement `M`)
 
 Operator route to Bizeul–Klartag–Lehec (arXiv:2610.05474v1), Theorem 3.1 (p. 10, proof p. 17);
 decision record `research/decisions/2026-10-07-bkl-operator-route.md`; route statements
-`research/audits/BKLIterateRouteStatements.lean`. Restated and discharged by the library theorems
-of `KLS/LogConcave/HeatSemigroup/PoissonIterate/Criterion.lean`:
+`research/audits/BKL/IterateRouteStatements.lean`. Restated and discharged by the library theorems
+of `KLS/BKL/PoissonIterate/Criterion.lean`:
 
 * `m`: the route statement `M`, **verbatim**: there is a universal `K` such that every centered
   regular law on `ℝⁿ` with `Cov ≤ Id` satisfying the Taylor bound (29) with `R ≥ 1` has
