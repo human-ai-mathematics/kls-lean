@@ -1,4 +1,5 @@
 import FunctionalInequalities.Analysis.BakryEmery.Tilt.SquareIntegrable
+import FunctionalInequalities.Analysis.BakryEmery.Tilt.Local
 
 /-!
 # The logarithmic Laplace transform and cumulant tensors
@@ -163,6 +164,91 @@ theorem tiltAverage_inner_eq_fderiv_logLaplace (μ : Measure E) [IsFiniteMeasure
   congr 1
   funext x
   ring
+
+omit [CompleteSpace E] in
+/-- **Local tilt-average/derivative identity**: `F_{⟪v,·⟫}(z) = ∂_v Λ_μ(z)` for `‖z‖ < r`, assuming
+only the single exponential moment `∫ e^{r‖x‖} dμ < ∞` (Luna, task R4b2). -/
+theorem tiltAverage_inner_eq_fderiv_logLaplace_of_lt (μ : Measure E) [IsFiniteMeasure μ] [NeZero μ]
+    {r : ℝ} (hexp : Integrable (fun x => Real.exp (r * ‖x‖)) μ) {z : E} (hz : ‖z‖ < r) (v : E) :
+    tiltAverage μ (fun x => ⟪v, x⟫) z = fderiv ℝ (logLaplace μ) z v := by
+      let g : E → ℝ := fun _ => 1
+      have hg : AEStronglyMeasurable g μ := by
+        exact aestronglyMeasurable_const
+      have hr : 0 ≤ r := by
+        linarith [norm_nonneg z]
+      have hgi :
+          ∀ t < r, Integrable (fun x => Real.exp (t * ‖x‖) * ‖g x‖) μ := by
+        intro t ht
+        apply hexp.mono' (by fun_prop)
+        filter_upwards with x
+        simp only [g, norm_one, mul_one]
+        rw [Real.norm_eq_abs, abs_of_pos (Real.exp_pos _)]
+        by_cases h : 0 ≤ t
+        · apply Real.exp_le_exp.mpr
+          exact mul_le_mul_of_nonneg_right (le_of_lt ht) (norm_nonneg x)
+        · have htx : t * ‖x‖ ≤ 0 :=
+            mul_nonpos_of_nonpos_of_nonneg (le_of_not_ge h) (norm_nonneg x)
+          have hzero : 0 ≤ r * ‖x‖ :=
+            mul_nonneg hr (norm_nonneg x)
+          calc
+            Real.exp (t * ‖x‖) ≤ 1 := by
+              simpa using Real.exp_le_one_iff.mpr htx
+            _ ≤ Real.exp (r * ‖x‖) := by
+              simpa using Real.one_le_exp_iff.mpr hzero
+      have hd := weightedExp_integral_hasFDerivAt_of_lt
+        (μ := μ) hg hgi hz
+      have hd' :
+          HasFDerivAt
+            (fun w : E => ∫ x, Real.exp ⟪w, x⟫ ∂μ)
+            (∫ x, Real.exp ⟪z, x⟫ • weightedExpD g x ∂μ) z := by
+        simpa [g, smul_eq_mul, mul_one] using hd
+      have hi : Integrable (fun x => Real.exp ⟪z, x⟫) μ := by
+        apply hexp.mono' (by fun_prop)
+        filter_upwards with x
+        rw [Real.norm_eq_abs, abs_of_pos (Real.exp_pos _)]
+        apply Real.exp_le_exp.mpr
+        calc
+          ⟪z, x⟫ ≤ ‖z‖ * ‖x‖ := real_inner_le_norm z x
+          _ ≤ r * ‖x‖ := by
+            exact mul_le_mul_of_nonneg_right hz.le (norm_nonneg x)
+      have hp : 0 < ∫ x, Real.exp ⟪z, x⟫ ∂μ :=
+        integral_exp_pos hi
+      have hlog := hd'.log hp.ne'
+      change
+        tiltAverage μ (fun x => ⟪v, x⟫) z =
+          (fderiv ℝ (fun w : E => Real.log (∫ x, Real.exp ⟪w, x⟫ ∂μ)) z) v
+      rw [hlog.fderiv]
+      have hwd :
+          Integrable
+            (fun x =>
+              Real.exp (‖z‖ * ‖x‖) * ‖weightedExpD g x‖) μ :=
+        (weightedExpD_integrable_lt (μ := μ) hg hgi) ‖z‖ hz
+      have hwi :
+          Integrable
+            (fun x => Real.exp ⟪z, x⟫ • weightedExpD g x) μ := by
+        refine hwd.mono' ?_ ?_
+        · change AEStronglyMeasurable
+            (fun x => Real.exp ⟪z, x⟫ •
+              (innerSL ℝ x).smulRight (1 : ℝ)) μ
+          fun_prop
+        · filter_upwards with x
+          rw [norm_smul, Real.norm_eq_abs, abs_of_pos (Real.exp_pos _)]
+          exact
+            mul_le_mul_of_nonneg_right
+              (Real.exp_le_exp.mpr (real_inner_le_norm z x))
+              (norm_nonneg (weightedExpD g x))
+      unfold tiltAverage expTilt
+      rw [integral_tilted]
+      conv_rhs =>
+        rw [smul_apply]
+      rw [ContinuousLinearMap.integral_apply hwi]
+      simp_rw [smul_eq_mul, div_eq_mul_inv]
+      rw [← integral_const_mul]
+      congr 1
+      funext x
+      simp [g, weightedExpD, ContinuousLinearMap.smulRight_apply, innerSL_apply_apply,
+        smul_eq_mul, real_inner_comm]
+      ring
 
 omit [CompleteSpace E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] in
 private lemma bkl_cumulant_swap_front {F : Type*} [NormedAddCommGroup F]
@@ -567,5 +653,183 @@ theorem sum_sq_cumulant_three_le_of_letwin (hc : ∀ v : E, ∫ x, ⟪v, x⟫ �
   linarith
 
 end ThirdCumulant
+
+
+omit [CompleteSpace E] in
+/-- **Linear step of BKL Proposition 7.1** (p. 30): under the cumulant bound `R^μ_{d+1} ≤ b Id` in
+coordinates, `Σ_J κ_{d+1}(u, e_J)² ≤ b |u|²`, the Taylor tensor of `ℓ = ⟪v, ·⟫` satisfies
+`|T_d ℓ|² ≤ b |v|² / (d!)²` in the Hilbert–Schmidt norm, by `T_d ℓ = κ_{d+1}(v, ·, …, ·) / d!`. -/
+theorem norm_coordTensor_taylorTensor_inner_sq_le (μ : Measure E) [IsProbabilityMeasure μ]
+    (hexp : ∀ r : ℝ, Integrable (fun x => Real.exp (r * ‖x‖)) μ) {d : ℕ} {b : ℝ}
+    (hR : ∀ u : E, ∑ J : Fin d → Fin (Module.finrank ℝ E),
+      cumulant μ (d + 1) (Fin.cons u fun k => stdOrthonormalBasis ℝ E (J k)) ^ 2 ≤ b * ‖u‖ ^ 2)
+    (v : E) :
+    ‖Analysis.Tensor.coordTensor (stdOrthonormalBasis ℝ E) (taylorTensor μ (fun x => ⟪v, x⟫) d)‖ ^ 2 ≤
+      b / (d.factorial : ℝ) ^ 2 * ‖v‖ ^ 2 := by
+    have hcoord :
+        ∀ J : Fin d → Fin (Module.finrank ℝ E),
+          (Analysis.Tensor.coordTensor (stdOrthonormalBasis ℝ E)
+              (taylorTensor μ (fun x => ⟪v, x⟫) d)).ofLp J =
+            (d.factorial : ℝ)⁻¹ *
+              cumulant μ (d + 1)
+                (Fin.cons v (fun k => stdOrthonormalBasis ℝ E (J k))) := by
+      intro J
+      simp [Analysis.Tensor.coordTensor_apply, taylorTensor_inner_eq_cumulant, hexp]
+    rw [EuclideanSpace.norm_sq_eq]
+    calc
+      ∑ J : Fin d → Fin (Module.finrank ℝ E),
+          ‖(Analysis.Tensor.coordTensor (stdOrthonormalBasis ℝ E)
+              (taylorTensor μ (fun x => ⟪v, x⟫) d)).ofLp J‖ ^ 2 =
+        ((d.factorial : ℝ)⁻¹) ^ 2 *
+          ∑ J : Fin d → Fin (Module.finrank ℝ E),
+            cumulant μ (d + 1)
+              (Fin.cons v (fun k => stdOrthonormalBasis ℝ E (J k))) ^ 2 := by
+        rw [Finset.mul_sum]
+        apply Finset.sum_congr rfl
+        intro J hJ
+        rw [hcoord J, norm_mul]
+        simp [Real.norm_eq_abs, sq_abs, mul_pow]
+      _ ≤ ((d.factorial : ℝ)⁻¹) ^ 2 * (b * ‖v‖ ^ 2) := by
+        exact mul_le_mul_of_nonneg_left (hR v) (sq_nonneg _)
+      _ = b / (d.factorial : ℝ) ^ 2 * ‖v‖ ^ 2 := by
+        simp [div_eq_mul_inv, inv_pow]
+        ring
+
+
+omit [CompleteSpace E] in
+/-- **Linear-function step in an arbitrary orthonormal basis** (BKL p. 30): the special case
+`norm_coordTensor_taylorTensor_inner_sq_le` with `stdOrthonormalBasis ℝ E` replaced by any orthonormal
+basis `bE` (Luna, task B3g). -/
+theorem norm_coordTensor_taylorTensor_inner_sq_le_of_basis (μ : Measure E) [IsProbabilityMeasure μ]
+    (hexp : ∀ r : ℝ, Integrable (fun x => Real.exp (r * ‖x‖)) μ) {m : ℕ}
+    (bE : OrthonormalBasis (Fin m) ℝ E) {d : ℕ} {b : ℝ}
+    (hR : ∀ u : E, ∑ J : Fin d → Fin m,
+      cumulant μ (d + 1) (Fin.cons u fun k => bE (J k)) ^ 2 ≤ b * ‖u‖ ^ 2) (v : E) :
+    ‖Analysis.Tensor.coordTensor bE (taylorTensor μ (fun x => ⟪v, x⟫) d)‖ ^ 2 ≤
+      b / (d.factorial : ℝ) ^ 2 * ‖v‖ ^ 2 := by
+    have hcoord :
+        ∀ J : Fin d → Fin m,
+          (Analysis.Tensor.coordTensor (bE)
+              (taylorTensor μ (fun x => ⟪v, x⟫) d)).ofLp J =
+            (d.factorial : ℝ)⁻¹ *
+              cumulant μ (d + 1)
+                (Fin.cons v (fun k => bE (J k))) := by
+      intro J
+      simp [Analysis.Tensor.coordTensor_apply, taylorTensor_inner_eq_cumulant, hexp]
+    rw [EuclideanSpace.norm_sq_eq]
+    calc
+      ∑ J : Fin d → Fin m,
+          ‖(Analysis.Tensor.coordTensor (bE)
+              (taylorTensor μ (fun x => ⟪v, x⟫) d)).ofLp J‖ ^ 2 =
+        ((d.factorial : ℝ)⁻¹) ^ 2 *
+          ∑ J : Fin d → Fin m,
+            cumulant μ (d + 1)
+              (Fin.cons v (fun k => bE (J k))) ^ 2 := by
+        rw [Finset.mul_sum]
+        apply Finset.sum_congr rfl
+        intro J hJ
+        rw [hcoord J, norm_mul]
+        simp [Real.norm_eq_abs, sq_abs, mul_pow]
+      _ ≤ ((d.factorial : ℝ)⁻¹) ^ 2 * (b * ‖v‖ ^ 2) := by
+        exact mul_le_mul_of_nonneg_left (hR v) (sq_nonneg _)
+      _ = b / (d.factorial : ℝ) ^ 2 * ‖v‖ ^ 2 := by
+        simp [div_eq_mul_inv, inv_pow]
+        ring
+
+open scoped ContDiff in
+omit [CompleteSpace E] in
+/-- **Local smoothness of `Λ_μ`** (BKL p. 29, "finite and smooth in a neighborhood of the origin"):
+one positive norm-exponential moment `∫ e^{r‖x‖} dμ < ∞` makes `Λ_μ` `C^∞` on the open ball of
+radius `r`. Provenance: Codex wrapper over the Luna local bodies in `Tilt/Local.lean`. -/
+theorem contDiffOn_logLaplace_ball (μ : Measure E) [IsFiniteMeasure μ] [NeZero μ] {r : ℝ}
+    (hr : 0 < r) (hexp : Integrable (fun x => Real.exp (r * ‖x‖)) μ) :
+    ContDiffOn ℝ ∞ (logLaplace μ) (Metric.ball 0 r) := by
+  have hgi : ∀ t < r,
+      Integrable (fun x : E => Real.exp (t * ‖x‖) * ‖(1 : ℝ)‖) μ := by
+    intro t ht
+    refine hexp.mono' ?_ ?_
+    · fun_prop
+    · filter_upwards [] with x
+      simp only [norm_one, mul_one, Real.norm_of_nonneg (Real.exp_pos _).le]
+      by_cases ht0 : 0 ≤ t
+      · exact Real.exp_le_exp.mpr (mul_le_mul_of_nonneg_right ht.le (norm_nonneg x))
+      · calc
+          Real.exp (t * ‖x‖) ≤ 1 := Real.exp_le_one_iff.mpr
+            (mul_nonpos_of_nonpos_of_nonneg (le_of_not_ge ht0) (norm_nonneg x))
+          _ ≤ Real.exp (r * ‖x‖) := Real.one_le_exp_iff.mpr
+            (mul_nonneg hr.le (norm_nonneg x))
+  have hZ : ContDiffOn ℝ ∞ (fun z : E => ∫ x, Real.exp ⟪z, x⟫ ∂μ)
+      (Metric.ball 0 r) := by
+    simpa only [smul_eq_mul, mul_one] using
+      weighted_integral_contDiffOn μ measurable_const.aestronglyMeasurable hgi
+  apply hZ.log
+  intro z hz
+  have hz' : ‖z‖ < r := by simpa using hz
+  have hzint : Integrable (fun x : E => Real.exp ⟪z, x⟫) μ := by
+    refine (hgi ‖z‖ hz').mono' ?_ ?_
+    · exact (by fun_prop : Continuous (fun x : E => Real.exp ⟪z, x⟫)).aestronglyMeasurable
+    · filter_upwards [] with x
+      simp only [norm_one, mul_one, Real.norm_of_nonneg (Real.exp_pos _).le]
+      exact Real.exp_le_exp.mpr (real_inner_le_norm z x)
+  exact (integral_exp_pos hzint).ne'
+
+
+/-- Iterated derivatives of a composition with a continuous linear equivalence. -/
+private theorem equiv_iteratedFDeriv_univ {E F G : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [NormedAddCommGroup F] [NormedSpace ℝ F] [NormedAddCommGroup G] [NormedSpace ℝ G]
+    (g : G ≃L[ℝ] E) (f : E → F) (x : G) (i : ℕ) :
+    iteratedFDeriv ℝ i (f ∘ g) x =
+      (iteratedFDeriv ℝ i f (g x)).compContinuousLinearMap
+        (fun _ => (g : G →L[ℝ] E)) := by
+  simpa only [Set.preimage_univ, iteratedFDerivWithin_univ] using
+    g.iteratedFDerivWithin_comp_right f uniqueDiffOn_univ
+      (Set.mem_univ (g x)) i
+
+/-- **Cumulants along a linear isometry**: `κ^{φ_*ν}_k(φ u₁, …, φ u_k) = κ^ν_k(u₁, …, u_k)` for
+every measure `ν`, since `Λ_{φ_*ν} = Λ_ν ∘ φ⁻¹` pointwise (Luna, task T1b). -/
+theorem cumulant_map_linearIsometryEquiv {E F : Type*} [NormedAddCommGroup E]
+    [InnerProductSpace ℝ E] [CompleteSpace E] [FiniteDimensional ℝ E] [MeasurableSpace E]
+    [BorelSpace E] [NormedAddCommGroup F] [InnerProductSpace ℝ F] [CompleteSpace F]
+    [FiniteDimensional ℝ F] [MeasurableSpace F] [BorelSpace F]
+    (φ : E ≃ₗᵢ[ℝ] F) (ν : Measure E) (k : ℕ) (u : Fin k → E) :
+    cumulant (ν.map φ) k (fun i => φ (u i)) = cumulant ν k u := by
+    have hlog :
+        logLaplace (ν.map φ) = logLaplace ν ∘ (φ.symm : F → E) := by
+      funext z
+      simp only [logLaplace, Function.comp_apply]
+      let hcont : Continuous (fun y : F => Real.exp ⟪z, y⟫) :=
+        Real.continuous_exp.comp (continuous_const.inner continuous_id)
+      have hz :
+          AEStronglyMeasurable (fun y : F => Real.exp ⟪z, y⟫) (ν.map φ) :=
+        hcont.aestronglyMeasurable
+      have hmap :
+          (∫ y : F, Real.exp ⟪z, y⟫ ∂(ν.map φ)) =
+            ∫ x : E, Real.exp ⟪z, φ x⟫ ∂ν := by
+        rw [integral_map φ.continuous.measurable.aemeasurable hz]
+      have hinner :
+          (∫ x : E, Real.exp ⟪z, φ x⟫ ∂ν) =
+            ∫ x : E, Real.exp ⟪φ.symm z, x⟫ ∂ν := by
+        apply integral_congr_ae
+        filter_upwards [] with x
+        have hx : ⟪z, φ x⟫ = ⟪φ.symm z, x⟫ := by
+          simpa using (φ.symm.inner_map_map z (φ x)).symm
+        rw [hx]
+      rw [hmap, hinner]
+
+    change
+      (iteratedFDeriv ℝ k (logLaplace (ν.map φ)) 0)
+          (fun i => φ (u i)) =
+        (iteratedFDeriv ℝ k (logLaplace ν) 0) u
+    rw [hlog]
+    have hderiv :
+        iteratedFDeriv ℝ k (logLaplace ν ∘ (φ.symm : F → E)) 0 =
+          (iteratedFDeriv ℝ k (logLaplace ν) 0).compContinuousLinearMap
+            (fun _ => (φ.symm.toContinuousLinearEquiv : F →L[ℝ] E)) := by
+      simpa using
+        (equiv_iteratedFDeriv_univ
+          (g := φ.symm.toContinuousLinearEquiv) (f := logLaplace ν)
+          (x := (0 : F)) (i := k))
+    rw [hderiv]
+    simp [ContinuousMultilinearMap.compContinuousLinearMap_apply]
 
 end FunctionalInequalities.Analysis.BakryEmery

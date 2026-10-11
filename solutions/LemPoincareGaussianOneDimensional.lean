@@ -8,9 +8,9 @@ named certificate and retains checks of the supporting interfaces and concrete a
 The imported mathematical declarations are fully proved and proof-placeholder-free.
 
 Source: the one-dimensional Poincaré component of the
-[Gaussian covariance family](https://github.com/numina-functional-inequalities/kls-exploration/blob/cd4a894a0faf40c0180f80b1a31eec1fdb6cb576/modules/03-tier1-gaussian.tex#L10-L37).
+[Gaussian covariance family](https://github.com/human-ai-mathematics/kls-conjecture-search/blob/cd4a894a0faf40c0180f80b1a31eec1fdb6cb576/modules/03-tier1-gaussian.tex#L10-L37).
 The unchanged normalization comes from
-[Definition 2.1](https://github.com/numina-functional-inequalities/kls-exploration/blob/cd4a894a0faf40c0180f80b1a31eec1fdb6cb576/modules/01-definitions.tex#L17-L25).
+[Definition 2.1](https://github.com/human-ai-mathematics/kls-conjecture-search/blob/cd4a894a0faf40c0180f80b1a31eec1fdb6cb576/modules/01-definitions.tex#L17-L25).
 Arbitrary means, zero variance, the smooth L² finite-energy domain and the direct density
 proof route are explicit local specifications. Each library declaration records its own source.
 

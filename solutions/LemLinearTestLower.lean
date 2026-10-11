@@ -5,10 +5,10 @@ import FunctionalInequalities.Poincare.SmoothTest.Linear
 
 Source: the Poincaré lower-bound part of Remark 3.8 in the combined manuscript at commit
 `cd4a894a0faf40c0180f80b1a31eec1fdb6cb576`:
-https://github.com/numina-functional-inequalities/kls-exploration/blob/cd4a894a0faf40c0180f80b1a31eec1fdb6cb576/modules/02-results-toolkit.tex#L108-L117
+https://github.com/human-ai-mathematics/kls-conjecture-search/blob/cd4a894a0faf40c0180f80b1a31eec1fdb6cb576/modules/02-results-toolkit.tex#L108-L117
 The accompanying linear-baseline dossier states the finite-covariance setting and computes the
 variance and gradient energy of linear tests:
-https://github.com/numina-functional-inequalities/kls-exploration/blob/cd4a894a0faf40c0180f80b1a31eec1fdb6cb576/solutions/glm-linear-baselines.tex#L39-L68
+https://github.com/human-ai-mathematics/kls-conjecture-search/blob/cd4a894a0faf40c0180f80b1a31eec1fdb6cb576/solutions/glm-linear-baselines.tex#L39-L68
 
 This certificate combines the admissible-test Rayleigh lower bound and the covariance lower
 bound on `ℝ^D`. The explicit `MemLp id 2 μ` premise, the zero-dimensional convention, and the

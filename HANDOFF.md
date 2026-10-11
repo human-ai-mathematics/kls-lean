@@ -1,109 +1,47 @@
 # Current KLS handoff
 
-Updated 2026-10-07. This file holds the current state only; earlier versions are preserved in the
-[handoff history](research/decisions/2026-10-07-handoff-history.md) and
-[earlier history](research/decisions/2026-10-02-handoff-history.md), and are not current task
-authorization. Exact results, scopes and certificates are in the
-[paper register](research/progress/LITERATURE.md) and the [node register](research/progress/STATUS.md).
+Updated 2026-10-12. This file records the current state only. Earlier wording and detailed execution history are preserved verbatim in the [handoff baseline archive](research/decisions/2026-10-11-file-management-handoff-baseline.md). Dated records are historical context, not current task authorization. Exact theorem scopes, certificates and coverage remain in the [paper register](research/progress/LITERATURE.md) and [node register](research/progress/STATUS.md).
 
 ## State
 
-- `origin/main` = `ca59365` (path-only family-directory move, on top of the two 2026-10-07 BKL commits
-  and `36e7c78`, BGL ergodicity and the BGL Corollary 4.8.2 certificate). Local `main` = `b401a9f`
-  (step 1 of the BKL operator route, unpushed); the Theorem 3.1 block is staged on top, uncommitted.
-  Remote Lean certification passed for `36e7c78` only
-  ([run 37516844384](https://github.com/numina-functional-inequalities/kls-lean/actions/runs/37516844384),
-  2026-10-07); later commits are verified locally (receipts in the block evidence), not remotely.
-- 29 ledger certificates (the 29th, `thm:bkl-taylor-criterion` = BKL Theorem 3.1, from the uncommitted
-  2026-10-07 eight-hour block). `FunctionalInequalities.KLS.kls` in `KLS/Target.lean` is the one
-  intentional hole, outside every certificate closure. Dimension-free KLS is open.
-- Covered papers: Ambrosio–Di Marino–Gigli Theorem 3.6 (`thm:relaxed-minkowski-content-perimeter`)
-  and Bakry–Gentil–Ledoux 2014 Corollary 4.8.2 (`thm:bakry-emery-poincare`, relation `⇑`, that
-  corollary only).
-- **Committed (2026-10-07 eight-hour block):** first dependencies of
-  Bizeul–Klartag–Lehec, arXiv:2610.05474v1 (pinned PDF SHA-256 `86824722…bb0db`). Execution record,
-  worker provenance, Codex reviews and the final report:
-  `build/reviews/2026-10-07-bkl-eight-hour/` ([dated log](research/decisions/2026-10-07-bkl-foundations.md)).
-  - Lemma 2.2 (partial tensor symmetrization, `4^d`) in the source form:
-    `Analysis/Tensor/{Symmetrization,Coordinate}.lean`.
-  - Lemma 3.6 for scalar and tensor-valued `u ∈ 𝒜` (Mathlib `HasTemperateGrowth`) and Corollary 3.7
-    (for every pair satisfying the relation (30)), both in reviewed stronger forms (relation `⇑`):
-    `Analysis/BakryEmery/Tilt/{Basic,Temperate,Tensor}.lean`.
-  - (15) and (16) on `𝒜` for scalar and tensor fields, with the curvature form used in Lemma 3.4
-    (`Analysis/BakryEmery/{IntegrationByParts,Bochner}/Temperate.lean`, `Analysis/BakryEmery/Bochner/Tensor.lean`), and (48) (all `⇑`).
-  - Restricted counterparts: Lemma 2.1, operator-domain inverse in the heat model
-    (`Analysis/Semigroup/Generated/Inverse.lean`, `KLS/LogConcave/HeatSemigroup/Inverse.lean`); steps of
-    Proposition 7.1 (linear functions; continuity of `T_d` on `L²`, also in the Hilbert–Schmidt norm)
-    (`Analysis/BakryEmery/Cumulant.lean`, `Analysis/BakryEmery/Tilt/SquareIntegrable.lean`).
-  - Infrastructure: symmetry of iterated derivatives of `C^∞` maps (Mathlib has it only for analytic
-    maps), the Leibniz rule with a linear factor, Hilbert–Schmidt coefficient arrays of multilinear
-    maps (`Analysis/Tensor/{Multilinear,Coefficients}.lean`).
-  - Audit client `research/audits/BKL/FoundationsAudit.lean` (nonvacuity on the constructed Gaussian,
-    nonzero tensors, `d = 0`, `n = 0`). No paper is newly covered.
-- **Committed (2026-10-07 four-hour block, on top of the above):** evidence in
-  `build/reviews/2026-10-07-bkl-four-hour/` ([dated log](research/decisions/2026-10-07-bkl-four-hour.md)).
-  - Lemma 4.2 conditionally on the Letwin bound (`LetwinQuadraticBound`, an explicit premise) for
-    centered isotropic laws with all exponential moments, relation partial
-    (`Analysis/BakryEmery/Cumulant.lean`); the uniform law on `[−√3, √3]` and a skewed two-point law
-    (`κ₃ = 3/2`) discharge every premise (`research/audits/BKL/ThirdCumulantWitnessAudit.lean`).
-  - Regular potentials (12): `KLS.RegularPotential` derives the probability normalization, Gaussian
-    tails, all exponential moments and growth of `∇V`; the tensor Lemma 3.6, curvature form of (16) and
-    Lemma 2.1 (operator domain, `C = 1/a`, also componentwise) hold for regular laws
-    (`KLS/LogConcave/Regular.lean`).
-  - Lemmas 3.2–3.4 (3.3 for `q = 2` only), Corollary 3.5, (35)–(36) and steps of Lemma 3.9 as
-    partial counterparts for supplied iterates: (39), (46), (47) and (45) for every pair satisfying
-    (30) and (33), summability and `v_N → 0` for sequences of tensor iterates, the energy drops
-    `v_i − v_{i+1} = ‖∫∇h_i‖²`, the near-symmetric gradient under `α² ≥ λ > 0`, (61), and
-    `p₁ ≤ λ²K` for a centered eigenfunction (`Analysis/BakryEmery/TensorEnergy.lean`).
-  - Lemma 2.1, componentwise tensor lift (operator domain) with Parseval in `L²(ν; G)`
-    (`L2/Components.lean`, `KLS/LogConcave/HeatSemigroup/Inverse.lean`).
-  - Lemma 2.1 on `𝒜`, bridge part: temperate functions lie in the generator domain with
-    `A[f] = [−ℒf]`, so a centered temperate solution is the operator-domain inverse; Poincaré on `𝒜`,
-    `‖∇h‖² ≤ C‖ℒh‖²`, the source's (32), and Lemmas 3.2 and 3.3 (`q = 2`) with the bound `C χ` for
-    supplied pairs, `C ≥ C_P` (`KLS/LogConcave/HeatSemigroup/Temperate.lean`).
-  - Audit client `research/audits/BKL/RegularLawAudit.lean` (the scaled Gaussian as a regular
-    potential; consumers of every new endpoint, including a sharp instance of the `p₁` bound).
+- Local `main` is `7c0145c4028687dccc4837f3d46410477c14ebe6`; `origin/main` is `ca59365726bca899f26cdd889dcc62850089eb09`. Work described as uncommitted is in the working tree only: no commit, push, tag, or remote CI has been made for it. Remote Lean certification passed for `36e7c78` only; later work has local evidence only.
+- There are 30 ledger certificates. The 30th is `prop:bkl-suspension` in `solutions/PropBklSuspension.lean`, Bizeul–Klartag–Lehec Proposition 7.1 in source form conditional on `CumulantBound d b`, in all dimensions. The 29th is `thm:bkl-taylor-criterion`. `FunctionalInequalities.KLS.kls` in `KLS/Target.lean` remains the one intentional hole outside every certificate closure. Dimension-free KLS is open.
+- Covered papers remain Ambrosio–Di Marino–Gigli Theorem 3.6 and Bakry–Gentil–Ledoux Corollary 4.8.2 (`⇑`). BKL and Letwin are not covered. BKL Theorem 1.1 is formalized only conditionally on the open Theorem 4.1/Eldan localization bound. Letwin Theorems 1.1–1.2 and the moment-map Stein kernel of an arbitrary law remain open; the Gaussian has the identity kernel.
+- Verification is snapshot-specific. The integrated snapshot, including the 2026-10-11 Letwin A.4/A.5 source integration, is checked by `python3 research/verify.py` only after all proof and metadata edits. `build/verification/latest.json` is valid only while its status is `passed` and its snapshot hash matches the working tree. The full receipt `20261011T125323.381816Z` covers the integrated Stage 2A snapshot before file maintenance; `20261010T093056.948739Z` covers its earlier Stage 1 snapshot. This handoff edit does not create a fresh proof or verification receipt.
+- Still open are the SDE/Itô dynamics, CEK essential continuity, Euler–Lagrange identification and Theorem 2, the regularity bridge (H2), the Letwin moment map, Theorem 2.5, Letwin Theorem 1.2, BKL Theorem 4.1, unconditional BKL Theorem 1.1, and `KLS.kls`.
 
-## Next
+## Current integrated work
 
-1. Owner decision: optional remote Lean certification of the BKL commits (manual dispatch or a
-   `milestone/**` tag); no BKL paper target is covered, so no milestone is due.
-2. **Current focus: the BKL formalization. Theorem 3.1 is certified**
-   (`thm:bkl-taylor-criterion`, `solutions/ThmBklTaylorCriterion.lean`,
-   uncommitted; block record `build/reviews/2026-10-07-bkl-operator-route/`): the exact source statement,
-   proved by the operator route (iterates in `D(A)`, `KLS/BKL/PoissonIterate/`;
-   approximate eigenfunction). Next for Theorem 1.1: Theorem 4.1 (Eldan localization; stochastic
-   calculus decision below), Proposition 7.1 (suspension), the regular approximation; the Letwin theorem
-   stays an explicit dependency of Lemma 4.2. Nonvacuity: dimension 0 and the standard Gaussian on `ℝ¹`
-   (R = 8, `KLS/BKL/GaussianTaylor.lean`).
-   The next proof target is Proposition 7.1: equations (109)–(110), continuity and convexity of the
-   suspension potential and the positive finite copy number, are now formalized in
-   `KLS/BKL/Suspension.lean`; the next missing interfaces are the joint-law identification,
-   isotropy and (111)–(112). Proposition 7.1 remains partial. See
-   [the suspension record](research/decisions/2026-10-07-bkl-suspension.md).
-3. Per-paper folders are in place (see "Recent layout"); new BKL modules go to `KLS/BKL/` and BKL audits
-   to `research/audits/BKL/`.
+The bounded Stage 2A was integrated and verified in receipt `20261011T125323.381816Z`; it is a completed supporting milestone. The subsequent path/filename maintenance requires its own matching full local receipt. It contains Letwin Lemma A.4 for every source-class potential and every real `R ≥ 1`, including the natural-index `C/(n+1)` form; Lemma A.5 for given cutoffs; and the nonconstant uniform-interval source-law client. It does not claim the arbitrary-law moment map, Letwin Theorems 2.5 or 1.1–1.2, BKL Lemma 4.2 without its hypothesis, Theorems 4.1/1.1, or `KLS.kls`.
 
-## Recent layout
+The adopted source integration is represented by the reviewed candidate bundle in `build/reviews/2026-10-11-bkl-a4-goal-setup/claude-w-final-integration-candidate-v1/`, with source SHA-256 prefix `6f70011e`, and by `build/reviews/2026-10-11-bkl-a4-goal-setup/STATE.json`. Its principal owners are `Analysis/Convex/Coercivity.lean`, `Analysis/Cutoff/Conservativity.lean`, `Analysis/BakryEmery/IntegrationByParts/InverseHessianCutoff.lean`, `Analysis/BakryEmery/UniformIntervalPotential.lean`, and `Analysis/BakryEmery/IntegrationByParts/UniformIntervalClient.lean`; the remaining A.4/A.5 declarations stay in their reviewed existing owners.
 
-- Per-paper folders (owner, 2026-10-07): BKL-specific modules in `KLS/BKL/`, BKL audit clients in
-  `research/audits/BKL/` ([record](research/decisions/2026-10-07-per-paper-folders.md)); `TensorEnergy`
-  stays until the BKL part of `HeatSemigroup/Temperate.lean` is split off.
+The adopted scalar cutoff, tail primitive, rescaling/positivity and real-exhaustion supports remain represented by their dated records and current source consumers. The separate [file-management goal](research/handoffs/2026-10-11-file-management-goal.md) reviews the Cutoff and Cumulant families; it does not replace the mathematical controller or advance proof status.
+
+The current mathematical results retain their original scopes. Proposition 7.1 remains conditional on `CumulantBound d b` in all dimensions. The conditional BKL reduction uses `CumulantBound d ((d!)² K^d)` for every `d ≥ 2`, `K ≥ 1`, and gives `C_P ≤ 2·C_{3.1}·K`; the Section 2 Gaussian-smoothing, affine-normalization, weak-limit, posterior-response, cumulant, covariance, and cutoff results retain their existing hypotheses and public declarations. No dimension, constant, theorem status, certificate, API, or coverage claim is widened here.
+
+Letwin Theorem 1.2 is the source of the quadratic-form bound with constant 8. That attribution is not assigned to Theorem 2.5. The current dependency remains A.4 → A.5 → Letwin Theorem 2.5 → Letwin Theorem 1.2, including its constant-8 quadratic-form bound → BKL Lemma 4.2 → Theorem 4.1 → Theorem 1.1. The bound is still an open prerequisite, not a proved result in this handoff.
+
+## Controller and next steps
+
+The current mathematical controller is Codex chat `01a128eb-e254-7d63-bd15-05abfcb7aaec`. The predecessor `01a12708-9c39-7f33-aa23-3b135e6d1de2` is historical. The bounded Stage 2A goal is [the 2026-10-11 BKL A.4 goal](research/handoffs/2026-10-11-bkl-a4-goal.md). Earlier controllers, idle predecessors, and superseded scheduling claims are historical. The authoritative packet handles remain in `build/reviews/2026-10-11-bkl-a4-goal-setup/STATE.json`.
+
+The immediate mathematical next stage is Letwin Theorem 1.2, including the moment-map and regularity work, Proposition 2.8, Theorem 2.5, and the Stein-kernel identity (2.21), without assuming the desired estimate. Later stages are the Eldan localization/SDE/Itô/non-explosion argument, universal Theorem 4.1, unconditional Theorem 1.1, and `KLS.kls`. Existing Theorem 3.1, conditional Proposition 7.1, and the Section 2 reduction remain in scope as already recorded.
+
+Codex coordinates and accepts; strong API models construct candidates; the reviewed Claude conversation remains the production integrator. No new proof, certificate, or coverage status is asserted by this handoff or by the file-management batch.
 
 ## Open owner decisions
 
-- Stochastic calculus for Theorem 4.1 and priorities 5–6: build it here or build on external Lean
-  efforts; evidence and a recommendation are in
-  [the options record](research/decisions/2026-10-03-stochastic-calculus-options.md).
-- E. Milman Lemma 4.1 is recorded as `same`, although the real-infimum quantile differs from the
-  paper's `−∞` in the degenerate case `f = 0`, `1 − ε < 0`; accept the convention or relabel it.
-- Upstreaming generic infrastructure to Mathlib after an API cleanup (the `C^∞` symmetry of
-  iterated derivatives is a candidate).
-- CI cost: project build cache or a self-hosted runner while the repository is private.
+- Decide whether to build stochastic calculus for Theorem 4.1 and priorities 5–6 here or build on external Lean efforts. The evidence and recommendation are in `research/decisions/2026-10-03-stochastic-calculus-options.md`.
+- Decide whether to retain E. Milman Lemma 4.1 as `same`, although the real-infimum quantile differs from the paper's `−∞` in the degenerate case `f = 0`, `1 − ε < 0`, or relabel it.
+- Decide whether to upstream generic infrastructure to Mathlib after API cleanup, including the `C^∞` symmetry of iterated derivatives.
+- Decide the CI strategy: project build cache or a self-hosted runner while the repository is private.
+- Decide whether the external stochastic closure, 339 StochLean modules at pin `e6741e18` and Apache-2.0 per the root audit, is adopted as a vendored separate Lake package or retained as evidence. The relevant records are `build/reviews/2026-10-07-bkl-continuous/reviews/STOCHASTIC-EXTERNAL-REUSE-SCHEME-20261008.md` and `build/reviews/2026-10-07-bkl-continuous/reviews/COEFFICIENT-SDE-MOMENTMAP-PROPOSALS-20261008.md`. The pinned closure has no SDE theorem; the Letwin moment-map producer remains out of reach at that pin and stays an explicit hypothesis.
 
-## Delivery
+## Local maintenance and delivery
 
-Follow [research/workflow.md](research/workflow.md): select work by paper and target theorem,
-run change-appropriate checks, stage canonical metadata and regenerate progress with
-`python3 research/progress/update.py`. Remote CI is Lean-only, on manual dispatch or a
-`milestone/**` tag.
+The separate file-management goal covers reviewed reversible local storage management, inventory and research navigation. Publication, commit/push/tag actions, remote CI, and irrecoverable deletion or other destructive storage actions remain separate matters and are not authorized by this handoff. The inventory tool is read-only with respect to repository artifacts and writes candidates only under ignored `build/` output by default.
+
+Follow [research/workflow.md](research/workflow.md). Stage canonical metadata and regenerate progress views only when proof or metadata work actually requires it. Preserve the broad dirty tree and actual Git index. Remote CI is Lean-only and requires separate owner authorization through manual dispatch or a `milestone/**` tag.
+
+The 2026-10-12 filename map registers the Operator and BKL Suspension families and PosteriorCovariance; the [complete map](research/api-migration/2026-10-12-analysis-bkl-filename-map.json) records every owned declaration. File management retained all evidence paths and handled 1,708 compiled duplicate targets with recoverable COW. Its dynamic acceptance/receipt is in `build/file-management/COMPLETION.json`. After this round, resume the existing strong API proof-construction / reviewed Claude integration workflow; coordinate Claude's LevStochCalc introduction without concurrent canonical writers.

@@ -7,7 +7,10 @@ import Mathlib.MeasureTheory.Measure.Tilted
 # Weighted integration by parts
 
 Haar integration by parts and its tilted-measure specialization. The pointwise
-weighted Laplacian and its regularity are provided by Laplacian.lean; no convexity is used.
+weighted Laplacian and its regularity are provided by Laplacian.lean; no convexity is used. The
+compact-test directional identity `∫ ∂ᵥF · g = −∫ F · ∂ᵥg` for smooth `F`, `g` with either one compactly
+supported derives its integrability from the compact support (Codex route bundle
+`MA-Metric-IntegrationByParts`, independently accepted; statement and placement: Claude).
 -/
 
 noncomputable section
@@ -18,6 +21,53 @@ open scoped ContDiff RealInnerProductSpace
 namespace FunctionalInequalities.Analysis.BakryEmery
 
 universe u
+
+section CompactTest
+
+variable {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E] [FiniteDimensional ℝ E]
+  [MeasurableSpace E] [BorelSpace E]
+
+omit [FiniteDimensional ℝ E] in
+/-- The three directional Haar integration-by-parts integrands are integrable as soon as one of the two
+smooth factors has compact support (normed-space scope; no inner product, no finite dimension). -/
+theorem integrable_fderiv_mul_of_hasCompactSupport (m : Measure E) [m.IsAddHaarMeasure]
+    {F g : E → ℝ} (hF : ContDiff ℝ ∞ F) (hg : ContDiff ℝ ∞ g)
+    (hc : HasCompactSupport F ∨ HasCompactSupport g) (v : E) :
+    Integrable (fun x => fderiv ℝ F x v * g x) m ∧
+      Integrable (fun x => F x * fderiv ℝ g x v) m ∧
+      Integrable (fun x => F x * g x) m := by
+  have hFv : Continuous (fun x => fderiv ℝ F x v) :=
+    (hF.continuous_fderiv (by simp)).clm_apply continuous_const
+  have hgv : Continuous (fun x => fderiv ℝ g x v) :=
+    (hg.continuous_fderiv (by simp)).clm_apply continuous_const
+  have hc1 : HasCompactSupport (fun x => fderiv ℝ F x v * g x) := by
+    rcases hc with hf | hg
+    · exact (hf.fderiv_apply ℝ v).mul_right
+    · exact hg.mul_left
+  have hc2 : HasCompactSupport (fun x => F x * fderiv ℝ g x v) := by
+    rcases hc with hf | hg
+    · exact hf.mul_right
+    · exact (hg.fderiv_apply ℝ v).mul_left
+  have hc3 : HasCompactSupport (fun x => F x * g x) := by
+    rcases hc with hf | hg
+    · exact hf.mul_right
+    · exact hg.mul_left
+  exact ⟨(hFv.mul hg.continuous).integrable_of_hasCompactSupport hc1,
+    (hF.continuous.mul hgv).integrable_of_hasCompactSupport hc2,
+    (hF.continuous.mul hg.continuous).integrable_of_hasCompactSupport hc3⟩
+
+/-- Directional Haar integration by parts with either smooth factor compactly supported:
+`∫ ∂ᵥF · g = −∫ F · ∂ᵥg` (normed-space scope, finite dimension). -/
+theorem integral_fderiv_mul_eq_neg_of_hasCompactSupport (m : Measure E) [m.IsAddHaarMeasure]
+    {F g : E → ℝ} (hF : ContDiff ℝ ∞ F) (hg : ContDiff ℝ ∞ g)
+    (hc : HasCompactSupport F ∨ HasCompactSupport g) (v : E) :
+    (∫ x, fderiv ℝ F x v * g x ∂m) = -∫ x, F x * fderiv ℝ g x v ∂m := by
+  obtain ⟨h1, h2, h3⟩ := integrable_fderiv_mul_of_hasCompactSupport m hF hg hc v
+  have h := integral_mul_fderiv_eq_neg_fderiv_mul_of_integrable (μ := m) h1 h2 h3
+    (fun x _ => hF.differentiable (by simp) x) (fun x _ => hg.differentiable (by simp) x) (v := v)
+  linarith only [h]
+
+end CompactTest
 
 variable {E : Type u} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
   [FiniteDimensional ℝ E]
@@ -195,5 +245,153 @@ theorem integral_weightedLaplacian_mul_comm {U f g : E → ℝ} (hU : ContDiff �
   rw [e1, e2, ← h1, ← h2, hcomm]
 
 end Tilted
+
+section Directional
+
+/-- **Weighted directional integration by parts** (Letwin arXiv:2607.24164v1, Lemma A.3, pp. 16–17):
+for smooth `φ, f, g` with `∫ e^{-φ} dm = 1` and the four integrands `(∂_v f) g`, `f ∂_v g`, `f g ∂_v φ`,
+`f g` integrable under `ν = e^{-φ} m`,
+`∫ (∂_v f) g dν = ∫ f ((∂_v φ) g − ∂_v g) dν`. Codex proof
+(`build/reviews/2026-10-07-bkl-continuous/queue/letwin-prerequisite/Letwin-A3-Codex-Proof.lean`,
+independently accepted). -/
+theorem integral_fderiv_mul_tilted_eq {E : Type*} [NormedAddCommGroup E]
+    [InnerProductSpace ℝ E] [CompleteSpace E] [FiniteDimensional ℝ E]
+    [MeasurableSpace E] [BorelSpace E] (m : Measure E) [m.IsAddHaarMeasure]
+    (φ f g : E → ℝ) (v : E) (hφ : ContDiff ℝ ∞ φ)
+    (hf : ContDiff ℝ ∞ f) (hg : ContDiff ℝ ∞ g)
+    (hφexp : Integrable (fun x => Real.exp (-φ x)) m)
+    (hφnorm : ∫ x, Real.exp (-φ x) ∂m = 1)
+    (hdfg : Integrable (fun x => fderiv ℝ f x v * g x) (m.tilted (-φ)))
+    (hfdg : Integrable (fun x => f x * fderiv ℝ g x v) (m.tilted (-φ)))
+    (hfgdφ : Integrable (fun x => f x * g x * fderiv ℝ φ x v) (m.tilted (-φ)))
+    (hfg : Integrable (fun x => f x * g x) (m.tilted (-φ))) :
+    (∫ x, fderiv ℝ f x v * g x ∂(m.tilted (-φ))) =
+      ∫ x, f x * (fderiv ℝ φ x v * g x - fderiv ℝ g x v)
+        ∂(m.tilted (-φ)) := by
+  let w : E → ℝ := fun x => Real.exp (-φ x)
+  let G : E → ℝ := fun x => g x * w x
+  have hfd : ∀ x, DifferentiableAt ℝ f x := fun x => hf.differentiable (by simp) x
+  have hgd : ∀ x, DifferentiableAt ℝ g x := fun x => hg.differentiable (by simp) x
+  have hφd : ∀ x, DifferentiableAt ℝ φ x := fun x => hφ.differentiable (by simp) x
+  have hGd : ∀ x, HasFDerivAt G
+      (g x • (w x • -fderiv ℝ φ x) + w x • fderiv ℝ g x) x := by
+    intro x
+    exact (hgd x).hasFDerivAt.mul ((hφd x).hasFDerivAt.neg.exp)
+  have hGv : ∀ x, fderiv ℝ G x v =
+      w x * fderiv ℝ g x v - w x * g x * fderiv ℝ φ x v := by
+    intro x
+    rw [(hGd x).fderiv]
+    simp only [add_apply, smul_apply,
+      neg_apply, smul_eq_mul]
+    ring
+  have hL1 : Integrable (fun x => w x * (fderiv ℝ f x v * g x)) m := by
+    simpa only [Pi.neg_apply, smul_eq_mul] using
+      (integrable_tilted_iff hφexp _).mp hdfg
+  have hD1 : Integrable (fun x => w x * (f x * fderiv ℝ g x v)) m := by
+    simpa only [Pi.neg_apply, smul_eq_mul] using
+      (integrable_tilted_iff hφexp _).mp hfdg
+  have hD2 : Integrable (fun x => w x * (f x * g x * fderiv ℝ φ x v)) m := by
+    simpa only [Pi.neg_apply, smul_eq_mul] using
+      (integrable_tilted_iff hφexp _).mp hfgdφ
+  have hF1 : Integrable (fun x => fderiv ℝ f x v * G x) m := by
+    convert hL1 using 1
+    funext x
+    dsimp [G]
+    ring
+  have hF2 : Integrable (fun x => f x * fderiv ℝ G x v) m := by
+    convert hD1.sub hD2 using 1
+    funext x
+    simp only [hGv, Pi.sub_apply]
+    ring
+  have hF3 : Integrable (fun x => f x * G x) m := by
+    have hh := (integrable_tilted_iff hφexp _).mp hfg
+    convert hh using 1
+    funext x
+    simp only [G, w, smul_eq_mul]
+    ring
+  have hkey := integral_mul_fderiv_eq_neg_fderiv_mul_of_integrable (μ := m) hF1 hF2 hF3
+    (fun x _ => hfd x) (fun x _ => (hGd x).differentiableAt)
+  rw [integral_tilted, integral_tilted]
+  simp only [Pi.neg_apply, hφnorm, div_one, smul_eq_mul]
+  calc
+    _ = ∫ x, fderiv ℝ f x v * G x ∂m := by
+      congr 1
+      funext x
+      dsimp [G, w]
+      ring
+    _ = -∫ x, f x * fderiv ℝ G x v ∂m := by linarith only [hkey]
+    _ = ∫ x, -(f x * fderiv ℝ G x v) ∂m := (integral_neg _).symm
+    _ = _ := by
+      congr 1
+      funext x
+      rw [hGv]
+      dsimp [w]
+      ring
+
+/-- **Mean Hessian equals the gradient second moment** under `e^{-φ}m` (Letwin Lemma 2.3, step 1; Luna, task
+LW-L23a, closing step repaired at integration): the directional integration by parts applied to `∂_u φ` and
+`g = 1`. -/
+theorem integral_fderiv_fderiv_tilted_eq_integral_mul {E : Type*} [NormedAddCommGroup E]
+    [InnerProductSpace ℝ E] [CompleteSpace E] [FiniteDimensional ℝ E]
+    [MeasurableSpace E] [BorelSpace E] (m : Measure E) [m.IsAddHaarMeasure]
+    (φ : E → ℝ) (u v : E) (hφ : ContDiff ℝ ∞ φ)
+    (hφexp : Integrable (fun x => Real.exp (-φ x)) m)
+    (hφnorm : ∫ x, Real.exp (-φ x) ∂m = 1)
+    (hdd : Integrable (fun x => fderiv ℝ (fun y => fderiv ℝ φ y u) x v) (m.tilted (-φ)))
+    (hdd' : Integrable (fun x => fderiv ℝ φ x u * fderiv ℝ φ x v) (m.tilted (-φ)))
+    (hd : Integrable (fun x => fderiv ℝ φ x u) (m.tilted (-φ))) :
+    (∫ x, fderiv ℝ (fun y => fderiv ℝ φ y u) x v ∂(m.tilted (-φ))) =
+      ∫ x, fderiv ℝ φ x u * fderiv ℝ φ x v ∂(m.tilted (-φ)) := by
+    have hF : ContDiff ℝ ∞ (fun y => fderiv ℝ φ y u) :=
+      (hφ.fderiv_right (m := ∞) (by simp)).clm_apply contDiff_const
+    have hdfg :
+        Integrable
+          (fun x => fderiv ℝ (fun y => fderiv ℝ φ y u) x v * (1 : ℝ))
+          (m.tilted (-φ)) := by
+      simpa only [mul_one] using hdd
+    have hfdg :
+        Integrable
+          (fun x =>
+            fderiv ℝ φ x u *
+              fderiv ℝ (fun _ : E => (1 : ℝ)) x v)
+          (m.tilted (-φ)) := by
+      have hz : Integrable (0 : E → ℝ) (m.tilted (-φ)) :=
+        integrable_zero E ℝ (m.tilted (-φ))
+      refine hz.congr (Filter.Eventually.of_forall ?_)
+      intro x
+      simp
+    have hfgdφ :
+        Integrable
+          (fun x =>
+            fderiv ℝ φ x u * (1 : ℝ) * fderiv ℝ φ x v)
+          (m.tilted (-φ)) := by
+      simpa only [mul_one] using hdd'
+    have hfg :
+        Integrable
+          (fun x => fderiv ℝ φ x u * (1 : ℝ))
+          (m.tilted (-φ)) := by
+      simpa only [mul_one] using hd
+    have h :=
+      integral_fderiv_mul_tilted_eq
+        (m := m) (φ := φ)
+        (f := fun y => fderiv ℝ φ y u)
+        (g := fun _ : E => (1 : ℝ))
+        (v := v)
+        (hφ := hφ)
+        (hf := hF)
+        (hg := contDiff_const)
+        (hφexp := hφexp)
+        (hφnorm := hφnorm)
+        (hdfg := hdfg)
+        (hfdg := hfdg)
+        (hfgdφ := hfgdφ)
+        (hfg := hfg)
+    simp only [mul_one] at h
+    rw [h]
+    congr 1
+    funext x
+    simp
+
+end Directional
 
 end FunctionalInequalities.Analysis.BakryEmery

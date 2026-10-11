@@ -94,10 +94,10 @@ not alter the ledger claim or any constant.
 ## Sources and precise scope
 
 The manuscript's
-[Gaussian covariance family](https://github.com/numina-functional-inequalities/kls-exploration/blob/cd4a894a0faf40c0180f80b1a31eec1fdb6cb576/modules/03-tier1-gaussian.tex#L10-L37)
+[Gaussian covariance family](https://github.com/human-ai-mathematics/kls-conjecture-search/blob/cd4a894a0faf40c0180f80b1a31eec1fdb6cb576/modules/03-tier1-gaussian.tex#L10-L37)
 gives the Poincaré constant of a centered Gaussian with positive-definite covariance. Its
 one-dimensional Poincaré component supplies the source claim. The numerical normalization is
-from [Definition 2.1](https://github.com/numina-functional-inequalities/kls-exploration/blob/cd4a894a0faf40c0180f80b1a31eec1fdb6cb576/modules/01-definitions.tex#L17-L25).
+from [Definition 2.1](https://github.com/human-ai-mathematics/kls-conjecture-search/blob/cd4a894a0faf40c0180f80b1a31eec1fdb6cb576/modules/01-definitions.tex#L17-L25).
 
 Arbitrary means, zero variance and the exact smooth finite-energy domain are explicit local
 specifications. The direct density route and its analytic helpers are local proof choices; the

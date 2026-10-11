@@ -76,7 +76,7 @@ The following distinctions remain essential:
 [BGL Proposition 4.3.1, pp. 185–187](https://www.hse.ru/data/2016/11/24/1113029204/bok%253A978-3-319-00227-9.pdf#page=201)
 supplies the binary fixed-constant upper bound in its Markov-triple framework. The local proof
 uses a.e. admissible sections rather than identifying its test domain with BGL's. The original
-manuscript's [Theorem 3.4](https://github.com/numina-functional-inequalities/kls-exploration/blob/cd4a894a0faf40c0180f80b1a31eec1fdb6cb576/modules/02-results-toolkit.tex#L59-L68)
+manuscript's [Theorem 3.4](https://github.com/human-ai-mathematics/kls-conjecture-search/blob/cd4a894a0faf40c0180f80b1a31eec1fdb6cb576/modules/02-results-toolkit.tex#L59-L68)
 states the product optimal-constant identity. Finite iteration, coordinate recovery, extended-real
 and empty-family details are explicitly local realizations. LSI, conditional decompositions,
 spectral-gap equivalence and the complete KLS product case remain outside the certified claims.

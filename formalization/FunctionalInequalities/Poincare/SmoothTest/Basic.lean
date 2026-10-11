@@ -5,9 +5,9 @@ import Mathlib.Probability.Moments.Variance
 /-!
 # Poincaré constants: source formula and local test domain
 
-Source: [Definition 2.1 of the historical manuscript](https://github.com/numina-functional-inequalities/kls-exploration/blob/cd4a894a0faf40c0180f80b1a31eec1fdb6cb576/modules/01-definitions.tex#L17-L25)
+Source: [Definition 2.1 of the historical manuscript](https://github.com/human-ai-mathematics/kls-conjecture-search/blob/cd4a894a0faf40c0180f80b1a31eec1fdb6cb576/modules/01-definitions.tex#L17-L25)
 uses `Var_P(f) ≤ C_P E_P ‖∇f‖²` for smooth real-valued `f ∈ L²(P)`. Its
-[preceding context](https://github.com/numina-functional-inequalities/kls-exploration/blob/cd4a894a0faf40c0180f80b1a31eec1fdb6cb576/modules/01-definitions.tex#L6-L15)
+[preceding context](https://github.com/human-ai-mathematics/kls-conjecture-search/blob/cd4a894a0faf40c0180f80b1a31eec1fdb6cb576/modules/01-definitions.tex#L6-L15)
 is a Euclidean probability density proportional to `exp (-U)` and its Langevin generator.
 
 This module preserves the numerical normalization while explicitly choosing globally `C∞`,
@@ -65,7 +65,7 @@ theorem energy_eq_fderiv (μ : Measure E) (f : E → ℝ) :
     change ‖gradient f x‖ ^ 2 = ‖fderiv ℝ f x‖ ^ 2
     rw [norm_fderiv_eq_norm_gradient]
 
-/-- Source: the inequality in [Definition 2.1](https://github.com/numina-functional-inequalities/kls-exploration/blob/cd4a894a0faf40c0180f80b1a31eec1fdb6cb576/modules/01-definitions.tex#L17-L25),
+/-- Source: the inequality in [Definition 2.1](https://github.com/human-ai-mathematics/kls-conjecture-search/blob/cd4a894a0faf40c0180f80b1a31eec1fdb6cb576/modules/01-definitions.tex#L17-L25),
 with the local Hilbert test domain `Admissible`. Probability and finite-constant
 nonnegativity are explicit; no source-domain or spectral-gap equivalence is asserted. -/
 structure Holds (μ : Measure E) (C : ℝ) : Prop where

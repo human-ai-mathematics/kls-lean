@@ -1,0 +1,690 @@
+{
+  "version": 1,
+  "date": "2026-10-10",
+  "batch": "cek-proposition12-promotion",
+  "title": "Promotion of the root-accepted CEK Proposition 12 scratch bundle",
+  "decision": "research/decisions/2026-10-10-cek-proposition12-promotion.md",
+  "rule": "research/workflow.md sections 1-5; research/naming.md (object families, per-paper folders)",
+  "kind": "scratch promotion: the old KLSConstruction.MomentMap names never existed in production; no production API is renamed",
+  "invariants": [
+    "All 61 reviewed declaration blocks are byte-identical to the accepted sources; short names are unchanged.",
+    "Existing production declarations keep their types, universes, kinds and values (104 checked).",
+    "No alias or compatibility module is created; no lower-level module imports KLS.CEK."
+  ],
+  "source": {
+    "reviewed_map": "build/reviews/2026-10-09-moment-map-letwin-parallel/p12-integration-plan/MIGRATION-MAP.rev3.json",
+    "reviewed_map_sha256": "727dd0a6aa29c5d6fc5b63f250efc2629935f53756ac6fc28e40bc51057ec6fd",
+    "accepted_bundle_acceptance_sha256": "848aa45ba5bdd043e7c16f12a19a9348a3a91073e5e7f0c1e82c068c3b1d0614",
+    "candidate_acceptance": "build/reviews/2026-10-09-moment-map-letwin-parallel/independent-p12-integration-review/ACCEPTANCE.json",
+    "candidate_acceptance_sha256": "67ff0a85a4c161d01eede16affc1ed542819af7e68cde170ac46d25ca80a7a6f",
+    "patch_sha256": "c895a87ac61331a6a6741b6d4c58ee6fcd1c07f69d53b36a5698ca31009b7907"
+  },
+  "parent_map": "research/api-migration/2026-10-09-cek-scratch-promotion-map.json",
+  "count": 61,
+  "modules": {
+    "FunctionalInequalities.Analysis.Convex.Affine": {
+      "action": "create",
+      "namespace": "FunctionalInequalities.Analysis",
+      "declarations": 7
+    },
+    "FunctionalInequalities.Analysis.Convex.Legendre": {
+      "action": "extend",
+      "namespace": "FunctionalInequalities.Analysis",
+      "declarations": 1
+    },
+    "FunctionalInequalities.Analysis.Convex.SupportingPlane": {
+      "action": "create",
+      "namespace": "FunctionalInequalities.Analysis",
+      "declarations": 3
+    },
+    "FunctionalInequalities.KLS.CEK.Competitors": {
+      "action": "create",
+      "namespace": "FunctionalInequalities.KLS.CEK",
+      "declarations": 3
+    },
+    "FunctionalInequalities.KLS.CEK.VariationalMaximum": {
+      "action": "create",
+      "namespace": "FunctionalInequalities.KLS.CEK",
+      "declarations": 3
+    },
+    "FunctionalInequalities.Probability.ConvexSupport": {
+      "action": "extend",
+      "namespace": "FunctionalInequalities.Probability",
+      "declarations": 1
+    },
+    "FunctionalInequalities.Probability.MomentMeasure.Affine": {
+      "action": "create",
+      "namespace": "FunctionalInequalities.Probability.MomentMeasure",
+      "declarations": 9
+    },
+    "FunctionalInequalities.Probability.MomentMeasure.Baseline": {
+      "action": "create",
+      "namespace": "FunctionalInequalities.Probability.MomentMeasure",
+      "declarations": 3
+    },
+    "FunctionalInequalities.Probability.MomentMeasure.Coercivity": {
+      "action": "create",
+      "namespace": "FunctionalInequalities.Probability.MomentMeasure",
+      "declarations": 11
+    },
+    "FunctionalInequalities.Probability.MomentMeasure.ConjugateMass": {
+      "action": "extend",
+      "namespace": "FunctionalInequalities.Probability.MomentMeasure",
+      "declarations": 1
+    },
+    "FunctionalInequalities.Probability.MomentMeasure.Integrability": {
+      "action": "create",
+      "namespace": "FunctionalInequalities.Probability.MomentMeasure",
+      "declarations": 5
+    },
+    "FunctionalInequalities.Probability.MomentMeasure.Normalization": {
+      "action": "create",
+      "namespace": "FunctionalInequalities.Probability.MomentMeasure",
+      "declarations": 1
+    },
+    "FunctionalInequalities.Probability.MomentMeasure.Truncation": {
+      "action": "create",
+      "namespace": "FunctionalInequalities.Probability.MomentMeasure",
+      "declarations": 13
+    }
+  },
+  "declarations": {
+    "FunctionalInequalities.Probability.zero_mem_interior_convexHull_support_of_integral_eq_zero": {
+      "new": "FunctionalInequalities.Probability.zero_mem_interior_convexHull_support_of_integral_eq_zero",
+      "old_module": "ZeroInterior",
+      "new_module": "FunctionalInequalities.Probability.ConvexSupport",
+      "visibility": "public",
+      "kind": "theorem"
+    },
+    "KLSConstruction.MomentMap.real_convexOn_domain_of_no_bot": {
+      "new": "FunctionalInequalities.Analysis.real_convexOn_domain_of_no_bot",
+      "old_module": "SupportingAffinePlane",
+      "new_module": "FunctionalInequalities.Analysis.Convex.SupportingPlane",
+      "visibility": "private",
+      "kind": "theorem"
+    },
+    "KLSConstruction.MomentMap.linear_eq_zero_of_local_nonpos": {
+      "new": "FunctionalInequalities.Analysis.linear_eq_zero_of_local_nonpos",
+      "old_module": "SupportingAffinePlane",
+      "new_module": "FunctionalInequalities.Analysis.Convex.SupportingPlane",
+      "visibility": "private",
+      "kind": "theorem"
+    },
+    "KLSConstruction.MomentMap.exists_supporting_affine_at_zero": {
+      "new": "FunctionalInequalities.Analysis.exists_supporting_affine_at_zero",
+      "old_module": "SupportingAffinePlane",
+      "new_module": "FunctionalInequalities.Analysis.Convex.SupportingPlane",
+      "visibility": "public",
+      "kind": "theorem"
+    },
+    "KLSConstruction.MomentMap.affineSubtract": {
+      "new": "FunctionalInequalities.Analysis.affineSubtract",
+      "old_module": "AffineConjugation",
+      "new_module": "FunctionalInequalities.Analysis.Convex.Affine",
+      "visibility": "public",
+      "kind": "def"
+    },
+    "KLSConstruction.MomentMap.iSup_add_coe": {
+      "new": "FunctionalInequalities.Analysis.iSup_add_coe",
+      "old_module": "AffineConjugation",
+      "new_module": "FunctionalInequalities.Analysis.Convex.Affine",
+      "visibility": "public",
+      "kind": "theorem"
+    },
+    "KLSConstruction.MomentMap.legendre_affineSubtract": {
+      "new": "FunctionalInequalities.Analysis.legendre_affineSubtract",
+      "old_module": "AffineConjugation",
+      "new_module": "FunctionalInequalities.Analysis.Convex.Affine",
+      "visibility": "public",
+      "kind": "theorem"
+    },
+    "KLSConstruction.MomentMap.affineSubtract_toReal_of_finite": {
+      "new": "FunctionalInequalities.Analysis.affineSubtract_toReal_of_finite",
+      "old_module": "AffineConjugation",
+      "new_module": "FunctionalInequalities.Analysis.Convex.Affine",
+      "visibility": "public",
+      "kind": "theorem"
+    },
+    "KLSConstruction.MomentMap.mass_legendre_affineSubtract": {
+      "new": "FunctionalInequalities.Probability.MomentMeasure.mass_legendre_affineSubtract",
+      "old_module": "AffineConjugation",
+      "new_module": "FunctionalInequalities.Probability.MomentMeasure.Affine",
+      "visibility": "public",
+      "kind": "theorem"
+    },
+    "KLSConstruction.MomentMap.mass_legendre_affineSubtract_volume": {
+      "new": "FunctionalInequalities.Probability.MomentMeasure.mass_legendre_affineSubtract_volume",
+      "old_module": "AffineConjugation",
+      "new_module": "FunctionalInequalities.Probability.MomentMeasure.Affine",
+      "visibility": "public",
+      "kind": "theorem"
+    },
+    "KLSConstruction.MomentMap.affineSubtract_potentialIntegrable": {
+      "new": "FunctionalInequalities.Probability.MomentMeasure.affineSubtract_potentialIntegrable",
+      "old_module": "AffineProbability",
+      "new_module": "FunctionalInequalities.Probability.MomentMeasure.Affine",
+      "visibility": "public",
+      "kind": "theorem"
+    },
+    "KLSConstruction.MomentMap.integral_affineSubtract": {
+      "new": "FunctionalInequalities.Probability.MomentMeasure.integral_affineSubtract",
+      "old_module": "AffineProbability",
+      "new_module": "FunctionalInequalities.Probability.MomentMeasure.Affine",
+      "visibility": "public",
+      "kind": "theorem"
+    },
+    "KLSConstruction.MomentMap.integral_affineSubtract_of_probability": {
+      "new": "FunctionalInequalities.Probability.MomentMeasure.integral_affineSubtract_of_probability",
+      "old_module": "AffineProbability",
+      "new_module": "FunctionalInequalities.Probability.MomentMeasure.Affine",
+      "visibility": "public",
+      "kind": "theorem"
+    },
+    "KLSConstruction.MomentMap.log_mass_legendre_affineSubtract": {
+      "new": "FunctionalInequalities.Probability.MomentMeasure.log_mass_legendre_affineSubtract",
+      "old_module": "AffineProbability",
+      "new_module": "FunctionalInequalities.Probability.MomentMeasure.Affine",
+      "visibility": "public",
+      "kind": "theorem"
+    },
+    "KLSConstruction.MomentMap.sub_coe_cancel_shift": {
+      "new": "FunctionalInequalities.Analysis.sub_coe_cancel_shift",
+      "old_module": "AffineProbability",
+      "new_module": "FunctionalInequalities.Analysis.Convex.Affine",
+      "visibility": "public",
+      "kind": "theorem"
+    },
+    "KLSConstruction.MomentMap.variationalFunctional_affineSubtract": {
+      "new": "FunctionalInequalities.Probability.MomentMeasure.variationalFunctional_affineSubtract",
+      "old_module": "AffineProbability",
+      "new_module": "FunctionalInequalities.Probability.MomentMeasure.Affine",
+      "visibility": "public",
+      "kind": "theorem"
+    },
+    "KLSConstruction.MomentMap.variationalFunctional_affineSubtract_volume": {
+      "new": "FunctionalInequalities.Probability.MomentMeasure.variationalFunctional_affineSubtract_volume",
+      "old_module": "AffineProbability",
+      "new_module": "FunctionalInequalities.Probability.MomentMeasure.Affine",
+      "visibility": "public",
+      "kind": "theorem"
+    },
+    "KLSConstruction.MomentMap.convex_epigraph_affineSubtract": {
+      "new": "FunctionalInequalities.Analysis.convex_epigraph_affineSubtract",
+      "old_module": "OriginNormalization",
+      "new_module": "FunctionalInequalities.Analysis.Convex.Affine",
+      "visibility": "public",
+      "kind": "theorem"
+    },
+    "KLSConstruction.MomentMap.exists_nonnegative_origin_zero_affine": {
+      "new": "FunctionalInequalities.Analysis.exists_nonnegative_origin_zero_affine",
+      "old_module": "OriginNormalization",
+      "new_module": "FunctionalInequalities.Analysis.Convex.Affine",
+      "visibility": "public",
+      "kind": "theorem"
+    },
+    "KLSConstruction.MomentMap.exists_origin_zero_affine_of_probability": {
+      "new": "FunctionalInequalities.Probability.MomentMeasure.exists_origin_zero_affine_of_probability",
+      "old_module": "OriginNormalization",
+      "new_module": "FunctionalInequalities.Probability.MomentMeasure.Affine",
+      "visibility": "public",
+      "kind": "theorem"
+    },
+    "KLSConstruction.MomentMap.potentialIntegrable_exists_finite": {
+      "new": "FunctionalInequalities.Probability.MomentMeasure.potentialIntegrable_exists_finite",
+      "old_module": "PotentialIntegrability",
+      "new_module": "FunctionalInequalities.Probability.MomentMeasure.Integrability",
+      "visibility": "public",
+      "kind": "theorem"
+    },
+    "KLSConstruction.MomentMap.lowerTruncate_toReal_of_finite": {
+      "new": "FunctionalInequalities.Probability.MomentMeasure.lowerTruncate_toReal_of_finite",
+      "old_module": "PotentialIntegrability",
+      "new_module": "FunctionalInequalities.Probability.MomentMeasure.Integrability",
+      "visibility": "public",
+      "kind": "theorem"
+    },
+    "KLSConstruction.MomentMap.lowerTruncate_potentialIntegrable": {
+      "new": "FunctionalInequalities.Probability.MomentMeasure.lowerTruncate_potentialIntegrable",
+      "old_module": "PotentialIntegrability",
+      "new_module": "FunctionalInequalities.Probability.MomentMeasure.Integrability",
+      "visibility": "public",
+      "kind": "theorem"
+    },
+    "KLSConstruction.MomentMap.biconjugate_lowerTruncate_potentialIntegrable": {
+      "new": "FunctionalInequalities.Probability.MomentMeasure.biconjugate_lowerTruncate_potentialIntegrable",
+      "old_module": "PotentialIntegrability",
+      "new_module": "FunctionalInequalities.Probability.MomentMeasure.Integrability",
+      "visibility": "public",
+      "kind": "theorem"
+    },
+    "KLSConstruction.MomentMap.integral_biconjugate_lowerTruncate_le": {
+      "new": "FunctionalInequalities.Probability.MomentMeasure.integral_biconjugate_lowerTruncate_le",
+      "old_module": "PotentialIntegrability",
+      "new_module": "FunctionalInequalities.Probability.MomentMeasure.Integrability",
+      "visibility": "public",
+      "kind": "theorem"
+    },
+    "KLSConstruction.MomentMap.norm_max_neg_le": {
+      "new": "FunctionalInequalities.Probability.MomentMeasure.norm_max_neg_le",
+      "old_module": "TruncationConvergence",
+      "new_module": "FunctionalInequalities.Probability.MomentMeasure.Truncation",
+      "visibility": "public",
+      "kind": "theorem"
+    },
+    "KLSConstruction.MomentMap.tendsto_lowerTruncate_toReal": {
+      "new": "FunctionalInequalities.Probability.MomentMeasure.tendsto_lowerTruncate_toReal",
+      "old_module": "TruncationConvergence",
+      "new_module": "FunctionalInequalities.Probability.MomentMeasure.Truncation",
+      "visibility": "public",
+      "kind": "theorem"
+    },
+    "KLSConstruction.MomentMap.tendsto_integral_lowerTruncate": {
+      "new": "FunctionalInequalities.Probability.MomentMeasure.tendsto_integral_lowerTruncate",
+      "old_module": "TruncationConvergence",
+      "new_module": "FunctionalInequalities.Probability.MomentMeasure.Truncation",
+      "visibility": "public",
+      "kind": "theorem"
+    },
+    "KLSConstruction.MomentMap.tendsto_integral_lowerTruncate_error": {
+      "new": "FunctionalInequalities.Probability.MomentMeasure.tendsto_integral_lowerTruncate_error",
+      "old_module": "TruncationConvergence",
+      "new_module": "FunctionalInequalities.Probability.MomentMeasure.Truncation",
+      "visibility": "public",
+      "kind": "theorem"
+    },
+    "KLSConstruction.MomentMap.integral_le_integral_lowerTruncate": {
+      "new": "FunctionalInequalities.Probability.MomentMeasure.integral_le_integral_lowerTruncate",
+      "old_module": "TruncationConvergence",
+      "new_module": "FunctionalInequalities.Probability.MomentMeasure.Truncation",
+      "visibility": "public",
+      "kind": "theorem"
+    },
+    "KLSConstruction.MomentMap.tendsto_integral_pointwise_lowerTruncate_error": {
+      "new": "FunctionalInequalities.Probability.MomentMeasure.tendsto_integral_pointwise_lowerTruncate_error",
+      "old_module": "TruncationConvergence",
+      "new_module": "FunctionalInequalities.Probability.MomentMeasure.Truncation",
+      "visibility": "public",
+      "kind": "theorem"
+    },
+    "KLSConstruction.MomentMap.max_neg_error_le_tail": {
+      "new": "FunctionalInequalities.Probability.MomentMeasure.max_neg_error_le_tail",
+      "old_module": "TruncationTail",
+      "new_module": "FunctionalInequalities.Probability.MomentMeasure.Truncation",
+      "visibility": "public",
+      "kind": "theorem"
+    },
+    "KLSConstruction.MomentMap.lowerTailNorm": {
+      "new": "FunctionalInequalities.Probability.MomentMeasure.lowerTailNorm",
+      "old_module": "TruncationTail",
+      "new_module": "FunctionalInequalities.Probability.MomentMeasure.Truncation",
+      "visibility": "public",
+      "kind": "def"
+    },
+    "KLSConstruction.MomentMap.lowerTailNorm_integrable": {
+      "new": "FunctionalInequalities.Probability.MomentMeasure.lowerTailNorm_integrable",
+      "old_module": "TruncationTail",
+      "new_module": "FunctionalInequalities.Probability.MomentMeasure.Truncation",
+      "visibility": "public",
+      "kind": "theorem"
+    },
+    "KLSConstruction.MomentMap.tendsto_integral_lowerTailNorm": {
+      "new": "FunctionalInequalities.Probability.MomentMeasure.tendsto_integral_lowerTailNorm",
+      "old_module": "TruncationTail",
+      "new_module": "FunctionalInequalities.Probability.MomentMeasure.Truncation",
+      "visibility": "public",
+      "kind": "theorem"
+    },
+    "KLSConstruction.MomentMap.integral_lowerTruncate_error_le_tail": {
+      "new": "FunctionalInequalities.Probability.MomentMeasure.integral_lowerTruncate_error_le_tail",
+      "old_module": "TruncationTail",
+      "new_module": "FunctionalInequalities.Probability.MomentMeasure.Truncation",
+      "visibility": "public",
+      "kind": "theorem"
+    },
+    "KLSConstruction.MomentMap.sub_coe_le_sub_coe_add": {
+      "new": "FunctionalInequalities.Probability.MomentMeasure.sub_coe_le_sub_coe_add",
+      "old_module": "VariationalCompetitor",
+      "new_module": "FunctionalInequalities.Probability.MomentMeasure.Truncation",
+      "visibility": "public",
+      "kind": "theorem"
+    },
+    "KLSConstruction.MomentMap.exists_convexified_lowerTruncate_variational_le_add": {
+      "new": "FunctionalInequalities.Probability.MomentMeasure.exists_convexified_lowerTruncate_variational_le_add",
+      "old_module": "VariationalCompetitor",
+      "new_module": "FunctionalInequalities.Probability.MomentMeasure.Truncation",
+      "visibility": "public",
+      "kind": "theorem"
+    },
+    "KLSConstruction.MomentMap.lintegral_nonneg_potential": {
+      "new": "FunctionalInequalities.Probability.MomentMeasure.lintegral_nonneg_potential",
+      "old_module": "Coercivity",
+      "new_module": "FunctionalInequalities.Probability.MomentMeasure.Coercivity",
+      "visibility": "public",
+      "kind": "theorem"
+    },
+    "KLSConstruction.MomentMap.exists_uniform_legendre_lower": {
+      "new": "FunctionalInequalities.Probability.MomentMeasure.exists_uniform_legendre_lower",
+      "old_module": "Coercivity",
+      "new_module": "FunctionalInequalities.Probability.MomentMeasure.Coercivity",
+      "visibility": "public",
+      "kind": "theorem"
+    },
+    "KLSConstruction.MomentMap.density_scaled_le_exp": {
+      "new": "FunctionalInequalities.Probability.MomentMeasure.density_scaled_le_exp",
+      "old_module": "Coercivity",
+      "new_module": "FunctionalInequalities.Probability.MomentMeasure.Coercivity",
+      "visibility": "public",
+      "kind": "theorem"
+    },
+    "KLSConstruction.MomentMap.lintegral_eq_pow_mul_smul": {
+      "new": "FunctionalInequalities.Probability.MomentMeasure.lintegral_eq_pow_mul_smul",
+      "old_module": "Coercivity",
+      "new_module": "FunctionalInequalities.Probability.MomentMeasure.Coercivity",
+      "visibility": "public",
+      "kind": "theorem"
+    },
+    "KLSConstruction.MomentMap.exists_uniform_mass_bound": {
+      "new": "FunctionalInequalities.Probability.MomentMeasure.exists_uniform_mass_bound",
+      "old_module": "Coercivity",
+      "new_module": "FunctionalInequalities.Probability.MomentMeasure.Coercivity",
+      "visibility": "public",
+      "kind": "theorem"
+    },
+    "KLSConstruction.MomentMap.functional_le_of_mass_bound": {
+      "new": "FunctionalInequalities.Probability.MomentMeasure.functional_le_of_mass_bound",
+      "old_module": "Coercivity",
+      "new_module": "FunctionalInequalities.Probability.MomentMeasure.Coercivity",
+      "visibility": "public",
+      "kind": "theorem"
+    },
+    "KLSConstruction.MomentMap.exists_coercivity_of_centered_probability": {
+      "new": "FunctionalInequalities.Probability.MomentMeasure.exists_coercivity_of_centered_probability",
+      "old_module": "Coercivity",
+      "new_module": "FunctionalInequalities.Probability.MomentMeasure.Coercivity",
+      "visibility": "public",
+      "kind": "theorem"
+    },
+    "KLSConstruction.MomentMap.exists_bound_of_log_lower": {
+      "new": "FunctionalInequalities.Probability.MomentMeasure.exists_bound_of_log_lower",
+      "old_module": "Coercivity",
+      "new_module": "FunctionalInequalities.Probability.MomentMeasure.Coercivity",
+      "visibility": "public",
+      "kind": "theorem"
+    },
+    "KLSConstruction.MomentMap.exists_integral_bound_of_eventual_functional_lower": {
+      "new": "FunctionalInequalities.Probability.MomentMeasure.exists_integral_bound_of_eventual_functional_lower",
+      "old_module": "Coercivity",
+      "new_module": "FunctionalInequalities.Probability.MomentMeasure.Coercivity",
+      "visibility": "public",
+      "kind": "theorem"
+    },
+    "KLSConstruction.MomentMap.exists_integral_bound_of_tendsto_functional_above": {
+      "new": "FunctionalInequalities.Probability.MomentMeasure.exists_integral_bound_of_tendsto_functional_above",
+      "old_module": "Coercivity",
+      "new_module": "FunctionalInequalities.Probability.MomentMeasure.Coercivity",
+      "visibility": "public",
+      "kind": "theorem"
+    },
+    "KLSConstruction.MomentMap.origin_mem_interior_domain_of_lower_bound": {
+      "new": "FunctionalInequalities.Probability.MomentMeasure.origin_mem_interior_domain_of_lower_bound",
+      "old_module": "NormalizedCompetitors",
+      "new_module": "FunctionalInequalities.Probability.MomentMeasure.Normalization",
+      "visibility": "public",
+      "kind": "theorem"
+    },
+    "KLSConstruction.MomentMap.exists_normalized_competitor": {
+      "new": "FunctionalInequalities.KLS.CEK.exists_normalized_competitor",
+      "old_module": "NormalizedCompetitors",
+      "new_module": "FunctionalInequalities.KLS.CEK.Competitors",
+      "visibility": "public",
+      "kind": "theorem"
+    },
+    "KLSConstruction.MomentMap.real_coercivity_le_uniform": {
+      "new": "FunctionalInequalities.Probability.MomentMeasure.real_coercivity_le_uniform",
+      "old_module": "NormalizedCompetitors",
+      "new_module": "FunctionalInequalities.Probability.MomentMeasure.Coercivity",
+      "visibility": "public",
+      "kind": "theorem"
+    },
+    "KLSConstruction.MomentMap.exists_uniform_functional_upper": {
+      "new": "FunctionalInequalities.KLS.CEK.exists_uniform_functional_upper",
+      "old_module": "NormalizedCompetitors",
+      "new_module": "FunctionalInequalities.KLS.CEK.Competitors",
+      "visibility": "public",
+      "kind": "theorem"
+    },
+    "KLSConstruction.MomentMap.legendre_norm": {
+      "new": "FunctionalInequalities.Analysis.legendre_norm",
+      "old_module": "Baseline",
+      "new_module": "FunctionalInequalities.Analysis.Convex.Legendre",
+      "visibility": "public",
+      "kind": "theorem"
+    },
+    "KLSConstruction.MomentMap.density_legendre_norm": {
+      "new": "FunctionalInequalities.Probability.MomentMeasure.density_legendre_norm",
+      "old_module": "Baseline",
+      "new_module": "FunctionalInequalities.Probability.MomentMeasure.Baseline",
+      "visibility": "public",
+      "kind": "theorem"
+    },
+    "KLSConstruction.MomentMap.mass_legendre_norm": {
+      "new": "FunctionalInequalities.Probability.MomentMeasure.mass_legendre_norm",
+      "old_module": "Baseline",
+      "new_module": "FunctionalInequalities.Probability.MomentMeasure.Baseline",
+      "visibility": "public",
+      "kind": "theorem"
+    },
+    "KLSConstruction.MomentMap.norm_baseline_finite": {
+      "new": "FunctionalInequalities.Probability.MomentMeasure.norm_baseline_finite",
+      "old_module": "Baseline",
+      "new_module": "FunctionalInequalities.Probability.MomentMeasure.Baseline",
+      "visibility": "public",
+      "kind": "theorem"
+    },
+    "KLSConstruction.MomentMap.exists_finite_baseline_and_upper": {
+      "new": "FunctionalInequalities.KLS.CEK.exists_finite_baseline_and_upper",
+      "old_module": "Baseline",
+      "new_module": "FunctionalInequalities.KLS.CEK.Competitors",
+      "visibility": "public",
+      "kind": "theorem"
+    },
+    "KLSConstruction.MomentMap.exists_normalized_maximizing_sequence": {
+      "new": "FunctionalInequalities.KLS.CEK.exists_normalized_maximizing_sequence",
+      "old_module": "MaximizingSequence",
+      "new_module": "FunctionalInequalities.KLS.CEK.VariationalMaximum",
+      "visibility": "public",
+      "kind": "theorem"
+    },
+    "KLSConstruction.MomentMap.exists_limit_ge_normalized_supremum": {
+      "new": "FunctionalInequalities.KLS.CEK.exists_limit_ge_normalized_supremum",
+      "old_module": "Attainment",
+      "new_module": "FunctionalInequalities.KLS.CEK.VariationalMaximum",
+      "visibility": "public",
+      "kind": "theorem"
+    },
+    "KLSConstruction.MomentMap.exists_variational_maximum": {
+      "new": "FunctionalInequalities.KLS.CEK.exists_variational_maximum",
+      "old_module": "Attainment",
+      "new_module": "FunctionalInequalities.KLS.CEK.VariationalMaximum",
+      "visibility": "public",
+      "kind": "theorem"
+    },
+    "KLSConstruction.MomentMap.log_sub_ge_of_integral_limits": {
+      "new": "FunctionalInequalities.Probability.MomentMeasure.log_sub_ge_of_integral_limits",
+      "old_module": "FunctionalLimit",
+      "new_module": "FunctionalInequalities.Probability.MomentMeasure.ConjugateMass",
+      "visibility": "public",
+      "kind": "theorem"
+    }
+  },
+  "actual_private_and_generated_names": [
+    {
+      "accepted": "KLSConstruction.MomentMap.log_sub_ge_of_integral_limits._simp_1_1",
+      "accepted_module": "FunctionalLimit",
+      "candidate": "FunctionalInequalities.Probability.MomentMeasure.log_sub_ge_of_integral_limits._simp_1_1",
+      "candidate_module": "FunctionalInequalities.Probability.MomentMeasure.ConjugateMass",
+      "visibility": "public",
+      "generated": true
+    },
+    {
+      "accepted": "_private.SupportingAffinePlane.0.KLSConstruction.MomentMap.linear_eq_zero_of_local_nonpos",
+      "accepted_module": "SupportingAffinePlane",
+      "candidate": "_private.FunctionalInequalities.Analysis.Convex.SupportingPlane.0.FunctionalInequalities.Analysis.linear_eq_zero_of_local_nonpos",
+      "candidate_module": "FunctionalInequalities.Analysis.Convex.SupportingPlane",
+      "visibility": "private",
+      "generated": false
+    },
+    {
+      "accepted": "_private.SupportingAffinePlane.0.KLSConstruction.MomentMap.real_convexOn_domain_of_no_bot",
+      "accepted_module": "SupportingAffinePlane",
+      "candidate": "_private.FunctionalInequalities.Analysis.Convex.SupportingPlane.0.FunctionalInequalities.Analysis.real_convexOn_domain_of_no_bot",
+      "candidate_module": "FunctionalInequalities.Analysis.Convex.SupportingPlane",
+      "visibility": "private",
+      "generated": false
+    },
+    {
+      "accepted": "KLSConstruction.MomentMap.variationalFunctional.eq_1",
+      "accepted_module": "Coercivity",
+      "candidate": "FunctionalInequalities.Probability.MomentMeasure.variationalFunctional.eq_1",
+      "candidate_module": "FunctionalInequalities.Probability.MomentMeasure.Coercivity",
+      "visibility": "public",
+      "generated": true
+    },
+    {
+      "accepted": "KLSConstruction.MomentMap.exists_coercivity_of_centered_probability._simp_1_1",
+      "accepted_module": "Coercivity",
+      "candidate": "FunctionalInequalities.Probability.MomentMeasure.exists_coercivity_of_centered_probability._simp_1_1",
+      "candidate_module": "FunctionalInequalities.Probability.MomentMeasure.Coercivity",
+      "visibility": "public",
+      "generated": true
+    },
+    {
+      "accepted": "KLSConstruction.MomentMap.functional_le_of_mass_bound._simp_1_2",
+      "accepted_module": "Coercivity",
+      "candidate": "FunctionalInequalities.Probability.MomentMeasure.functional_le_of_mass_bound._simp_1_2",
+      "candidate_module": "FunctionalInequalities.Probability.MomentMeasure.Coercivity",
+      "visibility": "public",
+      "generated": true
+    },
+    {
+      "accepted": "KLSConstruction.MomentMap.density_scaled_le_exp._simp_1_1",
+      "accepted_module": "Coercivity",
+      "candidate": "FunctionalInequalities.Probability.MomentMeasure.density_scaled_le_exp._simp_1_1",
+      "candidate_module": "FunctionalInequalities.Probability.MomentMeasure.Coercivity",
+      "visibility": "public",
+      "generated": true
+    },
+    {
+      "accepted": "KLSConstruction.MomentMap.exists_normalized_competitor._simp_1_1",
+      "accepted_module": "NormalizedCompetitors",
+      "candidate": "FunctionalInequalities.KLS.CEK.exists_normalized_competitor._simp_1_1",
+      "candidate_module": "FunctionalInequalities.KLS.CEK.Competitors",
+      "visibility": "public",
+      "generated": true
+    },
+    {
+      "accepted": "KLSConstruction.MomentMap.affineSubtract.eq_1",
+      "accepted_module": "NormalizedCompetitors",
+      "candidate": "FunctionalInequalities.Analysis.affineSubtract.eq_1",
+      "candidate_module": "FunctionalInequalities.Probability.MomentMeasure.Normalization",
+      "visibility": "public",
+      "generated": true
+    },
+    {
+      "accepted": "KLSConstruction.MomentMap.norm_baseline_finite._simp_1_2",
+      "accepted_module": "Baseline",
+      "candidate": "FunctionalInequalities.Probability.MomentMeasure.norm_baseline_finite._simp_1_2",
+      "candidate_module": "FunctionalInequalities.Probability.MomentMeasure.Baseline",
+      "visibility": "public",
+      "generated": true
+    },
+    {
+      "accepted": "KLSConstruction.MomentMap.density_legendre_norm._simp_1_1",
+      "accepted_module": "Baseline",
+      "candidate": "FunctionalInequalities.Probability.MomentMeasure.density_legendre_norm._simp_1_1",
+      "candidate_module": "FunctionalInequalities.Probability.MomentMeasure.Baseline",
+      "visibility": "public",
+      "generated": true
+    },
+    {
+      "accepted": "KLSConstruction.MomentMap.norm_baseline_finite._simp_1_1",
+      "accepted_module": "Baseline",
+      "candidate": "FunctionalInequalities.Probability.MomentMeasure.norm_baseline_finite._simp_1_1",
+      "candidate_module": "FunctionalInequalities.Probability.MomentMeasure.Baseline",
+      "visibility": "public",
+      "generated": true
+    },
+    {
+      "accepted": "KLSConstruction.MomentMap.lowerTruncate.eq_1",
+      "accepted_module": "Attainment",
+      "candidate": "FunctionalInequalities.Analysis.lowerTruncate.eq_1",
+      "candidate_module": "FunctionalInequalities.KLS.CEK.VariationalMaximum",
+      "visibility": "public",
+      "generated": true
+    },
+    {
+      "accepted": "KLSConstruction.MomentMap.exists_limit_ge_normalized_supremum._simp_1_1",
+      "accepted_module": "Attainment",
+      "candidate": "FunctionalInequalities.KLS.CEK.exists_limit_ge_normalized_supremum._simp_1_1",
+      "candidate_module": "FunctionalInequalities.KLS.CEK.VariationalMaximum",
+      "visibility": "public",
+      "generated": true
+    },
+    {
+      "accepted": "KLSConstruction.MomentMap.exists_variational_maximum._simp_1_1",
+      "accepted_module": "Attainment",
+      "candidate": "FunctionalInequalities.KLS.CEK.exists_variational_maximum._simp_1_1",
+      "candidate_module": "FunctionalInequalities.KLS.CEK.VariationalMaximum",
+      "visibility": "public",
+      "generated": true
+    }
+  ],
+  "generated_suffix_pairs": [
+    {
+      "accepted": "KLSConstruction.MomentMap.norm_baseline_finite._simp_1_3",
+      "accepted_mapped": "FunctionalInequalities.Probability.MomentMeasure.norm_baseline_finite._simp_1_3",
+      "candidate": "FunctionalInequalities.Probability.MomentMeasure.norm_baseline_finite._simp_1_4"
+    }
+  ],
+  "realized_in_several_modules": {
+    "FunctionalInequalities.Probability.MomentMeasure.density.eq_1": [
+      "FunctionalInequalities.Probability.MomentMeasure.Baseline"
+    ],
+    "FunctionalInequalities.Probability.MomentMeasure.variationalFunctional.eq_1": [
+      "FunctionalInequalities.Probability.MomentMeasure.Baseline"
+    ]
+  },
+  "import_corrections": [
+    {
+      "owner": "FunctionalInequalities.Probability.MomentMeasure.Baseline",
+      "import": "Mathlib.Analysis.Normed.Module.FiniteDimension",
+      "reason": "ProperSpace from FiniteDimensional in mass_legendre_norm; the accepted Baseline.lean had it through its NormalizedCompetitors import closure"
+    }
+  ],
+  "context_corrections": [
+    {
+      "source": "AffineConjugation",
+      "change": "dropped MeasureTheory from open (measure-free owner)"
+    },
+    {
+      "source": "AffineProbability",
+      "change": "dropped MeasureTheory from open (measure-free owner)"
+    },
+    {
+      "source": "AffineProbability",
+      "change": "dropped measure binders from variable context"
+    },
+    {
+      "source": "Baseline",
+      "change": "dropped MeasureTheory from open (measure-free owner)"
+    },
+    {
+      "source": "OriginNormalization",
+      "change": "dropped MeasureTheory from open (measure-free owner)"
+    }
+  ],
+  "audits": {
+    "CoercivityClients.lean, NormalizedClients.lean, AttainmentClients.lean": "research/audits/CEK/Proposition12Audit.lean",
+    "FunctionalLimitClients.lean": "research/audits/CEK/FunctionalLimitAudit.lean"
+  }
+}

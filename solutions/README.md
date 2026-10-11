@@ -61,7 +61,7 @@ Their types preserve the reviewed generality, including empty test classes, zero
 support, zero finite constants and infinite optima. Gaussian transport through these bridges is
 now proved. See the [comparison guide](../formalization/FunctionalInequalities/Poincare/Euclidean/README.md).
 
-The `Solutions` default target builds all twenty-nine certificates plus `GaussianAxiomAudit.lean` and
+The `Solutions` default target builds all thirty certificates plus `GaussianAxiomAudit.lean` and
 `FoundationAxiomAudit.lean`. The latter guards 27 foundation and comparison declarations together
 with the Dirac and normal-direction raw-energy obstructions; each new
 certificate also has its own axiom guard. These checks require exactly `propext`, `Classical.choice`
@@ -159,7 +159,7 @@ The user's confirmation and final semantic review complete the human acceptance 
 `../research/decisions/2026-09-03-finite-tensorization-freeze.md` and
 `../research/explorations/2026-09-03-finite-tensorization-acceptance.md`. The final publication
 SHA and matching CI result are tracked in
-[Issue #7](https://github.com/numina-functional-inequalities/kls-lean/issues/7).
+[Issue #7](https://github.com/human-ai-mathematics/kls-lean/issues/7).
 The existing #2 and #6 nodes retain their ledger claims, certificate signatures, and independent
 checked import closures.
 See `../formalization/README.md` for the current reusable module layout.
@@ -444,3 +444,17 @@ eigenfunction (`research/decisions/2026-10-07-bkl-operator-route.md`); the libra
 explicit but not part of the claim. `dimZero` and `gaussian` discharge every hypothesis in dimensions zero and one (the standard
 Gaussian on `ℝ¹` satisfies (29) with `R = 8`); four axiom guards. This certifies a supporting theorem of the paper; its main Theorem 1.1 is not
 covered.
+
+## Bizeul–Klartag–Lehec Proposition 7.1 certificate
+
+[`PropBklSuspension.lean`](PropBklSuspension.lean) certifies `prop:bkl-suspension`, Proposition 7.1
+of Bizeul–Klartag–Lehec (arXiv:2610.05474v1), in the source form: for `d ≥ 2`, if the `(d+1)`-cumulant
+bound `CumulantBound d b` holds for all isotropic log-concave laws, then every centered isotropic
+regular log-concave law `μ` on `ℝⁿ` and every `f ∈ L²(μ)` satisfy
+`‖T_d f‖²_HS ≤ 2 b (d!)⁻² ‖f‖₂²` (BKL (107)). The proof follows the paper's suspension: the joint
+law of `(f(X), X)` with independent Laplace noise, its density (109), log-concavity (110),
+isotropy, the mixed-cumulant identities (111)–(112), the Hilbert–Schmidt step, the `β → ∞` limit
+and the affine-orthogonal decomposition (`research/handoffs/2026-10-07-continuous-bkl-formalization.md`).
+`two` is the leading case `d = 2` with the constant `b/2`; no instance of `CumulantBound` is asserted,
+and Theorem 4.1, which would supply it, remains open. Two axiom guards. This certifies a supporting
+proposition of the paper; its main Theorem 1.1 is not covered.

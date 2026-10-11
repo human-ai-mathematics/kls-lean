@@ -1,6 +1,6 @@
 # Literature register as the primary progress view
 
-Date: 2026-10-02. Source: [issue #8](https://github.com/numina-functional-inequalities/kls-lean/issues/8),
+Date: 2026-10-02. Source: [issue #8](https://github.com/human-ai-mathematics/kls-lean/issues/8),
 section 1: make the literature register the primary progress view and define paper coverage.
 Moving the four exploratory routes out of the progress page is deliberately not done: the
 combined route diagram and approach table restored in `6c3437f` stay on

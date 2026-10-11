@@ -147,7 +147,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/Probability/Moments.lean",
-            "sha256": "6d930f322895afd8a73d89cfb49681703dcf0f38a9a9d85f57fc989bb4ced490"
+            "sha256": "f1fa40a0f99b13b2314b05662e2ee5ea2adaf8d2294d05292584c172481382a5"
           }
         ],
         "gaps": []
@@ -191,7 +191,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/LogConcave/Transport.lean",
-            "sha256": "98f10deb7b1b4248609a980c394cae90bacda69f625957395fa4c71ed296ae96"
+            "sha256": "6a832e847475993bb0bba4dffa191f41b437d4a2b7c43f9df9dcb80510bd00c6"
           },
           {
             "path": "formalization/.lake/packages/mathlib/Mathlib/Algebra/Group/Pointwise/Set/Scalar.lean",
@@ -235,7 +235,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Moments.lean",
-            "sha256": "8e13968e03f80e01c35557f8a2e008b0ae50ff8c74067d2a7437ba44cd2b6a61"
+            "sha256": "b4acb70332ece3ef676d39e9363237c90329e5880e192e8499c097f1a642f367"
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Construction.lean",
@@ -319,7 +319,7 @@
           },
           {
             "path": "formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex",
-            "sha256": "7144286e700fb69b0bf8470482f0ae125e9af6bf8b5bb445ff66d4f1dac999b6"
+            "sha256": "7e3c57924c2991a64bc2f4d1ee4ec2b828dd0d4fafcf388c33de2d93843f0afa"
           },
           {
             "path": "formalization/.lake/packages/mathlib/Mathlib/Analysis/InnerProductSpace/LaxMilgram.lean",
@@ -507,7 +507,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/Calculus.lean",
-            "sha256": "ca9f1779c46d0930ac70414c909baeaa624d98650ce58338fdf20abf4791f782"
+            "sha256": "9d87495ab78f6e82ba1d13f229107090f1a72c13d1883caf2c0224ebef02b9ba"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/Laplacian.lean",
@@ -515,7 +515,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/Basic.lean",
-            "sha256": "5839db78d8de40feb13007a015fa98f0ba5e3fde8461d152dab780c58c3b8f21"
+            "sha256": "c85402d0e1d0b633bd43321ca022158ba27fff9513cd04fd20282742205ed2b0"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/Semigroup/AdjointClosure.lean",
@@ -955,7 +955,7 @@
           },
           {
             "path": "formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex",
-            "sha256": "7144286e700fb69b0bf8470482f0ae125e9af6bf8b5bb445ff66d4f1dac999b6"
+            "sha256": "7e3c57924c2991a64bc2f4d1ee4ec2b828dd0d4fafcf388c33de2d93843f0afa"
           }
         ],
         "gaps": []
@@ -1027,7 +1027,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Moments.lean",
-            "sha256": "8e13968e03f80e01c35557f8a2e008b0ae50ff8c74067d2a7437ba44cd2b6a61"
+            "sha256": "b4acb70332ece3ef676d39e9363237c90329e5880e192e8499c097f1a642f367"
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Construction.lean",
@@ -1043,7 +1043,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/LogConcave/Isotropic.lean",
-            "sha256": "5359a4a919df4c70a357be99dcb3e6f2cea17702754442d2c25151e992ea435c"
+            "sha256": "271db606a7055a7e1c2f408a81a6786035815af6dfbbf9c02e059b15deabaf28"
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/LogConcave/Translation.lean",
@@ -1055,7 +1055,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/Poincare/SmoothTest/Basic.lean",
-            "sha256": "864a1074e90520009d6955a60875aec0aa1b3f7d2d9631ca7b8d6abe5e25b47e"
+            "sha256": "37d39ba98750cc453acf405fee33eb1c0f893078dda1cdc8452b7ebf5674d18a"
           },
           {
             "path": "formalization/.lake/packages/mathlib/Mathlib/Probability/Moments/Variance.lean",
@@ -1566,7 +1566,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/LogConcave/Transport.lean",
-            "sha256": "98f10deb7b1b4248609a980c394cae90bacda69f625957395fa4c71ed296ae96"
+            "sha256": "6a832e847475993bb0bba4dffa191f41b437d4a2b7c43f9df9dcb80510bd00c6"
           },
           {
             "path": "formalization/FunctionalInequalities/Probability/Domination/Averages.lean",
@@ -1626,7 +1626,7 @@
           },
           {
             "path": "formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex",
-            "sha256": "7144286e700fb69b0bf8470482f0ae125e9af6bf8b5bb445ff66d4f1dac999b6"
+            "sha256": "7e3c57924c2991a64bc2f4d1ee4ec2b828dd0d4fafcf388c33de2d93843f0afa"
           }
         ],
         "gaps": []
@@ -1710,7 +1710,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/Probability/Transport.lean",
-            "sha256": "d1a4bd12470c0996ce058f097191c71b19522e5fec4ef3064c3f49ce7b8e8f7b"
+            "sha256": "f5e0ca6c0c32f2fafbfbbd90bc86e902ba728e8aea19aeabf3cf6dc728aa3c73"
           },
           {
             "path": "formalization/FunctionalInequalities/Energy/WeightedGradient/Core.lean",
@@ -1778,7 +1778,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/Probability/Transport.lean",
-            "sha256": "d1a4bd12470c0996ce058f097191c71b19522e5fec4ef3064c3f49ce7b8e8f7b"
+            "sha256": "f5e0ca6c0c32f2fafbfbbd90bc86e902ba728e8aea19aeabf3cf6dc728aa3c73"
           },
           {
             "path": "formalization/FunctionalInequalities/Energy/CovarianceGradient/IntrinsicTranslation.lean",
@@ -1802,7 +1802,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/LogConcave/Transport.lean",
-            "sha256": "98f10deb7b1b4248609a980c394cae90bacda69f625957395fa4c71ed296ae96"
+            "sha256": "6a832e847475993bb0bba4dffa191f41b437d4a2b7c43f9df9dcb80510bd00c6"
           },
           {
             "path": "formalization/FunctionalInequalities/Probability/AffineSupport.lean",
@@ -1862,11 +1862,11 @@
           },
           {
             "path": "formalization/FunctionalInequalities/Probability/Transport.lean",
-            "sha256": "d1a4bd12470c0996ce058f097191c71b19522e5fec4ef3064c3f49ce7b8e8f7b"
+            "sha256": "f5e0ca6c0c32f2fafbfbbd90bc86e902ba728e8aea19aeabf3cf6dc728aa3c73"
           },
           {
             "path": "formalization/FunctionalInequalities/Probability/Covariance/Whitening.lean",
-            "sha256": "cd1d6cee95eb26be981d1d63ddc6e334d10d473a926b486fed1f9e0a5aaa5af1"
+            "sha256": "d0c8e9763773e66f0a5b3c282f66450151e3c146511eabfd0cec4540ecba5588"
           },
           {
             "path": "formalization/FunctionalInequalities/Energy/WeightedGradient/Basic.lean",
@@ -1878,7 +1878,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/LogConcave/Isotropic.lean",
-            "sha256": "5359a4a919df4c70a357be99dcb3e6f2cea17702754442d2c25151e992ea435c"
+            "sha256": "271db606a7055a7e1c2f408a81a6786035815af6dfbbf9c02e059b15deabaf28"
           },
           {
             "path": "formalization/FunctionalInequalities/Energy/Relaxation/Basic.lean",
@@ -1906,7 +1906,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/Isotropic.lean",
-            "sha256": "e61de76fd3e7de733afaac4d5720a3dfcf5f6c1c6dbbc9c61fac8e9b8be5f21b"
+            "sha256": "ab0876b3e8c7232e9b113f150341c84b5c468dbbb1964a2759546a22c688e05e"
           },
           {
             "path": "formalization/.lake/packages/mathlib/Mathlib/LinearAlgebra/FiniteDimensional/Basic.lean",
@@ -2326,7 +2326,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Moments.lean",
-            "sha256": "8e13968e03f80e01c35557f8a2e008b0ae50ff8c74067d2a7437ba44cd2b6a61"
+            "sha256": "b4acb70332ece3ef676d39e9363237c90329e5880e192e8499c097f1a642f367"
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Construction.lean",
@@ -2338,7 +2338,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/LogConcave/Isotropic.lean",
-            "sha256": "5359a4a919df4c70a357be99dcb3e6f2cea17702754442d2c25151e992ea435c"
+            "sha256": "271db606a7055a7e1c2f408a81a6786035815af6dfbbf9c02e059b15deabaf28"
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/LogConcave/Line/Density.lean",
@@ -2546,7 +2546,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Moments.lean",
-            "sha256": "8e13968e03f80e01c35557f8a2e008b0ae50ff8c74067d2a7437ba44cd2b6a61"
+            "sha256": "b4acb70332ece3ef676d39e9363237c90329e5880e192e8499c097f1a642f367"
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Construction.lean",
@@ -2602,7 +2602,7 @@
           },
           {
             "path": "formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex",
-            "sha256": "7144286e700fb69b0bf8470482f0ae125e9af6bf8b5bb445ff66d4f1dac999b6"
+            "sha256": "7e3c57924c2991a64bc2f4d1ee4ec2b828dd0d4fafcf388c33de2d93843f0afa"
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/Isoperimetry.lean",
@@ -2614,7 +2614,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Moments.lean",
-            "sha256": "8e13968e03f80e01c35557f8a2e008b0ae50ff8c74067d2a7437ba44cd2b6a61"
+            "sha256": "b4acb70332ece3ef676d39e9363237c90329e5880e192e8499c097f1a642f367"
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Construction.lean",
@@ -3178,7 +3178,7 @@
           },
           {
             "path": "research/naming.md",
-            "sha256": "3434763c38500a89aa02c35d6138c1f88c8a5ce5a030de698bcdbdba64336d08"
+            "sha256": "ab142b4827d1a4a42485fa56af1401acec0124e821d6df167ad8c9625786e3ca"
           },
           {
             "path": "research/api-migration/2026-09-17-analysis-module-map.json",
@@ -3442,7 +3442,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/LogConcave/Transport.lean",
-            "sha256": "98f10deb7b1b4248609a980c394cae90bacda69f625957395fa4c71ed296ae96"
+            "sha256": "6a832e847475993bb0bba4dffa191f41b437d4a2b7c43f9df9dcb80510bd00c6"
           },
           {
             "path": "formalization/FunctionalInequalities/Probability/Domination/Averages.lean",

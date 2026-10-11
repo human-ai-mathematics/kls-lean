@@ -18,9 +18,9 @@ open estimate follows from the cited literature.
    (`q:mm-spectral-occupation` and `prop:spectral-sufficiency`) and the
    [route-composition record](../../formalization/blueprint/route-composition.yaml)
    (`moment-map-spectral-full-damping`). They are the current KLS-facing contract.
-2. Read the pinned [upstream spectral manuscript](https://github.com/numina-functional-inequalities/kls-conjecture-search/blob/34b5fcd57fef17089e781616005fe6d3641bd11e/modules/kls/30-spectral-route.tex),
-   its [conditional sufficiency proof](https://github.com/numina-functional-inequalities/kls-conjecture-search/blob/34b5fcd57fef17089e781616005fe6d3641bd11e/solutions/prop-spectral-sufficiency.tex),
-   and the [research portfolio](https://github.com/numina-functional-inequalities/kls-conjecture-search/blob/34b5fcd57fef17089e781616005fe6d3641bd11e/research/program/portfolio.yaml).
+2. Read the pinned [upstream spectral manuscript](https://github.com/human-ai-mathematics/kls-conjecture-search/blob/34b5fcd57fef17089e781616005fe6d3641bd11e/modules/kls/30-spectral-route.tex),
+   its [conditional sufficiency proof](https://github.com/human-ai-mathematics/kls-conjecture-search/blob/34b5fcd57fef17089e781616005fe6d3641bd11e/solutions/prop-spectral-sufficiency.tex),
+   and the [research portfolio](https://github.com/human-ai-mathematics/kls-conjecture-search/blob/34b5fcd57fef17089e781616005fe6d3641bd11e/research/program/portfolio.yaml).
    The pinned revision is `34b5fcd57fef17089e781616005fe6d3641bd11e`.
    The [local evidence snapshot](../upstream/2026-09-12-kls-research.json) preserves
    selected ledger records, assumptions, and review paths. Recheck the upstream
@@ -153,7 +153,7 @@ metadata, then regenerate the progress views with
 
 | Role | Source | Use and limit |
 | --- | --- | --- |
-| Direct route source | [Pinned upstream §30](https://github.com/numina-functional-inequalities/kls-conjecture-search/blob/34b5fcd57fef17089e781616005fe6d3641bd11e/modules/kls/30-spectral-route.tex) | Defines the research route; the universal-time gate is open. |
+| Direct route source | [Pinned upstream §30](https://github.com/human-ai-mathematics/kls-conjecture-search/blob/34b5fcd57fef17089e781616005fe6d3641bd11e/modules/kls/30-spectral-route.tex) | Defines the research route; the universal-time gate is open. |
 | Stochastic localization | [Eldan, 2013](https://arxiv.org/abs/1203.0893); [Lee–Vempala, 2024](https://annals.math.princeton.edu/2024/199-3/p02) | Foundational method and quantitative KLS work; neither proves this gate. |
 | Existing dimension-dependent input | [Klartag, 2023](https://arxiv.org/abs/2303.14938) | Literature isoperimetric/spectral frontier used in the short-window analysis. |
 | Explicit short-window assumption | [Letwin, 2026, v1](https://arxiv.org/abs/2607.24164v1) | Quadratic-test inequality and polylogarithmic result; retain its status and the upstream dependency. |

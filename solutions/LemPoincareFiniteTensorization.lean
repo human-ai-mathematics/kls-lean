@@ -6,7 +6,7 @@ import FunctionalInequalities.Poincare.Product.Reverse
 
 Source for the Poincaré product identity: Theorem 3.4 (Tensorization) in the combined manuscript
 at commit `cd4a894a0faf40c0180f80b1a31eec1fdb6cb576`:
-https://github.com/numina-functional-inequalities/kls-exploration/blob/cd4a894a0faf40c0180f80b1a31eec1fdb6cb576/modules/02-results-toolkit.tex#L59-L68
+https://github.com/human-ai-mathematics/kls-conjecture-search/blob/cd4a894a0faf40c0180f80b1a31eec1fdb6cb576/modules/02-results-toolkit.tex#L59-L68
 The original gives `C_P(⊗ᵢ μᵢ) = maxᵢ C_P(μᵢ)`. Its LSI and conditional-decomposition claims
 are outside this entry point. The fixed-constant upper bound follows by finite iteration of the
 binary bound corresponding to BGL (2014), Proposition 4.3.1; reverse bounds use local coordinate

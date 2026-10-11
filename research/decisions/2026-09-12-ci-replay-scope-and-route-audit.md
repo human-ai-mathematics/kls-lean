@@ -5,7 +5,7 @@ The owner requested investigation of remote failures, an audit of the mathematic
 ## Reasons for remote failure
 
 The `d2f136f6633ddd2455b838a36732502978b37a56` was pushed to `origin/main`; this was not a commit or push failure.
-[Lean certification running 34695539602](https://github.com/numina-functional-inequalities/kls-lean/actions/runs/34695539602)
+[Lean certification running 34695539602](https://github.com/human-ai-mathematics/kls-lean/actions/runs/34695539602)
 Python tests, default Lake builds, statement snapshots, and declaration audits have been executed; subsequently, an error occurred when preparing to replay inputs:
 
 ```text

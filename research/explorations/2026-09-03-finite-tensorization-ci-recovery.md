@@ -4,7 +4,7 @@
 
 The accepted mathematical commit `58d3c1c7c68e44e4df54dcaf694a739df67167e5` passed the local
 and clean-checkout gates recorded in the finite-tensorization acceptance record. Its first
-[push workflow](https://github.com/numina-functional-inequalities/kls-lean/actions/runs/33762313810)
+[push workflow](https://github.com/human-ai-mathematics/kls-lean/actions/runs/33762313810)
 failed after 4m25s with runner `System.IO.IOException: No space left on device`. The ledger and
 Python steps had succeeded. The runner failed while the composite Lean step was in progress;
 GitHub could not supply that job's failed-step log. This is not a successful remote build and

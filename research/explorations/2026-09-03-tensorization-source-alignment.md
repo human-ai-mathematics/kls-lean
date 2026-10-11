@@ -57,7 +57,7 @@ Cheeger lower bound in terms of the largest coordinate variance. Parts (i) and (
 separately concern preservation of product structure and the scalar variance processes
 under stochastic localization.
 
-- [Pinned `prop:products` statement and proof](https://github.com/numina-functional-inequalities/kls-exploration/blob/8185e46ffb040e04fea076953e5bcaeb4157d71a/modules/kls/16-model-geometries.tex#L64).
+- [Pinned `prop:products` statement and proof](https://github.com/human-ai-mathematics/kls-conjecture-search/blob/8185e46ffb040e04fea076953e5bcaeb4157d71a/modules/kls/16-model-geometries.tex#L64).
 
 Issue #6 supplies the binary Poincaré upper-bound ingredient. Its finite iteration, the
 one-dimensional log-concave estimate, the comparison of the relevant test domains, and

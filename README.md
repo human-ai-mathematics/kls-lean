@@ -17,7 +17,7 @@ one intentional `sorry` and lies outside every certificate import closure.
 
 ## What is proved
 
-There are **29 registered Lean certificates**, plus proved auxiliary results. Highlights:
+There are **30 registered Lean certificates**, plus proved auxiliary results. Highlights:
 
 - the one-dimensional upper bound `C_P^lit ≤ 4 Var` for log-concave laws on the line;
 - finite Poincaré tensorization and the sharp one-dimensional Gaussian constant;
@@ -39,11 +39,37 @@ There are **29 registered Lean certificates**, plus proved auxiliary results. Hi
   certified in the source form (`thm:bkl-taylor-criterion`), proved through the operator domain of
   the generator with an approximate first eigenfunction; Lemma 2.2 and the Section 3 lemmas
   (Lemmas 3.2–3.4, 3.6, 3.8, 3.9, Corollaries 3.5, 3.7) are formalized for these iterates. The
-  paper's main Theorem 1.1 is **not** proved: Theorem 4.1 (Eldan localization), Proposition 7.1,
-  the regular approximation and the Letwin theorem remain.
-  Current work focuses on Proposition 7.1: the convexity of its suspension potential (109)–(110)
-  and the choice of a positive finite copy number are formalized; the joint law and mixed
-  cumulant identity remain open.
+  paper's main Theorem 1.1 is **not** proved: Theorem 4.1 (Eldan localization) and the Letwin bound it
+  uses remain open. The deterministic grouping of the drift expansion (74), `2m κ_m + 2 L_m` with `L_m` from (72), and the
+  covariance step `Cov(|M|^{1/2} X) = |M|` of the proof of Letwin's Theorem 1.2 are formalized; the stochastic Lemma 4.3
+  and Letwin's Theorem 1.2 are not. Letwin's Lemma A.4 is formalized for every potential in
+  its source class (the moment-map properties are hypotheses; cutoffs for every real `R ≥ 1` with `‖Lχ_R‖_{L¹(ν)} ≤ C/R`),
+  Lemma A.5 for given cutoffs, and both are applied to the uniform law on `(−√3, √3)` with the nonconstant test
+  function `tanh²(√3y/2)`; the moment map itself and Letwin's Theorem 2.5 are not. The Section 2 regular approximation is complete in conditional form: Gaussian
+  smoothing produces regular potentials (`δ ≤ ∇² ≤ 2s + δ`, polynomial growth of all derivatives through
+  the Gaussian posterior and quantitative Borell moments), the two-step laws converge to the law with
+  their means, second moments and covariances, regular laws center and whiten to isotropic regular
+  laws, a Poincaré bound for isotropic regular laws transfers through the covariance norm, and the
+  weak-limit passage gives: a bound for isotropic regular laws on `ℝⁿ` implies the bound for every
+  isotropic log-concave law. Combined with the p. 30 reduction, Theorem 1.1 is formalized
+  **conditionally on Theorem 4.1**: under its universal cumulant bounds, every isotropic log-concave
+  law in every finite dimension has `C_P ≤ 2·C_{3.1}·K` and the KLS conjecture follows
+  (`KLS.conjecture_of_cumulantBound`). This carries no certificate; `KLS.kls` stays open. Letwin's
+  Stein-kernel supports (Definition 2.6, A.7, Lemma 2.9, the mean-Hessian identity of Lemma 2.3 for a
+  given potential) are formalized; the Gaussian has the identity kernel, while the moment-map kernel of
+  an arbitrary law and Letwin's Theorems 1.1–1.2 remain open.
+- Bizeul–Klartag–Lehec **Proposition 7.1** (suspension: a `(d+1)`-cumulant bound `CumulantBound d b` for
+  all isotropic log-concave laws implies `‖T_d f‖²_HS ≤ 2 b (d!)⁻² ‖f‖₂²` for every centered
+  isotropic regular log-concave `μ` on `ℝⁿ` and every `f ∈ L²(μ)`, all dimensions) is certified in the source form
+  (`prop:bkl-suspension`): the joint law of the Laplace-noise suspension, its density (109),
+  log-concavity (110), isotropy, the mixed-cumulant identities (111)–(112), the Hilbert–Schmidt
+  step, the `β → ∞` limit and the affine-orthogonal decomposition are formalized. Theorem 4.1 is
+  stated conditionally (cumulant envelope) and remains open.
+- Cordero-Erausquin–Klartag (*Moment measures*): **Proposition 12** (a convex lower semicontinuous potential with
+  Legendre mass one maximizes the variational functional over every admissible competitor, for centered full-span
+  probability measures with finite first moment), **Lemma 16** for finite measures and **Lemma 17** with the
+  interior-hull condition as an explicit hypothesis. Lemma 15's constant, essential continuity and Theorem 2
+  (existence and uniqueness of moment potentials) remain open.
 
 ## What is not proved
 
@@ -85,5 +111,5 @@ python3 research/progress/update.py --check
 audit of every local declaration except `KLS.kls`, kernel replay, statement baselines and
 metadata checks. Remote CI runs its Lean-only scope (`--lean-only`) on manual dispatch
 (`gh workflow run lean.yml`) or a pushed `milestone/**` tag; ordinary pushes do not trigger it.
-[Run 37516844384](https://github.com/numina-functional-inequalities/kls-lean/actions/runs/37516844384)
+[Run 37516844384](https://github.com/human-ai-mathematics/kls-lean/actions/runs/37516844384)
 passed for commit `36e7c78`; it does not certify later commits or prove KLS.

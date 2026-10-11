@@ -1,5 +1,6 @@
 import FunctionalInequalities.KLS.Definitions
 import Mathlib.Analysis.Convex.Measure
+import Mathlib.Topology.Maps.Proper.Basic
 
 /-!
 # Geometry of the compact-set log-concavity convention
@@ -54,6 +55,39 @@ theorem of_affineIsometry_map {μ : ProbabilityMeasure E} (hμ : LogConcave μ)
     exact (hK.prod hL).image (by fun_prop)
   have h := hμ (f '' K) (f '' L) (hK.image f.continuous) (hL.image f.continuous) t ht ht1
   rwa [hm K hK, hm L hL, ← hcomb, hm _ hc] at h
+
+/-- Pushforward along an affine isometric embedding of a complete space preserves compact-set log-concavity
+(the converse direction of `of_affineIsometry_map`; lower-dimensional images allowed, no density assumed). -/
+theorem map_affineIsometry [CompleteSpace F]
+    (ν : ProbabilityMeasure F) (hν : LogConcave ν)
+    (μ : ProbabilityMeasure E) (f : F →ᵃⁱ[ℝ] E)
+    (hmap : (μ : Measure E) = (ν : Measure F).map f) :
+    LogConcave μ := by
+  intro K L hK hL t ht0 ht1
+  have hK' := f.isometry.isClosedEmbedding.isProperMap.isCompact_preimage hK
+  have hL' := f.isometry.isClosedEmbedding.isProperMap.isCompact_preimage hL
+  have h := hν (f ⁻¹' K) (f ⁻¹' L) hK' hL' t ht0 ht1
+  have hf (x y : F) : f (t • x + (1 - t) • y) = t • f x + (1 - t) • f y := by
+    simpa only [AffineMap.lineMap_apply_module, sub_sub_cancel, AffineIsometry.coe_toAffineMap]
+      using f.toAffineMap.apply_lineMap x y (1 - t)
+  have hc : IsCompact {z : E | ∃ x ∈ K, ∃ y ∈ L, z = t • x + (1 - t) • y} := by
+    have he : {z : E | ∃ x ∈ K, ∃ y ∈ L, z = t • x + (1 - t) • y} =
+        (fun p : E × E => t • p.1 + (1 - t) • p.2) '' (K ×ˢ L) := by
+      ext z
+      simp only [mem_ofPred_eq, mem_image, mem_prod]
+      constructor
+      · rintro ⟨x, hx, y, hy, rfl⟩
+        exact ⟨(x, y), ⟨hx, hy⟩, rfl⟩
+      · rintro ⟨⟨x, y⟩, ⟨hx, hy⟩, rfl⟩
+        exact ⟨x, hx, y, hy, rfl⟩
+    rw [he]
+    exact (hK.prod hL).image (by fun_prop)
+  rw [hmap, Measure.map_apply f.continuous.measurable hK.measurableSet,
+    Measure.map_apply f.continuous.measurable hL.measurableSet,
+    Measure.map_apply f.continuous.measurable hc.measurableSet]
+  apply h.trans (measure_mono ?_)
+  rintro z ⟨x, hx, y, hy, rfl⟩
+  exact ⟨f x, hx, f y, hy, hf x y⟩
 
 variable [ProperSpace E]
 

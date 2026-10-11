@@ -1,7 +1,7 @@
 # Finite tensorization statement preparation: validation
 
 Date: 2026-09-03 (Asia/Shanghai). Node: `lem:poincare-finite-tensorization`.
-Issue: [#7](https://github.com/numina-functional-inequalities/kls-lean/issues/7), confirmed by the
+Issue: [#7](https://github.com/human-ai-mathematics/kls-lean/issues/7), confirmed by the
 GitHub sub-issue endpoint under #1. Baseline/current HEAD:
 `4801ca958778ae02cc0d81fc7ec805a4e96a894c`, branch `main`.
 

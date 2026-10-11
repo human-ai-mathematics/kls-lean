@@ -769,7 +769,7 @@ their upstream dependencies, then runs the complete default `lake build`. Whole-
 caching and automatic full-Mathlib downloads are disabled to limit runner disk usage.
 
 The final publication SHA and CI result for that same commit are tracked in
-[Issue #7](https://github.com/numina-functional-inequalities/kls-lean/issues/7); earlier build or
+[Issue #7](https://github.com/human-ai-mathematics/kls-lean/issues/7); earlier build or
 CI results do not substitute for that publication check.
 
 To change dependency versions, choose a compatible Lean/Mathlib release, update `lean-toolchain`

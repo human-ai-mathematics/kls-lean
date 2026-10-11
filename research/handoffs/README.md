@@ -1,0 +1,28 @@
+# Chronological handoff index
+
+This chronological index is generated from the dated Markdown records. README files are navigation pages and are intentionally omitted.
+
+- [2026-09-30-admg-metric-continuation](2026-09-30-admg-metric-continuation.md)
+- [2026-09-30-eight-hour-locally-finite](2026-09-30-eight-hour-locally-finite.md)
+- [2026-09-30-eight-hour-upper-recovery-plan](2026-09-30-eight-hour-upper-recovery-plan.md)
+- [2026-09-30-four-hour-admg-finite](2026-09-30-four-hour-admg-finite.md)
+- [2026-10-03-eight-hour-bgl-ergodicity](2026-10-03-eight-hour-bgl-ergodicity.md)
+- [2026-10-03-renewed-eight-hour-bgl-ergodicity](2026-10-03-renewed-eight-hour-bgl-ergodicity.md)
+- [2026-10-07-continuous-bkl-formalization](2026-10-07-continuous-bkl-formalization.md)
+- [2026-10-07-eight-hour-bkl-foundations](2026-10-07-eight-hour-bkl-foundations.md)
+- [2026-10-07-eight-hour-bkl-operator-route](2026-10-07-eight-hour-bkl-operator-route.md)
+- [2026-10-07-four-hour-bkl-continuation](2026-10-07-four-hour-bkl-continuation.md)
+- [2026-10-09-api-first-goal](2026-10-09-api-first-goal.md)
+- [2026-10-09-cek-integration-adoption](2026-10-09-cek-integration-adoption.md)
+- [2026-10-09-claude-context-continuation](2026-10-09-claude-context-continuation.md)
+- [2026-10-09-codex-context-continuation](2026-10-09-codex-context-continuation.md)
+- [2026-10-09-moment-map-letwin-parallel](2026-10-09-moment-map-letwin-parallel.md)
+- [2026-10-10-bkl-primary-scope](2026-10-10-bkl-primary-scope.md)
+- [2026-10-10-bkl-staged-goals](2026-10-10-bkl-staged-goals.md)
+- [2026-10-11-bkl-a4-goal](2026-10-11-bkl-a4-goal.md)
+- [2026-10-11-file-management-goal](2026-10-11-file-management-goal.md)
+- [bv-eight-hour-2026-09-29](bv-eight-hour-2026-09-29.md)
+- [bv-renewed-eight-hours](bv-renewed-eight-hours.md)
+- [claude-bv-overnight](claude-bv-overnight.md)
+- [codex-bv-overnight-review](codex-bv-overnight-review.md)
+- [moment-map-spectral](moment-map-spectral.md)

@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "last_updated": "2026-10-07",
+  "last_updated": "2026-10-12",
   "nodes": {
     "ass:cmh-recovery-envelope": {
       "description": "Seek a regular moment-map approximation of every centered log-concave law with a dimension-free CMH bound.",
@@ -8,7 +8,7 @@
       "diagram": {
         "id": "MG",
         "label": "Bounded CMH<br/>Recovery envelope",
-        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/src/chapters/50-kls-routes.tex",
+        "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/blueprint/src/chapters/50-kls-routes.tex",
         "shape": "box"
       }
     },
@@ -18,7 +18,7 @@
       "diagram": {
         "id": "EG",
         "label": "Tight-prefix<br/>Carleson estimate",
-        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/src/chapters/50-kls-routes.tex",
+        "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/blueprint/src/chapters/50-kls-routes.tex",
         "shape": "box"
       }
     },
@@ -56,7 +56,7 @@
       "diagram": {
         "id": "KLS",
         "label": "KLS<br/>Dimension-free bound",
-        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Statement.lean",
+        "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Statement.lean",
         "shape": "box"
       }
     },
@@ -66,7 +66,7 @@
       "diagram": {
         "id": "ENERGY",
         "label": "Canonical energy<br/>= 2 × Cheeger energy",
-        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Energy/Cheeger/Basic.lean",
+        "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/Energy/Cheeger/Basic.lean",
         "shape": "box"
       }
     },
@@ -80,7 +80,7 @@
       "diagram": {
         "id": "MC",
         "label": "Recovery-sequence<br/>Sufficiency",
-        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/src/chapters/50-kls-routes.tex",
+        "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/blueprint/src/chapters/50-kls-routes.tex",
         "shape": "box"
       }
     },
@@ -90,7 +90,7 @@
       "diagram": {
         "id": "F4",
         "label": "Fiber energy<br/>≤ 4 × gradient energy",
-        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/ConditionalFiber.lean",
+        "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/ConditionalFiber.lean",
         "shape": "box"
       }
     },
@@ -100,7 +100,7 @@
       "diagram": {
         "id": "EC",
         "label": "Tight-window<br/>Consumption",
-        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/src/chapters/50-kls-routes.tex",
+        "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/blueprint/src/chapters/50-kls-routes.tex",
         "shape": "box"
       }
     },
@@ -178,7 +178,7 @@
       "diagram": {
         "id": "MT",
         "label": "Affine constant<br/>Translation invariance",
-        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Poincare/CovarianceGradient/Translation.lean",
+        "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/Poincare/CovarianceGradient/Translation.lean",
         "shape": "box"
       }
     },
@@ -192,7 +192,7 @@
       "diagram": {
         "id": "FP",
         "label": "Fiber-bound<br/>Energy comparison",
-        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/ConditionalFiber/EnergyComparison.lean",
+        "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/ConditionalFiber/EnergyComparison.lean",
         "shape": "box"
       }
     },
@@ -202,7 +202,7 @@
       "diagram": {
         "id": "FC",
         "label": "Fiber Dirichlet form",
-        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/ConditionalFiber/Closed.lean",
+        "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/ConditionalFiber/Closed.lean",
         "shape": "box"
       }
     },
@@ -236,7 +236,7 @@
       "diagram": {
         "id": "EQ",
         "label": "h_M = h_S",
-        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Cheeger/Equality.lean",
+        "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Cheeger/Equality.lean",
         "shape": "box"
       }
     },
@@ -262,7 +262,7 @@
       "diagram": {
         "id": "SC",
         "label": "Spectral<br/>Sufficiency",
-        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/src/chapters/50-kls-routes.tex",
+        "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/blueprint/src/chapters/50-kls-routes.tex",
         "shape": "box"
       }
     },
@@ -276,7 +276,7 @@
       "diagram": {
         "id": "FG",
         "label": "Universal<br/>Frame bound",
-        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/src/chapters/50-kls-routes.tex",
+        "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/blueprint/src/chapters/50-kls-routes.tex",
         "shape": "box"
       }
     },
@@ -286,7 +286,7 @@
       "diagram": {
         "id": "SG",
         "label": "Full-damping<br/>Occupation bound",
-        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/src/chapters/50-kls-routes.tex",
+        "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/blueprint/src/chapters/50-kls-routes.tex",
         "shape": "box"
       }
     },
@@ -304,7 +304,7 @@
       "diagram": {
         "id": "NORM",
         "label": "Affine / isotropic<br/>Reduction",
-        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/Isotropic.lean",
+        "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/Isotropic.lean",
         "shape": "box"
       }
     },
@@ -318,7 +318,7 @@
       "diagram": {
         "id": "DENS",
         "label": "Log-concave density<br/>Intrinsic support",
-        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Intrinsic.lean",
+        "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Intrinsic.lean",
         "shape": "box"
       }
     },
@@ -328,7 +328,7 @@
       "diagram": {
         "id": "MH",
         "label": "W₂ limit and<br/>CMH comparison",
-        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/src/chapters/50-kls-routes.tex",
+        "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/blueprint/src/chapters/50-kls-routes.tex",
         "shape": "box"
       }
     },
@@ -354,7 +354,7 @@
       "diagram": {
         "id": "FRONT",
         "label": "Density Cheeger<br/>Identification",
-        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex",
+        "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex",
         "shape": "box"
       }
     },
@@ -376,7 +376,7 @@
       "diagram": {
         "id": "CB",
         "label": "Cheeger–Buser<br/>4 and pi bounds",
-        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex",
+        "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex",
         "shape": "box"
       }
     },
@@ -386,7 +386,7 @@
       "diagram": {
         "id": "ONE",
         "label": "One-dimensional<br/>Poincaré ≤ 4 Var",
-        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/Line/SharpPoincare.lean",
+        "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/Line/SharpPoincare.lean",
         "shape": "box"
       }
     },
@@ -400,7 +400,7 @@
       "diagram": {
         "id": "CONST",
         "label": "Poincaré frontend<br/>Equivalence",
-        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/Poincare.lean",
+        "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/Poincare.lean",
         "shape": "box"
       }
     },
@@ -422,7 +422,7 @@
       "diagram": {
         "id": "FORMS",
         "label": "Closed forms<br/>Dirichlet property",
-        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Energy/SmoothGradient/Dirichlet.lean",
+        "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/Energy/SmoothGradient/Dirichlet.lean",
         "shape": "box"
       }
     },
@@ -440,7 +440,7 @@
         "state": "formalized",
         "evidence": {
           "kind": "reviewed_progress",
-          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Slice/Measurable.lean",
+          "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Slice/Measurable.lean",
           "baseline_commit": "b7b458c"
         },
         "kind": "auxiliary"
@@ -448,7 +448,7 @@
       "diagram": {
         "id": "MEAS",
         "label": "Slice measurability",
-        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Slice/Measurable.lean",
+        "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Slice/Measurable.lean",
         "shape": "box"
       }
     },
@@ -458,7 +458,7 @@
         "state": "formalized",
         "evidence": {
           "kind": "reviewed_progress",
-          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/Graph/OpenIntegral.lean",
+          "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/Graph/OpenIntegral.lean",
           "baseline_commit": "b7b458c"
         },
         "kind": "auxiliary"
@@ -466,7 +466,7 @@
       "diagram": {
         "id": "GRAPH",
         "label": "Open-domain<br/>Graph area",
-        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/Graph/OpenIntegral.lean",
+        "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/Graph/OpenIntegral.lean",
         "shape": "box"
       }
     },
@@ -476,7 +476,7 @@
         "state": "formalized",
         "evidence": {
           "kind": "reviewed_progress",
-          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Coarea/Regular.lean",
+          "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Coarea/Regular.lean",
           "baseline_commit": "b7b458c"
         },
         "kind": "auxiliary"
@@ -484,7 +484,7 @@
       "diagram": {
         "id": "REG",
         "label": "Regular-domain<br/>Coarea",
-        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Coarea/Regular.lean",
+        "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Coarea/Regular.lean",
         "shape": "box"
       }
     },
@@ -494,7 +494,7 @@
         "state": "formalized",
         "evidence": {
           "kind": "reviewed_progress",
-          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Slice/Critical.lean",
+          "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Slice/Critical.lean",
           "baseline_commit": "b7b458c"
         },
         "kind": "auxiliary"
@@ -502,7 +502,7 @@
       "diagram": {
         "id": "CRIT",
         "label": "Critical-slice nullity",
-        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Slice/Critical.lean",
+        "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Slice/Critical.lean",
         "shape": "box"
       }
     },
@@ -512,7 +512,7 @@
         "state": "formalized",
         "evidence": {
           "kind": "reviewed_progress",
-          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Coarea/Smooth.lean",
+          "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Coarea/Smooth.lean",
           "note": "L11 proved; strict source client research/audits/SmoothCoareaAudit.lean. Uncommitted source evidence at the 2026-09-16 FirstOrderJet closeout."
         },
         "kind": "auxiliary"
@@ -520,7 +520,7 @@
       "diagram": {
         "id": "C1",
         "label": "General C¹ coarea",
-        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Coarea/Smooth.lean",
+        "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Coarea/Smooth.lean",
         "shape": "box"
       }
     },
@@ -530,7 +530,7 @@
         "state": "formalized",
         "evidence": {
           "kind": "reviewed_progress",
-          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/research/decisions/2026-09-16-lipschitz-coarea.md",
+          "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/research/decisions/2026-09-16-lipschitz-coarea.md",
           "note": "L6, L6a and L7 are formalized in Lean. Compact jets cover almost every point, and global C1 representatives preserve both values and ambient derivatives on disjoint measurable pieces. Audit: research/audits/LipschitzCoareaAudit.lean. Uncommitted local proof."
         },
         "kind": "auxiliary"
@@ -538,7 +538,7 @@
       "diagram": {
         "id": "WHIT",
         "label": "Compact Whitney jets<br/>Exact C¹ pieces",
-        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/research/decisions/2026-09-16-lipschitz-coarea.md",
+        "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/research/decisions/2026-09-16-lipschitz-coarea.md",
         "shape": "box"
       }
     },
@@ -548,7 +548,7 @@
         "state": "formalized",
         "evidence": {
           "kind": "reviewed_progress",
-          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Coarea/LocallyLipschitz.lean",
+          "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Coarea/LocallyLipschitz.lean",
           "note": "L12 and the original T1/T2/T3 entry points are formally wired to hole-free modules, each by a migration with a machine-checked byte-identical pp.all signature. L13 KLS.coarea_of_locallyLipschitz then generalizes the formula to locally Lipschitz functions, subsuming L11 and L12; the audit proves the generalization is strict. The Cheeger infima and the Cheeger-Poincare comparison are a separate line owned by a collaborator. Audits: research/audits/LipschitzCoareaAudit.lean, LipschitzCoareaMigrationAudit.lean and LocallyLipschitzCoareaAudit.lean. Uncommitted local proof."
         },
         "kind": "auxiliary"
@@ -556,7 +556,7 @@
       "diagram": {
         "id": "LIP",
         "label": "Coarea: Lipschitz<br/>and locally Lipschitz",
-        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Coarea/LocallyLipschitz.lean",
+        "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Coarea/LocallyLipschitz.lean",
         "shape": "box"
       }
     },
@@ -566,7 +566,7 @@
         "state": "formalized",
         "evidence": {
           "kind": "reviewed_progress",
-          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/SmoothDomain/GaussGreen.lean",
+          "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/SmoothDomain/GaussGreen.lean",
           "baseline_commit": "b7b458c"
         },
         "kind": "auxiliary"
@@ -574,7 +574,7 @@
       "diagram": {
         "id": "GG",
         "label": "Global Gauss–Green",
-        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/SmoothDomain/GaussGreen.lean",
+        "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/SmoothDomain/GaussGreen.lean",
         "shape": "box"
       }
     },
@@ -584,7 +584,7 @@
         "state": "formalized",
         "evidence": {
           "kind": "reviewed_progress",
-          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Perimeter/Recovery.lean",
+          "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Perimeter/Recovery.lean",
           "baseline_commit": "b7b458c"
         },
         "kind": "auxiliary"
@@ -592,7 +592,7 @@
       "diagram": {
         "id": "REC",
         "label": "Smooth recovery",
-        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Perimeter/Recovery.lean",
+        "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Perimeter/Recovery.lean",
         "shape": "box"
       }
     },
@@ -602,7 +602,7 @@
         "state": "formalized",
         "evidence": {
           "kind": "reviewed_progress",
-          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Cheeger/Infimum.lean",
+          "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Cheeger/Infimum.lean",
           "baseline_commit": "b7b458c"
         },
         "kind": "auxiliary"
@@ -610,7 +610,7 @@
       "diagram": {
         "id": "FWD",
         "label": "h_M ≤ h_S",
-        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Cheeger/Infimum.lean",
+        "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Cheeger/Infimum.lean",
         "shape": "box"
       }
     },
@@ -620,7 +620,7 @@
         "state": "formalized",
         "evidence": {
           "kind": "reviewed_progress",
-          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/Sard/Sharp.lean",
+          "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/Sard/Sharp.lean",
           "baseline_commit": "f8e4ca8b63a53b2de070f02d93a3d3f7674a4648"
         },
         "kind": "auxiliary"
@@ -628,7 +628,7 @@
       "diagram": {
         "id": "SARD",
         "label": "Scalar Sard<br/>Sharp finite regularity",
-        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/Sard/Sharp.lean",
+        "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/Sard/Sharp.lean",
         "shape": "box"
       }
     },
@@ -638,7 +638,7 @@
         "state": "formalized",
         "evidence": {
           "kind": "reviewed_progress",
-          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Cheeger/Equality.lean",
+          "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Cheeger/Equality.lean",
           "baseline_commit": "f8e4ca8b63a53b2de070f02d93a3d3f7674a4648"
         },
         "kind": "auxiliary"
@@ -646,7 +646,7 @@
       "diagram": {
         "id": "SCI",
         "label": "Cheeger superlevel<br/>Integral bound",
-        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Cheeger/Equality.lean",
+        "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Cheeger/Equality.lean",
         "shape": "box"
       }
     },
@@ -656,7 +656,7 @@
         "state": "formalized",
         "evidence": {
           "kind": "reviewed_progress",
-          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Cheeger/DistanceCutoff.lean",
+          "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Cheeger/DistanceCutoff.lean",
           "baseline_commit": "b7b458c"
         },
         "kind": "auxiliary"
@@ -664,7 +664,7 @@
       "diagram": {
         "id": "CUT",
         "label": "Distance cutoffs",
-        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Cheeger/DistanceCutoff.lean",
+        "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Cheeger/DistanceCutoff.lean",
         "shape": "box"
       }
     },
@@ -674,7 +674,7 @@
         "state": "formalized",
         "evidence": {
           "kind": "reviewed_progress",
-          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Cheeger/Equality.lean",
+          "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Cheeger/Equality.lean",
           "baseline_commit": "f8e4ca8b63a53b2de070f02d93a3d3f7674a4648"
         },
         "kind": "auxiliary"
@@ -682,7 +682,7 @@
       "diagram": {
         "id": "REV",
         "label": "h_S ≤ h_M",
-        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Cheeger/Equality.lean",
+        "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Cheeger/Equality.lean",
         "shape": "box"
       }
     },
@@ -692,7 +692,7 @@
         "state": "formalized",
         "evidence": {
           "kind": "reviewed_progress",
-          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Cheeger/MinkowskiContent.lean",
+          "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Cheeger/MinkowskiContent.lean",
           "baseline_commit": "b7b458c"
         },
         "kind": "auxiliary"
@@ -700,7 +700,7 @@
       "diagram": {
         "id": "MINK",
         "label": "Minkowski coarea",
-        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Cheeger/MinkowskiContent.lean",
+        "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Cheeger/MinkowskiContent.lean",
         "shape": "box"
       }
     },
@@ -710,7 +710,7 @@
         "state": "formalized",
         "evidence": {
           "kind": "local_strict_client",
-          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Cheeger/BVIdentification.lean",
+          "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Cheeger/BVIdentification.lean",
           "source_sha256": "55a656189d29317ded0c6e4dca13e24a18efd001b2443642cb5e07402439bfeb"
         },
         "kind": "auxiliary"
@@ -718,7 +718,7 @@
       "diagram": {
         "id": "BV",
         "label": "Closed-support BV<br/>identification (log-concave)",
-        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Cheeger/BVIdentification.lean",
+        "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Cheeger/BVIdentification.lean",
         "shape": "box"
       }
     },
@@ -728,7 +728,7 @@
         "state": "pending",
         "evidence": {
           "kind": "reviewed_progress",
-          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/route-composition.yaml",
+          "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/blueprint/route-composition.yaml",
           "baseline_commit": "b7b458c"
         },
         "kind": "route"
@@ -736,7 +736,7 @@
       "diagram": {
         "id": "EAND",
         "label": "AND<br/>Eldan route",
-        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/route-composition.yaml",
+        "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/blueprint/route-composition.yaml",
         "shape": "diamond"
       },
       "route_branch": "eldan-tight-prefix"
@@ -747,7 +747,7 @@
         "state": "pending",
         "evidence": {
           "kind": "reviewed_progress",
-          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/route-composition.yaml",
+          "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/blueprint/route-composition.yaml",
           "baseline_commit": "b7b458c"
         },
         "kind": "route"
@@ -755,7 +755,7 @@
       "diagram": {
         "id": "SAND",
         "label": "AND<br/>Spectral route",
-        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/route-composition.yaml",
+        "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/blueprint/route-composition.yaml",
         "shape": "diamond"
       },
       "route_branch": "moment-map-spectral-full-damping"
@@ -766,7 +766,7 @@
         "state": "pending",
         "evidence": {
           "kind": "reviewed_progress",
-          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/route-composition.yaml",
+          "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/blueprint/route-composition.yaml",
           "baseline_commit": "b7b458c"
         },
         "kind": "route"
@@ -774,7 +774,7 @@
       "diagram": {
         "id": "MAND",
         "label": "AND<br/>CMH route",
-        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/route-composition.yaml",
+        "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/blueprint/route-composition.yaml",
         "shape": "diamond"
       },
       "route_branch": "moment-map-cmh-recovery"
@@ -785,7 +785,7 @@
         "state": "formalized",
         "evidence": {
           "kind": "reviewed_progress",
-          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/ConditionalFiber.lean",
+          "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/ConditionalFiber.lean",
           "baseline_commit": "b7b458c"
         },
         "kind": "auxiliary"
@@ -793,7 +793,7 @@
       "diagram": {
         "id": "FLOG",
         "label": "Fiber log-concavity",
-        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/ConditionalFiber.lean",
+        "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/ConditionalFiber.lean",
         "shape": "box"
       }
     },
@@ -803,7 +803,7 @@
         "state": "partial",
         "evidence": {
           "kind": "reviewed_progress",
-          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/route-composition.yaml",
+          "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/blueprint/route-composition.yaml",
           "baseline_commit": "b7b458c"
         },
         "kind": "route"
@@ -811,7 +811,7 @@
       "diagram": {
         "id": "FAND",
         "label": "AND<br/>Fiber route",
-        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/route-composition.yaml",
+        "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/blueprint/route-composition.yaml",
         "shape": "diamond"
       },
       "route_branch": "conditional-fiber-frame"
@@ -822,7 +822,7 @@
         "state": "logic",
         "evidence": {
           "kind": "reviewed_progress",
-          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/route-composition.yaml",
+          "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/blueprint/route-composition.yaml",
           "baseline_commit": "b7b458c"
         },
         "kind": "logic"
@@ -830,7 +830,7 @@
       "diagram": {
         "id": "ANY",
         "label": "OR<br/>Any completed route",
-        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/blueprint/route-composition.yaml",
+        "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/blueprint/route-composition.yaml",
         "shape": "diamond"
       }
     },
@@ -840,7 +840,7 @@
         "state": "formalized",
         "evidence": {
           "kind": "reviewed_progress",
-          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/Vector/Coarea/Regular.lean",
+          "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/Vector/Coarea/Regular.lean",
           "note": "Reviewed against current theorem statements and local axiom/client checks on 2026-09-17."
         },
         "kind": "auxiliary"
@@ -848,7 +848,7 @@
       "diagram": {
         "id": "VREG",
         "label": "Vector coarea<br/>Regular region",
-        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/Vector/Coarea/Regular.lean",
+        "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/Vector/Coarea/Regular.lean",
         "shape": "box"
       }
     },
@@ -858,7 +858,7 @@
         "state": "formalized",
         "evidence": {
           "kind": "reviewed_progress",
-          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/Vector/Slice/Critical.lean",
+          "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/Vector/Slice/Critical.lean",
           "note": "Reviewed against current theorem statements and local axiom/client checks on 2026-09-17."
         },
         "kind": "auxiliary"
@@ -866,7 +866,7 @@
       "diagram": {
         "id": "VZERO",
         "label": "Vector slices<br/>Zero derivative",
-        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/Vector/Slice/Critical.lean",
+        "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/Vector/Slice/Critical.lean",
         "shape": "box"
       }
     },
@@ -876,7 +876,7 @@
         "state": "formalized",
         "evidence": {
           "kind": "reviewed_progress",
-          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/research/audits/RightInverseBoundAudit.lean",
+          "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/research/audits/RightInverseBoundAudit.lean",
           "note": "Reviewed against current theorem statements and local axiom/client checks on 2026-09-17."
         },
         "kind": "auxiliary"
@@ -884,7 +884,7 @@
       "diagram": {
         "id": "VR123",
         "label": "Rank and kernel<br/>R1–R3",
-        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/research/audits/RightInverseBoundAudit.lean",
+        "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/research/audits/RightInverseBoundAudit.lean",
         "shape": "box"
       }
     },
@@ -894,7 +894,7 @@
         "state": "formalized",
         "evidence": {
           "kind": "reviewed_progress",
-          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/research/decisions/2026-09-17-tangential-lipschitz.md",
+          "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/research/decisions/2026-09-17-tangential-lipschitz.md",
           "note": "Based on the dated proof record and recorded local audit evidence of 2026-09-17; no fresh Lean or CI run during this commit preparation."
         },
         "kind": "auxiliary"
@@ -902,7 +902,7 @@
       "diagram": {
         "id": "VR4",
         "label": "Tangential estimate<br/>R4",
-        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/research/decisions/2026-09-17-tangential-lipschitz.md",
+        "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/research/decisions/2026-09-17-tangential-lipschitz.md",
         "shape": "box"
       }
     },
@@ -912,7 +912,7 @@
         "state": "formalized",
         "evidence": {
           "kind": "reviewed_progress",
-          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/research/decisions/2026-09-17-rank-deficient-coarea.md",
+          "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/research/decisions/2026-09-17-rank-deficient-coarea.md",
           "note": "Based on the dated proof record and recorded local audit evidence of 2026-09-17; no fresh Lean or CI run during this commit preparation."
         },
         "kind": "auxiliary"
@@ -920,7 +920,7 @@
       "diagram": {
         "id": "VFULL",
         "label": "C¹ vector coarea<br/>Rank-deficient part closed",
-        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/research/decisions/2026-09-17-rank-deficient-coarea.md",
+        "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/research/decisions/2026-09-17-rank-deficient-coarea.md",
         "shape": "box"
       }
     },
@@ -930,7 +930,7 @@
         "state": "formalized",
         "evidence": {
           "kind": "reviewed_progress",
-          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Basic.lean",
+          "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Basic.lean",
           "baseline_commit": "f8e4ca8b63a53b2de070f02d93a3d3f7674a4648"
         },
         "kind": "auxiliary"
@@ -938,7 +938,7 @@
       "diagram": {
         "id": "SEMI",
         "label": "Weighted-gradient<br/>Heat semigroup",
-        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Basic.lean",
+        "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Basic.lean",
         "shape": "box"
       }
     },
@@ -948,7 +948,7 @@
         "state": "formalized",
         "evidence": {
           "kind": "reviewed_progress",
-          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Markov.lean",
+          "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Markov.lean",
           "baseline_commit": "f8e4ca8b63a53b2de070f02d93a3d3f7674a4648"
         },
         "kind": "auxiliary"
@@ -956,7 +956,7 @@
       "diagram": {
         "id": "MARKOV",
         "label": "Heat semigroup<br/>Markov properties",
-        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Markov.lean",
+        "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Markov.lean",
         "shape": "box"
       }
     },
@@ -966,7 +966,7 @@
         "state": "formalized",
         "evidence": {
           "kind": "local_strict_client",
-          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Decay.lean",
+          "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Decay.lean",
           "source_sha256": "b05544b9331f2176a4775f03c2f44562960aaaec3278d77e92ff618c10f54621"
         },
         "kind": "auxiliary"
@@ -974,7 +974,7 @@
       "diagram": {
         "id": "DECAY",
         "label": "Centered heat decay<br/>and literature gap",
-        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Decay.lean",
+        "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Decay.lean",
         "shape": "box"
       }
     },
@@ -984,7 +984,7 @@
         "state": "formalized",
         "evidence": {
           "kind": "local_strict_client",
-          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/Basic.lean",
+          "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/Basic.lean",
           "source_sha256": "9199aaa957d191f45223c56230a98bec575ea52b4f3611f0205a11749c5525b1"
         },
         "kind": "auxiliary"
@@ -992,7 +992,7 @@
       "diagram": {
         "id": "GAUSS",
         "label": "Gaussian convolution<br/>Smooth potential",
-        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/Basic.lean",
+        "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/Basic.lean",
         "shape": "box"
       }
     },
@@ -1002,7 +1002,7 @@
         "state": "formalized",
         "evidence": {
           "kind": "local_strict_client",
-          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/Poincare.lean",
+          "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/Poincare.lean",
           "source_sha256": "b320880143ac5c424f9d78bd96f9792c20f68df97f3c8520ae089fcee3f1ce09"
         },
         "kind": "auxiliary"
@@ -1010,7 +1010,7 @@
       "diagram": {
         "id": "GSTAB",
         "label": "Gaussian convolution<br/>Poincaré stability",
-        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/Poincare.lean",
+        "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/Poincare.lean",
         "shape": "box"
       }
     },
@@ -1020,7 +1020,7 @@
         "state": "partial",
         "evidence": {
           "kind": "reviewed_progress",
-          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/BakryEmery/Bochner/Basic.lean",
+          "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/BakryEmery/Bochner/Basic.lean",
           "baseline_commit": "f8e4ca8b63a53b2de070f02d93a3d3f7674a4648"
         },
         "kind": "auxiliary"
@@ -1028,7 +1028,7 @@
       "diagram": {
         "id": "BE",
         "label": "Generator / Bochner<br/>Gradient estimates",
-        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/BakryEmery/Bochner/Basic.lean",
+        "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/BakryEmery/Bochner/Basic.lean",
         "shape": "box"
       }
     },
@@ -1038,7 +1038,7 @@
         "state": "partial",
         "evidence": {
           "kind": "reviewed_progress",
-          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Perimeter.lean",
+          "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Perimeter.lean",
           "baseline_commit": "b42ee274f46e1467cc271a90dbaff2078818dbf3"
         },
         "kind": "auxiliary"
@@ -1046,7 +1046,7 @@
       "diagram": {
         "id": "HEAT",
         "label": "Small-time heat bounds<br/>and pi Buser assembly",
-        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/SmoothBuser.lean",
+        "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/SmoothBuser.lean",
         "shape": "box"
       }
     },
@@ -1056,7 +1056,7 @@
         "state": "formalized",
         "evidence": {
           "kind": "reviewed_progress",
-          "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/Lipschitz/Local.lean",
+          "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/Lipschitz/Local.lean",
           "baseline_commit": "f8e4ca8b63a53b2de070f02d93a3d3f7674a4648"
         },
         "kind": "auxiliary"
@@ -1064,7 +1064,7 @@
       "diagram": {
         "id": "VLIP",
         "label": "Vector coarea<br/>Lipschitz and local",
-        "source": "https://github.com/numina-functional-inequalities/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/Lipschitz/Local.lean",
+        "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/Lipschitz/Local.lean",
         "shape": "box"
       }
     },
@@ -1140,6 +1140,22 @@
       "description": "Bizeul–Klartag–Lehec Lemma 4.2 conditionally on the Letwin quadratic-form bound: R_3 ≤ 8 Id for centered isotropic laws with all exponential moments.",
       "blueprint": "lem:bkl-third-cumulant-conditional"
     },
+    "lem:bkl-local-third-cumulant": {
+      "description": "Bizeul–Klartag–Lehec Lemma 4.2 in its source scope, conditionally on the Letwin bound: third-cumulant identity, polynomial L² membership and R_3 ≤ 8 Id from one exponential radius; every isotropic log-concave law satisfying the Letwin bound has R_3 ≤ 8 Id, and the universal order-3 cumulant bound with constant 8 follows if all do. Letwin Theorem 1.2 not proved.",
+      "blueprint": "lem:bkl-local-third-cumulant"
+    },
+    "lem:bkl-posterior-covariance-domain": {
+      "description": "BKL (67)–(68): the posterior of a compactly supported prior at every finite (c,Q) is a probability law with the prior's null sets/support/affine support and finite second moment; full affine support with finite second moment ⇒ strictly positive covariance, injective covariance ⇒ full affine support; isotropic compact priors give a self-adjoint positive invertible posterior covariance with canonical self-adjoint positive inverse, at which the deterministic generator cancels (initial rate Id); for a log-concave compact prior and self-adjoint Q ≥ 0 the posterior is log-concave; the diffusion coefficient A^{-1/2} is the principal inverse square root (canonical matrix CFC.sqrt in orthonormal coordinates: positive branch, σσ* = A⁻¹, cancellation, unique, basis independent, Id at the initial pair). No coefficient regularity, whitener, SDE or Itô claim.",
+      "blueprint": "lem:bkl-posterior-covariance-domain"
+    },
+    "lem:bkl-posterior-generator": {
+      "description": "BKL (67)–(68), deterministic part: the compact-prior posterior expectation is C^∞ in c with covariance gradient and Hessian, Q-derivative −½ Cov(f, ⟨Mx,x⟩), and for every symmetric M the generator combination D_c[Ma] + ∂_Q[M] + ½ tr_M D²_c vanishes (zero drift of (68) with M = A_t⁻¹). No SDE, Itô or martingale; the inverse-covariance specialization is separate.",
+      "blueprint": "lem:bkl-posterior-generator"
+    },
+    "lem:bkl-second-cumulant-base": {
+      "description": "Bizeul–Klartag–Lehec Theorem 4.1, base m = 2: for any law with one exponential moment κ₂ is the centered second moment = covariance pairing; for isotropic log-concave laws κ₂(u,v) = ⟨u,v⟩, Parseval, and CumulantBound 1 1 (R₂ = Id) holds unconditionally in every dimension. All-order Theorem 4.1 open; no certificate.",
+      "blueprint": "lem:bkl-second-cumulant-base"
+    },
     "lem:bkl-near-symmetric-gradient": {
       "description": "Bizeul–Klartag–Lehec Lemma 3.2: ∇₀h_{i+1} is within χ_i/λ (squared L² distance) of a field symmetric in its first two indices, for a pair satisfying (30) with α² ≥ λ > 0.",
       "blueprint": "lem:bkl-near-symmetric-gradient"
@@ -1155,6 +1171,258 @@
     "lem:bkl-suspension-convexity": {
       "description": "The finite-copy suspension potential (109) is continuous and convex under the Hessian condition (110); a positive finite copy number exists (a supporting step of BKL Proposition 7.1).",
       "blueprint": "lem:bkl-suspension-convexity"
+    },
+    "lem:bkl-laplace-law": {
+      "description": "The Laplace noise η_β of BKL Proposition 7.1: law, local moment generating function β²/(β²−w²) on |w|<β, mean 0, second moment 2/β², polynomial moments, and the vanishing derivative of its log-MGF at 0.",
+      "blueprint": "lem:bkl-laplace-law"
+    },
+    "lem:bkl-suspension-law": {
+      "description": "The joint law of (S, X₁, …, X_N) in BKL Proposition 7.1: a probability measure with density proportional to e^{−W_N} (109), log-concave under (110), with an exponential moment and a smooth logarithmic Laplace transform near 0.",
+      "blueprint": "lem:bkl-suspension-law"
+    },
+    "lem:bkl-suspension-isotropy": {
+      "description": "Isotropy of the joint law of the suspension from the normalization (108) of f (BKL Proposition 7.1, p. 28).",
+      "blueprint": "lem:bkl-suspension-isotropy"
+    },
+    "lem:bkl-suspension-derivatives": {
+      "description": "BKL (111)–(112) for the chosen N: factorization of Λ_ν, its first derivative along e₀ at points with vanishing S-coordinate, and the mixed cumulant entries d!/(σ√N)·T_d f(e_J) on single copy blocks.",
+      "blueprint": "lem:bkl-suspension-derivatives"
+    },
+    "lem:bkl-coordinate-adapter": {
+      "description": "Transport of isotropy and cumulants along linear isometries, the cumulant hypothesis on the joint space, the Hilbert–Schmidt step after (112) and the β → ∞ limit (BKL Proposition 7.1, pp. 29–30).",
+      "blueprint": "lem:bkl-coordinate-adapter"
+    },
+    "lem:bkl-affine-orthogonal": {
+      "description": "Affine-orthogonal decomposition in L²(μ) for a centered law with identity covariance: centering, orthogonality, L², C² with the same Hessian, contraction and Bessel; the linear-function step in any orthonormal basis (BKL Proposition 7.1, p. 30).",
+      "blueprint": "lem:bkl-affine-orthogonal"
+    },
+    "lem:bkl-cumulant-envelope": {
+      "description": "Section 6 envelope arithmetic of BKL: b_m = K^{m−1}((m−1)!)², identities (105)–(106), the absorption after (106) and the contraction (101)–(102); the cumulant induction itself is not proved.",
+      "blueprint": "lem:bkl-cumulant-envelope"
+    },
+    "lem:bkl-quadratic-tilt": {
+      "description": "Normalized small quadratic tilts of a probability measure converge to it (integrals, weak convergence, first and second moments): the second step of BKL's regular approximation (Section 2).",
+      "blueprint": "lem:bkl-quadratic-tilt"
+    },
+    "lem:bkl-suspension-taylor-bound": {
+      "description": "BKL (113): under the cumulant hypothesis in every dimension, |T_d f|² ≤ b/(d!)²·‖f‖₂² for every f ∈ L²(μ) orthogonal to the affine functions (smooth normalized case via the suspension and β → ∞, then density).",
+      "blueprint": "lem:bkl-suspension-taylor-bound"
+    },
+    "lem:letwin-support-identities": {
+      "description": "Letwin's Lemma A.3 (weighted directional integration by parts under e^{−φ}dm, any direction) and the finite form of equation (2.12) for symmetric arrays with arbitrary real weights; supports of BKL Lemma 4.2 through the Letwin bound, not Theorem 2.5.",
+      "blueprint": "lem:letwin-support-identities"
+    },
+    "lem:letwin-mapped-covariance": {
+      "description": "Letwin, proof of Theorem 1.2, p. 14, the covariance step preceding (2.21), reviewed stronger: for an isotropic law of X on ℝⁿ and every real symmetric M (singular, indefinite, n = 0), Z = |M|^{1/2} X has Cov(Z) = |M|; with the functional-calculus root, sign factorization |M|^{1/2} sgn(M) |M|^{1/2} = M and sgn(M)² = Id for invertible M. Not the Stein-kernel identity (2.21), Theorem 2.5 or Theorem 1.2.",
+      "blueprint": "lem:letwin-mapped-covariance"
+    },
+    "lem:letwin-cutoff-profile": {
+      "description": "Letwin Lemma A.4 (p. 17), real-variable part: the cutoff profile η(t) = smoothTransition(2 − t) (smooth, antitone, [0,1]-valued, 1 for t ≤ 1, 0 for t ≥ 2; η′ and η″ vanish off [1,2], are compactly supported and share a bound B), a smooth compactly supported nonnegative majorant w ≥ |η″| vanishing for t ≤ 0 and t ≥ 3, and the monotone exhaustion η(a/(n+1)) ↑ 1 for every real a, also along real R (R ↦ η(a/R) monotone on (0, ∞), limit 1); the tail primitive q_R(t) = R⁻¹∫_{t/R}^3 w of a smooth nonnegative w vanishing off (0,3), for R > 0 (smooth, q_R′ = −R⁻² w(t/R), 0 ≤ q_R ≤ R⁻¹∫_0^3 w, q_R = 0 for t ≥ 3R); the affine rescaling (f((·−c)/R))′ = R⁻¹ f′((·−c)/R), ″ = R⁻² f″((·−c)/R) for arbitrary f, c, R (total-derivative conventions). Immediate consumer: the Lemma A.4 cutoffs η((φ − min φ + 1)/R) with O(1/R) generator defect → Lemma A.5 → Theorem 2.5 → Theorem 1.2 → BKL Lemma 4.2; Lemma A.4 (lem:letwin-a4-cutoffs) and Lemma A.5 for given cutoffs (lem:letwin-a5-cutoffs) are provided, Theorems 2.5 and 1.2 are not.",
+      "blueprint": "lem:letwin-cutoff-profile"
+    },
+    "lem:letwin-inverse-hessian-quadratic": {
+      "description": "Letwin Lemma A.4 (p. 17) support: for a C² potential φ with positive definite Hessian at x, every orthonormal basis (any rank) and all coefficients a, Σ_ij ((∇²φ(x))⁻¹)_ij a_i a_j ≥ 0 — the sign of the φ^{ij}∂_iW∂_jW term in Lχ_R. Immediate consumer: the pointwise generator-defect domination of the A.4 cutoffs; Lemma A.4 and A.5 for given cutoffs are lem:letwin-a4-cutoffs and lem:letwin-a5-cutoffs; the moment map and Theorems 2.5/1.2 are not provided.",
+      "blueprint": "lem:letwin-inverse-hessian-quadratic"
+    },
+    "prop:bkl-suspension": {
+      "description": "BKL Proposition 7.1, (107), in the source form: if R^ν_{d+1} ≤ b·Id for every isotropic log-concave ν in every dimension (d ≥ 2, b > 0), then every isotropic regular law satisfies |T_d f|² ≤ 2b/(d!)²·‖f‖₂² for all f ∈ L²(μ). Conditional on its own hypothesis; Theorem 4.1 is not formalized.",
+      "blueprint": "prop:bkl-suspension"
+    },
+    "lem:bkl-weak-limit-transfer": {
+      "description": "Weak-limit transfer of the Poincaré bound (BKL Section 2, p. 5): the smooth-test bound passes to weak limits on compactly supported smooth tests, extends to all admissible tests by cutoffs, and bounds the literature constant of a log-concave limit law by the limit constant.",
+      "blueprint": "lem:bkl-weak-limit-transfer"
+    },
+    "lem:bkl-gaussian-hessian-upper": {
+      "description": "Upper Hessian bound of the Gaussian-smoothed potential (BKL Section 2, p. 5): ∇²V_s(x)(v,v) = 2s‖v‖² − 4s² Var_{P_x}⟪·,v⟫ ≤ 2s‖v‖² through the Gaussian posterior, with the posterior variance bound ‖v‖²/(2s) and finite second moments.",
+      "blueprint": "lem:bkl-gaussian-hessian-upper"
+    },
+    "lem:bkl-borell-uniform-moments": {
+      "description": "Quantitative Borell moment bounds: a ball of mass ≥ 3/4 and radius R gives ∫e^{q‖v‖} ≤ 3^{3/4}/(1−3^{−1/4}) with q = log 3/(4R) and all-order moment bounds; the radius 2√(M+1) is constructed from a second-moment bound ∫‖v‖² ≤ M; isotropic log-concave laws on ℝⁿ as a consumer.",
+      "blueprint": "lem:bkl-borell-uniform-moments"
+    },
+    "lem:bkl-gaussian-posterior-moments": {
+      "description": "Gaussian posterior of the smoothing (BKL Section 2, p. 5): log-concave with explicit Borell density; centered version with mean zero, directional variance ≤ ‖v‖²/(2s), trace ≤ n/(2s), and exponential/all-order moment bounds uniform in the base point.",
+      "blueprint": "lem:bkl-gaussian-posterior-moments"
+    },
+    "lem:bkl-gaussian-growth": {
+      "description": "Polynomial growth of all derivatives of the Gaussian-smoothed potential (BKL Section 2, p. 5): centered-posterior factorization, Dⁿ V = −(2s)ⁿ Dⁿ Λ_{Q_x}(0) for n ≥ 3, uniform Borell moments, local log composition and the temperate-growth constructor.",
+      "blueprint": "lem:bkl-gaussian-growth"
+    },
+    "lem:bkl-regular-producer": {
+      "description": "The regular approximation produces a regular potential (BKL (12)): V_s + δ/2‖·‖² has δ·Id ≤ ∇² ≤ (2s+δ)·Id and polynomial growth; its law is the two-step law (Gaussian smoothing then quadratic tilt) and is log-concave.",
+      "blueprint": "lem:bkl-regular-producer"
+    },
+    "lem:letwin-stein-dual": {
+      "description": "Letwin Stein kernels (Definition 2.6), the H^{-1} dual norm (2.19), the locally Lipschitz extension A.7 and Lemma 2.9 for full-dimensional log-concave laws.",
+      "blueprint": "lem:letwin-stein-dual"
+    },
+    "lem:bkl-regular-affine": {
+      "description": "Regular potentials under affine changes of variables (BKL Section 2): V∘(L·+c) is regular with constants a/(1+‖L⁻¹‖)² and max(b,1)(1+‖L‖)²; its law is the image of the law of V under y ↦ L⁻¹(y−c) and the normalizer scales by |det L|⁻¹.",
+      "blueprint": "lem:bkl-regular-affine"
+    },
+    "lem:bkl-regular-reduction": {
+      "description": "BKL p. 30 conditional reduction: under CumulantBound d ((d!)² K^d) for all d ≥ 2 (Theorem 4.1), every isotropic regular law has C_P ≤ 2·C_{3.1}·K, via Theorem 3.1 with R = √(2K), Proposition 7.1 for d ≥ 2 and the Bessel bound for d = 1. Theorem 4.1 not proved; no certificate.",
+      "blueprint": "lem:bkl-regular-reduction"
+    },
+    "lem:bkl-gaussian-moments": {
+      "description": "Moments and weak convergence of the Gaussian smoothing (BKL Section 2): γ_s has mean 0 and ∫⟪v,y⟫² = ‖v‖²/(2s); Cov(μ*γ_s) = Cov μ + Id/(2s); means, second moments and covariances converge as s → ∞; μ*γ_{n+1} → μ weakly.",
+      "blueprint": "lem:bkl-gaussian-moments"
+    },
+    "lem:bkl-regular-isotropic": {
+      "description": "Regular laws reduce to isotropic regular laws (BKL Section 2): finite second moment, full support, positive definite covariance, and an affine centering/whitening preserving regularity with explicit image law.",
+      "blueprint": "lem:bkl-regular-isotropic"
+    },
+    "lem:letwin-mean-hessian": {
+      "description": "Letwin Lemma 2.3, analytic part for a given smooth convex potential φ with e^{-φ} a probability density: Hessian entries integrable (cutoff IBP, uniform bound, Fatou, polarization), ∫∂_u∂_vφ dν = ∫∂_uφ∂_vφ dν, and = ⟪u,v⟫ when (∇φ)_*ν is isotropic.",
+      "blueprint": "lem:letwin-mean-hessian"
+    },
+    "lem:bkl-quadratic-covariance": {
+      "description": "Covariance of the quadratic tilt μ.tilted(−δ‖·‖²/2) converges to Cov μ in operator norm as δ → 0⁺ for laws with finite second moment (BKL Section 2).",
+      "blueprint": "lem:bkl-quadratic-covariance"
+    },
+    "lem:bkl-regular-isometry": {
+      "description": "Regular potentials under linear isometries between finite-dimensional inner product spaces: same constants, image law, isotropy and Poincaré constants preserved; standard coordinates on ℝⁿ and transfer of a Euclidean regular-isotropic bound (BKL Section 2).",
+      "blueprint": "lem:bkl-regular-isometry"
+    },
+    "lem:bkl-regular-approximation": {
+      "description": "Joint Gaussian-then-quadratic regular approximation (BKL Section 2): laws of regular potentials V_{n+1} + δ_k/2‖·‖² converge weakly to μ along a selected diagonal, with means, raw second moments and covariance operators converging; generic metric diagonal selection.",
+      "blueprint": "lem:bkl-regular-approximation"
+    },
+    "lem:bkl-regular-poincare-transfer": {
+      "description": "Conditional Poincaré transfer (BKL Section 2): a universal bound K on isotropic regular laws gives C_P ≤ K‖Cov‖ for every regular law, by centering/whitening and covariance-energy transport; envelope coefficient K(1+‖Cov−Id‖) → K.",
+      "blueprint": "lem:bkl-regular-poincare-transfer"
+    },
+    "lem:bkl-isotropic-reduction": {
+      "description": "Reduction of the isotropic log-concave Poincaré bound to isotropic regular laws (BKL Section 2, complete): Borell density and full support from isotropy, regular approximants with converging covariances, envelope transfer, weak-limit passage; KLS.IsotropicBound K from a bound for isotropic regular laws on ℝⁿ. With the p. 30 reduction: Theorem 1.1 conditional on Theorem 4.1 (no certificate).",
+      "blueprint": "lem:bkl-isotropic-reduction"
+    },
+    "lem:letwin-hessian-kernel": {
+      "description": "Letwin Lemma 2.7, analytic part for a given potential: τ = ∇²φ ∘ (∇φ)⁻¹ is a symmetric, positive semidefinite, integrable Stein kernel of the isotropic gradient image law with mean Id, given gradient injectivity; moment-map existence, strict PD and HS-L² not provided.",
+      "blueprint": "lem:letwin-hessian-kernel"
+    },
+    "lem:letwin-diffusion-product-rule": {
+      "description": "Letwin (2.3): the nondivergence operator L_{A,b} f = Σ A_ij ∂_ij f − Σ b_i ∂_i f for an arbitrary symmetric coefficient field, its Leibniz rule L(fg) = f Lg + g Lf + 2 Σ A_ij ∂_i f ∂_j g, and the generic Hessian product rule; the inverse-Hessian specialization and Theorem 2.5 are not provided.",
+      "blueprint": "lem:letwin-diffusion-product-rule"
+    },
+    "lem:letwin-inverse-hessian-derivative": {
+      "description": "Letwin (2.5) and the inverse-Hessian (2.3) operator for a given smooth φ with positive definite Hessian: Hessian operator a self-adjoint unit with positive inverse, derivative of the inverse Hessian (operator and coordinate forms), Leibniz rule of L = Σ (∇²φ)⁻¹_ij ∂_ij − Σ (∂_iV∘∇φ) ∂_i, and the right-hand-side derivative of the Monge–Ampère log-det equation taken as a hypothesis. Jacobi, Lemma 2.4/2.6, PSD, Brascamp–Lieb and moment-map existence not provided.",
+      "blueprint": "lem:letwin-inverse-hessian-derivative"
+    },
+    "lem:letwin-monge-ampere-first": {
+      "description": "Jacobi's formula for det/log det and Letwin (2.4): for a given smooth φ with positive definite Hessian and the zero-order Monge–Ampère equation log det ∇²φ = −φ + V∘∇φ (hypothesis), Σ (∇²φ)⁻¹_ac ∂_iac φ = −∂_iφ + Σ ∂_aV(∇φ) ∂_ai φ, with V smooth near the closure of K ⊇ range ∇φ. Moment-map existence not provided.",
+      "blueprint": "lem:letwin-monge-ampere-first"
+    },
+    "lem:letwin-monge-ampere-second": {
+      "description": "Letwin (2.6): L(∂_ij φ) + ∂_ij φ = (∇²φ ∇²V(∇φ) ∇²φ)_ij + inverse-Hessian-weighted third-derivative Gram, under the zero-order equation; both right-hand matrices positive semidefinite (V convex on the open K; Gram via A⊗A). Derivative commutation from C² symmetry. No Theorem 2.5/BL/P2.8/HS-norm/root claim.",
+      "blueprint": "lem:letwin-monge-ampere-second"
+    },
+    "lem:bkl-posterior-parameter-response": {
+      "description": "BKL p. 19, (67): deterministic parameter response of the posterior μ e^{⟨c,x⟩ − ½⟨Qx,x⟩}/Z — compact prior (all (c,Q) including 0; uniform moments) and coercive Q with any prior and polynomial statistics; covariance derivative along parameter lines; isotropic initial response ⟨u,h⟩. No SDE, Itô or martingale statement.",
+      "blueprint": "lem:bkl-posterior-parameter-response"
+    },
+    "lem:bkl-coefficients-regularity": {
+      "description": "BKL (67), compact stage: joint C^∞ in (c,Q) of the posterior expectation, mean and covariance of a compactly supported prior (all finite pairs incl. Q = 0, non-symmetric Q, rank 0); for an isotropic prior the rate Cov⁻¹ and the drift Cov⁻¹a are jointly C^∞ and the diffusion coefficient Cov⁻¹ᐟ² and the triple (Cov⁻¹ᐟ², Cov⁻¹a, Cov⁻¹) are locally Lipschitz on the whole parameter space (Sylvester Frobenius estimate for positive roots, relative CFC continuity, local floors). No strong solution, non-explosion, Itô or Theorem 4.1 claim.",
+      "blueprint": "lem:bkl-coefficients-regularity"
+    },
+    "lem:letwin-inverse-hessian-ibp": {
+      "description": "Letwin (2.2) for a GIVEN smooth φ with PD Hessian, ∫e^{−φ} = 1 and the zero-order MA equation (V smooth on an open set ⊇ range ∇φ): divergence of the inverse Hessian, flux form Σ_i ∂_i(e^{−φ}A_ij) = −e^{−φ}∂_jV(∇φ), density divergence form of L, and the weighted IBP ∫(Lf)g dν = −∫Σ A_ij ∂_if ∂_jg dν for smooth f,g with one compactly supported; ∫Lf dν = 0; integrated symmetry on compact tests. The noncompact extension is lem:letwin-a4-cutoffs and lem:letwin-a5-cutoffs. No moment-map producer, closed L² generator, Brascamp–Lieb, Theorem 2.5 or Proposition 2.8.",
+      "blueprint": "lem:letwin-inverse-hessian-ibp"
+    },
+    "lem:bkl-cgf-gradient-jets": {
+      "description": "BKL p. 20 before (74): for the CGF Λ of a compactly supported law, ∇Λ(0) = ∫x dμ, D(∇Λ − ∇Λ(0))(0) = Cov μ and, for every r ≥ 1, Dʳ(∇Λ − ∇Λ(0))(0)[h] = cumulantVector μ h (⟪·,w⟫ = κ_{r+1}(h,w), w in the last slot); generic supports Dʳ(f − c) = Dʳf and ⟪Dʳ∇f[h],w⟫ = Dʳ⁺¹f[h,w]; principal root sandwich σAσ = Id. (74) drift and stochastic statements not provided. Cumulant tensors of a compactly supported law are symmetric under every slot permutation.",
+      "blueprint": "lem:bkl-cgf-gradient-jets"
+    },
+    "lem:bkl-localization-supports": {
+      "description": "BKL (67)–(68) deterministic supports: covariance Cauchy–Schwarz cov(X,Y)² ≤ Var X·Var Y on any probability space; Var⟪Sh,·⟫ = ‖h‖² for a self-adjoint S with the actual sandwich S·Cov·S = Id (hypothesis, no root produced); trace energy Σ_i (tr B_i)² ≤ n Σ_{ijk} (B_i)_{jk}² without symmetry; third-moment contraction Σ_{ijk} (∫x_i x_j x_k)² ≤ ∫‖x‖⁶ (integrable sixth moment, no centering); covariance radius ‖Cov μ_{c,Q}‖ ≤ r² for a prior supported in the closed r-ball (all finite (c,Q), no isotropy). No noise bound, covariance dynamics, Itô, strong solution or non-explosion claim. The third-moment contraction also holds for an a.e.-measurable random vector on any probability space.",
+      "blueprint": "lem:bkl-localization-supports"
+    },
+    "lem:bkl-canonical-standardisation": {
+      "description": "BKL (67)–(68), transported law of (75)–(77): for a compact isotropic prior and every finite (c,Q) incl. rank 0 and negative Q, the principal inverse square root Cov(μ_{c,Q})^{-1/2} is a continuous linear equivalence W = σ and the image of the centred posterior under W is isotropic (L², mean 0, Cov = Id). Same principal root, no driver rotation, SDE, Itô, non-explosion or Theorem 4.1 claim.",
+      "blueprint": "lem:bkl-canonical-standardisation"
+    },
+    "lem:bkl-noise-bound": {
+      "description": "BKL (68): for a compact isotropic prior, a measurable statistic with |f| ≤ C on the prior support and every finite (c,Q) incl. signed non-symmetric Q and rank 0, ‖D_c(∫f dμ_{·,Q})(c) ∘ Cov(μ_{c,Q})^{-1/2}‖² ≤ Var_{μ_{c,Q}} f ≤ C² with the same principal root as (67). Deterministic coefficient bound only; no stochastic integral, Itô, martingale or quadratic variation.",
+      "blueprint": "lem:bkl-noise-bound"
+    },
+    "lem:iterated-derivative-symmetry-leibniz": {
+      "description": "Generic supports for the BKL cumulant algebra (71)–(74): raw iterated derivatives of a globally C^∞ map between real normed spaces are symmetric under every slot permutation (directional list convention = iteratedFDeriv, real C² symmetry), and D^m(B(f,g))[h] = Σ over Boolean subset indicators of B(D^{|q|}f[h_q], D^{m−|q|}g[h_{¬q}]) with coefficient 1 and inherited slot order (no factorial). Ordered-mask partition: the two selections have lengths adding to m and together permute the slots, a one-slot indicator selects exactly that slot, and a length-one selection comes from such an indicator (repeated values and m = 0 included). The (74) expansion and grouping are separate nodes; no parameter jet or stochastic claim. Complement pairing of Boolean masks (twice the sum over masks selecting a fixed slot).",
+      "blueprint": "lem:iterated-derivative-symmetry-leibniz"
+    },
+    "lem:moment-tails-eighth": {
+      "description": "Ball-conditioning supports (Letwin A.1 approximation dependency): for a probability law on a normed group with integrable ‖x‖⁸ and R > 0, ν(B(0,R)ᶜ) ≤ M₈/R⁸ (Markov), ‖x‖⁴ plus its tail restriction are integrable with ∫_{B(0,R)ᶜ} ‖x‖⁴ ≤ M₈/R⁴, and 2M₈ ≤ R⁸ gives ν(B(0,R)) ≥ 1/2 > 0 (M₈ the actual eighth moment; open ball; R > 0 indispensable). No covariance convergence or whitening claim.",
+      "blueprint": "lem:moment-tails-eighth"
+    },
+    "lem:ball-conditioning": {
+      "description": "Letwin A.1 conditioning step: conditionOnBall ν R hp = Mathlib cond on the open ball B(0,R) of positive mass p (a definition domain, not a conclusion premise); for integrable ‖x‖⁸, R > 0, C ≥ 0 and measurable f with |f| ≤ C(1+‖x‖⁴): f integrable under ν and ν_B, |E_B f − E f| ≤ ((1−p)|E f| + ∫_{Bᶜ}|f|)/p ≤ (C/p)((1−p)(2+∫‖x‖⁴) + M₈/R⁴). No smoothing, covariance convergence or whitening claim.",
+      "blueprint": "lem:ball-conditioning"
+    },
+    "lem:bkl-posterior-sixth-moment": {
+      "description": "Canonical sixth moment: for a compact isotropic log-concave prior on ℝⁿ, every c and every self-adjoint PSD Q, Y = Cov(μ_{c,Q})^{-1/2}(x − a) has integrable |Y|⁶ and ∫|Y|⁶ dμ_{c,Q} ≤ 6!(log 3/(8√(n+1)))^{-6}·3^{3/4}/(1−3^{-1/4}) (explicit, dimension-dependent). Signed or non-self-adjoint Q is outside the statement. No (69) identity, INTERFACE C energies or stochastic claim.",
+      "blueprint": "lem:bkl-posterior-sixth-moment"
+    },
+    "lem:bkl-singleton-allocation": {
+      "description": "BKL p. 21 singleton terms of (74): for a compactly supported law with invertible covariance A, ⟨κ₂(w,·), A⁻¹κ_{k+1}(h₁..h_k,·)⟩ = κ_{k+1}(h₁..h_k, w) (order k+1, w in the last slot). The full (74) expansion and its grouping are separate nodes; no parameter jet or stochastic claim.",
+      "blueprint": "lem:bkl-singleton-allocation"
+    },
+    "lem:bkl-raw-drift-expansion": {
+      "description": "BKL p. 21 (74) at a fixed compactly supported law: for ANY continuous linear M, D^m⟨v,Mv⟩(0)[h] = Σ over nonempty proper subsets J of ⟨κ_{|J|+1}(h_J,·), M κ_{m−|J|+1}(h_{Jᶜ},·)⟩ (coefficient 1, no factorial; empty/full vanish by v(0) = 0), with the jets of v at 0, the Leibniz rule for ⟨f, Mg⟩ and the empty-mask criterion. The grouping for M = A⁻¹ is lem:bkl-grouped-drift-expansion; no parameter jet or stochastic claim.",
+      "blueprint": "lem:bkl-raw-drift-expansion"
+    },
+    "lem:bkl-grouped-drift-expansion": {
+      "description": "BKL pp. 20–21, deterministic spatial step of the proof of Lemma 4.3: for a compactly supported law with invertible covariance A, every m ≥ 3, all h (repeated directions allowed) and any slot i₀, D^m⟨v, A⁻¹v⟩(0)[h] = 2m κ_m(h) + 2 Σ over J ∋ i₀ with |J|, |Jᶜ| ≥ 2 of ⟨κ_{|J|+1}(h_J,·), A⁻¹κ_{m−|J|+1}(h_{Jᶜ},·)⟩, i.e. (74) grouped as 2m κ_m + 2 L_m with L_m from (72) (any representative slot). No stochastic differential (73), Eldan process or Itô claim.",
+      "blueprint": "lem:bkl-grouped-drift-expansion"
+    },
+    "lem:bkl-noise-entries": {
+      "description": "BKL p. 19 (69) deterministic entry identity: for a compact isotropic prior and every finite (c,Q) incl. signed non-symmetric Q, (P H_i P)_{jk} = ∫ (σV)_j(σV)_k(σV)_i dμ_{c,Q} with the same principal root σ, its matrix P in the fixed basis and the computed slices H_i; generic form for finite measures a.e. supported in a ball and self-adjoint T. No stochastic covariance equation, energy or moment bound.",
+      "blueprint": "lem:bkl-noise-entries"
+    },
+    "lem:uniform-halfspace-mass": {
+      "description": "CEK arXiv:1304.0630v1 Lemma 16 proof (54), probability specialization: for a Borel probability measure on a finite-dimensional real inner product space and x₀ in the interior of the convex hull of its support, ∃ m ∈ (0,1] with μ{⟨u, x − x₀⟩ > 0} ≥ m for every unit u (strict open halfspaces; dimension 0 vacuous). Support for Lemma 16 (lem:cek-point-control); not moment-potential existence, not Letwin's constant-8 bound.",
+      "blueprint": "lem:uniform-halfspace-mass"
+    },
+    "lem:cek-point-control": {
+      "description": "CEK arXiv:1304.0630v1 Lemma 16: for a finite Borel measure on a finite-dimensional real inner product space (dimension 0 included) and x₀ interior to the convex hull of its support, one C > 0 chosen before φ gives φ(x₀) ≤ C ∫ φ dμ for every [0,∞]-valued φ with convex real epigraph, a.e.-measurable values and finite integral. Different route for (54) (finite product of ball masses, then normalization).",
+      "blueprint": "lem:cek-point-control"
+    },
+    "lem:legendre-convexification": {
+      "description": "Extended-real Legendre transform on a real inner product space: order reversal, Fenchel, φ** ≤ φ, φ*** = φ* for proper φ, lower semicontinuity and convex epigraph for every input; CEK (61) lower truncation and its biconjugate convexification preserving the transform; monotone conjugate mass. Proposition 12 truncation support; the maximiser is thm:cek-variational-maximum.",
+      "blueprint": "lem:legendre-convexification"
+    },
+    "lem:cek-compactness": {
+      "description": "CEK Lemma 17 in geometric form: finite Borel μ with 0 ∈ int conv(Supp μ) explicit, [0,∞]-valued convex φ_ℓ with φ_ℓ(0) = 0 and bounded integrals; one subsequence and one nonnegative convex μ-integrable limit satisfy (56a) and (56b) for every additive Haar measure, with finite conjugate mass derived. The Theorem 2 conditions give the interior hypothesis by lem:cek-zero-interior; no composed source-form declaration. Not Theorem 2.",
+      "blueprint": "lem:cek-compactness"
+    },
+    "lem:cek-zero-interior": {
+      "description": "CEK proof of Lemma 17 under Theorem 2's conditions: a nonzero finite Borel measure on a finite-dimensional real inner product space with finite first moment, barycenter 0 and no proper linear subspace of full measure has 0 in the interior of the convex hull of its support. Mass not normalized.",
+      "blueprint": "lem:cek-zero-interior"
+    },
+    "lem:cek-coercivity": {
+      "description": "Proposition 12 support for centered full-span probability measures: polynomial conjugate-mass coercivity with the constant chosen before the potential (not Lemma 15's constant), epsilon reduction of every admissible competitor to a truncated biconjugate, affine invariance of the functional, supporting-plane normalization, finite norm baseline.",
+      "blueprint": "lem:cek-coercivity"
+    },
+    "thm:cek-variational-maximum": {
+      "description": "CEK Proposition 12 (38), reviewed stronger: for a probability measure with finite first moment, barycenter 0 and full span on a finite-dimensional real inner product space and any additive Haar dx, a convex lower semicontinuous μ-integrable φ with ∫ e^{−φ*} dx = 1 maximizes I_μ over every μ-integrable f. Not essential continuity, the moment-measure identification or Theorem 2.",
+      "blueprint": "thm:cek-variational-maximum"
+    },
+    "lem:letwin-a4-supports": {
+      "description": "Letwin Lemma A.4 (p. 17) proof steps for a given potential: convex φ with integrable e^{−φ} has a minimum and compact sublevels; self-generator Lφ = dim E − ⟨∇V(∇φ), ∇φ⟩ and its uniform bound for bounded gradient image; composition rule, coefficient extraction, pointwise defect domination and continuity of L f; energy identity and weighted energy bound. No minimum, cutoff or energy premise.",
+      "blueprint": "lem:letwin-a4-supports"
+    },
+    "lem:letwin-a4-cutoffs": {
+      "description": "Letwin Lemma A.4 (p. 17) for every potential in the source class (smooth convex φ, bounded gradient image K, V smooth near closure K, Monge–Ampère, PD Hessian, ∫e^{−φ} = 1; any finite dimension, any Haar measure): cutoffs χ_R = η((φ − min φ + 1)/R) for all real R ≥ 1, smooth, compactly supported, [0,1]-valued, monotone to 1, with ∫|Lχ_R| dν ≤ C/R, and the natural-index form with C/(n+1). The source-class properties are hypotheses; the moment map is not constructed.",
+      "blueprint": "lem:letwin-a4-cutoffs"
+    },
+    "lem:letwin-a5-cutoffs": {
+      "description": "Letwin Lemma A.5 (p. 18) with the cutoffs as a premise: for a given potential as in (2.2), bounded smooth f with Lf + cf ≥ 0 (c > 0) and cutoffs with the conclusions of Lemma A.4, Lf ∈ L¹(ν) and ∫Lf dν = 0; generic Fatou/dominated-convergence core. Composed with A.4 only in the uniform-interval client, not as a general statement.",
+      "blueprint": "lem:letwin-a5-cutoffs"
+    },
+    "lem:letwin-uniform-interval-source": {
+      "description": "The uniform law on (−√3, √3) with V ≡ log(2√3): the explicit potential φ(y) = 2 log cosh(√3y/2) + log(4/√3) is in the source class of Letwin Lemmas A.4–A.5 (gradient range inclusion, Monge–Ampère, PD Hessian, ∫e^{−φ} = 1), and f = tanh²(√3y/2) is smooth, bounded, nonconstant with Lf = 1 − 3tanh² and Lf + 2f ≥ 0. Range inclusion only; no pushforward claim.",
+      "blueprint": "lem:letwin-uniform-interval-source"
+    },
+    "lem:letwin-uniform-interval-client": {
+      "description": "Letwin Lemma A.5 for the uniform-interval source law: Lf ∈ L¹(ν) and ∫Lf dν = 0 for f = tanh²(√3y/2), by the source package, the natural-index A.4 cutoffs and A.5 (C = 1, c = 2); no integral-zero premise. A concrete client, not Letwin Theorem 2.5 or 1.2.",
+      "blueprint": "lem:letwin-uniform-interval-client"
     }
   },
   "diagram": {

@@ -10,7 +10,7 @@ globally smooth L² finite-canonical-gradient-energy test class. Finite constant
 `NNReal`, cast to `ℝ` for `Holds`. Infinite values occur only in the `ENNReal` layer.
 
 Source: the Poincaré product identity in the historical manuscript's
-[Theorem 3.4](https://github.com/numina-functional-inequalities/kls-exploration/blob/cd4a894a0faf40c0180f80b1a31eec1fdb6cb576/modules/02-results-toolkit.tex#L59-L68).
+[Theorem 3.4](https://github.com/human-ai-mathematics/kls-conjecture-search/blob/cd4a894a0faf40c0180f80b1a31eec1fdb6cb576/modules/02-results-toolkit.tex#L59-L68).
 The source states that the product optimal constant is the maximum of the factor constants,
 and cites BGL. Its LSI and conditional-decomposition assertions are outside this module.
 For the upper bound we iterate

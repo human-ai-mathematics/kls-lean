@@ -1,6 +1,6 @@
 {
   "purpose": "Read-only selected upstream evidence; not a local certification ledger or scheduler input. Raw blocks retain assumes, dependencies, and proof modes.",
-  "repository": "https://github.com/numina-functional-inequalities/kls-conjecture-search",
+  "repository": "https://github.com/human-ai-mathematics/kls-conjecture-search",
   "revision": "34b5fcd57fef17089e781616005fe6d3641bd11e",
   "ledger": "research/program/ledger.yaml",
   "ledger_sha256": "1c51a095bcb9ab867ad37e37fbbcb1ddfda91066f05bb81f1ebebee4d346277c",

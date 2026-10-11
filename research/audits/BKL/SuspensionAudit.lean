@@ -1,4 +1,4 @@
-import FunctionalInequalities.KLS.BKL.Suspension
+import FunctionalInequalities.KLS.BKL.Suspension.Basic
 
 /-!
 # Audit of the convexity step of BKL Proposition 7.1
@@ -10,7 +10,7 @@ non-affine quadratic perturbation at equality in (110). No claim of Proposition 
 
 noncomputable section
 
-open FunctionalInequalities.KLS.BKL.Suspension
+open FunctionalInequalities.KLS.LogConcave.Suspension
 
 namespace BKLSuspensionAudit
 
@@ -76,8 +76,8 @@ theorem quadratic_continuous : Continuous
 
 end BKLSuspensionAudit
 
-#print axioms FunctionalInequalities.KLS.BKL.Suspension.convexOn_potential
-#print axioms FunctionalInequalities.KLS.BKL.Suspension.exists_copies
-#print axioms FunctionalInequalities.KLS.BKL.Suspension.continuous_potential
+#print axioms FunctionalInequalities.KLS.LogConcave.Suspension.convexOn_potential
+#print axioms FunctionalInequalities.KLS.LogConcave.Suspension.exists_copies
+#print axioms FunctionalInequalities.KLS.LogConcave.Suspension.continuous_potential
 #print axioms BKLSuspensionAudit.source_convexity
 #print axioms BKLSuspensionAudit.quadratic

@@ -78,7 +78,7 @@ EVIDENCE_FIELDS = {
 }
 MAX_EXPRESSION_DEPTH = 32
 PINNED_EXPLORATION_REPOSITORY = (
-    "https://github.com/numina-functional-inequalities/kls-conjecture-search.git"
+    "https://github.com/human-ai-mathematics/kls-conjecture-search.git"
 )
 PINNED_EXPLORATION_REVISION = "34b5fcd57fef17089e781616005fe6d3641bd11e"
 REQUIRED_ACTIVE_ROUTES = {
@@ -113,6 +113,10 @@ CERTIFICATES: dict[str, tuple[str, str]] = {
     "thm:bkl-taylor-criterion": (
         "thm:bkl-taylor-criterion",
         "Solutions.ThmBklTaylorCriterion.certificate",
+    ),
+    "prop:bkl-suspension": (
+        "prop:bkl-suspension",
+        "Solutions.PropBklSuspension.certificate",
     ),
     "lem:relative-perimeter-cheeger-infimum": (
         "lem:relative-perimeter-cheeger-infimum",

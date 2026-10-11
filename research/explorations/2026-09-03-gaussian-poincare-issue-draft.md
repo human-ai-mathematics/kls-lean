@@ -5,12 +5,12 @@ The user will decide whether to start the project, which implementation route to
 
 **Proposed title:** Lean: certify the one-dimensional Gaussian Poincaré inequality with the sharp constant
 
-**Proposed parent:** [Issue #1](https://github.com/numina-functional-inequalities/kls-lean/issues/1)
+**Proposed parent:** [Issue #1](https://github.com/human-ai-mathematics/kls-lean/issues/1)
 
 **Repository baseline:** `10e4c707491830ebe9d07f7bfc5e65efeddc7e2e` on `main`.
 
 The proposed issue body follows the structure of
-[Issue #2](https://github.com/numina-functional-inequalities/kls-lean/issues/2).
+[Issue #2](https://github.com/human-ai-mathematics/kls-lean/issues/2).
 
 ---
 
@@ -63,14 +63,14 @@ module boundaries remain subject to review.
 ### 1. Audit the source, normalization, and existing Mathlib APIs
 
 The manuscript's
-[Gaussian covariance family](https://github.com/numina-functional-inequalities/kls-exploration/blob/cd4a894a0faf40c0180f80b1a31eec1fdb6cb576/modules/03-tier1-gaussian.tex#L10-L37)
+[Gaussian covariance family](https://github.com/human-ai-mathematics/kls-conjecture-search/blob/cd4a894a0faf40c0180f80b1a31eec1fdb6cb576/modules/03-tier1-gaussian.tex#L10-L37)
 states `C_P(N(0, Σ)) = λ_max(Σ)` for positive-definite covariance. This issue targets its
 one-dimensional Poincaré component. Arbitrary means and the zero-variance Dirac case are explicit
 extensions in the proposed local statement. The same source's LSI and transport-entropy
 equalities are separate results.
 
 Preserve the normalization from
-[Definition 2.1](https://github.com/numina-functional-inequalities/kls-exploration/blob/cd4a894a0faf40c0180f80b1a31eec1fdb6cb576/modules/01-definitions.tex#L17-L25)
+[Definition 2.1](https://github.com/human-ai-mathematics/kls-conjecture-search/blob/cd4a894a0faf40c0180f80b1a31eec1fdb6cb576/modules/01-definitions.tex#L17-L25)
 and the existing `Admissible`, `energy`, `Holds`, and `constant` definitions. The smooth
 finite-energy formulation does not claim an equivalence with a closed Sobolev, Dirichlet, or
 spectral-gap domain.

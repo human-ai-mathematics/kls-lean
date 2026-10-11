@@ -51,6 +51,7 @@ roots = [
   "solutions.ThmRelaxedMinkowskiContentPerimeter",
   "solutions.ThmBakryEmeryPoincare",
   "solutions.ThmBklTaylorCriterion",
+  "solutions.PropBklSuspension",
 ]
 
 [[lean_lib]]

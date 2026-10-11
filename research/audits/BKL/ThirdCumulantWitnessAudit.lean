@@ -1,4 +1,4 @@
-import FunctionalInequalities.Analysis.BakryEmery.Cumulant
+import FunctionalInequalities.Analysis.BakryEmery.Cumulant.Basic
 import Mathlib.Probability.ConditionalProbability
 import Mathlib.Analysis.SpecialFunctions.Integrals.Basic
 
@@ -8,7 +8,7 @@ import Mathlib.Analysis.SpecialFunctions.Integrals.Basic
 The uniform law on `[-√3, √3]` is a centered isotropic probability law on `ℝ` with all exponential
 moments, and it satisfies `LetwinQuadraticBound` (for `M = m`, `Var(m X²) = 4 m² / 5 ≤ 8 m²`), so the
 conditional BKL Lemma 4.2 (`sum_sq_cumulant_three_le_of_letwin` in
-`Analysis/BakryEmery/Cumulant.lean`) applies to it with every premise discharged. The client also
+`Analysis/BakryEmery/Cumulant/Basic.lean`) applies to it with every premise discharged. The client also
 connects the cumulant and Taylor formulations (`taylorTensor_two_inner_eq_of_centered`,
 `cumulant_three_eq_integral`). Since the uniform law is symmetric (`κ₃ = 0`), a second, skewed witness
 is included: the two-point law `(1/5) δ₂ + (4/5) δ_{-1/2}` is centered and isotropic with

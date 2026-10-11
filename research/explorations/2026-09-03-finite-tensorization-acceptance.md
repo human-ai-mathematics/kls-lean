@@ -2,7 +2,7 @@
 
 **Date:** 2026-09-03 (Asia/Shanghai).
 
-**Issue:** [#7](https://github.com/numina-functional-inequalities/kls-lean/issues/7), a native
+**Issue:** [#7](https://github.com/human-ai-mathematics/kls-lean/issues/7), a native
 sub-issue of #1.
 
 **Node:** `lem:poincare-finite-tensorization`.
@@ -28,7 +28,7 @@ the final ledger becomes `proved` / `lean` only after those gates pass.
 ## Source correspondence and scope
 
 The actual pinned manuscript source was re-read at
-[`modules/02-results-toolkit.tex`, lines 59–68](https://github.com/numina-functional-inequalities/kls-exploration/blob/cd4a894a0faf40c0180f80b1a31eec1fdb6cb576/modules/02-results-toolkit.tex#L59-L68).
+[`modules/02-results-toolkit.tex`, lines 59–68](https://github.com/human-ai-mathematics/kls-conjecture-search/blob/cd4a894a0faf40c0180f80b1a31eec1fdb6cb576/modules/02-results-toolkit.tex#L59-L68).
 Its Theorem 3.4 states the product Poincaré optimal-constant identity. Its accompanying LSI and
 conditional-decomposition claims are outside this certificate.
 
@@ -114,7 +114,7 @@ publication requires a clean checkout of the delivered commit with fresh project
 only the pinned third-party dependency cache may be reused. GitHub Actions must then succeed
 for that exact published commit. The final commit SHA, clean-checkout result, frozen-contract
 comparison, and Actions URL are attached to
-[Issue #7](https://github.com/numina-functional-inequalities/kls-lean/issues/7) when those gates
+[Issue #7](https://github.com/human-ai-mathematics/kls-lean/issues/7) when those gates
 finish. The issue checklist is completed only after publication validation, not from an earlier
 CI result.
 

@@ -1,7 +1,7 @@
 # ADMG Theorem 3.6 paper-target certificate
 
 Date: 2026-10-02. Status: accepted by the owner on 2026-10-02 after semantic review; committed as
-`b9c8a39` and remotely certified by [run 37017009088](https://github.com/numina-functional-inequalities/kls-lean/actions/runs/37017009088)
+`b9c8a39` and remotely certified by [run 37017009088](https://github.com/human-ai-mathematics/kls-lean/actions/runs/37017009088)
 on tag `milestone/admg-theorem-3-6`.
 
 ## Placement plan

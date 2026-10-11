@@ -1119,10 +1119,10 @@ addressed.
 
 \begin{lemma}[Convex potential of the suspension]
   \label{lem:bkl-suspension-convexity}
-  \lean{FunctionalInequalities.KLS.BKL.Suspension.potential,
-        FunctionalInequalities.KLS.BKL.Suspension.convexOn_potential,
-        FunctionalInequalities.KLS.BKL.Suspension.exists_copies,
-        FunctionalInequalities.KLS.BKL.Suspension.continuous_potential}
+  \lean{FunctionalInequalities.KLS.LogConcave.Suspension.potential,
+        FunctionalInequalities.KLS.LogConcave.Suspension.convexOn_potential,
+        FunctionalInequalities.KLS.LogConcave.Suspension.exists_copies,
+        FunctionalInequalities.KLS.LogConcave.Suspension.continuous_potential}
   \leanok
   A step of Proposition~7.1 of \cite{BizeulKlartagLehec2026}, equations~(109)--(110).
   Let $V,f\in C^2(E;\mathbb R)$, $\nabla^2V\ge a\,\mathrm{Id}$,
@@ -1143,6 +1143,1005 @@ addressed.
   The Hessian bound implies convexity of $V\pm\beta f/\sqrt N$.
   Express $W_N$ as the maximum of their finite sums plus the corresponding
   linear term in $s$. Choose $N>(\beta M/a)^2+1$ for the existence claim.
+\end{proof}
+
+\begin{lemma}[The Laplace law]
+  \label{lem:bkl-laplace-law}
+  \lean{FunctionalInequalities.Probability.Line.laplaceDensity,
+        FunctionalInequalities.Probability.Line.laplaceMeasure,
+        FunctionalInequalities.Probability.Line.isProbabilityMeasure_laplaceMeasure,
+        FunctionalInequalities.Probability.Line.integral_exp_mul_laplaceDensity,
+        FunctionalInequalities.Probability.Line.laplaceMeasure_mgf,
+        FunctionalInequalities.Probability.Line.laplaceMeasure_moments,
+        FunctionalInequalities.Probability.Line.integrable_pow_laplaceMeasure,
+        FunctionalInequalities.Probability.Line.integrable_exp_abs_laplaceMeasure,
+        FunctionalInequalities.Probability.Line.hasDerivAt_log_integral_exp_laplaceMeasure_zero}
+  \leanok
+  The noise of Proposition~7.1 of \cite{BizeulKlartagLehec2026}, p.~28. For $\beta>0$ the
+  Laplace law $\eta_\beta$ with density $(\beta/2)e^{-\beta|s|}$ is a probability measure with
+  $\mathbb E\,e^{w\eta_\beta}=\beta^2/(\beta^2-w^2)$ for $|w|<\beta$ (and no exponential moment
+  of order $\ge\beta$), mean $0$, second moment $2/\beta^2$, all polynomial moments, and
+  $\frac{d}{dw}\log\mathbb E\,e^{(w/\sigma)\eta_\beta}\big|_{w=0}=0$.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Direct integration of the two exponential halves; the moments come from the analytic
+  moment generating function on $(-\beta,\beta)$.
+\end{proof}
+
+\begin{lemma}[The joint law of the suspension]
+  \label{lem:bkl-suspension-law}
+  \lean{FunctionalInequalities.KLS.LogConcave.Suspension.JointSpace,
+        FunctionalInequalities.KLS.LogConcave.Suspension.sigma,
+        FunctionalInequalities.KLS.LogConcave.Suspension.copyStat,
+        FunctionalInequalities.KLS.LogConcave.Suspension.embed,
+        FunctionalInequalities.KLS.LogConcave.Suspension.jointLaw,
+        FunctionalInequalities.KLS.LogConcave.Suspension.isProbabilityMeasure_jointLaw_of_pos,
+        FunctionalInequalities.KLS.LogConcave.Suspension.jointLaw_eq_tilted,
+        FunctionalInequalities.KLS.LogConcave.Suspension.logConcave_jointLaw,
+        FunctionalInequalities.KLS.LogConcave.Suspension.exists_integrable_exp_norm_contDiffOn_logLaplace_jointLaw}
+  \leanok
+  Proposition~7.1 of \cite{BizeulKlartagLehec2026}, equations~(109)--(110), p.~28--29. Let
+  $X_1,\dots,X_N$ be independent with law $\mu=e^{-V}dx/Z$ and $\eta_\beta$ an independent
+  Laplace variable; with $F_N=N^{-1/2}\sum f(X_i)$ and $\sigma_\beta^2=1+2/\beta^2$, the joint law
+  $\nu$ of $(S,X_1,\dots,X_N)$, $S=(F_N+\eta_\beta)/\sigma_\beta$, on
+  $\mathbb R^{\{0\}\sqcup([N]\times[n])}$ is a probability measure with density proportional to
+  $e^{-W_N}$ for every measurable $V,f$ and every $N,n$ (109). If $V,f\in C^2$,
+  $\nabla^2V\ge a$, $\norm{\nabla^2f}\le M$ and $\beta M/\sqrt N\le a$ (110), then $\nu$ is
+  log-concave, has an exponential moment, and $\Lambda_\nu$ is $C^\infty$ near $0$.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Product densities, a measurable fibrewise shear with density multiplier $\sigma$, a
+  volume-preserving coordinate equivalence and normalization give~(109); convexity of $W_N$
+  (Lemma~\ref{lem:bkl-suspension-convexity}) gives log-concavity; Borell's tail bound gives the
+  exponential moment, and the local smoothness of logarithmic Laplace transforms the rest.
+\end{proof}
+
+\begin{lemma}[Isotropy of the joint law]
+  \label{lem:bkl-suspension-isotropy}
+  \lean{FunctionalInequalities.Probability.pi_normalizedSum_moments,
+        FunctionalInequalities.Probability.integral_mul_comp_eval_pi,
+        FunctionalInequalities.Probability.prod_add_moments,
+        FunctionalInequalities.KLS.LogConcave.Suspension.copyStat_moments,
+        FunctionalInequalities.KLS.LogConcave.Suspension.scalar_moments,
+        FunctionalInequalities.KLS.LogConcave.Suspension.integral_scalar_mul_inner,
+        FunctionalInequalities.KLS.LogConcave.Suspension.jointLaw_moments_of_laplace,
+        FunctionalInequalities.KLS.LogConcave.Suspension.isotropic_jointLaw}
+  \leanok
+  Proposition~7.1 of \cite{BizeulKlartagLehec2026}, the isotropy computation from~(108),
+  p.~28: if $\mu$ is centered with identity covariance and $f\in L^2(\mu)$ satisfies
+  $\int f=0$, $\int f^2=1$ and $\int\langle u,x\rangle f=0$ for all $u$, then for every
+  $N\ge1$ and $\beta>0$ the joint law is isotropic.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Second moments of normalized sums of independent copies, of independent sums, and of the
+  coordinate products, assembled coordinatewise and transported through the embedding.
+\end{proof}
+
+\begin{lemma}[Derivatives of the joint logarithmic Laplace transform]
+  \label{lem:bkl-suspension-derivatives}
+  \lean{FunctionalInequalities.KLS.LogConcave.Suspension.lintegral_exp_inner_jointLaw,
+        FunctionalInequalities.KLS.LogConcave.Suspension.logLaplace_jointLaw_factorization,
+        FunctionalInequalities.KLS.LogConcave.Suspension.exists_graph_norm_moment_from_joint,
+        FunctionalInequalities.KLS.LogConcave.Suspension.fderiv_logLaplace_jointLaw_none,
+        FunctionalInequalities.KLS.LogConcave.Suspension.cumulant_jointLaw_none_entries,
+        FunctionalInequalities.Analysis.BakryEmery.contDiffOn_logLaplace_ball,
+        FunctionalInequalities.Analysis.BakryEmery.tiltAverage_inner_eq_fderiv_logLaplace_of_lt,
+        FunctionalInequalities.Analysis.BakryEmery.iteratedFDeriv_comp_clm_of_isOpen,
+        FunctionalInequalities.Analysis.BakryEmery.iteratedFDeriv_comp_perm_of_contDiffOn}
+  \leanok
+  Proposition~7.1 of \cite{BizeulKlartagLehec2026}, equations~(111)--(112), p.~29, for a regular
+  law $\mu$, $f\in C^2$ with $\norm{\nabla^2f}\le M$ and $N$ chosen by~(110):
+  $\Lambda_\nu$ factorizes into the noise term and the copy terms; at points with vanishing
+  $S$-coordinate, $\partial_{e_0}\Lambda_\nu(0,z_1,\dots,z_N)=(\sigma\sqrt N)^{-1}\sum_iF_f(z_i)$;
+  and for $d\ge1$ the mixed cumulants $\kappa^\nu_{d+1}(e_0,e_{(i_1,j_1)},\dots,e_{(i_d,j_d)})$
+  vanish unless all $i_k$ coincide, in which case they equal
+  $\frac{d!}{\sigma\sqrt N}\,T_df(e_{j_1},\dots,e_{j_d})$.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Local smoothness of $\Lambda$ on the ball given by one exponential moment, the chain rule along
+  continuous linear block maps, symmetry of the iterated derivatives of a locally smooth map, and the
+  differentiation of the copy terms through the graph law $(f(x),x)_*\mu$.
+\end{proof}
+
+\begin{lemma}[Coordinate adapter and the Hilbert--Schmidt step]
+  \label{lem:bkl-coordinate-adapter}
+  \lean{FunctionalInequalities.KLS.Isotropic.map_linearIsometryEquiv,
+        FunctionalInequalities.Analysis.BakryEmery.cumulant_map_linearIsometryEquiv,
+        FunctionalInequalities.KLS.LogConcave.Suspension.coordinateEquiv,
+        FunctionalInequalities.KLS.LogConcave.Suspension.cumulantBound_jointSpace,
+        FunctionalInequalities.Analysis.Tensor.sum_sq_blocks_le,
+        FunctionalInequalities.KLS.LogConcave.Suspension.sum_sq_cumulant_ge_of_entries,
+        FunctionalInequalities.KLS.LogConcave.Suspension.le_of_forall_le_mul_sigma_sq}
+  \leanok
+  Proposition~7.1 of \cite{BizeulKlartagLehec2026}, pp.~29--30. Isotropy and cumulants transport
+  along linear isometries, so the hypothesis $R^\nu_{d+1}\le b\,\mathrm{Id}$ ``in every
+  dimension'' applies to the joint law indexed by $\{0\}\sqcup([N]\times[n])$; summing the
+  squares of the entries of~(112) gives $(d!)^2\sigma^{-2}|T_df|^2\le\sum_K\kappa^\nu_{d+1}(e_0,e_K)^2$;
+  and a bound $X\le C\sigma_\beta^2$ for all $\beta>0$ gives $X\le C$.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Pointwise transport $\Lambda_{\varphi_*\nu}=\Lambda_\nu\circ\varphi^{-1}$, reindexing of finite
+  sums, and $\sigma_\beta^2=1+2/\beta^2\to1$.
+\end{proof}
+
+\begin{lemma}[Affine-orthogonal decomposition in $L^2(\mu)$]
+  \label{lem:bkl-affine-orthogonal}
+  \lean{FunctionalInequalities.L2.affineOrthPart,
+        FunctionalInequalities.L2.integral_affineOrthPart,
+        FunctionalInequalities.L2.integral_inner_mul_affineOrthPart,
+        FunctionalInequalities.L2.memLp_affineOrthPart,
+        FunctionalInequalities.L2.contDiff_affineOrthPart,
+        FunctionalInequalities.L2.eLpNorm_sub_affineOrthPart_le,
+        FunctionalInequalities.L2.integral_affineOrthPart_sq_le,
+        FunctionalInequalities.L2.norm_apply_le_sqrt_two_mul,
+        FunctionalInequalities.Analysis.BakryEmery.norm_coordTensor_taylorTensor_inner_sq_le_of_basis}
+  \leanok
+  Proposition~7.1 of \cite{BizeulKlartagLehec2026}, end of the proof, p.~30. For a centered
+  probability law with identity covariance, $\tilde g=g-\int g-\sum_j(\int\langle e_j,x\rangle g)\langle e_j,\cdot\rangle$
+  is centered, orthogonal to the linear functions, in $L^2$, $C^2$ with the Hessian of $g$ when
+  $g\in C^2$, a contraction towards affine-orthogonal $f$, and $\int\tilde g^2\le\int g^2$; the
+  linear-function step $|T_d\langle v,\cdot\rangle|^2\le b|v|^2/(d!)^2$ holds in any orthonormal basis.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Orthonormality of $\{1,\langle e_j,\cdot\rangle\}$ in $L^2(\mu)$ and $T_d\langle v,\cdot\rangle=\kappa_{d+1}(v,\cdot)/d!$.
+\end{proof}
+
+\begin{lemma}[The Taylor-coefficient bound on the affine-orthogonal class]
+  \label{lem:bkl-suspension-taylor-bound}
+  \lean{FunctionalInequalities.KLS.LogConcave.Suspension.CumulantBound,
+        FunctionalInequalities.KLS.LogConcave.Suspension.norm_coordTensor_taylorTensor_sq_le_of_cumulantBound,
+        FunctionalInequalities.KLS.LogConcave.Suspension.norm_coordTensor_taylorTensor_sq_le_of_smooth,
+        FunctionalInequalities.KLS.LogConcave.Suspension.norm_coordTensor_taylorTensor_sq_le_of_orthogonal}
+  \leanok
+  Proposition~7.1 of \cite{BizeulKlartagLehec2026}, equation~(113), pp.~29--30. Assume $d\ge2$, $b>0$ and $R^\nu_{d+1}\le b\,\mathrm{Id}$ for every isotropic
+  log-concave probability measure $\nu$ in every dimension. Then for every isotropic regular law
+  $\mu$ and every $f\in C^2(\mathbb R^n)\cap L^2(\mu)$ with bounded Hessian satisfying~(108),
+  $|T_df|^2\le b/(d!)^2$ in the Hilbert--Schmidt norm; by density (smooth compactly supported
+  approximants and their affine-orthogonal parts) the homogeneous form
+  $|T_df|^2\le b\,\norm f_{L^2}^2/(d!)^2$ holds for every $f\in L^2(\mu)$ orthogonal to the affine
+  functions. The bound~(107) with the factor~$2$ is not part of this statement.
+\end{lemma}
+\begin{proof}
+  \leanok
+  For each $\beta>0$ choose $N$ with $\beta M/\sqrt N\le a$; the joint law of the suspension is
+  isotropic (Lemma~\ref{lem:bkl-suspension-isotropy}) and log-concave
+  (Lemma~\ref{lem:bkl-suspension-law}), so the hypothesis applies on $\mathbb R^{Nn+1}$
+  (Lemma~\ref{lem:bkl-coordinate-adapter}); the entries~(112)
+  (Lemma~\ref{lem:bkl-suspension-derivatives}) and the Hilbert--Schmidt step give
+  $(d!)^2\sigma_\beta^{-2}|T_df|^2\le b$, and $\beta\to\infty$.
+\end{proof}
+
+\begin{proposition}[BKL Proposition 7.1]
+  \label{prop:bkl-suspension}
+  \lean{Solutions.PropBklSuspension.certificate,
+        FunctionalInequalities.KLS.LogConcave.Suspension.CumulantBound,
+        FunctionalInequalities.KLS.LogConcave.Suspension.norm_coordTensor_taylorTensor_sq_le_two_mul}
+  \leanok
+  \uses{lem:bkl-suspension-law, lem:bkl-suspension-isotropy, lem:bkl-suspension-derivatives,
+        lem:bkl-coordinate-adapter, lem:bkl-affine-orthogonal, lem:bkl-suspension-taylor-bound}
+  Proposition~7.1 of \cite{BizeulKlartagLehec2026}, equation~(107), in the source form. Let $d\ge2$
+  and $b>0$, and assume $R^\nu_{d+1}\le b\,\mathrm{Id}$ for every isotropic log-concave probability
+  measure $\nu$ in every dimension (\texttt{CumulantBound d b}). Then every isotropic regular law
+  $\mu$ on $\mathbb R^n$ satisfies $|T_df|^2\le 2b\,\norm f_{L^2(\mu)}^2/(d!)^2$ for every
+  $f\in L^2(\mu)$, in the Hilbert--Schmidt norm of the coefficient array. The hypothesis is the
+  source's own universal cumulant hypothesis; it is not asserted here, and Theorem~4.1 (which
+  supplies it) is not formalized.
+\end{proposition}
+\begin{proof}
+  \leanok
+  Decompose $f=c+\ell+h$ (constant, linear, affine-orthogonal). $T_dc=0$ for $d\ge1$; the
+  linear-function step bounds $|T_d\ell|^2\le b|v|^2/(d!)^2$ from the hypothesis in dimension $n$;
+  Lemma~\ref{lem:bkl-suspension-taylor-bound} bounds $|T_dh|^2\le b\norm h^2/(d!)^2$; and
+  Pythagoras gives $|v|^2+\norm h^2\le\norm f^2$, so $|T_df|^2\le2(|T_d\ell|^2+|T_dh|^2)$ yields~(107).
+\end{proof}
+
+\begin{lemma}[Envelope arithmetic of Section~6]
+  \label{lem:bkl-cumulant-envelope}
+  \lean{FunctionalInequalities.KLS.BKL.envelope,
+        FunctionalInequalities.KLS.BKL.choose_mul_sqrt_envelope,
+        FunctionalInequalities.KLS.BKL.envelope_succ,
+        FunctionalInequalities.KLS.BKL.sum_choose_mul_sqrt_envelope,
+        FunctionalInequalities.KLS.BKL.absorption_le_envelope,
+        FunctionalInequalities.Analysis.Tensor.sum_sq_contract_le}
+  \leanok
+  Section~6 of \cite{BizeulKlartagLehec2026}, pp.~26--27: with $b_m=K^{m-1}((m-1)!)^2$,
+  identities~(105)--(106), the absorption $2Cm^2b_{m-1}+4(m-3)\sqrt{b_{m-1}b_m}\le b_m$ for
+  $m\ge3$, $K\ge9C$, $K\ge64$, and the contraction~(101)--(102). These are the arithmetic steps
+  of the induction only; the cumulant process, the energy estimate and Theorem~4.1 are not proved.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Elementary.
+\end{proof}
+
+\begin{lemma}[Small quadratic tilts]
+  \label{lem:bkl-quadratic-tilt}
+  \lean{FunctionalInequalities.Probability.integral_quadraticTilt_tendsto,
+        FunctionalInequalities.Probability.quadraticTiltLaw_tendsto,
+        FunctionalInequalities.Probability.integral_norm_sq_quadraticTilt_tendsto}
+  \leanok
+  Section~2 of \cite{BizeulKlartagLehec2026}, p.~5 (second step of the regular approximation):
+  for a probability measure $\mu$ on a normed space, the normalized tilts
+  $e^{-\delta\|x\|^2/2}\mu/Z_\delta$ converge to $\mu$ as $\delta\to0^+$ against integrable
+  observables, weakly, and in first and second moments. The Gaussian smoothing step and the
+  joint limit are not covered.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Dominated convergence.
+\end{proof}
+
+\begin{lemma}[Weak-limit transfer of the Poincaré bound]
+  \label{lem:bkl-weak-limit-transfer}
+  \lean{FunctionalInequalities.Poincare.SmoothTest.variance_le_mul_energy_of_tendsto,
+        FunctionalInequalities.Poincare.SmoothTest.Admissible.of_contDiff_hasCompactSupport,
+        FunctionalInequalities.Poincare.SmoothTest.tendsto_integral_scaled_mul,
+        FunctionalInequalities.Poincare.SmoothTest.norm_gradient_scaled_mul_sq_eq,
+        FunctionalInequalities.Poincare.SmoothTest.norm_gradient_scaled_mul_sq_le,
+        FunctionalInequalities.Poincare.SmoothTest.tendsto_energy_scaled_mul,
+        FunctionalInequalities.Poincare.SmoothTest.Holds.of_compactSupport,
+        FunctionalInequalities.KLS.LogConcave.localSlope_constant_le_of_tendsto}
+  \leanok
+  Section~2 of \cite{BizeulKlartagLehec2026}, p.~5 (the reduction of Theorem~1.1 to regular laws).
+  Let $\mu_j\to\mu$ weakly on a finite-dimensional real inner product space, let each $\mu_j$
+  satisfy $\operatorname{Var}_{\mu_j}f\le C_j\int\|\nabla f\|^2\,d\mu_j$ on smooth tests with
+  finite energy, and let $C_j\to C$. Then the same bound holds for $\mu$: first on compactly
+  supported smooth $f$ by weak convergence of the bounded continuous integrands, then on every
+  admissible $f$ by the cutoffs $f\chi_{n}$ with $\chi_n=\chi(\cdot/n)$ (whose $L^2$ data and
+  energies converge). If $\mu$ is log-concave, its literature Poincaré constant is at most $C$.
+  The approximating laws themselves are not constructed here.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Weak convergence gives $\int f\,d\mu_j\to\int f\,d\mu$, $\int f^2\,d\mu_j\to\int f^2\,d\mu$ and
+  $\int\|\nabla f\|^2\,d\mu_j\to\int\|\nabla f\|^2\,d\mu$ for compactly supported smooth $f$, so the
+  inequality passes to the limit with $C_j\to C$. For admissible $f$, $f\chi_n$ is smooth with
+  compact support, $\nabla(f\chi_n)=\nabla f$ on $\|x\|<n$ and
+  $\|\nabla(f\chi_n)\|^2\le2\|\nabla f\|^2+2(M/n)^2f^2$, so dominated convergence gives the
+  variance and energy limits. The smooth-test constant equals the literature constant for
+  log-concave laws.
+\end{proof}
+
+\begin{lemma}[Upper Hessian bound of the Gaussian-smoothed potential]
+  \label{lem:bkl-gaussian-hessian-upper}
+  \lean{FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.normalizedDensity_line_factorization,
+        FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.potential_line_cgf,
+        FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.bilinearIteratedFDerivTwo_potential_eq_sub_variance_score,
+        FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.bilinearIteratedFDerivTwo_potential_eq_sub_variance_inner,
+        FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.bilinearIteratedFDerivTwo_potential_le,
+        FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.variance_inner_posterior_le,
+        FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.memLp_two_id_posterior}
+  \leanok
+  Section~2 of \cite{BizeulKlartagLehec2026}, p.~5 (regular approximation: $\nabla^2V_\varepsilon\le\varepsilon^{-1}\mathrm{Id}$
+  for the Gaussian convolution of variance~$\varepsilon$). Let $\mu$ be a probability law with a
+  Borell density $\rho$ on a finite-dimensional real inner product space and $s>0$; the smoothing
+  kernel $e^{-s\|x-y\|^2}$ has variance $\varepsilon=1/(2s)$. With the Gaussian posterior
+  $P_x=\mu\text{ tilted by }e^{-s\|x-\cdot\|^2}$ and the score $X=2s\langle\cdot-x,v\rangle$, the
+  potential $V_s=-\log(\rho*\gamma_s)$ satisfies, for all $x,v$,
+  $\nabla^2V_s(x)(v,v)=2s\|v\|^2-\operatorname{Var}_{P_x}X=2s\|v\|^2-4s^2\operatorname{Var}_{P_x}\langle\cdot,v\rangle\le2s\|v\|^2$,
+  and, by convexity of $V_s$, $\operatorname{Var}_{P_x}\langle\cdot,v\rangle\le\|v\|^2/(2s)$ with $P_x$
+  of finite second moment. No moment hypothesis on $\mu$ is used. Polynomial growth of all
+  derivatives and the covariance normalization are not treated here.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Completing the square, $e^{-s\|x-y\|^2}e^{tX(y)}=e^{st^2\|v\|^2}e^{-s\|x+tv-y\|^2}$, so every
+  exponential moment of $X$ under $P_x$ is finite and $(\rho*\gamma_s)(x+tv)=(\rho*\gamma_s)(x)\,e^{-st^2\|v\|^2}\,\mathrm{mgf}_{P_x}X(t)$.
+  Taking logarithms, $V_s(x+tv)=V_s(x)+st^2\|v\|^2-\mathrm{cgf}_{P_x}X(t)$; the second derivative at
+  $t=0$ is $2s\|v\|^2-\operatorname{Var}_{P_x}X$, and equals the Hessian in direction $v$ since
+  $V_s\in C^2$. Nonnegativity of the variance gives the upper bound; nonnegativity of the Hessian
+  (convexity) gives the posterior variance bound. The second moments follow from the exponential
+  domain and an orthonormal-basis sum.
+\end{proof}
+
+\begin{lemma}[Quantitative Borell moment bounds]
+  \label{lem:bkl-borell-uniform-moments}
+  \lean{FunctionalInequalities.KLS.BorelLogConcave.integral_exp_norm_le_of_ball,
+        FunctionalInequalities.KLS.BorelLogConcave.integral_norm_pow_le_of_ball,
+        FunctionalInequalities.Probability.measure_ball_ge_of_integral_norm_sq_le,
+        FunctionalInequalities.KLS.BorelLogConcave.integral_norm_pow_le_of_second_moment,
+        FunctionalInequalities.KLS.BorelLogConcave.integral_norm_pow_le_of_second_bound,
+        FunctionalInequalities.KLS.Isotropic.integral_norm_sq,
+        FunctionalInequalities.KLS.LogConcave.integral_norm_pow_le_of_isotropic}
+  \leanok
+  Supporting the regular approximation of \cite{BizeulKlartagLehec2026}, Section~2, p.~5 (uniform
+  moments). Let $\nu$ be a Borel log-concave probability law on a normed space and suppose the ball
+  of radius $R>0$ carries mass at least $3/4$. With $q=\log 3/(4R)$,
+  $\int e^{q\|v\|}\,d\nu\le C_0:=3^{3/4}/(1-3^{-1/4})$ and $\int\|v\|^p\,d\nu\le p!\,q^{-p}C_0$ for
+  every $p$. If $\int\|v\|^2\,d\nu\le R^2/4$ the ball has mass at least $3/4$ (Markov); if
+  $\int\|v\|^2\,d\nu\le M$ one may take $R=2\sqrt{M+1}$. Isotropic log-concave laws on
+  $\mathbb R^n$ have $\int\|v\|^2=n$, hence all moments bounded by constants depending on $n$ and
+  $p$ only. The constants are explicit and uniform over all such laws.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Borell's tail lemma gives $\nu(\|v\|\ge kR)\le 3^{(1-k)/2}$; dominate $e^{q\|v\|}$ by the shell
+  constants $e^{q(k+1)R}$ and sum the geometric series with ratio $3^{-1/4}$. The moment bound
+  is $\|v\|^p\le p!\,q^{-p}e^{q\|v\|}$. Markov's inequality on $\|v\|^2$ gives the ball mass, and
+  the radius $2\sqrt{M+1}$ satisfies $M\le R^2/4$.
+\end{proof}
+
+\begin{lemma}[Gaussian posterior of the smoothing and its uniform moments]
+  \label{lem:bkl-gaussian-posterior-moments}
+  \lean{FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.posteriorLaw,
+        FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.posteriorLaw_isBorellDensity,
+        FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.posteriorLaw_logConcave,
+        FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.centeredPosteriorLaw,
+        FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.integral_id_centeredPosteriorLaw,
+        FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.variance_inner_centeredPosteriorLaw_le,
+        FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.integral_norm_sq_centeredPosteriorLaw_le,
+        FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.integral_norm_pow_centeredPosteriorLaw_le,
+        FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.integral_exp_norm_centeredPosteriorLaw_le}
+  \leanok
+  \uses{lem:bkl-gaussian-hessian-upper, lem:bkl-borell-uniform-moments}
+  Section~2 of \cite{BizeulKlartagLehec2026}, p.~5 (moment input for the polynomial growth of the
+  derivatives of the smoothed potential). For a probability law $\mu$ with a Borell density
+  $\rho$ on a finite-dimensional inner product space, $s>0$ and $x$, the posterior
+  $P_x=\mu$ tilted by $e^{-s\|x-\cdot\|^2}$ is a log-concave probability law with density
+  $\rho(y)e^{-s\|x-y\|^2}/Z_x$. Its centering $Q_x$ has mean zero,
+  $\operatorname{Var}_{Q_x}\langle\cdot,v\rangle\le\|v\|^2/(2s)$ and $\int\|y\|^2\,dQ_x\le n/(2s)$;
+  hence, with $R=2\sqrt{n/(2s)+1}$ and $q=\log3/(4R)$, $\int e^{q\|y\|}\,dQ_x\le C_0$ and
+  $\int\|y\|^p\,dQ_x\le p!\,q^{-p}C_0$ for all $p$, uniformly in $x$. The growth of the
+  derivatives themselves is not treated here.
+\end{lemma}
+\begin{proof}
+  \leanok
+  The density is the product of $\rho$ with a positive continuous log-concave weight, so it is
+  upper semicontinuous and log-concave, and the measure identity is `withDensity` multiplicativity.
+  The posterior has finite second moment (Lemma~\ref{lem:bkl-gaussian-hessian-upper}), so its
+  barycenter is integrable and the translated law is centered; variances are translation
+  invariant and bounded by the Hessian identity; summing over an orthonormal basis gives the
+  trace. Lemma~\ref{lem:bkl-borell-uniform-moments} with $M=n/(2s)$ gives the uniform moments.
+\end{proof}
+
+\begin{lemma}[Polynomial growth of the derivatives of the smoothed potential]
+  \label{lem:bkl-gaussian-growth}
+  \lean{FunctionalInequalities.Analysis.BakryEmery.iteratedFDeriv_weightedExp_integral_of_lt,
+        FunctionalInequalities.Analysis.BakryEmery.norm_iteratedFDeriv_laplace_zero_le,
+        FunctionalInequalities.Analysis.norm_iteratedFDeriv_log_comp_le_factorial_sq,
+        FunctionalInequalities.Analysis.hasTemperateGrowth_of_bounded_high_derivatives,
+        FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.potential_centered_factorization,
+        FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.potential_iteratedFDeriv_ge_three,
+        FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.exists_uniform_potential_derivative_bound,
+        FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.potential_hasTemperateGrowth}
+  \leanok
+  \uses{lem:bkl-gaussian-posterior-moments}
+  Section~2 of \cite{BizeulKlartagLehec2026}, p.~5: every derivative of $V_s=-\log(\rho*\gamma_s)$
+  has polynomial growth. Along an increment $u$ at $x$, with the centered posterior $Q_x$ and its
+  mean displacement $m_x-x$, $V_s(x+u)=V_s(x)+s\|u\|^2-2s\langle m_x-x,u\rangle-\Lambda_{Q_x}(2su)$,
+  hence $D^nV_s(x)=-(2s)^nD^n\Lambda_{Q_x}(0)$ for $n\ge3$. The Laplace derivatives of $Q_x$ at $0$
+  are its moment tensors, bounded by the uniform Borell moments; the local log-composition bound
+  gives $\|D^n\Lambda_{Q_x}(0)\|\le(n!)^2D^n$ with $D$ independent of $x$; and uniformly bounded
+  derivatives of all orders $\ge3$ give \texttt{HasTemperateGrowth}. Constants depend on $n$, the
+  dimension and $s$ only.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Completing the square gives all exponential moments of $Q_x$ and the factorization; the
+  quadratic polynomial has vanishing derivatives of order $\ge3$; differentiate under the integral
+  inside one exponential radius; apply Faà di Bruno to $\log$ at the normalized value $1$; descend
+  from order $3$ to orders $2,1,0$ by the mean value inequality.
+\end{proof}
+
+\begin{lemma}[The regular approximation produces regular potentials]
+  \label{lem:bkl-regular-producer}
+  \lean{FunctionalInequalities.Analysis.BakryEmery.bilinearIteratedFDerivTwo_add_quadratic,
+        FunctionalInequalities.KLS.RegularPotential.of_convexOn_hasTemperateGrowth,
+        FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.quadraticTilt_smoothedLaw_eq_tilted,
+        FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.regularPotential_quadraticPotential,
+        FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.regularLaw_eq_quadraticTilt,
+        FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.quadraticTilt_logConcave}
+  \leanok
+  \uses{lem:bkl-gaussian-hessian-upper, lem:bkl-gaussian-growth, lem:bkl-quadratic-tilt}
+  Section~2 of \cite{BizeulKlartagLehec2026}, p.~5, and the regular class~(12). For a probability
+  law with a Borell density, $s>0$ and $\delta>0$, the potential $V_s+\tfrac\delta2\|\cdot\|^2$ is a
+  regular potential with $\delta\,\mathrm{Id}\le\nabla^2\le(2s+\delta)\,\mathrm{Id}$ (the Gaussian
+  variance is $\varepsilon=1/(2s)$), its law is exactly the two-step law (Gaussian smoothing, then
+  the quadratic tilt), and that law is log-concave. The approximating sequence and its convergence
+  are not treated here.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Adding $\tfrac\delta2\|\cdot\|^2$ adds $\delta\|v\|^2$ to the Hessian quadratic form; the lower
+  bound is convexity of $V_s$, the upper bound is Lemma~\ref{lem:bkl-gaussian-hessian-upper},
+  temperate growth is Lemma~\ref{lem:bkl-gaussian-growth}; the law identity is the tilt of a tilt.
+\end{proof}
+
+\begin{lemma}[Regular potentials under affine changes of variables]
+  \label{lem:bkl-regular-affine}
+  \lean{FunctionalInequalities.Analysis.BakryEmery.bilinearIteratedFDerivTwo_comp_affine,
+        FunctionalInequalities.Probability.map_tilted_measurableEquiv,
+        FunctionalInequalities.KLS.RegularPotential.comp_affine,
+        FunctionalInequalities.KLS.inverseAffine_map_volume,
+        FunctionalInequalities.KLS.RegularPotential.law_comp_affine,
+        FunctionalInequalities.KLS.RegularPotential.integral_exp_neg_comp_affine,
+        FunctionalInequalities.KLS.RegularPotential.law_comp_affine_eq_map}
+  \leanok
+  Section~2 of \cite{BizeulKlartagLehec2026}, p.~5 (the regular class~(12) under centering and
+  whitening). For a regular potential $V$ with $a\,\mathrm{Id}\le\nabla^2V\le b\,\mathrm{Id}$ and an
+  invertible affine map $x\mapsto Lx+c$, the potential $V(L\cdot+c)$ is regular with
+  $\nabla^2\ge a/(1+\|L^{-1}\|)^2$ and $\nabla^2\le\max(b,1)(1+\|L\|)^2$ (positive constants in
+  every dimension, including zero), its normalizer is $|\det L|^{-1}$ times that of $V$, and its
+  law is the image of the law of $V$ under $y\mapsto L^{-1}(y-c)$, i.e.\ a translation followed by
+  the continuous linear equivalence $L^{-1}$. No whitening operator is chosen here.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Hessian chain rule for affine maps and operator-norm bounds; the tilted law is transported
+  through the measurable equivalence $y\mapsto L^{-1}(y-c)$, under which Lebesgue measure scales
+  by a positive constant that cancels in the normalization.
+\end{proof}
+
+\begin{lemma}[Moments and weak convergence of the Gaussian smoothing]
+  \label{lem:bkl-gaussian-moments}
+  \lean{FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.gaussianLaw_laplace,
+        FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.gaussianLaw_mean_zero,
+        FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.gaussianLaw_inner_sq,
+        FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.smoothedLaw_mean,
+        FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.smoothedLaw_covariance_operator,
+        FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.smoothedLaw_norm_sq,
+        FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.smoothedLaw_covariance_operator_tendsto,
+        FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.smoothedProbabilityLaw_tendsto}
+  \leanok
+  Section~2 of \cite{BizeulKlartagLehec2026}, p.~5. The Gaussian noise $\gamma_s$ with kernel
+  $e^{-s\|y\|^2}$ has Laplace transform $e^{\|z\|^2/(4s)}$, mean $0$ and
+  $\int\langle v,y\rangle^2d\gamma_s=\|v\|^2/(2s)$. For $\mu$ with finite second moment,
+  $\mu*\gamma_s$ keeps the mean, has $\operatorname{Cov}(\mu*\gamma_s)=\operatorname{Cov}\mu+\tfrac1{2s}\mathrm{Id}$
+  and $\int\|y\|^2$ increased by $n/(2s)$; these converge to the data of $\mu$ as $s\to\infty$.
+  For $\mu$ with a Borell density, $\mu*\gamma_{n+1}\to\mu$ weakly.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Complete the square for the Laplace transform; differentiate at $0$ for the moments;
+  independence of the summands for the convolution; $L^1$ convergence of the normalized
+  densities for the weak limit.
+\end{proof}
+
+\begin{lemma}[Regular laws reduce to isotropic regular laws]
+  \label{lem:bkl-regular-isotropic}
+  \lean{FunctionalInequalities.KLS.RegularPotential.covariance_pos,
+        FunctionalInequalities.KLS.RegularPotential.support_law,
+        FunctionalInequalities.KLS.RegularPotential.isotropic_comp_affine_of_whitening,
+        FunctionalInequalities.KLS.RegularPotential.exists_isotropic_comp_affine,
+        FunctionalInequalities.KLS.RegularPotential.exists_regular_isotropic}
+  \leanok
+  \uses{lem:bkl-regular-affine}
+  Section~2 of \cite{BizeulKlartagLehec2026}, p.~5 (reduction of Theorem~1.1 to isotropic regular
+  laws). A regular law has finite second moment, full support and positive definite covariance,
+  so a self-adjoint whitening $W$ exists; the affine potential $V(W^{-1}\cdot+m)$, $m$ the mean,
+  is regular with positive constants and its law is isotropic, equal to the translated and
+  whitened law. The whitening is not asserted to be unique or continuous in $\mu$.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Zero variance of a nonzero linear form would make it constant a.e.\ for Lebesgue measure;
+  then Lemma~\ref{lem:bkl-regular-affine} and the covariance transport rules.
+\end{proof}
+
+\begin{lemma}[Covariance of the quadratic tilt]
+  \label{lem:bkl-quadratic-covariance}
+  \lean{FunctionalInequalities.Probability.memLp_id_two_quadraticTilt,
+        FunctionalInequalities.Probability.inner_covariance_quadraticTilt_tendsto,
+        FunctionalInequalities.Probability.covariance_quadraticTilt_tendsto}
+  \leanok
+  \uses{lem:bkl-quadratic-tilt}
+  Section~2 of \cite{BizeulKlartagLehec2026}, p.~5. For a probability law $\mu$ with finite second
+  moment on a finite-dimensional inner product space, the quadratic tilts
+  $\mu_\delta=\mu$ tilted by $e^{-\delta\|x\|^2/2}$ have finite second moments and
+  $\operatorname{Cov}(\mu_\delta)\to\operatorname{Cov}(\mu)$ in operator norm as $\delta\to0^+$.
+\end{lemma}
+\begin{proof}
+  \leanok
+  The tilt weights are bounded by one; means and raw second moments converge by dominated
+  convergence, hence every matrix entry, hence the operator in finite dimension.
+\end{proof}
+
+\begin{lemma}[Regular potentials under linear isometries]
+  \label{lem:bkl-regular-isometry}
+  \lean{FunctionalInequalities.Analysis.BakryEmery.bilinearIteratedFDerivTwo_comp_clm,
+        FunctionalInequalities.KLS.RegularPotential.comp_isometry,
+        FunctionalInequalities.KLS.RegularPotential.law_comp_isometry_eq_map,
+        FunctionalInequalities.KLS.RegularPotential.isotropic_comp_isometry,
+        FunctionalInequalities.KLS.RegularPotential.localSlope_constant_comp_isometry,
+        FunctionalInequalities.KLS.RegularPotential.toEuclidean,
+        FunctionalInequalities.KLS.RegularPotential.localSlope_le_of_euclidean_bound}
+  \leanok
+  Section~2 of \cite{BizeulKlartagLehec2026}, p.~5. For a linear isometry $L:E\to F$ between
+  finite-dimensional inner product spaces, $V\circ L^{-1}$ is regular with the same constants
+  $a,b$, its law is the image of the law of $V$ under $L$, isotropy and the smooth-test and
+  literature Poincaré constants are preserved. Standard coordinates give a regular potential on
+  $\mathbb R^n$, so a Poincaré bound for isotropic regular laws on $\mathbb R^n$ ($n>0$) transfers
+  to every finite-dimensional inner product space (dimension zero has constant $0$). No such
+  bound is asserted, and no non-isometric invariance is claimed.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Hessian chain rule for linear maps and norm preservation; the tilted law transports through
+  the measure-preserving isometry.
+\end{proof}
+
+\begin{lemma}[The joint regular approximation]
+  \label{lem:bkl-regular-approximation}
+  \lean{FunctionalInequalities.Analysis.exists_metric_diagonal,
+        FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.gaussian_joint_tendsto,
+        FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.row_joint_tendsto,
+        FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.exists_diagonal_limits,
+        FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.exists_regular_approximation_limits,
+        FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.exists_regularSeq_limits}
+  \leanok
+  \uses{lem:bkl-regular-producer, lem:bkl-gaussian-moments, lem:bkl-quadratic-covariance}
+  Section~2 of \cite{BizeulKlartagLehec2026}, p.~5. Let $\mu$ have a Borell density and finite
+  second moment. The two-step laws (Gaussian smoothing of variance $1/(2(n+1))$, then the
+  quadratic tilt of rate $\delta_k=1/(k+1)$) are the laws of regular potentials with
+  $\delta_k\le\nabla^2\le2(n+1)+\delta_k$; along a diagonal $k(n)\ge n$ they converge weakly to
+  $\mu$, with means, raw second moments and covariance operators converging to those of $\mu$.
+  No convergence of whitened laws is asserted.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Each row converges to its smoothing as $k\to\infty$ and the smoothings converge to $\mu$; select
+  the diagonal in the metrizable product of the weak topology with the statistics.
+\end{proof}
+
+\begin{lemma}[Conditional Poincaré transfer to regular laws]
+  \label{lem:bkl-regular-poincare-transfer}
+  \lean{FunctionalInequalities.KLS.RegularPotential.localSlope_le_covariance_norm,
+        FunctionalInequalities.KLS.RegularPotential.localSlope_le_covariance_envelope,
+        FunctionalInequalities.KLS.RegularPotential.envelope_coefficient_tendsto}
+  \leanok
+  \uses{lem:bkl-regular-isotropic}
+  Section~2 of \cite{BizeulKlartagLehec2026}, p.~5. Suppose every isotropic regular law with
+  positive upper curvature has literature Poincaré constant at most $K$ (an explicit hypothesis:
+  Theorem~1.1 for the isotropic regular class is not proved). Then every regular law $\mu$ has
+  $C_P(\mu)\le K\|\operatorname{Cov}\mu\|$, and $C_P(\mu)\le K(1+\|\operatorname{Cov}\mu-\mathrm{Id}\|)$,
+  a coefficient converging to $K$ along laws whose covariances converge to $\mathrm{Id}$.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Center and whiten to an isotropic regular law (Lemma~\ref{lem:bkl-regular-isotropic}); the
+  covariance-energy constant is invariant under this change of variables, and the Lipschitz
+  energy is bounded by $\|\operatorname{Cov}\|$ times the covariance energy.
+\end{proof}
+
+\begin{lemma}[Letwin: mean Hessian of a convex potential]
+  \label{lem:letwin-mean-hessian}
+  \lean{FunctionalInequalities.Analysis.integrable_of_cutoff_bounds,
+        FunctionalInequalities.Analysis.BakryEmery.integrable_hessian_diag_tilted_of_convexOn,
+        FunctionalInequalities.Analysis.BakryEmery.integrable_hessian_tilted_of_convexOn,
+        FunctionalInequalities.Analysis.BakryEmery.integral_hessian_tilted_eq_integral_fderiv_mul_of_convexOn,
+        FunctionalInequalities.KLS.integral_hessian_eq_inner_of_isotropic_map}
+  \leanok
+  \uses{lem:letwin-support-identities}
+  Letwin \cite{Letwin2026QuadraticKLS}, Lemma~2.3, analytic part for a given potential. Let
+  $\varphi$ be smooth and convex with $e^{-\varphi}$ a probability density on a finite-dimensional
+  inner product space, $\nu=e^{-\varphi}\,dx$, and $\nabla\varphi\in L^2(\nu)$. Then every Hessian
+  entry $\partial_u\partial_v\varphi$ is $\nu$-integrable and
+  $\int\partial_u\partial_v\varphi\,d\nu=\int\partial_u\varphi\,\partial_v\varphi\,d\nu$; if
+  $(\nabla\varphi)_\#\nu$ is isotropic, this equals $\langle u,v\rangle$ (and
+  $\nabla\varphi\in L^2$ follows from isotropy). The moment map $\varphi$ of Lemma~2.2 for a given
+  law is not constructed.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Integration by parts (A.3) with $f=\partial_v\varphi$ against the cutoffs $\chi_R$ gives
+  $\int\chi_R\partial_v^2\varphi=\int\chi_R(\partial_v\varphi)^2-\int\partial_v\chi_R\,\partial_v\varphi$,
+  bounded uniformly in $R\ge1$; the diagonal entries are nonnegative by convexity, so Fatou gives
+  integrability; polarization gives the mixed entries; the identity is A.3 with $g=1$.
+\end{proof}
+
+\begin{lemma}[Letwin: the Hessian--Stein kernel of a given potential]
+  \label{lem:letwin-hessian-kernel}
+  \lean{FunctionalInequalities.Probability.Stein.hessianKernel,
+        FunctionalInequalities.Probability.Stein.chain_coordinate,
+        FunctionalInequalities.Probability.Stein.hessianKernel_quadratic_nonneg,
+        FunctionalInequalities.Probability.Stein.exists_measurable_leftInverse_gradient_of_injective,
+        FunctionalInequalities.KLS.LogConcave.hessianKernel_compact_identity,
+        FunctionalInequalities.KLS.LogConcave.hessianKernel_isSteinKernel,
+        FunctionalInequalities.KLS.LogConcave.integral_hessianKernel_eq_one,
+        FunctionalInequalities.KLS.LogConcave.exists_hessianSteinKernel_of_injective_gradient}
+  \leanok
+  \uses{lem:letwin-stein-dual, lem:letwin-mean-hessian}
+  Letwin \cite{Letwin2026QuadraticKLS}, Lemma~2.7, analytic part for a given potential. Let
+  $\varphi$ be smooth and convex on $\mathbb R^n$ with $e^{-\varphi}$ a probability density,
+  $\nu=e^{-\varphi}dx$, $(\nabla\varphi)_\#\nu=\mu$ isotropic, and $\nabla\varphi$ injective (an
+  explicit prerequisite). With a measurable left inverse $\Psi$ of $\nabla\varphi$, the kernel
+  $\tau=\nabla^2\varphi\circ\Psi$ is a Stein kernel of $\mu$ (Definition~2.6) with integrable,
+  symmetric, positive semidefinite entries, mean $\mathrm{Id}$, and $\tau(\nabla\varphi\,y)=\nabla^2\varphi(y)$.
+  The pullback $f\circ\nabla\varphi$ of a compact test is bounded, not assumed compactly
+  supported. Not provided: the moment map of an arbitrary law, strict positive definiteness,
+  the Hilbert--Schmidt $L^2$ bound (the rest of Lemma~2.7 and Theorem~2.5).
+\end{lemma}
+\begin{proof}
+  \leanok
+  Chain rule $\partial_i(f\circ\nabla\varphi)=\sum_j\partial_{ij}\varphi\,(\partial_jf)\circ\nabla\varphi$;
+  A.3 for the bounded pullback with all integrability from Lemma~\ref{lem:letwin-mean-hessian};
+  transport through $(\nabla\varphi)_\#\nu=\mu$ with the a.e.\ coupling; symmetry and positive
+  semidefiniteness of the Hessian; the mean is the mean-Hessian identity.
+\end{proof}
+
+\begin{lemma}[Nondivergence operator and the diffusion product rule]
+  \label{lem:letwin-diffusion-product-rule}
+  \lean{FunctionalInequalities.Analysis.BakryEmery.bilinearIteratedFDerivTwo_mul,
+        FunctionalInequalities.Analysis.BakryEmery.nondivergenceOperator,
+        FunctionalInequalities.Analysis.BakryEmery.nondivergenceOperator_mul}
+  \leanok
+  Letwin \cite{Letwin2026QuadraticKLS}, p.~6, display~(2.3): for a second-order operator in
+  nondivergence form $L_{A,b}f=\sum_{ij}A_{ij}\,\partial_{ij}f-\sum_i b_i\,\partial_if$ with an arbitrary
+  real coefficient field $A$ (symmetric at each point) and drift $b$, and $C^2$ functions $f,g$,
+  $L_{A,b}(fg)=f\,L_{A,b}g+g\,L_{A,b}f+2\sum_{ij}A_{ij}\,\partial_if\,\partial_jg$; the underlying Hessian
+  product rule $D^2(fg)(u,v)=f\,D^2g(u,v)+g\,D^2f(u,v)+Df(u)Dg(v)+Dg(u)Df(v)$ is generic.  The source
+  specialization $A=(\nabla^2\varphi)^{-1}$ (the moment-map metric), the Monge--Amp\`ere and Brascamp--Lieb
+  inputs and Theorem~2.5 are not provided.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Hessian product rule in the standard orthonormal basis; the three bilinear sums regroup into the
+  two operator terms and the carr\'e-du-champ term.
+\end{proof}
+
+\begin{lemma}[Inverse Hessian derivative and the inverse-Hessian operator]
+  \label{lem:letwin-inverse-hessian-derivative}
+  \lean{FunctionalInequalities.Analysis.fderiv_ringInverse_comp_apply,
+        FunctionalInequalities.Analysis.operatorEntry_ringInverse_fderiv_apply,
+        FunctionalInequalities.Analysis.BakryEmery.hessianOperator,
+        FunctionalInequalities.Analysis.BakryEmery.hessianOperator_isUnit_of_posDef,
+        FunctionalInequalities.Analysis.BakryEmery.inner_ringInverse_hessianOperator_pos,
+        FunctionalInequalities.Analysis.BakryEmery.fderiv_ringInverse_hessianOperator_apply,
+        FunctionalInequalities.Analysis.BakryEmery.fderiv_inverseHessianEntry_apply,
+        FunctionalInequalities.Analysis.BakryEmery.hessianInverseOperator_mul,
+        FunctionalInequalities.Analysis.BakryEmery.fderiv_logDetHessian_of_mongeAmpere,
+        FunctionalInequalities.Analysis.BakryEmery.contDiffAt_comp_gradient_of_mem}
+  \leanok
+  \uses{lem:letwin-diffusion-product-rule}
+  Letwin \cite{Letwin2026QuadraticKLS}, pp.~5--7, (2.5) and the (2.3) operator with the inverse
+  Hessian, for a given smooth $\varphi$ with positive definite Hessian.  The Hessian operator
+  $\nabla^2\varphi(x)$ is a self-adjoint unit with positive definite inverse; the inverse Hessian is
+  symmetric and inverts the Hessian in orthonormal coordinates; its derivative is
+  $\partial_k(\nabla^2\varphi)^{-1}_{ij}=-\sum_{a,c}(\nabla^2\varphi)^{-1}_{ia}\,\partial_{kac}\varphi\,(\nabla^2\varphi)^{-1}_{cj}$
+  (operator and coordinate forms, from the derivative $-H^{-1}(DH)H^{-1}$ of an operator inverse).
+  The operator $L=\sum_{ij}(\nabla^2\varphi)^{-1}_{ij}\partial_{ij}-\sum_i(\partial_iV\circ\nabla\varphi)\partial_i$
+  satisfies the Leibniz rule.  If $\log\det\nabla^2\varphi=-\varphi+V\circ\nabla\varphi$ holds (the zero-order
+  Monge--Amp\`ere equation~(2.2), a hypothesis), with $V$ smooth on an open set containing the gradient
+  image, then $D(\log\det\nabla^2\varphi)[v]=-D\varphi[v]+DV(\nabla\varphi)[\nabla^2\varphi\,v]$.  Not
+  provided: Jacobi's derivative of the determinant, Lemma~2.4, Lemma~2.6, the positive-semidefinite
+  estimates, Brascamp--Lieb, and the existence of the moment map (Lemma~2.2).
+\end{lemma}
+\begin{proof}
+  \leanok
+  Mathlib's derivative of the inverse in a normed algebra composed with the Hessian field; symmetry
+  of the Hessian; invertibility from positive definiteness; coordinates in an orthonormal basis; the
+  nondivergence Leibniz rule with the symmetric inverse-Hessian coefficient; the chain rule for
+  $V\circ\nabla\varphi$ on the open neighbourhood.
+\end{proof}
+
+\begin{lemma}[Jacobi's formula and the first Monge--Amp\`ere derivative]
+  \label{lem:letwin-monge-ampere-first}
+  \lean{FunctionalInequalities.Analysis.fderiv_det_eq_det_mul_trace,
+        FunctionalInequalities.Analysis.fderiv_logDet_comp_apply,
+        FunctionalInequalities.Analysis.BakryEmery.fderiv_logDetHessian_eq_trace,
+        FunctionalInequalities.Analysis.BakryEmery.fderiv_logDetHessian_eq_sum,
+        FunctionalInequalities.Analysis.BakryEmery.mongeAmpere_first_derivative,
+        FunctionalInequalities.Analysis.BakryEmery.mongeAmpere_first_derivative_on_range}
+  \leanok
+  \uses{lem:letwin-inverse-hessian-derivative}
+  Jacobi's formula $D(\det)(M)[N]=\det M\,\mathrm{tr}(M^{-1}N)$ and $D(\log\det)(M)[N]=\mathrm{tr}(M^{-1}N)$ for
+  real square matrices, also along a differentiable matrix field.  For a smooth $\varphi$ with positive
+  definite Hessian, $D(\log\det\nabla^2\varphi)[v]=\sum_{a,c}(\nabla^2\varphi)^{-1}_{ac}\,\partial_v\partial_{ac}\varphi$.
+  Hence Letwin \cite{Letwin2026QuadraticKLS}, display~(2.4): if $\log\det\nabla^2\varphi=-\varphi+V\circ\nabla\varphi$
+  (the zero-order Monge--Amp\`ere equation~(2.2), a hypothesis) with $V$ smooth on an open neighbourhood of
+  $\overline K\supseteq\overline{\mathrm{range}\,\nabla\varphi}$, then
+  $\sum_{a,c}(\nabla^2\varphi)^{-1}_{ac}\partial_{iac}\varphi=-\partial_i\varphi+\sum_a\partial_aV(\nabla\varphi)\,\partial_{ai}\varphi$.
+  The moment map itself (Lemma~2.2) is not constructed.
+\end{lemma}
+\begin{proof}
+  \leanok
+  The determinant is a continuous multilinear map of the rows; its derivative is the sum of row
+  replacements, which the inverse turns into $\det M\,\mathrm{tr}(M^{-1}N)$.  Compose with the smooth
+  Hessian field and identify the inverse matrix with the inverse-Hessian entries; the right-hand side
+  is Lemma~\ref{lem:letwin-inverse-hessian-derivative}.
+\end{proof}
+
+\begin{lemma}[Second Monge--Amp\`ere derivative and its positive semidefinite terms]
+  \label{lem:letwin-monge-ampere-second}
+  \lean{FunctionalInequalities.Analysis.BakryEmery.bilinearIteratedFDerivTwo_bilinearIteratedFDerivTwo_comm,
+        FunctionalInequalities.Analysis.BakryEmery.bilinearIteratedFDerivTwo_self_nonneg_of_convexOn_open,
+        FunctionalInequalities.Analysis.posSemidef_weightedGram,
+        FunctionalInequalities.Analysis.BakryEmery.mongeAmpere_second_derivative_coordinate,
+        FunctionalInequalities.Analysis.BakryEmery.mongeAmpere_second_derivative,
+        FunctionalInequalities.Analysis.BakryEmery.mongeAmpere_second_derivative_on_range,
+        FunctionalInequalities.Analysis.BakryEmery.posSemidef_hessian_conj_hessian_on_range,
+        FunctionalInequalities.Analysis.BakryEmery.posSemidef_inverseHessian_third_gram}
+  \leanok
+  \uses{lem:letwin-monge-ampere-first}
+  Letwin \cite{Letwin2026QuadraticKLS}, display~(2.6): differentiating~(2.4) once more, with the
+  inverse-Hessian operator $L$ of~(2.3),
+  $L(\partial_{ij}\varphi)+\partial_{ij}\varphi=\big(\nabla^2\varphi\,\nabla^2V(\nabla\varphi)\,\nabla^2\varphi\big)_{ij}
+  +\sum_{a,c,p,q}(\nabla^2\varphi)^{-1}_{ap}(\nabla^2\varphi)^{-1}_{cq}\,\partial_{iac}\varphi\,\partial_{jpq}\varphi$,
+  under the zero-order equation, $\varphi\in C^\infty$ with positive definite Hessian, and $V$ smooth on a
+  neighbourhood of $\overline K$.  The commutation of third and fourth derivatives is derived from $C^2$
+  symmetry.  Both right-hand matrices are positive semidefinite: the first when $V$ is convex on the open
+  set $K$ containing the gradient image (no convexity on the larger neighbourhood is required), the second
+  as a Gram matrix weighted by $(\nabla^2\varphi)^{-1}\otimes(\nabla^2\varphi)^{-1}$.  Not provided: the
+  moment map, Theorem~2.5, Brascamp--Lieb, Proposition~2.8, any Hilbert--Schmidt or operator-norm bound,
+  and the principal root.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Differentiate both sides of~(2.4) in the direction $e_j$: the product rule on the left with the
+  inverse-Hessian derivative of Lemma~\ref{lem:letwin-inverse-hessian-derivative}, the chain rule for
+  $\partial_aV\circ\nabla\varphi$ on the right; regroup with the commutation lemmas.  Positivity: a $C^2$
+  function convex on an open set has nonnegative Hessian, conjugation by the symmetric Hessian preserves
+  positive semidefiniteness, and $F(A\otimes A)F^{\!\top}$ is positive semidefinite.
+\end{proof}
+
+\begin{lemma}[Integration by parts for the inverse-Hessian operator on compact tests]
+  \label{lem:letwin-inverse-hessian-ibp}
+  \lean{FunctionalInequalities.Analysis.BakryEmery.inverseHessian_divergence,
+        FunctionalInequalities.Analysis.BakryEmery.density_inverseHessian_divergence,
+        FunctionalInequalities.Analysis.BakryEmery.density_hessianInverseOperator_flux,
+        FunctionalInequalities.Analysis.BakryEmery.integral_fderiv_mul_eq_neg_of_hasCompactSupport,
+        FunctionalInequalities.Analysis.BakryEmery.integral_hessianInverseOperator_mul_eq_neg,
+        FunctionalInequalities.Analysis.BakryEmery.integral_hessianInverseOperator_mul_eq_neg_on_range,
+        FunctionalInequalities.Analysis.BakryEmery.integral_hessianInverseOperator_eq_zero,
+        FunctionalInequalities.Analysis.BakryEmery.integral_hessianInverseOperator_mul_comm}
+  \leanok
+  \uses{lem:letwin-monge-ampere-first}
+  Letwin \cite{Letwin2026QuadraticKLS}, display~(2.2): for a given smooth $\varphi$ with everywhere
+  positive definite Hessian, $\int e^{-\varphi}=1$ and the zero-order equation
+  $\log\det\nabla^2\varphi=-\varphi+V\circ\nabla\varphi$ with $V$ smooth on an open set containing
+  $\nabla\varphi(\mathbb R^n)$ (in the source, a neighbourhood of $\overline K$), the inverse Hessian
+  $A=(\nabla^2\varphi)^{-1}$ has coordinate divergence $\sum_i\partial_iA_{ij}=\sum_iA_{ij}\partial_i\varphi
+  -\partial_jV(\nabla\varphi)$, so $\sum_i\partial_i(e^{-\varphi}A_{ij})=-e^{-\varphi}\partial_jV(\nabla\varphi)$
+  and $\sum_{ij}\partial_i(e^{-\varphi}A_{ij}\partial_jf)=e^{-\varphi}Lf$; hence for smooth $f,g$ with one of
+  them compactly supported, $\int(Lf)\,g\,d\nu=-\int\sum_{ij}A_{ij}\partial_if\,\partial_jg\,d\nu$ with
+  $d\nu=e^{-\varphi}dx$, $\int Lf\,d\nu=0$, and $\int(Lf)g\,d\nu=\int f(Lg)\,d\nu$ on compact tests.  Haar
+  integrability comes from the compact test alone.  The noncompact extension is
+  Lemmas~\ref{lem:letwin-a4-cutoffs} and~\ref{lem:letwin-a5-cutoffs}.  Not provided: the moment map of an arbitrary law,
+  a closed $L^2$ generator, Brascamp--Lieb, Theorem~2.5, Proposition~2.8.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Multiply the first derivative~(2.4) of the equation by the inverse Hessian and use the third-slot
+  commutation; the product rule with $e^{-\varphi}$ gives the flux identities; directional Haar
+  integration by parts on each coordinate term, with integrability from compact support, and the tilt
+  normalisation.
+\end{proof}
+
+\begin{lemma}[Parameter response of the localization posterior]
+  \label{lem:bkl-posterior-parameter-response}
+  \lean{FunctionalInequalities.Probability.Posterior.quadraticExponent,
+        FunctionalInequalities.Probability.Posterior.expectation_hasDerivAt_of_compact,
+        FunctionalInequalities.Probability.Posterior.expectation_hasDerivAt_quadraticExponent_of_coercive,
+        FunctionalInequalities.Probability.Posterior.expectation_hasDerivAt_quadraticExponent_of_compact,
+        FunctionalInequalities.Probability.Posterior.exists_uniform_norm_moments_tilted_quadraticExponent_of_compact,
+        FunctionalInequalities.KLS.Isotropic.posterior_linear_response}
+  \leanok
+  \uses{lem:bkl-weak-limit-transfer}
+  \cite{BizeulKlartagLehec2026}, p.~19, the compact stage before~(67) and the deterministic parameter
+  dependence of the posterior $\mu_{c,Q}=\mu\,e^{\langle c,x\rangle-\frac12\langle Qx,x\rangle}/Z$ of~(67).
+  For a compactly supported prior, every parameter pair (including $c=Q=0$) gives a probability
+  posterior, continuous statistics are in $L^2$, all norm moments are bounded uniformly in $(c,Q)$ by a
+  support radius, and for $f$ bounded on the support
+  $\frac{d}{dt}\big|_{t=0}\int f\,d\mu_{c+th,\,Q+tH}=\mathrm{Cov}_{\mu_{c,Q}}\big(f,\langle h,x\rangle-\tfrac12\langle Hx,x\rangle\big)$.
+  For an arbitrary probability prior and $\langle Qx,x\rangle\ge a|x|^2$ with $a>0$, the same response holds
+  for measurable $f$ of polynomial growth without any prior moment ($Q=0$ is not coercive in positive dimension, vacuously so in
+  dimension zero, and is covered only by the compact branch).  For a compactly supported isotropic prior at $c=Q=0$ the response of
+  $\langle u,x\rangle$ to the linear parameter in direction $h$ is $\langle u,h\rangle$.  The stochastic
+  equations~(67)--(71), the It\^o formula, the martingale property and the compact approximation of
+  general laws are not provided.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Domination of the parameter family on a neighbourhood (support bound, or the quadratic damping
+  $e^{-\frac a4|x|^2}$ absorbing polynomial weights), differentiation under the integral, and the quotient
+  rule for the normalized expectation; isotropy gives the covariance pairing at the initial pair.
+\end{proof}
+
+\begin{lemma}[Covariance domain of the localization posterior]
+  \label{lem:bkl-posterior-covariance-domain}
+  \lean{FunctionalInequalities.Probability.Posterior.compactPosterior,
+        FunctionalInequalities.Probability.Posterior.compactPosterior_affineSupport,
+        FunctionalInequalities.Probability.Posterior.compactPosterior_covariance_pos_of_affineSupport_eq_top,
+        FunctionalInequalities.Covariance.inner_operator_self_pos_of_affineSupport_eq_top,
+        FunctionalInequalities.Probability.affineSupport_eq_top_of_covariance_injective,
+        FunctionalInequalities.KLS.Isotropic.compactPosterior_exists_positive_symmetric_inverse,
+        FunctionalInequalities.KLS.Isotropic.compactPosterior_ringInverse_covariance,
+        FunctionalInequalities.KLS.Isotropic.compactPosterior_generator_cancellation,
+        FunctionalInequalities.KLS.Isotropic.ringInverse_covariance_compactPosterior_zero,
+        FunctionalInequalities.KLS.LogConcave.logConcave_of_concave_tilt,
+        FunctionalInequalities.KLS.compactPosterior_logConcave,
+        FunctionalInequalities.Analysis.inverseSqrt_spec,
+        FunctionalInequalities.Analysis.inverseSqrt_unique,
+        FunctionalInequalities.Analysis.inverseSqrtIn_eq_of_basis,
+        FunctionalInequalities.KLS.Isotropic.compactPosterior_inverseSqrt_spec,
+        FunctionalInequalities.KLS.Isotropic.inverseSqrt_covariance_compactPosterior_zero}
+  \leanok
+  \uses{lem:bkl-posterior-parameter-response}
+  \cite{BizeulKlartagLehec2026}, (67)--(68): for a compactly supported prior $\mu$ and every finite
+  parameter pair $(c,Q)$ (including $c=Q=0$ and negative $Q$) the posterior
+  $\mu_{c,Q}=\mu\,e^{\langle c,x\rangle-\frac12\langle Qx,x\rangle}/Z$ is a probability law with the null
+  sets, support and affine support of $\mu$ and finite second moment.  A law with finite second moment and full affine support has
+  strictly positive covariance, and an injective covariance forces full affine support; hence for an
+  isotropic compact prior every $\mu_{c,Q}$ has a self-adjoint, strictly positive, invertible covariance,
+  whose canonical inverse $\mathrm{Cov}(\mu_{c,Q})^{-1}$ is self-adjoint and strictly positive (the rate
+  $A_t^{-1}$ in the parameter equations~(67); (68) is the equation of the expectations).  A positive-dimensional Dirac prior shows that compactness alone does not give a unit.
+  Not provided: a principal inverse square root or whitener, coefficient regularity, positivity of the
+  $Q$-process, the stochastic equations and It\^o calculus, and any Theorem~4.1 or main-theorem claim.
+  The diffusion coefficient $A^{-1/2}$ of~(67) is the principal inverse square root of the covariance,
+  obtained from the canonical matrix square root in orthonormal coordinates: positive, self-adjoint,
+  $\sigma^2=\sigma\sigma^*=A^{-1}$, $A\sigma\sigma^*=\sigma\sigma^*A=\mathrm{Id}$, the unique positive
+  operator with that square, basis independent, equal to $\mathrm{Id}$ at $c=Q=0$; coefficient algebra only
+  (no continuity or Lipschitz property of $(c,Q)\mapsto A^{-1/2}$, no whitener, no stochastic statement).
+\end{lemma}
+\begin{proof}
+  \leanok
+  Mathlib absolute continuity of normalized tilts in both directions; the hyperplane argument for a
+  vanishing variance against full affine support; kernel of the covariance versus the direction of the
+  affine support; a strictly positive operator is a unit, and right inverses of a self-adjoint
+  strictly positive unit are self-adjoint, strictly positive and equal to \texttt{Ring.inverse}.
+\end{proof}
+
+\begin{lemma}[Coefficient regularity of the localization equations]
+  \label{lem:bkl-coefficients-regularity}
+  \lean{FunctionalInequalities.Probability.Posterior.contDiff_posteriorExpectation_joint,
+        FunctionalInequalities.Probability.Posterior.contDiff_posteriorMean_joint,
+        FunctionalInequalities.Probability.Posterior.contDiff_posteriorCovariance_joint,
+        FunctionalInequalities.KLS.Isotropic.contDiff_ringInverse_covariance_joint,
+        FunctionalInequalities.KLS.Isotropic.contDiff_covarianceDrift_joint,
+        FunctionalInequalities.Analysis.root_difference_le_div,
+        FunctionalInequalities.Analysis.locallyLipschitz_matrixEntries_sqrt,
+        FunctionalInequalities.Analysis.locallyLipschitz_inverseSqrt_of_contDiff_ringInverse,
+        FunctionalInequalities.KLS.Isotropic.locallyLipschitz_inverseSqrt_covariance_joint,
+        FunctionalInequalities.KLS.Isotropic.locallyLipschitz_coefficients67}
+  \leanok
+  \uses{lem:bkl-posterior-covariance-domain}
+  \cite{BizeulKlartagLehec2026}, (67), compact stage: for a compactly supported prior $\mu$ the posterior
+  expectation $(c,Q)\mapsto\int f\,d\mu_{c,Q}$ of a measurable $f$ bounded on the support is $C^\infty$
+  jointly in $(c,Q)\in E\times\mathcal L(E)$ (operator norm on the second factor; every finite pair,
+  including $Q=0$, non-symmetric $Q$ and dimension zero), hence so are the mean $a(c,Q)$ and the covariance
+  $A(c,Q)$; for an isotropic prior the rate $A^{-1}=\mathrm{Cov}(\mu_{c,Q})^{-1}$ and the drift $A^{-1}a$
+  are jointly $C^\infty$, and the diffusion coefficient $A^{-1/2}$ (principal inverse square root) and the
+  coefficient triple $(A^{-1/2},A^{-1}a,A^{-1})$ are locally Lipschitz on the whole parameter space.  The
+  root estimate is the Frobenius bound $\|S-T\|_F\le\|S^2-T^2\|_F/(a+b)$ for positive floors $a,b$ and
+  symmetric $T$ (from $S(S-T)+(S-T)T=S^2-T^2$, no commutation), with continuity of the canonical matrix
+  square root on the nonnegative cone and a local positive floor.  Not provided: a strong solution of (67),
+  non-explosion, adaptedness, It\^o calculus, or any Theorem~4.1 claim; nothing is claimed about the root
+  off the self-adjoint positive cone.
+\end{lemma}
+\begin{proof}
+  \leanok
+  The exponent $\langle c,x\rangle-\tfrac12\langle Qx,x\rangle$ is continuous linear in $(c,Q)$; after a
+  finite-dimensional chart it is the pairing with a Riesz feature $\psi(x)$, so the joint expectation is
+  the $c$-only expectation of the pushed-forward prior $\psi_*\mu$ (compactly supported) at $Q'=0$, which
+  is $C^\infty$ by Lemma~\ref{lem:bkl-posterior-covariance-domain}'s generator calculus, composed with the
+  chart.  Mean and covariance are finite sums of such expectations times rank-one operators; the inverse
+  is analytic on units; local Lipschitzness of the root follows from the Sylvester estimate on a
+  neighbourhood with a common floor, transported to the operator norm by the finite-dimensional
+  coordinate charts.
+\end{proof}
+
+\begin{lemma}[Generator of the posterior expectation]
+  \label{lem:bkl-posterior-generator}
+  \lean{FunctionalInequalities.Probability.Posterior.covariance_hasDerivAt_of_compact,
+        FunctionalInequalities.Probability.Posterior.contDiff_posteriorExpectation_c,
+        FunctionalInequalities.Probability.Posterior.fderiv_posteriorExpectation_c_apply,
+        FunctionalInequalities.Probability.Posterior.bilinearIteratedFDerivTwo_posteriorExpectation_c_mean,
+        FunctionalInequalities.Probability.Posterior.sum_bilinearIteratedFDerivTwo_posteriorExpectation_c,
+        FunctionalInequalities.Probability.Posterior.posteriorExpectation_hasDerivAt_Q,
+        FunctionalInequalities.Probability.Posterior.posteriorExpectation_generator_cancellation}
+  \leanok
+  \uses{lem:bkl-posterior-parameter-response}
+  \cite{BizeulKlartagLehec2026}, (67)--(68), compact-prior stage, deterministic part.  For a
+  compactly supported prior and a measurable $f$ bounded on the support, the posterior expectation
+  $(c,Q)\mapsto\int f\,d\mu_{c,Q}$ is $C^\infty$ in $c$ with $c$-gradient $\mathrm{Cov}(f,\langle h,x\rangle)$,
+  $c$-Hessian $\mathrm{Cov}(f,\langle h,x\rangle\langle k,x\rangle)-\langle h,a\rangle\mathrm{Cov}(f,\langle k,x\rangle)
+  -\langle k,a\rangle\mathrm{Cov}(f,\langle h,x\rangle)$ ($a$ the posterior mean), and $Q$-derivative
+  $-\tfrac12\mathrm{Cov}(f,\langle Mx,x\rangle)$ in a direction $M$; the tilted covariance is differentiable
+  along exponent lines.  For every symmetric $M$ the generator combination
+  $D_c[Ma]+\partial_Q[M]+\tfrac12\sum_i D^2_c[Me_i,e_i]$ vanishes, in every orthonormal basis.
+  With $M=A_t^{-1}$ this is the deterministic content of the zero drift in~(68); the stochastic
+  equation~(67), It\^o's formula and the martingale property are not constructed, and the
+  specialization to the actual inverse covariance is a separate unit.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Smoothness of weighted integrals inside every exponential radius (compact support gives all
+  radii), the quotient rule for the normalization, identification of the directional responses with
+  the Fr\'echet derivatives, the trace contraction of the Hessian against $M$, and cancellation of
+  the three covariance terms.
+\end{proof}
+
+\begin{lemma}[Conditional reduction of Theorem 1.1 for regular isotropic laws]
+  \label{lem:bkl-regular-reduction}
+  \lean{FunctionalInequalities.Analysis.BakryEmery.taylorTensor_one_apply,
+        FunctionalInequalities.KLS.Isotropic.norm_coordTensor_taylorTensor_one_le,
+        FunctionalInequalities.KLS.RegularPotential.two_mul_pow_le_two_mul_pow,
+        FunctionalInequalities.KLS.RegularPotential.poincare_le_of_cumulantBound}
+  \leanok
+  \uses{thm:bkl-taylor-criterion, prop:bkl-suspension}
+  Proof of Theorem~1.1 in \cite{BizeulKlartagLehec2026}, p.~30, as a conditional statement.
+  Suppose the cumulant bounds of Theorem~4.1 hold universally: $R^\nu_{d+1}\le(d!)^2K^d\,\mathrm{Id}$
+  for every isotropic log-concave $\nu$ in every dimension and every $d\ge2$, with $K\ge1$. Then
+  every isotropic regular law $\mu$ on $\mathbb R^n$ satisfies $C_P(\mu)\le2CK$, where $C$ is the
+  constant of Theorem~3.1. Theorem~4.1 is not proved here, and no certificate is attached.
+\end{lemma}
+\begin{proof}
+  \leanok
+  For $d\ge2$, Proposition~\ref{prop:bkl-suspension} with $b=(d!)^2K^d$ gives
+  $|T_df|^2\le2K^d\|f\|^2\le(2K)^d\|f\|^2$. For $d=1$, $T_1f(e_j)=\int x_jf\,d\mu$ (the first
+  Taylor tensor is the centered first moment) and Bessel's inequality under isotropy gives
+  $|T_1f|\le\|f\|$. Hence~(29) holds with $R=\sqrt{2K}\ge1$, and
+  Theorem~\ref{thm:bkl-taylor-criterion} gives $C_P(\mu)\le CR^2=2CK$.
+\end{proof}
+
+\begin{lemma}[Reduction to isotropic regular laws, and Theorem 1.1 conditional on Theorem 4.1]
+  \label{lem:bkl-isotropic-reduction}
+  \lean{FunctionalInequalities.KLS.LogConcave.exists_isBorellDensity_of_isotropic,
+        FunctionalInequalities.KLS.LogConcave.localSlope_le_of_regular_isotropic_bound,
+        FunctionalInequalities.KLS.LogConcave.localSlope_le_of_euclidean_regular_isotropic_bound,
+        FunctionalInequalities.KLS.LogConcave.isotropicBound_of_euclidean_regular_isotropic_bound,
+        FunctionalInequalities.KLS.localSlope_le_of_cumulantBound_all,
+        FunctionalInequalities.KLS.conjecture_of_cumulantBound}
+  \leanok
+  \uses{lem:bkl-regular-approximation, lem:bkl-regular-poincare-transfer, lem:bkl-regular-isometry,
+        lem:bkl-weak-limit-transfer, lem:bkl-regular-reduction}
+  Section~2 of \cite{BizeulKlartagLehec2026}, p.~5, and the proof of Theorem~1.1 on p.~30. If every
+  isotropic regular law on $\mathbb R^n$, $n>0$, has literature Poincaré constant at most $K$, then
+  every isotropic log-concave law in every finite-dimensional inner product space has constant at
+  most $K$: such a law has a Borell density, is the weak limit of laws of regular potentials with
+  covariances tending to $\mathrm{Id}$, the bound transfers with the coefficient
+  $K(1+\|\operatorname{Cov}-\mathrm{Id}\|)\to K$, and the weak-limit passage concludes. Combined with
+  the p.~30 reduction: under the universal cumulant bounds of Theorem~4.1, every isotropic
+  log-concave law has $C_P\le2CK$, and the project's KLS conjecture follows from that hypothesis.
+  Theorem~4.1 is not proved, so this is \emph{not} a proof of Theorem~1.1 and no certificate is
+  attached; \texttt{KLS.kls} stays open.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Isotropy forces full affine support, hence a Borell density; apply
+  Lemmas~\ref{lem:bkl-regular-approximation}, \ref{lem:bkl-regular-poincare-transfer},
+  \ref{lem:bkl-regular-isometry} and \ref{lem:bkl-weak-limit-transfer}; then
+  Lemma~\ref{lem:bkl-regular-reduction}.
+\end{proof}
+
+\begin{lemma}[Letwin: Stein kernels, the $H^{-1}$ norm, A.7 and Lemma 2.9]
+  \label{lem:letwin-stein-dual}
+  \lean{FunctionalInequalities.Probability.Stein.IsSteinKernel,
+        FunctionalInequalities.Probability.Stein.hsNorm,
+        FunctionalInequalities.Probability.Stein.compact_directional_identity,
+        FunctionalInequalities.Probability.Stein.extended_identity_of_ac,
+        FunctionalInequalities.Probability.Stein.extended_abs_bound_of_ac,
+        FunctionalInequalities.Energy.Dual.UnitEnergyTest,
+        FunctionalInequalities.Energy.Dual.dualNorm,
+        FunctionalInequalities.Energy.Dual.toReal_dualNorm_eq_signed_sSup,
+        FunctionalInequalities.Probability.Stein.linear_dual_bound_of_ac,
+        FunctionalInequalities.KLS.LogConcave.stein_identity_of_affineSupport_eq_top,
+        FunctionalInequalities.KLS.LogConcave.dualNorm_linear_sq_le_of_affineSupport_eq_top}
+  \leanok
+  Letwin \cite{Letwin2026QuadraticKLS}, Definition~2.6, (2.19), Appendix~A.7 and Lemma~2.9 (supporting the
+  Letwin bound used in BKL Lemma~4.2). A Stein kernel of a centered law $\mu$ on $\mathbb R^n$ is a
+  matrix field $\tau$ with $\int x_if\,d\mu=\int(\tau\nabla f)_i\,d\mu$ for $f\in C_c^\infty$; with
+  a.e.\ symmetry and $|\tau|_{HS}\in L^2(\mu)$, for $\mu\ll\mathrm{vol}$ with finite second moment the
+  identity $\int\langle x,v\rangle f=\int\langle\tau v,\nabla f\rangle$ extends to all locally
+  Lipschitz $f$ with $f,\nabla f\in L^2(\mu)$ (A.7), and
+  $\|\langle\cdot,v\rangle\|_{H^{-1}(\mu)}^2\le\int\|\tau(x)v\|^2\,d\mu$ (Lemma~2.9), where
+  $\|q\|_{H^{-1}}=\sup\{\int qf\,d\mu:\int\|\nabla f\|^2\,d\mu\le1\}$ is taken as an extended real
+  over the full unit-energy class and identified with the real signed supremum once finite. Full
+  affine dimension and log-concavity supply absolute continuity and the second moment. No Stein
+  kernel is constructed (the moment-map kernel of Lemma~2.2 / Proposition~2.8 is open).
+\end{lemma}
+\begin{proof}
+  \leanok
+  Compact tests: sum the coordinate identities and use symmetry. Extension: approximate $f$ by
+  $C_c^\infty$ functions in the graph norm and pass both pairings to the limit in $L^2$.
+  Lemma~2.9: A.7 and Cauchy--Schwarz bound every unit-energy pairing by
+  $(\int\|\tau v\|^2)^{1/2}$; finiteness then identifies the extended value with the real supremum.
 \end{proof}
 
 \begin{lemma}[Regular laws]
@@ -1216,6 +2215,223 @@ addressed.
   and telescoping.
 \end{proof}
 
+\begin{lemma}[Letwin supporting identities]
+  \label{lem:letwin-support-identities}
+  \lean{FunctionalInequalities.Analysis.BakryEmery.integral_fderiv_mul_tilted_eq,
+        FunctionalInequalities.Analysis.Tensor.sum_weight_sq_mul_sq_sub_eq_half_sum_sq_sub_mul_sq}
+  \leanok
+  Two identities from Letwin, arXiv:2607.24164v1, used in the proof of its Theorem~2.5
+  (dependency of Lemma~4.2 of \cite{BizeulKlartagLehec2026}). Lemma~A.3 (pp.~16--17): for smooth
+  $\varphi,f,g$ with $\int e^{-\varphi}\,dm=1$ and $(\partial_vf)g$, $f\partial_vg$,
+  $fg\,\partial_v\varphi$, $fg$ integrable under $\nu=e^{-\varphi}m$,
+  $\int(\partial_vf)g\,d\nu=\int f\,((\partial_v\varphi)g-\partial_vg)\,d\nu$, for any direction $v$.
+  Equation~(2.12) (p.~10), finite form: for an array $T$ symmetric in its first two indices and
+  arbitrary real weights $b$,
+  $\sum b_i^2T_{ijk}^2-\sum b_ib_jT_{ijk}^2=\tfrac12\sum(b_i-b_j)^2T_{ijk}^2\ge0$.
+  The moment map, its regularity, the Hessian-metric generator and Theorem~2.5 are not formalized.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Mathlib's directional integration by parts applied to $f$ and $g e^{-\varphi}$; a pointwise
+  polynomial identity after swapping the first two indices.
+\end{proof}
+
+\begin{lemma}[Letwin: covariance of the transported vector]
+  \label{lem:letwin-mapped-covariance}
+  \lean{FunctionalInequalities.KLS.Isotropic.covarianceBilin_map_sqrt_abs_matrix,
+        FunctionalInequalities.Analysis.symmetric_matrix_sqrt_real_cfc_bridge,
+        FunctionalInequalities.Analysis.symmetric_matrix_sign_factorization}
+  \leanok
+  Letwin \cite{Letwin2026QuadraticKLS}, proof of Theorem~1.2, p.~14, the unnumbered covariance step preceding~(2.21), in
+  a reviewed stronger form: for an isotropic probability law of $X$ on $\mathbb R^n$ and EVERY real symmetric $M$
+  (singular and indefinite included, $n=0$ allowed), with $|M|=\sqrt{M^2}$ and $Z=|M|^{1/2}X$, $\mathrm{Cov}(Z)=|M|$; the
+  source first reduces to invertible $M$ (Lemma~A.2).  Matrix supports: $|M|$ and $|M|^{1/2}$ agree with the real
+  continuous functional calculus and are positive semidefinite, $|M|^{1/2}\,\mathrm{sgn}(M)\,|M|^{1/2}=M$, and
+  $\mathrm{sgn}(M)^2=\mathrm{Id}$ for invertible $M$.  Not provided: the Stein-kernel trace identity~(2.21), Theorem~2.5,
+  Proposition~2.8, Lemma~2.9 for $F(z)=\langle\mathrm{sgn}(M)z,z\rangle-\mathrm{Tr}\,M$, and Theorem~1.2.
+\end{lemma}
+\begin{proof}
+  \leanok
+  The covariance of a linear image $L_\#\mu$ is $L\,\mathrm{Cov}(\mu)\,L^{T}$, isotropy gives $\mathrm{Cov}(\mu)=\mathrm{Id}$,
+  and $|M|^{1/2}|M|^{1/2}=|M|$ in the continuous functional calculus.
+\end{proof}
+
+\begin{lemma}[Letwin: scalar cutoff profile (Lemma~A.4, real-variable part)]
+  \label{lem:letwin-cutoff-profile}
+  \lean{FunctionalInequalities.Analysis.smoothTransition_two_sub_cutoff,
+        FunctionalInequalities.Analysis.exists_majorant_abs_deriv_deriv_smoothTransition_two_sub,
+        FunctionalInequalities.Analysis.monotone_and_tendsto_smoothTransition_two_sub_div_succ,
+        FunctionalInequalities.Analysis.inv_mul_intervalIntegral_div_three_cutoff,
+        FunctionalInequalities.Analysis.deriv_comp_sub_div_and_deriv_deriv,
+        FunctionalInequalities.Analysis.monotoneOn_and_tendsto_smoothTransition_two_sub_div}
+  \leanok
+  Letwin \cite{Letwin2026QuadraticKLS}, Lemma~A.4 (p.~17), the real-variable part of the cutoff construction.  The
+  profile $\eta(t)=\mathrm{smoothTransition}(2-t)$ is $C^\infty$, antitone, with values in $[0,1]$, equal to $1$ for
+  $t\le1$ and to $0$ for $t\ge2$; $\eta'$ and $\eta''$ vanish off $[1,2]$, are compactly supported and share a finite
+  bound $B$.  There is a $C^\infty$, compactly supported, nonnegative $w$, vanishing for $t\le0$ and for $t\ge3$, with
+  $|\eta''|\le w$.  For every real $a$, $n\mapsto\eta(a/(n+1))$ is monotone and tends to $1$, and so is the real-parameter
+  family $R\mapsto\eta(a/R)$: monotone on $(0,\infty)$ with limit $1$ as $R\to\infty$.  Tail primitive: for every
+  $C^\infty$ nonnegative $w$ vanishing for $t\le0$ and $t\ge3$ and every $R>0$, $q_R(t)=R^{-1}\int_{t/R}^{3}w$ is
+  $C^\infty$ with $q_R'(t)=-R^{-2}w(t/R)$, $0\le q_R\le R^{-1}\int_0^3w$ and $q_R(t)=0$ for $t\ge3R$.  Affine rescaling:
+  for arbitrary $f$, $c$, $R$, $t$, $\big(f((\cdot-c)/R)\big)'(t)=R^{-1}f'((t-c)/R)$ and
+  $\big(f((\cdot-c)/R)\big)''(t)=R^{-2}f''((t-c)/R)$ (total-derivative conventions, $R=0$ included).  Immediate consumer: the
+  cutoffs $\chi_R=\eta((\varphi-\min\varphi+1)/R)$ of Lemma~A.4 with $\|L\chi_R\|_{L^1(\nu)}=O(1/R)$, then Lemma~A.5,
+  Theorem~2.5 and Theorem~1.2, the input of Lemma~4.2 of \cite{BizeulKlartagLehec2026}.  Lemma~A.4 itself (the minimum of
+  $\varphi$, the cutoffs $\chi_R$, their compact support and generator-defect bound) is Lemma~\ref{lem:letwin-a4-cutoffs}.
+  Not provided: the moment map, Theorems~2.5 and~1.2.
+\end{lemma}
+\begin{proof}
+  \leanok
+  The smooth transition is locally constant off $[1,2]$, so $\eta'$ and $\eta''$ vanish there and, being continuous with
+  compact support, are bounded; $w$ is $B$ times a product of two smooth transitions, equal to $B$ on $[1,2]$.
+  Exhaustion: for $a<0$ every argument $a/(n+1)$ is negative, so every term $\eta(a/(n+1))$ already equals $1$;
+  for $a\ge0$ the arguments $a/(n+1)$ decrease in $n$ and $\eta$ is antitone, which gives monotonicity; and
+  $a/(n+1)\to0$ with $\eta=1$ on $t\le1$ gives the limit $1$; the real parameter $R>0$ is handled by the same argument
+  with $a/R$.  Primitive: the fundamental theorem of calculus for the
+  continuous $w$ composed with $t\mapsto t/R$, smoothness from the smooth derivative, nonnegativity of $w$ on $[t/R,3]$, and
+  $w=0$ off $(0,3)$.  Rescaling: the chain rule for the affine map $s\mapsto(s-c)/R$, applied twice.
+\end{proof}
+
+\begin{lemma}[Letwin: nonnegative inverse-Hessian quadratic form (Lemma~A.4 support)]
+  \label{lem:letwin-inverse-hessian-quadratic}
+  \lean{FunctionalInequalities.Analysis.BakryEmery.sum_inverseHessianEntry_mul_mul_nonneg}
+  \leanok
+  Letwin \cite{Letwin2026QuadraticKLS}, Lemma~A.4 (p.~17), the sign of $\varphi^{ij}\partial_iW\partial_jW$ in
+  $L\chi_R=R^{-1}\eta'(W/R)\,LW+R^{-2}\eta''(W/R)\,\varphi^{ij}\partial_iW\partial_jW$: for a $C^2$ potential $\varphi$ whose
+  Hessian at $x$ is positive definite, every orthonormal basis (of any rank $m$) and all coefficients $a$,
+  $\sum_{i,j}\big((\nabla^2\varphi(x))^{-1}\big)_{ij}a_ia_j\ge0$.  Immediate consumer: the pointwise generator-defect
+  domination of the Lemma~A.4 cutoffs.  Lemma~A.4 and Lemma~A.5 for given cutoffs are Lemmas~\ref{lem:letwin-a4-cutoffs}
+  and~\ref{lem:letwin-a5-cutoffs}.  Not provided: the moment map, Theorems~2.5 and~1.2.
+\end{lemma}
+\begin{proof}
+  \leanok
+  The inverse of the Hessian matrix in the basis is the matrix of inverse-Hessian entries and is positive semidefinite;
+  the quadratic form is the dot product $a\cdot(A^{-1}a)$.
+\end{proof}
+
+\begin{lemma}[Letwin: supports of the cutoff construction (Lemma~A.4)]
+  \label{lem:letwin-a4-supports}
+  \lean{FunctionalInequalities.Analysis.exists_forall_le_and_isCompact_sublevel_of_convexOn_integrable_exp_neg,
+        FunctionalInequalities.Analysis.BakryEmery.hessianInverseOperator_self,
+        FunctionalInequalities.Analysis.BakryEmery.bounded_hessianInverseOperator_self,
+        FunctionalInequalities.Analysis.BakryEmery.hessianInverseOperator_comp,
+        FunctionalInequalities.Analysis.BakryEmery.sum_inverseHessianEntry_mul_fderiv_comp,
+        FunctionalInequalities.Analysis.BakryEmery.abs_hessianInverseOperator_comp_sub_div_le,
+        FunctionalInequalities.Analysis.BakryEmery.continuous_hessianInverseOperator,
+        FunctionalInequalities.Analysis.BakryEmery.integral_hessianInverseOperator_self_mul_comp_eq_neg,
+        FunctionalInequalities.Analysis.BakryEmery.integrable_and_neg_integral_deriv_comp_mul_le}
+  \leanok
+  \uses{lem:letwin-inverse-hessian-ibp, lem:letwin-inverse-hessian-quadratic}
+  Letwin \cite{Letwin2026QuadraticKLS}, Lemma~A.4 (p.~17), the steps of the proof for a given potential.  Coercivity: a
+  convex $\varphi$ with $e^{-\varphi}$ integrable for an additive Haar measure attains its minimum and all its sublevel sets
+  are compact (no coercivity premise; dimension zero included).  Self-generator: where the Hessian of a $C^2$ potential is
+  positive definite, $L\varphi=\dim E-\langle\nabla V(\nabla\varphi),\nabla\varphi\rangle$, and $L\varphi$ is uniformly
+  bounded when $\nabla\varphi$ takes values in a bounded $K$ and $V$ is $C^1$ on an open set containing $\overline K$.
+  Composition: $L(h\circ W)=h'(W)\,LW+h''(W)\sum_{ij}A_{ij}\partial_iW\,\partial_jW$ for $C^2$ $W$ and $h$; the coefficient
+  extraction $\sum_{ij}A_{ij}\partial_i\varphi\,\partial_j(h\circ\varphi)=h'(\varphi)\sum_{ij}A_{ij}\partial_i\varphi\,
+  \partial_j\varphi$; the pointwise domination $|L(e((\varphi-c)/R))|\le|R^{-1}e'((\varphi-c)/R)|\,|L\varphi|
+  +R^{-2}|e''((\varphi-c)/R)|\,|\sum_{ij}A_{ij}\partial_i\varphi\,\partial_j\varphi|$; continuity of $Lf$ for $C^2$ $f$.
+  Energy: for smooth $h$ with $h\circ\varphi$ compactly supported, $\int(L\varphi)\,h(\varphi)\,d\nu=-\int h'(\varphi)
+  \sum_{ij}A_{ij}\partial_i\varphi\,\partial_j\varphi\,d\nu$, and with $|L\varphi|\le D$, $|h|\le M$ the energy integrand
+  is integrable with $-\int h'(\varphi)\sum_{ij}A_{ij}\partial_i\varphi\,\partial_j\varphi\,d\nu\le DM$.  No minimum,
+  cutoff, energy inequality or global integrability is a premise.
+\end{lemma}
+\begin{proof}
+  \leanok
+  A convex set of finite Haar volume containing a ball is bounded, so the sublevels are compact and the minimum over
+  $\{\varphi\le\varphi(0)\}$ is global.  The self-generator identity is the trace of $A\nabla^2\varphi$; its bound uses the
+  compact images of $DV$ and $\nabla\varphi$.  Composition and domination are the chain rule with the affine rescaling;
+  the energy identity is (2.2) with $f=\varphi$, $g=h\circ\varphi$, and the bound integrates it.
+\end{proof}
+
+\begin{lemma}[Letwin: cutoffs with small generator (Lemma~A.4)]
+  \label{lem:letwin-a4-cutoffs}
+  \lean{FunctionalInequalities.Analysis.BakryEmery.exists_scaled_cutoffs_hessianInverseOperator,
+        FunctionalInequalities.Analysis.BakryEmery.exists_cutoffs_hessianInverseOperator}
+  \leanok
+  \uses{lem:letwin-cutoff-profile, lem:letwin-a4-supports}
+  Letwin \cite{Letwin2026QuadraticKLS}, Lemma~A.4 (p.~17), for every potential in the source class: $\varphi$ smooth and
+  convex on a finite-dimensional real inner product space $E$ with $\nabla\varphi(E)\subseteq K$, $K$ bounded, $V$ smooth
+  on an open $U\supseteq\overline K$, $\log\det\nabla^2\varphi=-\varphi+V\circ\nabla\varphi$, positive definite Hessian
+  and $\int e^{-\varphi}\,dm=1$ for an additive Haar measure $m$; $\nu=e^{-\varphi}m$.  There are $\chi_R$ for real
+  $R\ge1$ and one $C\ge0$ such that each $\chi_R$ is $C^\infty$, compactly supported and $[0,1]$-valued, $R\mapsto
+  \chi_R(x)$ is monotone on $[1,\infty)$ with limit $1$, $L\chi_R\in L^1(\nu)$ and $\int|L\chi_R|\,d\nu\le C/R$; explicitly
+  $\chi_R=\eta((\varphi-\min\varphi+1)/R)$.  The natural index $\chi_n=\chi_{n+1}$ gives cutoffs monotone in $n$ with
+  $\int|L\chi_n|\,d\nu\le C/(n+1)\to0$.  The source-class properties are hypotheses: they are the properties the paper
+  uses for the moment map of a regular law, whose existence and regularity are not formalized.
+\end{lemma}
+\begin{proof}
+  \leanok
+  The minimum and compact sublevels come from Lemma~\ref{lem:letwin-a4-supports}, so $\chi_R$ is compactly supported;
+  the composition rule, the bounded self-generator and the profile bounds dominate $|L\chi_R|$ by
+  $R^{-1}B\,D+R^{-2}w(W/R)\,\Gamma(W)$ with $W=\varphi-\min\varphi+1$; the energy estimate with the tail primitive $q_R$
+  bounds the second term by $R^{-1}D\int_0^3w$; monotonicity and the limit come from the real-parameter exhaustion.
+\end{proof}
+
+\begin{lemma}[Letwin: mean zero of $Lf$ for given cutoffs (Lemma~A.5)]
+  \label{lem:letwin-a5-cutoffs}
+  \lean{FunctionalInequalities.Analysis.integrable_and_integral_eq_zero_of_cutoff_defect,
+        FunctionalInequalities.Analysis.BakryEmery.integrable_and_integral_hessianInverseOperator_eq_zero_of_cutoffs}
+  \leanok
+  \uses{lem:letwin-inverse-hessian-ibp}
+  Letwin \cite{Letwin2026QuadraticKLS}, Lemma~A.5 (p.~18), with the cutoffs as a premise: for a given potential as in
+  (2.2), smooth $f$ with $|f|\le C$ and $Lf+cf\ge0$ for some $c>0$, and smooth compactly supported $\chi_n$ with
+  $0\le\chi_n\le1$, $\chi_n\to1$, $L\chi_n\in L^1(\nu)$ and $\|L\chi_n\|_{L^1(\nu)}\to0$: $Lf\in L^1(\nu)$ and
+  $\int Lf\,d\nu=0$.  Generic core: for a probability law, bounded $f$, $g+cf\ge0$ with $c>0$, cutoffs $0\le\chi_n\le1$,
+  $\chi_n\to1$ and defects $d_n$ with $\int|d_n|\to0$ and $\int\chi_ng=\int f\,d_n$, the function $g$ is integrable with
+  $\int g=0$.  For a potential in the source class of Lemma~\ref{lem:letwin-a4-cutoffs} its natural-index cutoffs satisfy
+  the premises; that composition is carried out for the uniform-interval law
+  (Lemma~\ref{lem:letwin-uniform-interval-client}), not as a separate general statement.
+\end{lemma}
+\begin{proof}
+  \leanok
+  The integrated symmetry (2.2) against $\chi_n$ gives $\int\chi_n\,Lf\,d\nu=\int f\,L\chi_n\,d\nu$; Fatou's lemma gives
+  integrability of $Lf+cf$, and dominated convergence gives $\int Lf\,d\nu=0$.
+\end{proof}
+
+\begin{lemma}[Letwin: the uniform-interval moment potential]
+  \label{lem:letwin-uniform-interval-source}
+  \lean{FunctionalInequalities.Analysis.BakryEmery.uniformInterval_momentPotential_gradient,
+        FunctionalInequalities.Analysis.BakryEmery.uniformInterval_momentPotential_contDiff_convexOn,
+        FunctionalInequalities.Analysis.BakryEmery.uniformInterval_momentPotential_bilinearIteratedFDerivTwo,
+        FunctionalInequalities.Analysis.BakryEmery.uniformInterval_momentPotential_logDetHessian,
+        FunctionalInequalities.Analysis.BakryEmery.uniformInterval_momentPotential_integral_exp_neg,
+        FunctionalInequalities.Analysis.BakryEmery.uniformInterval_momentPotential_source_hypotheses,
+        FunctionalInequalities.Analysis.BakryEmery.uniformInterval_tanhSq_nonconstant_facts}
+  \leanok
+  \uses{lem:letwin-inverse-hessian-derivative}
+  The uniform law on $K=(-\sqrt3,\sqrt3)$ (mean $0$, variance $1$) with $V\equiv\log(2\sqrt3)$: the explicit potential
+  $\varphi(y)=2\log\cosh(\sqrt3y/2)+\log(4/\sqrt3)$ on $\mathbb R$ is smooth and convex, with
+  $\varphi'(y)=\sqrt3\tanh(\sqrt3y/2)\in K$, $\varphi''(y)=\tfrac32\operatorname{sech}^2(\sqrt3y/2)>0$,
+  $\log\varphi''=-\varphi+\log(2\sqrt3)$ and $\int e^{-\varphi}=1$: the source class of Lemmas~A.4 and~A.5.  For the
+  nonconstant $f(y)=\tanh^2(\sqrt3y/2)$: $f$ is smooth, $|f|\le1$, $f(0)\ne f(1)$, $Lf=f''/\varphi''=1-3\tanh^2(\sqrt3y/2)$
+  and $Lf+2f\ge0$.  Only the range inclusion $\varphi'(\mathbb R)\subseteq K$ is proved, not that $\varphi'$ pushes
+  $e^{-\varphi}dy$ forward to the uniform law.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Direct calculus with $\cosh$ and $\tanh$; the normalization integrates $\tfrac{\sqrt3}{4}\operatorname{sech}^2$ with
+  the antiderivative $\tfrac12\tanh(\sqrt3y/2)$ on both half-lines; with constant $V$ the drift vanishes and the rank-one
+  Hessian gives $Lg=g''/\varphi''$.
+\end{proof}
+
+\begin{lemma}[Letwin: Lemma~A.5 for the uniform-interval source law]
+  \label{lem:letwin-uniform-interval-client}
+  \lean{FunctionalInequalities.Analysis.BakryEmery.uniformInterval_tanhSq_integrable_and_integral_hessianInverseOperator_eq_zero}
+  \leanok
+  \uses{lem:letwin-uniform-interval-source, lem:letwin-a4-cutoffs, lem:letwin-a5-cutoffs}
+  For $\varphi$, $V$ and $f$ as in Lemma~\ref{lem:letwin-uniform-interval-source} and $\nu=e^{-\varphi}dy$:
+  $Lf\in L^1(\nu)$ and $\int Lf\,d\nu=0$.  The proof applies the source package, the natural-index cutoffs of
+  Lemma~\ref{lem:letwin-a4-cutoffs} with $K=(-\sqrt3,\sqrt3)$, $U=\mathbb R$, and Lemma~\ref{lem:letwin-a5-cutoffs} with
+  $C=1$, $c=2$.  No integral-zero statement for $f$ is assumed or proved separately.  This is a concrete source-law
+  client, not Letwin's Theorem~2.5 or~1.2.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Lemma~\ref{lem:letwin-a4-cutoffs} applied to the source package supplies the cutoffs, and
+  Lemma~\ref{lem:letwin-a5-cutoffs} with $|f|\le1$ and $Lf+2f\ge0$ gives the conclusion.
+\end{proof}
+
 \begin{lemma}[Third cumulant under the Letwin bound]
   \label{lem:bkl-third-cumulant-conditional}
   \lean{FunctionalInequalities.Analysis.BakryEmery.LetwinQuadraticBound,
@@ -1237,6 +2453,508 @@ form taken by the variance estimate for isotropic $\mu$), then
   \leanok
   The cumulant formula for linear functions and centering, then Cauchy--Schwarz between
   $\langle u,x\rangle$ and the centered quadratic form of $M=\sum_{j,k}\kappa_3(u,e_j,e_k)\,e_j\otimes e_k$.
+\end{proof}
+
+\begin{lemma}[Third cumulant from one exponential radius]
+  \label{lem:bkl-local-third-cumulant}
+  \lean{FunctionalInequalities.Analysis.BakryEmery.cumulant_three_eq_integral_of_integrable_exp,
+        FunctionalInequalities.Analysis.BakryEmery.memLp_of_polynomial_bound_of_integrable_exp,
+        FunctionalInequalities.Analysis.BakryEmery.sum_sq_cumulant_three_le_of_letwin_of_integrable_exp,
+        FunctionalInequalities.Analysis.BakryEmery.sum_sq_cumulant_three_le_of_letwin_of_integrable_exp_basis,
+        FunctionalInequalities.Analysis.BakryEmery.compact_support_integrable_exp,
+        FunctionalInequalities.KLS.LogConcave.sum_sq_cumulant_three_le_of_letwin,
+        FunctionalInequalities.KLS.LogConcave.Suspension.cumulantBound_two_of_letwin}
+  \leanok
+  \uses{lem:bkl-third-cumulant-conditional, lem:bkl-borell-uniform-moments}
+  Lemma~4.2 of \cite{BizeulKlartagLehec2026} in its source scope, conditionally on the Letwin
+  quadratic-form bound.  Log-concavity guarantees some positive exponential radius (Borell) but not, in general,
+  every exponential moment; the Laplace law is isotropic and log-concave but has no exponential moment at
+  its own rate.  For a centered probability law with $\int e^{r|x|}d\mu<\infty$ for one $r>0$,
+  $\kappa_3(u,v,w)=\int\langle u,x\rangle\langle v,x\rangle\langle w,x\rangle\,d\mu$ and continuous
+  functions with polynomial growth lie in $L^2(\mu)$; if $\mu$ is isotropic and satisfies the Letwin
+  bound, $\sum_{j,k}\kappa_3(u,e_j,e_k)^2\le 8|u|^2$ in every orthonormal basis.  Hence every isotropic
+  log-concave law satisfying the Letwin bound has $R_3\le 8\,\mathrm{Id}$, and if all isotropic
+  log-concave laws in positive dimension satisfy the Letwin bound then the universal cumulant bound of
+  order $3$ with constant $8$ holds.  Letwin Theorem~1.2 and the unconditional Lemma~4.2 are not proved.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Differentiation of the Laplace transform inside the exponential radius for the cumulant identity;
+  the contraction argument of Lemma~\ref{lem:bkl-third-cumulant-conditional} with every $L^2$ fact
+  taken from the single radius; Borell's exponential moment for the log-concave adapter.
+\end{proof}
+
+\begin{lemma}[Second cumulant and the Theorem 4.1 base case]
+  \label{lem:bkl-second-cumulant-base}
+  \lean{FunctionalInequalities.Analysis.BakryEmery.cumulant_two_eq_centered_moment_of_integrable_exp,
+        FunctionalInequalities.Analysis.BakryEmery.cumulant_two_eq_covariance_of_integrable_exp,
+        FunctionalInequalities.KLS.LogConcave.cumulant_two_eq_inner_of_isotropic,
+        FunctionalInequalities.KLS.LogConcave.sum_sq_cumulant_two_eq_norm_sq_of_isotropic,
+        FunctionalInequalities.KLS.LogConcave.Suspension.cumulantBound_one_one}
+  \leanok
+  \uses{lem:bkl-local-third-cumulant}
+  \cite{BizeulKlartagLehec2026}, p.~18, the base $m=2$ of Theorem~4.1.  For a probability law with
+  one exponential moment $\int e^{r|x|}d\mu<\infty$, $r>0$ (no centering), the second cumulant is the
+  centered second moment $\kappa_2(u,v)=\int\langle u,x\rangle\langle v,x\rangle\,d\mu-\int\langle u,x\rangle d\mu\int\langle v,x\rangle d\mu
+  =\langle\mathrm{Cov}(\mu)u,v\rangle$.  For an isotropic log-concave law $\kappa_2(u,v)=\langle u,v\rangle$,
+  so $\sum_j\kappa_2(u,e_j)^2=|u|^2$ in every orthonormal basis and the universal cumulant bound
+  $\mathrm{CumulantBound}\,1\,1$ ($R_2=\mathrm{Id}$) holds unconditionally in every dimension, including
+  dimension zero.  The all-order Theorem~4.1 is not proved; no certificate is claimed.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Differentiate $\log\int e^{\langle z,x\rangle}d\mu$ twice inside the exponential radius with the
+  product rule for $z\mapsto\int e^{\langle z,x\rangle}\langle v,x\rangle d\mu=F(z)Z(z)$; isotropy and Parseval.
+\end{proof}
+
+\begin{lemma}[Gradient jets of the cumulant-generating function at zero]
+  \label{lem:bkl-cgf-gradient-jets}
+  \lean{FunctionalInequalities.Analysis.BakryEmery.cumulantVector,
+        FunctionalInequalities.Analysis.BakryEmery.cumulantVector_inner,
+        FunctionalInequalities.Analysis.BakryEmery.gradient_logLaplace_zero_of_compact,
+        FunctionalInequalities.Analysis.BakryEmery.fderiv_centeredGradient_logLaplace_zero_of_compact,
+        FunctionalInequalities.Analysis.iteratedFDeriv_sub_const_of_pos,
+        FunctionalInequalities.Analysis.inner_iteratedFDeriv_gradient_apply,
+        FunctionalInequalities.Analysis.BakryEmery.iteratedFDeriv_centeredGradient_logLaplace_zero_of_compact,
+        FunctionalInequalities.Analysis.BakryEmery.cumulant_comp_perm_of_compact,
+        FunctionalInequalities.Analysis.inverseSqrt_mul_mul_inverseSqrt}
+  \leanok
+  \uses{lem:bkl-second-cumulant-base}
+  \cite{BizeulKlartagLehec2026}, p.~20, the sentence before~(74): for the cumulant-generating function
+  $\Lambda=\log\int e^{\langle z,x\rangle}d\mu$ of a compactly supported probability law and
+  $v(z)=\nabla\Lambda(z)-\nabla\Lambda(0)$, one has $\nabla\Lambda(0)=\int x\,d\mu$ (so $v(0)=0$) and
+  $Dv(0)=A$, the covariance operator.  The Riesz vector $\kappa_{|hs|+1}(hs,\cdot)$ of the last slot of a
+  scalar cumulant is recorded as \texttt{cumulantVector}.  The cumulant tensors of a compactly supported law are
+  symmetric: $\kappa_m(h\circ\sigma)=\kappa_m(h)$ for every permutation $\sigma$ and every $m$.  Also: the principal inverse square root of a positive
+  unit satisfies $\sigma A\sigma=\mathrm{Id}$ (it whitens the covariance; no transported-law whitening API is
+  claimed).  For every $r\ge1$ the higher jet is the cumulant Riesz vector,
+  $D^rv(0)[h]=\kappa_{r+1}(h,\cdot)$, i.e. $\langle D^rv(0)[h],w\rangle=\kappa_{r+1}(h,w)$ with $w$ in the last slot,
+  from two generic supports: $D^r(f-c)=D^rf$ for $r\ge1$ on real normed spaces and
+  $\langle D^r(\nabla f)(x)[h],w\rangle=D^{r+1}f(x)[h,w]$ on complete real inner product spaces.  Not provided: the
+  drift expansion~(74) and any stochastic statement.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Riesz representation of the first derivative of $\Lambda$ at $0$ (the mean pairing); the derivative of
+  $\nabla\Lambda$ at $0$ is the second derivative, which is the covariance by the second-cumulant identity;
+  $\sigma A\sigma\,\sigma=\sigma$ and right cancellation by the unit $\sigma$.  Higher jets: shift invariance,
+  the Riesz chart of the gradient commuted with the iterated derivative, and the successor formula with the new
+  direction in the last slot, identified with the scalar cumulant's last slot.
+\end{proof}
+
+\begin{lemma}[Deterministic supports of the localization noise and non-explosion estimates]
+  \label{lem:bkl-localization-supports}
+  \lean{FunctionalInequalities.Probability.covariance_sq_le_variance_mul_variance,
+        FunctionalInequalities.Covariance.variance_inner_eq_of_sandwich,
+        FunctionalInequalities.Analysis.sum_trace_sq_le_card_mul_sum_sq,
+        FunctionalInequalities.Probability.sum_sq_integral_mul_mul_le_integral_norm_pow_six,
+        FunctionalInequalities.Probability.sum_sq_integral_comp_mul_mul_le_integral_norm_pow_six,
+        FunctionalInequalities.KLS.opNorm_covariance_compactPosterior_le_sq_radius}
+  \leanok
+  \uses{lem:bkl-posterior-covariance-domain}
+  \cite{BizeulKlartagLehec2026}, (67)--(68): three deterministic supports of the proposed noise estimate for
+  the expectation equation~(68) and of the proposed log-determinant non-explosion route for~(67).
+  (i)~Covariance Cauchy--Schwarz on an arbitrary probability space: $\mathrm{cov}(X,Y)^2\le\mathrm{Var}X\,\mathrm{Var}Y$
+  for square-integrable real statistics.  (ii)~Whitened linear statistics: for a law with finite second moment
+  on a finite-dimensional inner product space and a self-adjoint $S$ with the actual sandwich
+  $S\,\mathrm{Cov}(\mu)\,S=\mathrm{Id}$, $\mathrm{Var}\langle Sh,\cdot\rangle=|h|^2$; the sandwich is a hypothesis,
+  so this is conditional on a root and produces none.  (iii)~Trace energy for real $n\times n$ matrices
+  $B_1,\dots,B_n$ without symmetry or positivity: $\sum_i(\operatorname{tr}B_i)^2\le n\sum_{i,j,k}(B_i)_{jk}^2$.
+  (iv)~Third-moment contraction for a probability law on $\mathbb R^n$ with integrable sixth moment (no centering
+  or log-concavity): $\sum_{i,j,k}\big(\int x_ix_jx_k\,d\nu\big)^2\le\int|x|^6\,d\nu$, and the same for an
+  a.e.-measurable random vector $Y$ on any probability space: $\sum_{i,j,k}\big(\int Y_iY_jY_k\big)^2\le\int|Y|^6$.  (v)~Covariance radius: for a
+  compactly supported prior with support in the closed ball of radius $r$, every posterior $\mu_{c,Q}$ (all finite
+  pairs, no isotropy) has $\|\mathrm{Cov}(\mu_{c,Q})\|\le r^2$.
+  The noise bound itself is \cref{lem:bkl-noise-bound}.  Not provided: the covariance dynamics, the It\^o formula, a strong solution or any non-explosion theorem.
+\end{lemma}
+\begin{proof}
+  \leanok
+  (i)~The variance of $Y-tX$ is a nonnegative quadratic polynomial in $t$, expanded by bilinearity of the
+  covariance; both the zero- and positive-variance branches in $X$ are treated.  (ii)~The variance of a linear
+  statistic is the covariance bilinear form, which is the Riesz pairing with the covariance operator; move $S$
+  across the pairing by self-adjointness and cancel with the sandwich.  (iii)~Cauchy--Schwarz on the diagonal
+  and the nonnegative off-diagonal squares.  (iv)~$(\int g)^2\le\int g^2$ termwise and
+  $\sum_{ijk}(x_ix_jx_k)^2=|x|^6$.  (v)~$\langle\mathrm{Cov}\,v,w\rangle=\mathrm{cov}(\langle v,\cdot\rangle,
+  \langle w,\cdot\rangle)$, (i), $\mathrm{Var}\langle v,\cdot\rangle\le r^2|v|^2$ on the support (the posterior
+  keeps the prior's support), then $|Av|^2\le r^2|v||Av|$.
+\end{proof}
+
+\begin{lemma}[Canonical standardisation of the localization posterior]
+  \label{lem:bkl-canonical-standardisation}
+  \lean{FunctionalInequalities.KLS.Isotropic.exists_inverseSqrt_equiv_isotropic_standardized}
+  \leanok
+  \uses{lem:bkl-posterior-covariance-domain,lem:bkl-cgf-gradient-jets}
+  \cite{BizeulKlartagLehec2026}, (67)--(68) and the transported law of (75)--(77): for a compactly supported
+  isotropic prior $\mu$ and every finite parameter pair $(c,Q)$ (including $c=Q=0$, non-symmetric and negative
+  $Q$, and rank zero), the principal inverse square root $\sigma=\mathrm{Cov}(\mu_{c,Q})^{-1/2}$ of~(67) is a
+  continuous linear equivalence $W$ with $W=\sigma$ as a map, and the image of the centred posterior
+  $\mu_{c,Q}(\cdot+a)$, $a$ the posterior mean, under $W$ is isotropic (finite second moment, mean zero,
+  covariance $\mathrm{Id}$).  The SAME principal root is used, not an arbitrary whitening.  Not provided: any
+  rotation of the Brownian driver, stochastic equation, It\^o identity, martingale property, non-explosion or
+  Theorem~4.1 claim.
+\end{lemma}
+\begin{proof}
+  \leanok
+  $\sigma$ is a unit (positive root of a positive unit); transport the second moment, the mean (translation by
+  the mean centres the law) and the covariance along the translation and the equivalence,
+  $\mathrm{Cov}(T_\#\nu)=T\,\mathrm{Cov}(\nu)\,T^*$; self-adjointness of $\sigma$ and the sandwich
+  $\sigma A\sigma=\mathrm{Id}$ give the identity covariance.
+\end{proof}
+
+\begin{lemma}[Noise coefficient of the expectation equation]
+  \label{lem:bkl-noise-bound}
+  \lean{FunctionalInequalities.KLS.Isotropic.opNorm_sq_fderiv_posteriorExpectation_comp_inverseSqrt_le_variance,
+        FunctionalInequalities.KLS.Isotropic.opNorm_sq_fderiv_posteriorExpectation_comp_inverseSqrt_le_sq}
+  \leanok
+  \uses{lem:bkl-localization-supports,lem:bkl-cgf-gradient-jets,lem:bkl-posterior-parameter-response}
+  \cite{BizeulKlartagLehec2026}, (68): for a compactly supported isotropic prior, a measurable statistic $f$ with
+  $|f|\le C$ on the prior support and every finite pair $(c,Q)$ (signed, non-symmetric $Q$ and rank zero included),
+  the noise coefficient of the equation of $\int f\,d\mu_{c,Q}$, namely $D_c\big(\int f\,d\mu_{\cdot,Q}\big)(c)\circ
+  \mathrm{Cov}(\mu_{c,Q})^{-1/2}$ with the same principal root as~(67), has squared operator norm at most
+  $\mathrm{Var}_{\mu_{c,Q}}f\le C^2$.  Deterministic coefficient bound only: no stochastic integral, It\^o identity,
+  martingale property or quadratic-variation statement.
+\end{lemma}
+\begin{proof}
+  \leanok
+  $D_c(\int f)(c)[\sigma h]=\mathrm{cov}_{\mu_{c,Q}}(f,\langle\sigma h,\cdot\rangle)$ (parameter response),
+  covariance Cauchy--Schwarz, $\mathrm{Var}\langle\sigma h,\cdot\rangle=|h|^2$ from the sandwich
+  $\sigma A\sigma=\mathrm{Id}$, then $\mathrm{Var}f\le\int f^2\le C^2$ on the posterior, which keeps the prior's support.
+\end{proof}
+
+\begin{lemma}[Principal-root noise entries]
+  \label{lem:bkl-noise-entries}
+  \lean{FunctionalInequalities.KLS.Isotropic.operatorMatrix_inverseSqrt_mul_thirdMomentMatrix_mul_apply,
+        FunctionalInequalities.Probability.operatorMatrix_mul_coordinateThirdMoment_mul_apply_of_ae_norm_sub_le,
+        FunctionalInequalities.Probability.integrable_coord_mul_coord_mul_clm_coord_of_ae_norm_sub_le,
+        FunctionalInequalities.Probability.integrable_coord_mul_coord_mul_coord_of_ae_norm_sub_le,
+        FunctionalInequalities.Probability.integral_sum_sum_const_mul,
+        FunctionalInequalities.Probability.Posterior.compactPosterior_exists_ae_norm_sub_le,
+        FunctionalInequalities.Analysis.euclidean_clm_apply_eq_sum_operatorMatrix,
+        FunctionalInequalities.Analysis.euclidean_inner_selfAdjoint_basisFun,
+        FunctionalInequalities.Analysis.sum_sum_mul_mul_mul_mul_eq_of_symm}
+  \leanok
+  \uses{lem:bkl-canonical-standardisation}
+  \cite{BizeulKlartagLehec2026}, p.~19, (69), the deterministic entry identity: for a compactly supported isotropic prior
+  and every finite $(c,Q)$ (signed, non-symmetric $Q$ included), with $V=x-a$, the SAME principal root
+  $\sigma=\mathrm{Cov}(\mu_{c,Q})^{-1/2}$ as in~(67), its matrix $P$ in the fixed original basis $e$ and the computed
+  slices $H_i(j,k)=\int V_jV_k\langle\sigma e_i,V\rangle\,d\mu_{c,Q}$, one has
+  $(PH_iP)_{jk}=\int(\sigma V)_j(\sigma V)_k(\sigma V)_i\,d\mu_{c,Q}$.  Generic form: any finite measure a.e.\ supported
+  in a ball and any self-adjoint $T$.  Not provided: the covariance equation~(69) as a stochastic equality, the energy
+  bounds built on these slices, or any moment bound.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Coordinates of $\sigma V$ through $P$, self-adjointness of $\sigma$, integrability of cubic coordinate monomials on the
+  bounded support, exchange of finite double sums with the integral, and the symmetric-sandwich entry algebra.
+\end{proof}
+
+\begin{lemma}[Canonical sixth moment of the posterior]
+  \label{lem:bkl-posterior-sixth-moment}
+  \lean{FunctionalInequalities.KLS.Isotropic.integral_norm_pow_six_inverseSqrt_sub_posteriorMean_le}
+  \leanok
+  \uses{lem:bkl-canonical-standardisation}
+  \cite{BizeulKlartagLehec2026}, the sixth-moment input of the energy bounds: for a compactly supported isotropic
+  log-concave prior on $\mathbb R^n$, every $c$ and every self-adjoint positive semidefinite $Q$, the canonically
+  standardised posterior variable $Y=\mathrm{Cov}(\mu_{c,Q})^{-1/2}(x-a)$ ($a$ the posterior mean, principal root as
+  in~(67)) has integrable $|Y|^6$ and
+  $\int|Y|^6\,d\mu_{c,Q}\le 6!\,\big(\log 3/(8\sqrt{n+1})\big)^{-6}\cdot 3^{3/4}/(1-3^{-1/4})$.  The constant is the
+  explicit one of the formal statement, dimension-dependent; signed or non-self-adjoint $Q$ is outside this statement.
+  Not provided: the third-moment matrix identity~(69), the energies of INTERFACE~C, or any stochastic statement.
+\end{lemma}
+\begin{proof}
+  \leanok
+  The standardised posterior is isotropic log-concave; an exponential moment of $|Y|$ at an explicit rate from the
+  log-concave tail bound, and $t^6\le 6!\,e^{t}$ after rescaling.
+\end{proof}
+
+\begin{lemma}[Permutation symmetry and raw Leibniz expansion of iterated derivatives]
+  \label{lem:iterated-derivative-symmetry-leibniz}
+  \lean{FunctionalInequalities.Analysis.directional,
+        FunctionalInequalities.Analysis.directional_perm,
+        FunctionalInequalities.Analysis.directional_ofFn,
+        FunctionalInequalities.Analysis.iteratedFDeriv_perm,
+        FunctionalInequalities.Analysis.selected,
+        FunctionalInequalities.Analysis.selected_mask_partition,
+        FunctionalInequalities.Analysis.directional_bilinear,
+        FunctionalInequalities.Analysis.iteratedFDeriv_bilinear,
+        FunctionalInequalities.Analysis.sum_filter_eq_two_mul_sum_filter_of_compl_invariant}
+  \leanok
+  Generic calculus supports for the cumulant algebra of \cite{BizeulKlartagLehec2026}, pp.~20--21,
+  (71)--(74).  For a globally $C^\infty$ map $f$ between real normed spaces, successive directional
+  derivatives along a list commute under every permutation (genuine real $C^2$ symmetry, no analytic or
+  tensor-symmetry premise), the list convention equals the raw iterated Fr\'echet derivative, so
+  $D^mf(x)[h\circ\sigma]=D^mf(x)[h]$; and for a continuous bilinear $B$ and $C^\infty$ maps $f,g$,
+  $D^m\big(B(f,g)\big)(x)[h]=\sum_{q\in\{0,1\}^m}B\big(D^{|q|}f(x)[h_q],D^{m-|q|}g(x)[h_{\neg q}]\big)$,
+  every subset allocation with coefficient~$1$ in inherited slot order (no factorial).  Complement pairing: a
+  complement-invariant real summand over a complement-invariant set of masks sums to twice its sum over the masks
+  selecting a fixed slot.  Ordered-mask partition: for every $h:[m]\to E$ and mask $q$ the two selections have
+  lengths adding to $m$ and together form a permutation of $(h_1,\dots,h_m)$, the indicator of one slot $i$ selects
+  exactly $[h_i]$, and a selection of length~$1$ comes from such an indicator (repeated values and $m=0$ included).
+  The spatial expansion~(74) of $\langle v,Mv\rangle$ and its grouping are
+  Lemmas~\ref{lem:bkl-raw-drift-expansion} and~\ref{lem:bkl-grouped-drift-expansion}.  Not provided: parameter jets
+  or any stochastic statement.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Adjacent swaps by the symmetric second derivative of the $C^\infty$ composite; induction on the list and on
+  the permutation; the Leibniz rule for a bilinear image at each successive derivative, splitting the Boolean
+  indicator at the new slot.
+\end{proof}
+
+\begin{lemma}[Raw expansion of the drift quadratic form]
+  \label{lem:bkl-raw-drift-expansion}
+  \lean{FunctionalInequalities.Analysis.BakryEmery.iteratedFDeriv_inner_centeredGradient_zero_of_compact,
+        FunctionalInequalities.Analysis.BakryEmery.directional_centeredGradient_logLaplace_zero_of_compact,
+        FunctionalInequalities.Analysis.iteratedFDeriv_inner_clm,
+        FunctionalInequalities.Analysis.selected_eq_nil_iff}
+  \leanok
+  \uses{lem:bkl-cgf-gradient-jets,lem:iterated-derivative-symmetry-leibniz}
+  \cite{BizeulKlartagLehec2026}, p.~21, (74), at a fixed law: for a compactly supported probability law with
+  $\Lambda=\log\int e^{\langle z,x\rangle}d\mu$, $v(z)=\nabla\Lambda(z)-\nabla\Lambda(0)$ and ANY continuous linear $M$,
+  $D^m\langle v,Mv\rangle(0)[h]=\sum_{\emptyset\ne J\subsetneq[m]}\langle\kappa_{|J|+1}(h_J,\cdot),
+  M\kappa_{m-|J|+1}(h_{J^c},\cdot)\rangle$, every subset with coefficient~$1$ in inherited slot order (no factorial);
+  the empty and full subsets vanish because $v(0)=0$.  Supports: the directional derivatives of $v$ at $0$ are $0$ for
+  the empty list and the cumulant Riesz vectors otherwise; the Leibniz rule for $\langle f,Mg\rangle$; a Boolean mask
+  selects nothing exactly when it is all false.  The grouping for $M=A^{-1}$ is
+  Lemma~\ref{lem:bkl-grouped-drift-expansion}.  Not provided: parameter jets or any stochastic statement (the
+  source's (71)/(73) are stochastic).
+\end{lemma}
+\begin{proof}
+  \leanok
+  Raw bilinear Leibniz rule for $(x,y)\mapsto\langle x,My\rangle$, the jets of $v$ at $0$, and the vanishing of the
+  empty/full allocations.
+\end{proof}
+
+\begin{lemma}[Singleton allocation of the drift expansion]
+  \label{lem:bkl-singleton-allocation}
+  \lean{FunctionalInequalities.Analysis.BakryEmery.inner_cumulantVector_single_ringInverse_cumulantVector}
+  \leanok
+  \uses{lem:bkl-cgf-gradient-jets}
+  \cite{BizeulKlartagLehec2026}, p.~21, the singleton terms of~(74): for a compactly supported probability law whose
+  covariance $A$ is invertible, every list $h_1,\dots,h_k$ and every $w$,
+  $\langle\kappa_2(w,\cdot),A^{-1}\kappa_{k+1}(h_1,\dots,h_k,\cdot)\rangle=\kappa_{k+1}(h_1,\dots,h_k,w)$, the cumulant of
+  order $k+1$ with $w$ in the last slot.  The full expansion~(74) and its grouping are
+  Lemmas~\ref{lem:bkl-raw-drift-expansion} and~\ref{lem:bkl-grouped-drift-expansion}.  Not provided: parameter jets
+  or any stochastic statement.
+\end{lemma}
+\begin{proof}
+  \leanok
+  $\kappa_2(w,\cdot)=Aw$ (second cumulant equals covariance), self-adjointness of $A$ and $AA^{-1}=\mathrm{Id}$, then the
+  Riesz representation of the cumulant vector.
+\end{proof}
+
+\begin{lemma}[Grouped drift expansion]
+  \label{lem:bkl-grouped-drift-expansion}
+  \lean{FunctionalInequalities.Analysis.BakryEmery.iteratedFDeriv_inner_centeredGradient_zero_grouped_of_compact}
+  \leanok
+  \uses{lem:bkl-raw-drift-expansion,lem:bkl-singleton-allocation,lem:iterated-derivative-symmetry-leibniz}
+  \cite{BizeulKlartagLehec2026}, pp.~20--21, the deterministic spatial step of the proof of Lemma~4.3: the expansion~(74)
+  grouped with the form $L_m$ of~(72), at a fixed law.  For a compactly supported probability law with invertible
+  covariance $A$, $\Lambda=\log\int e^{\langle z,x\rangle}d\mu$, $v(z)=\nabla\Lambda(z)-\nabla\Lambda(0)$, every $m\ge3$,
+  all $h_1,\dots,h_m$ (repeated directions allowed) and every slot $i_0$,
+  $D^m\langle v,A^{-1}v\rangle(0)[h]=2m\,\kappa_m(h)+2\sum_{J\ni i_0,\ |J|\ge2,\ |J^c|\ge2}
+  \langle\kappa_{|J|+1}(h_J,\cdot),A^{-1}\kappa_{m-|J|+1}(h_{J^c},\cdot)\rangle$; for $i_0=1$ the sum is $L_m(h)$
+  of~(72) (reviewed stronger: any representative slot).  Not provided: the stochastic differential~(73), Eldan's process
+  and It\^o calculus, hence Lemma~4.3 and Theorem~4.1.
+\end{lemma}
+\begin{proof}
+  \leanok
+  The raw expansion~(74) for $M=A^{-1}$; the $2m$ allocations with $|J|\in\{1,m-1\}$ equal $\kappa_m(h)$ by the singleton
+  allocation, cumulant symmetry and the ordered-mask partition; the other allocations pair with their complements by
+  self-adjointness of $A^{-1}$, keeping the representative containing $i_0$.
+\end{proof}
+
+\begin{lemma}[Uniform mass of open halfspaces]
+  \label{lem:uniform-halfspace-mass}
+  \lean{FunctionalInequalities.Probability.exists_pos_le_measure_halfspace_of_mem_interior_convexHull_support,
+        FunctionalInequalities.Probability.exists_mem_support_inner_sub_pos_of_mem_interior_convexHull,
+        FunctionalInequalities.Probability.exists_pos_ball_inner_sub_pos_of_mem_support}
+  \leanok
+  Cordero-Erausquin--Klartag \cite{CorderoKlartag2015}, proof of Lemma~16, bound~(54), probability specialization: for a
+  Borel probability measure $\mu$ on a finite-dimensional real inner product space and $x_0$ in the interior of the convex
+  hull of its support there is $m\in(0,1]$ with $\mu\{x:\langle u,x-x_0\rangle>0\}\ge m$ for every unit vector $u$ (strict
+  open halfspaces; in dimension~$0$ the unit sphere is empty).  Lemma~16 itself is
+  Lemma~\ref{lem:cek-point-control}.  Not provided: the existence of a moment potential, or Letwin's quadratic-form
+  bound with constant~$8$.
+\end{lemma}
+\begin{proof}
+  \leanok
+  A support point strictly on the positive side of each direction, a ball of positive mass inside every nearby open
+  halfspace, a finite cover of the compact unit sphere, and the finite product of the ball masses (each in $(0,1]$).
+\end{proof}
+
+\begin{lemma}[Pointwise bound by the integral]
+  \label{lem:cek-point-control}
+  \lean{FunctionalInequalities.Probability.exists_pos_le_mul_lintegral_toReal_of_convex_epigraph,
+        FunctionalInequalities.Probability.mem_interior_setOf_ne_top_of_lintegral_ne_top,
+        FunctionalInequalities.Probability.exists_pos_le_measure_halfspace_of_mem_interior_convexHull_support_of_isFiniteMeasure,
+        FunctionalInequalities.Probability.real_convexOn_effective_domain}
+  \leanok
+  \uses{lem:uniform-halfspace-mass}
+  Cordero-Erausquin--Klartag \cite{CorderoKlartag2015}, Lemma~16: let $\mu$ be a finite Borel measure on a
+  finite-dimensional real inner product space and $x_0$ a point of the interior of the convex hull of its support.  There
+  is $C>0$, chosen before $\varphi$, such that $\varphi(x_0)\le C\int\varphi\,d\mu$ for every $\varphi$ with values in
+  $[0,+\infty]$, convex real epigraph, a.e.-measurable values and finite integral.  Dimension~$0$ is included; $\mu$ is not
+  normalized.
+\end{lemma}
+\begin{proof}
+  \leanok
+  $\varphi$ is finite near $x_0$; the halfspace bound transfers to finite measures by normalization ($m\le\mu(E)$); either
+  $x_0$ minimizes $\varphi$ or a separating unit vector gives an open halfspace on which $\varphi\ge\varphi(x_0)$.  The
+  halfspace bound replaces the source's Fatou argument.
+\end{proof}
+
+\begin{lemma}[Extended-real Legendre transform and convexification]
+  \label{lem:legendre-convexification}
+  \lean{FunctionalInequalities.Analysis.legendre_antitone, FunctionalInequalities.Analysis.fenchel_le,
+        FunctionalInequalities.Analysis.biconjugate_le, FunctionalInequalities.Analysis.triconjugate_eq,
+        FunctionalInequalities.Analysis.lowerSemicontinuous_legendre,
+        FunctionalInequalities.Analysis.convexPotential_legendre,
+        FunctionalInequalities.Analysis.lowerTruncate_convexification,
+        FunctionalInequalities.Probability.MomentMeasure.mass_legendre_mono}
+  \leanok
+  For $\varphi\colon E\to[-\infty,+\infty]$ on a real inner product space, $\varphi^*(y)=\sup_x(\langle x,y\rangle-\varphi(x))$.
+  The transform reverses order, is lower semicontinuous with convex epigraph for every input, has no value $-\infty$ exactly
+  when $\varphi$ has a finite value, and satisfies $\langle x,y\rangle\le\varphi(x)+\varphi^*(y)$, $\varphi^{**}\le\varphi$
+  and $\varphi^{***}=\varphi^*$ for proper $\varphi$.  For the lower truncation $g=\max(\varphi,-M)$ of
+  \cite{CorderoKlartag2015}, (61), with one finite value of $\varphi$, $g^{**}$ is convex, lower semicontinuous and proper,
+  lies between $-M$ and $g$, and has the same transform as $g$; $\int e^{-\varphi^*}$ is monotone in $\varphi$.  These are the
+  truncation steps of the proof of Proposition~12; the maximiser is Theorem~\ref{thm:cek-variational-maximum}.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Suprema of continuous affine functions, with the infinite intercepts handled separately; the triconjugate identity from
+  order reversal and $\varphi^{**}\le\varphi$.
+\end{proof}
+
+\begin{lemma}[Compactness of normalised potentials, geometric form]
+  \label{lem:cek-compactness}
+  \lean{FunctionalInequalities.Probability.MomentMeasure.exists_subseq_integral_bounds_of_convex_epigraph,
+        FunctionalInequalities.Probability.exists_subseq_lintegral_le_liminf_of_convex_epigraph,
+        FunctionalInequalities.Probability.MomentMeasure.limsup_mass_legendre_le,
+        FunctionalInequalities.Analysis.exists_subseq_tendsto_of_convexOn_of_bddAbove,
+        FunctionalInequalities.Analysis.exists_radial_extension_of_convexOn}
+  \leanok
+  \uses{lem:cek-point-control, lem:legendre-convexification}
+  \cite{CorderoKlartag2015}, Lemma~17, with $0\in\operatorname{int}\operatorname{conv}\operatorname{Supp}\mu$ as an explicit
+  hypothesis: let $\mu$ be a finite Borel measure on a finite-dimensional real inner product space and $\varphi_\ell$ functions
+  with values in $[0,+\infty]$, convex real epigraphs, $\varphi_\ell(0)=0$, a.e.-measurable values and
+  $\sup_\ell\int\varphi_\ell\,d\mu<\infty$.  One subsequence and one nonnegative convex $\mu$-integrable $\psi$ satisfy
+  $\int\psi\,d\mu\le\liminf_j\int\varphi_{\ell_j}\,d\mu$ and, for every additive Haar measure,
+  $\limsup_j\int e^{-\varphi_{\ell_j}^*}\le\int e^{-\psi^*}<\infty$.  The finiteness is derived; zero mass and dimension~$0$
+  are included.  The conditions of Theorem~2 give the interior-hull hypothesis by Lemma~\ref{lem:cek-zero-interior}; no
+  declaration states the composition in the source form.  Not provided: Theorem~2.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Lemma~\ref{lem:cek-point-control} bounds $\varphi_\ell$ on the interior $K$ of the support hull; pointwise compactness of
+  bounded convex functions gives a subsequence converging on $K$, and the radial extension gives $\psi$.  Fatou along the
+  scaled potentials and then along the radial limit gives the first bound.  A finite set whose hull contains a neighbourhood
+  of $0$ gives a common integrable exponential dominator, and reverse Fatou with the interior formula for $\psi^*$ gives the
+  second.
+\end{proof}
+
+\begin{lemma}[Interior of the support hull of a centered measure]
+  \label{lem:cek-zero-interior}
+  \lean{FunctionalInequalities.Probability.zero_mem_interior_convexHull_support_of_integral_eq_zero}
+  \leanok
+  \cite{CorderoKlartag2015}, the step implicit in the proof of Lemma~17 under the conditions of Theorem~2: for a nonzero
+  finite Borel measure $\mu$ on a finite-dimensional real inner product space with finite first moment and barycenter $0$,
+  such that no proper linear subspace has full measure, $0$ lies in the interior of the convex hull of $\operatorname{Supp}\mu$.
+  The total mass is not normalized; in dimension~$0$ the zero measure is excluded by $\mu\ne0$.
+\end{lemma}
+\begin{proof}
+  \leanok
+  A nonzero continuous functional vanishing on the direction of the affine span of the support would make $\mu$ concentrated
+  on its kernel, so the hull has nonempty interior; a functional separating $0$ from the interior is $\le0$ on the support,
+  has integral $0$, and again forces $\mu$ onto its kernel.
+\end{proof}
+
+\begin{lemma}[Coercivity, truncation and normalization for Proposition~12]
+  \label{lem:cek-coercivity}
+  \lean{FunctionalInequalities.Probability.MomentMeasure.exists_coercivity_of_centered_probability,
+        FunctionalInequalities.Probability.MomentMeasure.exists_convexified_lowerTruncate_variational_le_add,
+        FunctionalInequalities.Probability.MomentMeasure.variationalFunctional_affineSubtract,
+        FunctionalInequalities.Analysis.exists_supporting_affine_at_zero,
+        FunctionalInequalities.Probability.MomentMeasure.norm_baseline_finite,
+        FunctionalInequalities.KLS.CEK.exists_normalized_competitor}
+  \leanok
+  \uses{lem:cek-zero-interior, lem:legendre-convexification, lem:cek-point-control}
+  Support for \cite{CorderoKlartag2015}, Proposition~12, for a probability measure with finite first moment, barycenter $0$
+  and no proper linear subspace of full measure: a conjugate-mass bound polynomial in the integral, with its constant chosen
+  before the potential; every admissible competitor is within $\varepsilon$ of the biconjugate of a lower truncation; the
+  functional is invariant under subtracting an affine function (for finite measures the integral changes by the mass times
+  the constant); a supporting affine function at an interior point of the effective domain normalizes a convex potential to
+  be nonnegative and zero at the origin; the norm potential has finite positive mass and finite value.  The bound is not the
+  constant of Lemma~15.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Lemma~16 at the vertices of a fixed simplex and the affine-maximum lower bound of the transform give linear growth, then
+  Haar scaling; dominated convergence for the truncations; Hahn--Banach separation for the supporting plane.
+\end{proof}
+
+\begin{theorem}[Existence of a variational maximiser]
+  \label{thm:cek-variational-maximum}
+  \lean{FunctionalInequalities.KLS.CEK.exists_variational_maximum,
+        FunctionalInequalities.KLS.CEK.exists_limit_ge_normalized_supremum,
+        FunctionalInequalities.KLS.CEK.exists_normalized_maximizing_sequence,
+        FunctionalInequalities.Probability.MomentMeasure.log_sub_ge_of_integral_limits}
+  \leanok
+  \uses{lem:cek-coercivity, lem:cek-compactness}
+  \cite{CorderoKlartag2015}, Proposition~12~(38): let $\mu$ be a probability measure on a finite-dimensional real inner product
+  space with finite first moment and barycenter $0$ such that no proper linear subspace has full measure, and $dx$ an additive
+  Haar measure.  There is $\varphi$ with values in $(-\infty,+\infty]$, convex real epigraph, lower semicontinuous and
+  $\mu$-integrable, with $\int e^{-\varphi^*}\,dx=1$ and $I_\mu(f)\le I_\mu(\varphi)$ for every $\mu$-integrable $f$, where
+  $I_\mu(f)=\log\int e^{-f^*}\,dx-\int f\,d\mu$ with the extended logarithm.  Not provided: essential continuity, the
+  identification of $\mu$ as the moment measure of the maximiser, or Theorem~2.
+\end{theorem}
+\begin{proof}
+  \leanok
+  A normalized maximizing sequence approaching the finite supremum; coercivity bounds its integrals; an integral-convergent
+  subsequence is chosen before Lemma~17's subsequence, so both limit inequalities hold along one composed subsequence; the
+  biconjugate preserves the dual mass, and affine invariance with injectivity of the logarithm normalizes the mass to $1$.
+\end{proof}
+
+\begin{lemma}[Eighth-moment tail bounds for ball conditioning]
+  \label{lem:moment-tails-eighth}
+  \lean{FunctionalInequalities.Probability.measure_ball_compl_toReal_le_integral_norm_pow_eight_div,
+        FunctionalInequalities.Probability.integrable_norm_pow_four_and_tail_le_of_integrable_pow_eight,
+        FunctionalInequalities.Probability.one_half_le_measure_ball_toReal_of_integral_norm_pow_eight}
+  \leanok
+  First supports of the ball-conditioning stage of the moment-potential producer (Letwin \cite{Letwin2026QuadraticKLS},
+  Appendix~A.1: conditioning a smoothed law on a ball of radius $\varepsilon^{-1/2}$ before centering and
+  whitening).  For a probability law $\nu$ on a normed group with Borel structure, integrable $|x|^8$ and $R>0$,
+  with $M_8=\int|x|^8\,d\nu$: $\nu(B(0,R)^c)\le M_8/R^8$; $|x|^4$ and its restriction to $B(0,R)^c$ are integrable and
+  $\int_{B(0,R)^c}|x|^4\,d\nu\le M_8/R^4$; and if $2M_8\le R^8$ then $\nu(B(0,R))\ge 1/2>0$ (half mass).  The ball is
+  open and $R>0$ is indispensable (a Dirac at $0$ with $R=0$).  Not provided: covariance convergence or the canonical
+  whitening of the conditioned sequence.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Markov's inequality for $|x|^8$ at level $R^8$ and monotonicity from the open-ball complement; $|x|^4\le1+|x|^8$ and
+  $|x|^4\le|x|^8/R^4$ off the ball, then monotonicity of the integral; the half mass from the tail bound and
+  $\nu(B)+\nu(B^c)=1$.
+\end{proof}
+
+\begin{lemma}[Conditioning on a ball]
+  \label{lem:ball-conditioning}
+  \lean{FunctionalInequalities.Probability.conditionOnBall,
+        FunctionalInequalities.Probability.coe_conditionOnBall,
+        FunctionalInequalities.Probability.abs_integral_conditionOnBall_sub_le}
+  \leanok
+  \uses{lem:moment-tails-eighth}
+  Letwin \cite{Letwin2026QuadraticKLS}, Appendix~A.1, the conditioning step.  For a probability law $\nu$ on a normed group with
+  Borel structure and an open ball $B=B(0,R)$ of positive mass $p$, $\nu_B=\nu(\cdot\mid B)$.  If $|x|^8$ is integrable,
+  $R>0$, $C\ge0$ and $f$ is measurable with $|f(x)|\le C(1+|x|^4)$, then $f$ is integrable under $\nu$ and $\nu_B$ and
+  $\big|\int f\,d\nu_B-\int f\,d\nu\big|\le\big((1-p)\,|\int f\,d\nu|+\int_{B^c}|f|\,d\nu\big)/p
+  \le (C/p)\big((1-p)(2+\int|x|^4\,d\nu)+M_8/R^4\big)$.  Positive ball mass is a definition domain of $\nu_B$, not a
+  premise on the conclusion.  Not provided: smoothing, covariance convergence or whitening of the conditioned sequence.
+\end{lemma}
+\begin{proof}
+  \leanok
+  $\int f\,d\nu_B=(\int_B f\,d\nu)/p$ and $\int f=\int_B f+\int_{B^c}f$; the exact error identity, then the tail bounds
+  and the degree-four growth.
 \end{proof}
 
 \begin{lemma}[Near-symmetric gradient]

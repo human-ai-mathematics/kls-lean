@@ -12,7 +12,7 @@ name.
 
 The read-only audit began from clean `main` at
 `5b1b44219050be0290c24e5765166f0298ff1ca4`, then equal to `origin/main`. The canonical write
-remote is `https://github.com/numina-functional-inequalities/kls-lean.git`. The remotes named
+remote is `https://github.com/human-ai-mathematics/kls-lean.git`. The remotes named
 `legacy-fork` and `legacy-upstream` are historical sources. `legacy-fork` is a historical remote,
 not the repository named by this decision.
 

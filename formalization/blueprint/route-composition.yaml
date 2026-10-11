@@ -10,7 +10,7 @@
     {
       "id": "kls-exploration",
       "kind": "git",
-      "repository": "https://github.com/numina-functional-inequalities/kls-conjecture-search.git",
+      "repository": "https://github.com/human-ai-mathematics/kls-conjecture-search.git",
       "revision": "34b5fcd57fef17089e781616005fe6d3641bd11e",
       "ledger": "research/program/ledger.yaml"
     }

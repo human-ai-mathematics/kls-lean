@@ -29,7 +29,7 @@ does not freeze statements or certify tensorization.
 ## Existing acceptance evidence
 
 The Issue #2-only commit `e7805f86cb89b1fe085179d9255722ccc8a8cbf5` passed both
-[push CI](https://github.com/numina-functional-inequalities/kls-lean/actions/runs/33667425988)
-and [PR CI](https://github.com/numina-functional-inequalities/kls-lean/actions/runs/33667472558).
+[push CI](https://github.com/human-ai-mathematics/kls-lean/actions/runs/33667425988)
+and [PR CI](https://github.com/human-ai-mathematics/kls-lean/actions/runs/33667472558).
 The direct-main publication additionally runs the three required local commands and its own
 push workflow. The historical CI and design records remain append-only.

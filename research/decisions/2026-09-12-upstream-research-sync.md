@@ -6,10 +6,10 @@ boundary-interface proofs belong to earlier work.
 
 ## Sources and revisions
 
-- The upstream repository is now named [kls-conjecture-search](https://github.com/numina-functional-inequalities/kls-conjecture-search).
+- The upstream repository is now named [kls-conjecture-search](https://github.com/human-ai-mathematics/kls-conjecture-search).
 - Previous research pin: `8185e46ffb040e04fea076953e5bcaeb4157d71a` (2026-09-01).
 - New research pin: `34b5fcd57fef17089e781616005fe6d3641bd11e` (2026-09-10), confirmed by a read-only query as `main` during this round.
-- [Six-commit comparison](https://github.com/numina-functional-inequalities/kls-conjecture-search/compare/8185e46ffb040e04fea076953e5bcaeb4157d71a...34b5fcd57fef17089e781616005fe6d3641bd11e): template migration, two research batches, manuscript and website improvements. Record dates are not merge dates.
+- [Six-commit comparison](https://github.com/human-ai-mathematics/kls-conjecture-search/compare/8185e46ffb040e04fea076953e5bcaeb4157d71a...34b5fcd57fef17089e781616005fe6d3641bd11e): template migration, two research batches, manuscript and website improvements. Record dates are not merge dates.
 - The ledger moved to `research/program/ledger.yaml`, and the search portfolio to `research/program/portfolio.yaml`.
 - The local route source retains stable ID `kls-exploration`; repository URL, revision, ledger, and route-provenance paths are updated. Historical decisions and certificates retain their old revision sources.
 
@@ -44,8 +44,8 @@ endpoint conditional on Letwin as a new best literature bound.
 
 ## Added research and remaining gaps
 
-The [wave-four summary](https://github.com/numina-functional-inequalities/kls-conjecture-search/blob/34b5fcd57fef17089e781616005fe6d3641bd11e/research/explorations/2026-08-31-orchestrator-kls-angles-wave-w4.md)
-and [wave-five mathematical summary](https://github.com/numina-functional-inequalities/kls-conjecture-search/blob/34b5fcd57fef17089e781616005fe6d3641bd11e/research/explorations/2026-09-06-orchestrator-kls-cone-lift-wave-w5.md)
+The [wave-four summary](https://github.com/human-ai-mathematics/kls-conjecture-search/blob/34b5fcd57fef17089e781616005fe6d3641bd11e/research/explorations/2026-08-31-orchestrator-kls-angles-wave-w4.md)
+and [wave-five mathematical summary](https://github.com/human-ai-mathematics/kls-conjecture-search/blob/34b5fcd57fef17089e781616005fe6d3641bd11e/research/explorations/2026-09-06-orchestrator-kls-cone-lift-wave-w5.md)
 provide proof and review paths; the latest ledger takes precedence over provisional statuses
 from earlier waves.
 

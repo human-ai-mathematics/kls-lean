@@ -2,11 +2,11 @@
 
 Historical snapshot of `HANDOFF.md` from commit `6ca1824f18e81b7409fd6e5aafdc0df53b14678e`
 (unchanged through `6c3437f`), archived on 2026-10-02 for
-[issue #8](https://github.com/numina-functional-inequalities/kls-lean/issues/8).
+[issue #8](https://github.com/human-ai-mathematics/kls-lean/issues/8).
 The dated sections retain their original claims and instructions; they are historical,
 not current task authorization. Only relative Markdown links were rebased for this location.
 See the [current handoff](../../HANDOFF.md) and the
-[original snapshot](https://github.com/numina-functional-inequalities/kls-lean/blob/6ca1824f18e81b7409fd6e5aafdc0df53b14678e/HANDOFF.md).
+[original snapshot](https://github.com/human-ai-mathematics/kls-lean/blob/6ca1824f18e81b7409fd6e5aafdc0df53b14678e/HANDOFF.md).
 
 ---
 
@@ -6195,7 +6195,7 @@ Probability pushforwards and L² pullbacks occupy their own layers. See [the nam
 
 ## Repository identity
 
-- Canonical repository: `https://github.com/numina-functional-inequalities/kls-lean.git`.
+- Canonical repository: `https://github.com/human-ai-mathematics/kls-lean.git`.
 - Publication branch: `main`, following
   [`research/explorations/2026-09-03-main-only-workflow.md`](../explorations/2026-09-03-main-only-workflow.md).
 - Phase-one alignment baseline: `5b1b44219050be0290c24e5765166f0298ff1ca4`.
@@ -6260,7 +6260,7 @@ The 2026-09-06 follow-ups should be read in this order:
 4. Blueprint TeX and `route-composition.yaml` provide derived navigation and AND/OR structure.
    They are not a proof database and cannot promote a node.
 5. Long-route mathematics is pinned to
-   `numina-functional-inequalities/kls-conjecture-search@34b5fcd57fef17089e781616005fe6d3641bd11e`.
+   `human-ai-mathematics/kls-conjecture-search@34b5fcd57fef17089e781616005fe6d3641bd11e`.
    Its manuscript, ledger, route notes, and reviews supply statements and provenance only.
    `checked_by: agent` is review evidence and never authorizes `\leanok`.
 6. `lyw-ops/formech@d0bb1913acc1f710ba6eadf1244b633abbc75fb9` is a writing-style reference only.

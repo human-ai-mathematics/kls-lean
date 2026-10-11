@@ -2,7 +2,7 @@
 
 **Date:** 2026-09-03 (Asia/Shanghai).
 **Node:** `lem:poincare-tensorization`.
-**Issue:** [#6](https://github.com/numina-functional-inequalities/kls-lean/issues/6).
+**Issue:** [#6](https://github.com/human-ai-mathematics/kls-lean/issues/6).
 **Baseline:** `faf782f97eabefbd3d3f2aed50d2907d07ac7a46` on `main`.
 
 ## Approval and delivered scope
@@ -133,7 +133,7 @@ third-party dependency cache reused, and a successful GitHub Actions run for tha
 
 The final published SHA, clean-checkout result, repeated frozen-type/ledger comparison and
 the exact successful Actions URL are attached to
-[Issue #6](https://github.com/numina-functional-inequalities/kls-lean/issues/6) when those gates
+[Issue #6](https://github.com/human-ai-mathematics/kls-lean/issues/6) when those gates
 complete. That commit-specific evidence distinguishes the final publication from an earlier
 local build or an earlier successful CI run. The issue's checklist is completed only after
 the publication gates pass.

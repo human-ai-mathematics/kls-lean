@@ -124,4 +124,120 @@ theorem norm_le_four_pow_mul_norm_symmetrize {n k d : ℕ} (hk : 3 * d ≤ k) (A
         (Q := slots k 0 (2 * d)) (d := d)
         hAcard hBcard hdis hAQ hQ hQcard A h₁ h₂
 
+
+/-! ### Disjoint copy blocks -/
+
+private theorem blocks_injective {ι κ : Type*} [Fintype ι] [Fintype κ]
+    [DecidableEq ι] [DecidableEq κ] {d : ℕ} (hd : 0 < d) :
+    Function.Injective
+      (fun p : κ × (Fin d → ι) => fun k => some (p.1, p.2 k)) := by
+  rintro ⟨i, j⟩ ⟨i', j'⟩ h
+  have hp (k : Fin d) : (i, j k) = (i', j' k) := by
+    exact Option.some.inj (congrFun h k)
+  have hi : i = i' := by
+    exact congrArg (fun q : κ × ι => q.1) (hp ⟨0, hd⟩)
+  have hj : j = j' := by
+    funext k
+    exact congrArg (fun q : κ × ι => q.2) (hp k)
+  cases hi
+  cases hj
+  rfl
+
+/-- **Disjoint copy blocks** (BKL Proposition 7.1, the Hilbert–Schmidt estimate after (112)). For `d > 0` the map `(i, j) ↦ (fun k => some (i, j k))` is injective,
+so the block entries of `A` are a subfamily of all entries. -/
+theorem sum_sq_blocks_le {ι κ : Type*} [Fintype ι] [Fintype κ] [DecidableEq ι] [DecidableEq κ]
+    {d : ℕ} (hd : 0 < d) (A : (Fin d → Option (κ × ι)) → ℝ) :
+    ∑ i : κ, ∑ j : Fin d → ι, A (fun k => some (i, j k)) ^ 2 ≤ ∑ J, A J ^ 2 := by
+    let f : κ × (Fin d → ι) → (Fin d → Option (κ × ι)) :=
+      fun p k => some (p.1, p.2 k)
+    have hf : Function.Injective f := by
+      dsimp [f]
+      exact blocks_injective hd
+    have hsum :
+        (Finset.univ : Finset (κ × (Fin d → ι))).sum (fun p => A (f p) ^ 2) =
+          (Finset.univ.image f).sum (fun J => A J ^ 2) := by
+      rw [Finset.sum_image]
+      intro a ha b hb hab
+      exact hf hab
+    calc
+      ∑ i : κ, ∑ j : Fin d → ι, A (fun k => some (i, j k)) ^ 2 =
+          ∑ p : κ × (Fin d → ι), A (f p) ^ 2 := by
+        simp only [f, Fintype.sum_prod_type]
+      _ = (Finset.univ.image f).sum (fun J => A J ^ 2) := hsum
+      _ ≤ (Finset.univ : Finset (Fin d → Option (κ × ι))).sum (fun J => A J ^ 2) := by
+        apply Finset.sum_le_sum_of_subset_of_nonneg
+        · intro J hJ
+          simp
+        · intro J hJ hJ'
+          positivity
+
+/-- If every block entry is `c` times a common array `T`, the block energy `|κ| c² |T|²` is at most
+the whole Hilbert–Schmidt energy (the source's use, with `|κ| = N` and `c = d!/(σ√N)`). -/
+theorem card_mul_sq_mul_sum_sq_le_of_blocks {ι κ : Type*} [Fintype ι] [Fintype κ] [DecidableEq ι]
+    [DecidableEq κ] {d : ℕ} (hd : 0 < d) (A : (Fin d → Option (κ × ι)) → ℝ) (c : ℝ)
+    (T : (Fin d → ι) → ℝ) (hA : ∀ i j, A (fun k => some (i, j k)) = c * T j) :
+    (Fintype.card κ : ℝ) * c ^ 2 * ∑ j, T j ^ 2 ≤ ∑ J, A J ^ 2 := by
+  have h := sum_sq_blocks_le hd A
+  simp only [hA, mul_pow, ← Finset.mul_sum, Finset.sum_const, Finset.card_univ,
+    nsmul_eq_mul] at h
+  linarith
+
+
+/-- **Row contraction** (BKL (101)–(102), at the level of finite arrays): a row bound
+`Σ_j (Σ_k v_k T(j,k))² ≤ b Σ_k v_k²` for every `v` gives `Σ_i Σ_j (Σ_k S(i,k) T(j,k))² ≤
+b Σ_i Σ_k S(i,k)²` for every array `S`. -/
+theorem sum_sq_contract_le {ι κ ρ : Type*} [Fintype ι] [Fintype κ] [Fintype ρ]
+    (T : ρ → κ → ℝ) {b : ℝ}
+    (hT : ∀ v : κ → ℝ, ∑ j, (∑ k, v k * T j k) ^ 2 ≤ b * ∑ k, v k ^ 2) (S : ι → κ → ℝ) :
+    ∑ i, ∑ j, (∑ k, S i k * T j k) ^ 2 ≤ b * ∑ i, ∑ k, S i k ^ 2 := by
+    calc
+      ∑ i, ∑ j, (∑ k, S i k * T j k) ^ 2 ≤
+          ∑ i, (b * ∑ k, S i k ^ 2) := by
+        exact Finset.sum_le_sum (fun i _ => hT (S i))
+      _ = b * ∑ i, ∑ k, S i k ^ 2 := by
+        rw [Finset.mul_sum]
+
+section WeightedSymmetricSums
+
+/-- **Letwin (2.12), finite form** (arXiv:2607.24164v1, proof of Theorem 2.5, p. 10): for an array
+`T` symmetric in its first two indices and weights `b`,
+`Σ b_i² T_{ijk}² − Σ b_i b_j T_{ijk}² = ½ Σ (b_i − b_j)² T_{ijk}²`; in particular the left side is
+nonnegative. Stated for arbitrary real weights (the source has nonnegative eigenvalues). Codex proof
+(`build/reviews/2026-10-07-bkl-continuous/queue/letwin-prerequisite/Letwin-2-12-Codex-Proof.lean`,
+independently accepted). -/
+theorem sum_weight_sq_mul_sq_sub_eq_half_sum_sq_sub_mul_sq {ι : Type*} [Fintype ι] (b : ι → ℝ)
+    (T : ι → ι → ι → ℝ) (hT : ∀ i j k, T i j k = T j i k) :
+    (∑ i, ∑ j, ∑ k, (b i) ^ 2 * (T i j k) ^ 2) -
+        (∑ i, ∑ j, ∑ k, b i * b j * (T i j k) ^ 2) =
+      (1 / 2 : ℝ) * ∑ i, ∑ j, ∑ k,
+        (b i - b j) ^ 2 * (T i j k) ^ 2 := by
+  classical
+  have hswap : (∑ i, ∑ j, ∑ k, (b j) ^ 2 * (T i j k) ^ 2) =
+      ∑ i, ∑ j, ∑ k, (b i) ^ 2 * (T i j k) ^ 2 := by
+    rw [Finset.sum_comm]
+    apply Finset.sum_congr rfl
+    intro i _
+    apply Finset.sum_congr rfl
+    intro j _
+    apply Finset.sum_congr rfl
+    intro k _
+    rw [hT j i k]
+  calc
+    _ = (1 / 2 : ℝ) *
+        ((∑ i, ∑ j, ∑ k, (b i) ^ 2 * (T i j k) ^ 2) +
+         (∑ i, ∑ j, ∑ k, (b j) ^ 2 * (T i j k) ^ 2) -
+         2 * (∑ i, ∑ j, ∑ k, b i * b j * (T i j k) ^ 2)) := by rw [hswap]; ring
+    _ = _ := by
+      congr 1
+      simp_rw [Finset.mul_sum, ← Finset.sum_add_distrib, ← Finset.sum_sub_distrib]
+      apply Finset.sum_congr rfl
+      intro i _
+      apply Finset.sum_congr rfl
+      intro j _
+      apply Finset.sum_congr rfl
+      intro k _
+      ring
+
+end WeightedSymmetricSums
+
 end FunctionalInequalities.Analysis.Tensor

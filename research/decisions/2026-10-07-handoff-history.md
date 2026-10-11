@@ -18,7 +18,7 @@ authorization. Exact results, scopes and certificates are in the
 ## State
 
 - Remote Lean certification passed for `b9c8a39` on tag `milestone/admg-theorem-3-6`
-  ([run 37017009088](https://github.com/numina-functional-inequalities/kls-lean/actions/runs/37017009088),
+  ([run 37017009088](https://github.com/human-ai-mathematics/kls-lean/actions/runs/37017009088),
   2026-10-02). The full local verifier also passed 184 gates for that commit
   (`build/verification/20261002T134816.216230Z/report.json`).
 - `main` = `origin/main` = `89a85e1` (BGL Chapter 4 map and the Bakry–Émery curvature work, pushed

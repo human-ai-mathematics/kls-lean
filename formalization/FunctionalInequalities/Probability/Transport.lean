@@ -1,6 +1,8 @@
 import FunctionalInequalities.Probability.Covariance.Basic
 import FunctionalInequalities.Probability.AffineSupport
 import Mathlib.Analysis.InnerProductSpace.Adjoint
+import Mathlib.MeasureTheory.Measure.Tilted
+import Mathlib.MeasureTheory.Measure.Support
 
 /-! # Pushforwards by translations and linear equivalences
 
@@ -15,6 +17,100 @@ open MeasureTheory Filter Topology InnerProductSpace
 namespace FunctionalInequalities
 
 universe u v
+
+section TiltTransport
+
+/-- Pushing a density through a measurable equivalence: the new density is the old one composed with
+the inverse. -/
+theorem Probability.map_withDensity_measurableEquiv {A B : Type*} [MeasurableSpace A] [MeasurableSpace B]
+    (e : A ≃ᵐ B) (μ : Measure A) (w : A → ENNReal) (hw : Measurable w) :
+    (μ.withDensity w).map e = (μ.map e).withDensity (fun y => w (e.symm y)) := by
+  apply Measure.ext_of_lintegral
+  intro φ hφ
+  rw [lintegral_map hφ e.measurable,
+    lintegral_withDensity_eq_lintegral_mul μ hw (show Measurable (fun x => φ (e x)) from hφ.comp e.measurable),
+    lintegral_withDensity_eq_lintegral_mul (μ.map e) (show Measurable (fun y => w (e.symm y)) from hw.comp e.symm.measurable) hφ]
+  simp only [Pi.mul_apply]
+  rw [lintegral_map (show Measurable (fun y => w (e.symm y) * φ y) from (hw.comp e.symm.measurable).mul hφ) e.measurable]
+  simp only [e.symm_apply_apply]
+
+/-- The tilted measure transported through a measurable equivalence is the tilt of the image measure by
+the composed weight. -/
+theorem Probability.map_tilted_measurableEquiv {A B : Type*} [MeasurableSpace A] [MeasurableSpace B]
+    (e : A ≃ᵐ B) (μ : Measure A) (f : A → ℝ) (hf : Measurable f) :
+    (μ.tilted f).map e = (μ.map e).tilted (fun y => f (e.symm y)) := by
+  have hZ : (∫ y, Real.exp (f (e.symm y)) ∂(μ.map e)) = ∫ x, Real.exp (f x) ∂μ := by
+    simpa only [Function.comp_def, e.symm_apply_apply] using
+      integral_map e.measurable.aemeasurable
+        ((hf.comp e.symm.measurable).exp.aestronglyMeasurable)
+  unfold Measure.tilted
+  rw [Probability.map_withDensity_measurableEquiv e μ _ (hf.exp.div_const _).ennreal_ofReal, hZ]
+
+/-- A positive scalar multiple of the base measure has the same normalized tilt. -/
+theorem Probability.tilted_smul_pos {A : Type*} [MeasurableSpace A] (μ : Measure A)
+    (f : A → ℝ) {c : ℝ} (hc : 0 < c) :
+    (ENNReal.ofReal c • μ).tilted f = μ.tilted f := by
+  unfold Measure.tilted
+  rw [integral_smul_measure, ENNReal.toReal_ofReal hc.le, withDensity_smul_measure,
+    ← withDensity_smul' (ENNReal.ofReal c) _ ENNReal.ofReal_ne_top]
+  congr 1
+  funext x
+  change ENNReal.ofReal c * ENNReal.ofReal
+    (Real.exp (f x) / (c * ∫ y, Real.exp (f y) ∂μ)) =
+      ENNReal.ofReal (Real.exp (f x) / ∫ y, Real.exp (f y) ∂μ)
+  rw [← ENNReal.ofReal_mul hc.le]
+  congr 1
+  by_cases hZ : (∫ y, Real.exp (f y) ∂μ) = 0
+  · simp [hZ]
+  · field_simp [hc.ne', hZ]
+
+
+/-- A measurable pushforward commutes with a pulled-back density. -/
+theorem Probability.map_withDensity_comp {A B : Type*} [MeasurableSpace A] [MeasurableSpace B]
+    (μ : Measure A) (f : A → B) (hf : Measurable f) (g : B → ENNReal) (hg : Measurable g) :
+    (μ.withDensity (g ∘ f)).map f = (μ.map f).withDensity g := by
+  ext s hs
+  rw [Measure.map_apply hf hs, withDensity_apply _ (hf hs), withDensity_apply _ hs,
+    ← lintegral_indicator (hf hs), ← lintegral_indicator hs, lintegral_map (hg.indicator hs) hf]
+  congr 1
+
+/-- Pushforward of a tilt by a pulled-back exponent is the tilt of the pushforward. -/
+theorem Probability.map_tilted_comp {A B : Type*} [MeasurableSpace A] [MeasurableSpace B]
+    (μ : Measure A) (f : A → B) (hf : Measurable f) (φ : B → ℝ) (hφ : Measurable φ) :
+    (μ.tilted (φ ∘ f)).map f = (μ.map f).tilted φ := by
+  have hZ : (∫ y, Real.exp (φ y) ∂μ.map f) = ∫ x, Real.exp ((φ ∘ f) x) ∂μ := by
+    simpa only [Function.comp_apply] using integral_map hf.aemeasurable hφ.exp.aestronglyMeasurable
+  unfold Measure.tilted
+  rw [hZ]
+  simpa only [Function.comp_def] using Probability.map_withDensity_comp μ f hf
+    (fun y => ENNReal.ofReal (Real.exp (φ y) / ∫ x, Real.exp ((φ ∘ f) x) ∂μ))
+    (hφ.exp.div_const _).ennreal_ofReal
+
+end TiltTransport
+
+section TiltAbsoluteContinuity
+
+variable {Ω : Type*} [MeasurableSpace Ω]
+
+/-- A normalized exponential tilt has the same null sets as the base law (Mathlib absolute continuity in
+both directions). -/
+theorem Probability.tilted_null_iff (μ : Measure Ω) {φ : Ω → ℝ}
+    (hi : Integrable (fun x => Real.exp (φ x)) μ) (s : Set Ω) :
+    μ.tilted φ s = 0 ↔ μ s = 0 :=
+  ⟨fun hs => absolutelyContinuous_tilted hi hs, fun hs => tilted_absolutelyContinuous μ φ hs⟩
+
+/-- A normalized tilt has the same a.e. filter as the base law. -/
+theorem Probability.ae_tilted_eq (μ : Measure Ω) {φ : Ω → ℝ}
+    (hi : Integrable (fun x => Real.exp (φ x)) μ) : ae (μ.tilted φ) = ae μ :=
+  le_antisymm (tilted_absolutelyContinuous μ φ).ae_le (absolutelyContinuous_tilted hi).ae_le
+
+/-- A normalized tilt has the same topological support as the base law. -/
+theorem Probability.support_tilted_eq [TopologicalSpace Ω] (μ : Measure Ω) {φ : Ω → ℝ}
+    (hi : Integrable (fun x => Real.exp (φ x)) μ) : (μ.tilted φ).support = μ.support :=
+  Set.Subset.antisymm (tilted_absolutelyContinuous μ φ).support_mono
+    (absolutelyContinuous_tilted hi).support_mono
+
+end TiltAbsoluteContinuity
 
 section Translation
 

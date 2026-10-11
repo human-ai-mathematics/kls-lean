@@ -50,12 +50,12 @@ and ledger statement. Record any required change as a new issue for human handli
 
 ## Sources and project extensions
 
-The manuscript's [Gaussian covariance family](https://github.com/numina-functional-inequalities/kls-exploration/blob/cd4a894a0faf40c0180f80b1a31eec1fdb6cb576/modules/03-tier1-gaussian.tex#L10-L37)
+The manuscript's [Gaussian covariance family](https://github.com/human-ai-mathematics/kls-conjecture-search/blob/cd4a894a0faf40c0180f80b1a31eec1fdb6cb576/modules/03-tier1-gaussian.tex#L10-L37)
 is the source for centered Gaussians with positive definite covariance; this round takes its
 one-dimensional Poincaré part. Normalization comes from
-[Definition 2.1](https://github.com/numina-functional-inequalities/kls-exploration/blob/cd4a894a0faf40c0180f80b1a31eec1fdb6cb576/modules/01-definitions.tex#L17-L25);
+[Definition 2.1](https://github.com/human-ai-mathematics/kls-conjecture-search/blob/cd4a894a0faf40c0180f80b1a31eec1fdb6cb576/modules/01-definitions.tex#L17-L25);
 the linear-test lower bound is in
-[Remark 3.8](https://github.com/numina-functional-inequalities/kls-exploration/blob/cd4a894a0faf40c0180f80b1a31eec1fdb6cb576/modules/02-results-toolkit.tex#L108-L117).
+[Remark 3.8](https://github.com/human-ai-mathematics/kls-conjecture-search/blob/cd4a894a0faf40c0180f80b1a31eec1fdb6cb576/modules/02-results-toolkit.tex#L108-L117).
 
 Arbitrary means, zero variance, the exact smooth finite-energy test domain, and the `ENNReal`
 encoding are local extensions or choices. The direct density/interval-integral route is a

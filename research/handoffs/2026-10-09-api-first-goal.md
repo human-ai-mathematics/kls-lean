@@ -1,0 +1,11 @@
+# API-first execution policy: BKL primary goal
+
+Updated 2026-10-10. The owner restored BKL arXiv:2610.05474v1 Theorem 1.1 as the primary formalization target. See the [current scope and dependency filter](2026-10-10-bkl-primary-scope.md). Other papers are pursued only for referenced results and necessary source-faithful prerequisites with an explicit BKL consumer. Full general CEK Theorem 2/uniqueness and full Letwin paper coverage are not independent goals.
+
+Codex is the mathematical coordinator: freeze statements, preserve hypotheses/constants/dimension, select dependency-ready work, dispatch strong API proof workers and perform final semantic acceptance. Prefer Astra for difficult proofs and Sol for suitable construction; the minimum is GPT-5.6 Sol. Do not dispatch Luna or use an automatic weaker fallback. Existing credential reuse remains authorized; never expose or copy credentials. Use compact contexts and saved diagnostics, not duplicate proof construction.
+
+Completed candidates require strict Lean compilation, complete type/universe checks, actual public/private/generated proof values with standard axiom closure, meaningful clients and explicit local kernel evidence. Keep sorry construction outside production/certificates. Claude remains the reviewed production integrator under the existing one-editor policy. Supporting or conditional results do not cover a paper main theorem. Preserve unrelated work and the real index; commit/push/tag/remote CI need their own authorization.
+
+The current controller is `01a128eb-e254-7d63-bd15-05abfcb7aaec` (predecessor `01a12708-9c39-7f33-aa23-3b135e6d1de2`, historical), under the owner's 2026-10-11 request for a new bounded goal: [Stage 2A, source Letwin A.4 and its A.5 client](2026-10-11-bkl-a4-goal.md). The unfinished parent exact Stage 2 objective is not declared complete. Preserve accepted work and failed histories; verify authoritative request state before every fresh dispatch. The construction policy above remains in force, while the new current-goal record governs the active acceptance gates.
+
+The previous broad CEK/Letwin wording and transition checkpoint are preserved verbatim in the [dated scope history](../decisions/2026-10-10-bkl-primary-scope-history.md). Historical Luna proofs and failed API epochs retain their original provenance.

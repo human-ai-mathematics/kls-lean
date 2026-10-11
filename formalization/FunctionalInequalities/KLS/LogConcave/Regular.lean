@@ -375,6 +375,88 @@ theorem existsUnique_centered_adjointComp_eq_components (hV : RegularPotential V
     (volume : Measure E) hV.logConcave_law hV.interior_support_law rfl
     (hV.temperate.1.of_le (WithTop.coe_le_coe.mpr le_top)) hV.pos hV.lower e g hg
 
+omit [CompleteSpace E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] in
+/-- **Regular potential from a convex temperate potential with bounded Hessian**: if `f` is convex with
+`Function.HasTemperateGrowth` and `∇²f ≤ B`, then `f + δ/2‖·‖²` is a regular potential with curvature
+bounds `δ ≤ ∇² ≤ B + δ` (BKL Section 2, p. 5, the quadratic tilt step of the regular approximation). -/
+theorem of_convexOn_hasTemperateGrowth {f : E → ℝ} (hf : f.HasTemperateGrowth)
+    (hc : ConvexOn ℝ Set.univ f) {B δ : ℝ} (hδ : 0 < δ)
+    (hb : ∀ x v, bilinearIteratedFDerivTwo ℝ f x v v ≤ B * ‖v‖ ^ 2) :
+    RegularPotential (fun y => f y + δ / 2 * ‖y‖ ^ 2) δ (B + δ) where
+  temperate := by
+    have hq := (Function.HasTemperateGrowth.const (δ / 2 : ℝ)).mul
+      (Function.hasTemperateGrowth_norm_sq E)
+    exact hf.add hq
+  pos := hδ
+  lower x v := by
+    rw [Analysis.BakryEmery.bilinearIteratedFDerivTwo_add_quadratic (hf.1.of_le (WithTop.coe_le_coe.mpr le_top))]
+    have h := Analysis.BakryEmery.bilinearIteratedFDerivTwo_nonneg_of_convexOn (hf.1.of_le (WithTop.coe_le_coe.mpr le_top)) hc x v
+    linarith
+  upper x v := by
+    rw [Analysis.BakryEmery.bilinearIteratedFDerivTwo_add_quadratic (hf.1.of_le (WithTop.coe_le_coe.mpr le_top))]
+    have h := hb x v
+    nlinarith
+
+/-- Lower curvature constant of `V ∘ (L · + c)`: `a / (1 + ‖L⁻¹‖)²` (positive in every dimension). -/
+noncomputable def affineLowerConstant (a : ℝ) (L : E ≃L[ℝ] E) : ℝ :=
+  a / (1 + ‖(L.symm : E →L[ℝ] E)‖) ^ 2
+
+/-- Upper curvature constant of `V ∘ (L · + c)`: `max b 1 · (1 + ‖L‖)²`. -/
+noncomputable def affineUpperConstant (b : ℝ) (L : E ≃L[ℝ] E) : ℝ :=
+  max b 1 * (1 + ‖(L : E →L[ℝ] E)‖) ^ 2
+
+omit [CompleteSpace E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] in
+theorem affineLowerConstant_pos {a : ℝ} (ha : 0 < a) (L : E ≃L[ℝ] E) :
+    0 < affineLowerConstant a L := by
+  unfold affineLowerConstant
+  exact div_pos ha (sq_pos_of_pos (by positivity))
+
+omit [CompleteSpace E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] in
+theorem affineUpperConstant_pos (b : ℝ) (L : E ≃L[ℝ] E) : 0 < affineUpperConstant b L := by
+  unfold affineUpperConstant
+  exact mul_pos (lt_of_lt_of_le zero_lt_one (le_max_right b 1)) (sq_pos_of_pos (by positivity))
+
+omit [CompleteSpace E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] in
+/-- **Regular potentials are preserved by affine changes of variables**: `V ∘ (L · + c)` is regular with
+constants `affineLowerConstant a L`, `affineUpperConstant b L` (positive also in dimension zero). -/
+theorem comp_affine {V : E → ℝ} {a b : ℝ} (hV : KLS.RegularPotential V a b)
+    (L : E ≃L[ℝ] E) (c : E) :
+    KLS.RegularPotential (fun x => V (L x + c)) (affineLowerConstant a L) (affineUpperConstant b L) := by
+  have hV2 : ContDiff ℝ 2 V := hV.temperate.1.of_le (WithTop.coe_le_coe.mpr le_top)
+  refine ⟨?_, affineLowerConstant_pos hV.pos L, ?_, ?_⟩
+  · exact hV.temperate.comp (L.hasTemperateGrowth.add (Function.HasTemperateGrowth.const c))
+  · intro x v
+    rw [Analysis.BakryEmery.bilinearIteratedFDerivTwo_comp_affine hV2 L c x v v]
+    have hbase := hV.lower (L x + c) (L v)
+    have hinv : ‖v‖ ≤ (1 + ‖(L.symm : E →L[ℝ] E)‖) * ‖L v‖ := by
+      calc
+        ‖v‖ = ‖L.symm (L v)‖ := by rw [L.symm_apply_apply]
+        _ ≤ ‖(L.symm : E →L[ℝ] E)‖ * ‖L v‖ := (L.symm : E →L[ℝ] E).le_opNorm _
+        _ ≤ _ := mul_le_mul_of_nonneg_right (by linarith) (norm_nonneg _)
+    have hsq : ‖v‖ ^ 2 ≤ (1 + ‖(L.symm : E →L[ℝ] E)‖) ^ 2 * ‖L v‖ ^ 2 := by
+      simpa only [← pow_two, mul_pow] using mul_self_le_mul_self (norm_nonneg v) hinv
+    have hdiv : ‖v‖ ^ 2 / (1 + ‖(L.symm : E →L[ℝ] E)‖) ^ 2 ≤ ‖L v‖ ^ 2 := by
+      apply (div_le_iff₀ (sq_pos_of_pos (by positivity))).2
+      simpa only [mul_comm] using hsq
+    have hmul := mul_le_mul_of_nonneg_left hdiv hV.pos.le
+    apply le_trans _ hbase
+    simpa only [affineLowerConstant, div_eq_mul_inv, mul_assoc, mul_left_comm, mul_comm] using hmul
+  · intro x v
+    rw [Analysis.BakryEmery.bilinearIteratedFDerivTwo_comp_affine hV2 L c x v v]
+    have hbase := hV.upper (L x + c) (L v)
+    have hnorm : ‖L v‖ ≤ (1 + ‖(L : E →L[ℝ] E)‖) * ‖v‖ :=
+      ((L : E →L[ℝ] E).le_opNorm v).trans
+        (mul_le_mul_of_nonneg_right (by linarith) (norm_nonneg _))
+    have hsq : ‖L v‖ ^ 2 ≤ (1 + ‖(L : E →L[ℝ] E)‖) ^ 2 * ‖v‖ ^ 2 := by
+      simpa only [← pow_two, mul_pow] using mul_self_le_mul_self (norm_nonneg _) hnorm
+    calc
+      bilinearIteratedFDerivTwo ℝ V (L x + c) (L v) (L v) ≤ b * ‖L v‖ ^ 2 := hbase
+      _ ≤ max b 1 * ‖L v‖ ^ 2 := mul_le_mul_of_nonneg_right (le_max_left b 1) (sq_nonneg _)
+      _ ≤ max b 1 * ((1 + ‖(L : E →L[ℝ] E)‖) ^ 2 * ‖v‖ ^ 2) :=
+        mul_le_mul_of_nonneg_left hsq (le_trans zero_le_one (le_max_right b 1))
+      _ = affineUpperConstant b L * ‖v‖ ^ 2 := by unfold affineUpperConstant; ring
+
+
 end RegularPotential
 
 end FunctionalInequalities.KLS

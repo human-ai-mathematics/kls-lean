@@ -1,6 +1,6 @@
 {
   "revision": "34b5fcd57fef17089e781616005fe6d3641bd11e",
-  "source": "https://github.com/numina-functional-inequalities/kls-conjecture-search/blob/34b5fcd57fef17089e781616005fe6d3641bd11e/research/program/portfolio.yaml",
+  "source": "https://github.com/human-ai-mathematics/kls-conjecture-search/blob/34b5fcd57fef17089e781616005fe6d3641bd11e/research/program/portfolio.yaml",
   "approaches": [
     {
       "id": "ap:eldan-trace-upgrade",

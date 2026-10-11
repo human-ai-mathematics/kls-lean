@@ -23,6 +23,13 @@ or uniqueness of `W`, so its returned conditions do not characterize the positiv
 root `T^{-1/2}`. For example, `T = 1` and `W = -1` satisfy them. The isotropic reduction needs only
 the whitening identity. The zero-dimensional space is included: the positivity premise is vacuous
 and the unique linear equivalence satisfies the conclusion.
+
+`Covariance.variance_inner_eq_of_sandwich` records the variance of a whitened linear statistic: for a
+probability law with finite second moment and a self-adjoint `S` with the actual sandwich
+`S ∘ Cov ∘ S = 1`, `Var⟪S h, ·⟫ = ‖h‖²`. It is a deterministic support of the BKL (68) posterior noise
+estimate (Codex review `Root-Posterior-Noise-Bound-20261008`; proof body: Luna unit NB3, independently
+accepted 2026-10-08, with `E` renamed to the section variable `V`); the sandwich is a hypothesis, not a
+produced root.
 -/
 
 noncomputable section
@@ -118,6 +125,46 @@ theorem exists_whitening (μ : MeasureTheory.Measure V)
     _ = ProbabilityTheory.covarianceBilin μ y x := ProbabilityTheory.covarianceBilin_comm x y
     _ = inner ℝ (operator μ y) x := (operator_inner μ y x).symm
     _ = inner ℝ x (operator μ y) := real_inner_comm _ _
+
+section WhitenedStatistic
+
+open MeasureTheory ProbabilityTheory
+open scoped RealInnerProductSpace
+
+private theorem finiteDimensional_marker (E : Type*)
+    [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+    [FiniteDimensional ℝ E] :
+    Nonempty (FiniteDimensional ℝ E) :=
+  ⟨inferInstance⟩
+
+/-- **Variance of a whitened linear statistic**: for a probability law `μ` with finite second moment and a
+self-adjoint `S` with `S ∘ Cov(μ) ∘ S = 1`, `Var[⟪S h, x⟫] = ‖h‖²`. -/
+theorem variance_inner_eq_of_sandwich (μ : Measure V) [IsProbabilityMeasure μ]
+    (h2 : MemLp (id : V → V) 2 μ) (S : V →L[ℝ] V) (hS : IsSelfAdjoint S)
+    (hsand : S * operator μ * S = 1) (h : V) :
+    variance (fun x => ⟪S h, x⟫) μ = ‖h‖ ^ 2 := by
+    have hSad : S.adjoint = S := by
+      rw [← ContinuousLinearMap.star_eq_adjoint]
+      exact hS
+    have hcomp : S (operator μ (S h)) = h := by
+      have hfd := finiteDimensional_marker V
+      have hsand_h :
+          (S * operator μ * S) h = (1 : V →L[ℝ] V) h :=
+        hfd.elim (fun _ => congrArg (fun T : V →L[ℝ] V => T h) hsand)
+      simpa [mul_apply_eq_comp, one_apply_eq_self] using hsand_h
+    calc
+      variance (fun x => ⟪S h, x⟫) μ =
+          covarianceBilin μ (S h) (S h) :=
+        (covarianceBilin_self h2 (S h)).symm
+      _ = ⟪operator μ (S h), S h⟫ :=
+        (Covariance.operator_inner μ (S h) (S h)).symm
+      _ = ⟪S (operator μ (S h)), h⟫ := by
+        simpa only [hSad] using
+          (ContinuousLinearMap.adjoint_inner_right S (operator μ (S h)) h)
+      _ = ⟪h, h⟫ := by rw [hcomp]
+      _ = ‖h‖ ^ 2 := real_inner_self_eq_norm_sq h
+
+end WhitenedStatistic
 
 end Covariance
 

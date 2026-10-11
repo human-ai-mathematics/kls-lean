@@ -1,6 +1,6 @@
 import FunctionalInequalities.Analysis.Tensor.Coordinate
 import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Inverse
-import FunctionalInequalities.Analysis.BakryEmery.Cumulant
+import FunctionalInequalities.Analysis.BakryEmery.Cumulant.Basic
 import FunctionalInequalities.Analysis.BakryEmery.Tilt.Temperate
 import FunctionalInequalities.Analysis.BakryEmery.Tilt.SquareIntegrable
 import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.Temperate

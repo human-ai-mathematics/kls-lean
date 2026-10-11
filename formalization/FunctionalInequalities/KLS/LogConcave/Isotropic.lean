@@ -1,6 +1,7 @@
 import FunctionalInequalities.Energy.CovarianceGradient.LinearEquiv
 import FunctionalInequalities.KLS.Isotropic
 import FunctionalInequalities.KLS.LogConcave.Translation
+import FunctionalInequalities.KLS.LogConcave.Density.BorellRepresentation.Moments
 import FunctionalInequalities.KLS.LogConcave.WeightedGradient.Basic
 import FunctionalInequalities.KLS.Statement
 import FunctionalInequalities.Poincare.LipschitzGradient.Comparison
@@ -130,6 +131,26 @@ theorem interior_support_nonempty_of_affineSupport_eq_top {ν : ProbabilityMeasu
     (hν : LogConcave ν) (h : affineSupport ν = ⊤) :
     (interior (ν : Measure V₁).support).Nonempty :=
   hν.convex_support.interior_nonempty_iff_affineSpan_eq_top.mpr h
+
+end KLS.LogConcave
+
+namespace KLS.LogConcave
+
+open scoped RealInnerProductSpace in
+/-- **All moments of isotropic log-concave laws on `ℝⁿ`** are bounded by constants depending only on
+`n` and the order, with radius `R = 2√(n+1)` (quantitative Borell; BKL Section 2, p. 5). -/
+theorem integral_norm_pow_le_of_isotropic {n : ℕ}
+    {ν : ProbabilityMeasure (EuclideanSpace ℝ (Fin n))} (hlc : KLS.LogConcave ν)
+    (hiso : KLS.Isotropic ν) (p : ℕ) :
+    let R : ℝ := 2 * Real.sqrt ((n : ℝ) + 1)
+    Integrable (fun v : EuclideanSpace ℝ (Fin n) => ‖v‖ ^ p) (ν : Measure (EuclideanSpace ℝ (Fin n))) ∧
+      (∫ v, ‖v‖ ^ p ∂(ν : Measure (EuclideanSpace ℝ (Fin n)))) ≤
+        (p.factorial : ℝ) / (Real.log 3 / (4 * R)) ^ p *
+          ((3 : ℝ) ^ (3 / 4 : ℝ) / (1 - (3 : ℝ) ^ (-(1 / 4 : ℝ)))) := by
+  have hLC : KLS.BorelLogConcave ν := (KLS.LogConcave.borel_iff ν).1 hlc
+  have hint : Integrable (fun v : EuclideanSpace ℝ (Fin n) => ‖v‖ ^ 2) (ν : Measure (EuclideanSpace ℝ (Fin n))) := by
+    simpa only [id_eq] using (memLp_two_iff_integrable_sq_norm hiso.memLp_two.1).1 hiso.memLp_two
+  exact hLC.integral_norm_pow_le_of_second_bound hint hiso.integral_norm_sq.le p
 
 end KLS.LogConcave
 

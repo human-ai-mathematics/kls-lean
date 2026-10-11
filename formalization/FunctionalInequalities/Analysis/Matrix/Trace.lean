@@ -1,6 +1,7 @@
 import Mathlib.Analysis.Matrix.HermitianFunctionalCalculus
 import Mathlib.Analysis.Matrix.PosDef
 import Mathlib.Analysis.SpecialFunctions.Pow.Real
+import Mathlib.Algebra.Order.Chebyshev
 
 /-!
 # A trace inequality for real powers of a positive definite matrix
@@ -10,6 +11,12 @@ Lemma 42, attributed there to Eldan: for a positive definite real matrix `A`, a 
 `Δ` and `α, β ≥ 0`, `Tr(A^α Δ A^β Δ) ≤ Tr(A^{α+β} Δ²)`. The real power of a Hermitian matrix is
 Mathlib's continuous functional calculus, `A^α = cfc (· ^ α) A`, which acts on the eigenvalues in
 an orthonormal eigenbasis.
+
+The final section holds the generic trace–energy inequality `Σ_i (tr B_i)² ≤ n Σ_{i,j,k} (B_i)_{jk}²` for
+real `n × n` matrices without symmetry or positivity, a deterministic support of the proposed
+log-determinant non-explosion route for the BKL localization equations (67) (Codex review
+`Takeover-Logdet-Nonexplosion-20261008`; proof body: Luna unit TE1, independently accepted 2026-10-08).
+It supplies no covariance dynamics, Itô formula, strong solution or non-explosion theorem.
 -/
 
 open Matrix
@@ -311,5 +318,53 @@ theorem trace_rpow_mul_rpow_mul_le {A Δ : Matrix n n ℝ} (hA : A.PosDef) (hΔ 
     _ = (U * Dγ * Uᵀ * Δ ^ 2).trace := hright.symm
     _ = (cfc (fun x : ℝ => x ^ (α + β)) A * Δ ^ 2).trace := by
           rw [hcfg]
+
+section TraceEnergy
+
+/-- **Trace energy**: `Σ_i (tr B_i)² ≤ n · Σ_{i,j,k} (B_i)_{jk}²` for real `n × n` matrices, no symmetry
+assumed. Cauchy–Schwarz on the diagonal and the nonnegative off-diagonal squares. -/
+theorem sum_trace_sq_le_card_mul_sum_sq {n : ℕ} (B : Fin n → Matrix (Fin n) (Fin n) ℝ) :
+    (∑ i : Fin n, Matrix.trace (B i) ^ 2) ≤
+      (n : ℝ) * ∑ i : Fin n, ∑ j : Fin n, ∑ k : Fin n, (B i j k) ^ 2 := by
+    have hdiag (i : Fin n) :
+        (∑ j : Fin n, (B i j j) ^ 2) ≤
+          ∑ j : Fin n, ∑ k : Fin n, (B i j k) ^ 2 := by
+      refine Finset.sum_le_sum (fun j hj => ?_)
+      have hs :
+          (B i j j) ^ 2 ≤
+            ∑ k ∈ (Finset.univ : Finset (Fin n)), (B i j k) ^ 2 := by
+        exact Finset.single_le_sum
+          (s := (Finset.univ : Finset (Fin n)))
+          (f := fun k : Fin n => (B i j k) ^ 2)
+          (fun k hk => sq_nonneg _)
+          (Finset.mem_univ j)
+      simpa using hs
+
+    have hi (i : Fin n) :
+        (Matrix.trace (B i)) ^ 2 ≤
+          (n : ℝ) * ∑ j : Fin n, ∑ k : Fin n, (B i j k) ^ 2 := by
+      have hcs :
+          (∑ j : Fin n, B i j j) ^ 2 ≤
+            (n : ℝ) * ∑ j : Fin n, (B i j j) ^ 2 := by
+        simpa using
+          (sq_sum_le_card_mul_sum_sq
+            (s := (Finset.univ : Finset (Fin n)))
+            (f := fun j : Fin n => B i j j))
+      have hmul :
+          (n : ℝ) * ∑ j : Fin n, (B i j j) ^ 2 ≤
+            (n : ℝ) * ∑ j : Fin n, ∑ k : Fin n, (B i j k) ^ 2 :=
+        mul_le_mul_of_nonneg_left (hdiag i) (by positivity)
+      change (∑ j : Fin n, B i j j) ^ 2 ≤
+        (n : ℝ) * ∑ j : Fin n, ∑ k : Fin n, (B i j k) ^ 2
+      exact hcs.trans hmul
+
+    calc
+      ∑ i : Fin n, Matrix.trace (B i) ^ 2 ≤
+          ∑ i : Fin n, (n : ℝ) * ∑ j : Fin n, ∑ k : Fin n, (B i j k) ^ 2 :=
+        Finset.sum_le_sum (fun i _ => hi i)
+      _ = (n : ℝ) * ∑ i : Fin n, ∑ j : Fin n, ∑ k : Fin n, (B i j k) ^ 2 := by
+        rw [Finset.mul_sum]
+
+end TraceEnergy
 
 end FunctionalInequalities.Analysis

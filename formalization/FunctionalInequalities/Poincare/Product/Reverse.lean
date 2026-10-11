@@ -8,7 +8,7 @@ Both factor probability instances are explicit. Probability of `prodMeasure μ �
 does not normalize its two factors.
 
 Source: the Poincaré part of the historical manuscript's
-[Theorem 3.4](https://github.com/numina-functional-inequalities/kls-exploration/blob/cd4a894a0faf40c0180f80b1a31eec1fdb6cb576/modules/02-results-toolkit.tex#L59-L68)
+[Theorem 3.4](https://github.com/human-ai-mathematics/kls-conjecture-search/blob/cd4a894a0faf40c0180f80b1a31eec1fdb6cb576/modules/02-results-toolkit.tex#L59-L68)
 states the product optimal-constant identity. The coordinate lower bounds below are local
 steps toward that identity, rather than separately stated manuscript results. The Hilbert,
 Borel, finite-energy and extended-real formulation is the present realization. BGL

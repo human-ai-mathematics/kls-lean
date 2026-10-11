@@ -2,7 +2,7 @@
 
 Date: 2026-09-03 (Asia/Shanghai). Statement agent: Codex.
 Node: `lem:poincare-finite-tensorization`.
-Issue: [#7](https://github.com/numina-functional-inequalities/kls-lean/issues/7), verified as an actual sub-issue of [#1](https://github.com/numina-functional-inequalities/kls-lean/issues/1).
+Issue: [#7](https://github.com/human-ai-mathematics/kls-lean/issues/7), verified as an actual sub-issue of [#1](https://github.com/human-ai-mathematics/kls-lean/issues/1).
 Status: **drafted / checked_by: null**. This is a statement preparation record, not a freeze or proof acceptance.
 
 ## Baseline and ownership
@@ -65,7 +65,7 @@ BGL Proposition 4.3.1 gives a binary upper bound with the larger factor constant
 
 The reverse bounds and optimal equalities are independent coordinate-test deductions in this repository's domain, not an assertion that BGL directly states or certifies every part of this API. For arbitrary Borel measures, a smooth function's gradient energy need not depend only on its L² equivalence class: under `δ₀` on the line, zero and the identity agree almost everywhere but have different energies. Thus a Sobolev/closed-Dirichlet domain identification is a separate theorem.
 
-The pinned upstream [`prop:products`, proof (iii)](https://github.com/numina-functional-inequalities/kls-exploration/blob/8185e46ffb040e04fea076953e5bcaeb4157d71a/modules/kls/16-model-geometries.tex#L64) was re-read through GitHub at `8185e46ffb040e04fea076953e5bcaeb4157d71a`. It uses finite-product equality, then a one-dimensional log-concave estimate in terms of variance, and then a Cheeger–Poincaré comparison. This node prepares the finite-product ingredient with explicit local test-domain semantics. The remaining analytic comparisons and localization assertions in parts (i) and (ii) remain separate obligations.
+The pinned upstream [`prop:products`, proof (iii)](https://github.com/human-ai-mathematics/kls-conjecture-search/blob/8185e46ffb040e04fea076953e5bcaeb4157d71a/modules/kls/16-model-geometries.tex#L64) was re-read through GitHub at `8185e46ffb040e04fea076953e5bcaeb4157d71a`. It uses finite-product equality, then a one-dimensional log-concave estimate in terms of variance, and then a Cheeger–Poincaré comparison. This node prepares the finite-product ingredient with explicit local test-domain semantics. The remaining analytic comparisons and localization assertions in parts (i) and (ii) remain separate obligations.
 
 ## Proposed proof route and helper boundaries
 

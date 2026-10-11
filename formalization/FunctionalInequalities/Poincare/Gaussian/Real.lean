@@ -4,7 +4,7 @@ import FunctionalInequalities.Poincare.SmoothTest.Linear
 /-!
 # Sharp one-dimensional Gaussian Poincaré constant
 
-Source: the [Gaussian covariance family in the historical manuscript](https://github.com/numina-functional-inequalities/kls-exploration/blob/cd4a894a0faf40c0180f80b1a31eec1fdb6cb576/modules/03-tier1-gaussian.tex#L10-L37)
+Source: the [Gaussian covariance family in the historical manuscript](https://github.com/human-ai-mathematics/kls-conjecture-search/blob/cd4a894a0faf40c0180f80b1a31eec1fdb6cb576/modules/03-tier1-gaussian.tex#L10-L37)
 states `C_P(N(0, Σ)) = λ_max(Σ)` for positive-definite covariance. This module proves its
 one-dimensional Poincaré component for the repository's existing globally smooth L²
 finite-energy `Admissible` domain.
@@ -36,7 +36,7 @@ theorem holds_gaussianReal_zero (m : ℝ) : Holds (gaussianReal m 0) 0 := by
   rw [zero_mul, gaussianReal_zero_var, variance_dirac]
 
 /-- Source: the one-dimensional Poincaré component of the
-[Gaussian covariance family](https://github.com/numina-functional-inequalities/kls-exploration/blob/cd4a894a0faf40c0180f80b1a31eec1fdb6cb576/modules/03-tier1-gaussian.tex#L10-L37).
+[Gaussian covariance family](https://github.com/human-ai-mathematics/kls-conjecture-search/blob/cd4a894a0faf40c0180f80b1a31eec1fdb6cb576/modules/03-tier1-gaussian.tex#L10-L37).
 The existing smooth L² finite-energy domain, arbitrary mean, and zero-variance branch are
 explicit local choices/extensions. Combine the positive-variance anchored estimate with
 variance minimization and `holds_gaussianReal_zero`; the constant is the variance `v`. -/
@@ -51,7 +51,7 @@ theorem holds_gaussianReal (m : ℝ) (v : NNReal) :
     _ ≤ (v : ℝ) * energy (gaussianReal m v) f := hf.integral_sq_sub_gaussian_le hv
 
 /-- Source: the linear-test lower-bound argument in the
-[Gaussian covariance family](https://github.com/numina-functional-inequalities/kls-exploration/blob/cd4a894a0faf40c0180f80b1a31eec1fdb6cb576/modules/03-tier1-gaussian.tex#L24-L28).
+[Gaussian covariance family](https://github.com/human-ai-mathematics/kls-conjecture-search/blob/cd4a894a0faf40c0180f80b1a31eec1fdb6cb576/modules/03-tier1-gaussian.tex#L24-L28).
 Use `variance_linear_le` at `1 : ℝ`, Mathlib's `memLp_id_gaussianReal`, and
 `variance_id_gaussianReal`. The test is the identity, whose energy is one, including for `v = 0`.
 Arbitrary means and zero variance are local extensions; no covariance eigenvalue theorem is needed. -/
@@ -67,9 +67,9 @@ theorem Holds.gaussianReal_variance_le {m : ℝ} {v : NNReal} {C : ℝ}
   simpa [variance_id_gaussianReal] using hlin
 
 /-- Source: the one-dimensional sharp Poincaré constant in the
-[Gaussian covariance family](https://github.com/numina-functional-inequalities/kls-exploration/blob/cd4a894a0faf40c0180f80b1a31eec1fdb6cb576/modules/03-tier1-gaussian.tex#L10-L37),
+[Gaussian covariance family](https://github.com/human-ai-mathematics/kls-conjecture-search/blob/cd4a894a0faf40c0180f80b1a31eec1fdb6cb576/modules/03-tier1-gaussian.tex#L10-L37),
 with the existing local `Admissible` domain and local `ENNReal` infimum encoding of the constant in
-[Definition 2.1](https://github.com/numina-functional-inequalities/kls-exploration/blob/cd4a894a0faf40c0180f80b1a31eec1fdb6cb576/modules/01-definitions.tex#L17-L25).
+[Definition 2.1](https://github.com/human-ai-mathematics/kls-conjecture-search/blob/cd4a894a0faf40c0180f80b1a31eec1fdb6cb576/modules/01-definitions.tex#L17-L25).
 Combine `holds_gaussianReal`, `Holds.gaussianReal_variance_le`, `constant_le`, and `le_constant`.
 All means and nonnegative variances are included; no infimum-attainment witness is assumed. -/
 theorem constant_gaussianReal (m : ℝ) (v : NNReal) :

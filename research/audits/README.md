@@ -456,4 +456,66 @@ isoperimetry `h_M ≥ 2ρ(m)`, `ρ ≤ 2ρ(m)`, `Var ≥ 1/(12ρ_max²)`, the li
 `Ψ² ≤ 12 C_P` on the line and for affine supports of dimension at most one — with the
 zero-dimensional and Dirac boundary cases. `B0` is not touched. 36 standard-only axiom reports.
 
-There are now 61 source clients here, plus the 7 previously referenced local clients.
+Per-paper clients live in `BKL/` and `CEK/` ([naming rule](../naming.md)). `CEK/` holds the clients of the
+2026-10-09 CEK scratch promotion ([map](../api-migration/2026-10-09-cek-scratch-promotion-map.json)), all compiled
+strictly by `research/verify.py`: `LegendreAudit.lean` (Legendre transform, truncation and convexification; a signed
+affine primal, a nonconvex two-point primal, the empty effective domain; 25 reports), `PointControlAudit.lean` (Lemma 16
+for a mass-two measure at the endpoints of `[-1, 1]` and in dimension zero; 10 reports), `ConjugateMassAudit.lean`
+(zero and infinite conjugate mass, the functional at `⊥`/`⊤`; 15 reports) and `Lemma17Audit.lean` (one subsequence
+and one limit for both inequalities of Lemma 17, boundary-supported mass two and dimension zero; 6 reports). The
+2026-10-10 Proposition 12 promotion ([map](../api-migration/2026-10-10-cek-proposition12-promotion-map.json)) adds
+`Proposition12Audit.lean` (the accepted coercivity, normalization and attainment clients in one file, since audits
+compile independently: a centered two-atom law with boundary support, a signed nonconvex input infinite at the origin,
+dimension zero and the all-competitor maximum; plus marked new instances for the finite-mass affine correction and a
+bounded effective domain; 75 reports) and `FunctionalLimitAudit.lean` (zero and infinite prefix masses; 4 reports). All
+135 CEK reports are standard-only. These are proof clients, not ledger certificates.
+
+The 2026-10-10 BKL/Letwin Stage 1 integration ([record](../decisions/2026-10-10-bkl-stage1-integration.md)) adds three
+`BKL/` clients: `GroupedCumulantAudit.lean` (the grouped (74) at `m = 3` with an empty middle sum, `6 κ₃`; the three
+`m = 4` pairings; the frozen binder names; the actual compactly supported skew two-point law with its covariance
+unit derived from isotropy and `D³ = 9`; 11 reports), `SelectedPartitionAudit.lean` (zero slots, repeated vectors, an
+indexed singleton; 4 reports) and `MappedCovarianceAudit.lean` (the covariance step of Letwin's proof of Theorem 1.2:
+an arbitrary isotropic law, an indefinite, a singular and a scaled matrix, dimension zero and the actual Gaussian on
+`Fin 1`; 15 reports). All are standard-only proof clients, not ledger certificates.
+
+The 2026-10-11 cutoff-profile adoption ([record](../decisions/2026-10-11-cutoff-profile-adoption.md)) adds
+`BKL/LetwinCutoffProfileAudit.lean` (the real-variable part of Letwin's Lemma A.4: the profile endpoints
+`η 0 = 1` and `η 3 = 0`, interval integrability on `[0, 3]` and vanishing at `4` of the majorant, and the
+nonconstant monotone exhaustion `η(5/(n+1))`; 6 reports). It is a standard-only proof client, not a ledger
+certificate.
+
+The 2026-10-11 tail-primitive adoption ([record](../decisions/2026-10-11-cutoff-primitive-adoption.md)) adds
+`BKL/LetwinCutoffPrimitiveAudit.lean` (`q_R(t) = R⁻¹∫_{t/R}^3 w` for the explicit bump
+`smoothTransition t · smoothTransition (3 − t)` at `R = 1` and `R = 2`: the source coefficient `q_R′(R) = −R⁻²`, both
+tails `t < 0` and `t > 3R`, the bounds, and the accepted majorant of `|η″|` fed into the primitive for every
+`R ≥ 1`; 8 reports). It is a standard-only proof client, not a ledger certificate.
+
+The 2026-10-11 rescaling/positivity adoption ([record](../decisions/2026-10-11-rescaling-positivity-adoption.md)) adds
+`BKL/LetwinRescalingPositivityAudit.lean`: the affine rescaling for the actual `exp` with shift `c = 1` and `R = 2`, the
+`R = 0` total-derivative convention and the profile bound `|(η((· − c)/R))″| ≤ (R⁻¹)² B`; the inverse-Hessian quadratic
+form for the scaled Gaussian potential `δ/2 ‖y‖²` on the plane (rank 2), the chain-rule coordinate form and the
+rank-zero boundary; 13 reports. The Gaussian examples are local coordinate-property tests, not the bounded-gradient
+source-law client that Lemmas A.4/A.5 still need. Standard-only proof client, not a ledger certificate.
+
+The 2026-10-11 real-exhaustion adoption ([record](../decisions/2026-10-11-real-exhaustion-adoption.md)) adds
+`BKL/LetwinRealExhaustionAudit.lean`: the real-parameter exhaustion `R ↦ η(a/R)` restricted to `[1, ∞)` (the form
+the real-`R` producer uses), the nonconstant family `a = 3` (`η(3/1) = 0`, `η(3/3) = 1`, monotone, limit `1`), the
+negative case `a = −2` (constant `1`), and agreement with the natural-index exhaustion along `R = n + 1`; 6 reports.
+It is not the Lemma A.4 producer or a source-law client. Standard-only proof client, not a ledger certificate.
+
+The 2026-10-11 Letwin Lemma A.4/A.5 source integration ([record](../decisions/2026-10-11-letwin-a4-a5-source-integration.md))
+adds six `BKL/` clients. `LetwinA4SupportAudit.lean`: the coercivity theorem for the real Gaussian potential `x²` and in
+dimension zero, with the axiom reports of the four support declarations (13 reports). `LetwinEnergyDefectAudit.lean`: the
+coefficient extraction for `h(s) = s²`, the pointwise defect domination for the actual profile, and the sign of the
+energy identity for `h′ ≤ 0` (6 reports). `LetwinOperatorContinuityAudit.lean`: continuity of the generator of the rescaled
+profile and of `Lφ`, and the cutoff-product integrability (4 reports). `LetwinWeightedEnergyAudit.lean`: the energy bound
+`D` derived from the source data and the tail-primitive energy term `∫ R⁻² w(φ/R) Γφ dν ≤ D R⁻¹ ∫_0^3 w` (4 reports).
+`LetwinCutoffAudit.lean`: the generic conservativity core on an actual two-atom law and a Dirac counterexample showing
+that the defect decay is necessary (13 reports). `LetwinUniformIntervalAudit.lean`: axiom reports for the source cutoffs
+(real and natural index), Lemma A.5 for given cutoffs, the uniform-interval potential facts, the test-function facts and
+the final client, plus elaboration-time checks: the natural-index cutoffs call the real-parameter construction, the
+final client calls the source package, the natural-index cutoffs, Lemma A.5 and the test-function facts, every constant
+(public, private and generated) of the owning modules has standard axioms, and no integral-zero or pushforward statement
+for the test function exists (11 reports). All are standard-only proof clients, not ledger certificates.
+
+There are now 67 source clients here, plus the 7 previously referenced local clients.

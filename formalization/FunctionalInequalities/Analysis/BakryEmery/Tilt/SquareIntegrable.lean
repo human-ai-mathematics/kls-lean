@@ -24,12 +24,14 @@ universe u
 variable {E : Type u} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
   [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
 
-private def weightedExpD {F : Type*} [NormedAddCommGroup F] [NormedSpace ℝ F]
+/-- The derivative amplitude `x ↦ ⟪·, x⟫ • g x` of `w ↦ e^{⟪w, x⟫} g(x)`. -/
+def weightedExpD {F : Type*} [NormedAddCommGroup F] [NormedSpace ℝ F]
     (g : E → F) (x : E) : E →L[ℝ] F :=
   (innerSL ℝ x).smulRight (g x)
 
 omit [CompleteSpace E] in
-private theorem weightedExpD_meas {F : Type*} [NormedAddCommGroup F] [NormedSpace ℝ F]
+/-- Measurability of the derivative amplitude. -/
+theorem weightedExpD_meas {F : Type*} [NormedAddCommGroup F] [NormedSpace ℝ F]
     {μ : Measure E} {g : E → F} (hg : AEStronglyMeasurable g μ) :
     AEStronglyMeasurable (weightedExpD g) μ := by
   exact (ContinuousLinearMap.smulRightL ℝ E F).continuous₂.comp_aestronglyMeasurable
@@ -59,7 +61,8 @@ private theorem weightedExpD_integrable {F : Type*} [NormedAddCommGroup F]
         ring
 
 omit [CompleteSpace E] [FiniteDimensional ℝ E] in
-private theorem weightedExp_integrable {F : Type*} [NormedAddCommGroup F]
+/-- Integrability of `e^{⟪z, x⟫} g(x)` under integrability against every exponential weight. -/
+theorem weightedExp_integrable {F : Type*} [NormedAddCommGroup F]
     [NormedSpace ℝ F] (μ : Measure E) {g : E → F}
     (hg : AEStronglyMeasurable g μ)
     (hgi : ∀ r : ℝ, Integrable (fun x => Real.exp (r * ‖x‖) * ‖g x‖) μ) (z : E) :
@@ -72,7 +75,8 @@ private theorem weightedExp_integrable {F : Type*} [NormedAddCommGroup F]
     exact real_inner_le_norm z x
 
 omit [CompleteSpace E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] in
-private theorem weightedExp_hasFDeriv {F : Type*} [NormedAddCommGroup F]
+/-- The pointwise derivative of `w ↦ e^{⟪w, x⟫} g(x)`. -/
+theorem weightedExp_hasFDeriv {F : Type*} [NormedAddCommGroup F]
     [NormedSpace ℝ F] (g : E → F) (x z : E) :
     HasFDerivAt (fun w => Real.exp ⟪w, x⟫ • g x)
       (Real.exp ⟪z, x⟫ • weightedExpD g x) z := by
@@ -85,7 +89,9 @@ private theorem weightedExp_hasFDeriv {F : Type*} [NormedAddCommGroup F]
   simp [weightedExpD, ContinuousLinearMap.smulRight_apply, mul_smul]
 
 omit [CompleteSpace E] in
-private theorem weightedExp_integral_hasFDeriv {F : Type*} [NormedAddCommGroup F]
+/-- Differentiation under the integral sign for exponential weights (first derivative): the
+derivative of `z ↦ ∫ e^{⟪z, x⟫} g(x) dμ` at `z` is `∫ e^{⟪z, x⟫} (⟪x, ·⟫ g(x)) dμ`. -/
+theorem weightedExp_integral_hasFDeriv {F : Type*} [NormedAddCommGroup F]
     [NormedSpace ℝ F] [CompleteSpace F] (μ : Measure E) {g : E → F}
     (hg : AEStronglyMeasurable g μ)
     (hgi : ∀ r : ℝ, Integrable (fun x => Real.exp (r * ‖x‖) * ‖g x‖) μ) (z : E) :
@@ -276,6 +282,18 @@ private lemma integrable_exp_inner_of_all_exp (μ : Measure E) [IsFiniteMeasure 
     apply Real.exp_le_exp.mpr
     exact le_trans (le_abs_self _) (abs_real_inner_le_norm z x)
   exact (hexp ‖z‖).mono' hmeas hbound
+
+omit [CompleteSpace E] [FiniteDimensional ℝ E] [BorelSpace E] in
+/-- `F_f(z) · ∫ e^{⟪z,x⟫} dμ = ∫ e^{⟪z,x⟫} f(x) dμ` whenever `∫ e^{⟪z,x⟫} dμ ≠ 0`
+(Luna, task RED-D1a). -/
+theorem tiltAverage_mul_integral_exp (μ : Measure E) (f : E → ℝ) (z : E)
+    (hz : (∫ x, Real.exp ⟪z, x⟫ ∂μ) ≠ 0) :
+    tiltAverage μ f z * ∫ x, Real.exp ⟪z, x⟫ ∂μ = ∫ x, Real.exp ⟪z, x⟫ * f x ∂μ := by
+    rw [tiltAverage, expTilt, integral_tilted]
+    simp only [smul_eq_mul]
+    simp_rw [div_mul_eq_mul_div]
+    rw [integral_div]
+    exact div_mul_cancel₀ _ hz
 
 omit [CompleteSpace E] in
 /-- Tilt averages of square-integrable functions are smooth. -/

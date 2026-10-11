@@ -18,9 +18,9 @@ from that commit through the authenticated GitHub CLI during this preparation.
 
 | ID | Exact source | What it supports |
 | --- | --- | --- |
-| G | [Gaussian covariance family, `fam:gaussian-covariance`, lines 10–37](https://github.com/numina-functional-inequalities/kls-exploration/blob/cd4a894a0faf40c0180f80b1a31eec1fdb6cb576/modules/03-tier1-gaussian.tex#L10-L37) | For a centered Gaussian with positive-definite covariance, the Poincaré constant is its largest covariance eigenvalue; the one-dimensional specialization is the variance. |
-| D | [Definition 2.1, `def:poincare`, lines 17–25](https://github.com/numina-functional-inequalities/kls-exploration/blob/cd4a894a0faf40c0180f80b1a31eec1fdb6cb576/modules/01-definitions.tex#L17-L25) | The normalization is variance bounded by a constant times the expected squared gradient. |
-| L | [Remark 3.8, `rem:rayleigh-lower-only`, lines 108–117](https://github.com/numina-functional-inequalities/kls-exploration/blob/cd4a894a0faf40c0180f80b1a31eec1fdb6cb576/modules/02-results-toolkit.tex#L108-L117), and G lines 24–28 | Linear tests give lower bounds and attain the Gaussian constant. |
+| G | [Gaussian covariance family, `fam:gaussian-covariance`, lines 10–37](https://github.com/human-ai-mathematics/kls-conjecture-search/blob/cd4a894a0faf40c0180f80b1a31eec1fdb6cb576/modules/03-tier1-gaussian.tex#L10-L37) | For a centered Gaussian with positive-definite covariance, the Poincaré constant is its largest covariance eigenvalue; the one-dimensional specialization is the variance. |
+| D | [Definition 2.1, `def:poincare`, lines 17–25](https://github.com/human-ai-mathematics/kls-conjecture-search/blob/cd4a894a0faf40c0180f80b1a31eec1fdb6cb576/modules/01-definitions.tex#L17-L25) | The normalization is variance bounded by a constant times the expected squared gradient. |
+| L | [Remark 3.8, `rem:rayleigh-lower-only`, lines 108–117](https://github.com/human-ai-mathematics/kls-conjecture-search/blob/cd4a894a0faf40c0180f80b1a31eec1fdb6cb576/modules/02-results-toolkit.tex#L108-L117), and G lines 24–28 | Linear tests give lower bounds and attain the Gaussian constant. |
 
 There are four explicit differences between the source and the local candidate:
 

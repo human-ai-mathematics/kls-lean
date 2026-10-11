@@ -3484,8 +3484,33 @@
       "url": "https://arxiv.org/abs/1304.0630",
       "locator": "Theorem 2",
       "result": "A nonzero finite centered measure whose support spans the space is the moment measure of an essentially continuous convex potential, unique up to translation.",
-      "remaining": "The existence/uniqueness theorem is not locally formalized; generic closed forms do not supply its convex potential.",
-      "local_results": [],
+      "remaining": "Theorem 2 is not locally formalized: Lemmas 14–15 (source constants), essential continuity (Proposition 10, Theorem 8), the Euler–Lagrange identification of the maximiser with a moment-measure push-forward, existence and uniqueness remain open, and generic closed forms do not supply its convex potential. Formalized support: Lemma 16, Lemma 17 in geometric form (explicit interior-hull input, with a separate source-condition adapter), the Legendre/truncation tools and Proposition 12 attainment (⇑).",
+      "local_results": [
+        {
+          "node": "lem:cek-point-control",
+          "scope": "Lemma 16 for finite measures"
+        },
+        {
+          "node": "lem:cek-compactness",
+          "scope": "Lemma 17 with explicit interior-hull input"
+        },
+        {
+          "node": "lem:legendre-convexification",
+          "scope": "Proposition 12 truncation and convexification tools"
+        },
+        {
+          "node": "lem:cek-zero-interior",
+          "scope": "Theorem 2 conditions give the interior-hull hypothesis"
+        },
+        {
+          "node": "lem:cek-coercivity",
+          "scope": "Coercivity, truncation and affine normalization for Proposition 12"
+        },
+        {
+          "node": "thm:cek-variational-maximum",
+          "scope": "Proposition 12 attainment (reviewed stronger)"
+        }
+      ],
       "diagram": "2015 · Cordero-Erausquin–Klartag<br/>Moment-measure existence",
       "additional_sources": [
         "https://webusers.imj-prg.fr/~dario.cordero/Docs/articles/2015_moment_measures.pdf"
@@ -3493,7 +3518,7 @@
       "lemma_map": {
         "source_version": "arXiv:1304.0630v1",
         "source_url": "https://arxiv.org/abs/1304.0630v1",
-        "reviewed_on": "2026-10-03",
+        "reviewed_on": "2026-10-10",
         "standing_assumptions": "n ≥ 1. Convex functions ψ: R^n → R ∪ {+∞} are allowed to take the value +∞ (convexity is required where both values are finite; exp(−∞) = 0). For convex ψ with 0 < ∫ e^{−ψ} < ∞, μ_ψ is the measure with density e^{−ψ} on R^n and ∇ψ is defined almost everywhere in the interior of {ψ < +∞}. The Legendre transform is ψ*(y) = sup_{ψ(x)<∞} [x·y − ψ(x)]; ∂ψ is the subgradient; D²f is the Aleksandrov Hessian of a convex f; Supp(μ) is the closed support, conv its convex hull, H^{n−1} the (n−1)-dimensional Hausdorff measure, κ_n the volume of the Euclidean unit ball, S^{n−1} the unit sphere. Cited, unproved inputs: integrability of e^{−ψ} iff liminf_{|x|→∞} ψ(x)/|x| > 0 (display (7), from Klartag, Lemma 2.1), (13), Prékopa's inequality (17) and Dubuc's characterisation of its equality cases, the Brenier map and McCann's weak regularity (20), the Rogers–Shephard inequality, Fradelizi's inequality ψ(0) ≤ inf ψ + n at the barycenter, the functional Santaló inequality of Artstein–Klartag–Milman, Rockafellar's Theorem 10.9 and Berman–Berndtsson Lemma 2.7. Numbering: Theorem, Proposition, Lemma, Corollary, Remark, Notation, Fact and Conjecture share one global counter (theo); Definition has its own counter; no section-relative numbering and no appendix; no Corollary, Notation, Fact, Conjecture or Claim occurs. The printed numbers Definitions 1–2 and Theorem/Proposition/Lemma/Remark 1–17 were computed from the LaTeX counters and checked against the PDF text.",
         "omitted": "All 19 numbered statements of v1 are listed except Remark 11, a purely expository heuristic (the measure in Theorem 8 might become a distribution acting through the asymptotic slope of φ when ψ0 is not essentially continuous). Unnumbered displayed claims are not listed: the integrability criterion (7) and (13), the Legendre identity (12), the support identity (16) (stated without proof), the Prékopa inequality (17) for Legendre transforms (deduced from Prékopa's theorem), the example moment measures (simplex, Gaussian, sphere, cube (5)), the Monge–Ampère equation (4), the one-dimensional formula, the end-of-Section-2 observations on conv(Supp μ), and the Section 5 discussion of cone-volume and surface-area variants. Reviewed Lean candidates with no item mapped: FunctionalInequalities.KLS.LogConcave (KLS/Definitions.lean), FunctionalInequalities.KLS.IsBorellDensity and its lemmas (KLS/LogConcave/Density/BorellRepresentation/Basic.lean, Density/Bounds.lean), FunctionalInequalities.Probability.Line.prekopaLeindler (Probability/Line/BrunnMinkowski.lean) and FunctionalInequalities.Analysis.prekopaLeindler (Probability/BrunnMinkowski.lean); the finite-dimensional Prékopa–Leindler inequality is an available ingredient for (17) (with f = e^{−u0*}, g = e^{−u1*}, h = e^{−[(1−λ)u0+λu1]*}) but states neither (17) nor any numbered item.",
         "items": [
@@ -3505,7 +3530,7 @@
             "uses": [],
             "relation": "same",
             "declarations": [],
-            "note": "Translation of ψ leaves μ unchanged; adding λ to ψ multiplies μ by e^{−λ}. No Lean declaration: the library has no extended-real convex potentials, Legendre transforms, gradient push-forwards or moment measures."
+            "note": "Translation of ψ leaves μ unchanged; adding λ to ψ multiplies μ by e^{−λ}. No Lean declaration. The library has extended-real convex potentials and the Legendre transform (Analysis/Convex/Legendre.lean) and the exponential-potential measure, mass and CEK functional (Probability/MomentMeasure/Basic.lean), but no gradient push-forward, moment-measure predicate or essential-continuity definition."
           },
           {
             "id": "D2",
@@ -3515,7 +3540,7 @@
             "uses": [],
             "relation": "same",
             "declarations": [],
-            "note": "Every finite convex function is essentially continuous; in dimension one the notion equals continuity. No Lean declaration: the library has no extended-real convex potentials, Legendre transforms, gradient push-forwards or moment measures."
+            "note": "Every finite convex function is essentially continuous; in dimension one the notion equals continuity. No Lean declaration. The library has extended-real convex potentials and the Legendre transform (Analysis/Convex/Legendre.lean) and the exponential-potential measure, mass and CEK functional (Probability/MomentMeasure/Basic.lean), but no gradient push-forward, moment-measure predicate or essential-continuity definition."
           },
           {
             "id": "P1",
@@ -3528,7 +3553,7 @@
             ],
             "relation": "same",
             "declarations": [],
-            "note": "Proof: barycenter 0 from the 'furthermore' part of Lemma 4; support not in a hyperplane through 0 by Lemma 6, hence not in any hyperplane since the barycenter is 0. These are the necessity half of the bijection announced before Theorem 2. No Lean declaration: the library has no extended-real convex potentials, Legendre transforms, gradient push-forwards or moment measures."
+            "note": "Proof: barycenter 0 from the 'furthermore' part of Lemma 4; support not in a hyperplane through 0 by Lemma 6, hence not in any hyperplane since the barycenter is 0. These are the necessity half of the bijection announced before Theorem 2. No Lean declaration. The library has extended-real convex potentials and the Legendre transform (Analysis/Convex/Legendre.lean) and the exponential-potential measure, mass and CEK functional (Probability/MomentMeasure/Basic.lean), but no gradient push-forward, moment-measure predicate or essential-continuity definition."
           },
           {
             "id": "T2",
@@ -3543,7 +3568,7 @@
             ],
             "relation": "same",
             "declarations": [],
-            "note": "Main item: the paper calls it 'Our main result' and the title, abstract and Section 4 ('Existence and Uniqueness') are devoted to it; with Proposition 1 it gives the bijection between essentially continuous convex functions modulo translation and such measures. Uniqueness: for two potentials ψ0, ψ1, apply Theorem 8 to each against ψ_{1/2} = ((ψ0* + ψ1*)/2)* (integrability by Proposition 7), get equality in Prékopa's inequality (17), and conclude by Dubuc's equality characterisation. Existence: normalise μ to a probability, take the maximiser φ of Proposition 12, set ψ = φ*; Jensen and the Kantorovich dual problem (**) with the variation φ + t b (Berman–Berndtsson Lemma 2.7) give (∇ψ)_# e^{−ψ} = μ, and Proposition 10 gives essential continuity. No Lean declaration: the library has no extended-real convex potentials, Legendre transforms, gradient push-forwards or moment measures. The Prékopa–Leindler theorems FunctionalInequalities.Analysis.prekopaLeindler and FunctionalInequalities.Probability.Line.prekopaLeindler would supply (17) only after the Legendre-transform reduction.",
+            "note": "Main item: the paper calls it 'Our main result' and the title, abstract and Section 4 ('Existence and Uniqueness') are devoted to it; with Proposition 1 it gives the bijection between essentially continuous convex functions modulo translation and such measures. Uniqueness: for two potentials ψ0, ψ1, apply Theorem 8 to each against ψ_{1/2} = ((ψ0* + ψ1*)/2)* (integrability by Proposition 7), get equality in Prékopa's inequality (17), and conclude by Dubuc's equality characterisation. Existence: normalise μ to a probability, take the maximiser φ of Proposition 12, set ψ = φ*; Jensen and the Kantorovich dual problem (**) with the variation φ + t b (Berman–Berndtsson Lemma 2.7) give (∇ψ)_# e^{−ψ} = μ, and Proposition 10 gives essential continuity. No Lean declaration. The library has extended-real convex potentials and the Legendre transform (Analysis/Convex/Legendre.lean) and the exponential-potential measure, mass and CEK functional (Probability/MomentMeasure/Basic.lean), but no gradient push-forward, moment-measure predicate or essential-continuity definition. The Prékopa–Leindler theorems FunctionalInequalities.Analysis.prekopaLeindler and FunctionalInequalities.Probability.Line.prekopaLeindler would supply (17) only after the Legendre-transform reduction. Proposition 12 attainment is formalized (KLS.CEK.exists_variational_maximum); essential continuity, the Euler–Lagrange identification, existence and uniqueness are not.",
             "main": true
           },
           {
@@ -3554,7 +3579,7 @@
             "uses": [],
             "relation": "same",
             "declarations": [],
-            "note": "Proof: the projection of the H^{n−1}-null discontinuity set onto H is H^{n−1}-null; convexity gives local Lipschitz continuity. No Lean declaration: the library has no extended-real convex potentials, Legendre transforms, gradient push-forwards or moment measures."
+            "note": "Proof: the projection of the H^{n−1}-null discontinuity set onto H is H^{n−1}-null; convexity gives local Lipschitz continuity. No Lean declaration. The library has extended-real convex potentials and the Legendre transform (Analysis/Convex/Legendre.lean) and the exponential-potential measure, mass and CEK functional (Probability/MomentMeasure/Basic.lean), but no gradient push-forward, moment-measure predicate or essential-continuity definition."
           },
           {
             "id": "L4",
@@ -3578,7 +3603,7 @@
             ],
             "relation": "same",
             "declarations": [],
-            "note": "Proof: ∇ψ(x)·(x − x0) ≥ ψ(x) − ψ(x0) is bounded below; the divergence theorem on smooth convex compact K ∋ x0 inside {ψ < ∞} bounds the integral by n∫e^{−ψ}; Lemma 4 handles ∇ψ·x0. The paper notes equality holds but neither uses nor proves it. No Lean declaration: the library has no extended-real convex potentials, Legendre transforms, gradient push-forwards or moment measures."
+            "note": "Proof: ∇ψ(x)·(x − x0) ≥ ψ(x) − ψ(x0) is bounded below; the divergence theorem on smooth convex compact K ∋ x0 inside {ψ < ∞} bounds the integral by n∫e^{−ψ}; Lemma 4 handles ∇ψ·x0. The paper notes equality holds but neither uses nor proves it. No Lean declaration. The library has extended-real convex potentials and the Legendre transform (Analysis/Convex/Legendre.lean) and the exponential-potential measure, mass and CEK functional (Probability/MomentMeasure/Basic.lean), but no gradient push-forward, moment-measure predicate or essential-continuity definition."
           },
           {
             "id": "L6",
@@ -3590,7 +3615,7 @@
             ],
             "relation": "same",
             "declarations": [],
-            "note": "Proof: if Supp(μ) ⊆ θ^⊥ then ∂_θ ρ = 0 a.e.; by Lemma 3, ρ is constant on almost every line in direction θ, so ∫ρ ∈ {0, ∞} by Fubini, a contradiction. No Lean declaration: the library has no extended-real convex potentials, Legendre transforms, gradient push-forwards or moment measures."
+            "note": "Proof: if Supp(μ) ⊆ θ^⊥ then ∂_θ ρ = 0 a.e.; by Lemma 3, ρ is constant on almost every line in direction θ, so ∫ρ ∈ {0, ∞} by Fubini, a contradiction. No Lean declaration. The library has extended-real convex potentials and the Legendre transform (Analysis/Convex/Legendre.lean) and the exponential-potential measure, mass and CEK functional (Probability/MomentMeasure/Basic.lean), but no gradient push-forward, moment-measure predicate or essential-continuity definition."
           },
           {
             "id": "P7",
@@ -3602,7 +3627,7 @@
             ],
             "relation": "same",
             "declarations": [],
-            "note": "Proof: φ(∇ψ(x)) = x·∇ψ(x) − ψ(x) μ_ψ-a.e. (12); x·∇ψ ∈ L¹(μ_ψ) by Lemma 5, and ψ ∈ L¹(μ_ψ) since ψ is bounded below and ψe^{−ψ} ≤ 2e^{−ψ/2} with (7) (display (15)). No essential continuity is assumed. No Lean declaration: the library has no extended-real convex potentials, Legendre transforms, gradient push-forwards or moment measures."
+            "note": "Proof: φ(∇ψ(x)) = x·∇ψ(x) − ψ(x) μ_ψ-a.e. (12); x·∇ψ ∈ L¹(μ_ψ) by Lemma 5, and ψ ∈ L¹(μ_ψ) since ψ is bounded below and ψe^{−ψ} ≤ 2e^{−ψ/2} with (7) (display (15)). No essential continuity is assumed. No Lean declaration. The library has extended-real convex potentials and the Legendre transform (Analysis/Convex/Legendre.lean) and the exponential-potential measure, mass and CEK functional (Probability/MomentMeasure/Basic.lean), but no gradient push-forward, moment-measure predicate or essential-continuity definition."
           },
           {
             "id": "T8",
@@ -3616,7 +3641,7 @@
             ],
             "relation": "same",
             "declarations": [],
-            "note": "Printed title 'Prékopa's theorem revisited'. Proof: Brenier map T = ∇f from e^{−ψ0} to e^{−ψ1}1_L (L a large ball), McCann's a.e. Monge–Ampère equation (20), log s ≤ s − 1 and the Legendre inequalities give (21); the integration by parts ∫(Δf − ∇ψ0·∇f) dμ_ψ0 ≤ 0 follows line by line from Lemma 9 using Lemma 3, and Lemma 5 controls the remaining term. Expresses −μ̄ as a subgradient of the convex functional J(u) = −log ∫ e^{−u*}. No Lean declaration: the library has no extended-real convex potentials, Legendre transforms, gradient push-forwards or moment measures."
+            "note": "Printed title 'Prékopa's theorem revisited'. Proof: Brenier map T = ∇f from e^{−ψ0} to e^{−ψ1}1_L (L a large ball), McCann's a.e. Monge–Ampère equation (20), log s ≤ s − 1 and the Legendre inequalities give (21); the integration by parts ∫(Δf − ∇ψ0·∇f) dμ_ψ0 ≤ 0 follows line by line from Lemma 9 using Lemma 3, and Lemma 5 controls the remaining term. Expresses −μ̄ as a subgradient of the convex functional J(u) = −log ∫ e^{−u*}. No Lean declaration. The library has extended-real convex potentials and the Legendre transform (Analysis/Convex/Legendre.lean) and the exponential-potential measure, mass and CEK functional (Probability/MomentMeasure/Basic.lean), but no gradient push-forward, moment-measure predicate or essential-continuity definition."
           },
           {
             "id": "L9",
@@ -3639,7 +3664,7 @@
             ],
             "relation": "same",
             "declarations": [],
-            "note": "Converse to Theorem 8. Proof: near x0 in A = {x ∈ ∂{ψ<∞} : ψ(x) < ∞} write the boundary as a Lipschitz graph; test with φ_ε = max{φ, φ + ε(y·θ) − 1}: the right side is o(ε) by first moments (Lemma 4), while ∫e^{−ψ_ε} gains at least ε c0^{n−1} e^{−(k0+1)} H^{n−1}(A^{k0}), forcing H^{n−1}(A^{k0}) = 0. μ-integrability of φ_ε uses Proposition 7. No Lean declaration: the library has no extended-real convex potentials, Legendre transforms, gradient push-forwards or moment measures."
+            "note": "Converse to Theorem 8. Proof: near x0 in A = {x ∈ ∂{ψ<∞} : ψ(x) < ∞} write the boundary as a Lipschitz graph; test with φ_ε = max{φ, φ + ε(y·θ) − 1}: the right side is o(ε) by first moments (Lemma 4), while ∫e^{−ψ_ε} gains at least ε c0^{n−1} e^{−(k0+1)} H^{n−1}(A^{k0}), forcing H^{n−1}(A^{k0}) = 0. μ-integrability of φ_ε uses Proposition 7. No Lean declaration. The library has extended-real convex potentials and the Legendre transform (Analysis/Convex/Legendre.lean) and the exponential-potential measure, mass and CEK functional (Probability/MomentMeasure/Basic.lean), but no gradient push-forward, moment-measure predicate or essential-continuity definition."
           },
           {
             "id": "P12",
@@ -3650,9 +3675,54 @@
               "L15",
               "L17"
             ],
-            "relation": "same",
-            "declarations": [],
-            "note": "Variational problem of Berman–Berndtsson. Proof: truncate a maximising sequence below, replace by biconjugates, normalise φ_ℓ(0) = inf φ_ℓ = 0; Lemma 15 and log t = o(t^{1/n}) bound sup_ℓ ∫e^{−φ_ℓ*} and sup_ℓ ∫φ_ℓ dμ; Lemma 17 extracts a limit with I_μ(φ) ≥ limsup I_μ(φ_ℓj). No Lean declaration: the library has no extended-real convex potentials, Legendre transforms, gradient push-forwards or moment measures."
+            "relation": "stronger",
+            "declarations": [
+              {
+                "name": "FunctionalInequalities.KLS.CEK.exists_variational_maximum",
+                "source": "formalization/FunctionalInequalities/KLS/CEK/VariationalMaximum.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.CEK.exists_limit_ge_normalized_supremum",
+                "source": "formalization/FunctionalInequalities/KLS/CEK/VariationalMaximum.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.CEK.exists_normalized_maximizing_sequence",
+                "source": "formalization/FunctionalInequalities/KLS/CEK/VariationalMaximum.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.CEK.exists_finite_baseline_and_upper",
+                "source": "formalization/FunctionalInequalities/KLS/CEK/Competitors.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.CEK.exists_normalized_competitor",
+                "source": "formalization/FunctionalInequalities/KLS/CEK/Competitors.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Probability.MomentMeasure.exists_coercivity_of_centered_probability",
+                "source": "formalization/FunctionalInequalities/Probability/MomentMeasure/Coercivity.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Probability.MomentMeasure.exists_convexified_lowerTruncate_variational_le_add",
+                "source": "formalization/FunctionalInequalities/Probability/MomentMeasure/Truncation.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Probability.MomentMeasure.variationalFunctional_affineSubtract",
+                "source": "formalization/FunctionalInequalities/Probability/MomentMeasure/Affine.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Probability.MomentMeasure.log_sub_ge_of_integral_limits",
+                "source": "formalization/FunctionalInequalities/Probability/MomentMeasure/ConjugateMass.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Probability.MomentMeasure.norm_baseline_finite",
+                "source": "formalization/FunctionalInequalities/Probability/MomentMeasure/Baseline.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.exists_supporting_affine_at_zero",
+                "source": "formalization/FunctionalInequalities/Analysis/Convex/SupportingPlane.lean"
+              }
+            ],
+            "note": "Variational problem of Berman–Berndtsson. Proof: truncate a maximising sequence below, replace by biconjugates, normalise φ_ℓ(0) = inf φ_ℓ = 0; Lemma 15 and log t = o(t^{1/n}) bound sup_ℓ ∫e^{−φ_ℓ*} and sup_ℓ ∫φ_ℓ dμ; Lemma 17 extracts a limit with I_μ(φ) ≥ limsup I_μ(φ_ℓj). Formalized (KLS.CEK.exists_variational_maximum): for a probability measure μ on a finite-dimensional real inner product space (dimension 0 included) with finite first moment, barycenter 0 and no proper linear subspace of full measure, and any additive Haar measure dx, there is φ: E → (−∞, +∞] with convex real epigraph, lower semicontinuous and μ-integrable, with ∫ e^{−φ*} dx = 1 and I_μ(f) ≤ I_μ(φ) for every μ-integrable f (convex or not). Reviewed stronger: lower semicontinuity and the general Haar/space scope are added; no maximising sequence, bound or optimizer is supplied. Different route for the bounds: a measure-dependent polynomial conjugate-mass bound (exists_coercivity_of_centered_probability) replaces the particular constant of Lemma 15, and the normalisation subtracts a supporting affine function produced by Hahn–Banach separation. Adopted 2026-10-10 from the root-accepted CEK Proposition 12 candidate; clients research/audits/CEK/Proposition12Audit.lean and FunctionalLimitAudit.lean."
           },
           {
             "id": "R13",
@@ -3664,7 +3734,7 @@
             ],
             "relation": "same",
             "declarations": [],
-            "note": "Not purely expository: it asserts the concavity of I_μ (from (17)) and the maximising property of ψ0* (from Theorem 8), without separate proof. No Lean declaration: the library has no extended-real convex potentials, Legendre transforms, gradient push-forwards or moment measures."
+            "note": "Not purely expository: it asserts the concavity of I_μ (from (17)) and the maximising property of ψ0* (from Theorem 8), without separate proof. No Lean declaration. The library has extended-real convex potentials and the Legendre transform (Analysis/Convex/Legendre.lean) and the exponential-potential measure, mass and CEK functional (Probability/MomentMeasure/Basic.lean), but no gradient push-forward, moment-measure predicate or essential-continuity definition."
           },
           {
             "id": "L14",
@@ -3674,7 +3744,7 @@
             "uses": [],
             "relation": "same",
             "declarations": [],
-            "note": "Proof: with K = {φ ≤ 1}, Rogers–Shephard gives Vol(K − K) ≤ 4^n Vol(K), so K − K has inradius at most R_φ = 4κ_n^{−1/n} Vol(K)^{1/n}; convexity gives φ(x) ≥ |x·θ0|/R_φ + inf φ − 1 and ∫e^{−φ} ≥ Vol(K)/e. No Lean declaration: the library has no extended-real convex potentials, Legendre transforms, gradient push-forwards or moment measures."
+            "note": "Proof: with K = {φ ≤ 1}, Rogers–Shephard gives Vol(K − K) ≤ 4^n Vol(K), so K − K has inradius at most R_φ = 4κ_n^{−1/n} Vol(K)^{1/n}; convexity gives φ(x) ≥ |x·θ0|/R_φ + inf φ − 1 and ∫e^{−φ} ≥ Vol(K)/e. No Lean declaration. The library has extended-real convex potentials and the Legendre transform (Analysis/Convex/Legendre.lean) and the exponential-potential measure, mass and CEK functional (Probability/MomentMeasure/Basic.lean), but no gradient push-forward, moment-measure predicate or essential-continuity definition."
           },
           {
             "id": "L15",
@@ -3686,7 +3756,7 @@
             ],
             "relation": "same",
             "declarations": [],
-            "note": "Proof: ∫φ dμ ≥ 0 via a subgradient at 0 and the zero barycenter; after translating ψ to have barycenter 0, Fradelizi's inequality gives inf φ = −ψ(0) ≥ −n, Lemma 14 applies, and the functional Santaló inequality ∫e^{−ψ} ∫e^{−φ} ≤ (2π)^n of Artstein–Klartag–Milman concludes. No Lean declaration: the library has no extended-real convex potentials, Legendre transforms, gradient push-forwards or moment measures."
+            "note": "Proof: ∫φ dμ ≥ 0 via a subgradient at 0 and the zero barycenter; after translating ψ to have barycenter 0, Fradelizi's inequality gives inf φ = −ψ(0) ≥ −n, Lemma 14 applies, and the functional Santaló inequality ∫e^{−ψ} ∫e^{−φ} ≤ (2π)^n of Artstein–Klartag–Milman concludes. No Lean declaration. The library has extended-real convex potentials and the Legendre transform (Analysis/Convex/Legendre.lean) and the exponential-potential measure, mass and CEK functional (Probability/MomentMeasure/Basic.lean), but no gradient push-forward, moment-measure predicate or essential-continuity definition. The adopted Proposition 12 proof uses a different, measure-dependent polynomial coercivity bound (Probability.MomentMeasure.exists_coercivity_of_centered_probability); the constant of this lemma is not formalized."
           },
           {
             "id": "L16",
@@ -3694,9 +3764,34 @@
             "label": "Pointwise bound by the integral",
             "statement": "Let μ be a finite Borel measure on R^n and K the interior of conv(Supp(μ)). For every x0 ∈ K there is C_{μ,x0} > 0 such that φ(x0) ≤ C_{μ,x0} ∫ φ dμ for every nonnegative μ-integrable convex φ: R^n → R ∪ {+∞}.",
             "uses": [],
-            "relation": "same",
-            "declarations": [],
-            "note": "Proof: m_{μ,x0} = inf_θ μ{(x − x0)·θ > 0} > 0 by Fatou and compactness of S^{n−1}; integrate the supporting-hyperplane bound over a half-space; C_{μ,x0} = 1/m_{μ,x0}. No Lean declaration: the library has no extended-real convex potentials, Legendre transforms, gradient push-forwards or moment measures."
+            "relation": "alternative",
+            "declarations": [
+              {
+                "name": "FunctionalInequalities.Probability.exists_pos_le_mul_lintegral_toReal_of_convex_epigraph",
+                "source": "formalization/FunctionalInequalities/Probability/ConvexSupport.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Probability.mem_interior_setOf_ne_top_of_lintegral_ne_top",
+                "source": "formalization/FunctionalInequalities/Probability/ConvexSupport.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Probability.exists_pos_le_measure_halfspace_of_mem_interior_convexHull_support_of_isFiniteMeasure",
+                "source": "formalization/FunctionalInequalities/Probability/ConvexSupport.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Probability.exists_pos_le_measure_halfspace_of_mem_interior_convexHull_support",
+                "source": "formalization/FunctionalInequalities/Probability/ConvexSupport.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Probability.exists_mem_support_inner_sub_pos_of_mem_interior_convexHull",
+                "source": "formalization/FunctionalInequalities/Probability/ConvexSupport.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Probability.exists_pos_ball_inner_sub_pos_of_mem_support",
+                "source": "formalization/FunctionalInequalities/Probability/ConvexSupport.lean"
+              }
+            ],
+            "note": "Proof: m_{μ,x0} = inf_θ μ{(x − x0)·θ > 0} > 0 by Fatou and compactness of S^{n−1}; integrate the supporting-hyperplane bound over a half-space; C_{μ,x0} = 1/m_{μ,x0}. Formalized with the source statement (exists_pos_le_mul_lintegral_toReal_of_convex_epigraph): for a finite Borel measure on a finite-dimensional real inner product space (dimension 0 included) and x0 in the interior of the convex hull of its support, one C > 0, chosen before φ, gives φ(x0) ≤ C ∫ φ dμ for every nonnegative extended-real φ with convex real epigraph, a.e.-measurable values and finite integral. Different route: the uniform halfspace bound (54) is proved for probability measures by a finite product of ball masses over a cover of the unit sphere, not Fatou, and transported to finite measures by normalization (m ≤ μ(R^n)); the point bound uses finiteness of φ near interior points of the support hull (mem_interior_setOf_ne_top_of_lintegral_ne_top) and a halfspace-or-global-minimum alternative for the strict sublevel set. Promoted 2026-10-09 from the root-accepted CEK integration candidate; clients research/audits/CEK/PointControlAudit.lean (mass-two boundary measure, dimension 0) and research/audits/BKL/ConvexSupportAudit.lean."
           },
           {
             "id": "L17",
@@ -3706,9 +3801,34 @@
             "uses": [
               "L16"
             ],
-            "relation": "same",
-            "declarations": [],
-            "note": "Proof: Lemma 16 gives pointwise bounds on K = int conv(Supp μ); Rockafellar Theorem 10.9 gives a pointwise convergent subsequence on K; extend φ radially to ∂K, use Fatou and monotone convergence for the first inequality, and a finite dense max-affine approximation of φ* for the second. No Lean declaration: the library has no extended-real convex potentials, Legendre transforms, gradient push-forwards or moment measures."
+            "relation": "partial",
+            "declarations": [
+              {
+                "name": "FunctionalInequalities.Probability.MomentMeasure.exists_subseq_integral_bounds_of_convex_epigraph",
+                "source": "formalization/FunctionalInequalities/Probability/MomentMeasure/Compactness.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Probability.exists_subseq_lintegral_le_liminf_of_convex_epigraph",
+                "source": "formalization/FunctionalInequalities/Probability/MomentMeasure/Compactness.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Probability.MomentMeasure.limsup_mass_legendre_le",
+                "source": "formalization/FunctionalInequalities/Probability/MomentMeasure/ConjugateMass.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.exists_subseq_tendsto_of_convexOn_of_bddAbove",
+                "source": "formalization/FunctionalInequalities/Analysis/Convex/PointwiseCompactness.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.exists_radial_extension_of_convexOn",
+                "source": "formalization/FunctionalInequalities/Analysis/Convex/RadialExtension.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Probability.zero_mem_interior_convexHull_support_of_integral_eq_zero",
+                "source": "formalization/FunctionalInequalities/Probability/ConvexSupport.lean"
+              }
+            ],
+            "note": "Proof: Lemma 16 gives pointwise bounds on K = int conv(Supp μ); Rockafellar Theorem 10.9 gives a pointwise convergent subsequence on K; extend φ radially to ∂K, use Fatou and monotone convergence for the first inequality, and a finite dense max-affine approximation of φ* for the second. Formalized in geometric form (MomentMeasure.exists_subseq_integral_bounds_of_convex_epigraph): for a finite Borel measure μ on a finite-dimensional real inner product space with 0 ∈ int conv(Supp μ) as an explicit hypothesis, and nonnegative φ_ℓ with convex real epigraph, φ_ℓ(0) = 0, a.e.-measurable values and sup_ℓ ∫ φ_ℓ dμ < ∞, one subsequence and one nonnegative convex μ-integrable limit satisfy both (56a) and (56b), the latter for every additive Haar measure; the limit is finite and attained on K, radially closed and +∞ off the closure of K, and finiteness of ∫ e^{−φ*} is derived (zero mass, a non-probability μ and dimension 0 included). Partial for the source item: the source assumes the conditions of Theorem 2. The adapter from a nonzero finite measure with finite first moment, barycenter 0 and no proper linear subspace of full measure to 0 ∈ int conv(Supp μ) is formalized (Probability.zero_mem_interior_convexHull_support_of_integral_eq_zero, adopted 2026-10-10), but no declaration states their composition in the source form. Promoted 2026-10-09 from the root-accepted CEK integration candidate; clients research/audits/CEK/Lemma17Audit.lean and ConjugateMassAudit.lean."
           }
         ]
       }
@@ -4531,7 +4651,7 @@
             "declarations": [
               {
                 "name": "FunctionalInequalities.Analysis.trace_rpow_mul_rpow_mul_le",
-                "source": "formalization/FunctionalInequalities/Analysis/MatrixTrace.lean"
+                "source": "formalization/FunctionalInequalities/Analysis/Matrix/Trace.lean"
               }
             ],
             "note": "Attributed to Eldan 2013. Lean states it for real square matrices over any finite index type, with A^α the continuous functional calculus cfc (· ^ α) A; the proof diagonalizes A and uses (a^α − b^α)(a^β − b^β) ≥ 0 in place of weighted AM-GM. Deterministic."
@@ -7700,15 +7820,60 @@
       "url": "https://arxiv.org/html/2607.24164v1",
       "locator": "Theorems 1.1 and 1.2",
       "result": "For isotropic log-concave X and symmetric M, Var(XᵀMX) ≤ 8‖M‖²_HS = 2 E‖∇(XᵀMX)‖². For n ≥ 2, ψₙ = O((log n)^(1/4)), hence C_P = O(√log n).",
-      "remaining": "The quadratic inequality, its moment-map/Stein proof and the κₙ-to-KLS conversion are not locally formalized. Quadratic tests do not suffice for full KLS.",
-      "local_results": [],
+      "remaining": "The covariance step of the proof of Theorem 1.2 (p. 14, Cov(|M|^{1/2} X) = |M| for every symmetric M) is formalized; the Stein-kernel identity (2.21), Theorem 2.5 and the quadratic inequality, its moment-map/Stein proof and the κₙ-to-KLS conversion are not locally formalized. Quadratic tests do not suffice for full KLS. Two supporting identities (Lemma A.3 and the finite form of (2.12)) are formalized; the moment map, its regularity (A.1), the Hessian-metric generator and Theorem 2.5 are not. Lemma A.4 is formalized for every potential in the source class, with the moment-map properties of Lemma 2.2 as hypotheses (reviewed stronger): cutoffs for every real R ≥ 1 with ‖Lχ_R‖_{L¹(ν)} ≤ C/R and the natural-index form; Lemma A.5 is formalized for given cutoffs, and the two are applied to the uniform law on (−√3, √3) with the nonconstant f = tanh²(√3y/2). A general source-class Lemma A.5 without the cutoff premise is not a separate statement; the moment map (Lemmas 2.1–2.2), Theorem 2.5 and Theorems 1.1–1.2 are not formalized.",
+      "local_results": [
+        {
+          "node": "lem:letwin-support-identities",
+          "scope": "Lemma A.3 (weighted directional IBP, any direction) and the finite identity (2.12) with arbitrary real weights"
+        },
+        {
+          "node": "lem:letwin-support-identities",
+          "scope": "Lemma 2.3 in conditional generic form: for any smooth potential with ν = e^{-φ} m a probability law and isotropic gradient law (∇φ)_* ν, with Hessian integrability, the mean Hessian is the identity; the moment-map producer and the source regularity class are not formalized"
+        },
+        {
+          "node": "lem:letwin-stein-dual",
+          "scope": "Definition 2.6 (compact-test Stein kernel, HS norm), (2.19) H^{-1} norm as an extended supremum, A.7 (locally Lipschitz extension and Cauchy–Schwarz) and Lemma 2.9 for full-dimensional log-concave laws; no kernel construction, no Theorem 1.1/1.2 coverage"
+        },
+        {
+          "node": "lem:letwin-mean-hessian",
+          "scope": "Lemma 2.3 analytic part for a given smooth convex normalized potential with isotropic gradient law: Hessian integrability derived and mean Hessian = Id; moment map not constructed"
+        },
+        {
+          "node": "lem:letwin-hessian-kernel",
+          "scope": "Lemma 2.7 analytic part for a given normalized convex potential with isotropic gradient image and injective gradient: the Hessian kernel is a symmetric PSD integrable Stein kernel with mean Id; moment-map existence, strict PD and HS-L² open"
+        },
+        {
+          "node": "lem:letwin-mapped-covariance",
+          "scope": "Proof of Theorem 1.2, p. 14, covariance step preceding (2.21): Cov(|M|^{1/2} X) = |M| for isotropic X and every real symmetric M (singular, indefinite, dimension zero; reviewed stronger than the invertible reduction); not (2.21), Theorem 2.5 or Theorem 1.2"
+        },
+        {
+          "node": "lem:letwin-cutoff-profile",
+          "scope": "Lemma A.4, real-variable part only: profile η(t) = smoothTransition(2 − t) with derivative support and bound, smooth majorant w ≥ |η″| vanishing for t ≤ 0 and t ≥ 3, monotone exhaustion η(a/(n+1)) ↑ 1 and η(a/R) ↑ 1 for real R > 0, tail primitive q_R(t) = R⁻¹∫_{t/R}^3 w (R > 0), affine rescaling of derivatives; the cutoffs η((φ − min φ + 1)/R), their compact support and the O(1/R) defect bound are lem:letwin-a4-cutoffs"
+        },
+        {
+          "node": "lem:letwin-inverse-hessian-quadratic",
+          "scope": "Lemma A.4 support only: nonnegative inverse-Hessian quadratic form Σ A_ij a_i a_j ≥ 0 at a point with positive definite C² Hessian, any orthonormal basis and rank; consumed by the pointwise defect domination of lem:letwin-a4-cutoffs"
+        },
+        {
+          "node": "lem:letwin-a4-cutoffs",
+          "scope": "Lemma A.4 for every potential in the source class (smooth convex φ with bounded gradient image, V smooth near its closure, Monge–Ampère, PD Hessian, ∫e^{−φ} = 1; any finite dimension, any Haar measure): cutoffs for every real R ≥ 1 with ∫|Lχ_R| dν ≤ C/R and the natural-index C/(n+1) form; the moment-map properties are hypotheses, the moment map is not constructed"
+        },
+        {
+          "node": "lem:letwin-a5-cutoffs",
+          "scope": "Lemma A.5 with the cutoffs as a premise (bounded smooth f, Lf + cf ≥ 0, cutoffs with the conclusions of A.4); not a general source-class statement without the cutoff premise"
+        },
+        {
+          "node": "lem:letwin-uniform-interval-client",
+          "scope": "Lemmas A.4–A.5 applied to the uniform law on (−√3, √3) (explicit moment potential, V ≡ log(2√3)) with the nonconstant f = tanh²(√3y/2): Lf ∈ L¹(ν) and ∫Lf dν = 0; gradient range inclusion only, no pushforward; not Theorem 2.5 or 1.2"
+        }
+      ],
       "diagram": "27 July 2026 · Letwin<br/>ψₙ = O((log n)^(1/4))",
       "lemma_map": {
         "source_version": "arXiv:2607.24164v1",
         "source_url": "https://arxiv.org/abs/2607.24164v1",
         "reviewed_on": "2026-10-03",
         "standing_assumptions": "Probability measures on R^n, n >= 2; log-concave means a log-concave density on the affine hull of the support (Borell); isotropic means mean 0 and covariance Id. C_P is the optimal Poincare constant for locally Lipschitz tests, psi_mu the inverse isoperimetric (Cheeger) constant with min{mu(A), 1 - mu(A)} denominator over smooth-boundary open sets, psi_n = sup psi_mu over isotropic log-concave mu on R^n. Throughout Section 2 and Appendix A (except Lemmas A.1, A.2 and the general Stein-kernel statements Definition 2.6, Proposition 2.8, Lemmas 2.9 and A.7) mu is regular: dmu = e^{-V} 1_K dx with K bounded open convex and V smooth convex near the closure of K; phi is its moment map, nu = e^{-phi} dy, (phi^{ij}) = (Hess phi)^{-1}, L f = phi^{ij} d_ij f - (V_i o grad phi) d_i f, Einstein summation. C denotes absolute constants. All 18 numbered environments share one per-section counter (Theorem 1.1-1.2; Lemma 2.1-2.4, Theorem 2.5, Definition 2.6, Lemma 2.7, Proposition 2.8, Lemma 2.9; Lemma A.1-A.7) and are listed; the unnumbered definitions, the comparison display and the conjecture statement of Section 1 are listed because Lean declarations state them.",
-        "omitted": "The paper has no Remark, Corollary, Fact, Claim or Conjecture environment. Omitted unnumbered material: the expository discussion after Theorem 1.2 (sharpness of the constant 2 for the isotropic exponential vector with M = Id, recorded in the note of T12, and the Bobkov-Chistyakov-Gotze second-order correlation consequence), Eldan's parameter kappa_n (defined inside the proof of Theorem 1.1, recorded in the note of T11), the Notation and AI Disclosure subsections, the footnote to Theorem 2.5, and the motivating remarks before Lemma 2.3 and before the proof of Theorem 1.2. Numbered displays (1.2)-(2.22) are recorded with the statements they belong to: (1.2) in T12, (2.1) in LA3, (2.2)-(2.3) in the note of L22, (2.4)-(2.6) in L24, (2.7)-(2.17) in T25, (2.18) in D26, (2.19)-(2.20) in P28, (2.21)-(2.22) in T12 and LA2.",
+        "omitted": "The paper has no Remark, Corollary, Fact, Claim or Conjecture environment. Omitted unnumbered material: the expository discussion after Theorem 1.2 (sharpness of the constant 2 for the isotropic exponential vector with M = Id, recorded in the note of T12, and the Bobkov-Chistyakov-Gotze second-order correlation consequence), Eldan's parameter kappa_n (defined inside the proof of Theorem 1.1, recorded in the note of T11), the Notation and AI Disclosure subsections, the footnote to Theorem 2.5, and the motivating remarks before Lemma 2.3 and before the proof of Theorem 1.2. Display (2.3) is now listed as E23. Numbered displays (1.2)-(2.22) are recorded with the statements they belong to: (1.2) in T12, (2.1) in LA3, (2.2)-(2.3) in the note of L22, (2.4)-(2.6) in L24, (2.7)-(2.17) in T25, (2.18) in D26, (2.19)-(2.20) in P28, (2.21)-(2.22) in T12 and LA2; the unnumbered covariance display preceding (2.21) on p. 14 is CZ14.",
         "items": [
           {
             "id": "DISO",
@@ -7834,11 +7999,32 @@
               "P28",
               "L29",
               "LA1",
-              "LA2"
+              "LA2",
+              "CZ14"
             ],
-            "relation": "same",
-            "declarations": [],
-            "note": "Proof (end of Section 2): reduce to the regular class (Lemma A.1) and invertible M (Lemma A.2); push mu forward by |M|^{1/2} to eta, whose Stein kernel |M|^{1/2} tau_mu |M|^{1/2} has E||tau_eta||_HS^2 <= 2 Tr(M^2) by Theorem 2.5 with B = |M|; apply Proposition 2.8 to F(z) = <sgn(M) z, z> - Tr M and Lemma 2.9 to each partial derivative. Sharpness of the constant 2 (isotropic exponential vector, M = Id) is asserted as an exercise. The paper calls it the KLS conjecture for quadratic forms. No Lean statement; neither Stein kernels, moment measures nor H^{-1} norms are formalized."
+            "relation": "partial",
+            "declarations": [
+              {
+                "name": "FunctionalInequalities.KLS.Isotropic.covarianceBilin_map_sqrt_abs_matrix",
+                "source": "formalization/FunctionalInequalities/KLS/Isotropic.lean"
+              }
+            ],
+            "note": "Proof (end of Section 2): reduce to the regular class (Lemma A.1) and invertible M (Lemma A.2); push mu forward by |M|^{1/2} to eta, whose Stein kernel |M|^{1/2} tau_mu |M|^{1/2} has E||tau_eta||_HS^2 <= 2 Tr(M^2) by Theorem 2.5 with B = |M|; apply Proposition 2.8 to F(z) = <sgn(M) z, z> - Tr M and Lemma 2.9 to each partial derivative. Sharpness of the constant 2 (isotropic exponential vector, M = Id) is asserted as an exercise. The paper calls it the KLS conjecture for quadratic forms. Only the covariance step CZ14 (p. 14, ⇑) is formalized. Not formalized: the Lemma A.1/A.2 reductions, the transported Stein kernel of η and the trace identity (2.21), Theorem 2.5 with B = |M|, Proposition 2.8, Lemma 2.9 for the partial derivatives of F(z) = ⟨sgn(M) z, z⟩ − Tr M, and the constant-8 bound; Theorem 1.2 remains open."
+          },
+          {
+            "id": "CZ14",
+            "locator": "Proof of Theorem 1.2, p. 14 (unnumbered display preceding (2.21))",
+            "label": "Covariance of the transported vector",
+            "statement": "For isotropic X ~ μ and symmetric M, reduced to invertible M by Lemma A.2, Z = |M|^{1/2} X and η = (|M|^{1/2})_# μ satisfy Cov_{Z∼η}(Z) = |M|.",
+            "uses": [],
+            "relation": "stronger",
+            "declarations": [
+              {
+                "name": "FunctionalInequalities.KLS.Isotropic.covarianceBilin_map_sqrt_abs_matrix",
+                "source": "formalization/FunctionalInequalities/KLS/Isotropic.lean"
+              }
+            ],
+            "note": "Reviewed stronger covariance part (Stage 1, Astra v5, independently accepted 2026-10-10): every real symmetric M, singular and indefinite included, and dimension zero, without the invertible reduction. The companion identity of the same display, ⟨MX, X⟩ = ⟨sgn(M) Z, Z⟩, is not part of this item and is pending: no declaration states it (only the matrix factorization |M|^{1/2} sgn(M) |M|^{1/2} = M, in Analysis/Matrix/Sign.lean). Display (2.21) itself, the Stein-kernel Hilbert–Schmidt trace identity on p. 15, is not formalized; T12 stays partial."
           },
           {
             "id": "L21",
@@ -7873,9 +8059,57 @@
               "LA3",
               "DISO"
             ],
-            "relation": "same",
-            "declarations": [],
-            "note": "Proof: integration by parts (2.1) with f = d_i phi, g = 1, and isotropy of mu = (grad phi)_# nu. Not formalized."
+            "relation": "partial",
+            "declarations": [
+              {
+                "name": "FunctionalInequalities.Analysis.BakryEmery.integral_fderiv_fderiv_tilted_eq_integral_mul",
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/Basic.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.integral_fderiv_mul_fderiv_eq_inner_of_isotropic_map",
+                "source": "formalization/FunctionalInequalities/KLS/Isotropic.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.integral_fderiv_fderiv_tilted_eq_inner_of_isotropic_map",
+                "source": "formalization/FunctionalInequalities/KLS/Isotropic.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.BakryEmery.integral_hessian_tilted_eq_integral_fderiv_mul_of_convexOn",
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/ConvexHessian.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.integral_hessian_eq_inner_of_isotropic_map",
+                "source": "formalization/FunctionalInequalities/KLS/Isotropic.lean"
+              }
+            ],
+            "note": "Proof: integration by parts (2.1) with f = d_i phi, g = 1, and isotropy of mu = (grad phi)_# nu. Formalized as conditional generic supports (⇑ reviewed stronger form, no moment-map regularity): for a smooth potential φ on a finite-dimensional inner product space with ν = m.tilted (-φ) a probability law, step 1 ∫ ∂_v∂_u φ dν = ∫ ∂_u φ ∂_v φ dν (IBP with g = 1, given Hessian integrability), step 2 ∫ ∂_u φ ∂_v φ dν = ⟪u,v⟫ when (∇φ)_* ν is isotropic (first/product integrability derived from the pushforward), and their assembly: the mean Hessian is the identity. The moment-map producer (existence of φ with (∇φ)_* ν = μ for the regular class, Lemma 2.2 / Lemma A.1) and its source regularity assumptions are not formalized; Lemma 2.3 for the source objects is therefore not covered. Now also with all integrability derived (⇑): for a given smooth convex φ with e^{-φ} a probability density and (∇φ)_*ν isotropic, ∇φ ∈ L² follows from isotropy, the Hessian entries are integrable by cutoff integration by parts, a uniform bound and Fatou, and the mean Hessian is the identity (KLS.integral_hessian_eq_inner_of_isotropic_map). The source statement additionally needs the moment map φ of Lemma 2.2 for the given law, which is not constructed."
+          },
+          {
+            "id": "E23",
+            "locator": "Equation (2.3), p. 6 (unnumbered display)",
+            "label": "Product rule for the diffusion generator",
+            "statement": "For the generator L = Σ_ij A_ij ∂_ij − Σ_i b_i ∂_i (in the source, A = (∇²φ)⁻¹ on the moment-map side), L(fg) = f Lg + g Lf + 2 Σ_ij A_ij ∂_i f ∂_j g.",
+            "uses": [],
+            "relation": "partial",
+            "declarations": [
+              {
+                "name": "FunctionalInequalities.Analysis.BakryEmery.bilinearIteratedFDerivTwo_mul",
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Calculus.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.BakryEmery.nondivergenceOperator",
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Calculus.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.BakryEmery.nondivergenceOperator_mul",
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Calculus.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.BakryEmery.hessianInverseOperator_mul",
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/HessianOperator.lean"
+              }
+            ],
+            "note": "Formalized for an arbitrary real coefficient field A (symmetric at each point, no positivity) and drift b, on C² functions, in the standard orthonormal basis (Luna LET23-H/LET23-N, 2026-10-08; clients research/audits/BKL/NondivergenceAudit.lean: rank 0, and the cross-direction product ⟨e_i,·⟩⟨e_j,·⟩ exposing 2A_ij − b_i⟨e_j,x⟩ − b_j⟨e_i,x⟩). The source specialization A = (∇²φ)⁻¹, the Monge–Ampère/Brascamp–Lieb inputs and Theorem 2.5 are not formalized. The specialization A = (∇²φ)⁻¹, b = ∇V∘∇φ (hessianInverseOperator) and its Leibniz rule are now formalized for a given φ (MA-Inverse, 2026-10-08); Theorem 2.5 remains open."
           },
           {
             "id": "L24",
@@ -7885,9 +8119,42 @@
             "uses": [
               "L22"
             ],
-            "relation": "same",
-            "declarations": [],
-            "note": "Proof: differentiate log det Hess phi = -phi + V(grad phi) twice (Jacobi's formula); positivity from convexity of V and a Hilbert-Schmidt Gram-matrix representation. Not formalized."
+            "relation": "partial",
+            "declarations": [
+              {
+                "name": "FunctionalInequalities.Analysis.BakryEmery.mongeAmpere_first_derivative_on_range",
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/MongeAmpere.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.BakryEmery.mongeAmpere_second_derivative_on_range",
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/MongeAmpere.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.BakryEmery.posSemidef_hessian_conj_hessian_on_range",
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/MongeAmpere.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.BakryEmery.posSemidef_inverseHessian_third_gram",
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/MongeAmpere.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.fderiv_det_eq_det_mul_trace",
+                "source": "formalization/FunctionalInequalities/Analysis/Matrix/DeterminantDerivative.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.BakryEmery.fderiv_inverseHessianEntry_apply",
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/HessianOperator.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.BakryEmery.fderiv_ringInverse_hessianOperator_apply",
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/HessianOperator.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.BakryEmery.fderiv_logDetHessian_of_mongeAmpere",
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/MongeAmpere.lean"
+              }
+            ],
+            "note": "Proof: differentiate log det Hess phi = -phi + V(grad phi) twice (Jacobi's formula); positivity from convexity of V and a Hilbert-Schmidt Gram-matrix representation. Not formalized. Partial (Codex route bundle MA-Inverse, independently accepted 2026-10-08): the display (2.5) — derivative of the inverse Hessian ∂_k(∇²φ)⁻¹_ij = −Σ (∇²φ)⁻¹_ia ∂_kac φ (∇²φ)⁻¹_cj — in operator and coordinate forms for a given smooth φ with positive definite Hessian, and the derivative of the right-hand side −φ + V∘∇φ of the log-det equation (2.2) taken as a hypothesis, with V smooth only on an open neighbourhood of the gradient image. Jacobi's formula (Codex route bundle MA-Jacobi, independently accepted 2026-10-08) gives the left-hand side, hence the first derivative (2.4) of the equation; the second derivative (2.6) with the inverse-Hessian operator and the positive semidefiniteness of both right-hand matrices (V convex on the open K containing the gradient image; the Gram term weighted by (∇²φ)⁻¹ ⊗ (∇²φ)⁻¹) are formalized (bundle MA-Second-Derivative, independently accepted 2026-10-08). The local Lemma 2.4 identity is therefore proved for a GIVEN smooth φ with positive definite Hessian satisfying the zero-order equation (2.2); the upstream Lemma 2.2 (existence and regularity of the moment map, the zero-order equation itself) remains the open gap, as do Theorem 2.5, Brascamp–Lieb and Proposition 2.8."
           },
           {
             "id": "T25",
@@ -7902,9 +8169,34 @@
               "LA5",
               "LA6"
             ],
-            "relation": "same",
-            "declarations": [],
-            "note": "Proof: for B >= 0, apply L to Tr(B Hess phi B Hess phi), substitute Lemma 2.4, integrate using Lemma A.5 (c = 2), compare third-derivative terms pointwise ((b_i - b_j)^2 identity), and apply the Brascamp-Lieb inequality (Lemma A.6) to B^{1/2} Hess phi B^{1/2}, whose mean is B by Lemma 2.3; general B via |B|. Matrix inequalities: traces of products of PSD matrices, Hilbert-Schmidt Gram matrices. Not formalized."
+            "relation": "partial",
+            "declarations": [
+              {
+                "name": "FunctionalInequalities.Analysis.Tensor.sum_weight_sq_mul_sq_sub_eq_half_sum_sq_sub_mul_sq",
+                "source": "formalization/FunctionalInequalities/Analysis/Tensor/Coordinate.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.BakryEmery.inverseHessian_divergence",
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/MongeAmpere.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.BakryEmery.density_hessianInverseOperator_flux",
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/MongeAmpere.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.BakryEmery.integral_hessianInverseOperator_mul_eq_neg_on_range",
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/InverseHessian.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.BakryEmery.integral_hessianInverseOperator_eq_zero",
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/InverseHessian.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.BakryEmery.integral_hessianInverseOperator_mul_comm",
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/InverseHessian.lean"
+              }
+            ],
+            "note": "Proof: for B >= 0, apply L to Tr(B Hess phi B Hess phi), substitute Lemma 2.4, integrate using Lemma A.5 (c = 2), compare third-derivative terms pointwise ((b_i - b_j)^2 identity), and apply the Brascamp-Lieb inequality (Lemma A.6) to B^{1/2} Hess phi B^{1/2}, whose mean is B by Lemma 2.3; general B via |B|. Matrix inequalities: traces of products of PSD matrices, Hilbert-Schmidt Gram matrices. Equation (2.12) formalized as the finite symmetric-tensor identity for arbitrary real weights (⇑); the coordinate normalization, diagonalization and the identification with the inverse-Hessian contractions, and Theorem 2.5 itself, are not formalized. Support (Codex route bundle MA-Metric-IntegrationByParts, independently accepted 2026-10-08): the integration by parts (2.2) for the inverse-Hessian operator L on smooth tests with one compactly supported, for a GIVEN smooth φ with positive definite Hessian, ∫e^{−φ} = 1 and the zero-order MA equation with V smooth on an open neighbourhood of closure K ⊇ range ∇φ: coordinate divergence of (∇²φ)⁻¹, flux identity, density divergence form of L, ∫Lf dν = 0 and integrated symmetry on compact tests (Analysis/BakryEmery/MongeAmpere.lean section Divergence, IntegrationByParts/InverseHessian.lean). The noncompact extension (A.4–A.5), Brascamp–Lieb (A.6), the trace estimate itself and the moment map remain unformalized."
           },
           {
             "id": "D26",
@@ -7912,9 +8204,22 @@
             "label": "Stein kernel",
             "statement": "For a centered random vector W ~ lambda in R^n, a measurable matrix-valued tau_lambda with entries locally integrable under lambda (up to lambda-a.e. equality) is a Stein kernel if E[W_i f(W)] = E[sum_j tau_lambda(W)_ij d_j f(W)] for every f in C_c^infinity(R^n) and every i (equation (2.18)); it is symmetric if tau_lambda(u) is symmetric for lambda-a.e. u.",
             "uses": [],
-            "relation": "same",
-            "declarations": [],
-            "note": "Not formalized."
+            "relation": "partial",
+            "declarations": [
+              {
+                "name": "FunctionalInequalities.Probability.Stein.IsSteinKernel",
+                "source": "formalization/FunctionalInequalities/Probability/Stein/Kernel.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Probability.Stein.SymmetricAE",
+                "source": "formalization/FunctionalInequalities/Probability/Stein/Kernel.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Probability.Stein.hsNorm",
+                "source": "formalization/FunctionalInequalities/Probability/Stein/Kernel.lean"
+              }
+            ],
+            "note": "Not formalized. Formalized as the compact-test coordinate Stein predicate on ℝⁿ (centered finite-first-moment law, measurable locally integrable entries, identity on C_c^∞ tests) with a.e. symmetry and the Hilbert–Schmidt (Frobenius) norm. No kernel is constructed."
           },
           {
             "id": "L27",
@@ -7925,9 +8230,22 @@
               "L22",
               "D26"
             ],
-            "relation": "same",
-            "declarations": [],
-            "note": "Quoted from Fathi 2019; the paper's proof only checks symmetry, positivity and the coupling identity, citing Fathi for the Stein identity. Not formalized."
+            "relation": "partial",
+            "declarations": [
+              {
+                "name": "FunctionalInequalities.KLS.LogConcave.exists_hessianSteinKernel_of_injective_gradient",
+                "source": "formalization/FunctionalInequalities/KLS/LogConcave/HessianStein.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.LogConcave.hessianKernel_isSteinKernel",
+                "source": "formalization/FunctionalInequalities/KLS/LogConcave/HessianStein.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Probability.Stein.hessianKernel",
+                "source": "formalization/FunctionalInequalities/Probability/Stein/HessianKernel.lean"
+              }
+            ],
+            "note": "Quoted from Fathi 2019; the paper's proof only checks symmetry, positivity and the coupling identity, citing Fathi for the Stein identity. Not formalized. Formalized analytic part for a GIVEN potential: for smooth convex normalized φ with (∇φ)_*ν = μ isotropic and injective ∇φ (explicit prerequisite), τ = ∇²φ ∘ (∇φ)⁻¹ (measurable left inverse) is a Stein kernel of μ with symmetric PSD integrable entries, mean Id and the coupling τ(∇φ y) = ∇²φ(y); the Gaussian has τ = Id. Not formalized: existence of the moment map for an arbitrary law, strict positive definiteness, the HS-L² bound."
           },
           {
             "id": "P28",
@@ -7948,9 +8266,30 @@
               "D26",
               "LA7"
             ],
-            "relation": "same",
-            "declarations": [],
-            "note": "Proof: Stein identity plus Cauchy-Schwarz on C_c^infinity tests, extended by Lemma A.7. Not formalized."
+            "relation": "partial",
+            "declarations": [
+              {
+                "name": "FunctionalInequalities.KLS.LogConcave.dualNorm_linear_sq_le_of_affineSupport_eq_top",
+                "source": "formalization/FunctionalInequalities/KLS/LogConcave/Stein.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Probability.Stein.linear_dual_bound_of_ac",
+                "source": "formalization/FunctionalInequalities/Probability/Stein/DualBound.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Energy.Dual.dualNorm",
+                "source": "formalization/FunctionalInequalities/Energy/DualNorm.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Energy.Dual.UnitEnergyTest",
+                "source": "formalization/FunctionalInequalities/Energy/DualNorm.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Energy.Dual.toReal_dualNorm_eq_signed_sSup",
+                "source": "formalization/FunctionalInequalities/Energy/DualNorm.lean"
+              }
+            ],
+            "note": "Proof: Stein identity plus Cauchy-Schwarz on C_c^infinity tests, extended by Lemma A.7. Not formalized. Formalized (⇑ reviewed stronger form): for a full-dimensional log-concave law with an a.e. symmetric Stein kernel τ, |τ|_HS ∈ L², the linear function ⟪·,v⟫ is centered with finite H^{-1} norm (extended-valued supremum over the full locally Lipschitz unit-energy class, identified with the real signed supremum once finite) and ‖⟪·,v⟫‖²_{H^{-1}} ≤ ∫‖τ(x)v‖² dμ; isotropy is not needed. The moment-map kernel producing τ is not formalized."
           },
           {
             "id": "LA1",
@@ -7983,9 +8322,14 @@
               "L22",
               "LA1"
             ],
-            "relation": "same",
-            "declarations": [],
-            "note": "Proof: cutoff chi_R and dominated convergence. Not formalized."
+            "relation": "partial",
+            "declarations": [
+              {
+                "name": "FunctionalInequalities.Analysis.BakryEmery.integral_fderiv_mul_tilted_eq",
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/Basic.lean"
+              }
+            ],
+            "note": "Proof: cutoff chi_R and dominated convergence. Lemma A.3 formalized as weighted directional integration by parts for any fixed direction with the four source L¹ premises (⇑ reviewed different route: Mathlib directional IBP, no moment-map regularity)."
           },
           {
             "id": "LA4",
@@ -7996,9 +8340,46 @@
               "L22",
               "LA1"
             ],
-            "relation": "same",
-            "declarations": [],
-            "note": "Proof: chi_R = eta((phi - min phi + 1)/R) with L phi = n - <grad V(grad phi), grad phi> bounded, plus (2.2). Not formalized."
+            "relation": "stronger",
+            "declarations": [
+              {
+                "name": "FunctionalInequalities.Analysis.BakryEmery.exists_scaled_cutoffs_hessianInverseOperator",
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/InverseHessianCutoff.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.BakryEmery.exists_cutoffs_hessianInverseOperator",
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/InverseHessianCutoff.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.smoothTransition_two_sub_cutoff",
+                "source": "formalization/FunctionalInequalities/Analysis/Cutoff/Profile.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.exists_majorant_abs_deriv_deriv_smoothTransition_two_sub",
+                "source": "formalization/FunctionalInequalities/Analysis/Cutoff/Profile.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.monotone_and_tendsto_smoothTransition_two_sub_div_succ",
+                "source": "formalization/FunctionalInequalities/Analysis/Cutoff/Profile.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.inv_mul_intervalIntegral_div_three_cutoff",
+                "source": "formalization/FunctionalInequalities/Analysis/Cutoff/Profile.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.deriv_comp_sub_div_and_deriv_deriv",
+                "source": "formalization/FunctionalInequalities/Analysis/Cutoff/Profile.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.BakryEmery.sum_inverseHessianEntry_mul_mul_nonneg",
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/MongeAmpere.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.monotoneOn_and_tendsto_smoothTransition_two_sub_div",
+                "source": "formalization/FunctionalInequalities/Analysis/Cutoff/Profile.lean"
+              }
+            ],
+            "note": "Proof: chi_R = eta((phi - min phi + 1)/R) with L phi = n - <grad V(grad phi), grad phi> bounded, plus (2.2). Formalized (⇑, reviewed stronger): exists_scaled_cutoffs_hessianInverseOperator for every potential phi in the source class, i.e. with the moment-map properties of L22 as hypotheses (phi smooth and convex, grad phi(R^n) in a bounded K, V smooth on an open set containing the closure of K, log det Hess phi = -phi + V(grad phi), Hess phi positive definite) and int e^{-phi} = 1, on any finite-dimensional real inner product space and for any additive Haar measure: smooth compactly supported chi_R with values in [0,1] for EVERY real R >= 1 (the paper: all large R), monotone in R with limit 1, L chi_R in L^1(nu) and one constructed C with ||L chi_R||_{L^1(nu)} <= C/R; exists_cutoffs_hessianInverseOperator is the natural-index form chi_n = chi_{n+1} with bound C/(n+1). The minimum of phi, compact sublevels, bounded self-generator, energy estimate and integrability are derived, not assumed. Applying it to the paper's phi requires the moment map of a regular law (Lemmas 2.1-2.2, LA1), which is not formalized. The earlier real-variable supports (profile, majorant, exhaustion, tail primitive, rescaling, quadratic positivity) are listed after the two main declarations."
           },
           {
             "id": "LA5",
@@ -8008,9 +8389,22 @@
             "uses": [
               "LA4"
             ],
-            "relation": "same",
-            "declarations": [],
-            "note": "Proof: symmetry (2.2) against chi_R and Fatou's lemma. Not formalized."
+            "relation": "partial",
+            "declarations": [
+              {
+                "name": "FunctionalInequalities.Analysis.BakryEmery.integrable_and_integral_hessianInverseOperator_eq_zero_of_cutoffs",
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/InverseHessian.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.integrable_and_integral_eq_zero_of_cutoff_defect",
+                "source": "formalization/FunctionalInequalities/Analysis/Cutoff/Conservativity.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.BakryEmery.uniformInterval_tanhSq_integrable_and_integral_hessianInverseOperator_eq_zero",
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/UniformIntervalClient.lean"
+              }
+            ],
+            "note": "Proof: symmetry (2.2) against chi_R and Fatou's lemma. Partial: the operator statement integrable_and_integral_hessianInverseOperator_eq_zero_of_cutoffs takes the cutoffs as a premise (smooth compactly supported chi_n with 0 <= chi_n <= 1, chi_n -> 1, L chi_n in L^1(nu), ||L chi_n||_{L^1(nu)} -> 0), with f smooth and bounded everywhere (equivalent to L^infinity(nu) for continuous f, since nu has a positive density), L f + c f >= 0 and c > 0; its generic core is integrable_and_integral_eq_zero_of_cutoff_defect. For a source-class potential the premise is supplied by the natural-index LA4, but that composition is not stated as a general theorem; it is carried out for one concrete source law, uniformInterval_tanhSq_integrable_and_integral_hessianInverseOperator_eq_zero (uniform law on (-sqrt 3, sqrt 3), V = log(2 sqrt 3), f = tanh^2(sqrt 3 y / 2), C = 1, c = 2)."
           },
           {
             "id": "LA6",
@@ -8033,9 +8427,26 @@
             "uses": [
               "D26"
             ],
-            "relation": "same",
-            "declarations": [],
-            "note": "Proof: C_c^infinity density in the weighted H^1 space [7, Proposition 27] and Cauchy-Schwarz. Not formalized."
+            "relation": "partial",
+            "declarations": [
+              {
+                "name": "FunctionalInequalities.KLS.LogConcave.stein_identity_of_affineSupport_eq_top",
+                "source": "formalization/FunctionalInequalities/KLS/LogConcave/Stein.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Probability.Stein.extended_identity_of_ac",
+                "source": "formalization/FunctionalInequalities/Probability/Stein/Kernel.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Probability.Stein.extended_abs_bound_of_ac",
+                "source": "formalization/FunctionalInequalities/Probability/Stein/Kernel.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Probability.Stein.compact_directional_identity",
+                "source": "formalization/FunctionalInequalities/Probability/Stein/Kernel.lean"
+              }
+            ],
+            "note": "Proof: C_c^infinity density in the weighted H^1 space [7, Proposition 27] and Cauchy-Schwarz. Not formalized. Formalized: the Stein identity on compact tests extends to all locally Lipschitz f with f, ∇f ∈ L²(μ) for μ ≪ volume with finite second moment (C_c^∞ approximation in the graph norm), with the Cauchy–Schwarz bound; the log-concave full-dimensional adapter derives absolute continuity and the second moment."
           }
         ]
       }
@@ -8050,7 +8461,7 @@
       "url": "https://arxiv.org/abs/2610.05474v1",
       "locator": "Theorem 1.1 (through Theorems 3.1 and 4.1 and Proposition 7.1); first dependencies Lemmas 2.1, 2.2, 3.4, 3.6, Corollaries 3.5, 3.7 and conditional Lemma 4.2",
       "result": "Claims C_P(μ) ≤ C for every isotropic log-concave μ in every dimension (the KLS conjecture with a universal constant): Taylor coefficients of tilt averages bounded by cumulant bounds along Eldan localization give the criterion of Theorem 3.1. Not peer reviewed.",
-      "remaining": "Theorem 3.1 is formalized in the source form and certified (thm:bkl-taylor-criterion) by the operator route: the iterates are built in the generator domain D(A) and an approximate first eigenfunction at λ = 1/C_P replaces (19); (32)–(36), (47), Lemmas 3.2–3.4, 3.3 for every q, 3.8, 3.9 and Corollaries 3.5, 3.7 hold for these iterates (reviewed stronger forms), with the weak Hessian, the curvature form of (16), (48) and Lemma 3.6 on D(A). Lemma 2.2 is formalized in the source form, Lemma 3.6 also on 𝒜; the regular-law adapter derives the probability normalization, Gaussian tails and all exponential moments from (12). Lemma 2.1 (operator-domain inverse, componentwise lift; temperate functions in the generator domain), (15) and (16) on 𝒜, steps of Proposition 7.1 (linear functions, continuity of T_d on L², convexity of the suspension potential under (110) and choice of finite N) and Lemma 4.2 conditionally on the Letwin bound have restricted or conditional counterparts. Theorems 1.1 and 4.1, Lemmas 4.3, 5.1 and 5.2, Proposition 7.1, Lemma 2.1 on 𝒜 (smooth representatives and the pointwise equation), the existence of a first eigenfunction (19), Eldan localization, the regular approximation and the Letwin theorem are not formalized. Theorem 3.1 is a certified supporting theorem; the paper is not covered until Theorem 1.1 is.",
+      "remaining": "Theorem 3.1 is formalized in the source form and certified (thm:bkl-taylor-criterion) by the operator route: the iterates are built in the generator domain D(A) and an approximate first eigenfunction at λ = 1/C_P replaces (19); (32)–(36), (47), Lemmas 3.2–3.4, 3.3 for every q, 3.8, 3.9 and Corollaries 3.5, 3.7 hold for these iterates (reviewed stronger forms), with the weak Hessian, the curvature form of (16), (48) and Lemma 3.6 on D(A). Lemma 2.2 is formalized in the source form, Lemma 3.6 also on 𝒜; the regular-law adapter derives the probability normalization, Gaussian tails and all exponential moments from (12). Lemma 2.1 (operator-domain inverse, componentwise lift; temperate functions in the generator domain), (15) and (16) on 𝒜, steps of Proposition 7.1 (the Laplace noise, the joint law with its density (109), log-concavity under (110), exponential moment and local smoothness, isotropy from (108), (111)–(112) for the chosen N, the Hilbert–Schmidt step, the β → ∞ limit, the affine-orthogonal decomposition, continuity of T_d on L², the linear-function step and (113) for the smooth normalized class; (113) on the affine-orthogonal class and the assembly (107) — Proposition 7.1 in the source form, conditional on its hypothesis) and the Section 6 envelope arithmetic and Lemma 4.2 conditionally on the Letwin bound have restricted or conditional counterparts. The deterministic spatial step of the proof of Lemma 4.3 ((74) grouped as 2m κ_m + 2 L_m with (72)) is formalized. Theorems 1.1 and 4.1, Lemmas 4.3 (the stochastic differential (73)), 5.1 and 5.2, Lemma 2.1 on 𝒜 (smooth representatives and the pointwise equation), the existence of a first eigenfunction (19), Eldan localization, the regular approximation and the Letwin theorem are not formalized. Theorem 3.1 is a certified supporting theorem; the paper is not covered until Theorem 1.1 is.",
       "local_results": [
         {
           "node": "lem:bkl-partial-symmetrization",
@@ -8130,7 +8541,111 @@
         },
         {
           "node": "lem:bkl-suspension-convexity",
-          "scope": "Proposition 7.1, (109)–(110): continuous convex suspension potential and existence of a positive finite N; joint law, isotropy and (112) remain open"
+          "scope": "Proposition 7.1, (109)–(110): continuous convex suspension potential and existence of a positive finite N (the joint law, its isotropy, (111)–(112) and (113) are formalized in the suspension nodes below)"
+        },
+        {
+          "node": "lem:bkl-laplace-law",
+          "scope": "The Laplace noise η_β: law, local MGF, moments"
+        },
+        {
+          "node": "lem:bkl-suspension-law",
+          "scope": "Joint law of (S, X₁, …, X_N): density (109), log-concavity under (110), exponential moment and smooth Λ"
+        },
+        {
+          "node": "lem:bkl-suspension-isotropy",
+          "scope": "Isotropy of the joint law from (108)"
+        },
+        {
+          "node": "lem:bkl-suspension-derivatives",
+          "scope": "(111) and (112) for the chosen N"
+        },
+        {
+          "node": "lem:bkl-coordinate-adapter",
+          "scope": "Isotropy/cumulant transport along isometries, Hilbert–Schmidt step, β → ∞"
+        },
+        {
+          "node": "lem:bkl-affine-orthogonal",
+          "scope": "Affine-orthogonal decomposition in L²(μ); linear-function step in any basis"
+        },
+        {
+          "node": "lem:bkl-cumulant-envelope",
+          "scope": "Section 6 envelope arithmetic (105)–(106), absorption, contraction (101)–(102)"
+        },
+        {
+          "node": "lem:bkl-quadratic-tilt",
+          "scope": "Small quadratic tilts converge (regular approximation, step 2)"
+        },
+        {
+          "node": "lem:bkl-suspension-taylor-bound",
+          "scope": "(113) for the smooth normalized class and, by density, for all f ∈ L² orthogonal to affine functions; conditional on CumulantBound"
+        },
+        {
+          "node": "prop:bkl-suspension",
+          "scope": "Proposition 7.1, (107), in the source form: conditional on the universal cumulant hypothesis CumulantBound d b (d ≥ 2, b > 0), every isotropic regular law has |T_d f|² ≤ 2b/(d!)² ‖f‖₂² for all f ∈ L²"
+        },
+        {
+          "node": "lem:bkl-weak-limit-transfer",
+          "scope": "Section 2, p. 5: weak-limit transfer of the smooth-test Poincaré bound with converging constants to the literature constant of a log-concave limit law (any finite-dimensional inner product space); approximating laws not constructed"
+        },
+        {
+          "node": "lem:bkl-gaussian-hessian-upper",
+          "scope": "Section 2, p. 5: upper Hessian bound 2s·Id for the Gaussian-smoothed potential of any probability law with a Borell density, via the posterior covariance identity; all finite dimensions; higher-derivative growth not treated"
+        },
+        {
+          "node": "lem:bkl-borell-uniform-moments",
+          "scope": "Quantitative Borell: explicit exponential and all-order moment bounds for Borel log-concave laws with a ball of mass 3/4 or a second-moment bound, uniform over such laws (any normed space); isotropic log-concave laws on ℝⁿ with constants depending on n and the order"
+        },
+        {
+          "node": "lem:bkl-gaussian-posterior-moments",
+          "scope": "Section 2, p. 5: the Gaussian posterior of the smoothing is log-concave with explicit density; the centered posterior has mean zero, variance ≤ ‖v‖²/(2s), trace ≤ n/(2s) and uniform exponential/all-order moments independent of the base point; derivative growth not treated"
+        },
+        {
+          "node": "lem:bkl-gaussian-growth",
+          "scope": "Section 2, p. 5: all derivatives of the Gaussian-smoothed potential have polynomial growth, with constants depending on the order, dimension and s; all finite dimensions"
+        },
+        {
+          "node": "lem:bkl-regular-producer",
+          "scope": "Section 2, p. 5 / (12): Gaussian smoothing then quadratic tilt produces a regular potential with curvature bounds δ ≤ ∇² ≤ 2s+δ; two-step law identity and log-concavity; convergence to the original law not treated"
+        },
+        {
+          "node": "lem:bkl-regular-affine",
+          "scope": "Section 2, p. 5: regular potentials are preserved by affine changes of variables with explicit constants (all dimensions incl. zero); image-law and normalizer identities"
+        },
+        {
+          "node": "lem:bkl-regular-reduction",
+          "scope": "p. 30: conditional reduction of Theorem 1.1 for isotropic regular laws to Theorem 3.1 + Proposition 7.1 under the universal cumulant bounds of Theorem 4.1; all dimensions; hypothesis not discharged"
+        },
+        {
+          "node": "lem:bkl-gaussian-moments",
+          "scope": "Section 2, p. 5: moments of the Gaussian noise and of the smoothed law (Cov μ + Id/(2s)), their limits as s → ∞, weak convergence of the smoothing to μ"
+        },
+        {
+          "node": "lem:bkl-regular-isotropic",
+          "scope": "Section 2, p. 5: regular laws center and whiten to isotropic regular laws by affine maps (full support, positive definite covariance); whitening operator not chosen"
+        },
+        {
+          "node": "lem:bkl-quadratic-covariance",
+          "scope": "Section 2, p. 5: Cov of the quadratic tilt μ_δ converges to Cov μ in operator norm as δ → 0⁺ (finite second moment only)"
+        },
+        {
+          "node": "lem:bkl-regular-isometry",
+          "scope": "Section 2, p. 5: regular potentials, laws, isotropy and Poincaré constants under linear isometries between spaces; standard coordinates; transfer of a Euclidean bound"
+        },
+        {
+          "node": "lem:bkl-regular-approximation",
+          "scope": "Section 2, p. 5: joint Gaussian-then-quadratic regular approximation of a law with a Borell density and finite second moment, with weak, mean, raw-second-moment and covariance convergence along a selected diagonal; no whitened limit"
+        },
+        {
+          "node": "lem:bkl-regular-poincare-transfer",
+          "scope": "Section 2, p. 5: conditional transfer C_P ≤ K‖Cov‖ to all regular laws from a universal bound K on isotropic regular laws (hypothesis); envelope coefficient converging to K"
+        },
+        {
+          "node": "lem:bkl-isotropic-reduction",
+          "scope": "Section 2, p. 5 (complete): a Poincaré bound for isotropic regular laws on ℝⁿ implies the bound for all isotropic log-concave laws in every finite-dimensional space; with the p. 30 reduction, Theorem 1.1 follows conditionally from the Theorem 4.1 cumulant bounds (hypothesis, not proved)"
+        },
+        {
+          "node": "lem:bkl-grouped-drift-expansion",
+          "scope": "(74) grouped as 2m κ_m + 2 L_m with (72), at a fixed compactly supported law with invertible covariance, every m ≥ 3 and any representative slot (deterministic step of the proof of Lemma 4.3; (73) and Lemma 4.3 open)"
         }
       ],
       "diagram": "4 Oct 2026 · Bizeul–Klartag–Lehec<br/>C_P ≤ C claimed (preprint)",
@@ -8151,9 +8666,22 @@
               "T41",
               "P71"
             ],
-            "relation": "same",
-            "declarations": [],
-            "note": "Main theorem (title and abstract). Proof (p. 30): Theorem 4.1 with b = K^d (d!)² and Proposition 7.1 give |T_d f|² ≤ (2K)^d‖f‖² for d ≥ 2, d = 1 by isotropy, then Theorem 3.1 with R = √(2K) after the regular approximation of Section 2. The local target KLS.kls stays open; the left inequality of (6) is FunctionalInequalities.Covariance.lambdaMax_le_constant (linear tests). No declaration is listed, so the item stays ○.",
+            "relation": "partial",
+            "declarations": [
+              {
+                "name": "FunctionalInequalities.KLS.RegularPotential.poincare_le_of_cumulantBound",
+                "source": "formalization/FunctionalInequalities/KLS/BKL/Reduction.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.localSlope_le_of_cumulantBound_all",
+                "source": "formalization/FunctionalInequalities/KLS/BKL/Reduction.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.conjecture_of_cumulantBound",
+                "source": "formalization/FunctionalInequalities/KLS/BKL/Reduction.lean"
+              }
+            ],
+            "note": "Main theorem (title and abstract). Proof (p. 30): Theorem 4.1 with b = K^d (d!)² and Proposition 7.1 give |T_d f|² ≤ (2K)^d‖f‖² for d ≥ 2, d = 1 by isotropy, then Theorem 3.1 with R = √(2K) after the regular approximation of Section 2. Formalized CONDITIONALLY (◐, no certificate): under the universal cumulant bounds CumulantBound d ((d!)² K^d) for all d ≥ 2 (K ≥ 1) — the content of Theorem 4.1, which is not proved — every isotropic log-concave law in every finite-dimensional inner product space has C_P ≤ 2·C_{3.1}·K (KLS.localSlope_le_of_cumulantBound_all: the p. 30 reduction for isotropic regular laws composed with the Section 2 regular approximation and weak-limit passage), and hence the project's KLS.Conjecture follows from that hypothesis (KLS.conjecture_of_cumulantBound). KLS.kls remains the intentional hole: Theorem 1.1 is not proved. The left inequality of (6) is FunctionalInequalities.Covariance.lambdaMax_le_constant (linear tests).",
             "main": true
           },
           {
@@ -8531,9 +9059,54 @@
               "L51",
               "L52"
             ],
-            "relation": "same",
-            "declarations": [],
-            "note": "Proof along Eldan stochastic localization for compactly supported μ, then approximation; no local stochastic calculus. The cumulant tensors κ_m are defined locally (Analysis/BakryEmery/Cumulant.lean, cumulant)."
+            "relation": "partial",
+            "declarations": [
+              {
+                "name": "FunctionalInequalities.KLS.LogConcave.Suspension.cumulantBound_one_one",
+                "source": "formalization/FunctionalInequalities/KLS/BKL/SecondCumulant.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.LogConcave.cumulant_two_eq_inner_of_isotropic",
+                "source": "formalization/FunctionalInequalities/KLS/BKL/SecondCumulant.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.BKL.envelope",
+                "source": "formalization/FunctionalInequalities/KLS/BKL/CumulantEnvelope.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.BKL.absorption_le_envelope",
+                "source": "formalization/FunctionalInequalities/KLS/BKL/CumulantEnvelope.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.BKL.sum_choose_mul_sqrt_envelope",
+                "source": "formalization/FunctionalInequalities/KLS/BKL/CumulantEnvelope.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.Tensor.sum_sq_contract_le",
+                "source": "formalization/FunctionalInequalities/Analysis/Tensor/Coordinate.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.BakryEmery.gradient_logLaplace_zero_of_compact",
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Cumulant/Local.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.BakryEmery.fderiv_centeredGradient_logLaplace_zero_of_compact",
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Cumulant/Local.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.BakryEmery.inner_cumulantVector_single_ringInverse_cumulantVector",
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Cumulant/Local.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.BakryEmery.iteratedFDeriv_inner_centeredGradient_zero_of_compact",
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Cumulant/Leibniz.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.BakryEmery.directional_centeredGradient_logLaplace_zero_of_compact",
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Cumulant/Leibniz.lean"
+              }
+            ],
+            "note": "Proof along Eldan stochastic localization for compactly supported μ, then approximation; no local stochastic calculus. The cumulant tensors κ_m are defined locally (Analysis/BakryEmery/Cumulant/Basic.lean, cumulant). Supporting arithmetic of Section 6 formalized (envelope b_m, (105)–(106), absorption, contraction (101)–(102)); the cumulant induction (95)–(104), Lemma 4.3 and the theorem itself are not formalized. Base case m = 2 (Codex route bundle Local-Second-Cumulant, independently accepted 2026-10-08): CumulantBound 1 1, i.e. R₂ = Id for every isotropic log-concave law in every dimension, is proved unconditionally from one exponential radius (κ₂ = centered second moment = covariance pairing; Parseval). This covers only the m = 2 base; the all-order bound (d+1)-cumulant ≤ (d!)² K^d and the Eldan induction remain open. CGF jets at zero (p. 20 before (74); Luna gpt-5.6-luna units CGF1-M/CGF1-C with recorded closing repairs, independently accepted 2026-10-08): ∇Λ(0) = ∫x dμ and D(∇Λ − ∇Λ(0))(0) = Cov μ for compactly supported laws (Analysis/BakryEmery/Cumulant/Local.lean section GradientJets; cumulantVector records the Riesz vector of the last cumulant slot). The higher jets Dʳ(∇Λ − ∇Λ(0))(0)[h] = cumulantVector μ h (⟪·,w⟫ = κ_{r+1}(h,w), all r ≥ 1; Luna units CGF1-J2a/J2b + the J2c v2 assembly, independently accepted 2026-10-08; generic supports in Analysis/IteratedDerivative/GradientJet.lean) are formalized. The singleton terms of (74), ⟪κ₂(w,·), A⁻¹κ_{k+1}(h,·)⟫ = κ_{k+1}(h,w) for invertible covariance A (Luna unit D74s, independently accepted 2026-10-08; Cumulant/Local.lean section SingletonAllocation), are formalized. The raw (74) expansion at a fixed compactly supported law, D^m⟨v,Mv⟩(0)[h] = Σ_{∅≠J⊊[m]} ⟨κ_{|J|+1}(h_J,·), Mκ_{m−|J|+1}(h_{Jᶜ},·)⟩ for ANY continuous linear M (Luna units D74a1/D74a2r/D74a3r + the D74A assembly, independently accepted 2026-10-09; Analysis/BakryEmery/Cumulant/Leibniz.lean), is formalized; its grouping 2m κ_m + 2 L_m with (72) for M = A⁻¹ is formalized (E7274); the stochastic differential (73) (Lemma 4.3) remains unformalized."
           },
           {
             "id": "L42",
@@ -8544,25 +9117,67 @@
             "relation": "partial",
             "declarations": [
               {
+                "name": "FunctionalInequalities.KLS.LogConcave.sum_sq_cumulant_three_le_of_letwin",
+                "source": "formalization/FunctionalInequalities/KLS/BKL/LocalThirdCumulant.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.LogConcave.Suspension.cumulantBound_two_of_letwin",
+                "source": "formalization/FunctionalInequalities/KLS/BKL/LocalThirdCumulant.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.BakryEmery.cumulant_three_eq_integral_of_integrable_exp",
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Cumulant/Local.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.BakryEmery.sum_sq_cumulant_three_le_of_letwin_of_integrable_exp_basis",
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Cumulant/Local.lean"
+              },
+              {
                 "name": "FunctionalInequalities.Analysis.BakryEmery.sum_sq_cumulant_three_le_of_letwin",
-                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Cumulant.lean"
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Cumulant/Basic.lean"
               },
               {
                 "name": "FunctionalInequalities.Analysis.BakryEmery.cumulant_three_eq_integral",
-                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Cumulant.lean"
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Cumulant/Basic.lean"
               }
             ],
-            "note": "Conditional counterpart (Codex review N, 2026-10-07): for a centered isotropic probability law with all exponential moments that satisfies LetwinQuadraticBound — the quadratic-form estimate of Letwin (2026) Theorem 1.2, Var⟨MX, X⟩ ≤ 8|M|²_HS for self-adjoint M, an explicit premise that is not proved — Σ_{j,k} κ_3(u, e_j, e_k)² ≤ 8|u|² (= ⟨R_3 u, u⟩ ≤ 8|u|², (65)); the third cumulant of a centered law is its third moment. Nonvacuity (research/audits/BKL/ThirdCumulantWitnessAudit.lean): every premise is discharged for the uniform law on [−√3, √3] and for the skewed two-point law (1/5)δ₂ + (4/5)δ_{−1/2} (κ₃(1,1,1) = 3/2). General isotropic log-concave laws (only some exponential moments) and the Letwin theorem itself are not covered."
+            "note": "Source-scope conditional form (Codex route bundle Local-Third-Cumulant, independently accepted 2026-10-08): for every isotropic log-concave μ satisfying LetwinQuadraticBound — the quadratic-form estimate of Letwin (2026) Theorem 1.2, Var⟨MX, X⟩ ≤ 8|M|²_HS for self-adjoint M, an explicit premise that is not proved — Σ_{j,k} κ_3(u, b_j, b_k)² ≤ 8|u|² in every orthonormal basis (= ⟨R_3 u, u⟩ ≤ 8|u|², (65)); the exponential radius comes from Borell, so no all-moment hypothesis is used, and the Laplace law (isotropic, log-concave, no exponential moment at its own rate) is in scope (research/audits/BKL/LocalThirdCumulantAudit.lean). If all isotropic log-concave laws in positive dimension satisfy the Letwin bound then CumulantBound 2 8 holds (base case of the Section 4 induction). Earlier all-radii counterpart (Codex review N, 2026-10-07) in Analysis/BakryEmery/Cumulant/Basic.lean with witnesses in ThirdCumulantWitnessAudit.lean. Letwin Theorem 1.2 and the unconditional Lemma 4.2 are not proved; the statement stays partial."
           },
           {
             "id": "L43",
             "locator": "Lemma 4.3, p. 20",
             "label": "Cumulant dynamics",
             "statement": "For m ≥ 3, along Eldan’s process dκ_m(t) = κ_{m+1}(t)(·, …, ·, A_t^{−1/2}dB_t) − (mκ_m(t) + L_m(t))dt.",
+            "uses": [
+              "E7274"
+            ],
+            "relation": "partial",
+            "declarations": [
+              {
+                "name": "FunctionalInequalities.Analysis.BakryEmery.iteratedFDeriv_inner_centeredGradient_zero_grouped_of_compact",
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Cumulant/Leibniz.lean"
+              }
+            ],
+            "note": "Only the deterministic spatial step of the proof is formalized (E7274: (74) grouped as 2m κ_m + 2 L_m with (72), at a fixed compactly supported law). Not formalized: Eldan's process (67)/(70) as an SDE solution, the Itô differential of (71), the stochastic integral term κ_{m+1}(t)(·, …, ·, A_t^{−1/2} dB_t) and hence (73). Lemma 4.3 remains open."
+          },
+          {
+            "id": "E7274",
+            "locator": "Equations (72) and (74), pp. 20–21 (spatial step of the proof of Lemma 4.3)",
+            "label": "Grouped drift expansion",
+            "statement": "For m ≥ 3 and the compactly supported law at time t with invertible covariance A_t, ∇^m⟨v_t, A_t⁻¹ v_t⟩(0)[h] = Σ_{∅≠J⊊[m]} ⟨κ_{|J|+1}(h_J,·), A_t⁻¹ κ_{m−|J|+1}(h_{Jᶜ},·)⟩ (74), and grouping the 2m summands with |J| ∈ {1, m−1} (each equal to κ_m(h)) and the complementary pairs gives 2m κ_m(h) + 2 L_m(h), where (72) defines L_m(h) as the sum over J ∋ 1 with 2 ≤ |J| ≤ m − 2.",
             "uses": [],
-            "relation": "same",
-            "declarations": [],
-            "note": ""
+            "relation": "stronger",
+            "declarations": [
+              {
+                "name": "FunctionalInequalities.Analysis.BakryEmery.iteratedFDeriv_inner_centeredGradient_zero_of_compact",
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Cumulant/Leibniz.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.BakryEmery.iteratedFDeriv_inner_centeredGradient_zero_grouped_of_compact",
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Cumulant/Leibniz.lean"
+              }
+            ],
+            "note": "Reviewed stronger form at a fixed law (Stage 1, Astra v5 grouped proof with the Astra v6 ordered-mask partition, independently accepted 2026-10-10): every compactly supported probability law with invertible covariance, every m ≥ 3, repeated directions allowed, and ANY representative slot i₀ (the source keeps the representative containing 1); the raw (74) holds for any continuous linear M. Deterministic only: the stochastic differential (73) is Lemma 4.3."
           },
           {
             "id": "L51",
@@ -8595,30 +9210,106 @@
             "label": "Suspension",
             "statement": "For d ≥ 2: if R^ν_{d+1} ≤ b Id for every isotropic log-concave ν in every dimension, then every isotropic regular log-concave μ has |T_d f|² ≤ 2b/(d!)²‖f‖² for all f ∈ L²(μ).",
             "uses": [],
-            "relation": "partial",
+            "relation": "same",
             "declarations": [
               {
+                "name": "Solutions.PropBklSuspension.certificate",
+                "source": "solutions/PropBklSuspension.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.LogConcave.Suspension.norm_coordTensor_taylorTensor_sq_le_two_mul",
+                "source": "formalization/FunctionalInequalities/KLS/BKL/Proposition71.lean"
+              },
+              {
                 "name": "FunctionalInequalities.Analysis.BakryEmery.taylorTensor_inner_eq_cumulant",
-                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Cumulant.lean"
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Cumulant/Basic.lean"
               },
               {
                 "name": "FunctionalInequalities.Analysis.BakryEmery.exists_norm_taylorTensor_le",
                 "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Tilt/SquareIntegrable.lean"
               },
               {
-                "name": "FunctionalInequalities.KLS.BKL.Suspension.convexOn_potential",
-                "source": "formalization/FunctionalInequalities/KLS/BKL/Suspension.lean"
+                "name": "FunctionalInequalities.KLS.LogConcave.Suspension.convexOn_potential",
+                "source": "formalization/FunctionalInequalities/KLS/BKL/Suspension/Basic.lean"
               },
               {
-                "name": "FunctionalInequalities.KLS.BKL.Suspension.exists_copies",
-                "source": "formalization/FunctionalInequalities/KLS/BKL/Suspension.lean"
+                "name": "FunctionalInequalities.KLS.LogConcave.Suspension.exists_copies",
+                "source": "formalization/FunctionalInequalities/KLS/BKL/Suspension/Basic.lean"
               },
               {
-                "name": "FunctionalInequalities.KLS.BKL.Suspension.continuous_potential",
-                "source": "formalization/FunctionalInequalities/KLS/BKL/Suspension.lean"
+                "name": "FunctionalInequalities.KLS.LogConcave.Suspension.continuous_potential",
+                "source": "formalization/FunctionalInequalities/KLS/BKL/Suspension/Basic.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.LogConcave.Suspension.jointLaw",
+                "source": "formalization/FunctionalInequalities/KLS/BKL/Suspension/Law.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.LogConcave.Suspension.isotropic_jointLaw",
+                "source": "formalization/FunctionalInequalities/KLS/BKL/Suspension/Moments.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.LogConcave.Suspension.jointLaw_eq_tilted",
+                "source": "formalization/FunctionalInequalities/KLS/BKL/Suspension/Density.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.LogConcave.Suspension.logConcave_jointLaw",
+                "source": "formalization/FunctionalInequalities/KLS/BKL/Suspension/Density.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.LogConcave.Suspension.exists_integrable_exp_norm_contDiffOn_logLaplace_jointLaw",
+                "source": "formalization/FunctionalInequalities/KLS/BKL/Suspension/Density.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.LogConcave.Suspension.fderiv_logLaplace_jointLaw_none",
+                "source": "formalization/FunctionalInequalities/KLS/BKL/Suspension/Derivatives.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.LogConcave.Suspension.cumulant_jointLaw_none_entries",
+                "source": "formalization/FunctionalInequalities/KLS/BKL/Suspension/Derivatives.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.LogConcave.Suspension.sum_sq_cumulant_ge_of_entries",
+                "source": "formalization/FunctionalInequalities/KLS/BKL/Suspension/Cumulant.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.LogConcave.Suspension.cumulantBound_jointSpace",
+                "source": "formalization/FunctionalInequalities/KLS/BKL/Suspension/Law.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.LogConcave.Suspension.le_of_forall_le_mul_sigma_sq",
+                "source": "formalization/FunctionalInequalities/KLS/BKL/Suspension/Law.lean"
+              },
+              {
+                "name": "FunctionalInequalities.L2.affineOrthPart",
+                "source": "formalization/FunctionalInequalities/L2/AffineDecomposition.lean"
+              },
+              {
+                "name": "FunctionalInequalities.L2.eLpNorm_sub_affineOrthPart_le",
+                "source": "formalization/FunctionalInequalities/L2/AffineDecomposition.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.BakryEmery.norm_coordTensor_taylorTensor_inner_sq_le_of_basis",
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Cumulant/Basic.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Probability.Line.laplaceMeasure_moments",
+                "source": "formalization/FunctionalInequalities/Probability/Line/Laplace.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.LogConcave.Suspension.norm_coordTensor_taylorTensor_sq_le_of_cumulantBound",
+                "source": "formalization/FunctionalInequalities/KLS/BKL/Proposition71.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.LogConcave.Suspension.norm_coordTensor_taylorTensor_sq_le_of_smooth",
+                "source": "formalization/FunctionalInequalities/KLS/BKL/Proposition71.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.LogConcave.Suspension.norm_coordTensor_taylorTensor_sq_le_of_orthogonal",
+                "source": "formalization/FunctionalInequalities/KLS/BKL/Proposition71.lean"
               }
             ],
-            "note": "Proved steps: the continuity of T_d on L²(μ) used in the proof (‖T_d f‖ ≤ C_d‖f‖₂ for a probability measure with all exponential moments; T_d is linear on L²), and the linear-function step: for a nonzero finite measure with all exponential moments, F_⟨v,·⟩ = DΛ_μ(·)v and T_d⟨v,·⟩ = κ_{d+1}(v, ·, …, ·)/d!. Equations (109)–(110): the suspension potential W_N = Σ V(x_i) + β|σs − Σ f(x_i)/√N| is continuous and convex when V,f are C², D²V ≥ a Id, ‖D²f‖op ≤ M, β ≥ 0 and βM/√N ≤ a; a positive finite N exists for a > 0 and M ≥ 0. The source scale σ = √(1 + 2/β²) is a specialization. The joint-law identification, isotropy, mixed cumulant identity (112), limit β → ∞ and density argument are not proved."
+            "note": "Formalized in the source form and certified (prop:bkl-suspension, solutions/PropBklSuspension.lean), conditional on the paper's universal cumulant hypothesis CumulantBound d b. Proved steps: the continuity of T_d on L²(μ) used in the proof (‖T_d f‖ ≤ C_d‖f‖₂ for a probability measure with all exponential moments; T_d is linear on L²), and the linear-function step: for a nonzero finite measure with all exponential moments, F_⟨v,·⟩ = DΛ_μ(·)v and T_d⟨v,·⟩ = κ_{d+1}(v, ·, …, ·)/d!. Equations (109)–(110): the suspension potential W_N = Σ V(x_i) + β|σs − Σ f(x_i)/√N| is continuous and convex when V,f are C², D²V ≥ a Id, ‖D²f‖op ≤ M, β ≥ 0 and βM/√N ≤ a; a positive finite N exists for a > 0 and M ≥ 0. The source scale σ = √(1 + 2/β²) is a specialization. Also formalized: the Laplace noise; the joint law of (S, X₁, …, X_N) with its density (109), log-concavity under (110), exponential moment and smooth Λ near 0; isotropy from (108); (111) and (112) for the chosen N; the Hilbert–Schmidt step; the β → ∞ limit; the affine-orthogonal decomposition; (113) for the smooth normalized class and, by density, for every f ∈ L² orthogonal to the affine functions — all conditional on the universal hypothesis CumulantBound. The assembly (107) is `norm_coordTensor_taylorTensor_sq_le_two_mul` (Codex, independently replayed): the source statement with its universal hypothesis CumulantBound, d ≥ 2, b > 0 and the constant 2b/(d!)², for all f ∈ L²(μ) and all n. Formalized steps (2026-10-08): the Laplace law; the joint law, its density (109), log-concavity under (110), exponential moment and smooth Λ near 0; isotropy from (108); (111) and (112) for the chosen N; the Hilbert–Schmidt step; the β → ∞ limit; the affine-orthogonal decomposition and the linear-function step in any basis. Also (113) for the smooth normalized class (`norm_coordTensor_taylorTensor_sq_le_of_cumulantBound`, Codex). Also the density extension to all f ∈ L² orthogonal to the affine functions (`norm_coordTensor_taylorTensor_sq_le_of_orthogonal`). Pending: the assembly (107) with the factor 2; the proposition remains conditional on its hypothesis CumulantBound."
           },
           {
             "id": "E12",
@@ -8643,9 +9334,185 @@
               {
                 "name": "FunctionalInequalities.KLS.RegularPotential.integral_hessian_add_le_norm_sq_weightedLaplacianVec",
                 "source": "formalization/FunctionalInequalities/KLS/LogConcave/Regular.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Poincare.SmoothTest.variance_le_mul_energy_of_tendsto",
+                "source": "formalization/FunctionalInequalities/Poincare/SmoothTest/WeakLimit.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Poincare.SmoothTest.Holds.of_compactSupport",
+                "source": "formalization/FunctionalInequalities/Poincare/SmoothTest/WeakLimit.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.LogConcave.localSlope_constant_le_of_tendsto",
+                "source": "formalization/FunctionalInequalities/KLS/LogConcave/WeakLimit.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.normalizedDensity_line_factorization",
+                "source": "formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/Hessian.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.potential_line_cgf",
+                "source": "formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/Hessian.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.bilinearIteratedFDerivTwo_potential_eq_sub_variance_score",
+                "source": "formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/Hessian.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.bilinearIteratedFDerivTwo_potential_eq_sub_variance_inner",
+                "source": "formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/Hessian.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.bilinearIteratedFDerivTwo_potential_le",
+                "source": "formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/Hessian.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.variance_inner_posterior_le",
+                "source": "formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/Hessian.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.memLp_two_id_posterior",
+                "source": "formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/Hessian.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.BorelLogConcave.integral_exp_norm_le_of_ball",
+                "source": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Moments.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.BorelLogConcave.integral_norm_pow_le_of_ball",
+                "source": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Moments.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Probability.measure_ball_ge_of_integral_norm_sq_le",
+                "source": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Moments.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.BorelLogConcave.integral_norm_pow_le_of_second_bound",
+                "source": "formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Moments.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.LogConcave.integral_norm_pow_le_of_isotropic",
+                "source": "formalization/FunctionalInequalities/KLS/LogConcave/Isotropic.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.posteriorLaw",
+                "source": "formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/Posterior.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.posteriorLaw_isBorellDensity",
+                "source": "formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/Posterior.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.posteriorLaw_logConcave",
+                "source": "formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/Posterior.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.centeredPosteriorLaw",
+                "source": "formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/Posterior.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.integral_id_centeredPosteriorLaw",
+                "source": "formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/Posterior.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.variance_inner_centeredPosteriorLaw_le",
+                "source": "formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/Posterior.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.integral_norm_sq_centeredPosteriorLaw_le",
+                "source": "formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/Posterior.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.integral_norm_pow_centeredPosteriorLaw_le",
+                "source": "formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/Posterior.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.integral_exp_norm_centeredPosteriorLaw_le",
+                "source": "formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/Posterior.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.potential_hasTemperateGrowth",
+                "source": "formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/Growth.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.potential_iteratedFDeriv_ge_three",
+                "source": "formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/Growth.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.exists_uniform_potential_derivative_bound",
+                "source": "formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/Growth.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.regularPotential_quadraticPotential",
+                "source": "formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/Regular.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.regularLaw_eq_quadraticTilt",
+                "source": "formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/Regular.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.quadraticTilt_logConcave",
+                "source": "formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/Regular.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.RegularPotential.of_convexOn_hasTemperateGrowth",
+                "source": "formalization/FunctionalInequalities/KLS/LogConcave/Regular.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.RegularPotential.comp_affine",
+                "source": "formalization/FunctionalInequalities/KLS/LogConcave/Regular.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.RegularPotential.law_comp_affine",
+                "source": "formalization/FunctionalInequalities/KLS/LogConcave/RegularAffine.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.RegularPotential.law_comp_affine_eq_map",
+                "source": "formalization/FunctionalInequalities/KLS/LogConcave/RegularAffine.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.smoothedLaw_covariance_operator",
+                "source": "formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/Moments.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.smoothedLaw_covariance_operator_tendsto",
+                "source": "formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/Moments.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.smoothedProbabilityLaw_tendsto",
+                "source": "formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/Approximation.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.RegularPotential.exists_regular_isotropic",
+                "source": "formalization/FunctionalInequalities/KLS/LogConcave/RegularIsotropic.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Probability.covariance_quadraticTilt_tendsto",
+                "source": "formalization/FunctionalInequalities/Probability/QuadraticTilt.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.RegularPotential.comp_isometry",
+                "source": "formalization/FunctionalInequalities/KLS/LogConcave/RegularIsometry.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.RegularPotential.localSlope_le_of_euclidean_bound",
+                "source": "formalization/FunctionalInequalities/KLS/LogConcave/RegularIsometry.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.exists_regularSeq_limits",
+                "source": "formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/RegularApproximation.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.RegularPotential.localSlope_le_covariance_norm",
+                "source": "formalization/FunctionalInequalities/KLS/LogConcave/RegularPoincare.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.LogConcave.isotropicBound_of_euclidean_regular_isotropic_bound",
+                "source": "formalization/FunctionalInequalities/KLS/LogConcave/IsotropicReduction.lean"
               }
             ],
-            "note": "Same (Codex reviews RE and final): RegularPotential V a b records only the assumptions of (12) (HasTemperateGrowth, 0 < a, a‖v‖² ≤ ∇²V(v,v) ≤ b‖v‖²) on any finite-dimensional real inner product space (the source's b > 0 follows in positive dimension; in dimension 0 any b is allowed); derived in Lean: strong convexity, Gaussian domination of e^{−V}, integrability and positive normalizer, the probability law volume.tilted(−V) (density e^{−V}/Z; the paper's normalized potential is V + log Z), all exponential moments, polynomial growth of ∇V, log-concavity and full support; the scalar/tensor (48)–(50), (15), (16) with curvature a, and the operator-domain Lemma 2.1 with C = 1/a then hold with every analytic premise discharged. The regular approximation of general log-concave laws is not proved."
+            "note": "Same (Codex reviews RE and final): RegularPotential V a b records only the assumptions of (12) (HasTemperateGrowth, 0 < a, a‖v‖² ≤ ∇²V(v,v) ≤ b‖v‖²) on any finite-dimensional real inner product space (the source's b > 0 follows in positive dimension; in dimension 0 any b is allowed); derived in Lean: strong convexity, Gaussian domination of e^{−V}, integrability and positive normalizer, the probability law volume.tilted(−V), all exponential moments, polynomial growth of ∇V, log-concavity and full support; the scalar/tensor (48)–(50), (15), (16) with curvature a, and the operator-domain Lemma 2.1 with C = 1/a then hold with every analytic premise discharged. Regular approximation (p. 5), formalized state as of 2026-10-08: (i) Gaussian smoothing of a law with a Borell density is a producer of regular potentials V_s + δ/2‖·‖² with δ·Id ≤ ∇² ≤ (2s+δ)·Id (upper Hessian through the Gaussian posterior, polynomial growth of all derivatives through uniform quantitative Borell moments of the centered posterior), whose law is the two-step law and is log-concave; (ii) the smoothed laws have covariance Cov μ + Id/(2s) and converge to μ weakly and in mean, second moment and covariance; the quadratic tilts have covariances converging to Cov μ; (iii) the joint Gaussian-then-quadratic approximation: along a selected diagonal, the laws of the produced regular potentials converge weakly to μ with means, raw second moments and covariance operators converging; (iv) the regular class is stable under affine maps and isometries, every regular law centers and whitens to an isotropic regular law, and a Poincaré bound for isotropic regular laws on ℝⁿ transfers to every finite-dimensional space; (v) conditional transfer: a universal bound K for isotropic regular laws gives C_P ≤ K‖Cov‖ for every regular law; (vi) the weak-limit transfer of a Poincaré bound with converging constants to the literature constant of a log-concave limit. (vii) the final passage: a bound for isotropic regular laws on ℝⁿ (n > 0) implies the bound for every isotropic log-concave law in every finite-dimensional space (KLS.LogConcave.isotropicBound_of_euclidean_regular_isotropic_bound), so the Section 2 reduction of Theorem 1.1 to isotropic regular laws is complete. The whitened-sequence convergence is not needed and not claimed. Theorem 1.1 itself remains open (its regular case needs Theorem 4.1)."
           },
           {
             "id": "E2628",
@@ -8766,6 +9633,137 @@
               }
             ],
             "note": "Formalized in a reviewed stronger form (Codex review 4): for scalar and tensor-valued u ∈ 𝒜 (vector form F_{−ℒu}(z) = F_{Du}(z) z, ℒu = Δu − Du(∇V)), μ = m.tilted(−V) with V ∈ C¹, ∇V of polynomial growth and all exponential moments (the source assumes μ regular; that implication is reviewed, not a Lean adapter), by integration by parts under each tilt with a scaled bump cutoff and dominated convergence; also for compactly supported C² scalar u. Also for every F ∈ D(A) in the heat model, as an identity of L² classes (tiltAverage_adjointComp_eq, operator route of 2026-10-07)."
+          },
+          {
+            "id": "E67",
+            "locator": "Equation (67), p. 19 (unnumbered display) and the compact stage before it",
+            "label": "Localization posterior and its parameter dependence",
+            "statement": "μ_t has density proportional to e^{⟨c_t,x⟩ − ½⟨Q_t x,x⟩} dμ with (c_0,Q_0) = (0,0); the parameters evolve by dc = A⁻¹a dt + A^{-1/2} dB, dQ = A⁻¹ dt.",
+            "uses": [],
+            "relation": "partial",
+            "declarations": [
+              {
+                "name": "FunctionalInequalities.Probability.Posterior.quadraticExponent",
+                "source": "formalization/FunctionalInequalities/Probability/Posterior/Exponent.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Probability.Posterior.expectation_hasDerivAt_of_compact",
+                "source": "formalization/FunctionalInequalities/Probability/Posterior/CompactPrior.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Probability.Posterior.expectation_hasDerivAt_quadraticExponent_of_coercive",
+                "source": "formalization/FunctionalInequalities/Probability/Posterior/Coercive.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Probability.Posterior.expectation_hasDerivAt_quadraticExponent_of_compact",
+                "source": "formalization/FunctionalInequalities/Probability/Posterior/CompactQuadratic.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Probability.Posterior.exists_uniform_norm_moments_tilted_quadraticExponent_of_compact",
+                "source": "formalization/FunctionalInequalities/Probability/Posterior/CompactQuadratic.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.Isotropic.posterior_linear_response",
+                "source": "formalization/FunctionalInequalities/KLS/BKL/PosteriorResponse.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Probability.Posterior.compactPosterior",
+                "source": "formalization/FunctionalInequalities/Probability/Posterior/CompactDomain.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.Isotropic.compactPosterior_exists_positive_symmetric_inverse",
+                "source": "formalization/FunctionalInequalities/KLS/BKL/PosteriorCovariance.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.Isotropic.compactPosterior_ringInverse_covariance",
+                "source": "formalization/FunctionalInequalities/KLS/BKL/PosteriorCovariance.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Probability.Posterior.posteriorExpectation_generator_cancellation",
+                "source": "formalization/FunctionalInequalities/Probability/Posterior/Generator.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Probability.Posterior.contDiff_posteriorExpectation_c",
+                "source": "formalization/FunctionalInequalities/Probability/Posterior/Generator.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.Isotropic.compactPosterior_generator_cancellation",
+                "source": "formalization/FunctionalInequalities/KLS/BKL/PosteriorCovariance.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.compactPosterior_logConcave",
+                "source": "formalization/FunctionalInequalities/KLS/BKL/PosteriorCovariance.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.Isotropic.compactPosterior_inverseSqrt_spec",
+                "source": "formalization/FunctionalInequalities/KLS/BKL/PosteriorCovariance.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Probability.Posterior.contDiff_posteriorExpectation_joint",
+                "source": "formalization/FunctionalInequalities/Probability/Posterior/JointRegularity.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Probability.Posterior.contDiff_posteriorCovariance_joint",
+                "source": "formalization/FunctionalInequalities/Probability/Posterior/JointRegularity.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.Isotropic.contDiff_covarianceDrift_joint",
+                "source": "formalization/FunctionalInequalities/KLS/BKL/PosteriorCovariance.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.locallyLipschitz_inverseSqrt_of_contDiff_ringInverse",
+                "source": "formalization/FunctionalInequalities/Analysis/Operator/InverseSqrt.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.Isotropic.locallyLipschitz_coefficients67",
+                "source": "formalization/FunctionalInequalities/KLS/BKL/PosteriorCovariance.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.inverseSqrt_mul_mul_inverseSqrt",
+                "source": "formalization/FunctionalInequalities/Analysis/Operator/InverseSqrt.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Probability.covariance_sq_le_variance_mul_variance",
+                "source": "formalization/FunctionalInequalities/Probability/Covariance/CauchySchwarz.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Covariance.variance_inner_eq_of_sandwich",
+                "source": "formalization/FunctionalInequalities/Probability/Covariance/Whitening.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.sum_trace_sq_le_card_mul_sum_sq",
+                "source": "formalization/FunctionalInequalities/Analysis/Matrix/Trace.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.Isotropic.exists_inverseSqrt_equiv_isotropic_standardized",
+                "source": "formalization/FunctionalInequalities/KLS/BKL/PosteriorCovariance.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Probability.sum_sq_integral_mul_mul_le_integral_norm_pow_six",
+                "source": "formalization/FunctionalInequalities/Probability/Moments.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.opNorm_covariance_compactPosterior_le_sq_radius",
+                "source": "formalization/FunctionalInequalities/KLS/BKL/PosteriorCovariance.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.Isotropic.opNorm_sq_fderiv_posteriorExpectation_comp_inverseSqrt_le_variance",
+                "source": "formalization/FunctionalInequalities/KLS/BKL/PosteriorCovariance.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.Isotropic.opNorm_sq_fderiv_posteriorExpectation_comp_inverseSqrt_le_sq",
+                "source": "formalization/FunctionalInequalities/KLS/BKL/PosteriorCovariance.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.Isotropic.integral_norm_pow_six_inverseSqrt_sub_posteriorMean_le",
+                "source": "formalization/FunctionalInequalities/KLS/BKL/PosteriorCovariance.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.Isotropic.operatorMatrix_inverseSqrt_mul_thirdMomentMatrix_mul_apply",
+                "source": "formalization/FunctionalInequalities/KLS/BKL/PosteriorCovariance.lean"
+              }
+            ],
+            "note": "Only the deterministic parameter dependence of the posterior is formalized (Codex q_batch bundle Posterior-Parameter-Calculus, independently accepted 2026-10-08): for a compactly supported prior every (c,Q) including the initial pair gives a probability posterior with uniform norm moments ≤ R^p and the covariance derivative along signed parameter lines; for an arbitrary probability prior and coercive Q (⟨Qx,x⟩ ≥ a‖x‖², a > 0, so not Q = 0) the same for polynomially growing statistics without prior moments; the isotropic initial response of ⟨u,x⟩ is ⟨u,h⟩ (research/audits/BKL/PosteriorParameterAudit.lean: Gaussian prior response 1/2 at Q = Id, rank 0). The stochastic equations (67)–(71), the Itô formula, the martingale property and the compact approximation of general laws are not formalized. Covariance domain (Codex bkl bundle Posterior-Covariance-Domain, independently accepted 2026-10-08): the posterior of a compactly supported prior at every finite (c,Q), including the initial pair and negative Q, keeps the prior's null sets, support and affine support and has finite second moment; for an isotropic prior (finite second moment from compact support) its covariance is self-adjoint, strictly positive and a unit with canonical self-adjoint positive inverse (the rate A_t⁻¹ = Cov(μ_t)⁻¹ in the parameter equations (67); (68) is the equation of the expectations); a positive-dimensional Dirac prior has posterior covariance 0, not a unit. Q-process positivity is not formalized (the principal inverse square root, its regularity and the canonical standardisation are recorded below). Generator (Codex q_batch bundle Posterior-Generator-Cancellation, independently accepted 2026-10-08): the posterior expectation is C^∞ in c with covariance gradient/Hessian and Q-derivative −½ Cov(f,⟨Mx,x⟩), and for every symmetric M the combination D_c[Ma] + ∂_Q[M] + ½ tr_M D²_c vanishes — the deterministic content of the zero drift in (68); the specialization M = Cov(μ_t)⁻¹, the SDE, Itô and the martingale property are not formalized. The generator cancels at the source rate M = Ring.inverse (Cov μ_{c,Q}) for compactly supported isotropic priors at every finite (c,Q) including rank 0, with rate Id at the initial pair (Codex q_batch bundle Posterior-Generator-Inverse, independently accepted 2026-10-08); the diffusion root A^{-1/2}, SDE, Itô and the martingale property remain unformalized. Log-concavity of the posterior for a log-concave compact prior and self-adjoint Q ≥ 0, including Q = 0, singular priors and rank 0 (Codex q_batch bundle Posterior-LogConcavity, independently accepted 2026-10-08; concave tilts of log-concave laws via the intrinsic Borell density); no claim for negative Q or for positivity of the Q-process. The diffusion coefficient A_t^{-1/2} (Codex bkl bundle Principal-Inverse-SquareRoot, independently accepted 2026-10-08): principal inverse square root of the posterior covariance via the canonical matrix CFC.sqrt in orthonormal coordinates (Analysis/Operator/InverseSqrt.lean), positive self-adjoint, σ² = σσ* = Cov⁻¹, cancellation with Cov, unique positive branch, basis independent, Id at c = Q = 0, all finite (c,Q) incl. rank 0; coefficient algebra (the regularity of (c,Q) ↦ A^{-1/2} is recorded below); no native real-operator functional calculus is claimed at the pin. Coefficient regularity (Codex q_batch bundles Posterior-Joint-Regularity and Principal-Root-Regularity, independently accepted 2026-10-08): the posterior expectation, mean and covariance of a compactly supported prior are C^∞ jointly in (c,Q) ∈ E × L(E) (Probability/Posterior/JointRegularity.lean; chart to a Riesz feature and the c-only smoothness of the pushed-forward prior), the rate Cov⁻¹ and the drift Cov⁻¹a are jointly C^∞ for an isotropic prior, and the diffusion coefficient Cov⁻¹ᐟ² and the literal coefficient triple (Cov⁻¹ᐟ², Cov⁻¹a, Cov⁻¹) of (67) are locally Lipschitz on the whole parameter space (Sylvester Frobenius estimate ‖S−T‖_F ≤ ‖S²−T²‖_F/(a+b) for positive roots, relative continuity of the matrix CFC.sqrt on the nonnegative cone, local positive floors; Analysis/Matrix/Positivity.lean, Analysis/Operator/InverseSqrt.lean, KLS/BKL/PosteriorCovariance.lean). The strong solution of (67), non-explosion, adaptedness and the Itô identities (68)–(71) remain unformalized; the pinned Mathlib and the audited external closure contain no SDE theorem. Root sandwich σAσ = Id for the principal inverse square root (Luna unit NB2, independently accepted 2026-10-08): the canonical root whitens the covariance; no transported-law whitening API (image law with mean 0 and covariance Id) is claimed yet — the earlier 'not a whitener' wording is superseded (recorded prose drift). Deterministic supports of the (68) noise estimate and of the proposed log-determinant non-explosion route (Luna units NB1, NB3, TE1, independently accepted 2026-10-08): covariance Cauchy–Schwarz cov(X,Y)² ≤ Var X·Var Y on any probability space (Probability/Covariance/CauchySchwarz.lean); Var⟪Sh,·⟫ = ‖h‖² for a self-adjoint S with the actual sandwich S·Cov·S = Id (Probability/Covariance/Whitening.lean; the sandwich is a hypothesis, no root is produced); trace energy Σ_i (tr B_i)² ≤ n·Σ_{ijk}(B_i)_{jk}² without symmetry (Analysis/Matrix/Trace.lean); third-moment contraction Σ_{ijk}(∫x_i x_j x_k)² ≤ ∫‖x‖⁶ for an integrable sixth moment, no centering (Luna unit TM1b, independently accepted 2026-10-08; Probability/Moments.lean); covariance radius ‖Cov μ_{c,Q}‖ ≤ r² for a prior supported in the closed r-ball at every finite (c,Q) without isotropy (Luna unit TU1b round 8 with a recorded linter-only Claude repair, independently accepted 2026-10-08; KLS/BKL/PosteriorCovariance.lean). The noise coefficient of (68) is bounded (Luna units NB4a/NB4b round 8 in Claude's accepted assembly, independently accepted 2026-10-08; KLS/BKL/PosteriorCovariance.lean section NoiseBound): for a compact isotropic prior and |f| ≤ C on the prior support, ‖D_c(∫f dμ_{·,Q})(c) ∘ Cov(μ_{c,Q})^{-1/2}‖² ≤ Var_{μ_{c,Q}} f ≤ C² at every finite (c,Q). The covariance dynamics, Itô, the stochastic integral, a strong solution and non-explosion remain unformalized. Canonical standardisation (Luna unit TW1 with recorded Claude closing repairs, independently accepted 2026-10-08; KLS/BKL/PosteriorCovariance.lean section CanonicalStandardisation): for a compact isotropic prior and every finite (c,Q) the principal inverse square root is a continuous linear equivalence W = σ transporting the centred posterior to an isotropic law (the transported law of (75)–(77) with the SAME principal root; no rotation of the Brownian driver is claimed). Canonical sixth moment (Luna unit SM1, independently accepted 2026-10-08; KLS/BKL/PosteriorCovariance.lean section SixthMoment): for a compact isotropic log-concave prior, every c and self-adjoint PSD Q, ∫‖Cov(μ_{c,Q})^{-1/2}(x − a)‖⁶ ≤ 6!(log 3/(8√(n+1)))^{-6}·3^{3/4}/(1−3^{-1/4}) (explicit, dimension-dependent); the energies built on the (69) slices are not formalized. The deterministic (69) entry identity (B69 chain, independently accepted 2026-10-09; KLS/BKL/PosteriorCovariance.lean section NoiseEntries, generic form Probability/CoordinateThirdMoment.lean): for a compact isotropic prior and every finite (c,Q), signed and non-symmetric Q included, (P H_i P)_{jk} = ∫ (σV)_j(σV)_k(σV)_i dμ_{c,Q} with the same principal root σ of (67), its matrix P in the fixed basis and the computed slices H_i; the covariance equation (69) itself (stochastic) is not formalized."
           }
         ]
       }
@@ -8895,8 +9893,8 @@
       "papers": [
         "BKL2026"
       ],
-      "target": "Theorem 1.1 through Theorems 3.1 (certified, thm:bkl-taylor-criterion), 4.1 and Proposition 7.1: Section 3 is formalized by the operator route; Lemma 2.2, Lemma 3.6 (⇑), Corollary 3.7 (⇑), Lemmas 3.2–3.4, 3.8, 3.9 for the D(A) iterates (⇑) and the regular-law adapter for (12) are formalized; Lemma 2.1 on 𝒜, (19), steps of Proposition 7.1 and Lemma 4.2 conditional on the Letwin bound are partial, restricted or conditional counterparts.",
-      "next_step": "Current focus: complete BKL Proposition 7.1, starting with the joint-law identification and mixed cumulant identity (111)–(112); convexity (109)–(110) and the finite-N choice are formalized. Then the regular approximation and Theorem 4.1 (Eldan localization) connect to the certified Theorem 3.1. Letwin stays a prerequisite of Lemma 4.2. Lemma 2.1 on 𝒜 and (19) are not needed by the operator route."
+      "target": "Theorem 1.1 through Theorems 3.1 (certified, thm:bkl-taylor-criterion), 4.1 and Proposition 7.1 (certified in the source form, prop:bkl-suspension, conditional on its hypothesis CumulantBound): Section 3 is formalized by the operator route; Lemma 2.2, Lemma 3.6 (⇑), Corollary 3.7 (⇑), Lemmas 3.2–3.4, 3.8, 3.9 for the D(A) iterates (⇑), the regular-law adapter for (12), the complete Section 2 reduction to isotropic regular laws (regular approximation and weak-limit transfer) and the p. 30 reduction are formalized, so Theorem 1.1 is formalized conditionally on the Theorem 4.1 cumulant bounds (no certificate); Lemma 2.1 on 𝒜, (19), and Lemma 4.2 conditional on the Letwin bound are partial, restricted or conditional counterparts; the deterministic spatial step (74)/(72) of Lemma 4.3 is formalized (⇑); Theorem 4.1 is stated conditionally (cumulant envelope) and open.",
+      "next_step": "Next: Stage 2, Letwin Theorem 1.2 (Var ≤ 8‖M‖²_HS, the exact input of Lemma 4.2), active under the renewed Codex controller. Stage 2A is formalized: Letwin Lemma A.4 for every source-class potential and every real R ≥ 1 with its natural-index C/(n+1) form, Lemma A.5 for given cutoffs, and their application to the nonconstant uniform-interval source-law client. This supports, but does not prove, Letwin Theorem 2.5, Theorem 1.2 or an unconditional BKL Lemma 4.2. Next within Stage 2: Letwin Theorem 2.5 with Proposition 2.8 and the Stein-kernel identity (2.21), toward Theorem 1.2. Stage 1 (BKL (74) grouped with (72); the covariance step of the proof of Letwin Theorem 1.2) is integrated and covered by the full local receipt 20261010T093056.948739Z. Owner scope (2026-10-10): BKL Theorem 1.1 is the primary objective. Discharge Theorem 4.1 through the original Eldan localization and the Section 4-6 cumulant-energy argument, and the cited Letwin Theorem 1.2 input for Lemma 4.2. Reuse the certified Theorem 3.1, conditional source Proposition 7.1 and regular-law reduction. Other papers are pursued only for referenced results and necessary prerequisites with an explicit BKL consumer; general CEK Theorem 2/uniqueness and full Letwin paper coverage are not standalone goals. Moment-potential, regularity, Stein, integration and approximation work must be tied to the required Letwin bound. Conditional assembly remains insufficient; KLS.kls stays open."
     },
     {
       "rank": 2,
@@ -8904,7 +9902,7 @@
         "BGL2014"
       ],
       "target": "Corollary 4.8.2 (strongly log-concave Bakry–Émery C_P ≤ 1/ρ) is certified as thm:bakry-emery-poincare and committed in 36e7c78 (remote run 37516844384 succeeded); select a separate Brascamp–Lieb source statement.",
-      "next_step": "Pin a Brascamp–Lieb source theorem, its assumptions and normalization, and assess reuse of the heat-semigroup and Γ₂ interfaces before proof work."
+      "next_step": "Deferred as an independent paper target under the 2026-10-10 BKL-first scope. Resume only for a reviewed referenced result or necessary prerequisite with an explicit BKL proof consumer; existing formalization and certificates are retained."
     },
     {
       "rank": 3,
@@ -8912,7 +9910,7 @@
         "KLS1995"
       ],
       "target": "Theorem 5.1, ψ(K) ≥ ln 2 / M₁(K) for convex bodies, through the needle reduction (Corollary 2.2, Lemma 2.6, Theorem 2.7). With the local Cheeger inequality it gives C_P ≲ E‖X − EX‖² for convex bodies.",
-      "next_step": "Pin a proof of the cited localization lemma (Lovász–Simonovits 1993 or a modern account) and choose a Lean form for needles; keep the product denominator of (1.1) distinct from the min-denominator constant."
+      "next_step": "Deferred as an independent paper target under the 2026-10-10 BKL-first scope. Resume only for a reviewed referenced result or necessary prerequisite with an explicit BKL proof consumer; existing formalization and certificates are retained."
     },
     {
       "rank": 4,
@@ -8920,7 +9918,7 @@
         "Milman2009"
       ],
       "target": "Concentration implies a Cheeger bound under the source convexity hypotheses.",
-      "next_step": "Pin the main theorem and its concentration/curvature assumptions; compare its analytic inputs with the current finite-dimensional Cheeger–Buser API."
+      "next_step": "Deferred as an independent paper target under the 2026-10-10 BKL-first scope. Resume only for a reviewed referenced result or necessary prerequisite with an explicit BKL proof consumer; existing formalization and certificates are retained."
     },
     {
       "rank": 5,
@@ -8932,7 +9930,7 @@
         "Klartag2023"
       ],
       "target": "Published stochastic-localization theorems and quantitative KLS bounds.",
-      "next_step": "Reuse Mathlib probability foundations; build an isolated audited client of pinned external stochastic APIs before selecting the missing vector/matrix SDE bridges."
+      "next_step": "Deferred as an independent paper target under the 2026-10-10 BKL-first scope. Resume only for a reviewed referenced result or necessary prerequisite with an explicit BKL proof consumer; existing formalization and certificates are retained."
     },
     {
       "rank": 6,
@@ -8942,7 +9940,7 @@
         "Letwin2026"
       ],
       "target": "Selected 2025–2026 thin-shell and quadratic-form results.",
-      "next_step": "Retain exact preprint versions and assess moment-measure, stochastic and matrix-estimate dependencies; do not credit exploratory hypotheses as completed paper theorems."
+      "next_step": "Deferred as an independent paper target under the 2026-10-10 BKL-first scope. Resume only for a reviewed referenced result or necessary prerequisite with an explicit BKL proof consumer; existing formalization and certificates are retained."
     }
   ]
 }

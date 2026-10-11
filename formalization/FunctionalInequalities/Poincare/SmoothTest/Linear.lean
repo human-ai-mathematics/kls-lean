@@ -7,9 +7,9 @@ import Mathlib.Probability.Moments.CovarianceBilin
 /-!
 # The linear-test lower bound: source and formalization scope
 
-Source: [Remark 3.8 of the historical manuscript](https://github.com/numina-functional-inequalities/kls-exploration/blob/cd4a894a0faf40c0180f80b1a31eec1fdb6cb576/modules/02-results-toolkit.tex#L108-L117)
+Source: [Remark 3.8 of the historical manuscript](https://github.com/human-ai-mathematics/kls-conjecture-search/blob/cd4a894a0faf40c0180f80b1a31eec1fdb6cb576/modules/02-results-toolkit.tex#L108-L117)
 states the Rayleigh lower bound and its linear-test consequence
-`C_P ≥ λ_max(Cov_P)`. The [linear-test dossier](https://github.com/numina-functional-inequalities/kls-exploration/blob/cd4a894a0faf40c0180f80b1a31eec1fdb6cb576/solutions/glm-linear-baselines.tex#L39-L68)
+`C_P ≥ λ_max(Cov_P)`. The [linear-test dossier](https://github.com/human-ai-mathematics/kls-conjecture-search/blob/cd4a894a0faf40c0180f80b1a31eec1fdb6cb576/solutions/glm-linear-baselines.tex#L39-L68)
 explicitly assumes a Euclidean probability measure with finite covariance, allows an extended
 optimal constant, and gives the linear-test variance and energy calculation.
 
@@ -105,7 +105,7 @@ the source remark does not spell out these conventions. -/
 def rayleigh (μ : Measure E) (f : E → ℝ) : ENNReal :=
   ENNReal.ofReal (variance f μ) / ENNReal.ofReal (energy μ f)
 
-/-- Source: the Rayleigh bound in [Remark 3.8](https://github.com/numina-functional-inequalities/kls-exploration/blob/cd4a894a0faf40c0180f80b1a31eec1fdb6cb576/modules/02-results-toolkit.tex#L108-L117).
+/-- Source: the Rayleigh bound in [Remark 3.8](https://github.com/human-ai-mathematics/kls-conjecture-search/blob/cd4a894a0faf40c0180f80b1a31eec1fdb6cb576/modules/02-results-toolkit.tex#L108-L117).
 This local `Admissible`/`ENNReal` version follows from `Holds.le` and `le_constant`,
 including the stated zero-energy conventions and the absence of finite valid constants. -/
 theorem rayleigh_le_constant {μ : Measure E} {f : E → ℝ}
@@ -283,8 +283,8 @@ theorem lambdaMax_le {μ : Measure E} {C : ℝ}
     rw [rayleighMax, Real.iSup_of_isEmpty]
     exact hP.constant_nonneg
 
-/-- Source: the covariance lower bound in [Remark 3.8](https://github.com/numina-functional-inequalities/kls-exploration/blob/cd4a894a0faf40c0180f80b1a31eec1fdb6cb576/modules/02-results-toolkit.tex#L108-L117)
-and its [finite-covariance dossier](https://github.com/numina-functional-inequalities/kls-exploration/blob/cd4a894a0faf40c0180f80b1a31eec1fdb6cb576/solutions/glm-linear-baselines.tex#L39-L68).
+/-- Source: the covariance lower bound in [Remark 3.8](https://github.com/human-ai-mathematics/kls-conjecture-search/blob/cd4a894a0faf40c0180f80b1a31eec1fdb6cb576/modules/02-results-toolkit.tex#L108-L117)
+and its [finite-covariance dossier](https://github.com/human-ai-mathematics/kls-conjecture-search/blob/cd4a894a0faf40c0180f80b1a31eec1fdb6cb576/solutions/glm-linear-baselines.tex#L39-L68).
 This Hilbert/`ENNReal` version follows from `lambdaMax_le` and `Poincare.SmoothTest.le_constant`,
 with an explicit second moment and the local dimension-zero convention. -/
 theorem lambdaMax_le_constant {μ : Measure E}
