@@ -4,7 +4,7 @@ Updated 2026-10-12. This file records the current state only. Earlier wording an
 
 ## State
 
-- Local `main` is `ad630b00` (2026-10-12, owner-authorized commit of the snapshot `bf72ed91` covered by the full receipt `20261011T173331.204329Z`); `origin/main` is `ca59365726bca899f26cdd889dcc62850089eb09`. No push, tag or remote CI has been made. The vendored stochastic calculus below is in the working tree only, uncommitted. Remote Lean certification passed for `36e7c78` only; later work has local evidence only.
+- Local `main` is `313a43c` (2026-10-12, owner-authorized commit of the snapshot `7a039007` covered by the full receipt `20261012T151046.694236Z`, including the vendored stochastic calculus and its provenance lock); `origin/main` is `ca59365726bca899f26cdd889dcc62850089eb09`. No push, tag or remote CI has been made. Remote Lean certification passed for `36e7c78` only; later work has local evidence only.
 - There are 30 ledger certificates. The 30th is `prop:bkl-suspension` in `solutions/PropBklSuspension.lean`, Bizeul–Klartag–Lehec Proposition 7.1 in source form conditional on `CumulantBound d b`, in all dimensions. The 29th is `thm:bkl-taylor-criterion`. `FunctionalInequalities.KLS.kls` in `KLS/Target.lean` remains the one intentional hole outside every certificate closure. Dimension-free KLS is open.
 - Covered papers remain Ambrosio–Di Marino–Gigli Theorem 3.6 and Bakry–Gentil–Ledoux Corollary 4.8.2 (`⇑`). BKL and Letwin are not covered. BKL Theorem 1.1 is formalized only conditionally on the open Theorem 4.1/Eldan localization bound. Letwin Theorems 1.1–1.2 and the moment-map Stein kernel of an arbitrary law remain open; the Gaussian has the identity kernel.
 - Verification is snapshot-specific. The integrated snapshot, including the 2026-10-11 Letwin A.4/A.5 source integration, is checked by `python3 research/verify.py` only after all proof and metadata edits. `build/verification/latest.json` is valid only while its status is `passed` and its snapshot hash matches the working tree. The full receipt `20261011T125323.381816Z` covers the integrated Stage 2A snapshot before file maintenance; `20261010T093056.948739Z` covers its earlier Stage 1 snapshot. This handoff edit does not create a fresh proof or verification receipt.
@@ -38,15 +38,25 @@ Letwin (2.9)–(2.10) for a given potential (2026-10-12, working tree; verified 
 
 Legendre first variation (2026-10-12, working tree; verified by the full local receipt `20261012T145253.174906Z`): in `Analysis/Extremum.lean` and `Analysis/Convex/LegendreVariation/{Attainment,Perturbation,Derivative}.lean`, for proper lower semicontinuous `φ`, `y` interior to the finite domain of `φ*` with `φ*` differentiable there and bounded continuous `b`, `d/dt (φ + t b)*(y) = −b(∇φ*(y))` at `t = 0` (`hasDerivAt_legendre_add_smul_of_dualDifferentiable`), with attainment, maximizer = dual gradient, near-maximizer concentration and the two-sided perturbation bound of the whole `EReal` supremum, in every dimension (Blueprint `lem:legendre-attainment`, `lem:legendre-first-variation`; audit `BKL/LetwinLegendreVariationAudit.lean` with an infinite-exterior, non-`C¹` client and a zero-dimensional client). It is the pointwise form of CEK (42), a moment-map prerequisite: the integral Euler–Lagrange identification for a source law, the gradient push-forward, source regularity, CEK Theorem 2, Letwin Theorems 2.5 and 1.2, BKL and KLS remain open.
 
+BKL Claude-controller batch 1 (2026-10-13, local; GPT proof bodies, statements and placement by Claude, under the [Claude controller goal](research/handoffs/2026-10-12-bkl-claude-controller-goal.md)): the affine transformation rule of cumulants of order `k ≥ 2` (`cumulant_map_affine`, BKL (77) standardization); conditioning on a closed convex set preserves log-concavity (`LogConcave.cond` in `KLS/LogConcave/Transport.lean`); Letwin's tensor comparison (2.12) in arbitrary coordinates for symmetric `B` (`letwin_tensor_comparison` in `Analysis/Matrix/Trace.lean`); the log-determinant infimum representation and quantitative concavity (new `Analysis/Matrix/LogDet.lean`, weak moment-map route); the compact interface (new `KLS/BKL/CompactReduction.lean`: `CumulantBoundCompact`, `LetwinCompactBound` = Letwin Theorem 1.2 for compactly supported isotropic log-concave laws, and the base case `CumulantBoundCompact 2 8` from it); and the first project modules importing the vendored stochastic calculus (new `Probability/Diffusion/{Setup,Generator,Cutoff,Dynkin}.lean`, `Analysis/Gronwall.lean`): the usual filtration, `IsDiffusion`, Dynkin's identity for compactly supported coefficients and every `C²` function, the noise-free linear identity, cutoff Lipschitz lemmas and integral Grönwall. No SDE for (67), Lemma 4.3, Lemmas 5.1–5.2, Theorem 4.1, Letwin Theorem 1.2, BKL Theorem 1.1 or `KLS.kls` is proved by this batch.
+
 Letwin Theorem 1.2 is the source of the quadratic-form bound with constant 8. That attribution is not assigned to Theorem 2.5. The current dependency remains A.4 → A.5 → Letwin Theorem 2.5 → Letwin Theorem 1.2, including its constant-8 quadratic-form bound → BKL Lemma 4.2 → Theorem 4.1 → Theorem 1.1. The bound is still an open prerequisite, not a proved result in this handoff.
 
 ## Controller and next steps
 
-The current mathematical controller is Codex thread `01a12de4-2412-7082-ae33-15b1c3502420`, which continues the owner-authorized Goal (predecessor root thread `01a12b29-a858-7c43-9bb3-b28e3d038b05`, historical); its active record is [the 2026-10-12 Letwin Theorem 2.5 goal](research/handoffs/2026-10-12-bkl-letwin-t25-goal.md). The bounded Stage 2A goal ([2026-10-11 BKL A.4 goal](research/handoffs/2026-10-11-bkl-a4-goal.md)) and its earlier controllers are historical; the superseded controller wording is preserved verbatim in [the 2026-10-12 centered-range record](research/decisions/2026-10-12-letwin-centered-range-integration.md) and [the 2026-10-12 controller record](research/decisions/2026-10-12-controller-letwin-t25-goal.md). Current packet handles are in `build/reviews/2026-10-12-bkl-letwin-t25-continuation/`.
+The controller and sole canonical integrator is the Claude session of 2026-10-12, under the
+[BKL Claude controller goal](research/handoffs/2026-10-12-bkl-claude-controller-goal.md); proofs
+are constructed by the owner's GPT API (`gpt-6-astra`, high) and reviewed and integrated here.
+The Codex thread `01a12de4-2412-7082-ae33-15b1c3502420` has stopped; its goal record and the
+superseded controller text are historical ([2026-10-12 controller handoff](research/decisions/2026-10-12-controller-claude-goal.md)).
 
-The immediate mathematical next stage is Letwin Theorem 1.2, including the moment-map and regularity work, Proposition 2.8, Theorem 2.5, and the Stein-kernel identity (2.21), without assuming the desired estimate. Later stages are the Eldan localization/SDE/Itô/non-explosion argument, universal Theorem 4.1, unconditional Theorem 1.1, and `KLS.kls`. Existing Theorem 3.1, conditional Proposition 7.1, and the Section 2 reduction remain in scope as already recorded.
-
-Codex coordinates and accepts; strong API models construct candidates; the reviewed Claude conversation remains the production integrator. No new proof, certificate, or coverage status is asserted by this handoff or by the file-management batch.
+The objective is BKL Theorem 1.1 without hypotheses. Its assembly to `KLS.Conjecture` is already
+proved conditionally on `CumulantBound d ((d!)²K^d)` for all `d ≥ 2`; what remains is Theorem 4.1
+for m ≥ 3 (stream S: generator calculus, standardization, Lemma 5.1, Section 6, the Eldan SDE with
+cutoffs, a Dynkin bridge, the induction, compact approximation) and Letwin Theorem 1.2 for
+compactly supported laws by the weak moment-map route (stream L). Current milestone: G0 (frozen
+statements, definition audit). Local commits follow full verification; push, tags and remote CI
+need the owner.
 
 ## Open owner decisions
 
@@ -54,7 +64,7 @@ Codex coordinates and accepts; strong API models construct candidates; the revie
 - Decide whether to upstream generic infrastructure to Mathlib after API cleanup, including the `C^∞` symmetry of iterated derivatives.
 - Decide the CI strategy: project build cache or a self-hosted runner while the repository is private.
 
-## Vendored stochastic calculus (uncommitted, 2026-10-12)
+## Vendored stochastic calculus (2026-10-12, commit 313a43c)
 
 The owner adopted LevyStochCalc for the Eldan localization; StochLean is not adopted. Record:
 [2026-10-12 LevyStochCalc adoption](research/decisions/2026-10-12-levystochcalc-adoption.md), with
@@ -70,7 +80,7 @@ pins, licenses, the port diff and the upstream holes in [formalization/vendor/RE
   project-local declaration now runs in full as well as `--lean-only` verification; axiom
   reports are parsed exactly (structured JSON for generated audits) and unparsed reports fail.
 - No SDE, Itô, non-explosion or BKL statement is proved by this adoption.
-- Provenance lock (2026-10-12, uncommitted): `formalization/vendor/vendor-lock.json` pins, for all
+- Provenance lock (2026-10-12, commit 313a43c): `formalization/vendor/vendor-lock.json` pins, for all
   243 vendored files (239 modules, 4 licenses), the upstream path, SHA-256 and Git blob at the
   pinned commit, the vendored SHA-256 and the `port.patch` SHA-256 and file set. Placement: new
   tooling module `research/vendor_lock.py` (owner: verification tooling; no Lean or API change),

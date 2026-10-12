@@ -191,7 +191,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/LogConcave/Transport.lean",
-            "sha256": "6a832e847475993bb0bba4dffa191f41b437d4a2b7c43f9df9dcb80510bd00c6"
+            "sha256": "2e07a677436d9f1340a20dfc73d95c668f691cebf99b534717144fd0820cda05"
           },
           {
             "path": "formalization/.lake/packages/mathlib/Mathlib/Algebra/Group/Pointwise/Set/Scalar.lean",
@@ -1566,7 +1566,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/LogConcave/Transport.lean",
-            "sha256": "6a832e847475993bb0bba4dffa191f41b437d4a2b7c43f9df9dcb80510bd00c6"
+            "sha256": "2e07a677436d9f1340a20dfc73d95c668f691cebf99b534717144fd0820cda05"
           },
           {
             "path": "formalization/FunctionalInequalities/Probability/Domination/Averages.lean",
@@ -1802,7 +1802,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/LogConcave/Transport.lean",
-            "sha256": "6a832e847475993bb0bba4dffa191f41b437d4a2b7c43f9df9dcb80510bd00c6"
+            "sha256": "2e07a677436d9f1340a20dfc73d95c668f691cebf99b534717144fd0820cda05"
           },
           {
             "path": "formalization/FunctionalInequalities/Probability/AffineSupport.lean",
@@ -3442,7 +3442,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/LogConcave/Transport.lean",
-            "sha256": "6a832e847475993bb0bba4dffa191f41b437d4a2b7c43f9df9dcb80510bd00c6"
+            "sha256": "2e07a677436d9f1340a20dfc73d95c668f691cebf99b534717144fd0820cda05"
           },
           {
             "path": "formalization/FunctionalInequalities/Probability/Domination/Averages.lean",

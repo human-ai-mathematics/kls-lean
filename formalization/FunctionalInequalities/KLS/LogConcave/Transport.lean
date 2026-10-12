@@ -1,6 +1,7 @@
 import FunctionalInequalities.KLS.Definitions
 import Mathlib.Analysis.Convex.Measure
 import Mathlib.Topology.Maps.Proper.Basic
+import Mathlib.Probability.ConditionalProbability
 
 /-!
 # Geometry of the compact-set log-concavity convention
@@ -9,6 +10,10 @@ These lemmas use the existing `KLS.LogConcave` definition. Read affine-isometric
 then the intrinsic-coordinate corollary. They provide the coordinate reduction for the
 absolute-continuity step in the general log-concave literature comparison. No density is
 included in the definition and no representation theorem is assumed here.
+
+Conditioning on a closed convex set of positive mass preserves log-concavity (`cond`), used to
+truncate laws to balls (BKL arXiv:2610.05474v1, p. 19); proof body: GPT (BKL Claude-controller goal,
+task T1a), statement and placement: Claude.
 -/
 
 noncomputable section
@@ -199,5 +204,161 @@ theorem haar_frontier_intrinsic_support {μ : ProbabilityMeasure E}
     [Measure.IsAddHaarMeasure m] :
     m (frontier (Probability.intrinsicMeasure μ : Measure _).support) = 0 :=
   hμ.intrinsicMeasure.convex_support.addHaar_frontier m
+
+section Conditioning
+
+open ProbabilityTheory
+
+/-- **Conditioning on a closed convex set preserves log-concavity**: if `μ` is log-concave (in the
+compact-set sense of `LogConcave`) and `C` is closed and convex with `μ C ≠ 0`, then the
+conditional law `μ[|C]` is log-concave. Used to truncate isotropic log-concave laws to balls
+(BKL arXiv:2610.05474v1, p. 19: Theorem 4.1 reduces to compactly supported laws). -/
+theorem cond {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [MeasurableSpace E] [BorelSpace E] {μ : ProbabilityMeasure E} (hμ : LogConcave μ)
+    {C : Set E} (hC : Convex ℝ C) (hCc : IsClosed C) (hpos : (μ : Measure E) C ≠ 0) :
+    LogConcave (⟨(μ : Measure E)[|C], cond_isProbabilityMeasure hpos⟩ : ProbabilityMeasure E) := by
+  intro K₀ K₁ hK₀ hK₁ t ht₀ ht₁
+  change
+    ((μ : Measure E)[|C] K₀) ^ t * ((μ : Measure E)[|C] K₁) ^ (1 - t) ≤
+      (μ : Measure E)[|C]
+        {z | ∃ x ∈ K₀, ∃ y ∈ K₁, z = t • x + (1 - t) • y}
+
+  have hmain :
+      (μ : Measure E) (K₀ ∩ C) ^ t * (μ : Measure E) (K₁ ∩ C) ^ (1 - t) ≤
+        (μ : Measure E)
+          {z | ∃ x ∈ K₀ ∩ C, ∃ y ∈ K₁ ∩ C,
+            z = t • x + (1 - t) • y} :=
+    hμ (K₀ ∩ C) (K₁ ∩ C) (hK₀.inter_right hCc) (hK₁.inter_right hCc) t ht₀ ht₁
+
+  have hsubset :
+      {z | ∃ x ∈ K₀ ∩ C, ∃ y ∈ K₁ ∩ C,
+          z = t • x + (1 - t) • y} ⊆
+        C ∩ {z | ∃ x ∈ K₀, ∃ y ∈ K₁,
+          z = t • x + (1 - t) • y} := by
+    intro z hz
+    rcases hz with ⟨x, ⟨hx₀, hxC⟩, y, ⟨hy₀, hyC⟩, rfl⟩
+    refine ⟨hC hxC hyC ht₀.le (sub_nonneg.mpr ht₁.le) (by ring), ?_⟩
+    exact ⟨x, hx₀, y, hy₀, rfl⟩
+
+  have hmono :
+      (μ : Measure E)
+          {z | ∃ x ∈ K₀ ∩ C, ∃ y ∈ K₁ ∩ C,
+            z = t • x + (1 - t) • y} ≤
+        (μ : Measure E)
+          (C ∩ {z | ∃ x ∈ K₀, ∃ y ∈ K₁,
+            z = t • x + (1 - t) • y}) :=
+    measure_mono hsubset
+
+  have hm_le_one : (μ : Measure E) C ≤ 1 := by
+    calc
+      (μ : Measure E) C ≤ (μ : Measure E) Set.univ :=
+        measure_mono (Set.subset_univ C)
+      _ = 1 := by simp
+
+  have hm_top : (μ : Measure E) C ≠ ⊤ := by
+    exact ne_of_lt (lt_of_le_of_lt hm_le_one (by simp))
+
+  have hd₀ : ((μ : Measure E) C)⁻¹ ≠ 0 := by
+    simp [hm_top]
+
+  have hd_top : ((μ : Measure E) C)⁻¹ ≠ ⊤ := by
+    simp [hpos]
+
+  have hpow :
+      ((μ : Measure E) C)⁻¹ ^ t * ((μ : Measure E) C)⁻¹ ^ (1 - t) =
+        ((μ : Measure E) C)⁻¹ := by
+    calc
+      ((μ : Measure E) C)⁻¹ ^ t * ((μ : Measure E) C)⁻¹ ^ (1 - t) =
+          ((μ : Measure E) C)⁻¹ ^ (t + (1 - t)) := by
+            exact
+              (ENNReal.rpow_add (x := ((μ : Measure E) C)⁻¹) t (1 - t) hd₀ hd_top).symm
+      _ = ((μ : Measure E) C)⁻¹ := by
+        rw [show t + (1 - t) = 1 by ring]
+        simp
+
+  have hfactor :
+      (((μ : Measure E) C)⁻¹ * (μ : Measure E) (K₀ ∩ C)) ^ t *
+          (((μ : Measure E) C)⁻¹ * (μ : Measure E) (K₁ ∩ C)) ^ (1 - t) =
+        ((μ : Measure E) C)⁻¹ *
+          ((μ : Measure E) (K₀ ∩ C) ^ t *
+            (μ : Measure E) (K₁ ∩ C) ^ (1 - t)) := by
+    calc
+      (((μ : Measure E) C)⁻¹ * (μ : Measure E) (K₀ ∩ C)) ^ t *
+            (((μ : Measure E) C)⁻¹ * (μ : Measure E) (K₁ ∩ C)) ^ (1 - t) =
+          ((μ : Measure E) C)⁻¹ ^ t * (μ : Measure E) (K₀ ∩ C) ^ t *
+            ((((μ : Measure E) C)⁻¹) ^ (1 - t) *
+              (μ : Measure E) (K₁ ∩ C) ^ (1 - t)) := by
+                rw [ENNReal.mul_rpow_of_nonneg
+                      (x := ((μ : Measure E) C)⁻¹)
+                      (y := (μ : Measure E) (K₀ ∩ C)) ht₀.le,
+                  ENNReal.mul_rpow_of_nonneg
+                      (x := ((μ : Measure E) C)⁻¹)
+                      (y := (μ : Measure E) (K₁ ∩ C))
+                      (sub_nonneg.mpr ht₁.le)]
+      _ = ((μ : Measure E) C)⁻¹ ^ t *
+            ((μ : Measure E) C)⁻¹ ^ (1 - t) *
+              ((μ : Measure E) (K₀ ∩ C) ^ t *
+                (μ : Measure E) (K₁ ∩ C) ^ (1 - t)) := by
+                ac_rfl
+      _ = ((μ : Measure E) C)⁻¹ *
+          ((μ : Measure E) (K₀ ∩ C) ^ t *
+            (μ : Measure E) (K₁ ∩ C) ^ (1 - t)) := by
+              rw [hpow]
+
+  have hcond₀ :
+      (μ : Measure E)[|C] K₀ =
+        ((μ : Measure E) C)⁻¹ * (μ : Measure E) (K₀ ∩ C) := by
+    calc
+      (μ : Measure E)[|C] K₀ =
+          ((μ : Measure E) C)⁻¹ * (μ : Measure E) (C ∩ K₀) :=
+        cond_apply' hK₀.measurableSet (μ : Measure E)
+      _ = ((μ : Measure E) C)⁻¹ * (μ : Measure E) (K₀ ∩ C) := by
+        rw [Set.inter_comm]
+
+  have hcond₁ :
+      (μ : Measure E)[|C] K₁ =
+        ((μ : Measure E) C)⁻¹ * (μ : Measure E) (K₁ ∩ C) := by
+    calc
+      (μ : Measure E)[|C] K₁ =
+          ((μ : Measure E) C)⁻¹ * (μ : Measure E) (C ∩ K₁) :=
+        cond_apply' hK₁.measurableSet (μ : Measure E)
+      _ = ((μ : Measure E) C)⁻¹ * (μ : Measure E) (K₁ ∩ C) := by
+        rw [Set.inter_comm]
+
+  have hcond₂ :
+      (μ : Measure E)[|C]
+          {z | ∃ x ∈ K₀, ∃ y ∈ K₁,
+            z = t • x + (1 - t) • y} =
+        ((μ : Measure E) C)⁻¹ *
+          (μ : Measure E)
+            (C ∩ {z | ∃ x ∈ K₀, ∃ y ∈ K₁,
+              z = t • x + (1 - t) • y}) :=
+    cond_apply hCc.measurableSet (μ : Measure E) _
+
+  calc
+    ((μ : Measure E)[|C] K₀) ^ t * ((μ : Measure E)[|C] K₁) ^ (1 - t) =
+        (((μ : Measure E) C)⁻¹ * (μ : Measure E) (K₀ ∩ C)) ^ t *
+          (((μ : Measure E) C)⁻¹ * (μ : Measure E) (K₁ ∩ C)) ^ (1 - t) := by
+            rw [hcond₀, hcond₁]
+    _ = ((μ : Measure E) C)⁻¹ *
+          ((μ : Measure E) (K₀ ∩ C) ^ t *
+            (μ : Measure E) (K₁ ∩ C) ^ (1 - t)) :=
+      hfactor
+    _ ≤ ((μ : Measure E) C)⁻¹ *
+          (μ : Measure E)
+            {z | ∃ x ∈ K₀ ∩ C, ∃ y ∈ K₁ ∩ C,
+              z = t • x + (1 - t) • y} := by
+      gcongr
+    _ ≤ ((μ : Measure E) C)⁻¹ *
+          (μ : Measure E)
+            (C ∩ {z | ∃ x ∈ K₀, ∃ y ∈ K₁,
+              z = t • x + (1 - t) • y}) := by
+      gcongr
+    _ = (μ : Measure E)[|C]
+          {z | ∃ x ∈ K₀, ∃ y ∈ K₁,
+            z = t • x + (1 - t) • y} :=
+      hcond₂.symm
+
+end Conditioning
 
 end FunctionalInequalities.KLS.LogConcave

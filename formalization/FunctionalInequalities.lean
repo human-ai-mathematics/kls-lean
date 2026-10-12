@@ -221,6 +221,7 @@ import FunctionalInequalities.KLS.BKL.Suspension.Derivatives
 import FunctionalInequalities.KLS.BKL.Proposition71
 import FunctionalInequalities.KLS.BKL.Reduction
 import FunctionalInequalities.KLS.BKL.LocalThirdCumulant
+import FunctionalInequalities.KLS.BKL.CompactReduction
 import FunctionalInequalities.KLS.BKL.SecondCumulant
 import FunctionalInequalities.Analysis.BakryEmery.Tilt.Local
 import FunctionalInequalities.Analysis.BakryEmery.Tilt.LocalDerivatives
@@ -275,6 +276,7 @@ import FunctionalInequalities.Analysis.Matrix.Positivity
 import FunctionalInequalities.Analysis.Matrix.Sign
 import FunctionalInequalities.Analysis.Matrix.Integral
 import FunctionalInequalities.Analysis.Matrix.DeterminantDerivative
+import FunctionalInequalities.Analysis.Matrix.LogDet
 import FunctionalInequalities.Analysis.BakryEmery.MongeAmpere
 import FunctionalInequalities.Analysis.BakryEmery.InverseHessianEnergy
 import FunctionalInequalities.Analysis.BakryEmery.HessianTrace
@@ -283,6 +285,11 @@ import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.UniformInte
 import FunctionalInequalities.Analysis.BakryEmery.HessianOperator
 import FunctionalInequalities.Analysis.Operator.Coordinates
 import FunctionalInequalities.Analysis.RingInverseDerivative
+import FunctionalInequalities.Analysis.Gronwall
+import FunctionalInequalities.Probability.Diffusion.Generator
+import FunctionalInequalities.Probability.Diffusion.Cutoff
+import FunctionalInequalities.Probability.Diffusion.Setup
+import FunctionalInequalities.Probability.Diffusion.Dynkin
 
 /-!
 # Functional inequalities
