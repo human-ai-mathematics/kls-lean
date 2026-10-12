@@ -1417,12 +1417,60 @@
       "blueprint": "lem:letwin-a5-cutoffs"
     },
     "lem:letwin-uniform-interval-source": {
-      "description": "The uniform law on (−√3, √3) with V ≡ log(2√3): the explicit potential φ(y) = 2 log cosh(√3y/2) + log(4/√3) is in the source class of Letwin Lemmas A.4–A.5 (gradient range inclusion, Monge–Ampère, PD Hessian, ∫e^{−φ} = 1), and f = tanh²(√3y/2) is smooth, bounded, nonconstant with Lf = 1 − 3tanh² and Lf + 2f ≥ 0. Range inclusion only; no pushforward claim.",
+      "description": "For K = (−√3, √3) and V ≡ log(2√3): the explicit potential φ(y) = 2 log cosh(√3y/2) + log(4/√3) is in the source class of Letwin Lemmas A.4–A.5 (gradient range inclusion, Monge–Ampère, PD Hessian, ∫e^{−φ} = 1), and f = tanh²(√3y/2) is smooth, bounded, nonconstant with Lf = 1 − 3tanh² and Lf + 2f ≥ 0. Range inclusion only; no pushforward claim.",
       "blueprint": "lem:letwin-uniform-interval-source"
     },
     "lem:letwin-uniform-interval-client": {
-      "description": "Letwin Lemma A.5 for the uniform-interval source law: Lf ∈ L¹(ν) and ∫Lf dν = 0 for f = tanh²(√3y/2), by the source package, the natural-index A.4 cutoffs and A.5 (C = 1, c = 2); no integral-zero premise. A concrete client, not Letwin Theorem 2.5 or 1.2.",
+      "description": "Letwin Lemma A.5 for the uniform-interval potential (not a uniform-target pushforward or moment-map producer): Lf ∈ L¹(ν) and ∫Lf dν = 0 for f = tanh²(√3y/2), by the source package, the natural-index A.4 cutoffs and A.5 (C = 1, c = 2); no integral-zero premise. A concrete client, not Letwin Theorem 2.5 or 1.2.",
       "blueprint": "lem:letwin-uniform-interval-client"
+    },
+    "lem:letwin-symmetric-jordan": {
+      "description": "Letwin Theorem 2.5 support, real matrices over any finite index type: nonnegative spectral functions of a symmetric matrix are PSD; every symmetric B = P − N with derived PSD Jordan parts, PN = NP = 0 and tr B² = tr P² + tr N²; tr(PHNH) ≥ 0 and tr((P−N)H(P−N)H) ≤ tr(PHPH) + tr(NHNH) for symmetric H without commutation; tr(BHBH) ≥ 0 for PSD H. Not the PSD integral bound, its measure extension, the moment map, Brascamp–Lieb or Theorem 2.5.",
+      "blueprint": "lem:letwin-symmetric-jordan"
+    },
+    "lem:letwin-symmetric-integral": {
+      "blueprint": "lem:letwin-symmetric-integral",
+      "description": "Letwin Theorem 2.5 support, conditional on the PSD bound: for any measure, any finite index type and a measurable PSD matrix field H, if every PSD A has tr(AHAH) integrable with ∫ tr(AHAH) dν ≤ 2 tr(A²), then every symmetric B has the same (integrability derived by Jordan domination; no finiteness, nonemptiness or commutation premise). Not the PSD bound, the moment map, Brascamp–Lieb or Theorem 2.5."
+    },
+    "lem:letwin-centered-range": {
+      "blueprint": "lem:letwin-centered-range",
+      "description": "Letwin Lemma A.6 support: for a log-concave ν = m.tilted(−U) with C¹ U on a finite-dimensional space, the images −Lf of compactly supported smooth f under the ordinary weighted diffusion operator are dense in the mean-zero classes of L²(ν) (arbitrary g, no domain restriction; density derived). Not Brascamp–Lieb, full A.6 with infinite right side, the moment map or Theorem 2.5."
+    },
+    "lem:letwin-finite-energy-supports": {
+      "blueprint": "lem:letwin-finite-energy-supports",
+      "description": "Letwin Lemma A.6 supports: for μ = m.tilted(−U) with C² U and smooth compactly supported u, ∇²U(∇u,∇u) and (ℒu)² are μ-integrable and ∫∇²U(∇u,∇u) dμ ≤ ∫(ℒu)² dμ for the ordinary weighted Laplacian (not the inverse-Hessian operator); 2 v·w ≤ v·H⁻¹v + w·Hw for positive definite real H on any finite index type. Not Brascamp–Lieb, A.6, the moment map or Theorem 2.5."
+    },
+    "lem:letwin-hessian-trace": {
+      "blueprint": "lem:letwin-hessian-trace",
+      "description": "Letwin (2.8), Theorem 2.5 support: for smooth φ, any V and every constant real matrix B, L tr(BHBH) = 2 tr(BHB·LH) + 2 Σ φ^{ab} tr(B ∂_aH B ∂_bH) pointwise for the inverse-Hessian operator L and the Hessian matrix H in the standard orthonormal basis; no PSD, commutation or Monge–Ampère premise. Not the Lemma 2.4 substitution, (2.10), the tensor comparison or the trace bound."
+    },
+    "lem:cek-bounded-primal": {
+      "blueprint": "lem:cek-bounded-primal",
+      "description": "CEK Proposition 12 for a bounded isotropic source (‖y‖ ≤ L μ-a.e., any finite dimension): an LSC convex maximiser with effective domain in the L-ball, an attained real minimum and a finite conjugate ψ that is convex, L-Lipschitz, with ∫ e^{−ψ} = 1 and e^{−ψ}dx a probability (weak normalized primal; audited for the uniform law on [−√3, √3]). Not the Euler–Lagrange identification, the gradient push-forward (∇ψ)_# e^{−ψ} = μ, source smoothness, a positive definite Hessian, the gradient diffeomorphism and the Monge–Ampère equation, CEK Theorem 2 or Letwin Theorem 2.5."
+    },
+    "lem:letwin-inverse-hessian-energy": {
+      "blueprint": "lem:letwin-inverse-hessian-energy",
+      "description": "Letwin Lemma A.6 energy: Young 2⟨v,w⟩ ≤ ⟨v,H⁻¹v⟩ + D²U(w,w) for a pointwise positive definite C² Hessian, nonnegativity of ⟨∇f,H⁻¹∇f⟩, its coordinate form Σ (H⁻¹)_ij ∂_if ∂_jf in any orthonormal basis and its continuity for smooth U and C¹ f; every dimension."
+    },
+    "thm:letwin-scalar-brascamp-lieb": {
+      "blueprint": "thm:letwin-scalar-brascamp-lieb",
+      "description": "Letwin Lemma A.6 for a GIVEN potential: for a log-concave ν = m.tilted(−U) with everywhere positive definite Hessian and C¹ f ∈ L²(ν), Var f ≤ ∫⟨∇f,H⁻¹∇f⟩ dν — finite-energy form for C² U with integrable energy, extended form in [0,∞] for C^∞ U with no energy premise, bounded-test form; any dimension; sharp for the standard Gaussian law. Not the source moment map, A.6 for the source law, Theorem 2.5 or 1.2."
+    },
+    "lem:letwin-trace-gram-positivity": {
+      "blueprint": "lem:letwin-trace-gram-positivity",
+      "description": "Matrix support for Letwin (2.10): Σ A_ij C_ij ≥ 0 and tr(AC) ≥ 0 for real PSD A, C over any finite index type; (tr(B T_a B T_b))_{ab} is PSD for PSD B and symmetric T_a."
+    },
+    "lem:letwin-ma-trace-210": {
+      "blueprint": "lem:letwin-ma-trace-210",
+      "description": "Letwin (2.9)–(2.10) for a GIVEN smooth potential with PD Hessian satisfying the zero-order Monge–Ampère relation, V smooth only near closure K ⊇ range ∇φ: L H = −H + H∇²V(∇φ)H + G, (2.10) for every constant real B; for open K, V convex on K and PSD B the three remainders are nonnegative, so L tr(BHBH) + 2 tr(BHBH) ≥ 0 pointwise. Not the A.4/A.5 integration of this condition, the source moment map, the source trace bound or Theorem 2.5."
+    },
+    "lem:legendre-attainment": {
+      "blueprint": "lem:legendre-attainment",
+      "description": "Pointwise prerequisite of CEK (42): finite maxima of USC EReal functions with linear decay; for proper φ and y interior to the finite dual domain, coercive tilt, maximizer = ∇φ*(y) under dual differentiability, and (φ LSC) an attained maximizer with that identity; any dimension, no convexity/finiteness/nonnegativity of φ."
+    },
+    "lem:legendre-first-variation": {
+      "blueprint": "lem:legendre-first-variation",
+      "description": "CEK (42), pointwise: two-sided bounded perturbation of the whole EReal Legendre supremum and its finite curve; near-maximizer concentration at ∇φ*(y); d/dt (φ + t b)*(y) at 0 = −b(∇φ*(y)) for bounded continuous b, φ proper LSC (may take ⊤), y interior, φ* differentiable at y; any dimension. Not the source-law Euler–Lagrange, push-forward, regularity or CEK Theorem 2."
     }
   },
   "diagram": {

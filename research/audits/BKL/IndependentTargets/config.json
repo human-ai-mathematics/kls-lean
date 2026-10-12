@@ -1,0 +1,70 @@
+{
+  "version": 1,
+  "paper": {
+    "url": "https://arxiv.org/abs/2610.05474v1",
+    "pdf_sha256": "86824722318f2213daf5ae624391b41f76bb4d41118b1657db9ab00d2d1bb0db",
+    "locators": [
+      "Theorem 3.1, p. 10",
+      "Proposition 7.1, p. 28",
+      "(5), (12), (26)-(29), (65), (107)"
+    ]
+  },
+  "certificate_modules": [
+    "solutions.ThmBklTaylorCriterion",
+    "solutions.PropBklSuspension"
+  ],
+  "owners": [
+    "FunctionalInequalities",
+    "solutions",
+    "BKLIndependentSpecification",
+    "BKLIndependentChecks"
+  ],
+  "roots": [
+    "Solutions.ThmBklTaylorCriterion.certificate",
+    "Solutions.PropBklSuspension.certificate",
+    "BKLIndependent.Theorem31",
+    "BKLIndependent.Proposition71",
+    "BKLIndependent.Regular",
+    "BKLIndependent.RegularLaw",
+    "BKLIndependent.Isotropic",
+    "BKLIndependent.Average",
+    "BKLIndependent.Taylor",
+    "BKLIndependent.Cumulant",
+    "BKLIndependent.UniversalCumulant",
+    "BKLIndependentChecks.theorem31",
+    "BKLIndependentChecks.proposition71",
+    "FunctionalInequalities.KLS.RegularPotential",
+    "FunctionalInequalities.KLS.RegularPotential.law",
+    "FunctionalInequalities.KLS.Isotropic",
+    "FunctionalInequalities.KLS.LogConcave",
+    "FunctionalInequalities.Analysis.BakryEmery.tiltAverage",
+    "FunctionalInequalities.Analysis.BakryEmery.taylorTensor",
+    "FunctionalInequalities.Analysis.BakryEmery.cumulant",
+    "FunctionalInequalities.Analysis.Tensor.coordTensor",
+    "FunctionalInequalities.KLS.LogConcave.Suspension.CumulantBound",
+    "FunctionalInequalities.Poincare.LocalSlope.Intrinsic.constant",
+    "FunctionalInequalities.Energy.LocalSlope.apply",
+    "FunctionalInequalities.Energy.LocalSlope.Admissible",
+    "FunctionalInequalities.Energy.LocalSlope.energy"
+  ],
+  "checks": [
+    "regular_adapter",
+    "regular_iff",
+    "regular_add_constant",
+    "normalized_density",
+    "isotropic_iff",
+    "average_eq",
+    "taylor_eq",
+    "taylor_norm_sq",
+    "cumulant_eq",
+    "universalCumulant_iff",
+    "theorem31",
+    "proposition71"
+  ],
+  "boundary_parameters": [
+    "Poincare.LocalSlope.Intrinsic.constant",
+    "KLS.LogConcave"
+  ],
+  "baseline": "golden.json",
+  "review": "research/decisions/2026-10-12-bkl-independent-target-checks.md"
+}

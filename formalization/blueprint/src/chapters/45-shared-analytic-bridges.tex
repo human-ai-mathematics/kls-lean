@@ -2256,6 +2256,212 @@ addressed.
   and $|M|^{1/2}|M|^{1/2}=|M|$ in the continuous functional calculus.
 \end{proof}
 
+\begin{lemma}[Letwin: Jordan decomposition and trace energy of symmetric matrices (Theorem~2.5 support)]
+  \label{lem:letwin-symmetric-jordan}
+  \lean{FunctionalInequalities.Analysis.cfc_posSemidef_of_nonneg,
+        FunctionalInequalities.Analysis.trace_cross_nonneg,
+        FunctionalInequalities.Analysis.trace_energy_nonneg,
+        FunctionalInequalities.Analysis.jordan_trace_domination,
+        FunctionalInequalities.Analysis.symmetric_jordan_decomposition,
+        FunctionalInequalities.Analysis.symmetric_jordan_trace_support}
+  \leanok
+  Letwin \cite{Letwin2026QuadraticKLS}, Theorem~2.5, support for the extension from positive semidefinite to all
+  symmetric $B$, for real matrices over any finite index type (the empty one included).  A nonnegative real function of a
+  symmetric matrix is positive semidefinite.  Every symmetric $B$ is $P-N$ with $P=\mathrm{cfc}(\max(\cdot,0))\,B$ and
+  $N=\mathrm{cfc}(\max(-\cdot,0))\,B$ positive semidefinite, $PN=NP=0$ and $\operatorname{tr}B^2=\operatorname{tr}P^2+
+  \operatorname{tr}N^2$; no decomposition is assumed.  For positive semidefinite $P,N$ and symmetric $H$,
+  $\operatorname{tr}(PHNH)\ge0$ and $\operatorname{tr}((P-N)H(P-N)H)\le\operatorname{tr}(PHPH)+\operatorname{tr}(NHNH)$,
+  without commutation; and $\operatorname{tr}(BHBH)\ge0$ for symmetric $B$ and positive semidefinite $H$.  Not provided:
+  the positive semidefinite integral bound and its measure extension, the moment map, Brascamp--Lieb, (2.12) for the
+  inverse-Hessian contractions and Theorem~2.5 itself.
+\end{lemma}
+\begin{proof}
+  \leanok
+  The continuous functional calculus acts on the eigenvalues in an orthonormal eigenbasis, so a nonnegative function
+  gives a Gram matrix; the scalar identities $\max(x,0)-\max(-x,0)=x$ and $\max(x,0)\max(-x,0)=0$ pass through the
+  calculus.  With $P=X^{\top}X$, $\operatorname{tr}(PHNH)=\operatorname{tr}((XH)N(XH)^{\top})\ge0$; with $H=X^{\top}X$,
+  $\operatorname{tr}(BHBH)=\operatorname{tr}(C^2)$ for the symmetric $C=XBX^{\top}$; expanding $(P-N)H(P-N)H$ leaves the
+  two nonnegative mixed traces.
+\end{proof}
+
+\begin{lemma}[Letwin: from positive semidefinite to symmetric matrices under a measure (Theorem~2.5 support)]
+  \label{lem:letwin-symmetric-integral}
+  \lean{FunctionalInequalities.Analysis.symmetric_trace_integral_extension}
+  \leanok
+  \uses{lem:letwin-symmetric-jordan}
+  Letwin \cite{Letwin2026QuadraticKLS}, Theorem~2.5, the extension step, conditional on the positive semidefinite bound:
+  for an arbitrary measure $\nu$ on an arbitrary measurable space, any finite index type (the empty one included) and a
+  coordinatewise measurable field $H$ of positive semidefinite matrices, if every positive semidefinite $A$ has
+  $x\mapsto\operatorname{tr}(AH(x)AH(x))$ integrable with $\int\operatorname{tr}(AHAH)\,d\nu\le2\operatorname{tr}(A^2)$,
+  then every symmetric $B$ has $x\mapsto\operatorname{tr}(BHBH)$ integrable and
+  $\int\operatorname{tr}(BHBH)\,d\nu\le2\operatorname{tr}(B^2)$.  The integrability for $B$ is derived; no finiteness of
+  $\nu$, nonemptiness or commutation is assumed.  The positive semidefinite bound is a named hypothesis: it, the moment
+  map, Brascamp--Lieb and Theorem~2.5 itself are not provided.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Write $B=P-N$ by Lemma~\ref{lem:letwin-symmetric-jordan}; pointwise $0\le\operatorname{tr}(BHBH)\le
+  \operatorname{tr}(PHPH)+\operatorname{tr}(NHNH)$ gives integrability by domination and, integrated, the bound
+  $2\operatorname{tr}(P^2)+2\operatorname{tr}(N^2)=2\operatorname{tr}(B^2)$.
+\end{proof}
+
+\begin{lemma}[Letwin: centered range density of compact smooth diffusion images (Lemma~A.6 support)]
+  \label{lem:letwin-centered-range}
+  \lean{FunctionalInequalities.KLS.LogConcave.HeatSemigroup.compactSmoothDiffusionImage,
+        FunctionalInequalities.KLS.LogConcave.HeatSemigroup.centered_mem_closure_compactSmoothDiffusionImage,
+        FunctionalInequalities.KLS.LogConcave.HeatSemigroup.center_mem_closure_compactSmoothDiffusionImage}
+  \leanok
+  Letwin \cite{Letwin2026QuadraticKLS}, Lemma~A.6 (Brascamp--Lieb for $\nu$), supporting step for the finite-energy
+  argument: for a log-concave probability law $\nu=m.\mathrm{tilted}(-U)$ on a finite-dimensional real inner product space,
+  with $U\in C^1$ and $m$ an additive Haar measure, the images $-Lf$ of compactly supported smooth $f$ under the ordinary
+  weighted diffusion operator are dense in the mean-zero classes of $L^2(\nu)$: every $g\in L^2(\nu)$ with mean $0$ lies in
+  their closure, and so does the centering of every $g$.  The class $g$ is arbitrary (no operator-domain or compact-test
+  restriction) and the density is derived, not assumed.  Not provided: Brascamp--Lieb itself, Lemma~A.6 with an infinite
+  right side, the moment map and Theorem~2.5.
+\end{lemma}
+\begin{proof}
+  \leanok
+  The kernel of the closed weighted operator $T$ consists of the constants, so a mean-zero $g$ is orthogonal to
+  $\ker(T^{\dagger}T)$ and lies in the closure of its range; each element of that range is the limit of images of compactly
+  supported smooth functions.
+\end{proof}
+
+\begin{lemma}[Letwin: ordinary diffusion coercivity and inverse Young inequality (Lemma~A.6 supports)]
+  \label{lem:letwin-finite-energy-supports}
+  \lean{FunctionalInequalities.Analysis.BakryEmery.compact_ordinary_diffusion_coercivity,
+        FunctionalInequalities.Analysis.inverse_quadratic_young}
+  \leanok
+  Letwin \cite{Letwin2026QuadraticKLS}, Lemma~A.6 (Brascamp--Lieb for $\nu$), two supporting steps of the finite-energy
+  argument.  (i) For $\mu=m.\mathrm{tilted}(-U)$ on a finite-dimensional real inner product space, with $U\in C^2$, $m$ an
+  additive Haar measure and $u$ smooth with compact support, $\nabla^2U(\nabla u,\nabla u)$ and $(\mathcal Lu)^2$ are
+  $\mu$-integrable and $\int\nabla^2U(\nabla u,\nabla u)\,d\mu\le\int(\mathcal Lu)^2\,d\mu$, for the ordinary weighted
+  Laplacian $\mathcal Lu=\Delta u-\langle\nabla U,\nabla u\rangle$ (not the inverse-Hessian operator; no lower Hessian
+  bound).  (ii) For a positive definite real matrix $H$ over any finite index type, the empty one included,
+  $2\,v\cdot w\le v\cdot H^{-1}v+w\cdot Hw$.  Not provided: Brascamp--Lieb itself, Lemma~A.6, the moment map and
+  Theorem~2.5.
+\end{lemma}
+\begin{proof}
+  \leanok
+  (i) Pointwise $\Gamma_2(u)=\|\nabla\nabla u\|^2+\nabla^2U(\nabla u,\nabla u)\ge\nabla^2U(\nabla u,\nabla u)$, the Hessian
+  square is integrable by compact support, and $\int\Gamma_2(u)\,d\mu=\int(\mathcal Lu)^2\,d\mu$.  (ii) Expand the
+  nonnegative quadratic form $(w-H^{-1}v)\cdot H(w-H^{-1}v)$.
+\end{proof}
+
+\begin{lemma}[Letwin: inverse-Hessian energy of a gradient]
+  \label{lem:letwin-inverse-hessian-energy}
+  \lean{FunctionalInequalities.Analysis.BakryEmery.hessian_inverse_young,
+        FunctionalInequalities.Analysis.BakryEmery.gradient_pairing_eq_fderiv,
+        FunctionalInequalities.Analysis.BakryEmery.inverse_hessian_energy_eq_coordinate_sum,
+        FunctionalInequalities.Analysis.BakryEmery.continuous_inverse_hessian_gradient_energy,
+        FunctionalInequalities.Analysis.BakryEmery.inverse_hessian_gradient_energy_nonneg}
+  \leanok
+  Letwin \cite{Letwin2026QuadraticKLS}, Lemma~A.6, the energy $\varphi^{ab}\partial_af\,\partial_bf$.  For a $C^2$ potential
+  $U$ whose Hessian operator $H(x)$ is positive definite at $x$: $2\langle v,w\rangle\le\langle v,H(x)^{-1}v\rangle+D^2U(x)(w,w)$
+  (no uniform curvature constant), and $\langle\nabla f(x),H(x)^{-1}\nabla f(x)\rangle\ge0$.  For a smooth $U$ with
+  everywhere positive definite Hessian: in any orthonormal basis the energy equals
+  $\sum_{i,j}(H^{-1})_{ij}\,\partial_if\,\partial_jf$, and for $f\in C^1$ it is continuous.  Every dimension, zero included.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Positivity of the Hessian form at $w-H^{-1}v$ and self-adjointness; coordinates of the gradient in the basis; continuity
+  of the smooth inverse entries.
+\end{proof}
+
+\begin{theorem}[Letwin: scalar Brascamp--Lieb for a given potential (Lemma~A.6, given-potential form)]
+  \label{thm:letwin-scalar-brascamp-lieb}
+  \lean{FunctionalInequalities.KLS.LogConcave.scalar_brascamp_lieb_finite_energy,
+        FunctionalInequalities.KLS.LogConcave.scalar_brascamp_lieb_extended_energy,
+        FunctionalInequalities.KLS.LogConcave.scalar_brascamp_lieb_extended_energy_of_bounded,
+        FunctionalInequalities.KLS.LogConcave.compact_variational_estimate}
+  \leanok
+  \uses{lem:letwin-centered-range, lem:letwin-finite-energy-supports, lem:letwin-inverse-hessian-energy}
+  Letwin \cite{Letwin2026QuadraticKLS}, Lemma~A.6, for a given potential.  Let $\nu=m.\mathrm{tilted}(-U)$ be a log-concave
+  probability law on a finite-dimensional real inner product space (any dimension, zero included), $m$ an additive Haar
+  measure, with the Hessian of $U$ positive definite at every point (no uniform lower bound), and let $f\in C^1\cap L^2(\nu)$,
+  not necessarily compactly supported.  (Finite-$C^2$ scope) If $U\in C^2$ and the energy
+  $\langle\nabla f,H^{-1}\nabla f\rangle$ is $\nu$-integrable, then $\mathrm{Var}_\nu f\le\int\langle\nabla f,H^{-1}\nabla
+  f\rangle\,d\nu$.  (Extended-smooth scope) If $U\in C^\infty$, then with no energy premise
+  $\mathrm{Var}_\nu f\le\int\langle\nabla f,H^{-1}\nabla f\rangle\,d\nu$ in $[0,\infty]$; for bounded $f\in C^1$ the $L^2$
+  premise is derived.  Equality holds for the standard Gaussian law on $\mathbb R$ and $f=\mathrm{id}$ (audited).  Not
+  provided: the source moment map, its Euler--Lagrange identification, push-forward and regularity, hence Lemma~A.6 for the
+  source law, Theorem~2.5, Theorem~1.2, BKL and KLS.
+\end{theorem}
+\begin{proof}
+  \leanok
+  On the compact smooth diffusion images $w=-\mathcal Lu$, Young, compact integration by parts and ordinary-diffusion
+  coercivity give $2\langle\bar f,w\rangle-\|w\|^2\le\int\langle\nabla f,H^{-1}\nabla f\rangle$ for the centered class
+  $\bar f$; these images are dense in the centered classes, so the bound holds at $w=\bar f$, i.e. $\mathrm{Var}f\le$ energy.
+  The extended form splits on finiteness of the lower integral; finiteness gives integrability before any real conversion.
+\end{proof}
+
+\begin{lemma}[Letwin: trace evolution of the Hessian (identity (2.8), Theorem~2.5 support)]
+  \label{lem:letwin-hessian-trace}
+  \lean{FunctionalInequalities.Analysis.BakryEmery.stdHessianMatrix,
+        FunctionalInequalities.Analysis.BakryEmery.stdHessianMatrixDeriv,
+        FunctionalInequalities.Analysis.BakryEmery.stdHessianMatrixGenerator,
+        FunctionalInequalities.Analysis.BakryEmery.hessianInverseOperator_trace_stdHessianMatrix_sq}
+  \leanok
+  Letwin \cite{Letwin2026QuadraticKLS}, proof of Theorem~2.5, the pointwise identity (2.8).  For a smooth $\varphi$ on a
+  finite-dimensional real inner product space, any $V$, the inverse-Hessian operator
+  $L=\varphi^{ij}\partial_{ij}-(\partial_iV\circ\nabla\varphi)\partial_i$, the Hessian matrix $H$ of $\varphi$ in the standard
+  orthonormal basis and every constant real matrix $B$, at every point
+  $L\,\mathrm{tr}(BHBH)=2\,\mathrm{tr}(BHB\,LH)+2\sum_{a,b}\varphi^{ab}\,\mathrm{tr}(B\,\partial_aH\,B\,\partial_bH)$, with
+  $LH$ taken entrywise.  No positive semidefiniteness, commutation or Monge--Amp\`ere premise.  Not provided: the
+  substitution of Lemma~2.4, (2.10), the tensor comparison and the trace bound of Theorem~2.5.
+\end{lemma}
+\begin{proof}
+  \leanok
+  The product rule $L(fg)=fLg+gLf+2\varphi^{ij}\partial_if\,\partial_jg$, additivity and homogeneity of $L$, and
+  linearity of the trace in the entries of $BH$.
+\end{proof}
+
+\begin{lemma}[Trace pairings of positive semidefinite matrices]
+  \label{lem:letwin-trace-gram-positivity}
+  \lean{FunctionalInequalities.Analysis.sum_entry_mul_nonneg,
+        FunctionalInequalities.Analysis.trace_mul_nonneg,
+        FunctionalInequalities.Analysis.traceGram_posSemidef}
+  \leanok
+  Matrix support for Letwin \cite{Letwin2026QuadraticKLS}, (2.10).  For real positive semidefinite $A,C$ over any finite
+  index type (the empty one included), $\sum_{ij}A_{ij}C_{ij}\ge0$ and $\mathrm{tr}(AC)\ge0$ (the product itself is not claimed
+  positive semidefinite).  For positive semidefinite $B$ and symmetric $T_a$, the matrix
+  $(\mathrm{tr}(B\,T_a\,B\,T_b))_{a,b}$ is positive semidefinite.
+\end{lemma}
+\begin{proof}
+  \leanok
+  The Frobenius pairing is the quadratic form of $A\otimes C$ at the diagonal vector; the trace-weighted Gram matrix is a
+  weighted Gram matrix after reindexing.
+\end{proof}
+
+\begin{lemma}[Letwin: (2.9), (2.10) and the pointwise generator condition for a given potential]
+  \label{lem:letwin-ma-trace-210}
+  \lean{FunctionalInequalities.Analysis.BakryEmery.stdHessianConjugate,
+        FunctionalInequalities.Analysis.BakryEmery.stdThirdGram,
+        FunctionalInequalities.Analysis.BakryEmery.stdHessianMatrixGenerator_eq_on_range,
+        FunctionalInequalities.Analysis.BakryEmery.traceGenerator_210_on_range,
+        FunctionalInequalities.Analysis.BakryEmery.weightedDerivativeTrace_nonneg,
+        FunctionalInequalities.Analysis.BakryEmery.hessianConjugateTrace_nonneg_on_range,
+        FunctionalInequalities.Analysis.BakryEmery.thirdGramTrace_nonneg,
+        FunctionalInequalities.Analysis.BakryEmery.traceGeneratorCondition_on_range}
+  \leanok
+  \uses{lem:letwin-hessian-trace, lem:letwin-trace-gram-positivity}
+  Letwin \cite{Letwin2026QuadraticKLS}, proof of Theorem~2.5, (2.9)--(2.10), for a given potential.  Let $\varphi$ be smooth
+  with positive definite Hessian at every point, $V$ smooth only on an open $U\supseteq\overline K$, $\mathrm{range}\,
+  \nabla\varphi\subseteq K$, and $\log\det\nabla^2\varphi=-\varphi+V(\nabla\varphi)$ everywhere.  Then (2.9)
+  $LH=-H+H\,\nabla^2V(\nabla\varphi)\,H+G$ with the inverse-Hessian third-derivative Gram matrix $G$, and (2.10) holds for every
+  constant real $B$ (every finite dimension, zero included).  If moreover $K$ is open, $V$ convex on $K$ and $B$ positive
+  semidefinite, the three remainders $\sum\varphi^{ab}\mathrm{tr}(B\partial_aHB\partial_bH)$,
+  $\mathrm{tr}(BHB\cdot H\nabla^2V(\nabla\varphi)H)$ and $\mathrm{tr}(BHB\cdot G)$ are nonnegative, so
+  $L\,\mathrm{tr}(BHBH)+2\,\mathrm{tr}(BHBH)\ge0$ pointwise.  An explicit nonconstant interval potential is an audited
+  client.  Not provided: the integration of this condition (Lemmas~A.4--A.5 for this trace function), the moment map of an
+  arbitrary source law, the source trace bound and tensor comparison, Theorem~2.5.
+\end{lemma}
+\begin{proof}
+  \leanok
+  (2.9) is the second derivative of the Monge--Amp\`ere relation (Lemma~2.4 on the range); substituting it into the trace
+  identity of \texttt{lem:letwin-hessian-trace} gives (2.10).  The remainders are traces of products of positive semidefinite
+  matrices and a pairing of the inverse Hessian with a positive semidefinite trace-weighted Gram matrix.
+\end{proof}
+
 \begin{lemma}[Letwin: scalar cutoff profile (Lemma~A.4, real-variable part)]
   \label{lem:letwin-cutoff-profile}
   \lean{FunctionalInequalities.Analysis.smoothTransition_two_sub_cutoff,
@@ -2415,7 +2621,7 @@ addressed.
   Hessian gives $Lg=g''/\varphi''$.
 \end{proof}
 
-\begin{lemma}[Letwin: Lemma~A.5 for the uniform-interval source law]
+\begin{lemma}[Letwin: Lemma~A.5 for the uniform-interval potential]
   \label{lem:letwin-uniform-interval-client}
   \lean{FunctionalInequalities.Analysis.BakryEmery.uniformInterval_tanhSq_integrable_and_integral_hessianInverseOperator_eq_zero}
   \leanok
@@ -2914,6 +3120,82 @@ form taken by the variance estimate for isotropic $\mu$), then
   A normalized maximizing sequence approaching the finite supremum; coercivity bounds its integrals; an integral-convergent
   subsequence is chosen before Lemma~17's subsequence, so both limit inequalities hold along one composed subsequence; the
   biconjugate preserves the dual mass, and affine invariance with injectivity of the logarithm normalizes the mass to $1$.
+\end{proof}
+
+\begin{lemma}[CEK maximiser for a bounded source: normalized Lipschitz primal]
+  \label{lem:cek-bounded-primal}
+  \lean{FunctionalInequalities.KLS.CEK.bounded_source_cap_lsc,
+        FunctionalInequalities.KLS.CEK.bounded_source_finite_conjugate,
+        FunctionalInequalities.KLS.CEK.bounded_source_lipschitz_primal,
+        FunctionalInequalities.KLS.CEK.bounded_source_real_density_client,
+        FunctionalInequalities.Analysis.closedBallCap,
+        FunctionalInequalities.Analysis.legendre_finite_of_bounded_domain,
+        FunctionalInequalities.Analysis.lipschitzWith_real_legendre,
+        FunctionalInequalities.Probability.MomentMeasure.real_legendre_normalization}
+  \leanok
+  \uses{thm:cek-variational-maximum}
+  \cite{CorderoKlartag2015}, Proposition~12 for a bounded source, a support toward Theorem~2 and Letwin
+  \cite{Letwin2026QuadraticKLS}, Lemmas~2.1--2.2.  Let $\mu$ be an isotropic probability law on a finite-dimensional real
+  inner product space (dimension zero included), $L\ge0$ and $\|y\|\le L$ for $\mu$-almost every $y$.  The Proposition~12
+  maximiser capped to $\bar B(0,L)$ (value $+\infty$ outside) is again a maximiser: convex, lower semicontinuous,
+  $\mu$-integrable, with effective domain in the ball and $\int e^{-q^*}=1$.  It attains a real minimum $m$ at some
+  $a\in\bar B(0,L)$, its conjugate is finite everywhere with $q^*(x)\le L\|x\|-m$, and the real representative $\psi=q^*$ is
+  convex, $L$-Lipschitz and continuous, with $e^{-\psi}$ Bochner integrable, $\int e^{-\psi}=1$ and $e^{-\psi}dx$ a
+  probability measure; moreover $\psi(0)=-m$, $\langle a,x\rangle-m\le\psi(x)$, $|\psi(x)+m|\le L\|x\|$, and $e^{-\psi}$ is
+  positive and midpoint log-concave.  The fixed uniform law on $[-\sqrt3,\sqrt3]$ is an audited client.  A weak normalized
+  primal: not provided are the Euler--Lagrange identification, the gradient push-forward $(\nabla\psi)_\#e^{-\psi}=\mu$,
+  smoothness, a positive definite Hessian, the gradient diffeomorphism, the Monge--Amp\`ere equation and Theorem~2.
+\end{lemma}
+\begin{proof}
+  \leanok
+  The cap agrees with the maximiser $\mu$-almost everywhere and only raises the potential, so its dual mass is at least $1$
+  while optimality bounds it by $1$.  Lower semicontinuity and compactness of the ball give the minimum; bounded slopes bound
+  the supremum defining $q^*$; convexity and the Lipschitz bound pass to the finite representative, and mass one gives
+  Bochner integrability before any real conversion.
+\end{proof}
+
+\begin{lemma}[Attainment of the Legendre supremum and the dual gradient]
+  \label{lem:legendre-attainment}
+  \lean{FunctionalInequalities.Analysis.exists_finite_maximum_of_upperSemicontinuous_linear_decay,
+        FunctionalInequalities.Analysis.exists_coercive_tilt_of_mem_interior_legendre_domain,
+        FunctionalInequalities.Analysis.tiltedObjective_data,
+        FunctionalInequalities.Analysis.conjugate_maximizer_eq_gradient,
+        FunctionalInequalities.Analysis.exists_legendre_maximizer_with_gradient_identity}
+  \leanok
+  Pointwise prerequisite of \cite{CorderoKlartag2015}, (42) (Berman--Berndtsson, Lemma~2.7 / Appendix~6).  On a
+  finite-dimensional real inner product space (dimension zero included): an upper semicontinuous $G\colon E\to
+  [-\infty,+\infty]$ that never equals $+\infty$, is finite somewhere and satisfies $G(x)\le b-a\|x\|$ with $a>0$ attains a finite
+  maximum.  For a proper $\varphi\colon E\to(-\infty,+\infty]$ and $y$ interior to $\{\varphi^*<\infty\}$: the tilted primal grows
+  linearly, $a\|z\|-b\le\varphi(z)-\langle z,y\rangle$; every $z$ with $\langle z,y\rangle-\varphi(z)=\varphi^*(y)$ equals
+  $\nabla\varphi^*(y)$ when $\varphi^*$ is differentiable at $y$; and, for lower semicontinuous $\varphi$, such a maximizer
+  exists.  No convexity, differentiability, nonnegativity or global finiteness of $\varphi$ is assumed.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Compactness of a large ball and the decay; finitely many finite dual values around $y$ give an affine maximum below the
+  tilted primal; a maximizer is a local maximum of $q\mapsto\langle z,q\rangle-\varphi^*(q)$ by the Fenchel inequality.
+\end{proof}
+
+\begin{lemma}[First variation of the Legendre transform]
+  \label{lem:legendre-first-variation}
+  \lean{FunctionalInequalities.Analysis.legendre_bounded_perturbation,
+        FunctionalInequalities.Analysis.legendre_bounded_perturbation_finite_curve,
+        FunctionalInequalities.Analysis.exists_delta_nearMaximizer_norm_sub_gradient_lt,
+        FunctionalInequalities.Analysis.hasDerivAt_legendre_add_smul_of_dualDifferentiable}
+  \leanok
+  \uses{lem:legendre-attainment}
+  \cite{CorderoKlartag2015}, (42), pointwise.  For proper $\varphi$ and $|b|\le M$: $\varphi^*-|t|M\le(\varphi+tb)^*\le
+  \varphi^*+|t|M$ for the whole extended-real supremum, so at a point where $\varphi^*$ is finite the perturbed conjugates form a
+  finite real curve.  If moreover $\varphi$ is lower semicontinuous, $y$ is interior to $\{\varphi^*<\infty\}$ and $\varphi^*$ is
+  differentiable at $y$, then near-maximizers concentrate at $\nabla\varphi^*(y)$, and for every bounded continuous real $b$,
+  $\frac{d}{dt}\big|_{t=0}(\varphi+tb)^*(y)=-b(\nabla\varphi^*(y))$.  $\varphi$ may take $+\infty$; every dimension, zero
+  included.  Not provided: the integral first variation (Euler--Lagrange) for a source law, the gradient push-forward, source
+  regularity, Theorem~2, and the Letwin and BKL theorems that use them.
+\end{lemma}
+\begin{proof}
+  \leanok
+  The perturbation bound is termwise; approximate maximizers of the perturbed problem are near-maximizers of the unperturbed
+  one, hence converge to $\nabla\varphi^*(y)$, which squeezes the difference quotient.
 \end{proof}
 
 \begin{lemma}[Eighth-moment tail bounds for ball conditioning]

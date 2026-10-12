@@ -1,0 +1,2 @@
+# Unified-diff context lines for empty source lines are a single space.
+port.patch -whitespace

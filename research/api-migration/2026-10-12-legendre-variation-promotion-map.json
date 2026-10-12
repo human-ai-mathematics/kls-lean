@@ -1,0 +1,316 @@
+{
+ "date": "2026-10-12",
+ "kind": "promotion of reviewed strong-API scratch modules (revalidated) into canonical modules; no alias",
+ "source": "build/reviews/2026-10-12-bkl-letwin-t25-continuation/goal-20261012T0647/revalidated-legendre-variation/",
+ "modules": {
+  "USCAttainmentFixed": "FunctionalInequalities.Analysis.Extremum",
+  "CoerciveTiltFixed": "FunctionalInequalities.Analysis.Convex.LegendreVariation.Attainment",
+  "TiltedObjectiveFixed": "FunctionalInequalities.Analysis.Convex.LegendreVariation.Attainment",
+  "MaximizerGradient": "FunctionalInequalities.Analysis.Convex.LegendreVariation.Attainment",
+  "ActualArgmax": "FunctionalInequalities.Analysis.Convex.LegendreVariation.Attainment",
+  "LegendreBoundedPerturbationFixed": "FunctionalInequalities.Analysis.Convex.LegendreVariation.Perturbation",
+  "LegendreFiniteCurveFixed": "FunctionalInequalities.Analysis.Convex.LegendreVariation.Perturbation",
+  "LegendreNearMaxFixed": "FunctionalInequalities.Analysis.Convex.LegendreVariation.Derivative",
+  "LegendreVariationFixed": "FunctionalInequalities.Analysis.Convex.LegendreVariation.Derivative",
+  "IntervalConjugate": "research/audits/BKL/LetwinLegendreVariationAudit.lean (BKL.LetwinLegendreVariationAudit)",
+  "VariationInputs": "research/audits/BKL/LetwinLegendreVariationAudit.lean (BKL.LetwinLegendreVariationAudit)",
+  "VariationClients": "research/audits/BKL/LetwinLegendreVariationAudit.lean (BKL.LetwinLegendreVariationAudit)"
+ },
+ "namespaces": {
+  "KLSConstruction.API.FirstVariation": "FunctionalInequalities.Analysis (conjugate_maximizer_eq_gradient)",
+  "KLSConstruction.API.FirstVariation.BoundaryClient": "DirectVariationBoundaryClient (audit only)"
+ },
+ "declarations": [
+  {
+   "source_module": "USCAttainmentFixed",
+   "old": "FunctionalInequalities.Analysis.exists_finite_maximum_of_upperSemicontinuous_linear_decay",
+   "new": "FunctionalInequalities.Analysis.exists_finite_maximum_of_upperSemicontinuous_linear_decay"
+  },
+  {
+   "source_module": "CoerciveTiltFixed",
+   "old": "FunctionalInequalities.Analysis.exists_coercive_tilt_of_mem_interior_legendre_domain",
+   "new": "FunctionalInequalities.Analysis.exists_coercive_tilt_of_mem_interior_legendre_domain"
+  },
+  {
+   "source_module": "CoerciveTiltFixed",
+   "old": "FunctionalInequalities.Analysis.affineMaximum.eq_1",
+   "new": "FunctionalInequalities.Analysis.affineMaximum.eq_1"
+  },
+  {
+   "source_module": "TiltedObjectiveFixed",
+   "old": "FunctionalInequalities.Analysis.tiltedObjective_data",
+   "new": "FunctionalInequalities.Analysis.tiltedObjective_data"
+  },
+  {
+   "source_module": "MaximizerGradient",
+   "old": "KLSConstruction.API.FirstVariation.conjugate_maximizer_eq_gradient",
+   "new": "FunctionalInequalities.Analysis.conjugate_maximizer_eq_gradient"
+  },
+  {
+   "source_module": "MaximizerGradient",
+   "old": "fderivInnerCLM.eq_1",
+   "new": "fderivInnerCLM.eq_1"
+  },
+  {
+   "source_module": "ActualArgmax",
+   "old": "FunctionalInequalities.Analysis.exists_legendre_maximizer_with_gradient_identity",
+   "new": "FunctionalInequalities.Analysis.exists_legendre_maximizer_with_gradient_identity"
+  },
+  {
+   "source_module": "LegendreBoundedPerturbationFixed",
+   "old": "_private.LegendreBoundedPerturbationFixed.0.FunctionalInequalities.Analysis.legendre_bounded_perturbation_terms._simp_1_1",
+   "new": "_private.FunctionalInequalities.Analysis.Convex.LegendreVariation.Perturbation.0.FunctionalInequalities.Analysis.legendre_bounded_perturbation_terms._simp_1_1"
+  },
+  {
+   "source_module": "LegendreBoundedPerturbationFixed",
+   "old": "_private.LegendreBoundedPerturbationFixed.0.FunctionalInequalities.Analysis.legendre_bounded_perturbation_terms",
+   "new": "_private.FunctionalInequalities.Analysis.Convex.LegendreVariation.Perturbation.0.FunctionalInequalities.Analysis.legendre_bounded_perturbation_terms"
+  },
+  {
+   "source_module": "LegendreBoundedPerturbationFixed",
+   "old": "FunctionalInequalities.Analysis.legendre_bounded_perturbation",
+   "new": "FunctionalInequalities.Analysis.legendre_bounded_perturbation"
+  },
+  {
+   "source_module": "LegendreFiniteCurveFixed",
+   "old": "FunctionalInequalities.Analysis.legendre_bounded_perturbation_finite_curve",
+   "new": "FunctionalInequalities.Analysis.legendre_bounded_perturbation_finite_curve"
+  },
+  {
+   "source_module": "LegendreNearMaxFixed",
+   "old": "FunctionalInequalities.Analysis.exists_delta_nearMaximizer_norm_sub_gradient_lt._simp_1_4",
+   "new": "FunctionalInequalities.Analysis.exists_delta_nearMaximizer_norm_sub_gradient_lt._simp_1_4"
+  },
+  {
+   "source_module": "LegendreNearMaxFixed",
+   "old": "FunctionalInequalities.Analysis.exists_delta_nearMaximizer_norm_sub_gradient_lt._simp_1_6",
+   "new": "FunctionalInequalities.Analysis.exists_delta_nearMaximizer_norm_sub_gradient_lt._simp_1_6"
+  },
+  {
+   "source_module": "LegendreNearMaxFixed",
+   "old": "FunctionalInequalities.Analysis.exists_delta_nearMaximizer_norm_sub_gradient_lt._simp_1_7",
+   "new": "FunctionalInequalities.Analysis.exists_delta_nearMaximizer_norm_sub_gradient_lt._simp_1_7"
+  },
+  {
+   "source_module": "LegendreNearMaxFixed",
+   "old": "FunctionalInequalities.Analysis.exists_delta_nearMaximizer_norm_sub_gradient_lt._simp_1_5",
+   "new": "FunctionalInequalities.Analysis.exists_delta_nearMaximizer_norm_sub_gradient_lt._simp_1_5"
+  },
+  {
+   "source_module": "LegendreNearMaxFixed",
+   "old": "FunctionalInequalities.Analysis.exists_delta_nearMaximizer_norm_sub_gradient_lt._simp_1_8",
+   "new": "FunctionalInequalities.Analysis.exists_delta_nearMaximizer_norm_sub_gradient_lt._simp_1_8"
+  },
+  {
+   "source_module": "LegendreNearMaxFixed",
+   "old": "FunctionalInequalities.Analysis.exists_delta_nearMaximizer_norm_sub_gradient_lt._simp_1_9",
+   "new": "FunctionalInequalities.Analysis.exists_delta_nearMaximizer_norm_sub_gradient_lt._simp_1_9"
+  },
+  {
+   "source_module": "LegendreNearMaxFixed",
+   "old": "FunctionalInequalities.Analysis.exists_delta_nearMaximizer_norm_sub_gradient_lt",
+   "new": "FunctionalInequalities.Analysis.exists_delta_nearMaximizer_norm_sub_gradient_lt"
+  },
+  {
+   "source_module": "LegendreNearMaxFixed",
+   "old": "FunctionalInequalities.Analysis.exists_delta_nearMaximizer_norm_sub_gradient_lt._simp_1_11",
+   "new": "FunctionalInequalities.Analysis.exists_delta_nearMaximizer_norm_sub_gradient_lt._simp_1_11"
+  },
+  {
+   "source_module": "LegendreNearMaxFixed",
+   "old": "FunctionalInequalities.Analysis.exists_delta_nearMaximizer_norm_sub_gradient_lt._simp_1_10",
+   "new": "FunctionalInequalities.Analysis.exists_delta_nearMaximizer_norm_sub_gradient_lt._simp_1_10"
+  },
+  {
+   "source_module": "LegendreNearMaxFixed",
+   "old": "FunctionalInequalities.Analysis.exists_delta_nearMaximizer_norm_sub_gradient_lt._simp_1_12",
+   "new": "FunctionalInequalities.Analysis.exists_delta_nearMaximizer_norm_sub_gradient_lt._simp_1_12"
+  },
+  {
+   "source_module": "LegendreNearMaxFixed",
+   "old": "FunctionalInequalities.Analysis.ProperPotential.eq_1",
+   "new": "FunctionalInequalities.Analysis.ProperPotential.eq_1"
+  },
+  {
+   "source_module": "LegendreVariationFixed",
+   "old": "FunctionalInequalities.Analysis.hasDerivAt_legendre_add_smul_of_dualDifferentiable",
+   "new": "FunctionalInequalities.Analysis.hasDerivAt_legendre_add_smul_of_dualDifferentiable"
+  },
+  {
+   "source_module": "IntervalConjugate",
+   "old": "KLSConstruction.API.FirstVariation.BoundaryClient.intervalPotential",
+   "new": "DirectVariationBoundaryClient.intervalPotential"
+  },
+  {
+   "source_module": "IntervalConjugate",
+   "old": "KLSConstruction.API.FirstVariation.BoundaryClient.interval_conjugate",
+   "new": "DirectVariationBoundaryClient.interval_conjugate"
+  },
+  {
+   "source_module": "IntervalConjugate",
+   "old": "KLSConstruction.API.FirstVariation.BoundaryClient.intervalPotential.eq_1",
+   "new": "DirectVariationBoundaryClient.intervalPotential.eq_1"
+  },
+  {
+   "source_module": "VariationInputs",
+   "old": "DirectVariationInputs.clippedAbs_abs_bound",
+   "new": "DirectVariationInputs.clippedAbs_abs_bound"
+  },
+  {
+   "source_module": "VariationInputs",
+   "old": "DirectVariationInputs.negativePerturbation",
+   "new": "DirectVariationInputs.negativePerturbation"
+  },
+  {
+   "source_module": "VariationInputs",
+   "old": "DirectVariationInputs.negativePotential.eq_1",
+   "new": "DirectVariationInputs.negativePotential.eq_1"
+  },
+  {
+   "source_module": "VariationInputs",
+   "old": "DirectVariationInputs.negative_dual_differentiable",
+   "new": "DirectVariationInputs.negative_dual_differentiable"
+  },
+  {
+   "source_module": "VariationInputs",
+   "old": "DirectVariationInputs.interval_gradient_one",
+   "new": "DirectVariationInputs.interval_gradient_one"
+  },
+  {
+   "source_module": "VariationInputs",
+   "old": "DirectVariationInputs.clippedAbs_bounded",
+   "new": "DirectVariationInputs.clippedAbs_bounded"
+  },
+  {
+   "source_module": "VariationInputs",
+   "old": "DirectVariationInputs.negative_continuous",
+   "new": "DirectVariationInputs.negative_continuous"
+  },
+  {
+   "source_module": "VariationInputs",
+   "old": "DirectVariationInputs.negative_bounded",
+   "new": "DirectVariationInputs.negative_bounded"
+  },
+  {
+   "source_module": "VariationInputs",
+   "old": "DirectVariationInputs.clippedAbs_not_C1",
+   "new": "DirectVariationInputs.clippedAbs_not_C1"
+  },
+  {
+   "source_module": "VariationInputs",
+   "old": "DirectVariationInputs.interval_dual_domain",
+   "new": "DirectVariationInputs.interval_dual_domain"
+  },
+  {
+   "source_module": "VariationInputs",
+   "old": "DirectVariationInputs.interval_proper",
+   "new": "DirectVariationInputs.interval_proper"
+  },
+  {
+   "source_module": "VariationInputs",
+   "old": "DirectVariationInputs.negativePotential._proof_1",
+   "new": "DirectVariationInputs.negativePotential._proof_1"
+  },
+  {
+   "source_module": "VariationInputs",
+   "old": "DirectVariationInputs.negativePotential",
+   "new": "DirectVariationInputs.negativePotential"
+  },
+  {
+   "source_module": "VariationInputs",
+   "old": "DirectVariationInputs.negative_dual_constant",
+   "new": "DirectVariationInputs.negative_dual_constant"
+  },
+  {
+   "source_module": "VariationInputs",
+   "old": "DirectVariationInputs.clippedAbs_one",
+   "new": "DirectVariationInputs.clippedAbs_one"
+  },
+  {
+   "source_module": "VariationInputs",
+   "old": "DirectVariationInputs.negativePerturbation._proof_1",
+   "new": "DirectVariationInputs.negativePerturbation._proof_1"
+  },
+  {
+   "source_module": "VariationInputs",
+   "old": "DirectVariationInputs.negativePerturbation.eq_1",
+   "new": "DirectVariationInputs.negativePerturbation.eq_1"
+  },
+  {
+   "source_module": "VariationInputs",
+   "old": "DirectVariationInputs.E0",
+   "new": "DirectVariationInputs.E0"
+  },
+  {
+   "source_module": "VariationInputs",
+   "old": "DirectVariationInputs.negative_lsc",
+   "new": "DirectVariationInputs.negative_lsc"
+  },
+  {
+   "source_module": "VariationInputs",
+   "old": "DirectVariationInputs.negative_dual_domain",
+   "new": "DirectVariationInputs.negative_dual_domain"
+  },
+  {
+   "source_module": "VariationInputs",
+   "old": "DirectVariationInputs.clippedAbs_not_differentiable_zero._simp_1_1",
+   "new": "DirectVariationInputs.clippedAbs_not_differentiable_zero._simp_1_1"
+  },
+  {
+   "source_module": "VariationInputs",
+   "old": "DirectVariationInputs.interval_dual_differentiable_one",
+   "new": "DirectVariationInputs.interval_dual_differentiable_one"
+  },
+  {
+   "source_module": "VariationInputs",
+   "old": "DirectVariationInputs.interval_boundary_and_infinite_exterior",
+   "new": "DirectVariationInputs.interval_boundary_and_infinite_exterior"
+  },
+  {
+   "source_module": "VariationInputs",
+   "old": "DirectVariationInputs.clippedAbs_nonneg",
+   "new": "DirectVariationInputs.clippedAbs_nonneg"
+  },
+  {
+   "source_module": "VariationInputs",
+   "old": "DirectVariationInputs.clippedAbs",
+   "new": "DirectVariationInputs.clippedAbs"
+  },
+  {
+   "source_module": "VariationInputs",
+   "old": "DirectVariationInputs.clippedAbs_not_differentiable_zero",
+   "new": "DirectVariationInputs.clippedAbs_not_differentiable_zero"
+  },
+  {
+   "source_module": "VariationInputs",
+   "old": "DirectVariationInputs.interval_lsc",
+   "new": "DirectVariationInputs.interval_lsc"
+  },
+  {
+   "source_module": "VariationInputs",
+   "old": "DirectVariationInputs.clippedAbs.eq_1",
+   "new": "DirectVariationInputs.clippedAbs.eq_1"
+  },
+  {
+   "source_module": "VariationInputs",
+   "old": "DirectVariationInputs.negative_proper",
+   "new": "DirectVariationInputs.negative_proper"
+  },
+  {
+   "source_module": "VariationInputs",
+   "old": "DirectVariationInputs.clippedAbs_continuous",
+   "new": "DirectVariationInputs.clippedAbs_continuous"
+  },
+  {
+   "source_module": "VariationClients",
+   "old": "DirectVariationClients.signed_negative_zero_dimension_actual_derivative",
+   "new": "DirectVariationClients.signed_negative_zero_dimension_actual_derivative"
+  },
+  {
+   "source_module": "VariationClients",
+   "old": "DirectVariationClients.boundary_infinite_primal_nonsmooth_bounded_perturbation",
+   "new": "DirectVariationClients.boundary_infinite_primal_nonsmooth_bounded_perturbation"
+  }
+ ],
+ "note": "Short names unchanged; private prefixes follow the owning module; generated equation lemmas of other modules' definitions (ProperPotential.eq_1, affineMaximum.eq_1, fderivInnerCLM.eq_1) are owned by the first new module that unfolds them."
+}

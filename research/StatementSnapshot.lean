@@ -13,10 +13,11 @@ set_option pp.maxSteps 1000000
 
 namespace StatementSnapshot
 
-private def localDeclaration (env : Environment) (name : Name) : Bool :=
+private def localDeclaration (env : Environment) (name : Name)
+    (owners : Array Name) : Bool :=
   match env.getModuleIdxFor? name with
-  | some idx => (`FunctionalInequalities).isPrefixOf env.header.moduleNames[idx.toNat]!
-  | none => (`FunctionalInequalities).isPrefixOf name
+  | some idx => owners.any (·.isPrefixOf env.header.moduleNames[idx.toNat]!)
+  | none => owners.any (·.isPrefixOf name)
 
 private def kind : ConstantInfo → String
   | .defnInfo _ => "definition"
@@ -44,7 +45,8 @@ private def render (e : Expr) : MetaM String := do
     throwError "Statement snapshot printing was truncated"
   return text
 
-private def snapshot (roots : Array Name) : MetaM Json := do
+private def snapshot (roots : Array Name)
+    (owners : Array Name := #[`FunctionalInequalities]) : MetaM Json := do
   let env ← getEnv
   let mut pending := roots
   let mut visited : NameSet := {}
@@ -56,7 +58,7 @@ private def snapshot (roots : Array Name) : MetaM Json := do
     if visited.contains name then continue
     visited := visited.insert name
     let some info := env.find? name | throwError "Snapshot declaration not found: {name}"
-    if !localDeclaration env name then
+    if !localDeclaration env name owners then
       external := external.insert name
       continue
     if info.isUnsafe || info.isPartial || info.isAxiom then
@@ -85,6 +87,15 @@ elab "#statement_snapshot " names:ident+ : command => do
     let roots ← names.mapM fun name => realizeGlobalConstNoOverloadWithInfo name
     withOptions (fun o => (o.setBool `pp.all true).setBool `pp.proofs true) do
       snapshot roots
+  liftIO <| IO.println result.compress
+
+/-- Audit-only extension: explicitly include certificate/specification module owners.
+The existing command keeps its original FunctionalInequalities-only boundary. -/
+elab "#statement_snapshot_owned " owners:ident+ " => " names:ident+ : command => do
+  let result ← liftTermElabM do
+    let roots ← names.mapM fun name => realizeGlobalConstNoOverloadWithInfo name
+    withOptions (fun o => (o.setBool `pp.all true).setBool `pp.proofs true) do
+      snapshot roots (owners.map (·.getId))
   liftIO <| IO.println result.compress
 
 end StatementSnapshot

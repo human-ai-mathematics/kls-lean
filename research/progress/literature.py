@@ -269,6 +269,55 @@ def render_priorities(catalog):
     return '\n'.join(lines)
 
 
+def render_proof_path(catalog, certificates, read_source):
+    """A reading view of existing lemma maps, without a second proof-status database."""
+    path = catalog['proof_path']
+    papers = {p['id']: p for p in catalog['papers']}
+    lines = [
+        f'Pinned main source: [{papers[path["source"]]["authors"]}, '
+        f'{papers[path["source"]]["lemma_map"]["source_version"]}]({papers[path["source"]]["url"]}).', '',
+        'Read the conditional assembly first, then its analytic inputs and the remaining',
+        'Letwin/localization obligations. This is a reading order, not a new dependency graph.',
+        'Status comes from the existing paper lemma maps. A ✓ proves the displayed statement',
+        'with its hypotheses; it does not discharge an input or cover the whole paper.', '',
+        '| Source step | Lean entry | Local status | Input boundary / remaining work | Evidence |',
+        '| --- | --- | --- | --- | --- |',
+    ]
+    seen = set()
+    for step in path['steps']:
+        key = (step['paper'], step['item'])
+        if key in seen:
+            raise ValueError('Duplicate proof-path step')
+        seen.add(key)
+        paper = papers[step['paper']]
+        items = validate_lemma_map(paper, read_source)
+        item = items[step['item']]
+        if not step.get('boundary', '').strip():
+            raise ValueError('Proof-path step needs its input boundary')
+        declared = {d['name']: d for d in item['declarations']}
+        names = step.get('entries', [])
+        if any(name not in declared for name in names):
+            raise ValueError('Proof-path entry is not in its canonical lemma map')
+        entries = '<br/>'.join(f'[`{name}`](../../{declared[name]["source"]})' for name in names)
+        if not entries:
+            entries = 'No source-theorem entry' if not declared else 'Supporting declarations in the item map'
+        state = lemma_state(item, read_source)
+        evidence = f'[Item map](LITERATURE.md#{paper["id"].lower()}-lemma-map)'
+        cert_label = step.get('certificate')
+        if cert_label:
+            cert = certificates.get(cert_label)
+            if not cert or cert['declaration'] not in declared:
+                raise ValueError('Proof-path certificate is not registered for the mapped item')
+            evidence += f'<br/>[Certificate](../../{cert["module"].replace(".", "/")}.lean)'
+        source = f'[{paper["authors"]}: {item["locator"]}]({paper["lemma_map"]["source_url"]})'
+        lines.append(f'| {source} | {entries} | {LEMMA_MARKS[state]} {LEMMA_LABELS[state]} | '
+                     f'{views.cell(step["boundary"])} | {evidence} |')
+    lines += ['', 'Certificates and item maps identify statements and source reviews, not a fresh run.',
+              'For snapshot-specific acceptance use [verification](../verification.md#receipts-and-trust-scope)',
+              'and the [current handoff](../../HANDOFF.md). **BKL Theorem 1.1 and dimension-free KLS remain open.**']
+    return '\n'.join(lines)
+
+
 def render(catalog, records, blueprint, certificates=None, read_source=None):
     certificates = {} if certificates is None else certificates
     papers = validate(catalog, records)

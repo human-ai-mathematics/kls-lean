@@ -156,6 +156,8 @@ import FunctionalInequalities.Analysis.IteratedDerivative.InnerProduct
 import FunctionalInequalities.Analysis.Matrix.Trace
 import FunctionalInequalities.Analysis.Majorization
 import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.InteriorRegularity
+import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Range
+import FunctionalInequalities.KLS.LogConcave.BrascampLieb
 import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Curvature
 import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.GammaTwo
 import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.TestClass
@@ -242,6 +244,11 @@ import FunctionalInequalities.Probability.Covariance.CauchySchwarz
 import FunctionalInequalities.Probability.Conditioning
 import FunctionalInequalities.Probability.ConvexSupport
 import FunctionalInequalities.Analysis.Convex.Legendre
+import FunctionalInequalities.Analysis.Extremum
+import FunctionalInequalities.Analysis.Convex.LegendreVariation.Attainment
+import FunctionalInequalities.Analysis.Convex.LegendreVariation.Perturbation
+import FunctionalInequalities.Analysis.Convex.LegendreVariation.Derivative
+import FunctionalInequalities.Analysis.Convex.BoundedConjugate
 import FunctionalInequalities.Analysis.Convex.AffineMaximum
 import FunctionalInequalities.Analysis.Convex.PointwiseCompactness
 import FunctionalInequalities.Analysis.Convex.RadialExtension
@@ -253,6 +260,7 @@ import FunctionalInequalities.Analysis.Convex.SupportingPlane
 import FunctionalInequalities.Analysis.Convex.Coercivity
 import FunctionalInequalities.KLS.CEK.Competitors
 import FunctionalInequalities.KLS.CEK.VariationalMaximum
+import FunctionalInequalities.KLS.CEK.BoundedPrimal
 import FunctionalInequalities.Probability.MomentMeasure.Affine
 import FunctionalInequalities.Probability.MomentMeasure.Baseline
 import FunctionalInequalities.Probability.MomentMeasure.Coercivity
@@ -265,8 +273,11 @@ import FunctionalInequalities.Analysis.Operator.InverseSqrt
 import FunctionalInequalities.KLS.LogConcave.Density.ConcaveTilt
 import FunctionalInequalities.Analysis.Matrix.Positivity
 import FunctionalInequalities.Analysis.Matrix.Sign
+import FunctionalInequalities.Analysis.Matrix.Integral
 import FunctionalInequalities.Analysis.Matrix.DeterminantDerivative
 import FunctionalInequalities.Analysis.BakryEmery.MongeAmpere
+import FunctionalInequalities.Analysis.BakryEmery.InverseHessianEnergy
+import FunctionalInequalities.Analysis.BakryEmery.HessianTrace
 import FunctionalInequalities.Analysis.BakryEmery.UniformIntervalPotential
 import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.UniformIntervalClient
 import FunctionalInequalities.Analysis.BakryEmery.HessianOperator

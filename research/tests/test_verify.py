@@ -8,8 +8,9 @@ import unittest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from verify import (axiom_audit_code, build_replay_inputs, check_research_audits,
-                    library_axiom_audit_code, parse_axioms, prepare_replay,
-                    undiscovered_lean_sources, verification_snapshot)
+                    library_axiom_audit_code, parse_axioms, prepare_replay, replay_sources,
+                    reported_names,
+                    undiscovered_lean_sources, vendor_axiom_audit_code, verification_snapshot)
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -64,6 +65,16 @@ class ResearchAuditTests(unittest.TestCase):
         with self.assertRaisesRegex(RuntimeError, "unexpected axioms"):
             self.check_sources({"research/audits/Axiom.lean":
                                 "axiom bad : False\n#print axioms bad\n"})
+
+    def test_quoted_name_with_space_rejects_verification(self):
+        with self.assertRaisesRegex(RuntimeError, "unexpected axioms"):
+            self.check_sources({"research/audits/Quoted.lean":
+                                "axiom «bad name» : False\n#print axioms «bad name»\n"})
+
+    def test_quoted_name_with_line_break_fails_closed(self):
+        with self.assertRaisesRegex(RuntimeError, "unparsed axiom report"):
+            self.check_sources({"research/audits/Newline.lean":
+                                "axiom «bad\nname» : False\n#print axioms «bad\nname»\n"})
 
 
 class CheckedViewTests(unittest.TestCase):
@@ -223,7 +234,7 @@ class AxiomAuditTests(unittest.TestCase):
             "def AuditFixture : {x : Nat // x = 0} := ⟨0, by rfl⟩", names)
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
         self.assertNotIn("warning:", result.stdout + result.stderr)
-        reports, errors = parse_axioms(result.stdout, names)
+        reports, errors = parse_axioms(result.stdout, names, structured=True)
         self.assertEqual(errors, [])
         self.assertEqual(reports, {name: [] for name in names})
 
@@ -233,16 +244,48 @@ class AxiomAuditTests(unittest.TestCase):
             "axiom auditForbidden : False\n"
             "theorem auditDependency : False := auditForbidden", names)
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
-        reports, errors = parse_axioms(result.stdout, names)
+        reports, errors = parse_axioms(result.stdout, names, structured=True)
         self.assertEqual(reports["auditDependency"], ["auditForbidden"])
         self.assertTrue(any("unexpected axioms" in error for error in errors))
+
+    def test_text_reports_keep_primes_generated_suffixes_and_spaces(self):
+        output = ("'A.lemma'' depends on axioms: [propext]\n"
+                  "'A.other'._simp_1_2' depends on axioms: [propext,\n Classical.choice]\n"
+                  "'B.other'._simp_1_2' depends on axioms: [sorryAx]\n"
+                  "'«bad name»' depends on axioms: [«bad name»]\n"
+                  "'C.plain' does not depend on any axioms\n")
+        names = {"A.lemma'", "A.other'._simp_1_2", "B.other'._simp_1_2", "«bad name»", "C.plain"}
+        self.assertEqual(reported_names(output), names)
+        reports, errors = parse_axioms(output, names)
+        self.assertEqual(reports["A.other'._simp_1_2"], ["Classical.choice", "propext"])
+        self.assertEqual(errors, ["B.other'._simp_1_2: unexpected axioms ['sorryAx']",
+                                  "«bad name»: unexpected axioms ['«bad name»']"])
+
+    def test_unparsed_text_report_fails_closed(self):
+        # Actual Lean output for `axiom «bad\nname» : False` and `#print axioms «bad\nname»`.
+        output = "'«bad\nname»' depends on axioms: [«bad\n   name»]\n"
+        reports, errors = parse_axioms(output, reported_names(output))
+        self.assertEqual(reports, {})
+        self.assertEqual(errors, ["unparsed axiom report: 1 verdicts, 0 parsed"])
+
+    def test_structured_reports_parse_any_name_and_reject_text(self):
+        output = ('AXIOM_REPORT {"name":"«bad\\nname»","axioms":["propext"]}\n'
+                  'AXIOM_REPORT {"name":"A.x\'._simp_1","axioms":["sorryAx"]}\n')
+        reports, errors = parse_axioms(output, {"«bad\nname»", "A.x'._simp_1"}, structured=True)
+        self.assertEqual(reports["«bad\nname»"], ["propext"])
+        self.assertEqual(errors, ["A.x'._simp_1: unexpected axioms ['sorryAx']"])
+        _, errors = parse_axioms(output + "'C' depends on axioms: [propext]\n",
+                                 set(), structured=True)
+        self.assertIn("unstructured axiom report in a structured audit", errors)
+        _, errors = parse_axioms("AXIOM_REPORT {broken\n", set(), structured=True)
+        self.assertTrue(errors[0].startswith("unparsed structured axiom report"))
 
     def test_missing_declaration_fails_before_collection(self):
         names = {"AuditMissing"}
         result = self.run_audit("", names)
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("Axiom audit declaration not found: AuditMissing", result.stdout)
-        reports, errors = parse_axioms(result.stdout, names)
+        reports, errors = parse_axioms(result.stdout, names, structured=True)
         self.assertEqual(reports, {})
         self.assertIn("missing axiom report: AuditMissing", errors)
 
@@ -284,6 +327,97 @@ class LeanOnlyBoundaryTests(unittest.TestCase):
         result = self.run_library_audit("axiom FunctionalInequalities.unlisted : False\n")
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("unexpected axioms", result.stdout + result.stderr)
+
+
+class VendorTests(unittest.TestCase):
+    def test_vendored_sources_replay_under_their_module_roots(self):
+        snapshot = {"files": {
+            "formalization/FunctionalInequalities.lean": "root",
+            "formalization/vendor/LevyStochCalc/LevyStochCalc/Ito/Picard.lean": "vendored",
+            "formalization/vendor/LevyStochCalc/LevyStochCalc/Ito/Removed.lean": None,
+            "formalization/vendor/LevyStochCalc/Stray/Helper.lean": "outside the module root",
+            "formalization/vendor/BrownianMotion/LICENSE": "license",
+        }}
+        self.assertEqual(replay_sources(snapshot), {
+            "FunctionalInequalities": "formalization/FunctionalInequalities.lean",
+            "LevyStochCalc.Ito.Picard": "formalization/vendor/LevyStochCalc/LevyStochCalc/Ito/Picard.lean",
+        })
+
+    def run_vendor_audit(self, source, listed):
+        env = dict(os.environ)
+        env.pop("LEAN_PATH", None)
+        code = vendor_axiom_audit_code([], set(listed)).removeprefix("import Lean")
+        return subprocess.run(["lake", "env", "lean", "--stdin"], cwd=ROOT / "formalization",
+                              input="import Lean\n" + source + code,
+                              text=True, capture_output=True, timeout=60, env=env)
+
+    hole = "theorem BrownianMotion.hole : True := by sorry\n"
+
+    def test_listed_upstream_sorry_is_isolated(self):
+        result = self.run_vendor_audit(
+            self.hole + "theorem LevyStochCalc.fine : True := trivial\n", ["BrownianMotion.hole"])
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertIn("Audited 2 vendored declarations", result.stdout)
+
+    def test_vendored_user_of_listed_sorry_is_rejected(self):
+        result = self.run_vendor_audit(
+            self.hole + "theorem LevyStochCalc.user : True := BrownianMotion.hole\n",
+            ["BrownianMotion.hole"])
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("LevyStochCalc.user: unexpected axioms [sorryAx]", result.stdout + result.stderr)
+
+    def test_unlisted_vendored_sorry_is_rejected(self):
+        result = self.run_vendor_audit(self.hole, [])
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("unexpected axioms [sorryAx]", result.stdout + result.stderr)
+
+    def test_fixed_or_missing_listed_declaration_is_rejected(self):
+        fixed = self.run_vendor_audit("theorem BrownianMotion.hole : True := trivial\n",
+                                      ["BrownianMotion.hole"])
+        self.assertNotEqual(fixed.returncode, 0)
+        self.assertIn("listed upstream sorry declaration has axioms", fixed.stdout + fixed.stderr)
+        missing = self.run_vendor_audit("", ["BrownianMotion.hole"])
+        self.assertNotEqual(missing.returncode, 0)
+        self.assertIn("Listed upstream sorry declaration not found", missing.stdout + missing.stderr)
+
+    def test_listed_name_outside_the_vendored_roots_is_rejected(self):
+        result = self.run_vendor_audit(
+            "theorem External.hole : True := by sorry\ntheorem LevyStochCalc.fine : True := trivial\n",
+            ["External.hole"])
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("is not a vendored declaration: External.hole", result.stdout + result.stderr)
+
+    def test_unregistered_local_wrapper_of_vendored_sorry_fails_local_audit(self):
+        env = dict(os.environ)
+        env.pop("LEAN_PATH", None)
+        source = (self.hole +
+                  "theorem FunctionalInequalities.unregisteredWrapper : True := BrownianMotion.hole\n")
+        result = subprocess.run(["lake", "env", "lean", "--stdin"], cwd=ROOT / "formalization",
+                                input="import Lean\n" + source +
+                                library_axiom_audit_code([]).removeprefix("import Lean"),
+                                text=True, capture_output=True, timeout=60, env=env)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("FunctionalInequalities.unregisteredWrapper: unexpected axioms [sorryAx]",
+                      result.stdout + result.stderr)
+
+    @unittest.skipUnless((ROOT / "formalization/.lake/build/lib/lean/BrownianMotion/StochasticIntegral/"
+                          "Quasimartingale/CadlagModification.olean").is_file(),
+                         "vendored BrownianMotion is not built")
+    def test_wrapper_of_actual_vendored_hole_fails_local_audit(self):
+        env = dict(os.environ)
+        env.pop("LEAN_PATH", None)
+        source = ("import BrownianMotion.StochasticIntegral.Quasimartingale.CadlagModification\n"
+                  "import Lean\n"
+                  "set_option linter.defProp false in\n"
+                  "def FunctionalInequalities.unregisteredWrapper :=\n"
+                  "  @ProbabilityTheory.uniformIntegrable_of_countable\n")
+        result = subprocess.run(["lake", "env", "lean", "--stdin"], cwd=ROOT / "formalization",
+                                input=source + library_axiom_audit_code([]).removeprefix("import Lean"),
+                                text=True, capture_output=True, timeout=300, env=env)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("FunctionalInequalities.unregisteredWrapper: unexpected axioms",
+                      result.stdout + result.stderr)
+        self.assertIn("sorryAx", result.stdout + result.stderr)
 
 
 if __name__ == "__main__":

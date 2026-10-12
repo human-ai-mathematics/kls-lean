@@ -2,6 +2,8 @@ import Mathlib.Analysis.Matrix.HermitianFunctionalCalculus
 import Mathlib.Analysis.Matrix.PosDef
 import Mathlib.Analysis.SpecialFunctions.Pow.Real
 import Mathlib.Algebra.Order.Chebyshev
+import Mathlib.Analysis.Matrix.Order
+import Mathlib.Tactic.NoncommRing
 
 /-!
 # A trace inequality for real powers of a positive definite matrix
@@ -366,5 +368,135 @@ theorem sum_trace_sq_le_card_mul_sum_sq {n : ℕ} (B : Fin n → Matrix (Fin n) 
         rw [Finset.mul_sum]
 
 end TraceEnergy
+
+end FunctionalInequalities.Analysis
+
+namespace FunctionalInequalities.Analysis
+
+section JordanTrace
+
+/-! ### Positive spectral functions and trace energy of symmetric matrices
+
+Support for Letwin, arXiv:2607.24164v1, Theorem 2.5 (the extension from positive semidefinite to all symmetric `B`):
+a nonnegative real function of a symmetric matrix is positive semidefinite (`cfc_posSemidef_of_nonneg`, through the
+orthonormal spectral representation `cfc_eq_mul_diagonal_mul`); for positive semidefinite `P`, `N` and symmetric `H`
+the mixed trace `tr(P H N H)` is nonnegative (`trace_cross_nonneg`); a positive semidefinite weight makes the trace
+energy `tr(B H B H)` of a symmetric `B` nonnegative (`trace_energy_nonneg`); and
+`tr((P − N) H (P − N) H) ≤ tr(P H P H) + tr(N H N H)` without commutation (`jordan_trace_domination`). Arbitrary
+finite index types, including the empty one. Not provided here: the measure extension, the moment map, Brascamp–Lieb
+or Theorem 2.5 itself. Proof bodies: strong-API candidate (gpt-6-astra, `api-symmetric-compiler-patch-v3`, e735387e…),
+verbatim; the two one-use helpers are private.
+-/
+
+open scoped MatrixOrder
+
+variable {ι : Type*} [Fintype ι] [DecidableEq ι]
+
+/-- Positivity of a real diagonal matrix, proved by an explicit Gram factor. -/
+private theorem diagonal_posSemidef (d : ι → ℝ) (hd : ∀ i, 0 ≤ d i) :
+    (Matrix.diagonal d).PosSemidef := by
+  let D : Matrix ι ι ℝ := Matrix.diagonal (fun i => Real.sqrt (d i))
+  have he : D.conjTranspose * D = Matrix.diagonal d := by
+    rw [Matrix.conjTranspose_eq_transpose_of_trivial]
+    ext i j
+    by_cases hij : i = j
+    · subst j
+      simpa [D, Matrix.mul_apply, Matrix.diagonal_apply, pow_two] using
+        Real.sq_sqrt (hd i)
+    · simp [D, Matrix.mul_apply, Matrix.diagonal_apply, hij]
+  rw [← he]
+  exact Matrix.posSemidef_conjTranspose_mul_self D
+
+omit [Fintype ι] [DecidableEq ι] in
+/-- For real matrices, positive semidefiniteness entails symmetry. -/
+private theorem real_posSemidef_isSymm {A : Matrix ι ι ℝ} (hA : A.PosSemidef) :
+    A.IsSymm := by
+  change A.transpose = A
+  rw [← Matrix.conjTranspose_eq_transpose_of_trivial]
+  exact hA.isHermitian.eq
+
+/-- Positivity of a nonnegative real spectral function, using the actual
+orthonormal spectral representation of the matrix CFC. -/
+theorem cfc_posSemidef_of_nonneg (B : Matrix ι ι ℝ) (hB : B.IsSymm)
+    (f : ℝ → ℝ) (hf : ∀ x, 0 ≤ f x) : (cfc f B).PosSemidef := by
+  have hHerm : B.IsHermitian := by
+    change B.conjTranspose = B
+    rw [Matrix.conjTranspose_eq_transpose_of_trivial, hB.eq]
+  rw [FunctionalInequalities.Analysis.cfc_eq_mul_diagonal_mul hHerm f]
+  simpa only [Matrix.conjTranspose_eq_transpose_of_trivial] using
+    (diagonal_posSemidef (fun i => f (hHerm.eigenvalues i))
+      (fun i => hf (hHerm.eigenvalues i))).mul_mul_conjTranspose_same
+        (hHerm.eigenvectorUnitary : Matrix ι ι ℝ)
+
+/-- A mixed weighted trace is nonnegative. The weight need only be symmetric;
+it need not be positive semidefinite. -/
+theorem trace_cross_nonneg {P N H : Matrix ι ι ℝ}
+    (hP : P.PosSemidef) (hN : N.PosSemidef) (hH : H.IsSymm) :
+    0 ≤ (P * H * N * H).trace := by
+  obtain ⟨X, hX⟩ := CStarAlgebra.nonneg_iff_eq_star_mul_self.mp hP.nonneg
+  have he : (P * H * N * H).trace =
+      ((X * H) * N * (X * H).conjTranspose).trace := by
+    simp only [hX, Matrix.star_eq_conjTranspose,
+      Matrix.conjTranspose_eq_transpose_of_trivial, Matrix.transpose_mul, hH.eq]
+    simpa only [Matrix.mul_assoc] using
+      (Matrix.trace_mul_comm X.transpose (X * H * N * H))
+  rw [he]
+  exact (hN.mul_mul_conjTranspose_same (X * H)).trace_nonneg
+
+/-- A positive semidefinite weight makes the trace energy of every symmetric
+real matrix nonnegative. -/
+theorem trace_energy_nonneg {B H : Matrix ι ι ℝ}
+    (hB : B.IsSymm) (hH : H.PosSemidef) :
+    0 ≤ (B * H * B * H).trace := by
+  have hHs : H.IsSymm := real_posSemidef_isSymm hH
+  obtain ⟨X, hX⟩ := CStarAlgebra.nonneg_iff_eq_star_mul_self.mp hH.nonneg
+  have hX' : H = X.conjTranspose * X := by
+    simpa only [Matrix.star_eq_conjTranspose] using hX
+  let C : Matrix ι ι ℝ := X * B * X.conjTranspose
+  have hC : C.IsSymm := by
+    change C.transpose = C
+    simp [C, Matrix.conjTranspose_eq_transpose_of_trivial,
+      Matrix.transpose_mul, Matrix.mul_assoc, hB.eq]
+  have hCpsd : (C * C).PosSemidef := by
+    simpa [Matrix.conjTranspose_eq_transpose_of_trivial, hC.eq] using
+      (Matrix.posSemidef_conjTranspose_mul_self C)
+  have heq : (B * H * B * H).trace = (C * C).trace := by
+    calc
+      (B * H * B * H).trace =
+          (B * (X.conjTranspose * X) * B *
+            (X.conjTranspose * X)).trace := by rw [hX']
+      _ = (X * (B * X.conjTranspose * X * B * X.conjTranspose)).trace := by
+        simpa [Matrix.mul_assoc] using
+          (Matrix.trace_mul_comm
+            (B * X.conjTranspose * X * B * X.conjTranspose) X)
+      _ = (C * C).trace := by simp [C, Matrix.mul_assoc]
+  rw [heq]
+  exact hCpsd.trace_nonneg
+
+/-- Jordan decomposition gives pointwise trace-energy domination for every
+symmetric weight, without a commutation assumption. -/
+theorem jordan_trace_domination {P N H : Matrix ι ι ℝ}
+    (hP : P.PosSemidef) (hN : N.PosSemidef) (hH : H.IsSymm) :
+    ((P - N) * H * (P - N) * H).trace ≤
+      (P * H * P * H).trace + (N * H * N * H).trace := by
+  have hPNH := trace_cross_nonneg (P := P) (N := N) hP hN hH
+  have hNPH := trace_cross_nonneg (P := N) (N := P) hN hP hH
+  have hexpand :
+      ((P - N) * H * (P - N) * H).trace =
+        (P * H * P * H).trace - (P * H * N * H).trace -
+          (N * H * P * H).trace + (N * H * N * H).trace := by
+    calc
+      ((P - N) * H * (P - N) * H).trace =
+          (P * H * P * H - P * H * N * H -
+            N * H * P * H + N * H * N * H).trace := by
+        congr 1
+        noncomm_ring
+      _ = (P * H * P * H).trace - (P * H * N * H).trace -
+          (N * H * P * H).trace + (N * H * N * H).trace := by
+        simp only [Matrix.trace_add, Matrix.trace_sub]
+  rw [hexpand]
+  linarith
+
+end JordanTrace
 
 end FunctionalInequalities.Analysis

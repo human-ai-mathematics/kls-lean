@@ -1,6 +1,7 @@
 name = "functional-inequalities"
 version = "0.1.0"
-defaultTargets = ["FunctionalInequalities", "Solutions", "Examples"]
+defaultTargets = ["FunctionalInequalities", "Solutions", "Examples",
+  "LevyStochCalc", "BrownianMotion", "MathFin", "KolmogorovExtension4"]
 
 [[require]]
 name = "mathlib"
@@ -58,6 +59,33 @@ roots = [
 name = "Examples"
 srcDir = ".."
 roots = ["examples.PoincareFoundation", "examples.ApiOrganization"]
+
+# Vendored third-party stochastic calculus (Apache-2.0), ported to this toolchain and Mathlib.
+# Pins, licenses, the module closure and every local change are recorded in vendor/README.md.
+# The options are the upstream package options under which the libraries were written.
+[[lean_lib]]
+name = "LevyStochCalc"
+srcDir = "vendor/LevyStochCalc"
+globs = ["LevyStochCalc.+"]
+leanOptions = {relaxedAutoImplicit = false, maxSynthPendingDepth = 3}
+
+[[lean_lib]]
+name = "BrownianMotion"
+srcDir = "vendor/BrownianMotion"
+globs = ["BrownianMotion.+"]
+leanOptions = {relaxedAutoImplicit = false, maxSynthPendingDepth = 3}
+
+[[lean_lib]]
+name = "MathFin"
+srcDir = "vendor/MathFin"
+globs = ["MathFin.+"]
+leanOptions = {relaxedAutoImplicit = false, maxSynthPendingDepth = 3}
+
+[[lean_lib]]
+name = "KolmogorovExtension4"
+srcDir = "vendor/KolmogorovExtension4"
+globs = ["KolmogorovExtension4.+"]
+leanOptions = {relaxedAutoImplicit = false, maxSynthPendingDepth = 3}
 
 # `Dev/Search.lean` (LeanSearchClient query scratchpad) is intentionally NOT a `lean_lib`:
 # the Blueprint's `lake exe checkdecls` imports the roots of every library of this package,

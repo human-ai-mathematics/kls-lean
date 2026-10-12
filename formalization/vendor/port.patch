@@ -1,0 +1,333 @@
+--- a/BrownianMotion/BrownianMotion/Auxiliary/Algebra.lean
++++ b/BrownianMotion/BrownianMotion/Auxiliary/Algebra.lean
+@@ -1,14 +1,13 @@
++-- Modified 2026-10-12 by the KLS formalization project: ported to Lean v4.33.0 and
++-- Mathlib db584cd. The changes are listed in vendor/README.md and vendor/port.patch.
+ module
+ 
+ public import Mathlib.LinearAlgebra.Dimension.Finite
+ 
+ @[expose] public section
+ 
+--- TODO: remove if https://github.com/leanprover-community/mathlib4/pull/40909 has merged.
+-lemma Set.indicator_apply_apply {ι Ω M : Type*} [Zero M] (s : Set ι) (f : ι → Ω → M) (i : ι)
+-    (ω : Ω) :
+-    s.indicator f i ω = s.indicator (fun j ↦ f j ω) i := by
+-  by_cases h : i ∈ s <;> simp [h]
++-- `Set.indicator_apply_apply` is now provided by Mathlib
++-- (`Mathlib.Algebra.Notation.Indicator`), with `s` and `i` implicit.
+ 
+ /-- A finite sum of monotone functions is monotone. -/
+ lemma Monotone.finset_sum {ι κ M : Type*} [Preorder ι] [AddCommMonoid M] [Preorder M]
+--- a/BrownianMotion/BrownianMotion/StochasticIntegral/SimpleProcess.lean
++++ b/BrownianMotion/BrownianMotion/StochasticIntegral/SimpleProcess.lean
+@@ -3,6 +3,8 @@
+ Released under Apache 2.0 license as described in the file LICENSE.
+ Authors: Rémy Degenne, Thomas Zhu
+ -/
++-- Modified 2026-10-12 by the KLS formalization project: ported to Lean v4.33.0 and
++-- Mathlib db584cd. The changes are listed in vendor/README.md and vendor/port.patch.
+ module
+ 
+ public import BrownianMotion.Auxiliary.StoppedProcess
+@@ -182,7 +184,7 @@
+     {C : ℝ} (hC : ∀ k ≤ n, ∀ ω, ‖W k ω‖ ≤ C) :
+     SimpleProcess E 𝓕 where
+   valueBot := W 0
+-  value := Finsupp.onFinset ((Finset.range n).map ⟨fun k ↦ (k, k + 1), fun _ ↦ by grind⟩)
++  value := Finsupp.onFinset ((Finset.range n).map ⟨fun k ↦ (k, k + 1), by intro _; grind⟩)
+       (fun p ↦ if p.1 < n ∧ p.2 = p.1 + 1 then W p.2 else 0)
+       (fun p ↦ by simp; grind)
+   le_of_mem_support_value p hp := by simp at hp; grind
+--- a/KolmogorovExtension4/KolmogorovExtension4/KolmogorovExtension.lean
++++ b/KolmogorovExtension4/KolmogorovExtension4/KolmogorovExtension.lean
+@@ -3,6 +3,8 @@
+ Released under Apache 2.0 license as described in the file LICENSE.
+ Authors: Rémy Degenne, Peter Pfaffelhuber
+ -/
++-- Modified 2026-10-12 by the KLS formalization project: ported to Lean v4.33.0 and
++-- Mathlib db584cd. The changes are listed in vendor/README.md and vendor/port.patch.
+ module
+ 
+ public import KolmogorovExtension4.RegularContent
+@@ -143,9 +145,10 @@
+   swap; · exact J.measurable_restrict
+   have h_mem : J.restrict ⁻¹' s ∈ measurableCylinders α :=
+     (mem_measurableCylinders _).mpr ⟨J, s, hs, rfl⟩
+-  rw [projectiveLimit, AddContent.measure_eq _ _ _ _ h_mem,
+-    projectiveFamilyContent_congr hP (_ ⁻¹' _) rfl hs]
+-  exact generateFrom_measurableCylinders.symm
++  rw [projectiveLimit]
++  exact (AddContent.measure_eq _ isSetSemiring_measurableCylinders
++    generateFrom_measurableCylinders.symm (projectiveFamilyContent_iUnion_le_sum hP) h_mem).trans
++    (projectiveFamilyContent_congr hP (_ ⁻¹' _) rfl hs)
+ 
+ instance isFiniteMeasure_projectiveLimit (hP : IsProjectiveMeasureFamily P) :
+     IsFiniteMeasure (projectiveLimit P hP) :=
+--- a/LevyStochCalc/LevyStochCalc/Brownian/CrossVariation.lean
++++ b/LevyStochCalc/LevyStochCalc/Brownian/CrossVariation.lean
+@@ -3,6 +3,8 @@
+ Released under Apache 2.0 license as described in the file LICENSE.
+ Authors: Christian Garry
+ -/
++-- Modified 2026-10-12 by the KLS formalization project: ported to Lean v4.33.0 and
++-- Mathlib db584cd. The changes are listed in vendor/README.md and vendor/port.patch.
+ import LevyStochCalc.Brownian.ItoAlgebra
+ import LevyStochCalc.Brownian.CrossOrthogonality
+ 
+@@ -61,9 +63,8 @@
+       then (![fun _ : Ω => (0 : ℝ), Z] : Fin 2 → Ω → ℝ) i ω else 0)
+     = if a < s ∧ s ≤ b then Z ω else 0
+   rw [Fin.sum_univ_two]
+-  simp only [Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.head_cons, Matrix.cons_val_two,
+-    Matrix.tail_cons, Fin.castSucc_zero, Fin.castSucc_one, Fin.succ_zero_eq_one,
+-    Fin.succ_one_eq_two]
++  change (if (0 : ℝ) < s ∧ s ≤ a then (0 : ℝ) else 0)
++      + (if a < s ∧ s ≤ b then Z ω else 0) = _
+   by_cases h2 : a < s ∧ s ≤ b <;> simp [h2]
+ 
+ theorem twoCell_adapted {a b : ℝ} (ha : 0 < a) (hab : a < b) {Z : Ω → ℝ} (hZm : Measurable Z)
+--- a/LevyStochCalc/LevyStochCalc/Brownian/ItoAlgebraAssociativity.lean
++++ b/LevyStochCalc/LevyStochCalc/Brownian/ItoAlgebraAssociativity.lean
+@@ -3,6 +3,8 @@
+ Released under Apache 2.0 license as described in the file LICENSE.
+ Authors: Christian Garry
+ -/
++-- Modified 2026-10-12 by the KLS formalization project: ported to Lean v4.33.0 and
++-- Mathlib db584cd. The changes are listed in vendor/README.md and vendor/port.patch.
+ import LevyStochCalc.Brownian.ItoAlgebraProduct
+ 
+ /-!
+@@ -310,9 +312,8 @@
+   · rw [Set.indicator_of_mem (Set.mem_Ioc.mpr h)]
+     simp [h]
+   · rw [Set.indicator_of_notMem fun hm => h (Set.mem_Ioc.mp hm)]
+-    simp only [Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.head_cons, Fin.isValue,
+-      Matrix.cons_val_two, Matrix.tail_cons, Fin.castSucc_zero, Fin.succ_zero_eq_one,
+-      Fin.castSucc_one, Fin.succ_one_eq_two]
++    show (if (0 : ℝ) < s ∧ s ≤ a then (0 : ℝ) else 0)
++      + (if a < s ∧ s ≤ b then (1 : ℝ) else 0) = 0
+     simp only [ite_self, zero_add]
+     exact if_neg h
+ 
+--- a/LevyStochCalc/LevyStochCalc/Brownian/ItoFourthMomentIncrements.lean
++++ b/LevyStochCalc/LevyStochCalc/Brownian/ItoFourthMomentIncrements.lean
+@@ -3,6 +3,8 @@
+ Released under Apache 2.0 license as described in the file LICENSE.
+ Authors: Christian Garry
+ -/
++-- Modified 2026-10-12 by the KLS formalization project: ported to Lean v4.33.0 and
++-- Mathlib db584cd. The changes are listed in vendor/README.md and vendor/port.patch.
+ import LevyStochCalc.Brownian.ItoAlgebra
+ 
+ /-!
+@@ -81,8 +83,8 @@
+     (W.measurable_eval b).sub (W.measurable_eval a)
+   rw [← integral_map hmeas.aemeasurable
+       (f := fun x : ℝ => x ^ m) (by fun_prop),
+-    W.increment_gaussian ha hab, integral_pow_gaussianReal_zero]
+-  rfl
++    W.increment_gaussian ha hab]
++  exact integral_pow_gaussianReal_zero _ m
+ 
+ /-- Odd moments of a Brownian increment vanish. -/
+ theorem integral_increment_pow_odd {a b : ℝ} (ha : 0 ≤ a) (hab : a < b) {m : ℕ} (hm : Odd m) :
+--- a/LevyStochCalc/LevyStochCalc/Brownian/ItoL2CompletionIncrement.lean
++++ b/LevyStochCalc/LevyStochCalc/Brownian/ItoL2CompletionIncrement.lean
+@@ -3,6 +3,8 @@
+ Released under Apache 2.0 license as described in the file LICENSE.
+ Authors: Christian Garry
+ -/
++-- Modified 2026-10-12 by the KLS formalization project: ported to Lean v4.33.0 and
++-- Mathlib db584cd. The changes are listed in vendor/README.md and vendor/port.patch.
+ import LevyStochCalc.Brownian.ItoL2CompletionExistence
+ 
+ /-!
+@@ -86,7 +88,7 @@
+         (ProbabilityTheory.gaussianReal 0 ⟨b - a, by linarith⟩) := by
+       have h_memLp : MeasureTheory.MemLp (id : ℝ → ℝ) 2
+           (ProbabilityTheory.gaussianReal 0 ⟨b - a, by linarith⟩) :=
+-        ProbabilityTheory.IsGaussian.memLp_id _ 2 (by simp)
++        ProbabilityTheory.memLp_id_gaussianReal' 2 (by simp)
+       have h := h_memLp.integrable_norm_pow (p := 2) (by norm_num)
+       convert h using 1; ext x; change x ^ 2 = ‖x‖ ^ 2; rw [Real.norm_eq_abs, sq_abs]
+     have h_nn_sq : 0 ≤ᵐ[ProbabilityTheory.gaussianReal 0 ⟨b - a, by linarith⟩]
+@@ -187,8 +189,8 @@
+       (by fun_prop : MeasureTheory.AEStronglyMeasurable (fun x : ℝ => x ^ 2)
+         (P.map (fun ω => W.W t ω - W.W s ω))) h_meas.aemeasurable).symm]
+   rw [W.increment_gaussian hs hst]
+-  have h := (ProbabilityTheory.IsGaussian.memLp_id
+-    (ProbabilityTheory.gaussianReal 0 ⟨t - s, by linarith⟩) 2 (by simp)).integrable_norm_pow
++  have h := (ProbabilityTheory.memLp_id_gaussianReal' (μ := 0)
++    (v := ⟨t - s, by linarith⟩) 2 (by simp)).integrable_norm_pow
+     (p := 2) (by norm_num)
+   convert h using 1; ext x; change x ^ 2 = ‖x‖ ^ 2; rw [Real.norm_eq_abs, sq_abs]
+ 
+--- a/LevyStochCalc/LevyStochCalc/Brownian/ItoPullOut.lean
++++ b/LevyStochCalc/LevyStochCalc/Brownian/ItoPullOut.lean
+@@ -3,6 +3,8 @@
+ Released under Apache 2.0 license as described in the file LICENSE.
+ Authors: Christian Garry
+ -/
++-- Modified 2026-10-12 by the KLS formalization project: ported to Lean v4.33.0 and
++-- Mathlib db584cd. The changes are listed in vendor/README.md and vendor/port.patch.
+ import LevyStochCalc.Brownian.ItoIncrement
+ 
+ /-!
+@@ -76,9 +78,8 @@
+   · rw [Set.indicator_of_mem (Set.mem_Ioc.mpr h)]
+     simp [h]
+   · rw [Set.indicator_of_notMem fun hmem => h (Set.mem_Ioc.mp hmem)]
+-    simp only [Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.head_cons, Fin.isValue,
+-      Matrix.cons_val_two, Matrix.tail_cons, Fin.castSucc_zero, Fin.succ_zero_eq_one,
+-      Fin.castSucc_one, Fin.succ_one_eq_two]
++    show (if (0 : ℝ) < s ∧ s ≤ a then (0 : ℝ) else 0)
++      + (if a < s ∧ s ≤ b then V ω else 0) = V ω * 0
+     simp only [ite_self, zero_add]
+     rw [if_neg h]
+     ring
+@@ -96,8 +97,7 @@
+   · rw [Set.indicator_of_mem (Set.mem_Ioc.mpr h)]
+     simp [h]
+   · rw [Set.indicator_of_notMem fun hmem => h (Set.mem_Ioc.mp hmem)]
+-    simp only [Matrix.cons_val_zero, Matrix.cons_val_one, Fin.isValue,
+-      Fin.castSucc_zero, Fin.succ_zero_eq_one]
++    show (if (0 : ℝ) < s ∧ s ≤ b then V ω else 0) = V ω * 0
+     rw [if_neg h]
+     ring
+ 
+--- a/LevyStochCalc/LevyStochCalc/Brownian/ItoSimpleMoments.lean
++++ b/LevyStochCalc/LevyStochCalc/Brownian/ItoSimpleMoments.lean
+@@ -3,6 +3,8 @@
+ Released under Apache 2.0 license as described in the file LICENSE.
+ Authors: Christian Garry
+ -/
++-- Modified 2026-10-12 by the KLS formalization project: ported to Lean v4.33.0 and
++-- Mathlib db584cd. The changes are listed in vendor/README.md and vendor/port.patch.
+ import LevyStochCalc.Brownian.ItoSimpleIntegrand
+ import LevyStochCalc.Brownian.Filtered
+ 
+@@ -119,7 +121,7 @@
+         (ProbabilityTheory.gaussianReal 0 ⟨t - s, by linarith⟩) := by
+       have h_memLp : MeasureTheory.MemLp (id : ℝ → ℝ) 2
+           (ProbabilityTheory.gaussianReal 0 ⟨t - s, by linarith⟩) :=
+-        ProbabilityTheory.IsGaussian.memLp_id _ 2 (by simp)
++        ProbabilityTheory.memLp_id_gaussianReal' 2 (by simp)
+       have h := h_memLp.integrable_norm_pow (p := 2) (by norm_num)
+       convert h using 1
+       ext x
+@@ -168,7 +170,7 @@
+   -- Integrable (fun x => x²) (gaussianReal 0 ⟨t-s, _⟩) via MemLp 2 of id.
+   have h_memLp : MeasureTheory.MemLp (id : ℝ → ℝ) 2
+       (ProbabilityTheory.gaussianReal 0 ⟨t - s, by linarith⟩) :=
+-    ProbabilityTheory.IsGaussian.memLp_id _ 2 (by simp)
++    ProbabilityTheory.memLp_id_gaussianReal' 2 (by simp)
+   have h := h_memLp.integrable_norm_pow (p := 2) (by norm_num)
+   convert h using 1
+   ext x
+--- a/LevyStochCalc/LevyStochCalc/Brownian/Martingale.lean
++++ b/LevyStochCalc/LevyStochCalc/Brownian/Martingale.lean
+@@ -3,6 +3,8 @@
+ Released under Apache 2.0 license as described in the file LICENSE.
+ Authors: Christian Garry
+ -/
++-- Modified 2026-10-12 by the KLS formalization project: ported to Lean v4.33.0 and
++-- Mathlib db584cd. The changes are listed in vendor/README.md and vendor/port.patch.
+ import LevyStochCalc.Brownian.Continuity
+ import LevyStochCalc.Martingale.RightCont
+ import Mathlib.Probability.Martingale.Basic
+@@ -110,7 +112,7 @@
+     have h_int_id : MeasureTheory.Integrable (id : ℝ → ℝ)
+         (ProbabilityTheory.gaussianReal 0 ⟨s, hs⟩) :=
+       MeasureTheory.memLp_one_iff_integrable.mp
+-        (ProbabilityTheory.IsGaussian.memLp_id _ 1 (by simp))
++        (ProbabilityTheory.memLp_id_gaussianReal' 1 (by simp))
+     have := (MeasureTheory.integrable_map_measure (g := (id : ℝ → ℝ))
+       (by fun_prop : MeasureTheory.AEStronglyMeasurable id _)
+       (W.measurable_eval s).aemeasurable).mp (h_map ▸ h_int_id)
+@@ -154,7 +156,7 @@
+       simpa using this
+     have h_memLp_id : MeasureTheory.MemLp (id : ℝ → ℝ) 2
+         (ProbabilityTheory.gaussianReal 0 ⟨s, hs⟩) :=
+-      ProbabilityTheory.IsGaussian.memLp_id _ 2 (by simp)
++      ProbabilityTheory.memLp_id_gaussianReal' 2 (by simp)
+     rw [show (W.W s : Ω → ℝ) = id ∘ W.W s from rfl]
+     rw [← h_map] at h_memLp_id
+     exact (MeasureTheory.memLp_map_measure_iff (by fun_prop)
+@@ -201,7 +203,7 @@
+         (ProbabilityTheory.gaussianReal 0 ⟨s, hs⟩) := by
+       have h_memLp : MeasureTheory.MemLp (id : ℝ → ℝ) 2
+           (ProbabilityTheory.gaussianReal 0 ⟨s, hs⟩) :=
+-        ProbabilityTheory.IsGaussian.memLp_id _ 2 (by simp)
++        ProbabilityTheory.memLp_id_gaussianReal' 2 (by simp)
+       have h := h_memLp.integrable_norm_pow (p := 2) (by norm_num)
+       convert h using 1
+       ext x
+--- a/LevyStochCalc/LevyStochCalc/Brownian/MartingaleCondExp.lean
++++ b/LevyStochCalc/LevyStochCalc/Brownian/MartingaleCondExp.lean
+@@ -3,6 +3,8 @@
+ Released under Apache 2.0 license as described in the file LICENSE.
+ Authors: Christian Garry
+ -/
++-- Modified 2026-10-12 by the KLS formalization project: ported to Lean v4.33.0 and
++-- Mathlib db584cd. The changes are listed in vendor/README.md and vendor/port.patch.
+ import LevyStochCalc.Brownian.Martingale
+ 
+ /-!
+@@ -63,7 +65,7 @@
+   have h_int_id : MeasureTheory.Integrable (id : ℝ → ℝ)
+       (ProbabilityTheory.gaussianReal 0 ⟨t - s, by linarith⟩) :=
+     MeasureTheory.memLp_one_iff_integrable.mp
+-      (ProbabilityTheory.IsGaussian.memLp_id _ 1 (by simp))
++      (ProbabilityTheory.memLp_id_gaussianReal' 1 (by simp))
+   have h_int : MeasureTheory.Integrable (fun ω => W.W t ω - W.W s ω) P := by
+     have h_map := W.increment_gaussian hs hst
+     have := (MeasureTheory.integrable_map_measure (g := (id : ℝ → ℝ))
+@@ -132,7 +134,7 @@
+       (ProbabilityTheory.gaussianReal 0 ⟨t - s, by linarith⟩) := by
+     have h_memLp : MeasureTheory.MemLp (id : ℝ → ℝ) 2
+         (ProbabilityTheory.gaussianReal 0 ⟨t - s, by linarith⟩) :=
+-      ProbabilityTheory.IsGaussian.memLp_id _ 2 (by simp)
++      ProbabilityTheory.memLp_id_gaussianReal' 2 (by simp)
+     have h := h_memLp.integrable_norm_pow (p := 2) (by norm_num)
+     convert h using 1
+     ext x
+@@ -154,8 +156,7 @@
+         (by fun_prop : MeasureTheory.AEStronglyMeasurable
+           (fun x : ℝ => x^2) _)).symm]
+     rw [W.increment_gaussian hs hst]
+-    rw [gaussianReal_second_moment]
+-    rfl
++    exact gaussianReal_second_moment _
+   -- σ-algebra independence: the squared increment is in σ(W_t - W_s).
+   -- The σ-algebra generated by (W_t - W_s)^2 is contained in that of (W_t - W_s).
+   -- Use the larger σ-algebra and apply Indep.symm.
+@@ -195,7 +196,7 @@
+   have h_inc_memLp : MeasureTheory.MemLp (fun ω => W.W t ω - W.W s ω) 2 P := by
+     have h_int_id_2 : MeasureTheory.MemLp (id : ℝ → ℝ) 2
+         (ProbabilityTheory.gaussianReal 0 ⟨t - s, by linarith⟩) :=
+-      ProbabilityTheory.IsGaussian.memLp_id _ 2 (by simp)
++      ProbabilityTheory.memLp_id_gaussianReal' 2 (by simp)
+     rw [show (fun ω => W.W t ω - W.W s ω)
+         = id ∘ (fun ω => W.W t ω - W.W s ω) from rfl]
+     rw [← W.increment_gaussian hs hst] at h_int_id_2
+--- a/LevyStochCalc/LevyStochCalc/Brownian/SimplePredictableRefineAppend.lean
++++ b/LevyStochCalc/LevyStochCalc/Brownian/SimplePredictableRefineAppend.lean
+@@ -3,6 +3,8 @@
+ Released under Apache 2.0 license as described in the file LICENSE.
+ Authors: Christian Garry
+ -/
++-- Modified 2026-10-12 by the KLS formalization project: ported to Lean v4.33.0 and
++-- Mathlib db584cd. The changes are listed in vendor/README.md and vendor/port.patch.
+ import LevyStochCalc.Brownian.SimplePredictableRefineCommon
+ 
+ /-!
+@@ -91,7 +93,7 @@
+     {T : ℝ} (H : SimplePredictable Ω T) {T' : ℝ}
+     (hlt : H.partition (Fin.last H.N) < T') (j : Fin (H.N + 1)) :
+     (H.appendInterval hlt).partition (Fin.castSucc j) = H.partition j := by
+-  rw [H.appendInterval_partition_eq hlt]; simp only [Fin.snoc_castSucc]
++  rw [H.appendInterval_partition_eq hlt]; exact Fin.snoc_castSucc (α := fun _ => ℝ) _ _ _
+ 
+ lemma SimplePredictable.appendInterval_xi_castSucc
+     {T : ℝ} (H : SimplePredictable Ω T) {T' : ℝ}

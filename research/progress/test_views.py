@@ -35,7 +35,7 @@ class ProgressViewsTests(unittest.TestCase):
             self.assertIn(f'| Example | {views.status_cell(records["x"]["state"])} |', readme)
 
     def test_missing_route_input_is_rejected(self):
-        catalog = json.loads((HERE / 'nodes.json').read_text())
+        catalog = json.loads(update.staged('research/progress/nodes.json'))
         routes = json.loads(update.staged('formalization/blueprint/route-composition.yaml'))
         catalog['diagram']['edges'] = [e for e in catalog['diagram']['edges'] if e['from'] != 'EG']
         with self.assertRaisesRegex(ValueError, 'missing required route inputs'):

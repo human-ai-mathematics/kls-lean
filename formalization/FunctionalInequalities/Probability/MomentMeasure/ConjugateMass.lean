@@ -21,6 +21,11 @@ finitely many vertices (`Analysis/Convex/AffineMaximum.lean`) and `integrable_ex
 
 Declaration blocks are verbatim from ConjugateMass (90a65ba7…) of the root-accepted Lemma 17 bundle (ACCEPTANCE
 ec6d356c…).
+
+Real normalization (`real_legendre_normalization`): if the conjugate `φ*` has a real representative `ψ` and conjugate mass
+`1`, then `exp(−ψ)` is Bochner integrable with integral `1` and `weightedMeasure dx ψ` is a probability measure; finiteness of
+the lower integral is established before the real conversion. Proof body: strong-API candidate (gpt-6-astra,
+`api-bounded-primal-geometry-v11`, d77ddfc1…), verbatim, in its own variable context; placement: Claude.
 -/
 
 noncomputable section
@@ -238,5 +243,66 @@ theorem log_sub_ge_of_integral_limits
 #print axioms log_sub_ge_of_integral_limits
 
 end
+
+end FunctionalInequalities.Probability.MomentMeasure
+
+namespace FunctionalInequalities.Probability.MomentMeasure
+
+section RealNormalization
+
+open MeasureTheory Set Metric
+open scoped ENNReal Topology RealInnerProductSpace
+
+open FunctionalInequalities
+open FunctionalInequalities.Analysis
+open FunctionalInequalities.Probability
+open FunctionalInequalities.Probability.MomentMeasure
+
+variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+  [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
+
+omit [FiniteDimensional ℝ E] in
+/-- Actual conjugate mass one gives genuine Bochner integrability and a
+probability measure for its finite real representative. Integral finiteness
+is established before using the ENNReal-to-real integrability bridge. -/
+theorem real_legendre_normalization
+    (dx : Measure E) (q : E → EReal) (ψ : E → ℝ)
+    (hψ : ∀ x, legendre q x = (ψ x : EReal))
+    (hmass : mass dx (legendre q) = 1) :
+    Integrable (fun x => Real.exp (-ψ x)) dx ∧
+    (∫ x, Real.exp (-ψ x) ∂dx) = 1 ∧
+    IsProbabilityMeasure (weightedMeasure dx (fun x => (ψ x : EReal))) := by
+  have hd : density (legendre q) =
+      (fun x => ENNReal.ofReal (Real.exp (-ψ x))) := by
+    funext x
+    simp only [density, hψ x, ← EReal.coe_neg, EReal.exp_coe]
+  have hmassfinite : (∫⁻ x, density (legendre q) x ∂dx) ≠ ∞ := by
+    change mass dx (legendre q) ≠ ∞
+    rw [hmass]
+    exact ENNReal.one_ne_top
+  have hi : Integrable (fun x => (density (legendre q) x).toReal) dx :=
+    MeasureTheory.integrable_toReal_of_lintegral_ne_top
+      (measurable_density_legendre q).aemeasurable hmassfinite
+  have hreal : (fun x => (density (legendre q) x).toReal) =
+      (fun x => Real.exp (-ψ x)) := by
+    funext x
+    rw [hd, ENNReal.toReal_ofReal (Real.exp_nonneg _)]
+  rw [hreal] at hi
+  have hmass' : (∫⁻ x, ENNReal.ofReal (Real.exp (-ψ x)) ∂dx) = 1 := by
+    simpa only [mass, hd] using hmass
+  have hnonneg : ∀ᵐ x ∂dx, 0 ≤ Real.exp (-ψ x) :=
+    Filter.Eventually.of_forall (fun x => Real.exp_nonneg (-ψ x))
+  have hpotential : (fun x : E => (ψ x : EReal)) = legendre q :=
+    funext (fun x => (hψ x).symm)
+  refine ⟨hi, ?_, ?_⟩
+  · rw [integral_eq_lintegral_of_nonneg_ae hnonneg hi.aestronglyMeasurable,
+      hmass', ENNReal.toReal_one]
+  · constructor
+    change (dx.withDensity (density (fun x => (ψ x : EReal)))) univ = 1
+    rw [hpotential, MeasureTheory.withDensity_apply _ MeasurableSet.univ,
+      Measure.restrict_univ]
+    exact hmass
+
+end RealNormalization
 
 end FunctionalInequalities.Probability.MomentMeasure

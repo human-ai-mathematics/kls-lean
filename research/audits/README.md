@@ -1,5 +1,10 @@
 # Versioned infrastructure audit sources
 
+The [BKL independent target pilot](BKL/IndependentTargets/README.md) separately checks Theorem 3.1
+and Proposition 7.1, with a Mathlib-only specification, explicit library-boundary bridges and
+an immutable reviewed closure baseline. Its `.lean.in` templates are compiled by its own runner;
+they are not automatically included in the ordinary audit-client sweep.
+
 These Lean clients are source evidence referenced by `research/tasks.json`. Keep them in Git:
 CI validates their paths and SHA-256 hashes from a clean checkout. Generated logs and local
 verification receipts belong under the ignored `build/` directory.
@@ -518,4 +523,57 @@ final client calls the source package, the natural-index cutoffs, Lemma A.5 and 
 (public, private and generated) of the owning modules has standard axioms, and no integral-zero or pushforward statement
 for the test function exists (11 reports). All are standard-only proof clients, not ledger certificates.
 
-There are now 67 source clients here, plus the 7 previously referenced local clients.
+The 2026-10-12 Letwin Theorem 2.5 matrix-support integration ([record](../decisions/2026-10-12-letwin-symmetric-jordan-integration.md))
+adds `BKL/LetwinSymmetricJordanAudit.lean`: a real indefinite, noncommuting `Fin 2` client (`B = diag(1, −2)`, neither
+`B` nor `−B` positive semidefinite, positive semidefinite `H = [[2, 1], [1, 2]]`, `B H ≠ H B`, `tr(B H B H) = 16`) and the
+axiom reports of the six public declarations (7 reports). A real algebraic example, not a moment-map or source-law
+certificate. Standard-only proof client, not a ledger certificate.
+
+The 2026-10-12 Letwin Theorem 2.5 measure-extension integration ([record](../decisions/2026-10-12-controller-letwin-t25-goal.md))
+adds `BKL/LetwinSymmetricIntegralAudit.lean`: the actual law `½ δ_false + ½ δ_true` on `Bool` (mass `1`, nonzero), the
+nonconstant rank-one positive semidefinite field `H(false) = [[1, 1], [1, 1]]`, `H(true) = [[1, −1], [−1, 1]]`, the
+positive semidefinite bound derived for every positive semidefinite `A`, the production extension invoked for every
+symmetric `C`, and the indefinite `B = diag(1, −2)` commuting with neither atom with averaged trace energy `1` (2 reports).
+A generic matrix-field client, not a moment-map or source-law client. Standard-only proof client, not a ledger certificate.
+
+The 2026-10-12 Letwin Lemma A.6 range-density integration ([record](../decisions/2026-10-12-letwin-centered-range-integration.md))
+adds `BKL/LetwinCenteredRangeAudit.lean`: for the canonical Gaussian law (regular potential `‖x‖²/2` on `ℝ`), the class
+`g = id` has `‖g‖² = 1`, `g ≠ 0`, mean `0` and lies in the closure of the compact smooth diffusion images, by the
+production theorem; every premise derived (3 reports). Not Brascamp–Lieb, A.6 or a moment-map client. Standard-only
+proof client, not a ledger certificate.
+
+The 2026-10-12 finite-energy and trace-identity integration ([record](../decisions/2026-10-12-letwin-finite-energy-trace-integration.md))
+adds `BKL/LetwinFiniteEnergyAudit.lean`: `inverse_quadratic_young` for `H = diag(1, 2)`, positive definiteness and `H⁻¹ v`
+derived, `v = (1, −1)`, `w = (2, 3)` (3 reports, also covering `compact_ordinary_diffusion_coercivity`); and
+`BKL/LetwinHessianTraceAudit.lean`: the trace identity (2.8) at every point for `φ(x) = x⁴/12 + x²/2` (Hessian
+`1 + x²`, positive and nonconstant, `H(0) ≠ H(1)`), `V = 0`, `B = 1` (5 reports). Not Brascamp–Lieb, A.6, (2.10) or a
+moment-map client. Standard-only proof clients, not ledger certificates.
+
+The 2026-10-12 bounded-source primal integration ([record](../decisions/2026-10-12-cek-bounded-primal-integration.md)) adds
+`BKL/LetwinBoundedPrimalAudit.lean`: for the uniform law on `[-√3, √3]` (bundled; bound `√3`, zero mean, isotropy and second
+moment `1` derived with no premise), `bounded_source_lipschitz_primal` is invoked and every conclusion kept, and the density
+`ofReal (exp (−ψ))` is a probability (16 reports). The five needed uniform-law witness blocks of
+`SingletonAllocationAudit.lean` are reproduced verbatim under `LetwinBoundedPrimalWitness`; no audit is imported. A weak
+normalized primal, not a gradient push-forward or moment-map client. Standard-only proof client, not a ledger certificate.
+
+The 2026-10-12 scalar Brascamp–Lieb integration ([record](../decisions/2026-10-12-letwin-scalar-brascamp-lieb-integration.md))
+adds `BKL/LetwinScalarBrascampLiebAudit.lean`: for the standard Gaussian law on `ℝ` (potential `x²/2`) and `f = id`, the
+gradient `1`, Hessian and inverse `1`, energy integral `1`, isotropy (from the actual moments) and variance `1` are derived
+and `scalar_brascamp_lieb_finite_energy` is invoked, so the inequality is an equality (9 reports). A given-potential client,
+not a source moment-map client. Standard-only proof client, not a ledger certificate.
+
+The 2026-10-12 Monge–Ampère trace integration ([record](../decisions/2026-10-12-letwin-monge-ampere-trace-integration.md)) adds
+`BKL/LetwinMongeAmpereTraceAudit.lean`: for the explicit potential `2 log cosh(√3y/2) + log(4/√3)` with constant `V`,
+`K = (−√3, √3)`, `U = ℝ` (smoothness, Monge–Ampère relation, positive definiteness, gradient range and normalization derived),
+the Hessian is nonconstant and `traceGenerator_210_on_range` and `traceGeneratorCondition_on_range` are invoked with `B = 1`
+(14 reports). A given-potential client, not a push-forward, moment-map or A.5 consumption client. Standard-only proof client,
+not a ledger certificate.
+
+The 2026-10-12 Legendre first-variation integration ([record](../decisions/2026-10-12-legendre-first-variation-integration.md))
+adds `BKL/LetwinLegendreVariationAudit.lean`: the interval potential (`0` on `[−1, 1]`, `⊤` outside) has conjugate `|y|`, and
+the bounded continuous non-`C¹` perturbation `min |z| 1` gives the derivative `−1` at `y = 1`; on the zero-dimensional space
+the constant potential `−3` with perturbation `−2` gives the signed derivative `2`; both invoke
+`hasDerivAt_legendre_add_smul_of_dualDifferentiable` (12 reports). Not a source-law Euler–Lagrange or push-forward client.
+Standard-only proof client, not a ledger certificate.
+
+There are now 76 source clients here, plus the 7 previously referenced local clients.

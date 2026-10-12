@@ -40,6 +40,7 @@ jobs:
           sources += list(Path('../solutions').rglob('*.lean'))
           sources += list(Path('../examples').rglob('*.lean'))
           sources += list(Path('../research/audits').rglob('*.lean'))
+          sources += list(Path('vendor').rglob('*.lean'))
           modules = set()
           for source in sources:
               for imports in re.findall(r'(?m)^(?:public )?import ([\w. ]+)', source.read_text()):

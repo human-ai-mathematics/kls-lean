@@ -2,6 +2,7 @@
 
 | View | Purpose |
 | --- | --- |
+| [BKL main proof chain](#bkl-main-proof-chain) | Short reading order, Lean entries and remaining inputs |
 | [Literature register](LITERATURE.md) | **Primary progress view.** Paper by paper: target theorem, local Lean statements, local status and certificates |
 | [Route diagrams](#proof-progress-tree) | Exploratory proof routes and the shared analytic infrastructure behind them |
 | [Progress table](STATUS.md) | Local node IDs, mathematical provenance, recorded Lean status, certificates, dependencies, and gaps |
@@ -14,13 +15,43 @@ formalization targets in their own right.
 A paper is **covered** only when its main theorem is stated faithfully in Lean (same hypotheses,
 constants, normalization and dimensional scope), proved without nonstandard axioms, and
 registered with a certificate and verification evidence for that exact statement. Supporting
-lemmas, restricted cases and conditional reductions do not cover a paper. **Covered so far:
-Ambrosio–Di Marino–Gigli, Theorem 3.6.** Upstream mathematical proofs and conditional arguments remain separate from local Lean
-proofs. KLS remains open.
+lemmas, restricted cases and conditional reductions do not cover a paper. Upstream mathematical
+proofs and conditional arguments remain separate from local Lean proofs. KLS remains open.
+
+<!-- BEGIN GENERATED COVERAGE -->
+**Covered by a registered paper-target certificate: Bakry–Gentil–Ledoux (Corollary 4.8.2, p. 212), Ambrosio–Di Marino–Gigli (Theorem 3.6).**
+<!-- END GENERATED COVERAGE -->
 
 The current analytic frontier is summarized under [Proof progress tree](#proof-progress-tree):
 the numerical π Cheeger–Buser comparison holds for every finite-dimensional log-concave law,
 and metric BV relaxation and recovery are proved within their stated measure and space scope.
+
+## BKL main proof chain
+
+<!-- BEGIN GENERATED BKL -->
+Pinned main source: [Bizeul–Klartag–Lehec, arXiv:2610.05474v1](https://arxiv.org/abs/2610.05474v1).
+
+Read the conditional assembly first, then its analytic inputs and the remaining
+Letwin/localization obligations. This is a reading order, not a new dependency graph.
+Status comes from the existing paper lemma maps. A ✓ proves the displayed statement
+with its hypotheses; it does not discharge an input or cover the whole paper.
+
+| Source step | Lean entry | Local status | Input boundary / remaining work | Evidence |
+| --- | --- | --- | --- | --- |
+| [Bizeul–Klartag–Lehec: Theorem 1.1, p. 2](https://arxiv.org/abs/2610.05474v1) | [`FunctionalInequalities.KLS.conjecture_of_cumulantBound`](../../formalization/FunctionalInequalities/KLS/BKL/Reduction.lean) | ◐ Partial or statement only | Assembly is proved only under the universal cumulant input of Theorem 4.1. Theorem 1.1 and KLS remain open. | [Item map](LITERATURE.md#bkl2026-lemma-map) |
+| [Bizeul–Klartag–Lehec: Theorem 3.1, p. 10](https://arxiv.org/abs/2610.05474v1) | [`Solutions.ThmBklTaylorCriterion.certificate`](../../solutions/ThmBklTaylorCriterion.lean) | ✓ Formalized in Lean | Source-form Taylor criterion for centered regular laws, covariance at most Id and the Taylor coefficient hypothesis. Operator route with an approximate first eigenfunction. | [Item map](LITERATURE.md#bkl2026-lemma-map)<br/>[Certificate](../../solutions/ThmBklTaylorCriterion.lean) |
+| [Bizeul–Klartag–Lehec: Proposition 7.1, p. 28](https://arxiv.org/abs/2610.05474v1) | [`Solutions.PropBklSuspension.certificate`](../../solutions/PropBklSuspension.lean) | ✓ Formalized in Lean | Source-form suspension implication in all dimensions; CumulantBound d b is a retained premise supplied by the still-open Theorem 4.1. | [Item map](LITERATURE.md#bkl2026-lemma-map)<br/>[Certificate](../../solutions/PropBklSuspension.lean) |
+| [Bizeul–Klartag–Lehec: Theorem 4.1, p. 18](https://arxiv.org/abs/2610.05474v1) | Supporting declarations in the item map | ◐ Partial or statement only | Universal cumulant estimate is open. Envelope/arithmetic supports do not supply the Eldan process, stochastic induction or compact-support/limit argument. | [Item map](LITERATURE.md#bkl2026-lemma-map) |
+| [Bizeul–Klartag–Lehec: Lemma 4.3, p. 20](https://arxiv.org/abs/2610.05474v1) | [`FunctionalInequalities.Analysis.BakryEmery.iteratedFDeriv_inner_centeredGradient_zero_grouped_of_compact`](../../formalization/FunctionalInequalities/Analysis/BakryEmery/Cumulant/Leibniz.lean) | ◐ Partial or statement only | Only the deterministic spatial grouping (72)/(74) is proved. Eldan SDE, Ito dynamics and the stochastic integral in (73) remain open; vendor adoption is infrastructure. | [Item map](LITERATURE.md#bkl2026-lemma-map) |
+| [Bizeul–Klartag–Lehec: Lemma 4.2, p. 18](https://arxiv.org/abs/2610.05474v1) | [`FunctionalInequalities.KLS.LogConcave.sum_sq_cumulant_three_le_of_letwin`](../../formalization/FunctionalInequalities/KLS/BKL/LocalThirdCumulant.lean) | ◐ Partial or statement only | Conditional source-scope counterpart retaining LetwinQuadraticBound; the constant-8 input is not discharged. | [Item map](LITERATURE.md#bkl2026-lemma-map) |
+| [Letwin: Theorem 1.2](https://arxiv.org/abs/2607.24164v1) | [`FunctionalInequalities.KLS.Isotropic.covarianceBilin_map_sqrt_abs_matrix`](../../formalization/FunctionalInequalities/KLS/Isotropic.lean) | ◐ Partial or statement only | Covariance transport support is proved. The actual moment-map Stein kernel, identity (2.21), source reductions and the Var <= 8 &#124;&#124;M&#124;&#124;_HS^2 bound remain open. | [Item map](LITERATURE.md#letwin2026-lemma-map) |
+| [Letwin: Theorem 2.5](https://arxiv.org/abs/2607.24164v1) | [`FunctionalInequalities.Analysis.symmetric_trace_integral_extension`](../../formalization/FunctionalInequalities/Analysis/Matrix/Integral.lean) | ◐ Partial or statement only | Matrix extension and given-potential cutoff, trace and scalar Brascamp-Lieb supports do not prove the source theorem. The actual moment map, its regularity and the integrated positive-semidefinite bound remain open. | [Item map](LITERATURE.md#letwin2026-lemma-map) |
+| [Letwin: Lemma 2.1 (Cordero-Erausquin and Klartag [21, Theorem 2])](https://arxiv.org/abs/2607.24164v1) | No source-theorem entry | ○ Not yet formalized | Produce the moment potential of the source law and then the regularity of Lemma 2.2. A supplied potential or bounded-primal support is not the source-law construction. | [Item map](LITERATURE.md#letwin2026-lemma-map) |
+
+Certificates and item maps identify statements and source reviews, not a fresh run.
+For snapshot-specific acceptance use [verification](../verification.md#receipts-and-trust-scope)
+and the [current handoff](../../HANDOFF.md). **BKL Theorem 1.1 and dimension-free KLS remain open.**
+<!-- END GENERATED BKL -->
 
 ## Literature priorities
 
@@ -30,7 +61,7 @@ Every proof task must first pin its paper version, theorem, hypotheses and const
 
 | Priority | Sources / target | Next action |
 | --- | --- | --- |
-| 1 | [Bizeul–Klartag–Lehec](https://arxiv.org/abs/2610.05474v1)<br/>Theorem 1.1 through Theorems 3.1 (certified, thm:bkl-taylor-criterion), 4.1 and Proposition 7.1 (certified in the source form, prop:bkl-suspension, conditional on its hypothesis CumulantBound): Section 3 is formalized by the operator route; Lemma 2.2, Lemma 3.6 (⇑), Corollary 3.7 (⇑), Lemmas 3.2–3.4, 3.8, 3.9 for the D(A) iterates (⇑), the regular-law adapter for (12), the complete Section 2 reduction to isotropic regular laws (regular approximation and weak-limit transfer) and the p. 30 reduction are formalized, so Theorem 1.1 is formalized conditionally on the Theorem 4.1 cumulant bounds (no certificate); Lemma 2.1 on 𝒜, (19), and Lemma 4.2 conditional on the Letwin bound are partial, restricted or conditional counterparts; the deterministic spatial step (74)/(72) of Lemma 4.3 is formalized (⇑); Theorem 4.1 is stated conditionally (cumulant envelope) and open. | Next: Stage 2, Letwin Theorem 1.2 (Var ≤ 8‖M‖²_HS, the exact input of Lemma 4.2), active under the renewed Codex controller. Stage 2A is formalized: Letwin Lemma A.4 for every source-class potential and every real R ≥ 1 with its natural-index C/(n+1) form, Lemma A.5 for given cutoffs, and their application to the nonconstant uniform-interval source-law client. This supports, but does not prove, Letwin Theorem 2.5, Theorem 1.2 or an unconditional BKL Lemma 4.2. Next within Stage 2: Letwin Theorem 2.5 with Proposition 2.8 and the Stein-kernel identity (2.21), toward Theorem 1.2. Stage 1 (BKL (74) grouped with (72); the covariance step of the proof of Letwin Theorem 1.2) is integrated and covered by the full local receipt 20261010T093056.948739Z. Owner scope (2026-10-10): BKL Theorem 1.1 is the primary objective. Discharge Theorem 4.1 through the original Eldan localization and the Section 4-6 cumulant-energy argument, and the cited Letwin Theorem 1.2 input for Lemma 4.2. Reuse the certified Theorem 3.1, conditional source Proposition 7.1 and regular-law reduction. Other papers are pursued only for referenced results and necessary prerequisites with an explicit BKL consumer; general CEK Theorem 2/uniqueness and full Letwin paper coverage are not standalone goals. Moment-potential, regularity, Stein, integration and approximation work must be tied to the required Letwin bound. Conditional assembly remains insufficient; KLS.kls stays open. |
+| 1 | [Bizeul–Klartag–Lehec](https://arxiv.org/abs/2610.05474v1)<br/>Theorem 1.1 through Theorems 3.1 (certified, thm:bkl-taylor-criterion), 4.1 and Proposition 7.1 (certified in the source form, prop:bkl-suspension, conditional on its hypothesis CumulantBound): Section 3 is formalized by the operator route; Lemma 2.2, Lemma 3.6 (⇑), Corollary 3.7 (⇑), Lemmas 3.2–3.4, 3.8, 3.9 for the D(A) iterates (⇑), the regular-law adapter for (12), the complete Section 2 reduction to isotropic regular laws (regular approximation and weak-limit transfer) and the p. 30 reduction are formalized, so Theorem 1.1 is formalized conditionally on the Theorem 4.1 cumulant bounds (no certificate); Lemma 2.1 on 𝒜, (19), and Lemma 4.2 conditional on the Letwin bound are partial, restricted or conditional counterparts; the deterministic spatial step (74)/(72) of Lemma 4.3 is formalized (⇑); Theorem 4.1 is stated conditionally (cumulant envelope) and open. | Next: Stage 2, Letwin Theorem 1.2 (Var ≤ 8‖M‖²_HS, the exact input of Lemma 4.2), active under the renewed Codex controller. Stage 2A is formalized: Letwin Lemma A.4 for every source-class potential and every real R ≥ 1 with its natural-index C/(n+1) form, Lemma A.5 for given cutoffs, and their application to the nonconstant uniform-interval potential client (its pushforward to the uniform law is not proved; not the general moment-map producer). This supports, but does not prove, Letwin Theorem 2.5, Theorem 1.2 or an unconditional BKL Lemma 4.2. Next within Stage 2: Letwin Theorem 2.5 with Proposition 2.8 and the Stein-kernel identity (2.21), toward Theorem 1.2. Stage 1 (BKL (74) grouped with (72); the covariance step of the proof of Letwin Theorem 1.2) is integrated and covered by the full local receipt 20261010T093056.948739Z. Owner scope (2026-10-10): BKL Theorem 1.1 is the primary objective. Discharge Theorem 4.1 through the original Eldan localization and the Section 4-6 cumulant-energy argument, and the cited Letwin Theorem 1.2 input for Lemma 4.2. Reuse the certified Theorem 3.1, conditional source Proposition 7.1 and regular-law reduction. Other papers are pursued only for referenced results and necessary prerequisites with an explicit BKL consumer; general CEK Theorem 2/uniqueness and full Letwin paper coverage are not standalone goals. Moment-potential, regularity, Stein, integration and approximation work must be tied to the required Letwin bound. Conditional assembly remains insufficient; KLS.kls stays open. |
 | 2 | [Bakry–Gentil–Ledoux](https://link.springer.com/book/10.1007/978-3-319-00227-9)<br/>Corollary 4.8.2 (strongly log-concave Bakry–Émery C_P ≤ 1/ρ) is certified as thm:bakry-emery-poincare and committed in 36e7c78 (remote run 37516844384 succeeded); select a separate Brascamp–Lieb source statement. | Deferred as an independent paper target under the 2026-10-10 BKL-first scope. Resume only for a reviewed referenced result or necessary prerequisite with an explicit BKL proof consumer; existing formalization and certificates are retained. |
 | 3 | [Kannan–Lovász–Simonovits](https://link.springer.com/article/10.1007/BF02574061)<br/>Theorem 5.1, ψ(K) ≥ ln 2 / M₁(K) for convex bodies, through the needle reduction (Corollary 2.2, Lemma 2.6, Theorem 2.7). With the local Cheeger inequality it gives C_P ≲ E‖X − EX‖² for convex bodies. | Deferred as an independent paper target under the 2026-10-10 BKL-first scope. Resume only for a reviewed referenced result or necessary prerequisite with an explicit BKL proof consumer; existing formalization and certificates are retained. |
 | 4 | [E. Milman](https://arxiv.org/abs/0712.4092)<br/>Concentration implies a Cheeger bound under the source convexity hypotheses. | Deferred as an independent paper target under the 2026-10-10 BKL-first scope. Resume only for a reviewed referenced result or necessary prerequisite with an explicit BKL proof consumer; existing formalization and certificates are retained. |
@@ -1111,7 +1142,7 @@ flowchart LR
 
 ### Letwin (arXiv:2607.24164v1)
 
-25 statements: 1 ✓, 15 ◐, 7 ○, 2 ⇑. [Full map](LITERATURE.md#letwin2026-lemma-map).
+25 statements: 1 ✓, 16 ◐, 6 ○, 2 ⇑. [Full map](LITERATURE.md#letwin2026-lemma-map).
 
 ```mermaid
 flowchart LR
@@ -1138,7 +1169,7 @@ flowchart LR
     Letwin2026_LA3["◐ Lemma A.3<br/>Integration by parts under nu"]
     Letwin2026_LA4["⇑ Lemma A.4<br/>Cutoffs with small generator"]
     Letwin2026_LA5["◐ Lemma A.5<br/>Mean zero of L f"]
-    Letwin2026_LA6["○ Lemma A.6<br/>Brascamp-Lieb for nu"]
+    Letwin2026_LA6["◐ Lemma A.6<br/>Brascamp-Lieb for nu"]
     Letwin2026_LA7["◐ Lemma A.7<br/>Extended Stein identity"]
     Letwin2026_DISO --> Letwin2026_DPSI
     Letwin2026_DCP --> Letwin2026_ECMP
@@ -1190,9 +1221,9 @@ flowchart LR
     classDef lemma_formalized fill:#dbeafe,stroke:#2563eb,color:#1e3a8a;
     class Letwin2026_DISO lemma_formalized;
     classDef lemma_partial fill:#fff3df,stroke:#c88719,color:#66420d;
-    class Letwin2026_DCP,Letwin2026_DPSI,Letwin2026_ECMP,Letwin2026_CONJ,Letwin2026_T12,Letwin2026_L23,Letwin2026_E23,Letwin2026_L24,Letwin2026_T25,Letwin2026_D26,Letwin2026_L27,Letwin2026_L29,Letwin2026_LA3,Letwin2026_LA5,Letwin2026_LA7 lemma_partial;
+    class Letwin2026_DCP,Letwin2026_DPSI,Letwin2026_ECMP,Letwin2026_CONJ,Letwin2026_T12,Letwin2026_L23,Letwin2026_E23,Letwin2026_L24,Letwin2026_T25,Letwin2026_D26,Letwin2026_L27,Letwin2026_L29,Letwin2026_LA3,Letwin2026_LA5,Letwin2026_LA6,Letwin2026_LA7 lemma_partial;
     classDef lemma_pending fill:#fee2e2,stroke:#dc2626,color:#991b1b;
-    class Letwin2026_T11,Letwin2026_L21,Letwin2026_L22,Letwin2026_P28,Letwin2026_LA1,Letwin2026_LA2,Letwin2026_LA6 lemma_pending;
+    class Letwin2026_T11,Letwin2026_L21,Letwin2026_L22,Letwin2026_P28,Letwin2026_LA1,Letwin2026_LA2 lemma_pending;
     classDef lemma_improved fill:#dcfce7,stroke:#15803d,color:#14532d;
     class Letwin2026_CZ14,Letwin2026_LA4 lemma_improved;
     style Letwin2026_T11 stroke-width:3px

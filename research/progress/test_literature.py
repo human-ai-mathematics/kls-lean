@@ -94,5 +94,57 @@ class LemmaMapTests(unittest.TestCase):
                 literature.validate_lemma_map(paper(items), self.read)
 
 
+class ProofPathTests(unittest.TestCase):
+    def setUp(self):
+        self.source = 'theorem certificate : True := trivial\ntheorem conditional (h : False) : True := trivial\n'
+        items = [
+            {'id': 'T31', 'locator': 'Theorem 3.1', 'label': 'Criterion', 'statement': 'True',
+             'uses': [], 'relation': 'same', 'main': True,
+             'declarations': [{'name': 'Solutions.Cert.certificate', 'source': 'solutions/Cert.lean'}]},
+            {'id': 'T11', 'locator': 'Theorem 1.1', 'label': 'Assembly', 'statement': 'True',
+             'uses': ['T31'], 'relation': 'partial',
+             'declarations': [{'name': 'NS.conditional', 'source': 'formalization/Conditional.lean'}]},
+        ]
+        self.catalog = {'papers': [{'id': 'P', 'authors': 'Authors', 'url': 'https://example.org',
+                                   'lemma_map': {'source_version': 'v1', 'source_url': 'https://example.org',
+                                                 'reviewed_on': '2026-10-12', 'items': items}}],
+                        'proof_path': {'source': 'P', 'steps': [
+                            {'paper': 'P', 'item': 'T31', 'entries': ['Solutions.Cert.certificate'],
+                             'boundary': 'Taylor hypothesis retained.', 'certificate': 'cert:criterion'},
+                            {'paper': 'P', 'item': 'T11', 'entries': ['NS.conditional'],
+                             'boundary': 'Universal input remains open.'}]}}
+        self.certificates = {'cert:criterion': {'module': 'solutions.Cert',
+                                               'declaration': 'Solutions.Cert.certificate'}}
+
+    def render(self):
+        return literature.render_proof_path(self.catalog, self.certificates, lambda _: self.source)
+
+    def test_conditional_assembly_is_partial_and_source_certificate_keeps_its_boundary(self):
+        text = self.render()
+        self.assertIn('✓ Formalized in Lean', text)
+        self.assertIn('◐ Partial or statement only', text)
+        self.assertIn('Taylor hypothesis retained.', text)
+        self.assertIn('Universal input remains open.', text)
+        self.assertIn('[Certificate](../../solutions/Cert.lean)', text)
+
+    def test_entries_and_certificates_cannot_escape_the_item_map(self):
+        self.catalog['proof_path']['steps'][0]['entries'] = ['NS.unrelated']
+        with self.assertRaisesRegex(ValueError, 'canonical lemma map'):
+            self.render()
+        self.catalog['proof_path']['steps'][0]['entries'] = ['Solutions.Cert.certificate']
+        self.certificates['cert:criterion']['declaration'] = 'NS.unrelated'
+        with self.assertRaisesRegex(ValueError, 'not registered'):
+            self.render()
+
+    def test_missing_boundary_and_duplicate_steps_are_rejected(self):
+        self.catalog['proof_path']['steps'][0]['boundary'] = ''
+        with self.assertRaisesRegex(ValueError, 'input boundary'):
+            self.render()
+        self.catalog['proof_path']['steps'][0]['boundary'] = 'Retained.'
+        self.catalog['proof_path']['steps'].append(self.catalog['proof_path']['steps'][0])
+        with self.assertRaisesRegex(ValueError, 'Duplicate'):
+            self.render()
+
+
 if __name__ == '__main__':
     unittest.main()

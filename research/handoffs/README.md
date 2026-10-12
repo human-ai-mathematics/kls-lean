@@ -21,6 +21,7 @@ This chronological index is generated from the dated Markdown records. README fi
 - [2026-10-10-bkl-staged-goals](2026-10-10-bkl-staged-goals.md)
 - [2026-10-11-bkl-a4-goal](2026-10-11-bkl-a4-goal.md)
 - [2026-10-11-file-management-goal](2026-10-11-file-management-goal.md)
+- [2026-10-12-bkl-letwin-t25-goal](2026-10-12-bkl-letwin-t25-goal.md)
 - [bv-eight-hour-2026-09-29](bv-eight-hour-2026-09-29.md)
 - [bv-renewed-eight-hours](bv-renewed-eight-hours.md)
 - [claude-bv-overnight](claude-bv-overnight.md)

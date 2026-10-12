@@ -3484,7 +3484,7 @@
       "url": "https://arxiv.org/abs/1304.0630",
       "locator": "Theorem 2",
       "result": "A nonzero finite centered measure whose support spans the space is the moment measure of an essentially continuous convex potential, unique up to translation.",
-      "remaining": "Theorem 2 is not locally formalized: Lemmas 14–15 (source constants), essential continuity (Proposition 10, Theorem 8), the Euler–Lagrange identification of the maximiser with a moment-measure push-forward, existence and uniqueness remain open, and generic closed forms do not supply its convex potential. Formalized support: Lemma 16, Lemma 17 in geometric form (explicit interior-hull input, with a separate source-condition adapter), the Legendre/truncation tools and Proposition 12 attainment (⇑).",
+      "remaining": "Theorem 2 is not locally formalized: Lemmas 14–15 (source constants), essential continuity (Proposition 10, Theorem 8), the Euler–Lagrange identification of the maximiser with a moment-measure push-forward, existence and uniqueness remain open, and generic closed forms do not supply its convex potential. Formalized support: Lemma 16, Lemma 17 in geometric form (explicit interior-hull input, with a separate source-condition adapter), the Legendre/truncation tools, Proposition 12 attainment (⇑), and for bounded isotropic sources a normalized maximiser with finite convex Lipschitz conjugate and probability density e^{−ψ} (not the push-forward), and the pointwise first variation (42) of the Legendre transform (not its integral Euler–Lagrange form).",
       "local_results": [
         {
           "node": "lem:cek-point-control",
@@ -3509,6 +3509,18 @@
         {
           "node": "thm:cek-variational-maximum",
           "scope": "Proposition 12 attainment (reviewed stronger)"
+        },
+        {
+          "node": "lem:cek-bounded-primal",
+          "scope": "Proposition 12 for a bounded isotropic source: capped LSC maximiser, real minimum, finite convex L-Lipschitz conjugate ψ with ∫ e^{−ψ} = 1 and probability density; weak normalized primal, not the push-forward or Theorem 2"
+        },
+        {
+          "node": "lem:legendre-attainment",
+          "scope": "Attainment of the Legendre supremum at interior points of the finite dual domain and maximizer = dual gradient (generic, any dimension)"
+        },
+        {
+          "node": "lem:legendre-first-variation",
+          "scope": "(42) pointwise: d/dt (φ + t b)*(y) at 0 = −b(∇φ*(y)) for bounded continuous b, φ proper LSC, φ* differentiable at an interior y; not the integral Euler–Lagrange or push-forward"
         }
       ],
       "diagram": "2015 · Cordero-Erausquin–Klartag<br/>Moment-measure existence",
@@ -3568,7 +3580,7 @@
             ],
             "relation": "same",
             "declarations": [],
-            "note": "Main item: the paper calls it 'Our main result' and the title, abstract and Section 4 ('Existence and Uniqueness') are devoted to it; with Proposition 1 it gives the bijection between essentially continuous convex functions modulo translation and such measures. Uniqueness: for two potentials ψ0, ψ1, apply Theorem 8 to each against ψ_{1/2} = ((ψ0* + ψ1*)/2)* (integrability by Proposition 7), get equality in Prékopa's inequality (17), and conclude by Dubuc's equality characterisation. Existence: normalise μ to a probability, take the maximiser φ of Proposition 12, set ψ = φ*; Jensen and the Kantorovich dual problem (**) with the variation φ + t b (Berman–Berndtsson Lemma 2.7) give (∇ψ)_# e^{−ψ} = μ, and Proposition 10 gives essential continuity. No Lean declaration. The library has extended-real convex potentials and the Legendre transform (Analysis/Convex/Legendre.lean) and the exponential-potential measure, mass and CEK functional (Probability/MomentMeasure/Basic.lean), but no gradient push-forward, moment-measure predicate or essential-continuity definition. The Prékopa–Leindler theorems FunctionalInequalities.Analysis.prekopaLeindler and FunctionalInequalities.Probability.Line.prekopaLeindler would supply (17) only after the Legendre-transform reduction. Proposition 12 attainment is formalized (KLS.CEK.exists_variational_maximum); essential continuity, the Euler–Lagrange identification, existence and uniqueness are not.",
+            "note": "Main item: the paper calls it 'Our main result' and the title, abstract and Section 4 ('Existence and Uniqueness') are devoted to it; with Proposition 1 it gives the bijection between essentially continuous convex functions modulo translation and such measures. Uniqueness: for two potentials ψ0, ψ1, apply Theorem 8 to each against ψ_{1/2} = ((ψ0* + ψ1*)/2)* (integrability by Proposition 7), get equality in Prékopa's inequality (17), and conclude by Dubuc's equality characterisation. Existence: normalise μ to a probability, take the maximiser φ of Proposition 12, set ψ = φ*; Jensen and the Kantorovich dual problem (**) with the variation φ + t b (Berman–Berndtsson Lemma 2.7) give (∇ψ)_# e^{−ψ} = μ, and Proposition 10 gives essential continuity. No Lean declaration. The library has extended-real convex potentials and the Legendre transform (Analysis/Convex/Legendre.lean) and the exponential-potential measure, mass and CEK functional (Probability/MomentMeasure/Basic.lean), but no gradient push-forward, moment-measure predicate or essential-continuity definition. The Prékopa–Leindler theorems FunctionalInequalities.Analysis.prekopaLeindler and FunctionalInequalities.Probability.Line.prekopaLeindler would supply (17) only after the Legendre-transform reduction. Proposition 12 attainment is formalized (KLS.CEK.exists_variational_maximum), and for a bounded isotropic source (‖y‖ ≤ L μ-a.e.) the maximiser capped to the L-ball has a finite conjugate ψ that is convex, L-Lipschitz, with ∫ e^{−ψ} = 1 and e^{−ψ}dx a probability (KLS/CEK/BoundedPrimal.lean; a weak normalized primal, strong-API candidate, accepted 2026-10-12); the pointwise first variation (42) of the Legendre transform is formalized for proper lower semicontinuous φ, y interior to the finite dual domain with φ* differentiable there and bounded continuous b: d/dt (φ + t b)*(y) = −b(∇φ*(y)) at t = 0, with attainment, maximizer = dual gradient and near-maximizer concentration, in every dimension (Analysis/Convex/LegendreVariation/; strong-API constructions, revalidated and accepted 2026-10-12); essential continuity, the Euler–Lagrange identification, the push-forward, existence and uniqueness are not, so Theorem 2 has no declaration.",
             "main": true
           },
           {
@@ -7820,7 +7832,7 @@
       "url": "https://arxiv.org/html/2607.24164v1",
       "locator": "Theorems 1.1 and 1.2",
       "result": "For isotropic log-concave X and symmetric M, Var(XᵀMX) ≤ 8‖M‖²_HS = 2 E‖∇(XᵀMX)‖². For n ≥ 2, ψₙ = O((log n)^(1/4)), hence C_P = O(√log n).",
-      "remaining": "The covariance step of the proof of Theorem 1.2 (p. 14, Cov(|M|^{1/2} X) = |M| for every symmetric M) is formalized; the Stein-kernel identity (2.21), Theorem 2.5 and the quadratic inequality, its moment-map/Stein proof and the κₙ-to-KLS conversion are not locally formalized. Quadratic tests do not suffice for full KLS. Two supporting identities (Lemma A.3 and the finite form of (2.12)) are formalized; the moment map, its regularity (A.1), the Hessian-metric generator and Theorem 2.5 are not. Lemma A.4 is formalized for every potential in the source class, with the moment-map properties of Lemma 2.2 as hypotheses (reviewed stronger): cutoffs for every real R ≥ 1 with ‖Lχ_R‖_{L¹(ν)} ≤ C/R and the natural-index form; Lemma A.5 is formalized for given cutoffs, and the two are applied to the uniform law on (−√3, √3) with the nonconstant f = tanh²(√3y/2). A general source-class Lemma A.5 without the cutoff premise is not a separate statement; the moment map (Lemmas 2.1–2.2), Theorem 2.5 and Theorems 1.1–1.2 are not formalized.",
+      "remaining": "The covariance step of the proof of Theorem 1.2 (p. 14, Cov(|M|^{1/2} X) = |M| for every symmetric M) is formalized; the Stein-kernel identity (2.21), Theorem 2.5 and the quadratic inequality, its moment-map/Stein proof and the κₙ-to-KLS conversion are not locally formalized. Quadratic tests do not suffice for full KLS. Two supporting identities (Lemma A.3 and the finite form of (2.12)) are formalized, as is the Jordan/trace-energy matrix support of Theorem 2.5 with its measure extension conditional on the PSD bound, and the centered range density of compact smooth diffusion images, ordinary-diffusion coercivity and the inverse-quadratic Young inequality supporting Lemma A.6, and the scalar Brascamp–Lieb inequality of Lemma A.6 for a given potential with positive definite Hessian (finite energy for C², possibly infinite energy for C^∞; not for the source moment map), the pointwise trace identity (2.8) for the actual Hessian field, and (2.9)–(2.10) with nonnegative remainders for a given potential satisfying the Monge–Ampère relation (a pointwise condition, not yet integrated through A.4–A.5; not the trace bound); the pointwise first variation of the Legendre transform (CEK (42)) is formalized; for a bounded isotropic source the CEK maximiser gives a weak normalized convex Lipschitz primal ψ with ∫ e^{−ψ} = 1 (not the moment map: the gradient push-forward and its regularity are open); the moment map, its regularity (A.1), the Hessian-metric generator and Theorem 2.5 are not. Lemma A.4 is formalized for every potential in the source class, with the moment-map properties of Lemma 2.2 as hypotheses (reviewed stronger): cutoffs for every real R ≥ 1 with ‖Lχ_R‖_{L¹(ν)} ≤ C/R and the natural-index form; Lemma A.5 is formalized for given cutoffs, and the two are applied to the explicit uniform-interval potential (gradient range in (−√3, √3); its pushforward to the uniform law is not proved) with the nonconstant f = tanh²(√3y/2). A general source-class Lemma A.5 without the cutoff premise is not a separate statement; the moment map (Lemmas 2.1–2.2), Theorem 2.5 and Theorems 1.1–1.2 are not formalized.",
       "local_results": [
         {
           "node": "lem:letwin-support-identities",
@@ -7847,6 +7859,42 @@
           "scope": "Proof of Theorem 1.2, p. 14, covariance step preceding (2.21): Cov(|M|^{1/2} X) = |M| for isotropic X and every real symmetric M (singular, indefinite, dimension zero; reviewed stronger than the invertible reduction); not (2.21), Theorem 2.5 or Theorem 1.2"
         },
         {
+          "node": "lem:letwin-symmetric-jordan",
+          "scope": "Theorem 2.5 matrix support only: Jordan decomposition of every real symmetric matrix with derived PSD parts, mixed/energy trace positivity and the pointwise Jordan trace domination, any finite index type; not the integral bound, the measure extension, the moment map or Theorem 2.5"
+        },
+        {
+          "node": "lem:letwin-symmetric-integral",
+          "scope": "Theorem 2.5 extension step from PSD to all symmetric B under an arbitrary measure, conditional on the PSD bound as a named hypothesis (integrability for B derived); not the PSD bound, the moment map or Theorem 2.5"
+        },
+        {
+          "node": "lem:letwin-centered-range",
+          "scope": "Lemma A.6 support only: density of compact smooth diffusion images in the centered classes of L²(ν) for a log-concave ν = m.tilted(−U), C¹ U, any finite dimension; not Brascamp–Lieb, A.6, the moment map or Theorem 2.5"
+        },
+        {
+          "node": "lem:letwin-finite-energy-supports",
+          "scope": "Lemma A.6 supports only: compactly supported ordinary weighted-diffusion coercivity ∫∇²U(∇u,∇u) dμ ≤ ∫(ℒu)² dμ (C² U, any finite dimension) and the inverse-quadratic Young inequality for positive definite H on any finite index type; not Brascamp–Lieb, A.6, the moment map or Theorem 2.5"
+        },
+        {
+          "node": "thm:letwin-scalar-brascamp-lieb",
+          "scope": "Lemma A.6 for a given potential: log-concave ν = m.tilted(−U), Hess U positive definite everywhere, C¹ f ∈ L²(ν); finite-energy (C² U) and extended-energy (C^∞ U, right side in [0,∞]) forms, bounded tests, any dimension, sharp for the Gaussian; not the source moment map or A.6 for the source law"
+        },
+        {
+          "node": "lem:letwin-inverse-hessian-energy",
+          "scope": "Lemma A.6 energy facts: operator Young inequality, nonnegativity, coordinate form and continuity of ⟨∇f,H⁻¹∇f⟩"
+        },
+        {
+          "node": "lem:letwin-hessian-trace",
+          "scope": "Theorem 2.5 support only: the pointwise trace identity (2.8) for smooth φ, any V and every constant real B (no PSD, commutation or Monge–Ampère premise); not the Lemma 2.4 substitution, (2.10), the tensor comparison or the trace bound"
+        },
+        {
+          "node": "lem:letwin-ma-trace-210",
+          "scope": "(2.9)–(2.10) for a given smooth PD potential with the Monge–Ampère relation and local V, every constant B; nonnegative remainders and L tr(BHBH) + 2 tr(BHBH) ≥ 0 pointwise for PSD B and V convex on open K; not the A.4/A.5 integration, the source moment map or the trace bound"
+        },
+        {
+          "node": "lem:letwin-trace-gram-positivity",
+          "scope": "PSD Frobenius pairing, trace of a PSD product and trace-weighted Gram positivity (matrix support for (2.10))"
+        },
+        {
           "node": "lem:letwin-cutoff-profile",
           "scope": "Lemma A.4, real-variable part only: profile η(t) = smoothTransition(2 − t) with derivative support and bound, smooth majorant w ≥ |η″| vanishing for t ≤ 0 and t ≥ 3, monotone exhaustion η(a/(n+1)) ↑ 1 and η(a/R) ↑ 1 for real R > 0, tail primitive q_R(t) = R⁻¹∫_{t/R}^3 w (R > 0), affine rescaling of derivatives; the cutoffs η((φ − min φ + 1)/R), their compact support and the O(1/R) defect bound are lem:letwin-a4-cutoffs"
         },
@@ -7864,7 +7912,7 @@
         },
         {
           "node": "lem:letwin-uniform-interval-client",
-          "scope": "Lemmas A.4–A.5 applied to the uniform law on (−√3, √3) (explicit moment potential, V ≡ log(2√3)) with the nonconstant f = tanh²(√3y/2): Lf ∈ L¹(ν) and ∫Lf dν = 0; gradient range inclusion only, no pushforward; not Theorem 2.5 or 1.2"
+          "scope": "Lemmas A.4–A.5 applied to the explicit uniform-interval potential (V ≡ log(2√3), gradient range in (−√3, √3); pushforward to the uniform law not proved; not the general moment-map producer) with the nonconstant f = tanh²(√3y/2): Lf ∈ L¹(ν) and ∫Lf dν = 0; gradient range inclusion only, no pushforward; not Theorem 2.5 or 1.2"
         }
       ],
       "diagram": "27 July 2026 · Letwin<br/>ψₙ = O((log n)^(1/4))",
@@ -8109,7 +8157,7 @@
                 "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/HessianOperator.lean"
               }
             ],
-            "note": "Formalized for an arbitrary real coefficient field A (symmetric at each point, no positivity) and drift b, on C² functions, in the standard orthonormal basis (Luna LET23-H/LET23-N, 2026-10-08; clients research/audits/BKL/NondivergenceAudit.lean: rank 0, and the cross-direction product ⟨e_i,·⟩⟨e_j,·⟩ exposing 2A_ij − b_i⟨e_j,x⟩ − b_j⟨e_i,x⟩). The source specialization A = (∇²φ)⁻¹, the Monge–Ampère/Brascamp–Lieb inputs and Theorem 2.5 are not formalized. The specialization A = (∇²φ)⁻¹, b = ∇V∘∇φ (hessianInverseOperator) and its Leibniz rule are now formalized for a given φ (MA-Inverse, 2026-10-08); Theorem 2.5 remains open."
+            "note": "Formalized for an arbitrary real coefficient field A (symmetric at each point, no positivity) and drift b, on C² functions, in the standard orthonormal basis (Luna LET23-H/LET23-N, 2026-10-08; clients research/audits/BKL/NondivergenceAudit.lean: rank 0, and the cross-direction product ⟨e_i,·⟩⟨e_j,·⟩ exposing 2A_ij − b_i⟨e_j,x⟩ − b_j⟨e_i,x⟩). The source specialization A = (∇²φ)⁻¹ for the moment map of the source law, the Monge–Ampère/Brascamp–Lieb inputs for that potential and Theorem 2.5 are not formalized (given-potential forms: L24, LA6, T25). The specialization A = (∇²φ)⁻¹, b = ∇V∘∇φ (hessianInverseOperator) and its Leibniz rule are now formalized for a given φ (MA-Inverse, 2026-10-08); Theorem 2.5 remains open."
           },
           {
             "id": "L24",
@@ -8154,7 +8202,7 @@
                 "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/MongeAmpere.lean"
               }
             ],
-            "note": "Proof: differentiate log det Hess phi = -phi + V(grad phi) twice (Jacobi's formula); positivity from convexity of V and a Hilbert-Schmidt Gram-matrix representation. Not formalized. Partial (Codex route bundle MA-Inverse, independently accepted 2026-10-08): the display (2.5) — derivative of the inverse Hessian ∂_k(∇²φ)⁻¹_ij = −Σ (∇²φ)⁻¹_ia ∂_kac φ (∇²φ)⁻¹_cj — in operator and coordinate forms for a given smooth φ with positive definite Hessian, and the derivative of the right-hand side −φ + V∘∇φ of the log-det equation (2.2) taken as a hypothesis, with V smooth only on an open neighbourhood of the gradient image. Jacobi's formula (Codex route bundle MA-Jacobi, independently accepted 2026-10-08) gives the left-hand side, hence the first derivative (2.4) of the equation; the second derivative (2.6) with the inverse-Hessian operator and the positive semidefiniteness of both right-hand matrices (V convex on the open K containing the gradient image; the Gram term weighted by (∇²φ)⁻¹ ⊗ (∇²φ)⁻¹) are formalized (bundle MA-Second-Derivative, independently accepted 2026-10-08). The local Lemma 2.4 identity is therefore proved for a GIVEN smooth φ with positive definite Hessian satisfying the zero-order equation (2.2); the upstream Lemma 2.2 (existence and regularity of the moment map, the zero-order equation itself) remains the open gap, as do Theorem 2.5, Brascamp–Lieb and Proposition 2.8."
+            "note": "Proof: differentiate log det Hess phi = -phi + V(grad phi) twice (Jacobi's formula); positivity from convexity of V and a Hilbert-Schmidt Gram-matrix representation. Not formalized. Partial (Codex route bundle MA-Inverse, independently accepted 2026-10-08): the display (2.5) — derivative of the inverse Hessian ∂_k(∇²φ)⁻¹_ij = −Σ (∇²φ)⁻¹_ia ∂_kac φ (∇²φ)⁻¹_cj — in operator and coordinate forms for a given smooth φ with positive definite Hessian, and the derivative of the right-hand side −φ + V∘∇φ of the log-det equation (2.2) taken as a hypothesis, with V smooth only on an open neighbourhood of the gradient image. Jacobi's formula (Codex route bundle MA-Jacobi, independently accepted 2026-10-08) gives the left-hand side, hence the first derivative (2.4) of the equation; the second derivative (2.6) with the inverse-Hessian operator and the positive semidefiniteness of both right-hand matrices (V convex on the open K containing the gradient image; the Gram term weighted by (∇²φ)⁻¹ ⊗ (∇²φ)⁻¹) are formalized (bundle MA-Second-Derivative, independently accepted 2026-10-08). The local Lemma 2.4 identity is therefore proved for a GIVEN smooth φ with positive definite Hessian satisfying the zero-order equation (2.2); the upstream Lemma 2.2 (existence and regularity of the moment map, the zero-order equation itself) remains the open gap, as do Theorem 2.5, Brascamp–Lieb for the moment map of the source law (the given-potential inequality is under LA6) and Proposition 2.8."
           },
           {
             "id": "T25",
@@ -8194,9 +8242,73 @@
               {
                 "name": "FunctionalInequalities.Analysis.BakryEmery.integral_hessianInverseOperator_mul_comm",
                 "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/InverseHessian.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.cfc_posSemidef_of_nonneg",
+                "source": "formalization/FunctionalInequalities/Analysis/Matrix/Trace.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.trace_cross_nonneg",
+                "source": "formalization/FunctionalInequalities/Analysis/Matrix/Trace.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.trace_energy_nonneg",
+                "source": "formalization/FunctionalInequalities/Analysis/Matrix/Trace.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.jordan_trace_domination",
+                "source": "formalization/FunctionalInequalities/Analysis/Matrix/Trace.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.symmetric_jordan_decomposition",
+                "source": "formalization/FunctionalInequalities/Analysis/Matrix/Sign.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.symmetric_jordan_trace_support",
+                "source": "formalization/FunctionalInequalities/Analysis/Matrix/Sign.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.symmetric_trace_integral_extension",
+                "source": "formalization/FunctionalInequalities/Analysis/Matrix/Integral.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.BakryEmery.stdHessianMatrix",
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/HessianTrace.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.BakryEmery.stdHessianMatrixDeriv",
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/HessianTrace.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.BakryEmery.stdHessianMatrixGenerator",
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/HessianTrace.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.BakryEmery.hessianInverseOperator_trace_stdHessianMatrix_sq",
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/HessianTrace.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.BakryEmery.stdHessianMatrixGenerator_eq_on_range",
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/HessianTrace.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.BakryEmery.traceGenerator_210_on_range",
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/HessianTrace.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.BakryEmery.traceGeneratorCondition_on_range",
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/HessianTrace.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.trace_mul_nonneg",
+                "source": "formalization/FunctionalInequalities/Analysis/Matrix/Positivity.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.traceGram_posSemidef",
+                "source": "formalization/FunctionalInequalities/Analysis/Matrix/Positivity.lean"
               }
             ],
-            "note": "Proof: for B >= 0, apply L to Tr(B Hess phi B Hess phi), substitute Lemma 2.4, integrate using Lemma A.5 (c = 2), compare third-derivative terms pointwise ((b_i - b_j)^2 identity), and apply the Brascamp-Lieb inequality (Lemma A.6) to B^{1/2} Hess phi B^{1/2}, whose mean is B by Lemma 2.3; general B via |B|. Matrix inequalities: traces of products of PSD matrices, Hilbert-Schmidt Gram matrices. Equation (2.12) formalized as the finite symmetric-tensor identity for arbitrary real weights (⇑); the coordinate normalization, diagonalization and the identification with the inverse-Hessian contractions, and Theorem 2.5 itself, are not formalized. Support (Codex route bundle MA-Metric-IntegrationByParts, independently accepted 2026-10-08): the integration by parts (2.2) for the inverse-Hessian operator L on smooth tests with one compactly supported, for a GIVEN smooth φ with positive definite Hessian, ∫e^{−φ} = 1 and the zero-order MA equation with V smooth on an open neighbourhood of closure K ⊇ range ∇φ: coordinate divergence of (∇²φ)⁻¹, flux identity, density divergence form of L, ∫Lf dν = 0 and integrated symmetry on compact tests (Analysis/BakryEmery/MongeAmpere.lean section Divergence, IntegrationByParts/InverseHessian.lean). The noncompact extension (A.4–A.5), Brascamp–Lieb (A.6), the trace estimate itself and the moment map remain unformalized."
+            "note": "Proof: for B >= 0, apply L to Tr(B Hess phi B Hess phi), substitute Lemma 2.4, integrate using Lemma A.5 (c = 2), compare third-derivative terms pointwise ((b_i - b_j)^2 identity), and apply the Brascamp-Lieb inequality (Lemma A.6) to B^{1/2} Hess phi B^{1/2}, whose mean is B by Lemma 2.3; general B via |B|. Matrix inequalities: traces of products of PSD matrices, Hilbert-Schmidt Gram matrices. Equation (2.12) formalized as the finite symmetric-tensor identity for arbitrary real weights (⇑); the coordinate normalization, diagonalization and the identification with the inverse-Hessian contractions, and Theorem 2.5 itself, are not formalized. Support (Codex route bundle MA-Metric-IntegrationByParts, independently accepted 2026-10-08): the integration by parts (2.2) for the inverse-Hessian operator L on smooth tests with one compactly supported, for a GIVEN smooth φ with positive definite Hessian, ∫e^{−φ} = 1 and the zero-order MA equation with V smooth on an open neighbourhood of closure K ⊇ range ∇φ: coordinate divergence of (∇²φ)⁻¹, flux identity, density divergence form of L, ∫Lf dν = 0 and integrated symmetry on compact tests (Analysis/BakryEmery/MongeAmpere.lean section Divergence, IntegrationByParts/InverseHessian.lean). Brascamp–Lieb (A.6) for the source moment map, the trace estimate itself and the moment map remain unformalized (the given-potential scalar Brascamp–Lieb inequality is under LA6); the noncompact extension is LA4 and LA5 (for given cutoffs). Matrix support for the extension from PSD to all symmetric B (strong-API candidate, gpt-6-astra, accepted 2026-10-12): the Jordan decomposition B = P − N with derived PSD parts, PN = NP = 0 and tr B² = tr P² + tr N², nonnegative mixed and energy traces, and the pointwise domination tr((P−N)H(P−N)H) ≤ tr(PHPH) + tr(NHNH) for symmetric H without commutation, for every finite index type; the measure extension is formalized conditionally on the PSD bound (symmetric_trace_integral_extension: for any measure and any measurable PSD field H, the PSD bound for every PSD A gives the same bound, with derived integrability, for every symmetric B; strong-API candidate, gpt-6-astra, accepted 2026-10-12); the PSD integral bound itself, the moment map and Theorem 2.5 are not formalized. Pointwise trace identity (2.8) (strong-API candidate, gpt-6-astra, accepted 2026-10-12): for smooth phi, any V and every constant real matrix B, L tr(B H B H) = 2 tr(B H B (L H)) + 2 sum_ab phi^{ab} tr(B d_a H B d_b H) at every point, H the Hessian matrix in the standard orthonormal basis and L H entrywise, with no PSD, commutation or Monge-Ampere premise; the Monge–Ampère substitution follows. (2.9) and (2.10) for a GIVEN potential (strong-API candidate, gpt-6-astra, accepted 2026-10-12): for smooth phi with positive definite Hessian satisfying the zero-order Monge-Ampere relation, with V smooth only on an open neighbourhood of closure K containing the gradient range, L H = -H + H Hess V(grad phi) H + G (G the inverse-Hessian third-derivative Gram matrix) and (2.10) for every constant real B; for K open, V convex on K and B positive semidefinite the three remainders are nonnegative, so L tr(BHBH) + 2 tr(BHBH) >= 0 pointwise. The integration of this pointwise condition (Lemmas A.4-A.5 for this trace function), the tensor comparison (2.12) with the mean Hessian, the source trace bound and the moment map of the source law are not formalized."
           },
           {
             "id": "D26",
@@ -8404,7 +8516,7 @@
                 "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/UniformIntervalClient.lean"
               }
             ],
-            "note": "Proof: symmetry (2.2) against chi_R and Fatou's lemma. Partial: the operator statement integrable_and_integral_hessianInverseOperator_eq_zero_of_cutoffs takes the cutoffs as a premise (smooth compactly supported chi_n with 0 <= chi_n <= 1, chi_n -> 1, L chi_n in L^1(nu), ||L chi_n||_{L^1(nu)} -> 0), with f smooth and bounded everywhere (equivalent to L^infinity(nu) for continuous f, since nu has a positive density), L f + c f >= 0 and c > 0; its generic core is integrable_and_integral_eq_zero_of_cutoff_defect. For a source-class potential the premise is supplied by the natural-index LA4, but that composition is not stated as a general theorem; it is carried out for one concrete source law, uniformInterval_tanhSq_integrable_and_integral_hessianInverseOperator_eq_zero (uniform law on (-sqrt 3, sqrt 3), V = log(2 sqrt 3), f = tanh^2(sqrt 3 y / 2), C = 1, c = 2)."
+            "note": "Proof: symmetry (2.2) against chi_R and Fatou's lemma. Partial: the operator statement integrable_and_integral_hessianInverseOperator_eq_zero_of_cutoffs takes the cutoffs as a premise (smooth compactly supported chi_n with 0 <= chi_n <= 1, chi_n -> 1, L chi_n in L^1(nu), ||L chi_n||_{L^1(nu)} -> 0), with f smooth and bounded everywhere (equivalent to L^infinity(nu) for continuous f, since nu has a positive density), L f + c f >= 0 and c > 0; its generic core is integrable_and_integral_eq_zero_of_cutoff_defect. For a source-class potential the premise is supplied by the natural-index LA4, but that composition is not stated as a general theorem; it is carried out for one concrete potential (the uniform-interval potential: exponential normalization and gradient range inclusion are proved, its gradient pushforward to the uniform law is not; not the general moment-map producer), uniformInterval_tanhSq_integrable_and_integral_hessianInverseOperator_eq_zero (uniform law on (-sqrt 3, sqrt 3), V = log(2 sqrt 3), f = tanh^2(sqrt 3 y / 2), C = 1, c = 2)."
           },
           {
             "id": "LA6",
@@ -8415,9 +8527,46 @@
               "L22",
               "LA1"
             ],
-            "relation": "same",
-            "declarations": [],
-            "note": "Proof: Brascamp-Lieb [14, Theorem 4.1] on the bounded convex sets {phi < R}, then monotone convergence. Not formalized."
+            "relation": "partial",
+            "declarations": [
+              {
+                "name": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.compactSmoothDiffusionImage",
+                "source": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Range.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.centered_mem_closure_compactSmoothDiffusionImage",
+                "source": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Range.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.LogConcave.HeatSemigroup.center_mem_closure_compactSmoothDiffusionImage",
+                "source": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Range.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.BakryEmery.compact_ordinary_diffusion_coercivity",
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Curvature.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.inverse_quadratic_young",
+                "source": "formalization/FunctionalInequalities/Analysis/Matrix/Positivity.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.LogConcave.scalar_brascamp_lieb_finite_energy",
+                "source": "formalization/FunctionalInequalities/KLS/LogConcave/BrascampLieb.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.LogConcave.scalar_brascamp_lieb_extended_energy",
+                "source": "formalization/FunctionalInequalities/KLS/LogConcave/BrascampLieb.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.LogConcave.scalar_brascamp_lieb_extended_energy_of_bounded",
+                "source": "formalization/FunctionalInequalities/KLS/LogConcave/BrascampLieb.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.BakryEmery.inverse_hessian_gradient_energy_nonneg",
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/InverseHessianEnergy.lean"
+              }
+            ],
+            "note": "Proof: Brascamp-Lieb [14, Theorem 4.1] on the bounded convex sets {phi < R}, then monotone convergence. Supporting step: for a log-concave nu = m.tilted(-U) with C^1 U on a finite-dimensional space, the images -L f of compactly supported smooth f under the ordinary weighted diffusion operator are dense in the mean-zero classes of L^2(nu) (every centered g, arbitrary; strong-API candidate, gpt-6-astra, accepted 2026-10-12). Two further supports (strong-API candidate, gpt-6-astra, accepted 2026-10-12): compactly supported coercivity of the ordinary weighted diffusion (integral of Hess U(grad u, grad u) <= integral of (L u)^2 under m.tilted(-U), with both integrability conclusions, U of class C^2; the ordinary weighted Laplacian, not the inverse-Hessian operator) and the inverse-quadratic Young inequality 2 v.w <= v.H^{-1}v + w.Hw for positive definite H over any finite index type. The inequality itself is formalized for a GIVEN potential (strong-API candidate, gpt-6-astra, accepted 2026-10-12): for a log-concave nu = m.tilted(-U) with Hess U positive definite at every point (no uniform bound) and C^1 f in L^2(nu), Var f <= integral of <grad f, (Hess U)^{-1} grad f>, in a finite-energy form (U of class C^2, integrable energy) and an extended form with the right side possibly infinite (U smooth, no energy premise; bounded C^1 f included), in every dimension, with equality for the standard Gaussian law and f = id. Partial: the source potential phi is the moment map, whose existence, Euler-Lagrange identification, push-forward and regularity (Lemmas 2.1-2.2) are not formalized, so Lemma A.6 for the source law is not."
           },
           {
             "id": "LA7",
@@ -9894,7 +10043,7 @@
         "BKL2026"
       ],
       "target": "Theorem 1.1 through Theorems 3.1 (certified, thm:bkl-taylor-criterion), 4.1 and Proposition 7.1 (certified in the source form, prop:bkl-suspension, conditional on its hypothesis CumulantBound): Section 3 is formalized by the operator route; Lemma 2.2, Lemma 3.6 (⇑), Corollary 3.7 (⇑), Lemmas 3.2–3.4, 3.8, 3.9 for the D(A) iterates (⇑), the regular-law adapter for (12), the complete Section 2 reduction to isotropic regular laws (regular approximation and weak-limit transfer) and the p. 30 reduction are formalized, so Theorem 1.1 is formalized conditionally on the Theorem 4.1 cumulant bounds (no certificate); Lemma 2.1 on 𝒜, (19), and Lemma 4.2 conditional on the Letwin bound are partial, restricted or conditional counterparts; the deterministic spatial step (74)/(72) of Lemma 4.3 is formalized (⇑); Theorem 4.1 is stated conditionally (cumulant envelope) and open.",
-      "next_step": "Next: Stage 2, Letwin Theorem 1.2 (Var ≤ 8‖M‖²_HS, the exact input of Lemma 4.2), active under the renewed Codex controller. Stage 2A is formalized: Letwin Lemma A.4 for every source-class potential and every real R ≥ 1 with its natural-index C/(n+1) form, Lemma A.5 for given cutoffs, and their application to the nonconstant uniform-interval source-law client. This supports, but does not prove, Letwin Theorem 2.5, Theorem 1.2 or an unconditional BKL Lemma 4.2. Next within Stage 2: Letwin Theorem 2.5 with Proposition 2.8 and the Stein-kernel identity (2.21), toward Theorem 1.2. Stage 1 (BKL (74) grouped with (72); the covariance step of the proof of Letwin Theorem 1.2) is integrated and covered by the full local receipt 20261010T093056.948739Z. Owner scope (2026-10-10): BKL Theorem 1.1 is the primary objective. Discharge Theorem 4.1 through the original Eldan localization and the Section 4-6 cumulant-energy argument, and the cited Letwin Theorem 1.2 input for Lemma 4.2. Reuse the certified Theorem 3.1, conditional source Proposition 7.1 and regular-law reduction. Other papers are pursued only for referenced results and necessary prerequisites with an explicit BKL consumer; general CEK Theorem 2/uniqueness and full Letwin paper coverage are not standalone goals. Moment-potential, regularity, Stein, integration and approximation work must be tied to the required Letwin bound. Conditional assembly remains insufficient; KLS.kls stays open."
+      "next_step": "Next: Stage 2, Letwin Theorem 1.2 (Var ≤ 8‖M‖²_HS, the exact input of Lemma 4.2), active under the renewed Codex controller. Stage 2A is formalized: Letwin Lemma A.4 for every source-class potential and every real R ≥ 1 with its natural-index C/(n+1) form, Lemma A.5 for given cutoffs, and their application to the nonconstant uniform-interval potential client (its pushforward to the uniform law is not proved; not the general moment-map producer). This supports, but does not prove, Letwin Theorem 2.5, Theorem 1.2 or an unconditional BKL Lemma 4.2. Next within Stage 2: Letwin Theorem 2.5 with Proposition 2.8 and the Stein-kernel identity (2.21), toward Theorem 1.2. Stage 1 (BKL (74) grouped with (72); the covariance step of the proof of Letwin Theorem 1.2) is integrated and covered by the full local receipt 20261010T093056.948739Z. Owner scope (2026-10-10): BKL Theorem 1.1 is the primary objective. Discharge Theorem 4.1 through the original Eldan localization and the Section 4-6 cumulant-energy argument, and the cited Letwin Theorem 1.2 input for Lemma 4.2. Reuse the certified Theorem 3.1, conditional source Proposition 7.1 and regular-law reduction. Other papers are pursued only for referenced results and necessary prerequisites with an explicit BKL consumer; general CEK Theorem 2/uniqueness and full Letwin paper coverage are not standalone goals. Moment-potential, regularity, Stein, integration and approximation work must be tied to the required Letwin bound. Conditional assembly remains insufficient; KLS.kls stays open."
     },
     {
       "rank": 2,
@@ -9942,5 +10091,80 @@
       "target": "Selected 2025–2026 thin-shell and quadratic-form results.",
       "next_step": "Deferred as an independent paper target under the 2026-10-10 BKL-first scope. Resume only for a reviewed referenced result or necessary prerequisite with an explicit BKL proof consumer; existing formalization and certificates are retained."
     }
-  ]
+  ],
+  "proof_path": {
+    "source": "BKL2026",
+    "steps": [
+      {
+        "paper": "BKL2026",
+        "item": "T11",
+        "entries": [
+          "FunctionalInequalities.KLS.conjecture_of_cumulantBound"
+        ],
+        "boundary": "Assembly is proved only under the universal cumulant input of Theorem 4.1. Theorem 1.1 and KLS remain open."
+      },
+      {
+        "paper": "BKL2026",
+        "item": "T31",
+        "entries": [
+          "Solutions.ThmBklTaylorCriterion.certificate"
+        ],
+        "boundary": "Source-form Taylor criterion for centered regular laws, covariance at most Id and the Taylor coefficient hypothesis. Operator route with an approximate first eigenfunction.",
+        "certificate": "thm:bkl-taylor-criterion"
+      },
+      {
+        "paper": "BKL2026",
+        "item": "P71",
+        "entries": [
+          "Solutions.PropBklSuspension.certificate"
+        ],
+        "boundary": "Source-form suspension implication in all dimensions; CumulantBound d b is a retained premise supplied by the still-open Theorem 4.1.",
+        "certificate": "prop:bkl-suspension"
+      },
+      {
+        "paper": "BKL2026",
+        "item": "T41",
+        "entries": [],
+        "boundary": "Universal cumulant estimate is open. Envelope/arithmetic supports do not supply the Eldan process, stochastic induction or compact-support/limit argument."
+      },
+      {
+        "paper": "BKL2026",
+        "item": "L43",
+        "entries": [
+          "FunctionalInequalities.Analysis.BakryEmery.iteratedFDeriv_inner_centeredGradient_zero_grouped_of_compact"
+        ],
+        "boundary": "Only the deterministic spatial grouping (72)/(74) is proved. Eldan SDE, Ito dynamics and the stochastic integral in (73) remain open; vendor adoption is infrastructure."
+      },
+      {
+        "paper": "BKL2026",
+        "item": "L42",
+        "entries": [
+          "FunctionalInequalities.KLS.LogConcave.sum_sq_cumulant_three_le_of_letwin"
+        ],
+        "boundary": "Conditional source-scope counterpart retaining LetwinQuadraticBound; the constant-8 input is not discharged."
+      },
+      {
+        "paper": "Letwin2026",
+        "item": "T12",
+        "entries": [
+          "FunctionalInequalities.KLS.Isotropic.covarianceBilin_map_sqrt_abs_matrix"
+        ],
+        "boundary": "Covariance transport support is proved. The actual moment-map Stein kernel, identity (2.21), source reductions and the Var <= 8 ||M||_HS^2 bound remain open."
+      },
+      {
+        "paper": "Letwin2026",
+        "item": "T25",
+        "entries": [
+          "FunctionalInequalities.Analysis.symmetric_trace_integral_extension"
+        ],
+        "boundary": "Matrix extension and given-potential cutoff, trace and scalar Brascamp-Lieb supports do not prove the source theorem. The actual moment map, its regularity and the integrated positive-semidefinite bound remain open."
+      },
+      {
+        "paper": "Letwin2026",
+        "item": "L21",
+        "entries": [],
+        "boundary": "Produce the moment potential of the source law and then the regularity of Lemma 2.2. A supplied potential or bounded-primal support is not the source-law construction."
+      }
+    ]
+  }
 }

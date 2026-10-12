@@ -1,4 +1,5 @@
 import Mathlib.Analysis.Matrix.Order
+import FunctionalInequalities.Analysis.Matrix.Trace
 import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Abs
 import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Rpow.Basic
 
@@ -228,5 +229,108 @@ theorem symmetric_matrix_sign_factorization
           (fun x : ℝ => (SignType.sign x : ℝ))
       _ = cfc (fun _ : ℝ => (1 : ℝ)) M := hsignsq
       _ = 1 := hone
+
+section Jordan
+
+/-! ### Jordan decomposition of a real symmetric matrix
+
+For every real symmetric `B`, the continuous functional calculus parts `P = cfc (max · 0) B` and
+`N = cfc (max (−·) 0) B` are positive semidefinite with `B = P − N`, `P N = N P = 0` and
+`tr(B²) = tr(P²) + tr(N²)` (`symmetric_jordan_decomposition`; no decomposition is assumed, the empty index type
+included); with the trace domination of `Matrix/Trace.lean` this gives `symmetric_jordan_trace_support`. Support for
+Letwin, arXiv:2607.24164v1, Theorem 2.5; not the theorem itself. Proof bodies: strong-API candidate (gpt-6-astra,
+`api-symmetric-compiler-patch-v3`, e735387e…), verbatim.
+-/
+
+variable {ι : Type*} [Fintype ι] [DecidableEq ι]
+
+private lemma scalar_jordan_identities (x : ℝ) :
+    max x 0 - max (-x) 0 = x ∧ max x 0 * max (-x) 0 = 0 := by
+  by_cases hx : 0 ≤ x
+  · have hn : -x ≤ 0 := neg_nonpos.mpr hx
+    simp [max_eq_left hx, max_eq_right hn]
+  · have hx' : x ≤ 0 := le_of_lt (lt_of_not_ge hx)
+    have hn : 0 ≤ -x := neg_nonneg.mpr hx'
+    simp [max_eq_right hx', max_eq_left hn]
+
+/-- The positive and negative parts are constructed by the matrix CFC.
+No Jordan identities or decomposition witnesses are hypotheses. This also
+includes the empty index type. -/
+theorem symmetric_jordan_decomposition (B : Matrix ι ι ℝ) (hB : B.IsSymm) :
+    ∃ P N : Matrix ι ι ℝ,
+      P.PosSemidef ∧ N.PosSemidef ∧ B = P - N ∧
+      P * N = 0 ∧ N * P = 0 ∧
+      (B * B).trace = (P * P).trace + (N * N).trace := by
+  let P : Matrix ι ι ℝ := cfc (fun x : ℝ => max x 0) B
+  let N : Matrix ι ι ℝ := cfc (fun x : ℝ => max (-x) 0) B
+  have hP : P.PosSemidef :=
+    cfc_posSemidef_of_nonneg B hB (fun x : ℝ => max x 0)
+      (fun x => le_max_right x 0)
+  have hN : N.PosSemidef :=
+    cfc_posSemidef_of_nonneg B hB (fun x : ℝ => max (-x) 0)
+      (fun x => le_max_right (-x) 0)
+  have hspec : (spectrum ℝ B).Finite := Matrix.finite_real_spectrum (A := B)
+  have hmul (f g : ℝ → ℝ) :
+      cfc f B * cfc g B = cfc (fun x => f x * g x) B := by
+    rw [← cfc_mul (hf := hspec.continuousOn f) (hg := hspec.continuousOn g)]
+  have hdec : B = P - N := by
+    calc
+      B = cfc (fun x : ℝ => x) B := (cfc_id ℝ B hB).symm
+      _ = cfc (fun x : ℝ => max x 0 - max (-x) 0) B := by
+        apply cfc_congr
+        intro x hx
+        exact (scalar_jordan_identities x).1.symm
+      _ = P - N := by
+        dsimp [P, N]
+        rw [cfc_sub
+          (hf := hspec.continuousOn (fun x : ℝ => max x 0))
+          (hg := hspec.continuousOn (fun x : ℝ => max (-x) 0))]
+  have hPN : P * N = 0 := by
+    change cfc (fun x : ℝ => max x 0) B *
+      cfc (fun x : ℝ => max (-x) 0) B = 0
+    rw [hmul]
+    calc
+      cfc (fun x : ℝ => max x 0 * max (-x) 0) B =
+          cfc (fun _ : ℝ => 0) B := by
+        apply cfc_congr
+        intro x hx
+        exact (scalar_jordan_identities x).2
+      _ = 0 := by simp
+  have hNP : N * P = 0 := by
+    change cfc (fun x : ℝ => max (-x) 0) B *
+      cfc (fun x : ℝ => max x 0) B = 0
+    rw [hmul]
+    calc
+      cfc (fun x : ℝ => max (-x) 0 * max x 0) B =
+          cfc (fun _ : ℝ => 0) B := by
+        apply cfc_congr
+        intro x hx
+        exact (mul_comm (max (-x) 0) (max x 0)).trans
+          (scalar_jordan_identities x).2
+      _ = 0 := by simp
+  have hsq : (P - N) * (P - N) = P * P + N * N := by
+    calc
+      (P - N) * (P - N) = P * P - P * N - N * P + N * N := by
+        noncomm_ring
+      _ = P * P + N * N := by rw [hPN, hNP]; simp
+  have htrace : (B * B).trace = (P * P).trace + (N * N).trace := by
+    rw [hdec, hsq, Matrix.trace_add]
+  exact ⟨P, N, hP, hN, hdec, hPN, hNP, htrace⟩
+
+/-- Derived Jordan witnesses together with their pointwise trace domination. -/
+theorem symmetric_jordan_trace_support (B H : Matrix ι ι ℝ)
+    (hB : B.IsSymm) (hH : H.IsSymm) :
+    ∃ P N : Matrix ι ι ℝ,
+      P.PosSemidef ∧ N.PosSemidef ∧ B = P - N ∧
+      P * N = 0 ∧ N * P = 0 ∧
+      (B * B).trace = (P * P).trace + (N * N).trace ∧
+      ((P - N) * H * (P - N) * H).trace ≤
+        (P * H * P * H).trace + (N * H * N * H).trace := by
+  obtain ⟨P, N, hP, hN, hdec, hPN, hNP, htrace⟩ :=
+    symmetric_jordan_decomposition B hB
+  exact ⟨P, N, hP, hN, hdec, hPN, hNP, htrace,
+    jordan_trace_domination hP hN hH⟩
+
+end Jordan
 
 end FunctionalInequalities.Analysis

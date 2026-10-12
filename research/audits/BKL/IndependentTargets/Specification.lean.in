@@ -1,0 +1,88 @@
+import Mathlib.Analysis.Distribution.TemperateGrowth
+import Mathlib.Analysis.InnerProductSpace.Laplacian
+import Mathlib.Analysis.InnerProductSpace.PiL2
+import Mathlib.Analysis.Normed.Lp.MeasurableSpace
+import Mathlib.MeasureTheory.Measure.Haar.OfBasis
+import Mathlib.MeasureTheory.Measure.Tilted
+import Mathlib.MeasureTheory.Measure.ProbabilityMeasure
+import Mathlib.MeasureTheory.Function.L2Space
+import Mathlib.MeasureTheory.Measure.Lebesgue.EqHaar
+
+/-!
+Mathlib-only source specification for BKL arXiv:2610.05474v1, Theorem 3.1 and Proposition 7.1.
+No project definitions or proved target are imported. The log-concavity and Poincaré interfaces
+are explicit boundary parameters; the separate check specializes and snapshots them.
+The paper's normalized density is represented by a normalized potential law. Positive a and b
+are both retained here; the production API additionally allows dimension zero and arbitrary b
+in that dimension. No existence of a universal cumulant bound is asserted.
+-/
+
+noncomputable section
+open MeasureTheory
+open scoped RealInnerProductSpace ContDiff ENNReal
+
+namespace BKLIndependent
+
+abbrev Space (n : ℕ) := EuclideanSpace ℝ (Fin n)
+
+structure Regular (V : Space n → ℝ) (a b : ℝ) : Prop where
+  smooth : ContDiff ℝ ∞ V
+  growth : ∀ k : ℕ, ∃ (p : ℕ) (C : ℝ), ∀ x,
+    ‖iteratedFDeriv ℝ k V x‖ ≤ C * (1 + ‖x‖) ^ p
+  lower_pos : 0 < a
+  upper_pos : 0 < b
+  lower : ∀ x v, a * ‖v‖ ^ 2 ≤ bilinearIteratedFDerivTwo ℝ V x v v
+  upper : ∀ x v, bilinearIteratedFDerivTwo ℝ V x v v ≤ b * ‖v‖ ^ 2
+
+def RegularLaw (μ : ProbabilityMeasure (Space n)) : Prop :=
+  ∃ (V : Space n → ℝ) (a b : ℝ), Regular V a b ∧
+    (μ : Measure (Space n)) = (volume : Measure (Space n)).tilted (-V)
+
+def Isotropic (μ : ProbabilityMeasure (Space n)) : Prop :=
+  MemLp id 2 (μ : Measure (Space n)) ∧
+  (∫ x, x ∂(μ : Measure (Space n))) = 0 ∧
+  ∀ u v : Space n, ∫ x, ⟪u, x⟫ * ⟪v, x⟫ ∂(μ : Measure (Space n)) = ⟪u, v⟫
+
+/-- Equations (26)–(27), written directly as the normalized scalar integral. -/
+def Average (μ : Measure (Space n)) (f : Space n → ℝ) (z : Space n) : ℝ :=
+  (∫ x, Real.exp ⟪z, x⟫ * f x ∂μ) / ∫ x, Real.exp ⟪z, x⟫ ∂μ
+
+/-- Equation (28), an array in a Euclidean space; its norm is Hilbert–Schmidt. -/
+def Taylor (μ : Measure (Space n)) (f : Space n → ℝ) (d : ℕ) :
+    EuclideanSpace ℝ (Fin d → Fin n) :=
+  WithLp.toLp 2 fun I => (d.factorial : ℝ)⁻¹ *
+    iteratedFDeriv ℝ d (Average μ f) 0 (fun j => EuclideanSpace.basisFun (Fin n) ℝ (I j))
+
+/-- Section 4: no factorial normalization is applied to the cumulant. -/
+def Cumulant (μ : Measure (Space n)) (d : ℕ) :
+    ContinuousMultilinearMap ℝ (fun _ : Fin d => Space n) ℝ :=
+  iteratedFDeriv ℝ d (fun z => Real.log (∫ x, Real.exp ⟪z, x⟫ ∂μ)) 0
+
+/-- Equation (65) expanded, universally in the ambient dimension. -/
+def UniversalCumulant (logConcave : ∀ n, ProbabilityMeasure (Space n) → Prop)
+    (d : ℕ) (b : ℝ) : Prop :=
+  ∀ (m : ℕ) (ν : ProbabilityMeasure (Space m)), Isotropic ν → logConcave m ν →
+    ∀ u : Space m,
+    ∑ I : Fin d → Fin m, Cumulant (ν : Measure (Space m)) (d + 1)
+      (Fin.cons u fun k => EuclideanSpace.basisFun (Fin m) ℝ (I k)) ^ 2 ≤ b * ‖u‖ ^ 2
+
+def Theorem31 (logConcave : ∀ n, ProbabilityMeasure (Space n) → Prop)
+    (poincare : ∀ n, ProbabilityMeasure (Space n) → ℝ≥0∞) : Prop :=
+  ∃ C : ℝ, 0 < C ∧ ∀ (n : ℕ) (μ : ProbabilityMeasure (Space n)),
+    RegularLaw μ → logConcave n μ →
+    (∫ x, x ∂(μ : Measure (Space n))) = 0 →
+    (∀ v : Space n, ∫ x, ⟪v, x⟫ ^ 2 ∂(μ : Measure (Space n)) ≤ ‖v‖ ^ 2) →
+    ∀ R : ℝ, 1 ≤ R →
+    (∀ f : Space n → ℝ, MemLp f 2 (μ : Measure (Space n)) → ∀ d : ℕ, 1 ≤ d →
+      ‖Taylor (μ : Measure (Space n)) f d‖ ≤ R ^ d *
+        (eLpNorm f 2 (μ : Measure (Space n))).toReal) →
+    poincare n μ ≤ ENNReal.ofReal (C * R ^ 2)
+
+def Proposition71 (logConcave : ∀ n, ProbabilityMeasure (Space n) → Prop) : Prop :=
+  ∀ (d : ℕ), 2 ≤ d → ∀ b : ℝ, 0 < b → UniversalCumulant logConcave d b →
+    ∀ (n : ℕ) (μ : ProbabilityMeasure (Space n)), RegularLaw μ → logConcave n μ →
+      Isotropic μ → ∀ f : Space n → ℝ, MemLp f 2 (μ : Measure (Space n)) →
+      ‖Taylor (μ : Measure (Space n)) f d‖ ^ 2 ≤
+        2 * b / (d.factorial : ℝ) ^ 2 * (eLpNorm f 2 (μ : Measure (Space n))).toReal ^ 2
+
+end BKLIndependent

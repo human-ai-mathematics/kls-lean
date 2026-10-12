@@ -21,6 +21,32 @@ def staged(path):
     return subprocess.check_output(['git', 'show', ':' + path], cwd=ROOT)
 
 
+def load_inputs():
+    """Read one index's records and statement sources; never mix in working-tree metadata."""
+    paths = subprocess.check_output(['git', 'ls-files', '-z'], cwd=ROOT).decode().split('\0')
+    paths = [p for p in paths if p.startswith('formalization/blueprint/src/chapters/') and p.endswith('.tex')]
+    paths += ['research/a-series/ledger.yaml', 'research/tasks.json',
+              'formalization/blueprint/route-composition.yaml',
+              'research/upstream/2026-09-12-kls-research.json',
+              'research/progress/nodes.json', 'research/progress/portfolio.json',
+              'research/progress/literature.json', 'research/progress/README.md']
+    inputs = {p: staged(p) for p in sorted(paths)}
+    # Generated blocks are outputs, not canonical template inputs. Excluding their old
+    # bodies makes the input digest stable across regeneration and repairs tampering.
+    template = inputs['research/progress/README.md'].decode()
+    template = re.sub(r'(<!-- BEGIN GENERATED ([A-Z]+) -->).*?(<!-- END GENERATED \2 -->)',
+                      lambda m: m[1] + '\n' + m[3], template, flags=re.S)
+    inputs['research/progress/README.md'] = template.encode()
+    bibliography = json.loads(inputs['research/progress/literature.json'])
+    sources = set()
+    for paper in bibliography['papers']:
+        sources.update(t['source'] for t in paper.get('target_declarations', []))
+        for item in paper.get('lemma_map', {}).get('items', []):
+            sources.update(t['source'] for t in item['declarations'])
+    inputs.update({p: staged(p) for p in sorted(sources)})
+    return dict(sorted(inputs.items()))
+
+
 def cell(value):
     return str(value).replace('|', '&#124;').replace('\n', ' ').strip()
 
@@ -30,12 +56,7 @@ def link(path, label='Source'):
 
 
 def generate():
-    paths = subprocess.check_output(['git', 'ls-files'], cwd=ROOT, text=True).splitlines()
-    paths = [p for p in paths if p.startswith('formalization/blueprint/src/chapters/') and p.endswith('.tex')]
-    paths += ['research/a-series/ledger.yaml', 'research/tasks.json',
-              'formalization/blueprint/route-composition.yaml',
-              'research/upstream/2026-09-12-kls-research.json']
-    inputs = {p: staged(p) for p in sorted(paths)}
+    inputs = load_inputs()
     with tempfile.TemporaryDirectory(prefix='kls-progress-') as directory:
         root = Path(directory)
         for name, data in inputs.items():
@@ -68,18 +89,21 @@ def generate():
            'See the linked statement for full hypotheses and scope.', '',
            '| Node ID | Plain-English description | Upstream / mathematical record | Our Lean record | Certificate / statement |',
            '| --- | --- | --- | --- | --- |']
-    catalog = json.loads((ROOT / 'research/progress/nodes.json').read_text())
-    portfolio = json.loads((ROOT / 'research/progress/portfolio.json').read_text())
-    bibliography = json.loads((ROOT / 'research/progress/literature.json').read_text())
+    catalog = json.loads(inputs['research/progress/nodes.json'])
+    portfolio = json.loads(inputs['research/progress/portfolio.json'])
+    bibliography = json.loads(inputs['research/progress/literature.json'])
     records = views.resolve(catalog, nodes, claims)
     views.validate_routes(catalog, records, routes)
     tree = views.render_tree(catalog, records)
-    readme = views.render_readme((ROOT / 'research/progress/README.md').read_text(), tree, catalog, records, portfolio)
+    readme = views.render_readme(inputs['research/progress/README.md'].decode(), tree, catalog, records, portfolio)
+    read_source = lambda path: inputs[path].decode()
     literature_outputs, literature_overview = literature.render(
-        bibliography, records, nodes, certificates, read_source=lambda path: staged(path).decode())
+        bibliography, records, nodes, certificates, read_source=read_source)
+    readme = views.replace_block(readme, 'COVERAGE', literature.covered_sentence(bibliography, certificates))
+    readme = views.replace_block(readme, 'BKL', literature.render_proof_path(bibliography, certificates, read_source))
     readme = views.replace_block(readme, 'LITERATURE', literature_overview)
     readme = views.replace_block(readme, 'PRIORITIES', literature.render_priorities(bibliography))
-    readme = views.replace_block(readme, 'LEMMAS', literature.render_lemma_hub(literature_outputs, bibliography, lambda path: staged(path).decode()))
+    readme = views.replace_block(readme, 'LEMMAS', literature.render_lemma_hub(literature_outputs, bibliography, read_source))
     descriptions = {r['blueprint']: r['description'] for r in records.values() if 'blueprint' in r}
     if descriptions.keys() != nodes.keys():
         raise ValueError('Update nodes.json to match the Blueprint node inventory.')

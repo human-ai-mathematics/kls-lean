@@ -17,6 +17,7 @@ import time
 
 import atlas
 import statement_snapshot
+import vendor_lock
 
 STANDARD_AXIOMS = {"propext", "Classical.choice", "Quot.sound"}
 STATEMENT_CHECKS = {"Solutions.StatementChecks." + name for name in (
@@ -46,6 +47,36 @@ STATEMENT_CHECKS = {"Solutions.StatementChecks." + name for name in (
     'zero_dimension_affine_constant',
     'ambient_dirac_affine_constant',
 )}
+# Vendored third-party libraries (formalization/vendor/README.md): module root -> source directory.
+VENDOR_ROOTS = {
+    "LevyStochCalc": "formalization/vendor/LevyStochCalc",
+    "BrownianMotion": "formalization/vendor/BrownianMotion",
+    "MathFin": "formalization/vendor/MathFin",
+    "KolmogorovExtension4": "formalization/vendor/KolmogorovExtension4",
+}
+# Upstream BrownianMotion declarations that depend on `sorry` at the pinned revision. Each must
+# still depend on `sorryAx` and nothing else may: a new hole, a new user or an upstream fix fails.
+VENDOR_UPSTREAM_SORRY = {
+    "MeasureTheory.Martingale.cadlagModif_ae_eq",
+    "MeasureTheory.Martingale.isRealQuasimartingale",
+    "ProbabilityTheory.cadlagModif_ae_eq_of_continuousWithinAt_integral",
+    "ProbabilityTheory.rightContModif_ae_eq_of_integral_tendsto",
+    "ProbabilityTheory.uniformIntegrable_of_countable",
+}
+
+
+def vendor_module_path(name: str) -> Path | None:
+    """The module path of a vendored source file, or None outside the vendored roots."""
+    for module_root, directory in VENDOR_ROOTS.items():
+        if name.startswith(directory + "/"):
+            relative = Path(name).relative_to(directory)
+            if relative.parts[0] == module_root:
+                return relative.with_suffix("")
+    return None
+
+
+def is_vendor_module(module: str) -> bool:
+    return module.split(".")[0] in VENDOR_ROOTS
 
 
 def replay_sources(snapshot: dict) -> dict[str, str]:
@@ -58,6 +89,8 @@ def replay_sources(snapshot: dict) -> dict[str, str]:
             relative = Path(name).relative_to("formalization").with_suffix("")
         elif name.startswith(("solutions/", "examples/")):
             relative = Path(name).with_suffix("")
+        elif (vendored := vendor_module_path(name)) is not None:
+            relative = vendored
         else:
             continue
         module = ".".join(relative.parts)
@@ -96,15 +129,58 @@ def prepare_replay(root: Path, snapshot: dict, destination: Path) -> dict:
     return {"modules": list(sources), "compiled_sha256": hashes}
 
 
-def parse_axioms(output: str, expected: set[str]) -> tuple[dict[str, list[str]], list[str]]:
+# Text reports of `#print axioms`: anchored at a line start, the name is everything up to the
+# last quote on that line before the verdict, so primes, generated suffixes and spaces inside
+# `«…»` are kept; Lean may break the line between a long name and its verdict.
+TEXT_REPORT = re.compile(r"(?m)^'([^\r\n]+)'\s+(?:depends on axioms:\s*\[([^\]]*)\]|(does not depend on any axioms))")
+TEXT_MARKER = re.compile(r"depends on axioms:|does not depend on any axioms")
+# Structured reports emitted by the generated audits below: one JSON object per line.
+JSON_PREFIX = "AXIOM_REPORT "
+
+
+def axiom_reports(output: str, *, structured: bool = False) -> tuple[list[tuple[str, list[str]]], list[str]]:
+    """All axiom reports in `output`, failing closed on any report that cannot be parsed exactly.
+
+    Generated audits emit JSON lines (`structured`); research audits use `#print axioms`, whose
+    text is parsed only when every verdict marker belongs to a line-anchored report. A name
+    containing a line break, or any other unparsed report, is an error rather than being skipped.
+    """
+    reports, errors = [], []
+    if structured:
+        for line in output.splitlines():
+            if not line.startswith(JSON_PREFIX):
+                continue
+            try:
+                item = json.loads(line[len(JSON_PREFIX):])
+                name, axioms = item["name"], item["axioms"]
+                if not isinstance(name, str) or not isinstance(axioms, list) or not all(isinstance(a, str) for a in axioms):
+                    raise ValueError
+            except (ValueError, KeyError, TypeError):
+                errors.append(f"unparsed structured axiom report: {line[:200]}")
+                continue
+            reports.append((name, sorted(axioms)))
+        if TEXT_MARKER.search(output):
+            errors.append("unstructured axiom report in a structured audit")
+        return reports, errors
+    for match in TEXT_REPORT.finditer(output):
+        reports.append((match.group(1), sorted(filter(None, (s.strip() for s in (match.group(2) or "").split(","))))))
+    markers = len(TEXT_MARKER.findall(output))
+    if markers != len(reports):
+        errors.append(f"unparsed axiom report: {markers} verdicts, {len(reports)} parsed")
+    return reports, errors
+
+
+def reported_names(output: str, *, structured: bool = False) -> set[str]:
+    return {name for name, _ in axiom_reports(output, structured=structured)[0]}
+
+
+def parse_axioms(output: str, expected: set[str], *, structured: bool = False) -> tuple[dict[str, list[str]], list[str]]:
+    found, errors = axiom_reports(output, structured=structured)
     reports = {}
-    errors = []
-    pattern = re.compile(r"'([^']+)'\s+(?:depends on axioms:\s*\[([^\]]*)\]|(does not depend on any axioms))")
-    for match in pattern.finditer(output):
-        name = match.group(1)
+    for name, axioms in found:
         if name in reports:
             errors.append(f"duplicate axiom report: {name}")
-        reports[name] = sorted(filter(None, (s.strip() for s in (match.group(2) or "").split(","))))
+        reports[name] = axioms
     for name in sorted(expected - reports.keys()):
         errors.append(f"missing axiom report: {name}")
     for name, axioms in reports.items():
@@ -130,8 +206,9 @@ def axiom_audit_code(declarations: set[str]) -> str:
     unless (env.find? name).isSome do
       throwError "Axiom audit declaration not found: {{text}}"
     let axioms ← Lean.collectAxioms name
-    let rendered := String.intercalate ", " (axioms.toList.map Lean.Name.toString)
-    Lean.logInfo m!"'{{text}}' depends on axioms: [{{rendered}}]"
+    let report := Lean.Json.mkObj [("name", Lean.Json.str text),
+      ("axioms", Lean.toJson (axioms.toList.map Lean.Name.toString))]
+    Lean.logInfo m!"AXIOM_REPORT {{report.compress}}"
 '''
 
 
@@ -150,8 +227,7 @@ def check_research_audits(root: Path, snapshot: dict, run, *, lean: str, lean_pa
         output = run(f"research-audit-{index:03d}",
                      [lean, "-DwarningAsError=true", str(root / name)],
                      cwd=root / "formalization", lean_path=lean_path)
-        names = set(re.findall(r"'([^']+)' depends on axioms:", output))
-        _, errors = parse_axioms(output, names)
+        _, errors = parse_axioms(output, reported_names(output))
         if errors:
             raise RuntimeError(f"{name}: " + "; ".join(errors))
         return name
@@ -165,7 +241,7 @@ def undiscovered_lean_sources(root: Path, snapshot: dict) -> list[str]:
     live = {name for name, digest in snapshot["files"].items() if digest is not None}
     paths = [root / "formalization/FunctionalInequalities.lean"]
     for directory in ["formalization/FunctionalInequalities", "solutions", "examples",
-                      "research/audits"]:
+                      "research/audits", *VENDOR_ROOTS.values()]:
         paths.extend((root / directory).rglob("*.lean"))
     return sorted(str(p.relative_to(root)) for p in paths
                   if p.is_file() and str(p.relative_to(root)) not in live)
@@ -205,11 +281,57 @@ run_cmd do
     count := count + 1
     let axioms ← Lean.collectAxioms name
     let rendered := String.intercalate ", " (axioms.toList.map Lean.Name.toString)
-    Lean.logInfo m!"'{{name}}' depends on axioms: [{{rendered}}]"
+    let report := Lean.Json.mkObj [("name", Lean.Json.str name.toString),
+      ("axioms", Lean.toJson (axioms.toList.map Lean.Name.toString))]
+    Lean.logInfo m!"AXIOM_REPORT {{report.compress}}"
     unless axioms.all (allowed.contains ·) do
       throwError "{{name}}: unexpected axioms [{{rendered}}]"
   if count == 0 then throwError "No local declarations audited"
   Lean.logInfo m!"Audited {{count}} local declarations; KLS.kls remains open."
+'''
+
+
+def vendor_axiom_audit_code(modules: list[str], upstream_sorry: set[str] = VENDOR_UPSTREAM_SORRY) -> str:
+    """Audit every vendored declaration, isolating the exact listed upstream `sorry` ones."""
+    imports = "\n".join("import " + module for module in sorted(set(modules) | {"Lean"}))
+    names = ", ".join(json.dumps(module) for module in modules)
+    roots = ", ".join("`" + root for root in VENDOR_ROOTS)
+    listed = ", ".join(json.dumps(name) for name in sorted(upstream_sorry))
+    return imports + f'''
+run_cmd do
+  let env ← Lean.getEnv
+  let modules : Array String := #[{names}]
+  let roots : Array Lean.Name := #[{roots}]
+  let listed : Array Lean.Name := (#[{listed}] : Array String).map String.toName
+  let allowed : Array Lean.Name := #[`propext, `Classical.choice, `Quot.sound]
+  for name in listed do
+    unless (env.find? name).isSome do
+      throwError "Listed upstream sorry declaration not found: {{name}}"
+  let mut count : Nat := 0
+  let mut seenListed : Array Lean.Name := #[]
+  for (name, _) in env.constants.toList do
+    let vendored := match env.getModuleIdxFor? name with
+      | some idx => modules.contains env.header.moduleNames[idx.toNat]!.toString
+      | none => roots.any (·.isPrefixOf name)
+    if !vendored then continue
+    count := count + 1
+    let axioms ← Lean.collectAxioms name
+    let rendered := String.intercalate ", " (axioms.toList.map Lean.Name.toString)
+    if listed.contains name then
+      seenListed := seenListed.push name
+      unless axioms.contains `sorryAx && axioms.all (fun a => allowed.contains a || a == `sorryAx) do
+        throwError "{{name}}: listed upstream sorry declaration has axioms [{{rendered}}]"
+    else
+      unless axioms.all (allowed.contains ·) do
+        throwError "{{name}}: unexpected axioms [{{rendered}}]"
+  if count == 0 then throwError "No vendored declarations audited"
+  -- Each listed name must be an audited vendored declaration, not a same-named import.
+  for name in listed do
+    unless seenListed.contains name do
+      throwError "Listed upstream sorry declaration is not a vendored declaration: {{name}}"
+  unless seenListed.size == listed.size do
+    throwError "Listed upstream sorry declarations audited {{seenListed.size}} times, expected {{listed.size}}"
+  Lean.logInfo m!"Audited {{count}} vendored declarations; {{listed.size}} listed upstream sorry declarations are isolated."
 '''
 
 
@@ -222,7 +344,7 @@ def run_verification(root: Path, *, lean_only: bool = False) -> int:
     report = {"version": 1, "started_utc": started, "artifact": str(artifact / "report.json"),
               "snapshot": before, "scope": "lean-only" if lean_only else "full",
               "status": "failed", "gates": [], "errors": [],
-              "trust_scope": "Local source build and local-module kernel replay; pinned third-party compiled imports are trusted. No fresh replay, external checker or isolated rebuild."}
+              "trust_scope": "Local source build and local-module kernel replay, including the vendored libraries; pinned third-party compiled imports (Mathlib and its dependencies) are trusted. No fresh replay, external checker or isolated rebuild."}
 
     def run(name: str, command: list[str], *, cwd: Path = root, code: str | None = None,
             lean_path: str | None = None) -> str:
@@ -259,6 +381,10 @@ def run_verification(root: Path, *, lean_only: bool = False) -> int:
             derived, errors = atlas.build_atlas(root, snapshot=before)
             internal_gate("atlas-ledger-blueprint", errors, "Structural and task metadata checks")
             (output_dir / "atlas.json").write_text(json.dumps(derived, ensure_ascii=False, indent=2) + "\n")
+            # Offline provenance of the vendored libraries (formalization/vendor/README.md).
+            report["vendor_lock"], errors = vendor_lock.check_lock(root, set(VENDOR_ROOTS))
+            internal_gate("vendor-provenance-lock", errors,
+                          "Checked vendored files, port.patch and upstream hashes against vendor-lock.json")
             run("python-tests", [sys.executable, "-m", "unittest", "discover", "-s", "research/tests", "-p", "test_*.py"])
         run("lake-build", ["lake", "build"], cwd=root / "formalization")
         view = output_dir / "local-olean"
@@ -278,19 +404,30 @@ def run_verification(root: Path, *, lean_only: bool = False) -> int:
         report["checked_lean_path"] = paths
         report["research_audits"] = check_research_audits(
             root, before, run, lean=lean, lean_path=checked_path)
+        vendored = [m for m in replay["modules"] if is_vendor_module(m)]
+        code = vendor_axiom_audit_code(vendored)
+        (output_dir / "VendorAudit.lean").write_text(code)
+        output = run("vendor-axiom-audit", [lean, "--stdin"], cwd=formalization,
+                     code=code, lean_path=checked_path)
+        report["vendor"] = {"modules": len(vendored), "upstream_sorry": sorted(VENDOR_UPSTREAM_SORRY),
+                            "summary": output.strip().splitlines()[-1] if output.strip() else ""}
+        # Every project-local declaration, registered or not (public, private and generated), in
+        # both modes: kernel replay alone accepts `sorryAx`, and the vendor allowlist does not
+        # extend to local declarations. Only the exact open target `KLS.kls` is excluded.
+        code = library_axiom_audit_code([m for m in replay["modules"] if not is_vendor_module(m)])
+        (output_dir / "LocalDeclarationAudit.lean").write_text(code)
+        output = run("local-declaration-audit", [lean, "--stdin"], cwd=formalization,
+                     code=code, lean_path=checked_path)
+        local_reports, errors = parse_axioms(output, reported_names(output, structured=True),
+                                             structured=True)
+        if not local_reports:
+            errors.append("No local declaration axiom reports")
+        report["local_declarations_audited"] = len(local_reports)
+        report["excluded_open_targets"] = ["FunctionalInequalities.KLS.kls"]
+        if errors:
+            raise RuntimeError("\n".join(errors))
         if lean_only:
-            code = library_axiom_audit_code(replay["modules"])
-            (output_dir / "DeclarationAudit.lean").write_text(code)
-            output = run("declaration-audit", [lean, "--stdin"], cwd=formalization,
-                         code=code, lean_path=checked_path)
-            names = set(re.findall(r"'([^']+)' depends on axioms:", output))
-            reports, errors = parse_axioms(output, names)
-            if not reports:
-                errors.append("No local declaration axiom reports")
-            report["axioms"] = reports
-            report["excluded_open_targets"] = ["FunctionalInequalities.KLS.kls"]
-            if errors:
-                raise RuntimeError("\n".join(errors))
+            report["axioms"] = local_reports
         else:
             code = statement_snapshot.snapshot_code(root)
             (output_dir / "StatementSnapshot.lean").write_text(code)
@@ -316,11 +453,11 @@ def run_verification(root: Path, *, lean_only: bool = False) -> int:
             (output_dir / "DeclarationAudit.lean").write_text(code)
             output = run("declaration-audit", [lean, "--stdin"], cwd=root / "formalization",
                          code=code, lean_path=checked_path)
-            reports, errors = parse_axioms(output, declarations)
+            reports, errors = parse_axioms(output, declarations, structured=True)
             report["axioms"] = reports
             if errors:
                 raise RuntimeError("\n".join(errors))
-        output = run("leanchecker", [str(Path(toolchain) / "bin/leanchecker"), "--verbose", "FunctionalInequalities", "solutions", "examples"],
+        output = run("leanchecker", [str(Path(toolchain) / "bin/leanchecker"), "--verbose", "FunctionalInequalities", "solutions", "examples", *VENDOR_ROOTS],
                      cwd=formalization, lean_path=os.pathsep.join(paths))
         replayed = sorted(set(re.findall(r"(?m)^replaying (\S+)\s*$", output)))
         expected_modules = set(replay["modules"])

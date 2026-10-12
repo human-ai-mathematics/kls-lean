@@ -1,0 +1,146 @@
+import BKLIndependentSpecification
+import solutions.ThmBklTaylorCriterion
+import solutions.PropBklSuspension
+
+noncomputable section
+open MeasureTheory FunctionalInequalities
+open scoped RealInnerProductSpace
+
+namespace BKLIndependentChecks
+
+abbrev logConcave (n : ℕ) := KLS.LogConcave (E := BKLIndependent.Space n)
+abbrev poincare (n : ℕ) := Poincare.LocalSlope.Intrinsic.constant (E := BKLIndependent.Space n)
+
+/-- The standalone growth and Hessian clauses imply exactly the existing regular contract. -/
+theorem regular_adapter {n : ℕ} {V : BKLIndependent.Space n → ℝ} {a b : ℝ}
+    (h : BKLIndependent.Regular V a b) : KLS.RegularPotential V a b :=
+  ⟨⟨h.smooth, h.growth⟩, h.lower_pos, h.lower, h.upper⟩
+
+theorem isotropic_iff {n : ℕ} (μ : ProbabilityMeasure (BKLIndependent.Space n)) :
+    BKLIndependent.Isotropic μ ↔ KLS.Isotropic μ := by
+  constructor
+  · rintro ⟨h2, h0, hm⟩
+    exact KLS.isotropic_of_moments μ h2 h0 hm
+  · intro h
+    exact ⟨h.memLp_two, h.mean_zero, h.integral_inner_mul_inner⟩
+
+theorem regular_iff {n : ℕ} (V : BKLIndependent.Space n → ℝ) (a b : ℝ) :
+    BKLIndependent.Regular V a b ↔ KLS.RegularPotential V a b ∧ 0 < b := by
+  constructor
+  · intro h
+    exact ⟨regular_adapter h, h.upper_pos⟩
+  · rintro ⟨h, hb⟩
+    exact ⟨h.temperate.1, h.temperate.2, h.pos, hb, h.lower, h.upper⟩
+
+/-- Normalization adds a constant to the potential, preserving the whole regularity contract. -/
+theorem regular_add_constant {n : ℕ} {V : BKLIndependent.Space n → ℝ} {a b : ℝ}
+    (h : BKLIndependent.Regular V a b) (c : ℝ) :
+    BKLIndependent.Regular (fun x => V x + c) a b := by
+  have hg := ((regular_adapter h).temperate.add (Function.HasTemperateGrowth.const c))
+  have hF : fderiv ℝ (fun x => V x + c) = fderiv ℝ V := by
+    funext x
+    exact fderiv_add_const c
+  refine ⟨hg.1, hg.2, h.lower_pos, h.upper_pos, ?_, ?_⟩
+  · intro x v
+    simpa only [bilinearIteratedFDerivTwo, hF] using h.lower x v
+  · intro x v
+    simpa only [bilinearIteratedFDerivTwo, hF] using h.upper x v
+
+/-- The paper density exp(-W), with W = V + log Z, is exactly the production normalized law. -/
+theorem normalized_density {n : ℕ} {V : BKLIndependent.Space n → ℝ} {a b : ℝ}
+    (h : BKLIndependent.Regular V a b) :
+    (volume : Measure (BKLIndependent.Space n)).tilted (-V) =
+      volume.withDensity (fun x => ENNReal.ofReal (Real.exp
+        (-(V x + Real.log (∫ y, Real.exp (-V y) ∂(volume : Measure (BKLIndependent.Space n))))))) := by
+  have hZ := (regular_adapter h).integral_exp_neg_pos
+  change 0 < ∫ y, Real.exp (-V y) ∂(volume : Measure (BKLIndependent.Space n)) at hZ
+  unfold Measure.tilted
+  congr 1
+  funext x
+  simp only [Pi.neg_apply]
+  rw [neg_add, Real.exp_add]
+  rw [Real.exp_neg (Real.log (∫ y, Real.exp (-V y) ∂(volume : Measure (BKLIndependent.Space n)))),
+    Real.exp_log hZ, div_eq_mul_inv]
+
+/-- All totalized cases are included; the source hypotheses ensure probability tilts. -/
+theorem average_eq {n : ℕ} (μ : Measure (BKLIndependent.Space n)) (f : BKLIndependent.Space n → ℝ) :
+    BKLIndependent.Average μ f = Analysis.BakryEmery.tiltAverage μ f := by
+  funext z
+  unfold BKLIndependent.Average Analysis.BakryEmery.tiltAverage Analysis.BakryEmery.expTilt
+  rw [integral_tilted]
+  simp only [smul_eq_mul]
+  calc
+    (∫ x, Real.exp ⟪z, x⟫ * f x ∂μ) / (∫ x, Real.exp ⟪z, x⟫ ∂μ) =
+        ∫ x, (Real.exp ⟪z, x⟫ * f x) * (∫ y, Real.exp ⟪z, y⟫ ∂μ)⁻¹ ∂μ := by
+      rw [integral_mul_const, div_eq_mul_inv]
+    _ = ∫ x, (Real.exp ⟪z, x⟫ / (∫ y, Real.exp ⟪z, y⟫ ∂μ)) * f x ∂μ := by
+      congr 1
+      funext x
+      ring
+
+theorem taylor_eq {n : ℕ} (μ : Measure (BKLIndependent.Space n)) (f : BKLIndependent.Space n → ℝ)
+    (d : ℕ) : BKLIndependent.Taylor μ f d =
+      Analysis.Tensor.coordTensor (EuclideanSpace.basisFun (Fin n) ℝ)
+        (Analysis.BakryEmery.taylorTensor μ f d) := by
+  simp only [BKLIndependent.Taylor, Analysis.Tensor.coordTensor,
+    Analysis.BakryEmery.taylorTensor, average_eq, smul_apply, smul_eq_mul]
+
+/-- Explicit sum-of-squares check: the norm is Hilbert–Schmidt, not the multilinear operator norm. -/
+theorem taylor_norm_sq {n : ℕ} (μ : Measure (BKLIndependent.Space n)) (f : BKLIndependent.Space n → ℝ)
+    (d : ℕ) : ‖BKLIndependent.Taylor μ f d‖ ^ 2 =
+      ∑ I : Fin d → Fin n, ((d.factorial : ℝ)⁻¹ * iteratedFDeriv ℝ d
+        (BKLIndependent.Average μ f) 0 (fun j => EuclideanSpace.basisFun (Fin n) ℝ (I j))) ^ 2 := by
+  exact EuclideanSpace.real_norm_sq_eq _
+
+theorem cumulant_eq {n : ℕ} (μ : Measure (BKLIndependent.Space n)) (d : ℕ) :
+    BKLIndependent.Cumulant μ d = Analysis.BakryEmery.cumulant μ d := rfl
+
+theorem universalCumulant_iff (d : ℕ) (b : ℝ) :
+    BKLIndependent.UniversalCumulant logConcave d b ↔ KLS.LogConcave.Suspension.CumulantBound d b := by
+  constructor
+  · intro h m ν hi hl
+    simpa only [cumulant_eq] using h m ν ((isotropic_iff ν).mpr hi) hl
+  · intro h m ν hi hl
+    simpa only [cumulant_eq] using h m ν ((isotropic_iff ν).mp hi) hl
+
+/-- Link the existing proof to the independently written target; retain every source premise. -/
+theorem theorem31 : BKLIndependent.Theorem31 logConcave poincare := by
+  obtain ⟨C, hC, h⟩ := Solutions.ThmBklTaylorCriterion.certificate
+  refine ⟨C, hC, ?_⟩
+  intro n μ hreg _hl hmean hcov R hR htaylor
+  obtain ⟨V, a, b, hV, hμ⟩ := hreg
+  let hprod := regular_adapter hV
+  have hLaw : μ = hprod.law := by
+    apply Subtype.ext
+    exact hμ
+  subst μ
+  apply h n V a b hprod hmean hcov R hR
+  intro f hf d hd
+  simpa only [taylor_eq] using htaylor f hf d hd
+
+theorem proposition71 : BKLIndependent.Proposition71 logConcave := by
+  intro d hd b hb hcb n μ hreg _hl hi f hf
+  obtain ⟨V, a, b', hV, hμ⟩ := hreg
+  let hprod := regular_adapter hV
+  have hLaw : μ = hprod.law := by
+    apply Subtype.ext
+    exact hμ
+  subst μ
+  have h := Solutions.PropBklSuspension.certificate hd hb ((universalCumulant_iff d b).mp hcb)
+    V hprod ((isotropic_iff hprod.law).mp hi) f hf
+  simpa only [taylor_eq] using h
+
+#print axioms BKLIndependentChecks.regular_adapter
+#print axioms BKLIndependentChecks.regular_iff
+#print axioms BKLIndependentChecks.regular_add_constant
+#print axioms BKLIndependentChecks.normalized_density
+#print axioms BKLIndependentChecks.isotropic_iff
+#print axioms BKLIndependentChecks.average_eq
+#print axioms BKLIndependentChecks.taylor_eq
+#print axioms BKLIndependentChecks.taylor_norm_sq
+#print axioms BKLIndependentChecks.cumulant_eq
+#print axioms BKLIndependentChecks.universalCumulant_iff
+#print axioms BKLIndependentChecks.theorem31
+#print axioms BKLIndependentChecks.proposition71
+
+end BKLIndependentChecks

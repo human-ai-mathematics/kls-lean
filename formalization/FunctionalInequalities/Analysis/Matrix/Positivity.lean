@@ -19,6 +19,18 @@ is stable under Frobenius-small perturbations, and for floors `a`, `b` and symme
 `S(S−T) + (S−T)T = S² − T²` (no commutation) gives `‖S − T‖_F ≤ ‖S² − T²‖_F / (a + b)`. Used for the local
 Lipschitz property of the principal inverse square root (`Analysis/PrincipalInverseSqrt.lean`). Proof bodies:
 Codex q_batch bundle `Principal-Root-Regularity` (independently accepted); statements and placement: Claude.
+
+Inverse-quadratic Young inequality (`inverse_quadratic_young`): for a positive definite real matrix `H` over any finite
+index type (the empty one included), `2 (v ⬝ᵥ w) ≤ v ⬝ᵥ H⁻¹ v + w ⬝ᵥ H w`, from the nonnegative quadratic form of
+`w − H⁻¹ v`; no commutation or identity restriction. Support for Letwin, arXiv:2607.24164v1, Lemma A.6. Proof body:
+strong-API candidate (gpt-6-astra, `api-finite-energy-bl-compiler-v6`, cadc3b6c…), verbatim; placement: Claude.
+
+Trace pairings of positive semidefinite matrices (`sum_entry_mul_nonneg`, `trace_mul_nonneg`): for real positive
+semidefinite `A`, `C` over any finite index type (the empty one included), `Σ_ij A_ij C_ij ≥ 0` (through the Kronecker
+product) and `tr(AC) ≥ 0`; the product itself is not claimed positive semidefinite. Trace-weighted Gram matrices
+(`traceGram_posSemidef`): for positive semidefinite `B` and symmetric `T a`, the matrix `(tr(B T_a B T_b))_{ab}` is positive
+semidefinite. Supports for Letwin, arXiv:2607.24164v1, (2.10). Proof bodies: strong-API candidate (gpt-6-astra,
+`api-trace-monge-ampere-210-v3`, de34b430…), verbatim, in the candidate's variable context; placement: Claude.
 -/
 
 noncomputable section
@@ -261,5 +273,179 @@ theorem root_difference_le_div (S T : Matrix ι ι ℝ) {a b : ℝ}
   simpa only [mul_comm] using root_difference_bound S T hS hT hSym
 
 end Sylvester
+
+end FunctionalInequalities.Analysis
+
+namespace FunctionalInequalities.Analysis
+
+section InverseYoung
+
+open scoped BigOperators Matrix
+
+variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+  [CompleteSpace E] [FiniteDimensional ℝ E]
+  [MeasurableSpace E] [BorelSpace E]
+
+/-- The inverse-quadratic Young inequality for a finite real positive-definite matrix. -/
+theorem inverse_quadratic_young
+    {ι : Type*} [Fintype ι] [DecidableEq ι]
+    (H : Matrix ι ι ℝ) (hH : H.PosDef) (v w : ι → ℝ) :
+    2 * (v ⬝ᵥ w) ≤ v ⬝ᵥ (H⁻¹ *ᵥ v) + w ⬝ᵥ (H *ᵥ w) := by
+  classical
+  have hdet : IsUnit H.det := (Matrix.isUnit_iff_isUnit_det H).mp hH.isUnit
+  have hmul : H * H⁻¹ = 1 := Matrix.mul_nonsing_inv H hdet
+  have hcancel : H *ᵥ (H⁻¹ *ᵥ v) = v := by
+    rw [Matrix.mulVec_mulVec, hmul]
+    simp
+  have hsymm : H.IsSymm := Matrix.isHermitian_iff_isSymm.mp hH.isHermitian
+  have htranspose : Hᵀ = H := hsymm
+  have hcross₁ : w ⬝ᵥ (H *ᵥ (H⁻¹ *ᵥ v)) = v ⬝ᵥ w := by
+    rw [hcancel]
+    exact dotProduct_comm _ _
+  have hcross₂ : (H⁻¹ *ᵥ v) ⬝ᵥ (H *ᵥ w) = v ⬝ᵥ w := by
+    calc
+      (H⁻¹ *ᵥ v) ⬝ᵥ (H *ᵥ w) =
+          (H⁻¹ *ᵥ v) ⬝ᵥ (Hᵀ *ᵥ w) := by rw [htranspose]
+      _ = w ⬝ᵥ (H *ᵥ (H⁻¹ *ᵥ v)) :=
+        Matrix.dotProduct_transpose_mulVec H (H⁻¹ *ᵥ v) w
+      _ = v ⬝ᵥ w := hcross₁
+  have hlast : (H⁻¹ *ᵥ v) ⬝ᵥ (H *ᵥ (H⁻¹ *ᵥ v)) =
+      v ⬝ᵥ (H⁻¹ *ᵥ v) := by
+    rw [hcancel]
+    exact dotProduct_comm _ _
+  have hquad :
+      (w - H⁻¹ *ᵥ v) ⬝ᵥ (H *ᵥ (w - H⁻¹ *ᵥ v)) =
+        w ⬝ᵥ (H *ᵥ w) - 2 * (v ⬝ᵥ w) + v ⬝ᵥ (H⁻¹ *ᵥ v) := by
+    calc
+      (w - H⁻¹ *ᵥ v) ⬝ᵥ (H *ᵥ (w - H⁻¹ *ᵥ v)) =
+          (w ⬝ᵥ (H *ᵥ w) - w ⬝ᵥ (H *ᵥ (H⁻¹ *ᵥ v))) -
+            ((H⁻¹ *ᵥ v) ⬝ᵥ (H *ᵥ w) -
+              (H⁻¹ *ᵥ v) ⬝ᵥ (H *ᵥ (H⁻¹ *ᵥ v))) := by
+        simp only [Matrix.mulVec_sub, sub_dotProduct, dotProduct_sub]
+        ring
+      _ = w ⬝ᵥ (H *ᵥ w) - 2 * (v ⬝ᵥ w) + v ⬝ᵥ (H⁻¹ *ᵥ v) := by
+        rw [hcross₁, hcross₂, hlast]
+        ring
+  have hnonneg : 0 ≤
+      (w - H⁻¹ *ᵥ v) ⬝ᵥ (H *ᵥ (w - H⁻¹ *ᵥ v)) := by
+    simpa using hH.posSemidef.dotProduct_mulVec_nonneg (w - H⁻¹ *ᵥ v)
+  nlinarith [hquad, hnonneg]
+
+end InverseYoung
+
+end FunctionalInequalities.Analysis
+
+namespace FunctionalInequalities.Analysis
+
+section TraceGram
+
+open scoped BigOperators Kronecker
+open Matrix
+
+variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+  [FiniteDimensional ℝ E]
+
+/-- Frobenius pairing of two real PSD matrices, proved using their Kronecker product.
+No nonempty-index assumption is needed. -/
+theorem sum_entry_mul_nonneg {ι : Type*} [Fintype ι]
+    {A C : Matrix ι ι ℝ} (hA : A.PosSemidef) (hC : C.PosSemidef) :
+    0 ≤ ∑ i, ∑ j, A i j * C i j := by
+  classical
+  have h := (hA.kronecker hC).dotProduct_mulVec_nonneg
+    (fun p : ι × ι => if p.1 = p.2 then (1 : ℝ) else 0)
+  change 0 ≤ ∑ p : ι × ι,
+    (if p.1 = p.2 then (1 : ℝ) else 0) *
+      (∑ q : ι × ι, (A p.1 q.1 * C p.2 q.2) *
+        (if q.1 = q.2 then (1 : ℝ) else 0)) at h
+  simpa [Fintype.sum_prod_type, mul_ite, ite_mul] using h
+
+/-- The trace of a product of real PSD matrices is nonnegative; the product itself
+is not asserted to be PSD. -/
+theorem trace_mul_nonneg {ι : Type*} [Fintype ι]
+    {A C : Matrix ι ι ℝ} (hA : A.PosSemidef) (hC : C.PosSemidef) :
+    0 ≤ (A * C).trace := by
+  classical
+  have hs (i j : ι) : C j i = C i j := by
+    have h := congrArg (fun M : Matrix ι ι ℝ => M i j) hC.isHermitian
+    simpa only [Matrix.conjTranspose_apply, star_trivial] using h
+  calc
+    0 ≤ ∑ i, ∑ j, A i j * C i j := sum_entry_mul_nonneg hA hC
+    _ = (A * C).trace := by
+      change (∑ i, ∑ j, A i j * C i j) =
+        ∑ i, ∑ j, A i j * C j i
+      apply Finset.sum_congr rfl
+      intro i _
+      apply Finset.sum_congr rfl
+      intro j _
+      rw [hs i j]
+
+/-- The matrix indexed by derivative directions with entries `tr(B Tᵤ B Tᵥ)`
+is a genuine PSD weighted Gram matrix. -/
+theorem traceGram_posSemidef {ι κ : Type*} [Fintype ι] [Fintype κ]
+    (B : Matrix ι ι ℝ) (hB : B.PosSemidef)
+    (T : κ → Matrix ι ι ℝ) (hT : ∀ a, (T a).IsSymm) :
+    (Matrix.of fun a b => (B * T a * B * T b).trace).PosSemidef := by
+  classical
+  have hb (i j : ι) : B i j = B j i := by
+    have h := congrArg (fun M : Matrix ι ι ℝ => M j i) hB.isHermitian
+    simpa only [Matrix.conjTranspose_apply, star_trivial] using h
+  have ht (a : κ) (i j : ι) : T a j i = T a i j :=
+    congrFun (congrFun (hT a) i) j
+  have he (u v : κ) :
+      (B * T u * B * T v).trace =
+        ∑ p, ∑ q, ∑ r, ∑ s,
+          B p r * B q s * T u p q * T v r s := by
+    calc
+      _ = ∑ r, ∑ s, ∑ q, ∑ p,
+          B r p * T u p q * B q s * T v s r := by
+        simp only [Matrix.trace, Matrix.diag, Matrix.mul_apply,
+          Finset.sum_mul]
+      _ = ∑ r, ∑ p, ∑ q, ∑ s,
+          B r p * T u p q * B q s * T v s r := by
+        apply Finset.sum_congr rfl
+        intro r _
+        calc
+          (∑ s, ∑ q, ∑ p,
+              B r p * T u p q * B q s * T v s r) =
+              ∑ s, ∑ p, ∑ q,
+                B r p * T u p q * B q s * T v s r := by
+            apply Finset.sum_congr rfl
+            intro s _
+            rw [Finset.sum_comm]
+          _ = ∑ p, ∑ s, ∑ q,
+              B r p * T u p q * B q s * T v s r := by
+            rw [Finset.sum_comm]
+          _ = ∑ p, ∑ q, ∑ s,
+              B r p * T u p q * B q s * T v s r := by
+            apply Finset.sum_congr rfl
+            intro p _
+            rw [Finset.sum_comm]
+      _ = ∑ p, ∑ q, ∑ r, ∑ s,
+          B r p * T u p q * B q s * T v s r := by
+        rw [Finset.sum_comm]
+        apply Finset.sum_congr rfl
+        intro p _
+        rw [Finset.sum_comm]
+      _ = _ := by
+        apply Finset.sum_congr rfl
+        intro p _
+        apply Finset.sum_congr rfl
+        intro q _
+        apply Finset.sum_congr rfl
+        intro r _
+        apply Finset.sum_congr rfl
+        intro s _
+        rw [hb r p, ht v r s]
+        ring
+  have hmat :
+      (Matrix.of fun u v => (B * T u * B * T v).trace) =
+        (Matrix.of fun u v => ∑ p, ∑ q, ∑ r, ∑ s,
+          B p r * B q s * T u p q * T v r s) := by
+    ext u v
+    exact he u v
+  rw [hmat]
+  exact posSemidef_weightedGram B hB T
+
+end TraceGram
 
 end FunctionalInequalities.Analysis
