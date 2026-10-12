@@ -296,6 +296,13 @@ import FunctionalInequalities.KLS.BKL.Localization.Standardization
 import FunctionalInequalities.KLS.BKL.Localization.Coefficients
 import FunctionalInequalities.KLS.BKL.Localization.Energy
 import FunctionalInequalities.Probability.Diffusion.Existence
+import FunctionalInequalities.Analysis.BakryEmery.Cumulant.Truncation
+import FunctionalInequalities.KLS.LogConcave.HminusOne
+import FunctionalInequalities.Analysis.Matrix.Piola
+import FunctionalInequalities.Analysis.Tensor.SlotAction
+import FunctionalInequalities.KLS.CEK.PartitionVariation
+import FunctionalInequalities.Analysis.Convex.SecondDifference
+import FunctionalInequalities.Analysis.WeakDerivative
 
 /-!
 # Functional inequalities

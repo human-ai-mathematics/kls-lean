@@ -125,6 +125,11 @@ dimension 0; basis mismatch between the Stein API (`Fin n`) and the BakryEmery A
   integrability (Analysis/WeakDerivative.lean), the set-wise Alexandrov identity, and touching-test
   viscosity statements. New infrastructure only; no existing definition or target statement changes.
   Open for owner review.
+- 2026-10-13: a second Fable sub-controller owns the analytic core of stream S (Lemma 5.1 as a generator
+  inequality, the Eldan cutoff process and its Dynkin identity, Lyapunov moments, the cutoff limit, Lemma 5.2 and
+  the induction), under the same boundaries (no canonical writes; log in
+  `build/reviews/2026-10-12-bkl-claude-goal/routes/s-core-subcontroller-log.md`). Tasks that exhaust the GPT loop
+  are given to Fable workers under the same acceptance checks (`tools/accept_manual.py`).
 
 ## Not claimed
 

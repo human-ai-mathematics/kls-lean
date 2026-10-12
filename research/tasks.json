@@ -663,7 +663,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/Mollification.lean",
-            "sha256": "dfc9d86d3c7d4188af3e339ade7129e380038b5eb74a644281bf73ac819123a6"
+            "sha256": "aa52ed15831f18537fce153e3f13244d78365791df08d3204bb68521a420aaca"
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/InteriorRegularity.lean",
