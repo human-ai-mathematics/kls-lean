@@ -4,7 +4,9 @@ import Mathlib.Analysis.Calculus.FDeriv.Symmetric
 import Mathlib.Analysis.Normed.Module.FiniteDimension
 import Mathlib.Analysis.Calculus.Rademacher
 import Mathlib.Analysis.Convex.Continuous
+import Mathlib.Analysis.Convex.Measure
 import Mathlib.Analysis.InnerProductSpace.Dual
+import FunctionalInequalities.Analysis.Convex.LegendreVariation.Attainment
 
 /-!
 # Subgradients of convex functions
@@ -615,3 +617,682 @@ theorem ConvexOn.ae_differentiableAt_of_isOpen {E : Type*} [NormedAddCommGroup E
 end LT14A0ConvexAeDifferentiable
 
 end FunctionalInequalities.Analysis
+
+section LT5CUniqueSubgradientDifferentiable
+
+open scoped RealInnerProductSpace
+
+/-! A unique subgradient gives differentiability (task L-T5c). -/
+
+namespace FunctionalInequalities.Analysis
+
+private lemma convex_line_slope_mono {E : Type*} [NormedAddCommGroup E]
+    [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] {u : E → ℝ}
+    (hconv : ConvexOn ℝ Set.univ u) (x v : E) {a b : ℝ}
+    (ha : 0 < a) (hab : a ≤ b) :
+    (u (x + a • v) - u x) / a ≤ (u (x + b • v) - u x) / b := by
+  have hline : ConvexOn ℝ Set.univ (fun t : ℝ => u (t • v + x)) := by
+    simpa only [Set.preimage_univ, Function.comp_def,
+      AffineMap.lineMap_apply_module', add_sub_cancel_left] using
+      hconv.comp_affineMap (AffineMap.lineMap x (x + v))
+  have hb : 0 < b := lt_of_lt_of_le ha hab
+  have h :=
+    hline.slope_mono (show (0 : ℝ) ∈ Set.univ by simp)
+      (show a ∈ Set.univ \ {0} by simp [ne_of_gt ha])
+      (show b ∈ Set.univ \ {0} by simp [ne_of_gt hb]) hab
+  simpa only [slope_def_field, zero_smul, add_zero, sub_zero, add_comm] using h
+
+private lemma hasFDerivAt_of_convexOn_of_unique_subgradient
+    {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+    [FiniteDimensional ℝ E] {u : E → ℝ}
+    (hconv : ConvexOn ℝ Set.univ u) (x g : E)
+    (hg : ∀ y, u x + ⟪g, y - x⟫ ≤ u y)
+    (huniq : ∀ q, (∀ y, u x + ⟪q, y - x⟫ ≤ u y) → q = g) :
+    HasFDerivAt u ((InnerProductSpace.toDual ℝ E) g) x := by
+  classical
+  have hu : Continuous u :=
+    continuousOn_univ.mp (hconv.continuousOn isOpen_univ)
+  let R : E → ℝ := fun h => u (x + h) - u x - ⟪g, h⟫
+  have hR_nonneg : ∀ h, 0 ≤ R h := by
+    intro h
+    have hh := hg (x + h)
+    have hh' : u x + ⟪g, h⟫ ≤ u (x + h) := by
+      simpa only [add_sub_cancel_left] using hh
+    dsimp [R]
+    linarith
+  have hF_cont (t : ℝ) :
+      Continuous (fun v : E =>
+        (u (x + t • v) - u x) / t - ⟪g, v⟫) := by
+    have harg : Continuous (fun v : E => x + t • v) :=
+      continuous_const.add (continuous_const.smul continuous_id)
+    have hinner : Continuous (fun v : E => ⟪g, v⟫) :=
+      continuous_const.inner continuous_id
+    exact (((hu.comp harg).sub continuous_const).div_const t).sub hinner
+  have hlittle :
+      R =o[nhds 0] fun h : E => h := by
+    rw [Asymptotics.isLittleO_iff]
+    intro ε hε
+    by_cases hS : (Metric.sphere (0 : E) 1).Nonempty
+    · let S : Set E := Metric.sphere (0 : E) 1
+      have hSc : IsCompact S := by
+        exact isCompact_sphere (0 : E) 1
+      let I := {v : E // v ∈ S}
+      let H : ∀ v : I, ∃ q : E,
+          (∀ y, u x + ⟪q, y - x⟫ ≤ u y) ∧
+            ∀ ε > 0, ∃ t > 0,
+              (u (x + t • (v : E)) - u x) / t ≤ ⟪q, (v : E)⟫ + ε :=
+        fun v => exists_subgradient_slope_le_inner_add hconv x (v : E)
+      let T : I → ℝ := fun v =>
+        Classical.choose ((H v).choose_spec.2 (ε / 2) (by linarith))
+      have hT_pos (v : I) : 0 < T v := by
+        exact (Classical.choose_spec
+          ((H v).choose_spec.2 (ε / 2) (by linarith))).1
+      have hT_bound (v : I) :
+          (u (x + T v • (v : E)) - u x) / T v -
+              ⟪g, v⟫ ≤ ε / 2 := by
+        have hqg : (H v).choose = g :=
+          huniq _ (H v).choose_spec.1
+        have hchosen :=
+          Classical.choose_spec ((H v).choose_spec.2 (ε / 2) (by linarith))
+        have hchosen' :
+            (u (x + T v • (v : E)) - u x) / T v ≤
+              ⟪g, v⟫ + ε / 2 := by
+          simpa only [T, hqg] using hchosen.2
+        linarith
+      let U : I → Set E := fun v =>
+        {w | (u (x + T v • w) - u x) / T v - ⟪g, w⟫ < ε}
+      have hU_open : ∀ v : I, IsOpen (U v) := by
+        intro v
+        exact isOpen_Iio.preimage (hF_cont (T v))
+      have hU_cover : S ⊆ ⋃ v : I, U v := by
+        intro v hv
+        let w : I := ⟨v, hv⟩
+        have hw : (w : E) ∈ U w := by
+          change (u (x + T w • (w : E)) - u x) / T w -
+              ⟪g, w⟫ < ε
+          exact (hT_bound w).trans_lt (by linarith)
+        exact Set.mem_iUnion.2 ⟨w, hw⟩
+      obtain ⟨K, hK⟩ := hSc.elim_finite_subcover U hU_open hU_cover
+      have hK_nonempty : K.Nonempty := by
+        obtain ⟨v, hv⟩ := hS
+        have hv' := hK hv
+        rcases Set.mem_iUnion.mp hv' with ⟨w, hv'⟩
+        rcases Set.mem_iUnion.mp hv' with ⟨hwK, _⟩
+        exact ⟨w, hwK⟩
+      obtain ⟨v₀, hv₀⟩ := hK_nonempty
+      let K' : Finset ℝ := K.image T
+      have hK'_nonempty : K'.Nonempty := by
+        refine ⟨T v₀, ?_⟩
+        exact Finset.mem_image.mpr ⟨v₀, hv₀, rfl⟩
+      let δ : ℝ := K'.min' hK'_nonempty
+      have hδ : 0 < δ := by
+        have hδmem : δ ∈ K' := by
+          dsimp [δ]
+          exact Finset.min'_mem K' hK'_nonempty
+        rcases Finset.mem_image.mp hδmem with ⟨v, _, heq⟩
+        rw [← heq]
+        exact hT_pos v
+      have hδ_le (v : I) (hv : v ∈ K) : δ ≤ T v := by
+        have hmem : T v ∈ K' := Finset.mem_image.mpr ⟨v, hv, rfl⟩
+        change K'.min' hK'_nonempty ≤ T v
+        exact Finset.min'_le K' (T v) hmem
+      have hsmall :
+          ∀ᶠ h : E in nhds 0, ‖h‖ < δ := by
+        exact Metric.eventually_nhds_iff.2 ⟨δ, hδ, by
+          intro h hh
+          simpa [dist_zero_right] using hh⟩
+      filter_upwards [hsmall] with h hh
+      by_cases hz : h = 0
+      · simp [R, hz]
+      · let s : ℝ := ‖h‖
+        let w : E := s⁻¹ • h
+        have hs : 0 < s := by
+          exact norm_pos_iff.mpr hz
+        have hw : ‖w‖ = 1 := by
+          calc
+            ‖w‖ = ‖s⁻¹‖ * ‖h‖ := norm_smul _ _
+            _ = s⁻¹ * ‖h‖ := by
+              rw [Real.norm_of_nonneg (inv_nonneg.mpr hs.le)]
+            _ = 1 := inv_mul_cancel₀ (ne_of_gt hs)
+        have hwS : w ∈ S := by
+          rw [Metric.mem_sphere]
+          simpa [dist_zero_right] using hw
+        have hwI : ∃ v : I, v ∈ K ∧ (w : E) ∈ U v := by
+          have hcover := hK hwS
+          rcases Set.mem_iUnion.mp hcover with ⟨v, hcover⟩
+          rcases Set.mem_iUnion.mp hcover with ⟨hvK, hwv⟩
+          exact ⟨v, hvK, hwv⟩
+        obtain ⟨v, hvK, hwv⟩ := hwI
+        have hsδ : s < δ := by
+          exact hh
+        have hst : s ≤ T v := by
+          exact hsδ.le.trans (hδ_le v hvK)
+        have hmono :
+            (u (x + s • w) - u x) / s ≤
+              (u (x + T v • w) - u x) / T v := by
+          exact convex_line_slope_mono hconv x w hs hst
+        have hU := hwv
+        change (u (x + T v • w) - u x) / T v -
+            ⟪g, w⟫ < ε at hU
+        have hmono' :
+            u (x + s • w) - u x ≤
+              ((u (x + T v • w) - u x) / T v) * s := by
+          exact (div_le_iff₀ hs).mp hmono
+        have hupper :
+            u (x + s • w) - u x - ⟪g, s • w⟫ ≤ ε * s := by
+          have hscale : ⟪g, s • w⟫ = s * ⟪g, w⟫ := by
+            simp [real_inner_smul_right]
+          rw [hscale]
+          calc
+            u (x + s • w) - u x - s * ⟪g, w⟫ ≤
+                ((u (x + T v • w) - u x) / T v) * s -
+                  s * ⟪g, w⟫ := by
+                    exact sub_le_sub_right hmono' _
+            _ = ((u (x + T v • w) - u x) / T v -
+                  ⟪g, w⟫) * s := by ring
+            _ ≤ ε * s := by
+              exact mul_le_mul_of_nonneg_right (by linarith) hs.le
+        have heq : s • w = h := by
+          dsimp [w, s]
+          rw [smul_smul, mul_inv_cancel₀ (ne_of_gt hs), one_smul]
+        have hnorm : ‖s • w‖ = s := by
+          rw [norm_smul, Real.norm_of_nonneg hs.le, hw, mul_one]
+        have hupper' :
+            R h ≤ ε * ‖h‖ := by
+          rw [← heq]
+          change u (x + s • w) - u x - ⟪g, s • w⟫ ≤ ε * ‖s • w‖
+          rw [hnorm]
+          exact hupper
+        rw [Real.norm_of_nonneg (hR_nonneg h)]
+        exact hupper'
+    · have hzero : ∀ v : E, v = 0 := by
+        intro v
+        by_contra hv
+        let w : E := ‖v‖⁻¹ • v
+        have hw : ‖w‖ = 1 := by
+          calc
+            ‖w‖ = ‖‖v‖⁻¹‖ * ‖v‖ := norm_smul _ _
+            _ = ‖v‖⁻¹ * ‖v‖ := by
+              rw [Real.norm_of_nonneg (inv_nonneg.mpr (norm_nonneg v))]
+            _ = 1 := inv_mul_cancel₀ (ne_of_gt (norm_pos_iff.mpr hv))
+        exact hS ⟨w, by
+          rw [Metric.mem_sphere]
+          simpa [dist_zero_right] using hw⟩
+      exact Filter.Eventually.of_forall (fun h => by
+        simp [R, hzero h])
+  rw [hasFDerivAt_iff_isLittleO_nhds_zero]
+  simpa only [InnerProductSpace.toDual_apply_apply, R] using hlittle
+
+/-- **A convex function with a unique subgradient at every point is differentiable** (weak Letwin
+route, step N7 "singleton subdifferential ⇒ C¹", differentiability half): on a finite-dimensional
+inner product space, if the subgradient inequality `u x + ⟪g, y - x⟫ ≤ u y` (all `y`) is satisfied by
+exactly one `g` at every `x`, then `u` is differentiable (with that `g` as gradient; `C¹` then follows
+from `contDiff_one_of_convexOn_of_differentiable`). -/
+theorem differentiable_of_convexOn_of_unique_subgradient {E : Type*} [NormedAddCommGroup E]
+    [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] {u : E → ℝ}
+    (hconv : ConvexOn ℝ Set.univ u) (hsub : ∀ x, ∃! g : E, ∀ y, u x + ⟪g, y - x⟫ ≤ u y) :
+    Differentiable ℝ u := by
+  intro x
+  obtain ⟨g, hg, huniq⟩ := hsub x
+  exact (hasFDerivAt_of_convexOn_of_unique_subgradient hconv x g hg huniq).differentiableAt
+
+end FunctionalInequalities.Analysis
+
+end LT5CUniqueSubgradientDifferentiable
+
+section LT12ASubgradientImageMonotone
+
+open Set
+open scoped RealInnerProductSpace
+open scoped Topology
+
+/-! Monotonicity of subgradient images (Gutiérrez Lemma 1.4.1; task L-T12a). -/
+
+namespace FunctionalInequalities.Analysis
+
+private lemma support_of_max
+    {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+    {u : E → ℝ} {Ω : Set E} (hu : ConvexOn ℝ univ u) (hΩ : IsOpen Ω)
+    (x₀ x₁ p : E) (c : ℝ) (hx₁ : x₁ ∈ Ω)
+    (hmax :
+      IsMaxOn (fun z => c + ⟪p, z - x₀⟫ - u z) (closure Ω) x₁) :
+    ∀ y, u x₁ + ⟪p, y - x₁⟫ ≤ u y := by
+  let ell : E → ℝ := fun z => c + ⟪p, z - x₀⟫
+  let a : ℝ := ell x₁ - u x₁
+  let f : E → ℝ := fun z => u z - ell z + a
+  have hell :
+      ∀ (x y : E) (α β : ℝ), α + β = 1 →
+        ell (α • x + β • y) = α • ell x + β • ell y := by
+    intro x y α β hab
+    dsimp [ell]
+    have harg :
+        α • x + β • y - x₀ = α • (x - x₀) + β • (y - x₀) := by
+      calc
+        α • x + β • y - x₀ =
+            α • x + β • y - (α + β) • x₀ := by
+              rw [hab, one_smul]
+        _ = α • (x - x₀) + β • (y - x₀) := by
+          rw [add_smul, smul_sub, smul_sub]
+          abel
+    rw [harg, inner_add_right, real_inner_smul_right, real_inner_smul_right]
+    change c + (α * ⟪p, x - x₀⟫ + β * ⟪p, y - x₀⟫) =
+      α * (c + ⟪p, x - x₀⟫) + β * (c + ⟪p, y - x₀⟫)
+    calc
+      c + (α * ⟪p, x - x₀⟫ + β * ⟪p, y - x₀⟫) =
+          (α + β) * c +
+            (α * ⟪p, x - x₀⟫ + β * ⟪p, y - x₀⟫) := by
+              simp [hab]
+      _ = α * (c + ⟪p, x - x₀⟫) +
+            β * (c + ⟪p, y - x₀⟫) := by ring
+  have hfconv : ConvexOn ℝ univ f := by
+    refine ⟨convex_univ, ?_⟩
+    intro x _ y _ α β hα hβ hab
+    have h := hu.2 (show x ∈ (univ : Set E) by simp)
+      (show y ∈ (univ : Set E) by simp) hα hβ hab
+    have h' : u (α • x + β • y) ≤ α * u x + β * u y := by
+      simpa only [smul_eq_mul] using h
+    calc
+      f (α • x + β • y) =
+          u (α • x + β • y) - (α * ell x + β * ell y) + a := by
+            simp only [f, hell x y α β hab, smul_eq_mul]
+      _ ≤ (α * u x + β * u y) - (α * ell x + β * ell y) + a := by
+            linarith
+      _ = α • f x + β • f y := by
+            change
+              (α * u x + β * u y) - (α * ell x + β * ell y) + a =
+                α * (u x - ell x + a) + β * (u y - ell y + a)
+            calc
+              (α * u x + β * u y) - (α * ell x + β * ell y) + a =
+                  α * (u x - ell x) + β * (u y - ell y) + (α + β) * a := by
+                    simp [hab]
+                    ring
+              _ = α * (u x - ell x + a) + β * (u y - ell y + a) := by
+                    ring
+  have hnonneg : ∀ z ∈ Ω, 0 ≤ f z := by
+    intro z hz
+    have hzmax := hmax (subset_closure hz)
+    dsimp [f, a, ell] at hzmax ⊢
+    linarith
+  have hxzero : f x₁ = 0 := by
+    dsimp [f, a]
+    ring
+  intro y
+  have hfy : 0 ≤ f y := by
+    by_contra hy
+    have hy' : f y < 0 := lt_of_not_ge hy
+    have hpre :
+        (AffineMap.lineMap x₁ y) ⁻¹' Ω ∈ 𝓝 (0 : ℝ) :=
+      (AffineMap.lineMap_continuous (p := x₁) (q := y)).continuousAt.preimage_mem_nhds
+        (hΩ.mem_nhds (show AffineMap.lineMap x₁ y 0 ∈ Ω by
+          rw [AffineMap.lineMap_apply_zero]
+          exact hx₁))
+    obtain ⟨ε, hε, hεsub⟩ := Metric.mem_nhds_iff.mp hpre
+    let t : ℝ := min (ε / 2) (1 / 2)
+    have ht : 0 < t := by
+      dsimp [t]
+      exact lt_min (by linarith) (by norm_num)
+    have htε : t < ε := by
+      dsimp [t]
+      exact (min_le_left _ _).trans_lt (by linarith)
+    have ht1 : t < 1 := by
+      dsimp [t]
+      exact (min_le_right _ _).trans_lt (by norm_num)
+    have htΩ : AffineMap.lineMap x₁ y t ∈ Ω := by
+      apply hεsub
+      have hdist : dist t 0 < ε := by
+        rw [Real.dist_eq]
+        simpa [abs_of_pos ht] using htε
+      exact hdist
+    let z : E := AffineMap.lineMap x₁ y t
+    have hzΩ : z ∈ Ω := by
+      simpa [z] using htΩ
+    have hzseg : z ∈ openSegment ℝ x₁ y := by
+      exact lineMap_mem_openSegment ℝ x₁ y ⟨ht, ht1⟩
+    have hxz : f x₁ ≤ f z := by
+      simpa [hxzero] using hnonneg z hzΩ
+    have hzy : f z ≤ f y :=
+      hfconv.le_right_of_left_le
+        (x := x₁) (y := y) (z := z)
+        (show x₁ ∈ (univ : Set E) by simp)
+        (show y ∈ (univ : Set E) by simp)
+        hzseg hxz
+    exact (not_lt_of_ge (hnonneg z hzΩ)) (lt_of_le_of_lt hzy hy')
+  have helldiff : ell y - ell x₁ = ⟪p, y - x₁⟫ := by
+    dsimp [ell]
+    simp only [inner_sub_right]
+    ring
+  dsimp [f, a] at hfy
+  linarith [helldiff]
+
+/-- The **subgradient image** `∂u(S) = {p | ∃ x ∈ S, p is a subgradient of u at x}` (weak Letwin
+route, routes/letwin-weak-definitions.md item 2). -/
+def subgradientImage {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E] (u : E → ℝ)
+    (S : Set E) : Set E :=
+  {p | ∃ x ∈ S, ∀ y, u x + ⟪p, y - x⟫ ≤ u y}
+
+/-- **Monotonicity of subgradient images under comparison** (Gutiérrez, *The Monge–Ampère
+equation*, Lemma 1.4.1; weak Letwin route, step N8 comparison principle): if `u ≤ v` on a
+bounded open `Ω` and `u = v` on its frontier, then `∂v(Ω) ⊆ ∂u(Ω)`. -/
+theorem subgradientImage_subset_of_le {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+    [FiniteDimensional ℝ E] {u v : E → ℝ} (hu : ConvexOn ℝ univ u) (hv : ConvexOn ℝ univ v)
+    {Ω : Set E} (hΩ : IsOpen Ω) (hb : Bornology.IsBounded Ω) (hle : ∀ x ∈ Ω, u x ≤ v x)
+    (heq : ∀ x ∈ frontier Ω, u x = v x) : subgradientImage v Ω ⊆ subgradientImage u Ω := by
+  rintro p ⟨x₀, hx₀, hp⟩
+  let w : E → ℝ := fun z => v x₀ + ⟪p, z - x₀⟫ - u z
+  have huc : Continuous u := by
+    apply continuousOn_univ.mp
+    exact hu.continuousOn isOpen_univ
+  have hvc : Continuous v := by
+    apply continuousOn_univ.mp
+    exact hv.continuousOn isOpen_univ
+  have hlin : Continuous (fun z : E => ⟪p, z - x₀⟫) := by
+    fun_prop
+  have hwc : Continuous w := by
+    have hwc' : Continuous ((fun _ : E => v x₀) + (fun z : E => ⟪p, z - x₀⟫) - u) :=
+      (continuous_const.add hlin).sub huc
+    convert hwc' using 1
+    ext z
+    simp [w]
+  have hcompact : IsCompact (closure Ω) := hb.isCompact_closure
+  have hnonempty : (closure Ω).Nonempty :=
+    ⟨x₀, subset_closure hx₀⟩
+  obtain ⟨x₁, hx₁, hmax⟩ :=
+    hcompact.exists_isMaxOn hnonempty hwc.continuousOn
+  by_cases hx₁Ω : x₁ ∈ Ω
+  · refine ⟨x₁, hx₁Ω, ?_⟩
+    exact support_of_max hu hΩ x₀ x₁ p (v x₀) hx₁Ω (by
+      simpa [w] using hmax)
+  · have hwx₀ : 0 ≤ w x₀ := by
+      simpa [w] using hle x₀ hx₀
+    have hax : 0 ≤ w x₁ :=
+      hwx₀.trans (hmax (subset_closure hx₀))
+    have hfront : x₁ ∈ frontier Ω := by
+      rw [← closure_sdiff_interior]
+      exact ⟨hx₁, by simpa [hΩ.interior_eq] using hx₁Ω⟩
+    have heqx₁ : u x₁ = v x₁ := heq x₁ hfront
+    have hupper : w x₁ ≤ 0 := by
+      have hp₁ := hp x₁
+      rw [← heqx₁] at hp₁
+      dsimp [w]
+      linarith
+    have hax0 : w x₁ = 0 := le_antisymm hupper hax
+    have hwx₀zero : w x₀ = 0 := by
+      apply le_antisymm
+      · simpa [hax0] using hmax (subset_closure hx₀)
+      · exact hwx₀
+    have hmax₀ : IsMaxOn w (closure Ω) x₀ := by
+      intro z hz
+      have hzmax := hmax hz
+      simpa [hax0, hwx₀zero] using hzmax
+    refine ⟨x₀, hx₀, ?_⟩
+    exact support_of_max hu hΩ x₀ x₀ p (v x₀) hx₀ (by
+      simpa [w] using hmax₀)
+
+end FunctionalInequalities.Analysis
+
+end LT12ASubgradientImageMonotone
+
+section LT14ASubgradientAeInjective
+
+open MeasureTheory Set
+open scoped RealInnerProductSpace
+
+/-! Almost-everywhere injectivity of the subgradient map (task L-T14a). -/
+
+namespace FunctionalInequalities.Analysis
+
+private theorem legendre_eq_of_subgradient {E : Type*} [NormedAddCommGroup E]
+    [InnerProductSpace ℝ E] (u : E → ℝ) (x p : E)
+    (hsub : ∀ z, u x + ⟪p, z - x⟫ ≤ u z) :
+    (⟪x, p⟫ : EReal) - (u x : EReal) =
+      legendre (fun z => (u z : EReal)) p := by
+  apply le_antisymm
+  · change (⟪x, p⟫ : EReal) - (u x : EReal) ≤
+      ⨆ z : E, (⟪z, p⟫ : EReal) - (u z : EReal)
+    exact le_iSup (fun z : E => (⟪z, p⟫ : EReal) - (u z : EReal)) x
+  · change (⨆ z : E, (⟪z, p⟫ : EReal) - (u z : EReal)) ≤
+      (⟪x, p⟫ : EReal) - (u x : EReal)
+    apply iSup_le
+    intro z
+    have hz := hsub z
+    rw [inner_sub_right] at hz
+    rw [← real_inner_comm p z, ← real_inner_comm p x] at hz
+    have hz' : ⟪z, p⟫ - u z ≤ ⟪x, p⟫ - u x := by
+      linarith
+    simpa only [EReal.coe_sub] using
+      (EReal.coe_le_coe_iff.mpr hz')
+
+private theorem convex_legendre_finite_domain {E : Type*} [NormedAddCommGroup E]
+    [InnerProductSpace ℝ E] (φ : E → EReal) (hφ : ProperPotential φ) :
+    Convex ℝ {q : E | legendre φ q ≠ ⊤} := by
+  intro q₁ hq₁ q₂ hq₂ a b ha hb hab
+  have hq₁bot : legendre φ q₁ ≠ ⊥ := legendre_ne_bot φ hφ q₁
+  have hq₂bot : legendre φ q₂ ≠ ⊥ := legendre_ne_bot φ hφ q₂
+  have hq₁epi :
+      (q₁, (legendre φ q₁).toReal) ∈
+        {p : E × ℝ | legendre φ p.1 ≤ (p.2 : EReal)} := by
+    change legendre φ q₁ ≤ ((legendre φ q₁).toReal : EReal)
+    rw [EReal.coe_toReal hq₁ hq₁bot]
+  have hq₂epi :
+      (q₂, (legendre φ q₂).toReal) ∈
+        {p : E × ℝ | legendre φ p.1 ≤ (p.2 : EReal)} := by
+    change legendre φ q₂ ≤ ((legendre φ q₂).toReal : EReal)
+    rw [EReal.coe_toReal hq₂ hq₂bot]
+  have hcomb := (convex_epigraph_legendre φ) hq₁epi hq₂epi ha hb hab
+  change legendre φ (a • q₁ + b • q₂) ≤
+    ((a * (legendre φ q₁).toReal + b * (legendre φ q₂).toReal : ℝ) : EReal) at hcomb
+  intro htop
+  rw [htop] at hcomb
+  exact (not_le_of_gt (EReal.coe_lt_top _)) hcomb
+
+/-- **Almost every subgradient belongs to a single point** (weak Letwin route, step N5, the
+Alexandrov identity): for a convex Lipschitz `u` on a finite-dimensional inner product space, the
+set of `p` that are subgradients of `u` at two distinct points is Lebesgue-null (such `p` are
+non-differentiability points of the conjugate `u*`, or frontier points of its domain). -/
+theorem volume_subgradient_two_points_eq_zero {E : Type*} [NormedAddCommGroup E]
+    [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
+    {u : E → ℝ} {L : NNReal} (hu : LipschitzWith L u) (hconv : ConvexOn ℝ univ u) :
+    (volume : Measure E) {p : E | ∃ x y : E, x ≠ y ∧ (∀ z, u x + ⟪p, z - x⟫ ≤ u z) ∧
+      (∀ z, u y + ⟪p, z - y⟫ ≤ u z)} = 0 := by
+  have _ := hu
+  have _ := hconv
+  classical
+  let φ : E → EReal := fun x => (u x : EReal)
+  let Dom : Set E := {q | legendre φ q ≠ ⊤}
+  let g : E → ℝ := fun q => (legendre φ q).toReal
+  let S : Set E := {p : E | ∃ x y : E, x ≠ y ∧
+    (∀ z, u x + ⟪p, z - x⟫ ≤ u z) ∧
+    (∀ z, u y + ⟪p, z - y⟫ ≤ u z)}
+  change (volume : Measure E) S = 0
+  have hφ : ProperPotential φ := by
+    refine ⟨?_, ⟨0, ?_⟩⟩
+    · intro x
+      exact EReal.coe_ne_bot _
+    · exact EReal.coe_ne_top _
+  have hDom : Convex ℝ Dom := by
+    simpa only [Dom] using convex_legendre_finite_domain φ hφ
+  have hconvG : ConvexOn ℝ (interior Dom) g := by
+    refine ⟨hDom.interior, ?_⟩
+    intro q₁ hq₁ q₂ hq₂ a b ha hb hab
+    have hq₁D : q₁ ∈ Dom := interior_subset hq₁
+    have hq₂D : q₂ ∈ Dom := interior_subset hq₂
+    have hqD : a • q₁ + b • q₂ ∈ Dom :=
+      hDom hq₁D hq₂D ha hb hab
+    have hq₁bot : legendre φ q₁ ≠ ⊥ := legendre_ne_bot φ hφ q₁
+    have hq₂bot : legendre φ q₂ ≠ ⊥ := legendre_ne_bot φ hφ q₂
+    have hqbot : legendre φ (a • q₁ + b • q₂) ≠ ⊥ :=
+      legendre_ne_bot φ hφ (a • q₁ + b • q₂)
+    have hq₁epi :
+        (q₁, g q₁) ∈ {p : E × ℝ | legendre φ p.1 ≤ (p.2 : EReal)} := by
+      change legendre φ q₁ ≤ ((legendre φ q₁).toReal : EReal)
+      rw [EReal.coe_toReal hq₁D hq₁bot]
+    have hq₂epi :
+        (q₂, g q₂) ∈ {p : E × ℝ | legendre φ p.1 ≤ (p.2 : EReal)} := by
+      change legendre φ q₂ ≤ ((legendre φ q₂).toReal : EReal)
+      rw [EReal.coe_toReal hq₂D hq₂bot]
+    have hE := (convex_epigraph_legendre φ) hq₁epi hq₂epi ha hb hab
+    change legendre φ (a • q₁ + b • q₂) ≤
+      ((a * g q₁ + b * g q₂ : ℝ) : EReal) at hE
+    have hcoe :
+        (g (a • q₁ + b • q₂) : EReal) =
+          legendre φ (a • q₁ + b • q₂) := by
+      dsimp [g]
+      exact EReal.coe_toReal hqD hqbot
+    have hreal :
+        g (a • q₁ + b • q₂) ≤ a * g q₁ + b * g q₂ := by
+      apply EReal.coe_le_coe_iff.mp
+      rw [hcoe]
+      exact hE
+    simpa only [smul_eq_mul] using hreal
+  have hae :
+      ∀ᵐ q : E ∂(volume : Measure E),
+        q ∈ interior Dom → DifferentiableAt ℝ g q :=
+    FunctionalInequalities.Analysis.ConvexOn.ae_differentiableAt_of_isOpen
+      (volume : Measure E) isOpen_interior hconvG
+  let B : Set E := {q | q ∈ interior Dom ∧ ¬ DifferentiableAt ℝ g q}
+  have hB : (volume : Measure E) B = 0 := by
+    have hnot : ∀ᵐ q : E ∂(volume : Measure E), q ∉ B := by
+      filter_upwards [hae] with q hq
+      intro hqB
+      change q ∈ interior Dom ∧ ¬ DifferentiableAt ℝ g q at hqB
+      exact hqB.2 (hq hqB.1)
+    have hz := ae_iff.mp hnot
+    have hset : {q : E | ¬ q ∉ B} = B := by
+      ext q
+      simp
+    rw [hset] at hz
+    exact hz
+  have hfrontier : (volume : Measure E) (frontier Dom) = 0 :=
+    Convex.addHaar_frontier (volume : Measure E) hDom
+  have hsubset : S ⊆ frontier Dom ∪ B := by
+    intro p hp
+    rcases hp with ⟨x, y, hxy, hx, hy⟩
+    have hxEq : (⟪x, p⟫ : EReal) - φ x = legendre φ p := by
+      simpa only [φ] using legendre_eq_of_subgradient u x p hx
+    have hyEq : (⟪y, p⟫ : EReal) - φ y = legendre φ p := by
+      simpa only [φ] using legendre_eq_of_subgradient u y p hy
+    have hterm : (⟪x, p⟫ : EReal) - φ x ≠ ⊤ := by
+      intro ht
+      have ht' : ((⟪x, p⟫ - u x : ℝ) : EReal) = ⊤ := by
+        simpa only [φ, EReal.coe_sub] using ht
+      exact EReal.coe_ne_top _ ht'
+    have hpD : p ∈ Dom := by
+      intro htop
+      exact hterm (hxEq.trans htop)
+    have hpcl : p ∈ closure Dom := subset_closure hpD
+    rw [closure_eq_interior_union_frontier] at hpcl
+    rcases hpcl with hpI | hpF
+    · right
+      change p ∈ interior Dom ∧ ¬ DifferentiableAt ℝ g p
+      refine ⟨hpI, ?_⟩
+      intro hd
+      have hd' : DifferentiableAt ℝ
+          (fun q => (legendre φ q).toReal) p := by
+        simpa only [g] using hd
+      have hxg := conjugate_maximizer_eq_gradient φ hφ hpI hd' x hxEq
+      have hyg := conjugate_maximizer_eq_gradient φ hφ hpI hd' y hyEq
+      exact hxy (hxg.trans hyg.symm)
+    · left
+      exact hpF
+  exact measure_mono_null hsubset (measure_union_null hfrontier hB)
+
+end FunctionalInequalities.Analysis
+
+end LT14ASubgradientAeInjective
+
+section LT11BAffineLineSubgradient
+
+open MeasureTheory Set
+open scoped RealInnerProductSpace
+
+/-! Subgradients along a segment where the function is affine form a null set (Caffarelli block; task L-T11b). -/
+
+namespace FunctionalInequalities.Analysis
+
+/-- **A function affine along a full line pins every subgradient** (weak Letwin route, Caffarelli
+block T11b): if `u (x₀ + t θ) = u x₀ + t c` for all real `t`, then every subgradient `p` of `u` at
+any point satisfies `⟪p, θ⟫ = c`. -/
+theorem inner_subgradient_eq_of_affine_on_line {E : Type*} [NormedAddCommGroup E]
+    [InnerProductSpace ℝ E] {u : E → ℝ} {x₀ θ : E} {c : ℝ}
+    (hline : ∀ t : ℝ, u (x₀ + t • θ) = u x₀ + t * c) {x p : E}
+    (hp : ∀ y, u x + ⟪p, y - x⟫ ≤ u y) : ⟪p, θ⟫ = c := by
+  have hineq (t : ℝ) :
+      u x + ⟪p, (x₀ + t • θ) - x⟫ ≤ u x₀ + t * c := by
+    calc
+      u x + ⟪p, (x₀ + t • θ) - x⟫ ≤ u (x₀ + t • θ) :=
+        hp (x₀ + t • θ)
+      _ = u x₀ + t * c := hline t
+  have hzero : ⟪p, θ⟫ - c = 0 := by
+    by_contra hne
+    let K : ℝ := u x₀ - u x - ⟪p, x₀ - x⟫
+    let t : ℝ := (K + 1) / (⟪p, θ⟫ - c)
+    have ht := hineq t
+    have harg : (x₀ + t • θ) - x = (x₀ - x) + t • θ := by
+      abel
+    rw [harg, inner_add_right, inner_smul_right] at ht
+    have ht' : t * (⟪p, θ⟫ - c) ≤ K := by
+      dsimp [K]
+      nlinarith [ht]
+    have hprod : t * (⟪p, θ⟫ - c) = K + 1 := by
+      dsimp [t]
+      exact div_mul_cancel₀ (K + 1) hne
+    nlinarith [ht', hprod]
+  linarith
+
+/-- The set of subgradients of a function affine along a line in a nonzero direction is
+Lebesgue-null (it lies in an affine hyperplane). -/
+theorem volume_setOf_subgradient_eq_zero_of_affine_on_line {E : Type*} [NormedAddCommGroup E]
+    [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
+    {u : E → ℝ} {x₀ θ : E} (hθ : θ ≠ 0) {c : ℝ}
+    (hline : ∀ t : ℝ, u (x₀ + t • θ) = u x₀ + t * c) :
+    (volume : Measure E) {p | ∃ x, ∀ y, u x + ⟪p, y - x⟫ ≤ u y} = 0 := by
+  let L : E →ₗ[ℝ] ℝ :=
+    { toFun := fun p => ⟪p, θ⟫
+      map_add' := by
+        intro p q
+        exact inner_add_left p q θ
+      map_smul' := by
+        intro a p
+        change ⟪a • p, θ⟫ = a * ⟪p, θ⟫
+        exact real_inner_smul_left p θ a }
+  let p₀ : E := (c / ⟪θ, θ⟫) • θ
+  have hθθ : ⟪θ, θ⟫ ≠ 0 := (inner_self_ne_zero).2 hθ
+  have hp₀ : L p₀ = c := by
+    dsimp [L, p₀]
+    rw [real_inner_smul_left]
+    exact div_mul_cancel₀ c hθθ
+  let H : AffineSubspace ℝ E := AffineSubspace.mk' p₀ L.ker
+  have hq : p₀ + θ ∉ H := by
+    intro hmem
+    change p₀ + θ ∈ AffineSubspace.mk' p₀ L.ker at hmem
+    have hv : (p₀ + θ) -ᵥ p₀ ∈ L.ker :=
+      (AffineSubspace.mem_mk').mp hmem
+    have hz : L ((p₀ + θ) -ᵥ p₀) = 0 :=
+      (LinearMap.mem_ker).mp hv
+    have hz' : ⟪θ, θ⟫ = 0 := by
+      simpa [L] using hz
+    exact hθθ hz'
+  have hHtop : H ≠ (⊤ : AffineSubspace ℝ E) := by
+    intro htop
+    apply hq
+    rw [htop]
+    exact AffineSubspace.mem_top ℝ E (p₀ + θ)
+  apply measure_mono_null ?_ (Measure.addHaar_affineSubspace volume H hHtop)
+  intro p hp
+  rcases hp with ⟨x, hx⟩
+  have hpc : ⟪p, θ⟫ = c :=
+    inner_subgradient_eq_of_affine_on_line hline hx
+  have hpL : L p = c := by
+    simpa [L] using hpc
+  change p ∈ AffineSubspace.mk' p₀ L.ker
+  apply (AffineSubspace.mem_mk').2
+  apply (LinearMap.mem_ker).2
+  change L (p - p₀) = 0
+  calc
+    L (p - p₀) = L p - L p₀ := L.map_sub p p₀
+    _ = c - c := by rw [hpL, hp₀]
+    _ = 0 := sub_self c
+
+end FunctionalInequalities.Analysis
+
+end LT11BAffineLineSubgradient

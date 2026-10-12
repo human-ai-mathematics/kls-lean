@@ -1142,7 +1142,7 @@ flowchart LR
 
 ### Letwin (arXiv:2607.24164v1)
 
-25 statements: 2 ✓, 16 ◐, 5 ○, 2 ⇑. [Full map](LITERATURE.md#letwin2026-lemma-map).
+25 statements: 2 ✓, 17 ◐, 4 ○, 2 ⇑. [Full map](LITERATURE.md#letwin2026-lemma-map).
 
 ```mermaid
 flowchart LR
@@ -1162,7 +1162,7 @@ flowchart LR
     Letwin2026_T25["◐ Theorem 2.5<br/>Key moment-map Hessian bound"]
     Letwin2026_D26["◐ Definition 2.6<br/>Stein kernel"]
     Letwin2026_L27["◐ Lemma 2.7 (Fathi [29, Theorem 2.3])<br/>Moment map gives Stein kernel"]
-    Letwin2026_P28["○ Proposition 2.8 (Barthe and Klartag [7, Proposition 10])<br/>H^{-1} variance inequality"]
+    Letwin2026_P28["◐ Proposition 2.8 (Barthe and Klartag [7, Proposition 10])<br/>H^{-1} variance inequality"]
     Letwin2026_L29["◐ Lemma 2.9<br/>Stein kernel bounds H^{-1} norm"]
     Letwin2026_LA1["✓ Lemma A.1<br/>Reduction to regular measures"]
     Letwin2026_LA2["○ Lemma A.2<br/>Reduction to invertible M"]
@@ -1221,9 +1221,9 @@ flowchart LR
     classDef lemma_formalized fill:#dbeafe,stroke:#2563eb,color:#1e3a8a;
     class Letwin2026_DISO,Letwin2026_LA1 lemma_formalized;
     classDef lemma_partial fill:#fff3df,stroke:#c88719,color:#66420d;
-    class Letwin2026_DCP,Letwin2026_DPSI,Letwin2026_ECMP,Letwin2026_CONJ,Letwin2026_T12,Letwin2026_L23,Letwin2026_E23,Letwin2026_L24,Letwin2026_T25,Letwin2026_D26,Letwin2026_L27,Letwin2026_L29,Letwin2026_LA3,Letwin2026_LA5,Letwin2026_LA6,Letwin2026_LA7 lemma_partial;
+    class Letwin2026_DCP,Letwin2026_DPSI,Letwin2026_ECMP,Letwin2026_CONJ,Letwin2026_T12,Letwin2026_L23,Letwin2026_E23,Letwin2026_L24,Letwin2026_T25,Letwin2026_D26,Letwin2026_L27,Letwin2026_P28,Letwin2026_L29,Letwin2026_LA3,Letwin2026_LA5,Letwin2026_LA6,Letwin2026_LA7 lemma_partial;
     classDef lemma_pending fill:#fee2e2,stroke:#dc2626,color:#991b1b;
-    class Letwin2026_T11,Letwin2026_L21,Letwin2026_L22,Letwin2026_P28,Letwin2026_LA2 lemma_pending;
+    class Letwin2026_T11,Letwin2026_L21,Letwin2026_L22,Letwin2026_LA2 lemma_pending;
     classDef lemma_improved fill:#dcfce7,stroke:#15803d,color:#14532d;
     class Letwin2026_CZ14,Letwin2026_LA4 lemma_improved;
     style Letwin2026_T11 stroke-width:3px

@@ -305,6 +305,10 @@ import FunctionalInequalities.Analysis.Convex.SecondDifference
 import FunctionalInequalities.Analysis.WeakDerivative
 import FunctionalInequalities.KLS.CEK.MomentMap
 import FunctionalInequalities.KLS.BKL.Localization.LogLaplaceGenerator
+import FunctionalInequalities.Analysis.MollificationHessian
+import FunctionalInequalities.KLS.BKL.Localization.NoiseBound
+import FunctionalInequalities.KLS.BKL.Localization.Process
+import FunctionalInequalities.Probability.Diffusion.Transport
 
 /-!
 # Functional inequalities
