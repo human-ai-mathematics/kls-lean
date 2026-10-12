@@ -303,6 +303,8 @@ import FunctionalInequalities.Analysis.Tensor.SlotAction
 import FunctionalInequalities.KLS.CEK.PartitionVariation
 import FunctionalInequalities.Analysis.Convex.SecondDifference
 import FunctionalInequalities.Analysis.WeakDerivative
+import FunctionalInequalities.KLS.CEK.MomentMap
+import FunctionalInequalities.KLS.BKL.Localization.LogLaplaceGenerator
 
 /-!
 # Functional inequalities

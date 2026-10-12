@@ -9278,6 +9278,10 @@
               {
                 "name": "FunctionalInequalities.Analysis.BakryEmery.tendsto_cumulant_cond_closedBall",
                 "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Cumulant/Truncation.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.LogConcave.Suspension.cumulantBound_of_compact",
+                "source": "formalization/FunctionalInequalities/KLS/BKL/CompactReduction.lean"
               }
             ],
             "note": "Proof along Eldan stochastic localization for compactly supported μ, then approximation; no local stochastic calculus. The cumulant tensors κ_m are defined locally (Analysis/BakryEmery/Cumulant/Basic.lean, cumulant). Supporting arithmetic of Section 6 formalized (envelope b_m, (105)–(106), absorption, contraction (101)–(102)); the cumulant induction (95)–(104), Lemma 4.3 and the theorem itself are not formalized. Base case m = 2 (Codex route bundle Local-Second-Cumulant, independently accepted 2026-10-08): CumulantBound 1 1, i.e. R₂ = Id for every isotropic log-concave law in every dimension, is proved unconditionally from one exponential radius (κ₂ = centered second moment = covariance pairing; Parseval). This covers only the m = 2 base; the all-order bound (d+1)-cumulant ≤ (d!)² K^d and the Eldan induction remain open. CGF jets at zero (p. 20 before (74); Luna gpt-5.6-luna units CGF1-M/CGF1-C with recorded closing repairs, independently accepted 2026-10-08): ∇Λ(0) = ∫x dμ and D(∇Λ − ∇Λ(0))(0) = Cov μ for compactly supported laws (Analysis/BakryEmery/Cumulant/Local.lean section GradientJets; cumulantVector records the Riesz vector of the last cumulant slot). The higher jets Dʳ(∇Λ − ∇Λ(0))(0)[h] = cumulantVector μ h (⟪·,w⟫ = κ_{r+1}(h,w), all r ≥ 1; Luna units CGF1-J2a/J2b + the J2c v2 assembly, independently accepted 2026-10-08; generic supports in Analysis/IteratedDerivative/GradientJet.lean) are formalized. The singleton terms of (74), ⟪κ₂(w,·), A⁻¹κ_{k+1}(h,·)⟫ = κ_{k+1}(h,w) for invertible covariance A (Luna unit D74s, independently accepted 2026-10-08; Cumulant/Local.lean section SingletonAllocation), are formalized. The raw (74) expansion at a fixed compactly supported law, D^m⟨v,Mv⟩(0)[h] = Σ_{∅≠J⊊[m]} ⟨κ_{|J|+1}(h_J,·), Mκ_{m−|J|+1}(h_{Jᶜ},·)⟩ for ANY continuous linear M (Luna units D74a1/D74a2r/D74a3r + the D74A assembly, independently accepted 2026-10-09; Analysis/BakryEmery/Cumulant/Leibniz.lean), is formalized; its grouping 2m κ_m + 2 L_m with (72) for M = A⁻¹ is formalized (E7274); the stochastic differential (73) (Lemma 4.3) remains unformalized."
@@ -9338,6 +9342,10 @@
               {
                 "name": "FunctionalInequalities.Probability.Posterior.cumulant_compactPosterior",
                 "source": "formalization/FunctionalInequalities/Probability/Posterior/LogPartition.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.BKL.Localization.generator_logLaplace_posterior",
+                "source": "formalization/FunctionalInequalities/KLS/BKL/Localization/LogLaplaceGenerator.lean"
               }
             ],
             "note": "Only the deterministic spatial step of the proof is formalized (E7274: (74) grouped as 2m κ_m + 2 L_m with (72), at a fixed compactly supported law). Not formalized: Eldan's process (67)/(70) as an SDE solution, the Itô differential of (71), the stochastic integral term κ_{m+1}(t)(·, …, ·, A_t^{−1/2} dB_t) and hence (73). Lemma 4.3 remains open."

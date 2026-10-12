@@ -377,9 +377,9 @@ retain their evidence source; generating this view does not run Lean.
 Upstream revision: `34b5fcd57fef17089e781616005fe6d3641bd11e`. The selected upstream snapshot contains
 20 records; this register is not an inventory of the entire upstream ledger.
 
-Canonical input digest: `6ca59e2c0ecda8873bfa45a2d7ff4a29444fbf6604aa6634bcf6f2bee9c6ebde`.
+Canonical input digest: `414619e2bb23df6e2ecb62fcd322a20fa27cdf0426a02250122824f1d7e8702f`.
 Diagram digest: `0b59816fe62a0c451b6a56dd68dee8634741f1888f80451c9e5a2fee623d9cab`.
-View input digest: `c3ab66a1c94ea73a23f74a45b6b0fe3a393175c2ed1d000109808b5431fe8c99`.
+View input digest: `3f195305b85576b5d215cfa032b74fabb9a8dd34dc462364a192895cb6a1dd1a`.
 
 Regenerate with `python3 research/progress/update.py` after staging the intended source and
 metadata updates; unstaged unrelated metadata is then deliberately excluded. When the
