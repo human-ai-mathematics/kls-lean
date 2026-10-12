@@ -277,6 +277,7 @@ import FunctionalInequalities.Analysis.Matrix.Sign
 import FunctionalInequalities.Analysis.Matrix.Integral
 import FunctionalInequalities.Analysis.Matrix.DeterminantDerivative
 import FunctionalInequalities.Analysis.Matrix.LogDet
+import FunctionalInequalities.Analysis.Convex.Subgradient
 import FunctionalInequalities.Analysis.BakryEmery.MongeAmpere
 import FunctionalInequalities.Analysis.BakryEmery.InverseHessianEnergy
 import FunctionalInequalities.Analysis.BakryEmery.HessianTrace
@@ -290,6 +291,11 @@ import FunctionalInequalities.Probability.Diffusion.Generator
 import FunctionalInequalities.Probability.Diffusion.Cutoff
 import FunctionalInequalities.Probability.Diffusion.Setup
 import FunctionalInequalities.Probability.Diffusion.Dynkin
+import FunctionalInequalities.Probability.Posterior.LogPartition
+import FunctionalInequalities.KLS.BKL.Localization.Standardization
+import FunctionalInequalities.KLS.BKL.Localization.Coefficients
+import FunctionalInequalities.KLS.BKL.Localization.Energy
+import FunctionalInequalities.Probability.Diffusion.Existence
 
 /-!
 # Functional inequalities

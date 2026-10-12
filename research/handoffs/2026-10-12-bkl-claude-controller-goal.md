@@ -114,6 +114,18 @@ dimension 0; basis mismatch between the Stein API (`Fin n`) and the BakryEmery A
    `Ito/PicardWellPosed` returns to the owner if that route fails: decided 2026-10-12 (owner).
 5. Closing `KLS.kls` (Target imports) once Theorem 1.1 is unconditional: open.
 
+## Controller decisions log
+
+- 2026-10-13: the Letwin stream runs under a Fable sub-controller (owner suggestion) that freezes statements
+  and drives the GPT loop but does not touch the canonical tree; the controller integrates.
+- 2026-10-13: approved the weak-route auxiliary definitions
+  (`build/reviews/2026-10-12-bkl-claude-goal/routes/letwin-weak-definitions.md`): pointwise subgradient
+  predicate and `subgradientImage` (Analysis/Convex/Subgradient.lean), a.e. Hessian via the existing
+  `hessianOperator`/`hessianMatrix`, `HasWeakDerivAlong` with `C¹_c` tests and built-in local
+  integrability (Analysis/WeakDerivative.lean), the set-wise Alexandrov identity, and touching-test
+  viscosity statements. New infrastructure only; no existing definition or target statement changes.
+  Open for owner review.
+
 ## Not claimed
 
 This goal record proves nothing. Theorem 4.1 for m ≥ 3, Letwin Theorems 2.5 and 1.2, BKL
