@@ -1296,3 +1296,25 @@ theorem volume_setOf_subgradient_eq_zero_of_affine_on_line {E : Type*} [NormedAd
 end FunctionalInequalities.Analysis
 
 end LT11BAffineLineSubgradient
+
+section LT5DUniqueSubgradientC1
+
+open scoped RealInnerProductSpace
+
+/-! Unique subgradients everywhere give a `C¹` function (task L-T5d). -/
+
+namespace FunctionalInequalities.Analysis
+
+/-- **Singleton subdifferential ⇒ `C¹`** (weak Letwin route, step N7, assembly of L-T5b/L-T5c): a
+convex function on a finite-dimensional inner product space with exactly one subgradient at every
+point is continuously differentiable. -/
+theorem contDiff_one_of_convexOn_of_unique_subgradient {E : Type*} [NormedAddCommGroup E]
+    [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] {u : E → ℝ}
+    (hconv : ConvexOn ℝ Set.univ u) (hsub : ∀ x, ∃! g : E, ∀ y, u x + ⟪g, y - x⟫ ≤ u y) :
+    ContDiff ℝ 1 u := by
+  exact contDiff_one_of_convexOn_of_differentiable hconv
+    (differentiable_of_convexOn_of_unique_subgradient hconv hsub)
+
+end FunctionalInequalities.Analysis
+
+end LT5DUniqueSubgradientC1

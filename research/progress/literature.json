@@ -9351,9 +9351,13 @@
               {
                 "name": "FunctionalInequalities.KLS.BKL.Localization.generator_logLaplace_posterior",
                 "source": "formalization/FunctionalInequalities/KLS/BKL/Localization/LogLaplaceGenerator.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.BKL.Localization.generator_cumulant_posterior",
+                "source": "formalization/FunctionalInequalities/KLS/BKL/Localization/CumulantGenerator.lean"
               }
             ],
-            "note": "Only the deterministic spatial step of the proof is formalized (E7274: (74) grouped as 2m κ_m + 2 L_m with (72), at a fixed compactly supported law). Not formalized: Eldan's process (67)/(70) as an SDE solution, the Itô differential of (71), the stochastic integral term κ_{m+1}(t)(·, …, ·, A_t^{−1/2} dB_t) and hence (73). Lemma 4.3 remains open."
+            "note": "Only the deterministic spatial step of the proof is formalized (E7274: (74) grouped as 2m κ_m + 2 L_m with (72), at a fixed compactly supported law). Not formalized: Eldan's process (67)/(70) as an SDE solution, the Itô differential of (71), the stochastic integral term κ_{m+1}(t)(·, …, ·, A_t^{−1/2} dB_t) and hence (73). Lemma 4.3 remains open. 2026-10-13: the drift of (73) is formalized in generator form, 𝓛κ_m = −(mκ_m + L_m) (generator_cumulant_posterior), for compactly supported isotropic priors; the stochastic differential is used only through Dynkin identities of the cutoff process (decision of the Claude-controller goal), so the relation stays partial until the cutoff limit is assembled."
           },
           {
             "id": "E7274",
@@ -9992,6 +9996,10 @@
               },
               {
                 "name": "FunctionalInequalities.KLS.BKL.Localization.IsEldanCutoff.dynkin",
+                "source": "formalization/FunctionalInequalities/KLS/BKL/Localization/Process.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.BKL.Localization.IsEldanCutoff.ae_Q_posSemidef",
                 "source": "formalization/FunctionalInequalities/KLS/BKL/Localization/Process.lean"
               }
             ],

@@ -1,5 +1,7 @@
 import FunctionalInequalities.Probability.Stein.HessianKernel
 import FunctionalInequalities.Analysis.Matrix.DeterminantDerivative
+import FunctionalInequalities.Analysis.MollificationHessian
+import Mathlib.Analysis.Calculus.LineDeriv.IntegrationByParts
 
 /-!
 # The Piola identity for Hessian adjugates
@@ -267,3 +269,222 @@ theorem sum_fderiv_adjugate_hessianMatrix_eq_zero {n : ℕ} {u : EuclideanSpace 
       linarith
 
 end FunctionalInequalities.Analysis
+
+section LT6BWeakPiola
+
+open MeasureTheory Matrix Filter
+open scoped Topology
+open FunctionalInequalities.Probability.Stein
+
+/-! The weak Piola identity for `C¹` functions with Lipschitz gradient (task L-T6b). -/
+
+namespace FunctionalInequalities.Analysis
+
+private def weakPiolaMatrix {n : ℕ}
+    (L : EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n)) :
+    Matrix (Fin n) (Fin n) ℝ :=
+  fun r s =>
+    (InnerProductSpace.toDual ℝ (EuclideanSpace ℝ (Fin n)))
+      (L (EuclideanSpace.basisFun (Fin n) ℝ r))
+      (EuclideanSpace.basisFun (Fin n) ℝ s)
+
+private lemma weakPiola_hessian {n : ℕ}
+    (u : EuclideanSpace ℝ (Fin n) → ℝ) (x : EuclideanSpace ℝ (Fin n)) :
+    hessianMatrix u x = weakPiolaMatrix (fderiv ℝ (gradient u) x) := by
+  let T : EuclideanSpace ℝ (Fin n) ≃L[ℝ]
+      StrongDual ℝ (EuclideanSpace ℝ (Fin n)) :=
+    (InnerProductSpace.toDual ℝ (EuclideanSpace ℝ (Fin n))).toContinuousLinearEquiv
+  have he : fderiv ℝ u = T ∘ gradient u :=
+    funext fun y => (T.apply_symm_apply (fderiv ℝ u y)).symm
+  have hd :
+      fderiv ℝ (fderiv ℝ u) x =
+        T.toContinuousLinearMap.comp (fderiv ℝ (gradient u) x) :=
+    (congrArg (fun f => fderiv ℝ f x) he).trans T.comp_fderiv
+  ext r s
+  change
+    fderiv ℝ (fderiv ℝ u) x (EuclideanSpace.basisFun (Fin n) ℝ r)
+        (EuclideanSpace.basisFun (Fin n) ℝ s) =
+      T (fderiv ℝ (gradient u) x (EuclideanSpace.basisFun (Fin n) ℝ r))
+        (EuclideanSpace.basisFun (Fin n) ℝ s)
+  rw [hd]
+  rfl
+
+private lemma weakPiola_continuous_cofactor {n : ℕ} (i j : Fin n) :
+    Continuous
+      (fun L : EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n) =>
+        (weakPiolaMatrix L).adjugate i j) := by
+  let T : EuclideanSpace ℝ (Fin n) ≃L[ℝ]
+      StrongDual ℝ (EuclideanSpace ℝ (Fin n)) :=
+    (InnerProductSpace.toDual ℝ (EuclideanSpace ℝ (Fin n))).toContinuousLinearEquiv
+  apply (continuous_apply j).comp
+  apply (continuous_apply i).comp
+  apply Continuous.matrix_adjugate
+  apply continuous_pi
+  intro r
+  apply continuous_pi
+  intro s
+  exact
+    (T.continuous.comp (continuous_id.clm_apply continuous_const)).clm_apply
+      continuous_const
+
+private lemma weakPiola_contDiff_cofactor {n : ℕ}
+    {u : EuclideanSpace ℝ (Fin n) → ℝ} (hu : ContDiff ℝ 3 u)
+    (i j : Fin n) :
+    ContDiff ℝ 1 (fun x => (hessianMatrix u x).adjugate i j) := by
+  classical
+  have h₂ : ContDiff ℝ 2 (fderiv ℝ u) :=
+    hu.fderiv_right (by norm_num)
+  have h₁ : ContDiff ℝ 1 (fderiv ℝ (fderiv ℝ u)) :=
+    h₂.fderiv_right (by norm_num)
+  have hentry : ∀ r s, ContDiff ℝ 1 (fun x => hessianMatrix u x r s) := by
+    intro r s
+    exact (h₁.clm_apply contDiff_const).clm_apply contDiff_const
+  simp only [Matrix.adjugate_apply, Matrix.det_apply]
+  apply ContDiff.sum
+  intro σ _
+  apply ContDiff.const_smul
+  apply contDiff_prod
+  intro r _
+  simp only [Matrix.updateRow_apply]
+  split_ifs
+  · exact contDiff_const
+  · exact hentry _ _
+
+private lemma weakPiola_integration_by_parts {n : ℕ}
+    {f ψ : EuclideanSpace ℝ (Fin n) → ℝ}
+    (hf : ContDiff ℝ 1 f) (hψ : ContDiff ℝ 1 ψ)
+    (hψc : HasCompactSupport ψ) (v : EuclideanSpace ℝ (Fin n)) :
+    (∫ x, f x * fderiv ℝ ψ x v) =
+      - ∫ x, fderiv ℝ f x v * ψ x := by
+  apply integral_mul_fderiv_eq_neg_fderiv_mul_of_integrable
+  · exact
+      (((hf.continuous_fderiv one_ne_zero).clm_apply continuous_const).mul
+        hψ.continuous).integrable_of_hasCompactSupport hψc.mul_left
+  · exact
+      (hf.continuous.mul
+        ((hψ.continuous_fderiv one_ne_zero).clm_apply
+          continuous_const)).integrable_of_hasCompactSupport
+            (hψc.fderiv_apply ℝ v).mul_left
+  · exact
+      (hf.continuous.mul hψ.continuous).integrable_of_hasCompactSupport hψc.mul_left
+  · exact fun x _ => hf.differentiable one_ne_zero x
+  · exact fun x _ => hψ.differentiable one_ne_zero x
+
+private lemma weakPiola_smooth {n : ℕ}
+    {u : EuclideanSpace ℝ (Fin n) → ℝ} (hu : ContDiff ℝ 3 u)
+    {ψ : EuclideanSpace ℝ (Fin n) → ℝ}
+    (hψ : ContDiff ℝ 1 ψ) (hψc : HasCompactSupport ψ) (i : Fin n) :
+    ∑ j, ∫ x, (hessianMatrix u x).adjugate i j *
+      fderiv ℝ ψ x (EuclideanSpace.basisFun (Fin n) ℝ j) = 0 := by
+  classical
+  let e := EuclideanSpace.basisFun (Fin n) ℝ
+  have hA := weakPiola_contDiff_cofactor hu i
+  have hInt : ∀ j : Fin n,
+      Integrable (fun x =>
+        fderiv ℝ (fun y => (hessianMatrix u y).adjugate i j) x (e j) * ψ x)
+        (volume : Measure (EuclideanSpace ℝ (Fin n))) := by
+    intro j
+    exact
+      ((((hA j).continuous_fderiv one_ne_zero).clm_apply continuous_const).mul
+        hψ.continuous).integrable_of_hasCompactSupport hψc.mul_left
+  calc
+    ∑ j, ∫ x, (hessianMatrix u x).adjugate i j * fderiv ℝ ψ x (e j) =
+        ∑ j, -(∫ x,
+          fderiv ℝ (fun y => (hessianMatrix u y).adjugate i j) x (e j) * ψ x) := by
+      apply Finset.sum_congr rfl
+      intro j _
+      exact weakPiola_integration_by_parts (hA j) hψ hψc (e j)
+    _ = -(∑ j, ∫ x,
+        fderiv ℝ (fun y => (hessianMatrix u y).adjugate i j) x (e j) * ψ x) :=
+      Finset.sum_neg_distrib _
+    _ = -(∫ x, ∑ j,
+        fderiv ℝ (fun y => (hessianMatrix u y).adjugate i j) x (e j) * ψ x) := by
+      congr 1
+      exact (integral_finsetSum Finset.univ (fun j _ => hInt j)).symm
+    _ = 0 := by
+      have hz : ∀ x, (∑ j,
+          fderiv ℝ (fun y => (hessianMatrix u y).adjugate i j) x (e j) *
+            ψ x) = 0 := by
+        intro x
+        rw [← Finset.sum_mul]
+        change
+          (∑ j, fderiv ℝ (fun y => (hessianMatrix u y).adjugate i j) x
+            (EuclideanSpace.basisFun (Fin n) ℝ j)) * ψ x = 0
+        rw [sum_fderiv_adjugate_hessianMatrix_eq_zero hu x i, zero_mul]
+      simp only [hz, integral_zero, neg_zero]
+
+/-- **Weak Piola identity for a `C¹` function with Lipschitz gradient** (weak Letwin route, step N10):
+the rows of the adjugate of the a.e. Hessian `H = D(∇u)` are weakly divergence-free,
+`∑ⱼ ∫ (adj H)ᵢⱼ ∂ⱼψ = 0` for every `C¹` test `ψ` with compact support. Here
+`hessianMatrix u x i j = D²u(x)(eᵢ, eⱼ)` is the true Hessian at every point where `∇u` is
+differentiable (almost everywhere, Rademacher), and the identity is obtained by mollification from
+the smooth case `sum_fderiv_adjugate_hessianMatrix_eq_zero`. -/
+theorem sum_integral_adjugate_hessianMatrix_mul_fderiv_eq_zero {n : ℕ}
+    {u : EuclideanSpace ℝ (Fin n) → ℝ} (hu : ContDiff ℝ 1 u) {G : NNReal}
+    (hG : LipschitzWith G (gradient u)) {ψ : EuclideanSpace ℝ (Fin n) → ℝ}
+    (hψ : ContDiff ℝ 1 ψ) (hψc : HasCompactSupport ψ) (i : Fin n) :
+    ∑ j, ∫ x, (hessianMatrix u x).adjugate i j * fderiv ℝ ψ x (EuclideanSpace.basisFun (Fin n) ℝ j)
+      ∂(volume : Measure (EuclideanSpace ℝ (Fin n))) = 0 := by
+  classical
+  obtain ⟨Uk, hUk, _, hLip, _, hconv⟩ :=
+    exists_contDiff_approx_of_lipschitz_gradient hu hG
+  let e := EuclideanSpace.basisFun (Fin n) ℝ
+  have hUk₃ : ∀ k, ContDiff ℝ 3 (Uk k) :=
+    fun k => (hUk k).of_le
+      (WithTop.coe_le_coe.mpr (show (3 : ℕ∞) ≤ ⊤ from le_top))
+  have hA : ∀ k j, ContDiff ℝ 1
+      (fun x => (hessianMatrix (Uk k) x).adjugate i j) :=
+    fun k j => weakPiola_contDiff_cofactor (hUk₃ k) i j
+  have hψD : ∀ j : Fin n, Continuous (fun x => fderiv ℝ ψ x (e j)) :=
+    fun _ => (hψ.continuous_fderiv one_ne_zero).clm_apply continuous_const
+  have hlim : ∀ j : Fin n,
+      Tendsto
+        (fun k => ∫ x, (hessianMatrix (Uk k) x).adjugate i j *
+          fderiv ℝ ψ x (e j))
+        atTop
+        (𝓝 (∫ x, (hessianMatrix u x).adjugate i j *
+          fderiv ℝ ψ x (e j))) := by
+    intro j
+    have hco := weakPiola_continuous_cofactor i j
+    obtain ⟨C, hC⟩ :=
+      (isCompact_closedBall
+        (0 : EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n))
+        (G : ℝ)).exists_bound_of_continuousOn hco.continuousOn
+    have hbound : ∀ k x, ‖(hessianMatrix (Uk k) x).adjugate i j‖ ≤ C := by
+      intro k x
+      rw [weakPiola_hessian]
+      apply hC
+      change dist (fderiv ℝ (gradient (Uk k)) x) 0 ≤ (G : ℝ)
+      rw [dist_zero_right]
+      exact norm_fderiv_le_of_lipschitz ℝ (hLip k)
+    apply tendsto_integral_filter_of_dominated_convergence
+      (fun x => C * ‖fderiv ℝ ψ x (e j)‖)
+    · exact Filter.Eventually.of_forall fun k =>
+        ((hA k j).continuous.mul (hψD j)).aestronglyMeasurable
+    · exact Filter.Eventually.of_forall fun k =>
+        Filter.Eventually.of_forall fun x => by
+          rw [norm_mul]
+          exact mul_le_mul_of_nonneg_right (hbound k x) (norm_nonneg _)
+    · exact
+        ((hψD j).integrable_of_hasCompactSupport
+          (hψc.fderiv_apply ℝ (e j))).norm.const_mul C
+    · filter_upwards [hconv] with x hx
+      have ht :=
+        (hco.continuousAt.tendsto.comp hx).mul_const (fderiv ℝ ψ x (e j))
+      simpa only [weakPiola_hessian, Function.comp_def] using ht
+  have hsum :=
+    tendsto_finsetSum Finset.univ (fun j _ => hlim j)
+  have hzero : ∀ k,
+      (∑ j, ∫ x, (hessianMatrix (Uk k) x).adjugate i j *
+        fderiv ℝ ψ x (e j)) = 0 :=
+    fun k => weakPiola_smooth (hUk₃ k) hψ hψc i
+  have hsumzero : Tendsto
+      (fun k => ∑ j, ∫ x, (hessianMatrix (Uk k) x).adjugate i j *
+        fderiv ℝ ψ x (e j)) atTop (𝓝 0) := by
+    simp only [hzero]
+    exact tendsto_const_nhds
+  exact tendsto_nhds_unique hsum hsumzero
+
+end FunctionalInequalities.Analysis
+
+end LT6BWeakPiola

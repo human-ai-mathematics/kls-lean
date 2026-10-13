@@ -309,6 +309,18 @@ import FunctionalInequalities.Analysis.MollificationHessian
 import FunctionalInequalities.KLS.BKL.Localization.NoiseBound
 import FunctionalInequalities.KLS.BKL.Localization.Process
 import FunctionalInequalities.Probability.Diffusion.Transport
+import FunctionalInequalities.Analysis.BakryEmery.Bochner.Lipschitz
+import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.LipschitzHessian
+import FunctionalInequalities.Analysis.Convex.Alexandrov
+import FunctionalInequalities.KLS.BKL.Localization.CumulantGenerator
+import FunctionalInequalities.KLS.BKL.Localization.EnergyBound
+import FunctionalInequalities.KLS.BKL.Localization.CumulantDerivative
+import FunctionalInequalities.KLS.BKL.Localization.CovarianceGenerator
+import FunctionalInequalities.Probability.Diffusion.InverseCalculus
+import FunctionalInequalities.Analysis.Operator.HilbertSchmidt
+import FunctionalInequalities.Probability.Diffusion.VectorGenerator
+import FunctionalInequalities.KLS.BKL.Localization.EnergyConjugation
+import FunctionalInequalities.Analysis.Tensor.EnergyForm
 
 /-!
 # Functional inequalities
