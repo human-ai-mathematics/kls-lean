@@ -135,6 +135,10 @@ dimension 0; basis mismatch between the Stein API (`Fin n`) and the BakryEmery A
   tests via `Probability.Stein.hessianMatrix`; imports `Probability/Stein/HessianKernel.lean`, as `Analysis/Matrix/Piola.lean`
   already does). Created rather than extending `Alexandrov.lean` because the Hessian dependency diverges; no public API
   change elsewhere; validated by build, strict compile and the full verifier.
+- 2026-10-13 (placement): `Analysis/Convex/Normalization.lean` (new; family `Analysis/Convex`; maximal simplices and
+  standard-simplex geometry for the affine normalisation of convex bodies; Mathlib only) and
+  `KLS/BKL/Localization/LyapunovMoment.lean` (new; Gronwall moment and tail bounds along the cutoff process; imports
+  Lyapunov, Process, CutoffInduction, Gronwall). Both created because no existing module owns these objects; no API change.
 
 ## Not claimed
 

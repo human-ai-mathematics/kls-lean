@@ -1728,3 +1728,350 @@ theorem infDist_frontier_le_of_forall_inner_le {E : Type*} [NormedAddCommGroup E
 end FunctionalInequalities.Analysis
 
 end LT11E2InfdistLeWidth
+
+section LT11E1AffineTransportSubgradientimage
+
+open MeasureTheory Set
+open scoped RealInnerProductSpace ENNReal
+
+/-! Subgradient images under affine changes of variables and their volume (task L-T11e1). -/
+
+namespace FunctionalInequalities.Analysis
+
+private lemma affineEquiv_linear_sub {E : Type*} [NormedAddCommGroup E]
+    [Module ℝ E] (e : E ≃ᵃ[ℝ] E) (a b : E) :
+    (e.linear : E →ₗ[ℝ] E) (a - b) = e a - e b := by
+  change (AffineEquiv.toAffineMap e).linear (a - b) =
+    (AffineEquiv.toAffineMap e) a - (AffineEquiv.toAffineMap e) b
+  exact (AffineEquiv.toAffineMap e).linearMap_vsub a b
+
+/-- **Affine transport of subgradient images** (weak Letwin route, Caffarelli block T11e, step G5):
+under an affine equivalence `e` with linear part `T`, the subgradient image of `u ∘ e.symm` over
+`e '' G` is the image of `∂u(G)` under the adjoint of `T⁻¹`. -/
+theorem subgradientImage_comp_affineEquiv_symm {E : Type*} [NormedAddCommGroup E]
+    [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] (u : E → ℝ) (e : E ≃ᵃ[ℝ] E) (G : Set E) :
+    subgradientImage (u ∘ e.symm) (e '' G) =
+      (LinearMap.adjoint (e.linear.symm : E →ₗ[ℝ] E)) '' subgradientImage u G := by
+  ext q
+  constructor
+  · rintro ⟨z, ⟨x, hx, rfl⟩, hq⟩
+    let p : E := LinearMap.adjoint (e.linear : E →ₗ[ℝ] E) q
+    have hcomp :
+        (e.linear : E →ₗ[ℝ] E) ∘ₗ (e.linear.symm : E →ₗ[ℝ] E) =
+          LinearMap.id := by
+      ext v
+      simp
+    have hadjcomp :
+        LinearMap.adjoint (e.linear.symm : E →ₗ[ℝ] E) ∘ₗ
+            LinearMap.adjoint (e.linear : E →ₗ[ℝ] E) =
+          LinearMap.id := by
+      calc
+        LinearMap.adjoint (e.linear.symm : E →ₗ[ℝ] E) ∘ₗ
+              LinearMap.adjoint (e.linear : E →ₗ[ℝ] E) =
+            LinearMap.adjoint
+              ((e.linear : E →ₗ[ℝ] E) ∘ₗ (e.linear.symm : E →ₗ[ℝ] E)) :=
+          (LinearMap.adjoint_comp (e.linear : E →ₗ[ℝ] E)
+            (e.linear.symm : E →ₗ[ℝ] E)).symm
+        _ = LinearMap.adjoint LinearMap.id := by rw [hcomp]
+        _ = LinearMap.id := LinearMap.adjoint_id
+    have hadj :
+        LinearMap.adjoint (e.linear.symm : E →ₗ[ℝ] E) p = q := by
+      have h := congrArg (fun f : E →ₗ[ℝ] E => f q) hadjcomp
+      simpa [p] using h
+    have hp : p ∈ subgradientImage u G := by
+      refine ⟨x, hx, ?_⟩
+      intro y
+      have hi :
+          inner ℝ q (e y - e x) = inner ℝ p (y - x) := by
+        calc
+          inner ℝ q (e y - e x) =
+              inner ℝ ((e.linear : E →ₗ[ℝ] E) (y - x)) q := by
+            rw [affineEquiv_linear_sub e y x]
+            exact (real_inner_comm q (e y - e x)).symm
+          _ = inner ℝ (y - x) p := by
+            simpa [p] using
+              (LinearMap.adjoint_inner_right (e.linear : E →ₗ[ℝ] E) (y - x) q).symm
+          _ = inner ℝ p (y - x) := real_inner_comm p (y - x)
+      calc
+        u x + inner ℝ p (y - x) =
+            u x + inner ℝ q (e y - e x) := by rw [hi]
+        _ ≤ u y := by
+          simpa only [Function.comp_apply, e.symm_apply_apply] using hq (e y)
+    refine ⟨p, hp, ?_⟩
+    exact hadj
+  · rintro ⟨p, hp, hpq⟩
+    rcases hp with ⟨x, hx, hpx⟩
+    refine ⟨e x, ⟨x, hx, rfl⟩, ?_⟩
+    rw [← hpq]
+    intro z
+    have hlin :
+        (e.symm.linear : E →ₗ[ℝ] E) =
+          (e.linear.symm : E →ₗ[ℝ] E) := by
+      ext v
+      simp
+    have hv :
+        (e.linear.symm : E →ₗ[ℝ] E) (z - e x) = e.symm z - x := by
+      calc
+        (e.linear.symm : E →ₗ[ℝ] E) (z - e x) =
+            (e.symm.linear : E →ₗ[ℝ] E) (z - e x) := by
+              rw [hlin]
+        _ = e.symm z - e.symm (e x) :=
+          affineEquiv_linear_sub e.symm z (e x)
+        _ = e.symm z - x := by rw [e.symm_apply_apply]
+    have hi :
+        inner ℝ (LinearMap.adjoint (e.linear.symm : E →ₗ[ℝ] E) p) (z - e x) =
+          inner ℝ p (e.symm z - x) := by
+      calc
+        inner ℝ (LinearMap.adjoint (e.linear.symm : E →ₗ[ℝ] E) p) (z - e x) =
+            inner ℝ (z - e x)
+              (LinearMap.adjoint (e.linear.symm : E →ₗ[ℝ] E) p) := by
+          rw [real_inner_comm]
+        _ = inner ℝ ((e.linear.symm : E →ₗ[ℝ] E) (z - e x)) p :=
+          LinearMap.adjoint_inner_right (e.linear.symm : E →ₗ[ℝ] E) (z - e x) p
+        _ = inner ℝ (e.symm z - x) p := by rw [hv]
+        _ = inner ℝ p (e.symm z - x) :=
+          real_inner_comm p (e.symm z - x)
+    simpa only [Function.comp_apply, e.symm_apply_apply, hi] using hpx (e.symm z)
+
+/-- The volume of the transported subgradient image is `vol (∂u(G)) / |det T|`. -/
+theorem volume_subgradientImage_comp_affineEquiv_symm {E : Type*} [NormedAddCommGroup E]
+    [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
+    (u : E → ℝ) (e : E ≃ᵃ[ℝ] E) (G : Set E) :
+    (volume : Measure E) (subgradientImage (u ∘ e.symm) (e '' G)) =
+      ENNReal.ofReal |LinearMap.det (e.linear : E →ₗ[ℝ] E)|⁻¹ *
+        (volume : Measure E) (subgradientImage u G) := by
+  let b := stdOrthonormalBasis ℝ E
+  have hdetadj :
+      LinearMap.det (LinearMap.adjoint (e.linear.symm : E →ₗ[ℝ] E)) =
+        LinearMap.det (e.linear.symm : E →ₗ[ℝ] E) := by
+    calc
+      LinearMap.det (LinearMap.adjoint (e.linear.symm : E →ₗ[ℝ] E)) =
+          (LinearMap.toMatrix b.toBasis b.toBasis
+            (LinearMap.adjoint (e.linear.symm : E →ₗ[ℝ] E))).det :=
+        (LinearMap.det_toMatrix b.toBasis
+          (LinearMap.adjoint (e.linear.symm : E →ₗ[ℝ] E))).symm
+      _ = (LinearMap.toMatrix b.toBasis b.toBasis
+            (e.linear.symm : E →ₗ[ℝ] E)).conjTranspose.det := by
+        rw [LinearMap.toMatrix_adjoint b b]
+      _ = (LinearMap.toMatrix b.toBasis b.toBasis
+            (e.linear.symm : E →ₗ[ℝ] E)).det := by
+        rw [Matrix.det_conjTranspose]
+        simp
+      _ = LinearMap.det (e.linear.symm : E →ₗ[ℝ] E) :=
+        LinearMap.det_toMatrix b.toBasis (e.linear.symm : E →ₗ[ℝ] E)
+  have hcomp :
+      (e.linear.symm : E →ₗ[ℝ] E) ∘ₗ (e.linear : E →ₗ[ℝ] E) =
+        LinearMap.id := by
+    ext v
+    simp
+  have hprod :
+      LinearMap.det (e.linear.symm : E →ₗ[ℝ] E) *
+          LinearMap.det (e.linear : E →ₗ[ℝ] E) = 1 := by
+    calc
+      LinearMap.det (e.linear.symm : E →ₗ[ℝ] E) *
+          LinearMap.det (e.linear : E →ₗ[ℝ] E) =
+          LinearMap.det
+            ((e.linear.symm : E →ₗ[ℝ] E) ∘ₗ (e.linear : E →ₗ[ℝ] E)) :=
+        (LinearMap.det_comp (e.linear.symm : E →ₗ[ℝ] E)
+          (e.linear : E →ₗ[ℝ] E)).symm
+      _ = LinearMap.det LinearMap.id := by rw [hcomp]
+      _ = 1 := LinearMap.det_id
+  have hdet_ne :
+      LinearMap.det (e.linear : E →ₗ[ℝ] E) ≠ 0 := by
+    intro hzero
+    have hbad : (1 : ℝ) = 0 := by
+      calc
+        (1 : ℝ) =
+            LinearMap.det (e.linear.symm : E →ₗ[ℝ] E) *
+              LinearMap.det (e.linear : E →ₗ[ℝ] E) := hprod.symm
+        _ = 0 := by rw [hzero]; simp
+    exact zero_ne_one hbad.symm
+  have hdet_symm :
+      LinearMap.det (e.linear.symm : E →ₗ[ℝ] E) =
+        (LinearMap.det (e.linear : E →ₗ[ℝ] E))⁻¹ := by
+    calc
+      LinearMap.det (e.linear.symm : E →ₗ[ℝ] E) =
+          LinearMap.det (e.linear.symm : E →ₗ[ℝ] E) * 1 := by simp
+      _ = LinearMap.det (e.linear.symm : E →ₗ[ℝ] E) *
+          (LinearMap.det (e.linear : E →ₗ[ℝ] E) *
+            (LinearMap.det (e.linear : E →ₗ[ℝ] E))⁻¹) := by
+        rw [mul_inv_cancel₀ hdet_ne]
+      _ = (LinearMap.det (e.linear.symm : E →ₗ[ℝ] E) *
+          LinearMap.det (e.linear : E →ₗ[ℝ] E)) *
+            (LinearMap.det (e.linear : E →ₗ[ℝ] E))⁻¹ := by ring
+      _ = (LinearMap.det (e.linear : E →ₗ[ℝ] E))⁻¹ := by
+        rw [hprod]
+        simp
+  have hdetabs :
+      |LinearMap.det (LinearMap.adjoint (e.linear.symm : E →ₗ[ℝ] E))| =
+        |LinearMap.det (e.linear : E →ₗ[ℝ] E)|⁻¹ := by
+    calc
+      |LinearMap.det (LinearMap.adjoint (e.linear.symm : E →ₗ[ℝ] E))| =
+          |LinearMap.det (e.linear.symm : E →ₗ[ℝ] E)| :=
+        congrArg abs hdetadj
+      _ = |(LinearMap.det (e.linear : E →ₗ[ℝ] E))⁻¹| :=
+        congrArg abs hdet_symm
+      _ = |LinearMap.det (e.linear : E →ₗ[ℝ] E)|⁻¹ :=
+        abs_inv _
+  rw [subgradientImage_comp_affineEquiv_symm]
+  rw [MeasureTheory.Measure.addHaar_image_linearMap]
+  rw [hdetabs]
+
+end FunctionalInequalities.Analysis
+
+end LT11E1AffineTransportSubgradientimage
+
+section LT11E4NormalizedMinEstimate
+
+open MeasureTheory Set Metric
+open scoped RealInnerProductSpace ENNReal
+
+/-! Minimum estimate for a normalized convex function from a lower Alexandrov bound (task L-T11e4). -/
+
+namespace FunctionalInequalities.Analysis
+
+/-- **Minimum estimate on a normalised section by quadratic comparison** (weak Letwin route, Caffarelli
+block T11e, step (b); Gutiérrez Lemma via the comparison with `½κ(‖x‖² − 1)`): if `v` is convex, `≤ 0` on
+the frontier of a bounded open `S ⊇ closedBall 0 1`, and `a · vol G ≤ vol ∂v(G)` for open `G ⊆ S`, then
+`v 0 ≤ −½ (a/2)^{1/n}`. -/
+theorem le_neg_of_lower_alexandrov_bound {n : ℕ} (hn : 0 < n) {v : EuclideanSpace ℝ (Fin n) → ℝ}
+    (hconv : ConvexOn ℝ univ v) {S : Set (EuclideanSpace ℝ (Fin n))} (hS : IsOpen S)
+    (hb : Bornology.IsBounded S) (hball : closedBall (0 : EuclideanSpace ℝ (Fin n)) 1 ⊆ S)
+    (hfr : ∀ x ∈ frontier S, v x ≤ 0) {a : ℝ} (ha : 0 < a)
+    (hA : ∀ G : Set (EuclideanSpace ℝ (Fin n)), IsOpen G → G ⊆ S →
+      ENNReal.ofReal a * (volume : Measure (EuclideanSpace ℝ (Fin n))) G ≤
+        (volume : Measure (EuclideanSpace ℝ (Fin n))) (subgradientImage v G)) :
+    v 0 ≤ -(1 / 2) * (a / 2) ^ (1 / (n : ℝ)) := by
+  let E := EuclideanSpace ℝ (Fin n)
+  let κ : ℝ := (a / 2) ^ (1 / (n : ℝ))
+  let M : Matrix (Fin n) (Fin n) ℝ := κ • (1 : Matrix (Fin n) (Fin n) ℝ)
+  let w : E → ℝ := quadraticAt M 0 0 (-κ / 2)
+  have hκ : 0 < κ := by
+    dsimp [κ]
+    exact Real.rpow_pos_of_pos (by positivity) _
+  have hκpow : κ ^ n = a / 2 := by
+    dsimp [κ]
+    simpa only [one_div] using
+      (Real.rpow_inv_natCast_pow (show 0 ≤ a / 2 by positivity) (Nat.ne_of_gt hn))
+  have hMpos : M.PosDef := by
+    dsimp [M]
+    exact Matrix.PosDef.one.smul hκ
+  have hMdet : M.det = κ ^ n := by
+    dsimp [M]
+    rw [Matrix.det_smul, Matrix.det_one, Fintype.card_fin, mul_one]
+  have hMaction (x : E) :
+      Matrix.toEuclideanLin M x = κ • x := by
+    change Matrix.toLpLin 2 2 (κ • (1 : Matrix (Fin n) (Fin n) ℝ)) x = κ • x
+    rw [map_smul, Matrix.toLpLin_one]
+    simp
+  have hwformula (x : E) :
+      w x = (κ / 2) * (‖x‖ ^ 2 - 1) := by
+    dsimp [w, quadraticAt]
+    rw [hMaction]
+    simp only [sub_zero, inner_zero_left, real_inner_smul_right,
+      real_inner_self_eq_norm_sq]
+    ring
+  have hvc : Continuous v := by
+    apply continuousOn_univ.mp
+    exact hconv.continuousOn isOpen_univ
+  have hwconv : ConvexOn ℝ univ w := by
+    dsimp [w]
+    exact convexOn_quadraticAt hMpos.posSemidef 0 0 (-κ / 2)
+  have hwc : Continuous w := by
+    apply continuousOn_univ.mp
+    exact hwconv.continuousOn isOpen_univ
+  have hwfront : ∀ x ∈ frontier S, 0 < w x := by
+    intro x hx
+    have hxnotS : x ∉ S := by
+      rw [hS.frontier_eq] at hx
+      exact fun hxs => hx.2 hxs
+    have hnorm : 1 < ‖x‖ := by
+      apply lt_of_not_ge
+      intro hle
+      apply hxnotS
+      apply hball
+      simpa [mem_closedBall, dist_zero_right] using hle
+    have hsq : 0 < ‖x‖ ^ 2 - 1 := by
+      nlinarith [norm_nonneg x]
+    rw [hwformula]
+    exact mul_pos (half_pos hκ) hsq
+  let G : Set E := S ∩ {x | w x < v x}
+  have hGopen : IsOpen G := by
+    dsimp [G]
+    exact hS.inter (isOpen_lt hwc hvc)
+  have hGsub : G ⊆ S := by
+    intro x hx
+    exact hx.1
+  have hGb : Bornology.IsBounded G := hb.subset hGsub
+  have hGeq : ∀ x ∈ frontier G, w x = v x := by
+    intro x hx
+    have hxclG : x ∈ closure G := frontier_subset_closure hx
+    have hxclS : x ∈ closure S := closure_mono hGsub hxclG
+    have hle : w x ≤ v x := by
+      apply closure_minimal
+        (s := G) (t := {y | w y ≤ v y}) ?_ (isClosed_le hwc hvc) hxclG
+      intro y hy
+      change w y ≤ v y
+      exact le_of_lt (show w y < v y from hy.2)
+    by_cases hxs : x ∈ S
+    · have hxnotG : x ∉ G := by
+        have hx' := hx
+        rw [hGopen.frontier_eq] at hx'
+        exact fun hxg => hx'.2 hxg
+      apply le_antisymm hle
+      exact le_of_not_gt (fun hlt => hxnotG ⟨hxs, hlt⟩)
+    · have hxf : x ∈ frontier S := by
+        rw [hS.frontier_eq]
+        exact ⟨hxclS, hxs⟩
+      exfalso
+      linarith [hfr x hxf, hwfront x hxf]
+  have hGempty : G = ∅ := by
+    by_contra hGne
+    have hGnonempty : G.Nonempty := nonempty_iff_ne_empty.mpr hGne
+    have hGpos : 0 < (volume : Measure E) G :=
+      IsOpen.measure_pos volume hGopen hGnonempty
+    have hGtop : (volume : Measure E) G < ∞ := hGb.measure_lt_top
+    have hcomp : subgradientImage v G ⊆ subgradientImage w G :=
+      subgradientImage_subset_of_le hwconv hconv hGopen hGb
+        (fun x hx => le_of_lt hx.2) hGeq
+    have hmul :
+        ENNReal.ofReal a * (volume : Measure E) G ≤
+          ENNReal.ofReal M.det * (volume : Measure E) G := by
+      calc
+        ENNReal.ofReal a * (volume : Measure E) G ≤
+            (volume : Measure E) (subgradientImage v G) :=
+          hA G hGopen hGsub
+        _ ≤ (volume : Measure E) (subgradientImage w G) :=
+          measure_mono hcomp
+        _ = ENNReal.ofReal M.det * (volume : Measure E) G :=
+          volume_subgradientImage_quadraticAt hMpos 0 0 (-κ / 2) hGopen.measurableSet
+    have hcoef : ENNReal.ofReal a ≤ ENNReal.ofReal M.det := by
+      exact
+        (ENNReal.mul_le_mul_iff_right
+          (a := (volume : Measure E) G) (ne_of_gt hGpos) (ne_of_lt hGtop)).mp
+          (by simpa [mul_comm] using hmul)
+    have hreal : a ≤ M.det :=
+      (ENNReal.ofReal_le_ofReal_iff hMpos.det_pos.le).mp hcoef
+    rw [hMdet, hκpow] at hreal
+    linarith
+  have hvw : ∀ x ∈ S, v x ≤ w x := by
+    intro x hxs
+    by_contra hnot
+    have hlt : w x < v x := lt_of_not_ge hnot
+    have hxg : x ∈ G := ⟨hxs, hlt⟩
+    rw [hGempty] at hxg
+    exact hxg
+  have hzeroS : (0 : E) ∈ S := by
+    apply hball
+    simp [mem_closedBall]
+  calc
+    v 0 ≤ w 0 := hvw 0 hzeroS
+    _ = -(1 / 2) * (a / 2) ^ (1 / (n : ℝ)) := by
+      rw [hwformula]
+      dsimp [κ]
+      simp
+      ring
+
+end FunctionalInequalities.Analysis
+
+end LT11E4NormalizedMinEstimate
