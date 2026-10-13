@@ -149,6 +149,9 @@ dimension 0; basis mismatch between the Stein API (`Fin n`) and the BakryEmery A
   `KLS/BKL/Proposition71.lean` precedent). Letwin supports: Lipschitz null images to `Analysis/Sard/Equidimensional.lean`,
   proximal/Moreau/Taylor lemmas to `Analysis/Convex/Subgradient.lean`. 2026-10-13: Fable credits exhausted; the Letwin
   sub-controller continues on Opus, the S line was finished by the main controller.
+- 2026-10-13 (placement): `Analysis/Convex/SecondOrder.lean` (new; second-order differentiability of convex functions,
+  Alexandrov's theorem; imports Subgradient and Sard/Equidimensional). L-T11e7 supersedes L-T11e (same statement re-proved);
+  only L-T11e7 was integrated.
 
 ## Not claimed
 
