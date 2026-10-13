@@ -1318,3 +1318,474 @@ theorem contDiff_one_of_convexOn_of_unique_subgradient {E : Type*} [NormedAddCom
 end FunctionalInequalities.Analysis
 
 end LT5DUniqueSubgradientC1
+
+section LT12D2ProximalPoint
+
+open Set
+open scoped RealInnerProductSpace
+
+/-! The proximal point of a convex function and its Lipschitz dependence (task L-T12d2). -/
+
+namespace FunctionalInequalities.Analysis
+
+private theorem proximal_subgradient_monotonicity
+    {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+    {f : E → ℝ} {x x' z w : E}
+    (hx : ∀ y, f x + ⟪z - x, y - x⟫ ≤ f y)
+    (hx' : ∀ y, f x' + ⟪w - x', y - x'⟫ ≤ f y) :
+    ‖x - x'‖ ^ 2 ≤ ⟪x - x', z - w⟫ := by
+  have h₁ : f x - ⟪z - x, x - x'⟫ ≤ f x' := by
+    simpa only [← neg_sub x x', inner_neg_right, sub_eq_add_neg] using hx x'
+  have h₂ := hx' x
+  have hm : 0 ≤ ⟪(z - x) - (w - x'), x - x'⟫ := by
+    rw [inner_sub_left]
+    linarith
+  have he : (z - x) - (w - x') = (z - w) - (x - x') := by
+    abel
+  rw [he, inner_sub_left, real_inner_self_eq_norm_sq] at hm
+  have hc := real_inner_comm (x - x') (z - w)
+  linarith
+
+set_option maxHeartbeats 800000 in
+private theorem exists_proximal_minimizer
+    {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+    [FiniteDimensional ℝ E] {f : E → ℝ}
+    (hconv : ConvexOn ℝ univ f) (z : E) :
+    ∃ x, ∀ y,
+      f x + (1 / 2 : ℝ) * ‖x - z‖ ^ 2 ≤
+        f y + (1 / 2 : ℝ) * ‖y - z‖ ^ 2 := by
+  let φ : E → ℝ := fun x => f x + (1 / 2 : ℝ) * ‖x - z‖ ^ 2
+  have hf : Continuous f :=
+    continuousOn_univ.mp (hconv.continuousOn isOpen_univ)
+  have hφ : Continuous φ :=
+    hf.add (((continuous_id.sub continuous_const).norm.pow 2).const_mul (1 / 2 : ℝ))
+  obtain ⟨g, hg, _⟩ := exists_subgradient_slope_le_inner_add hconv z (0 : E)
+  let R : ℝ := 2 * ‖g‖ + 1
+  have hR : 0 ≤ R := by
+    dsimp [R]
+    positivity
+  obtain ⟨x, _, hx⟩ :=
+    (isCompact_closedBall z R).exists_isMinOn
+      ⟨z, Metric.mem_closedBall_self hR⟩ hφ.continuousOn
+  refine ⟨x, ?_⟩
+  intro y
+  by_cases hy : y ∈ Metric.closedBall z R
+  · exact (isMinOn_iff.mp hx) y hy
+  · have hr : 2 * ‖g‖ + 1 < ‖y - z‖ := by
+      simpa only [Metric.mem_closedBall, dist_eq_norm, not_le, R] using hy
+    have hr0 : 0 < ‖y - z‖ := by
+      linarith [norm_nonneg g]
+    have hprod :=
+      mul_pos hr0 (show 0 < ‖y - z‖ - 2 * ‖g‖ by linarith)
+    have hi := neg_le_of_abs_le (abs_real_inner_le_norm g (y - z))
+    have ha := hg y
+    have hxz := (isMinOn_iff.mp hx) z (Metric.mem_closedBall_self hR)
+    dsimp [φ] at hxz ⊢
+    simp only [sub_self, norm_zero, zero_pow (by decide : 2 ≠ 0),
+      mul_zero, add_zero] at hxz
+    nlinarith
+
+set_option maxHeartbeats 800000 in
+private theorem subgradient_of_proximal_minimizer
+    {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+    {f : E → ℝ} (hconv : ConvexOn ℝ univ f) {x z : E}
+    (hx : ∀ y,
+      f x + (1 / 2 : ℝ) * ‖x - z‖ ^ 2 ≤
+        f y + (1 / 2 : ℝ) * ‖y - z‖ ^ 2) :
+    ∀ y, f x + ⟪z - x, y - x⟫ ≤ f y := by
+  intro y
+  have ht : ∀ t : ℝ, 0 < t → t ≤ 1 →
+      0 ≤ f y - f x + ⟪x - z, y - x⟫ + (t / 2) * ‖y - x‖ ^ 2 := by
+    intro t ht ht1
+    have he : (1 - t) • x + t • y = x + t • (y - x) := by
+      rw [sub_smul, one_smul, smul_sub]
+      abel
+    have hf := hconv.2 (mem_univ x) (mem_univ y)
+      (sub_nonneg.mpr ht1) ht.le (show 1 - t + t = 1 by ring)
+    rw [he] at hf
+    simp only [smul_eq_mul] at hf
+    have hm := hx (x + t • (y - x))
+    have he' : x + t • (y - x) - z = (x - z) + t • (y - x) := by
+      abel
+    rw [he', norm_add_sq_real, inner_smul_right, norm_smul,
+      Real.norm_eq_abs, abs_of_pos ht] at hm
+    have hmul :
+        0 ≤ t * (f y - f x + ⟪x - z, y - x⟫ + (t / 2) * ‖y - x‖ ^ 2) := by
+      nlinarith
+    exact nonneg_of_mul_nonneg_right hmul ht
+  have hcont : Continuous
+      (fun t : ℝ => f y - f x + ⟪x - z, y - x⟫ + (t / 2) * ‖y - x‖ ^ 2) :=
+    continuous_const.add ((continuous_id.div_const 2).mul continuous_const)
+  have hev : ∀ᶠ t : ℝ in nhdsWithin 0 (Ioi 0),
+      0 ≤ f y - f x + ⟪x - z, y - x⟫ + (t / 2) * ‖y - x‖ ^ 2 := by
+    have hpos : ∀ᶠ t : ℝ in nhdsWithin 0 (Ioi 0), 0 < t :=
+      self_mem_nhdsWithin
+    have hsmall : ∀ᶠ t : ℝ in nhdsWithin 0 (Ioi 0), t < 1 :=
+      (eventually_lt_nhds (show (0 : ℝ) < 1 by norm_num)).filter_mono
+        nhdsWithin_le_nhds
+    exact (hpos.and hsmall).mono (fun t h => ht t h.1 h.2.le)
+  have hlim : 0 ≤ f y - f x + ⟪x - z, y - x⟫ := by
+    simpa only [zero_div, zero_mul, add_zero] using
+      ge_of_tendsto ((hcont.tendsto 0).mono_left nhdsWithin_le_nhds) hev
+  have hi : ⟪z - x, y - x⟫ = -⟪x - z, y - x⟫ := by
+    rw [← neg_sub x z, inner_neg_left]
+  rw [hi]
+  linarith
+
+/-- The **proximal point** (resolvent of the subdifferential) of `f` at `z`: a point `x` such that
+`z − x` is a subgradient of `f` at `x`, i.e. the minimiser of `x ↦ f x + ½‖x − z‖²` (weak Letwin route,
+Alexandrov's theorem, task T12d2). For convex `f` on a finite-dimensional space it exists and is unique. -/
+def proximalPoint {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E] (f : E → ℝ) (z : E) : E :=
+  Classical.epsilon fun x => ∀ y, f x + ⟪z - x, y - x⟫ ≤ f y
+
+/-- `z − proximalPoint f z` is a subgradient of the convex `f` at `proximalPoint f z`. -/
+theorem proximalPoint_spec {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+    [FiniteDimensional ℝ E] {f : E → ℝ} (hconv : ConvexOn ℝ univ f) (z : E) :
+    ∀ y, f (proximalPoint f z) + ⟪z - proximalPoint f z, y - proximalPoint f z⟫ ≤ f y := by
+  obtain ⟨x, hx⟩ := exists_proximal_minimizer hconv z
+  exact Classical.epsilon_spec
+    (p := fun x : E => ∀ y, f x + ⟪z - x, y - x⟫ ≤ f y)
+    ⟨x, subgradient_of_proximal_minimizer hconv hx⟩
+
+/-- Uniqueness: if `z − x` is a subgradient of `f` at `x`, then `x` is the proximal point of `z`. -/
+theorem proximalPoint_eq_of_subgradient {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+    [FiniteDimensional ℝ E] {f : E → ℝ} (hconv : ConvexOn ℝ univ f) {x z : E}
+    (hx : ∀ y, f x + ⟪z - x, y - x⟫ ≤ f y) : proximalPoint f z = x := by
+  have h := proximal_subgradient_monotonicity (proximalPoint_spec hconv z) hx
+  simp only [sub_self, inner_zero_right] at h
+  have hn : ‖proximalPoint f z - x‖ = 0 := by
+    nlinarith [norm_nonneg (proximalPoint f z - x)]
+  exact sub_eq_zero.mp (norm_eq_zero.mp hn)
+
+/-- Firm nonexpansiveness of the proximal map. -/
+theorem sq_norm_proximalPoint_sub_le_inner {E : Type*} [NormedAddCommGroup E]
+    [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] {f : E → ℝ} (hconv : ConvexOn ℝ univ f)
+    (z w : E) :
+    ‖proximalPoint f z - proximalPoint f w‖ ^ 2 ≤
+      ⟪proximalPoint f z - proximalPoint f w, z - w⟫ := by
+  exact proximal_subgradient_monotonicity
+    (proximalPoint_spec hconv z) (proximalPoint_spec hconv w)
+
+/-- The proximal map is `1`-Lipschitz. -/
+theorem lipschitzWith_proximalPoint {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+    [FiniteDimensional ℝ E] {f : E → ℝ} (hconv : ConvexOn ℝ univ f) :
+    LipschitzWith 1 (proximalPoint f) := by
+  apply LipschitzWith.of_dist_le_mul
+  intro z w
+  simp only [NNReal.coe_one, one_mul, dist_eq_norm]
+  have h := sq_norm_proximalPoint_sub_le_inner hconv z w
+  have hi := real_inner_le_norm (proximalPoint f z - proximalPoint f w) (z - w)
+  have hb : ‖proximalPoint f z - proximalPoint f w‖ ^ 2 ≤
+      ‖proximalPoint f z - proximalPoint f w‖ * ‖z - w‖ :=
+    h.trans hi
+  by_contra hn
+  have hlt : ‖z - w‖ < ‖proximalPoint f z - proximalPoint f w‖ :=
+    lt_of_not_ge hn
+  have hp : 0 < ‖proximalPoint f z - proximalPoint f w‖ :=
+    lt_of_le_of_lt (norm_nonneg _) hlt
+  have hm := mul_pos hp (sub_pos.mpr hlt)
+  nlinarith
+
+end FunctionalInequalities.Analysis
+
+end LT12D2ProximalPoint
+
+section LT12D3MoreauSymmetricDerivative
+
+open Set Filter
+open scoped RealInnerProductSpace Topology
+
+/-! Derivative of `½‖x‖² − (Moreau envelope)` and symmetry of the derivative of the resolvent (task L-T12d3). -/
+
+namespace FunctionalInequalities.Analysis
+
+/-- **The resolvent of a convex function is a gradient** (weak Letwin route, Alexandrov's theorem, task
+T12d3): if `P z` is a point at which `z − P z` is a subgradient of the convex `f` (the proximal map), then
+`w ↦ ½‖w‖² − (f (P w) + ½‖P w − w‖²)` (½‖·‖² minus the Moreau envelope) has derivative `⟪P z, ·⟫` at every `z`. -/
+theorem hasFDerivAt_half_sq_sub_moreau {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+    {f : E → ℝ} {P : E → E} (hP : ∀ z y, f (P z) + ⟪z - P z, y - P z⟫ ≤ f y) (z : E) :
+    HasFDerivAt (fun w => (1 / 2) * ‖w‖ ^ 2 - (f (P w) + (1 / 2) * ‖P w - w‖ ^ 2))
+      (innerSL ℝ (P z)) z := by
+  let g : E → ℝ := fun w =>
+    (1 / 2) * ‖w‖ ^ 2 - (f (P w) + (1 / 2) * ‖P w - w‖ ^ 2)
+  have hbound (w : E) :
+      0 ≤ g w - g z - ⟪P z, w - z⟫ ∧
+        g w - g z - ⟪P z, w - z⟫ ≤ (1 / 2) * ‖w - z‖ ^ 2 := by
+    have hpw := hP w (P z)
+    have hpz := hP z (P w)
+    have hsq := sq_nonneg ‖(w - z) - (P w - P z)‖
+    have hsq' := sq_nonneg ‖P w - P z‖
+    dsimp only [g]
+    simp only [← real_inner_self_eq_norm_sq, inner_sub_left, inner_sub_right]
+      at hpw hpz hsq hsq' ⊢
+    simp only [real_inner_comm] at hpw hpz hsq hsq' ⊢
+    constructor
+    · linarith only [hpw, hsq']
+    · linarith only [hpz, hsq]
+  change HasFDerivAt g (innerSL ℝ (P z)) z
+  apply HasFDerivAt.of_isLittleO
+  apply Asymptotics.IsLittleO.of_bound
+  intro c hc
+  have hn : ContinuousAt (fun w : E => ‖w - z‖) z :=
+    (continuousAt_id.sub continuousAt_const).norm
+  have he : ∀ᶠ w in 𝓝 z, ‖w - z‖ < c :=
+    hn.eventually_lt continuousAt_const (by simpa only [sub_self, norm_zero] using hc)
+  filter_upwards [he] with w hw
+  change ‖g w - g z - ⟪P z, w - z⟫‖ ≤ c * ‖w - z‖
+  rw [Real.norm_eq_abs, abs_of_nonneg (hbound w).1]
+  calc
+    g w - g z - ⟪P z, w - z⟫ ≤ (1 / 2) * ‖w - z‖ ^ 2 := (hbound w).2
+    _ ≤ c * ‖w - z‖ := by
+      have hm := mul_le_mul_of_nonneg_right hw.le (norm_nonneg (w - z))
+      nlinarith only [hm, sq_nonneg ‖w - z‖]
+
+/-- **The derivative of the resolvent is symmetric and firmly nonexpansive** (task T12d3): at a point
+where the proximal map `P` is differentiable with derivative `T`, `⟪T v, w⟫ = ⟪v, T w⟫` and
+`‖T v‖² ≤ ⟪T v, v⟫`. -/
+theorem inner_hasFDerivAt_resolvent_symm {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+    {f : E → ℝ} {P : E → E} (hP : ∀ z y, f (P z) + ⟪z - P z, y - P z⟫ ≤ f y) {z : E}
+    {T : E →L[ℝ] E} (hT : HasFDerivAt P T z) (v w : E) :
+    ⟪T v, w⟫ = ⟪v, T w⟫ ∧ ‖T v‖ ^ 2 ≤ ⟪T v, v⟫ := by
+  constructor
+  · have hs := second_derivative_symmetric
+      (fun y => hasFDerivAt_half_sq_sub_moreau hP y)
+      ((innerSL ℝ : E →L[ℝ] (E →L[ℝ] ℝ)).hasFDerivAt.comp z hT) v w
+    change ⟪T v, w⟫ = ⟪T w, v⟫ at hs
+    exact hs.trans (real_inner_comm (T w) v).symm
+  · have hfirm (a b : E) :
+        ‖P a - P b‖ ^ 2 ≤ ⟪P a - P b, a - b⟫ := by
+      have hab := hP a (P b)
+      have hba := hP b (P a)
+      simp only [← real_inner_self_eq_norm_sq, inner_sub_left, inner_sub_right]
+        at hab hba ⊢
+      simp only [real_inner_comm] at hab hba ⊢
+      linarith only [hab, hba]
+    have hline : HasDerivAt (fun t : ℝ => P (z + t • v)) (T v) 0 := by
+      have hp : HasDerivAt (fun t : ℝ => z + t • v) v 0 := by
+        simpa only [id_eq, one_smul] using
+          ((hasDerivAt_id (0 : ℝ)).smul_const v).const_add z
+      have ht : HasFDerivAt P T (z + (0 : ℝ) • v) := by
+        simpa only [zero_smul, add_zero] using hT
+      exact ht.comp_hasDerivAt 0 hp
+    have hlim :
+        Tendsto (fun t : ℝ => t⁻¹ • (P (z + t • v) - P z))
+          (𝓝[≠] 0) (𝓝 (T v)) := by
+      simpa only [zero_add, zero_smul, add_zero] using hline.tendsto_slope_zero
+    have hquot (t : ℝ) :
+        ‖t⁻¹ • (P (z + t • v) - P z)‖ ^ 2 ≤
+          ⟪t⁻¹ • (P (z + t • v) - P z), v⟫ := by
+      by_cases ht : t = 0
+      · simp [ht]
+      · have hp := hfirm (z + t • v) z
+        simp only [add_sub_cancel_left, real_inner_smul_right] at hp
+        rw [norm_smul, mul_pow, Real.norm_eq_abs, sq_abs, real_inner_smul_left]
+        calc
+          (t⁻¹) ^ 2 * ‖P (z + t • v) - P z‖ ^ 2 ≤
+              (t⁻¹) ^ 2 * (t * ⟪P (z + t • v) - P z, v⟫) :=
+            mul_le_mul_of_nonneg_left hp (sq_nonneg t⁻¹)
+          _ = t⁻¹ * ⟪P (z + t • v) - P z, v⟫ := by
+            field_simp [ht]
+    exact le_of_tendsto_of_tendsto (hlim.norm.pow 2)
+      (hlim.inner tendsto_const_nhds) (Filter.Eventually.of_forall hquot)
+
+end FunctionalInequalities.Analysis
+
+end LT12D3MoreauSymmetricDerivative
+
+section LT12D5SubgradientExpansionTaylor
+
+open Set Filter
+open scoped RealInnerProductSpace Topology
+
+/-! A first-order expansion of the subgradient gives a second-order Taylor expansion of the function (task L-T12d5). -/
+
+namespace FunctionalInequalities.Analysis
+
+private lemma riemann_sum_affine (N : ℕ) (hN : (N : ℝ) ≠ 0)
+    (a b c s : ℝ) :
+    (∑ k ∈ Finset.range N,
+      (1 / (N : ℝ)) * (a + ((k : ℝ) + s) / N * b + c)) =
+      a + (1 / 2 + (s - 1 / 2) / (N : ℝ)) * b + c := by
+  have hs : ∀ (n : ℕ) (u v : ℝ),
+      (∑ k ∈ Finset.range n, (u + (k : ℝ) * v)) =
+        (n : ℝ) * u + ((n : ℝ) * ((n : ℝ) - 1) / 2) * v := by
+    intro n u v
+    induction n with
+    | zero => simp
+    | succ n ih =>
+      rw [Finset.sum_range_succ, ih]
+      push_cast
+      ring
+  have he :
+      (fun k : ℕ => (1 / (N : ℝ)) * (a + ((k : ℝ) + s) / N * b + c)) =
+      (fun k : ℕ =>
+        (a + s / (N : ℝ) * b + c) / (N : ℝ) +
+          (k : ℝ) * (b / (N : ℝ) ^ 2)) := by
+    funext k
+    ring
+  rw [he, hs]
+  field_simp [hN]
+  ring
+
+private lemma riemann_sum_sandwich (F s : ℕ → ℝ) (N : ℕ)
+    (a b c : ℝ) (hN : 0 < (N : ℝ))
+    (hstep : ∀ k < N,
+      (1 / (N : ℝ)) * s k ≤ F (k + 1) - F k ∧
+        F (k + 1) - F k ≤ (1 / (N : ℝ)) * s (k + 1))
+    (hs : ∀ k ≤ N, |s k - a - (k : ℝ) / N * b| ≤ c) :
+    (∑ k ∈ Finset.range N,
+      (1 / (N : ℝ)) * (a + ((k : ℝ) + 0) / N * b + (-c))) ≤ F N - F 0 ∧
+    F N - F 0 ≤ ∑ k ∈ Finset.range N,
+      (1 / (N : ℝ)) * (a + ((k : ℝ) + 1) / N * b + c) := by
+  rw [← Finset.sum_range_sub F N]
+  constructor
+  · apply Finset.sum_le_sum
+    intro k hk
+    have hkN := Finset.mem_range.mp hk
+    have hb := (abs_le.mp (hs k (Nat.le_of_lt hkN))).1
+    have hm := mul_le_mul_of_nonneg_left
+      (show a + ((k : ℝ) + 0) / N * b + (-c) ≤ s k by
+        simp only [add_zero]
+        linarith)
+      (le_of_lt (one_div_pos.mpr hN))
+    exact hm.trans (hstep k hkN).1
+  · apply Finset.sum_le_sum
+    intro k hk
+    have hkN := Finset.mem_range.mp hk
+    have hb := (abs_le.mp (hs (k + 1) hkN)).2
+    have hb' : s (k + 1) ≤ a + ((k : ℝ) + 1) / N * b + c := by
+      push_cast at hb
+      linarith
+    exact (hstep k hkN).2.trans
+      (mul_le_mul_of_nonneg_left hb' (le_of_lt (one_div_pos.mpr hN)))
+
+private lemma inner_slope_error {E : Type*}
+    [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+    (p q h : E) (B : E →L[ℝ] E) (t e : ℝ)
+    (ht : 0 ≤ t) (ht1 : t ≤ 1) (he : 0 ≤ e)
+    (hex : ‖q - p - B (t • h)‖ ≤ e * ‖t • h‖) :
+    |⟪q, h⟫ - ⟪p, h⟫ - t * ⟪B h, h⟫| ≤ e * ‖h‖ ^ 2 := by
+  have hn : ‖t • h‖ ≤ ‖h‖ := by
+    rw [norm_smul, Real.norm_eq_abs, abs_of_nonneg ht]
+    nlinarith [norm_nonneg h]
+  have hb := (abs_real_inner_le_norm (q - p - B (t • h)) h).trans
+    (mul_le_mul_of_nonneg_right
+      (hex.trans (mul_le_mul_of_nonneg_left hn he)) (norm_nonneg h))
+  rw [inner_sub_left, inner_sub_left, map_smul, real_inner_smul_left] at hb
+  simpa only [pow_two, mul_assoc] using hb
+
+set_option maxHeartbeats 800000 in
+/-- **First-order expansion of the subdifferential gives a second-order Taylor expansion** (weak Letwin
+route, Alexandrov's theorem, task T12d5): if every subgradient `q` of the convex `f` at points `y` near `x`
+satisfies `‖q − p − B (y − x)‖ ≤ ε ‖y − x‖`, then
+`|f y − f x − ⟪p, y − x⟫ − ½ ⟪B (y − x), y − x⟫| ≤ ε' ‖y − x‖²` near `x`. -/
+theorem eventually_abs_sub_quadratic_le_of_subgradient_expansion {E : Type*}
+    [NormedAddCommGroup E] [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] {f : E → ℝ}
+    (hconv : ConvexOn ℝ univ f) {x p : E} {B : E →L[ℝ] E}
+    (hexp : ∀ ε > 0, ∀ᶠ y in 𝓝 x, ∀ q : E, (∀ w, f y + ⟪q, w - y⟫ ≤ f w) →
+      ‖q - p - B (y - x)‖ ≤ ε * ‖y - x‖) :
+    ∀ ε > 0, ∀ᶠ y in 𝓝 x,
+      |f y - f x - ⟪p, y - x⟫ - (1 / 2) * ⟪B (y - x), y - x⟫| ≤ ε * ‖y - x‖ ^ 2 := by
+  classical
+  intro ε hε
+  have hε₂ : 0 < ε / 2 := by positivity
+  obtain ⟨r, hr, hex⟩ :=
+    Metric.eventually_nhds_iff_ball.mp (hexp (ε / 2) hε₂)
+  obtain ⟨N, hlarge⟩ := exists_nat_gt (‖B‖ / ε + 1)
+  have hN : 0 < (N : ℝ) := by
+    have : 0 ≤ ‖B‖ / ε := div_nonneg (norm_nonneg B) (le_of_lt hε)
+    linarith
+  have hN0 : (N : ℝ) ≠ 0 := ne_of_gt hN
+  have hmesh : (1 / (2 * (N : ℝ))) * ‖B‖ ≤ ε / 2 := by
+    have hb : ‖B‖ < (N : ℝ) * ε :=
+      (div_lt_iff₀ hε).mp (by linarith : ‖B‖ / ε < (N : ℝ))
+    have hd : ‖B‖ / (2 * (N : ℝ)) ≤ ε / 2 :=
+      (div_le_iff₀ (by positivity : 0 < 2 * (N : ℝ))).2 (by nlinarith)
+    convert hd using 1
+    ring
+  apply Metric.eventually_nhds_iff_ball.mpr
+  refine ⟨r, hr, ?_⟩
+  intro y hy
+  let h : E := y - x
+  let z : ℕ → E := fun k => x + ((k : ℝ) / N) • h
+  have hh : ‖h‖ < r := by
+    simpa only [Metric.mem_ball, dist_eq_norm] using hy
+  have ht0 (k : ℕ) : 0 ≤ (k : ℝ) / N :=
+    div_nonneg (Nat.cast_nonneg k) (le_of_lt hN)
+  have ht1 (k : ℕ) (hk : k ≤ N) : (k : ℝ) / N ≤ 1 :=
+    (div_le_one hN).2 (by exact_mod_cast hk)
+  have hzsub (k : ℕ) : z k - x = ((k : ℝ) / N) • h := by
+    dsimp only [z]
+    exact add_sub_cancel_left x _
+  have hzball (k : ℕ) (hk : k ≤ N) : z k ∈ Metric.ball x r := by
+    rw [Metric.mem_ball, dist_eq_norm, hzsub k]
+    rw [norm_smul, Real.norm_eq_abs, abs_of_nonneg (ht0 k)]
+    have hle : (k : ℝ) / N * ‖h‖ ≤ ‖h‖ := by
+      nlinarith [ht1 k hk, norm_nonneg h]
+    exact hle.trans_lt hh
+  have hz0 : z 0 = x := by simp [z]
+  have hzN : z N = y := by simp [z, h, hN0]
+  have hzstep (k : ℕ) : z (k + 1) - z k = (1 / (N : ℝ)) • h := by
+    dsimp only [z]
+    rw [add_sub_add_left_eq_sub, ← sub_smul]
+    congr 1
+    push_cast
+    ring
+  let q : ℕ → E := fun k =>
+    Classical.choose (exists_subgradient_slope_le_inner_add hconv (z k) h)
+  have hq (k : ℕ) : ∀ w, f (z k) + ⟪q k, w - z k⟫ ≤ f w :=
+    (Classical.choose_spec
+      (exists_subgradient_slope_le_inner_add hconv (z k) h)).1
+  have hslope (k : ℕ) (hk : k ≤ N) :
+      |⟪q k, h⟫ - ⟪p, h⟫ - (k : ℝ) / N * ⟪B h, h⟫| ≤
+        (ε / 2) * ‖h‖ ^ 2 := by
+    have he := hex (z k) (hzball k hk) (q k) (hq k)
+    rw [hzsub k] at he
+    exact inner_slope_error p (q k) h B ((k : ℝ) / N) (ε / 2)
+      (ht0 k) (ht1 k hk) (le_of_lt hε₂) he
+  have hstep (k : ℕ) (_hk : k < N) :
+      (1 / (N : ℝ)) * ⟪q k, h⟫ ≤ f (z (k + 1)) - f (z k) ∧
+      f (z (k + 1)) - f (z k) ≤ (1 / (N : ℝ)) * ⟪q (k + 1), h⟫ := by
+    have hl := hq k (z (k + 1))
+    rw [hzstep k, real_inner_smul_right] at hl
+    have hu := hq (k + 1) (z k)
+    rw [← neg_sub (z (k + 1)) (z k), hzstep k,
+      inner_neg_right, real_inner_smul_right] at hu
+    constructor <;> linarith
+  obtain ⟨hl, hu⟩ := riemann_sum_sandwich
+    (fun k => f (z k)) (fun k => ⟪q k, h⟫) N
+    ⟪p, h⟫ ⟪B h, h⟫ ((ε / 2) * ‖h‖ ^ 2) hN hstep hslope
+  rw [riemann_sum_affine N hN0] at hl hu
+  have hc0 :
+      (1 / 2 : ℝ) + (0 - 1 / 2) / (N : ℝ) =
+        1 / 2 - 1 / (2 * (N : ℝ)) := by ring
+  have hc1 :
+      (1 / 2 : ℝ) + (1 - 1 / 2) / (N : ℝ) =
+        1 / 2 + 1 / (2 * (N : ℝ)) := by ring
+  rw [hc0, hzN, hz0] at hl
+  rw [hc1, hzN, hz0] at hu
+  have hB : |⟪B h, h⟫| ≤ ‖B‖ * ‖h‖ ^ 2 := by
+    calc
+      |⟪B h, h⟫| ≤ ‖B h‖ * ‖h‖ := abs_real_inner_le_norm (B h) h
+      _ ≤ (‖B‖ * ‖h‖) * ‖h‖ :=
+        mul_le_mul_of_nonneg_right (B.le_opNorm h) (norm_nonneg h)
+      _ = ‖B‖ * ‖h‖ ^ 2 := by ring
+  have hd0 : 0 ≤ 1 / (2 * (N : ℝ)) := by positivity
+  have hdisc :
+      (1 / (2 * (N : ℝ))) * ⟪B h, h⟫ ≤ (ε / 2) * ‖h‖ ^ 2 := by
+    calc
+      (1 / (2 * (N : ℝ))) * ⟪B h, h⟫ ≤
+          (1 / (2 * (N : ℝ))) * |⟪B h, h⟫| :=
+        mul_le_mul_of_nonneg_left (le_abs_self _) hd0
+      _ ≤ (1 / (2 * (N : ℝ))) * (‖B‖ * ‖h‖ ^ 2) :=
+        mul_le_mul_of_nonneg_left hB hd0
+      _ = ((1 / (2 * (N : ℝ))) * ‖B‖) * ‖h‖ ^ 2 := by ring
+      _ ≤ (ε / 2) * ‖h‖ ^ 2 :=
+        mul_le_mul_of_nonneg_right hmesh (sq_nonneg ‖h‖)
+  change |f y - f x - ⟪p, h⟫ - (1 / 2) * ⟪B h, h⟫| ≤ ε * ‖h‖ ^ 2
+  apply abs_le.mpr
+  constructor <;> nlinarith only [hl, hu, hdisc]
+
+end FunctionalInequalities.Analysis
+
+end LT12D5SubgradientExpansionTaylor

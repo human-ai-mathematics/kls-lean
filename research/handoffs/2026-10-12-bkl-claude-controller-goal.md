@@ -143,6 +143,12 @@ dimension 0; basis mismatch between the Stein API (`Fin n`) and the BakryEmery A
   cutoff process, Lemma 5.2 cutoff form; imports CutoffInduction, EnergyConjugation, EnergyBound, CumulantDerivative,
   EnergyForm) and `Analysis/Convex/Caffarelli.lean` (new; geometric steps of Caffarelli's argument; imports Alexandrov).
   Touching-test Taylor bound goes to `Viscosity.lean` (Hessian imports), not `Alexandrov.lean`. No API change.
+- 2026-10-13 (placement): `KLS/BKL/Localization/CutoffInductionStep.lean` (new; the induction step and the named hypothesis
+  `Lemma51Bound`; cannot live in `CutoffInduction.lean`, which its imports `EnergyIntegral`/`LyapunovMoment` depend on) and
+  `KLS/BKL/Theorem41.lean` (new; paper-level assembly of Theorem 4.1 and the conditional Theorem 1.1, after the
+  `KLS/BKL/Proposition71.lean` precedent). Letwin supports: Lipschitz null images to `Analysis/Sard/Equidimensional.lean`,
+  proximal/Moreau/Taylor lemmas to `Analysis/Convex/Subgradient.lean`. 2026-10-13: Fable credits exhausted; the Letwin
+  sub-controller continues on Opus, the S line was finished by the main controller.
 
 ## Not claimed
 

@@ -19,7 +19,9 @@ finite tensorization, coarea and Sard infrastructure, canonical energy identific
 Cheeger–Buser comparisons, metric BV/Minkowski recovery, and the selected Bakry–Émery bound.
 BKL Theorem 3.1 and Proposition 7.1 have source-form certificates; Proposition 7.1 retains
 its universal cumulant hypothesis. The regular approximation and final BKL assembly are
-formalized conditionally on the still-open Theorem 4.1.
+formalized; BKL Theorem 4.1 is formalized through a cutoff Eldan-localization route, and with it
+`KLS.Conjecture` (`conjecture_of_letwinCompact`), conditionally on one open input: Letwin's
+Theorem 1.2 for compactly supported isotropic log-concave laws (`LetwinCompactBound`).
 
 The [paper register](research/progress/LITERATURE.md) owns exact hypotheses, constants,
 dimensions, selected paper coverage and certificates. The
@@ -28,7 +30,7 @@ entries and missing inputs. Supporting results and conditional reductions do not
 
 ## What is not proved
 
-BKL Theorem 1.1, its universal Theorem 4.1 input, the required Letwin source-law estimates,
+BKL Theorems 1.1 and 4.1 without hypotheses, Letwin Theorem 1.2 (the `LetwinCompactBound` input)
 and the project's dimension-free KLS target remain open. `KLS.kls` is the intentional
 project-local hole, outside certificate closures. The separately audited
 [vendored stochastic calculus](formalization/vendor/README.md#upstream-holes) contains

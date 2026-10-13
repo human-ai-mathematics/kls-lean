@@ -317,6 +317,8 @@ import FunctionalInequalities.Analysis.Convex.Normalization
 import FunctionalInequalities.Analysis.Convex.Caffarelli
 import FunctionalInequalities.KLS.BKL.Localization.LyapunovMoment
 import FunctionalInequalities.KLS.BKL.Localization.EnergyIntegral
+import FunctionalInequalities.KLS.BKL.Localization.CutoffInductionStep
+import FunctionalInequalities.KLS.BKL.Theorem41
 import FunctionalInequalities.KLS.BKL.Localization.CumulantGenerator
 import FunctionalInequalities.KLS.BKL.Localization.EnergyBound
 import FunctionalInequalities.KLS.BKL.Localization.CumulantDerivative

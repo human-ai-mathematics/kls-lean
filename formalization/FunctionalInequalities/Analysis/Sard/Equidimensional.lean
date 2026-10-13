@@ -1,4 +1,6 @@
 import FunctionalInequalities.Analysis.Vector.Coarea.FiberIntegral
+import Mathlib.MeasureTheory.Measure.Hausdorff
+import Mathlib.MeasureTheory.Measure.Haar.InnerProductSpace
 
 /-! # The equidimensional degenerate case: almost no level is a critical value
 
@@ -120,3 +122,35 @@ theorem ae_critical_inter_levelSet_eq_empty {u : V → W} (hu : ContDiff ℝ 1 u
 end Equidimensional
 
 end FunctionalInequalities.Analysis
+
+section LT12D1LipschitzNullImage
+
+open MeasureTheory Set
+
+/-! Lipschitz maps between spaces of equal dimension send null sets to null sets (task L-T12d1). -/
+
+namespace FunctionalInequalities.Analysis
+
+/-- **Lipschitz maps send null sets to null sets** (weak Letwin route, Alexandrov's second-order
+differentiability theorem, task T12d1): for a map of a finite-dimensional real inner product space into
+itself that is Lipschitz on `s`, a Lebesgue-null `s` has a Lebesgue-null image. No measurability of `s`
+is assumed. -/
+theorem volume_image_eq_zero_of_lipschitzOnWith {E : Type*} [NormedAddCommGroup E]
+    [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
+    {f : E → E} {K : NNReal} {s : Set E} (hf : LipschitzOnWith K f s)
+    (hs : (volume : Measure E) s = 0) : (volume : Measure E) (f '' s) = 0 := by
+  have hsH : (μH[(Module.finrank ℝ E : ℝ)] : Measure E) s = 0 := by
+    rw [Measure.isAddLeftInvariant_eq_smul
+      (μH[(Module.finrank ℝ E : ℝ)] : Measure E) (volume : Measure E),
+      Measure.smul_apply, hs, smul_zero]
+  have himageH : (μH[(Module.finrank ℝ E : ℝ)] : Measure E) (f '' s) = 0 := by
+    have h := hf.hausdorffMeasure_image_le (Nat.cast_nonneg (Module.finrank ℝ E))
+    rw [hsH, mul_zero] at h
+    exact le_antisymm h bot_le
+  rw [Measure.isAddLeftInvariant_eq_smul
+    (volume : Measure E) (μH[(Module.finrank ℝ E : ℝ)] : Measure E),
+    Measure.smul_apply, himageH, smul_zero]
+
+end FunctionalInequalities.Analysis
+
+end LT12D1LipschitzNullImage

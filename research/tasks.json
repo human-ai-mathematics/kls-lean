@@ -3162,7 +3162,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/Sard/Equidimensional.lean",
-            "sha256": "5d4478ccf45a31b6042be5986381c77bc0013342fb5734814dc1304ec19139a7"
+            "sha256": "0398dc3fde3cebacc88275d71a3064f8c83c71cc834ecaccf84bea92c3405832"
           },
           {
             "path": "research/audits/EquidimensionalSardAudit.lean",
