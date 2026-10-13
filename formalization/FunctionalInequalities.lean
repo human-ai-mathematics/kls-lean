@@ -321,6 +321,9 @@ import FunctionalInequalities.Analysis.Operator.HilbertSchmidt
 import FunctionalInequalities.Probability.Diffusion.VectorGenerator
 import FunctionalInequalities.KLS.BKL.Localization.EnergyConjugation
 import FunctionalInequalities.Analysis.Tensor.EnergyForm
+import FunctionalInequalities.KLS.BKL.Localization.CutoffInduction
+import FunctionalInequalities.KLS.BKL.Localization.Lyapunov
+import FunctionalInequalities.KLS.BKL.Localization.EnergyGenerator
 
 /-!
 # Functional inequalities

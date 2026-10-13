@@ -250,3 +250,215 @@ theorem drift_expression_ge {m : ℕ} (hm : r + 1 = m) (H : Fin n → Matrix (Fi
   nlinarith [hcross, hC, hA, hDnonneg, hprod, hH_used]
 
 end FunctionalInequalities.Analysis.CoordinateTensor
+
+section S3Bf3ASlotActionAlgebra
+
+open Matrix
+
+/-! Commutation and inner-product algebra of slot actions (task S-3bF3a). -/
+
+namespace FunctionalInequalities.Analysis.CoordinateTensor
+
+variable {n r : ℕ}
+
+/-- Slot actions at different slots commute. -/
+theorem actOn_actOn_comm (M N : Matrix (Fin n) (Fin n) ℝ) {s t : Fin r} (hst : s ≠ t)
+    (T : (Fin r → Fin n) → ℝ) : actOn M s (actOn N t T) = actOn N t (actOn M s T) := by
+  classical
+  funext J
+  simp only [actOn]
+  have hNt (k : Fin n) : Function.update J s k t = J t := by
+    rw [Function.update_apply, if_neg (Ne.symm hst)]
+  have hNs (l : Fin n) : Function.update J t l s = J s := by
+    rw [Function.update_apply, if_neg hst]
+  have hupd (k l : Fin n) :
+      Function.update (Function.update J s k) t l =
+        Function.update (Function.update J t l) s k := by
+    exact Function.update_comm hst k l J
+  calc
+    (∑ k, M (J s) k * (∑ l, N (Function.update J s k t) l *
+      T (Function.update (Function.update J s k) t l))) =
+        ∑ k, ∑ l, M (J s) k *
+          (N (Function.update J s k t) l *
+            T (Function.update (Function.update J s k) t l)) := by
+              apply Finset.sum_congr rfl
+              intro k hk
+              rw [Finset.mul_sum]
+    _ = ∑ l, ∑ k, M (J s) k *
+          (N (Function.update J s k t) l *
+            T (Function.update (Function.update J s k) t l)) := by
+              rw [Finset.sum_comm]
+    _ = ∑ l, ∑ k, M (J s) k *
+          (N (J t) l *
+            T (Function.update (Function.update J t l) s k)) := by
+              apply Finset.sum_congr rfl
+              intro l hl
+              apply Finset.sum_congr rfl
+              intro k hk
+              rw [hNt k, hupd k l]
+    _ = ∑ l, N (J t) l *
+          (∑ k, M (J s) k *
+            T (Function.update (Function.update J t l) s k)) := by
+              apply Finset.sum_congr rfl
+              intro l hl
+              rw [Finset.mul_sum]
+              apply Finset.sum_congr rfl
+              intro k hk
+              ring
+    _ = ∑ l, N (J t) l *
+          (∑ k, M (Function.update J t l s) k *
+            T (Function.update (Function.update J t l) s k)) := by
+              apply Finset.sum_congr rfl
+              intro l hl
+              rw [hNs l]
+
+/-- A product of matrices acts as the composition at the same slot. -/
+theorem actOn_mul (M N : Matrix (Fin n) (Fin n) ℝ) (s : Fin r) (T : (Fin r → Fin n) → ℝ) :
+    actOn (M * N) s T = actOn M s (actOn N s T) := by
+  classical
+  funext J
+  simp only [actOn]
+  calc
+    (∑ k, (M * N) (J s) k * T (Function.update J s k)) =
+        ∑ k, (∑ l, M (J s) l * N l k) * T (Function.update J s k) := by
+          apply Finset.sum_congr rfl
+          intro k hk
+          exact congrArg (fun x : ℝ => x * T (Function.update J s k))
+            (Matrix.mul_apply (M := M) (N := N) (i := J s) (k := k))
+    _ = ∑ k, ∑ l, (M (J s) l * N l k) *
+          T (Function.update J s k) := by
+          apply Finset.sum_congr rfl
+          intro k hk
+          rw [Finset.sum_mul]
+    _ = ∑ k, ∑ l, (M (J s) k * N k l) *
+          T (Function.update J s l) := by
+          rw [Finset.sum_comm]
+    _ = ∑ k, ∑ l, M (J s) k *
+          (N (Function.update J s k s) l *
+            T (Function.update (Function.update J s k) s l)) := by
+          apply Finset.sum_congr rfl
+          intro k hk
+          apply Finset.sum_congr rfl
+          intro l hl
+          rw [Function.update_self, Function.update_idem]
+          ring
+    _ = ∑ k, M (J s) k *
+          (∑ l, N (Function.update J s k s) l *
+            T (Function.update (Function.update J s k) s l)) := by
+          apply Finset.sum_congr rfl
+          intro k hk
+          rw [Finset.mul_sum]
+
+/-- The slot action of a symmetric matrix is self-adjoint for `inner`. -/
+theorem inner_actOn_left (M : Matrix (Fin n) (Fin n) ℝ) (hM : M.IsSymm) (s : Fin r)
+    (T S : (Fin r → Fin n) → ℝ) : inner (actOn M s T) S = inner T (actOn M s S) := by
+  classical
+  let f : ((Fin r → Fin n) × Fin n) → ((Fin r → Fin n) × Fin n) :=
+    fun x => (Function.update x.1 s x.2, x.1 s)
+  have hf : Function.Involutive f := by
+    rintro ⟨J, k⟩
+    dsimp [f]
+    apply Prod.ext
+    · rw [Function.update_idem, Function.update_eq_self]
+    · exact Function.update_self s k J
+  let e : Equiv.Perm ((Fin r → Fin n) × Fin n) := hf.toPerm
+  have heval (J : Fin r → Fin n) (k : Fin n) :
+      e (J, k) = (Function.update J s k, J s) := by
+    rfl
+  calc
+    inner (actOn M s T) S =
+        ∑ J, ∑ k, M (J s) k * T (Function.update J s k) * S J := by
+          unfold inner actOn
+          apply Finset.sum_congr rfl
+          intro J hJ
+          rw [Finset.sum_mul]
+    _ = ∑ x : (Fin r → Fin n) × Fin n,
+          M (x.1 s) x.2 * T (Function.update x.1 s x.2) * S x.1 := by
+          symm
+          exact Fintype.sum_prod_type' (γ := ℝ)
+            (α₁ := Fin r → Fin n) (α₂ := Fin n)
+            (fun J k => M (J s) k * T (Function.update J s k) * S J)
+    _ = ∑ x : (Fin r → Fin n) × Fin n,
+          T x.1 * M (x.1 s) x.2 * S (Function.update x.1 s x.2) := by
+          refine Fintype.sum_equiv (M := ℝ) e
+            (fun x : (Fin r → Fin n) × Fin n =>
+              M (x.1 s) x.2 * T (Function.update x.1 s x.2) * S x.1)
+            (fun x : (Fin r → Fin n) × Fin n =>
+              T x.1 * M (x.1 s) x.2 * S (Function.update x.1 s x.2)) ?_
+          rintro ⟨J, k⟩
+          simp only [heval, Function.update_self, Function.update_idem,
+            Function.update_eq_self]
+          rw [hM.apply (J s) k]
+          ring
+    _ = ∑ J, ∑ k, T J * M (J s) k * S (Function.update J s k) := by
+          exact Fintype.sum_prod_type' (γ := ℝ)
+            (α₁ := Fin r → Fin n) (α₂ := Fin n)
+            (fun J k => T J * M (J s) k * S (Function.update J s k))
+    _ = inner T (actOn M s S) := by
+          unfold inner actOn
+          apply Finset.sum_congr rfl
+          intro J hJ
+          rw [Finset.mul_sum]
+          apply Finset.sum_congr rfl
+          intro k hk
+          ring
+
+/-- `⟨T, (M²)^{(s)} T⟩ = |M^{(s)} T|²` for symmetric `M`. -/
+theorem inner_actOn_mul_self (M : Matrix (Fin n) (Fin n) ℝ) (hM : M.IsSymm) (s : Fin r)
+    (T : (Fin r → Fin n) → ℝ) : inner T (actOn (M * M) s T) = inner (actOn M s T) (actOn M s T) := by
+  rw [actOn_mul]
+  exact (inner_actOn_left M hM s T (actOn M s T)).symm
+
+/-- `|Σ_M T|² = Σ_s |M^{(s)} T|² + Σ_{s ≠ t} ⟨T, M^{(s)} M^{(t)} T⟩` for symmetric `M` (BKL (87)–(88)). -/
+theorem inner_actSum_actSum (M : Matrix (Fin n) (Fin n) ℝ) (hM : M.IsSymm) (T : (Fin r → Fin n) → ℝ) :
+    inner (actSum M T) (actSum M T) =
+      ∑ s, inner (actOn M s T) (actOn M s T) +
+        ∑ s, ∑ t ∈ Finset.univ.erase s, inner T (actOn M s (actOn M t T)) := by
+  classical
+  have hexpand :
+      inner (actSum M T) (actSum M T) =
+        ∑ s, ∑ t, inner (actOn M s T) (actOn M t T) := by
+    unfold inner actSum
+    calc
+      (∑ J, (∑ s, actOn M s T J) * (∑ t, actOn M t T J)) =
+          ∑ J, ∑ s, ∑ t, (actOn M s T J) * (actOn M t T J) := by
+            apply Finset.sum_congr rfl
+            intro J hJ
+            rw [Finset.sum_mul_sum]
+      _ = ∑ s, ∑ J, ∑ t, (actOn M s T J) * (actOn M t T J) := by
+            rw [Finset.sum_comm]
+      _ = ∑ s, ∑ t, ∑ J, (actOn M s T J) * (actOn M t T J) := by
+            apply Finset.sum_congr rfl
+            intro s hs
+            rw [Finset.sum_comm]
+      _ = ∑ s, ∑ t, inner (actOn M s T) (actOn M t T) := by
+            rfl
+  calc
+    inner (actSum M T) (actSum M T) =
+        ∑ s, ∑ t, inner (actOn M s T) (actOn M t T) := hexpand
+    _ = ∑ s, (inner (actOn M s T) (actOn M s T) +
+          ∑ t ∈ Finset.univ.erase s, inner (actOn M s T) (actOn M t T)) := by
+          apply Finset.sum_congr rfl
+          intro s hs
+          symm
+          exact Finset.add_sum_erase (Finset.univ : Finset (Fin r))
+            (fun t => inner (actOn M s T) (actOn M t T))
+            (Finset.mem_univ s)
+    _ = (∑ s, inner (actOn M s T) (actOn M s T)) +
+          ∑ s, ∑ t ∈ Finset.univ.erase s,
+            inner (actOn M s T) (actOn M t T) := by
+          rw [Finset.sum_add_distrib]
+    _ = (∑ s, inner (actOn M s T) (actOn M s T)) +
+          ∑ s, ∑ t ∈ Finset.univ.erase s,
+            inner T (actOn M s (actOn M t T)) := by
+          apply congrArg (fun x : ℝ =>
+            (∑ s, inner (actOn M s T) (actOn M s T)) + x)
+          apply Finset.sum_congr rfl
+          intro s hs
+          apply Finset.sum_congr rfl
+          intro t ht
+          exact inner_actOn_left M hM s T (actOn M t T)
+
+end FunctionalInequalities.Analysis.CoordinateTensor
+
+end S3Bf3ASlotActionAlgebra
