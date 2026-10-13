@@ -156,6 +156,11 @@ dimension 0; basis mismatch between the Stein API (`Fin n`) and the BakryEmery A
   imports Viscosity, Alexandrov, Coercivity, SecondDifference) and `KLS/LogConcave/BallConditioning.lean` (new; regular class
   of ball-conditioned affine images; imports RegularAffine). The generic ball-conditioning limit goes to
   `Probability/Conditioning.lean` (its unused `KLS.Isotropic` import dropped).
+- 2026-10-13 (owner directive): Letwin formalization is limited to what BKL needs, i.e. the critical path to
+  `LetwinCompactBound`; all other Letwin work is parked, and the project sprints on BKL Theorem 1.1. The Letwin
+  sub-controller writes `routes/letwin-critical-path.md` and dispatches only critical-path tasks.
+- 2026-10-13 (placement): L-N11a goes to `Viscosity.lean`, not `Analysis/Matrix/LogDet.lean` (it imports Viscosity, which
+  imports LogDet). L-N10a needed `_root_.add_apply`/`smul_apply`/`neg_apply` under `Piola.lean`'s `open Matrix`.
 
 ## Not claimed
 
