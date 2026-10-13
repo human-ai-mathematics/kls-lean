@@ -637,3 +637,505 @@ theorem fderiv_fderiv_apply_eq_deriv_deriv_line {W : Type*} [NormedAddCommGroup 
 end FunctionalInequalities.Analysis.CoordinateTensor
 
 end S3Bf3B1SecondOrderHelpers
+
+section S3Bf3B2SecondOrderCore
+
+open Matrix
+open scoped RealInnerProductSpace
+
+/-! Second derivative of the energy form along lines and at the identity (BKL (88), second order; task S-3bF3b2). -/
+
+namespace FunctionalInequalities.Analysis.CoordinateTensor
+
+variable {n r : ℕ}
+
+/-! ### Real-valued `HasDerivAt` combinators with beta-reduced function shapes -/
+
+private lemma real_deriv_add {f g : ℝ → ℝ} {df dg x : ℝ}
+    (hf : HasDerivAt f df x) (hg : HasDerivAt g dg x) :
+    HasDerivAt (fun t => f t + g t) (df + dg) x :=
+  hf.add hg
+
+private lemma real_deriv_const_mul {f : ℝ → ℝ} {df x : ℝ} (c : ℝ)
+    (hf : HasDerivAt f df x) :
+    HasDerivAt (fun t => c * f t) (c * df) x :=
+  hf.const_mul c
+
+private lemma real_deriv_mul_const {f : ℝ → ℝ} {df x : ℝ} (c : ℝ)
+    (hf : HasDerivAt f df x) :
+    HasDerivAt (fun t => f t * c) (df * c) x :=
+  hf.mul_const c
+
+/-- One-slot delta collapse with two tensors: `Σ_{J,K} S_J T_K Σ_s Π_{u≠s} δ (−M_{J_s K_s}) = −⟨S, Σ_M T⟩`. -/
+private lemma slot_sum_two
+    (S T : (Fin r → Fin n) → ℝ) (M : Matrix (Fin n) (Fin n) ℝ) :
+    (∑ J : Fin r → Fin n, ∑ K : Fin r → Fin n,
+      S J * T K * (∑ s : Fin r,
+        (∏ u ∈ Finset.univ.erase s, if J u = K u then (1 : ℝ) else 0) *
+          (-M (J s) (K s)))) =
+      -inner S (actSum M T) := by
+  let D (s : Fin r) (J K : Fin r → Fin n) : ℝ :=
+    ∏ u ∈ Finset.univ.erase s, if J u = K u then (1 : ℝ) else 0
+  have hc (s : Fin r) (J : Fin r → Fin n) :
+      (∑ K, (T K * M (J s) (K s)) * D s J K) =
+        ∑ k, T (Function.update J s k) * M (J s) k := by
+    simpa only [D, Function.update_self] using
+      sum_mul_prod_delta_erase J s (fun K => T K * M (J s) (K s))
+  have hs (s : Fin r) (J : Fin r → Fin n) :
+      (∑ K, S J * T K * (D s J K * (-M (J s) (K s)))) =
+        -(S J * actOn M s T J) := by
+    calc
+      (∑ K, S J * T K * (D s J K * (-M (J s) (K s)))) =
+          ∑ K, -(S J * ((T K * M (J s) (K s)) * D s J K)) := by
+        apply Finset.sum_congr rfl
+        intro K _
+        ring
+      _ = -(S J * ∑ K, (T K * M (J s) (K s)) * D s J K) := by
+        rw [Finset.sum_neg_distrib, Finset.mul_sum]
+      _ = -(S J * actOn M s T J) := by
+        rw [hc]
+        apply congrArg (fun z : ℝ => -(S J * z))
+        unfold actOn
+        apply Finset.sum_congr rfl
+        intro k _
+        exact mul_comm _ _
+  have hJ (J : Fin r → Fin n) :
+      (∑ K, S J * T K * (∑ s, D s J K * (-M (J s) (K s)))) =
+        -(S J * actSum M T J) := by
+    calc
+      (∑ K, S J * T K * (∑ s, D s J K * (-M (J s) (K s)))) =
+          ∑ K, ∑ s, S J * T K * (D s J K * (-M (J s) (K s))) := by
+        simp only [Finset.mul_sum]
+      _ = ∑ s, ∑ K, S J * T K * (D s J K * (-M (J s) (K s))) := by
+        rw [Finset.sum_comm]
+      _ = ∑ s, -(S J * actOn M s T J) := by
+        apply Finset.sum_congr rfl
+        intro s _
+        exact hs s J
+      _ = -(S J * actSum M T J) := by
+        unfold actSum
+        rw [Finset.sum_neg_distrib, Finset.mul_sum]
+  change (∑ J, ∑ K, S J * T K * (∑ s, D s J K * (-M (J s) (K s)))) =
+    -inner S (actSum M T)
+  calc
+    (∑ J, ∑ K, S J * T K * (∑ s, D s J K * (-M (J s) (K s)))) =
+        ∑ J, -(S J * actSum M T J) := by
+      apply Finset.sum_congr rfl
+      intro J _
+      exact hJ J
+    _ = -inner S (actSum M T) := by
+      simp only [inner, Finset.sum_neg_distrib]
+
+private lemma inner_comm' (T S : (Fin r → Fin n) → ℝ) : inner T S = inner S T := by
+  unfold inner
+  apply Finset.sum_congr rfl
+  intro J _
+  exact mul_comm _ _
+
+private lemma inner_actSum_eq_sum (N : Matrix (Fin n) (Fin n) ℝ) (T S : (Fin r → Fin n) → ℝ) :
+    inner T (actSum N S) = ∑ s, inner T (actOn N s S) := by
+  unfold inner actSum
+  simp only [Finset.mul_sum]
+  exact Finset.sum_comm
+
+private lemma inner_actSum_left (M : Matrix (Fin n) (Fin n) ℝ) (hM : M.IsSymm)
+    (T S : (Fin r → Fin n) → ℝ) : inner (actSum M T) S = inner T (actSum M S) := by
+  rw [inner_comm', inner_actSum_eq_sum, inner_actSum_eq_sum]
+  apply Finset.sum_congr rfl
+  intro s _
+  rw [inner_comm']
+  exact inner_actOn_left M hM s T S
+
+/-- Two-slot delta collapse: the mixed second-order term is `Σ_s Σ_{u≠s} ⟨T, M^{(s)} M^{(u)} T⟩`. -/
+private lemma two_slot_sum (T : (Fin r → Fin n) → ℝ) (M : Matrix (Fin n) (Fin n) ℝ) :
+    (∑ J : Fin r → Fin n, ∑ K : Fin r → Fin n, T J * T K *
+      (∑ s : Fin r, (∑ u ∈ Finset.univ.erase s,
+        (∏ v ∈ (Finset.univ.erase s).erase u, if J v = K v then (1 : ℝ) else 0) *
+          (-M (J u) (K u))) * (-M (J s) (K s)))) =
+      ∑ s : Fin r, ∑ u ∈ Finset.univ.erase s, inner T (actOn M s (actOn M u T)) := by
+  have key (J : Fin r → Fin n) (s u : Fin r) (hus : u ≠ s) :
+      (∑ K : Fin r → Fin n, T J * T K *
+        ((∏ v ∈ (Finset.univ.erase s).erase u, if J v = K v then (1 : ℝ) else 0) *
+          (-M (J u) (K u)) * (-M (J s) (K s)))) =
+        T J * actOn M s (actOn M u T) J := by
+    have hsu : s ≠ u := Ne.symm hus
+    have hc := sum_mul_prod_delta_erase_erase J hsu
+      (fun K => T K * M (J s) (K s) * M (J u) (K u))
+    calc
+      (∑ K : Fin r → Fin n, T J * T K *
+          ((∏ v ∈ (Finset.univ.erase s).erase u, if J v = K v then (1 : ℝ) else 0) *
+            (-M (J u) (K u)) * (-M (J s) (K s)))) =
+          T J * ∑ K : Fin r → Fin n, (T K * M (J s) (K s) * M (J u) (K u)) *
+            ∏ v ∈ (Finset.univ.erase s).erase u, (if J v = K v then (1 : ℝ) else 0) := by
+        rw [Finset.mul_sum]
+        apply Finset.sum_congr rfl
+        intro K _
+        ring
+      _ = T J * ∑ k, ∑ l, T (Function.update (Function.update J s k) u l) *
+            M (J s) k * M (J u) l := by
+        rw [hc]
+        congr 1
+        apply Finset.sum_congr rfl
+        intro k _
+        apply Finset.sum_congr rfl
+        intro l _
+        simp only [Function.update_self, Function.update_of_ne hsu]
+      _ = T J * actOn M s (actOn M u T) J := by
+        congr 1
+        simp only [actOn, Function.update_of_ne hus]
+        apply Finset.sum_congr rfl
+        intro k _
+        rw [Finset.mul_sum]
+        apply Finset.sum_congr rfl
+        intro l _
+        ring
+  calc
+    (∑ J : Fin r → Fin n, ∑ K : Fin r → Fin n, T J * T K *
+        (∑ s : Fin r, (∑ u ∈ Finset.univ.erase s,
+          (∏ v ∈ (Finset.univ.erase s).erase u, if J v = K v then (1 : ℝ) else 0) *
+            (-M (J u) (K u))) * (-M (J s) (K s)))) =
+        ∑ J : Fin r → Fin n, ∑ s : Fin r, ∑ u ∈ Finset.univ.erase s,
+          ∑ K : Fin r → Fin n, T J * T K *
+            ((∏ v ∈ (Finset.univ.erase s).erase u, if J v = K v then (1 : ℝ) else 0) *
+              (-M (J u) (K u)) * (-M (J s) (K s))) := by
+      apply Finset.sum_congr rfl
+      intro J _
+      calc
+        (∑ K : Fin r → Fin n, T J * T K *
+            (∑ s : Fin r, (∑ u ∈ Finset.univ.erase s,
+              (∏ v ∈ (Finset.univ.erase s).erase u, if J v = K v then (1 : ℝ) else 0) *
+                (-M (J u) (K u))) * (-M (J s) (K s)))) =
+            ∑ K : Fin r → Fin n, ∑ s : Fin r, ∑ u ∈ Finset.univ.erase s, T J * T K *
+              ((∏ v ∈ (Finset.univ.erase s).erase u, if J v = K v then (1 : ℝ) else 0) *
+                (-M (J u) (K u)) * (-M (J s) (K s))) := by
+          apply Finset.sum_congr rfl
+          intro K _
+          rw [Finset.mul_sum]
+          apply Finset.sum_congr rfl
+          intro s _
+          rw [Finset.sum_mul, Finset.mul_sum]
+        _ = ∑ s : Fin r, ∑ u ∈ Finset.univ.erase s, ∑ K : Fin r → Fin n, T J * T K *
+              ((∏ v ∈ (Finset.univ.erase s).erase u, if J v = K v then (1 : ℝ) else 0) *
+                (-M (J u) (K u)) * (-M (J s) (K s))) := by
+          rw [Finset.sum_comm]
+          apply Finset.sum_congr rfl
+          intro s _
+          rw [Finset.sum_comm]
+    _ = ∑ J : Fin r → Fin n, ∑ s : Fin r, ∑ u ∈ Finset.univ.erase s,
+          T J * actOn M s (actOn M u T) J := by
+      apply Finset.sum_congr rfl
+      intro J _
+      apply Finset.sum_congr rfl
+      intro s _
+      apply Finset.sum_congr rfl
+      intro u hu
+      exact key J s u (Finset.ne_of_mem_erase hu)
+    _ = ∑ s : Fin r, ∑ u ∈ Finset.univ.erase s, inner T (actOn M s (actOn M u T)) := by
+      rw [Finset.sum_comm]
+      apply Finset.sum_congr rfl
+      intro s _
+      rw [Finset.sum_comm]
+      rfl
+
+/-! ### The standard matrix of a self-adjoint operator -/
+
+private lemma stdMatrix_isSymm (H : EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n))
+    (hH : IsSelfAdjoint H) : (stdMatrix H).IsSymm := by
+  have hsym : ∀ x y : EuclideanSpace ℝ (Fin n), ⟪H x, y⟫ = ⟪x, H y⟫ :=
+    fun x y => (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hH) x y
+  apply Matrix.IsSymm.ext
+  intro i k
+  change ⟪EuclideanSpace.basisFun (Fin n) ℝ k, H (EuclideanSpace.basisFun (Fin n) ℝ i)⟫ =
+    ⟪EuclideanSpace.basisFun (Fin n) ℝ i, H (EuclideanSpace.basisFun (Fin n) ℝ k)⟫
+  rw [← hsym, real_inner_comm]
+
+private lemma inner_H_H (H : EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n))
+    (hH : IsSelfAdjoint H) (i k : Fin n) :
+    ⟪EuclideanSpace.basisFun (Fin n) ℝ i, H (H (EuclideanSpace.basisFun (Fin n) ℝ k))⟫ =
+      (stdMatrix H * stdMatrix H) i k := by
+  have hsym : ∀ x y : EuclideanSpace ℝ (Fin n), ⟪H x, y⟫ = ⟪x, H y⟫ :=
+    fun x y => (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hH) x y
+  rw [Matrix.mul_apply, ← hsym (EuclideanSpace.basisFun (Fin n) ℝ i) (H (EuclideanSpace.basisFun (Fin n) ℝ k)),
+    ← (EuclideanSpace.basisFun (Fin n) ℝ).sum_inner_mul_inner
+      (H (EuclideanSpace.basisFun (Fin n) ℝ i)) (H (EuclideanSpace.basisFun (Fin n) ℝ k))]
+  apply Finset.sum_congr rfl
+  intro j _
+  change ⟪H (EuclideanSpace.basisFun (Fin n) ℝ i), EuclideanSpace.basisFun (Fin n) ℝ j⟫ *
+      ⟪EuclideanSpace.basisFun (Fin n) ℝ j, H (EuclideanSpace.basisFun (Fin n) ℝ k)⟫ =
+    ⟪EuclideanSpace.basisFun (Fin n) ℝ i, H (EuclideanSpace.basisFun (Fin n) ℝ j)⟫ *
+      ⟪EuclideanSpace.basisFun (Fin n) ℝ j, H (EuclideanSpace.basisFun (Fin n) ℝ k)⟫
+  rw [hsym]
+
+/-! ### The second derivative along the line -/
+
+set_option maxHeartbeats 1600000 in
+/-- **BKL (88), second order, along the line**: for symmetric `H`,
+`d²/dε² F(1 + εH, T + εX)|₀ = 2 (|X|² − 2⟨X, Σ_H T⟩ + ½|Σ_H T|² + ½ Σ_s |H^{(s)} T|²)`. -/
+theorem deriv_deriv_energyForm_line (T : (Fin r → Fin n) → ℝ)
+    (H : EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n)) (hH : IsSelfAdjoint H)
+    (X : (Fin r → Fin n) → ℝ) :
+    deriv (deriv fun ε : ℝ => energyForm (1 + ε • H) (T + ε • X)) 0 =
+      2 * (inner X X - 2 * inner X (actSum (stdMatrix H) T)
+        + (1 / 2 : ℝ) * inner (actSum (stdMatrix H) T) (actSum (stdMatrix H) T)
+        + (1 / 2 : ℝ) * ∑ s, inner (actOn (stdMatrix H) s T) (actOn (stdMatrix H) s T)) := by
+  have hM : (stdMatrix H).IsSymm := stdMatrix_isSymm H hH
+  let a (i k : Fin n) (t : ℝ) : ℝ :=
+    ⟪EuclideanSpace.basisFun (Fin n) ℝ i,
+      Ring.inverse (1 + t • H) (EuclideanSpace.basisFun (Fin n) ℝ k)⟫
+  have hz :
+      (1 : EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n)) +
+        (0 : ℝ) • H = 1 := by
+    apply ContinuousLinearMap.ext
+    intro v
+    change v + (0 : ℝ) • H v = v
+    simp
+  have a0 (i k : Fin n) : a i k 0 = if i = k then 1 else 0 := by
+    unfold a
+    rw [hz, Ring.inverse_one]
+    exact (EuclideanSpace.basisFun (Fin n) ℝ).inner_eq_ite i k
+  have ha0 (i k : Fin n) : HasDerivAt (a i k) (-stdMatrix H i k) 0 :=
+    hasDerivAt_inner_ringInverse_one_add H i k
+  have da0 (i k : Fin n) : deriv (a i k) 0 = -stdMatrix H i k := (ha0 i k).deriv
+  have hda (i k : Fin n) :
+      HasDerivAt (deriv (a i k)) (2 * (stdMatrix H * stdMatrix H) i k) 0 := by
+    rw [← inner_H_H H hH i k]
+    exact hasDerivAt_deriv_inner_ringInverse_one_add H i k
+  have hopen : {t : ℝ | IsUnit (1 + t • H)} ∈ nhds (0 : ℝ) := by
+    have hc : Continuous (fun t : ℝ =>
+        (1 : EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n)) + t • H) :=
+      continuous_const.add (continuous_id.smul continuous_const)
+    apply (Units.isOpen.preimage hc).mem_nhds
+    change IsUnit ((1 : EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n)) + (0 : ℝ) • H)
+    rw [hz]
+    exact isUnit_one
+  have hT (J : Fin r → Fin n) (t : ℝ) :
+      HasDerivAt (fun x : ℝ => T J + x * X J) (X J) t := by
+    simpa only [id_eq, one_mul] using
+      (((hasDerivAt_id t).mul_const (X J)).const_add (T J))
+  -- the two pieces of the first derivative
+  let A (J K : Fin r → Fin n) (t : ℝ) : ℝ :=
+    (X J * (T K + t * X K) + (T J + t * X J) * X K) * ∏ s, a (J s) (K s) t
+  let B (J K : Fin r → Fin n) (t : ℝ) : ℝ :=
+    (T J + t * X J) * (T K + t * X K) *
+      ∑ s, (∏ u ∈ Finset.univ.erase s, a (J u) (K u) t) * deriv (a (J s) (K s)) t
+  -- first derivative at every unit point
+  have hD1 (t : ℝ) (ht : IsUnit (1 + t • H)) :
+      HasDerivAt (fun ε : ℝ => energyForm (1 + ε • H) (T + ε • X))
+        (∑ J, ∑ K, (A J K t + B J K t)) t := by
+    have ha (i k : Fin n) : HasDerivAt (a i k) (deriv (a i k) t) t :=
+      (hasDerivAt_inner_ringInverse_one_add_of_isUnit H i k ht).differentiableAt.hasDerivAt
+    have hp (J K : Fin r → Fin n) :
+        HasDerivAt (fun x => ∏ s, a (J s) (K s) x)
+          (∑ s, (∏ u ∈ Finset.univ.erase s, a (J u) (K u) t) * deriv (a (J s) (K s)) t) t :=
+      real_deriv_prod Finset.univ (fun s x => a (J s) (K s) x)
+        (fun s => deriv (a (J s) (K s)) t) t (fun s _ => ha (J s) (K s))
+    have hraw :
+        HasDerivAt
+          (fun x : ℝ => ∑ J, ∑ K,
+            (T J + x * X J) * (T K + x * X K) * ∏ s, a (J s) (K s) x)
+          (∑ J, ∑ K, (A J K t + B J K t)) t := by
+      apply real_deriv_sum
+      intro J _
+      apply real_deriv_sum
+      intro K _
+      exact real_deriv_mul (real_deriv_mul (hT J t) (hT K t)) (hp J K)
+    convert hraw using 1
+    rfl
+  have heq :
+      (deriv fun ε : ℝ => energyForm (1 + ε • H) (T + ε • X)) =ᶠ[nhds (0 : ℝ)]
+        (fun t : ℝ => ∑ J, ∑ K, (A J K t + B J K t)) := by
+    filter_upwards [hopen] with t ht
+    exact (hD1 t ht).deriv
+  -- second derivative at `0`
+  let P (J K : Fin r → Fin n) : ℝ :=
+    ∏ s, if J s = K s then (1 : ℝ) else 0
+  let Q (J K : Fin r → Fin n) : ℝ :=
+    ∑ s, (∏ u ∈ Finset.univ.erase s, if J u = K u then (1 : ℝ) else 0) *
+      (-stdMatrix H (J s) (K s))
+  let R (J K : Fin r → Fin n) : ℝ :=
+    ∑ s, ((∑ u ∈ Finset.univ.erase s,
+        (∏ v ∈ (Finset.univ.erase s).erase u, if J v = K v then (1 : ℝ) else 0) *
+          (-stdMatrix H (J u) (K u))) * (-stdMatrix H (J s) (K s)) +
+      (∏ u ∈ Finset.univ.erase s, if J u = K u then (1 : ℝ) else 0) *
+        (2 * (stdMatrix H * stdMatrix H) (J s) (K s)))
+  let dA (J K : Fin r → Fin n) : ℝ :=
+    (X J * X K + X J * X K) * P J K + (X J * T K + T J * X K) * Q J K
+  let dB (J K : Fin r → Fin n) : ℝ :=
+    (X J * T K + T J * X K) * Q J K + T J * T K * R J K
+  have hp0 (J K : Fin r → Fin n) :
+      HasDerivAt (fun x => ∏ s, a (J s) (K s) x) (Q J K) 0 := by
+    have h := real_deriv_prod Finset.univ (fun s x => a (J s) (K s) x)
+      (fun s => -stdMatrix H (J s) (K s)) 0 (fun s _ => ha0 (J s) (K s))
+    apply h.congr_deriv
+    simp only [a0, Q]
+  have hq0 (J K : Fin r → Fin n) :
+      HasDerivAt
+        (fun x => ∑ s, (∏ u ∈ Finset.univ.erase s, a (J u) (K u) x) * deriv (a (J s) (K s)) x)
+        (R J K) 0 := by
+    have h := real_deriv_sum Finset.univ
+      (fun s x => (∏ u ∈ Finset.univ.erase s, a (J u) (K u) x) * deriv (a (J s) (K s)) x)
+      (fun s => (∑ u ∈ Finset.univ.erase s,
+          (∏ v ∈ (Finset.univ.erase s).erase u, a (J v) (K v) 0) *
+            (-stdMatrix H (J u) (K u))) * deriv (a (J s) (K s)) 0 +
+        (∏ u ∈ Finset.univ.erase s, a (J u) (K u) 0) *
+          (2 * (stdMatrix H * stdMatrix H) (J s) (K s))) 0
+      (fun s _ => real_deriv_mul
+        (real_deriv_prod (Finset.univ.erase s) (fun u x => a (J u) (K u) x)
+          (fun u => -stdMatrix H (J u) (K u)) 0 (fun u _ => ha0 (J u) (K u)))
+        (hda (J s) (K s)))
+    apply h.congr_deriv
+    simp only [a0, da0, R]
+  have hA (J K : Fin r → Fin n) : HasDerivAt (fun t => A J K t) (dA J K) 0 := by
+    have h := real_deriv_mul
+      (real_deriv_add (real_deriv_const_mul (X J) (hT K 0)) (real_deriv_mul_const (X K) (hT J 0)))
+      (hp0 J K)
+    apply h.congr_deriv
+    simp only [a0, dA, P, zero_mul, add_zero]
+  have hB (J K : Fin r → Fin n) : HasDerivAt (fun t => B J K t) (dB J K) 0 := by
+    have h := real_deriv_mul (real_deriv_mul (hT J 0) (hT K 0)) (hq0 J K)
+    apply h.congr_deriv
+    simp only [a0, da0, dB, Q, zero_mul, add_zero]
+  have hD2 :
+      HasDerivAt (fun t : ℝ => ∑ J, ∑ K, (A J K t + B J K t))
+        (∑ J, ∑ K, (dA J K + dB J K)) 0 := by
+    apply real_deriv_sum
+    intro J _
+    apply real_deriv_sum
+    intro K _
+    exact real_deriv_add (hA J K) (hB J K)
+  rw [heq.deriv_eq, hD2.deriv]
+  -- the algebra
+  have h1 : (∑ J, ∑ K, (X J * X K + X J * X K) * P J K) = 2 * inner X X := by
+    calc
+      (∑ J, ∑ K, (X J * X K + X J * X K) * P J K) =
+          ∑ J, (X J * X J + X J * X J) := by
+        apply Finset.sum_congr rfl
+        intro J _
+        simp [P, delta_product, mul_ite]
+      _ = 2 * inner X X := by
+        unfold inner
+        rw [Finset.mul_sum]
+        apply Finset.sum_congr rfl
+        intro J _
+        ring
+  have h2 : (∑ J, ∑ K, (X J * T K + T J * X K) * Q J K) =
+      -(2 * inner X (actSum (stdMatrix H) T)) := by
+    have e1 : (∑ J, ∑ K, X J * T K * Q J K) = -inner X (actSum (stdMatrix H) T) :=
+      slot_sum_two X T (stdMatrix H)
+    have e2 : (∑ J, ∑ K, T J * X K * Q J K) = -inner T (actSum (stdMatrix H) X) :=
+      slot_sum_two T X (stdMatrix H)
+    have e3 : inner T (actSum (stdMatrix H) X) = inner X (actSum (stdMatrix H) T) := by
+      rw [← inner_actSum_left _ hM T X, inner_comm']
+    calc
+      (∑ J, ∑ K, (X J * T K + T J * X K) * Q J K) =
+          ∑ J, ∑ K, (X J * T K * Q J K + T J * X K * Q J K) := by
+        apply Finset.sum_congr rfl
+        intro J _
+        apply Finset.sum_congr rfl
+        intro K _
+        ring
+      _ = (∑ J, ∑ K, X J * T K * Q J K) + ∑ J, ∑ K, T J * X K * Q J K := by
+        simp only [Finset.sum_add_distrib]
+      _ = -(2 * inner X (actSum (stdMatrix H) T)) := by
+        rw [e1, e2, e3]
+        ring
+  have h3a :
+      (∑ J, ∑ K, T J * T K * (∑ s, (∑ u ∈ Finset.univ.erase s,
+          (∏ v ∈ (Finset.univ.erase s).erase u, if J v = K v then (1 : ℝ) else 0) *
+            (-stdMatrix H (J u) (K u))) * (-stdMatrix H (J s) (K s)))) =
+        ∑ s, ∑ u ∈ Finset.univ.erase s,
+          inner T (actOn (stdMatrix H) s (actOn (stdMatrix H) u T)) :=
+    two_slot_sum T (stdMatrix H)
+  have h3b :
+      (∑ J, ∑ K, T J * T K * (∑ s,
+          (∏ u ∈ Finset.univ.erase s, if J u = K u then (1 : ℝ) else 0) *
+            (2 * (stdMatrix H * stdMatrix H) (J s) (K s)))) =
+        2 * ∑ s, inner (actOn (stdMatrix H) s T) (actOn (stdMatrix H) s T) := by
+    have e := slot_sum_two T T (stdMatrix H * stdMatrix H)
+    have hpt (J K : Fin r → Fin n) :
+        (∑ s, (∏ u ∈ Finset.univ.erase s, if J u = K u then (1 : ℝ) else 0) *
+            (2 * (stdMatrix H * stdMatrix H) (J s) (K s))) =
+          -2 * ∑ s, (∏ u ∈ Finset.univ.erase s, if J u = K u then (1 : ℝ) else 0) *
+            (-(stdMatrix H * stdMatrix H) (J s) (K s)) := by
+      rw [Finset.mul_sum]
+      apply Finset.sum_congr rfl
+      intro s _
+      ring
+    calc
+      (∑ J, ∑ K, T J * T K * (∑ s,
+          (∏ u ∈ Finset.univ.erase s, if J u = K u then (1 : ℝ) else 0) *
+            (2 * (stdMatrix H * stdMatrix H) (J s) (K s)))) =
+          ∑ J, ∑ K, -2 * (T J * T K * (∑ s,
+            (∏ u ∈ Finset.univ.erase s, if J u = K u then (1 : ℝ) else 0) *
+              (-(stdMatrix H * stdMatrix H) (J s) (K s)))) := by
+        apply Finset.sum_congr rfl
+        intro J _
+        apply Finset.sum_congr rfl
+        intro K _
+        rw [hpt]
+        ring
+      _ = -2 * ∑ J, ∑ K, T J * T K * (∑ s,
+            (∏ u ∈ Finset.univ.erase s, if J u = K u then (1 : ℝ) else 0) *
+              (-(stdMatrix H * stdMatrix H) (J s) (K s))) := by
+        simp only [Finset.mul_sum]
+      _ = -2 * -inner T (actSum (stdMatrix H * stdMatrix H) T) := by
+        rw [e]
+      _ = 2 * ∑ s, inner (actOn (stdMatrix H) s T) (actOn (stdMatrix H) s T) := by
+        rw [inner_actSum_eq_sum,
+          Finset.sum_congr rfl (fun s _ => inner_actOn_mul_self (stdMatrix H) hM s T)]
+        ring
+  have h3 : (∑ J, ∑ K, T J * T K * R J K) =
+      (∑ s, ∑ u ∈ Finset.univ.erase s,
+        inner T (actOn (stdMatrix H) s (actOn (stdMatrix H) u T))) +
+      2 * ∑ s, inner (actOn (stdMatrix H) s T) (actOn (stdMatrix H) s T) := by
+    calc
+      (∑ J, ∑ K, T J * T K * R J K) =
+          ∑ J, ∑ K, (T J * T K * (∑ s, (∑ u ∈ Finset.univ.erase s,
+              (∏ v ∈ (Finset.univ.erase s).erase u, if J v = K v then (1 : ℝ) else 0) *
+                (-stdMatrix H (J u) (K u))) * (-stdMatrix H (J s) (K s))) +
+            T J * T K * (∑ s,
+              (∏ u ∈ Finset.univ.erase s, if J u = K u then (1 : ℝ) else 0) *
+                (2 * (stdMatrix H * stdMatrix H) (J s) (K s)))) := by
+        apply Finset.sum_congr rfl
+        intro J _
+        apply Finset.sum_congr rfl
+        intro K _
+        simp only [R, Finset.sum_add_distrib, mul_add]
+      _ = (∑ J, ∑ K, T J * T K * (∑ s, (∑ u ∈ Finset.univ.erase s,
+              (∏ v ∈ (Finset.univ.erase s).erase u, if J v = K v then (1 : ℝ) else 0) *
+                (-stdMatrix H (J u) (K u))) * (-stdMatrix H (J s) (K s)))) +
+          ∑ J, ∑ K, T J * T K * (∑ s,
+              (∏ u ∈ Finset.univ.erase s, if J u = K u then (1 : ℝ) else 0) *
+                (2 * (stdMatrix H * stdMatrix H) (J s) (K s))) := by
+        simp only [Finset.sum_add_distrib]
+      _ = _ := by
+        rw [h3a, h3b]
+  have hsplit : (∑ J, ∑ K, (dA J K + dB J K)) =
+      ((∑ J, ∑ K, (X J * X K + X J * X K) * P J K) +
+        ∑ J, ∑ K, (X J * T K + T J * X K) * Q J K) +
+      ((∑ J, ∑ K, (X J * T K + T J * X K) * Q J K) +
+        ∑ J, ∑ K, T J * T K * R J K) := by
+    simp only [dA, dB, Finset.sum_add_distrib]
+  rw [hsplit, h1, h2, h3, inner_actSum_actSum (stdMatrix H) hM T]
+  ring
+
+/-- **BKL (88), second order**: for symmetric `H`,
+`D²F(Id, T)[(H, X), (H, X)] = 2 (|X|² − 2⟨X, Σ_H T⟩ + ½|Σ_H T|² + ½ Σ_s |H^{(s)} T|²)`. -/
+theorem fderiv_fderiv_energyForm_one (T : (Fin r → Fin n) → ℝ)
+    (H : EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n)) (hH : IsSelfAdjoint H)
+    (X : (Fin r → Fin n) → ℝ) :
+    fderiv ℝ (fderiv ℝ (fun q : (EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n)) × ((Fin r → Fin n) → ℝ) =>
+        energyForm q.1 q.2)) (1, T) (H, X) (H, X) =
+      2 * (inner X X - 2 * inner X (actSum (stdMatrix H) T)
+        + (1 / 2 : ℝ) * inner (actSum (stdMatrix H) T) (actSum (stdMatrix H) T)
+        + (1 / 2 : ℝ) * ∑ s, inner (actOn (stdMatrix H) s T) (actOn (stdMatrix H) s T)) := by
+  have hdiff :=
+    contDiffAt_energyForm
+      (1 : EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n)) isUnit_one T
+  rw [fderiv_fderiv_apply_eq_deriv_deriv_line hdiff (H, X)]
+  change deriv (deriv fun ε : ℝ => energyForm (1 + ε • H) (T + ε • X)) 0 = _
+  exact deriv_deriv_energyForm_line T H hH X
+
+end FunctionalInequalities.Analysis.CoordinateTensor
+
+end S3Bf3B2SecondOrderCore

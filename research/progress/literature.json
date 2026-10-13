@@ -9423,7 +9423,7 @@
               "L43",
               "L42"
             ],
-            "relation": "same",
+            "relation": "partial",
             "declarations": [
               {
                 "name": "FunctionalInequalities.Analysis.CoordinateTensor.drift_expression_ge",
@@ -9436,9 +9436,13 @@
               {
                 "name": "FunctionalInequalities.KLS.BKL.Localization.sum_sq_conjugatedNoiseMatrix_mulVec_le",
                 "source": "formalization/FunctionalInequalities/KLS/BKL/Localization/NoiseBound.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.BKL.Localization.generator_cumulantEnergy_ge",
+                "source": "formalization/FunctionalInequalities/KLS/BKL/Localization/EnergyGenerator.lean"
               }
             ],
-            "note": ""
+            "note": "Generator form (Claude-controller batch 12, 2026-10-13; the cutoff-only route replaces the Itô drift by the generator of the posterior parameter diffusion): generator_cumulantEnergy_ge proves, for every compactly supported isotropic log-concave prior, r ≥ 2 (m = r + 1 ≥ 3), every direction u and every parameter p = (c, Q) with Q symmetric positive semidefinite, 𝓛E_m(p) ≥ ½E_{m+1}(p) − 17(r+1)²E_m(p) − 2⟨κ_m(u), L_m(u)⟩_p, i.e. (80) with the explicit constant C = 17. It assumes CumulantBoundCompact 2 8, the compact-support form of the Lemma 4.2 bound (79), which rests on Letwin Theorem 1.2 (open); hence partial. Supporting results: the algebraic bound drift_expression_ge (SlotAction.lean), the generator chain rule and the noise bound (NoiseBound.lean)."
           },
           {
             "id": "L52",

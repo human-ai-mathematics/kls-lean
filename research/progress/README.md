@@ -1231,7 +1231,7 @@ flowchart LR
 
 ### Bizeul–Klartag–Lehec (arXiv:2610.05474v1)
 
-27 statements: 6 ✓, 7 ◐, 1 ○, 13 ⇑. [Full map](LITERATURE.md#bkl2026-lemma-map).
+27 statements: 5 ✓, 8 ◐, 1 ○, 13 ⇑. [Full map](LITERATURE.md#bkl2026-lemma-map).
 
 ```mermaid
 flowchart LR
@@ -1252,7 +1252,7 @@ flowchart LR
     BKL2026_L42["◐ Lemma 4.2, p. 18<br/>Third cumulant"]
     BKL2026_L43["◐ Lemma 4.3, p. 20<br/>Cumulant dynamics"]
     BKL2026_E7274["⇑ Equations (72) and (74), pp. 20–21 (spatial step of the proof of Lemma 4.3)<br/>Grouped drift expansion"]
-    BKL2026_L51["✓ Lemma 5.1, p. 22<br/>Drift inequality"]
+    BKL2026_L51["◐ Lemma 5.1, p. 22<br/>Drift inequality"]
     BKL2026_L52["◐ Lemma 5.2, p. 24<br/>Integrated drift bound"]
     BKL2026_P71["✓ Proposition 7.1, p. 28<br/>Suspension"]
     BKL2026_E12["✓ Section 2, (12), p. 5 (unnumbered)<br/>Regular log-concave measures"]
@@ -1300,9 +1300,9 @@ flowchart LR
     BKL2026_E2628 --> BKL2026_E48
     BKL2026_more["+1 further statements in the paper register"]
     classDef lemma_formalized fill:#dbeafe,stroke:#2563eb,color:#1e3a8a;
-    class BKL2026_L22,BKL2026_T31,BKL2026_L51,BKL2026_P71,BKL2026_E12,BKL2026_E2628 lemma_formalized;
+    class BKL2026_L22,BKL2026_T31,BKL2026_P71,BKL2026_E12,BKL2026_E2628 lemma_formalized;
     classDef lemma_partial fill:#fff3df,stroke:#c88719,color:#66420d;
-    class BKL2026_T11,BKL2026_L21,BKL2026_T41,BKL2026_L42,BKL2026_L43,BKL2026_L52,BKL2026_E67 lemma_partial;
+    class BKL2026_T11,BKL2026_L21,BKL2026_T41,BKL2026_L42,BKL2026_L43,BKL2026_L51,BKL2026_L52,BKL2026_E67 lemma_partial;
     classDef lemma_improved fill:#dcfce7,stroke:#15803d,color:#14532d;
     class BKL2026_L32,BKL2026_EQ3536,BKL2026_L33,BKL2026_L34,BKL2026_C35,BKL2026_L36,BKL2026_C37,BKL2026_L38,BKL2026_L39,BKL2026_E7274,BKL2026_EQ15,BKL2026_EQ16,BKL2026_E48 lemma_improved;
     style BKL2026_T11 stroke-width:3px

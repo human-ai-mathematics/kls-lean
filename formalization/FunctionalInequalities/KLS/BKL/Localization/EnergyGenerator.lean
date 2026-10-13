@@ -5,6 +5,7 @@ import FunctionalInequalities.KLS.BKL.Localization.EnergyConjugation
 import FunctionalInequalities.KLS.BKL.Localization.NoiseBound
 import FunctionalInequalities.Probability.Diffusion.VectorGenerator
 import FunctionalInequalities.Analysis.Tensor.EnergyForm
+import FunctionalInequalities.KLS.BKL.Localization.Standardization
 
 /-!
 # The generator of the cumulant energy
@@ -405,3 +406,230 @@ theorem generator_cumulantEnergy_eq (hiso : KLS.Isotropic μ) {r : ℕ} (hr : 2 
   rfl
 
 end FunctionalInequalities.KLS.BKL.Localization
+
+section S3BLemma51Assembly
+
+open MeasureTheory
+open scoped RealInnerProductSpace
+open FunctionalInequalities.Probability.Posterior FunctionalInequalities.Analysis
+  FunctionalInequalities.Analysis.BakryEmery FunctionalInequalities.Probability.Diffusion
+  FunctionalInequalities.Analysis.CoordinateTensor
+
+/-! **BKL Lemma 5.1** in generator form: the drift inequality (80) for the cumulant energy, from the chain rule (82), the first- and second-order expansions (88) of the energy form and the algebraic bound `drift_expression_ge` (task S-3b-lemma51-assembly). -/
+
+namespace FunctionalInequalities.KLS.BKL.Localization
+
+variable {n : ℕ} (μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin n)))
+  (hc : IsCompact (μ : Measure (EuclideanSpace ℝ (Fin n))).support)
+
+private lemma stdMatrix_neg_one :
+    stdMatrix (-1 : EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n)) =
+      (-1 : Matrix (Fin n) (Fin n) ℝ) := by
+  classical
+  ext i k
+  change
+    ⟪EuclideanSpace.basisFun (Fin n) ℝ i,
+      -(EuclideanSpace.basisFun (Fin n) ℝ k)⟫ =
+        -((1 : Matrix (Fin n) (Fin n) ℝ) i k)
+  rw [_root_.inner_neg_right, OrthonormalBasis.inner_eq_ite, Matrix.one_apply]
+
+private lemma actOn_neg_one {r : ℕ} (s : Fin r) (T : (Fin r → Fin n) → ℝ) :
+    actOn (-1 : Matrix (Fin n) (Fin n) ℝ) s T = -T := by
+  classical
+  ext J
+  simp [actOn, Matrix.one_apply, ite_mul]
+
+private lemma actSum_neg_one {r : ℕ} (T : (Fin r → Fin n) → ℝ) :
+    actSum (-1 : Matrix (Fin n) (Fin n) ℝ) T = -(r : ℝ) • T := by
+  classical
+  ext J
+  simp [actSum, actOn_neg_one, Finset.sum_const]
+
+private lemma tensor_inner_smul_right {r : ℕ}
+    (A B : (Fin r → Fin n) → ℝ) (c : ℝ) :
+    inner A (c • B) = c * inner A B := by
+  classical
+  simp only [CoordinateTensor.inner, Pi.smul_apply, smul_eq_mul]
+  calc
+    (∑ J, A J * (c * B J)) = ∑ J, c * (A J * B J) := by
+      apply Finset.sum_congr rfl
+      intro J _
+      ring
+    _ = c * ∑ J, A J * B J := (Finset.mul_sum _ _ _).symm
+
+private lemma tensor_inner_neg_right {r : ℕ}
+    (A B : (Fin r → Fin n) → ℝ) :
+    inner A (-B) = -inner A B := by
+  simp [CoordinateTensor.inner]
+
+private lemma tensor_inner_add_right {r : ℕ}
+    (A B C : (Fin r → Fin n) → ℝ) :
+    inner A (B + C) = inner A B + inner A C := by
+  simp [CoordinateTensor.inner, mul_add, Finset.sum_add_distrib]
+
+private lemma stdMatrix_entry_symmetry
+    (A : EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n))
+    (hA : IsSelfAdjoint A) :
+    ∀ a b, stdMatrix A a b = stdMatrix A b a := by
+  have hs := ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hA
+  intro a b
+  change
+    ⟪EuclideanSpace.basisFun (Fin n) ℝ a,
+        A (EuclideanSpace.basisFun (Fin n) ℝ b)⟫ =
+      ⟪EuclideanSpace.basisFun (Fin n) ℝ b,
+        A (EuclideanSpace.basisFun (Fin n) ℝ a)⟫
+  calc
+    ⟪EuclideanSpace.basisFun (Fin n) ℝ a,
+        A (EuclideanSpace.basisFun (Fin n) ℝ b)⟫ =
+        ⟪A (EuclideanSpace.basisFun (Fin n) ℝ a),
+          EuclideanSpace.basisFun (Fin n) ℝ b⟫ := (hs _ _).symm
+    _ = ⟪EuclideanSpace.basisFun (Fin n) ℝ b,
+          A (EuclideanSpace.basisFun (Fin n) ℝ a)⟫ := real_inner_comm _ _
+
+/-- **BKL Lemma 5.1, (80), in generator form** with the explicit constant `C = 17`: for a compactly supported isotropic
+log-concave prior, the third-order bound `CumulantBoundCompact 2 8` (BKL (79) via Lemma 4.2), `m = r + 1 ≥ 3`, a direction
+`u` and a parameter `p` with symmetric positive semidefinite `Q`, the generator of (67) applied to the cumulant energy
+`E_m(q) = |κ_m(μ_q)(u)|²_q` satisfies
+`𝓛E_m(p) ≥ ½ E_{m+1}(p) − 17 m² E_m(p) − 2 ⟨κ_m(p)(u), L_m(p)(u)⟩_p`,
+where `⟨κ_m(u), L_m(u)⟩_p = Σ_K κ_m(u, σ e_K) · L_m(u, σ e_K)` with `σ = A(p)^{-1/2}` and `L_m` the middle term (72)
+(`lowerDrift`, slot `0`). -/
+theorem generator_cumulantEnergy_ge (hiso : KLS.Isotropic μ) (hLC : KLS.LogConcave μ)
+    (h8 : LogConcave.Suspension.CumulantBoundCompact 2 8) {r : ℕ} (hr : 2 ≤ r)
+    (u : EuclideanSpace ℝ (Fin n)) (p : Param n) (hSym : IsSelfAdjoint p.2) (hQ : ∀ x, 0 ≤ ⟪p.2 x, x⟫) :
+    (1 / 2 : ℝ) * cumulantEnergy (compactPosterior μ hc p.1 p.2 : Measure (EuclideanSpace ℝ (Fin n))) (r + 1) u
+        - 17 * ((r : ℝ) + 1) ^ 2 *
+          cumulantEnergy (compactPosterior μ hc p.1 p.2 : Measure (EuclideanSpace ℝ (Fin n))) r u
+        - 2 * ∑ K : Fin r → Fin n,
+            cumulant (compactPosterior μ hc p.1 p.2 : Measure (EuclideanSpace ℝ (Fin n))) (r + 1)
+                (Fin.cons u fun s => inverseSqrt (cov μ hc p) (EuclideanSpace.basisFun (Fin n) ℝ (K s))) *
+              lowerDrift (compactPosterior μ hc p.1 p.2 : Measure (EuclideanSpace ℝ (Fin n)))
+                (Fin.cons u fun s => inverseSqrt (cov μ hc p) (EuclideanSpace.basisFun (Fin n) ℝ (K s))) 0 ≤
+      generator μ hc
+        (fun q : Param n => cumulantEnergy (compactPosterior μ hc q.1 q.2 : Measure (EuclideanSpace ℝ (Fin n))) r u) p := by
+  classical
+  let T : (Fin r → Fin n) → ℝ := energyTensor μ hc p r u
+  let L : (Fin r → Fin n) → ℝ := lowerTensor μ hc p r u
+  let W : Fin n → (Fin r → Fin n) → ℝ := noiseTensor μ hc p r u
+  let H : Fin n → Matrix (Fin n) (Fin n) ℝ :=
+    fun i => conjugatedNoiseMatrix μ hc p i
+
+  have hfirst :
+      fderiv ℝ
+          (fun q : (EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n)) ×
+            ((Fin r → Fin n) → ℝ) => energyForm q.1 q.2)
+          (1, T) (-1, -(((r : ℝ) + 1) • T + L)) =
+        -(((r : ℝ) + 1) + 1) * inner T T - 2 * inner T L := by
+    rw [fderiv_energyForm_one, stdMatrix_neg_one, actSum_neg_one]
+    simp only [tensor_inner_neg_right, tensor_inner_add_right, tensor_inner_smul_right]
+    ring
+
+  have hsecond (i : Fin n) :
+      fderiv ℝ
+          (fderiv ℝ
+            (fun q : (EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n)) ×
+              ((Fin r → Fin n) → ℝ) => energyForm q.1 q.2))
+          (1, T)
+          (conjugatedNoiseOperator μ hc p i, W i)
+          (conjugatedNoiseOperator μ hc p i, W i) =
+        2 * (inner (W i) (W i)
+          - 2 * inner (W i) (actSum (H i) T)
+          + (1 / 2 : ℝ) * inner (actSum (H i) T) (actSum (H i) T)
+          + (1 / 2 : ℝ) * ∑ s,
+              inner (actOn (H i) s T) (actOn (H i) s T)) := by
+    rw [fderiv_fderiv_energyForm_one T
+      (conjugatedNoiseOperator μ hc p i)
+      (isSelfAdjoint_conjugatedNoiseOperator μ hc hiso p i) (W i)]
+    rw [stdMatrix_conjugatedNoiseOperator μ hc hiso p i]
+
+  have hHerm : ∀ i, (H i).IsHermitian := by
+    intro i
+    change (H i).conjTranspose = H i
+    ext a b
+    change conjugatedNoiseMatrix μ hc p i b a =
+      conjugatedNoiseMatrix μ hc p i a b
+    rw [← stdMatrix_conjugatedNoiseOperator μ hc hiso p i]
+    exact stdMatrix_entry_symmetry
+      (conjugatedNoiseOperator μ hc p i)
+      (isSelfAdjoint_conjugatedNoiseOperator μ hc hiso p i) b a
+
+  have h8' :
+      ∀ v : Fin n → ℝ,
+        ∑ i, ∑ a, (∑ b, H i a b * v b) ^ 2 ≤ 8 * ∑ a, v a ^ 2 := by
+    intro v
+    exact sum_sq_conjugatedNoiseMatrix_mulVec_le μ hc hiso hLC h8 p hSym hQ v
+
+  have hT :
+      inner T T =
+        cumulantEnergy
+          (compactPosterior μ hc p.1 p.2 : Measure (EuclideanSpace ℝ (Fin n))) r u :=
+    inner_energyTensor_self μ hc p r u
+
+  have hW :
+      ∑ i, inner (W i) (W i) =
+        cumulantEnergy
+          (compactPosterior μ hc p.1 p.2 : Measure (EuclideanSpace ℝ (Fin n)))
+          (r + 1) u :=
+    sum_inner_noiseTensor_self μ hc p r u
+
+  have hTL :
+      inner T L =
+        ∑ K : Fin r → Fin n,
+          cumulant
+              (compactPosterior μ hc p.1 p.2 : Measure (EuclideanSpace ℝ (Fin n)))
+              (r + 1)
+              (Fin.cons u fun s =>
+                inverseSqrt (cov μ hc p)
+                  (EuclideanSpace.basisFun (Fin n) ℝ (K s))) *
+            lowerDrift
+              (compactPosterior μ hc p.1 p.2 : Measure (EuclideanSpace ℝ (Fin n)))
+              (Fin.cons u fun s =>
+                inverseSqrt (cov μ hc p)
+                  (EuclideanSpace.basisFun (Fin n) ℝ (K s))) 0 := by
+    rfl
+
+  have hg :
+      generator μ hc
+          (fun q : Param n =>
+            cumulantEnergy
+              (compactPosterior μ hc q.1 q.2 : Measure (EuclideanSpace ℝ (Fin n))) r u) p =
+        fderiv ℝ
+            (fun q : (EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n)) ×
+              ((Fin r → Fin n) → ℝ) => energyForm q.1 q.2)
+            (1, T) (-1, -(((r : ℝ) + 1) • T + L)) +
+          (1 / 2 : ℝ) * ∑ i,
+            fderiv ℝ
+              (fderiv ℝ
+                (fun q : (EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n)) ×
+                  ((Fin r → Fin n) → ℝ) => energyForm q.1 q.2))
+              (1, T)
+              (conjugatedNoiseOperator μ hc p i, W i)
+              (conjugatedNoiseOperator μ hc p i, W i) :=
+    generator_cumulantEnergy_eq μ hc hiso hr u p
+
+  have hformula :
+      generator μ hc
+          (fun q : Param n =>
+            cumulantEnergy
+              (compactPosterior μ hc q.1 q.2 : Measure (EuclideanSpace ℝ (Fin n))) r u) p =
+        -(((r : ℝ) + 1) + 1) * inner T T - 2 * inner T L
+          + ∑ i, inner (W i) (W i)
+          - 2 * ∑ i, inner (W i) (actSum (H i) T)
+          + (1 / 2 : ℝ) * ∑ i,
+              inner (actSum (H i) T) (actSum (H i) T)
+          + (1 / 2 : ℝ) * ∑ i, ∑ s,
+              inner (actOn (H i) s T) (actOn (H i) s T) := by
+    rw [hg, hfirst]
+    simp_rw [hsecond]
+    simp only [Finset.sum_add_distrib, Finset.sum_sub_distrib, ← Finset.mul_sum]
+    ring
+
+  have hd :=
+    drift_expression_ge (r := r) (m := r + 1) rfl H hHerm h8' T L W
+  rw [Nat.cast_add, Nat.cast_one] at hd
+  rw [← hformula] at hd
+  rw [hT, hW, hTL] at hd
+  exact hd
+
+end FunctionalInequalities.KLS.BKL.Localization
+
+end S3BLemma51Assembly
