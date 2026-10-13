@@ -404,3 +404,236 @@ theorem fderiv_energyForm_one (T : (Fin r → Fin n) → ℝ)
 end FunctionalInequalities.Analysis.CoordinateTensor
 
 end S3Bf2EnergyFormFirstOrder
+
+section S3Bf3B1SecondOrderHelpers
+
+open Matrix
+open scoped RealInnerProductSpace
+
+/-! Helpers for the second-order expansion of the energy form: a double-erasure product sum and line derivatives of `⟪(1 + tB)⁻¹ ·, ·⟫` (task S-3bF3b1). -/
+
+namespace FunctionalInequalities.Analysis.CoordinateTensor
+
+variable {n r : ℕ}
+
+private lemma inverse_line_at_unit {R : Type*} [NormedRing R]
+    [NormedAlgebra ℝ R] [HasSummableGeomSeries R]
+    (H : R) (t : ℝ) (ht : IsUnit (1 + t • H)) :
+    HasDerivAt (fun x : ℝ => Ring.inverse (1 + x • H))
+      (-(Ring.inverse (1 + t • H) * H * Ring.inverse (1 + t • H))) t := by
+  have hl : HasDerivAt (fun x : ℝ => (1 : R) + x • H) H t := by
+    simpa only [id_eq, one_smul] using
+      ((hasDerivAt_id t).smul_const H).const_add (1 : R)
+  have hi := hasFDerivAt_ringInverse (𝕜 := ℝ) ht.unit
+  rw [ht.unit_spec] at hi
+  have hc := hi.comp_hasDerivAt t hl
+  simpa only [Function.comp_def, _root_.neg_apply,
+    ContinuousLinearMap.mulLeftRight_apply, ← Ring.inverse_unit, ht.unit_spec] using hc
+
+private lemma inverse_line_at_zero {R : Type*} [NormedRing R]
+    [NormedAlgebra ℝ R] [HasSummableGeomSeries R] (H : R) :
+    HasDerivAt (fun t : ℝ => Ring.inverse (1 + t • H)) (-H) 0 := by
+  have hu : IsUnit ((1 : R) + (0 : ℝ) • H) := by
+    simpa only [zero_smul, add_zero] using (isUnit_one : IsUnit (1 : R))
+  simpa only [zero_smul, add_zero, Ring.inverse_one, one_mul, mul_one] using
+    inverse_line_at_unit H 0 hu
+
+private lemma inverse_entry_at_unit
+    {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E] [CompleteSpace E]
+    (H : E →L[ℝ] E) (L : E →L[ℝ] ℝ) (v : E) (t : ℝ)
+    (ht : IsUnit (1 + t • H)) :
+    HasDerivAt (fun x : ℝ => L (Ring.inverse (1 + x • H) v))
+      (-L (Ring.inverse (1 + t • H) (H (Ring.inverse (1 + t • H) v)))) t := by
+  have h := inverse_line_at_unit H t ht
+  simpa only [Function.comp_def, _root_.neg_apply, mul_apply_eq_comp,
+    map_zero, add_zero, map_neg] using
+    L.hasFDerivAt.comp_hasDerivAt t (h.clm_apply (hasDerivAt_const t v))
+
+private lemma inverse_entry_second
+    {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E] [CompleteSpace E]
+    (H : E →L[ℝ] E) (L : E →L[ℝ] ℝ) (v : E) :
+    HasDerivAt (deriv fun t : ℝ => L (Ring.inverse (1 + t • H) v))
+      (2 * L (H (H v))) 0 := by
+  have hR := inverse_line_at_zero H
+  have hv := hR.clm_apply (hasDerivAt_const (0 : ℝ) v)
+  have hHv := (hasDerivAt_const (0 : ℝ) H).clm_apply hv
+  have hboth := hR.clm_apply hHv
+  have hh := (-L).hasFDerivAt.comp_hasDerivAt 0 hboth
+  have hd :
+      HasDerivAt
+        (fun t : ℝ =>
+          -L (Ring.inverse (1 + t • H) (H (Ring.inverse (1 + t • H) v))))
+        (2 * L (H (H v))) 0 := by
+    simpa only [Function.comp_def, zero_smul, add_zero, Ring.inverse_one,
+      one_apply_eq_self, _root_.neg_apply, _root_.zero_apply, map_zero,
+      zero_add, map_neg, map_add, neg_add, neg_neg, two_mul] using hh
+  have hopen : {t : ℝ | IsUnit (1 + t • H)} ∈ nhds (0 : ℝ) := by
+    have hc : Continuous (fun t : ℝ => (1 : E →L[ℝ] E) + t • H) :=
+      continuous_const.add (continuous_id.smul continuous_const)
+    apply (Units.isOpen.preimage hc).mem_nhds
+    change IsUnit ((1 : E →L[ℝ] E) + (0 : ℝ) • H)
+    simpa only [zero_smul, add_zero] using
+      (isUnit_one : IsUnit (1 : E →L[ℝ] E))
+  have heq :
+      (deriv fun t : ℝ => L (Ring.inverse (1 + t • H) v)) =ᶠ[nhds 0]
+        (fun t : ℝ =>
+          -L (Ring.inverse (1 + t • H) (H (Ring.inverse (1 + t • H) v)))) := by
+    filter_upwards [hopen] with t ht
+    exact (inverse_entry_at_unit H L v t ht).deriv
+  exact hd.congr_of_eventuallyEq heq
+
+/-- **Delta collapse on all slots but two**: for `s ≠ t`,
+`Σ_{J'} f(J') Π_{s' ∉ {s,t}} δ_{J_{s'} J'_{s'}} = Σ_{k,l} f(J[s ↦ k][t ↦ l])`. -/
+theorem sum_mul_prod_delta_erase_erase (J : Fin r → Fin n) {s t : Fin r} (hst : s ≠ t)
+    (f : (Fin r → Fin n) → ℝ) :
+    ∑ J' : Fin r → Fin n, f J' *
+        ∏ s' ∈ (Finset.univ.erase s).erase t, (if J s' = J' s' then (1 : ℝ) else 0) =
+      ∑ k, ∑ l, f (Function.update (Function.update J s k) t l) := by
+  classical
+  let p : (Fin r → Fin n) → Prop :=
+    fun J' => ∀ u ∈ (Finset.univ.erase s).erase t, J u = J' u
+  let q : (Fin n × Fin n) → (Fin r → Fin n) :=
+    fun kl => Function.update (Function.update J s kl.1) t kl.2
+  have hprod (J' : Fin r → Fin n) :
+      (∏ u ∈ (Finset.univ.erase s).erase t,
+          (if J u = J' u then (1 : ℝ) else 0)) =
+        if p J' then 1 else 0 := by
+    by_cases hp : p J'
+    · simp only [p, if_pos hp]
+      apply Finset.prod_eq_one
+      intro u hu
+      exact if_pos (hp u hu)
+    · rw [if_neg hp]
+      obtain ⟨u, hu, hne⟩ :
+          ∃ u, u ∈ (Finset.univ.erase s).erase t ∧ J u ≠ J' u := by
+        by_contra h
+        apply hp
+        intro u hu
+        by_contra h'
+        exact h ⟨u, hu, h'⟩
+      exact Finset.prod_eq_zero hu (if_neg hne)
+  have hfilter : Finset.univ.filter p = Finset.univ.image q := by
+    ext J'
+    constructor
+    · intro hJ'
+      have hp : p J' := (Finset.mem_filter.mp hJ').2
+      have heq : q (J' s, J' t) = J' := by
+        funext u
+        by_cases hus : u = s
+        · subst u
+          change Function.update (Function.update J s (J' s)) t (J' t) s = J' s
+          rw [Function.update_of_ne hst, Function.update_self]
+        · by_cases hut : u = t
+          · subst u
+            change Function.update (Function.update J s (J' s)) t (J' t) t = J' t
+            rw [Function.update_self]
+          · have hu : u ∈ (Finset.univ.erase s).erase t := by
+              simp [hus, hut]
+            change Function.update (Function.update J s (J' s)) t (J' t) u = J' u
+            rw [Function.update_of_ne hut, Function.update_of_ne hus]
+            exact hp u hu
+      exact Finset.mem_image.mpr ⟨(J' s, J' t), Finset.mem_univ _, heq⟩
+    · intro hJ'
+      obtain ⟨kl, -, rfl⟩ := Finset.mem_image.mp hJ'
+      apply Finset.mem_filter.mpr
+      constructor
+      · exact Finset.mem_univ _
+      · intro u hu
+        have hut : u ≠ t := (Finset.mem_erase.mp hu).1
+        have hus : u ≠ s :=
+          (Finset.mem_erase.mp (Finset.mem_erase.mp hu).2).1
+        change J u = Function.update (Function.update J s kl.1) t kl.2 u
+        rw [Function.update_of_ne hut, Function.update_of_ne hus]
+  have hq : Function.Injective q := by
+    intro kl kl' hkl
+    have hs' := congrFun hkl s
+    have ht' := congrFun hkl t
+    have hk : kl.1 = kl'.1 := by
+      simpa only [q, Function.update_of_ne hst, Function.update_self] using hs'
+    have hl : kl.2 = kl'.2 := by
+      simpa only [q, Function.update_self] using ht'
+    exact Prod.ext hk hl
+  calc
+    ∑ J' : Fin r → Fin n, f J' *
+        ∏ u ∈ (Finset.univ.erase s).erase t,
+          (if J u = J' u then (1 : ℝ) else 0) =
+        ∑ J', if p J' then f J' else 0 := by
+      apply Finset.sum_congr rfl
+      intro J' _
+      rw [hprod]
+      by_cases hp : p J' <;> simp [hp]
+    _ = ∑ J' ∈ Finset.univ.filter p, f J' := by
+      rw [← Finset.sum_filter]
+    _ = ∑ J' ∈ Finset.univ.image q, f J' := by
+      rw [hfilter]
+    _ = ∑ kl : Fin n × Fin n, f (q kl) := by
+      rw [Finset.sum_image]
+      intro kl _ kl' _ hEq
+      exact hq hEq
+    _ = ∑ k, ∑ l, f (Function.update (Function.update J s k) t l) := by
+      simpa only [q] using
+        (Fintype.sum_prod_type
+          (fun kl : Fin n × Fin n =>
+            f (Function.update (Function.update J s kl.1) t kl.2)))
+
+/-- The entries of `(1 + εH)⁻¹` are differentiable near `ε = 0` with derivative
+`−⟪e_i, (1+εH)⁻¹ H (1+εH)⁻¹ e_k⟫`. -/
+theorem hasDerivAt_inner_ringInverse_one_add_of_isUnit
+    (H : EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n)) (i k : Fin n) {ε : ℝ}
+    (hε : IsUnit (1 + ε • H)) :
+    HasDerivAt (fun ε : ℝ => ⟪EuclideanSpace.basisFun (Fin n) ℝ i,
+        Ring.inverse (1 + ε • H) (EuclideanSpace.basisFun (Fin n) ℝ k)⟫)
+      (-⟪EuclideanSpace.basisFun (Fin n) ℝ i,
+        Ring.inverse (1 + ε • H) (H (Ring.inverse (1 + ε • H) (EuclideanSpace.basisFun (Fin n) ℝ k)))⟫) ε := by
+  exact inverse_entry_at_unit H
+    (innerSL ℝ (EuclideanSpace.basisFun (Fin n) ℝ i))
+    (EuclideanSpace.basisFun (Fin n) ℝ k) ε hε
+
+/-- The second derivative of the entries of `(1 + εH)⁻¹` at `ε = 0` is `2⟪e_i, H² e_k⟫`. -/
+theorem hasDerivAt_deriv_inner_ringInverse_one_add
+    (H : EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n)) (i k : Fin n) :
+    HasDerivAt (deriv fun ε : ℝ => ⟪EuclideanSpace.basisFun (Fin n) ℝ i,
+        Ring.inverse (1 + ε • H) (EuclideanSpace.basisFun (Fin n) ℝ k)⟫)
+      (2 * ⟪EuclideanSpace.basisFun (Fin n) ℝ i, H (H (EuclideanSpace.basisFun (Fin n) ℝ k))⟫) 0 := by
+  exact inverse_entry_second H
+    (innerSL ℝ (EuclideanSpace.basisFun (Fin n) ℝ i))
+    (EuclideanSpace.basisFun (Fin n) ℝ k)
+
+set_option maxHeartbeats 800000 in
+/-- The second directional derivative is the second derivative along the line. -/
+theorem fderiv_fderiv_apply_eq_deriv_deriv_line {W : Type*} [NormedAddCommGroup W] [NormedSpace ℝ W]
+    {Φ : W → ℝ} {y : W} (hΦ : ContDiffAt ℝ 2 Φ y) (v : W) :
+    fderiv ℝ (fderiv ℝ Φ) y v v = deriv (deriv fun ε : ℝ => Φ (y + ε • v)) 0 := by
+  have hc : ContDiffAt ℝ 1 (fderiv ℝ Φ) y :=
+    hΦ.fderiv_right (by norm_num)
+  have hl (t : ℝ) : HasDerivAt (fun a : ℝ => y + a • v) v t := by
+    simpa only [id_eq, one_smul] using
+      ((hasDerivAt_id t).smul_const v).const_add y
+  have hp :
+      HasFDerivAt (fderiv ℝ Φ) (fderiv ℝ (fderiv ℝ Φ) y)
+        (y + (0 : ℝ) • v) := by
+    simpa only [zero_smul, add_zero] using
+      (hc.differentiableAt (by norm_num)).hasFDerivAt
+  have hd :
+      HasDerivAt (fun t : ℝ => fderiv ℝ Φ (y + t • v))
+        (fderiv ℝ (fderiv ℝ Φ) y v) 0 :=
+    hp.comp_hasDerivAt 0 (hl 0)
+  have hd' :
+      deriv (fun t : ℝ => fderiv ℝ Φ (y + t • v) v) 0 =
+        fderiv ℝ (fderiv ℝ Φ) y v v := by
+    simpa only [map_zero, add_zero] using
+      (hd.clm_apply (hasDerivAt_const (0 : ℝ) v)).deriv
+  have ht :
+      Filter.Tendsto (fun t : ℝ => y + t • v) (nhds 0) (nhds y) := by
+    simpa only [ContinuousAt, zero_smul, add_zero] using (hl 0).continuousAt
+  have heq :
+      (deriv fun t : ℝ => Φ (y + t • v)) =ᶠ[nhds 0]
+        (fun t : ℝ => fderiv ℝ Φ (y + t • v) v) := by
+    filter_upwards [ht.eventually (hΦ.eventually (by norm_num))] with t h
+    exact
+      ((h.differentiableAt (by norm_num)).hasFDerivAt.comp_hasDerivAt t (hl t)).deriv
+  exact hd'.symm.trans heq.deriv_eq.symm
+
+end FunctionalInequalities.Analysis.CoordinateTensor
+
+end S3Bf3B1SecondOrderHelpers

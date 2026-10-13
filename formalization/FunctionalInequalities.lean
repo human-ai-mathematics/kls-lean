@@ -314,7 +314,9 @@ import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.LipschitzHe
 import FunctionalInequalities.Analysis.Convex.Alexandrov
 import FunctionalInequalities.Analysis.Convex.Viscosity
 import FunctionalInequalities.Analysis.Convex.Normalization
+import FunctionalInequalities.Analysis.Convex.Caffarelli
 import FunctionalInequalities.KLS.BKL.Localization.LyapunovMoment
+import FunctionalInequalities.KLS.BKL.Localization.EnergyIntegral
 import FunctionalInequalities.KLS.BKL.Localization.CumulantGenerator
 import FunctionalInequalities.KLS.BKL.Localization.EnergyBound
 import FunctionalInequalities.KLS.BKL.Localization.CumulantDerivative

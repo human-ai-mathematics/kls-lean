@@ -2075,3 +2075,48 @@ theorem le_neg_of_lower_alexandrov_bound {n : ℕ} (hn : 0 < n) {v : EuclideanSp
 end FunctionalInequalities.Analysis
 
 end LT11E4NormalizedMinEstimate
+
+section LT11E6SubgradientimageSubAffine
+
+open MeasureTheory Set
+open scoped RealInnerProductSpace
+
+/-! Subgradient images after subtracting an affine function, and their volume (task L-T11e6). -/
+
+namespace FunctionalInequalities.Analysis
+
+/-- **Subtracting an affine function translates subgradient images** (weak Letwin route, Caffarelli
+block T11e, bookkeeping): `∂(u − ⟪p, ·⟫ − c)(G) = ∂u(G) − p`, hence the volumes agree. -/
+theorem subgradientImage_sub_inner_add_const {E : Type*} [NormedAddCommGroup E]
+    [InnerProductSpace ℝ E] (u : E → ℝ) (p : E) (c : ℝ) (G : Set E) :
+    subgradientImage (fun x => u x - (⟪p, x⟫ + c)) G = (fun q => q - p) '' subgradientImage u G := by
+  ext q
+  constructor
+  · rintro ⟨x, hx, hq⟩
+    refine ⟨q + p, ?_, add_sub_cancel_right q p⟩
+    refine ⟨x, hx, ?_⟩
+    intro y
+    have h := hq y
+    simp only [inner_sub_right] at h
+    simp only [inner_add_left, inner_sub_right]
+    linarith
+  · rintro ⟨r, ⟨x, hx, hr⟩, rfl⟩
+    refine ⟨x, hx, ?_⟩
+    intro y
+    have h := hr y
+    simp only [inner_sub_right] at h
+    simp only [inner_sub_left, inner_sub_right]
+    linarith
+
+theorem volume_subgradientImage_sub_inner_add_const {E : Type*} [NormedAddCommGroup E]
+    [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
+    (u : E → ℝ) (p : E) (c : ℝ) (G : Set E) :
+    (volume : Measure E) (subgradientImage (fun x => u x - (⟪p, x⟫ + c)) G) =
+      (volume : Measure E) (subgradientImage u G) := by
+  rw [subgradientImage_sub_inner_add_const]
+  simp only [sub_eq_add_neg, Set.image_add_right, neg_neg]
+  exact measure_preimage_add_right (volume : Measure E) p (subgradientImage u G)
+
+end FunctionalInequalities.Analysis
+
+end LT11E6SubgradientimageSubAffine

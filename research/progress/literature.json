@@ -9448,9 +9448,18 @@
             "uses": [
               "L51"
             ],
-            "relation": "same",
-            "declarations": [],
-            "note": ""
+            "relation": "partial",
+            "declarations": [
+              {
+                "name": "FunctionalInequalities.KLS.BKL.Localization.contDiff_cumulantEnergy_posterior",
+                "source": "formalization/FunctionalInequalities/KLS/BKL/Localization/EnergyIntegral.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.BKL.Localization.energy_integral_le_of_generator_ge",
+                "source": "formalization/FunctionalInequalities/KLS/BKL/Localization/EnergyIntegral.lean"
+              }
+            ],
+            "note": "Cutoff form only (Claude-controller batch 11, 2026-10-13; the cutoff-only route replaces the paper's stopping-time integrability assumptions): along a ball-cutoff Eldan process, Dynkin's identity for the C^∞ posterior cumulant energy E_m and Cauchy–Schwarz give the integrated bound (92)–(93) with weights γ_R², under two explicit hypotheses: the drift inequality (80) of Lemma 5.1 (h51) and the Section 6 bound (104) (hL, the statement of sqrt_lowerDrift_energy_le). Lemma 5.1 is not yet discharged, so the entry stays partial."
           },
           {
             "id": "P71",

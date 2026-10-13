@@ -139,6 +139,10 @@ dimension 0; basis mismatch between the Stein API (`Fin n`) and the BakryEmery A
   standard-simplex geometry for the affine normalisation of convex bodies; Mathlib only) and
   `KLS/BKL/Localization/LyapunovMoment.lean` (new; Gronwall moment and tail bounds along the cutoff process; imports
   Lyapunov, Process, CutoffInduction, Gronwall). Both created because no existing module owns these objects; no API change.
+- 2026-10-13 (placement): `KLS/BKL/Localization/EnergyIntegral.lean` (new; Dynkin and integrated energy bound along the
+  cutoff process, Lemma 5.2 cutoff form; imports CutoffInduction, EnergyConjugation, EnergyBound, CumulantDerivative,
+  EnergyForm) and `Analysis/Convex/Caffarelli.lean` (new; geometric steps of Caffarelli's argument; imports Alexandrov).
+  Touching-test Taylor bound goes to `Viscosity.lean` (Hessian imports), not `Alexandrov.lean`. No API change.
 
 ## Not claimed
 
