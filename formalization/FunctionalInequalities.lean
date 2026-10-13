@@ -312,6 +312,7 @@ import FunctionalInequalities.Probability.Diffusion.Transport
 import FunctionalInequalities.Analysis.BakryEmery.Bochner.Lipschitz
 import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.LipschitzHessian
 import FunctionalInequalities.Analysis.Convex.Alexandrov
+import FunctionalInequalities.Analysis.Convex.Viscosity
 import FunctionalInequalities.KLS.BKL.Localization.CumulantGenerator
 import FunctionalInequalities.KLS.BKL.Localization.EnergyBound
 import FunctionalInequalities.KLS.BKL.Localization.CumulantDerivative

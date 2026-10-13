@@ -365,3 +365,263 @@ theorem cutoffEnergyClaim_one (hL : LogConcave.Suspension.LetwinCompactBound) {K
   linarith
 
 end FunctionalInequalities.KLS.BKL.Localization
+
+section S7CClaimToBound
+
+open MeasureTheory ProbabilityTheory Filter Topology
+open scoped NNReal ENNReal RealInnerProductSpace
+open FunctionalInequalities.Probability.Posterior FunctionalInequalities.Analysis
+  FunctionalInequalities.Analysis.BakryEmery FunctionalInequalities.Probability.Diffusion
+
+/-! From the cutoff energy claim to the compact cumulant bound (task S-7c). -/
+
+namespace FunctionalInequalities.KLS.BKL.Localization
+
+open LevyStochCalc LevyStochCalc.Brownian LevyStochCalc.Brownian.Multidim LevyStochCalc.Brownian.Ito
+
+/-- For an isotropic law the energy at the initial parameter is the standard-basis sum
+`Σ_J κ_{d+1}(u, e_J)²` (`σ = Cov⁻¹ᐟ² = Id`). -/
+theorem cumulantEnergy_eq_sum_sq_of_isotropic {n : ℕ} (μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin n)))
+    (hiso : KLS.Isotropic μ) (d : ℕ) (u : EuclideanSpace ℝ (Fin n)) :
+    cumulantEnergy (μ : Measure (EuclideanSpace ℝ (Fin n))) d u =
+      ∑ J : Fin d → Fin n, cumulant (μ : Measure (EuclideanSpace ℝ (Fin n))) (d + 1)
+        (Fin.cons u fun k => EuclideanSpace.basisFun (Fin n) ℝ (J k)) ^ 2 := by
+  have hsqrt :
+      inverseSqrt (Covariance.operator (μ : Measure (EuclideanSpace ℝ (Fin n)))) =
+        ContinuousLinearMap.id ℝ (EuclideanSpace ℝ (Fin n)) := by
+    rw [hiso.covariance_identity]
+    change inverseSqrt (1 : EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n)) = 1
+    apply inverseSqrt_unique _ _ isUnit_one
+    · exact ContinuousLinearMap.isPositive_one
+    · simp
+  simp only [cumulantEnergy, hsqrt, ContinuousLinearMap.id_apply]
+
+/-- **From the cutoff claim to the cumulant bound** (BKL p. 27, `E_m(0) = ⟨R^μ_m u, u⟩`): `CutoffEnergyClaim K d`
+gives `CumulantBoundCompact d (envelope K (d + 1))`. -/
+theorem cumulantBoundCompact_of_cutoffEnergyClaim {K : ℝ} (hK : 0 ≤ K) {d : ℕ} (h : CutoffEnergyClaim K d) :
+    LogConcave.Suspension.CumulantBoundCompact d (envelope K (d + 1)) := by
+  classical
+  unfold LogConcave.Suspension.CumulantBoundCompact
+  intro m ν hiso hLC hc u
+  by_cases hu0 : u = 0
+  · subst u
+    have hzero (J : Fin d → Fin m) :
+        cumulant (ν : Measure (EuclideanSpace ℝ (Fin m))) (d + 1)
+            (Fin.cons (0 : EuclideanSpace ℝ (Fin m))
+              (fun k => EuclideanSpace.basisFun (Fin m) ℝ (J k))) = 0 := by
+      exact
+        (cumulant (ν : Measure (EuclideanSpace ℝ (Fin m))) (d + 1)).map_coord_zero 0
+          (by simp)
+    calc
+      ∑ J : Fin d → Fin m,
+          cumulant (ν : Measure (EuclideanSpace ℝ (Fin m))) (d + 1)
+            (Fin.cons (0 : EuclideanSpace ℝ (Fin m))
+              (fun k => EuclideanSpace.basisFun (Fin m) ℝ (J k))) ^ 2 = 0 := by
+        apply Finset.sum_eq_zero
+        intro J _
+        rw [hzero J]
+        norm_num
+      _ ≤ envelope K (d + 1) * ‖(0 : EuclideanSpace ℝ (Fin m))‖ ^ 2 :=
+        mul_nonneg (envelope_nonneg hK (d + 1)) (sq_nonneg _)
+  · let v : EuclideanSpace ℝ (Fin m) := ‖u‖⁻¹ • u
+    have hnorm : ‖u‖ ≠ 0 := norm_ne_zero_iff.mpr hu0
+    have hv : ‖v‖ = 1 := by
+      calc
+        ‖v‖ = ‖(‖u‖ : ℝ)⁻¹‖ * ‖u‖ := norm_smul _ _
+        _ = ‖u‖⁻¹ * ‖u‖ := by
+          rw [Real.norm_eq_abs, abs_inv, abs_of_nonneg (norm_nonneg u)]
+        _ = 1 := inv_mul_cancel₀ hnorm
+    have huv : ‖u‖ • v = u := by
+      dsimp [v]
+      rw [smul_smul, mul_inv_cancel₀ hnorm, one_smul]
+    have hunitApprox (ε : ℝ) (hε : 0 < ε) :
+        ∑ J : Fin d → Fin m,
+            cumulant (ν : Measure (EuclideanSpace ℝ (Fin m))) (d + 1)
+              (Fin.cons v
+                (fun k => EuclideanSpace.basisFun (Fin m) ℝ (J k))) ^ 2
+          ≤ envelope K (d + 1) + ε := by
+      obtain ⟨Ω, _, P, _, W, _⟩ :=
+        FunctionalInequalities.Probability.Diffusion.exists_brownianSetup m
+      let ℱ : Filtration ℝ ‹MeasurableSpace Ω› := usualFiltration W
+      have hright : ℱ.IsRightContinuous := by
+        dsimp [ℱ]
+        infer_instance
+      have hW : ∀ k, IsBrownianFiltration (W.W k) ℱ := by
+        intro k
+        change IsBrownianFiltration (W.W k) (usualFiltration W)
+        exact usualFiltration_brownian W k
+      have hℱ0 : ∀ t : ℝ, t ≤ 0 → ℱ 0 ≤ ℱ t := by
+        intro t ht
+        change usualFiltration W 0 ≤ usualFiltration W t
+        exact usualFiltration_le_of_nonpos W t ht
+      have hnull :
+          ∀ s : Set Ω, MeasurableSet s → P s = 0 → MeasurableSet[ℱ 0] s := by
+        intro s hs hPs
+        change MeasurableSet[usualFiltration W 0] s
+        exact usualFiltration_null W s hs hPs
+      obtain ⟨R₀, hR₀⟩ := h m ν hc hiso hLC v hv ε hε 0 (by norm_num)
+      obtain ⟨p, hp⟩ :=
+        @exists_isEldanCutoff m ν hc hiso Ω _ P _ W ℱ hright hW hℱ0 hnull
+          (ballCutoff R₀) (isCutoff_ballCutoff R₀)
+      have hineq := hR₀ R₀ le_rfl W ℱ hW hℱ0 hnull hp
+      have hzeroIntegral :
+          weightedEnergyIntegral ν hc P (ballCutoff R₀) p (d + 1) v 0 = 0 := by
+        simp [weightedEnergyIntegral]
+      rw [hzeroIntegral, mul_zero, add_zero] at hineq
+      calc
+        ∑ J : Fin d → Fin m,
+            cumulant (ν : Measure (EuclideanSpace ℝ (Fin m))) (d + 1)
+              (Fin.cons v
+                (fun k => EuclideanSpace.basisFun (Fin m) ℝ (J k))) ^ 2
+            =
+            cumulantEnergy (ν : Measure (EuclideanSpace ℝ (Fin m))) d v :=
+              (cumulantEnergy_eq_sum_sq_of_isotropic ν hiso d v).symm
+        _ ≤ envelope K (d + 1) + ε := hineq
+    have hunit :
+        ∑ J : Fin d → Fin m,
+            cumulant (ν : Measure (EuclideanSpace ℝ (Fin m))) (d + 1)
+              (Fin.cons v
+                (fun k => EuclideanSpace.basisFun (Fin m) ℝ (J k))) ^ 2
+          ≤ envelope K (d + 1) := by
+      apply le_of_forall_pos_lt_add
+      intro ε hε
+      have hhalf := hunitApprox (ε / 2) (by linarith)
+      linarith
+    have hscale (J : Fin d → Fin m) :
+        cumulant (ν : Measure (EuclideanSpace ℝ (Fin m))) (d + 1)
+            (Fin.cons u
+              (fun k => EuclideanSpace.basisFun (Fin m) ℝ (J k))) =
+          ‖u‖ *
+            cumulant (ν : Measure (EuclideanSpace ℝ (Fin m))) (d + 1)
+              (Fin.cons v
+                (fun k => EuclideanSpace.basisFun (Fin m) ℝ (J k))) := by
+      calc
+        cumulant (ν : Measure (EuclideanSpace ℝ (Fin m))) (d + 1)
+            (Fin.cons u
+              (fun k => EuclideanSpace.basisFun (Fin m) ℝ (J k))) =
+            cumulant (ν : Measure (EuclideanSpace ℝ (Fin m))) (d + 1)
+              (Function.update
+                (Fin.cons v
+                  (fun k => EuclideanSpace.basisFun (Fin m) ℝ (J k))) 0
+                (‖u‖ • v)) := by
+                  rw [Fin.update_cons_zero, huv]
+        _ =
+            ‖u‖ •
+              cumulant (ν : Measure (EuclideanSpace ℝ (Fin m))) (d + 1)
+                (Function.update
+                  (Fin.cons v
+                    (fun k => EuclideanSpace.basisFun (Fin m) ℝ (J k))) 0 v) :=
+              (cumulant (ν : Measure (EuclideanSpace ℝ (Fin m))) (d + 1)).map_update_smul
+                (Fin.cons v
+                  (fun k => EuclideanSpace.basisFun (Fin m) ℝ (J k))) 0 ‖u‖ v
+        _ =
+            ‖u‖ *
+              cumulant (ν : Measure (EuclideanSpace ℝ (Fin m))) (d + 1)
+                (Fin.cons v
+                  (fun k => EuclideanSpace.basisFun (Fin m) ℝ (J k))) := by
+              rw [Fin.update_cons_zero, smul_eq_mul]
+    calc
+      ∑ J : Fin d → Fin m,
+          cumulant (ν : Measure (EuclideanSpace ℝ (Fin m))) (d + 1)
+            (Fin.cons u
+              (fun k => EuclideanSpace.basisFun (Fin m) ℝ (J k))) ^ 2 =
+          ∑ J : Fin d → Fin m,
+            ‖u‖ ^ 2 *
+              cumulant (ν : Measure (EuclideanSpace ℝ (Fin m))) (d + 1)
+                (Fin.cons v
+                  (fun k => EuclideanSpace.basisFun (Fin m) ℝ (J k))) ^ 2 := by
+            apply Finset.sum_congr rfl
+            intro J _
+            rw [hscale, mul_pow]
+      _ =
+          ‖u‖ ^ 2 *
+            ∑ J : Fin d → Fin m,
+              cumulant (ν : Measure (EuclideanSpace ℝ (Fin m))) (d + 1)
+                (Fin.cons v
+                  (fun k => EuclideanSpace.basisFun (Fin m) ℝ (J k))) ^ 2 := by
+            rw [Finset.mul_sum]
+      _ ≤ ‖u‖ ^ 2 * envelope K (d + 1) :=
+        mul_le_mul_of_nonneg_left hunit (sq_nonneg ‖u‖)
+      _ = envelope K (d + 1) * ‖u‖ ^ 2 := mul_comm _ _
+
+/-- The envelope at order `d + 1` is the constant of `conjecture_of_cumulantBound`: `b_{d+1} = (d!)² K^d`. -/
+theorem envelope_succ_eq (K : ℝ) (d : ℕ) : envelope K (d + 1) = (d.factorial : ℝ) ^ 2 * K ^ d := by
+  unfold envelope
+  rw [Nat.add_sub_cancel]
+  exact mul_comm _ _
+
+end FunctionalInequalities.KLS.BKL.Localization
+
+end S7CClaimToBound
+
+section S7DTheorem41Compact
+
+open MeasureTheory
+open FunctionalInequalities.Analysis.BakryEmery
+
+/-! The strong induction over the order and Theorem 4.1 for compactly supported laws with `K = 153`, given the induction step and the claim-to-bound passage as hypotheses (task S-7d). -/
+
+namespace FunctionalInequalities.KLS.BKL.Localization
+
+/-- **The cutoff claim at every order** (BKL (95) for all `m ≥ 2`), by induction from the base case and the step. -/
+theorem cutoffEnergyClaim_all (hL : LogConcave.Suspension.LetwinCompactBound) {K : ℝ} (hK : 153 ≤ K)
+    (hstep : ∀ m : ℕ, 3 ≤ m →
+      (∀ r : ℕ, 2 ≤ r → r < m → CutoffEnergyClaim K (r - 1)) →
+      (∀ r : ℕ, 2 ≤ r → r < m → LogConcave.Suspension.CumulantBoundCompact (r - 1) (envelope K r)) →
+      CutoffEnergyClaim K (m - 1))
+    (hbound : ∀ d : ℕ, CutoffEnergyClaim K d → LogConcave.Suspension.CumulantBoundCompact d (envelope K (d + 1))) :
+    ∀ d : ℕ, 1 ≤ d → CutoffEnergyClaim K d := by
+  intro d
+  refine Nat.strong_induction_on d ?_
+  intro n ih hn
+  by_cases h1 : n = 1
+  · subst n
+    exact cutoffEnergyClaim_one hL (by linarith)
+  · have hn2 : 2 ≤ n := by
+      omega
+    let m : ℕ := n + 1
+    have hm : 3 ≤ m := by
+      dsimp [m]
+      omega
+    have hs : CutoffEnergyClaim K (m - 1) := by
+      apply hstep m hm
+      · intro r hr2 hrm
+        exact ih (r - 1) (by omega) (by omega)
+      · intro r hr2 hrm
+        have hclaim : CutoffEnergyClaim K (r - 1) :=
+          ih (r - 1) (by omega) (by omega)
+        have hb := hbound (r - 1) hclaim
+        rw [Nat.sub_add_cancel (by omega)] at hb
+        exact hb
+    have hm_sub : m - 1 = n := by
+      dsimp [m]
+    rw [hm_sub] at hs
+    exact hs
+
+/-- **BKL Theorem 4.1 for compactly supported laws** (conditional on the compact Letwin bound): there is a universal
+`K ≥ 1` with `R^ν_{d+1} ≤ (d!)² K^d · Id` for every compactly supported isotropic log-concave `ν` and every `d ≥ 2`. -/
+theorem theorem41Compact_of_letwinCompact (hL : LogConcave.Suspension.LetwinCompactBound)
+    (hstep : ∀ m : ℕ, 3 ≤ m →
+      (∀ r : ℕ, 2 ≤ r → r < m → CutoffEnergyClaim 153 (r - 1)) →
+      (∀ r : ℕ, 2 ≤ r → r < m → LogConcave.Suspension.CumulantBoundCompact (r - 1) (envelope 153 r)) →
+      CutoffEnergyClaim 153 (m - 1))
+    (hbound : ∀ d : ℕ, CutoffEnergyClaim 153 d →
+      LogConcave.Suspension.CumulantBoundCompact d (envelope 153 (d + 1))) :
+    ∃ K : ℝ, 1 ≤ K ∧ ∀ d : ℕ, 2 ≤ d →
+      LogConcave.Suspension.CumulantBoundCompact d ((d.factorial : ℝ) ^ 2 * K ^ d) := by
+  refine ⟨153, by norm_num, ?_⟩
+  intro d hd
+  have hclaim : CutoffEnergyClaim 153 d :=
+    cutoffEnergyClaim_all hL (by norm_num) hstep hbound d (by omega)
+  have hb := hbound d hclaim
+  have henvelope : envelope 153 (d + 1) =
+      (d.factorial : ℝ) ^ 2 * 153 ^ d := by
+    unfold envelope
+    rw [Nat.add_sub_cancel d 1]
+    exact mul_comm _ _
+  rw [henvelope] at hb
+  exact hb
+
+end FunctionalInequalities.KLS.BKL.Localization
+
+end S7DTheorem41Compact

@@ -130,6 +130,11 @@ dimension 0; basis mismatch between the Stein API (`Fin n`) and the BakryEmery A
   the induction), under the same boundaries (no canonical writes; log in
   `build/reviews/2026-10-12-bkl-claude-goal/routes/s-core-subcontroller-log.md`). Tasks that exhaust the GPT loop
   are given to Fable workers under the same acceptance checks (`tools/accept_manual.py`).
+- 2026-10-13 (placement): touching-test (viscosity) inequalities for convex functions get their own module
+  `Analysis/Convex/Viscosity.lean` (owner family `Analysis/Convex`, scope: pointwise consequences of `C²` touching
+  tests via `Probability.Stein.hessianMatrix`; imports `Probability/Stein/HessianKernel.lean`, as `Analysis/Matrix/Piola.lean`
+  already does). Created rather than extending `Alexandrov.lean` because the Hessian dependency diverges; no public API
+  change elsewhere; validated by build, strict compile and the full verifier.
 
 ## Not claimed
 

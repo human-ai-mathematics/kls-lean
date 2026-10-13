@@ -1048,3 +1048,683 @@ theorem exists_pos_volume_convexHull_closedBall_union_singleton_ge {E : Type*}
 end FunctionalInequalities.Analysis
 
 end LT11C4ConeVolume
+
+section LT11C5AlexandrovMaximumPrinciple
+
+open MeasureTheory Set Metric
+open scoped RealInnerProductSpace ENNReal
+
+/-! The Alexandrov maximum principle (task L-T11c5). -/
+
+namespace FunctionalInequalities.Analysis
+
+private lemma alexandrov_frontier_nonempty {E : Type*} [NormedAddCommGroup E]
+    [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] [Nontrivial E]
+    {Ω : Set E} (hb : Bornology.IsBounded Ω) {x₀ : E} (hx₀ : x₀ ∈ Ω) :
+    (frontier Ω).Nonempty := by
+  by_contra hne
+  have hfrontier_empty : frontier Ω = ∅ := by
+    ext y
+    constructor
+    · intro hy
+      exact (hne ⟨y, hy⟩).elim
+    · intro hy
+      simp at hy
+  rw [frontier_eq_empty_iff] at hfrontier_empty
+  rcases hfrontier_empty with hΩempty | hΩuniv
+  · rw [hΩempty] at hx₀
+    exact hx₀
+  · obtain ⟨s, hs⟩ := hb.subset_closedBall x₀
+    have hs_nonneg : 0 ≤ s := by
+      have hsx : dist x₀ x₀ ≤ s := hs hx₀
+      simpa only [dist_self] using hsx
+    obtain ⟨v, hv⟩ := exists_ne (0 : E)
+    have hvpos : 0 < ‖v‖ := norm_pos_iff.mpr hv
+    let e : E := ‖v‖⁻¹ • v
+    have he : ‖e‖ = 1 := by
+      dsimp [e]
+      rw [norm_smul, Real.norm_eq_abs, abs_of_nonneg (inv_nonneg.mpr hvpos.le)]
+      exact inv_mul_cancel₀ hvpos.ne'
+    let y : E := x₀ + (s + 1) • e
+    have hyΩ : y ∈ Ω := by
+      rw [hΩuniv]
+      exact mem_univ y
+    have hyball : y ∈ closedBall x₀ s := hs hyΩ
+    have hnorm : ‖y - x₀‖ = s + 1 := by
+      dsimp [y]
+      rw [add_sub_cancel_left, norm_smul, he, mul_one]
+      exact abs_of_nonneg (by linarith)
+    have hydist : dist y x₀ ≤ s := hyball
+    rw [dist_eq_norm, hnorm] at hydist
+    linarith
+
+private lemma alexandrov_diam_pos {E : Type*} [NormedAddCommGroup E]
+    [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] [Nontrivial E]
+    {Ω : Set E} (hΩ : IsOpen Ω) (hb : Bornology.IsBounded Ω)
+    {x₀ : E} (hx₀ : x₀ ∈ Ω) :
+    0 < diam Ω := by
+  obtain ⟨r, hr, hball⟩ := Metric.isOpen_iff.mp hΩ x₀ hx₀
+  obtain ⟨v, hv⟩ := exists_ne (0 : E)
+  have hvpos : 0 < ‖v‖ := norm_pos_iff.mpr hv
+  let e : E := ‖v‖⁻¹ • v
+  have he : ‖e‖ = 1 := by
+    dsimp [e]
+    rw [norm_smul, Real.norm_eq_abs, abs_of_nonneg (inv_nonneg.mpr hvpos.le)]
+    exact inv_mul_cancel₀ hvpos.ne'
+  let y : E := x₀ + (r / 2) • e
+  have hy : y ∈ Ω := by
+    apply hball
+    rw [mem_ball, dist_eq_norm]
+    dsimp [y]
+    rw [add_sub_cancel_left, norm_smul, he, mul_one,
+      Real.norm_eq_abs, abs_of_pos (by linarith : 0 < r / 2)]
+    linarith
+  have hdist : dist x₀ y ≤ diam Ω :=
+    Metric.dist_le_diam_of_mem hb hx₀ hy
+  have hdist' : dist x₀ y = r / 2 := by
+    rw [dist_eq_norm, norm_sub_rev]
+    dsimp [y]
+    rw [add_sub_cancel_left, norm_smul, he, mul_one,
+      Real.norm_eq_abs, abs_of_pos (by linarith : 0 < r / 2)]
+  rw [hdist'] at hdist
+  linarith
+
+private lemma alexandrov_infDist_frontier_pos {E : Type*} [NormedAddCommGroup E]
+    [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] [Nontrivial E]
+    {Ω : Set E} (hΩ : IsOpen Ω) (hb : Bornology.IsBounded Ω)
+    {x₀ : E} (hx₀ : x₀ ∈ Ω) :
+    0 < infDist x₀ (frontier Ω) := by
+  obtain ⟨r, hr, hball⟩ := Metric.isOpen_iff.mp hΩ x₀ hx₀
+  have hne : (frontier Ω).Nonempty :=
+    alexandrov_frontier_nonempty hb hx₀
+  apply lt_of_lt_of_le hr
+  apply (Metric.le_infDist hne).2
+  intro y hy
+  have hyn : y ∉ Ω := by
+    intro hyΩ
+    apply hy.2
+    rw [hΩ.interior_eq]
+    exact hyΩ
+  have hnot : ¬ dist y x₀ < r := by
+    intro hdist
+    exact hyn (hball (mem_ball.mpr hdist))
+  simpa [dist_comm] using (le_of_not_gt hnot)
+
+private lemma alexandrov_frontier_distance_le_diam {E : Type*} [NormedAddCommGroup E]
+    [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] [Nontrivial E]
+    {_Ω : Set E} (_hΩ : IsOpen _Ω) (hb : Bornology.IsBounded _Ω)
+    {x₀ : E} (hx₀ : x₀ ∈ _Ω) :
+    infDist x₀ (frontier _Ω) ≤ diam _Ω := by
+  obtain ⟨r, hr⟩ := hb.subset_closedBall x₀
+  have hcompact_ball : IsCompact (closedBall x₀ r) :=
+    isCompact_closedBall x₀ r
+  have hcompact_frontier : IsCompact (frontier _Ω) :=
+    hcompact_ball.of_isClosed_subset isClosed_frontier
+      (frontier_subset_closure.trans (closure_minimal hr isClosed_closedBall))
+  obtain ⟨y, hy, hyeq⟩ :=
+    hcompact_frontier.exists_infDist_eq_dist
+      (alexandrov_frontier_nonempty hb hx₀) x₀
+  have hdist : dist x₀ y ≤ diam _Ω := by
+    have hdist' : dist x₀ y ≤ diam (closure _Ω) :=
+      Metric.dist_le_diam_of_mem hb.closure
+        (subset_closure hx₀) (frontier_subset_closure hy)
+    simpa only [Metric.diam_closure] using hdist'
+  exact hyeq.trans_le hdist
+
+private lemma alexandrov_affine_set_convex {E : Type*}
+    [NormedAddCommGroup E] [InnerProductSpace ℝ E] {u : E → ℝ} {x₀ : E}
+    {Ω : Set E} :
+    Convex ℝ {p : E | ∀ x ∈ closure Ω,
+      u x₀ + ⟪p, x - x₀⟫ ≤ 0} := by
+  intro p hp q hq a b ha hb hab x hx
+  have hp' := hp x hx
+  have hq' := hq x hx
+  have hi :
+      ⟪a • p + b • q, x - x₀⟫ =
+        a * ⟪p, x - x₀⟫ + b * ⟪q, x - x₀⟫ := by
+    rw [inner_add_left, real_inner_smul_left, real_inner_smul_left]
+  calc
+    u x₀ + ⟪a • p + b • q, x - x₀⟫ =
+        u x₀ + (a * ⟪p, x - x₀⟫ + b * ⟪q, x - x₀⟫) := by
+          rw [hi]
+    _ = (a + b) * u x₀ +
+          (a * ⟪p, x - x₀⟫ + b * ⟪q, x - x₀⟫) := by
+          rw [hab]
+          ring
+    _ = a * (u x₀ + ⟪p, x - x₀⟫) +
+          b * (u x₀ + ⟪q, x - x₀⟫) := by
+          ring
+    _ ≤ 0 := by
+      simpa using add_le_add
+        (mul_nonpos_of_nonneg_of_nonpos ha hp')
+        (mul_nonpos_of_nonneg_of_nonpos hb hq')
+
+/-- **Alexandrov maximum principle** (Gutiérrez, *The Monge–Ampère equation*, Theorem 1.4.2; weak
+Letwin route, Caffarelli block T11c): there is `c > 0` depending only on `E` such that for every
+convex `u`, bounded open convex `Ω`, `u ≥ 0` on `∂Ω` and `x₀ ∈ Ω` with `u x₀ < 0`,
+`c · (−u x₀)^n ≤ vol (∂u(Ω)) · diam(Ω)^(n−1) · dist(x₀, ∂Ω)`, `n = dim E`. -/
+theorem exists_pos_alexandrov_maximum_principle {E : Type*} [NormedAddCommGroup E]
+    [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] [Nontrivial E] [MeasurableSpace E]
+    [BorelSpace E] :
+    ∃ c : ℝ, 0 < c ∧ ∀ (u : E → ℝ), ConvexOn ℝ univ u → ∀ (Ω : Set E), IsOpen Ω → Convex ℝ Ω →
+      Bornology.IsBounded Ω → (∀ x ∈ frontier Ω, 0 ≤ u x) → ∀ x₀ ∈ Ω, u x₀ < 0 →
+      ENNReal.ofReal (c * (-u x₀) ^ Module.finrank ℝ E) ≤
+        (volume : Measure E) (subgradientImage u Ω) *
+          ENNReal.ofReal (diam Ω ^ (Module.finrank ℝ E - 1) * infDist x₀ (frontier Ω)) := by
+  obtain ⟨c, hc, hcone⟩ :=
+    exists_pos_volume_convexHull_closedBall_union_singleton_ge (E := E)
+  refine ⟨c, hc, ?_⟩
+  intro u hconv Ω hΩ hΩconv hb hfr x₀ hx₀ hneg
+  let m : ℝ := -u x₀
+  let D : ℝ := diam Ω
+  let d : ℝ := infDist x₀ (frontier Ω)
+  have hm : 0 < m := by
+    dsimp [m]
+    linarith
+  have hD : 0 < D := alexandrov_diam_pos hΩ hb hx₀
+  have hd : 0 < d := alexandrov_infDist_frontier_pos hΩ hb hx₀
+  have hdd : d ≤ D :=
+    alexandrov_frontier_distance_le_diam hΩ hb hx₀
+  obtain ⟨e, he, heΩ⟩ :=
+    exists_unit_inner_le_infDist_frontier hΩ hΩconv hb hx₀
+  let r : ℝ := m / D
+  let q : E := (m / d) • e
+  have hr : 0 < r := div_pos hm hD
+  have hqnorm : ‖q‖ = m / d := by
+    dsimp [q]
+    rw [norm_smul, he, mul_one, Real.norm_eq_abs,
+      abs_of_pos (div_pos hm hd)]
+  have hrq : r ≤ ‖q‖ := by
+    rw [hqnorm]
+    exact div_le_div_of_nonneg_left hm.le hd hdd
+  let A : Set E := {p : E | ∀ x ∈ closure Ω,
+      u x₀ + ⟪p, x - x₀⟫ ≤ 0}
+  have hAconv : Convex ℝ A :=
+    alexandrov_affine_set_convex
+  have hballA : closedBall (0 : E) r ⊆ A := by
+    intro p hp x hx
+    have hdist := Metric.dist_le_diam_of_mem hb.closure
+      hx (subset_closure hx₀)
+    have hxd : ‖x - x₀‖ ≤ D := by
+      simpa only [dist_eq_norm, Metric.diam_closure] using hdist
+    have hpnorm : ‖p‖ ≤ r := by
+      simpa [mem_closedBall, dist_zero_right] using hp
+    have hinner : ⟪p, x - x₀⟫ ≤ ‖p‖ * ‖x - x₀‖ :=
+      le_trans (le_abs_self _) (abs_real_inner_le_norm _ _)
+    have hmul : ‖p‖ * ‖x - x₀‖ ≤ r * D :=
+      mul_le_mul hpnorm hxd (norm_nonneg _) (by positivity)
+    have hzero : u x₀ + r * D = 0 := by
+      dsimp [r, m]
+      rw [div_mul_cancel₀ _ hD.ne']
+      ring
+    calc
+      u x₀ + ⟪p, x - x₀⟫ ≤ u x₀ + ‖p‖ * ‖x - x₀‖ := by
+        exact add_le_add (le_refl _) hinner
+      _ ≤ u x₀ + r * D := by
+        exact add_le_add (le_refl _) hmul
+      _ = 0 := hzero
+  have hqA : q ∈ A := by
+    intro x hx
+    have hΩbound : ∀ y ∈ Ω, u x₀ + ⟪q, y - x₀⟫ ≤ 0 := by
+      intro y hy
+      have hey := heΩ y hy
+      have hey' : ⟪e, y - x₀⟫ ≤ d := by
+        simpa only [real_inner_comm] using hey
+      have hi :
+          ⟪q, y - x₀⟫ =
+            (m / d) * ⟪e, y - x₀⟫ := by
+        rw [real_inner_smul_left]
+      have hmul :
+          (m / d) * ⟪e, y - x₀⟫ ≤ (m / d) * d :=
+        mul_le_mul_of_nonneg_left hey' (div_pos hm hd).le
+      calc
+        u x₀ + ⟪q, y - x₀⟫ =
+            u x₀ + (m / d) * ⟪e, y - x₀⟫ := by rw [hi]
+        _ ≤ u x₀ + (m / d) * d := by
+          exact add_le_add (le_refl _) hmul
+        _ = 0 := by
+          dsimp [m]
+          rw [div_mul_cancel₀ _ hd.ne']
+          ring
+    have hcont : Continuous (fun y : E =>
+        u x₀ + ⟪q, y - x₀⟫) :=
+      continuous_const.add
+        ((continuous_const : Continuous (fun _ : E => q)).inner
+          (continuous_id.sub continuous_const))
+    have hclosed :
+        IsClosed {y : E | u x₀ + ⟪q, y - x₀⟫ ≤ 0} :=
+      isClosed_Iic.preimage hcont
+    exact closure_minimal hΩbound hclosed hx
+  have hHullA :
+      convexHull ℝ (closedBall (0 : E) r ∪ {q}) ⊆ A :=
+    convexHull_min (by
+      intro p hp
+      rcases hp with hp | hp
+      · exact hballA hp
+      · rw [Set.mem_singleton_iff] at hp
+        rw [hp]
+        exact hqA) hAconv
+  have hsub :
+      convexHull ℝ (closedBall (0 : E) r ∪ {q}) ⊆
+        subgradientImage u Ω := by
+    exact hHullA.trans (by
+      intro p hp
+      exact mem_subgradientImage_of_affine_le_of_nonneg_frontier
+        hconv hΩ hb hfr hx₀ hneg hp)
+  have hvol :
+      ENNReal.ofReal (c * r ^ (Module.finrank ℝ E - 1) * ‖q‖) ≤
+        (volume : Measure E) (subgradientImage u Ω) :=
+    (hcone r hr q hrq).trans (measure_mono hsub)
+  have hn : 1 ≤ Module.finrank ℝ E :=
+    Nat.one_le_iff_ne_zero.mpr
+      (Nat.ne_of_gt (Module.finrank_pos (R := ℝ) (M := E)))
+  have hcancel :
+      (c * r ^ (Module.finrank ℝ E - 1) * ‖q‖) *
+          (D ^ (Module.finrank ℝ E - 1) * d) =
+        c * m ^ (Module.finrank ℝ E - 1) * m := by
+    rw [hqnorm]
+    change
+      (c * (m / D) ^ (Module.finrank ℝ E - 1) * (m / d)) *
+          (D ^ (Module.finrank ℝ E - 1) * d) =
+        c * m ^ (Module.finrank ℝ E - 1) * m
+    simp only [div_eq_mul_inv, mul_pow]
+    have hpowD :
+        D ^ (Module.finrank ℝ E - 1) *
+            D⁻¹ ^ (Module.finrank ℝ E - 1) = 1 := by
+      rw [← mul_pow, mul_inv_cancel₀ hD.ne', one_pow]
+    calc
+      (c * (m ^ (Module.finrank ℝ E - 1) *
+          D⁻¹ ^ (Module.finrank ℝ E - 1)) *
+          (m * d⁻¹)) *
+          (D ^ (Module.finrank ℝ E - 1) * d) =
+          c * m ^ (Module.finrank ℝ E - 1) * m *
+            (D ^ (Module.finrank ℝ E - 1) *
+              D⁻¹ ^ (Module.finrank ℝ E - 1)) *
+            (d⁻¹ * d) := by ring
+      _ = c * m ^ (Module.finrank ℝ E - 1) * m := by
+        rw [hpowD, inv_mul_cancel₀ hd.ne']
+        ring
+  have hEq :
+      (c * r ^ (Module.finrank ℝ E - 1) * ‖q‖) *
+          (D ^ (Module.finrank ℝ E - 1) * d) =
+        c * m ^ Module.finrank ℝ E := by
+    calc
+      (c * r ^ (Module.finrank ℝ E - 1) * ‖q‖) *
+          (D ^ (Module.finrank ℝ E - 1) * d) =
+          c * m ^ (Module.finrank ℝ E - 1) * m := hcancel
+      _ = c * (m ^ (Module.finrank ℝ E - 1) * m) := by ring
+      _ = c * m ^ ((Module.finrank ℝ E - 1) + 1) := by
+        rw [pow_succ]
+      _ = c * m ^ Module.finrank ℝ E := by
+        rw [Nat.sub_add_cancel hn]
+  have hreal :
+      c * m ^ Module.finrank ℝ E ≤
+        (c * r ^ (Module.finrank ℝ E - 1) * ‖q‖) *
+          (D ^ (Module.finrank ℝ E - 1) * d) := by
+    rw [hEq]
+  have hreal' :
+      ENNReal.ofReal (c * m ^ Module.finrank ℝ E) ≤
+        ENNReal.ofReal (c * r ^ (Module.finrank ℝ E - 1) * ‖q‖) *
+          ENNReal.ofReal (D ^ (Module.finrank ℝ E - 1) * d) := by
+    rw [← ENNReal.ofReal_mul (by positivity :
+      0 ≤ c * r ^ (Module.finrank ℝ E - 1) * ‖q‖)]
+    exact ENNReal.ofReal_mono hreal
+  calc
+    ENNReal.ofReal (c * (-u x₀) ^ Module.finrank ℝ E) =
+        ENNReal.ofReal (c * m ^ Module.finrank ℝ E) := by
+          rfl
+    _ ≤ ENNReal.ofReal (c * r ^ (Module.finrank ℝ E - 1) * ‖q‖) *
+          ENNReal.ofReal (D ^ (Module.finrank ℝ E - 1) * d) := hreal'
+    _ ≤ (volume : Measure E) (subgradientImage u Ω) *
+          ENNReal.ofReal (D ^ (Module.finrank ℝ E - 1) * d) :=
+      mul_le_mul' hvol (le_refl _)
+    _ = (volume : Measure E) (subgradientImage u Ω) *
+          ENNReal.ofReal (diam Ω ^ (Module.finrank ℝ E - 1) *
+            infDist x₀ (frontier Ω)) := by
+      rfl
+
+end FunctionalInequalities.Analysis
+
+end LT11C5AlexandrovMaximumPrinciple
+
+section LT12C1QuadraticSubgradientImage
+
+open MeasureTheory Set Matrix
+open scoped RealInnerProductSpace ENNReal
+
+/-! Subgradient images of quadratic functions (task L-T12c1). -/
+
+namespace FunctionalInequalities.Analysis
+
+/-- The quadratic function with constant `c`, slope `b` and Hessian matrix `A` centred at `x₀`:
+`Q x = c + ⟪b, x − x₀⟫ + ½ ⟪x − x₀, A (x − x₀)⟫` (weak Letwin route, N8 viscosity tests). -/
+def quadraticAt {n : ℕ} (A : Matrix (Fin n) (Fin n) ℝ) (x₀ b : EuclideanSpace ℝ (Fin n)) (c : ℝ)
+    (x : EuclideanSpace ℝ (Fin n)) : ℝ :=
+  c + ⟪b, x - x₀⟫ + (1 / 2) * ⟪x - x₀, Matrix.toEuclideanLin A (x - x₀)⟫
+
+private lemma quadraticAt_inner_symm {n : ℕ} {A : Matrix (Fin n) (Fin n) ℝ}
+    (hA : A.IsHermitian) (x y : EuclideanSpace ℝ (Fin n)) :
+    ⟪x, Matrix.toEuclideanLin A y⟫ = ⟪Matrix.toEuclideanLin A x, y⟫ := by
+  let T : EuclideanSpace ℝ (Fin n) →ₗ[ℝ] EuclideanSpace ℝ (Fin n) :=
+    Matrix.toEuclideanLin A
+  have hT : LinearMap.adjoint T = T := by
+    calc
+      LinearMap.adjoint T = Matrix.toEuclideanLin Aᴴ := by
+        symm
+        exact Matrix.toEuclideanLin_conjTranspose_eq_adjoint A
+      _ = T := by
+        rw [hA.eq]
+  change ⟪x, T y⟫ = ⟪T x, y⟫
+  simpa [hT] using LinearMap.adjoint_inner_right T x y
+
+private lemma quadraticAt_nonneg {n : ℕ} {A : Matrix (Fin n) (Fin n) ℝ}
+    (hA : A.PosSemidef) (x : EuclideanSpace ℝ (Fin n)) :
+    0 ≤ ⟪x, Matrix.toEuclideanLin A x⟫ := by
+  rw [EuclideanSpace.inner_eq_star_dotProduct]
+  change 0 ≤ (A *ᵥ x.ofLp) ⬝ᵥ star x.ofLp
+  simpa [dotProduct_comm] using
+    (posSemidef_iff_dotProduct_mulVec.mp hA).2 x.ofLp
+
+private lemma quadraticAt_quadratic_expand {n : ℕ} {A : Matrix (Fin n) (Fin n) ℝ}
+    (hA : A.IsHermitian) (x₀ b : EuclideanSpace ℝ (Fin n)) (c : ℝ)
+    (x v : EuclideanSpace ℝ (Fin n)) :
+    quadraticAt A x₀ b c (x + v) =
+      quadraticAt A x₀ b c x +
+        ⟪b + Matrix.toEuclideanLin A (x - x₀), v⟫ +
+          (1 / 2) * ⟪v, Matrix.toEuclideanLin A v⟫ := by
+  let T : EuclideanSpace ℝ (Fin n) →ₗ[ℝ] EuclideanSpace ℝ (Fin n) :=
+    Matrix.toEuclideanLin A
+  have hq (z w : EuclideanSpace ℝ (Fin n)) :
+      ⟪z + w, T (z + w)⟫ =
+        ⟪z, T z⟫ + 2 * ⟪T z, w⟫ + ⟪w, T w⟫ := by
+    simp only [map_add, inner_add_left, inner_add_right]
+    rw [quadraticAt_inner_symm hA z w, real_inner_comm w (T z)]
+    ring
+  have harg : x + v - x₀ = (x - x₀) + v := by
+    abel
+  dsimp [quadraticAt]
+  dsimp [T] at hq ⊢
+  rw [harg, hq]
+  have hlin :
+      ⟪b + Matrix.toEuclideanLin A (x - x₀), v⟫ =
+        ⟪b, v⟫ + ⟪Matrix.toEuclideanLin A (x - x₀), v⟫ := by
+    rw [inner_add_left]
+  rw [hlin, inner_add_right]
+  ring
+
+private lemma quadraticAt_subgradient_iff {n : ℕ} {A : Matrix (Fin n) (Fin n) ℝ}
+    (hA : A.PosSemidef) (x₀ b : EuclideanSpace ℝ (Fin n)) (c : ℝ)
+    (x p : EuclideanSpace ℝ (Fin n)) :
+    (∀ y, quadraticAt A x₀ b c x + ⟪p, y - x⟫ ≤ quadraticAt A x₀ b c y) ↔
+      p = b + Matrix.toEuclideanLin A (x - x₀) := by
+  let T : EuclideanSpace ℝ (Fin n) →ₗ[ℝ] EuclideanSpace ℝ (Fin n) :=
+    Matrix.toEuclideanLin A
+  let g : EuclideanSpace ℝ (Fin n) → EuclideanSpace ℝ (Fin n) :=
+    fun z => b + T (z - x₀)
+  constructor
+  · intro hp
+    have hineq (w : EuclideanSpace ℝ (Fin n)) :
+        ⟪p - g x, w⟫ ≤ (1 / 2) * ⟪w, T w⟫ := by
+      have h₁ := hp (x + w)
+      have h₂ := quadraticAt_quadratic_expand hA.1 x₀ b c x w
+      have h₁' :
+          quadraticAt A x₀ b c x + ⟪p, w⟫ ≤ quadraticAt A x₀ b c (x + w) := by
+        simpa only [add_sub_cancel_left] using h₁
+      have h₃ : ⟪p, w⟫ = ⟪g x, w⟫ + ⟪p - g x, w⟫ := by
+        rw [← inner_add_left]
+        congr 1
+        abel
+      rw [h₂, h₃] at h₁'
+      linarith
+    have hv : p - g x = 0 := by
+      by_contra hv
+      let r : ℝ := ⟪p - g x, p - g x⟫
+      let q : ℝ := ⟪p - g x, T (p - g x)⟫
+      have hr : 0 < r := by
+        dsimp [r]
+        rw [real_inner_self_eq_norm_sq]
+        exact sq_pos_of_pos (norm_pos_iff.mpr hv)
+      have hq : 0 ≤ q := by
+        dsimp [q]
+        exact quadraticAt_nonneg hA _
+      let t : ℝ := r / (q + 1)
+      have ht : 0 < t := by
+        dsimp [t]
+        positivity
+      have hs : ⟪p - g x, t • (p - g x)⟫ = t * r := by
+        calc
+          ⟪p - g x, t • (p - g x)⟫ =
+              t * ⟪p - g x, p - g x⟫ := by
+                rw [real_inner_smul_right]
+          _ = t * r := by rfl
+      have hsmul (z : EuclideanSpace ℝ (Fin n)) (s : ℝ) :
+          ⟪s • z, T (s • z)⟫ = s ^ 2 * ⟪z, T z⟫ := by
+        rw [map_smul]
+        simp only [real_inner_smul_left, real_inner_smul_right]
+        ring
+      have hqs :
+          ⟪t • (p - g x), T (t • (p - g x))⟫ =
+            t ^ 2 * q := by
+        rw [hsmul]
+      have hi := hineq (t • (p - g x))
+      rw [hs, hqs] at hi
+      have htq : t * (q + 1) = r := by
+        dsimp [t]
+        exact div_mul_cancel₀ r (by positivity)
+      nlinarith [sq_pos_of_pos ht, hr, hq, htq]
+    exact sub_eq_zero.mp hv
+  · intro hp y
+    have hinc := quadraticAt_quadratic_expand hA.1 x₀ b c x (y - x)
+    have harg : x + (y - x) = y := by
+      abel
+    rw [harg] at hinc
+    rw [hp]
+    nlinarith [quadraticAt_nonneg hA (y - x)]
+
+private lemma quadraticAt_mix_identity {n : ℕ} {A : Matrix (Fin n) (Fin n) ℝ}
+    (hA : A.PosSemidef) (x₀ b : EuclideanSpace ℝ (Fin n)) (c : ℝ)
+    (x y : EuclideanSpace ℝ (Fin n)) (a r : ℝ) (har : a + r = 1) :
+    quadraticAt A x₀ b c (a • x + r • y) =
+      a * quadraticAt A x₀ b c x + r * quadraticAt A x₀ b c y -
+        (1 / 2) * (a * r) *
+          ⟪x - y, Matrix.toEuclideanLin A (x - y)⟫ := by
+  let T : EuclideanSpace ℝ (Fin n) →ₗ[ℝ] EuclideanSpace ℝ (Fin n) :=
+    Matrix.toEuclideanLin A
+  have hr : r = 1 - a := by
+    linarith
+  have hcross (u v : EuclideanSpace ℝ (Fin n)) :
+      ⟪v, T u⟫ = ⟪u, T v⟫ := by
+    calc
+      ⟪v, T u⟫ = ⟪T u, v⟫ := real_inner_comm _ _
+      _ = ⟪u, T v⟫ := (quadraticAt_inner_symm hA.1 u v).symm
+  have hquad (u v : EuclideanSpace ℝ (Fin n)) :
+      ⟪a • u + r • v, T (a • u + r • v)⟫ =
+        a * ⟪u, T u⟫ + r * ⟪v, T v⟫ -
+          a * r * ⟪u - v, T (u - v)⟫ := by
+    rw [hr]
+    simp only [map_add, map_smul, map_sub, inner_add_left, inner_add_right,
+      inner_sub_left, inner_sub_right, real_inner_smul_left, real_inner_smul_right]
+    rw [hcross u v]
+    ring
+  have harg :
+      a • x + r • y - x₀ = a • (x - x₀) + r • (y - x₀) := by
+    calc
+      a • x + r • y - x₀ =
+          a • x + r • y - (a + r) • x₀ := by
+            rw [har, one_smul]
+      _ = a • (x - x₀) + r • (y - x₀) := by
+        module
+  have hdiff : (x - x₀) - (y - x₀) = x - y := by
+    abel
+  dsimp [quadraticAt]
+  dsimp [T] at hquad ⊢
+  rw [harg, hquad, hdiff]
+  have hlin :
+      ⟪b, a • (x - x₀) + r • (y - x₀)⟫ =
+        a * ⟪b, x - x₀⟫ + r * ⟪b, y - x₀⟫ := by
+    rw [inner_add_right, real_inner_smul_right, real_inner_smul_right]
+  rw [hlin, hr]
+  ring
+
+/-- A quadratic with positive semidefinite Hessian is convex. -/
+theorem convexOn_quadraticAt {n : ℕ} {A : Matrix (Fin n) (Fin n) ℝ} (hA : A.PosSemidef)
+    (x₀ b : EuclideanSpace ℝ (Fin n)) (c : ℝ) : ConvexOn ℝ univ (quadraticAt A x₀ b c) := by
+  refine ⟨convex_univ, ?_⟩
+  intro x _hx y _hy a r ha hr har
+  change quadraticAt A x₀ b c (a • x + r • y) ≤
+    a * quadraticAt A x₀ b c x + r * quadraticAt A x₀ b c y
+  rw [quadraticAt_mix_identity hA x₀ b c x y a r har]
+  have hcoeff : 0 ≤ (1 / 2 : ℝ) * (a * r) := by
+    positivity
+  have hq :
+      0 ≤ ⟪x - y, Matrix.toEuclideanLin A (x - y)⟫ :=
+    quadraticAt_nonneg hA (x - y)
+  have hprod :
+      0 ≤ (1 / 2 : ℝ) * (a * r) *
+        ⟪x - y, Matrix.toEuclideanLin A (x - y)⟫ :=
+    mul_nonneg hcoeff hq
+  nlinarith
+
+private lemma volume_subgradientImage_quadraticAt_aux
+    {n : ℕ} {A : Matrix (Fin n) (Fin n) ℝ} (hA : A.PosDef)
+    (x₀ b : EuclideanSpace ℝ (Fin n)) (c : ℝ)
+    {G : Set (EuclideanSpace ℝ (Fin n))} :
+    (volume : Measure (EuclideanSpace ℝ (Fin n)))
+        (subgradientImage (quadraticAt A x₀ b c) G) =
+      ENNReal.ofReal A.det *
+        (volume : Measure (EuclideanSpace ℝ (Fin n))) G := by
+  let E := EuclideanSpace ℝ (Fin n)
+  let T : E →ₗ[ℝ] E := Matrix.toEuclideanLin A
+  let g : E → E := fun x => b + T (x - x₀)
+  have himage :
+      subgradientImage (quadraticAt A x₀ b c) G = g '' G := by
+    ext p
+    constructor
+    · rintro ⟨x, hx, hp⟩
+      refine ⟨x, hx, ?_⟩
+      have heq :=
+        (quadraticAt_subgradient_iff hA.posSemidef x₀ b c x p).mp hp
+      simpa [g] using heq.symm
+    · rintro ⟨x, hx, rfl⟩
+      refine ⟨x, hx, ?_⟩
+      apply (quadraticAt_subgradient_iff hA.posSemidef x₀ b c x (g x)).mpr
+      rfl
+  let d : E := b - T x₀
+  have hg (x : E) : g x = d + T x := by
+    dsimp [g, d]
+    rw [map_sub]
+    abel
+  have haffine :
+      g '' G = (fun z : E => d + z) '' (T '' G) := by
+    ext p
+    constructor
+    · rintro ⟨x, hx, rfl⟩
+      refine ⟨T x, ⟨x, hx, rfl⟩, ?_⟩
+      exact (hg x).symm
+    · rintro ⟨z, ⟨x, hx, rfl⟩, rfl⟩
+      exact ⟨x, hx, hg x⟩
+  have htrans :
+      (volume : Measure E) ((fun z : E => d + z) '' (T '' G)) =
+        (volume : Measure E) (T '' G) := by
+    rw [image_add_left]
+    exact measure_preimage_add volume (-d) (T '' G)
+  have hdet : LinearMap.det T = A.det := by
+    change LinearMap.det (Matrix.toLpLin 2 2 A) = A.det
+    rw [Matrix.toLpLin_eq_toLin]
+    exact LinearMap.det_toLin (PiLp.basisFun 2 ℝ (Fin n)) A
+  have hdetpos : 0 < A.det := Matrix.PosDef.det_pos hA
+  calc
+    (volume : Measure E) (subgradientImage (quadraticAt A x₀ b c) G) =
+        (volume : Measure E) (g '' G) := by rw [himage]
+    _ = (volume : Measure E) ((fun z : E => d + z) '' (T '' G)) := by
+      rw [haffine]
+    _ = (volume : Measure E) (T '' G) := htrans
+    _ = ENNReal.ofReal |LinearMap.det T| * (volume : Measure E) G :=
+      Measure.addHaar_image_linearMap volume T G
+    _ = ENNReal.ofReal A.det * (volume : Measure E) G := by
+      rw [hdet, abs_of_pos hdetpos]
+
+/-- **Subgradient images of a positive definite quadratic are exact affine images, with volume
+`det A · vol G`** (weak Letwin route, N8). -/
+theorem volume_subgradientImage_quadraticAt {n : ℕ} {A : Matrix (Fin n) (Fin n) ℝ} (hA : A.PosDef)
+    (x₀ b : EuclideanSpace ℝ (Fin n)) (c : ℝ) {G : Set (EuclideanSpace ℝ (Fin n))}
+    (hG : MeasurableSet G) :
+    (volume : Measure (EuclideanSpace ℝ (Fin n))) (subgradientImage (quadraticAt A x₀ b c) G) =
+      ENNReal.ofReal A.det * (volume : Measure (EuclideanSpace ℝ (Fin n))) G := by
+  have _hG : MeasurableSet G := hG
+  exact volume_subgradientImage_quadraticAt_aux hA x₀ b c
+
+end FunctionalInequalities.Analysis
+
+end LT12C1QuadraticSubgradientImage
+
+section LT11E2InfdistLeWidth
+
+open Set Metric
+open scoped RealInnerProductSpace
+
+/-! Distance to the frontier is bounded by the directional width (weak Letwin route, Caffarelli step G3, task L-T11e2). -/
+
+namespace FunctionalInequalities.Analysis
+
+/-- **Distance to the frontier is at most the width in any direction** (weak Letwin route, Caffarelli
+block T11e, step G3): for a bounded open `S`, a point `x ∈ S` and a unit vector `θ`, if
+`⟪y − x, θ⟫ ≤ t` for all `y ∈ S`, then `infDist x (frontier S) ≤ t`. -/
+theorem infDist_frontier_le_of_forall_inner_le {E : Type*} [NormedAddCommGroup E]
+    [InnerProductSpace ℝ E] {S : Set E} (hS : IsOpen S) (hb : Bornology.IsBounded S)
+    {x : E} (hx : x ∈ S) {θ : E} (hθ : ‖θ‖ = 1) {t : ℝ} (ht : ∀ y ∈ S, ⟪y - x, θ⟫ ≤ t) :
+    infDist x (frontier S) ≤ t := by
+  have _ := hb
+  have ht0 : 0 ≤ t := by
+    simpa using ht x hx
+  apply le_of_forall_pos_le_add
+  intro η hη
+  have ha0 : 0 ≤ t + η := add_nonneg ht0 (le_of_lt hη)
+  have hz : x + (t + η) • θ ∉ S := by
+    intro hzS
+    have hle := ht (x + (t + η) • θ) hzS
+    have heq : ⟪(x + (t + η) • θ) - x, θ⟫ = t + η := by
+      simp only [add_sub_cancel_left, real_inner_smul_left, real_inner_self_eq_norm_sq,
+        hθ, one_pow, mul_one]
+    rw [heq] at hle
+    linarith
+  let f : ℝ → E := fun r => x + r • θ
+  let T : Set E := f '' Icc 0 (t + η)
+  have hf : Continuous f := by
+    dsimp [f]
+    exact continuous_const.add (continuous_id.smul continuous_const)
+  have hTpc : IsPreconnected T := by
+    exact isPreconnected_Icc.image f hf.continuousOn
+  have hxT : (T ∩ S).Nonempty := by
+    refine ⟨x, ?_, hx⟩
+    refine ⟨0, ⟨le_rfl, ha0⟩, ?_⟩
+    simp [f]
+  have hzT : x + (t + η) • θ ∈ T := by
+    refine ⟨t + η, ⟨ha0, le_rfl⟩, ?_⟩
+    rfl
+  have hfront : (frontier S ∩ T).Nonempty := by
+    by_contra hne
+    have hclosure : closure S ∩ T ⊆ S := by
+      intro y hy
+      by_contra hys
+      have hyf : y ∈ frontier S := by
+        rw [hS.frontier_eq]
+        exact ⟨hy.1, hys⟩
+      exact hne ⟨y, hyf, hy.2⟩
+    have hsub : T ⊆ S :=
+      hTpc.subset_of_closure_inter_subset hS hxT hclosure
+    exact hz (hsub hzT)
+  rcases hfront with ⟨y, hyfront, hyT⟩
+  rcases hyT with ⟨r, hr, rfl⟩
+  change x + r • θ ∈ frontier S at hyfront
+  calc
+    infDist x (frontier S) ≤ dist x (x + r • θ) :=
+      Metric.infDist_le_dist_of_mem hyfront
+    _ = r := by
+      rw [dist_self_add_right, norm_smul, Real.norm_eq_abs, hθ, mul_one,
+        abs_of_nonneg hr.1]
+    _ ≤ t + η := hr.2
+
+end FunctionalInequalities.Analysis
+
+end LT11E2InfdistLeWidth
