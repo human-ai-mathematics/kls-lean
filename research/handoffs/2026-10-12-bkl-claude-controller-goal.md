@@ -152,6 +152,10 @@ dimension 0; basis mismatch between the Stein API (`Fin n`) and the BakryEmery A
 - 2026-10-13 (placement): `Analysis/Convex/SecondOrder.lean` (new; second-order differentiability of convex functions,
   Alexandrov's theorem; imports Subgradient and Sard/Equidimensional). L-T11e7 supersedes L-T11e (same statement re-proved);
   only L-T11e7 was integrated.
+- 2026-10-13 (placement): `Analysis/Convex/GradientLipschitz.lean` (new; the C^{1,1} estimate for moment-map potentials;
+  imports Viscosity, Alexandrov, Coercivity, SecondDifference) and `KLS/LogConcave/BallConditioning.lean` (new; regular class
+  of ball-conditioned affine images; imports RegularAffine). The generic ball-conditioning limit goes to
+  `Probability/Conditioning.lean` (its unused `KLS.Isotropic` import dropped).
 
 ## Not claimed
 

@@ -201,6 +201,7 @@ import FunctionalInequalities.Analysis.BakryEmery.Bochner.Tensor
 import FunctionalInequalities.Analysis.BakryEmery.TensorEnergy
 import FunctionalInequalities.KLS.LogConcave.Regular
 import FunctionalInequalities.KLS.LogConcave.RegularAffine
+import FunctionalInequalities.KLS.LogConcave.BallConditioning
 import FunctionalInequalities.KLS.LogConcave.RegularIsotropic
 import FunctionalInequalities.KLS.LogConcave.RegularIsometry
 import FunctionalInequalities.KLS.LogConcave.RegularPoincare
@@ -316,6 +317,7 @@ import FunctionalInequalities.Analysis.Convex.Viscosity
 import FunctionalInequalities.Analysis.Convex.Normalization
 import FunctionalInequalities.Analysis.Convex.Caffarelli
 import FunctionalInequalities.Analysis.Convex.SecondOrder
+import FunctionalInequalities.Analysis.Convex.GradientLipschitz
 import FunctionalInequalities.KLS.BKL.Localization.LyapunovMoment
 import FunctionalInequalities.KLS.BKL.Localization.EnergyIntegral
 import FunctionalInequalities.KLS.BKL.Localization.CutoffInductionStep
