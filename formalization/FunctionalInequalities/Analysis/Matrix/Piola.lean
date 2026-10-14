@@ -1000,6 +1000,52 @@ theorem sum_integral_inv_hessianMatrix_mul_fderiv_eq {n : ℕ}
   simp only [hsplit, Finset.sum_sub_distrib] at hzero
   exact sub_eq_zero.mp hzero
 
+/-- Compactly supported bounded multipliers are integrable against inverse-Hessian
+entries under the existing weak Monge-Ampere assumptions for Letwin (2.2). -/
+theorem integrable_inv_hessianMatrix_mul_of_bounded_compact {n : ℕ}
+    {u F f : EuclideanSpace ℝ (Fin n) → ℝ}
+    {G : NNReal} (hG : LipschitzWith G (gradient u)) (hF : Continuous F)
+    (hdet : ∀ᵐ x ∂(volume : Measure (EuclideanSpace ℝ (Fin n))),
+      (hessianMatrix u x).det = Real.exp (F x))
+    (hf : Measurable f) (hfc : HasCompactSupport f)
+    {C : ℝ} (hC : ∀ x, ‖f x‖ ≤ C) (i j : Fin n) :
+    Integrable (fun x => (hessianMatrix u x)⁻¹ i j * f x)
+      (volume : Measure (EuclideanSpace ℝ (Fin n))) := by
+  classical
+  have hw : Continuous (fun x => Real.exp (-F x)) :=
+    Real.continuous_exp.comp hF.neg
+  -- The bounded-compact argument of `n10_integrable_bounded_compact`,
+  -- with continuous multiplication as in `n10_integrable_weighted_deriv`.
+  have hl : LocallyIntegrable f
+      (volume : Measure (EuclideanSpace ℝ (Fin n))) :=
+    (memLp_top_of_bound hf.aestronglyMeasurable C
+      (Filter.Eventually.of_forall hC)).locallyIntegrable le_top
+  have hwl := LocallyIntegrable.continuous_mul hw hl
+  have hwi : Integrable (fun x => Real.exp (-F x) * f x)
+      (volume : Measure (EuclideanSpace ℝ (Fin n))) := by
+    apply (hwl.integrableOn_isCompact hfc.isCompact).integrable_of_forall_notMem_eq_zero
+    intro x hx
+    rw [image_eq_zero_of_notMem_tsupport hx, mul_zero]
+  obtain ⟨B, hB⟩ := n10_cofactor_bound hG i j
+  have hi := hwi.bdd_mul
+    (n10_measurable_cofactor u i j).aestronglyMeasurable
+    (Filter.Eventually.of_forall hB)
+  -- The AE inverse representation and congruence argument of
+  -- `sum_integral_inv_hessianMatrix_mul_fderiv_eq` above.
+  have hinv :
+      ∀ᵐ x ∂(volume : Measure (EuclideanSpace ℝ (Fin n))),
+        (hessianMatrix u x)⁻¹ i j =
+          Real.exp (-F x) * (hessianMatrix u x).adjugate i j := by
+    filter_upwards [hdet] with x hx
+    simp only [Matrix.inv_def, hx, Ring.inverse_eq_inv, Matrix.smul_apply,
+      smul_eq_mul, Real.exp_neg]
+  apply hi.congr
+  filter_upwards [hinv] with x hx
+  change (hessianMatrix u x).adjugate i j * (Real.exp (-F x) * f x) =
+    (hessianMatrix u x)⁻¹ i j * f x
+  rw [hx]
+  ring
+
 end FunctionalInequalities.Analysis
 
 end LN10AInverseHessianDivergence

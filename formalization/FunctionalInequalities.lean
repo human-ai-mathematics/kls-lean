@@ -305,6 +305,7 @@ import FunctionalInequalities.KLS.CEK.PartitionVariation
 import FunctionalInequalities.Analysis.Convex.SecondDifference
 import FunctionalInequalities.Analysis.WeakDerivative
 import FunctionalInequalities.KLS.CEK.MomentMap
+import FunctionalInequalities.KLS.CEK.MomentRegularity
 import FunctionalInequalities.KLS.BKL.Localization.LogLaplaceGenerator
 import FunctionalInequalities.Analysis.MollificationHessian
 import FunctionalInequalities.KLS.BKL.Localization.NoiseBound
@@ -312,8 +313,10 @@ import FunctionalInequalities.KLS.BKL.Localization.Process
 import FunctionalInequalities.Probability.Diffusion.Transport
 import FunctionalInequalities.Analysis.BakryEmery.Bochner.Lipschitz
 import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.LipschitzHessian
+import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.WeakInverseHessian
 import FunctionalInequalities.Analysis.Convex.Alexandrov
 import FunctionalInequalities.Analysis.Convex.Viscosity
+import FunctionalInequalities.Analysis.Convex.HessianIncrement
 import FunctionalInequalities.Analysis.Convex.Normalization
 import FunctionalInequalities.Analysis.Convex.Caffarelli
 import FunctionalInequalities.Analysis.Convex.SecondOrder
@@ -322,6 +325,7 @@ import FunctionalInequalities.KLS.BKL.Localization.LyapunovMoment
 import FunctionalInequalities.KLS.BKL.Localization.EnergyIntegral
 import FunctionalInequalities.KLS.BKL.Localization.CutoffInductionStep
 import FunctionalInequalities.KLS.BKL.Theorem41
+import FunctionalInequalities.KLS.BKL.LetwinApproximation
 import FunctionalInequalities.KLS.BKL.Localization.CumulantGenerator
 import FunctionalInequalities.KLS.BKL.Localization.EnergyBound
 import FunctionalInequalities.KLS.BKL.Localization.CumulantDerivative

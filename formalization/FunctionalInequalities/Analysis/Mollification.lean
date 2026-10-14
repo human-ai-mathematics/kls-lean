@@ -5,6 +5,8 @@ import Mathlib.MeasureTheory.Function.ContinuousMapDense
 import Mathlib.MeasureTheory.Function.L2Space
 import Mathlib.Analysis.Calculus.LineDeriv.Basic
 import Mathlib.Analysis.Calculus.Rademacher
+import Mathlib.Analysis.Convex.Integral
+import Mathlib.MeasureTheory.SpecificCodomains.Pi
 
 /-!
 # Mollification against a Haar measure
@@ -547,3 +549,147 @@ theorem hasFDerivAt_convolution_normed_of_lipschitz {E : Type*} [NormedAddCommGr
 end LipschitzConvolution
 
 end FunctionalInequalities.Analysis
+
+
+/-! Weak-route support for Letwin arXiv:2607.24164v1. Proof body: the independently
+checked existing L-W3b2a-mollified-values-convex candidate; placement and acceptance: Codex closeout. -/
+
+section ConvexRangeMollification
+
+open MeasureTheory Set Filter Metric
+open scoped Topology Convolution
+
+namespace FunctionalInequalities.Analysis
+
+/-- **Mollified values stay in a closed convex set** (weak Letwin route, task W3b2a, generic): if the vector of values
+`(f k x)ₖ` lies in a closed convex `C` for almost every `x` in `cthickening r S`, then for every bump `φ` with
+`φ.rOut ≤ r` and every `x ∈ S`, the mollified vector `((φ.normed ⋆ f k) x)ₖ` lies in `C`. -/
+theorem convolution_mem_of_ae_mem {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+    [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] {ι : Type*} [Fintype ι]
+    {f : ι → E → ℝ} (hf : ∀ k, LocallyIntegrable (f k) (volume : Measure E))
+    {C : Set (ι → ℝ)} (hCc : Convex ℝ C) (hCcl : IsClosed C) {S : Set E} {r : ℝ}
+    (hfC : ∀ᵐ x ∂((volume : Measure E).restrict (cthickening r S)), (fun k => f k x) ∈ C)
+    (φ : ContDiffBump (0 : E)) (hφ : φ.rOut ≤ r) {x : E} (hx : x ∈ S) :
+    (fun k => convolution (φ.normed volume) (f k) (ContinuousLinearMap.lsmul ℝ ℝ) volume x) ∈ C := by
+  let ρ : E → ℝ := fun y => φ.normed volume (x - y)
+  let P : Measure E := volume.withDensity (fun y => ENNReal.ofReal (ρ y))
+  have hρ_cont : Continuous ρ := by
+    exact φ.continuous_normed.comp (continuous_const.sub continuous_id)
+  have hρ_meas : Measurable ρ := hρ_cont.measurable
+  have hρ_nn : ∀ y, 0 ≤ ρ y := by
+    intro y
+    exact φ.nonneg_normed _
+  have hρ_comp : HasCompactSupport ρ := by
+    exact φ.hasCompactSupport_normed.comp_homeomorph (Homeomorph.subLeft x)
+  have hρ_integrable : Integrable ρ (volume : Measure E) :=
+    hρ_cont.integrable_of_hasCompactSupport hρ_comp
+  have hρ_int : ∫ y, ρ y ∂(volume : Measure E) = 1 := by
+    have hsub :
+        ∫ y, φ.normed volume (x - y) ∂(volume : Measure E) =
+          ∫ y, φ.normed volume y ∂(volume : Measure E) := by
+      exact
+        (Measure.measurePreserving_sub_left (volume : Measure E) x).integral_comp
+          (Homeomorph.subLeft x).measurableEmbedding (φ.normed volume)
+    rw [hsub]
+    exact φ.integral_normed
+  have hP_prob : IsProbabilityMeasure P := by
+    apply IsProbabilityMeasure.mk
+    change (volume.withDensity (fun y => ENNReal.ofReal (ρ y))) univ = 1
+    rw [MeasureTheory.withDensity_apply
+      (fun y => ENNReal.ofReal (ρ y)) MeasurableSet.univ]
+    simp only [Measure.restrict_univ]
+    rw [← ofReal_integral_eq_lintegral_ofReal hρ_integrable
+      (ae_of_all _ hρ_nn)]
+    simpa using congrArg ENNReal.ofReal hρ_int
+  let _ : IsProbabilityMeasure P := hP_prob
+  have hρ_support :
+      Function.support ρ ⊆ closedBall x φ.rOut := by
+    intro y hy
+    change φ.normed volume (x - y) ≠ 0 at hy
+    have hyball : x - y ∈ Function.support (φ.normed volume) := hy
+    rw [φ.support_normed_eq] at hyball
+    rw [Metric.mem_ball] at hyball
+    rw [Metric.mem_closedBall, dist_comm, dist_eq_norm]
+    simpa [dist_eq_norm] using le_of_lt hyball
+  have hball_cthick :
+      closedBall x φ.rOut ⊆ cthickening r S := by
+    intro y hy
+    change infEDist y S ≤ ENNReal.ofReal r
+    have hdist : dist y x ≤ φ.rOut := by
+      exact Metric.mem_closedBall.mp hy
+    calc
+      infEDist y S ≤ edist y x := Metric.infEDist_le_edist_of_mem hx
+      _ = ENNReal.ofReal (dist y x) := by rw [edist_dist]
+      _ ≤ ENNReal.ofReal r := ENNReal.ofReal_le_ofReal (hdist.trans hφ)
+  have hT : MeasurableSet (cthickening r S) :=
+    Metric.isClosed_cthickening.measurableSet
+  have hfC' :
+      ∀ᵐ y ∂(volume : Measure E), y ∈ cthickening r S →
+        (fun k => f k y) ∈ C := by
+    exact (ae_restrict_iff' hT).mp hfC
+  have hae_mem :
+      ∀ᵐ y ∂P, (fun k => f k y) ∈ C := by
+    rw [ae_withDensity_iff hρ_meas.ennreal_ofReal]
+    filter_upwards [hfC'] with y hyT hyρ
+    exact hyT (hball_cthick (hρ_support (by
+      intro hzero
+      apply hyρ
+      simp [hzero])))
+  have hfi (k : ι) : Integrable (f k) P := by
+    rw [integrable_withDensity_iff hρ_meas.ennreal_ofReal
+      (Eventually.of_forall fun y => ENNReal.ofReal_lt_top)]
+    have hi :=
+      (hf k).integrable_smul_left_of_hasCompactSupport hρ_cont hρ_comp
+    have hfun :
+        (fun y => f k y * (ENNReal.ofReal (ρ y)).toReal) =
+          (fun y => ρ y • f k y) := by
+      funext y
+      rw [ENNReal.toReal_ofReal (hρ_nn y)]
+      simp [smul_eq_mul, mul_comm]
+    rw [hfun]
+    exact hi
+  have hvec_int : Integrable (fun y => fun k => f k y) P := by
+    rw [integrable_pi_iff]
+    intro k
+    exact hfi k
+  have havg :
+      (∫ y, (fun k => f k y) ∂P) ∈ C :=
+    hCc.integral_mem hCcl hae_mem hvec_int
+  have hcoord (k : ι) :
+      (∫ y, (fun j => f j y) ∂P) k =
+        convolution (φ.normed volume) (f k) (ContinuousLinearMap.lsmul ℝ ℝ) volume x := by
+    have hproj :
+        (∫ y, (fun j => f j y) ∂P) k =
+          ∫ y, f k y ∂P := by
+      let L : (ι → ℝ) →L[ℝ] ℝ := ContinuousLinearMap.proj k
+      simpa [L] using (L.integral_comp_comm hvec_int).symm
+    calc
+      (∫ y, (fun j => f j y) ∂P) k = ∫ y, f k y ∂P := hproj
+      _ = ∫ y, f k y * ρ y ∂(volume : Measure E) := by
+        change
+          (∫ y, f k y ∂
+            (volume.withDensity (fun y => ENNReal.ofReal (ρ y)))) =
+            ∫ y, f k y * ρ y ∂(volume : Measure E)
+        rw [integral_withDensity_eq_integral_toReal_smul
+          hρ_meas.ennreal_ofReal
+          (Eventually.of_forall fun y => ENNReal.ofReal_lt_top)]
+        apply integral_congr_ae
+        filter_upwards [] with y
+        rw [ENNReal.toReal_ofReal (hρ_nn y)]
+        simp [smul_eq_mul, mul_comm]
+      _ = convolution (φ.normed volume) (f k)
+          (ContinuousLinearMap.lsmul ℝ ℝ) volume x := by
+        rw [convolution_eq_swap (ContinuousLinearMap.lsmul ℝ ℝ)]
+        apply integral_congr_ae
+        filter_upwards [] with y
+        simp only [ρ, ContinuousLinearMap.lsmul_apply, smul_eq_mul]
+        ring
+  have havg' :
+      (fun k => (∫ y, (fun j => f j y) ∂P) k) ∈ C := by
+    change (∫ y, (fun k => f k y) ∂P) ∈ C
+    exact havg
+  simpa only [hcoord] using havg'
+
+end FunctionalInequalities.Analysis
+
+end ConvexRangeMollification

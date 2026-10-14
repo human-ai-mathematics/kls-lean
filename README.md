@@ -22,6 +22,12 @@ its universal cumulant hypothesis. The regular approximation and final BKL assem
 formalized; BKL Theorem 4.1 is formalized through a cutoff Eldan-localization route, and with it
 `KLS.Conjecture` (`conjecture_of_letwinCompact`), conditionally on one open input: Letwin's
 Theorem 1.2 for compactly supported isotropic log-concave laws (`LetwinCompactBound`).
+That compact bound is reduced to the smooth uniformly convex regular class. Weak
+Hessian symmetry and convex-range mollification are proved supports. The weak regular
+moment-potential package now supplies C1, a 16/kappa-Lipschitz gradient and a.e.
+Hessian/log-det data, the weak C^{1,1} inverse-Hessian generator identities (Letwin (2.2)) and the
+integrated Hessian-increment energy estimate are proved supports; the regular-class constant-8 bound
+remains open.
 
 The [paper register](research/progress/LITERATURE.md) owns exact hypotheses, constants,
 dimensions, selected paper coverage and certificates. The
@@ -31,7 +37,8 @@ entries and missing inputs. Supporting results and conditional reductions do not
 ## What is not proved
 
 BKL Theorems 1.1 and 4.1 without hypotheses, Letwin Theorem 1.2 (the `LetwinCompactBound` input)
-and the project's dimension-free KLS target remain open. `KLS.kls` is the intentional
+and the project's dimension-free KLS target remain open. The current goal is that compact constant-8
+input, `LetwinCompactBound` (see [HANDOFF](HANDOFF.md)). `KLS.kls` is the intentional
 project-local hole, outside certificate closures. The separately audited
 [vendored stochastic calculus](formalization/vendor/README.md#upstream-holes) contains
 known upstream holes; no project-local proved declaration may depend on them.
@@ -40,6 +47,7 @@ known upstream holes; no project-local proved declaration may depend on them.
 
 | Entry | Contents |
 | --- | --- |
+| [Proof path](research/progress/PROOF-PATH.md) | Four-stage main line to KLS through BKL, with exact inputs |
 | [Literature register](research/progress/LITERATURE.md) | Primary paper-by-paper scope and coverage |
 | [Progress hub](research/progress/README.md) · [Node register](research/progress/STATUS.md) | BKL navigation, complete diagrams and generated status |
 | [Current handoff](HANDOFF.md) | Current controller, scope, snapshot evidence and next step |

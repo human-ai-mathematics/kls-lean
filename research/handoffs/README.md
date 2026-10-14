@@ -2,6 +2,8 @@
 
 This chronological index is generated from the dated Markdown records. README files are navigation pages and are intentionally omitted.
 
+The current controller and work are described only in the root [HANDOFF](../../HANDOFF.md), which links the active Goal record. Other dated records are historical, including records whose own text still says "active".
+
 - [2026-09-30-admg-metric-continuation](2026-09-30-admg-metric-continuation.md)
 - [2026-09-30-eight-hour-locally-finite](2026-09-30-eight-hour-locally-finite.md)
 - [2026-09-30-eight-hour-upper-recovery-plan](2026-09-30-eight-hour-upper-recovery-plan.md)
@@ -21,7 +23,9 @@ This chronological index is generated from the dated Markdown records. README fi
 - [2026-10-10-bkl-staged-goals](2026-10-10-bkl-staged-goals.md)
 - [2026-10-11-bkl-a4-goal](2026-10-11-bkl-a4-goal.md)
 - [2026-10-11-file-management-goal](2026-10-11-file-management-goal.md)
+- [2026-10-12-bkl-claude-controller-goal](2026-10-12-bkl-claude-controller-goal.md)
 - [2026-10-12-bkl-letwin-t25-goal](2026-10-12-bkl-letwin-t25-goal.md)
+- [2026-10-14-bkl-step1-letwin-constant-eight](2026-10-14-bkl-step1-letwin-constant-eight.md)
 - [bv-eight-hour-2026-09-29](bv-eight-hour-2026-09-29.md)
 - [bv-renewed-eight-hours](bv-renewed-eight-hours.md)
 - [claude-bv-overnight](claude-bv-overnight.md)

@@ -71,6 +71,18 @@ flowchart LR
     VFULL["✓ C¹ vector coarea<br/>Rank-deficient part closed"]
     VLIP["✓ Vector coarea<br/>Lipschitz and local"]
     end
+    subgraph LETWINWEAK["Letwin weak regularity supports — constant-8 bound remains open"]
+    CEKMAP["✓ Bounded CEK source<br/>Actual moment map"]
+    WEAKHESS["✓ C1 Hessian<br/>Gradient derivative at a point"]
+    REGMOM["✓ Regular-class R0<br/>C1,1 and a.e. Hessian package"]
+    WEAKINVINT["✓ Inverse Hessian<br/>Bounded compact integrability"]
+    WEAKGEN["✓ Weak generator identities<br/>Letwin (2.2) at C1,1"]
+    HESSENT["✓ Hessian entries<br/>Measurable, bounded by G"]
+    CDIFF["✓ Centered difference<br/>C1,1 and 0 <= w <= D|h|^2"]
+    WEAKGENINT["✓ Weak generator<br/>Density integrability"]
+    INCINT["✓ Hessian increments<br/>Weighted integrability"]
+    INCENERGY["✓ Hessian-increment energy<br/>Original N11b estimate"]
+    end
     KLS["○ KLS<br/>Dimension-free bound"]
     ANY{"OR<br/>Any completed route"}
     EG --> EAND
@@ -129,8 +141,19 @@ flowchart LR
     GSTAB -.-> CB
     HEAT -.-> CB
     VFULL -.-> VLIP
+    CEKMAP --> REGMOM
+    WEAKHESS --> REGMOM
+    WEAKINVINT --> WEAKGEN
+    WEAKHESS --> WEAKGEN
+    HESSENT --> WEAKGENINT
+    WEAKINVINT --> WEAKGENINT
+    HESSENT --> INCINT
+    CDIFF --> INCENERGY
+    INCINT --> INCENERGY
+    WEAKGENINT --> INCENERGY
+    WEAKGEN --> INCENERGY
     classDef done fill:#dbeafe,stroke:#2563eb,color:#1e3a8a;
-    class ENERGY,F4,MT,FP,FC,EQ,NORM,DENS,FRONT,CB,ONE,CONST,FORMS,MEAS,GRAPH,REG,CRIT,C1,WHIT,LIP,GG,REC,FWD,SARD,SCI,CUT,REV,MINK,BV,FLOG,VREG,VZERO,VR123,VR4,VFULL,SEMI,MARKOV,DECAY,GAUSS,GSTAB,VLIP done;
+    class ENERGY,F4,MT,FP,FC,EQ,NORM,DENS,FRONT,CB,ONE,CONST,FORMS,MEAS,GRAPH,REG,CRIT,C1,WHIT,LIP,GG,REC,FWD,SARD,SCI,CUT,REV,MINK,BV,FLOG,VREG,VZERO,VR123,VR4,VFULL,SEMI,MARKOV,DECAY,GAUSS,GSTAB,VLIP,WEAKHESS,CEKMAP,REGMOM,WEAKINVINT,WEAKGEN,HESSENT,CDIFF,WEAKGENINT,INCINT,INCENERGY done;
     classDef partial fill:#fff3df,stroke:#c88719,color:#66420d;
     class FAND,BE,HEAT partial;
     classDef todo fill:#fee2e2,stroke:#dc2626,color:#991b1b;
@@ -194,3 +217,13 @@ flowchart LR
     click BE href "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/BakryEmery/Bochner/Basic.lean" "Generator / Bochner — Gradient estimates" _blank
     click HEAT href "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/SmoothBuser.lean" "Small-time heat bounds — and pi Buser assembly" _blank
     click VLIP href "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/Lipschitz/Local.lean" "Vector coarea — Lipschitz and local" _blank
+    click WEAKHESS href "../../formalization/FunctionalInequalities/Probability/Stein/HessianKernel.lean" "C1 Hessian — Gradient derivative at a point" _blank
+    click CEKMAP href "../../formalization/FunctionalInequalities/KLS/CEK/MomentMap.lean" "Bounded CEK source — Actual moment map" _blank
+    click REGMOM href "../../formalization/FunctionalInequalities/KLS/CEK/MomentRegularity.lean" "Regular-class R0 — C1,1 and a.e. Hessian package" _blank
+    click WEAKINVINT href "../../formalization/FunctionalInequalities/Analysis/Matrix/Piola.lean" "Inverse Hessian — Bounded compact integrability" _blank
+    click WEAKGEN href "../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakInverseHessian.lean" "Weak generator identities — Letwin (2.2) at C1,1" _blank
+    click HESSENT href "../../formalization/FunctionalInequalities/Probability/Stein/HessianKernel.lean" "Hessian entries — Measurable, bounded by G" _blank
+    click CDIFF href "../../formalization/FunctionalInequalities/Analysis/Convex/SecondDifference.lean" "Centered difference — C1,1 and 0 <= w <= D|h|^2" _blank
+    click WEAKGENINT href "../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakInverseHessian.lean" "Weak generator — Density integrability" _blank
+    click INCINT href "../../formalization/FunctionalInequalities/Analysis/Convex/HessianIncrement.lean" "Hessian increments — Weighted integrability" _blank
+    click INCENERGY href "../../formalization/FunctionalInequalities/Analysis/Convex/HessianIncrement.lean" "Hessian-increment energy — Original N11b estimate" _blank

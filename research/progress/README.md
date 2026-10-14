@@ -2,6 +2,7 @@
 
 | View | Purpose |
 | --- | --- |
+| [Proof path](PROOF-PATH.md) | Reading guide: Letwin constant 8 → stochastic localization → BKL Theorem 4.1 → KLS, with exact inputs |
 | [BKL main proof chain](#bkl-main-proof-chain) | Short reading order, Lean entries and remaining inputs |
 | [Literature register](LITERATURE.md) | **Primary progress view.** Paper by paper: target theorem, local Lean statements, local status and certificates |
 | [Route diagrams](#proof-progress-tree) | Exploratory proof routes and the shared analytic infrastructure behind them |
@@ -26,6 +27,8 @@ The current analytic frontier is summarized under [Proof progress tree](#proof-p
 the numerical π Cheeger–Buser comparison holds for every finite-dimensional log-concave law,
 and metric BV relaxation and recovery are proved within their stated measure and space scope.
 
+As of 2026-10-14 the active Goal is step 1 of the [proof path](PROOF-PATH.md), the compact Letwin constant-8 bound `LetwinCompactBound`. On the weak route, the R0 regular-class moment potential, the N10b weak generator identities and the original N11b integrated Hessian-increment energy estimate are proved supports (see the [N11b integration record](../decisions/2026-10-14-n11b-hessian-increment-integration.md) and the earlier [R0 record](../decisions/2026-10-13-r0-weak-hessian-integration.md); the historical [failure analysis](../decisions/2026-10-13-letwin-loop-failure-analysis.md) is unchanged). The next actual producer is N11d, the local L² weak third derivatives of the Hessian entries. The regular-class constant-8 bound remains open.
+
 ## BKL main proof chain
 
 <!-- BEGIN GENERATED BKL -->
@@ -38,15 +41,15 @@ with its hypotheses; it does not discharge an input or cover the whole paper.
 
 | Source step | Lean entry | Local status | Input boundary / remaining work | Evidence |
 | --- | --- | --- | --- | --- |
-| [Bizeul–Klartag–Lehec: Theorem 1.1, p. 2](https://arxiv.org/abs/2610.05474v1) | [`FunctionalInequalities.KLS.conjecture_of_cumulantBound`](../../formalization/FunctionalInequalities/KLS/BKL/Reduction.lean) | ◐ Partial or statement only | Assembly is proved only under the universal cumulant input of Theorem 4.1. Theorem 1.1 and KLS remain open. | [Item map](LITERATURE.md#bkl2026-lemma-map) |
+| [Bizeul–Klartag–Lehec: Theorem 1.1, p. 2](https://arxiv.org/abs/2610.05474v1) | [`FunctionalInequalities.KLS.BKL.Localization.conjecture_of_letwinCompact`](../../formalization/FunctionalInequalities/KLS/BKL/Theorem41.lean) | ◐ Partial or statement only | The conditional KLS assembly is proved under LetwinCompactBound alone. The universal compact constant-8 input, unconditional Theorem 1.1 and KLS remain open. | [Item map](LITERATURE.md#bkl2026-lemma-map) |
 | [Bizeul–Klartag–Lehec: Theorem 3.1, p. 10](https://arxiv.org/abs/2610.05474v1) | [`Solutions.ThmBklTaylorCriterion.certificate`](../../solutions/ThmBklTaylorCriterion.lean) | ✓ Formalized in Lean | Source-form Taylor criterion for centered regular laws, covariance at most Id and the Taylor coefficient hypothesis. Operator route with an approximate first eigenfunction. | [Item map](LITERATURE.md#bkl2026-lemma-map)<br/>[Certificate](../../solutions/ThmBklTaylorCriterion.lean) |
 | [Bizeul–Klartag–Lehec: Proposition 7.1, p. 28](https://arxiv.org/abs/2610.05474v1) | [`Solutions.PropBklSuspension.certificate`](../../solutions/PropBklSuspension.lean) | ✓ Formalized in Lean | Source-form suspension implication in all dimensions; CumulantBound d b is a retained premise supplied by the still-open Theorem 4.1. | [Item map](LITERATURE.md#bkl2026-lemma-map)<br/>[Certificate](../../solutions/PropBklSuspension.lean) |
-| [Bizeul–Klartag–Lehec: Theorem 4.1, p. 18](https://arxiv.org/abs/2610.05474v1) | Supporting declarations in the item map | ◐ Partial or statement only | Universal cumulant estimate is open. Envelope/arithmetic supports do not supply the Eldan process, stochastic induction or compact-support/limit argument. | [Item map](LITERATURE.md#bkl2026-lemma-map) |
-| [Bizeul–Klartag–Lehec: Lemma 4.3, p. 20](https://arxiv.org/abs/2610.05474v1) | [`FunctionalInequalities.Analysis.BakryEmery.iteratedFDeriv_inner_centeredGradient_zero_grouped_of_compact`](../../formalization/FunctionalInequalities/Analysis/BakryEmery/Cumulant/Leibniz.lean) | ◐ Partial or statement only | Only the deterministic spatial grouping (72)/(74) is proved. Eldan SDE, Ito dynamics and the stochastic integral in (73) remain open; vendor adoption is infrastructure. | [Item map](LITERATURE.md#bkl2026-lemma-map) |
+| [Bizeul–Klartag–Lehec: Theorem 4.1, p. 18](https://arxiv.org/abs/2610.05474v1) | [`FunctionalInequalities.KLS.BKL.Localization.theorem41`](../../formalization/FunctionalInequalities/KLS/BKL/Theorem41.lean) | ◐ Partial or statement only | The all-order cumulant estimate is proved conditionally on LetwinCompactBound through the compact cutoff-localization and approximation chain. The unconditional source theorem remains open. | [Item map](LITERATURE.md#bkl2026-lemma-map) |
+| [Bizeul–Klartag–Lehec: Lemma 4.3, p. 20](https://arxiv.org/abs/2610.05474v1) | [`FunctionalInequalities.Analysis.BakryEmery.iteratedFDeriv_inner_centeredGradient_zero_grouped_of_compact`](../../formalization/FunctionalInequalities/Analysis/BakryEmery/Cumulant/Leibniz.lean) | ◐ Partial or statement only | Spatial grouping and the registered compact cutoff-localization supports are available. This row is partial and does not certify an unrestricted source-form stochastic identity; the conditional Theorem 4.1 assembly is linked above. | [Item map](LITERATURE.md#bkl2026-lemma-map) |
 | [Bizeul–Klartag–Lehec: Lemma 4.2, p. 18](https://arxiv.org/abs/2610.05474v1) | [`FunctionalInequalities.KLS.LogConcave.sum_sq_cumulant_three_le_of_letwin`](../../formalization/FunctionalInequalities/KLS/BKL/LocalThirdCumulant.lean) | ◐ Partial or statement only | Conditional source-scope counterpart retaining LetwinQuadraticBound; the constant-8 input is not discharged. | [Item map](LITERATURE.md#bkl2026-lemma-map) |
-| [Letwin: Theorem 1.2](https://arxiv.org/abs/2607.24164v1) | [`FunctionalInequalities.KLS.Isotropic.covarianceBilin_map_sqrt_abs_matrix`](../../formalization/FunctionalInequalities/KLS/Isotropic.lean) | ◐ Partial or statement only | Covariance transport support is proved. The actual moment-map Stein kernel, identity (2.21), source reductions and the Var <= 8 &#124;&#124;M&#124;&#124;_HS^2 bound remain open. | [Item map](LITERATURE.md#letwin2026-lemma-map) |
-| [Letwin: Theorem 2.5](https://arxiv.org/abs/2607.24164v1) | [`FunctionalInequalities.Analysis.symmetric_trace_integral_extension`](../../formalization/FunctionalInequalities/Analysis/Matrix/Integral.lean) | ◐ Partial or statement only | Matrix extension and given-potential cutoff, trace and scalar Brascamp-Lieb supports do not prove the source theorem. The actual moment map, its regularity and the integrated positive-semidefinite bound remain open. | [Item map](LITERATURE.md#letwin2026-lemma-map) |
-| [Letwin: Lemma 2.1 (Cordero-Erausquin and Klartag [21, Theorem 2])](https://arxiv.org/abs/2607.24164v1) | No source-theorem entry | ○ Not yet formalized | Produce the moment potential of the source law and then the regularity of Lemma 2.2. A supplied potential or bounded-primal support is not the source-law construction. | [Item map](LITERATURE.md#letwin2026-lemma-map) |
+| [Letwin: Theorem 1.2](https://arxiv.org/abs/2607.24164v1) | [`FunctionalInequalities.KLS.LogConcave.Suspension.letwinCompactBound_of_regularClass`](../../formalization/FunctionalInequalities/KLS/BKL/LetwinApproximation.lean) | ◐ Partial or statement only | Compact laws are reduced to the smooth uniformly convex regular class. Its constant-8 bound, Stein/H^-1 transport, final assembly and general source theorem remain open. | [Item map](LITERATURE.md#letwin2026-lemma-map) |
+| [Letwin: Theorem 2.5](https://arxiv.org/abs/2607.24164v1) | [`FunctionalInequalities.Analysis.symmetric_trace_integral_extension`](../../formalization/FunctionalInequalities/Analysis/Matrix/Integral.lean) | ◐ Partial or statement only | Matrix, cutoff, given-potential trace/BL and weak-symmetry/mollification supports are proved. The weak R0 regularity package, the weak C1,1 generator identities of (2.2) and the integrated Hessian-increment energy estimate (N11b) are formalized; the actual weak third derivatives (N11d), weak Hessian evolution and the integrated PSD bound remain open; the source theorem is not covered. | [Item map](LITERATURE.md#letwin2026-lemma-map) |
+| [Letwin: Lemma 2.1 (Cordero-Erausquin and Klartag [21, Theorem 2])](https://arxiv.org/abs/2607.24164v1) | [`FunctionalInequalities.KLS.CEK.exists_momentMap_of_isotropic_of_ae_norm_le`](../../formalization/FunctionalInequalities/KLS/CEK/MomentMap.lean) | ◐ Partial or statement only | Actual moment-map existence and pushforward for bounded isotropic probability laws. General finite-mass/unbounded existence and uniqueness, and source smooth regularity, remain open. | [Item map](LITERATURE.md#letwin2026-lemma-map) |
 
 Certificates and item maps identify statements and source reviews, not a fresh run.
 For snapshot-specific acceptance use [verification](../verification.md#receipts-and-trust-scope)
@@ -61,7 +64,7 @@ Every proof task must first pin its paper version, theorem, hypotheses and const
 
 | Priority | Sources / target | Next action |
 | --- | --- | --- |
-| 1 | [Bizeul–Klartag–Lehec](https://arxiv.org/abs/2610.05474v1)<br/>Theorem 1.1 through Theorems 3.1 (certified, thm:bkl-taylor-criterion), 4.1 and Proposition 7.1 (certified in the source form, prop:bkl-suspension, conditional on its hypothesis CumulantBound): Section 3 is formalized by the operator route; Lemma 2.2, Lemma 3.6 (⇑), Corollary 3.7 (⇑), Lemmas 3.2–3.4, 3.8, 3.9 for the D(A) iterates (⇑), the regular-law adapter for (12), the complete Section 2 reduction to isotropic regular laws (regular approximation and weak-limit transfer) and the p. 30 reduction are formalized, so Theorem 1.1 is formalized conditionally on the Theorem 4.1 cumulant bounds (no certificate); Lemma 2.1 on 𝒜, (19), and Lemma 4.2 conditional on the Letwin bound are partial, restricted or conditional counterparts; the deterministic spatial step (74)/(72) of Lemma 4.3 is formalized (⇑); Theorem 4.1 is stated conditionally (cumulant envelope) and open. | Next: Stage 2, Letwin Theorem 1.2 (Var ≤ 8‖M‖²_HS, the exact input of Lemma 4.2), active under the renewed Codex controller. Stage 2A is formalized: Letwin Lemma A.4 for every source-class potential and every real R ≥ 1 with its natural-index C/(n+1) form, Lemma A.5 for given cutoffs, and their application to the nonconstant uniform-interval potential client (its pushforward to the uniform law is not proved; not the general moment-map producer). This supports, but does not prove, Letwin Theorem 2.5, Theorem 1.2 or an unconditional BKL Lemma 4.2. Next within Stage 2: Letwin Theorem 2.5 with Proposition 2.8 and the Stein-kernel identity (2.21), toward Theorem 1.2. Stage 1 (BKL (74) grouped with (72); the covariance step of the proof of Letwin Theorem 1.2) is integrated and covered by the full local receipt 20261010T093056.948739Z. Owner scope (2026-10-10): BKL Theorem 1.1 is the primary objective. Discharge Theorem 4.1 through the original Eldan localization and the Section 4-6 cumulant-energy argument, and the cited Letwin Theorem 1.2 input for Lemma 4.2. Reuse the certified Theorem 3.1, conditional source Proposition 7.1 and regular-law reduction. Other papers are pursued only for referenced results and necessary prerequisites with an explicit BKL consumer; general CEK Theorem 2/uniqueness and full Letwin paper coverage are not standalone goals. Moment-potential, regularity, Stein, integration and approximation work must be tied to the required Letwin bound. Conditional assembly remains insufficient; KLS.kls stays open. |
+| 1 | [Bizeul–Klartag–Lehec](https://arxiv.org/abs/2610.05474v1)<br/>BKL Theorem 1.1 through source-form Theorem 3.1 and Proposition 7.1 certificates, and Theorem 4.1. Theorem 4.1 and KLS.Conjecture are now proved conditionally on LetwinCompactBound alone; Proposition 7.1 retains its cumulant hypothesis. Unconditional BKL and dimension-free KLS remain open. | Active Goal (2026-10-14, roadmap step 1 of 4: Letwin constant 8, stochastic localization, BKL Theorem 4.1, KLS): prove the original compact constant-eight endpoint letwinCompactBound : LetwinCompactBound (n > 0, every self-adjoint quadratic form including singular and indefinite ones, exact constant 8, isotropic normalization) through the actual regular-class producer; steps 2-4 are queued and the existing conditional Theorem 4.1/KLS assembly will be re-reviewed, not re-proved. Canonical base: R0, the T10f compact reduction, both weak (2.2) generator identities (N10b) and the original N11b integrated Hessian-increment energy estimate with its supports (six parts independently accepted, canonically integrated 2026-10-14). Next actual producer under review: N11d, the actual local L2 weak third derivatives of the Hessian entries; then local H1/chain-rule bridges, weak Hessian evolution and trace, weak Brascamp-Lieb, Stein/H^-1 transport and the spectral constant-8 assembly. One candidate at a time with the existing API loop; old large loops stay stopped; no commit is authorized. BKL remains primary. |
 | 2 | [Bakry–Gentil–Ledoux](https://link.springer.com/book/10.1007/978-3-319-00227-9)<br/>Corollary 4.8.2 (strongly log-concave Bakry–Émery C_P ≤ 1/ρ) is certified as thm:bakry-emery-poincare and committed in 36e7c78 (remote run 37516844384 succeeded); select a separate Brascamp–Lieb source statement. | Deferred as an independent paper target under the 2026-10-10 BKL-first scope. Resume only for a reviewed referenced result or necessary prerequisite with an explicit BKL proof consumer; existing formalization and certificates are retained. |
 | 3 | [Kannan–Lovász–Simonovits](https://link.springer.com/article/10.1007/BF02574061)<br/>Theorem 5.1, ψ(K) ≥ ln 2 / M₁(K) for convex bodies, through the needle reduction (Corollary 2.2, Lemma 2.6, Theorem 2.7). With the local Cheeger inequality it gives C_P ≲ E‖X − EX‖² for convex bodies. | Deferred as an independent paper target under the 2026-10-10 BKL-first scope. Resume only for a reviewed referenced result or necessary prerequisite with an explicit BKL proof consumer; existing formalization and certificates are retained. |
 | 4 | [E. Milman](https://arxiv.org/abs/0712.4092)<br/>Concentration implies a Cheeger bound under the source convexity hypotheses. | Deferred as an independent paper target under the 2026-10-10 BKL-first scope. Resume only for a reviewed referenced result or necessary prerequisite with an explicit BKL proof consumer; existing formalization and certificates are retained. |
@@ -1142,7 +1145,7 @@ flowchart LR
 
 ### Letwin (arXiv:2607.24164v1)
 
-25 statements: 2 ✓, 17 ◐, 4 ○, 2 ⇑. [Full map](LITERATURE.md#letwin2026-lemma-map).
+25 statements: 1 ✓, 20 ◐, 2 ○, 2 ⇑. [Full map](LITERATURE.md#letwin2026-lemma-map).
 
 ```mermaid
 flowchart LR
@@ -1154,8 +1157,8 @@ flowchart LR
     Letwin2026_T11["○ Theorem 1.1<br/>KLS constant O(log^{1/4} n)"]
     Letwin2026_T12["◐ Theorem 1.2<br/>Quadratic-form Poincare inequality"]
     Letwin2026_CZ14["⇑ Proof of Theorem 1.2, p. 14 (unnumbered display preceding (2.21))<br/>Covariance of the transported vector"]
-    Letwin2026_L21["○ Lemma 2.1 (Cordero-Erausquin and Klartag [21, Theorem 2])<br/>Existence of moment maps"]
-    Letwin2026_L22["○ Lemma 2.2 (Klartag [41])<br/>Regularity of the moment map"]
+    Letwin2026_L21["◐ Lemma 2.1 (Cordero-Erausquin and Klartag [21, Theorem 2])<br/>Existence of moment maps"]
+    Letwin2026_L22["◐ Lemma 2.2 (Klartag [41])<br/>Regularity of the moment map"]
     Letwin2026_L23["◐ Lemma 2.3<br/>Hessian of phi has mean Id"]
     Letwin2026_E23["◐ Equation (2.3), p. 6 (unnumbered display)<br/>Product rule for the diffusion generator"]
     Letwin2026_L24["◐ Lemma 2.4<br/>Twice-differentiated Monge-Ampere equation"]
@@ -1164,7 +1167,7 @@ flowchart LR
     Letwin2026_L27["◐ Lemma 2.7 (Fathi [29, Theorem 2.3])<br/>Moment map gives Stein kernel"]
     Letwin2026_P28["◐ Proposition 2.8 (Barthe and Klartag [7, Proposition 10])<br/>H^{-1} variance inequality"]
     Letwin2026_L29["◐ Lemma 2.9<br/>Stein kernel bounds H^{-1} norm"]
-    Letwin2026_LA1["✓ Lemma A.1<br/>Reduction to regular measures"]
+    Letwin2026_LA1["◐ Lemma A.1<br/>Reduction to regular measures"]
     Letwin2026_LA2["○ Lemma A.2<br/>Reduction to invertible M"]
     Letwin2026_LA3["◐ Lemma A.3<br/>Integration by parts under nu"]
     Letwin2026_LA4["⇑ Lemma A.4<br/>Cutoffs with small generator"]
@@ -1219,11 +1222,11 @@ flowchart LR
     Letwin2026_LA1 --> Letwin2026_LA6
     Letwin2026_D26 --> Letwin2026_LA7
     classDef lemma_formalized fill:#dbeafe,stroke:#2563eb,color:#1e3a8a;
-    class Letwin2026_DISO,Letwin2026_LA1 lemma_formalized;
+    class Letwin2026_DISO lemma_formalized;
     classDef lemma_partial fill:#fff3df,stroke:#c88719,color:#66420d;
-    class Letwin2026_DCP,Letwin2026_DPSI,Letwin2026_ECMP,Letwin2026_CONJ,Letwin2026_T12,Letwin2026_L23,Letwin2026_E23,Letwin2026_L24,Letwin2026_T25,Letwin2026_D26,Letwin2026_L27,Letwin2026_P28,Letwin2026_L29,Letwin2026_LA3,Letwin2026_LA5,Letwin2026_LA6,Letwin2026_LA7 lemma_partial;
+    class Letwin2026_DCP,Letwin2026_DPSI,Letwin2026_ECMP,Letwin2026_CONJ,Letwin2026_T12,Letwin2026_L21,Letwin2026_L22,Letwin2026_L23,Letwin2026_E23,Letwin2026_L24,Letwin2026_T25,Letwin2026_D26,Letwin2026_L27,Letwin2026_P28,Letwin2026_L29,Letwin2026_LA1,Letwin2026_LA3,Letwin2026_LA5,Letwin2026_LA6,Letwin2026_LA7 lemma_partial;
     classDef lemma_pending fill:#fee2e2,stroke:#dc2626,color:#991b1b;
-    class Letwin2026_T11,Letwin2026_L21,Letwin2026_L22,Letwin2026_LA2 lemma_pending;
+    class Letwin2026_T11,Letwin2026_LA2 lemma_pending;
     classDef lemma_improved fill:#dcfce7,stroke:#15803d,color:#14532d;
     class Letwin2026_CZ14,Letwin2026_LA4 lemma_improved;
     style Letwin2026_T11 stroke-width:3px
@@ -1399,7 +1402,7 @@ See the [full tables and normalization](LITERATURE.md#constant-conventions).
 ## Proof progress tree
 
 <!-- BEGIN GENERATED DATE -->
-Last updated: **2026-10-12**.
+Last updated: **2026-10-14**.
 
 ![✓ Formalized in Lean](badges/formalized.svg) · ![○ Not yet formalized](badges/pending.svg) · ![◐ Partially formalized](badges/partial.svg) · ![— Excluded: refuted](badges/excluded.svg)
 <!-- END GENERATED DATE -->
@@ -1549,6 +1552,18 @@ flowchart LR
     VFULL["✓ C¹ vector coarea<br/>Rank-deficient part closed"]
     VLIP["✓ Vector coarea<br/>Lipschitz and local"]
     end
+    subgraph LETWINWEAK["Letwin weak regularity supports — constant-8 bound remains open"]
+    CEKMAP["✓ Bounded CEK source<br/>Actual moment map"]
+    WEAKHESS["✓ C1 Hessian<br/>Gradient derivative at a point"]
+    REGMOM["✓ Regular-class R0<br/>C1,1 and a.e. Hessian package"]
+    WEAKINVINT["✓ Inverse Hessian<br/>Bounded compact integrability"]
+    WEAKGEN["✓ Weak generator identities<br/>Letwin (2.2) at C1,1"]
+    HESSENT["✓ Hessian entries<br/>Measurable, bounded by G"]
+    CDIFF["✓ Centered difference<br/>C1,1 and 0 <= w <= D|h|^2"]
+    WEAKGENINT["✓ Weak generator<br/>Density integrability"]
+    INCINT["✓ Hessian increments<br/>Weighted integrability"]
+    INCENERGY["✓ Hessian-increment energy<br/>Original N11b estimate"]
+    end
     KLS["○ KLS<br/>Dimension-free bound"]
     ANY{"OR<br/>Any completed route"}
     EG --> EAND
@@ -1607,8 +1622,19 @@ flowchart LR
     GSTAB -.-> CB
     HEAT -.-> CB
     VFULL -.-> VLIP
+    CEKMAP --> REGMOM
+    WEAKHESS --> REGMOM
+    WEAKINVINT --> WEAKGEN
+    WEAKHESS --> WEAKGEN
+    HESSENT --> WEAKGENINT
+    WEAKINVINT --> WEAKGENINT
+    HESSENT --> INCINT
+    CDIFF --> INCENERGY
+    INCINT --> INCENERGY
+    WEAKGENINT --> INCENERGY
+    WEAKGEN --> INCENERGY
     classDef done fill:#dbeafe,stroke:#2563eb,color:#1e3a8a;
-    class ENERGY,F4,MT,FP,FC,EQ,NORM,DENS,FRONT,CB,ONE,CONST,FORMS,MEAS,GRAPH,REG,CRIT,C1,WHIT,LIP,GG,REC,FWD,SARD,SCI,CUT,REV,MINK,BV,FLOG,VREG,VZERO,VR123,VR4,VFULL,SEMI,MARKOV,DECAY,GAUSS,GSTAB,VLIP done;
+    class ENERGY,F4,MT,FP,FC,EQ,NORM,DENS,FRONT,CB,ONE,CONST,FORMS,MEAS,GRAPH,REG,CRIT,C1,WHIT,LIP,GG,REC,FWD,SARD,SCI,CUT,REV,MINK,BV,FLOG,VREG,VZERO,VR123,VR4,VFULL,SEMI,MARKOV,DECAY,GAUSS,GSTAB,VLIP,WEAKHESS,CEKMAP,REGMOM,WEAKINVINT,WEAKGEN,HESSENT,CDIFF,WEAKGENINT,INCINT,INCENERGY done;
     classDef partial fill:#fff3df,stroke:#c88719,color:#66420d;
     class FAND,BE,HEAT partial;
     classDef todo fill:#fee2e2,stroke:#dc2626,color:#991b1b;
@@ -1672,6 +1698,16 @@ flowchart LR
     click BE href "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/BakryEmery/Bochner/Basic.lean" "Generator / Bochner — Gradient estimates" _blank
     click HEAT href "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/SmoothBuser.lean" "Small-time heat bounds — and pi Buser assembly" _blank
     click VLIP href "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/Lipschitz/Local.lean" "Vector coarea — Lipschitz and local" _blank
+    click WEAKHESS href "../../formalization/FunctionalInequalities/Probability/Stein/HessianKernel.lean" "C1 Hessian — Gradient derivative at a point" _blank
+    click CEKMAP href "../../formalization/FunctionalInequalities/KLS/CEK/MomentMap.lean" "Bounded CEK source — Actual moment map" _blank
+    click REGMOM href "../../formalization/FunctionalInequalities/KLS/CEK/MomentRegularity.lean" "Regular-class R0 — C1,1 and a.e. Hessian package" _blank
+    click WEAKINVINT href "../../formalization/FunctionalInequalities/Analysis/Matrix/Piola.lean" "Inverse Hessian — Bounded compact integrability" _blank
+    click WEAKGEN href "../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakInverseHessian.lean" "Weak generator identities — Letwin (2.2) at C1,1" _blank
+    click HESSENT href "../../formalization/FunctionalInequalities/Probability/Stein/HessianKernel.lean" "Hessian entries — Measurable, bounded by G" _blank
+    click CDIFF href "../../formalization/FunctionalInequalities/Analysis/Convex/SecondDifference.lean" "Centered difference — C1,1 and 0 <= w <= D|h|^2" _blank
+    click WEAKGENINT href "../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakInverseHessian.lean" "Weak generator — Density integrability" _blank
+    click INCINT href "../../formalization/FunctionalInequalities/Analysis/Convex/HessianIncrement.lean" "Hessian increments — Weighted integrability" _blank
+    click INCENERGY href "../../formalization/FunctionalInequalities/Analysis/Convex/HessianIncrement.lean" "Hessian-increment energy — Original N11b estimate" _blank
 ```
 <!-- END GENERATED TREE -->
 
@@ -1700,8 +1736,9 @@ flowchart LR
   equalities of infima; individual BV perimeters and Minkowski contents need not agree.
   The general metric-measure comparison, the nonconvex-support identification, and the
   `L¹_loc` result beyond proper spaces with finite measures remain open locally.
-- There are 27 registered certificates and one isolated `KLS.kls` target hole. The former WIP
-  modules are removed; the target is outside every certificate closure.
+- Registered certificates are listed in the [certification ledger](../a-series/ledger.yaml); there is one
+  isolated `KLS.kls` target hole. The former WIP modules are removed; the target is outside every
+  certificate closure.
 - CMH sufficiency requires a regular recovery sequence; it is not an equivalence.
 - Refuted packages and parked probes remain outside the active implication chain. The pinned
   upstream portfolio and its four active route requirements are unchanged.
@@ -1795,6 +1832,16 @@ The [full node register](STATUS.md) separately lists definitions and registered 
 | Generator / Bochner — Gradient estimates | ![◐ Partially formalized](badges/partial.svg) | [Source](https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/BakryEmery/Bochner/Basic.lean) |
 | Small-time heat bounds — and pi Buser assembly | ![◐ Partially formalized](badges/partial.svg) | [Source](https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/SmoothBuser.lean) |
 | Vector coarea — Lipschitz and local | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/Lipschitz/Local.lean) |
+| C1 Hessian — Gradient derivative at a point | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/Probability/Stein/HessianKernel.lean) |
+| Bounded CEK source — Actual moment map | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/KLS/CEK/MomentMap.lean) |
+| Regular-class R0 — C1,1 and a.e. Hessian package | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/KLS/CEK/MomentRegularity.lean) |
+| Inverse Hessian — Bounded compact integrability | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/Analysis/Matrix/Piola.lean) |
+| Weak generator identities — Letwin (2.2) at C1,1 | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakInverseHessian.lean) |
+| Hessian entries — Measurable, bounded by G | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/Probability/Stein/HessianKernel.lean) |
+| Centered difference — C1,1 and 0 <= w <= D&#124;h&#124;^2 | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/Analysis/Convex/SecondDifference.lean) |
+| Weak generator — Density integrability | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakInverseHessian.lean) |
+| Hessian increments — Weighted integrability | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/Analysis/Convex/HessianIncrement.lean) |
+| Hessian-increment energy — Original N11b estimate | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/Analysis/Convex/HessianIncrement.lean) |
 <!-- END GENERATED RESULTS -->
 
 ### Benchmarks and upstream research beyond the four route gates
@@ -1889,6 +1936,16 @@ Every node has a link. If diagram links are disabled in your viewer, use this di
 | Generator / Bochner — Gradient estimates | [Source](https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/BakryEmery/Bochner/Basic.lean) |
 | Small-time heat bounds — and pi Buser assembly | [Source](https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/SmoothBuser.lean) |
 | Vector coarea — Lipschitz and local | [Source](https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/Lipschitz/Local.lean) |
+| C1 Hessian — Gradient derivative at a point | [Source](../../formalization/FunctionalInequalities/Probability/Stein/HessianKernel.lean) |
+| Bounded CEK source — Actual moment map | [Source](../../formalization/FunctionalInequalities/KLS/CEK/MomentMap.lean) |
+| Regular-class R0 — C1,1 and a.e. Hessian package | [Source](../../formalization/FunctionalInequalities/KLS/CEK/MomentRegularity.lean) |
+| Inverse Hessian — Bounded compact integrability | [Source](../../formalization/FunctionalInequalities/Analysis/Matrix/Piola.lean) |
+| Weak generator identities — Letwin (2.2) at C1,1 | [Source](../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakInverseHessian.lean) |
+| Hessian entries — Measurable, bounded by G | [Source](../../formalization/FunctionalInequalities/Probability/Stein/HessianKernel.lean) |
+| Centered difference — C1,1 and 0 <= w <= D&#124;h&#124;^2 | [Source](../../formalization/FunctionalInequalities/Analysis/Convex/SecondDifference.lean) |
+| Weak generator — Density integrability | [Source](../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakInverseHessian.lean) |
+| Hessian increments — Weighted integrability | [Source](../../formalization/FunctionalInequalities/Analysis/Convex/HessianIncrement.lean) |
+| Hessian-increment energy — Original N11b estimate | [Source](../../formalization/FunctionalInequalities/Analysis/Convex/HessianIncrement.lean) |
 <!-- END GENERATED LINKS -->
 
 </details>

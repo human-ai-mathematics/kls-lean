@@ -319,7 +319,7 @@
           },
           {
             "path": "formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex",
-            "sha256": "5490886ee0f7bed06a74c56066116256ef308c72270771ca05d382134a7d9ad0"
+            "sha256": "2a9bcc6fc5674f863ce49d4dd05c5f6fceda9abc201113a5163b8bdbe878d1eb"
           },
           {
             "path": "formalization/.lake/packages/mathlib/Mathlib/Analysis/InnerProductSpace/LaxMilgram.lean",
@@ -663,7 +663,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/Mollification.lean",
-            "sha256": "aa52ed15831f18537fce153e3f13244d78365791df08d3204bb68521a420aaca"
+            "sha256": "9b69c0c6c1b2a15bbc1eedfb94b1aca290c4c04f4397fea78275f4c6e262afe9"
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/InteriorRegularity.lean",
@@ -955,7 +955,7 @@
           },
           {
             "path": "formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex",
-            "sha256": "5490886ee0f7bed06a74c56066116256ef308c72270771ca05d382134a7d9ad0"
+            "sha256": "2a9bcc6fc5674f863ce49d4dd05c5f6fceda9abc201113a5163b8bdbe878d1eb"
           }
         ],
         "gaps": []
@@ -1626,7 +1626,7 @@
           },
           {
             "path": "formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex",
-            "sha256": "5490886ee0f7bed06a74c56066116256ef308c72270771ca05d382134a7d9ad0"
+            "sha256": "2a9bcc6fc5674f863ce49d4dd05c5f6fceda9abc201113a5163b8bdbe878d1eb"
           }
         ],
         "gaps": []
@@ -2602,7 +2602,7 @@
           },
           {
             "path": "formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex",
-            "sha256": "5490886ee0f7bed06a74c56066116256ef308c72270771ca05d382134a7d9ad0"
+            "sha256": "2a9bcc6fc5674f863ce49d4dd05c5f6fceda9abc201113a5163b8bdbe878d1eb"
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/Isoperimetry.lean",
@@ -3459,6 +3459,218 @@
           {
             "path": "solutions/LemLogConcaveIntrinsicAbsoluteContinuity.lean",
             "sha256": "e2dfbbe69c8819986e24198048101b3906a58592265f58fe02bf9eaf444ca9c7"
+          }
+        ],
+        "gaps": []
+      }
+    },
+    "lem:letwin-weak-hessian-identification": {
+      "mathematics": "local_argument",
+      "evidence": [
+        "blueprint:lem:letwin-weak-hessian-identification"
+      ],
+      "assumptions": [],
+      "priority": 0,
+      "note": "C1 plus gradient differentiability at x gives the coordinate Hessian as the derivative matrix and Hermitian symmetry; all finite dimensions, no C2 hypothesis. N11e helper reuse, independent frozen and matrix-order clients. Completed supporting result, not a queued task or source-paper certificate.",
+      "infrastructure": {
+        "status": "available",
+        "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
+        "evidence": [
+          {
+            "path": "formalization/FunctionalInequalities/Probability/Stein/HessianKernel.lean",
+            "sha256": "6c9ae7d6eb4daeb29e0d859f0b59c35feee0e949c5d24319cf1fdfebcd65b788"
+          }
+        ],
+        "gaps": []
+      }
+    },
+    "lem:cek-bounded-moment-map": {
+      "mathematics": "local_argument",
+      "evidence": [
+        "blueprint:lem:cek-bounded-moment-map"
+      ],
+      "assumptions": [],
+      "priority": 0,
+      "note": "Already integrated bounded isotropic moment-map producer: convex L-Lipschitz normalized potential with actual gradient pushforward, all finite dimensions including zero. No unbounded/finite-mass source or uniqueness claim. Completed supporting result, not a queued task or source-paper certificate.",
+      "infrastructure": {
+        "status": "available",
+        "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
+        "evidence": [
+          {
+            "path": "formalization/FunctionalInequalities/KLS/CEK/MomentMap.lean",
+            "sha256": "69dacfc668ff8529b8dad1e2a4e2945af17e0f7a78b6c0d2674e9186ff70f2db"
+          }
+        ],
+        "gaps": []
+      }
+    },
+    "lem:letwin-weak-regular-moment-potential": {
+      "mathematics": "local_argument",
+      "evidence": [
+        "blueprint:lem:letwin-weak-regular-moment-potential"
+      ],
+      "assumptions": [],
+      "priority": 0,
+      "note": "Positive-dimensional regular compact isotropic law: normalized convex Lipschitz moment potential and actual pushforward, C1, 16/kappa-Lipschitz gradient, a.e. PD/log-det/16/kappa cap. Original frozen R0 type independently verified. Full smooth Lemma 2.2 and constant-8 bound remain open. Completed supporting result, not a queued task or source-paper certificate.",
+      "infrastructure": {
+        "status": "available",
+        "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
+        "evidence": [
+          {
+            "path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity.lean",
+            "sha256": "8d9097021d3e17e432cfb804df3b09bb4ccbab472a94ecd057304e6965e79961"
+          }
+        ],
+        "gaps": []
+      }
+    },
+    "lem:letwin-weak-inverse-hessian-integrability": {
+      "mathematics": "local_argument",
+      "evidence": [
+        "blueprint:lem:letwin-weak-inverse-hessian-integrability"
+      ],
+      "assumptions": [],
+      "priority": 0,
+      "note": "Lipschitz gradient u, continuous F, det Hess u = exp F a.e.: inverse-Hessian entries times any measurable bounded compactly supported function are integrable; no C1/C2, PosDef or bound on F; all finite dimensions. Independently accepted N10b.4 interface. Completed supporting result, not a queued task or source-paper certificate.",
+      "infrastructure": {
+        "status": "available",
+        "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
+        "evidence": [
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/Matrix/Piola.lean",
+            "sha256": "5ca9a8b8ee9b8a1aa3604d0301d5588d3e6d650269008fe86fa7ed6848fca33f"
+          }
+        ],
+        "gaps": []
+      }
+    },
+    "lem:letwin-weak-generator-symmetry": {
+      "mathematics": "local_argument",
+      "evidence": [
+        "blueprint:lem:letwin-weak-generator-symmetry"
+      ],
+      "assumptions": [],
+      "priority": 0,
+      "note": "Weak C1,1 counterpart of Letwin (2.2): both original frozen N10b integral identities for the a.e. Monge-Ampere solution u (C1, Lipschitz gradient, Lipschitz exponent), w C1 with Lipschitz gradient and eta C2 compactly supported; no C2 u or w; all finite dimensions. Independently accepted N10b chain. Supports Theorem 2.5; Theorems 2.5/1.2 remain open. Completed supporting result, not a queued task or source-paper certificate.",
+      "infrastructure": {
+        "status": "available",
+        "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
+        "evidence": [
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakInverseHessian.lean",
+            "sha256": "11c41a736cad0abe47cf7b578536fe08592c28811d16240b5559edf1513fc64d"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/Matrix/Piola.lean",
+            "sha256": "5ca9a8b8ee9b8a1aa3604d0301d5588d3e6d650269008fe86fa7ed6848fca33f"
+          }
+        ],
+        "gaps": []
+      }
+    },
+    "lem:hessian-entry-measurable-bounded": {
+      "mathematics": "local_argument",
+      "evidence": [
+        "blueprint:lem:hessian-entry-measurable-bounded"
+      ],
+      "assumptions": [],
+      "priority": 0,
+      "note": "Total coordinate Hessian entries are measurable for every u and bounded by G for a G-Lipschitz gradient; all finite dimensions, no C1/C2. Independently accepted N11b.3. Completed supporting result, not a queued task or source-paper certificate.",
+      "infrastructure": {
+        "status": "available",
+        "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
+        "evidence": [
+          {
+            "path": "formalization/FunctionalInequalities/Probability/Stein/HessianKernel.lean",
+            "sha256": "6c9ae7d6eb4daeb29e0d859f0b59c35feee0e949c5d24319cf1fdfebcd65b788"
+          }
+        ],
+        "gaps": []
+      }
+    },
+    "lem:centered-difference-regularity-bounds": {
+      "mathematics": "local_argument",
+      "evidence": [
+        "blueprint:lem:centered-difference-regularity-bounds"
+      ],
+      "assumptions": [],
+      "priority": 0,
+      "note": "Centered second difference: C1 with 4G-Lipschitz gradient; 0 <= w <= D|h|^2 from convexity and the original upper bound. Independently accepted N11b.1/N11b.2. Completed supporting result, not a queued task or source-paper certificate.",
+      "infrastructure": {
+        "status": "available",
+        "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
+        "evidence": [
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/Convex/SecondDifference.lean",
+            "sha256": "0b19b8bb8e4101ed5a4bf3d50a61f0c2b933875b739765e069f8f49c6a4ccc8e"
+          }
+        ],
+        "gaps": []
+      }
+    },
+    "lem:letwin-weak-generator-integrability": {
+      "mathematics": "local_argument",
+      "evidence": [
+        "blueprint:lem:letwin-weak-generator-integrability"
+      ],
+      "assumptions": [],
+      "priority": 0,
+      "note": "Integrability of the weak inverse-Hessian generator densities eta Lw e^{-u}, w L eta e^{-u}, |eta + L eta| e^{-u}; no compact w, no C2 u/w. Independently accepted N11b.5. Completed supporting result, not a queued task or source-paper certificate.",
+      "infrastructure": {
+        "status": "available",
+        "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
+        "evidence": [
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakInverseHessian.lean",
+            "sha256": "11c41a736cad0abe47cf7b578536fe08592c28811d16240b5559edf1513fc64d"
+          }
+        ],
+        "gaps": []
+      }
+    },
+    "lem:letwin-hessian-increment-integrability": {
+      "mathematics": "local_argument",
+      "evidence": [
+        "blueprint:lem:letwin-hessian-increment-integrability"
+      ],
+      "assumptions": [],
+      "priority": 0,
+      "note": "Integrability of the weighted squared shifted-Hessian density; every shift and dimension. Independently accepted N11b.4. Completed supporting result, not a queued task or source-paper certificate.",
+      "infrastructure": {
+        "status": "available",
+        "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
+        "evidence": [
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/Convex/HessianIncrement.lean",
+            "sha256": "fa7ed659f1338f79a45bce2797cec5be854622ed485b5a47943e09d5c7473a87"
+          }
+        ],
+        "gaps": []
+      }
+    },
+    "lem:letwin-hessian-increment-energy": {
+      "mathematics": "local_argument",
+      "evidence": [
+        "blueprint:lem:letwin-hessian-increment-energy"
+      ],
+      "assumptions": [],
+      "priority": 0,
+      "note": "Original N11b integrated Hessian-increment energy estimate, exact coefficient 2K^2(D|h|^2), under the original C1/convex/Lipschitz, a.e. PD/log-det/cap and nonnegative C2 compact test hypotheses. Independently accepted N11b.6. Supports Theorem 2.5; N11d, the trace bound and Theorems 2.5/1.2 remain open. Completed supporting result, not a queued task or source-paper certificate.",
+      "infrastructure": {
+        "status": "available",
+        "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
+        "evidence": [
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/Convex/HessianIncrement.lean",
+            "sha256": "fa7ed659f1338f79a45bce2797cec5be854622ed485b5a47943e09d5c7473a87"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakInverseHessian.lean",
+            "sha256": "11c41a736cad0abe47cf7b578536fe08592c28811d16240b5559edf1513fc64d"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/Convex/SecondDifference.lean",
+            "sha256": "0b19b8bb8e4101ed5a4bf3d50a61f0c2b933875b739765e069f8f49c6a4ccc8e"
           }
         ],
         "gaps": []

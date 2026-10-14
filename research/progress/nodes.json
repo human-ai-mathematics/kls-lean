@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "last_updated": "2026-10-12",
+  "last_updated": "2026-10-14",
   "nodes": {
     "ass:cmh-recovery-envelope": {
       "description": "Seek a regular moment-map approximation of every centered log-concave law with a dimension-free CMH bound.",
@@ -1471,6 +1471,106 @@
     "lem:legendre-first-variation": {
       "blueprint": "lem:legendre-first-variation",
       "description": "CEK (42), pointwise: two-sided bounded perturbation of the whole EReal Legendre supremum and its finite curve; near-maximizer concentration at ∇φ*(y); d/dt (φ + t b)*(y) at 0 = −b(∇φ*(y)) for bounded continuous b, φ proper LSC (may take ⊤), y interior, φ* differentiable at y; any dimension. Not the source-law Euler–Lagrange, push-forward, regularity or CEK Theorem 2."
+    },
+    "lem:letwin-weak-hessian-identification": {
+      "blueprint": "lem:letwin-weak-hessian-identification",
+      "description": "C1 plus gradient differentiability at x gives the coordinate Hessian as the derivative matrix and Hermitian symmetry; all finite dimensions, no C2 hypothesis. N11e helper reuse, independent frozen and matrix-order clients.",
+      "diagram": {
+        "id": "WEAKHESS",
+        "label": "C1 Hessian<br/>Gradient derivative at a point",
+        "source": "../../formalization/FunctionalInequalities/Probability/Stein/HessianKernel.lean",
+        "shape": "box"
+      }
+    },
+    "lem:cek-bounded-moment-map": {
+      "blueprint": "lem:cek-bounded-moment-map",
+      "description": "Already integrated bounded isotropic moment-map producer: convex L-Lipschitz normalized potential with actual gradient pushforward, all finite dimensions including zero. No unbounded/finite-mass source or uniqueness claim.",
+      "diagram": {
+        "id": "CEKMAP",
+        "label": "Bounded CEK source<br/>Actual moment map",
+        "source": "../../formalization/FunctionalInequalities/KLS/CEK/MomentMap.lean",
+        "shape": "box"
+      }
+    },
+    "lem:letwin-weak-regular-moment-potential": {
+      "blueprint": "lem:letwin-weak-regular-moment-potential",
+      "description": "Positive-dimensional regular compact isotropic law: normalized convex Lipschitz moment potential and actual pushforward, C1, 16/kappa-Lipschitz gradient, a.e. PD/log-det/16/kappa cap. Original frozen R0 type independently verified. Full smooth Lemma 2.2 and constant-8 bound remain open.",
+      "diagram": {
+        "id": "REGMOM",
+        "label": "Regular-class R0<br/>C1,1 and a.e. Hessian package",
+        "source": "../../formalization/FunctionalInequalities/KLS/CEK/MomentRegularity.lean",
+        "shape": "box"
+      }
+    },
+    "lem:letwin-weak-inverse-hessian-integrability": {
+      "blueprint": "lem:letwin-weak-inverse-hessian-integrability",
+      "description": "Lipschitz gradient u, continuous F, det Hess u = exp F a.e.: inverse-Hessian entries times any measurable bounded compactly supported function are integrable; no C1/C2, PosDef or bound on F; all finite dimensions. Thin interface beside the weak inverse divergence identity.",
+      "diagram": {
+        "id": "WEAKINVINT",
+        "label": "Inverse Hessian<br/>Bounded compact integrability",
+        "source": "../../formalization/FunctionalInequalities/Analysis/Matrix/Piola.lean",
+        "shape": "box"
+      }
+    },
+    "lem:letwin-weak-generator-symmetry": {
+      "blueprint": "lem:letwin-weak-generator-symmetry",
+      "description": "Weak C1,1 counterpart of Letwin (2.2): for the a.e. Monge-Ampere solution u (C1, Lipschitz gradient, Lipschitz exponent), w C1 with Lipschitz gradient and eta C2 compactly supported, both original frozen integral identities ∫ eta (L w) e^{-u} = −energy = ∫ w (L eta) e^{-u}; no C2 u or w; all finite dimensions. Supports Theorem 2.5; Theorems 2.5/1.2 remain open.",
+      "diagram": {
+        "id": "WEAKGEN",
+        "label": "Weak generator identities<br/>Letwin (2.2) at C1,1",
+        "source": "../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakInverseHessian.lean",
+        "shape": "box"
+      }
+    },
+    "lem:hessian-entry-measurable-bounded": {
+      "blueprint": "lem:hessian-entry-measurable-bounded",
+      "description": "Every total coordinate Hessian entry is measurable, and bounded by G when the gradient is G-Lipschitz; all finite dimensions, no C1/C2 premise.",
+      "diagram": {
+        "id": "HESSENT",
+        "label": "Hessian entries<br/>Measurable, bounded by G",
+        "source": "../../formalization/FunctionalInequalities/Probability/Stein/HessianKernel.lean",
+        "shape": "box"
+      }
+    },
+    "lem:centered-difference-regularity-bounds": {
+      "blueprint": "lem:centered-difference-regularity-bounds",
+      "description": "Centered second difference of u: C1 with 4G-Lipschitz gradient; 0 <= w <= D|h|^2 under convexity and the original upper bound; every shift and dimension.",
+      "diagram": {
+        "id": "CDIFF",
+        "label": "Centered difference<br/>C1,1 and 0 <= w <= D|h|^2",
+        "source": "../../formalization/FunctionalInequalities/Analysis/Convex/SecondDifference.lean",
+        "shape": "box"
+      }
+    },
+    "lem:letwin-weak-generator-integrability": {
+      "blueprint": "lem:letwin-weak-generator-integrability",
+      "description": "Integrability of eta L w e^{-u}, w L eta e^{-u} and |eta + L eta| e^{-u} for the weak inverse-Hessian generator; no compact w, no C2 u or w.",
+      "diagram": {
+        "id": "WEAKGENINT",
+        "label": "Weak generator<br/>Density integrability",
+        "source": "../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakInverseHessian.lean",
+        "shape": "box"
+      }
+    },
+    "lem:letwin-hessian-increment-integrability": {
+      "blueprint": "lem:letwin-hessian-increment-integrability",
+      "description": "Integrability of the weighted squared shifted-Hessian density for continuous u with Lipschitz gradient and continuous compact eta; every shift and dimension.",
+      "diagram": {
+        "id": "INCINT",
+        "label": "Hessian increments<br/>Weighted integrability",
+        "source": "../../formalization/FunctionalInequalities/Analysis/Convex/HessianIncrement.lean",
+        "shape": "box"
+      }
+    },
+    "lem:letwin-hessian-increment-energy": {
+      "blueprint": "lem:letwin-hessian-increment-energy",
+      "description": "Original N11b estimate: integrated squared Hessian-increment energy at most 2K^2(D|h|^2) times the integral of |eta + L eta| e^{-u}, under the original weak C1,1 Monge-Ampere hypotheses; supports Theorem 2.5, not the trace bound or Theorems 2.5/1.2.",
+      "diagram": {
+        "id": "INCENERGY",
+        "label": "Hessian-increment energy<br/>Original N11b estimate",
+        "source": "../../formalization/FunctionalInequalities/Analysis/Convex/HessianIncrement.lean",
+        "shape": "box"
+      }
     }
   },
   "diagram": {
@@ -1576,6 +1676,22 @@
           "VR4",
           "VFULL",
           "VLIP"
+        ]
+      },
+      {
+        "id": "LETWINWEAK",
+        "title": "Letwin weak regularity supports — constant-8 bound remains open",
+        "nodes": [
+          "CEKMAP",
+          "WEAKHESS",
+          "REGMOM",
+          "WEAKINVINT",
+          "WEAKGEN",
+          "HESSENT",
+          "CDIFF",
+          "WEAKGENINT",
+          "INCINT",
+          "INCENERGY"
         ]
       }
     ],
@@ -1859,6 +1975,61 @@
         "from": "VFULL",
         "to": "VLIP",
         "kind": "context"
+      },
+      {
+        "from": "CEKMAP",
+        "to": "REGMOM",
+        "kind": "dependency"
+      },
+      {
+        "from": "WEAKHESS",
+        "to": "REGMOM",
+        "kind": "dependency"
+      },
+      {
+        "from": "WEAKINVINT",
+        "to": "WEAKGEN",
+        "kind": "dependency"
+      },
+      {
+        "from": "WEAKHESS",
+        "to": "WEAKGEN",
+        "kind": "dependency"
+      },
+      {
+        "from": "HESSENT",
+        "to": "WEAKGENINT",
+        "kind": "dependency"
+      },
+      {
+        "from": "WEAKINVINT",
+        "to": "WEAKGENINT",
+        "kind": "dependency"
+      },
+      {
+        "from": "HESSENT",
+        "to": "INCINT",
+        "kind": "dependency"
+      },
+      {
+        "from": "CDIFF",
+        "to": "INCENERGY",
+        "kind": "dependency"
+      },
+      {
+        "from": "INCINT",
+        "to": "INCENERGY",
+        "kind": "dependency"
+      },
+      {
+        "from": "WEAKGENINT",
+        "to": "INCENERGY",
+        "kind": "dependency"
+      },
+      {
+        "from": "WEAKGEN",
+        "to": "INCENERGY",
+        "kind": "dependency"
       }
     ]
   }

@@ -3431,3 +3431,197 @@ form taken by the variance estimate for isotropic $\mu$), then
   first index with $v_{N+1}<\lambda/2$, and the recursion~(63) with the dyadic summation gives a
   contradiction unless $\lambda R^2$ is bounded below by a universal constant.
 \end{proof}
+
+
+\begin{lemma}[Weak Hessian identification at gradient differentiability points]
+  \label{lem:letwin-weak-hessian-identification}
+  \lean{FunctionalInequalities.Probability.Stein.hessianMatrix_toEuclideanLin_of_differentiableAt_gradient,
+        FunctionalInequalities.Probability.Stein.hessianMatrix_isHermitian_of_differentiableAt_gradient}
+  \leanok
+  Supporting bridge for Letwin \cite{Letwin2026QuadraticKLS}, Lemma~2.2 in the weak regular-class route.
+  For $u\in C^1(\mathbb R^n)$ and a point $x$ where $\nabla u$ is differentiable, the coordinate Hessian
+  represents $D(\nabla u)(x)$ under \texttt{Matrix.toEuclideanLin} and is Hermitian. Dimension zero is included.
+  No global $C^2$ premise, moment-map premise or weak third-derivative tensor is required.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Reuse the independently checked N11e pointwise coordinate and Schwarz-symmetry helpers; identify
+  the matrix through the standard orthonormal basis. The Lipschitz-gradient client consumes this
+  identity to obtain the upper matrix-order bound at Rademacher points.
+\end{proof}
+
+\begin{lemma}[Bounded isotropic source: actual weak moment map]
+  \label{lem:cek-bounded-moment-map}
+  \lean{FunctionalInequalities.KLS.CEK.exists_momentMap_of_isotropic_of_ae_norm_le}
+  \leanok
+  \uses{lem:cek-bounded-primal, lem:legendre-first-variation}
+  The already integrated bounded-source existence specialization of Cordero--Erausquin--Klartag
+  \cite{CorderoKlartag2015}, Theorem~2, used by the R0 consumer: for an isotropic probability law
+  $\mu$ on a finite-dimensional real inner product space, $L\ge0$ and $\|y\|\le L$ $\mu$-a.e.,
+  there is a finite convex $L$-Lipschitz $u$ with $\int e^{-u}=1$ and
+  $(\nabla u)_\#(e^{-u}dx)=\mu$. Dimension zero is included. General unbounded/finite-mass existence
+  and uniqueness are not claimed by this producer.
+\end{lemma}
+\begin{proof}
+  \leanok
+  The bounded normalized CEK primal and the existing integral first-variation/Euler--Lagrange
+  identification give equality of integrals of bounded continuous tests, hence the actual pushforward.
+  This registration introduces no new proof or certificate for the general source theorem.
+\end{proof}
+
+\begin{lemma}[Weak regular-class moment-potential package]
+  \label{lem:letwin-weak-regular-moment-potential}
+  \lean{FunctionalInequalities.Analysis.exists_regular_moment_potential}
+  \leanok
+  \uses{lem:cek-bounded-moment-map, lem:letwin-weak-hessian-identification}
+  Weak supporting counterpart of Letwin \cite{Letwin2026QuadraticKLS}, Lemma~2.2 for the compact
+  regular class: $n>0$, $K$ compact convex with nonempty interior, $W$ globally smooth,
+  $W-\frac\kappa2\|\cdot\|^2$ convex for $\kappa>0$, and $\mu=1_K e^{-W}dx$ an isotropic
+  probability. There is a finite convex Lipschitz moment potential $u$ with $\int e^{-u}=1$,
+  $(\nabla u)_\#(e^{-u}dx)=\mu$, $u\in C^1$ and $\nabla u$ $16/\kappa$-Lipschitz. Almost everywhere,
+  $H=\nabla^2u$ is positive definite, $\log\det H=-u+W(\nabla u)$ and
+  $(16/\kappa)I-H$ is positive semidefinite. The complete original R0 frozen declaration is retained.
+  This does not establish global smoothness, everywhere positive definiteness, a gradient
+  diffeomorphism, the integrated trace bound or Theorems~2.5/1.2.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Compactness bounds the source; the bounded CEK producer, Caffarelli $C^1$ result and the existing
+  Lipschitz-gradient estimate give $u$. At Rademacher points the accepted weak Hessian bridge
+  identifies the gradient derivative. The subgradient quadratic expansion and the existing
+  viscosity/Alexandrov result give positive definiteness and the determinant identity. The derivative
+  operator-norm bound transfers to the stated matrix-order cap. No $C^1$-to-$C^2$ promotion is used.
+\end{proof}
+
+\begin{lemma}[Inverse-Hessian integrability against bounded compact multipliers]
+  \label{lem:letwin-weak-inverse-hessian-integrability}
+  \lean{FunctionalInequalities.Analysis.integrable_inv_hessianMatrix_mul_of_bounded_compact}
+  \leanok
+  Supporting interface for the weak counterpart of Letwin \cite{Letwin2026QuadraticKLS}, equation~(2.2).
+  Let $\nabla u$ be Lipschitz, $F$ continuous and $\det\nabla^2u=e^{F}$ almost everywhere. For every measurable,
+  globally bounded, compactly supported $f$ and all indices $i,j$, the function $(\nabla^2u)^{-1}_{ij}f$ is
+  integrable. No $C^1$ or $C^2$ hypothesis on $u$, positive definiteness or bound on $F$ is assumed; all finite
+  dimensions are included.
+\end{lemma}
+\begin{proof}
+  \leanok
+  The cofactors of $\nabla^2u$ are measurable and bounded by the Lipschitz constant of $\nabla u$; almost
+  everywhere $(\nabla^2u)^{-1}_{ij}=e^{-F}\operatorname{adj}(\nabla^2u)_{ij}$, and $e^{-F}f$ is integrable because
+  $e^{-F}$ is continuous and $f$ is bounded with compact support.
+\end{proof}
+
+\begin{lemma}[Weak inverse-Hessian generator identities]
+  \label{lem:letwin-weak-generator-symmetry}
+  \lean{FunctionalInequalities.Analysis.integral_mul_generator_eq_neg_energy,
+        FunctionalInequalities.Analysis.integral_mul_generator_eq_neg_energy'}
+  \leanok
+  \uses{lem:letwin-weak-inverse-hessian-integrability, lem:letwin-weak-hessian-identification}
+  Weak $C^{1,1}$ counterpart of Letwin \cite{Letwin2026QuadraticKLS}, equation~(2.2). Let $u\in C^1$ with
+  $\nabla u$ Lipschitz, $V\in C^1$, the exponent $F=-u+V(\nabla u)$ Lipschitz and
+  $\det\nabla^2u=e^{F}$ almost everywhere, and set $Lf=\operatorname{tr}((\nabla^2u)^{-1}\nabla^2f)-DV(\nabla u)(\nabla f)$.
+  For every $w\in C^1$ with Lipschitz gradient and every compactly supported $\eta\in C^2$,
+  \[
+    \int \eta\,(Lw)\,e^{-u}=-\int\langle(\nabla^2u)^{-1}\nabla\eta,\nabla w\rangle e^{-u}
+    =\int w\,(L\eta)\,e^{-u}.
+  \]
+  Both identities are the original frozen statements; all finite dimensions are included. They are supports for
+  Theorem~2.5; Theorems~2.5 and~1.2 are not proved here.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Apply the weak inverse-Hessian divergence identity to the compactly supported Lipschitz tests
+  $\eta e^{-u}\partial_iw$ and $w e^{-u}\partial_i\eta$ (the latter compact through $\partial_i\eta$, without assuming
+  $w$ compact). Integrability of every summand comes from
+  Lemma~\ref{lem:letwin-weak-inverse-hessian-integrability}. At almost every point the derivatives of the tests and
+  of the exponent are computed with the pointwise Hessian identification of
+  Lemma~\ref{lem:letwin-weak-hessian-identification}, without promoting $C^1$ to $C^2$, and a finite inverse-matrix
+  cancellation identifies the density with the energy plus $\eta\,(Lw)\,e^{-u}$; symmetry of $(\nabla^2u)^{-1}$ gives
+  the second orientation.
+\end{proof}
+
+\begin{lemma}[Total coordinate Hessian entries: measurability and Lipschitz-gradient bound]
+  \label{lem:hessian-entry-measurable-bounded}
+  \lean{FunctionalInequalities.Probability.Stein.measurable_hessianMatrix_entry,
+        FunctionalInequalities.Probability.Stein.norm_hessianMatrix_entry_le_of_lipschitz_gradient}
+  \leanok
+  For every function $u$ on $\mathbb R^n$ and all indices $i,j$, the total coordinate Hessian entry
+  $x\mapsto H_u(x)_{ij}$ (defined through the total Fr\'echet derivative, zero at nondifferentiability points) is
+  measurable. If $\nabla u$ is $G$-Lipschitz, then $|H_u(x)_{ij}|\le G$ for every $x$. No $C^1$ or $C^2$ hypothesis, no
+  positive dimension; this asserts no classical Hessian.
+\end{lemma}
+\begin{proof}
+  \leanok
+  The entry is a continuous function of $D(\nabla u)(x)$ through the dual isometry and two evaluations, composed with the
+  measurable total derivative; the bound is the operator-norm bound of $D(\nabla u)(x)$ by the Lipschitz constant.
+\end{proof}
+
+\begin{lemma}[Centered second difference: regularity and bounds]
+  \label{lem:centered-difference-regularity-bounds}
+  \lean{FunctionalInequalities.Analysis.centeredDifference_contDiff_lipschitz_gradient,
+        FunctionalInequalities.Analysis.centeredDifference_nonneg_le}
+  \leanok
+  Let $w(x)=u(x+h)+u(x-h)-2u(x)$. If $u\in C^1$ with $G$-Lipschitz gradient, then $w\in C^1$ and $\nabla w$ is
+  $4G$-Lipschitz. If $u$ is convex and $w\le D\|h\|^2$ everywhere, then $0\le w\le D\|h\|^2$ and $0\le D\|h\|^2$. Every $h$
+  and every finite dimension; no sign of $D$ is assumed.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Translations are isometries, which gives $G+G+2G$; the lower bound is midpoint convexity at $x\pm h$, and the scalar
+  bound is the two bounds at the origin.
+\end{proof}
+
+\begin{lemma}[Weak generator integrability]
+  \label{lem:letwin-weak-generator-integrability}
+  \lean{FunctionalInequalities.Analysis.integrable_weak_generator_densities}
+  \leanok
+  \uses{lem:hessian-entry-measurable-bounded, lem:letwin-weak-inverse-hessian-integrability}
+  Let $u$ be continuous with Lipschitz gradient, $V\in C^1$, $F=-u+V(\nabla u)$ continuous with $\det\nabla^2u=e^F$ almost
+  everywhere, $w$ continuous with Lipschitz gradient and $\eta\in C^2$ compactly supported, and
+  $Lf=\operatorname{tr}((\nabla^2u)^{-1}\nabla^2f)-DV(\nabla u)(\nabla f)$. Then $\eta\,(Lw)\,e^{-u}$, $w\,(L\eta)\,e^{-u}$ and
+  $|\eta+L\eta|\,e^{-u}$ are integrable. Neither compact support of $w$ nor $C^2$ regularity of $u$ or $w$ is assumed.
+\end{lemma}
+\begin{proof}
+  \leanok
+  The Hessian entries of $w$ are bounded and measurable, those of $\eta$ continuous with compact support; each trace term is
+  a bounded compactly supported multiplier against inverse-Hessian entries, and the drift terms are continuous with compact
+  support through $\eta$ or $\nabla\eta$.
+\end{proof}
+
+\begin{lemma}[Weighted Hessian-increment integrability]
+  \label{lem:letwin-hessian-increment-integrability}
+  \lean{FunctionalInequalities.Analysis.integrable_hessian_increment_energy}
+  \leanok
+  \uses{lem:hessian-entry-measurable-bounded}
+  For $u$ continuous with Lipschitz gradient, $\eta$ continuous with compact support and every shift $h$, the density
+  $\eta(x)\bigl(\|H_u(x+h)-H_u(x)\|_F^2+\|H_u(x-h)-H_u(x)\|_F^2\bigr)e^{-u(x)}$ is integrable, in every finite dimension.
+\end{lemma}
+\begin{proof}
+  \leanok
+  The squared entry differences are measurable and bounded by $(2G)^2$; the weight $\eta e^{-u}$ is continuous with compact
+  support.
+\end{proof}
+
+\begin{lemma}[Integrated energy of Hessian increments]
+  \label{lem:letwin-hessian-increment-energy}
+  \lean{FunctionalInequalities.Analysis.integral_mul_hessian_increment_le}
+  \leanok
+  \uses{lem:centered-difference-regularity-bounds, lem:letwin-hessian-increment-integrability,
+        lem:letwin-weak-generator-integrability, lem:letwin-weak-generator-symmetry}
+  Weak supporting estimate toward Letwin \cite{Letwin2026QuadraticKLS}, Theorem~2.5. Let $u\in C^1$ be convex with
+  $G$-Lipschitz gradient, $V\in C^1$ convex, $-u+V(\nabla u)$ Lipschitz, $K>0$, and almost everywhere $\nabla^2u$ positive
+  definite with $\log\det\nabla^2u=-u+V(\nabla u)$ and $\nabla^2u\le K$. For every nonnegative compactly supported
+  $\eta\in C^2$ and every $h$ with $u(x+h)+u(x-h)-2u(x)\le D\|h\|^2$ for all $x$,
+  \[
+    \int\eta\bigl(\|H_u(x+h)-H_u(x)\|_F^2+\|H_u(x-h)-H_u(x)\|_F^2\bigr)e^{-u}
+    \le 2K^2\,(D\|h\|^2)\int|\eta+L\eta|\,e^{-u},
+  \]
+  in every finite dimension. This is the original frozen statement. It does not produce weak third derivatives or the
+  integrated trace bound, and does not prove Theorems~2.5 or~1.2.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Multiply the existing pointwise coercivity of Hessian increments by $\eta e^{-u}\ge0$ and integrate, using only proved
+  integrability; the two weak generator identities give equal integrals for $\eta Lw$ and $wL\eta$, and $0\le w\le D\|h\|^2$
+  bounds $w(\eta+L\eta)$ by $D\|h\|^2|\eta+L\eta|$. The determinant identity $\det\nabla^2u=e^{-u+V(\nabla u)}$ follows from the
+  positive determinant and the log-determinant data. No $C^1$ to $C^2$ promotion is used.
+\end{proof}
