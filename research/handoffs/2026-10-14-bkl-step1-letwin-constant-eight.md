@@ -72,7 +72,7 @@ covers the snapshot `6e7d5285…` taken before this documentation setup.
 At setup, the immediate next contract was N11b.2: from the original convexity and upper-bound assumptions, the centered second
 difference satisfies `0 ≤ w ≤ D‖h‖²` together with the needed scalar nonnegativity. It has since been accepted and integrated (see below).
 
-## Current queue (updated 2026-10-14 at the documentation checkpoint)
+## Queue at the documentation checkpoint (2026-10-14, history)
 
 The six N11b contracts (N11b.1-N11b.6) each have independent Codex acceptance (`independent/N11b1..6` in the control directory)
 and are canonically integrated under the Codex-accepted placement: centered-difference regularity and bounds in
@@ -97,3 +97,134 @@ the documentation checkpoint of 2026-10-14 only, the owner explicitly authorized
 containing the documentation cleanup together with the independently accepted proof changes; Codex reviews, validates, stages,
 commits and pushes. No tag, remote CI run, separate release beyond that ordinary push, or new proof dispatch is authorized by it, and the Goal's success criteria are
 unchanged.
+
+## Queue at the N11d integration (2026-10-14, history)
+
+The four N11d contracts (N11d.1-N11d.4) each have independent Codex acceptance (`independent/N11d1..4`) and are canonically
+integrated under the Codex-accepted placement:
+- the uniform translated-cutoff majorant in the new `Analysis/Cutoff/Translation.lean`;
+- compact-local and cutoff-global L2 of total Hessian entries in `Probability/Stein/HessianKernel.lean`;
+- the cutoff Hessian difference-energy bound in `Analysis/Convex/HessianIncrement.lean`;
+- the unchanged original `Analysis.exists_weak_third_derivative` in the new `Analysis/Convex/HessianRegularity.lean`;
+- audit `research/audits/BKL/WeakHessianRegularityAudit.lean`.
+
+See the [N11d integration record](../decisions/2026-10-14-n11d-weak-hessian-integration.md).
+
+From the preserved original data, the tensor theorem produces an actual weak third tensor, L2 on every compact set. A fresh full
+verification of the post-integration snapshot and Codex's canonical acceptance are pending at this documentation freeze. This is a
+supporting result; the Goal endpoint `LetwinCompactBound` is not reached.
+
+Next: close the two original inputs of the tensor theorem from the actual R0 regular-class data, the global centered-difference bound
+and the global Lipschitz exponent -u + W(gradient u). Then local H1/chain-rule bridges, weak Hessian evolution and the trace estimate,
+weak Brascamp-Lieb, Stein/H^-1 transport and the spectral constant-8 assembly. No contract for these is dispatched by the integration.
+
+## Queue at the R0 source-law tensor integration (2026-10-14, history)
+
+The N11d package has Codex canonical acceptance (`N11d-integration/codex-final/ACCEPTANCE.json`), so the queue entry from that
+integration is history. N11d.5 and N11d.6 each have independent Codex acceptance and are canonically integrated with the actual R0
+tensor consumer ([R0 source-law record](../decisions/2026-10-14-r0-source-weak-tensor-integration.md)):
+- the exported 4/kappa centered-difference bound `Analysis.secondDifference_le_of_map_gradient` (`Analysis/Convex/GradientLipschitz.lean`);
+- the generic exponent producer `Analysis.exists_lipschitzWith_neg_add_comp_gradient` (`Analysis/Lipschitz/Gradient.lean`);
+- the promoted `Analysis.exists_regular_moment_weak_tensor` (`KLS/CEK/MomentRegularity.lean`). From the exact original R0 regular-source
+  hypotheses it produces all R0 fields, both original N11d inputs and actual weak, locally L2 derivatives of the Hessian entries (the potential's weak
+  third-derivative tensor).
+
+The audit is `research/audits/BKL/RegularMomentWeakTensorAudit.lean`. Codex's metadata review, a final full verification and Codex's
+canonical acceptance of this snapshot are pending at this documentation stage. This is a supporting result: the Goal endpoint
+`LetwinCompactBound` is not reached.
+
+Next: weak local calculus and chain rules for the produced tensor, then weak Hessian evolution and the integrated PSD trace estimate,
+weak Brascamp-Lieb, Stein/H^-1 transport and the spectral constant-8 assembly. The integration dispatches no contract for these.
+
+## Queue at the weak product integration (2026-10-15, history)
+
+The R0 source-law package has a passing full receipt and Codex canonical acceptance for snapshot `7db01f58…`
+(`R0-input-closure-integration/codex-final/ACCEPTANCE.json`); its queue entry above is history.
+
+W3p1 and W3p2 each have independent Codex acceptance and are canonically integrated in `Analysis/WeakDerivative.lean`
+([weak product record](../decisions/2026-10-15-weak-product-integration.md)):
+- the global-L2 weak product `HasWeakDerivAlong.mul_of_memLp_two` (global L1 product with its directional weak derivative along one
+  fixed direction; no full-gradient W1,1 claim);
+- the bounded local product `HasWeakDerivAlong.mul_of_locally_memLp_two`, with compact-local L2 derivative.
+
+The audit `research/audits/BKL/WeakHessianProductAudit.lean` applies both to the actual regular source law. It produces cutoff and uncut
+Hessian-entry products and squares with compact-local L2 derivatives built from the produced tensor T, which consists of the weak derivatives
+of the Hessian entries. This package's final full verification and Codex canonical acceptance are recorded in the ignored
+`W3-products-integration/` directory. It is a supporting result; the Goal endpoint `LetwinCompactBound` is not reached.
+
+Next:
+1. Determinant/cofactor/inverse and any other genuinely missing chain interfaces for the weak Hessian.
+2. Weak Hessian evolution and the integrated PSD trace estimate.
+3. Weak Brascamp-Lieb, Stein/H^-1 transport and the spectral constant-8 assembly.
+
+The integration dispatches no contract for these.
+
+## Queue at the weak polynomial integration (2026-10-15, history)
+
+The weak product package has a passing full receipt and Codex canonical acceptance for snapshot `cb4d39f4…`
+(`W3-products-integration/codex-final/ACCEPTANCE.json`); its queue entry above is history.
+
+W3p3-W3p6 each have independent Codex acceptance. They are canonically integrated
+([weak polynomial record](../decisions/2026-10-15-weak-polynomial-integration.md)):
+- finite weak linear combinations and finite bounded products in `Analysis/WeakDerivative.lean`;
+- the weak determinant and the trace quadratic tr(B A B A) for arbitrary real B in the new `Analysis/Matrix/WeakDerivative.lean`.
+
+All are first derivatives along one fixed direction, with compact-local L2 densities; finite linearity needs no boundedness, while
+the product and matrix theorems take L-infinity factors or entries. The audit
+`research/audits/BKL/WeakHessianPolynomialAudit.lean` applies them to the actual regular source law. This package's final full
+verification and Codex canonical acceptance are recorded in the ignored `W3-polynomials-integration/` directory. It is a supporting
+result; the Goal endpoint `LetwinCompactBound` is not reached.
+
+Next steps, in order:
+1. Identify the accepted weak determinant polynomial density with the existing pointwise Jacobi algebra (actual a.e. positive
+   determinant and log-det equation); then the weak inverse, chain and testing interfaces.
+2. The weak counterpart of the source height cutoffs (Appendix A.4) and their A.5 consumption. The smooth A.4 cannot be used for the
+   actual C1/Lipschitz-gradient potential. Tensor products in the evolution density are only locally L1. See
+   `SOURCE-INTEGRATION-BOUNDARY-REVIEW.md` in the control directory.
+3. Weak Hessian evolution and the integrated PSD trace estimate.
+4. Weak Brascamp-Lieb, Stein/H^-1 transport and the spectral constant-8 assembly.
+
+The integration dispatches no contract for these.
+
+## Queue at the weak Jacobi-density integration (2026-10-15, history)
+
+The weak polynomial package has a passing full receipt and Codex canonical acceptance for snapshot `25732189…`
+(`W3-polynomials-integration/codex-final/ACCEPTANCE.json`); its queue entry above is history.
+
+J1, the full determinant-density identification, exhausted naturally on instance-path errors; its history is preserved. The smaller scalar
+J1a was independently accepted. The original full J1 statement `Analysis.fderiv_det_eq_sum_permutation` is canonically integrated in
+`Analysis/Matrix/DeterminantDerivative.lean`, assembled via an existing Mathlib directional-derivative API
+([weak Jacobi record](../decisions/2026-10-15-weak-jacobi-density-integration.md)). The audit
+`research/audits/BKL/WeakDeterminantJacobiAudit.lean` identifies, almost everywhere, the weak determinant density of the actual Hessian
+with det(H) tr(H^-1 T_k).
+
+This package's final full verification and Codex canonical acceptance are recorded in the ignored `J1-integration/` directory. It is a
+supporting result; the Goal endpoint `LetwinCompactBound` is not reached.
+
+Next:
+1. Derive or reuse the exponent derivative with a weak exp / a.e. transport consumer interface. The existing private
+   `ae_fderiv_mongeAmpere_exponent` is not to be re-proved.
+2. Weak inverse, log-det and testing interfaces.
+3. Weak source height cutoffs A.4/A.5, with locally L1 right-hand sides and locally L2 flux (not the old N13c L2 right-hand side).
+4. Weak Hessian evolution and the integrated PSD trace estimate.
+5. Weak Brascamp-Lieb, Stein/H^-1 transport and the spectral constant-8 assembly.
+
+The integration dispatches no contract for these.
+
+## Current queue (updated 2026-10-15 at the publication checkpoint)
+
+Canonical supports reach the actual-source first weak Monge–Ampère identity (2.4), with every
+original R0 field retained. Snapshot `d7503d7e…` passed full verification
+(`build/verification/20261015T004538.149290Z/report.json`) and Codex canonical acceptance
+(`EX-first-MA-integration/canonical-independent/ACCEPTANCE.json` in the ignored control directory).
+This receipt predates the documentation cleanup and cannot certify its later metadata.
+
+The [current handoff](../../HANDOFF.md) owns live evidence, scratch status and coordination;
+the [proof path](../progress/PROOF-PATH.md) owns the source-to-Lean reading order and remaining
+obligations. Historical queues above do not override them. E3 is independently accepted scratch;
+E4 has only an interface/client preflight. Neither is canonically integrated.
+
+The owner authorized one documentation and accepted-proof commit/push at this checkpoint.
+That authorization does not close `LetwinCompactBound`, include scratch candidates, authorize
+remote CI, or resume the other three stages. The original exact endpoint and proof-acceptance
+protocol remain unchanged.

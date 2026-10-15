@@ -1831,7 +1831,9 @@ addressed.
   \leanok
   \uses{lem:letwin-inverse-hessian-derivative}
   Jacobi's formula $D(\det)(M)[N]=\det M\,\mathrm{tr}(M^{-1}N)$ and $D(\log\det)(M)[N]=\mathrm{tr}(M^{-1}N)$ for
-  real square matrices, also along a differentiable matrix field.  For a smooth $\varphi$ with positive
+  real square matrices $M$ with $\det M\ne0$ (the determinant formula assumes $\det M$ is a unit, i.e.\ $M$ invertible), and the
+  $\log\det$ formula along a differentiable matrix field $x\mapsto M(x)$ at points with $\det M(x)\ne0$. (The permutation formula of
+  Lemma~\ref{lem:determinant-permutation-differential} has no such restriction and covers singular matrices.)  For a smooth $\varphi$ with positive
   definite Hessian, $D(\log\det\nabla^2\varphi)[v]=\sum_{a,c}(\nabla^2\varphi)^{-1}_{ac}\,\partial_v\partial_{ac}\varphi$.
   Hence Letwin \cite{Letwin2026QuadraticKLS}, display~(2.4): if $\log\det\nabla^2\varphi=-\varphi+V\circ\nabla\varphi$
   (the zero-order Monge--Amp\`ere equation~(2.2), a hypothesis) with $V$ smooth on an open neighbourhood of
@@ -3624,4 +3626,338 @@ form taken by the variance estimate for isotropic $\mu$), then
   integrability; the two weak generator identities give equal integrals for $\eta Lw$ and $wL\eta$, and $0\le w\le D\|h\|^2$
   bounds $w(\eta+L\eta)$ by $D\|h\|^2|\eta+L\eta|$. The determinant identity $\det\nabla^2u=e^{-u+V(\nabla u)}$ follows from the
   positive determinant and the log-determinant data. No $C^1$ to $C^2$ promotion is used.
+\end{proof}
+
+\begin{lemma}[Uniform smooth majorant for translated compact cutoffs]
+  \label{lem:uniform-translated-cutoff-majorant}
+  \lean{FunctionalInequalities.Analysis.exists_smooth_compact_translate_majorant}
+  \leanok
+  Let $u$ and $\chi$ be continuous on $\mathbb R^n$, $\chi$ compactly supported, and $v\in\mathbb R^n$. There is one
+  nonnegative compactly supported $\eta\in C^\infty$ with $\chi(x+tv)^2e^{u(x)}\le\eta(x)$ for every $x$ and every $|t|\le1$.
+  Every finite dimension and every direction are included; no energy or envelope premise is assumed.
+\end{lemma}
+\begin{proof}
+  \leanok
+  The support of $\chi$ lies in a ball of radius $r$; on the closed ball of radius $R=|r|+\|v\|+1$ the functions $\chi^2$ and
+  $e^u$ are bounded, and a smooth bump equal to $1$ on that ball, multiplied by the product of the two bounds, dominates all
+  translates.
+\end{proof}
+
+\begin{lemma}[Hessian entries: local and cutoff $L^2$]
+  \label{lem:hessian-entry-local-l2}
+  \lean{FunctionalInequalities.Probability.Stein.memLp_hessianMatrix_entry_of_isCompact,
+        FunctionalInequalities.Probability.Stein.memLp_cutoff_mul_hessianMatrix_entry}
+  \leanok
+  \uses{lem:hessian-entry-measurable-bounded}
+  If $\nabla u$ is $G$-Lipschitz, every total coordinate Hessian entry $H_u(\cdot)_{ij}$ is in $L^2$ of Lebesgue measure
+  restricted to any compact set, and $\chi\,H_u(\cdot)_{ij}$ is in $L^2(\mathbb R^n)$ for every continuous compactly supported
+  $\chi$. No differentiability premise; all finite dimensions; Lebesgue measure on the whole space is not treated as finite.
+\end{lemma}
+\begin{proof}
+  \leanok
+  The entry is measurable and bounded by $G$; a compact set has finite measure. The cutoff product is bounded on the compact
+  support of $\chi$ and vanishes outside it, so it is the indicator extension of a function in the restricted $L^2$ space.
+\end{proof}
+
+\begin{lemma}[Cutoff difference energy of Hessian entries]
+  \label{lem:letwin-cutoff-hessian-difference-energy}
+  \lean{FunctionalInequalities.Analysis.exists_hessian_cutoff_sq_difference_bound}
+  \leanok
+  \uses{lem:uniform-translated-cutoff-majorant, lem:hessian-entry-local-l2, lem:letwin-hessian-increment-energy,
+        lem:letwin-hessian-increment-integrability}
+  Let $u\in C^1$ be convex with $G$-Lipschitz gradient, $V\in C^1$ convex, $-u+V(\nabla u)$ $L_F$-Lipschitz, $K>0$, and almost
+  everywhere $\nabla^2u$ positive definite with $\log\det\nabla^2u=-u+V(\nabla u)$ and $\nabla^2u\le K$; assume the global
+  centered-difference bound $u(x+h)+u(x-h)-2u(x)\le D\|h\|^2$ for all $x,h$. Let $\chi\in C^1$ be compactly supported,
+  $v\in\mathbb R^n$ and $i,j$ arbitrary indices. There is $C\ge0$ such that for every $t\ne0$ with $|t|\le1$,
+  \[
+    \int\bigl(\chi(x+tv)H_u(x+tv)_{ij}-\chi(x)H_u(x)_{ij}\bigr)^2\,dx\le C\,t^2 .
+  \]
+  No test function or single shift is an input: the compactly supported test used in the proof is produced, and the global
+  translation bound $C\,t^2$ is a conclusion, while the global centered-difference bound is an original input. Every finite
+  dimension is included.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Split the difference as $\chi(x+tv)(H(x+tv)-H(x))+H(x)(\chi(x+tv)-\chi(x))$. The first square is dominated through the uniform
+  majorant by the weighted increment density, whose integral is at most $A t^2$ by Lemma~\ref{lem:letwin-hessian-increment-energy}
+  at $h=tv$. The second is at most $G^2L^2\|v\|^2t^2$ on the compact support of the majorant and zero outside it. Translation
+  invariance and the cutoff $L^2$ statement justify integrability.
+\end{proof}
+
+\begin{lemma}[Weak derivatives of the Hessian entries (third-derivative tensor)]
+  \label{lem:letwin-weak-third-derivative}
+  \lean{FunctionalInequalities.Analysis.exists_weak_third_derivative}
+  \leanok
+  \uses{lem:letwin-cutoff-hessian-difference-energy, lem:hessian-entry-local-l2}
+  Weak supporting step toward Letwin \cite{Letwin2026QuadraticKLS}, Theorem~2.5. Let $u\in C^1$ be convex with $G$-Lipschitz
+  gradient, $V\in C^1$ convex, $-u+V(\nabla u)$ $L_F$-Lipschitz, $K>0$, and almost everywhere $\nabla^2u$ positive definite with
+  $\log\det\nabla^2u=-u+V(\nabla u)$ and $\nabla^2u\le K$, and assume the global centered-difference bound
+  $u(x+h)+u(x-h)-2u(x)\le D\|h\|^2$ for all $x,h$. Then there is a tensor $T$ such that for all coordinate indices $k,i,j$ the
+  entry $H_u(\cdot)_{ij}$ has the weak derivative $T(\cdot,k,i,j)$ along $e_k$, and $T(\cdot,k,i,j)$ is $L^2$ on every compact
+  set. This is the original frozen statement; it has no cutoff or test-function input, and every finite dimension is included.
+  No given tensor, $H^1$ or cutoff square-difference-energy conclusion is assumed. The result is the original weak, locally
+  $L^2$ tensor support; it does not establish global $C^2$ or smooth regularity, the trace bound or Theorems~2.5 and~1.2.
+  The tensor $T(\cdot,k,i,j)=\partial_k H_u(\cdot)_{ij}$ consists of weak first derivatives of the Hessian entries, i.e.\ the
+  weak third-derivative tensor of $u$. This generic theorem keeps its centered-difference and exponent Lipschitz inputs; for
+  the actual regular source class they are discharged in Lemma~\ref{lem:letwin-regular-moment-weak-tensor}.
+\end{lemma}
+\begin{proof}
+  \leanok
+  For each $k,i,j$ apply the cutoff gluing criterion for weak derivatives with the compact-local $L^2$ statement; for each
+  compactly supported $C^1$ cutoff, the difference-quotient criterion applies to the cutoff product with the constant from
+  Lemma~\ref{lem:letwin-cutoff-hessian-difference-energy}. Choosing the resulting derivatives for all indices gives $T$.
+\end{proof}
+
+\begin{lemma}[Centered second differences of the regular moment potential]
+  \label{lem:moment-map-second-difference}
+  \lean{FunctionalInequalities.Analysis.secondDifference_le_of_map_gradient}
+  \leanok
+  Let $u$ be convex, Lipschitz and $C^1$ with $\int e^{-u}=1$, let $K$ be compact and convex, $V\in C^1$ with
+  $V-\frac\kappa2\|\cdot\|^2$ convex for $\kappa>0$, and suppose $(\nabla u)_\#(e^{-u}dx)=1_Ke^{-V}dx$. Then
+  $u(x+h)+u(x-h)-2u(x)\le\frac4\kappa\|h\|^2$ for all $x,h$, in every finite dimension. No difference bound is assumed.
+\end{lemma}
+\begin{proof}
+  \leanok
+  This is the step of the existing proof of the $16/\kappa$-Lipschitz gradient theorem preceding co-coercivity: the maximum
+  principle for penalized second differences of mollified potentials. That theorem now consumes this statement; its own
+  statement is unchanged.
+\end{proof}
+
+\begin{lemma}[Lipschitz exponent from a Lipschitz potential and gradient]
+  \label{lem:lipschitz-gradient-exponent}
+  \lean{FunctionalInequalities.Analysis.exists_lipschitzWith_neg_add_comp_gradient}
+  \leanok
+  If $u$ is $L$-Lipschitz, its total gradient is $G$-Lipschitz and $V\in C^1$, then $-u+V(\nabla u)$ is globally Lipschitz
+  with some constant $L_F$. Every finite dimension; $L$ and $G$ may vanish. No differentiability of $u$, convexity, equation,
+  bounded range or derivative bound is assumed.
+\end{lemma}
+\begin{proof}
+  \leanok
+  The gradient takes values in the closed ball of radius $L$, on which the locally Lipschitz $V$ is $C$-Lipschitz; hence
+  $V\circ\nabla u$ is $CG$-Lipschitz and $L_F=L+CG$.
+\end{proof}
+
+\begin{lemma}[Regular moment potential: weak third-derivative tensor]
+  \label{lem:letwin-regular-moment-weak-tensor}
+  \lean{FunctionalInequalities.Analysis.exists_regular_moment_weak_tensor}
+  \leanok
+  \uses{lem:letwin-weak-regular-moment-potential, lem:moment-map-second-difference, lem:lipschitz-gradient-exponent,
+        lem:letwin-weak-third-derivative}
+  Under the hypotheses of Lemma~\ref{lem:letwin-weak-regular-moment-potential} ($n>0$, $K$ compact convex with nonempty
+  interior, $W$ smooth with $W-\frac\kappa2\|\cdot\|^2$ convex for $\kappa>0$, $\mu=1_Ke^{-W}dx$ an isotropic probability),
+  there are $u$, $L$, $L_F$ and a tensor $T$ such that $u$ has every conclusion of that lemma, $-u+W(\nabla u)$ is
+  $L_F$-Lipschitz, $u(x+h)+u(x-h)-2u(x)\le\frac4\kappa\|h\|^2$ for all $x,h$, and for all coordinate indices $k,i,j$ the
+  Hessian entry $H_u(\cdot)_{ij}$ has the weak derivative $T(\cdot,k,i,j)$ along $e_k$, which is $L^2$ on every compact set.
+  No difference, exponent, tensor, $H^1$, trace or main-bound premise is assumed. This is weak, locally $L^2$ Hessian
+  regularity; it does not establish global $C^2$ or smooth regularity, a gradient diffeomorphism, the trace bound or
+  Theorems~2.5 and~1.2.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Take $u$ from Lemma~\ref{lem:letwin-weak-regular-moment-potential}; the actual pushforward gives the centered-difference
+  bound by Lemma~\ref{lem:moment-map-second-difference} and the exponent constant by
+  Lemma~\ref{lem:lipschitz-gradient-exponent}; $W$ is convex as the sum of $W-\frac\kappa2\|\cdot\|^2$ and a convex quadratic.
+  Lemma~\ref{lem:letwin-weak-third-derivative} with cap $16/\kappa$ produces $T$.
+\end{proof}
+
+\begin{lemma}[Weak product rule for global $L^2$ factors]
+  \label{lem:weak-product-global-l2}
+  \lean{FunctionalInequalities.Analysis.HasWeakDerivAlong.mul_of_memLp_two}
+  \leanok
+  If $f$ and $g$ have weak derivatives $df$ and $dg$ along a direction $v$ of $\mathbb R^n$, and $f,df,g,dg\in L^2(\mathbb R^n)$,
+  then $fg\in L^1(\mathbb R^n)$ has the weak derivative $df\,g+f\,dg$ along $v$. Every finite dimension and every direction,
+  including zero, are included. Only the one direction $v$ is involved: membership of $fg$ in the full-gradient space $W^{1,1}$ is
+  not asserted, nor is an $L^2$ bound for the derivative. No boundedness, smoothness or $C^1/C^2$ regularity of the rough factors
+  and no finite volume is assumed.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Mollify $g$ by a shrinking normalized bump. The mollifications are smooth, converge to $g$ in $L^2$, and their derivative is the
+  mollification of $dg$. Test the weak derivative of $f$ against $\psi g_m$ and pass to the limit in the three $L^2$ pairings.
+\end{proof}
+
+\begin{lemma}[Weak product rule for bounded factors with locally $L^2$ derivatives]
+  \label{lem:weak-product-local-bounded}
+  \lean{FunctionalInequalities.Analysis.HasWeakDerivAlong.mul_of_locally_memLp_two}
+  \leanok
+  \uses{lem:weak-product-global-l2}
+  If $f,g\in L^\infty(\mathbb R^n)$ have weak derivatives $df,dg$ along $v$ that are in $L^2$ on every compact set, then the uncut
+  product $fg$ has the weak derivative $df\,g+f\,dg$ along $v$, and this derivative is $L^2$ on every compact set. Every finite
+  dimension and every direction are included; $f,df,g,dg$ are not assumed globally $L^2$, and Lebesgue measure on the whole space
+  is not treated as finite. Applied to the actual regular moment potential (audit clients), this gives the weak derivatives
+  $T_{kij}H_{ab}+H_{ij}T_{kab}$ of products of bounded Hessian entries, where $T_{kij}$ is the weak derivative of $H_{ij}$ along
+  $e_k$; it is not determinant or inverse calculus, Hessian evolution or the trace bound.
+\end{lemma}
+\begin{proof}
+  \leanok
+  For a test $\psi$ choose a smooth bump $\chi$ equal to one on a neighbourhood of its support. The cutoff factors $\chi f$ and
+  $\chi g$ have weak derivatives with global $L^2$ data by H\"older's inequality, so Lemma~\ref{lem:weak-product-global-l2}
+  applies; on the support of $\psi$ the cutoff is one with vanishing derivative, which removes it from the tested identity.
+\end{proof}
+
+\begin{lemma}[Finite weak linear combinations]
+  \label{lem:weak-finite-linear-combination}
+  \lean{FunctionalInequalities.Analysis.hasWeakDerivAlong_finsetSum_mul}
+  \leanok
+  Let $s$ be a finite set (possibly empty) and $c_i\in\mathbb R$. If each $f_i$ has the weak derivative $df_i$ along a fixed
+  direction $v$ of $\mathbb R^n$ and each $df_i$ is $L^2$ on every compact set, then $\sum_{i\in s}c_if_i$ has the weak derivative
+  $\sum_{i\in s}c_i\,df_i$ along $v$, and this derivative is $L^2$ on every compact set. Every finite dimension and direction are
+  included; no global $L^2$, boundedness or $C^1/C^2$ regularity of the $f_i$ is assumed.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Local integrability and compact-local $L^2$ are preserved by scalar multiples and finite sums; the tested identity is the finite
+  sum of the component identities.
+\end{proof}
+
+\begin{lemma}[Finite products of bounded weak factors]
+  \label{lem:weak-finite-product}
+  \lean{FunctionalInequalities.Analysis.hasWeakDerivAlong_finsetProd_of_locally_memLp_two}
+  \leanok
+  \uses{lem:weak-product-local-bounded}
+  If $f_i\in L^\infty(\mathbb R^n)$, $i\in s$ finite (possibly empty), have weak derivatives $df_i$ along $v$ that are $L^2$ on every
+  compact set, then $\prod_{i\in s}f_i$ has the weak derivative $\sum_{i\in s}df_i\prod_{j\in s\setminus\{i\}}f_j$ along $v$, which
+  is $L^2$ on every compact set. The empty product $1$ has derivative $0$. Signed factors and every dimension and direction are
+  included; no global $L^2$, $C^1/C^2$ regularity of the rough factors or finite volume is assumed.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Induction on $s$ with the bounded binary product rule; a finite product of $L^\infty$ factors is $L^\infty$.
+\end{proof}
+
+\begin{lemma}[Weak derivative of the determinant of a bounded matrix field]
+  \label{lem:weak-determinant}
+  \lean{FunctionalInequalities.Analysis.hasWeakDerivAlong_det_of_locally_memLp_two}
+  \leanok
+  \uses{lem:weak-finite-product, lem:weak-finite-linear-combination}
+  Let $\iota$ be a finite index type (possibly empty) and $A:\mathbb R^d\to\mathbb R^{\iota\times\iota}$ have $L^\infty$ entries with
+  weak derivatives $DA_{ij}$ along $v$ that are $L^2$ on every compact set. Then $\det A$ has the weak derivative
+  \[
+    \sum_{\sigma}\operatorname{sign}\sigma\sum_{i}DA_{\sigma(i)i}\prod_{j\ne i}A_{\sigma(j)j}
+  \]
+  along $v$, which is $L^2$ on every compact set. The ambient dimension $d$ is independent of $\iota$; no symmetry, positivity or
+  invertibility of $A$ is assumed. This is not inverse or log-determinant calculus.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Apply Lemma~\ref{lem:weak-finite-product} to each permutation product and Lemma~\ref{lem:weak-finite-linear-combination} to the
+  signed sum, then use the Leibniz formula for the determinant.
+\end{proof}
+
+\begin{lemma}[Weak derivative of the trace quadratic $\operatorname{tr}(BABA)$]
+  \label{lem:weak-trace-quadratic}
+  \lean{FunctionalInequalities.Analysis.hasWeakDerivAlong_trace_quadratic_of_locally_memLp_two}
+  \leanok
+  \uses{lem:weak-product-local-bounded, lem:weak-finite-linear-combination}
+  For every constant real $n\times n$ matrix $B$ and every $A:\mathbb R^d\to\mathbb R^{n\times n}$ as in
+  Lemma~\ref{lem:weak-determinant}, $\operatorname{tr}(BABA)$ has the weak derivative $2\operatorname{tr}(BAB\,DA)$ along $v$, which
+  is $L^2$ on every compact set. The dimensions $d$ and $n$ are independent and may vanish; $B$ need not be symmetric, positive
+  semidefinite or invertible. Applied to the actual regular moment potential (audit clients), this is the first weak derivative
+  $2\operatorname{tr}(BHBT_k)$ of $\operatorname{tr}(BHBH)$; it is not the generator identity (2.8)/(2.10), Hessian evolution or
+  the integrated trace estimate of Theorem~2.5.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Expand the trace as a finite sum of products of two entries with coefficients $B_{ab}B_{ce}$, apply the bounded binary product rule
+  to each and Lemma~\ref{lem:weak-finite-linear-combination} to the sum, and identify the result with finite matrix identities.
+\end{proof}
+
+\begin{lemma}[Determinant polynomial density and the outer Jacobi differential]
+  \label{lem:determinant-permutation-differential}
+  \lean{FunctionalInequalities.Analysis.fderiv_det_eq_sum_permutation}
+  \leanok
+  \uses{lem:weak-determinant, lem:letwin-monge-ampere-first}
+  For every finite index type $\iota$ (possibly empty) and all real matrices $A,N\in\mathbb R^{\iota\times\iota}$, singular or not,
+  \[
+    D(\det)(A)[N]=\sum_{\sigma}\operatorname{sign}\sigma\sum_{i}N_{\sigma(i)i}\prod_{j\ne i}A_{\sigma(j)j}.
+  \]
+  Hence the signed permutation-polynomial density of Lemma~\ref{lem:weak-determinant} is the outer differential of the determinant
+  applied to the weak derivative field. For the actual regular moment potential (audit client), where the Hessian is almost
+  everywhere positive definite, Jacobi's formula of Lemma~\ref{lem:letwin-monge-ampere-first} identifies this density with
+  $\det(H)\operatorname{tr}(H^{-1}T_k)$ almost everywhere. By itself this is not weak $\log\det$ or inverse calculus, the exponent chain rule or
+  the weak first Monge--Amp\`ere derivative~(2.4).
+\end{lemma}
+\begin{proof}
+  \leanok
+  The derivative of $t\mapsto\det(A+tN)$ at $0$ is computed entrywise from the Leibniz formula; the existing directional-derivative
+  identity for the differentiable map $\det$ equates it with $D(\det)(A)[N]$.
+\end{proof}
+
+\begin{lemma}[The exponential is Lipschitz on a half-line]
+  \label{lem:exp-lipschitz-half-line}
+  \lean{FunctionalInequalities.Analysis.lipschitzOnWith_exp_Iic}
+  \leanok
+  For every real $C$, negative values included, $\exp$ is $e^{C}$-Lipschitz on $(-\infty,C]$. No lower bound is assumed.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Mean-value inequality on the convex half-line: $|\exp'|=\exp\le e^{C}$ there.
+\end{proof}
+
+\begin{lemma}[Weak directional derivatives under almost-everywhere changes]
+  \label{lem:weak-derivative-ae-congr}
+  \lean{FunctionalInequalities.Analysis.HasWeakDerivAlong.congr_ae}
+  \leanok
+  On every finite-dimensional real inner-product space and along every direction $v$: if $f$ has the weak derivative $g$ along $v$,
+  $f=f'$ almost everywhere and $g=g'$ almost everywhere, then $f'$ has the weak derivative $g'$ along $v$; the local integrability of
+  $f'$ and $g'$ is produced, not assumed.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Local integrability is invariant under a.e.\ equality, and both sides of the testing identity are integrals that change only on null
+  sets.
+\end{proof}
+
+\begin{lemma}[Almost-everywhere derivative of the Monge--Amp\`ere exponent]
+  \label{lem:ae-mongeampere-exponent}
+  \lean{FunctionalInequalities.Analysis.ae_fderiv_mongeAmpere_exponent}
+  \leanok
+  Let $u\in C^1(\mathbb R^n)$ have a Lipschitz gradient and let $V\in C^1$. For almost every $x$ and every coordinate $j$,
+  \[
+    \partial_j\bigl(-u+V(\nabla u)\bigr)(x)=-\partial_ju(x)+\sum_k H_u(x)_{jk}\,\partial_kV(\nabla u(x)).
+  \]
+  No convexity, $C^2$ or smooth-Hessian regularity, or Monge--Amp\`ere equation is assumed. (This formula was already proved as a
+  compiler-private theorem; only
+  its visibility changed.)
+\end{lemma}
+\begin{proof}
+  \leanok
+  The Lipschitz gradient is differentiable almost everywhere (Rademacher); at such points the chain rule applies to $V\circ\nabla u$ and
+  the Hessian matrix is the derivative of the gradient.
+\end{proof}
+
+\begin{lemma}[Regular moment potential: first weak Monge--Amp\`ere derivative]
+  \label{lem:letwin-regular-moment-weak-first-ma}
+  \lean{FunctionalInequalities.Analysis.exists_regular_moment_weak_first_derivative}
+  \leanok
+  \uses{lem:letwin-regular-moment-weak-tensor, lem:weak-determinant, lem:determinant-permutation-differential,
+        lem:letwin-monge-ampere-first, lem:ae-mongeampere-exponent, lem:exp-lipschitz-half-line,
+        lem:weak-derivative-ae-congr}
+  Under the hypotheses of Lemma~\ref{lem:letwin-regular-moment-weak-tensor} there are $u$, $L$, $L_F$ and $T$ with every conclusion
+  of that lemma (the normalization and the actual gradient pushforward are produced, not assumed) and in addition, with
+  $H=H_u$ and $T_k=(T(\cdot,k,i,j))_{ij}$:
+  \begin{itemize}
+    \item $\exp(-u+W(\nabla u))$ is globally Lipschitz;
+    \item for every coordinate $k$, $\det H$ has the weak derivative $\det(H)\operatorname{tr}(H^{-1}T_k)$ along $e_k$, which is $L^2$
+      on every compact set;
+    \item $\log\det H$ has the weak derivative $\operatorname{tr}(H^{-1}T_k)$ along $e_k$;
+    \item almost everywhere,
+      $\operatorname{tr}(H^{-1}T_k)=\partial_k\bigl(-u+W(\nabla u)\bigr)=-\partial_ku+\sum_aH_{ka}\,\partial_aW(\nabla u)$.
+  \end{itemize}
+  The last identity is the weak, actual-source form of Letwin \cite{Letwin2026QuadraticKLS}, display~(2.4). The $\log\det$
+  identification holds for this actual source, whose Hessian is almost everywhere positive definite with $\log\det H=-u+W(\nabla u)$;
+  it is not unrestricted $\log\det$ calculus for rough matrix fields. No $C^1$-to-$C^2$ step, given tensor, given equation or trace
+  estimate is used. The twice-differentiated Lemma~2.4 is not obtained: its second evolution identity~(2.6) and the
+  positivity/trace integration are not supplied, and neither are Theorems~2.5 and~1.2.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Coercivity of the normalized convex Lipschitz $u$ bounds the exponent $F=-u+W(\nabla u)$ above by some $C$; since $F$ is
+  $L_F$-Lipschitz, $e^F$ is Lipschitz by Lemma~\ref{lem:exp-lipschitz-half-line}. The Lipschitz function $e^F$ has the weak
+  derivative $e^F\partial_kF$ (its almost-everywhere classical derivative), which Lemma~\ref{lem:weak-derivative-ae-congr} transfers to
+  $\det H=e^F$ almost everywhere. Uniqueness of weak derivatives identifies the signed permutation density of
+  Lemma~\ref{lem:weak-determinant} with $e^F\partial_kF$; by Lemma~\ref{lem:determinant-permutation-differential} and Jacobi's formula
+  (Lemma~\ref{lem:letwin-monge-ampere-first}) that density is $\det(H)\operatorname{tr}(H^{-1}T_k)$ almost everywhere, and cancelling
+  $\det H>0$ gives $\operatorname{tr}(H^{-1}T_k)=\partial_kF$. Lemma~\ref{lem:ae-mongeampere-exponent} gives the explicit right-hand
+  side. Finally $\log\det H=F$ almost everywhere, so the weak derivative of the Lipschitz $F$ transfers to $\log\det H$.
 \end{proof}

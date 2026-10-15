@@ -1,3 +1,4 @@
+import FunctionalInequalities.Analysis.Lipschitz.Exponential
 import FunctionalInequalities.L2.Duality
 import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Approximation
 import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Perimeter
@@ -75,6 +76,7 @@ import FunctionalInequalities.Energy.Cheeger.Basic
 import FunctionalInequalities.KLS.LogConcave.Cheeger
 import FunctionalInequalities.Analysis.Lipschitz.VectorCoarea
 import FunctionalInequalities.Analysis.Lipschitz.Local
+import FunctionalInequalities.Analysis.Lipschitz.Gradient
 import FunctionalInequalities.Analysis.Sard.Sharp
 import FunctionalInequalities.KLS.Geometry.Cheeger.Equality
 import FunctionalInequalities.KLS.Geometry.Cheeger.BVConstant
@@ -154,6 +156,7 @@ import FunctionalInequalities.Analysis.IteratedDerivative.Symmetry
 import FunctionalInequalities.Analysis.IteratedDerivative.Bilinear
 import FunctionalInequalities.Analysis.IteratedDerivative.InnerProduct
 import FunctionalInequalities.Analysis.Matrix.Trace
+import FunctionalInequalities.Analysis.Matrix.WeakDerivative
 import FunctionalInequalities.Analysis.Majorization
 import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.InteriorRegularity
 import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Range
@@ -316,7 +319,9 @@ import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.LipschitzHe
 import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.WeakInverseHessian
 import FunctionalInequalities.Analysis.Convex.Alexandrov
 import FunctionalInequalities.Analysis.Convex.Viscosity
+import FunctionalInequalities.Analysis.Cutoff.Translation
 import FunctionalInequalities.Analysis.Convex.HessianIncrement
+import FunctionalInequalities.Analysis.Convex.HessianRegularity
 import FunctionalInequalities.Analysis.Convex.Normalization
 import FunctionalInequalities.Analysis.Convex.Caffarelli
 import FunctionalInequalities.Analysis.Convex.SecondOrder

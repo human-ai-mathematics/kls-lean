@@ -21,8 +21,9 @@ The proof applies the weak inverse-Hessian divergence identity and the inverse-H
 `Analysis/Matrix/Piola.lean` to weighted gradient tests. Its one-use supports are private: the Lipschitz constant and
 compact support of the test `η e^{−u} ∂ᵢw`, its almost-everywhere derivative (with two coordinate lemmas reproduced
 privately from `Probability/Stein/HessianKernel.lean`, which requires only differentiability of the gradient at the
-point), the almost-everywhere chain derivative of the Monge–Ampère exponent `−u + V(∇u)`, and a finite inverse-matrix
-cancellation. No `C²` regularity of `u` or `w` is used. These are supporting identities; Letwin Theorems 2.5 and 1.2
+point), and a finite inverse-matrix cancellation. The almost-everywhere chain derivative of the
+Monge–Ampère exponent `−u + V(∇u)` is also public as `ae_fderiv_mongeAmpere_exponent`,
+for use by the actual-source weak Monge–Ampère identification bridge. No `C²` regularity of `u` or `w` is used. These are supporting identities; Letwin Theorems 2.5 and 1.2
 are not proved here.
 -/
 
@@ -209,7 +210,7 @@ private lemma gradient_fderiv_coordinate {n : ℕ}
 
 /-- AE coordinate chain derivative of the Monge-Ampere right-hand exponent
 for Letwin (2.2), with C1 u and Lipschitz gradient, without a C2 premise. -/
-private theorem ae_fderiv_mongeAmpere_exponent {n : ℕ}
+theorem ae_fderiv_mongeAmpere_exponent {n : ℕ}
     {u V : EuclideanSpace ℝ (Fin n) → ℝ}
     (hu : ContDiff ℝ 1 u) {G : NNReal} (hG : LipschitzWith G (gradient u))
     (hV : ContDiff ℝ 1 V) :

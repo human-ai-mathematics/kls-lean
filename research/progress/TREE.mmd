@@ -82,6 +82,24 @@ flowchart LR
     WEAKGENINT["✓ Weak generator<br/>Density integrability"]
     INCINT["✓ Hessian increments<br/>Weighted integrability"]
     INCENERGY["✓ Hessian-increment energy<br/>Original N11b estimate"]
+    TRANSCUT["✓ Translated cutoffs<br/>Uniform smooth majorant"]
+    HESSL2["✓ Hessian entries<br/>Local and cutoff L2"]
+    HESSDIFF["✓ Cutoff Hessian entries<br/>Difference energy C t^2"]
+    WEAKTHIRD["✓ Weak third-derivative tensor<br/>Original N11d (Hessian entries)"]
+    SRCDIFF["✓ Moment potential<br/>Second differences ≤ 4/κ"]
+    EXPLIP["✓ Lipschitz exponent<br/>−u + V(∇u)"]
+    REGTENSOR["✓ Regular source law<br/>Weak third-derivative tensor"]
+    WPRODG["✓ Weak product<br/>Global L2 factors"]
+    WPRODL["✓ Weak product<br/>Bounded, local L2 derivative"]
+    WLIN["✓ Weak linearity<br/>Finite real combinations"]
+    WFPROD["✓ Weak product<br/>Finite bounded factors"]
+    WDET["✓ Weak determinant<br/>Permutation polynomial"]
+    WTRACE["✓ Weak trace quadratic<br/>tr(BABA), arbitrary B"]
+    WJAC["✓ Weak determinant density<br/>= outer Jacobi differential"]
+    EXPHALF["✓ Exponential Lipschitz<br/>on a half-line"]
+    WAECONGR["✓ Weak derivative<br/>a.e. transport"]
+    AEEXP["✓ A.e. exponent derivative<br/>−u + V(∇u)"]
+    WMA1["✓ Regular source law<br/>First weak Monge–Ampère (2.4)"]
     end
     KLS["○ KLS<br/>Dimension-free bound"]
     ANY{"OR<br/>Any completed route"}
@@ -152,8 +170,32 @@ flowchart LR
     INCINT --> INCENERGY
     WEAKGENINT --> INCENERGY
     WEAKGEN --> INCENERGY
+    HESSENT --> HESSL2
+    TRANSCUT --> HESSDIFF
+    HESSL2 --> HESSDIFF
+    INCINT --> HESSDIFF
+    INCENERGY --> HESSDIFF
+    HESSL2 --> WEAKTHIRD
+    HESSDIFF --> WEAKTHIRD
+    SRCDIFF --> REGTENSOR
+    EXPLIP --> REGTENSOR
+    REGMOM --> REGTENSOR
+    WEAKTHIRD --> REGTENSOR
+    WPRODG --> WPRODL
+    WPRODL --> WFPROD
+    WFPROD --> WDET
+    WLIN --> WDET
+    WPRODL --> WTRACE
+    WLIN --> WTRACE
+    WDET --> WJAC
+    REGTENSOR --> WMA1
+    WDET --> WMA1
+    WJAC --> WMA1
+    AEEXP --> WMA1
+    EXPHALF --> WMA1
+    WAECONGR --> WMA1
     classDef done fill:#dbeafe,stroke:#2563eb,color:#1e3a8a;
-    class ENERGY,F4,MT,FP,FC,EQ,NORM,DENS,FRONT,CB,ONE,CONST,FORMS,MEAS,GRAPH,REG,CRIT,C1,WHIT,LIP,GG,REC,FWD,SARD,SCI,CUT,REV,MINK,BV,FLOG,VREG,VZERO,VR123,VR4,VFULL,SEMI,MARKOV,DECAY,GAUSS,GSTAB,VLIP,WEAKHESS,CEKMAP,REGMOM,WEAKINVINT,WEAKGEN,HESSENT,CDIFF,WEAKGENINT,INCINT,INCENERGY done;
+    class ENERGY,F4,MT,FP,FC,EQ,NORM,DENS,FRONT,CB,ONE,CONST,FORMS,MEAS,GRAPH,REG,CRIT,C1,WHIT,LIP,GG,REC,FWD,SARD,SCI,CUT,REV,MINK,BV,FLOG,VREG,VZERO,VR123,VR4,VFULL,SEMI,MARKOV,DECAY,GAUSS,GSTAB,VLIP,WEAKHESS,CEKMAP,REGMOM,WEAKINVINT,WEAKGEN,HESSENT,CDIFF,WEAKGENINT,INCINT,INCENERGY,TRANSCUT,HESSL2,HESSDIFF,WEAKTHIRD,SRCDIFF,EXPLIP,REGTENSOR,WPRODG,WPRODL,WLIN,WFPROD,WDET,WTRACE,WJAC,EXPHALF,WAECONGR,AEEXP,WMA1 done;
     classDef partial fill:#fff3df,stroke:#c88719,color:#66420d;
     class FAND,BE,HEAT partial;
     classDef todo fill:#fee2e2,stroke:#dc2626,color:#991b1b;
@@ -227,3 +269,21 @@ flowchart LR
     click WEAKGENINT href "../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakInverseHessian.lean" "Weak generator — Density integrability" _blank
     click INCINT href "../../formalization/FunctionalInequalities/Analysis/Convex/HessianIncrement.lean" "Hessian increments — Weighted integrability" _blank
     click INCENERGY href "../../formalization/FunctionalInequalities/Analysis/Convex/HessianIncrement.lean" "Hessian-increment energy — Original N11b estimate" _blank
+    click TRANSCUT href "../../formalization/FunctionalInequalities/Analysis/Cutoff/Translation.lean" "Translated cutoffs — Uniform smooth majorant" _blank
+    click HESSL2 href "../../formalization/FunctionalInequalities/Probability/Stein/HessianKernel.lean" "Hessian entries — Local and cutoff L2" _blank
+    click HESSDIFF href "../../formalization/FunctionalInequalities/Analysis/Convex/HessianIncrement.lean" "Cutoff Hessian entries — Difference energy C t^2" _blank
+    click WEAKTHIRD href "../../formalization/FunctionalInequalities/Analysis/Convex/HessianRegularity.lean" "Weak third-derivative tensor — Original N11d (Hessian entries)" _blank
+    click SRCDIFF href "../../formalization/FunctionalInequalities/Analysis/Convex/GradientLipschitz.lean" "Moment potential — Second differences ≤ 4/κ" _blank
+    click EXPLIP href "../../formalization/FunctionalInequalities/Analysis/Lipschitz/Gradient.lean" "Lipschitz exponent — −u + V(∇u)" _blank
+    click REGTENSOR href "../../formalization/FunctionalInequalities/KLS/CEK/MomentRegularity.lean" "Regular source law — Weak third-derivative tensor" _blank
+    click WPRODG href "../../formalization/FunctionalInequalities/Analysis/WeakDerivative.lean" "Weak product — Global L2 factors" _blank
+    click WPRODL href "../../formalization/FunctionalInequalities/Analysis/WeakDerivative.lean" "Weak product — Bounded, local L2 derivative" _blank
+    click WLIN href "../../formalization/FunctionalInequalities/Analysis/WeakDerivative.lean" "Weak linearity — Finite real combinations" _blank
+    click WFPROD href "../../formalization/FunctionalInequalities/Analysis/WeakDerivative.lean" "Weak product — Finite bounded factors" _blank
+    click WDET href "../../formalization/FunctionalInequalities/Analysis/Matrix/WeakDerivative.lean" "Weak determinant — Permutation polynomial" _blank
+    click WTRACE href "../../formalization/FunctionalInequalities/Analysis/Matrix/WeakDerivative.lean" "Weak trace quadratic — tr(BABA), arbitrary B" _blank
+    click WJAC href "../../formalization/FunctionalInequalities/Analysis/Matrix/DeterminantDerivative.lean" "Weak determinant density — = outer Jacobi differential" _blank
+    click EXPHALF href "../../formalization/FunctionalInequalities/Analysis/Lipschitz/Exponential.lean" "Exponential Lipschitz — on a half-line" _blank
+    click WAECONGR href "../../formalization/FunctionalInequalities/Analysis/WeakDerivative.lean" "Weak derivative — a.e. transport" _blank
+    click AEEXP href "../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakInverseHessian.lean" "A.e. exponent derivative — −u + V(∇u)" _blank
+    click WMA1 href "../../formalization/FunctionalInequalities/KLS/CEK/MomentRegularity.lean" "Regular source law — First weak Monge–Ampère (2.4)" _blank

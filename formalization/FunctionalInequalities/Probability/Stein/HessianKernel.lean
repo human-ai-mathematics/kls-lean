@@ -567,3 +567,71 @@ theorem norm_hessianMatrix_entry_le_of_lipschitz_gradient {n : ℕ}
 end FunctionalInequalities.Probability.Stein
 
 end HessianEntryBounds
+
+
+noncomputable section
+open MeasureTheory Set
+open scoped Topology ContDiff
+namespace FunctionalInequalities.Probability.Stein
+
+/-- The total coordinate Hessian entry is L2 on every compact set, from the
+actual Lipschitz-gradient bound. No differentiability or PDE premise is added. -/
+theorem memLp_hessianMatrix_entry_of_isCompact {n : ℕ}
+    {u : EuclideanSpace ℝ (Fin n) → ℝ} {G : NNReal}
+    (hG : LipschitzWith G (gradient u)) (i j : Fin n)
+    {S : Set (EuclideanSpace ℝ (Fin n))} (hS : IsCompact S) :
+    MemLp (fun x => hessianMatrix u x i j) 2
+      ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S) := by
+  let : IsFiniteMeasure
+      ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S) :=
+    isFiniteMeasure_restrict.mpr hS.measure_lt_top.ne
+  exact MemLp.of_bound
+    (measurable_hessianMatrix_entry u i j).aestronglyMeasurable
+    (G : ℝ)
+    (Filter.Eventually.of_forall fun x =>
+      norm_hessianMatrix_entry_le_of_lipschitz_gradient hG x i j)
+
+/-- Multiplying a total Hessian entry by a continuous compact cutoff produces
+an actual global L2 function for the existing difference-quotient criterion. -/
+theorem memLp_cutoff_mul_hessianMatrix_entry {n : ℕ}
+    {u χ : EuclideanSpace ℝ (Fin n) → ℝ} {G : NNReal}
+    (hG : LipschitzWith G (gradient u)) (i j : Fin n)
+    (hχ : Continuous χ) (hχc : HasCompactSupport χ) :
+    MemLp (fun x => χ x * hessianMatrix u x i j) 2
+      (volume : Measure (EuclideanSpace ℝ (Fin n))) := by
+  classical
+  have hK : IsCompact (tsupport χ) := hχc
+  have hKm : MeasurableSet (tsupport χ) :=
+    (isClosed_tsupport χ).measurableSet
+  obtain ⟨C, hC⟩ := hK.exists_bound_of_continuousOn hχ.continuousOn
+  let : IsFiniteMeasure
+      ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict (tsupport χ)) :=
+    isFiniteMeasure_restrict.mpr hK.measure_lt_top.ne
+  have hlocal : MemLp (fun x => χ x * hessianMatrix u x i j) 2
+      ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict (tsupport χ)) := by
+    apply MemLp.of_bound
+      (hχ.measurable.mul
+        (measurable_hessianMatrix_entry u i j)).aestronglyMeasurable
+      (C * (G : ℝ))
+    exact (ae_restrict_mem hKm).mono fun x hx => by
+      calc
+        ‖χ x * hessianMatrix u x i j‖ =
+            ‖χ x‖ * ‖hessianMatrix u x i j‖ := norm_mul _ _
+        _ ≤ ‖χ x‖ * (G : ℝ) :=
+          mul_le_mul_of_nonneg_left
+            (norm_hessianMatrix_entry_le_of_lipschitz_gradient hG x i j)
+            (norm_nonneg _)
+        _ ≤ C * (G : ℝ) :=
+          mul_le_mul_of_nonneg_right (hC x hx) (NNReal.coe_nonneg G)
+  have heq :
+      (tsupport χ).indicator (fun x => χ x * hessianMatrix u x i j) =
+        (fun x => χ x * hessianMatrix u x i j) := by
+    funext x
+    by_cases hx : x ∈ tsupport χ
+    · exact Set.indicator_of_mem hx _
+    · rw [Set.indicator_of_notMem hx,
+        image_eq_zero_of_notMem_tsupport hx, zero_mul]
+  rw [← heq]
+  exact (memLp_indicator_iff_restrict hKm).mpr hlocal
+
+end FunctionalInequalities.Probability.Stein

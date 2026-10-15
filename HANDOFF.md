@@ -1,32 +1,70 @@
 # Current KLS handoff
 
-Updated 2026-10-14 at the documentation checkpoint. The previous handoff is preserved byte for byte in [the pre-checkpoint archive](research/decisions/2026-10-14-pre-documentation-checkpoint-handoff.md); earlier ones are listed in the [decision index](research/decisions/README.md). Exact statements and coverage belong to the [paper register](research/progress/LITERATURE.md); the main line is summarized in the [proof path](research/progress/PROOF-PATH.md).
+Updated 2026-10-15 for the documentation and accepted-proof checkpoint. The previous handoff is
+preserved in [the dated archive](research/decisions/2026-10-15-pre-publication-handoff.md).
+Use the [proof path](research/progress/PROOF-PATH.md) for source-to-Lean navigation and the
+[paper register](research/progress/LITERATURE.md) for exact scope and coverage.
 
-## Active Goal
+## Target and current boundary
 
-The owner's four-step roadmap is (1) Letwin constant 8, (2) stochastic localization, (3) BKL Theorem 4.1, (4) the KLS main theorem. Only step 1 is the active Goal ([Goal record](research/handoffs/2026-10-14-bkl-step1-letwin-constant-eight.md); control directory `build/reviews/2026-10-14-letwin-constant-eight-goal/`). Its endpoint is a proof of the frozen `letwinCompactBound : LetwinCompactBound` through the actual regular-class producer: for every n > 0 and every compactly supported isotropic log-concave probability measure on `EuclideanSpace ℝ (Fin n)`, every self-adjoint quadratic form, singular and indefinite ones included, has centered variance at most 8 times its squared Hilbert-Schmidt norm (Letwin arXiv:2607.24164v1, Theorem 1.2). Supports, conditional assemblies and documentation do not complete it. Steps 2-4 are queued; the existing conditional Theorem 4.1 and KLS assembly will be re-reviewed against exact sources and evidence, not re-proved.
+The four-stage main line is **Letwin constant 8 → stochastic localization → BKL Theorem 4.1 → KLS**.
+The selected target is stage 1, `KLS.LogConcave.Suspension.LetwinCompactBound`: Letwin
+arXiv:2607.24164v1, Theorem 1.2 through Theorem 2.5, as used by BKL arXiv:2610.05474v1, Lemma 4.2.
+It requires the exact constant 8 for every n > 0, every compactly supported isotropic log-concave
+probability law and every self-adjoint real quadratic form, including singular and indefinite ones.
 
-Roles: Codex owns sources, frozen contracts, dependency order, placement review and independent acceptance; the existing Claude session runs the existing API loop (gpt-6-astra/high, existing script and provider configuration, max_rounds 4, max_queries 6, one candidate at a time) and is the sole canonical writer after Codex acceptance. No other worker or sub-controller; the old claude-kls heartbeat stays paused; the old eight large loops are not restarted.
+**This bound and dimension-free KLS remain open.** The regular-class bound is still an input to
+`letwinCompactBound_of_regularClass`; BKL `theorem41` and `conjecture_of_letwinCompact` retain
+`LetwinCompactBound` as a hypothesis. `KLS.kls` is the intentional hole outside certificate closures.
+Stages 2–4 are queued for source/evidence review; their conditional assembly already exists.
 
-## Current mathematical state
+## Accepted canonical frontier
 
-Dimension-free KLS remains open; `KLS.kls` in `KLS/Target.lean` is the intentional hole outside certificate closures. `KLS.BKL.Localization.conjecture_of_letwinCompact : LetwinCompactBound → KLS.Conjecture` and `theorem41` (KLS/BKL/Theorem41.lean) hold conditionally on `LetwinCompactBound`, which `letwinCompactBound_of_regularClass` reduces to the smooth uniformly convex regular class; that regular-class bound is still a premise.
+The actual regular source law now produces a C¹ moment potential with Lipschitz gradient, every
+original R0 field, and an actual weak third-derivative tensor T, L² on compact sets. Canonical
+supports include the N10b generator identities (2.2), the N11b Hessian-increment estimate, weak
+product and matrix-polynomial calculus, and the determinant/Jacobi identification.
 
-Proved supports on the weak C^{1,1} route, each with its own scope: the bounded CEK moment-map producer and the R0 regular-class moment potential (`KLS/CEK/MomentRegularity.lean`); the pointwise Hessian identification and N11e weak third-derivative symmetry, which assumes the weak tensor (`Probability/Stein/HessianKernel.lean`); the N10b weak generator identities of Letwin (2.2) with their integrability (`Analysis/BakryEmery/IntegrationByParts/WeakInverseHessian.lean`, `Analysis/Matrix/Piola.lean`); and the original N11b integrated Hessian-increment energy estimate `Analysis.integral_mul_hessian_increment_le` with its centered-difference, Hessian-entry and integrability supports (`Analysis/Convex/HessianIncrement.lean`, `Analysis/Convex/SecondDifference.lean`, `Probability/Stein/HessianKernel.lean`).
+`Analysis.exists_regular_moment_weak_first_derivative` retains the same u, L, LF and T and all R0
+fields. It adds a globally Lipschitz exp(−u + W(∇u)), the weak determinant density det(H) tr(H⁻¹ T_k)
+with compact-local L² control, the weak log-det derivative, and a.e.
+tr(H⁻¹ T_k) = −∂_k u + Σ_a H_ka ∂_aW(∇u): the first weak Monge–Ampère identity (2.4).
+See the [declarations and owners](research/progress/PROOF-PATH.md#stage-1-letwins-constant-8).
+These are supports; Lemma 2.4's second evolution identity, Theorem 2.5 and compact constant 8 are open.
+The 30 ledger certificates and paper coverage are unchanged.
 
-Still open: the actual local L2 weak third derivatives (N11d), local H1/chain-rule bridges, weak Hessian evolution and the integrated PSD trace estimate, weak Brascamp-Lieb, Stein/H^-1 transport, the spectral constant-8 assembly, full smooth Letwin Lemma 2.2, Letwin Theorems 1.1/1.2/2.5, unconditional BKL Theorems 4.1/1.1 and KLS. The 30 certificates and the covered ADM-G/BGL targets retain their scopes; no paper coverage changed.
+## Evidence and unintegrated work
 
-## Evidence
+- The accepted canonical source/meta snapshot before this documentation cleanup is `d7503d7e…`,
+  full receipt `build/verification/20261015T004538.149290Z/report.json`: 287 passing gates,
+  273 research clients, 9,633 local declarations audited and 812 local modules replayed.
+  `EX-first-MA-integration/canonical-independent/ACCEPTANCE.json` records independent acceptance,
+  complete interface/proof comparison, standard axioms, strict clients and local kernel replay.
+  Both paths are local artifacts under the ignored Goal control directory or verifier directory.
+- Documentation edits change the full snapshot. This checkpoint needs a fresh full receipt;
+  `build/verification/latest.json` identifies the latest attempt, which must pass and match the
+  current content. See [receipt scope](research/verification.md#receipts-and-trust-scope).
+- E3, the local weak derivative of exp(−F) for globally Lipschitz F, has independent scratch
+  acceptance (`independent/E3/ACCEPTANCE.json`). It is not canonical or part of this commit.
+- E4, the product rule with compact-local L∞ factors and compact-local L² derivatives, has an
+  interface/client preflight only. No candidate run or accepted proof exists. No proof worker or
+  KLS build is running at this checkpoint. Scratch status does not advance paper coverage.
 
-- N11b integration: the full receipt `build/verification/20261014T080831.534453Z/report.json` passed (snapshot `6465861a5f7e4abd4ca9e027cab940daa0f8bc9ba8f79791bf802ce69d1edb36`), and Codex recorded `CODEX_CANONICAL_ACCEPT` for that snapshot (`build/reviews/2026-10-14-letwin-constant-eight-goal/canonical-independent/ACCEPTANCE.json`). Both cover the snapshot before this documentation checkpoint, not the later documentation.
-- Earlier receipts cover only their own snapshots. No full verification of the post-checkpoint snapshot is claimed in this file; its evidence is recorded in the ignored checkpoint directory `build/reviews/2026-10-14-documentation-checkpoint/`.
+## Next obligations and coordination
 
-## Documentation checkpoint authorization
+First finish the genuinely missing weak inverse/coefficient interfaces and bounded H¹ testing.
+Then handle actual C¹/Lipschitz-gradient height cutoffs (A.4/A.5), the second evolution identity
+and integrated energy comparison (2.14), E tr(BHBH) ≥ 2 E G₁. Actual weak Brascamp–Lieb (A.6) and
+mean-Hessian (Lemma 2.3) consumers are then needed for the Theorem 2.5 upper bound
+E tr(BHBH) ≤ 2 tr(B²), followed by Stein/H⁻¹ and the spectral/regular-class/compact-8 assembly.
+Local L² of T gives only local L¹ of T²; no C² upgrade or global weighted T² estimate is available.
+The smooth A.4 and old N13c local-L² right-hand-side interface do not close the weak-source gap.
 
-On 2026-10-14 the owner prioritized a documentation cleanup and authorized one commit and an ordinary push to `origin/main` containing this documentation together with the independently accepted proof changes. This supersedes, for this checkpoint only, the earlier no-commit rule. Codex reviews, performs the final validation, stages, commits and pushes; Claude writes the documentation only. No tag, remote CI run or separate release is authorized beyond that ordinary push, and no new proof task is dispatched: the next contract N11d.1 is frozen but undispatched, and a frozen interface is not a proof acceptance.
-
-The pre-existing dirty tree, the actual staged entries and flags of the real index and unrelated `.cursor/`/`.clinerules/` work are preserved; progress views are generated through a private temporary index.
-
-## Next action
-
-After the checkpoint, the next actual producer is N11d (local L2 weak third derivatives of the Hessian entries from the N11b difference-quotient bound and the canonical weak-derivative interfaces in `Analysis/WeakDerivative.lean`), beginning with the frozen N11d.1 contract when Codex dispatches it. The Goal endpoint remains `LetwinCompactBound`.
+Codex freezes sources, statements, dependencies and placement, then independently accepts.
+The authorized existing Claude session runs one unchanged gpt-6-astra/high API loop at a time
+(max_rounds 4, max_queries 6) and integrates accepted proof packages after placement review.
+The old large loops and other roadmap stages stay stopped. The current user authorization covers
+one commit and push of this documentation plus already accepted canonical proofs; it does not
+publish scratch candidates or authorize a milestone tag or remote CI. Proof work is held during
+this checkpoint. The [Goal record](research/handoffs/2026-10-14-bkl-step1-letwin-constant-eight.md)
+retains the endpoint and acceptance protocol; historical queues do not override this handoff.

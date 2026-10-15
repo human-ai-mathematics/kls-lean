@@ -22,12 +22,14 @@ its universal cumulant hypothesis. The regular approximation and final BKL assem
 formalized; BKL Theorem 4.1 is formalized through a cutoff Eldan-localization route, and with it
 `KLS.Conjecture` (`conjecture_of_letwinCompact`), conditionally on one open input: Letwin's
 Theorem 1.2 for compactly supported isotropic log-concave laws (`LetwinCompactBound`).
-That compact bound is reduced to the smooth uniformly convex regular class. Weak
-Hessian symmetry and convex-range mollification are proved supports. The weak regular
-moment-potential package now supplies C1, a 16/kappa-Lipschitz gradient and a.e.
-Hessian/log-det data, the weak C^{1,1} inverse-Hessian generator identities (Letwin (2.2)) and the
-integrated Hessian-increment energy estimate are proved supports; the regular-class constant-8 bound
-remains open.
+That compact bound is reduced to a smooth uniformly convex regular class, whose bound remains
+open. The weak analytic supports now produce an actual C¹ moment potential with Lipschitz
+gradient, weak locally L² third derivatives, the generator and Hessian-increment identities,
+and weak product/determinant calculus. The first weak Monge–Ampère identity (Letwin (2.4))
+is proved for the actual regular source law, with every original moment-map field retained.
+The second Hessian evolution identity, Theorem 2.5 and the regular-class constant-8 bound are
+still open. The [proof path](research/progress/PROOF-PATH.md) maps each source step to its Lean
+entry and remaining hypotheses.
 
 The [paper register](research/progress/LITERATURE.md) owns exact hypotheses, constants,
 dimensions, selected paper coverage and certificates. The

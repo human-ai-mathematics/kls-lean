@@ -27,7 +27,18 @@ The current analytic frontier is summarized under [Proof progress tree](#proof-p
 the numerical π Cheeger–Buser comparison holds for every finite-dimensional log-concave law,
 and metric BV relaxation and recovery are proved within their stated measure and space scope.
 
-As of 2026-10-14 the active Goal is step 1 of the [proof path](PROOF-PATH.md), the compact Letwin constant-8 bound `LetwinCompactBound`. On the weak route, the R0 regular-class moment potential, the N10b weak generator identities and the original N11b integrated Hessian-increment energy estimate are proved supports (see the [N11b integration record](../decisions/2026-10-14-n11b-hessian-increment-integration.md) and the earlier [R0 record](../decisions/2026-10-13-r0-weak-hessian-integration.md); the historical [failure analysis](../decisions/2026-10-13-letwin-loop-failure-analysis.md) is unchanged). The next actual producer is N11d, the local L² weak third derivatives of the Hessian entries. The regular-class constant-8 bound remains open.
+As of 2026-10-15, stage 1 of the [proof path](PROOF-PATH.md) is the selected target:
+Letwin's compact constant-8 bound. Canonical supports reach the actual-source first weak
+Monge–Ampère identity (2.4), retaining every moment-map field and producing the weak third
+tensor locally in L². The [proof path](PROOF-PATH.md#stage-1-letwins-constant-8) lists source
+steps, declarations, owners and exact hypothesis boundaries; [HANDOFF](../../HANDOFF.md)
+records the current receipt and scratch work.
+
+Weak inverse/coefficient calculus and bounded H¹ testing come next, followed by the actual
+source-height cutoffs, second Hessian evolution and energy comparison (2.14), then weak
+Brascamp–Lieb and mean-Hessian consumers for Theorem 2.5. The second evolution identity and
+the regular-class and compact constant-8 bounds remain open. Supporting proofs do not
+complete those targets or change paper coverage.
 
 ## BKL main proof chain
 
@@ -48,7 +59,7 @@ with its hypotheses; it does not discharge an input or cover the whole paper.
 | [Bizeul–Klartag–Lehec: Lemma 4.3, p. 20](https://arxiv.org/abs/2610.05474v1) | [`FunctionalInequalities.Analysis.BakryEmery.iteratedFDeriv_inner_centeredGradient_zero_grouped_of_compact`](../../formalization/FunctionalInequalities/Analysis/BakryEmery/Cumulant/Leibniz.lean) | ◐ Partial or statement only | Spatial grouping and the registered compact cutoff-localization supports are available. This row is partial and does not certify an unrestricted source-form stochastic identity; the conditional Theorem 4.1 assembly is linked above. | [Item map](LITERATURE.md#bkl2026-lemma-map) |
 | [Bizeul–Klartag–Lehec: Lemma 4.2, p. 18](https://arxiv.org/abs/2610.05474v1) | [`FunctionalInequalities.KLS.LogConcave.sum_sq_cumulant_three_le_of_letwin`](../../formalization/FunctionalInequalities/KLS/BKL/LocalThirdCumulant.lean) | ◐ Partial or statement only | Conditional source-scope counterpart retaining LetwinQuadraticBound; the constant-8 input is not discharged. | [Item map](LITERATURE.md#bkl2026-lemma-map) |
 | [Letwin: Theorem 1.2](https://arxiv.org/abs/2607.24164v1) | [`FunctionalInequalities.KLS.LogConcave.Suspension.letwinCompactBound_of_regularClass`](../../formalization/FunctionalInequalities/KLS/BKL/LetwinApproximation.lean) | ◐ Partial or statement only | Compact laws are reduced to the smooth uniformly convex regular class. Its constant-8 bound, Stein/H^-1 transport, final assembly and general source theorem remain open. | [Item map](LITERATURE.md#letwin2026-lemma-map) |
-| [Letwin: Theorem 2.5](https://arxiv.org/abs/2607.24164v1) | [`FunctionalInequalities.Analysis.symmetric_trace_integral_extension`](../../formalization/FunctionalInequalities/Analysis/Matrix/Integral.lean) | ◐ Partial or statement only | Matrix, cutoff, given-potential trace/BL and weak-symmetry/mollification supports are proved. The weak R0 regularity package, the weak C1,1 generator identities of (2.2) and the integrated Hessian-increment energy estimate (N11b) are formalized; the actual weak third derivatives (N11d), weak Hessian evolution and the integrated PSD bound remain open; the source theorem is not covered. | [Item map](LITERATURE.md#letwin2026-lemma-map) |
+| [Letwin: Theorem 2.5](https://arxiv.org/abs/2607.24164v1) | [`FunctionalInequalities.Analysis.symmetric_trace_integral_extension`](../../formalization/FunctionalInequalities/Analysis/Matrix/Integral.lean) | ◐ Partial or statement only | Matrix, cutoff, given-potential trace/BL and weak-symmetry/mollification supports are proved. The weak R0 regularity package, the weak C1,1 generator identities of (2.2), the integrated Hessian-increment energy estimate (N11b), the original weak third-derivative tensor (N11d) and its source-law application producing actual weak locally L2 derivatives of the Hessian entries (the potential's weak third-derivative tensor) from the exact R0 hypotheses are formalized, together with weak product and finite polynomial calculus (weak determinant, first weak derivative of tr(BHBH)) for bounded Hessian entries with compact-local L2 derivatives; the identification of the weak determinant density with the outer Jacobi differential; and the actual-source first weak Monge-Ampere identity (2.4) with weak log-det derivative tr(H^-1 T_k); weak inverse/weighted coefficient calculus and bounded H1 testing, the actual source-height cutoff consumption, the second Hessian evolution identity, the integrated PSD energy comparison (2.14), the actual weak Brascamp-Lieb and mean-Hessian consumers and the trace-square upper bound remain open; the source theorem is not covered. | [Item map](LITERATURE.md#letwin2026-lemma-map) |
 | [Letwin: Lemma 2.1 (Cordero-Erausquin and Klartag [21, Theorem 2])](https://arxiv.org/abs/2607.24164v1) | [`FunctionalInequalities.KLS.CEK.exists_momentMap_of_isotropic_of_ae_norm_le`](../../formalization/FunctionalInequalities/KLS/CEK/MomentMap.lean) | ◐ Partial or statement only | Actual moment-map existence and pushforward for bounded isotropic probability laws. General finite-mass/unbounded existence and uniqueness, and source smooth regularity, remain open. | [Item map](LITERATURE.md#letwin2026-lemma-map) |
 
 Certificates and item maps identify statements and source reviews, not a fresh run.
@@ -64,7 +75,7 @@ Every proof task must first pin its paper version, theorem, hypotheses and const
 
 | Priority | Sources / target | Next action |
 | --- | --- | --- |
-| 1 | [Bizeul–Klartag–Lehec](https://arxiv.org/abs/2610.05474v1)<br/>BKL Theorem 1.1 through source-form Theorem 3.1 and Proposition 7.1 certificates, and Theorem 4.1. Theorem 4.1 and KLS.Conjecture are now proved conditionally on LetwinCompactBound alone; Proposition 7.1 retains its cumulant hypothesis. Unconditional BKL and dimension-free KLS remain open. | Active Goal (2026-10-14, roadmap step 1 of 4: Letwin constant 8, stochastic localization, BKL Theorem 4.1, KLS): prove the original compact constant-eight endpoint letwinCompactBound : LetwinCompactBound (n > 0, every self-adjoint quadratic form including singular and indefinite ones, exact constant 8, isotropic normalization) through the actual regular-class producer; steps 2-4 are queued and the existing conditional Theorem 4.1/KLS assembly will be re-reviewed, not re-proved. Canonical base: R0, the T10f compact reduction, both weak (2.2) generator identities (N10b) and the original N11b integrated Hessian-increment energy estimate with its supports (six parts independently accepted, canonically integrated 2026-10-14). Next actual producer under review: N11d, the actual local L2 weak third derivatives of the Hessian entries; then local H1/chain-rule bridges, weak Hessian evolution and trace, weak Brascamp-Lieb, Stein/H^-1 transport and the spectral constant-8 assembly. One candidate at a time with the existing API loop; old large loops stay stopped; no commit is authorized. BKL remains primary. |
+| 1 | [Bizeul–Klartag–Lehec](https://arxiv.org/abs/2610.05474v1)<br/>BKL Theorem 1.1 through source-form Theorem 3.1 and Proposition 7.1 certificates, and Theorem 4.1. Theorem 4.1 and KLS.Conjecture are now proved conditionally on LetwinCompactBound alone; Proposition 7.1 retains its cumulant hypothesis. Unconditional BKL and dimension-free KLS remain open. | Active Goal (2026-10-14, roadmap step 1 of 4: Letwin constant 8, stochastic localization, BKL Theorem 4.1, KLS): prove the original compact constant-eight endpoint letwinCompactBound : LetwinCompactBound (n > 0, every self-adjoint quadratic form including singular and indefinite ones, exact constant 8, isotropic normalization) through the actual regular-class producer; steps 2-4 are queued and the existing conditional Theorem 4.1/KLS assembly will be re-reviewed, not re-proved. Canonical base: R0, the T10f compact reduction, both weak (2.2) generator identities (N10b), the original N11b integrated Hessian-increment energy estimate, the original N11d weak third-derivative tensor and its source-law application exists_regular_moment_weak_tensor (actual weak locally L2 derivatives of the Hessian entries, i.e. the potential's weak third-derivative tensor, from the exact R0 hypotheses), with their supports (canonically integrated 2026-10-14), and weak scalar/Hessian product and finite polynomial calculus (2026-10-15: weak determinant and first weak trace-quadratic derivative), the identification of the weak determinant density with the outer Jacobi differential (det(H) tr(H^-1 T_k) a.e. for the actual Hessian), and the actual-source first weak Monge-Ampere identity (2.4) with the weak log-det derivative tr(H^-1 T_k) (exists_regular_moment_weak_first_derivative; the second evolution identity is not obtained). Next: weak inverse and weighted coefficient calculus with bounded H1 testing, then the actual C1/Lipschitz-gradient source-height cutoffs (Letwin A.4) with their A.5 consumption (locally L1 right-hand sides and locally L2 flux, not the old N13c L2 right-hand side; tensor products in the evolution density are only locally L1; the smooth A.4 does not apply to the C1/Lipschitz-gradient potential); then the second Hessian evolution identity and the integrated PSD energy comparison (2.14), E tr(BHBH) >= 2 E G1; then the actual weak Brascamp-Lieb (A.6) and mean-Hessian (Lemma 2.3) consumers and the final Theorem 2.5 trace-square upper bound E tr(BHBH) <= 2 tr(B^2); then Stein/H^-1 transport and the spectral/regular-class/compact constant-8 assembly. One candidate at a time with the existing API loop; old large loops stay stopped; no commit is authorized. BKL remains primary. |
 | 2 | [Bakry–Gentil–Ledoux](https://link.springer.com/book/10.1007/978-3-319-00227-9)<br/>Corollary 4.8.2 (strongly log-concave Bakry–Émery C_P ≤ 1/ρ) is certified as thm:bakry-emery-poincare and committed in 36e7c78 (remote run 37516844384 succeeded); select a separate Brascamp–Lieb source statement. | Deferred as an independent paper target under the 2026-10-10 BKL-first scope. Resume only for a reviewed referenced result or necessary prerequisite with an explicit BKL proof consumer; existing formalization and certificates are retained. |
 | 3 | [Kannan–Lovász–Simonovits](https://link.springer.com/article/10.1007/BF02574061)<br/>Theorem 5.1, ψ(K) ≥ ln 2 / M₁(K) for convex bodies, through the needle reduction (Corollary 2.2, Lemma 2.6, Theorem 2.7). With the local Cheeger inequality it gives C_P ≲ E‖X − EX‖² for convex bodies. | Deferred as an independent paper target under the 2026-10-10 BKL-first scope. Resume only for a reviewed referenced result or necessary prerequisite with an explicit BKL proof consumer; existing formalization and certificates are retained. |
 | 4 | [E. Milman](https://arxiv.org/abs/0712.4092)<br/>Concentration implies a Cheeger bound under the source convexity hypotheses. | Deferred as an independent paper target under the 2026-10-10 BKL-first scope. Resume only for a reviewed referenced result or necessary prerequisite with an explicit BKL proof consumer; existing formalization and certificates are retained. |
@@ -1402,7 +1413,7 @@ See the [full tables and normalization](LITERATURE.md#constant-conventions).
 ## Proof progress tree
 
 <!-- BEGIN GENERATED DATE -->
-Last updated: **2026-10-14**.
+Last updated: **2026-10-15**.
 
 ![✓ Formalized in Lean](badges/formalized.svg) · ![○ Not yet formalized](badges/pending.svg) · ![◐ Partially formalized](badges/partial.svg) · ![— Excluded: refuted](badges/excluded.svg)
 <!-- END GENERATED DATE -->
@@ -1563,6 +1574,24 @@ flowchart LR
     WEAKGENINT["✓ Weak generator<br/>Density integrability"]
     INCINT["✓ Hessian increments<br/>Weighted integrability"]
     INCENERGY["✓ Hessian-increment energy<br/>Original N11b estimate"]
+    TRANSCUT["✓ Translated cutoffs<br/>Uniform smooth majorant"]
+    HESSL2["✓ Hessian entries<br/>Local and cutoff L2"]
+    HESSDIFF["✓ Cutoff Hessian entries<br/>Difference energy C t^2"]
+    WEAKTHIRD["✓ Weak third-derivative tensor<br/>Original N11d (Hessian entries)"]
+    SRCDIFF["✓ Moment potential<br/>Second differences ≤ 4/κ"]
+    EXPLIP["✓ Lipschitz exponent<br/>−u + V(∇u)"]
+    REGTENSOR["✓ Regular source law<br/>Weak third-derivative tensor"]
+    WPRODG["✓ Weak product<br/>Global L2 factors"]
+    WPRODL["✓ Weak product<br/>Bounded, local L2 derivative"]
+    WLIN["✓ Weak linearity<br/>Finite real combinations"]
+    WFPROD["✓ Weak product<br/>Finite bounded factors"]
+    WDET["✓ Weak determinant<br/>Permutation polynomial"]
+    WTRACE["✓ Weak trace quadratic<br/>tr(BABA), arbitrary B"]
+    WJAC["✓ Weak determinant density<br/>= outer Jacobi differential"]
+    EXPHALF["✓ Exponential Lipschitz<br/>on a half-line"]
+    WAECONGR["✓ Weak derivative<br/>a.e. transport"]
+    AEEXP["✓ A.e. exponent derivative<br/>−u + V(∇u)"]
+    WMA1["✓ Regular source law<br/>First weak Monge–Ampère (2.4)"]
     end
     KLS["○ KLS<br/>Dimension-free bound"]
     ANY{"OR<br/>Any completed route"}
@@ -1633,8 +1662,32 @@ flowchart LR
     INCINT --> INCENERGY
     WEAKGENINT --> INCENERGY
     WEAKGEN --> INCENERGY
+    HESSENT --> HESSL2
+    TRANSCUT --> HESSDIFF
+    HESSL2 --> HESSDIFF
+    INCINT --> HESSDIFF
+    INCENERGY --> HESSDIFF
+    HESSL2 --> WEAKTHIRD
+    HESSDIFF --> WEAKTHIRD
+    SRCDIFF --> REGTENSOR
+    EXPLIP --> REGTENSOR
+    REGMOM --> REGTENSOR
+    WEAKTHIRD --> REGTENSOR
+    WPRODG --> WPRODL
+    WPRODL --> WFPROD
+    WFPROD --> WDET
+    WLIN --> WDET
+    WPRODL --> WTRACE
+    WLIN --> WTRACE
+    WDET --> WJAC
+    REGTENSOR --> WMA1
+    WDET --> WMA1
+    WJAC --> WMA1
+    AEEXP --> WMA1
+    EXPHALF --> WMA1
+    WAECONGR --> WMA1
     classDef done fill:#dbeafe,stroke:#2563eb,color:#1e3a8a;
-    class ENERGY,F4,MT,FP,FC,EQ,NORM,DENS,FRONT,CB,ONE,CONST,FORMS,MEAS,GRAPH,REG,CRIT,C1,WHIT,LIP,GG,REC,FWD,SARD,SCI,CUT,REV,MINK,BV,FLOG,VREG,VZERO,VR123,VR4,VFULL,SEMI,MARKOV,DECAY,GAUSS,GSTAB,VLIP,WEAKHESS,CEKMAP,REGMOM,WEAKINVINT,WEAKGEN,HESSENT,CDIFF,WEAKGENINT,INCINT,INCENERGY done;
+    class ENERGY,F4,MT,FP,FC,EQ,NORM,DENS,FRONT,CB,ONE,CONST,FORMS,MEAS,GRAPH,REG,CRIT,C1,WHIT,LIP,GG,REC,FWD,SARD,SCI,CUT,REV,MINK,BV,FLOG,VREG,VZERO,VR123,VR4,VFULL,SEMI,MARKOV,DECAY,GAUSS,GSTAB,VLIP,WEAKHESS,CEKMAP,REGMOM,WEAKINVINT,WEAKGEN,HESSENT,CDIFF,WEAKGENINT,INCINT,INCENERGY,TRANSCUT,HESSL2,HESSDIFF,WEAKTHIRD,SRCDIFF,EXPLIP,REGTENSOR,WPRODG,WPRODL,WLIN,WFPROD,WDET,WTRACE,WJAC,EXPHALF,WAECONGR,AEEXP,WMA1 done;
     classDef partial fill:#fff3df,stroke:#c88719,color:#66420d;
     class FAND,BE,HEAT partial;
     classDef todo fill:#fee2e2,stroke:#dc2626,color:#991b1b;
@@ -1708,6 +1761,24 @@ flowchart LR
     click WEAKGENINT href "../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakInverseHessian.lean" "Weak generator — Density integrability" _blank
     click INCINT href "../../formalization/FunctionalInequalities/Analysis/Convex/HessianIncrement.lean" "Hessian increments — Weighted integrability" _blank
     click INCENERGY href "../../formalization/FunctionalInequalities/Analysis/Convex/HessianIncrement.lean" "Hessian-increment energy — Original N11b estimate" _blank
+    click TRANSCUT href "../../formalization/FunctionalInequalities/Analysis/Cutoff/Translation.lean" "Translated cutoffs — Uniform smooth majorant" _blank
+    click HESSL2 href "../../formalization/FunctionalInequalities/Probability/Stein/HessianKernel.lean" "Hessian entries — Local and cutoff L2" _blank
+    click HESSDIFF href "../../formalization/FunctionalInequalities/Analysis/Convex/HessianIncrement.lean" "Cutoff Hessian entries — Difference energy C t^2" _blank
+    click WEAKTHIRD href "../../formalization/FunctionalInequalities/Analysis/Convex/HessianRegularity.lean" "Weak third-derivative tensor — Original N11d (Hessian entries)" _blank
+    click SRCDIFF href "../../formalization/FunctionalInequalities/Analysis/Convex/GradientLipschitz.lean" "Moment potential — Second differences ≤ 4/κ" _blank
+    click EXPLIP href "../../formalization/FunctionalInequalities/Analysis/Lipschitz/Gradient.lean" "Lipschitz exponent — −u + V(∇u)" _blank
+    click REGTENSOR href "../../formalization/FunctionalInequalities/KLS/CEK/MomentRegularity.lean" "Regular source law — Weak third-derivative tensor" _blank
+    click WPRODG href "../../formalization/FunctionalInequalities/Analysis/WeakDerivative.lean" "Weak product — Global L2 factors" _blank
+    click WPRODL href "../../formalization/FunctionalInequalities/Analysis/WeakDerivative.lean" "Weak product — Bounded, local L2 derivative" _blank
+    click WLIN href "../../formalization/FunctionalInequalities/Analysis/WeakDerivative.lean" "Weak linearity — Finite real combinations" _blank
+    click WFPROD href "../../formalization/FunctionalInequalities/Analysis/WeakDerivative.lean" "Weak product — Finite bounded factors" _blank
+    click WDET href "../../formalization/FunctionalInequalities/Analysis/Matrix/WeakDerivative.lean" "Weak determinant — Permutation polynomial" _blank
+    click WTRACE href "../../formalization/FunctionalInequalities/Analysis/Matrix/WeakDerivative.lean" "Weak trace quadratic — tr(BABA), arbitrary B" _blank
+    click WJAC href "../../formalization/FunctionalInequalities/Analysis/Matrix/DeterminantDerivative.lean" "Weak determinant density — = outer Jacobi differential" _blank
+    click EXPHALF href "../../formalization/FunctionalInequalities/Analysis/Lipschitz/Exponential.lean" "Exponential Lipschitz — on a half-line" _blank
+    click WAECONGR href "../../formalization/FunctionalInequalities/Analysis/WeakDerivative.lean" "Weak derivative — a.e. transport" _blank
+    click AEEXP href "../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakInverseHessian.lean" "A.e. exponent derivative — −u + V(∇u)" _blank
+    click WMA1 href "../../formalization/FunctionalInequalities/KLS/CEK/MomentRegularity.lean" "Regular source law — First weak Monge–Ampère (2.4)" _blank
 ```
 <!-- END GENERATED TREE -->
 
@@ -1842,6 +1913,24 @@ The [full node register](STATUS.md) separately lists definitions and registered 
 | Weak generator — Density integrability | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakInverseHessian.lean) |
 | Hessian increments — Weighted integrability | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/Analysis/Convex/HessianIncrement.lean) |
 | Hessian-increment energy — Original N11b estimate | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/Analysis/Convex/HessianIncrement.lean) |
+| Translated cutoffs — Uniform smooth majorant | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/Analysis/Cutoff/Translation.lean) |
+| Hessian entries — Local and cutoff L2 | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/Probability/Stein/HessianKernel.lean) |
+| Cutoff Hessian entries — Difference energy C t^2 | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/Analysis/Convex/HessianIncrement.lean) |
+| Weak third-derivative tensor — Original N11d (Hessian entries) | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/Analysis/Convex/HessianRegularity.lean) |
+| Moment potential — Second differences ≤ 4/κ | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/Analysis/Convex/GradientLipschitz.lean) |
+| Lipschitz exponent — −u + V(∇u) | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/Analysis/Lipschitz/Gradient.lean) |
+| Regular source law — Weak third-derivative tensor | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/KLS/CEK/MomentRegularity.lean) |
+| Weak product — Global L2 factors | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/Analysis/WeakDerivative.lean) |
+| Weak product — Bounded, local L2 derivative | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/Analysis/WeakDerivative.lean) |
+| Weak linearity — Finite real combinations | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/Analysis/WeakDerivative.lean) |
+| Weak product — Finite bounded factors | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/Analysis/WeakDerivative.lean) |
+| Weak determinant — Permutation polynomial | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/Analysis/Matrix/WeakDerivative.lean) |
+| Weak trace quadratic — tr(BABA), arbitrary B | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/Analysis/Matrix/WeakDerivative.lean) |
+| Weak determinant density — = outer Jacobi differential | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/Analysis/Matrix/DeterminantDerivative.lean) |
+| Exponential Lipschitz — on a half-line | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/Analysis/Lipschitz/Exponential.lean) |
+| Weak derivative — a.e. transport | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/Analysis/WeakDerivative.lean) |
+| A.e. exponent derivative — −u + V(∇u) | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakInverseHessian.lean) |
+| Regular source law — First weak Monge–Ampère (2.4) | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/KLS/CEK/MomentRegularity.lean) |
 <!-- END GENERATED RESULTS -->
 
 ### Benchmarks and upstream research beyond the four route gates
@@ -1946,6 +2035,24 @@ Every node has a link. If diagram links are disabled in your viewer, use this di
 | Weak generator — Density integrability | [Source](../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakInverseHessian.lean) |
 | Hessian increments — Weighted integrability | [Source](../../formalization/FunctionalInequalities/Analysis/Convex/HessianIncrement.lean) |
 | Hessian-increment energy — Original N11b estimate | [Source](../../formalization/FunctionalInequalities/Analysis/Convex/HessianIncrement.lean) |
+| Translated cutoffs — Uniform smooth majorant | [Source](../../formalization/FunctionalInequalities/Analysis/Cutoff/Translation.lean) |
+| Hessian entries — Local and cutoff L2 | [Source](../../formalization/FunctionalInequalities/Probability/Stein/HessianKernel.lean) |
+| Cutoff Hessian entries — Difference energy C t^2 | [Source](../../formalization/FunctionalInequalities/Analysis/Convex/HessianIncrement.lean) |
+| Weak third-derivative tensor — Original N11d (Hessian entries) | [Source](../../formalization/FunctionalInequalities/Analysis/Convex/HessianRegularity.lean) |
+| Moment potential — Second differences ≤ 4/κ | [Source](../../formalization/FunctionalInequalities/Analysis/Convex/GradientLipschitz.lean) |
+| Lipschitz exponent — −u + V(∇u) | [Source](../../formalization/FunctionalInequalities/Analysis/Lipschitz/Gradient.lean) |
+| Regular source law — Weak third-derivative tensor | [Source](../../formalization/FunctionalInequalities/KLS/CEK/MomentRegularity.lean) |
+| Weak product — Global L2 factors | [Source](../../formalization/FunctionalInequalities/Analysis/WeakDerivative.lean) |
+| Weak product — Bounded, local L2 derivative | [Source](../../formalization/FunctionalInequalities/Analysis/WeakDerivative.lean) |
+| Weak linearity — Finite real combinations | [Source](../../formalization/FunctionalInequalities/Analysis/WeakDerivative.lean) |
+| Weak product — Finite bounded factors | [Source](../../formalization/FunctionalInequalities/Analysis/WeakDerivative.lean) |
+| Weak determinant — Permutation polynomial | [Source](../../formalization/FunctionalInequalities/Analysis/Matrix/WeakDerivative.lean) |
+| Weak trace quadratic — tr(BABA), arbitrary B | [Source](../../formalization/FunctionalInequalities/Analysis/Matrix/WeakDerivative.lean) |
+| Weak determinant density — = outer Jacobi differential | [Source](../../formalization/FunctionalInequalities/Analysis/Matrix/DeterminantDerivative.lean) |
+| Exponential Lipschitz — on a half-line | [Source](../../formalization/FunctionalInequalities/Analysis/Lipschitz/Exponential.lean) |
+| Weak derivative — a.e. transport | [Source](../../formalization/FunctionalInequalities/Analysis/WeakDerivative.lean) |
+| A.e. exponent derivative — −u + V(∇u) | [Source](../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakInverseHessian.lean) |
+| Regular source law — First weak Monge–Ampère (2.4) | [Source](../../formalization/FunctionalInequalities/KLS/CEK/MomentRegularity.lean) |
 <!-- END GENERATED LINKS -->
 
 </details>

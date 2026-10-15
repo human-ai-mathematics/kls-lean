@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "last_updated": "2026-10-14",
+  "last_updated": "2026-10-15",
   "nodes": {
     "ass:cmh-recovery-envelope": {
       "description": "Seek a regular moment-map approximation of every centered log-concave law with a dimension-free CMH bound.",
@@ -1571,6 +1571,186 @@
         "source": "../../formalization/FunctionalInequalities/Analysis/Convex/HessianIncrement.lean",
         "shape": "box"
       }
+    },
+    "lem:uniform-translated-cutoff-majorant": {
+      "blueprint": "lem:uniform-translated-cutoff-majorant",
+      "description": "One nonnegative smooth compactly supported eta dominating chi(x+t v)^2 e^{u(x)} for every |t| <= 1, from continuous u and continuous compact chi; every direction and finite dimension; no energy or envelope premise.",
+      "diagram": {
+        "id": "TRANSCUT",
+        "label": "Translated cutoffs<br/>Uniform smooth majorant",
+        "source": "../../formalization/FunctionalInequalities/Analysis/Cutoff/Translation.lean",
+        "shape": "box"
+      }
+    },
+    "lem:hessian-entry-local-l2": {
+      "blueprint": "lem:hessian-entry-local-l2",
+      "description": "For a G-Lipschitz gradient, every total Hessian entry is L2 on every compact set and its product with a continuous compact cutoff is globally L2; no differentiability premise; all finite dimensions.",
+      "diagram": {
+        "id": "HESSL2",
+        "label": "Hessian entries<br/>Local and cutoff L2",
+        "source": "../../formalization/FunctionalInequalities/Probability/Stein/HessianKernel.lean",
+        "shape": "box"
+      }
+    },
+    "lem:letwin-cutoff-hessian-difference-energy": {
+      "blueprint": "lem:letwin-cutoff-hessian-difference-energy",
+      "description": "From the original potential data (u, V, G, LF, K, a.e. PD/log-det/cap) and the original global centered-difference bound: for a C1 compact cutoff chi, direction v and indices i, j, a produced C >= 0 with the squared global L2 translation difference of chi*H_ij at most C t^2 for all nonzero |t| <= 1. The C t^2 bound is a conclusion; the centered-difference bound is an input.",
+      "diagram": {
+        "id": "HESSDIFF",
+        "label": "Cutoff Hessian entries<br/>Difference energy C t^2",
+        "source": "../../formalization/FunctionalInequalities/Analysis/Convex/HessianIncrement.lean",
+        "shape": "box"
+      }
+    },
+    "lem:letwin-weak-third-derivative": {
+      "blueprint": "lem:letwin-weak-third-derivative",
+      "description": "Original N11d statement: under the original potential data with the global centered-difference and exponent Lipschitz inputs, an actual tensor T gives every Hessian entry a weak derivative along every coordinate direction, L2 on compact sets; no cutoff/test input and no given tensor, H1 or cutoff square-difference-energy conclusion. Weak locally L2 support only: it does not establish global C2 regularity, Theorem 2.5/1.2 or constant 8; for the actual regular source class the two inputs are discharged by the source-law application.",
+      "diagram": {
+        "id": "WEAKTHIRD",
+        "label": "Weak third-derivative tensor<br/>Original N11d (Hessian entries)",
+        "source": "../../formalization/FunctionalInequalities/Analysis/Convex/HessianRegularity.lean",
+        "shape": "box"
+      }
+    },
+    "lem:moment-map-second-difference": {
+      "blueprint": "lem:moment-map-second-difference",
+      "description": "Normalized convex Lipschitz C1 moment potential whose gradient pushes e^{-u}dx to 1_K e^{-V}dx (K compact convex, V C1 and kappa-strongly convex): u(x+h)+u(x-h)-2u(x) <= (4/kappa)|h|^2 for all x, h; every finite dimension, no difference premise. Exported from the existing 16/kappa gradient proof, whose interface is unchanged.",
+      "diagram": {
+        "id": "SRCDIFF",
+        "label": "Moment potential<br/>Second differences ≤ 4/κ",
+        "source": "../../formalization/FunctionalInequalities/Analysis/Convex/GradientLipschitz.lean",
+        "shape": "box"
+      }
+    },
+    "lem:lipschitz-gradient-exponent": {
+      "blueprint": "lem:lipschitz-gradient-exponent",
+      "description": "Generic: L-Lipschitz u with G-Lipschitz total gradient and C1 V give a produced LF with -u + V(gradient u) LF-Lipschitz; every finite dimension; no C1 u, convexity, PDE, normalization, bounded-range, derivative or exponent premise.",
+      "diagram": {
+        "id": "EXPLIP",
+        "label": "Lipschitz exponent<br/>−u + V(∇u)",
+        "source": "../../formalization/FunctionalInequalities/Analysis/Lipschitz/Gradient.lean",
+        "shape": "box"
+      }
+    },
+    "lem:letwin-regular-moment-weak-tensor": {
+      "blueprint": "lem:letwin-regular-moment-weak-tensor",
+      "description": "Exact original R0 regular-source hypotheses produce u, L, LF, T with all R0 fields, the global 4/kappa centered-difference bound, the global Lipschitz exponent and actual weak, locally L2 derivatives of the Hessian entries (the potential's weak third-derivative tensor); no given difference/exponent/tensor/H1/trace/main-bound premise. Weak H1_loc support only: not global C2, a gradient diffeomorphism, the trace bound, Theorems 2.5/1.2 or constant 8.",
+      "diagram": {
+        "id": "REGTENSOR",
+        "label": "Regular source law<br/>Weak third-derivative tensor",
+        "source": "../../formalization/FunctionalInequalities/KLS/CEK/MomentRegularity.lean",
+        "shape": "box"
+      }
+    },
+    "lem:weak-product-global-l2": {
+      "blueprint": "lem:weak-product-global-l2",
+      "description": "Generic weak product along one fixed direction v: f, df, g, dg in global L2 give a globally integrable f*g with the directional weak derivative df*g + f*dg (no full-gradient W1,1 claim); every finite dimension and direction; no boundedness, C1/C2 regularity of the rough factors, finite-volume or product premise.",
+      "diagram": {
+        "id": "WPRODG",
+        "label": "Weak product<br/>Global L2 factors",
+        "source": "../../formalization/FunctionalInequalities/Analysis/WeakDerivative.lean",
+        "shape": "box"
+      }
+    },
+    "lem:weak-product-local-bounded": {
+      "blueprint": "lem:weak-product-local-bounded",
+      "description": "Generic weak product along one fixed direction v: L-infinity f, g with compact-local L2 weak derivatives give the uncut directional weak derivative df*g + f*dg, L2 on every compact set; no global L2 of f, df, g, dg, no C1/C2 regularity of the rough factors, no finite whole-space volume. Audit clients apply it to the actual regular source law (Hessian-entry products and squares). Not determinant/inverse calculus, evolution or the trace bound.",
+      "diagram": {
+        "id": "WPRODL",
+        "label": "Weak product<br/>Bounded, local L2 derivative",
+        "source": "../../formalization/FunctionalInequalities/Analysis/WeakDerivative.lean",
+        "shape": "box"
+      }
+    },
+    "lem:weak-finite-linear-combination": {
+      "blueprint": "lem:weak-finite-linear-combination",
+      "description": "Generic, one fixed direction: a finite real combination of weak derivatives (any finite set, possibly empty; signed coefficients) is the weak derivative of the combination, with compact-local L2 density; no global L2, boundedness or C1/C2 regularity of the f_i.",
+      "diagram": {
+        "id": "WLIN",
+        "label": "Weak linearity<br/>Finite real combinations",
+        "source": "../../formalization/FunctionalInequalities/Analysis/WeakDerivative.lean",
+        "shape": "box"
+      }
+    },
+    "lem:weak-finite-product": {
+      "blueprint": "lem:weak-finite-product",
+      "description": "Generic, one fixed direction: L-infinity factors with compact-local L2 weak derivatives give the Leibniz weak derivative of a finite product (empty product included), L2 on compact sets; no global L2, C1/C2 regularity of the rough factors or finite volume.",
+      "diagram": {
+        "id": "WFPROD",
+        "label": "Weak product<br/>Finite bounded factors",
+        "source": "../../formalization/FunctionalInequalities/Analysis/WeakDerivative.lean",
+        "shape": "box"
+      }
+    },
+    "lem:weak-determinant": {
+      "blueprint": "lem:weak-determinant",
+      "description": "Generic, one fixed direction: bounded weak matrix fields over any finite index type (empty, singleton) and independent ambient dimension: det A has the signed permutation-polynomial weak derivative, L2 on compact sets; no symmetry, positivity or invertibility. Audit clients: actual regular source law (determinant, cofactors). Not inverse/log-det calculus.",
+      "diagram": {
+        "id": "WDET",
+        "label": "Weak determinant<br/>Permutation polynomial",
+        "source": "../../formalization/FunctionalInequalities/Analysis/Matrix/WeakDerivative.lean",
+        "shape": "box"
+      }
+    },
+    "lem:weak-trace-quadratic": {
+      "blueprint": "lem:weak-trace-quadratic",
+      "description": "Generic, one fixed direction: tr(B A B A) has weak derivative 2 tr(B A B DA), L2 on compact sets, for every real B and independent dimensions (zero included). Audit client: 2 tr(B H B T_k) for the actual regular source law. Not (2.8)/(2.10), evolution or the integrated trace estimate.",
+      "diagram": {
+        "id": "WTRACE",
+        "label": "Weak trace quadratic<br/>tr(BABA), arbitrary B",
+        "source": "../../formalization/FunctionalInequalities/Analysis/Matrix/WeakDerivative.lean",
+        "shape": "box"
+      }
+    },
+    "lem:determinant-permutation-differential": {
+      "blueprint": "lem:determinant-permutation-differential",
+      "description": "Pointwise: for every finite index type (empty, singleton) and arbitrary singular/non-Hermitian A, N, the outer differential fderiv det A N equals the signed permutation polynomial, so the weak determinant density is the outer differential of det applied to the weak derivative. Audit client: for the actual regular source law the density equals det(H) tr(H^-1 T_k) a.e. (existing Jacobi formula, actual a.e. positive definiteness). Not weak log-det/inverse/exponent calculus or weak (2.4).",
+      "diagram": {
+        "id": "WJAC",
+        "label": "Weak determinant density<br/>= outer Jacobi differential",
+        "source": "../../formalization/FunctionalInequalities/Analysis/Matrix/DeterminantDerivative.lean",
+        "shape": "box"
+      }
+    },
+    "lem:exp-lipschitz-half-line": {
+      "blueprint": "lem:exp-lipschitz-half-line",
+      "description": "Generic: for every real C (negative included, no lower bound), exp is exp(C)-Lipschitz on (-inf, C].",
+      "diagram": {
+        "id": "EXPHALF",
+        "label": "Exponential Lipschitz<br/>on a half-line",
+        "source": "../../formalization/FunctionalInequalities/Analysis/Lipschitz/Exponential.lean",
+        "shape": "box"
+      }
+    },
+    "lem:weak-derivative-ae-congr": {
+      "blueprint": "lem:weak-derivative-ae-congr",
+      "description": "Generic: on every finite-dimensional real inner-product space and along every direction, a weak directional derivative is invariant under a.e. changes of the function and of its derivative; local integrability of the new representatives is produced.",
+      "diagram": {
+        "id": "WAECONGR",
+        "label": "Weak derivative<br/>a.e. transport",
+        "source": "../../formalization/FunctionalInequalities/Analysis/WeakDerivative.lean",
+        "shape": "box"
+      }
+    },
+    "lem:ae-mongeampere-exponent": {
+      "blueprint": "lem:ae-mongeampere-exponent",
+      "description": "For C1 u with Lipschitz gradient and C1 V: a.e., the derivative of -u + V(grad u) along e_j is -d_j u + sum_k H_jk d_k V(grad u). Existing proof, previously compiler-private; only visibility changed. No convexity, second-order regularity or equation premise.",
+      "diagram": {
+        "id": "AEEXP",
+        "label": "A.e. exponent derivative<br/>−u + V(∇u)",
+        "source": "../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakInverseHessian.lean",
+        "shape": "box"
+      }
+    },
+    "lem:letwin-regular-moment-weak-first-ma": {
+      "blueprint": "lem:letwin-regular-moment-weak-first-ma",
+      "description": "Exact original R0 regular-source hypotheses produce the same u, L, LF, T with every R0 field (normalization and gradient pushforward produced), plus: exp(-u + W(grad u)) globally Lipschitz; for every k, weak derivative det(H) tr(H^-1 T_k) of det H (compact-local L2), weak derivative tr(H^-1 T_k) of log det H, and a.e. tr(H^-1 T_k) = -d_k u + sum_a H_ka d_a W(grad u), the first weak Monge-Ampere identity (2.4). Log-det identification for this actual source only, not unrestricted rough-matrix log-det calculus. Not the second evolution identity (2.6) or the full Lemma 2.4, trace estimate, Theorems 2.5/1.2 or constant 8.",
+      "diagram": {
+        "id": "WMA1",
+        "label": "Regular source law<br/>First weak Monge–Ampère (2.4)",
+        "source": "../../formalization/FunctionalInequalities/KLS/CEK/MomentRegularity.lean",
+        "shape": "box"
+      }
     }
   },
   "diagram": {
@@ -1691,7 +1871,25 @@
           "CDIFF",
           "WEAKGENINT",
           "INCINT",
-          "INCENERGY"
+          "INCENERGY",
+          "TRANSCUT",
+          "HESSL2",
+          "HESSDIFF",
+          "WEAKTHIRD",
+          "SRCDIFF",
+          "EXPLIP",
+          "REGTENSOR",
+          "WPRODG",
+          "WPRODL",
+          "WLIN",
+          "WFPROD",
+          "WDET",
+          "WTRACE",
+          "WJAC",
+          "EXPHALF",
+          "WAECONGR",
+          "AEEXP",
+          "WMA1"
         ]
       }
     ],
@@ -2029,6 +2227,126 @@
       {
         "from": "WEAKGEN",
         "to": "INCENERGY",
+        "kind": "dependency"
+      },
+      {
+        "from": "HESSENT",
+        "to": "HESSL2",
+        "kind": "dependency"
+      },
+      {
+        "from": "TRANSCUT",
+        "to": "HESSDIFF",
+        "kind": "dependency"
+      },
+      {
+        "from": "HESSL2",
+        "to": "HESSDIFF",
+        "kind": "dependency"
+      },
+      {
+        "from": "INCINT",
+        "to": "HESSDIFF",
+        "kind": "dependency"
+      },
+      {
+        "from": "INCENERGY",
+        "to": "HESSDIFF",
+        "kind": "dependency"
+      },
+      {
+        "from": "HESSL2",
+        "to": "WEAKTHIRD",
+        "kind": "dependency"
+      },
+      {
+        "from": "HESSDIFF",
+        "to": "WEAKTHIRD",
+        "kind": "dependency"
+      },
+      {
+        "from": "SRCDIFF",
+        "to": "REGTENSOR",
+        "kind": "dependency"
+      },
+      {
+        "from": "EXPLIP",
+        "to": "REGTENSOR",
+        "kind": "dependency"
+      },
+      {
+        "from": "REGMOM",
+        "to": "REGTENSOR",
+        "kind": "dependency"
+      },
+      {
+        "from": "WEAKTHIRD",
+        "to": "REGTENSOR",
+        "kind": "dependency"
+      },
+      {
+        "from": "WPRODG",
+        "to": "WPRODL",
+        "kind": "dependency"
+      },
+      {
+        "from": "WPRODL",
+        "to": "WFPROD",
+        "kind": "dependency"
+      },
+      {
+        "from": "WFPROD",
+        "to": "WDET",
+        "kind": "dependency"
+      },
+      {
+        "from": "WLIN",
+        "to": "WDET",
+        "kind": "dependency"
+      },
+      {
+        "from": "WPRODL",
+        "to": "WTRACE",
+        "kind": "dependency"
+      },
+      {
+        "from": "WLIN",
+        "to": "WTRACE",
+        "kind": "dependency"
+      },
+      {
+        "from": "WDET",
+        "to": "WJAC",
+        "kind": "dependency"
+      },
+      {
+        "from": "REGTENSOR",
+        "to": "WMA1",
+        "kind": "dependency"
+      },
+      {
+        "from": "WDET",
+        "to": "WMA1",
+        "kind": "dependency"
+      },
+      {
+        "from": "WJAC",
+        "to": "WMA1",
+        "kind": "dependency"
+      },
+      {
+        "from": "AEEXP",
+        "to": "WMA1",
+        "kind": "dependency"
+      },
+      {
+        "from": "EXPHALF",
+        "to": "WMA1",
+        "kind": "dependency"
+      },
+      {
+        "from": "WAECONGR",
+        "to": "WMA1",
         "kind": "dependency"
       }
     ]

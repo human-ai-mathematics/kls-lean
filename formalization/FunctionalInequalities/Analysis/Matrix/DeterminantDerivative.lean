@@ -4,6 +4,7 @@ import Mathlib.LinearAlgebra.Matrix.NonsingularInverse
 import Mathlib.LinearAlgebra.Matrix.Trace
 import Mathlib.Analysis.Matrix.Normed
 import Mathlib.Analysis.SpecialFunctions.Log.Deriv
+import Mathlib.Analysis.Calculus.TaylorIntegral
 
 /-!
 # Derivative of the determinant and of the log-determinant (Jacobi's formula)
@@ -93,3 +94,67 @@ theorem fderiv_logDet_comp_apply {G : Type*} [NormedAddCommGroup G] [NormedSpace
   rw [hc, ContinuousLinearMap.comp_apply, fderiv_logDet_apply (M x) _ hdet]
 
 end FunctionalInequalities.Analysis
+
+
+section DeterminantPolynomialIdentification
+
+open scoped BigOperators Matrix.Norms.Elementwise
+
+namespace FunctionalInequalities.Analysis
+
+/-- Derivative of the finite determinant polynomial along a scalar affine path.
+No outer matrix chain rule, invertibility, or nonempty-index assumption. -/
+private theorem deriv_det_add_smul_zero {ι : Type*}
+    [instFintype : Fintype ι] [instDecidableEq : DecidableEq ι]
+    (A N : Matrix ι ι ℝ) :
+    deriv (fun t : ℝ => Matrix.det (A + t • N)) 0 =
+      ∑ σ : Equiv.Perm ι, ((Equiv.Perm.sign σ : ℤ) : ℝ) *
+        ∑ i : ι, N (σ i) i *
+          ∏ j ∈ (Finset.univ : Finset ι).erase i, A (σ j) j := by
+  have hentry (σ : Equiv.Perm ι) (i : ι) :
+      HasDerivAt (fun t : ℝ => A (σ i) i + t * N (σ i) i)
+        (N (σ i) i) 0 := by
+    simpa only [id_eq, one_mul] using
+      HasDerivAt.const_add (A (σ i) i)
+        ((hasDerivAt_id (0 : ℝ)).mul_const (N (σ i) i))
+  have hprod (σ : Equiv.Perm ι) :
+      HasDerivAt
+        (fun t : ℝ => ∏ i : ι, (A (σ i) i + t * N (σ i) i))
+        (∑ i : ι, N (σ i) i *
+          ∏ j ∈ (Finset.univ : Finset ι).erase i, A (σ j) j) 0 := by
+    simpa only [zero_mul, add_zero, smul_eq_mul, mul_comm] using
+      (HasDerivAt.fun_finsetProd (u := Finset.univ)
+        (fun i _ => hentry σ i))
+  have hpoly :
+      HasDerivAt (fun t : ℝ => Matrix.det (A + t • N))
+        (∑ σ : Equiv.Perm ι, ((Equiv.Perm.sign σ : ℤ) : ℝ) *
+          ∑ i : ι, N (σ i) i *
+            ∏ j ∈ (Finset.univ : Finset ι).erase i, A (σ j) j) 0 := by
+    simp only [Matrix.det_apply', Matrix.add_apply, Matrix.smul_apply, smul_eq_mul]
+    exact HasDerivAt.fun_sum
+      (fun σ _ =>
+        HasDerivAt.const_mul ((Equiv.Perm.sign σ : ℤ) : ℝ) (hprod σ))
+  exact hpoly.deriv
+
+
+/-- The signed permutation-polynomial determinant density is its existing
+outer matrix derivative, including singular and empty matrices. -/
+theorem fderiv_det_eq_sum_permutation {ι : Type*}
+    [instFintype : Fintype ι] [instDecidableEq : DecidableEq ι]
+    (A N : Matrix ι ι ℝ) :
+    fderiv ℝ Matrix.det A N =
+      ∑ σ : Equiv.Perm ι, ((Equiv.Perm.sign σ : ℤ) : ℝ) *
+        ∑ i : ι, N (σ i) i *
+          ∏ j ∈ (Finset.univ : Finset ι).erase i, A (σ j) j := by
+  have hd : DifferentiableAt ℝ Matrix.det (A + (0 : ℝ) • N) := by
+    simpa only [zero_smul, add_zero] using differentiableAt_det A
+  calc
+    fderiv ℝ Matrix.det A N =
+        deriv (fun t : ℝ => Matrix.det (A + t • N)) 0 := by
+      simpa only [zero_smul, add_zero] using! hd.deriv_comp_add_smul.symm
+    _ = _ := deriv_det_add_smul_zero A N
+
+
+end FunctionalInequalities.Analysis
+
+end DeterminantPolynomialIdentification
