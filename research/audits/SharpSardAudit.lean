@@ -1,5 +1,5 @@
 import FunctionalInequalities.Analysis.Sard.Sharp
-
+import FunctionalInequalities.KLS.BKL.Poincare
 /-!
 # Scope audit for the sharp finite-regularity Sard theorem
 

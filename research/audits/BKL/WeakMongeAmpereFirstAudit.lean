@@ -1,4 +1,4 @@
-import FunctionalInequalities.KLS.CEK.MomentRegularity
+import FunctionalInequalities.KLS.CEK.MomentRegularity.WeakDerivative
 
 /-!
 # Actual-source first weak Monge–Ampère identity

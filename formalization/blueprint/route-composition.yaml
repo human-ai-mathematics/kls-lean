@@ -18,12 +18,19 @@
   "claims": [
     {
       "node": "conj:kls",
-      "state": "open",
+      "state": "proved",
       "provenance": {
-        "source": "kls-exploration",
-        "record": "conj:kls"
+        "source": "kls-lean",
+        "path": "formalization/blueprint/src/chapters/00-orientation-and-status.tex"
       },
-      "evidence": []
+      "evidence": [
+        {
+          "kind": "lean",
+          "source": "kls-lean",
+          "ledger_node": "thm:bkl-poincare",
+          "declaration": "FunctionalInequalities.KLS.kls"
+        }
+      ]
     },
     {
       "node": "thm:selected-literature-constant-equivalence",

@@ -1,6 +1,6 @@
 import FunctionalInequalities.KLS.LogConcave.BrascampLieb
 import FunctionalInequalities.KLS.BKL.GaussianTaylor
-import FunctionalInequalities.KLS.LogConcave.RegularIsotropic
+import FunctionalInequalities.KLS.LogConcave.Regular.Isotropic
 
 /-!
 # Audit: the scalar Brascamp–Lieb inequality is sharp for the standard Gaussian law on `ℝ`

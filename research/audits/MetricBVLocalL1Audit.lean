@@ -1,5 +1,5 @@
 import FunctionalInequalities.KLS.Geometry.Perimeter.LocalLipschitzTests
-
+import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
 /-! Independent full-signature clients for the bounded-ball `L¹` bridge: locally Lipschitz
 sequences converging to `1_B` in `L¹(ν)` on every closed ball, on a proper space with a finite
 measure, yield an actual approximating test sequence and the perimeter bound. The premise is

@@ -50,7 +50,7 @@ only three premises: `ν ≪ Haar`, a null support boundary, and local dominatio
 on compact subsets of the support interior.
 
 `Isotropic` also uses `Energy/CovarianceGradient/LinearEquiv` (transport under general linear
-equivalences), `Probability/CovarianceWhitening` (self-adjoint inverse square root of positive
+equivalences), `Probability/Covariance/Whitening` (self-adjoint inverse square root of positive
 definite covariance), and `Poincare/LipschitzGradient/Comparison` (the bridge from unit-weight
 Lipschitz-gradient relaxation to the literature constant). Log-concavity supplies log-concavity
 of the image law, full support, and positive definite intrinsic covariance.
@@ -64,7 +64,7 @@ the translated law and ambient second moments.
 Lipschitz-gradient pre-energy for any probability law. Log-concavity supplies the contract's
 premises: absolute continuity, a null support boundary, and moments.
 
-`AbsoluteContinuity` also uses `Probability/BallAverages`. `BorellRepresentation` uses both
+`AbsoluteContinuity` also uses `Probability/Domination/Averages`. `BorellRepresentation` uses both
 absolute continuity (to construct the density representative) and the Borel-set formulation
 (for Borell's tail lemma and exponential moments).
 

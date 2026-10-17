@@ -1,4 +1,6 @@
-import FunctionalInequalities.KLS.Geometry.Perimeter.MetricBV
+import FunctionalInequalities.KLS.Geometry.Perimeter.MetricBV.Basic
+import FunctionalInequalities.KLS.Geometry.Perimeter.MetricBV.Finite
+import FunctionalInequalities.KLS.Geometry.Perimeter.MetricBV.Approximation
 import Mathlib.Probability.Distributions.Gaussian.Real
 
 /-! Independent full-signature clients for the recovery sequence of the metric BV perimeter:

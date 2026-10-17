@@ -5,7 +5,7 @@ import FunctionalInequalities.KLS.BKL.Reduction
 
 Source: Bizeul–Klartag–Lehec, arXiv:2610.05474v1, p. 30, proof of Theorem 1.1 from Theorems 3.1,
 4.1 and Proposition 7.1. The reduction is conditional on the universal cumulant bounds
-`CumulantBound d ((d!)² K^d)` for all `d ≥ 2` (Theorem 4.1, not proved); it yields
+`CumulantBound d ((d!)² K^d)` for all `d ≥ 2` (supplied separately by the proved Theorem 4.1); it yields
 `C_P(μ) ≤ 2 C_{3.1} K` for every isotropic regular law in every dimension. Clients: the `d = 1` Taylor
 bound for the standard Gaussian on `ℝ¹`, the numeric step at `K = 1`, and the conditional conclusion
 specialised to `K = 1`. Neither Theorem 4.1 nor Theorem 1.1 is asserted.

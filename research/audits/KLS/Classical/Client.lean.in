@@ -1,0 +1,97 @@
+import OriginalAnalyticSpecification
+import FunctionalInequalities.KLS.Target
+import FunctionalInequalities.KLS.LogConcave.Poincare
+import FunctionalInequalities.KLS.IsotropicSupport
+import FunctionalInequalities.KLS.LogConcave.Density.Tilted
+import Lean
+
+noncomputable section
+open MeasureTheory ProbabilityTheory
+open FunctionalInequalities
+open scoped RealInnerProductSpace ContDiff
+namespace SecondIndependentReview
+
+-- Definition bridge checked by reduction, rather than a name-level assertion.
+theorem rawLogConcave_iff {n : ℕ}
+    (μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin n))) :
+    RawLogConcave μ ↔ KLS.LogConcave μ := Iff.rfl
+
+theorem covarianceNormalizedSmoothKls : CovarianceNormalizedSmoothKls := by
+  obtain ⟨C, hC⟩ := KLS.kls
+  refine ⟨(C : ℝ) + 1, by positivity, ?_⟩
+  intro n μ hLC f hf hf2 hgf
+  have hLC' : KLS.LogConcave μ := (rawLogConcave_iff μ).mp hLC
+  have h2 := hLC'.memLp_id_two
+  let A := Covariance.operator (μ : Measure (EuclideanSpace ℝ (Fin n)))
+  let B : NNReal := C * ‖A‖₊
+  have hc : Poincare.SmoothGradient.Ambient.constant μ ≤ (B : ENNReal) := by
+    rw [← Poincare.SmoothTest.constant_eq_ambient μ,
+      hLC'.smoothTest_constant_eq_localSlope]
+    simpa only [B, A, ENNReal.coe_mul, ← coe_nnnorm, ENNReal.ofReal_coe_nnreal]
+      using hC n μ hLC' h2
+  have hholds := (Poincare.SmoothTest.holds_iff_ambient μ B).mpr
+    ((Poincare.SmoothGradient.Ambient.holds_iff_constant_le μ B).mpr hc)
+  have hb := hholds.variance_le (f := f) ⟨hf,hf2,hgf⟩
+  change variance f (μ : Measure (EuclideanSpace ℝ (Fin n))) ≤ (B : ℝ) *
+    (∫ x, ‖gradient f x‖ ^ 2 ∂(μ : Measure (EuclideanSpace ℝ (Fin n)))) at hb
+  have hnonneg : 0 ≤ ∫ x, ‖gradient f x‖ ^ 2 ∂(μ : Measure (EuclideanSpace ℝ (Fin n))) :=
+    integral_nonneg fun x => sq_nonneg _
+  change variance f (μ : Measure (EuclideanSpace ℝ (Fin n))) ≤ ((C : ℝ) + 1) * ‖A‖ *
+    (∫ x, ‖gradient f x‖ ^ 2 ∂(μ : Measure (EuclideanSpace ℝ (Fin n))))
+  apply hb.trans
+  dsimp [B]
+  nlinarith [norm_nonneg A, mul_nonneg (norm_nonneg A) hnonneg]
+
+theorem isotropicLocallyLipschitzKls : IsotropicLocallyLipschitzKls := by
+  obtain ⟨C, hCpos, hC⟩ := KLS.BKL.Localization.theorem11.{0}
+  refine ⟨C, hCpos, ?_⟩
+  intro n μ hLC hmean hcov f hflip hf2
+  have hLC' : KLS.LogConcave μ := (rawLogConcave_iff μ).mp hLC
+  have h2 := hLC'.memLp_id_two
+  have hiso : KLS.Isotropic μ := KLS.isotropic_of_moments μ h2 hmean hcov
+  have hc : Poincare.SmoothGradient.Ambient.constant μ ≤ (C : ENNReal) := by
+    rw [← Poincare.SmoothTest.constant_eq_ambient μ,
+      hLC'.smoothTest_constant_eq_localSlope]
+    exact hC _ μ hLC' hiso
+  have hsmooth := (Poincare.SmoothTest.holds_iff_ambient μ C).mpr
+    ((Poincare.SmoothGradient.Ambient.holds_iff_constant_le μ C).mpr hc)
+  have hi := hLC'.interior_support_nonempty_of_affineSupport_eq_top
+    hiso.affineSupport_eq_top
+  have hac : (μ : Measure (EuclideanSpace ℝ (Fin n))) ≪ (volume : Measure (EuclideanSpace ℝ (Fin n))) :=
+    hLC'.absolutelyContinuous_haar volume hi
+  have hlocal := (Poincare.SmoothTest.holds_iff_localSlope μ volume hac C).mp hsmooth
+  have hgradient := (Poincare.LocalSlope.holds_iff_memLp_gradient μ volume hac C).mp hlocal
+  by_cases hg2 : MemLp (gradient f) 2 (μ : Measure _)
+  · simpa only [ENNReal.ofReal_coe_nnreal] using hgradient f hflip hf2 hg2
+  · have htop : Energy.LocalSlope.energy μ f = ⊤ := by
+      by_contra hfinite
+      exact hg2 ((Energy.LocalSlope.admissible_iff_memLp_gradient μ volume hac f).mp
+        ⟨hflip, hf2, hfinite⟩).2.2
+    rw [← Energy.LocalSlope.energy_eq_lintegral_gradient μ volume hac f hflip, htop]
+    simp [ENNReal.ofReal_coe_nnreal, hCpos.ne']
+
+theorem uniformConvexBodyKls : UniformConvexBodyKls := by
+  obtain ⟨C, hCpos, hC⟩ := isotropicLocallyLipschitzKls
+  refine ⟨C, hCpos, ?_⟩
+  intro n K hcompact hconv hvol0 μ hμ hmean hcov f hlip hf2
+  have hvoltop : volume K ≠ ⊤ := hcompact.measure_ne_top
+  have hpos : 0 < (volume K).toReal := ENNReal.toReal_pos hvol0 hvoltop
+  let W : EuclideanSpace ℝ (Fin n) → ℝ := fun _ => Real.log (volume K).toReal
+  have hexp : ENNReal.ofReal (Real.exp (-Real.log (volume K).toReal)) = (volume K)⁻¹ := by
+    rw [Real.exp_neg, Real.exp_log hpos, ENNReal.ofReal_inv_of_pos hpos,
+      ENNReal.ofReal_toReal hvoltop]
+  have hlc : KLS.LogConcave μ := KLS.LogConcave.logConcave_of_eq_restricted_exp μ
+    hcompact.isClosed hconv (W := W) continuous_const (convexOn_const _ convex_univ) (by
+      rw [hμ]
+      congr 1
+      funext x
+      by_cases hx : x ∈ K <;> simp [hx, W, hexp])
+  exact hC n μ ((rawLogConcave_iff μ).mpr hlc) hmean hcov f hlip hf2
+
+#print axioms FunctionalInequalities.KLS.kls
+#print axioms covarianceNormalizedSmoothKls
+#print axioms isotropicLocallyLipschitzKls
+#print axioms uniformConvexBodyKls
+#check covarianceNormalizedSmoothKls
+#check isotropicLocallyLipschitzKls
+end SecondIndependentReview

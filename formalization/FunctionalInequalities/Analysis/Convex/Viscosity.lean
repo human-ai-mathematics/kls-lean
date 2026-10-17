@@ -1,4 +1,4 @@
-import FunctionalInequalities.Probability.Stein.HessianKernel
+import FunctionalInequalities.Analysis.BakryEmery.HessianOperator
 import Mathlib.Analysis.Calculus.DerivativeTest
 import FunctionalInequalities.Analysis.Convex.Alexandrov
 import FunctionalInequalities.Analysis.Convex.SecondOrder

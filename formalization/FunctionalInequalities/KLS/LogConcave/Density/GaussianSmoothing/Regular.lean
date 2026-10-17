@@ -1,5 +1,5 @@
 import FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Growth
-import FunctionalInequalities.KLS.LogConcave.Regular
+import FunctionalInequalities.KLS.LogConcave.Regular.Basic
 import FunctionalInequalities.Probability.QuadraticTilt
 
 /-!

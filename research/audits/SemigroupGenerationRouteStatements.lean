@@ -2,7 +2,7 @@ import FunctionalInequalities.Energy.Relaxation.LinearPMap
 import Mathlib.Analysis.InnerProductSpace.LaxMilgram
 import Mathlib.Analysis.InnerProductSpace.LinearPMap
 import Mathlib.Analysis.Normed.Algebra.Exponential
-
+import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
 /-!
 # Route statements for semigroup generation from a closed energy form
 

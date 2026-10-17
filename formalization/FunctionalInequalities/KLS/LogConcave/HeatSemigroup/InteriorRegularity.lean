@@ -1,5 +1,5 @@
 import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.OperatorCore
-import FunctionalInequalities.Analysis.Mollification
+import FunctionalInequalities.Analysis.Mollification.Basic
 
 /-!
 # Interior regularity of deficiency elements, and the operator core
@@ -29,7 +29,7 @@ Against the Haar measure the equation `ℒ u = u` for the class `W = ρ u` reads
 `Δ W = -div (W ∇U) + W`: `∫ Δf W dm = ∫ ⟪∇f, W ∇U⟫ dm + ∫ f W dm` for all `f ∈ C_c^∞(V)`
 (`integral_laplacian_mul_tiltedDensity_mul`). The principal part is the constant-coefficient
 Laplacian, so mollification commutes with it: with a cutoff `η` equal to one near `tsupport χ`
-and the normalised bumps `ρₙ` of `Analysis/Mollification.lean`, the smooth functions
+and the normalised bumps `ρₙ` of `Analysis/Mollification/Basic.lean`, the smooth functions
 `vₙ = ρₙ ⋆ (η W)` satisfy the same equation with the continuous fields `Hₙ = ρₙ ⋆ (η W ∇U)`
 against every test supported in `tsupport χ` (`integral_laplacian_mul_convolution_eq`). The
 Caccioppoli-type estimate `‖χ ∇v‖ ≤ 3 ‖v ∇χ‖ + 2 ‖χ H‖`, obtained from the test `g = χ² v`
@@ -39,12 +39,12 @@ compactly supported tests `gₙ = χ vₙ / ρ` converge to `[χ u]` in `L²(ν)
 `L²(ν; V)`, and closedness of `T̄` gives `[χ u] ∈ D(T̄)`. No weak compactness, no Friedrichs
 commutator and no Fourier transform is used, and no classical derivative of `u` is ever taken.
 
-## What this is not
+## Scope and downstream results
 
-Nothing here is a statement about the semigroup, about `Γ₂`, or about convexity; the potential
-is only `C¹`. The passage from smooth potentials to general log-concave laws, the `Γ` time
-interpolation, `Γ(P_t f) ≤ P_t Γ(f)`, the constant `π`, Buser and KLS remain open and are not
-advanced by this module. The deliberate `KLS/Target.lean` hole is untouched.
+This module proves the operator-core result for a `C¹` potential. Semigroup estimates and
+convexity-based applications have their own owners. The numerical π Cheeger--Buser comparison
+and the BKL proof of KLS are separately formalized downstream; `KLS/Target.lean` contains the
+proved target. None of those conclusions is asserted by the operator-core theorem alone.
 -/
 
 noncomputable section

@@ -1,4 +1,4 @@
-import FunctionalInequalities.KLS.CEK.MomentRegularity
+import FunctionalInequalities.KLS.CEK.MomentRegularity.Potential
 
 noncomputable section
 open MeasureTheory Set Filter

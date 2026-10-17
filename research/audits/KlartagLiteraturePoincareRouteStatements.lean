@@ -1,7 +1,7 @@
 import FunctionalInequalities.Energy.LocalSlope.Gradient
 import FunctionalInequalities.Poincare.LocalSlope.SmoothTestComparison
 import FunctionalInequalities.KLS.LogConcave.Density.AbsoluteContinuity
-
+import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
 /-!
 # Route statements for the literature-Poincaré clause of `thm:klartag-density-frontend-identification`
 

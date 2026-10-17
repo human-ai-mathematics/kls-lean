@@ -1,6 +1,7 @@
-import FunctionalInequalities.Analysis.WeakDerivative
-import FunctionalInequalities.KLS.CEK.MomentRegularity
-
+import FunctionalInequalities.Analysis.WeakDerivative.Basic
+import FunctionalInequalities.Analysis.WeakDerivative.Calculus
+import FunctionalInequalities.KLS.CEK.MomentRegularity.WeakDerivative
+import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
 noncomputable section
 open MeasureTheory Set
 open scoped ContDiff Topology
@@ -8,31 +9,6 @@ open FunctionalInequalities FunctionalInequalities.Analysis
 open FunctionalInequalities.Probability.Stein
 
 namespace WeakHessianProductAudit.Global
-
-/-- Pure cutoff adapter: global L2 follows from compact-local L2, without a
-finite whole-space measure assumption. -/
-private theorem cutoff_memLp {n : ℕ}
-    {f χ : EuclideanSpace ℝ (Fin n) → ℝ}
-    (hχ : Continuous χ) (hχc : HasCompactSupport χ)
-    (hf : ∀ S : Set (EuclideanSpace ℝ (Fin n)), IsCompact S →
-      MemLp f 2 ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S)) :
-    MemLp (fun x => χ x * f x) 2
-      (volume : Measure (EuclideanSpace ℝ (Fin n))) := by
-  classical
-  have hKm : MeasurableSet (tsupport χ) := (isClosed_tsupport χ).measurableSet
-  have hind : MemLp ((tsupport χ).indicator f) 2
-      (volume : Measure (EuclideanSpace ℝ (Fin n))) :=
-    (memLp_indicator_iff_restrict hKm).mpr (hf (tsupport χ) hχc)
-  have hχlp : MemLp χ (⊤ : ENNReal) (volume : Measure (EuclideanSpace ℝ (Fin n))) :=
-    hχ.memLp_of_hasCompactSupport hχc
-  have hm : MemLp (fun x => χ x * ((tsupport χ).indicator f) x) 2
-      (volume : Measure (EuclideanSpace ℝ (Fin n))) := hind.mul' hχlp
-  convert hm using 1
-  funext x
-  by_cases hx : x ∈ tsupport χ
-  · rw [Set.indicator_of_mem hx]
-  · rw [Set.indicator_of_notMem hx, image_eq_zero_of_notMem_tsupport hx,
-      zero_mul, zero_mul]
 
 /-- Genuine application: the actual normalized regular source law produces
 both cut-off Hessian factors and their derivative densities. -/
@@ -84,7 +60,7 @@ theorem produced_normalized_cutoff_hessian_product {n : ℕ} (hn : 0 < n)
       (fun x => χ x * T x k r s + fderiv ℝ χ x
         (EuclideanSpace.basisFun (Fin n) ℝ k) * hessianMatrix u x r s) 2
       (volume : Measure (EuclideanSpace ℝ (Fin n))) :=
-    (cutoff_memLp hχ.continuous hχc (hT k r s).2).add
+    (memLp_mul_of_hasCompactSupport hχ.continuous hχc (hT k r s).2).add
       (Probability.Stein.memLp_cutoff_mul_hessianMatrix_entry hG r s hχd hχdc)
   exact ((hT k i j).1.mul_contDiff hχ hχc).mul_of_memLp_two
     ((hT k a b).1.mul_contDiff hχ hχc)

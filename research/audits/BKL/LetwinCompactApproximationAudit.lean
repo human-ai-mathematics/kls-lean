@@ -1,5 +1,6 @@
 import FunctionalInequalities.KLS.BKL.LetwinApproximation
 import FunctionalInequalities.KLS.BKL.Theorem41
+import FunctionalInequalities.KLS.BKL.Poincare
 noncomputable section
 open MeasureTheory Set Metric Filter
 open scoped RealInnerProductSpace ContDiff Topology

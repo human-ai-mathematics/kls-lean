@@ -1,7 +1,7 @@
 import FunctionalInequalities.Poincare.SmoothTest.Basic
 import Mathlib.MeasureTheory.Measure.ProbabilityMeasure
 import Mathlib.Topology.ContinuousMap.Bounded.Basic
-import FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Basic
+import FunctionalInequalities.Analysis.Cutoff.SmoothBall
 import Mathlib.MeasureTheory.Integral.DominatedConvergence
 
 /-!

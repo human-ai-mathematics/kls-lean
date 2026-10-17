@@ -1,7 +1,7 @@
 import FunctionalInequalities.KLS.BKL.PoissonIterate.Basic
 import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Hessian
 import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Tilt
-import FunctionalInequalities.KLS.LogConcave.Regular
+import FunctionalInequalities.KLS.LogConcave.Regular.Basic
 
 /-!
 # Route statements: the BKL iterates in `D(A)` and Theorem 3.1

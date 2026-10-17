@@ -1,6 +1,7 @@
 import FunctionalInequalities.Analysis.BakryEmery.MongeAmpere
-import FunctionalInequalities.Probability.Stein.HessianKernel
-import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.InverseHessian
+import FunctionalInequalities.Analysis.Operator.Coordinates
+import FunctionalInequalities.Analysis.BakryEmery.HessianOperator
+import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.InverseHessian.Basic
 import Mathlib.Analysis.SpecialFunctions.Gaussian.GaussianIntegral
 import Mathlib.Analysis.Calculus.BumpFunction.FiniteDimension
 import Mathlib.MeasureTheory.Measure.Haar.InnerProductSpace

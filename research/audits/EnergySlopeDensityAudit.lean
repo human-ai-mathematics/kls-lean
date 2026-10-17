@@ -1,5 +1,5 @@
 import FunctionalInequalities.Energy.Euclidean.Slope.Density
-
+import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
 /-!
 # Scope audit for the density module `Energy/Euclidean/Slope/Density.lean`
 

@@ -1,4 +1,4 @@
-import FunctionalInequalities.KLS.LogConcave.RegularAffine
+import FunctionalInequalities.KLS.LogConcave.Regular.Affine
 import Mathlib.Probability.ConditionalProbability
 import FunctionalInequalities.KLS.Isotropic
 import FunctionalInequalities.Analysis.Operator.InverseSqrt

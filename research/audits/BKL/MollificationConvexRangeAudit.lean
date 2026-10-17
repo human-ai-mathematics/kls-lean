@@ -1,4 +1,4 @@
-import FunctionalInequalities.Analysis.Mollification
+import FunctionalInequalities.Analysis.Mollification.Basic
 noncomputable section
 open MeasureTheory Set Filter Metric
 open scoped Topology Convolution

@@ -1,4 +1,6 @@
-import FunctionalInequalities.KLS.Geometry.Perimeter.MetricBV
+import FunctionalInequalities.KLS.Geometry.Perimeter.MetricBV.Basic
+import FunctionalInequalities.KLS.Geometry.Perimeter.MetricBV.Finite
+import FunctionalInequalities.KLS.Geometry.Perimeter.MetricBV.Transport
 
 /-! Independent full-signature clients for the perimeter equality under a nonexpansive retraction
 onto a full-mass measurable subset: the nonexpansive-composition slope bound (with a collapsing

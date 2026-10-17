@@ -1,11 +1,14 @@
-import FunctionalInequalities.KLS.BKL.PosteriorResponse
-import FunctionalInequalities.KLS.BKL.PosteriorCovariance
+import FunctionalInequalities.KLS.BKL.Posterior.Response
+import FunctionalInequalities.KLS.BKL.Posterior.Covariance
 import FunctionalInequalities.Probability.Posterior.Generator
 import FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Moments
-import FunctionalInequalities.KLS.LogConcave.Regular
+import FunctionalInequalities.KLS.LogConcave.Regular.Basic
 import FunctionalInequalities.KLS.BKL.GaussianTaylor
 import FunctionalInequalities.KLS.LogConcave.Line.Poincare
-
+import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
+import FunctionalInequalities.KLS.BKL.Posterior.Noise
+import FunctionalInequalities.KLS.BKL.Posterior.Regularity
+import FunctionalInequalities.KLS.BKL.Posterior.Standardization
 /-!
 # Audit: parameter response, generator and log-concavity of the BKL posterior (67)–(68)
 

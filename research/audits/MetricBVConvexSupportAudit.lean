@@ -1,3 +1,4 @@
+import FunctionalInequalities.KLS.Geometry.Perimeter.MetricBV.Finite
 import FunctionalInequalities.KLS.Geometry.Perimeter.ConvexSupport
 
 /-! Independent full-signature clients for the metric BV perimeter on a closed convex support:

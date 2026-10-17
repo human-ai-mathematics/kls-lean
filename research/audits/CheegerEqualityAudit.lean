@@ -1,5 +1,5 @@
 import FunctionalInequalities.KLS.Geometry.Cheeger.Equality
-
+import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
 /-!
 # Scope audit for the hole-free Cheeger-equality module
 

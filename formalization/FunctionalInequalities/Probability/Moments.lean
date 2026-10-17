@@ -7,6 +7,7 @@ import Mathlib.MeasureTheory.Integral.Bochner.Basic
 import Mathlib.Probability.Moments.Variance
 import Mathlib.MeasureTheory.Integral.Bochner.Set
 import Mathlib.MeasureTheory.Measure.Real
+import FunctionalInequalities.Analysis.Matrix.Trace.Algebra
 
 /-!
 # Finite second moments of Borel laws and a third-moment contraction
@@ -431,3 +432,104 @@ theorem integral_sum_sum_const_mul {α ι κ : Type*} [MeasurableSpace α] {ν :
 end CoordinateMonomials
 
 end FunctionalInequalities.Probability
+
+section FiniteVarianceSum
+
+open MeasureTheory
+
+namespace FunctionalInequalities.Probability
+
+private theorem sum_variance_eq_integral_sum_sq_sub_sum_integral_sq {alpha I : Type*}
+    [MeasurableSpace alpha] [Fintype I] (mu : Measure alpha) [IsProbabilityMeasure mu]
+    (F : I → alpha → ℝ) (hF : ∀ i, MemLp (F i) 2 mu) :
+    (∑ i, ProbabilityTheory.variance (F i) mu) =
+      (∫ x, ∑ i, F i x ^ 2 ∂mu) - ∑ i, (∫ x, F i x ∂mu) ^ 2 := by
+  classical
+  calc
+    _ = ∑ i, ((∫ x, F i x ^ 2 ∂mu) - (∫ x, F i x ∂mu) ^ 2) := by
+      apply Finset.sum_congr rfl
+      intro i _
+      exact ProbabilityTheory.variance_eq_sub (hF i)
+    _ = (∑ i, ∫ x, F i x ^ 2 ∂mu) - ∑ i, (∫ x, F i x ∂mu) ^ 2 := by
+      rw [Finset.sum_sub_distrib]
+    _ = _ := by rw [integral_finsetSum _ (fun i _ => (hF i).integrable_sq)]
+
+end FunctionalInequalities.Probability
+
+end FiniteVarianceSum
+
+section MatrixVarianceTrace
+
+open MeasureTheory Matrix
+
+namespace FunctionalInequalities.Probability
+
+/-- For an almost-everywhere symmetric random matrix `H` with L2 entries and symmetric mean `M` under a probability
+measure, the entry variances sum to `∫ tr(H H) - tr(M M)`; all finite dimensions. -/
+theorem sum_variance_entries_eq_integral_trace_sub_trace_mean {alpha : Type*} [MeasurableSpace alpha]
+    {n : ℕ} (mu : Measure alpha) [IsProbabilityMeasure mu]
+    (H : alpha → Matrix (Fin n) (Fin n) ℝ) (M : Matrix (Fin n) (Fin n) ℝ)
+    (hM : M.IsSymm) (hH : ∀ᵐ x ∂mu, (H x).IsSymm)
+    (hH2 : ∀ i j, MemLp (fun x => H x i j) 2 mu)
+    (hmean : ∀ i j, (∫ x, H x i j ∂mu) = M i j) :
+    (∑ p : Fin n × Fin n, ProbabilityTheory.variance (fun x => H x p.1 p.2) mu) =
+      (∫ x, (H x * H x).trace ∂mu) - (M * M).trace := by
+  classical
+  have hI : (1 : Matrix (Fin n) (Fin n) ℝ).IsSymm := by
+    change (1 : Matrix (Fin n) (Fin n) ℝ).transpose = 1
+    simp only [Matrix.transpose_one]
+  have htrace : (fun x => ∑ p : Fin n × Fin n, H x p.1 p.2 ^ 2) =ᵐ[mu]
+      (fun x => (H x * H x).trace) := by
+    filter_upwards [hH] with x hx
+    simpa only [Matrix.one_mul, Matrix.mul_one, pow_two] using
+      Analysis.sum_matrix_product_entry_mul_eq_trace (1 : Matrix (Fin n) (Fin n) ℝ) (H x) (H x) hI hx
+  have hMtrace : (∑ p : Fin n × Fin n, M p.1 p.2 ^ 2) = (M * M).trace := by
+    simpa only [Matrix.one_mul, Matrix.mul_one, pow_two] using
+      Analysis.sum_matrix_product_entry_mul_eq_trace (1 : Matrix (Fin n) (Fin n) ℝ) M M hI hM
+  rw [sum_variance_eq_integral_sum_sq_sub_sum_integral_sq mu
+    (fun p : Fin n × Fin n => fun x => H x p.1 p.2) (fun p => hH2 p.1 p.2)]
+  rw [integral_congr_ae htrace]
+  simp_rw [hmean]
+  rw [hMtrace]
+
+end FunctionalInequalities.Probability
+
+end MatrixVarianceTrace
+
+/-! ### Quadratic forms of a fourth-moment vector
+
+If `f` is in `L⁴`, then `⟪A f, f⟫` is in `L²` for every continuous linear `A`. -/
+
+noncomputable section
+open MeasureTheory
+open scoped RealInnerProductSpace
+
+namespace FunctionalInequalities.Probability
+
+set_option maxHeartbeats 300000 in
+theorem memLp_quadratic_of_memLp_four {alpha E : Type*} [MeasurableSpace alpha]
+    [NormedAddCommGroup E] [InnerProductSpace ℝ E] {mu : Measure alpha}
+    {f : alpha → E} (hf : MemLp f 4 mu) (A : E →L[ℝ] E) :
+    MemLp (fun x => ⟪A (f x), f x⟫) 2 mu := by
+  have ht : ENNReal.HolderTriple (4 : ENNReal) 4 2 := by
+    constructor
+    rw [← ENNReal.coe_ofNat 4, ← ENNReal.coe_ofNat 2,
+      ← ENNReal.coe_inv (by norm_num : (4 : NNReal) ≠ 0),
+      ← ENNReal.coe_inv (by norm_num : (2 : NNReal) ≠ 0),
+      ← ENNReal.coe_add]
+    norm_num
+  have hp := hf.norm.mul hf.norm (hpqr := ht)
+  apply hp.of_le_mul (c := ‖A‖)
+    ((hf.continuousLinearMap_comp A).aestronglyMeasurable.inner hf.aestronglyMeasurable)
+  filter_upwards [] with x
+  calc
+    ‖⟪A (f x), f x⟫‖ ≤ ‖A (f x)‖ * ‖f x‖ := norm_inner_le_norm _ _
+    _ ≤ (‖A‖ * ‖f x‖) * ‖f x‖ :=
+      mul_le_mul_of_nonneg_right (A.le_opNorm (f x)) (norm_nonneg _)
+    _ = ‖A‖ * ‖‖f x‖ * ‖f x‖‖ := by
+      rw [Real.norm_of_nonneg (mul_nonneg (norm_nonneg _) (norm_nonneg _))]
+      ring
+
+end FunctionalInequalities.Probability
+
+end

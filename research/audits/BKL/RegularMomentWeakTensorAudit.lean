@@ -1,4 +1,5 @@
-import FunctionalInequalities.KLS.CEK.MomentRegularity
+import FunctionalInequalities.KLS.CEK.MomentRegularity.Potential
+import FunctionalInequalities.KLS.CEK.MomentRegularity.WeakDerivative
 import FunctionalInequalities.Analysis.Lipschitz.Gradient
 
 noncomputable section

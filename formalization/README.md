@@ -5,9 +5,15 @@ has an entry in repository-root `solutions/` that imports its mathematical owner
 For current proof scope, use the [paper register](../research/progress/LITERATURE.md),
 [BKL main proof chain](../research/progress/README.md#bkl-main-proof-chain) and
 [current handoff](../HANDOFF.md). This guide describes layout and operations, not a second
-proof-status register. Dimension-free KLS remains open.
+proof-status register. The target theorem `KLS.kls` is proved; acceptance evidence belongs to the handoff.
+
+The [Lean design](../LEAN_DESIGN.md) explains current interface boundaries; the
+[calling examples](../examples/README.md) identify narrow imports and checked clients.
 
 ## Source map
+
+The [complete filename directory](MODULES.md) expands every source directory and links all
+Lean modules. Regenerate it with `python3 research/module_inventory.py` after module moves.
 
 | Family | Responsibility / guide |
 | --- | --- |
@@ -22,9 +28,18 @@ proof-status register. Dimension-free KLS remains open.
 | `../solutions/` · `../examples/` | Certificate clients and reusable calling examples |
 | `../research/audits/` | Independent proof clients and explicitly classified candidate statements |
 
+Focused family guides explain the maintained import boundaries:
+[weak derivatives](FunctionalInequalities/Analysis/WeakDerivative/README.md),
+[matrix trace](FunctionalInequalities/Analysis/Matrix/Trace/README.md),
+[Stein identities](FunctionalInequalities/Probability/Stein/README.md),
+[metric BV](FunctionalInequalities/KLS/Geometry/Perimeter/MetricBV/README.md), and
+[regular moment producers](FunctionalInequalities/KLS/CEK/MomentRegularity/README.md).
+The [maintenance register](../research/technical-debt/remaining-families.md) links all placements
+and maps; it does not assign mathematical progress.
+
 The aggregate `FunctionalInequalities.lean` is a library import root, not a completion marker.
 The target is [KLS/Statement.lean](FunctionalInequalities/KLS/Statement.lean), with its definitions
-in [KLS/Definitions.lean](FunctionalInequalities/KLS/Definitions.lean) and the open theorem in
+in [KLS/Definitions.lean](FunctionalInequalities/KLS/Definitions.lean) and the target theorem in
 [KLS/Target.lean](FunctionalInequalities/KLS/Target.lean).
 
 ## Placement rules

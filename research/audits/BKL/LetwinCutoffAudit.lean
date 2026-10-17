@@ -1,5 +1,5 @@
 import FunctionalInequalities.Analysis.Cutoff.Conservativity
-import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.InverseHessian
+import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.InverseHessian.Basic
 import Mathlib.MeasureTheory.Integral.Bochner.Basic
 import Mathlib.Analysis.SpecificLimits.Basic
 

@@ -4,6 +4,10 @@ This directory contains thin, node-specific Lean entry points. Reusable definiti
 belong under `formalization/FunctionalInequalities/`; a file here only packages the exact theorem
 surface associated with a repository ledger node.
 
+For the selected KLS chain, start with [BKL Theorem 1.1 and KLS](#bkl-theorem-11-certificate-and-the-kls-target),
+then its [Theorem 4.1](#bkl-theorem-41-certificate) and [compact Letwin](#letwin-compact-quadratic-form-certificate)
+inputs. Exact paper coverage belongs to the [literature register](../research/progress/LITERATURE.md).
+
 ## Lean certification convention
 
 A proved ledger node certified by Lean records:
@@ -61,7 +65,7 @@ Their types preserve the reviewed generality, including empty test classes, zero
 support, zero finite constants and infinite optima. Gaussian transport through these bridges is
 now proved. See the [comparison guide](../formalization/FunctionalInequalities/Poincare/Euclidean/README.md).
 
-The `Solutions` default target builds all thirty certificates plus `GaussianAxiomAudit.lean` and
+The `Solutions` default target builds all registered certificates plus `GaussianAxiomAudit.lean` and
 `FoundationAxiomAudit.lean`. The latter guards 27 foundation and comparison declarations together
 with the Dirac and normal-direction raw-energy obstructions; each new
 certificate also has its own axiom guard. These checks require exactly `propext`, `Classical.choice`
@@ -76,7 +80,7 @@ certifies intrinsic absolute continuity from the compact-set definition.
 [`ThmSelectedLiteratureConstantEquivalence.lean`](ThmSelectedLiteratureConstantEquivalence.lean)
 then certifies the general log-concave constant equality, including singular ambient laws and
 zero-dimensional support. Both certificates and all new reusable declarations have default-build
-axiom guards. The full Borell density/moment theorem remains separate; read the
+axiom guards. Density and moment conclusions have their own certificate below; read the
 [general proof record](../research/decisions/2026-09-06-general-logconcave-comparison.md).
 
 [`ThmSmoothLipschitzConstantEquivalence.lean`](ThmSmoothLipschitzConstantEquivalence.lean)
@@ -96,7 +100,7 @@ node is `proved / checked_by: lean`; see the
 [acceptance record](../research/decisions/2026-09-06-weighted-approximation-acceptance.md).
 
 `StatementChecks.lean` is a default-build target for the literal KLS proposition and its domain
-and boundary encodings. It is not a ledger proof certificate. All twenty-nine mathematical certificates,
+and boundary encodings. It is not a ledger proof certificate. All registered mathematical certificates,
 the twenty-five named definition sanity checks, the six conditional-fiber contracts and the five
 affine covariance contracts have default-build transitive axiom guards. Existing
 Dirac representative examples and Gaussian comparisons are reused. A concrete Gaussian literature
@@ -115,54 +119,29 @@ change rules.
 
 ## Gaussian certificate
 
-`LemPoincareGaussianOneDimensional.lean` is the default-build entry point for
-`lem:poincare-gaussian-one-dimensional`, with `status: proved` and `checked_by: lean`.
-It imports `Poincare/Gaussian/Real.lean` directly and contains the sole node certificate,
-`Solutions.LemPoincareGaussianOneDimensional.certificate`. The certificate combines, for every
-`m : ℝ` and `v : NNReal`, that `(v : ℝ)` is a valid constant for `gaussianReal m v` and that the
-optimal `ENNReal` constant equals v. The file also prints the 20 proof-complete library interfaces.
-Seven typed applications cover the standard Gaussian, mean 3/variance 4, arbitrary-mean zero
-variance, and the existing Dirac-law identity; they introduce no duplicate public theorem.
+[`LemPoincareGaussianOneDimensional.lean`](LemPoincareGaussianOneDimensional.lean) certifies
+`lem:poincare-gaussian-one-dimensional`: for every real mean `m` and variance `v : NNReal`,
+`v` is a valid smooth-test Poincaré constant for `gaussianReal m v`, and its optimal
+`ENNReal` constant equals `v`. This includes zero variance and the Dirac case.
+Typed clients cover concrete and boundary cases without duplicate specialization theorems.
 
-The imported Gaussian library is split into `Density` (7 declarations), `Hardy` (9), and `Real`
-(4): density calculus and integrability feed interval/Tonelli half-line estimates, which feed the
-fixed and sharp constants. All 20 declarations are proved, and the certificate and its local
-import closure contain no forbidden proof escapes. Human semantic and mathematical review
-confirmed the variance normalization, the separate zero-variance Dirac case, and the precise
-smooth L2 finite-energy scope. Use the
-[reading guide](../formalization/FunctionalInequalities/Poincare/Gaussian/README.md) for the
-current theorem and architecture. The
-[candidate package](../research/decisions/2026-09-04-gaussian-poincare-candidate.md) and
-[source audit](../research/explorations/2026-09-04-gaussian-poincare-design.md) remain historical
-review/provenance records. The current approved contract and verification evidence are in the
-[Gaussian freeze](../research/decisions/2026-09-04-gaussian-poincare-freeze.md) and
-[Gaussian acceptance record](../research/explorations/2026-09-04-gaussian-poincare-acceptance.md).
+The [Gaussian guide](../formalization/FunctionalInequalities/Poincare/Gaussian/README.md)
+explains the `Density` → `Hardy` → `Real` proof and its smooth L² finite-energy scope.
+The [acceptance record](../research/explorations/2026-09-04-gaussian-poincare-acceptance.md)
+retains the historical review and evidence.
 
 ## Finite tensorization certificate
 
-Issue #7 and node `lem:poincare-finite-tensorization` use
-`solutions/LemPoincareFiniteTensorization.lean`, with `status: proved` and `checked_by: lean`.
-Its sole named certificate covers the ledger claim. The 45 `#check @...` statements retain
-the reusable API surface; eight Euclidean statement families and six concrete boundary cases
-are checked through typed applications of that API. These applications add no duplicate
-specialization declarations. The deduplication review remains in
-`../research/explorations/2026-09-03-certificate-deduplication.md`; the original 53-name candidate
-is preserved as history in `../research/decisions/2026-09-03-finite-tensorization-candidate.md`.
+[`LemPoincareFiniteTensorization.lean`](LemPoincareFiniteTensorization.lean) certifies
+`lem:poincare-finite-tensorization`: binary reverse bounds and equality, finite fixed-constant
+tensorization and optimal equality, with the supporting coordinate/isometry transports.
+Typed applications check Euclidean families and boundary cases; the certificate combines the
+accepted conclusions without duplicate specialization declarations.
 
-The scope includes binary reverse bounds/equality, finite fixed-constant tensorization,
-finite optimal equality, and the supporting coordinate/isometry transports. Their library
-proofs are implemented, as recorded in
-`../research/explorations/2026-09-03-finite-tensorization-proofs.md`. Application checks verify
-how these declarations specialize; the certificate separately combines the accepted conclusions.
-
-The user's confirmation and final semantic review complete the human acceptance recorded in
-`../research/decisions/2026-09-03-finite-tensorization-freeze.md` and
-`../research/explorations/2026-09-03-finite-tensorization-acceptance.md`. The final publication
-SHA and matching CI result are tracked in
-[Issue #7](https://github.com/human-ai-mathematics/kls-lean/issues/7).
-The existing #2 and #6 nodes retain their ledger claims, certificate signatures, and independent
-checked import closures.
-See `../formalization/README.md` for the current reusable module layout.
+See the [proof record](../research/explorations/2026-09-03-finite-tensorization-proofs.md) and
+[acceptance record](../research/explorations/2026-09-03-finite-tensorization-acceptance.md).
+Earlier candidate, freeze and publication details are retained in the
+[archived certificate guide](../research/decisions/2026-10-18-pre-final-certificate-guide.md).
 
 ## Borell equivalence certificate and implemented definition checks
 
@@ -442,8 +421,8 @@ Theorem 3.1 of Bizeul–Klartag–Lehec (arXiv:2610.05474v1), in the source form
 goes through the operator domain of the heat-model generator and an approximate first
 eigenfunction (`research/decisions/2026-10-07-bkl-operator-route.md`); the library constant is
 explicit but not part of the claim. `dimZero` and `gaussian` discharge every hypothesis in dimensions zero and one (the standard
-Gaussian on `ℝ¹` satisfies (29) with `R = 8`); four axiom guards. This certifies a supporting theorem of the paper; its main Theorem 1.1 is not
-covered.
+Gaussian on `ℝ¹` satisfies (29) with `R = 8`); four axiom guards. This certificate covers the
+supporting theorem. The main Theorem 1.1 has its own certificate below.
 
 ## Bizeul–Klartag–Lehec Proposition 7.1 certificate
 
@@ -455,6 +434,69 @@ regular log-concave law `μ` on `ℝⁿ` and every `f ∈ L²(μ)` satisfy
 law of `(f(X), X)` with independent Laplace noise, its density (109), log-concavity (110),
 isotropy, the mixed-cumulant identities (111)–(112), the Hilbert–Schmidt step, the `β → ∞` limit
 and the affine-orthogonal decomposition (`research/handoffs/2026-10-07-continuous-bkl-formalization.md`).
-`two` is the leading case `d = 2` with the constant `b/2`; no instance of `CumulantBound` is asserted,
-and Theorem 4.1, which would supply it, remains open. Two axiom guards. This certifies a supporting
-proposition of the paper; its main Theorem 1.1 is not covered.
+`two` is the leading case `d = 2` with the constant `b/2`. This proposition retains the cumulant
+bound as a premise; the separate, now-proved Theorem 4.1 supplies it in the final assembly.
+Two axiom guards. Theorem 4.1 and the main Theorem 1.1 have their own certificates below.
+
+## Letwin compact quadratic-form certificate
+
+[`ThmLetwinCompactQuadraticBound.lean`](ThmLetwinCompactQuadraticBound.lean) certifies
+`thm:letwin-compact-quadratic-bound`, the compact counterpart of Theorem 1.2 of Letwin
+(arXiv:2607.24164v1), in the source form: for every `n > 0`, every compactly supported isotropic
+log-concave probability measure `μ` on `EuclideanSpace ℝ (Fin n)` and every self-adjoint continuous
+linear `M`, singular and indefinite ones included, `Var_μ ⟨M x, x⟩ ≤ 8 ∑ᵢⱼ ⟨M eᵢ, eⱼ⟩²` in the
+standard orthonormal basis. `certificate` states this expanded form and `bound` the named predicate
+`LetwinCompactBound`, the input of Bizeul–Klartag–Lehec (arXiv:2610.05474v1), Lemma 4.2; both are the
+library theorem `letwinCompactBound` (`research/decisions/2026-10-16-letwin-compact-eight-integration.md`).
+Two axiom guards. The noncompact Theorem 1.2 (every isotropic log-concave law) and the paper are not
+covered. The subsequent certified cutoff localization, BKL Theorem 4.1 and KLS stages are described below.
+
+## BKL cutoff energy certificate
+
+[`LemBklCutoffEnergy.lean`](LemBklCutoffEnergy.lean) certifies `lem:bkl-cutoff-energy`, equation (95) of
+Bizeul–Klartag–Lehec (arXiv:2610.05474v1, Sections 4–6) in finite-horizon cutoff form. The statement:
+- **Quantifiers.** It holds for every d ≥ 1 (order m = d + 1) and every compactly supported isotropic log-concave
+  probability measure on `EuclideanSpace ℝ (Fin n)`. It also holds for every unit u, ε > 0 and T ≥ 0, all sufficiently
+  large cutoff radii R and every actual cutoff Eldan process.
+- **Inequality.** `E_{d+1}(0) + ½ ∫∫₀ᵀ γ_R² E_{d+2} ≤ (d!)² 153^d + ε`.
+
+`bound` is the named predicate `CutoffEnergyClaim 153 d`, given by the closed producer `cutoffEnergyClaim_153` of
+[`KLS/BKL/CumulantBound.lean`](../formalization/FunctionalInequalities/KLS/BKL/CumulantBound.lean). It uses the actual compact constant-8 theorem
+`letwinCompactBound`, and no inequality, induction step or Lyapunov estimate is assumed. Two axiom guards.
+
+This is a restricted, different-route supporting certificate. The uncut Eldan process, its uniqueness and
+non-explosion, and the literal stochastic identities (68)–(73) are not constructed. This certificate covers the
+cutoff estimate; the following certificates establish BKL Theorems 4.1 and 1.1 and lead to KLS.
+
+## BKL Theorem 4.1 certificate
+
+[`ThmBklCumulantBound.lean`](ThmBklCumulantBound.lean) certifies `thm:bkl-cumulant-bound`, Theorem 4.1 of
+Bizeul–Klartag–Lehec (arXiv:2610.05474v1), (65)–(66), in the source form. There is one universal K ≥ 1 such that,
+for every order m = d + 1 ≥ 2 (the base m = 2 included), every dimension, every isotropic log-concave probability
+measure on `EuclideanSpace ℝ (Fin n)` and every u, the bound
+`Σ_J κ_{d+1}(u, e_{J 1}, …, e_{J d})² ≤ K^d (d!)² ‖u‖²` holds.
+
+There is no compactness, Letwin, moment, energy or induction premise. `bound` is the `CumulantBound` form, with the
+witness K = 153, given by the closed producer `cumulantBound_153` of the same module. Two axiom guards.
+
+The proof uses the cutoff energy induction of `lem:bkl-cutoff-energy`, with the actual compact constant-8 theorem,
+and the compact-to-general passage `cumulantBound_of_compact`. It does not construct the uncut Eldan process or the
+literal (68)–(73). This certificate does not cover BKL Theorem 1.1, KLS or the paper; see the next section.
+
+## BKL Theorem 1.1 certificate and the KLS target
+
+[`ThmBklPoincare.lean`](ThmBklPoincare.lean) certifies `thm:bkl-poincare`, Theorem 1.1 of Bizeul–Klartag–Lehec
+(arXiv:2610.05474v1), p. 2, in the source form. There is one C > 0, chosen before every dimension and law, such that
+every n ≥ 1 and every isotropic log-concave probability measure μ on `EuclideanSpace ℝ (Fin n)` have
+`Poincare.LocalSlope.Intrinsic.constant μ ≤ C`.
+
+There is no compactness, regularity or moment premise. `bound` is `KLS.IsotropicBound C` on every finite-dimensional
+real inner product space. Two axiom guards.
+
+The proof is the closed producer `KLS.BKL.Localization.theorem11`. It runs the p. 30 assembly (Theorem 3.1, Proposition
+7.1, the regular approximation) on Theorem 4.1 from the cutoff route and the proved compact Letwin bound. The project
+target `KLS.kls : KLS.Conjecture` follows through the affine/isotropic reduction with the same constant.
+
+The independent client [`research/audits/BKL/KlsAudit.lean`](../research/audits/BKL/KlsAudit.lean) handwrites both
+statements and consumes the actual `KLS.kls`. The paper is covered in the exact sense of its main theorem; the uncut
+Eldan process and the literal (68)–(73) are not constructed.

@@ -1,6 +1,12 @@
+import FunctionalInequalities.Analysis.Operator.Coordinates
+import FunctionalInequalities.Probability.Stein.Kernel
+import FunctionalInequalities.Analysis.BakryEmery.HessianOperator
+import FunctionalInequalities.Analysis.BakryEmery.WeakHessian
 import FunctionalInequalities.Probability.Stein.HessianKernel
 import FunctionalInequalities.KLS.Isotropic
 import FunctionalInequalities.KLS.LogConcave.Stein
+import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.LipschitzHessian
+import FunctionalInequalities.Analysis.BakryEmery.Calculus
 
 /-!
 # The Hessian–Stein kernel of a normalized convex potential
@@ -218,3 +224,173 @@ theorem exists_hessianSteinKernel_of_injective_gradient {n : ℕ} (φ : Euclidea
     fun i j => integral_hessianKernel_eq_one φ hφ hcv hnorm ν μ hν hmap hiso Ψ hΨ hiAE i j⟩
 
 end FunctionalInequalities.KLS.LogConcave
+
+section WeakSourceSteinIdentity
+
+open MeasureTheory Filter
+open FunctionalInequalities.Analysis
+open FunctionalInequalities.Probability.Stein
+open scoped ContDiff Topology RealInnerProductSpace
+
+namespace FunctionalInequalities.KLS.LogConcave
+
+set_option maxHeartbeats 600000 in
+/-- Weak source Stein identity at a C1 potential with Lipschitz gradient and mass-one exponential weight: for every C1 bounded
+globally Lipschitz test `f` the coordinate pairing `∫ ∂ᵢu · f(∇u)` equals `∫ ∑ⱼ (∇²u)ᵢⱼ ∂ⱼf(∇u)` (both integrable);
+no C2, global inverse or kernel premise. -/
+theorem source_stein_identity_of_bounded_lipschitz_test {n : ℕ}
+    {u f : EuclideanSpace ℝ (Fin n) → ℝ} {L G Lf : NNReal}
+    (hu : ContDiff ℝ 1 u) (hL : LipschitzWith L u)
+    (hG : LipschitzWith G (gradient u))
+    (hnorm : (∫ y, Real.exp (-u y) ∂volume) = 1)
+    (hf : ContDiff ℝ 1 f) (hfLip : LipschitzWith Lf f)
+    (C : ℝ) (hbound : ∀ x, ‖f x‖ ≤ C) (i : Fin n) :
+    Integrable (fun y => gradient u y i * f (gradient u y))
+      ((volume : Measure (EuclideanSpace ℝ (Fin n))).tilted (-u)) ∧
+    Integrable (fun y => ∑ j, hessianMatrix u y i j * gradient f (gradient u y) j)
+      ((volume : Measure (EuclideanSpace ℝ (Fin n))).tilted (-u)) ∧
+    (∫ y, gradient u y i * f (gradient u y)
+      ∂((volume : Measure (EuclideanSpace ℝ (Fin n))).tilted (-u))) =
+      ∫ y, (∑ j, hessianMatrix u y i j * gradient f (gradient u y) j)
+        ∂((volume : Measure (EuclideanSpace ℝ (Fin n))).tilted (-u)) := by
+  let eta := f ∘ gradient u
+  let mu : Measure (EuclideanSpace ℝ (Fin n)) := volume.tilted (-u)
+  have hpair := integral_fderiv_tilted_eq_integral_mul_fderiv_of_bounded_lipschitz
+    hL (hfLip.comp hG) C (fun y => hbound (gradient u y)) hnorm
+    (EuclideanSpace.basisFun (Fin n) ℝ i)
+  have hleft : (fun y => eta y * fderiv ℝ u y (EuclideanSpace.basisFun (Fin n) ℝ i)) =ᵐ[mu]
+      (fun y => gradient u y i * f (gradient u y)) := by
+    filter_upwards [] with y
+    have hdu : fderiv ℝ u y (EuclideanSpace.basisFun (Fin n) ℝ i) = gradient u y i := by
+      rw [← inner_gradient_left, EuclideanSpace.inner_basisFun_real]
+    dsimp only [eta, Function.comp_apply]
+    rw [hdu, mul_comm]
+  have hchain : (fun y => fderiv ℝ eta y (EuclideanSpace.basisFun (Fin n) ℝ i)) =ᵐ[mu]
+      (fun y => ∑ j, hessianMatrix u y i j * gradient f (gradient u y) j) := by
+    have hac : mu ≪ (volume : Measure (EuclideanSpace ℝ (Fin n))) :=
+      tilted_absolutelyContinuous _ _
+    filter_upwards [hac.ae_le (hG.ae_differentiableAt (μ := volume))] with y hy
+    exact chain_coordinate_of_differentiableAt_gradient hu hf hy i
+  refine ⟨hpair.2.1.congr hleft, hpair.1.congr hchain, ?_⟩
+  calc
+    _ = ∫ y, eta y * fderiv ℝ u y (EuclideanSpace.basisFun (Fin n) ℝ i) ∂mu :=
+      (integral_congr_ae hleft).symm
+    _ = ∫ y, fderiv ℝ eta y (EuclideanSpace.basisFun (Fin n) ℝ i) ∂mu := hpair.2.2.symm
+    _ = _ := integral_congr_ae hchain
+
+end FunctionalInequalities.KLS.LogConcave
+
+end WeakSourceSteinIdentity
+
+/-! ### Directional and affine source Stein identities
+
+For `C¹` globally Lipschitz `u` with Lipschitz gradient and `∫ e^{-u} = 1`, the coordinate source Stein identity in a direction `v`, and its form for tests `h (S x + z)` with a continuous linear `S`. -/
+
+noncomputable section
+open MeasureTheory
+open FunctionalInequalities.Analysis
+open FunctionalInequalities.Probability.Stein
+open scoped ContDiff RealInnerProductSpace
+
+namespace FunctionalInequalities.KLS.LogConcave
+
+set_option maxHeartbeats 600000 in
+theorem source_directional_stein_identity_of_bounded_lipschitz_test {n : ℕ}
+    {u f : EuclideanSpace ℝ (Fin n) → ℝ} {L G Lf : NNReal}
+    (hu : ContDiff ℝ 1 u) (hL : LipschitzWith L u)
+    (hG : LipschitzWith G (gradient u))
+    (hnorm : (∫ y, Real.exp (-u y) ∂volume) = 1)
+    (hf : ContDiff ℝ 1 f) (hfLip : LipschitzWith Lf f)
+    (C : ℝ) (hbound : ∀ x, ‖f x‖ ≤ C) (v : EuclideanSpace ℝ (Fin n)) :
+    Integrable (fun y => ⟪gradient u y, v⟫ * f (gradient u y))
+      ((volume : Measure (EuclideanSpace ℝ (Fin n))).tilted (-u)) ∧
+    Integrable (fun y => ⟪v, action (hessianMatrix u y) (gradient f (gradient u y))⟫)
+      ((volume : Measure (EuclideanSpace ℝ (Fin n))).tilted (-u)) ∧
+    (∫ y, ⟪gradient u y, v⟫ * f (gradient u y)
+      ∂((volume : Measure (EuclideanSpace ℝ (Fin n))).tilted (-u))) =
+      ∫ y, ⟪v, action (hessianMatrix u y) (gradient f (gradient u y))⟫
+        ∂((volume : Measure (EuclideanSpace ℝ (Fin n))).tilted (-u)) := by
+  classical
+  let mu : Measure (EuclideanSpace ℝ (Fin n)) := volume.tilted (-u)
+  let A (i : Fin n) (y : EuclideanSpace ℝ (Fin n)) := gradient u y i * f (gradient u y)
+  let B (i : Fin n) (y : EuclideanSpace ℝ (Fin n)) :=
+    ∑ j, hessianMatrix u y i j * gradient f (gradient u y) j
+  have hp (i : Fin n) := source_stein_identity_of_bounded_lipschitz_test hu hL hG hnorm hf hfLip C hbound i
+  have hA : Integrable (fun y => ∑ i, v i * A i y) mu :=
+    integrable_finsetSum Finset.univ fun i _ => (hp i).1.const_mul (v i)
+  have hB : Integrable (fun y => ∑ i, v i * B i y) mu :=
+    integrable_finsetSum Finset.univ fun i _ => (hp i).2.1.const_mul (v i)
+  have heqA (y : EuclideanSpace ℝ (Fin n)) : (∑ i, v i * A i y) =
+      ⟪gradient u y, v⟫ * f (gradient u y) := by
+    simp only [PiLp.inner_apply, Real.inner_apply, Finset.sum_mul, A]
+    apply Finset.sum_congr rfl
+    intro i _
+    ring
+  have heqB (y : EuclideanSpace ℝ (Fin n)) : (∑ i, v i * B i y) =
+      ⟪v, action (hessianMatrix u y) (gradient f (gradient u y))⟫ := by
+    simp only [PiLp.inner_apply, Real.inner_apply, action, Matrix.mulVec, dotProduct, B]
+  refine ⟨hA.congr (ae_of_all _ heqA), hB.congr (ae_of_all _ heqB), ?_⟩
+  calc
+    _ = ∫ y, ∑ i, v i * A i y ∂mu := (integral_congr_ae (ae_of_all _ heqA)).symm
+    _ = ∑ i, v i * ∫ y, A i y ∂mu := by
+      rw [integral_finsetSum Finset.univ (fun i _ => (hp i).1.const_mul (v i))]
+      simp only [integral_const_mul, A, mu]
+    _ = ∑ i, v i * ∫ y, B i y ∂mu := by
+      apply Finset.sum_congr rfl
+      intro i _
+      rw [(hp i).2.2]
+    _ = ∫ y, ∑ i, v i * B i y ∂mu := by
+      rw [integral_finsetSum Finset.univ (fun i _ => (hp i).2.1.const_mul (v i))]
+      simp only [integral_const_mul, B, mu]
+    _ = _ := integral_congr_ae (ae_of_all _ heqB)
+
+end FunctionalInequalities.KLS.LogConcave
+
+end
+
+noncomputable section
+open MeasureTheory
+open FunctionalInequalities.Analysis.BakryEmery
+open FunctionalInequalities.Probability.Stein
+open scoped ContDiff RealInnerProductSpace
+
+namespace FunctionalInequalities.KLS.LogConcave
+
+set_option maxHeartbeats 600000 in
+theorem source_affine_stein_identity_of_bounded_lipschitz_test {n : ℕ}
+    {u h : EuclideanSpace ℝ (Fin n) → ℝ} {L G Lh : NNReal}
+    (hu : ContDiff ℝ 1 u) (hL : LipschitzWith L u)
+    (hG : LipschitzWith G (gradient u))
+    (hnorm : (∫ y, Real.exp (-u y) ∂volume) = 1)
+    (hh : ContDiff ℝ 1 h) (hhLip : LipschitzWith Lh h)
+    (C : ℝ) (hbound : ∀ x, ‖h x‖ ≤ C)
+    (S : EuclideanSpace ℝ (Fin n) →L[ℝ] EuclideanSpace ℝ (Fin n))
+    (z v : EuclideanSpace ℝ (Fin n)) :
+    Integrable (fun y => ⟪S (gradient u y), v⟫ * h (S (gradient u y) + z))
+      ((volume : Measure (EuclideanSpace ℝ (Fin n))).tilted (-u)) ∧
+    Integrable (fun y => ⟪S.adjoint v,
+      action (hessianMatrix u y) (S.adjoint (gradient h (S (gradient u y) + z)))⟫)
+      ((volume : Measure (EuclideanSpace ℝ (Fin n))).tilted (-u)) ∧
+    (∫ y, ⟪S (gradient u y), v⟫ * h (S (gradient u y) + z)
+      ∂((volume : Measure (EuclideanSpace ℝ (Fin n))).tilted (-u))) =
+      ∫ y, ⟪S.adjoint v,
+        action (hessianMatrix u y) (S.adjoint (gradient h (S (gradient u y) + z)))⟫
+        ∂((volume : Measure (EuclideanSpace ℝ (Fin n))).tilted (-u)) := by
+  have hf : ContDiff ℝ 1 (fun x => h (S x + z)) := hh.comp (S.contDiff.add contDiff_const)
+  have hp := source_directional_stein_identity_of_bounded_lipschitz_test hu hL hG hnorm
+    hf (hhLip.comp (S.lipschitz.add (LipschitzWith.const z))) C (fun x => hbound (S x + z)) (S.adjoint v)
+  have hleft (y : EuclideanSpace ℝ (Fin n)) :
+      ⟪gradient u y, S.adjoint v⟫ * h (S (gradient u y) + z) =
+      ⟪S (gradient u y), v⟫ * h (S (gradient u y) + z) := by
+    rw [S.adjoint_inner_right]
+  have hright (y : EuclideanSpace ℝ (Fin n)) :
+      ⟪S.adjoint v, action (hessianMatrix u y) (gradient (fun x => h (S x + z)) (gradient u y))⟫ =
+      ⟪S.adjoint v, action (hessianMatrix u y) (S.adjoint (gradient h (S (gradient u y) + z)))⟫ := by
+    rw [gradient_comp_affine S z (hh.differentiable one_ne_zero _)]
+  refine ⟨hp.1.congr (ae_of_all _ hleft), hp.2.1.congr (ae_of_all _ hright), ?_⟩
+  exact (integral_congr_ae (ae_of_all _ hleft)).symm.trans (hp.2.2.trans
+    (integral_congr_ae (ae_of_all _ hright)))
+
+end FunctionalInequalities.KLS.LogConcave
+
+end

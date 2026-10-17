@@ -1,0 +1,1272 @@
+{
+  "owner": "Analysis.Cutoff and Analysis.WeakDerivative; gradient estimates extend Analysis.Lipschitz.Gradient",
+  "scope": "S2: preserve exact source declaration payloads, names, assumptions, cutoff profiles, theorem/proof and certificate statuses",
+  "decision": "extend/split",
+  "old_modules": [
+    "FunctionalInequalities.Analysis.WeakDerivative",
+    "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Basic",
+    "FunctionalInequalities.Probability.Diffusion.Cutoff",
+    "FunctionalInequalities.Analysis.Lipschitz.Gradient"
+  ],
+  "new_modules": [
+    "FunctionalInequalities.Analysis.Lipschitz.Gradient",
+    "FunctionalInequalities.Analysis.Cutoff.SmoothBall",
+    "FunctionalInequalities.Analysis.Cutoff.LipschitzBall",
+    "FunctionalInequalities.Analysis.WeakDerivative.Basic",
+    "FunctionalInequalities.Analysis.WeakDerivative.Mollification",
+    "FunctionalInequalities.Analysis.WeakDerivative.Approximation",
+    "FunctionalInequalities.Analysis.WeakDerivative.Calculus"
+  ],
+  "API_impact": "Module ownership only; no namespace/name migrations or aliases",
+  "validation": [
+    "Complete source-span and owner map",
+    "Elaborated types/definition closures",
+    "All direct and transitive clients",
+    "Full build and full local verifier",
+    "Index and history protection"
+  ],
+  "destinations": {
+    "formalization/FunctionalInequalities/Analysis/Lipschitz/Gradient.lean": {
+      "title": null,
+      "imports": [
+        "Mathlib.Analysis.Calculus.Gradient.Basic",
+        "Mathlib.Analysis.Calculus.ContDiff.RCLike",
+        "Mathlib.Analysis.InnerProductSpace.PiL2",
+        "Mathlib.Analysis.Calculus.MeanValue"
+      ]
+    },
+    "formalization/FunctionalInequalities/Analysis/Cutoff/SmoothBall.lean": {
+      "title": "Smooth norm-ball cutoffs and compact localization",
+      "imports": [
+        "Mathlib.Analysis.Calculus.BumpFunction.FiniteDimension",
+        "Mathlib.Analysis.Calculus.Gradient.Basic",
+        "Mathlib.Analysis.Calculus.BumpFunction.InnerProduct",
+        "Mathlib.Analysis.Calculus.BumpFunction.Normed",
+        "Mathlib.Analysis.Calculus.MeanValue",
+        "Mathlib.MeasureTheory.Measure.Haar.Basic",
+        "Mathlib.MeasureTheory.Measure.Haar.NormedSpace",
+        "Mathlib.Topology.MetricSpace.Lipschitz",
+        "FunctionalInequalities.Analysis.Lipschitz.Gradient"
+      ]
+    },
+    "formalization/FunctionalInequalities/Analysis/Cutoff/LipschitzBall.lean": {
+      "title": "Lipschitz norm-ball cutoffs and compact localization",
+      "imports": [
+        "Mathlib.Topology.EMetricSpace.Lipschitz",
+        "Mathlib.Topology.Algebra.MetricSpace.Lipschitz",
+        "Mathlib.Analysis.Normed.Module.FiniteDimension",
+        "Mathlib.Topology.Algebra.Support"
+      ]
+    },
+    "formalization/FunctionalInequalities/Analysis/WeakDerivative/Basic.lean": {
+      "title": "Weak directional derivatives and classical identification",
+      "imports": [
+        "FunctionalInequalities.Analysis.Mollification.Basic",
+        "Mathlib"
+      ]
+    },
+    "formalization/FunctionalInequalities/Analysis/WeakDerivative/Mollification.lean": {
+      "title": "Mollification and weak derivatives from difference bounds",
+      "imports": [
+        "FunctionalInequalities.Analysis.WeakDerivative.Basic",
+        "Mathlib.Analysis.Calculus.BumpFunction.Convolution"
+      ]
+    },
+    "formalization/FunctionalInequalities/Analysis/WeakDerivative/Approximation.lean": {
+      "title": "Cutoff gluing and compact smooth weak-derivative approximation",
+      "imports": [
+        "FunctionalInequalities.Analysis.WeakDerivative.Basic",
+        "FunctionalInequalities.Analysis.WeakDerivative.Mollification",
+        "FunctionalInequalities.Analysis.Cutoff.SmoothBall"
+      ]
+    },
+    "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean": {
+      "title": "Weak products, chain rule and rough testing",
+      "imports": [
+        "FunctionalInequalities.Analysis.WeakDerivative.Approximation",
+        "FunctionalInequalities.Analysis.Cutoff.SmoothBall",
+        "FunctionalInequalities.Analysis.WeakDerivative.Basic",
+        "FunctionalInequalities.Analysis.WeakDerivative.Mollification"
+      ]
+    }
+  },
+  "source_segments": [
+    {
+      "old_path": "formalization/FunctionalInequalities/Analysis/Lipschitz/Gradient.lean",
+      "first_line": 5,
+      "last_line": 33,
+      "new_path": "formalization/FunctionalInequalities/Analysis/Lipschitz/Gradient.lean"
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Basic.lean",
+      "first_line": 18,
+      "last_line": 45,
+      "new_path": "formalization/FunctionalInequalities/Analysis/Lipschitz/Gradient.lean"
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Basic.lean",
+      "first_line": 18,
+      "last_line": 28,
+      "new_path": "formalization/FunctionalInequalities/Analysis/Cutoff/SmoothBall.lean"
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Basic.lean",
+      "first_line": 47,
+      "last_line": 198,
+      "new_path": "formalization/FunctionalInequalities/Analysis/Cutoff/SmoothBall.lean"
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/Probability/Diffusion/Cutoff.lean",
+      "first_line": 15,
+      "last_line": 140,
+      "new_path": "formalization/FunctionalInequalities/Analysis/Cutoff/LipschitzBall.lean"
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative.lean",
+      "first_line": 20,
+      "last_line": 230,
+      "new_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Basic.lean"
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative.lean",
+      "first_line": 1104,
+      "last_line": 1142,
+      "new_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Basic.lean"
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative.lean",
+      "first_line": 232,
+      "last_line": 483,
+      "new_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Mollification.lean"
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative.lean",
+      "first_line": 485,
+      "last_line": 613,
+      "new_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Approximation.lean"
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative.lean",
+      "first_line": 1450,
+      "last_line": 1668,
+      "new_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Approximation.lean"
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative.lean",
+      "first_line": 1923,
+      "last_line": 2146,
+      "new_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Approximation.lean"
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative.lean",
+      "first_line": 616,
+      "last_line": 1102,
+      "new_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean"
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative.lean",
+      "first_line": 1144,
+      "last_line": 1289,
+      "new_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean"
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative.lean",
+      "first_line": 1292,
+      "last_line": 1447,
+      "new_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean"
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative.lean",
+      "first_line": 1450,
+      "last_line": 1459,
+      "new_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean"
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative.lean",
+      "first_line": 1670,
+      "last_line": 1920,
+      "new_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean"
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative.lean",
+      "first_line": 2149,
+      "last_line": 2679,
+      "new_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean"
+    }
+  ],
+  "authored_declaration_destinations": {
+    "FunctionalInequalities.Analysis.HasWeakDerivAlong": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Basic.lean",
+    "FunctionalInequalities.Analysis.HasWeakDerivAlong.ae_eq": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Basic.lean",
+    "FunctionalInequalities.Analysis.HasWeakDerivAlong.compact_mul_data": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+    "FunctionalInequalities.Analysis.HasWeakDerivAlong.congr_ae": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Basic.lean",
+    "FunctionalInequalities.Analysis.HasWeakDerivAlong.mul_contDiff": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Basic.lean",
+    "FunctionalInequalities.Analysis.HasWeakDerivAlong.mul_of_locally_bounded": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+    "FunctionalInequalities.Analysis.HasWeakDerivAlong.mul_of_locally_memLp_two": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+    "FunctionalInequalities.Analysis.HasWeakDerivAlong.mul_of_memLp_two": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+    "FunctionalInequalities.Analysis.exists_contDiff_compact_bounded_all_weak_deriv_approximation": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Approximation.lean",
+    "FunctionalInequalities.Analysis.exists_contDiff_compact_weak_deriv_approximation": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Approximation.lean",
+    "FunctionalInequalities.Analysis.exists_hasWeakDerivAlong_of_forall_cutoff": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Approximation.lean",
+    "FunctionalInequalities.Analysis.exists_hasWeakDerivAlong_of_sq_difference_le": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Mollification.lean",
+    "FunctionalInequalities.Analysis.fderiv_convolution_eq_of_hasWeakDerivAlong": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Mollification.lean",
+    "FunctionalInequalities.Analysis.hasWeakDerivAlong_exp_neg_of_lipschitz": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+    "FunctionalInequalities.Analysis.hasWeakDerivAlong_finsetProd_of_locally_memLp_two": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+    "FunctionalInequalities.Analysis.hasWeakDerivAlong_finsetSum_mul": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+    "FunctionalInequalities.Analysis.hasWeakDerivAlong_of_contDiff": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Basic.lean",
+    "FunctionalInequalities.Analysis.hasWeakDerivAlong_of_lipschitz": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Basic.lean",
+    "FunctionalInequalities.Analysis.integral_compact_flux_eq_neg_forcing_of_global_bounded_weak_test": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+    "FunctionalInequalities.Analysis.integral_eq_zero_of_integrable_weak_derivative": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+    "FunctionalInequalities.Analysis.integral_flux_eq_neg_forcing_of_bounded_weak_test": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+    "FunctionalInequalities.Analysis.integral_weakDeriv_mul_eq_swap": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+    "FunctionalInequalities.Analysis.locallyIntegrable_mul_of_compact_L2": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+    "FunctionalInequalities.Analysis.locallyIntegrable_of_compact_local_memLp_two": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+    "FunctionalInequalities.Analysis.memLp_mul_of_hasCompactSupport": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+    "FunctionalInequalities.Analysis.memLp_top_restrict_of_continuous": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+    "_private.FunctionalInequalities.Analysis.WeakDerivative.0.FunctionalInequalities.Analysis.compact_bounded_test_domination": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+    "_private.FunctionalInequalities.Analysis.WeakDerivative.0.FunctionalInequalities.Analysis.integral_flux_eq_neg_forcing_of_test_limits": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+    "_private.FunctionalInequalities.Analysis.WeakDerivative.0.FunctionalInequalities.Analysis.l2_pairing_toLp": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Mollification.lean",
+    "_private.FunctionalInequalities.Analysis.WeakDerivative.0.FunctionalInequalities.Analysis.l2_toLp_norm_sq": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Mollification.lean",
+    "_private.FunctionalInequalities.Analysis.WeakDerivative.0.FunctionalInequalities.Analysis.norm_normed_convolution_le_three_mul": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Approximation.lean",
+    "_private.FunctionalInequalities.Analysis.WeakDerivative.0.FunctionalInequalities.Analysis.quotient_pairing_tendsto": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Mollification.lean",
+    "_private.FunctionalInequalities.Analysis.WeakDerivative.0.FunctionalInequalities.Analysis.tendsto_integral_mul_compact_bounded_tests": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+    "_private.FunctionalInequalities.Analysis.WeakDerivative.0.FunctionalInequalities.Analysis.tendsto_integral_mul_of_compact_local_l2": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+    "_private.FunctionalInequalities.Analysis.WeakDerivative.0.FunctionalInequalities.Analysis.tendsto_integral_mul_of_l2": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+    "_private.FunctionalInequalities.Analysis.WeakDerivative.0.FunctionalInequalities.Analysis.translated_memLp": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Mollification.lean",
+    "_private.FunctionalInequalities.Analysis.WeakDerivative.0.FunctionalInequalities.Analysis.weak_exists_compact_contDiff_eq_one_near": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+    "_private.FunctionalInequalities.Analysis.WeakDerivative.0.FunctionalInequalities.Analysis.weak_fderiv_apply_eq_zero_off_tsupport": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+    "_private.FunctionalInequalities.Analysis.WeakDerivative.0.FunctionalInequalities.Analysis.weak_measurable_fderiv_apply": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+    "_private.FunctionalInequalities.Analysis.WeakDerivative.0.FunctionalInequalities.Analysis.weak_norm_fderiv_apply_le": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+    "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.bump": "formalization/FunctionalInequalities/Analysis/Cutoff/SmoothBall.lean",
+    "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.contDiff_scaled": "formalization/FunctionalInequalities/Analysis/Cutoff/SmoothBall.lean",
+    "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.continuous_scaled": "formalization/FunctionalInequalities/Analysis/Cutoff/SmoothBall.lean",
+    "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.exists_bound_fderiv_bump": "formalization/FunctionalInequalities/Analysis/Cutoff/SmoothBall.lean",
+    "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.fderiv_scaled_eq_zero": "formalization/FunctionalInequalities/Analysis/Cutoff/SmoothBall.lean",
+    "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.gradient_eq_of_hasFDerivAt": "formalization/FunctionalInequalities/Analysis/Lipschitz/Gradient.lean",
+    "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.gradient_scaled_mul": "formalization/FunctionalInequalities/Analysis/Cutoff/SmoothBall.lean",
+    "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.hasCompactSupport_scaled": "formalization/FunctionalInequalities/Analysis/Cutoff/SmoothBall.lean",
+    "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.hasFDerivAt_scaled": "formalization/FunctionalInequalities/Analysis/Cutoff/SmoothBall.lean",
+    "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.lipschitzOnWith_of_locallyLipschitz_of_isCompact": "formalization/FunctionalInequalities/Analysis/Cutoff/SmoothBall.lean",
+    "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.lipschitzWith_scaled": "formalization/FunctionalInequalities/Analysis/Cutoff/SmoothBall.lean",
+    "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.norm_fderiv_scaled_le": "formalization/FunctionalInequalities/Analysis/Cutoff/SmoothBall.lean",
+    "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.norm_gradient_eq_norm_fderiv": "formalization/FunctionalInequalities/Analysis/Lipschitz/Gradient.lean",
+    "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.norm_gradient_le_of_lipschitz": "formalization/FunctionalInequalities/Analysis/Lipschitz/Gradient.lean",
+    "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.scaled": "formalization/FunctionalInequalities/Analysis/Cutoff/SmoothBall.lean",
+    "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.scaled_eq_one": "formalization/FunctionalInequalities/Analysis/Cutoff/SmoothBall.lean",
+    "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.scaled_eq_zero": "formalization/FunctionalInequalities/Analysis/Cutoff/SmoothBall.lean",
+    "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.scaled_le_one": "formalization/FunctionalInequalities/Analysis/Cutoff/SmoothBall.lean",
+    "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.scaled_nonneg": "formalization/FunctionalInequalities/Analysis/Cutoff/SmoothBall.lean",
+    "FunctionalInequalities.Probability.Diffusion.ballCutoff": "formalization/FunctionalInequalities/Analysis/Cutoff/LipschitzBall.lean",
+    "FunctionalInequalities.Probability.Diffusion.ballCutoff_eq_one": "formalization/FunctionalInequalities/Analysis/Cutoff/LipschitzBall.lean",
+    "FunctionalInequalities.Probability.Diffusion.ballCutoff_mem_Icc": "formalization/FunctionalInequalities/Analysis/Cutoff/LipschitzBall.lean",
+    "FunctionalInequalities.Probability.Diffusion.exists_lipschitzWith_smul_of_locallyLipschitz": "formalization/FunctionalInequalities/Analysis/Cutoff/LipschitzBall.lean",
+    "FunctionalInequalities.Probability.Diffusion.hasCompactSupport_ballCutoff": "formalization/FunctionalInequalities/Analysis/Cutoff/LipschitzBall.lean",
+    "FunctionalInequalities.Probability.Diffusion.lipschitzWith_ballCutoff": "formalization/FunctionalInequalities/Analysis/Cutoff/LipschitzBall.lean",
+    "FunctionalInequalities.Analysis.exists_lipschitzWith_neg_add_comp_gradient": "formalization/FunctionalInequalities/Analysis/Lipschitz/Gradient.lean"
+  },
+  "default_path_map": {
+    "formalization/FunctionalInequalities/Analysis/WeakDerivative.lean": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Basic.lean",
+    "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Basic.lean": "formalization/FunctionalInequalities/Analysis/Cutoff/SmoothBall.lean",
+    "formalization/FunctionalInequalities/Probability/Diffusion/Cutoff.lean": "formalization/FunctionalInequalities/Analysis/Cutoff/LipschitzBall.lean"
+  },
+  "default_module_map": {
+    "FunctionalInequalities.Analysis.WeakDerivative": "FunctionalInequalities.Analysis.WeakDerivative.Basic",
+    "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Basic": "FunctionalInequalities.Analysis.Cutoff.SmoothBall",
+    "FunctionalInequalities.Probability.Diffusion.Cutoff": "FunctionalInequalities.Analysis.Cutoff.LipschitzBall"
+  },
+  "required_import_direction": "Generic cutoff and weak calculus -> generic Analysis; Energy/Probability/application layers consume them",
+  "namespace_and_public_names_unchanged": true,
+  "migration_map": "research/api-migration/2026-10-17-cutoff-weak-derivative-map.json",
+  "context_documentation_replacements": [
+    {
+      "path": "formalization/FunctionalInequalities/KLS/Geometry/Cheeger/Inequality.lean",
+      "old": "Energy/Euclidean/LipschitzApproximation/Basic.lean",
+      "new": "Analysis/Cutoff/SmoothBall.lean"
+    }
+  ],
+  "private_context_adaptation": "Keep rough product, exponential chain and rough testing together in Calculus because two private supports are shared; keep the C1 product in Basic so Approximation stays below Calculus.",
+  "compiler_owners": {
+    "FunctionalInequalities.Analysis.HasWeakDerivAlong.congr_simp": "FunctionalInequalities.Analysis.WeakDerivative.Calculus"
+  },
+  "date": "2026-10-17",
+  "lazy_compiler_auxiliary_owner_changes": {
+    "FunctionalInequalities.Analysis.HasWeakDerivAlong.congr_simp": "FunctionalInequalities.Analysis.WeakDerivative.Calculus"
+  },
+  "compiler_auxiliary_renames": {},
+  "owned_declaration_location_map": [
+    {
+      "old_name": "FunctionalInequalities.Analysis.HasWeakDerivAlong",
+      "new_name": "FunctionalInequalities.Analysis.HasWeakDerivAlong",
+      "old_module": "FunctionalInequalities.Analysis.WeakDerivative",
+      "new_module": "FunctionalInequalities.Analysis.WeakDerivative.Basic",
+      "old_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Basic.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.HasWeakDerivAlong.ae_eq",
+      "new_name": "FunctionalInequalities.Analysis.HasWeakDerivAlong.ae_eq",
+      "old_module": "FunctionalInequalities.Analysis.WeakDerivative",
+      "new_module": "FunctionalInequalities.Analysis.WeakDerivative.Basic",
+      "old_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Basic.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.HasWeakDerivAlong.compact_mul_data",
+      "new_name": "FunctionalInequalities.Analysis.HasWeakDerivAlong.compact_mul_data",
+      "old_module": "FunctionalInequalities.Analysis.WeakDerivative",
+      "new_module": "FunctionalInequalities.Analysis.WeakDerivative.Calculus",
+      "old_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.HasWeakDerivAlong.congr_ae",
+      "new_name": "FunctionalInequalities.Analysis.HasWeakDerivAlong.congr_ae",
+      "old_module": "FunctionalInequalities.Analysis.WeakDerivative",
+      "new_module": "FunctionalInequalities.Analysis.WeakDerivative.Basic",
+      "old_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Basic.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.HasWeakDerivAlong.congr_simp",
+      "new_name": "FunctionalInequalities.Analysis.HasWeakDerivAlong.congr_simp",
+      "old_module": "FunctionalInequalities.Analysis.WeakDerivative",
+      "new_module": "FunctionalInequalities.Analysis.WeakDerivative.Calculus",
+      "old_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.HasWeakDerivAlong.mul_contDiff",
+      "new_name": "FunctionalInequalities.Analysis.HasWeakDerivAlong.mul_contDiff",
+      "old_module": "FunctionalInequalities.Analysis.WeakDerivative",
+      "new_module": "FunctionalInequalities.Analysis.WeakDerivative.Basic",
+      "old_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Basic.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.HasWeakDerivAlong.mul_of_locally_bounded",
+      "new_name": "FunctionalInequalities.Analysis.HasWeakDerivAlong.mul_of_locally_bounded",
+      "old_module": "FunctionalInequalities.Analysis.WeakDerivative",
+      "new_module": "FunctionalInequalities.Analysis.WeakDerivative.Calculus",
+      "old_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.HasWeakDerivAlong.mul_of_locally_memLp_two",
+      "new_name": "FunctionalInequalities.Analysis.HasWeakDerivAlong.mul_of_locally_memLp_two",
+      "old_module": "FunctionalInequalities.Analysis.WeakDerivative",
+      "new_module": "FunctionalInequalities.Analysis.WeakDerivative.Calculus",
+      "old_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.HasWeakDerivAlong.mul_of_memLp_two",
+      "new_name": "FunctionalInequalities.Analysis.HasWeakDerivAlong.mul_of_memLp_two",
+      "old_module": "FunctionalInequalities.Analysis.WeakDerivative",
+      "new_module": "FunctionalInequalities.Analysis.WeakDerivative.Calculus",
+      "old_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.exists_contDiff_compact_bounded_all_weak_deriv_approximation",
+      "new_name": "FunctionalInequalities.Analysis.exists_contDiff_compact_bounded_all_weak_deriv_approximation",
+      "old_module": "FunctionalInequalities.Analysis.WeakDerivative",
+      "new_module": "FunctionalInequalities.Analysis.WeakDerivative.Approximation",
+      "old_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Approximation.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.exists_contDiff_compact_weak_deriv_approximation",
+      "new_name": "FunctionalInequalities.Analysis.exists_contDiff_compact_weak_deriv_approximation",
+      "old_module": "FunctionalInequalities.Analysis.WeakDerivative",
+      "new_module": "FunctionalInequalities.Analysis.WeakDerivative.Approximation",
+      "old_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Approximation.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.exists_hasWeakDerivAlong_of_forall_cutoff",
+      "new_name": "FunctionalInequalities.Analysis.exists_hasWeakDerivAlong_of_forall_cutoff",
+      "old_module": "FunctionalInequalities.Analysis.WeakDerivative",
+      "new_module": "FunctionalInequalities.Analysis.WeakDerivative.Approximation",
+      "old_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Approximation.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.exists_hasWeakDerivAlong_of_forall_cutoff._simp_1_1",
+      "new_name": "FunctionalInequalities.Analysis.exists_hasWeakDerivAlong_of_forall_cutoff._simp_1_1",
+      "old_module": "FunctionalInequalities.Analysis.WeakDerivative",
+      "new_module": "FunctionalInequalities.Analysis.WeakDerivative.Approximation",
+      "old_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Approximation.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.exists_hasWeakDerivAlong_of_sq_difference_le",
+      "new_name": "FunctionalInequalities.Analysis.exists_hasWeakDerivAlong_of_sq_difference_le",
+      "old_module": "FunctionalInequalities.Analysis.WeakDerivative",
+      "new_module": "FunctionalInequalities.Analysis.WeakDerivative.Mollification",
+      "old_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Mollification.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.exists_hasWeakDerivAlong_of_sq_difference_le._simp_1_1",
+      "new_name": "FunctionalInequalities.Analysis.exists_hasWeakDerivAlong_of_sq_difference_le._simp_1_1",
+      "old_module": "FunctionalInequalities.Analysis.WeakDerivative",
+      "new_module": "FunctionalInequalities.Analysis.WeakDerivative.Mollification",
+      "old_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Mollification.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.exists_hasWeakDerivAlong_of_sq_difference_le._simp_1_2",
+      "new_name": "FunctionalInequalities.Analysis.exists_hasWeakDerivAlong_of_sq_difference_le._simp_1_2",
+      "old_module": "FunctionalInequalities.Analysis.WeakDerivative",
+      "new_module": "FunctionalInequalities.Analysis.WeakDerivative.Mollification",
+      "old_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Mollification.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.exists_hasWeakDerivAlong_of_sq_difference_le._simp_1_3",
+      "new_name": "FunctionalInequalities.Analysis.exists_hasWeakDerivAlong_of_sq_difference_le._simp_1_3",
+      "old_module": "FunctionalInequalities.Analysis.WeakDerivative",
+      "new_module": "FunctionalInequalities.Analysis.WeakDerivative.Mollification",
+      "old_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Mollification.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.exists_hasWeakDerivAlong_of_sq_difference_le._simp_1_4",
+      "new_name": "FunctionalInequalities.Analysis.exists_hasWeakDerivAlong_of_sq_difference_le._simp_1_4",
+      "old_module": "FunctionalInequalities.Analysis.WeakDerivative",
+      "new_module": "FunctionalInequalities.Analysis.WeakDerivative.Mollification",
+      "old_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Mollification.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.exists_hasWeakDerivAlong_of_sq_difference_le._simp_1_5",
+      "new_name": "FunctionalInequalities.Analysis.exists_hasWeakDerivAlong_of_sq_difference_le._simp_1_5",
+      "old_module": "FunctionalInequalities.Analysis.WeakDerivative",
+      "new_module": "FunctionalInequalities.Analysis.WeakDerivative.Mollification",
+      "old_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Mollification.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.exists_hasWeakDerivAlong_of_sq_difference_le._simp_1_6",
+      "new_name": "FunctionalInequalities.Analysis.exists_hasWeakDerivAlong_of_sq_difference_le._simp_1_6",
+      "old_module": "FunctionalInequalities.Analysis.WeakDerivative",
+      "new_module": "FunctionalInequalities.Analysis.WeakDerivative.Mollification",
+      "old_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Mollification.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.exists_hasWeakDerivAlong_of_sq_difference_le._simp_1_7",
+      "new_name": "FunctionalInequalities.Analysis.exists_hasWeakDerivAlong_of_sq_difference_le._simp_1_7",
+      "old_module": "FunctionalInequalities.Analysis.WeakDerivative",
+      "new_module": "FunctionalInequalities.Analysis.WeakDerivative.Mollification",
+      "old_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Mollification.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.exists_hasWeakDerivAlong_of_sq_difference_le._simp_1_8",
+      "new_name": "FunctionalInequalities.Analysis.exists_hasWeakDerivAlong_of_sq_difference_le._simp_1_8",
+      "old_module": "FunctionalInequalities.Analysis.WeakDerivative",
+      "new_module": "FunctionalInequalities.Analysis.WeakDerivative.Mollification",
+      "old_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Mollification.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.exists_lipschitzWith_neg_add_comp_gradient",
+      "new_name": "FunctionalInequalities.Analysis.exists_lipschitzWith_neg_add_comp_gradient",
+      "old_module": "FunctionalInequalities.Analysis.Lipschitz.Gradient",
+      "new_module": "FunctionalInequalities.Analysis.Lipschitz.Gradient",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Lipschitz/Gradient.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Lipschitz/Gradient.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.exists_lipschitzWith_neg_add_comp_gradient._simp_1_1",
+      "new_name": "FunctionalInequalities.Analysis.exists_lipschitzWith_neg_add_comp_gradient._simp_1_1",
+      "old_module": "FunctionalInequalities.Analysis.Lipschitz.Gradient",
+      "new_module": "FunctionalInequalities.Analysis.Lipschitz.Gradient",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Lipschitz/Gradient.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Lipschitz/Gradient.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.fderiv_convolution_eq_of_hasWeakDerivAlong",
+      "new_name": "FunctionalInequalities.Analysis.fderiv_convolution_eq_of_hasWeakDerivAlong",
+      "old_module": "FunctionalInequalities.Analysis.WeakDerivative",
+      "new_module": "FunctionalInequalities.Analysis.WeakDerivative.Mollification",
+      "old_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Mollification.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.hasWeakDerivAlong_exp_neg_of_lipschitz",
+      "new_name": "FunctionalInequalities.Analysis.hasWeakDerivAlong_exp_neg_of_lipschitz",
+      "old_module": "FunctionalInequalities.Analysis.WeakDerivative",
+      "new_module": "FunctionalInequalities.Analysis.WeakDerivative.Calculus",
+      "old_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.hasWeakDerivAlong_finsetProd_of_locally_memLp_two",
+      "new_name": "FunctionalInequalities.Analysis.hasWeakDerivAlong_finsetProd_of_locally_memLp_two",
+      "old_module": "FunctionalInequalities.Analysis.WeakDerivative",
+      "new_module": "FunctionalInequalities.Analysis.WeakDerivative.Calculus",
+      "old_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.hasWeakDerivAlong_finsetSum_mul",
+      "new_name": "FunctionalInequalities.Analysis.hasWeakDerivAlong_finsetSum_mul",
+      "old_module": "FunctionalInequalities.Analysis.WeakDerivative",
+      "new_module": "FunctionalInequalities.Analysis.WeakDerivative.Calculus",
+      "old_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.hasWeakDerivAlong_of_contDiff",
+      "new_name": "FunctionalInequalities.Analysis.hasWeakDerivAlong_of_contDiff",
+      "old_module": "FunctionalInequalities.Analysis.WeakDerivative",
+      "new_module": "FunctionalInequalities.Analysis.WeakDerivative.Basic",
+      "old_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Basic.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.hasWeakDerivAlong_of_lipschitz",
+      "new_name": "FunctionalInequalities.Analysis.hasWeakDerivAlong_of_lipschitz",
+      "old_module": "FunctionalInequalities.Analysis.WeakDerivative",
+      "new_module": "FunctionalInequalities.Analysis.WeakDerivative.Basic",
+      "old_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Basic.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.integral_compact_flux_eq_neg_forcing_of_global_bounded_weak_test",
+      "new_name": "FunctionalInequalities.Analysis.integral_compact_flux_eq_neg_forcing_of_global_bounded_weak_test",
+      "old_module": "FunctionalInequalities.Analysis.WeakDerivative",
+      "new_module": "FunctionalInequalities.Analysis.WeakDerivative.Calculus",
+      "old_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.integral_eq_zero_of_integrable_weak_derivative",
+      "new_name": "FunctionalInequalities.Analysis.integral_eq_zero_of_integrable_weak_derivative",
+      "old_module": "FunctionalInequalities.Analysis.WeakDerivative",
+      "new_module": "FunctionalInequalities.Analysis.WeakDerivative.Calculus",
+      "old_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.integral_flux_eq_neg_forcing_of_bounded_weak_test",
+      "new_name": "FunctionalInequalities.Analysis.integral_flux_eq_neg_forcing_of_bounded_weak_test",
+      "old_module": "FunctionalInequalities.Analysis.WeakDerivative",
+      "new_module": "FunctionalInequalities.Analysis.WeakDerivative.Calculus",
+      "old_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.integral_weakDeriv_mul_eq_swap",
+      "new_name": "FunctionalInequalities.Analysis.integral_weakDeriv_mul_eq_swap",
+      "old_module": "FunctionalInequalities.Analysis.WeakDerivative",
+      "new_module": "FunctionalInequalities.Analysis.WeakDerivative.Calculus",
+      "old_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.locallyIntegrable_mul_of_compact_L2",
+      "new_name": "FunctionalInequalities.Analysis.locallyIntegrable_mul_of_compact_L2",
+      "old_module": "FunctionalInequalities.Analysis.WeakDerivative",
+      "new_module": "FunctionalInequalities.Analysis.WeakDerivative.Calculus",
+      "old_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.locallyIntegrable_of_compact_local_memLp_two",
+      "new_name": "FunctionalInequalities.Analysis.locallyIntegrable_of_compact_local_memLp_two",
+      "old_module": "FunctionalInequalities.Analysis.WeakDerivative",
+      "new_module": "FunctionalInequalities.Analysis.WeakDerivative.Calculus",
+      "old_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.memLp_mul_of_hasCompactSupport",
+      "new_name": "FunctionalInequalities.Analysis.memLp_mul_of_hasCompactSupport",
+      "old_module": "FunctionalInequalities.Analysis.WeakDerivative",
+      "new_module": "FunctionalInequalities.Analysis.WeakDerivative.Calculus",
+      "old_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.memLp_top_restrict_of_continuous",
+      "new_name": "FunctionalInequalities.Analysis.memLp_top_restrict_of_continuous",
+      "old_module": "FunctionalInequalities.Analysis.WeakDerivative",
+      "new_module": "FunctionalInequalities.Analysis.WeakDerivative.Calculus",
+      "old_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.bump",
+      "new_name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.bump",
+      "old_module": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Basic",
+      "new_module": "FunctionalInequalities.Analysis.Cutoff.SmoothBall",
+      "old_path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Basic.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Cutoff/SmoothBall.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.bump._proof_1",
+      "new_name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.bump._proof_1",
+      "old_module": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Basic",
+      "new_module": "FunctionalInequalities.Analysis.Cutoff.SmoothBall",
+      "old_path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Basic.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Cutoff/SmoothBall.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.bump._proof_2",
+      "new_name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.bump._proof_2",
+      "old_module": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Basic",
+      "new_module": "FunctionalInequalities.Analysis.Cutoff.SmoothBall",
+      "old_path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Basic.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Cutoff/SmoothBall.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.bump._proof_3",
+      "new_name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.bump._proof_3",
+      "old_module": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Basic",
+      "new_module": "FunctionalInequalities.Analysis.Cutoff.SmoothBall",
+      "old_path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Basic.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Cutoff/SmoothBall.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.contDiff_scaled",
+      "new_name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.contDiff_scaled",
+      "old_module": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Basic",
+      "new_module": "FunctionalInequalities.Analysis.Cutoff.SmoothBall",
+      "old_path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Basic.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Cutoff/SmoothBall.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.continuous_scaled",
+      "new_name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.continuous_scaled",
+      "old_module": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Basic",
+      "new_module": "FunctionalInequalities.Analysis.Cutoff.SmoothBall",
+      "old_path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Basic.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Cutoff/SmoothBall.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.exists_bound_fderiv_bump",
+      "new_name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.exists_bound_fderiv_bump",
+      "old_module": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Basic",
+      "new_module": "FunctionalInequalities.Analysis.Cutoff.SmoothBall",
+      "old_path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Basic.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Cutoff/SmoothBall.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.fderiv_scaled_eq_zero",
+      "new_name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.fderiv_scaled_eq_zero",
+      "old_module": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Basic",
+      "new_module": "FunctionalInequalities.Analysis.Cutoff.SmoothBall",
+      "old_path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Basic.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Cutoff/SmoothBall.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.fderiv_scaled_eq_zero._simp_1_1",
+      "new_name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.fderiv_scaled_eq_zero._simp_1_1",
+      "old_module": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Basic",
+      "new_module": "FunctionalInequalities.Analysis.Cutoff.SmoothBall",
+      "old_path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Basic.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Cutoff/SmoothBall.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.gradient_eq_of_hasFDerivAt",
+      "new_name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.gradient_eq_of_hasFDerivAt",
+      "old_module": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Basic",
+      "new_module": "FunctionalInequalities.Analysis.Lipschitz.Gradient",
+      "old_path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Basic.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Lipschitz/Gradient.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.gradient_scaled_mul",
+      "new_name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.gradient_scaled_mul",
+      "old_module": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Basic",
+      "new_module": "FunctionalInequalities.Analysis.Cutoff.SmoothBall",
+      "old_path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Basic.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Cutoff/SmoothBall.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.hasCompactSupport_scaled",
+      "new_name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.hasCompactSupport_scaled",
+      "old_module": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Basic",
+      "new_module": "FunctionalInequalities.Analysis.Cutoff.SmoothBall",
+      "old_path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Basic.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Cutoff/SmoothBall.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.hasFDerivAt_scaled",
+      "new_name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.hasFDerivAt_scaled",
+      "old_module": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Basic",
+      "new_module": "FunctionalInequalities.Analysis.Cutoff.SmoothBall",
+      "old_path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Basic.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Cutoff/SmoothBall.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.lipschitzOnWith_of_locallyLipschitz_of_isCompact",
+      "new_name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.lipschitzOnWith_of_locallyLipschitz_of_isCompact",
+      "old_module": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Basic",
+      "new_module": "FunctionalInequalities.Analysis.Cutoff.SmoothBall",
+      "old_path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Basic.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Cutoff/SmoothBall.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.lipschitzOnWith_of_locallyLipschitz_of_isCompact._simp_1_1",
+      "new_name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.lipschitzOnWith_of_locallyLipschitz_of_isCompact._simp_1_1",
+      "old_module": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Basic",
+      "new_module": "FunctionalInequalities.Analysis.Cutoff.SmoothBall",
+      "old_path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Basic.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Cutoff/SmoothBall.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.lipschitzOnWith_of_locallyLipschitz_of_isCompact._simp_1_2",
+      "new_name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.lipschitzOnWith_of_locallyLipschitz_of_isCompact._simp_1_2",
+      "old_module": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Basic",
+      "new_module": "FunctionalInequalities.Analysis.Cutoff.SmoothBall",
+      "old_path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Basic.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Cutoff/SmoothBall.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.lipschitzOnWith_of_locallyLipschitz_of_isCompact._simp_1_3",
+      "new_name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.lipschitzOnWith_of_locallyLipschitz_of_isCompact._simp_1_3",
+      "old_module": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Basic",
+      "new_module": "FunctionalInequalities.Analysis.Cutoff.SmoothBall",
+      "old_path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Basic.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Cutoff/SmoothBall.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.lipschitzOnWith_of_locallyLipschitz_of_isCompact._simp_1_4",
+      "new_name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.lipschitzOnWith_of_locallyLipschitz_of_isCompact._simp_1_4",
+      "old_module": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Basic",
+      "new_module": "FunctionalInequalities.Analysis.Cutoff.SmoothBall",
+      "old_path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Basic.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Cutoff/SmoothBall.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.lipschitzOnWith_of_locallyLipschitz_of_isCompact._simp_1_5",
+      "new_name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.lipschitzOnWith_of_locallyLipschitz_of_isCompact._simp_1_5",
+      "old_module": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Basic",
+      "new_module": "FunctionalInequalities.Analysis.Cutoff.SmoothBall",
+      "old_path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Basic.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Cutoff/SmoothBall.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.lipschitzOnWith_of_locallyLipschitz_of_isCompact._simp_1_6",
+      "new_name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.lipschitzOnWith_of_locallyLipschitz_of_isCompact._simp_1_6",
+      "old_module": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Basic",
+      "new_module": "FunctionalInequalities.Analysis.Cutoff.SmoothBall",
+      "old_path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Basic.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Cutoff/SmoothBall.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.lipschitzOnWith_of_locallyLipschitz_of_isCompact._simp_1_7",
+      "new_name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.lipschitzOnWith_of_locallyLipschitz_of_isCompact._simp_1_7",
+      "old_module": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Basic",
+      "new_module": "FunctionalInequalities.Analysis.Cutoff.SmoothBall",
+      "old_path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Basic.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Cutoff/SmoothBall.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.lipschitzWith_scaled",
+      "new_name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.lipschitzWith_scaled",
+      "old_module": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Basic",
+      "new_module": "FunctionalInequalities.Analysis.Cutoff.SmoothBall",
+      "old_path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Basic.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Cutoff/SmoothBall.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.norm_fderiv_scaled_le",
+      "new_name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.norm_fderiv_scaled_le",
+      "old_module": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Basic",
+      "new_module": "FunctionalInequalities.Analysis.Cutoff.SmoothBall",
+      "old_path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Basic.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Cutoff/SmoothBall.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.norm_gradient_eq_norm_fderiv",
+      "new_name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.norm_gradient_eq_norm_fderiv",
+      "old_module": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Basic",
+      "new_module": "FunctionalInequalities.Analysis.Lipschitz.Gradient",
+      "old_path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Basic.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Lipschitz/Gradient.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.norm_gradient_le_of_lipschitz",
+      "new_name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.norm_gradient_le_of_lipschitz",
+      "old_module": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Basic",
+      "new_module": "FunctionalInequalities.Analysis.Lipschitz.Gradient",
+      "old_path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Basic.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Lipschitz/Gradient.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.scaled",
+      "new_name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.scaled",
+      "old_module": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Basic",
+      "new_module": "FunctionalInequalities.Analysis.Cutoff.SmoothBall",
+      "old_path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Basic.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Cutoff/SmoothBall.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.scaled_eq_one",
+      "new_name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.scaled_eq_one",
+      "old_module": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Basic",
+      "new_module": "FunctionalInequalities.Analysis.Cutoff.SmoothBall",
+      "old_path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Basic.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Cutoff/SmoothBall.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.scaled_eq_zero",
+      "new_name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.scaled_eq_zero",
+      "old_module": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Basic",
+      "new_module": "FunctionalInequalities.Analysis.Cutoff.SmoothBall",
+      "old_path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Basic.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Cutoff/SmoothBall.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.scaled_le_one",
+      "new_name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.scaled_le_one",
+      "old_module": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Basic",
+      "new_module": "FunctionalInequalities.Analysis.Cutoff.SmoothBall",
+      "old_path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Basic.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Cutoff/SmoothBall.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.scaled_nonneg",
+      "new_name": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.scaled_nonneg",
+      "old_module": "FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Basic",
+      "new_module": "FunctionalInequalities.Analysis.Cutoff.SmoothBall",
+      "old_path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Basic.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Cutoff/SmoothBall.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Probability.Diffusion.ballCutoff",
+      "new_name": "FunctionalInequalities.Probability.Diffusion.ballCutoff",
+      "old_module": "FunctionalInequalities.Probability.Diffusion.Cutoff",
+      "new_module": "FunctionalInequalities.Analysis.Cutoff.LipschitzBall",
+      "old_path": "formalization/FunctionalInequalities/Probability/Diffusion/Cutoff.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Cutoff/LipschitzBall.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Probability.Diffusion.ballCutoff.eq_1",
+      "new_name": "FunctionalInequalities.Probability.Diffusion.ballCutoff.eq_1",
+      "old_module": "FunctionalInequalities.Probability.Diffusion.Cutoff",
+      "new_module": "FunctionalInequalities.Analysis.Cutoff.LipschitzBall",
+      "old_path": "formalization/FunctionalInequalities/Probability/Diffusion/Cutoff.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Cutoff/LipschitzBall.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Probability.Diffusion.ballCutoff_eq_one",
+      "new_name": "FunctionalInequalities.Probability.Diffusion.ballCutoff_eq_one",
+      "old_module": "FunctionalInequalities.Probability.Diffusion.Cutoff",
+      "new_module": "FunctionalInequalities.Analysis.Cutoff.LipschitzBall",
+      "old_path": "formalization/FunctionalInequalities/Probability/Diffusion/Cutoff.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Cutoff/LipschitzBall.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Probability.Diffusion.ballCutoff_mem_Icc",
+      "new_name": "FunctionalInequalities.Probability.Diffusion.ballCutoff_mem_Icc",
+      "old_module": "FunctionalInequalities.Probability.Diffusion.Cutoff",
+      "new_module": "FunctionalInequalities.Analysis.Cutoff.LipschitzBall",
+      "old_path": "formalization/FunctionalInequalities/Probability/Diffusion/Cutoff.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Cutoff/LipschitzBall.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Probability.Diffusion.exists_lipschitzWith_smul_of_locallyLipschitz",
+      "new_name": "FunctionalInequalities.Probability.Diffusion.exists_lipschitzWith_smul_of_locallyLipschitz",
+      "old_module": "FunctionalInequalities.Probability.Diffusion.Cutoff",
+      "new_module": "FunctionalInequalities.Analysis.Cutoff.LipschitzBall",
+      "old_path": "formalization/FunctionalInequalities/Probability/Diffusion/Cutoff.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Cutoff/LipschitzBall.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Probability.Diffusion.exists_lipschitzWith_smul_of_locallyLipschitz._abel_1_1",
+      "new_name": "FunctionalInequalities.Probability.Diffusion.exists_lipschitzWith_smul_of_locallyLipschitz._abel_1_1",
+      "old_module": "FunctionalInequalities.Probability.Diffusion.Cutoff",
+      "new_module": "FunctionalInequalities.Analysis.Cutoff.LipschitzBall",
+      "old_path": "formalization/FunctionalInequalities/Probability/Diffusion/Cutoff.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Cutoff/LipschitzBall.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Probability.Diffusion.hasCompactSupport_ballCutoff",
+      "new_name": "FunctionalInequalities.Probability.Diffusion.hasCompactSupport_ballCutoff",
+      "old_module": "FunctionalInequalities.Probability.Diffusion.Cutoff",
+      "new_module": "FunctionalInequalities.Analysis.Cutoff.LipschitzBall",
+      "old_path": "formalization/FunctionalInequalities/Probability/Diffusion/Cutoff.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Cutoff/LipschitzBall.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Probability.Diffusion.hasCompactSupport_ballCutoff._simp_1_1",
+      "new_name": "FunctionalInequalities.Probability.Diffusion.hasCompactSupport_ballCutoff._simp_1_1",
+      "old_module": "FunctionalInequalities.Probability.Diffusion.Cutoff",
+      "new_module": "FunctionalInequalities.Analysis.Cutoff.LipschitzBall",
+      "old_path": "formalization/FunctionalInequalities/Probability/Diffusion/Cutoff.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Cutoff/LipschitzBall.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Probability.Diffusion.lipschitzWith_ballCutoff",
+      "new_name": "FunctionalInequalities.Probability.Diffusion.lipschitzWith_ballCutoff",
+      "old_module": "FunctionalInequalities.Probability.Diffusion.Cutoff",
+      "new_module": "FunctionalInequalities.Analysis.Cutoff.LipschitzBall",
+      "old_path": "formalization/FunctionalInequalities/Probability/Diffusion/Cutoff.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Cutoff/LipschitzBall.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "_private.FunctionalInequalities.Analysis.WeakDerivative.0.FunctionalInequalities.Analysis.compact_bounded_test_domination",
+      "new_name": "_private.FunctionalInequalities.Analysis.WeakDerivative.Calculus.0.FunctionalInequalities.Analysis.compact_bounded_test_domination",
+      "old_module": "FunctionalInequalities.Analysis.WeakDerivative",
+      "new_module": "FunctionalInequalities.Analysis.WeakDerivative.Calculus",
+      "old_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+      "public_name_unchanged": false
+    },
+    {
+      "old_name": "_private.FunctionalInequalities.Analysis.WeakDerivative.0.FunctionalInequalities.Analysis.integral_flux_eq_neg_forcing_of_test_limits",
+      "new_name": "_private.FunctionalInequalities.Analysis.WeakDerivative.Calculus.0.FunctionalInequalities.Analysis.integral_flux_eq_neg_forcing_of_test_limits",
+      "old_module": "FunctionalInequalities.Analysis.WeakDerivative",
+      "new_module": "FunctionalInequalities.Analysis.WeakDerivative.Calculus",
+      "old_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+      "public_name_unchanged": false
+    },
+    {
+      "old_name": "_private.FunctionalInequalities.Analysis.WeakDerivative.0.FunctionalInequalities.Analysis.l2_pairing_toLp",
+      "new_name": "_private.FunctionalInequalities.Analysis.WeakDerivative.Mollification.0.FunctionalInequalities.Analysis.l2_pairing_toLp",
+      "old_module": "FunctionalInequalities.Analysis.WeakDerivative",
+      "new_module": "FunctionalInequalities.Analysis.WeakDerivative.Mollification",
+      "old_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Mollification.lean",
+      "public_name_unchanged": false
+    },
+    {
+      "old_name": "_private.FunctionalInequalities.Analysis.WeakDerivative.0.FunctionalInequalities.Analysis.l2_toLp_norm_sq",
+      "new_name": "_private.FunctionalInequalities.Analysis.WeakDerivative.Mollification.0.FunctionalInequalities.Analysis.l2_toLp_norm_sq",
+      "old_module": "FunctionalInequalities.Analysis.WeakDerivative",
+      "new_module": "FunctionalInequalities.Analysis.WeakDerivative.Mollification",
+      "old_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Mollification.lean",
+      "public_name_unchanged": false
+    },
+    {
+      "old_name": "_private.FunctionalInequalities.Analysis.WeakDerivative.0.FunctionalInequalities.Analysis.norm_normed_convolution_le_three_mul",
+      "new_name": "_private.FunctionalInequalities.Analysis.WeakDerivative.Approximation.0.FunctionalInequalities.Analysis.norm_normed_convolution_le_three_mul",
+      "old_module": "FunctionalInequalities.Analysis.WeakDerivative",
+      "new_module": "FunctionalInequalities.Analysis.WeakDerivative.Approximation",
+      "old_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Approximation.lean",
+      "public_name_unchanged": false
+    },
+    {
+      "old_name": "_private.FunctionalInequalities.Analysis.WeakDerivative.0.FunctionalInequalities.Analysis.quotient_pairing_tendsto",
+      "new_name": "_private.FunctionalInequalities.Analysis.WeakDerivative.Mollification.0.FunctionalInequalities.Analysis.quotient_pairing_tendsto",
+      "old_module": "FunctionalInequalities.Analysis.WeakDerivative",
+      "new_module": "FunctionalInequalities.Analysis.WeakDerivative.Mollification",
+      "old_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Mollification.lean",
+      "public_name_unchanged": false
+    },
+    {
+      "old_name": "_private.FunctionalInequalities.Analysis.WeakDerivative.0.FunctionalInequalities.Analysis.tendsto_integral_mul_compact_bounded_tests",
+      "new_name": "_private.FunctionalInequalities.Analysis.WeakDerivative.Calculus.0.FunctionalInequalities.Analysis.tendsto_integral_mul_compact_bounded_tests",
+      "old_module": "FunctionalInequalities.Analysis.WeakDerivative",
+      "new_module": "FunctionalInequalities.Analysis.WeakDerivative.Calculus",
+      "old_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+      "public_name_unchanged": false
+    },
+    {
+      "old_name": "_private.FunctionalInequalities.Analysis.WeakDerivative.0.FunctionalInequalities.Analysis.tendsto_integral_mul_of_compact_local_l2",
+      "new_name": "_private.FunctionalInequalities.Analysis.WeakDerivative.Calculus.0.FunctionalInequalities.Analysis.tendsto_integral_mul_of_compact_local_l2",
+      "old_module": "FunctionalInequalities.Analysis.WeakDerivative",
+      "new_module": "FunctionalInequalities.Analysis.WeakDerivative.Calculus",
+      "old_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+      "public_name_unchanged": false
+    },
+    {
+      "old_name": "_private.FunctionalInequalities.Analysis.WeakDerivative.0.FunctionalInequalities.Analysis.tendsto_integral_mul_of_l2",
+      "new_name": "_private.FunctionalInequalities.Analysis.WeakDerivative.Calculus.0.FunctionalInequalities.Analysis.tendsto_integral_mul_of_l2",
+      "old_module": "FunctionalInequalities.Analysis.WeakDerivative",
+      "new_module": "FunctionalInequalities.Analysis.WeakDerivative.Calculus",
+      "old_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+      "public_name_unchanged": false
+    },
+    {
+      "old_name": "_private.FunctionalInequalities.Analysis.WeakDerivative.0.FunctionalInequalities.Analysis.translated_memLp",
+      "new_name": "_private.FunctionalInequalities.Analysis.WeakDerivative.Mollification.0.FunctionalInequalities.Analysis.translated_memLp",
+      "old_module": "FunctionalInequalities.Analysis.WeakDerivative",
+      "new_module": "FunctionalInequalities.Analysis.WeakDerivative.Mollification",
+      "old_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Mollification.lean",
+      "public_name_unchanged": false
+    },
+    {
+      "old_name": "_private.FunctionalInequalities.Analysis.WeakDerivative.0.FunctionalInequalities.Analysis.weak_exists_compact_contDiff_eq_one_near",
+      "new_name": "_private.FunctionalInequalities.Analysis.WeakDerivative.Calculus.0.FunctionalInequalities.Analysis.weak_exists_compact_contDiff_eq_one_near",
+      "old_module": "FunctionalInequalities.Analysis.WeakDerivative",
+      "new_module": "FunctionalInequalities.Analysis.WeakDerivative.Calculus",
+      "old_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+      "public_name_unchanged": false
+    },
+    {
+      "old_name": "_private.FunctionalInequalities.Analysis.WeakDerivative.0.FunctionalInequalities.Analysis.weak_fderiv_apply_eq_zero_off_tsupport",
+      "new_name": "_private.FunctionalInequalities.Analysis.WeakDerivative.Calculus.0.FunctionalInequalities.Analysis.weak_fderiv_apply_eq_zero_off_tsupport",
+      "old_module": "FunctionalInequalities.Analysis.WeakDerivative",
+      "new_module": "FunctionalInequalities.Analysis.WeakDerivative.Calculus",
+      "old_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+      "public_name_unchanged": false
+    },
+    {
+      "old_name": "_private.FunctionalInequalities.Analysis.WeakDerivative.0.FunctionalInequalities.Analysis.weak_measurable_fderiv_apply",
+      "new_name": "_private.FunctionalInequalities.Analysis.WeakDerivative.Calculus.0.FunctionalInequalities.Analysis.weak_measurable_fderiv_apply",
+      "old_module": "FunctionalInequalities.Analysis.WeakDerivative",
+      "new_module": "FunctionalInequalities.Analysis.WeakDerivative.Calculus",
+      "old_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+      "public_name_unchanged": false
+    },
+    {
+      "old_name": "_private.FunctionalInequalities.Analysis.WeakDerivative.0.FunctionalInequalities.Analysis.weak_norm_fderiv_apply_le",
+      "new_name": "_private.FunctionalInequalities.Analysis.WeakDerivative.Calculus.0.FunctionalInequalities.Analysis.weak_norm_fderiv_apply_le",
+      "old_module": "FunctionalInequalities.Analysis.WeakDerivative",
+      "new_module": "FunctionalInequalities.Analysis.WeakDerivative.Calculus",
+      "old_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+      "public_name_unchanged": false
+    }
+  ],
+  "compiler_identifier_map": {
+    "_private.FunctionalInequalities.Analysis.WeakDerivative.Calculus.0.FunctionalInequalities.Analysis.compact_bounded_test_domination": "_private.FunctionalInequalities.Analysis.WeakDerivative.0.FunctionalInequalities.Analysis.compact_bounded_test_domination",
+    "_private.FunctionalInequalities.Analysis.WeakDerivative.Calculus.0.FunctionalInequalities.Analysis.integral_flux_eq_neg_forcing_of_test_limits": "_private.FunctionalInequalities.Analysis.WeakDerivative.0.FunctionalInequalities.Analysis.integral_flux_eq_neg_forcing_of_test_limits",
+    "_private.FunctionalInequalities.Analysis.WeakDerivative.Mollification.0.FunctionalInequalities.Analysis.l2_pairing_toLp": "_private.FunctionalInequalities.Analysis.WeakDerivative.0.FunctionalInequalities.Analysis.l2_pairing_toLp",
+    "_private.FunctionalInequalities.Analysis.WeakDerivative.Mollification.0.FunctionalInequalities.Analysis.l2_toLp_norm_sq": "_private.FunctionalInequalities.Analysis.WeakDerivative.0.FunctionalInequalities.Analysis.l2_toLp_norm_sq",
+    "_private.FunctionalInequalities.Analysis.WeakDerivative.Approximation.0.FunctionalInequalities.Analysis.norm_normed_convolution_le_three_mul": "_private.FunctionalInequalities.Analysis.WeakDerivative.0.FunctionalInequalities.Analysis.norm_normed_convolution_le_three_mul",
+    "_private.FunctionalInequalities.Analysis.WeakDerivative.Mollification.0.FunctionalInequalities.Analysis.quotient_pairing_tendsto": "_private.FunctionalInequalities.Analysis.WeakDerivative.0.FunctionalInequalities.Analysis.quotient_pairing_tendsto",
+    "_private.FunctionalInequalities.Analysis.WeakDerivative.Calculus.0.FunctionalInequalities.Analysis.tendsto_integral_mul_compact_bounded_tests": "_private.FunctionalInequalities.Analysis.WeakDerivative.0.FunctionalInequalities.Analysis.tendsto_integral_mul_compact_bounded_tests",
+    "_private.FunctionalInequalities.Analysis.WeakDerivative.Calculus.0.FunctionalInequalities.Analysis.tendsto_integral_mul_of_compact_local_l2": "_private.FunctionalInequalities.Analysis.WeakDerivative.0.FunctionalInequalities.Analysis.tendsto_integral_mul_of_compact_local_l2",
+    "_private.FunctionalInequalities.Analysis.WeakDerivative.Calculus.0.FunctionalInequalities.Analysis.tendsto_integral_mul_of_l2": "_private.FunctionalInequalities.Analysis.WeakDerivative.0.FunctionalInequalities.Analysis.tendsto_integral_mul_of_l2",
+    "_private.FunctionalInequalities.Analysis.WeakDerivative.Mollification.0.FunctionalInequalities.Analysis.translated_memLp": "_private.FunctionalInequalities.Analysis.WeakDerivative.0.FunctionalInequalities.Analysis.translated_memLp",
+    "_private.FunctionalInequalities.Analysis.WeakDerivative.Calculus.0.FunctionalInequalities.Analysis.weak_exists_compact_contDiff_eq_one_near": "_private.FunctionalInequalities.Analysis.WeakDerivative.0.FunctionalInequalities.Analysis.weak_exists_compact_contDiff_eq_one_near",
+    "_private.FunctionalInequalities.Analysis.WeakDerivative.Calculus.0.FunctionalInequalities.Analysis.weak_fderiv_apply_eq_zero_off_tsupport": "_private.FunctionalInequalities.Analysis.WeakDerivative.0.FunctionalInequalities.Analysis.weak_fderiv_apply_eq_zero_off_tsupport",
+    "_private.FunctionalInequalities.Analysis.WeakDerivative.Calculus.0.FunctionalInequalities.Analysis.weak_measurable_fderiv_apply": "_private.FunctionalInequalities.Analysis.WeakDerivative.0.FunctionalInequalities.Analysis.weak_measurable_fderiv_apply",
+    "_private.FunctionalInequalities.Analysis.WeakDerivative.Calculus.0.FunctionalInequalities.Analysis.weak_norm_fderiv_apply_le": "_private.FunctionalInequalities.Analysis.WeakDerivative.0.FunctionalInequalities.Analysis.weak_norm_fderiv_apply_le",
+    "inst._@.FunctionalInequalities.Analysis.WeakDerivative.Basic.497950489._hygCtx._hyg.3": "inst._@.FunctionalInequalities.Analysis.WeakDerivative.497950489._hygCtx._hyg.3",
+    "inst._@.FunctionalInequalities.Analysis.WeakDerivative.Basic.497950489._hygCtx._hyg.6": "inst._@.FunctionalInequalities.Analysis.WeakDerivative.497950489._hygCtx._hyg.6",
+    "inst._@.FunctionalInequalities.Analysis.WeakDerivative.Basic.497950489._hygCtx._hyg.12": "inst._@.FunctionalInequalities.Analysis.WeakDerivative.497950489._hygCtx._hyg.12",
+    "inst._@.FunctionalInequalities.Analysis.WeakDerivative.Basic.497950489._hygCtx._hyg.18": "inst._@.FunctionalInequalities.Analysis.WeakDerivative.497950489._hygCtx._hyg.18",
+    "inst._@.FunctionalInequalities.Analysis.WeakDerivative.Basic.497950489._hygCtx._hyg.21": "inst._@.FunctionalInequalities.Analysis.WeakDerivative.497950489._hygCtx._hyg.21",
+    "inst._@.FunctionalInequalities.Analysis.WeakDerivative.Basic.2745324486._hygCtx._hyg.3": "inst._@.FunctionalInequalities.Analysis.WeakDerivative.2745324486._hygCtx._hyg.3",
+    "inst._@.FunctionalInequalities.Analysis.WeakDerivative.Basic.2745324486._hygCtx._hyg.6": "inst._@.FunctionalInequalities.Analysis.WeakDerivative.2745324486._hygCtx._hyg.6",
+    "inst._@.FunctionalInequalities.Analysis.WeakDerivative.Basic.2745324486._hygCtx._hyg.12": "inst._@.FunctionalInequalities.Analysis.WeakDerivative.2745324486._hygCtx._hyg.12",
+    "inst._@.FunctionalInequalities.Analysis.WeakDerivative.Basic.2745324486._hygCtx._hyg.18": "inst._@.FunctionalInequalities.Analysis.WeakDerivative.2745324486._hygCtx._hyg.18",
+    "inst._@.FunctionalInequalities.Analysis.WeakDerivative.Basic.2745324486._hygCtx._hyg.21": "inst._@.FunctionalInequalities.Analysis.WeakDerivative.2745324486._hygCtx._hyg.21",
+    "inst._@.FunctionalInequalities.Analysis.WeakDerivative.Basic.3508076081._hygCtx._hyg.3": "inst._@.FunctionalInequalities.Analysis.WeakDerivative.3508076081._hygCtx._hyg.3",
+    "inst._@.FunctionalInequalities.Analysis.WeakDerivative.Basic.3508076081._hygCtx._hyg.6": "inst._@.FunctionalInequalities.Analysis.WeakDerivative.3508076081._hygCtx._hyg.6",
+    "inst._@.FunctionalInequalities.Analysis.WeakDerivative.Basic.3508076081._hygCtx._hyg.12": "inst._@.FunctionalInequalities.Analysis.WeakDerivative.3508076081._hygCtx._hyg.12",
+    "inst._@.FunctionalInequalities.Analysis.WeakDerivative.Basic.3508076081._hygCtx._hyg.18": "inst._@.FunctionalInequalities.Analysis.WeakDerivative.3508076081._hygCtx._hyg.18",
+    "inst._@.FunctionalInequalities.Analysis.WeakDerivative.Basic.3508076081._hygCtx._hyg.21": "inst._@.FunctionalInequalities.Analysis.WeakDerivative.3508076081._hygCtx._hyg.21",
+    "inst._@.FunctionalInequalities.Analysis.WeakDerivative.Approximation.141231719._hygCtx._hyg.3": "inst._@.FunctionalInequalities.Analysis.WeakDerivative.141231719._hygCtx._hyg.3",
+    "inst._@.FunctionalInequalities.Analysis.WeakDerivative.Approximation.141231719._hygCtx._hyg.6": "inst._@.FunctionalInequalities.Analysis.WeakDerivative.141231719._hygCtx._hyg.6",
+    "inst._@.FunctionalInequalities.Analysis.WeakDerivative.Approximation.141231719._hygCtx._hyg.12": "inst._@.FunctionalInequalities.Analysis.WeakDerivative.141231719._hygCtx._hyg.12",
+    "inst._@.FunctionalInequalities.Analysis.WeakDerivative.Approximation.141231719._hygCtx._hyg.18": "inst._@.FunctionalInequalities.Analysis.WeakDerivative.141231719._hygCtx._hyg.18",
+    "inst._@.FunctionalInequalities.Analysis.WeakDerivative.Approximation.141231719._hygCtx._hyg.21": "inst._@.FunctionalInequalities.Analysis.WeakDerivative.141231719._hygCtx._hyg.21",
+    "inst._@.FunctionalInequalities.Analysis.WeakDerivative.Mollification.511532240._hygCtx._hyg.3": "inst._@.FunctionalInequalities.Analysis.WeakDerivative.511532240._hygCtx._hyg.3",
+    "inst._@.FunctionalInequalities.Analysis.WeakDerivative.Mollification.511532240._hygCtx._hyg.6": "inst._@.FunctionalInequalities.Analysis.WeakDerivative.511532240._hygCtx._hyg.6",
+    "inst._@.FunctionalInequalities.Analysis.WeakDerivative.Mollification.511532240._hygCtx._hyg.12": "inst._@.FunctionalInequalities.Analysis.WeakDerivative.511532240._hygCtx._hyg.12",
+    "inst._@.FunctionalInequalities.Analysis.WeakDerivative.Mollification.511532240._hygCtx._hyg.18": "inst._@.FunctionalInequalities.Analysis.WeakDerivative.511532240._hygCtx._hyg.18",
+    "inst._@.FunctionalInequalities.Analysis.WeakDerivative.Mollification.511532240._hygCtx._hyg.21": "inst._@.FunctionalInequalities.Analysis.WeakDerivative.511532240._hygCtx._hyg.21",
+    "inst._@.FunctionalInequalities.Analysis.WeakDerivative.Mollification.3215264059._hygCtx._hyg.3": "inst._@.FunctionalInequalities.Analysis.WeakDerivative.3215264059._hygCtx._hyg.3",
+    "inst._@.FunctionalInequalities.Analysis.WeakDerivative.Mollification.3215264059._hygCtx._hyg.6": "inst._@.FunctionalInequalities.Analysis.WeakDerivative.3215264059._hygCtx._hyg.6",
+    "inst._@.FunctionalInequalities.Analysis.WeakDerivative.Mollification.3215264059._hygCtx._hyg.12": "inst._@.FunctionalInequalities.Analysis.WeakDerivative.3215264059._hygCtx._hyg.12",
+    "inst._@.FunctionalInequalities.Analysis.WeakDerivative.Mollification.3215264059._hygCtx._hyg.18": "inst._@.FunctionalInequalities.Analysis.WeakDerivative.3215264059._hygCtx._hyg.18",
+    "inst._@.FunctionalInequalities.Analysis.WeakDerivative.Mollification.3215264059._hygCtx._hyg.21": "inst._@.FunctionalInequalities.Analysis.WeakDerivative.3215264059._hygCtx._hyg.21",
+    "inst._@.FunctionalInequalities.Analysis.WeakDerivative.Calculus.715937981._hygCtx._hyg.6": "inst._@.FunctionalInequalities.Analysis.WeakDerivative.715937981._hygCtx._hyg.6",
+    "inst._@.FunctionalInequalities.Analysis.WeakDerivative.Basic.4092338626._hygCtx._hyg.3": "inst._@.FunctionalInequalities.Analysis.WeakDerivative.4092338626._hygCtx._hyg.3",
+    "inst._@.FunctionalInequalities.Analysis.WeakDerivative.Basic.4092338626._hygCtx._hyg.6": "inst._@.FunctionalInequalities.Analysis.WeakDerivative.4092338626._hygCtx._hyg.6",
+    "inst._@.FunctionalInequalities.Analysis.WeakDerivative.Basic.4092338626._hygCtx._hyg.12": "inst._@.FunctionalInequalities.Analysis.WeakDerivative.4092338626._hygCtx._hyg.12",
+    "inst._@.FunctionalInequalities.Analysis.WeakDerivative.Basic.4092338626._hygCtx._hyg.18": "inst._@.FunctionalInequalities.Analysis.WeakDerivative.4092338626._hygCtx._hyg.18",
+    "inst._@.FunctionalInequalities.Analysis.WeakDerivative.Basic.4092338626._hygCtx._hyg.21": "inst._@.FunctionalInequalities.Analysis.WeakDerivative.4092338626._hygCtx._hyg.21",
+    "inst._@.FunctionalInequalities.Analysis.WeakDerivative.Basic.3208529734._hygCtx._hyg.3": "inst._@.FunctionalInequalities.Analysis.WeakDerivative.3208529734._hygCtx._hyg.3",
+    "inst._@.FunctionalInequalities.Analysis.WeakDerivative.Basic.3208529734._hygCtx._hyg.6": "inst._@.FunctionalInequalities.Analysis.WeakDerivative.3208529734._hygCtx._hyg.6",
+    "inst._@.FunctionalInequalities.Analysis.WeakDerivative.Basic.3208529734._hygCtx._hyg.12": "inst._@.FunctionalInequalities.Analysis.WeakDerivative.3208529734._hygCtx._hyg.12",
+    "inst._@.FunctionalInequalities.Analysis.WeakDerivative.Basic.3208529734._hygCtx._hyg.18": "inst._@.FunctionalInequalities.Analysis.WeakDerivative.3208529734._hygCtx._hyg.18",
+    "inst._@.FunctionalInequalities.Analysis.WeakDerivative.Basic.3208529734._hygCtx._hyg.21": "inst._@.FunctionalInequalities.Analysis.WeakDerivative.3208529734._hygCtx._hyg.21",
+    "inst._@.FunctionalInequalities.Analysis.Cutoff.SmoothBall.1201264278._hygCtx._hyg.3": "inst._@.FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Basic.1201264278._hygCtx._hyg.3",
+    "inst._@.FunctionalInequalities.Analysis.Cutoff.SmoothBall.1610905257._hygCtx._hyg.3": "inst._@.FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Basic.1610905257._hygCtx._hyg.3",
+    "inst._@.FunctionalInequalities.Analysis.Cutoff.SmoothBall.1610905257._hygCtx._hyg.6": "inst._@.FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Basic.1610905257._hygCtx._hyg.6",
+    "inst._@.FunctionalInequalities.Analysis.Cutoff.SmoothBall.3815199267._hygCtx._hyg.3": "inst._@.FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Basic.3815199267._hygCtx._hyg.3",
+    "inst._@.FunctionalInequalities.Analysis.Cutoff.SmoothBall.3815199267._hygCtx._hyg.6": "inst._@.FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Basic.3815199267._hygCtx._hyg.6",
+    "inst._@.FunctionalInequalities.Analysis.Cutoff.SmoothBall.1751911470._hygCtx._hyg.3": "inst._@.FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Basic.1751911470._hygCtx._hyg.3",
+    "inst._@.FunctionalInequalities.Analysis.Cutoff.SmoothBall.1751911470._hygCtx._hyg.6": "inst._@.FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Basic.1751911470._hygCtx._hyg.6",
+    "inst._@.FunctionalInequalities.Analysis.Cutoff.SmoothBall.1751911470._hygCtx._hyg.12": "inst._@.FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Basic.1751911470._hygCtx._hyg.12",
+    "inst._@.FunctionalInequalities.Analysis.Cutoff.SmoothBall.2874445996._hygCtx._hyg.3": "inst._@.FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Basic.2874445996._hygCtx._hyg.3",
+    "inst._@.FunctionalInequalities.Analysis.Cutoff.SmoothBall.2874445996._hygCtx._hyg.6": "inst._@.FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Basic.2874445996._hygCtx._hyg.6",
+    "inst._@.FunctionalInequalities.Analysis.Lipschitz.Gradient.2479204199._hygCtx._hyg.3": "inst._@.FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Basic.2479204199._hygCtx._hyg.3",
+    "inst._@.FunctionalInequalities.Analysis.Lipschitz.Gradient.2479204199._hygCtx._hyg.6": "inst._@.FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Basic.2479204199._hygCtx._hyg.6",
+    "inst._@.FunctionalInequalities.Analysis.Lipschitz.Gradient.2479204199._hygCtx._hyg.12": "inst._@.FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Basic.2479204199._hygCtx._hyg.12",
+    "inst._@.FunctionalInequalities.Analysis.Cutoff.SmoothBall.2402111686._hygCtx._hyg.3": "inst._@.FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Basic.2402111686._hygCtx._hyg.3",
+    "inst._@.FunctionalInequalities.Analysis.Cutoff.SmoothBall.2402111686._hygCtx._hyg.6": "inst._@.FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Basic.2402111686._hygCtx._hyg.6",
+    "inst._@.FunctionalInequalities.Analysis.Cutoff.SmoothBall.2402111686._hygCtx._hyg.12": "inst._@.FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Basic.2402111686._hygCtx._hyg.12",
+    "inst._@.FunctionalInequalities.Analysis.Cutoff.SmoothBall.1374999536._hygCtx._hyg.3": "inst._@.FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Basic.1374999536._hygCtx._hyg.3",
+    "inst._@.FunctionalInequalities.Analysis.Cutoff.SmoothBall.1374999536._hygCtx._hyg.6": "inst._@.FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Basic.1374999536._hygCtx._hyg.6",
+    "inst._@.FunctionalInequalities.Analysis.Cutoff.SmoothBall.1374999536._hygCtx._hyg.12": "inst._@.FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Basic.1374999536._hygCtx._hyg.12",
+    "inst._@.FunctionalInequalities.Analysis.Cutoff.SmoothBall.3564814638._hygCtx._hyg.3": "inst._@.FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Basic.3564814638._hygCtx._hyg.3",
+    "inst._@.FunctionalInequalities.Analysis.Cutoff.SmoothBall.3564814638._hygCtx._hyg.6": "inst._@.FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Basic.3564814638._hygCtx._hyg.6",
+    "inst._@.FunctionalInequalities.Analysis.Cutoff.SmoothBall.3051651838._hygCtx._hyg.3": "inst._@.FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Basic.3051651838._hygCtx._hyg.3",
+    "inst._@.FunctionalInequalities.Analysis.Cutoff.SmoothBall.629377175._hygCtx._hyg.3": "inst._@.FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Basic.629377175._hygCtx._hyg.3",
+    "inst._@.FunctionalInequalities.Analysis.Cutoff.SmoothBall.629377175._hygCtx._hyg.6": "inst._@.FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Basic.629377175._hygCtx._hyg.6",
+    "inst._@.FunctionalInequalities.Analysis.Cutoff.SmoothBall.3951424339._hygCtx._hyg.3": "inst._@.FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Basic.3951424339._hygCtx._hyg.3",
+    "inst._@.FunctionalInequalities.Analysis.Cutoff.SmoothBall.3951424339._hygCtx._hyg.6": "inst._@.FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Basic.3951424339._hygCtx._hyg.6",
+    "inst._@.FunctionalInequalities.Analysis.Lipschitz.Gradient.110545199._hygCtx._hyg.3": "inst._@.FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Basic.110545199._hygCtx._hyg.3",
+    "inst._@.FunctionalInequalities.Analysis.Lipschitz.Gradient.110545199._hygCtx._hyg.6": "inst._@.FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Basic.110545199._hygCtx._hyg.6",
+    "inst._@.FunctionalInequalities.Analysis.Lipschitz.Gradient.110545199._hygCtx._hyg.12": "inst._@.FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Basic.110545199._hygCtx._hyg.12",
+    "inst._@.FunctionalInequalities.Analysis.Lipschitz.Gradient.368993759._hygCtx._hyg.3": "inst._@.FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Basic.368993759._hygCtx._hyg.3",
+    "inst._@.FunctionalInequalities.Analysis.Lipschitz.Gradient.368993759._hygCtx._hyg.6": "inst._@.FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Basic.368993759._hygCtx._hyg.6",
+    "inst._@.FunctionalInequalities.Analysis.Lipschitz.Gradient.368993759._hygCtx._hyg.12": "inst._@.FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Basic.368993759._hygCtx._hyg.12",
+    "inst._@.FunctionalInequalities.Analysis.Cutoff.SmoothBall.52141077._hygCtx._hyg.3": "inst._@.FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Basic.52141077._hygCtx._hyg.3",
+    "inst._@.FunctionalInequalities.Analysis.Cutoff.SmoothBall.52141077._hygCtx._hyg.6": "inst._@.FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Basic.52141077._hygCtx._hyg.6",
+    "inst._@.FunctionalInequalities.Analysis.Cutoff.SmoothBall.477629195._hygCtx._hyg.3": "inst._@.FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Basic.477629195._hygCtx._hyg.3",
+    "inst._@.FunctionalInequalities.Analysis.Cutoff.SmoothBall.477629195._hygCtx._hyg.6": "inst._@.FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Basic.477629195._hygCtx._hyg.6",
+    "inst._@.FunctionalInequalities.Analysis.Cutoff.SmoothBall.3547053172._hygCtx._hyg.3": "inst._@.FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Basic.3547053172._hygCtx._hyg.3",
+    "inst._@.FunctionalInequalities.Analysis.Cutoff.SmoothBall.3547053172._hygCtx._hyg.6": "inst._@.FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Basic.3547053172._hygCtx._hyg.6",
+    "inst._@.FunctionalInequalities.Analysis.Cutoff.SmoothBall.701228077._hygCtx._hyg.3": "inst._@.FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Basic.701228077._hygCtx._hyg.3",
+    "inst._@.FunctionalInequalities.Analysis.Cutoff.SmoothBall.701228077._hygCtx._hyg.6": "inst._@.FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Basic.701228077._hygCtx._hyg.6",
+    "inst._@.FunctionalInequalities.Analysis.Cutoff.SmoothBall.648734721._hygCtx._hyg.3": "inst._@.FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Basic.648734721._hygCtx._hyg.3",
+    "inst._@.FunctionalInequalities.Analysis.Cutoff.SmoothBall.648734721._hygCtx._hyg.6": "inst._@.FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Basic.648734721._hygCtx._hyg.6",
+    "inst._@.FunctionalInequalities.Analysis.Cutoff.LipschitzBall.1766167743._hygCtx._hyg.4": "inst._@.FunctionalInequalities.Probability.Diffusion.Cutoff.1766167743._hygCtx._hyg.4",
+    "inst._@.FunctionalInequalities.Analysis.Cutoff.LipschitzBall.2673607139._hygCtx._hyg.4": "inst._@.FunctionalInequalities.Probability.Diffusion.Cutoff.2673607139._hygCtx._hyg.4",
+    "inst._@.FunctionalInequalities.Analysis.Cutoff.LipschitzBall.2673607139._hygCtx._hyg.7": "inst._@.FunctionalInequalities.Probability.Diffusion.Cutoff.2673607139._hygCtx._hyg.7",
+    "inst._@.FunctionalInequalities.Analysis.Cutoff.LipschitzBall.2673607139._hygCtx._hyg.13": "inst._@.FunctionalInequalities.Probability.Diffusion.Cutoff.2673607139._hygCtx._hyg.13",
+    "inst._@.FunctionalInequalities.Analysis.Cutoff.LipschitzBall.3787404765._hygCtx._hyg.4": "inst._@.FunctionalInequalities.Probability.Diffusion.Cutoff.3787404765._hygCtx._hyg.4",
+    "inst._@.FunctionalInequalities.Analysis.Cutoff.LipschitzBall.3787404765._hygCtx._hyg.7": "inst._@.FunctionalInequalities.Probability.Diffusion.Cutoff.3787404765._hygCtx._hyg.7",
+    "inst._@.FunctionalInequalities.Analysis.Cutoff.LipschitzBall.3787404765._hygCtx._hyg.13": "inst._@.FunctionalInequalities.Probability.Diffusion.Cutoff.3787404765._hygCtx._hyg.13",
+    "inst._@.FunctionalInequalities.Analysis.Cutoff.LipschitzBall.2056464893._hygCtx._hyg.4": "inst._@.FunctionalInequalities.Probability.Diffusion.Cutoff.2056464893._hygCtx._hyg.4",
+    "inst._@.FunctionalInequalities.Analysis.Cutoff.LipschitzBall.2056464893._hygCtx._hyg.7": "inst._@.FunctionalInequalities.Probability.Diffusion.Cutoff.2056464893._hygCtx._hyg.7",
+    "inst._@.FunctionalInequalities.Analysis.Cutoff.LipschitzBall.2056464893._hygCtx._hyg.13": "inst._@.FunctionalInequalities.Probability.Diffusion.Cutoff.2056464893._hygCtx._hyg.13",
+    "inst._@.FunctionalInequalities.Analysis.Cutoff.LipschitzBall.2056464893._hygCtx._hyg.19": "inst._@.FunctionalInequalities.Probability.Diffusion.Cutoff.2056464893._hygCtx._hyg.19",
+    "inst._@.FunctionalInequalities.Analysis.Cutoff.LipschitzBall.2056464893._hygCtx._hyg.22": "inst._@.FunctionalInequalities.Probability.Diffusion.Cutoff.2056464893._hygCtx._hyg.22",
+    "inst._@.FunctionalInequalities.Analysis.Cutoff.LipschitzBall.668883091._hygCtx._hyg.4": "inst._@.FunctionalInequalities.Probability.Diffusion.Cutoff.668883091._hygCtx._hyg.4",
+    "inst._@.FunctionalInequalities.Analysis.Cutoff.LipschitzBall.668883091._hygCtx._hyg.7": "inst._@.FunctionalInequalities.Probability.Diffusion.Cutoff.668883091._hygCtx._hyg.7",
+    "inst._@.FunctionalInequalities.Analysis.Cutoff.LipschitzBall.668883091._hygCtx._hyg.13": "inst._@.FunctionalInequalities.Probability.Diffusion.Cutoff.668883091._hygCtx._hyg.13",
+    "inst._@.FunctionalInequalities.Analysis.Cutoff.LipschitzBall.2802139947._hygCtx._hyg.4": "inst._@.FunctionalInequalities.Probability.Diffusion.Cutoff.2802139947._hygCtx._hyg.4",
+    "inst._@.FunctionalInequalities.Analysis.Cutoff.LipschitzBall.2802139947._hygCtx._hyg.7": "inst._@.FunctionalInequalities.Probability.Diffusion.Cutoff.2802139947._hygCtx._hyg.7",
+    "inst._@.FunctionalInequalities.Analysis.Cutoff.LipschitzBall.2802139947._hygCtx._hyg.13": "inst._@.FunctionalInequalities.Probability.Diffusion.Cutoff.2802139947._hygCtx._hyg.13",
+    "inst._@.FunctionalInequalities.Analysis.WeakDerivative.Mollification.3455124257._hygCtx._hyg.3": "inst._@.FunctionalInequalities.Analysis.WeakDerivative.3455124257._hygCtx._hyg.3",
+    "inst._@.FunctionalInequalities.Analysis.WeakDerivative.Mollification.1186018452._hygCtx._hyg.3": "inst._@.FunctionalInequalities.Analysis.WeakDerivative.1186018452._hygCtx._hyg.3",
+    "inst._@.FunctionalInequalities.Analysis.WeakDerivative.Mollification.3618196501._hygCtx._hyg.3": "inst._@.FunctionalInequalities.Analysis.WeakDerivative.3618196501._hygCtx._hyg.3",
+    "inst._@.FunctionalInequalities.Analysis.WeakDerivative.Mollification.3618196501._hygCtx._hyg.6": "inst._@.FunctionalInequalities.Analysis.WeakDerivative.3618196501._hygCtx._hyg.6",
+    "inst._@.FunctionalInequalities.Analysis.WeakDerivative.Mollification.3618196501._hygCtx._hyg.12": "inst._@.FunctionalInequalities.Analysis.WeakDerivative.3618196501._hygCtx._hyg.12",
+    "inst._@.FunctionalInequalities.Analysis.WeakDerivative.Mollification.3618196501._hygCtx._hyg.18": "inst._@.FunctionalInequalities.Analysis.WeakDerivative.3618196501._hygCtx._hyg.18",
+    "inst._@.FunctionalInequalities.Analysis.WeakDerivative.Mollification.3618196501._hygCtx._hyg.21": "inst._@.FunctionalInequalities.Analysis.WeakDerivative.3618196501._hygCtx._hyg.21",
+    "inst._@.FunctionalInequalities.Analysis.WeakDerivative.Calculus.3970890534._hygCtx._hyg.3": "inst._@.FunctionalInequalities.Analysis.WeakDerivative.3970890534._hygCtx._hyg.3",
+    "inst._@.FunctionalInequalities.Analysis.WeakDerivative.Mollification.2784544406._hygCtx._hyg.3": "inst._@.FunctionalInequalities.Analysis.WeakDerivative.2784544406._hygCtx._hyg.3",
+    "inst._@.FunctionalInequalities.Analysis.WeakDerivative.Mollification.2784544406._hygCtx._hyg.6": "inst._@.FunctionalInequalities.Analysis.WeakDerivative.2784544406._hygCtx._hyg.6",
+    "inst._@.FunctionalInequalities.Analysis.WeakDerivative.Mollification.2784544406._hygCtx._hyg.12": "inst._@.FunctionalInequalities.Analysis.WeakDerivative.2784544406._hygCtx._hyg.12",
+    "inst._@.FunctionalInequalities.Analysis.WeakDerivative.Mollification.2784544406._hygCtx._hyg.18": "inst._@.FunctionalInequalities.Analysis.WeakDerivative.2784544406._hygCtx._hyg.18",
+    "inst._@.FunctionalInequalities.Analysis.WeakDerivative.Mollification.2784544406._hygCtx._hyg.21": "inst._@.FunctionalInequalities.Analysis.WeakDerivative.2784544406._hygCtx._hyg.21",
+    "inst._@.FunctionalInequalities.Analysis.WeakDerivative.Calculus.220252745._hygCtx._hyg.3": "inst._@.FunctionalInequalities.Analysis.WeakDerivative.220252745._hygCtx._hyg.3",
+    "inst._@.FunctionalInequalities.Analysis.WeakDerivative.Calculus.220252745._hygCtx._hyg.6": "inst._@.FunctionalInequalities.Analysis.WeakDerivative.220252745._hygCtx._hyg.6",
+    "inst._@.FunctionalInequalities.Analysis.WeakDerivative.Calculus.220252745._hygCtx._hyg.12": "inst._@.FunctionalInequalities.Analysis.WeakDerivative.220252745._hygCtx._hyg.12",
+    "x._@.FunctionalInequalities.Analysis.WeakDerivative.Calculus.220252745._hygCtx._hyg.83": "x._@.FunctionalInequalities.Analysis.WeakDerivative.220252745._hygCtx._hyg.83",
+    "inst._@.FunctionalInequalities.Analysis.WeakDerivative.Calculus.919421827._hygCtx._hyg.3": "inst._@.FunctionalInequalities.Analysis.WeakDerivative.919421827._hygCtx._hyg.3",
+    "inst._@.FunctionalInequalities.Analysis.WeakDerivative.Calculus.919421827._hygCtx._hyg.6": "inst._@.FunctionalInequalities.Analysis.WeakDerivative.919421827._hygCtx._hyg.6",
+    "inst._@.FunctionalInequalities.Analysis.WeakDerivative.Calculus.3325765013._hygCtx._hyg.3": "inst._@.FunctionalInequalities.Analysis.WeakDerivative.3325765013._hygCtx._hyg.3",
+    "inst._@.FunctionalInequalities.Analysis.WeakDerivative.Calculus.3325765013._hygCtx._hyg.6": "inst._@.FunctionalInequalities.Analysis.WeakDerivative.3325765013._hygCtx._hyg.6",
+    "inst._@.FunctionalInequalities.Analysis.WeakDerivative.Calculus.3325765013._hygCtx._hyg.12": "inst._@.FunctionalInequalities.Analysis.WeakDerivative.3325765013._hygCtx._hyg.12",
+    "inst._@.FunctionalInequalities.Analysis.WeakDerivative.Calculus.3325765013._hygCtx._hyg.15": "inst._@.FunctionalInequalities.Analysis.WeakDerivative.3325765013._hygCtx._hyg.15",
+    "inst._@.FunctionalInequalities.Analysis.WeakDerivative.Calculus.906630058._hygCtx._hyg.3": "inst._@.FunctionalInequalities.Analysis.WeakDerivative.906630058._hygCtx._hyg.3",
+    "inst._@.FunctionalInequalities.Analysis.WeakDerivative.Calculus.906630058._hygCtx._hyg.6": "inst._@.FunctionalInequalities.Analysis.WeakDerivative.906630058._hygCtx._hyg.6"
+  },
+  "semantic_comparison": {
+    "passed": true,
+    "owned_declarations": 91,
+    "closure_declarations": 91,
+    "non_theorem_definition_bodies": 4,
+    "compiler_identifier_pairs": 140,
+    "differences": [],
+    "kernel_checked_definitional_equalities": 0,
+    "definitionally_equal_instance_dependency_changes": [],
+    "safety_and_partiality_flags_identical": true,
+    "normalization": "Exact bijective private/hygienic Name pairs constrained by source declaration destinations. Structural types/definition closures compared; any nonstructural instance-path difference additionally requires a fresh kernel-checked reflexive equality over the complete old/new expression trees. Public binder names/info, literals, levels and safety flags retained; nonkernel mdata omitted.",
+    "theorem_proof_values_claimed_equal": false
+  },
+  "evidence": "build/file-management/2026-10-17-other-families-optimization/batch-01-cutoff-weak-derivative/",
+  "historical_records_preserved": true
+}

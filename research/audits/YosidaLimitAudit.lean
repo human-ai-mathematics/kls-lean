@@ -1,5 +1,5 @@
 import FunctionalInequalities.Analysis.Semigroup.Yosida.Limit
-
+import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
 /-!
 # Scope audit for `Y8` (`S6` for the Yosida approximation)
 

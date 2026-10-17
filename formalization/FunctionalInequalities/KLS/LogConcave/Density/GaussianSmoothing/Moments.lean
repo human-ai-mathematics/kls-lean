@@ -3,6 +3,11 @@ import FunctionalInequalities.Analysis.BakryEmery.Tilt.LocalDerivatives
 import FunctionalInequalities.Probability.Product
 import FunctionalInequalities.Probability.Covariance.Basic
 import Mathlib.MeasureTheory.Group.IntegralConvolution
+import FunctionalInequalities.Analysis.WeakDerivative.Basic
+import FunctionalInequalities.Analysis.WeakDerivative.Calculus
+import FunctionalInequalities.KLS.LogConcave.Density.BorellRepresentation.Moments
+
+section
 
 /-!
 # Moments of the Gaussian noise and of the smoothed law
@@ -389,3 +394,177 @@ theorem smoothedLaw_covariance_operator_tendsto (μ : Measure E) [IsProbabilityM
   exact (smoothedLaw_covariance_operator μ hμ2 hs).symm
 
 end FunctionalInequalities.KLS.LogConcave.GaussianSmoothing
+
+section GaussianDirectionalIdentity
+
+open MeasureTheory Filter
+open FunctionalInequalities.Analysis
+open FunctionalInequalities.Analysis.BakryEmery
+open scoped ContDiff Topology RealInnerProductSpace
+
+namespace FunctionalInequalities.KLS.LogConcave.GaussianSmoothing
+
+set_option maxHeartbeats 800000 in
+/-- Gaussian integration by parts for C1 bounded globally Lipschitz tests: under `gaussianLaw s` (`s > 0`, all dimensions),
+`∫ ⟪x, v⟫ f = (2 s)⁻¹ ∫ D_v f`, with both integrands integrable. -/
+theorem gaussianLaw_directional_identity_of_bounded_lipschitz_test {n : ℕ}
+    {s : ℝ} (hs : 0 < s) {f : EuclideanSpace ℝ (Fin n) → ℝ} {L : NNReal}
+    (hf : ContDiff ℝ 1 f) (hLip : LipschitzWith L f) (C : ℝ) (hbound : ∀ x, ‖f x‖ ≤ C)
+    (v : EuclideanSpace ℝ (Fin n)) :
+    Integrable (fun x => ⟪x, v⟫ * f x) (gaussianLaw s) ∧
+    Integrable (fun x => fderiv ℝ f x v) (gaussianLaw s) ∧
+    (∫ x, ⟪x, v⟫ * f x ∂(gaussianLaw s)) =
+      (2 * s)⁻¹ * ∫ x, fderiv ℝ f x v ∂(gaussianLaw s) := by
+  let E := EuclideanSpace ℝ (Fin n)
+  let w : E → ℝ := fun x => Real.exp (-s * ‖x‖ ^ 2)
+  let mu : Measure E := gaussianLaw s
+  let : IsProbabilityMeasure mu := gaussianLaw_probability hs
+  have hexp : Integrable (fun x : E => Real.exp (-s * ‖x‖ ^ 2)) volume := integrable_kernel hs
+  have hF : Integrable f mu :=
+    (integrable_const C).mono' hf.continuous.aestronglyMeasurable (ae_of_all _ hbound)
+  have hX : Integrable (fun x : E => ⟪x, v⟫) mu :=
+    ((gaussianLaw_memLp_two hs).inner_const (𝕜 := ℝ) v).integrable one_le_two
+  have hXF : Integrable (fun x : E => ⟪x, v⟫ * f x) mu :=
+    hX.mul_bdd hf.continuous.aestronglyMeasurable (ae_of_all _ hbound)
+  have hdfmeas : Measurable (fun x : E => fderiv ℝ f x v) :=
+    (continuous_id.clm_apply continuous_const).measurable.comp (measurable_fderiv ℝ f)
+  have hDF : Integrable (fun x : E => fderiv ℝ f x v) mu := by
+    apply (integrable_const ((L : ℝ) * ‖v‖)).mono' hdfmeas.aestronglyMeasurable
+    exact ae_of_all _ fun x => ((fderiv ℝ f x).le_opNorm v).trans
+      (mul_le_mul_of_nonneg_right (norm_fderiv_le_of_lipschitz ℝ hLip) (norm_nonneg v))
+  have raw (k : E → ℝ) (hk : Integrable k mu) : Integrable (fun x => w x * k x) volume := by
+    have hkt : Integrable k ((volume : Measure E).tilted (fun x => -s * ‖x‖ ^ 2)) := by
+      rwa [← gaussianLaw_eq_tilted hs]
+    simpa only [w, smul_eq_mul] using (integrable_tilted_iff hexp k).mp hkt
+  have hRawF := raw f hF
+  have hRawXF := raw (fun x => ⟪x, v⟫ * f x) hXF
+  have hRawDF := raw (fun x => fderiv ℝ f x v) hDF
+  have hw : ContDiff ℝ 1 w := by
+    have hn : ContDiff ℝ 1 (fun x : E => ‖x‖ ^ 2) := contDiff_norm_sq ℝ
+    exact ((contDiff_const : ContDiff ℝ 1 (fun _ : E => -s)).mul hn).exp
+  have hd (x : E) : fderiv ℝ (fun y => w y * f y) x v =
+      w x * fderiv ℝ f x v - (2 * s) * (w x * (⟪x, v⟫ * f x)) := by
+    have hwx : HasFDerivAt w (w x • ((-s) • (2 • innerSL ℝ x))) x :=
+      ((hasStrictFDerivAt_norm_sq x).hasFDerivAt.const_mul (-s)).exp
+    change fderiv ℝ (w * f) x v = _
+    rw [(hwx.mul ((hf.differentiable one_ne_zero x).hasFDerivAt)).fderiv]
+    simp only [add_apply, smul_apply, smul_eq_mul, innerSL_apply_apply]
+    ring
+  have hRawD : Integrable (fun x => fderiv ℝ (fun y => w y * f y) x v) volume := by
+    apply (hRawDF.sub (hRawXF.const_mul (2 * s))).congr
+    filter_upwards [] with x
+    exact (hd x).symm
+  have hz := integral_eq_zero_of_integrable_weak_derivative
+    (hasWeakDerivAlong_of_contDiff (hw.mul hf) v) hRawF hRawD
+  have hRawEq : (∫ x, w x * fderiv ℝ f x v ∂volume) =
+      (2 * s) * ∫ x, w x * (⟪x, v⟫ * f x) ∂volume := by
+    have heq : (∫ x, fderiv ℝ (fun y => w y * f y) x v ∂volume) =
+        (∫ x, w x * fderiv ℝ f x v ∂volume) -
+        (2 * s) * ∫ x, w x * (⟪x, v⟫ * f x) ∂volume := by
+      calc
+        _ = ∫ x, w x * fderiv ℝ f x v - (2 * s) * (w x * (⟪x, v⟫ * f x)) ∂volume :=
+          integral_congr_ae (ae_of_all _ hd)
+        _ = _ := by rw [integral_sub hRawDF (hRawXF.const_mul (2 * s)), integral_const_mul]
+    linarith
+  have htilt (k : E → ℝ) : (∫ x, k x ∂mu) =
+      (∫ x, w x * k x ∂volume) / (∫ x, w x ∂volume) := by
+    dsimp only [mu]
+    rw [gaussianLaw_eq_tilted hs, integral_tilted]
+    change (∫ x, (w x / (∫ y, w y ∂volume)) * k x ∂volume) = _
+    simp_rw [div_mul_eq_mul_div]
+    exact integral_div _ _
+  refine ⟨hXF, hDF, ?_⟩
+  change (∫ x, ⟪x, v⟫ * f x ∂mu) = (2 * s)⁻¹ * ∫ x, fderiv ℝ f x v ∂mu
+  rw [htilt, htilt, hRawEq, mul_div_assoc, ← mul_assoc,
+    inv_mul_cancel₀ (ne_of_gt (mul_pos (by norm_num : (0 : ℝ) < 2) hs)), one_mul]
+
+end FunctionalInequalities.KLS.LogConcave.GaussianSmoothing
+
+end GaussianDirectionalIdentity
+
+end
+
+/-! ### Fourth moments of Gaussian, smoothed and linear-image laws; translated Gaussian identity
+
+`gaussianLaw s` has a fourth moment; fourth moments pass to smoothed laws and linear images; the Gaussian directional identity for bounded Lipschitz `C¹` tests holds after a translation. -/
+
+noncomputable section
+open MeasureTheory
+open scoped ENNReal
+
+namespace FunctionalInequalities.KLS.LogConcave.GaussianSmoothing
+
+theorem gaussianLaw_memLp_four {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+    [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
+    {s : ℝ} (hs : 0 < s) : MemLp id 4 (gaussianLaw (V := E) s) := by
+  let _ : IsProbabilityMeasure (gaussianLaw (V := E) s) := gaussianLaw_probability hs
+  have he : Integrable (fun x : E => Real.exp ((1 : ℝ) * ‖x‖)) (gaussianLaw s) := by
+    simpa only [one_mul] using gaussianLaw_exp_norm_integrable (E := E) hs
+  have hp := Probability.integrable_norm_pow_of_integrable_exp_norm
+    (by norm_num : (0 : ℝ) < 1) he 4
+  apply (integrable_norm_rpow_iff (f := (id : E → E)) continuous_id.aestronglyMeasurable
+    (by norm_num : (4 : ENNReal) ≠ 0) (by simp : (4 : ENNReal) ≠ ∞)).mp
+  simpa using hp
+
+end FunctionalInequalities.KLS.LogConcave.GaussianSmoothing
+
+end
+
+noncomputable section
+open MeasureTheory Set
+open scoped ENNReal ContDiff
+
+namespace FunctionalInequalities.KLS.LogConcave.GaussianSmoothing
+
+variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+  [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
+
+theorem smoothedLaw_memLp_four (μ : Measure E) [IsProbabilityMeasure μ]
+    (hμ4 : MemLp id 4 μ) {s : ℝ} (hs : 0 < s) : MemLp id 4 (smoothedLaw μ s) := by
+  let _ : IsProbabilityMeasure (gaussianLaw (V := E) s) := gaussianLaw_probability hs
+  unfold smoothedLaw Measure.conv
+  apply (memLp_map_measure_iff continuous_id.aestronglyMeasurable
+    (by fun_prop : AEMeasurable (fun p : E × E => p.1 + p.2) _)).2
+  exact (hμ4.comp_fst (gaussianLaw s)).add ((gaussianLaw_memLp_four hs).comp_snd μ)
+
+theorem map_linear_memLp_four (μ : Measure E) (S : E →L[ℝ] E)
+    (hμ4 : MemLp id 4 μ) : MemLp id 4 (μ.map S) := by
+  apply (memLp_map_measure_iff continuous_id.aestronglyMeasurable S.continuous.measurable.aemeasurable).2
+  exact S.comp_memLp' hμ4
+
+end FunctionalInequalities.KLS.LogConcave.GaussianSmoothing
+
+end
+
+noncomputable section
+open MeasureTheory
+open FunctionalInequalities.Analysis.BakryEmery
+open scoped ContDiff RealInnerProductSpace
+
+namespace FunctionalInequalities.KLS.LogConcave.GaussianSmoothing
+
+theorem gaussianLaw_translated_directional_identity_of_bounded_lipschitz_test {n : ℕ}
+    {h : EuclideanSpace ℝ (Fin n) → ℝ} {Lh : NNReal}
+    (hh : ContDiff ℝ 1 h) (hhLip : LipschitzWith Lh h)
+    (C : ℝ) (hbound : ∀ x, ‖h x‖ ≤ C)
+    (a v : EuclideanSpace ℝ (Fin n)) {s : ℝ} (hs : 0 < s) :
+    Integrable (fun z => ⟪z,v⟫ * h (a+z)) (gaussianLaw s) ∧
+    Integrable (fun z => fderiv ℝ h (a+z) v) (gaussianLaw s) ∧
+    (∫ z, ⟪z,v⟫ * h (a+z) ∂(gaussianLaw s)) =
+      (2*s)⁻¹ * ∫ z, fderiv ℝ h (a+z) v ∂(gaussianLaw s) := by
+  let E := EuclideanSpace ℝ (Fin n)
+  have hf : ContDiff ℝ 1 (fun z : E => h (a+z)) := hh.comp (contDiff_const.add contDiff_id)
+  have hp := gaussianLaw_directional_identity_of_bounded_lipschitz_test hs hf
+    (hhLip.comp ((LipschitzWith.const a).add LipschitzWith.id)) C (fun z => hbound (a+z)) v
+  have hd (z : E) : fderiv ℝ (fun w => h (a+w)) z v = fderiv ℝ h (a+z) v := by
+    have ha : HasFDerivAt (fun w : E => a+w) (ContinuousLinearMap.id ℝ E) z :=
+      (hasFDerivAt_id z).const_add a
+    exact congrArg (fun T : E →L[ℝ] ℝ => T v)
+      ((hh.differentiable one_ne_zero (a+z)).hasFDerivAt.comp z ha).fderiv
+  refine ⟨hp.1,hp.2.1.congr (ae_of_all _ hd),hp.2.2.trans ?_⟩
+  congr 1
+  exact integral_congr_ae (ae_of_all _ hd)
+
+end FunctionalInequalities.KLS.LogConcave.GaussianSmoothing
+
+end

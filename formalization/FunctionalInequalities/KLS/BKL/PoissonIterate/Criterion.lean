@@ -2,7 +2,7 @@ import FunctionalInequalities.KLS.BKL.PoissonIterate.Defect
 import FunctionalInequalities.KLS.BKL.PoissonIterate.TaylorRecursion
 import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.ApproximateEigenfunction
 import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Curvature
-import FunctionalInequalities.KLS.LogConcave.Regular
+import FunctionalInequalities.KLS.LogConcave.Regular.Basic
 import FunctionalInequalities.Analysis.DyadicSummation
 import FunctionalInequalities.Analysis.Tensor.BasisChange
 

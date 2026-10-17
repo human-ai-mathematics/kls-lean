@@ -1,3 +1,4 @@
+import FunctionalInequalities.Analysis.Operator.Coordinates
 import FunctionalInequalities.Analysis.BakryEmery.HessianOperator
 import FunctionalInequalities.Analysis.Matrix.DeterminantDerivative
 import FunctionalInequalities.Analysis.Matrix.Positivity

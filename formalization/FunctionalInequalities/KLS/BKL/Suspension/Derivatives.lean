@@ -1,6 +1,6 @@
 import FunctionalInequalities.KLS.BKL.Suspension.Density
 import FunctionalInequalities.KLS.BKL.Suspension.Cumulant
-import FunctionalInequalities.KLS.LogConcave.Regular
+import FunctionalInequalities.KLS.LogConcave.Regular.Basic
 
 /-!
 # Derivatives of the logarithmic Laplace transform of the suspension (BKL (111), (112))

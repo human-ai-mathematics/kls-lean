@@ -118,6 +118,22 @@ CERTIFICATES: dict[str, tuple[str, str]] = {
         "prop:bkl-suspension",
         "Solutions.PropBklSuspension.certificate",
     ),
+    "thm:letwin-compact-quadratic-bound": (
+        "thm:letwin-compact-quadratic-bound",
+        "Solutions.ThmLetwinCompactQuadraticBound.certificate",
+    ),
+    "lem:bkl-cutoff-energy": (
+        "lem:bkl-cutoff-energy",
+        "Solutions.LemBklCutoffEnergy.certificate",
+    ),
+    "thm:bkl-cumulant-bound": (
+        "thm:bkl-cumulant-bound",
+        "Solutions.ThmBklCumulantBound.certificate",
+    ),
+    "thm:bkl-poincare": (
+        "thm:bkl-poincare",
+        "Solutions.ThmBklPoincare.certificate",
+    ),
     "lem:relative-perimeter-cheeger-infimum": (
         "lem:relative-perimeter-cheeger-infimum",
         "Solutions.LemRelativePerimeterCheegerInfimum.certificate",

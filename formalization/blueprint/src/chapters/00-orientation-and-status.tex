@@ -175,7 +175,9 @@ mathematical presentations have not yet been identified formally.
 
 \begin{conjecture}[KLS, affine and isotropic forms]
   \label{conj:kls}
-  \lean{FunctionalInequalities.KLS.Conjecture}
+  \lean{FunctionalInequalities.KLS.Conjecture,
+        FunctionalInequalities.KLS.kls}
+  \leanok
   \uses{def:log-concave-law,def:literature-poincare-constant}
   There is a universal $C<\infty$ such that, on every finite-dimensional Euclidean space, every
   log-concave Borel probability $\mu$ with finite second moment satisfies
@@ -183,20 +185,27 @@ mathematical presentations have not yet been identified formally.
     \CPLit(\mu)\le C\norm{\Cov_\mu}_{\op}.
   \]
 \end{conjecture}
+\begin{proof}
+  \leanok
+  \uses{thm:bkl-poincare, thm:affine-isotropic-reduction}
+  BKL Theorem~1.1 (Theorem~\ref{thm:bkl-poincare}) gives one universal $C$ with $\CPLit(\mu)\le C$ for every isotropic
+  log-concave law in every finite-dimensional space. The affine-support and whitening bridge
+  (Theorem~\ref{thm:affine-isotropic-reduction}) transfers this bound, with the same constant, to every log-concave law
+  with finite second moment, including singular and lower-dimensional supports and dimension~$0$. In Lean,
+  \texttt{KLS.kls} is \texttt{KLS.BKL.Localization.conjecture}.
+\end{proof}
 
 The equivalence with the isotropic formulation is not hidden in the word ``equivalently.''  It is
 the named affine-support and whitening bridge \cref{thm:affine-isotropic-reduction}.
 
-The conjecture has a precise mathematical statement, so it is not tagged \texttt{notready}.
-It has no \texttt{leanok}: no theorem in this repository proves it, and no upstream
-\texttt{checked\_by: agent} record is promoted to Lean certification.
-The Lean name above is a \texttt{def \ldots : Prop}: it names the sentence and asserts nothing.
-The claim itself is stated as the theorem \texttt{FunctionalInequalities.KLS.kls} in
-\texttt{KLS/Target.lean}, with an explicit \texttt{sorry}: that is the repository's one
-deliberate proof hole, kept so that the final target is visible in Lean and not only here.
-It is not listed in \texttt{\textbackslash lean} because the declaration audit rejects
-\texttt{sorryAx}, and no certificate imports it (decision record
-\texttt{research/decisions/2026-09-19-kls-target-theorem.md}).
+The statement keeps its stable label and environment, and it is proved here.
+The Lean name \texttt{FunctionalInequalities.KLS.Conjecture} is a \texttt{def \ldots : Prop}: it names the sentence.
+The theorem \texttt{FunctionalInequalities.KLS.kls} in \texttt{KLS/Target.lean} proves it through the BKL route, on the
+owner-selected cutoff localization (decision record
+\texttt{research/decisions/2026-10-17-bkl-theorem11-kls-integration.md}, superseding the 2026-09-19 rule that kept
+it as a deliberate hole). Its axiom audit uses the standard axioms only, and no local declaration is excluded from the
+declaration audit. The route evidence of this node is local Lean evidence; the pinned upstream record is not promoted.
+The four exploratory route records remain separate and open; this proof does not complete them.
 
 \section{Status contract}
 

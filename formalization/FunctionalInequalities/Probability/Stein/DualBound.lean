@@ -1,4 +1,6 @@
+import FunctionalInequalities.Analysis.Operator.Coordinates
 import FunctionalInequalities.Probability.Stein.Kernel
+import FunctionalInequalities.Probability.Stein.IdentityExtension
 import FunctionalInequalities.Energy.DualNorm
 
 /-!

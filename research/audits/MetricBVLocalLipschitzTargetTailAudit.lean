@@ -1,5 +1,5 @@
 import FunctionalInequalities.KLS.Geometry.Perimeter.TestClassRelaxation
-
+import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
 /-! Strict proof clients for the ADMG Remark 3.5 alternative classes on proper spaces at
 measurable finite-mass targets, for arbitrary Borel measures: the target-tail truncation
 estimates, the compact-local diagonal perimeter bound, and the identification of the locally

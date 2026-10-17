@@ -1,5 +1,7 @@
 import FunctionalInequalities.Analysis.Convex.HessianIncrement
-import FunctionalInequalities.Analysis.WeakDerivative
+import FunctionalInequalities.Analysis.WeakDerivative.Basic
+import FunctionalInequalities.Analysis.WeakDerivative.Mollification
+import FunctionalInequalities.Analysis.WeakDerivative.Approximation
 
 noncomputable section
 

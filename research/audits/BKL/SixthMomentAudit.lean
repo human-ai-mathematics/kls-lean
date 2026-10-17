@@ -1,9 +1,10 @@
-import FunctionalInequalities.KLS.BKL.PosteriorCovariance
+import FunctionalInequalities.KLS.BKL.Posterior.Covariance
 import FunctionalInequalities.Analysis.BakryEmery.Cumulant.Basic
 import Mathlib.Probability.ConditionalProbability
 import Mathlib.Analysis.SpecialFunctions.Integrals.Basic
 import FunctionalInequalities.KLS.LogConcave.Density.FromBorell
-
+import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
+import FunctionalInequalities.KLS.BKL.Posterior.Moments
 /-! Independent audit clients for SM1 canonical sixth moment of the compact posterior (KLS/BKL/PosteriorDomain.lean section SixthMoment). Merged verbatim from the reviewer receipt `SM1-Independent-20261008 (raw 989e6c8a…)` (modules
 UniformWitness, LawClients, ZeroClients, ConsumerApplications), re-pointed from the raw `Candidate*` modules to the production owners; contracts/axiom-enumeration
 tooling stays in the receipt. -/

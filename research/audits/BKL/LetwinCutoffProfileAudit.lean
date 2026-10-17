@@ -1,5 +1,5 @@
 import FunctionalInequalities.Analysis.Cutoff.Profile
-
+import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
 /-!
 # Audit: scalar cutoff profile of Letwin Lemma A.4
 

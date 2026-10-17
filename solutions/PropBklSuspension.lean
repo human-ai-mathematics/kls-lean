@@ -14,8 +14,8 @@ The certificate states it in the source form: the universal cumulant hypothesis 
 log-concave `ν` on every `EuclideanSpace ℝ (Fin m)` and every `u`), regularity is
 `KLS.RegularPotential V a b'` (BKL (12)) with the law `hV.law`, isotropy is `KLS.Isotropic`, and
 `T_d f` is measured in the Hilbert–Schmidt norm of its coefficient array in the standard basis.
-The hypothesis is the source's own hypothesis (supplied in the paper by Theorem 4.1, which is not
-formalized); the certificate asserts only the conditional statement.
+The hypothesis is the source's own hypothesis. The separately certified Theorem 4.1 supplies it
+in the final assembly; this certificate retains the conditional statement.
 
 The proof follows the source: the suspension `(S, X₁, …, X_N)` with `N` chosen by (110), its
 isotropy and log-concavity, the mixed cumulants (111)–(112), the Hilbert–Schmidt step and `β → ∞`

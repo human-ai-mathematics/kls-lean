@@ -1,5 +1,5 @@
 import FunctionalInequalities.Energy.Euclidean.Slope.Comparison
-
+import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
 /-!
 # Scope audit for the slope sandwich `A1`–`A3`
 

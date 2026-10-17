@@ -5,9 +5,9 @@ import FunctionalInequalities.KLS.BKL.Suspension.Moments
 import FunctionalInequalities.KLS.BKL.Suspension.Derivatives
 import FunctionalInequalities.KLS.BKL.Proposition71
 import FunctionalInequalities.L2.AffineDecomposition
-import FunctionalInequalities.KLS.LogConcave.Regular
+import FunctionalInequalities.KLS.LogConcave.Regular.Basic
 import FunctionalInequalities.Analysis.Tensor.Coordinate
-
+import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
 /-!
 # Audit: supporting endpoints of BKL Proposition 7.1 with source-style consumers
 

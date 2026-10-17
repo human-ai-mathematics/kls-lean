@@ -1,0 +1,63 @@
+import Mathlib.Analysis.InnerProductSpace.PiL2
+import Mathlib.Analysis.Calculus.Gradient.Basic
+import Mathlib.MeasureTheory.Measure.ProbabilityMeasure
+import Mathlib.Probability.Moments.CovarianceBilin
+import Mathlib.Probability.Moments.Variance
+import Mathlib.Analysis.InnerProductSpace.Dual
+import Mathlib.Analysis.SpecialFunctions.Pow.Real
+import Mathlib.Topology.MetricSpace.Lipschitz
+
+noncomputable section
+open MeasureTheory ProbabilityTheory
+open scoped RealInnerProductSpace ContDiff
+namespace SecondIndependentReview
+
+-- Mathlib-only boundary: no project definitions, axioms, or theorem imports.
+def RawLogConcave {n : ℕ}
+    (μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin n))) : Prop :=
+  ∀ K₀ K₁ : Set (EuclideanSpace ℝ (Fin n)), IsCompact K₀ → IsCompact K₁ →
+    ∀ t : ℝ, 0 < t → t < 1 →
+      (μ : Measure (EuclideanSpace ℝ (Fin n))) K₀ ^ t * (μ : Measure (EuclideanSpace ℝ (Fin n))) K₁ ^ (1 - t) ≤
+        (μ : Measure (EuclideanSpace ℝ (Fin n))) {z | ∃ x ∈ K₀, ∃ y ∈ K₁, z = t • x + (1-t) • y}
+
+def CovarianceNormalizedSmoothKls : Prop :=
+  ∃ C : ℝ, 0 < C ∧ ∀ (n : ℕ)
+    (μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin n))),
+    RawLogConcave μ →
+    ∀ f : EuclideanSpace ℝ (Fin n) → ℝ,
+      ContDiff ℝ ∞ f → MemLp f 2 (μ : Measure (EuclideanSpace ℝ (Fin n))) →
+      Integrable (fun x => ‖gradient f x‖ ^ 2) (μ : Measure (EuclideanSpace ℝ (Fin n))) →
+      variance f (μ : Measure (EuclideanSpace ℝ (Fin n))) ≤
+        C * ‖InnerProductSpace.continuousLinearMapOfBilin
+          (covarianceBilin (μ : Measure (EuclideanSpace ℝ (Fin n))))‖ *
+          (∫ x, ‖gradient f x‖ ^ 2 ∂(μ : Measure (EuclideanSpace ℝ (Fin n))))
+
+def IsotropicLocallyLipschitzKls : Prop :=
+  ∃ C : ℝ, 0 < C ∧ ∀ (n : ℕ)
+    (μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin n))),
+    RawLogConcave μ →
+    (∫ x, x ∂(μ : Measure (EuclideanSpace ℝ (Fin n)))) = 0 →
+    (∀ u v : EuclideanSpace ℝ (Fin n),
+      (∫ x, ⟪u,x⟫ * ⟪v,x⟫ ∂(μ : Measure (EuclideanSpace ℝ (Fin n)))) = ⟪u,v⟫) →
+    ∀ f : EuclideanSpace ℝ (Fin n) → ℝ,
+      LocallyLipschitz f → MemLp f 2 (μ : Measure (EuclideanSpace ℝ (Fin n))) →
+      evariance f (μ : Measure (EuclideanSpace ℝ (Fin n))) ≤
+        ENNReal.ofReal C * ∫⁻ x, (ENNReal.ofReal ‖gradient f x‖)^2 ∂(μ : Measure (EuclideanSpace ℝ (Fin n)))
+
+-- The classical convex-body subclass, with the normalized Lebesgue law written literally.
+def UniformConvexBodyKls : Prop :=
+  ∃ C : ℝ, 0 < C ∧ ∀ (n : ℕ)
+    (K : Set (EuclideanSpace ℝ (Fin n))),
+    IsCompact K → Convex ℝ K → volume K ≠ 0 →
+    ∀ μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin n)),
+    (μ : Measure (EuclideanSpace ℝ (Fin n))) = (volume : Measure (EuclideanSpace ℝ (Fin n))).withDensity
+      (K.indicator fun _ => (volume K)⁻¹) →
+    (∫ x, x ∂(μ : Measure (EuclideanSpace ℝ (Fin n)))) = 0 →
+    (∀ u v : EuclideanSpace ℝ (Fin n),
+      (∫ x, ⟪u,x⟫ * ⟪v,x⟫ ∂(μ : Measure (EuclideanSpace ℝ (Fin n)))) = ⟪u,v⟫) →
+    ∀ f : EuclideanSpace ℝ (Fin n) → ℝ,
+      LocallyLipschitz f → MemLp f 2 (μ : Measure (EuclideanSpace ℝ (Fin n))) →
+      evariance f (μ : Measure (EuclideanSpace ℝ (Fin n))) ≤
+        ENNReal.ofReal C * ∫⁻ x, (ENNReal.ofReal ‖gradient f x‖)^2 ∂(μ : Measure (EuclideanSpace ℝ (Fin n)))
+
+end SecondIndependentReview

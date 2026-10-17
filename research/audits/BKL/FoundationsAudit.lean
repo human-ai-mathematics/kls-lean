@@ -8,7 +8,7 @@ import FunctionalInequalities.Analysis.BakryEmery.Bochner.Temperate
 import FunctionalInequalities.Analysis.BakryEmery.Tilt.Tensor
 import FunctionalInequalities.Analysis.BakryEmery.Bochner.Tensor
 import solutions.ThmBakryEmeryPoincare
-
+import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
 /-!
 # Audit: first dependencies of Bizeul–Klartag–Lehec (arXiv:2610.05474v1)
 

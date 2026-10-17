@@ -247,6 +247,11 @@ def undiscovered_lean_sources(root: Path, snapshot: dict) -> list[str]:
                   if p.is_file() and str(p.relative_to(root)) not in live)
 
 
+# Classical KLS specification gate (research/audits/KLS/Classical/README.md): its templates, pins and driver are
+# Lean-scope inputs.
+CLASSICAL_KLS_DIR = "research/audits/KLS/Classical"
+
+
 def verification_snapshot(root: Path, *, lean_only: bool = False) -> dict:
     snapshot = atlas.source_snapshot(root)
     if lean_only:
@@ -254,7 +259,7 @@ def verification_snapshot(root: Path, *, lean_only: bool = False) -> dict:
         inputs = {"formalization/lean-toolchain", "formalization/lakefile.toml",
                   "formalization/lake-manifest.json", "research/verify.py", "research/atlas.py"}
         files = {name: digest for name, digest in snapshot["files"].items()
-                 if name in inputs or name.endswith(".lean")}
+                 if name in inputs or name.endswith(".lean") or name.startswith(CLASSICAL_KLS_DIR + "/")}
         snapshot = {**snapshot, "files": files, "sha256": atlas.digest(files)}
     return snapshot
 
@@ -275,9 +280,6 @@ run_cmd do
       | none => (`FunctionalInequalities).isPrefixOf name ||
           (`solutions).isPrefixOf name || (`examples).isPrefixOf name
     if !localDecl then continue
-    -- This exact open conjecture is the repository's sole intentional target hole.
-    -- Every other declaration, including a wrapper around it, is still audited.
-    if name == `FunctionalInequalities.KLS.kls then continue
     count := count + 1
     let axioms ← Lean.collectAxioms name
     let rendered := String.intercalate ", " (axioms.toList.map Lean.Name.toString)
@@ -287,7 +289,7 @@ run_cmd do
     unless axioms.all (allowed.contains ·) do
       throwError "{{name}}: unexpected axioms [{{rendered}}]"
   if count == 0 then throwError "No local declarations audited"
-  Lean.logInfo m!"Audited {{count}} local declarations; KLS.kls remains open."
+  Lean.logInfo m!"Audited {{count}} local declarations."
 '''
 
 
@@ -404,6 +406,10 @@ def run_verification(root: Path, *, lean_only: bool = False) -> int:
         report["checked_lean_path"] = paths
         report["research_audits"] = check_research_audits(
             root, before, run, lean=lean, lean_path=checked_path)
+        classical = output_dir / "classical-kls"
+        run("classical-kls", [sys.executable, str(root / CLASSICAL_KLS_DIR / "check.py"), "--root", str(root),
+                              "--lean", lean, "--lean-path", checked_path, "--out", str(classical)])
+        report["classical_kls"] = json.loads((classical / "summary.json").read_text(encoding="utf-8"))
         vendored = [m for m in replay["modules"] if is_vendor_module(m)]
         code = vendor_axiom_audit_code(vendored)
         (output_dir / "VendorAudit.lean").write_text(code)
@@ -413,7 +419,7 @@ def run_verification(root: Path, *, lean_only: bool = False) -> int:
                             "summary": output.strip().splitlines()[-1] if output.strip() else ""}
         # Every project-local declaration, registered or not (public, private and generated), in
         # both modes: kernel replay alone accepts `sorryAx`, and the vendor allowlist does not
-        # extend to local declarations. Only the exact open target `KLS.kls` is excluded.
+        # extend to local declarations. No local declaration is excluded, including `KLS.kls`.
         code = library_axiom_audit_code([m for m in replay["modules"] if not is_vendor_module(m)])
         (output_dir / "LocalDeclarationAudit.lean").write_text(code)
         output = run("local-declaration-audit", [lean, "--stdin"], cwd=formalization,
@@ -423,7 +429,7 @@ def run_verification(root: Path, *, lean_only: bool = False) -> int:
         if not local_reports:
             errors.append("No local declaration axiom reports")
         report["local_declarations_audited"] = len(local_reports)
-        report["excluded_open_targets"] = ["FunctionalInequalities.KLS.kls"]
+        report["excluded_open_targets"] = []
         if errors:
             raise RuntimeError("\n".join(errors))
         if lean_only:

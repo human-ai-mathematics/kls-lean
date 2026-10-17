@@ -1,6 +1,6 @@
 import FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.RegularApproximation
-import FunctionalInequalities.KLS.LogConcave.RegularIsometry
-import FunctionalInequalities.KLS.LogConcave.RegularPoincare
+import FunctionalInequalities.KLS.LogConcave.Regular.Isometry
+import FunctionalInequalities.KLS.LogConcave.Regular.Poincare
 import FunctionalInequalities.KLS.LogConcave.WeakLimit
 import FunctionalInequalities.KLS.IsotropicSupport
 import FunctionalInequalities.Poincare.SmoothTest.Comparison

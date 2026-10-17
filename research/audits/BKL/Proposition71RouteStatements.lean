@@ -1,9 +1,9 @@
 import FunctionalInequalities.KLS.BKL.Suspension.Law
-import FunctionalInequalities.KLS.LogConcave.Regular
+import FunctionalInequalities.KLS.LogConcave.Regular.Basic
 import FunctionalInequalities.KLS.Isotropic
 import FunctionalInequalities.Analysis.BakryEmery.Cumulant.Basic
 import FunctionalInequalities.Analysis.Tensor.Coefficients
-
+import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
 /-!
 # Route statements: BKL Proposition 7.1
 

@@ -1,7 +1,7 @@
 import FunctionalInequalities.Analysis.BakryEmery.Cumulant.Local
 import FunctionalInequalities.Analysis.IteratedDerivative.Bilinear
 import Mathlib.Analysis.InnerProductSpace.PiL2
-
+import FunctionalInequalities.KLS.BKL.CumulantEnergy.Basic
 /-! Independent audit clients for the cumulant permutation symmetry (LocalCumulant section CumulantSymmetry) and the Boolean-mask complement pairing (IteratedDerivative/Bilinear). Merged verbatim from the reviewer receipt `D74-Grouping-Supports-Independent-20261009 (receipt 0175abed…)` (modules SkewLaw, PlaneLaw, PermutationClients, PairClients), each in its own named section, re-pointed from the raw `Candidate*` modules to the production owners; contracts/axiom-enumeration tooling stays in the receipt. -/
 
 -- ===== reviewer module SkewLaw (D74-Grouping-Supports-Independent-20261009 (receipt 0175abed…)) =====

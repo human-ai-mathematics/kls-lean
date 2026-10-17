@@ -1,6 +1,6 @@
 import FunctionalInequalities.Analysis.Matrix.DeterminantDerivative
 import FunctionalInequalities.Analysis.Matrix.WeakDerivative
-import FunctionalInequalities.KLS.CEK.MomentRegularity
+import FunctionalInequalities.KLS.CEK.MomentRegularity.WeakDerivative
 
 noncomputable section
 open MeasureTheory Set Matrix

@@ -1,7 +1,10 @@
-import FunctionalInequalities.Analysis.Matrix.Trace
+import FunctionalInequalities.Analysis.Matrix.Trace.Algebra
 
 /-!
 # Audit: trace–energy inequality (support of the BKL (67) log-determinant non-explosion route)
+
+Current owner: `Analysis/Matrix/Trace/Algebra.lean`. The following paragraph records the original
+2026-10-08 client-acceptance provenance.
 
 Clients compiled against `Analysis/Matrix/Trace.lean` section `TraceEnergy`
 (`sum_trace_sq_le_card_mul_sum_sq`, Luna unit TE1, independently accepted 2026-10-08, receipt

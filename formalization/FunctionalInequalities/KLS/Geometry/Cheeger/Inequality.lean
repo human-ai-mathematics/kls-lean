@@ -6,7 +6,7 @@ import Mathlib.Analysis.MeanInequalitiesPow
 import Mathlib.Analysis.Calculus.ContDiff.Deriv
 import Mathlib.Analysis.Calculus.Deriv.Slope
 import Mathlib.Analysis.Calculus.MeanValue
-import FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Basic
+import FunctionalInequalities.Analysis.Cutoff.SmoothBall
 import FunctionalInequalities.KLS.Geometry.Cheeger.Equality
 import FunctionalInequalities.Poincare.LocalSlope.SmoothTestComparison
 import FunctionalInequalities.KLS.LogConcave.Density.BorellRepresentation.Intrinsic
@@ -38,7 +38,7 @@ Read the module in this order.
   squares.
 * `minkowskiConstant_sq_mul_evariance_le_of_admissible` — the same for every admissible smooth
   test, by cutting off with the smooth bump `scaled R` of
-  `Energy/Euclidean/LipschitzApproximation/Basic.lean`: the cutoff is bounded, Lipschitz and compactly
+  `Analysis/Cutoff/SmoothBall.lean`: the cutoff is bounded, Lipschitz and compactly
   supported, its gradient energy converges by dominated convergence and its variance dominates
   that of the test in the limit by Fatou's lemma.
 * `smoothTest_constant_le`, `smoothTest_constant_eq_zero_of_minkowskiConstant_eq_top` — the

@@ -1,4 +1,4 @@
-import FunctionalInequalities.KLS.LogConcave.Regular
+import FunctionalInequalities.KLS.LogConcave.Regular.Basic
 import FunctionalInequalities.Analysis.BakryEmery.TensorEnergy
 import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Temperate
 import solutions.ThmBakryEmeryPoincare

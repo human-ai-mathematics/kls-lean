@@ -1,4 +1,4 @@
-import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.InverseHessianCutoff
+import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.InverseHessian.Cutoff
 import FunctionalInequalities.Analysis.BakryEmery.UniformIntervalPotential
 
 /-!

@@ -1,5 +1,5 @@
 import FunctionalInequalities.KLS.LogConcave.Poincare
-
+import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
 /-!
 # Scope audit for the literature-Poincaré clause of `thm:klartag-density-frontend-identification`
 

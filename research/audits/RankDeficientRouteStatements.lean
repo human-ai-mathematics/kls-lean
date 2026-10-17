@@ -1,6 +1,6 @@
 import FunctionalInequalities.Analysis.Vector.Slice.Critical
 import Mathlib.Analysis.InnerProductSpace.ProdL2
-
+import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
 /-!
 # Route statements for the rank-deficient part of the codimension-`m` critical set
 

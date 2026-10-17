@@ -1,6 +1,6 @@
 import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.Basic
 import FunctionalInequalities.Analysis.BakryEmery.Bochner.Basic
-import FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Basic
+import FunctionalInequalities.Analysis.Cutoff.SmoothBall
 import FunctionalInequalities.Analysis.Cutoff.Integrability
 import Mathlib.MeasureTheory.Function.L2Space
 

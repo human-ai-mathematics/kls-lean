@@ -1,7 +1,7 @@
 import Mathlib.Analysis.Calculus.Gradient.Basic
 import Mathlib.Analysis.Calculus.ContDiff.RCLike
 import Mathlib.Analysis.InnerProductSpace.PiL2
-
+import Mathlib.Analysis.Calculus.MeanValue
 noncomputable section
 open Set Metric
 open scoped RealInnerProductSpace
@@ -31,3 +31,34 @@ theorem exists_lipschitzWith_neg_add_comp_gradient {n : ℕ}
   exact ⟨L + C * G, hL.neg.add hcomp⟩
 
 end FunctionalInequalities.Analysis
+
+noncomputable section
+
+open Filter Topology
+open scoped ContDiff ENNReal
+
+namespace FunctionalInequalities.Energy.Euclidean.LipschitzApproximation
+
+universe u
+
+variable {E : Type u} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+
+section Gradient
+
+variable [CompleteSpace E]
+
+theorem norm_gradient_eq_norm_fderiv (f : E → ℝ) (x : E) :
+    ‖gradient f x‖ = ‖fderiv ℝ f x‖ :=
+  LinearIsometryEquiv.norm_map _ _
+
+theorem norm_gradient_le_of_lipschitz {K : NNReal} {f : E → ℝ} (hf : LipschitzWith K f) (x : E) :
+    ‖gradient f x‖ ≤ K := by
+  rw [norm_gradient_eq_norm_fderiv]; exact norm_fderiv_le_of_lipschitz ℝ hf
+
+theorem gradient_eq_of_hasFDerivAt {f : E → ℝ} {L : E →L[ℝ] ℝ} {x : E} (h : HasFDerivAt f L x) :
+    gradient f x = (InnerProductSpace.toDual ℝ E).symm L :=
+  (hasFDerivAt_iff_hasGradientAt.mp h).gradient
+
+end Gradient
+
+end FunctionalInequalities.Energy.Euclidean.LipschitzApproximation

@@ -1,4 +1,4 @@
-import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.InverseHessianCutoff
+import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.InverseHessian.Cutoff
 import FunctionalInequalities.Analysis.BakryEmery.UniformIntervalPotential
 import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.UniformIntervalClient
 
@@ -49,7 +49,7 @@ end LetwinUniformIntervalAudit
 
 open LetwinUniformIntervalAudit in
 run_cmd do
-  for m in [`FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.InverseHessianCutoff,
+  for m in [`FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.InverseHessian.Cutoff,
             `FunctionalInequalities.Analysis.BakryEmery.UniformIntervalPotential] do
     let bad ← nonstandard m
     unless bad.isEmpty do throwError "nonstandard axioms in {m}: {bad}"

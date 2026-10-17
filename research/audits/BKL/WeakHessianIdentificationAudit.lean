@@ -1,4 +1,5 @@
-import FunctionalInequalities.Probability.Stein.HessianKernel
+import FunctionalInequalities.Analysis.BakryEmery.HessianOperator
+import FunctionalInequalities.Analysis.BakryEmery.WeakHessian
 
 noncomputable section
 

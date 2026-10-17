@@ -52,7 +52,8 @@ property or agreement of raw test energy with relaxed energy. For individual rep
 import paths, see the [migration record](../../../research/explorations/2026-09-07-energy-module-layout.md).
 
 `Euclidean/LipschitzApproximation/` is divided by responsibility into
-[Basic](Euclidean/LipschitzApproximation/Basic.lean) (gradients and truncation),
+[gradient estimates](../Analysis/Lipschitz/Gradient.lean) and
+[smooth ball cutoffs](../Analysis/Cutoff/SmoothBall.lean) (generic tools),
 [Measurable](Euclidean/LipschitzApproximation/Measurable.lean) (measurability),
 [Kernel](Euclidean/LipschitzApproximation/Kernel.lean) (kernels and convolution estimates), and
 [Approximation](Euclidean/LipschitzApproximation/Approximation.lean) (weighted approximation).

@@ -2,7 +2,7 @@ import FunctionalInequalities.KLS.BKL.Suspension.Density
 import FunctionalInequalities.KLS.BKL.Suspension.Cumulant
 import FunctionalInequalities.KLS.BKL.Suspension.Derivatives
 import FunctionalInequalities.KLS.BKL.Suspension.Moments
-import FunctionalInequalities.KLS.LogConcave.Regular
+import FunctionalInequalities.KLS.LogConcave.Regular.Basic
 import Mathlib.Analysis.Normed.Lp.SmoothApprox
 import FunctionalInequalities.Analysis.BakryEmery.Calculus
 import FunctionalInequalities.Analysis.BakryEmery.Tilt.SquareIntegrable

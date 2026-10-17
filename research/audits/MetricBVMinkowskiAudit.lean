@@ -1,3 +1,4 @@
+import FunctionalInequalities.KLS.Geometry.Perimeter.MetricBV.Finite
 import FunctionalInequalities.KLS.Geometry.Perimeter.MetricBVMinkowski
 
 /-! Independent full-signature clients for the one-sided bridge "metric BV perimeter ≤ outer

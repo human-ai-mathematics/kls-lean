@@ -1,4 +1,4 @@
-import FunctionalInequalities.KLS.Geometry.Perimeter.MetricBV
+import FunctionalInequalities.KLS.Geometry.Perimeter.MetricBV.Basic
 
 /-! Independent full-signature clients for the sequential lower semicontinuity of the metric BV
 perimeter under global `L¹` convergence of set indicators, for every Borel measure: the owner

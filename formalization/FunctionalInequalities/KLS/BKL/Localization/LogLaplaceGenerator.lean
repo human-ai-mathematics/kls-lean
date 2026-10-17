@@ -1,6 +1,7 @@
 import FunctionalInequalities.KLS.BKL.Localization.Coefficients
 import FunctionalInequalities.Probability.Posterior.LogPartition
-
+import FunctionalInequalities.KLS.BKL.Posterior.Covariance
+import FunctionalInequalities.Probability.Diffusion.Generator
 /-!
 # BKL (71) in generator form
 

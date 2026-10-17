@@ -66,12 +66,16 @@
             "sha256": "de5909a4e513b78eea8398bb2b08ad6aca261d4b8d2b7d98cfd4ce713ea3f756"
           },
           {
-            "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Basic.lean",
-            "sha256": "5653d6fab51b7fc1e13a6a7e4cebeae466d8d63234d16f07316236e79b788cb7"
+            "path": "formalization/FunctionalInequalities/Analysis/Cutoff/SmoothBall.lean",
+            "sha256": "39f1487dc038dcae4a8c435529e5ce7611fe520ceaf461218d28370fbc859549"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/Lipschitz/Gradient.lean",
+            "sha256": "e1a0ce4caf39906de0ed51b46d11d29e5f851c29d829f95b0fbbf21c09c83575"
           },
           {
             "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Measurable.lean",
-            "sha256": "0f04fa14b0dc11bdc35f76b4fd9b6e11ea9f6b7bf95c876f21543bcc847db7b6"
+            "sha256": "0f20367ef594d3be9e64e3a9ccadfa20990355a64ca568e4c750f2d089879ef0"
           },
           {
             "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Kernel.lean",
@@ -147,7 +151,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/Probability/Moments.lean",
-            "sha256": "f1fa40a0f99b13b2314b05662e2ee5ea2adaf8d2294d05292584c172481382a5"
+            "sha256": "703aedc72a11b49c304f9108dfe56214c8dad02ea7cb14d87817cb4b065bf1cf"
           }
         ],
         "gaps": []
@@ -319,7 +323,7 @@
           },
           {
             "path": "formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex",
-            "sha256": "46902fa6312dcb06ee41ab70134a6303b7c0ca4609cba619425b2c17ffa3c0b8"
+            "sha256": "83011d184e4631a8641d35a4da4eac0c7ef75ec456a2668e37e25d3c494f43e8"
           },
           {
             "path": "formalization/.lake/packages/mathlib/Mathlib/Analysis/InnerProductSpace/LaxMilgram.lean",
@@ -347,7 +351,7 @@
           },
           {
             "path": "research/audits/SemigroupGenerationRouteStatements.lean",
-            "sha256": "a5e69ff2c086a6bd025845e0216adc535032a4e3905835161a446a03d014cbf5"
+            "sha256": "43feb40f15af6766916658f75553330091551a17d0a90a17a37ecf11e943c079"
           },
           {
             "path": "research/audits/SemigroupFormAudit.lean",
@@ -431,7 +435,7 @@
           },
           {
             "path": "research/audits/YosidaLimitAudit.lean",
-            "sha256": "ae6bba927583823a5b18ab128946f9f4a2c49a30538082f2172a08e6210d5370"
+            "sha256": "404ff9cc570f41a3065b8b5a94398680156f9f9d7cffa00ae1ba20f54a2fdb2d"
           },
           {
             "path": "research/decisions/2026-09-19-yosida-limit-route.md",
@@ -455,7 +459,7 @@
           },
           {
             "path": "research/audits/GeneratedSemigroupRouteStatements.lean",
-            "sha256": "5b4962af56b948d15a8274a5c39c7c16b12cd8c6d180d42271c94c46010680a4"
+            "sha256": "b1c8fa9cde198efddef5c01b0c78b23c82cd930cf641e4c73d16ec5de713304e"
           },
           {
             "path": "research/audits/SemigroupLawsAudit.lean",
@@ -507,7 +511,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/Calculus.lean",
-            "sha256": "9d87495ab78f6e82ba1d13f229107090f1a72c13d1883caf2c0224ebef02b9ba"
+            "sha256": "351849d1e47a4e07f731b76859dfd15d6a8981665a9042e5440f7e93f1e98de5"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/Laplacian.lean",
@@ -611,7 +615,7 @@
           },
           {
             "path": "research/audits/SemigroupSmoothingAudit.lean",
-            "sha256": "b4ae37974b6cb824e15275474f1c4121ce1f6e227b54959ea74692527fb2aa1e"
+            "sha256": "94d3b9a2050cac6a2ee8be518097d6e6c5afc2b77757f7cd12585cf3212dfc08"
           },
           {
             "path": "research/decisions/2026-09-21-semigroup-positive-time-smoothing.md",
@@ -643,7 +647,7 @@
           },
           {
             "path": "research/audits/BakryEmeryGeneratorGammaTwoAudit.lean",
-            "sha256": "3ae03eb54691744ed9fdbf944f87f36bab1a774ce6b9ff6b32feba390097224d"
+            "sha256": "e103e2114685453db7a61dadd29ef62c3c19c93b099e6e26b26c36388cbf542b"
           },
           {
             "path": "research/decisions/2026-09-21-generator-gamma-two.md",
@@ -662,12 +666,12 @@
             "sha256": "d551fcb6e8439bf28e4b0f971d666e96419c92d1636d161e3d9c432efad1b260"
           },
           {
-            "path": "formalization/FunctionalInequalities/Analysis/Mollification.lean",
+            "path": "formalization/FunctionalInequalities/Analysis/Mollification/Basic.lean",
             "sha256": "9b69c0c6c1b2a15bbc1eedfb94b1aca290c4c04f4397fea78275f4c6e262afe9"
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/InteriorRegularity.lean",
-            "sha256": "e2912aa3b211e9b087b65b91a10d86a38b21b0076970d91adceb46eddf387ede"
+            "sha256": "66c1d10ef25f09f348273805cea5fe78f9f6feb1a8f78fac9567d53d6087066c"
           },
           {
             "path": "research/audits/BakryEmeryInteriorRegularityAudit.lean",
@@ -899,7 +903,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/L2/MeanVariance.lean",
-            "sha256": "4d8fe6c6b3cfc6c565632356ce8f6e56b17846f933312a9e0cf93ae646853d74"
+            "sha256": "06002e5c40f496bd8260555a827398d501b9383b932e8865db477e4aa071ca79"
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/Decay.lean",
@@ -955,7 +959,7 @@
           },
           {
             "path": "formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex",
-            "sha256": "46902fa6312dcb06ee41ab70134a6303b7c0ca4609cba619425b2c17ffa3c0b8"
+            "sha256": "83011d184e4631a8641d35a4da4eac0c7ef75ec456a2668e37e25d3c494f43e8"
           }
         ],
         "gaps": []
@@ -1094,13 +1098,40 @@
       }
     },
     "conj:kls": {
-      "mathematics": "conjectural",
+      "mathematics": "local_argument",
       "evidence": [
         "blueprint:conj:kls"
       ],
       "assumptions": [],
       "priority": 5,
-      "note": "Research task with explicit stopping criteria; no ordinary proof-hole retry loop. 2026-09-19: the claim is stated as theorem FunctionalInequalities.KLS.kls (KLS/Target.lean) with an explicit sorry, the repository's one deliberate direct hole; KLS.Conjecture remains the def : Prop that names the sentence for the reductions. The declaration is deliberately absent from the Blueprint lean tag (the declaration audit rejects sorryAx) and from every certificate import closure (check_ledger.py forbids sorry there). Rule and rationale: research/decisions/2026-09-19-kls-target-theorem.md."
+      "note": "2026-10-17 (stage 4): proved locally. FunctionalInequalities.KLS.kls : Conjecture (KLS/Target.lean) is KLS.BKL.Localization.conjecture (KLS/BKL/Poincare.lean): BKL Theorem 1.1 (thm:bkl-poincare, Solutions.ThmBklPoincare) from the proved compact Letwin bound, the cutoff Theorem 4.1, Theorem 3.1, Proposition 7.1 and the regular approximation, then the affine/isotropic reduction (thm:affine-isotropic-reduction) with the same constant. The statement of KLS.Conjecture is unchanged; standard axioms only, no local declaration is excluded from the declaration audit, and there is no target assumption. The 2026-09-19 hole rule (research/decisions/2026-09-19-kls-target-theorem.md) is superseded by research/decisions/2026-10-17-bkl-theorem11-kls-integration.md; the previous record is in research/decisions/2026-10-17-pre-bkl-kls-register-notes.md. The four exploratory route gates stay open.",
+      "infrastructure": {
+        "status": "available",
+        "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
+        "evidence": [
+          {
+            "path": "formalization/FunctionalInequalities/KLS/Target.lean",
+            "sha256": "c550d279901ea5892770c95639bf0ceef154d81494337f49464db13597cfcb84"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/KLS/BKL/Theorem41.lean",
+            "sha256": "0142189f4f75faa69b2137ec82fc2c1d46b023f80029ff85c0245b16d250b1e4"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/KLS/BKL/Poincare.lean",
+            "sha256": "4d8c4cd812d3cec75e75abb269bb66e66a9ab4bbf38d9a5a8a91741f15388a11"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/KLS/Statement.lean",
+            "sha256": "f130d2b0e915a26aa267af5fb799e3bd88734b5f1e71b502b6523588cba19741"
+          },
+          {
+            "path": "solutions/ThmBklPoincare.lean",
+            "sha256": "22e3b7f568e65ec1f794f181adea1e4e5d0345aaf69ff67e7663f470c06704dd"
+          }
+        ],
+        "gaps": []
+      }
     },
     "q:smooth-gradient-raw-core-agreement": {
       "mathematics": "conjectural",
@@ -1197,12 +1228,16 @@
             "sha256": "0559e40c643485253ef8ad257863eea9d5be94b55c8e5edb26dbff1858ae31d7"
           },
           {
-            "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Basic.lean",
-            "sha256": "5653d6fab51b7fc1e13a6a7e4cebeae466d8d63234d16f07316236e79b788cb7"
+            "path": "formalization/FunctionalInequalities/Analysis/Cutoff/SmoothBall.lean",
+            "sha256": "39f1487dc038dcae4a8c435529e5ce7611fe520ceaf461218d28370fbc859549"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/Lipschitz/Gradient.lean",
+            "sha256": "e1a0ce4caf39906de0ed51b46d11d29e5f851c29d829f95b0fbbf21c09c83575"
           },
           {
             "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Measurable.lean",
-            "sha256": "0f04fa14b0dc11bdc35f76b4fd9b6e11ea9f6b7bf95c876f21543bcc847db7b6"
+            "sha256": "0f20367ef594d3be9e64e3a9ccadfa20990355a64ca568e4c750f2d089879ef0"
           },
           {
             "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Kernel.lean",
@@ -1218,11 +1253,11 @@
           },
           {
             "path": "research/audits/EnergySlopeRouteStatements.lean",
-            "sha256": "21973714e449473a355cfabe5b18f616ee9ffb22d49b0ea0ddfcb1d8c4493a6f"
+            "sha256": "dafc5e474e2da52c9a2bf3ccdb925d520ad09411265ec94d9fdab6d6e449a02f"
           },
           {
             "path": "research/audits/EnergySlopeComparisonAudit.lean",
-            "sha256": "65fc0a2cf36cd5d10ad06972ccfe68988cd2755b142e611d64ffeb1e58d827af"
+            "sha256": "e7f102baf82ac2206d41db82e60c9324f9ef97f58ac8f3bb79362d7c7f1549e9"
           },
           {
             "path": "research/audits/EnergySlopeRecoveryAudit.lean",
@@ -1230,7 +1265,7 @@
           },
           {
             "path": "research/audits/EnergySlopeDensityAudit.lean",
-            "sha256": "6d280f5d2c4eee6502c5591d5c31da228fdc6c621072c4ab5a92b24dcb8bdb29"
+            "sha256": "019c57b82f26219b16bc19b57f276bc67895e9a40532493314248a0e98a1bc91"
           },
           {
             "path": "research/decisions/2026-09-19-energy-slope-route.md",
@@ -1293,12 +1328,16 @@
             "sha256": "6edbf16fde2aab13c9420f9cdca5e33e73b2aa98a78bfdf9d81af59eb6aa1314"
           },
           {
-            "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Basic.lean",
-            "sha256": "5653d6fab51b7fc1e13a6a7e4cebeae466d8d63234d16f07316236e79b788cb7"
+            "path": "formalization/FunctionalInequalities/Analysis/Cutoff/SmoothBall.lean",
+            "sha256": "39f1487dc038dcae4a8c435529e5ce7611fe520ceaf461218d28370fbc859549"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/Lipschitz/Gradient.lean",
+            "sha256": "e1a0ce4caf39906de0ed51b46d11d29e5f851c29d829f95b0fbbf21c09c83575"
           },
           {
             "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Measurable.lean",
-            "sha256": "0f04fa14b0dc11bdc35f76b4fd9b6e11ea9f6b7bf95c876f21543bcc847db7b6"
+            "sha256": "0f20367ef594d3be9e64e3a9ccadfa20990355a64ca568e4c750f2d089879ef0"
           },
           {
             "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Kernel.lean",
@@ -1421,12 +1460,16 @@
             "sha256": "94c2fe1632aa6ff68099c6983816a9d9bfbe5b80bfa4e78a40f79a66f8352a59"
           },
           {
-            "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Basic.lean",
-            "sha256": "5653d6fab51b7fc1e13a6a7e4cebeae466d8d63234d16f07316236e79b788cb7"
+            "path": "formalization/FunctionalInequalities/Analysis/Cutoff/SmoothBall.lean",
+            "sha256": "39f1487dc038dcae4a8c435529e5ce7611fe520ceaf461218d28370fbc859549"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/Lipschitz/Gradient.lean",
+            "sha256": "e1a0ce4caf39906de0ed51b46d11d29e5f851c29d829f95b0fbbf21c09c83575"
           },
           {
             "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Measurable.lean",
-            "sha256": "0f04fa14b0dc11bdc35f76b4fd9b6e11ea9f6b7bf95c876f21543bcc847db7b6"
+            "sha256": "0f20367ef594d3be9e64e3a9ccadfa20990355a64ca568e4c750f2d089879ef0"
           },
           {
             "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Kernel.lean",
@@ -1501,12 +1544,16 @@
             "sha256": "3773fe1930834183be5a1c3f6e9d83908c1b4c2aee2b9e706c40df024c5f8f41"
           },
           {
-            "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Basic.lean",
-            "sha256": "5653d6fab51b7fc1e13a6a7e4cebeae466d8d63234d16f07316236e79b788cb7"
+            "path": "formalization/FunctionalInequalities/Analysis/Cutoff/SmoothBall.lean",
+            "sha256": "39f1487dc038dcae4a8c435529e5ce7611fe520ceaf461218d28370fbc859549"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/Lipschitz/Gradient.lean",
+            "sha256": "e1a0ce4caf39906de0ed51b46d11d29e5f851c29d829f95b0fbbf21c09c83575"
           },
           {
             "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Measurable.lean",
-            "sha256": "0f04fa14b0dc11bdc35f76b4fd9b6e11ea9f6b7bf95c876f21543bcc847db7b6"
+            "sha256": "0f20367ef594d3be9e64e3a9ccadfa20990355a64ca568e4c750f2d089879ef0"
           },
           {
             "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Kernel.lean",
@@ -1522,7 +1569,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/L2/MeanVariance.lean",
-            "sha256": "4d8fe6c6b3cfc6c565632356ce8f6e56b17846f933312a9e0cf93ae646853d74"
+            "sha256": "06002e5c40f496bd8260555a827398d501b9383b932e8865db477e4aa071ca79"
           },
           {
             "path": "formalization/FunctionalInequalities/Poincare/LocalSlope/SmoothTestComparison.lean",
@@ -1626,7 +1673,7 @@
           },
           {
             "path": "formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex",
-            "sha256": "46902fa6312dcb06ee41ab70134a6303b7c0ca4609cba619425b2c17ffa3c0b8"
+            "sha256": "83011d184e4631a8641d35a4da4eac0c7ef75ec456a2668e37e25d3c494f43e8"
           }
         ],
         "gaps": []
@@ -1886,7 +1933,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/L2/MeanVariance.lean",
-            "sha256": "4d8fe6c6b3cfc6c565632356ce8f6e56b17846f933312a9e0cf93ae646853d74"
+            "sha256": "06002e5c40f496bd8260555a827398d501b9383b932e8865db477e4aa071ca79"
           },
           {
             "path": "formalization/FunctionalInequalities/Poincare/LocalSlope/SmoothTestComparison.lean",
@@ -1967,7 +2014,7 @@
         "evidence": [
           {
             "path": "formalization/blueprint/src/chapters/50-kls-routes.tex",
-            "sha256": "b77abb304519f1bf5da13452c7c9dc4990f1c296d2c560c016a33a671435a93f"
+            "sha256": "386337141988d36fd6d716639c582b87d0c9c2994252425c695e45fda0473577"
           },
           {
             "path": "formalization/.lake/packages/mathlib/Mathlib/Probability/BrownianMotion/Basic.lean",
@@ -2181,12 +2228,16 @@
             "sha256": "3773fe1930834183be5a1c3f6e9d83908c1b4c2aee2b9e706c40df024c5f8f41"
           },
           {
-            "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Basic.lean",
-            "sha256": "5653d6fab51b7fc1e13a6a7e4cebeae466d8d63234d16f07316236e79b788cb7"
+            "path": "formalization/FunctionalInequalities/Analysis/Cutoff/SmoothBall.lean",
+            "sha256": "39f1487dc038dcae4a8c435529e5ce7611fe520ceaf461218d28370fbc859549"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/Lipschitz/Gradient.lean",
+            "sha256": "e1a0ce4caf39906de0ed51b46d11d29e5f851c29d829f95b0fbbf21c09c83575"
           },
           {
             "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Measurable.lean",
-            "sha256": "0f04fa14b0dc11bdc35f76b4fd9b6e11ea9f6b7bf95c876f21543bcc847db7b6"
+            "sha256": "0f20367ef594d3be9e64e3a9ccadfa20990355a64ca568e4c750f2d089879ef0"
           },
           {
             "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Kernel.lean",
@@ -2206,7 +2257,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/L2/MeanVariance.lean",
-            "sha256": "4d8fe6c6b3cfc6c565632356ce8f6e56b17846f933312a9e0cf93ae646853d74"
+            "sha256": "06002e5c40f496bd8260555a827398d501b9383b932e8865db477e4aa071ca79"
           },
           {
             "path": "solutions/LemConditionalFiberEnergyComparison.lean",
@@ -2457,12 +2508,16 @@
             "sha256": "89598ad78db89b67e4564798cec7d81a2504c38aad5ee4188a38afb428e87c48"
           },
           {
-            "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Basic.lean",
-            "sha256": "5653d6fab51b7fc1e13a6a7e4cebeae466d8d63234d16f07316236e79b788cb7"
+            "path": "formalization/FunctionalInequalities/Analysis/Cutoff/SmoothBall.lean",
+            "sha256": "39f1487dc038dcae4a8c435529e5ce7611fe520ceaf461218d28370fbc859549"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/Lipschitz/Gradient.lean",
+            "sha256": "e1a0ce4caf39906de0ed51b46d11d29e5f851c29d829f95b0fbbf21c09c83575"
           },
           {
             "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Measurable.lean",
-            "sha256": "0f04fa14b0dc11bdc35f76b4fd9b6e11ea9f6b7bf95c876f21543bcc847db7b6"
+            "sha256": "0f20367ef594d3be9e64e3a9ccadfa20990355a64ca568e4c750f2d089879ef0"
           },
           {
             "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Kernel.lean",
@@ -2506,7 +2561,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/L2/MeanVariance.lean",
-            "sha256": "4d8fe6c6b3cfc6c565632356ce8f6e56b17846f933312a9e0cf93ae646853d74"
+            "sha256": "06002e5c40f496bd8260555a827398d501b9383b932e8865db477e4aa071ca79"
           },
           {
             "path": "formalization/FunctionalInequalities/Energy/WeightedGradient/Closable.lean",
@@ -2525,12 +2580,16 @@
             "sha256": "e7e81b0b5cff20d35e5f2de52278b1aaa0a44ce0bc5bc2e5e44dcdf8dbc621d7"
           },
           {
-            "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Basic.lean",
-            "sha256": "5653d6fab51b7fc1e13a6a7e4cebeae466d8d63234d16f07316236e79b788cb7"
+            "path": "formalization/FunctionalInequalities/Analysis/Cutoff/SmoothBall.lean",
+            "sha256": "39f1487dc038dcae4a8c435529e5ce7611fe520ceaf461218d28370fbc859549"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/Lipschitz/Gradient.lean",
+            "sha256": "e1a0ce4caf39906de0ed51b46d11d29e5f851c29d829f95b0fbbf21c09c83575"
           },
           {
             "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Measurable.lean",
-            "sha256": "0f04fa14b0dc11bdc35f76b4fd9b6e11ea9f6b7bf95c876f21543bcc847db7b6"
+            "sha256": "0f20367ef594d3be9e64e3a9ccadfa20990355a64ca568e4c750f2d089879ef0"
           },
           {
             "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Kernel.lean",
@@ -2602,7 +2661,7 @@
           },
           {
             "path": "formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex",
-            "sha256": "46902fa6312dcb06ee41ab70134a6303b7c0ca4609cba619425b2c17ffa3c0b8"
+            "sha256": "83011d184e4631a8641d35a4da4eac0c7ef75ec456a2668e37e25d3c494f43e8"
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/Isoperimetry.lean",
@@ -2790,7 +2849,7 @@
           },
           {
             "path": "research/audits/CompactSliceAudit.lean",
-            "sha256": "abe5df80a64c701f9190f1f881bc0effa9ffc3f41ac6992b2af327fd5ca0fe0e"
+            "sha256": "b19874890a601bb9a53eaf0e57472a8993fb7c3b9f0ee1927731697e9f6a036d"
           },
           {
             "path": "research/decisions/2026-09-15-borel-slice-measurable.md",
@@ -2798,7 +2857,7 @@
           },
           {
             "path": "research/audits/BorelSliceAudit.lean",
-            "sha256": "0c95484da6a2ac6870f57bf59cd285023c53f18fafe7fa699ca3b6c55700ba81"
+            "sha256": "e7af785eba383cedef1d2225d599546b3293c7e6ffbd430ca603bc7ef929ea13"
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/Geometry/Slice/Measurable.lean",
@@ -2994,7 +3053,7 @@
           },
           {
             "path": "research/audits/AreaFormulaRouteStatements.lean",
-            "sha256": "f65f9e89860a00248da26b84f151c0ebffcd3dfd2d8ec5ad71019fcb692c9c54"
+            "sha256": "c03163e47a90b0c3b678d4ce36146741e7286d3460c4d7740ed68d13c3170c28"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/Vector/JacobianContinuity.lean",
@@ -3002,7 +3061,7 @@
           },
           {
             "path": "research/audits/NormDetContinuityAudit.lean",
-            "sha256": "f08aea6cc5e45c32f1bfe0167400be706912c113dd5995484ccd6736609f8552"
+            "sha256": "23c3747fe67c655e4888eb27fc0e0faf5e4f550302cfb1282d5fa4aa3f9c296a"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/Vector/Graph/Basic.lean",
@@ -3086,7 +3145,7 @@
           },
           {
             "path": "research/audits/VectorSliceMeasurableAudit.lean",
-            "sha256": "e2760659558ba6df5fd6ee80ae2007d11c7929d717126a1f70a7d0ddaf9e9b64"
+            "sha256": "855308e05e16ccf752cb3aa678d22e113d20908e711ff9e5f462bddf6825663f"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/Vector/Slice/Critical.lean",
@@ -3098,7 +3157,7 @@
           },
           {
             "path": "research/audits/RankDeficientRouteStatements.lean",
-            "sha256": "f2f38662702a95a6ca36ade38d878593001cf32bf6ecbe6ef4ba1e9c0161b833"
+            "sha256": "2205c426d720ab4fd983b06d1c3c47465a9756e9cafeb5cb738c2fe7f516a9c3"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/Vector/RankDeficient/Stratification.lean",
@@ -3138,7 +3197,7 @@
           },
           {
             "path": "research/audits/TargetSplitFubiniAudit.lean",
-            "sha256": "5fe13149bfb1a8bff898e7bc58b278046ad7f24a936a8164bb80a785a63fec6c"
+            "sha256": "dd94ec825dd97fb6443d7805df9a944f63efcd0ad418c3d14f12d753bdb09290"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/Vector/RankDeficient/StratumSlicing.lean",
@@ -3166,7 +3225,7 @@
           },
           {
             "path": "research/audits/EquidimensionalSardAudit.lean",
-            "sha256": "063a6caa49f68160d4fcd190f718ae15c71d4dc493c1e72e93fca70d7dd67610"
+            "sha256": "1b1da12fc3bcbee34980a5701da69e399f1ada252f9b652e42d8ab16489576bb"
           },
           {
             "path": "research/audits/ExponentObstructionAudit.lean",
@@ -3178,7 +3237,7 @@
           },
           {
             "path": "research/naming.md",
-            "sha256": "ed4d4cef9782bb7669406f09d2429c1a8c0766b04345225695d030fd5f594d25"
+            "sha256": "aa3c35611cfd84e04714770948205a142b07a6a99c947354ea14c769719714fd"
           },
           {
             "path": "research/api-migration/2026-09-17-analysis-module-map.json",
@@ -3202,7 +3261,7 @@
           },
           {
             "path": "research/audits/SharpSardAudit.lean",
-            "sha256": "e6f98b1bb42d832eb8e0619bcae9a0f2355fd6b5606494e106709736ea33ae36"
+            "sha256": "ca72fc7a73f87b488046ac5a089bea2129d46b42344942f1271d83f4a498c7ae"
           },
           {
             "path": "research/decisions/2026-09-19-sharp-sard-route.md",
@@ -3270,7 +3329,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/Geometry/Cheeger/Inequality.lean",
-            "sha256": "b63b6b4eafbe1ad23ea9f9e7963ff42b8b8e2aa9bec32270be432a0a6c00d0a9"
+            "sha256": "0197b1855867196d9a6b45c3e101d4f50255c3a8761ec4321d081b205fbbce4c"
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/Geometry/Cheeger/Median.lean",
@@ -3278,11 +3337,11 @@
           },
           {
             "path": "research/audits/CheegerInfimumRouteStatements.lean",
-            "sha256": "8541ec56be575f2d6341510f44bce565477f5282da129dd9654231dc96daf2a5"
+            "sha256": "f75a0490ed00ac8103cbe0bb1fe6c6441143bee71059575ff13fdf8529de80b3"
           },
           {
             "path": "research/audits/CheegerEqualityAudit.lean",
-            "sha256": "66c1e85dfb9bbfb1522f3f85f7a1dccc34545beb46dd4a174b84d7af27f9f7be"
+            "sha256": "d53c1f357c2edafb5906fd1bc6f8086124317e171ff5a7c06e1cf24db9dbc556"
           },
           {
             "path": "research/audits/CheegerInequalityRouteStatements.lean",
@@ -3349,12 +3408,16 @@
             "sha256": "867c788c95d02ab9171e20af18524ba2d7ab492e100958473f978a3acebd01fa"
           },
           {
-            "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Basic.lean",
-            "sha256": "5653d6fab51b7fc1e13a6a7e4cebeae466d8d63234d16f07316236e79b788cb7"
+            "path": "formalization/FunctionalInequalities/Analysis/Cutoff/SmoothBall.lean",
+            "sha256": "39f1487dc038dcae4a8c435529e5ce7611fe520ceaf461218d28370fbc859549"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/Lipschitz/Gradient.lean",
+            "sha256": "e1a0ce4caf39906de0ed51b46d11d29e5f851c29d829f95b0fbbf21c09c83575"
           },
           {
             "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Measurable.lean",
-            "sha256": "0f04fa14b0dc11bdc35f76b4fd9b6e11ea9f6b7bf95c876f21543bcc847db7b6"
+            "sha256": "0f20367ef594d3be9e64e3a9ccadfa20990355a64ca568e4c750f2d089879ef0"
           },
           {
             "path": "formalization/FunctionalInequalities/Energy/Euclidean/LipschitzApproximation/Kernel.lean",
@@ -3370,7 +3433,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/Geometry/Cheeger/Inequality.lean",
-            "sha256": "b63b6b4eafbe1ad23ea9f9e7963ff42b8b8e2aa9bec32270be432a0a6c00d0a9"
+            "sha256": "0197b1855867196d9a6b45c3e101d4f50255c3a8761ec4321d081b205fbbce4c"
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/Geometry/Cheeger/Median.lean",
@@ -3378,11 +3441,11 @@
           },
           {
             "path": "research/audits/CheegerInfimumRouteStatements.lean",
-            "sha256": "8541ec56be575f2d6341510f44bce565477f5282da129dd9654231dc96daf2a5"
+            "sha256": "f75a0490ed00ac8103cbe0bb1fe6c6441143bee71059575ff13fdf8529de80b3"
           },
           {
             "path": "research/audits/CheegerEqualityAudit.lean",
-            "sha256": "66c1e85dfb9bbfb1522f3f85f7a1dccc34545beb46dd4a174b84d7af27f9f7be"
+            "sha256": "d53c1f357c2edafb5906fd1bc6f8086124317e171ff5a7c06e1cf24db9dbc556"
           },
           {
             "path": "research/audits/CheegerInequalityRouteStatements.lean",
@@ -3477,8 +3540,16 @@
         "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
         "evidence": [
           {
+            "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/HessianOperator.lean",
+            "sha256": "bb6f525cbb741c1cda46d7de6fe3fcce4a9999af2eb5f61c4b714ca79bbb7e62"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/WeakHessian.lean",
+            "sha256": "173b7bbab1be25c79a9b491bf0adb5c844388692294d126731609b165a39f549"
+          },
+          {
             "path": "formalization/FunctionalInequalities/Probability/Stein/HessianKernel.lean",
-            "sha256": "1721660f8ba5bc121ebb2d461cfc08de8deb77eed393a11f06181a3fa2816987"
+            "sha256": "4a3914b6e99b9d70ff74c3c12e619a4b6c06887070d6d368d4746b63e32e496c"
           }
         ],
         "gaps": []
@@ -3517,8 +3588,24 @@
         "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
         "evidence": [
           {
-            "path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity.lean",
-            "sha256": "f239fe6ca7d97d3a71073181278d0214d0f2c27328d5b8ab7592530aeeddeb7d"
+            "path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/Cutoff.lean",
+            "sha256": "d61600a73a2beefb25ce9b63c398c5f09f55657a93610b703428c79537b21e09"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/Potential.lean",
+            "sha256": "11d56724f8361597ec175b97b47ebb54cb13e2ea6d5f0d7089360ecdcceeb946"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/TraceStein.lean",
+            "sha256": "1a6064285161d2fc71f5aec1c53b116cd8397dd438d07050e7520c89ed97e5cd"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakDerivative.lean",
+            "sha256": "5870a4cb4b5ef16556cc7b8ba5b82fbc5262fa9ef3e0bc92d596410d1bf99f2a"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakHessian.lean",
+            "sha256": "fd9e790f3d85eda908a83a7ae985d0f7f2e8873945cf72727cace9b55873ea3c"
           }
         ],
         "gaps": []
@@ -3538,7 +3625,7 @@
         "evidence": [
           {
             "path": "formalization/FunctionalInequalities/Analysis/Matrix/Piola.lean",
-            "sha256": "5ca9a8b8ee9b8a1aa3604d0301d5588d3e6d650269008fe86fa7ed6848fca33f"
+            "sha256": "923fc6fff407158551b24994f029e22b352ccf180b37a5ef6693f12cacf08825"
           }
         ],
         "gaps": []
@@ -3557,12 +3644,12 @@
         "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
         "evidence": [
           {
-            "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakInverseHessian.lean",
-            "sha256": "6a17fddf36c297649c938b226a7b4f79fe613b2af9db16dfe3ebf161fd20b45a"
+            "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/InverseHessian/Weak.lean",
+            "sha256": "9a40ddec016fde1934ac23ec16f2262fce84f47a227efef40613ee4ded28ce9c"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/Matrix/Piola.lean",
-            "sha256": "5ca9a8b8ee9b8a1aa3604d0301d5588d3e6d650269008fe86fa7ed6848fca33f"
+            "sha256": "923fc6fff407158551b24994f029e22b352ccf180b37a5ef6693f12cacf08825"
           }
         ],
         "gaps": []
@@ -3581,8 +3668,16 @@
         "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
         "evidence": [
           {
+            "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/HessianOperator.lean",
+            "sha256": "bb6f525cbb741c1cda46d7de6fe3fcce4a9999af2eb5f61c4b714ca79bbb7e62"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/WeakHessian.lean",
+            "sha256": "173b7bbab1be25c79a9b491bf0adb5c844388692294d126731609b165a39f549"
+          },
+          {
             "path": "formalization/FunctionalInequalities/Probability/Stein/HessianKernel.lean",
-            "sha256": "1721660f8ba5bc121ebb2d461cfc08de8deb77eed393a11f06181a3fa2816987"
+            "sha256": "4a3914b6e99b9d70ff74c3c12e619a4b6c06887070d6d368d4746b63e32e496c"
           }
         ],
         "gaps": []
@@ -3621,8 +3716,8 @@
         "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
         "evidence": [
           {
-            "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakInverseHessian.lean",
-            "sha256": "6a17fddf36c297649c938b226a7b4f79fe613b2af9db16dfe3ebf161fd20b45a"
+            "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/InverseHessian/Weak.lean",
+            "sha256": "9a40ddec016fde1934ac23ec16f2262fce84f47a227efef40613ee4ded28ce9c"
           }
         ],
         "gaps": []
@@ -3642,7 +3737,7 @@
         "evidence": [
           {
             "path": "formalization/FunctionalInequalities/Analysis/Convex/HessianIncrement.lean",
-            "sha256": "a769832f878723293fccb435aa25ce479fea8a8474258cbdd04471591854d40b"
+            "sha256": "020668606ca2dc9d04f2e4ac8b425e54e8c72b9532f196f55faa2215d50c673c"
           }
         ],
         "gaps": []
@@ -3662,11 +3757,11 @@
         "evidence": [
           {
             "path": "formalization/FunctionalInequalities/Analysis/Convex/HessianIncrement.lean",
-            "sha256": "a769832f878723293fccb435aa25ce479fea8a8474258cbdd04471591854d40b"
+            "sha256": "020668606ca2dc9d04f2e4ac8b425e54e8c72b9532f196f55faa2215d50c673c"
           },
           {
-            "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakInverseHessian.lean",
-            "sha256": "6a17fddf36c297649c938b226a7b4f79fe613b2af9db16dfe3ebf161fd20b45a"
+            "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/InverseHessian/Weak.lean",
+            "sha256": "9a40ddec016fde1934ac23ec16f2262fce84f47a227efef40613ee4ded28ce9c"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/Convex/SecondDifference.lean",
@@ -3709,8 +3804,16 @@
         "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
         "evidence": [
           {
+            "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/HessianOperator.lean",
+            "sha256": "bb6f525cbb741c1cda46d7de6fe3fcce4a9999af2eb5f61c4b714ca79bbb7e62"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/WeakHessian.lean",
+            "sha256": "173b7bbab1be25c79a9b491bf0adb5c844388692294d126731609b165a39f549"
+          },
+          {
             "path": "formalization/FunctionalInequalities/Probability/Stein/HessianKernel.lean",
-            "sha256": "1721660f8ba5bc121ebb2d461cfc08de8deb77eed393a11f06181a3fa2816987"
+            "sha256": "4a3914b6e99b9d70ff74c3c12e619a4b6c06887070d6d368d4746b63e32e496c"
           }
         ],
         "gaps": []
@@ -3730,15 +3833,23 @@
         "evidence": [
           {
             "path": "formalization/FunctionalInequalities/Analysis/Convex/HessianIncrement.lean",
-            "sha256": "a769832f878723293fccb435aa25ce479fea8a8474258cbdd04471591854d40b"
+            "sha256": "020668606ca2dc9d04f2e4ac8b425e54e8c72b9532f196f55faa2215d50c673c"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/Cutoff/Translation.lean",
             "sha256": "17311fe40404f9c6f7d1b58691196bdcf5001113ceb0aeb93536d38f40fd2ea5"
           },
           {
+            "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/HessianOperator.lean",
+            "sha256": "bb6f525cbb741c1cda46d7de6fe3fcce4a9999af2eb5f61c4b714ca79bbb7e62"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/WeakHessian.lean",
+            "sha256": "173b7bbab1be25c79a9b491bf0adb5c844388692294d126731609b165a39f549"
+          },
+          {
             "path": "formalization/FunctionalInequalities/Probability/Stein/HessianKernel.lean",
-            "sha256": "1721660f8ba5bc121ebb2d461cfc08de8deb77eed393a11f06181a3fa2816987"
+            "sha256": "4a3914b6e99b9d70ff74c3c12e619a4b6c06887070d6d368d4746b63e32e496c"
           }
         ],
         "gaps": []
@@ -3758,15 +3869,27 @@
         "evidence": [
           {
             "path": "formalization/FunctionalInequalities/Analysis/Convex/HessianRegularity.lean",
-            "sha256": "8a4ea25c14c29218731bddb7a363b0fdb438079e2ce8d3472e58a2d8085f1fcb"
+            "sha256": "c7d3e0378e0e1c6af8dd2c0f80ed9acc75d96078317f270468e5b9405cd97215"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/Convex/HessianIncrement.lean",
-            "sha256": "a769832f878723293fccb435aa25ce479fea8a8474258cbdd04471591854d40b"
+            "sha256": "020668606ca2dc9d04f2e4ac8b425e54e8c72b9532f196f55faa2215d50c673c"
           },
           {
-            "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative.lean",
-            "sha256": "ddf7fc69c872f5383e854eb7529d16520816162b62624e3c55b05acb62e3eb00"
+            "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Approximation.lean",
+            "sha256": "6f9a83090970931d254540d1965a3bbd6ad8e55222de091e0f19d575cab08658"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Basic.lean",
+            "sha256": "d8d9afbe829030302d2267aa0c2d7c0f51665249e053b3ae154b2849e60d74a5"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+            "sha256": "311f32a06eb3bb1e1d3b519868c38dcc746752fc57ed68f3bb2eae6f7711c251"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Mollification.lean",
+            "sha256": "a59eba3d25c9a2f483a7fd16328232d2dedacb44d8b8c96b5fbc6b62fb916c67"
           }
         ],
         "gaps": []
@@ -3806,7 +3929,7 @@
         "evidence": [
           {
             "path": "formalization/FunctionalInequalities/Analysis/Lipschitz/Gradient.lean",
-            "sha256": "cda1effaca0e7114a2ea87a3083a054dd4cdf1fc2057b55f6f623b9c2820c2d4"
+            "sha256": "e1a0ce4caf39906de0ed51b46d11d29e5f851c29d829f95b0fbbf21c09c83575"
           }
         ],
         "gaps": []
@@ -3825,8 +3948,24 @@
         "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
         "evidence": [
           {
-            "path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity.lean",
-            "sha256": "f239fe6ca7d97d3a71073181278d0214d0f2c27328d5b8ab7592530aeeddeb7d"
+            "path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/Cutoff.lean",
+            "sha256": "d61600a73a2beefb25ce9b63c398c5f09f55657a93610b703428c79537b21e09"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/Potential.lean",
+            "sha256": "11d56724f8361597ec175b97b47ebb54cb13e2ea6d5f0d7089360ecdcceeb946"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/TraceStein.lean",
+            "sha256": "1a6064285161d2fc71f5aec1c53b116cd8397dd438d07050e7520c89ed97e5cd"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakDerivative.lean",
+            "sha256": "5870a4cb4b5ef16556cc7b8ba5b82fbc5262fa9ef3e0bc92d596410d1bf99f2a"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakHessian.lean",
+            "sha256": "fd9e790f3d85eda908a83a7ae985d0f7f2e8873945cf72727cace9b55873ea3c"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/Convex/GradientLipschitz.lean",
@@ -3834,11 +3973,11 @@
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/Lipschitz/Gradient.lean",
-            "sha256": "cda1effaca0e7114a2ea87a3083a054dd4cdf1fc2057b55f6f623b9c2820c2d4"
+            "sha256": "e1a0ce4caf39906de0ed51b46d11d29e5f851c29d829f95b0fbbf21c09c83575"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/Convex/HessianRegularity.lean",
-            "sha256": "8a4ea25c14c29218731bddb7a363b0fdb438079e2ce8d3472e58a2d8085f1fcb"
+            "sha256": "c7d3e0378e0e1c6af8dd2c0f80ed9acc75d96078317f270468e5b9405cd97215"
           }
         ],
         "gaps": []
@@ -3857,11 +3996,23 @@
         "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
         "evidence": [
           {
-            "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative.lean",
-            "sha256": "ddf7fc69c872f5383e854eb7529d16520816162b62624e3c55b05acb62e3eb00"
+            "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Approximation.lean",
+            "sha256": "6f9a83090970931d254540d1965a3bbd6ad8e55222de091e0f19d575cab08658"
           },
           {
-            "path": "formalization/FunctionalInequalities/Analysis/Mollification.lean",
+            "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Basic.lean",
+            "sha256": "d8d9afbe829030302d2267aa0c2d7c0f51665249e053b3ae154b2849e60d74a5"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+            "sha256": "311f32a06eb3bb1e1d3b519868c38dcc746752fc57ed68f3bb2eae6f7711c251"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Mollification.lean",
+            "sha256": "a59eba3d25c9a2f483a7fd16328232d2dedacb44d8b8c96b5fbc6b62fb916c67"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/Mollification/Basic.lean",
             "sha256": "9b69c0c6c1b2a15bbc1eedfb94b1aca290c4c04f4397fea78275f4c6e262afe9"
           }
         ],
@@ -3881,8 +4032,20 @@
         "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
         "evidence": [
           {
-            "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative.lean",
-            "sha256": "ddf7fc69c872f5383e854eb7529d16520816162b62624e3c55b05acb62e3eb00"
+            "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Approximation.lean",
+            "sha256": "6f9a83090970931d254540d1965a3bbd6ad8e55222de091e0f19d575cab08658"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Basic.lean",
+            "sha256": "d8d9afbe829030302d2267aa0c2d7c0f51665249e053b3ae154b2849e60d74a5"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+            "sha256": "311f32a06eb3bb1e1d3b519868c38dcc746752fc57ed68f3bb2eae6f7711c251"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Mollification.lean",
+            "sha256": "a59eba3d25c9a2f483a7fd16328232d2dedacb44d8b8c96b5fbc6b62fb916c67"
           }
         ],
         "gaps": []
@@ -3901,8 +4064,20 @@
         "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
         "evidence": [
           {
-            "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative.lean",
-            "sha256": "ddf7fc69c872f5383e854eb7529d16520816162b62624e3c55b05acb62e3eb00"
+            "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Approximation.lean",
+            "sha256": "6f9a83090970931d254540d1965a3bbd6ad8e55222de091e0f19d575cab08658"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Basic.lean",
+            "sha256": "d8d9afbe829030302d2267aa0c2d7c0f51665249e053b3ae154b2849e60d74a5"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+            "sha256": "311f32a06eb3bb1e1d3b519868c38dcc746752fc57ed68f3bb2eae6f7711c251"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Mollification.lean",
+            "sha256": "a59eba3d25c9a2f483a7fd16328232d2dedacb44d8b8c96b5fbc6b62fb916c67"
           }
         ],
         "gaps": []
@@ -3921,8 +4096,20 @@
         "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
         "evidence": [
           {
-            "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative.lean",
-            "sha256": "ddf7fc69c872f5383e854eb7529d16520816162b62624e3c55b05acb62e3eb00"
+            "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Approximation.lean",
+            "sha256": "6f9a83090970931d254540d1965a3bbd6ad8e55222de091e0f19d575cab08658"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Basic.lean",
+            "sha256": "d8d9afbe829030302d2267aa0c2d7c0f51665249e053b3ae154b2849e60d74a5"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+            "sha256": "311f32a06eb3bb1e1d3b519868c38dcc746752fc57ed68f3bb2eae6f7711c251"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Mollification.lean",
+            "sha256": "a59eba3d25c9a2f483a7fd16328232d2dedacb44d8b8c96b5fbc6b62fb916c67"
           }
         ],
         "gaps": []
@@ -3942,11 +4129,23 @@
         "evidence": [
           {
             "path": "formalization/FunctionalInequalities/Analysis/Matrix/WeakDerivative.lean",
-            "sha256": "f530c2c3b75287862d550b48122dd03a345d2cd1b42b0bb4a15a296f03a0a33a"
+            "sha256": "a3b5563378cad1bb314e23d6230a86e20edab0a01b891e2301d46b8fd6541ca0"
           },
           {
-            "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative.lean",
-            "sha256": "ddf7fc69c872f5383e854eb7529d16520816162b62624e3c55b05acb62e3eb00"
+            "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Approximation.lean",
+            "sha256": "6f9a83090970931d254540d1965a3bbd6ad8e55222de091e0f19d575cab08658"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Basic.lean",
+            "sha256": "d8d9afbe829030302d2267aa0c2d7c0f51665249e053b3ae154b2849e60d74a5"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+            "sha256": "311f32a06eb3bb1e1d3b519868c38dcc746752fc57ed68f3bb2eae6f7711c251"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Mollification.lean",
+            "sha256": "a59eba3d25c9a2f483a7fd16328232d2dedacb44d8b8c96b5fbc6b62fb916c67"
           }
         ],
         "gaps": []
@@ -3966,11 +4165,23 @@
         "evidence": [
           {
             "path": "formalization/FunctionalInequalities/Analysis/Matrix/WeakDerivative.lean",
-            "sha256": "f530c2c3b75287862d550b48122dd03a345d2cd1b42b0bb4a15a296f03a0a33a"
+            "sha256": "a3b5563378cad1bb314e23d6230a86e20edab0a01b891e2301d46b8fd6541ca0"
           },
           {
-            "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative.lean",
-            "sha256": "ddf7fc69c872f5383e854eb7529d16520816162b62624e3c55b05acb62e3eb00"
+            "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Approximation.lean",
+            "sha256": "6f9a83090970931d254540d1965a3bbd6ad8e55222de091e0f19d575cab08658"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Basic.lean",
+            "sha256": "d8d9afbe829030302d2267aa0c2d7c0f51665249e053b3ae154b2849e60d74a5"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+            "sha256": "311f32a06eb3bb1e1d3b519868c38dcc746752fc57ed68f3bb2eae6f7711c251"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Mollification.lean",
+            "sha256": "a59eba3d25c9a2f483a7fd16328232d2dedacb44d8b8c96b5fbc6b62fb916c67"
           }
         ],
         "gaps": []
@@ -3994,7 +4205,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/Matrix/WeakDerivative.lean",
-            "sha256": "f530c2c3b75287862d550b48122dd03a345d2cd1b42b0bb4a15a296f03a0a33a"
+            "sha256": "a3b5563378cad1bb314e23d6230a86e20edab0a01b891e2301d46b8fd6541ca0"
           }
         ],
         "gaps": []
@@ -4033,8 +4244,20 @@
         "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
         "evidence": [
           {
-            "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative.lean",
-            "sha256": "ddf7fc69c872f5383e854eb7529d16520816162b62624e3c55b05acb62e3eb00"
+            "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Approximation.lean",
+            "sha256": "6f9a83090970931d254540d1965a3bbd6ad8e55222de091e0f19d575cab08658"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Basic.lean",
+            "sha256": "d8d9afbe829030302d2267aa0c2d7c0f51665249e053b3ae154b2849e60d74a5"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+            "sha256": "311f32a06eb3bb1e1d3b519868c38dcc746752fc57ed68f3bb2eae6f7711c251"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Mollification.lean",
+            "sha256": "a59eba3d25c9a2f483a7fd16328232d2dedacb44d8b8c96b5fbc6b62fb916c67"
           }
         ],
         "gaps": []
@@ -4053,8 +4276,8 @@
         "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
         "evidence": [
           {
-            "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakInverseHessian.lean",
-            "sha256": "6a17fddf36c297649c938b226a7b4f79fe613b2af9db16dfe3ebf161fd20b45a"
+            "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/InverseHessian/Weak.lean",
+            "sha256": "9a40ddec016fde1934ac23ec16f2262fce84f47a227efef40613ee4ded28ce9c"
           }
         ],
         "gaps": []
@@ -4073,20 +4296,48 @@
         "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
         "evidence": [
           {
-            "path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity.lean",
-            "sha256": "f239fe6ca7d97d3a71073181278d0214d0f2c27328d5b8ab7592530aeeddeb7d"
+            "path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/Cutoff.lean",
+            "sha256": "d61600a73a2beefb25ce9b63c398c5f09f55657a93610b703428c79537b21e09"
           },
           {
-            "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakInverseHessian.lean",
-            "sha256": "6a17fddf36c297649c938b226a7b4f79fe613b2af9db16dfe3ebf161fd20b45a"
+            "path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/Potential.lean",
+            "sha256": "11d56724f8361597ec175b97b47ebb54cb13e2ea6d5f0d7089360ecdcceeb946"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/TraceStein.lean",
+            "sha256": "1a6064285161d2fc71f5aec1c53b116cd8397dd438d07050e7520c89ed97e5cd"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakDerivative.lean",
+            "sha256": "5870a4cb4b5ef16556cc7b8ba5b82fbc5262fa9ef3e0bc92d596410d1bf99f2a"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakHessian.lean",
+            "sha256": "fd9e790f3d85eda908a83a7ae985d0f7f2e8873945cf72727cace9b55873ea3c"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/InverseHessian/Weak.lean",
+            "sha256": "9a40ddec016fde1934ac23ec16f2262fce84f47a227efef40613ee4ded28ce9c"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/Lipschitz/Exponential.lean",
             "sha256": "725a0da43a1049591aff3695b36877cd055b3fde65c4c5ea476bf6afb024e01a"
           },
           {
-            "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative.lean",
-            "sha256": "ddf7fc69c872f5383e854eb7529d16520816162b62624e3c55b05acb62e3eb00"
+            "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Approximation.lean",
+            "sha256": "6f9a83090970931d254540d1965a3bbd6ad8e55222de091e0f19d575cab08658"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Basic.lean",
+            "sha256": "d8d9afbe829030302d2267aa0c2d7c0f51665249e053b3ae154b2849e60d74a5"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+            "sha256": "311f32a06eb3bb1e1d3b519868c38dcc746752fc57ed68f3bb2eae6f7711c251"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Mollification.lean",
+            "sha256": "a59eba3d25c9a2f483a7fd16328232d2dedacb44d8b8c96b5fbc6b62fb916c67"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/Matrix/DeterminantDerivative.lean",
@@ -4094,7 +4345,1883 @@
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/Matrix/WeakDerivative.lean",
-            "sha256": "f530c2c3b75287862d550b48122dd03a345d2cd1b42b0bb4a15a296f03a0a33a"
+            "sha256": "a3b5563378cad1bb314e23d6230a86e20edab0a01b891e2301d46b8fd6541ca0"
+          }
+        ],
+        "gaps": []
+      }
+    },
+    "lem:weak-exp-neg-lipschitz": {
+      "mathematics": "local_argument",
+      "evidence": [
+        "blueprint:lem:weak-exp-neg-lipschitz"
+      ],
+      "assumptions": [],
+      "priority": 0,
+      "note": "Generic owner Analysis/WeakDerivative (E3, independently accepted): weak derivative -exp(-F) DF[v] of exp(-F) for globally Lipschitz F, L2 on compact sets; every finite-dimensional space and direction; no lower bound on F, global exp bound or C1 F. Completed supporting result, not a queued task or source-paper certificate.",
+      "infrastructure": {
+        "status": "available",
+        "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
+        "evidence": [
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Approximation.lean",
+            "sha256": "6f9a83090970931d254540d1965a3bbd6ad8e55222de091e0f19d575cab08658"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Basic.lean",
+            "sha256": "d8d9afbe829030302d2267aa0c2d7c0f51665249e053b3ae154b2849e60d74a5"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+            "sha256": "311f32a06eb3bb1e1d3b519868c38dcc746752fc57ed68f3bb2eae6f7711c251"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Mollification.lean",
+            "sha256": "a59eba3d25c9a2f483a7fd16328232d2dedacb44d8b8c96b5fbc6b62fb916c67"
+          }
+        ],
+        "gaps": []
+      }
+    },
+    "lem:weak-product-locally-bounded": {
+      "mathematics": "local_argument",
+      "evidence": [
+        "blueprint:lem:weak-product-locally-bounded"
+      ],
+      "assumptions": [],
+      "priority": 0,
+      "note": "Generic owner Analysis/WeakDerivative (E4, independently accepted): explicit weak product derivative df g + f dg for compact-locally essentially bounded factors with compact-local L2 derivatives, L2 on compact sets; reduces to the existing globally bounded rule by cutoffs; no global bound or C1/C2. Completed supporting result, not a queued task or source-paper certificate.",
+      "infrastructure": {
+        "status": "available",
+        "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
+        "evidence": [
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Approximation.lean",
+            "sha256": "6f9a83090970931d254540d1965a3bbd6ad8e55222de091e0f19d575cab08658"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Basic.lean",
+            "sha256": "d8d9afbe829030302d2267aa0c2d7c0f51665249e053b3ae154b2849e60d74a5"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+            "sha256": "311f32a06eb3bb1e1d3b519868c38dcc746752fc57ed68f3bb2eae6f7711c251"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Mollification.lean",
+            "sha256": "a59eba3d25c9a2f483a7fd16328232d2dedacb44d8b8c96b5fbc6b62fb916c67"
+          }
+        ],
+        "gaps": []
+      }
+    },
+    "lem:weak-matrix-inverse-derivative": {
+      "mathematics": "local_argument",
+      "evidence": [
+        "blueprint:lem:weak-matrix-inverse-derivative"
+      ],
+      "assumptions": [],
+      "priority": 0,
+      "note": "Generic owner Analysis/Matrix/WeakDerivative (E5, independently accepted): R A = Id a.e. with compact-local L-infinity entries and compact-local L2 weak derivatives gives DR = -R DA R a.e.; independent dimensions, zero included; no symmetry/positivity/C1/global bound. Completed supporting result, not a queued task or source-paper certificate.",
+      "infrastructure": {
+        "status": "available",
+        "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
+        "evidence": [
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/Matrix/WeakDerivative.lean",
+            "sha256": "a3b5563378cad1bb314e23d6230a86e20edab0a01b891e2301d46b8fd6541ca0"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Approximation.lean",
+            "sha256": "6f9a83090970931d254540d1965a3bbd6ad8e55222de091e0f19d575cab08658"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Basic.lean",
+            "sha256": "d8d9afbe829030302d2267aa0c2d7c0f51665249e053b3ae154b2849e60d74a5"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+            "sha256": "311f32a06eb3bb1e1d3b519868c38dcc746752fc57ed68f3bb2eae6f7711c251"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Mollification.lean",
+            "sha256": "a59eba3d25c9a2f483a7fd16328232d2dedacb44d8b8c96b5fbc6b62fb916c67"
+          }
+        ],
+        "gaps": []
+      }
+    },
+    "lem:hessian-adjugate-weak-derivative": {
+      "mathematics": "local_argument",
+      "evidence": [
+        "blueprint:lem:hessian-adjugate-weak-derivative"
+      ],
+      "assumptions": [],
+      "priority": 0,
+      "note": "Owner Analysis/Matrix/Piola (promoted client support; existing private cofactor proof core reused, no exponent or Monge-Ampere hypothesis): (1) global essential bound of Hessian adjugate entries for Lipschitz gradient; (2) separately, for globally essentially bounded Hessian entries and a SUPPLIED weak Hessian tensor (compact-local L2), a weak adjugate derivative, L2 on compact sets, via row-updated determinants, with no Lipschitz-gradient premise. Completed supporting result, not a queued task or source-paper certificate.",
+      "infrastructure": {
+        "status": "available",
+        "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
+        "evidence": [
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/Matrix/Piola.lean",
+            "sha256": "923fc6fff407158551b24994f029e22b352ccf180b37a5ef6693f12cacf08825"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/Matrix/WeakDerivative.lean",
+            "sha256": "a3b5563378cad1bb314e23d6230a86e20edab0a01b891e2301d46b8fd6541ca0"
+          }
+        ],
+        "gaps": []
+      }
+    },
+    "lem:weak-inverse-hessian-of-logdet": {
+      "mathematics": "local_argument",
+      "evidence": [
+        "blueprint:lem:weak-inverse-hessian-of-logdet"
+      ],
+      "assumptions": [],
+      "priority": 0,
+      "note": "Owner Analysis/BakryEmery/IntegrationByParts/WeakInverseHessian (new assembly, separately frozen type): Lipschitz gradient/F, a.e. PD Hessian with log det H = F and a supplied weak tensor give the weak (2.5) derivative -(H^-1 T_k H^-1)_ij, compact-local L2, and compact-local essential inverse bounds. No inverse formula is assumed as an input. Not (2.6). Completed supporting result, not a queued task or source-paper certificate.",
+      "infrastructure": {
+        "status": "available",
+        "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
+        "evidence": [
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/InverseHessian/Weak.lean",
+            "sha256": "9a40ddec016fde1934ac23ec16f2262fce84f47a227efef40613ee4ded28ce9c"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/Matrix/Piola.lean",
+            "sha256": "923fc6fff407158551b24994f029e22b352ccf180b37a5ef6693f12cacf08825"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/Matrix/WeakDerivative.lean",
+            "sha256": "a3b5563378cad1bb314e23d6230a86e20edab0a01b891e2301d46b8fd6541ca0"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Approximation.lean",
+            "sha256": "6f9a83090970931d254540d1965a3bbd6ad8e55222de091e0f19d575cab08658"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Basic.lean",
+            "sha256": "d8d9afbe829030302d2267aa0c2d7c0f51665249e053b3ae154b2849e60d74a5"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+            "sha256": "311f32a06eb3bb1e1d3b519868c38dcc746752fc57ed68f3bb2eae6f7711c251"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Mollification.lean",
+            "sha256": "a59eba3d25c9a2f483a7fd16328232d2dedacb44d8b8c96b5fbc6b62fb916c67"
+          }
+        ],
+        "gaps": []
+      }
+    },
+    "lem:letwin-regular-moment-weak-inverse": {
+      "mathematics": "local_argument",
+      "evidence": [
+        "blueprint:lem:letwin-regular-moment-weak-inverse"
+      ],
+      "assumptions": [],
+      "priority": 0,
+      "note": "Actual-source producer in KLS/CEK/MomentRegularity (new assembly, separately frozen type; audit research/audits/BKL/WeakHessianInverseAudit.lean): exact original R0 hypotheses, same u, L, LF, T and every R0/first-weak-MA field, plus weak (2.5) for every inverse entry, compact-local L2 and compact-local essential inverse bounds. No inverse derivative, evolution identity, trace estimate, C2 or global inverse bound is assumed as an input; the output includes the explicit weak inverse formula. Not (2.6), (2.14), Theorems 2.5/1.2 or constant 8. Completed supporting result, not a queued task or source-paper certificate.",
+      "infrastructure": {
+        "status": "available",
+        "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
+        "evidence": [
+          {
+            "path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/Cutoff.lean",
+            "sha256": "d61600a73a2beefb25ce9b63c398c5f09f55657a93610b703428c79537b21e09"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/Potential.lean",
+            "sha256": "11d56724f8361597ec175b97b47ebb54cb13e2ea6d5f0d7089360ecdcceeb946"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/TraceStein.lean",
+            "sha256": "1a6064285161d2fc71f5aec1c53b116cd8397dd438d07050e7520c89ed97e5cd"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakDerivative.lean",
+            "sha256": "5870a4cb4b5ef16556cc7b8ba5b82fbc5262fa9ef3e0bc92d596410d1bf99f2a"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakHessian.lean",
+            "sha256": "fd9e790f3d85eda908a83a7ae985d0f7f2e8873945cf72727cace9b55873ea3c"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/InverseHessian/Weak.lean",
+            "sha256": "9a40ddec016fde1934ac23ec16f2262fce84f47a227efef40613ee4ded28ce9c"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/Matrix/Piola.lean",
+            "sha256": "923fc6fff407158551b24994f029e22b352ccf180b37a5ef6693f12cacf08825"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/Matrix/WeakDerivative.lean",
+            "sha256": "a3b5563378cad1bb314e23d6230a86e20edab0a01b891e2301d46b8fd6541ca0"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Approximation.lean",
+            "sha256": "6f9a83090970931d254540d1965a3bbd6ad8e55222de091e0f19d575cab08658"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Basic.lean",
+            "sha256": "d8d9afbe829030302d2267aa0c2d7c0f51665249e053b3ae154b2849e60d74a5"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+            "sha256": "311f32a06eb3bb1e1d3b519868c38dcc746752fc57ed68f3bb2eae6f7711c251"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Mollification.lean",
+            "sha256": "a59eba3d25c9a2f483a7fd16328232d2dedacb44d8b8c96b5fbc6b62fb916c67"
+          }
+        ],
+        "gaps": []
+      }
+    },
+    "lem:weak-smooth-approximation": {
+      "mathematics": "local_argument",
+      "evidence": [
+        "blueprint:lem:weak-smooth-approximation"
+      ],
+      "assumptions": [],
+      "priority": 0,
+      "note": "Generic owner Analysis/WeakDerivative (H1b, independently accepted): common compact support smooth approximation of a compact rough test with two compact global-L2 weak derivatives; simultaneous global-L2 convergence; every dimension and direction; no C1 or global-L2 eta assumed as an input. Completed supporting result, not a queued task or source-paper certificate.",
+      "infrastructure": {
+        "status": "available",
+        "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
+        "evidence": [
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Approximation.lean",
+            "sha256": "6f9a83090970931d254540d1965a3bbd6ad8e55222de091e0f19d575cab08658"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Basic.lean",
+            "sha256": "d8d9afbe829030302d2267aa0c2d7c0f51665249e053b3ae154b2849e60d74a5"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+            "sha256": "311f32a06eb3bb1e1d3b519868c38dcc746752fc57ed68f3bb2eae6f7711c251"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Mollification.lean",
+            "sha256": "a59eba3d25c9a2f483a7fd16328232d2dedacb44d8b8c96b5fbc6b62fb916c67"
+          }
+        ],
+        "gaps": []
+      }
+    },
+    "lem:weak-curl-rough-test": {
+      "mathematics": "local_argument",
+      "evidence": [
+        "blueprint:lem:weak-curl-rough-test"
+      ],
+      "assumptions": [],
+      "priority": 0,
+      "note": "Generic owner Analysis/WeakDerivative (H1c, independently accepted, exactly the original H1a type): int p b = int q a for two compact-local-L2 weak derivatives of the same f against a compact rough test; reuses the existing private L2 pairing lemma; actual client in research/audits/BKL/WeakHessianInverseAudit.lean with eta = psi (H^-1)_ab. No curl identity, C1/C2 eta or global-L2 p/q is assumed as an input. Not (2.6). Completed supporting result, not a queued task or source-paper certificate.",
+      "infrastructure": {
+        "status": "available",
+        "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
+        "evidence": [
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Approximation.lean",
+            "sha256": "6f9a83090970931d254540d1965a3bbd6ad8e55222de091e0f19d575cab08658"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Basic.lean",
+            "sha256": "d8d9afbe829030302d2267aa0c2d7c0f51665249e053b3ae154b2849e60d74a5"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+            "sha256": "311f32a06eb3bb1e1d3b519868c38dcc746752fc57ed68f3bb2eae6f7711c251"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Mollification.lean",
+            "sha256": "a59eba3d25c9a2f483a7fd16328232d2dedacb44d8b8c96b5fbc6b62fb916c67"
+          },
+          {
+            "path": "research/audits/BKL/WeakHessianInverseAudit.lean",
+            "sha256": "16d135774c73f163d228e88c284c9a3de38ba88bef8553daeacbc93cf36ecd86"
+          }
+        ],
+        "gaps": []
+      }
+    },
+    "lem:letwin-weak-generator-c1": {
+      "mathematics": "local_argument",
+      "evidence": [
+        "blueprint:lem:letwin-weak-generator-c1"
+      ],
+      "assumptions": [],
+      "priority": 0,
+      "note": "Owner Analysis/BakryEmery/IntegrationByParts/WeakInverseHessian (checked composition of the closed N10b proof): unprimed generator identity for C1 compactly supported multipliers; original N10b theorems unchanged; primed form still C2. Readiness support, not the actual A.4 height cutoffs. Completed supporting result, not a queued task or source-paper certificate.",
+      "infrastructure": {
+        "status": "available",
+        "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
+        "evidence": [
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/InverseHessian/Weak.lean",
+            "sha256": "9a40ddec016fde1934ac23ec16f2262fce84f47a227efef40613ee4ded28ce9c"
+          },
+          {
+            "path": "research/audits/BKL/WeakHessianInverseAudit.lean",
+            "sha256": "16d135774c73f163d228e88c284c9a3de38ba88bef8553daeacbc93cf36ecd86"
+          }
+        ],
+        "gaps": []
+      }
+    },
+    "lem:letwin-mean-hessian-c11": {
+      "mathematics": "local_argument",
+      "evidence": [
+        "blueprint:lem:letwin-mean-hessian-c11"
+      ],
+      "assumptions": [],
+      "priority": 0,
+      "note": "Existing canonical C1,1 mean-Hessian identity (Analysis/BakryEmery/IntegrationByParts/LipschitzHessian), recorded as a prerequisite of the actual-source mean Hessian; file unchanged in this integration. Completed supporting result, not a queued task or source-paper certificate.",
+      "infrastructure": {
+        "status": "available",
+        "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
+        "evidence": [
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/LipschitzHessian.lean",
+            "sha256": "fdbaf0346e1cb5719c0747b56f38db162b38da1cf66e0985cd906b5f58fdc987"
+          }
+        ],
+        "gaps": []
+      }
+    },
+    "lem:letwin-regular-moment-weak-mean-hessian": {
+      "mathematics": "local_argument",
+      "evidence": [
+        "blueprint:lem:letwin-regular-moment-weak-mean-hessian"
+      ],
+      "assumptions": [],
+      "priority": 0,
+      "note": "Actual-source producer in KLS/CEK/MomentRegularity (audit whole_source_mean_interface): exact original R0 hypotheses, same u, L, LF, T and every R0/first-weak-MA/weak-inverse field, plus integrable Hessian entries with mean Id under nu = e^{-u} dx. No analytic premise, C2, given mean or trace estimate is assumed as an input. Lemma 2.3 for the actual R0 source potential under C1/Lipschitz-gradient hypotheses, without asserting full smoothness or diffeomorphism properties of Lemma 2.2; not (2.6), (2.14), Theorem 2.5 or constant 8. Completed supporting result, not a queued task or source-paper certificate.",
+      "infrastructure": {
+        "status": "available",
+        "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
+        "evidence": [
+          {
+            "path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/Cutoff.lean",
+            "sha256": "d61600a73a2beefb25ce9b63c398c5f09f55657a93610b703428c79537b21e09"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/Potential.lean",
+            "sha256": "11d56724f8361597ec175b97b47ebb54cb13e2ea6d5f0d7089360ecdcceeb946"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/TraceStein.lean",
+            "sha256": "1a6064285161d2fc71f5aec1c53b116cd8397dd438d07050e7520c89ed97e5cd"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakDerivative.lean",
+            "sha256": "5870a4cb4b5ef16556cc7b8ba5b82fbc5262fa9ef3e0bc92d596410d1bf99f2a"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakHessian.lean",
+            "sha256": "fd9e790f3d85eda908a83a7ae985d0f7f2e8873945cf72727cace9b55873ea3c"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/LipschitzHessian.lean",
+            "sha256": "fdbaf0346e1cb5719c0747b56f38db162b38da1cf66e0985cd906b5f58fdc987"
+          },
+          {
+            "path": "research/audits/BKL/WeakHessianInverseAudit.lean",
+            "sha256": "16d135774c73f163d228e88c284c9a3de38ba88bef8553daeacbc93cf36ecd86"
+          }
+        ],
+        "gaps": []
+      }
+    },
+    "lem:weak-bounded-all-coordinate-approximation": {
+      "mathematics": "local_argument",
+      "evidence": [
+        "blueprint:lem:weak-bounded-all-coordinate-approximation"
+      ],
+      "assumptions": [],
+      "priority": 0,
+      "note": "Owner Analysis/WeakDerivative (accepted B1; audit bounded_approximation_zero_dimension): one smooth common-support sequence with uniform bound 3C, L2 convergence of every coordinate derivative and full-sequence a.e. convergence; every dimension, zero included; continuity or C1 regularity of eta is not assumed as an input. The two-direction approximation is unchanged. Completed supporting result, not a queued task or source-paper certificate.",
+      "infrastructure": {
+        "status": "available",
+        "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
+        "evidence": [
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Approximation.lean",
+            "sha256": "6f9a83090970931d254540d1965a3bbd6ad8e55222de091e0f19d575cab08658"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Basic.lean",
+            "sha256": "d8d9afbe829030302d2267aa0c2d7c0f51665249e053b3ae154b2849e60d74a5"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+            "sha256": "311f32a06eb3bb1e1d3b519868c38dcc746752fc57ed68f3bb2eae6f7711c251"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Mollification.lean",
+            "sha256": "a59eba3d25c9a2f483a7fd16328232d2dedacb44d8b8c96b5fbc6b62fb916c67"
+          },
+          {
+            "path": "research/audits/BKL/WeakHessianEvolutionAudit.lean",
+            "sha256": "e14b4603da4bd9eccd01eacd60225d54474432a599e4f38b380fe511c9d22326"
+          }
+        ],
+        "gaps": []
+      }
+    },
+    "lem:weak-bounded-test-extension": {
+      "mathematics": "local_argument",
+      "evidence": [
+        "blueprint:lem:weak-bounded-test-extension"
+      ],
+      "assumptions": [],
+      "priority": 0,
+      "note": "Owner Analysis/WeakDerivative (accepted H2 generic part): compact C1 test identities with compact-local L2 flux and locally integrable forcing extend to bounded compact rough tests with compact global-L2 coordinate weak derivatives; reuses the existing private L2 pairing helper. Completed supporting result, not a queued task or source-paper certificate.",
+      "infrastructure": {
+        "status": "available",
+        "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
+        "evidence": [
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Approximation.lean",
+            "sha256": "6f9a83090970931d254540d1965a3bbd6ad8e55222de091e0f19d575cab08658"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Basic.lean",
+            "sha256": "d8d9afbe829030302d2267aa0c2d7c0f51665249e053b3ae154b2849e60d74a5"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+            "sha256": "311f32a06eb3bb1e1d3b519868c38dcc746752fc57ed68f3bb2eae6f7711c251"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Mollification.lean",
+            "sha256": "a59eba3d25c9a2f483a7fd16328232d2dedacb44d8b8c96b5fbc6b62fb916c67"
+          }
+        ],
+        "gaps": []
+      }
+    },
+    "lem:weak-inverse-hessian-row-divergence": {
+      "mathematics": "local_argument",
+      "evidence": [
+        "blueprint:lem:weak-inverse-hessian-row-divergence"
+      ],
+      "assumptions": [],
+      "priority": 0,
+      "note": "Owner Analysis/BakryEmery/IntegrationByParts/WeakInverseHessian (accepted GenericRow): weak Piola row divergence of the inverse Hessian at a fixed weak inverse-derivative object; every finite dimension. Completed supporting result, not a queued task or source-paper certificate.",
+      "infrastructure": {
+        "status": "available",
+        "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
+        "evidence": [
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/InverseHessian/Weak.lean",
+            "sha256": "9a40ddec016fde1934ac23ec16f2262fce84f47a227efef40613ee4ded28ce9c"
+          }
+        ],
+        "gaps": []
+      }
+    },
+    "lem:weak-gradient-derivative-composition": {
+      "mathematics": "local_argument",
+      "evidence": [
+        "blueprint:lem:weak-gradient-derivative-composition"
+      ],
+      "assumptions": [],
+      "priority": 0,
+      "note": "Owner Analysis/BakryEmery/IntegrationByParts/WeakHessianEvolution (accepted CP1): weak coordinate derivative of d_a W(grad u) for C1 Lipschitz u with Lipschitz gradient and C2 W. Completed supporting result, not a queued task or source-paper certificate.",
+      "infrastructure": {
+        "status": "available",
+        "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
+        "evidence": [
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessianEvolution.lean",
+            "sha256": "4f62f6d12bdffe7dec9d4b3441e0bb567ccc88a43042a2e4ef3096ce1aaca19a"
+          }
+        ],
+        "gaps": []
+      }
+    },
+    "lem:weak-monge-ampere-first-rhs": {
+      "mathematics": "local_argument",
+      "evidence": [
+        "blueprint:lem:weak-monge-ampere-first-rhs"
+      ],
+      "assumptions": [],
+      "priority": 0,
+      "note": "Owner WeakHessianEvolution (accepted Q2): weak derivative of the first Monge-Ampere right-hand side with compact-local L2 density, given the compact-local L2 weak Hessian tensor. Completed supporting result, not a queued task or source-paper certificate.",
+      "infrastructure": {
+        "status": "available",
+        "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
+        "evidence": [
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessianEvolution.lean",
+            "sha256": "4f62f6d12bdffe7dec9d4b3441e0bb567ccc88a43042a2e4ef3096ce1aaca19a"
+          }
+        ],
+        "gaps": []
+      }
+    },
+    "lem:weak-hessian-flux-forcing-local": {
+      "mathematics": "local_argument",
+      "evidence": [
+        "blueprint:lem:weak-hessian-flux-forcing-local"
+      ],
+      "assumptions": [],
+      "priority": 0,
+      "note": "Owner WeakHessianEvolution (accepted CF1a): compact-local L2 flux and locally integrable raw trace forcing. Completed supporting result, not a queued task or source-paper certificate.",
+      "infrastructure": {
+        "status": "available",
+        "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
+        "evidence": [
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessianEvolution.lean",
+            "sha256": "4f62f6d12bdffe7dec9d4b3441e0bb567ccc88a43042a2e4ef3096ce1aaca19a"
+          }
+        ],
+        "gaps": []
+      }
+    },
+    "lem:weak-hessian-flux-identity": {
+      "mathematics": "local_argument",
+      "evidence": [
+        "blueprint:lem:weak-hessian-flux-identity"
+      ],
+      "assumptions": [],
+      "priority": 0,
+      "note": "Owner WeakHessianEvolution (accepted full CF1; the one-use finite integral balance IA1 is private there): unweighted weak Hessian flux identity against compactly supported C1 tests, consuming the rough curl. Completed supporting result, not a queued task or source-paper certificate.",
+      "infrastructure": {
+        "status": "available",
+        "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
+        "evidence": [
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessianEvolution.lean",
+            "sha256": "4f62f6d12bdffe7dec9d4b3441e0bb567ccc88a43042a2e4ef3096ce1aaca19a"
+          }
+        ],
+        "gaps": []
+      }
+    },
+    "lem:letwin-weak-hessian-evolution": {
+      "mathematics": "local_argument",
+      "evidence": [
+        "blueprint:lem:letwin-weak-hessian-evolution"
+      ],
+      "assumptions": [],
+      "priority": 0,
+      "note": "Owner WeakHessianEvolution (accepted CF2): weighted weak (2.6) with curvature and Gram forcing; C2 regularity of u, a global inverse bound, global L2 of T and an energy bound are not assumed as inputs. The positivity statement of Lemma 2.4, (2.14) and Theorem 2.5 are not supplied. Completed supporting result, not a queued task or source-paper certificate.",
+      "infrastructure": {
+        "status": "available",
+        "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
+        "evidence": [
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessianEvolution.lean",
+            "sha256": "4f62f6d12bdffe7dec9d4b3441e0bb567ccc88a43042a2e4ef3096ce1aaca19a"
+          }
+        ],
+        "gaps": []
+      }
+    },
+    "lem:letwin-weak-hessian-evolution-bounded-test": {
+      "mathematics": "local_argument",
+      "evidence": [
+        "blueprint:lem:letwin-weak-hessian-evolution-bounded-test"
+      ],
+      "assumptions": [],
+      "priority": 0,
+      "note": "Owner WeakHessianEvolution (accepted H2 intrinsic part): weighted weak (2.6) for bounded compact rough tests with compact global-L2 coordinate weak derivatives. Completed supporting result, not a queued task or source-paper certificate.",
+      "infrastructure": {
+        "status": "available",
+        "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
+        "evidence": [
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessianEvolution.lean",
+            "sha256": "4f62f6d12bdffe7dec9d4b3441e0bb567ccc88a43042a2e4ef3096ce1aaca19a"
+          }
+        ],
+        "gaps": []
+      }
+    },
+    "lem:letwin-regular-moment-weak-hessian-evolution": {
+      "mathematics": "local_argument",
+      "evidence": [
+        "blueprint:lem:letwin-regular-moment-weak-hessian-evolution"
+      ],
+      "assumptions": [],
+      "priority": 0,
+      "note": "Actual-source producer in KLS/CEK/MomentRegularity (audit weighted_evolution_retains_flux_source_contract): exact original R0 hypotheses, same u, L, LF, T and every R0/tensor/first-weak-MA/inverse/mean field, plus the weak trace derivative, the unweighted flux identity and the weighted weak (2.6). No analytic premise is assumed as an input. Not (2.14), Theorem 2.5 or constant 8. Completed supporting result, not a queued task or source-paper certificate.",
+      "infrastructure": {
+        "status": "available",
+        "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
+        "evidence": [
+          {
+            "path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/Cutoff.lean",
+            "sha256": "d61600a73a2beefb25ce9b63c398c5f09f55657a93610b703428c79537b21e09"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/Potential.lean",
+            "sha256": "11d56724f8361597ec175b97b47ebb54cb13e2ea6d5f0d7089360ecdcceeb946"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/TraceStein.lean",
+            "sha256": "1a6064285161d2fc71f5aec1c53b116cd8397dd438d07050e7520c89ed97e5cd"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakDerivative.lean",
+            "sha256": "5870a4cb4b5ef16556cc7b8ba5b82fbc5262fa9ef3e0bc92d596410d1bf99f2a"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakHessian.lean",
+            "sha256": "fd9e790f3d85eda908a83a7ae985d0f7f2e8873945cf72727cace9b55873ea3c"
+          },
+          {
+            "path": "research/audits/BKL/WeakHessianEvolutionAudit.lean",
+            "sha256": "e14b4603da4bd9eccd01eacd60225d54474432a599e4f38b380fe511c9d22326"
+          }
+        ],
+        "gaps": []
+      }
+    },
+    "lem:letwin-regular-moment-bounded-hessian-testing": {
+      "mathematics": "local_argument",
+      "evidence": [
+        "blueprint:lem:letwin-regular-moment-bounded-hessian-testing"
+      ],
+      "assumptions": [],
+      "priority": 0,
+      "note": "Actual-source producer in KLS/CEK/MomentRegularity (audits bounded_testing_retains_weighted_source_contract, actual_source_hessian_entry_weak_test): the weak-evolution producer at the same witness plus the weighted weak (2.6) for the bounded tests psi * H_lk. No global L2 bound of T or new source premise is assumed as an input. Not the actual A.4/A.5 cutoffs, (2.14), Theorem 2.5 or constant 8. Completed supporting result, not a queued task or source-paper certificate.",
+      "infrastructure": {
+        "status": "available",
+        "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
+        "evidence": [
+          {
+            "path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/Cutoff.lean",
+            "sha256": "d61600a73a2beefb25ce9b63c398c5f09f55657a93610b703428c79537b21e09"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/Potential.lean",
+            "sha256": "11d56724f8361597ec175b97b47ebb54cb13e2ea6d5f0d7089360ecdcceeb946"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/TraceStein.lean",
+            "sha256": "1a6064285161d2fc71f5aec1c53b116cd8397dd438d07050e7520c89ed97e5cd"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakDerivative.lean",
+            "sha256": "5870a4cb4b5ef16556cc7b8ba5b82fbc5262fa9ef3e0bc92d596410d1bf99f2a"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakHessian.lean",
+            "sha256": "fd9e790f3d85eda908a83a7ae985d0f7f2e8873945cf72727cace9b55873ea3c"
+          },
+          {
+            "path": "research/audits/BKL/WeakHessianEvolutionAudit.lean",
+            "sha256": "e14b4603da4bd9eccd01eacd60225d54474432a599e4f38b380fe511c9d22326"
+          }
+        ],
+        "gaps": []
+      }
+    },
+    "lem:letwin-weak-cutoff-real-family": {
+      "mathematics": "local_argument",
+      "evidence": [
+        "blueprint:lem:letwin-weak-cutoff-real-family"
+      ],
+      "assumptions": [],
+      "priority": 0,
+      "note": "Owner Analysis/BakryEmery/IntegrationByParts/WeakInverseHessianCutoff (accepted API core exists_C1_height_generator_defect_bound, private, and the closed full family): real-parameter C1 weak inverse-Hessian height cutoffs with integrable literal generator and C/R defect under nu = e^{-u} dx; every finite dimension, zero included; drift, coercivity, majorant and defect are derived, not assumed as inputs. C1 counterpart of Lemma A.4 for the weak source, not the C-infinity cutoffs of the smooth source class. Completed supporting result, not a queued task or source-paper certificate.",
+      "infrastructure": {
+        "status": "available",
+        "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
+        "evidence": [
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/InverseHessian/WeakCutoff.lean",
+            "sha256": "bf4379c1b857acda261e6c12bcb9dc4cc754e7adc062e0eed6cc9330e883eabd"
+          }
+        ],
+        "gaps": []
+      }
+    },
+    "lem:letwin-weak-cutoff-natural-family": {
+      "mathematics": "local_argument",
+      "evidence": [
+        "blueprint:lem:letwin-weak-cutoff-natural-family"
+      ],
+      "assumptions": [],
+      "priority": 0,
+      "note": "Owner WeakInverseHessianCutoff: the same family at R = m + 1 with bound C/(m+1). Completed supporting result, not a queued task or source-paper certificate.",
+      "infrastructure": {
+        "status": "available",
+        "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
+        "evidence": [
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/InverseHessian/WeakCutoff.lean",
+            "sha256": "bf4379c1b857acda261e6c12bcb9dc4cc754e7adc062e0eed6cc9330e883eabd"
+          }
+        ],
+        "gaps": []
+      }
+    },
+    "lem:letwin-regular-moment-weak-cutoffs": {
+      "mathematics": "local_argument",
+      "evidence": [
+        "blueprint:lem:letwin-regular-moment-weak-cutoffs"
+      ],
+      "assumptions": [],
+      "priority": 0,
+      "note": "Actual-source producer in KLS/CEK/MomentRegularity (audits weak_cutoffs_retain_bounded_testing_source_contract, actual_source_cutoff_hessian_entry_test): exact original R0 hypotheses, same u, L, LF, T with the whole bounded weak-Hessian-testing payload, plus one common c, C with the real-parameter weak cutoff family. The original R0 source hypotheses are retained; no source premise is added. Not A.5, the weak trace contraction, (2.14), Theorem 2.5 or constant 8. Completed supporting result, not a queued task or source-paper certificate.",
+      "infrastructure": {
+        "status": "available",
+        "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
+        "evidence": [
+          {
+            "path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/Cutoff.lean",
+            "sha256": "d61600a73a2beefb25ce9b63c398c5f09f55657a93610b703428c79537b21e09"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/Potential.lean",
+            "sha256": "11d56724f8361597ec175b97b47ebb54cb13e2ea6d5f0d7089360ecdcceeb946"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/TraceStein.lean",
+            "sha256": "1a6064285161d2fc71f5aec1c53b116cd8397dd438d07050e7520c89ed97e5cd"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakDerivative.lean",
+            "sha256": "5870a4cb4b5ef16556cc7b8ba5b82fbc5262fa9ef3e0bc92d596410d1bf99f2a"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakHessian.lean",
+            "sha256": "fd9e790f3d85eda908a83a7ae985d0f7f2e8873945cf72727cace9b55873ea3c"
+          },
+          {
+            "path": "research/audits/BKL/WeakInverseHessianCutoffAudit.lean",
+            "sha256": "a79fce28dbd75fa0e4340b88f8d800926239cf2525e00e7a781c0091ec5ff075"
+          }
+        ],
+        "gaps": []
+      }
+    },
+    "lem:weak-compact-flux-bounded-test": {
+      "mathematics": "local_argument",
+      "evidence": [
+        "blueprint:lem:weak-compact-flux-bounded-test"
+      ],
+      "assumptions": [],
+      "priority": 0,
+      "note": "Let J_i be compactly supported fluxes in L2 on every compact set and F a compactly supported locally integrable forcing with int sum_i J_i d_i psi = -int F psi for every compactly supported C1 test psi. Then every globally bounded locally integrable eta whose coordinate weak derivatives a_i are in L2 on every compact set satisfies: each J_i a_i and F eta is integrable and int sum_i J_i a_i = -int F eta, in every dimension. The shared compact-local tools used here (products with compactly supported L2 functions, compact C1 multiplier data, compact L-infinity bounds of continuous functions and local integrability from compact L2 bounds) are public in the same owner. Completed supporting result, not a queued task or source-paper certificate.",
+      "infrastructure": {
+        "status": "available",
+        "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
+        "evidence": [
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Approximation.lean",
+            "sha256": "6f9a83090970931d254540d1965a3bbd6ad8e55222de091e0f19d575cab08658"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Basic.lean",
+            "sha256": "d8d9afbe829030302d2267aa0c2d7c0f51665249e053b3ae154b2849e60d74a5"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+            "sha256": "311f32a06eb3bb1e1d3b519868c38dcc746752fc57ed68f3bb2eae6f7711c251"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Mollification.lean",
+            "sha256": "a59eba3d25c9a2f483a7fd16328232d2dedacb44d8b8c96b5fbc6b62fb916c67"
+          }
+        ],
+        "gaps": []
+      }
+    },
+    "lem:weak-bounded-trace-quadratic": {
+      "mathematics": "local_argument",
+      "evidence": [
+        "blueprint:lem:weak-bounded-trace-quadratic"
+      ],
+      "assumptions": [],
+      "priority": 0,
+      "note": "Let A be a matrix field with measurable entries bounded by M and coordinate weak derivatives DA_k in L2 on every compact set. For every real matrix B, tr(B A B A) is globally bounded and locally integrable, with weak coordinate derivatives 2 tr(B A B DA_k) in L2 on every compact set. For every real matrix S and every direction v along which the entries of H (bounded by M) have weak derivatives DH that are L2 on compact sets, every entry of S H S is bounded explicitly and has weak derivative the corresponding entry of S DH S, again L2 on compact sets. All finite dimensions. Completed supporting result, not a queued task or source-paper certificate.",
+      "infrastructure": {
+        "status": "available",
+        "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
+        "evidence": [
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/Matrix/WeakDerivative.lean",
+            "sha256": "a3b5563378cad1bb314e23d6230a86e20edab0a01b891e2301d46b8fd6541ca0"
+          }
+        ],
+        "gaps": []
+      }
+    },
+    "lem:letwin-weak-rough-cutoff-generator": {
+      "mathematics": "local_argument",
+      "evidence": [
+        "blueprint:lem:letwin-weak-rough-cutoff-generator"
+      ],
+      "assumptions": [],
+      "priority": 0,
+      "note": "Let u be C1 with Lipschitz gradient, V be C1, the exponent -u + V(grad u) be globally Lipschitz, det Hess u = exp(-u + V(grad u)) almost everywhere, and the inverse Hessian entries be essentially bounded on every compact set. Let chi be a compactly supported C1 cutoff with Lipschitz gradient whose inverse-Hessian generator tr((Hess u)^-1 Hess chi) - DV(grad u)(grad chi), weighted by e^{-u}, is integrable. Then for every globally bounded locally integrable eta with coordinate weak derivatives a_i in L2 on every compact set, both pairings below are integrable and int eta (tr((Hess u)^-1 Hess chi) - DV(grad u)(grad chi)) e^{-u} = -int sum_ij (Hess u)^-1_ij a_i d_j chi e^{-u}. Completed supporting result, not a queued task or source-paper certificate.",
+      "infrastructure": {
+        "status": "available",
+        "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
+        "evidence": [
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/InverseHessian/WeakCutoff.lean",
+            "sha256": "bf4379c1b857acda261e6c12bcb9dc4cc754e7adc062e0eed6cc9330e883eabd"
+          }
+        ],
+        "gaps": []
+      }
+    },
+    "lem:letwin-weak-trace-contraction": {
+      "mathematics": "local_argument",
+      "evidence": [
+        "blueprint:lem:letwin-weak-trace-contraction"
+      ],
+      "assumptions": [],
+      "priority": 0,
+      "note": "This is the weak counterpart of the trace contraction (2.8)/(2.10) in the proof of Letwin Theorem 2.5. Let H, R and E be matrix fields, T a tensor field and rho a continuous weight. Assume H has globally essentially bounded entries, the entries of T and of the fluxes J_ija = sum_b R_ba T_bij are L2 on every compact set, E is locally integrable, and rho sum_a J_ija (psi T_alk + d_a psi H_lk) tested against every compactly supported C1 psi equals minus the integral of rho E_ij psi H_lk. Then for every real matrix B, the density g = 2 tr(B H B E) + 2 sum_ij R_ij tr(B T_i B T_j) is locally integrable and, for every compactly supported C1 psi, the contracted flux sum_j (sum_i R_ij 2 tr(B H B T_i)) d_j psi weighted by rho integrates to minus the integral of rho g psi, with all terms integrable. All finite dimensions; no Hessian, potential or source premise. Completed supporting result, not a queued task or source-paper certificate.",
+      "infrastructure": {
+        "status": "available",
+        "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
+        "evidence": [
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/Matrix/WeakTrace.lean",
+            "sha256": "b43791b36254f72ef3524f3d1e2a32a1b9f8f3a03ad137d0d2d3edab8e2ab39c"
+          }
+        ],
+        "gaps": []
+      }
+    },
+    "lem:letwin-trace-density-positivity": {
+      "mathematics": "local_argument",
+      "evidence": [
+        "blueprint:lem:letwin-trace-density-positivity"
+      ],
+      "assumptions": [],
+      "priority": 0,
+      "note": "For positive semidefinite matrices B, H, R, W and symmetric matrices T_i, with G_R the trace Gram matrix (G_R)_ij = tr(R T_i R T_j), the quantity 2 tr(B H B (-H + H W H + G_R)) + 2 sum_ij R_ij tr(B T_i B T_j) + 2 tr(B H B H) is nonnegative. Completed supporting result, not a queued task or source-paper certificate.",
+      "infrastructure": {
+        "status": "available",
+        "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
+        "evidence": [
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/Matrix/Positivity.lean",
+            "sha256": "c108094b6fc510bdf1326560deea904794cf68750f226f189606874047fe3f74"
+          }
+        ],
+        "gaps": []
+      }
+    },
+    "lem:letwin-trace-gram-comparison": {
+      "mathematics": "local_argument",
+      "evidence": [
+        "blueprint:lem:letwin-trace-gram-comparison"
+      ],
+      "assumptions": [],
+      "priority": 0,
+      "note": "For a positive definite H, a symmetric B and a fully symmetric three-tensor T, sum_ij (H^-1)_ij tr(B T_i B T_j) <= tr(B H B G), where G_ij = tr(H^-1 T_i H^-1 T_j); this is Letwin (2.12) in trace-Gram coordinates. For positive semidefinite B and W and positive definite H, the quantity D = sum_ij (H^-1)_ij tr(B T_i B T_j) satisfies 0 <= D and 4 D <= g + 2 tr(B H B H), where g = 2 tr(B H B (-H + H W H + G)) + 2 D is the weak trace density. Completed supporting result, not a queued task or source-paper certificate.",
+      "infrastructure": {
+        "status": "available",
+        "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
+        "evidence": [
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/Matrix/TraceGram.lean",
+            "sha256": "40001161481e173cf65f645ebcd89d1d6db373b2919e6a71bb6c67ac96981982"
+          }
+        ],
+        "gaps": []
+      }
+    },
+    "lem:letwin-regular-moment-bounded-weak-cutoff-testing": {
+      "mathematics": "local_argument",
+      "evidence": [
+        "blueprint:lem:letwin-regular-moment-bounded-weak-cutoff-testing"
+      ],
+      "assumptions": [],
+      "priority": 0,
+      "note": "For the actual source law, under the exact original R0 hypotheses (n > 0, isotropic 1_K exp(-W) dx with K compact and convex with nonempty interior, W smooth and kappa-uniformly convex), the same u, L, LF, T and the same common cutoff family as the weak cutoffs (whole earlier payload retained) satisfy, for every r >= 1 and every globally bounded locally integrable eta with coordinate weak derivatives in L2 on every compact set, the rough inverse-Hessian cutoff-generator identity. No source premise is added. The audit weak_trace_contraction_retains_trace_cutoff_contract in WeakHessianTraceAudit checks that the cutoff testing payload is retained. Completed supporting result, not a queued task or source-paper certificate.",
+      "infrastructure": {
+        "status": "available",
+        "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
+        "evidence": [
+          {
+            "path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/Cutoff.lean",
+            "sha256": "d61600a73a2beefb25ce9b63c398c5f09f55657a93610b703428c79537b21e09"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/Potential.lean",
+            "sha256": "11d56724f8361597ec175b97b47ebb54cb13e2ea6d5f0d7089360ecdcceeb946"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/TraceStein.lean",
+            "sha256": "1a6064285161d2fc71f5aec1c53b116cd8397dd438d07050e7520c89ed97e5cd"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakDerivative.lean",
+            "sha256": "5870a4cb4b5ef16556cc7b8ba5b82fbc5262fa9ef3e0bc92d596410d1bf99f2a"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakHessian.lean",
+            "sha256": "fd9e790f3d85eda908a83a7ae985d0f7f2e8873945cf72727cace9b55873ea3c"
+          },
+          {
+            "path": "research/audits/BKL/WeakHessianTraceAudit.lean",
+            "sha256": "f61a0a44d10e504c47fb55ceac2fa33ba50c141f5ca68aab8e2f696aebcf3dec"
+          }
+        ],
+        "gaps": []
+      }
+    },
+    "lem:weak-ordinary-diffusion-pairing": {
+      "mathematics": "local_argument",
+      "evidence": [
+        "blueprint:lem:weak-ordinary-diffusion-pairing"
+      ],
+      "assumptions": [],
+      "priority": 0,
+      "note": "Let U be C1 with int e^{-U} = 1, v be smooth and compactly supported, and eta be globally bounded and locally integrable with coordinate weak derivatives a_i in L2 on every compact set. Then eta Lv and sum_i a_i d_i v are integrable for the tilted measure e^{-U} dx and int eta Lv dnu = -int sum_i a_i d_i v dnu, where L is the ordinary weighted Laplacian; no inverse-Hessian object is used. Completed supporting result, not a queued task or source-paper certificate.",
+      "infrastructure": {
+        "status": "available",
+        "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
+        "evidence": [
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakLaplacian.lean",
+            "sha256": "b2e004217af3398035d043c680d8b63dcef9d901f12a4c0b8687fbd1db00d355"
+          }
+        ],
+        "gaps": []
+      }
+    },
+    "lem:ordinary-diffusion-coercivity-lipschitz": {
+      "mathematics": "local_argument",
+      "evidence": [
+        "blueprint:lem:ordinary-diffusion-coercivity-lipschitz"
+      ],
+      "assumptions": [],
+      "priority": 0,
+      "note": "On a finite-dimensional real inner product space, let U be C1 and globally Lipschitz with Lipschitz gradient and integrable e^{-U}. For every smooth compactly supported f, <D(grad U) grad f, grad f> and (Lf)^2 are integrable for the tilted measure and the integral of the first is at most the integral of the second. This is the Lipschitz-gradient sibling of compact_ordinary_diffusion_coercivity. Completed supporting result, not a queued task or source-paper certificate.",
+      "infrastructure": {
+        "status": "available",
+        "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
+        "evidence": [
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/Bochner/Lipschitz.lean",
+            "sha256": "c02c3bbd15945d246d6af537c8d853eef06caf8090d21e510cee6caebfe6ae51"
+          }
+        ],
+        "gaps": []
+      }
+    },
+    "lem:letwin-weak-brascamp-lieb": {
+      "mathematics": "local_argument",
+      "evidence": [
+        "blueprint:lem:letwin-weak-brascamp-lieb"
+      ],
+      "assumptions": [],
+      "priority": 0,
+      "note": "This is Letwin Lemma A.6 at C^{1,1} regularity for a given potential. Let nu = e^{-U} dx be a log-concave probability measure with U C1, globally Lipschitz, with Lipschitz gradient, int e^{-U} = 1 and almost everywhere positive definite coordinate Hessian. For every globally bounded locally integrable eta with coordinate weak derivatives a in L2 on every compact set and nu-integrable inverse-Hessian energy <a, (Hess U)^-1 a>, Var_nu eta <= int <a, (Hess U)^-1 a> dnu. The Hilbert-closure helpers it shares with the scalar Brascamp-Lieb owner are public there. Completed supporting result, not a queued task or source-paper certificate.",
+      "infrastructure": {
+        "status": "available",
+        "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
+        "evidence": [
+          {
+            "path": "formalization/FunctionalInequalities/KLS/LogConcave/WeakBrascampLieb.lean",
+            "sha256": "f56eba108f9c2ce89cca7666436debd2606ea8e8af8d1b9793d10aab4eed61a8"
+          }
+        ],
+        "gaps": []
+      }
+    },
+    "lem:matrix-product-entry-trace": {
+      "mathematics": "local_argument",
+      "evidence": [
+        "blueprint:lem:matrix-product-entry-trace"
+      ],
+      "assumptions": [],
+      "priority": 0,
+      "note": "For symmetric S and D and arbitrary A, sum_ij (S A S)_ij (S D S)_ij = tr((S S) A (S S) D). For symmetric S, arbitrary R and symmetric T_k, the entrywise quadratic forms of the vectors ((S T_k S)_ij)_k against R sum to sum_kl R_kl tr((S S) T_k (S S) T_l). All finite dimensions. Completed supporting result, not a queued task or source-paper certificate.",
+      "infrastructure": {
+        "status": "available",
+        "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
+        "evidence": [
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/Matrix/Trace/Algebra.lean",
+            "sha256": "e4f2669e91aeee01bd499855a741844854dc59502a4a81ea1ffc2db7e681b871"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/Matrix/Trace/Energy.lean",
+            "sha256": "31e20e8cd7ec967ca7429d541f0a5b179b5a86f965ac0f3c50d3a144ea40e16e"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/Matrix/Trace/Power.lean",
+            "sha256": "8774e28c6f9ebb5ea6136409fb8dfe010bd9f1943cd5085a13b97ed7542d907c"
+          }
+        ],
+        "gaps": []
+      }
+    },
+    "lem:matrix-variance-trace": {
+      "mathematics": "local_argument",
+      "evidence": [
+        "blueprint:lem:matrix-variance-trace"
+      ],
+      "assumptions": [],
+      "priority": 0,
+      "note": "Under a probability measure, for an almost everywhere symmetric random matrix H with L2 entries and symmetric mean M, sum_ij Var(H_ij) = int tr(H H) - tr(M M). All finite dimensions. Completed supporting result, not a queued task or source-paper certificate.",
+      "infrastructure": {
+        "status": "available",
+        "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
+        "evidence": [
+          {
+            "path": "formalization/FunctionalInequalities/Probability/Moments.lean",
+            "sha256": "703aedc72a11b49c304f9108dfe56214c8dad02ea7cb14d87817cb4b065bf1cf"
+          }
+        ],
+        "gaps": []
+      }
+    },
+    "thm:letwin-weak-hessian-trace-bound": {
+      "mathematics": "local_argument",
+      "evidence": [
+        "blueprint:thm:letwin-weak-hessian-trace-bound"
+      ],
+      "assumptions": [],
+      "priority": 0,
+      "note": "This is the weak C^{1,1} form of Letwin Theorem 2.5 for a given potential, with positive semidefinite B. Let nu = e^{-U} dx with U convex, C1, globally Lipschitz, with Lipschitz gradient, int e^{-U} = 1 and almost everywhere positive definite Hessian; let T be a weak Hessian tensor in L2 on every compact set, and let the inverse Hessian entries be essentially bounded on every compact set. Assume as hypotheses that the Hessian entries are nu-integrable with mean Id, that D = sum_kl (Hess U)^-1_kl tr(B T_k B T_l) is nu-integrable and that the half-energy bound int D dnu <= (1/2) int tr(B Hess U B Hess U) dnu holds. Then tr(B Hess U B Hess U) is nu-integrable and its integral is at most 2 tr(B B). The mean and half-energy inputs remain visible hypotheses; only the actual source producer discharges them. Completed supporting result, not a queued task or source-paper certificate.",
+      "infrastructure": {
+        "status": "available",
+        "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
+        "evidence": [
+          {
+            "path": "formalization/FunctionalInequalities/KLS/LogConcave/HessianTrace.lean",
+            "sha256": "1003cf1501fd8a5dd0d4cdc0345a57dffd2cee065f3d904586ccf6c190fb465c"
+          }
+        ],
+        "gaps": []
+      }
+    },
+    "lem:symmetric-trace-integral-ae": {
+      "mathematics": "local_argument",
+      "evidence": [
+        "blueprint:lem:symmetric-trace-integral-ae"
+      ],
+      "assumptions": [],
+      "priority": 0,
+      "note": "For an arbitrary measure and finite index type, let H have measurable entries and be positive semidefinite almost everywhere. If tr(A H A H) is integrable with integral at most 2 tr(A A) for every positive semidefinite A, then the same holds for every symmetric B, singular or indefinite. This is the almost-everywhere version of symmetric_trace_integral_extension. Completed supporting result, not a queued task or source-paper certificate.",
+      "infrastructure": {
+        "status": "available",
+        "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
+        "evidence": [
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/Matrix/Integral.lean",
+            "sha256": "1309d3c5319acab386e1a63c4711a10a1acd58ec50e54c9f9dedb328fabd2835"
+          }
+        ],
+        "gaps": []
+      }
+    },
+    "lem:integrable-weak-divergence": {
+      "mathematics": "local_argument",
+      "evidence": [
+        "blueprint:lem:integrable-weak-divergence"
+      ],
+      "assumptions": [],
+      "priority": 0,
+      "note": "If g is the weak directional derivative of f along v against compactly supported C1 tests and f and g are globally integrable, then int g = 0. Every dimension, including zero, and every direction. The proof body is the accepted S1 API output, copied verbatim. Completed supporting result, not a queued task or source-paper certificate.",
+      "infrastructure": {
+        "status": "available",
+        "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
+        "evidence": [
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Approximation.lean",
+            "sha256": "6f9a83090970931d254540d1965a3bbd6ad8e55222de091e0f19d575cab08658"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Basic.lean",
+            "sha256": "d8d9afbe829030302d2267aa0c2d7c0f51665249e053b3ae154b2849e60d74a5"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+            "sha256": "311f32a06eb3bb1e1d3b519868c38dcc746752fc57ed68f3bb2eae6f7711c251"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Mollification.lean",
+            "sha256": "a59eba3d25c9a2f483a7fd16328232d2dedacb44d8b8c96b5fbc6b62fb916c67"
+          }
+        ],
+        "gaps": []
+      }
+    },
+    "lem:tilted-ibp-bounded-lipschitz": {
+      "mathematics": "local_argument",
+      "evidence": [
+        "blueprint:lem:tilted-ibp-bounded-lipschitz"
+      ],
+      "assumptions": [],
+      "priority": 0,
+      "note": "Let U be globally Lipschitz with int e^{-U} = 1 and eta be bounded and globally Lipschitz. For every direction v, D_v eta and eta D_v U are integrable for the tilted measure e^{-U} dx and int D_v eta dnu = int eta D_v U dnu. All dimensions. Completed supporting result, not a queued task or source-paper certificate.",
+      "infrastructure": {
+        "status": "available",
+        "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
+        "evidence": [
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/LipschitzHessian.lean",
+            "sha256": "fdbaf0346e1cb5719c0747b56f38db162b38da1cf66e0985cd906b5f58fdc987"
+          }
+        ],
+        "gaps": []
+      }
+    },
+    "lem:c1-gradient-chain": {
+      "mathematics": "local_argument",
+      "evidence": [
+        "blueprint:lem:c1-gradient-chain"
+      ],
+      "assumptions": [],
+      "priority": 0,
+      "note": "For C1 functions u and f and a point y where grad u is differentiable, d_i (f o grad u)(y) = sum_j (Hess u)_ij(y) (grad f)_j(grad u(y)). This is the C1 counterpart of chain_coordinate; all dimensions. Completed supporting result, not a queued task or source-paper certificate.",
+      "infrastructure": {
+        "status": "available",
+        "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
+        "evidence": [
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/HessianOperator.lean",
+            "sha256": "bb6f525cbb741c1cda46d7de6fe3fcce4a9999af2eb5f61c4b714ca79bbb7e62"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/WeakHessian.lean",
+            "sha256": "173b7bbab1be25c79a9b491bf0adb5c844388692294d126731609b165a39f549"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Probability/Stein/HessianKernel.lean",
+            "sha256": "4a3914b6e99b9d70ff74c3c12e619a4b6c06887070d6d368d4746b63e32e496c"
+          }
+        ],
+        "gaps": []
+      }
+    },
+    "lem:weak-source-stein-identity": {
+      "mathematics": "local_argument",
+      "evidence": [
+        "blueprint:lem:weak-source-stein-identity"
+      ],
+      "assumptions": [],
+      "priority": 0,
+      "note": "Let u be C1 and globally Lipschitz with Lipschitz gradient and int e^{-u} = 1, and let nu = e^{-u} dx. For every C1, bounded and globally Lipschitz test f and every coordinate i, d_i u f(grad u) and sum_j (Hess u)_ij d_j f(grad u) are nu-integrable and int d_i u f(grad u) dnu = int sum_j (Hess u)_ij d_j f(grad u) dnu. This is the latent source coupling identity behind Lemma 2.7 at C^{1,1} regularity; no Stein kernel is constructed and no target inverse is used. Completed supporting result, not a queued task or source-paper certificate.",
+      "infrastructure": {
+        "status": "available",
+        "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
+        "evidence": [
+          {
+            "path": "formalization/FunctionalInequalities/KLS/LogConcave/HessianStein.lean",
+            "sha256": "05c08b702b513ac6828f880c0db8407d25f6f7942783c306100bb8bc1c0bdedd"
+          }
+        ],
+        "gaps": []
+      }
+    },
+    "lem:compact-source-dual-bound": {
+      "mathematics": "local_argument",
+      "evidence": [
+        "blueprint:lem:compact-source-dual-bound"
+      ],
+      "assumptions": [],
+      "priority": 0,
+      "note": "Let P be a measure on a latent space, Z a measurable map with P.map Z = mu for a probability law mu, and F a latent field in L2(P). If a smooth compactly supported h satisfies the latent source identity int <x, v> h dmu = int <F, grad h(Z)> dP, then (int <x, v> h dmu)^2 <= (int |F|^2 dP) (int |Dh|^2 dmu). Arbitrary latent space and all dimensions. The source identity and the L2 field remain inputs; this is the compact dual Cauchy-Schwarz step that supplies the dual bound directly, without a target Stein kernel. Completed supporting result, not a queued task or source-paper certificate.",
+      "infrastructure": {
+        "status": "available",
+        "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
+        "evidence": [
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/Operator/Coordinates.lean",
+            "sha256": "e3aaffd6726fcacf5e3f657f13caac716fbf2648d2bb1d90661ee0a89c02720b"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Probability/Stein/IdentityExtension.lean",
+            "sha256": "2a9db965cc317ab35329c09500d59054f40fa710c4140346cbeaeb6cacfc071b"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Probability/Stein/Kernel.lean",
+            "sha256": "4d08cd4d1cb07a6b97996c57b3238718f39b28490b0607dd346bcbd860c57785"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Probability/Stein/SourceDualBound.lean",
+            "sha256": "9b918bf53f9fb10273391197ba1d5717e2a73888f2f58498f40e477f2245a59c"
+          }
+        ],
+        "gaps": []
+      }
+    },
+    "lem:gaussian-directional-identity": {
+      "mathematics": "local_argument",
+      "evidence": [
+        "blueprint:lem:gaussian-directional-identity"
+      ],
+      "assumptions": [],
+      "priority": 0,
+      "note": "Under gaussianLaw s with s > 0, in every dimension, for every C1, bounded and globally Lipschitz f and every direction v, <x, v> f and D_v f are integrable and int <x, v> f = (2 s)^-1 int D_v f. This supports the Gaussian smoothing step; no product coupling is asserted. Completed supporting result, not a queued task or source-paper certificate.",
+      "infrastructure": {
+        "status": "available",
+        "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
+        "evidence": [
+          {
+            "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/Moments.lean",
+            "sha256": "fb25ee889f14a14f0f386bde235be0199e3e85da1176d15681024e51b79978a6"
+          }
+        ],
+        "gaps": []
+      }
+    },
+    "thm:letwin-regular-moment-weak-stein-coupling": {
+      "mathematics": "local_argument",
+      "evidence": [
+        "blueprint:thm:letwin-regular-moment-weak-stein-coupling"
+      ],
+      "assumptions": [],
+      "priority": 0,
+      "note": "For the actual source law, under the exact original R0 hypotheses (n > 0, isotropic 1_K exp(-W) dx with K compact and convex with nonempty interior, W smooth and kappa-uniformly convex), there is ONE weak normalized convex globally Lipschitz moment potential u, with constants L, LF and weak Hessian tensor T, that retains the whole earlier payload: R0 regularity (C1, 16/kappa-Lipschitz gradient, 4/kappa centered-difference bound, almost everywhere positive definite Hessian with log-det equation and 16/kappa cap), the weak tensor, first Monge-Ampere and inverse fields, mean Hessian Id under nu = e^{-u} dx, the weak evolution identities, bounded testing, the weak cutoffs and rough cutoff testing, the weak trace contraction, A.5 conservativity int g dnu = 0 and the half energy int D dnu <= (1/2) int tr(B H B H) dnu for every positive semidefinite B. It adds: for EVERY real symmetric B, tr(B H B H) is nu-integrable and int tr(B H B H) dnu <= 2 tr(B B) (Theorem 2.5 with the exact constant 2, weak C^{1,1} form for this witness); the weighted integration by parts int D_v eta dnu = int eta D_v u dnu for every bounded globally Lipschitz eta; and the coordinate source Stein identity for every C1, bounded and globally Lipschitz test. This is not the smooth moment map of Lemma 2.2, not a constructed Stein kernel, and not Theorem 1.2 or the constant-8 bound. The seven-step retention chain in WeakHessianTraceAudit (weak_stein_coupling_retains_weighted_pairing_contract through weak_trace_contraction_retains_trace_cutoff_contract) projects every earlier public contract from this one witness. Completed supporting result, not a queued task or source-paper certificate.",
+      "infrastructure": {
+        "status": "available",
+        "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
+        "evidence": [
+          {
+            "path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/Cutoff.lean",
+            "sha256": "d61600a73a2beefb25ce9b63c398c5f09f55657a93610b703428c79537b21e09"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/Potential.lean",
+            "sha256": "11d56724f8361597ec175b97b47ebb54cb13e2ea6d5f0d7089360ecdcceeb946"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/TraceStein.lean",
+            "sha256": "1a6064285161d2fc71f5aec1c53b116cd8397dd438d07050e7520c89ed97e5cd"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakDerivative.lean",
+            "sha256": "5870a4cb4b5ef16556cc7b8ba5b82fbc5262fa9ef3e0bc92d596410d1bf99f2a"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakHessian.lean",
+            "sha256": "fd9e790f3d85eda908a83a7ae985d0f7f2e8873945cf72727cace9b55873ea3c"
+          },
+          {
+            "path": "research/audits/BKL/WeakHessianTraceAudit.lean",
+            "sha256": "f61a0a44d10e504c47fb55ceac2fa33ba50c141f5ca68aab8e2f696aebcf3dec"
+          }
+        ],
+        "gaps": []
+      }
+    },
+    "lem:matrix-noise-trace-identities": {
+      "mathematics": "local_argument",
+      "evidence": [
+        "blueprint:lem:matrix-noise-trace-identities"
+      ],
+      "assumptions": [],
+      "priority": 0,
+      "note": "Finite real-matrix trace identities over any finite index type: tr((A + tI)^T (A + tI)) = tr(A^T A) + 2t tr A + n t^2; invariance of tr((AQ)^T AQ) under a symmetric involution Q; tr(SHS) = tr(S^2 H); and tr((SHS)^T SHS) = tr(S^2 H S^2 H) for symmetric S, H. Completed supporting result, not a queued task or source-paper certificate.",
+      "infrastructure": {
+        "status": "available",
+        "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
+        "evidence": [
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/Matrix/Trace/Algebra.lean",
+            "sha256": "e4f2669e91aeee01bd499855a741844854dc59502a4a81ea1ffc2db7e681b871"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/Matrix/Trace/Energy.lean",
+            "sha256": "31e20e8cd7ec967ca7429d541f0a5b179b5a86f965ac0f3c50d3a144ea40e16e"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/Matrix/Trace/Power.lean",
+            "sha256": "8774e28c6f9ebb5ea6136409fb8dfe010bd9f1943cd5085a13b97ed7542d907c"
+          }
+        ],
+        "gaps": []
+      }
+    },
+    "lem:symmetric-matrix-spectral-geometry": {
+      "mathematics": "local_argument",
+      "evidence": [
+        "blueprint:lem:symmetric-matrix-spectral-geometry"
+      ],
+      "assumptions": [],
+      "priority": 0,
+      "note": "For symmetric invertible M with B = sqrt(M^2), S = sqrt B and Q = sign M: B and S are positive semidefinite, Q is symmetric, B^2 = M^2, S^2 = B, SQS = M, Q^2 = I, S is invertible, Q acts self-adjointly and S defines a self-adjoint continuous linear equivalence. Completed supporting result, not a queued task or source-paper certificate.",
+      "infrastructure": {
+        "status": "available",
+        "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
+        "evidence": [
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/Matrix/Sign.lean",
+            "sha256": "968be96ec1255f6659127a074524c32ecb8a1aab146d76a4866a13b7113bde97"
+          }
+        ],
+        "gaps": []
+      }
+    },
+    "lem:symmetric-invertible-approximation": {
+      "mathematics": "local_argument",
+      "evidence": [
+        "blueprint:lem:symmetric-invertible-approximation"
+      ],
+      "assumptions": [],
+      "priority": 0,
+      "note": "Every symmetric real matrix A over a finite index type is the limit of the symmetric invertible matrices A - r_k I, with 0 < r_k < 1/(k+1) outside the finite real spectrum of A. Completed supporting result, not a queued task or source-paper certificate.",
+      "infrastructure": {
+        "status": "available",
+        "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
+        "evidence": [
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/Matrix/Sign.lean",
+            "sha256": "968be96ec1255f6659127a074524c32ecb8a1aab146d76a4866a13b7113bde97"
+          }
+        ],
+        "gaps": []
+      }
+    },
+    "lem:matrix-trace-mean-identity": {
+      "mathematics": "local_argument",
+      "evidence": [
+        "blueprint:lem:matrix-trace-mean-identity"
+      ],
+      "assumptions": [],
+      "priority": 0,
+      "note": "For a matrix field H with integrable entries and mean Id under a measure, tr(B H) is integrable with integral tr B for every matrix B. Completed supporting result, not a queued task or source-paper certificate.",
+      "infrastructure": {
+        "status": "available",
+        "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
+        "evidence": [
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/Matrix/Integral.lean",
+            "sha256": "1309d3c5319acab386e1a63c4711a10a1acd58ec50e54c9f9dedb328fabd2835"
+          }
+        ],
+        "gaps": []
+      }
+    },
+    "lem:symmetric-hilbert-schmidt-trace": {
+      "mathematics": "local_argument",
+      "evidence": [
+        "blueprint:lem:symmetric-hilbert-schmidt-trace"
+      ],
+      "assumptions": [],
+      "priority": 0,
+      "note": "For a symmetric continuous linear operator A and any finite orthonormal basis b, the sum over i, j of <A b_i, b_j>^2 equals tr(A o A). Completed supporting result, not a queued task or source-paper certificate.",
+      "infrastructure": {
+        "status": "available",
+        "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
+        "evidence": [
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/Operator/HilbertSchmidt.lean",
+            "sha256": "2406123001ed41af2eaee39525d8d48f1853537521b44e3b55334c85569daca6"
+          }
+        ],
+        "gaps": []
+      }
+    },
+    "lem:gradient-affine-precomposition": {
+      "mathematics": "local_argument",
+      "evidence": [
+        "blueprint:lem:gradient-affine-precomposition"
+      ],
+      "assumptions": [],
+      "priority": 0,
+      "note": "For complete real inner product spaces, a continuous linear S, z and f differentiable at Sx + z, the gradient of y -> f(Sy + z) at x is S* grad f(Sx + z). Completed supporting result, not a queued task or source-paper certificate.",
+      "infrastructure": {
+        "status": "available",
+        "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
+        "evidence": [
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/Calculus.lean",
+            "sha256": "351849d1e47a4e07f731b76859dfd15d6a8981665a9042e5440f7e93f1e98de5"
+          }
+        ],
+        "gaps": []
+      }
+    },
+    "lem:matrix-action-algebra": {
+      "mathematics": "local_argument",
+      "evidence": [
+        "blueprint:lem:matrix-action-algebra"
+      ],
+      "assumptions": [],
+      "priority": 0,
+      "note": "The Euclidean action of real n x n matrices equals the Euclidean linear map of the matrix and is multiplicative, additive, homogeneous and unital; (A e_i)_j = A_ji and the sum of |A e_i|^2 is tr(A^T A). Completed supporting result, not a queued task or source-paper certificate.",
+      "infrastructure": {
+        "status": "available",
+        "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
+        "evidence": [
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/Operator/Coordinates.lean",
+            "sha256": "e3aaffd6726fcacf5e3f657f13caac716fbf2648d2bb1d90661ee0a89c02720b"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Probability/Stein/IdentityExtension.lean",
+            "sha256": "2a9db965cc317ab35329c09500d59054f40fa710c4140346cbeaeb6cacfc071b"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Probability/Stein/Kernel.lean",
+            "sha256": "4d08cd4d1cb07a6b97996c57b3238718f39b28490b0607dd346bcbd860c57785"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Probability/Stein/SourceDualBound.lean",
+            "sha256": "9b918bf53f9fb10273391197ba1d5717e2a73888f2f58498f40e477f2245a59c"
+          }
+        ],
+        "gaps": []
+      }
+    },
+    "lem:hessian-action-l2": {
+      "mathematics": "local_argument",
+      "evidence": [
+        "blueprint:lem:hessian-action-l2"
+      ],
+      "assumptions": [],
+      "priority": 0,
+      "note": "If grad u is Lipschitz on R^n, then y -> Hess u(y) v is in L2 of every finite measure, for every v. Completed supporting result, not a queued task or source-paper certificate.",
+      "infrastructure": {
+        "status": "available",
+        "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
+        "evidence": [
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/HessianOperator.lean",
+            "sha256": "bb6f525cbb741c1cda46d7de6fe3fcce4a9999af2eb5f61c4b714ca79bbb7e62"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Analysis/BakryEmery/WeakHessian.lean",
+            "sha256": "173b7bbab1be25c79a9b491bf0adb5c844388692294d126731609b165a39f549"
+          },
+          {
+            "path": "formalization/FunctionalInequalities/Probability/Stein/HessianKernel.lean",
+            "sha256": "4a3914b6e99b9d70ff74c3c12e619a4b6c06887070d6d368d4746b63e32e496c"
+          }
+        ],
+        "gaps": []
+      }
+    },
+    "lem:quadratic-action-identities": {
+      "mathematics": "local_argument",
+      "evidence": [
+        "blueprint:lem:quadratic-action-identities"
+      ],
+      "assumptions": [],
+      "priority": 0,
+      "note": "Coordinate form sum A_ij x_i x_j = <Ax, x>; the sandwich <Q(Sx), Sx> = <(SQS)x, x> and invariance of the variance of the quadratic form under the pushforward by symmetric S; and e(H(e* v)) + t v = (SHS + tI) v for a self-adjoint equivalence e with the operator of S. Completed supporting result, not a queued task or source-paper certificate.",
+      "infrastructure": {
+        "status": "available",
+        "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
+        "evidence": [
+          {
+            "path": "formalization/FunctionalInequalities/Probability/Stein/QuadraticAction.lean",
+            "sha256": "f7016204892cf45f7884d3c579d002514d2debe241ec66e620310dfcf0eb070b"
+          }
+        ],
+        "gaps": []
+      }
+    },
+    "lem:spectral-sign-noise-identity": {
+      "mathematics": "local_argument",
+      "evidence": [
+        "blueprint:lem:spectral-sign-noise-identity"
+      ],
+      "assumptions": [],
+      "priority": 0,
+      "note": "For symmetric invertible M with B = sqrt(M^2), S = sqrt B, Q = sign M, every symmetric H and real t: the sum over i of |(SHS + tI) Q e_i|^2 equals tr(BHBH) + 2t tr(BH) + n t^2. Completed supporting result, not a queued task or source-paper certificate.",
+      "infrastructure": {
+        "status": "available",
+        "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
+        "evidence": [
+          {
+            "path": "formalization/FunctionalInequalities/Probability/Stein/QuadraticAction.lean",
+            "sha256": "f7016204892cf45f7884d3c579d002514d2debe241ec66e620310dfcf0eb070b"
+          }
+        ],
+        "gaps": []
+      }
+    },
+    "lem:spectral-noise-energy-integral": {
+      "mathematics": "local_argument",
+      "evidence": [
+        "blueprint:lem:spectral-noise-energy-integral"
+      ],
+      "assumptions": [],
+      "priority": 0,
+      "note": "For probability measures on arbitrary measurable spaces and a measurable, a.e. symmetric matrix field with integrable entries, mean Id and the input trace bound int tr(B'HB'H) <= 2 tr(B'^2) for every symmetric B', the integrated energy of the shifted action is at most 2 tr(M^2) + 2t tr B + n t^2 for symmetric invertible M. No log-concavity or Hessian hypothesis. Completed supporting result, not a queued task or source-paper certificate.",
+      "infrastructure": {
+        "status": "available",
+        "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
+        "evidence": [
+          {
+            "path": "formalization/FunctionalInequalities/Probability/Stein/QuadraticAction.lean",
+            "sha256": "f7016204892cf45f7884d3c579d002514d2debe241ec66e620310dfcf0eb070b"
+          }
+        ],
+        "gaps": []
+      }
+    },
+    "lem:quadratic-form-fourth-moment": {
+      "mathematics": "local_argument",
+      "evidence": [
+        "blueprint:lem:quadratic-form-fourth-moment"
+      ],
+      "assumptions": [],
+      "priority": 0,
+      "note": "If f is in L4 with values in a real inner product space and A is continuous linear, then <A f, f> is in L2. Completed supporting result, not a queued task or source-paper certificate.",
+      "infrastructure": {
+        "status": "available",
+        "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
+        "evidence": [
+          {
+            "path": "formalization/FunctionalInequalities/Probability/Moments.lean",
+            "sha256": "703aedc72a11b49c304f9108dfe56214c8dad02ea7cb14d87817cb4b065bf1cf"
+          }
+        ],
+        "gaps": []
+      }
+    },
+    "lem:finite-combination-variance-continuity": {
+      "mathematics": "local_argument",
+      "evidence": [
+        "blueprint:lem:finite-combination-variance-continuity"
+      ],
+      "assumptions": [],
+      "priority": 0,
+      "note": "For a probability measure and finitely many real L2 functions f_i, if the coefficients c_{k,i} converge to b_i then the variance of sum_i c_{k,i} f_i converges to that of sum_i b_i f_i. Completed supporting result, not a queued task or source-paper certificate.",
+      "infrastructure": {
+        "status": "available",
+        "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
+        "evidence": [
+          {
+            "path": "formalization/FunctionalInequalities/L2/MeanVariance.lean",
+            "sha256": "06002e5c40f496bd8260555a827398d501b9383b932e8865db477e4aa071ca79"
+          }
+        ],
+        "gaps": []
+      }
+    },
+    "lem:quadratic-matrix-variance-continuity": {
+      "mathematics": "local_argument",
+      "evidence": [
+        "blueprint:lem:quadratic-matrix-variance-continuity"
+      ],
+      "assumptions": [],
+      "priority": 0,
+      "note": "For a probability law on R^n with finite fourth moment and matrices A_k -> A, the variance of sum (A_k)_ij x_i x_j converges to that of sum A_ij x_i x_j. Completed supporting result, not a queued task or source-paper certificate.",
+      "infrastructure": {
+        "status": "available",
+        "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
+        "evidence": [
+          {
+            "path": "formalization/FunctionalInequalities/Probability/QuadraticVariance.lean",
+            "sha256": "c69ada7625d35821842a92110605e9ca704d4f210317fd6f7a2416626db55276"
+          }
+        ],
+        "gaps": []
+      }
+    },
+    "lem:letwin-singular-extension": {
+      "mathematics": "local_argument",
+      "evidence": [
+        "blueprint:lem:letwin-singular-extension"
+      ],
+      "assumptions": [],
+      "priority": 0,
+      "note": "For every probability law on R^n (every n) with finite fourth moment and every real C: if Var(sum B_ij x_i x_j) <= C tr(B^2) for all symmetric invertible B, then for all symmetric B. Stronger than Letwin Lemma A.2 (no isotropy or log-concavity, arbitrary C); proved through B - r_k I outside the spectrum, not M + eps P_0. It does not establish the bound. Completed supporting result, not a queued task or source-paper certificate.",
+      "infrastructure": {
+        "status": "available",
+        "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
+        "evidence": [
+          {
+            "path": "formalization/FunctionalInequalities/Probability/QuadraticVariance.lean",
+            "sha256": "c69ada7625d35821842a92110605e9ca704d4f210317fd6f7a2416626db55276"
+          }
+        ],
+        "gaps": []
+      }
+    },
+    "lem:centered-noise-quadratic-variance": {
+      "mathematics": "local_argument",
+      "evidence": [
+        "blueprint:lem:centered-noise-quadratic-variance"
+      ],
+      "assumptions": [],
+      "priority": 0,
+      "note": "For probability laws mu, nu on a complete separable real inner product space with finite fourth moments, nu centered, and continuous linear A, Var_mu <Ax, x> <= Var_{mu * nu} <Ax, x>. Completed supporting result, not a queued task or source-paper certificate.",
+      "infrastructure": {
+        "status": "available",
+        "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
+        "evidence": [
+          {
+            "path": "formalization/FunctionalInequalities/Probability/QuadraticVariance.lean",
+            "sha256": "c69ada7625d35821842a92110605e9ca704d4f210317fd6f7a2416626db55276"
+          }
+        ],
+        "gaps": []
+      }
+    },
+    "lem:gaussian-fourth-moments": {
+      "mathematics": "local_argument",
+      "evidence": [
+        "blueprint:lem:gaussian-fourth-moments"
+      ],
+      "assumptions": [],
+      "priority": 0,
+      "note": "gaussianLaw s (s > 0) has a fourth moment, and fourth moments pass to Gaussian smoothings and to continuous linear images of a probability measure. Completed supporting result, not a queued task or source-paper certificate.",
+      "infrastructure": {
+        "status": "available",
+        "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
+        "evidence": [
+          {
+            "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/Moments.lean",
+            "sha256": "fb25ee889f14a14f0f386bde235be0199e3e85da1176d15681024e51b79978a6"
+          }
+        ],
+        "gaps": []
+      }
+    },
+    "lem:gaussian-translated-directional-identity": {
+      "mathematics": "local_argument",
+      "evidence": [
+        "blueprint:lem:gaussian-translated-directional-identity"
+      ],
+      "assumptions": [],
+      "priority": 0,
+      "note": "For s > 0, bounded globally Lipschitz C1 h and a, v: int <z, v> h(a + z) = (2s)^-1 int D_v h(a + z) under gaussianLaw s, both integrable. Completed supporting result, not a queued task or source-paper certificate.",
+      "infrastructure": {
+        "status": "available",
+        "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
+        "evidence": [
+          {
+            "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/Moments.lean",
+            "sha256": "fb25ee889f14a14f0f386bde235be0199e3e85da1176d15681024e51b79978a6"
+          }
+        ],
+        "gaps": []
+      }
+    },
+    "lem:gaussian-product-latent-map": {
+      "mathematics": "local_argument",
+      "evidence": [
+        "blueprint:lem:gaussian-product-latent-map"
+      ],
+      "assumptions": [],
+      "priority": 0,
+      "note": "If g pushes the probability measure rho to mu, S is continuous linear and s > 0, then rho x gaussianLaw s pushed by (y, z) -> S(g y) + z is the Gaussian smoothing of S_# mu. Completed supporting result, not a queued task or source-paper certificate.",
+      "infrastructure": {
+        "status": "available",
+        "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
+        "evidence": [
+          {
+            "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/LinearImage.lean",
+            "sha256": "8fc43b7d28699592c3fd6be9a42c9712b3cd8909a222bde13ce7a7a322e1e6f0"
+          }
+        ],
+        "gaps": []
+      }
+    },
+    "lem:gaussian-smoothed-linear-image-potential": {
+      "mathematics": "local_argument",
+      "evidence": [
+        "blueprint:lem:gaussian-smoothed-linear-image-potential"
+      ],
+      "assumptions": [],
+      "priority": 0,
+      "note": "For a log-concave probability law with full affine support, a continuous linear equivalence S and s > 0, the Gaussian smoothing of S_# mu is e^{-W} dx with W smooth and convex, and the smoothed probability law is log-concave. Completed supporting result, not a queued task or source-paper certificate.",
+      "infrastructure": {
+        "status": "available",
+        "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
+        "evidence": [
+          {
+            "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/LinearImage.lean",
+            "sha256": "8fc43b7d28699592c3fd6be9a42c9712b3cd8909a222bde13ce7a7a322e1e6f0"
+          }
+        ],
+        "gaps": []
+      }
+    },
+    "lem:source-directional-affine-stein": {
+      "mathematics": "local_argument",
+      "evidence": [
+        "blueprint:lem:source-directional-affine-stein"
+      ],
+      "assumptions": [],
+      "priority": 0,
+      "note": "For C1 globally Lipschitz u with Lipschitz gradient and int e^{-u} = 1: the source Stein identity in a direction v for bounded Lipschitz C1 tests f, and its affine form for tests h(S grad u + z) with continuous linear S. Completed supporting result, not a queued task or source-paper certificate.",
+      "infrastructure": {
+        "status": "available",
+        "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
+        "evidence": [
+          {
+            "path": "formalization/FunctionalInequalities/KLS/LogConcave/HessianStein.lean",
+            "sha256": "05c08b702b513ac6828f880c0db8407d25f6f7942783c306100bb8bc1c0bdedd"
+          }
+        ],
+        "gaps": []
+      }
+    },
+    "lem:gaussian-product-source-stein": {
+      "mathematics": "local_argument",
+      "evidence": [
+        "blueprint:lem:gaussian-product-source-stein"
+      ],
+      "assumptions": [],
+      "priority": 0,
+      "note": "For s > 0, on P = (e^{-u} dx) x gaussianLaw s with Z = S grad u + z: the latent fields are in L2(P), the source and noise pairings are integrable, and int <Z, v> h(Z) dP = int (<S* v, Hess u S* grad h(Z)> + (2s)^-1 D_v h(Z)) dP for bounded Lipschitz C1 h. Completed supporting result, not a queued task or source-paper certificate.",
+      "infrastructure": {
+        "status": "available",
+        "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
+        "evidence": [
+          {
+            "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/ProductCoupling.lean",
+            "sha256": "106d89b93bcb6b86a671197ff6cbfef8fa10081a9a8c2ae18b62425caf723cf8"
+          }
+        ],
+        "gaps": []
+      }
+    },
+    "lem:gaussian-product-compact-dual": {
+      "mathematics": "local_argument",
+      "evidence": [
+        "blueprint:lem:gaussian-product-compact-dual"
+      ],
+      "assumptions": [],
+      "priority": 0,
+      "note": "With grad u pushing e^{-u} dx to mu, s > 0 and nu_s the Gaussian smoothing of S_# mu: (int <x, v> h d nu_s)^2 <= int |S Hess u S* v + (2s)^-1 v|^2 dP * int |Dh|^2 d nu_s for smooth compactly supported h. Completed supporting result, not a queued task or source-paper certificate.",
+      "infrastructure": {
+        "status": "available",
+        "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
+        "evidence": [
+          {
+            "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/ProductCoupling.lean",
+            "sha256": "106d89b93bcb6b86a671197ff6cbfef8fa10081a9a8c2ae18b62425caf723cf8"
+          }
+        ],
+        "gaps": []
+      }
+    },
+    "lem:gaussian-noise-limit": {
+      "mathematics": "local_argument",
+      "evidence": [
+        "blueprint:lem:gaussian-noise-limit"
+      ],
+      "assumptions": [],
+      "priority": 0,
+      "note": "If a <= b + c (2s)^-1 + d ((2s)^-1)^2 for every s > 0, then a <= b. Completed supporting result, not a queued task or source-paper certificate.",
+      "infrastructure": {
+        "status": "available",
+        "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
+        "evidence": [
+          {
+            "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/QuadraticVariance.lean",
+            "sha256": "58c8e839681e7417c45b5428b1cae24412f4dfcf4d9924e4554ac75ca10a65f9"
+          }
+        ],
+        "gaps": []
+      }
+    },
+    "lem:gaussian-smoothing-quadratic-variance": {
+      "mathematics": "local_argument",
+      "evidence": [
+        "blueprint:lem:gaussian-smoothing-quadratic-variance"
+      ],
+      "assumptions": [],
+      "priority": 0,
+      "note": "For a probability law with finite fourth moment, continuous linear A and s > 0, Var <Ax, x> is at most its variance under the Gaussian smoothing. Completed supporting result, not a queued task or source-paper certificate.",
+      "infrastructure": {
+        "status": "available",
+        "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
+        "evidence": [
+          {
+            "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/QuadraticVariance.lean",
+            "sha256": "58c8e839681e7417c45b5428b1cae24412f4dfcf4d9924e4554ac75ca10a65f9"
+          }
+        ],
+        "gaps": []
+      }
+    },
+    "lem:gaussian-smoothed-quadratic-h-minus-one": {
+      "mathematics": "local_argument",
+      "evidence": [
+        "blueprint:lem:gaussian-smoothed-quadratic-h-minus-one"
+      ],
+      "assumptions": [],
+      "priority": 0,
+      "note": "For log-concave mu with full affine support equal to grad u_# (e^{-u} dx) with u as above, a continuous linear equivalence S, self-adjoint Q and s > 0: the variance of <Qx, x> under the Gaussian smoothing of S_# mu is at most 4 times sum_i int |S Hess u S* Q e_i + (2s)^-1 Q e_i|^2 dP, via the H^-1 inequality on the smooth convex smoothed law. Completed supporting result, not a queued task or source-paper certificate.",
+      "infrastructure": {
+        "status": "available",
+        "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
+        "evidence": [
+          {
+            "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/QuadraticVariance.lean",
+            "sha256": "58c8e839681e7417c45b5428b1cae24412f4dfcf4d9924e4554ac75ca10a65f9"
+          }
+        ],
+        "gaps": []
+      }
+    },
+    "lem:restricted-exp-logconcave": {
+      "mathematics": "local_argument",
+      "evidence": [
+        "blueprint:lem:restricted-exp-logconcave"
+      ],
+      "assumptions": [],
+      "priority": 0,
+      "note": "If a probability law mu has density 1_K e^{-W}, with K closed convex and W continuous convex, then 1_K e^{-W} is a Borell density of mu, so mu is log-concave; in particular every regular-class probability law is log-concave. Completed supporting result, not a queued task or source-paper certificate.",
+      "infrastructure": {
+        "status": "available",
+        "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
+        "evidence": [
+          {
+            "path": "formalization/FunctionalInequalities/KLS/LogConcave/Density/Tilted.lean",
+            "sha256": "8d6c5d03fc197daafb21e787f64ca08f48712a038c69db2e478e624117dc1c60"
+          }
+        ],
+        "gaps": []
+      }
+    },
+    "lem:letwin-operator-matrix-identification": {
+      "mathematics": "local_argument",
+      "evidence": [
+        "blueprint:lem:letwin-operator-matrix-identification"
+      ],
+      "assumptions": [],
+      "priority": 0,
+      "note": "For every measure mu on R^n: if Var(sum M_ij x_i x_j) <= 8 tr(M^2) for every symmetric M, then mu satisfies LetwinQuadraticBound. Completed supporting result, not a queued task or source-paper certificate.",
+      "infrastructure": {
+        "status": "available",
+        "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
+        "evidence": [
+          {
+            "path": "formalization/FunctionalInequalities/KLS/Letwin/RegularClass.lean",
+            "sha256": "7d3c50826e943dde64354edc8ea629566709e5bf9f6c44e9844f78d9a32f06c6"
+          }
+        ],
+        "gaps": []
+      }
+    },
+    "thm:letwin-regular-class-constant-eight": {
+      "mathematics": "local_argument",
+      "evidence": [
+        "blueprint:thm:letwin-regular-class-constant-eight"
+      ],
+      "assumptions": [],
+      "priority": 0,
+      "note": "Exact R0 hypotheses (n > 0, isotropic 1_K e^{-W} dx, K compact convex with nonempty interior, W smooth and kappa-uniformly convex): Var(sum M_ij x_i x_j) <= 8 tr(M^2) for every symmetric M, hence LetwinQuadraticBound. Regular-class case of Letwin Theorem 1.2. Completed supporting result, not a queued task or source-paper certificate.",
+      "infrastructure": {
+        "status": "available",
+        "mathlib_revision": "db584cd6d46c92f209a44c0f1c829460d327499d",
+        "evidence": [
+          {
+            "path": "formalization/FunctionalInequalities/KLS/Letwin/RegularClass.lean",
+            "sha256": "7d3c50826e943dde64354edc8ea629566709e5bf9f6c44e9844f78d9a32f06c6"
           }
         ],
         "gaps": []

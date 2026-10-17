@@ -4,6 +4,7 @@ import Mathlib.Analysis.Calculus.Gradient.Basic
 import Mathlib.Analysis.InnerProductSpace.Laplacian
 import Mathlib.Analysis.Convex.Deriv
 import Mathlib.Analysis.Calculus.Deriv.Slope
+import Mathlib.Analysis.InnerProductSpace.Adjoint
 
 /-!
 # Local differential calculus
@@ -827,3 +828,27 @@ theorem exists_bound_fderiv_fderiv_of_hasCompactSupport {E F : Type*} [NormedAdd
 end CompactSupport
 
 end FunctionalInequalities.Analysis.BakryEmery
+
+/-! ### Gradient of an affine precomposition
+
+The gradient of `f (S x + z)` is `S† ∇f (S x + z)` for a continuous linear `S` between real inner product spaces. -/
+
+noncomputable section
+open scoped RealInnerProductSpace
+
+namespace FunctionalInequalities.Analysis.BakryEmery
+
+theorem gradient_comp_affine {E F : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+    [CompleteSpace E] [NormedAddCommGroup F] [InnerProductSpace ℝ F] [CompleteSpace F]
+    (S : E →L[ℝ] F) (z : F) {f : F → ℝ} {x : E}
+    (hf : DifferentiableAt ℝ f (S x + z)) :
+    gradient (fun y => f (S y + z)) x = S.adjoint (gradient f (S x + z)) := by
+  apply ext_inner_right ℝ
+  intro v
+  rw [inner_gradient_left, ContinuousLinearMap.adjoint_inner_left, inner_gradient_left]
+  exact congrArg (fun T : E →L[ℝ] ℝ => T v)
+    (hf.hasFDerivAt.comp x (S.hasFDerivAt.add_const z)).fderiv
+
+end FunctionalInequalities.Analysis.BakryEmery
+
+end

@@ -192,7 +192,7 @@ A published input or an upstream reviewed proof receives no \texttt{leanok} mere
   measure nor an affine origin, which is the last sentence of the theorem.  All three clauses being
   local Lean proofs, the node now carries \texttt{leanok}.  The separate
   Cheeger--Buser comparison below is also a local Lean proof as of 2026-09-26;
-  the dimension-free KLS bound remains open.
+  neither gives the dimension-free KLS bound by itself.
 \end{proof}
 
 \begin{theorem}[Cheeger--Buser comparison for log-concave laws]
@@ -1330,8 +1330,8 @@ addressed.
   measure $\nu$ in every dimension (\texttt{CumulantBound d b}). Then every isotropic regular law
   $\mu$ on $\mathbb R^n$ satisfies $|T_df|^2\le 2b\,\norm f_{L^2(\mu)}^2/(d!)^2$ for every
   $f\in L^2(\mu)$, in the Hilbert--Schmidt norm of the coefficient array. The hypothesis is the
-  source's own universal cumulant hypothesis; it is not asserted here, and Theorem~4.1 (which
-  supplies it) is not formalized.
+  source's own universal cumulant hypothesis; it is not asserted here. Theorem~4.1, which
+  supplies it, is Theorem~\ref{thm:bkl-cumulant-bound}.
 \end{proposition}
 \begin{proof}
   \leanok
@@ -2071,7 +2071,7 @@ addressed.
   Suppose the cumulant bounds of Theorem~4.1 hold universally: $R^\nu_{d+1}\le(d!)^2K^d\,\mathrm{Id}$
   for every isotropic log-concave $\nu$ in every dimension and every $d\ge2$, with $K\ge1$. Then
   every isotropic regular law $\mu$ on $\mathbb R^n$ satisfies $C_P(\mu)\le2CK$, where $C$ is the
-  constant of Theorem~3.1. Theorem~4.1 is not proved here, and no certificate is attached.
+  constant of Theorem~3.1. The hypothesis is not discharged in this lemma; Theorem~\ref{thm:bkl-poincare} discharges it.
 \end{lemma}
 \begin{proof}
   \leanok
@@ -2101,8 +2101,8 @@ addressed.
   $K(1+\|\operatorname{Cov}-\mathrm{Id}\|)\to K$, and the weak-limit passage concludes. Combined with
   the p.~30 reduction: under the universal cumulant bounds of Theorem~4.1, every isotropic
   log-concave law has $C_P\le2CK$, and the project's KLS conjecture follows from that hypothesis.
-  Theorem~4.1 is not proved, so this is \emph{not} a proof of Theorem~1.1 and no certificate is
-  attached; \texttt{KLS.kls} stays open.
+  This lemma keeps Theorem~4.1 as a hypothesis; Theorem~\ref{thm:bkl-poincare} discharges it, and
+  Conjecture~\ref{conj:kls} follows.
 \end{lemma}
 \begin{proof}
   \leanok
@@ -2288,7 +2288,8 @@ addressed.
 
 \begin{lemma}[Letwin: from positive semidefinite to symmetric matrices under a measure (Theorem~2.5 support)]
   \label{lem:letwin-symmetric-integral}
-  \lean{FunctionalInequalities.Analysis.symmetric_trace_integral_extension}
+  \lean{FunctionalInequalities.Analysis.symmetric_trace_integral_extension,
+        FunctionalInequalities.Analysis.symmetric_trace_integral_extension_mul}
   \leanok
   \uses{lem:letwin-symmetric-jordan}
   Letwin \cite{Letwin2026QuadraticKLS}, Theorem~2.5, the extension step, conditional on the positive semidefinite bound:
@@ -3960,4 +3961,1348 @@ form taken by the variance estimate for isotropic $\mu$), then
   (Lemma~\ref{lem:letwin-monge-ampere-first}) that density is $\det(H)\operatorname{tr}(H^{-1}T_k)$ almost everywhere, and cancelling
   $\det H>0$ gives $\operatorname{tr}(H^{-1}T_k)=\partial_kF$. Lemma~\ref{lem:ae-mongeampere-exponent} gives the explicit right-hand
   side. Finally $\log\det H=F$ almost everywhere, so the weak derivative of the Lipschitz $F$ transfers to $\log\det H$.
+\end{proof}
+
+\begin{lemma}[Weak negative exponential of a Lipschitz exponent]
+  \label{lem:weak-exp-neg-lipschitz}
+  \lean{FunctionalInequalities.Analysis.hasWeakDerivAlong_exp_neg_of_lipschitz}
+  \leanok
+  On every finite-dimensional real inner-product space, for every direction $v$ (including $0$) and every globally Lipschitz $F$,
+  $e^{-F}$ has the weak derivative $-e^{-F}\,DF[v]$ along $v$, and this density is $L^2$ on every compact set. No lower bound on $F$,
+  global bound on $e^{-F}$, $C^1$ regularity of $F$ or finite whole-space measure is assumed.
+\end{lemma}
+\begin{proof}
+  \leanok
+  By Rademacher's theorem the density is the almost-everywhere chain rule. For a compactly supported $C^1$ test $\psi$, a $C^1$
+  compactly supported $\chi$ equal to $1$ near $F(\operatorname{tsupport}\psi)$ makes $q(t)=\chi(t)e^{-t}$ globally Lipschitz; the
+  Lipschitz weak rule for $q\circ F$ transfers to $e^{-F}$ near $\operatorname{tsupport}\psi$. On a compact set $e^{-F}$ is bounded
+  and $|DF[v]|\le L\|v\|$.
+\end{proof}
+
+\begin{lemma}[Weak product rule for compact-locally bounded factors]
+  \label{lem:weak-product-locally-bounded}
+  \lean{FunctionalInequalities.Analysis.HasWeakDerivAlong.mul_of_locally_bounded}
+  \leanok
+  \uses{lem:weak-product-local-bounded}
+  Along one fixed direction $v$ (including $0$) in $\mathbb R^n$ (including $n=0$): if $f,g$ have weak derivatives $df,dg$ along $v$,
+  $f$ and $g$ are essentially bounded on every compact set, and $df,dg$ are $L^2$ on every compact set, then $fg$ has the weak
+  derivative $df\,g+f\,dg$ along $v$, which is $L^2$ on every compact set. No global bound, global $L^2$, continuity or $C^1/C^2$
+  regularity of the factors is assumed.
+\end{lemma}
+\begin{proof}
+  \leanok
+  On a compact set the restricted measure is finite, so the density is locally $L^2$. For a test $\psi$, a $C^1$ cutoff $\chi$ equal to
+  $1$ near $\operatorname{tsupport}\psi$ makes $\chi f$ and $\chi g$ globally essentially bounded; Lemma~\ref{lem:weak-product-local-bounded}
+  applies to them, and $\chi=1$, $D\chi=0$ on $\operatorname{tsupport}\psi$ removes the cutoffs.
+\end{proof}
+
+\begin{lemma}[Weak derivative of a matrix inverse]
+  \label{lem:weak-matrix-inverse-derivative}
+  \lean{FunctionalInequalities.Analysis.ae_weak_matrix_inverse_derivative}
+  \leanok
+  \uses{lem:weak-product-locally-bounded, lem:weak-finite-linear-combination, lem:weak-derivative-ae-congr}
+  Let $d,m\ge0$ be independent, $v$ any direction, and $A,R:\mathbb R^d\to\mathbb R^{m\times m}$ have entrywise weak derivatives
+  $DA,DR$ along $v$, with $A,R$ essentially bounded and $DA,DR$ in $L^2$ on every compact set. If $RA=\mathrm{Id}$ almost everywhere,
+  then $DR=-R\,DA\,R$ almost everywhere. No symmetry, positivity, $C^1$ regularity or global bound is assumed.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Lemmas~\ref{lem:weak-product-locally-bounded} and~\ref{lem:weak-finite-linear-combination} give the weak derivative
+  $(DR\,A+R\,DA)_{ij}$ of $(RA)_{ij}$; since $RA=\mathrm{Id}$ almost everywhere, uniqueness of weak derivatives makes it vanish almost
+  everywhere. There $AR=\mathrm{Id}$ for square matrices, and right multiplication by $R$ gives the formula.
+\end{proof}
+
+\begin{lemma}[Bounded Hessian adjugate and its weak derivative]
+  \label{lem:hessian-adjugate-weak-derivative}
+  \lean{FunctionalInequalities.Analysis.memLp_hessian_adjugate_top,
+        FunctionalInequalities.Analysis.exists_weak_hessian_adjugate_derivative}
+  \leanok
+  \uses{lem:hessian-entry-measurable-bounded, lem:weak-determinant}
+  If $\nabla u$ is Lipschitz, every adjugate entry of $\nabla^2u$ is globally essentially bounded. Separately, if the Hessian entries
+  are globally essentially bounded and a supplied tensor $T$ gives every Hessian entry the weak coordinate derivative $T(\cdot,k,i,j)$,
+  $L^2$ on compact sets, then every adjugate entry has some weak coordinate derivative, $L^2$ on compact sets; this second statement
+  does not assume that $\nabla u$ is Lipschitz. No log-det exponent or Monge--Amp\`ere equation is assumed in either statement.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Each adjugate entry is a continuous function of the total derivative $D(\nabla u)(x)$, which is measurable and, for Lipschitz
+  $\nabla u$, lies in a closed ball; this is the argument of Lemma~\ref{lem:hessian-entry-measurable-bounded}, applied to the adjugate
+  through the existing private Piola cofactor helpers (reused, with no exponent or Monge--Amp\`ere hypothesis). For the second statement,
+  each adjugate entry is the determinant of a row-updated Hessian whose replaced row is constant, and Lemma~\ref{lem:weak-determinant}
+  applies.
+\end{proof}
+
+\begin{lemma}[Intrinsic weak inverse-Hessian derivative]
+  \label{lem:weak-inverse-hessian-of-logdet}
+  \lean{FunctionalInequalities.Analysis.hasWeakDerivAlong_inverse_hessian_of_logdet}
+  \leanok
+  \uses{lem:weak-exp-neg-lipschitz, lem:hessian-adjugate-weak-derivative, lem:weak-product-locally-bounded,
+        lem:weak-derivative-ae-congr, lem:weak-matrix-inverse-derivative}
+  Let $\nabla u$ and $F$ be Lipschitz, $\nabla^2u$ positive definite with $\log\det\nabla^2u=F$ almost everywhere, and let a supplied
+  tensor $T$ give every Hessian entry the weak coordinate derivative $T(\cdot,k,i,j)$, $L^2$ on compact sets. Then for all $k,i,j$,
+  with $H=\nabla^2u$ and $T_k=(T(\cdot,k,a,b))_{ab}$, $(H^{-1})_{ij}$ has the weak derivative $-(H^{-1}T_kH^{-1})_{ij}$ along $e_k$,
+  $L^2$ on compact sets, and $(H^{-1})_{ij}$ is essentially bounded on compact sets. This is the weak form of Letwin
+  \cite{Letwin2026QuadraticKLS}, display~(2.5), not the second evolution identity~(2.6).
+\end{lemma}
+\begin{proof}
+  \leanok
+  Almost everywhere $H^{-1}=e^{-F}\operatorname{adj}H$. Lemmas~\ref{lem:weak-exp-neg-lipschitz},
+  \ref{lem:hessian-adjugate-weak-derivative} and~\ref{lem:weak-product-locally-bounded} give a weak derivative of $e^{-F}\operatorname{adj}H$,
+  which Lemma~\ref{lem:weak-derivative-ae-congr} transfers to $H^{-1}$; Lemma~\ref{lem:weak-matrix-inverse-derivative} identifies its
+  density.
+\end{proof}
+
+\begin{lemma}[Regular moment potential: weak inverse-Hessian derivative]
+  \label{lem:letwin-regular-moment-weak-inverse}
+  \lean{FunctionalInequalities.Analysis.exists_regular_moment_weak_inverse}
+  \leanok
+  \uses{lem:letwin-regular-moment-weak-first-ma, lem:weak-inverse-hessian-of-logdet}
+  Under the hypotheses of Lemma~\ref{lem:letwin-regular-moment-weak-tensor} there are $u$, $L$, $L_F$ and $T$ with every conclusion of
+  Lemma~\ref{lem:letwin-regular-moment-weak-first-ma} (the same witnesses, normalization and actual gradient pushforward) and, for all
+  $k,i,j$, the weak derivative $-(H^{-1}T_kH^{-1})_{ij}$ of $(H^{-1})_{ij}$ along $e_k$, $L^2$ on compact sets, together with
+  compact-local essential bounds on $(H^{-1})_{ij}$. No inverse formula, given inverse derivative, $C^2$ Hessian, global inverse bound,
+  weighted $T^2$ bound or trace estimate is assumed as an input; the output includes the explicit weak inverse formula. The second
+  evolution identity~(2.6), the energy comparison~(2.14) and
+  Theorems~2.5 and~1.2 are not supplied.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Take the witnesses of Lemma~\ref{lem:letwin-regular-moment-weak-first-ma}; its Lipschitz exponent, positive definiteness, log-det
+  equation and weak tensor are the inputs of Lemma~\ref{lem:weak-inverse-hessian-of-logdet}.
+\end{proof}
+
+\begin{lemma}[Common-support smooth approximation of two weak derivatives]
+  \label{lem:weak-smooth-approximation}
+  \lean{FunctionalInequalities.Analysis.exists_contDiff_compact_weak_deriv_approximation}
+  \leanok
+  Let $n\ge0$ and $v,w\in\mathbb R^n$ (zero allowed). If $\eta$ is compactly supported and has weak derivatives $a$ along $v$ and $b$
+  along $w$ that are compactly supported and in $L^2$, then there are one compact set $S$ containing the supports of $\eta,a,b$ and
+  smooth compactly supported $\theta_m$ such that $\theta_m$, $D\theta_m[v]$ and $D\theta_m[w]$ are supported in $S$, both directional
+  derivatives are in $L^2$, and $D\theta_m[v]\to a$, $D\theta_m[w]\to b$ in $L^2$. No $C^1$ regularity or global $L^2$ of $\eta$ is
+  assumed.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Mollify $\eta$ with normalized bumps of radius $1/(m+1)$. The directional derivatives of the mollification are the mollifications of
+  $a$ and $b$, which converge in $L^2$; all supports lie in the union of the closed $1$-thickenings of the three supports.
+\end{proof}
+
+\begin{lemma}[Rough compact curl testing]
+  \label{lem:weak-curl-rough-test}
+  \lean{FunctionalInequalities.Analysis.integral_weakDeriv_mul_eq_swap}
+  \leanok
+  \uses{lem:weak-smooth-approximation}
+  Let $p$ and $q$ be weak derivatives of the same $f$ along $v$ and $w$, each $L^2$ on every compact set, and let $\eta,a,b$ be as in
+  Lemma~\ref{lem:weak-smooth-approximation}. Then $\int p\,b=\int q\,a$. Every finite dimension and both directions (zero included);
+  no $C^1$ or $C^2$ regularity of $\eta$, global $L^2$ of $p,q$, fourth derivative of $f$ or the identity itself is assumed. This is a
+  support for the weak form of Letwin \cite{Letwin2026QuadraticKLS}, display~(2.6), not that identity.
+\end{lemma}
+\begin{proof}
+  \leanok
+  For a smooth compactly supported $\chi$, testing the weak identity for $p$ with $D_w\chi$ and the one for $q$ with $D_v\chi$ gives
+  $\int p\,D_w\chi=-\int f\,D_vD_w\chi=-\int f\,D_wD_v\chi=\int q\,D_v\chi$, by symmetry of second derivatives of $\chi$. Apply this to
+  $\theta_m$ from Lemma~\ref{lem:weak-smooth-approximation}; restricting $p,q$ to the common compact set gives $L^2$ factors, and the
+  $L^2$ convergence of the derivatives passes the identity to the limit.
+\end{proof}
+
+\begin{lemma}[Weak generator identity for $C^1$ multipliers]
+  \label{lem:letwin-weak-generator-c1}
+  \lean{FunctionalInequalities.Analysis.integral_mul_generator_eq_neg_energy_of_contDiff_one}
+  \leanok
+  \uses{lem:letwin-weak-generator-symmetry}
+  Under the hypotheses of Lemma~\ref{lem:letwin-weak-generator-symmetry}, its first (unprimed) identity
+  $\int\eta\,(Lw)\,e^{-u}=-\int\langle(\nabla^2u)^{-1}\nabla\eta,\nabla w\rangle e^{-u}$ holds for every compactly supported
+  $\eta\in C^1$. The primed form, with $\eta$ inside $L$, still requires $\eta\in C^2$. This is readiness support for the actual
+  height cutoffs of Letwin's Lemma~A.4, not their construction.
+\end{lemma}
+\begin{proof}
+  \leanok
+  The existing closed proof of the unprimed identity uses only first derivatives of $\eta$.
+\end{proof}
+
+\begin{lemma}[Mean Hessian at $C^{1,1}$]
+  \label{lem:letwin-mean-hessian-c11}
+  \lean{FunctionalInequalities.Analysis.BakryEmery.integral_inner_fderiv_gradient_tilted_eq_integral_fderiv_mul}
+  \leanok
+  Weak-route analytic part of Letwin \cite{Letwin2026QuadraticKLS}, Lemma~2.3. Let $\varphi\in C^1$ be convex with Lipschitz gradient,
+  $e^{-\varphi}$ a probability density, $\nu=e^{-\varphi}\,dx$ and $\nabla\varphi\in L^2(\nu)$. Then for all $u,v$,
+  $\int\langle D(\nabla\varphi)u,v\rangle\,d\nu=\int\partial_u\varphi\,\partial_v\varphi\,d\nu$, where $D(\nabla\varphi)$ is the
+  almost-everywhere derivative of the Lipschitz map $\nabla\varphi$. (Existing canonical theorem; recorded here as a prerequisite.)
+\end{lemma}
+\begin{proof}
+  \leanok
+  Integration by parts against cutoffs for the Lipschitz function $\langle\nabla\varphi,v\rangle$.
+\end{proof}
+
+\begin{lemma}[Regular moment potential: mean Hessian]
+  \label{lem:letwin-regular-moment-weak-mean-hessian}
+  \lean{FunctionalInequalities.Analysis.exists_regular_moment_weak_inverse_mean_hessian}
+  \leanok
+  \uses{lem:letwin-regular-moment-weak-inverse, lem:letwin-mean-hessian-c11, lem:hessian-entry-measurable-bounded}
+  Under the hypotheses of Lemma~\ref{lem:letwin-regular-moment-weak-tensor} there are $u$, $L$, $L_F$ and $T$ with every conclusion of
+  Lemma~\ref{lem:letwin-regular-moment-weak-inverse} (the same witnesses) and, for all $i,j$, the Hessian entry $H_{ij}$ is integrable
+  for $\nu=e^{-u}\,dx$ with $\int H_{ij}\,d\nu=\delta_{ij}$. This is Lemma~2.3 for the actual R0 source potential under
+  $C^1$/Lipschitz-gradient hypotheses. The full smoothness and diffeomorphism properties of Lemma~2.2 are not asserted. No analytic
+  premise, $C^2$ regularity, given mean or trace estimate is added.
+\end{lemma}
+\begin{proof}
+  \leanok
+  The Hessian entries are bounded by the Lipschitz constant of $\nabla u$ (Lemma~\ref{lem:hessian-entry-measurable-bounded}) and $\nu$
+  is a probability measure. Lemma~\ref{lem:letwin-mean-hessian-c11} gives $\int H_{ij}\,d\nu=\int\partial_iu\,\partial_ju\,d\nu$, which
+  is $\delta_{ij}$ because the actual gradient pushforward of $\nu$ is the isotropic source law.
+\end{proof}
+
+\begin{lemma}[Bounded all-coordinate common-support approximation]
+  \label{lem:weak-bounded-all-coordinate-approximation}
+  \lean{FunctionalInequalities.Analysis.exists_contDiff_compact_bounded_all_weak_deriv_approximation}
+  \leanok
+  Let $\eta$ on $\mathbb R^n$ (every $n$, including $n=0$) be locally integrable, compactly supported and bounded by $C$, and for every
+  coordinate $i$ let $a_i$ be a weak derivative of $\eta$ along $e_i$ that is compactly supported and in $L^2$. Then there are one
+  compact set $S$ containing the supports of $\eta$ and of every $a_i$, and one sequence $\theta_m$ of smooth compactly supported
+  functions supported in $S$ with $|\theta_m|\le 3C$, such that every $\partial_i\theta_m$ is supported in $S$, lies in $L^2$ and
+  converges to $a_i$ in $L^2$, and $\theta_m\to\eta$ almost everywhere along the full sequence. No continuity or $C^1$ regularity of
+  $\eta$ is assumed. Support for the bounded test extension of the weak form of Letwin \cite{Letwin2026QuadraticKLS}, display~(2.6);
+  Lemma~\ref{lem:weak-smooth-approximation} keeps its two-direction statement.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Mollify $\eta$ with normalized bumps of radius $1/(m+1)$. The normalized convolution of a bounded function is bounded by $3C$; the
+  coordinate derivatives of the mollification are the mollifications of the $a_i$, which converge in $L^2$; the full-sequence almost
+  everywhere convergence is the Lebesgue differentiation theorem for normalized bumps of bounded radius ratio; all supports lie in
+  the union of closed $1$-thickenings of the finitely many supports.
+\end{proof}
+
+\begin{lemma}[Bounded weak-test extension of a divergence identity]
+  \label{lem:weak-bounded-test-extension}
+  \lean{FunctionalInequalities.Analysis.integral_flux_eq_neg_forcing_of_bounded_weak_test}
+  \leanok
+  \uses{lem:weak-bounded-all-coordinate-approximation}
+  Let $J_i$ be $L^2$ on every compact set and $F$ locally integrable on $\mathbb R^n$ (every $n$, including $n=0$), with
+  $\int\sum_iJ_i\,\partial_i\psi=-\int F\psi$ for every compactly supported $\psi\in C^1$. Then for every $\eta$ and $a_i$ as in
+  Lemma~\ref{lem:weak-bounded-all-coordinate-approximation}, every $J_ia_i$ and $F\eta$ are integrable and
+  $\int\sum_iJ_ia_i=-\int F\eta$.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Apply the identity to the smooth sequence of Lemma~\ref{lem:weak-bounded-all-coordinate-approximation}. The flux terms converge by
+  $L^2$ pairing on the common compact set; the forcing terms converge by dominated convergence with the integrable bound
+  $C\,|F|$ on that set and the almost everywhere convergence.
+\end{proof}
+
+\begin{lemma}[Weak Piola row divergence of the inverse Hessian]
+  \label{lem:weak-inverse-hessian-row-divergence}
+  \lean{FunctionalInequalities.Analysis.ae_inverse_hessian_row_divergence_of_weak_derivative}
+  \leanok
+  \uses{lem:letwin-weak-inverse-hessian-integrability}
+  Let $u\in C^1$ have Lipschitz gradient, $F$ be Lipschitz and $\det\nabla^2u=e^{F}$ almost everywhere, and let $T$ be a given tensor
+  such that every $(\nabla^2u)^{-1}_{ij}$ has the weak derivative $-((\nabla^2u)^{-1}T_k(\nabla^2u)^{-1})_{ij}$ along $e_k$, $L^2$ on
+  compact sets, and is essentially bounded on compact sets. Then for every row $b$ the function
+  $\sum_a(\nabla^2u)^{-1}_{ba}\partial_aF$ is $L^2$ on compact sets and almost everywhere
+  $\sum_a-((\nabla^2u)^{-1}T_a(\nabla^2u)^{-1})_{ba}=-\sum_a(\nabla^2u)^{-1}_{ba}\partial_aF$. Every finite dimension.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Test both sides against compactly supported smooth $\psi$: the weak inverse derivatives give the left side, and the weak Piola
+  divergence identity of the inverse Hessian with $\det\nabla^2u=e^F$ gives the right side; both are locally integrable.
+\end{proof}
+
+\begin{lemma}[Weak derivative of a coordinate derivative composed with the gradient]
+  \label{lem:weak-gradient-derivative-composition}
+  \lean{FunctionalInequalities.Analysis.exists_lipschitzWith_weak_fderiv_comp_gradient}
+  \leanok
+  \uses{lem:ae-mongeampere-exponent}
+  Let $u\in C^1$ be Lipschitz with Lipschitz gradient and $W\in C^2$. For every coordinate $a$, the function $\partial_aW(\nabla u)$ is
+  Lipschitz and, for every $j$, has the weak derivative $\sum_bH_{jb}\,\partial_{ba}W(\nabla u)$ along $e_j$, $L^2$ on compact sets,
+  where $H$ is the Hessian of $u$. Every finite dimension.
+\end{lemma}
+\begin{proof}
+  \leanok
+  A Lipschitz function has its almost-everywhere derivative as weak derivative; the almost-everywhere chain formula of
+  Lemma~\ref{lem:ae-mongeampere-exponent} identifies it with the stated density.
+\end{proof}
+
+\begin{lemma}[Weak derivative of the first Monge--Amp\`ere right-hand side]
+  \label{lem:weak-monge-ampere-first-rhs}
+  \lean{FunctionalInequalities.Analysis.hasWeakDerivAlong_mongeAmpere_first_rhs}
+  \leanok
+  \uses{lem:weak-gradient-derivative-composition, lem:weak-product-locally-bounded, lem:weak-finite-linear-combination, lem:hessian-entry-measurable-bounded}
+  Let $u\in C^1$ be Lipschitz with Lipschitz gradient, $W\in C^2$, and $T$ a given tensor such that every Hessian entry $H_{ij}$ has
+  the weak derivative $T_{kij}$ along $e_k$, $L^2$ on compact sets. Then for all $i,j$ the right-hand side
+  $-\partial_iu+\sum_aH_{ia}\,\partial_aW(\nabla u)$ of the first Monge--Amp\`ere identity has the weak derivative
+  $-H_{ji}+\sum_a\big(T_{jia}\,\partial_aW(\nabla u)+H_{ia}\sum_bH_{jb}\,\partial_{ba}W(\nabla u)\big)$ along $e_j$, $L^2$ on compact
+  sets. Every finite dimension.
+\end{lemma}
+\begin{proof}
+  \leanok
+  The weak derivative of $\partial_iu$ is the Hessian entry; each product uses Lemma~\ref{lem:weak-product-locally-bounded} with the
+  compact-local bounds of the Hessian entries and of the continuous composition; finite linearity assembles the sum.
+\end{proof}
+
+\begin{lemma}[Local integrability of the Hessian flux and trace forcing]
+  \label{lem:weak-hessian-flux-forcing-local}
+  \lean{FunctionalInequalities.Analysis.localLp_hessian_flux_trace_forcing}
+  \leanok
+  Let $R=(\nabla^2u)^{-1}$, $D_{kba}=-(RT_kR)_{ba}$ and $J_{ija}=\sum_bR_{ba}T_{bij}$. If $T$ and $D$ are $L^2$ on compact sets, $R$ is
+  essentially bounded on compact sets and every $Q_{ij}$ is locally integrable, then every $J_{ija}$ is $L^2$ on compact sets and
+  $C_{ij}=Q_{ij}-\sum_{a,b}T_{iab}D_{jba}+\sum_bT_{bij}\sum_aD_{aba}$ is locally integrable.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Products of an $L^2$ and an $L^\infty$ factor are $L^2$, and products of two $L^2$ factors are integrable, on every compact set.
+\end{proof}
+
+\begin{lemma}[Unweighted weak Hessian flux identity]
+  \label{lem:weak-hessian-flux-identity}
+  \lean{FunctionalInequalities.Analysis.integral_weak_hessian_flux_eq_trace_derivative}
+  \leanok
+  \uses{lem:weak-hessian-flux-forcing-local, lem:weak-curl-rough-test}
+  Let $u\in C^1$ have Lipschitz gradient, $T$ be a weak Hessian tensor $L^2$ on compact sets, the inverse-Hessian entries have the weak
+  derivatives $D$ of Lemma~\ref{lem:weak-hessian-flux-forcing-local} with compact-local bounds, and $Q_{ij}$ be a weak derivative of
+  $\operatorname{tr}(RT_i)$ along $e_j$, $L^2$ on compact sets. Then, with $J$ and $C$ as in
+  Lemma~\ref{lem:weak-hessian-flux-forcing-local}, $\int\sum_aJ_{ija}\,\partial_a\psi=-\int C_{ij}\,\psi$ for every compactly
+  supported $\psi\in C^1$. Every finite dimension.
+\end{lemma}
+\begin{proof}
+  \leanok
+  For each pair of indices apply the rough curl identity of Lemma~\ref{lem:weak-curl-rough-test} to the Hessian entries with the
+  compact rough test $\psi R_{ba}$, use the almost-everywhere symmetry of the weak third derivatives, and sum the resulting pair
+  identities with the trace identity by a finite integral balance.
+\end{proof}
+
+\begin{lemma}[Weighted weak Hessian evolution]
+  \label{lem:letwin-weak-hessian-evolution}
+  \lean{FunctionalInequalities.Analysis.integral_exp_neg_hessian_flux_eq_curvature_gram}
+  \leanok
+  \uses{lem:weak-monge-ampere-first-rhs, lem:weak-hessian-flux-identity, lem:weak-inverse-hessian-row-divergence, lem:ae-mongeampere-exponent}
+  Weak form of Letwin \cite{Letwin2026QuadraticKLS}, display~(2.6). Let $u\in C^1$ be Lipschitz with Lipschitz gradient, $W\in C^2$,
+  $-u+W(\nabla u)$ Lipschitz with $\det\nabla^2u=e^{-u+W(\nabla u)}$ almost everywhere, $T$ a weak Hessian tensor $L^2$ on compact
+  sets, the inverse entries with weak derivatives $-(RT_kR)_{ij}$ ($L^2$ on compact sets) and compact-local bounds, and almost
+  everywhere $\operatorname{tr}(RT_i)=-\partial_iu+\sum_aH_{ia}\,\partial_aW(\nabla u)$. Then $J$ is $L^2$ on compact sets,
+  $E_{ij}=-H_{ij}+(H\,\nabla^2W(\nabla u)\,H)_{ij}+\operatorname{tr}(RT_iRT_j)$ and $e^{-u}E_{ij}$ are locally integrable, and
+  $\int e^{-u}\sum_aJ_{ija}\,\partial_a\psi=-\int e^{-u}E_{ij}\,\psi$ for every compactly supported $\psi\in C^1$. Every finite
+  dimension. No $C^2$ regularity of $u$, global inverse bound, global $L^2$ bound of $T$ or energy estimate is assumed. The
+  positivity statement of Letwin's Lemma~2.4 is not stated here.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Lemma~\ref{lem:weak-monge-ampere-first-rhs} and the first identity give the weak trace derivative needed by
+  Lemma~\ref{lem:weak-hessian-flux-identity}. The row divergence of Lemma~\ref{lem:weak-inverse-hessian-row-divergence} with the
+  almost-everywhere exponent formula and the symmetry of the weak third derivatives identify the forcing minus the drift
+  $\sum_aJ_{ija}\partial_au$ with $E_{ij}$; multiplying the test by $e^{-u}\in C^1$ gives the weighted identity.
+\end{proof}
+
+\begin{lemma}[Weighted weak Hessian evolution for bounded tests]
+  \label{lem:letwin-weak-hessian-evolution-bounded-test}
+  \lean{FunctionalInequalities.Analysis.integral_exp_neg_hessian_flux_eq_curvature_gram_of_bounded_weak_test}
+  \leanok
+  \uses{lem:letwin-weak-hessian-evolution, lem:weak-bounded-test-extension}
+  Under the hypotheses of Lemma~\ref{lem:letwin-weak-hessian-evolution}, for every $\eta$ and $a_b$ as in
+  Lemma~\ref{lem:weak-bounded-all-coordinate-approximation}, every $e^{-u}J_{ijb}a_b$ and $e^{-u}E_{ij}\eta$ are integrable and
+  $\int e^{-u}\sum_bJ_{ijb}a_b=-\int e^{-u}E_{ij}\,\eta$.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Apply Lemma~\ref{lem:weak-bounded-test-extension} to the weighted flux $e^{-u}J$, which is $L^2$ on compact sets, and the locally
+  integrable forcing $e^{-u}E$.
+\end{proof}
+
+\begin{lemma}[Regular moment potential: weak Hessian evolution]
+  \label{lem:letwin-regular-moment-weak-hessian-evolution}
+  \lean{FunctionalInequalities.Analysis.exists_regular_moment_weak_hessian_evolution}
+  \leanok
+  \uses{lem:letwin-regular-moment-weak-mean-hessian, lem:weak-monge-ampere-first-rhs, lem:weak-hessian-flux-identity, lem:letwin-weak-hessian-evolution}
+  Under the hypotheses of Lemma~\ref{lem:letwin-regular-moment-weak-tensor} there are $u$, $L$, $L_F$ and $T$ with every conclusion of
+  Lemma~\ref{lem:letwin-regular-moment-weak-mean-hessian} (the same witnesses) and, in addition, for all $i,j$: the weak derivative of
+  $\operatorname{tr}((\nabla^2u)^{-1}T_i)$ along $e_j$ given by Lemma~\ref{lem:weak-monge-ampere-first-rhs}, $L^2$ on compact sets; the
+  unweighted identity of Lemma~\ref{lem:weak-hessian-flux-identity}; and the weighted weak~(2.6) of
+  Lemma~\ref{lem:letwin-weak-hessian-evolution}. No analytic premise is added.
+\end{lemma}
+\begin{proof}
+  \leanok
+  The source fields supply every hypothesis of the intrinsic results; the first weak identity transports the right-hand-side weak
+  derivative to the trace, and $\det\nabla^2u=e^{-u+W(\nabla u)}$ follows from the log-determinant field.
+\end{proof}
+
+\begin{lemma}[Regular moment potential: bounded Hessian testing]
+  \label{lem:letwin-regular-moment-bounded-hessian-testing}
+  \lean{FunctionalInequalities.Analysis.exists_regular_moment_bounded_weak_hessian_testing}
+  \leanok
+  \uses{lem:letwin-regular-moment-weak-hessian-evolution, lem:letwin-weak-hessian-evolution-bounded-test, lem:hessian-entry-local-l2, lem:hessian-entry-measurable-bounded}
+  Under the hypotheses of Lemma~\ref{lem:letwin-regular-moment-weak-tensor} there are $u$, $L$, $L_F$ and $T$ with every conclusion of
+  Lemma~\ref{lem:letwin-regular-moment-weak-hessian-evolution} (the same witnesses) and, for every compactly supported $\psi\in C^1$ and
+  all $l,k,i,j$, both sides are integrable and
+  $\int e^{-u}\sum_bJ_{ijb}\,(\psi\,T_{blk}+\partial_b\psi\,H_{lk})=-\int e^{-u}E_{ij}\,\psi H_{lk}$: the bounded $H^1$ tests
+  $\psi H_{lk}$. No global $L^2$ bound of $T$ and no new source premise is used.
+\end{lemma}
+\begin{proof}
+  \leanok
+  $\psi H_{lk}$ is bounded and compactly supported with the compact $L^2$ coordinate weak derivatives $\psi T_{blk}+\partial_b\psi H_{lk}$;
+  apply Lemma~\ref{lem:letwin-weak-hessian-evolution-bounded-test} at the same witness.
+\end{proof}
+
+\begin{lemma}[Weak inverse-Hessian height cutoffs, real parameter]
+  \label{lem:letwin-weak-cutoff-real-family}
+  \lean{FunctionalInequalities.Analysis.exists_scaled_weak_inverse_hessian_cutoffs}
+  \leanok
+  \uses{lem:letwin-cutoff-profile, lem:letwin-a4-supports, lem:letwin-weak-inverse-hessian-integrability, lem:letwin-weak-generator-c1, lem:hessian-entry-measurable-bounded}
+  $C^1$ counterpart of Letwin \cite{Letwin2026QuadraticKLS}, Lemma~A.4, for a weak source. Let $u\in C^1$ on $\mathbb R^n$ (every $n$,
+  including $n=0$) be convex and Lipschitz with Lipschitz gradient and $\int e^{-u}=1$, let $V\in C^1$ with $-u+V(\nabla u)$ Lipschitz,
+  and let $\det\nabla^2u=e^{-u+V(\nabla u)}$ with $\nabla^2u$ positive definite almost everywhere. Then there are $c$ and $C\ge0$ with
+  $u-c\ge1$ such that $\chi_R=\eta(2-(u-c)/R)$, $\eta$ the smooth transition, satisfies for every real $R\ge1$: $\chi_R\in C^1$ is
+  compactly supported with Lipschitz gradient and values in $[0,1]$; $\chi_R$ is monotone in $R$ with pointwise limit $1$; the literal
+  generator $L\chi_R=\operatorname{tr}((\nabla^2u)^{-1}\nabla^2\chi_R)-DV(\nabla u)(\nabla\chi_R)$ is integrable for $\nu=e^{-u}dx$ with
+  $\int|L\chi_R|\,d\nu\le C/R$, and this defect tends to $0$. The drift bound, sublevel coercivity, majorant and defect bound are
+  derived, not assumed. This is not the $C^\infty$ cutoff family of the smooth source class (Lemma~\ref{lem:letwin-a4-cutoffs}).
+\end{lemma}
+\begin{proof}
+  \leanok
+  Convexity and normalization give a minimum and compact sublevels. The composition $\eta(2-(u-c)/R)$ is $C^1$ with Lipschitz gradient,
+  and its almost-everywhere Hessian is computed from the Hessian of $u$. The unprimed $C^1$ weak generator identity bounds the
+  drift term, and the integrability of inverse-Hessian entries against bounded compact functions controls the trace term; integrating
+  the profile majorant over the height range gives the $C/R$ bound.
+\end{proof}
+
+\begin{lemma}[Weak inverse-Hessian height cutoffs, natural index]
+  \label{lem:letwin-weak-cutoff-natural-family}
+  \lean{FunctionalInequalities.Analysis.exists_weak_inverse_hessian_cutoffs}
+  \leanok
+  \uses{lem:letwin-weak-cutoff-real-family}
+  Under the hypotheses of Lemma~\ref{lem:letwin-weak-cutoff-real-family}, the same family at $R=m+1$: for every $m\in\mathbb N$,
+  $\chi_m$ has the same regularity and range, is monotone in $m$ with pointwise limit $1$, $L\chi_m$ is integrable for $\nu$ with
+  $\int|L\chi_m|\,d\nu\le C/(m+1)$, and this defect tends to $0$.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Specialize Lemma~\ref{lem:letwin-weak-cutoff-real-family} to $R=m+1\ge1$.
+\end{proof}
+
+\begin{lemma}[Regular moment potential: weak inverse-Hessian cutoffs]
+  \label{lem:letwin-regular-moment-weak-cutoffs}
+  \lean{FunctionalInequalities.Analysis.exists_regular_moment_weak_cutoffs}
+  \leanok
+  \uses{lem:letwin-regular-moment-bounded-hessian-testing, lem:letwin-weak-cutoff-real-family}
+  Under the hypotheses of Lemma~\ref{lem:letwin-regular-moment-weak-tensor} there are $u$, $L$, $L_F$ and $T$ with every conclusion of
+  Lemma~\ref{lem:letwin-regular-moment-bounded-hessian-testing} (the same witnesses), and one common $c$ and $C$ with the real-parameter
+  cutoff family of Lemma~\ref{lem:letwin-weak-cutoff-real-family} for this $u$ and the source potential $W$. No source premise is added.
+  The audit client applies the bounded weak~(2.6) testing to $\chi_R H_{lk}$ at this witness for every $R\ge1$ and all $l,k,i,j$.
+\end{lemma}
+\begin{proof}
+  \leanok
+  The log-determinant field gives $\det\nabla^2u=e^{-u+W(\nabla u)}$ almost everywhere; the remaining hypotheses of
+  Lemma~\ref{lem:letwin-weak-cutoff-real-family} are source fields.
+\end{proof}
+
+\begin{lemma}[Compact flux identity against bounded weak tests]
+  \label{lem:weak-compact-flux-bounded-test}
+  \lean{FunctionalInequalities.Analysis.integral_compact_flux_eq_neg_forcing_of_global_bounded_weak_test,
+        FunctionalInequalities.Analysis.HasWeakDerivAlong.compact_mul_data,
+        FunctionalInequalities.Analysis.memLp_mul_of_hasCompactSupport,
+        FunctionalInequalities.Analysis.memLp_top_restrict_of_continuous,
+        FunctionalInequalities.Analysis.locallyIntegrable_mul_of_compact_L2,
+        FunctionalInequalities.Analysis.locallyIntegrable_of_compact_local_memLp_two}
+  \leanok
+  \uses{lem:weak-bounded-test-extension}
+  Let $J_i$ be compactly supported fluxes in $L^2$ on every compact set and $F$ a compactly supported locally integrable forcing on
+  $\mathbb R^n$ with $\int\sum_i J_i\,\partial_i\psi=-\int F\psi$ for every compactly supported $C^1$ test $\psi$. Then every globally bounded,
+  locally integrable $\eta$ whose coordinate weak derivatives $a_i$ are in $L^2$ on every compact set satisfies: each $J_ia_i$ and $F\eta$
+  is integrable and $\int\sum_iJ_ia_i=-\int F\eta$, in every dimension. The shared compact-local tools used here (products with compactly
+  supported $L^2$ functions, compact $C^1$ multiplier data, compact $L^\infty$ bounds of continuous functions and local integrability
+  from compact $L^2$ bounds) are public in the same owner.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Multiply by a compactly supported $C^1$ cutoff equal to $1$ on the supports, approximate the bounded weak test by smooth compactly
+  supported functions with a uniform bound and $L^2$ convergence of the derivatives, and pass to the limit in both pairings.
+\end{proof}
+
+\begin{lemma}[Bounded weak trace-quadratic data and matrix products]
+  \label{lem:weak-bounded-trace-quadratic}
+  \lean{FunctionalInequalities.Analysis.bounded_weak_matrix_product_entry,
+        FunctionalInequalities.Analysis.bounded_trace_quadratic_weak_derivative_data,
+        FunctionalInequalities.Analysis.trace_mul_mul_mul_eq_sum}
+  \leanok
+  \uses{lem:weak-trace-quadratic}
+  Let $A$ be a matrix field with measurable entries bounded by $M$ and coordinate weak derivatives $DA_k$ in $L^2$ on every compact set.
+  For every real matrix $B$, $\operatorname{tr}(BABA)$ is globally bounded and locally integrable, with weak coordinate derivatives
+  $2\operatorname{tr}(BABDA_k)$ in $L^2$ on every compact set. For every real matrix $S$ and every direction $v$ along which the entries of
+  $H$ (bounded by $M$) have weak derivatives $DH$ that are $L^2$ on compact sets, every entry of $SHS$ is bounded explicitly and has weak
+  derivative the corresponding entry of $S\,DH\,S$, again $L^2$ on compact sets. All finite dimensions.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Expand the trace and the matrix products as finite sums of products of bounded entries and apply the bounded weak product rule.
+\end{proof}
+
+\begin{lemma}[Rough weak tests against the $C^1$ inverse-Hessian cutoff generator]
+  \label{lem:letwin-weak-rough-cutoff-generator}
+  \lean{FunctionalInequalities.Analysis.integral_rough_mul_generator_eq_neg_energy_of_contDiff_one}
+  \leanok
+  \uses{lem:weak-compact-flux-bounded-test, lem:letwin-weak-generator-c1}
+  Let $u$ be $C^1$ with Lipschitz gradient, $V$ be $C^1$, the exponent $-u+V(\nabla u)$ be globally Lipschitz,
+  $\det\nabla^2u=e^{-u+V(\nabla u)}$ almost everywhere, and the inverse Hessian entries be essentially bounded on every compact set.
+  Let $\chi$ be a compactly supported $C^1$ cutoff with Lipschitz gradient whose inverse-Hessian generator
+  $L\chi=\operatorname{tr}((\nabla^2u)^{-1}\nabla^2\chi)-DV(\nabla u)(\nabla\chi)$, weighted by $e^{-u}$, is integrable. Then for every
+  globally bounded, locally integrable $\eta$ with coordinate weak derivatives $a_i$ in $L^2$ on every compact set, both pairings below are
+  integrable and $\int\eta\,L\chi\,e^{-u}=-\int\sum_{ij}(\nabla^2u)^{-1}_{ij}a_i\,\partial_j\chi\,e^{-u}$.
+\end{lemma}
+\begin{proof}
+  \leanok
+  The $C^1$ weak generator identity gives the compact flux identity for the weighted inverse-Hessian flux of $\chi$; apply
+  Lemma~\ref{lem:weak-compact-flux-bounded-test}.
+\end{proof}
+
+\begin{lemma}[Weak trace contraction (2.8)/(2.10)]
+  \label{lem:letwin-weak-trace-contraction}
+  \lean{FunctionalInequalities.Analysis.integral_trace_quadratic_flux_eq_neg_density}
+  \leanok
+  \uses{lem:weak-bounded-trace-quadratic, lem:letwin-weak-hessian-evolution-bounded-test}
+  Weak counterpart of the trace contraction (2.8)/(2.10) in the proof of Letwin \cite{Letwin2026QuadraticKLS}, Theorem~2.5. Let $H$,
+  $R$ and $E$ be matrix fields, $T$ a tensor field and $\rho$ a continuous weight. Assume $H$ has globally essentially bounded entries, the
+  entries of $T$ and of the fluxes $J_{ija}=\sum_bR_{ba}T_{bij}$ are $L^2$ on every compact set, $E$ is locally integrable, and
+  $\int\rho\sum_aJ_{ija}(\psi T_{alk}+\partial_a\psi\,H_{lk})=-\int\rho E_{ij}\psi H_{lk}$ for every compactly supported $C^1$ test $\psi$.
+  Then for every real matrix $B$ the density $g=2\operatorname{tr}(BHBE)+2\sum_{ij}R_{ij}\operatorname{tr}(BT_iBT_j)$ is locally
+  integrable and, for every compactly supported $C^1$ test $\psi$, the contracted flux
+  $\sum_j(\sum_iR_{ij}\,2\operatorname{tr}(BHBT_i))\,\partial_j\psi$ weighted by $\rho$ integrates to $-\int\rho g\psi$, with all terms
+  integrable. All finite dimensions; no Hessian, potential or source premise.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Contract the tested identities with the entries of $BHB$ and collect the finite sums.
+\end{proof}
+
+\begin{lemma}[Pointwise positivity of the trace density]
+  \label{lem:letwin-trace-density-positivity}
+  \lean{FunctionalInequalities.Analysis.trace_forcing_add_twice_energy_nonneg}
+  \leanok
+  For positive semidefinite matrices $B$, $H$, $R$, $W$ and symmetric matrices $T_i$, with the trace Gram matrix
+  $(G_R)_{ij}=\operatorname{tr}(RT_iRT_j)$, the quantity
+  $2\operatorname{tr}(BHB(-H+HWH+G_R))+2\sum_{ij}R_{ij}\operatorname{tr}(BT_iBT_j)+2\operatorname{tr}(BHBH)$ is nonnegative.
+\end{lemma}
+\begin{proof}
+  \leanok
+  The terms $\operatorname{tr}(BHBHWH)$, $\operatorname{tr}(BHBG_R)$ and $\sum_{ij}R_{ij}\operatorname{tr}(BT_iBT_j)$ are traces of products
+  of positive semidefinite matrices, hence nonnegative, and the remaining terms cancel.
+\end{proof}
+
+\begin{lemma}[Trace-Gram comparison (2.12)]
+  \label{lem:letwin-trace-gram-comparison}
+  \lean{FunctionalInequalities.Analysis.letwin_tensor_comparison_trace_gram,
+        FunctionalInequalities.Analysis.four_tensor_trace_le_density_add_twice_energy}
+  \leanok
+  \uses{lem:letwin-support-identities, lem:letwin-trace-density-positivity}
+  For a positive definite $H$, a symmetric $B$ and a fully symmetric three-tensor $T$,
+  $\sum_{ij}(H^{-1})_{ij}\operatorname{tr}(BT_iBT_j)\le\operatorname{tr}(BHBG)$ with $G_{ij}=\operatorname{tr}(H^{-1}T_iH^{-1}T_j)$; this is
+  Letwin (2.12) in trace-Gram coordinates. For positive semidefinite $B$ and $W$ and positive definite $H$, the quantity
+  $D=\sum_{ij}(H^{-1})_{ij}\operatorname{tr}(BT_iBT_j)$ satisfies $0\le D$ and $4D\le g+2\operatorname{tr}(BHBH)$, where
+  $g=2\operatorname{tr}(BHB(-H+HWH+G))+2D$ is the weak trace density.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Diagonalize $H$ and apply the coordinate weight identity to the symmetric tensor; the second statement combines this with
+  Lemma~\ref{lem:letwin-trace-density-positivity}.
+\end{proof}
+
+\begin{lemma}[Regular moment potential: rough cutoff testing]
+  \label{lem:letwin-regular-moment-bounded-weak-cutoff-testing}
+  \lean{FunctionalInequalities.Analysis.exists_regular_moment_bounded_weak_cutoff_testing}
+  \leanok
+  \uses{lem:letwin-regular-moment-weak-cutoffs, lem:letwin-weak-rough-cutoff-generator}
+  For the actual source law, under the exact original R0 hypotheses ($n>0$, isotropic $1_Ke^{-W}dx$ with $K$ compact and convex with
+  nonempty interior, $W$ smooth and $\kappa$-uniformly convex), the same $u$, $L$, $L_F$, $T$ and the same common cutoff family as in
+  Lemma~\ref{lem:letwin-regular-moment-weak-cutoffs} (whole earlier payload retained) satisfy, for every $r\ge1$ and every globally bounded,
+  locally integrable $\eta$ with coordinate weak derivatives in $L^2$ on every compact set, the rough inverse-Hessian cutoff-generator
+  identity of Lemma~\ref{lem:letwin-weak-rough-cutoff-generator}. No source premise is added.
+\end{lemma}
+\begin{proof}
+  \leanok
+  The source fields supply every hypothesis of Lemma~\ref{lem:letwin-weak-rough-cutoff-generator} for each cutoff of the family.
+\end{proof}
+
+\begin{lemma}[Rough weak pairing with the weighted Laplacian]
+  \label{lem:weak-ordinary-diffusion-pairing}
+  \lean{FunctionalInequalities.Analysis.integral_bounded_weak_mul_weightedLaplacian_of_contDiff_one}
+  \leanok
+  \uses{lem:weak-compact-flux-bounded-test}
+  Let $U$ be $C^1$ with $\int e^{-U}=1$, $v$ be smooth and compactly supported, and $\eta$ be globally bounded and locally integrable with
+  coordinate weak derivatives $a_i$ in $L^2$ on every compact set. Then $\eta\,Lv$ and $\sum_ia_i\partial_iv$ are integrable for the
+  tilted measure $\nu=e^{-U}dx$ and $\int\eta\,Lv\,d\nu=-\int\sum_ia_i\partial_iv\,d\nu$, where $L$ is the ordinary weighted Laplacian; no
+  inverse-Hessian object is used.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Apply Lemma~\ref{lem:weak-compact-flux-bounded-test} to the flux $e^{-U}\nabla v$.
+\end{proof}
+
+\begin{lemma}[Ordinary diffusion coercivity with Lipschitz gradient]
+  \label{lem:ordinary-diffusion-coercivity-lipschitz}
+  \lean{FunctionalInequalities.Analysis.BakryEmery.compact_ordinary_diffusion_coercivity_of_lipschitz_gradient}
+  \leanok
+  \uses{lem:letwin-finite-energy-supports}
+  On a finite-dimensional real inner product space, let $U$ be $C^1$ and globally Lipschitz with Lipschitz gradient and integrable
+  $e^{-U}$. For every smooth compactly supported $f$, $\langle D(\nabla U)\nabla f,\nabla f\rangle$ and $(Lf)^2$ are integrable for the
+  tilted measure and the integral of the first is at most the integral of the second. This is the Lipschitz-gradient sibling of
+  \texttt{compact\_ordinary\_diffusion\_coercivity}.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Use the $C^{1,1}$ Bochner identity and drop the nonnegative Hessian-square term.
+\end{proof}
+
+\begin{lemma}[Weak finite-energy Brascamp--Lieb inequality (A.6)]
+  \label{lem:letwin-weak-brascamp-lieb}
+  \lean{FunctionalInequalities.KLS.LogConcave.scalar_brascamp_lieb_weak_finite_energy,
+        FunctionalInequalities.KLS.LogConcave.compact_weak_variational_estimate,
+        FunctionalInequalities.KLS.LogConcave.norm_sq_le_of_mem_closure_quadratic_bound,
+        FunctionalInequalities.KLS.LogConcave.real_inner_toLp,
+        FunctionalInequalities.KLS.LogConcave.inner_center_left_of_mean_zero}
+  \leanok
+  \uses{lem:weak-ordinary-diffusion-pairing, lem:ordinary-diffusion-coercivity-lipschitz, thm:letwin-scalar-brascamp-lieb}
+  Letwin \cite{Letwin2026QuadraticKLS}, Lemma~A.6, at $C^{1,1}$ regularity for a given potential. Let $\nu=e^{-U}dx$ be a log-concave
+  probability measure with $U$ $C^1$, globally Lipschitz, with Lipschitz gradient, $\int e^{-U}=1$ and almost everywhere positive definite
+  coordinate Hessian. For every globally bounded, locally integrable $\eta$ with coordinate weak derivatives $a$ in $L^2$ on every compact
+  set and $\nu$-integrable inverse-Hessian energy $\langle a,(\nabla^2U)^{-1}a\rangle$,
+  $\operatorname{Var}_\nu\eta\le\int\langle a,(\nabla^2U)^{-1}a\rangle\,d\nu$. The Hilbert-closure helpers it shares with the scalar
+  Brascamp--Lieb owner are public there.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Centered smooth diffusion images are dense; pair $\eta$ with them through Lemma~\ref{lem:weak-ordinary-diffusion-pairing}, bound the
+  pairing by inverse-quadratic Young and Lemma~\ref{lem:ordinary-diffusion-coercivity-lipschitz}, and pass to the Hilbert closure.
+\end{proof}
+
+\begin{lemma}[Matrix product entries and traces]
+  \label{lem:matrix-product-entry-trace}
+  \lean{FunctionalInequalities.Analysis.sum_matrix_product_entry_mul_eq_trace,
+        FunctionalInequalities.Analysis.sum_matrix_product_entry_quadratic_eq_trace}
+  \leanok
+  For symmetric $S$ and $D$ and arbitrary $A$, $\sum_{ij}(SAS)_{ij}(SDS)_{ij}=\operatorname{tr}((SS)A(SS)D)$. For symmetric $S$,
+  arbitrary $R$ and symmetric $T_k$, the entrywise quadratic forms of the vectors $((ST_kS)_{ij})_k$ against $R$ sum to
+  $\sum_{kl}R_{kl}\operatorname{tr}((SS)T_k(SS)T_l)$. All finite dimensions.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Expand both sides as finite sums and use the symmetry of $S$, $D$ and $T_k$.
+\end{proof}
+
+\begin{lemma}[Random matrix variance trace]
+  \label{lem:matrix-variance-trace}
+  \lean{FunctionalInequalities.Probability.sum_variance_entries_eq_integral_trace_sub_trace_mean}
+  \leanok
+  \uses{lem:matrix-product-entry-trace}
+  Under a probability measure, for an almost everywhere symmetric random matrix $H$ with $L^2$ entries and symmetric mean $M$,
+  $\sum_{ij}\operatorname{Var}(H_{ij})=\int\operatorname{tr}(HH)-\operatorname{tr}(MM)$. All finite dimensions.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Sum the entrywise variance identities and use $\operatorname{tr}(HH)=\sum_{ij}H_{ij}^2$ for symmetric $H$.
+\end{proof}
+
+\begin{theorem}[Weak Hessian trace bound for a given potential (Theorem 2.5, PSD $B$)]
+  \label{thm:letwin-weak-hessian-trace-bound}
+  \lean{FunctionalInequalities.KLS.LogConcave.integral_trace_quadratic_le_two_mul_trace_sq}
+  \leanok
+  \uses{lem:letwin-weak-brascamp-lieb, lem:weak-bounded-trace-quadratic, lem:matrix-product-entry-trace, lem:matrix-variance-trace}
+  Weak $C^{1,1}$ form of Letwin \cite{Letwin2026QuadraticKLS}, Theorem~2.5, for a given potential, with positive semidefinite $B$. Let
+  $\nu=e^{-U}dx$ with $U$ convex, $C^1$, globally Lipschitz, with Lipschitz gradient, $\int e^{-U}=1$ and almost everywhere positive
+  definite Hessian; let $T$ be a weak Hessian tensor in $L^2$ on every compact set, and let the inverse Hessian entries be essentially
+  bounded on every compact set. Assume as hypotheses that the Hessian entries are $\nu$-integrable with mean $\mathrm{Id}$, that
+  $D=\sum_{kl}(\nabla^2U)^{-1}_{kl}\operatorname{tr}(BT_kBT_l)$ is $\nu$-integrable and that
+  $\int D\,d\nu\le\frac12\int\operatorname{tr}(B\nabla^2UB\nabla^2U)\,d\nu$. Then $\operatorname{tr}(B\nabla^2UB\nabla^2U)$ is
+  $\nu$-integrable and its integral is at most $2\operatorname{tr}(BB)$. The mean and half-energy inputs remain visible hypotheses; only
+  the actual source producer (Theorem~\ref{thm:letwin-regular-moment-weak-stein-coupling}) discharges them.
+\end{theorem}
+\begin{proof}
+  \leanok
+  Apply Lemma~\ref{lem:letwin-weak-brascamp-lieb} to each entry of $SHS$ with $S=B^{1/2}$, sum with Lemma~\ref{lem:matrix-product-entry-trace},
+  and compare with the variance identity of Lemma~\ref{lem:matrix-variance-trace} and the half-energy hypothesis.
+\end{proof}
+
+\begin{lemma}[Almost-everywhere PSD symmetric trace extension]
+  \label{lem:symmetric-trace-integral-ae}
+  \lean{FunctionalInequalities.Analysis.symmetric_trace_integral_extension_of_ae_posSemidef,
+        FunctionalInequalities.Analysis.symmetric_trace_integral_extension_mul_of_ae_posSemidef}
+  \leanok
+  \uses{lem:letwin-symmetric-integral}
+  For an arbitrary measure and finite index type, let $H$ have measurable entries and be positive semidefinite almost everywhere. If
+  $\operatorname{tr}(AHAH)$ is integrable with integral at most $2\operatorname{tr}(AA)$ for every positive semidefinite $A$, then the same
+  holds for every symmetric $B$, singular or indefinite. This is the almost-everywhere version of
+  \texttt{symmetric\_trace\_integral\_extension}.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Split $B$ into its positive and negative parts and use the pointwise Jordan inequality almost everywhere.
+\end{proof}
+
+\begin{lemma}[Integrable weak derivatives have zero integral]
+  \label{lem:integrable-weak-divergence}
+  \lean{FunctionalInequalities.Analysis.integral_eq_zero_of_integrable_weak_derivative}
+  \leanok
+  If $g$ is the weak directional derivative of $f$ along $v$ against compactly supported $C^1$ tests and $f$ and $g$ are globally
+  integrable, then $\int g=0$. Every dimension, including zero, and every direction.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Test against a dilated compactly supported cutoff; the cutoff term tends to $\int g$ by dominated convergence and the derivative term
+  vanishes since $f$ is integrable. The proof body is the accepted S1 API output.
+\end{proof}
+
+\begin{lemma}[Tilted integration by parts for bounded Lipschitz tests]
+  \label{lem:tilted-ibp-bounded-lipschitz}
+  \lean{FunctionalInequalities.Analysis.integral_fderiv_tilted_eq_integral_mul_fderiv_of_bounded_lipschitz}
+  \leanok
+  \uses{lem:integrable-weak-divergence}
+  Let $U$ be globally Lipschitz with $\int e^{-U}=1$ and $\eta$ be bounded and globally Lipschitz. For every direction $v$, $D_v\eta$ and
+  $\eta\,D_vU$ are integrable for the tilted measure $\nu=e^{-U}dx$ and $\int D_v\eta\,d\nu=\int\eta\,D_vU\,d\nu$. All dimensions.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Apply Lemma~\ref{lem:integrable-weak-divergence} to $\eta e^{-U}$, whose weak derivative is $(D_v\eta-\eta D_vU)e^{-U}$.
+\end{proof}
+
+\begin{lemma}[$C^1$ gradient chain coordinate]
+  \label{lem:c1-gradient-chain}
+  \lean{FunctionalInequalities.Probability.Stein.chain_coordinate_of_differentiableAt_gradient}
+  \leanok
+  \uses{lem:letwin-weak-hessian-identification}
+  For $C^1$ functions $u$ and $f$ and a point $y$ where $\nabla u$ is differentiable,
+  $\partial_i(f\circ\nabla u)(y)=\sum_j(\nabla^2u)_{ij}(y)\,(\nabla f)_j(\nabla u(y))$. This is the $C^1$ counterpart of
+  \texttt{chain\_coordinate}; all dimensions.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Chain rule at $y$ and identification of the derivative of $\nabla u$ with the Hessian matrix.
+\end{proof}
+
+\begin{lemma}[Weak source Stein identity]
+  \label{lem:weak-source-stein-identity}
+  \lean{FunctionalInequalities.KLS.LogConcave.source_stein_identity_of_bounded_lipschitz_test}
+  \leanok
+  \uses{lem:tilted-ibp-bounded-lipschitz, lem:c1-gradient-chain}
+  Let $u$ be $C^1$ and globally Lipschitz with Lipschitz gradient and $\int e^{-u}=1$, and let $\nu=e^{-u}dx$. For every $C^1$, bounded and
+  globally Lipschitz test $f$ and every coordinate $i$, $\partial_iu\,f(\nabla u)$ and $\sum_j(\nabla^2u)_{ij}\,\partial_jf(\nabla u)$ are
+  $\nu$-integrable and $\int\partial_iu\,f(\nabla u)\,d\nu=\int\sum_j(\nabla^2u)_{ij}\,\partial_jf(\nabla u)\,d\nu$. This is the latent
+  source coupling identity behind Letwin \cite{Letwin2026QuadraticKLS}, Lemma~2.7, at $C^{1,1}$ regularity; no Stein kernel is constructed
+  and no target inverse is used.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Apply Lemma~\ref{lem:tilted-ibp-bounded-lipschitz} to $\eta=f\circ\nabla u$ and identify $\partial_i\eta$ almost everywhere by
+  Lemma~\ref{lem:c1-gradient-chain}.
+\end{proof}
+
+\begin{lemma}[Compact source dual bound]
+  \label{lem:compact-source-dual-bound}
+  \lean{FunctionalInequalities.Probability.Stein.compact_linear_pairing_sq_le_of_source_identity}
+  \leanok
+  Let $P$ be a measure on a latent space, $Z$ a measurable map with $Z_\#P=\mu$ for a probability law $\mu$, and $F$ a latent field in
+  $L^2(P)$. If a smooth compactly supported $h$ satisfies the latent source identity
+  $\int\langle x,v\rangle h\,d\mu=\int\langle F,\nabla h(Z)\rangle\,dP$, then
+  $(\int\langle x,v\rangle h\,d\mu)^2\le(\int|F|^2dP)(\int|Dh|^2d\mu)$. Arbitrary latent space and all dimensions. The source identity and
+  the $L^2$ field remain inputs; this is the compact dual Cauchy--Schwarz step that supplies the dual bound directly, without a target
+  Stein kernel.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Cauchy--Schwarz in $L^2(P)$ and the change of variables $Z_\#P=\mu$.
+\end{proof}
+
+\begin{lemma}[Gaussian directional identity for $C^1$ tests]
+  \label{lem:gaussian-directional-identity}
+  \lean{FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.gaussianLaw_directional_identity_of_bounded_lipschitz_test}
+  \leanok
+  \uses{lem:integrable-weak-divergence}
+  Under \texttt{gaussianLaw s} with $s>0$, in every dimension, for every $C^1$, bounded and globally Lipschitz $f$ and every direction $v$,
+  $\langle x,v\rangle f$ and $D_vf$ are integrable and $\int\langle x,v\rangle f=(2s)^{-1}\int D_vf$. This supports the Gaussian smoothing
+  step; no product coupling is asserted.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Apply Lemma~\ref{lem:integrable-weak-divergence} to $f$ times the Gaussian density.
+\end{proof}
+
+\begin{theorem}[Regular moment potential: Theorem 2.5 with constant 2 and source Stein coupling]
+  \label{thm:letwin-regular-moment-weak-stein-coupling}
+  \lean{FunctionalInequalities.Analysis.exists_regular_moment_weak_stein_coupling,
+        FunctionalInequalities.Analysis.exists_regular_moment_hessian_trace_bound}
+  \leanok
+  \uses{lem:letwin-regular-moment-bounded-weak-cutoff-testing, lem:letwin-weak-trace-contraction, lem:letwin-trace-gram-comparison, thm:letwin-weak-hessian-trace-bound, lem:symmetric-trace-integral-ae, lem:tilted-ibp-bounded-lipschitz, lem:weak-source-stein-identity}
+  For the actual source law, under the exact original R0 hypotheses ($n>0$, isotropic $1_Ke^{-W}dx$ with $K$ compact and convex with
+  nonempty interior, $W$ smooth and $\kappa$-uniformly convex), there is ONE weak normalized convex globally Lipschitz moment potential $u$,
+  with constants $L$, $L_F$ and weak Hessian tensor $T$, that retains the whole earlier payload: R0 regularity ($C^1$, $16/\kappa$-Lipschitz
+  gradient, $4/\kappa$ centered-difference bound, almost everywhere positive definite Hessian with log-det equation and $16/\kappa$ cap), the
+  weak tensor, first Monge--Amp\`ere and inverse fields, mean Hessian $\mathrm{Id}$ under $\nu=e^{-u}dx$, the weak evolution identities,
+  bounded testing, the weak cutoffs and rough cutoff testing, the weak trace contraction, A.5 conservativity $\int g\,d\nu=0$ and the half
+  energy $\int D\,d\nu\le\frac12\int\operatorname{tr}(BHBH)\,d\nu$ for every positive semidefinite $B$. It adds: for EVERY real symmetric
+  $B$, $\operatorname{tr}(BHBH)$ is $\nu$-integrable and $\int\operatorname{tr}(BHBH)\,d\nu\le2\operatorname{tr}(BB)$ (Theorem~2.5 with the
+  exact constant $2$, weak $C^{1,1}$ form for this witness); the weighted integration by parts $\int D_v\eta\,d\nu=\int\eta\,D_vu\,d\nu$ for
+  every bounded globally Lipschitz $\eta$; and the coordinate source Stein identity for every $C^1$, bounded and globally Lipschitz test.
+  This is not the smooth moment map of Lemma~2.2, not a constructed Stein kernel, and not Theorem~1.2 or the constant-8 bound.
+\end{theorem}
+\begin{proof}
+  \leanok
+  At the witness of Lemma~\ref{lem:letwin-regular-moment-bounded-weak-cutoff-testing}, contract the tested evolution identities with
+  Lemma~\ref{lem:letwin-weak-trace-contraction}, consume the cutoffs to obtain $\int g\,d\nu=0$, and combine
+  Lemma~\ref{lem:letwin-trace-gram-comparison} into the half energy. Theorem~\ref{thm:letwin-weak-hessian-trace-bound} gives the bound for
+  positive semidefinite $B$, and Lemma~\ref{lem:symmetric-trace-integral-ae} extends it to every symmetric $B$. The weighted integration by
+  parts and the source Stein identity are Lemmas~\ref{lem:tilted-ibp-bounded-lipschitz} and~\ref{lem:weak-source-stein-identity} at $u$.
+\end{proof}
+
+\begin{lemma}[Trace identities for noise shifts, involutions and conjugations]
+  \label{lem:matrix-noise-trace-identities}
+  \lean{FunctionalInequalities.Analysis.trace_transpose_mul_shift_one,
+        FunctionalInequalities.Analysis.trace_transpose_mul_right_involution,
+        FunctionalInequalities.Analysis.trace_symmetric_conjugation,
+        FunctionalInequalities.Analysis.trace_transpose_conjugation_sq}
+  \leanok
+  For real square matrices over any finite index type of cardinality $n$:
+  $\operatorname{tr}((A+t I)^{\top}(A+t I))=\operatorname{tr}(A^{\top}A)+2t\operatorname{tr}A+nt^2$;
+  $\operatorname{tr}((AQ)^{\top}AQ)=\operatorname{tr}(A^{\top}A)$ for symmetric $Q$ with $Q^2=I$;
+  $\operatorname{tr}(SHS)=\operatorname{tr}(S^2H)$; and $\operatorname{tr}((SHS)^{\top}SHS)=\operatorname{tr}(S^2HS^2H)$ for
+  symmetric $S,H$.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Expand the products and use cyclicity of the trace.
+\end{proof}
+
+\begin{lemma}[Spectral geometry of a symmetric invertible matrix]
+  \label{lem:symmetric-matrix-spectral-geometry}
+  \lean{FunctionalInequalities.Analysis.symmetric_matrix_spectral_geometry}
+  \leanok
+  \uses{lem:letwin-mapped-covariance}
+  Let $M\in\mathbb R^{n\times n}$ be symmetric and invertible, $B=\sqrt{M^2}$, $S=\sqrt B$ and $Q=\operatorname{sign}M$
+  (continuous functional calculus). Then $B$ and $S$ are positive semidefinite, $Q$ is symmetric, $B^2=M^2$, $S^2=B$,
+  $SQS=M$, $Q^2=I$, $S$ is invertible, the Euclidean operator of $Q$ is self-adjoint, and $S$ defines a self-adjoint
+  continuous linear equivalence of $\mathbb R^n$.
+\end{lemma}
+\begin{proof}
+  \leanok
+  The sign factorization gives $S^2=B$, $SQS=M$ and $Q^2=I$; invertibility of $S$ follows from $\det M\ne0$.
+\end{proof}
+
+\begin{lemma}[Invertible symmetric approximation]
+  \label{lem:symmetric-invertible-approximation}
+  \lean{FunctionalInequalities.Analysis.exists_symmetric_isUnit_matrix_sequence}
+  \leanok
+  Every symmetric real matrix $A$ over a finite index type is the limit of the symmetric invertible matrices
+  $A-r_kI$, where $0<r_k<1/(k+1)$ avoids the finite real spectrum of $A$.
+\end{lemma}
+\begin{proof}
+  \leanok
+  The spectrum is finite, so each interval $(0,1/(k+1))$ contains an admissible $r_k$; then $r_k\to0$.
+\end{proof}
+
+\begin{lemma}[Trace against a mean-identity matrix field]
+  \label{lem:matrix-trace-mean-identity}
+  \lean{FunctionalInequalities.Analysis.integral_trace_mul_of_mean_one}
+  \leanok
+  For a measure $\rho$ and a matrix field $H$ with integrable entries and $\int H_{ij}\,d\rho=\delta_{ij}$, and every
+  matrix $B$, the function $\operatorname{tr}(BH)$ is integrable and $\int\operatorname{tr}(BH)\,d\rho=\operatorname{tr}B$.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Linearity of the integral over the finite trace sum.
+\end{proof}
+
+\begin{lemma}[Hilbert--Schmidt sum of a symmetric operator]
+  \label{lem:symmetric-hilbert-schmidt-trace}
+  \lean{FunctionalInequalities.Analysis.sum_inner_apply_sq_eq_trace_comp_of_isSymmetric}
+  \leanok
+  For a symmetric continuous linear operator $A$ on a real inner product space and any finite orthonormal basis $(b_i)$,
+  $\sum_{i,j}\langle Ab_i,b_j\rangle^2=\operatorname{tr}(A\circ A)$.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Parseval in each column and symmetry of $A$.
+\end{proof}
+
+\begin{lemma}[Gradient of an affine precomposition]
+  \label{lem:gradient-affine-precomposition}
+  \lean{FunctionalInequalities.Analysis.BakryEmery.gradient_comp_affine}
+  \leanok
+  For complete real inner product spaces, a continuous linear $S:E\to F$, $z\in F$ and $f$ differentiable at $Sx+z$,
+  $\nabla\bigl(y\mapsto f(Sy+z)\bigr)(x)=S^{*}\nabla f(Sx+z)$.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Chain rule and the defining property of the adjoint.
+\end{proof}
+
+\begin{lemma}[Algebra of the matrix action]
+  \label{lem:matrix-action-algebra}
+  \lean{FunctionalInequalities.Probability.Stein.action_eq_toEuclideanLin,
+        FunctionalInequalities.Probability.Stein.action_mul,
+        FunctionalInequalities.Probability.Stein.action_add,
+        FunctionalInequalities.Probability.Stein.action_smul,
+        FunctionalInequalities.Probability.Stein.action_one,
+        FunctionalInequalities.Probability.Stein.action_basis_apply,
+        FunctionalInequalities.Probability.Stein.sum_norm_action_basis_sq_eq_trace_transpose_mul}
+  \leanok
+  The Euclidean action of real $n\times n$ matrices agrees with the Euclidean linear map of the matrix and is
+  multiplicative, additive, homogeneous and unital; its value on the $i$th basis vector has $j$th coordinate $A_{ji}$, and
+  $\sum_i\|Ae_i\|^2=\operatorname{tr}(A^{\top}A)$.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Coordinate computations with matrix--vector products.
+\end{proof}
+
+\begin{lemma}[The Hessian action is square integrable]
+  \label{lem:hessian-action-l2}
+  \lean{FunctionalInequalities.Probability.Stein.memLp_hessian_action_of_lipschitz_gradient}
+  \leanok
+  \uses{lem:hessian-entry-measurable-bounded}
+  If $\nabla u$ is $G$-Lipschitz on $\mathbb R^n$, then $y\mapsto\nabla^2u(y)\,v$ lies in $L^2(\mu)$ for every finite measure
+  $\mu$ and every $v$.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Each Hessian entry is measurable and bounded by $G$.
+\end{proof}
+
+\begin{lemma}[Quadratic forms of the matrix action]
+  \label{lem:quadratic-action-identities}
+  \lean{FunctionalInequalities.Probability.Stein.quadratic_matrix_sum_eq_inner_action,
+        FunctionalInequalities.Probability.Stein.inner_action_sandwich,
+        FunctionalInequalities.Probability.Stein.latent_field_eq_action_conjugation,
+        FunctionalInequalities.Probability.Stein.variance_quadratic_map_sandwich}
+  \leanok
+  \uses{lem:matrix-action-algebra}
+  For real $n\times n$ matrices: $\sum_{i,j}A_{ij}x_ix_j=\langle Ax,x\rangle$; for symmetric $S$,
+  $\langle Q(Sx),Sx\rangle=\langle(SQS)x,x\rangle$ and the variance of $x\mapsto\langle Qx,x\rangle$ under the image of $\mu$
+  by $S$ equals the variance of $x\mapsto\langle(SQS)x,x\rangle$ under $\mu$; and if a continuous linear equivalence $e$ has
+  the operator of $S$ and is self-adjoint, then $e(H(e^{*}v))+tv=(SHS+tI)v$.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Coordinates, multiplicativity of the action and the change of variables for variances.
+\end{proof}
+
+\begin{lemma}[Spectral sign/noise identity]
+  \label{lem:spectral-sign-noise-identity}
+  \lean{FunctionalInequalities.Analysis.sum_norm_action_spectral_sign_noise}
+  \leanok
+  \uses{lem:symmetric-matrix-spectral-geometry, lem:matrix-action-algebra, lem:matrix-noise-trace-identities}
+  For symmetric invertible $M$ with $B=\sqrt{M^2}$, $S=\sqrt B$, $Q=\operatorname{sign}M$, every symmetric $H$ and every real
+  $t$:
+  $\sum_i\|(SHS+tI)Qe_i\|^2=\operatorname{tr}(BHBH)+2t\operatorname{tr}(BH)+nt^2$.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Write the sum as $\operatorname{tr}(X^{\top}X)$ for $X=(SHS+tI)Q$, remove the involution $Q$, expand the noise shift and
+  use $S^2=B$.
+\end{proof}
+
+\begin{lemma}[Integrated spectral noise energy]
+  \label{lem:spectral-noise-energy-integral}
+  \lean{FunctionalInequalities.KLS.LogConcave.sum_integral_spectral_noise_energy_le}
+  \leanok
+  \uses{lem:spectral-sign-noise-identity, lem:matrix-trace-mean-identity, lem:symmetric-matrix-spectral-geometry}
+  Let $\rho$ and $\gamma$ be probability measures on arbitrary measurable spaces and $H$ a measurable matrix field that is
+  $\rho$-a.e.\ symmetric, has $\rho$-integrable entries with $\int H\,d\rho=I$, and satisfies, as an input,
+  $\int\operatorname{tr}(B'HB'H)\,d\rho\le2\operatorname{tr}(B'^2)$ with integrability for every symmetric $B'$. Then for
+  symmetric invertible $M$, with $B,S,Q$ as above and every $t$, each $\|(SHS+tI)Qe_i\|^2$ is $\rho$-integrable and
+  $\sum_i\int\|(SH(y)S+tI)Qe_i\|^2\,d(\rho\otimes\gamma)(y,z)\le2\operatorname{tr}(M^2)+2t\operatorname{tr}B+nt^2$. No
+  log-concavity or Hessian hypothesis is used.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Integrate the pointwise identity, use the mean-identity trace and the trace input with $B'=B$, and project the product
+  measure to its first factor.
+\end{proof}
+
+\begin{lemma}[Quadratic forms of a fourth-moment vector]
+  \label{lem:quadratic-form-fourth-moment}
+  \lean{FunctionalInequalities.Probability.memLp_quadratic_of_memLp_four}
+  \leanok
+  If $f\in L^4(\mu)$ takes values in a real inner product space and $A$ is continuous linear, then
+  $\langle Af,f\rangle\in L^2(\mu)$.
+\end{lemma}
+\begin{proof}
+  \leanok
+  H\"older with exponents $(4,4,2)$ and $|\langle Af,f\rangle|\le\|A\|\,\|f\|^2$.
+\end{proof}
+
+\begin{lemma}[Variance continuity of finite linear combinations]
+  \label{lem:finite-combination-variance-continuity}
+  \lean{FunctionalInequalities.Probability.tendsto_variance_finite_linear_combination}
+  \leanok
+  For a probability measure and finitely many real $L^2$ functions $f_i$, if $c_{k,i}\to b_i$ for every $i$, then
+  $\operatorname{Var}(\sum_ic_{k,i}f_i)\to\operatorname{Var}(\sum_ib_if_i)$.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Represent the combinations in $L^2$ and use continuity of the $L^2$ variance.
+\end{proof}
+
+\begin{lemma}[Variance continuity of quadratic matrix forms]
+  \label{lem:quadratic-matrix-variance-continuity}
+  \lean{FunctionalInequalities.Probability.tendsto_variance_quadratic_matrix_forms}
+  \leanok
+  \uses{lem:finite-combination-variance-continuity}
+  For a probability law on $\mathbb R^n$ with finite fourth moment and matrices $A_k\to A$,
+  $\operatorname{Var}(\sum_{i,j}(A_k)_{ij}x_ix_j)\to\operatorname{Var}(\sum_{i,j}A_{ij}x_ix_j)$.
+\end{lemma}
+\begin{proof}
+  \leanok
+  The products $x_ix_j$ are in $L^2$ by H\"older; apply the finite-combination continuity.
+\end{proof}
+
+\begin{lemma}[Letwin: singular extension (Lemma A.2, stronger form)]
+  \label{lem:letwin-singular-extension}
+  \lean{FunctionalInequalities.Probability.symmetric_matrix_variance_bound_of_isUnit}
+  \leanok
+  \uses{lem:symmetric-invertible-approximation, lem:quadratic-matrix-variance-continuity}
+  Let $\mu$ be a probability law on $\mathbb R^n$ (every $n$) with finite fourth moment and $C$ any real constant. If
+  $\operatorname{Var}_\mu(\sum_{i,j}B_{ij}x_ix_j)\le C\operatorname{tr}(B^2)$ for every symmetric invertible $B$, then the same
+  bound holds for every symmetric $B$. This is a stronger form of Letwin \cite{Letwin2026QuadraticKLS}, Lemma~A.2 (no
+  isotropy or log-concavity, arbitrary $C$), proved through $B-r_kI$ with $r_k$ outside the spectrum rather than the source's
+  $M+\varepsilon P_0$. It does not establish the bound.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Approximate $B$ by invertible symmetric matrices and pass to the limit on both sides.
+\end{proof}
+
+\begin{lemma}[Centered noise does not decrease quadratic variance]
+  \label{lem:centered-noise-quadratic-variance}
+  \lean{FunctionalInequalities.Probability.quadratic_variance_le_centered_noise_convolution}
+  \leanok
+  \uses{lem:quadratic-form-fourth-moment}
+  For probability laws $\mu,\nu$ on a complete separable real inner product space with finite fourth moments, $\nu$ centered,
+  and continuous linear $A$, $\operatorname{Var}_\mu\langle Ax,x\rangle\le\operatorname{Var}_{\mu*\nu}\langle Ax,x\rangle$.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Decompose the variance on the product; the noise average equals the quadratic form plus a constant.
+\end{proof}
+
+\begin{lemma}[Fourth moments of Gaussian, smoothed and linear-image laws]
+  \label{lem:gaussian-fourth-moments}
+  \lean{FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.gaussianLaw_memLp_four,
+        FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.smoothedLaw_memLp_four,
+        FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.map_linear_memLp_four}
+  \leanok
+  On a finite-dimensional real inner product space: \texttt{gaussianLaw s} ($s>0$) has a fourth moment; if a probability
+  measure $\mu$ has a fourth moment, so do its Gaussian smoothing and its image under any continuous linear map.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Exponential moments of the Gaussian; the smoothing is the image of a product.
+\end{proof}
+
+\begin{lemma}[Translated Gaussian directional identity]
+  \label{lem:gaussian-translated-directional-identity}
+  \lean{FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.gaussianLaw_translated_directional_identity_of_bounded_lipschitz_test}
+  \leanok
+  \uses{lem:gaussian-directional-identity}
+  For $s>0$, a bounded globally Lipschitz $h\in C^1$ and $a,v\in\mathbb R^n$, under $z\sim$ \texttt{gaussianLaw s}:
+  $\int\langle z,v\rangle h(a+z)=(2s)^{-1}\int D_vh(a+z)$, both integrands being integrable.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Apply the Gaussian directional identity to $z\mapsto h(a+z)$.
+\end{proof}
+
+\begin{lemma}[Product latent map onto the smoothed linear image]
+  \label{lem:gaussian-product-latent-map}
+  \lean{FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.gaussian_product_latent_map}
+  \leanok
+  If $\rho$ is a probability measure with $g_\#\rho=\mu$ ($g$ measurable), $S$ is continuous linear and $s>0$, then
+  $(\rho\otimes\mathrm{gaussianLaw}\,s)$ pushed by $(y,z)\mapsto S(g(y))+z$ is the Gaussian smoothing of $S_\#\mu$.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Images of product measures and the convolution as the image of a product.
+\end{proof}
+
+\begin{lemma}[Smooth convex potential of a smoothed linear image]
+  \label{lem:gaussian-smoothed-linear-image-potential}
+  \lean{FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.exists_convex_smooth_potential_smoothed_linearEquiv}
+  \leanok
+  \uses{thm:borell-logconcave-density}
+  Let $\mu$ be a log-concave probability law on a finite-dimensional real inner product space with full affine support, $S$ a
+  continuous linear equivalence and $s>0$. Then the Gaussian smoothing of $S_\#\mu$ is $e^{-W}dx$ (tilted Lebesgue measure)
+  for some $W\in C^\infty$ convex, and the smoothed probability law is log-concave.
+\end{lemma}
+\begin{proof}
+  \leanok
+  The image is log-concave with full affine support, so its support has nonempty interior and it has a Borell density;
+  its Gaussian smoothing has a smooth convex potential.
+\end{proof}
+
+\begin{lemma}[Directional and affine source Stein identities]
+  \label{lem:source-directional-affine-stein}
+  \lean{FunctionalInequalities.KLS.LogConcave.source_directional_stein_identity_of_bounded_lipschitz_test,
+        FunctionalInequalities.KLS.LogConcave.source_affine_stein_identity_of_bounded_lipschitz_test}
+  \leanok
+  \uses{lem:weak-source-stein-identity, lem:gradient-affine-precomposition}
+  Let $u\in C^1$ be globally Lipschitz with Lipschitz gradient and $\int e^{-u}=1$, $\nu=e^{-u}dx$. For bounded globally
+  Lipschitz $C^1$ tests $f$ and every direction $v$:
+  $\int\langle\nabla u,v\rangle f(\nabla u)\,d\nu=\int\langle v,\nabla^2u\,\nabla f(\nabla u)\rangle\,d\nu$; and for a continuous
+  linear $S$ and $z$, with $h$ bounded Lipschitz $C^1$,
+  $\int\langle S\nabla u,v\rangle h(S\nabla u+z)\,d\nu=\int\langle S^{*}v,\nabla^2u\,S^{*}\nabla h(S\nabla u+z)\rangle\,d\nu$; all
+  integrands integrable.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Linear combinations of the coordinate source Stein identity, and the affine gradient chain.
+\end{proof}
+
+\begin{lemma}[Gaussian product source Stein identity]
+  \label{lem:gaussian-product-source-stein}
+  \lean{FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.gaussian_product_source_stein_pairings_integrable,
+        FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.gaussian_product_source_stein_identity}
+  \leanok
+  \uses{lem:hessian-action-l2, lem:gaussian-translated-directional-identity, lem:source-directional-affine-stein, lem:gaussian-fourth-moments}
+  With $u$ as above, $s>0$, $P=\nu\otimes\mathrm{gaussianLaw}\,s$, a continuous linear $S$, $Z(y,z)=S\nabla u(y)+z$, a bounded
+  Lipschitz $C^1$ test $h$ and $v$: the latent fields are in $L^2(P)$, the source and noise pairings are integrable, and
+  $\int\langle Z,v\rangle h(Z)\,dP=\int\bigl(\langle S^{*}v,\nabla^2u\,S^{*}\nabla h(Z)\rangle+(2s)^{-1}D_vh(Z)\bigr)dP$.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Split $\langle Z,v\rangle$; use the affine source Stein identity in $y$ and the translated Gaussian identity in $z$, and
+  Fubini.
+\end{proof}
+
+\begin{lemma}[Compact dual bound for the Gaussian product coupling]
+  \label{lem:gaussian-product-compact-dual}
+  \lean{FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.gaussian_product_compact_dual_bound}
+  \leanok
+  \uses{lem:gaussian-product-source-stein, lem:gaussian-product-latent-map, lem:compact-source-dual-bound, lem:letwin-weak-hessian-identification}
+  With $u$ as above, $\nabla u_\#\nu=\mu$, $S$ continuous linear, $s>0$ and $\nu_s$ the Gaussian smoothing of $S_\#\mu$:
+  for every $v$ and every smooth compactly supported $h$,
+  $\bigl(\int\langle x,v\rangle h\,d\nu_s\bigr)^2\le\int\|S\nabla^2u\,S^{*}v+(2s)^{-1}v\|^2\,dP\cdot\int\|Dh\|^2\,d\nu_s$.
+\end{lemma}
+\begin{proof}
+  \leanok
+  The product source identity gives a latent source identity for the latent field; Cauchy--Schwarz in $L^2(P)$.
+\end{proof}
+
+\begin{lemma}[Removal of a vanishing noise error]
+  \label{lem:gaussian-noise-limit}
+  \lean{FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.le_of_forall_inverse_noise_quadratic_error}
+  \leanok
+  If $a\le b+c(2s)^{-1}+d((2s)^{-1})^2$ for every $s>0$, then $a\le b$.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Let $s\to\infty$.
+\end{proof}
+
+\begin{lemma}[Gaussian smoothing does not decrease quadratic variance]
+  \label{lem:gaussian-smoothing-quadratic-variance}
+  \lean{FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.variance_quadratic_le_smoothedLaw}
+  \leanok
+  \uses{lem:centered-noise-quadratic-variance, lem:gaussian-fourth-moments}
+  For a probability law with finite fourth moment on a finite-dimensional real inner product space, continuous linear $A$
+  and $s>0$, the variance of $\langle Ax,x\rangle$ is at most its variance under the Gaussian smoothing.
+\end{lemma}
+\begin{proof}
+  \leanok
+  The Gaussian is centered with a fourth moment.
+\end{proof}
+
+\begin{lemma}[Smoothed quadratic variance via the $H^{-1}$ inequality]
+  \label{lem:gaussian-smoothed-quadratic-h-minus-one}
+  \lean{FunctionalInequalities.KLS.LogConcave.GaussianSmoothing.gaussian_smoothed_quadratic_variance_le_latent_energy}
+  \leanok
+  \uses{lem:gaussian-product-compact-dual, lem:gaussian-smoothed-linear-image-potential, lem:quadratic-form-fourth-moment, lem:gaussian-fourth-moments}
+  Let $\mu$ be log-concave with full affine support and $\mu=\nabla u_\#\nu$ for $u$ as above. For a continuous linear
+  equivalence $S$, a self-adjoint $Q$ and $s>0$, the variance of $\langle Qx,x\rangle$ under the Gaussian smoothing of
+  $S_\#\mu$ is at most $4\sum_i\int\|S\nabla^2u\,S^{*}Qe_i+(2s)^{-1}Qe_i\|^2\,dP$.
+\end{lemma}
+\begin{proof}
+  \leanok
+  The smoothed law is $e^{-W}dx$ with $W$ smooth and convex; apply the $H^{-1}$ variance inequality
+  (\texttt{variance\_le\_sum\_of\_partial\_dual\_bounds}) with the compact dual bounds for the partial derivatives
+  $2\langle x,Qe_i\rangle$.
+\end{proof}
+
+\begin{lemma}[Restricted exponential densities are log-concave]
+  \label{lem:restricted-exp-logconcave}
+  \lean{FunctionalInequalities.KLS.LogConcave.isBorellDensity_of_eq_restricted_exp,
+        FunctionalInequalities.KLS.LogConcave.logConcave_of_eq_restricted_exp,
+        FunctionalInequalities.KLS.LogConcave.logConcave_of_eq_regularClass}
+  \leanok
+  \uses{thm:borell-logconcave-density}
+  If a probability law $\mu$ on a finite-dimensional space has density $1_Ke^{-W}$ with respect to Lebesgue measure,
+  with $K$ closed convex and $W$ continuous convex, then $1_Ke^{-W}$ is a Borell density of $\mu$, so $\mu$ is
+  log-concave; in particular every regular-class probability law ($W-\tfrac\kappa2\|\cdot\|^2$ convex, $\kappa>0$) is
+  log-concave.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Upper semicontinuity, log-concavity of the restricted density, and the Borell characterization.
+\end{proof}
+
+\begin{lemma}[Operator and matrix forms of the quadratic bound]
+  \label{lem:letwin-operator-matrix-identification}
+  \lean{FunctionalInequalities.KLS.LogConcave.letwinQuadraticBound_of_matrix_variance_bound}
+  \leanok
+  \uses{lem:symmetric-hilbert-schmidt-trace, lem:quadratic-action-identities, lem:bkl-third-cumulant-conditional}
+  For every measure $\mu$ on $\mathbb R^n$: if $\operatorname{Var}_\mu(\sum_{i,j}M_{ij}x_ix_j)\le8\operatorname{tr}(M^2)$ for every
+  symmetric $M$, then $\mu$ satisfies \texttt{LetwinQuadraticBound}.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Take the standard matrix of a self-adjoint operator; its quadratic form and Hilbert--Schmidt sum are the matrix ones.
+\end{proof}
+
+\begin{theorem}[Letwin: constant 8 for the regular class]
+  \label{thm:letwin-regular-class-constant-eight}
+  \lean{FunctionalInequalities.KLS.LogConcave.regularClass_matrix_variance_le_eight,
+        FunctionalInequalities.KLS.LogConcave.regularClass_letwinQuadraticBound}
+  \leanok
+  \uses{thm:letwin-regular-moment-weak-stein-coupling, lem:restricted-exp-logconcave, lem:gaussian-smoothed-quadratic-h-minus-one, lem:spectral-noise-energy-integral, lem:quadratic-action-identities, lem:letwin-singular-extension, lem:gaussian-smoothing-quadratic-variance, lem:gaussian-noise-limit, lem:symmetric-matrix-spectral-geometry, lem:letwin-operator-matrix-identification}
+  Let $n>0$, $K\subset\mathbb R^n$ compact convex with nonempty interior, $W\in C^\infty$ with $W-\tfrac\kappa2\|\cdot\|^2$
+  convex ($\kappa>0$), and $\mu=1_Ke^{-W}dx$ an isotropic probability law. Then
+  $\operatorname{Var}_\mu(\sum_{i,j}M_{ij}x_ix_j)\le8\operatorname{tr}(M^2)$ for every symmetric $M$, and $\mu$ satisfies
+  \texttt{LetwinQuadraticBound}. This is the regular-class case of Letwin \cite{Letwin2026QuadraticKLS}, Theorem~1.2,
+  under exactly the stated hypotheses.
+\end{theorem}
+\begin{proof}
+  \leanok
+  Take the weak Stein witness $u$ of Theorem~\ref{thm:letwin-regular-moment-weak-stein-coupling} once; its bounded
+  gradient pushes the normalized law $\rho=e^{-u}dx$ to $\mu$. The given law $\mu$ is log-concave
+  (Lemma~\ref{lem:restricted-exp-logconcave}), has full affine support by isotropy and has a finite fourth moment as the
+  image of $\rho$ under the bounded gradient. By Lemma~\ref{lem:letwin-singular-extension} it suffices to treat invertible
+  $M$. With $S=\sqrt{|M|}$ and $Q=\operatorname{sign}M$, put $\eta=S_\#\mu$: the variance of $\langle Qx,x\rangle$ under
+  $\eta$ equals that of $\sum_{i,j}M_{ij}x_ix_j$ under $\mu$ and is at most its variance under the Gaussian smoothing of
+  $\eta$. Bound the smoothed variance by $4$ times the latent energy, evaluate the energy by the spectral noise identity
+  and the trace bound of the witness, and let the noise parameter tend to infinity.
+\end{proof}
+
+\begin{theorem}[Letwin: compact quadratic-form bound]
+  \label{thm:letwin-compact-quadratic-bound}
+  \lean{FunctionalInequalities.KLS.LogConcave.Suspension.letwinCompactBound,
+        Solutions.ThmLetwinCompactQuadraticBound.certificate,
+        Solutions.ThmLetwinCompactQuadraticBound.bound}
+  \leanok
+  \uses{thm:letwin-regular-class-constant-eight}
+  For every $n>0$, every compactly supported isotropic log-concave probability measure $\mu$ on $\mathbb R^n$ and every
+  self-adjoint operator $M$ (singular and indefinite included),
+  \[
+    \int\Bigl(\langle Mx,x\rangle-\int\langle My,y\rangle\,d\mu(y)\Bigr)^2d\mu(x)\le8\sum_{i,j}\langle Me_i,e_j\rangle^2
+  \]
+  in the standard orthonormal basis. This is the exact compact counterpart of Letwin \cite{Letwin2026QuadraticKLS},
+  Theorem~1.2 (arXiv:2607.24164v1), the input of Bizeul--Klartag--Lehec \cite{BizeulKlartagLehec2026}, Lemma~4.2. The
+  noncompact Theorem~1.2 is not covered.
+\end{theorem}
+\begin{proof}
+  \leanok
+  The existing compact reduction \texttt{letwinCompactBound\_of\_regularClass} reduces the bound to the regular class, which
+  is Theorem~\ref{thm:letwin-regular-class-constant-eight}.
+\end{proof}
+
+\begin{lemma}[BKL equation (95), finite-horizon cutoff form]
+  \label{lem:bkl-cutoff-energy}
+  \lean{Solutions.LemBklCutoffEnergy.certificate,
+        Solutions.LemBklCutoffEnergy.bound,
+        FunctionalInequalities.KLS.BKL.Localization.CutoffEnergyClaim,
+        FunctionalInequalities.KLS.BKL.Localization.cutoffEnergyClaim_of_letwinCompact,
+        FunctionalInequalities.KLS.BKL.Localization.cutoffEnergyClaim_153}
+  \leanok
+  \uses{thm:letwin-compact-quadratic-bound, lem:bkl-cumulant-envelope, lem:bkl-second-cumulant-base,
+        lem:bkl-grouped-drift-expansion, lem:bkl-canonical-standardisation, lem:bkl-coefficients-regularity,
+        lem:bkl-posterior-generator}
+  \cite{BizeulKlartagLehec2026}, Sections~4--6, equation~(95), in a finite-horizon cutoff form. Let $d\ge1$ (the
+  order $m=d+1\ge2$), $n\ge0$, $\mu$ a compactly supported isotropic log-concave probability measure on $\mathbb R^n$,
+  $u$ a unit vector, $\varepsilon>0$ and $T\ge0$. Then there is $R_0$ such that for every $R\ge R_0$ and every cutoff
+  Eldan process $p_t=(c_t,Q_t)$ on any probability space carrying an $n$-dimensional Brownian motion with a usual
+  filtration --- the strong solution of~(67) with drift $\gamma_R^2(A^{-1}a,A^{-1})$ and noise
+  $\gamma_R(A^{-1/2}e_k,0)$, $\gamma_R(p)=\max(0,\min(1,R+1-|p|))$, started at $0$ ---
+  \[
+    E_{d+1}(0)+\frac12\int\!\!\int_0^T\gamma_R(p_s)^2\,E_{d+2}(p_s)\,ds\,dP\le(d!)^2\,153^d+\varepsilon,
+  \]
+  where $E_{r+1}(p)=|\kappa_{r+1}(\mu_p)(u)|^2_{A(p)}$ is the cumulant energy (75)--(76) of the posterior $\mu_p$.
+  The factor $\frac12$, the normalization $b_{d+1}=K^d(d!)^2$ of~(94) and a universal $K=153$ are those of the
+  source, and $d\ge1$ includes the base order $m=2$. This is a restricted, different-route counterpart of~(95), which
+  the source states for the uncut Eldan process on the infinite horizon. The uncut process (strong solution,
+  uniqueness, non-explosion) and the literal stochastic identities (68)--(73) are not constructed here. BKL
+  Theorem~4.1 (stage~3 of the main line) and KLS (stage~4) are not claimed.
+\end{lemma}
+\begin{proof}
+  \leanok
+  The cutoff coefficients are globally Lipschitz and bounded, so the cutoff equation has a strong solution on every
+  Brownian setup with a usual filtration. Dynkin's identity $\mathbb EF(p_T)-F(0)=\mathbb E\int_0^T\gamma^2\mathcal
+  LF(p_s)\,ds$ holds for every $C^2$ function $F$ of the parameter, and $Q_t$ stays positive semidefinite. Lemma~4.3
+  enters through the generator identity $\mathcal L\kappa_m=-(m\kappa_m+L_m)$
+  (Lemma~\ref{lem:bkl-grouped-drift-expansion}). Lemma~5.1 enters through its generator form
+  $\mathcal LE_m\ge\frac12E_{m+1}-17m^2E_m-2\langle\kappa_m(u),L_m(u)\rangle$, with $C=17$; it uses the third-order bound
+  (79), supplied by the actual compact constant-8 theorem (Theorem~\ref{thm:letwin-compact-quadratic-bound}).
+  Dynkin's identity for $E_m$ gives Lemma~5.2 in cutoff-weighted form. The base order $m=2$ follows from Dynkin's
+  identity for $\langle Au,u\rangle$, as in~(78), with $K\ge5$. For $m\ge3$ the strong induction of Section~6 bounds
+  the middle term by (99)--(106), using the envelope arithmetic (Lemma~\ref{lem:bkl-cumulant-envelope}) and the
+  standardized-posterior bound (77). A Lyapunov moment bound with a Markov tail (its generator bound again uses (79))
+  and a mean-value choice of the horizon remove the cutoff boundary terms as $R\to\infty$. Finally,
+  $K=153=9\cdot17\ge\max\{5,9C,64\}$. No inequality, induction step, Lyapunov estimate or process existence is
+  assumed.
+\end{proof}
+
+\begin{theorem}[BKL Theorem 4.1]
+  \label{thm:bkl-cumulant-bound}
+  \lean{Solutions.ThmBklCumulantBound.certificate,
+        Solutions.ThmBklCumulantBound.bound,
+        FunctionalInequalities.KLS.LogConcave.Suspension.cumulantBound_of_compact,
+        FunctionalInequalities.KLS.BKL.Localization.cumulantBound_of_letwinCompact,
+        FunctionalInequalities.KLS.BKL.Localization.cumulantBound_153}
+  \leanok
+  \uses{lem:bkl-cutoff-energy, lem:bkl-cumulant-envelope}
+  \cite{BizeulKlartagLehec2026}, Theorem~4.1, (65)--(66), in the source form. There is a universal $K\ge1$ such that
+  for every order $m\ge2$, every $n$, every isotropic log-concave probability measure $\mu$ on $\mathbb R^n$ and every
+  $u\in\mathbb R^n$,
+  \[
+    \sum_{i_2,\dots,i_m=1}^n\kappa^\mu_m(u,e_{i_2},\dots,e_{i_m})^2\le K^{m-1}\bigl((m-1)!\bigr)^2|u|^2,
+  \]
+  that is, $R^\mu_m\le K^{m-1}((m-1)!)^2\,\mathrm{Id}$, with $\kappa^\mu_m=\nabla^m\Lambda_\mu(0)$. There is no
+  compactness, Letwin, moment, energy or induction premise. The Lean statement uses $m=d+1$ with $d\ge1$, so the base
+  order $m=2$ is included; it holds with $K=153$, and also for $n=0$, where it is trivial. The proof goes through the
+  cutoff localization route chosen for the main line. The uncut Eldan process and the literal stochastic identities
+  (68)--(73) are not constructed, and BKL Theorem~1.1 and KLS are not claimed.
+\end{theorem}
+\begin{proof}
+  \leanok
+  For every $d\ge1$ the cutoff energy induction (Lemma~\ref{lem:bkl-cutoff-energy}, with the actual compact constant-8
+  theorem) gives, at $T=0$ and as $\varepsilon\to0$, the compact bound $R^\nu_{d+1}\le(d!)^2153^d\,\mathrm{Id}$ for
+  every compactly supported isotropic log-concave $\nu$; here $E_{d+1}(0)=\langle R^\nu_{d+1}u,u\rangle$ and the
+  envelope $b_{d+1}=(d!)^2K^d$ is that of Lemma~\ref{lem:bkl-cumulant-envelope}. The compact-to-general passage
+  \texttt{cumulantBound\_of\_compact} extends the bound to every isotropic log-concave law with the same constant. It
+  restricts the law to large balls, standardizes it, applies the compact bound, and passes to the limit, which is the
+  approximation argument on p.~19 of the source.
+\end{proof}
+
+\begin{theorem}[BKL Theorem 1.1]
+  \label{thm:bkl-poincare}
+  \lean{Solutions.ThmBklPoincare.certificate,
+        Solutions.ThmBklPoincare.bound,
+        FunctionalInequalities.KLS.BKL.Localization.theorem11}
+  \leanok
+  \uses{thm:bkl-cumulant-bound, prop:bkl-suspension, thm:bkl-taylor-criterion, lem:bkl-regular-reduction,
+        lem:bkl-regular-approximation, lem:bkl-isotropic-reduction, thm:letwin-compact-quadratic-bound}
+  \cite{BizeulKlartagLehec2026}, Theorem~1.1, p.~2, in the source form. There is a universal constant $C>0$ such that
+  for every $n\ge1$ and every isotropic log-concave probability measure $\mu$ on $\mathbb R^n$,
+  \[
+    \CPLit(\mu)\le C,
+  \]
+  where $\CPLit$ is the literature local-slope Poincaré constant (for log-concave laws the source constant of~(5)). The
+  constant is chosen before the dimension and the law; there is no compactness, regularity or moment premise beyond
+  isotropy. The named form \texttt{bound} states the same bound on every finite-dimensional real inner product space.
+  The right-hand inequality of the equivalent form~(6), for every log-concave law with the operator norm of its
+  covariance, is the project target, Conjecture~\ref{conj:kls}, which follows through the affine/isotropic reduction
+  (Theorem~\ref{thm:affine-isotropic-reduction}). The proof goes through the cutoff localization route chosen for the
+  main line. The uncut Eldan process and the literal stochastic identities (68)--(73) are not constructed, and the
+  intermediate source statements keep their own recorded scopes.
+\end{theorem}
+\begin{proof}
+  \leanok
+  Proof on p.~30. Theorem~\ref{thm:bkl-cumulant-bound} gives a universal $K\ge1$ with
+  $R^\nu_{d+1}\le(d!)^2K^d\,\mathrm{Id}$ for every isotropic log-concave $\nu$ in every dimension and every $d\ge2$; in
+  Lean this is \texttt{theorem41} applied to the proved compact Letwin bound
+  (Theorem~\ref{thm:letwin-compact-quadratic-bound}). Lemma~\ref{lem:bkl-regular-reduction}
+  (Proposition~\ref{prop:bkl-suspension} with $b=(d!)^2K^d$, isotropy for $d=1$, and
+  Theorem~\ref{thm:bkl-taylor-criterion} with $R=\sqrt{2K}$) gives $\CPLit(\mu)\le2CK$ for every isotropic regular law,
+  where the constant $C$ of Theorem~3.1 is chosen before $K$. Lemma~\ref{lem:bkl-isotropic-reduction} (the regular
+  approximation of Section~2, Lemma~\ref{lem:bkl-regular-approximation}, and the weak-limit passage) extends this to
+  every isotropic log-concave law in every finite-dimensional space. Hence $2CK$ is a universal constant.
 \end{proof}

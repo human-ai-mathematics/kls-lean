@@ -1,5 +1,5 @@
 import FunctionalInequalities.KLS.Geometry.Cheeger.UpperMinkowskiContent
-
+import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
 /-! Independent full-signature clients for the upper Minkowski content of thickenings at
 differentiability radii (phase 22).  Checks: the almost-everywhere monotone differentiation
 theorem combined with the pointwise derivative bound, the pointwise bound with a nonnegative

@@ -1,4 +1,5 @@
 import Mathlib
+import Mathlib.Analysis.InnerProductSpace.Trace
 
 /-!
 # Standard trace and Hilbert–Schmidt norm
@@ -175,3 +176,28 @@ theorem sum_inner_apply_le_sqrt_hsNormSq_mul (M N : EuclideanSpace ℝ (Fin n) �
       rw [← hsNormSq_eq_sum_norm_sq, ← hsNormSq_eq_sum_norm_sq]
 
 end FunctionalInequalities.Analysis
+
+/-! ### Hilbert–Schmidt sum of a symmetric operator
+
+For a symmetric continuous linear operator `A` and any finite orthonormal basis, `Σᵢⱼ ⟪A bᵢ, bⱼ⟫² = tr (A ∘ A)`. -/
+
+noncomputable section
+open scoped RealInnerProductSpace
+
+namespace FunctionalInequalities.Analysis
+
+theorem sum_inner_apply_sq_eq_trace_comp_of_isSymmetric
+    {ι E : Type*} [Fintype ι] [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+    (A : E →L[ℝ] E) (hA : (A : E →ₗ[ℝ] E).IsSymmetric)
+    (b : OrthonormalBasis ι ℝ E) :
+    (∑ i, ∑ j, ⟪A (b i),b j⟫ ^ 2) = LinearMap.trace ℝ E (A.toLinearMap * A.toLinearMap) := by
+  simp_rw [b.sum_sq_inner_left]
+  rw [LinearMap.trace_eq_sum_inner _ b]
+  apply Finset.sum_congr rfl
+  intro i _
+  rw [← real_inner_self_eq_norm_sq (A (b i))]
+  exact hA (b i) (A (b i))
+
+end FunctionalInequalities.Analysis
+
+end

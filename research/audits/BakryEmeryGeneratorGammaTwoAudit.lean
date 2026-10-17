@@ -1,5 +1,5 @@
 import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.GammaTwo
-
+import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
 /-! Independent statement audit for the **generator form** of the weak `Γ₂` inequality.
 
 Every proposition below is restated in full and **proved** from the library. The audit covers:

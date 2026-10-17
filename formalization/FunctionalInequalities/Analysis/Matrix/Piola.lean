@@ -1,6 +1,7 @@
-import FunctionalInequalities.Probability.Stein.HessianKernel
+import FunctionalInequalities.Analysis.Matrix.WeakDerivative
+import FunctionalInequalities.Analysis.BakryEmery.HessianOperator
 import FunctionalInequalities.Analysis.Matrix.DeterminantDerivative
-import FunctionalInequalities.Analysis.MollificationHessian
+import FunctionalInequalities.Analysis.Mollification.Hessian
 import Mathlib.Analysis.Calculus.LineDeriv.IntegrationByParts
 import Mathlib.Analysis.Calculus.Rademacher
 
@@ -10,7 +11,7 @@ import Mathlib.Analysis.Calculus.Rademacher
 `Σⱼ ∂ⱼ adj(∇²u)ᵢⱼ = 0` for `C³` functions `u` (`sum_fderiv_adjugate_hessianMatrix_eq_zero`), in terms of
 `Probability.Stein.hessianMatrix`; the smooth input of the weak Piola identity on the moment-map route to Letwin
 arXiv:2607.24164v1. Proof body: GPT (Letwin sub-controller task L-T6a); statement by the Letwin sub-controller;
-placement: Claude.
+placement: Claude. The cofactor consumers also supply essential boundedness from a Lipschitz gradient and weak adjugate derivatives from a given local-L2 Hessian tensor; they do not assume smoothness of that tensor or prove the main bound.
 -/
 
 noncomputable section
@@ -1049,3 +1050,72 @@ theorem integrable_inv_hessianMatrix_mul_of_bounded_compact {n : ℕ}
 end FunctionalInequalities.Analysis
 
 end LN10AInverseHessianDivergence
+
+
+section WeakHessianAdjugateConsumers
+open MeasureTheory Set Filter Metric Matrix
+open scoped ContDiff Topology Matrix.Norms.Elementwise
+open FunctionalInequalities.Probability.Stein
+namespace FunctionalInequalities.Analysis
+
+theorem memLp_hessian_adjugate_top {n : ℕ}
+    {u : EuclideanSpace ℝ (Fin n) → ℝ} {G : NNReal}
+    (hG : LipschitzWith G (gradient u)) (i j : Fin n) :
+    MemLp (fun x => (hessianMatrix u x).adjugate i j) (⊤ : ENNReal)
+      (volume : Measure (EuclideanSpace ℝ (Fin n))) := by
+  obtain ⟨C, hC⟩ := n10_cofactor_bound hG i j
+  exact memLp_top_of_bound (n10_measurable_cofactor u i j).aestronglyMeasurable C
+    (Filter.Eventually.of_forall hC)
+
+/-- Existing cofactor proof core, for the same supplied actual tensor. -/
+theorem exists_weak_hessian_adjugate_derivative {n : ℕ}
+    {u : EuclideanSpace ℝ (Fin n) → ℝ}
+    {T : EuclideanSpace ℝ (Fin n) → Fin n → Fin n → Fin n → ℝ}
+    (hbound : ∀ r s : Fin n, MemLp (fun x => hessianMatrix u x r s)
+      (⊤ : ENNReal) (volume : Measure (EuclideanSpace ℝ (Fin n))))
+    (hT : ∀ k i j : Fin n,
+      HasWeakDerivAlong (fun x => hessianMatrix u x i j) (fun x => T x k i j)
+        (EuclideanSpace.basisFun (Fin n) ℝ k) ∧
+      ∀ S : Set (EuclideanSpace ℝ (Fin n)), IsCompact S →
+        MemLp (fun x => T x k i j) 2
+          ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S))
+    (k i j : Fin n) :
+    ∃ g : EuclideanSpace ℝ (Fin n) → ℝ,
+      HasWeakDerivAlong (fun x => (hessianMatrix u x).adjugate i j) g
+        (EuclideanSpace.basisFun (Fin n) ℝ k) ∧
+      ∀ S : Set (EuclideanSpace ℝ (Fin n)), IsCompact S →
+        MemLp g 2 ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S) := by
+  classical
+  let A : EuclideanSpace ℝ (Fin n) → Matrix (Fin n) (Fin n) ℝ :=
+    fun x => (hessianMatrix u x).updateRow j (Pi.single i 1)
+  let DA : EuclideanSpace ℝ (Fin n) → Matrix (Fin n) (Fin n) ℝ :=
+    fun x => (Matrix.of fun r s => T x k r s).updateRow j (fun _ => 0)
+  have hA (r s : Fin n) : HasWeakDerivAlong (fun x => A x r s)
+      (fun x => DA x r s) (EuclideanSpace.basisFun (Fin n) ℝ k) := by
+    by_cases hr : r = j
+    · subst r
+      simpa [A, DA, Matrix.updateRow_apply] using
+        (hasWeakDerivAlong_of_contDiff
+          (f := fun _ : EuclideanSpace ℝ (Fin n) => (Pi.single i (1 : ℝ) : Fin n → ℝ) s)
+          contDiff_const (EuclideanSpace.basisFun (Fin n) ℝ k))
+    · simpa [A, DA, Matrix.updateRow_apply, hr] using (hT k r s).1
+  have hAb (r s : Fin n) : MemLp (fun x => A x r s) (⊤ : ENNReal)
+      (volume : Measure (EuclideanSpace ℝ (Fin n))) := by
+    by_cases hr : r = j
+    · subst r
+      simpa [A, Matrix.updateRow_apply] using
+        (memLp_top_const ((Pi.single i (1 : ℝ) : Fin n → ℝ) s)
+          (μ := (volume : Measure (EuclideanSpace ℝ (Fin n)))))
+    · simpa [A, Matrix.updateRow_apply, hr] using hbound r s
+  have hDA2 (r s : Fin n) (S : Set (EuclideanSpace ℝ (Fin n))) (hS : IsCompact S) :
+      MemLp (fun x => DA x r s) 2
+        ((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S) := by
+    by_cases hr : r = j
+    · subst r
+      simp [DA, Matrix.updateRow_apply]
+    · simpa [DA, Matrix.updateRow_apply, hr] using (hT k r s).2 S hS
+  have hp := hasWeakDerivAlong_det_of_locally_memLp_two hA hAb hDA2
+  refine ⟨_, ?_, hp.2⟩
+  simpa only [Matrix.adjugate_apply] using hp.1
+end FunctionalInequalities.Analysis
+end WeakHessianAdjugateConsumers

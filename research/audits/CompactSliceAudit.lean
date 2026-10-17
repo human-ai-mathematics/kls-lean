@@ -1,5 +1,5 @@
 import FunctionalInequalities.Analysis.Hausdorff.SurfaceSlicing
-
+import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
 /-!
 # Strict audit client for compact-slice measurability (obligation `L3`)
 

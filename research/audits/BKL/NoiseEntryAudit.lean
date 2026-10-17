@@ -1,6 +1,6 @@
-import FunctionalInequalities.KLS.BKL.PosteriorCovariance
+import FunctionalInequalities.KLS.BKL.Posterior.Covariance
 import FunctionalInequalities.Probability.CoordinateThirdMoment
-
+import FunctionalInequalities.KLS.BKL.Posterior.Noise
 /-! Independent audit clients for the (69) entry chain (Analysis/OperatorCoordinates.lean section EuclideanCoordinates, Probability/Moments.lean section CoordinateMonomials, Probability/CoordinateThirdMoment.lean, Probability/Posterior/CompactDomain.lean, KLS/BKL/PosteriorDomain.lean section NoiseEntries). Merged verbatim from the reviewer receipt `B69-Full-Chain-Independent-20261009 (receipt b467cf7a…)` (modules
 ABCClients, ChainClients, PosteriorClients), re-pointed from the raw `Candidate*` modules to the production owners; the namespace map Analysis → Probability of the moved B69 lemmas is applied by one added `open FunctionalInequalities.Probability` after each `open … FunctionalInequalities.Analysis` line; contracts/axiom-enumeration tooling stays in the receipt. -/
 

@@ -571,8 +571,9 @@ $\operatorname{Var}(\langle MX,X\rangle)\le2\E|\nabla\langle MX,X\rangle|^2$
 for symmetric $M$, and $\psi_n\le C(\log n)^{1/4}$ for $n\ge2$
 \cite{Letwin2026QuadraticKLS}. In the convention
 $\tfrac14\le\psi_\mu^2/C_P(\mu)\le\pi$, the latter yields
-$C_P\le C'\sqrt{\log n}$, not a dimension-free bound. Neither preprint is
-Lean-certified here, and thin-shell control alone is not a proof of KLS.
+$C_P\le C'\sqrt{\log n}$, not a dimension-free bound. Chen--Klartag's bound is not Lean-certified here. For Letwin's Theorem~1.2 only the compact
+counterpart is certified (Theorem~\ref{thm:letwin-compact-quadratic-bound}), not the noncompact
+statement or the bound on $\psi_n$; thin-shell control alone is not a proof of KLS.
 
 \paragraph{Spectral and screened localization.}
 Upstream restart de-weighting and

@@ -276,8 +276,8 @@ def render_proof_path(catalog, certificates, read_source):
     lines = [
         f'Pinned main source: [{papers[path["source"]]["authors"]}, '
         f'{papers[path["source"]]["lemma_map"]["source_version"]}]({papers[path["source"]]["url"]}).', '',
-        'Read the conditional assembly first, then its analytic inputs and the remaining',
-        'Letwin/localization obligations. This is a reading order, not a new dependency graph.',
+        'Read the main theorem first, then its analytic inputs and the separate',
+        'Letwin/localization statements. This is a reading order, not a new dependency graph.',
         'Status comes from the existing paper lemma maps. A ✓ proves the displayed statement',
         'with its hypotheses; it does not discharge an input or cover the whole paper.', '',
         '| Source step | Lean entry | Local status | Input boundary / remaining work | Evidence |',
@@ -314,7 +314,7 @@ def render_proof_path(catalog, certificates, read_source):
                      f'{views.cell(step["boundary"])} | {evidence} |')
     lines += ['', 'Certificates and item maps identify statements and source reviews, not a fresh run.',
               'For snapshot-specific acceptance use [verification](../verification.md#receipts-and-trust-scope)',
-              'and the [current handoff](../../HANDOFF.md). **BKL Theorem 1.1 and dimension-free KLS remain open.**']
+              'and the [current handoff](../../HANDOFF.md). **`KLS.kls` is proved through BKL Theorem 1.1 (`thm:bkl-poincare`) and the affine/isotropic reduction.**']
     return '\n'.join(lines)
 
 
@@ -337,8 +337,8 @@ def render(catalog, records, blueprint, certificates=None, read_source=None):
         catalog['scope'], '',
         'The literature has advanced to an inverse-Cheeger bound of order `(log n)^(1/4)` in the',
         '[July 2026 Letwin preprint](https://arxiv.org/html/2607.24164v1). Our repository currently',
-        'formalizes selected analytic foundations and reductions; none of the general',
-        'dimension-dependent frontier bounds below is yet proved here. Dimension-free KLS remains open.', '',
+        'formalizes selected analytic foundations and reductions, and the dimension-free KLS bound through',
+        'Bizeul–Klartag–Lehec\'s Theorem 1.1; the dimension-dependent frontier proofs below are not formalized as such.', '',
         'Publication status and local Lean status are separate columns. **◐ means named fragments or',
         'restricted counterparts, never an entire paper; ○ means the selected main result is not',
         'locally formalized.** A ✓ beside an individual local result is derived from the existing',
@@ -414,7 +414,9 @@ def render(catalog, records, blueprint, certificates=None, read_source=None):
         for target in p.get('target_declarations', []):
             statements.append(f'- Selected target: [`{target["name"]}`](../../{target["source"]}).')
         if p.get('target_review'):
-            statements += [f'- [Target scope review](../../{p["target_review"]}); no registered target certificate.']
+            own_cert = paper_certificate(p, certificates)
+            statements += [f'- [Target scope review](../../{p["target_review"]})'
+                           + (f'; paper-target certificate `{own_cert[0]}`.' if own_cert else '; no registered target certificate.')]
         for item in p['local_results']:
             record = records[item['node']]
             declarations = blueprint[record['blueprint']]['lean']['declarations'] if record.get('blueprint') else []

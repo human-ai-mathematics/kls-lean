@@ -1,4 +1,4 @@
-import FunctionalInequalities.KLS.LogConcave.RegularAffine
+import FunctionalInequalities.KLS.LogConcave.Regular.Affine
 import FunctionalInequalities.KLS.BKL.GaussianTaylor
 
 /-!

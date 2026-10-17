@@ -437,52 +437,6 @@ open scoped ContDiff RealInnerProductSpace
 
 namespace FunctionalInequalities.KLS.LogConcave
 
-private theorem real_inner_toLp {α : Type*} [MeasurableSpace α]
-    {μ : Measure α} {f g : α → ℝ}
-    (hf : MemLp f 2 μ) (hg : MemLp g 2 μ) :
-    ⟪hf.toLp f, hg.toLp g⟫ = ∫ x, f x * g x ∂μ := by
-  rw [MeasureTheory.L2.inner_def]
-  apply integral_congr_ae
-  filter_upwards [hf.coeFn_toLp, hg.coeFn_toLp] with x hx hy
-  simp [hx, hy, mul_comm]
-
-private theorem inner_center_left_of_mean_zero
-    {α : Type*} [MeasurableSpace α]
-    (ν : ProbabilityMeasure α) (F w : Lp ℝ 2 (ν : Measure α))
-    (hw : FunctionalInequalities.L2.mean ν w = 0) :
-    ⟪FunctionalInequalities.L2.center ν F, w⟫ = ⟪F, w⟫ := by
-  have hc :
-      FunctionalInequalities.L2.const ν (FunctionalInequalities.L2.mean ν F) =
-        FunctionalInequalities.L2.mean ν F • FunctionalInequalities.L2.const ν 1 := by
-    simpa only [mul_one] using
-      (FunctionalInequalities.L2.const_smul ν
-        (FunctionalInequalities.L2.mean ν F) 1)
-  have hcw : ⟪FunctionalInequalities.L2.const ν 1, w⟫ = 0 := by
-    rw [real_inner_comm]
-    exact hw
-  change
-    ⟪F - FunctionalInequalities.L2.const ν
-        (FunctionalInequalities.L2.mean ν F), w⟫ = ⟪F, w⟫
-  rw [inner_sub_left, hc, real_inner_smul_left, hcw, mul_zero, sub_zero]
-
-private theorem norm_sq_le_of_mem_closure_quadratic_bound
-    {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℝ H]
-    (z : H) {S : Set H} {C : ℝ} (hz : z ∈ closure S)
-    (hbound : ∀ w ∈ S, 2 * ⟪z, w⟫ - ‖w‖ ^ 2 ≤ C) :
-    ‖z‖ ^ 2 ≤ C := by
-  have hcontinuous :
-      Continuous (fun w : H => (2 : ℝ) * ⟪z, w⟫ - ‖w‖ ^ 2) :=
-    (continuous_const.mul (continuous_const.inner continuous_id)).sub
-      (continuous_id.norm.pow 2)
-  have hclosed : IsClosed {w : H | 2 * ⟪z, w⟫ - ‖w‖ ^ 2 ≤ C} :=
-    isClosed_le hcontinuous continuous_const
-  have hclosure : closure S ⊆ {w : H | 2 * ⟪z, w⟫ - ‖w‖ ^ 2 ≤ C} :=
-    closure_minimal (fun w hw => hbound w hw) hclosed
-  have h := hclosure hz
-  change 2 * ⟪z, z⟫ - ‖z‖ ^ 2 ≤ C at h
-  rw [real_inner_self_eq_norm_sq] at h
-  linarith only [h]
-
 /-- **`H⁻¹` variance bound for a convex potential** (Letwin arXiv:2607.24164v1, Proposition 2.8,
 quoted from Barthe–Klartag; here for a `C²` convex potential, the form used after Gaussian
 smoothing of the target): if `ν = e^{-W} dm` with `W` convex and `C²`, `f ∈ C¹ ∩ L²(ν)` has square

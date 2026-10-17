@@ -1,5 +1,5 @@
 import FunctionalInequalities.KLS.BKL.Suspension.Basic
-
+import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
 /-!
 # Audit of the convexity step of BKL Proposition 7.1
 

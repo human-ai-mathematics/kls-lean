@@ -1,5 +1,5 @@
 import FunctionalInequalities.Analysis.Matrix.WeakDerivative
-import FunctionalInequalities.KLS.CEK.MomentRegularity
+import FunctionalInequalities.KLS.CEK.MomentRegularity.WeakDerivative
 
 /-!
 # Genuine weak Hessian polynomial clients

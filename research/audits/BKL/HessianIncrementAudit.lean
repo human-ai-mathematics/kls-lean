@@ -1,6 +1,6 @@
 import FunctionalInequalities.Analysis.Convex.HessianIncrement
 import Lean
-
+import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
 /-! Audit client for the integrated Hessian-increment energy support of the weak Letwin route (Letwin arXiv:2607.24164v1,
 toward Theorem 2.5): centered second-difference regularity and bounds (`Analysis/Convex/SecondDifference.lean`), total
 coordinate Hessian-entry measurability and the Lipschitz-gradient entry bound (`Probability/Stein/HessianKernel.lean`), weak

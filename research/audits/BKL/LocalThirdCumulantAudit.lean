@@ -1,14 +1,13 @@
 import FunctionalInequalities.KLS.BKL.LocalThirdCumulant
 import FunctionalInequalities.KLS.BKL.SecondCumulant
-import FunctionalInequalities.KLS.BKL.PosteriorCovariance
+import FunctionalInequalities.KLS.BKL.Posterior.Covariance
 import FunctionalInequalities.KLS.BKL.Suspension.Density
-import FunctionalInequalities.KLS.LogConcave.Regular
+import FunctionalInequalities.KLS.LogConcave.Regular.Basic
 import FunctionalInequalities.Probability.Line.Laplace
 import FunctionalInequalities.KLS.BKL.GaussianTaylor
 import FunctionalInequalities.KLS.LogConcave.Translation
 import FunctionalInequalities.KLS.LogConcave.Line.Poincare
 import FunctionalInequalities.KLS.LogConcave.Density.Tilted
-
 /-!
 # Audit: BKL Lemma 4.2, the Theorem 4.1 base case and the posterior covariance domain
 

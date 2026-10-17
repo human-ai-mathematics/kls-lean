@@ -264,3 +264,8 @@ theorem sum_sum_mul_mul_mul_mul_eq_of_symm {n : ℕ} (P : Fin n → Fin n → �
 end EuclideanCoordinates
 
 end FunctionalInequalities.Analysis
+
+namespace FunctionalInequalities.Probability.Stein
+abbrev KernelMatrix (n : ℕ) := Matrix (Fin n) (Fin n) ℝ
+
+end FunctionalInequalities.Probability.Stein

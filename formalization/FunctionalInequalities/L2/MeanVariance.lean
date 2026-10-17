@@ -344,3 +344,49 @@ theorem norm_toLp_sq {W : Type*} [NormedAddCommGroup W] [InnerProductSpace ℝ W
 end NormSquare
 
 end FunctionalInequalities.L2
+
+/-! ### Variance continuity of finite linear combinations
+
+For finitely many real `L²` random variables, the variance of `Σᵢ cₖᵢ fᵢ` converges when the coefficients converge (stated in namespace `Probability`). -/
+
+noncomputable section
+open MeasureTheory Filter
+open scoped Topology
+
+namespace FunctionalInequalities.Probability
+
+theorem tendsto_variance_finite_linear_combination
+    {alpha I : Type*} [MeasurableSpace alpha] [Fintype I]
+    (mu : ProbabilityMeasure alpha) (f : I → alpha → ℝ)
+    (hf : ∀ i, MemLp (f i) 2 (mu : Measure alpha))
+    (c : ℕ → I → ℝ) (b : I → ℝ)
+    (hc : ∀ i, Tendsto (fun k => c k i) atTop (𝓝 (b i))) :
+    Tendsto (fun k => ProbabilityTheory.variance (fun x => ∑ i, c k i * f i x) (mu : Measure alpha))
+      atTop (𝓝 (ProbabilityTheory.variance (fun x => ∑ i, b i * f i x) (mu : Measure alpha))) := by
+  classical
+  let F (a : I → ℝ) : Lp ℝ 2 (mu : Measure alpha) := ∑ i, a i • (hf i).toLp (f i)
+  have hrep (a : I → ℝ) : (F a : alpha → ℝ) =ᵐ[(mu : Measure alpha)]
+      fun x => ∑ i, a i * f i x := by
+    have hi (i : I) : (a i • (hf i).toLp (f i) : Lp ℝ 2 (mu : Measure alpha)) =ᵐ[(mu : Measure alpha)]
+        fun x => a i * f i x := by
+      filter_upwards [Lp.coeFn_smul (a i) ((hf i).toLp (f i)), (hf i).coeFn_toLp] with x h1 h2
+      simpa only [Pi.smul_apply, smul_eq_mul, h2] using h1
+    apply (Lp.coeFn_fun_finsetSum Finset.univ (fun i => a i • (hf i).toLp (f i))).trans
+    filter_upwards [ae_all_iff.mpr hi] with x hx
+    exact Finset.sum_congr rfl fun i _ => hx i
+  have hF : Tendsto (fun k => F (c k)) atTop (𝓝 (F b)) := by
+    apply tendsto_finsetSum
+    intro i _
+    exact (hc i).smul tendsto_const_nhds
+  have hv (a : I → ℝ) : (FunctionalInequalities.L2.variance mu (F a) : ℝ) =
+      ProbabilityTheory.variance (fun x => ∑ i, a i * f i x) (mu : Measure alpha) :=
+    (FunctionalInequalities.L2.coe_variance_eq_pointwise mu (F a)).trans
+      (ProbabilityTheory.variance_congr (hrep a))
+  have h := (NNReal.continuous_coe.comp (FunctionalInequalities.L2.continuous_variance mu)).continuousAt.tendsto.comp hF
+  change Tendsto (fun k => (FunctionalInequalities.L2.variance mu (F (c k)) : ℝ)) atTop
+    (𝓝 (FunctionalInequalities.L2.variance mu (F b) : ℝ)) at h
+  simpa only [hv] using h
+
+end FunctionalInequalities.Probability
+
+end

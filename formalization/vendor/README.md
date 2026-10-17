@@ -69,7 +69,7 @@ import) and still depend on `sorryAx`, and every other vendored declaration may 
 an upstream fix therefore fails verification until this list is reviewed. The allowlist applies to
 this gate only: the `local-declaration-audit` gate, run in both the full and the `--lean-only`
 verification, checks every project-local declaration (public, private and generated, registered
-or not) for the three standard axioms, excluding only the exact open target `KLS.kls`, so no
+or not), `KLS.kls` included and with no exclusion, for the three standard axioms, so no
 local result can depend on these holes.
 
 ## Verification and updates

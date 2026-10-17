@@ -1,7 +1,7 @@
 import FunctionalInequalities.Probability.Diffusion.Setup
 import FunctionalInequalities.Probability.Diffusion.Existence
 import FunctionalInequalities.Probability.Diffusion.Dynkin
-
+import FunctionalInequalities.Probability.Diffusion.Generator
 /-!
 # Diffusions under a change of coordinates
 

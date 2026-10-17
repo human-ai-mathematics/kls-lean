@@ -10,8 +10,8 @@ Bizeul–Klartag–Lehec arXiv:2610.05474v1, p. 30 (proof of Theorem 1.1). Given
 bound of Theorem 4.1, `R^ν_{d+1} ≤ (d!)² K^d · Id` for all `d ≥ 2` (`CumulantBound d ((d!)² K^d)`,
 `K ≥ 1`), Proposition 7.1 gives `|T_d f|² ≤ 2K^d ‖f‖² ≤ (2K)^d ‖f‖²` for every isotropic regular law,
 isotropy gives `|T_1 f| ≤ ‖f‖`, and Theorem 3.1 with `R = √(2K)` yields `C_P(μ) ≤ 2 C_{3.1} K`.
-This module contains the reduction only: Theorem 4.1 is not proved, and no certificate is attached
-(the hypothesis is not discharged). The regular approximation of Section 2 is separate.
+This module contains the reduction only; its hypothesis is not discharged here. The closed producers
+are `BKL.Localization.theorem11` and `conjecture` (`KLS/BKL/Theorem41.lean`); Section 2's regular approximation is separate.
 -/
 
 open MeasureTheory FunctionalInequalities.Analysis.BakryEmery FunctionalInequalities.Analysis.Tensor
@@ -177,7 +177,7 @@ and every `d ≥ 2` (`CumulantBound d ((d!)² K^d)`, `K ≥ 1`), then every isot
 has literature Poincaré constant at most `2 C K`, where `C` is the constant of Theorem 3.1
 (`poincare_le_of_taylor`): Proposition 7.1 gives `|T_d f|² ≤ 2K^d‖f‖² ≤ (2K)^d‖f‖²` for `d ≥ 2`,
 isotropy gives `|T_1 f| ≤ ‖f‖`, and Theorem 3.1 applies with `R = √(2K)`. The hypothesis is the
-source's Theorem 4.1, which is not proved here; no certificate is attached. (Luna, task RED-D4.) -/
+source's Theorem 4.1, discharged in the closed producer `BKL.Localization.theorem11`. (Luna, task RED-D4.) -/
 theorem poincare_le_of_cumulantBound :
     ∃ C : ℝ, 0 < C ∧ ∀ K : ℝ, 1 ≤ K →
       (∀ d : ℕ, 2 ≤ d → CumulantBound d ((d.factorial : ℝ) ^ 2 * K ^ d)) →
@@ -302,8 +302,8 @@ universe u
 /-- **BKL Theorem 1.1, conditional on Theorem 4.1**: under the universal cumulant bounds
 `CumulantBound d ((d!)² K^d)` for all `d ≥ 2` (`K ≥ 1`), every isotropic log-concave law in every
 finite-dimensional inner product space has literature Poincaré constant at most `2·C_{3.1}·K`
-(the p. 30 reduction for regular laws plus the Section 2 regular approximation). Theorem 4.1 is
-not proved; this is not a proof of Theorem 1.1. -/
+(the p. 30 reduction for regular laws plus the Section 2 regular approximation). The closed
+producer `BKL.Localization.theorem11` discharges the hypothesis and proves Theorem 1.1. -/
 theorem localSlope_le_of_cumulantBound_all :
     ∃ C : ℝ, 0 < C ∧ ∀ K : ℝ, 1 ≤ K →
       (∀ d : ℕ, 2 ≤ d → CumulantBound d ((d.factorial : ℝ) ^ 2 * K ^ d)) →
@@ -330,8 +330,8 @@ theorem localSlope_le_of_cumulantBound_all :
     hEuro μ hLC hiso
 
 /-- The conditional implication to the project's `KLS.Conjecture`: the universal cumulant bounds of
-Theorem 4.1 (an explicit hypothesis `hSource`) imply the dimension-free KLS bound. `KLS.kls` itself
-remains the intentional hole. -/
+Theorem 4.1 (an explicit hypothesis `hSource`) imply the dimension-free KLS bound. `KLS.kls`
+(`KLS/Target.lean`) is proved through the closed producer `BKL.Localization.conjecture`. -/
 theorem conjecture_of_cumulantBound
     (hSource : ∃ K : ℝ, 1 ≤ K ∧
       ∀ d : ℕ, 2 ≤ d → CumulantBound d ((d.factorial : ℝ) ^ 2 * K ^ d)) :

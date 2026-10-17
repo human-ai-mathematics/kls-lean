@@ -1,4 +1,6 @@
-import FunctionalInequalities.KLS.Geometry.Perimeter.MetricBV
+import FunctionalInequalities.KLS.Geometry.Perimeter.MetricBV.Basic
+import FunctionalInequalities.KLS.Geometry.Perimeter.MetricBV.Complement
+import FunctionalInequalities.KLS.Geometry.Perimeter.MetricBV.Approximation
 import FunctionalInequalities.KLS.Geometry.Cheeger.MinkowskiContent
 import FunctionalInequalities.KLS.Geometry.Cheeger.LocalSlopeCoarea
 

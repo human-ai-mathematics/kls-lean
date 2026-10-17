@@ -1,6 +1,6 @@
-import FunctionalInequalities.KLS.LogConcave.RegularIsotropic
+import FunctionalInequalities.KLS.LogConcave.Regular.Isotropic
 import FunctionalInequalities.KLS.BKL.GaussianTaylor
-
+import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
 /-!
 # Audit: centering and whitening of regular laws (BKL Section 2)
 

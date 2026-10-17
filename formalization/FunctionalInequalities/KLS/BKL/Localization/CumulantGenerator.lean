@@ -1,8 +1,8 @@
 import FunctionalInequalities.KLS.BKL.Localization.LogLaplaceGenerator
 import FunctionalInequalities.KLS.BKL.Localization.Coefficients
-import FunctionalInequalities.KLS.BKL.Localization.Energy
+import FunctionalInequalities.KLS.BKL.CumulantEnergy.Basic
 import FunctionalInequalities.Probability.Posterior.LogPartition
-
+import FunctionalInequalities.KLS.BKL.Posterior.Covariance
 /-!
 # BKL Lemma 4.3 in generator form
 

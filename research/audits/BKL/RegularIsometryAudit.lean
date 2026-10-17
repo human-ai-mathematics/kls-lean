@@ -1,7 +1,7 @@
-import FunctionalInequalities.KLS.LogConcave.RegularIsometry
+import FunctionalInequalities.KLS.LogConcave.Regular.Isometry
 import FunctionalInequalities.KLS.BKL.GaussianTaylor
 import FunctionalInequalities.KLS.LogConcave.Translation
-
+import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
 /-!
 # Audit: regular potentials under linear isometries (BKL Section 2)
 

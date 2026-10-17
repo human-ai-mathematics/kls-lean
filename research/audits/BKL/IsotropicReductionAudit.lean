@@ -9,7 +9,9 @@ Source: Bizeul–Klartag–Lehec, arXiv:2610.05474v1, Section 2 (p. 5) and p. 30
 dimension one the regular-isotropic premise is discharged by the certified bound `C_P ≤ 4 Var`, so every
 isotropic log-concave law on `ℝ` has `C_P ≤ 4` through the full approximation passage, exercised on
 the standard Gaussian (variance `1`); the zero-dimensional Dirac law has constant `0` without any
-positive-dimensional premise. The all-dimensional universal premise and Theorem 4.1 are not proved.
+positive-dimensional premise. These clients test the conditional reduction. The all-dimensional
+bound and Theorem 4.1 have separate closed producers in `KLS/BKL/Poincare.lean` and
+`KLS/BKL/CumulantBound.lean`.
 Clients adapted from the Codex bundle `Full-Isotropic-Regular-Reduction/Clients.lean`
 (independently accepted, receipt 4590bfb8…).
 -/

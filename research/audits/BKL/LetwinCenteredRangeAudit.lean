@@ -1,6 +1,6 @@
 import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Range
 import FunctionalInequalities.KLS.BKL.GaussianTaylor
-import FunctionalInequalities.KLS.LogConcave.RegularIsotropic
+import FunctionalInequalities.KLS.LogConcave.Regular.Isotropic
 
 /-!
 # Audit: centered range density for the standard Gaussian law

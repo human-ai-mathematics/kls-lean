@@ -4,7 +4,7 @@ import Mathlib.Tactic
 import Mathlib.Analysis.InnerProductSpace.PiL2
 import Mathlib.Analysis.Calculus.Gradient.Basic
 import Mathlib.Analysis.Calculus.Deriv.Abs
-
+import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
 /-!
 # Audit: the first variation of the Legendre transform on real clients
 

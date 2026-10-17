@@ -5,6 +5,11 @@ and Proposition 7.1, with a Mathlib-only specification, explicit library-boundar
 an immutable reviewed closure baseline. Its `.lean.in` templates are compiled by its own runner;
 they are not automatically included in the ordinary audit-client sweep.
 
+The [classical KLS specification gate](KLS/Classical/README.md) compiles a separately written Mathlib-only statement of
+three classical KLS formulations, then a client that proves them from `KLS.kls` and BKL Theorem 1.1. It runs in
+`research/verify.py` as the `classical-kls` gate, with pinned templates, kernel replay and rejected false-statement
+mutations.
+
 These Lean clients are source evidence referenced by `research/tasks.json`. Keep them in Git:
 CI validates their paths and SHA-256 hashes from a clean checkout. Generated logs and local
 verification receipts belong under the ignored `build/` directory.

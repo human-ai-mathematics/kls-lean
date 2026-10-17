@@ -1,6 +1,6 @@
 import FunctionalInequalities.Analysis.Cutoff.Translation
 import FunctionalInequalities.Analysis.Convex.SecondDifference
-import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.WeakInverseHessian
+import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.InverseHessian.Weak
 import FunctionalInequalities.Analysis.Convex.Viscosity
 import Mathlib.MeasureTheory.Function.LocallyIntegrable
 
@@ -19,7 +19,7 @@ For a weak `C^{1,1}` Monge–Ampère potential `u` (Letwin arXiv:2607.24164v1, w
   `2K²(D‖h‖²) ∫ |η + Lη| e^{−u}`, with `L` the inverse-Hessian generator.
 
 The pointwise coercivity is `ae_hessian_increment_le_generator` (`Analysis/Convex/Viscosity.lean`); the generator identities
-and integrability are in `Analysis/BakryEmery/IntegrationByParts/WeakInverseHessian.lean`; the centered-difference facts are in
+and integrability are in `Analysis/BakryEmery/IntegrationByParts/InverseHessian/Weak.lean`; the centered-difference facts are in
 `Analysis/Convex/SecondDifference.lean`. These are supports: the weak third derivative, Theorem 2.5 and Theorem 1.2 are not
 proved here.
 -/

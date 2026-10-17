@@ -180,12 +180,12 @@ remote certification and Blueprint artifacts remain separate evidence.
 
 Remote certification runs `python3 research/verify.py --lean-only`: it builds all current
 library, solution and example modules, strictly compiles the independent Lean audit clients,
-audits transitive axioms of all local declarations except the exact open target `KLS.kls`,
-and replays the local modules in the kernel. A wrapper depending on the target is rejected.
+audits transitive axioms of every local declaration with no exclusion (`KLS.kls` included),
+and replays the local modules in the kernel. A declaration depending on a hole is rejected.
 The Lean receipt is bound to Lean sources, pinned dependencies and verification tooling;
 documentation, Blueprint/task metadata, statement-baseline records and Python tests are
 checked by the full local command, not remote CI. Remote success does not certify those
-local metadata gates or prove KLS. Evidence artifacts contain reports, logs and generated
+local metadata gates or a later snapshot. Evidence artifacts contain reports, logs and generated
 Lean clients; compiled module copies stay on the runner.
 
 `research/verify.py` strictly compiles every live, nonignored `research/audits/**/*.lean`

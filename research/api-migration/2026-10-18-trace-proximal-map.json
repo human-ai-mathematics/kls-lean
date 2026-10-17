@@ -1,0 +1,1139 @@
+{
+  "date": "2026-10-18",
+  "scope": "S3/S5: trace algebra/spectral/energy and proximal object responsibilities; exact statements, proof payloads and names retained",
+  "old_modules": [
+    "FunctionalInequalities.Analysis.Matrix.Trace",
+    "FunctionalInequalities.Analysis.Convex.Subgradient"
+  ],
+  "migration_map": "research/api-migration/2026-10-18-trace-proximal-map.json",
+  "namespace_and_public_names_unchanged": true,
+  "decision": "extend/split",
+  "API_impact": "Module locations only; names, source declaration payloads, assumptions and visibility retained",
+  "validation": [
+    "Exact source spans",
+    "Elaborated interfaces/definition closures",
+    "Complete clients",
+    "Full build/full verifier",
+    "Index/history preservation"
+  ],
+  "new_modules": [
+    "FunctionalInequalities.Analysis.Matrix.Trace.Algebra",
+    "FunctionalInequalities.Analysis.Matrix.Trace.Power",
+    "FunctionalInequalities.Analysis.Matrix.Trace.Energy",
+    "FunctionalInequalities.Analysis.Convex.Subgradient",
+    "FunctionalInequalities.Analysis.Convex.Proximal"
+  ],
+  "destinations": {
+    "formalization/FunctionalInequalities/Analysis/Matrix/Trace/Algebra.lean": {
+      "title": "Finite real matrix trace algebra and the elementary trace-energy bound",
+      "imports": [
+        "Mathlib.Data.Real.Basic",
+        "Mathlib.LinearAlgebra.Matrix.Symmetric",
+        "Mathlib.LinearAlgebra.Matrix.Trace",
+        "Mathlib.Algebra.Order.Chebyshev",
+        "Mathlib.Algebra.BigOperators.Group.Finset.Sigma",
+        "Mathlib.Tactic.NoncommRing",
+        "Mathlib.Tactic.Positivity",
+        "Mathlib.Tactic.Linarith"
+      ]
+    },
+    "formalization/FunctionalInequalities/Analysis/Matrix/Trace/Power.lean": {
+      "title": "Trace inequalities for real spectral powers",
+      "imports": [
+        "Mathlib.Analysis.Matrix.HermitianFunctionalCalculus",
+        "Mathlib.Analysis.Matrix.PosDef",
+        "Mathlib.Analysis.SpecialFunctions.Pow.Real",
+        "Mathlib.Algebra.Order.Chebyshev",
+        "Mathlib.Analysis.Matrix.Order",
+        "Mathlib.Tactic.NoncommRing"
+      ]
+    },
+    "formalization/FunctionalInequalities/Analysis/Matrix/Trace/Energy.lean": {
+      "title": "Spectral trace positivity, Jordan domination and tensor comparison",
+      "imports": [
+        "Mathlib.Analysis.Matrix.HermitianFunctionalCalculus",
+        "Mathlib.Analysis.Matrix.PosDef",
+        "Mathlib.Analysis.SpecialFunctions.Pow.Real",
+        "Mathlib.Algebra.Order.Chebyshev",
+        "Mathlib.Analysis.Matrix.Order",
+        "Mathlib.Tactic.NoncommRing",
+        "FunctionalInequalities.Analysis.Matrix.Trace.Power"
+      ]
+    },
+    "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean": {
+      "title": null,
+      "imports": [
+        "Mathlib.Analysis.Convex.Deriv",
+        "Mathlib.Analysis.Calculus.Gradient.Basic",
+        "Mathlib.Analysis.Calculus.FDeriv.Symmetric",
+        "Mathlib.Analysis.Normed.Module.FiniteDimension",
+        "Mathlib.Analysis.Calculus.Rademacher",
+        "Mathlib.Analysis.Convex.Continuous",
+        "Mathlib.Analysis.Convex.Measure",
+        "Mathlib.Analysis.InnerProductSpace.Dual",
+        "FunctionalInequalities.Analysis.Convex.LegendreVariation.Attainment"
+      ]
+    },
+    "formalization/FunctionalInequalities/Analysis/Convex/Proximal.lean": {
+      "title": "Proximal points, Moreau derivatives and resolvent symmetry",
+      "imports": [
+        "FunctionalInequalities.Analysis.Convex.Subgradient"
+      ]
+    }
+  },
+  "source_segments": [
+    {
+      "old_path": "formalization/FunctionalInequalities/Analysis/Matrix/Trace.lean",
+      "first_line": 32,
+      "last_line": 37,
+      "new_path": "formalization/FunctionalInequalities/Analysis/Matrix/Trace/Algebra.lean"
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/Analysis/Matrix/Trace.lean",
+      "first_line": 332,
+      "last_line": 380,
+      "new_path": "formalization/FunctionalInequalities/Analysis/Matrix/Trace/Algebra.lean"
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/Analysis/Matrix/Trace.lean",
+      "first_line": 824,
+      "last_line": 988,
+      "new_path": "formalization/FunctionalInequalities/Analysis/Matrix/Trace/Algebra.lean"
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/Analysis/Matrix/Trace.lean",
+      "first_line": 32,
+      "last_line": 331,
+      "new_path": "formalization/FunctionalInequalities/Analysis/Matrix/Trace/Power.lean"
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/Analysis/Matrix/Trace.lean",
+      "first_line": 382,
+      "last_line": 822,
+      "new_path": "formalization/FunctionalInequalities/Analysis/Matrix/Trace/Energy.lean"
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "first_line": 10,
+      "last_line": 1321,
+      "new_path": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean"
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "first_line": 1595,
+      "last_line": 1791,
+      "new_path": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean"
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "first_line": 1322,
+      "last_line": 1593,
+      "new_path": "formalization/FunctionalInequalities/Analysis/Convex/Proximal.lean"
+    }
+  ],
+  "authored_declaration_destinations": {
+    "FunctionalInequalities.Analysis.cfc_eq_mul_diagonal_mul": "formalization/FunctionalInequalities/Analysis/Matrix/Trace/Power.lean",
+    "FunctionalInequalities.Analysis.cfc_posSemidef_of_nonneg": "formalization/FunctionalInequalities/Analysis/Matrix/Trace/Energy.lean",
+    "FunctionalInequalities.Analysis.jordan_trace_domination": "formalization/FunctionalInequalities/Analysis/Matrix/Trace/Energy.lean",
+    "FunctionalInequalities.Analysis.letwin_tensor_comparison": "formalization/FunctionalInequalities/Analysis/Matrix/Trace/Energy.lean",
+    "FunctionalInequalities.Analysis.rpow_mul_rpow_add_rpow_mul_rpow_le": "formalization/FunctionalInequalities/Analysis/Matrix/Trace/Power.lean",
+    "FunctionalInequalities.Analysis.sum_matrix_product_entry_mul_eq_trace": "formalization/FunctionalInequalities/Analysis/Matrix/Trace/Algebra.lean",
+    "FunctionalInequalities.Analysis.sum_matrix_product_entry_quadratic_eq_trace": "formalization/FunctionalInequalities/Analysis/Matrix/Trace/Algebra.lean",
+    "FunctionalInequalities.Analysis.sum_trace_sq_le_card_mul_sum_sq": "formalization/FunctionalInequalities/Analysis/Matrix/Trace/Algebra.lean",
+    "FunctionalInequalities.Analysis.trace_cross_nonneg": "formalization/FunctionalInequalities/Analysis/Matrix/Trace/Energy.lean",
+    "FunctionalInequalities.Analysis.trace_diagonal_rpow_mul_le": "formalization/FunctionalInequalities/Analysis/Matrix/Trace/Power.lean",
+    "FunctionalInequalities.Analysis.trace_energy_nonneg": "formalization/FunctionalInequalities/Analysis/Matrix/Trace/Energy.lean",
+    "FunctionalInequalities.Analysis.trace_mul_mul_mul_eq_sum": "formalization/FunctionalInequalities/Analysis/Matrix/Trace/Algebra.lean",
+    "FunctionalInequalities.Analysis.trace_rpow_mul_rpow_mul_le": "formalization/FunctionalInequalities/Analysis/Matrix/Trace/Power.lean",
+    "FunctionalInequalities.Analysis.trace_symmetric_conjugation": "formalization/FunctionalInequalities/Analysis/Matrix/Trace/Algebra.lean",
+    "FunctionalInequalities.Analysis.trace_transpose_conjugation_sq": "formalization/FunctionalInequalities/Analysis/Matrix/Trace/Algebra.lean",
+    "FunctionalInequalities.Analysis.trace_transpose_mul_right_involution": "formalization/FunctionalInequalities/Analysis/Matrix/Trace/Algebra.lean",
+    "FunctionalInequalities.Analysis.trace_transpose_mul_shift_one": "formalization/FunctionalInequalities/Analysis/Matrix/Trace/Algebra.lean",
+    "_private.FunctionalInequalities.Analysis.Matrix.Trace.0.FunctionalInequalities.Analysis.diagonal_posSemidef": "formalization/FunctionalInequalities/Analysis/Matrix/Trace/Energy.lean",
+    "_private.FunctionalInequalities.Analysis.Matrix.Trace.0.FunctionalInequalities.Analysis.letwin_psd_factor": "formalization/FunctionalInequalities/Analysis/Matrix/Trace/Energy.lean",
+    "_private.FunctionalInequalities.Analysis.Matrix.Trace.0.FunctionalInequalities.Analysis.letwin_real_transpose": "formalization/FunctionalInequalities/Analysis/Matrix/Trace/Energy.lean",
+    "_private.FunctionalInequalities.Analysis.Matrix.Trace.0.FunctionalInequalities.Analysis.letwin_slice_comparison": "formalization/FunctionalInequalities/Analysis/Matrix/Trace/Energy.lean",
+    "_private.FunctionalInequalities.Analysis.Matrix.Trace.0.FunctionalInequalities.Analysis.letwin_sum_four_swap": "formalization/FunctionalInequalities/Analysis/Matrix/Trace/Energy.lean",
+    "_private.FunctionalInequalities.Analysis.Matrix.Trace.0.FunctionalInequalities.Analysis.letwin_tensor_trace_identity": "formalization/FunctionalInequalities/Analysis/Matrix/Trace/Energy.lean",
+    "_private.FunctionalInequalities.Analysis.Matrix.Trace.0.FunctionalInequalities.Analysis.letwin_trace_contract": "formalization/FunctionalInequalities/Analysis/Matrix/Trace/Energy.lean",
+    "_private.FunctionalInequalities.Analysis.Matrix.Trace.0.FunctionalInequalities.Analysis.letwin_trace_sandwich": "formalization/FunctionalInequalities/Analysis/Matrix/Trace/Energy.lean",
+    "_private.FunctionalInequalities.Analysis.Matrix.Trace.0.FunctionalInequalities.Analysis.letwin_trace_sandwich_product": "formalization/FunctionalInequalities/Analysis/Matrix/Trace/Energy.lean",
+    "_private.FunctionalInequalities.Analysis.Matrix.Trace.0.FunctionalInequalities.Analysis.letwin_trace_square_le": "formalization/FunctionalInequalities/Analysis/Matrix/Trace/Energy.lean",
+    "_private.FunctionalInequalities.Analysis.Matrix.Trace.0.FunctionalInequalities.Analysis.letwin_trace_weighted_slices": "formalization/FunctionalInequalities/Analysis/Matrix/Trace/Energy.lean",
+    "_private.FunctionalInequalities.Analysis.Matrix.Trace.0.FunctionalInequalities.Analysis.real_posSemidef_isSymm": "formalization/FunctionalInequalities/Analysis/Matrix/Trace/Energy.lean",
+    "_private.FunctionalInequalities.Analysis.Matrix.Trace.0.FunctionalInequalities.Analysis.reverse_triple_sum": "formalization/FunctionalInequalities/Analysis/Matrix/Trace/Algebra.lean",
+    "FunctionalInequalities.Analysis.ConvexOn.ae_differentiableAt_of_isOpen": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+    "FunctionalInequalities.Analysis.contDiff_one_of_convexOn_of_differentiable": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+    "FunctionalInequalities.Analysis.contDiff_one_of_convexOn_of_unique_subgradient": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+    "FunctionalInequalities.Analysis.differentiable_of_convexOn_of_unique_subgradient": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+    "FunctionalInequalities.Analysis.eventually_abs_sub_quadratic_le_of_subgradient_expansion": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+    "FunctionalInequalities.Analysis.exists_subgradient_slope_le_inner_add": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+    "FunctionalInequalities.Analysis.hasFDerivAt_half_sq_sub_moreau": "formalization/FunctionalInequalities/Analysis/Convex/Proximal.lean",
+    "FunctionalInequalities.Analysis.inner_hasFDerivAt_resolvent_symm": "formalization/FunctionalInequalities/Analysis/Convex/Proximal.lean",
+    "FunctionalInequalities.Analysis.inner_subgradient_eq_of_affine_on_line": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+    "FunctionalInequalities.Analysis.lipschitzWith_proximalPoint": "formalization/FunctionalInequalities/Analysis/Convex/Proximal.lean",
+    "FunctionalInequalities.Analysis.proximalPoint": "formalization/FunctionalInequalities/Analysis/Convex/Proximal.lean",
+    "FunctionalInequalities.Analysis.proximalPoint_eq_of_subgradient": "formalization/FunctionalInequalities/Analysis/Convex/Proximal.lean",
+    "FunctionalInequalities.Analysis.proximalPoint_spec": "formalization/FunctionalInequalities/Analysis/Convex/Proximal.lean",
+    "FunctionalInequalities.Analysis.sq_norm_proximalPoint_sub_le_inner": "formalization/FunctionalInequalities/Analysis/Convex/Proximal.lean",
+    "FunctionalInequalities.Analysis.subgradientImage": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+    "FunctionalInequalities.Analysis.subgradientImage_subset_of_le": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+    "FunctionalInequalities.Analysis.subgradient_mem_of_ae_gradient_mem": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+    "FunctionalInequalities.Analysis.volume_setOf_subgradient_eq_zero_of_affine_on_line": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+    "FunctionalInequalities.Analysis.volume_subgradient_two_points_eq_zero": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+    "_private.FunctionalInequalities.Analysis.Convex.Subgradient.0.FunctionalInequalities.Analysis.convex_legendre_finite_domain": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+    "_private.FunctionalInequalities.Analysis.Convex.Subgradient.0.FunctionalInequalities.Analysis.convex_line_slope_mono": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+    "_private.FunctionalInequalities.Analysis.Convex.Subgradient.0.FunctionalInequalities.Analysis.exists_proximal_minimizer": "formalization/FunctionalInequalities/Analysis/Convex/Proximal.lean",
+    "_private.FunctionalInequalities.Analysis.Convex.Subgradient.0.FunctionalInequalities.Analysis.gradient_le_increment": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+    "_private.FunctionalInequalities.Analysis.Convex.Subgradient.0.FunctionalInequalities.Analysis.hasFDerivAt_of_convexOn_of_unique_subgradient": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+    "_private.FunctionalInequalities.Analysis.Convex.Subgradient.0.FunctionalInequalities.Analysis.inner_slope_error": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+    "_private.FunctionalInequalities.Analysis.Convex.Subgradient.0.FunctionalInequalities.Analysis.legendre_eq_of_subgradient": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+    "_private.FunctionalInequalities.Analysis.Convex.Subgradient.0.FunctionalInequalities.Analysis.proximal_subgradient_monotonicity": "formalization/FunctionalInequalities/Analysis/Convex/Proximal.lean",
+    "_private.FunctionalInequalities.Analysis.Convex.Subgradient.0.FunctionalInequalities.Analysis.riemann_sum_affine": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+    "_private.FunctionalInequalities.Analysis.Convex.Subgradient.0.FunctionalInequalities.Analysis.riemann_sum_sandwich": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+    "_private.FunctionalInequalities.Analysis.Convex.Subgradient.0.FunctionalInequalities.Analysis.subgradient_of_proximal_minimizer": "formalization/FunctionalInequalities/Analysis/Convex/Proximal.lean",
+    "_private.FunctionalInequalities.Analysis.Convex.Subgradient.0.FunctionalInequalities.Analysis.support_of_max": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean"
+  },
+  "default_path_map": {
+    "formalization/FunctionalInequalities/Analysis/Matrix/Trace.lean": "formalization/FunctionalInequalities/Analysis/Matrix/Trace/Power.lean"
+  },
+  "default_module_map": {
+    "FunctionalInequalities.Analysis.Matrix.Trace": "FunctionalInequalities.Analysis.Matrix.Trace.Power",
+    "FunctionalInequalities.Analysis.Convex.Subgradient": "FunctionalInequalities.Analysis.Convex.Subgradient"
+  },
+  "placement_reason": "Elementary matrix consumers import Algebra; real-power and spectral/tensor properties retain their genuine assumptions and private supports. The subgradient expansion has no proximal references and stays with Subgradient.",
+  "context_documentation_replacements": [
+    {
+      "path": "formalization/FunctionalInequalities/Analysis/Matrix/Integral.lean",
+      "old": "Matrix/Trace.lean",
+      "new": "Matrix/Trace/Energy.lean"
+    },
+    {
+      "path": "formalization/FunctionalInequalities/Analysis/Matrix/WeakDerivative.lean",
+      "old": "Matrix/Trace.lean",
+      "new": "Matrix/Trace/Algebra.lean"
+    },
+    {
+      "path": "formalization/FunctionalInequalities/Analysis/Matrix/Sign.lean",
+      "old": "Matrix/Trace.lean",
+      "new": "Matrix/Trace/Energy.lean"
+    }
+  ],
+  "lazy_compiler_auxiliary_owner_changes": {},
+  "compiler_auxiliary_renames": {},
+  "owned_declaration_location_map": [
+    {
+      "old_name": "FunctionalInequalities.Analysis.ConvexOn.ae_differentiableAt_of_isOpen",
+      "new_name": "FunctionalInequalities.Analysis.ConvexOn.ae_differentiableAt_of_isOpen",
+      "old_module": "FunctionalInequalities.Analysis.Convex.Subgradient",
+      "new_module": "FunctionalInequalities.Analysis.Convex.Subgradient",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.cfc_eq_mul_diagonal_mul",
+      "new_name": "FunctionalInequalities.Analysis.cfc_eq_mul_diagonal_mul",
+      "old_module": "FunctionalInequalities.Analysis.Matrix.Trace",
+      "new_module": "FunctionalInequalities.Analysis.Matrix.Trace.Power",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Matrix/Trace.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Matrix/Trace/Power.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.cfc_posSemidef_of_nonneg",
+      "new_name": "FunctionalInequalities.Analysis.cfc_posSemidef_of_nonneg",
+      "old_module": "FunctionalInequalities.Analysis.Matrix.Trace",
+      "new_module": "FunctionalInequalities.Analysis.Matrix.Trace.Energy",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Matrix/Trace.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Matrix/Trace/Energy.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.contDiff_one_of_convexOn_of_differentiable",
+      "new_name": "FunctionalInequalities.Analysis.contDiff_one_of_convexOn_of_differentiable",
+      "old_module": "FunctionalInequalities.Analysis.Convex.Subgradient",
+      "new_module": "FunctionalInequalities.Analysis.Convex.Subgradient",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.contDiff_one_of_convexOn_of_differentiable._simp_1_1",
+      "new_name": "FunctionalInequalities.Analysis.contDiff_one_of_convexOn_of_differentiable._simp_1_1",
+      "old_module": "FunctionalInequalities.Analysis.Convex.Subgradient",
+      "new_module": "FunctionalInequalities.Analysis.Convex.Subgradient",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.contDiff_one_of_convexOn_of_unique_subgradient",
+      "new_name": "FunctionalInequalities.Analysis.contDiff_one_of_convexOn_of_unique_subgradient",
+      "old_module": "FunctionalInequalities.Analysis.Convex.Subgradient",
+      "new_module": "FunctionalInequalities.Analysis.Convex.Subgradient",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.differentiable_of_convexOn_of_unique_subgradient",
+      "new_name": "FunctionalInequalities.Analysis.differentiable_of_convexOn_of_unique_subgradient",
+      "old_module": "FunctionalInequalities.Analysis.Convex.Subgradient",
+      "new_module": "FunctionalInequalities.Analysis.Convex.Subgradient",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.eventually_abs_sub_quadratic_le_of_subgradient_expansion",
+      "new_name": "FunctionalInequalities.Analysis.eventually_abs_sub_quadratic_le_of_subgradient_expansion",
+      "old_module": "FunctionalInequalities.Analysis.Convex.Subgradient",
+      "new_module": "FunctionalInequalities.Analysis.Convex.Subgradient",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.eventually_abs_sub_quadratic_le_of_subgradient_expansion._simp_1_1",
+      "new_name": "FunctionalInequalities.Analysis.eventually_abs_sub_quadratic_le_of_subgradient_expansion._simp_1_1",
+      "old_module": "FunctionalInequalities.Analysis.Convex.Subgradient",
+      "new_module": "FunctionalInequalities.Analysis.Convex.Subgradient",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.exists_subgradient_slope_le_inner_add",
+      "new_name": "FunctionalInequalities.Analysis.exists_subgradient_slope_le_inner_add",
+      "old_module": "FunctionalInequalities.Analysis.Convex.Subgradient",
+      "new_module": "FunctionalInequalities.Analysis.Convex.Subgradient",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.exists_subgradient_slope_le_inner_add._abel_1_1",
+      "new_name": "FunctionalInequalities.Analysis.exists_subgradient_slope_le_inner_add._abel_1_1",
+      "old_module": "FunctionalInequalities.Analysis.Convex.Subgradient",
+      "new_module": "FunctionalInequalities.Analysis.Convex.Subgradient",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.exists_subgradient_slope_le_inner_add._abel_1_10",
+      "new_name": "FunctionalInequalities.Analysis.exists_subgradient_slope_le_inner_add._abel_1_10",
+      "old_module": "FunctionalInequalities.Analysis.Convex.Subgradient",
+      "new_module": "FunctionalInequalities.Analysis.Convex.Subgradient",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.exists_subgradient_slope_le_inner_add._simp_1_2",
+      "new_name": "FunctionalInequalities.Analysis.exists_subgradient_slope_le_inner_add._simp_1_2",
+      "old_module": "FunctionalInequalities.Analysis.Convex.Subgradient",
+      "new_module": "FunctionalInequalities.Analysis.Convex.Subgradient",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.exists_subgradient_slope_le_inner_add._simp_1_3",
+      "new_name": "FunctionalInequalities.Analysis.exists_subgradient_slope_le_inner_add._simp_1_3",
+      "old_module": "FunctionalInequalities.Analysis.Convex.Subgradient",
+      "new_module": "FunctionalInequalities.Analysis.Convex.Subgradient",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.exists_subgradient_slope_le_inner_add._simp_1_4",
+      "new_name": "FunctionalInequalities.Analysis.exists_subgradient_slope_le_inner_add._simp_1_4",
+      "old_module": "FunctionalInequalities.Analysis.Convex.Subgradient",
+      "new_module": "FunctionalInequalities.Analysis.Convex.Subgradient",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.exists_subgradient_slope_le_inner_add._simp_1_5",
+      "new_name": "FunctionalInequalities.Analysis.exists_subgradient_slope_le_inner_add._simp_1_5",
+      "old_module": "FunctionalInequalities.Analysis.Convex.Subgradient",
+      "new_module": "FunctionalInequalities.Analysis.Convex.Subgradient",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.exists_subgradient_slope_le_inner_add._simp_1_6",
+      "new_name": "FunctionalInequalities.Analysis.exists_subgradient_slope_le_inner_add._simp_1_6",
+      "old_module": "FunctionalInequalities.Analysis.Convex.Subgradient",
+      "new_module": "FunctionalInequalities.Analysis.Convex.Subgradient",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.exists_subgradient_slope_le_inner_add._simp_1_7",
+      "new_name": "FunctionalInequalities.Analysis.exists_subgradient_slope_le_inner_add._simp_1_7",
+      "old_module": "FunctionalInequalities.Analysis.Convex.Subgradient",
+      "new_module": "FunctionalInequalities.Analysis.Convex.Subgradient",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.exists_subgradient_slope_le_inner_add._simp_1_8",
+      "new_name": "FunctionalInequalities.Analysis.exists_subgradient_slope_le_inner_add._simp_1_8",
+      "old_module": "FunctionalInequalities.Analysis.Convex.Subgradient",
+      "new_module": "FunctionalInequalities.Analysis.Convex.Subgradient",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.exists_subgradient_slope_le_inner_add._simp_1_9",
+      "new_name": "FunctionalInequalities.Analysis.exists_subgradient_slope_le_inner_add._simp_1_9",
+      "old_module": "FunctionalInequalities.Analysis.Convex.Subgradient",
+      "new_module": "FunctionalInequalities.Analysis.Convex.Subgradient",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.hasFDerivAt_half_sq_sub_moreau",
+      "new_name": "FunctionalInequalities.Analysis.hasFDerivAt_half_sq_sub_moreau",
+      "old_module": "FunctionalInequalities.Analysis.Convex.Subgradient",
+      "new_module": "FunctionalInequalities.Analysis.Convex.Proximal",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Convex/Proximal.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.hasFDerivAt_half_sq_sub_moreau._simp_1_1",
+      "new_name": "FunctionalInequalities.Analysis.hasFDerivAt_half_sq_sub_moreau._simp_1_1",
+      "old_module": "FunctionalInequalities.Analysis.Convex.Subgradient",
+      "new_module": "FunctionalInequalities.Analysis.Convex.Proximal",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Convex/Proximal.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.inner_hasFDerivAt_resolvent_symm",
+      "new_name": "FunctionalInequalities.Analysis.inner_hasFDerivAt_resolvent_symm",
+      "old_module": "FunctionalInequalities.Analysis.Convex.Subgradient",
+      "new_module": "FunctionalInequalities.Analysis.Convex.Proximal",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Convex/Proximal.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.inner_hasFDerivAt_resolvent_symm._simp_1_1",
+      "new_name": "FunctionalInequalities.Analysis.inner_hasFDerivAt_resolvent_symm._simp_1_1",
+      "old_module": "FunctionalInequalities.Analysis.Convex.Subgradient",
+      "new_module": "FunctionalInequalities.Analysis.Convex.Proximal",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Convex/Proximal.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.inner_hasFDerivAt_resolvent_symm._simp_1_2",
+      "new_name": "FunctionalInequalities.Analysis.inner_hasFDerivAt_resolvent_symm._simp_1_2",
+      "old_module": "FunctionalInequalities.Analysis.Convex.Subgradient",
+      "new_module": "FunctionalInequalities.Analysis.Convex.Proximal",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Convex/Proximal.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.inner_hasFDerivAt_resolvent_symm._simp_1_3",
+      "new_name": "FunctionalInequalities.Analysis.inner_hasFDerivAt_resolvent_symm._simp_1_3",
+      "old_module": "FunctionalInequalities.Analysis.Convex.Subgradient",
+      "new_module": "FunctionalInequalities.Analysis.Convex.Proximal",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Convex/Proximal.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.inner_hasFDerivAt_resolvent_symm._simp_1_4",
+      "new_name": "FunctionalInequalities.Analysis.inner_hasFDerivAt_resolvent_symm._simp_1_4",
+      "old_module": "FunctionalInequalities.Analysis.Convex.Subgradient",
+      "new_module": "FunctionalInequalities.Analysis.Convex.Proximal",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Convex/Proximal.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.inner_hasFDerivAt_resolvent_symm._simp_1_5",
+      "new_name": "FunctionalInequalities.Analysis.inner_hasFDerivAt_resolvent_symm._simp_1_5",
+      "old_module": "FunctionalInequalities.Analysis.Convex.Subgradient",
+      "new_module": "FunctionalInequalities.Analysis.Convex.Proximal",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Convex/Proximal.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.inner_hasFDerivAt_resolvent_symm._simp_1_6",
+      "new_name": "FunctionalInequalities.Analysis.inner_hasFDerivAt_resolvent_symm._simp_1_6",
+      "old_module": "FunctionalInequalities.Analysis.Convex.Subgradient",
+      "new_module": "FunctionalInequalities.Analysis.Convex.Proximal",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Convex/Proximal.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.inner_hasFDerivAt_resolvent_symm._simp_1_7",
+      "new_name": "FunctionalInequalities.Analysis.inner_hasFDerivAt_resolvent_symm._simp_1_7",
+      "old_module": "FunctionalInequalities.Analysis.Convex.Subgradient",
+      "new_module": "FunctionalInequalities.Analysis.Convex.Proximal",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Convex/Proximal.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.inner_hasFDerivAt_resolvent_symm._simp_1_8",
+      "new_name": "FunctionalInequalities.Analysis.inner_hasFDerivAt_resolvent_symm._simp_1_8",
+      "old_module": "FunctionalInequalities.Analysis.Convex.Subgradient",
+      "new_module": "FunctionalInequalities.Analysis.Convex.Proximal",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Convex/Proximal.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.inner_subgradient_eq_of_affine_on_line",
+      "new_name": "FunctionalInequalities.Analysis.inner_subgradient_eq_of_affine_on_line",
+      "old_module": "FunctionalInequalities.Analysis.Convex.Subgradient",
+      "new_module": "FunctionalInequalities.Analysis.Convex.Subgradient",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.inner_subgradient_eq_of_affine_on_line._abel_1_1",
+      "new_name": "FunctionalInequalities.Analysis.inner_subgradient_eq_of_affine_on_line._abel_1_1",
+      "old_module": "FunctionalInequalities.Analysis.Convex.Subgradient",
+      "new_module": "FunctionalInequalities.Analysis.Convex.Subgradient",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.jordan_trace_domination",
+      "new_name": "FunctionalInequalities.Analysis.jordan_trace_domination",
+      "old_module": "FunctionalInequalities.Analysis.Matrix.Trace",
+      "new_module": "FunctionalInequalities.Analysis.Matrix.Trace.Energy",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Matrix/Trace.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Matrix/Trace/Energy.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.jordan_trace_domination._abel_1_1",
+      "new_name": "FunctionalInequalities.Analysis.jordan_trace_domination._abel_1_1",
+      "old_module": "FunctionalInequalities.Analysis.Matrix.Trace",
+      "new_module": "FunctionalInequalities.Analysis.Matrix.Trace.Energy",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Matrix/Trace.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Matrix/Trace/Energy.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.letwin_tensor_comparison",
+      "new_name": "FunctionalInequalities.Analysis.letwin_tensor_comparison",
+      "old_module": "FunctionalInequalities.Analysis.Matrix.Trace",
+      "new_module": "FunctionalInequalities.Analysis.Matrix.Trace.Energy",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Matrix/Trace.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Matrix/Trace/Energy.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.lipschitzWith_proximalPoint",
+      "new_name": "FunctionalInequalities.Analysis.lipschitzWith_proximalPoint",
+      "old_module": "FunctionalInequalities.Analysis.Convex.Subgradient",
+      "new_module": "FunctionalInequalities.Analysis.Convex.Proximal",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Convex/Proximal.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.proximalPoint",
+      "new_name": "FunctionalInequalities.Analysis.proximalPoint",
+      "old_module": "FunctionalInequalities.Analysis.Convex.Subgradient",
+      "new_module": "FunctionalInequalities.Analysis.Convex.Proximal",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Convex/Proximal.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.proximalPoint._proof_1",
+      "new_name": "FunctionalInequalities.Analysis.proximalPoint._proof_1",
+      "old_module": "FunctionalInequalities.Analysis.Convex.Subgradient",
+      "new_module": "FunctionalInequalities.Analysis.Convex.Proximal",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Convex/Proximal.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.proximalPoint_eq_of_subgradient",
+      "new_name": "FunctionalInequalities.Analysis.proximalPoint_eq_of_subgradient",
+      "old_module": "FunctionalInequalities.Analysis.Convex.Subgradient",
+      "new_module": "FunctionalInequalities.Analysis.Convex.Proximal",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Convex/Proximal.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.proximalPoint_spec",
+      "new_name": "FunctionalInequalities.Analysis.proximalPoint_spec",
+      "old_module": "FunctionalInequalities.Analysis.Convex.Subgradient",
+      "new_module": "FunctionalInequalities.Analysis.Convex.Proximal",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Convex/Proximal.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.rpow_mul_rpow_add_rpow_mul_rpow_le",
+      "new_name": "FunctionalInequalities.Analysis.rpow_mul_rpow_add_rpow_mul_rpow_le",
+      "old_module": "FunctionalInequalities.Analysis.Matrix.Trace",
+      "new_module": "FunctionalInequalities.Analysis.Matrix.Trace.Power",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Matrix/Trace.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Matrix/Trace/Power.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.sq_norm_proximalPoint_sub_le_inner",
+      "new_name": "FunctionalInequalities.Analysis.sq_norm_proximalPoint_sub_le_inner",
+      "old_module": "FunctionalInequalities.Analysis.Convex.Subgradient",
+      "new_module": "FunctionalInequalities.Analysis.Convex.Proximal",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Convex/Proximal.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.subgradientImage",
+      "new_name": "FunctionalInequalities.Analysis.subgradientImage",
+      "old_module": "FunctionalInequalities.Analysis.Convex.Subgradient",
+      "new_module": "FunctionalInequalities.Analysis.Convex.Subgradient",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.subgradientImage_subset_of_le",
+      "new_name": "FunctionalInequalities.Analysis.subgradientImage_subset_of_le",
+      "old_module": "FunctionalInequalities.Analysis.Convex.Subgradient",
+      "new_module": "FunctionalInequalities.Analysis.Convex.Subgradient",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.subgradient_mem_of_ae_gradient_mem",
+      "new_name": "FunctionalInequalities.Analysis.subgradient_mem_of_ae_gradient_mem",
+      "old_module": "FunctionalInequalities.Analysis.Convex.Subgradient",
+      "new_module": "FunctionalInequalities.Analysis.Convex.Subgradient",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.sum_matrix_product_entry_mul_eq_trace",
+      "new_name": "FunctionalInequalities.Analysis.sum_matrix_product_entry_mul_eq_trace",
+      "old_module": "FunctionalInequalities.Analysis.Matrix.Trace",
+      "new_module": "FunctionalInequalities.Analysis.Matrix.Trace.Algebra",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Matrix/Trace.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Matrix/Trace/Algebra.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.sum_matrix_product_entry_quadratic_eq_trace",
+      "new_name": "FunctionalInequalities.Analysis.sum_matrix_product_entry_quadratic_eq_trace",
+      "old_module": "FunctionalInequalities.Analysis.Matrix.Trace",
+      "new_module": "FunctionalInequalities.Analysis.Matrix.Trace.Algebra",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Matrix/Trace.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Matrix/Trace/Algebra.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.sum_matrix_product_entry_quadratic_eq_trace._simp_1_1",
+      "new_name": "FunctionalInequalities.Analysis.sum_matrix_product_entry_quadratic_eq_trace._simp_1_1",
+      "old_module": "FunctionalInequalities.Analysis.Matrix.Trace",
+      "new_module": "FunctionalInequalities.Analysis.Matrix.Trace.Algebra",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Matrix/Trace.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Matrix/Trace/Algebra.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.sum_trace_sq_le_card_mul_sum_sq",
+      "new_name": "FunctionalInequalities.Analysis.sum_trace_sq_le_card_mul_sum_sq",
+      "old_module": "FunctionalInequalities.Analysis.Matrix.Trace",
+      "new_module": "FunctionalInequalities.Analysis.Matrix.Trace.Algebra",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Matrix/Trace.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Matrix/Trace/Algebra.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.trace_cross_nonneg",
+      "new_name": "FunctionalInequalities.Analysis.trace_cross_nonneg",
+      "old_module": "FunctionalInequalities.Analysis.Matrix.Trace",
+      "new_module": "FunctionalInequalities.Analysis.Matrix.Trace.Energy",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Matrix/Trace.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Matrix/Trace/Energy.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.trace_diagonal_rpow_mul_le",
+      "new_name": "FunctionalInequalities.Analysis.trace_diagonal_rpow_mul_le",
+      "old_module": "FunctionalInequalities.Analysis.Matrix.Trace",
+      "new_module": "FunctionalInequalities.Analysis.Matrix.Trace.Power",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Matrix/Trace.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Matrix/Trace/Power.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.trace_energy_nonneg",
+      "new_name": "FunctionalInequalities.Analysis.trace_energy_nonneg",
+      "old_module": "FunctionalInequalities.Analysis.Matrix.Trace",
+      "new_module": "FunctionalInequalities.Analysis.Matrix.Trace.Energy",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Matrix/Trace.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Matrix/Trace/Energy.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.trace_mul_mul_mul_eq_sum",
+      "new_name": "FunctionalInequalities.Analysis.trace_mul_mul_mul_eq_sum",
+      "old_module": "FunctionalInequalities.Analysis.Matrix.Trace",
+      "new_module": "FunctionalInequalities.Analysis.Matrix.Trace.Algebra",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Matrix/Trace.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Matrix/Trace/Algebra.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.trace_rpow_mul_rpow_mul_le",
+      "new_name": "FunctionalInequalities.Analysis.trace_rpow_mul_rpow_mul_le",
+      "old_module": "FunctionalInequalities.Analysis.Matrix.Trace",
+      "new_module": "FunctionalInequalities.Analysis.Matrix.Trace.Power",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Matrix/Trace.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Matrix/Trace/Power.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.trace_symmetric_conjugation",
+      "new_name": "FunctionalInequalities.Analysis.trace_symmetric_conjugation",
+      "old_module": "FunctionalInequalities.Analysis.Matrix.Trace",
+      "new_module": "FunctionalInequalities.Analysis.Matrix.Trace.Algebra",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Matrix/Trace.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Matrix/Trace/Algebra.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.trace_transpose_conjugation_sq",
+      "new_name": "FunctionalInequalities.Analysis.trace_transpose_conjugation_sq",
+      "old_module": "FunctionalInequalities.Analysis.Matrix.Trace",
+      "new_module": "FunctionalInequalities.Analysis.Matrix.Trace.Algebra",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Matrix/Trace.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Matrix/Trace/Algebra.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.trace_transpose_mul_right_involution",
+      "new_name": "FunctionalInequalities.Analysis.trace_transpose_mul_right_involution",
+      "old_module": "FunctionalInequalities.Analysis.Matrix.Trace",
+      "new_module": "FunctionalInequalities.Analysis.Matrix.Trace.Algebra",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Matrix/Trace.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Matrix/Trace/Algebra.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.trace_transpose_mul_shift_one",
+      "new_name": "FunctionalInequalities.Analysis.trace_transpose_mul_shift_one",
+      "old_module": "FunctionalInequalities.Analysis.Matrix.Trace",
+      "new_module": "FunctionalInequalities.Analysis.Matrix.Trace.Algebra",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Matrix/Trace.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Matrix/Trace/Algebra.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.volume_setOf_subgradient_eq_zero_of_affine_on_line",
+      "new_name": "FunctionalInequalities.Analysis.volume_setOf_subgradient_eq_zero_of_affine_on_line",
+      "old_module": "FunctionalInequalities.Analysis.Convex.Subgradient",
+      "new_module": "FunctionalInequalities.Analysis.Convex.Subgradient",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.volume_subgradient_two_points_eq_zero",
+      "new_name": "FunctionalInequalities.Analysis.volume_subgradient_two_points_eq_zero",
+      "old_module": "FunctionalInequalities.Analysis.Convex.Subgradient",
+      "new_module": "FunctionalInequalities.Analysis.Convex.Subgradient",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "_private.FunctionalInequalities.Analysis.Convex.Subgradient.0.FunctionalInequalities.Analysis.convex_legendre_finite_domain",
+      "new_name": "_private.FunctionalInequalities.Analysis.Convex.Subgradient.0.FunctionalInequalities.Analysis.convex_legendre_finite_domain",
+      "old_module": "FunctionalInequalities.Analysis.Convex.Subgradient",
+      "new_module": "FunctionalInequalities.Analysis.Convex.Subgradient",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "public_name_unchanged": false
+    },
+    {
+      "old_name": "_private.FunctionalInequalities.Analysis.Convex.Subgradient.0.FunctionalInequalities.Analysis.convex_line_slope_mono",
+      "new_name": "_private.FunctionalInequalities.Analysis.Convex.Subgradient.0.FunctionalInequalities.Analysis.convex_line_slope_mono",
+      "old_module": "FunctionalInequalities.Analysis.Convex.Subgradient",
+      "new_module": "FunctionalInequalities.Analysis.Convex.Subgradient",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "public_name_unchanged": false
+    },
+    {
+      "old_name": "_private.FunctionalInequalities.Analysis.Convex.Subgradient.0.FunctionalInequalities.Analysis.exists_proximal_minimizer",
+      "new_name": "_private.FunctionalInequalities.Analysis.Convex.Proximal.0.FunctionalInequalities.Analysis.exists_proximal_minimizer",
+      "old_module": "FunctionalInequalities.Analysis.Convex.Subgradient",
+      "new_module": "FunctionalInequalities.Analysis.Convex.Proximal",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Convex/Proximal.lean",
+      "public_name_unchanged": false
+    },
+    {
+      "old_name": "_private.FunctionalInequalities.Analysis.Convex.Subgradient.0.FunctionalInequalities.Analysis.exists_proximal_minimizer._simp_1_1",
+      "new_name": "_private.FunctionalInequalities.Analysis.Convex.Proximal.0.FunctionalInequalities.Analysis.exists_proximal_minimizer._simp_1_1",
+      "old_module": "FunctionalInequalities.Analysis.Convex.Subgradient",
+      "new_module": "FunctionalInequalities.Analysis.Convex.Proximal",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Convex/Proximal.lean",
+      "public_name_unchanged": false
+    },
+    {
+      "old_name": "_private.FunctionalInequalities.Analysis.Convex.Subgradient.0.FunctionalInequalities.Analysis.exists_proximal_minimizer._simp_1_2",
+      "new_name": "_private.FunctionalInequalities.Analysis.Convex.Proximal.0.FunctionalInequalities.Analysis.exists_proximal_minimizer._simp_1_2",
+      "old_module": "FunctionalInequalities.Analysis.Convex.Subgradient",
+      "new_module": "FunctionalInequalities.Analysis.Convex.Proximal",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Convex/Proximal.lean",
+      "public_name_unchanged": false
+    },
+    {
+      "old_name": "_private.FunctionalInequalities.Analysis.Convex.Subgradient.0.FunctionalInequalities.Analysis.gradient_le_increment",
+      "new_name": "_private.FunctionalInequalities.Analysis.Convex.Subgradient.0.FunctionalInequalities.Analysis.gradient_le_increment",
+      "old_module": "FunctionalInequalities.Analysis.Convex.Subgradient",
+      "new_module": "FunctionalInequalities.Analysis.Convex.Subgradient",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "public_name_unchanged": false
+    },
+    {
+      "old_name": "_private.FunctionalInequalities.Analysis.Convex.Subgradient.0.FunctionalInequalities.Analysis.hasFDerivAt_of_convexOn_of_unique_subgradient",
+      "new_name": "_private.FunctionalInequalities.Analysis.Convex.Subgradient.0.FunctionalInequalities.Analysis.hasFDerivAt_of_convexOn_of_unique_subgradient",
+      "old_module": "FunctionalInequalities.Analysis.Convex.Subgradient",
+      "new_module": "FunctionalInequalities.Analysis.Convex.Subgradient",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "public_name_unchanged": false
+    },
+    {
+      "old_name": "_private.FunctionalInequalities.Analysis.Convex.Subgradient.0.FunctionalInequalities.Analysis.inner_slope_error",
+      "new_name": "_private.FunctionalInequalities.Analysis.Convex.Subgradient.0.FunctionalInequalities.Analysis.inner_slope_error",
+      "old_module": "FunctionalInequalities.Analysis.Convex.Subgradient",
+      "new_module": "FunctionalInequalities.Analysis.Convex.Subgradient",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "public_name_unchanged": false
+    },
+    {
+      "old_name": "_private.FunctionalInequalities.Analysis.Convex.Subgradient.0.FunctionalInequalities.Analysis.legendre_eq_of_subgradient",
+      "new_name": "_private.FunctionalInequalities.Analysis.Convex.Subgradient.0.FunctionalInequalities.Analysis.legendre_eq_of_subgradient",
+      "old_module": "FunctionalInequalities.Analysis.Convex.Subgradient",
+      "new_module": "FunctionalInequalities.Analysis.Convex.Subgradient",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "public_name_unchanged": false
+    },
+    {
+      "old_name": "_private.FunctionalInequalities.Analysis.Convex.Subgradient.0.FunctionalInequalities.Analysis.proximal_subgradient_monotonicity",
+      "new_name": "_private.FunctionalInequalities.Analysis.Convex.Proximal.0.FunctionalInequalities.Analysis.proximal_subgradient_monotonicity",
+      "old_module": "FunctionalInequalities.Analysis.Convex.Subgradient",
+      "new_module": "FunctionalInequalities.Analysis.Convex.Proximal",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Convex/Proximal.lean",
+      "public_name_unchanged": false
+    },
+    {
+      "old_name": "_private.FunctionalInequalities.Analysis.Convex.Subgradient.0.FunctionalInequalities.Analysis.proximal_subgradient_monotonicity._abel_1_1",
+      "new_name": "_private.FunctionalInequalities.Analysis.Convex.Proximal.0.FunctionalInequalities.Analysis.proximal_subgradient_monotonicity._abel_1_1",
+      "old_module": "FunctionalInequalities.Analysis.Convex.Subgradient",
+      "new_module": "FunctionalInequalities.Analysis.Convex.Proximal",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Convex/Proximal.lean",
+      "public_name_unchanged": false
+    },
+    {
+      "old_name": "_private.FunctionalInequalities.Analysis.Convex.Subgradient.0.FunctionalInequalities.Analysis.riemann_sum_affine",
+      "new_name": "_private.FunctionalInequalities.Analysis.Convex.Subgradient.0.FunctionalInequalities.Analysis.riemann_sum_affine",
+      "old_module": "FunctionalInequalities.Analysis.Convex.Subgradient",
+      "new_module": "FunctionalInequalities.Analysis.Convex.Subgradient",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "public_name_unchanged": false
+    },
+    {
+      "old_name": "_private.FunctionalInequalities.Analysis.Convex.Subgradient.0.FunctionalInequalities.Analysis.riemann_sum_sandwich",
+      "new_name": "_private.FunctionalInequalities.Analysis.Convex.Subgradient.0.FunctionalInequalities.Analysis.riemann_sum_sandwich",
+      "old_module": "FunctionalInequalities.Analysis.Convex.Subgradient",
+      "new_module": "FunctionalInequalities.Analysis.Convex.Subgradient",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "public_name_unchanged": false
+    },
+    {
+      "old_name": "_private.FunctionalInequalities.Analysis.Convex.Subgradient.0.FunctionalInequalities.Analysis.subgradient_of_proximal_minimizer",
+      "new_name": "_private.FunctionalInequalities.Analysis.Convex.Proximal.0.FunctionalInequalities.Analysis.subgradient_of_proximal_minimizer",
+      "old_module": "FunctionalInequalities.Analysis.Convex.Subgradient",
+      "new_module": "FunctionalInequalities.Analysis.Convex.Proximal",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Convex/Proximal.lean",
+      "public_name_unchanged": false
+    },
+    {
+      "old_name": "_private.FunctionalInequalities.Analysis.Convex.Subgradient.0.FunctionalInequalities.Analysis.subgradient_of_proximal_minimizer._abel_1_1",
+      "new_name": "_private.FunctionalInequalities.Analysis.Convex.Proximal.0.FunctionalInequalities.Analysis.subgradient_of_proximal_minimizer._abel_1_1",
+      "old_module": "FunctionalInequalities.Analysis.Convex.Subgradient",
+      "new_module": "FunctionalInequalities.Analysis.Convex.Proximal",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Convex/Proximal.lean",
+      "public_name_unchanged": false
+    },
+    {
+      "old_name": "_private.FunctionalInequalities.Analysis.Convex.Subgradient.0.FunctionalInequalities.Analysis.subgradient_of_proximal_minimizer._abel_1_2",
+      "new_name": "_private.FunctionalInequalities.Analysis.Convex.Proximal.0.FunctionalInequalities.Analysis.subgradient_of_proximal_minimizer._abel_1_2",
+      "old_module": "FunctionalInequalities.Analysis.Convex.Subgradient",
+      "new_module": "FunctionalInequalities.Analysis.Convex.Proximal",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Convex/Proximal.lean",
+      "public_name_unchanged": false
+    },
+    {
+      "old_name": "_private.FunctionalInequalities.Analysis.Convex.Subgradient.0.FunctionalInequalities.Analysis.support_of_max",
+      "new_name": "_private.FunctionalInequalities.Analysis.Convex.Subgradient.0.FunctionalInequalities.Analysis.support_of_max",
+      "old_module": "FunctionalInequalities.Analysis.Convex.Subgradient",
+      "new_module": "FunctionalInequalities.Analysis.Convex.Subgradient",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "public_name_unchanged": false
+    },
+    {
+      "old_name": "_private.FunctionalInequalities.Analysis.Convex.Subgradient.0.FunctionalInequalities.Analysis.support_of_max._abel_1_1",
+      "new_name": "_private.FunctionalInequalities.Analysis.Convex.Subgradient.0.FunctionalInequalities.Analysis.support_of_max._abel_1_1",
+      "old_module": "FunctionalInequalities.Analysis.Convex.Subgradient",
+      "new_module": "FunctionalInequalities.Analysis.Convex.Subgradient",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean",
+      "public_name_unchanged": false
+    },
+    {
+      "old_name": "_private.FunctionalInequalities.Analysis.Matrix.Trace.0.FunctionalInequalities.Analysis.diagonal_posSemidef",
+      "new_name": "_private.FunctionalInequalities.Analysis.Matrix.Trace.Energy.0.FunctionalInequalities.Analysis.diagonal_posSemidef",
+      "old_module": "FunctionalInequalities.Analysis.Matrix.Trace",
+      "new_module": "FunctionalInequalities.Analysis.Matrix.Trace.Energy",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Matrix/Trace.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Matrix/Trace/Energy.lean",
+      "public_name_unchanged": false
+    },
+    {
+      "old_name": "_private.FunctionalInequalities.Analysis.Matrix.Trace.0.FunctionalInequalities.Analysis.letwin_psd_factor",
+      "new_name": "_private.FunctionalInequalities.Analysis.Matrix.Trace.Energy.0.FunctionalInequalities.Analysis.letwin_psd_factor",
+      "old_module": "FunctionalInequalities.Analysis.Matrix.Trace",
+      "new_module": "FunctionalInequalities.Analysis.Matrix.Trace.Energy",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Matrix/Trace.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Matrix/Trace/Energy.lean",
+      "public_name_unchanged": false
+    },
+    {
+      "old_name": "_private.FunctionalInequalities.Analysis.Matrix.Trace.0.FunctionalInequalities.Analysis.letwin_real_transpose",
+      "new_name": "_private.FunctionalInequalities.Analysis.Matrix.Trace.Energy.0.FunctionalInequalities.Analysis.letwin_real_transpose",
+      "old_module": "FunctionalInequalities.Analysis.Matrix.Trace",
+      "new_module": "FunctionalInequalities.Analysis.Matrix.Trace.Energy",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Matrix/Trace.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Matrix/Trace/Energy.lean",
+      "public_name_unchanged": false
+    },
+    {
+      "old_name": "_private.FunctionalInequalities.Analysis.Matrix.Trace.0.FunctionalInequalities.Analysis.letwin_slice_comparison",
+      "new_name": "_private.FunctionalInequalities.Analysis.Matrix.Trace.Energy.0.FunctionalInequalities.Analysis.letwin_slice_comparison",
+      "old_module": "FunctionalInequalities.Analysis.Matrix.Trace",
+      "new_module": "FunctionalInequalities.Analysis.Matrix.Trace.Energy",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Matrix/Trace.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Matrix/Trace/Energy.lean",
+      "public_name_unchanged": false
+    },
+    {
+      "old_name": "_private.FunctionalInequalities.Analysis.Matrix.Trace.0.FunctionalInequalities.Analysis.letwin_sum_four_swap",
+      "new_name": "_private.FunctionalInequalities.Analysis.Matrix.Trace.Energy.0.FunctionalInequalities.Analysis.letwin_sum_four_swap",
+      "old_module": "FunctionalInequalities.Analysis.Matrix.Trace",
+      "new_module": "FunctionalInequalities.Analysis.Matrix.Trace.Energy",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Matrix/Trace.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Matrix/Trace/Energy.lean",
+      "public_name_unchanged": false
+    },
+    {
+      "old_name": "_private.FunctionalInequalities.Analysis.Matrix.Trace.0.FunctionalInequalities.Analysis.letwin_tensor_trace_identity",
+      "new_name": "_private.FunctionalInequalities.Analysis.Matrix.Trace.Energy.0.FunctionalInequalities.Analysis.letwin_tensor_trace_identity",
+      "old_module": "FunctionalInequalities.Analysis.Matrix.Trace",
+      "new_module": "FunctionalInequalities.Analysis.Matrix.Trace.Energy",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Matrix/Trace.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Matrix/Trace/Energy.lean",
+      "public_name_unchanged": false
+    },
+    {
+      "old_name": "_private.FunctionalInequalities.Analysis.Matrix.Trace.0.FunctionalInequalities.Analysis.letwin_trace_contract",
+      "new_name": "_private.FunctionalInequalities.Analysis.Matrix.Trace.Energy.0.FunctionalInequalities.Analysis.letwin_trace_contract",
+      "old_module": "FunctionalInequalities.Analysis.Matrix.Trace",
+      "new_module": "FunctionalInequalities.Analysis.Matrix.Trace.Energy",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Matrix/Trace.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Matrix/Trace/Energy.lean",
+      "public_name_unchanged": false
+    },
+    {
+      "old_name": "_private.FunctionalInequalities.Analysis.Matrix.Trace.0.FunctionalInequalities.Analysis.letwin_trace_sandwich",
+      "new_name": "_private.FunctionalInequalities.Analysis.Matrix.Trace.Energy.0.FunctionalInequalities.Analysis.letwin_trace_sandwich",
+      "old_module": "FunctionalInequalities.Analysis.Matrix.Trace",
+      "new_module": "FunctionalInequalities.Analysis.Matrix.Trace.Energy",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Matrix/Trace.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Matrix/Trace/Energy.lean",
+      "public_name_unchanged": false
+    },
+    {
+      "old_name": "_private.FunctionalInequalities.Analysis.Matrix.Trace.0.FunctionalInequalities.Analysis.letwin_trace_sandwich_product",
+      "new_name": "_private.FunctionalInequalities.Analysis.Matrix.Trace.Energy.0.FunctionalInequalities.Analysis.letwin_trace_sandwich_product",
+      "old_module": "FunctionalInequalities.Analysis.Matrix.Trace",
+      "new_module": "FunctionalInequalities.Analysis.Matrix.Trace.Energy",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Matrix/Trace.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Matrix/Trace/Energy.lean",
+      "public_name_unchanged": false
+    },
+    {
+      "old_name": "_private.FunctionalInequalities.Analysis.Matrix.Trace.0.FunctionalInequalities.Analysis.letwin_trace_square_le",
+      "new_name": "_private.FunctionalInequalities.Analysis.Matrix.Trace.Energy.0.FunctionalInequalities.Analysis.letwin_trace_square_le",
+      "old_module": "FunctionalInequalities.Analysis.Matrix.Trace",
+      "new_module": "FunctionalInequalities.Analysis.Matrix.Trace.Energy",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Matrix/Trace.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Matrix/Trace/Energy.lean",
+      "public_name_unchanged": false
+    },
+    {
+      "old_name": "_private.FunctionalInequalities.Analysis.Matrix.Trace.0.FunctionalInequalities.Analysis.letwin_trace_weighted_slices",
+      "new_name": "_private.FunctionalInequalities.Analysis.Matrix.Trace.Energy.0.FunctionalInequalities.Analysis.letwin_trace_weighted_slices",
+      "old_module": "FunctionalInequalities.Analysis.Matrix.Trace",
+      "new_module": "FunctionalInequalities.Analysis.Matrix.Trace.Energy",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Matrix/Trace.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Matrix/Trace/Energy.lean",
+      "public_name_unchanged": false
+    },
+    {
+      "old_name": "_private.FunctionalInequalities.Analysis.Matrix.Trace.0.FunctionalInequalities.Analysis.real_posSemidef_isSymm",
+      "new_name": "_private.FunctionalInequalities.Analysis.Matrix.Trace.Energy.0.FunctionalInequalities.Analysis.real_posSemidef_isSymm",
+      "old_module": "FunctionalInequalities.Analysis.Matrix.Trace",
+      "new_module": "FunctionalInequalities.Analysis.Matrix.Trace.Energy",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Matrix/Trace.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Matrix/Trace/Energy.lean",
+      "public_name_unchanged": false
+    },
+    {
+      "old_name": "_private.FunctionalInequalities.Analysis.Matrix.Trace.0.FunctionalInequalities.Analysis.reverse_triple_sum",
+      "new_name": "_private.FunctionalInequalities.Analysis.Matrix.Trace.Algebra.0.FunctionalInequalities.Analysis.reverse_triple_sum",
+      "old_module": "FunctionalInequalities.Analysis.Matrix.Trace",
+      "new_module": "FunctionalInequalities.Analysis.Matrix.Trace.Algebra",
+      "old_path": "formalization/FunctionalInequalities/Analysis/Matrix/Trace.lean",
+      "new_path": "formalization/FunctionalInequalities/Analysis/Matrix/Trace/Algebra.lean",
+      "public_name_unchanged": false
+    }
+  ],
+  "compiler_identifier_map": {
+    "_private.FunctionalInequalities.Analysis.Convex.Proximal.0.FunctionalInequalities.Analysis.exists_proximal_minimizer": "_private.FunctionalInequalities.Analysis.Convex.Subgradient.0.FunctionalInequalities.Analysis.exists_proximal_minimizer",
+    "_private.FunctionalInequalities.Analysis.Convex.Proximal.0.FunctionalInequalities.Analysis.exists_proximal_minimizer._simp_1_1": "_private.FunctionalInequalities.Analysis.Convex.Subgradient.0.FunctionalInequalities.Analysis.exists_proximal_minimizer._simp_1_1",
+    "_private.FunctionalInequalities.Analysis.Convex.Proximal.0.FunctionalInequalities.Analysis.exists_proximal_minimizer._simp_1_2": "_private.FunctionalInequalities.Analysis.Convex.Subgradient.0.FunctionalInequalities.Analysis.exists_proximal_minimizer._simp_1_2",
+    "_private.FunctionalInequalities.Analysis.Convex.Proximal.0.FunctionalInequalities.Analysis.proximal_subgradient_monotonicity": "_private.FunctionalInequalities.Analysis.Convex.Subgradient.0.FunctionalInequalities.Analysis.proximal_subgradient_monotonicity",
+    "_private.FunctionalInequalities.Analysis.Convex.Proximal.0.FunctionalInequalities.Analysis.proximal_subgradient_monotonicity._abel_1_1": "_private.FunctionalInequalities.Analysis.Convex.Subgradient.0.FunctionalInequalities.Analysis.proximal_subgradient_monotonicity._abel_1_1",
+    "_private.FunctionalInequalities.Analysis.Convex.Proximal.0.FunctionalInequalities.Analysis.subgradient_of_proximal_minimizer": "_private.FunctionalInequalities.Analysis.Convex.Subgradient.0.FunctionalInequalities.Analysis.subgradient_of_proximal_minimizer",
+    "_private.FunctionalInequalities.Analysis.Convex.Proximal.0.FunctionalInequalities.Analysis.subgradient_of_proximal_minimizer._abel_1_1": "_private.FunctionalInequalities.Analysis.Convex.Subgradient.0.FunctionalInequalities.Analysis.subgradient_of_proximal_minimizer._abel_1_1",
+    "_private.FunctionalInequalities.Analysis.Convex.Proximal.0.FunctionalInequalities.Analysis.subgradient_of_proximal_minimizer._abel_1_2": "_private.FunctionalInequalities.Analysis.Convex.Subgradient.0.FunctionalInequalities.Analysis.subgradient_of_proximal_minimizer._abel_1_2",
+    "_private.FunctionalInequalities.Analysis.Matrix.Trace.Energy.0.FunctionalInequalities.Analysis.diagonal_posSemidef": "_private.FunctionalInequalities.Analysis.Matrix.Trace.0.FunctionalInequalities.Analysis.diagonal_posSemidef",
+    "_private.FunctionalInequalities.Analysis.Matrix.Trace.Energy.0.FunctionalInequalities.Analysis.letwin_psd_factor": "_private.FunctionalInequalities.Analysis.Matrix.Trace.0.FunctionalInequalities.Analysis.letwin_psd_factor",
+    "_private.FunctionalInequalities.Analysis.Matrix.Trace.Energy.0.FunctionalInequalities.Analysis.letwin_real_transpose": "_private.FunctionalInequalities.Analysis.Matrix.Trace.0.FunctionalInequalities.Analysis.letwin_real_transpose",
+    "_private.FunctionalInequalities.Analysis.Matrix.Trace.Energy.0.FunctionalInequalities.Analysis.letwin_slice_comparison": "_private.FunctionalInequalities.Analysis.Matrix.Trace.0.FunctionalInequalities.Analysis.letwin_slice_comparison",
+    "_private.FunctionalInequalities.Analysis.Matrix.Trace.Energy.0.FunctionalInequalities.Analysis.letwin_sum_four_swap": "_private.FunctionalInequalities.Analysis.Matrix.Trace.0.FunctionalInequalities.Analysis.letwin_sum_four_swap",
+    "_private.FunctionalInequalities.Analysis.Matrix.Trace.Energy.0.FunctionalInequalities.Analysis.letwin_tensor_trace_identity": "_private.FunctionalInequalities.Analysis.Matrix.Trace.0.FunctionalInequalities.Analysis.letwin_tensor_trace_identity",
+    "_private.FunctionalInequalities.Analysis.Matrix.Trace.Energy.0.FunctionalInequalities.Analysis.letwin_trace_contract": "_private.FunctionalInequalities.Analysis.Matrix.Trace.0.FunctionalInequalities.Analysis.letwin_trace_contract",
+    "_private.FunctionalInequalities.Analysis.Matrix.Trace.Energy.0.FunctionalInequalities.Analysis.letwin_trace_sandwich": "_private.FunctionalInequalities.Analysis.Matrix.Trace.0.FunctionalInequalities.Analysis.letwin_trace_sandwich",
+    "_private.FunctionalInequalities.Analysis.Matrix.Trace.Energy.0.FunctionalInequalities.Analysis.letwin_trace_sandwich_product": "_private.FunctionalInequalities.Analysis.Matrix.Trace.0.FunctionalInequalities.Analysis.letwin_trace_sandwich_product",
+    "_private.FunctionalInequalities.Analysis.Matrix.Trace.Energy.0.FunctionalInequalities.Analysis.letwin_trace_square_le": "_private.FunctionalInequalities.Analysis.Matrix.Trace.0.FunctionalInequalities.Analysis.letwin_trace_square_le",
+    "_private.FunctionalInequalities.Analysis.Matrix.Trace.Energy.0.FunctionalInequalities.Analysis.letwin_trace_weighted_slices": "_private.FunctionalInequalities.Analysis.Matrix.Trace.0.FunctionalInequalities.Analysis.letwin_trace_weighted_slices",
+    "_private.FunctionalInequalities.Analysis.Matrix.Trace.Energy.0.FunctionalInequalities.Analysis.real_posSemidef_isSymm": "_private.FunctionalInequalities.Analysis.Matrix.Trace.0.FunctionalInequalities.Analysis.real_posSemidef_isSymm",
+    "_private.FunctionalInequalities.Analysis.Matrix.Trace.Algebra.0.FunctionalInequalities.Analysis.reverse_triple_sum": "_private.FunctionalInequalities.Analysis.Matrix.Trace.0.FunctionalInequalities.Analysis.reverse_triple_sum",
+    "inst._@.FunctionalInequalities.Analysis.Matrix.Trace.Power.2030581666._hygCtx._hyg.10": "inst._@.FunctionalInequalities.Analysis.Matrix.Trace.2030581666._hygCtx._hyg.10",
+    "inst._@.FunctionalInequalities.Analysis.Matrix.Trace.Power.2030581666._hygCtx._hyg.13": "inst._@.FunctionalInequalities.Analysis.Matrix.Trace.2030581666._hygCtx._hyg.13",
+    "inst._@.FunctionalInequalities.Analysis.Matrix.Trace.Energy.2616617108._hygCtx._hyg.3": "inst._@.FunctionalInequalities.Analysis.Matrix.Trace.2616617108._hygCtx._hyg.3",
+    "inst._@.FunctionalInequalities.Analysis.Matrix.Trace.Energy.2616617108._hygCtx._hyg.6": "inst._@.FunctionalInequalities.Analysis.Matrix.Trace.2616617108._hygCtx._hyg.6",
+    "inst._@.FunctionalInequalities.Analysis.Convex.Proximal.4265451710._hygCtx._hyg.3": "inst._@.FunctionalInequalities.Analysis.Convex.Subgradient.4265451710._hygCtx._hyg.3",
+    "inst._@.FunctionalInequalities.Analysis.Convex.Proximal.4265451710._hygCtx._hyg.6": "inst._@.FunctionalInequalities.Analysis.Convex.Subgradient.4265451710._hygCtx._hyg.6",
+    "inst._@.FunctionalInequalities.Analysis.Convex.Proximal.3691948699._hygCtx._hyg.3": "inst._@.FunctionalInequalities.Analysis.Convex.Subgradient.3691948699._hygCtx._hyg.3",
+    "inst._@.FunctionalInequalities.Analysis.Convex.Proximal.3691948699._hygCtx._hyg.6": "inst._@.FunctionalInequalities.Analysis.Convex.Subgradient.3691948699._hygCtx._hyg.6",
+    "inst._@.FunctionalInequalities.Analysis.Matrix.Trace.Energy.3124613259._hygCtx._hyg.3": "inst._@.FunctionalInequalities.Analysis.Matrix.Trace.3124613259._hygCtx._hyg.3",
+    "inst._@.FunctionalInequalities.Analysis.Matrix.Trace.Energy.3124613259._hygCtx._hyg.6": "inst._@.FunctionalInequalities.Analysis.Matrix.Trace.3124613259._hygCtx._hyg.6",
+    "inst._@.FunctionalInequalities.Analysis.Convex.Proximal.4176395408._hygCtx._hyg.3": "inst._@.FunctionalInequalities.Analysis.Convex.Subgradient.4176395408._hygCtx._hyg.3",
+    "inst._@.FunctionalInequalities.Analysis.Convex.Proximal.4176395408._hygCtx._hyg.6": "inst._@.FunctionalInequalities.Analysis.Convex.Subgradient.4176395408._hygCtx._hyg.6",
+    "inst._@.FunctionalInequalities.Analysis.Convex.Proximal.4176395408._hygCtx._hyg.12": "inst._@.FunctionalInequalities.Analysis.Convex.Subgradient.4176395408._hygCtx._hyg.12",
+    "inst._@.FunctionalInequalities.Analysis.Convex.Proximal.2191513896._hygCtx._hyg.3": "inst._@.FunctionalInequalities.Analysis.Convex.Subgradient.2191513896._hygCtx._hyg.3",
+    "inst._@.FunctionalInequalities.Analysis.Convex.Proximal.2191513896._hygCtx._hyg.6": "inst._@.FunctionalInequalities.Analysis.Convex.Subgradient.2191513896._hygCtx._hyg.6",
+    "inst._@.FunctionalInequalities.Analysis.Convex.Proximal.3043326288._hygCtx._hyg.3": "inst._@.FunctionalInequalities.Analysis.Convex.Subgradient.3043326288._hygCtx._hyg.3",
+    "inst._@.FunctionalInequalities.Analysis.Convex.Proximal.3043326288._hygCtx._hyg.6": "inst._@.FunctionalInequalities.Analysis.Convex.Subgradient.3043326288._hygCtx._hyg.6",
+    "inst._@.FunctionalInequalities.Analysis.Convex.Proximal.3043326288._hygCtx._hyg.12": "inst._@.FunctionalInequalities.Analysis.Convex.Subgradient.3043326288._hygCtx._hyg.12",
+    "inst._@.FunctionalInequalities.Analysis.Convex.Proximal.3073179680._hygCtx._hyg.3": "inst._@.FunctionalInequalities.Analysis.Convex.Subgradient.3073179680._hygCtx._hyg.3",
+    "inst._@.FunctionalInequalities.Analysis.Convex.Proximal.3073179680._hygCtx._hyg.6": "inst._@.FunctionalInequalities.Analysis.Convex.Subgradient.3073179680._hygCtx._hyg.6",
+    "inst._@.FunctionalInequalities.Analysis.Convex.Proximal.3073179680._hygCtx._hyg.12": "inst._@.FunctionalInequalities.Analysis.Convex.Subgradient.3073179680._hygCtx._hyg.12",
+    "inst._@.FunctionalInequalities.Analysis.Convex.Proximal.3116207259._hygCtx._hyg.3": "inst._@.FunctionalInequalities.Analysis.Convex.Subgradient.3116207259._hygCtx._hyg.3",
+    "inst._@.FunctionalInequalities.Analysis.Convex.Proximal.3116207259._hygCtx._hyg.6": "inst._@.FunctionalInequalities.Analysis.Convex.Subgradient.3116207259._hygCtx._hyg.6",
+    "inst._@.FunctionalInequalities.Analysis.Convex.Proximal.3116207259._hygCtx._hyg.12": "inst._@.FunctionalInequalities.Analysis.Convex.Subgradient.3116207259._hygCtx._hyg.12",
+    "inst._@.FunctionalInequalities.Analysis.Matrix.Trace.Energy.3368624042._hygCtx._hyg.3": "inst._@.FunctionalInequalities.Analysis.Matrix.Trace.3368624042._hygCtx._hyg.3",
+    "inst._@.FunctionalInequalities.Analysis.Matrix.Trace.Energy.3368624042._hygCtx._hyg.6": "inst._@.FunctionalInequalities.Analysis.Matrix.Trace.3368624042._hygCtx._hyg.6",
+    "inst._@.FunctionalInequalities.Analysis.Matrix.Trace.Power.1572363412._hygCtx._hyg.3": "inst._@.FunctionalInequalities.Analysis.Matrix.Trace.1572363412._hygCtx._hyg.3",
+    "inst._@.FunctionalInequalities.Analysis.Matrix.Trace.Power.1572363412._hygCtx._hyg.6": "inst._@.FunctionalInequalities.Analysis.Matrix.Trace.1572363412._hygCtx._hyg.6",
+    "inst._@.FunctionalInequalities.Analysis.Matrix.Trace.Energy.439893235._hygCtx._hyg.3": "inst._@.FunctionalInequalities.Analysis.Matrix.Trace.439893235._hygCtx._hyg.3",
+    "inst._@.FunctionalInequalities.Analysis.Matrix.Trace.Energy.439893235._hygCtx._hyg.6": "inst._@.FunctionalInequalities.Analysis.Matrix.Trace.439893235._hygCtx._hyg.6",
+    "inst._@.FunctionalInequalities.Analysis.Matrix.Trace.Power.3869493626._hygCtx._hyg.10": "inst._@.FunctionalInequalities.Analysis.Matrix.Trace.3869493626._hygCtx._hyg.10",
+    "inst._@.FunctionalInequalities.Analysis.Matrix.Trace.Power.3869493626._hygCtx._hyg.13": "inst._@.FunctionalInequalities.Analysis.Matrix.Trace.3869493626._hygCtx._hyg.13",
+    "inst._@.FunctionalInequalities.Analysis.Matrix.Trace.Algebra.3773908998._hygCtx._hyg.3": "inst._@.FunctionalInequalities.Analysis.Matrix.Trace.3773908998._hygCtx._hyg.3",
+    "inst._@.FunctionalInequalities.Analysis.Matrix.Trace.Algebra.414201453._hygCtx._hyg.3": "inst._@.FunctionalInequalities.Analysis.Matrix.Trace.414201453._hygCtx._hyg.3",
+    "inst._@.FunctionalInequalities.Analysis.Matrix.Trace.Algebra.3039847079._hygCtx._hyg.3": "inst._@.FunctionalInequalities.Analysis.Matrix.Trace.3039847079._hygCtx._hyg.3",
+    "inst._@.FunctionalInequalities.Analysis.Matrix.Trace.Algebra.3039847079._hygCtx._hyg.6": "inst._@.FunctionalInequalities.Analysis.Matrix.Trace.3039847079._hygCtx._hyg.6",
+    "inst._@.FunctionalInequalities.Analysis.Matrix.Trace.Algebra.2983831746._hygCtx._hyg.3": "inst._@.FunctionalInequalities.Analysis.Matrix.Trace.2983831746._hygCtx._hyg.3",
+    "inst._@.FunctionalInequalities.Analysis.Matrix.Trace.Algebra.2983831746._hygCtx._hyg.6": "inst._@.FunctionalInequalities.Analysis.Matrix.Trace.2983831746._hygCtx._hyg.6",
+    "inst._@.FunctionalInequalities.Analysis.Convex.Proximal.3125011154._hygCtx._hyg.3": "inst._@.FunctionalInequalities.Analysis.Convex.Subgradient.3125011154._hygCtx._hyg.3",
+    "inst._@.FunctionalInequalities.Analysis.Convex.Proximal.3125011154._hygCtx._hyg.6": "inst._@.FunctionalInequalities.Analysis.Convex.Subgradient.3125011154._hygCtx._hyg.6",
+    "inst._@.FunctionalInequalities.Analysis.Convex.Proximal.3125011154._hygCtx._hyg.12": "inst._@.FunctionalInequalities.Analysis.Convex.Subgradient.3125011154._hygCtx._hyg.12",
+    "inst._@.FunctionalInequalities.Analysis.Convex.Proximal.1942581514._hygCtx._hyg.3": "inst._@.FunctionalInequalities.Analysis.Convex.Subgradient.1942581514._hygCtx._hyg.3",
+    "inst._@.FunctionalInequalities.Analysis.Convex.Proximal.1942581514._hygCtx._hyg.6": "inst._@.FunctionalInequalities.Analysis.Convex.Subgradient.1942581514._hygCtx._hyg.6",
+    "inst._@.FunctionalInequalities.Analysis.Convex.Proximal.1288100811._hygCtx._hyg.3": "inst._@.FunctionalInequalities.Analysis.Convex.Subgradient.1288100811._hygCtx._hyg.3",
+    "inst._@.FunctionalInequalities.Analysis.Convex.Proximal.1288100811._hygCtx._hyg.6": "inst._@.FunctionalInequalities.Analysis.Convex.Subgradient.1288100811._hygCtx._hyg.6",
+    "inst._@.FunctionalInequalities.Analysis.Matrix.Trace.Energy.107759839._hygCtx._hyg.3": "inst._@.FunctionalInequalities.Analysis.Matrix.Trace.107759839._hygCtx._hyg.3",
+    "inst._@.FunctionalInequalities.Analysis.Matrix.Trace.Energy.107759839._hygCtx._hyg.6": "inst._@.FunctionalInequalities.Analysis.Matrix.Trace.107759839._hygCtx._hyg.6"
+  },
+  "semantic_comparison": {
+    "passed": true,
+    "owned_declarations": 92,
+    "closure_declarations": 94,
+    "non_theorem_definition_bodies": 4,
+    "compiler_identifier_pairs": 68,
+    "differences": [],
+    "kernel_checked_definitional_equalities": 0,
+    "definitionally_equal_instance_dependency_changes": [],
+    "safety_and_partiality_flags_identical": true,
+    "normalization": "Exact bijective private/hygienic Name pairs constrained by source declaration destinations. Structural types/definition closures compared; any nonstructural instance-path difference additionally requires a fresh kernel-checked reflexive equality over the complete old/new expression trees. Public binder names/info, literals, levels and safety flags retained; nonkernel mdata omitted.",
+    "theorem_proof_values_claimed_equal": false
+  },
+  "evidence": "build/file-management/2026-10-17-other-families-optimization/batch-03-trace-proximal/",
+  "historical_records_preserved": true
+}

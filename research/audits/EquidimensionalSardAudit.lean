@@ -2,7 +2,7 @@ import FunctionalInequalities.Analysis.Sard.Equidimensional
 import FunctionalInequalities.Analysis.Vector.RankDeficient.Coarea
 import FunctionalInequalities.Analysis.Sard.Basic
 import Mathlib.Analysis.InnerProductSpace.PiL2
-
+import FunctionalInequalities.KLS.BKL.Poincare
 /-!
 # Scope audit for the equidimensional degenerate case `R10`
 

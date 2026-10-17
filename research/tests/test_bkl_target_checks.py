@@ -62,7 +62,7 @@ class BKLTargetCheckTests(unittest.TestCase):
         self.assertIn('statement dependency removed: ' + name,
                       statement_snapshot.compare_snapshot(changed, golden))
         modules = runner.closure(['solutions.ThmBklTaylorCriterion', 'solutions.PropBklSuspension'])
-        self.assertIn('FunctionalInequalities.KLS.LogConcave.Regular', modules)
+        self.assertIn('FunctionalInequalities.KLS.LogConcave.Regular.Basic', modules)
         self.assertNotIn('FunctionalInequalities.KLS.Target', modules)
 
 

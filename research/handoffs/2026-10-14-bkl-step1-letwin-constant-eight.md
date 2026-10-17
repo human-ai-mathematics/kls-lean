@@ -211,7 +211,7 @@ Next:
 
 The integration dispatches no contract for these.
 
-## Current queue (updated 2026-10-15 at the publication checkpoint)
+## Queue at the publication checkpoint (2026-10-15, history)
 
 Canonical supports reach the actual-source first weak Monge–Ampère identity (2.4), with every
 original R0 field retained. Snapshot `d7503d7e…` passed full verification
@@ -228,3 +228,165 @@ The owner authorized one documentation and accepted-proof commit/push at this ch
 That authorization does not close `LetwinCompactBound`, include scratch candidates, authorize
 remote CI, or resume the other three stages. The original exact endpoint and proof-acceptance
 protocol remain unchanged.
+
+## Queue at the weak inverse integration (2026-10-15, history)
+
+The publication checkpoint above is complete (HEAD `2c3e369`, full receipt
+`build/verification/20261015T015709.906783Z/report.json` for snapshot `a3805d3d…` only). Proof work has
+resumed under the current Codex chat `01a13ea4-f340-73b1-bbe8-af9381f33679` and the original Claude
+session; no further commit, push, tag, remote CI or publication is authorized.
+
+E3, E4 and E5 were independently accepted and are now canonical supports. The
+[weak inverse record](../decisions/2026-10-15-weak-inverse-integration.md) integrates them with the Piola
+adjugate consumers and the actual-source producer `exists_regular_moment_weak_inverse`. It keeps the same
+u, L, LF, T and every R0/first-weak-Monge–Ampère field, and adds the weak (2.5) derivative
+−(H⁻¹ T_k H⁻¹)_ij, L² on compact sets, with compact-local essential inverse bounds. Codex accepted the
+canonical sources. Final acceptance requires a passing full receipt matching the current source/meta
+snapshot, bound in the ignored `weak-inverse-integration/` final acceptance/completion records; inspect
+`build/verification/latest.json` and the exact report.
+
+Next:
+1. The genuinely missing weak coefficient and curl testing interfaces, and bounded H¹ testing. The
+   read-only `NEXT-CURL-COEFFICIENT-READINESS-2026-10-15.json` is a gap review only: not frozen, proved or
+   dispatched.
+2. Actual C¹/Lipschitz-gradient source-height A.4/A.5, with locally L² flux and locally L¹ right-hand sides.
+3. Weak (2.6) and the integrated energy comparison (2.14), E tr(BHBH) ≥ 2 E G₁.
+4. Actual weak Brascamp–Lieb (A.6) and mean Hessian (Lemma 2.3), then the Theorem 2.5 upper bound
+   E tr(BHBH) ≤ 2 tr(B²).
+5. Stein/H⁻¹, spectral, regular-class and compact constant-8 assembly.
+
+Local T² is only L¹; no C² upgrade, global inverse bound, global weighted tensor square or assumed
+energy is available. The endpoint remains the full `LetwinCompactBound`; weak (2.5) does not complete
+Lemma 2.4, Theorem 2.5, Theorem 1.2, BKL or KLS.
+
+## Queue at the curl and mean-Hessian support integration (2026-10-15, history)
+
+The weak inverse package passed full verification and Codex canonical acceptance for snapshot `d99c763b…`
+(`build/verification/20261015T085050.186417Z/report.json`); its queue entry above is history. H1a exhausted
+naturally and stays preserved; the smaller H1b and the original H1c statement were then independently accepted.
+
+The [curl/mean support record](../decisions/2026-10-15-curl-mean-support-integration.md) integrates:
+- the common-support smooth approximation and the rough compact curl identity `integral_weakDeriv_mul_eq_swap`;
+- the unprimed weak generator identity for C¹ multipliers;
+- `exists_regular_moment_weak_inverse_mean_hessian`: the same u, L, LF, T and every earlier field, with integrable
+  Hessian entries of mean Id.
+
+Codex accepted the canonical sources. Final acceptance requires a passing full receipt matching the current
+source/meta snapshot, bound in the ignored `curl-mean-support-integration/` final acceptance/completion records;
+inspect `build/verification/latest.json` and the exact report.
+
+Next:
+1. The actual weak second Monge–Ampère identity (2.6): the weak derivative of the right-hand side q_i, the Piola
+   divergence of H⁻¹, and consumption of the proved rough curl.
+2. Bounded H¹ testing with locally L¹ forcing, and actual C¹/Lipschitz-gradient A.4/A.5 with locally L² flux.
+3. The integrated energy comparison (2.14), E tr(BHBH) ≥ 2 E G₁.
+4. The actual weak Brascamp–Lieb (A.6) consumer, then the Theorem 2.5 upper bound E tr(BHBH) ≤ 2 tr(B²).
+5. Stein/H⁻¹, spectral, regular-class and compact constant-8 assembly.
+
+The original Claude session stays the sole canonical integrator and runs one unchanged gpt-6-astra/high loop at a
+time (max_rounds 4, max_queries 6). The endpoint remains the full `LetwinCompactBound`; these supports do not
+complete (2.6), Theorem 2.5, Theorem 1.2, BKL or KLS.
+
+## Queue at the weak Hessian evolution and bounded H¹ testing integration (2026-10-16, history)
+
+The curl/mean package passed full verification and Codex canonical acceptance for snapshot `464d989a…`
+(`build/verification/20261015T121010.942278Z/report.json`); its queue entry above is history. The weak (2.6) and bounded
+H¹ testing tasks ran once each in the existing loop; their exhausted attempts are preserved, and only independently accepted
+bodies were integrated.
+
+The [weak evolution record](../decisions/2026-10-16-weak-hessian-evolution-h1-integration.md) integrates:
+- the generic bounded all-coordinate approximation, the bounded weak-test extension and the weak Piola row divergence;
+- the intrinsic weighted weak (2.6) leaf `Analysis/BakryEmery/IntegrationByParts/WeakHessianEvolution.lean`;
+- `exists_regular_moment_weak_hessian_evolution` and `exists_regular_moment_bounded_weak_hessian_testing`: the same u, L, LF,
+  T and every earlier field, the weighted weak (2.6), and its bounded H¹ tests ψ·H_lk.
+
+Codex accepted the canonical sources. Final acceptance requires a passing full receipt matching the current
+source/meta snapshot, bound in the ignored `weak-evolution-H1-integration/` final acceptance/completion records;
+inspect `build/verification/latest.json` and the exact report.
+
+Next:
+1. The actual C¹/Lipschitz-gradient source-height cutoffs (A.4) with an integrable generator defect bounded by C/R, and their
+   A.5 consumption. Reviewed supports for the actual height family are scratch only, not canonical.
+2. The integrated energy comparison (2.14), E tr(BHBH) ≥ 2 E G₁.
+3. The actual weak Brascamp–Lieb (A.6) consumer, then the Theorem 2.5 upper bound E tr(BHBH) ≤ 2 tr(B²).
+4. Stein/H⁻¹, spectral, regular-class and compact constant-8 assembly.
+
+The original Claude session stays the sole canonical integrator and runs one unchanged gpt-6-astra/high loop at a
+time (max_rounds 4, max_queries 6). The endpoint remains the full `LetwinCompactBound`; these results do not
+complete Lemma 2.4's positivity statement, (2.14), Theorem 2.5, Theorem 1.2, BKL or KLS.
+
+## Queue at the weak inverse-Hessian cutoff integration (2026-10-16, history)
+
+The weak evolution package passed full verification and Codex acceptance for snapshot `3a87e101…`
+(`build/verification/20261016T033139.894094Z/report.json`); its queue entry above is history. The A4 core API task ran once
+(accepted in round 2 of 4; the round-1 failure is preserved), and the closed cutoff families and actual producer were
+independently accepted before integration.
+
+The [weak cutoff record](../decisions/2026-10-16-weak-inverse-hessian-cutoff-integration.md) integrates:
+- `exists_scaled_weak_inverse_hessian_cutoffs` and `exists_weak_inverse_hessian_cutoffs`: C1 height cutoffs with integrable
+  literal inverse-Hessian generator and C/R defect, every finite dimension;
+- `exists_regular_moment_weak_cutoffs`: the whole bounded-testing payload at one witness with one common c and C; the audit
+  tests χ_R·H_lk.
+
+Codex accepted the canonical sources. Final acceptance requires a passing full receipt matching the current
+source/meta snapshot, bound in the ignored `weak-cutoff-integration/` final acceptance/completion records;
+inspect `build/verification/latest.json` and the exact report.
+
+Next:
+1. The finite contraction of the actual χ·H weak (2.6) tests to the trace-quadratic density (2.8)/(2.10), its positivity and
+   the actual A.5 consumption. Reviewed scratch packets for these steps are not canonical.
+2. The integrated energy comparison (2.14), E tr(BHBH) ≥ 2 E G₁.
+3. The actual weak Brascamp–Lieb (A.6) consumer, then the Theorem 2.5 upper bound E tr(BHBH) ≤ 2 tr(B²).
+4. Stein/H⁻¹, spectral, regular-class and compact constant-8 assembly.
+
+The original Claude session stays the sole canonical integrator and runs one unchanged gpt-6-astra/high loop at a
+time (max_rounds 4, max_queries 6). The endpoint remains the full `LetwinCompactBound`; these results do not
+complete A.5, (2.14), Theorem 2.5, Theorem 1.2, BKL or KLS.
+
+## Queue at the weak trace, Theorem 2.5 and source Stein integration (2026-10-16, history)
+
+The weak cutoff queue above is history. The [weak trace/Theorem 2.5/source Stein record](../decisions/2026-10-16-weak-trace-t25-stein-integration.md)
+integrates the weak trace contraction (2.8)/(2.10), its positivity, the (2.12)/(2.14) comparison, A.5 consumption, the
+weak Brascamp–Lieb inequality (A.6), the given-potential weak Theorem 2.5 bound and, at the actual source witness,
+`exists_regular_moment_weak_stein_coupling`: one u, L, LF and T with the whole earlier payload and
+E_ν tr(B∇²u B∇²u) ≤ 2 tr(B²) for every real symmetric B, the weighted integration by parts and the coordinate source
+Stein identity. Codex accepted the canonical source copy `3af79a97…`; a fresh full local verification of the current
+source/meta snapshot is pending.
+
+The S3 Gaussian product source-pairing task ran once (4 rounds, 1 query) and exhausted with no accepted proof; the
+939-file run is sealed and failure-reviewed, and the API is idle. S2/Lemma A.2, the directional/affine helpers, the
+Gaussian L4 prototype and the S3 Expected preflight are scratch build evidence, not formal results.
+
+Next:
+1. The Gaussian product coupling of the actual source law (product integrability, translated Gaussian, Fubini).
+2. The compact dual Cauchy–Schwarz bound from the latent source identity.
+3. The H⁻¹ variance inequality on the actual C² convex Gaussian-smoothed law.
+4. The spectral/invertible constant-8 assembly and the noise removal.
+5. The singular-matrix extension (Lemma A.2).
+6. The regular-class/Lemma A.1 compact constant-8 bound.
+
+A target Stein kernel or inverse transport is optional, not a required prerequisite. The original Claude session stays
+the sole canonical integrator and runs one unchanged gpt-6-astra/high loop at a time (max_rounds 4, max_queries 6). The
+endpoint remains the full `LetwinCompactBound`; these results do not complete Theorem 2.5 as stated, Theorem 1.2, BKL or
+KLS.
+
+## Current queue (updated 2026-10-17 at the exact compact Letwin constant-8 integration)
+
+The weak trace/Theorem 2.5/source Stein queue above is history. Stage 1 is proved in its compact form:
+`KLS.LogConcave.Suspension.letwinCompactBound : LetwinCompactBound` (n > 0, every compactly supported isotropic
+log-concave law, every self-adjoint form including singular and indefinite ones, exact constant 8, standard orthonormal
+basis), certified in source form as `thm:letwin-compact-quadratic-bound`. The
+[integration record](../decisions/2026-10-16-letwin-compact-eight-integration.md) gives the placement, proof chain and
+evidence. The milestone is accepted only with a passed full local verification report for the exact current source/meta
+snapshot and its independent acceptance; the ignored Goal checkpoint records the current report and acceptance state, and
+each earlier report applies only to its recorded snapshot. The noncompact Letwin Theorem 1.2 is not claimed.
+
+Next:
+1. A source audit of BKL arXiv:2610.05474v1, Section 5 (stochastic localization), against `KLS/BKL/Localization/`.
+2. A source-faithful review of BKL Theorem 4.1 (`theorem41`, `theorem41Compact`).
+3. Only then, a review of the KLS composition through `conjecture_of_letwinCompact`; `KLS.kls` stays open until that
+   exact statement is proved and verified.
+
+The original Claude session stays the sole canonical integrator and runs one unchanged gpt-6-astra/high loop at a time
+(max_rounds 4, max_queries 6). These results do not complete stochastic localization, BKL Theorem 4.1, BKL Theorem 1.1 or
+KLS.

@@ -1,6 +1,6 @@
-import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.InverseHessian
+import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.InverseHessian.Basic
 import FunctionalInequalities.Analysis.Cutoff.Profile
-
+import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
 /-!
 # Audit: Letwin Lemma A.4 operator continuity
 

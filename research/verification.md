@@ -41,10 +41,19 @@ statement baseline and registered declarations, audits transitive axioms, and re
 current local modules with Lean's kernel.
 
 The generated axiom audit checks every project-local declaration, including private and
-generated declarations. Only the exact open target `FunctionalInequalities.KLS.kls` is
-excluded. A wrapper depending on it fails. The vendor gate uses an exact, separately reviewed
-upstream-hole list; it does not permit project-local results to depend on those holes.
+generated declarations and the target theorem `FunctionalInequalities.KLS.kls`; no local
+declaration is excluded. A local declaration or wrapper depending on `sorryAx` or another
+nonstandard axiom fails. The vendor gate uses an exact, separately reviewed list of five upstream
+`sorry` declarations; it does not permit project-local results to depend on those holes.
 See the [vendor policy](../formalization/vendor/README.md#upstream-holes).
+
+The `classical-kls` gate (both modes, after the research-audit sweep) runs
+[research/audits/KLS/Classical/check.py](audits/KLS/Classical/README.md) with the same filtered view.
+- **Inputs.** Pinned Mathlib-only templates of three classical KLS formulations and their client.
+- **Checks.** Strict compilation of both, exactly four standard-axiom reports, kernel replay of both runtime modules, and
+  three false-statement mutations of the specification, each rejected by the expected client elaboration error.
+- **Pins.** The pins change only with a reviewed source change; the gate does not refresh them.
+- **Lean-only receipt.** It binds every file in that directory.
 The full verifier also checks the vendored files offline against
 `formalization/vendor/vendor-lock.json` (inventory, vendored hashes, `port.patch` hash, and strict
 reverse application of the patch to the locked upstream hashes); `python3 research/vendor_lock.py

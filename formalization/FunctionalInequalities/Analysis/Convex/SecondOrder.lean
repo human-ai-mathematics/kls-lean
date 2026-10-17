@@ -1,4 +1,5 @@
 import FunctionalInequalities.Analysis.Convex.Subgradient
+import FunctionalInequalities.Analysis.Convex.Proximal
 import Mathlib.MeasureTheory.Integral.Lebesgue.Add
 import Mathlib.Analysis.Calculus.Taylor
 import Mathlib.Analysis.Calculus.ContDiff.Convolution

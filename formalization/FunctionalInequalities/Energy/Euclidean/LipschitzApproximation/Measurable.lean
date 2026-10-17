@@ -1,6 +1,6 @@
 import Mathlib.Analysis.Calculus.Rademacher
 import Mathlib.Analysis.Calculus.FDeriv.Measurable
-import FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Basic
+import FunctionalInequalities.Analysis.Cutoff.SmoothBall
 
 /-!
 # LipschitzApproximation: Measurable

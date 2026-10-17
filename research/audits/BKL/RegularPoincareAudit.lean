@@ -1,4 +1,4 @@
-import FunctionalInequalities.KLS.LogConcave.RegularPoincare
+import FunctionalInequalities.KLS.LogConcave.Regular.Poincare
 import FunctionalInequalities.KLS.BKL.GaussianTaylor
 import FunctionalInequalities.KLS.LogConcave.Line.SharpPoincare
 

@@ -1,9 +1,12 @@
 import FunctionalInequalities.Analysis.Cutoff.Translation
-import FunctionalInequalities.Probability.Stein.HessianKernel
+import FunctionalInequalities.Analysis.BakryEmery.HessianOperator
+import FunctionalInequalities.Analysis.BakryEmery.WeakHessian
 import FunctionalInequalities.Analysis.Convex.HessianIncrement
 import FunctionalInequalities.Analysis.Convex.HessianRegularity
-import FunctionalInequalities.Analysis.WeakDerivative
-
+import FunctionalInequalities.Analysis.WeakDerivative.Basic
+import FunctionalInequalities.Analysis.WeakDerivative.Mollification
+import FunctionalInequalities.Analysis.WeakDerivative.Approximation
+import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
 noncomputable section
 open MeasureTheory Set Filter
 open scoped Topology ContDiff RealInnerProductSpace

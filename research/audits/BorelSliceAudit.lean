@@ -1,5 +1,5 @@
 import FunctionalInequalities.Analysis.Hausdorff.SurfaceSlicing
-
+import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
 /-!
 # Strict audit client for Borel slices and measurable weights (obligations `L4`, `L5`, target `T1`)
 

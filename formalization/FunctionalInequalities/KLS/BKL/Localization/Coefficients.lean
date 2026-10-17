@@ -1,7 +1,7 @@
-import FunctionalInequalities.KLS.BKL.PosteriorCovariance
+import FunctionalInequalities.KLS.BKL.Posterior.Covariance
 import FunctionalInequalities.Probability.Diffusion.Generator
-import FunctionalInequalities.Probability.Diffusion.Cutoff
-
+import FunctionalInequalities.Analysis.Cutoff.LipschitzBall
+import FunctionalInequalities.KLS.BKL.Posterior.Regularity
 /-!
 # Coefficients and generator of the Eldan localization equations
 

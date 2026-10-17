@@ -449,3 +449,43 @@ theorem traceGram_posSemidef {ι κ : Type*} [Fintype ι] [Fintype κ]
 end TraceGram
 
 end FunctionalInequalities.Analysis
+
+namespace FunctionalInequalities.Analysis
+
+section TraceForcingDensity
+
+open Matrix
+
+/-- For positive semidefinite `B`, `H`, `R`, `W` and symmetric `Tᵢ`, the pointwise trace density
+`2 tr(B H B (-H + H W H + G_R)) + 2 ∑ R_{ij} tr(B Tᵢ B Tⱼ) + 2 tr(B H B H)` is nonnegative,
+where `G_R` is the trace Gram matrix `tr(R Tᵢ R Tⱼ)`. -/
+theorem trace_forcing_add_twice_energy_nonneg {n : ℕ}
+    (B H R W : Matrix (Fin n) (Fin n) ℝ)
+    (hB : B.PosSemidef) (hH : H.PosSemidef) (hR : R.PosSemidef) (hW : W.PosSemidef)
+    (T : Fin n → Matrix (Fin n) (Fin n) ℝ) (hT : ∀ i : Fin n, (T i).IsSymm) :
+    0 ≤ (2 * (B * H * B * (-H + H * W * H +
+        (Matrix.of fun i j => (R * T i * R * T j).trace))).trace +
+      2 * ∑ i : Fin n, ∑ j : Fin n, R i j * (B * T i * B * T j).trace) +
+      2 * (B * H * B * H).trace := by
+  classical
+  have hC : (B * H * B).PosSemidef := by
+    simpa only [hB.isHermitian.eq] using hH.mul_mul_conjTranspose_same B
+  have hM : (H * W * H).PosSemidef := by
+    simpa only [hH.isHermitian.eq] using hW.mul_mul_conjTranspose_same H
+  have hG := traceGram_posSemidef R hR T hT
+  have h1 := trace_mul_nonneg hC hM
+  have h2 := trace_mul_nonneg hC hG
+  have h3 := sum_entry_mul_nonneg hR (traceGram_posSemidef B hB T hT)
+  have he :
+      (B * H * B * (-H + H * W * H +
+        (Matrix.of fun i j => (R * T i * R * T j).trace))).trace =
+      -(B * H * B * H).trace + (B * H * B * (H * W * H)).trace +
+        (B * H * B * (Matrix.of fun i j => (R * T i * R * T j).trace)).trace := by
+    simp only [mul_add, mul_neg, Matrix.trace_add, Matrix.trace_neg]
+  rw [he]
+  change 0 ≤ ∑ i : Fin n, ∑ j : Fin n, R i j * (B * T i * B * T j).trace at h3
+  linarith
+
+end TraceForcingDensity
+
+end FunctionalInequalities.Analysis

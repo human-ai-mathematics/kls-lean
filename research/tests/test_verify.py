@@ -314,14 +314,22 @@ class LeanOnlyBoundaryTests(unittest.TestCase):
                               input="import Lean\n" + source + library_axiom_audit_code([]).removeprefix("import Lean"),
                               text=True, capture_output=True, timeout=60, env=env)
 
-    def test_open_target_is_excluded_but_a_dependent_wrapper_fails(self):
-        source = "theorem FunctionalInequalities.KLS.kls : False := by sorry\n"
-        clean = self.run_library_audit(source + "theorem FunctionalInequalities.checked : True := trivial\n")
-        self.assertEqual(clean.returncode, 0, clean.stdout + clean.stderr)
-        wrapper = self.run_library_audit(source +
+    def test_hole_named_kls_is_rejected(self):
+        result = self.run_library_audit("theorem FunctionalInequalities.KLS.kls : False := by sorry\n")
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("FunctionalInequalities.KLS.kls: unexpected axioms [sorryAx]", result.stdout + result.stderr)
+
+    def test_wrapper_of_a_kls_hole_is_rejected(self):
+        result = self.run_library_audit("theorem FunctionalInequalities.KLS.kls : False := by sorry\n"
             "theorem FunctionalInequalities.wrapper : False := FunctionalInequalities.KLS.kls\n")
-        self.assertNotEqual(wrapper.returncode, 0)
-        self.assertIn("unexpected axioms [sorryAx]", wrapper.stdout + wrapper.stderr)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("unexpected axioms [sorryAx]", result.stdout + result.stderr)
+
+    def test_proved_kls_with_standard_axioms_is_accepted(self):
+        result = self.run_library_audit("theorem FunctionalInequalities.KLS.kls : True := trivial\n"
+            "theorem FunctionalInequalities.checked : True := FunctionalInequalities.KLS.kls\n")
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertIn('"name":"FunctionalInequalities.KLS.kls"', result.stdout + result.stderr)
 
     def test_unlisted_nonstandard_axiom_is_rejected(self):
         result = self.run_library_audit("axiom FunctionalInequalities.unlisted : False\n")

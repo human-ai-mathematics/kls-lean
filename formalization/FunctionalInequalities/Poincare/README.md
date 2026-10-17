@@ -18,7 +18,9 @@ representative and moment theorems have a separate certificate. Cheeger-energy i
 `Ecan = 2 Ch` (local-slope convention) is proved for every finite-dimensional Borel probability
 law, including singular laws; see [Cheeger identification](../Energy/Cheeger/Identification.lean).
 This identifies relaxed energies; it supplies neither raw-test-energy agreement nor a finite
-Poincaré bound. The dimension-free KLS bound remains open.
+Poincaré bound. The dimension-free KLS bound is proved separately in
+[the final KLS target](../KLS/Target.lean); the [paper register](../../../research/progress/LITERATURE.md)
+records its exact scope and certificates.
 
 Interfaces may evolve with the mathematical design, including already proved interfaces.
 Proof work does not require an interface freeze. Certification concerns the current statement

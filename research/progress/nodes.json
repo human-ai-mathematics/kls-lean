@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "last_updated": "2026-10-15",
+  "last_updated": "2026-10-17",
   "nodes": {
     "ass:cmh-recovery-envelope": {
       "description": "Seek a regular moment-map approximation of every centered log-concave law with a dimension-free CMH bound.",
@@ -51,7 +51,7 @@
       "blueprint": "cert:linear-test-lower"
     },
     "conj:kls": {
-      "description": "Seek one dimension-free Poincaré bound for all isotropic log-concave laws, equivalently a covariance-scaled bound.",
+      "description": "One dimension-free Poincaré bound for all isotropic log-concave laws, equivalently a covariance-scaled bound; proved locally as KLS.kls through BKL Theorem 1.1 and the affine/isotropic reduction. The four exploratory routes stay open.",
       "blueprint": "conj:kls",
       "diagram": {
         "id": "KLS",
@@ -1015,7 +1015,7 @@
       }
     },
     "diagram:BE": {
-      "description": "Generator identification on smooth compactly supported tests (T*T f = -(Delta f - <grad U, grad f>), weighted integration by parts) and the local Gamma/Gamma_2 calculus (carre du champ product identity, positive semidefinite Hessian of a convex potential, Bochner identity in the fixed standard basis, Gamma_2 >= 0) are proved pointwise for smooth potentials; on the operator side D(A) invariance, generator commutation, right time derivatives, stability of the whole form domain D(T) under P_t with the energy contraction norm(T(P_t f)) <= norm(T f), positive-time domain regularity for arbitrary L2 data (P_t g in D(T*T), norm(T*T(P_t g)) <= norm(g)/t) and second-order regularity T*T(P_t g) in D(T) are proved for arbitrary weights; the weak Gamma interface is proved (L1 carre du champ of L2 fields with its integrability, testing and L1 stability, Leibniz and chain rules on IsTest inputs with their stated hypotheses, weak integration by parts against T*T, the integrated Bochner inequality on smooth compactly supported tests and its transfer to L2 limits of the fields, integrated Gamma contraction along the heat flow); the second-order field is now eliminated from the weak Gamma_2 inequality by the Leibniz rule for the closed gradient against a C_c^infty multiplier on the whole form domain, so the inequality transfers along first-order graph convergence for the generator ([f_n] -> F and A[f_n] -> A F in L2) and holds unconditionally on the domain of the closure of A restricted to C_c^infty; for the heat flow it was first proved under a single explicit hypothesis, which the 2026-09-22 round REDUCED from the global operator-core property of A = T*T to a purely LOCAL regularity statement (the global cutoff half: an L2 class orthogonal to (A+1) C_c^infty whose C_c^infty localizations lie in D(T) is zero, via norm(chi_r u) <= (M/r) norm(u)); the later 2026-09-22 round then PROVED that local statement for every C^1 potential in the current full-dimensional log-concave tilted-law model with unit weight, by mollification against the Haar measure (L2 contraction, L2 convergence and symmetry of the normalised bump, commutation with grad and Delta; the divergence-form weak equation Delta W = -div(W grad U) + W for W = rho u; a Caccioppoli estimate applied to differences of mollifications, so that no weak compactness is needed; closedness of T), so C_c^infty IS an operator core of A = T*T (L essentially self-adjoint on C_c^infty) and the heat-flow weak Gamma_2 inequality holds with only the model hypotheses (C^infty convex potential, unit weight, arbitrary g in L2, every t > 0, every nonnegative phi in C_c^infty). The Gamma time interpolation s -> integral of (P_s phi) Gamma(T(P_(t-s) f)) dnu with the outer semigroup on the test function, the extension of weak Gamma_2 to the test class {P_s phi}, sharp constants, the square and first-order pointwise gradient estimates for the existing semigroup and their general-law passage remain pending, as internal milestones of the full pi Buser task. The heat-test takeover proves uniform essential bounds for P_s phi and A(P_s phi), integrability of both pairings for arbitrary L2 fields, and the inequality for smooth compactly supported data against nonnegative D(A) tests. Transfer to arbitrary F = P_r g remains unproved: the conditional two-field transfer needs convergence of T(A f_n), which the existing A graph core does not supply. See research/decisions/2026-09-22-heat-test-class.md. 2026-09-22 (heat approximation continuation, PARTIAL): Generated/Smoothing.lean proves r^3 * norm(T A P_r g)^2 <= 4 * norm(g)^2 and continuity of both heat fields under L2 convergence of initial data. HeatSemigroup.exists_seq_smooth_tendsto_regularized_fields constructs smooth compactly supported f_n whose HEAT EVOLUTIONS P_(r/2)[f_n] approximate both fields of P_r g. The approximating heat values are not asserted to be compactly supported smooth data; applying smooth-data Bochner to them remains unjustified. The full arbitrary-data heat-test extension is still open. See research/decisions/2026-09-22-heat-test-approximation.md. The subsequent resolvent route review adds no Lean proof: density of (I+A) C_c^infty in D(T) remains unproved, with a fourth-order orthogonality condition; the first-order block-power core route is external mathematics only. See research/decisions/2026-09-22-heat-test-extension-route.md. The finite wave splitting construction now formalizes explicit flows, joint cell smoothness and common compact support (Analysis/WaveSplitting/Basic.lean). Derivative-norm stability, residual-controlled time averaging and form-range density remain unproved; the arbitrary-data heat-test frontend remains open. See research/decisions/2026-09-22-wave-splitting-construction.md. The derivative-energy continuation proves exact Haar preservation of every finite ordered-coordinate derivative energy by actual coordinate sweeps, plus zero-order reaction and full-split stability under an explicit coefficient bound, with a fixed-horizon iteration client. Higher-order reaction stability, coefficient localization, the residual estimate and the heat-test frontend remain open. See research/decisions/2026-09-22-wave-splitting-energy.md. The 2026-09-23 stability continuation proves the actual finite directional Leibniz expansion, scalar integrated multiplication bound, and reaction, full-split, grid and cell stability at every finite derivative order, including five, under explicit raw coefficient derivative bounds. These are ordered-coordinate energies with dimension-dependent constants. Coefficient localization, the third-order residual bound with two derivative losses, weighted energy and gradient compatibility, the residual-controlled finite time average and heat-test frontend remain open. Next prove the actual split residual estimate. See research/decisions/2026-09-23-wave-splitting-stability.md. The 2026-09-23 localization continuation constructs one compact smooth coefficient agreeing on the common support ball, proves all finite coordinate derivative bounds for it and equality of the actual grid/cells, and removes global coefficient-bound assumptions from fixed-horizon stability for original smooth coefficients. An independent fifth-order smooth-potential client is proved. The actual third-order split residual estimate, weighted energy, compatibility defect, finite time average and heat-test frontend remain open. See research/decisions/2026-09-23-wave-splitting-localization.md. The 2026-09-23 consistency continuation proves the time-dependent-input chain rules for the complete finite splitting composition, identifies full coordinate lists with the wave generator, and defines the actual residual with joint smoothness, zero initial value and exact time-integral representation. The mesh-uniform tame residual estimate with two derivative losses is NOT proved and is next; a pointwise smoothness argument is insufficient. Weighted energy, compatibility, the time average and heat-test frontend remain open. See research/decisions/2026-09-23-wave-splitting-consistency.md. The 2026-09-23 generator-bound continuation proves scalar coordinate differentiation and actual coordinate generators lose one energy order, reaction loses no order, and the full split generator squared and all ordered elementary pairs lose at most two orders. Independent clients instantiate order five to three, including both mixed orders without commuting generators. Differentiated split products with intervening flow factors are not yet controlled; their second time derivative is not identified with the square of the summed generator. The tame residual bound, weighted energy, time average and heat-test frontend remain open. See research/decisions/2026-09-23-wave-generator-bounds.md. The 2026-09-23 residual continuation proves all-time chain rules for the actual flows with time-dependent input, exchange of time and space derivatives, the exact ordered residual identity e_Y(t) = R(t) sweepDerivative(t,js,Y) - G_js(S(t)Y) (no G^2 S(t)Y identification, no commutation), a Fubini/Cauchy-Schwarz time-integral energy lemma, and the tame bound E_k(e_Y(t)) <= residualConstant(js,k,B) t^2 E_(k+2)(Y) for 0 <= t <= 1 (Analysis/WaveSplitting/FlowDerivative.lean, Residual.lean), with the constant depending only on the coordinate count, split list, k and coefficient bound through order k+1. The localized grid-cell client gives E_k(residual at node k, time theta) <= C delta^2 for all meshes 0 <= delta <= 1, N delta <= L, k < N, 0 <= theta <= delta, for original smooth coefficients without global bounds. Weighted forced energy, gradient compatibility, the time average, form-range density and the heat-test frontend remain open. See research/decisions/2026-09-23-wave-splitting-residual.md. The 2026-09-23 weighted-energy continuation (Analysis/WaveSplitting/WeightedEnergy.lean, Compatibility.lean) proves Cauchy-Schwarz/Minkowski for the weighted energy W(Y) = integral of w (u^2+v^2+sum p_j^2) and for the ordered derivative energies, the weighted skew identity <Y, waveGenerator Y>_w = 0 when D_(a_j) w = -b_j w (no p = grad u), differentiation of W along cells, and the forced bound sqrt W(cell_k(theta)) <= sqrt W(Y) + C delta for all meshes 0 <= delta <= 1, N delta <= L, k < N, 0 <= theta <= delta, with leading coefficient one, for smooth coefficients without global bounds. The compatibility defect d = p - D_(a_j) u evolves exactly by the defect of the actual residual, and sqrt E_k(d(cell)) <= sqrt E_k(d(Y)) + C delta; the weighted coordinate form energy of u is bounded by sqrt W(Y) + C (sqrt E_0(d(Y)) + delta). The potential client uses w = exp(-U) and initial data (0,h,0). The finite time average, its J q - h identity, identification with the L2(nu)/form norms, form-range density and the heat-test frontend remain open. See research/decisions/2026-09-23-wave-splitting-weighted-energy.md. The 2026-09-23 time-average continuation (Analysis/WaveSplitting/TimeAverage.lean) proves differentiation under and C^infty smoothness of parametric interval integrals of jointly smooth functions, that the cellwise time average q = sum_k int_0^delta (1-(k delta+theta)/(N delta)) u_k(theta) of the actual cells is C_c^infty, the exact split (waveGenerator Y).v = -J_cl u + div_b (p - D u), and the exact pointwise identity J_cl q - v(0) = (u(0) - u_N)/L + (1/L) sum_k int e_(k,u) + sum_k int (1 - t/L)(div_b d + e_(k,v)) with L = N delta != 0, the actual residuals and the actual defect (for (0,h,0) the route's J q - h identity). The quantitative bound ||J[q]-[h]||_E <= ||h||/L + C delta, identification of J_cl and the square energies with the tilted-law operator and norms, form-range density and the heat-test frontend remain open. See research/decisions/2026-09-23-wave-splitting-time-average.md. The 2026-09-23 error continuation (Analysis/WaveSplitting/AverageError.lean) proves the mesh-uniform bound sqrt FE_w(J_cl q - h) <= sqrt(int w h^2)/L + C delta for all meshes N delta = L, 0 < delta <= 1, where FE_w(f) = int w (f^2 + sum_j (D_(a_j) f)^2) and q is the actual cellwise time average of (0,h,0) (exists_timeAverage_error_bound), via joint smoothness of time primitives, a time-integral energy lemma, Minkowski for scalar and weighted form energies and the localized divergence bound; the potential client proves classical form-range approximation: for every eps > 0 an actual q in C_c^infty with sqrt FE_w(J_cl q - h) < eps. Identification of FE_w, J_cl and [C_c^infty] with the tilted-law form norm, I + A and the form domain, two-field convergence and the heat-test frontend remain open. See research/decisions/2026-09-23-wave-splitting-average-error.md. The 2026-09-23 form-range continuation (Analysis/WaveSplitting/Potential.lean, KLS/LogConcave/HeatSemigroup/FormRange.lean) proves the class-level density of the form range: for nu = m.tilted(-U) log-concave with smooth U, T the closed unit-weight gradient, A = T*T and J = I + A, every z in D(T) and eps > 0 admit q in C_c^infty with [q] in D(A), J[q] in D(T) and sqrt(norm(J[q] - z)^2 + norm(T J[q] - T z)^2) < eps (exists_toLp_add_adjointComp_graph_lt; Dense form dense_formRange_graphL2 in graphL2 T). The bridges are proved: in any orthonormal basis sum_j (D_j f)^2 = norm(grad f)^2, sum_j D_j D_j f = Delta f, sum_j b_j D_j f = <grad U, grad f>, formOperator = f - L f, Z = int exp(-U) dm > 0 with int exp(-U) g dm = Z int g dnu, the norm bridge norm([f])^2 + norm(T[f])^2 = FE_w(f)/Z and the operator bridge J[q] = [q - L q] in D(T). Zero dimension is included (J = I). Two-field convergence and the arbitrary-data heat-test frontend remain open. See research/decisions/2026-09-23-wave-splitting-form-range.md. The 2026-09-23 frontend continuation proves the generic second-order expansion norm(Je)^2 + norm(T Je)^2 = norm(e)^2 + 3 norm(Te)^2 + 3 norm(Ae)^2 + norm(T Ae)^2 for e in D(A) with Ae in D(T) and the resulting four-field convergence (Analysis/Semigroup/VonNeumann.lean), the two-field smooth core exists_seq_smooth_tendsto_two_fields (every F in D(A) with AF in D(T) has q_n in C_c^infty with [q_n] -> F, [grad q_n] -> T F, [-L q_n] -> A F, [grad(-L q_n)] -> T(A F); HeatSemigroup/FormRange.lean), and the arbitrary-data heat-test frontend HeatSemigroup.integral_weakGamma_operator_nonneg (HeatSemigroup/TestClassExtension.lean): for smooth convex U, arbitrary g in L2, r > 0, nonnegative phi in C_c^infty and s >= 0, with F = P_r g and psi = P_s[phi], both pairings are integrable and 0 <= -(1/2) int (A psi) Gamma(T F, T F) dnu + int psi Gamma(T F, T(A F)) dnu, with no wave, core, residual or sequence premise. The time interpolation s -> int (P_s phi) Gamma(T(P_(t-s) f)) dnu, gradient estimates, general-law passage and small-time bounds remain open. See research/decisions/2026-09-23-heat-test-extension-frontend.md. The 2026-09-23 square-estimate continuation proves the time interpolation r -> int (P_(t-r) phi) Gamma(T P_r f) dnu with the outer semigroup on the test function, its right time derivative (tested weak-Gamma product rule with uniformly bounded difference quotients, L2/L1 pairing by truncation, generic time derivatives of P_t f and of the gradient orbit T P_t g, the difference bound |P_h psi - psi| <= h sup|A psi|) and its monotonicity via the heat-test frontend, hence the integrated square gradient estimate HeatSemigroup.integral_mul_weakGamma_le: int phi Gamma(T P_t f) dnu <= int (P_t phi) Gamma(T f) dnu for every f in D(T), t >= 0 and nonnegative phi in C_c^infty, smooth convex U (HeatSemigroup/GradientEstimate.lean, Generated/TimeDerivative.lean). Not proved: a pointwise a.e. form, the L1 self-improvement |T P_t f| <= P_t |T f|, the reverse BGL estimate, small-time bounds, the general-law passage and the constant pi. See research/decisions/2026-09-23-heat-gradient-square-estimate.md. The 2026-09-23 reverse-Poincare/self-improvement continuation proves, for smooth convex U, unit weight and nonnegative phi in C_c^infty, the reverse local Poincare (BGL, K = 0) inequality 2t int phi Gamma(T P_t f) <= int (P_t phi) f^2 - int phi (P_t f)^2 for arbitrary f in L2 and t > 0 (HeatSemigroup.two_mul_integral_mul_weakGamma_le; bounded data: 2t int phi Gamma(T P_t f) <= M^2 int phi) and Bakry's L1 self-improvement int phi |T P_t f| <= int (P_t phi) |T f| for f in D(T), t >= 0 (HeatSemigroup.integral_mul_norm_le). Inputs: Laplacian chain rule, improved Bochner |grad Gamma(f)|^2 <= 4 Gamma(f) Gamma_2(f), the pointwise sqrt(eps + Gamma) inequality, the regularized-norm calculus (Analysis/BakryEmery/RegularizedNorm.lean), the D(A) carre identity and the orbit derivative for arbitrary data. Not proved: a.e. forms, small-time BV bounds, general-law passage, the constant pi. See research/decisions/2026-09-23-heat-reverse-poincare-self-improvement.md. The 2026-09-23 a.e. continuation proves smooth-test order separation for integrable real functions on finite Borel measures (Analysis/TestFunctionOrder.lean), the bounded-data estimate |T P_t f| <= M/sqrt(2t) a.e. for t > 0 (HeatSemigroup.ae_norm_gradient_le_of_bounded), and |T P_t f| <= P_t |T f| a.e. for form-domain data and t >= 0 (HeatSemigroup.ae_norm_gradient_le), with global gradient L1 contraction (integral_norm_gradient_le). Small-time BV estimates, general-law passage and pi Buser remain open. See research/decisions/2026-09-23-heat-almost-everywhere.md. The 2026-09-23 small-time continuation proves integral |f-P_t f| <= sqrt(2t) integral |T f| on the whole form domain, L1 contraction between L2 inputs, and the smooth-domain relative-perimeter indicator estimate via the actual recovery sequence. The ENNReal endpoint includes infinite perimeter and zero time. This is not the sharp De Ponti-Mondino coefficient 2 sqrt(t/pi): their Gaussian-profile BGL estimate (32)-(33) is stronger than the proved ordinary reverse local Poincare inequality and remains open. See research/decisions/2026-09-23-heat-small-time-perimeter.md. The 2026-09-24 Gaussian scalar continuation constructs the actual Gaussian CDF/quantile profile and proves its ODE I I'' = -1 on (0,1), attained bound 1/sqrt(2*pi), endpoint limits, continuity and strict concavity on [0,1] (Probability/Line/GaussianProfile.lean). Regularized-profile calculus and the BGL heat interpolation remain next; no heat coefficient or route completion changes. See research/decisions/2026-09-24-gaussian-profile.md. The 2026-09-24 regularization continuation proves interior smoothness, reflection and midpoint normalization, shifted-profile nonnegativity, derivative bounds, Lipschitz control, a uniform value bound and pointwise epsilon convergence on [0,1). It constructs a globally smooth extension agreeing near the admissible interval, with bounded value and first two derivatives. A smooth-input weighted-Laplacian chain-rule client is proved. The tested D(A) generator chain rule and BGL heat interpolation remain next; heat constants are unchanged. See research/decisions/2026-09-24-gaussian-regularization.md. The 2026-09-24 tested-chain-rule continuation proves integrability and the scalar generator composition identity on arbitrary D(A) data for globally smooth Phi vanishing at zero with bounded value and first two derivatives, bounded psi in D(A), and a C1 potential (no A psi bound or convexity premise). The actual shifted Gaussian-profile specialization constructs and eliminates its extension under an explicit a.e. range margin. BGL heat interpolation, any needed stronger composition-domain identification and endpoint limits remain next; heat constants are unchanged. See research/decisions/2026-09-24-heat-chain-rule.md. The 2026-09-24 composition-domain continuation proves recognition from the actual smooth graph core and the operator chain rule when Gamma is in L2 (C1 potential). The positive-time bounded-data Gamma field is proved to be in L2 from the existing reverse bound. The shifted Gaussian operator frontend proves both range preservation and integrability from the initial range 0 <= f <= 1-2 eps, with no additional domain premise. Squared BGL interpolation, nonlinear time differentiation, endpoint limits and epsilon removal remain next; heat constants are unchanged. See research/decisions/2026-09-24-heat-composition-domain.md. The 2026-09-24 time-differentiation continuation proves scalar composition differentiation along L2 curves via affine quotients and Lipschitz perturbations, without asserting global Frechet differentiability of the composition map. The tested interior heat interpolation has derivative int P_s psi Phi'' Gamma, with exact generator cancellation for C1 potentials, bounded D(A) tests and arbitrary L2 data. The actual shifted Gaussian specialization has derivative -int P_s psi Gamma/I under the initial range margin. Its actual positive-time L2 derivative is also constructed. Squared BGL interpolation, its quantitative inequality and integration, endpoint limits and epsilon removal remain next; heat coefficients are unchanged. See research/decisions/2026-09-24-heat-composition-derivative.md. The 2026-09-24 strong-interpolation continuation proves the generated-semigroup product rule on varying differentiable data and its domain version. The shifted Gaussian interpolation has strong L2 derivative -P_s z with z=Gamma/I constructed in L2. Adding the heat-invariant I(eps) gives the unshifted positive profile, and bounded-test quadratic differentiation yields -2 int beta Y_s P_s z. Weighted semigroup Cauchy-Schwarz and L1 self-improvement for the quantitative dissipation bound, time integration, endpoints and epsilon removal remain next. Heat coefficients are unchanged. See research/decisions/2026-09-24-heat-strong-interpolation.md. The 2026-09-24 weighted-Cauchy continuation proves preservation of pointwise positive semidefinite two-by-two L2 matrices by positive real linear maps, using rational quadratic tests and continuity. Combined with L1 gradient self-improvement it gives the weighted square-gradient bound. The actual Gaussian specialization proves Gamma(T P_t f) <= Y_s P_s z a.e. and the quantitative tested square derivative <= -2 int beta Gamma(T P_t f), for bounded nonnegative tests in the smooth convex model with the initial epsilon range margin. Time integration, endpoints and epsilon removal remain next; heat coefficients and route markers are unchanged. See research/decisions/2026-09-24-heat-weighted-cauchy.md. The 2026-09-24 integrated-profile continuation proves strong continuity for varying semigroup data, including time zero, and continuity of bounded-test quadratic functionals. One fixed Gaussian interpolation curve on [0,t] gives the integrated tested inequality with both endpoints identified. L2 representative uniqueness and smooth-test order detection give 2t Gamma(T P_t f) <= I(P_t f+eps)^2 - (P_t I(f+eps))^2 a.e., with the actual initial profile constructed in L2. The smooth convex model, unit weight and epsilon range margin remain explicit. Removing that margin is next; the unregularized BGL estimate and improved heat constants remain open. See research/decisions/2026-09-24-heat-integrated-profile.md. The 2026-09-24 profile-limit continuation proves continuity of the Gaussian zero extension and dominated L2 convergence of I((1-2eps)f+eps). Exact heat and closed-gradient scaling, followed by bounded-test quadratic continuity, remove the epsilon range margin. For all 0<=f<=1 in L2 and t>0, the actual smooth convex unit-weight model satisfies 2t Gamma(T P_t f)<=I(P_t f)^2-(P_t I(f))^2 a.e., with I(f) constructed in L2. The integrated tested version is also proved. This completes the Gaussian BGL inequality in this model; deriving the improved bounded-data gradient and 2 sqrt(t/pi) L1/perimeter coefficients, general-law passage and pi Buser assembly remain next. KLS remains open. See research/decisions/2026-09-24-heat-profile-limit.md. The 2026-09-25 pi-coefficient continuation proves the unit-interval gradient bound 1/(2 sqrt(pi*t)) and the bounded-data bound M/sqrt(pi*t), including M=0. The dual time argument yields the 2 sqrt(t/pi) whole-form-domain L1 estimate, its form-approximation and recovery transfer, and the smooth-domain relative-perimeter bound in the actual smooth convex model. The ENNReal perimeter bound covers t=0 and infinite perimeter. Eight earlier public signatures are preserved as weaker bounds, and eight independent clients audit the new results. General-law passage, remaining perimeter interfaces, the form-domain-gap to literature-constant bridge and pi Cheeger-Buser assembly remain open; KLS remains open. See research/decisions/2026-09-25-heat-pi-coefficient.md. 2026-10-03/04 (uncommitted): Analysis/Semigroup/Generated/Convergence.lean proves, for a closed densely defined T between real Hilbert spaces, that P_t g -> 0 strongly for every g orthogonal to ker T. In the tilted-law heat model, ker T = constants (Energy/Euclidean/ZeroGradient.lean, KLS/LogConcave/WeightedGradient/Kernel.lean), Var(P_t u) -> 0 for every u in L2, and with Hess U >= rho > 0, Var(u) <= rho^-1 norm(T u)^2 on the whole form domain and C_P <= 1/rho without an ergodicity hypothesis (KLS/LogConcave/HeatSemigroup/Curvature.lean); the volume.tilted(-W) form of BGL Corollary 4.8.2 is proved, with log-concavity and full support from KLS/LogConcave/Density/Tilted.lean. This is supporting analytic infrastructure; it changes neither this node's status nor the pi Buser comparison. No BGL certificate is registered (candidate under owner review: research/decisions/2026-10-04-bgl-corollary-4-8-2-candidate.md).",
+      "description": "Generator identification on smooth compactly supported tests (T*T f = -(Delta f - <grad U, grad f>), weighted integration by parts) and the local Gamma/Gamma_2 calculus (carre du champ product identity, positive semidefinite Hessian of a convex potential, Bochner identity in the fixed standard basis, Gamma_2 >= 0) are proved pointwise for smooth potentials; on the operator side D(A) invariance, generator commutation, right time derivatives, stability of the whole form domain D(T) under P_t with the energy contraction norm(T(P_t f)) <= norm(T f), positive-time domain regularity for arbitrary L2 data (P_t g in D(T*T), norm(T*T(P_t g)) <= norm(g)/t) and second-order regularity T*T(P_t g) in D(T) are proved for arbitrary weights; the weak Gamma interface is proved (L1 carre du champ of L2 fields with its integrability, testing and L1 stability, Leibniz and chain rules on IsTest inputs with their stated hypotheses, weak integration by parts against T*T, the integrated Bochner inequality on smooth compactly supported tests and its transfer to L2 limits of the fields, integrated Gamma contraction along the heat flow); the second-order field is now eliminated from the weak Gamma_2 inequality by the Leibniz rule for the closed gradient against a C_c^infty multiplier on the whole form domain, so the inequality transfers along first-order graph convergence for the generator ([f_n] -> F and A[f_n] -> A F in L2) and holds unconditionally on the domain of the closure of A restricted to C_c^infty; for the heat flow it was first proved under a single explicit hypothesis, which the 2026-09-22 round REDUCED from the global operator-core property of A = T*T to a purely LOCAL regularity statement (the global cutoff half: an L2 class orthogonal to (A+1) C_c^infty whose C_c^infty localizations lie in D(T) is zero, via norm(chi_r u) <= (M/r) norm(u)); the later 2026-09-22 round then PROVED that local statement for every C^1 potential in the current full-dimensional log-concave tilted-law model with unit weight, by mollification against the Haar measure (L2 contraction, L2 convergence and symmetry of the normalised bump, commutation with grad and Delta; the divergence-form weak equation Delta W = -div(W grad U) + W for W = rho u; a Caccioppoli estimate applied to differences of mollifications, so that no weak compactness is needed; closedness of T), so C_c^infty IS an operator core of A = T*T (L essentially self-adjoint on C_c^infty) and the heat-flow weak Gamma_2 inequality holds with only the model hypotheses (C^infty convex potential, unit weight, arbitrary g in L2, every t > 0, every nonnegative phi in C_c^infty). The Gamma time interpolation s -> integral of (P_s phi) Gamma(T(P_(t-s) f)) dnu with the outer semigroup on the test function, the extension of weak Gamma_2 to the test class {P_s phi}, sharp constants, the square and first-order pointwise gradient estimates for the existing semigroup and their general-law passage remain pending, as internal milestones of the full pi Buser task. The heat-test takeover proves uniform essential bounds for P_s phi and A(P_s phi), integrability of both pairings for arbitrary L2 fields, and the inequality for smooth compactly supported data against nonnegative D(A) tests. Transfer to arbitrary F = P_r g remains unproved: the conditional two-field transfer needs convergence of T(A f_n), which the existing A graph core does not supply. See research/decisions/2026-09-22-heat-test-class.md. 2026-09-22 (heat approximation continuation, PARTIAL): Generated/Smoothing.lean proves r^3 * norm(T A P_r g)^2 <= 4 * norm(g)^2 and continuity of both heat fields under L2 convergence of initial data. HeatSemigroup.exists_seq_smooth_tendsto_regularized_fields constructs smooth compactly supported f_n whose HEAT EVOLUTIONS P_(r/2)[f_n] approximate both fields of P_r g. The approximating heat values are not asserted to be compactly supported smooth data; applying smooth-data Bochner to them remains unjustified. The full arbitrary-data heat-test extension is still open. See research/decisions/2026-09-22-heat-test-approximation.md. The subsequent resolvent route review adds no Lean proof: density of (I+A) C_c^infty in D(T) remains unproved, with a fourth-order orthogonality condition; the first-order block-power core route is external mathematics only. See research/decisions/2026-09-22-heat-test-extension-route.md. The finite wave splitting construction now formalizes explicit flows, joint cell smoothness and common compact support (Analysis/WaveSplitting/Basic.lean). Derivative-norm stability, residual-controlled time averaging and form-range density remain unproved; the arbitrary-data heat-test frontend remains open. See research/decisions/2026-09-22-wave-splitting-construction.md. The derivative-energy continuation proves exact Haar preservation of every finite ordered-coordinate derivative energy by actual coordinate sweeps, plus zero-order reaction and full-split stability under an explicit coefficient bound, with a fixed-horizon iteration client. Higher-order reaction stability, coefficient localization, the residual estimate and the heat-test frontend remain open. See research/decisions/2026-09-22-wave-splitting-energy.md. The 2026-09-23 stability continuation proves the actual finite directional Leibniz expansion, scalar integrated multiplication bound, and reaction, full-split, grid and cell stability at every finite derivative order, including five, under explicit raw coefficient derivative bounds. These are ordered-coordinate energies with dimension-dependent constants. Coefficient localization, the third-order residual bound with two derivative losses, weighted energy and gradient compatibility, the residual-controlled finite time average and heat-test frontend remain open. Next prove the actual split residual estimate. See research/decisions/2026-09-23-wave-splitting-stability.md. The 2026-09-23 localization continuation constructs one compact smooth coefficient agreeing on the common support ball, proves all finite coordinate derivative bounds for it and equality of the actual grid/cells, and removes global coefficient-bound assumptions from fixed-horizon stability for original smooth coefficients. An independent fifth-order smooth-potential client is proved. The actual third-order split residual estimate, weighted energy, compatibility defect, finite time average and heat-test frontend remain open. See research/decisions/2026-09-23-wave-splitting-localization.md. The 2026-09-23 consistency continuation proves the time-dependent-input chain rules for the complete finite splitting composition, identifies full coordinate lists with the wave generator, and defines the actual residual with joint smoothness, zero initial value and exact time-integral representation. The mesh-uniform tame residual estimate with two derivative losses is NOT proved and is next; a pointwise smoothness argument is insufficient. Weighted energy, compatibility, the time average and heat-test frontend remain open. See research/decisions/2026-09-23-wave-splitting-consistency.md. The 2026-09-23 generator-bound continuation proves scalar coordinate differentiation and actual coordinate generators lose one energy order, reaction loses no order, and the full split generator squared and all ordered elementary pairs lose at most two orders. Independent clients instantiate order five to three, including both mixed orders without commuting generators. Differentiated split products with intervening flow factors are not yet controlled; their second time derivative is not identified with the square of the summed generator. The tame residual bound, weighted energy, time average and heat-test frontend remain open. See research/decisions/2026-09-23-wave-generator-bounds.md. The 2026-09-23 residual continuation proves all-time chain rules for the actual flows with time-dependent input, exchange of time and space derivatives, the exact ordered residual identity e_Y(t) = R(t) sweepDerivative(t,js,Y) - G_js(S(t)Y) (no G^2 S(t)Y identification, no commutation), a Fubini/Cauchy-Schwarz time-integral energy lemma, and the tame bound E_k(e_Y(t)) <= residualConstant(js,k,B) t^2 E_(k+2)(Y) for 0 <= t <= 1 (Analysis/WaveSplitting/FlowDerivative.lean, Residual.lean), with the constant depending only on the coordinate count, split list, k and coefficient bound through order k+1. The localized grid-cell client gives E_k(residual at node k, time theta) <= C delta^2 for all meshes 0 <= delta <= 1, N delta <= L, k < N, 0 <= theta <= delta, for original smooth coefficients without global bounds. Weighted forced energy, gradient compatibility, the time average, form-range density and the heat-test frontend remain open. See research/decisions/2026-09-23-wave-splitting-residual.md. The 2026-09-23 weighted-energy continuation (Analysis/WaveSplitting/WeightedEnergy.lean, Compatibility.lean) proves Cauchy-Schwarz/Minkowski for the weighted energy W(Y) = integral of w (u^2+v^2+sum p_j^2) and for the ordered derivative energies, the weighted skew identity <Y, waveGenerator Y>_w = 0 when D_(a_j) w = -b_j w (no p = grad u), differentiation of W along cells, and the forced bound sqrt W(cell_k(theta)) <= sqrt W(Y) + C delta for all meshes 0 <= delta <= 1, N delta <= L, k < N, 0 <= theta <= delta, with leading coefficient one, for smooth coefficients without global bounds. The compatibility defect d = p - D_(a_j) u evolves exactly by the defect of the actual residual, and sqrt E_k(d(cell)) <= sqrt E_k(d(Y)) + C delta; the weighted coordinate form energy of u is bounded by sqrt W(Y) + C (sqrt E_0(d(Y)) + delta). The potential client uses w = exp(-U) and initial data (0,h,0). The finite time average, its J q - h identity, identification with the L2(nu)/form norms, form-range density and the heat-test frontend remain open. See research/decisions/2026-09-23-wave-splitting-weighted-energy.md. The 2026-09-23 time-average continuation (Analysis/WaveSplitting/TimeAverage.lean) proves differentiation under and C^infty smoothness of parametric interval integrals of jointly smooth functions, that the cellwise time average q = sum_k int_0^delta (1-(k delta+theta)/(N delta)) u_k(theta) of the actual cells is C_c^infty, the exact split (waveGenerator Y).v = -J_cl u + div_b (p - D u), and the exact pointwise identity J_cl q - v(0) = (u(0) - u_N)/L + (1/L) sum_k int e_(k,u) + sum_k int (1 - t/L)(div_b d + e_(k,v)) with L = N delta != 0, the actual residuals and the actual defect (for (0,h,0) the route's J q - h identity). The quantitative bound ||J[q]-[h]||_E <= ||h||/L + C delta, identification of J_cl and the square energies with the tilted-law operator and norms, form-range density and the heat-test frontend remain open. See research/decisions/2026-09-23-wave-splitting-time-average.md. The 2026-09-23 error continuation (Analysis/WaveSplitting/AverageError.lean) proves the mesh-uniform bound sqrt FE_w(J_cl q - h) <= sqrt(int w h^2)/L + C delta for all meshes N delta = L, 0 < delta <= 1, where FE_w(f) = int w (f^2 + sum_j (D_(a_j) f)^2) and q is the actual cellwise time average of (0,h,0) (exists_timeAverage_error_bound), via joint smoothness of time primitives, a time-integral energy lemma, Minkowski for scalar and weighted form energies and the localized divergence bound; the potential client proves classical form-range approximation: for every eps > 0 an actual q in C_c^infty with sqrt FE_w(J_cl q - h) < eps. Identification of FE_w, J_cl and [C_c^infty] with the tilted-law form norm, I + A and the form domain, two-field convergence and the heat-test frontend remain open. See research/decisions/2026-09-23-wave-splitting-average-error.md. The 2026-09-23 form-range continuation (Analysis/WaveSplitting/Potential.lean, KLS/LogConcave/HeatSemigroup/FormRange.lean) proves the class-level density of the form range: for nu = m.tilted(-U) log-concave with smooth U, T the closed unit-weight gradient, A = T*T and J = I + A, every z in D(T) and eps > 0 admit q in C_c^infty with [q] in D(A), J[q] in D(T) and sqrt(norm(J[q] - z)^2 + norm(T J[q] - T z)^2) < eps (exists_toLp_add_adjointComp_graph_lt; Dense form dense_formRange_graphL2 in graphL2 T). The bridges are proved: in any orthonormal basis sum_j (D_j f)^2 = norm(grad f)^2, sum_j D_j D_j f = Delta f, sum_j b_j D_j f = <grad U, grad f>, formOperator = f - L f, Z = int exp(-U) dm > 0 with int exp(-U) g dm = Z int g dnu, the norm bridge norm([f])^2 + norm(T[f])^2 = FE_w(f)/Z and the operator bridge J[q] = [q - L q] in D(T). Zero dimension is included (J = I). Two-field convergence and the arbitrary-data heat-test frontend remain open. See research/decisions/2026-09-23-wave-splitting-form-range.md. The 2026-09-23 frontend continuation proves the generic second-order expansion norm(Je)^2 + norm(T Je)^2 = norm(e)^2 + 3 norm(Te)^2 + 3 norm(Ae)^2 + norm(T Ae)^2 for e in D(A) with Ae in D(T) and the resulting four-field convergence (Analysis/Semigroup/VonNeumann.lean), the two-field smooth core exists_seq_smooth_tendsto_two_fields (every F in D(A) with AF in D(T) has q_n in C_c^infty with [q_n] -> F, [grad q_n] -> T F, [-L q_n] -> A F, [grad(-L q_n)] -> T(A F); HeatSemigroup/FormRange.lean), and the arbitrary-data heat-test frontend HeatSemigroup.integral_weakGamma_operator_nonneg (HeatSemigroup/TestClassExtension.lean): for smooth convex U, arbitrary g in L2, r > 0, nonnegative phi in C_c^infty and s >= 0, with F = P_r g and psi = P_s[phi], both pairings are integrable and 0 <= -(1/2) int (A psi) Gamma(T F, T F) dnu + int psi Gamma(T F, T(A F)) dnu, with no wave, core, residual or sequence premise. The time interpolation s -> int (P_s phi) Gamma(T(P_(t-s) f)) dnu, gradient estimates, general-law passage and small-time bounds remain open. See research/decisions/2026-09-23-heat-test-extension-frontend.md. The 2026-09-23 square-estimate continuation proves the time interpolation r -> int (P_(t-r) phi) Gamma(T P_r f) dnu with the outer semigroup on the test function, its right time derivative (tested weak-Gamma product rule with uniformly bounded difference quotients, L2/L1 pairing by truncation, generic time derivatives of P_t f and of the gradient orbit T P_t g, the difference bound |P_h psi - psi| <= h sup|A psi|) and its monotonicity via the heat-test frontend, hence the integrated square gradient estimate HeatSemigroup.integral_mul_weakGamma_le: int phi Gamma(T P_t f) dnu <= int (P_t phi) Gamma(T f) dnu for every f in D(T), t >= 0 and nonnegative phi in C_c^infty, smooth convex U (HeatSemigroup/GradientEstimate.lean, Generated/TimeDerivative.lean). Not proved: a pointwise a.e. form, the L1 self-improvement |T P_t f| <= P_t |T f|, the reverse BGL estimate, small-time bounds, the general-law passage and the constant pi. See research/decisions/2026-09-23-heat-gradient-square-estimate.md. The 2026-09-23 reverse-Poincare/self-improvement continuation proves, for smooth convex U, unit weight and nonnegative phi in C_c^infty, the reverse local Poincare (BGL, K = 0) inequality 2t int phi Gamma(T P_t f) <= int (P_t phi) f^2 - int phi (P_t f)^2 for arbitrary f in L2 and t > 0 (HeatSemigroup.two_mul_integral_mul_weakGamma_le; bounded data: 2t int phi Gamma(T P_t f) <= M^2 int phi) and Bakry's L1 self-improvement int phi |T P_t f| <= int (P_t phi) |T f| for f in D(T), t >= 0 (HeatSemigroup.integral_mul_norm_le). Inputs: Laplacian chain rule, improved Bochner |grad Gamma(f)|^2 <= 4 Gamma(f) Gamma_2(f), the pointwise sqrt(eps + Gamma) inequality, the regularized-norm calculus (Analysis/BakryEmery/RegularizedNorm.lean), the D(A) carre identity and the orbit derivative for arbitrary data. Not proved: a.e. forms, small-time BV bounds, general-law passage, the constant pi. See research/decisions/2026-09-23-heat-reverse-poincare-self-improvement.md. The 2026-09-23 a.e. continuation proves smooth-test order separation for integrable real functions on finite Borel measures (Analysis/TestFunctionOrder.lean), the bounded-data estimate |T P_t f| <= M/sqrt(2t) a.e. for t > 0 (HeatSemigroup.ae_norm_gradient_le_of_bounded), and |T P_t f| <= P_t |T f| a.e. for form-domain data and t >= 0 (HeatSemigroup.ae_norm_gradient_le), with global gradient L1 contraction (integral_norm_gradient_le). Small-time BV estimates, general-law passage and pi Buser remain open. See research/decisions/2026-09-23-heat-almost-everywhere.md. The 2026-09-23 small-time continuation proves integral |f-P_t f| <= sqrt(2t) integral |T f| on the whole form domain, L1 contraction between L2 inputs, and the smooth-domain relative-perimeter indicator estimate via the actual recovery sequence. The ENNReal endpoint includes infinite perimeter and zero time. This is not the sharp De Ponti-Mondino coefficient 2 sqrt(t/pi): their Gaussian-profile BGL estimate (32)-(33) is stronger than the proved ordinary reverse local Poincare inequality and remains open. See research/decisions/2026-09-23-heat-small-time-perimeter.md. The 2026-09-24 Gaussian scalar continuation constructs the actual Gaussian CDF/quantile profile and proves its ODE I I'' = -1 on (0,1), attained bound 1/sqrt(2*pi), endpoint limits, continuity and strict concavity on [0,1] (Probability/Line/GaussianProfile.lean). Regularized-profile calculus and the BGL heat interpolation remain next; no heat coefficient or route completion changes. See research/decisions/2026-09-24-gaussian-profile.md. The 2026-09-24 regularization continuation proves interior smoothness, reflection and midpoint normalization, shifted-profile nonnegativity, derivative bounds, Lipschitz control, a uniform value bound and pointwise epsilon convergence on [0,1). It constructs a globally smooth extension agreeing near the admissible interval, with bounded value and first two derivatives. A smooth-input weighted-Laplacian chain-rule client is proved. The tested D(A) generator chain rule and BGL heat interpolation remain next; heat constants are unchanged. See research/decisions/2026-09-24-gaussian-regularization.md. The 2026-09-24 tested-chain-rule continuation proves integrability and the scalar generator composition identity on arbitrary D(A) data for globally smooth Phi vanishing at zero with bounded value and first two derivatives, bounded psi in D(A), and a C1 potential (no A psi bound or convexity premise). The actual shifted Gaussian-profile specialization constructs and eliminates its extension under an explicit a.e. range margin. BGL heat interpolation, any needed stronger composition-domain identification and endpoint limits remain next; heat constants are unchanged. See research/decisions/2026-09-24-heat-chain-rule.md. The 2026-09-24 composition-domain continuation proves recognition from the actual smooth graph core and the operator chain rule when Gamma is in L2 (C1 potential). The positive-time bounded-data Gamma field is proved to be in L2 from the existing reverse bound. The shifted Gaussian operator frontend proves both range preservation and integrability from the initial range 0 <= f <= 1-2 eps, with no additional domain premise. Squared BGL interpolation, nonlinear time differentiation, endpoint limits and epsilon removal remain next; heat constants are unchanged. See research/decisions/2026-09-24-heat-composition-domain.md. The 2026-09-24 time-differentiation continuation proves scalar composition differentiation along L2 curves via affine quotients and Lipschitz perturbations, without asserting global Frechet differentiability of the composition map. The tested interior heat interpolation has derivative int P_s psi Phi'' Gamma, with exact generator cancellation for C1 potentials, bounded D(A) tests and arbitrary L2 data. The actual shifted Gaussian specialization has derivative -int P_s psi Gamma/I under the initial range margin. Its actual positive-time L2 derivative is also constructed. Squared BGL interpolation, its quantitative inequality and integration, endpoint limits and epsilon removal remain next; heat coefficients are unchanged. See research/decisions/2026-09-24-heat-composition-derivative.md. The 2026-09-24 strong-interpolation continuation proves the generated-semigroup product rule on varying differentiable data and its domain version. The shifted Gaussian interpolation has strong L2 derivative -P_s z with z=Gamma/I constructed in L2. Adding the heat-invariant I(eps) gives the unshifted positive profile, and bounded-test quadratic differentiation yields -2 int beta Y_s P_s z. Weighted semigroup Cauchy-Schwarz and L1 self-improvement for the quantitative dissipation bound, time integration, endpoints and epsilon removal remain next. Heat coefficients are unchanged. See research/decisions/2026-09-24-heat-strong-interpolation.md. The 2026-09-24 weighted-Cauchy continuation proves preservation of pointwise positive semidefinite two-by-two L2 matrices by positive real linear maps, using rational quadratic tests and continuity. Combined with L1 gradient self-improvement it gives the weighted square-gradient bound. The actual Gaussian specialization proves Gamma(T P_t f) <= Y_s P_s z a.e. and the quantitative tested square derivative <= -2 int beta Gamma(T P_t f), for bounded nonnegative tests in the smooth convex model with the initial epsilon range margin. Time integration, endpoints and epsilon removal remain next; heat coefficients and route markers are unchanged. See research/decisions/2026-09-24-heat-weighted-cauchy.md. The 2026-09-24 integrated-profile continuation proves strong continuity for varying semigroup data, including time zero, and continuity of bounded-test quadratic functionals. One fixed Gaussian interpolation curve on [0,t] gives the integrated tested inequality with both endpoints identified. L2 representative uniqueness and smooth-test order detection give 2t Gamma(T P_t f) <= I(P_t f+eps)^2 - (P_t I(f+eps))^2 a.e., with the actual initial profile constructed in L2. The smooth convex model, unit weight and epsilon range margin remain explicit. Removing that margin is next; the unregularized BGL estimate and improved heat constants remain open. See research/decisions/2026-09-24-heat-integrated-profile.md. The 2026-09-24 profile-limit continuation proves continuity of the Gaussian zero extension and dominated L2 convergence of I((1-2eps)f+eps). Exact heat and closed-gradient scaling, followed by bounded-test quadratic continuity, remove the epsilon range margin. For all 0<=f<=1 in L2 and t>0, the actual smooth convex unit-weight model satisfies 2t Gamma(T P_t f)<=I(P_t f)^2-(P_t I(f))^2 a.e., with I(f) constructed in L2. The integrated tested version is also proved. This completes the Gaussian BGL inequality in this model; deriving the improved bounded-data gradient and 2 sqrt(t/pi) L1/perimeter coefficients, general-law passage and pi Buser assembly remain next. This program does not by itself prove KLS. See research/decisions/2026-09-24-heat-profile-limit.md. The 2026-09-25 pi-coefficient continuation proves the unit-interval gradient bound 1/(2 sqrt(pi*t)) and the bounded-data bound M/sqrt(pi*t), including M=0. The dual time argument yields the 2 sqrt(t/pi) whole-form-domain L1 estimate, its form-approximation and recovery transfer, and the smooth-domain relative-perimeter bound in the actual smooth convex model. The ENNReal perimeter bound covers t=0 and infinite perimeter. Eight earlier public signatures are preserved as weaker bounds, and eight independent clients audit the new results. General-law passage, remaining perimeter interfaces, the form-domain-gap to literature-constant bridge and pi Cheeger-Buser assembly remain open; this program does not by itself prove KLS. See research/decisions/2026-09-25-heat-pi-coefficient.md. 2026-10-03/04 (uncommitted): Analysis/Semigroup/Generated/Convergence.lean proves, for a closed densely defined T between real Hilbert spaces, that P_t g -> 0 strongly for every g orthogonal to ker T. In the tilted-law heat model, ker T = constants (Energy/Euclidean/ZeroGradient.lean, KLS/LogConcave/WeightedGradient/Kernel.lean), Var(P_t u) -> 0 for every u in L2, and with Hess U >= rho > 0, Var(u) <= rho^-1 norm(T u)^2 on the whole form domain and C_P <= 1/rho without an ergodicity hypothesis (KLS/LogConcave/HeatSemigroup/Curvature.lean); the volume.tilted(-W) form of BGL Corollary 4.8.2 is proved, with log-concavity and full support from KLS/LogConcave/Density/Tilted.lean. This is supporting analytic infrastructure; it changes neither this node's status nor the pi Buser comparison. No BGL certificate is registered (candidate under owner review: research/decisions/2026-10-04-bgl-corollary-4-8-2-candidate.md).",
       "assessment": {
         "state": "partial",
         "evidence": {
@@ -1033,7 +1033,7 @@
       }
     },
     "diagram:HEAT": {
-      "description": "Form-domain small-time L1 approximation and smooth-domain relative-perimeter heat bound with coefficient 2 sqrt(t/pi) are formalized in the smooth convex tilted-law model; L1 contraction and the actual recovery passage are proved. The Gaussian-profile BGL inequality is formalized in the smooth convex model for all unit-interval L2 data. The improved 2 sqrt(t/pi) coefficient is formalized, including zero time and infinite perimeter. The literature form-gap bridge and pi Buser assembly for the smooth convex tilted model are proved. The affine-support transport gives the exact inverseScale inequality whenever the intrinsic law is a smooth convex tilt; the general nonsmooth-law passage remains open. The 2026-09-24 Gaussian scalar continuation constructs the actual Gaussian CDF/quantile profile and proves its ODE I I'' = -1 on (0,1), attained bound 1/sqrt(2*pi), endpoint limits, continuity and strict concavity on [0,1] (Probability/Line/GaussianProfile.lean). Regularized-profile calculus and the BGL heat interpolation remain next; no heat coefficient or route completion changes. See research/decisions/2026-09-24-gaussian-profile.md. The 2026-09-24 regularization continuation proves interior smoothness, reflection and midpoint normalization, shifted-profile nonnegativity, derivative bounds, Lipschitz control, a uniform value bound and pointwise epsilon convergence on [0,1). It constructs a globally smooth extension agreeing near the admissible interval, with bounded value and first two derivatives. A smooth-input weighted-Laplacian chain-rule client is proved. The tested D(A) generator chain rule and BGL heat interpolation remain next; heat constants are unchanged. See research/decisions/2026-09-24-gaussian-regularization.md. The 2026-09-24 tested-chain-rule continuation proves integrability and the scalar generator composition identity on arbitrary D(A) data for globally smooth Phi vanishing at zero with bounded value and first two derivatives, bounded psi in D(A), and a C1 potential (no A psi bound or convexity premise). The actual shifted Gaussian-profile specialization constructs and eliminates its extension under an explicit a.e. range margin. BGL heat interpolation, any needed stronger composition-domain identification and endpoint limits remain next; heat constants are unchanged. See research/decisions/2026-09-24-heat-chain-rule.md. The 2026-09-24 composition-domain continuation proves recognition from the actual smooth graph core and the operator chain rule when Gamma is in L2 (C1 potential). The positive-time bounded-data Gamma field is proved to be in L2 from the existing reverse bound. The shifted Gaussian operator frontend proves both range preservation and integrability from the initial range 0 <= f <= 1-2 eps, with no additional domain premise. Squared BGL interpolation, nonlinear time differentiation, endpoint limits and epsilon removal remain next; heat constants are unchanged. See research/decisions/2026-09-24-heat-composition-domain.md. The 2026-09-24 time-differentiation continuation proves scalar composition differentiation along L2 curves via affine quotients and Lipschitz perturbations, without asserting global Frechet differentiability of the composition map. The tested interior heat interpolation has derivative int P_s psi Phi'' Gamma, with exact generator cancellation for C1 potentials, bounded D(A) tests and arbitrary L2 data. The actual shifted Gaussian specialization has derivative -int P_s psi Gamma/I under the initial range margin. Its actual positive-time L2 derivative is also constructed. Squared BGL interpolation, its quantitative inequality and integration, endpoint limits and epsilon removal remain next; heat coefficients are unchanged. See research/decisions/2026-09-24-heat-composition-derivative.md. The 2026-09-24 strong-interpolation continuation proves the generated-semigroup product rule on varying differentiable data and its domain version. The shifted Gaussian interpolation has strong L2 derivative -P_s z with z=Gamma/I constructed in L2. Adding the heat-invariant I(eps) gives the unshifted positive profile, and bounded-test quadratic differentiation yields -2 int beta Y_s P_s z. Weighted semigroup Cauchy-Schwarz and L1 self-improvement for the quantitative dissipation bound, time integration, endpoints and epsilon removal remain next. Heat coefficients are unchanged. See research/decisions/2026-09-24-heat-strong-interpolation.md. The 2026-09-24 weighted-Cauchy continuation proves preservation of pointwise positive semidefinite two-by-two L2 matrices by positive real linear maps, using rational quadratic tests and continuity. Combined with L1 gradient self-improvement it gives the weighted square-gradient bound. The actual Gaussian specialization proves Gamma(T P_t f) <= Y_s P_s z a.e. and the quantitative tested square derivative <= -2 int beta Gamma(T P_t f), for bounded nonnegative tests in the smooth convex model with the initial epsilon range margin. Time integration, endpoints and epsilon removal remain next; heat coefficients and route markers are unchanged. See research/decisions/2026-09-24-heat-weighted-cauchy.md. The 2026-09-24 integrated-profile continuation proves strong continuity for varying semigroup data, including time zero, and continuity of bounded-test quadratic functionals. One fixed Gaussian interpolation curve on [0,t] gives the integrated tested inequality with both endpoints identified. L2 representative uniqueness and smooth-test order detection give 2t Gamma(T P_t f) <= I(P_t f+eps)^2 - (P_t I(f+eps))^2 a.e., with the actual initial profile constructed in L2. The smooth convex model, unit weight and epsilon range margin remain explicit. Removing that margin is next; the unregularized BGL estimate and improved heat constants remain open. See research/decisions/2026-09-24-heat-integrated-profile.md. The 2026-09-24 profile-limit continuation proves continuity of the Gaussian zero extension and dominated L2 convergence of I((1-2eps)f+eps). Exact heat and closed-gradient scaling, followed by bounded-test quadratic continuity, remove the epsilon range margin. For all 0<=f<=1 in L2 and t>0, the actual smooth convex unit-weight model satisfies 2t Gamma(T P_t f)<=I(P_t f)^2-(P_t I(f))^2 a.e., with I(f) constructed in L2. The integrated tested version is also proved. This completes the Gaussian BGL inequality in this model; deriving the improved bounded-data gradient and 2 sqrt(t/pi) L1/perimeter coefficients, general-law passage and pi Buser assembly remain next. KLS remains open. See research/decisions/2026-09-24-heat-profile-limit.md. The 2026-09-25 pi-coefficient continuation proves the unit-interval gradient bound 1/(2 sqrt(pi*t)) and the bounded-data bound M/sqrt(pi*t), including M=0. The dual time argument yields the 2 sqrt(t/pi) whole-form-domain L1 estimate, its form-approximation and recovery transfer, and the smooth-domain relative-perimeter bound in the actual smooth convex model. The ENNReal perimeter bound covers t=0 and infinite perimeter. Eight earlier public signatures are preserved as weaker bounds, and eight independent clients audit the new results. General-law passage, remaining perimeter interfaces, the form-domain-gap to literature-constant bridge and pi Cheeger-Buser assembly remain open; KLS remains open. See research/decisions/2026-09-25-heat-pi-coefficient.md. The 2026-09-25 centered-decay continuation proves exp(-2t/C) squared-norm decay on all L2 data and exp(-t/C) centered indicator correlation under an explicit positive form-domain gap; see research/decisions/2026-09-25-heat-spectral-decay.md. The 2026-09-25 bridge continuation identifies the closed unit-gradient form optimum exactly with the intrinsic literature constant, proves indicator L1 displacement equals twice the loss of centered correlation, certifies 2 sqrt(5/4) <= pi (1-exp(-5/4)), and combines the pi perimeter bound with the proved smooth/Minkowski Cheeger equality. The exact extended-optimum pi Buser inequality is formalized for smooth convex tilted full-dimensional laws, including zero and infinity. General intrinsic Borell laws need a new nonsmooth-potential heat/perimeter transfer or a different Buser proof; the full affine-support inverseScale statement and KLS remain open. See research/decisions/2026-09-25-heat-buser-bridge.md. The 2026-09-25 affine continuation transports the exact pi inequality to inverseScale on arbitrary affine supports with smooth convex tilted intrinsic law. The unrestricted nonsmooth-law passage remains open; see research/decisions/2026-09-25-affine-smooth-buser.md. The zero-dimensional pi bound is unconditional for every law.",
+      "description": "Form-domain small-time L1 approximation and smooth-domain relative-perimeter heat bound with coefficient 2 sqrt(t/pi) are formalized in the smooth convex tilted-law model; L1 contraction and the actual recovery passage are proved. The Gaussian-profile BGL inequality is formalized in the smooth convex model for all unit-interval L2 data. The improved 2 sqrt(t/pi) coefficient is formalized, including zero time and infinite perimeter. The literature form-gap bridge and pi Buser assembly for the smooth convex tilted model are proved. The affine-support transport gives the exact inverseScale inequality whenever the intrinsic law is a smooth convex tilt; the general nonsmooth-law passage remains open. The 2026-09-24 Gaussian scalar continuation constructs the actual Gaussian CDF/quantile profile and proves its ODE I I'' = -1 on (0,1), attained bound 1/sqrt(2*pi), endpoint limits, continuity and strict concavity on [0,1] (Probability/Line/GaussianProfile.lean). Regularized-profile calculus and the BGL heat interpolation remain next; no heat coefficient or route completion changes. See research/decisions/2026-09-24-gaussian-profile.md. The 2026-09-24 regularization continuation proves interior smoothness, reflection and midpoint normalization, shifted-profile nonnegativity, derivative bounds, Lipschitz control, a uniform value bound and pointwise epsilon convergence on [0,1). It constructs a globally smooth extension agreeing near the admissible interval, with bounded value and first two derivatives. A smooth-input weighted-Laplacian chain-rule client is proved. The tested D(A) generator chain rule and BGL heat interpolation remain next; heat constants are unchanged. See research/decisions/2026-09-24-gaussian-regularization.md. The 2026-09-24 tested-chain-rule continuation proves integrability and the scalar generator composition identity on arbitrary D(A) data for globally smooth Phi vanishing at zero with bounded value and first two derivatives, bounded psi in D(A), and a C1 potential (no A psi bound or convexity premise). The actual shifted Gaussian-profile specialization constructs and eliminates its extension under an explicit a.e. range margin. BGL heat interpolation, any needed stronger composition-domain identification and endpoint limits remain next; heat constants are unchanged. See research/decisions/2026-09-24-heat-chain-rule.md. The 2026-09-24 composition-domain continuation proves recognition from the actual smooth graph core and the operator chain rule when Gamma is in L2 (C1 potential). The positive-time bounded-data Gamma field is proved to be in L2 from the existing reverse bound. The shifted Gaussian operator frontend proves both range preservation and integrability from the initial range 0 <= f <= 1-2 eps, with no additional domain premise. Squared BGL interpolation, nonlinear time differentiation, endpoint limits and epsilon removal remain next; heat constants are unchanged. See research/decisions/2026-09-24-heat-composition-domain.md. The 2026-09-24 time-differentiation continuation proves scalar composition differentiation along L2 curves via affine quotients and Lipschitz perturbations, without asserting global Frechet differentiability of the composition map. The tested interior heat interpolation has derivative int P_s psi Phi'' Gamma, with exact generator cancellation for C1 potentials, bounded D(A) tests and arbitrary L2 data. The actual shifted Gaussian specialization has derivative -int P_s psi Gamma/I under the initial range margin. Its actual positive-time L2 derivative is also constructed. Squared BGL interpolation, its quantitative inequality and integration, endpoint limits and epsilon removal remain next; heat coefficients are unchanged. See research/decisions/2026-09-24-heat-composition-derivative.md. The 2026-09-24 strong-interpolation continuation proves the generated-semigroup product rule on varying differentiable data and its domain version. The shifted Gaussian interpolation has strong L2 derivative -P_s z with z=Gamma/I constructed in L2. Adding the heat-invariant I(eps) gives the unshifted positive profile, and bounded-test quadratic differentiation yields -2 int beta Y_s P_s z. Weighted semigroup Cauchy-Schwarz and L1 self-improvement for the quantitative dissipation bound, time integration, endpoints and epsilon removal remain next. Heat coefficients are unchanged. See research/decisions/2026-09-24-heat-strong-interpolation.md. The 2026-09-24 weighted-Cauchy continuation proves preservation of pointwise positive semidefinite two-by-two L2 matrices by positive real linear maps, using rational quadratic tests and continuity. Combined with L1 gradient self-improvement it gives the weighted square-gradient bound. The actual Gaussian specialization proves Gamma(T P_t f) <= Y_s P_s z a.e. and the quantitative tested square derivative <= -2 int beta Gamma(T P_t f), for bounded nonnegative tests in the smooth convex model with the initial epsilon range margin. Time integration, endpoints and epsilon removal remain next; heat coefficients and route markers are unchanged. See research/decisions/2026-09-24-heat-weighted-cauchy.md. The 2026-09-24 integrated-profile continuation proves strong continuity for varying semigroup data, including time zero, and continuity of bounded-test quadratic functionals. One fixed Gaussian interpolation curve on [0,t] gives the integrated tested inequality with both endpoints identified. L2 representative uniqueness and smooth-test order detection give 2t Gamma(T P_t f) <= I(P_t f+eps)^2 - (P_t I(f+eps))^2 a.e., with the actual initial profile constructed in L2. The smooth convex model, unit weight and epsilon range margin remain explicit. Removing that margin is next; the unregularized BGL estimate and improved heat constants remain open. See research/decisions/2026-09-24-heat-integrated-profile.md. The 2026-09-24 profile-limit continuation proves continuity of the Gaussian zero extension and dominated L2 convergence of I((1-2eps)f+eps). Exact heat and closed-gradient scaling, followed by bounded-test quadratic continuity, remove the epsilon range margin. For all 0<=f<=1 in L2 and t>0, the actual smooth convex unit-weight model satisfies 2t Gamma(T P_t f)<=I(P_t f)^2-(P_t I(f))^2 a.e., with I(f) constructed in L2. The integrated tested version is also proved. This completes the Gaussian BGL inequality in this model; deriving the improved bounded-data gradient and 2 sqrt(t/pi) L1/perimeter coefficients, general-law passage and pi Buser assembly remain next. This program does not by itself prove KLS. See research/decisions/2026-09-24-heat-profile-limit.md. The 2026-09-25 pi-coefficient continuation proves the unit-interval gradient bound 1/(2 sqrt(pi*t)) and the bounded-data bound M/sqrt(pi*t), including M=0. The dual time argument yields the 2 sqrt(t/pi) whole-form-domain L1 estimate, its form-approximation and recovery transfer, and the smooth-domain relative-perimeter bound in the actual smooth convex model. The ENNReal perimeter bound covers t=0 and infinite perimeter. Eight earlier public signatures are preserved as weaker bounds, and eight independent clients audit the new results. General-law passage, remaining perimeter interfaces, the form-domain-gap to literature-constant bridge and pi Cheeger-Buser assembly remain open; this program does not by itself prove KLS. See research/decisions/2026-09-25-heat-pi-coefficient.md. The 2026-09-25 centered-decay continuation proves exp(-2t/C) squared-norm decay on all L2 data and exp(-t/C) centered indicator correlation under an explicit positive form-domain gap; see research/decisions/2026-09-25-heat-spectral-decay.md. The 2026-09-25 bridge continuation identifies the closed unit-gradient form optimum exactly with the intrinsic literature constant, proves indicator L1 displacement equals twice the loss of centered correlation, certifies 2 sqrt(5/4) <= pi (1-exp(-5/4)), and combines the pi perimeter bound with the proved smooth/Minkowski Cheeger equality. The exact extended-optimum pi Buser inequality is formalized for smooth convex tilted full-dimensional laws, including zero and infinity. General intrinsic Borell laws need a new nonsmooth-potential heat/perimeter transfer or a different Buser proof; the full affine-support inverseScale statement and KLS remain open. See research/decisions/2026-09-25-heat-buser-bridge.md. The 2026-09-25 affine continuation transports the exact pi inequality to inverseScale on arbitrary affine supports with smooth convex tilted intrinsic law. The unrestricted nonsmooth-law passage remains open; see research/decisions/2026-09-25-affine-smooth-buser.md. The zero-dimensional pi bound is unconditional for every law.",
       "assessment": {
         "state": "partial",
         "evidence": {
@@ -1122,7 +1122,13 @@
     },
     "thm:bkl-taylor-criterion": {
       "description": "Bizeul–Klartag–Lehec Theorem 3.1: C_P(μ) ≤ K R² for centered regular log-concave μ with Cov μ ≤ Id and |T_d f| ≤ R^d‖f‖₂ (29); paper-target certificate.",
-      "blueprint": "thm:bkl-taylor-criterion"
+      "blueprint": "thm:bkl-taylor-criterion",
+      "diagram": {
+        "id": "BT31",
+        "label": "BKL Theorem 3.1<br/>Taylor criterion (certified)",
+        "source": "../../solutions/ThmBklTaylorCriterion.lean",
+        "shape": "box"
+      }
     },
     "lem:bkl-corollary-3-7": {
       "description": "Bizeul–Klartag–Lehec Corollary 3.7: S_{d+1}T_d(∇₀h) = T_{d+1}(−ℒh) = αT_{d+1}(∇₀g) whenever −ℒh = α∇₀g, for tensor fields of temperate growth.",
@@ -1153,7 +1159,7 @@
       "blueprint": "lem:bkl-posterior-generator"
     },
     "lem:bkl-second-cumulant-base": {
-      "description": "Bizeul–Klartag–Lehec Theorem 4.1, base m = 2: for any law with one exponential moment κ₂ is the centered second moment = covariance pairing; for isotropic log-concave laws κ₂(u,v) = ⟨u,v⟩, Parseval, and CumulantBound 1 1 (R₂ = Id) holds unconditionally in every dimension. All-order Theorem 4.1 open; no certificate.",
+      "description": "Bizeul–Klartag–Lehec Theorem 4.1, base m = 2: for any law with one exponential moment κ₂ is the centered second moment = covariance pairing; for isotropic log-concave laws κ₂(u,v) = ⟨u,v⟩, Parseval, and CumulantBound 1 1 (R₂ = Id) holds unconditionally in every dimension. The all-order Theorem 4.1 is certified separately (thm:bkl-cumulant-bound).",
       "blueprint": "lem:bkl-second-cumulant-base"
     },
     "lem:bkl-near-symmetric-gradient": {
@@ -1197,7 +1203,7 @@
       "blueprint": "lem:bkl-affine-orthogonal"
     },
     "lem:bkl-cumulant-envelope": {
-      "description": "Section 6 envelope arithmetic of BKL: b_m = K^{m−1}((m−1)!)², identities (105)–(106), the absorption after (106) and the contraction (101)–(102); the cumulant induction itself is not proved.",
+      "description": "Section 6 envelope arithmetic of BKL: b_m = K^{m−1}((m−1)!)², identities (105)–(106), the absorption after (106) and the contraction (101)–(102); the cumulant induction itself is the cutoff energy induction (lem:bkl-cutoff-energy).",
       "blueprint": "lem:bkl-cumulant-envelope"
     },
     "lem:bkl-quadratic-tilt": {
@@ -1225,8 +1231,14 @@
       "blueprint": "lem:letwin-inverse-hessian-quadratic"
     },
     "prop:bkl-suspension": {
-      "description": "BKL Proposition 7.1, (107), in the source form: if R^ν_{d+1} ≤ b·Id for every isotropic log-concave ν in every dimension (d ≥ 2, b > 0), then every isotropic regular law satisfies |T_d f|² ≤ 2b/(d!)²·‖f‖₂² for all f ∈ L²(μ). Conditional on its own hypothesis; Theorem 4.1 is not formalized.",
-      "blueprint": "prop:bkl-suspension"
+      "description": "BKL Proposition 7.1, (107), in the source form: if R^ν_{d+1} ≤ b·Id for every isotropic log-concave ν in every dimension (d ≥ 2, b > 0), then every isotropic regular law satisfies |T_d f|² ≤ 2b/(d!)²·‖f‖₂² for all f ∈ L²(μ). Conditional on its own hypothesis, which the certified Theorem 4.1 (thm:bkl-cumulant-bound) supplies in BKL Theorem 1.1.",
+      "blueprint": "prop:bkl-suspension",
+      "diagram": {
+        "id": "BP71",
+        "label": "BKL Proposition 7.1<br/>suspension (certified)",
+        "source": "../../solutions/PropBklSuspension.lean",
+        "shape": "box"
+      }
     },
     "lem:bkl-weak-limit-transfer": {
       "description": "Weak-limit transfer of the Poincaré bound (BKL Section 2, p. 5): the smooth-test bound passes to weak limits on compactly supported smooth tests, extends to all admissible tests by cutoffs, and bounds the literature constant of a log-concave limit law by the limit constant.",
@@ -1261,7 +1273,7 @@
       "blueprint": "lem:bkl-regular-affine"
     },
     "lem:bkl-regular-reduction": {
-      "description": "BKL p. 30 conditional reduction: under CumulantBound d ((d!)² K^d) for all d ≥ 2 (Theorem 4.1), every isotropic regular law has C_P ≤ 2·C_{3.1}·K, via Theorem 3.1 with R = √(2K), Proposition 7.1 for d ≥ 2 and the Bessel bound for d = 1. Theorem 4.1 not proved; no certificate.",
+      "description": "BKL p. 30 conditional reduction: under CumulantBound d ((d!)² K^d) for all d ≥ 2 (Theorem 4.1), every isotropic regular law has C_P ≤ 2·C_{3.1}·K, via Theorem 3.1 with R = √(2K), Proposition 7.1 for d ≥ 2 and the Bessel bound for d = 1. The hypothesis is discharged in BKL Theorem 1.1 (thm:bkl-poincare).",
       "blueprint": "lem:bkl-regular-reduction"
     },
     "lem:bkl-gaussian-moments": {
@@ -1286,7 +1298,13 @@
     },
     "lem:bkl-regular-approximation": {
       "description": "Joint Gaussian-then-quadratic regular approximation (BKL Section 2): laws of regular potentials V_{n+1} + δ_k/2‖·‖² converge weakly to μ along a selected diagonal, with means, raw second moments and covariance operators converging; generic metric diagonal selection.",
-      "blueprint": "lem:bkl-regular-approximation"
+      "blueprint": "lem:bkl-regular-approximation",
+      "diagram": {
+        "id": "BREG",
+        "label": "BKL Section 2<br/>regular approximation",
+        "source": "../../formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/RegularApproximation.lean",
+        "shape": "box"
+      }
     },
     "lem:bkl-regular-poincare-transfer": {
       "description": "Conditional Poincaré transfer (BKL Section 2): a universal bound K on isotropic regular laws gives C_P ≤ K‖Cov‖ for every regular law, by centering/whitening and covariance-energy transport; envelope coefficient K(1+‖Cov−Id‖) → K.",
@@ -1478,7 +1496,7 @@
       "diagram": {
         "id": "WEAKHESS",
         "label": "C1 Hessian<br/>Gradient derivative at a point",
-        "source": "../../formalization/FunctionalInequalities/Probability/Stein/HessianKernel.lean",
+        "source": "../../formalization/FunctionalInequalities/Analysis/BakryEmery/WeakHessian.lean",
         "shape": "box"
       }
     },
@@ -1498,7 +1516,7 @@
       "diagram": {
         "id": "REGMOM",
         "label": "Regular-class R0<br/>C1,1 and a.e. Hessian package",
-        "source": "../../formalization/FunctionalInequalities/KLS/CEK/MomentRegularity.lean",
+        "source": "../../formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/Potential.lean",
         "shape": "box"
       }
     },
@@ -1518,7 +1536,7 @@
       "diagram": {
         "id": "WEAKGEN",
         "label": "Weak generator identities<br/>Letwin (2.2) at C1,1",
-        "source": "../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakInverseHessian.lean",
+        "source": "../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/InverseHessian/Weak.lean",
         "shape": "box"
       }
     },
@@ -1528,7 +1546,7 @@
       "diagram": {
         "id": "HESSENT",
         "label": "Hessian entries<br/>Measurable, bounded by G",
-        "source": "../../formalization/FunctionalInequalities/Probability/Stein/HessianKernel.lean",
+        "source": "../../formalization/FunctionalInequalities/Analysis/BakryEmery/WeakHessian.lean",
         "shape": "box"
       }
     },
@@ -1548,7 +1566,7 @@
       "diagram": {
         "id": "WEAKGENINT",
         "label": "Weak generator<br/>Density integrability",
-        "source": "../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakInverseHessian.lean",
+        "source": "../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/InverseHessian/Weak.lean",
         "shape": "box"
       }
     },
@@ -1588,7 +1606,7 @@
       "diagram": {
         "id": "HESSL2",
         "label": "Hessian entries<br/>Local and cutoff L2",
-        "source": "../../formalization/FunctionalInequalities/Probability/Stein/HessianKernel.lean",
+        "source": "../../formalization/FunctionalInequalities/Analysis/BakryEmery/WeakHessian.lean",
         "shape": "box"
       }
     },
@@ -1638,7 +1656,7 @@
       "diagram": {
         "id": "REGTENSOR",
         "label": "Regular source law<br/>Weak third-derivative tensor",
-        "source": "../../formalization/FunctionalInequalities/KLS/CEK/MomentRegularity.lean",
+        "source": "../../formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakDerivative.lean",
         "shape": "box"
       }
     },
@@ -1648,7 +1666,7 @@
       "diagram": {
         "id": "WPRODG",
         "label": "Weak product<br/>Global L2 factors",
-        "source": "../../formalization/FunctionalInequalities/Analysis/WeakDerivative.lean",
+        "source": "../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
         "shape": "box"
       }
     },
@@ -1658,7 +1676,7 @@
       "diagram": {
         "id": "WPRODL",
         "label": "Weak product<br/>Bounded, local L2 derivative",
-        "source": "../../formalization/FunctionalInequalities/Analysis/WeakDerivative.lean",
+        "source": "../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
         "shape": "box"
       }
     },
@@ -1668,7 +1686,7 @@
       "diagram": {
         "id": "WLIN",
         "label": "Weak linearity<br/>Finite real combinations",
-        "source": "../../formalization/FunctionalInequalities/Analysis/WeakDerivative.lean",
+        "source": "../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
         "shape": "box"
       }
     },
@@ -1678,7 +1696,7 @@
       "diagram": {
         "id": "WFPROD",
         "label": "Weak product<br/>Finite bounded factors",
-        "source": "../../formalization/FunctionalInequalities/Analysis/WeakDerivative.lean",
+        "source": "../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
         "shape": "box"
       }
     },
@@ -1728,7 +1746,7 @@
       "diagram": {
         "id": "WAECONGR",
         "label": "Weak derivative<br/>a.e. transport",
-        "source": "../../formalization/FunctionalInequalities/Analysis/WeakDerivative.lean",
+        "source": "../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Basic.lean",
         "shape": "box"
       }
     },
@@ -1738,7 +1756,7 @@
       "diagram": {
         "id": "AEEXP",
         "label": "A.e. exponent derivative<br/>−u + V(∇u)",
-        "source": "../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakInverseHessian.lean",
+        "source": "../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/InverseHessian/Weak.lean",
         "shape": "box"
       }
     },
@@ -1748,8 +1766,815 @@
       "diagram": {
         "id": "WMA1",
         "label": "Regular source law<br/>First weak Monge–Ampère (2.4)",
-        "source": "../../formalization/FunctionalInequalities/KLS/CEK/MomentRegularity.lean",
+        "source": "../../formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakDerivative.lean",
         "shape": "box"
+      }
+    },
+    "lem:weak-exp-neg-lipschitz": {
+      "blueprint": "lem:weak-exp-neg-lipschitz",
+      "description": "Generic (E3): for globally Lipschitz F on any finite-dimensional real inner-product space and any direction (zero included), exp(-F) has the weak derivative -exp(-F) DF[v], L2 on compact sets; no lower bound on F, global bound on exp(-F) or C1 F.",
+      "diagram": {
+        "id": "WEXPNEG",
+        "label": "Weak negative exponential<br/>Lipschitz exponent",
+        "source": "../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+        "shape": "box"
+      }
+    },
+    "lem:weak-product-locally-bounded": {
+      "blueprint": "lem:weak-product-locally-bounded",
+      "description": "Generic (E4): one fixed direction, every Euclidean dimension (zero included); factors essentially bounded on compact sets with compact-local L2 weak derivatives give the explicit derivative df g + f dg, L2 on compact sets; no global bound, global L2, continuity or C1/C2.",
+      "diagram": {
+        "id": "WPRODLB",
+        "label": "Weak product<br/>Compact-locally bounded factors",
+        "source": "../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+        "shape": "box"
+      }
+    },
+    "lem:weak-matrix-inverse-derivative": {
+      "blueprint": "lem:weak-matrix-inverse-derivative",
+      "description": "Generic (E5): independent ambient dimension and matrix size (zero included), any direction; compact-local L-infinity A, R with compact-local L2 weak derivatives and R A = Id a.e. give DR = -R DA R a.e.; no symmetry, positivity, C1 or global bound.",
+      "diagram": {
+        "id": "WMATINV",
+        "label": "Weak matrix inverse<br/>DR = −R DA R a.e.",
+        "source": "../../formalization/FunctionalInequalities/Analysis/Matrix/WeakDerivative.lean",
+        "shape": "box"
+      }
+    },
+    "lem:hessian-adjugate-weak-derivative": {
+      "blueprint": "lem:hessian-adjugate-weak-derivative",
+      "description": "Piola consumers (existing private cofactor helpers reused; no exponent or Monge-Ampere hypothesis): (1) Lipschitz gradient gives globally essentially bounded Hessian adjugate entries; (2) separately, globally essentially bounded Hessian entries and a SUPPLIED weak Hessian tensor (compact-local L2) give each adjugate entry a weak coordinate derivative, L2 on compact sets, via row-updated determinants, without a Lipschitz-gradient premise.",
+      "diagram": {
+        "id": "WADJ",
+        "label": "Hessian adjugate<br/>Bound and weak derivative",
+        "source": "../../formalization/FunctionalInequalities/Analysis/Matrix/Piola.lean",
+        "shape": "box"
+      }
+    },
+    "lem:weak-inverse-hessian-of-logdet": {
+      "blueprint": "lem:weak-inverse-hessian-of-logdet",
+      "description": "Intrinsic assembly: Lipschitz gradient and Lipschitz F, a.e. positive definite Hessian with log det H = F, and a SUPPLIED weak Hessian tensor give the weak derivative -(H^-1 T_k H^-1)_ij of (H^-1)_ij, L2 on compact sets, and compact-local essential inverse bounds (weak Letwin (2.5)); via H^-1 = exp(-F) adj H a.e. Not (2.6).",
+      "diagram": {
+        "id": "WINVH",
+        "label": "Intrinsic weak inverse Hessian<br/>Letwin (2.5)",
+        "source": "../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/InverseHessian/Weak.lean",
+        "shape": "box"
+      }
+    },
+    "lem:letwin-regular-moment-weak-inverse": {
+      "blueprint": "lem:letwin-regular-moment-weak-inverse",
+      "description": "Actual source law: exact original R0 hypotheses give the same u, L, LF, T with every R0 and first-weak-Monge-Ampere field, plus for all k, i, j the weak derivative -(H^-1 T_k H^-1)_ij of (H^-1)_ij (compact-local L2) and compact-local essential inverse bounds. None of an inverse formula, given inverse derivative, C2 Hessian, global inverse bound, weighted T^2 or trace estimate is assumed as an input; the output includes the explicit weak inverse formula. Not (2.6), the energy comparison (2.14), Theorems 2.5/1.2 or constant 8.",
+      "diagram": {
+        "id": "WINV",
+        "label": "Regular source law<br/>Weak inverse Hessian (2.5)",
+        "source": "../../formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakHessian.lean",
+        "shape": "box"
+      }
+    },
+    "lem:weak-smooth-approximation": {
+      "blueprint": "lem:weak-smooth-approximation",
+      "description": "Generic (H1b): a compactly supported rough eta with compactly supported global-L2 weak derivatives a, b along v, w admits smooth compactly supported theta_m with one common compact support whose two directional derivatives converge to a, b in global L2; every dimension and direction, zero included; eta is not assumed C1 or globally L2.",
+      "diagram": {
+        "id": "WSMOOTH",
+        "label": "Common-support smooth<br/>approximation of weak derivatives",
+        "source": "../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Approximation.lean",
+        "shape": "box"
+      }
+    },
+    "lem:weak-curl-rough-test": {
+      "blueprint": "lem:weak-curl-rough-test",
+      "description": "Generic (H1c, the original H1a statement): weak derivatives p, q of the same f along v, w, L2 on compact sets, satisfy int p b = int q a for every compact rough eta with compact global-L2 weak derivatives a, b; every dimension and direction; C1/C2 regularity of eta, global L2 of p/q and the curl identity are not assumed. Support for weak (2.6), not (2.6).",
+      "diagram": {
+        "id": "WCURL",
+        "label": "Rough compact curl testing<br/>∫ p b = ∫ q a",
+        "source": "../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+        "shape": "box"
+      }
+    },
+    "lem:letwin-weak-generator-c1": {
+      "blueprint": "lem:letwin-weak-generator-c1",
+      "description": "The unprimed weak generator identity (2.2) for C1 compactly supported multipliers under the N10b hypotheses; the primed form still needs C2. Readiness support for actual A.4 height cutoffs, not their construction.",
+      "diagram": {
+        "id": "WEAKGENC1",
+        "label": "Weak generator identity<br/>C¹ multipliers",
+        "source": "../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/InverseHessian/Weak.lean",
+        "shape": "box"
+      }
+    },
+    "lem:letwin-mean-hessian-c11": {
+      "blueprint": "lem:letwin-mean-hessian-c11",
+      "description": "Existing canonical C1,1 mean-Hessian identity: for convex C1 phi with Lipschitz gradient, e^{-phi} a probability density and grad phi in L2(nu), int <D(grad phi) u, v> dnu = int d_u phi d_v phi dnu (a.e. derivative of the Lipschitz gradient).",
+      "diagram": {
+        "id": "MEANC11",
+        "label": "Mean Hessian identity<br/>C¹,¹ potential",
+        "source": "../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/LipschitzHessian.lean",
+        "shape": "box"
+      }
+    },
+    "lem:letwin-regular-moment-weak-mean-hessian": {
+      "blueprint": "lem:letwin-regular-moment-weak-mean-hessian",
+      "description": "Actual source law: exact original R0 hypotheses give the same u, L, LF, T with every R0, first-weak-MA and weak-inverse field, plus integrable Hessian entries for nu = e^{-u} dx with mean Id (Lemma 2.3 for the actual R0 source potential under C1/Lipschitz-gradient hypotheses, without asserting the full smoothness or diffeomorphism properties of Lemma 2.2). No analytic premise, C2 regularity, given mean or trace estimate is assumed as an input.",
+      "diagram": {
+        "id": "WMEANH",
+        "label": "Regular source law<br/>Mean Hessian = Id",
+        "source": "../../formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakHessian.lean",
+        "shape": "box"
+      }
+    },
+    "lem:weak-bounded-all-coordinate-approximation": {
+      "blueprint": "lem:weak-bounded-all-coordinate-approximation",
+      "description": "Generic (B1): a bounded, compactly supported, locally integrable eta whose coordinate weak derivatives a_i are compactly supported and globally L2 admits ONE smooth compactly supported sequence with supports in one compact set, uniform bound 3C, L2 convergence of every coordinate derivative to a_i and full-sequence a.e. convergence; every dimension, zero included; continuity or C1 regularity of eta is not assumed as an input. The two-direction approximation is unchanged.",
+      "diagram": {
+        "id": "WBAPPROX",
+        "label": "Bounded all-coordinate approximation<br/>common support, a.e. limit",
+        "source": "../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Approximation.lean",
+        "shape": "box"
+      }
+    },
+    "lem:weak-bounded-test-extension": {
+      "blueprint": "lem:weak-bounded-test-extension",
+      "description": "Generic (H2): an identity int sum_i J_i d_i psi = -int F psi for compactly supported C1 psi, with J_i L2 on compact sets and F locally integrable, extends to bounded compact rough tests with compact global-L2 coordinate weak derivatives, both sides integrable; every dimension, zero included.",
+      "diagram": {
+        "id": "WBTEST",
+        "label": "Bounded weak-test extension<br/>of divergence identities",
+        "source": "../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+        "shape": "box"
+      }
+    },
+    "lem:weak-inverse-hessian-row-divergence": {
+      "blueprint": "lem:weak-inverse-hessian-row-divergence",
+      "description": "Fixed weak inverse-derivative object: for C1 u with Lipschitz gradient, Lipschitz F and det H = exp F a.e., the row sums of the given inverse derivatives equal -(H^-1 grad F) a.e., which is L2 on compact sets; every finite dimension.",
+      "diagram": {
+        "id": "WINVROW",
+        "label": "Weak Piola row divergence<br/>of the inverse Hessian",
+        "source": "../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/InverseHessian/Weak.lean",
+        "shape": "box"
+      }
+    },
+    "lem:weak-gradient-derivative-composition": {
+      "blueprint": "lem:weak-gradient-derivative-composition",
+      "description": "For C1 Lipschitz u with Lipschitz gradient and C2 W, each d_a W(grad u) is Lipschitz with weak derivative sum_b H_jb d_ba W(grad u) along e_j, L2 on compact sets; every finite dimension.",
+      "diagram": {
+        "id": "WGRADCOMP",
+        "label": "Weak derivative of<br/>∂ₐW(∇u)",
+        "source": "../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessianEvolution.lean",
+        "shape": "box"
+      }
+    },
+    "lem:weak-monge-ampere-first-rhs": {
+      "blueprint": "lem:weak-monge-ampere-first-rhs",
+      "description": "With a given compact-local L2 weak Hessian tensor T: -d_i u + sum_a H_ia d_a W(grad u) has weak derivative -H_ji + sum_a (T_jia d_a W(grad u) + H_ia sum_b H_jb d_ba W(grad u)) along e_j, L2 on compact sets; every finite dimension.",
+      "diagram": {
+        "id": "WMARHS",
+        "label": "Weak derivative of the<br/>first Monge–Ampère right side",
+        "source": "../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessianEvolution.lean",
+        "shape": "box"
+      }
+    },
+    "lem:weak-hessian-flux-forcing-local": {
+      "blueprint": "lem:weak-hessian-flux-forcing-local",
+      "description": "Flux J_ija = sum_b (H^-1)_ba T_bij is L2 on compact sets and the raw forcing C_ij is locally integrable, from compact-local L2 tensor and inverse derivatives and compact-local inverse bounds.",
+      "diagram": {
+        "id": "WFLUXLOC",
+        "label": "Hessian flux L2 and<br/>trace forcing locally L1",
+        "source": "../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessianEvolution.lean",
+        "shape": "box"
+      }
+    },
+    "lem:weak-hessian-flux-identity": {
+      "blueprint": "lem:weak-hessian-flux-identity",
+      "description": "int sum_a J_ija d_a psi = -int C_ij psi for compactly supported C1 psi, from C1 u with Lipschitz gradient, its weak tensor, weak inverse data and a compact-local L2 weak derivative of tr(H^-1 T_i); uses the rough curl with eta = psi (H^-1)_ba; every finite dimension.",
+      "diagram": {
+        "id": "WFLUX",
+        "label": "Unweighted weak<br/>Hessian flux identity",
+        "source": "../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessianEvolution.lean",
+        "shape": "box"
+      }
+    },
+    "lem:letwin-weak-hessian-evolution": {
+      "blueprint": "lem:letwin-weak-hessian-evolution",
+      "description": "Weak (2.6): int e^{-u} sum_a J_ija d_a psi = -int e^{-u} E_ij psi for compactly supported C1 psi, with E = -H + H Hess W(grad u) H + tr(H^-1 T_i H^-1 T_j) and e^{-u} E locally integrable, J L2 on compact sets; C2 regularity of u, a global inverse bound, global L2 of T and an energy bound are not assumed as inputs. The positivity statement of Lemma 2.4 is not stated.",
+      "diagram": {
+        "id": "WEVOL",
+        "label": "Weighted weak Hessian evolution<br/>Letwin (2.6)",
+        "source": "../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessianEvolution.lean",
+        "shape": "box"
+      }
+    },
+    "lem:letwin-weak-hessian-evolution-bounded-test": {
+      "blueprint": "lem:letwin-weak-hessian-evolution-bounded-test",
+      "description": "The weighted weak (2.6) for bounded compact rough tests with compact global-L2 coordinate weak derivatives, both sides integrable; every finite dimension.",
+      "diagram": {
+        "id": "WEVOLB",
+        "label": "Weak Hessian evolution<br/>bounded H¹ tests",
+        "source": "../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessianEvolution.lean",
+        "shape": "box"
+      }
+    },
+    "lem:letwin-regular-moment-weak-hessian-evolution": {
+      "blueprint": "lem:letwin-regular-moment-weak-hessian-evolution",
+      "description": "Actual source law: exact original R0 hypotheses give the same u, L, LF, T with every R0, tensor, first-weak-MA, inverse and mean-Hessian field, plus the weak derivative of tr(H^-1 T_i), the unweighted flux identity and the weighted weak (2.6). No analytic premise is assumed as an input. Not (2.14), Theorem 2.5 or constant 8.",
+      "diagram": {
+        "id": "WEVOLSRC",
+        "label": "Regular source law<br/>weak Hessian evolution (2.6)",
+        "source": "../../formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakHessian.lean",
+        "shape": "box"
+      }
+    },
+    "lem:letwin-regular-moment-bounded-hessian-testing": {
+      "blueprint": "lem:letwin-regular-moment-bounded-hessian-testing",
+      "description": "Actual source law at the same witness: every field of the weak-evolution producer, plus the weighted weak (2.6) tested against psi * H_lk for every compactly supported C1 psi, both sides integrable. No global L2 bound of T or new source premise is assumed as an input.",
+      "diagram": {
+        "id": "WHTEST",
+        "label": "Regular source law<br/>bounded ψ·H tests",
+        "source": "../../formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakHessian.lean",
+        "shape": "box"
+      }
+    },
+    "lem:letwin-weak-cutoff-real-family": {
+      "blueprint": "lem:letwin-weak-cutoff-real-family",
+      "description": "C1 counterpart of Lemma A.4 (every finite dimension, zero included): for convex normalized Lipschitz C1 u with Lipschitz gradient, C1 V, Lipschitz exponent and a.e. Monge-Ampere/positive-definite Hessian, one shift c and constant C give C1 compact cutoffs chi_R = smoothTransition(2 - (u - c)/R) with Lipschitz gradient, values in [0,1], monotone with limit 1, literal generator integrable under nu = e^{-u} dx and int |L chi_R| dnu <= C/R -> 0. Drift, coercivity, majorant and defect are derived, not assumed as inputs. Not the C-infinity cutoffs of the smooth source class.",
+      "diagram": {
+        "id": "WCUTR",
+        "label": "Weak inverse-Hessian cutoffs<br/>real R ≥ 1, defect ≤ C/R",
+        "source": "../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/InverseHessian/WeakCutoff.lean",
+        "shape": "box"
+      }
+    },
+    "lem:letwin-weak-cutoff-natural-family": {
+      "blueprint": "lem:letwin-weak-cutoff-natural-family",
+      "description": "The real-parameter weak cutoff family at R = m + 1: same regularity and range, monotone in m with limit 1, integrable generator with int |L chi_m| dnu <= C/(m+1) -> 0.",
+      "diagram": {
+        "id": "WCUTN",
+        "label": "Weak inverse-Hessian cutoffs<br/>natural index, defect ≤ C/(m+1)",
+        "source": "../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/InverseHessian/WeakCutoff.lean",
+        "shape": "box"
+      }
+    },
+    "lem:letwin-regular-moment-weak-cutoffs": {
+      "blueprint": "lem:letwin-regular-moment-weak-cutoffs",
+      "description": "Actual source law: exact original R0 hypotheses give the same u, L, LF, T with the whole bounded weak-Hessian-testing payload, plus one common c, C with the real-parameter weak cutoff family for this u and W; no source premise is assumed as an input. The audit applies the bounded weak (2.6) testing to chi_R * H_lk at this witness. Not A.5, the weak trace contraction, (2.14), Theorem 2.5 or constant 8.",
+      "diagram": {
+        "id": "WCUTSRC",
+        "label": "Regular source law<br/>weak height cutoffs",
+        "source": "../../formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/Cutoff.lean",
+        "shape": "box"
+      }
+    },
+    "lem:weak-compact-flux-bounded-test": {
+      "blueprint": "lem:weak-compact-flux-bounded-test",
+      "description": "Let J_i be compactly supported fluxes in L2 on every compact set and F a compactly supported locally integrable forcing with int sum_i J_i d_i psi = -int F psi for every compactly supported C1 test psi. Then every globally bounded locally integrable eta whose coordinate weak derivatives a_i are in L2 on every compact set satisfies: each J_i a_i and F eta is integrable and int sum_i J_i a_i = -int F eta, in every dimension. The shared compact-local tools used here (products with compactly supported L2 functions, compact C1 multiplier data, compact L-infinity bounds of continuous functions and local integrability from compact L2 bounds) are public in the same owner.",
+      "diagram": {
+        "id": "WCFLUX",
+        "label": "Compact flux IBP<br/>bounded weak test",
+        "source": "../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+        "shape": "box"
+      }
+    },
+    "lem:weak-bounded-trace-quadratic": {
+      "blueprint": "lem:weak-bounded-trace-quadratic",
+      "description": "Let A be a matrix field with measurable entries bounded by M and coordinate weak derivatives DA_k in L2 on every compact set. For every real matrix B, tr(B A B A) is globally bounded and locally integrable, with weak coordinate derivatives 2 tr(B A B DA_k) in L2 on every compact set. For every real matrix S and every direction v along which the entries of H (bounded by M) have weak derivatives DH that are L2 on compact sets, every entry of S H S is bounded explicitly and has weak derivative the corresponding entry of S DH S, again L2 on compact sets. All finite dimensions.",
+      "diagram": {
+        "id": "WBTRQ",
+        "label": "Bounded weak trace<br/>quadratic data",
+        "source": "../../formalization/FunctionalInequalities/Analysis/Matrix/WeakDerivative.lean",
+        "shape": "box"
+      }
+    },
+    "lem:letwin-weak-rough-cutoff-generator": {
+      "blueprint": "lem:letwin-weak-rough-cutoff-generator",
+      "description": "Let u be C1 with Lipschitz gradient, V be C1, the exponent -u + V(grad u) be globally Lipschitz, det Hess u = exp(-u + V(grad u)) almost everywhere, and the inverse Hessian entries be essentially bounded on every compact set. Let chi be a compactly supported C1 cutoff with Lipschitz gradient whose inverse-Hessian generator tr((Hess u)^-1 Hess chi) - DV(grad u)(grad chi), weighted by e^{-u}, is integrable. Then for every globally bounded locally integrable eta with coordinate weak derivatives a_i in L2 on every compact set, both pairings below are integrable and int eta (tr((Hess u)^-1 Hess chi) - DV(grad u)(grad chi)) e^{-u} = -int sum_ij (Hess u)^-1_ij a_i d_j chi e^{-u}.",
+      "diagram": {
+        "id": "WROUGH",
+        "label": "Rough eta against<br/>C1 cutoff generator",
+        "source": "../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/InverseHessian/WeakCutoff.lean",
+        "shape": "box"
+      }
+    },
+    "lem:letwin-weak-trace-contraction": {
+      "blueprint": "lem:letwin-weak-trace-contraction",
+      "description": "This is the weak counterpart of the trace contraction (2.8)/(2.10) in the proof of Letwin Theorem 2.5. Let H, R and E be matrix fields, T a tensor field and rho a continuous weight. Assume H has globally essentially bounded entries, the entries of T and of the fluxes J_ija = sum_b R_ba T_bij are L2 on every compact set, E is locally integrable, and rho sum_a J_ija (psi T_alk + d_a psi H_lk) tested against every compactly supported C1 psi equals minus the integral of rho E_ij psi H_lk. Then for every real matrix B, the density g = 2 tr(B H B E) + 2 sum_ij R_ij tr(B T_i B T_j) is locally integrable and, for every compactly supported C1 psi, the contracted flux sum_j (sum_i R_ij 2 tr(B H B T_i)) d_j psi weighted by rho integrates to minus the integral of rho g psi, with all terms integrable. All finite dimensions; no Hessian, potential or source premise.",
+      "diagram": {
+        "id": "WTRCON",
+        "label": "Weak trace contraction<br/>(2.8)/(2.10)",
+        "source": "../../formalization/FunctionalInequalities/Analysis/Matrix/WeakTrace.lean",
+        "shape": "box"
+      }
+    },
+    "lem:letwin-trace-density-positivity": {
+      "blueprint": "lem:letwin-trace-density-positivity",
+      "description": "For positive semidefinite matrices B, H, R, W and symmetric matrices T_i, with G_R the trace Gram matrix (G_R)_ij = tr(R T_i R T_j), the quantity 2 tr(B H B (-H + H W H + G_R)) + 2 sum_ij R_ij tr(B T_i B T_j) + 2 tr(B H B H) is nonnegative.",
+      "diagram": {
+        "id": "TRPOS",
+        "label": "Trace density<br/>positivity",
+        "source": "../../formalization/FunctionalInequalities/Analysis/Matrix/Positivity.lean",
+        "shape": "box"
+      }
+    },
+    "lem:letwin-trace-gram-comparison": {
+      "blueprint": "lem:letwin-trace-gram-comparison",
+      "description": "For a positive definite H, a symmetric B and a fully symmetric three-tensor T, sum_ij (H^-1)_ij tr(B T_i B T_j) <= tr(B H B G), where G_ij = tr(H^-1 T_i H^-1 T_j); this is Letwin (2.12) in trace-Gram coordinates. For positive semidefinite B and W and positive definite H, the quantity D = sum_ij (H^-1)_ij tr(B T_i B T_j) satisfies 0 <= D and 4 D <= g + 2 tr(B H B H), where g = 2 tr(B H B (-H + H W H + G)) + 2 D is the weak trace density.",
+      "diagram": {
+        "id": "TRGRAM",
+        "label": "Trace-Gram comparison<br/>(2.12), 4D <= g + 2f",
+        "source": "../../formalization/FunctionalInequalities/Analysis/Matrix/TraceGram.lean",
+        "shape": "box"
+      }
+    },
+    "lem:letwin-regular-moment-bounded-weak-cutoff-testing": {
+      "blueprint": "lem:letwin-regular-moment-bounded-weak-cutoff-testing",
+      "description": "For the actual source law, under the exact original R0 hypotheses (n > 0, isotropic 1_K exp(-W) dx with K compact and convex with nonempty interior, W smooth and kappa-uniformly convex), the same u, L, LF, T and the same common cutoff family as the weak cutoffs (whole earlier payload retained) satisfy, for every r >= 1 and every globally bounded locally integrable eta with coordinate weak derivatives in L2 on every compact set, the rough inverse-Hessian cutoff-generator identity. No source premise is added.",
+      "diagram": {
+        "id": "WCUTTEST",
+        "label": "Regular source law<br/>rough cutoff testing",
+        "source": "../../formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/Cutoff.lean",
+        "shape": "box"
+      }
+    },
+    "lem:weak-ordinary-diffusion-pairing": {
+      "blueprint": "lem:weak-ordinary-diffusion-pairing",
+      "description": "Let U be C1 with int e^{-U} = 1, v be smooth and compactly supported, and eta be globally bounded and locally integrable with coordinate weak derivatives a_i in L2 on every compact set. Then eta Lv and sum_i a_i d_i v are integrable for the tilted measure e^{-U} dx and int eta Lv dnu = -int sum_i a_i d_i v dnu, where L is the ordinary weighted Laplacian; no inverse-Hessian object is used.",
+      "diagram": {
+        "id": "WLAP",
+        "label": "Rough weak pairing<br/>weighted Laplacian",
+        "source": "../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakLaplacian.lean",
+        "shape": "box"
+      }
+    },
+    "lem:ordinary-diffusion-coercivity-lipschitz": {
+      "blueprint": "lem:ordinary-diffusion-coercivity-lipschitz",
+      "description": "On a finite-dimensional real inner product space, let U be C1 and globally Lipschitz with Lipschitz gradient and integrable e^{-U}. For every smooth compactly supported f, <D(grad U) grad f, grad f> and (Lf)^2 are integrable for the tilted measure and the integral of the first is at most the integral of the second. This is the Lipschitz-gradient sibling of compact_ordinary_diffusion_coercivity.",
+      "diagram": {
+        "id": "C11COER",
+        "label": "C^{1,1} ordinary<br/>diffusion coercivity",
+        "source": "../../formalization/FunctionalInequalities/Analysis/BakryEmery/Bochner/Lipschitz.lean",
+        "shape": "box"
+      }
+    },
+    "lem:letwin-weak-brascamp-lieb": {
+      "blueprint": "lem:letwin-weak-brascamp-lieb",
+      "description": "This is Letwin Lemma A.6 at C^{1,1} regularity for a given potential. Let nu = e^{-U} dx be a log-concave probability measure with U C1, globally Lipschitz, with Lipschitz gradient, int e^{-U} = 1 and almost everywhere positive definite coordinate Hessian. For every globally bounded locally integrable eta with coordinate weak derivatives a in L2 on every compact set and nu-integrable inverse-Hessian energy <a, (Hess U)^-1 a>, Var_nu eta <= int <a, (Hess U)^-1 a> dnu. The Hilbert-closure helpers it shares with the scalar Brascamp-Lieb owner are public there.",
+      "diagram": {
+        "id": "WBL",
+        "label": "Weak finite-energy<br/>Brascamp-Lieb (A.6)",
+        "source": "../../formalization/FunctionalInequalities/KLS/LogConcave/WeakBrascampLieb.lean",
+        "shape": "box"
+      }
+    },
+    "lem:matrix-product-entry-trace": {
+      "blueprint": "lem:matrix-product-entry-trace",
+      "description": "For symmetric S and D and arbitrary A, sum_ij (S A S)_ij (S D S)_ij = tr((S S) A (S S) D). For symmetric S, arbitrary R and symmetric T_k, the entrywise quadratic forms of the vectors ((S T_k S)_ij)_k against R sum to sum_kl R_kl tr((S S) T_k (S S) T_l). All finite dimensions.",
+      "diagram": {
+        "id": "MPTRACE",
+        "label": "Matrix product entry<br/>trace identities",
+        "source": "../../formalization/FunctionalInequalities/Analysis/Matrix/Trace/Algebra.lean",
+        "shape": "box"
+      }
+    },
+    "lem:matrix-variance-trace": {
+      "blueprint": "lem:matrix-variance-trace",
+      "description": "Under a probability measure, for an almost everywhere symmetric random matrix H with L2 entries and symmetric mean M, sum_ij Var(H_ij) = int tr(H H) - tr(M M). All finite dimensions.",
+      "diagram": {
+        "id": "MVAR",
+        "label": "Random matrix<br/>variance trace",
+        "source": "../../formalization/FunctionalInequalities/Probability/Moments.lean",
+        "shape": "box"
+      }
+    },
+    "thm:letwin-weak-hessian-trace-bound": {
+      "blueprint": "thm:letwin-weak-hessian-trace-bound",
+      "description": "This is the weak C^{1,1} form of Letwin Theorem 2.5 for a given potential, with positive semidefinite B. Let nu = e^{-U} dx with U convex, C1, globally Lipschitz, with Lipschitz gradient, int e^{-U} = 1 and almost everywhere positive definite Hessian; let T be a weak Hessian tensor in L2 on every compact set, and let the inverse Hessian entries be essentially bounded on every compact set. Assume as hypotheses that the Hessian entries are nu-integrable with mean Id, that D = sum_kl (Hess U)^-1_kl tr(B T_k B T_l) is nu-integrable and that the half-energy bound int D dnu <= (1/2) int tr(B Hess U B Hess U) dnu holds. Then tr(B Hess U B Hess U) is nu-integrable and its integral is at most 2 tr(B B). The mean and half-energy inputs remain visible hypotheses; only the actual source producer discharges them.",
+      "diagram": {
+        "id": "WT25",
+        "label": "Weak Hessian trace bound<br/>(Theorem 2.5, PSD B)",
+        "source": "../../formalization/FunctionalInequalities/KLS/LogConcave/HessianTrace.lean",
+        "shape": "box"
+      }
+    },
+    "lem:symmetric-trace-integral-ae": {
+      "blueprint": "lem:symmetric-trace-integral-ae",
+      "description": "For an arbitrary measure and finite index type, let H have measurable entries and be positive semidefinite almost everywhere. If tr(A H A H) is integrable with integral at most 2 tr(A A) for every positive semidefinite A, then the same holds for every symmetric B, singular or indefinite. This is the almost-everywhere version of symmetric_trace_integral_extension.",
+      "diagram": {
+        "id": "SYMAE",
+        "label": "AE PSD symmetric<br/>trace extension",
+        "source": "../../formalization/FunctionalInequalities/Analysis/Matrix/Integral.lean",
+        "shape": "box"
+      }
+    },
+    "lem:integrable-weak-divergence": {
+      "blueprint": "lem:integrable-weak-divergence",
+      "description": "If g is the weak directional derivative of f along v against compactly supported C1 tests and f and g are globally integrable, then int g = 0. Every dimension, including zero, and every direction. The proof body is the accepted S1 API output, copied verbatim.",
+      "diagram": {
+        "id": "S1",
+        "label": "Integrable weak derivative<br/>has zero integral",
+        "source": "../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+        "shape": "box"
+      }
+    },
+    "lem:tilted-ibp-bounded-lipschitz": {
+      "blueprint": "lem:tilted-ibp-bounded-lipschitz",
+      "description": "Let U be globally Lipschitz with int e^{-U} = 1 and eta be bounded and globally Lipschitz. For every direction v, D_v eta and eta D_v U are integrable for the tilted measure e^{-U} dx and int D_v eta dnu = int eta D_v U dnu. All dimensions.",
+      "diagram": {
+        "id": "WIBP",
+        "label": "Tilted IBP<br/>bounded Lipschitz tests",
+        "source": "../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/LipschitzHessian.lean",
+        "shape": "box"
+      }
+    },
+    "lem:c1-gradient-chain": {
+      "blueprint": "lem:c1-gradient-chain",
+      "description": "For C1 functions u and f and a point y where grad u is differentiable, d_i (f o grad u)(y) = sum_j (Hess u)_ij(y) (grad f)_j(grad u(y)). This is the C1 counterpart of chain_coordinate; all dimensions.",
+      "diagram": {
+        "id": "C1CHAIN",
+        "label": "C1 gradient<br/>chain coordinate",
+        "source": "../../formalization/FunctionalInequalities/Analysis/BakryEmery/WeakHessian.lean",
+        "shape": "box"
+      }
+    },
+    "lem:weak-source-stein-identity": {
+      "blueprint": "lem:weak-source-stein-identity",
+      "description": "Let u be C1 and globally Lipschitz with Lipschitz gradient and int e^{-u} = 1, and let nu = e^{-u} dx. For every C1, bounded and globally Lipschitz test f and every coordinate i, d_i u f(grad u) and sum_j (Hess u)_ij d_j f(grad u) are nu-integrable and int d_i u f(grad u) dnu = int sum_j (Hess u)_ij d_j f(grad u) dnu. This is the latent source coupling identity behind Lemma 2.7 at C^{1,1} regularity; no Stein kernel is constructed and no target inverse is used.",
+      "diagram": {
+        "id": "SRCSTEIN",
+        "label": "Weak source<br/>Stein identity",
+        "source": "../../formalization/FunctionalInequalities/KLS/LogConcave/HessianStein.lean",
+        "shape": "box"
+      }
+    },
+    "lem:compact-source-dual-bound": {
+      "blueprint": "lem:compact-source-dual-bound",
+      "description": "Let P be a measure on a latent space, Z a measurable map with P.map Z = mu for a probability law mu, and F a latent field in L2(P). If a smooth compactly supported h satisfies the latent source identity int <x, v> h dmu = int <F, grad h(Z)> dP, then (int <x, v> h dmu)^2 <= (int |F|^2 dP) (int |Dh|^2 dmu). Arbitrary latent space and all dimensions. The source identity and the L2 field remain inputs; this is the compact dual Cauchy-Schwarz step that supplies the dual bound directly, without a target Stein kernel.",
+      "diagram": {
+        "id": "DUALB",
+        "label": "Compact source<br/>dual bound",
+        "source": "../../formalization/FunctionalInequalities/Probability/Stein/SourceDualBound.lean",
+        "shape": "box"
+      }
+    },
+    "lem:gaussian-directional-identity": {
+      "blueprint": "lem:gaussian-directional-identity",
+      "description": "Under gaussianLaw s with s > 0, in every dimension, for every C1, bounded and globally Lipschitz f and every direction v, <x, v> f and D_v f are integrable and int <x, v> f = (2 s)^-1 int D_v f. This supports the Gaussian smoothing step; no product coupling is asserted.",
+      "diagram": {
+        "id": "GAUSSID",
+        "label": "Gaussian directional<br/>identity (C1 tests)",
+        "source": "../../formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/Moments.lean",
+        "shape": "box"
+      }
+    },
+    "thm:letwin-regular-moment-weak-stein-coupling": {
+      "blueprint": "thm:letwin-regular-moment-weak-stein-coupling",
+      "description": "For the actual source law, under the exact original R0 hypotheses (n > 0, isotropic 1_K exp(-W) dx with K compact and convex with nonempty interior, W smooth and kappa-uniformly convex), there is ONE weak normalized convex globally Lipschitz moment potential u, with constants L, LF and weak Hessian tensor T, that retains the whole earlier payload: R0 regularity (C1, 16/kappa-Lipschitz gradient, 4/kappa centered-difference bound, almost everywhere positive definite Hessian with log-det equation and 16/kappa cap), the weak tensor, first Monge-Ampere and inverse fields, mean Hessian Id under nu = e^{-u} dx, the weak evolution identities, bounded testing, the weak cutoffs and rough cutoff testing, the weak trace contraction, A.5 conservativity int g dnu = 0 and the half energy int D dnu <= (1/2) int tr(B H B H) dnu for every positive semidefinite B. It adds: for EVERY real symmetric B, tr(B H B H) is nu-integrable and int tr(B H B H) dnu <= 2 tr(B B) (Theorem 2.5 with the exact constant 2, weak C^{1,1} form for this witness); the weighted integration by parts int D_v eta dnu = int eta D_v u dnu for every bounded globally Lipschitz eta; and the coordinate source Stein identity for every C1, bounded and globally Lipschitz test. This is not the smooth moment map of Lemma 2.2, not a constructed Stein kernel, and not Theorem 1.2 or the constant-8 bound.",
+      "diagram": {
+        "id": "WSTEINSRC",
+        "label": "Regular source law<br/>T2.5 exact 2 + source Stein",
+        "source": "../../formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/TraceStein.lean",
+        "shape": "box"
+      }
+    },
+    "lem:matrix-noise-trace-identities": {
+      "blueprint": "lem:matrix-noise-trace-identities",
+      "description": "Finite real-matrix trace identities over any finite index type: tr((A + tI)^T (A + tI)) = tr(A^T A) + 2t tr A + n t^2; invariance of tr((AQ)^T AQ) under a symmetric involution Q; tr(SHS) = tr(S^2 H); and tr((SHS)^T SHS) = tr(S^2 H S^2 H) for symmetric S, H.",
+      "diagram": {
+        "id": "MNTRACE",
+        "label": "Trace identities<br/>noise shift, involution",
+        "source": "../../formalization/FunctionalInequalities/Analysis/Matrix/Trace/Algebra.lean",
+        "shape": "box"
+      }
+    },
+    "lem:symmetric-matrix-spectral-geometry": {
+      "blueprint": "lem:symmetric-matrix-spectral-geometry",
+      "description": "For symmetric invertible M with B = sqrt(M^2), S = sqrt B and Q = sign M: B and S are positive semidefinite, Q is symmetric, B^2 = M^2, S^2 = B, SQS = M, Q^2 = I, S is invertible, Q acts self-adjointly and S defines a self-adjoint continuous linear equivalence.",
+      "diagram": {
+        "id": "SPECGEO",
+        "label": "Spectral geometry<br/>B, S, sign Q",
+        "source": "../../formalization/FunctionalInequalities/Analysis/Matrix/Sign.lean",
+        "shape": "box"
+      }
+    },
+    "lem:symmetric-invertible-approximation": {
+      "blueprint": "lem:symmetric-invertible-approximation",
+      "description": "Every symmetric real matrix A over a finite index type is the limit of the symmetric invertible matrices A - r_k I, with 0 < r_k < 1/(k+1) outside the finite real spectrum of A.",
+      "diagram": {
+        "id": "SYMINV",
+        "label": "Invertible symmetric<br/>approximation",
+        "source": "../../formalization/FunctionalInequalities/Analysis/Matrix/Sign.lean",
+        "shape": "box"
+      }
+    },
+    "lem:matrix-trace-mean-identity": {
+      "blueprint": "lem:matrix-trace-mean-identity",
+      "description": "For a matrix field H with integrable entries and mean Id under a measure, tr(B H) is integrable with integral tr B for every matrix B.",
+      "diagram": {
+        "id": "MTRMEAN",
+        "label": "Trace against a<br/>mean-Id field",
+        "source": "../../formalization/FunctionalInequalities/Analysis/Matrix/Integral.lean",
+        "shape": "box"
+      }
+    },
+    "lem:symmetric-hilbert-schmidt-trace": {
+      "blueprint": "lem:symmetric-hilbert-schmidt-trace",
+      "description": "For a symmetric continuous linear operator A and any finite orthonormal basis b, the sum over i, j of <A b_i, b_j>^2 equals tr(A o A).",
+      "diagram": {
+        "id": "HSSYM",
+        "label": "Symmetric operator<br/>HS sum = tr(A^2)",
+        "source": "../../formalization/FunctionalInequalities/Analysis/Operator/HilbertSchmidt.lean",
+        "shape": "box"
+      }
+    },
+    "lem:gradient-affine-precomposition": {
+      "blueprint": "lem:gradient-affine-precomposition",
+      "description": "For complete real inner product spaces, a continuous linear S, z and f differentiable at Sx + z, the gradient of y -> f(Sy + z) at x is S* grad f(Sx + z).",
+      "diagram": {
+        "id": "GRADAFF",
+        "label": "Gradient of an<br/>affine precomposition",
+        "source": "../../formalization/FunctionalInequalities/Analysis/BakryEmery/Calculus.lean",
+        "shape": "box"
+      }
+    },
+    "lem:matrix-action-algebra": {
+      "blueprint": "lem:matrix-action-algebra",
+      "description": "The Euclidean action of real n x n matrices equals the Euclidean linear map of the matrix and is multiplicative, additive, homogeneous and unital; (A e_i)_j = A_ji and the sum of |A e_i|^2 is tr(A^T A).",
+      "diagram": {
+        "id": "ACTALG",
+        "label": "Matrix action<br/>algebra",
+        "source": "../../formalization/FunctionalInequalities/Probability/Stein/Kernel.lean",
+        "shape": "box"
+      }
+    },
+    "lem:hessian-action-l2": {
+      "blueprint": "lem:hessian-action-l2",
+      "description": "If grad u is Lipschitz on R^n, then y -> Hess u(y) v is in L2 of every finite measure, for every v.",
+      "diagram": {
+        "id": "HESSACT",
+        "label": "Hessian action<br/>in L2",
+        "source": "../../formalization/FunctionalInequalities/Probability/Stein/HessianKernel.lean",
+        "shape": "box"
+      }
+    },
+    "lem:quadratic-action-identities": {
+      "blueprint": "lem:quadratic-action-identities",
+      "description": "Coordinate form sum A_ij x_i x_j = <Ax, x>; the sandwich <Q(Sx), Sx> = <(SQS)x, x> and invariance of the variance of the quadratic form under the pushforward by symmetric S; and e(H(e* v)) + t v = (SHS + tI) v for a self-adjoint equivalence e with the operator of S.",
+      "diagram": {
+        "id": "QACTION",
+        "label": "Quadratic forms<br/>of the action",
+        "source": "../../formalization/FunctionalInequalities/Probability/Stein/QuadraticAction.lean",
+        "shape": "box"
+      }
+    },
+    "lem:spectral-sign-noise-identity": {
+      "blueprint": "lem:spectral-sign-noise-identity",
+      "description": "For symmetric invertible M with B = sqrt(M^2), S = sqrt B, Q = sign M, every symmetric H and real t: the sum over i of |(SHS + tI) Q e_i|^2 equals tr(BHBH) + 2t tr(BH) + n t^2.",
+      "diagram": {
+        "id": "SIGNNOISE",
+        "label": "Spectral sign/noise<br/>identity",
+        "source": "../../formalization/FunctionalInequalities/Probability/Stein/QuadraticAction.lean",
+        "shape": "box"
+      }
+    },
+    "lem:spectral-noise-energy-integral": {
+      "blueprint": "lem:spectral-noise-energy-integral",
+      "description": "For probability measures on arbitrary measurable spaces and a measurable, a.e. symmetric matrix field with integrable entries, mean Id and the input trace bound int tr(B'HB'H) <= 2 tr(B'^2) for every symmetric B', the integrated energy of the shifted action is at most 2 tr(M^2) + 2t tr B + n t^2 for symmetric invertible M. No log-concavity or Hessian hypothesis.",
+      "diagram": {
+        "id": "NOISEINT",
+        "label": "Integrated spectral<br/>noise energy",
+        "source": "../../formalization/FunctionalInequalities/Probability/Stein/QuadraticAction.lean",
+        "shape": "box"
+      }
+    },
+    "lem:quadratic-form-fourth-moment": {
+      "blueprint": "lem:quadratic-form-fourth-moment",
+      "description": "If f is in L4 with values in a real inner product space and A is continuous linear, then <A f, f> is in L2.",
+      "diagram": {
+        "id": "QFOURTH",
+        "label": "Quadratic form in L2<br/>from L4",
+        "source": "../../formalization/FunctionalInequalities/Probability/Moments.lean",
+        "shape": "box"
+      }
+    },
+    "lem:finite-combination-variance-continuity": {
+      "blueprint": "lem:finite-combination-variance-continuity",
+      "description": "For a probability measure and finitely many real L2 functions f_i, if the coefficients c_{k,i} converge to b_i then the variance of sum_i c_{k,i} f_i converges to that of sum_i b_i f_i.",
+      "diagram": {
+        "id": "FINVAR",
+        "label": "Variance continuity<br/>finite combinations",
+        "source": "../../formalization/FunctionalInequalities/L2/MeanVariance.lean",
+        "shape": "box"
+      }
+    },
+    "lem:quadratic-matrix-variance-continuity": {
+      "blueprint": "lem:quadratic-matrix-variance-continuity",
+      "description": "For a probability law on R^n with finite fourth moment and matrices A_k -> A, the variance of sum (A_k)_ij x_i x_j converges to that of sum A_ij x_i x_j.",
+      "diagram": {
+        "id": "QVARCONT",
+        "label": "Variance continuity<br/>quadratic matrix forms",
+        "source": "../../formalization/FunctionalInequalities/Probability/QuadraticVariance.lean",
+        "shape": "box"
+      }
+    },
+    "lem:letwin-singular-extension": {
+      "blueprint": "lem:letwin-singular-extension",
+      "description": "For every probability law on R^n (every n) with finite fourth moment and every real C: if Var(sum B_ij x_i x_j) <= C tr(B^2) for all symmetric invertible B, then for all symmetric B. Stronger than Letwin Lemma A.2 (no isotropy or log-concavity, arbitrary C); proved through B - r_k I outside the spectrum, not M + eps P_0. It does not establish the bound.",
+      "diagram": {
+        "id": "LA2EXT",
+        "label": "Singular extension<br/>(Lemma A.2, stronger)",
+        "source": "../../formalization/FunctionalInequalities/Probability/QuadraticVariance.lean",
+        "shape": "box"
+      }
+    },
+    "lem:centered-noise-quadratic-variance": {
+      "blueprint": "lem:centered-noise-quadratic-variance",
+      "description": "For probability laws mu, nu on a complete separable real inner product space with finite fourth moments, nu centered, and continuous linear A, Var_mu <Ax, x> <= Var_{mu * nu} <Ax, x>.",
+      "diagram": {
+        "id": "NOISECONV",
+        "label": "Centered noise keeps<br/>quadratic variance",
+        "source": "../../formalization/FunctionalInequalities/Probability/QuadraticVariance.lean",
+        "shape": "box"
+      }
+    },
+    "lem:gaussian-fourth-moments": {
+      "blueprint": "lem:gaussian-fourth-moments",
+      "description": "gaussianLaw s (s > 0) has a fourth moment, and fourth moments pass to Gaussian smoothings and to continuous linear images of a probability measure.",
+      "diagram": {
+        "id": "G4MOM",
+        "label": "Gaussian, smoothed and<br/>linear-image L4",
+        "source": "../../formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/Moments.lean",
+        "shape": "box"
+      }
+    },
+    "lem:gaussian-translated-directional-identity": {
+      "blueprint": "lem:gaussian-translated-directional-identity",
+      "description": "For s > 0, bounded globally Lipschitz C1 h and a, v: int <z, v> h(a + z) = (2s)^-1 int D_v h(a + z) under gaussianLaw s, both integrable.",
+      "diagram": {
+        "id": "GTRANS",
+        "label": "Translated Gaussian<br/>directional identity",
+        "source": "../../formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/Moments.lean",
+        "shape": "box"
+      }
+    },
+    "lem:gaussian-product-latent-map": {
+      "blueprint": "lem:gaussian-product-latent-map",
+      "description": "If g pushes the probability measure rho to mu, S is continuous linear and s > 0, then rho x gaussianLaw s pushed by (y, z) -> S(g y) + z is the Gaussian smoothing of S_# mu.",
+      "diagram": {
+        "id": "GLATENT",
+        "label": "Product latent map<br/>onto smoothed image",
+        "source": "../../formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/LinearImage.lean",
+        "shape": "box"
+      }
+    },
+    "lem:gaussian-smoothed-linear-image-potential": {
+      "blueprint": "lem:gaussian-smoothed-linear-image-potential",
+      "description": "For a log-concave probability law with full affine support, a continuous linear equivalence S and s > 0, the Gaussian smoothing of S_# mu is e^{-W} dx with W smooth and convex, and the smoothed probability law is log-concave.",
+      "diagram": {
+        "id": "GPOT",
+        "label": "Smooth convex potential<br/>of smoothed image",
+        "source": "../../formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/LinearImage.lean",
+        "shape": "box"
+      }
+    },
+    "lem:source-directional-affine-stein": {
+      "blueprint": "lem:source-directional-affine-stein",
+      "description": "For C1 globally Lipschitz u with Lipschitz gradient and int e^{-u} = 1: the source Stein identity in a direction v for bounded Lipschitz C1 tests f, and its affine form for tests h(S grad u + z) with continuous linear S.",
+      "diagram": {
+        "id": "SRCAFF",
+        "label": "Directional and affine<br/>source Stein",
+        "source": "../../formalization/FunctionalInequalities/KLS/LogConcave/HessianStein.lean",
+        "shape": "box"
+      }
+    },
+    "lem:gaussian-product-source-stein": {
+      "blueprint": "lem:gaussian-product-source-stein",
+      "description": "For s > 0, on P = (e^{-u} dx) x gaussianLaw s with Z = S grad u + z: the latent fields are in L2(P), the source and noise pairings are integrable, and int <Z, v> h(Z) dP = int (<S* v, Hess u S* grad h(Z)> + (2s)^-1 D_v h(Z)) dP for bounded Lipschitz C1 h.",
+      "diagram": {
+        "id": "GPRODSTEIN",
+        "label": "Gaussian product<br/>source Stein",
+        "source": "../../formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/ProductCoupling.lean",
+        "shape": "box"
+      }
+    },
+    "lem:gaussian-product-compact-dual": {
+      "blueprint": "lem:gaussian-product-compact-dual",
+      "description": "With grad u pushing e^{-u} dx to mu, s > 0 and nu_s the Gaussian smoothing of S_# mu: (int <x, v> h d nu_s)^2 <= int |S Hess u S* v + (2s)^-1 v|^2 dP * int |Dh|^2 d nu_s for smooth compactly supported h.",
+      "diagram": {
+        "id": "GPRODDUAL",
+        "label": "Compact dual bound<br/>product coupling",
+        "source": "../../formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/ProductCoupling.lean",
+        "shape": "box"
+      }
+    },
+    "lem:gaussian-noise-limit": {
+      "blueprint": "lem:gaussian-noise-limit",
+      "description": "If a <= b + c (2s)^-1 + d ((2s)^-1)^2 for every s > 0, then a <= b.",
+      "diagram": {
+        "id": "NOISELIM",
+        "label": "Removal of a<br/>vanishing noise error",
+        "source": "../../formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/QuadraticVariance.lean",
+        "shape": "box"
+      }
+    },
+    "lem:gaussian-smoothing-quadratic-variance": {
+      "blueprint": "lem:gaussian-smoothing-quadratic-variance",
+      "description": "For a probability law with finite fourth moment, continuous linear A and s > 0, Var <Ax, x> is at most its variance under the Gaussian smoothing.",
+      "diagram": {
+        "id": "GSMVAR",
+        "label": "Smoothing keeps<br/>quadratic variance",
+        "source": "../../formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/QuadraticVariance.lean",
+        "shape": "box"
+      }
+    },
+    "lem:gaussian-smoothed-quadratic-h-minus-one": {
+      "blueprint": "lem:gaussian-smoothed-quadratic-h-minus-one",
+      "description": "For log-concave mu with full affine support equal to grad u_# (e^{-u} dx) with u as above, a continuous linear equivalence S, self-adjoint Q and s > 0: the variance of <Qx, x> under the Gaussian smoothing of S_# mu is at most 4 times sum_i int |S Hess u S* Q e_i + (2s)^-1 Q e_i|^2 dP, via the H^-1 inequality on the smooth convex smoothed law.",
+      "diagram": {
+        "id": "GHMINUS",
+        "label": "Smoothed quadratic<br/>variance via H^-1",
+        "source": "../../formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/QuadraticVariance.lean",
+        "shape": "box"
+      }
+    },
+    "lem:restricted-exp-logconcave": {
+      "blueprint": "lem:restricted-exp-logconcave",
+      "description": "If a probability law mu has density 1_K e^{-W}, with K closed convex and W continuous convex, then 1_K e^{-W} is a Borell density of mu, so mu is log-concave; in particular every regular-class probability law is log-concave.",
+      "diagram": {
+        "id": "RESTEXP",
+        "label": "Restricted exponential<br/>log-concavity",
+        "source": "../../formalization/FunctionalInequalities/KLS/LogConcave/Density/Tilted.lean",
+        "shape": "box"
+      }
+    },
+    "lem:letwin-operator-matrix-identification": {
+      "blueprint": "lem:letwin-operator-matrix-identification",
+      "description": "For every measure mu on R^n: if Var(sum M_ij x_i x_j) <= 8 tr(M^2) for every symmetric M, then mu satisfies LetwinQuadraticBound.",
+      "diagram": {
+        "id": "OPMAT",
+        "label": "Operator and matrix<br/>forms of the bound",
+        "source": "../../formalization/FunctionalInequalities/KLS/Letwin/RegularClass.lean",
+        "shape": "box"
+      }
+    },
+    "thm:letwin-regular-class-constant-eight": {
+      "blueprint": "thm:letwin-regular-class-constant-eight",
+      "description": "Exact R0 hypotheses (n > 0, isotropic 1_K e^{-W} dx, K compact convex with nonempty interior, W smooth and kappa-uniformly convex): Var(sum M_ij x_i x_j) <= 8 tr(M^2) for every symmetric M, hence LetwinQuadraticBound. Regular-class case of Letwin Theorem 1.2.",
+      "diagram": {
+        "id": "REGCLASS8",
+        "label": "Regular class<br/>constant 8",
+        "source": "../../formalization/FunctionalInequalities/KLS/Letwin/RegularClass.lean",
+        "shape": "box"
+      }
+    },
+    "thm:letwin-compact-quadratic-bound": {
+      "blueprint": "thm:letwin-compact-quadratic-bound",
+      "description": "letwinCompactBound : LetwinCompactBound: for every n > 0, every compactly supported isotropic log-concave law and every self-adjoint form (singular and indefinite included), variance at most 8 times the squared Hilbert-Schmidt norm in the standard orthonormal basis. Exact compact counterpart of Letwin Theorem 1.2, certified in source form; the noncompact theorem is not covered.",
+      "diagram": {
+        "id": "LCOMPACT8",
+        "label": "Compact Letwin bound<br/>constant 8 (certified)",
+        "source": "../../formalization/FunctionalInequalities/KLS/Letwin/CompactBound.lean",
+        "shape": "box"
+      }
+    },
+    "lem:bkl-cutoff-energy": {
+      "blueprint": "lem:bkl-cutoff-energy",
+      "description": "BKL (95) in finite-horizon cutoff form, certified (Solutions.LemBklCutoffEnergy): for every d >= 1 (m = d + 1), every compactly supported isotropic log-concave law, unit u, epsilon > 0, T >= 0, all large cutoff radii R and every actual cutoff Eldan process, E_{d+1}(0) + (1/2) int int_0^T gamma_R^2 E_{d+2} <= (d!)^2 153^d + epsilon, from the actual compact constant-8 theorem. A supporting different-route result: the uncut Eldan process, its non-explosion and the literal (68)-(73) are not constructed, and BKL Theorem 4.1 and KLS are not claimed.",
+      "diagram": {
+        "id": "BCUT",
+        "label": "BKL (95) cutoff<br/>energy induction (certified)",
+        "source": "../../solutions/LemBklCutoffEnergy.lean",
+        "shape": "box"
+      }
+    },
+    "thm:bkl-cumulant-bound": {
+      "blueprint": "thm:bkl-cumulant-bound",
+      "description": "BKL Theorem 4.1 in the source form, certified (Solutions.ThmBklCumulantBound): one universal K >= 1 (witness 153) such that every isotropic log-concave law in every dimension and every order m >= 2 satisfy R_m <= K^{m-1} ((m-1)!)^2 Id, with no compactness or Letwin premise; through the cutoff energy endpoint and the compact-to-general passage. The uncut Eldan process and the literal (68)-(73) are not constructed; Theorem 1.1 and KLS are not claimed.",
+      "diagram": {
+        "id": "BCUM",
+        "label": "BKL Theorem 4.1<br/>cumulant bound (certified)",
+        "source": "../../solutions/ThmBklCumulantBound.lean",
+        "shape": "box"
+      }
+    },
+    "thm:bkl-poincare": {
+      "blueprint": "thm:bkl-poincare",
+      "description": "BKL Theorem 1.1 in the source form, certified (Solutions.ThmBklPoincare): one C > 0 such that every n >= 1 and every isotropic log-concave law on R^n have C_P <= C, with no compactness, regularity or moment premise; from the certified Theorems 3.1 and 4.1, Proposition 7.1 and the Section 2 regular approximation, on the cutoff localization route. The uncut Eldan process and the literal (68)-(73) are not constructed; the intermediate source statements keep their own scopes.",
+      "diagram": {
+        "id": "BKLMAIN",
+        "label": "BKL Theorem 1.1<br/>dimension-free Poincaré (certified)",
+        "source": "../../solutions/ThmBklPoincare.lean",
+        "shape": "box"
+      }
+    },
+    "diagram:BKLAND": {
+      "description": "AND — BKL Theorem 1.1 with the affine/isotropic reduction gives KLS (completed literature route; not one of the four exploratory routes)",
+      "assessment": {
+        "state": "logic",
+        "evidence": {
+          "kind": "reviewed_progress",
+          "source": "../../research/decisions/2026-10-17-bkl-theorem11-kls-integration.md"
+        },
+        "kind": "logic"
+      },
+      "diagram": {
+        "id": "BKLAND",
+        "label": "AND<br/>BKL route",
+        "source": "../../research/decisions/2026-10-17-bkl-theorem11-kls-integration.md",
+        "shape": "diamond"
       }
     }
   },
@@ -1860,7 +2685,7 @@
       },
       {
         "id": "LETWINWEAK",
-        "title": "Letwin weak regularity supports — constant-8 bound remains open",
+        "title": "Letwin constant 8 — compact bound proved; weak regularity, Gaussian route and endpoint",
         "nodes": [
           "CEKMAP",
           "WEAKHESS",
@@ -1889,7 +2714,108 @@
           "EXPHALF",
           "WAECONGR",
           "AEEXP",
-          "WMA1"
+          "WMA1",
+          "WEXPNEG",
+          "WPRODLB",
+          "WMATINV",
+          "WADJ",
+          "WINVH",
+          "WINV",
+          "WSMOOTH",
+          "WCURL",
+          "WEAKGENC1",
+          "MEANC11",
+          "WMEANH",
+          "WBAPPROX",
+          "WBTEST",
+          "WINVROW",
+          "WGRADCOMP",
+          "WMARHS",
+          "WFLUXLOC",
+          "WFLUX",
+          "WEVOL",
+          "WEVOLB",
+          "WEVOLSRC",
+          "WHTEST",
+          "WCUTR",
+          "WCUTN",
+          "WCUTSRC",
+          "WCFLUX",
+          "WBTRQ",
+          "WROUGH",
+          "WTRCON",
+          "TRPOS",
+          "TRGRAM",
+          "WCUTTEST",
+          "WLAP",
+          "C11COER",
+          "WBL",
+          "MPTRACE",
+          "MVAR",
+          "WT25",
+          "SYMAE",
+          "S1",
+          "WIBP",
+          "C1CHAIN",
+          "SRCSTEIN",
+          "DUALB",
+          "GAUSSID",
+          "WSTEINSRC",
+          "MNTRACE",
+          "SPECGEO",
+          "SYMINV",
+          "MTRMEAN",
+          "HSSYM",
+          "GRADAFF",
+          "ACTALG",
+          "HESSACT",
+          "QACTION",
+          "SIGNNOISE",
+          "NOISEINT",
+          "QFOURTH",
+          "FINVAR",
+          "QVARCONT",
+          "LA2EXT",
+          "NOISECONV",
+          "G4MOM",
+          "GTRANS",
+          "GLATENT",
+          "GPOT",
+          "SRCAFF",
+          "GPRODSTEIN",
+          "GPRODDUAL",
+          "NOISELIM",
+          "GSMVAR",
+          "GHMINUS",
+          "RESTEXP",
+          "OPMAT",
+          "REGCLASS8",
+          "LCOMPACT8"
+        ]
+      },
+      {
+        "id": "BKLCUTOFF",
+        "title": "BKL cutoff localization — supporting endpoint; uncut process open",
+        "nodes": [
+          "BCUT"
+        ]
+      },
+      {
+        "id": "BKLCUMULANT",
+        "title": "BKL cumulant bound — Theorem 4.1 (source form); KLS composition separate",
+        "nodes": [
+          "BCUM"
+        ]
+      },
+      {
+        "id": "BKLTHM11",
+        "title": "BKL Theorem 1.1 — completed literature route to KLS (not an exploratory branch)",
+        "nodes": [
+          "BT31",
+          "BP71",
+          "BREG",
+          "BKLMAIN",
+          "BKLAND"
         ]
       }
     ],
@@ -2347,6 +3273,651 @@
       {
         "from": "WAECONGR",
         "to": "WMA1",
+        "kind": "dependency"
+      },
+      {
+        "from": "WPRODL",
+        "to": "WPRODLB",
+        "kind": "dependency"
+      },
+      {
+        "from": "WPRODLB",
+        "to": "WMATINV",
+        "kind": "dependency"
+      },
+      {
+        "from": "WLIN",
+        "to": "WMATINV",
+        "kind": "dependency"
+      },
+      {
+        "from": "WAECONGR",
+        "to": "WMATINV",
+        "kind": "dependency"
+      },
+      {
+        "from": "WDET",
+        "to": "WADJ",
+        "kind": "dependency"
+      },
+      {
+        "from": "WEXPNEG",
+        "to": "WINVH",
+        "kind": "dependency"
+      },
+      {
+        "from": "WADJ",
+        "to": "WINVH",
+        "kind": "dependency"
+      },
+      {
+        "from": "WPRODLB",
+        "to": "WINVH",
+        "kind": "dependency"
+      },
+      {
+        "from": "WAECONGR",
+        "to": "WINVH",
+        "kind": "dependency"
+      },
+      {
+        "from": "WMATINV",
+        "to": "WINVH",
+        "kind": "dependency"
+      },
+      {
+        "from": "WMA1",
+        "to": "WINV",
+        "kind": "dependency"
+      },
+      {
+        "from": "WINVH",
+        "to": "WINV",
+        "kind": "dependency"
+      },
+      {
+        "from": "HESSENT",
+        "to": "WADJ",
+        "kind": "dependency"
+      },
+      {
+        "from": "WSMOOTH",
+        "to": "WCURL",
+        "kind": "dependency"
+      },
+      {
+        "from": "WEAKGEN",
+        "to": "WEAKGENC1",
+        "kind": "dependency"
+      },
+      {
+        "from": "WINV",
+        "to": "WMEANH",
+        "kind": "dependency"
+      },
+      {
+        "from": "MEANC11",
+        "to": "WMEANH",
+        "kind": "dependency"
+      },
+      {
+        "from": "HESSENT",
+        "to": "WMEANH",
+        "kind": "dependency"
+      },
+      {
+        "from": "WBAPPROX",
+        "to": "WBTEST",
+        "kind": "dependency"
+      },
+      {
+        "from": "WEAKINVINT",
+        "to": "WINVROW",
+        "kind": "dependency"
+      },
+      {
+        "from": "AEEXP",
+        "to": "WGRADCOMP",
+        "kind": "dependency"
+      },
+      {
+        "from": "WGRADCOMP",
+        "to": "WMARHS",
+        "kind": "dependency"
+      },
+      {
+        "from": "WPRODLB",
+        "to": "WMARHS",
+        "kind": "dependency"
+      },
+      {
+        "from": "WLIN",
+        "to": "WMARHS",
+        "kind": "dependency"
+      },
+      {
+        "from": "HESSENT",
+        "to": "WMARHS",
+        "kind": "dependency"
+      },
+      {
+        "from": "WFLUXLOC",
+        "to": "WFLUX",
+        "kind": "dependency"
+      },
+      {
+        "from": "WCURL",
+        "to": "WFLUX",
+        "kind": "dependency"
+      },
+      {
+        "from": "WMARHS",
+        "to": "WEVOL",
+        "kind": "dependency"
+      },
+      {
+        "from": "WFLUX",
+        "to": "WEVOL",
+        "kind": "dependency"
+      },
+      {
+        "from": "WINVROW",
+        "to": "WEVOL",
+        "kind": "dependency"
+      },
+      {
+        "from": "AEEXP",
+        "to": "WEVOL",
+        "kind": "dependency"
+      },
+      {
+        "from": "WEVOL",
+        "to": "WEVOLB",
+        "kind": "dependency"
+      },
+      {
+        "from": "WBTEST",
+        "to": "WEVOLB",
+        "kind": "dependency"
+      },
+      {
+        "from": "WMEANH",
+        "to": "WEVOLSRC",
+        "kind": "dependency"
+      },
+      {
+        "from": "WMARHS",
+        "to": "WEVOLSRC",
+        "kind": "dependency"
+      },
+      {
+        "from": "WFLUX",
+        "to": "WEVOLSRC",
+        "kind": "dependency"
+      },
+      {
+        "from": "WEVOL",
+        "to": "WEVOLSRC",
+        "kind": "dependency"
+      },
+      {
+        "from": "WEVOLSRC",
+        "to": "WHTEST",
+        "kind": "dependency"
+      },
+      {
+        "from": "WEVOLB",
+        "to": "WHTEST",
+        "kind": "dependency"
+      },
+      {
+        "from": "HESSL2",
+        "to": "WHTEST",
+        "kind": "dependency"
+      },
+      {
+        "from": "HESSENT",
+        "to": "WHTEST",
+        "kind": "dependency"
+      },
+      {
+        "from": "WEAKINVINT",
+        "to": "WCUTR",
+        "kind": "dependency"
+      },
+      {
+        "from": "WEAKGENC1",
+        "to": "WCUTR",
+        "kind": "dependency"
+      },
+      {
+        "from": "HESSENT",
+        "to": "WCUTR",
+        "kind": "dependency"
+      },
+      {
+        "from": "WCUTR",
+        "to": "WCUTN",
+        "kind": "dependency"
+      },
+      {
+        "from": "WHTEST",
+        "to": "WCUTSRC",
+        "kind": "dependency"
+      },
+      {
+        "from": "WCUTR",
+        "to": "WCUTSRC",
+        "kind": "dependency"
+      },
+      {
+        "from": "WBTEST",
+        "to": "WCFLUX",
+        "kind": "dependency"
+      },
+      {
+        "from": "WTRACE",
+        "to": "WBTRQ",
+        "kind": "dependency"
+      },
+      {
+        "from": "WCFLUX",
+        "to": "WROUGH",
+        "kind": "dependency"
+      },
+      {
+        "from": "WEAKGENC1",
+        "to": "WROUGH",
+        "kind": "dependency"
+      },
+      {
+        "from": "WBTRQ",
+        "to": "WTRCON",
+        "kind": "dependency"
+      },
+      {
+        "from": "WEVOLB",
+        "to": "WTRCON",
+        "kind": "dependency"
+      },
+      {
+        "from": "TRPOS",
+        "to": "TRGRAM",
+        "kind": "dependency"
+      },
+      {
+        "from": "WCUTSRC",
+        "to": "WCUTTEST",
+        "kind": "dependency"
+      },
+      {
+        "from": "WROUGH",
+        "to": "WCUTTEST",
+        "kind": "dependency"
+      },
+      {
+        "from": "WCFLUX",
+        "to": "WLAP",
+        "kind": "dependency"
+      },
+      {
+        "from": "WLAP",
+        "to": "WBL",
+        "kind": "dependency"
+      },
+      {
+        "from": "C11COER",
+        "to": "WBL",
+        "kind": "dependency"
+      },
+      {
+        "from": "MPTRACE",
+        "to": "MVAR",
+        "kind": "dependency"
+      },
+      {
+        "from": "WBL",
+        "to": "WT25",
+        "kind": "dependency"
+      },
+      {
+        "from": "WBTRQ",
+        "to": "WT25",
+        "kind": "dependency"
+      },
+      {
+        "from": "MPTRACE",
+        "to": "WT25",
+        "kind": "dependency"
+      },
+      {
+        "from": "MVAR",
+        "to": "WT25",
+        "kind": "dependency"
+      },
+      {
+        "from": "S1",
+        "to": "WIBP",
+        "kind": "dependency"
+      },
+      {
+        "from": "WEAKHESS",
+        "to": "C1CHAIN",
+        "kind": "dependency"
+      },
+      {
+        "from": "WIBP",
+        "to": "SRCSTEIN",
+        "kind": "dependency"
+      },
+      {
+        "from": "C1CHAIN",
+        "to": "SRCSTEIN",
+        "kind": "dependency"
+      },
+      {
+        "from": "S1",
+        "to": "GAUSSID",
+        "kind": "dependency"
+      },
+      {
+        "from": "WCUTTEST",
+        "to": "WSTEINSRC",
+        "kind": "dependency"
+      },
+      {
+        "from": "WTRCON",
+        "to": "WSTEINSRC",
+        "kind": "dependency"
+      },
+      {
+        "from": "TRGRAM",
+        "to": "WSTEINSRC",
+        "kind": "dependency"
+      },
+      {
+        "from": "WT25",
+        "to": "WSTEINSRC",
+        "kind": "dependency"
+      },
+      {
+        "from": "SYMAE",
+        "to": "WSTEINSRC",
+        "kind": "dependency"
+      },
+      {
+        "from": "WIBP",
+        "to": "WSTEINSRC",
+        "kind": "dependency"
+      },
+      {
+        "from": "SRCSTEIN",
+        "to": "WSTEINSRC",
+        "kind": "dependency"
+      },
+      {
+        "from": "HESSENT",
+        "to": "HESSACT",
+        "kind": "dependency"
+      },
+      {
+        "from": "ACTALG",
+        "to": "QACTION",
+        "kind": "dependency"
+      },
+      {
+        "from": "SPECGEO",
+        "to": "SIGNNOISE",
+        "kind": "dependency"
+      },
+      {
+        "from": "ACTALG",
+        "to": "SIGNNOISE",
+        "kind": "dependency"
+      },
+      {
+        "from": "MNTRACE",
+        "to": "SIGNNOISE",
+        "kind": "dependency"
+      },
+      {
+        "from": "SIGNNOISE",
+        "to": "NOISEINT",
+        "kind": "dependency"
+      },
+      {
+        "from": "MTRMEAN",
+        "to": "NOISEINT",
+        "kind": "dependency"
+      },
+      {
+        "from": "SPECGEO",
+        "to": "NOISEINT",
+        "kind": "dependency"
+      },
+      {
+        "from": "FINVAR",
+        "to": "QVARCONT",
+        "kind": "dependency"
+      },
+      {
+        "from": "SYMINV",
+        "to": "LA2EXT",
+        "kind": "dependency"
+      },
+      {
+        "from": "QVARCONT",
+        "to": "LA2EXT",
+        "kind": "dependency"
+      },
+      {
+        "from": "QFOURTH",
+        "to": "NOISECONV",
+        "kind": "dependency"
+      },
+      {
+        "from": "GAUSSID",
+        "to": "GTRANS",
+        "kind": "dependency"
+      },
+      {
+        "from": "DENS",
+        "to": "GPOT",
+        "kind": "dependency"
+      },
+      {
+        "from": "SRCSTEIN",
+        "to": "SRCAFF",
+        "kind": "dependency"
+      },
+      {
+        "from": "GRADAFF",
+        "to": "SRCAFF",
+        "kind": "dependency"
+      },
+      {
+        "from": "HESSACT",
+        "to": "GPRODSTEIN",
+        "kind": "dependency"
+      },
+      {
+        "from": "GTRANS",
+        "to": "GPRODSTEIN",
+        "kind": "dependency"
+      },
+      {
+        "from": "SRCAFF",
+        "to": "GPRODSTEIN",
+        "kind": "dependency"
+      },
+      {
+        "from": "G4MOM",
+        "to": "GPRODSTEIN",
+        "kind": "dependency"
+      },
+      {
+        "from": "GPRODSTEIN",
+        "to": "GPRODDUAL",
+        "kind": "dependency"
+      },
+      {
+        "from": "GLATENT",
+        "to": "GPRODDUAL",
+        "kind": "dependency"
+      },
+      {
+        "from": "DUALB",
+        "to": "GPRODDUAL",
+        "kind": "dependency"
+      },
+      {
+        "from": "WEAKHESS",
+        "to": "GPRODDUAL",
+        "kind": "dependency"
+      },
+      {
+        "from": "NOISECONV",
+        "to": "GSMVAR",
+        "kind": "dependency"
+      },
+      {
+        "from": "G4MOM",
+        "to": "GSMVAR",
+        "kind": "dependency"
+      },
+      {
+        "from": "GPRODDUAL",
+        "to": "GHMINUS",
+        "kind": "dependency"
+      },
+      {
+        "from": "GPOT",
+        "to": "GHMINUS",
+        "kind": "dependency"
+      },
+      {
+        "from": "QFOURTH",
+        "to": "GHMINUS",
+        "kind": "dependency"
+      },
+      {
+        "from": "G4MOM",
+        "to": "GHMINUS",
+        "kind": "dependency"
+      },
+      {
+        "from": "DENS",
+        "to": "RESTEXP",
+        "kind": "dependency"
+      },
+      {
+        "from": "HSSYM",
+        "to": "OPMAT",
+        "kind": "dependency"
+      },
+      {
+        "from": "QACTION",
+        "to": "OPMAT",
+        "kind": "dependency"
+      },
+      {
+        "from": "WSTEINSRC",
+        "to": "REGCLASS8",
+        "kind": "dependency"
+      },
+      {
+        "from": "RESTEXP",
+        "to": "REGCLASS8",
+        "kind": "dependency"
+      },
+      {
+        "from": "GHMINUS",
+        "to": "REGCLASS8",
+        "kind": "dependency"
+      },
+      {
+        "from": "NOISEINT",
+        "to": "REGCLASS8",
+        "kind": "dependency"
+      },
+      {
+        "from": "QACTION",
+        "to": "REGCLASS8",
+        "kind": "dependency"
+      },
+      {
+        "from": "LA2EXT",
+        "to": "REGCLASS8",
+        "kind": "dependency"
+      },
+      {
+        "from": "GSMVAR",
+        "to": "REGCLASS8",
+        "kind": "dependency"
+      },
+      {
+        "from": "NOISELIM",
+        "to": "REGCLASS8",
+        "kind": "dependency"
+      },
+      {
+        "from": "SPECGEO",
+        "to": "REGCLASS8",
+        "kind": "dependency"
+      },
+      {
+        "from": "OPMAT",
+        "to": "REGCLASS8",
+        "kind": "dependency"
+      },
+      {
+        "from": "REGCLASS8",
+        "to": "LCOMPACT8",
+        "kind": "dependency"
+      },
+      {
+        "from": "LCOMPACT8",
+        "to": "BCUT",
+        "kind": "dependency"
+      },
+      {
+        "from": "BCUT",
+        "to": "BCUM",
+        "kind": "dependency"
+      },
+      {
+        "from": "BCUM",
+        "to": "BKLMAIN",
+        "kind": "dependency"
+      },
+      {
+        "from": "BT31",
+        "to": "BKLMAIN",
+        "kind": "dependency"
+      },
+      {
+        "from": "BP71",
+        "to": "BKLMAIN",
+        "kind": "dependency"
+      },
+      {
+        "from": "BREG",
+        "to": "BKLMAIN",
+        "kind": "dependency"
+      },
+      {
+        "from": "BKLMAIN",
+        "to": "BKLAND",
+        "kind": "dependency"
+      },
+      {
+        "from": "NORM",
+        "to": "BKLAND",
+        "kind": "dependency"
+      },
+      {
+        "from": "BKLAND",
+        "to": "KLS",
         "kind": "dependency"
       }
     ]

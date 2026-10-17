@@ -41,7 +41,7 @@ variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℝ H]
 
 /-- A continuous quadratic sublevel bound on a set controls the norm of any
 point of its closure when that point is also the vector in the pairing. -/
-private theorem norm_sq_le_of_mem_closure_quadratic_bound
+theorem norm_sq_le_of_mem_closure_quadratic_bound
     (z : H) {S : Set H} {C : ℝ} (hz : z ∈ closure S)
     (hbound : ∀ w ∈ S, 2 * ⟪z, w⟫ - ‖w‖ ^ 2 ≤ C) :
     ‖z‖ ^ 2 ≤ C := by
@@ -66,7 +66,7 @@ variable {α : Type*} [MeasurableSpace α]
 
 /-- The scalar pairing of actual `toLp` classes is the integral of the
 product of their original functions. -/
-private theorem real_inner_toLp {μ : Measure α} {f g : α → ℝ}
+theorem real_inner_toLp {μ : Measure α} {f g : α → ℝ}
     (hf : MemLp f 2 μ) (hg : MemLp g 2 μ) :
     ⟪hf.toLp f, hg.toLp g⟫ = ∫ x, f x * g x ∂μ := by
   rw [MeasureTheory.L2.inner_def]
@@ -76,7 +76,7 @@ private theorem real_inner_toLp {μ : Measure α} {f g : α → ℝ}
 
 /-- Centering the first argument does not change its pairing with a
 mean-zero second argument. The constant term is explicitly removed. -/
-private theorem inner_center_left_of_mean_zero
+theorem inner_center_left_of_mean_zero
     (ν : ProbabilityMeasure α) (F w : Lp ℝ 2 (ν : Measure α))
     (hw : FunctionalInequalities.L2.mean ν w = 0) :
     ⟪FunctionalInequalities.L2.center ν F, w⟫ = ⟪F, w⟫ := by

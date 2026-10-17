@@ -16,8 +16,9 @@ The Cheeger energy is the Blueprint's own local-slope convention, one half of th
 asymptotic-Lipschitz convention is a separate definition and is never identified with it here.
 Every compact-set log-concave law satisfies the hypothesis through the certified
 `lem:logconcave-intrinsic-absolute-continuity`, so the identification is available throughout the
-KLS routes. The singular case `thm:smooth-gradient-relaxation-two-cheeger` remains open and is not
-claimed: no Poincaré inequality, no finiteness of any constant and no Cheeger--Buser comparison
+KLS routes. The general Borel-law statement has its separate certificate in
+`solutions/ThmSmoothGradientRelaxationTwoCheeger.lean`; this certificate retains the absolutely
+continuous scope. No Poincaré inequality, finiteness of a constant or Cheeger--Buser comparison
 follows from this certificate.
 -/
 

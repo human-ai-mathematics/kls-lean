@@ -1,4 +1,4 @@
-import FunctionalInequalities.Analysis.MollificationHessian
+import FunctionalInequalities.Analysis.Mollification.Hessian
 import FunctionalInequalities.Analysis.BakryEmery.Curvature
 import FunctionalInequalities.Analysis.BakryEmery.Bochner.Basic
 import FunctionalInequalities.Analysis.BakryEmery.HessianOperator
@@ -277,5 +277,67 @@ theorem integral_weightedLaplacian_sq_eq_of_lipschitz_gradient {E : Type*} [Norm
     intro k
     exact (mixed_integral_identity hU ((hV k).of_le (by decide)) hf hfc).symm
   exact tendsto_nhds_unique hlimit hH
+
+set_option maxHeartbeats 2000000 in
+/-- Ordinary diffusion coercivity at `C^{1,1}`: for a C1 globally Lipschitz potential `U` with Lipschitz gradient and
+integrable `e^{-U}`, and `f ∈ C_c^∞`, the Hessian pairing `⟪D(∇U) ∇f, ∇f⟫` and `(ℒf)²` are integrable for the tilted
+measure and `∫ ⟪D(∇U) ∇f, ∇f⟫ ≤ ∫ (ℒf)²`. Lipschitz-gradient sibling of `compact_ordinary_diffusion_coercivity`. -/
+theorem compact_ordinary_diffusion_coercivity_of_lipschitz_gradient
+    {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+    [CompleteSpace E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
+    {U : E → ℝ} (hU : ContDiff ℝ 1 U) {G : NNReal}
+    (hG : LipschitzWith G (gradient U)) {L : NNReal} (hL : LipschitzWith L U)
+    (hexp : Integrable (fun x => Real.exp (-U x)) (volume : Measure E))
+    {f : E → ℝ} (hf : ContDiff ℝ ∞ f) (hfc : HasCompactSupport f) :
+    Integrable (fun x => ⟪fderiv ℝ (gradient U) x (gradient f x), gradient f x⟫)
+      ((volume : Measure E).tilted (-U)) ∧
+    Integrable (fun x => weightedLaplacian U f x ^ 2)
+      ((volume : Measure E).tilted (-U)) ∧
+    (∫ x, ⟪fderiv ℝ (gradient U) x (gradient f x), gradient f x⟫
+        ∂((volume : Measure E).tilted (-U))) ≤
+      ∫ x, weightedLaplacian U f x ^ 2 ∂((volume : Measure E).tilted (-U)) := by
+  classical
+  let mu : Measure E := (volume : Measure E).tilted (-U)
+  have hf1 : ContDiff ℝ 1 f := hf.of_le (by decide)
+  have hf2 : ContDiff ℝ 2 f := hf.of_le (by decide)
+  have hgf : Continuous (gradient f) := continuous_gradient hf1
+  obtain ⟨C, hC⟩ := ((hasCompactSupport_gradient hfc).isCompact_range hgf).isBounded.exists_norm_le
+  have hb (x : E) : ‖gradient f x‖ ≤ C := hC _ ⟨x, rfl⟩
+  have hC0 : 0 ≤ C := (norm_nonneg _).trans (hb 0)
+  have hmD : Measurable (fderiv ℝ (gradient U)) := measurable_fderiv ℝ (gradient U)
+  have hev : Continuous (fun p : (E →L[ℝ] E) × E => p.1 p.2) :=
+    continuous_fst.clm_apply continuous_snd
+  have hmQ : Measurable (fun x => ⟪fderiv ℝ (gradient U) x (gradient f x), gradient f x⟫) :=
+    (hev.measurable.comp (hmD.prodMk hgf.measurable)).inner hgf.measurable
+  have hQ : Integrable
+      (fun x => ⟪fderiv ℝ (gradient U) x (gradient f x), gradient f x⟫) mu := by
+    refine (integrable_const ((G : ℝ) * C * C)).mono' hmQ.aestronglyMeasurable ?_
+    apply Filter.Eventually.of_forall
+    intro x
+    have hop : ‖fderiv ℝ (gradient U) x‖ ≤ (G : ℝ) :=
+      norm_fderiv_le_of_lipschitz ℝ hG
+    have happ : ‖fderiv ℝ (gradient U) x (gradient f x)‖ ≤ (G : ℝ) * C :=
+      ((fderiv ℝ (gradient U) x).le_opNorm _).trans
+        (mul_le_mul hop (hb x) (norm_nonneg _) G.coe_nonneg)
+    exact (norm_inner_le_norm _ _).trans
+      (mul_le_mul happ (hb x) (norm_nonneg _) (mul_nonneg G.coe_nonneg hC0))
+  have hScont : Continuous (hessianSqStdBasis f) := continuous_hessian_square hf
+  have hSsupp : HasCompactSupport (hessianSqStdBasis f) := compact_hessian_square hfc
+  have hS : Integrable (hessianSqStdBasis f) mu :=
+    hScont.integrable_of_hasCompactSupport hSsupp
+  have hLap : Integrable (fun x => weightedLaplacian U f x ^ 2) mu := by
+    have hc2 : HasCompactSupport (fun x => weightedLaplacian U f x ^ 2) :=
+      (hasCompactSupport_weightedLaplacian U hfc).comp_left (g := fun t : ℝ => t ^ 2) (by simp)
+    have hcont2 : Continuous (fun x => weightedLaplacian U f x ^ 2) :=
+      (continuous_weightedLaplacian hU hf2).pow 2
+    exact hcont2.integrable_of_hasCompactSupport hc2
+  have hIdentity := integral_weightedLaplacian_sq_eq_of_lipschitz_gradient hU hG hL hexp hf hfc
+  change (∫ x, weightedLaplacian U f x ^ 2 ∂mu) =
+    ∫ x, hessianSqStdBasis f x +
+      ⟪fderiv ℝ (gradient U) x (gradient f x), gradient f x⟫ ∂mu at hIdentity
+  rw [integral_add hS hQ] at hIdentity
+  have hnonneg : 0 ≤ ∫ x, hessianSqStdBasis f x ∂mu :=
+    integral_nonneg fun x => hessianSqStdBasis_nonneg f x
+  exact ⟨hQ, hLap, by linarith⟩
 
 end FunctionalInequalities.Analysis.BakryEmery

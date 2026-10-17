@@ -1,6 +1,6 @@
 import FunctionalInequalities.Analysis.Tensor.Coordinate
 import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.Basic
-
+import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
 /-!
 # Audit: Letwin supporting identities with source-style consumers
 

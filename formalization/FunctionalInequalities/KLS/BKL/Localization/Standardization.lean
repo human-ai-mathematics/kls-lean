@@ -1,6 +1,6 @@
-import FunctionalInequalities.KLS.BKL.PosteriorCovariance
+import FunctionalInequalities.KLS.BKL.Posterior.Covariance
 import FunctionalInequalities.KLS.BKL.CompactReduction
-
+import FunctionalInequalities.KLS.BKL.Posterior.Standardization
 /-!
 # Standardized posteriors inherit the compact cumulant bound
 

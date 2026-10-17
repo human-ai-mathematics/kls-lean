@@ -1,0 +1,488 @@
+{
+  "date": "2026-10-18",
+  "scope": "C1 resolved by actual producer/private dependencies: preserve all same-witness fields and hypotheses; no new interface or proof changes",
+  "old_modules": [
+    "FunctionalInequalities.KLS.CEK.MomentRegularity"
+  ],
+  "migration_map": "research/api-migration/2026-10-18-moment-regularity-map.json",
+  "namespace_and_public_names_unchanged": true,
+  "decision": "extend/split",
+  "API_impact": "Module locations only; names, source declaration payloads, assumptions and visibility retained",
+  "validation": [
+    "Exact source spans",
+    "Elaborated interfaces/definition closures",
+    "Complete clients",
+    "Full build/full verifier",
+    "Index/history preservation"
+  ],
+  "new_modules": [
+    "FunctionalInequalities.KLS.CEK.MomentRegularity.Potential",
+    "FunctionalInequalities.KLS.CEK.MomentRegularity.WeakDerivative",
+    "FunctionalInequalities.KLS.CEK.MomentRegularity.WeakHessian",
+    "FunctionalInequalities.KLS.CEK.MomentRegularity.Cutoff",
+    "FunctionalInequalities.KLS.CEK.MomentRegularity.TraceStein"
+  ],
+  "destinations": {
+    "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/Potential.lean": {
+      "title": "Actual regular-class C1 moment potentials",
+      "imports": [
+        "FunctionalInequalities.Analysis.BakryEmery.HessianOperator",
+        "FunctionalInequalities.Analysis.BakryEmery.WeakHessian",
+        "FunctionalInequalities.Analysis.Convex.Alexandrov",
+        "FunctionalInequalities.Analysis.Convex.Caffarelli",
+        "FunctionalInequalities.Analysis.Convex.GradientLipschitz",
+        "FunctionalInequalities.Analysis.Convex.Subgradient",
+        "FunctionalInequalities.Analysis.Convex.Viscosity",
+        "FunctionalInequalities.KLS.CEK.MomentMap",
+        "FunctionalInequalities.KLS.Isotropic"
+      ]
+    },
+    "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakDerivative.lean": {
+      "title": "Regular-source weak tensors and first Monge\u2013Ampere derivatives",
+      "imports": [
+        "FunctionalInequalities.Analysis.BakryEmery.HessianOperator",
+        "FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.InverseHessian.Weak",
+        "FunctionalInequalities.Analysis.BakryEmery.WeakHessian",
+        "FunctionalInequalities.Analysis.Convex.Coercivity",
+        "FunctionalInequalities.Analysis.Convex.GradientLipschitz",
+        "FunctionalInequalities.Analysis.Convex.HessianRegularity",
+        "FunctionalInequalities.Analysis.Lipschitz.Exponential",
+        "FunctionalInequalities.Analysis.Lipschitz.Gradient",
+        "FunctionalInequalities.Analysis.Matrix.DeterminantDerivative",
+        "FunctionalInequalities.Analysis.Matrix.WeakDerivative",
+        "FunctionalInequalities.Analysis.WeakDerivative.Basic",
+        "FunctionalInequalities.KLS.Isotropic",
+        "FunctionalInequalities.KLS.CEK.MomentRegularity.Potential"
+      ]
+    },
+    "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakHessian.lean": {
+      "title": "Regular-source weak inverse, Hessian mean, evolution and testing",
+      "imports": [
+        "FunctionalInequalities.Analysis.BakryEmery.HessianOperator",
+        "FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.InverseHessian.Weak",
+        "FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.LipschitzHessian",
+        "FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.WeakHessianEvolution",
+        "FunctionalInequalities.Analysis.BakryEmery.WeakHessian",
+        "FunctionalInequalities.Analysis.Graph.Area",
+        "FunctionalInequalities.Analysis.WeakDerivative.Basic",
+        "FunctionalInequalities.Analysis.WeakDerivative.Calculus",
+        "FunctionalInequalities.KLS.Isotropic",
+        "FunctionalInequalities.Probability.Stein.HessianKernel",
+        "FunctionalInequalities.KLS.CEK.MomentRegularity.WeakDerivative"
+      ]
+    },
+    "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/Cutoff.lean": {
+      "title": "Regular-source height cutoffs and bounded weak cutoff testing",
+      "imports": [
+        "FunctionalInequalities.Analysis.BakryEmery.HessianOperator",
+        "FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.InverseHessian.Basic",
+        "FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.InverseHessian.WeakCutoff",
+        "FunctionalInequalities.Analysis.WeakDerivative.Basic",
+        "FunctionalInequalities.KLS.Isotropic",
+        "FunctionalInequalities.KLS.CEK.MomentRegularity.WeakHessian"
+      ]
+    },
+    "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/TraceStein.lean": {
+      "title": "Trace and weak Stein estimates at one regular moment witness",
+      "imports": [
+        "FunctionalInequalities.Analysis.BakryEmery.Bochner.Basic",
+        "FunctionalInequalities.Analysis.BakryEmery.HessianOperator",
+        "FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.InverseHessian.Basic",
+        "FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.LipschitzHessian",
+        "FunctionalInequalities.Analysis.BakryEmery.MongeAmpere",
+        "FunctionalInequalities.Analysis.BakryEmery.WeakHessian",
+        "FunctionalInequalities.Analysis.Cutoff.Conservativity",
+        "FunctionalInequalities.Analysis.Matrix.Integral",
+        "FunctionalInequalities.Analysis.Matrix.Positivity",
+        "FunctionalInequalities.Analysis.Matrix.TraceGram",
+        "FunctionalInequalities.Analysis.Matrix.WeakDerivative",
+        "FunctionalInequalities.Analysis.Matrix.WeakTrace",
+        "FunctionalInequalities.Analysis.WeakDerivative.Basic",
+        "FunctionalInequalities.KLS.Isotropic",
+        "FunctionalInequalities.KLS.LogConcave.HessianStein",
+        "FunctionalInequalities.KLS.LogConcave.HessianTrace",
+        "FunctionalInequalities.KLS.CEK.MomentRegularity.Cutoff"
+      ]
+    }
+  },
+  "source_segments": [
+    {
+      "old_path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity.lean",
+      "first_line": 49,
+      "last_line": 246,
+      "new_path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/Potential.lean"
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity.lean",
+      "first_line": 49,
+      "last_line": 55,
+      "new_path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakDerivative.lean"
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity.lean",
+      "first_line": 247,
+      "last_line": 505,
+      "new_path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakDerivative.lean"
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity.lean",
+      "first_line": 49,
+      "last_line": 54,
+      "new_path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakHessian.lean"
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity.lean",
+      "first_line": 508,
+      "last_line": 1160,
+      "new_path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakHessian.lean"
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity.lean",
+      "first_line": 49,
+      "last_line": 54,
+      "new_path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/Cutoff.lean"
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity.lean",
+      "first_line": 1163,
+      "last_line": 1570,
+      "new_path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/Cutoff.lean"
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity.lean",
+      "first_line": 49,
+      "last_line": 54,
+      "new_path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/TraceStein.lean"
+    },
+    {
+      "old_path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity.lean",
+      "first_line": 1572,
+      "last_line": 3978,
+      "new_path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/TraceStein.lean"
+    }
+  ],
+  "authored_declaration_destinations": {
+    "FunctionalInequalities.Analysis.exists_regular_moment_bounded_weak_cutoff_testing": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/Cutoff.lean",
+    "FunctionalInequalities.Analysis.exists_regular_moment_bounded_weak_hessian_testing": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakHessian.lean",
+    "FunctionalInequalities.Analysis.exists_regular_moment_hessian_trace_bound": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/TraceStein.lean",
+    "FunctionalInequalities.Analysis.exists_regular_moment_potential": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/Potential.lean",
+    "FunctionalInequalities.Analysis.exists_regular_moment_weak_cutoffs": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/Cutoff.lean",
+    "FunctionalInequalities.Analysis.exists_regular_moment_weak_first_derivative": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakDerivative.lean",
+    "FunctionalInequalities.Analysis.exists_regular_moment_weak_hessian_evolution": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakHessian.lean",
+    "FunctionalInequalities.Analysis.exists_regular_moment_weak_inverse": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakHessian.lean",
+    "FunctionalInequalities.Analysis.exists_regular_moment_weak_inverse_mean_hessian": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakHessian.lean",
+    "FunctionalInequalities.Analysis.exists_regular_moment_weak_stein_coupling": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/TraceStein.lean",
+    "FunctionalInequalities.Analysis.exists_regular_moment_weak_tensor": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakDerivative.lean",
+    "_private.FunctionalInequalities.KLS.CEK.MomentRegularity.0.FunctionalInequalities.Analysis.actual_source_cutoff_trace_quadratic_testing": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/TraceStein.lean",
+    "_private.FunctionalInequalities.KLS.CEK.MomentRegularity.0.FunctionalInequalities.Analysis.actual_source_weak_symmetric_trace_bound_data": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/TraceStein.lean",
+    "_private.FunctionalInequalities.KLS.CEK.MomentRegularity.0.FunctionalInequalities.Analysis.actual_source_weak_theorem25_data": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/TraceStein.lean",
+    "_private.FunctionalInequalities.KLS.CEK.MomentRegularity.0.FunctionalInequalities.Analysis.actual_source_weak_trace_conservativity_data": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/TraceStein.lean",
+    "_private.FunctionalInequalities.KLS.CEK.MomentRegularity.0.FunctionalInequalities.Analysis.actual_source_weak_trace_contraction_data": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/TraceStein.lean",
+    "_private.FunctionalInequalities.KLS.CEK.MomentRegularity.0.FunctionalInequalities.Analysis.actual_source_weighted_weak_pairing_data": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/TraceStein.lean",
+    "_private.FunctionalInequalities.KLS.CEK.MomentRegularity.0.FunctionalInequalities.Analysis.ae_weak_trace_density_add_twice_energy_nonneg": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/TraceStein.lean",
+    "_private.FunctionalInequalities.KLS.CEK.MomentRegularity.0.FunctionalInequalities.Analysis.bounded_compact_hessian_test_data": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakHessian.lean",
+    "_private.FunctionalInequalities.KLS.CEK.MomentRegularity.0.FunctionalInequalities.Analysis.exists_regular_moment_weak_trace_energy": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/TraceStein.lean",
+    "_private.FunctionalInequalities.KLS.CEK.MomentRegularity.0.FunctionalInequalities.Analysis.exponent_upper_of_normalized_convex": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakDerivative.lean",
+    "_private.FunctionalInequalities.KLS.CEK.MomentRegularity.0.FunctionalInequalities.Analysis.integrable_and_integral_le_half_of_four_mul_le": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/TraceStein.lean",
+    "_private.FunctionalInequalities.KLS.CEK.MomentRegularity.0.FunctionalInequalities.Analysis.integrable_zero_tilted_of_weighted_cutoff_defect": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/TraceStein.lean",
+    "_private.FunctionalInequalities.KLS.CEK.MomentRegularity.0.FunctionalInequalities.Analysis.mean_hessian_basis_entry": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakHessian.lean",
+    "_private.FunctionalInequalities.KLS.CEK.MomentRegularity.0.FunctionalInequalities.Analysis.memLp_top_hessianMatrix_entry_of_isCompact": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakHessian.lean"
+  },
+  "default_path_map": {
+    "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity.lean": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/TraceStein.lean"
+  },
+  "default_module_map": {
+    "FunctionalInequalities.KLS.CEK.MomentRegularity": "FunctionalInequalities.KLS.CEK.MomentRegularity.TraceStein"
+  },
+  "placement_reason": "Extract the public producer stages; keep the entire private trace-to-Stein chain and final flat projection together, so no new witness is chosen and no private lemma is exposed or duplicated. Weak Hessian evolution and its testing helper remain together.",
+  "same_witness_non_claims": "No new structure/class, no C2/diffeomorphism assumption, no additional analytic premise, no noncompact theorem coverage.",
+  "additional_transitive_import_clients": [],
+  "context_documentation_replacements": [
+    {
+      "path": "formalization/FunctionalInequalities/Analysis/Matrix/WeakTrace.lean",
+      "old": "`KLS/CEK/MomentRegularity.lean`",
+      "new": "`KLS/CEK/MomentRegularity/TraceStein.lean`"
+    },
+    {
+      "path": "research/audits/BKL/WeakHessianTraceAudit.lean",
+      "old": "`KLS/CEK/MomentRegularity.lean`",
+      "new": "`KLS/CEK/MomentRegularity/TraceStein.lean`"
+    },
+    {
+      "path": "research/audits/BKL/TraceEnergyAudit.lean",
+      "old": "Clients compiled against `Analysis/Matrix/Trace.lean` section `TraceEnergy`",
+      "new": "Current owner: `Analysis/Matrix/Trace/Algebra.lean`. The following paragraph records the original\n2026-10-08 client-acceptance provenance.\n\nClients compiled against `Analysis/Matrix/Trace.lean` section `TraceEnergy`"
+    }
+  ],
+  "lazy_compiler_auxiliary_owner_changes": {},
+  "compiler_auxiliary_renames": {},
+  "owned_declaration_location_map": [
+    {
+      "old_name": "FunctionalInequalities.Analysis.exists_regular_moment_bounded_weak_cutoff_testing",
+      "new_name": "FunctionalInequalities.Analysis.exists_regular_moment_bounded_weak_cutoff_testing",
+      "old_module": "FunctionalInequalities.KLS.CEK.MomentRegularity",
+      "new_module": "FunctionalInequalities.KLS.CEK.MomentRegularity.Cutoff",
+      "old_path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity.lean",
+      "new_path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/Cutoff.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.exists_regular_moment_bounded_weak_hessian_testing",
+      "new_name": "FunctionalInequalities.Analysis.exists_regular_moment_bounded_weak_hessian_testing",
+      "old_module": "FunctionalInequalities.KLS.CEK.MomentRegularity",
+      "new_module": "FunctionalInequalities.KLS.CEK.MomentRegularity.WeakHessian",
+      "old_path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity.lean",
+      "new_path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakHessian.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.exists_regular_moment_hessian_trace_bound",
+      "new_name": "FunctionalInequalities.Analysis.exists_regular_moment_hessian_trace_bound",
+      "old_module": "FunctionalInequalities.KLS.CEK.MomentRegularity",
+      "new_module": "FunctionalInequalities.KLS.CEK.MomentRegularity.TraceStein",
+      "old_path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity.lean",
+      "new_path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/TraceStein.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.exists_regular_moment_potential",
+      "new_name": "FunctionalInequalities.Analysis.exists_regular_moment_potential",
+      "old_module": "FunctionalInequalities.KLS.CEK.MomentRegularity",
+      "new_module": "FunctionalInequalities.KLS.CEK.MomentRegularity.Potential",
+      "old_path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity.lean",
+      "new_path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/Potential.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.exists_regular_moment_weak_cutoffs",
+      "new_name": "FunctionalInequalities.Analysis.exists_regular_moment_weak_cutoffs",
+      "old_module": "FunctionalInequalities.KLS.CEK.MomentRegularity",
+      "new_module": "FunctionalInequalities.KLS.CEK.MomentRegularity.Cutoff",
+      "old_path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity.lean",
+      "new_path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/Cutoff.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.exists_regular_moment_weak_first_derivative",
+      "new_name": "FunctionalInequalities.Analysis.exists_regular_moment_weak_first_derivative",
+      "old_module": "FunctionalInequalities.KLS.CEK.MomentRegularity",
+      "new_module": "FunctionalInequalities.KLS.CEK.MomentRegularity.WeakDerivative",
+      "old_path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity.lean",
+      "new_path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakDerivative.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.exists_regular_moment_weak_hessian_evolution",
+      "new_name": "FunctionalInequalities.Analysis.exists_regular_moment_weak_hessian_evolution",
+      "old_module": "FunctionalInequalities.KLS.CEK.MomentRegularity",
+      "new_module": "FunctionalInequalities.KLS.CEK.MomentRegularity.WeakHessian",
+      "old_path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity.lean",
+      "new_path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakHessian.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.exists_regular_moment_weak_inverse",
+      "new_name": "FunctionalInequalities.Analysis.exists_regular_moment_weak_inverse",
+      "old_module": "FunctionalInequalities.KLS.CEK.MomentRegularity",
+      "new_module": "FunctionalInequalities.KLS.CEK.MomentRegularity.WeakHessian",
+      "old_path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity.lean",
+      "new_path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakHessian.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.exists_regular_moment_weak_inverse_mean_hessian",
+      "new_name": "FunctionalInequalities.Analysis.exists_regular_moment_weak_inverse_mean_hessian",
+      "old_module": "FunctionalInequalities.KLS.CEK.MomentRegularity",
+      "new_module": "FunctionalInequalities.KLS.CEK.MomentRegularity.WeakHessian",
+      "old_path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity.lean",
+      "new_path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakHessian.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.exists_regular_moment_weak_stein_coupling",
+      "new_name": "FunctionalInequalities.Analysis.exists_regular_moment_weak_stein_coupling",
+      "old_module": "FunctionalInequalities.KLS.CEK.MomentRegularity",
+      "new_module": "FunctionalInequalities.KLS.CEK.MomentRegularity.TraceStein",
+      "old_path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity.lean",
+      "new_path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/TraceStein.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "FunctionalInequalities.Analysis.exists_regular_moment_weak_tensor",
+      "new_name": "FunctionalInequalities.Analysis.exists_regular_moment_weak_tensor",
+      "old_module": "FunctionalInequalities.KLS.CEK.MomentRegularity",
+      "new_module": "FunctionalInequalities.KLS.CEK.MomentRegularity.WeakDerivative",
+      "old_path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity.lean",
+      "new_path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakDerivative.lean",
+      "public_name_unchanged": true
+    },
+    {
+      "old_name": "_private.FunctionalInequalities.KLS.CEK.MomentRegularity.0.FunctionalInequalities.Analysis.actual_source_cutoff_trace_quadratic_testing",
+      "new_name": "_private.FunctionalInequalities.KLS.CEK.MomentRegularity.TraceStein.0.FunctionalInequalities.Analysis.actual_source_cutoff_trace_quadratic_testing",
+      "old_module": "FunctionalInequalities.KLS.CEK.MomentRegularity",
+      "new_module": "FunctionalInequalities.KLS.CEK.MomentRegularity.TraceStein",
+      "old_path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity.lean",
+      "new_path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/TraceStein.lean",
+      "public_name_unchanged": false
+    },
+    {
+      "old_name": "_private.FunctionalInequalities.KLS.CEK.MomentRegularity.0.FunctionalInequalities.Analysis.actual_source_weak_symmetric_trace_bound_data",
+      "new_name": "_private.FunctionalInequalities.KLS.CEK.MomentRegularity.TraceStein.0.FunctionalInequalities.Analysis.actual_source_weak_symmetric_trace_bound_data",
+      "old_module": "FunctionalInequalities.KLS.CEK.MomentRegularity",
+      "new_module": "FunctionalInequalities.KLS.CEK.MomentRegularity.TraceStein",
+      "old_path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity.lean",
+      "new_path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/TraceStein.lean",
+      "public_name_unchanged": false
+    },
+    {
+      "old_name": "_private.FunctionalInequalities.KLS.CEK.MomentRegularity.0.FunctionalInequalities.Analysis.actual_source_weak_theorem25_data",
+      "new_name": "_private.FunctionalInequalities.KLS.CEK.MomentRegularity.TraceStein.0.FunctionalInequalities.Analysis.actual_source_weak_theorem25_data",
+      "old_module": "FunctionalInequalities.KLS.CEK.MomentRegularity",
+      "new_module": "FunctionalInequalities.KLS.CEK.MomentRegularity.TraceStein",
+      "old_path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity.lean",
+      "new_path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/TraceStein.lean",
+      "public_name_unchanged": false
+    },
+    {
+      "old_name": "_private.FunctionalInequalities.KLS.CEK.MomentRegularity.0.FunctionalInequalities.Analysis.actual_source_weak_trace_conservativity_data",
+      "new_name": "_private.FunctionalInequalities.KLS.CEK.MomentRegularity.TraceStein.0.FunctionalInequalities.Analysis.actual_source_weak_trace_conservativity_data",
+      "old_module": "FunctionalInequalities.KLS.CEK.MomentRegularity",
+      "new_module": "FunctionalInequalities.KLS.CEK.MomentRegularity.TraceStein",
+      "old_path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity.lean",
+      "new_path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/TraceStein.lean",
+      "public_name_unchanged": false
+    },
+    {
+      "old_name": "_private.FunctionalInequalities.KLS.CEK.MomentRegularity.0.FunctionalInequalities.Analysis.actual_source_weak_trace_contraction_data",
+      "new_name": "_private.FunctionalInequalities.KLS.CEK.MomentRegularity.TraceStein.0.FunctionalInequalities.Analysis.actual_source_weak_trace_contraction_data",
+      "old_module": "FunctionalInequalities.KLS.CEK.MomentRegularity",
+      "new_module": "FunctionalInequalities.KLS.CEK.MomentRegularity.TraceStein",
+      "old_path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity.lean",
+      "new_path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/TraceStein.lean",
+      "public_name_unchanged": false
+    },
+    {
+      "old_name": "_private.FunctionalInequalities.KLS.CEK.MomentRegularity.0.FunctionalInequalities.Analysis.actual_source_weighted_weak_pairing_data",
+      "new_name": "_private.FunctionalInequalities.KLS.CEK.MomentRegularity.TraceStein.0.FunctionalInequalities.Analysis.actual_source_weighted_weak_pairing_data",
+      "old_module": "FunctionalInequalities.KLS.CEK.MomentRegularity",
+      "new_module": "FunctionalInequalities.KLS.CEK.MomentRegularity.TraceStein",
+      "old_path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity.lean",
+      "new_path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/TraceStein.lean",
+      "public_name_unchanged": false
+    },
+    {
+      "old_name": "_private.FunctionalInequalities.KLS.CEK.MomentRegularity.0.FunctionalInequalities.Analysis.ae_weak_trace_density_add_twice_energy_nonneg",
+      "new_name": "_private.FunctionalInequalities.KLS.CEK.MomentRegularity.TraceStein.0.FunctionalInequalities.Analysis.ae_weak_trace_density_add_twice_energy_nonneg",
+      "old_module": "FunctionalInequalities.KLS.CEK.MomentRegularity",
+      "new_module": "FunctionalInequalities.KLS.CEK.MomentRegularity.TraceStein",
+      "old_path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity.lean",
+      "new_path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/TraceStein.lean",
+      "public_name_unchanged": false
+    },
+    {
+      "old_name": "_private.FunctionalInequalities.KLS.CEK.MomentRegularity.0.FunctionalInequalities.Analysis.bounded_compact_hessian_test_data",
+      "new_name": "_private.FunctionalInequalities.KLS.CEK.MomentRegularity.WeakHessian.0.FunctionalInequalities.Analysis.bounded_compact_hessian_test_data",
+      "old_module": "FunctionalInequalities.KLS.CEK.MomentRegularity",
+      "new_module": "FunctionalInequalities.KLS.CEK.MomentRegularity.WeakHessian",
+      "old_path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity.lean",
+      "new_path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakHessian.lean",
+      "public_name_unchanged": false
+    },
+    {
+      "old_name": "_private.FunctionalInequalities.KLS.CEK.MomentRegularity.0.FunctionalInequalities.Analysis.exists_regular_moment_weak_trace_energy",
+      "new_name": "_private.FunctionalInequalities.KLS.CEK.MomentRegularity.TraceStein.0.FunctionalInequalities.Analysis.exists_regular_moment_weak_trace_energy",
+      "old_module": "FunctionalInequalities.KLS.CEK.MomentRegularity",
+      "new_module": "FunctionalInequalities.KLS.CEK.MomentRegularity.TraceStein",
+      "old_path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity.lean",
+      "new_path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/TraceStein.lean",
+      "public_name_unchanged": false
+    },
+    {
+      "old_name": "_private.FunctionalInequalities.KLS.CEK.MomentRegularity.0.FunctionalInequalities.Analysis.exponent_upper_of_normalized_convex",
+      "new_name": "_private.FunctionalInequalities.KLS.CEK.MomentRegularity.WeakDerivative.0.FunctionalInequalities.Analysis.exponent_upper_of_normalized_convex",
+      "old_module": "FunctionalInequalities.KLS.CEK.MomentRegularity",
+      "new_module": "FunctionalInequalities.KLS.CEK.MomentRegularity.WeakDerivative",
+      "old_path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity.lean",
+      "new_path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakDerivative.lean",
+      "public_name_unchanged": false
+    },
+    {
+      "old_name": "_private.FunctionalInequalities.KLS.CEK.MomentRegularity.0.FunctionalInequalities.Analysis.exponent_upper_of_normalized_convex._simp_1_1",
+      "new_name": "_private.FunctionalInequalities.KLS.CEK.MomentRegularity.WeakDerivative.0.FunctionalInequalities.Analysis.exponent_upper_of_normalized_convex._simp_1_1",
+      "old_module": "FunctionalInequalities.KLS.CEK.MomentRegularity",
+      "new_module": "FunctionalInequalities.KLS.CEK.MomentRegularity.WeakDerivative",
+      "old_path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity.lean",
+      "new_path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakDerivative.lean",
+      "public_name_unchanged": false
+    },
+    {
+      "old_name": "_private.FunctionalInequalities.KLS.CEK.MomentRegularity.0.FunctionalInequalities.Analysis.integrable_and_integral_le_half_of_four_mul_le",
+      "new_name": "_private.FunctionalInequalities.KLS.CEK.MomentRegularity.TraceStein.0.FunctionalInequalities.Analysis.integrable_and_integral_le_half_of_four_mul_le",
+      "old_module": "FunctionalInequalities.KLS.CEK.MomentRegularity",
+      "new_module": "FunctionalInequalities.KLS.CEK.MomentRegularity.TraceStein",
+      "old_path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity.lean",
+      "new_path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/TraceStein.lean",
+      "public_name_unchanged": false
+    },
+    {
+      "old_name": "_private.FunctionalInequalities.KLS.CEK.MomentRegularity.0.FunctionalInequalities.Analysis.integrable_zero_tilted_of_weighted_cutoff_defect",
+      "new_name": "_private.FunctionalInequalities.KLS.CEK.MomentRegularity.TraceStein.0.FunctionalInequalities.Analysis.integrable_zero_tilted_of_weighted_cutoff_defect",
+      "old_module": "FunctionalInequalities.KLS.CEK.MomentRegularity",
+      "new_module": "FunctionalInequalities.KLS.CEK.MomentRegularity.TraceStein",
+      "old_path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity.lean",
+      "new_path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/TraceStein.lean",
+      "public_name_unchanged": false
+    },
+    {
+      "old_name": "_private.FunctionalInequalities.KLS.CEK.MomentRegularity.0.FunctionalInequalities.Analysis.mean_hessian_basis_entry",
+      "new_name": "_private.FunctionalInequalities.KLS.CEK.MomentRegularity.WeakHessian.0.FunctionalInequalities.Analysis.mean_hessian_basis_entry",
+      "old_module": "FunctionalInequalities.KLS.CEK.MomentRegularity",
+      "new_module": "FunctionalInequalities.KLS.CEK.MomentRegularity.WeakHessian",
+      "old_path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity.lean",
+      "new_path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakHessian.lean",
+      "public_name_unchanged": false
+    },
+    {
+      "old_name": "_private.FunctionalInequalities.KLS.CEK.MomentRegularity.0.FunctionalInequalities.Analysis.memLp_top_hessianMatrix_entry_of_isCompact",
+      "new_name": "_private.FunctionalInequalities.KLS.CEK.MomentRegularity.WeakHessian.0.FunctionalInequalities.Analysis.memLp_top_hessianMatrix_entry_of_isCompact",
+      "old_module": "FunctionalInequalities.KLS.CEK.MomentRegularity",
+      "new_module": "FunctionalInequalities.KLS.CEK.MomentRegularity.WeakHessian",
+      "old_path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity.lean",
+      "new_path": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakHessian.lean",
+      "public_name_unchanged": false
+    }
+  ],
+  "compiler_identifier_map": {
+    "_private.FunctionalInequalities.KLS.CEK.MomentRegularity.TraceStein.0.FunctionalInequalities.Analysis.actual_source_cutoff_trace_quadratic_testing": "_private.FunctionalInequalities.KLS.CEK.MomentRegularity.0.FunctionalInequalities.Analysis.actual_source_cutoff_trace_quadratic_testing",
+    "_private.FunctionalInequalities.KLS.CEK.MomentRegularity.TraceStein.0.FunctionalInequalities.Analysis.actual_source_weak_symmetric_trace_bound_data": "_private.FunctionalInequalities.KLS.CEK.MomentRegularity.0.FunctionalInequalities.Analysis.actual_source_weak_symmetric_trace_bound_data",
+    "_private.FunctionalInequalities.KLS.CEK.MomentRegularity.TraceStein.0.FunctionalInequalities.Analysis.actual_source_weak_theorem25_data": "_private.FunctionalInequalities.KLS.CEK.MomentRegularity.0.FunctionalInequalities.Analysis.actual_source_weak_theorem25_data",
+    "_private.FunctionalInequalities.KLS.CEK.MomentRegularity.TraceStein.0.FunctionalInequalities.Analysis.actual_source_weak_trace_conservativity_data": "_private.FunctionalInequalities.KLS.CEK.MomentRegularity.0.FunctionalInequalities.Analysis.actual_source_weak_trace_conservativity_data",
+    "_private.FunctionalInequalities.KLS.CEK.MomentRegularity.TraceStein.0.FunctionalInequalities.Analysis.actual_source_weak_trace_contraction_data": "_private.FunctionalInequalities.KLS.CEK.MomentRegularity.0.FunctionalInequalities.Analysis.actual_source_weak_trace_contraction_data",
+    "_private.FunctionalInequalities.KLS.CEK.MomentRegularity.TraceStein.0.FunctionalInequalities.Analysis.actual_source_weighted_weak_pairing_data": "_private.FunctionalInequalities.KLS.CEK.MomentRegularity.0.FunctionalInequalities.Analysis.actual_source_weighted_weak_pairing_data",
+    "_private.FunctionalInequalities.KLS.CEK.MomentRegularity.TraceStein.0.FunctionalInequalities.Analysis.ae_weak_trace_density_add_twice_energy_nonneg": "_private.FunctionalInequalities.KLS.CEK.MomentRegularity.0.FunctionalInequalities.Analysis.ae_weak_trace_density_add_twice_energy_nonneg",
+    "_private.FunctionalInequalities.KLS.CEK.MomentRegularity.WeakHessian.0.FunctionalInequalities.Analysis.bounded_compact_hessian_test_data": "_private.FunctionalInequalities.KLS.CEK.MomentRegularity.0.FunctionalInequalities.Analysis.bounded_compact_hessian_test_data",
+    "_private.FunctionalInequalities.KLS.CEK.MomentRegularity.TraceStein.0.FunctionalInequalities.Analysis.exists_regular_moment_weak_trace_energy": "_private.FunctionalInequalities.KLS.CEK.MomentRegularity.0.FunctionalInequalities.Analysis.exists_regular_moment_weak_trace_energy",
+    "_private.FunctionalInequalities.KLS.CEK.MomentRegularity.WeakDerivative.0.FunctionalInequalities.Analysis.exponent_upper_of_normalized_convex": "_private.FunctionalInequalities.KLS.CEK.MomentRegularity.0.FunctionalInequalities.Analysis.exponent_upper_of_normalized_convex",
+    "_private.FunctionalInequalities.KLS.CEK.MomentRegularity.WeakDerivative.0.FunctionalInequalities.Analysis.exponent_upper_of_normalized_convex._simp_1_1": "_private.FunctionalInequalities.KLS.CEK.MomentRegularity.0.FunctionalInequalities.Analysis.exponent_upper_of_normalized_convex._simp_1_1",
+    "_private.FunctionalInequalities.KLS.CEK.MomentRegularity.TraceStein.0.FunctionalInequalities.Analysis.integrable_and_integral_le_half_of_four_mul_le": "_private.FunctionalInequalities.KLS.CEK.MomentRegularity.0.FunctionalInequalities.Analysis.integrable_and_integral_le_half_of_four_mul_le",
+    "_private.FunctionalInequalities.KLS.CEK.MomentRegularity.TraceStein.0.FunctionalInequalities.Analysis.integrable_zero_tilted_of_weighted_cutoff_defect": "_private.FunctionalInequalities.KLS.CEK.MomentRegularity.0.FunctionalInequalities.Analysis.integrable_zero_tilted_of_weighted_cutoff_defect",
+    "_private.FunctionalInequalities.KLS.CEK.MomentRegularity.WeakHessian.0.FunctionalInequalities.Analysis.mean_hessian_basis_entry": "_private.FunctionalInequalities.KLS.CEK.MomentRegularity.0.FunctionalInequalities.Analysis.mean_hessian_basis_entry",
+    "_private.FunctionalInequalities.KLS.CEK.MomentRegularity.WeakHessian.0.FunctionalInequalities.Analysis.memLp_top_hessianMatrix_entry_of_isCompact": "_private.FunctionalInequalities.KLS.CEK.MomentRegularity.0.FunctionalInequalities.Analysis.memLp_top_hessianMatrix_entry_of_isCompact",
+    "inst._@.FunctionalInequalities.KLS.CEK.MomentRegularity.TraceStein.3589884562._hygCtx._hyg.3": "inst._@.FunctionalInequalities.KLS.CEK.MomentRegularity.3589884562._hygCtx._hyg.3"
+  },
+  "semantic_comparison": {
+    "passed": true,
+    "owned_declarations": 26,
+    "closure_declarations": 33,
+    "non_theorem_definition_bodies": 4,
+    "compiler_identifier_pairs": 16,
+    "differences": [],
+    "kernel_checked_definitional_equalities": 0,
+    "definitionally_equal_instance_dependency_changes": [],
+    "safety_and_partiality_flags_identical": true,
+    "normalization": "Exact bijective private/hygienic Name pairs constrained by source declaration destinations. Structural types/definition closures compared; any nonstructural instance-path difference additionally requires a fresh kernel-checked reflexive equality over the complete old/new expression trees. Public binder names/info, literals, levels and safety flags retained; nonkernel mdata omitted.",
+    "theorem_proof_values_claimed_equal": false
+  },
+  "evidence": "build/file-management/2026-10-17-other-families-optimization/batch-05-moment-regularity/",
+  "historical_records_preserved": true
+}

@@ -53,6 +53,10 @@ roots = [
   "solutions.ThmBakryEmeryPoincare",
   "solutions.ThmBklTaylorCriterion",
   "solutions.PropBklSuspension",
+  "solutions.ThmLetwinCompactQuadraticBound",
+  "solutions.LemBklCutoffEnergy",
+  "solutions.ThmBklCumulantBound",
+  "solutions.ThmBklPoincare",
 ]
 
 [[lean_lib]]

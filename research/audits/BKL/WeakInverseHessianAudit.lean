@@ -1,4 +1,4 @@
-import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.WeakInverseHessian
+import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.InverseHessian.Weak
 
 /-! Audit client for the weak inverse-Hessian generator identities (Letwin arXiv:2607.24164v1 (2.2), weak `C^{1,1}`
 counterpart) and the inverse-Hessian integrability interface of `Analysis/Matrix/Piola.lean`: the exact original

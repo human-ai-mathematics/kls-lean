@@ -23,13 +23,13 @@ when `∇φ` takes values in a bounded `K` and `V` is `C¹` on an open set conta
 (`bounded_hessianInverseOperator_self`, compact-image bound of the pointwise identity), and the composition rule
 `L(h ∘ W) = h′(W) LW + h″(W) Σ_{ij} ((∇²φ)⁻¹)_{ij} ∂_iW ∂_jW` for `C²` `W`, `h` with no hypothesis on `φ`
 (`hessianInverseOperator_comp`). The minimum of `φ` is in `Analysis/Convex/Coercivity.lean`; the cutoffs `η(W/R)` and
-their defect bound (Lemma A.4) are constructed in `IntegrationByParts/InverseHessianCutoff.lean`. Not provided: the
+their defect bound (Lemma A.4) are constructed in `IntegrationByParts/InverseHessian/Cutoff.lean`. Not provided: the
 moment map. Proof bodies: Codex API jobs
 `letwin-a4-self-astra-high-v2` (ff901785…), `letwin-a4-bounded-astra-high-v2` (f666a094…) and
 `letwin-a4-chain-astra-high-v4` (d2f84023…), independently verified; statements and placement: Claude.
 
 Also for Lemma A.4: the coefficient extraction `Σ_ij A_ij ∂_iφ ∂_j(h ∘ φ) = h′(φ) Σ_ij A_ij ∂_iφ ∂_jφ` in any orthonormal
-basis (`sum_inverseHessianEntry_mul_fderiv_comp`, used by the energy identity in `IntegrationByParts/InverseHessian.lean`)
+basis (`sum_inverseHessianEntry_mul_fderiv_comp`, used by the energy identity in `IntegrationByParts/InverseHessian/Basic.lean`)
 and the pointwise defect domination
 `|L(e((φ − c)/R))| ≤ |R⁻¹e′((φ − c)/R)| |Lφ| + R⁻² |e″((φ − c)/R)| |Σ_ij A_ij ∂_iφ ∂_jφ|` for `C²` `φ`, `e` and all real
 `c`, `R` (`abs_hessianInverseOperator_comp_sub_div_le`; the affine rescaling comes from the scalar leaf
@@ -553,3 +553,56 @@ theorem continuous_hessianInverseOperator {E : Type*} [NormedAddCommGroup E] [In
 end Continuity
 
 end FunctionalInequalities.Analysis.BakryEmery
+
+open FunctionalInequalities.Analysis.BakryEmery
+open scoped RealInnerProductSpace ContDiff
+namespace FunctionalInequalities.Probability.Stein
+/-- The Hessian matrix `(∇²φ)_{ij}(y) = D²φ(y)(e_i, e_j)` of `φ` in the standard basis. -/
+noncomputable def hessianMatrix {n : ℕ} (φ : EuclideanSpace ℝ (Fin n) → ℝ) (y : EuclideanSpace ℝ (Fin n)) : Probability.Stein.KernelMatrix n :=
+  fun i j => bilinearIteratedFDerivTwo ℝ φ y (EuclideanSpace.basisFun (Fin n) ℝ i) (EuclideanSpace.basisFun (Fin n) ℝ j)
+
+/-- The coordinate Hessian matrix is the standard-basis entry matrix of the Hessian operator
+`Analysis.BakryEmery.hessianOperator` (specialization bridge; the two objects keep their roles). -/
+theorem hessianMatrix_eq_operatorEntry_hessianOperator {n : ℕ} {φ : EuclideanSpace ℝ (Fin n) → ℝ}
+    (hφ : ContDiff ℝ 2 φ) (y : EuclideanSpace ℝ (Fin n)) (i j : Fin n) :
+    hessianMatrix φ y i j =
+      Analysis.operatorEntry (EuclideanSpace.basisFun (Fin n) ℝ) (hessianOperator φ y) i j :=
+  (operatorEntry_hessianOperator (EuclideanSpace.basisFun (Fin n) ℝ) hφ y i j).symm
+
+/-- `D²φ(y)(u, v) = ⟪D(∇φ)(y) u, v⟫`. -/
+theorem hessian_eq_inner_fderiv_gradient {E : Type*} [NormedAddCommGroup E]
+    [InnerProductSpace ℝ E] [CompleteSpace E] {φ : E → ℝ} (hφ : ContDiff ℝ 2 φ)
+    (y u v : E) : bilinearIteratedFDerivTwo ℝ φ y u v = ⟪fderiv ℝ (gradient φ) y u, v⟫ := by
+  have hg : ContDiff ℝ 1 (gradient φ) := contDiff_gradient hφ (by norm_num)
+  have hfun : (fun x : E => fderiv ℝ φ x v) = fun x => ⟪gradient φ x, v⟫ := by
+    funext x
+    exact inner_gradient_left.symm
+  rw [bilinearIteratedFDerivTwo_eq_fderiv_apply hφ, hfun,
+    fderiv_inner_apply ℝ (hg.differentiable one_ne_zero y) (differentiableAt_const v)]
+  simp
+
+/-- Chain rule in coordinates: `∂_i (f ∘ ∇φ)(y) = ∑_j (∇²φ)_{ij}(y) (∂_j f)(∇φ y)`. -/
+theorem chain_coordinate {n : ℕ} {φ f : EuclideanSpace ℝ (Fin n) → ℝ} (hφ : ContDiff ℝ 2 φ)
+    (hf : ContDiff ℝ 1 f) (y : EuclideanSpace ℝ (Fin n)) (i : Fin n) :
+    fderiv ℝ (f ∘ gradient φ) y (EuclideanSpace.basisFun (Fin n) ℝ i) =
+      ∑ j, hessianMatrix φ y i j * gradient f (gradient φ y) j := by
+  have hg : ContDiff ℝ 1 (gradient φ) := contDiff_gradient hφ (by norm_num)
+  rw [fderiv_comp y (hf.differentiable one_ne_zero _) (hg.differentiable one_ne_zero _)]
+  change fderiv ℝ f (gradient φ y) (fderiv ℝ (gradient φ) y (EuclideanSpace.basisFun (Fin n) ℝ i)) = _
+  rw [← inner_gradient_left, PiLp.inner_apply]
+  apply Finset.sum_congr rfl
+  intro j _
+  have hcoord : fderiv ℝ (gradient φ) y (EuclideanSpace.basisFun (Fin n) ℝ i) j = hessianMatrix φ y i j := by
+    rw [hessianMatrix, hessian_eq_inner_fderiv_gradient hφ]
+    exact (EuclideanSpace.inner_basisFun_real (Fin n) (fderiv ℝ (gradient φ) y (EuclideanSpace.basisFun (Fin n) ℝ i)) j).symm
+  rw [hcoord]
+  simp only [Real.inner_apply, mul_comm]
+
+/-- Continuity of the Hessian entries. -/
+theorem hessian_entry_continuous {n : ℕ} {φ : EuclideanSpace ℝ (Fin n) → ℝ} (hφ : ContDiff ℝ 2 φ) (i j : Fin n) :
+    Continuous (fun y => hessianMatrix φ y i j) := by
+  have h1 : ContDiff ℝ 1 (fderiv ℝ φ) := hφ.fderiv_right (by norm_num)
+  exact ((h1.continuous_fderiv (by norm_num)).clm_apply continuous_const).clm_apply continuous_const
+
+
+end FunctionalInequalities.Probability.Stein

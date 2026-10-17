@@ -13,7 +13,9 @@ with the Letwin quadratic-form bound
 If this holds for all isotropic log-concave laws in positive dimension, `CumulantBound 2 8` follows.
 The older statement in `Analysis/BakryEmery/Cumulant/Basic.lean` assumes all exponential moments, which
 general log-concave laws (e.g. Laplace) do not have; this module is the source-faithful version.
-Theorem 4.1, the Letwin bound and the Eldan induction remain open. Proof bodies: Codex route (bundle
+The full noncompact Letwin hypothesis remains open. The separately proved Theorem 4.1 uses the
+compact Letwin theorem and cutoff induction; it does not discharge this module's full hypothesis
+or construct the uncut Eldan process. Proof bodies: Codex route (bundle
 `Local-Third-Cumulant`, independently accepted); statements and placement: Claude.
 -/
 

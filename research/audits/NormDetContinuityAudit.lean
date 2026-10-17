@@ -1,6 +1,6 @@
 import FunctionalInequalities.Analysis.Vector.JacobianContinuity
 import Mathlib.Analysis.InnerProductSpace.PiL2
-
+import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
 /-!
 # Scope audit for obligation `A1`
 

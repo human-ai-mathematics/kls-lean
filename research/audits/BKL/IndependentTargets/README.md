@@ -35,4 +35,5 @@ an external comparator or a second-kernel result. Source-fidelity review is reco
 Mutation checks remove the factorial, change 2b to b and restrict the universal input to one
 dimension. All three specifications must compile, and all three links must be rejected.
 The source-review notes explain normalization and the existing zero-dimensional API extension.
-Proposition 7.1 remains conditional; Theorem 4.1, Theorem 1.1 and KLS remain open.
+This audit leaves Proposition 7.1 conditional and does not cover Theorem 4.1, Theorem 1.1 or KLS; those are
+registered separately (`thm:bkl-cumulant-bound`, `thm:bkl-poincare`).

@@ -1,31 +1,24 @@
+import Mathlib.MeasureTheory.Measure.ProbabilityMeasure
 import Mathlib.Analysis.Matrix.Normed
 import Mathlib.MeasureTheory.Function.LocallyIntegrable
 import FunctionalInequalities.L2.Pairing
 import FunctionalInequalities.Analysis.BakryEmery.Calculus
-import FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Approximation
+import FunctionalInequalities.Analysis.Operator.Coordinates
 
 /-!
-# Stein kernels on `ℝⁿ`
+# Stein kernel object and compact-test identities
 
-Letwin, arXiv:2607.24164v1, Definition 2.6 and Appendix A.7. A Stein kernel of a centered law `μ` on
-`ℝⁿ` is a matrix field `τ` with measurable locally integrable entries satisfying
-`∫ x_i f dμ = ∫ (τ ∇f)_i dμ` for all `f ∈ C_c^∞`; the Hilbert–Schmidt norm `|τ|_HS` is the Frobenius
-norm. With a.e. symmetry and `|τ|_HS ∈ L²(μ)` the directional identity `∫ ⟪x, v⟫ f = ∫ ⟪τ v, ∇f⟫`
-holds on compact tests and, for `μ ≪ volume` with finite second moment, extends to all locally
-Lipschitz `f` with `f, ∇f ∈ L²(μ)` (A.7), with the Cauchy–Schwarz bound. No Stein kernel is
-constructed here (the moment-map producer of the paper is not formalized). Proof bodies: Codex
-route (bundle `Letwin-A7`, independently accepted); statements and placement: Claude.
+Existing statements, names and proof payloads are preserved.
 -/
 
 open MeasureTheory Filter
-open FunctionalInequalities.Analysis.BakryEmery FunctionalInequalities.Energy.Euclidean.LipschitzApproximation
+open FunctionalInequalities.Analysis.BakryEmery
 open scoped RealInnerProductSpace Topology ContDiff Matrix.Norms.Frobenius
 
 noncomputable section
 
 namespace FunctionalInequalities.Probability.Stein
 
-abbrev KernelMatrix (n : ℕ) := Matrix (Fin n) (Fin n) ℝ
 
 /-- The Hilbert–Schmidt (Frobenius) norm of a kernel matrix: `|T|_HS² = ∑_{ij} T_{ij}²` (Letwin (2.19)). -/
 def hsNorm {n : ℕ} (T : KernelMatrix n) : ℝ := ‖T‖
@@ -178,58 +171,53 @@ theorem compact_directional_identity {n : ℕ} (μ : ProbabilityMeasure (Euclide
           (f := fun i x => v i * R i x) (fun i _ => (hRi i).const_mul (v i)))
     _ = _ := integral_congr_ae hRfun
 
-/-- **Letwin A.7 (identity)**: for `μ ≪ volume` with finite second moment, the Stein identity extends to
-every locally Lipschitz `f ∈ L²(μ)` with `∇f ∈ L²(μ)`, by `C_c^∞` approximation in the graph norm. -/
-theorem extended_identity_of_ac {n : ℕ} (μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin n)))
-    (τ : EuclideanSpace ℝ (Fin n) → KernelMatrix n) (hK : IsSteinKernel μ τ)
-    (hac : (μ : Measure (EuclideanSpace ℝ (Fin n))) ≪ volume)
-    (hμ2 : MemLp (id : EuclideanSpace ℝ (Fin n) → EuclideanSpace ℝ (Fin n)) 2 (μ : Measure (EuclideanSpace ℝ (Fin n))))
-    (hSym : SymmetricAE μ τ) (hHS : MemLp (fun x => hsNorm (τ x)) 2 (μ : Measure (EuclideanSpace ℝ (Fin n))))
-    (f : EuclideanSpace ℝ (Fin n) → ℝ) (hf : LocallyLipschitz f) (hf2 : MemLp f 2 (μ : Measure (EuclideanSpace ℝ (Fin n))))
-    (hgrad : MemLp (gradient f) 2 (μ : Measure (EuclideanSpace ℝ (Fin n)))) (v : EuclideanSpace ℝ (Fin n)) :
-    (∫ x, ⟪x, v⟫ * f x ∂(μ : Measure (EuclideanSpace ℝ (Fin n)))) =
-      ∫ x, ⟪action (τ x) v, gradient f x⟫ ∂(μ : Measure (EuclideanSpace ℝ (Fin n))) := by
-  have hgradId : MemLp (fun x => (ContinuousLinearMap.id ℝ (EuclideanSpace ℝ (Fin n))) (gradient f x)) 2 (μ : Measure (EuclideanSpace ℝ (Fin n))) := by
-    simpa only [ContinuousLinearMap.id_apply] using hgrad
-  obtain ⟨seq, hs, hval, hder⟩ := exists_smooth_weighted_L2 μ volume hac
-    (ContinuousLinearMap.id ℝ (EuclideanSpace ℝ (Fin n))) f hf hf2 hgradId
-  have hsval (j : ℕ) : MemLp (seq j) 2 (μ : Measure (EuclideanSpace ℝ (Fin n))) := (hs j).2.2.1
-  have hsgrad (j : ℕ) : MemLp (gradient (seq j)) 2 (μ : Measure (EuclideanSpace ℝ (Fin n))) := by
-    simpa only [ContinuousLinearMap.id_apply] using (hs j).2.2.2
-  have hder' : Tendsto (fun j => eLpNorm
-      (fun x => gradient (seq j) x - gradient f x) 2 (μ : Measure (EuclideanSpace ℝ (Fin n)))) atTop (𝓝 0) := by
-    simpa only [ContinuousLinearMap.id_apply] using hder
-  have hlinear : MemLp (fun x : EuclideanSpace ℝ (Fin n) => ⟪x, v⟫) 2 (μ : Measure (EuclideanSpace ℝ (Fin n))) := by
-    simpa only [id_eq] using hμ2.inner_const (𝕜 := ℝ) v
-  have hleft : Tendsto (fun j => ∫ x, ⟪x, v⟫ * seq j x ∂(μ : Measure (EuclideanSpace ℝ (Fin n)))) atTop
-      (𝓝 (∫ x, ⟪x, v⟫ * f x ∂(μ : Measure (EuclideanSpace ℝ (Fin n))))) := by
-    simpa only [Real.inner_apply] using
-      L2.tendsto_integral_inner_of_eLpNorm_sub hlinear hf2 hsval hval
-  have hτv := action_memLp hK.measurable_entries hHS v
-  have hright := L2.tendsto_integral_inner_of_eLpNorm_sub hτv hgrad hsgrad hder'
-  have heq (j : ℕ) : (∫ x, ⟪x, v⟫ * seq j x ∂(μ : Measure (EuclideanSpace ℝ (Fin n)))) =
-      ∫ x, ⟪action (τ x) v, gradient (seq j) x⟫ ∂(μ : Measure (EuclideanSpace ℝ (Fin n))) :=
-    compact_directional_identity μ τ hK hμ2 hSym hHS (seq j) (hs j).1 (hs j).2.1 v
-  have hright' : Tendsto (fun j => ∫ x, ⟪x, v⟫ * seq j x ∂(μ : Measure (EuclideanSpace ℝ (Fin n)))) atTop
-      (𝓝 (∫ x, ⟪action (τ x) v, gradient f x⟫ ∂(μ : Measure (EuclideanSpace ℝ (Fin n))))) :=
-    hright.congr' (Filter.Eventually.of_forall fun j => (heq j).symm)
-  exact tendsto_nhds_unique hleft hright'
 
-/-- **Letwin A.7 (bound)**: `|∫ ⟪x, v⟫ f dμ| ≤ (∫ ‖τ(x) v‖² dμ)^{1/2} (∫ ‖∇f‖² dμ)^{1/2}`. -/
-theorem extended_abs_bound_of_ac {n : ℕ} (μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin n)))
-    (τ : EuclideanSpace ℝ (Fin n) → KernelMatrix n) (hK : IsSteinKernel μ τ)
-    (hac : (μ : Measure (EuclideanSpace ℝ (Fin n))) ≪ volume)
-    (hμ2 : MemLp (id : EuclideanSpace ℝ (Fin n) → EuclideanSpace ℝ (Fin n)) 2 (μ : Measure (EuclideanSpace ℝ (Fin n))))
-    (hSym : SymmetricAE μ τ) (hHS : MemLp (fun x => hsNorm (τ x)) 2 (μ : Measure (EuclideanSpace ℝ (Fin n))))
-    (f : EuclideanSpace ℝ (Fin n) → ℝ) (hf : LocallyLipschitz f) (hf2 : MemLp f 2 (μ : Measure (EuclideanSpace ℝ (Fin n))))
-    (hgrad : MemLp (gradient f) 2 (μ : Measure (EuclideanSpace ℝ (Fin n)))) (v : EuclideanSpace ℝ (Fin n)) :
-    |∫ x, ⟪x, v⟫ * f x ∂(μ : Measure (EuclideanSpace ℝ (Fin n)))| ≤
-      Real.sqrt (∫ x, ‖action (τ x) v‖ ^ 2 ∂(μ : Measure (EuclideanSpace ℝ (Fin n)))) *
-        Real.sqrt (∫ x, ‖gradient f x‖ ^ 2 ∂(μ : Measure (EuclideanSpace ℝ (Fin n)))) := by
-  rw [extended_identity_of_ac μ τ hK hac hμ2 hSym hHS f hf hf2 hgrad v]
-  have hτv := action_memLp hK.measurable_entries hHS v
-  rw [L2.sqrt_integral_norm_sq_eq hτv, L2.sqrt_integral_norm_sq_eq hgrad]
-  exact L2.abs_integral_inner_le hτv hgrad
+end FunctionalInequalities.Probability.Stein
+end
+/-! ### Algebra of the matrix action
+
+`action` is multiplicative, additive, homogeneous and unital; its basis columns and the trace formula `Σᵢ ‖A eᵢ‖² = tr (Aᵀ A)`. -/
+
+noncomputable section
+open scoped RealInnerProductSpace
+
+namespace FunctionalInequalities.Probability.Stein
+
+theorem action_eq_toEuclideanLin {n : ℕ} (A : KernelMatrix n) (x : EuclideanSpace ℝ (Fin n)) :
+    action A x = Matrix.toEuclideanLin A x := rfl
+
+theorem action_mul {n : ℕ} (A B : KernelMatrix n) (x : EuclideanSpace ℝ (Fin n)) :
+    action (A*B) x = action A (action B x) := by
+  apply WithLp.ofLp_injective
+  exact (Matrix.mulVec_mulVec x.ofLp A B).symm
+
+theorem action_add {n : ℕ} (A B : KernelMatrix n) (x : EuclideanSpace ℝ (Fin n)) :
+    action (A+B) x = action A x + action B x := by
+  apply WithLp.ofLp_injective
+  exact Matrix.add_mulVec A B x.ofLp
+
+theorem action_smul {n : ℕ} (t : ℝ) (A : KernelMatrix n) (x : EuclideanSpace ℝ (Fin n)) :
+    action (t • A) x = t • action A x := by
+  apply WithLp.ofLp_injective
+  exact Matrix.smul_mulVec t A x.ofLp
+
+theorem action_one {n : ℕ} (x : EuclideanSpace ℝ (Fin n)) :
+    action (1 : KernelMatrix n) x = x := by
+  apply WithLp.ofLp_injective
+  exact Matrix.one_mulVec x.ofLp
+
+theorem action_basis_apply {n : ℕ} (A : KernelMatrix n) (i j : Fin n) :
+    action A (EuclideanSpace.basisFun (Fin n) ℝ i) j = A j i := by
+  rw [EuclideanSpace.basisFun_apply]
+  change (A.mulVec (Pi.single i 1)) j = A j i
+  rw [Matrix.mulVec_single_one]
+  rfl
+
+theorem sum_norm_action_basis_sq_eq_trace_transpose_mul {n : ℕ} (A : KernelMatrix n) :
+    (∑ i, ‖action A (EuclideanSpace.basisFun (Fin n) ℝ i)‖^2) = Matrix.trace (A.transpose*A) := by
+  simp_rw [EuclideanSpace.real_norm_sq_eq]
+  simp only [action_basis_apply,Matrix.trace,Matrix.diag_apply,
+    Matrix.mul_apply,Matrix.transpose_apply,pow_two]
 
 end FunctionalInequalities.Probability.Stein
 
