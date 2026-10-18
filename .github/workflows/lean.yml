@@ -11,10 +11,35 @@ permissions:
 
 jobs:
   certify:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     env:
       MATHLIB_NO_CACHE_ON_UPDATE: '1'
     steps:
+      - name: Reserve disk space for Lean certification
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ "$RUNNER_ENVIRONMENT" != github-hosted || "$RUNNER_OS" != Linux ]]; then
+            echo "::error::Disk preparation is restricted to GitHub-hosted Linux runners."
+            exit 1
+          fi
+          df -h "$GITHUB_WORKSPACE"
+          # These preinstalled SDKs are unused by Lean, Lake, Python and the imported cache.
+          unused_toolchains=(
+            /usr/local/lib/android
+            /usr/share/dotnet
+            /usr/local/.ghcup
+            /usr/local/share/powershell
+            /opt/hostedtoolcache/CodeQL
+          )
+          sudo rm -rf -- "${unused_toolchains[@]}"
+          df -h "$GITHUB_WORKSPACE"
+          available_kib=$(df -Pk "$GITHUB_WORKSPACE" | awk 'NR == 2 { print $4 }')
+          minimum_kib=$((32 * 1024 * 1024))
+          if (( available_kib < minimum_kib )); then
+            echo "::error::Lean certification requires at least 32 GiB free before setup."
+            exit 1
+          fi
       - uses: actions/checkout@v5
       - uses: actions/setup-python@v6
         with:
