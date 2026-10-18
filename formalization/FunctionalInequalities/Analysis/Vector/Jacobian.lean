@@ -76,7 +76,7 @@ theorem coareaJacobian_eq_norm_toDual_symm (L : V →L[ℝ] ℝ) :
 
 /-- **Compatibility with the proved scalar theory**: the coarea Jacobian of the differential of a
 real-valued function is exactly the norm of its gradient, the integrand of the weighted coarea
-formula `L11`/`L12`/`L13`. -/
+formula C¹ coarea/globally Lipschitz coarea/locally Lipschitz coarea. -/
 theorem coareaJacobian_fderiv (u : V → ℝ) (x : V) :
     coareaJacobian (fderiv ℝ u x) = ‖gradient u x‖ := by
   rw [coareaJacobian_eq_norm_toDual_symm]

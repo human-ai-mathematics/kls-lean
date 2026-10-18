@@ -146,6 +146,25 @@ Distinguish source checks, kernel replay, certificate registration and remote CI
 alone never advances mathematical proof status. Preserve unrelated work; commit and push only
 when authorized.
 
+### Review after mechanical checks
+
+Use this short checklist after the change-appropriate checks above. Record `pass`, a concrete
+finding, or `not applicable` with its reason in the batch review. Findings name the source
+location, impact, affected consumer, proposed correction and acceptance check.
+
+| Angle | Review question and required evidence |
+| --- | --- |
+| Meaning and scope | Do definitions and statements retain the source hypotheses, constants, normalization and dimensions? Compare the actual Lean types; separate conditional inputs from closed producers. |
+| Reuse and generality | Search the pinned Mathlib and existing owners. A duplication finding names an actual replacement and its use. Generalize for a real consumer; retain necessary mathematical distinctions. |
+| Public API and placement | Can a client use the characteristic lemmas without unfolding internals? Check mathematical ownership, dependency direction, private supports and the complete intended migration map. |
+| Documentation and credit | Keep mathematical purpose, assumptions and literature attribution in source; archive process history verbatim. Check current claims and links against declarations and receipts. |
+| Consumer and compatibility | Compile an actual narrow-import client. For Git delivery, identify the exact revision and distinguish a pristine dependency from a source overlay and reused third-party caches. |
+| Evidence and preservation | Bind results to the checked source and tool versions; preserve unrelated staging, local configuration, historical files and proof/certificate states. |
+
+Compilation, mathematical meaning and API usability require separate evidence. Human semantic
+review retains its stated scope; an automated verdict does not supply it. For browsing current
+compiler-derived interfaces, use the [generated API directory](../formalization/API.md).
+
 ### Remote CI at verification milestones
 
 Ordinary branch pushes and PR updates do not run remote CI, including Lean changes. Keep the

@@ -5,8 +5,7 @@ import FunctionalInequalities.Analysis.BakryEmery.Cumulant.Basic
 /-!
 # BorellRepresentation: Moments
 
-Responsibility split of the existing implementation. Public namespaces, mathematical scope
-and proof bodies are preserved; later layers import their prerequisites.
+Exponential and polynomial moment bounds for Borell log-concave probability laws.
 -/
 
 noncomputable section
@@ -247,8 +246,7 @@ namespace KLS.BorelLogConcave
 omit [FiniteDimensional ℝ V] in
 /-- **Quantitative Borell exponential moment**: if a ball of radius `R` carries mass `≥ 3/4`, then
 `∫ e^{q‖v‖} dν ≤ 3^{3/4}/(1 − 3^{−1/4})` with the explicit rate `q = log 3/(4R)`; constants do not
-depend on the law (BKL Section 2, p. 5, uniform moments of the regular approximation; Codex, bundle
-`Borell-Uniform-Moments`). -/
+depend on the law (BKL Section 2, p. 5, uniform moments of the regular approximation). -/
 theorem integral_exp_norm_le_of_ball {ν : ProbabilityMeasure V}
     (hν : KLS.BorelLogConcave ν) {R : ℝ} (hR : 0 < R)
     (hball : ENNReal.ofReal (3 / 4) ≤ (ν : Measure V) (Metric.ball (0 : V) R)) :

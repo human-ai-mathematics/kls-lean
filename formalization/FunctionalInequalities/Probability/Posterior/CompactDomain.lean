@@ -11,8 +11,7 @@ as a probability law with the null sets, a.e. filter, support and affine support
 second moment, and, when the prior has full affine support, strictly positive covariance. The isotropic
 source adapter (unit covariance with a self-adjoint positive canonical inverse) is in
 `KLS/BKL/PosteriorDomain.lean`. No square root, transported-law whitening, stochastic equation or coefficient
-regularity is provided. Proof bodies: Codex bkl bundle `Posterior-Covariance-Domain` (independently
-accepted); statements and placement: Claude.
+regularity is provided.
 -/
 
 noncomputable section

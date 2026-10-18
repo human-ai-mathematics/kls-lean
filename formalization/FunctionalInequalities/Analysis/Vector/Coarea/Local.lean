@@ -4,7 +4,7 @@ import FunctionalInequalities.Analysis.Vector.Coarea.FiberIntegral
 /-! # The local codimension-`m` coarea equality on a level chart
 
 Everything the codimension-`m` coarea formula needs on one chart is now available, and this module
-puts it together.  The three inputs, each proved in its own round:
+puts it together.  The three inputs, each proved separately:
 
 * the **ambient side**, `setLIntegral_coareaJacobian_levelGraphFamily`: on a Borel piece of a level
   family the ambient coarea density becomes the graph area density, by the fibrewise

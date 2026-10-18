@@ -2,18 +2,13 @@ import FunctionalInequalities.Analysis.Vector.Coarea.Regular
 
 /-! # The fibres of the regular part have finite Hausdorff measure
 
-Obligation `R5` of the rank-deficient route recorded in
-`research/decisions/2026-09-17-rank-deficient-route.md` and stated in
-`research/audits/RankDeficientRouteStatements.lean`.  **Only `R5` is proved here**; with `R1`, `R2`,
-`R3`, `R4` and `R6` that is six of the route's obligations.  `R0`, `R7`–`R10`, `N1` and `N2` remain
-open, and so does the rank-deficient part of the codimension-`m` coarea critical set.  Nothing here
-is a coarea formula in a new case, a slicing statement about the critical set, or a Sard theorem.
+On relatively compact regular pieces, almost every fibre of the regular component has finite Hausdorff measure. This module does not state a coarea formula for critical fibres or a Sard theorem.
 
-**What `R5` is for.**  The route repairs the exponent by applying the Eilenberg bound not in `V` but
+**What regular-fibre finiteness is for.**  The route repairs the exponent by applying the Eilenberg bound not in `V` but
 inside a fibre of the regular component `v = P ∘ u`, with `d = k` and a target of dimension
 `m − r`, so that `d + (m − r) = n − r`.  For that bound to say anything the fibre must carry
 **finite** `ℋ^{n−r}` measure — otherwise the right-hand side is `∞` and the estimate is vacuous,
-exactly as `N2` records for the one-step method.
+exactly as the false exponent-comparison diagnostic records for the one-step method.
 
 **It is a corollary of the proved regular coarea formula**, not new analysis:
 `coarea_of_contDiffOn_of_coareaJacobian_ne_zero` with weight `1` says that the total fibre measure
@@ -60,7 +55,7 @@ theorem hausdorffNormalized_ne_top_iff (k : ℕ) (A : Set V) :
     · exact h h2
     · exact absurd h1 ENNReal.ofReal_ne_top
 
-/-- **`R5`: at almost every level the fibre of a regular `C¹` map meets a relatively compact piece
+/-- **regular-fibre finiteness: at almost every level the fibre of a regular `C¹` map meets a relatively compact piece
 in a set of finite `ℋ^{n-r}` measure.**
 
 This is what makes the Eilenberg right-hand side finite at the repaired exponent.  It follows from

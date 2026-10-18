@@ -28,13 +28,13 @@ linear cutoffs at that scale.  At most one block is active at any point, which i
 global Lipschitz constant at `9 L + 8 α`, independently of `δ`.
 
 `C4`.  Taking `α = δ = 1 / (n + 1)` the patches converge to `g` in `L²(ν)` — they differ from `g`
-by at most `2 L + 2 α` and only outside a set of mass `δ` — and `B1` bounds the relaxation at each
+by at most `2 L + 2 α` and only outside a set of mass `δ` — and smooth recovery bounds the relaxation at each
 patch by its asymptotic-Lipschitz energy, which a *measurable majorant* bounds by
 `(1 + 4 α) · LocalSlope.energy ν g + 4 α + 4 α² + M² δ`.  No measurability of the asymptotic
 Lipschitz constant is needed.  Lower semicontinuity of the relaxation finishes.
 
-`C5`.  A general admissible test is cut off by the smooth bump `scaled (n + 1)`; `B2` and `B3`
-make the cutoff globally Lipschitz, dominated convergence gives `L²` convergence, and `B5` with
+`C5`.  A general admissible test is cut off by the smooth bump `scaled (n + 1)`; the local Lipschitz product rule and the bounded-support Lipschitz bound
+make the cutoff globally Lipschitz, dominated convergence gives `L²` convergence, and the local-slope product bound with
 Young's inequality bounds the energy of the cutoff.  `C6` feeds `C5` to
 `LocalSlope.le_relaxation_of_lowerSemicontinuous`.
 

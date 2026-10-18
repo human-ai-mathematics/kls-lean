@@ -5,7 +5,7 @@ import FunctionalInequalities.KLS.LogConcave.Density.Tilted
 /-!
 # The weak Hessian on the generator domain and the curvature form of (16)
 
-Route obligation `O3` of `research/decisions/2026-10-07-bkl-operator-route.md`
+Property the weak Hessian estimate of `research/decisions/2026-10-07-bkl-operator-route.md`
 (Bizeul–Klartag–Lehec, arXiv:2610.05474v1, eq. (16) and its use in Lemma 3.4), for the heat
 model with unit weight. Let `ν = m.tilted (-U)` be a full-dimensional log-concave probability law
 whose potential `U` has temperate growth and all exponential moments, let
@@ -258,7 +258,7 @@ private theorem norm_sub_sq_le_of_smooth (hνU : (ν : Measure V) = m.tilted (-U
     (fun j _ => sq_nonneg _) (Finset.mem_univ i)
   linarith
 
-/-- **The approximation behind `O3`.** For `F ∈ D(A)` there are `fₙ ∈ C_c^∞` with
+/-- **The approximation behind the weak Hessian estimate.** For `F ∈ D(A)` there are `fₙ ∈ C_c^∞` with
 `T̄ [fₙ] → T̄ F`, `A [fₙ] → A F`, and, for every `i`, `⟪eᵢ, T̄ F⟫ ∈ D(T̄)` with
 `T̄ [∂ᵢ fₙ] → T̄ ⟪eᵢ, T̄ F⟫`. -/
 private theorem exists_seq_smooth_tendsto_weakHessian (hνU : (ν : Measure V) = m.tilted (-U))
@@ -341,7 +341,7 @@ private theorem zero_mul_le_bilinearIteratedFDerivTwo (hνU : (ν : Measure V) =
   exact bilinearIteratedFDerivTwo_nonneg_of_convexOn hU
     (convexOn_of_eq_tilted m hν hνU hU.continuous) x v
 
-/-- **`O3`, weak first derivatives in the form domain.** For `ν = m.tilted (-U)` log-concave,
+/-- **the weak Hessian estimate, weak first derivatives in the form domain.** For `ν = m.tilted (-U)` log-concave,
 with `U` of temperate growth and all exponential moments, and `F ∈ D(A)`, every weak first
 derivative `∂ᵢ F = ⟪eᵢ, T̄ F⟫` (standard orthonormal basis) lies in `D(T̄)`. No curvature bound
 beyond the convexity of `U` implied by log-concavity is assumed. -/
@@ -359,7 +359,7 @@ theorem compLp_innerSL_mem_closedWeightedOperator_domain
     (hU2.of_le (by norm_num)) hexp (zero_mul_le_bilinearIteratedFDerivTwo m hν hνU hU2) F
   exact (hD i).1
 
-/-- **`O3`, symmetry of the weak Hessian.** Under the hypotheses of
+/-- **the weak Hessian estimate, symmetry of the weak Hessian.** Under the hypotheses of
 `compLp_innerSL_mem_closedWeightedOperator_domain`, `⟪eⱼ, T̄ ∂ᵢ F⟫ = ⟪eᵢ, T̄ ∂ⱼ F⟫` in `L²(ν)`. -/
 theorem compLp_innerSL_closedWeightedOperator_comm
     (hνU : (ν : Measure V) = m.tilted (-U)) (hUt : U.HasTemperateGrowth)
@@ -394,7 +394,7 @@ theorem compLp_innerSL_closedWeightedOperator_comm
   exact MemLp.toLp_congr _ _ (Eventually.of_forall fun y =>
     fderiv_apply_comm hf2 y (stdOrthonormalBasis ℝ V i) (stdOrthonormalBasis ℝ V j))
 
-/-- **`O3`, the curvature form of BKL (16) on `D(A)`.** Under the hypotheses of
+/-- **the weak Hessian estimate, the curvature form of BKL (16) on `D(A)`.** Under the hypotheses of
 `compLp_innerSL_mem_closedWeightedOperator_domain`, if `∇²U ≥ ρ` for a real `ρ`, then
 `Σᵢ ‖T̄ ∂ᵢ F‖² + ρ ‖T̄ F‖² ≤ ‖A F‖²`. -/
 theorem sum_norm_sq_closedWeightedOperator_add_le

@@ -10,8 +10,7 @@ Bizeul–Klartag–Lehec (arXiv:2610.05474v1), proof of Proposition 7.1, p. 28: 
 centered and uncorrelated with unit variance. This module proves the scalar pieces: the copy
 statistic `F_N`, the suspension coordinate `S = (F_N + η)/σ_β`, and their cross moments with the
 copies, and assembles them into the second moments and the isotropy of the joint law
-(`isotropic_jointLaw`). Codex proofs (`build/reviews/2026-10-07-bkl-continuous/reviews/R1-*`,
-`R1-joint-assembly/`).
+(`isotropic_jointLaw`).
 -/
 
 noncomputable section
@@ -239,7 +238,8 @@ private theorem euclideanMomentsFromCoordinates {A I : Type*} [MeasurableSpace A
 
 /-- **Second moments of the joint law** (BKL p. 28, isotropy from (108)): under the explicit Laplace
 moment data, the joint law of `(S, X₁, …, X_N)` has finite second moment, mean `0` and identity
-covariance. Codex proof (`reviews/R1-joint-assembly/`, independently accepted). -/
+covariance.
+-/
 theorem jointLaw_moments_of_laplace {n N : ℕ} (hN : 0 < N)
     (μ : Measure (EuclideanSpace ℝ (Fin n))) [IsProbabilityMeasure μ]
     (hμ2 : MemLp id 2 μ) (hμ0 : ∫ x, x ∂μ = 0)

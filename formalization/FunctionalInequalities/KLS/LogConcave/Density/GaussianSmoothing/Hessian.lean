@@ -18,8 +18,7 @@ smooth on all of `ℝ` by completing the square, so
 Nonnegativity of the variance gives the upper bound; convexity of `V_s` (Basic) gives the posterior
 variance bound `Var_{P_x}⟪·,v⟫ ≤ ‖v‖²/(2s)` and finite second moments of `P_x`. Polynomial growth of
 the higher derivatives and the covariance normalization of the regular approximation are not treated
-here. Proof bodies: Codex (bundle `Gaussian-Hessian-Upper`, independently accepted); statements and
-placement: Claude.
+here.
 -/
 
 open MeasureTheory ProbabilityTheory

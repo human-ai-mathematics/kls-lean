@@ -18,8 +18,7 @@ of `∇φ` the Hessian kernel `τ = ∇²φ ∘ Ψ` is a Stein kernel of `μ` (D
 positive semidefiniteness and mean `Id`; gradient injectivity (an explicit geometric prerequisite)
 produces such a `Ψ`. The existence of the moment-map potential for an arbitrary law, strict positive
 definiteness and the Hilbert–Schmidt `L²` bound (the rest of Lemma 2.7 and Theorem 2.5) remain
-open. Proof bodies: Codex route (bundle `Hessian-Stein-Kernel`, independently accepted);
-statements and placement: Claude.
+open.
 -/
 
 open MeasureTheory

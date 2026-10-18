@@ -9,8 +9,7 @@ Generic calculus support (used for the polynomial growth of the derivatives of a
 log-density, Bizeul–Klartag–Lehec arXiv:2610.05474v1, Section 2, p. 5): the raw derivatives of
 `log` at `1` are `(-1)^n n!`, and for `f` smooth and positive near `x` with `f x = 1` and
 `‖D^i f(x)‖ ≤ D^i`, the Faà di Bruno bound gives `‖D^n (log ∘ f)(x)‖ ≤ (n!)² D^n`. Raw iterated
-Fréchet derivatives, not Taylor coefficients. Proof bodies: root Codex (bundle
-`Log-Composition-Bounds`, independently accepted); statements and placement: Claude.
+Fréchet derivatives, not Taylor coefficients.
 -/
 
 open Set

@@ -6,8 +6,7 @@ import FunctionalInequalities.Analysis.Operator.Positive
 
 For a probability law with finite second moment on a finite-dimensional inner product space: full affine
 support gives a strictly positive covariance operator, an injective covariance operator gives full affine
-support, and the covariance operator is self-adjoint. Proof bodies: Codex bkl bundle
-`Posterior-Covariance-Domain` (independently accepted); statements and placement: Claude.
+support, and the covariance operator is self-adjoint.
 -/
 
 open MeasureTheory ProbabilityTheory

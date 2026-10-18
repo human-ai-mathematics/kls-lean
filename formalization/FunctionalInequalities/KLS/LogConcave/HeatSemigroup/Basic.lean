@@ -5,8 +5,7 @@ import Mathlib.MeasureTheory.Function.L2Space
 /-!
 # The heat semigroup of a log-concave law
 
-This module specialises the abstract semigroup construction of `Analysis/Semigroup/` (route
-`S1`–`S8`, all proved) to the repository's energy operator. For a full-dimensional compact-set
+This module specialises the abstract semigroup construction of `Analysis/Semigroup/` to the repository's energy operator. For a full-dimensional compact-set
 log-concave probability `ν` on a finite-dimensional Euclidean space `V`, a Haar measure `m` and a
 weight `B : V →L[ℝ] V`, the closable weighted gradient
 `T = hν.weightedOperator m B hi : L²(ν) →ₗ.[ℝ] L²(ν; V)` (`KLS/LogConcave/WeightedGradient/Basic.lean`,
@@ -24,12 +23,10 @@ on any finite-dimensional Euclidean space is `HeatSemigroup.intrinsic`.
 
 ## What this is not
 
-This closes **gap 1** of the Buser program recorded for
-`thm:logconcave-cheeger-poincare-comparison` in `tasks.json` (generation of a symmetric contraction
-semigroup from the closed energy form), for the concrete operator. It provides **no** Markov
-property (positivity, `P_t 1 = 1`, `L^∞` contraction: gap 2), no Bakry–Émery `Γ`-calculus (gap 3),
-no small-time heat estimate (gap 4), and no step of Buser's inequality; the node gains no progress
-marker and the constant `π` is not approached. Nothing here uses log-concavity beyond the three
+This module constructs the symmetric contraction semigroup from the concrete closed energy operator.
+It does not establish the Markov property (positivity, `P_t 1 = 1` or `L^∞` contraction),
+Bakry–Émery `Γ`-calculus, a small-time heat estimate or Buser's inequality with constant `π`.
+Nothing here uses log-concavity beyond the three
 hypothesis lemmas that make the weighted gradient closable and densely defined.
 -/
 

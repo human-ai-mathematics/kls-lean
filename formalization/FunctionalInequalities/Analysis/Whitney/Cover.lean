@@ -11,7 +11,7 @@ disjoint small balls whose fivefold enlargements cover the complement. Eightfold
 stay in the complement, are locally finite there, and have uniformly bounded overlap.
 
 This is the geometric input to the compact-jet extension construction. It does not construct
-a partition of unity or prove L6. All constants are explicit; no sharpness is asserted.
+a partition of unity or prove compact Whitney extension. All constants are explicit; no sharpness is asserted.
 -/
 
 noncomputable section

@@ -12,8 +12,7 @@ Bizeul–Klartag–Lehec arXiv:2610.05474v1, p. 19, (67): the localization poste
 parameters `(c, Q)` is the tilt of `μ` by the exponent `x ↦ ⟪c, x⟫ − ½⟪Q x, x⟫`. This module defines the
 exponent, records that it is affine in the parameters, bounds it polynomially, and writes a tilted
 expectation as a ratio of prior integrals. Analytic inputs for the parameter response are in
-`Probability/Posterior/{CompactPrior, Coercive, CompactQuadratic}.lean`. Proof bodies: Codex q_batch
-bundle `Posterior-Parameter-Calculus` (independently accepted); statements and placement: Claude.
+`Probability/Posterior/{CompactPrior, Coercive, CompactQuadratic}.lean`.
 -/
 
 noncomputable section

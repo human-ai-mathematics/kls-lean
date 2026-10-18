@@ -26,7 +26,7 @@ open FunctionalInequalities.Probability.Stein
 
 namespace FunctionalInequalities.Analysis
 /-- Actual source-law tensor: both original hw and hF inputs are produced;
-all original R0 data and the weak/local-L2 tensor are retained. -/
+all original regular-class data and the weak/local-L2 tensor are retained. -/
 theorem exists_regular_moment_weak_tensor {n : ℕ} (hn : 0 < n)
     {K : Set (EuclideanSpace ℝ (Fin n))} {W : EuclideanSpace ℝ (Fin n) → ℝ}
     {κ : ℝ} (hκ : 0 < κ) (hK : IsCompact K) (hKc : Convex ℝ K)

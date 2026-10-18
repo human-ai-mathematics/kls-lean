@@ -19,13 +19,9 @@ No convergence of the conjugates, finiteness of initial dual masses or integrabi
 finitely many vertices (`Analysis/Convex/AffineMaximum.lean`) and `integrable_exp_sub_norm`, the Haar integrability of
 `exp(M - c‖y‖)` for `c > 0`.
 
-Declaration blocks are verbatim from ConjugateMass (90a65ba7…) of the root-accepted Lemma 17 bundle (ACCEPTANCE
-ec6d356c…).
-
 Real normalization (`real_legendre_normalization`): if the conjugate `φ*` has a real representative `ψ` and conjugate mass
 `1`, then `exp(−ψ)` is Bochner integrable with integral `1` and `weightedMeasure dx ψ` is a probability measure; finiteness of
-the lower integral is established before the real conversion. Proof body: strong-API candidate (gpt-6-astra,
-`api-bounded-primal-geometry-v11`, d77ddfc1…), verbatim, in its own variable context; placement: Claude.
+the lower integral is established before the real conversion.
 -/
 
 noncomputable section

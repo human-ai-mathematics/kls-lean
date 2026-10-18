@@ -7,9 +7,7 @@ import Mathlib.Analysis.Normed.Operator.Banach
 Generic facts about a continuous linear operator `T` on a real inner product space with
 `⟪T v, v⟫ > 0` for `v ≠ 0`: it is a unit in finite dimension, has a two-sided inverse, any right inverse
 of a self-adjoint positive `T` is self-adjoint and strictly positive, and any right inverse of a unit is
-the canonical `Ring.inverse`. Used for the covariance of the BKL localization posterior. Proof bodies:
-Codex bkl bundle `Posterior-Covariance-Domain` (independently accepted) and its Codex root reviewer
-(`eq_ringInverse_of_comp_eq_id`); statements and placement: Claude.
+the canonical `Ring.inverse`. Used for the covariance of the BKL localization posterior.
 -/
 
 open scoped RealInnerProductSpace
@@ -77,8 +75,7 @@ theorem inner_self_pos_of_comp_eq_id (T B : E →L[ℝ] E)
   rw [hf] at hp
   rwa [real_inner_comm] at hp
 
-/-- Any right inverse of a unit equals the canonical `Ring.inverse` (Codex reviewer, independent root review
-of the Posterior-Covariance-Domain bundle). -/
+/-- Any right inverse of a unit equals the canonical `Ring.inverse`. -/
 theorem eq_ringInverse_of_comp_eq_id (A B : E →L[ℝ] E) (hu : IsUnit A)
     (hAB : A.comp B = ContinuousLinearMap.id ℝ E) : B = Ring.inverse A := by
   change A * B = 1 at hAB

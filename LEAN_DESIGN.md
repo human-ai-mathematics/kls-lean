@@ -2,6 +2,7 @@
 
 The library provides reusable analysis, probability, energy and Poincaré interfaces, with literature-specific proofs in `KLS/`.
 Use the [formalization guide](formalization/README.md) for layout and builds, the [calling examples](examples/README.md) for imports and clients,
+the [generated API directory](formalization/API.md) for compiler-derived signatures,
 and the [naming guide](research/naming.md) for public API conventions.
 
 The proved target is `FunctionalInequalities.KLS.kls : KLS.Conjecture`. The [paper register](research/progress/LITERATURE.md)

@@ -12,8 +12,6 @@ Cordero-Erausquin–Klartag (arXiv:1304.0630v1), Proposition 12 (38): for a prob
 moment, barycenter zero and full-dimensional support, a convex lower semicontinuous admissible potential with
 Legendre exponential mass one maximizes the functional over every admissible competitor
 (`exists_variational_maximum`). Not provided: essential continuity, the Euler–Lagrange identification, Theorem 2.
-
-Declaration blocks are verbatim from the root-accepted CEK Proposition 12 bundle (`independent-p12-attainment`, ACCEPTANCE 848aa45b…) under the reviewed rev3 migration map.
 -/
 
 noncomputable section

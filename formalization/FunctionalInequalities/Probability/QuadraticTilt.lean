@@ -14,8 +14,7 @@ For a probability measure `μ` on a normed space, the normalized tilts `e^{-δ�
 converge to `μ` as `δ → 0⁺`: integrals of integrable observables, the laws (weakly), means and
 second moments. Only probability and integrability are assumed. This is the second step of the
 regular approximation in Bizeul–Klartag–Lehec (arXiv:2610.05474v1, Section 2, p. 5); the
-Gaussian smoothing step and the joint limit are separate. Codex proofs
-(`build/reviews/2026-10-07-bkl-continuous/queue/regular-approximation/`).
+Gaussian smoothing step and the joint limit are separate.
 -/
 
 noncomputable section

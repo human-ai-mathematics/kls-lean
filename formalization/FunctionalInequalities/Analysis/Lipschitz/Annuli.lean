@@ -3,7 +3,7 @@ import Mathlib.Analysis.Normed.Group.Basic
 
 /-! # The half-open annuli of a normed space
 
-`X3` of the route recorded in
+the annular partition of the route recorded in
 `research/decisions/2026-09-19-locally-lipschitz-vector-coarea-route.md`: the bookkeeping that
 turns a *local* hypothesis into a countable sum.  The sets `k ≤ ‖x‖ < k + 1` are measurable,
 pairwise disjoint, cover the space, and each of them sits inside the **open** ball of radius

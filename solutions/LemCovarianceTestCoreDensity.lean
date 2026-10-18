@@ -4,7 +4,7 @@ import FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Approximat
 # Lean certificate: `lem:covariance-test-core-density`
 
 Status: proved / checked_by: lean. The certificate packages all four approximation contracts.
-Source: Blueprint Appendix A and `research/decisions/2026-09-06-weighted-approximation-acceptance.md`.
+Source: Blueprint Appendix A.
 The reusable declarations retain their original hypotheses, including arbitrary singular B,
 absolute continuity with respect to any Haar reference measure, and dimension zero.
 -/

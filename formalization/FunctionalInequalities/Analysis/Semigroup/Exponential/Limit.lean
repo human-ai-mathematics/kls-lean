@@ -12,10 +12,10 @@ import Mathlib.Analysis.Calculus.MeanValue
 * `Y6` (`norm_exp_neg_smul_sub_le`) is the analytic core: for bounded **commuting** nonnegative
   operators `A, B` on a real Hilbert space and `t ≥ 0`,
   `‖exp (-t • A) f - exp (-t • B) f‖ ≤ t ‖A f - B f‖`, pointwise in `f`.
-* `Y7` (`exists_limit_exp_neg_smul`) is the **corrected** abstract `S6`: a family `L s hs` of
+* `Y7` (`exists_limit_exp_neg_smul`) is the **corrected** abstract the adjoint-product identification: a family `L s hs` of
   nonnegative commuting bounded operators whose values are Cauchy as `s ↓ 0` on a dense set has
   `exp (-t • L s hs) f` convergent as `s ↓ 0` for every `f` and every `t ≥ 0`. The Cauchy
-  hypothesis on a dense set is what `S6` of
+  hypothesis on a dense set is what the adjoint-product identification of
   `research/audits/SemigroupGenerationRouteStatements.lean` was missing; `Y0` of the route file
   records the counterexample to the uncorrected statement.
 
@@ -26,7 +26,7 @@ With `φ τ = exp (τ • (-A)) (exp ((τ - t) • B) f)` the product rule
 `φ' τ = exp (τ • (-A)) ((-A) (exp ((τ - t) • B) f)) + exp (τ • (-A)) (exp ((τ - t) • B) (B f))`,
 and `Commute.exp_right` moves `A` past `exp ((τ - t) • B)`, so
 `φ' τ = exp (τ • (-A)) (exp ((τ - t) • B) (B f - A f))`. On `[0, t]` both exponentials are
-contractions by `S5` (`norm_exp_neg_smul_apply_le`), so `‖φ' τ‖ ≤ ‖A f - B f‖`, and the mean value
+contractions by resolvent contraction (`norm_exp_neg_smul_apply_le`), so `‖φ' τ‖ ≤ ‖A f - B f‖`, and the mean value
 inequality `norm_image_sub_le_of_norm_deriv_le_segment'` applied to `φ t - φ 0` is the claim. No
 operator norm is ever estimated: everything is pointwise in `f`, which avoids the
 `ContinuousLinearMap` norm instance diamond.
@@ -37,7 +37,7 @@ operator norm is ever estimated: everything is pointwise in `f`, which avoids th
 `u : ∀ s : ℝ, 0 < s → H₀` in a complete normed group: an `ε`–`δ` Cauchy family as `s ↓ 0`
 converges. It is proved by extracting the sequence `u (1 / (n + 1))`, which is `CauchySeq`, and
 comparing an arbitrary small `s` with a far enough member of that sequence. `Y6` makes the family
-`s ↦ exp (-t • L s hs) v` Cauchy for `v` in the dense set, and the contraction bound `S5` upgrades
+`s ↦ exp (-t • L s hs) v` Cauchy for `v` in the dense set, and the contraction bound resolvent contraction upgrades
 this to every `f` by an `ε/3` argument through a nearby `v ∈ D`.
 
 ## Route hypotheses used, and the general form of the lemmas
@@ -45,16 +45,16 @@ this to every `f` by an `ε/3` argument through a nearby `v ∈ D`.
 Every hypothesis of `Y6` is used: nonnegativity of `A` and of `B` each supply one of the two
 contraction estimates on `‖φ' τ‖`, commutation supplies the cancellation in `φ'`, and `0 ≤ t` is
 needed both for the contraction estimates and for `[0, t]` to be the correct interval. `Y7` uses
-all four of its hypotheses through `Y6` and `S5`. The module lemmas differ from the route
+all four of its hypotheses through `Y6` and resolvent contraction. The module lemmas differ from the route
 propositions only in binder shape (explicit `ε`, `s`, `r` instead of the route's implicit ones)
 and in that `exists_limit_of_cauchy_along_pos` is stated for a bare complete normed group; the
 verbatim route statements are `route_Y6` and `route_Y7`.
 
 ## Deliberately out of scope
 
-`Y8` (`S6` for the actual Yosida approximation `L_s = s⁻¹ (1 - J_s)`) is **not** proved here: this
-module mentions no unbounded operator `T`, no resolvent and no adjoint. `S7` (the semigroup and
-strong-continuity laws of the limit) and `S8` (the generator is `T†T`) are not stated. Nothing
+`Y8` (the adjoint-product identification for the actual Yosida approximation `L_s = s⁻¹ (1 - J_s)`) is **not** proved here: this
+module mentions no unbounded operator `T`, no resolvent and no adjoint. the exponential approximation (the semigroup and
+strong-continuity laws of the limit) and the semigroup limit (the generator is `T†T`) are not stated. Nothing
 here is the Markov property, Bakry–Émery calculus, a heat kernel estimate or any step of Buser's
 inequality; `thm:logconcave-cheeger-poincare-comparison` gains no progress marker from this
 module.
@@ -72,14 +72,14 @@ section Contraction
 
 variable {H₀ : Type*} [NormedAddCommGroup H₀] [InnerProductSpace ℝ H₀] [CompleteSpace H₀]
 
-/-- Restatement of `S5` (`norm_exp_neg_smul_apply_le`) for a **nonpositive** scalar: if `L` is
+/-- Restatement of resolvent contraction (`norm_exp_neg_smul_apply_le`) for a **nonpositive** scalar: if `L` is
 bounded and nonnegative and `c ≤ 0`, then `exp (c • L)` is a pointwise contraction. -/
 theorem norm_exp_smul_apply_le_of_nonpos (L : H₀ →L[ℝ] H₀) (hL : ∀ f, 0 ≤ ⟪L f, f⟫) {c : ℝ}
     (hc : c ≤ 0) (f : H₀) : ‖NormedSpace.exp (c • L) f‖ ≤ ‖f‖ := by
   have h := norm_exp_neg_smul_apply_le L hL (neg_nonneg.mpr hc) f
   rwa [neg_neg] at h
 
-/-- Restatement of `S5` (`norm_exp_neg_smul_apply_le`) with the sign on the **operator**: if `L`
+/-- Restatement of resolvent contraction (`norm_exp_neg_smul_apply_le`) with the sign on the **operator**: if `L`
 is bounded and nonnegative and `0 ≤ c`, then `exp (c • (-L))` is a pointwise contraction. This is
 the normal form produced by `hasDerivAt_exp_smul_const` along the orbit of `-L`. -/
 theorem norm_exp_smul_neg_apply_le (L : H₀ →L[ℝ] H₀) (hL : ∀ f, 0 ≤ ⟪L f, f⟫) {c : ℝ}
@@ -200,12 +200,12 @@ section Limit
 
 variable {H₀ : Type*} [NormedAddCommGroup H₀] [InnerProductSpace ℝ H₀] [CompleteSpace H₀]
 
-/-- **`Y7`, the corrected abstract `S6`.** Let `L s hs` be bounded, nonnegative and pairwise
+/-- **`Y7`, the corrected abstract the adjoint-product identification.** Let `L s hs` be bounded, nonnegative and pairwise
 commuting for `s > 0`, and suppose the values `L s hs v` are Cauchy as `s ↓ 0` for every `v` in a
 dense set `D`. Then for every `f : H₀` and every `t ≥ 0` the family `exp (-t • L s hs) f`
 converges as `s ↓ 0`.
 
-`Y6` gives the Cauchy property of `exp (-t • L s hs) v` for `v ∈ D`, the contraction bound `S5`
+`Y6` gives the Cauchy property of `exp (-t • L s hs) v` for `v ∈ D`, the contraction bound resolvent contraction
 transports it to every `f` by an `ε/3` argument, and `exists_limit_of_cauchy_along_pos` produces
 the limit. -/
 theorem exists_limit_exp_neg_smul (L : ∀ s : ℝ, 0 < s → H₀ →L[ℝ] H₀)

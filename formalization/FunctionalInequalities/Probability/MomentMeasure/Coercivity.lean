@@ -12,7 +12,7 @@ Haar scaling of exponential mass, a polynomial bound on conjugate mass with the 
 and the resulting functional and integral bounds for centered probability measures with full-dimensional support.
 This route does not establish the particular constant of CEK Lemma 15.
 
-Declaration blocks are verbatim from the root-accepted CEK Proposition 12 bundle (`independent-p12-attainment`, ACCEPTANCE 848aa45b…) under the reviewed rev3 migration map.
+Supporting infrastructure for Cordero-Erausquin–Klartag, Proposition 12.
 -/
 
 noncomputable section

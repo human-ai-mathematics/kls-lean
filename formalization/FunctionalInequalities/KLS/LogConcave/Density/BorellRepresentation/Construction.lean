@@ -5,8 +5,7 @@ import FunctionalInequalities.KLS.LogConcave.Density.BorellRepresentation.Moment
 /-!
 # BorellRepresentation: Construction
 
-Responsibility split of the existing implementation. Public namespaces, mathematical scope
-and proof bodies are preserved; later layers import their prerequisites.
+Ball-ratio densities and their measurable log-concave envelope for the Borell representation.
 -/
 
 noncomputable section

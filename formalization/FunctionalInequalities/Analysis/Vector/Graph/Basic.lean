@@ -3,7 +3,7 @@ import FunctionalInequalities.Analysis.Vector.JacobianContinuity
 
 /-! # Graphs of vector-valued maps
 
-Obligation `B1` of the area formula route, first part: the `C¹` infrastructure for the graph of a
+Property vector-valued graph area of the area formula route, first part: the `C¹` infrastructure for the graph of a
 **`K`-valued** map, `dim K = m`, which is what a codimension-`m` fibre looks like.  The
 codimension-one case lives in `Analysis/Graph/Area.lean`; this module mirrors its second and third
 phases — the graph map, its retraction, injectivity, derivative, image measurability and linear
@@ -16,7 +16,7 @@ Mathlib's `LinearMap.hausdorffMeasure_image` together with `normDet_graphMapLine
 argument the codimension-one file needed is not repeated.
 
 **The area formula itself is not proved here**: the two-sided estimates and the limit, the fourth
-and fifth phases of the codimension-one file, are the remaining part of `B1`.
+and fifth phases of the codimension-one file, are the remaining part of vector-valued graph area.
 -/
 
 noncomputable section
@@ -167,7 +167,7 @@ theorem measurableSet_image_vectorGraphMap (ι : H →ₗᵢ[ℝ] V) (κ : K →
   exact (isClosed_eq
     ((continuous_vectorGraphMap ι κ hγ).comp (graphProj ι).continuous) continuous_id).measurableSet
 
-/-- **The linear case of `B1`.**  No shear argument is needed: this is Mathlib's linear area formula
+/-- **The linear case of vector-valued graph area.**  No shear argument is needed: this is Mathlib's linear area formula
 combined with the volume factor computed in `Analysis/Graph/Jacobian.lean`. -/
 theorem hausdorffMeasure_image_graphMapLinear (ι : H →ₗᵢ[ℝ] V) (κ : K →ₗᵢ[ℝ] V)
     (hperp : ∀ (y : H) (z : K), ⟪ι y, κ z⟫ = (0 : ℝ)) (A : H →L[ℝ] K) (s : Set H) :

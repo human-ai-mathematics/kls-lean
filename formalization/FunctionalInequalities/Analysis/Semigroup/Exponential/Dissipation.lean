@@ -4,7 +4,7 @@ import FunctionalInequalities.Analysis.Semigroup.Exponential.Contraction
 # Energy dissipation along the orbit of a bounded symmetric operator
 
 `Exponential/Contraction.lean` differentiates `u ↦ ‖exp (-u • L) y‖ ^ 2` once and concludes that
-it is antitone (`S5`).  This module differentiates the same orbit **twice** and records the two
+it is antitone (resolvent contraction).  This module differentiates the same orbit **twice** and records the two
 resulting quantitative estimates: for `L` bounded and symmetric, `u ≥ 0` and `v = exp (-u • L) y`,
 
 * `two_mul_inner_exp_neg_smul_le`: `2 u ⟪L v, v⟫ ≤ ‖y‖ ² - ‖v‖ ²`;

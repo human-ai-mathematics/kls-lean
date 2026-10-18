@@ -29,7 +29,7 @@ namespace FunctionalInequalities.Poincare.LocalSlope
 variable {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [CompleteSpace V]
   [MeasurableSpace V] [BorelSpace V] [SecondCountableTopology V] [FiniteDimensional ℝ V]
 
-/-- `Q1`: for an absolutely continuous law the local-slope and gradient descriptions of a valid
+/-- fixed-constant equivalence: for an absolutely continuous law the local-slope and gradient descriptions of a valid
 finite constant agree. Both directions rewrite the same two proved identifications, so no
 inequality is weakened: the admissible class and the energy are transported simultaneously. -/
 theorem holds_iff_memLp_gradient (ν : ProbabilityMeasure V) (m : Measure V)
@@ -55,7 +55,7 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteS
   [MeasurableSpace E] [BorelSpace E] [SecondCountableTopology E] [FiniteDimensional ℝ E]
 
 omit [CompleteSpace E] in
-/-- `Q2`: the literature optimum of an absolutely continuous intrinsic law, in gradient form.
+/-- the optimal-constant identity: the literature optimum of an absolutely continuous intrinsic law, in gradient form.
 The two infima range over subtypes cut out by equivalent predicates, so each bounds the other. -/
 theorem Intrinsic.constant_eq_iInf_gradient (μ : ProbabilityMeasure E)
     (m : Measure (Probability.affineSupport μ).direction) [Measure.IsAddHaarMeasure m]

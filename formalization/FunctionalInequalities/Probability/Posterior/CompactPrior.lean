@@ -13,8 +13,7 @@ Bizeul–Klartag–Lehec arXiv:2610.05474v1, p. 19, the compact-prior stage befo
 law with compact support, every continuous exponent gives an integrable tilt (a probability law), bounded
 measurable statistics are in `L²` of the tilt, tilted expectations are bounded by the support bound, and
 the expectation `t ↦ ∫ f d(μ.tilted (φ + t g))` has derivative `Cov_{μ.tilted φ}(f, g)` at `t = 0`.
-No coercivity is needed, so zero parameters are covered. Proof bodies: Codex q_batch bundle
-`Posterior-Parameter-Calculus` (independently accepted); statements and placement: Claude.
+No coercivity is needed, so zero parameters are covered.
 -/
 
 noncomputable section

@@ -5,10 +5,10 @@ import Mathlib.Analysis.SpecialFunctions.Exponential
 /-!
 # The exponential of a bounded nonnegative operator is a contraction
 
-`S5` of the semigroup-generation route
+resolvent contraction of the semigroup-generation route
 (`research/decisions/2026-09-19-semigroup-generation-route.md`), proved here as
-`norm_exp_neg_smul_apply_le` and restated verbatim as `route_S5`. See `Form.lean` for `S1`, `S2`
-and `S4`, and `Resolvent.lean` for `S3`.
+`norm_exp_neg_smul_apply_le` and restated verbatim as `route_S5`. See `Form.lean` for the form construction, the shifted weak form
+and the resolvent operator, and `Resolvent.lean` for resolvent solvability.
 
 The route applies this to the Yosida approximation `L_s = (1 - J_s)/s`, a bounded nonnegative
 self-adjoint operator, to see that `NormedSpace.exp (-t • L_s)` is a contraction for `t ≥ 0`.
@@ -30,13 +30,13 @@ The route assumes `L` self-adjoint, `⟪L f, g⟫ = ⟪f, L g⟫`. The proof nev
 of `⟪u t, u t⟫` is `⟪u t, -L (u t)⟫ + ⟪-L (u t), u t⟫`, and both terms are `-⟪L (u t), u t⟫` by
 symmetry of the **real inner product** alone (`real_inner_comm`). The module therefore proves the
 stronger statement `norm_exp_neg_smul_apply_le` for every bounded nonnegative `L`, and `route_S5`
-accepts and discards the self-adjointness hypothesis, exactly as `S2` discards `0 < s` and `S3`
+accepts and discards the self-adjointness hypothesis, exactly as the shifted weak form discards `0 < s` and resolvent solvability
 discards density. The hypothesis `0 ≤ t` **is** used: for `t < 0` the orbit norm is larger, not
 smaller, than `‖f‖`.
 
 ## Deliberately out of scope
 
-`S6`–`S8` (strong convergence of the Yosida exponentials, the semigroup and strong-continuity
+the adjoint-product identification–the semigroup limit (strong convergence of the Yosida exponentials, the semigroup and strong-continuity
 laws, the generator) are not proved here. This is one step of the abstract semigroup
 construction; it is not the Markov property, not Bakry–Émery calculus, and not any step of
 Buser's inequality. `thm:logconcave-cheeger-poincare-comparison` gains no progress marker from
@@ -87,7 +87,7 @@ theorem antitone_normSq_exp_smul_neg (L : H₀ →L[ℝ] H₀) (hL : ∀ f, 0 �
   have := hL (NormedSpace.exp (t • (-L)) f)
   linarith
 
-/-- **`S5`, strengthened.** If `L` is a bounded nonnegative operator on a real Hilbert space, then
+/-- **resolvent contraction, strengthened.** If `L` is a bounded nonnegative operator on a real Hilbert space, then
 `exp (-t • L)` is a contraction for every `t ≥ 0`, pointwise: `‖exp (-t • L) f‖ ≤ ‖f‖`.
 
 The route's self-adjointness hypothesis is not needed and not assumed. -/
@@ -100,7 +100,7 @@ theorem norm_exp_neg_smul_apply_le (L : H₀ →L[ℝ] H₀) (hL : ∀ f, 0 ≤ 
 
 end Orbit
 
-/-- **`S5` of the semigroup-generation route**, stated verbatim as in
+/-- **resolvent contraction of the semigroup-generation route**, stated verbatim as in
 `research/audits/SemigroupGenerationRouteStatements.lean` and discharged from
 `norm_exp_neg_smul_apply_le`.
 

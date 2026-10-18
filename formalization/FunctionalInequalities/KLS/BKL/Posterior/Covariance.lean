@@ -62,8 +62,7 @@ theorem Isotropic.compactPosterior_exists_positive_symmetric_inverse (μ : Proba
     fun _ hv => Analysis.inner_self_pos_of_comp_eq_id _ _ ?_ hAB hv, hAB, hBA⟩
   exact fun _ hw => Isotropic.compactPosterior_covariance_pos μ hc hiso c Q hw
 
-/-- The canonical inverse `Ring.inverse (Cov μ_{c,Q})` is a two-sided, self-adjoint, strictly positive inverse
-(Codex root reviewer of the Posterior-Covariance-Domain bundle). -/
+/-- The canonical inverse `Ring.inverse (Cov μ_{c,Q})` is a two-sided, self-adjoint, strictly positive inverse. -/
 theorem Isotropic.compactPosterior_ringInverse_covariance (μ : ProbabilityMeasure E) (hc : IsCompact (μ : Measure E).support)
     (hiso : KLS.Isotropic μ) (c : E) (Q : E →L[ℝ] E) :
     let A := Covariance.operator (compactPosterior μ hc c Q : Measure E)

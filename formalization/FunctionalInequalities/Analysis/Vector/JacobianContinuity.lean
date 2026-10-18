@@ -3,7 +3,7 @@ import Mathlib.Analysis.Calculus.FDeriv.Measurable
 
 /-! # Continuity and measurability of the volume factors
 
-Obligation `A1` of the area formula route.  Mathlib proves the algebraic theory of
+Property `A1` of the area formula route.  Mathlib proves the algebraic theory of
 `LinearMap.normDet` but **not** its continuity in the operator, so the right-hand side of the area
 formula is not yet known to be an integral of a measurable function.  This module supplies that.
 

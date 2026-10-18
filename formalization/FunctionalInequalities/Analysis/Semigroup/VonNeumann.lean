@@ -4,56 +4,55 @@ import FunctionalInequalities.Analysis.Semigroup.Resolvent.Basic
 /-!
 # von Neumann's theorem for `T†T`
 
-Part A (`V1`–`V5`) of the von Neumann route recorded in
-`research/decisions/2026-09-19-von-neumann-route.md`, for a closed densely defined operator
+For a closed densely defined operator
 `T : H₀ →ₗ.[ℝ] H₁` between real Hilbert spaces.  `T†T` is `Analysis.Semigroup.adjointComp T`
 (`AdjointComp.lean`) and `J_s = (1 + s T†T)⁻¹` is `Analysis.Semigroup.resolventCLM`
 (`Resolvent.lean`, built from the weak equation `WeakResolvent` of `Form.lean`).
 
 What is proved here:
 
-* `V1` = `inner_adjointComp` / `inner_adjointComp_apply`: `⟪T†T x, y⟫ = ⟪T x, T y⟫` for
+* the form identity = `inner_adjointComp` / `inner_adjointComp_apply`: `⟪T†T x, y⟫ = ⟪T x, T y⟫` for
   `x ∈ D(T†T)`, `y ∈ D(T)`;
-* `V2` = `resolvent_add_smul_adjointComp` (with the two halves
+* the resolvent domain identity = `resolvent_add_smul_adjointComp` (with the two halves
   `mem_adjointComp_domain_resolventDomain` and `adjointComp_resolventDomain`):
   `J_s f ∈ D(T†T)` and `(1 + s T†T) J_s f = f`;
-* `V3` = `isSelfAdjoint_adjointComp`: `T†T` is self-adjoint;
-* `V4` = `dense_adjointComp_domain`: `D(T†T)` is dense;
-* `V5` = `sub_resolvent_eq_smul`: `f - J_s f = s • J_s (T†T f)` for `f ∈ D(T†T)`.
+* self-adjointness of T†T = `isSelfAdjoint_adjointComp`: `T†T` is self-adjoint;
+* density of D(T†T) = `dense_adjointComp_domain`: `D(T†T)` is dense;
+* the resolvent defect identity = `sub_resolvent_eq_smul`: `f - J_s f = s • J_s (T†T f)` for `f ∈ D(T†T)`.
 
-Two further consequences of `V1` concern `J = I + T†T` on `{e ∈ D(T†T) : T†T e ∈ D(T)}`:
+Two further consequences of the form identity concern `J = I + T†T` on `{e ∈ D(T†T) : T†T e ∈ D(T)}`:
 the expansion `norm_add_adjointComp_sq_add_norm_sq` of its graph norm,
 `‖Je‖² + ‖T(Je)‖² = ‖e‖² + 3‖Te‖² + 3‖T†Te‖² + ‖T(T†Te)‖²`, and the resulting four-field
 convergence `tendsto_of_tendsto_add_adjointComp`.
 
-## Unused route hypotheses (stronger statements, verbatim wrappers kept)
+## Scope of the individual statements
 
-Following the precedent of `Form.lean` (`S2` drops `0 < s`, `S3` drops `Dense`) and
-`Resolvent.lean` (`S5` drops self-adjointness), hypotheses that turn out to be unnecessary are
+Following the precedent of `Form.lean` (the shifted weak form drops `0 < s`, resolvent solvability drops `Dense`) and
+`Resolvent.lean` (resolvent contraction drops self-adjointness), hypotheses that turn out to be unnecessary are
 **not** assumed:
 
-* `V1` is proved without `T.IsClosed` (the route statement does not carry it either) and
+* the form identity is proved without `T.IsClosed` (the route statement does not carry it either) and
   without `CompleteSpace H₁`: `inner_adjointComp` and the verbatim wrapper
   `inner_adjointComp_apply` live in the section before `CompleteSpace H₁` is introduced.  Only
   density of `D(T)` is used, and it is genuinely needed because Mathlib's `LinearPMap.adjoint`
   carries a junk value on a non-dense domain.
-* The domain half of `V2`, `mem_adjointComp_domain_resolventDomain`, needs **no density**: that
+* The domain half of the resolvent domain identity, `mem_adjointComp_domain_resolventDomain`, needs **no density**: that
   `T (J_s f) ∈ D(T†)` follows from `mem_adjoint_domain_of_exists` applied to the weak equation,
   and only the identification of the value `T† (T (J_s f)) = s⁻¹ (f - J_s f)`
   (`adjointComp_resolventDomain`) uses `adjoint_apply_eq`, hence density.
 
 ## Deviation from the route sketch
 
-The route sketches `V4` as "immediate from `V3` and `IsSelfAdjoint.dense_domain`".  That order is
+The route sketches density of D(T†T) as "immediate from self-adjointness of T†T and `IsSelfAdjoint.dense_domain`".  That order is
 not available: `LinearPMap.IsFormalAdjoint.le_adjoint`, which turns symmetry of `T†T` into
-`T†T ≤ (T†T)†`, already requires `D(T†T)` to be dense.  So `V4` is proved first, by the direct
+`T†T ≤ (T†T)†`, already requires `D(T†T)` to be dense.  So density of D(T†T) is proved first, by the direct
 argument the route also records (if `g ⊥ D(T†T)` then `g = u + T†T u` with `u = J_1 g`, and
-`0 = ⟪u, g⟫ = ‖u‖² + ‖T u‖²`), and `V3` is then derived from it.
+`0 = ⟪u, g⟫ = ‖u‖² + ‖T u‖²`), and self-adjointness of T†T is then derived from it.
 
 ## Deliberately out of scope
 
-Nothing here proves `S6`–`S8` of the semigroup-generation route (Yosida exponentials, their
-strong convergence, the semigroup), nothing proves Part B (`R1`–`R3`, the resolvent limits), and
+Nothing here proves the adjoint-product identification–the semigroup limit of the semigroup-generation route (Yosida exponentials, their
+strong convergence, the semigroup), nothing proves Part B (the quantitative resolvent bound–resolvent commutation, the resolvent limits), and
 nothing here concerns Buser's inequality, the Markov property, Bakry–Émery calculus or any KLS
 quantity.  This module is general real Hilbert space material: no measure, no log-concavity.
 -/
@@ -68,7 +67,7 @@ namespace FunctionalInequalities.Analysis.Semigroup
 variable {H₀ H₁ : Type*} [NormedAddCommGroup H₀] [InnerProductSpace ℝ H₀] [CompleteSpace H₀]
   [NormedAddCommGroup H₁] [InnerProductSpace ℝ H₁]
 
-/-- `V1`: `T†T` acts through the form.
+/-- the form identity: `T†T` acts through the form.
 
 For `x ∈ D(T†T)` and `y ∈ D(T)` one has `⟪T†T x, y⟫ = ⟪T x, T y⟫`.  This is
 `LinearPMap.adjoint_isFormalAdjoint` read through `adjointComp_apply`; density of `D(T)` is
@@ -81,7 +80,7 @@ theorem inner_adjointComp {T : H₀ →ₗ.[ℝ] H₁} (hd : Dense (T.domain : S
   rw [adjointComp_apply]
   exact LinearPMap.adjoint_isFormalAdjoint hd _ ⟨y, hy⟩
 
-/-- `V1`, in the verbatim shape of the route statement: the pairing version of
+/-- the form identity, in the verbatim shape of the route statement: the pairing version of
 `inner_adjointComp` with `y` presented as an element of `T.domain`. -/
 theorem inner_adjointComp_apply (T : H₀ →ₗ.[ℝ] H₁) (hd : Dense (T.domain : Set H₀))
     (x : (adjointComp T).domain) (y : T.domain) :
@@ -90,7 +89,7 @@ theorem inner_adjointComp_apply (T : H₀ →ₗ.[ℝ] H₁) (hd : Dense (T.doma
 
 /-- The Dirichlet form of `T†T`: for `x ∈ D(T†T)`, `⟪T†T x, x⟫ = ‖T x‖ ^ 2`.
 
-`V1` with `y = x`, which is legitimate because `D(T†T) ⊆ D(T)`.  This is the form that the
+the form identity with `y = x`, which is legitimate because `D(T†T) ⊆ D(T)`.  This is the form that the
 semigroup contracts; `FunctionalInequalities.KLS.LogConcave.inner_adjointComp_self_eq` is its
 specialization to the closed weighted gradient.  Neither `T.IsClosed` nor completeness of `H₁`
 is used. -/
@@ -101,7 +100,7 @@ theorem inner_adjointComp_self {T : H₀ →ₗ.[ℝ] H₁} (hd : Dense (T.domai
 
 /-- `T†T` is symmetric: it is a formal adjoint of itself.
 
-Both sides of `⟪T†T x, y⟫ = ⟪x, T†T y⟫` equal `⟪T x, T y⟫` by `V1`, the right-hand one after a
+Both sides of `⟪T†T x, y⟫ = ⟪x, T†T y⟫` equal `⟪T x, T y⟫` by the form identity, the right-hand one after a
 real inner-product flip.  This is the input that `LinearPMap.IsFormalAdjoint.le_adjoint` turns
 into `T†T ≤ (T†T)†` once `D(T†T)` is known to be dense. -/
 theorem adjointComp_isFormalAdjoint {T : H₀ →ₗ.[ℝ] H₁} (hd : Dense (T.domain : Set H₀)) :
@@ -114,7 +113,7 @@ theorem adjointComp_isFormalAdjoint {T : H₀ →ₗ.[ℝ] H₁} (hd : Dense (T.
 /-- **The graph norm of `(I + T†T) e`.** For `e ∈ D(T†T)` with `T†T e ∈ D(T)`,
 `‖e + T†T e‖² + ‖T e + T (T†T e)‖² = ‖e‖² + 3 ‖T e‖² + 3 ‖T†T e‖² + ‖T (T†T e)‖²`.
 
-Both cross terms are `V1`: `⟪e, T†T e⟫ = ‖T e‖²` and `⟪T e, T (T†T e)⟫ = ‖T†T e‖²`. Only
+Both cross terms are the form identity: `⟪e, T†T e⟫ = ‖T e‖²` and `⟪T e, T (T†T e)⟫ = ‖T†T e‖²`. Only
 density of `D(T)` is used. -/
 theorem norm_add_adjointComp_sq_add_norm_sq {T : H₀ →ₗ.[ℝ] H₁} (hd : Dense (T.domain : Set H₀))
     (e : (adjointComp T).domain) (he : (adjointComp T e : H₀) ∈ T.domain) :
@@ -227,7 +226,7 @@ section Resolvent
 
 variable [CompleteSpace H₁]
 
-/-- `V2`, domain half: the weak solution `J_s f` lies in `D(T†T)`.
+/-- the resolvent domain identity, domain half: the weak solution `J_s f` lies in `D(T†T)`.
 
 From the weak equation `⟪u, v⟫ + s ⟪T u, T v⟫ = ⟪f, v⟫` the vector `T u` pairs continuously
 against `T v`, with representative `w = s⁻¹ (f - u)`, so `T u ∈ D(T†)` by
@@ -248,7 +247,7 @@ theorem mem_adjointComp_domain_resolventDomain (T : H₀ →ₗ.[ℝ] H₁) (hT 
   field_simp
   linarith
 
-/-- `V2`, value half: `T† (T (J_s f)) = s⁻¹ (f - J_s f)`.
+/-- the resolvent domain identity, value half: `T† (T (J_s f)) = s⁻¹ (f - J_s f)`.
 
 The same representative `w = s⁻¹ (f - u)` that witnesses membership in `D(T†)` is the value of
 the adjoint, by `LinearPMap.adjoint_apply_eq`; this step does use density of `D(T)`.  The
@@ -270,7 +269,7 @@ theorem adjointComp_resolventDomain (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClose
   field_simp
   linarith
 
-/-- `V2`: the resolvent inverts `1 + s T†T`.
+/-- the resolvent domain identity: the resolvent inverts `1 + s T†T`.
 
 For `s > 0` and every datum `f`, the weak solution `J_s f` lies in `D(T†T)` and satisfies
 `J_s f + s • T†T (J_s f) = f`.  This is the verbatim route statement, assembled from
@@ -287,8 +286,8 @@ theorem resolvent_add_smul_adjointComp (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsCl
 
 /-- `1 + T†T` is surjective: every `z : H₀` is `x + T†T x` for some `x ∈ D(T†T)`.
 
-This is `V2` at `s = 1`, and it is the only consequence of `V2` used in the proofs of `V3` and
-`V4`. -/
+This is the resolvent domain identity at `s = 1`, and it is the only consequence of the resolvent domain identity used in the proofs of self-adjointness of T†T and
+density of D(T†T). -/
 theorem exists_add_adjointComp (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClosed)
     (hd : Dense (T.domain : Set H₀)) (z : H₀) :
     ∃ x : (adjointComp T).domain, (x : H₀) + adjointComp T x = z := by
@@ -299,11 +298,11 @@ theorem exists_add_adjointComp (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClosed)
   rw [inv_one, one_smul]
   abel
 
-/-- `V4`: `D(T†T)` is dense.
+/-- density of D(T†T): `D(T†T)` is dense.
 
-Proved directly, not from `V3` (see the module docstring for why the route's order is not
+Proved directly, not from self-adjointness of T†T (see the module docstring for why the route's order is not
 available).  If `g` is orthogonal to `D(T†T)`, write `g = x + T†T x` with `x ∈ D(T†T)` by
-surjectivity of `1 + T†T`; then `0 = ⟪x, g⟫ = ‖x‖² + ‖T x‖²` by `V1`, so `x = 0` and `g = 0`.
+surjectivity of `1 + T†T`; then `0 = ⟪x, g⟫ = ‖x‖² + ‖T x‖²` by the form identity, so `x = 0` and `g = 0`.
 A submodule of a complete inner product space with trivial orthogonal complement is dense. -/
 theorem dense_adjointComp_domain (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClosed)
     (hd : Dense (T.domain : Set H₀)) :
@@ -322,9 +321,9 @@ theorem dense_adjointComp_domain (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClosed)
   rw [← hx, hx0]
   simp
 
-/-- `V3` (von Neumann): `T†T` is self-adjoint.
+/-- self-adjointness of T†T (von Neumann): `T†T` is self-adjoint.
 
-Symmetry (`adjointComp_isFormalAdjoint`) together with density of `D(T†T)` (`V4`) gives
+Symmetry (`adjointComp_isFormalAdjoint`) together with density of `D(T†T)` (density of D(T†T)) gives
 `T†T ≤ (T†T)†`.  For the reverse inclusion take `y ∈ D((T†T)†)`, solve `u + T†T u = y + (T†T)† y`
 with `u ∈ D(T†T)` by surjectivity of `1 + T†T`, and test against an arbitrary `z = x + T†T x`:
 both `⟪z, y⟫` and `⟪z, u⟫` collapse to `⟪x, y + (T†T)† y⟫`, so `y - u` is orthogonal to all of
@@ -373,10 +372,10 @@ theorem isSelfAdjoint_adjointComp (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClosed)
   rw [LinearPMap.isSelfAdjoint_def]
   exact LinearPMap.eq_of_le_of_domain_eq hge (le_antisymm hge.1 hle.1)
 
-/-- `V5`: the Yosida approximation on `D(T†T)`.
+/-- the resolvent defect identity: the Yosida approximation on `D(T†T)`.
 
 For `f ∈ D(T†T)`, `f - J_s f = s • J_s (T†T f)`; equivalently `L_s f = s⁻¹ (f - J_s f)` equals
-`J_s (T†T f)`.  By `V1`, `f` itself solves the weak equation with datum `f + s • T†T f`, so
+`J_s (T†T f)`.  By the form identity, `f` itself solves the weak equation with datum `f + s • T†T f`, so
 uniqueness (`eq_resolventDomain`) gives `J_s (f + s • T†T f) = f`, and linearity of `J_s`
 separates the two terms. -/
 theorem sub_resolvent_eq_smul (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClosed)

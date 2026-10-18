@@ -10,8 +10,7 @@ For a real symmetric matrix `M`: `M * M ≥ 0`; `|M| = CFC.sqrt (M * M)` and `S 
 continuous functional calculus and are positive semidefinite (`symmetric_matrix_sqrt_real_cfc_bridge`); with
 `sign M = cfc sign M`, `S * S = |M|`, `S * sign M * S = M`, and `sign M ^ 2 = 1` when `M` is a unit
 (`symmetric_matrix_sign_factorization`). Singular and indefinite `M` are included. Support for the covariance step
-of the proof of Letwin, arXiv:2607.24164v1, Theorem 1.2 (p. 14, preceding (2.21)). Proof bodies: root-accepted API scratch (`MatrixSqrtBridgeFixed` 0378ae4d…,
-`MatrixSignFixed` d6c0d1bd…), verbatim, with exactly their accepted imports.
+of the proof of Letwin, arXiv:2607.24164v1, Theorem 1.2 (p. 14, preceding (2.21)).
 -/
 
 noncomputable section
@@ -238,8 +237,7 @@ For every real symmetric `B`, the continuous functional calculus parts `P = cfc 
 `N = cfc (max (−·) 0) B` are positive semidefinite with `B = P − N`, `P N = N P = 0` and
 `tr(B²) = tr(P²) + tr(N²)` (`symmetric_jordan_decomposition`; no decomposition is assumed, the empty index type
 included); with the trace domination of `Matrix/Trace/Energy.lean` this gives `symmetric_jordan_trace_support`. Support for
-Letwin, arXiv:2607.24164v1, Theorem 2.5; not the theorem itself. Proof bodies: strong-API candidate (gpt-6-astra,
-`api-symmetric-compiler-patch-v3`, e735387e…), verbatim.
+Letwin, arXiv:2607.24164v1, Theorem 2.5; not the theorem itself.
 -/
 
 variable {ι : Type*} [Fintype ι] [DecidableEq ι]

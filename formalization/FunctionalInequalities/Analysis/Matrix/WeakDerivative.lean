@@ -13,8 +13,7 @@ constant matrices are retained. No C1/C2 regularity, symmetry, positivity or
 invertibility of the rough field is assumed for these polynomial rules. The inverse-density identification additionally takes a locally essentially bounded inverse pair, its given local-L2 weak derivatives and the a.e. inverse identity; it proves the explicit inverse formula without classical differentiability. Supporting interfaces for Letwin
 arXiv:2607.24164v1 Theorem 2.5 and compact Theorem 1.2, constant 8; these do not
 establish Hessian evolution, an integrated trace estimate or the main bound.
-Proof bodies: independently accepted W3p5/W3p6 API candidates, verbatim;
-private finite matrix identities: previously checked client algebra, verbatim; the four-fold trace
+The four-fold trace
 product identity `trace_mul_mul_mul_eq_sum` lives in `Matrix/Trace/Algebra.lean`. `bounded_trace_quadratic_weak_derivative_data`
 packages bounded trace data of `tr(B A B A)` for globally bounded rough fields.
 -/

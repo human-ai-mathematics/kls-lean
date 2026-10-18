@@ -68,6 +68,12 @@ The runner builds a filtered compiled-module view for the current source invento
 the local entry in the Lean search path. Hidden production sources, missing artifacts, orphan
 module adoption and replay coverage mismatches fail. See the implementation in [verify.py](verify.py).
 
+For a separate Git consumer, use the [downstream runner](downstream.py) and its
+[command guide](../examples/README.md#reproduce-downstream-acceptance). It builds three narrow
+clients from one exact commit, audits their primary declaration closure and replays their
+local modules. Its receipt is a separate downstream check; it neither runs the full KLS
+verifier nor changes certificate status. Third-party compiled dependencies remain trusted.
+
 ## Receipts and trust scope
 
 Each run retains its report, generated clients and logs under `build/verification/<UTC time>/`.

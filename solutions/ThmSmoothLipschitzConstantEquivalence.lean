@@ -7,7 +7,6 @@ Status: proved / checked_by: lean. The sole certificate packages all eight publi
 with their own quantifiers: pointwise slope, a.e. slope, energy, domain, finite bounds, coordinate
 infima, ambient/intrinsic comparison, and the selected/literature corollary under intrinsic
 absolute continuity. It does not supply the separate Borell input or a KLS proof.
-Proof acceptance: `research/decisions/2026-09-06-smooth-literature-proofs.md`.
 -/
 
 noncomputable section

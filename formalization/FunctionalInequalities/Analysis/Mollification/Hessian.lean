@@ -6,8 +6,7 @@ import Mathlib
 
 Smooth approximation of a `C¹` function with Lipschitz gradient by normalized bump convolutions, with gradients
 converging locally uniformly and Hessians converging almost everywhere (support for the weak Piola identity and the
-weak Bochner formula on the moment-map route to Letwin arXiv:2607.24164v1). Proof body: GPT (Letwin sub-controller task
-L-T8a); statement by the Letwin sub-controller; placement: Claude.
+weak Bochner formula on the moment-map route to Letwin arXiv:2607.24164v1).
 -/
 
 noncomputable section

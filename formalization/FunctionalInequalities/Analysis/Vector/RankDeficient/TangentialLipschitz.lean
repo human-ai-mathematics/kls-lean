@@ -4,25 +4,19 @@ import Mathlib.Analysis.Calculus.InverseFunctionTheorem.ApproximatesLinearOn
 
 /-! # The tangential small-Lipschitz estimate on fibres
 
-Obligation `R4` of the rank-deficient route recorded in
-`research/decisions/2026-09-17-rank-deficient-route.md` and stated in
-`research/audits/RankDeficientRouteStatements.lean`.  **Only `R4` is proved here**; with `R1`, `R2`
-of `Analysis/Vector/RankDeficient/Stratification.lean` and `R3` of `Analysis/Vector/RankDeficient/RightInverseBound.lean` that is four of
-the route's obligations.  `R0`, `R5`–`R10`, `N1` and `N2` remain open, and so does the
-rank-deficient part of the codimension-`m` coarea critical set.  Nothing here is a coarea formula,
-a slicing statement or a Sard theorem.
+A projected map has a Lipschitz constant proportional to the derivative approximation error along fibres of its regular component.
 
 **This is the analytic content the route turns on, and the step that replaces the one that fails.**
 The proved vanishing-derivative argument covers the rank-zero layer because there the approximating
 partition makes `u` itself `ε`-Lipschitz on each piece.  On a stratum of rank `r ≥ 1` it does not,
-in any direction inside the range of the differential.  What `R4` says is that the **projected** map
+in any direction inside the range of the differential.  What small tangential Lipschitz control says is that the **projected** map
 `Q ∘ f` is nevertheless Lipschitz with a constant proportional to `ε` **along each fibre of
 `P ∘ f`** — which is exactly what the Eilenberg bound needs inside a fibre.
 
 **The estimate in one line.**  For `a`, `b` in one fibre, `P (f b) = P (f a)`, so the approximation
 gives `‖P (A (b - a))‖ ≤ ‖P‖ ε ‖b - a‖`: the chord is *almost* in the kernel of `P ∘ A`, though not
-in it.  `R3` converts that into an actual kernel element `w` with `‖(b - a) - w‖ ≤ C ‖P (A (b-a))‖`,
-`R2` says `A w = 0`, and therefore `‖A (b - a)‖ ≤ ‖A‖ C ‖P‖ ε ‖b - a‖`.  Feeding this back into the
+in it.  The uniform right-inverse bound converts that into an actual kernel element `w` with `‖(b - a) - w‖ ≤ C ‖P (A (b-a))‖`,
+The kernel identity says `A w = 0`, and therefore `‖A (b - a)‖ ≤ ‖A‖ C ‖P‖ ε ‖b - a‖`.  Feeding this back into the
 approximation bounds `‖f b - f a‖`, and applying `Q` gives the constant
 `‖Q‖ (1 + ‖A‖ C ‖P‖)`, which **does not depend on `ε`**.
 
@@ -30,8 +24,8 @@ That independence is the whole point: the `ε → 0` limit of the Eilenberg argu
 approximating partition at every scale, so a constant that grew with the partition would be
 useless.
 
-No inner product, no measure, no completeness and no finite-dimensionality is used by `R4` itself;
-the hypotheses are exactly the conclusions of `R2` and `R3` for the linear model, and
+No inner product, no measure, no completeness and no finite-dimensionality is used by small tangential Lipschitz control itself;
+the hypotheses are exactly the conclusions of the kernel identity and the uniform right-inverse bound for the linear model, and
 `exists_lipschitzOnWith_fibre` records what they combine to on a rank stratum.
 -/
 
@@ -62,9 +56,9 @@ theorem norm_comp_apply_sub_le_of_approximatesLinearOn {A : V →L[ℝ] W} {P : 
     _ ≤ ‖P‖ * ‖f b - f a - A (b - a)‖ := P.le_opNorm _
     _ ≤ ‖P‖ * (ε * ‖b - a‖) := mul_le_mul_of_nonneg_left (hf b hb a ha) (norm_nonneg P)
 
-/-- **`R4`: the tangential small-Lipschitz estimate.**  If the linear model `A` dies on the kernel
-of `P ∘ A` — the conclusion of `R2` — and vectors almost annihilated by `P ∘ A` are close to that
-kernel with constant `C` — the conclusion of `R3` — then on every fibre of `P ∘ f` the projected map
+/-- **small tangential Lipschitz control: the tangential small-Lipschitz estimate.**  If the linear model `A` dies on the kernel
+of `P ∘ A` — the conclusion of the kernel identity — and vectors almost annihilated by `P ∘ A` are close to that
+kernel with constant `C` — the conclusion of the uniform right-inverse bound — then on every fibre of `P ∘ f` the projected map
 `Q ∘ f` is Lipschitz with constant proportional to the approximation parameter `ε`.
 
 The constant `c = ‖Q‖ (1 + ‖A‖ C ‖P‖)` depends only on the linear data, **never on `ε`, on `f`, on
@@ -83,7 +77,7 @@ theorem lipschitzOnWith_of_ker_bound (A : V →L[ℝ] W) (P : W →L[ℝ] W₁) 
   -- the chord is almost in the kernel of `P ∘ A`
   have hPA : ‖P (A (b - a))‖ ≤ ‖P‖ * (ε * ‖b - a‖) :=
     norm_comp_apply_sub_le_of_approximatesLinearOn hf ha.1 hb.1 ha.2 hb.2
-  -- `R3` replaces it by an honest kernel element, and `R2` kills the linear model there
+  -- the uniform right-inverse bound replaces it by an honest kernel element, and the kernel identity kills the linear model there
   obtain ⟨w, hw, hwle⟩ := hinv (b - a)
   have hAw : A w = 0 := hker w hw
   have hAz : A (b - a) = A (b - a - w) := by
@@ -105,7 +99,7 @@ theorem lipschitzOnWith_of_ker_bound (A : V →L[ℝ] W) (P : W →L[ℝ] W₁) 
         mul_le_mul_of_nonneg_left hfba (norm_nonneg Q)
     _ = ‖Q‖ * (1 + ‖A‖ * C * ‖P‖) * ε * ‖b - a‖ := by ring
 
-/-- **`R4`: the tangential small-Lipschitz estimate, existential form.**  The route's statement;
+/-- **small tangential Lipschitz control: the tangential small-Lipschitz estimate, existential form.**  The route's statement;
 the constant supplied by `lipschitzOnWith_of_ker_bound` is `‖Q‖ (1 + ‖A‖ C ‖P‖)`, which depends
 only on the linear data and **never on `ε`, on `f`, on `S` or on the fibre**.  The explicit form is
 what a per-stratum assembly needs, because the approximating partition produces a different linear
@@ -128,13 +122,13 @@ variable {V W W₁ W₂ : Type*} [NormedAddCommGroup V] [NormedSpace ℝ V] [Fin
   [NormedAddCommGroup W₁] [NormedSpace ℝ W₁] [FiniteDimensional ℝ W₁]
   [NormedAddCommGroup W₂] [NormedSpace ℝ W₂]
 
-/-- **What `R2`, `R3` and `R4` combine to on a rank stratum.**  If `P ∘ A` is surjective onto a
+/-- **What the kernel identity, the uniform right-inverse bound and small tangential Lipschitz control combine to on a rank stratum.**  If `P ∘ A` is surjective onto a
 space of the same dimension as the range of `A` — the situation at a point of the rank stratum, with
-`P` the projection onto the range of the differential — then the two hypotheses of `R4` are
+`P` the projection onto the range of the differential — then the two hypotheses of small tangential Lipschitz control are
 available, and the projected map is `c ε`-Lipschitz along every fibre of `P ∘ f`.
 
 This is a **corollary of the three proved obligations, not a new one**, and in particular it is
-**not** `R7`: it says nothing about measures, slices or Hausdorff dimension, and the approximating
+**not** fibrewise slicing: it says nothing about measures, slices or Hausdorff dimension, and the approximating
 partition that would supply `f` and `S` is not constructed here. -/
 theorem exists_lipschitzOnWith_fibre {A : V →L[ℝ] W} {P : W →L[ℝ] W₁} (Q : W →L[ℝ] W₂)
     (hsurj : Function.Surjective (P.comp A))

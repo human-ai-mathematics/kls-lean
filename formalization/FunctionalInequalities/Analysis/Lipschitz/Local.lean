@@ -6,21 +6,21 @@ import FunctionalInequalities.Analysis.Hausdorff.Measure
 
 /-! # From the globally Lipschitz coarea formula to the locally Lipschitz one
 
-`X2`, `X4` and `X5` of the route recorded in
+closed-ball Lipschitz bounds, locality and the local-to-global assembly of the route recorded in
 `research/decisions/2026-09-19-locally-lipschitz-vector-coarea-route.md`.
 
-`X2` is the compactness step: a locally Lipschitz map on a finite-dimensional space is Lipschitz on
-every closed ball.  `X4` is the locality step: two maps agreeing on an open set have the same
-differential and the same level sets on any piece inside it.  `X5` is the assembly, and it is the
+closed-ball Lipschitz bounds is the compactness step: a locally Lipschitz map on a finite-dimensional space is Lipschitz on
+every closed ball.  locality is the locality step: two maps agreeing on an open set have the same
+differential and the same level sets on any piece inside it.  the local-to-global assembly is the assembly, and it is the
 codimension-`m` transcription of the scalar argument of
 `KLS/Geometry/Coarea/LocallyLipschitz.lean`, step for step: the annuli of
 `Analysis/Lipschitz/Annuli.lean` cut the ambient set into countably many disjoint measurable
 pieces, on the piece of index `n` the map is replaced by a **globally** Lipschitz extension
-supplied by `Analysis/Lipschitz/Extension.lean`, the hypothesis is applied to that extension, `X4`
+supplied by `Analysis/Lipschitz/Extension.lean`, the hypothesis is applied to that extension, locality
 carries the coarea Jacobian and the level sets back to the original map, and countable additivity
 sums the pieces.
 
-`X5` is stated as an **implication**: the globally Lipschitz codimension-`m` coarea formula is not
+the local-to-global assembly is stated as an **implication**: the globally Lipschitz codimension-`m` coarea formula is not
 proved here and is not assumed to hold; it is a hypothesis.  Nothing in this file proves a coarea
 formula, and the relation `k + finrank ℝ W = finrank ℝ V` between the codimension and the
 dimensions is never used — it belongs to the hypothesis, which carries its own.
@@ -36,7 +36,7 @@ open scoped ENNReal NNReal
 
 namespace FunctionalInequalities.Analysis
 
-/-- **`X2`: a locally Lipschitz map is Lipschitz on every closed ball.**  The closed balls of a
+/-- **closed-ball Lipschitz bounds: a locally Lipschitz map is Lipschitz on every closed ball.**  The closed balls of a
 finite-dimensional normed space are compact, and a locally Lipschitz map is Lipschitz on a compact
 set.  No relation between the constant and the radius is claimed. -/
 theorem exists_lipschitzOnWith_closedBall {V W : Type*} [NormedAddCommGroup V]
@@ -46,7 +46,7 @@ theorem exists_lipschitzOnWith_closedBall {V W : Type*} [NormedAddCommGroup V]
   LocallyLipschitzOn.exists_lipschitzOnWith_of_compact (isCompact_closedBall (0 : V) r)
     hu.locallyLipschitzOn
 
-/-- **`X4`: agreement on an open set transfers the differential and the level sets to any piece
+/-- **locality: agreement on an open set transfers the differential and the level sets to any piece
 inside it.**  The differential is a local notion, so `Filter.EventuallyEq.fderiv_eq` applies at each
 point of the piece; the level sets agree by set extensionality.  No differentiability is assumed:
 where neither map is differentiable both `fderiv`s are `0` and the identity still holds. -/
@@ -68,7 +68,7 @@ variable {V W : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [FiniteD
   [NormedAddCommGroup W] [InnerProductSpace ℝ W] [FiniteDimensional ℝ W]
   [MeasurableSpace W] [BorelSpace W]
 
-/-- **`X5`: the codimension-`m` coarea formula for globally Lipschitz maps implies the one for
+/-- **the local-to-global assembly: the codimension-`m` coarea formula for globally Lipschitz maps implies the one for
 locally Lipschitz maps.**  The hypothesis `hL` is the globally Lipschitz statement, which is **not**
 proved here; the conclusion is the same statement with `LipschitzWith K u` weakened to
 `LocallyLipschitz u`, so no global Lipschitz constant and no modulus of continuity survives.
@@ -96,7 +96,7 @@ theorem coarea_of_locallyLipschitz_of_lipschitz {k : ℕ}
   classical
   set ν : Measure V := KLS.hausdorffNormalized V k
   have hcont : Continuous u := hu.continuous
-  -- Globally Lipschitz representatives of `u` on the closed balls: `X2` then `X1`.
+  -- Globally Lipschitz representatives of `u` on the closed balls: closed-ball Lipschitz bounds then global Lipschitz extension.
   have hext : ∀ n : ℕ, ∃ w : V → W, (∃ K : ℝ≥0, LipschitzWith K w) ∧
       EqOn u w (closedBall (0 : V) ((n : ℝ) + 1)) := by
     intro n
@@ -114,7 +114,7 @@ theorem coarea_of_locallyLipschitz_of_lipschitz {k : ℕ}
     have : x ∈ ⋃ n : ℕ, annulus V n := by rw [iUnion_annulus V]; trivial
     obtain ⟨n, hn⟩ := mem_iUnion.1 this
     exact mem_iUnion.2 ⟨n, hx, hn⟩
-  -- `X4` on the open ball of radius `n + 1`, which contains the `n`-th piece.
+  -- locality on the open ball of radius `n + 1`, which contains the `n`-th piece.
   have hloc : ∀ n : ℕ, (∀ x ∈ P n, fderiv ℝ u x = fderiv ℝ (v n) x) ∧
       ∀ t : W, P n ∩ {x : V | u x = t} = P n ∩ {x : V | v n x = t} := fun n =>
     fderiv_eq_and_inter_levelSet_eq_of_eqOn (O := ball (0 : V) ((n : ℝ) + 1)) isOpen_ball
@@ -156,11 +156,11 @@ theorem coarea_of_locallyLipschitz_of_lipschitz {k : ℕ}
           (lintegral_tsum fun n => (hpiece n).1).symm
       _ = _ := by simp_rw [← hsum]
 
-/-- **`N0`: the codimension-`m` coarea formula for locally Lipschitz maps.**  `coarea_of_contDiff`
+/-- **locally Lipschitz vector coarea: the codimension-`m` coarea formula for locally Lipschitz maps.**  `coarea_of_contDiff`
 with `ContDiff ℝ 1 u` replaced by `LocallyLipschitz u`: no global Lipschitz constant, no `C¹`
 regularity, no hypothesis on the critical set, no boundedness of `S`, no positivity of the
-codimension.  It is `X5` applied to the proved globally Lipschitz formula `coarea_of_lipschitz`
-(`L0`), and it is the common generalization of `L0` and of `coarea_of_contDiff`.  **It is not a
+codimension.  It is the local-to-global assembly applied to the proved globally Lipschitz formula `coarea_of_lipschitz`
+(globally Lipschitz coarea), and it is the common generalization of globally Lipschitz coarea and of `coarea_of_contDiff`.  **It is not a
 Sard theorem.** -/
 theorem coarea_of_locallyLipschitz {S : Set V} {u : V → W} {g : V → ℝ≥0∞} {k : ℕ}
     (hk : k + finrank ℝ W = finrank ℝ V) (hu : LocallyLipschitz u)

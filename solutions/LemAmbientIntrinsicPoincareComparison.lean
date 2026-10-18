@@ -5,7 +5,6 @@ import FunctionalInequalities.Poincare.SmoothGradient.Comparison
 
 Ledger node: `lem:ambient-intrinsic-poincare-comparison`.
 Status: proved / checked_by: lean. The named certificate packages the complete node.
-The public comparison signatures are unchanged from the reviewed statement batch.
 Typed applications include zero dimension, singular laws and infinite optimal constants.
 
 Sources, assumptions and reading order: `Poincare/Euclidean/README.md` in the library.

@@ -9,7 +9,7 @@ import FunctionalInequalities.Probability.MomentMeasure.Coercivity
 
 `origin_mem_interior_domain_of_lower_bound`: the generic interior step used before supporting-plane normalization.
 
-Declaration blocks are verbatim from the root-accepted CEK Proposition 12 bundle (`independent-p12-attainment`, ACCEPTANCE 848aa45b…) under the reviewed rev3 migration map.
+Supporting infrastructure for Cordero-Erausquin–Klartag, Proposition 12.
 -/
 
 noncomputable section

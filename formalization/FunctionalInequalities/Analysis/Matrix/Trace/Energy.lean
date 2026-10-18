@@ -26,8 +26,7 @@ the mixed trace `tr(P H N H)` is nonnegative (`trace_cross_nonneg`); a positive 
 energy `tr(B H B H)` of a symmetric `B` nonnegative (`trace_energy_nonneg`); and
 `tr((P − N) H (P − N) H) ≤ tr(P H P H) + tr(N H N H)` without commutation (`jordan_trace_domination`). Arbitrary
 finite index types, including the empty one. Not provided here: the measure extension, the moment map, Brascamp–Lieb
-or Theorem 2.5 itself. Proof bodies: strong-API candidate (gpt-6-astra, `api-symmetric-compiler-patch-v3`, e735387e…),
-verbatim; the two one-use helpers are private.
+or Theorem 2.5 itself.
 -/
 
 open scoped MatrixOrder

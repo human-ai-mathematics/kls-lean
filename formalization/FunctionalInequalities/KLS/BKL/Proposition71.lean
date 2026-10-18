@@ -21,10 +21,7 @@ functions (`norm_coordTensor_taylorTensor_sq_le_of_orthogonal`). Finally the ass
 `norm_coordTensor_taylorTensor_sq_le_two_mul`, is Proposition 7.1 in the source form (conditional on
 its hypothesis `CumulantBound`). Nothing here is Theorem 4.1 or Theorem 1.1.
 
-Provenance: Codex proof (`build/reviews/2026-10-07-bkl-continuous/reviews/P71-R7-assembly/
-R7-EXACT-PROPOSAL.lean`, exact frozen statement `P71-R7`, root-independent strict replay), over the
-production steps in `SuspensionLaw`, `SuspensionDensity`, `SuspensionCumulant`, `SuspensionMoments`
-and `SuspensionDerivatives`; the Luna R7 attempts failed and are recorded.
+The proof uses the law, density, cumulant, moment and derivative interfaces of `Suspension/`.
 -/
 
 open MeasureTheory FunctionalInequalities FunctionalInequalities.Analysis.BakryEmery
@@ -33,9 +30,9 @@ open scoped RealInnerProductSpace
 
 namespace FunctionalInequalities.KLS.LogConcave.Suspension
 
-/-! Codex scratch assembly for exact frozen P71-R7. The scalar lemma is the independently
-proved Codex beta-limit argument, using the integrated sigma identity. Actual R1, R2/R3,
-original chosen-N R5c (112), R6 and the Fin coordinate adapter are consumed below. -/
+/-! The scalar beta-limit argument uses the integrated sigma identity. The suspension law,
+its density and cumulants, the chosen-copy derivative formula (112), and the finite-coordinate
+comparison supply the Taylor estimate below. -/
 
 private theorem r7_source_energy_limit {T b : ℝ} {d : ℕ} (hb : 0 < b) (hd : 2 ≤ d)
     (hβbound : ∀ β : ℝ, 0 < β → T ≤ (sigma β) ^ 2 * b / (d.factorial : ℝ) ^ 2) :
@@ -108,7 +105,7 @@ private theorem r7_beta_energy_bound {d : ℕ} (hd : 1 ≤ d) {b : ℝ}
 /-- **BKL (113) for `f ∈ C²` with bounded Hessian satisfying (108)**: under `CumulantBound d b`, for an
 isotropic regular law, `|T_d f|² ≤ b/(d!)²`. For each `β > 0` a copy number `N` is chosen by (110); the
 joint law is isotropic and log-concave, (112) and the Hilbert–Schmidt step give
-`(d!)²/σ_β² |T_d f|² ≤ b`, and `β → ∞` (Codex assembly, `reviews/P71-R7-assembly/`). -/
+`(d!)²/σ_β² |T_d f|² ≤ b`, and `β → ∞`. -/
 theorem norm_coordTensor_taylorTensor_sq_le_of_cumulantBound {d : ℕ} (hd : 2 ≤ d) {b : ℝ}
     (hb : 0 < b) (hcb : CumulantBound d b) {n : ℕ} (V : EuclideanSpace ℝ (Fin n) → ℝ) {a b' : ℝ}
     (hV : KLS.RegularPotential V a b') (hiso : KLS.Isotropic hV.law)
@@ -157,9 +154,8 @@ private theorem smooth_compact_hessian_bounded {E F : Type*}
   have hg2 : ContDiff ℝ 2 g := hg.of_le (WithTop.coe_le_coe.mpr le_top)
   exact compact_c2_hessian_bounded hg2 hc
 
-/-! Codex scratch proof for BKL p.30: actual smooth-infinity affine-orthogonal approximants.
-Production affine projection proofs retain their own Luna/Codex provenance. The approximation
-is derived from actual Mathlib smooth compact-support density, not assumed as a field. -/
+/-! Smooth affine-orthogonal approximants for BKL p. 30. The approximation is derived
+from Mathlib smooth compact-support density, not assumed as a field. -/
 
 set_option autoImplicit false
 
@@ -376,7 +372,7 @@ private theorem smooth_homogeneous_bound {n d : ℕ}
     rw [hnormscale, div_pow] at hqbound
     exact (div_le_iff₀ (sq_pos_of_pos hs)).1 hqbound
 
-/-- Exact source R8 endpoint: the normalized smooth estimate extends to the full affine-
+/-- Exact source affine-orthogonal density extension endpoint: the normalized smooth estimate extends to the full affine-
 orthogonal L2 subspace by actual smooth bounded-Hessian density and actual Taylor continuity. -/
 theorem norm_coordTensor_taylorTensor_sq_le_of_smooth {d : ℕ} {b : ℝ} (hb : 0 ≤ b) {n : ℕ}
     (V : EuclideanSpace ℝ (Fin n) → ℝ) {a b' : ℝ} (hV : KLS.RegularPotential V a b')

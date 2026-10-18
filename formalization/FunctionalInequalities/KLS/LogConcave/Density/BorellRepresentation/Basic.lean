@@ -9,8 +9,7 @@ import Mathlib.Analysis.Convex.Measure
 /-!
 # BorellRepresentation: Basic
 
-Responsibility split of the existing implementation. Public namespaces, mathematical scope
-and proof bodies are preserved; later layers import their prerequisites.
+Convexity of the positive-density set, concavity of its logarithm and continuity on the interior support.
 -/
 
 noncomputable section

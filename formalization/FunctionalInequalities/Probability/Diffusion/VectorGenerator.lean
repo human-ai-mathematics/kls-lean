@@ -6,8 +6,7 @@ import Mathlib.Analysis.Calculus.ContDiff.Operations
 # The vector-valued generator
 
 `vectorGenerator b σ G x = DG(x)[b x] + ½ Σ_k D²G(x)[σ_k x, σ_k x]` (the drift of `G(X_t)`), equal to `diffusionGenerator`
-for scalar `G`, and its behaviour under continuous linear maps, products and finite families. Proof bodies: GPT (task
-S-3bV); statements by the S-line sub-controller; placement: Claude.
+for scalar `G`, and its behaviour under continuous linear maps, products and finite families.
 -/
 
 noncomputable section

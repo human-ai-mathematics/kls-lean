@@ -11,9 +11,7 @@ basis vector, and `stdHessianMatrixGenerator φ V x` its entrywise image under t
 `L tr(B H B H) = 2 tr(B H B (L H)) + 2 Σ_ab A^{ab} tr(B ∂_a H B ∂_b H)` with `A = (∇²φ)⁻¹` (`inverseHessianEntry`), the
 pointwise trace identity (2.8) of Letwin, arXiv:2607.24164v1, in the proof of Theorem 2.5. There is no positive
 semidefiniteness, commutation or Monge–Ampère premise. Not provided: the substitution of the twice-differentiated
-Monge–Ampère equation, (2.10), the tensor comparison and the trace bound of Theorem 2.5. Proof bodies: strong-API candidate
-(gpt-6-astra, `api-trace-nonconstant-client-v10`, b37b32bf…; generic part verbatim from `api-trace-square-patch-v7`),
-verbatim up to the declaration names; placement and names: Claude.
+Monge–Ampère equation, (2.10), the tensor comparison and the trace bound of Theorem 2.5.
 
 Monge–Ampère substitution (section `MongeAmpereTrace`). For a GIVEN smooth `φ` with positive definite Hessian at every
 point satisfying the zero-order Monge–Ampère relation `log det ∇²φ = −φ + V(∇φ)`, with `V` smooth only on an open `U ⊇
@@ -23,8 +21,7 @@ matrix `G = stdThirdGram φ x` (`stdHessianMatrixGenerator_apply_on_range`, `std
 positive semidefinite, the three remainders `Σ A^{ab} tr(B∂_aH B∂_bH)`, `tr(BHB·H∇²V(∇φ)H)` and `tr(BHB·G)` are
 nonnegative, hence `L tr(BHBH) + 2 tr(BHBH) ≥ 0` pointwise (`traceGeneratorCondition_on_range`). This is the pointwise
 condition before Lemma A.5; its integration (A.4/A.5 for this trace function), the moment map of an arbitrary source law
-and the trace bound of Theorem 2.5 are not provided. Proof bodies: strong-API candidate (gpt-6-astra,
-`api-trace-monge-ampere-210-v3`, de34b430…), verbatim up to the declaration names; placement and names: Claude.
+and the trace bound of Theorem 2.5 are not provided.
 -/
 
 noncomputable section

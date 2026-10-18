@@ -15,8 +15,7 @@ density and finite second moment is approximated by the laws of regular potentia
 selected in the metrizable product of the weak topology with the statistics, the laws converge
 weakly and their means, raw second moments and covariance operators converge to those of the
 law. Convergence of whitened laws and the limit of the Poincaré constants are separate (the
-conditional transfer is in `KLS/LogConcave/Regular/Poincare.lean`). Proof bodies: Codex q (bundle
-`Gaussian-Quadratic-Diagonal`, independently accepted); statements and placement: Claude.
+conditional transfer is in `KLS/LogConcave/Regular/Poincare.lean`).
 -/
 
 open MeasureTheory Filter Topology

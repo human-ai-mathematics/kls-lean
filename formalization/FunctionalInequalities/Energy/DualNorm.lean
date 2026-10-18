@@ -10,8 +10,7 @@ Letwin, arXiv:2607.24164v1, (2.19): for a probability law `μ` and `q ∈ L²(μ
 `‖q‖_{H^{-1}(μ)} = sup { ∫ q f dμ : f locally Lipschitz, ∫ ‖∇f‖² dμ ≤ 1 }`. The supremum is taken as
 an extended real over the full test class (no centering, smoothness or compact support); it is
 identified with the real signed supremum only once finiteness is proved. Constant inputs have
-infinite dual norm (constants are zero-energy tests). Proof bodies: Codex route (bundle
-`Letwin-A7`, independently accepted); statements and placement: Claude.
+infinite dual norm (constants are zero-energy tests).
 -/
 
 open MeasureTheory Filter

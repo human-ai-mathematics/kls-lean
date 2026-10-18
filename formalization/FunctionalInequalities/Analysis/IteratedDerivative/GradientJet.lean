@@ -14,10 +14,6 @@ Generic calculus supports for the jets of the centred cumulant-generating-functi
   completeness or measure assumption);
 * `inner_iteratedFDeriv_gradient_apply`: on a complete real inner product space,
   `⟪Dʳ(∇f)(x)[h], w⟫ = Dʳ⁺¹f(x)[h, w]` with `w` in the last slot.
-
-Proof bodies: Luna unit CGF1-J2a (round 8 with recorded Claude closing repairs: import, pointwise
-subtraction lemma, definitional `exact`) and Luna unit CGF1-J2b (round 5), both independently accepted
-2026-10-08; statements and placement: Claude.
 -/
 
 noncomputable section

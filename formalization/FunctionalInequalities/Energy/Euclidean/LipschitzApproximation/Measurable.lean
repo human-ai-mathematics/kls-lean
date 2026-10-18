@@ -5,8 +5,7 @@ import FunctionalInequalities.Analysis.Cutoff.SmoothBall
 /-!
 # LipschitzApproximation: Measurable
 
-Responsibility split of the existing implementation. Public namespaces, mathematical scope
-and proof bodies are preserved; later layers import their prerequisites.
+Measurability of gradients, almost-everywhere differentiability and dominated Lp convergence for approximation.
 -/
 
 noncomputable section

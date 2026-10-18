@@ -3,7 +3,7 @@ import FunctionalInequalities.Analysis.Coarea.FiberIntegral
 import FunctionalInequalities.Analysis.Graph.Divergence
 import FunctionalInequalities.KLS.Geometry.Slice.OpenMeasurable
 
-/-! # Weighted coarea on regular open C¹ domains (L9)
+/-! # Weighted coarea on regular open C¹ domains (regular-domain coarea)
 
 `KLS.coarea_of_contDiffOn_of_fderiv_ne_zero` proves both weighted slice measurability and
 coarea for arbitrary Borel `S ⊆ O`, arbitrary measurable ENNReal weights, and every dimension.
@@ -22,7 +22,7 @@ calculation with no regularity outside `O`. Neither representative is a global e
 of `O`. Second countability and disjoint Borel pieces assemble the final equality; weighted
 slice measurability is established independently in `OpenSliceMeasurable`.
 
-This proves only the regular-domain result L9. It does not use critical slicing, Sard, WIP,
+This proves only the regular-domain result regular-domain coarea. It does not use critical slicing, Sard, WIP,
 or Whitney extension, and does not migrate any existing coarea hole.
 -/
 
@@ -234,7 +234,7 @@ theorem exists_regular_coarea_neighborhood {O : Set V} {u : V → ℝ}
   exact setLIntegral_congr_fun hS fun x hx => by
     rw [(hevent x (hSN hx).2).gradient_eq]
 
-/-- **L9: weighted coarea on a regular open C¹ domain**, including a.e. measurability
+/-- **regular-domain coarea: weighted coarea on a regular open C¹ domain**, including a.e. measurability
 of the weighted slices. All weights in ENNReal and all dimensions are covered. -/
 theorem coarea_of_contDiffOn_of_fderiv_ne_zero {O S : Set V} {u : V → ℝ} {g : V → ℝ≥0∞}
     (hO : IsOpen O) (hu : ContDiffOn ℝ 1 u O) (hreg : ∀ x ∈ O, fderiv ℝ u x ≠ 0)

@@ -4,7 +4,7 @@ import FunctionalInequalities.Analysis.Semigroup.Exponential.Dissipation
 /-!
 # Positive-time smoothing for `P_t = exp (-t T†T)`
 
-`Generated/Domain.lean` (`S0a`) and `Generated/FormDomain.lean` (`F0`–`F4`) both start from a
+`Generated/Domain.lean` (operator-domain invariance) and `Generated/FormDomain.lean` (the operator-domain energy bound–`F4`) both start from a
 datum that already lies in `D(T†T)` or `D(T)`. This module removes that assumption: for `T` closed
 and densely defined and **every** `g : H₀`,
 
@@ -28,19 +28,19 @@ claimed, so the sharp constants `1/√(2et)` and `1/(et)` remain unproved.
 for a bounded symmetric `L` and `u ≥ 0` with `v = exp (-u • L) y`,
 `2 u ⟪L v, v⟫ ≤ ‖y‖ ² - ‖v‖ ²` and (for `L ≥ 0`) `2 u ‖L v‖ ² ≤ ⟪L y, y⟫ - ⟪L v, v⟫`. Applied to
 the Yosida approximation `L_s` and passed to the limit `s ↓ 0` along any positive null sequence,
-using `L_s (exp (-t • L_s) f) = exp (-t • L_s) (L_s f)`, `Y5` and `S6`, they become
+using `L_s (exp (-t • L_s) f) = exp (-t • L_s) (L_s f)`, `Y5` and the adjoint-product identification, they become
 
 `2 t ‖T (P_t f)‖ ² ≤ ‖f‖ ² - ‖P_t f‖ ²` and `2 t ‖T†T (P_t f)‖ ² ≤ ‖T f‖ ² - ‖T (P_t f)‖ ²`
 
 for `f ∈ D(T†T)` (`two_mul_norm_map_apply_sq_le_sub`, `two_mul_norm_adjointComp_apply_sq_le_sub`),
-after rewriting `⟪T†T (P_t f), P_t f⟫ = ‖T (P_t f)‖ ²` with `V1` and `T†T (P_t f) = P_t (T†T f)`
-with `S0a`.
+after rewriting `⟪T†T (P_t f), P_t f⟫ = ‖T (P_t f)‖ ²` with the form identity and `T†T (P_t f) = P_t (T†T f)`
+with operator-domain invariance.
 
 **Off the domain the estimates are transported by density.** Each estimate is applied to
 differences, which turns it into a Cauchy estimate: from `g_n → g` with `g_n ∈ D(T†T)` the
 sequence `T (P_t g_n)` is Cauchy because `2 t ‖T (P_t (g_n - g_m))‖ ² ≤ ‖g_n - g_m‖ ²`, and
 `exists_mem_domain_apply_eq_of_tendsto` (closedness of `T`) identifies the limit. The same
-argument with `F1`'s graph-norm approximation and closedness of `T†T` (self-adjoint, so closed)
+argument with graph-norm density's graph-norm approximation and closedness of `T†T` (self-adjoint, so closed)
 upgrades the second estimate to every `f ∈ D(T)`
 (`mem_adjointComp_domain_apply_of_mem_domain`). Composing the two through
 `P_t = P_{t/2} P_{t/2}` gives the operator-domain statement for arbitrary data.
@@ -73,7 +73,7 @@ section YosidaLimits
 variable (s : ℕ → ℝ) (hs : ∀ n, 0 < s n) (hs0 : Filter.Tendsto s Filter.atTop (nhds 0))
 
 include hT hd hs hs0 in
-/-- `S6` along a sequence: `exp (-t • L_{s n}) g → P_t g` for any positive null sequence `s`. -/
+/-- the adjoint-product identification along a sequence: `exp (-t • L_{s n}) g → P_t g` for any positive null sequence `s`. -/
 theorem tendsto_exp_neg_smul_yosida (g : H₀) {t : ℝ} (ht : 0 ≤ t) :
     Filter.Tendsto (fun n : ℕ => NormedSpace.exp (-t • yosida T hT (hs n)) g)
       Filter.atTop (nhds (apply T hT hd t g)) := by
@@ -104,7 +104,7 @@ include hT hd hs hs0 in
 /-- The mixed limit `L_{s n} (exp (-t • L_{s n}) f) → P_t (T†T f)` for `f ∈ D(T†T)`.
 
 `L_s` commutes with its own exponential (`exp_neg_smul_apply_comm`), so the sequence equals
-`exp (-t • L_{s n}) (L_{s n} f)`; the contraction property absorbs `L_{s n} f - T†T f` and `S6`
+`exp (-t • L_{s n}) (L_{s n} f)`; the contraction property absorbs `L_{s n} f - T†T f` and the adjoint-product identification
 handles the remaining `exp (-t • L_{s n}) (T†T f) - P_t (T†T f)`. -/
 theorem tendsto_yosida_exp_neg_smul_apply (f : (adjointComp T).domain) {t : ℝ} (ht : 0 ≤ t) :
     Filter.Tendsto (fun n : ℕ => yosida T hT (hs n)
@@ -147,7 +147,7 @@ end YosidaLimits
 `2 t ‖T (P_t f)‖ ² ≤ ‖f‖ ² - ‖P_t f‖ ²`.
 
 `two_mul_inner_exp_neg_smul_le` for the Yosida approximation, passed to the limit along
-`s n = 1 / (n + 1)`; the left-hand side is `2 t ⟪T†T (P_t f), P_t f⟫` by `V1` and `S0a`. -/
+`s n = 1 / (n + 1)`; the left-hand side is `2 t ⟪T†T (P_t f), P_t f⟫` by the form identity and operator-domain invariance. -/
 theorem two_mul_norm_map_apply_sq_le_sub (f : (adjointComp T).domain) {t : ℝ} (ht : 0 ≤ t)
     (hft : apply T hT hd t (f : H₀) ∈ T.domain) :
     2 * t * ‖T ⟨apply T hT hd t (f : H₀), hft⟩‖ ^ 2
@@ -315,7 +315,7 @@ theorem two_mul_norm_map_apply_sq_le (g : H₀) {t : ℝ} (ht : 0 < t)
 /-- **Form-domain data enter the generator domain at positive times**, with the estimate
 `2 t ‖T†T (P_t f)‖ ² ≤ ‖T f‖ ²`.
 
-Same transport one level up: `F1` supplies `u n ∈ D(T†T)` with `u n → f` **and** `T (u n) → T f`,
+Same transport one level up: graph-norm density supplies `u n ∈ D(T†T)` with `u n → f` **and** `T (u n) → T f`,
 `two_mul_norm_adjointComp_apply_sq_le_sub` applied to differences makes `T†T (P_t (u n))` Cauchy,
 and `T†T` is self-adjoint, hence closed, so it absorbs the limit. -/
 theorem exists_mem_adjointComp_domain_apply_of_mem_domain (f : T.domain) {t : ℝ} (ht : 0 < t) :
@@ -397,7 +397,7 @@ theorem exists_mem_adjointComp_domain_apply_of_pos (g : H₀) {t : ℝ} (ht : 0 
     sq_nonneg (t * ‖adjointComp T ⟨apply T hT hd t g, hmem⟩‖ - ‖g‖)]
 
 /-- **Positive-time smoothing into the generator domain.**  For every `g : H₀` and `t > 0`,
-`P_t g ∈ D(T†T)`.  This is the statement `S0a` carried as a type-checked candidate. -/
+`P_t g ∈ D(T†T)`.  This is the statement operator-domain invariance carried as a type-checked candidate. -/
 theorem mem_adjointComp_domain_apply_of_pos (g : H₀) {t : ℝ} (ht : 0 < t) :
     apply T hT hd t g ∈ (adjointComp T).domain := by
   obtain ⟨h, _⟩ := exists_mem_adjointComp_domain_apply_of_pos T hT hd g ht
@@ -417,7 +417,7 @@ generator image `T†T (P_t g)` again lies in the **form** domain `D(T)`.
 
 Split the time, `P_t = P_{t/2} P_{t/2}`.  The inner half puts `g` in `D(T†T)` (`E4`), so
 commutation gives `T†T (P_t g) = P_{t/2} (T†T (P_{t/2} g))`, and the outer half sends that
-`H₀`-vector into `D(T)` (`E2`).  Nothing beyond `E2`, `E4` and `S0a`'s commutation is used; in
+`H₀`-vector into `D(T)` (`E2`).  Nothing beyond `E2`, `E4` and operator-domain invariance's commutation is used; in
 particular no classical representative and no second application of the adjoint. -/
 theorem mem_domain_adjointComp_apply_of_pos (g : H₀) {t : ℝ} (ht : 0 < t)
     (h : apply T hT hd t g ∈ (adjointComp T).domain) :

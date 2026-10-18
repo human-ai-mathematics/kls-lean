@@ -15,9 +15,7 @@ law on every finite-dimensional inner product space (`KLS.IsotropicBound K`). Th
 Borell density of the law, approximates it by the laws of regular potentials with converging
 covariances, transfers the bound through centering/whitening with the envelope coefficient, and
 passes to the weak limit. The universal bound for regular laws is a hypothesis (it is what Theorems
-3.1, 4.1 and Proposition 7.1 would supply); nothing unconditional is asserted. Proof bodies: Codex
-q_batch (bundle `Full-Isotropic-Regular-Reduction`, independently accepted); statements and
-placement: Claude.
+3.1, 4.1 and Proposition 7.1 would supply); nothing unconditional is asserted.
 -/
 
 open MeasureTheory Filter Topology

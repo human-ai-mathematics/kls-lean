@@ -12,15 +12,15 @@ For a densely defined operator `T : H₀ →ₗ.[ℝ] H₁` the energy form is `
 `H₀` but bounded on the form domain `D(T)` in the graph norm. This module supplies the three
 statements that make the Lax–Milgram construction of the resolvent applicable:
 
-* `completeSpace_graph` (`S1`): the graph of a closed operator is complete, which is the
+* `completeSpace_graph` (the form construction): the graph of a closed operator is complete, which is the
   completeness the form domain needs;
-* `min_one_mul_graphNormSq_le` (`S2`): the shifted form `⟪u, v⟫ + s ⟪T u, T v⟫` is coercive in the
+* `min_one_mul_graphNormSq_le` (the shifted weak form): the shifted form `⟪u, v⟫ + s ⟪T u, T v⟫` is coercive in the
   graph norm, with explicit constant `min 1 s`;
-* `norm_le_of_weak_resolvent` and `inner_nonneg_of_weak_resolvent` (`S4`): any solution of the weak
+* `norm_le_of_weak_resolvent` and `inner_nonneg_of_weak_resolvent` (the resolvent operator): any solution of the weak
   resolvent equation is a contraction of the datum and pairs nonnegatively with it.
 
-Nothing here constructs the resolvent, the Yosida approximation or the semigroup; those are `S3`,
-`S5`–`S8` of the route and are not proved. This module is general real Hilbert space material: it
+Nothing here constructs the resolvent, the Yosida approximation or the semigroup; those are resolvent solvability,
+resolvent contraction–the semigroup limit of the route and are not proved. This module is general real Hilbert space material: it
 mentions no measure, no log-concavity and no KLS quantity.
 -/
 
@@ -35,7 +35,7 @@ namespace FunctionalInequalities.Analysis.Semigroup
 variable {H₀ H₁ : Type*} [NormedAddCommGroup H₀] [InnerProductSpace ℝ H₀] [CompleteSpace H₀]
   [NormedAddCommGroup H₁] [InnerProductSpace ℝ H₁] [CompleteSpace H₁]
 
-/-- `S1`: the graph of a closed operator is a complete space.
+/-- the form construction: the graph of a closed operator is a complete space.
 
 `LinearPMap.IsClosed` is by definition closedness of the graph as a set, so this is the closed
 subspace of the complete product `H₀ × H₁`. It is the completeness that makes the form domain
@@ -44,7 +44,7 @@ theorem completeSpace_graph (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClosed) : Com
   hT.completeSpace_coe
 
 omit [CompleteSpace H₀] [CompleteSpace H₁] in
-/-- `S2`: coercivity of the shifted form in the graph norm.
+/-- the shifted weak form: coercivity of the shifted form in the graph norm.
 
 The quadratic form `u ↦ ‖u‖² + s ‖T u‖²` dominates `min 1 s` times the squared graph norm. This is
 the coercivity hypothesis that `IsCoercive` asks for, with an explicit constant.
@@ -77,7 +77,7 @@ theorem graphNormSq_eq_inner_of_weakResolvent {T : H₀ →ₗ.[ℝ] H₁} {s : 
   rwa [real_inner_self_eq_norm_sq, real_inner_self_eq_norm_sq] at this
 
 omit [CompleteSpace H₀] [CompleteSpace H₁] in
-/-- `S4`, first half: a solution of the weak resolvent equation is a contraction of its datum,
+/-- the resolvent operator, first half: a solution of the weak resolvent equation is a contraction of its datum,
 so the resolvent is norm-nonexpansive. Test against `u` and apply Cauchy–Schwarz. -/
 theorem norm_le_of_weakResolvent {T : H₀ →ₗ.[ℝ] H₁} {s : ℝ} (hs : 0 < s) {f : H₀} {u : T.domain}
     (hu : WeakResolvent T s f u) :
@@ -91,7 +91,7 @@ theorem norm_le_of_weakResolvent {T : H₀ →ₗ.[ℝ] H₁} {s : ℝ} (hs : 0 
     exact le_of_mul_le_mul_right hmul h0
 
 omit [CompleteSpace H₀] [CompleteSpace H₁] in
-/-- `S4`, second half: a solution pairs nonnegatively with its datum, so the resolvent is a
+/-- the resolvent operator, second half: a solution pairs nonnegatively with its datum, so the resolvent is a
 nonnegative operator. The pairing equals the squared graph norm. -/
 theorem inner_nonneg_of_weakResolvent {T : H₀ →ₗ.[ℝ] H₁} {s : ℝ} (hs : 0 < s) {f : H₀}
     {u : T.domain} (hu : WeakResolvent T s f u) :

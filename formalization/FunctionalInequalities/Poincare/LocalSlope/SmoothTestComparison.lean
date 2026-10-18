@@ -13,7 +13,7 @@ Source: Blueprint `thm:smooth-lipschitz-constant-equivalence`; the final selecte
 corollary retains explicit intrinsic absolute continuity, before the separate Borell theorem.
 Read finite-constant equivalence, equality of the coordinate infima, the ambient/intrinsic
 chain, then the selected/literature corollary. All four proofs are complete.
-See `research/decisions/2026-09-06-smooth-literature-proofs.md` for scope and acceptance.
+
 
 `Poincare.LocalSlope.Holds ν` tests functions directly on ν. In contrast, `Poincare.LocalSlope.Intrinsic.constant μ` is
 already defined on `Probability.intrinsicMeasure μ`. The coordinate infimum below is printed

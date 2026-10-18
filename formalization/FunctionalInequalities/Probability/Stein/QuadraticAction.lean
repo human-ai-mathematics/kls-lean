@@ -17,7 +17,6 @@ Identities for the Euclidean action `Stein.action` of a real matrix, used for sp
   entries and mean `Id` whose `tr (B H B H)` satisfies the trace bound `∫ ≤ 2 tr (B²)` for every symmetric `B` (an input), the integrated
   energy of the shifted action is at most `2 tr (M²) + 2 t tr B + n t²`. No log-concavity or Hessian hypothesis is used.
 
-Provenance: accepted closed assemblies for the exact compact Letwin constant 8 (Codex acceptances recorded in the integration packet).
 All finite dimensions; nothing here asserts a Stein kernel.
 -/
 

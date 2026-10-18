@@ -10,8 +10,7 @@ import Mathlib.Topology.Instances.EReal.Lemmas
 included), an upper semicontinuous `G : E → EReal` that never takes `⊤`, takes a finite value somewhere and satisfies a linear
 decay `G x ≤ b − a‖x‖` with `a > 0` attains a finite global maximum. Values `⊥` elsewhere are allowed and no maximizing point
 is supplied. A generic tool, used for the attainment of the Legendre supremum
-(`Analysis/Convex/LegendreVariation/Attainment.lean`). Proof body: strong-API construction (reviewed; revalidated literal
-source `USCAttainmentFixed`, b5cd3f64…), verbatim; placement: Claude.
+(`Analysis/Convex/LegendreVariation/Attainment.lean`).
 -/
 
 noncomputable section

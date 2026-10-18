@@ -12,7 +12,6 @@ Letwin arXiv:2607.24164v1 Theorem 2.5 in weak form: for a normalized log-concave
 with Lipschitz gradient, the weak Brascamp–Lieb inequality applied to the entries of `√B ∇²U √B`, the matrix variance
 identity and the half energy bound give `∫ tr(B ∇²U B ∇²U) ≤ 2 tr(B B)` for PSD `B`. Regularity is explicit in each
 statement. The entry Brascamp–Lieb client and the finite component-integrability step are private one-use supports.
-Proof bodies: accepted Codex closed assemblies, verbatim up to the reviewed matrix-product name.
 -/
 
 noncomputable section

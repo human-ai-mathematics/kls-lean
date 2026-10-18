@@ -104,7 +104,7 @@ theorem eq_apply_of_tendsto (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClosed)
     linarith
   exact sub_eq_zero.mp (norm_eq_zero.mp (eq_zero_of_forall_pos_lt (norm_nonneg _) key))
 
-/-- **`P3`**: `P_t` is a contraction, `‖P_t f‖ ≤ ‖f‖`.  `S5` (`norm_exp_neg_smul_apply_le` applied
+/-- **contraction**: `P_t` is a contraction, `‖P_t f‖ ≤ ‖f‖`.  resolvent contraction (`norm_exp_neg_smul_apply_le` applied
 to the nonnegative operator `L_s`) passes to the limit. -/
 theorem norm_apply_le (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClosed)
     (hd : Dense (T.domain : Set H₀)) {t : ℝ} (ht : 0 ≤ t) (f : H₀) :
@@ -187,7 +187,7 @@ theorem map_add (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClosed)
   have h := Generated.map_smul_add T hT hd ht 1 f g
   rwa [one_smul, one_smul] at h
 
-/-- `P_t` packaged as a `ContinuousLinearMap` of operator norm at most `1`, using `P2` and `P3`.
+/-- `P_t` packaged as a `ContinuousLinearMap` of operator norm at most `1`, using `P2` and contraction.
 `Generated.operator_apply` identifies it with `Generated.apply`. -/
 def operator (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClosed) (hd : Dense (T.domain : Set H₀)) {t : ℝ}
     (ht : 0 ≤ t) : H₀ →L[ℝ] H₀ :=
@@ -225,7 +225,7 @@ theorem inner_exp_neg_smul_yosida (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClosed)
 
 namespace Generated
 
-/-- **`P4`**: `P_t` is symmetric, `⟪P_t f, g⟫ = ⟪f, P_t g⟫`.  Each `exp (-t • L_s)` is symmetric,
+/-- **symmetry**: `P_t` is symmetric, `⟪P_t f, g⟫ = ⟪f, P_t g⟫`.  Each `exp (-t • L_s)` is symmetric,
 and the defect `⟪P_t f, g⟫ - ⟪f, P_t g⟫` is bounded by `ε * (‖g‖ + ‖f‖)` for every `ε > 0`. -/
 theorem symmetric (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClosed)
     (hd : Dense (T.domain : Set H₀)) {t : ℝ} (ht : 0 ≤ t) (f g : H₀) :
@@ -280,9 +280,9 @@ theorem zero_time (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClosed)
   rw [hid, sub_self, norm_zero]
   exact hε
 
-/-- **`P6`**: the semigroup law `P_{t + u} = P_t ∘ P_u`.  `exp (-(t+u) • L_s)` factors as
+/-- **the semigroup law**: the semigroup law `P_{t + u} = P_t ∘ P_u`.  `exp (-(t+u) • L_s)` factors as
 `exp (-t • L_s) ∘ exp (-u • L_s)` (`exp_neg_add_smul_apply`); the error splits as
-`‖exp (-u • L_s) f - P_u f‖` (after the contraction `S5`) plus
+`‖exp (-u • L_s) f - P_u f‖` (after the contraction resolvent contraction) plus
 `‖exp (-t • L_s) (P_u f) - P_t (P_u f)‖`, and `P1` identifies the limit. -/
 theorem add_time (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClosed)
     (hd : Dense (T.domain : Set H₀)) {t u : ℝ} (ht : 0 ≤ t) (hu : 0 ≤ u) (f : H₀) :
@@ -358,7 +358,7 @@ theorem displacement_le (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClosed)
 
 /-- **`P7`**: strong continuity at `0`.  For `f ∈ D(T†T)` this is
 `Generated.displacement_le`; a general `f` is approximated within `ε/3` by some
-`g ∈ D(T†T)` (`dense_adjointComp_domain`), and the contraction `P3` together with linearity
+`g ∈ D(T†T)` (`dense_adjointComp_domain`), and the contraction contraction together with linearity
 transfers the bound. -/
 theorem continuous_at_zero (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClosed)
     (hd : Dense (T.domain : Set H₀)) (f : H₀) {ε : ℝ} (hε : 0 < ε) :
@@ -394,7 +394,7 @@ theorem continuous_at_zero (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClosed)
   linarith
 
 /-- **`P8`**: `t ↦ P_t f` is continuous on `[0, ∞)`.  For `t₀ ≤ t` the semigroup law gives
-`P_t f - P_{t₀} f = P_{t₀} (P_{t - t₀} f - f)`, which the contraction `P3` bounds by
+`P_t f - P_{t₀} f = P_{t₀} (P_{t - t₀} f - f)`, which the contraction contraction bounds by
 `‖P_{t - t₀} f - f‖`; for `t ≤ t₀` exchange the roles.  Then apply `P7`. -/
 theorem continuousOn (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClosed)
     (hd : Dense (T.domain : Set H₀)) (f : H₀) :

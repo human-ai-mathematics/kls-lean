@@ -3,13 +3,13 @@ import FunctionalInequalities.Analysis.Whitney.FirstOrderJet
 /-!
 # Boundary gluing for the compact first-order Whitney extension problem
 
-This module starts the sufficiency direction of obligation L6. It proves the boundary step:
+This module starts the sufficiency direction of obligation compact Whitney extension. It proves the boundary step:
 a candidate defined and differentiable off the compact set, with controlled value and derivative
 errors relative to nearest-point affine jets, extends the prescribed jet as a globally C¹ map.
 
 It does **not** construct that candidate. The quantitative covering, partition and affine-jet
 estimates are supplied by `WhitneyCover`, `WhitneyBump`, `WhitneyPartition` and
-`WhitneyConstruction`. The last module proves the full compact-set L6 extension theorem;
+`WhitneyConstruction`. The last module proves the full compact-set compact Whitney extension extension theorem;
 this module provides its boundary step. `FirstOrderJet` supplies the necessity direction.
 -/
 
@@ -148,7 +148,7 @@ theorem continuousAt_of_nearby_field {S : Set V} (hS : IsCompact S)
     have := dist_triangle (D y) (F a) (F x)
     linarith
 
-/-- The boundary gluing criterion for L6. The hypotheses concern a candidate and a continuous
+/-- The boundary gluing criterion for compact Whitney extension. The hypotheses concern a candidate and a continuous
 derivative field on the **complement** of the compact set, together with two quantitative
 nearest-jet estimates. The conclusion includes the ambient derivative on `S`, even when `S`
 has empty interior. `WhitneyConstruction` constructs such candidates in finite dimension. -/
@@ -188,7 +188,7 @@ theorem contDiff_of_nearby_jet {S : Set V} (hS : IsCompact S)
     · rw [hD hx]; exact hboundary x hx
     · exact hdiff x hx
 
-/-- Reduction of L6 to a controlled C¹ function on the complement. The input `w` need not
+/-- Reduction of compact Whitney extension to a controlled C¹ function on the complement. The input `w` need not
 agree with `f`, be continuous, or have the prescribed derivative on `S`. The extension is
 constructed by replacing its values on `S` with `f`; boundary gluing proves it is globally C¹.
 Existence of such a controlled `w` is proved separately in `WhitneyConstruction`; it is an

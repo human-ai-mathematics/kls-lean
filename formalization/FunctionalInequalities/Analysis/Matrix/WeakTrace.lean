@@ -9,8 +9,7 @@ a fixed-test finite integral contraction from given L1 coordinate pairings, loca
 coefficients from compact-local Lp entry data, and the full contracted identity
 `integral_trace_quadratic_flux_eq_neg_density` for arbitrary rough fields `H`, `R`, `E`, `T`, `ρ`. No Hessian,
 potential or source premise; all finite dimensions. Actual Hessian-evolution specializations live in
-`KLS/CEK/MomentRegularity/TraceStein.lean`. Proof bodies: accepted Codex closed assemblies (independent A5a closed assembly,
-local coefficient packet), verbatim up to reviewed helper names; one-use supports are private.
+`KLS/CEK/MomentRegularity/TraceStein.lean`. One-use supports are private.
 -/
 
 noncomputable section

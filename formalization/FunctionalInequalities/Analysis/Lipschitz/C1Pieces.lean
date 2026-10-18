@@ -3,7 +3,7 @@ import FunctionalInequalities.Analysis.Whitney.Construction
 import Mathlib.MeasureTheory.Measure.Haar.InnerProductSpace
 
 /-! # Exact C¹ pieces of a Lipschitz function
-L6a extracts compact jets; L6 extends each jet. Difference sets give a disjoint measurable
+compact Whitney jets extracts compact jets; compact Whitney extension extends each jet. Difference sets give a disjoint measurable
 partition of a conull set. Both values and ambient derivatives are preserved pointwise. -/
 
 noncomputable section
@@ -15,7 +15,7 @@ namespace FunctionalInequalities.Analysis
 variable {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V]
   [FiniteDimensional ℝ V] [MeasurableSpace V] [BorelSpace V]
 
-/-- **L7**: exact C¹ representatives on countably many disjoint measurable pieces,
+/-- **exact C¹ decomposition**: exact C¹ representatives on countably many disjoint measurable pieces,
 covering almost every point, with the original ambient derivative on each piece. -/
 theorem exists_contDiff_pieces {u : V → ℝ} {K : ℝ≥0} (hu : LipschitzWith K u) :
     ∃ (S : ℕ → Set V) (v : ℕ → V → ℝ),

@@ -11,8 +11,7 @@ potential `V_s + δ/2‖·‖²`, which is regular in the sense of (12): smooth 
 derivatives (`Growth`), convex, and `δ · Id ≤ ∇² ≤ (2s + δ) · Id` (`Hessian`). The two-step law is
 identified exactly with `Probability.quadraticTiltLaw (smoothedProbabilityLaw μ s) δ` and is
 log-concave. The approximation sequence, covariance normalization and the passage to the limit are
-not treated here. Proof bodies: root Codex (bundle `Gaussian-Regular-Producer`, independently
-accepted); statements and placement: Claude.
+not treated here.
 -/
 
 open MeasureTheory

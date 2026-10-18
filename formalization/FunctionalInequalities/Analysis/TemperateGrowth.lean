@@ -8,8 +8,6 @@ Generic calculus support (for the polynomial growth of the derivatives of a smoo
 Bizeul–Klartag–Lehec arXiv:2610.05474v1, Section 2, p. 5): on arbitrary real normed spaces, a
 polynomial bound on `D^{m+1} f` gives one on `D^m f` by the mean value inequality, and a smooth
 function with uniformly bounded derivatives of all orders `≥ 3` has `Function.HasTemperateGrowth`.
-Proof bodies: root Codex (bundle `Log-Composition-Bounds`, independently accepted); statements and
-placement: Claude.
 -/
 
 open Set

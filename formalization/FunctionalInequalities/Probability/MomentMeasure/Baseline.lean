@@ -8,7 +8,7 @@ import Mathlib.Analysis.Normed.Module.FiniteDimension
 The Legendre transform of the norm (zero on the closed unit ball, `⊤` outside), its density and finite positive Haar
 mass, and the finite functional value of the norm potential for finite first moment, including dimension zero.
 
-Declaration blocks are verbatim from the root-accepted CEK Proposition 12 bundle (`independent-p12-attainment`, ACCEPTANCE 848aa45b…) under the reviewed rev3 migration map.
+Supporting infrastructure for Cordero-Erausquin–Klartag, Proposition 12.
 -/
 
 noncomputable section

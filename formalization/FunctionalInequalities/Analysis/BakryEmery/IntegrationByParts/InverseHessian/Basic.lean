@@ -18,8 +18,7 @@ generic `integrable_and_integral_eq_zero_of_cutoff_defect`). The cutoffs themsel
 downstream in `IntegrationByParts/InverseHessian/Cutoff.lean`: `exists_scaled_cutoffs_hessianInverseOperator` for real
 `R ≥ 1` and its natural-index form `exists_cutoffs_hessianInverseOperator`, whose conclusions are exactly the cutoff
 premises of Lemma A.5 here. Not provided: a moment map for an arbitrary law, a closed `L²` generator, Brascamp–Lieb
-(A.6), Theorem 2.5 or Proposition 2.8. Proof bodies of the compact-test results: Codex route bundle
-`MA-Metric-IntegrationByParts` (independently accepted); statements and placement: Claude.
+(A.6), Theorem 2.5 or Proposition 2.8.
 -/
 
 noncomputable section
@@ -186,8 +185,8 @@ smooth bounded `f` with `Lf + c f ≥ 0`, `c > 0`, and smooth compactly supporte
 Lemma A.4 (`0 ≤ χ_n ≤ 1`, `χ_n → 1`, `‖Lχ_n‖_{L¹(ν)} → 0`), `Lf ∈ L¹(ν)` and `∫ Lf dν = 0`. The symmetry and the
 cutoff-product integrability are derived from (2.2) and continuity. The cutoffs are a premise here; for a potential in
 the Lemma A.4 source class they are supplied by `exists_cutoffs_hessianInverseOperator`
-(`IntegrationByParts/InverseHessian/Cutoff.lean`). Proof body: independently checked Astra (`round1.lean` 365a8d73…),
-verbatim. -/
+(`IntegrationByParts/InverseHessian/Cutoff.lean`).
+-/
 theorem integrable_and_integral_hessianInverseOperator_eq_zero_of_cutoffs (m : Measure E)
     [m.IsAddHaarMeasure] {φ V f : E → ℝ} (hφ : ContDiff ℝ ∞ φ) (hf : ContDiff ℝ ∞ f)
     {U : Set E} (hU : IsOpen U) (hV : ContDiffOn ℝ ∞ V U)
@@ -280,8 +279,8 @@ theorem integrable_and_integral_hessianInverseOperator_eq_zero_of_cutoffs (m : M
 
 /-- **Energy identity** (Letwin Lemma A.4, p. 17: (2.2) with `f = φ`, `g = h ∘ φ`): for a given potential as in (2.2)
 and smooth `h` with `h ∘ φ` compactly supported, `∫ (Lφ) h(φ) dν = −∫ h′(φ) Σ_ij A_ij ∂_iφ ∂_jφ dν`. No minimum,
-cutoff or bound is a premise. Proof body: Codex API job `letwin-a4-energy-identity-from-pointwise-astra-high-responses-v6`
-(9fd2dc24…), independently verified, verbatim. -/
+cutoff or bound is a premise.
+-/
 theorem integral_hessianInverseOperator_self_mul_comp_eq_neg (m : Measure E) [m.IsAddHaarMeasure]
     {φ V : E → ℝ} {h : ℝ → ℝ} (hφ : ContDiff ℝ ∞ φ) (hh : ContDiff ℝ ∞ h)
     (hc : HasCompactSupport (fun x => h (φ x)))
@@ -310,8 +309,8 @@ theorem integral_hessianInverseOperator_self_mul_comp_eq_neg (m : Measure E) [m.
 
 /-- **Weighted energy bound** (Letwin Lemma A.4, p. 17: `R⁻² ∫ w(W/R) Γ dν = ∫ q_R(W) LW dν ≤ ‖q_R‖_∞ ‖LW‖_{L¹}`): under
 the hypotheses of the energy identity, `|Lφ| ≤ D` and `|h| ≤ M`, the energy integrand `h′(φ) Γφ` is integrable and
-`−∫ h′(φ) Γφ dν ≤ D M`. No energy inequality or global integrability of `Γφ` is a premise. Proof body: Codex API job
-`letwin-a4-local-sum-equality-astra-medium-v4` (c4f53c4c…), independently verified, verbatim. -/
+`−∫ h′(φ) Γφ dν ≤ D M`. No energy inequality or global integrability of `Γφ` is a premise.
+-/
 theorem integrable_and_neg_integral_deriv_comp_mul_le (m : Measure E) [m.IsAddHaarMeasure]
     {φ V : E → ℝ} {h : ℝ → ℝ} (hφ : ContDiff ℝ ∞ φ) (hh : ContDiff ℝ ∞ h)
     (hc : HasCompactSupport (fun x => h (φ x)))

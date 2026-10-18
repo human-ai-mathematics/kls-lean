@@ -21,9 +21,7 @@ included) and a point `y` in the interior of the finite domain `{q | φ* q ≠ �
 
 No convexity, differentiability, nonnegativity or global finiteness of `φ` is assumed. Pointwise prerequisites of
 Cordero-Erausquin–Klartag, arXiv:1304.0630v1, (42) (Berman–Berndtsson, arXiv:1207.6128v1, Lemma 2.7 / Appendix 6); not the
-integral first variation, the source moment map or its push-forward. Proof bodies: strong-API constructions (reviewed;
-revalidated literal sources `MaximizerGradient`, `CoerciveTiltFixed`, `TiltedObjectiveFixed`, `ActualArgmax`), verbatim
-up to the namespace of `conjugate_maximizer_eq_gradient` (formerly `KLSConstruction.API.FirstVariation`); placement: Claude.
+integral first variation, the source moment map or its push-forward.
 -/
 
 noncomputable section

@@ -4,8 +4,8 @@ import FunctionalInequalities.KLS.LogConcave.Line.Hazard
 /-!
 # One-dimensional isoperimetry for log-concave laws: `h_M(ν) ≥ 2 ρ(m)`
 
-Source: Blueprint Stage 1 of `research/decisions/2026-09-19-buser-route.md`, obligations `Q1`,
-`Q1'` and `Q2` of `research/audits/BuserRouteStatements.lean`.  Read
+Source: of `research/decisions/2026-09-19-buser-route.md`, obligations the Minkowski Cheeger bound,
+the smooth-domain perimeter bound and the median density bound of `research/audits/BuserRouteStatements.lean`.  Read
 `LineDensity.le_two_mul` (the density is at most twice its value at a median), then the
 boundary-charge lemmas `LineDensity.mul_measure_Iio_diff_le`, `mul_measure_Ioi_diff_le`,
 `mul_measure_compl_le`, then the smooth-domain bound
@@ -25,7 +25,7 @@ the second the single boundary point `m` already carries `ρ(m) ≥ 2 ρ(m) · m
 The certified equality `h_M = h_S` then turns the smooth-domain bound into the bound on the
 Minkowski Cheeger infimum.
 
-For `Q2` the supporting exponential at the median with slope `k` has `|k| ≤ 2 ρ(m)`, because the
+For the median density bound the supporting exponential at the median with slope `k` has `|k| ≤ 2 ρ(m)`, because the
 half mass on the side where it decays is `ρ(m) / |k|`; the supporting-line bound
 `ρ ≤ ρ(m) + k (F - 1/2)` of the hazard module then gives `ρ ≤ 2 ρ(m)` on the interior of the
 support, and log-concavity together with the vanishing of `ρ` off that interior extends the bound
@@ -124,7 +124,7 @@ theorem interior_pos_subset : interior {y | 0 < d.ρ y} ⊆ interior (μ : Measu
     exact measure_mono_null hsub (ae_iff.mp hW0)
   exact absurd hvol (hWopen.measure_pos volume ⟨x, hxW⟩).ne'
 
-/-! ### `Q2`: the density is at most twice its value at a median -/
+/-! ### the median density bound: the density is at most twice its value at a median -/
 
 section Median
 
@@ -187,7 +187,7 @@ end Supergradient
 
 include hμ hi hm
 
-/-- Blueprint Stage 1 `Q2`: the density of a log-concave law on the line is at most twice its
+/-- the median density bound: the density of a log-concave law on the line is at most twice its
 value at a median, at every point of the line. -/
 theorem le_two_mul (x : ℝ) : d.ρ x ≤ 2 * d.ρ m := by
   have hmΩ := median_mem hμ hi hm
@@ -244,7 +244,7 @@ theorem le_two_mul (x : ℝ) : d.ρ x ≤ 2 * d.ρ m := by
     exact hseg t ht
   simpa using hlim
 
-/-! ### `Q1'`: the smooth-domain isoperimetric bound -/
+/-! ### the smooth-domain perimeter bound: the smooth-domain isoperimetric bound -/
 
 /-- Left half: the mass strictly left of the median outside an open set containing the median is
 charged by the boundary point closest to the median on that side. -/
@@ -383,7 +383,7 @@ theorem mul_measure_compl_le {W : Set ℝ} (hW : IsOpen W) (hmW : m ∈ W) :
         lintegral_mono' (Measure.restrict_mono (by
           rintro z (hz | hz) <;> exact hz.1) le_rfl) le_rfl
 
-/-- Blueprint Stage 1 `Q1'`: every smooth domain of the line has relative perimeter at least
+/-- the smooth-domain perimeter bound: every smooth domain of the line has relative perimeter at least
 `2 ρ(m)` times the balance of its mass. -/
 theorem mul_min_le_relativePerimeter (U : SmoothDomain ℝ) :
     ENNReal.ofReal (2 * d.ρ m) *
@@ -430,7 +430,7 @@ theorem mul_min_le_relativePerimeter (U : SmoothDomain ℝ) :
     · exact lintegral_mono' (Measure.restrict_mono
         (Set.inter_subset_inter_left _ hfrW) le_rfl) le_rfl
 
-/-- Blueprint Stage 1 `Q1`: the Minkowski Cheeger infimum of a log-concave law on the line is at
+/-- the Minkowski Cheeger bound: the Minkowski Cheeger infimum of a log-concave law on the line is at
 least twice the density at a median. -/
 theorem two_mul_le_minkowskiConstant :
     ENNReal.ofReal (2 * d.ρ m) ≤ Isoperimetry.minkowskiConstant μ := by

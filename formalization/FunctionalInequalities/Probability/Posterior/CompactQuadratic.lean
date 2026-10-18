@@ -8,8 +8,6 @@ Bizeul–Klartag–Lehec arXiv:2610.05474v1, p. 19, (67) in the compact stage: f
 prior every parameter pair `(c, Q)`, including the initial pair `c = Q = 0`, gives a probability
 posterior, continuous statistics are in `L²`, the expectation has the covariance derivative along signed
 parameter lines, and all norm moments are bounded uniformly in the parameters by a support radius.
-Proof bodies: Codex q_batch bundle `Posterior-Parameter-Calculus` (independently accepted); statements
-and placement: Claude.
 -/
 
 noncomputable section

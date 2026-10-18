@@ -10,9 +10,6 @@ derivatives along a list (`directional`, inherited order) commute under adjacent
 real `C²` symmetry, hence under every permutation, and the list convention is exactly the raw
 iterated Fréchet derivative, so `iteratedFDeriv ℝ m f x (h ∘ σ) = iteratedFDeriv ℝ m f x h`. No
 analytic, finite-dimensional, complete, Hilbert or measure premise; no tensor symmetry is assumed.
-Proof bodies: Codex bundle `Cumulant-Leibniz-Drift` (accepted owned snapshot
-`Takeover-Cumulant-Drift-20261008`, source sha 39f3cea9…); statements, namespace and placement: Claude
-(the frozen namespace `ReviewCumulantDrift` is mapped to `FunctionalInequalities.Analysis`, no alias).
 -/
 
 noncomputable section

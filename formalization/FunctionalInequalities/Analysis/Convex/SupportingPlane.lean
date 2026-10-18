@@ -10,7 +10,7 @@ For an extended-real potential with convex real epigraph, no value `-∞`, and `
 domain, a supporting affine function touching at `0` is produced by Hahn–Banach separation
 (`exists_supporting_affine_at_zero`); it is not supplied as a premise.
 
-Declaration blocks are verbatim from the root-accepted CEK Proposition 12 bundle (`independent-p12-attainment`, ACCEPTANCE 848aa45b…) under the reviewed rev3 migration map.
+Supporting infrastructure for Cordero-Erausquin–Klartag, Proposition 12.
 -/
 
 noncomputable section

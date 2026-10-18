@@ -14,8 +14,7 @@ transforms of a sequence (`eventually_affineMaximum_sub_le_legendre`, Cordero-Er
 arXiv:1304.0630v1, (60)).
 
 This is the geometric part of the proof of Lemma 17, (56b); the integration step is in
-`Probability/MomentMeasure/ConjugateMass.lean`. Declaration blocks are verbatim from ConjugateMass (90a65ba7…) of the
-root-accepted Lemma 17 bundle (ACCEPTANCE ec6d356c…).
+`Probability/MomentMeasure/ConjugateMass.lean`.
 -/
 
 noncomputable section

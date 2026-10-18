@@ -17,8 +17,7 @@ equality with a lower-semicontinuous closure).
 This is the extension step in the proof of Cordero-Erausquin–Klartag, *Moment measures* (arXiv:1304.0630v1), Lemma 17.
 Construction (private): `ψ x = ⨆ n, radialCut (radialScale n) x` with `radialScale n = 1 − 1/(n + 2)`, the value at
 `radialScale n • x` when that point lies in `K` and `⊤` otherwise; a countable supremum, hence Borel, and equal to the source's
-monotone radial limit. Statement: Claude (frozen e2a7b7ed…); proof: Codex source specialization, root-accepted
-(CEK17-R-Radial-Raw-Root ACCEPTANCE 3c339bcf…).
+monotone radial limit.
 -/
 
 noncomputable section

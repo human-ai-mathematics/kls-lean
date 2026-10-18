@@ -98,8 +98,8 @@ namespace Intrinsic
 variable {E : Type u} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
   [MeasurableSpace E] [BorelSpace E] [SecondCountableTopology E] [FiniteDimensional ℝ E]
 
--- The type is the one fixed by the statement round; `CompleteSpace E` is part of the frozen
--- signature, so the linter is silenced instead of the signature changed.
+-- `CompleteSpace E` is retained in this theorem signature.
+-- The unused-section-variable linter is locally disabled for this signature.
 set_option linter.unusedSectionVars false in
 /-- Blueprint `thm:smooth-gradient-relaxation-two-cheeger`: on ambient real `L²(μ)`, the selected
 canonical energy `𝓔^can_μ = SmoothGradient.Intrinsic.energy μ` equals twice the metric Cheeger

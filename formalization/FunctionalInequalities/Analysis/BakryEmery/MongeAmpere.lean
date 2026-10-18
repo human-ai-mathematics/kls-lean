@@ -19,14 +19,12 @@ with the inverse-Hessian operator, whose two right-hand-side matrices (`∇²φ 
 and the inverse-Hessian-weighted third-derivative Gram matrix) are positive semidefinite. Section
 `QuadraticForm` (Letwin Lemma A.4, p. 17): at a point with positive definite `C²` Hessian, the inverse-Hessian quadratic
 form `Σ_ij ((∇²φ)⁻¹)_{ij} a_i a_j` is nonnegative in every orthonormal basis and every rank
-(`sum_inverseHessianEntry_mul_mul_nonneg`; proof body: Codex API job `letwin-a4-inverse-quadratic-nonneg-astra-high-v1`
-with the existing inverse-matrix lemma explicitly instantiated, 99d92f10…, independently verified). Section
+(`sum_inverseHessianEntry_mul_mul_nonneg`). Section
 `Divergence`: the coordinate divergence of the inverse Hessian `Σ_i ∂_i A_{ij} = Σ_i A_{ij} ∂_iφ − ∂_jV(∇φ)`
 (from the zero-order equation, Jacobi and the third-slot commutation), the flux form
 `Σ_i ∂_i (e^{−φ} A_{ij}) = −e^{−φ} ∂_jV(∇φ)` and the density divergence form of the operator `L` of (2.2). The
 potential `φ` is given; moment-map existence (Lemma 2.2), Theorem 2.5, Brascamp–Lieb and Proposition 2.8 are
-not provided. Proof bodies: Codex route bundles `MA-Inverse`, `MA-Jacobi`, `MA-Second-Derivative` and
-`MA-Metric-IntegrationByParts` (independently accepted); statements and placement: Claude.
+not provided.
 -/
 
 noncomputable section

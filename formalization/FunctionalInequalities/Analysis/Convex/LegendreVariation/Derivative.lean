@@ -17,8 +17,7 @@ Let `φ` be proper and lower semicontinuous on a finite-dimensional real inner-p
 No maximizing family, derivative formula, primal differentiability, global finiteness or nonnegativity is assumed. This is
 the pointwise first variation behind Cordero-Erausquin–Klartag, arXiv:1304.0630v1, (42) (Berman–Berndtsson,
 arXiv:1207.6128v1, Lemma 2.7 second point / Appendix 6); the integral first variation (Euler–Lagrange) for a source law, the
-gradient push-forward, source regularity and CEK Theorem 2 are not provided. Proof bodies: strong-API constructions
-(reviewed; revalidated literal sources `LegendreNearMaxFixed`, `LegendreVariationFixed`), verbatim; placement: Claude.
+gradient push-forward, source regularity and CEK Theorem 2 are not provided.
 -/
 
 noncomputable section

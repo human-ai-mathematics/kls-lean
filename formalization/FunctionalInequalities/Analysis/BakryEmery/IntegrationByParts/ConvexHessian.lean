@@ -12,8 +12,7 @@ Letwin, arXiv:2607.24164v1, Lemma 2.3 (analytic part), for a given smooth convex
 `ν = e^{-φ} dx`: the diagonal Hessian entries are integrable (cutoff integration by parts, uniform
 bound, Fatou), hence all mixed entries, and `∫ ∂_u∂_v φ dν = ∫ ∂_uφ ∂_vφ dν`. No Hessian
 integrability, regularity, growth or exponential moment is assumed. The isotropy adapter is in
-`KLS/Isotropic.lean`. Proof bodies: root Codex (bundle `Convex-Hessian-Moment`, independently
-accepted); statements and placement: Claude.
+`KLS/Isotropic.lean`.
 -/
 
 open MeasureTheory Filter Topology

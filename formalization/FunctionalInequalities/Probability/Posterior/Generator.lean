@@ -13,8 +13,6 @@ expectation `(c, Q) ↦ ∫ f dμ_{c,Q}` of a measurable `f` bounded on the supp
 direction `M` is `−½ Cov(f, ⟪Mx,x⟫)`, and for every symmetric `M` the generator combination
 `D_c[M a] + ∂_Q[M] + ½ tr_M D²_c` vanishes. Instantiating `M = Cov(μ_{c,Q})⁻¹` is the deterministic
 content of the zero drift in (68); no stochastic process, Itô formula or martingale is constructed.
-Proof bodies: Codex q_batch bundle `Posterior-Generator-Cancellation` (independently accepted);
-statements and placement: Claude.
 -/
 
 noncomputable section

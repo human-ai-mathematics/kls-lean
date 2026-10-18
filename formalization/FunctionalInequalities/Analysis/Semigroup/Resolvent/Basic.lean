@@ -4,9 +4,9 @@ import Mathlib.Analysis.InnerProductSpace.ProdL2
 /-!
 # The resolvent: unique solvability of the weak equation
 
-`S3` of the semigroup-generation route
+resolvent solvability of the semigroup-generation route
 (`research/decisions/2026-09-19-semigroup-generation-route.md`), proved here as
-`existsUnique_weakResolvent`. See `Resolvent/Form.lean` for `S1`, `S2` and `S4`.
+`existsUnique_weakResolvent`. See `Resolvent/Form.lean` for the form construction, the shifted weak form and the resolvent operator.
 
 The proof uses **orthogonal projection, not Lax–Milgram**. Rescaling the second coordinate by
 `√s` turns the shifted form into the ambient inner product of `WithLp 2 (H₀ × H₁)`: for
@@ -20,7 +20,7 @@ theorems here: uniqueness needs neither closedness nor density, and existence ne
 **not density** — density matters only if one wants to identify the solution as `(1 + s T*T)⁻¹ f`
 through the adjoint, which this module does not do.
 
-`S5`–`S8` are not proved here.
+resolvent contraction–the semigroup limit are not proved here.
 -/
 
 noncomputable section
@@ -35,7 +35,7 @@ variable {H₀ H₁ : Type*} [NormedAddCommGroup H₀] [InnerProductSpace ℝ H�
   [NormedAddCommGroup H₁] [InnerProductSpace ℝ H₁] [CompleteSpace H₁]
 
 omit [CompleteSpace H₀] [CompleteSpace H₁] in
-/-- `S3`, uniqueness half: the weak resolvent equation has at most one solution.
+/-- resolvent solvability, uniqueness half: the weak resolvent equation has at most one solution.
 
 The difference of two solutions is tested against itself, giving `‖w‖² + s ‖T w‖² = 0`; strict
 positivity of `s` is not even needed for the norm to vanish, but it is kept to match the route.
@@ -86,10 +86,10 @@ theorem isClosed_graphL2 (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClosed) :
     IsClosed ((graphL2 T : Submodule ℝ (WithLp 2 (H₀ × H₁))) : Set (WithLp 2 (H₀ × H₁))) := by
   exact hT.preimage (WithLp.prodContinuousLinearEquiv 2 ℝ H₀ H₁).continuous
 
-/-- `S3`'s ambient space: the transported graph of a closed operator is a Hilbert space.
+/-- resolvent solvability's ambient space: the transported graph of a closed operator is a Hilbert space.
 
-This is the space on which the shifted form of `S2` is coercive, so it is exactly the input
-Lax–Milgram needs. The existence half of `S3` is still open. -/
+This is the space on which the shifted form of the shifted weak form is coercive, so it is exactly the input
+Lax–Milgram needs. The existence half of resolvent solvability is still open. -/
 theorem completeSpace_graphL2 (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClosed) :
     CompleteSpace (graphL2 T) :=
   (isClosed_graphL2 T hT).completeSpace_coe
@@ -147,7 +147,7 @@ theorem completeSpace_scaledGraphL2 (T : H₀ →ₗ.[ℝ] H₁) (s : ℝ) (hT :
     CompleteSpace (scaledGraphL2 T s) :=
   (isClosed_scaledGraphL2 T s hT).completeSpace_coe
 
-/-- `S3`, existence half: the weak resolvent equation has a solution.
+/-- resolvent solvability, existence half: the weak resolvent equation has a solution.
 
 The solution is the orthogonal projection of `(f, 0)` onto the rescaled graph; density of the
 domain is **not** needed, only closedness. -/
@@ -169,7 +169,7 @@ theorem exists_weakResolvent (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClosed) {s :
     rw [← mul_assoc, Real.mul_self_sqrt hs.le]
   linarith [h0, hprod]
 
-/-- `S3`: the weak resolvent equation is uniquely solvable for every datum. -/
+/-- resolvent solvability: the weak resolvent equation is uniquely solvable for every datum. -/
 theorem existsUnique_weakResolvent (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClosed) {s : ℝ} (hs : 0 < s)
     (f : H₀) : ∃! u : T.domain, WeakResolvent T s f u := by
   obtain ⟨u, hu⟩ := exists_weakResolvent T hT hs f
@@ -177,9 +177,9 @@ theorem existsUnique_weakResolvent (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClosed
 
 /-! ## The resolvent as a bounded operator
 
-`S3` gives unique solvability, so the solution map is a well-defined function; linearity follows
-from uniqueness, the norm bound from `S4`, and self-adjointness from symmetry of the form. This is
-the operator `J_s = (1 + s T*T)⁻¹` that the Yosida approximation of `S5`–`S8` is built from.
+resolvent solvability gives unique solvability, so the solution map is a well-defined function; linearity follows
+from uniqueness, the norm bound from the resolvent operator, and self-adjointness from symmetry of the form. This is
+the operator `J_s = (1 + s T*T)⁻¹` that the Yosida approximation of resolvent contraction–the semigroup limit is built from.
 -/
 
 section ResolventOperator

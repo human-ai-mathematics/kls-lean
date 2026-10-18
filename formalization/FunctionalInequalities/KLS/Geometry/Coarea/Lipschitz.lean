@@ -3,24 +3,14 @@ import FunctionalInequalities.KLS.Geometry.Coarea.Smooth
 
 /-! # Weighted coarea for Lipschitz functions
 
-L12: the exact C¹ pieces from L7 carry the C¹ formula L11. Countable additivity sums the
-pieces; null slicing L2 removes their ambient-null complement from almost every level.
-No boundedness, finite-volume, integrability, positive-dimension, or SFinite surface-measure
+Exact C¹ pieces carry the C¹ coarea formula. Countable additivity sums the pieces;
+null slicing removes their ambient-null complement from almost every level.
+No boundedness, finite-volume, integrability, positive-dimension or SFinite surface-measure
 assumption is imposed. The ENNReal weight may be identically infinity.
 
-The original entry point `Analysis.lintegral_enorm_gradient_mul_eq_lintegral_levelSet` (`T2`)
-migrated here at the end of this file from `KLS/WIP/AnalyticPrerequisites.lean`, where it was a
-direct hole, with a **byte-identical `pp.all` signature**: the same universe, the same six
-instance arguments in the same order, the same implicit binders `u`, `K`, `g`, the same
-hypothesis names `hu`, `hg`, and the same conclusion.  Only its proof is new, and it no longer
-depends on `sorryAx`.  It is `L12` at `S = Set.univ`; the coarea theorem is not reproved and no
-compatibility alias is introduced.  It keeps the `FunctionalInequalities.Analysis` namespace
-because its published name must not change, exactly as `KLS/Geometry/Slice/Measurable.lean`
-and `KLS/Geometry/Coarea/Isoperimetry.lean` did for their own migrations.
-
-**This closes neither the sharp `C^(finrank)` `Analysis.sard` nor its consequence
-`Analysis.ae_forall_fderiv_ne_zero`, which keep their statements, proofs and holes.**
--/
+`Analysis.lintegral_enorm_gradient_mul_eq_lintegral_levelSet` is the full-space specialization.
+The sharp finite-regularity Sard theorem and its nonzero-derivative consequence are proved
+separately in `Analysis/Sard/Sharp.lean`. -/
 
 noncomputable section
 open MeasureTheory Set Filter
@@ -31,7 +21,7 @@ namespace FunctionalInequalities.KLS
 variable {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V]
   [FiniteDimensional ℝ V] [MeasurableSpace V] [BorelSpace V]
 
-/-- **L12**: weighted Lipschitz coarea, including almost-everywhere slice measurability. -/
+/-- **globally Lipschitz coarea**: weighted Lipschitz coarea, including almost-everywhere slice measurability. -/
 theorem coarea_of_lipschitz {S : Set V} {u : V → ℝ} {K : ℝ≥0} {g : V → ℝ≥0∞}
     (hu : LipschitzWith K u) (hS : MeasurableSet S) (hg : Measurable g) :
     AEMeasurable (fun t : ℝ => ∫⁻ y in S ∩ {x | u x = t}, g y ∂(surfaceMeasure V))

@@ -1,6 +1,6 @@
 # Current KLS handoff
 
-Updated 2026-10-18 for combined reuse/API and source-comment delivery.
+Updated 2026-10-18 for reusable downstream acceptance and library-usability maintenance.
 
 ## Accepted result and open boundaries
 
@@ -17,56 +17,34 @@ BKL's main theorem is covered. Letwin's noncompact Theorems 1.1/1.2, the uncut E
 construction and literal identities (68)–(73), and the separate uncut intermediate statements
 remain open. The four exploratory routes retain their own statuses.
 
-## Current library and maintenance state
+## Library use and verification
 
-The article-standard review, BKL reorganization, documentation corrections and five subsequent
-source-layout batches are complete and independently accepted. All 8,018 compared public
-interfaces agree across the latter layout work. Proof statements, definitions, assumptions,
-certificate states and existing historical records were preserved.
+Use the [calling examples](examples/README.md), [compiler API directory](formalization/API.md)
+and [short review checklist](research/workflow.md#review-after-mechanical-checks).
+The [downstream runner](research/downstream.py) accepts a full Git commit, builds three narrow
+clients in a fresh Lake project, audits their complete primary declaration closure and replays
+its local compiled modules. It does not accept a working-tree overlay or renew a certificate;
+explicit third-party compiled caches remain trusted. Commands and failure receipts are described
+in the [example guide](examples/README.md#reproduce-downstream-acceptance).
 
-- [Lean design](LEAN_DESIGN.md) and [calling examples](examples/README.md): public interfaces and imports.
-- [Module directory](formalization/MODULES.md) and [BKL guide](formalization/FunctionalInequalities/KLS/BKL/README.md): source owners.
-- [Maintenance register](research/technical-debt/remaining-families.md): per-batch decisions, migration maps and acceptance requirements; MetricBV cross-family relocation remains deferred.
-- [Final documentation decision](research/decisions/2026-10-18-final-documentation-review.md): corrected status prose and shortened navigation.
+The [verification guide](research/verification.md) owns the full local command and receipt
+boundaries. `build/verification/latest.json` records the latest full attempt; its source snapshot,
+status and logs determine its scope. The downstream delivery evidence is kept separately under
+`build/reusability/2026-10-18-downstream-runner/`. Known
+[vendor holes](formalization/vendor/README.md#upstream-holes) remain isolated.
 
-## Reuse proposal and evidence
+The [usability record](research/decisions/2026-10-18-library-usability.md) preserves the accepted
+comment cleanup, Git consumer and API navigation batches. The
+[runner record](research/decisions/2026-10-18-downstream-runner.md) preserves the preceding handoff
+and this tool's placement and acceptance scope. Existing proofs, hypotheses, 34 certificate states
+and historical records are unchanged; this work adds verification tooling and navigation.
 
-The independent Git-pinned downstream acceptance, three narrow clients and two bounded-operator
-interfaces are recorded in the [reuse decision](research/decisions/2026-10-18-downstream-reuse.md)
-and [example guide](examples/README.md). Concise source headers and the scoped HminusOne openings
-preserve all 42 original declaration interfaces and proof-expression comparisons. Existing
-certificates, hypotheses and history are unchanged; the one empty migrated source directory was removed.
+## Coordination and next work
 
-The downstream/API snapshot `c9958b5d54af9715ff06354bf3a4386c5629387330c1902bc2ef21a1735f1d0d`
-passed full local verification at `build/verification/20261018T034819.544549Z/report.json`
-(297 gates, 282 strict clients, 9,856 local declarations and 867 module replays).
-Every project-local declaration, `KLS.kls` included, is audited; known [vendor holes](formalization/vendor/README.md#upstream-holes) remain isolated.
-
-The downstream/API proposal has per-batch receipts and its final frozen-tree verification
-under `build/reusability/2026-10-18-downstream-and-examples/STATE.json` and `FINAL-ACCEPTANCE.json`.
-Each receipt applies to its recorded snapshot; see [receipt scope](research/verification.md#receipts-and-trust-scope).
-
-## Source-comment maintenance
-
-The subsequent documentation-only pass cleans process records in 72 source files, in seven
-independently accepted batches. Every byte outside comments is preserved, along with hypotheses,
-certificate states, existing history and the real staging area. Original comments and the previous
-handoff are retained in the [process-history archive](research/decisions/2026-10-18-source-comment-process-history.md).
-Its source comparisons, reassessed evidence hashes and current documentation checks are indexed by
-`build/file-management/2026-10-18-source-comment-cleanup/COMPLETION.json`.
-This pass changes source/document hashes and does not renew the full Lean receipt above.
-
-## Coordination and delivery
-
-Proof API loops and the original Claude proof-integrator session are idle. The queued review
-follow-up stays paused. Sealed failures, previous decisions and controller records remain
-historical evidence. The [pre-delivery handoff](research/decisions/2026-10-18-pre-delivery-handoff.md)
-preserves the preceding state verbatim.
-
-The combined revision retains the two derived semigroup APIs and three calling examples,
-with existing proofs, assumptions and certificate states unchanged. Its fresh full local
-verification and source/staged-tree comparisons are recorded under
-`build/reviews/2026-10-18-reuse-comments-full-validation-and-push/`; `COMPLETION.json` binds
-the accepted source snapshot to the resulting commit and confirmed remote revision when delivery
-completes. Local editor configuration is excluded. Earlier receipts above retain their original
-snapshot scope; ordinary branch delivery does not claim remote CI.
+The original Claude read-only duplication review has delivered `READY_FOR_CODEX` under
+`build/reusability/2026-10-18-duplication-review/`; independent acceptance of its classifications
+and any implementation of its suggestions are separate work. No replacement was adopted here.
+Proof workers are idle and the queued review follow-up stays paused. Source owners are in the
+[module directory](formalization/MODULES.md); the
+[maintenance register](research/technical-debt/remaining-families.md) retains deferred MetricBV
+relocation. Local editor configuration is excluded from delivery.

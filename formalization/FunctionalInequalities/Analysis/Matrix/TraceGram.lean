@@ -8,8 +8,7 @@ import FunctionalInequalities.Analysis.Matrix.Positivity
 For a fully symmetric tensor `T` and a weight matrix `R`, the trace Gram matrix `(tr(R Tᵢ R Tⱼ))ᵢⱼ` is the
 coordinate form of Letwin's tensor term. This module states Letwin arXiv:2607.24164v1 (2.12) in these coordinates
 and derives the pointwise comparison `0 ≤ D`, `4 D ≤ g + 2 tr(B H B H)` used for the energy estimate (2.14).
-All finite dimensions are included; `B` may be singular. Proof bodies: accepted Codex closed assemblies,
-verbatim; the four-sum identity is a private one-use support.
+All finite dimensions are included; `B` may be singular. The four-sum identity is a private one-use support.
 -/
 
 noncomputable section

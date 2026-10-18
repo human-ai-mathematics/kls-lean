@@ -16,9 +16,7 @@ claimed). The root sandwiches the operator to the identity, `σ A σ = 1`, so it
 transported-law whitening API (image law with mean `0` and covariance `Id`) is claimed yet. Section `LocalLipschitz`: along a positive definite matrix profile the canonical
 `CFC.sqrt` is locally Lipschitz (relative continuity of `CFC.sqrt` on the nonnegative cone, a local positive floor,
 and the Sylvester estimate of `Matrix/Positivity`), and `inverseSqrt ∘ A` is locally Lipschitz whenever `Ring.inverse ∘ A`
-is `C¹` with positive invertible values; nothing is claimed off the self-adjoint positive cone. Proof bodies: Codex
-bkl bundle `Principal-Inverse-SquareRoot` and Codex q_batch bundle `Principal-Root-Regularity` (both independently
-accepted); statements and placement: Claude.
+is `C¹` with positive invertible values; nothing is claimed off the self-adjoint positive cone.
 -/
 
 noncomputable section
@@ -127,8 +125,8 @@ theorem inverseSqrt_unique (A S : E →L[ℝ] E)
     inverseSqrt A = S := inverseSqrtIn_unique _ A S hunit hS hSquare
 
 /-- **Root sandwich** `σ A σ = 1` for a positive unit `A` and `σ = inverseSqrt A`: from `A σσ = 1` and `σ` a unit,
-`(σ A σ) σ = σ`, so `σ A σ = 1` (no commutation of `σ` with `A` is used). Proof body: Luna (`gpt-5.6-luna`, NB2
-round 1); statement: Claude. -/
+`(σ A σ) σ = σ`, so `σ A σ = 1` (no commutation of `σ` with `A` is used).
+-/
 theorem inverseSqrt_mul_mul_inverseSqrt (A : E →L[ℝ] E) (hpos : A.IsPositive) (hunit : IsUnit A) :
     inverseSqrt A * A * inverseSqrt A = 1 := by
     have hspec := inverseSqrt_spec A hpos hunit

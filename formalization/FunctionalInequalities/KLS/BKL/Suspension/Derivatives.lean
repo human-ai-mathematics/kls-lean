@@ -19,12 +19,8 @@ through the graph law `(f(x), x)_* μ`. Differentiating `d` more times along cop
 unless all `i_k` coincide, and then equal `d!/(σ√N) · T_d f(e_{j_1}, …, e_{j_d})`. The helpers
 (block selection, local slot calculus, spatial slice) are private to this boundary.
 
-Provenance: Codex proofs (`build/reviews/2026-10-07-bkl-continuous/reviews/R4-FirstDerivative/` for
-(111), exact frozen statement `P71-R4d`; `reviews/P71-source112/S112-ORIGINAL-R5C-PROOF.lean` for
-(112), exact frozen statement `P71-R5c`), not Luna. The same derivative steps are
-also available as the public lemmas `hasDerivAt_log_integral_exp_laplaceMeasure_zero` (Luna, R4a3),
-`tiltAverage_inner_eq_fderiv_logLaplace_of_lt` (Luna, R4b2) and `hasDerivAt_log_integral_exp_copy`
-(Luna, R4d1).
+The first-derivative steps are also exposed by `hasDerivAt_log_integral_exp_laplaceMeasure_zero`,
+`tiltAverage_inner_eq_fderiv_logLaplace_of_lt` and `hasDerivAt_log_integral_exp_copy`.
 -/
 
 open MeasureTheory FunctionalInequalities FunctionalInequalities.Analysis.BakryEmery
@@ -33,8 +29,7 @@ open scoped RealInnerProductSpace
 
 namespace FunctionalInequalities.KLS.LogConcave.Suspension
 
-/-! Codex reviewer scratch helper assembly. The frozen target below is unchanged;
-all additional declarations are private lemmas. Production/API ownership remains with Claude/Luna. -/
+/-! Private helper lemmas for the first-derivative formula. -/
 
 open FunctionalInequalities.KLS.LogConcave.Suspension
 open scoped Topology ContDiff
@@ -472,7 +467,7 @@ private theorem iteratedFDeriv_sum_copies_select {ι : Type*} [Fintype ι] [Deci
       exact hsame (fun k => (hi k).trans (hi k0).symm)
     simp [hnot]
 
-/-! Codex scratch proof proposal: local symmetry and the mixed-derivative bridge in BKL (112).
+/-! Local symmetry and the mixed-derivative bridge in BKL (112).
 The function is smooth on an open neighborhood, not on the whole ambient space. -/
 
 set_option autoImplicit false
@@ -572,9 +567,8 @@ private theorem iteratedFDeriv_directional_on {g : E → F} {U : Set E}
       congrArg (fun a : E [×d]→L[ℝ] F => a h) heval
   exact heval'.trans hs.symm
 
-/-! Codex scratch consumer body. Compile with the exact two preceding scratch helper contexts.
-This is a genuine deduction of higher mixed derivatives from a separately proved first-derivative
-germ; no mixed derivative identity is assumed. -/
+/-! Higher mixed derivatives follow from the separately proved first-derivative germ;
+no mixed derivative identity is assumed. -/
 
 open scoped ContDiff Topology
 open Filter Set
@@ -692,10 +686,9 @@ private theorem jointSpatialSlice_single {N n : ℕ} (i : Fin N) (j : Fin n) :
         simp [EuclideanSpace.basisFun_apply]
       · simp [hi, EuclideanSpace.basisFun_apply, Prod.ext_iff]
 
-/-! Codex scratch source consumer. The actual (111) proof context is copied unaltered from
-q_batch's Production111.lean; the new higher derivative and factorial assembly are Codex.
-This statement is BKL (112) for the original regular-law setting; no separate L2 premise is needed.
-It does not assert Proposition 7.1's final operator inequality. -/
+/-! BKL (112) follows from the first-derivative identity (111) by higher differentiation
+and the factorial calculation in the original regular-law setting. No separate L2 premise is needed.
+This does not assert Proposition 7.1's final operator inequality. -/
 
 open MeasureTheory FunctionalInequalities FunctionalInequalities.Analysis.BakryEmery
 open FunctionalInequalities.KLS.LogConcave.Suspension

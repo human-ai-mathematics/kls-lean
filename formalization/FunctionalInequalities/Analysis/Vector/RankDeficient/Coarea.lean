@@ -2,10 +2,7 @@ import FunctionalInequalities.Analysis.Vector.RankDeficient.StratumSlicing
 
 /-! # The rank-deficient critical set, and the codimension-`m` coarea formula
 
-The last three obligations of the rank-deficient route recorded in
-`research/decisions/2026-09-17-rank-deficient-route.md`: `R8`, the localization; **`R0`**, the
-target — the rank-deficient critical set is `ℋ^k`-null in almost every level; and **`R9`**, the
-codimension-`m` coarea formula with **no hypothesis on the critical set**.
+Critical-set localization gives almost-everywhere nullity of rank-deficient fibres and the codimension-`m` coarea formula without a critical-set hypothesis.
 
 **What this closes.**  `Analysis/Vector/Coarea/Regular.lean` proved the coarea formula where the
 differential is surjective, and `Analysis/Vector/Slice/Critical.lean` extended it under the hypothesis
@@ -18,15 +15,14 @@ the set of critical *values*, which for a merely `C¹` map may well be positive.
 `C¹`, not Lipschitz.  The fibre measure is the normalized Hausdorff measure of the complementary
 dimension, in the repository's standing convention.
 
-**The route, in one paragraph.**  `R1` stratifies the critical set by the exact rank of the
-differential into finitely many measurable layers.  On a layer, `R2` says the differential dies
-along the fibres of the regular component `P ∘ u`, `R3` makes that quantitative with a locally
-uniform right-inverse bound, and `R4` turns the two into a small tangential Lipschitz constant.
-`R7` then runs the approximating partition on `u` itself and applies the Eilenberg bound **inside a
+**The route, in one paragraph.**  Rank stratification decomposes the critical set by the exact rank of the
+differential into finitely many measurable layers.  On a layer, The kernel identity says the differential dies
+along the fibres of the regular component `P ∘ u`, a locally uniform right-inverse bound makes this quantitative, and small tangential Lipschitz control turns the two into a small tangential Lipschitz constant.
+fibrewise slicing then runs the approximating partition on `u` itself and applies the Eilenberg bound **inside a
 fibre**, where `k + (m − r) = n − r` is the right exponent, integrating against the proved regular
-coarea formula; that gives the layer's nullity near each of its points.  `R8` here patches those
-neighbourhoods together by second countability, the finite union over `r < m` gives `R0`, and the
-critical part of the coarea equality then vanishes on both sides, giving `R9`.
+coarea formula; that gives the layer's nullity near each of its points.  critical-set localization here patches those
+neighbourhoods together by second countability, the finite union over `r < m` gives critical-fibre nullity, and the
+critical part of the coarea equality then vanishes on both sides, giving vector coarea.
 -/
 
 noncomputable section
@@ -40,7 +36,7 @@ variable {V W : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [FiniteD
   [NormedAddCommGroup W] [InnerProductSpace ℝ W] [FiniteDimensional ℝ W]
   [MeasurableSpace W] [BorelSpace W]
 
-/-- **`R8`: a local null-slicing statement patches to a global one.**  `V` is second countable, so
+/-- **critical-set localization: a local null-slicing statement patches to a global one.**  `V` is second countable, so
 the neighbourhood family has a countable subcover and the almost-everywhere quantifier survives the
 countable intersection.  No regularity of `u` and no measurability of `A` is used. -/
 theorem ae_hausdorffMeasure_inter_levelSet_eq_zero_of_local {u : V → W} {A : Set V} {k : ℕ}
@@ -96,7 +92,7 @@ theorem ae_hausdorffMeasure_stratum_inter_levelSet_eq_zero {u : V → W} (hu : C
   ae_hausdorffMeasure_inter_levelSet_eq_zero_of_local
     fun _x₀ hx₀ => exists_nhds_ae_hausdorffMeasure_stratum_inter_levelSet_eq_zero hu hk hr hx₀
 
-/-- **`R0`: the critical set of a `C¹` map is `ℋ^k`-null in almost every level.**  This is the
+/-- **critical-fibre nullity: the critical set of a `C¹` map is `ℋ^k`-null in almost every level.**  This is the
 target of the rank-deficient route, and it covers the **whole** critical set
 `{x | fderiv ℝ u x` is not surjective`}`, not merely the part where the derivative vanishes.
 
@@ -123,7 +119,7 @@ theorem ae_hausdorffMeasure_critical_inter_levelSet_eq_zero {u : V → W} (hu : 
     _ = 0 := by
         refine Finset.sum_eq_zero fun r hr => ht r hr
 
-/-- The normalized form of `R0`, which the coarea layer consumes. -/
+/-- The normalized form of critical-fibre nullity, which the coarea layer consumes. -/
 theorem ae_hausdorffNormalized_critical_inter_levelSet_eq_zero {u : V → W} (hu : ContDiff ℝ 1 u)
     {k : ℕ} (hk : k + finrank ℝ W = finrank ℝ V) :
     ∀ᵐ t ∂(volume : Measure W),
@@ -132,10 +128,10 @@ theorem ae_hausdorffNormalized_critical_inter_levelSet_eq_zero {u : V → W} (hu
   filter_upwards [ae_hausdorffMeasure_critical_inter_levelSet_eq_zero hu hk] with t ht
   exact (hausdorffNormalized_eq_zero_iff (V := V) k _).2 ht
 
-/-- **`R9`: the codimension-`m` coarea formula for `C¹` maps, with no hypothesis on the critical
+/-- **vector coarea: the codimension-`m` coarea formula for `C¹` maps, with no hypothesis on the critical
 set.**  `Analysis/Vector/Slice/Critical.lean` proved this under the extra assumption that the
 derivative vanishes wherever it fails to be surjective, which for `m ≥ 2` is a genuine restriction;
-`R0` removes it.
+critical-fibre nullity removes it.
 
 No finiteness, boundedness, integrability or regular-value hypothesis is used, `S` is an arbitrary
 Borel set, `g` an arbitrary measurable `ℝ≥0∞` weight, and no positivity of the codimension is

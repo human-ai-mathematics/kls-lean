@@ -3,17 +3,15 @@ import FunctionalInequalities.Analysis.Semigroup.Resolvent.Basic
 /-!
 # Resolvent limits: `J_s → 1` as `s ↓ 0`, and commutation
 
-Part B (`R1`–`R3`) of the von Neumann route recorded in
-`research/decisions/2026-09-19-von-neumann-route.md`, restated in
-`research/audits/VonNeumannRouteStatements.lean`:
+The module proves:
 
-* `R1`, `norm_resolventCLM_sub_sq_le`: for `f ∈ D(T)`, `‖J_s f - f‖ ^ 2 ≤ s * ‖T f‖ ^ 2`;
-* `R2`, `exists_delta_norm_resolventCLM_sub_lt`: `J_s → 1` strongly as `s ↓ 0`, in `ε`–`δ` form
+* the quantitative resolvent bound, `norm_resolventCLM_sub_sq_le`: for `f ∈ D(T)`, `‖J_s f - f‖ ^ 2 ≤ s * ‖T f‖ ^ 2`;
+* strong resolvent convergence, `exists_delta_norm_resolventCLM_sub_lt`: `J_s → 1` strongly as `s ↓ 0`, in `ε`–`δ` form
   (`resolventCLM` carries the proof `0 < s` as an argument, so this is how the route states it);
-* `R3`, `resolventCLM_comp_comm`: the resolvents commute, `J_s J_r = J_r J_s`.
+* resolvent commutation, `resolventCLM_comp_comm`: the resolvents commute, `J_s J_r = J_r J_s`.
 
 The same module also proves the **graph-norm** convergence that the Bakry–Émery form-domain stage
-needs and that `R1`–`R3` do not give: for `f ∈ D(T)`, `T (J_s f) → T f` in `H₁`
+needs and that the quantitative resolvent bound–resolvent commutation do not give: for `f ∈ D(T)`, `T (J_s f) → T f` in `H₁`
 (`exists_delta_norm_map_resolventDomain_sub_map_lt`), together with the two-parameter energy
 identity `resolventDomain_energy_identity` behind it, antitonicity of `s ↦ ‖T (J_s f)‖ ^ 2`
 (`norm_map_resolventDomain_sq_le_of_le`), its Cauchy consequence
@@ -26,20 +24,20 @@ and the unique solvability of `Resolvent/Basic.lean`.  In particular:
 
 **The adjoint never appears.**  No declaration here refers to `LinearPMap.adjoint`, to
 `adjointComp` or to `adjointCompDomain`; the module does not import
-`FunctionalInequalities.Analysis.Semigroup.AdjointComp`, and it proves none of `V1`–`V5` of the
-same route.  It also proves nothing about `S6`–`S8` of the semigroup-generation route (the Yosida
+`FunctionalInequalities.Analysis.Semigroup.AdjointComp`, and it proves none of the form identity–the resolvent defect identity of the
+same route.  It also proves nothing about the adjoint-product identification–the semigroup limit of the semigroup-generation route (the Yosida
 exponentials, the semigroup laws, the generator), nothing about the Markov property or
 Bakry–Émery calculus, and no step of Buser's inequality.  This is general real Hilbert space
 material: no measure, no log-concavity, no KLS quantity.
 
 ## Strengthenings over the route statements
 
-`R1` is proved through the **sharper** `norm_resolventCLM_sub_sq_le_quarter`, with the constant
+the quantitative resolvent bound is proved through the **sharper** `norm_resolventCLM_sub_sq_le_quarter`, with the constant
 `s ‖T f‖ ^ 2 / 4` (the route asks only for `s ‖T f‖ ^ 2`).  The sharp form is the honest output of
 the computation `‖u - f‖ ^ 2 = -s ‖T u‖ ^ 2 + s ⟪T u, T f⟫ ≤ s ‖T f‖ ^ 2 / 4`, so the route's
-bound is kept verbatim as a wrapper.  No route hypothesis is dropped: `R1` and `R3` use
-closedness only through `resolventCLM`, `R2` genuinely needs density, and completeness of `H₀`
-and `H₁` is required for `resolventCLM` to exist at all.  The route's `R3` suggests routing
+bound is kept verbatim as a wrapper.  No route hypothesis is dropped: the quantitative resolvent bound and resolvent commutation use
+closedness only through `resolventCLM`, strong resolvent convergence genuinely needs density, and completeness of `H₀`
+and `H₁` is required for `resolventCLM` to exist at all.  The route's resolvent commutation suggests routing
 through the resolvent identity `J_s - J_r = (r - s) J_s T†T J_r`; the proof here instead shows
 that `s • J_s f - r • J_r f + (r - s) • J_s (J_r f)` solves the weak equation with datum `0`,
 hence vanishes, which is the same identity with the adjoint removed.
@@ -56,12 +54,12 @@ namespace FunctionalInequalities.Analysis.Semigroup
 variable {H₀ H₁ : Type*} [NormedAddCommGroup H₀] [InnerProductSpace ℝ H₀] [CompleteSpace H₀]
   [NormedAddCommGroup H₁] [InnerProductSpace ℝ H₁] [CompleteSpace H₁]
 
-/-! ## `R1` — quantitative convergence on the domain -/
+/-! ## the quantitative resolvent bound — quantitative convergence on the domain -/
 
-/-- The exact form of `R1`'s computation: testing the weak equation for `u = J_s f` against
+/-- The exact form of the quantitative resolvent bound's computation: testing the weak equation for `u = J_s f` against
 `v = u - f ∈ D(T)` gives `‖u - f‖ ^ 2 = -s ‖T u‖ ^ 2 + s ⟪T u, T f⟫`.
 
-This is the only place where the weak equation is used in the proof of `R1`. -/
+This is the only place where the weak equation is used in the proof of the quantitative resolvent bound. -/
 theorem norm_resolventCLM_sub_sq_eq (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClosed) {s : ℝ} (hs : 0 < s)
     (f : T.domain) :
     ‖resolventCLM T hT hs f - f‖ ^ 2
@@ -85,9 +83,9 @@ theorem norm_resolventCLM_sub_sq_eq (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClose
   rw [hTself] at h
   linarith [hsym]
 
-/-- `R1`, sharp form: for `f ∈ D(T)`, `‖J_s f - f‖ ^ 2 ≤ s ‖T f‖ ^ 2 / 4`.
+/-- the quantitative resolvent bound, sharp form: for `f ∈ D(T)`, `‖J_s f - f‖ ^ 2 ≤ s ‖T f‖ ^ 2 / 4`.
 
-Sharper than the route's `R1` by the factor `4`: the computation
+Sharper than the route's the quantitative resolvent bound by the factor `4`: the computation
 `‖u - f‖ ^ 2 = -s ‖T u‖ ^ 2 + s ⟪T u, T f⟫` is closed by Cauchy–Schwarz and
 `s (‖T u‖ - ‖T f‖ / 2) ^ 2 ≥ 0`, so the bound `‖T u‖ ≤ ‖T f‖` suggested by the route sketch is
 not needed. -/
@@ -104,7 +102,7 @@ theorem norm_resolventCLM_sub_sq_le_quarter (T : H₀ →ₗ.[ℝ] H₁) (hT : T
     mul_nonneg hs.le (sq_nonneg _)
   nlinarith [h1, h2]
 
-/-- `R1` of the von Neumann route: for `f ∈ D(T)`, `‖J_s f - f‖ ^ 2 ≤ s ‖T f‖ ^ 2`.
+/-- the quantitative resolvent bound of the von Neumann route: for `f ∈ D(T)`, `‖J_s f - f‖ ^ 2 ≤ s ‖T f‖ ^ 2`.
 
 The route's statement, obtained from the sharp `norm_resolventCLM_sub_sq_le_quarter`. -/
 theorem norm_resolventCLM_sub_sq_le (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClosed) {s : ℝ} (hs : 0 < s)
@@ -112,14 +110,14 @@ theorem norm_resolventCLM_sub_sq_le (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClose
   have h := norm_resolventCLM_sub_sq_le_quarter T hT hs f
   nlinarith [mul_nonneg hs.le (sq_nonneg ‖T f‖)]
 
-/-! ## `R2` — strong convergence to the identity -/
+/-! ## strong resolvent convergence — strong convergence to the identity -/
 
-/-- `R2` of the von Neumann route: `J_s f → f` as `s ↓ 0`, for every `f : H₀`.
+/-- strong resolvent convergence of the von Neumann route: `J_s f → f` as `s ↓ 0`, for every `f : H₀`.
 
 Stated in `ε`–`δ` form because `resolventCLM` carries the proof `0 < s` as an argument.  Split
 `‖J_s f - f‖ ≤ ‖J_s (f - g)‖ + ‖J_s g - g‖ + ‖g - f‖` for `g ∈ D(T)` within `ε / 3` of `f`
 (density), bound the outer terms by the contraction property `norm_resolventCLM_le` and the middle
-term by `R1`, and take `δ = (ε / 3) ^ 2 / (‖T g‖ ^ 2 + 1)`. -/
+term by the quantitative resolvent bound, and take `δ = (ε / 3) ^ 2 / (‖T g‖ ^ 2 + 1)`. -/
 theorem exists_delta_norm_resolventCLM_sub_lt (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClosed)
     (hD : Dense (T.domain : Set H₀)) (f : H₀) {ε : ℝ} (hε : 0 < ε) :
     ∃ δ : ℝ, 0 < δ ∧ ∀ {s : ℝ} (hs : 0 < s), s < δ → ‖resolventCLM T hT hs f - f‖ < ε := by
@@ -159,7 +157,7 @@ theorem exists_delta_norm_resolventCLM_sub_lt (T : H₀ →ₗ.[ℝ] H₁) (hT :
     exact le_trans (norm_add_le _ _) (by linarith)
   linarith
 
-/-! ## `R3` — the resolvents commute -/
+/-! ## resolvent commutation — the resolvents commute -/
 
 /-- The weak resolvent identity, with the adjoint removed: for all `s, r > 0` and every datum `f`,
 `s • J_s f - r • J_r f + (r - s) • J_s (J_r f) = 0` inside `D(T)`.
@@ -190,7 +188,7 @@ theorem resolventDomain_identity (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClosed) 
     simp [T.map_zero]
   exact weakResolvent_unique hs hzero hzero'
 
-/-- `R3` of the von Neumann route: the resolvents commute, `J_s J_r = J_r J_s`.
+/-- resolvent commutation of the von Neumann route: the resolvents commute, `J_s J_r = J_r J_s`.
 
 From `resolventDomain_identity`: `w = J_s (J_r f)` satisfies the weak `r`-equation with datum
 `J_s f`, so `w = J_r (J_s f)` by uniqueness. -/
@@ -225,9 +223,9 @@ theorem resolventCLM_comp_comm (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClosed) {s
 
 /-! ## Graph-norm convergence of the resolvent
 
-`R1`–`R3` above measure `J_s f - f` in the norm of `H₀` only.  Buser's route needs the
+the quantitative resolvent bound–resolvent commutation above measure `J_s f - f` in the norm of `H₀` only.  Buser's route needs the
 convergence in the **graph norm** of `T`: for `f ∈ D(T)` also `T (J_s f) → T f`.  That does not
-follow from `R1`–`R3`, and it is not a consequence of the `H₀`-contraction of `J_s` either: the
+follow from the quantitative resolvent bound–resolvent commutation, and it is not a consequence of the `H₀`-contraction of `J_s` either: the
 energies `‖T (J_s f)‖` have to be shown to converge, not merely to stay bounded.
 
 Everything here is again proved from the weak equation alone; the adjoint still never appears,
@@ -374,7 +372,7 @@ private theorem exists_tendsto_of_energy_cauchy {H : Type*} [NormedAddCommGroup 
   nlinarith [norm_nonneg (x n - x N), hη, le_abs_self (‖x n‖ ^ 2 - ‖x N‖ ^ 2)]
 
 /-- **Graph-norm convergence of the resolvent.** For `f ∈ D(T)` and every `ε > 0` there is
-`δ > 0` with `‖T (J_s f) - T f‖ < ε` for every `0 < s < δ`; together with `R1` this says that
+`δ > 0` with `‖T (J_s f) - T f‖ < ε` for every `0 < s < δ`; together with the quantitative resolvent bound this says that
 `J_s f → f` in the graph norm of `T`, i.e. that `J_s f` approximates `f` in the form domain.
 
 Stated in `ε`–`δ` form because `resolventDomain` carries the proof `0 < s` as an argument.
@@ -382,7 +380,7 @@ Stated in `ε`–`δ` form because `resolventDomain` carries the proof `0 < s` a
 Proof.  Along `s_n = 1 / (n + 1)` the energies `‖T (J_{s_n} f)‖ ^ 2` are monotone
 (`norm_map_resolventDomain_sq_le_of_le`) and bounded by `‖T f‖ ^ 2`
 (`norm_map_resolventDomain_le`), and the increments control the distances
-(`norm_map_resolventDomain_sub_sq_le_sub`), so `T (J_{s_n} f)` converges in `H₁`; `R1` makes
+(`norm_map_resolventDomain_sub_sq_le_sub`), so `T (J_{s_n} f)` converges in `H₁`; the quantitative resolvent bound makes
 `J_{s_n} f → f` in `H₀`, and **closedness of `T`** identifies the limit as `T f`.  Hence
 `‖T (J_{s_n} f)‖ → ‖T f‖`, and `norm_map_resolventDomain_sub_map_sq_le` with antitonicity of the
 energy transfers the resulting estimate from the sequence to every small `s`. -/

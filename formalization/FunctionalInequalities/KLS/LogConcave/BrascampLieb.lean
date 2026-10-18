@@ -19,9 +19,7 @@ Route: by Young, compact integration by parts and the ordinary-diffusion coerciv
 centered class of `f` satisfies `2⟪f̄, w⟫ − ‖w‖² ≤ ∫ energy` on the compact smooth diffusion images `w`, which are dense in the
 centered classes (`center_mem_closure_compactSmoothDiffusionImage`). This is the inequality of Letwin, arXiv:2607.24164v1,
 Lemma A.6, for a GIVEN potential: the source moment map, its Euler–Lagrange identification, push-forward and regularity, and
-therefore A.6 for the source law and Theorem 2.5, are not provided. Proof bodies: strong-API candidate (gpt-6-astra,
-`api-scalar-bl-extended-gaussian-v5`, 394a24b1…; the finite-energy blocks from the accepted assembly-v2), verbatim with
-their section variable contexts; the one-use Hilbert-closure and `L²`-pairing helpers are private here; placement: Claude.
+therefore A.6 for the source law and Theorem 2.5, are not provided. The one-use Hilbert-closure and `L²`-pairing helpers are private here.
 -/
 
 noncomputable section

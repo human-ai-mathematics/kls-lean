@@ -9,8 +9,7 @@ import FunctionalInequalities.Probability.Transport
 A continuous concave exponent `φ` with `∫ e^{φ} dμ < ∞` tilts a log-concave probability law to a
 log-concave law: on the intrinsic affine support the Borell density is multiplied by the log-concave
 weight `e^{φ}/Z`, and the result is pushed forward along the reconstruction isometry. Used for the BKL
-posterior with `Q ≥ 0` (`KLS/BKL/PosteriorDomain.lean`). Proof bodies: Codex q_batch bundle
-`Posterior-LogConcavity` (independently accepted); statements and placement: Claude.
+posterior with `Q ≥ 0` (`KLS/BKL/PosteriorDomain.lean`).
 -/
 
 noncomputable section

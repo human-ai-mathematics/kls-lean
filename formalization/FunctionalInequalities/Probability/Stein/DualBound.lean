@@ -9,8 +9,7 @@ import FunctionalInequalities.Energy.DualNorm
 Letwin, arXiv:2607.24164v1, Lemma 2.9 in generic form: if `τ` is an a.e. symmetric Stein kernel of
 `μ ≪ volume` with `|τ|_HS ∈ L²(μ)` and finite second moment, then for every `v` the linear function
 `⟪·, v⟫` has finite `H^{-1}(μ)` norm with `‖⟪·, v⟫‖²_{H^{-1}} ≤ ∫ ‖τ(x) v‖² dμ` (A.7 plus Cauchy–Schwarz
-on every unit-energy test). Proof bodies: Codex route (bundle `Letwin-A7`, independently accepted);
-statements and placement: Claude.
+on every unit-energy test).
 -/
 
 open MeasureTheory

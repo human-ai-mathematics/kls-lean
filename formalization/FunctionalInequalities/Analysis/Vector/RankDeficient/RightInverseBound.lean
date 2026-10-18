@@ -5,15 +5,9 @@ import Mathlib.Analysis.Normed.Operator.Bilinear
 
 /-! # Approximate right inverses of a surjection, pointwise and locally uniformly
 
-Obligation `R3` of the rank-deficient route recorded in
-`research/decisions/2026-09-17-rank-deficient-route.md` and stated in
-`research/audits/RankDeficientRouteStatements.lean`.  **Only `R3` is proved here**; together with
-the already proved `R1` and `R2` of `Analysis/Vector/RankDeficient/Stratification.lean` that is three of the route's
-obligations.  `R0`, `R4`–`R10`, `N1` and `N2` remain open, and so does the rank-deficient part of
-the codimension-`m` coarea critical set.  Nothing here is a coarea formula, a slicing statement or
-a Sard theorem.
+Surjective continuous linear maps admit norm-controlled approximate inverses, with locally uniform bounds obtained by perturbing a fixed right inverse.
 
-**What `R3` is for.**  In the route a fibre of the regular component `v = P ∘ u` is sliced, and the
+**What the uniform right-inverse bound is for.**  In the route a fibre of the regular component `v = P ∘ u` is sliced, and the
 chord `b - a` of a fibre is *not* a tangent vector: two points of one fibre only give
 `‖Dv (b - a)‖ ≤ ε ‖b - a‖`, not `Dv (b - a) = 0`.  Turning that into smallness of `‖Du (b - a)‖`
 needs a quantitative statement that a vector almost annihilated by a surjection is close to its
@@ -55,7 +49,7 @@ theorem exists_mem_ker_norm_sub_le {L : V →L[ℝ] W₁} {R : W₁ →L[ℝ] V}
     refine (R.le_opNorm _).trans ?_
     gcongr
 
-/-- **`R3`, pointwise.**  A surjection onto a finite-dimensional space admits a single constant `C`
+/-- **the uniform right-inverse bound, pointwise.**  A surjection onto a finite-dimensional space admits a single constant `C`
 such that every vector is within `C ‖L z‖` of the kernel.
 
 The domain is an arbitrary real normed space: only the target has to be finite-dimensional, which
@@ -86,7 +80,7 @@ theorem rightInverse_comp_inverse {A : V →L[ℝ] W₁} {R₀ : W₁ →L[ℝ] 
   have := congrArg (fun T : W₁ →L[ℝ] W₁ => T y) hmul
   simpa using this
 
-/-- **`R3`, locally uniform.**  Around a point where the differential of a `C¹` map is surjective
+/-- **the uniform right-inverse bound, locally uniform.**  Around a point where the differential of a `C¹` map is surjective
 there is a neighbourhood carrying **one** bound `M` on the differential and **one** constant `C`
 for the kernel estimate.
 

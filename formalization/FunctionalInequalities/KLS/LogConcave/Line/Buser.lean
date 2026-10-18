@@ -143,7 +143,7 @@ end Isoperimetry
 
 /-! ### `Q4`: the linear test -/
 
-/-- Blueprint Stage 1 `Q4`: the identity is a smooth test of unit gradient energy on the line, so
+/-- `Q4`: the identity is a smooth test of unit gradient energy on the line, so
 the variance is at most the smooth-test Poincaré constant. -/
 theorem evariance_le_smoothTest_constant (ν : ProbabilityMeasure ℝ)
     (h : MemLp id 2 (ν : Measure ℝ)) :
@@ -198,7 +198,7 @@ theorem interior_support_nonempty : (interior (μ : Measure ℝ).support).Nonemp
   · rw [ha, d.measure_singleton] at hfull
     simp at hfull
 
-/-- Blueprint Stage 1 `Q3`: a law on the line whose density is bounded by `M` has extended
+/-- `Q3`: a law on the line whose density is bounded by `M` has extended
 variance at least `1 / (12 M²)`. -/
 theorem one_div_le_evariance {M : ℝ} (hM : 0 < M) (hbd : ∀ x, d.ρ x ≤ M) :
     ENNReal.ofReal (1 / (12 * M ^ 2)) ≤ evariance id (μ : Measure ℝ) := by
@@ -283,7 +283,7 @@ theorem minkowskiConstant_eq_top_of_interior_empty (hν : LogConcave ν)
       exact iInf_neg (by rw [hB0]; exact lt_irrefl 0)
   · exact iInf_neg hB
 
-/-- Blueprint Stage 1 `Q0`: on the line the squared inverse Cheeger scale is at most twelve times
+/-- `Q0`: on the line the squared inverse Cheeger scale is at most twelve times
 the smooth-test Poincaré constant. -/
 theorem inv_minkowskiConstant_sq_le (hν : LogConcave ν) :
     (Isoperimetry.minkowskiConstant ν)⁻¹ ^ 2 ≤
@@ -329,7 +329,7 @@ theorem inv_minkowskiConstant_sq_le (hν : LogConcave ν) :
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
   [MeasurableSpace E] [BorelSpace E] [SecondCountableTopology E] [FiniteDimensional ℝ E]
 
-/-- Blueprint Stage 1 `Q0'`: a log-concave law whose affine support has dimension at most one
+/-- `Q0'`: a log-concave law whose affine support has dimension at most one
 satisfies the Buser comparison with constant twelve.  Dirac laws have both sides zero on the
 left. -/
 theorem inverseScale_sq_le_of_finrank_le_one {μ : ProbabilityMeasure E} (hμ : LogConcave μ)

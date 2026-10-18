@@ -6,8 +6,7 @@ import Mathlib.MeasureTheory.Function.L2Space
 Generic facts about the pairing `∫ ⟪a, f⟫ dμ` of two square-integrable fields: identification with
 the `L²` inner product, continuity along `L²` convergence, Cauchy–Schwarz, the energy identity
 `∫ ‖a‖² = ‖a‖₂²`, and integrability of the pointwise pairing. Used for the Stein-kernel identities of
-Letwin arXiv:2607.24164v1 (Appendix A.7). Proof bodies: Codex route (bundle `Letwin-A7`,
-independently accepted); statements and placement: Claude.
+Letwin arXiv:2607.24164v1 (Appendix A.7).
 -/
 
 open MeasureTheory Filter

@@ -23,10 +23,7 @@ Legendre transform, with no selected maximizers. `ConvexPotential φ` excludes `
 * `legendre_eq_interior_sup`: if `K` is open and convex with `0 ∈ K`, and `ψ` is radially closed and `⊤` off `closure K`,
   the transform is the supremum of its affine terms over `K` (proof of Lemma 17, (56b)).
 
-Measure-free; the exponential density, mass and the CEK functional are in `Probability/MomentMeasure/`. Declaration blocks
-are verbatim from the root-accepted Lemma 17 bundle (`independent-lemma17`, ACCEPTANCE ec6d356c…): lane A definitions
-(6433a0f6…) and prerequisites (5ec2f621…), round 2 convexification (7df876d9…) and `legendre_eq_interior_sup` from
-ConjugateMass (90a65ba7…).
+Measure-free; the exponential density, mass and the CEK functional are in `Probability/MomentMeasure/`.
 -/
 
 noncomputable section

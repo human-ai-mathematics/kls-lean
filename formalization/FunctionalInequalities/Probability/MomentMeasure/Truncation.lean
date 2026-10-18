@@ -8,7 +8,7 @@ Dominated convergence for lower truncations, the lower-tail control of the trunc
 reduction of every admissible competitor to a convex lower semicontinuous admissible one
 (`exists_convexified_lowerTruncate_variational_le_add`), with zero and infinite exponential mass retained.
 
-Declaration blocks are verbatim from the root-accepted CEK Proposition 12 bundle (`independent-p12-attainment`, ACCEPTANCE 848aa45b…) under the reviewed rev3 migration map.
+Supporting infrastructure for Cordero-Erausquin–Klartag, Proposition 12.
 -/
 
 noncomputable section

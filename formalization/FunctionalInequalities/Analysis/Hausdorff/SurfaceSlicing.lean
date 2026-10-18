@@ -36,9 +36,9 @@ level.  It is not a consequence of the majorant bound — that bound says nothin
 function's measurability — and it is proved in `Analysis/Hausdorff/Content.lean` through the
 scalewise open-cover costs, whose scale limit is `μH[d]` and each of which is upper semicontinuous
 in the level.  Only the positive normalizing scalar is added here, so no dimension split is
-needed. The later declarations in this module prove the Borel-set bridge L4 and
-measurable-weight version L5, with almost-everywhere measurability under a Lipschitz bound on
-the set. `LevelSetMeasurable` exposes L5 at `S = Set.univ` under the original Analysis name.
+needed. The later declarations in this module prove the Borel-set bridge Borel-slice measurability and
+measurable-weight version weighted-slice measurability, with almost-everywhere measurability under a Lipschitz bound on
+the set. `LevelSetMeasurable` exposes weighted-slice measurability at `S = Set.univ` under the original Analysis name.
 -/
 
 noncomputable section

@@ -5,10 +5,7 @@ import Mathlib.Analysis.SpecialFunctions.Exponential
 /-!
 # A mean value bound for `exp (-t • A) f - f + t • A f`
 
-`G2` of the generated-semigroup route
-(`research/decisions/2026-09-19-generated-semigroup-route.md`, statements in
-`research/audits/GeneratedSemigroupRouteStatements.lean`), proved here as
-`norm_exp_neg_smul_sub_add_smul_le` and restated verbatim as `route_G2`.
+The estimate is `norm_exp_neg_smul_sub_add_smul_le`.
 
 For a bounded operator `A` on a complete normed space, a vector `f`, `0 ≤ t` and a real `C`: if
 `‖exp (-τ • A) (A f) - A f‖ ≤ C` for every `τ ∈ [0, t]`, then
@@ -35,21 +32,21 @@ exponential is ever estimated, which avoids the `ContinuousLinearMap` norm insta
 Nonnegativity of `A` is not assumed and not needed, nor is `0 ≤ C`: for `t = 0` both sides
 are `0`.
 
-## Route hypotheses not used
+## Scope
 
-The route states `G2` on a real Hilbert space, `[InnerProductSpace ℝ H₀] [CompleteSpace H₀]`. The
+The route states the exponential mean-value bound on a real Hilbert space, `[InnerProductSpace ℝ H₀] [CompleteSpace H₀]`. The
 inner product plays no role — no symmetry, no nonnegativity, no Cauchy–Schwarz — so the module
 lemmas are proved for an arbitrary `[NormedSpace ℝ H₀] [CompleteSpace H₀]`, and `route_G2`
 accepts the `InnerProductSpace` instance and discards it. Completeness **is** used: it supplies
 `CompleteSpace (H₀ →L[ℝ] H₀)`, the hypothesis under which `NormedSpace.exp` is differentiable.
 The hypothesis `0 ≤ t` **is** used, so that `[0, t]` is the correct interval and `t` its right
-endpoint. This follows the precedent of `S2`, `S3`, `S5` and `V1`, which likewise prove the
+endpoint. This follows the precedent of the shifted weak form, resolvent solvability, resolvent contraction and the form identity, which likewise prove the
 general statement and keep a verbatim wrapper.
 
 ## Deliberately out of scope
 
-`G1` (uniformity on `[0, t]` of the `S6` convergence) and `G3`/`S8` (the generator of the limit
-semigroup is `-T†T`) are **not** proved here; neither are `P1`–`P8` (`S7`). This module mentions
+the generator right derivative (uniformity on `[0, t]` of the the adjoint-product identification convergence) and `G3`/the semigroup limit (the generator of the limit
+semigroup is `-T†T`) are **not** proved here; neither are `P1`–`P8` (the exponential approximation). This module mentions
 no unbounded operator `T`, no adjoint, no resolvent and no Yosida approximation: it is a
 statement about a single bounded operator. Nothing here is the Markov property, Bakry–Émery
 calculus, a small-time heat estimate, localization or any step of Buser's inequality;
@@ -64,7 +61,7 @@ section MeanValue
 
 variable {H₀ : Type*} [NormedAddCommGroup H₀] [NormedSpace ℝ H₀] [CompleteSpace H₀]
 
-/-- The path `σ ↦ exp (-σ • A) f - f + σ • A f` used in `G2` is differentiable, with derivative
+/-- The path `σ ↦ exp (-σ • A) f - f + σ • A f` used in the exponential mean-value bound is differentiable, with derivative
 `-(exp (-τ • A) (A f)) + A f`.
 
 This is `hasDerivAt_exp_smul_const` for the operator `-A`, evaluated at the fixed vector `f`,
@@ -92,7 +89,7 @@ theorem hasDerivAt_exp_neg_smul_path (A : H₀ →L[ℝ] H₀) (f : H₀) (τ : 
   refine ((hu.sub_const f).add hs).congr_deriv ?_
   rw [hswap]
 
-/-- **`G2`, for an arbitrary complete normed space.** Let `A` be a bounded operator, `f` a vector,
+/-- **the exponential mean-value bound, for an arbitrary complete normed space.** Let `A` be a bounded operator, `f` a vector,
 `0 ≤ t` and `C : ℝ`. If `‖exp (-τ • A) (A f) - A f‖ ≤ C` for every `τ ∈ [0, t]`, then
 
 `‖exp (-t • A) f - f + t • A f‖ ≤ C * t`.
@@ -119,7 +116,7 @@ theorem norm_exp_neg_smul_sub_add_smul_le (A : H₀ →L[ℝ] H₀) (f : H₀) {
 
 end MeanValue
 
-/-- **`G2` of the generated-semigroup route**, stated verbatim as in
+/-- **the exponential mean-value bound of the generated-semigroup route**, stated verbatim as in
 `research/audits/GeneratedSemigroupRouteStatements.lean` and discharged from
 `norm_exp_neg_smul_sub_add_smul_le`.
 

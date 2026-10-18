@@ -14,9 +14,7 @@ products, entries of derivatives, and the coordinate form of the inverse derivat
 `operatorMatrix b T = LinearMap.toMatrixOrthonormal b T` with its inverse `operatorOfMatrix`, positivity,
 unit and inverse transfer (identified with the entries by `operatorMatrix_apply_eq_operatorEntry`), and the
 continuous linear charts `operatorOfMatrixL`/`operatorMatrixL` between Euclidean matrix entries and operators
-(finite-dimensional norm comparison; no identification of the Frobenius and operator norms). Proof bodies:
-Codex route bundles `MA-Inverse`, `Principal-Inverse-SquareRoot` and `Principal-Root-Regularity` (independently
-accepted); statements and placement: Claude.
+(finite-dimensional norm comparison; no identification of the Frobenius and operator norms).
 -/
 
 noncomputable section

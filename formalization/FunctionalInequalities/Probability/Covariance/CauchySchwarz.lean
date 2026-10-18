@@ -7,8 +7,7 @@ import Mathlib.Probability.Moments.Variance
 `cov[X, Y]² ≤ Var X · Var Y` for two square-integrable real statistics under a probability measure, on
 an arbitrary measurable space. The pinned Mathlib has `covariance_eq_sub`, `covariance_self`, the
 bilinearity lemmas and `variance_nonneg` but no such endpoint. It is a deterministic support of the BKL (68)
-posterior noise estimate (Codex review `Root-Posterior-Noise-Bound-20261008`; proof body: Luna unit NB1,
-independently accepted 2026-10-08): the nonnegative variance polynomial of `Y − tX` is expanded by
+posterior noise estimate: the nonnegative variance polynomial of `Y − tX` is expanded by
 bilinearity, and both the zero-variance and positive-variance branches in `X` are treated.
 -/
 

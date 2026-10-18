@@ -16,8 +16,7 @@ Laplace derivatives at `0` are the moment tensors bounded by the uniform quantit
 independent of `x`, and the temperate-growth constructor turns the uniform bounds of orders `≥ 3`
 into `Function.HasTemperateGrowth`. Constants depend on `n`, the dimension and `s`; nothing here is
 dimension-free. Quadratic regularization, whitening and the convergence of the approximation are
-separate. Proof bodies: Codex q_batch (bundle `Gaussian-AllOrder-Growth`, independently accepted);
-statements and placement: Claude.
+separate.
 -/
 
 open MeasureTheory ProbabilityTheory Set FunctionalInequalities

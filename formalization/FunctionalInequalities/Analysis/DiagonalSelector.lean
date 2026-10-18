@@ -6,8 +6,7 @@ import Mathlib.Analysis.SpecificLimits.Basic
 
 Generic tool: from row limits `G n k → F n` (`k → ∞`) and an outer limit `F n → x`, choose indices
 `k n ≥ n` with `G n (k n) → x`. Used for the joint Gaussian-then-quadratic regular approximation
-(Bizeul–Klartag–Lehec arXiv:2610.05474v1, Section 2). Proof body: Codex q (bundle
-`Gaussian-Quadratic-Diagonal`, independently accepted); statement and placement: Claude.
+(Bizeul–Klartag–Lehec arXiv:2610.05474v1, Section 2).
 -/
 
 open Filter Topology

@@ -466,9 +466,9 @@ private theorem measurePreserving_coordinateEquiv (μ : ProbabilityMeasure E) :
   funext x
   simp [Function.comp, Probability.intrinsicMap]
 
--- The type is the one fixed by the statement round; `CompleteSpace E` became unused only because
--- the body is now a proof rather than a hole, so the linter is silenced instead of the signature
--- changed.
+-- `CompleteSpace E` is retained although this proof does not require completeness.
+-- The unused-section-variable linter is locally disabled for this signature.
+-- This does not change the retained completeness premise.
 set_option linter.unusedSectionVars false in
 /-- The affine-support isoperimetric constant of `def:isoperimetric-cheeger-scale` is the
 coordinate-space Minkowski constant of the intrinsic law: the map `x ↦ x - a` from the affine

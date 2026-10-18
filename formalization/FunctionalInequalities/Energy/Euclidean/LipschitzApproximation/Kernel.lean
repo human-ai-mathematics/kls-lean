@@ -4,8 +4,7 @@ import FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Measurable
 /-!
 # LipschitzApproximation: Kernel
 
-Responsibility split of the existing implementation. Public namespaces, mathematical scope
-and proof bodies are preserved; later layers import their prerequisites.
+The normalized smooth kernel, its compact support and derivative bounds for Euclidean Lipschitz approximation.
 -/
 
 noncomputable section

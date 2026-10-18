@@ -12,7 +12,7 @@ same (`symmetric_trace_integral_extension_mul`, a.e. form `symmetric_trace_integ
 source coefficient `C = 2` is `symmetric_trace_integral_extension`). The integrability for `B` is derived (pointwise Jordan domination of
 `Matrix/Sign.lean` and `Matrix/Trace/Energy.lean`); no finiteness of `ν`, nonemptiness or commutation is assumed. The positive
 semidefinite bound is a named hypothesis: it is not constructed here, nor is the moment map, Brascamp–Lieb or Theorem
-2.5 itself. Proof body: strong-API candidate (gpt-6-astra, `api-symmetric-client-patch-v9`, 1376c19e…), verbatim.
+2.5 itself.
 -/
 
 noncomputable section

@@ -14,6 +14,7 @@ The [Lean design](../LEAN_DESIGN.md) explains current interface boundaries; the
 
 The [complete filename directory](MODULES.md) expands every source directory and links all
 Lean modules. Regenerate it with `python3 research/module_inventory.py` after module moves.
+The [generated API directory](API.md) provides compiler signatures and an offline search page.
 
 | Family | Responsibility / guide |
 | --- | --- |

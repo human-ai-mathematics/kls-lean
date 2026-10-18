@@ -8,7 +8,7 @@ import FunctionalInequalities.Analysis.Convex.SupportingPlane
 accordingly (`legendre_affineSubtract`), convex real epigraphs are preserved, finite shifts cancel in `EReal`, and a
 touching plane at `0` normalizes a potential to be nonnegative and zero at the origin. Pointwise; no measure.
 
-Declaration blocks are verbatim from the root-accepted CEK Proposition 12 bundle (`independent-p12-attainment`, ACCEPTANCE 848aa45b…) under the reviewed rev3 migration map.
+Supporting infrastructure for Cordero-Erausquin–Klartag, Proposition 12.
 -/
 
 noncomputable section

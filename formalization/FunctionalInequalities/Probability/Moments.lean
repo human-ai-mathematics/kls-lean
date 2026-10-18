@@ -15,14 +15,11 @@ import FunctionalInequalities.Analysis.Matrix.Trace.Algebra
 `memLp_id_two_iff_lintegral_enorm_rpow_lt_top` characterises finite second moments. The section
 `ThirdMomentContraction` proves `Σ_{ijk} (∫ x_i x_j x_k dν)² ≤ ∫ ‖x‖⁶ dν` for a probability law on `ℝⁿ` with
 integrable sixth moment (no centering or log-concavity), a deterministic support of the proposed
-log-determinant non-explosion route for the BKL localization equations (67) (Codex review
-`Takeover-Logdet-Nonexplosion-20261008`; proof body: Luna unit TM1b round 6, independently accepted 2026-10-08).
+log-determinant non-explosion route for the BKL localization equations (67).
 The section `MomentTails` holds the eighth-moment tail bounds on a normed group with Borel structure: for a
 probability law with integrable `‖x‖⁸` and `R > 0`, `ν(ball(0,R)ᶜ) ≤ M₈/R⁸` (Markov) and `‖x‖⁴` together with its
 tail restriction are integrable with `∫ 1_{ball(0,R)ᶜ} ‖x‖⁴ ≤ M₈/R⁴`, `M₈` the actual eighth moment. They are the first
-supports of the ball-conditioning stage of the moment-potential producer (Codex reviews
-`Takeover-Moment-Potential-Producer-20261008`, `Conditioning-Draft-Review-20261008`; proof bodies: Luna units CB2 round 5
-and CB3 round 2 under the checked-context driver, independently accepted 2026-10-08, kept verbatim).
+supports of the ball-conditioning stage of the moment-potential producer.
 -/
 
 open MeasureTheory

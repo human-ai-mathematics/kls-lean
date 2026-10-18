@@ -13,8 +13,7 @@ and the Poincaré constants transport through linear isometries between (possibl
 finite-dimensional inner product spaces, with the same curvature constants `a, b`. In particular a
 regular law on an abstract space has a regular law in standard coordinates on `ℝⁿ`, so a Poincaré
 bound for isotropic regular laws on `ℝⁿ` transfers with the same constant. No non-isometric
-invariance of the constant is asserted. Proof bodies: Codex bkl (bundle `Regular-Isometry-Transport`,
-independently accepted); statements and placement: Claude.
+invariance of the constant is asserted.
 -/
 
 open MeasureTheory

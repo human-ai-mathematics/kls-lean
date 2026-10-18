@@ -7,8 +7,7 @@ import FunctionalInequalities.Analysis.BakryEmery.IntegrationByParts.Basic
 
 Weak counterpart of `integral_inner_gradient_tilted`: the ordinary weighted Laplacian `ℒv = Δv - ⟪∇U, ∇v⟫` of a
 compactly supported smooth test, at a C1 potential `U` with `∫ e^{-U} = 1`, paired with a globally bounded weak
-function. Support for Letwin arXiv:2607.24164v1 Lemma A.6 at C^{1,1}. Proof body: accepted Codex closed assembly
-(light variant without the inverse-Hessian import), verbatim.
+function. Support for Letwin arXiv:2607.24164v1 Lemma A.6 at C^{1,1}.
 -/
 
 noncomputable section

@@ -17,8 +17,7 @@ noise `γ_s` (kernel `e^{-s‖y‖²}`, variance `ε = 1/(2s)`) has mean zero an
 the smoothed law `μ * γ_s` of a law with finite second moment keeps the mean and has covariance
 `Cov μ + ε·Id`, with `∫‖y‖²` increased by `n ε`. As `s → ∞` the means, raw second moments and
 covariance operators converge to those of `μ`. The weak convergence of the smoothed laws is in
-`Approximation`. Proof bodies: Codex q_batch (bundle `Gaussian-Moments-Convergence`, independently
-accepted); statements and placement: Claude.
+`Approximation`.
 -/
 
 open MeasureTheory ProbabilityTheory Filter Topology

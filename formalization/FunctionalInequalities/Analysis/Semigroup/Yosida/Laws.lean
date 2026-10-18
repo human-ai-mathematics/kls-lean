@@ -40,7 +40,7 @@ theorem yosida_symm (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClosed) {s : ℝ} (hs
     inner_sub_right, resolventCLM_symm]
 
 /-- `Y3`: the Yosida family commutes, `L_s L_r = L_r L_s`.  Both sides expand to
-`s⁻¹ r⁻¹ (1 - J_s - J_r + J_s J_r)`, and `J_s J_r = J_r J_s` is `R3`
+`s⁻¹ r⁻¹ (1 - J_s - J_r + J_s J_r)`, and `J_s J_r = J_r J_s` is resolvent commutation
 (`resolventCLM_comp_comm`). -/
 theorem yosida_comp_comm (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClosed) {s r : ℝ} (hs : 0 < s)
     (hr : 0 < r) :
@@ -51,7 +51,7 @@ theorem yosida_comp_comm (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClosed) {s r : �
   simp only [ContinuousLinearMap.comp_apply, yosida_apply, map_smul, map_sub, hcomm]
   module
 
-/-- `Y4`: on `D(T†T)` the Yosida approximation is `L_s = J_s T†T`.  This is `V5`
+/-- `Y4`: on `D(T†T)` the Yosida approximation is `L_s = J_s T†T`.  This is the resolvent defect identity
 (`sub_resolvent_eq_smul`) divided by `s`. -/
 theorem yosida_apply_eq_resolventCLM_adjointComp (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClosed)
     (hd : Dense (T.domain : Set H₀)) {s : ℝ} (hs : 0 < s) (f : (adjointComp T).domain) :
@@ -60,7 +60,7 @@ theorem yosida_apply_eq_resolventCLM_adjointComp (T : H₀ →ₗ.[ℝ] H₁) (h
     one_smul]
 
 /-- `Y5`: on `D(T†T)` the Yosida approximation converges strongly to `T†T` as `s ↓ 0`.  By `Y4`
-the difference is `J_s (T†T f) - T†T f`, which `R2`
+the difference is `J_s (T†T f) - T†T f`, which strong resolvent convergence
 (`exists_delta_norm_resolventCLM_sub_lt`) makes small. -/
 theorem exists_delta_norm_yosida_sub_adjointComp_lt (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClosed)
     (hd : Dense (T.domain : Set H₀)) (f : (adjointComp T).domain) {ε : ℝ} (hε : 0 < ε) :

@@ -5,22 +5,22 @@ import Mathlib.Topology.MetricSpace.Thickening
 
 /-! # The first-order jet condition of the Whitney extension problem
 
-Obligation `L6` of the weighted coarea route asks for the converse of what is proved here: that a
+Property compact Whitney extension of the weighted coarea route asks for the converse of what is proved here: that a
 compatible first-order jet `(f, F)` on a compact set extends to a globally `C¹` function with
-exactly those values and derivatives.  **`L6` itself is not proved in this module**, and the pinned
+exactly those values and derivatives.  **compact Whitney extension itself is not proved in this module**, and the pinned
 Mathlib contains no Whitney extension theorem — only the unrelated `WhitneyEmbedding` for manifolds
 and `Continuous.exists_contDiff_approx_and_eqOn`, which requires the function to be `C^n` on a
 whole *neighbourhood* of the closed set and therefore cannot start from jet data on the set alone.
 
-What is proved here is that `L6`'s hypothesis is **necessary**, so the jet condition it assumes is
+What is proved here is that compact Whitney extension's hypothesis is **necessary**, so the jet condition it assumes is
 exactly the right one: if some globally `C¹` function realizes the jet on a compact `S`, then the
 uniform first-order remainder estimate
 
 `∀ ε > 0, ∃ δ > 0, ∀ x y ∈ S, ‖y - x‖ < δ → ‖f y - f x - F x (y - x)‖ ≤ ε ‖y - x‖`
 
-holds.  Together with `L6` this makes the estimate a characterization, and it is the exact
-interface between `L6a` — which must *produce* this estimate on compact pieces of a Lipschitz
-function — and `L6`, which *consumes* it.
+holds.  Together with compact Whitney extension this makes the estimate a characterization, and it is the exact
+interface between compact Whitney jets — which must *produce* this estimate on compact pieces of a Lipschitz
+function — and compact Whitney extension, which *consumes* it.
 
 The proof is the mean value inequality along segments.  Compactness enters twice: it makes the
 closed unit thickening of `S` compact in a finite-dimensional space, so the continuous derivative
@@ -40,11 +40,11 @@ section Jet
 
 variable {V : Type*} [NormedAddCommGroup V] [NormedSpace ℝ V] [FiniteDimensional ℝ V]
 
-/-- **The first-order jet condition of `L6` is necessary.**  If a globally `C¹` function realizes
+/-- **The first-order jet condition of compact Whitney extension is necessary.**  If a globally `C¹` function realizes
 the values `f` and the derivatives `F` on a compact set `S`, then the uniform first-order remainder
-estimate of `L6` holds on `S`.
+estimate of compact Whitney extension holds on `S`.
 
-`L6` is the converse — that the estimate suffices to build such a function — and is **not** proved
+compact Whitney extension is the converse — that the estimate suffices to build such a function — and is **not** proved
 here. -/
 theorem uniform_jet_remainder_of_contDiff {S : Set V} {f : V → ℝ} {F : V → V →L[ℝ] ℝ}
     (hS : IsCompact S) {v : V → ℝ} (hv : ContDiff ℝ 1 v)

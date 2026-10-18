@@ -10,10 +10,7 @@ p. 21, (72)–(74): for a continuous bilinear `B : F →L[ℝ] G →L[ℝ] H` an
 on a real normed space, the `m`-th raw iterated derivative of `y ↦ B (f y) (g y)` is the sum over
 all Boolean subset indicators `q : Fin m → Bool` of `B (D^{|q|} f [h_q]) (D^{m−|q|} g [h_{¬q}])`, each
 allocation with coefficient `1` and slots kept in their inherited increasing order (`selected`); no
-factorial, Taylor normalisation or symmetry is involved. Proof bodies: Codex bundle
-`Cumulant-Leibniz-Drift` with the reviewer's private linter-scope correction only (accepted owned
-snapshot `Takeover-Cumulant-Drift-20261008`, source sha 49b27e53…); statements, namespace and
-placement: Claude (frozen namespace `ReviewCumulantDrift` mapped to `FunctionalInequalities.Analysis`).
+factorial, Taylor normalisation or symmetry is involved.
 -/
 
 noncomputable section
@@ -175,8 +172,8 @@ namespace FunctionalInequalities.Analysis
 /-- Boolean-mask partition facts for the actual ordered `selected` lists (BKL arXiv:2610.05474v1, (72)–(74),
 singleton and middle allocations): lengths add up to `m`, the two selections together are a permutation of the
 slots, an indicator of one slot selects exactly that slot, and a selection of length `1` comes from such an
-indicator. Repeated slot values and `m = 0` are included. Proof body: independently accepted Astra v6
-(`round1.lean` 788c3d48…), verbatim. -/
+indicator. Repeated slot values and `m = 0` are included.
+-/
 theorem selected_mask_partition {E : Type*} {m : ℕ}
     (h : Fin m → E) (q : Fin m → Bool) :
     (selected h q).length + (selected h (fun i => !(q i))).length = m ∧

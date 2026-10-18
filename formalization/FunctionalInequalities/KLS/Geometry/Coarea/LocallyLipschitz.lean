@@ -2,21 +2,21 @@ import FunctionalInequalities.KLS.Geometry.Coarea.Lipschitz
 
 /-! # Weighted coarea for locally Lipschitz functions
 
-`L13`: the weighted coarea formula and slice `AEMeasurable` with **no global Lipschitz bound and no
+locally Lipschitz coarea: the weighted coarea formula and slice `AEMeasurable` with **no global Lipschitz bound and no
 global modulus of any kind** — only `LocallyLipschitz u`.  This is a common generalization of the
-two results it is built from: `LipschitzWith K u → LocallyLipschitz u` gives back `L12`
+two results it is built from: `LipschitzWith K u → LocallyLipschitz u` gives back globally Lipschitz coarea
 (`coarea_of_lipschitz`), and `ContDiff ℝ 1 u → LocallyLipschitz u` gives back the hypothesis of
-`L11` (`coarea_of_contDiff`), so neither a Lipschitz constant nor `C¹` regularity is needed any
+C¹ coarea (`coarea_of_contDiff`), so neither a Lipschitz constant nor `C¹` regularity is needed any
 more.  Both original theorems keep their statements; nothing is restated through this one.
 
 The reduction is by half-open annuli.  A finite-dimensional real normed space is proper, so `u` is
 Lipschitz on each closed ball; McShane's extension replaces it there by a **globally** Lipschitz
-`v k`, and `L12` applies to `v k` on the piece `S ∩ (ball 0 (k+1) \ ball 0 k)`.  Each piece is
+`v k`, and globally Lipschitz coarea applies to `v k` on the piece `S ∩ (ball 0 (k+1) \ ball 0 k)`.  Each piece is
 contained in the **open** ball, where `u` and `v k` agree on a neighbourhood of every point, so the
 gradients agree pointwise and the level sets of `u` and `v k` cut each piece identically.  Countable
 additivity over the disjoint pieces then assembles both conclusions; the sum is exchanged with the
 outer integral by `lintegral_tsum`, whose hypothesis is exactly the per-piece `AEMeasurable` that
-`L12` supplies.
+globally Lipschitz coarea supplies.
 
 No boundedness, finite-volume, integrability, positive-dimension or `SFinite` surface-measure
 assumption is imposed, the set `S` is an arbitrary measurable set, and the `ℝ≥0∞` weight may be
@@ -32,7 +32,7 @@ namespace FunctionalInequalities.KLS
 variable {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V]
   [FiniteDimensional ℝ V] [MeasurableSpace V] [BorelSpace V]
 
-/-- **L13**: weighted coarea for a locally Lipschitz function, including almost-everywhere slice
+/-- **locally Lipschitz coarea**: weighted coarea for a locally Lipschitz function, including almost-everywhere slice
 measurability.  No global Lipschitz constant and no `C¹` regularity is assumed. -/
 theorem coarea_of_locallyLipschitz {S : Set V} {u : V → ℝ} {g : V → ℝ≥0∞}
     (hu : LocallyLipschitz u) (hS : MeasurableSet S) (hg : Measurable g) :
@@ -91,7 +91,7 @@ theorem coarea_of_locallyLipschitz {S : Set V} {u : V → ℝ} {g : V → ℝ≥
       simp only [mem_ofPred_eq] at ht ⊢
     · rwa [hveq k (ball_subset_closedBall (hAsub k hx.2))]
     · rwa [← hveq k (ball_subset_closedBall (hAsub k hx.2))]
-  -- `L12` on each piece, transported back to `u`.
+  -- globally Lipschitz coarea on each piece, transported back to `u`.
   have hL12 : ∀ k,
       AEMeasurable (fun t : ℝ => ∫⁻ y in P k ∩ {x | u x = t}, g y ∂(surfaceMeasure V)) volume ∧
       (∫⁻ x in P k, ‖gradient u x‖ₑ * g x ∂(volume : Measure V)) =

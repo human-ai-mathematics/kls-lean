@@ -10,8 +10,7 @@ affine changes of variables, which is what centering and whitening a regular law
 potential `V` and an invertible affine map `x ↦ L x + c`, the potential `V ∘ (L · + c)` is regular
 (`Regular`), its normalizing constant is `|det L|⁻¹` times that of `V`, and its law is exactly the
 image of the law of `V` under `y ↦ L⁻¹(y − c)`, i.e. a translation followed by the continuous linear
-equivalence `L⁻¹`. No whitening operator is chosen here. Proof bodies: Codex bkl (bundle
-`Affine-Regular-Transport`, independently accepted); statements and placement: Claude.
+equivalence `L⁻¹`. No whitening operator is chosen here.
 -/
 
 open MeasureTheory

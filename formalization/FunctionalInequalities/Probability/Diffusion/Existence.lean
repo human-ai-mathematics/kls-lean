@@ -14,8 +14,7 @@ On any filtered space carrying a multidimensional Brownian motion with a usual f
 Lipschitz bounded coefficients on `Fin N → ℝ` have an everywhere continuous adapted solution with Itô
 representation along itself (`exists_isDiffusion`): the vendored Picard global solution with zero jumps (a
 zero-intensity Poisson random measure), its continuous Itô version, and their identification. Used for the cutoff
-Eldan localization equations (BKL arXiv:2610.05474v1, (67)). Proof body: GPT (BKL Claude-controller goal, task
-S5a); statement and placement: Claude.
+Eldan localization equations (BKL arXiv:2610.05474v1, (67)).
 -/
 
 open MeasureTheory ProbabilityTheory Filter Topology

@@ -5,31 +5,26 @@ import Mathlib.LinearAlgebra.FiniteDimensional.Lemmas
 
 /-! # The rank stratification of the differential, and the kernel lemma
 
-The first two obligations of the rank-deficient route recorded in
-`research/decisions/2026-09-17-rank-deficient-route.md` and stated in
-`research/audits/RankDeficientRouteStatements.lean`.  **Only `R1` and `R2` are proved here**; `R0`
-and `R3`–`R10` remain open, and so does the rank-deficient part of the codimension-`m` coarea
-critical set that they are steps towards.  Nothing here is a coarea formula, a slicing statement or
-a Sard theorem.
+The critical set is stratified into measurable exact-rank layers. Linear algebra identifies the kernel of the differential with that of its regular component.
 
 The coarea critical set of a map into an `m`-dimensional target is
 `{x | fderiv ℝ u x` is not surjective`}`, where the rank of the differential drops below `m`.
 `Analysis/Vector/Slice/Critical.lean` handles the layer where the derivative *vanishes*; the route
 for the remaining layers stratifies the critical set by the exact rank.
 
-**`R1`** makes the stratification usable: each stratum is measurable — Mathlib's
+**rank stratification** makes the stratification usable: each stratum is measurable — Mathlib's
 `isOpen_setOfPred_nat_le_rank` makes `{f | r ≤ rank f}` open, so a stratum is the difference of two
 open sets, pulled back along the continuous derivative — and the critical set is the union of the
 finitely many strata of rank `r < m`.
 
-**`R2`** is the structural heart of the route, and is pure linear algebra.  If `P ∘ L` is already
+**the kernel identity** is the structural heart of the route, and is pure linear algebra.  If `P ∘ L` is already
 surjective onto a space of the same dimension as the range of `L`, then `P` is injective on that
 range, so `P ∘ L` and `L` have the *same* kernel.  In the route `L` is the differential at a point
 of the stratum and `P` the orthogonal projection onto its range, so the conclusion is that the
 differential vanishes along the fibre of the regular part `P ∘ u` — which is what lets the
 Eilenberg bound be applied inside a fibre, at the exponent that finally matches.
 
-No inner product, no measure and no completeness is used for `R2`; `R1` needs only continuity of
+No inner product, no measure and no completeness is used for the kernel identity; rank stratification needs only continuity of
 the derivative and the Borel structure of the domain.  The target is never assumed
 positive-dimensional: with `finrank ℝ W = 0` every map is surjective, the critical set is empty and
 the union over `r < 0` is empty too.
@@ -56,7 +51,7 @@ theorem surjective_domRestrict_range_of_comp {L : V →L[ℝ] W} {P : W →L[ℝ
   obtain ⟨z, hz⟩ := h w₁
   exact ⟨⟨L z, LinearMap.mem_range_self _ z⟩, hz⟩
 
-/-- **`R2`, kernel form.**  If `P ∘ L` is surjective onto a space whose dimension equals the rank of
+/-- **the kernel identity, kernel form.**  If `P ∘ L` is surjective onto a space whose dimension equals the rank of
 `L`, then `P` is injective on the range of `L` and the two kernels coincide.
 
 The dimension hypothesis is exactly what rules out the degenerate reading: without it `P` may
@@ -80,7 +75,7 @@ theorem ker_comp_eq_ker_of_finrank_range_eq [FiniteDimensional ℝ V] [FiniteDim
   · have hz' : L z = 0 := hz
     simp [LinearMap.mem_ker, hz']
 
-/-- **`R2`, the form the route consumes**: on the stratum the differential vanishes wherever the
+/-- **the kernel identity, the form the route consumes**: on the stratum the differential vanishes wherever the
 regular component does, that is, along the fibre directions of `P ∘ u`. -/
 theorem apply_eq_zero_of_comp_apply_eq_zero [FiniteDimensional ℝ V] [FiniteDimensional ℝ W₁]
     (L : V →L[ℝ] W) (P : W →L[ℝ] W₁) (hsurj : Function.Surjective (P.comp L))
@@ -127,7 +122,7 @@ theorem surjective_iff_rank_eq (f : V →L[ℝ] W) :
   · intro h
     exact LinearMap.range_eq_top.1 (Submodule.eq_top_of_finrank_eq h)
 
-/-- **`R1`, second half: the critical set is the union of the strata of rank below the dimension of
+/-- **rank stratification, second half: the critical set is the union of the strata of rank below the dimension of
 the target.**  A finite union, and no regularity of `u` is used: this is pointwise linear algebra.
 With a zero-dimensional target both sides are empty. -/
 theorem setOf_not_surjective_fderiv_eq_iUnion (u : V → W) :
@@ -147,7 +142,7 @@ theorem setOf_not_surjective_fderiv_eq_iUnion (u : V → W) :
 variable [MeasurableSpace V] [BorelSpace V]
 
 omit [FiniteDimensional ℝ W] in
-/-- **`R1`, first half: the rank strata of the differential of a `C¹` map are measurable.**
+/-- **rank stratification, first half: the rank strata of the differential of a `C¹` map are measurable.**
 
 Mathlib's `isOpen_setOfPred_nat_le_rank` gives the lower semicontinuity of the rank; a stratum is
 the difference of two of those open sets, pulled back along the continuous derivative.  No

@@ -27,8 +27,7 @@ and the unique linear equivalence satisfies the conclusion.
 `Covariance.variance_inner_eq_of_sandwich` records the variance of a whitened linear statistic: for a
 probability law with finite second moment and a self-adjoint `S` with the actual sandwich
 `S ∘ Cov ∘ S = 1`, `Var⟪S h, ·⟫ = ‖h‖²`. It is a deterministic support of the BKL (68) posterior noise
-estimate (Codex review `Root-Posterior-Noise-Bound-20261008`; proof body: Luna unit NB3, independently
-accepted 2026-10-08, with `E` renamed to the section variable `V`); the sandwich is a hypothesis, not a
+estimate; the sandwich is a hypothesis, not a
 produced root.
 -/
 

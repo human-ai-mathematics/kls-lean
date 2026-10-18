@@ -5,7 +5,7 @@ import FunctionalInequalities.Analysis.Semigroup.AdjointClosure
 /-!
 # The generator on smooth compactly supported tests: `T̄†T̄ f = -ℒ f`
 
-Route obligations `G0` and `G1` of `research/decisions/2026-09-20-bakry-emery-route.md`, for the
+Properties weighted integration by parts and the smooth-test generator identity of `research/decisions/2026-09-20-bakry-emery-route.md`, for the
 smooth-potential model with unit weight. Let `ν` be a full-dimensional log-concave probability law
 on a finite-dimensional Euclidean space `V` whose measure is the tilted Haar measure
 `m.tilted (-U)` for a `C¹` potential `U`, and let
@@ -16,13 +16,13 @@ be the closed unit-weight gradient, so that the heat semigroup is `P_t = exp (-t
 `f ∈ C_c^∞(V)` and the weighted Laplacian `ℒ f = Δ f - ⟪∇U, ∇f⟫`
 (`Analysis.BakryEmery.weightedLaplacian`):
 
-* `G0`: `∫ ⟪∇f, ∇g⟫ dν = ∫ (-ℒf) g dν` for every `C¹` function `g`
+* weighted integration by parts: `∫ ⟪∇f, ∇g⟫ dν = ∫ (-ℒf) g dν` for every `C¹` function `g`
   (`integral_inner_gradient_eq`);
-* `G1`: `-ℒ f ∈ L²(ν)`, `[f] ∈ D(T̄†T̄)` and `T̄†T̄ [f] = [-ℒ f]`
+* the smooth-test generator identity: `-ℒ f ∈ L²(ν)`, `[f] ∈ D(T̄†T̄)` and `T̄†T̄ [f] = [-ℒ f]`
   (`memLp_neg_weightedLaplacian`, `toLp_mem_adjointComp_domain`, `adjointComp_toLp_eq`).
 
-The proof of `G1` goes through the adjoint, not through a pointwise computation. The weak identity
-`⟪[-ℒf], [g]⟫ = ⟪[∇f], [∇g]⟫` is `G0` on smooth compactly supported `g`; by
+The proof of the smooth-test generator identity goes through the adjoint, not through a pointwise computation. The weak identity
+`⟪[-ℒf], [g]⟫ = ⟪[∇f], [∇g]⟫` is weighted integration by parts on smooth compactly supported `g`; by
 `closure_domRestrict_eq_of_smoothCore_le` these classes are a graph-norm core of `T̄`, and
 `Analysis.Semigroup.inner_eq_inner_closure_apply` extends the identity to every `x ∈ D(T̄)`. Then
 `[∇f] = T̄ [f]` lies in `D(T̄†)` with `T̄† [∇f] = [-ℒf]` (`LinearPMap.adjoint_apply_eq`, using the
@@ -57,7 +57,7 @@ variable {ν : ProbabilityMeasure V} (m : Measure V) [m.IsAddHaarMeasure] {U : V
 
 include hνU hU in
 omit [SecondCountableTopology V] in
-/-- **`G0`, weighted integration by parts for the law `ν = m.tilted (-U)`**: for a `C²` compactly
+/-- **weighted integration by parts, weighted integration by parts for the law `ν = m.tilted (-U)`**: for a `C²` compactly
 supported `f` and a `C¹` function `g`, `∫ ⟪∇f, ∇g⟫ dν = ∫ (-ℒf) g dν`. -/
 theorem integral_inner_gradient_eq {f g : V → ℝ} (hf : ContDiff ℝ 2 f) (hfc : HasCompactSupport f)
     (hg : ContDiff ℝ 1 g) :
@@ -69,7 +69,7 @@ theorem integral_inner_gradient_eq {f g : V → ℝ} (hf : ContDiff ℝ 2 f) (hf
 include hνU hU in
 omit [SecondCountableTopology V] in
 /-- The weighted Laplacian has zero mean: `∫ ℒf dν = 0` for `C²` compactly supported `f`. This is
-`G0` against the constant test `g = 1`, and it is the infinitesimal form of the conservation of
+weighted integration by parts against the constant test `g = 1`, and it is the infinitesimal form of the conservation of
 integrals by the heat semigroup (`HeatSemigroup.integral`). -/
 theorem integral_weightedLaplacian_eq_zero {f : V → ℝ} (hf : ContDiff ℝ 2 f)
     (hfc : HasCompactSupport f) : ∫ x, weightedLaplacian U f x ∂(ν : Measure V) = 0 := by
@@ -94,7 +94,7 @@ theorem memLp_gradient_of_contDiff_hasCompactSupport {f : V → ℝ} (hf : ContD
     (IsTest.of_contDiff_hasCompactSupport ν (ContinuousLinearMap.id ℝ V) hf hfc).memLp_apply
 
 omit [SecondCountableTopology V] in
-/-- `-ℒ f ∈ L²(ν)` for `f ∈ C_c^∞(V)` and a `C¹` potential: the integrability clause of `G1`. -/
+/-- `-ℒ f ∈ L²(ν)` for `f ∈ C_c^∞(V)` and a `C¹` potential: the integrability clause of the smooth-test generator identity. -/
 theorem memLp_neg_weightedLaplacian (hU : ContDiff ℝ 1 U) {f : V → ℝ} (hf : ContDiff ℝ ∞ f)
     (hfc : HasCompactSupport f) :
     MemLp (fun x => -weightedLaplacian U f x) 2 (ν : Measure V) :=
@@ -127,7 +127,7 @@ theorem closedWeightedOperator_toLp_eq {f : V → ℝ} (hf : ContDiff ℝ ∞ f)
 
 include hνU hU in
 /-- **The weak identity on the domain of `T̄`**: for `f ∈ C_c^∞(V)` and every `x ∈ D(T̄)`,
-`⟪[-ℒf], x⟫ = ⟪[∇f], T̄ x⟫` in `L²(ν)`. On smooth compactly supported classes this is `G0`; it
+`⟪[-ℒf], x⟫ = ⟪[∇f], T̄ x⟫` in `L²(ν)`. On smooth compactly supported classes this is weighted integration by parts; it
 extends to `D(T̄)` because those classes are a graph-norm core of `T̄`. -/
 theorem inner_toLp_neg_weightedLaplacian_eq {f : V → ℝ} (hf : ContDiff ℝ ∞ f)
     (hfc : HasCompactSupport f)
@@ -185,7 +185,7 @@ theorem inner_toLp_neg_weightedLaplacian_eq {f : V → ℝ} (hf : ContDiff ℝ �
   exact this x
 
 include hνU hU in
-/-- **`G1`, domain clause**: for `f ∈ C_c^∞(V)`, the class `[f]` lies in `D(T̄†T̄)`. -/
+/-- **the smooth-test generator identity, domain clause**: for `f ∈ C_c^∞(V)`, the class `[f]` lies in `D(T̄†T̄)`. -/
 theorem toLp_mem_adjointComp_domain {f : V → ℝ} (hf : ContDiff ℝ ∞ f)
     (hfc : HasCompactSupport f) :
     (memLp_of_contDiff_hasCompactSupport ν hf hfc).toLp f ∈
@@ -197,7 +197,7 @@ theorem toLp_mem_adjointComp_domain {f : V → ℝ} (hf : ContDiff ℝ ∞ f)
     ⟨_, fun x => hν.inner_toLp_neg_weightedLaplacian_eq m hi hνU hU hf hfc x⟩
 
 include hνU hU in
-/-- **`G1`, value clause**: for `f ∈ C_c^∞(V)`, `T̄†T̄ [f] = [-ℒ f]` with `ℒ f = Δ f - ⟪∇U, ∇f⟫`.
+/-- **the smooth-test generator identity, value clause**: for `f ∈ C_c^∞(V)`, `T̄†T̄ [f] = [-ℒ f]` with `ℒ f = Δ f - ⟪∇U, ∇f⟫`.
 The generator of the heat semigroup `P_t = exp (-t T̄†T̄)` is therefore `ℒ` on smooth compactly
 supported tests: `d/dt P_t f |_{t=0} = ℒ f`. -/
 theorem adjointComp_toLp_eq {f : V → ℝ} (hf : ContDiff ℝ ∞ f) (hfc : HasCompactSupport f) :

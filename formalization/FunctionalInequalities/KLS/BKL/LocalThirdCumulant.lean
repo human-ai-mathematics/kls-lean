@@ -15,8 +15,7 @@ The older statement in `Analysis/BakryEmery/Cumulant/Basic.lean` assumes all exp
 general log-concave laws (e.g. Laplace) do not have; this module is the source-faithful version.
 The full noncompact Letwin hypothesis remains open. The separately proved Theorem 4.1 uses the
 compact Letwin theorem and cutoff induction; it does not discharge this module's full hypothesis
-or construct the uncut Eldan process. Proof bodies: Codex route (bundle
-`Local-Third-Cumulant`, independently accepted); statements and placement: Claude.
+or construct the uncut Eldan process.
 -/
 
 open MeasureTheory

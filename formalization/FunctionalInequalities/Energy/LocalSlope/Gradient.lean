@@ -8,10 +8,8 @@ Five proved interfaces for `thm:smooth-lipschitz-constant-equivalence`.
 Source: the existing `Energy.LocalSlope.apply` definition and Blueprint shared analytic bridges.
 Read the pointwise identity first, then its almost-everywhere consequence, extended energy
 identity, finite-energy domain characterization, and the real-integral form of the energy
-(`energy_eq_integral_gradient`, moved here from `Poincare/LipschitzGradient/Comparison.lean` by
-LD-013, statement and proof unchanged). All five proofs are complete.
-Proof acceptance: `research/decisions/2026-09-06-smooth-literature-proofs.md`.
-The earlier statement handoff remains a historical scope record.
+(`energy_eq_integral_gradient`).
+
 
 The pointwise result needs only differentiability at the point and includes the zero space.
 For locally Lipschitz tests, absolute continuity transfers the proved Rademacher statement

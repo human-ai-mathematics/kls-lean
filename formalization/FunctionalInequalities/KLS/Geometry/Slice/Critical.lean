@@ -3,22 +3,21 @@ import Mathlib.MeasureTheory.Function.Jacobian
 
 /-! # The critical part of a `C¹` function has null level slices
 
-Obligation `L10` of the weighted coarea route: for a `C¹` real function on a finite-dimensional
+Property critical-slice nullity of the weighted coarea route: for a `C¹` real function on a finite-dimensional
 inner-product space, almost every level meets the critical set `{x | fderiv ℝ u x = 0}` in a set of
 zero `surfaceMeasure`.
 
 This is **not** Sard's theorem and does not imply it.  Sard asserts that the *image* of the
-critical set is Lebesgue-null in `ℝ`, which in high dimension needs regularity `C^(finrank)` and
-remains an unproved obligation (`Analysis.sard`).  The statement here is about the codimension-one
+critical set is Lebesgue-null in `ℝ`, which in high dimension needs regularity `C^(finrank)` and is proved separately as `Analysis.sard` in `Analysis/Sard/Sharp.lean`.  The statement here is about the codimension-one
 measure of the critical *part of each slice*, and it holds for merely `C¹` functions in every
 dimension.  A `C¹` function may well have a positive-measure set of critical values; the assertion
 is only that the critical part of almost every slice is `ℋ^{n-1}`-null.
 
-The proof is the first genuine consumer of the Eilenberg bound `L1`
+The proof is the first genuine consumer of the Eilenberg bound Eilenberg majorant
 (`KLS.exists_measurable_majorant`).  On the critical set the derivative vanishes, so Mathlib's
 `exists_partition_approximatesLinearOn_of_hasFDerivWithinAt` — whose approximating linear maps are
 values of the derivative — covers it by countably many **pairwise disjoint measurable** pieces on
-which `u` is `ε`-Lipschitz, for any prescribed `ε > 0`.  Applying `L1` on each piece inside a ball
+which `u` is `ε`-Lipschitz, for any prescribed `ε > 0`.  Applying Eilenberg majorant on each piece inside a ball
 of radius `R` and summing gives a measurable majorant of the slice measure whose integral is at
 most `eilenbergConstant V * ε * volume (closedBall 0 R)`.  Taking the pointwise infimum over
 `ε = (k + 1)⁻¹` produces a measurable majorant of integral zero, so the slice measure vanishes
@@ -142,7 +141,7 @@ theorem ae_surfaceMeasure_critical_ball_eq_zero {u : V → ℝ} (hu : ContDiff �
   refine le_antisymm ?_ (by simp)
   simpa [ht] using le_iInf fun k => hGdom k t
 
-/-- **The critical part of almost every level is null** (obligation `L10`).
+/-- **The critical part of almost every level is null** (obligation critical-slice nullity).
 
 Not Sard's theorem: nothing is claimed about the Lebesgue measure of the set of critical *values*,
 which for a merely `C¹` function may well be positive. -/

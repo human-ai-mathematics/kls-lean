@@ -202,9 +202,8 @@ section WeightedSymmetricSums
 /-- **Letwin (2.12), finite form** (arXiv:2607.24164v1, proof of Theorem 2.5, p. 10): for an array
 `T` symmetric in its first two indices and weights `b`,
 `Σ b_i² T_{ijk}² − Σ b_i b_j T_{ijk}² = ½ Σ (b_i − b_j)² T_{ijk}²`; in particular the left side is
-nonnegative. Stated for arbitrary real weights (the source has nonnegative eigenvalues). Codex proof
-(`build/reviews/2026-10-07-bkl-continuous/queue/letwin-prerequisite/Letwin-2-12-Codex-Proof.lean`,
-independently accepted). -/
+nonnegative. Stated for arbitrary real weights (the source has nonnegative eigenvalues).
+-/
 theorem sum_weight_sq_mul_sq_sub_eq_half_sum_sq_sub_mul_sq {ι : Type*} [Fintype ι] (b : ι → ℝ)
     (T : ι → ι → ι → ℝ) (hT : ∀ i j k, T i j k = T j i k) :
     (∑ i, ∑ j, ∑ k, (b i) ^ 2 * (T i j k) ^ 2) -

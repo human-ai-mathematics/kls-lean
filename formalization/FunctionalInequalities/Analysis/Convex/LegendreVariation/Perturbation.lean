@@ -8,8 +8,7 @@ supremum moves by at most `|t| M` in both directions, `φ* q − |t|M ≤ (φ + 
 supremum kept, infinite values included (`legendre_bounded_perturbation`); consequently, at a point where `φ*` is finite, the
 perturbed conjugates form a finite real curve within `|t| M` of `φ* y` (`legendre_bounded_perturbation_finite_curve`). No
 convexity or global finiteness of `φ` is assumed. Pointwise prerequisites of Cordero-Erausquin–Klartag, arXiv:1304.0630v1,
-(42). Proof bodies: strong-API constructions (reviewed; revalidated literal sources `LegendreBoundedPerturbationFixed`,
-`LegendreFiniteCurveFixed`), verbatim; placement: Claude.
+(42).
 -/
 
 noncomputable section

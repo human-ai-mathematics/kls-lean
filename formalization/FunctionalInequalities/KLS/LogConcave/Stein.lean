@@ -11,7 +11,6 @@ of full affine dimension (hence `μ ≪ volume` with finite second moment): the 
 to all locally Lipschitz `f` with `f, ∇f ∈ L²(μ)`, and the `H^{-1}(μ)` norm of `⟪·, v⟫` is bounded by
 `∫ ‖τ(x) v‖² dμ`. No isotropy, regularity or Stein-kernel construction is assumed or provided; the
 moment-map kernel of the paper (Lemma 2.2, Proposition 2.8) and Theorems 1.1–1.2 remain open.
-Proof bodies: Codex route (bundle `Letwin-A7`, independently accepted); statements and placement: Claude.
 -/
 
 open MeasureTheory

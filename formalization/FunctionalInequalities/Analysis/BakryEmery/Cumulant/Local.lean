@@ -22,8 +22,7 @@ membership, and `∑_{jk} κ₃(u,e_j,e_k)² ≤ 8‖u‖²` under isotropy and 
 (contraction argument as in `Cumulant`, whose all-radii version keeps its own provenance); the second
 cumulant of any such law is the centered second moment, i.e. the covariance pairing. A law with
 compact support has every exponential moment. The log-concave adapter and the Eldan base case are
-in `KLS/BKL/LocalThirdCumulant.lean`. Proof bodies: Codex route (bundles `Local-Third-Cumulant` and
-`Local-Second-Cumulant`, independently accepted); statements and placement: Claude.
+in `KLS/BKL/LocalThirdCumulant.lean`.
 -/
 
 open MeasureTheory Filter Topology
@@ -512,9 +511,8 @@ section GradientJets
 /-! BKL arXiv:2610.05474v1, p. 20, the sentence before (74): for `Λ = logLaplace μ` of a compactly supported law
 and `v(z) = ∇Λ(z) − ∇Λ(0)`, `v(0) = 0`, `Dv(0) = A` (the covariance) and, for every `r ≥ 1`,
 `Dʳv(0)[h] = cumulantVector μ (List.ofFn h)`, i.e. `⟪Dʳv(0)[h], w⟫ = κ_{r+1}(h, w)` (generic supports in
-`Analysis/IteratedDerivative/GradientJet.lean`). Proof bodies: Luna (`gpt-5.6-luna`, CGF1-M and CGF1-C round 8)
-with two recorded closing-line repairs by Claude each, and the CGF1-J2c round-8 body (Claude assembly v2, independently
-accepted); statements, `cumulantVector` and placement: Claude. -/
+`Analysis/IteratedDerivative/GradientJet.lean`).
+-/
 
 /-- The Riesz vector of the last slot of the scalar cumulant of order `hs.length + 1`, the first slots being the
 list `hs` (inherited order): `⟪cumulantVector μ hs, w⟫ = κ_{|hs|+1}(hs, w)`. -/

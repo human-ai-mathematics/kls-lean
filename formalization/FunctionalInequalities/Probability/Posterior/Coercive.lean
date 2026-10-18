@@ -14,8 +14,7 @@ is a probability law, polynomially growing statistics are in `L²`, and the post
 covariance derivative along any signed parameter line `(c + t h, Q + t H)`. The source initial stage
 `Q = 0` is not coercive in positive dimension (in dimension zero coercivity holds vacuously) and is
 handled by the compact-prior modules. No stochastic process, Itô formula
-or (68)–(71) is constructed. Proof bodies: Codex q_batch bundle `Posterior-Parameter-Calculus`
-(independently accepted); statements and placement: Claude.
+or (68)–(71) is constructed.
 -/
 
 noncomputable section

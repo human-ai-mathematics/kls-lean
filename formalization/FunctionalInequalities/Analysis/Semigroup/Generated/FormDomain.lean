@@ -5,46 +5,46 @@ import FunctionalInequalities.Analysis.Semigroup.Resolvent.Limit
 /-!
 # Form-domain invariance and energy contraction for `P_t = exp (-t T†T)`
 
-`Generated/Domain.lean` (`S0a`) keeps the **operator** domain `D(T†T)` invariant.  This module
+`Generated/Domain.lean` (operator-domain invariance) keeps the **operator** domain `D(T†T)` invariant.  This module
 extends the gradient interface to the whole **form** domain `D(T)`, for `T` closed and densely
 defined between real Hilbert spaces:
 
-* `norm_map_apply_le_of_generator` (`F0`): `‖T (P_t f)‖ ≤ ‖T f‖` for `f ∈ D(T†T)`, with
+* `norm_map_apply_le_of_generator` (the operator-domain energy bound): `‖T (P_t f)‖ ≤ ‖T f‖` for `f ∈ D(T†T)`, with
   `inner_adjointComp_apply_le` its Dirichlet-form phrasing `⟪T†T (P_t f), P_t f⟫ ≤ ⟪T†T f, f⟫`;
-* `exists_seq_mem_adjointComp_domain_tendsto_graph` (`F1`): `D(T†T)` is dense in `D(T)` **for the
+* `exists_seq_mem_adjointComp_domain_tendsto_graph` (graph-norm density): `D(T†T)` is dense in `D(T)` **for the
   graph norm of `T`** — every `f ∈ D(T)` is the limit of `f_n ∈ D(T†T)` with `T f_n → T f`;
-* `preserves_form_domain` (`F2`): `P_t f ∈ D(T)` for every `f ∈ D(T)` and `t ≥ 0`;
-* `norm_map_apply_le` (`F3`): `‖T (P_t f)‖ ≤ ‖T f‖` for every `f ∈ D(T)` and `t ≥ 0`.
+* `preserves_form_domain` (form-domain invariance): `P_t f ∈ D(T)` for every `f ∈ D(T)` and `t ≥ 0`;
+* `norm_map_apply_le` (form-energy contraction): `‖T (P_t f)‖ ≤ ‖T f‖` for every `f ∈ D(T)` and `t ≥ 0`.
 
-`F2` and `F3` are delivered together by `exists_mem_domain_norm_map_apply_le`, because the
+form-domain invariance and form-energy contraction are delivered together by `exists_mem_domain_norm_map_apply_le`, because the
 membership witness is what the norm even refers to.
 
 ## Proofs
 
-`F0`.  `V1` turns the energy into the form: `‖T x‖ ² = ⟪T†T x, x⟫` for `x ∈ D(T†T)`
-(`inner_adjointComp_self`).  With `S0a`'s invariance and commutation, symmetry `P4` and the
-semigroup law `P6`,
+the operator-domain energy bound.  the form identity turns the energy into the form: `‖T x‖ ² = ⟪T†T x, x⟫` for `x ∈ D(T†T)`
+(`inner_adjointComp_self`).  With operator-domain invariance's invariance and commutation, symmetry symmetry and the
+semigroup law the semigroup law,
 
 `‖T (P_t f)‖ ² = ⟪T†T (P_t f), P_t f⟫ = ⟪P_t (T†T f), P_t f⟫ = ⟪T†T f, P_{2t} f⟫
   = ⟪T f, T (P_{2t} f)⟫ ≤ ‖T f‖ ‖T (P_{2t} f)‖`,
 
 which is `norm_map_apply_sq_le_mul`: the energy at time `t` is controlled by the **doubled** time.
-The `L²` contraction `P3` bounds all these energies at once by `‖T†T f‖ ‖f‖`
+The `L²` contraction contraction bounds all these energies at once by `‖T†T f‖ ‖f‖`
 (`norm_map_apply_sq_le_mul_norm`), so `M = sup_{t ≥ 0} ‖T (P_t f)‖` is finite and satisfies
 `M ² ≤ ‖T f‖ M`, i.e. `M ≤ ‖T f‖`.  No time derivative, no monotonicity theorem and no spectral
 calculus is used, and the doubling step is applied to a supremum rather than iterated.
 
-`F1`.  Take `f_n = J_{1/(n+1)} f`.  `V2` puts `J_s f` in `D(T†T)`, `R1` gives `f_n → f` in `H₀`,
+graph-norm density.  Take `f_n = J_{1/(n+1)} f`.  the resolvent domain identity puts `J_s f` in `D(T†T)`, the quantitative resolvent bound gives `f_n → f` in `H₀`,
 and `exists_delta_norm_map_resolventDomain_sub_map_lt` of `Resolvent/Limit.lean` gives
 `T f_n → T f` in `H₁`.  The second convergence is the substantive one; a uniform energy bound
 would not suffice.
 
-`F2`–`F3`.  For `f ∈ D(T)` take `f_n` from `F1`.  Then `P_t f_n ∈ D(T†T) ⊆ D(T)`, and `F0` applied
+form-domain invariance–form-energy contraction.  For `f ∈ D(T)` take `f_n` from graph-norm density.  Then `P_t f_n ∈ D(T†T) ⊆ D(T)`, and the operator-domain energy bound applied
 to the differences `f_n - f_m ∈ D(T†T)` gives
 `‖T (P_t f_n) - T (P_t f_m)‖ ≤ ‖T f_n - T f_m‖`, so `T (P_t f_n)` is Cauchy and converges in `H₁`;
 `P_t f_n → P_t f` because `P_t` is bounded.  **Closedness of `T`** identifies the limit, giving
 `P_t f ∈ D(T)` and `T (P_t f) = lim T (P_t f_n)`, whose norm is at most `lim ‖T f_n‖ = ‖T f‖`
-by `F0`.
+by the operator-domain energy bound.
 
 ## Deliberately out of scope
 
@@ -79,14 +79,14 @@ private theorem one_div_succ_le {m n : ℕ} (h : m ≤ n) :
     linarith
   exact one_div_le_one_div_of_le (by positivity) hmn
 
-/-! ### `F0`: energy contraction on the generator domain -/
+/-! ### the operator-domain energy bound: energy contraction on the generator domain -/
 
 /-- The doubling estimate: for `f ∈ D(T†T)`, `t ≥ 0` and `u = 2t`,
 
 `‖T (P_t f)‖ ² ≤ ‖T f‖ ‖T (P_u f)‖`.
 
-`V1` (`inner_adjointComp_self`), the `S0a` commutation `generator_comm`, symmetry `P4` and the
-semigroup law `P6`, closed by Cauchy–Schwarz.  The membership witnesses are hypotheses so that
+the form identity (`inner_adjointComp_self`), the operator-domain invariance commutation `generator_comm`, symmetry symmetry and the
+semigroup law the semigroup law, closed by Cauchy–Schwarz.  The membership witnesses are hypotheses so that
 `u` can be any expression equal to `t + t`. -/
 theorem norm_map_apply_sq_le_mul (f : (adjointComp T).domain) {t u : ℝ} (ht : 0 ≤ t)
     (hu : u = t + t) (hft : apply T hT hd t (f : H₀) ∈ T.domain)
@@ -111,7 +111,7 @@ theorem norm_map_apply_sq_le_mul (f : (adjointComp T).domain) {t u : ℝ} (ht : 
 
 `‖T (P_t f)‖ ² = ⟪P_t (T†T f), P_t f⟫ ≤ ‖T†T f‖ ‖f‖`,
 
-using only the `S0a` commutation and the `L²` contraction `P3`. -/
+using only the operator-domain invariance commutation and the `L²` contraction contraction. -/
 theorem norm_map_apply_sq_le_mul_norm (f : (adjointComp T).domain) {t : ℝ} (ht : 0 ≤ t)
     (hft : apply T hT hd t (f : H₀) ∈ T.domain) :
     ‖T ⟨apply T hT hd t (f : H₀), hft⟩‖ ^ 2 ≤ ‖adjointComp T f‖ * ‖(f : H₀)‖ := by
@@ -125,7 +125,7 @@ theorem norm_map_apply_sq_le_mul_norm (f : (adjointComp T).domain) {t : ℝ} (ht
   exact mul_le_mul (norm_apply_le T hT hd ht _) (norm_apply_le T hT hd ht _)
     (norm_nonneg _) (norm_nonneg _)
 
-/-- **`F0`: the semigroup contracts the energy on the generator domain.**  For `f ∈ D(T†T)` and
+/-- **the operator-domain energy bound: the semigroup contracts the energy on the generator domain.**  For `f ∈ D(T†T)` and
 `t ≥ 0`, `‖T (P_t f)‖ ≤ ‖T f‖`.
 
 The supremum `M` of `‖T (P_t f)‖` over all `t ≥ 0` is finite by
@@ -173,7 +173,7 @@ theorem norm_map_apply_le_of_generator (f : (adjointComp T).domain) {t : ℝ} (h
     · exact le_of_mul_le_mul_right (by nlinarith [hMsq]) h
   exact le_trans (hMle _ (hmemS t ht hft)) hMa
 
-/-- **`F0`, Dirichlet-form phrasing.**  For `f ∈ D(T†T)` and `t ≥ 0`,
+/-- **the operator-domain energy bound, Dirichlet-form phrasing.**  For `f ∈ D(T†T)` and `t ≥ 0`,
 `⟪T†T (P_t f), P_t f⟫ ≤ ⟪T†T f, f⟫`. -/
 theorem inner_adjointComp_apply_le (f : (adjointComp T).domain) {t : ℝ} (ht : 0 ≤ t) :
     ⟪adjointComp T ⟨apply T hT hd t (f : H₀), preserves_domain T hT hd f ht⟩,
@@ -184,15 +184,15 @@ theorem inner_adjointComp_apply_le (f : (adjointComp T).domain) {t : ℝ} (ht : 
   nlinarith [h, norm_nonneg (T ⟨apply T hT hd t (f : H₀), (preserves_domain T hT hd f ht).2⟩),
     norm_nonneg (T ⟨(f : H₀), f.2.2⟩)]
 
-/-! ### `F1`: `D(T†T)` is dense in `D(T)` for the graph norm -/
+/-! ### graph-norm density: `D(T†T)` is dense in `D(T)` for the graph norm -/
 
 include hT hd in
-/-- **`F1`.**  Every `f ∈ D(T)` is approximated in the **graph norm** of `T` by elements of
+/-- **graph-norm density.**  Every `f ∈ D(T)` is approximated in the **graph norm** of `T` by elements of
 `D(T†T)`: there is a sequence `u n ∈ D(T†T)` with `u n → f` in `H₀` **and** `T (u n) → T f`
 in `H₁`.
 
-The sequence is `u n = J_{1/(n+1)} f`.  Membership is `V2`
-(`mem_adjointComp_domain_resolventDomain`), the `H₀` convergence is `R2`, and the `H₁`
+The sequence is `u n = J_{1/(n+1)} f`.  Membership is the resolvent domain identity
+(`mem_adjointComp_domain_resolventDomain`), the `H₀` convergence is strong resolvent convergence, and the `H₁`
 convergence is `exists_delta_norm_map_resolventDomain_sub_map_lt`. -/
 theorem exists_seq_mem_adjointComp_domain_tendsto_graph (f : T.domain) :
     ∃ (u : ℕ → H₀) (hu : ∀ n, u n ∈ (adjointComp T).domain),
@@ -213,9 +213,9 @@ theorem exists_seq_mem_adjointComp_domain_tendsto_graph (f : T.domain) :
     rw [dist_eq_norm]
     exact hlt (one_div_succ_pos n) (lt_of_le_of_lt (one_div_succ_le hn) hN)
 
-/-! ### `F2`–`F3`: form-domain invariance and energy contraction -/
+/-! ### form-domain invariance–form-energy contraction: form-domain invariance and energy contraction -/
 
-/-- **`F2` and `F3` together.**  For every `f ∈ D(T)` and every `t ≥ 0` the semigroup value
+/-- **form-domain invariance and form-energy contraction together.**  For every `f ∈ D(T)` and every `t ≥ 0` the semigroup value
 `P_t f` lies in `D(T)`, and `‖T (P_t f)‖ ≤ ‖T f‖`.
 
 The membership witness and the estimate are produced in one statement because the estimate
@@ -268,14 +268,14 @@ theorem exists_mem_domain_norm_map_apply_le (f : T.domain) {t : ℝ} (ht : 0 ≤
   rw [hzeq, hz₂']
   exact le_of_tendsto_of_tendsto' hη.norm hu₁.norm hcontr
 
-/-- **`F2`: the form domain is invariant.**  For `f ∈ D(T)` and `t ≥ 0`, `P_t f ∈ D(T)`.  Time
+/-- **form-domain invariance: the form domain is invariant.**  For `f ∈ D(T)` and `t ≥ 0`, `P_t f ∈ D(T)`.  Time
 zero and the zero vector are allowed, and the datum is only assumed to be in the form domain. -/
 theorem preserves_form_domain (f : T.domain) {t : ℝ} (ht : 0 ≤ t) :
     apply T hT hd t (f : H₀) ∈ T.domain := by
   obtain ⟨h, _⟩ := exists_mem_domain_norm_map_apply_le T hT hd f ht
   exact h
 
-/-- **`F3`: the semigroup contracts the energy on the whole form domain.**  For `f ∈ D(T)`,
+/-- **form-energy contraction: the semigroup contracts the energy on the whole form domain.**  For `f ∈ D(T)`,
 `t ≥ 0` and any witness of `P_t f ∈ D(T)`, `‖T (P_t f)‖ ≤ ‖T f‖`.  The gradient is `T` in the
 closed-operator sense; no classical representative is claimed. -/
 theorem norm_map_apply_le (f : T.domain) {t : ℝ} (ht : 0 ≤ t)

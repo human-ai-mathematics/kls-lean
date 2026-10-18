@@ -45,12 +45,12 @@ variable {H₀ H₁ : Type*} [NormedAddCommGroup H₀] [InnerProductSpace ℝ H�
 
 namespace Generated
 
-/-- **`G1` on `D(T†T)`.** For `b ∈ D(T†T)`, `0 ≤ t` and `ε > 0` there is `δ > 0` such that for
+/-- **the generator right derivative on `D(T†T)`.** For `b ∈ D(T†T)`, `0 ≤ t` and `ε > 0` there is `δ > 0` such that for
 every `0 < s < δ` **and every `τ ∈ [0, t]` simultaneously**
 
 `‖exp (-τ • L_s) b - P_τ b‖ ≤ ε`.
 
-The point is the uniformity in `τ`: the `S6` convergence `Generated.yosida_limit` is a pointwise
+The point is the uniformity in `τ`: the the adjoint-product identification convergence `Generated.yosida_limit` is a pointwise
 statement at a fixed time, whereas the bound here has a single `δ` for the whole interval.
 
 Proof: `Y6` bounds `‖exp (-τ • L_s) b - exp (-τ • L_r) b‖` by `τ ‖L_s b - L_r b‖ ≤ t ‖L_s b - L_r b‖`,
@@ -105,16 +105,16 @@ theorem yosida_error_le (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClosed)
     (NormedSpace.exp (-τ • yosida T hT hr0) (b : H₀)) (Generated.apply T hT hd τ (b : H₀))
   linarith
 
-/-- **`G1`.** For every `g : H₀`, every `0 ≤ t` and every `ε > 0` there is `δ > 0` such that for
+/-- **the generator right derivative.** For every `g : H₀`, every `0 ≤ t` and every `ε > 0` there is `δ > 0` such that for
 all `0 < s < δ` and **all** `τ ∈ [0, t]`
 
 `‖exp (-τ • L_s) g - P_τ g‖ < ε`,
 
-i.e. the `S6` convergence of `Generated.yosida_limit` is uniform on compact time intervals.
+i.e. the the adjoint-product identification convergence of `Generated.yosida_limit` is uniform on compact time intervals.
 
 Proof: approximate `g` within `ε/3` by `b ∈ D(T†T)` (`dense_adjointComp_domain`), apply
 `Generated.yosida_error_le` to `b` with `ε/3`, and absorb the two
-approximation errors with the contraction bounds `S5` (`norm_exp_neg_smul_apply_le`) and `P3`
+approximation errors with the contraction bounds resolvent contraction (`norm_exp_neg_smul_apply_le`) and contraction
 (`Generated.norm_apply_le`). -/
 theorem yosida_converges (T : H₀ →ₗ.[ℝ] H₁)
     (hT : T.IsClosed) (hd : Dense (T.domain : Set H₀)) (g : H₀) {t : ℝ} (ht : 0 ≤ t) {ε : ℝ}
@@ -144,14 +144,14 @@ theorem yosida_converges (T : H₀ →ₗ.[ℝ] H₁)
     (Generated.apply T hT hd τ b) (Generated.apply T hT hd τ g)
   linarith
 
-/-- **The quantitative form of `S8`.** For `f ∈ D(T†T)` and `ε > 0` there is `δ > 0` with
+/-- **The quantitative form of the semigroup limit.** For `f ∈ D(T†T)` and `ε > 0` there is `δ > 0` with
 
 `‖P_t f - f + t • T†T f‖ ≤ (7 ε / 8) * t` for every `0 < t < δ`,
 
 i.e. `P_t f = f - t • T†T f + o(t)` as `t ↓ 0`, with an explicit modulus.
 
-Proof: `G2` applied to `A = L_s` needs `‖exp (-τ • L_s) (L_s f) - L_s f‖` bounded on all of
-`[0, t]`, which is exactly what `G1` (uniformity in `τ`), `Y5` and `P7` supply; then `s ↓ 0` at
+Proof: the exponential mean-value bound applied to `A = L_s` needs `‖exp (-τ • L_s) (L_s f) - L_s f‖` bounded on all of
+`[0, t]`, which is exactly what the generator right derivative (uniformity in `τ`), `Y5` and `P7` supply; then `s ↓ 0` at
 the fixed `t` through `Generated.yosida_limit`, squeezed by `le_of_forall_pos_add_le`. -/
 theorem generator_error_le (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClosed)
     (hd : Dense (T.domain : Set H₀)) (f : (adjointComp T).domain) {ε : ℝ} (hε : 0 < ε) :
@@ -179,7 +179,7 @@ theorem generator_error_le (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClosed)
   have hYs : ‖yosida T hT hs (f : H₀) - adjointComp T f‖ < ε / 8 := hY5 hs hsa
   have hYs' : ‖adjointComp T f - yosida T hT hs (f : H₀)‖ < ε / 8 := by
     rwa [norm_sub_rev] at hYs
-  -- The hypothesis of `G2`, uniformly on `[0, t]`.
+  -- The hypothesis of the exponential mean-value bound, uniformly on `[0, t]`.
   have hC : ∀ τ ∈ Set.Icc 0 t, ‖NormedSpace.exp (-τ • yosida T hT hs) (yosida T hT hs (f : H₀))
       - yosida T hT hs (f : H₀)‖ ≤ 3 * ε / 4 := by
     intro τ hτ
@@ -229,7 +229,7 @@ theorem generator_error_le (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClosed)
     rwa [norm_sub_rev] at hlim
   linarith
 
-/-- **`G3` = `S8`: the generator of `P_t` is `-T†T` on `D(T†T)`.** For `f ∈ D(T†T)` and `ε > 0`
+/-- **`G3` = the semigroup limit: the generator of `P_t` is `-T†T` on `D(T†T)`.** For `f ∈ D(T†T)` and `ε > 0`
 there is `δ > 0` with
 
 `‖t⁻¹ • (P_t f - f) + T†T f‖ < ε` for every `0 < t < δ`,

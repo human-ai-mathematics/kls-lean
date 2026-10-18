@@ -204,7 +204,7 @@ Under that hypothesis the critical set is exactly the vanishing-derivative set, 
 null by the theorem above, so the regular-case formula extends to the whole space.
 
 For `m = 1` the hypothesis is **automatic** — a real differential is surjective exactly when it is
-nonzero — so this is the codimension-one `L11` in that case.  For `m ≥ 2` it is a genuine
+nonzero — so this is the codimension-one C¹ coarea in that case.  For `m ≥ 2` it is a genuine
 restriction: it excludes intermediate ranks, and the rank-deficient part is **not** covered by
 anything proved here. -/
 theorem coarea_of_contDiff_of_critical_eq_zeroDeriv {S : Set V} {u : V → W} {g : V → ℝ≥0∞}

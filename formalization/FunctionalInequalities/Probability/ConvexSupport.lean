@@ -388,9 +388,7 @@ theorem exists_pos_le_measure_halfspace_of_mem_interior_convexHull_support {E : 
 section EffectiveDomain
 
 /-! Cordero-Erausquin–Klartag (2015), Lemma 16, finiteness near the interior: an extended-real convex potential with finite
-integral is finite on a neighbourhood of every interior point of the convex hull of the support. Body: root-accepted raw
-candidate (CEK16-FiniteNear-Raw-Root ACCEPTANCE b389a6fc…, candidate a96fc727…), verbatim; statement = the exact
-`ExtendedFiniteNearGoal` contract with its definitions unfolded. -/
+integral is finite on a neighbourhood of every interior point of the convex hull of the support. -/
 
 open MeasureTheory Set
 
@@ -455,8 +453,7 @@ section FiniteMeasureHalfspace
 probability specialization `exists_pos_le_measure_halfspace_of_mem_interior_convexHull_support` transported by
 normalization `ν = μ(E)⁻¹ • μ` (same support; `μ ≠ 0` follows from the support-hull hypothesis, never from the zero-mass
 fallback of `FiniteMeasure.normalize`). The bound `m ≤ μ(E)` keeps the positive total mass for the global-minimum
-alternative; in dimension 0 the direction condition is vacuous. Statement and body: root direct existing-source
-specialization (CEK16-FiniteMass-Raw-Root ACCEPTANCE 88b66a91…, CandidateV3 df51eb0b…, freeze 1a7f2143…), verbatim. -/
+alternative; in dimension 0 the direction condition is vacuous. -/
 
 /-- Uniform positive mass, at most the total mass, of the strict open halfspaces through an interior point of the convex
 hull of the support of a finite Borel measure. -/
@@ -505,11 +502,10 @@ end FiniteMeasureHalfspace
 
 section PointControl
 
-/-! Cordero-Erausquin–Klartag (2015), Lemma 16, the pointwise bound. Private geometry: root-accepted source specialization
-(CEK16-EReal-Geometry-Raw-Root ACCEPTANCE 20790ce1…, candidate a5a8c47e…), verbatim, reusing the private
-`effective_domain_convex` of section `EffectiveDomain`; `real_convexOn_effective_domain` is public (generic consumer).
-Public statement frozen 670cf2e6…; proof: Codex source specialization from the finite-near theorem, the finite-measure (54)
-bound and the geometry (CEK16-Point-Control-Raw-Root ACCEPTANCE 8e161b9d…). -/
+/-! Cordero-Erausquin–Klartag (2015), Lemma 16: the pointwise bound follows from the
+finite-near theorem, the finite-measure bound (54), and convex effective-domain geometry.
+Private geometry uses `effective_domain_convex` in section `EffectiveDomain`;
+`real_convexOn_effective_domain` is the public effective-domain interface. -/
 
 open Set
 

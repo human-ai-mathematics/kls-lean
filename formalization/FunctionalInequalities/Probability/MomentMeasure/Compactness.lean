@@ -25,8 +25,7 @@ integrals. Dimension zero is included.
   finite conjugate mass derived (`MomentMeasure/ConjugateMass.lean`), not assumed. Zero conjugate mass is allowed.
 
 Not provided: attainment in Proposition 12, essential continuity, the Euler–Lagrange identification, existence or
-uniqueness of moment potentials (Theorem 2). Declaration blocks are verbatim from the root-accepted Lemma 17 bundle
-(ACCEPTANCE ec6d356c…): the (56a) assembly (adcb1e09…) and Lemma17 (26b7c645…).
+uniqueness of moment potentials (Theorem 2).
 -/
 
 open MeasureTheory

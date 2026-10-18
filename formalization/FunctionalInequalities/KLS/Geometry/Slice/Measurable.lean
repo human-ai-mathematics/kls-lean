@@ -2,30 +2,16 @@ import FunctionalInequalities.Analysis.Hausdorff.SurfaceSlicing
 
 /-! # Measurability of weighted level-set integrals
 
-`Analysis.aemeasurable_lintegral_levelSet` migrated here from `KLS/WIP/AnalyticPrerequisites.lean`,
-where it was a direct hole, with a **byte-identical `pp.all` signature**: the same universe, the
-same six instance arguments in the same order (`CompleteSpace V` included, although the proof does
-not use it), the same implicit binders `u`, `K`, `g`, the same hypothesis names `hu`, `hg`, and the
-same conclusion.  Only its proof is new, and it no longer depends on `sorryAx`.  The module is free
-of `sorry` and of transitive `sorryAx`.
+`Analysis.aemeasurable_lintegral_levelSet` is the full-space specialization of
+`KLS.aemeasurable_setLIntegral_inter_levelSet`. Its statement retains `CompleteSpace V`.
+The proof uses the measurable Eilenberg majorant, null slicing, compact-slice measurability
+and the Borel-slice version in `Analysis/Hausdorff/SurfaceSlicing.lean` and
+`Analysis/Hausdorff/Content.lean`. It needs no SFinite hypothesis on the codimension-one
+surface measure, which is not SFinite in positive ambient dimension.
 
-The proof is `KLS.aemeasurable_setLIntegral_inter_levelSet` (obligation `L5` of the weighted coarea
-route) at `S = Set.univ`, which is itself built from the measurable Eilenberg majorant (`L1`), null
-slicing (`L2`), compact-slice measurability (`L3`) and the Borel version (`L4`) of
-`Analysis/Hausdorff/SurfaceSlicing.lean` and `Analysis/Hausdorff/Content.lean`.  No parametric-integral
-theorem is used, so the codimension-one surface measure is never assumed `SFinite`, which it is not
-in positive dimension.
-
-The declaration keeps the `FunctionalInequalities.Analysis` namespace because its published name
-must not change, while the file sits under `KLS/Geometry/` because the statement names
-`KLS.surfaceMeasure` and is therefore not part of the KLS-independent `Analysis/` layer; the
-work-in-progress file it replaces made the same choice.
-
-This module supplies measurability. The equality
-`Analysis.lintegral_enorm_gradient_mul_eq_lintegral_levelSet` is proved separately in
-`KLS/Geometry/Coarea/Lipschitz.lean`; `LocallyLipschitzCoarea` extends both conclusions to locally
-Lipschitz functions. The sharp `C^(finrank)` `Analysis.sard` is proved in
-`Analysis/Sard/Sharp.lean`; the former `KLS/WIP/AnalyticPrerequisites.lean` is deleted. -/
+This module supplies measurability. The coarea equality is in
+`KLS/Geometry/Coarea/Lipschitz.lean`; `KLS/Geometry/Coarea/LocallyLipschitz.lean` extends
+both conclusions to locally Lipschitz functions. Sharp Sard is in `Analysis/Sard/Sharp.lean`. -/
 
 noncomputable section
 

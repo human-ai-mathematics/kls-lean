@@ -2,7 +2,7 @@ import FunctionalInequalities.Analysis.Vector.Graph.Area
 
 /-! # The weighted codimension-`m` graph area formula
 
-Obligation `B2` of the area formula route computes the normalized `k`-dimensional measure of a `C¹`
+Property `B2` of the area formula route computes the normalized `k`-dimensional measure of a `C¹`
 graph.  That is an identity of **measures of sets**; the coarea formula integrates an arbitrary
 weight over a fibre, so it needs the same identity as a **change of variables**.
 

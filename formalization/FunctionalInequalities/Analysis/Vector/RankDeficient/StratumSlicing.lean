@@ -7,14 +7,7 @@ import Mathlib.MeasureTheory.Integral.Prod
 
 /-! # The per-stratum slicing
 
-**Obligation `R7`** of the rank-deficient route recorded in
-`research/decisions/2026-09-17-rank-deficient-route.md`, **proved** here as
-`exists_nhds_ae_hausdorffMeasure_stratum_inter_levelSet_eq_zero`: around every point of the rank-`r`
-stratum there is a neighbourhood in which almost every level meets the stratum in an `ℋ^k`-null set.
-With `R1`–`R6` that is seven of the route's obligations.  **`R0` is still open**: it needs `R8`, the
-localization of this statement to the whole stratum, and the finite union over `r < m`.  Nothing
-here is a coarea formula in a new case, a slicing statement about the full critical set, or a Sard
-theorem.
+`exists_nhds_ae_hausdorffMeasure_stratum_inter_levelSet_eq_zero` gives a neighbourhood of each rank-stratum point in which almost every level meets the stratum in an `ℋ^k`-null set. Global localization belongs to `Analysis/Vector/RankDeficient/Coarea.lean`.
 
 **The argument.**  Near a point of the stratum let `K` be the range of the differential there and
 `P`, `Q` the orthogonal projections onto `K` and `Kᗮ`.
@@ -23,11 +16,11 @@ theorem.
   closure on which `P ∘ u` is a submersion, together with **one** constant `c` such that for
   **every** stratum point `y` in it, every `ε` and every set on which `u` is `ε`-approximated by
   `fderiv ℝ u y`, the projected map `Q ∘ u` is `c ε`-Lipschitz along every fibre of `P ∘ u`.  The
-  uniformity of `c` over `y` is the difficulty, since `R4`'s constant depends on the piece's linear
-  model; it comes from `R2`, the **locally uniform** half of `R3`, and a bound on `‖fderiv ℝ u‖`.
+  uniformity of `c` over `y` is the difficulty, since small tangential Lipschitz control's constant depends on the piece's linear
+  model; it comes from the kernel identity, the **locally uniform** half of the uniform right-inverse bound, and a bound on `‖fderiv ℝ u‖`.
 * `lintegral_split_target` — an integral over the target is the iterated integral over an orthogonal
   splitting of it, by `LinearIsometryEquiv.measurePreserving`, `WithLp.volume_preserving_toLp` and
-  Tonelli.  This is the integral form of what `R6` does for null sets.
+  Tonelli.  This is the integral form of what target-split Fubini does for null sets.
 * `lintegral_hausdorffMeasure_stratum_le` — the **per-scale bound**.  Run Mathlib's approximating
   partition on `u` **itself**, so one partition serves both components; on each piece the local
   package makes `Q ∘ u` small-Lipschitz along fibres; the Eilenberg bound of
@@ -185,7 +178,7 @@ variable {W₁ W₂ : Type*}
   [MeasurableSpace W₂] [BorelSpace W₂]
 
 /-- **The integral form of the target splitting.**  An integral over the target is the iterated
-integral over an orthogonal splitting of it.  This is what `R6` does for null sets, in the form the
+integral over an orthogonal splitting of it.  This is what target-split Fubini does for null sets, in the form the
 per-scale estimate has to be integrated against: the inner integral is over the directions the
 second slicing uses, the outer one over the fibre parameter of the regular component. -/
 theorem lintegral_split_target (e : W ≃ₗᵢ[ℝ] WithLp 2 (W₁ × W₂)) {f : W → ℝ≥0∞}
@@ -402,7 +395,7 @@ theorem lintegral_hausdorffMeasure_stratum_le
         ring
 
 
-/-- **`R7`: the local per-stratum slicing.** -/
+/-- **fibrewise slicing: the local per-stratum slicing.** -/
 theorem exists_nhds_ae_hausdorffMeasure_stratum_inter_levelSet_eq_zero
     {u : V → W} (hu : ContDiff ℝ 1 u) {k r : ℕ} (hk : k + finrank ℝ W = finrank ℝ V)
     (hr : r < finrank ℝ W) {x₀ : V} (hx₀ : x₀ ∈ stratum u r) :

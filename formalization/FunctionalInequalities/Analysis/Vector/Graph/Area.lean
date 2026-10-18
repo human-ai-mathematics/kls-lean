@@ -2,7 +2,7 @@ import FunctionalInequalities.Analysis.Vector.Graph.Sandwich
 
 /-! # The codimension-`m` area formula for `C¹` graphs
 
-Obligation `B1`, fifth and last phase.  The `k`-dimensional measure of the graph of a `C¹`
+Property vector-valued graph area, fifth and last phase.  The `k`-dimensional measure of the graph of a `C¹`
 `K`-valued map over a measurable set is the integral of `√det (1 + Dγᵀ Dγ)`.
 
 One step differs from codimension one and is the reason this phase needed its own partition.  The
@@ -277,7 +277,7 @@ private theorem hausdorffMeasure_image_vectorGraphMap_of_finite (ι : H →ₗ�
       exact (hest ε hε).2
     exact le_antisymm hAle hIle
 
-/-- **`B1`: the codimension-`m` area formula for `C¹` graphs.**  The `k`-dimensional Hausdorff
+/-- **vector-valued graph area: the codimension-`m` area formula for `C¹` graphs.**  The `k`-dimensional Hausdorff
 measure of the graph of a `C¹` `K`-valued map over a measurable set is the integral of the graph
 volume factor `√det (1 + Dγᵀ Dγ)`.  No finiteness, boundedness or injectivity hypothesis: a graph
 map is injective by construction. -/

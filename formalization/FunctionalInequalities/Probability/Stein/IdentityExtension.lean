@@ -4,7 +4,7 @@ import FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Approximat
 /-!
 # Stein identity extension to locally Lipschitz L2 tests
 
-Existing statements, names and proof payloads are preserved.
+The Stein integration-by-parts identity extends to locally Lipschitz L2 tests.
 -/
 
 open MeasureTheory Filter

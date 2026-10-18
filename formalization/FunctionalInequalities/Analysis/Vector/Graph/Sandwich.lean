@@ -2,7 +2,7 @@ import FunctionalInequalities.Analysis.Vector.Graph.Basic
 
 /-! # Two-sided estimates for vector-valued graphs
 
-Obligation `B1`, fourth phase: the sandwich estimates.  A graph map that is `ε`-close to its linear
+Property vector-valued graph area, fourth phase: the sandwich estimates.  A graph map that is `ε`-close to its linear
 model has `k`-dimensional image measure within a factor `(1 + ε)^k` of the linear one, on both
 sides.
 
@@ -186,7 +186,7 @@ theorem le_hausdorffMeasure_image_vectorGraphMap (ι : H →ₗᵢ[ℝ] V) (κ :
 omit [MeasurableSpace V] [BorelSpace V] [FiniteDimensional ℝ V] [FiniteDimensional ℝ K] in
 /-- A countable measurable partition of `H` on which the graph map is `ε`-approximated by linear
 graph maps and the derivative stays `ε`-close to the corresponding slope.  This is the input of the
-remaining, fifth phase of `B1`. -/
+remaining, fifth phase of vector-valued graph area. -/
 theorem exists_approximating_partition_vectorGraph (ι : H →ₗᵢ[ℝ] V) (κ : K →ₗᵢ[ℝ] V)
     {γ : H → K} (hγ : ContDiff ℝ 1 γ) {ε : ℝ≥0} (hε : 0 < ε) :
     ∃ (t : ℕ → Set H) (A : ℕ → (H →L[ℝ] K)),

@@ -12,7 +12,7 @@ Exact formulas for the conjugate mass, the integral and the extended-logarithm f
 function: a finite-measure correction in general, and invariance for a centered probability measure with finite first
 moment; the normalization producing a nonnegative potential vanishing at the origin.
 
-Declaration blocks are verbatim from the root-accepted CEK Proposition 12 bundle (`independent-p12-attainment`, ACCEPTANCE 848aa45b…) under the reviewed rev3 migration map.
+Supporting infrastructure for Cordero-Erausquin–Klartag, Proposition 12.
 -/
 
 noncomputable section

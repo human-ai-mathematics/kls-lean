@@ -3,7 +3,7 @@ import FunctionalInequalities.Analysis.Hausdorff.SurfaceSlicing
 
 /-! # Measurability of weighted slices on an open C¹ domain
 
-The measurability component of L9. No regular-point hypothesis is needed for this component.
+The measurability component of regular-domain coarea. No regular-point hypothesis is needed for this component.
 Local C¹ representatives and disjoint Borel pieces reduce it to the Lipschitz-on-set result.
 This module does not assert the coarea equality.
 -/

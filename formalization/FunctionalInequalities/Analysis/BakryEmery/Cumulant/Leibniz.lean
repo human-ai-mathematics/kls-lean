@@ -149,7 +149,7 @@ theorem iteratedFDeriv_inner_centeredGradient_zero_of_compact (μ : ProbabilityM
 singleton/complement allocations give `2m * kappa_m`, and all middle allocations pair to twice the sum over the
 middle masks containing the slot `i0` (72). It assumes only compact support and invertibility of the actual
 covariance, for every `m ≥ 3`; it contains no stochastic process, Itô formula or cumulant evolution conclusion.
-Proof body: independently accepted Astra v5 (`round1.lean` ca257ea4…), verbatim. -/
+-/
 theorem iteratedFDeriv_inner_centeredGradient_zero_grouped_of_compact
     (mu : ProbabilityMeasure E)
     (hc : IsCompact (mu : Measure E).support)

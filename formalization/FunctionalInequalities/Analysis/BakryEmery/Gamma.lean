@@ -18,7 +18,7 @@ universe u
 
 variable {E : Type u} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
 
-/-! ### The carré du champ and `B0` -/
+/-! ### The carré du champ and the carré-du-champ product identity -/
 
 section Gamma
 
@@ -80,7 +80,7 @@ theorem weightedLaplacian_comp (U : E → ℝ) {h h' h'' : ℝ → ℝ} {G : E �
     ((hG.differentiable (by norm_num)) x), (hh x).deriv, inner_smul_right]
   ring
 
-/-- **Route `B0`, the carré-du-champ product identity**: for `C²` functions `f`, `g` and any
+/-- **the carré-du-champ product identity, the carré-du-champ product identity**: for `C²` functions `f`, `g` and any
 potential `U`, `(ℒ(fg) - f ℒg - g ℒf) / 2 = Γ(f, g) = ⟪∇f, ∇g⟫`. -/
 theorem gamma_eq_weightedLaplacian (U : E → ℝ) {f g : E → ℝ} (hf : ContDiff ℝ 2 f)
     (hg : ContDiff ℝ 2 g) (x : E) :
@@ -98,7 +98,7 @@ theorem gammaTwo_apply (U f : E → ℝ) (x : E) :
     gammaTwo U f x =
       weightedLaplacian U (fun y => gamma f f y) x / 2 - gamma f (weightedLaplacian U f) x := rfl
 
-/-- `Γ₂` written out in gradients and Laplacians, exactly the left-hand side of route `B3`. -/
+/-- `Γ₂` written out in gradients and Laplacians, exactly the left-hand side of route the Bochner identity. -/
 theorem gammaTwo_eq_expanded (U f : E → ℝ) (x : E) :
     gammaTwo U f x =
       (Laplacian.laplacian (fun y => ‖gradient f y‖ ^ 2) x -

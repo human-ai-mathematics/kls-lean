@@ -10,9 +10,7 @@ Bizeul–Klartag–Lehec arXiv:2610.05474v1, Section 2 (p. 5): the reduction of 
 isotropic regular laws by centering and whitening. A regular law has finite second moment, full
 support and positive definite covariance; a covariance whitening `W` exists, and the affine
 potential `V (W⁻¹ · + mean)` is regular (`RegularAffine`) and isotropic, with its law the
-translated and whitened law. No continuity or uniqueness of the whitening is asserted. Proof
-bodies: Codex bkl (bundle `Regular-Isotropic-Producer`, independently accepted); statements and
-placement: Claude.
+translated and whitened law. No continuity or uniqueness of the whitening is asserted.
 -/
 
 open MeasureTheory ProbabilityTheory

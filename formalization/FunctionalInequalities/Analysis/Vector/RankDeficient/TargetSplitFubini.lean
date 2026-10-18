@@ -4,18 +4,12 @@ import Mathlib.Analysis.InnerProductSpace.ProdL2
 
 /-! # Fubini across an orthogonal splitting of the target
 
-Obligation `R6` of the rank-deficient route recorded in
-`research/decisions/2026-09-17-rank-deficient-route.md` and stated in
-`research/audits/RankDeficientRouteStatements.lean`.  **Only `R6` is proved here**; with `R1`, `R2`
-of `Analysis/Vector/RankDeficient/Stratification.lean`, `R3` of `Analysis/Vector/RankDeficient/RightInverseBound.lean` and `R4` of
-`Analysis/Vector/RankDeficient/TangentialLipschitz.lean` that is five of the route's obligations.  `R0`, `R5`,
-`R7`–`R10`, `N1` and `N2` remain open, and so does the rank-deficient part of the codimension-`m`
-coarea critical set.  Nothing here is a coarea formula, a slicing statement or a Sard theorem.
+An orthogonal splitting of the target combines two iterated almost-everywhere statements into one almost-everywhere statement about the target level.
 
-**What `R6` is for.**  The route slices twice: first in codimension `r` by the regular component
+**What target-split Fubini is for.**  The route slices twice: first in codimension `r` by the regular component
 `P ∘ u`, then in codimension `m − r` by `Q ∘ u` inside each fibre.  What that produces is "for
 almost every `s ∈ W₁`, for almost every `τ ∈ W₁ᗮ`", while the conclusion has to be about almost
-every `t ∈ W`.  `R6` is the bookkeeping that joins the two levels.
+every `t ∈ W`.  Target-split Fubini combines the quantifiers that joins the two levels.
 
 **It is bookkeeping, but it was not available.**  Mathlib supplies every part —
 `LinearIsometryEquiv.measurePreserving`, `WithLp.volume_preserving_toLp` and `Measure.prod_apply` —
@@ -53,7 +47,7 @@ theorem measurableSet_splitPreimage (e : W ≃ₗᵢ[ℝ] WithLp 2 (W₁ × W₂
     e.symm.continuous.measurable.comp (MeasurableEquiv.toLp 2 (W₁ × W₂)).measurable
   exact hmeas hN
 
-/-- **`R6`: Fubini across an orthogonal splitting of the target.**  If almost every first-coordinate
+/-- **target-split Fubini: Fubini across an orthogonal splitting of the target.**  If almost every first-coordinate
 slice of `N` is null, then `N` is null.
 
 This is what turns the route's "for almost every `s`, for almost every `τ`" into "for almost every

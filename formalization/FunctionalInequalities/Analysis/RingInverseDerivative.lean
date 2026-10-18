@@ -5,8 +5,7 @@ import Mathlib.Analysis.Calculus.FDeriv.Mul
 
 For `H : E → R` into a complete normed algebra with `H x` a unit, `y ↦ Ring.inverse (H y)` is
 differentiable at `x` with derivative `v ↦ −H(x)⁻¹ (DH(x)[v]) H(x)⁻¹` (noncommutative order kept).
-Used for the derivative of the inverse Hessian (Letwin (2.5)). Proof bodies: Codex route bundle
-`MA-Inverse` (independently accepted); statements and placement: Claude.
+Used for the derivative of the inverse Hessian (Letwin (2.5)).
 -/
 
 noncomputable section

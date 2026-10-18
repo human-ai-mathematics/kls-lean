@@ -20,8 +20,7 @@ and `weightedMeasure volume ψ` a probability measure (`bounded_source_lipschitz
 This is a weak normalized convex Lipschitz primal linked to the source law, a support toward the moment map of
 Cordero-Erausquin–Klartag Theorem 2 and Letwin, arXiv:2607.24164v1, Lemmas 2.1–2.2. Not provided: the Euler–Lagrange
 identification, the gradient pushforward `(∇ψ)_# e^{−ψ} = μ`, smoothness, a positive definite Hessian, the gradient
-diffeomorphism, the Monge–Ampère equation, Letwin Theorem 2.5. Proof bodies: strong-API candidate (gpt-6-astra,
-`api-bounded-primal-geometry-v11`, d77ddfc1…), verbatim up to the name `cap ↦ closedBallCap`; placement: Claude.
+diffeomorphism, the Monge–Ampère equation, Letwin Theorem 2.5.
 -/
 
 noncomputable section

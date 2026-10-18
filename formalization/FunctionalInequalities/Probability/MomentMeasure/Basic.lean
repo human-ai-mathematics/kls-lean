@@ -15,8 +15,9 @@ the monotonicity `mass_legendre_mono` used for the truncation (61), and Borel me
 an arbitrary, possibly nonmeasurable primal (`measurable_density_legendre`).
 
 The gradient push-forward (moment measure), the effective domain and essential continuity of CEK Definition 2 and
-Theorem 2 are not defined in this module. Declaration blocks are verbatim from the root-accepted Lemma 17 bundle
-(ACCEPTANCE ec6d356c…): lane A definitions (6433a0f6…) and prerequisites (5ec2f621…), ConjugateMass (90a65ba7…).
+Theorem 2 are not defined in this module.
+
+Supporting definitions for Cordero-Erausquin–Klartag, Lemma 17.
 -/
 
 noncomputable section

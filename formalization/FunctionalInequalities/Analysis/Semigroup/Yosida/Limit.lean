@@ -2,22 +2,22 @@ import FunctionalInequalities.Analysis.Semigroup.Exponential.Limit
 import FunctionalInequalities.Analysis.Semigroup.Yosida.Laws
 
 /-!
-# `S6`: the Yosida exponentials converge strongly
+# the adjoint-product identification: the Yosida exponentials converge strongly
 
 `Y8` of the Yosida-limit route (`research/decisions/2026-09-19-yosida-limit-route.md`), which is
-`S6` of the semigroup-generation route for the actual Yosida approximation
+the adjoint-product identification of the semigroup-generation route for the actual Yosida approximation
 `L_s = s⁻¹ (1 - J_s)` of `T†T`: for `T` closed and densely defined,
 `exp (-t • L_s) f` converges as `s ↓ 0`, for every `f : H₀` and every `t ≥ 0`.
 
 The proof is pure composition. The corrected abstract statement `Y7`
 (`exists_limit_exp_neg_smul`, `Exponential/Limit.lean`) is applied to the family `s ↦ L_s` with the
 dense set `D(T†T)`: nonnegativity is `Y1` (`yosida_nonneg`), commutation is `Y3`
-(`yosida_comp_comm`), density is `V4` (`dense_adjointComp_domain`), and the Cauchy property on
+(`yosida_comp_comm`), density is density of D(T†T) (`dense_adjointComp_domain`), and the Cauchy property on
 `D(T†T)` follows from the convergence `L_s f → T†T f` of `Y5`
 (`exists_delta_norm_yosida_sub_adjointComp_lt`) by the triangle inequality.
 
-The limit `g` is not yet named as an operator: `S7` (the limit defines a strongly continuous
-semigroup of self-adjoint contractions) and `S8` (its generator is `T†T`) are not proved here. Nothing
+The limit `g` is not yet named as an operator: the exponential approximation (the limit defines a strongly continuous
+semigroup of self-adjoint contractions) and the semigroup limit (its generator is `T†T`) are not proved here. Nothing
 here is the Markov property, Bakry–Émery calculus, a heat estimate or any step of Buser's inequality.
 -/
 
@@ -52,7 +52,7 @@ theorem yosida_cauchy_on_adjointComp_domain (T : H₀ →ₗ.[ℝ] H₁) (hT : T
     _ < ε / 2 + ε / 2 := add_lt_add h1 h2
     _ = ε := add_halves ε
 
-/-- **`S6` for the Yosida approximation** (`Y8`). For `T` closed and densely defined, every
+/-- **the adjoint-product identification for the Yosida approximation** (`Y8`). For `T` closed and densely defined, every
 `t ≥ 0` and every `f : H₀`, the vectors `exp (-t • L_s) f` converge as `s ↓ 0`, in the `ε`–`δ`
 sense forced by the proof argument `0 < s` carried by `L_s`. -/
 theorem exists_limit_exp_neg_smul_yosida (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClosed)

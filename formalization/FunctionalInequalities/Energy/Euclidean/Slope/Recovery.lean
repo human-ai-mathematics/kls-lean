@@ -5,14 +5,14 @@ import FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Kernel
 # Smooth recovery of a globally Lipschitz test, and the reduction tools
 
 Source: the route recorded in `research/decisions/2026-09-19-energy-slope-route.md`, part `B`.
-Read `SmoothGradient.relaxation_le_asymptoticLipschitz_of_lipschitzWith` (`B1`) for the main
-contract, then the four reduction tools `locallyLipschitz_mul` (`B2`),
-`exists_lipschitzWith_of_eq_zero_outside_ball` (`B3`), `AsymptoticLipschitz.apply_mul_le` (`B4`)
-and `LocalSlope.apply_mul_le` (`B5`).
+Read `SmoothGradient.relaxation_le_asymptoticLipschitz_of_lipschitzWith` (smooth recovery) for the main
+contract, then the four reduction tools `locallyLipschitz_mul` (the local Lipschitz product rule),
+`exists_lipschitzWith_of_eq_zero_outside_ball` (the bounded-support Lipschitz bound), `AsymptoticLipschitz.apply_mul_le` (the asymptotic-Lipschitz product bound)
+and `LocalSlope.apply_mul_le` (the local-slope product bound).
 
 ## What is proved
 
-`B1`.  For a globally `K`-Lipschitz `g` the mollifications `g ⋆ ρ_R` of
+smooth recovery.  For a globally `K`-Lipschitz `g` the mollifications `g ⋆ ρ_R` of
 `Energy/Euclidean/LipschitzApproximation/Kernel.lean` are `C^∞`, uniformly `K`-Lipschitz, converge to
 `g` uniformly (hence in `L²(ν)` for every probability law `ν`), and satisfy the pointwise bound
 `limsup_{R → 0} ‖∇(g ⋆ ρ_R)(x)‖ ≤ Lip_a g (x)`: the mollification at `x` sees `g` only within
@@ -22,7 +22,7 @@ enough radius.  The uniform bound `K²` makes reverse Fatou (`MeasureTheory.lims
 applicable, so the mollifications form an approximating sequence of smooth tests whose limiting
 energy is at most the asymptotic-Lipschitz energy of `g`.
 
-`B2`–`B5` are the reduction tools that turn a general test into a globally Lipschitz one:
+the local Lipschitz product rule–the local-slope product bound are the reduction tools that turn a general test into a globally Lipschitz one:
 a locally Lipschitz function times a bounded globally Lipschitz one is locally Lipschitz; a
 locally Lipschitz function vanishing outside a ball is globally Lipschitz; and the one-moving-
 point Leibniz bounds for the asymptotic Lipschitz constant and for the local slope.
@@ -189,14 +189,14 @@ end Metric
 
 end AsymptoticLipschitz
 
-/-! ### `B2`, `B3` — the two Lipschitz reduction tools -/
+/-! ### the local Lipschitz product rule, the bounded-support Lipschitz bound — the two Lipschitz reduction tools -/
 
 section Reduction
 
 variable {V : Type u} [NormedAddCommGroup V] [InnerProductSpace ℝ V]
 
 omit [InnerProductSpace ℝ V] in
-/-- `B2`.  A locally Lipschitz function times a bounded globally Lipschitz one is locally
+/-- the local Lipschitz product rule.  A locally Lipschitz function times a bounded globally Lipschitz one is locally
 Lipschitz. -/
 theorem locallyLipschitz_mul {g h : V → ℝ} {N : ℝ≥0} (hg : LocallyLipschitz g)
     (hh : LipschitzWith N h) (hh1 : ∀ x, |h x| ≤ 1) :
@@ -247,7 +247,7 @@ theorem locallyLipschitz_mul {g h : V → ℝ} {N : ℝ≥0} (hg : LocallyLipsch
 
 variable [FiniteDimensional ℝ V]
 
-/-- `B3`.  A locally Lipschitz function vanishing outside a ball is globally Lipschitz. -/
+/-- the bounded-support Lipschitz bound.  A locally Lipschitz function vanishing outside a ball is globally Lipschitz. -/
 theorem exists_lipschitzWith_of_eq_zero_outside_ball {g : V → ℝ} {R : ℝ}
     (hg : LocallyLipschitz g) (hR : ∀ x, R ≤ ‖x‖ → g x = 0) :
     ∃ K : ℝ≥0, LipschitzWith K g := by
@@ -301,7 +301,7 @@ theorem exists_lipschitzWith_of_eq_zero_outside_ball {g : V → ℝ} {R : ℝ}
 
 end Reduction
 
-/-! ### `B4`, `B5` — the one-moving-point Leibniz bounds -/
+/-! ### the asymptotic-Lipschitz product bound, the local-slope product bound — the one-moving-point Leibniz bounds -/
 
 namespace AsymptoticLipschitz
 
@@ -310,7 +310,7 @@ section Leibniz
 variable {V : Type u} [NormedAddCommGroup V] [InnerProductSpace ℝ V]
 
 omit [InnerProductSpace ℝ V] in
-/-- `B4`.  Multiplying by a bounded `N`-Lipschitz factor costs at most `|g x| · N` in the
+/-- the asymptotic-Lipschitz product bound.  Multiplying by a bounded `N`-Lipschitz factor costs at most `|g x| · N` in the
 asymptotic Lipschitz constant. -/
 theorem apply_mul_le (g h : V → ℝ) {N : ℝ≥0} (hh : LipschitzWith N h)
     (hh1 : ∀ y, |h y| ≤ 1) (x : V) :
@@ -398,7 +398,7 @@ section Leibniz
 variable {V : Type u} [NormedAddCommGroup V] [InnerProductSpace ℝ V]
 
 omit [InnerProductSpace ℝ V] in
-/-- `B5`.  Multiplying by a bounded `N`-Lipschitz factor costs at most `|g x| · N` in the local
+/-- the local-slope product bound.  Multiplying by a bounded `N`-Lipschitz factor costs at most `|g x| · N` in the local
 slope.  Here the moving point is only `y`, so no correction in the radius is needed. -/
 theorem apply_mul_le (g h : V → ℝ) {N : ℝ≥0} (hh : LipschitzWith N h)
     (hh1 : ∀ y, |h y| ≤ 1) (x : V) :
@@ -449,7 +449,7 @@ end Leibniz
 
 end LocalSlope
 
-/-! ### `B1` — smooth recovery of a globally Lipschitz test -/
+/-! ### smooth recovery — smooth recovery of a globally Lipschitz test -/
 
 section Mollification
 
@@ -552,7 +552,7 @@ section Recovery
 variable {V : Type u} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [CompleteSpace V]
   [MeasurableSpace V] [BorelSpace V] [SecondCountableTopology V] [FiniteDimensional ℝ V]
 
-/-- `B1`.  The smooth-gradient relaxation of a globally Lipschitz test is at most its
+/-- smooth recovery.  The smooth-gradient relaxation of a globally Lipschitz test is at most its
 asymptotic-Lipschitz energy.  The recovery sequence is the mollification at radius `2 / (j + 1)`;
 the global Lipschitz constant dominates the integrands uniformly, so reverse Fatou converts the
 pointwise bound `limsup ‖∇(g ⋆ ρ_R)(x)‖ ≤ Lip_a g (x)` into the energy bound. -/

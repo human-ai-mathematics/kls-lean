@@ -6,8 +6,7 @@ import FunctionalInequalities.KLS.Isotropic
 Bizeul–Klartag–Lehec arXiv:2610.05474v1, p. 19: at the initial parameters `c = Q = 0` of the
 localization (67), the response of a linear statistic of a compactly supported isotropic prior to the
 linear parameter is the isotropic covariance pairing. This is the deterministic first variation only;
-the stochastic equations (67)–(71) are not constructed. Proof bodies: Codex q_batch bundle
-`Posterior-Parameter-Calculus` (independently accepted); statements and placement: Claude.
+the stochastic equations (67)–(71) are not constructed.
 -/
 
 noncomputable section

@@ -10,8 +10,7 @@ in any orthonormal basis is `Σ_ij (H⁻¹)_ij ∂_i f ∂_j f` (`inverse_hessia
 `f` it is continuous (`continuous_inverse_hessian_gradient_energy`), and it is nonnegative
 (`inverse_hessian_gradient_energy_nonneg`) in every dimension, zero included. Used by the scalar Brascamp–Lieb inequality
 (`KLS/LogConcave/BrascampLieb.lean`); the smooth inverse entries come from `MongeAmpere.lean`, so these facts sit above it
-rather than in `HessianOperator.lean`. Proof bodies: strong-API candidate (gpt-6-astra, `api-scalar-bl-extended-gaussian-v5`,
-394a24b1…), verbatim, with the candidate's section variable context; placement: Claude.
+rather than in `HessianOperator.lean`.
 -/
 
 noncomputable section

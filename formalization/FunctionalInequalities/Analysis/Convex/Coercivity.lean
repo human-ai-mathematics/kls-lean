@@ -11,8 +11,7 @@ set is compact (`exists_forall_le_and_isCompact_sublevel_of_convexOn_integrable_
 bounded-sublevel premise; the source normalisation `∫ e^{-φ} = 1` only supplies the integrability. Dimension zero is
 included. Route: every sublevel has finite Haar volume; a convex set of finite volume containing a ball is bounded
 (otherwise it contains arbitrarily many disjoint translates of a smaller ball); closed and bounded sublevels are
-compact, and the minimum over the nonempty sublevel `{φ ≤ φ 0}` is global. Proof body: Codex API job
-`letwin-a4-coercive-astra-high-v6` (source 14da3e46…, independently verified); statement and placement: Claude.
+compact, and the minimum over the nonempty sublevel `{φ ≤ φ 0}` is global.
 -/
 
 open MeasureTheory

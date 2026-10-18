@@ -16,9 +16,7 @@ For an extended-real potential `φ` on a real inner-product space whose effectiv
 representative `ψ` of a finite conjugate is convex (`real_convexOn_legendre`) and `L`-Lipschitz
 (`lipschitzWith_real_legendre`), and satisfies the real Fenchel inequality at finite points (`real_legendre_fenchel`).
 Infinite values are excluded before every real conversion. Used by the bounded-source producer of
-`KLS/CEK/BoundedPrimal.lean`. Proof bodies: strong-API candidate (gpt-6-astra, `api-bounded-primal-geometry-v11`,
-d77ddfc1…), verbatim up to the name `cap ↦ closedBallCap`; the candidate's variable context is kept (its `omit` lines name
-the measurable-space binders, which no statement here uses); placement: Claude.
+`KLS/CEK/BoundedPrimal.lean`.
 -/
 
 noncomputable section

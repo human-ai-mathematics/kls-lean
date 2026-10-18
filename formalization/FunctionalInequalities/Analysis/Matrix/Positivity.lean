@@ -10,27 +10,23 @@ import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Order
 # Positive semidefinite Gram matrices with a Kronecker weight
 
 `F (A ⊗ A) Fᵀ` is positive semidefinite for positive semidefinite `A`; written out, this is the
-four-index Gram matrix used for the third-derivative term of Letwin's Lemma 2.4. Proof bodies: Codex
-route bundle `MA-Second-Derivative` (independently accepted); statements and placement: Claude.
+four-index Gram matrix used for the third-derivative term of Letwin's Lemma 2.4.
 
 Quadratic floors and the Sylvester estimate: `matrixEntries A` is the Euclidean (Frobenius) view of the
 entries; `QuadraticFloor S a` is `a‖v‖² ≤ ⟪v, S v⟫`; a positive definite matrix has a positive floor, a floor
 is stable under Frobenius-small perturbations, and for floors `a`, `b` and symmetric `T` the identity
 `S(S−T) + (S−T)T = S² − T²` (no commutation) gives `‖S − T‖_F ≤ ‖S² − T²‖_F / (a + b)`. Used for the local
-Lipschitz property of the principal inverse square root (`Analysis/PrincipalInverseSqrt.lean`). Proof bodies:
-Codex q_batch bundle `Principal-Root-Regularity` (independently accepted); statements and placement: Claude.
+Lipschitz property of the principal inverse square root (`Analysis/PrincipalInverseSqrt.lean`).
 
 Inverse-quadratic Young inequality (`inverse_quadratic_young`): for a positive definite real matrix `H` over any finite
 index type (the empty one included), `2 (v ⬝ᵥ w) ≤ v ⬝ᵥ H⁻¹ v + w ⬝ᵥ H w`, from the nonnegative quadratic form of
-`w − H⁻¹ v`; no commutation or identity restriction. Support for Letwin, arXiv:2607.24164v1, Lemma A.6. Proof body:
-strong-API candidate (gpt-6-astra, `api-finite-energy-bl-compiler-v6`, cadc3b6c…), verbatim; placement: Claude.
+`w − H⁻¹ v`; no commutation or identity restriction. Support for Letwin, arXiv:2607.24164v1, Lemma A.6.
 
 Trace pairings of positive semidefinite matrices (`sum_entry_mul_nonneg`, `trace_mul_nonneg`): for real positive
 semidefinite `A`, `C` over any finite index type (the empty one included), `Σ_ij A_ij C_ij ≥ 0` (through the Kronecker
 product) and `tr(AC) ≥ 0`; the product itself is not claimed positive semidefinite. Trace-weighted Gram matrices
 (`traceGram_posSemidef`): for positive semidefinite `B` and symmetric `T a`, the matrix `(tr(B T_a B T_b))_{ab}` is positive
-semidefinite. Supports for Letwin, arXiv:2607.24164v1, (2.10). Proof bodies: strong-API candidate (gpt-6-astra,
-`api-trace-monge-ampere-210-v3`, de34b430…), verbatim, in the candidate's variable context; placement: Claude.
+semidefinite. Supports for Letwin, arXiv:2607.24164v1, (2.10).
 -/
 
 noncomputable section

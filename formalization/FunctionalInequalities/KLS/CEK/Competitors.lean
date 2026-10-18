@@ -9,8 +9,6 @@ import FunctionalInequalities.Probability.MomentMeasure.Baseline
 Cordero-Erausquin–Klartag, *Moment measures* (arXiv:1304.0630v1), proof of Proposition 12: every admissible competitor
 is reduced, up to epsilon, to a normalized convex one; a finite real ceiling over all admissible competitors and a
 finite norm baseline bound the variational range.
-
-Declaration blocks are verbatim from the root-accepted CEK Proposition 12 bundle (`independent-p12-attainment`, ACCEPTANCE 848aa45b…) under the reviewed rev3 migration map.
 -/
 
 noncomputable section

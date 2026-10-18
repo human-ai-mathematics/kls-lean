@@ -5,17 +5,17 @@ import Mathlib.Analysis.Calculus.Deriv.Inv
 import Mathlib.Analysis.SpecialFunctions.Sqrt
 
 /-!
-# Convex Hessians and the local Bochner identity: `B1`, `B3`, `B4`
+# Convex Hessians and the local Bochner identity
 
-Route obligations `B1`, `B3` and `B4` of `research/decisions/2026-09-20-bakry-emery-route.md`, for
+For
 the diffusion generator `ℒ f = Δ f - ⟪∇U, ∇f⟫` on a finite-dimensional real inner product space
 `E`, with `Γ` and `Γ₂` as defined in `Gamma.lean`.
 
-* `B1` (`bilinearIteratedFDerivTwo_nonneg_of_convexOn`): a `C²` convex function has a positive
+* convex Hessian positivity (`bilinearIteratedFDerivTwo_nonneg_of_convexOn`): a `C²` convex function has a positive
   semidefinite Hessian, `0 ≤ D²U(x)(v, v)`. The proof restricts `U` to the line `t ↦ U (x + t v)`,
   whose convexity makes its derivative monotone (`ConvexOn.monotoneOn_deriv`) and hence its second
   derivative at `0` nonnegative (`Monotone.deriv_nonneg`); that second derivative is `D²U(x)(v, v)`.
-* `B3` (`gammaTwo_eq_hessianSqStdBasis_add`, `bochner_stdBasis`): for `C³` `f` and `C²` `U`,
+* the Bochner identity (`gammaTwo_eq_hessianSqStdBasis_add`, `bochner_stdBasis`): for `C³` `f` and `C²` `U`,
 
   `Γ₂(f) = ℒ(‖∇f‖²)/2 - ⟪∇f, ∇(ℒf)⟫ = ∑ᵢ ∑ⱼ (D²f(eᵢ, eⱼ))² + D²U(∇f, ∇f)`,
 
@@ -26,7 +26,7 @@ the diffusion generator `ℒ f = Δ f - ⟪∇U, ∇f⟫` on a finite-dimensiona
   the commutation `∂ⱼ∂ᵢ∂ᵢ f = ∂ᵢ∂ᵢ∂ⱼ f` (`fderiv_fderiv_fderiv_apply_comm`); the drift
   contributions `-⟪∇U, ∇‖∇f‖²⟫/2` and `+⟪∇f, ∇⟪∇U, ∇f⟫⟫` leave exactly `+D²U(∇f, ∇f)` after the
   symmetry `∂ᵢ∂ⱼf = ∂ⱼ∂ᵢf` (route `B2`).
-* `B4` (`gammaTwo_nonneg`, `bochner_nonneg_stdBasis`): for convex `U`, `0 ≤ Γ₂(f)`, as a sum of
+* Γ₂ nonnegativity (`gammaTwo_nonneg`, `bochner_nonneg_stdBasis`): for convex `U`, `0 ≤ Γ₂(f)`, as a sum of
   squares plus a value of the positive semidefinite Hessian of `U`.
 
 * Improved Bochner (`norm_gradient_norm_gradient_sq_le`): for convex `U` and `C³` `f`,
@@ -56,7 +56,7 @@ universe u
 
 variable {E : Type u} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
 
-/-! ### `B1`: convexity gives a positive semidefinite Hessian -/
+/-! ### convex Hessian positivity: convexity gives a positive semidefinite Hessian -/
 
 section ConvexHessian
 
@@ -102,7 +102,7 @@ theorem deriv_deriv_line {U : E → ℝ} (hU : ContDiff ℝ 2 U) (x v : E) :
   rw [h4]
   rfl
 
-/-- **Route `B1`**: the Hessian of a `C²` convex function is positive semidefinite,
+/-- **convex Hessian positivity**: the Hessian of a `C²` convex function is positive semidefinite,
 `0 ≤ D²U(x)(v, v)` for all `x v`. -/
 theorem bilinearIteratedFDerivTwo_nonneg_of_convexOn {U : E → ℝ} (hU : ContDiff ℝ 2 U)
     (hconv : ConvexOn ℝ Set.univ U) (x v : E) :
@@ -287,13 +287,13 @@ theorem inner_gradient_gradient_inner {U f : E → ℝ} (hU : ContDiff ℝ 2 U) 
 
 end Terms
 
-/-! ### `B3` and `B4` -/
+/-! ### the Bochner identity and Γ₂ nonnegativity -/
 
 section Bochner
 
 variable [CompleteSpace E] [FiniteDimensional ℝ E]
 
-/-- **Route `B3`, the Bochner identity in the standard orthonormal basis**: for `C²` `U` and `C³`
+/-- **the Bochner identity, the Bochner identity in the standard orthonormal basis**: for `C²` `U` and `C³`
 `f`, `Γ₂(f) = ∑ᵢ ∑ⱼ (D²f(eᵢ, eⱼ))² + D²U(∇f, ∇f)`. -/
 theorem gammaTwo_eq_hessianSqStdBasis_add {U f : E → ℝ} (hU : ContDiff ℝ 2 U)
     (hf : ContDiff ℝ 3 f) (x : E) :
@@ -312,7 +312,7 @@ theorem gammaTwo_eq_hessianSqStdBasis_add {U f : E → ℝ} (hU : ContDiff ℝ 2
     inner_gradient_gradient_inner hU hf2, hessianSqStdBasis_apply]
   ring
 
-/-- **Route `B3` in expanded form**: for `C³` `U` and `f`,
+/-- **the Bochner identity in expanded form**: for `C³` `U` and `f`,
 `(Δ‖∇f‖² - ⟪∇U, ∇‖∇f‖²⟫)/2 - ⟪∇f, ∇(Δf - ⟪∇U, ∇f⟫)⟫ = ∑ᵢ ∑ⱼ (D²f(eᵢ, eⱼ))² + D²U(∇f, ∇f)`. -/
 theorem bochner_stdBasis {U f : E → ℝ} (hU : ContDiff ℝ 3 U) (hf : ContDiff ℝ 3 f) (x : E) :
     (Laplacian.laplacian (fun y => ‖gradient f y‖ ^ 2) x -
@@ -326,14 +326,14 @@ theorem bochner_stdBasis {U f : E → ℝ} (hU : ContDiff ℝ 3 U) (hf : ContDif
   rw [← gammaTwo_eq_expanded, gammaTwo_eq_hessianSqStdBasis_add (hU.of_le (by norm_num)) hf,
     hessianSqStdBasis_apply]
 
-/-- **Route `B4`**: for a `C²` convex potential and a `C³` function, `0 ≤ Γ₂(f)`. -/
+/-- **Γ₂ nonnegativity**: for a `C²` convex potential and a `C³` function, `0 ≤ Γ₂(f)`. -/
 theorem gammaTwo_nonneg {U f : E → ℝ} (hU : ContDiff ℝ 2 U) (hconv : ConvexOn ℝ Set.univ U)
     (hf : ContDiff ℝ 3 f) (x : E) : 0 ≤ gammaTwo U f x := by
   rw [gammaTwo_eq_hessianSqStdBasis_add hU hf]
   exact add_nonneg (hessianSqStdBasis_nonneg f x)
     (bilinearIteratedFDerivTwo_nonneg_of_convexOn hU hconv x _)
 
-/-- **Route `B4` in expanded form**: for a `C³` convex potential and a `C³` function,
+/-- **Γ₂ nonnegativity in expanded form**: for a `C³` convex potential and a `C³` function,
 `0 ≤ (Δ‖∇f‖² - ⟪∇U, ∇‖∇f‖²⟫)/2 - ⟪∇f, ∇(Δf - ⟪∇U, ∇f⟫)⟫`. -/
 theorem bochner_nonneg_stdBasis {U f : E → ℝ} (hU : ContDiff ℝ 3 U)
     (hconv : ConvexOn ℝ Set.univ U) (hf : ContDiff ℝ 3 f) (x : E) :

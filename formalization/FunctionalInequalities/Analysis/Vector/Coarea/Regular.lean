@@ -15,7 +15,7 @@ slice integral is a Tonelli section of one measurable function on the parameter‚
 its measurability is immediate and no slicing inequality is used.
 
 That is enough for the regular case, and `coarea_of_contDiffOn_of_coareaJacobian_ne_zero` assembles
-it: the **codimension-`m` regular coarea formula**, the analogue of the scalar `L9`
+it: the **codimension-`m` regular coarea formula**, the analogue of the scalar regular-domain coarea
 `KLS.coarea_of_contDiffOn_of_fderiv_ne_zero`, with weighted slice measurability included.
 
 **What is still open**: slice measurability **without** the regularity hypothesis, which in
@@ -132,7 +132,7 @@ everywhere surjective, for every Borel `S ‚äÜ O` and every measurable `‚Ñù‚â•0‚à
 function is measurable and the coarea equality holds, with the normalized Hausdorff measure of the
 codimension as the fibre measure.
 
-This is the analogue of the scalar `L9`, `KLS.coarea_of_contDiffOn_of_fderiv_ne_zero`; the level
+This is the analogue of the scalar regular-domain coarea, `KLS.coarea_of_contDiffOn_of_fderiv_ne_zero`; the level
 function is even **measurable**, not merely almost everywhere measurable.
 
 No finiteness, boundedness, integrability, regular-value or `SFinite` hypothesis is used, and no

@@ -54,8 +54,7 @@ is dimension-dependent, and no dimension-free instance of (29) is claimed. The w
 nonvacuity check of the hypotheses of Theorem 3.1; it gives no new information on the Gaussian
 (whose Poincaré constant is `1` by Bakry–Émery) and is not a step towards the KLS bound.
 
-Placement: `KLS/LogConcave/` next to `Regular.lean`, whose `RegularPotential` structure and law it
-instantiates; it consumes `PoissonIterate/Criterion.lean` and is not imported by the route.
+The concrete witness instantiates `RegularPotential` and uses `KLS/LogConcave/Regular/Basic.lean` and `KLS/BKL/PoissonIterate/Criterion.lean`.
 -/
 
 noncomputable section

@@ -11,7 +11,7 @@ import FunctionalInequalities.Analysis.Matrix.Positivity
 Letwin arXiv:2607.24164v1 Lemma A.6 for a normalized C1 globally Lipschitz potential with Lipschitz gradient and
 a.e. positive definite coordinate Hessian, for globally bounded weak tests with finite inverse-Hessian energy. Weak
 sibling of `KLS/LogConcave/BrascampLieb.lean`, reusing its Hilbert-closure helpers; the finite-coordinate Hessian
-identification uses `Probability/Stein/HessianKernel`. Proof bodies: accepted Codex closed assembly, verbatim.
+identification uses `Probability/Stein/HessianKernel`.
 -/
 
 noncomputable section

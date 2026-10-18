@@ -11,8 +11,7 @@ import Mathlib.Analysis.Calculus.TaylorIntegral
 
 The determinant of a real square matrix is a continuous multilinear map of its rows; its derivative
 in a direction `N` is the sum of row replacements and, for invertible `M`, equals `det M · tr(M⁻¹ N)`.
-Hence `D(log det)(M)[N] = tr(M⁻¹ N)`, also along a differentiable matrix-valued map. Proof bodies:
-Codex route bundle `MA-Jacobi` (independently accepted); statements and placement: Claude.
+Hence `D(log det)(M)[N] = tr(M⁻¹ N)`, also along a differentiable matrix-valued map.
 -/
 
 noncomputable section

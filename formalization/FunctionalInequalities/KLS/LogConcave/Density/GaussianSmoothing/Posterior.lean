@@ -12,8 +12,7 @@ zero, directional variances `≤ ‖v‖²/(2s)` (from the Hessian identity in `
 `≤ n/(2s)`. The quantitative Borell bounds (`BorellRepresentation.Moments`) then give exponential
 and all-order moment bounds for `Q_x` with constants depending on `n`, `s` and the order only, not
 on `x`. This is the moment input for the polynomial growth of the derivatives of the smoothed
-potential, which is not treated here. Proof bodies: Codex (bundle `Gaussian-Posterior-Centered`,
-quantitative Borell by root Codex, independently accepted); statements and placement: Claude.
+potential, which is not treated here.
 -/
 
 open MeasureTheory ProbabilityTheory Set FunctionalInequalities

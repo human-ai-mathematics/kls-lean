@@ -10,8 +10,6 @@ exponential radius `r` (integrability of `e^{t‖x‖}‖g(x)‖` for `t < r`), 
 for `‖z‖ < r`; at `z = 0` the Laplace transform of a probability law has `D^d L_μ(0)(h) = ∫ ∏⟪x,h_j⟫ dμ`
 with operator norm at most the norm moment `∫ ‖x‖^d dμ`. This extends the one-radius calculus of
 `Tilt.Local` (it must not import the Borell moment module, which depends on this family).
-Proof bodies: Codex q_batch (bundle `Gaussian-AllOrder-Growth`, independently accepted); statements
-and placement: Claude.
 -/
 
 open MeasureTheory Filter Topology
@@ -166,8 +164,7 @@ theorem norm_iteratedFDeriv_laplace_zero_le (μ : Measure E) [IsProbabilityMeasu
     _ = (∫ x, ‖x‖ ^ d ∂μ) * ∏ j, ‖h j‖ := integral_mul_const _ _
 
 /-- **The first Taylor tensor is the centered first moment**: for `f ∈ L²(μ)`,
-`T_1 f (w) = ∫ ⟪w, x⟫ f(x) dμ − (∫ f dμ) ∫ ⟪w, x⟫ dμ` (BKL p. 30, the `d = 1` coefficient; Luna, task
-RED-D1c). -/
+`T_1 f (w) = ∫ ⟪w, x⟫ f(x) dμ − (∫ f dμ) ∫ ⟪w, x⟫ dμ` (BKL p. 30, the `d = 1` coefficient). -/
 theorem taylorTensor_one_apply (μ : Measure E) [IsProbabilityMeasure μ]
     (hexp : ∀ r : ℝ, Integrable (fun x => Real.exp (r * ‖x‖)) μ) {f : E → ℝ}
     (hf : MemLp f 2 μ) (w : E) :

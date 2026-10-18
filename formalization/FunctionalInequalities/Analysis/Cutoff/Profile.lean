@@ -15,14 +15,7 @@ smooth nonnegative `w` vanishing off `(0, 3)` with `q_R′ t = −R⁻² w(t/R)`
 (`deriv_comp_sub_div_and_deriv_deriv`; Lean total-derivative conventions, `R = 0` included), and the real-parameter
 exhaustion: `R ↦ η(a/R)` is monotone on `(0, ∞)` and tends to `1` (`monotoneOn_and_tendsto_smoothTransition_two_sub_div`).
 Generic real-variable tools; the cutoffs `η(W/R)` and the
-quantitative generator defect of Lemma A.4 are not provided here. Proof bodies: Codex API jobs
-`letwin-a4-scalar-profile-astra-high-v2` (156e2d03…), `letwin-a4-scalar-majorant-astra-high-takeover-v2` (2489dec3…),
-`letwin-a4-scalar-monotone-astra-high-v1` (4bb28339…) and `letwin-a4-scalar-primitive-astra-high-takeover-v6`
-(5f48742c…; exactly three compiler-reported unused tactics removed, 21912ed5…) and
-`letwin-a4-scalar-rescaling-astra-high-goal-v1` (explicitly specialized shift lemma and two compiler-reported tactic
-cleanups, 4f36afcd…) and `letwin-a4-real-exhaustion-astra-high-goal-v2` (obsolete guessed API names replaced by the exact
-existing lemmas, b3b01128…), independently verified, verbatim;
-statements and placement: Claude.
+quantitative generator defect of Lemma A.4 are not provided here.
 -/
 
 open scoped ContDiff

@@ -3,7 +3,7 @@ import Mathlib.Topology.MetricSpace.Lipschitz
 
 /-! # A Lipschitz extension into a finite-dimensional inner-product space
 
-`X1` of the route recorded in
+global Lipschitz extension of the route recorded in
 `research/decisions/2026-09-19-locally-lipschitz-vector-coarea-route.md`: a map into a
 finite-dimensional real inner-product space that is Lipschitz on a set agrees on that set with a
 map that is Lipschitz on the **whole** space.
@@ -28,7 +28,7 @@ open scoped ENNReal NNReal
 
 namespace FunctionalInequalities.Analysis
 
-/-- **`X1`: a map Lipschitz on a set extends to a globally Lipschitz map into the same
+/-- **global Lipschitz extension: a map Lipschitz on a set extends to a globally Lipschitz map into the same
 finite-dimensional inner-product space.**  The Lipschitz constant of the extension is existentially
 quantified and **no optimality is claimed**; this is the componentwise McShane extension, not
 Kirszbraun's theorem. -/

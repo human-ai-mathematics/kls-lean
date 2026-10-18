@@ -19,8 +19,7 @@ Compactly supported coercivity (`compact_ordinary_diffusion_coercivity`): for `U
 supported `u`, the functions `∇∇U(∇u, ∇u)` and `(ℒu)²` are `μ`-integrable and `∫ ∇∇U(∇u, ∇u) dμ ≤ ∫ (ℒu)² dμ`, from
 `Γ₂(u) = ‖∇∇u‖² + ∇∇U(∇u, ∇u)` and the integrated identity; no lower Hessian bound is assumed. This concerns the ordinary
 weighted Laplacian `ℒ`, not the inverse-Hessian operator: support for the finite-energy Brascamp–Lieb argument of Letwin,
-arXiv:2607.24164v1, Lemma A.6, not that lemma. Proof bodies: strong-API candidate (gpt-6-astra,
-`api-finite-energy-bl-compiler-v6`, cadc3b6c…), verbatim; placement: Claude.
+arXiv:2607.24164v1, Lemma A.6, not that lemma.
 -/
 
 noncomputable section

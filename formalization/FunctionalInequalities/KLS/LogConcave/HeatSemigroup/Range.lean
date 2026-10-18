@@ -15,8 +15,7 @@ centering of every `g` (`center_mem_closure_compactSmoothDiffusionImage`). The c
 compact-test restriction). Route: the kernel of the closed weighted operator consists of constants, so the range of
 `T†T` is dense in the centered classes, and every element of that range is approximated by the images of compactly
 supported smooth functions. Supporting infrastructure for the finite-energy Brascamp–Lieb inequality of Letwin,
-arXiv:2607.24164v1, Lemma A.6; not Brascamp–Lieb, A.6, the moment map or Theorem 2.5. Proof bodies: strong-API candidate
-(gpt-6-astra, `api-centered-range-gaussian-compiler-v6`, 527e35ef…), verbatim.
+arXiv:2607.24164v1, Lemma A.6; not Brascamp–Lieb, A.6, the moment map or Theorem 2.5.
 -/
 
 noncomputable section

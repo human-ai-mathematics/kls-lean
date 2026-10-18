@@ -138,7 +138,7 @@ theorem coarea_of_lipschitz_of_pieces {S : Set V} {u : V → W} {K : ℝ≥0} {g
           (fun i j hij => (hPd hij).mono inter_subset_left inter_subset_left) g).symm
     _ = _ := lintegral_congr_ae hslice
 
-/-- **`L0`: the codimension-`m` coarea formula for Lipschitz maps.**  Exactly
+/-- **globally Lipschitz coarea: the codimension-`m` coarea formula for Lipschitz maps.**  Exactly
 `coarea_of_contDiff` with `ContDiff ℝ 1 u` replaced by `LipschitzWith K u`; the density
 `coareaJacobian (fderiv ℝ u x)` is unchanged, `fderiv` being junk on the Lebesgue-null set of
 non-differentiability.

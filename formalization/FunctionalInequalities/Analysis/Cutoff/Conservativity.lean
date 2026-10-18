@@ -12,7 +12,6 @@ Letwin arXiv:2607.24164v1, Lemma A.5 (p. 18), with `g = Lf`, `d_n = Lχ_n`. Neit
 integral is assumed. Same generic cutoff role as `Analysis/CutoffIntegrability.lean` (Fatou integrability from bounded
 cutoff integrals), but a separate module: it needs the dominated-convergence and probability-measure imports, under which
 the existing `integrable_of_cutoff_bounds` would elaborate different instance terms; it does not import that module.
-Proof body: independently accepted Astra (`round1.lean` b2c168a5…), verbatim; statement and placement: Root/Claude.
 -/
 
 noncomputable section

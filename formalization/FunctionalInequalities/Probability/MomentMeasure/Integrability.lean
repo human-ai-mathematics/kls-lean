@@ -11,7 +11,7 @@ import Mathlib.MeasureTheory.Function.L1Space.Integrable
 Finite-domain witnesses of `PotentialIntegrable`, integrability of the lower truncation for every real cutoff and of
 its actual biconjugate, and the integral comparison used in the convexification step of CEK Proposition 12.
 
-Declaration blocks are verbatim from the root-accepted CEK Proposition 12 bundle (`independent-p12-attainment`, ACCEPTANCE 848aa45b…) under the reviewed rev3 migration map.
+Supporting infrastructure for Cordero-Erausquin–Klartag, Proposition 12.
 -/
 
 noncomputable section

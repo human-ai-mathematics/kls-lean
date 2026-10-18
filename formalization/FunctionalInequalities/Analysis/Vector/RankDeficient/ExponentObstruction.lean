@@ -3,8 +3,7 @@ import FunctionalInequalities.Analysis.Vector.Slice.Hausdorff
 
 /-! # What the small-Lipschitz method actually yields: the exponent of the obstruction
 
-Route obligation `N1` of `research/decisions/2026-09-17-rank-deficient-route.md`, the **diagnostic**
-that records what the projected small-Lipschitz argument gives and why it is not `R0`.
+The projected small-Lipschitz argument gives nullity at an exponent larger than the one needed for critical-fibre nullity. The distinction is quantified below.
 
 Suppose the composite `Q ∘ u` — the part of `u` orthogonal to the range of its differential — can,
 at every scale `ε`, be made `ε`-Lipschitz on the pieces of a countable measurable partition of `S`.
@@ -14,7 +13,7 @@ Running the codimension-`dim W₂` Eilenberg inequality on each piece and lettin
 
 **That exponent is `k + r`, not `k`.**  In the route's notation `W₂` is the orthogonal complement of
 the rank-`r` range, so `dim W₂ = m − r` and the exponent is `n − (m − r) = k + r`.  For `r ≥ 1` this
-is strictly weaker than `R0` in the useless direction: a set can be `μH[k + r]`-null and still carry
+is strictly weaker than critical-fibre nullity in the useless direction: a set can be `μH[k + r]`-null and still carry
 infinite `μH[k]`.  That is exactly why the route has to slice **inside a fibre** instead, which is
 what `Analysis/Vector/RankDeficient/StratumSlicing.lean` does, and why this file is a diagnostic with **no consumer**.
 
@@ -27,15 +26,15 @@ is what makes the Eilenberg constant `ε ^ (dim W₂)` tend to `0` — with `dim
 so when the target is larger than the domain it collapses to `0` rather than going negative.  The
 proof never needs `finrank ℝ W₂ ≤ finrank ℝ V`: all it uses is
 `(n - m) + m ≥ n`, which holds in `ℕ` either way and keeps the Eilenberg right-hand side
-`μH[(n − m) + m] S ≤ μH[n] S` finite.  This is the point on which the companion diagnostic `N2`
-fails, and `N1` survives it.
+`μH[(n − m) + m] S ≤ μH[n] S` finite.  This is the point on which the companion diagnostic the false exponent-comparison diagnostic
+fails, and the weaker-exponent diagnostic survives it.
 
-**The companion diagnostic `N2` is false as written**, and `hausdorffMeasure_finrank_sub_eq_top`
+**The companion diagnostic the false exponent-comparison diagnostic is false as written**, and `hausdorffMeasure_finrank_sub_eq_top`
 below is its repair: below the top dimension a set of positive Lebesgue measure has infinite
 Hausdorff measure, **provided the dimension is positive**.  That proviso is exactly what the route's
-`N2` was missing, and it is necessary — the refutation and the route bookkeeping are in
-`research/audits/ExponentObstructionAudit.lean`.  The repaired statement is also what makes `N1`
-useless for `R0`: at the exponent `k` the measure is already infinite, so nullity at `k + r` says
+the false exponent-comparison diagnostic was missing, and it is necessary — the refutation and the route bookkeeping are in
+`research/audits/ExponentObstructionAudit.lean`.  The repaired statement is also what makes the weaker-exponent diagnostic
+useless for critical-fibre nullity: at the exponent `k` the measure is already infinite, so nullity at `k + r` says
 nothing.
 -/
 
@@ -64,11 +63,11 @@ theorem hausdorffMeasure_truncated_add_le (S : Set V) (m : ℕ) :
   have h : (finrank ℝ V : ℕ) ≤ (finrank ℝ V - m : ℕ) + m := by omega
   exact_mod_cast h
 
-/-! ### The companion diagnostic `N2`, repaired -/
+/-! ### The companion diagnostic the false exponent-comparison diagnostic, repaired -/
 
 omit [FiniteDimensional ℝ W] [MeasurableSpace W₂] [BorelSpace W₂] in
-/-- **`N2`, repaired.**  Below the top dimension the Hausdorff measure of a set of positive
-Lebesgue measure is infinite.  The hypothesis `0 < finrank ℝ V` is **necessary**: the route's `N2`
+/-- **the false exponent-comparison diagnostic, repaired.**  Below the top dimension the Hausdorff measure of a set of positive
+Lebesgue measure is infinite.  The hypothesis `0 < finrank ℝ V` is **necessary**: the route's the false exponent-comparison diagnostic
 omits it and is false, because the truncated subtraction `finrank ℝ V - r` collapses to `0` in a
 zero-dimensional space, where a nonempty set has `μH[0] = 1` rather than `⊤`.  The refutation is
 `route_N2_is_false` in `research/audits/ExponentObstructionAudit.lean`. -/
@@ -143,12 +142,12 @@ theorem exists_measurable_majorant_of_lipschitz_pieces {u : V → W} {S : Set V}
           exact hausdorffMeasure_truncated_add_le S _
 
 omit [FiniteDimensional ℝ V] [FiniteDimensional ℝ W] in
-/-- **`N1`: the obstruction, stated.**  Projecting away the range of the differential and running
+/-- **the weaker-exponent diagnostic: the obstruction, stated.**  Projecting away the range of the differential and running
 the proved Eilenberg bound gives a null slicing statement at the exponent `n − dim W₂`, which in
-the route's notation is `k + r`, **not** `k`.  For `r ≥ 1` this is strictly weaker than `R0` in the
+the route's notation is `k + r`, **not** `k`.  For `r ≥ 1` this is strictly weaker than critical-fibre nullity in the
 useless direction: a set can be `μH[k + r]`-null and have infinite `μH[k]`.
 
-This is a **diagnostic**: it is not a step towards `R0`, which was proved independently in
+This is a **diagnostic**: it is not a step towards critical-fibre nullity, which was proved independently in
 `Analysis/Vector/RankDeficient/Coarea.lean` by slicing inside a fibre instead. -/
 theorem ae_hausdorffMeasure_inter_levelSet_eq_zero_of_lipschitz_pieces {u : V → W} {S : Set V}
     (Q : W →L[ℝ] W₂) (hS : MeasurableSet S) (hW₂ : 0 < finrank ℝ W₂)

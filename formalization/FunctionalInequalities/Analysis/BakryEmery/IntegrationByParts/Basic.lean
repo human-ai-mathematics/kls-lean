@@ -9,8 +9,7 @@ import Mathlib.MeasureTheory.Measure.Tilted
 Haar integration by parts and its tilted-measure specialization. The pointwise
 weighted Laplacian and its regularity are provided by Laplacian.lean; no convexity is used. The
 compact-test directional identity `∫ ∂ᵥF · g = −∫ F · ∂ᵥg` for smooth `F`, `g` with either one compactly
-supported derives its integrability from the compact support (Codex route bundle
-`MA-Metric-IntegrationByParts`, independently accepted; statement and placement: Claude).
+supported derives its integrability from the compact support.
 -/
 
 noncomputable section
@@ -197,7 +196,7 @@ section Tilted
 
 variable [MeasurableSpace E] [BorelSpace E] (m : Measure E) [m.IsAddHaarMeasure]
 
-/-- **Weighted integration by parts for a tilted Haar measure** (route obligation `G0`): with
+/-- **Weighted integration by parts for a tilted Haar measure** (property weighted integration by parts): with
 `μ = m.tilted (-U)` the normalised law of density `exp (-U)`, a `C¹` potential `U`, a `C²`
 compactly supported `f` and a `C¹` function `g`,
 `∫ ⟪∇f, ∇g⟫ dμ = ∫ (-ℒf) g dμ` where `ℒf = Δf - ⟪∇U, ∇f⟫`. -/
@@ -251,9 +250,8 @@ section Directional
 /-- **Weighted directional integration by parts** (Letwin arXiv:2607.24164v1, Lemma A.3, pp. 16–17):
 for smooth `φ, f, g` with `∫ e^{-φ} dm = 1` and the four integrands `(∂_v f) g`, `f ∂_v g`, `f g ∂_v φ`,
 `f g` integrable under `ν = e^{-φ} m`,
-`∫ (∂_v f) g dν = ∫ f ((∂_v φ) g − ∂_v g) dν`. Codex proof
-(`build/reviews/2026-10-07-bkl-continuous/queue/letwin-prerequisite/Letwin-A3-Codex-Proof.lean`,
-independently accepted). -/
+`∫ (∂_v f) g dν = ∫ f ((∂_v φ) g − ∂_v g) dν`.
+-/
 theorem integral_fderiv_mul_tilted_eq {E : Type*} [NormedAddCommGroup E]
     [InnerProductSpace ℝ E] [CompleteSpace E] [FiniteDimensional ℝ E]
     [MeasurableSpace E] [BorelSpace E] (m : Measure E) [m.IsAddHaarMeasure]
@@ -328,8 +326,7 @@ theorem integral_fderiv_mul_tilted_eq {E : Type*} [NormedAddCommGroup E]
       dsimp [w]
       ring
 
-/-- **Mean Hessian equals the gradient second moment** under `e^{-φ}m` (Letwin Lemma 2.3, step 1; Luna, task
-LW-L23a, closing step repaired at integration): the directional integration by parts applied to `∂_u φ` and
+/-- **Mean Hessian equals the gradient second moment** under `e^{-φ}m` (Letwin Lemma 2.3, step 1): the directional integration by parts applied to `∂_u φ` and
 `g = 1`. -/
 theorem integral_fderiv_fderiv_tilted_eq_integral_mul {E : Type*} [NormedAddCommGroup E]
     [InnerProductSpace ℝ E] [CompleteSpace E] [FiniteDimensional ℝ E]

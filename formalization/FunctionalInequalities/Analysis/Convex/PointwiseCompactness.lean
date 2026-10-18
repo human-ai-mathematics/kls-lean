@@ -13,8 +13,7 @@ Theorem 10.9, used in the proof of Cordero-Erausquin–Klartag, *Moment measures
 
 Proof: the pointwise supremum is convex and finite on `K`, hence locally bounded, giving common local Lipschitz bounds; a
 subsequence converges on a countable dense subset (one diagonal extraction over `ℕ` coordinates) and the convergence extends
-to all of `K` by the Cauchy criterion; convexity passes to the limit. Four private helpers. Statement: Claude (frozen
-fcb8f05d…); proof: Codex source specialization, root-accepted (CEK17-P1-ConvexSubseq-Raw-Root ACCEPTANCE 9d501183…).
+to all of `K` by the Cauchy criterion; convexity passes to the limit. Four private helpers.
 -/
 
 noncomputable section

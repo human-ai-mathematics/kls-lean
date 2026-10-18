@@ -6,8 +6,7 @@ import Mathlib.MeasureTheory.Integral.Lebesgue.Add
 
 A nonnegative function whose cutoffs `c_n h` (with `0 ≤ c_n → 1` pointwise) have uniformly bounded
 integrals is integrable, by Fatou's lemma. Generic tool, used to pass from compactly supported
-integration by parts to global integrability (Letwin Lemma 2.3 supports). Proof body: root Codex
-(bundle `Convex-Hessian-Moment`, independently accepted); statement and placement: Claude.
+integration by parts to global integrability (Letwin Lemma 2.3 supports).
 -/
 
 open MeasureTheory Filter Topology

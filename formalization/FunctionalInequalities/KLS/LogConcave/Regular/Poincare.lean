@@ -10,8 +10,7 @@ isotropic regular laws (an explicit hypothesis here; the paper's Theorem 1.1 for
 gives `C_P(μ) ≤ K‖Cov μ‖` for every regular law `μ`, by centering and whitening to an isotropic
 regular law (`RegularIsotropic`) and transporting the covariance energy; the envelope form
 `K(1 + ‖Cov μ − Id‖)` tends to `K` along laws whose covariances tend to `Id`. No whitening-sequence
-limit and no unconditional bound is asserted. Proof bodies: Codex route (bundle
-`Regular-Poincare-Reduction`, independently accepted); statements and placement: Claude.
+limit and no unconditional bound is asserted.
 -/
 
 open MeasureTheory Filter

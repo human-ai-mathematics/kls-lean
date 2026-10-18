@@ -9,8 +9,7 @@ import FunctionalInequalities.KLS.BKL.Suspension.Law
 Bizeul–Klartag–Lehec arXiv:2610.05474v1, p. 18: for an isotropic log-concave law the second cumulant
 is `R₂ = Id`, so the universal cumulant bound `CumulantBound 1 1` (the `(d+1) = 2` cumulant bound with
 constant `1`) holds unconditionally in every dimension. This is the `m = 2` base of Theorem 4.1 only;
-the all-order source certificate is registered separately (`thm:bkl-cumulant-bound`). Proof bodies: Codex route bundle
-`Local-Second-Cumulant` (independently accepted); statements and placement: Claude.
+the all-order source certificate is registered separately (`thm:bkl-cumulant-bound`).
 -/
 
 open MeasureTheory

@@ -153,7 +153,7 @@ theorem exists_compact_uniform_cover (μ : Measure V) [Measure.InnerRegularCompa
     _ < ε / 2 + ε / 2 := ENNReal.add_lt_add hloss hCloss
     _ = ε := ENNReal.add_halves ε
 
-/-- **L6a**: compact jets covering almost every point of a Lipschitz function.
+/-- **compact Whitney jets**: compact jets covering almost every point of a Lipschitz function.
 The statement holds for every additive Haar measure on a finite-dimensional real normed space. -/
 theorem exists_compact_jets (μ : Measure V) [Measure.IsAddHaarMeasure μ]
     {u : V → ℝ} {K : ℝ≥0} (hu : LipschitzWith K u) :

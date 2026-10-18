@@ -14,8 +14,7 @@ inverse Hessian is symmetric, inverts the Hessian in coordinates, and satisfies 
 forms). The operator `L = Σ ((∇²φ)⁻¹)_{ij} ∂_{ij} − Σ (∂_i V ∘ ∇φ) ∂_i` of (2.3) with the inverse Hessian as
 coefficient field has the Leibniz rule. The potential `φ` is given (Letwin Lemma 2.2, moment-map
 existence, is not provided); no Monge–Ampère equation, Lemma 2.4, Lemma 2.6, Brascamp–Lieb or
-positive-semidefinite estimate is used or claimed. Proof bodies: Codex route bundle `MA-Inverse`
-(independently accepted); statements and placement: Claude.
+positive-semidefinite estimate is used or claimed.
 
 Letwin Lemma A.4 (p. 17) supporting results for the operator `L` of a given potential: the self-generator identity
 `L φ = n − ⟨∇V(∇φ), ∇φ⟩` at a point with positive definite Hessian (`hessianInverseOperator_self`), its uniform bound
@@ -24,20 +23,16 @@ when `∇φ` takes values in a bounded `K` and `V` is `C¹` on an open set conta
 `L(h ∘ W) = h′(W) LW + h″(W) Σ_{ij} ((∇²φ)⁻¹)_{ij} ∂_iW ∂_jW` for `C²` `W`, `h` with no hypothesis on `φ`
 (`hessianInverseOperator_comp`). The minimum of `φ` is in `Analysis/Convex/Coercivity.lean`; the cutoffs `η(W/R)` and
 their defect bound (Lemma A.4) are constructed in `IntegrationByParts/InverseHessian/Cutoff.lean`. Not provided: the
-moment map. Proof bodies: Codex API jobs
-`letwin-a4-self-astra-high-v2` (ff901785…), `letwin-a4-bounded-astra-high-v2` (f666a094…) and
-`letwin-a4-chain-astra-high-v4` (d2f84023…), independently verified; statements and placement: Claude.
+moment map.
 
 Also for Lemma A.4: the coefficient extraction `Σ_ij A_ij ∂_iφ ∂_j(h ∘ φ) = h′(φ) Σ_ij A_ij ∂_iφ ∂_jφ` in any orthonormal
 basis (`sum_inverseHessianEntry_mul_fderiv_comp`, used by the energy identity in `IntegrationByParts/InverseHessian/Basic.lean`)
 and the pointwise defect domination
 `|L(e((φ − c)/R))| ≤ |R⁻¹e′((φ − c)/R)| |Lφ| + R⁻² |e″((φ − c)/R)| |Σ_ij A_ij ∂_iφ ∂_jφ|` for `C²` `φ`, `e` and all real
 `c`, `R` (`abs_hessianInverseOperator_comp_sub_div_le`; the affine rescaling comes from the scalar leaf
-`Analysis/Cutoff/Profile.lean`). Proof bodies: Codex API jobs `letwin-a4-energy-pointwise-astra-high-responses-v2`
-(e0a237b1…) and `letwin-a4-pointwise-defect-astra-high-responses-v2` (one compiler-reported unused tactic removed,
-a2f63c12…), independently verified, verbatim. The operator `L f` of a `C²` `f` is continuous for smooth `φ` with
+`Analysis/Cutoff/Profile.lean`). The operator `L f` of a `C²` `f` is continuous for smooth `φ` with
 positive definite Hessian and `V` `C¹` on an open set containing the gradient range
-(`continuous_hessianInverseOperator`; `letwin-a4-operator-continuity-astra-feedback-responses-v7`, dadbfa97…).
+(`continuous_hessianInverseOperator`).
 -/
 
 noncomputable section
@@ -493,8 +488,8 @@ section Continuity
 
 /-- **Operator continuity** (Letwin Lemma A.4, p. 17, measurability of `Lχ_R`, hence `Lχ_R ∈ L¹(ν)` by domination):
 for smooth `φ` with positive definite Hessian, `V` `C¹` on an open set containing the gradient range and `C²` `f`,
-`L f` is continuous. Proof body: Codex API job `letwin-a4-operator-continuity-astra-feedback-responses-v7`
-(dadbfa97…), independently verified, verbatim. -/
+`L f` is continuous.
+-/
 theorem continuous_hessianInverseOperator {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
     [FiniteDimensional ℝ E] {φ V f : E → ℝ} (hφ : ContDiff ℝ ∞ φ)
     (hPD : ∀ x v : E, v ≠ 0 → 0 < bilinearIteratedFDerivTwo ℝ φ x v v)
