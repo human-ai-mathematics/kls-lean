@@ -7,9 +7,6 @@ import FunctionalInequalities.KLS.BKL.Posterior.Standardization
 
 /-!
 # A-priori posterior energy bounds
-
-Module layout: research/decisions/2026-10-17-bkl-module-reorganization.md.
-Existing declarations and their mathematical scope are preserved.
 -/
 
 noncomputable section

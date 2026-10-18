@@ -3,9 +3,6 @@ import FunctionalInequalities.Probability.Diffusion.Generator
 
 /-!
 # Integrals of bounded functionals of cutoff Eldan processes
-
-Module layout: research/decisions/2026-10-17-bkl-module-reorganization.md.
-Existing declarations and their mathematical scope are preserved.
 -/
 
 noncomputable section

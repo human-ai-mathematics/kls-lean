@@ -219,3 +219,12 @@ tempCodeRunnerFile.py
 
 # Local verification artifacts produced from the formalization working directory.
 /formalization/build/
+
+# The three local editor/agent configuration files excluded from delivery (never committed).
+/.cursor/mcp.json
+/.cursor/rules/kls-formalization.mdc
+/.clinerules/kls-formalization.md
+
+# Environment secrets: every dotenv variant except a committed example template.
+.env.*
+!.env.example

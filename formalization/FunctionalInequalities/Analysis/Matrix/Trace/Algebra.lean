@@ -9,8 +9,6 @@ import Mathlib.Tactic.Linarith
 
 /-!
 # Finite real matrix trace algebra and the elementary trace-energy bound
-
-Existing statements, names and proof payloads are preserved.
 -/
 
 open Matrix

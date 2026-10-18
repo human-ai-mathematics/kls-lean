@@ -12,8 +12,6 @@ import FunctionalInequalities.KLS.CEK.MomentRegularity.WeakDerivative
 
 /-!
 # Regular-source weak inverse, Hessian mean, evolution and testing
-
-Existing statements, names and proof payloads are preserved.
 -/
 
 noncomputable section

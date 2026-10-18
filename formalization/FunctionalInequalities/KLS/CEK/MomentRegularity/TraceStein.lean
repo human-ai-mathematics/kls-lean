@@ -18,8 +18,6 @@ import FunctionalInequalities.KLS.CEK.MomentRegularity.Cutoff
 
 /-!
 # Trace and weak Stein estimates at one regular moment witness
-
-Existing statements, names and proof payloads are preserved.
 -/
 
 noncomputable section

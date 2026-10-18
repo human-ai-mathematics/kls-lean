@@ -3,9 +3,6 @@ import FunctionalInequalities.Analysis.IteratedDerivative.Log
 
 /-!
 # Cumulant norm bounds from moment bounds
-
-Module layout: research/decisions/2026-10-17-bkl-module-reorganization.md.
-Existing declarations and their mathematical scope are preserved.
 -/
 
 noncomputable section

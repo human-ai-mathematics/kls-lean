@@ -3,9 +3,6 @@ import FunctionalInequalities.KLS.LogConcave.Isotropic
 
 /-!
 # A-priori cumulant bounds for isotropic log-concave laws
-
-Module layout: research/decisions/2026-10-17-bkl-module-reorganization.md.
-Existing declarations and their mathematical scope are preserved.
 -/
 
 noncomputable section

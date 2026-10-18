@@ -2,8 +2,6 @@ import FunctionalInequalities.KLS.Geometry.Perimeter.MetricBV.Basic
 
 /-!
 # Metric BV on finite and singleton metric spaces
-
-Existing statements, names and proof payloads are preserved.
 -/
 
 noncomputable section

@@ -7,8 +7,6 @@ import Mathlib.Tactic.NoncommRing
 
 /-!
 # Trace inequalities for real spectral powers
-
-Existing statements, names and proof payloads are preserved.
 -/
 
 open Matrix

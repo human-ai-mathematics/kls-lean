@@ -15,9 +15,6 @@ import FunctionalInequalities.KLS.BKL.Posterior.Covariance
 
 /-!
 # Joint regularity of compact-posterior localization coefficients
-
-Module layout: research/decisions/2026-10-17-bkl-module-reorganization.md.
-Existing declarations and their mathematical scope are preserved.
 -/
 
 noncomputable section

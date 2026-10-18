@@ -13,9 +13,6 @@ import FunctionalInequalities.Probability.Diffusion.Generator
 
 /-!
 # Generator bounds for the localization Lyapunov function
-
-Module layout: research/decisions/2026-10-17-bkl-module-reorganization.md.
-Existing declarations and their mathematical scope are preserved.
 -/
 
 noncomputable section

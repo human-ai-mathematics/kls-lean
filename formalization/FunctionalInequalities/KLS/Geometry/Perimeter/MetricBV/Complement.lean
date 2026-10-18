@@ -2,8 +2,6 @@ import FunctionalInequalities.KLS.Geometry.Perimeter.MetricBV.Basic
 
 /-!
 # Metric BV complement symmetry for finite measures
-
-Existing statements, names and proof payloads are preserved.
 -/
 
 noncomputable section

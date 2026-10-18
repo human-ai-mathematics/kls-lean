@@ -3,8 +3,6 @@ import FunctionalInequalities.Analysis.WeakDerivative.Calculus
 
 /-!
 # Generic weak Hessian coordinates and pointwise identification
-
-Existing statements, names and proof payloads are preserved.
 -/
 
 open MeasureTheory

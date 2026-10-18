@@ -2,8 +2,6 @@ import FunctionalInequalities.Analysis.Convex.Subgradient
 
 /-!
 # Proximal points, Moreau derivatives and resolvent symmetry
-
-Existing statements, names and proof payloads are preserved.
 -/
 
 noncomputable section

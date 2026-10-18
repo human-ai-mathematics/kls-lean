@@ -38,28 +38,27 @@ operator identity. Changing energy frontend requires the corresponding proved co
 ## Connect a separate Lake project
 
 Use the same [pinned Lean toolchain](../formalization/lean-toolchain). The package is in the
-repository's `formalization/` subdirectory. In an independent project's `lakefile.toml`:
+repository's `formalization/` subdirectory. In an independent project's `lakefile.toml`, pin the
+reviewed commit:
 
 ```toml
 [[require]]
 name = "functional-inequalities"
 git = "https://github.com/human-ai-mathematics/kls-lean.git"
-rev = "<reviewed-full-commit-containing-the-used-interfaces>"
+rev = "5d41bd7dd379d0c0858f1b8416f61c82e0fe26eb"
 subDir = "formalization"
 ```
 
-For local development, replace `git`, `rev` and `subDir` with `path = "../KLS/formalization"`.
-Import an owning module in the client and build the client's Lake target.
+While the repository is private, Lake's Git fetch needs GitHub read access (an authenticated
+HTTPS remote); anonymous fetching is not yet available. For local development, replace `git`,
+`rev` and `subDir` with `path = "../KLS/formalization"`. Import an owning module in the client
+and build the client's Lake target.
 
-The published revision `b9ebbc3c41462fa269f4240ab5a95c703192aea2` passed an independent
-pure-Git acceptance with all three narrow clients, including the two bounded-operator APIs.
-Its 32 primary project modules were freshly compiled, without KLS, solution or repository-example
-imports and without a source overlay. All 467 related local declarations passed the standard-only
-axiom audit; all 35 primary/client modules replayed in the kernel. Ten clean pinned third-party
-source/compiled caches were reused; this was not a fresh Mathlib rebuild.
-The receipt is `build/reusability/2026-10-18-library-usability-followup/batch-02-git-downstream/ACCEPTANCE.json`.
-The [usability decision](../research/decisions/2026-10-18-library-usability.md) records its scope;
-[generated API browsing](../formalization/API.md) provides compiler-derived signatures.
+This pin passed all three narrow clients with freshly compiled primary modules and trusted
+pinned third-party caches. The [recorded baseline](../research/verification.md#recorded-baseline)
+lists the exact scope and results; these interface checks exclude KLS, solution and example imports.
+The [usability decision](../research/decisions/2026-10-18-library-usability.md) preserves the earlier
+acceptance, and [API browsing](../formalization/API.md) provides compiler-derived signatures.
 
 `SmoothTest`, `SmoothGradient`, `WeightedGradient`, `CovarianceGradient` and `LocalSlope` use
 different tests or energies. Raw gradient energy can depend on the chosen L² representative
@@ -75,7 +74,7 @@ From the repository root, select one full Git commit:
 python3 research/downstream.py --rev FULL_40_HEX_COMMIT
 ```
 
-The default source is the public Git repository. Add `--repository /path/to/repository`
+The default source is the GitHub repository. Add `--repository /path/to/repository`
 for a local committed revision before pushing, `--cache-packages DIR` for clean pinned
 third-party caches, `--output NEW_DIR` for a receipt directory, or `--threads N` (default 2).
 HTTP(S), file URLs and local Git directories are supported. Existing output directories

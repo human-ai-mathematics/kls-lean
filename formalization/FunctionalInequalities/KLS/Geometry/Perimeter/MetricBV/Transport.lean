@@ -4,8 +4,6 @@ import FunctionalInequalities.KLS.Geometry.Perimeter.MetricBV.Complement
 
 /-!
 # Metric BV subset restriction and closed-support laws
-
-Existing statements, names and proof payloads are preserved.
 -/
 
 noncomputable section

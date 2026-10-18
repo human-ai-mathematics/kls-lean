@@ -10,9 +10,6 @@ import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
 
 /-!
 # Integrated energy bound along the cutoff Eldan process
-
-Module layout: research/decisions/2026-10-17-bkl-module-reorganization.md.
-Existing declarations and their mathematical scope are preserved.
 -/
 
 noncomputable section

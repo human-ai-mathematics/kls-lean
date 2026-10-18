@@ -10,8 +10,6 @@ import FunctionalInequalities.KLS.Isotropic
 
 /-!
 # Actual regular-class C1 moment potentials
-
-Existing statements, names and proof payloads are preserved.
 -/
 
 noncomputable section

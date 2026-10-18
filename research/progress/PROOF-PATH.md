@@ -2,15 +2,15 @@
 
 Read this page as **source step → Lean declaration → owning module → remaining input**.
 The [literature register](LITERATURE.md) owns paper scope and coverage, the
-[node register](STATUS.md) records local status, and [HANDOFF](../../HANDOFF.md) owns the current
-queue and evidence. This page adds no certificate or dependency edge. **`KLS.kls` is proved through BKL Theorem 1.1.**
+[node register](STATUS.md) records local status, [HANDOFF](../../HANDOFF.md) owns current work, and
+the [recorded baseline](../verification.md#recorded-baseline) owns the snapshot evidence. This page adds no certificate or dependency edge. **`KLS.kls` is proved through BKL Theorem 1.1.**
 
 | Stage | Pinned target | Current boundary |
 | --- | --- | --- |
 | 1. Letwin constant 8 | arXiv:2607.24164v1, Theorem 1.2 via Theorem 2.5; BKL arXiv:2610.05474v1, Lemma 4.2 consumer | Compact constant 8 proved and certified (`letwinCompactBound`, `thm:letwin-compact-quadratic-bound`); the noncompact Theorem 1.2 is not formalized |
-| 2. Stochastic localization | BKL arXiv:2610.05474v1, Sections 4–6 | Accepted on the owner-selected cutoff route: the finite-horizon cutoff (95) for every order is certified (`lem:bkl-cutoff-energy`, full report `6644d8bd…`); the uncut process and the literal identities (68)–(73) are not proved |
-| 3. BKL Theorem 4.1 | BKL arXiv:2610.05474v1, Theorem 4.1 | Source form certified (`thm:bkl-cumulant-bound`, full report `5d796b69…`): one universal K, every m ≥ 2, every dimension and isotropic log-concave law |
-| 4. BKL Theorem 1.1 and KLS | BKL arXiv:2610.05474v1, Theorem 1.1; `KLS.Conjecture` | Source form certified (`thm:bkl-poincare`); `KLS.kls` is proved through the closed producer `conjecture` and the affine/isotropic reduction; the selected proof snapshot passed full local verification and independent acceptance, recorded in the final-stage checkpoint linked from HANDOFF |
+| 2. Stochastic localization | BKL arXiv:2610.05474v1, Sections 4–6 | Accepted on the finite-horizon cutoff route: the cutoff (95) for every order is certified (`lem:bkl-cutoff-energy`); the uncut process and the literal identities (68)–(73) are not proved |
+| 3. BKL Theorem 4.1 | BKL arXiv:2610.05474v1, Theorem 4.1 | Source form certified (`thm:bkl-cumulant-bound`): one universal K, every m ≥ 2, every dimension and isotropic log-concave law |
+| 4. BKL Theorem 1.1 and KLS | BKL arXiv:2610.05474v1, Theorem 1.1; `KLS.Conjecture` | Source form certified (`thm:bkl-poincare`); `KLS.kls` is proved through the closed producer `conjecture` and the affine/isotropic reduction; the proved snapshot passed full local verification, recorded in the [recorded baseline](../verification.md#recorded-baseline) |
 
 ## Stage 1: Letwin's constant 8
 
@@ -97,4 +97,4 @@ kernel.
 Completion requires the exact source statement, a proof with standard axioms, and matching
 verification evidence. Kernel replay, axiom checks, source comparison, certificate registration
 and remote CI have separate scopes; see [verification](../verification.md). For
-snapshot-specific acceptance, read [HANDOFF](../../HANDOFF.md).
+snapshot-specific acceptance, read the [recorded baseline](../verification.md#recorded-baseline).

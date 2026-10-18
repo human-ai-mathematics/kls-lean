@@ -15,9 +15,6 @@ import FunctionalInequalities.KLS.BKL.Posterior.Covariance
 
 /-!
 # Canonical covariance standardization of compact posteriors
-
-Module layout: research/decisions/2026-10-17-bkl-module-reorganization.md.
-Existing declarations and their mathematical scope are preserved.
 -/
 
 noncomputable section

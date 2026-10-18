@@ -12,7 +12,8 @@ variance of the quadratic form is at most `8` times its squared Hilbert–Schmid
 existing compact reduction `letwinCompactBound_of_regularClass`.
 
 This is the exact compact counterpart of Letwin (arXiv:2607.24164v1), Theorem 1.2, as used by Bizeul–Klartag–Lehec
-(arXiv:2610.05474v1), Lemma 4.2. It does not state the noncompact theorem and composes nothing further; `KLS.kls` is untouched.
+(arXiv:2610.05474v1), Lemma 4.2. It does not state the noncompact theorem; this module provides only that compact
+bound.
 -/
 
 noncomputable section

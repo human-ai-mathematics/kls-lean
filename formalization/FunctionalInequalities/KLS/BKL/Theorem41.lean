@@ -6,9 +6,6 @@ import FunctionalInequalities.KLS.BKL.CompactReduction
 
 /-!
 # BKL Theorem 4.1: the universal cumulant bound
-
-Module layout: research/decisions/2026-10-17-bkl-module-reorganization.md.
-Existing declarations and their mathematical scope are preserved.
 -/
 
 noncomputable section

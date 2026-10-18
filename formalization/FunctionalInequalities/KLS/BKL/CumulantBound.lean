@@ -8,7 +8,7 @@ The proved compact Letwin bound `LogConcave.Suspension.letwinCompactBound` disch
 producers `cutoffEnergyClaim_of_letwinCompact` and `cumulantBound_of_letwinCompact` (`Theorem41.lean`), at `K = 153` for every
 order `d + 1 ≥ 2`. These closed endpoints are consumed by the certificates of `lem:bkl-cutoff-energy` and
 `thm:bkl-cumulant-bound` and by the final Poincaré assembly. The uncut Eldan process and the literal (68)–(73) are not
-constructed. Module layout: research/decisions/2026-10-17-bkl-module-reorganization.md.
+constructed.
 -/
 
 noncomputable section

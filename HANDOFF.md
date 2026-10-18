@@ -1,11 +1,11 @@
 # Current KLS handoff
 
-Updated 2026-10-18 for reusable downstream acceptance and library-usability maintenance.
+Updated 2026-10-18 for public-entry documentation and module-comment maintenance.
 
 ## Accepted result and open boundaries
 
-`FunctionalInequalities.KLS.kls : KLS.Conjecture` is proved through the selected BKL
-cutoff-localization route. Its target is unchanged: one finite covariance-normalized
+`FunctionalInequalities.KLS.kls : KLS.Conjecture` is proved through the finite-horizon cutoff
+stochastic-localization route of BKL. Its target is unchanged: one finite covariance-normalized
 literature Poincaré bound for every dimension and every log-concave probability law with
 finite second moment, including dimension zero and singular affine supports.
 
@@ -17,34 +17,32 @@ BKL's main theorem is covered. Letwin's noncompact Theorems 1.1/1.2, the uncut E
 construction and literal identities (68)–(73), and the separate uncut intermediate statements
 remain open. The four exploratory routes retain their own statuses.
 
-## Library use and verification
+## Evidence and library use
 
-Use the [calling examples](examples/README.md), [compiler API directory](formalization/API.md)
-and [short review checklist](research/workflow.md#review-after-mechanical-checks).
-The [downstream runner](research/downstream.py) accepts a full Git commit, builds three narrow
+The [recorded baseline](research/verification.md#recorded-baseline) is the stable summary of the
+current evidence: commit `5d41bd7`, the completed full local verification and its binding to the
+committed source, the separate three-client interface acceptance, and the remote-CI boundary.
+Raw receipts and logs stay local in the ignored `build/` directory; publishing them is optional.
+
+Use the [calling examples](examples/README.md), the [compiler API directory](formalization/API.md)
+and the [short review checklist](research/workflow.md#review-after-mechanical-checks). The
+[downstream runner](research/downstream.py) accepts one full Git commit, builds three narrow
 clients in a fresh Lake project, audits their complete primary declaration closure and replays
-its local compiled modules. It does not accept a working-tree overlay or renew a certificate;
-explicit third-party compiled caches remain trusted. Commands and failure receipts are described
-in the [example guide](examples/README.md#reproduce-downstream-acceptance).
-
-The [verification guide](research/verification.md) owns the full local command and receipt
-boundaries. `build/verification/latest.json` records the latest full attempt; its source snapshot,
-status and logs determine its scope. The downstream delivery evidence is kept separately under
-`build/reusability/2026-10-18-downstream-runner/`. Known
+the local compiled modules; it does not accept a working-tree overlay or renew a certificate,
+and explicit third-party compiled caches remain trusted. Known
 [vendor holes](formalization/vendor/README.md#upstream-holes) remain isolated.
 
-The [usability record](research/decisions/2026-10-18-library-usability.md) preserves the accepted
-comment cleanup, Git consumer and API navigation batches. The
-[runner record](research/decisions/2026-10-18-downstream-runner.md) preserves the preceding handoff
-and this tool's placement and acceptance scope. Existing proofs, hypotheses, 34 certificate states
-and historical records are unchanged; this work adds verification tooling and navigation.
+## Next work
 
-## Coordination and next work
+The current maintenance scope is public-entry documentation, targeted ignore rules and module
+comments; the [delivery record](research/decisions/2026-10-18-comment-cleanup-delivery.md) records
+the scope and preserves the preceding handoff. Original changed comments are kept in the
+[comment archive](research/decisions/2026-10-18-migration-comment-history.md). Proofs, hypotheses
+and all 34 certificate states are unchanged. Run the full local verifier on a frozen final
+snapshot before committing this maintenance; receipts apply only to their recorded inputs.
 
-The original Claude read-only duplication review has delivered `READY_FOR_CODEX` under
-`build/reusability/2026-10-18-duplication-review/`; independent acceptance of its classifications
-and any implementation of its suggestions are separate work. No replacement was adopted here.
-Proof workers are idle and the queued review follow-up stays paused. Source owners are in the
-[module directory](formalization/MODULES.md); the
+Before public sharing, select the final commit for an owner-authorized remote Lean certification
+run and review the disclosure scope of the preserved dated history and old branch. Source owners
+are in the [module directory](formalization/MODULES.md); the
 [maintenance register](research/technical-debt/remaining-families.md) retains deferred MetricBV
-relocation. Local editor configuration is excluded from delivery.
+relocation.

@@ -3,8 +3,6 @@ import FunctionalInequalities.KLS.Geometry.Perimeter.MetricBV.Complement
 
 /-!
 # Bounded-support reductions for globally Lipschitz approximations
-
-Existing statements, names and proof payloads are preserved.
 -/
 
 noncomputable section

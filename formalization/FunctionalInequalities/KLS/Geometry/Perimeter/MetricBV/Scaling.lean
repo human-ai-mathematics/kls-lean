@@ -2,8 +2,6 @@ import FunctionalInequalities.KLS.Geometry.Perimeter.MetricBV.Basic
 
 /-!
 # Metric BV measure scaling and probability normalization
-
-Existing statements, names and proof payloads are preserved.
 -/
 
 noncomputable section

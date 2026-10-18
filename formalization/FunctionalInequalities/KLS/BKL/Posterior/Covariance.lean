@@ -14,9 +14,6 @@ import Mathlib.Probability.Moments.Variance
 
 /-!
 # Covariance algebra and radius bounds for compact posteriors
-
-Module layout: research/decisions/2026-10-17-bkl-module-reorganization.md.
-Existing declarations and their mathematical scope are preserved.
 -/
 
 noncomputable section

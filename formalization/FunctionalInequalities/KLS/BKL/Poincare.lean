@@ -3,9 +3,6 @@ import FunctionalInequalities.KLS.BKL.Reduction
 
 /-!
 # BKL Theorem 1.1 and the closed KLS producers
-
-Module layout: research/decisions/2026-10-17-bkl-module-reorganization.md.
-Existing declarations and their mathematical scope are preserved.
 -/
 
 noncomputable section

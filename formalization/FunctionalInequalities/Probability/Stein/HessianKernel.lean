@@ -9,8 +9,6 @@ import FunctionalInequalities.Analysis.Operator.Coordinates
 
 /-!
 # Hessian–Stein kernel, pushforward and inverse-map adapters
-
-Existing statements, names and proof payloads are preserved.
 -/
 
 open MeasureTheory

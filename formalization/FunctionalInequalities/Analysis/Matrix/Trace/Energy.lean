@@ -8,8 +8,6 @@ import FunctionalInequalities.Analysis.Matrix.Trace.Power
 
 /-!
 # Spectral trace positivity, Jordan domination and tensor comparison
-
-Existing statements, names and proof payloads are preserved.
 -/
 
 open Matrix

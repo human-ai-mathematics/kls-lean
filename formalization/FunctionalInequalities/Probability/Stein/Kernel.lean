@@ -7,8 +7,6 @@ import FunctionalInequalities.Analysis.Operator.Coordinates
 
 /-!
 # Stein kernel object and compact-test identities
-
-Existing statements, names and proof payloads are preserved.
 -/
 
 open MeasureTheory Filter

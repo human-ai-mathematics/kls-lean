@@ -10,8 +10,6 @@ import Mathlib.Data.Fintype.EquivFin
 
 /-!
 # Metric BV tests, relaxation, recovery and elementary bounds
-
-Existing statements, names and proof payloads are preserved.
 -/
 
 noncomputable section

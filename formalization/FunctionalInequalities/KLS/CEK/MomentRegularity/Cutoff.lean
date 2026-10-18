@@ -7,8 +7,6 @@ import FunctionalInequalities.KLS.CEK.MomentRegularity.WeakHessian
 
 /-!
 # Regular-source height cutoffs and bounded weak cutoff testing
-
-Existing statements, names and proof payloads are preserved.
 -/
 
 noncomputable section

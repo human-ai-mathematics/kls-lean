@@ -14,8 +14,6 @@ import FunctionalInequalities.KLS.CEK.MomentRegularity.Potential
 
 /-!
 # Regular-source weak tensors and first Monge–Ampere derivatives
-
-Existing statements, names and proof payloads are preserved.
 -/
 
 noncomputable section

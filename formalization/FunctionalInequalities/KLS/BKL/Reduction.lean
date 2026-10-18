@@ -11,7 +11,7 @@ bound of Theorem 4.1, `R^ν_{d+1} ≤ (d!)² K^d · Id` for all `d ≥ 2` (`Cumu
 `K ≥ 1`), Proposition 7.1 gives `|T_d f|² ≤ 2K^d ‖f‖² ≤ (2K)^d ‖f‖²` for every isotropic regular law,
 isotropy gives `|T_1 f| ≤ ‖f‖`, and Theorem 3.1 with `R = √(2K)` yields `C_P(μ) ≤ 2 C_{3.1} K`.
 This module contains the reduction only; its hypothesis is not discharged here. The closed producers
-are `BKL.Localization.theorem11` and `conjecture` (`KLS/BKL/Theorem41.lean`); Section 2's regular approximation is separate.
+are `BKL.Localization.theorem11` and `conjecture` (`KLS/BKL/Poincare.lean`); Section 2's regular approximation is separate.
 -/
 
 open MeasureTheory FunctionalInequalities.Analysis.BakryEmery FunctionalInequalities.Analysis.Tensor

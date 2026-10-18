@@ -9,9 +9,6 @@ import FunctionalInequalities.KLS.BKL.Localization.Process.Integral
 
 /-!
 # From cutoff energy claims to compact cumulant bounds
-
-Module layout: research/decisions/2026-10-17-bkl-module-reorganization.md.
-Existing declarations and their mathematical scope are preserved.
 -/
 
 noncomputable section

@@ -10,9 +10,6 @@ import FunctionalInequalities.Probability.Diffusion.Generator
 
 /-!
 # The Lyapunov function and its exact generator calculus
-
-Module layout: research/decisions/2026-10-17-bkl-module-reorganization.md.
-Existing declarations and their mathematical scope are preserved.
 -/
 
 noncomputable section

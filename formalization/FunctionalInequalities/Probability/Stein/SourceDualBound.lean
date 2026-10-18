@@ -5,8 +5,6 @@ import FunctionalInequalities.Analysis.BakryEmery.Calculus
 
 /-!
 # Compact-test dual bound from a latent source identity
-
-Existing statements, names and proof payloads are preserved.
 -/
 
 open MeasureTheory Filter
