@@ -7,8 +7,7 @@ import FunctionalInequalities.Analysis.WeakDerivative.Calculus
 # Mean of the Hessian at `C^{1,1}`
 
 `∫⟪D(∇φ)u, v⟫ dν = ∫ ∂_uφ ∂_vφ dν` for `ν = e^{−φ}dx` with `φ` convex `C¹` with Lipschitz gradient (Letwin
-arXiv:2607.24164v1, Lemma 2.3, analytic part, weak route). Proof body: GPT (task L-T15a); statement by the Letwin
-sub-controller; placement: Claude.
+arXiv:2607.24164v1, Lemma 2.3, analytic part, weak route).
 -/
 
 noncomputable section
@@ -24,7 +23,7 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteS
 
 set_option maxHeartbeats 800000 in
 /-- **Mean Hessian identity for a `C¹` potential with Lipschitz gradient** (Letwin
-arXiv:2607.24164v1, Lemma 2.3, analytic part, at `C^{1,1}`; weak Letwin route, N15):
+arXiv:2607.24164v1, Lemma 2.3, analytic part, at `C^{1,1}`; weak Letwin route):
 `∫ ⟪D(∇φ)(x) u, v⟫ dν = ∫ ∂_uφ ∂_vφ dν` for convex `φ ∈ C¹` with `G`-Lipschitz gradient,
 `e^{-φ}` a probability density and `∇φ ∈ L²(ν)`, where `D(∇φ)` is the a.e. (Rademacher)
 derivative of the Lipschitz map `∇φ`. -/

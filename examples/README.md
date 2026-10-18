@@ -1,51 +1,66 @@
 # Lean calling examples
 
-The examples demonstrate public interfaces, test domains and boundary cases. They are compiled by the default `Examples` target.
-Use [library design](../LEAN_DESIGN.md) for the layer boundaries and the [formalization guide](../formalization/README.md) for setup.
+These are compiled clients of existing mathematics, with no ledger certificate or new paper-coverage claim.
+The default `Examples` target checks every file below. Use [library design](../LEAN_DESIGN.md) for layer boundaries.
 
-## Start with a checked client
-
-| File | Calls demonstrated |
+| Client | Calls and scope |
 | --- | --- |
-| [PoincareFoundation.lean](PoincareFoundation.lean) | Arbitrary probability spaces, energy comparison, singular laws, empty test families and sharp Gaussian constants |
-| [ApiOrganization.lean](ApiOrganization.lean) | Public test objects, L² transport, covariance invariance and dimension zero |
+| [MatrixIntegral.lean](MatrixIntegral.lean) | One matrix-integral import; arbitrary real coefficient, an indefinite symmetric matrix, and an identity field with the PSD premise discharged |
+| [GeneratedSemigroup.lean](GeneratedSemigroup.lean) | One semigroup-law import; bounded-operator norm and composition, plus a closed full-domain zero operator; real Hilbert spaces without a finite-dimension assumption |
+| [FiniteProductCovariance.lean](FiniteProductCovariance.lean) | Finite tensorization, Gaussian and probability transport imports; variances `1, 0, 4`, a Dirac factor, the empty product, and covariance under translation |
+| [PoincareFoundation.lean](PoincareFoundation.lean) | Energy comparison, singular laws, empty test families and sharp one-dimensional Gaussian constants |
+| [ApiOrganization.lean](ApiOrganization.lean) | Aggregate-import overview of test objects, L² transport, covariance invariance and dimension zero |
 
-From the repository root, build these examples with the pinned toolchain:
+From the repository root:
 
 ```bash
 cd formalization
 lake build Examples
 ```
 
-`ApiOrganization.lean` uses the aggregate import for an overview. For a new application, select the mathematical owner below.
+## Use the owning interface
 
-## Choose a mathematical entry point
-
-| Task | Import | Scope to retain |
+| Task | Import | Keep explicit |
 | --- | --- | --- |
-| Compare Poincaré constants after changing an energy | `FunctionalInequalities.Poincare.L2.Comparison` | Arbitrary probability space; comparison on the specified finite energy domain |
-| Use sharp one-dimensional Gaussian constants | `FunctionalInequalities.Poincare.Gaussian.Real` | The second Gaussian parameter is variance; the theorem uses the smooth-test frontend |
-| Combine two factor laws | `FunctionalInequalities.Poincare.Product.Reverse` | The smooth-test product constant is the maximum of factor constants, including infinity |
-| Combine finitely many Hilbert factors | `FunctionalInequalities.Poincare.FiniteProduct.Tensorization` | Dependent finite product, probability factors and the stated smooth finite-energy tests |
-| Identify the literature constant for a log-concave law | `FunctionalInequalities.KLS.LogConcave.Poincare` | Finite-dimensional real geometry; absolute continuity is derived in intrinsic coordinates |
-| Use a generated contraction semigroup | `FunctionalInequalities.Analysis.Semigroup.Generated.Laws` | Closed densely defined operator between real Hilbert spaces; no probability model is required |
-| Extend a PSD trace bound to symmetric matrices | `FunctionalInequalities.Analysis.Matrix.Integral` | Arbitrary measure and finite matrix index; the displayed estimate has coefficient 2 |
+| Extend a PSD trace estimate to symmetric matrices | `FunctionalInequalities.Analysis.Matrix.Integral` | The PSD estimate is an input; arbitrary measure, finite index and real coefficient |
+| Compose generated bounded operators | `FunctionalInequalities.Analysis.Semigroup.Generated.Laws` | Closed operator, dense domain, nonnegative times; `Generated.operator_add_time` and `norm_operator_le_one` |
+| Combine finite factor laws | `FunctionalInequalities.Poincare.FiniteProduct.Tensorization` | Probability factors, smooth finite-energy frontend; empty families and infinite optimal constants are allowed |
+| Use sharp real Gaussian constants | `FunctionalInequalities.Poincare.Gaussian.Real` | The second Gaussian parameter is variance; zero variance is permitted |
+| Transport a covariance operator | `FunctionalInequalities.Probability.Transport` | Pushforward/translation belongs to the probability law; L² pullback is a separate operation |
+| Compare energies | `FunctionalInequalities.Poincare.L2.Comparison` | Specified finite-energy domains on a probability space |
+| Identify the log-concave literature constant | `FunctionalInequalities.KLS.LogConcave.Poincare` | Intrinsic coordinates and the theorem's geometric hypotheses |
 
-For example, a Gaussian product calculation needs these two owners:
+The matrix client uses `Measure` with `IsProbabilityMeasure` for its concrete probability case,
+so its generic integral import need not expose the bundled `ProbabilityMeasure` object.
+The Gaussian product's value `4` belongs to `SmoothTest`; covariance translation is a separate
+operator identity. Changing energy frontend requires the corresponding proved comparison.
 
-```lean
-import FunctionalInequalities.Poincare.Gaussian.Real
-import FunctionalInequalities.Poincare.Product.Reverse
+## Connect a separate Lake project
+
+Use the same [pinned Lean toolchain](../formalization/lean-toolchain). The package is in the
+repository's `formalization/` subdirectory. In an independent project's `lakefile.toml`:
+
+```toml
+[[require]]
+name = "functional-inequalities"
+git = "https://github.com/human-ai-mathematics/kls-lean.git"
+rev = "<reviewed-full-commit-containing-the-used-interfaces>"
+subDir = "formalization"
 ```
 
-The concrete Gaussian calls are in `PoincareFoundation.lean`; the product identity is
-[`constant_prod_eq`](../formalization/FunctionalInequalities/Poincare/Product/Reverse.lean).
+For local development, replace `git`, `rev` and `subDir` with `path = "../KLS/formalization"`.
+Import an owning module in the client and build the client's Lake target.
 
-## Keep the frontend explicit
+The initial independent acceptance used commit `79fbe1a`: 32 project modules were compiled
+from its separate Git checkout, without KLS, solution or repository-example imports. Pinned
+third-party source/compiled caches were copied separately; this was not a fresh Mathlib rebuild.
+The subsequent operator APIs and current examples were tested against an explicit source overlay.
+Choose a revision containing those additions when using the Git recipe; [HANDOFF](../HANDOFF.md)
+owns delivery status. The [reuse decision](../research/decisions/2026-10-18-downstream-reuse.md)
+records the scope and receipt locations.
 
-`SmoothTest`, `SmoothGradient`, `WeightedGradient`, `CovarianceGradient` and `LocalSlope` describe different tests or energies.
-Use the proved comparison for the hypotheses at hand. Raw gradient energy can depend on the representative of an L² class for a singular law;
-`PoincareFoundation.lean` contains the Dirac example. `Ambient` and `Intrinsic` also distinguish different carriers.
-
-For a certificate or paper target, use the [certificate directory](../solutions/README.md) and the
-[paper register](../research/progress/LITERATURE.md). A reusable calling example does not register a new certificate.
+`SmoothTest`, `SmoothGradient`, `WeightedGradient`, `CovarianceGradient` and `LocalSlope` use
+different tests or energies. Raw gradient energy can depend on the chosen L² representative
+for a singular law; the foundation client includes that obstruction. `Ambient` and `Intrinsic`
+also use different carriers. See the [certificate guide](../solutions/README.md) and
+[paper register](../research/progress/LITERATURE.md) for exact registered targets.

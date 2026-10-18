@@ -7,7 +7,6 @@ import FunctionalInequalities.Probability.Diffusion.Generator
 
 Continuity of diffusion paths, Dynkin's identity and the noise-free linear identity for a diffusion transported by a
 continuous linear equivalence of the state space (used for the Eldan process on `E × (E →L[ℝ] E)` in coordinates).
-Proof bodies: GPT (S-line sub-controller task S-5d2a); statements by the S-line sub-controller; placement: Claude.
 -/
 
 noncomputable section

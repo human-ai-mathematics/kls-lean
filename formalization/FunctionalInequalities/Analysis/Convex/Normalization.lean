@@ -4,11 +4,11 @@ import Mathlib
 # Affine normalisation of convex bodies
 
 Maximal-volume simplices in a convex body and the elementary geometry of the standard simplex, used for the
-affine normalisation step of Caffarelli's strict convexity argument (weak Letwin route, block T11d).
+affine normalisation step of Caffarelli's strict convexity argument (weak Letwin route).
 
-* `simplexEdgeMatrix`, `exists_max_simplexEdgeMatrix_det` (task L-T11d1);
-* `abs_simplexCoord_le_one_of_max` (task L-T11d2);
-* `closedBall_subset_stdSimplex_and_box_subset_closedBall` (task L-T11d3).
+* `simplexEdgeMatrix`, `exists_max_simplexEdgeMatrix_det`;
+* `abs_simplexCoord_le_one_of_max`;
+* `closedBall_subset_stdSimplex_and_box_subset_closedBall`.
 -/
 
 noncomputable section
@@ -27,7 +27,7 @@ private def simplexVolume {n : ℕ} :
   fun v => |(simplexEdgeMatrix v).det|
 
 /-- **A compact convex body contains a simplex of maximal volume with positive volume** (weak Letwin
-route, Caffarelli block T11d, affine normalisation, step 1). -/
+route, Caffarelli's argument, affine normalisation). -/
 theorem exists_max_simplexEdgeMatrix_det {n : ℕ} {K : Set (EuclideanSpace ℝ (Fin n))}
     (hK : IsCompact K) (hint : (interior K).Nonempty) :
     ∃ v : Fin (n + 1) → EuclideanSpace ℝ (Fin n), (∀ i, v i ∈ K) ∧
@@ -126,7 +126,7 @@ section LT11D2MaxSimplexBox
 
 open Set Matrix
 
-/-! Coordinates relative to a maximal simplex are bounded (task L-T11d2). -/
+/-! Coordinates relative to a maximal simplex are bounded. -/
 
 namespace FunctionalInequalities.Analysis
 
@@ -170,7 +170,7 @@ private lemma simplexEdgeMatrix_update_succ_det
     Matrix.det_updateCol_sum (simplexEdgeMatrix v) j c
 
 /-- **Maximality of the simplex confines the body to a box in simplex coordinates** (weak Letwin
-route, Caffarelli block T11d, step 2): if `v` is a nondegenerate simplex of maximal volume in `K`,
+route, Caffarelli's argument): if `v` is a nondegenerate simplex of maximal volume in `K`,
 then every `y ∈ K` has simplex coordinates `c = (M v)⁻¹ (y − v 0)` with `|cⱼ| ≤ 1` and
 `|1 − ∑ cⱼ| ≤ 1`. -/
 theorem abs_simplexCoord_le_one_of_max {n : ℕ} {K : Set (EuclideanSpace ℝ (Fin n))}
@@ -303,7 +303,7 @@ section LT11D3SimplexBall
 
 open Set Metric
 
-/-! A ball inside the standard simplex and the box inside a ball (task L-T11d3). -/
+/-! A ball inside the standard simplex and the box inside a ball. -/
 
 namespace FunctionalInequalities.Analysis
 
@@ -344,7 +344,7 @@ private lemma barycentre_ofLp_apply {n : ℕ} (i : Fin n) :
   simp [Finset.sum_apply]
 
 /-- **The standard simplex contains a ball around its barycentre, and the coordinate box lies in a
-ball** (weak Letwin route, Caffarelli block T11d, step 3). -/
+ball** (weak Letwin route, Caffarelli's argument). -/
 theorem closedBall_subset_stdSimplex_and_box_subset_closedBall {n : ℕ} (hn : 0 < n) :
     closedBall ((1 / ((n : ℝ) + 1)) • ∑ i, EuclideanSpace.single i (1 : ℝ))
         (1 / (2 * ((n : ℝ) + 1) * Real.sqrt n)) ⊆
@@ -508,13 +508,13 @@ section LT11D4AffineNormalizationAssembly
 
 open Set Metric
 
-/-! Affine normalisation of a convex body: an affine image sandwiched between two balls with dimensional radii (task L-T11d4). -/
+/-! Affine normalisation of a convex body: an affine image sandwiched between two balls with dimensional radii. -/
 
 namespace FunctionalInequalities.Analysis
 
 set_option maxHeartbeats 4000000 in
 /-- **Affine normalisation of convex bodies** (John-type, via a maximal-volume simplex; weak Letwin
-route, Caffarelli block T11d): there is a constant `C` depending only on the space such that every
+route, Caffarelli's argument): there is a constant `C` depending only on the space such that every
 compact convex set with nonempty interior is affinely equivalent to a set squeezed between the unit
 ball and the ball of radius `C`. -/
 theorem exists_affine_normalization {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]

@@ -15,7 +15,7 @@ The usual augmentation of the right-continuous natural filtration of a multidime
 (vendored LevyStochCalc API) and `IsDiffusion`: an everywhere continuous adapted version `Y` of
 `x₀ + ∫₀ᵗ b(Y_s) ds + Σ_k ∫₀ᵗ σ_k(Y_s) dW^k_s` with coefficients evaluated along `Y`. This is the first
 project module importing the vendored stochastic calculus (formalization/vendor/README.md); only vendored
-declarations with standard logical axioms are used. Proof bodies: GPT (BKL Claude-controller goal, tasks S5b); statements and placement: Claude.
+declarations with standard logical axioms are used.
 -/
 
 open MeasureTheory ProbabilityTheory Filter Topology

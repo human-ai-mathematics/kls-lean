@@ -9,8 +9,7 @@ Factorization of lower integrals of products over `μ^N`, and second-moment calc
 `μ ⊗ ν`: normalized sums of independent copies, products of coordinates, and sums of independent
 observables. Only `L²` hypotheses are used. These are the moment computations behind the isotropy
 of the suspension in Bizeul–Klartag–Lehec (arXiv:2610.05474v1), proof of Proposition 7.1, p. 28.
-`lintegral_pi_prod_fin` is Luna's (task LF2); the moment results are Codex proofs
-(`build/reviews/2026-10-07-bkl-continuous/reviews/R1-*`).
+The lower-integral factorization is `lintegral_pi_prod_fin`.
 -/
 
 noncomputable section
@@ -19,7 +18,7 @@ open MeasureTheory ProbabilityTheory Filter
 
 namespace FunctionalInequalities.Probability
 
-/-- `∫⁻ Π_i g_i(x_i) d(⊗_i μ) = Π_i ∫⁻ g_i dμ` over `Fin N` (Luna, task LF2). -/
+/-- `∫⁻ Π_i g_i(x_i) d(⊗_i μ) = Π_i ∫⁻ g_i dμ` over `Fin N`. -/
 theorem lintegral_pi_prod_fin {E : Type*} [MeasurableSpace E]
     (μ : Measure E) [SigmaFinite μ] (k : ℕ) (g : Fin k → E → ENNReal)
     (hg : ∀ i, Measurable (g i)) :

@@ -10,7 +10,7 @@ import Mathlib.Tactic.Positivity
 # Generators of inverses and powers
 
 The derivative of `Ring.inverse ∘ G`, the generator of an inverse operator `𝓛(A⁻¹) = −A⁻¹(𝓛A)A⁻¹ + Σ_k A⁻¹H_kA⁻¹H_kA⁻¹`, and
-bounds for generators of powers. Proof bodies: GPT (task S-5e0); statements by the S-line sub-controller; placement: Claude.
+bounds for generators of powers.
 -/
 
 noncomputable section

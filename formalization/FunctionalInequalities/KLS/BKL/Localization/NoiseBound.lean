@@ -7,8 +7,7 @@ import FunctionalInequalities.KLS.BKL.Posterior.Covariance
 
 `cumulantEnergy_succ_eq` reindexes `E_{r+2}` (BKL arXiv:2610.05474v1, (90)); `conjugatedNoiseMatrix μ hc p i` has entries
 `κ₃(μ_p)(σ e_a, σ e_b, σ e_i)`, `σ = A(p)^{-1/2}` (BKL (85), `H̃_i = P H_i P`), and the bound (79) in conjugated form,
-`Σ_i |H̃_i v|² ≤ 8|v|²`, follows from `CumulantBoundCompact 2 8` for symmetric positive semidefinite `Q`. Proof bodies: GPT
-(S-line sub-controller task S-3bI); statements by the S-line sub-controller; placement: Claude.
+`Σ_i |H̃_i v|² ≤ 8|v|²`, follows from `CumulantBoundCompact 2 8` for symmetric positive semidefinite `Q`.
 -/
 
 noncomputable section

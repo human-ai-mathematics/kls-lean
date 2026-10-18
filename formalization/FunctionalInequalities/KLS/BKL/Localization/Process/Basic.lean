@@ -12,8 +12,7 @@ import FunctionalInequalities.Probability.Diffusion.Generator
 `IsEldanCutoff μ hc W ℱ hW γ p`: the parameter process `p_t = (c_t, Q_t)` solves the cutoff localization equations
 (67) (drift `γ² (A⁻¹a, A⁻¹)`, noise `γ (A^{-1/2} e_k, 0)`, start `0`) in coordinates; existence for every admissible
 cutoff, continuity of paths, initial value, and Dynkin's identity `E F(p_T) − F(0) = E ∫₀ᵀ γ(p_s)² 𝓛F(p_s) ds` for
-every `C²` function (BKL arXiv:2610.05474v1, Section 4, cutoff stage). Proof bodies: GPT (S-line sub-controller
-task S-5d2a); statements by the S-line sub-controller; placement: Claude.
+every `C²` function (BKL arXiv:2610.05474v1, Section 4, cutoff stage).
 -/
 
 noncomputable section
@@ -228,7 +227,7 @@ open scoped NNReal ENNReal RealInnerProductSpace
 open FunctionalInequalities.Probability.Posterior FunctionalInequalities.Analysis
   FunctionalInequalities.Probability.Diffusion
 
-/-! `Q_t = ∫₀ᵗ γ² A⁻¹` pathwise, hence symmetric positive semidefinite (task S-5d2b). -/
+/-! `Q_t = ∫₀ᵗ γ² A⁻¹` pathwise, hence symmetric positive semidefinite. -/
 
 namespace FunctionalInequalities.KLS.BKL.Localization
 

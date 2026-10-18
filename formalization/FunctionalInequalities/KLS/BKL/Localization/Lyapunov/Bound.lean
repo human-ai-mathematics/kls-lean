@@ -27,7 +27,7 @@ open FunctionalInequalities.Probability.Posterior FunctionalInequalities.Analysi
   FunctionalInequalities.Analysis.BakryEmery FunctionalInequalities.Probability.Diffusion
   FunctionalInequalities.Analysis.CoordinateTensor
 
-/-! Generator bound `𝓛𝒱 ≤ K𝒱` on symmetric positive semidefinite `Q` under `CumulantBoundCompact 2 8` (task S-5e1b). -/
+/-! Generator bound `𝓛𝒱 ≤ K𝒱` on symmetric positive semidefinite `Q` under `CumulantBoundCompact 2 8`. -/
 
 namespace FunctionalInequalities.KLS.BKL.Localization
 

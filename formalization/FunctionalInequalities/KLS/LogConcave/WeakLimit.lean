@@ -18,13 +18,13 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
   [CompleteSpace E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
   [SecondCountableTopology E]
 
-/-- **Weak-limit transfer of the Poincaré bound** to the literature constant of a log-concave law**
+/-- **Weak-limit transfer of the Poincaré bound to the literature constant of a log-concave law**
 (BKL arXiv:2610.05474v1, Section 2, p. 5): if `μ_j → μ` weakly, each `μ_j` satisfies the smooth-test
 Poincaré bound with constant `C_j`, and `C_j → C`, then the log-concave limit `μ` has literature
 constant at most `C`. The smooth-test bound passes to the limit on compactly supported smooth tests
 (`Poincare.SmoothTest.variance_le_mul_energy_of_tendsto`), extends to all admissible tests by the
 cutoff argument (`Poincare.SmoothTest.Holds.of_compactSupport`), and the smooth-test constant equals
-the literature constant for log-concave laws. Luna, task S2-W3. -/
+the literature constant for log-concave laws. -/
 theorem localSlope_constant_le_of_tendsto (μs : ℕ → ProbabilityMeasure E)
     (μ : ProbabilityMeasure E) (hμ : LogConcave μ) (Cseq : ℕ → NNReal) (C : NNReal)
     (hlim : Tendsto μs atTop (𝓝 μ)) (hClim : Tendsto Cseq atTop (𝓝 C))

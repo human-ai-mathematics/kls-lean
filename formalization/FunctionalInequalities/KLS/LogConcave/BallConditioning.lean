@@ -8,9 +8,9 @@ import Mathlib.Topology.UniformSpace.HeineCantor
 # Log-concave laws conditioned on balls
 
 Conditioning a log-concave law on a closed ball and pushing it forward by an affine map stays in the regular
-class used by the approximation step of Letwin's Lemma A.1 (weak Letwin route, block T10).
+class used by the approximation step of Letwin's Lemma A.1 (weak Letwin route).
 
-* `exists_regularClass_of_cond_closedBall_map` (task L-T10c).
+* `exists_regularClass_of_cond_closedBall_map`.
 -/
 
 noncomputable section
@@ -89,7 +89,7 @@ private theorem letwin_convex_sub_quadratic
     nlinarith
   simpa only [neg_div, neg_mul, ← sub_eq_add_neg] using hc
 
-/-- **Ball-conditioned, affinely transported regular laws lie in Letwin's class** (Letwin Lemma A.1, task T10c):
+/-- **Ball-conditioned, affinely transported regular laws lie in Letwin's class** (Letwin Lemma A.1):
 conditioning the law of a regular potential `V` on `closedBall 0 R` (`R > 0`) and pushing forward by
 `x ↦ L (x − c)` gives `1_K e^{−W} dx` with `K` compact convex with nonempty interior and `W` smooth and uniformly
 convex. -/
@@ -187,7 +187,7 @@ section LT10BWhiteningMoments
 open MeasureTheory Set Metric Filter
 open scoped Topology RealInnerProductSpace MatrixOrder Matrix.Norms.L2Operator
 
-/-! Whitening maps of laws with converging second moments converge to the identity and preserve moment convergence (Letwin Lemma A.1 approximation; task L-T10b). -/
+/-! Whitening maps of laws with converging second moments converge to the identity and preserve moment convergence (Letwin Lemma A.1 approximation). -/
 
 namespace FunctionalInequalities.KLS
 
@@ -451,7 +451,7 @@ private lemma whitening_sequence
   exact ⟨Analysis.inverseSqrtIn_isSelfAdjoint b (C k),
     Analysis.inverseSqrt_mul_mul_inverseSqrt (C k) (hpos k) hk⟩
 
-/-- **Whitening preserves convergence of low moments** (Letwin Lemma A.1 approximation, task T10b): if the laws
+/-- **Whitening preserves convergence of low moments** (Letwin Lemma A.1 approximation): if the laws
 `λ k`, all carried by a fixed ball, have mixed moments of degree `≤ 4` converging to those of an isotropic `μ`, then
 there are affine maps `x ↦ L k (x − c k)` that make `λ k` isotropic for large `k` (mean zero, identity second
 moments) and keep the convergence of the moments of degree `≤ 4`. -/

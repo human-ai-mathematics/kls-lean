@@ -6,8 +6,7 @@ import FunctionalInequalities.Analysis.Convex.Subgradient
 
 A convex differentiable function with `u(x+h) + u(x−h) − 2u(x) ≤ C‖h‖²` has a quadratic upper bound, a co-coercive
 gradient and a `4C`-Lipschitz gradient (final step of the `C^{1,1}` estimate of the weak moment-map route to Letwin
-arXiv:2607.24164v1). Proof bodies: GPT (Letwin sub-controller tasks L-T4a, L-T4b, W0T4); statements by Claude and the
-Letwin sub-controller; placement: Claude.
+arXiv:2607.24164v1).
 -/
 
 noncomputable section
@@ -40,8 +39,7 @@ private lemma gradient_le_increment {E : Type*} [NormedAddCommGroup E]
     hcl.le_slope_of_hasDerivAt (Set.mem_univ 0) (Set.mem_univ 1)
       (zero_lt_one : (0 : ℝ) < 1) hl
 
-/-- **Quadratic upper bound from a second-difference bound** (weak Letwin route, C^{1,1} step N9,
-support for T4): a differentiable convex `u` with `u(x+h) + u(x−h) − 2u(x) ≤ C‖h‖²` satisfies
+/-- **Quadratic upper bound from a second-difference bound** (weak Letwin route, C^{1,1} estimate): a differentiable convex `u` with `u(x+h) + u(x−h) − 2u(x) ≤ C‖h‖²` satisfies
 `u y ≤ u x + ⟪∇u x, y − x⟫ + C ‖y − x‖²`. -/
 theorem le_add_inner_gradient_add_mul_sq_of_second_difference_le {E : Type*}
     [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E] {u : E → ℝ} {C : ℝ}
@@ -68,10 +66,10 @@ section LT4BCocoerciveGradient
 
 open scoped RealInnerProductSpace
 
-/-! Co-coercivity of the gradient (task L-T4b). -/
+/-! Co-coercivity of the gradient. -/
 
 /-- **Co-coercivity: a quadratic upper bound gives a Lipschitz gradient** (weak Letwin route, C^{1,1}
-step N9, support for T4): if a differentiable convex `u` satisfies
+estimate): if a differentiable convex `u` satisfies
 `u y ≤ u x + ⟪∇u x, y − x⟫ + C ‖y − x‖²` for all `x, y` with `C > 0`, then
 `‖∇u x − ∇u y‖ ≤ 2C ‖x − y‖`. -/
 theorem norm_gradient_sub_le_of_quadratic_upper_bound {E : Type*}
@@ -207,7 +205,7 @@ section W0T4SecondDifferenceLipschitz
 
 
 
-/-! Lipschitz gradient from a second-difference bound (task W0T4). -/
+/-! Lipschitz gradient from a second-difference bound. -/
 
 /-- **A second-difference bound gives a Lipschitz gradient**: a differentiable convex function with
 `u(x + h) + u(x − h) − 2 u(x) ≤ C ‖h‖²` for all `x, h` has a `4C`-Lipschitz gradient. -/
@@ -485,7 +483,7 @@ section LT17CPenalizedMaximumBound
 open Set
 open scoped RealInnerProductSpace
 
-/-! Second differences at maximisers of a penalized second difference (weak Letwin route, C^{1,1} estimate N9; task L-T17c). -/
+/-! Second differences at maximisers of a penalized second difference (weak Letwin route, C^{1,1} estimate). -/
 
 namespace FunctionalInequalities.Analysis
 
@@ -676,7 +674,7 @@ private lemma sd_penalized_estimate {E : Type*} [NormedAddCommGroup E]
   rw [he'] at ht
   exact ht
 
-/-- **Second-difference bound from penalised maxima** (weak Letwin route, N9, task T17c; KLS500
+/-- **Second-difference bound from penalised maxima** (weak Letwin route; KLS500
 `weak_moment_symmetricSecondDifference_le_of_uniformlyConvex_target`, algebraic part): let `u` be convex and
 differentiable, bounded below, and `V` differentiable with `V − (κ/2)‖·‖²` convex. Suppose that for every
 `η > 0` the penalised second difference `Δ²ₕu − η u` has a maximiser `x₀` at which the log-density
@@ -823,8 +821,8 @@ theorem centeredDifference_contDiff_lipschitz_gradient {n : ℕ}
   exact ⟨hC1, hgrad⟩
 
 
-/-- The actual centered difference bounds required by the original N11b
-increment-energy estimate, with no differentiability or sign assumption on D. -/
+/-- The centered difference bounds required by the Hessian-increment
+energy estimate, with no differentiability or sign assumption on D. -/
 theorem centeredDifference_nonneg_le {n : ℕ}
     {u : EuclideanSpace ℝ (Fin n) → ℝ} (hconv : ConvexOn ℝ univ u)
     {D : ℝ} (h : EuclideanSpace ℝ (Fin n))

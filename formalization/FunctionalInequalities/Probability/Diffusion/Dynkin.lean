@@ -8,7 +8,7 @@ import LevyStochCalc.Brownian.ItoFinsetSum
 For continuous compactly supported coefficients and every `C²` function `F`, `F(Y_T)` is integrable and
 `E F(Y_T) − F(x₀) = E ∫₀ᵀ 𝓛F(Y_s) ds` (vector Itô formula and the mean-zero Brownian integral); and linear
 functionals annihilating the noise evolve pathwise by the drift. These are the only stochastic inputs of
-the generator-form treatment of BKL arXiv:2610.05474v1, Lemmas 4.3, 5.1 and 5.2. Proof bodies: GPT (BKL Claude-controller goal, tasks S5b); statements and placement: Claude.
+the generator-form treatment of BKL arXiv:2610.05474v1, Lemmas 4.3, 5.1 and 5.2.
 -/
 
 open MeasureTheory ProbabilityTheory Filter Topology

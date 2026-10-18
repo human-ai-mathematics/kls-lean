@@ -4,7 +4,7 @@ import FunctionalInequalities.Analysis.Tensor.EnergyForm
 # Cumulant energies as energy forms
 
 `E_{r+1}(u) = F(PAP, P^{⊗r} κ_{r+1}(u, ·))` for the standard-coordinate cumulant tensor (BKL (83), (85)): the reduction of
-Lemma 5.1 to `A = Id`. Proof body: GPT (task S-3bJ); statement by the S-line sub-controller; placement: Claude.
+Lemma 5.1 to `A = Id`.
 -/
 
 noncomputable section

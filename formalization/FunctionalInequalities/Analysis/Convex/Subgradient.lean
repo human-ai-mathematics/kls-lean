@@ -14,10 +14,7 @@ import FunctionalInequalities.Analysis.Convex.LegendreVariation.Attainment
 Pointwise subgradients are written inline, `∀ y, u x + ⟪p, y - x⟫ ≤ u y`. A differentiable convex function on a
 finite-dimensional space is `C¹` (`contDiff_one_of_convexOn_of_differentiable`), and the subgradients of a convex
 Lipschitz function lie in every closed convex set containing its a.e. gradient
-(`subgradient_mem_of_ae_gradient_mem`). Weak moment-map route to Letwin arXiv:2607.24164v1, Theorem 1.2 (nodes N4,
-N7 of build/reviews/2026-10-12-bkl-claude-goal/routes/letwin-weak-route.md). Proof bodies: GPT (BKL
-Claude-controller goal, Letwin sub-controller tasks L-T5b, L-T11a); statements by the Letwin sub-controller;
-placement: Claude.
+(`subgradient_mem_of_ae_gradient_mem`). Weak moment-map route to Letwin arXiv:2607.24164v1, Theorem 1.2.
 -/
 
 noncomputable section
@@ -30,7 +27,7 @@ namespace FunctionalInequalities.Analysis
 section ConvexC1
 
 /-- **A differentiable convex function on a finite-dimensional space is `C¹`** (weak Letwin
-route, step N7): convexity makes the derivative map continuous. -/
+route): convexity makes the derivative map continuous. -/
 theorem contDiff_one_of_convexOn_of_differentiable {E : Type*} [NormedAddCommGroup E]
     [NormedSpace ℝ E] [FiniteDimensional ℝ E] {u : E → ℝ}
     (hconv : ConvexOn ℝ Set.univ u) (hdiff : Differentiable ℝ u) :
@@ -141,7 +138,7 @@ private lemma gradient_le_increment {E : Type*} [NormedAddCommGroup E]
       (zero_lt_one : (0 : ℝ) < 1) hl
 
 /-- **Subgradients of a convex Lipschitz function lie in the closed convex range of its a.e.
-gradient** (weak Letwin route, step N4: `∂u(x) ⊆ K̄` for the weak moment map, whose gradient lies
+gradient** (weak Letwin route: `∂u(x) ⊆ K̄` for the weak moment map, whose gradient lies
 a.e. in the target `K`): if `u` is convex and Lipschitz on a finite-dimensional inner product space,
 `K` is closed and convex and `∇u(x) ∈ K` for a.e. `x`, then every subgradient `p` of `u` at every
 point `x` (`u(x) + ⟪p, y − x⟫ ≤ u(y)` for all `y`) lies in `K`. -/
@@ -194,10 +191,10 @@ section LT5ASubgradientMaxFormula
 
 open scoped RealInnerProductSpace
 
-/-! Max formula and existence of subgradients (task L-T5a; proof body GPT, statement by the Letwin sub-controller). -/
+/-! Max formula and existence of subgradients. -/
 
 /-- **Max formula for the one-sided directional derivative of a finite convex function** (weak
-Letwin route, step N7 "singleton subdifferential ⇒ C¹"): for a convex `u : E → ℝ` on a
+Letwin route: "singleton subdifferential ⇒ C¹"): for a convex `u : E → ℝ` on a
 finite-dimensional inner product space, every point `x` and every direction `v`, there is a
 subgradient `g` of `u` at `x` whose pairing with `v` is the right derivative
 `inf_{t>0} (u(x + t v) - u(x))/t`: it is a subgradient and the difference quotients come
@@ -559,10 +556,10 @@ section LT14A0ConvexAeDifferentiable
 
 open MeasureTheory Set
 
-/-! Convex functions on open sets are differentiable almost everywhere (task L-T14a0; proof body GPT, statement by the Letwin sub-controller). -/
+/-! Convex functions on open sets are differentiable almost everywhere. -/
 
 /-- **A convex function on an open set is differentiable almost everywhere on it** (Rademacher for
-convex functions; weak Letwin route, support for the a.e. injectivity of the subgradient map, N5). -/
+convex functions; weak Letwin route, support for the a.e. injectivity of the subgradient map). -/
 theorem ConvexOn.ae_differentiableAt_of_isOpen {E : Type*} [NormedAddCommGroup E]
     [NormedSpace ℝ E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
     (μ : Measure E) [μ.IsAddHaarMeasure]
@@ -622,7 +619,7 @@ section LT5CUniqueSubgradientDifferentiable
 
 open scoped RealInnerProductSpace
 
-/-! A unique subgradient gives differentiability (task L-T5c). -/
+/-! A unique subgradient gives differentiability. -/
 
 namespace FunctionalInequalities.Analysis
 
@@ -824,7 +821,7 @@ private lemma hasFDerivAt_of_convexOn_of_unique_subgradient
   simpa only [InnerProductSpace.toDual_apply_apply, R] using hlittle
 
 /-- **A convex function with a unique subgradient at every point is differentiable** (weak Letwin
-route, step N7 "singleton subdifferential ⇒ C¹", differentiability half): on a finite-dimensional
+route: "singleton subdifferential ⇒ C¹", differentiability half): on a finite-dimensional
 inner product space, if the subgradient inequality `u x + ⟪g, y - x⟫ ≤ u y` (all `y`) is satisfied by
 exactly one `g` at every `x`, then `u` is differentiable (with that `g` as gradient; `C¹` then follows
 from `contDiff_one_of_convexOn_of_differentiable`). -/
@@ -846,7 +843,7 @@ open Set
 open scoped RealInnerProductSpace
 open scoped Topology
 
-/-! Monotonicity of subgradient images (Gutiérrez Lemma 1.4.1; task L-T12a). -/
+/-! Monotonicity of subgradient images (Gutiérrez Lemma 1.4.1). -/
 
 namespace FunctionalInequalities.Analysis
 
@@ -971,7 +968,7 @@ def subgradientImage {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E
   {p | ∃ x ∈ S, ∀ y, u x + ⟪p, y - x⟫ ≤ u y}
 
 /-- **Monotonicity of subgradient images under comparison** (Gutiérrez, *The Monge–Ampère
-equation*, Lemma 1.4.1; weak Letwin route, step N8 comparison principle): if `u ≤ v` on a
+equation*, Lemma 1.4.1; weak Letwin route, comparison principle): if `u ≤ v` on a
 bounded open `Ω` and `u = v` on its frontier, then `∂v(Ω) ⊆ ∂u(Ω)`. -/
 theorem subgradientImage_subset_of_le {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
     [FiniteDimensional ℝ E] {u v : E → ℝ} (hu : ConvexOn ℝ univ u) (hv : ConvexOn ℝ univ v)
@@ -1037,7 +1034,7 @@ section LT14ASubgradientAeInjective
 open MeasureTheory Set
 open scoped RealInnerProductSpace
 
-/-! Almost-everywhere injectivity of the subgradient map (task L-T14a). -/
+/-! Almost-everywhere injectivity of the subgradient map. -/
 
 namespace FunctionalInequalities.Analysis
 
@@ -1085,7 +1082,7 @@ private theorem convex_legendre_finite_domain {E : Type*} [NormedAddCommGroup E]
   rw [htop] at hcomb
   exact (not_le_of_gt (EReal.coe_lt_top _)) hcomb
 
-/-- **Almost every subgradient belongs to a single point** (weak Letwin route, step N5, the
+/-- **Almost every subgradient belongs to a single point** (weak Letwin route, the
 Alexandrov identity): for a convex Lipschitz `u` on a finite-dimensional inner product space, the
 set of `p` that are subgradients of `u` at two distinct points is Lebesgue-null (such `p` are
 non-differentiability points of the conjugate `u*`, or frontier points of its domain). -/
@@ -1205,12 +1202,11 @@ section LT11BAffineLineSubgradient
 open MeasureTheory Set
 open scoped RealInnerProductSpace
 
-/-! Subgradients along a segment where the function is affine form a null set (Caffarelli block; task L-T11b). -/
+/-! Subgradients along a segment where the function is affine form a null set (Caffarelli block). -/
 
 namespace FunctionalInequalities.Analysis
 
-/-- **A function affine along a full line pins every subgradient** (weak Letwin route, Caffarelli
-block T11b): if `u (x₀ + t θ) = u x₀ + t c` for all real `t`, then every subgradient `p` of `u` at
+/-- **A function affine along a full line pins every subgradient** (weak Letwin route, Caffarelli's argument): if `u (x₀ + t θ) = u x₀ + t c` for all real `t`, then every subgradient `p` of `u` at
 any point satisfies `⟪p, θ⟫ = c`. -/
 theorem inner_subgradient_eq_of_affine_on_line {E : Type*} [NormedAddCommGroup E]
     [InnerProductSpace ℝ E] {u : E → ℝ} {x₀ θ : E} {c : ℝ}
@@ -1301,11 +1297,11 @@ section LT5DUniqueSubgradientC1
 
 open scoped RealInnerProductSpace
 
-/-! Unique subgradients everywhere give a `C¹` function (task L-T5d). -/
+/-! Unique subgradients everywhere give a `C¹` function. -/
 
 namespace FunctionalInequalities.Analysis
 
-/-- **Singleton subdifferential ⇒ `C¹`** (weak Letwin route, step N7, assembly of L-T5b/L-T5c): a
+/-- **Singleton subdifferential ⇒ `C¹`** (weak Letwin route): a
 convex function on a finite-dimensional inner product space with exactly one subgradient at every
 point is continuously differentiable. -/
 theorem contDiff_one_of_convexOn_of_unique_subgradient {E : Type*} [NormedAddCommGroup E]
@@ -1324,7 +1320,7 @@ section LT12D5SubgradientExpansionTaylor
 open Set Filter
 open scoped RealInnerProductSpace Topology
 
-/-! A first-order expansion of the subgradient gives a second-order Taylor expansion of the function (task L-T12d5). -/
+/-! A first-order expansion of the subgradient gives a second-order Taylor expansion of the function. -/
 
 namespace FunctionalInequalities.Analysis
 
@@ -1403,7 +1399,7 @@ private lemma inner_slope_error {E : Type*}
 
 set_option maxHeartbeats 800000 in
 /-- **First-order expansion of the subdifferential gives a second-order Taylor expansion** (weak Letwin
-route, Alexandrov's theorem, task T12d5): if every subgradient `q` of the convex `f` at points `y` near `x`
+route, Alexandrov's theorem): if every subgradient `q` of the convex `f` at points `y` near `x`
 satisfies `‖q − p − B (y − x)‖ ≤ ε ‖y − x‖`, then
 `|f y − f x − ⟪p, y − x⟫ − ½ ⟪B (y − x), y − x⟫| ≤ ε' ‖y − x‖²` near `x`. -/
 theorem eventually_abs_sub_quadratic_le_of_subgradient_expansion {E : Type*}

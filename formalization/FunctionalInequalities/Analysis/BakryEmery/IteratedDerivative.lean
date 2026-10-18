@@ -354,7 +354,7 @@ theorem iteratedFDeriv_comp_perm_of_contDiff {f : E → F} (hf : ContDiff ℝ �
 
 /-- **Local symmetry of iterated derivatives**: for `f ∈ C^∞(U)`, `U` open, the iterated
 derivatives at `x ∈ U` are symmetric in their arguments (localization of
-`iteratedFDeriv_comp_perm_of_contDiff` by a smooth cutoff; Luna, task R5a3). -/
+`iteratedFDeriv_comp_perm_of_contDiff` by a smooth cutoff). -/
 theorem iteratedFDeriv_comp_perm_of_contDiffOn {U : Set E} (hU : IsOpen U) {f : E → F}
     (hf : ContDiffOn ℝ ∞ f U) (n : ℕ) {x : E} (hx : x ∈ U) (σ : Equiv.Perm (Fin n))
     (v : Fin n → E) :
@@ -411,7 +411,7 @@ variable {E F G : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
   [NormedAddCommGroup F] [NormedSpace ℝ F] [NormedAddCommGroup G] [NormedSpace ℝ G]
 
 /-- **Chain rule for iterated derivatives along a continuous linear map, on an open set**:
-`∇ⁿ(g ∘ L)(x) = ∇ⁿg(Lx) ∘ (L, …, L)` when `g ∈ Cⁿ(U)`, `U` open, `Lx ∈ U` (Luna, task R5a). -/
+`∇ⁿ(g ∘ L)(x) = ∇ⁿg(Lx) ∘ (L, …, L)` when `g ∈ Cⁿ(U)`, `U` open, `Lx ∈ U`. -/
 theorem iteratedFDeriv_comp_clm_of_isOpen {U : Set F} (hU : IsOpen U) {g : F → G} {n : ℕ}
     (hg : ContDiffOn ℝ n g U) (L : E →L[ℝ] F) {x : E} (hx : L x ∈ U) :
     iteratedFDeriv ℝ n (g ∘ L) x =

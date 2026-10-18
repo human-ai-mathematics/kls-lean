@@ -9,7 +9,7 @@ For every `z`, the generator of the localization equations (67) applied to the p
 `Λ_p(z) = ψ(c + z, Q) − ψ(c, Q)` equals `−½ ⟪v, A⁻¹ v⟫` with `v = a(c + z, Q) − a(c, Q)`
 (`generator_logLaplace_posterior`): `∫ e^{⟪z,x⟫} dμ_p = e^{Λ_p(z)}` has zero generator by the generator cancellation
 of the posterior, and the chain rule for `exp` gives the formula. Includes partial-derivative helpers on the parameter
-space. Proof body: Fable worker (BKL Claude-controller goal, task S1b); statement and placement: Claude.
+space.
 -/
 
 noncomputable section

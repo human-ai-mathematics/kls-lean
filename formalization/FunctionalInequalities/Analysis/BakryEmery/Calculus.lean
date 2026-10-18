@@ -136,7 +136,7 @@ theorem bilinearIteratedFDerivTwo_eq_fderiv_apply {f : E → ℝ} (hf : ContDiff
   rw [fderiv_fderiv_apply ((hf.fderiv_right (m := 1) (by norm_num)).differentiable one_ne_zero x)]
   rfl
 
-/-- Mixed directional derivatives of a `C²` function commute (route `B2` in directional form). -/
+/-- Mixed directional derivatives of a `C²` function commute (in directional form). -/
 theorem fderiv_apply_comm {f : E → ℝ} (hf : ContDiff ℝ 2 f) (x v w : E) :
     fderiv ℝ (fun y => fderiv ℝ f y w) x v = fderiv ℝ (fun y => fderiv ℝ f y v) x w := by
   rw [← bilinearIteratedFDerivTwo_eq_fderiv_apply hf, ← bilinearIteratedFDerivTwo_eq_fderiv_apply hf]
@@ -401,7 +401,7 @@ end CrossType
 
 /-- **Product rule for the Hessian quadratic/bilinear form**: for `f, g ∈ C²`,
 `D²(fg)(x)(u, v) = f(x) D²g(x)(u, v) + g(x) D²f(x)(u, v) + Df(x)u · Dg(x)v + Dg(x)u · Df(x)v`
-(Letwin (2.3) prerequisite; `laplacian_mul` is the identity-metric trace of this; Luna, task LET23-H). -/
+(Letwin (2.3) prerequisite; `laplacian_mul` is the identity-metric trace of this). -/
 theorem bilinearIteratedFDerivTwo_mul {f g : E → ℝ} (hf : ContDiff ℝ 2 f) (hg : ContDiff ℝ 2 g)
     (x u v : E) :
     bilinearIteratedFDerivTwo ℝ (fun y => f y * g y) x u v =
@@ -707,8 +707,7 @@ private lemma nondivergenceOperator_mul_mixed_sum
 
 omit [CompleteSpace E] in
 /-- **Letwin (2.3), the product rule for `L_{A,b}`** with symmetric `A(x)`:
-`L(fg) = f Lg + g Lf + 2 ∑_{ij} A_{ij} ∂_i f ∂_j g` (Luna, task LET23-N round 7; the three private helpers
-above are Luna proof implementation). -/
+`L(fg) = f Lg + g Lf + 2 ∑_{ij} A_{ij} ∂_i f ∂_j g`. -/
 theorem nondivergenceOperator_mul
     (A : E → Fin (Module.finrank ℝ E) → Fin (Module.finrank ℝ E) → ℝ)
     (hA : ∀ x i j, A x i j = A x j i) (b : E → Fin (Module.finrank ℝ E) → ℝ)
@@ -795,8 +794,7 @@ end DifferentialTools
 
 section CompactSupport
 
-/-- A `C^∞` function with compact support has a bounded second derivative (Luna, task R8s-2; one
-closing step replaced by `ContinuousLinearMap.opNorm_zero` at integration). -/
+/-- A `C^∞` function with compact support has a bounded second derivative. -/
 theorem exists_bound_fderiv_fderiv_of_hasCompactSupport {E F : Type*} [NormedAddCommGroup E]
     [NormedSpace ℝ E] [NormedAddCommGroup F] [NormedSpace ℝ F] {g : E → F}
     (hg : ContDiff ℝ ∞ g) (hc : HasCompactSupport g) :

@@ -436,8 +436,7 @@ section LipschitzConvolution
 open MeasureTheory
 open scoped Convolution
 
-/-! Derivative of a normalized-bump convolution with a Lipschitz function (proof body: GPT, Letwin sub-controller
-task L-T8a1; statement by the Letwin sub-controller; placement: Claude). -/
+/-! Derivative of a normalized-bump convolution with a Lipschitz function. -/
 
 private theorem integral_fderiv_kernel_eq
     {E : Type*} [NormedAddCommGroup E]
@@ -499,7 +498,7 @@ private theorem integral_fderiv_kernel_eq
   exact ha.symm.trans (hb'.trans hz)
 
 /-- **Derivative of the mollification of a Lipschitz map** (weak Letwin route, support for the
-mollification steps N10/N14): for a Lipschitz map `F : E → E` and a bump `φ`, the convolution
+mollification identities): for a Lipschitz map `F : E → E` and a bump `φ`, the convolution
 `φ.normed ⋆ F` is differentiable with derivative `φ.normed ⋆ DF`, where `DF = fderiv ℝ F` is the
 almost-everywhere (Rademacher) derivative of `F` (a bounded measurable map). -/
 theorem hasFDerivAt_convolution_normed_of_lipschitz {E : Type*} [NormedAddCommGroup E]
@@ -551,8 +550,7 @@ end LipschitzConvolution
 end FunctionalInequalities.Analysis
 
 
-/-! Weak-route support for Letwin arXiv:2607.24164v1. Proof body: the independently
-checked existing L-W3b2a-mollified-values-convex candidate; placement and acceptance: Codex closeout. -/
+/-! Weak-route support for Letwin arXiv:2607.24164v1. -/
 
 section ConvexRangeMollification
 
@@ -561,7 +559,7 @@ open scoped Topology Convolution
 
 namespace FunctionalInequalities.Analysis
 
-/-- **Mollified values stay in a closed convex set** (weak Letwin route, task W3b2a, generic): if the vector of values
+/-- **Mollified values stay in a closed convex set** (weak Letwin route, generic): if the vector of values
 `(f k x)ₖ` lies in a closed convex `C` for almost every `x` in `cthickening r S`, then for every bump `φ` with
 `φ.rOut ≤ r` and every `x ∈ S`, the mollified vector `((φ.normed ⋆ f k) x)ₖ` lies in `C`. -/
 theorem convolution_mem_of_ae_mem {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]

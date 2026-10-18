@@ -4,32 +4,27 @@ import Mathlib.MeasureTheory.Measure.Haar.InnerProductSpace
 
 /-! # The equidimensional degenerate case: almost no level is a critical value
 
-Route obligation `R10` of `research/decisions/2026-09-17-rank-deficient-route.md`, the last
-non-diagnostic item on that list.  When `n = m` the fibre dimension is `k = 0`, and `μH[0]`-nullity
+When `n = m` the fibre dimension is `k = 0`, and `μH[0]`-nullity
 of a slice means the slice is **empty**, so the statement to prove is that for almost every `t` the
 level `{u = t}` contains **no** critical point at all.
 
-**What this is.**  It is Mathlib's equidimensional Sard lemma
+**Proof.** The argument uses Mathlib's equidimensional Sard lemma
 `MeasureTheory.addHaar_image_eq_zero_of_det_fderivWithin_eq_zero` — if a map of a finite-dimensional
 real space to *itself* is differentiable on a set and its differential is singular there, the image
 of that set is Lebesgue-null — transported across the linear isometry
 `isometryEquivOfFinrankEq` between two inner product spaces of the same dimension, plus the
 linear algebra that in equal dimensions "not surjective" and "determinant zero" agree.
 
-**What this is not.**  It is **not** a Sard theorem in any generality, and it is **not** a step
-towards `R0`.  The sharp finite-regularity Sard theorem — the direct hole `Analysis.sard` — is
-untouched by this module and its status is unchanged.  Sard's theorem is a statement about the
+**Scope.** No general finite-regularity Sard theorem such as `Analysis.sard` is proved here. Sard's theorem is a statement about the
 measure of the set of critical **values** of a map `ℝⁿ → ℝᵐ`; what is proved here is only the
 `n = m` case, and only that case, where the critical set maps into a null set purely because a
 singular linear map contracts volume.  For `n > m` the critical values of a `C¹` map can have
-positive measure (Whitney), and nothing below says otherwise.  `R0`, the target of the
-rank-deficient route, is a statement about `ℋ^k` **inside** a level and was proved independently in
-`Analysis/Vector/RankDeficient/Coarea.lean`; `R10` is a consistency check on it, not an ingredient of it.
+positive measure (Whitney), and nothing below says otherwise.  The rank-deficient coarea conclusion is a statement about `ℋ^k` **inside** a level and was proved independently in
+`Analysis/Vector/RankDeficient/Coarea.lean`; this equidimensional theorem is a consistency check on it, not an ingredient of its proof.
 
-**Relation to `R0`.**  In the equidimensional case `R0` reads `μH[0] (C ∩ {u = t}) = 0` for almost
-every `t`, and a nonempty set has `μH[0] ≥ 1`, so `R0` and `R10` are then *equivalent* statements.
-Nothing of that equivalence is used here: this module imports neither `R0` nor any part of the
-rank-deficient route, so the two proofs are independent and the agreement is a real cross-check.
+**Relation to rank-deficient coarea.**  In the equidimensional case the coarea conclusion reads `μH[0] (C ∩ {u = t}) = 0` for almost
+every `t`, and a nonempty set has `μH[0] ≥ 1`, so the two conclusions are then *equivalent* statements.
+Nothing of that equivalence is used here: this module imports neither the rank-deficient coarea module nor any part of that route, so the two proofs are independent and the agreement is a real cross-check.
 It is recorded in `research/audits/EquidimensionalSardAudit.lean`, in both directions.
 -/
 
@@ -102,8 +97,8 @@ theorem measure_image_critical_eq_zero {u : V → W} (hu : ContDiff ℝ 1 u)
     (μ := (volume : Measure W)) hderiv hdet
 
 omit [MeasurableSpace V] [BorelSpace V] in
-/-- **`R10`: in equal dimensions, almost every level avoids the critical set entirely.**  The
-fibre dimension is `k = 0`, so the `ℋ^0`-null conclusion of `R0` degenerates to emptiness of the
+/-- **In equal dimensions, almost every level avoids the critical set entirely.**  The
+fibre dimension is `k = 0`, so the `ℋ^0`-null conclusion of rank-deficient coarea degenerates to emptiness of the
 slice.  See the module docstring: this is the `n = m` case only, and is not a general Sard
 theorem. -/
 theorem ae_critical_inter_levelSet_eq_empty {u : V → W} (hu : ContDiff ℝ 1 u)
@@ -127,12 +122,12 @@ section LT12D1LipschitzNullImage
 
 open MeasureTheory Set
 
-/-! Lipschitz maps between spaces of equal dimension send null sets to null sets (task L-T12d1). -/
+/-! Lipschitz maps between spaces of equal dimension send null sets to null sets. -/
 
 namespace FunctionalInequalities.Analysis
 
 /-- **Lipschitz maps send null sets to null sets** (weak Letwin route, Alexandrov's second-order
-differentiability theorem, task T12d1): for a map of a finite-dimensional real inner product space into
+differentiability theorem): for a map of a finite-dimensional real inner product space into
 itself that is Lipschitz on `s`, a Lebesgue-null `s` has a Lebesgue-null image. No measurability of `s`
 is assumed. -/
 theorem volume_image_eq_zero_of_lipschitzOnWith {E : Type*} [NormedAddCommGroup E]

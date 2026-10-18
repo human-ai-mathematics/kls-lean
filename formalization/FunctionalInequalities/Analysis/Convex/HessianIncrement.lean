@@ -31,7 +31,7 @@ open FunctionalInequalities.Probability.Stein
 
 namespace FunctionalInequalities.Analysis
 
-/-- The actual squared shifted Hessian-increment density in N11b is integrable
+/-- The squared shifted Hessian-increment density is integrable
 against the continuous compact weight. No C2 or given integrability is assumed. -/
 theorem integrable_hessian_increment_energy {n : ℕ}
     {u η : EuclideanSpace ℝ (Fin n) → ℝ}
@@ -108,7 +108,7 @@ theorem integrable_hessian_increment_energy {n : ℕ}
   ring
 
 
-/-- **Integrated energy of Hessian increments** (weak Letwin route, N11, task N11b; KLS500
+/-- **Integrated energy of Hessian increments** (weak Letwin route; KLS500
 `weak_moment_compact_hessian_increment_energy_bound`): for the `C^{1,1}` Monge–Ampère solution `u` with
 `0 ≤ Δ²ₕu ≤ D‖h‖²`, every nonnegative `η ∈ C²_c` satisfies
 `∫ η (‖H(x+h) − H(x)‖²_F + ‖H(x−h) − H(x)‖²_F) e^{−u} ≤ 2K² D ‖h‖² ∫ |η + Lη| e^{−u}`,

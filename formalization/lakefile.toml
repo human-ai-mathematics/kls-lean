@@ -62,7 +62,13 @@ roots = [
 [[lean_lib]]
 name = "Examples"
 srcDir = ".."
-roots = ["examples.PoincareFoundation", "examples.ApiOrganization"]
+roots = [
+  "examples.PoincareFoundation",
+  "examples.ApiOrganization",
+  "examples.MatrixIntegral",
+  "examples.GeneratedSemigroup",
+  "examples.FiniteProductCovariance",
+]
 
 # Vendored third-party stochastic calculus (Apache-2.0), ported to this toolchain and Mathlib.
 # Pins, licenses, the module closure and every local change are recorded in vendor/README.md.

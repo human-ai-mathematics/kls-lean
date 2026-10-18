@@ -7,10 +7,9 @@ import FunctionalInequalities.Analysis.Convex.SecondDifference
 # The C^{1,1} estimate for moment-map potentials
 
 If the gradient of a convex Lipschitz potential `u` with `∫ e^{-u} = 1` pushes `e^{-u} dx` forward to a law with density
-`e^{-V}` on a compact convex body, with `V` κ-strongly convex, then `∇u` is `16/κ`-Lipschitz (weak Letwin route, N9:
-maximum principle for penalized second differences; task L-T17d). The earlier exact centered-difference
-coefficient `4/κ` is exported for the actual weak Hessian regularity consumer. The existing `16/κ`
-gradient interface and all source hypotheses are unchanged.
+`e^{-V}` on a compact convex body, with `V` κ-strongly convex, then `∇u` is `16/κ`-Lipschitz (weak Letwin route:
+maximum principle for penalized second differences). The exact centered-difference
+coefficient `4/κ` is exported for the actual weak Hessian regularity consumer. The gradient interface uses `16/κ` with the stated source hypotheses.
 -/
 
 noncomputable section
@@ -174,7 +173,7 @@ theorem secondDifference_le_of_map_gradient {n : ℕ} {u V : EuclideanSpace ℝ 
         hκ hstrong hC hm n h hmax x
   exact hsd
 
-/-- **`C^{1,1}` regularity of the moment potential** (weak Letwin route, N9, task T17d; KLS500
+/-- **`C^{1,1}` regularity of the moment potential** (weak Letwin route; KLS500
 `weak_moment_mollify_hessian_upper`/`moment gradient Lipschitz`): if the `C¹` convex Lipschitz `u` with
 `∫ e^{-u} = 1` pushes `e^{-u} dx` forward by `∇u` to `1_K e^{-V} dx` with `K` compact convex and `V ∈ C¹` such
 that `V − (κ/2)‖·‖²` is convex, then `∇u` is `16/κ`-Lipschitz. -/

@@ -8,8 +8,7 @@ import FunctionalInequalities.Probability.Diffusion.Generator
 # The generator of the posterior covariance
 
 The carré-du-champ product rule for the generator, `𝓛 ∫ f dμ_p = 0` for posterior expectations, and
-`𝓛⟪A x, y⟫ = −⟪A x, y⟫` (BKL arXiv:2610.05474v1, (69)). Proof bodies: GPT (task S-3bA); statements by the S-line
-sub-controller; placement: Claude.
+`𝓛⟪A x, y⟫ = −⟪A x, y⟫` (BKL arXiv:2610.05474v1, (69)).
 -/
 
 noncomputable section

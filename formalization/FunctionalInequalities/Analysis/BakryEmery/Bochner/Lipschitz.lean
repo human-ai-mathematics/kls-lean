@@ -7,7 +7,7 @@ import FunctionalInequalities.Analysis.BakryEmery.HessianOperator
 # Bochner's identity at `C^{1,1}`
 
 `∫ (ℒf)² dν = ∫ (‖∇²f‖² + ⟪D∇U ∇f, ∇f⟫) dν` for compactly supported smooth `f` and a Lipschitz `C¹` potential `U` with
-Lipschitz gradient (route node N14). Proof body: GPT (task L-T8b); statement by the Letwin sub-controller; placement: Claude.
+Lipschitz gradient.
 -/
 
 noncomputable section
@@ -118,7 +118,7 @@ private lemma mixed_integral_identity {U V f : E → ℝ}
 
 end Helpers
 
-/-- **Bochner identity for a Lipschitz potential with Lipschitz gradient** (weak Letwin route, N14,
+/-- **Bochner identity for a Lipschitz potential with Lipschitz gradient** (weak Letwin route,
 Brascamp–Lieb at `C^{1,1}`): for `U ∈ C¹` Lipschitz with `G`-Lipschitz gradient and integrable
 `e^{-U}`, and `f ∈ C_c^∞`, `∫ (ℒf)² dν = ∫ (‖∇²f‖² + ⟪D(∇U) ∇f, ∇f⟫) dν` with `ν = e^{-U} dx`
 normalized, `ℒf = Δf − ⟪∇U, ∇f⟫`, and `D(∇U)` the a.e. derivative of the Lipschitz map `∇U`. -/

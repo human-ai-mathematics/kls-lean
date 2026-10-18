@@ -14,7 +14,7 @@ section S7DTheorem41Compact
 open MeasureTheory
 open FunctionalInequalities.Analysis.BakryEmery
 
-/-! The strong induction over the order and Theorem 4.1 for compactly supported laws with `K = 153`, given the induction step and the claim-to-bound passage as hypotheses (task S-7d). -/
+/-! The strong induction over the order and Theorem 4.1 for compactly supported laws with `K = 153`, given the induction step and the claim-to-bound passage as hypotheses. -/
 
 namespace FunctionalInequalities.KLS.BKL.Localization
 

@@ -17,9 +17,7 @@ nonlinear fibrewise shear `η ↦ (F_N(x) + η)/σ` (density multiplier `σ`, fr
 volume-preserving coordinate equivalence onto `EuclideanSpace ℝ (Option (Fin N × Fin n))`, and
 normalization of a positive density. The helpers are private to this boundary.
 
-Provenance: assembled by Codex (`build/reviews/2026-10-07-bkl-continuous/reviews/
-R2-assembly-Codex-proposal.lean`, independently verified) from a Luna finite-product integral
-helper (task LF2, now `Probability.lintegral_pi_prod_fin`) and Codex-proved density, shear, volume and normalization lemmas.
+The finite-product integral identity is `Probability.lintegral_pi_prod_fin`.
 -/
 
 open MeasureTheory FunctionalInequalities.Probability.Line

@@ -3,50 +3,17 @@ import FunctionalInequalities.Analysis.Semigroup.Exponential.Limit
 import FunctionalInequalities.Analysis.Semigroup.Yosida.Laws
 
 /-!
-# `S7`: the semigroup laws for `P_t = exp (-t T†T)`
+# Semigroup laws for the strong Yosida limit
 
-This module proves `P1`–`P8` — the whole of **`S7`** — of the generated-semigroup route recorded in
-`research/decisions/2026-09-19-generated-semigroup-route.md` and stated in
-`research/audits/GeneratedSemigroupRouteStatements.lean`.  Writing `P_t f = Generated.apply T hT hd t f`
-for the strong limit of `exp (-t • L_s) f` named in `Analysis/Semigroup/Generated/Basic.lean`
-(`L_s = yosida T hT hs` the Yosida approximation of `T†T`), for `T` closed and densely defined:
+For a closed densely defined operator `T` between real Hilbert spaces,
+`Generated.apply T hT hd t` is the strong limit of the exponentials approximating `exp (-t T†T)`.
+On nonnegative times it is linear, contractive, symmetric and strongly continuous;
+`zero_time` and `add_time` give the identity and semigroup laws.
 
-* `P1` `Generated.eq_apply_of_tendsto` — the defining limit is unique;
-* `P2` `Generated.map_smul_add` — `P_t` is linear;
-* `P3` `Generated.norm_apply_le` — `P_t` is a contraction;
-* `P4` `Generated.symmetric` — `P_t` is symmetric;
-* `P5` `Generated.zero_time` — `P_0 = 1`;
-* `P6` `Generated.add_time` — `P_{t+u} = P_t P_u`;
-* `P7` `Generated.continuous_at_zero` — strong continuity at `0`;
-* `P8` `Generated.continuousOn` — strong continuity on `[0, ∞)`.
-
-Together: `(P_t)_{t ≥ 0}` is a strongly continuous semigroup of self-adjoint contractions.  For
-convenience `Generated.operator` packages `P_t` as a `ContinuousLinearMap` of operator norm at most `1`,
-using `P2` and `P3`.
-
-## Deliberately **not** provided here
-
-* **`S8`** (`G1`–`G3`) — that on `D(T†T)` the generator of `P_t` is `-T†T`, i.e.
-  `(P_t f - f)/t → -T†T f` as `t ↓ 0`, together with its two inputs (uniformity of the `S6`
-  convergence on `[0, t]`, and the mean value bound for `exp (-t • A) f - f + t • A f`).  Those are
-  Part B of the route file; they are proved in `Analysis/Semigroup/Generated/Generator.lean` and
-  `Analysis/Semigroup/Exponential/MeanValue.lean`, not here, and nothing below substitutes for them.
-* Nothing here is the Markov property, Bakry–Émery `Γ`-calculus, a small-time heat kernel estimate,
-  localization, or any step of Buser's inequality.  There is no measure, no log-concavity and no
-  KLS content: this is general real Hilbert space material.
-
-## Route hypotheses, and stronger statements
-
-Every route hypothesis is used, with two exceptions, both recorded verbatim in the statements
-anyway because the route's `P_t` carries them in its very notation:
-
-* `P5` (`Generated.zero_time`) is stated for all `t`-free data and needs no `0 ≤ t`; the route
-  statement has no `0 ≤ t` either.
-* The auxiliary real-analysis lemmas `eq_zero_of_forall_pos_lt` and `eq_zero_of_forall_le_mul`
-  mention no Hilbert space at all.
-
-`norm_exp_neg_smul_yosida_sub_le` and `exp_neg_add_smul_apply` are the two purely operator-level
-ingredients; the second is stated for an arbitrary bounded operator, not only for `L_s`.
+`Generated.operator` packages the limit as a bounded linear operator.
+Its norm bound and composition law are `norm_operator_le_one` and `operator_add_time`.
+The generator and Markov properties have their own owners in `Generated/Generator.lean`
+and `Generated/Markov.lean`. Construction history is retained in `research/decisions/2026-10-18-source-interface-history.md`.
 -/
 
 noncomputable section
@@ -461,3 +428,26 @@ theorem continuousOn (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClosed)
 end Generated
 
 end FunctionalInequalities.Analysis.Semigroup
+
+namespace FunctionalInequalities.Analysis.Semigroup.Generated
+
+variable {H₀ H₁ : Type*} [NormedAddCommGroup H₀] [InnerProductSpace ℝ H₀] [CompleteSpace H₀]
+  [NormedAddCommGroup H₁] [InnerProductSpace ℝ H₁] [CompleteSpace H₁]
+
+/-- The generated bounded operator is a contraction in operator norm. -/
+theorem norm_operator_le_one (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClosed)
+    (hd : Dense (T.domain : Set H₀)) {t : ℝ} (ht : 0 ≤ t) :
+    ‖operator T hT hd ht‖ ≤ 1 := by
+  apply (operator T hT hd ht).opNorm_le_bound (by norm_num)
+  intro f
+  simpa only [operator_apply, one_mul] using norm_apply_le T hT hd ht f
+
+/-- The semigroup law as an equality of bounded linear operators. -/
+theorem operator_add_time (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClosed)
+    (hd : Dense (T.domain : Set H₀)) {t u : ℝ} (ht : 0 ≤ t) (hu : 0 ≤ u) :
+    operator T hT hd (add_nonneg ht hu) = (operator T hT hd ht).comp (operator T hT hd hu) := by
+  ext f
+  simp only [operator_apply, ContinuousLinearMap.comp_apply]
+  exact add_time T hT hd ht hu f
+
+end FunctionalInequalities.Analysis.Semigroup.Generated

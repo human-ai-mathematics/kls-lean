@@ -13,8 +13,7 @@ isotropic log-concave laws (`CumulantBoundCompact`), whose localization coeffici
 bounded. `LetwinCompactBound` is Letwin's quadratic-form bound (arXiv:2607.24164v1, Theorem 1.2) for
 compactly supported laws: the interface between the Letwin stream and the Theorem 4.1 stream. It gives
 the base case `CumulantBoundCompact 2 8` (BKL Lemma 4.2). Both names are hypotheses; neither Letwin's
-theorem nor Theorem 4.1 is proved here. Proof bodies: GPT (BKL Claude-controller goal, task S8a);
-statements and placement: Claude.
+theorem nor Theorem 4.1 is proved here.
 -/
 
 noncomputable section
@@ -100,7 +99,7 @@ open MeasureTheory
 open FunctionalInequalities.Analysis.BakryEmery
 open scoped RealInnerProductSpace
 
-/-! Reduction to compactly supported laws (BKL p. 19 and end of Section 6): `cumulantBound_of_compact`. Proof body: Fable worker (task S8c); statement: Claude. -/
+/-! Reduction to compactly supported laws (BKL p. 19 and end of Section 6): `cumulantBound_of_compact`. -/
 
 open Filter Topology ProbabilityTheory FunctionalInequalities.Analysis
 

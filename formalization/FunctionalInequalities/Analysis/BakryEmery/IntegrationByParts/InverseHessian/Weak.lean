@@ -764,7 +764,7 @@ private lemma energy_swap {n : ℕ}
   ring
 
 /-- **The Hessian-metric generator at `C^{1,1}` is symmetric** (Letwin arXiv:2607.24164v1 (2.2), weak form; weak Letwin
-route, N10, task N10b): for the `C^{1,1}` Monge–Ampère solution `u` (`det ∇²u = e^{−u + V(∇u)}` a.e., the right side
+route): for the `C^{1,1}` Monge–Ampère solution `u` (`det ∇²u = e^{−u + V(∇u)}` a.e., the right side
 Lipschitz), with `L f := tr((∇²u)⁻¹ ∇²f) − DV(∇u)(∇f)`, every `w ∈ C¹` with Lipschitz gradient and every `η ∈ C²` with compact
 support satisfy `∫ η (L w) e^{−u} = −∫ ⟨(∇²u)⁻¹ ∇η, ∇w⟩ e^{−u}`. -/
 theorem integral_mul_generator_eq_neg_energy {n : ℕ} {u V w η : EuclideanSpace ℝ (Fin n) → ℝ}
@@ -885,7 +885,7 @@ private lemma weak_generator_compact_apply {n : ℕ}
   rw [hz, map_zero]
 
 /-- Genuine integrability for the weak inverse-Hessian generator, its exchanged
-test density and the absolute RHS of the original N11b energy estimate. -/
+test density and the absolute RHS of the Hessian-increment energy estimate. -/
 theorem integrable_weak_generator_densities {n : ℕ}
     {u V w η : EuclideanSpace ℝ (Fin n) → ℝ}
     (hu : Continuous u) {G : NNReal} (hG : LipschitzWith G (gradient u))
@@ -1147,8 +1147,8 @@ open FunctionalInequalities.Probability.Stein
 open scoped ContDiff RealInnerProductSpace
 namespace FunctionalInequalities.Analysis
 
-/-- C1 compact multiplier version of the existing closed weak generator proof.
-Actual weak-source support for Letwin A4; no new regularity hypothesis on u. -/
+/-- C1 compact multiplier version of the closed weak generator identity.
+Weak-source support for Letwin A.4; no new regularity hypothesis on u. -/
 theorem integral_mul_generator_eq_neg_energy_of_contDiff_one {n : ℕ} {u V w η : EuclideanSpace ℝ (Fin n) → ℝ}
     (hu : ContDiff ℝ 1 u) {G : NNReal} (hG : LipschitzWith G (gradient u)) (hV : ContDiff ℝ 1 V)
     {LF : NNReal} (hF : LipschitzWith LF (fun x => -u x + V (gradient u x)))

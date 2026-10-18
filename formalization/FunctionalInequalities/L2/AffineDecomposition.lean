@@ -18,7 +18,7 @@ finite-dimensional subspaces `K` (constants) and `L` (linear functions).
 
 `affineOrthPart μ g = g - ∫ g dμ - Σ_j (∫ ⟪e_j, y⟫ g(y) dμ) ⟪e_j, ·⟫` is the concrete
 affine-orthogonal part of a function on `ℝⁿ` for a centered probability measure `μ` with identity
-covariance; its properties are stated with those moment hypotheses only (Luna, tasks R8a).
+covariance; its properties are stated with those moment hypotheses only.
 -/
 
 open MeasureTheory
@@ -111,7 +111,7 @@ theorem norm_apply_le_sqrt_two_mul {H F : Type*} [NormedAddCommGroup H] [InnerPr
 
 section Comparison
 
-/-- `∫ u² ≤ ∫ v²` implies `‖u‖₂ ≤ ‖v‖₂` for `u, v ∈ L²` (Luna, task R8a3). -/
+/-- `∫ u² ≤ ∫ v²` implies `‖u‖₂ ≤ ‖v‖₂` for `u, v ∈ L²`. -/
 theorem eLpNorm_le_eLpNorm_of_integral_sq_le {α : Type*} [MeasurableSpace α] {μ : Measure α}
     {u v : α → ℝ} (hu : MemLp u 2 μ) (hv : MemLp v 2 μ)
     (h : ∫ x, u x ^ 2 ∂μ ≤ ∫ x, v x ^ 2 ∂μ) :
@@ -476,7 +476,7 @@ theorem integral_inner_mul_affineOrthPart (μ : Measure (EuclideanSpace ℝ (Fin
       simp only [mul_comm]
       exact sub_self _
 
-/-- For `f` centered and orthogonal to the linear functions, `f - g̃ = (f - g)~` (Luna, task R8a3). -/
+/-- For `f` centered and orthogonal to the linear functions, `f - g̃ = (f - g)~`. -/
 theorem sub_affineOrthPart_eq (μ : Measure (EuclideanSpace ℝ (Fin n))) [IsProbabilityMeasure μ]
     (hμ2 : MemLp id 2 μ) {f g : EuclideanSpace ℝ (Fin n) → ℝ} (hf : MemLp f 2 μ)
     (hf0 : ∫ x, f x ∂μ = 0) (hfx : ∀ u, ∫ x, ⟪u, x⟫ * f x ∂μ = 0) (hg : MemLp g 2 μ) :
@@ -526,8 +526,7 @@ theorem sub_affineOrthPart_eq (μ : Measure (EuclideanSpace ℝ (Fin n))) [IsPro
     simp only [Finset.sum_neg_distrib, neg_mul]
     ring
 
-/-- The affine-orthogonal part of a `C²` function is `C²` with the same second derivative (Luna,
-task R8a4). -/
+/-- The affine-orthogonal part of a `C²` function is `C²` with the same second derivative. -/
 theorem contDiff_affineOrthPart (μ : Measure (EuclideanSpace ℝ (Fin n)))
     {g : EuclideanSpace ℝ (Fin n) → ℝ} (hg : ContDiff ℝ 2 g) :
     ContDiff ℝ 2 (affineOrthPart μ g) ∧
@@ -592,8 +591,7 @@ theorem contDiff_affineOrthPart (μ : Measure (EuclideanSpace ℝ (Fin n)))
     · intro x
       rw [hf, fderiv_sub_const]
 
-/-- **The affine-orthogonal part is orthogonal to the affine part**: `∫ g̃ (g - g̃) = 0` (Luna, task
-R8a3-cross). -/
+/-- **The affine-orthogonal part is orthogonal to the affine part**: `∫ g̃ (g - g̃) = 0`. -/
 theorem integral_affineOrthPart_mul_sub (μ : Measure (EuclideanSpace ℝ (Fin n)))
     [IsProbabilityMeasure μ] (hμ2 : MemLp id 2 μ) (hμ0 : ∫ x, x ∂μ = 0)
     (hμcov : ∀ u v : EuclideanSpace ℝ (Fin n), ∫ x, ⟪u, x⟫ * ⟪v, x⟫ ∂μ = ⟪u, v⟫)
@@ -696,8 +694,7 @@ theorem integral_affineOrthPart_mul_sub (μ : Measure (EuclideanSpace ℝ (Fin n
           integral_inner_mul_affineOrthPart μ hμ2 hμ0 hμcov hg]
         simp
 
-/-- **Bessel's inequality for the affine-orthogonal part**: `∫ g̃² ≤ ∫ g²` (Luna, task R8a3-sq2; one
-dead tactic and four `<;>`→`;` linter fixes applied at integration). -/
+/-- **Bessel's inequality for the affine-orthogonal part**: `∫ g̃² ≤ ∫ g²`. -/
 theorem integral_affineOrthPart_sq_le (μ : Measure (EuclideanSpace ℝ (Fin n)))
     [IsProbabilityMeasure μ] (hμ2 : MemLp id 2 μ) (hμ0 : ∫ x, x ∂μ = 0)
     (hμcov : ∀ u v : EuclideanSpace ℝ (Fin n), ∫ x, ⟪u, x⟫ * ⟪v, x⟫ ∂μ = ⟪u, v⟫)
@@ -867,7 +864,7 @@ theorem integral_affineOrthPart_sq_le (μ : Measure (EuclideanSpace ℝ (Fin n))
     simpa [f] using hle
 
 /-- **Contraction towards the affine-orthogonal functions**: if `f ∈ L²` is centered and orthogonal
-to the linear functions, then `‖f - g̃‖₂ ≤ ‖f - g‖₂` (Luna, task R8a5). -/
+to the linear functions, then `‖f - g̃‖₂ ≤ ‖f - g‖₂`. -/
 theorem eLpNorm_sub_affineOrthPart_le (μ : Measure (EuclideanSpace ℝ (Fin n)))
     [IsProbabilityMeasure μ] (hμ2 : MemLp id 2 μ) (hμ0 : ∫ x, x ∂μ = 0)
     (hμcov : ∀ u v : EuclideanSpace ℝ (Fin n), ∫ x, ⟪u, x⟫ * ⟪v, x⟫ ∂μ = ⟪u, v⟫)
@@ -880,7 +877,7 @@ theorem eLpNorm_sub_affineOrthPart_le (μ : Measure (EuclideanSpace ℝ (Fin n))
       (memLp_affineOrthPart μ hμ2 hfg) hfg ?_
   exact integral_affineOrthPart_sq_le μ hμ2 hμ0 hμcov hfg
 
-/-- **Square integral of an affine function** under a centered law with identity covariance (Luna, task R8a3-affsq). -/
+/-- **Square integral of an affine function** under a centered law with identity covariance. -/
 theorem integral_affine_sq (μ : Measure (EuclideanSpace ℝ (Fin n))) [IsProbabilityMeasure μ]
     (hμ2 : MemLp id 2 μ) (hμ0 : ∫ x, x ∂μ = 0)
     (hμcov : ∀ u v : EuclideanSpace ℝ (Fin n), ∫ x, ⟪u, x⟫ * ⟪v, x⟫ ∂μ = ⟪u, v⟫)
@@ -937,7 +934,7 @@ theorem integral_affine_sq (μ : Measure (EuclideanSpace ℝ (Fin n))) [IsProbab
             rw [integral_add hscaled_int hprod_int, hconst, hlin, hμcov v v, hvv]
             ring
 
-/-- **Pythagoras for the affine decomposition** of `f ∈ L²(μ)` (Luna, task R8a3-pyth2). -/
+/-- **Pythagoras for the affine decomposition** of `f ∈ L²(μ)`. -/
 theorem integral_sq_eq_affine_decomposition (μ : Measure (EuclideanSpace ℝ (Fin n)))
     [IsProbabilityMeasure μ] (hμ2 : MemLp id 2 μ) (hμ0 : ∫ x, x ∂μ = 0)
     (hμcov : ∀ u v : EuclideanSpace ℝ (Fin n), ∫ x, ⟪u, x⟫ * ⟪v, x⟫ ∂μ = ⟪u, v⟫)

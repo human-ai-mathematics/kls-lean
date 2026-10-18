@@ -50,7 +50,7 @@ theorem isotropic_of_moments {E : Type*} [NormedAddCommGroup E] [InnerProductSpa
     rw [ProbabilityTheory.covarianceBilin_apply h2]
     simpa [h0] using hcov u v
 
-/-- For an isotropic law the raw second moments are `∫ ⟪u, x⟫ ⟪v, x⟫ = ⟪u, v⟫` (Luna, task A1). -/
+/-- For an isotropic law the raw second moments are `∫ ⟪u, x⟫ ⟪v, x⟫ = ⟪u, v⟫`. -/
 theorem Isotropic.integral_inner_mul_inner {E : Type*} [NormedAddCommGroup E]
     [InnerProductSpace ℝ E] [CompleteSpace E] [FiniteDimensional ℝ E]
     [MeasurableSpace E] [BorelSpace E] {ν : ProbabilityMeasure E}
@@ -67,8 +67,8 @@ theorem Isotropic.integral_inner_mul_inner {E : Type*} [NormedAddCommGroup E]
       rw [← Covariance.operator_inner, hν.covariance_identity]
       simp
 
-/-- **Isotropy along a linear isometry** (Luna, task A1 round 10; `MemLp` step repaired by Codex via
-`ContinuousLinearMap.comp_memLp'`). -/
+/-- **Isotropy along a linear isometry**.
+The `MemLp` step uses `ContinuousLinearMap.comp_memLp'`. -/
 theorem Isotropic.map_linearIsometryEquiv {E F : Type*} [NormedAddCommGroup E]
     [InnerProductSpace ℝ E] [CompleteSpace E] [FiniteDimensional ℝ E] [MeasurableSpace E]
     [BorelSpace E] [NormedAddCommGroup F] [InnerProductSpace ℝ F] [CompleteSpace F]
@@ -121,9 +121,7 @@ theorem Isotropic.map_linearIsometryEquiv {E F : Type*} [NormedAddCommGroup E]
         simpa only [φ.apply_symm_apply] using
           (φ.inner_map_map (φ.symm u) (φ.symm v)).symm
 
-/-- **Gradient second moments of an isotropic pushforward** (Letwin Lemma 2.3, step 2; Luna, task
-LW-L23b; the worker failed on one `unnecessarySimpa` diagnostic and Claude rewrote three proof steps at
-integration): if `(∇φ)_* ν` is isotropic then
+/-- **Gradient second moments of an isotropic pushforward** (Letwin Lemma 2.3, step 2): if `(∇φ)_* ν` is isotropic then
 `∫ (∂_u φ)(∂_v φ) dν = ⟪u, v⟫`. -/
 theorem integral_fderiv_mul_fderiv_eq_inner_of_isotropic_map {E : Type*} [NormedAddCommGroup E]
     [InnerProductSpace ℝ E] [CompleteSpace E] [FiniteDimensional ℝ E] [MeasurableSpace E]
@@ -158,8 +156,7 @@ theorem integral_fderiv_mul_fderiv_eq_inner_of_isotropic_map {E : Type*} [Normed
 
 open scoped ContDiff in
 /-- **Letwin Lemma 2.3 (mean Hessian of the moment-map potential is the identity)**, for any smooth
-normalized `φ` with isotropic gradient law and the stated integrability (Luna, task LW-L23; the moment map
-itself is not constructed). -/
+normalized `φ` with isotropic gradient law and the stated integrability (the moment map itself is not constructed). -/
 theorem integral_fderiv_fderiv_tilted_eq_inner_of_isotropic_map {E : Type*} [NormedAddCommGroup E]
     [InnerProductSpace ℝ E] [CompleteSpace E] [FiniteDimensional ℝ E]
     [MeasurableSpace E] [BorelSpace E] (m : Measure E) [m.IsAddHaarMeasure]
@@ -246,8 +243,7 @@ For an isotropic law and a real symmetric matrix `M` (singular, indefinite and `
 of the proof of Letwin arXiv:2607.24164v1 Theorem 1.2 (p. 14, the unnumbered display preceding (2.21); the source
 first reduces to invertible `M`). Covariance/algebra prerequisite only (consumer chain:
 Letwin Theorem 1.2, then Bizeul–Klartag–Lehec Lemma 4.2); not the Stein-kernel trace identity (2.21), the `H⁻¹` or
-the variance-eight estimates.
-Proof body: root-accepted Astra v5 (`round1.lean` 030a859b…), verbatim. -/
+the variance-eight estimates. -/
 
 namespace FunctionalInequalities.KLS
 

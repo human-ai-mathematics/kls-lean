@@ -11,10 +11,6 @@ Proposition 7.1. Then `z ↦ ∫ e^{⟪z, x⟫} g(x) dμ` is `C^∞` on the open
 * `weightedExpD_integrable_lt`: the invariant passes to the derivative amplitude (same radius).
 * `weightedExp_integral_hasFDerivAt_of_lt`: differentiation under the integral inside the ball.
 * `weighted_integral_contDiffOn`: `C^∞` on `ball 0 r`, by induction on the order.
-
-Provenance: the first two bodies are unchanged Luna proofs (tasks Q6-1, Q6-2); the finite-order
-induction and the universe adapter are Codex proofs, independently reviewed
-(`build/reviews/2026-10-07-bkl-continuous/reviews/REVIEW-Q6-local-assembly-independent.md`).
 -/
 
 open MeasureTheory

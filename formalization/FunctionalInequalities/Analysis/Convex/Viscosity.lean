@@ -9,10 +9,10 @@ import Mathlib.Analysis.Calculus.BumpFunction.Convolution
 # Touching-test (viscosity) inequalities for convex functions
 
 Pointwise consequences of touching a function from above or below by a `C²` test function, stated with the
-coordinate Hessian `Probability.Stein.hessianMatrix` (weak Letwin route, steps N8/N12). Kept apart from
+coordinate Hessian `Probability.Stein.hessianMatrix` (weak Letwin route). Kept apart from
 `Analysis/Convex/Alexandrov.lean`, which needs no Hessian machinery.
 
-* `posSemidef_hessianMatrix_of_upper_touch` (task L-T12c3).
+* `posSemidef_hessianMatrix_of_upper_touch`.
 -/
 
 noncomputable section
@@ -145,7 +145,7 @@ private lemma directional_second_deriv_nonneg
   linarith
 
 /-- **A `C²` function touching a convex function from above has positive semidefinite Hessian at the
-contact point** (weak Letwin route, N8 viscosity tests). -/
+contact point** (weak Letwin route, viscosity tests). -/
 theorem posSemidef_hessianMatrix_of_upper_touch {n : ℕ} {u ψ : EuclideanSpace ℝ (Fin n) → ℝ}
     (hconv : ConvexOn ℝ univ u) {x₀ : EuclideanSpace ℝ (Fin n)} (hψ : ContDiffAt ℝ 2 ψ x₀)
     (hcontact : u x₀ = ψ x₀) (htouch : ∀ᶠ x in 𝓝 x₀, u x ≤ ψ x) :
@@ -188,7 +188,7 @@ open Set Metric Filter
 open scoped RealInnerProductSpace Topology
 open FunctionalInequalities.Probability.Stein
 
-/-! Second-order Taylor bound with the coordinate Hessian for `C²` test functions (task L-T12c2). -/
+/-! Second-order Taylor bound with the coordinate Hessian for `C²` test functions. -/
 
 namespace FunctionalInequalities.Analysis
 
@@ -382,7 +382,7 @@ private lemma local_taylor_two
   rw [hgexpr] at hbound
   simpa only [Real.norm_eq_abs] using hbound
 
-/-- **Second-order Taylor bound with the coordinate Hessian** (weak Letwin route, N8 viscosity tests):
+/-- **Second-order Taylor bound with the coordinate Hessian** (weak Letwin route, viscosity tests):
 for `ψ` twice differentiable at `x₀` (`ContDiffAt ℝ 2`), every `ε > 0` admits `r > 0` with
 `|ψ x − ψ x₀ − Dψ(x₀)(x − x₀) − ½ ⟪x − x₀, ∇²ψ(x₀)(x − x₀)⟫| ≤ ε ‖x − x₀‖²` on `ball x₀ r`. -/
 theorem exists_taylor_two_hessianMatrix_bound {n : ℕ} {ψ : EuclideanSpace ℝ (Fin n) → ℝ}
@@ -407,7 +407,7 @@ open MeasureTheory Set Metric Filter
 open scoped RealInnerProductSpace ENNReal Topology
 open FunctionalInequalities.Probability.Stein
 
-/-! Viscosity inequalities for Alexandrov solutions: the determinant of the Hessian of a `C²` test touching from above (below) is bounded below (above) by the Monge–Ampère density (task L-T12c4). -/
+/-! Viscosity inequalities for Alexandrov solutions: the determinant of the Hessian of a `C²` test touching from above (below) is bounded below (above) by the Monge–Ampère density. -/
 
 namespace FunctionalInequalities.Analysis
 
@@ -544,8 +544,7 @@ private lemma touching_cancel_volume {n : ℕ}
       (by simpa only [mul_comm] using h)
 
 set_option maxHeartbeats 800000 in
-/-- **Upper touching test for an Alexandrov solution** (weak Letwin route, N8 viscosity inequality,
-T12c): if the subgradient images of the convex `u` on open subsets of `Ω` carry the density `f`
+/-- **Upper touching test for an Alexandrov solution** (weak Letwin route, viscosity inequality): if the subgradient images of the convex `u` on open subsets of `Ω` carry the density `f`
 (`vol (∂u(G)) = ∫_G f`), `f` is continuous at `x₀ ∈ Ω`, and a `C²` function `ψ` touches `u` from above
 at `x₀` (`u ≤ ψ` near `x₀`, `u x₀ = ψ x₀`), then `f x₀ ≤ det ∇²ψ(x₀)` (standard coordinates of
 `EuclideanSpace ℝ (Fin n)`, `hessianMatrix ψ x₀ i j = D²ψ(x₀)(eᵢ, eⱼ)`). -/
@@ -650,7 +649,7 @@ theorem le_det_hessianMatrix_of_upper_touch {n : ℕ} {u f ψ : EuclideanSpace �
   exact (not_le_of_gt hMdet) hcoef
 
 set_option maxHeartbeats 800000 in
-/-- **Lower touching test for an Alexandrov solution** (weak Letwin route, N8, T12c): with the
+/-- **Lower touching test for an Alexandrov solution** (weak Letwin route): with the
 same Alexandrov hypothesis, if `ψ ∈ C²` touches `u` from below at `x₀` (`ψ ≤ u` near `x₀`,
 `u x₀ = ψ x₀`) and `∇²ψ(x₀)` is positive semidefinite, then `det ∇²ψ(x₀) ≤ f x₀`. -/
 theorem det_hessianMatrix_le_of_lower_touch {n : ℕ} {u f ψ : EuclideanSpace ℝ (Fin n) → ℝ}
@@ -771,11 +770,11 @@ open MeasureTheory Set Metric Filter
 open scoped RealInnerProductSpace ENNReal Topology
 open FunctionalInequalities.Probability.Stein
 
-/-! At a point of second-order expansion the Monge–Ampère equation holds pointwise with a positive definite Hessian (task L-T12e1). -/
+/-! At a point of second-order expansion the Monge–Ampère equation holds pointwise with a positive definite Hessian. -/
 
 namespace FunctionalInequalities.Analysis
 
-/-- `quadraticAt A x₀ b c` is smooth (weak Letwin route, task T12e1). -/
+/-- `quadraticAt A x₀ b c` is smooth (weak Letwin route). -/
 theorem contDiff_quadraticAt {n : ℕ} (A : Matrix (Fin n) (Fin n) ℝ) (x₀ b : EuclideanSpace ℝ (Fin n))
     (c : ℝ) : ContDiff ℝ 2 (quadraticAt A x₀ b c) := by
   let T := (Matrix.toEuclideanLin A).toContinuousLinearMap
@@ -830,7 +829,7 @@ private lemma quadraticAt_basis_entry {n : ℕ}
   simp [Matrix.mulVec, dotProduct]
 
 /-- The coordinate Hessian of `quadraticAt A x₀ b c` is `A` at every point when `A` is symmetric
-(weak Letwin route, task T12e1). -/
+(weak Letwin route). -/
 theorem hessianMatrix_quadraticAt {n : ℕ} {A : Matrix (Fin n) (Fin n) ℝ} (hA : A.IsHermitian)
     (x₀ b : EuclideanSpace ℝ (Fin n)) (c : ℝ) (x : EuclideanSpace ℝ (Fin n)) :
     hessianMatrix (quadraticAt A x₀ b c) x = A := by
@@ -906,8 +905,7 @@ private lemma posSemidef_sub_eventually {n : ℕ}
   rw [heq]
   exact hd.mul_mul_conjTranspose_same _
 
-/-- **The Monge–Ampère equation at points of second-order differentiability** (weak Letwin route, N8;
-task T12e1): if the subgradient images of the convex `u` on open subsets of `Ω` carry the density `f`,
+/-- **The Monge–Ampère equation at points of second-order differentiability** (weak Letwin route): if the subgradient images of the convex `u` on open subsets of `Ω` carry the density `f`,
 `f` is continuous and positive at `x₀ ∈ Ω`, and `u` has a second-order expansion at `x₀` with a symmetric
 matrix `B` (`|u x − (u x₀ + ⟪g, x − x₀⟫ + ½ ⟪x − x₀, B (x − x₀)⟫)| ≤ ε ‖x − x₀‖²` near `x₀` for every
 `ε > 0`), then `B` is positive definite and `det B = f x₀`. -/
@@ -987,7 +985,7 @@ open MeasureTheory Set Metric Filter
 open scoped RealInnerProductSpace ENNReal Topology
 open FunctionalInequalities.Probability.Stein
 
-/-! The log-determinant of the Hessian bounds the mollified Monge–Ampère density from above at points with positive definite Hessian (task L-T12d8). -/
+/-! The log-determinant of the Hessian bounds the mollified Monge–Ampère density from above at points with positive definite Hessian. -/
 
 namespace FunctionalInequalities.Analysis
 
@@ -1321,7 +1319,7 @@ private lemma trace_integral_bound {n : ℕ}
         rw [hH]
   exact he ▸ hi
 
-/-- **Mollified log-det lower bound** (weak Letwin route, N8/N9, task T12d8; KLS500
+/-- **Mollified log-det lower bound** (weak Letwin route; KLS500
 `weak_moment_mollified_average_det_lower`, via Fatou instead of the viscosity–distribution lemma): if the
 convex `u` has at almost every point a second-order expansion with a positive definite symmetric matrix
 `B` with `F x ≤ log det B`, `F` continuous, then every mollification `uφ := φ.normed ⋆ u` has a positive
@@ -1404,11 +1402,11 @@ open MeasureTheory Set Metric Filter
 open scoped RealInnerProductSpace ENNReal Topology
 open FunctionalInequalities.Probability.Stein
 
-/-! **The Monge–Ampère equation almost everywhere**: an Alexandrov solution has, at almost every point, a quadratic expansion with positive definite Hessian whose determinant equals the density (task L-T12d6b). -/
+/-! **The Monge–Ampère equation almost everywhere**: an Alexandrov solution has, at almost every point, a quadratic expansion with positive definite Hessian whose determinant equals the density. -/
 
 namespace FunctionalInequalities.Analysis
 
-/-- **Alexandrov's theorem in coordinates** (weak Letwin route, task T12d6b): a convex function on
+/-- **Alexandrov's theorem in coordinates** (weak Letwin route): a convex function on
 `EuclideanSpace ℝ (Fin n)` has, at almost every point `x`, a second-order expansion
 `|u y − quadraticAt B x g (u x) y| ≤ ε ‖y − x‖²` near `x` with a symmetric matrix `B`. -/
 theorem ae_exists_quadraticAt_expansion {n : ℕ} {u : EuclideanSpace ℝ (Fin n) → ℝ}
@@ -1437,7 +1435,7 @@ theorem ae_exists_quadraticAt_expansion {n : ℕ} {u : EuclideanSpace ℝ (Fin n
   filter_upwards [hexp ε hε] with y hy
   simpa only [quadraticAt, hquad, sub_add_eq_sub_sub] using hy
 
-/-- **The a.e. Monge–Ampère equation for an Alexandrov solution** (weak Letwin route, N8, task T12d6b):
+/-- **The a.e. Monge–Ampère equation for an Alexandrov solution** (weak Letwin route):
 if the subgradient images of the convex `u` on open sets carry a continuous positive density `f`, then at
 almost every point `u` has a second-order expansion with a positive definite symmetric `B`, `det B = f x`. -/
 theorem ae_exists_posDef_det_eq {n : ℕ} {u f : EuclideanSpace ℝ (Fin n) → ℝ}
@@ -1468,7 +1466,7 @@ open MeasureTheory Set Metric Filter
 open scoped RealInnerProductSpace ENNReal Topology
 open FunctionalInequalities.Probability.Stein
 
-/-! Existence of a penalized maximum with a quadratic comparison function (C^{1,1} estimate N9; task L-T17b). -/
+/-! Existence of a penalized maximum with a quadratic comparison function (C^{1,1} estimate). -/
 
 namespace FunctionalInequalities.Analysis
 
@@ -1701,7 +1699,7 @@ private lemma n9_touch_comparison {n : ℕ}
       (hlog (x + h)) (hlog (x - h))) hdet
 
 set_option maxHeartbeats 800000 in
-/-- **A penalised maximum with the log-density comparison** (weak Letwin route, N9, task T17b; KLS500
+/-- **A penalised maximum with the log-density comparison** (weak Letwin route; KLS500
 `exists_weak_moment_maximum_with_target_comparison`): let the convex, Lipschitz, coercive `u` be an Alexandrov
 solution `vol ∂u(G) = ∫_G e^F` with continuous `F`, and let `uₖ` be `C²` approximations, uniformly close to `u`,
 with positive definite Hessians satisfying `Fₖ ≤ log det ∇²uₖ` for `Fₖ → F` locally uniformly. Then for
@@ -1806,7 +1804,7 @@ open MeasureTheory Set Filter
 open scoped Topology RealInnerProductSpace
 open FunctionalInequalities.Probability.Stein
 
-/-! Coercivity of `tr(A) − log det` around the identity and the a.e. bound of Hessian increments by the generator (weak Letwin route N11; task L-N11a). -/
+/-! Coercivity of `tr(A) − log det` around the identity and the a.e. bound of Hessian increments by the generator (weak Letwin route). -/
 
 namespace FunctionalInequalities.Analysis
 
@@ -1898,7 +1896,7 @@ private lemma convex_fderiv_le_sub {n : ℕ}
     hq.le_slope_of_hasDerivAt (mem_univ 0) (mem_univ 1) (by norm_num) hd
   simpa [q, slope] using hs
 
-/-- **Three-point log-det concavity** (weak Letwin route, N11, task N11a): for positive definite `A, B₊, B₋ ≤ K·Id`,
+/-- **Three-point log-det concavity** (weak Letwin route): for positive definite `A, B₊, B₋ ≤ K·Id`,
 `(‖B₊ − A‖²_F + ‖B₋ − A‖²_F)/(2K²) ≤ tr(A⁻¹(B₊ + B₋ − 2A)) − log det B₊ − log det B₋ + 2 log det A`. -/
 theorem frobenius_add_frobenius_le_trace_sub_log_det {n : ℕ}
     {A Bp Bm : Matrix (Fin n) (Fin n) ℝ} {K : ℝ} (hA : A.PosDef) (hBp : Bp.PosDef) (hBm : Bm.PosDef)
@@ -1915,8 +1913,7 @@ theorem frobenius_add_frobenius_le_trace_sub_log_det {n : ℕ}
   rw [he, Matrix.mul_add, Matrix.trace_add, add_div]
   linarith
 
-/-- **Pointwise coercivity of Hessian increments for a `C^{1,1}` Monge–Ampère solution** (weak Letwin route, N11, task
-N11a; KLS500 `weak_moment_centered_difference_coercivity_ae`): if a.e. `∇²u` is positive definite, `≤ K·Id`, and
+/-- **Pointwise coercivity of Hessian increments for a `C^{1,1}` Monge–Ampère solution** (weak Letwin route; KLS500 `weak_moment_centered_difference_coercivity_ae`): if a.e. `∇²u` is positive definite, `≤ K·Id`, and
 `log det ∇²u = −u + V(∇u)` with `V` convex and differentiable, then for every `h`, at a.e. `x`, with
 `w := u(· + h) + u(· − h) − 2u` and `H := ∇²u`,
 `(‖H(x+h) − H(x)‖²_F + ‖H(x−h) − H(x)‖²_F)/(2K²) ≤ tr(H(x)⁻¹ ∇²w(x)) − DV(∇u(x))(∇w(x)) + w(x)`. -/

@@ -10,7 +10,7 @@ import FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.RegularAp
 `letwinCompactBound_of_regularClass`: if Letwin's quadratic-form bound holds for every isotropic law with density
 `1_K e^{-W}` (K a compact convex body, W smooth and κ-strongly convex), it holds for every compactly supported isotropic
 log-concave law, i.e. `LetwinCompactBound` (Letwin arXiv:2607.24164v1, Lemma A.1 approximation by Gaussian smoothing,
-ball conditioning and whitening; task L-T10f).
+ball conditioning and whitening).
 -/
 
 noncomputable section
@@ -55,8 +55,7 @@ private lemma integrable_continuous_of_closedBall_support
     (μ := (ν : Measure E)) (isCompact_closedBall (0 : E) R)
   rwa [IntegrableOn, Measure.restrict_eq_self_of_ae_mem ha] at hi
 
-/-- **Reduction of the compact Letwin bound to Letwin's regular class** (Letwin arXiv:2607.24164v1, Lemma A.1, task
-T10f): if every isotropic law `1_K e^{−W} dx` with `K` compact convex with nonempty interior and `W` smooth and
+/-- **Reduction of the compact Letwin bound to Letwin's regular class** (Letwin arXiv:2607.24164v1, Lemma A.1): if every isotropic law `1_K e^{−W} dx` with `K` compact convex with nonempty interior and `W` smooth and
 uniformly convex satisfies Letwin's quadratic bound, then so does every compactly supported isotropic log-concave law
 in positive dimension (`LetwinCompactBound`). -/
 theorem letwinCompactBound_of_regularClass

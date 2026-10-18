@@ -8,8 +8,7 @@ import FunctionalInequalities.Analysis.BakryEmery.Cumulant.Basic
 arXiv:2610.05474v1, Section 4): `ψ` is jointly `C^∞`, the log-Laplace transform of the posterior is
 `Λ_{μ_{c,Q}}(z) = ψ(c + z, Q) − ψ(c, Q)`, posterior cumulants are `c`-derivatives `κ_m = D_c^m ψ` (`m ≥ 1`),
 and `D_c ψ[h] = ⟪h, a(c, Q)⟫`. This is the deterministic bridge that turns the Itô computations (71) and
-(73) into generator identities. Proof bodies: GPT (BKL Claude-controller goal, task S1a; lint options
-adjusted by Claude); statements and placement: Claude.
+(73) into generator identities.
 -/
 
 noncomputable section

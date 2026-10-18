@@ -12,8 +12,7 @@ absolute-continuity step in the general log-concave literature comparison. No de
 included in the definition and no representation theorem is assumed here.
 
 Conditioning on a closed convex set of positive mass preserves log-concavity (`cond`), used to
-truncate laws to balls (BKL arXiv:2610.05474v1, p. 19); proof body: GPT (BKL Claude-controller goal,
-task T1a), statement and placement: Claude.
+truncate laws to balls (BKL arXiv:2610.05474v1, p. 19).
 -/
 
 noncomputable section

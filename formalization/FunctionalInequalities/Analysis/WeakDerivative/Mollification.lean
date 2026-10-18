@@ -16,11 +16,11 @@ section LW3B1WeakDerivativeMollification
 open MeasureTheory Set Filter
 open scoped Topology Convolution
 
-/-! Mollification commutes with weak directional derivatives (task L-W3b1). -/
+/-! Mollification commutes with weak directional derivatives. -/
 
 namespace FunctionalInequalities.Analysis
 
-/-- **Mollification commutes with weak derivatives** (weak Letwin route, task W3b1, generic): if `g` is the weak derivative
+/-- **Mollification commutes with weak derivatives** (weak Letwin route, generic): if `g` is the weak derivative
 of `f` along `v`, then `φ.normed ⋆ f` is smooth with `∂ᵥ(φ.normed ⋆ f) = φ.normed ⋆ g`. -/
 theorem fderiv_convolution_eq_of_hasWeakDerivAlong {E : Type*} [NormedAddCommGroup E]
     [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
@@ -91,7 +91,7 @@ section LN11C1WeakDerivativeOfDifferenceBound
 open MeasureTheory Set Filter
 open scoped Topology
 
-/-! Uniform `L²` bounds on difference quotients give a weak derivative in `L²` (task L-N11c1). -/
+/-! Uniform `L²` bounds on difference quotients give a weak derivative in `L²`. -/
 
 namespace FunctionalInequalities.Analysis
 
@@ -175,7 +175,7 @@ private lemma quotient_pairing_tendsto {E : Type*} [NormedAddCommGroup E]
   exact ht.congr' (.of_forall fun t => (heq t).symm)
 
 /-- **Difference-quotient criterion for a weak derivative in `L²`** (Nirenberg; Evans PDE §5.8.2 Thm 3(ii); weak Letwin
-route, N11, task N11c1): if `f ∈ L²` and `∫ (f(x + t v) − f(x))² ≤ C t²` for all small `t ≠ 0`, then `f` has a weak
+route): if `f ∈ L²` and `∫ (f(x + t v) − f(x))² ≤ C t²` for all small `t ≠ 0`, then `f` has a weak
 derivative along `v` that lies in `L²`. -/
 theorem exists_hasWeakDerivAlong_of_sq_difference_le {E : Type*} [NormedAddCommGroup E]
     [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]

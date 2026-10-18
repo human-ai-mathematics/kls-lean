@@ -6,8 +6,7 @@ import FunctionalInequalities.Analysis.Operator.InverseSqrt
 Bizeul–Klartag–Lehec arXiv:2610.05474v1, (72) and (75)–(76), at a fixed law `ν` with covariance `A` and
 `σ = A^{-1/2}`: the middle term `L_m(h) = Σ_{J ∋ i₀, 2 ≤ |J|, |Jᶜ| ≥ 2} ⟪κ_{|J|+1}(h_J, ·), A⁻¹ κ_{m−|J|+1}(h_{Jᶜ}, ·)⟫`
 (`lowerDrift`, in the mask form of `Analysis/BakryEmery/Cumulant/Leibniz.lean`) and the cumulant energy
-`E_{r+1} = |κ_{r+1}(u)|²_A = Σ_J κ_{r+1}(u, σ e_{J_1}, …, σ e_{J_r})²` (`cumulantEnergy`). Definitions only;
-statements and placement: Claude (BKL Claude-controller goal).
+`E_{r+1} = |κ_{r+1}(u)|²_A = Σ_J κ_{r+1}(u, σ e_{J_1}, …, σ e_{J_r})²` (`cumulantEnergy`).
 -/
 
 noncomputable section
@@ -43,7 +42,7 @@ open MeasureTheory
 open FunctionalInequalities.Analysis FunctionalInequalities.Analysis.BakryEmery
 open scoped RealInnerProductSpace
 
-/-! Section 6 pointwise bound (BKL (99)–(102) and the pointwise triangle inequality behind (104)): `sqrt_lowerDrift_energy_le`. Proof body: Fable worker (task S4); statement: Claude. -/
+/-! Section 6 pointwise bound (BKL (99)–(102) and the pointwise triangle inequality behind (104)): `sqrt_lowerDrift_energy_le`. -/
 
 namespace FunctionalInequalities.KLS.BKL
 

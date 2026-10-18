@@ -10,9 +10,9 @@ import FunctionalInequalities.Analysis.Convex.Coercivity
 # Caffarelli's strict convexity argument: geometric steps
 
 Steps of Caffarelli's exposed-point argument for Alexandrov solutions with two-sided Monge–Ampère bounds
-(weak Letwin route, block T11e), built on `Analysis/Convex/Alexandrov.lean` and `Analysis/Convex/Normalization.lean`.
+(weak Letwin route), built on `Analysis/Convex/Alexandrov.lean` and `Analysis/Convex/Normalization.lean`.
 
-* `infDist_frontier_image_le_of_width` (task L-T11e5).
+* `infDist_frontier_image_le_of_width`.
 -/
 
 noncomputable section
@@ -23,7 +23,7 @@ open scoped RealInnerProductSpace
 namespace FunctionalInequalities.Analysis
 
 /-- **Width ratios control the distance to the frontier after an affine normalisation** (weak Letwin
-route, Caffarelli block T11e, step (c)): if a bounded open `S ∋ x` has width at most `α` above `x` and
+route, Caffarelli's argument): if a bounded open `S ∋ x` has width at most `α` above `x` and
 at least `β > 0` below `x` in the unit direction `θ`, and `e` is an affine equivalence with
 `e '' S ⊆ closedBall 0 C₀`, then `infDist (e x) (frontier (e '' S)) ≤ 2 C₀ α / β`. -/
 theorem infDist_frontier_image_le_of_width {E : Type*} [NormedAddCommGroup E]
@@ -143,7 +143,7 @@ section LT11E3SectionsShrink
 open Set Metric Filter
 open scoped RealInnerProductSpace Topology
 
-/-! Compact sections nested inside the domain that shrink to the contact set (task L-T11e3). -/
+/-! Compact sections nested inside the domain that shrink to the contact set. -/
 
 namespace FunctionalInequalities.Analysis
 
@@ -169,7 +169,7 @@ private lemma caffarelli_gap_segment {E : Type*} [NormedAddCommGroup E]
   nlinarith [ha]
 
 /-- **Sections at an exposed point of a compact contact set are bounded and shrink to the slab piece
-of the contact set** (weak Letwin route, Caffarelli block T11e, steps G1–G2): with `w := u − ℓ ≥ 0`
+of the contact set** (weak Letwin route, Caffarelli's argument): with `w := u − ℓ ≥ 0`
 (`ℓ` the supporting affine function at `x₀`), compact contact set `C = {w = 0}`, an exposed point
 `xe ∈ C` in the unit direction `θ`, and `h > 0`, the sections
 `S ε := {x | w x < ε (⟪x − xe, θ⟫ + h)}` lie in a fixed compact set for small `ε`, and for every `δ > 0`
@@ -349,7 +349,7 @@ section LT11E7LocalizedContactLemma
 open MeasureTheory Set Metric
 open scoped RealInnerProductSpace ENNReal
 
-/-! Caffarelli's contact-set lemma: under local two-sided Alexandrov bounds a compact contact set is a single point, also in the localized form at exposed points (tasks L-T11e and L-T11e7). -/
+/-! Caffarelli's contact-set lemma: under local two-sided Alexandrov bounds a compact contact set is a single point, also in the localized form at exposed points. -/
 
 namespace FunctionalInequalities.Analysis
 
@@ -654,7 +654,7 @@ private lemma contact_stepC_choose {c C h K : ℝ}
   nlinarith
 
 set_option maxHeartbeats 4000000 in
-/-- **Caffarelli's contact-set lemma, localised form** (weak Letwin route, N6, task T11e7): let `C` be the
+/-- **Caffarelli's contact-set lemma, localised form** (weak Letwin route): let `C` be the
 compact contact set of a supporting affine function of the convex `u`, `z ∈ C` strictly exposed in the unit
 direction `θ`, `h > 0`, and suppose the two-sided Alexandrov bounds hold only on compact subsets of an open `U`
 containing the slab piece `C ∩ {⟪· − z, θ⟫ ≥ −h}`. Then `C = {z}`. -/
@@ -998,8 +998,7 @@ theorem contactSet_eq_singleton_of_exposed_of_local_bounds {E : Type*} [NormedAd
     (mul_le_mul_of_nonneg_left hnear hK).trans_lt hδsmall
   exact (not_lt_of_ge haway) hstrict
 
-/-- **Caffarelli's contact-set lemma** (global bounds, compact contact set; same statement as task L-T11e,
-re-derived here from the localised form so that only this file needs integrating). -/
+/-- **Caffarelli's contact-set lemma** (global bounds, compact contact set), derived from the localised form. -/
 theorem contactSet_eq_singleton_of_local_bounds {E : Type*} [NormedAddCommGroup E]
     [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] [Nontrivial E] [MeasurableSpace E]
     [BorelSpace E] {u : E → ℝ} (hconv : ConvexOn ℝ univ u)
@@ -1060,7 +1059,7 @@ section LT11F1StrictConvexityElementary
 open Set
 open scoped RealInnerProductSpace
 
-/-! Elementary steps from singleton contact sets to strict convexity (task L-T11f1). -/
+/-! Elementary steps from singleton contact sets to strict convexity. -/
 
 namespace FunctionalInequalities.Analysis
 
@@ -1081,7 +1080,7 @@ private theorem strict_supporting_inequality {E : Type*} [NormedAddCommGroup E]
   simp only [inner_sub_right, inner_add_right, real_inner_smul_right] at hs heq
   linarith
 
-/-- **Singleton contact sets give strict convexity** (weak Letwin route, N6, task T11f1): if every
+/-- **Singleton contact sets give strict convexity** (weak Letwin route): if every
 supporting affine function of the convex `u` touches its graph at exactly one point, `u` is strictly
 convex. -/
 theorem strictConvexOn_of_contact_eq {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
@@ -1135,7 +1134,7 @@ theorem strictConvexOn_of_contact_eq {E : Type*} [NormedAddCommGroup E] [InnerPr
   exact hxy (hxz.trans hyz.symm)
 
 /-- **Slopes of a strictly convex function lie in the interior of a convex slope range** (weak Letwin
-route, N7, task T11f1): if all subgradients of the strictly convex `u` lie in a convex `K` with nonempty
+route): if all subgradients of the strictly convex `u` lie in a convex `K` with nonempty
 interior, they lie in `interior K`. -/
 theorem subgradient_mem_interior_of_strictConvexOn {E : Type*} [NormedAddCommGroup E]
     [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] {u : E → ℝ}
@@ -1178,7 +1177,7 @@ theorem subgradient_mem_interior_of_strictConvexOn {E : Type*} [NormedAddCommGro
   rw [hqv] at hback
   linarith
 
-/-- **A strictly exposed contact point below a level** (weak Letwin route, N6, task T11f1; KLS500
+/-- **A strictly exposed contact point below a level** (weak Letwin route; KLS500
 `exists_strict_exposed_contact_in_sublevel`): if `{u ≤ R}` is compact and `u x < R`, the contact set of a
 supporting affine function at `x` has a point `z` with `u z < R` that is strictly exposed in the direction
 `θ` among the contact points with `u ≤ R`. -/
@@ -1248,11 +1247,11 @@ section LT11F2TruncatedConjugate
 open Set Metric
 open scoped RealInnerProductSpace
 
-/-! The truncated conjugate used to localize the contact-set argument (task L-T11f2). -/
+/-! The truncated conjugate used to localize the contact-set argument. -/
 
 namespace FunctionalInequalities.Analysis
 
-/-- The **ball-truncated conjugate** `p ↦ sup_{‖x‖ ≤ M} (⟪p, x⟫ − u x)` (weak Letwin route, N7, task T11f2;
+/-- The **ball-truncated conjugate** `p ↦ sup_{‖x‖ ≤ M} (⟪p, x⟫ − u x)` (weak Letwin route;
 KLS500 `truncatedLegendrePotential`): a globally finite convex function that agrees with the Legendre
 transform of `u` wherever the supremum is attained inside the ball. -/
 def truncatedConjugate {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E] (u : E → ℝ)
@@ -1299,7 +1298,7 @@ theorem convexOn_truncatedConjugate {E : Type*} [NormedAddCommGroup E] [InnerPro
       add_le_add (mul_le_mul_of_nonneg_left hpx ha)
         (mul_le_mul_of_nonneg_left hqx hb)
 
-/-- **Zeros of the centred truncated conjugate are the subgradients** (task T11f2): for convex `u` and
+/-- **Zeros of the centred truncated conjugate are the subgradients**: for convex `u` and
 `‖xc‖ < M`, `f p := truncatedConjugate u M p − ⟪p, xc⟫ + u xc` is nonnegative, vanishes exactly at the
 subgradients of `u` at `xc`, and has compact sublevel sets. -/
 theorem truncatedConjugate_centered_spec {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
@@ -1408,7 +1407,7 @@ section LT11F3TruncatedConjugateSubgradients
 open Set Metric
 open scoped RealInnerProductSpace Topology
 
-/-! Subgradients and subgradient images of the truncated conjugate (task L-T11f3). -/
+/-! Subgradients and subgradient images of the truncated conjugate. -/
 
 namespace FunctionalInequalities.Analysis
 
@@ -1516,8 +1515,7 @@ private lemma n7_support_of_interior_max {E : Type*} [NormedAddCommGroup E]
   rw [inner_sub_right]
   linarith
 
-/-- The set of slopes whose ball maximisers all lie in the open ball is open (weak Letwin route, N7,
-task T11f3). -/
+/-- The set of slopes whose ball maximisers all lie in the open ball is open (weak Letwin route). -/
 theorem isOpen_setOf_truncatedConjugate_maximizer_lt {E : Type*} [NormedAddCommGroup E]
     [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] {u : E → ℝ} (hu : Continuous u) {M : ℝ}
     (hM : 0 ≤ M) :
@@ -1544,7 +1542,7 @@ theorem isOpen_setOf_truncatedConjugate_maximizer_lt {E : Type*} [NormedAddCommG
   exact (n7_isClosed_bad_maximizers hu hM hc).isOpen_compl
 
 /-- For strictly convex `u`, a subgradient `p` at a point `x` of the open ball has `x` as its only ball
-maximiser (task T11f3). -/
+maximiser. -/
 theorem eq_of_truncatedConjugate_eq_of_subgradient {E : Type*} [NormedAddCommGroup E]
     [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] {u : E → ℝ}
     (hstrict : StrictConvexOn ℝ univ u) {M : ℝ} {x p : E} (hx : ‖x‖ < M)
@@ -1620,7 +1618,7 @@ private lemma n7_subgradient_eq_maximizer {E : Type*} [NormedAddCommGroup E]
   have hgz : ⟪v, g⟫ ≤ ⟪v, z⟫ := (mul_le_mul_iff_right₀ ht).mp hle
   linarith
 
-/-- **Danskin identification of subgradient images** (weak Letwin route, N7, task T11f3; KLS500
+/-- **Danskin identification of subgradient images** (weak Letwin route; KLS500
 `convexSubgradientImage_truncatedLegendrePotential_eq_relative`): for strictly convex continuous `u`, on a set
 `S` of slopes whose ball maximisers lie in the open ball, the subgradient image of the truncated conjugate is the
 inverse subgradient image `{x | ∃ p ∈ S, p ∈ ∂u(x)}`. -/
@@ -1662,7 +1660,7 @@ section LT11F5SublevelContactLemma
 open MeasureTheory Set Metric Filter
 open scoped RealInnerProductSpace ENNReal Topology
 
-/-! The contact lemma on sublevel sets (task L-T11f5). -/
+/-! The contact lemma on sublevel sets. -/
 
 namespace FunctionalInequalities.Analysis
 
@@ -1869,7 +1867,7 @@ private lemma eq_of_two_contacts_below {E : Type*} [NormedAddCommGroup E]
   have hyz : y = z := mem_singleton_iff.mp (hsingle ▸ hyC)
   exact hne (hyz.trans hxz.symm)
 
-/-- **Caffarelli's contact-set lemma below a level** (weak Letwin route, N6, task T11f5; KLS500
+/-- **Caffarelli's contact-set lemma below a level** (weak Letwin route; KLS500
 `supportContactSet_subsingleton_of_local_subgradient_bounds`): if `{u ≤ R}` is compact and the convex `u` has
 two-sided Alexandrov bounds on compact subsets of `{u < R}`, then a supporting affine function at `x₀`
 (`u x₀ < R`) touches the graph of `u` at no other point of `{u < R}`. No compactness of the full contact set
@@ -1934,11 +1932,11 @@ section LT11F6MomentStrictConvexity
 open MeasureTheory Set Metric
 open scoped RealInnerProductSpace ENNReal
 
-/-! **Caffarelli's strict convexity** for moment-map potentials: a convex potential whose gradient pushes a measure with bounded density forward to one with density bounded above and below on a convex body is strictly convex (task L-T11f6). -/
+/-! **Caffarelli's strict convexity** for moment-map potentials: a convex potential whose gradient pushes a measure with bounded density forward to one with density bounded above and below on a convex body is strictly convex. -/
 
 namespace FunctionalInequalities.Analysis
 
-/-- **The moment potential is strictly convex** (weak Letwin route, N6, task T11f6; KLS500
+/-- **The moment potential is strictly convex** (weak Letwin route; KLS500
 `moment_strictConvexOn`): a convex Lipschitz `u` with `∫ e^{-u} = 1` whose gradient pushes `e^{-u} dx` forward
 to `1_K e^{-V} dx` (`K` compact convex nonempty, `V` continuous) is strictly convex. -/
 theorem strictConvexOn_of_map_gradient {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
@@ -2052,7 +2050,7 @@ section LT11F7MomentC1
 open MeasureTheory Set Metric
 open scoped RealInnerProductSpace ENNReal
 
-/-! **The moment-map potential is C¹**: strict convexity of the conjugate gives differentiability of the potential (task L-T11f7). -/
+/-! **The moment-map potential is C¹**: strict convexity of the conjugate gives differentiability of the potential. -/
 
 namespace FunctionalInequalities.Analysis
 
@@ -2102,7 +2100,7 @@ private lemma t11f7_support_unique {E : Type*} [NormedAddCommGroup E]
     linarith
 
 set_option maxHeartbeats 800000 in
-/-- **The moment potential is `C¹`** (weak Letwin route, N7, task T11f7; KLS500
+/-- **The moment potential is `C¹`** (weak Letwin route; KLS500
 `moment_contDiff_one_closedTarget`): a convex Lipschitz `u` with `∫ e^{-u} = 1` whose gradient pushes
 `e^{-u} dx` forward to `1_K e^{-V} dx` (`K` compact convex with nonempty interior, `V` continuous) has exactly
 one subgradient at every point, hence is continuously differentiable. -/

@@ -166,6 +166,17 @@ Renaming updates all consumers, Blueprint anchors, guards, snapshots, and curren
 Do not rewrite historical decisions/explorations as part of renaming. Update golden files and
 source hashes after review; provide no compatibility aliases for old names.
 
+## Source documentation
+
+Module comments and declaration docstrings describe mathematics, exact hypotheses and scope,
+pinned source versions and locators, and useful proof explanations. Preserve paper attributions
+and license/author notices. Keep task and route-node identifiers, rounds, worker/controller
+allocation and integration/failure logs in dated `research/decisions/` records. When removing
+process text, archive the original passages verbatim, preserve all non-comment code, and reassess
+matching source-evidence hashes without changing proof or certificate status. Verification
+receipts continue to certify their recorded snapshots. See the
+[source-comment history](decisions/2026-10-18-source-comment-process-history.md).
+
 ## File and declaration scope
 
 Files belong to the family of their primary mathematical object: the smooth-test frontend in

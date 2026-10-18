@@ -15,7 +15,7 @@ section LT12D2ProximalPoint
 open Set
 open scoped RealInnerProductSpace
 
-/-! The proximal point of a convex function and its Lipschitz dependence (task L-T12d2). -/
+/-! The proximal point of a convex function and its Lipschitz dependence. -/
 
 namespace FunctionalInequalities.Analysis
 
@@ -125,7 +125,7 @@ private theorem subgradient_of_proximal_minimizer
 
 /-- The **proximal point** (resolvent of the subdifferential) of `f` at `z`: a point `x` such that
 `z − x` is a subgradient of `f` at `x`, i.e. the minimiser of `x ↦ f x + ½‖x − z‖²` (weak Letwin route,
-Alexandrov's theorem, task T12d2). For convex `f` on a finite-dimensional space it exists and is unique. -/
+Alexandrov's theorem). For convex `f` on a finite-dimensional space it exists and is unique. -/
 def proximalPoint {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E] (f : E → ℝ) (z : E) : E :=
   Classical.epsilon fun x => ∀ y, f x + ⟪z - x, y - x⟫ ≤ f y
 
@@ -186,12 +186,11 @@ section LT12D3MoreauSymmetricDerivative
 open Set Filter
 open scoped RealInnerProductSpace Topology
 
-/-! Derivative of `½‖x‖² − (Moreau envelope)` and symmetry of the derivative of the resolvent (task L-T12d3). -/
+/-! Derivative of `½‖x‖² − (Moreau envelope)` and symmetry of the derivative of the resolvent. -/
 
 namespace FunctionalInequalities.Analysis
 
-/-- **The resolvent of a convex function is a gradient** (weak Letwin route, Alexandrov's theorem, task
-T12d3): if `P z` is a point at which `z − P z` is a subgradient of the convex `f` (the proximal map), then
+/-- **The resolvent of a convex function is a gradient** (weak Letwin route, Alexandrov's theorem): if `P z` is a point at which `z − P z` is a subgradient of the convex `f` (the proximal map), then
 `w ↦ ½‖w‖² − (f (P w) + ½‖P w − w‖²)` (½‖·‖² minus the Moreau envelope) has derivative `⟪P z, ·⟫` at every `z`. -/
 theorem hasFDerivAt_half_sq_sub_moreau {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
     {f : E → ℝ} {P : E → E} (hP : ∀ z y, f (P z) + ⟪z - P z, y - P z⟫ ≤ f y) (z : E) :
@@ -230,7 +229,7 @@ theorem hasFDerivAt_half_sq_sub_moreau {E : Type*} [NormedAddCommGroup E] [Inner
       have hm := mul_le_mul_of_nonneg_right hw.le (norm_nonneg (w - z))
       nlinarith only [hm, sq_nonneg ‖w - z‖]
 
-/-- **The derivative of the resolvent is symmetric and firmly nonexpansive** (task T12d3): at a point
+/-- **The derivative of the resolvent is symmetric and firmly nonexpansive**: at a point
 where the proximal map `P` is differentiable with derivative `T`, `⟪T v, w⟫ = ⟪v, T w⟫` and
 `‖T v‖² ≤ ⟪T v, v⟫`. -/
 theorem inner_hasFDerivAt_resolvent_symm {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]

@@ -1,6 +1,6 @@
 # Current KLS handoff
 
-Updated 2026-10-18 after independent acceptance of the layout batches and the final documentation review.
+Updated 2026-10-18 for combined reuse/API and source-comment delivery.
 
 ## Accepted result and open boundaries
 
@@ -29,27 +29,44 @@ certificate states and existing historical records were preserved.
 - [Maintenance register](research/technical-debt/remaining-families.md): per-batch decisions, migration maps and acceptance requirements; MetricBV cross-family relocation remains deferred.
 - [Final documentation decision](research/decisions/2026-10-18-final-documentation-review.md): corrected status prose and shortened navigation.
 
-## Verification evidence
+## Reuse proposal and evidence
 
-The last frozen-source full receipt is `build/verification/20261017T182503.125701Z/report.json`:
-297 gates, 282 strict audit clients and 864 local-module kernel replays. It audits every
-project-local declaration, including `KLS.kls`, with no target exclusion. Known
-[vendored holes](formalization/vendor/README.md#upstream-holes) remain outside the proved local dependency closures.
+The independent Git-pinned downstream acceptance, three narrow clients and two bounded-operator
+interfaces are recorded in the [reuse decision](research/decisions/2026-10-18-downstream-reuse.md)
+and [example guide](examples/README.md). Concise source headers and the scoped HminusOne openings
+preserve all 42 original declaration interfaces and proof-expression comparisons. Existing
+certificates, hypotheses and history are unchanged; the one empty migrated source directory was removed.
 
-The layout receipt chain and cumulative checks are indexed by
-`build/file-management/2026-10-17-other-families-optimization/COMPLETION.json` and its `REPORT.md`.
-The final documentation review and staged-input comparison (including six corrected module
-docstrings, with all bytes outside those headers unchanged) are retained under
-`build/file-management/2026-10-18-final-docs-and-push/`.
-These ignored local artifacts apply to their recorded snapshots. Documentation checks do not
-renew the full Lean receipt; see [receipt scope](research/verification.md#receipts-and-trust-scope).
+The downstream/API snapshot `c9958b5d54af9715ff06354bf3a4386c5629387330c1902bc2ef21a1735f1d0d`
+passed full local verification at `build/verification/20261018T034819.544549Z/report.json`
+(297 gates, 282 strict clients, 9,856 local declarations and 867 module replays).
+Every project-local declaration, `KLS.kls` included, is audited; known [vendor holes](formalization/vendor/README.md#upstream-holes) remain isolated.
+
+The downstream/API proposal has per-batch receipts and its final frozen-tree verification
+under `build/reusability/2026-10-18-downstream-and-examples/STATE.json` and `FINAL-ACCEPTANCE.json`.
+Each receipt applies to its recorded snapshot; see [receipt scope](research/verification.md#receipts-and-trust-scope).
+
+## Source-comment maintenance
+
+The subsequent documentation-only pass cleans process records in 72 source files, in seven
+independently accepted batches. Every byte outside comments is preserved, along with hypotheses,
+certificate states, existing history and the real staging area. Original comments and the previous
+handoff are retained in the [process-history archive](research/decisions/2026-10-18-source-comment-process-history.md).
+Its source comparisons, reassessed evidence hashes and current documentation checks are indexed by
+`build/file-management/2026-10-18-source-comment-cleanup/COMPLETION.json`.
+This pass changes source/document hashes and does not renew the full Lean receipt above.
 
 ## Coordination and delivery
 
-All proof API loops are idle; the original Claude session remains the canonical proof integrator.
-The queued review follow-up is paused. Sealed failures and earlier controller records remain
-historical evidence and do not override this handoff.
+Proof API loops and the original Claude proof-integrator session are idle. The queued review
+follow-up stays paused. Sealed failures, previous decisions and controller records remain
+historical evidence. The [pre-delivery handoff](research/decisions/2026-10-18-pre-delivery-handoff.md)
+preserves the preceding state verbatim.
 
-The user authorized final documentation cleanup, one commit and an ordinary branch push on
-2026-10-18. This delivery preserves the accepted mathematics and excludes local editor configuration.
-The [previous handoff](research/decisions/2026-10-18-pre-final-documentation-handoff.md) preserves the superseded detail verbatim.
+The combined revision retains the two derived semigroup APIs and three calling examples,
+with existing proofs, assumptions and certificate states unchanged. Its fresh full local
+verification and source/staged-tree comparisons are recorded under
+`build/reviews/2026-10-18-reuse-comments-full-validation-and-push/`; `COMPLETION.json` binds
+the accepted source snapshot to the resulting commit and confirmed remote revision when delivery
+completes. Local editor configuration is excluded. Earlier receipts above retain their original
+snapshot scope; ordinary branch delivery does not claim remote CI.

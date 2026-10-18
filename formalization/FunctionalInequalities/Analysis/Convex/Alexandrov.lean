@@ -5,9 +5,8 @@ import Mathlib
 # Alexandrov identity in push-forward form
 
 If `(∇u)_# ν = μ` with `ν, μ ≪ volume` for a convex Lipschitz `u`, the subgradient image of a set has `μ`-measure
-equal to the `ν`-measure of the set (route node N5 of the weak moment-map route to Letwin arXiv:2607.24164v1), and the
-farthest-point exposure lemma for the Caffarelli block. Proof bodies: GPT (Letwin sub-controller tasks L-T14b, L-T11c1);
-statements by the Letwin sub-controller; placement: Claude.
+equal to the `ν`-measure of the set (weak moment-map route to Letwin arXiv:2607.24164v1), and the
+farthest-point exposure lemma for the Caffarelli block.
 -/
 
 noncomputable section
@@ -69,7 +68,7 @@ private lemma alexandrov_isClosed_subgradientImage {E : Type*} [NormedAddCommGro
   rw [← himage]
   exact isClosedMap_snd_of_compactSpace C hC
 
-/-- **Alexandrov identity in push-forward form** (weak Letwin route, step N5): for a convex Lipschitz
+/-- **Alexandrov identity in push-forward form** (weak Letwin route): for a convex Lipschitz
 `u` with `ν ≪ volume`, `ν.map (gradient u) = μ ≪ volume`, integrals of nonnegative functions over the subgradient
 image `∂u(S)` of a compact `S` against `μ` equal integrals over `S` of the composition with `∇u`
 against `ν`. -/
@@ -137,11 +136,11 @@ section LT11C1FarthestPointExposed
 open Set
 open scoped RealInnerProductSpace
 
-/-! Farthest points are exposed (task L-T11c1). -/
+/-! Farthest points are exposed. -/
 
 namespace FunctionalInequalities.Analysis
 
-/-- **A farthest point of a compact set is exposed** (weak Letwin route, Caffarelli block T11c/T11e):
+/-- **A farthest point of a compact set is exposed** (weak Letwin route, Caffarelli's argument):
 for a nonempty compact `C` in an inner product space and any `y`, there is `x_e ∈ C` with
 `⟪x − x_e, x_e − y⟫ < 0` for every other `x ∈ C`; moreover `‖x_e − y‖ ≥ ‖x − y‖` for all `x ∈ C`. -/
 theorem exists_farthest_point_exposed {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
@@ -189,7 +188,7 @@ section LT14CLocalAlexandrovBounds
 open MeasureTheory Set
 open scoped RealInnerProductSpace ENNReal
 
-/-! Local two-sided Alexandrov bounds (task L-T14c). -/
+/-! Local two-sided Alexandrov bounds. -/
 
 namespace FunctionalInequalities.Analysis
 
@@ -247,8 +246,8 @@ private lemma isCompact_subgradientImage_local {E : Type*} [NormedAddCommGroup E
   rw [← hEq]
   exact hTimage
 
-/-- **Local two-sided Alexandrov bounds** (weak Letwin route, step N5, input of the Caffarelli
-argument N6): if `u` is convex and Lipschitz, `ν = e^{-u} dx` (normalized), `ν.map ∇u = μ` has a
+/-- **Local two-sided Alexandrov bounds** (weak Letwin route, input of the Caffarelli
+argument): if `u` is convex and Lipschitz, `ν = e^{-u} dx` (normalized), `ν.map ∇u = μ` has a
 density `ρ` bounded above and below on a closed convex `K` containing `∇u` a.e., then on every compact
 `Q` the volume of the subgradient image is comparable to the volume of the set:
 `a · vol S ≤ vol (∂u(S)) ≤ b · vol S` for all compact `S ⊆ Q`, with `0 < a`. -/
@@ -435,11 +434,11 @@ section LT11C2AlexandrovSliding
 open Set Metric
 open scoped RealInnerProductSpace
 
-/-! Sliding supporting hyperplanes (Caffarelli block; task L-T11c2). -/
+/-! Sliding supporting hyperplanes (Caffarelli block). -/
 
 namespace FunctionalInequalities.Analysis
 
-/-- **Sliding lemma for the Alexandrov maximum principle** (weak Letwin route, Caffarelli block T11c):
+/-- **Sliding lemma for the Alexandrov maximum principle** (weak Letwin route, Caffarelli's argument):
 if `u` is convex, `u ≥ 0` on the frontier of a bounded open `Ω`, `u x₀ < 0` at some `x₀ ∈ Ω`, and the
 affine function `x ↦ u x₀ + ⟪p, x − x₀⟫` is `≤ 0` on `closure Ω`, then `p` is a subgradient of `u` at
 some point of `Ω`. In particular, `closedBall 0 (-u x₀ / diam Ω) ⊆ ∂u(Ω)`, and the cone over the ball
@@ -605,12 +604,12 @@ section LT11C3NearestBoundaryHalfspace
 open Set Metric
 open scoped RealInnerProductSpace
 
-/-! Nearest boundary points and supporting half-spaces (task L-T11c3). -/
+/-! Nearest boundary points and supporting half-spaces. -/
 
 namespace FunctionalInequalities.Analysis
 
 /-- **Supporting half-space at a nearest boundary point of an open convex set** (weak Letwin route,
-Caffarelli block T11c, the `dist(x₀, ∂Ω)` factor of the Alexandrov estimate): for a bounded open convex
+Caffarelli's argument, the `dist(x₀, ∂Ω)` factor of the Alexandrov estimate): for a bounded open convex
 `Ω` and `x₀ ∈ Ω`, with `d := infDist x₀ (frontier Ω)`, there is a unit vector `e` such that
 `⟪x − x₀, e⟫ ≤ d` for every `x ∈ Ω`. -/
 theorem exists_unit_inner_le_infDist_frontier {E : Type*} [NormedAddCommGroup E]
@@ -731,11 +730,11 @@ section LT11C4ConeVolume
 open MeasureTheory Set Metric
 open scoped ENNReal
 
-/-! Volumes of cones over convex sets (task L-T11c4). -/
+/-! Volumes of cones over convex sets. -/
 
 namespace FunctionalInequalities.Analysis
 
-/-- **Volume of the cone over a ball** (weak Letwin route, Caffarelli block T11c, Alexandrov maximum
+/-- **Volume of the cone over a ball** (weak Letwin route, Caffarelli's argument, Alexandrov maximum
 principle): there is `c > 0`, depending only on `E`, such that the convex hull of the closed ball of
 radius `r` and a point `q` with `‖q‖ ≥ r` has volume at least `c · r^(n−1) · ‖q‖`, `n = dim E`. -/
 theorem exists_pos_volume_convexHull_closedBall_union_singleton_ge {E : Type*}
@@ -1054,7 +1053,7 @@ section LT11C5AlexandrovMaximumPrinciple
 open MeasureTheory Set Metric
 open scoped RealInnerProductSpace ENNReal
 
-/-! The Alexandrov maximum principle (task L-T11c5). -/
+/-! The Alexandrov maximum principle. -/
 
 namespace FunctionalInequalities.Analysis
 
@@ -1200,7 +1199,7 @@ private lemma alexandrov_affine_set_convex {E : Type*}
         (mul_nonpos_of_nonneg_of_nonpos hb hq')
 
 /-- **Alexandrov maximum principle** (Gutiérrez, *The Monge–Ampère equation*, Theorem 1.4.2; weak
-Letwin route, Caffarelli block T11c): there is `c > 0` depending only on `E` such that for every
+Letwin route, Caffarelli's argument): there is `c > 0` depending only on `E` such that for every
 convex `u`, bounded open convex `Ω`, `u ≥ 0` on `∂Ω` and `x₀ ∈ Ω` with `u x₀ < 0`,
 `c · (−u x₀)^n ≤ vol (∂u(Ω)) · diam(Ω)^(n−1) · dist(x₀, ∂Ω)`, `n = dim E`. -/
 theorem exists_pos_alexandrov_maximum_principle {E : Type*} [NormedAddCommGroup E]
@@ -1392,12 +1391,12 @@ section LT12C1QuadraticSubgradientImage
 open MeasureTheory Set Matrix
 open scoped RealInnerProductSpace ENNReal
 
-/-! Subgradient images of quadratic functions (task L-T12c1). -/
+/-! Subgradient images of quadratic functions. -/
 
 namespace FunctionalInequalities.Analysis
 
 /-- The quadratic function with constant `c`, slope `b` and Hessian matrix `A` centred at `x₀`:
-`Q x = c + ⟪b, x − x₀⟫ + ½ ⟪x − x₀, A (x − x₀)⟫` (weak Letwin route, N8 viscosity tests). -/
+`Q x = c + ⟪b, x − x₀⟫ + ½ ⟪x − x₀, A (x − x₀)⟫` (weak Letwin route, viscosity tests). -/
 def quadraticAt {n : ℕ} (A : Matrix (Fin n) (Fin n) ℝ) (x₀ b : EuclideanSpace ℝ (Fin n)) (c : ℝ)
     (x : EuclideanSpace ℝ (Fin n)) : ℝ :=
   c + ⟪b, x - x₀⟫ + (1 / 2) * ⟪x - x₀, Matrix.toEuclideanLin A (x - x₀)⟫
@@ -1645,7 +1644,7 @@ private lemma volume_subgradientImage_quadraticAt_aux
       rw [hdet, abs_of_pos hdetpos]
 
 /-- **Subgradient images of a positive definite quadratic are exact affine images, with volume
-`det A · vol G`** (weak Letwin route, N8). -/
+`det A · vol G`** (weak Letwin route). -/
 theorem volume_subgradientImage_quadraticAt {n : ℕ} {A : Matrix (Fin n) (Fin n) ℝ} (hA : A.PosDef)
     (x₀ b : EuclideanSpace ℝ (Fin n)) (c : ℝ) {G : Set (EuclideanSpace ℝ (Fin n))}
     (hG : MeasurableSet G) :
@@ -1663,12 +1662,11 @@ section LT11E2InfdistLeWidth
 open Set Metric
 open scoped RealInnerProductSpace
 
-/-! Distance to the frontier is bounded by the directional width (weak Letwin route, Caffarelli step G3, task L-T11e2). -/
+/-! Distance to the frontier is bounded by the directional width (weak Letwin route, Caffarelli's argument). -/
 
 namespace FunctionalInequalities.Analysis
 
-/-- **Distance to the frontier is at most the width in any direction** (weak Letwin route, Caffarelli
-block T11e, step G3): for a bounded open `S`, a point `x ∈ S` and a unit vector `θ`, if
+/-- **Distance to the frontier is at most the width in any direction** (weak Letwin route, Caffarelli's argument): for a bounded open `S`, a point `x ∈ S` and a unit vector `θ`, if
 `⟪y − x, θ⟫ ≤ t` for all `y ∈ S`, then `infDist x (frontier S) ≤ t`. -/
 theorem infDist_frontier_le_of_forall_inner_le {E : Type*} [NormedAddCommGroup E]
     [InnerProductSpace ℝ E] {S : Set E} (hS : IsOpen S) (hb : Bornology.IsBounded S)
@@ -1734,7 +1732,7 @@ section LT11E1AffineTransportSubgradientimage
 open MeasureTheory Set
 open scoped RealInnerProductSpace ENNReal
 
-/-! Subgradient images under affine changes of variables and their volume (task L-T11e1). -/
+/-! Subgradient images under affine changes of variables and their volume. -/
 
 namespace FunctionalInequalities.Analysis
 
@@ -1745,7 +1743,7 @@ private lemma affineEquiv_linear_sub {E : Type*} [NormedAddCommGroup E]
     (AffineEquiv.toAffineMap e) a - (AffineEquiv.toAffineMap e) b
   exact (AffineEquiv.toAffineMap e).linearMap_vsub a b
 
-/-- **Affine transport of subgradient images** (weak Letwin route, Caffarelli block T11e, step G5):
+/-- **Affine transport of subgradient images** (weak Letwin route, Caffarelli's argument):
 under an affine equivalence `e` with linear part `T`, the subgradient image of `u ∘ e.symm` over
 `e '' G` is the image of `∂u(G)` under the adjoint of `T⁻¹`. -/
 theorem subgradientImage_comp_affineEquiv_symm {E : Type*} [NormedAddCommGroup E]
@@ -1926,12 +1924,11 @@ section LT11E4NormalizedMinEstimate
 open MeasureTheory Set Metric
 open scoped RealInnerProductSpace ENNReal
 
-/-! Minimum estimate for a normalized convex function from a lower Alexandrov bound (task L-T11e4). -/
+/-! Minimum estimate for a normalized convex function from a lower Alexandrov bound. -/
 
 namespace FunctionalInequalities.Analysis
 
-/-- **Minimum estimate on a normalised section by quadratic comparison** (weak Letwin route, Caffarelli
-block T11e, step (b); Gutiérrez Lemma via the comparison with `½κ(‖x‖² − 1)`): if `v` is convex, `≤ 0` on
+/-- **Minimum estimate on a normalised section by quadratic comparison** (weak Letwin route, Caffarelli's argument; Gutiérrez Lemma via the comparison with `½κ(‖x‖² − 1)`): if `v` is convex, `≤ 0` on
 the frontier of a bounded open `S ⊇ closedBall 0 1`, and `a · vol G ≤ vol ∂v(G)` for open `G ⊆ S`, then
 `v 0 ≤ −½ (a/2)^{1/n}`. -/
 theorem le_neg_of_lower_alexandrov_bound {n : ℕ} (hn : 0 < n) {v : EuclideanSpace ℝ (Fin n) → ℝ}
@@ -2081,12 +2078,11 @@ section LT11E6SubgradientimageSubAffine
 open MeasureTheory Set
 open scoped RealInnerProductSpace
 
-/-! Subgradient images after subtracting an affine function, and their volume (task L-T11e6). -/
+/-! Subgradient images after subtracting an affine function, and their volume. -/
 
 namespace FunctionalInequalities.Analysis
 
-/-- **Subtracting an affine function translates subgradient images** (weak Letwin route, Caffarelli
-block T11e, bookkeeping): `∂(u − ⟪p, ·⟫ − c)(G) = ∂u(G) − p`, hence the volumes agree. -/
+/-- **Subtracting an affine function translates subgradient images** (weak Letwin route, Caffarelli's argument, bookkeeping): `∂(u − ⟪p, ·⟫ − c)(G) = ∂u(G) − p`, hence the volumes agree. -/
 theorem subgradientImage_sub_inner_add_const {E : Type*} [NormedAddCommGroup E]
     [InnerProductSpace ℝ E] (u : E → ℝ) (p : E) (c : ℝ) (G : Set E) :
     subgradientImage (fun x => u x - (⟪p, x⟫ + c)) G = (fun q => q - p) '' subgradientImage u G := by
@@ -2126,7 +2122,7 @@ section LT14DAlexandrovIdentityOpen
 open MeasureTheory Set
 open scoped RealInnerProductSpace ENNReal
 
-/-! The Alexandrov identity on open sets: the volume of the subgradient image equals the integral of the Monge–Ampère density (task L-T14d). -/
+/-! The Alexandrov identity on open sets: the volume of the subgradient image equals the integral of the Monge–Ampère density. -/
 
 namespace FunctionalInequalities.Analysis
 
@@ -2156,7 +2152,7 @@ private lemma t14d_isClosed_subgradientImage {E : Type*} [NormedAddCommGroup E]
   rw [← himage]
   exact isClosedMap_snd_of_compactSpace C hC
 
-/-- **Alexandrov identity on open sets for the moment potential** (weak Letwin route, N5/N8, task T14d):
+/-- **Alexandrov identity on open sets for the moment potential** (weak Letwin route):
 if `u` is convex, Lipschitz, `ν = e^{-u} dx` is normalised and `ν.map ∇u = μ = 1_K e^{-V} dx` for a closed convex
 `K` and a measurable `V`, then the subgradient image of every open `G` has volume `∫_G e^{-u + V(∇u)}`. -/
 theorem volume_subgradientImage_eq_lintegral_of_isOpen {E : Type*} [NormedAddCommGroup E]
@@ -2306,7 +2302,7 @@ section LT11F4ReciprocalAlexandrovBounds
 open MeasureTheory Set Metric
 open scoped RealInnerProductSpace ENNReal
 
-/-! Two-sided Alexandrov bounds for the inverse subgradient map (task L-T11f4). -/
+/-! Two-sided Alexandrov bounds for the inverse subgradient map. -/
 
 namespace FunctionalInequalities.Analysis
 
@@ -2408,7 +2404,7 @@ private lemma inverse_subgradient_measurableSet {E : Type*} [NormedAddCommGroup 
   exact MeasurableSet.iUnion fun n =>
     (inverse_subgradient_isClosed hu (hScompact n)).measurableSet
 
-/-- **Reciprocal Alexandrov bounds** (weak Letwin route, N7, task T11f4; KLS500
+/-- **Reciprocal Alexandrov bounds** (weak Letwin route; KLS500
 `exists_local_relativeSubgradientImage_volume_bounds`): for the moment potential `u` (convex, Lipschitz,
 `ν = e^{-u} dx` normalised, `ν.map ∇u = μ = ρ dx` with `c ≤ ρ ≤ C` on a closed convex `K`) and a radius `M`,
 the set `(∂u)⁻¹(G) = {x | ∃ p ∈ G, p ∈ ∂u(x)}` of an open `G ⊆ K` that lies in `closedBall 0 M` has volume

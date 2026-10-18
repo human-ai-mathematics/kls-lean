@@ -6,7 +6,7 @@ import FunctionalInequalities.Analysis.BakryEmery.Cumulant.Local
 # Parameter derivatives of posterior cumulants
 
 Posterior cumulants are jointly smooth in the parameters and `D_c κ_m(μ_p)(h)[v] = κ_{m+1}(μ_p)(h, v)` (BKL (81)); covariance
-entries are second cumulants. Proof bodies: GPT (task S-3bD); statements by the S-line sub-controller; placement: Claude.
+entries are second cumulants.
 -/
 
 noncomputable section

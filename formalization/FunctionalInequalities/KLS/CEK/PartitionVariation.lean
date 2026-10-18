@@ -9,8 +9,7 @@ import FunctionalInequalities.Analysis.Convex.LegendreVariation.Perturbation
 
 The derivative at `0` of `t ↦ ∫ e^{−(q + t b)*}` (Cordero-Erausquin–Klartag (42), integral form), built on the pointwise
 Legendre first variation; the Euler–Lagrange step towards the moment-map push-forward on the weak route to Letwin
-arXiv:2607.24164v1. Proof body: GPT (Letwin sub-controller task L-T13a); statement by the Letwin sub-controller;
-placement: Claude.
+arXiv:2607.24164v1.
 -/
 
 noncomputable section
@@ -25,8 +24,7 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
   [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
 
 /-- **First variation of the partition function of the conjugate** (Cordero-Erausquin–Klartag
-arXiv:1304.0630v1, proof of Theorem 2, first variation (42) integrated; weak Letwin route, step
-N3): for a proper lower semicontinuous potential `q` whose conjugate `ψ = q*` is real, Lipschitz
+arXiv:1304.0630v1, proof of Theorem 2, first variation (42) integrated; weak Letwin route): for a proper lower semicontinuous potential `q` whose conjugate `ψ = q*` is real, Lipschitz
 and has integrable `e^{-ψ}`, and a bounded continuous perturbation `b`, the map
 `t ↦ ∫ exp(−(q + t b)*(x)) dx` is differentiable at `0` with derivative
 `∫ exp(−ψ(x)) b(∇ψ(x)) dx` (`∇ψ` is the a.e. gradient of the Lipschitz function `ψ`). -/

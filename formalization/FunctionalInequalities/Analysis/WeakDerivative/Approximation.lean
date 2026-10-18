@@ -17,11 +17,11 @@ section LN11C2WeakDerivativeGluing
 open MeasureTheory Set Filter Metric
 open scoped Topology
 
-/-! Gluing local weak derivatives along cutoffs into a global one (task L-N11c2). -/
+/-! Gluing local weak derivatives along cutoffs into a global one. -/
 
 namespace FunctionalInequalities.Analysis
 
-/-- **Gluing local weak derivatives** (weak Letwin route, N11, task N11c2, generic): if for every `C¹` cutoff `χ` with
+/-- **Gluing local weak derivatives** (weak Letwin route, generic): if for every `C¹` cutoff `χ` with
 compact support the product `χ f` has a weak derivative along `v` that is locally `L²`, then `f` itself has a weak
 derivative along `v` that is `L²` on every compact set. -/
 theorem exists_hasWeakDerivAlong_of_forall_cutoff {E : Type*} [NormedAddCommGroup E]
@@ -369,7 +369,7 @@ open MeasureTheory Filter Set Metric
 open scoped ContDiff Convolution Topology
 namespace FunctionalInequalities.Analysis
 
-/-! Bounded all-coordinate common-support approximation (accepted B1). -/
+/-! Bounded all-coordinate common-support approximation. -/
 
 /-- The existing normalized-bump estimate supplies one common uniform bound. -/
 private theorem norm_normed_convolution_le_three_mul {n : ℕ}

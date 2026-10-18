@@ -13,7 +13,7 @@ import Mathlib.Analysis.Calculus.ContDiff.Operations
 `diffusionGenerator b σ F x = DF(x)[b x] + ½ Σ_k D²F(x)[σ_k x, σ_k x]` for drift `b` and noise columns
 `σ_k`, coordinate-free on a normed space; it is invariant under continuous linear changes of coordinates
 (`diffusionGenerator_transport`), which moves a diffusion on a finite-dimensional state space (for BKL
-arXiv:2610.05474v1 (67), the parameter space `E × (E →L[ℝ] E)`) to coordinates `Fin N → ℝ`. Proof bodies: GPT (BKL Claude-controller goal, tasks S5cd); statements and placement: Claude.
+arXiv:2610.05474v1 (67), the parameter space `E × (E →L[ℝ] E)`) to coordinates `Fin N → ℝ`.
 -/
 
 noncomputable section
@@ -41,7 +41,7 @@ noncomputable def transportNoise {V' : Type*} [NormedAddCommGroup V'] [NormedSpa
     {d : ℕ} (Φ : V ≃L[ℝ] V') (σ : V → Fin d → V) : V' → Fin d → V' :=
   fun y k => Φ (σ (Φ.symm y) k)
 
-/-- **S5c.** The coordinate-free generator is invariant under a continuous linear change of
+/-- The coordinate-free generator is invariant under a continuous linear change of
 coordinates (no differentiability hypothesis is needed for a linear equivalence). -/
 theorem diffusionGenerator_transport {V' : Type*} [NormedAddCommGroup V'] [NormedSpace ℝ V']
     {d : ℕ} (Φ : V ≃L[ℝ] V') (b : V → V) (σ : V → Fin d → V) (F : V → ℝ) (x : V) :
@@ -81,7 +81,7 @@ section S3B1GeneratorChainRule
 
 
 
-/-! Chain rule for the generator, the step (82) of BKL (task S3b1; proof body GPT, statement Claude). -/
+/-! Chain rule for the generator, the step (82) of BKL. -/
 
 /-- **Chain rule for the generator** (Itô's formula for a composite, the step (82) of BKL arXiv:2610.05474v1):
 `𝓛(Φ ∘ G) = DΦ[DG·b + ½ Σ_k D²G[σ_k, σ_k]] + ½ Σ_k D²Φ[DG·σ_k, DG·σ_k]`. -/
@@ -170,7 +170,7 @@ section S3B1LLocalChainRule
 
 
 
-/-! Pointwise chain rule under local `C²` hypotheses (task S-3b1L; proof body GPT, statement by the S-line sub-controller). -/
+/-! Pointwise chain rule under local `C²` hypotheses. -/
 
 private theorem contDiffAt_fderiv_of_contDiffAt_two {E F : Type*}
     [NormedAddCommGroup E] [NormedSpace ℝ E]

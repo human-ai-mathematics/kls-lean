@@ -6,7 +6,7 @@ import Mathlib.Analysis.ODE.Gronwall
 # Integral Grönwall inequality
 
 `φ(t) ≤ a + K ∫₀ᵗ φ` on `[0, T]` for a measurable bounded `φ` and `K ≥ 0` gives `φ(t) ≤ a e^{Kt}`, any real
-`a` (Mathlib has the differential and discrete forms). Proof bodies: GPT (BKL Claude-controller goal, tasks S5cd); statements and placement: Claude.
+`a` (Mathlib has the differential and discrete forms).
 -/
 
 noncomputable section
@@ -15,7 +15,7 @@ open MeasureTheory Filter Topology
 
 namespace FunctionalInequalities.Analysis
 
-/-- Integral Grönwall (real analysis, needed for S5e-2; not in Mathlib in this form). -/
+/-- Integral Grönwall (real analysis; not in Mathlib in this form). -/
 theorem le_mul_exp_of_le_add_integral {φ : ℝ → ℝ} {a K T : ℝ} (hK : 0 ≤ K)
     (hφm : Measurable φ) (hφb : ∃ B, ∀ t ∈ Set.Icc (0 : ℝ) T, |φ t| ≤ B)
     (h : ∀ t ∈ Set.Icc (0 : ℝ) T, φ t ≤ a + K * ∫ s in Set.Ioc (0 : ℝ) t, φ s) :

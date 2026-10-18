@@ -37,14 +37,14 @@ abbrev JointSpace (N n : ℕ) : Type := EuclideanSpace ℝ (Option (Fin N × Fin
 /-- The source's `σ_β = √(1 + 2/β²)`. -/
 def sigma (β : ℝ) : ℝ := Real.sqrt (1 + 2 / β ^ 2)
 
-/-- `σ_β² = 1 + 2/β²` (Luna, task R7a). -/
+/-- `σ_β² = 1 + 2/β²`. -/
 theorem sigma_sq {β : ℝ} (hβ : 0 < β) :
     sigma β ^ 2 = 1 + 2 / β ^ 2 := by
   unfold sigma
   rw [Real.sq_sqrt]
   positivity
 
-/-- **The limit `β → ∞`** (BKL p. 30): `X ≤ C σ_β²` for all `β > 0` forces `X ≤ C` (Luna, task R7a3). -/
+/-- **The limit `β → ∞`** (BKL p. 30): `X ≤ C σ_β²` for all `β > 0` forces `X ≤ C`. -/
 theorem le_of_forall_le_mul_sigma_sq {X C : ℝ} (h : ∀ β : ℝ, 0 < β → X ≤ C * sigma β ^ 2) :
     X ≤ C := by
   by_contra hle
@@ -239,7 +239,7 @@ def CumulantBound (d : ℕ) (b : ℝ) : Prop :=
 The hypothesis `CumulantBound` is stated for laws on `EuclideanSpace ℝ (Fin m)`; the joint law is
 moved there by the linear isometry `coordinateEquiv`, which preserves isotropy
 (`Isotropic.map_linearIsometryEquiv`), log-concavity and cumulants
-(`cumulant_map_linearIsometryEquiv`). Codex clients (`reviews/A1-replan/`). -/
+(`cumulant_map_linearIsometryEquiv`). -/
 
 /-- The index set of the joint space has `N n + 1` elements. -/
 theorem card_option_prod (N n : ℕ) : Fintype.card (Option (Fin N × Fin n)) = N * n + 1 := by

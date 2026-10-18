@@ -17,12 +17,10 @@ centered isotropic probability law with all exponential moments satisfies `R^μ_
 (BKL Lemma 4.2 in that conditional, restricted form; the Letwin estimate is not proved here).
 
 Cumulants of order `k ≥ 2` transform along affine maps `x ↦ T(x − a)` through the adjoint of `T`
-(`cumulant_map_affine`, BKL (77)); proof body: GPT (BKL Claude-controller goal, task T1b), statement and
-placement: Claude.
+(`cumulant_map_affine`, BKL (77)).
 
 `LetwinQuadraticBound` is closed under convergence of mixed moments of degree at most four
-(`letwinQuadraticBound_of_tendsto_moments`, Letwin arXiv:2607.24164v1, last sentence of Lemma A.1); proof body:
-GPT (Letwin sub-controller task L-T10e), statement by the Letwin sub-controller, placement: Claude.
+(`letwinQuadraticBound_of_tendsto_moments`, Letwin arXiv:2607.24164v1, last sentence of Lemma A.1).
 -/
 
 noncomputable section
@@ -176,7 +174,7 @@ theorem tiltAverage_inner_eq_fderiv_logLaplace (μ : Measure E) [IsFiniteMeasure
 
 omit [CompleteSpace E] in
 /-- **Local tilt-average/derivative identity**: `F_{⟪v,·⟫}(z) = ∂_v Λ_μ(z)` for `‖z‖ < r`, assuming
-only the single exponential moment `∫ e^{r‖x‖} dμ < ∞` (Luna, task R4b2). -/
+only the single exponential moment `∫ e^{r‖x‖} dμ < ∞`. -/
 theorem tiltAverage_inner_eq_fderiv_logLaplace_of_lt (μ : Measure E) [IsFiniteMeasure μ] [NeZero μ]
     {r : ℝ} (hexp : Integrable (fun x => Real.exp (r * ‖x‖)) μ) {z : E} (hz : ‖z‖ < r) (v : E) :
     tiltAverage μ (fun x => ⟪v, x⟫) z = fderiv ℝ (logLaplace μ) z v := by
@@ -708,7 +706,7 @@ theorem norm_coordTensor_taylorTensor_inner_sq_le (μ : Measure E) [IsProbabilit
 omit [CompleteSpace E] in
 /-- **Linear-function step in an arbitrary orthonormal basis** (BKL p. 30): the special case
 `norm_coordTensor_taylorTensor_inner_sq_le` with `stdOrthonormalBasis ℝ E` replaced by any orthonormal
-basis `bE` (Luna, task B3g). -/
+basis `bE`. -/
 theorem norm_coordTensor_taylorTensor_inner_sq_le_of_basis (μ : Measure E) [IsProbabilityMeasure μ]
     (hexp : ∀ r : ℝ, Integrable (fun x => Real.exp (r * ‖x‖)) μ) {m : ℕ}
     (bE : OrthonormalBasis (Fin m) ℝ E) {d : ℕ} {b : ℝ}
@@ -749,7 +747,7 @@ open scoped ContDiff in
 omit [CompleteSpace E] in
 /-- **Local smoothness of `Λ_μ`** (BKL p. 29, "finite and smooth in a neighborhood of the origin"):
 one positive norm-exponential moment `∫ e^{r‖x‖} dμ < ∞` makes `Λ_μ` `C^∞` on the open ball of
-radius `r`. Provenance: Codex wrapper over the Luna local bodies in `Tilt/Local.lean`. -/
+radius `r`. The local integral identities are in `Tilt/Local.lean`. -/
 theorem contDiffOn_logLaplace_ball (μ : Measure E) [IsFiniteMeasure μ] [NeZero μ] {r : ℝ}
     (hr : 0 < r) (hexp : Integrable (fun x => Real.exp (r * ‖x‖)) μ) :
     ContDiffOn ℝ ∞ (logLaplace μ) (Metric.ball 0 r) := by
@@ -795,7 +793,7 @@ private theorem equiv_iteratedFDeriv_univ {E F G : Type*} [NormedAddCommGroup E]
       (Set.mem_univ (g x)) i
 
 /-- **Cumulants along a linear isometry**: `κ^{φ_*ν}_k(φ u₁, …, φ u_k) = κ^ν_k(u₁, …, u_k)` for
-every measure `ν`, since `Λ_{φ_*ν} = Λ_ν ∘ φ⁻¹` pointwise (Luna, task T1b). -/
+every measure `ν`, since `Λ_{φ_*ν} = Λ_ν ∘ φ⁻¹` pointwise. -/
 theorem cumulant_map_linearIsometryEquiv {E F : Type*} [NormedAddCommGroup E]
     [InnerProductSpace ℝ E] [CompleteSpace E] [FiniteDimensional ℝ E] [MeasurableSpace E]
     [BorelSpace E] [NormedAddCommGroup F] [InnerProductSpace ℝ F] [CompleteSpace F]

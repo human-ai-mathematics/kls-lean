@@ -9,8 +9,7 @@ For a probability measure with one exponential moment `∫ e^{r‖x‖} < ∞`, 
 the balls `B(0, R)` converge to its cumulants as `R → ∞` (`tendsto_cumulant_cond_closedBall`): cumulants are a fixed
 continuous function (Faà di Bruno, `FormalMultilinearSeries.taylorComp`) of the moment jets at `0`, and the
 truncated moment tensors converge. Used to reduce BKL arXiv:2610.05474v1, Theorem 4.1, to compactly supported laws
-(p. 19, end of Section 6). Proof body: Fable worker (BKL Claude-controller goal, task S8b); statement and
-placement: Claude.
+(p. 19, end of Section 6).
 -/
 
 noncomputable section

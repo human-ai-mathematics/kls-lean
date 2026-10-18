@@ -12,11 +12,11 @@ import Mathlib.MeasureTheory.Function.Jacobian
 
 First-order expansions of the subgradient through the resolvent of the subdifferential, integrated second
 differences, and Alexandrov's theorem that a convex function has a second-order Taylor expansion almost everywhere
-(weak Letwin route, block T12d).
+(weak Letwin route).
 
-* `subgradient_expansion_of_hasFDerivAt_resolvent` (task L-T12d4);
-* `tendsto_integral_secondDifference_mul`, `integral_mul_le_integral_mul_sum_iteratedFDeriv` (task L-T12d7);
-* `ae_exists_secondOrder_expansion` (task L-T12d6).
+* `subgradient_expansion_of_hasFDerivAt_resolvent`;
+* `tendsto_integral_secondDifference_mul`, `integral_mul_le_integral_mul_sum_iteratedFDeriv`;
+* `ae_exists_secondOrder_expansion`.
 -/
 
 noncomputable section
@@ -146,7 +146,7 @@ private lemma resolvent_absorb_remainder {E : Type*} [NormedAddCommGroup E]
 
 set_option maxHeartbeats 800000 in
 /-- **Inverting the resolvent at a point of invertible differentiability** (weak Letwin route,
-Alexandrov's theorem, task T12d4): let `P` be the resolvent of `f` (`z − P z` is a subgradient of `f` at
+Alexandrov's theorem): let `P` be the resolvent of `f` (`z − P z` is a subgradient of `f` at
 `P z` for every `z`). If `P` is differentiable at `z` with invertible derivative `T`, then `p₀ := z − P z` is
 the only subgradient of `f` at `x := P z`, and every subgradient `q` of `f` at `y` near `x` satisfies
 `‖q − p₀ − (T⁻¹ (y − x) − (y − x))‖ ≤ ε ‖y − x‖`. -/
@@ -253,7 +253,7 @@ section LT12D7FatouSecondDifference
 open MeasureTheory Set Filter
 open scoped Topology
 
-/-! Second differences against smooth tests and their limit (task L-T12d7). -/
+/-! Second differences against smooth tests and their limit. -/
 
 namespace FunctionalInequalities.Analysis
 
@@ -375,8 +375,7 @@ private lemma integral_secondDifference_eq {E : Type*} [NormedAddCommGroup E]
       rw [integral_div, integral_sub hsum htwo,
         integral_add hp hm, integral_const_mul]
 
-/-- **Second difference quotients converge to the distributional second derivative** (weak Letwin route,
-task T12d7): for continuous `u` and `χ ∈ C²` with compact support,
+/-- **Second difference quotients converge to the distributional second derivative** (weak Letwin route): for continuous `u` and `χ ∈ C²` with compact support,
 `∫ (u(x + t v) + u(x − t v) − 2 u(x)) / t² · χ(x) dx → ∫ u(x) ∂²_v χ(x) dx` as `t → 0⁺`. -/
 theorem tendsto_integral_secondDifference_mul {E : Type*} [NormedAddCommGroup E]
     [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
@@ -447,8 +446,7 @@ private lemma ofReal_mul_le_of_sub (a k : ℝ) (B : ENNReal)
   filter_upwards [self_mem_nhdsWithin] with ε hε
   exact h ε hε
 
-/-- **Fatou bound for the distributional second derivatives of a convex function** (weak Letwin route,
-task T12d7, input of the distributional log-det inequality): if `g` is below the lower limit of a
+/-- **Fatou bound for the distributional second derivatives of a convex function** (weak Letwin route, input of the distributional log-det inequality): if `g` is below the lower limit of a
 nonnegative combination of second difference quotients of the convex `u` almost everywhere, then
 `∫ g χ ≤ ∫ u ∑ᵢ cᵢ ∂²_{vᵢ} χ` for every nonnegative `χ ∈ C²` with compact support. -/
 theorem integral_mul_le_integral_mul_sum_iteratedFDeriv {E : Type*} [NormedAddCommGroup E]
@@ -578,12 +576,12 @@ section LT12D6AlexandrovTheorem
 open MeasureTheory Set Filter
 open scoped RealInnerProductSpace Topology
 
-/-! **Alexandrov's theorem**: a convex function on a finite-dimensional space has a second-order Taylor expansion at almost every point (task L-T12d6). -/
+/-! **Alexandrov's theorem**: a convex function on a finite-dimensional space has a second-order Taylor expansion at almost every point. -/
 
 namespace FunctionalInequalities.Analysis
 
 /-- **Alexandrov's theorem** (A. D. Alexandrov 1939; Evans–Gariepy, *Measure theory and fine properties of
-functions*, Thm 6.9; weak Letwin route, task T12d6): a convex function on a finite-dimensional real inner
+functions*, Thm 6.9; weak Letwin route): a convex function on a finite-dimensional real inner
 product space has, at almost every point, a unique subgradient `p` and a second-order expansion
 `f y = f x + ⟪p, y − x⟫ + ½ ⟪B (y − x), y − x⟫ + o(‖y − x‖²)` with a symmetric `B`. -/
 theorem ae_exists_secondOrder_expansion {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]

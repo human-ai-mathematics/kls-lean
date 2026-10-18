@@ -8,7 +8,7 @@ import FunctionalInequalities.Probability.Diffusion.Generator
 # Lyapunov moment bound for the cutoff Eldan process
 
 Gronwall bound `E 𝒱(p_t) ≤ 𝒱(p_0) e^{Kt}` along a ball-cutoff Eldan process, from a generator bound `L𝒱 ≤ K𝒱`
-taken as a hypothesis, and the resulting Markov tail bound (BKL Section 5, task S-5e2).
+taken as a hypothesis, and the resulting Markov tail bound (BKL Section 5).
 -/
 
 noncomputable section

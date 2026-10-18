@@ -4,8 +4,7 @@ import FunctionalInequalities.Analysis.Tensor.SlotAction
 # The energy form of a coordinate tensor
 
 `energyForm A T = ⟨T, (A⁻¹)^{⊗r} T⟩` for an operator `A` and an order-`r` coordinate tensor `T` (BKL arXiv:2610.05474v1, p. 22,
-`F(A, T)`), the standard matrix of an operator, `energyForm 1 T = |T|²`, and smoothness near invertible `A`. Proof bodies:
-GPT (S-line sub-controller task S-3bF); statements by the S-line sub-controller; placement: Claude.
+`F(A, T)`), the standard matrix of an operator, `energyForm 1 T = |T|²`, and smoothness near invertible `A`.
 -/
 
 noncomputable section
@@ -86,7 +85,7 @@ section S3Bf2EnergyFormFirstOrder
 open Matrix
 open scoped RealInnerProductSpace
 
-/-! First derivative of the energy form at `A = Id` (BKL (88), first order; task S-3bF2). -/
+/-! First derivative of the energy form at `A = Id` (BKL (88), first order). -/
 
 namespace FunctionalInequalities.Analysis.CoordinateTensor
 
@@ -410,7 +409,7 @@ section S3Bf3B1SecondOrderHelpers
 open Matrix
 open scoped RealInnerProductSpace
 
-/-! Helpers for the second-order expansion of the energy form: a double-erasure product sum and line derivatives of `⟪(1 + tB)⁻¹ ·, ·⟫` (task S-3bF3b1). -/
+/-! Helpers for the second-order expansion of the energy form: a double-erasure product sum and line derivatives of `⟪(1 + tB)⁻¹ ·, ·⟫`. -/
 
 namespace FunctionalInequalities.Analysis.CoordinateTensor
 
@@ -643,7 +642,7 @@ section S3Bf3B2SecondOrderCore
 open Matrix
 open scoped RealInnerProductSpace
 
-/-! Second derivative of the energy form along lines and at the identity (BKL (88), second order; task S-3bF3b2). -/
+/-! Second derivative of the energy form along lines and at the identity (BKL (88), second order). -/
 
 namespace FunctionalInequalities.Analysis.CoordinateTensor
 

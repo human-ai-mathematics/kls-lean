@@ -10,8 +10,7 @@ import Mathlib.Analysis.Calculus.Rademacher
 
 `Σⱼ ∂ⱼ adj(∇²u)ᵢⱼ = 0` for `C³` functions `u` (`sum_fderiv_adjugate_hessianMatrix_eq_zero`), in terms of
 `Probability.Stein.hessianMatrix`; the smooth input of the weak Piola identity on the moment-map route to Letwin
-arXiv:2607.24164v1. Proof body: GPT (Letwin sub-controller task L-T6a); statement by the Letwin sub-controller;
-placement: Claude. The cofactor consumers also supply essential boundedness from a Lipschitz gradient and weak adjugate derivatives from a given local-L2 Hessian tensor; they do not assume smoothness of that tensor or prove the main bound.
+arXiv:2607.24164v1. The cofactor consumers also supply essential boundedness from a Lipschitz gradient and weak adjugate derivatives from a given local-L2 Hessian tensor; they do not assume smoothness of that tensor or prove the main bound.
 -/
 
 noncomputable section
@@ -129,7 +128,7 @@ private lemma fderiv_det_updateRow
         rw [hr]
         rfl
 
-/-- **Piola identity for the adjugate of a smooth Hessian** (weak Letwin route, step N10, smooth
+/-- **Piola identity for the adjugate of a smooth Hessian** (weak Letwin route, smooth
 case): for a `C³` function `u` on `ℝⁿ`, the rows of the adjugate (cofactor) matrix of the Hessian
 `H = ∇²u` are divergence-free: `∑ⱼ ∂ⱼ (adj H)ᵢⱼ = 0`. Here `hessianMatrix u y i j = D²u(y)(eᵢ, eⱼ)`
 in the standard basis `eⱼ = EuclideanSpace.basisFun (Fin n) ℝ j`. -/
@@ -278,7 +277,7 @@ open MeasureTheory Matrix Filter
 open scoped Topology
 open FunctionalInequalities.Probability.Stein
 
-/-! The weak Piola identity for `C¹` functions with Lipschitz gradient (task L-T6b). -/
+/-! The weak Piola identity for `C¹` functions with Lipschitz gradient. -/
 
 namespace FunctionalInequalities.Analysis
 
@@ -415,7 +414,7 @@ private lemma weakPiola_smooth {n : ℕ}
         rw [sum_fderiv_adjugate_hessianMatrix_eq_zero hu x i, zero_mul]
       simp only [hz, integral_zero, neg_zero]
 
-/-- **Weak Piola identity for a `C¹` function with Lipschitz gradient** (weak Letwin route, step N10):
+/-- **Weak Piola identity for a `C¹` function with Lipschitz gradient** (weak Letwin route):
 the rows of the adjugate of the a.e. Hessian `H = D(∇u)` are weakly divergence-free,
 `∑ⱼ ∫ (adj H)ᵢⱼ ∂ⱼψ = 0` for every `C¹` test `ψ` with compact support. Here
 `hessianMatrix u x i j = D²u(x)(eᵢ, eⱼ)` is the true Hessian at every point where `∇u` is
@@ -497,7 +496,7 @@ open MeasureTheory Set Filter
 open scoped Topology
 open FunctionalInequalities.Probability.Stein
 
-/-! The weak Piola identity for Lipschitz gradients and the divergence form of the inverse Hessian (weak Letwin route N10; task L-N10a). -/
+/-! The weak Piola identity for Lipschitz gradients and the divergence form of the inverse Hessian (weak Letwin route). -/
 
 namespace FunctionalInequalities.Analysis
 
@@ -804,7 +803,7 @@ private lemma n10_integral_convergence {n : ℕ}
         (fderiv ℝ ψ x v)
     simpa only [n10_hessian, Function.comp_def] using ht
 
-/-- **Weak Piola identity with Lipschitz tests** (weak Letwin route, N10, task N10a): for `u ∈ C¹` with Lipschitz
+/-- **Weak Piola identity with Lipschitz tests** (weak Letwin route): for `u ∈ C¹` with Lipschitz
 gradient and a Lipschitz `ψ` with compact support (`fderiv ℝ ψ` its a.e. derivative),
 `∑ⱼ ∫ (adj ∇²u)ᵢⱼ ∂ⱼψ = 0`. -/
 theorem sum_integral_adjugate_hessianMatrix_mul_fderiv_eq_zero_of_lipschitz {n : ℕ}
@@ -897,7 +896,7 @@ private lemma n10_exp_test_lipschitz {n : ℕ}
   rw [he] at hL
   exact hL
 
-/-- **Divergence of the inverse Hessian** (weak Letwin route, N10, task N10a): if moreover `det ∇²u = e^F` a.e. for a
+/-- **Divergence of the inverse Hessian** (weak Letwin route): if moreover `det ∇²u = e^F` a.e. for a
 Lipschitz `F`, then for Lipschitz `ψ` with compact support
 `∑ⱼ ∫ (∇²u)⁻¹ᵢⱼ ∂ⱼψ = ∑ⱼ ∫ (∇²u)⁻¹ᵢⱼ ∂ⱼF ψ`, i.e. `div (∇²u)⁻¹ = −(∇²u)⁻¹ ∇F` weakly. -/
 theorem sum_integral_inv_hessianMatrix_mul_fderiv_eq {n : ℕ}

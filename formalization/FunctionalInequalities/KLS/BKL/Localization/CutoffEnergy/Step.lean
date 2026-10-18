@@ -16,7 +16,7 @@ import FunctionalInequalities.KLS.BKL.Posterior.Covariance
 
 `cutoffEnergyClaim_succ`: the cutoff energy claim (95) at order `m` from the lower orders, combining Lemma 5.2 in
 cutoff form (`EnergyIntegral.lean`), the Section 6 bound (104), the Lyapunov moment and tail bounds, the boundary
-mean-value step and the envelope arithmetic (105)–(106) (BKL arXiv:2610.05474v1, pp. 24–27; task S-7b3).
+mean-value step and the envelope arithmetic (105)–(106) (BKL arXiv:2610.05474v1, pp. 24–27).
 Lemma 5.1 enters as the named hypothesis `Lemma51Bound`, the exact statement of `generator_cumulantEnergy_ge`.
 -/
 

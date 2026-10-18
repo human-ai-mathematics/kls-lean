@@ -8,8 +8,7 @@ import FunctionalInequalities.KLS.BKL.Posterior.Covariance
 
 For `m ≥ 3`, every slot `i₀` and directions `h`, `𝓛_p κ_m(μ_p)(h) = −(m κ_m(h) + L_m(h))` with `L_m` the middle term (72)
 (`generator_cumulant_posterior`): the generator commutes with `D_z^m` (coefficients independent of `z`), (71) gives
-`𝓛Λ_p(z) = −½⟪v, A⁻¹v⟫`, and the grouped Leibniz expansion (74) finishes. Proof body: Fable worker (BKL Claude-controller
-goal, task S1c); statement and placement: Claude.
+`𝓛Λ_p(z) = −½⟪v, A⁻¹v⟫`, and the grouped Leibniz expansion (74) finishes.
 -/
 
 noncomputable section

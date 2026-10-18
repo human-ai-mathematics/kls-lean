@@ -4,12 +4,16 @@ import FunctionalInequalities.Analysis.BakryEmery.Bochner.Basic
 import FunctionalInequalities.KLS.LogConcave.BrascampLieb
 
 /-!
-# Dual (`H⁻¹`) gradient bounds
+# Dual gradient estimates and the H⁻¹ variance bound
 
-A dual bound `(∫ ∂ᵢf · h dν)² ≤ K ∫ ‖∇h‖² dν` for all compactly supported smooth `h` with a nonzero left side
-forces `K ≥ 0`; support for the `H⁻¹` variance lemma of the weak moment-map route to Letwin arXiv:2607.24164v1,
-Proposition 2.8. Proof body: GPT (Letwin sub-controller task L-T9e); statement by the Letwin sub-controller;
-placement: Claude.
+Supports Letwin arXiv:2607.24164v1, Proposition 2.8, through three interfaces:
+- nonnegativity of a compact-test dual constant for a positive-dimensional law
+  with continuous tilted density;
+- the integrated Bochner Hessian bound for a convex C² potential;
+- `variance_le_sum_of_partial_dual_bounds`, retaining the C² convex potential,
+  C¹/L² function and L² partial-derivative hypotheses stated below.
+
+The variance assembly uses the heat-generator range density from `HeatSemigroup/Range.lean`.
 -/
 
 noncomputable section
@@ -175,10 +179,9 @@ namespace FunctionalInequalities.Analysis.BakryEmery
 
 section LT9CBochnerHessianBound
 
-open MeasureTheory InnerProductSpace
-open scoped ContDiff
+open InnerProductSpace
 
-/-! Bochner Hessian bound for a convex `C²` potential (task L-T9c; proof body GPT, statement by the Letwin sub-controller). -/
+/-! Bochner Hessian bound for a convex `C²` potential. -/
 
 private theorem partial_integrable {n : ℕ}
     (μ : Measure (EuclideanSpace ℝ (Fin n))) [IsFiniteMeasureOnCompacts μ]
@@ -247,7 +250,7 @@ private theorem gammaTwo_integrable {n : ℕ}
   exact h₁
 
 /-- **Bochner bound for the coordinate Hessian under a convex `C²` potential** (Letwin
-arXiv:2607.24164v1, Proposition 2.8 via Barthe–Klartag; weak Letwin route, N16 support): for
+arXiv:2607.24164v1, Proposition 2.8 via Barthe–Klartag; weak Letwin route): for
 `ν = e^{-W} dm` with `W` convex and `C²`, and `g ∈ C_c^∞`,
 `∑ᵢ ∫ ‖∇(∂ᵢ g)‖² dν ≤ ∫ (ℒg)² dν` with `ℒg = Δg − ⟪∇W, ∇g⟫` and `∂ᵢ g = Dg(eᵢ)` in the
 standard coordinates of `EuclideanSpace ℝ (Fin n)`. -/
@@ -428,14 +431,13 @@ end FunctionalInequalities.Analysis.BakryEmery
 
 section LT9DHminus1VarianceAssembly
 
-open MeasureTheory ProbabilityTheory Filter Topology Set InnerProductSpace
-open FunctionalInequalities.Analysis.BakryEmery
-open FunctionalInequalities.KLS.LogConcave.HeatSemigroup
-open scoped ContDiff RealInnerProductSpace
-
-/-! The `H⁻¹` variance lemma for a convex `C²` potential (Letwin Proposition 2.8 analogue; frozen statement W0T9; task L-T9d). -/
+/-! The `H⁻¹` variance bound for a convex `C²` potential (Letwin Proposition 2.8). -/
 
 namespace FunctionalInequalities.KLS.LogConcave
+
+open ProbabilityTheory InnerProductSpace
+open Analysis.BakryEmery HeatSemigroup
+open scoped RealInnerProductSpace
 
 /-- **`H⁻¹` variance bound for a convex potential** (Letwin arXiv:2607.24164v1, Proposition 2.8,
 quoted from Barthe–Klartag; here for a `C²` convex potential, the form used after Gaussian

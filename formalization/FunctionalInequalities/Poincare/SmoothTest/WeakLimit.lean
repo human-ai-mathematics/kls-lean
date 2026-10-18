@@ -27,7 +27,7 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteS
   [MeasurableSpace E] [BorelSpace E]
 
 /-- **Weak passage of the Poincaré inequality on a compactly supported smooth test**: if `μ_j → μ`
-weakly, `C_j → C` and `Var_{μ_j} f ≤ C_j ∫‖∇f‖² dμ_j`, then `Var_μ f ≤ C ∫‖∇f‖² dμ` (Luna, task S2-W1-2). -/
+weakly, `C_j → C` and `Var_{μ_j} f ≤ C_j ∫‖∇f‖² dμ_j`, then `Var_μ f ≤ C ∫‖∇f‖² dμ`. -/
 theorem variance_le_mul_energy_of_tendsto {μs : ℕ → ProbabilityMeasure E} {μ : ProbabilityMeasure E}
     (hlim : Tendsto μs atTop (𝓝 μ)) {Cseq : ℕ → ℝ} {C : ℝ} (hC : Tendsto Cseq atTop (𝓝 C))
     {f : E → ℝ} (hf : ContDiff ℝ ∞ f) (hc : HasCompactSupport f)
@@ -155,8 +155,7 @@ section Cutoff
 
 variable [FiniteDimensional ℝ E]
 
-/-- A `C^∞` function with compact support is an admissible test for every finite measure (Luna, task
-S2-W2a). -/
+/-- A `C^∞` function with compact support is an admissible test for every finite measure. -/
 theorem Admissible.of_contDiff_hasCompactSupport {μ : Measure E} [IsFiniteMeasure μ]
     {f : E → ℝ} (hf : ContDiff ℝ ∞ f) (hc : HasCompactSupport f) : Admissible μ f := by
     refine
@@ -198,8 +197,7 @@ private lemma scaled_eq_one_of_ceil_le (x : E) (n : ℕ)
 
 omit [CompleteSpace E] [FiniteDimensional ℝ E] in
 /-- The first and second integrals of the cutoffs `f χ_{n+1}` converge to those of `f`:
-`∫ χ_{n+1} f → ∫ f` and `∫ (χ_{n+1} f)² → ∫ f²` (no `L²`-norm convergence is exported).
-(Luna, task S2-W2b). -/
+`∫ χ_{n+1} f → ∫ f` and `∫ (χ_{n+1} f)² → ∫ f²` (no `L²`-norm convergence is exported). -/
 theorem tendsto_integral_scaled_mul {μ : Measure E} [IsFiniteMeasure μ] {f : E → ℝ}
     (hf : MemLp f 2 μ) :
     Tendsto (fun n : ℕ => ∫ x, Energy.Euclidean.LipschitzApproximation.scaled ((n : ℝ) + 1) x * f x ∂μ)
@@ -326,7 +324,7 @@ theorem tendsto_integral_scaled_mul {μ : Measure E} [IsFiniteMeasure μ] {f : E
     exact ⟨hfirst, hsecond⟩
 
 omit [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] in
-/-- Inside the ball the cutoff does not change the gradient (Luna, task S2-W2c1a). -/
+/-- Inside the ball the cutoff does not change the gradient. -/
 theorem norm_gradient_scaled_mul_sq_eq {R : ℝ} (hR : 0 < R) {f : E → ℝ} {x : E}
     (hf : DifferentiableAt ℝ f x) (hx : ‖x‖ < R) :
     ‖gradient (fun y => Energy.Euclidean.LipschitzApproximation.scaled R y * f y) x‖ ^ 2 =
@@ -341,7 +339,7 @@ theorem norm_gradient_scaled_mul_sq_eq {R : ℝ} (hR : 0 < R) {f : E → ℝ} {x
     simp
 
 omit [MeasurableSpace E] [BorelSpace E] in
-/-- Everywhere the cutoff gradient is dominated by `2‖∇f‖² + 2 (M/R)² f²` (Luna, task S2-W2c1). -/
+/-- Everywhere the cutoff gradient is dominated by `2‖∇f‖² + 2 (M/R)² f²`. -/
 theorem norm_gradient_scaled_mul_sq_le {R M : ℝ} (hR : 0 < R)
     (hM : ∀ x : E, ‖fderiv ℝ (⇑(Energy.Euclidean.LipschitzApproximation.bump (E := E))) x‖ ≤ M)
     {f : E → ℝ} {x : E} (hf : DifferentiableAt ℝ f x) :
@@ -420,8 +418,7 @@ theorem norm_gradient_scaled_mul_sq_le {R M : ℝ} (hR : 0 < R)
       _ = 2 * ‖gradient f x‖ ^ 2 + 2 * (M / R) ^ 2 * f x ^ 2 := by
         rfl
 
-/-- The energies of the cutoffs `f χ_{n+1}` converge to the energy of `f` for an admissible `f`
-(Luna, task S2-W2c2). -/
+/-- The energies of the cutoffs `f χ_{n+1}` converge to the energy of `f` for an admissible `f`. -/
 theorem tendsto_energy_scaled_mul {μ : Measure E} [IsFiniteMeasure μ] {f : E → ℝ}
     (hf : Admissible μ f) :
     Tendsto (fun n : ℕ =>
@@ -531,7 +528,7 @@ theorem tendsto_energy_scaled_mul {μ : Measure E} [IsFiniteMeasure μ] {f : E �
         hmeas hbound hdom hlim
 
 /-- **A Poincaré bound on compactly supported admissible tests extends to all admissible tests**
-(BKL Section 2, cutoff extension; Luna, task S2-W2 assembly). -/
+(BKL Section 2, cutoff extension). -/
 theorem Holds.of_compactSupport {μ : Measure E} [IsProbabilityMeasure μ] {C : ℝ} (hC : 0 ≤ C)
     (h : ∀ f : E → ℝ, Admissible μ f → HasCompactSupport f → variance f μ ≤ C * energy μ f) :
     Holds μ C := by

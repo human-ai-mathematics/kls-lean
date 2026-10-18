@@ -12,11 +12,11 @@ the joint law `ν` of `(S, X₁, …, X_N)` and the Hilbert–Schmidt lower boun
 * `sum_sq_cumulant_ge_of_entries`: if the entries satisfy (112), the lower bound holds; the copy
   blocks are selected by `card_mul_sq_mul_sum_sq_le_of_blocks`.
 
-* `lintegral_exp_inner_jointLaw` (Luna), `joint_integrability_factorization` and
-  `logLaplace_jointLaw_factorization` (Codex): the joint Laplace transform factorizes, in extended,
+* `lintegral_exp_inner_jointLaw`, `joint_integrability_factorization` and
+  `logLaplace_jointLaw_factorization`: the joint Laplace transform factorizes, in extended,
   real and logarithmic form, with every factor's integrability derived from the joint one.
 
-(111) and (112) themselves are not proved here yet.
+(111) and (112) themselves are not proved here.
 -/
 
 noncomputable section
@@ -67,7 +67,7 @@ theorem sum_sq_cumulant_ge_of_entries {n N : ℕ} (hN : 0 < N) (ν : Measure (Jo
 open scoped RealInnerProductSpace
 
 /-- **Factorization of the joint Laplace transform** (BKL p. 28), in extended nonnegative form:
-`∫⁻ e^{⟪z, p⟫} dν = (∫⁻ e^{(z₀/σ) s} dη_β) · Π_i ∫⁻ e^{(z₀/(σ√N)) f + ⟪z_i, x⟫} dμ` (Luna, task LF2). -/
+`∫⁻ e^{⟪z, p⟫} dν = (∫⁻ e^{(z₀/σ) s} dη_β) · Π_i ∫⁻ e^{(z₀/(σ√N)) f + ⟪z_i, x⟫} dμ`. -/
 theorem lintegral_exp_inner_jointLaw {n N : ℕ} (μ : Measure (EuclideanSpace ℝ (Fin n)))
     [SigmaFinite μ] {f : EuclideanSpace ℝ (Fin n) → ℝ} (hf : Measurable f) (β σ : ℝ)
     [SigmaFinite (laplaceMeasure β)] (z : JointSpace N n) :
@@ -295,8 +295,7 @@ theorem logLaplace_jointLaw_factorization {n N : ℕ} (μ : Measure (EuclideanSp
 
 /-! ### Exponential moments of `f` and of the graph law
 
-Codex proofs (`build/reviews/2026-10-07-bkl-continuous/reviews/R4-GraphMoment/`) over the
-factorization above; inputs for the local smoothness of `Λ` in (111). -/
+The factorization above supplies exponential-moment inputs for the local smoothness of `Λ` in (111). -/
 
 /-- **Exponential moment of `f` from the joint law.** If the joint law has an exponential moment
 `e^{r‖p‖}` and `N > 0`, then `f` has the exponential moment `e^{t|f|}` with
@@ -471,8 +470,7 @@ theorem graph_map_probability {n : ℕ} (μ : Measure (EuclideanSpace ℝ (Fin n
         EuclideanSpace ℝ (Option (Fin n))))) :=
   Measure.isProbabilityMeasure_map (graph_map_measurable hf).aemeasurable
 
-/-- **The copy factor is the Laplace transform of the graph law** `(f(x), x)_* μ` at `(c, z)`
-(Luna, task R4c). -/
+/-- **The copy factor is the Laplace transform of the graph law** `(f(x), x)_* μ` at `(c, z)`. -/
 theorem integral_exp_add_inner_eq_graph {n : ℕ} (μ : Measure (EuclideanSpace ℝ (Fin n)))
     [IsProbabilityMeasure μ] {f : EuclideanSpace ℝ (Fin n) → ℝ} (hf : Measurable f) (c : ℝ)
     (z : EuclideanSpace ℝ (Fin n)) :
@@ -507,8 +505,7 @@ theorem integral_exp_add_inner_eq_graph {n : ℕ} (μ : Measure (EuclideanSpace 
             simp [v, φ, PiLp.inner_apply, Fintype.sum_option, mul_comm]
       _ = ∫ y, Real.exp ⟪v, y⟫ ∂(μ.map φ) := hmap.symm
 
-/-- **The tilt average of the `none` coordinate of the graph law at `(0, z)` is `F_f(z)`** (Luna,
-task R4c2). -/
+/-- **The tilt average of the `none` coordinate of the graph law at `(0, z)` is `F_f(z)`**. -/
 theorem tiltAverage_graph_none {n : ℕ} (μ : Measure (EuclideanSpace ℝ (Fin n)))
     [IsProbabilityMeasure μ] {f : EuclideanSpace ℝ (Fin n) → ℝ} (hf : Measurable f)
     (z : EuclideanSpace ℝ (Fin n)) :
@@ -544,7 +541,7 @@ theorem tiltAverage_graph_none {n : ℕ} (μ : Measure (EuclideanSpace ℝ (Fin 
     rw [hp x, he x]
 
 /-- **Derivative of a copy term of (111) at `w = 0`**: `d/dw log ∫ e^{c w f + ⟪z, x⟫} dμ = c F_f(z)`,
-through the graph law (Luna, task R4d1). -/
+through the graph law. -/
 theorem hasDerivAt_log_integral_exp_copy {n : ℕ} (μ : Measure (EuclideanSpace ℝ (Fin n)))
     [IsProbabilityMeasure μ] {f : EuclideanSpace ℝ (Fin n) → ℝ} (hf : Measurable f) {t : ℝ}
     (ht : 0 < t)

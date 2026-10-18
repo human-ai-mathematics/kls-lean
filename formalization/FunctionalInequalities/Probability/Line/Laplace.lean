@@ -93,9 +93,8 @@ theorem isProbabilityMeasure_laplaceMeasure {β : ℝ} (hβ : 0 < β) :
 
 /-! ### Local moment generating function and moments
 
-The density MGF is Luna's (task B2b, round 6); the law MGF, the moment identification through
-`ProbabilityTheory.iteratedDeriv_mgf_zero` and the rational calculus are Codex proofs
-(`build/reviews/2026-10-07-bkl-continuous/reviews/Q0b-mgf-closure/`). Only `|w| < β` is used. -/
+The density and law moment generating functions, the moment identification through
+`ProbabilityTheory.iteratedDeriv_mgf_zero` and the rational calculus are used only for `|w| < β`. -/
 
 section Moments
 
@@ -372,7 +371,7 @@ theorem laplaceMeasure_moments {β : ℝ} (hβ : 0 < β) :
   simpa only [pow_one] using integrable_pow_laplaceMeasure hβ 1
 
 /-- **The noise factor of BKL (111) has zero derivative at the origin**: `w ↦ log ∫ e^{(w/σ)s} dη_β(s)`
-is differentiable at `0` with derivative `0`, since `η_β` is centered (Luna, task R4a3). -/
+is differentiable at `0` with derivative `0`, since `η_β` is centered. -/
 theorem hasDerivAt_log_integral_exp_laplaceMeasure_zero {β σ : ℝ} (hβ : 0 < β) (hσ : σ ≠ 0) :
     HasDerivAt (fun w : ℝ => Real.log (∫ s : ℝ, Real.exp (w / σ * s) ∂laplaceMeasure β)) 0 0 := by
     have hi (w : ℝ) (hw : |w / σ| < β) :

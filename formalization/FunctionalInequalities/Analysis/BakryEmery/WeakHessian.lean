@@ -11,8 +11,7 @@ open MeasureTheory
 open FunctionalInequalities.Analysis.BakryEmery
 open scoped RealInnerProductSpace ContDiff
 
-/-! Weak-route support for Letwin arXiv:2607.24164v1. Proof body: the independently
-checked existing L-N11e-third-derivative-symmetry candidate; placement and acceptance: Codex closeout. -/
+/-! Weak-route support for Letwin arXiv:2607.24164v1. -/
 
 section WeakThirdDerivativeSymmetry
 
@@ -145,7 +144,7 @@ private lemma contDiff_fderiv_apply
   exact hfd.clm_apply
     (contDiff_const : ContDiff ℝ 1 (fun _ : E => v))
 
-/-- **Symmetry of the weak third derivative** (weak Letwin route, N11, task N11e): for `u ∈ C¹` with Lipschitz gradient, if
+/-- **Symmetry of the weak third derivative** (weak Letwin route): for `u ∈ C¹` with Lipschitz gradient, if
 `T · k i j` is the weak derivative of the Hessian entry `Hᵢⱼ` along `eₖ` for all indices, then a.e. `Tₖᵢⱼ = Tᵢₖⱼ` and
 `Tₖᵢⱼ = Tₖⱼᵢ`. -/
 theorem ae_weak_third_derivative_symm {n : ℕ} {u : EuclideanSpace ℝ (Fin n) → ℝ} (hu : ContDiff ℝ 1 u)

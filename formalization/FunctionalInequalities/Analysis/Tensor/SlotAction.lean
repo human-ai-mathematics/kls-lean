@@ -5,8 +5,7 @@ import Mathlib
 
 Order-`r` coordinate tensors on `ℝⁿ`, their Euclidean inner product, the action `H^{(s)}` of a matrix on the `s`-th input
 and `Σ_H = Σ_s H^{(s)}` (BKL arXiv:2610.05474v1, p. 23), and the algebra (89)–(91) of the proof of Lemma 5.1 at `A = Id`:
-the drift expression is at least `½ Σ|W_i|² − 17 m² |T|² − 2⟨T, L⟩` when `Σ_i H_i² ≤ 8 Id`. Proof body: GPT (BKL
-Claude-controller goal, task S3a); statement and placement: Claude.
+the drift expression is at least `½ Σ|W_i|² − 17 m² |T|² − 2⟨T, L⟩` when `Σ_i H_i² ≤ 8 Id`.
 -/
 
 noncomputable section
@@ -255,7 +254,7 @@ section S3Bf3ASlotActionAlgebra
 
 open Matrix
 
-/-! Commutation and inner-product algebra of slot actions (task S-3bF3a). -/
+/-! Commutation and inner-product algebra of slot actions. -/
 
 namespace FunctionalInequalities.Analysis.CoordinateTensor
 

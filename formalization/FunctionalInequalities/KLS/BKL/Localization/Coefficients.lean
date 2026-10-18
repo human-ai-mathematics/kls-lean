@@ -9,8 +9,7 @@ Bizeul–Klartag–Lehec arXiv:2610.05474v1, (67), compact-prior stage: the para
 covariance `A(p)`, the drift `(A⁻¹ a, A⁻¹)`, the noise columns `(A^{-1/2} e_k, 0)`, the generator
 `𝓛F = DF[(A⁻¹a, A⁻¹)] + ½ Σ_k D²F[(A^{-1/2}e_k, 0), (A^{-1/2}e_k, 0)]`, and the cutoff coefficients
 `γ² · drift`, `γ · noise` for an admissible cutoff `γ`, with `𝓛_γ F = γ² 𝓛F` and the admissibility of the cutoff
-coefficients (globally Lipschitz, bounded, compactly supported) for an isotropic compact prior. Statements and placement:
-Claude; proof bodies: Fable worker (BKL Claude-controller goal, task S5d1).
+coefficients (globally Lipschitz, bounded, compactly supported) for an isotropic compact prior.
 -/
 
 noncomputable section

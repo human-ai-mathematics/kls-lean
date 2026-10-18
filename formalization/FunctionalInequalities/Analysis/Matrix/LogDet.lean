@@ -20,7 +20,6 @@ Two matrix facts used on the weak moment-map route to Letwin's quadratic-form bo
   `log det B + ‖B − A‖²_F/(2K²) ≤ log det A + tr(A⁻¹(B − A))` (the difference-quotient estimate of the
   Hessian of the moment map).
 
-Proof bodies: GPT (BKL Claude-controller goal, tasks W0T2 and W0T1); statements and placement: Claude.
 -/
 
 noncomputable section

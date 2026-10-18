@@ -284,8 +284,7 @@ private lemma integrable_exp_inner_of_all_exp (μ : Measure E) [IsFiniteMeasure 
   exact (hexp ‖z‖).mono' hmeas hbound
 
 omit [CompleteSpace E] [FiniteDimensional ℝ E] [BorelSpace E] in
-/-- `F_f(z) · ∫ e^{⟪z,x⟫} dμ = ∫ e^{⟪z,x⟫} f(x) dμ` whenever `∫ e^{⟪z,x⟫} dμ ≠ 0`
-(Luna, task RED-D1a). -/
+/-- `F_f(z) · ∫ e^{⟪z,x⟫} dμ = ∫ e^{⟪z,x⟫} f(x) dμ` whenever `∫ e^{⟪z,x⟫} dμ ≠ 0`. -/
 theorem tiltAverage_mul_integral_exp (μ : Measure E) (f : E → ℝ) (z : E)
     (hz : (∫ x, Real.exp ⟪z, x⟫ ∂μ) ≠ 0) :
     tiltAverage μ f z * ∫ x, Real.exp ⟪z, x⟫ ∂μ = ∫ x, Real.exp ⟪z, x⟫ * f x ∂μ := by

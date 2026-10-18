@@ -22,7 +22,7 @@ open scoped NNReal ENNReal RealInnerProductSpace
 open FunctionalInequalities.Probability.Posterior FunctionalInequalities.Analysis
   FunctionalInequalities.Analysis.BakryEmery FunctionalInequalities.Probability.Diffusion
 
-/-! From the cutoff energy claim to the compact cumulant bound (task S-7c). -/
+/-! From the cutoff energy claim to the compact cumulant bound. -/
 
 namespace FunctionalInequalities.KLS.BKL.Localization
 

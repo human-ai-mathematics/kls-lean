@@ -5,8 +5,7 @@ import FunctionalInequalities.KLS.CEK.PartitionVariation
 
 Euler–Lagrange identification for the Cordero-Erausquin–Klartag variational problem: the gradient of the bounded-source
 primal pushes `e^{−ψ} dx` forward to the source law (weak moment map), the existence step of the weak moment-map route to
-Letwin arXiv:2607.24164v1. Proof body: GPT / Letwin sub-controller (task L-T13b); statement by the Letwin
-sub-controller; placement: Claude.
+Letwin arXiv:2607.24164v1.
 -/
 
 noncomputable section
@@ -26,7 +25,7 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
 
 /-- **Weak moment map of a bounded isotropic law** (Cordero-Erausquin–Klartag arXiv:1304.0630v1,
 Theorem 2, existence, via the bounded CEK primal `bounded_source_lipschitz_primal` and the first
-variation; weak Letwin route, step N3): for an isotropic probability law `μ` supported in the
+variation; weak Letwin route): for an isotropic probability law `μ` supported in the
 closed ball of radius `L`, there is a convex `L`-Lipschitz potential `ψ` with `∫ e^{-ψ} = 1`
 whose a.e. gradient pushes the law `e^{-ψ} dx` forward to `μ`. No regularity beyond Lipschitz is
 claimed. -/
@@ -343,7 +342,7 @@ private theorem exists_momentMap_aux (μ : ProbabilityMeasure E)
 
 /-- **Weak moment map of a bounded isotropic law** (Cordero-Erausquin–Klartag arXiv:1304.0630v1,
 Theorem 2, existence, via the bounded CEK primal `bounded_source_lipschitz_primal` and the first
-variation; weak Letwin route, step N3): for an isotropic probability law `μ` supported in the closed
+variation; weak Letwin route): for an isotropic probability law `μ` supported in the closed
 ball of radius `L`, there is a convex `L`-Lipschitz potential `ψ` with `∫ e^{-ψ} = 1` whose a.e.
 gradient pushes the law `e^{-ψ} dx` forward to `μ`. No regularity beyond Lipschitz is claimed. -/
 theorem exists_momentMap_of_isotropic_of_ae_norm_le (μ : ProbabilityMeasure E)

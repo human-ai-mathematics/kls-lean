@@ -6,7 +6,7 @@ import Mathlib.Analysis.InnerProductSpace.Trace
 
 `stdTrace` and `hsNormSq` in the standard basis of a finite-dimensional inner-product space, with operator norm ≤
 Hilbert–Schmidt ≤ trace for positive operators and the Cauchy–Schwarz and composition bounds (Lyapunov estimates of the
-cutoff localization). Proof bodies: GPT (task S-O1); statements by the S-line sub-controller; placement: Claude.
+cutoff localization).
 -/
 
 noncomputable section

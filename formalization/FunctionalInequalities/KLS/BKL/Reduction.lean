@@ -20,7 +20,7 @@ open scoped RealInnerProductSpace
 
 namespace FunctionalInequalities.KLS
 
-/-- Entries of the coordinate array of `T_1 f` for a centered law: `(T_1 f)_j = ∫ ⟪e_j, x⟫ f(x) dμ` (Luna, task RED-D2a). -/
+/-- Entries of the coordinate array of `T_1 f` for a centered law: `(T_1 f)_j = ∫ ⟪e_j, x⟫ f(x) dμ`. -/
 theorem coordTensor_taylorTensor_one_apply {n : ℕ} (μ : Measure (EuclideanSpace ℝ (Fin n)))
     [IsProbabilityMeasure μ] (hexp : ∀ r : ℝ, Integrable (fun x => Real.exp (r * ‖x‖)) μ)
     (hμ2 : MemLp (id : EuclideanSpace ℝ (Fin n) → EuclideanSpace ℝ (Fin n)) 2 μ)
@@ -45,7 +45,7 @@ theorem coordTensor_taylorTensor_one_apply {n : ℕ} (μ : Measure (EuclideanSpa
     rw [hmean, mul_zero, sub_zero]
 
 /-- **The `d = 1` Taylor bound from isotropy** (Bessel): `‖T_1 f‖_HS ≤ ‖f‖_{L²(μ)}`, given the entry
-formula of the coordinate array (Luna, task RED-D2b). -/
+formula of the coordinate array. -/
 theorem Isotropic.norm_coordTensor_taylorTensor_one_le_of_entries {n : ℕ}
     {μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin n))} (hiso : Isotropic μ)
     {f : EuclideanSpace ℝ (Fin n) → ℝ} (hf : MemLp f 2 (μ : Measure (EuclideanSpace ℝ (Fin n))))
@@ -147,7 +147,7 @@ theorem Isotropic.norm_coordTensor_taylorTensor_one_le_of_entries {n : ℕ}
         rw [Real.sqrt_sq (ENNReal.toReal_nonneg)]
 
 /-- **BKL p. 30, the case `d = 1`**: for an isotropic law on `ℝⁿ` with all exponential moments and
-`f ∈ L²(μ)`, `‖T_1 f‖_HS ≤ ‖f‖_{L²(μ)}` (Bessel; assembly of the two previous lemmas, Claude glue). -/
+`f ∈ L²(μ)`, `‖T_1 f‖_HS ≤ ‖f‖_{L²(μ)}` (Bessel; assembly of the two previous lemmas). -/
 theorem Isotropic.norm_coordTensor_taylorTensor_one_le {n : ℕ}
     {μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin n))} (hiso : Isotropic μ)
     (hexp : ∀ r : ℝ, Integrable (fun x => Real.exp (r * ‖x‖)) (μ : Measure (EuclideanSpace ℝ (Fin n))))
@@ -163,7 +163,7 @@ end FunctionalInequalities.KLS
 
 namespace FunctionalInequalities.KLS.RegularPotential
 
-/-- `2 K^d ≤ (2K)^d` for `d ≥ 1` and `K ≥ 0` (numeric step of BKL p. 30; Luna, task RED-D3b). -/
+/-- `2 K^d ≤ (2K)^d` for `d ≥ 1` and `K ≥ 0` (numeric step of BKL p. 30). -/
 theorem two_mul_pow_le_two_mul_pow {K : ℝ} (hK : 0 ≤ K) {d : ℕ} (hd : 1 ≤ d) :
     2 * K ^ d ≤ (2 * K) ^ d := by
     have hpow : (2 : ℝ) ≤ 2 ^ d :=
@@ -177,7 +177,7 @@ and every `d ≥ 2` (`CumulantBound d ((d!)² K^d)`, `K ≥ 1`), then every isot
 has literature Poincaré constant at most `2 C K`, where `C` is the constant of Theorem 3.1
 (`poincare_le_of_taylor`): Proposition 7.1 gives `|T_d f|² ≤ 2K^d‖f‖² ≤ (2K)^d‖f‖²` for `d ≥ 2`,
 isotropy gives `|T_1 f| ≤ ‖f‖`, and Theorem 3.1 applies with `R = √(2K)`. The hypothesis is the
-source's Theorem 4.1, discharged in the closed producer `BKL.Localization.theorem11`. (Luna, task RED-D4.) -/
+source's Theorem 4.1, discharged in the closed producer `BKL.Localization.theorem11`. -/
 theorem poincare_le_of_cumulantBound :
     ∃ C : ℝ, 0 < C ∧ ∀ K : ℝ, 1 ≤ K →
       (∀ d : ℕ, 2 ≤ d → CumulantBound d ((d.factorial : ℝ) ^ 2 * K ^ d)) →

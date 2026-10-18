@@ -239,11 +239,11 @@ section LT10ABallConditioningMoments
 open MeasureTheory Set Metric Filter
 open scoped Topology
 
-/-! Conditioning weakly convergent laws on a ball containing the support of the limit: integrals of continuous functions converge (Letwin Lemma A.1 approximation; task L-T10a). -/
+/-! Conditioning weakly convergent laws on a ball containing the support of the limit: integrals of continuous functions converge (Letwin Lemma A.1 approximation). -/
 
 namespace FunctionalInequalities.KLS
 
-/-- **Conditioning on a large ball preserves weak convergence** (Letwin Lemma A.1 approximation, task T10a):
+/-- **Conditioning on a large ball preserves weak convergence** (Letwin Lemma A.1 approximation):
 if `ν k → μ` weakly and `μ` is carried by `closedBall 0 r` with `r < R`, then for every continuous `f` the
 integrals against the conditioned laws `ν k [| closedBall 0 R]` converge to `∫ f dμ`. -/
 theorem tendsto_integral_cond_closedBall {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]

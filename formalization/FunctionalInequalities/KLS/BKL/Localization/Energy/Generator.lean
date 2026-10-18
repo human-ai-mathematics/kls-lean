@@ -13,8 +13,7 @@ import FunctionalInequalities.Probability.Diffusion.Generator
 # The generator of the cumulant energy
 
 The energy tensor, lower tensor and noise tensors of the posterior along the localization (BKL arXiv:2610.05474v1, (81)), and the
-chain-rule expression (82) for the generator of `E_m(p) = F(A(p), κ_m(p)(u))` in conjugated coordinates. Proof bodies: GPT
-(S-line sub-controller task S-3b-chain); statements by the S-line sub-controller; placement: Claude.
+chain-rule expression (82) for the generator of `E_m(p) = F(A(p), κ_m(p)(u))` in conjugated coordinates.
 -/
 
 noncomputable section
@@ -417,7 +416,7 @@ open FunctionalInequalities.Probability.Posterior FunctionalInequalities.Analysi
   FunctionalInequalities.Analysis.BakryEmery FunctionalInequalities.Probability.Diffusion
   FunctionalInequalities.Analysis.CoordinateTensor
 
-/-! **BKL Lemma 5.1** in generator form: the drift inequality (80) for the cumulant energy, from the chain rule (82), the first- and second-order expansions (88) of the energy form and the algebraic bound `drift_expression_ge` (task S-3b-lemma51-assembly). -/
+/-! **BKL Lemma 5.1** in generator form: the drift inequality (80) for the cumulant energy, from the chain rule (82), the first- and second-order expansions (88) of the energy form and the algebraic bound `drift_expression_ge`. -/
 
 namespace FunctionalInequalities.KLS.BKL.Localization
 

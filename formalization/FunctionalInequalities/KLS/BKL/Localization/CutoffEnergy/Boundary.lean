@@ -23,7 +23,7 @@ open scoped NNReal ENNReal RealInnerProductSpace
 open FunctionalInequalities.Probability.Posterior FunctionalInequalities.Analysis
   FunctionalInequalities.Analysis.BakryEmery FunctionalInequalities.Probability.Diffusion
 
-/-! Boundary-term split for the ball cutoff and a mean-value choice of the horizon in `[T₀, 2T₀]` (task S-7b2). -/
+/-! Boundary-term split for the ball cutoff and a mean-value choice of the horizon in `[T₀, 2T₀]`. -/
 
 namespace FunctionalInequalities.KLS.BKL.Localization
 

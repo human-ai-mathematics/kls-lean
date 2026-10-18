@@ -7,7 +7,6 @@ import FunctionalInequalities.KLS.BKL.Posterior.Standardization
 BKL arXiv:2610.05474v1, (77): for a compactly supported isotropic log-concave prior and symmetric positive
 semidefinite `Q`, the standardized posterior `(A^{-1/2}(· − a))_* μ_{c,Q}` is compactly supported, isotropic and
 log-concave, so a bound `CumulantBoundCompact d b` transfers to `‖κ_{d+1}(t)(v)‖²_t ≤ b ⟨A v, v⟩`.
-Proof body: GPT (BKL Claude-controller goal, task S2); statement and placement: Claude.
 -/
 
 noncomputable section
