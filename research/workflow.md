@@ -38,7 +38,7 @@ make it fit a directory.
 | Identification between two objects | Place at their integration boundary, with a descriptive topic name | Closed-form normalization in `WeightedGradient/Energy.lean` |
 | Counterexample or obstruction | The family of the statement being refuted; independent from the successful construction | `Semigroup/Exponential/Counterexample.lean` |
 | Proof client, signature check, candidate statement | `research/audits/`; distinguish proved clients from type-checked candidates | `SemigroupDomainStabilityAudit.lean` |
-| Historical rationale, route, verification record | Dated `research/decisions/`; never use it as the canonical API index | Layout decision plus an old-to-new migration map |
+| Historical rationale, route, verification record | Current normative reviews in `research/progress/` and the audit directories; superseded operational records in the local archive outside the published tree; neither is the canonical API index | Scope review plus an old-to-new migration map |
 
 Reuse the existing Energy, Probability, Poincare and KLS families when they own the mathematics.
 Do not move everything abstract to Analysis, or everything used by Buser to a Buser directory.
@@ -136,8 +136,8 @@ placement before adding more declarations to it.
 For proof, path or API changes, synchronize affected evidence hashes, live documentation and
 Blueprint anchors. Regenerate progress views from staged canonical records as required by
 `AGENTS.md`; a temporary index may preserve the user's actual staging. Compare old evidence to
-the baseline before refreshing hashes. Preserve historical decisions/explorations and earlier
-migration maps; add a new map instead of rewriting history. Review the full progress diagram
+the baseline before refreshing hashes. Preserve earlier migration maps and operational records in the
+local archive; add a new map instead of rewriting history. Review the full progress diagram
 and current-status summary when proof status or node source paths change.
 
 Verification receipts certify their recorded snapshots. Documentation edits after a successful

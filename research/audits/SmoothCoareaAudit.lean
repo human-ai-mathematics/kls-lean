@@ -7,13 +7,10 @@ Independent client of `KLS/Geometry/Coarea/Smooth.lean`.  `target` states the ro
 quantifier for quantifier and proves it; `target_of_not_completeSpace` drops the unused
 `[CompleteSpace V]`.
 
-`target_T3` is verbatim the route's third original target, and
-`wip_isoperimetry_statement` is verbatim the statement of the direct hole
-`KLS.Isoperimetry.lintegral_enorm_gradient_mul_eq_lintegral_levelSet` in
-`KLS/WIP/CheegerInfimum.lean`.  Both follow from `L11` at `S = univ`; the `LipschitzWith`
-hypothesis of those statements is **not used**, since they already assume `ContDiff ℝ 1 u`.
-**This client does not touch the work-in-progress file**: migrating that declaration is a separate
-decision, so it still carries `sorry` and the direct-hole count is unchanged.
+`target_T3` preserves the route's third target, and `wip_isoperimetry_statement` preserves the
+contract of `KLS.Isoperimetry.lintegral_enorm_gradient_mul_eq_lintegral_levelSet` from
+`KLS/Geometry/Coarea/Isoperimetry.lean`. Both follow from `L11` at `S = univ`; their
+`LipschitzWith` hypothesis is unused because they assume `ContDiff ℝ 1 u`.
 
 `constant_function` checks the `⊤ · 0` boundary independently of `L11`: for a constant function
 every slice at the attained level is the whole space, of infinite surface measure, yet both sides
@@ -29,7 +26,7 @@ namespace SmoothCoareaAudit
 
 /-! ### The obligation itself -/
 
--- The statement text of `L11` in `research/decisions/2026-09-15-weighted-coarea-route.md`.
+-- The statement text of obligation `L11` of the weighted coarea route.
 #check (∀ {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V]
     [CompleteSpace V] [FiniteDimensional ℝ V] [MeasurableSpace V] [BorelSpace V]
     {S : Set V} {u : V → ℝ} {g : V → ℝ≥0∞},
@@ -63,7 +60,7 @@ theorem target_of_not_completeSpace : ∀ {V : Type*} [NormedAddCommGroup V]
   intro V _ _ _ _ _ S u g hu hS hg
   exact coarea_of_contDiff hu hS hg
 
-/-! ### Target `T3`, which is also the statement of the `C¹` work-in-progress hole -/
+/-! ### Target `T3`: the `C¹` isoperimetric coarea contract -/
 
 /-- Target `T3` of the route, proved.  The `LipschitzWith` hypothesis is unused. -/
 theorem target_T3 : ∀ {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V]
@@ -77,7 +74,7 @@ theorem target_T3 : ∀ {V : Type*} [NormedAddCommGroup V] [InnerProductSpace �
   have h := (coarea_of_contDiff (S := Set.univ) hu MeasurableSet.univ hg).2
   simpa using h
 
-/-- Verbatim the statement of the direct hole
+/-- Verbatim the isoperimetric coarea contract
 `KLS.Isoperimetry.lintegral_enorm_gradient_mul_eq_lintegral_levelSet`, discharged through **named**
 arguments so a renamed binder or reordered hypothesis would fail to elaborate.  The
 work-in-progress file itself is untouched. -/

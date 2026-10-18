@@ -9,7 +9,7 @@ In the heat model `ν = m.tilted (-U)` with `U ∈ C²`, closed unit gradient `T
 `λ = C⁻¹`. For every `η > 0` there is a centered `f ∈ D(A)` with `‖f‖₂ = 1` and
 `‖A f - λ f‖₂ ≤ λ η` (`exists_centered_approx_eigenfunction`). This replaces the first
 eigenfunction `L f = -λ₁ f` of Bizeul–Klartag–Lehec (arXiv:2610.05474v1), (19), in the operator
-route of `research/decisions/2026-10-07-bkl-operator-route.md`.
+route (`research/audits/BKL/OperatorRouteStatements.lean`).
 
 The argument: since `C_P(ν) = C`, the gap `Var(u) ≤ C' ‖T̄ u‖²` fails for `C' = C / (1 + η')`
 (`literatureConstant_le_of_gap`), which produces a centered unit `y ∈ D(T̄)` with

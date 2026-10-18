@@ -9,27 +9,23 @@ import Mathlib.Probability.Moments.Variance
 /-!
 # Route statements for the Buser half `Ψ_KLS(μ)² ≤ π C_P^lit(μ)`
 
-**This file contains only `#check`s.  A proposition that type-checks is not a proof.**  It declares
-nothing, proves nothing, and introduces no placeholder axiom.  Each proposition below is an
-obligation or a target of the route recorded in `research/decisions/2026-09-19-buser-route.md`, and
-**at the time of this route snapshot none of `Q0`–`Q5`, `B0` had been proved**.
+**This file contains only `#check`s. A proposition that type-checks is not a proof.**
+It preserves the general comparison contract `B0` and the one-dimensional contracts `Q0`–`Q5`.
+The current general log-concave comparison is
+`KLS.LogConcave.inverseScale_sq_le_pi_literature` in
+`KLS/LogConcave/Density/GaussianSmoothing/Buser.lean`, including every affine-support dimension.
+The independent client is `research/audits/GaussianBuserPassageAudit.lean`.
 
-## The target, and why it is out of reach today
+## The target and mathematical routes
 
 `B0` is the Buser half of `thm:logconcave-cheeger-poincare-comparison`: for every finite-dimensional
-log-concave law, `Ψ_KLS(μ)² ≤ π C_P^lit(μ)`, i.e. `λ₁ ≤ π h²`.  Every known proof for log-concave
-laws in dimension `n ≥ 2` goes through one of two pieces of infrastructure that exist neither in
-Mathlib nor in this repository: the **weighted heat semigroup with the Bakry–Émery gradient bound**
-(Ledoux's argument; De Ponti–Mondino for the sharp constant `π` on `RCD(0,∞)` spaces — this needs
-either parabolic PDE theory for the weighted Laplacian on the possibly non-smooth support of a
-log-concave law, or the Wasserstein-contraction/EVI characterization of `CD(0,∞)`), or a
-**localization / needle decomposition** (Lovász–Simonovits, Klartag) together with a transfer
-argument that controls the needles' Poincaré constants — and the transfer is exactly the step
-that has no elementary proof.  Mathlib has no heat semigroup, no Hille–Yosida, no unbounded
-spectral theorem, no needle decomposition, and no log-concavity.  `B0` is therefore recorded as
-the target of a **program**, not of a round.
+log-concave law, `Ψ_KLS(μ)² ≤ π C_P^lit(μ)`, i.e. `λ₁ ≤ π h²`.
+Classical semigroup arguments use the weighted heat semigroup and Bakry–Émery gradient bounds
+(Ledoux; De Ponti–Mondino for the constant `π` on `RCD(0,∞)` spaces). A localization route uses
+Lovász–Simonovits or Klartag needle decompositions and a transfer of Poincaré constants to needles.
+These mathematical descriptions are distinct from the anonymous statement checks in this file.
 
-## Stage 1 — dimension one, with an explicit constant
+## One-dimensional contracts, with an explicit constant
 
 On the line everything needed already exists in this repository: a log-concave law with support of
 nonempty interior has a Borell density `ρ` (`LineDensity`), a median `m`, and the hazard bounds
@@ -58,20 +54,17 @@ nonempty interior has a Borell density `ρ` (`LineDensity`), a median `m`, and t
   line, and through the literature identification `Ψ_KLS(μ)² ≤ 12 C_P^lit(μ)` whenever the affine
   support of `μ` has dimension at most one (`Q0'`; Dirac laws have both sides `0`).
 
-The constant `12` is not `π`: Stage 1 proves the Buser half **with a worse constant** in dimension
-one, and nothing in dimension `n ≥ 2`.  The Blueprint node keeps its statement with `π`; if the
-program ever closes with a non-sharp constant, the Blueprint statement must be weakened explicitly
-rather than silently.
+The one-dimensional calculation gives `12`, which is larger than `π`; it does not by itself
+establish the general comparison with `π`. The latter has the separate Gaussian-smoothing source
+and full-signature client named above.
 
-## Stage 2 — the general case (not started)
+## General semigroup and localization descriptions
 
-Either (a) construct the Markov semigroup of the Cheeger form (the repository has the closed
-quadratic form; Mathlib lacks Hille–Yosida and the unbounded spectral theorem), prove the
-Bakry–Émery gradient bound `‖∇P_t f‖² ≤ P_t ‖∇f‖²` from log-concavity, and run Ledoux's argument
-`‖f − P_t f‖₁ ≤ c √t · μ⁺(A)` against `‖P_t f − μ A‖₂ ≤ e^{−t/C_P}`; or (b) formalize the
-Lovász–Simonovits bisection and its needle limit, and a transfer of the Poincaré constant to
-needles.  Both are estimated in the thousands of lines with Mathlib-level prerequisites; neither is
-attempted here.
+A semigroup argument uses the Markov semigroup of the Cheeger form, the Bakry–Émery gradient bound
+`‖∇P_t f‖² ≤ P_t ‖∇f‖²`, and Ledoux's estimates
+`‖f − P_t f‖₁ ≤ c √t · μ⁺(A)` and `‖P_t f − μ A‖₂ ≤ e^{−t/C_P}`.
+A localization argument uses Lovász–Simonovits bisection, a needle limit and transfer of Poincaré
+constants to needles. Neither description is a proof produced by a `#check` below.
 -/
 
 noncomputable section
@@ -91,9 +84,9 @@ open scoped ENNReal NNReal
 #check @FunctionalInequalities.Poincare.SmoothTest.rayleigh_le_constant
 #check @FunctionalInequalities.KLS.LogConcave.literatureConstant_le_four_mul_inverseScale_sq
 
-/-! ### B0 — the target of the program: the Buser half, every dimension, constant `π`
+/-! ### B0 — the general Buser contract, every dimension, constant `π`
 
-Recorded verbatim as the Blueprint states it; **not** an obligation of Stage 1. -/
+Recorded verbatim as the Blueprint states it; separate from the one-dimensional contracts `Q0`–`Q5`. -/
 
 #check (∀ {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
     [MeasurableSpace E] [BorelSpace E] [SecondCountableTopology E] [FiniteDimensional ℝ E]
@@ -101,12 +94,12 @@ Recorded verbatim as the Blueprint states it; **not** an obligation of Stage 1. 
     Isoperimetry.inverseScale μ ^ 2 ≤
       ENNReal.ofReal Real.pi * Poincare.LocalSlope.Intrinsic.constant μ)
 
-/-! ### Q0 — Stage 1 target on the line: `Ψ² ≤ 12 C_P^smooth` -/
+/-! ### Q0 — one-dimensional target on the line: `Ψ² ≤ 12 C_P^smooth` -/
 
 #check (∀ (ν : ProbabilityMeasure ℝ), LogConcave ν →
     (minkowskiConstant ν)⁻¹ ^ 2 ≤ 12 * Poincare.SmoothTest.constant (ν : Measure ℝ))
 
-/-! ### Q0' — Stage 1 target in the Blueprint's variables: affine support of dimension at most one -/
+/-! ### Q0' — one-dimensional target in the Blueprint's variables: affine support of dimension at most one -/
 
 #check (∀ {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
     [MeasurableSpace E] [BorelSpace E] [SecondCountableTopology E] [FiniteDimensional ℝ E]
@@ -148,11 +141,11 @@ Recorded verbatim as the Blueprint states it; **not** an obligation of Stage 1. 
 
 #check (∀ (ν : ProbabilityMeasure ℝ), LogConcave ν → MemLp id 2 (ν : Measure ℝ))
 
-/-! ### D1 — the sharpness bookkeeping: `12` is not `π`
+/-! ### D1 — comparison of the constants: `12` is not `π`
 
-Stage 1 cannot give `π`: the chain `h_M ≥ 2ρ(m)`, `ρ_max ≤ 2ρ(m)`, `Var ≥ 1/(12 ρ_max²)` loses a
+This chain does not give `π`: the chain `h_M ≥ 2ρ(m)`, `ρ_max ≤ 2ρ(m)`, `Var ≥ 1/(12 ρ_max²)` loses a
 factor at each step, and the exponential law shows `Q2` and the one-dimensional Cheeger bound are
 individually sharp.  Recorded as the (true, trivial) numerical statement that `π < 12`, so the
-Stage 1 bound is weaker than the Blueprint's, never stronger. -/
+one-dimensional bound with `12` is weaker than the Blueprint's bound with `π`. -/
 
 #check (Real.pi < 12)

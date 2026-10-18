@@ -5,15 +5,7 @@ proof-complete. The ledger node `lem:poincare-gaussian-one-dimensional` has `sta
 `checked_by: lean`; its sole node certificate is
 `Solutions.LemPoincareGaussianOneDimensional.certificate`.
 
-The [statement freeze](../../../../research/decisions/2026-09-04-gaussian-poincare-freeze.md)
-records the approved contract. The
-[proof-closeout and acceptance record](../../../../research/explorations/2026-09-04-gaussian-poincare-acceptance.md)
-records the final architecture and validation evidence.
-
-Start with the two public conclusions in [Real.lean](Real.lean). The earlier
-[candidate review package](../../../../research/decisions/2026-09-04-gaussian-poincare-candidate.md)
-is an append-only snapshot of the statement-review stage, not a description of the current
-proof status.
+Start with the two public conclusions in [Real.lean](Real.lean).
 
 ## What the theorem says
 
@@ -102,9 +94,7 @@ from [Definition 2.1](https://github.com/human-ai-mathematics/kls-conjecture-sea
 Arbitrary means, zero variance and the exact smooth finite-energy domain are explicit local
 specifications. The direct density route and its analytic helpers are local proof choices; the
 manuscript obtains its upper bound through Bakry–Émery and LSI. Each Lean declaration identifies
-whether it is a source specialization, a local extension/helper, or a Mathlib bridge. The
-[source and API audit](../../../../research/explorations/2026-09-04-gaussian-poincare-design.md)
-maps these categories to fixed source revisions and the declarations that use them.
+whether it is a source specialization, a local extension/helper, or a Mathlib bridge.
 
 Human semantic and mathematical review confirmed that v is the variance, that the factor and
 inequality direction match the manuscript normalization, that the positive and zero-variance
@@ -131,9 +121,6 @@ transitive axiom set to `propext`, `Classical.choice`, and `Quot.sound`, so any 
 default build. The Gaussian implementation and its local import closure contain no proof
 placeholders or forbidden proof escapes. Lean compilation checks the terms; the ledger checker
 checks certification structure and provenance; the completed human review supplies the separate
-semantic check. The earlier
-[validation record](../../../../research/explorations/2026-09-04-gaussian-poincare-validation.md)
-is retained as evidence from the candidate-interface stage and must not be read as the current
-proof status.
+semantic check.
 
 Lean and Mathlib remain pinned to v4.33.0.

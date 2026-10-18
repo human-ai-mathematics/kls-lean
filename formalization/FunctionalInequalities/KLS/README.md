@@ -43,5 +43,3 @@ Use the [workflow](../../../research/workflow.md) and [naming guide](../../../re
 [Certificates](../../../solutions/README.md) are clients of the mathematics, not a replacement
 for it. [Verification](../../../research/verification.md) checks actual transitive dependencies;
 [HANDOFF.md](../../../HANDOFF.md) records current work and snapshot-specific acceptance.
-The earlier construction rounds, WIP counts, assignments and module map are preserved in the
-[2026-10-12 module-guide archive](../../../research/decisions/2026-10-12-kls-module-guide-history.md).

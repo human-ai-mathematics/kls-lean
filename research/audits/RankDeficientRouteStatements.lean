@@ -4,16 +4,15 @@ import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
 /-!
 # Route statements for the rank-deficient part of the codimension-`m` critical set
 
-**This file contains only `#check`s.  A proposition that type-checks is not a proof.**  It declares
-nothing, proves nothing, and introduces no placeholder axiom.  Each proposition below is an
-obligation of the route recorded in `research/decisions/2026-09-17-rank-deficient-route.md`, and
-**at the time of this route snapshot none had been proved**. As of the submission review on
-2026-09-17, `RankStratification.lean` proves R1/R2 and `RightInverseBound.lean` proves both
-versions of R3. R0, R4–R10, N1 and N2 remain open. The propositions below are unchanged.
+**This file contains only `#check`s. A proposition that type-checks is not a proof.**
+The anonymous propositions preserve the rank-deficient coarea contracts `R0`–`R10`, `N1` and `N2`.
+Current source is in `Analysis/Vector/RankDeficient/`; independent clients include
+`research/audits/RankStratificationAudit.lean` and `research/audits/RankDeficientCoareaAudit.lean`.
+The route explanations below distinguish the vanishing-derivative argument from intermediate rank.
 
 Same convention as `AreaFormulaRouteStatements.lean` and `WeightedCoareaRouteStatements.lean`.
 
-## What is already proved, and where the gap is
+## Regular and vanishing-derivative scope
 
 `Analysis/Vector/Coarea/Regular.lean` proves the codimension-`m` coarea formula **where the
 differential is surjective**.  `Analysis/Vector/Slice/Critical.lean` proves that almost every level
@@ -25,7 +24,7 @@ For `m ≥ 2` that hypothesis is a genuine restriction: the coarea critical set 
 than the vanishing-derivative set.  Everything below is about the difference — the **rank-deficient**
 part, where the derivative is nonzero but not surjective.
 
-## Why the proved method does not reach it
+## Why the vanishing-derivative method does not cover intermediate rank
 
 The proved argument covers `{Du = 0}` because there Mathlib's approximating partition makes `u`
 itself `ε`-Lipschitz on each piece: the approximating linear maps are values of the derivative,
@@ -62,15 +61,13 @@ orthogonal splitting of the target.
 
 ## What Mathlib and this repository have
 
-Mathlib has **no** coarea formula, **no** constant-rank theorem, and **no** Federer degenerate
-part.  It has `isOpen_setOfPred_nat_le_rank` (lower semicontinuity of the rank of a continuous
-linear map), `exists_partition_approximatesLinearOn_of_hasFDerivWithinAt` and the
-`ApproximatesLinearOn` API, the equidimensional Sard lemma
+The route uses `isOpen_setOfPred_nat_le_rank` (lower semicontinuity of rank),
+`exists_partition_approximatesLinearOn_of_hasFDerivWithinAt`, `ApproximatesLinearOn`,
 `addHaar_image_eq_zero_of_det_fderivWithin_eq_zero`, `Submodule.orthogonalDecomposition`,
-`LinearIsometryEquiv.measurePreserving` and `WithLp.volume_preserving_ofLp`.  This repository has
-the codimension-`m` Eilenberg inequality, the regular coarea formula, unconditional slice
-measurability and the vanishing-derivative critical slice. The initial route gaps are recorded
-below; the current R1–R3 completion status is given at the top of this file.
+`LinearIsometryEquiv.measurePreserving` and `WithLp.volume_preserving_ofLp`.
+The repository's rank-stratum assembly and exponent diagnostics are in
+`Analysis/Vector/RankDeficient/Coarea.lean` and
+`Analysis/Vector/RankDeficient/ExponentObstruction.lean`.
 -/
 
 noncomputable section
@@ -189,7 +186,7 @@ relatively compact piece, so the fibre measure is finite at almost every level. 
 The two slicings produce "for almost every `s ∈ W₁`, for almost every `τ ∈ W₁ᗮ`"; the conclusion
 is about almost every `t ∈ W`.  Mathlib supplies `Submodule.orthogonalDecomposition`,
 `LinearIsometryEquiv.measurePreserving` and `WithLp.volume_preserving_ofLp`, so this is
-bookkeeping, but it is not currently in the repository in any form. -/
+the measure-theoretic transport contract. See `Analysis/Vector/RankDeficient/TargetSplitFubini.lean`. -/
 
 #check (∀ {W W₁ W₂ : Type*}
     [NormedAddCommGroup W] [InnerProductSpace ℝ W] [FiniteDimensional ℝ W]

@@ -4,7 +4,7 @@ import FunctionalInequalities.Analysis.Hausdorff.SurfaceSlicing
 # Strict audit client for null slicing (obligation `L2` of the weighted coarea route)
 
 Independent client of `Analysis/Hausdorff/SurfaceSlicing.lean` and `Analysis/Hausdorff/Slicing.lean`.
-`target` states the round's obligation quantifier for quantifier, with no added hypothesis: `N` is
+`target` states the route obligation quantifier for quantifier, with no added hypothesis: `N` is
 not measurable, `V` may be zero-dimensional, `u` is Lipschitz on `N` only, `K` is an arbitrary
 `ℝ≥0`, and `surfaceMeasure` keeps the repository's normalized Hausdorff definition.
 
@@ -26,14 +26,14 @@ namespace NullSlicingAudit
 
 /-! ### The obligation itself -/
 
--- The statement text of `L2` in `research/decisions/2026-09-15-weighted-coarea-route.md`.
+-- The statement text of obligation `L2` of the weighted coarea route.
 #check (∀ {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V]
     [CompleteSpace V] [FiniteDimensional ℝ V] [MeasurableSpace V] [BorelSpace V]
     {u : V → ℝ} {K : ℝ≥0} {N : Set V}, LipschitzOnWith K u N →
     (volume : Measure V) N = 0 →
     ∀ᵐ t ∂(volume : Measure ℝ), KLS.surfaceMeasure V (N ∩ {x | u x = t}) = 0)
 
-/-- The round's target, proved. -/
+/-- The route target, restated and proved. -/
 theorem target : ∀ {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V]
     [CompleteSpace V] [FiniteDimensional ℝ V] [MeasurableSpace V] [BorelSpace V]
     {u : V → ℝ} {K : ℝ≥0} {N : Set V}, LipschitzOnWith K u N →

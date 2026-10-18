@@ -26,13 +26,13 @@ namespace CompactSliceAudit
 
 /-! ### The obligation itself -/
 
--- The statement text of `L3` in `research/decisions/2026-09-15-weighted-coarea-route.md`.
+-- The statement text of obligation `L3` of the weighted coarea route.
 #check (∀ {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V]
     [CompleteSpace V] [FiniteDimensional ℝ V] [MeasurableSpace V] [BorelSpace V]
     {u : V → ℝ} {S : Set V}, Continuous u → IsCompact S →
     Measurable (fun t : ℝ ↦ KLS.surfaceMeasure V (S ∩ {x | u x = t})))
 
-/-- The round's target, proved. -/
+/-- The route target, restated and proved. -/
 theorem target : ∀ {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V]
     [CompleteSpace V] [FiniteDimensional ℝ V] [MeasurableSpace V] [BorelSpace V]
     {u : V → ℝ} {S : Set V}, Continuous u → IsCompact S →
@@ -120,7 +120,7 @@ theorem eilenberg_bound_Icc :
       ≤ (eilenbergConstant ℝ : ℝ≥0∞) * (1 : ℝ≥0) * volume (Set.Icc (0 : ℝ) 1) :=
   (eilenberg_compact (K := 1) LipschitzWith.id.lipschitzOnWith continuous_id isCompact_Icc).2
 
-/-! ### The Eilenberg-round statements are preserved -/
+/-! ### The Eilenberg contracts, restated verbatim -/
 
 theorem preserved_exists_measurable_majorant :
     ∀ {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [FiniteDimensional ℝ V]

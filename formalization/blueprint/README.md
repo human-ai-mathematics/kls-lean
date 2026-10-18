@@ -12,9 +12,6 @@ progress report.
   [progress hub](../../research/progress/README.md): per-paper coverage, generated status and diagrams.
 - [Current handoff](../../HANDOFF.md): the active goal, evidence and next step.
 
-Counts, dates and route assessments from earlier versions of this guide are preserved in the
-[2026-10-14 guide history](../../research/decisions/2026-10-14-blueprint-guide-history.md).
-
 ## Markers in the TeX sources
 
 - `\lean{...}` names the Lean declarations of a node.

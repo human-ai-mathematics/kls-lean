@@ -17,8 +17,7 @@ import Mathlib.MeasureTheory.Measure.Tilted
 # Route statements: generator identification and the Bakry--Émery interface
 
 This file contains only `#check`s.  A proposition that type-checks is not a proof.  The anonymous
-propositions below are candidate obligations for the smooth-potential starting point recorded in
-`research/decisions/2026-09-20-bakry-emery-route.md`; no axiom, theorem, definition, or placeholder
+propositions below are candidate obligations for the smooth-potential starting point of the Bakry–Émery route; no axiom, theorem, definition, or placeholder
 proof is introduced here.
 
 The current semigroup acts on `L²(μ)`.  In particular, none of the statements below asserts an
@@ -110,7 +109,7 @@ probability, log-concavity, and full support; none of these is inferred merely f
 This is the weak identity that must feed the adjoint definition.  A pointwise computation of the
 differential expression alone is not enough for `D(T* T)`.
 
-This exact proposition is now discharged by
+This exact proposition is discharged by
 `Analysis.BakryEmery.integral_inner_gradient_tilted` (Haar form
 `Analysis.BakryEmery.integral_mul_inner_gradient_eq_neg`; probability form
 `KLS.LogConcave.integral_inner_gradient_eq`), with `C¹` potential, `C²` test `f` and `C¹` test
@@ -134,7 +133,7 @@ The existential `hLf` records the required `L²(μ)` membership of the different
 The conclusion is only test-function inclusion and equality; it does not call `C_c^∞` an operator
 core and does not assert equality of the full closed operators.
 
-This exact proposition is now discharged by `KLS.LogConcave.memLp_neg_weightedLaplacian`,
+This exact proposition is discharged by `KLS.LogConcave.memLp_neg_weightedLaplacian`,
 `KLS.LogConcave.toLp_mem_adjointComp_domain` and `KLS.LogConcave.adjointComp_toLp_eq`
 (`KLS/LogConcave/HeatSemigroup/Generator.lean`), through the weak identity
 `KLS.LogConcave.inner_toLp_neg_weightedLaplacian_eq` on all of `D(T̄)` and the closure lemma
@@ -164,7 +163,7 @@ distinct: only the first is proved.
 
 /-! ## B0 -- the carré-du-champ product identity for the diffusion sign convention
 
-This exact proposition is now discharged by `Analysis.BakryEmery.gamma_eq_weightedLaplacian`
+This exact proposition is discharged by `Analysis.BakryEmery.gamma_eq_weightedLaplacian`
 (`Analysis/BakryEmery/Gamma.lean`), with `Γ(f, g) = ⟪∇f, ∇g⟫` defined geometrically
 (`Analysis.BakryEmery.gamma`) and no regularity assumed on `U`; see
 `research/audits/BakryEmeryBochnerAudit.lean` (`route_B0`).  The anonymous form is retained as a
@@ -182,7 +181,7 @@ signature audit.
 
 /-! ## B1 -- convexity gives a positive-semidefinite Hessian
 
-This exact proposition is now discharged by
+This exact proposition is discharged by
 `Analysis.BakryEmery.bilinearIteratedFDerivTwo_nonneg_of_convexOn` (`Analysis/BakryEmery/Bochner/Basic.lean`),
 through the line restriction `t ↦ U (x + t v)`, `ConvexOn.monotoneOn_deriv` and
 `Monotone.deriv_nonneg`; see `research/audits/BakryEmeryBochnerAudit.lean` (`route_B1`).
@@ -209,14 +208,13 @@ anonymous form is retained to audit the exact intended signature.  It is restate
 
 /-! ## B3 -- coordinate form of the Bochner identity
 
-The first double sum is the Hilbert--Schmidt square in the fixed standard orthonormal basis.  A
-named basis-independent Hilbert--Schmidt norm for this Hessian representation is not currently
-available, so basis independence must be proved before exposing the invariant notation.
+The first double sum is the Hilbert--Schmidt square in the fixed standard orthonormal basis.
+This contract uses the coordinate expression and does not assert basis independence.
 
-This exact proposition is now discharged by `Analysis.BakryEmery.bochner_stdBasis`
+This exact proposition is discharged by `Analysis.BakryEmery.bochner_stdBasis`
 (`Analysis/BakryEmery/Bochner/Basic.lean`; `Γ₂` form `Analysis.BakryEmery.gammaTwo_eq_hessianSqStdBasis_add`,
 which needs only `C²` for `U`), with the double sum named `Analysis.BakryEmery.hessianSqStdBasis`
-and **still tied to the standard basis**; see `research/audits/BakryEmeryBochnerAudit.lean`
+and **expressed in the standard basis**; see `research/audits/BakryEmeryBochnerAudit.lean`
 (`route_B3`).  The third-order terms cancel through
 `Analysis.BakryEmery.fderiv_fderiv_fderiv_apply_comm`; no basis independence is claimed.
 -/
@@ -236,7 +234,7 @@ and **still tied to the standard basis**; see `research/audits/BakryEmeryBochner
 
 /-! ## B4 -- the local `Γ₂ ≥ 0` consequence
 
-This exact proposition is now discharged by `Analysis.BakryEmery.bochner_nonneg_stdBasis`
+This exact proposition is discharged by `Analysis.BakryEmery.bochner_nonneg_stdBasis`
 (`Γ₂` form `Analysis.BakryEmery.gammaTwo_nonneg`), from `B3`, `B1` and the nonnegativity of the
 Hessian square; see `research/audits/BakryEmeryBochnerAudit.lean` (`route_B4`).  It is a pointwise
 statement: no semigroup estimate follows from it without the `S0` interfaces below.
@@ -295,7 +293,7 @@ representative and every `L²` proof needed to feed the current `L²` semigroup.
 
 /-! ## E0 -- the identity-weight bridge to the canonical energy
 
-This exact proposition is now discharged by
+This exact proposition is discharged by
 `KLS.LogConcave.closedWeightedOperator_id_energy_eq_smoothGradient`.  It remains below as an
 anonymous signature audit, not as an additional declaration.
 -/

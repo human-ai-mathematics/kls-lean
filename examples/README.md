@@ -55,10 +55,10 @@ HTTPS remote); anonymous fetching is not yet available. For local development, r
 and build the client's Lake target.
 
 This pin passed all three narrow clients with freshly compiled primary modules and trusted
-pinned third-party caches. The [recorded baseline](../research/verification.md#recorded-baseline)
-lists the exact scope and results; these interface checks exclude KLS, solution and example imports.
-The [usability decision](../research/decisions/2026-10-18-library-usability.md) preserves the earlier
-acceptance, and [API browsing](../formalization/API.md) provides compiler-derived signatures.
+pinned third-party caches. Its receipt records the exact Git revision and results under the
+[verification trust rules](../research/verification.md#receipts-and-trust-scope); these interface
+checks exclude KLS, solution and example imports.
+[API browsing](../formalization/API.md) provides compiler-derived signatures.
 
 `SmoothTest`, `SmoothGradient`, `WeightedGradient`, `CovarianceGradient` and `LocalSlope` use
 different tests or energies. Raw gradient energy can depend on the chosen L² representative

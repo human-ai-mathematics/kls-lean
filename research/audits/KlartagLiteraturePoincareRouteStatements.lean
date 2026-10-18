@@ -5,20 +5,16 @@ import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
 /-!
 # Route statements for the literature-Poincaré clause of `thm:klartag-density-frontend-identification`
 
-**This file contains only `#check`s.  A proposition that type-checks is not a proof.**  It declares
-nothing, proves nothing, and introduces no placeholder axiom.  Each proposition below is an
-obligation of the route recorded in
-`research/decisions/2026-09-19-klartag-literature-poincare-route.md`, and **at the time of this
-route snapshot none of `Q0`–`Q3` had been proved**.  No work-in-progress module is imported; there
-are none left in the repository.
+**This file contains only `#check`s. A proposition that type-checks is not a proof.**
+It preserves the literature-Poincaré contracts `Q0`–`Q3`.
+Current sources are `Poincare/LocalSlope/Gradient.lean` and `KLS/LogConcave/Poincare.lean`;
+`research/audits/KlartagLiteraturePoincareAudit.lean` is the independent client.
 
 ## The target
 
-`thm:klartag-density-frontend-identification` has three conclusions.  The two isoperimetric ones,
-`h_μ = h_ν^{sm,rel}` and `Ψ_KLS(μ) = ψ_ν`, are already Lean-certified through
-`lem:relative-perimeter-cheeger-infimum` (`Solutions.LemRelativePerimeterCheegerInfimum.intrinsic`,
-the 25th certificate).  The **third clause is not certified**, which is why the node carries no
-`\leanok`: that `C_P^lit(μ)` equals the infimum of the finite `C ≥ 0` for which
+`thm:klartag-density-frontend-identification` combines the two isoperimetric identities
+`h_μ = h_ν^{sm,rel}` and `Ψ_KLS(μ) = ψ_ν` with a literature-Poincaré identity. This file records
+the latter: `C_P^lit(μ)` equals the infimum of the finite `C ≥ 0` for which
 
   `Var_ν(g) ≤ C ∫_V ‖∇g‖² dν`
 
@@ -29,13 +25,11 @@ The content is the **gradient** description of the test energy.  `C_P^lit` is de
 `def:literature-poincare-constant` through the **local metric slope** `|D f|`
 (`Energy.LocalSlope.apply`), not through `‖∇g‖`; the clause asserts that the two descriptions cut
 out the same admissible class and the same energy, hence the same optimal constant.  The Buser
-half of `thm:logconcave-cheeger-poincare-comparison` is **not** in scope here and stays imported
-mathematics.
+half of `thm:logconcave-cheeger-poincare-comparison` is outside this client's scope.
 
 ## The route
 
-This is an assembly round, not a new analytic argument.  All four analytic steps already exist and
-are proved in `Energy/LocalSlope/Gradient.lean`, certified under
+The assembly uses four analytic identities from `Energy/LocalSlope/Gradient.lean`, certified under
 `thm:smooth-lipschitz-constant-equivalence`:
 
 * `apply_eq_norm_gradient` — pointwise, at any point of differentiability;
@@ -45,8 +39,8 @@ are proved in `Energy/LocalSlope/Gradient.lean`, certified under
 * `admissible_iff_memLp_gradient` — the existing admissible class is exactly
   `LocallyLipschitz g ∧ MemLp g 2 ν ∧ MemLp (gradient g) 2 ν`.
 
-What is missing is only the transport of these to the optimal constant: the predicate
-`Poincare.LocalSlope.Holds` is stated with `Energy.LocalSlope.energy`, so rewriting it in gradient
+The predicate `Poincare.LocalSlope.Holds` is stated with `Energy.LocalSlope.energy`.
+For transport to the optimal constant, rewriting it in gradient
 form (`Q1`) and taking the infimum over valid constants (`Q2`) gives the clause for any
 absolutely continuous law; `LogConcave.intrinsic_absolutelyContinuous` supplies the hypothesis for
 every finite-dimensional log-concave law, which is `Q0`.
@@ -148,7 +142,6 @@ law.  No log-concavity yet. -/
 The Blueprint sentence "these quantities do not depend on the affine origin `a`" is about the
 statement of the node, not about its analysis: `Probability.intrinsicMeasure` is already defined
 without a choice of origin, so this is expected to be discharged by the existing definition rather
-than proved.  It is listed so that the implementation round records explicitly which of the two it
-turned out to be. -/
+than a separate analytic argument. The `#check` below pins that origin-free definition. -/
 
 #check @FunctionalInequalities.Probability.affineSupport_intrinsicMeasure

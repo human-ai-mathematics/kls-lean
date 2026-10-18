@@ -7,12 +7,11 @@ import Mathlib.Analysis.Calculus.Deriv.Abs
 # Strict audit client for the codimension-`m` coarea formula of Lipschitz maps
 
 Independent client of `Analysis/Lipschitz/{Componentwise,Refinement,VectorPieces,VectorCoarea}.lean`.
-Every obligation of the route recorded in
-`research/decisions/2026-09-19-lipschitz-vector-coarea-route.md` — whose statements are frozen in
+Every obligation of the Lipschitz vector-coarea route — whose statements are frozen in
 `research/audits/LipschitzVectorCoareaRouteStatements.lean` as `#check`s — is **restated here
-verbatim**, binder for binder and instance for instance, as a theorem, and discharged from the new
-modules.  `route_M2`, the locally Lipschitz follow-on, is **outside this route** and is not proved
-here; the route file's `#check` of it is left as a `#check`.
+verbatim**, binder for binder and instance for instance, as a theorem, and discharged from the library
+modules. `route_M2` also checks the locally Lipschitz follow-on using
+`Analysis/Lipschitz/Local.lean`; it remains a separate contract from `L0`.
 
 **What is proved.**  `route_L0` is the target: `Analysis.coarea_of_contDiff` with `ContDiff ℝ 1 u`
 replaced by `LipschitzWith K u` and nothing else changed.  `route_V1` is the vector `C¹` pieces,
@@ -21,7 +20,7 @@ refinement, `route_V4'`, `route_V4''` and `route_V4` the componentwise calculus,
 assembly stated as an implication, so that `route_L0` is `route_V5` applied to `route_V1`.
 
 **What is not proved.**  No Sard theorem: nothing is claimed about the measure of the set of
-critical values.  No locally Lipschitz statement.  Nothing about the Cheeger–Buser line or the
+critical values.  The locally Lipschitz follow-on is the separate `route_M2` theorem below. Nothing about the Cheeger–Buser line or the
 sharp finite-regularity Sard.
 
 **Why the `C¹` formula is not recovered from `L0`.**  The two hypotheses are incomparable: a
@@ -294,7 +293,7 @@ end LipschitzVectorCoareaAudit
 #print axioms FunctionalInequalities.Analysis.coarea_of_lipschitz_of_pieces
 #print axioms FunctionalInequalities.Analysis.coarea_of_lipschitz
 
-/-! #### The follow-on `M2`, verbatim, proved after all (2026-09-19, integration): the locally Lipschitz route closed it as `N0 = X5 ∘ L0` -/
+/-! #### The follow-on `M2`, verbatim: the locally Lipschitz contract `N0 = X5 ∘ L0` -/
 
 theorem LipschitzVectorCoareaAudit.route_M2 : ∀ {V W : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [FiniteDimensional ℝ V]
     [MeasurableSpace V] [BorelSpace V]

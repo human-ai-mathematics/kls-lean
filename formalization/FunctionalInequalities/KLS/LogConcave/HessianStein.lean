@@ -27,14 +27,24 @@ open scoped RealInnerProductSpace ContDiff
 
 namespace FunctionalInequalities.KLS.LogConcave
 
-/-- For a smooth convex normalized `φ` with `(∇φ)_* ν = μ` isotropic, the Hessian entries are `ν`-integrable. -/
-theorem integrable_hessianMatrix_of_isotropic_map {n : ℕ} (φ : EuclideanSpace ℝ (Fin n) → ℝ) (hφ : ContDiff ℝ ∞ φ)
+section HessianKernel
+
+/-! Shared context of the six Hessian-kernel results: a smooth convex normalized potential `φ`,
+`ν = e^{-φ}dx` and the isotropic image law `μ = (∇φ)_* ν`. The hypotheses are included in every
+theorem of the section in this order. -/
+
+variable {n : ℕ} (φ : EuclideanSpace ℝ (Fin n) → ℝ) (hφ : ContDiff ℝ ∞ φ)
     (hcv : ConvexOn ℝ Set.univ φ)
     (hnorm : ∫ y, Real.exp (-φ y) ∂(volume : Measure (EuclideanSpace ℝ (Fin n))) = 1)
     (ν μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin n)))
     (hν : (ν : Measure (EuclideanSpace ℝ (Fin n))) = volume.tilted (-φ))
     (hmap : (ν : Measure (EuclideanSpace ℝ (Fin n))).map (gradient φ) = (μ : Measure (EuclideanSpace ℝ (Fin n))))
-    (hiso : KLS.Isotropic μ) (i j : Fin n) :
+    (hiso : KLS.Isotropic μ)
+
+include hφ hcv hnorm hν hmap hiso
+
+/-- For a smooth convex normalized `φ` with `(∇φ)_* ν = μ` isotropic, the Hessian entries are `ν`-integrable. -/
+theorem integrable_hessianMatrix_of_isotropic_map (i j : Fin n) :
     Integrable (fun y => Probability.Stein.hessianMatrix φ y i j) (ν : Measure (EuclideanSpace ℝ (Fin n))) := by
   have hexp : Integrable (fun y => Real.exp (-φ y)) (volume : Measure (EuclideanSpace ℝ (Fin n))) :=
     Integrable.of_integral_ne_zero (by rw [hnorm]; norm_num)
@@ -43,15 +53,18 @@ theorem integrable_hessianMatrix_of_isotropic_map {n : ℕ} (φ : EuclideanSpace
   rw [hν] at hgrad ⊢
   exact Analysis.BakryEmery.integrable_hessian_tilted_of_convexOn φ hφ hcv hexp hnorm hgrad _ _
 
+section LeftInverse
+
+/-! A measurable left inverse `Ψ` of `∇φ` on a `ν`-full set; this context belongs only to the four
+kernel results below. -/
+
+variable (Ψ : EuclideanSpace ℝ (Fin n) → EuclideanSpace ℝ (Fin n)) (hΨ : Measurable Ψ)
+    (hInv : ∀ᵐ y ∂(ν : Measure (EuclideanSpace ℝ (Fin n))), Ψ (gradient φ y) = y)
+
+include hΨ hInv
+
 /-- The entries `τ_{ij} = (∇²φ ∘ Ψ)_{ij}` of the Hessian kernel are `μ`-integrable. -/
-theorem integrable_hessianKernel_of_isotropic_map {n : ℕ} (φ : EuclideanSpace ℝ (Fin n) → ℝ) (hφ : ContDiff ℝ ∞ φ)
-    (hcv : ConvexOn ℝ Set.univ φ)
-    (hnorm : ∫ y, Real.exp (-φ y) ∂(volume : Measure (EuclideanSpace ℝ (Fin n))) = 1)
-    (ν μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin n)))
-    (hν : (ν : Measure (EuclideanSpace ℝ (Fin n))) = volume.tilted (-φ))
-    (hmap : (ν : Measure (EuclideanSpace ℝ (Fin n))).map (gradient φ) = (μ : Measure (EuclideanSpace ℝ (Fin n))))
-    (hiso : KLS.Isotropic μ) (Ψ : EuclideanSpace ℝ (Fin n) → EuclideanSpace ℝ (Fin n)) (hΨ : Measurable Ψ)
-    (hInv : ∀ᵐ y ∂(ν : Measure (EuclideanSpace ℝ (Fin n))), Ψ (gradient φ y) = y) (i j : Fin n) :
+theorem integrable_hessianKernel_of_isotropic_map (i j : Fin n) :
     Integrable (fun x => Probability.Stein.hessianKernel φ Ψ x i j) (μ : Measure (EuclideanSpace ℝ (Fin n))) := by
   have hg : Measurable (gradient φ) :=
     (continuous_gradient (hφ.of_le (WithTop.coe_le_coe.mpr le_top))).measurable
@@ -65,14 +78,7 @@ theorem integrable_hessianKernel_of_isotropic_map {n : ℕ} (φ : EuclideanSpace
 
 /-- **Compact-test Stein identity for the Hessian kernel**: `∫ x_i f dμ = ∫ (τ ∇f)_i dμ` for `f ∈ C_c^∞`
 (A.3 applied to the bounded pullback `f ∘ ∇φ`, whose compact support is not assumed). -/
-theorem hessianKernel_compact_identity {n : ℕ} (φ : EuclideanSpace ℝ (Fin n) → ℝ) (hφ : ContDiff ℝ ∞ φ)
-    (hcv : ConvexOn ℝ Set.univ φ)
-    (hnorm : ∫ y, Real.exp (-φ y) ∂(volume : Measure (EuclideanSpace ℝ (Fin n))) = 1)
-    (ν μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin n)))
-    (hν : (ν : Measure (EuclideanSpace ℝ (Fin n))) = volume.tilted (-φ))
-    (hmap : (ν : Measure (EuclideanSpace ℝ (Fin n))).map (gradient φ) = (μ : Measure (EuclideanSpace ℝ (Fin n))))
-    (hiso : KLS.Isotropic μ) (Ψ : EuclideanSpace ℝ (Fin n) → EuclideanSpace ℝ (Fin n)) (hΨ : Measurable Ψ)
-    (hInv : ∀ᵐ y ∂(ν : Measure (EuclideanSpace ℝ (Fin n))), Ψ (gradient φ y) = y)
+theorem hessianKernel_compact_identity
     (f : EuclideanSpace ℝ (Fin n) → ℝ) (hf : ContDiff ℝ ∞ f) (hfc : HasCompactSupport f) (i : Fin n) :
     (∫ x, x i * f x ∂(μ : Measure (EuclideanSpace ℝ (Fin n)))) =
       ∫ x, Probability.Stein.action (Probability.Stein.hessianKernel φ Ψ x) (gradient f x) i ∂(μ : Measure (EuclideanSpace ℝ (Fin n))) := by
@@ -142,14 +148,7 @@ theorem hessianKernel_compact_identity {n : ℕ} (φ : EuclideanSpace ℝ (Fin n
   exact hA3'.symm
 
 /-- `τ = ∇²φ ∘ Ψ` is a Stein kernel of `μ` (Definition 2.6). -/
-theorem hessianKernel_isSteinKernel {n : ℕ} (φ : EuclideanSpace ℝ (Fin n) → ℝ) (hφ : ContDiff ℝ ∞ φ)
-    (hcv : ConvexOn ℝ Set.univ φ)
-    (hnorm : ∫ y, Real.exp (-φ y) ∂(volume : Measure (EuclideanSpace ℝ (Fin n))) = 1)
-    (ν μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin n)))
-    (hν : (ν : Measure (EuclideanSpace ℝ (Fin n))) = volume.tilted (-φ))
-    (hmap : (ν : Measure (EuclideanSpace ℝ (Fin n))).map (gradient φ) = (μ : Measure (EuclideanSpace ℝ (Fin n))))
-    (hiso : KLS.Isotropic μ) (Ψ : EuclideanSpace ℝ (Fin n) → EuclideanSpace ℝ (Fin n)) (hΨ : Measurable Ψ)
-    (hInv : ∀ᵐ y ∂(ν : Measure (EuclideanSpace ℝ (Fin n))), Ψ (gradient φ y) = y) :
+theorem hessianKernel_isSteinKernel :
     Probability.Stein.IsSteinKernel μ (Probability.Stein.hessianKernel φ Ψ) where
   integrable_id := hiso.memLp_two.integrable one_le_two
   mean_zero := hiso.mean_zero
@@ -158,14 +157,7 @@ theorem hessianKernel_isSteinKernel {n : ℕ} (φ : EuclideanSpace ℝ (Fin n) �
   compact_identity := hessianKernel_compact_identity φ hφ hcv hnorm ν μ hν hmap hiso Ψ hΨ hInv
 
 /-- `∫ τ dμ = Id` (mean Hessian identity). -/
-theorem integral_hessianKernel_eq_one {n : ℕ} (φ : EuclideanSpace ℝ (Fin n) → ℝ) (hφ : ContDiff ℝ ∞ φ)
-    (hcv : ConvexOn ℝ Set.univ φ)
-    (hnorm : ∫ y, Real.exp (-φ y) ∂(volume : Measure (EuclideanSpace ℝ (Fin n))) = 1)
-    (ν μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin n)))
-    (hν : (ν : Measure (EuclideanSpace ℝ (Fin n))) = volume.tilted (-φ))
-    (hmap : (ν : Measure (EuclideanSpace ℝ (Fin n))).map (gradient φ) = (μ : Measure (EuclideanSpace ℝ (Fin n))))
-    (hiso : KLS.Isotropic μ) (Ψ : EuclideanSpace ℝ (Fin n) → EuclideanSpace ℝ (Fin n)) (hΨ : Measurable Ψ)
-    (hInv : ∀ᵐ y ∂(ν : Measure (EuclideanSpace ℝ (Fin n))), Ψ (gradient φ y) = y) (i j : Fin n) :
+theorem integral_hessianKernel_eq_one (i j : Fin n) :
     (∫ x, Probability.Stein.hessianKernel φ Ψ x i j ∂(μ : Measure (EuclideanSpace ℝ (Fin n)))) = (1 : Probability.Stein.KernelMatrix n) i j := by
   have hφ1 : ContDiff ℝ 1 φ := hφ.of_le (WithTop.coe_le_coe.mpr le_top)
   have hg := (continuous_gradient hφ1).measurable
@@ -191,18 +183,14 @@ theorem integral_hessianKernel_eq_one {n : ℕ} (φ : EuclideanSpace ℝ (Fin n)
   rw [he] at h
   exact h
 
+end LeftInverse
+
 /-- **Letwin Lemma 2.7, analytic part for a given potential**: if `φ` is smooth, convex, normalized,
 `ν = e^{-φ}dx`, `(∇φ)_* ν = μ` is isotropic and `∇φ` is injective (explicit prerequisite), then with a
 measurable left inverse `Ψ` the Hessian kernel `∇²φ ∘ Ψ` is a symmetric, positive semidefinite, integrable
 Stein kernel of `μ` with mean `Id` and coupling `τ(∇φ y) = ∇²φ(y)`. The moment map `φ` for an arbitrary law, strict
 positive definiteness and `|τ|_HS ∈ L²` are not provided. -/
-theorem exists_hessianSteinKernel_of_injective_gradient {n : ℕ} (φ : EuclideanSpace ℝ (Fin n) → ℝ)
-    (hφ : ContDiff ℝ ∞ φ) (hcv : ConvexOn ℝ Set.univ φ)
-    (hnorm : ∫ y, Real.exp (-φ y) ∂(volume : Measure (EuclideanSpace ℝ (Fin n))) = 1)
-    (ν μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin n)))
-    (hν : (ν : Measure (EuclideanSpace ℝ (Fin n))) = volume.tilted (-φ))
-    (hmap : (ν : Measure (EuclideanSpace ℝ (Fin n))).map (gradient φ) = (μ : Measure (EuclideanSpace ℝ (Fin n))))
-    (hiso : KLS.Isotropic μ) (hInj : Function.Injective (gradient φ)) :
+theorem exists_hessianSteinKernel_of_injective_gradient (hInj : Function.Injective (gradient φ)) :
     ∃ Ψ : EuclideanSpace ℝ (Fin n) → EuclideanSpace ℝ (Fin n),
       Measurable Ψ ∧ Function.LeftInverse Ψ (gradient φ) ∧
       Probability.Stein.IsSteinKernel μ (Probability.Stein.hessianKernel φ Ψ) ∧
@@ -221,6 +209,8 @@ theorem exists_hessianSteinKernel_of_injective_gradient {n : ℕ} (φ : Euclidea
     Probability.Stein.hessianKernel_comp_gradient φ Ψ ν hiAE,
     fun x v => Probability.Stein.hessianKernel_quadratic_nonneg (hφ.of_le (WithTop.coe_le_coe.mpr le_top)) hcv Ψ x v,
     fun i j => integral_hessianKernel_eq_one φ hφ hcv hnorm ν μ hν hmap hiso Ψ hΨ hiAE i j⟩
+
+end HessianKernel
 
 end FunctionalInequalities.KLS.LogConcave
 

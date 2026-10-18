@@ -66,5 +66,5 @@
     "KLS.LogConcave"
   ],
   "baseline": "golden.json",
-  "review": "research/decisions/2026-10-12-bkl-independent-target-checks.md"
+  "review": "research/audits/BKL/IndependentTargets/REVIEW.md"
 }

@@ -4,18 +4,18 @@ import FunctionalInequalities.KLS.Geometry.Coarea.LocallyLipschitz
 /-!
 # Route statements for the codimension-`m` coarea formula of locally Lipschitz maps
 
-**This file contains only `#check`s.  A proposition that type-checks is not a proof.**  It declares
-nothing, proves nothing, and introduces no placeholder axiom.  Each proposition below is an
-obligation of the route recorded in
-`research/decisions/2026-09-19-locally-lipschitz-vector-coarea-route.md`, and **at the time of this
-route snapshot none of `N0`, `X1`, `X3`–`X5` had been proved**.  Same convention as
-`LipschitzVectorCoareaRouteStatements.lean`, whose `M2` is the target `N0` here.
+**This file contains only `#check`s. A proposition that type-checks is not a proof.**
+It preserves the locally Lipschitz vector-coarea contracts `N0`, `X1`–`X5`.
+The extension and localization sources are `Analysis/Lipschitz/Extension.lean`,
+`Analysis/Lipschitz/Annuli.lean` and `Analysis/Lipschitz/Local.lean`; clients are
+`research/audits/LocallyLipschitzVectorCoareaAudit.lean` and
+`research/audits/LipschitzVectorCoareaAudit.lean` (the latter includes `N0` as `route_M2`).
+Same convention as `LipschitzVectorCoareaRouteStatements.lean`, whose `M2` is `N0` here.
 
 ## Position in the coarea program
 
 `Analysis/Vector/RankDeficient/Coarea.lean` proves the codimension-`m` coarea formula for `C¹` maps (`R9`);
-the route of the same day (`LipschitzVectorCoareaRouteStatements.lean`) states it for globally
-Lipschitz maps (`L0`, open).  The scalar side ends one step further, at **locally Lipschitz**
+`Analysis/Lipschitz/VectorCoarea.lean` gives the globally Lipschitz contract `L0`.  The scalar side ends one step further, at **locally Lipschitz**
 functions with no global constant and no global modulus (`KLS.coarea_of_locallyLipschitz`, `L13`).
 `N0` is the codimension-`m` `L13`; it is a common generalization of `L0` and `R9`.
 
@@ -26,20 +26,20 @@ McShane extension `LipschitzOnWith.extend_real` replaces it there by a globally 
 piece `S ∩ (ball 0 (k+1) \ ball 0 k)` lies in the open ball where `u = v k` near every point, so
 gradients and level sets agree on the piece, `L12` applies to `v k`, and countable additivity sums.
 
-In codimension `m` every step is the same except the extension: `extend_real` is scalar, and
-Kirszbraun's theorem is not in Mathlib.  It is not needed: `L0` only asks for **some** Lipschitz
+In codimension `m` the extension is different: `extend_real` is scalar.
+A Kirszbraun extension is unnecessary: `L0` only asks for **some** Lipschitz
 constant, so a **componentwise** McShane extension through a linear isometry onto
 `EuclideanSpace ℝ (Fin m)` — Mathlib's `LipschitzOnWith.extend_pi` on `Fin m → ℝ` with the sup norm,
 transported back through the `PiLp` equivalences at the cost of a factor `√m` — is enough (`X1`).
 The assembly `X5` is then the codimension-`m` copy of `L13`, consuming `L0`; it is stated as an
 implication from `L0`, so `N0 = X5 ∘ L0`, and the whole vector chain `C¹ → Lipschitz → locally
-Lipschitz` closes once `L0` does.
+Lipschitz` is expressed by these contracts.
 
 ## What Mathlib has
 
 `LipschitzOnWith.extend_pi` (componentwise McShane), `LocallyLipschitzOn.exists_lipschitzOnWith_of_compact`
 (a locally Lipschitz map is Lipschitz on a compact set), `Filter.EventuallyEq.fderiv_eq`, and the
-`PiLp` Lipschitz equivalences.  No Kirszbraun, no coarea formula.
+`PiLp` Lipschitz equivalences.  These are the extension and localization tools used in the route.
 -/
 
 noncomputable section
@@ -122,7 +122,7 @@ If `u = v` on a neighbourhood of every point of a piece `P`, then `fderiv ℝ u 
 /-! ### X5 — the assembly: `L0` on each annulus, then countable additivity
 
 The codimension-`m` copy of the `L13` proof, stated as an implication from `L0` (the globally
-Lipschitz formula, itself open in `LipschitzVectorCoareaRouteStatements.lean`): on the piece
+Lipschitz contract `L0` of `LipschitzVectorCoareaRouteStatements.lean`): on the piece
 `S ∩ A k` apply `L0` to the extension `v k` of `X1`/`X2`, transport density and slice back to `u` by
 `X4`, and sum over the disjoint measurable pieces with `lintegral_iUnion` and `lintegral_tsum`; the
 slice measurability comes from the per-piece `AEMeasurable` through `AEMeasurable.tsum`, since a

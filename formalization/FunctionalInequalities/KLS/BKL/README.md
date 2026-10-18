@@ -34,7 +34,4 @@ Poincaré reduction. These boundaries support narrower imports without changing 
 
 Namespaces span modules: existing declarations retain their public names and argument interfaces.
 The uncut process and literal source identities remain separate from the accepted cutoff route.
-The [layout decision](../../../../research/decisions/2026-10-17-bkl-module-reorganization.md)
-and [complete migration map](../../../../research/api-migration/2026-10-17-bkl-module-map.json)
-record ownership, import changes and preservation checks. The generated
-[filename directory](../../../MODULES.md) lists every current module.
+The generated [filename directory](../../../MODULES.md) lists every current module.

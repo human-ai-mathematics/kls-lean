@@ -5,7 +5,7 @@ import FunctionalInequalities.KLS.LogConcave.Line.Poincare
 # The sharp one-dimensional log-concave Poincaré bound `C_P^lit(ν) ≤ 4 Var_ν`
 
 Source: Blueprint `thm:one-dimensional-logconcave-poincare` (constant `4`, following the
-collaborator audit `research/explorations/2026-09-11-poincare-constant-4-audit.md`). Read
+collaborator's constant-4 source audit, a locally kept record). Read
 `LogConcave.smoothTest_holds_four_variance`, `LogConcave.localSlope_constant_le_four_variance` and
 `LogConcave.localSlope_constant_le_four_evariance`.
 

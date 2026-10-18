@@ -4,8 +4,7 @@ import FunctionalInequalities.KLS.BKL.PoissonIterate.Taylor
 # Audit: Corollary 3.7 and Lemma 3.9 (route form) for the BKL iterates (route `S2`, `J2`)
 
 The propositions `S2` and `J2` of `research/audits/BKL/IterateRouteStatements.lean` (operator route
-to Bizeul–Klartag–Lehec, arXiv:2610.05474v1, Theorem 3.1; decision record
-`research/decisions/2026-10-07-bkl-operator-route.md`), restated verbatim with the same `variable`
+to Bizeul–Klartag–Lehec, arXiv:2610.05474v1, Theorem 3.1), restated verbatim with the same `variable`
 block and notation, and discharged by the library theorems of
 `KLS/BKL/PoissonIterate/Taylor.lean`:
 

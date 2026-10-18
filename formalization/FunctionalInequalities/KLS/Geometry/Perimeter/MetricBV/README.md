@@ -17,5 +17,4 @@ added. Approximation uses global L¹ convergence for the actual Borel measure.
 Finite carriers and finite measures are distinct. Infinite perimeter may reflect an empty
 approximation class; recovery is asserted only under the original finite-perimeter condition.
 Qualified `KLS.MetricBV` names are unchanged. The family stays with its actual KLS perimeter
-consumers. See the [layout decision](../../../../../../research/decisions/2026-10-18-stein-metricbv-layout.md)
-and [verification scope](../../../../../../research/verification.md).
+consumers. See the [verification scope](../../../../../../research/verification.md).

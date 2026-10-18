@@ -5,8 +5,7 @@ import Mathlib.Analysis.Calculus.MeanValue
 # Strong limits of exponentials of commuting nonnegative bounded operators
 
 `Y6` and `Y7` of the Yosida-limit route
-(`research/decisions/2026-09-19-yosida-limit-route.md`, statements in
-`research/audits/YosidaLimitRouteStatements.lean`), proved here and restated verbatim as
+(statements in `research/audits/YosidaLimitRouteStatements.lean`), proved here and restated verbatim as
 `route_Y6` and `route_Y7`.
 
 * `Y6` (`norm_exp_neg_smul_sub_le`) is the analytic core: for bounded **commuting** nonnegative

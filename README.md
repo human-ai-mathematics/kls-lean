@@ -11,9 +11,8 @@ in every finite-dimensional Euclidean space. `C_P^lit` is the intrinsic local-sl
 Poincaré constant. See the [statement](formalization/FunctionalInequalities/KLS/Statement.lean)
 and [target theorem](formalization/FunctionalInequalities/KLS/Target.lean).
 **`KLS.kls` proves it** through Bizeul–Klartag–Lehec Theorem 1.1 (arXiv:2610.05474v1) on the
-finite-horizon cutoff stochastic-localization route. The proved snapshot passed full local
-verification; the [recorded baseline](research/verification.md#recorded-baseline) states that
-evidence and its scope.
+finite-horizon cutoff stochastic-localization route. The [verification guide](research/verification.md#receipts-and-trust-scope) explains
+snapshot-bound build, axiom-audit and kernel-replay evidence.
 
 ## What is proved
 
@@ -51,7 +50,7 @@ known upstream holes; no project-local proved declaration may depend on them.
 | --- | --- |
 | [Proof path](research/progress/PROOF-PATH.md) · [Literature register](research/progress/LITERATURE.md) | Main chain, source statements and paper coverage |
 | [Progress hub](research/progress/README.md) · [Node register](research/progress/STATUS.md) | BKL navigation, complete diagrams and generated status |
-| [Current handoff](HANDOFF.md) · [Decisions](research/decisions/README.md) | Current work and dated history |
+| [Current handoff](HANDOFF.md) · [Research navigation](research/README.md) | Current work, verification rules and current reviews |
 | [Lean design](LEAN_DESIGN.md) · [Calling examples](examples/README.md) | Current interfaces, mathematical layers and narrow imports |
 | [Formalization guide](formalization/README.md) · [Blueprint](formalization/blueprint/README.md) | Library layout, builds and mathematical reading order |
 | [Certificates](solutions/README.md) · [Ledger](research/a-series/ledger.yaml) | Lean certificate entry points and registrations |
@@ -86,6 +85,5 @@ passed for `36e7c78` and does not certify later commits.
 
 Project-owned code uses [Apache-2.0](LICENSE); [vendored libraries](formalization/vendor/README.md)
 retain their licenses and notices. The project builds on Mathlib and the other pinned packages.
-Development and review used AI coding agents; [decision records](research/decisions/README.md)
-describe their roles. No external human peer review is claimed.
-Earlier wording: [2026-10-12 guide archive](research/decisions/2026-10-12-root-guide-history.md).
+Development and review used AI coding agents; the [verification guide](research/verification.md)
+states what the mechanical checks cover. No external human peer review is claimed.

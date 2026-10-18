@@ -18,8 +18,7 @@ formulations of the KLS conjecture. The formulations are written independently, 
 - the uniform convex-body law is proved log-concave before use.
 
 Both templates are byte copies of the second independent review's sources. Their SHA-256 values are pinned in
-[config.json](config.json). The [review record](../../../decisions/2026-10-17-classical-kls-specification.md) records
-their provenance and the semantic review.
+[config.json](config.json), which also names the review record of their provenance and semantic review.
 
 ## Gate
 
@@ -56,5 +55,5 @@ python3 research/audits/KLS/Classical/check.py --root . --lean LEAN --lean-path 
 
 The gate checks source compilation and the client's consumption of the library. It relies on Lean, its kernel replay and
 the pinned compiled Mathlib imports. It is not an independent kernel, not a rebuild of Mathlib or every dependency, and not
-an automatic certification that the Lean statements match the English formulations: that reading is the reviewed record
-cited above.
+an automatic certification that the Lean statements match the English formulations: that reading is the reviewed
+correspondence summarised in the statement table above and named in `config.json`.

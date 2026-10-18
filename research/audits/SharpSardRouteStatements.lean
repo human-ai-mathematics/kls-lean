@@ -4,19 +4,18 @@ import FunctionalInequalities.Analysis.Sard.Smooth
 /-!
 # Route statements for the sharp finite-regularity Sard theorem
 
-**This file contains only `#check`s.  A proposition that type-checks is not a proof.**  It declares
-nothing, proves nothing, and introduces no placeholder axiom.  Each proposition below is an
-obligation of the route recorded in `research/decisions/2026-09-19-sharp-sard-route.md`, and
-**at the time of this route snapshot none of `M1`–`M6` had been proved**.  The propositions are
-written with Mathlib notions only — no auxiliary `structure` or `def` — so that an audit client
-can copy them verbatim and discharge them once a proof lands.
+**This file contains only `#check`s. A proposition that type-checks is not a proof.**
+It preserves the finite-regularity Sard route contracts using Mathlib notions, without auxiliary
+structures, definitions or placeholder proofs. See `Analysis/Sard/Sharp.lean` and
+`research/audits/SharpSardAudit.lean` for the source and client; the latter distinguishes the
+original `M2` contract from its repaired antilipschitz version.
 
 Same convention as `RankDeficientRouteStatements.lean`, `AreaFormulaRouteStatements.lean` and
 `WeightedCoareaRouteStatements.lean`.
 
 ## The target and why the smooth descent does not reach it
 
-The direct hole is `Analysis.sard` in `KLS/WIP/AnalyticPrerequisites.lean`: the critical values of a
+The target is `Analysis.sard` in `Analysis/Sard/Sharp.lean`: the critical values of a
 `C^n` real-valued function on an `n`-dimensional real normed space are Lebesgue-null.  `C^n` is the
 sharp regularity for a real target (Whitney).  The proved `C^∞` theorem `sard_smooth`
 (`Analysis/Sard/Smooth.lean`) stratifies the critical set by the order of vanishing of the
@@ -162,8 +161,7 @@ not assumed measurable. -/
 
 /-! ### M6 — the target: `Analysis.sard`, verbatim
 
-The direct hole of `KLS/WIP/AnalyticPrerequisites.lean`, restated here so that this file imports no
-work-in-progress module.  A migration must reproduce its `pp.all` signature byte for byte.  The
+The contract of `Analysis.sard` in `Analysis/Sard/Sharp.lean`, restated independently. The
 transport from `Fin (finrank ℝ V) → ℝ` along `ContinuousLinearEquiv.ofFinrankEq` is the one in
 `sard_smooth`. -/
 

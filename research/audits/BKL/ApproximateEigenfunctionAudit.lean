@@ -5,8 +5,7 @@ import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.ApproximateEigenfunct
 # Audit: approximate eigenvectors of `T†T` and approximate first eigenfunctions (BKL route, O1–O2)
 
 The obligations `O1` and `O2` of `research/audits/BKL/OperatorRouteStatements.lean` (operator route
-to Bizeul–Klartag–Lehec, arXiv:2610.05474v1, Theorem 3.1; see
-`research/decisions/2026-10-07-bkl-operator-route.md`) are restated **verbatim** and proved from
+to Bizeul–Klartag–Lehec, arXiv:2610.05474v1, Theorem 3.1) are restated **verbatim** and proved from
 the library:
 
 * `o1`: for a closed densely defined `T` between real Hilbert spaces with the gap
@@ -17,7 +16,7 @@ the library:
   admits a centered `f ∈ D(A)`, `‖f‖ = 1`, `‖A f - C⁻¹ f‖ ≤ C⁻¹ η`
   (`exists_centered_approx_eigenfunction`).
 
-Not audited, because not proved: the existence of an exact first eigenfunction (19), the weak
+Outside this client's scope: the existence of an exact first eigenfunction (19), the weak
 Hessian and tilt identities `O3`–`O5`, the iterates and Theorem 3.1 itself.
 -/
 

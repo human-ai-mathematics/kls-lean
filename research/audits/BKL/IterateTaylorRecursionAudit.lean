@@ -4,8 +4,7 @@ import FunctionalInequalities.KLS.BKL.PoissonIterate.TaylorRecursion
 # Audit: Lemma 3.8 for the BKL iterates (route `J1`)
 
 The proposition `J1` of `research/audits/BKL/IterateRouteStatements.lean` (operator route to
-Bizeul–Klartag–Lehec, arXiv:2610.05474v1, Theorem 3.1; decision record
-`research/decisions/2026-10-07-bkl-operator-route.md`), restated verbatim with the same `variable`
+Bizeul–Klartag–Lehec, arXiv:2610.05474v1, Theorem 3.1), restated verbatim with the same `variable`
 block and notation, and discharged by the library theorem `norm_taylorField_grad0_iter_sq_le` of
 `KLS/BKL/PoissonIterate/TaylorRecursion.lean`:
 

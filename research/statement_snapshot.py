@@ -54,11 +54,16 @@ def compare_snapshot(current: dict, golden: dict) -> list[str]:
 
 
 def decision_record(root: Path, relative: str) -> dict:
+    owners = {"research/a-series/statement-snapshot",
+              "research/audits/BKL/IndependentTargets"}
+    candidate = Path(relative)
+    if candidate.is_absolute() or ".." in candidate.parts or str(candidate.parent) not in owners:
+        raise ValueError("snapshot update requires a current review in an approved snapshot owner")
     path = root / relative
     resolved = path.resolve()
-    if (not resolved.is_relative_to((root / "research/decisions").resolve()) or
+    if (resolved != root.resolve() / candidate or path.is_symlink() or
             resolved.suffix != ".md" or not resolved.is_file() or not resolved.read_text().strip()):
-        raise ValueError("snapshot update requires a nonempty research/decisions/*.md record")
+        raise ValueError("snapshot update requires a nonempty local Markdown review without symlinks")
     return {"path": str(resolved.relative_to(root.resolve())), "sha256": sha256(resolved)}
 
 

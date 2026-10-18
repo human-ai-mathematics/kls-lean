@@ -4,7 +4,7 @@ import FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Kernel
 /-!
 # Smooth recovery of a globally Lipschitz test, and the reduction tools
 
-Source: the route recorded in `research/decisions/2026-09-19-energy-slope-route.md`, part `B`.
+Source: part `B` of the energy-slope route (`research/audits/EnergySlopeRouteStatements.lean`).
 Read `SmoothGradient.relaxation_le_asymptoticLipschitz_of_lipschitzWith` (smooth recovery) for the main
 contract, then the four reduction tools `locallyLipschitz_mul` (the local Lipschitz product rule),
 `exists_lipschitzWith_of_eq_zero_outside_ball` (the bounded-support Lipschitz bound), `AsymptoticLipschitz.apply_mul_le` (the asymptotic-Lipschitz product bound)

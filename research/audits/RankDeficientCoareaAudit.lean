@@ -12,17 +12,18 @@ import Mathlib.Analysis.InnerProductSpace.PiL2
 numbered items, and it closes the rank-deficient part of the codimension-`m` coarea critical set:
 **the general codimension-`m` coarea formula for `C¹` maps is proved.**
 
-**What is still open.**  `R10`, the equidimensional degenerate case, is a separate cheap sanity
-check and remains unproved; `N1` and `N2` are diagnostics of the obstruction, not steps, and remain
-unproved.
+**Other route items.** `R10` is the equidimensional sanity check; `N1` and `N2` diagnose the
+exponent obstruction rather than supplying steps of this client. Their contracts are recorded in
+`research/audits/RankDeficientRouteStatements.lean`.
 
 **This is not a Sard theorem.**  `no_sard_claimed` records what is and is not asserted: `R0` is
 about the measure of the critical set **inside a level**, and nothing whatever is claimed about the
 measure of the set of critical *values*, which for a merely `C¹` map may well be positive.  The
-sharp finite-regularity Sard theorem remains a direct hole and is untouched.
+finite-regularity Sard theorem has separate source `Analysis/Sard/Sharp.lean` and client
+`research/audits/SharpSardAudit.lean`.
 
-**The earlier hypothesis really is removed.**  `strictly_extends_conditional` derives the previously
-proved `coarea_of_contDiff_of_critical_eq_zeroDeriv` from the new formula, and
+**Comparison with the vanishing-derivative hypothesis.** `strictly_extends_conditional` derives
+`coarea_of_contDiff_of_critical_eq_zeroDeriv` from the general formula, and
 `rank_deficient_witness_now_covered` shows the rank-one projection of the plane — the witness that
 the old hypothesis fails at every point — is covered by `R0`.
 
@@ -34,7 +35,8 @@ forces, recorded rather than hidden.
 **Boundary cases.**  A zero-dimensional target — where every map is surjective, the critical set is
 empty and no positivity of the codimension is needed — and a constant map are covered.
 
-The two Cheeger comparisons and the five Energy holes are untouched.
+The current coarea source is `Analysis/Vector/RankDeficient/Coarea.lean`. Cheeger comparisons and
+energy identifications are outside this client's scope.
 -/
 
 noncomputable section
@@ -87,7 +89,7 @@ theorem route_R9 :
               ∂(volume : Measure W))) :=
   fun hk _ hu hS hg => coarea_of_contDiff hk hu hS hg
 
-/-! ### The earlier hypothesis is really removed -/
+/-! ### Comparison with the vanishing-derivative hypothesis -/
 
 section Extends
 

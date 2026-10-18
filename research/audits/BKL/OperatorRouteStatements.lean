@@ -9,8 +9,7 @@ import FunctionalInequalities.Analysis.Semigroup.Resolvent.Form
 # Route statements: the operator route to BKL Theorem 3.1, step 1
 
 This file contains only `#check`s. A proposition that type-checks is not a proof. The anonymous
-propositions below are the step-1 obligations of the operator route recorded in
-`research/decisions/2026-10-07-bkl-operator-route.md` (Bizeul–Klartag–Lehec, arXiv:2610.05474v1,
+propositions below are the step-1 obligations of the operator route to Bizeul–Klartag–Lehec (arXiv:2610.05474v1,
 Theorem 3.1). The iterates `h_i` of the source are built in `L²(ν)` from the operator domain of
 `A = T̄†T̄ = -ℒ` instead of the class `𝒜`, and the first eigenfunction of (19) is replaced by an
 approximate eigenfunction at `λ = 1 / C_P`. These obligations supply, on `D(A)`:
@@ -22,7 +21,8 @@ approximate eigenfunction at `λ = 1 / C_P`. These obligations supply, on `D(A)`
   its symmetry, and the curvature form of the Bochner identity (16) used in Lemma 3.4;
 * `O4`: the tilt identity (48) and `O5`: Lemma 3.6, `T_{d+1}(A F) = S_{d+1} T_d(T̄ F)`, on `D(A)`.
 
-Nothing here constructs the iterates or states Theorem 3.1 itself; those are later steps.
+This file does not construct the iterates or state Theorem 3.1 itself. Those contracts are in
+`research/audits/BKL/IterateRouteStatements.lean`.
 -/
 
 noncomputable section

@@ -17,7 +17,7 @@ constant remains `Poincare.LocalSlope.Intrinsic.constant`. The analysis is alrea
 only the transport of that identification through the validity predicate and its infimum.
 
 Read `holds_iff_memLp_gradient` first, then `Intrinsic.constant_eq_iInf_gradient` and its
-log-concave specialization in `KLS/LogConcave/Poincare.lean`. Route: `research/decisions/2026-09-19-klartag-literature-poincare-route.md`.
+log-concave specialization in `KLS/LogConcave/Poincare.lean`. Route statements: `research/audits/KlartagLiteraturePoincareRouteStatements.lean`.
 -/
 
 noncomputable section

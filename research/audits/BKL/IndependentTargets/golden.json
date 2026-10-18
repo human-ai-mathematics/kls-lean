@@ -3157,7 +3157,7 @@
     "FunctionalInequalities.Energy.LocalSlope.energy"
   ],
   "decision": {
-    "path": "research/decisions/2026-10-12-bkl-independent-target-checks.md",
-    "sha256": "1912972f13a2519e22968b83e0b741ce7b0ff31e5df742385529cdd1dd69542b"
+    "path": "research/audits/BKL/IndependentTargets/REVIEW.md",
+    "sha256": "a76d090a878950d92d251429ba52e0d01622c85c8ae9de1b86498fbae38fc51c"
   }
 }

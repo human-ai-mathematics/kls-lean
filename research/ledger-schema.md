@@ -44,15 +44,16 @@ inspection remain part of certification, without a separate mandatory freeze che
 
 The public KLS target additionally has a definition-dependency golden under
 `research/a-series/statement-snapshot/`. This records a reviewed statement baseline, not a ledger
-certificate or a permanent signature lock. Intentional baseline changes require a new nonempty
-`research/decisions/` record explaining mathematical scope changes and whether the original goal
-is still covered; toolchain or printing-only changes must be identified as such. Update it explicitly
-with `python3 research/statement_snapshot.py update --decision research/decisions/NEW-RECORD.md`.
-Normal verification only compares and fails on drift. The checker verifies the decision's content
-hash and requires a new decision path for an update; it cannot judge the adequacy of the review.
+certificate or a permanent signature lock. Intentional baseline changes require an updated, tracked
+[statement-snapshot review](a-series/statement-snapshot/REVIEW.md) explaining mathematical scope
+changes and whether the original goal is still covered; toolchain or printing-only changes must be
+identified as such. Update it explicitly with
+`python3 research/statement_snapshot.py update --decision research/a-series/statement-snapshot/REVIEW.md`.
+Normal verification only compares and fails on drift. The checker pins the review record's content
+hash, so a changed baseline requires a reviewed, re-pinned record; it cannot judge the adequacy of
+the review.
 See [verification.md](verification.md) for the local definition closure, external trust leaves and
-the rule to finish source/decision edits before final verification. Existing historical records
-remain append-only. This rule does not require a freeze before developing an interface change.
+the rule to finish source/decision edits before final verification. This rule does not require a freeze before developing an interface change.
 
 For a future unproved node, retain the `checked_by` field with the explicit JSON value `null`.
 This illustrative node is not an entry in the current ledger:
@@ -67,13 +68,6 @@ This illustrative node is not an entry in the current ledger:
   "checked_by": null
 }
 ```
-
-The tensorization signatures, complete ledger statement, and human acceptance are recorded in
-`decisions/2026-09-03-tensorization-freeze.md`. Its source correspondence, semantic review,
-validation evidence, and publication/CI status are recorded in
-`explorations/2026-09-03-tensorization-acceptance.md`. Earlier draft-stage decision and exploration
-entries remain unchanged as historical records. In particular, their past placeholder counts
-do not describe the current proved node.
 
 ## Structural and proof checks
 
@@ -117,12 +111,8 @@ packages the binary, finite-product, and boundary conclusions. The same default-
 retains the 45 supporting public-interface checks, eight Euclidean statement families and six
 concrete boundary applications. No schema or checker exemption is needed.
 
-The current approval and exact statement snapshot are in
-`decisions/2026-09-03-finite-tensorization-freeze.md`; semantic, machine, and publication gates
-are recorded in `explorations/2026-09-03-finite-tensorization-acceptance.md` and Issue #7.
-The earlier candidate and wrapper-removal records retain their historical draft status and
-placeholder counts. Both earlier proved nodes preserve their mathematical statements and
-retained certificate signatures.
+Both earlier proved nodes preserve their mathematical statements and retained certificate
+signatures.
 
 ## One-dimensional Gaussian acceptance (2026-09-04)
 
@@ -134,11 +124,6 @@ nonnegative variance. The same default-build entry point checks all 20 supportin
 declarations and the boundary applications. `solutions/GaussianAxiomAudit.lean` additionally
 makes the certificate's exact transitive axiom set a default-build obligation.
 
-The approved contract and the two generalized tail interfaces are recorded in
-`decisions/2026-09-04-gaussian-poincare-freeze.md`; the final architecture, semantic review,
-proof-escape checks, axiom audit and local machine gates are recorded in
-`explorations/2026-09-04-gaussian-poincare-acceptance.md`. Earlier candidate, design, signature
-and statement-validation records remain unchanged and retain their historical `drafted` state.
 No schema, checker or regression-test exemption was introduced for this promotion.
 
 ## Comparison certificates (2026-09-06)
@@ -146,16 +131,14 @@ No schema, checker or regression-test exemption was introduced for this promotio
 `lem:ambient-intrinsic-poincare-comparison` and `lem:legacy-relaxed-poincare-comparison`
 are now `proved` with `checked_by: lean`. Their named certificates package all five and seven
 reviewed conclusions respectively. The owner authorized proof work after the external-review
-assessment; the 12 theorem signatures are unchanged. The approval, semantic boundaries and
-local proof audits are recorded in `decisions/2026-09-06-poincare-comparison-proofs.md`.
-The earlier draft record is preserved. That comparison batch brought the ledger to six certified nodes.
+assessment; the 12 theorem signatures are unchanged. That comparison batch brought the ledger to six certified nodes.
 
 ## Weighted approximation acceptance (2026-09-06)
 
 `lem:covariance-test-core-density` adds the seventh proved node. Its sole certificate packages
 all four original contracts; both certificate and reusable theorems retain default-build axiom
 guards. The existing Blueprint mapping includes this node directly, without another graph node
-or checker exemption. See [the acceptance record](decisions/2026-09-06-weighted-approximation-acceptance.md).
+or checker exemption.
 
 ## Smooth/literature comparison acceptance (2026-09-06)
 
@@ -164,4 +147,4 @@ packages all eight proved interfaces with individual quantifiers; each component
 certificate have default-build axiom guards. The comparison retains intrinsic absolute continuity,
 so the general log-concave comparison and Borell node remain uncertified. The a.e. slope and
 extended-energy declarations omit a redundant second-countable instance, covering the original
-scope. See [the proof record](decisions/2026-09-06-smooth-literature-proofs.md).
+scope.

@@ -23,7 +23,7 @@ namespace OpenGraphAudit
 
 /-! ### The obligation itself -/
 
--- The statement text of `L8` in `research/decisions/2026-09-15-weighted-coarea-route.md`.
+-- The statement text of obligation `L8` of the weighted coarea route.
 #check (∀ {H V : Type*} [NormedAddCommGroup H] [InnerProductSpace ℝ H]
     [FiniteDimensional ℝ H] [MeasurableSpace H] [BorelSpace H]
     [NormedAddCommGroup V] [InnerProductSpace ℝ V] [FiniteDimensional ℝ V]
@@ -36,7 +36,7 @@ namespace OpenGraphAudit
       ∫⁻ y in S, ENNReal.ofReal (Analysis.graphJacobian (gradient v y)) *
         g (Analysis.graphMap ι e v y) ∂(volume : Measure H))
 
-/-- The round's target, proved. -/
+/-- The route target, restated and proved. -/
 theorem target : ∀ {H V : Type*} [NormedAddCommGroup H] [InnerProductSpace ℝ H]
     [FiniteDimensional ℝ H] [MeasurableSpace H] [BorelSpace H]
     [NormedAddCommGroup V] [InnerProductSpace ℝ V] [FiniteDimensional ℝ V]

@@ -12,5 +12,4 @@
 Letwin Definition 2.6 and Appendix A.7 are the source targets. The actual regular-class
 moment-map and weak Stein producer belongs to the [CEK moment family](../../KLS/CEK/MomentRegularity/README.md); these generic
 interfaces assert no unrestricted-source construction. Matrix coordinate and Hessian tools
-belong to Analysis. See the [layout decision](../../../../research/decisions/2026-10-18-stein-metricbv-layout.md)
-and [paper register](../../../../research/progress/LITERATURE.md) for scope and evidence.
+belong to Analysis. See the [paper register](../../../../research/progress/LITERATURE.md) for scope and evidence.

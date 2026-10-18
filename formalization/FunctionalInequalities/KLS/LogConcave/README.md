@@ -80,8 +80,8 @@ import FunctionalInequalities.KLS.LogConcave.Density.AbsoluteContinuity
 
 The literature Poincaré-constant comparison combines these tools in
 [Poincare.lean](../../KLS/LogConcave/Poincare.lean). Existing declaration names are unchanged;
-old module paths have no forwarding files. See the path map in the
-[migration record](../../../../research/explorations/2026-09-07-logconcave-module-layout.md).
+old module paths have no forwarding files; the
+[generated module directory](../../../MODULES.md) lists current paths.
 
 `Density/BorellRepresentation/` is divided into
 [Basic](Density/BorellRepresentation/Basic.lean) (properties of density representatives),

@@ -5,17 +5,17 @@ import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
 /-!
 # Route statements: the generated semigroup (`S7`) and its generator (`S8`)
 
-**This file contains only `#check`s.  A proposition that type-checks is not a proof.**  It declares
-nothing, proves nothing, and introduces no placeholder axiom.  Each proposition below is an
-obligation of the route recorded in `research/decisions/2026-09-19-generated-semigroup-route.md`,
-and **at the time of this route snapshot none of `P1`–`P8`, `G1`–`G3` had been proved**.
+**This file contains only `#check`s. A proposition that type-checks is not a proof.**
+It preserves the generated-semigroup contracts `P1`–`P8` and `G1`–`G3`.
+The corresponding sources are `Analysis/Semigroup/Generated/Laws.lean` and
+`Analysis/Semigroup/Generated/Generator.lean`; their independent clients are
+`research/audits/SemigroupLawsAudit.lean` and `research/audits/GeneratorAudit.lean`.
 
 ## The target
 
-`S1`–`S6` of the semigroup-generation route are proved.  `Analysis/Semigroup/Generated/Basic.lean` names
+`Analysis/Semigroup/Generated/Basic.lean` names
 the `S6` limit: `P_t f = FunctionalInequalities.Analysis.Semigroup.Generated.apply T hT hd t f` is the strong limit of `exp (-t • L_s) f` as
-`s ↓ 0` (`FunctionalInequalities.Analysis.Semigroup.Generated.yosida_limit`), for `T` closed and densely defined and `t ≥ 0`.  What remains of
-the route is
+`s ↓ 0` (`FunctionalInequalities.Analysis.Semigroup.Generated.yosida_limit`), for `T` closed and densely defined and `t ≥ 0`. The contracts recorded here are
 
 * **`S7`** (`P1`–`P8`): `P_t` is linear and a contraction, symmetric, `P_0 = 1`, `P_{t+u} = P_t P_u`,
   and `t ↦ P_t f` is continuous on `[0, ∞)` — a strongly continuous semigroup of self-adjoint
@@ -28,10 +28,9 @@ content.
 
 ## Deliberately out of scope
 
-Nothing here is the Markov property (gap 2), Bakry–Émery `Γ`-calculus (gap 3), a small-time heat
-estimate (gap 4), localization (gap 5) or any step of Buser's inequality.  Even with `S7`–`S8`
-proved, `thm:logconcave-cheeger-poincare-comparison` gains no progress marker: the semigroup is
-only the first of the four prerequisites recorded for it.
+These contracts concern general real Hilbert-space operators. They do not state the Markov
+property, Bakry–Émery `Γ`-calculus, a small-time heat estimate, localization or Buser's inequality.
+A `#check` in this file establishes no theorem or progress marker.
 
 ## Conventions
 

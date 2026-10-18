@@ -8,9 +8,8 @@ quantifier for quantifier and proves it; `target_of_not_completeSpace` drops the
 `[CompleteSpace V]`.
 
 **`L10` is not Sard's theorem.**  Sard asserts that the set of critical *values* is Lebesgue-null
-in `ℝ`, needs regularity `C^(finrank)` in general, and remains an unproved obligation
-(`Analysis.sard` in `KLS/WIP/AnalyticPrerequisites.lean`, which this client does not import and
-does not touch).  `L10` is about the codimension-one measure of the critical *part of each slice*.
+in `ℝ` and needs regularity `C^(finrank)` in general (`Analysis.sard` in
+`Analysis/Sard/Sharp.lean`). This client establishes no Sard statement.  `L10` is about the codimension-one measure of the critical *part of each slice*.
 `constant_exceptional_level` makes the difference concrete: for a constant function the critical
 set is everything, so the slice at the attained value is the whole line and has **nonzero** surface
 measure — the conclusion really is only almost everywhere, and the exceptional slice can be large.
@@ -29,14 +28,14 @@ namespace CriticalSliceAudit
 
 /-! ### The obligation itself -/
 
--- The statement text of `L10` in `research/decisions/2026-09-15-weighted-coarea-route.md`.
+-- The statement text of obligation `L10` of the weighted coarea route.
 #check (∀ {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V]
     [CompleteSpace V] [FiniteDimensional ℝ V] [MeasurableSpace V] [BorelSpace V]
     {u : V → ℝ}, ContDiff ℝ 1 u →
     ∀ᵐ t ∂(volume : Measure ℝ),
       KLS.surfaceMeasure V ({x | fderiv ℝ u x = 0} ∩ {x | u x = t}) = 0)
 
-/-- The round's target, proved. -/
+/-- The route target, restated and proved. -/
 theorem target : ∀ {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V]
     [CompleteSpace V] [FiniteDimensional ℝ V] [MeasurableSpace V] [BorelSpace V]
     {u : V → ℝ}, ContDiff ℝ 1 u →
@@ -113,7 +112,7 @@ theorem not_lipschitz :
       surfaceMeasure ℝ ({x : ℝ | fderiv ℝ Real.exp x = 0} ∩ {x : ℝ | Real.exp x = t}) = 0 :=
   ae_surfaceMeasure_critical_inter_levelSet_eq_zero Real.contDiff_exp
 
-/-! ### The Eilenberg-round statement is preserved -/
+/-! ### The Eilenberg contract, restated verbatim -/
 
 theorem preserved_exists_measurable_majorant :
     ∀ {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [FiniteDimensional ℝ V]

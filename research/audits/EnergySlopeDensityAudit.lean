@@ -3,7 +3,7 @@ import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
 /-!
 # Scope audit for the density module `Energy/Euclidean/Slope/Density.lean`
 
-This client imports **only** the new library module — no work-in-progress layer — and discharges
+This client uses `Energy/Euclidean/Slope/Density.lean` to discharge
 the five propositions `C1`, `C2`, `C4`, `C5`, `C6` of the route file
 `research/audits/EnergySlopeRouteStatements.lean` from it.  The propositions are restated
 **verbatim** from the route file as `route_C1`, `route_C2`, `route_C4`, `route_C5`, `route_C6`;
@@ -11,8 +11,8 @@ each is proved by a **named** application of the library lemma, so a renamed bin
 hypothesis would fail to elaborate here.
 
 `C6` is the reverse inequality `SmoothGradient.relaxation ν ≤ LocalSlope.relaxation ν` for **every**
-Borel probability law, singular laws included; it is the density statement that
-`Energy/WIP/Cheeger.lean` needs and that no absolute-continuity hypothesis is used for.  The
+Borel probability law, singular laws included. It is the density input to
+`Energy/Cheeger/Identification.lean`, without an absolute-continuity hypothesis.  The
 library lemma proving `C2` carries one extra conclusion beyond the route statement — the uniform
 bound `|F − f| ≤ 2 L + 2 α`, which is what makes the patches converge in `L²(ν)` — and `route_C2`
 below projects the route's own conjunction out of it.
@@ -24,9 +24,9 @@ inequality is the unconditional comparison already in the library, the middle on
 right one is the pointwise domination of the local slope by the asymptotic Lipschitz constant.
 
 The boundary section records the constant test and the zero-dimensional convention (on a one-point
-coordinate space the smooth-gradient relaxation vanishes identically, now unconditionally).
+coordinate space the smooth-gradient relaxation vanishes identically without an absolute-continuity hypothesis).
 
-The axiom reports at the end cover every public declaration of the new module and every theorem of
+The axiom reports at the end cover every public declaration of the density module and every theorem of
 this client; each of them must list only `propext`, `Classical.choice` and `Quot.sound`.
 -/
 

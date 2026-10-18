@@ -7,8 +7,7 @@ import Mathlib.Probability.Moments.Variance
 # Affine quantile-density profiles on the unit interval
 
 Source: Blueprint `thm:one-dimensional-logconcave-poincare` (sharp form with constant `4`),
-supporting calculus; the argument follows the collaborator audit recorded in
-`research/explorations/2026-09-11-poincare-constant-4-audit.md`, Section 4. Read `affineWeight`,
+supporting calculus; the argument follows Section 4 of the collaborator's constant-4 source audit (a locally kept record). Read `affineWeight`,
 `affineQuantile`, `hasDerivAt_affineQuantile` and `one_div_le_variance_affineQuantile`.
 
 For `a, b > 0` the affine weight `w(u) = a² (1 - u) + b² u` is positive on `[0, 1]` and the quantile

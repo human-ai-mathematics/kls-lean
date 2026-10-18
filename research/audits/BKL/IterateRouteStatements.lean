@@ -7,14 +7,12 @@ import FunctionalInequalities.KLS.LogConcave.Regular.Basic
 # Route statements: the BKL iterates in `D(A)` and Theorem 3.1
 
 This file contains only `#check`s. A proposition that type-checks is not a proof. These are the
-obligations of `research/handoffs/2026-10-07-eight-hour-bkl-operator-route.md` for
-Bizeul–Klartag–Lehec (arXiv:2610.05474v1), Section 3, in the operator route of
-`research/decisions/2026-10-07-bkl-operator-route.md`.
+obligations of the operator route for Bizeul–Klartag–Lehec (arXiv:2610.05474v1), Section 3.
 
 Common premises of `I*`–`J*`: the heat model `ν = m.tilted (-U)` with `U` of temperate growth, all
 exponential moments, `a ‖v‖² ≤ ∇²U` (`a` may be any real number unless `0 < a` is stated),
 `C_P(ν) ≤ C` with `0 < C` (so `λ = 1/C ≤ λ₁`), and a centered `f ∈ D(A)`. `iter T̄ f k` is the
-source's `h_{k+1}` (see `PoissonIterate/Basic.lean` for the conventions).
+source's `h_{k+1}` (see `KLS/BKL/PoissonIterate/Basic.lean` for the conventions).
 
 * `I1`–`I8`: the iterates (target 1): domain, (30), (33), (46), (35)–(36), (32), (47), Lemma 3.4,
   Corollary 3.5, Lemma 3.2.

@@ -8,8 +8,8 @@ import FunctionalInequalities.Analysis.Tensor.Symmetrization
 
 Bizeul–Klartag–Lehec (arXiv:2610.05474v1), Section 3, (30)–(37): the iterates
 `h_{i+1} = α_{i+1} (-L)⁻¹ ∇₀ h_i` built from a function `h₁ = f`, here in `L²(ν)` from the operator
-domain of `A = T†T` instead of the class `𝒜` (the operator route of
-`research/decisions/2026-10-07-bkl-operator-route.md`). This module only makes definitions; their
+domain of `A = T†T` instead of the class `𝒜` (the operator route, whose obligations are stated in
+`research/audits/BKL/OperatorRouteStatements.lean`). This module only makes definitions; their
 properties (beyond `normSq_nonneg`) are proved in the sibling modules.
 
 ## Conventions

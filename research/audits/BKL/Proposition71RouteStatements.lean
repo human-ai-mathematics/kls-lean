@@ -8,9 +8,8 @@ import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
 # Route statements: BKL Proposition 7.1
 
 This file contains only `#check`s. A proposition that type-checks is not a proof. Source:
-Bizeul–Klartag–Lehec, arXiv:2610.05474v1, Proposition 7.1 and its proof, pp. 28–30; goal
-`research/handoffs/2026-10-07-continuous-bkl-formalization.md`. The joint law of `(S, X₁, …, X_N)`
-lives on `JointSpace N n = EuclideanSpace ℝ (Option (Fin N × Fin n))` (`KLS/BKL/SuspensionLaw.lean`):
+Bizeul–Klartag–Lehec, arXiv:2610.05474v1, Proposition 7.1 and its proof, pp. 28–30. The joint law of `(S, X₁, …, X_N)`
+lives on `JointSpace N n = EuclideanSpace ℝ (Option (Fin N × Fin n))` (`KLS/BKL/Suspension/Law.lean`):
 `none` is `S`, `some (i, j)` the `j`-th coordinate of `X_i`.
 
 * `R1` isotropy of the joint law from (108); `R2` the density (109); `R3` its log-concavity under

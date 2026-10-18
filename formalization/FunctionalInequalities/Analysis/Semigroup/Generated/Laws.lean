@@ -13,7 +13,7 @@ On nonnegative times it is linear, contractive, symmetric and strongly continuou
 `Generated.operator` packages the limit as a bounded linear operator.
 Its norm bound and composition law are `norm_operator_le_one` and `operator_add_time`.
 The generator and Markov properties have their own owners in `Generated/Generator.lean`
-and `Generated/Markov.lean`. Construction history is retained in `research/decisions/2026-10-18-source-interface-history.md`.
+and `Generated/Markov.lean`.
 -/
 
 noncomputable section

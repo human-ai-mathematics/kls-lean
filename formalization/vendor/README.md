@@ -4,8 +4,7 @@ This directory holds third-party Lean libraries compiled as part of this package
 Eldan localization of Bizeul–Klartag–Lehec Theorem 4.1 can build on an existing Brownian motion,
 Itô integral, Itô formula and strong SDE solution instead of a new stochastic-calculus library.
 The libraries are infrastructure only: no SDE, Itô, martingale or BKL statement of this project is
-proved by adding them. Decision record:
-[2026-10-12 LevyStochCalc adoption](../../research/decisions/2026-10-12-levystochcalc-adoption.md).
+proved by adding them.
 
 ## Sources and pins
 

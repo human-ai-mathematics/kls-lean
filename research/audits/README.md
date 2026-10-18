@@ -7,9 +7,7 @@ reports a client actually prints are checked and may contain only standard axiom
 proposition-only file compiles the same way but declares nothing, so it prints no axiom report and
 proves nothing. These clients are source evidence referenced from `research/tasks.json`; they are
 not ledger certificates, not library-root imports, and compiling one does not change a theorem's
-status. Earlier journal entries that described each client
-and round are preserved verbatim in the
-[public-readiness documentation history](../decisions/2026-10-18-public-readiness-documentation-history.md).
+status. The earlier per-client journal is not part of the published tree.
 
 ## Four kinds of file
 

@@ -228,3 +228,12 @@ tempCodeRunnerFile.py
 # Environment secrets: every dotenv variant except a committed example template.
 .env.*
 !.env.example
+
+# Operational history is retained locally; current validation inputs have stable tracked owners.
+/research/decisions/
+/research/handoffs/
+/research/explorations/
+/research/weekly/
+/research/api-migration/
+/research/technical-debt/20*-*
+/research/proof-corrections-and-improvements.md

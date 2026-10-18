@@ -6,20 +6,19 @@ import Mathlib.Analysis.InnerProductSpace.Calculus
 /-!
 # Discharge audit for the locally Lipschitz vector coarea route
 
-Every obligation of `research/audits/LocallyLipschitzVectorCoareaRouteStatements.lean` except the
-target `N0` is restated here **verbatim** and **proved**.  The route file contains only `#check`s;
-this file contains only theorems, and each one is discharged from
-`FunctionalInequalities/Analysis/Lipschitz/{Extension,Annuli,Local}.lean`.
+Every obligation of `research/audits/LocallyLipschitzVectorCoareaRouteStatements.lean`, including
+`N0`, is restated here **verbatim** and proved from `Analysis/Lipschitz/Extension.lean`,
+`Analysis/Lipschitz/Annuli.lean` and `Analysis/Lipschitz/Local.lean`.
 
-**`N0` is not proved here, and nothing in this file proves a coarea formula.**  `X5` is the
-implication `L0 → N0`: it takes the codimension-`m` coarea formula for **globally Lipschitz** maps
-as a hypothesis, and that formula is still open in
-`research/audits/LipschitzVectorCoareaRouteStatements.lean`.  `X5` is the whole content of the
-reduction; `N0` follows from it the moment `L0` is proved, and not before.
+`X5` is the reduction `L0 → N0`: it takes the codimension-`m` coarea formula for **globally
+Lipschitz** maps as a hypothesis. The current source for `L0` is
+`Analysis/Lipschitz/VectorCoarea.lean`; `Analysis/Lipschitz/Local.lean` assembles the locally
+Lipschitz formula. The theorem `route_N0` below checks that complete target; the same signature is
+checked as `route_M2` in `research/audits/LipschitzVectorCoareaAudit.lean`.
 
 `D1` is a diagnostic, not a step: it exhibits a map that is locally Lipschitz, globally Lipschitz
 for no constant, and not differentiable at the origin, so that neither `L0` nor `R9` reaches it.
-`C1` and `C2` record that `N0` would be a common generalization of both.
+`C1` and `C2` record that `N0` is a common generalization of both.
 
 Every report below uses only `propext`, `Classical.choice` and `Quot.sound`.  No work-in-progress
 module is imported.
@@ -222,7 +221,7 @@ end LocallyLipschitzVectorCoareaAudit
 #print axioms LocallyLipschitzVectorCoareaAudit.route_C1
 #print axioms LocallyLipschitzVectorCoareaAudit.route_C2
 
-/-! #### The target `N0`, verbatim, now that `L0` is proved (2026-09-19, integration): `X5` applied to `Analysis.coarea_of_lipschitz` -/
+/-! #### The target `N0`, verbatim, from `Analysis.coarea_of_locallyLipschitz` -/
 
 theorem LocallyLipschitzVectorCoareaAudit.route_N0 : ∀ {V W : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [FiniteDimensional ℝ V]
     [MeasurableSpace V] [BorelSpace V]

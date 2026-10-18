@@ -12,8 +12,7 @@ estimate on the domain of `T†T`.
 For `f ∈ D(T†T)`, `Generated.generator_limit` identifies the right derivative at zero
 with `-T†T f`; `generator_error_le` is its quantitative remainder bound.
 The semigroup laws belong to `Generated/Laws.lean` and the exponential mean-value
-estimate to `Exponential/MeanValue.lean`. `research/decisions/2026-10-18-source-interface-history.md` retains
-construction history and the detailed proof route.
+estimate to `Exponential/MeanValue.lean`.
 -/
 
 noncomputable section

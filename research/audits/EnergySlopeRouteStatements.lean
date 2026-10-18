@@ -4,27 +4,27 @@ import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
 /-!
 # Route statements for the singular-law Cheeger identification `𝓔^can = 2 Ch`
 
-**This file contains only `#check`s.  A proposition that type-checks is not a proof.**  It declares
-nothing, proves nothing, and introduces no placeholder axiom.  Each proposition below is an
-obligation of the route recorded in `research/decisions/2026-09-19-energy-slope-route.md`; **at the
-time of this route snapshot none of `A1`–`A3`, `B1`–`B5`, `C1`–`C6` had been proved**, and `E0a`–`E0e`
-are the five `sorry` bodies of `Energy/WIP/Cheeger.lean`, restated verbatim so that the hole-free
-module which closes the route can be checked against them.  No work-in-progress module is imported.
+**This file contains only `#check`s. A proposition that type-checks is not a proof.**
+It preserves `E0a`–`E0e` and the supporting `A1`–`A3`, `B1`–`B5`, `C1`–`C6` contracts.
+The comparison, recovery and density sources are `Energy/Euclidean/Slope/Comparison.lean`,
+`Energy/Euclidean/Slope/Recovery.lean` and `Energy/Euclidean/Slope/Density.lean`; the assembled
+identification is in `Energy/Cheeger/Identification.lean`. Independent clients are
+`research/audits/EnergySlopeComparisonAudit.lean`, `research/audits/EnergySlopeRecoveryAudit.lean`
+and `research/audits/EnergySlopeDensityAudit.lean`.
 
-## The five holes and their true structure
+## The five identification contracts and their structure
 
-`Energy/WIP/Cheeger.lean` states, for every Borel probability law `ν` on a finite-dimensional
+The contracts state, for every Borel probability law `ν` on a finite-dimensional
 inner-product space: `E0a` the smooth-gradient relaxation is the relaxed squared local slope; `E0b`
 the two Cheeger conventions relax to the same functional; `E0c` the two Cheeger energies agree; `E0d`
 `𝓔 = 2 Ch` on the coordinate space; `E0e` the Blueprint identity
 `thm:smooth-gradient-relaxation-two-cheeger` on the affine support.  The certified corollary
 `cor:absolutely-continuous-relaxation-two-cheeger` proves all five under absolute continuity of `ν`
-(`Energy/Cheeger/Basic.lean`).  **Only `E0a` is a genuine obligation**: `E0b` follows from the sandwich
+(`Energy/Cheeger/Basic.lean`).  **`E0a` is the substantive identification**: `E0b` follows from the sandwich
 `LocalSlope.relaxation ≤ AsymptoticLipschitz.relaxation ≤ SmoothGradient.relaxation` (`A2`) once
 `E0a` collapses its ends (`A3`), `E0c` is `E0b` halved, `E0d` is `Cheeger.two_mul_energy`, and `E0e`
-is `E0a` on the intrinsic law transported as in the certified corollary.  The citation of
-Ambrosio–Gigli–Savaré for `E0b` in the WIP module points the wrong way: what the singular case needs
-is **density of smooth tests in the local-slope energy**, i.e. the reverse inequality
+is `E0a` on the intrinsic law transported as in the absolutely continuous corollary.
+For singular laws the substantive step is **density of smooth tests in the local-slope energy**, i.e. the reverse inequality
 `SmoothGradient.relaxation ≤ LocalSlope.relaxation` without a density (`C6`).
 
 ## The route
@@ -78,8 +78,7 @@ conclusion through Hopf–Lax.
 `norm_mollify_sub_le`), the smooth cutoff `scaled` with its Lipschitz bound,
 `tendsto_eLpNorm_zero_of_dominated`, the certified absolutely continuous scope.  Mathlib has McShane
 (`LipschitzOnWith.extend_real`), `Disjoint.exists_thickenings`, inner regularity
-(`MeasurableSet.exists_isCompact_sdiff_lt`), reverse Fatou (`limsup_lintegral_le`), and no density
-theorem for Lipschitz functions in energy.
+(`MeasurableSet.exists_isCompact_sdiff_lt`), reverse Fatou (`limsup_lintegral_le`), as the approximation and integration tools used by the route.
 -/
 
 noncomputable section
@@ -95,7 +94,7 @@ open scoped ENNReal NNReal ContDiff
 #check @FunctionalInequalities.Energy.SmoothGradient.relaxation_eq_localSlope_of_absolutelyContinuous
 #check @FunctionalInequalities.Energy.Cheeger.two_mul_energy
 
-/-! ### E0a–E0e — the five holes, verbatim -/
+/-! ### E0a–E0e — the identification contracts, verbatim -/
 
 #check (∀ {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [CompleteSpace V]
     [MeasurableSpace V] [BorelSpace V] [SecondCountableTopology V] [FiniteDimensional ℝ V]

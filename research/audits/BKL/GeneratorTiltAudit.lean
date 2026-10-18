@@ -4,8 +4,7 @@ import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.Tilt
 # Audit: the tilt identity (48) and Lemma 3.6 on the generator domain (BKL route, O4–O5)
 
 The obligations `O4` and `O5` of `research/audits/BKL/OperatorRouteStatements.lean` (operator route
-to Bizeul–Klartag–Lehec, arXiv:2610.05474v1, Theorem 3.1; see
-`research/decisions/2026-10-07-bkl-operator-route.md`) are restated **verbatim** and proved from
+to Bizeul–Klartag–Lehec, arXiv:2610.05474v1, Theorem 3.1) are restated **verbatim** and proved from
 the library. For `ν = m.tilted (-U)` with `U ∈ C¹` and all exponential moments, `T̄` the closed
 unit-weight gradient, `A = T̄†T̄` and `F ∈ D(A)`, with the representatives of the `L²` classes:
 

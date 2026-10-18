@@ -4,7 +4,7 @@ import FunctionalInequalities.KLS.LogConcave.Line.Hazard
 /-!
 # One-dimensional isoperimetry for log-concave laws: `h_M(ν) ≥ 2 ρ(m)`
 
-Source: of `research/decisions/2026-09-19-buser-route.md`, obligations the Minkowski Cheeger bound,
+Source: the Buser route, obligations the Minkowski Cheeger bound,
 the smooth-domain perimeter bound and the median density bound of `research/audits/BuserRouteStatements.lean`.  Read
 `LineDensity.le_two_mul` (the density is at most twice its value at a median), then the
 boundary-charge lemmas `LineDensity.mul_measure_Iio_diff_le`, `mul_measure_Ioi_diff_le`,

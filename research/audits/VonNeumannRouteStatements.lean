@@ -4,34 +4,32 @@ import FunctionalInequalities.Analysis.Semigroup.Resolvent.Basic
 /-!
 # Route statements: von Neumann's theorem and the resolvent limits (`S6` prerequisites)
 
-**This file contains only `#check`s.  A proposition that type-checks is not a proof.**  It declares
-nothing, proves nothing, and introduces no placeholder axiom.  Each proposition below is an
-obligation of the route recorded in `research/decisions/2026-09-19-von-neumann-route.md`, and **at
-the time of this route snapshot none of `V1`–`V5`, `R1`–`R3` had been proved**.
+**This file contains only `#check`s. A proposition that type-checks is not a proof.**
+It preserves the von Neumann and resolvent-limit contracts `V1`–`V5`, `R1`–`R3`.
+Current sources are `Analysis/Semigroup/VonNeumann.lean` and
+`Analysis/Semigroup/Resolvent/Limit.lean`; independent clients are
+`research/audits/VonNeumannAudit.lean` and `research/audits/ResolventLimitAudit.lean`.
 
 ## Why this route exists
 
-`S1`–`S5` of `SemigroupGenerationRouteStatements.lean` are proved
-(`Analysis/Semigroup/{Form,Resolvent,Yosida}.lean`).  `S6`, the strong convergence of the Yosida
-exponentials `exp (-t • L_s)` as `s ↓ 0`, is the step with no Mathlib precedent, and its classical
-proof needs two inputs that `S1`–`S5` deliberately avoided:
+The strong convergence of Yosida exponentials `exp (-t • L_s)` as `s ↓ 0` uses the form,
+resolvent and Yosida interfaces in `Analysis/Semigroup/Resolvent/` and
+`Analysis/Semigroup/Yosida/`, together with two operator-theoretic inputs:
 
 * **von Neumann's theorem**: for `T` closed and densely defined, `T†T` (Mathlib's
   `LinearPMap.adjoint` composed with `T`, packaged as `Analysis.Semigroup.adjointComp T`) is
   self-adjoint with dense domain, and `(1 + s T†T) J_s = 1` for the resolvent `J_s` already built in
-  `Resolvent.lean`;
+  `Analysis/Semigroup/Resolvent/Basic.lean`;
 * **resolvent limits**: `J_s → 1` strongly as `s ↓ 0`, and the resolvents commute.
 
 Both are general real Hilbert space material with no measure, no log-concavity and no KLS
-content.  The owner has fixed the Buser target at the sharp constant `π`
-(`2026-09-19-semigroup-handoff.md`, §5 addendum), so the semigroup route must be completed and this
-is its next block.
+content. The constant `π` in the Buser comparison is not an optimality claim in this client.
 
 ## Deliberately out of scope
 
 `S6`–`S8` themselves are not stated here; neither are the Markov property, Bakry–Émery calculus,
 small-time heat estimates or any step of Buser's inequality.
-`thm:logconcave-cheeger-poincare-comparison` gains no progress marker from this route.
+The checked propositions do not prove `thm:logconcave-cheeger-poincare-comparison`.
 
 ## Conventions
 

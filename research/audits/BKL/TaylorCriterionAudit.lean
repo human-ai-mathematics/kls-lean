@@ -4,7 +4,7 @@ import FunctionalInequalities.KLS.BKL.PoissonIterate.Criterion
 # Audit: BKL Theorem 3.1 for regular laws (route statement `M`)
 
 Operator route to Bizeul–Klartag–Lehec (arXiv:2610.05474v1), Theorem 3.1 (p. 10, proof p. 17);
-decision record `research/decisions/2026-10-07-bkl-operator-route.md`; route statements
+route statements
 `research/audits/BKL/IterateRouteStatements.lean`. Restated and discharged by the library theorems
 of `KLS/BKL/PoissonIterate/Criterion.lean`:
 
@@ -17,7 +17,7 @@ of `KLS/BKL/PoissonIterate/Criterion.lean`:
 * `scalar_final_argument`: the final argument for real sequences (`le_of_iterate_bounds`).
 
 Lemma 3.8 (`J1`) enters through `norm_taylorField_grad0_iter_sq_le`, Lemma 3.9 (`J2`) through
-`sum_meanGradSq_iter_le`, and Lemma 3.4 / Corollary 3.5 through `PoissonIterate/Defect.lean`. This
+`sum_meanGradSq_iter_le`, and Lemma 3.4 / Corollary 3.5 through `KLS/BKL/PoissonIterate/Defect.lean`. This
 is Theorem 3.1 for regular laws; it is not the KLS bound (Theorem 1.1).
 -/
 

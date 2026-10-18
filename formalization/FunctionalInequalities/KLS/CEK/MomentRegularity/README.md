@@ -20,6 +20,5 @@ establish the later trace/Stein conclusions. No global C²/smoothness, gradient 
 or unrestricted-source Stein construction is asserted. The constant-8 assembly belongs to
 [Letwin/RegularClass.lean](../../Letwin/RegularClass.lean).
 
-See the [layout decision](../../../../../research/decisions/2026-10-18-moment-regularity-layout.md),
-[proof path](../../../../../research/progress/PROOF-PATH.md), and
+See the [proof path](../../../../../research/progress/PROOF-PATH.md) and
 [paper register](../../../../../research/progress/LITERATURE.md) for precise scope and evidence.

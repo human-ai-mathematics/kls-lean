@@ -4,9 +4,9 @@ import Mathlib.Analysis.InnerProductSpace.LaxMilgram
 /-!
 # The form domain of a closed operator, and the weak resolvent equation
 
-First three obligations of the semigroup-generation route
-(`research/decisions/2026-09-19-semigroup-generation-route.md`), which is gap 1 of the five
-recorded for `thm:logconcave-cheeger-poincare-comparison`.
+First three obligations of the semigroup-generation route (statements in
+`research/audits/SemigroupGenerationRouteStatements.lean`): the construction of the heat semigroup
+used by the Buser half of `thm:logconcave-cheeger-poincare-comparison`.
 
 For a densely defined operator `T : H₀ →ₗ.[ℝ] H₁` the energy form is `E(u) = ‖T u‖²`, unbounded on
 `H₀` but bounded on the form domain `D(T)` in the graph norm. This module supplies the three

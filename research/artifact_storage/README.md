@@ -2,8 +2,7 @@
 
 This tool replaces verified duplicates with APFS copy-on-write clones at the same paths.
 It retains evidence and source files. It does not change proof, certificate or paper-coverage
-status. The inventory and explicit retention assessment are described by
-[the file-management goal](../handoffs/2026-10-11-file-management-goal.md).
+status.
 
 The layers have separate responsibilities: `filesystem.py` anchors descriptors and validates
 bytes and metadata; `journal.py` preserves durable transaction/recovery history;

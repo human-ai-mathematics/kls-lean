@@ -3,8 +3,7 @@ import Mathlib.Topology.MetricSpace.Lipschitz
 
 /-! # A Lipschitz extension into a finite-dimensional inner-product space
 
-global Lipschitz extension of the route recorded in
-`research/decisions/2026-09-19-locally-lipschitz-vector-coarea-route.md`: a map into a
+global Lipschitz extension of the locally Lipschitz vector-coarea route: a map into a
 finite-dimensional real inner-product space that is Lipschitz on a set agrees on that set with a
 map that is Lipschitz on the **whole** space.
 

@@ -183,7 +183,9 @@ open InnerProductSpace
 
 /-! Bochner Hessian bound for a convex `C²` potential. -/
 
-private theorem partial_integrable {n : ℕ}
+variable {n : ℕ}
+
+private theorem partial_integrable
     (μ : Measure (EuclideanSpace ℝ (Fin n))) [IsFiniteMeasureOnCompacts μ]
     {g : EuclideanSpace ℝ (Fin n) → ℝ} (hg : ContDiff ℝ ∞ g)
     (hgc : HasCompactSupport g) (i : Fin n) :
@@ -221,8 +223,13 @@ private theorem partial_integrable {n : ℕ}
     hcont.integrable_of_hasCompactSupport hn
   simpa [e] using hi
 
-private theorem gammaTwo_integrable {n : ℕ}
-    (m : Measure (EuclideanSpace ℝ (Fin n))) [m.IsAddHaarMeasure]
+section HaarReference
+
+/-! The two Haar-reference results share `m`; the compact-finiteness helper above does not. -/
+
+variable (m : Measure (EuclideanSpace ℝ (Fin n)))
+
+private theorem gammaTwo_integrable [m.IsAddHaarMeasure]
     {W g : EuclideanSpace ℝ (Fin n) → ℝ} (hW : ContDiff ℝ 2 W)
     (hg : ContDiff ℝ ∞ g) (hgc : HasCompactSupport g) :
     Integrable (gammaTwo W g) (m.tilted (-W)) := by
@@ -254,8 +261,7 @@ arXiv:2607.24164v1, Proposition 2.8 via Barthe–Klartag; weak Letwin route): fo
 `ν = e^{-W} dm` with `W` convex and `C²`, and `g ∈ C_c^∞`,
 `∑ᵢ ∫ ‖∇(∂ᵢ g)‖² dν ≤ ∫ (ℒg)² dν` with `ℒg = Δg − ⟪∇W, ∇g⟫` and `∂ᵢ g = Dg(eᵢ)` in the
 standard coordinates of `EuclideanSpace ℝ (Fin n)`. -/
-theorem sum_integral_norm_fderiv_partial_sq_le_integral_weightedLaplacian_sq {n : ℕ}
-    (m : Measure (EuclideanSpace ℝ (Fin n))) [m.IsAddHaarMeasure]
+theorem sum_integral_norm_fderiv_partial_sq_le_integral_weightedLaplacian_sq [m.IsAddHaarMeasure]
     {W : EuclideanSpace ℝ (Fin n) → ℝ} (hW : ContDiff ℝ 2 W) (hWc : ConvexOn ℝ Set.univ W)
     {g : EuclideanSpace ℝ (Fin n) → ℝ} (hg : ContDiff ℝ ∞ g) (hgc : HasCompactSupport g) :
     ∑ i, ∫ x, ‖fderiv ℝ (fun y => fderiv ℝ g y (EuclideanSpace.single i 1)) x‖ ^ 2
@@ -424,6 +430,8 @@ theorem sum_integral_norm_fderiv_partial_sq_le_integral_weightedLaplacian_sq {n 
     _ = ∫ x, weightedLaplacian W g x ^ 2 ∂ν := by
       simpa [ν] using
         (integral_gammaTwo_eq m hW hg3 hgc)
+
+end HaarReference
 
 end LT9CBochnerHessianBound
 

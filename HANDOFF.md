@@ -1,6 +1,6 @@
 # Current KLS handoff
 
-Updated 2026-10-18 for the final public-entry documentation corrections.
+Updated 2026-10-19 for the local context-maintenance phase.
 
 ## Accepted result and open boundaries
 
@@ -19,13 +19,11 @@ remain open. The four exploratory routes retain their own statuses.
 
 ## Evidence and library use
 
-The [recorded baseline](research/verification.md#recorded-baseline) summarises the most recent
-accepted snapshot: commit `904d1a5`, whose full local verification was completed, accepted and
-pushed, with every committed blob matched to the frozen source of that run; `5d41bd7` remains the
-separately tested three-client downstream pin; the recorded historical remote Lean run is
-run 37516844384 for `36e7c78`. Receipts and logs stay local in the ignored `build/` directory; they
-are dated evidence for their recorded snapshots, not a claim that every later prose commit was
-reverified, and a later remote result is read from its own GitHub Actions run, not from this page.
+Use the [context MCP](research/context-mcp.md) for snapshot-bound registry and local-receipt
+queries. The [verification guide](research/verification.md#receipts-and-trust-scope) defines
+acceptance scopes. Receipts and execution logs stay local under ignored `build/`; remote Lean
+evidence is the terminal GitHub Actions run for its exact `head_sha`. Neither a registry entry
+nor an old receipt verifies a later source tree.
 
 Use the [calling examples](examples/README.md), the [compiler API directory](formalization/API.md),
 the [audit client guide](research/audits/README.md) and the
@@ -38,21 +36,17 @@ and explicit third-party compiled caches remain trusted. Known
 
 ## Current work and next step
 
-Maintenance at `904d1a5` (public-entry documentation, targeted ignore rules and the 43 module
-comments) is delivered; the [delivery record](research/decisions/2026-10-18-comment-cleanup-delivery.md)
-and [comment archive](research/decisions/2026-10-18-migration-comment-history.md) preserve its scope
-and originals. The present batch is documentation only: two stale comment clauses, a concise audit
-client guide, this handoff and the recorded baseline, with the replaced originals in the
-[documentation history](research/decisions/2026-10-18-public-readiness-documentation-history.md).
-Proofs, hypotheses and all 34 certificate states are unchanged.
+The maintenance scope is the read-only context MCP, scoped section variables in
+`KLS/LogConcave/HessianStein.lean` and `HminusOne.lean`, and local retention of superseded
+operational history. Mathematical statements, proofs, hypotheses, normalization, dimensional
+scope and all 34 certificate states are retained. Current source reviews and validation inputs
+remain tracked, so a fresh clone does not need the local history archive.
 
-Acceptance procedure for this batch: Codex accepts the candidates, commits and pushes, then runs
-the owner's authorized remote Lean certification for that pushed commit. Its terminal result is
-read from the GitHub Actions run whose `head_sha` is that exact SHA. That run has the Lean-only scope
-described in the [verification guide](research/verification.md#change-appropriate-checks-and-remote-ci);
-no outcome is assumed here, and the SHA is not written back into this text. The repository is
-private until the owner decides
-the disclosure scope of the preserved dated history and old branch and changes visibility
-explicitly. Source owners are in the [module directory](formalization/MODULES.md); the
-[maintenance register](research/technical-debt/remaining-families.md) retains deferred MetricBV
-relocation.
+Each batch requires independent acceptance. Delivery requires full local verification of the
+frozen combined tree before one commit and push, followed by one remote Lean certification for
+the final pushed SHA after all local work. Read the outcome from that run; this file anticipates
+no result. No further proof construction is queued. A new mathematical task must select its
+pinned literature target under the [workflow](research/workflow.md). The repository stays private
+until the owner explicitly changes visibility. The [module directory](formalization/MODULES.md)
+locates source owners; the [maintenance register](research/technical-debt/remaining-families.md)
+lists unresolved debt.

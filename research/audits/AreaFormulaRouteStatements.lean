@@ -4,13 +4,10 @@ import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
 /-!
 # Route statements for the nonlinear area formula
 
-**This file contains only `#check`s.**  It declares nothing, proves nothing, and introduces no
-placeholder axiom.  Each proposition below is an obligation of the route recorded in
-`research/decisions/2026-09-16-area-formula-route.md` for the Federer area formula, which the
-codimension-`m` coarea program needs and which **nothing in this repository proves**.
-
-The same convention as `WeightedCoareaRouteStatements.lean`: a proposition type-check is not a
-proof, and none of these is claimed to hold in Lean yet.
+**This file contains only `#check`s. A proposition type-check is not a proof.**
+It preserves the nonlinear Federer area-formula contracts without introducing an axiom,
+definition or placeholder proof. `KLS/Geometry/LinearAreaFormula.lean` concerns linear maps;
+the propositions below specify the separate nonlinear contracts used by the coarea route.
 -/
 
 noncomputable section
@@ -118,7 +115,7 @@ which is exactly what `A3` lacks in general. -/
           LinearMap.adjoint ((fderiv ℝ γ y : H →ₗ[ℝ] K)) ∘ₗ (fderiv ℝ γ y : H →ₗ[ℝ] K))))
           ∂(volume : Measure H))
 
-/-! ### B2 — the normalized form actually consumed by the program -/
+/-! ### B2 — the normalized contract used by the coarea route -/
 
 #check (∀ {H K V : Type*} [NormedAddCommGroup H] [InnerProductSpace ℝ H] [FiniteDimensional ℝ H]
     [MeasurableSpace H] [BorelSpace H]

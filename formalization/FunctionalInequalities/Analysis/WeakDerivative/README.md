@@ -14,5 +14,3 @@ construct a moment potential, prove Hessian evolution or establish the constant-
 `Calculus` retains the chain rule's and product proof's shared private test helpers. Local L2, global L2 and bounded
 hypotheses remain distinct. The generic [smooth ball cutoff](../Cutoff/SmoothBall.lean) and
 [Lipschitz ball cutoff](../Cutoff/LipschitzBall.lean) have different profiles and regularity.
-See the [placement decision](../../../../research/decisions/2026-10-17-cutoff-weak-derivative-layout.md)
-and [complete map](../../../../research/api-migration/2026-10-17-cutoff-weak-derivative-map.json).

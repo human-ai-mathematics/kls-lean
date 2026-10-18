@@ -5,10 +5,10 @@ import Mathlib.Analysis.SpecialFunctions.Exponential
 /-!
 # The exponential of a bounded nonnegative operator is a contraction
 
-resolvent contraction of the semigroup-generation route
-(`research/decisions/2026-09-19-semigroup-generation-route.md`), proved here as
-`norm_exp_neg_smul_apply_le` and restated verbatim as `route_S5`. See `Form.lean` for the form construction, the shifted weak form
-and the resolvent operator, and `Resolvent.lean` for resolvent solvability.
+resolvent contraction of the semigroup-generation route (obligation `S5` of
+`research/audits/SemigroupGenerationRouteStatements.lean`), proved here as
+`norm_exp_neg_smul_apply_le` and restated verbatim as `route_S5`. See `Resolvent/Form.lean` for the form construction, the shifted weak form
+and the resolvent operator, and `Resolvent/Basic.lean` for resolvent solvability.
 
 The route applies this to the Yosida approximation `L_s = (1 - J_s)/s`, a bounded nonnegative
 self-adjoint operator, to see that `NormedSpace.exp (-t • L_s)` is a contraction for `t ≥ 0`.

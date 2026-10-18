@@ -62,10 +62,3 @@ New proofs require strict compilation, an actual client and the appropriate axio
 Documentation-only organization requires link, scope and preservation checks. It does not advance a proof or certificate,
 and it does not turn an earlier receipt into verification of a new source and documentation snapshot.
 See [verification commands and trust scope](research/verification.md).
-
-## Historical design records
-
-The complete earlier design text is retained in the
-[2026-10-17 design archive](research/decisions/2026-10-17-lean-design-history.md), including its dated contracts,
-acceptance history and former module paths. The [decision index](research/decisions/README.md) locates the original migration records.
-Historical scopes remain attached to their original dates.

@@ -6,9 +6,8 @@ import Mathlib.MeasureTheory.Integral.IntervalIntegral.IntegrationByParts
 # The sharp Hardy inequality with constant `4 · Var` for clipped smooth tests
 
 Source: Blueprint `thm:one-dimensional-logconcave-poincare` (sharp form with constant `4`); the
-argument follows the collaborator audit recorded in
-`research/explorations/2026-09-11-poincare-constant-4-audit.md`, Sections 6–7, transported to the
-coordinate of the line. Read `clip`, `LineDensity.integral_sq_clipCentered_eq`,
+argument follows Sections 6–7 of the collaborator's constant-4 source audit (a locally kept record),
+transported to the coordinate of the line. Read `clip`, `LineDensity.integral_sq_clipCentered_eq`,
 `LineDensity.groundState_inequality`, `LineDensity.integral_sq_div_le` and
 `LineDensity.variance_clip_le`.
 

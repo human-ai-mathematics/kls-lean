@@ -4,8 +4,7 @@ import FunctionalInequalities.KLS.BKL.PoissonIterate.Symmetry
 # Audit: BKL Lemma 3.3 for the iterates (route `S1`)
 
 The proposition `S1` of `research/audits/BKL/IterateRouteStatements.lean` (operator route to
-Bizeul–Klartag–Lehec, arXiv:2610.05474v1, Theorem 3.1; decision record
-`research/decisions/2026-10-07-bkl-operator-route.md`), restated verbatim with the same `variable`
+Bizeul–Klartag–Lehec, arXiv:2610.05474v1, Theorem 3.1), restated verbatim with the same `variable`
 block and notation, and discharged by the library theorem `normSq_grad0_iter_sub_symField_le` of
 `KLS/BKL/PoissonIterate/Symmetry.lean`:
 

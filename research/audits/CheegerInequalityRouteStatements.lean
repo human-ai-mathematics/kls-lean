@@ -7,11 +7,10 @@ import Mathlib.Probability.Moments.Variance
 /-!
 # Route statements for Cheeger's inequality `C_P^lit(μ) ≤ 4 Ψ_KLS(μ)²`
 
-**This file contains only `#check`s.  A proposition that type-checks is not a proof.**  It declares
-nothing, proves nothing, and introduces no placeholder axiom.  Each proposition below is an
-obligation of the route recorded in `research/decisions/2026-09-19-cheeger-inequality-route.md`,
-and **at the time of this route snapshot none of `P0`–`P6` had been proved**.  No work-in-progress
-module is imported.
+**This file contains only `#check`s. A proposition that type-checks is not a proof.**
+It preserves the Cheeger-inequality contracts `P0`–`P6`.
+The coordinate inequality is in `KLS/Geometry/Cheeger/Inequality.lean`; the intrinsic log-concave
+comparison is in `KLS/LogConcave/Poincare.lean`. These `#check`s introduce no proof or placeholder.
 
 ## The target
 
@@ -21,9 +20,9 @@ Poincaré constant of `def:literature-poincare-constant`
 (`Poincare.LocalSlope.Intrinsic.constant`) and `Ψ_KLS = h_μ⁻¹` the inverse isoperimetric scale of
 `def:isoperimetric-cheeger-scale` (`Isoperimetry.inverseScale`).  Dirac laws are included with both
 sides `0`.  The **Buser half** `Ψ_KLS(μ)² ≤ π C_P^lit(μ)` is **not** part of this route (`B1`
-below): every known proof for log-concave laws uses the Bakry–Émery gradient bound of the weighted
-heat semigroup (Ledoux; De Ponti–Mondino for the constant `π`) or Lovász–Simonovits localization,
-neither of which exists in Mathlib or in this repository.
+below). The general Buser comparison has the separate source
+`KLS/LogConcave/Density/GaussianSmoothing/Buser.lean` and client
+`research/audits/GaussianBuserPassageAudit.lean`; this route concerns the Cheeger half.
 
 ## The route
 
@@ -53,7 +52,7 @@ every log-concave law has) and `h_μ = h_M(ν)` (`Isoperimetry.constant_eq_minko
 `Poincare.SmoothTest.constant_eq_intrinsicMeasure_and_localSlope`,
 `LogConcave.intrinsic_absolutelyContinuous`, Mathlib's layer cake
 `lintegral_eq_lintegral_meas_le`, `ENNReal.lintegral_mul_le_Lp_mul_Lq` (Hölder), `evariance` and
-`variance`.  Mathlib has no Cheeger inequality and no median lemma in this form.
+`variance`.
 -/
 
 noncomputable section

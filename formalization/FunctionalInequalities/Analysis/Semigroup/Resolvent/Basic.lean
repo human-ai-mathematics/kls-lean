@@ -4,8 +4,8 @@ import Mathlib.Analysis.InnerProductSpace.ProdL2
 /-!
 # The resolvent: unique solvability of the weak equation
 
-resolvent solvability of the semigroup-generation route
-(`research/decisions/2026-09-19-semigroup-generation-route.md`), proved here as
+resolvent solvability of the semigroup-generation route (statements in
+`research/audits/SemigroupGenerationRouteStatements.lean`), proved here as
 `existsUnique_weakResolvent`. See `Resolvent/Form.lean` for the form construction, the shifted weak form and the resolvent operator.
 
 The proof uses **orthogonal projection, not Lax–Milgram**. Rescaling the second coordinate by

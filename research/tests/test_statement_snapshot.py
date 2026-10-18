@@ -61,7 +61,7 @@ class GoldenTests(unittest.TestCase):
         self.temp = tempfile.TemporaryDirectory()
         self.addCleanup(self.temp.cleanup)
         self.root = Path(self.temp.name)
-        self.decision = "research/decisions/first.md"
+        self.decision = "research/a-series/statement-snapshot/first.md"
         path = self.root / self.decision
         path.parent.mkdir(parents=True)
         path.write_text("Initial scope review.\n")
@@ -97,7 +97,7 @@ class GoldenTests(unittest.TestCase):
             snapshot.update_snapshot(self.root, self.current, self.decision)
         (self.root / self.decision).write_text("Rewritten history")
         self.assertTrue(snapshot.check_snapshot(self.root, self.current))
-        new = "research/decisions/second.md"
+        new = "research/a-series/statement-snapshot/second.md"
         (self.root / new).write_text("New review with the updated scope.")
         snapshot.update_snapshot(self.root, self.current, new)
         self.assertEqual(snapshot.check_snapshot(self.root, self.current), [])
@@ -109,6 +109,32 @@ class GoldenTests(unittest.TestCase):
     def test_external_decision_path_is_not_accepted(self):
         with self.assertRaises(ValueError):
             snapshot.update_snapshot(self.root, self.current, "../outside.md")
+
+    def test_review_must_belong_to_a_current_snapshot_owner(self):
+        for name in ("build/history/review.md", "research/decisions/review.md",
+                     "research/a-series/statement-snapshot/../review.md"):
+            with self.subTest(name=name), self.assertRaises(ValueError):
+                snapshot.decision_record(self.root, name)
+        name = "research/audits/BKL/IndependentTargets/review.md"
+        path = self.root / name
+        path.parent.mkdir(parents=True)
+        path.write_text("Current independent-target scope review.\n")
+        self.assertEqual(snapshot.decision_record(self.root, name)["path"], name)
+
+    def test_review_rejects_missing_empty_and_symlinked_inputs(self):
+        path = self.root / self.decision
+        path.unlink()
+        with self.assertRaises(ValueError):
+            snapshot.decision_record(self.root, self.decision)
+        path.write_text("  \n")
+        with self.assertRaises(ValueError):
+            snapshot.decision_record(self.root, self.decision)
+        outside = self.root / "outside.md"
+        outside.write_text("A review outside the permitted owner.\n")
+        path.unlink()
+        path.symlink_to(outside)
+        with self.assertRaises(ValueError):
+            snapshot.decision_record(self.root, self.decision)
 
 
 if __name__ == "__main__":

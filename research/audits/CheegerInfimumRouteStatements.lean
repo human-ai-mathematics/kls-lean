@@ -6,20 +6,15 @@ import FunctionalInequalities.KLS.Isoperimetry
 import FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Approximation
 import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
 /-!
-# Route statements for the two Cheeger-infimum holes
+# Route statements for Cheeger-infimum identification
 
-**This file contains only `#check`s.  A proposition that type-checks is not a proof.**  It declares
-nothing, proves nothing, and introduces no placeholder axiom.  Each proposition below is an
-obligation of the route recorded in `research/decisions/2026-09-19-cheeger-infimum-route.md`, and
-**at the time of this route snapshot `K0`, `K1`, `K2`, `K4`, `K5`, `K7`, `K8` had not been proved**.
-`K9`–`K13` are the public statements of the work-in-progress module `KLS/WIP/CheegerInfimum.lean`,
-proved there modulo the two holes; they are restated so that the hole-free module which closes the
-route can be checked against them declaration by declaration.  This file imports no
-work-in-progress module.
+**This file contains only `#check`s. A proposition that type-checks is not a proof.**
+It preserves the Cheeger-infimum contracts `K0`–`K13`.
+Current implementations of the smooth/Minkowski comparison and intrinsic transports are in
+`KLS/Geometry/Cheeger/Equality.lean`, with the definitions in `KLS/Geometry/Cheeger/Infimum.lean`.
+The anonymous statements below pin the route's hypotheses, constants and dimensional scope.
 
-## The two holes
-
-`KLS/WIP/CheegerInfimum.lean` has exactly two `sorry` bodies:
+## The two comparison contracts
 
 * `K0` — `Isoperimetry.smoothConstant_mul_lintegral_min_superlevel_le`: for a smooth Lipschitz
   `[0,1]`-valued `u`, `h_S · ∫₀¹ m(ν{u > t}) dt ≤ ∫ ‖∇u‖ dν`, where `h_S` is the smooth
@@ -29,7 +24,7 @@ work-in-progress module.
 Together with the proved `minkowskiConstant_le_smoothConstant` (`h_M ≤ h_S`,
 `KLS/Geometry/Cheeger/Infimum.lean`) they give `lem:relative-perimeter-cheeger-infimum`, the
 `h_μ = h_ν^{sm,rel}` and `Ψ_KLS(μ) = ψ_ν` clauses of `thm:klartag-density-frontend-identification`,
-and free the three intrinsic transports `K11`–`K13` of `sorryAx`.
+and supply the intrinsic transports `K11`–`K13`.
 
 ## The route
 
@@ -59,8 +54,7 @@ that no finiteness of `h_S` is needed; let the mollification index tend to infin
 `tendsto_lintegral_min_superlevel`, `SmoothDomain.ae_exists_superlevel`,
 `frontier_superlevel_subset`, `lintegral_enorm_gradient_distanceCutoff_le`,
 `tendsto_distanceCutoff_indicator`, `lintegral_enorm_gradient_mul_eq_lintegral_levelSet`,
-`Energy.Euclidean.LipschitzApproximation.exists_smooth_bounded_L1`.  Mathlib has no Cheeger
-constant, no relative perimeter and no Minkowski content.
+`Energy.Euclidean.LipschitzApproximation.exists_smooth_bounded_L1`.
 -/
 
 noncomputable section
@@ -80,7 +74,7 @@ open scoped ENNReal NNReal ContDiff
 #check @FunctionalInequalities.KLS.Isoperimetry.lintegral_enorm_gradient_distanceCutoff_le
 #check @FunctionalInequalities.Analysis.lintegral_enorm_gradient_mul_eq_lintegral_levelSet
 
-/-! ### K0 — the first hole, verbatim: the smooth coarea bound
+/-! ### K0 — the smooth coarea-bound contract, verbatim
 
 `h_S · ∫₀¹ m(ν{u > t}) dt ≤ ∫ ‖∇u‖ dν` for smooth Lipschitz `[0,1]`-valued `u`. -/
 
@@ -135,7 +129,7 @@ With `ν = volume.withDensity (ofReal ∘ ρ)`, the proved Lipschitz coarea form
     ∫⁻ x, ‖gradient u x‖ₑ ∂(ν : Measure V) =
       ∫⁻ t, ∫⁻ y in {x | u x = t}, ENNReal.ofReal (ρ y) ∂(surfaceMeasure V) ∂(volume : Measure ℝ))
 
-/-! ### K5 — the second hole, verbatim: `h_S ≤ h_M` -/
+/-! ### K5 — the comparison contract, verbatim: `h_S ≤ h_M` -/
 
 #check (∀ {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [CompleteSpace V]
     [MeasurableSpace V] [BorelSpace V] [SecondCountableTopology V] [FiniteDimensional ℝ V]
@@ -207,12 +201,13 @@ relative to Lebesgue measure — stronger than the Blueprint's full-dimensional 
     {ν : ProbabilityMeasure V} {ρ : V → ℝ}, IsBorellDensity (ν : Measure V) volume ρ →
     minkowskiConstant ν = smoothConstant ρ (interior (ν : Measure V).support) ν)
 
-/-! ### K11–K13 — the intrinsic transports (proved in the work-in-progress module modulo the holes)
+/-! ### K11–K13 — the intrinsic transports
 
-`K11` is hole-free already: the affine-support isoperimetric constant of
+`K11` identifies the affine-support isoperimetric constant of
 `def:isoperimetric-cheeger-scale` is the Minkowski constant of the intrinsic law.  `K12` and `K13`
 are the `h_μ = h_ν^{sm,rel}` and `Ψ_KLS(μ) = ψ_ν` clauses of
-`thm:klartag-density-frontend-identification`; they inherit `sorryAx` only through `K5`. -/
+`thm:klartag-density-frontend-identification`. Their current source is
+`KLS/Geometry/Cheeger/Equality.lean`. -/
 
 #check (∀ {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
     [MeasurableSpace E] [BorelSpace E] [SecondCountableTopology E] [FiniteDimensional ℝ E]

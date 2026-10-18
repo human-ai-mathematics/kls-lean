@@ -10,7 +10,7 @@ import FunctionalInequalities.Analysis.Tensor.BasisChange
 # The Taylor-coefficient criterion of BKL Theorem 3.1
 
 Bizeul–Klartag–Lehec (arXiv:2610.05474v1), Theorem 3.1 (p. 10) and its proof (p. 17), in the
-operator route of `research/decisions/2026-10-07-bkl-operator-route.md`: the final argument that
+operator route (`research/audits/BKL/IterateRouteStatements.lean`): the final argument that
 turns the estimates on the iterates `iter T̄ f k` (the source's `h_{k+1}`) of an approximate first
 eigenfunction into `C_P(μ) ≤ K R²`.
 
@@ -266,7 +266,7 @@ private theorem dyadic_step {C c R : ℝ} {S : ℕ → ℝ} (hC : 0 < C) (hc : 1
           5 * ((e + 1 : ℕ) : ℝ) * (c ^ 2 * C⁻¹ * R ^ 2) ^ (e + 1) := by rw [h2]; ring
 
 /-- **The final argument of BKL Theorem 3.1, for real sequences** (arXiv:2610.05474v1, p. 17,
-in the operator route of `research/decisions/2026-10-07-bkl-operator-route.md`).
+in the operator route).
 
 The sequences are the scalar quantities of the iterates `h_{k+1}` of one approximate
 eigenfunction, `λ = 1/C`: `v k` the energy `‖∇h_{k+1}‖²`, `p k` the drop `|∫∇h_{k+1}|²`, `χ k` the

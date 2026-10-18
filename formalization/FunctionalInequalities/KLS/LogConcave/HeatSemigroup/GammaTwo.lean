@@ -12,7 +12,7 @@ import FunctionalInequalities.KLS.LogConcave.HeatSemigroup.InteriorRegularity
 
 whose transfer to a general `F` needs `L²` convergence of `∇fₙ` **and** of `-∇(ℒ fₙ)`. The
 second convergence is a second-order property of the approximating sequence, and it is the
-obstruction recorded in `research/decisions/2026-09-21-weak-gamma-interface.md`.
+obstruction that motivates the formulation below.
 
 This module removes the second field from the inequality altogether. For `F ∈ D(A)` with
 `A F ∈ D(T̄)` and `φ ∈ C_c^∞(V)`, the Leibniz rule of

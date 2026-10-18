@@ -6,12 +6,11 @@ import FunctionalInequalities.KLS.BKL.Poincare
 **What is proved.**  Seven of the eight propositions of
 `research/audits/SharpSardRouteStatements.lean` are restated **verbatim** below and discharged:
 `M1`, `M1'`, `M3`, `M4`, `M5`, `M6` and the diagnostic `D1`.  In particular `route_M6` is the
-direct hole `FunctionalInequalities.Analysis.sard` of `KLS/WIP/AnalyticPrerequisites.lean`, and the
-module `Analysis/Sard/Sharp.lean` proves it under exactly that name with a `pp.all` signature that
-is byte-identical to the hole's.  The hole itself is **not** migrated here: this audit does not
-touch `KLS/WIP/AnalyticPrerequisites.lean`, and the route statement file is left byte-identical.
+contract `FunctionalInequalities.Analysis.sard` from `Analysis/Sard/Sharp.lean`, independently
+restated with the route's full signature. This client separates that theorem from the original
+`M2` contract and its repaired version.
 
-**`M2` is not proved, and as written it is false.**  The route's `M2` asks the mean value step to
+**The original `M2` is not proved by this client; as written it is false.**  The route's `M2` asks the mean value step to
 hold for an arbitrary `C¹` parametrized map `φ`, with the route record stating that "the
 antilipschitz constant of `φ` is not needed here".  It is needed.  Without it the hypothesis
 controls `fderiv ℝ f` only *on the curve*, while the conclusion measures the increment of `f`
@@ -41,9 +40,8 @@ repository, and `sard_smooth_recovered`, `sard_plane_recovered` and `sard_finran
 derive their statements from it without naming them in the proofs.  `dimension_zero` and
 `constant_function` are the two boundary cases.
 
-**Untouched.**  The Cheeger comparisons, the Energy holes and the dimension-free KLS conjecture are
-not referred to here, and neither is any work-in-progress module: the import closure of this file
-contains no `WIP` file.
+The Cheeger comparisons, energy identifications and dimension-free KLS bound are outside this
+client's scope. Its theorems concern finite-regularity Sard and the listed diagnostics.
 -/
 
 noncomputable section
@@ -77,7 +75,7 @@ theorem route_M1 :
   intro n k hk w x₀ hw hx₀ hd
   exact MorseSard.exists_graph hk hw hx₀ hd
 
-/-! ### `M2` — not proved; the repaired statement, with the antilipschitz constant -/
+/-! ### `M2` — the original is not proved here; the repaired statement has the antilipschitz constant -/
 
 /-- **Route obligation `M2` with its missing hypothesis restored.**  Verbatim the route's `M2`,
 with the antilipschitz bound of the disk added between the `C¹` hypothesis on `φ` and the
@@ -150,7 +148,7 @@ theorem route_M5 :
 
 /-- **Route obligation `M6`**, copied verbatim from
 `research/audits/SharpSardRouteStatements.lean` and discharged.  This is the statement of the
-direct hole `Analysis.sard` of `KLS/WIP/AnalyticPrerequisites.lean`. -/
+contract `Analysis.sard` of `Analysis/Sard/Sharp.lean`. -/
 theorem route_M6 :
     (∀ {V : Type*} [NormedAddCommGroup V] [NormedSpace ℝ V] [FiniteDimensional ℝ V]
       {u : V → ℝ}, ContDiff ℝ (Module.finrank ℝ V) u →

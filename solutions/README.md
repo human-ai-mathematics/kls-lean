@@ -54,10 +54,7 @@ with typed `#check` applications rather than duplicate public theorems.
   fixed constant and sharp optimal-constant equality for every real mean and nonnegative
   variance. Its typed checks cover the standard, translated, and zero-variance laws.
 
-These four nodes are recorded as `proved` with `checked_by: lean`. The binary tensorization
-freeze and acceptance records are `../research/decisions/2026-09-03-tensorization-freeze.md`
-and `../research/explorations/2026-09-03-tensorization-acceptance.md`; the latter records
-validation and the final publication/CI status.
+These four nodes are recorded as `proved` with `checked_by: lean`.
 
 The two comparison certificates, `LemAmbientIntrinsicPoincareComparison.lean` and
 `LemLegacyRelaxedPoincareComparison.lean`, package five and seven proved comparisons respectively.
@@ -80,8 +77,7 @@ certifies intrinsic absolute continuity from the compact-set definition.
 [`ThmSelectedLiteratureConstantEquivalence.lean`](ThmSelectedLiteratureConstantEquivalence.lean)
 then certifies the general log-concave constant equality, including singular ambient laws and
 zero-dimensional support. Both certificates and all new reusable declarations have default-build
-axiom guards. Density and moment conclusions have their own certificate below; read the
-[general proof record](../research/decisions/2026-09-06-general-logconcave-comparison.md).
+axiom guards. Density and moment conclusions have their own certificate below.
 
 [`ThmSmoothLipschitzConstantEquivalence.lean`](ThmSmoothLipschitzConstantEquivalence.lean)
 packages eight proved interfaces from `Energy/LocalSlope/Gradient.lean` and
@@ -89,15 +85,13 @@ packages eight proved interfaces from `Energy/LocalSlope/Gradient.lean` and
 feed energy/domain identification and the finite-constant and extended-optimum comparisons.
 The final comparison assumes intrinsic absolute continuity. The node is
 `proved / checked_by: lean`; all eight components and the certificate have default-build
-transitive axiom guards. Read the
-[proof record](../research/decisions/2026-09-06-smooth-literature-proofs.md).
+transitive axiom guards.
 
 [`LemCovarianceTestCoreDensity.lean`](LemCovarianceTestCoreDensity.lean) contains the certificate
 for four proved approximation contracts: weighted compact-support cutoff, full-gradient
 mollification, weighted L2 approximation, and interval-preserving bounded L1 smoothing. Its
 certificate and four reusable declarations have default-build transitive axiom guards. The
-node is `proved / checked_by: lean`; see the
-[acceptance record](../research/decisions/2026-09-06-weighted-approximation-acceptance.md).
+node is `proved / checked_by: lean`.
 
 `StatementChecks.lean` is a default-build target for the literal KLS proposition and its domain
 and boundary encodings. It is not a ledger proof certificate. All registered mathematical certificates,
@@ -127,8 +121,6 @@ Typed clients cover concrete and boundary cases without duplicate specialization
 
 The [Gaussian guide](../formalization/FunctionalInequalities/Poincare/Gaussian/README.md)
 explains the `Density` → `Hardy` → `Real` proof and its smooth L² finite-energy scope.
-The [acceptance record](../research/explorations/2026-09-04-gaussian-poincare-acceptance.md)
-retains the historical review and evidence.
 
 ## Finite tensorization certificate
 
@@ -138,11 +130,6 @@ tensorization and optimal equality, with the supporting coordinate/isometry tran
 Typed applications check Euclidean families and boundary cases; the certificate combines the
 accepted conclusions without duplicate specialization declarations.
 
-See the [proof record](../research/explorations/2026-09-03-finite-tensorization-proofs.md) and
-[acceptance record](../research/explorations/2026-09-03-finite-tensorization-acceptance.md).
-Earlier candidate, freeze and publication details are retained in the
-[archived certificate guide](../research/decisions/2026-10-18-pre-final-certificate-guide.md).
-
 ## Borell equivalence certificate and implemented definition checks
 
 [`ThmCompactBorellLogconcavityEquivalence.lean`](ThmCompactBorellLogconcavityEquivalence.lean)
@@ -151,9 +138,7 @@ probability law on a finite-dimensional real normed space is equivalent to Bobko
 formulation, including singular laws, null sets, proper affine supports and dimension zero. Its
 `certificate` wraps `KLS.LogConcave.borel_iff`; the certificate, the library theorem and the two
 compactness/inner-regularity lemmas have default-build axiom guards. The node is
-`proved / checked_by: lean`. Read the
-[proof handoff](../research/decisions/2026-09-07-borell-equivalence-claude-handoff.md) and the
-[completion record](../research/decisions/2026-09-07-borell-equivalence-and-conditional-fiber-proofs.md).
+`proved / checked_by: lean`.
 
 `StatementChecks.lean` contains twenty-five named, proved checks with standard-only axiom guards, plus
 axiom guards for the six proved conditional-fiber contracts in `KLS/ConditionalFiber/Basic.lean`
@@ -182,9 +167,7 @@ such representative on the interior of the support, two-sided positive bounds on
 that interior, the closed-convex-hull identity of the support, the null complement of the support
 interior, an exponential moment and all-order moments. Typed applications cover the Euclidean
 family including dimension zero. The certificate and nine reusable declarations have default-build
-axiom guards. The node is `proved / checked_by: lean`. Read the
-[statement decision](../research/decisions/2026-09-07-borell-density-statements.md) and the
-[proof record](../research/decisions/2026-09-07-borell-density-proofs.md).
+axiom guards. The node is `proved / checked_by: lean`.
 
 ## Covariance-core closure certificate
 
@@ -198,7 +181,6 @@ particular `ℝ + C_c^∞`) has the same closure; and the sequential relaxation 
 law of every log-concave law on `EuclideanSpace ℝ (Fin n)`, dimension zero (zero operator, full
 domain) and the identity with `Energy.CovarianceGradient.Intrinsic.energy` for every square root `B` of the intrinsic
 covariance. The certificate and eleven reusable declarations carry default-build axiom guards.
-Read [the record](../research/decisions/2026-09-08-covariance-core-closure.md).
 
 ## Affine covariance closed-form certificate
 
@@ -211,8 +193,7 @@ isometry preserving variance, relaxation and optimal constant; and for a square 
 intrinsic covariance the affine relaxation is the squared-norm energy of the closure of `B ∇` on the
 core `ℝ + C_c^∞`, with `Poincare.CovarianceGradient.Intrinsic.constant μ` its optimal constant. Typed applications cover
 every `EuclideanSpace ℝ (Fin n)` and dimension zero. The certificate and ten reusable declarations
-carry default-build axiom guards. Read
-[the record](../research/decisions/2026-09-08-affine-covariance-relaxation-closed.md).
+carry default-build axiom guards.
 
 ## Affine constant translation-invariance certificate
 
@@ -224,8 +205,7 @@ is log-concave; its ambient covariance operator and the direction of its affine 
 intertwines the affine covariance relaxations; `Poincare.CovarianceGradient.Intrinsic.constant` is unchanged; `μ` has a
 finite ambient second moment; and translating by the negative barycenter gives zero mean. Typed
 applications cover centering on every `EuclideanSpace ℝ (Fin n)` and dimension zero. The certificate
-and twelve reusable declarations carry default-build axiom guards. Read
-[the record](../research/decisions/2026-09-08-affine-poincare-translation-invariance.md).
+and twelve reusable declarations carry default-build axiom guards.
 
 ## Affine and isotropic reduction certificate
 
@@ -237,8 +217,7 @@ equivalences of `KLS.IsotropicBound K` (isotropic log-concave laws have literatu
 over every finite-dimensional Euclidean space of a fixed universe, and the implication from the affine
 bound in universe zero to `KLS.Conjecture`. Typed applications cover the covariance-normalized bound
 on every `EuclideanSpace ℝ (Fin n)` and dimension zero. The certificate and fifteen reusable
-declarations carry default-build axiom guards. Read
-[the record](../research/decisions/2026-09-08-affine-isotropic-reduction.md).
+declarations carry default-build axiom guards.
 
 ## Smooth-gradient Dirichlet certificate
 
@@ -248,8 +227,7 @@ Euclidean space its sole `certificate` packages: the smooth-gradient relaxation 
 normal contraction of an `L²` class does not increase the relaxed energy), it is a Dirichlet energy,
 and the intrinsic-affine relaxation on the ambient `L²` is a Dirichlet energy. Typed applications
 cover the contraction inequality on every `EuclideanSpace ℝ (Fin n)`, dimension zero and the Dirac
-law on `ℝ`. The certificate and eleven reusable declarations carry default-build axiom guards. Read
-[the record](../research/decisions/2026-09-10-smooth-gradient-relaxation-dirichlet.md).
+law on `ℝ`. The certificate and eleven reusable declarations carry default-build axiom guards.
 
 ## One-dimensional log-concave Poincaré certificate
 
@@ -261,9 +239,7 @@ affine support, where the constant is `0`. Typed applications cover finiteness o
 constant, Bobkov's constant `12` as a corollary, the Dirac law at the origin (log-concave by
 `KLS.logConcave_dirac`, constant `≤ 0`), and the smooth-test inequality with constant `4 · Var` for
 laws with interior support. The certificate and twenty-two reusable declarations carry
-default-build axiom guards. Read
-[the constant-12 record](../research/decisions/2026-09-10-one-dimensional-logconcave-poincare.md)
-and [the constant-4 record](../research/decisions/2026-09-11-one-dimensional-logconcave-poincare-four.md).
+default-build axiom guards.
 
 ## Raw/sequential-core agreement certificate
 
@@ -275,8 +251,7 @@ sole `certificate` packages agreement of the smooth-gradient pre-energy with its
 smooth test and the sequential-core property. Typed applications cover the intrinsic law named by
 the Blueprint, the Euclidean family, and the consequence that two smooth tests with the same `L²`
 class have the same raw energy. The certificate and eleven reusable declarations carry default-build
-axiom guards. Read
-[the record](../research/decisions/2026-09-10-smooth-gradient-raw-core-agreement-density.md).
+axiom guards.
 
 ## Closed conditional-fiber form certificate
 
@@ -291,8 +266,7 @@ over `2 Var(T)`); the swap invariance of every two-point measure (reversibility)
 law, finite second moment, admissible frame, none of which the theorem uses), dense domain and lower
 semicontinuity on `EuclideanSpace ℝ (Fin (n + 1))`, the Markov inequality, the smooth compactly
 supported core inside the finite domain, and the empty sphere of dimension zero. The certificate and
-eleven reusable declarations carry default-build axiom guards. Read
-[the record](../research/decisions/2026-09-11-conditional-fiber-form.md).
+eleven reusable declarations carry default-build axiom guards.
 
 ## Conditional-fiber energy comparison certificate
 
@@ -309,8 +283,6 @@ bound, membership of every finite-energy test in `domain μ ρ`, the Euclidean f
 measure as the Haar reference, and the empty sphere of dimension zero. The certificate and the two
 library theorems carry default-build axiom guards. No value of `κ`, no fiber log-concavity and no
 Poincaré inequality for `μ` is claimed; `cor:conditional-fiber-twelve-bound` is a separate node.
-Read [the statement record](../research/decisions/2026-09-11-conditional-fiber-energy-comparison-statement.md)
-and [the proof record](../research/decisions/2026-09-11-conditional-fiber-energy-comparison-proofs.md).
 
 ## Log-concave conditional fibers certificate
 
@@ -327,8 +299,6 @@ finite-energy test in `domain μ ρ`, the corollary as an instance of the parame
 the Euclidean family with Lebesgue measure as the Haar reference, and the empty sphere of dimension
 zero. The certificate and two library theorems carry default-build axiom guards. No frame bound, no
 Poincaré inequality for `μ` and no KLS statement is claimed; `q:conditional-fiber-frame` is open.
-Read [the statement record](../research/decisions/2026-09-11-conditional-fiber-twelve-bound-statement.md)
-and [the proof record](../research/decisions/2026-09-11-conditional-fiber-twelve-bound-proofs.md).
 
 ## Cheeger identification certificate (absolutely continuous scope)
 
@@ -344,9 +314,7 @@ log-concave case (hypothesis discharged by `intrinsic_absolutelyContinuous`), th
 one-point space, and the Euclidean family with the canonical Haar measure. The certificate and two
 library theorems carry default-build axiom guards. The singular case
 `thm:smooth-gradient-relaxation-two-cheeger` is **not** claimed; no Poincaré inequality, constant
-finiteness or Cheeger--Buser comparison follows. Read
-[the statement record](../research/decisions/2026-09-11-smooth-gradient-relaxation-two-cheeger-statement.md)
-and [the registration record](../research/decisions/2026-09-12-cheeger-absolutely-continuous-registration.md).
+finiteness or Cheeger--Buser comparison follows.
 
 ## Ambient/intrinsic covariance certificate
 
@@ -358,8 +326,7 @@ law, has the same operator norm, the intrinsic covariance is positive definite, 
 zero-dimensional direction gives zero operators. Typed applications cover the Euclidean family
 including dimension zero. The certificate and nine reusable declarations in
 `Probability/Covariance/Intrinsic.lean` have default-build axiom guards. The node is
-`proved / checked_by: lean`. Read the
-[record](../research/decisions/2026-09-07-ambient-intrinsic-covariance.md).
+`proved / checked_by: lean`.
 
 ## Cheeger-infimum equality certificate
 
@@ -371,9 +338,7 @@ Cheeger infimum over smooth domains, both `⊤` when no admissible set exists; `
 log-concave affine-support form `h_μ = h_ν^{sm,rel}` and `Ψ_KLS(μ) = ψ_ν`, the two isoperimetric
 clauses of `thm:klartag-density-frontend-identification`. Lean is stronger than the Blueprint's
 full-dimensional log-concave hypothesis. The one-sided comparisons, dimension zero and the Euclidean
-family are exercised; four axiom guards. The node is `proved / checked_by: lean`. Read the
-[route](../research/decisions/2026-09-19-cheeger-infimum-route.md) and the
-[registration record](../research/decisions/2026-09-19-cheeger-line-proofs.md).
+family are exercised; four axiom guards. The node is `proved / checked_by: lean`.
 
 ## Cheeger identification certificate (every Borel law)
 
@@ -385,8 +350,7 @@ relaxations of the intrinsic law and the identity `𝓔^can_μ = 2 Ch_μ` on amb
 `⊤` allowed on both sides; `conventions_agree` records that the asymptotic-Lipschitz convention relaxes
 to the same functional. The absolutely continuous certificate is recovered without its hypothesis,
 the coordinate form, dimension zero and the Euclidean family are exercised; four axiom guards. The node
-is `proved / checked_by: lean`. Read the [route](../research/decisions/2026-09-19-energy-slope-route.md)
-and the [registration record](../research/decisions/2026-09-19-energy-slope-proofs.md).
+is `proved / checked_by: lean`.
 
 ## Relaxed Minkowski content certificate (paper target)
 
@@ -397,8 +361,8 @@ that is finite on bounded Borel sets and a measurable set of finite mass, the re
 content equals the infimum of liminf slope integrals over globally Lipschitz approximants converging
 in `L¹`; `upper` gives the same for the relaxed upper content. The certificate composes two existing
 library identities. Typed applications cover finite measures and Lebesgue measure on Euclidean
-spaces; four axiom guards. It is the first paper-target certificate. Read the
-[review record](../research/decisions/2026-10-02-admg-theorem-3-6-certificate.md).
+spaces; four axiom guards. It is the first paper-target certificate. Its scope review is in the
+[target-scope reviews](../research/progress/target-reviews.md).
 
 ## Bakry–Émery Poincaré certificate (paper target)
 
@@ -409,8 +373,8 @@ and `∇∇W ≥ ρ Id`, `ρ > 0`, the literature Poincaré constant satisfies `
 gives `Var_ν(f) ≤ ρ⁻¹ ∫ ‖∇f‖² dν` on smooth tests. The book assumes `ℝⁿ`, smooth `W` and
 `∫ e^{-W} = 1`. `gaussian` constructs the scaled Gaussian law as a probability measure and applies
 both statements with every hypothesis discharged, so the hypotheses are satisfiable in every
-dimension, including zero; three axiom guards. It is the second paper-target certificate. Read the
-[review record](../research/decisions/2026-10-04-bgl-corollary-4-8-2-candidate.md).
+dimension, including zero; three axiom guards. It is the second paper-target certificate. Its scope review is in the
+[target-scope reviews](../research/progress/target-reviews.md).
 
 ## Bizeul–Klartag–Lehec Theorem 3.1 certificate
 
@@ -419,7 +383,7 @@ Theorem 3.1 of Bizeul–Klartag–Lehec (arXiv:2610.05474v1), in the source form
 `K` with `C_P(μ) ≤ K R²` for every regular potential on `ℝⁿ` (BKL (12)) whose law is centered with
 `Cov ≤ Id` and every `R ≥ 1` satisfying the Taylor bound (29) in the Hilbert–Schmidt norm. The proof
 goes through the operator domain of the heat-model generator and an approximate first
-eigenfunction (`research/decisions/2026-10-07-bkl-operator-route.md`); the library constant is
+eigenfunction (the operator route, `research/audits/BKL/IterateRouteStatements.lean`); the library constant is
 explicit but not part of the claim. `dimZero` and `gaussian` discharge every hypothesis in dimensions zero and one (the standard
 Gaussian on `ℝ¹` satisfies (29) with `R = 8`); four axiom guards. This certificate covers the
 supporting theorem. The main Theorem 1.1 has its own certificate below.
@@ -433,7 +397,7 @@ regular log-concave law `μ` on `ℝⁿ` and every `f ∈ L²(μ)` satisfy
 `‖T_d f‖²_HS ≤ 2 b (d!)⁻² ‖f‖₂²` (BKL (107)). The proof follows the paper's suspension: the joint
 law of `(f(X), X)` with independent Laplace noise, its density (109), log-concavity (110),
 isotropy, the mixed-cumulant identities (111)–(112), the Hilbert–Schmidt step, the `β → ∞` limit
-and the affine-orthogonal decomposition (`research/handoffs/2026-10-07-continuous-bkl-formalization.md`).
+and the affine-orthogonal decomposition.
 `two` is the leading case `d = 2` with the constant `b/2`. This proposition retains the cumulant
 bound as a premise; the separate, now-proved Theorem 4.1 supplies it in the final assembly.
 Two axiom guards. Theorem 4.1 and the main Theorem 1.1 have their own certificates below.
@@ -447,7 +411,7 @@ log-concave probability measure `μ` on `EuclideanSpace ℝ (Fin n)` and every s
 linear `M`, singular and indefinite ones included, `Var_μ ⟨M x, x⟩ ≤ 8 ∑ᵢⱼ ⟨M eᵢ, eⱼ⟩²` in the
 standard orthonormal basis. `certificate` states this expanded form and `bound` the named predicate
 `LetwinCompactBound`, the input of Bizeul–Klartag–Lehec (arXiv:2610.05474v1), Lemma 4.2; both are the
-library theorem `letwinCompactBound` (`research/decisions/2026-10-16-letwin-compact-eight-integration.md`).
+library theorem `letwinCompactBound`.
 Two axiom guards. The noncompact Theorem 1.2 (every isotropic log-concave law) and the paper are not
 covered. The subsequent certified cutoff localization, BKL Theorem 4.1 and KLS stages are described below.
 

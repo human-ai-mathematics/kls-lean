@@ -5,8 +5,9 @@ import FunctionalInequalities.KLS.LogConcave.Density.Tilted
 /-!
 # The weak Hessian on the generator domain and the curvature form of (16)
 
-Property the weak Hessian estimate of `research/decisions/2026-10-07-bkl-operator-route.md`
-(Bizeul–Klartag–Lehec, arXiv:2610.05474v1, eq. (16) and its use in Lemma 3.4), for the heat
+The weak Hessian estimate of the operator route (the `O3` obligations of
+`research/audits/BKL/OperatorRouteStatements.lean`; Bizeul–Klartag–Lehec, arXiv:2610.05474v1,
+eq. (16) and its use in Lemma 3.4), for the heat
 model with unit weight. Let `ν = m.tilted (-U)` be a full-dimensional log-concave probability law
 whose potential `U` has temperate growth and all exponential moments, let
 `T̄ = hν.closedWeightedOperator m (ContinuousLinearMap.id ℝ V) hi` be the closed gradient and

@@ -7,20 +7,21 @@ import Mathlib.Analysis.Calculus.MeanValue
 /-!
 # Route statements: strong convergence of the Yosida exponentials (`S6`)
 
-**This file contains only `#check`s.  A proposition that type-checks is not a proof.**  It declares
-nothing, proves nothing, and introduces no placeholder axiom.  Each proposition below is an
-obligation of the route recorded in `research/decisions/2026-09-19-yosida-limit-route.md`, and **at
-the time of this route snapshot none of `Y0`–`Y8` had been proved**.
+**This file contains only `#check`s. A proposition that type-checks is not a proof.**
+It preserves the Yosida-limit contracts `Y0`–`Y8`, including the diagnostic counterexample `Y0`.
+See `Analysis/Semigroup/Exponential/Counterexample.lean`, `Analysis/Semigroup/Yosida/Laws.lean`,
+`Analysis/Semigroup/Exponential/MeanValue.lean` and `Analysis/Semigroup/Exponential/Limit.lean`.
+Independent clients are `research/audits/YosidaFamilyAudit.lean` and
+`research/audits/YosidaLimitAudit.lean`.
 
-## The target, and a correction to the earlier route
+## The target and the necessary Cauchy hypothesis
 
-`S6` of `SemigroupGenerationRouteStatements.lean` asked for the strong convergence of
+The abstract `S6` of `SemigroupGenerationRouteStatements.lean` asks for strong convergence of
 `exp (-t • L s) f` as `s ↓ 0` for an **abstract** family `L : ℝ → H₀ →L[ℝ] H₀` assumed only
 nonnegative and commuting.  **That abstract statement is false**: `L s = c s • 1` with `c` taking the
 values `0` and `1` on two sequences accumulating at `0⁺` is nonnegative and commuting, and
 `exp (-t • L s) f = exp (-t c s) • f` has no limit.  `Y0` states this counterexample so the correction
-is on record rather than silently absorbed.  The route file `SemigroupGenerationRouteStatements.lean`
-is kept byte-unchanged.
+is explicit alongside the positive contracts. The anonymous propositions retain their mathematical signatures.
 
 The correct statement needs a **Cauchy hypothesis on a dense set**: `Y7` is the corrected abstract
 `S6`, and `Y8` is `S6` for the actual Yosida approximation
@@ -31,7 +32,7 @@ Cauchy property comes from `L_s f → T†T f` (`Y5`, from `V5` and `R2`).
 
 `S7` (semigroup and strong-continuity laws of the limit) and `S8` (the generator is `T†T`) are not
 stated.  Nothing here is the Markov property, Bakry–Émery calculus, a heat estimate or any step of
-Buser's inequality; `thm:logconcave-cheeger-poincare-comparison` gains no progress marker.
+Buser's inequality. These `#check`s establish no theorem or progress marker.
 
 ## Conventions
 

@@ -1,11 +1,10 @@
 # Local verification and task atlas
 
 Use the [current handoff](../HANDOFF.md) for active work, the
-[recorded baseline](#recorded-baseline) for the current evidence summary, and the
+[receipt rules](#receipts-and-trust-scope) for snapshot-bound evidence, and the
 [paper register](progress/LITERATURE.md) for theorem scope, source versions and coverage.
 The [BKL main proof chain](progress/README.md#bkl-main-proof-chain) provides a short reading order.
-This guide describes current commands and trust boundaries. Dated counts and execution history
-are preserved in the [2026-10-12 guide archive](decisions/2026-10-12-verification-guide-history.md).
+This guide describes current commands and trust boundaries.
 
 ## Authorities and task navigation
 
@@ -94,28 +93,6 @@ isolated source reconstruction. Kernel replay alone accepts `sorryAx`; the separ
 gates reject it in their stated proof scopes. No-sorry claims require the actual declaration
 and import-boundary audits, not just a successful build.
 
-## Recorded baseline
-
-Commit `904d1a5d36c1ba31996765f42cc3f4376af34a82` (2026-10-18) is the most recent recorded snapshot
-with completed full local acceptance. Receipts and logs stay local under the ignored `build/`
-directory; this summary is the tracked record and is dated evidence for the commits it names.
-
-| Scope | Recorded result | Reproduce |
-| --- | --- | --- |
-| Full local KLS verification of `904d1a5` | Passed: 297 gates, 223 Python tests, 282 strictly compiled audit clients, 9,856 local declaration audits, 867 module replays, `classical-kls`; 34 certificate states and the statement baseline unchanged; no excluded open target | `python3 research/verify.py` |
-| Three independent Lake clients built from `5d41bd7` (reusable interfaces only; KLS, solution and example imports are excluded) | Passed: 32 freshly built primary modules, 467 audited declarations, 35 module replays | `python3 research/downstream.py --rev 5d41bd7dd379d0c0858f1b8416f61c82e0fe26eb` |
-| Remote Lean certification (historical, as recorded here) | Run 37516844384 passed for `36e7c78`; this page records no remote run for `5d41bd7` or `904d1a5`. Any later run is identified by its exact `head_sha` on GitHub Actions | Manual dispatch or `milestone/**` tag, with authorization |
-
-The full run recorded the pre-commit HEAD `5d41bd7` and a frozen source snapshot; a separate
-comparison matched all 1,854 committed blobs of `904d1a5` to that snapshot, so the receipt binds
-the committed source although it was produced before the commit existed. `KLS.kls` uses only
-`Classical.choice`, `Quot.sound` and `propext`. The downstream pin `5d41bd7` is interface evidence
-and not a second KLS proof. This section is a dated record: later prose commits do not renew these
-runs, the remote row is not kept current here, and a remote `--lean-only` success for a later SHA
-certifies the Lean scope only. Both scopes trust pinned third-party
-compiled imports and use Lean's own kernel for replay; see
-[receipts and trust scope](#receipts-and-trust-scope).
-
 ## Statement baseline
 
 [statement_snapshot.py](statement_snapshot.py) checks elaborated types and local definition
@@ -129,11 +106,12 @@ coverage; it is not a proof of source fidelity or semantic equivalence.
 python3 research/statement_snapshot.py check
 ```
 
-The verifier never refreshes the golden automatically. An intentional baseline change requires
-a new decision record with the old/new mathematical scope or toolchain/printing explanation:
+The verifier never refreshes the golden automatically. An intentional baseline change requires a
+newly named, tracked [statement-snapshot review](a-series/statement-snapshot/REVIEW.md) stating the
+old/new mathematical scope or the toolchain/printing-only nature of the change, re-pinned explicitly:
 
 ```bash
-python3 research/statement_snapshot.py update --decision research/decisions/NEW-RECORD.md
+python3 research/statement_snapshot.py update --decision research/a-series/statement-snapshot/NEW-REVIEW.md
 ```
 
 ## BKL independent target pilot

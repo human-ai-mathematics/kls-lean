@@ -440,7 +440,7 @@ def render(catalog, records, blueprint, certificates=None, read_source=None):
         '- The 2025 parallel-coupling preprint is read at `2507.15495v2` (23 February 2026).',
         '- The book’s coefficient 4 is a recorded statement; our one-dimensional proof is independent.',
         '  The original attribution remains distinct from mathematical proof and formal verification:',
-        '  see the [source audit](../explorations/2026-09-11-poincare-constant-4-audit.md).',
+        '  see the [one-dimensional scope review](one-dimensional-poincare.md).',
         '  Book metadata was checked on the publisher pages; detailed book-page correspondences',
         '  use the existing source audits, rather than a fresh reading of the complete monographs.',
         '- General auxiliary progress, such as locally Lipschitz coarea and smooth recovery, is listed',

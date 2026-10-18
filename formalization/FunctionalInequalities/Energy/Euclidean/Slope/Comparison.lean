@@ -3,8 +3,7 @@ import FunctionalInequalities.Energy.Cheeger.Basic
 /-!
 # The slope sandwich: smooth tests, the asymptotic Lipschitz constant, and the two relaxations
 
-Source: obligations `A1`–`A3` of the route recorded in
-`research/decisions/2026-09-19-energy-slope-route.md` and restated in
+Source: obligations `A1`–`A3` of the energy-slope route, as stated in
 `research/audits/EnergySlopeRouteStatements.lean`.  Read
 `AsymptoticLipschitz.apply_eq_norm_gradient` first, then `SmoothGradient.Test.asymptoticLipschitz_*`
 and `SmoothGradient.asymptoticLipschitz_relaxation_le`, then

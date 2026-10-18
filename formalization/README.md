@@ -90,9 +90,3 @@ changes dependency resolution. Default targets include the library, certificates
 and vendored libraries. Use the [verification guide](../research/verification.md) for the full
 local gate and the separate Lean-only remote scope. Documentation-only changes do not need
 a Lean rebuild. Builds, axiom audits, kernel replay and certificate registration have distinct scopes.
-
-## Historical guides
-
-The previous detailed source map, foundation boundaries, construction stages and build notes
-are preserved in the [2026-10-12 guide archive](../research/decisions/2026-10-12-formalization-guide-history.md).
-Its counts, old paths and next steps describe the recorded rounds, not the current checkout.

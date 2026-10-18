@@ -7,7 +7,7 @@ import FunctionalInequalities.Poincare.SmoothTest.Transport
 /-!
 # Stage 1 of the Buser route: `Ψ² ≤ 12 C_P` in dimension one
 
-Source: Stage 1 of `research/decisions/2026-09-19-buser-route.md`, obligations `Q0`, `Q0'`, `Q3`,
+Source: Stage 1 of the Buser route, obligations `Q0`, `Q0'`, `Q3`,
 `Q4`, `Q5` of `research/audits/BuserRouteStatements.lean`.  Read
 `evariance_le_smoothTest_constant` (the linear test), `LineDensity.one_div_le_evariance` (a
 bounded density has variance at least `1 / (12 M²)`), then the assembly

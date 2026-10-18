@@ -5,8 +5,8 @@ import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
 
 Every obligation `Q1`, `Q2` and the target `Q0` of
 `research/audits/KlartagLiteraturePoincareRouteStatements.lean` is restated here **verbatim** — the
-propositions are copied character for character from that route snapshot — and discharged from the
-single new hole-free module `Poincare/LocalSlope/Gradient.lean`. A renamed binder, a reordered
+propositions preserve the route contracts — and discharged through
+`Poincare/LocalSlope/Gradient.lean` and `KLS/LogConcave/Poincare.lean`. A renamed binder, a reordered
 hypothesis or a weakened conclusion would fail to elaborate here.
 
 `Q3` (affine-origin independence) has no proposition of its own in this file, and that is the
@@ -15,15 +15,16 @@ origin, so the Blueprint sentence is discharged by the existing definition. `Q0`
 carries no reference measure in its statement — the Haar measure is constructed inside its proof —
 so the constant depends on neither the origin nor the reference.
 
-Out of scope, deliberately absent: the Buser half `Ψ_KLS(μ)² ≤ π C_P^lit(μ)` of
-`thm:logconcave-cheeger-poincare-comparison`, which stays imported mathematics in dimension
-`n ≥ 2`, and the dimension-free KLS bound.
+The Buser half `Ψ_KLS(μ)² ≤ π C_P^lit(μ)` of
+`thm:logconcave-cheeger-poincare-comparison` is outside this client's scope; its current source is
+`KLS/LogConcave/Density/GaussianSmoothing/Buser.lean`, with client
+`research/audits/GaussianBuserPassageAudit.lean`. This client also makes no dimension-free KLS claim.
 
 Two boundary cases are recorded after the route items: a zero-dimensional direction space, where
 both sides collapse to `0`, and the transport of a valid constant through `Q1` for a law that is
 already absolutely continuous.
 
-The axiom reports at the end cover every public declaration of the new module and every theorem of
+The axiom reports at the end cover the gradient/optimal-constant source declarations and every theorem of
 this client.
 -/
 

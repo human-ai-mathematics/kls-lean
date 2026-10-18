@@ -6,17 +6,13 @@ and parameter conventions.
 
 Public names express mathematical objects, operations, and conclusions. Namespaces may span
 implementation modules; certificate entry points, ledger node IDs, and source labels retain
-stable identities. See the complete mapping in the
-[migration record](decisions/2026-09-08-mathematical-api-organization.md) and
-[declaration map](api-migration/2026-09-08-name-map.json). `FunctionalInequalities` is omitted below.
+stable identities. `FunctionalInequalities` is omitted below.
 
 ## Short names do not repeat the namespace
 
 Do not repeat an object or role already supplied by the namespace. Use operation names such
 as `apply`, `energy`, `toL2`, and `constant`; theorem short names describe properties of those
-operations. Do not encode every assumption in the name. See the
-[short-name record](decisions/2026-09-08-namespace-short-names.md) and
-[complete map](api-migration/2026-09-08-short-name-map.json). Examples:
+operations. Do not encode every assumption in the name. Examples:
 
 - `WeightedGradient.IsTest.memLp_apply`, `apply_add_ae`, `apply_smul_ae`.
 - `LocalSlope.apply`, `apply_const`, replacing the redundant `LocalSlope.slope`.
@@ -36,8 +32,7 @@ retain complete mathematical premises in the type and documentation. Examples in
 `CovarianceGradient.relaxation_eq_lipschitz`, `relaxation_eq_ofLinearPMap`,
 `relaxation_le_mul_lipschitz`, and `SmoothTest.constant_eq_ambient`,
 `constant_eq_intrinsic`, `constant_eq_lipschitz`. Multiplicative comparisons retain `mul`;
-do not name an inequality with a coefficient as direct domination. See the
-[comparison short-name record](decisions/2026-09-08-comparison-short-names.md).
+do not name an inequality with a coefficient as direct domination.
 
 ## Energies, tests, and optimal constants
 
@@ -113,7 +108,7 @@ do not name an inequality with a coefficient as direct domination. See the
 | Generic tools for the final argument | `Analysis.Tensor.norm_coordTensor_eq` (Hilbert–Schmidt norm independent of the orthonormal basis), `Analysis.le_of_dyadic_recursion` | In `Analysis/Tensor/BasisChange.lean` and `Analysis/DyadicSummation.lean` |
 | CEK Proposition 12 (variational attainment) | `KLS.CEK.exists_variational_maximum`, `exists_normalized_competitor`; `Probability.MomentMeasure.exists_coercivity_of_centered_probability`, `exists_convexified_lowerTruncate_variational_le_add`, `variationalFunctional_affineSubtract`; `Analysis.affineSubtract`, `exists_supporting_affine_at_zero`; `Probability.zero_mem_interior_convexHull_support_of_integral_eq_zero` | Paper assembly in `KLS/CEK/`, generic properties in their families; full span written `∀ V : Submodule ℝ E, μ (V : Set E)ᶜ = 0 → V = ⊤`; affine invariance needs a probability measure, finite measures get the mass correction |
 | CEK maximiser for a bounded source (normalized Lipschitz primal) | `KLS.CEK.bounded_source_cap_lsc`, `bounded_source_cap`, `bounded_source_finite_conjugate`, `bounded_source_lipschitz_primal`, `bounded_source_real_density_client`; `Analysis.closedBallCap`, `closedBallCap_lowerSemicontinuous`, `exists_real_global_minimum_of_bounded_domain`, `legendre_le_of_real_lower_bound`, `legendre_finite_of_bounded_domain`, `real_convexOn_legendre`, `lipschitzWith_real_legendre`, `real_legendre_fenchel`; `Probability.MomentMeasure.real_legendre_normalization` | Split by dependency level: generic bounded-effective-domain geometry in the new `Analysis/Convex/BoundedConjugate.lean` (no probability or CEK import; the candidate's verbatim variable context, whose `omit` lines name measurable-space binders, needs only the Mathlib Borel-space import); the mass-one normalization beside the conjugate-mass results in `Probability/MomentMeasure/ConjugateMass.lean`; the source-law producers in the new `KLS/CEK/BoundedPrimal.lean`. `closedBallCap` (candidate `cap`) is `φ` on `closedBall 0 L` and `⊤` outside; `bounded_source` marks the `μ`-a.e. bound `‖y‖ ≤ L`; `real_` marks the finite real representative of the conjugate; the `_density_client` theorem is a generic consequence for every such `μ` |
-| Legendre first variation (CEK (42), pointwise) | `Analysis.exists_finite_maximum_of_upperSemicontinuous_linear_decay`; `Analysis.conjugate_maximizer_eq_gradient`, `exists_coercive_tilt_of_mem_interior_legendre_domain`, `tiltedObjective_data`, `exists_legendre_maximizer_with_gradient_identity`; `Analysis.legendre_bounded_perturbation`, `legendre_bounded_perturbation_finite_curve`; `Analysis.exists_delta_nearMaximizer_norm_sub_gradient_lt`, `hasDerivAt_legendre_add_smul_of_dualDifferentiable` | The generic extremum is the cross-family root module `Analysis/Extremum.lean`; the three Legendre-variation modules form the family directory `Analysis/Convex/LegendreVariation/{Attainment,Perturbation,Derivative}.lean` (family rule: no `Legendre*` basenames, and `Convex/Legendre.lean` stays in place); `conjugate_maximizer_eq_gradient` moved from the scratch namespace `KLSConstruction.API.FirstVariation` ([map](api-migration/2026-10-12-legendre-variation-promotion-map.json)); the one-use perturbation-term helper is private |
+| Legendre first variation (CEK (42), pointwise) | `Analysis.exists_finite_maximum_of_upperSemicontinuous_linear_decay`; `Analysis.conjugate_maximizer_eq_gradient`, `exists_coercive_tilt_of_mem_interior_legendre_domain`, `tiltedObjective_data`, `exists_legendre_maximizer_with_gradient_identity`; `Analysis.legendre_bounded_perturbation`, `legendre_bounded_perturbation_finite_curve`; `Analysis.exists_delta_nearMaximizer_norm_sub_gradient_lt`, `hasDerivAt_legendre_add_smul_of_dualDifferentiable` | The generic extremum is the cross-family root module `Analysis/Extremum.lean`; the three Legendre-variation modules form the family directory `Analysis/Convex/LegendreVariation/{Attainment,Perturbation,Derivative}.lean` (family rule: no `Legendre*` basenames, and `Convex/Legendre.lean` stays in place); `conjugate_maximizer_eq_gradient` moved from the scratch namespace `KLSConstruction.API.FirstVariation`; the one-use perturbation-term helper is private |
 | Extended-real Legendre transform (CEK (61), Proposition 12 tools) | `Analysis.legendre`, `ConvexPotential`, `ProperPotential`, `legendre_antitone`, `fenchel_le`, `biconjugate_le`, `triconjugate_eq`, `lowerSemicontinuous_legendre`, `convex_epigraph_legendre`, `lowerTruncate`, `lowerTruncate_convexification`, `legendre_eq_interior_sup`; `affineMaximum`, `affineMaximum_coercive` | `φ : E → EReal`; `legendre φ y = ⨆ x, ⟪x, y⟫ - φ x` with no selected maximizer; measure-free, in `Analysis/Convex/` |
 | Exponential-potential measure and CEK Lemmas 16–17 | `Probability.MomentMeasure.density`, `weightedMeasure`, `mass`, `PotentialIntegrable`, `variationalFunctional`, `limsup_mass_legendre_le`, `exists_subseq_integral_bounds_of_convex_epigraph`; `Probability.exists_pos_le_mul_lintegral_toReal_of_convex_epigraph`, `exists_subseq_lintegral_le_liminf_of_convex_epigraph` | `density φ = exp(-φ)` in `ℝ≥0∞`, zero and infinite mass retained, no normalization; Lemma 17 takes `0 ∈ interior (convexHull ℝ μ.support)` explicitly; no moment-measure predicate yet |
 | Closed BKL cumulant producers | `KLS.BKL.Localization.cutoffEnergyClaim_of_letwinCompact`, `cumulantBound_of_letwinCompact` (in `KLS/BKL/Theorem41.lean`); `cutoffEnergyClaim_153`, `cumulantBound_153` (in `KLS/BKL/CumulantBound.lean`) | `_of_letwinCompact` marks the explicit compact Letwin hypothesis; `153` is the constant in the closed forms, which the certificates and `Poincare.lean` consume |
@@ -163,19 +158,19 @@ the integral of the kernel's derivative norm normalized by its mass.
 6. Retain mathematically meaningful weighted, L¹/L², ae, compact-support, boundary, finiteness, and directional qualifiers. Borel sets and Borell representation are different concepts. Names locate results; types and documentation give their complete assumptions and conclusions, rather than spelling out the theorem in its name.
 
 Renaming updates all consumers, Blueprint anchors, guards, snapshots, and current documentation.
-Do not rewrite historical decisions/explorations as part of renaming. Update golden files and
+Record the old/new map with the change. Update golden files and
 source hashes after review; provide no compatibility aliases for old names.
 
 ## Source documentation
 
 Module comments and declaration docstrings describe mathematics, exact hypotheses and scope,
 pinned source versions and locators, and useful proof explanations. Preserve paper attributions
-and license/author notices. Keep task and route-node identifiers, rounds, worker/controller
-allocation and integration/failure logs in dated `research/decisions/` records. When removing
-process text, archive the original passages verbatim, preserve all non-comment code, and reassess
-matching source-evidence hashes without changing proof or certificate status. Verification
-receipts continue to certify their recorded snapshots. See the
-[source-comment history](decisions/2026-10-18-source-comment-process-history.md).
+and license/author notices. Keep task and route-node identifiers, rounds, worker allocation and
+integration or failure logs out of source comments; such operational records stay in the local
+archive, not in the published tree. When removing process text, keep the original passages in that
+archive, preserve all non-comment code, and reassess matching source-evidence hashes without
+changing proof or certificate status. Verification receipts continue to certify their recorded
+snapshots.
 
 ## File and declaration scope
 
@@ -188,8 +183,7 @@ comparisons under their common parent namespace; do not add aliases just to shor
 
 ### Family names belong in directories, not filenames
 
-Directory conventions (library-wide since 2026-09-20; see the
-[directory reorganization](decisions/2026-09-20-formalization-directory-organization.md)):
+Directory conventions (library-wide since 2026-09-20):
 
 1. **Three or more** modules for one mathematical object must form a family directory.
 2. Two modules may form a family directory when they are a genuine foundational/extension pair. Two merely adjacent modules without that relationship remain at the existing level.
@@ -205,34 +199,23 @@ distinguishing term in filenames. Examples include `Poincare/SmoothTest/`,
 `Resolvent/`, `Exponential/`, `Yosida/`, and `Generated/` under `Analysis/Semigroup/`, and
 `ConditionalFiber/`, `Geometry/Cheeger/`, and `Geometry/Coarea/` under `KLS/`.
 Do not repeat the family in each basename: use `LogConcave/Covariance.lean`, not
-`LogConcave/AffineCovariance.lean` (see the
-[module map](api-migration/2026-09-08-library-naming-module-map.json)).
+`LogConcave/AffineCovariance.lean`.
 
 **Place new `Analysis/` modules in family subdirectories using this rule**, removing the family
-term from basenames. Historical flat modules were reorganized in batches: the 2026-09-17
-`Graph`, `RankDeficient`, `Sard`, `Vector`, and `Whitney` moves are in the
-[Analysis map](api-migration/2026-09-17-analysis-module-map.json); 2026-09-19 semigroup moves
-in the [Semigroup map](api-migration/2026-09-19-semigroup-module-map.json) and KLS moves in the
-[KLS map](api-migration/2026-09-19-kls-module-map.json). The 2026-09-20 library-wide reorganization
-has three batches: [Analysis](api-migration/2026-09-20-analysis-module-map.json),
-[Energy/Probability/Poincare](api-migration/2026-09-20-foundation-module-map.json), and
-[KLS](api-migration/2026-09-20-kls-module-map.json). The 2026-10-07 batch forms
-`Analysis/BakryEmery/{Tilt,Bochner,IntegrationByParts}/` and
-`KLS/LogConcave/Density/GaussianSmoothing/` ([map](api-migration/2026-10-07-family-directories-map.json)).
-The 2026-10-09 CEK scratch promotion populates `Analysis/Convex/` and `Probability/MomentMeasure/`; it moves no
-production API ([map](api-migration/2026-10-09-cek-scratch-promotion-map.json)).
-The 2026-10-10 CEK Proposition 12 promotion adds `Analysis/Convex/{SupportingPlane,Affine}`, six `MomentMeasure`
-modules and `KLS/CEK/` ([map](api-migration/2026-10-10-cek-proposition12-promotion-map.json)).
-The 2026-10-10 matrix batch forms `Analysis/Matrix/{Trace,Positivity,DeterminantDerivative,Sign}`
-([map](api-migration/2026-10-10-analysis-matrix-family-map.json)).
-The 2026-10-11 maintenance batch forms `Analysis/Cutoff/{Profile,Integrability,Conservativity}` and
-`Analysis/BakryEmery/Cumulant/{Basic,Local,Leibniz}`, preserving authored/public declaration names and namespaces
-([map](api-migration/2026-10-11-cutoff-cumulant-family-map.json)). Compiler-private ownership prefixes are paired explicitly.
-The 2026-10-12 Legendre first-variation promotion adds `Analysis/Extremum.lean` and forms
-`Analysis/Convex/LegendreVariation/{Attainment,Perturbation,Derivative}` ([map](api-migration/2026-10-12-legendre-variation-promotion-map.json)).
-Historical decisions and explorations retain
-their original paths without retrospective migration; each reorganization must provide a path
-map so old references remain resolvable.
+term from basenames. The historical flat modules were reorganized in dated batches between
+2026-09-17 and 2026-10-12: the `Graph`, `RankDeficient`, `Sard`, `Vector` and `Whitney` moves,
+the semigroup and KLS moves, the library-wide `Analysis`/`Energy`/`Probability`/`Poincare`/`KLS`
+reorganization, `Analysis/BakryEmery/{Tilt,Bochner,IntegrationByParts}/`,
+`KLS/LogConcave/Density/GaussianSmoothing/`, the CEK promotions into `Analysis/Convex/`,
+`Probability/MomentMeasure/` and `KLS/CEK/` (moving no production API),
+`Analysis/Matrix/{Trace,Positivity,DeterminantDerivative,Sign}`,
+`Analysis/Cutoff/{Profile,Integrability,Conservativity}`,
+`Analysis/BakryEmery/Cumulant/{Basic,Local,Leibniz}`, `Analysis/Extremum.lean` and
+`Analysis/Convex/LegendreVariation/{Attainment,Perturbation,Derivative}`. Every move preserved
+authored public declaration names and namespaces, with compiler-private ownership prefixes paired
+explicitly. Old module paths have no forwarding files: the
+[generated module directory](../formalization/MODULES.md) lists current paths, and each
+reorganization must provide an old-to-new path map so old references remain resolvable.
 
 Existing directories based on namespace or domain rather than family are exceptions to rule 5
 and remain unchanged: `Poincare/Euclidean/`, `Poincare/FiniteProduct/`, `Poincare/LipschitzGradient/`.
@@ -245,7 +228,7 @@ main-theorem assembly and witnesses — live in a per-paper library folder under
 used by a paper (Bochner, tilts, tensors, semigroups, summation lemmas, the heat-model generator)
 stay in their object families, and an object-family module must never import a per-paper module.
 Folders for other papers (Letwin, Song–Zhang) are created only with their first module. File moves
-keep namespaces; see the [per-paper map](api-migration/2026-10-07-per-paper-folders-map.json).
+keep namespaces.
 
 Directories group files without changing mathematical identity. Pure file moves preserve every
 existing namespace, including `FunctionalInequalities.Analysis` and its object subnamespaces;
@@ -256,8 +239,7 @@ requires import, evidence-path, Blueprint-link, and verification-snapshot checks
 For example, write `theorem apply_eq_norm_gradient` inside `Energy.LocalSlope`. Log-concave
 proofs can still call `hμ.intrinsicCovariance_closedQuadratic`,
 `hμ.intrinsicSmooth_constant_eq_localSlope`, and `hμ.intrinsicWeightedOperator m B`;
-`weighted` retains the meaning of an arbitrary external weight B. See the
-[library-wide naming cleanup](decisions/2026-09-08-library-naming.md).
+`weighted` retains the meaning of an arbitrary external weight B.
 
 ## Semigroup interface layout (2026-09-20, after S0a)
 
@@ -271,8 +253,7 @@ The S0a public interfaces use `Analysis.Semigroup.Generated` and
 `KLS.LogConcave.HeatSemigroup`, with short names such as `preserves_domain`, `generator_comm`
 and `right_derivative`. Types retain the exact generator domain, right-limit direction and
 arbitrary-weight scope. The final cleanup also migrates the construction, law and Markov APIs into these namespaces,
-with an explicit old/new name map. Parameter order and mathematical scope are preserved. See the [layout record](decisions/2026-09-20-semigroup-layout.md) and
-[complete migration map](api-migration/2026-09-20-semigroup-layout-map.json).
+with an explicit old/new name map. Parameter order and mathematical scope are preserved.
 
 The curvature layer (2026-10-03) keeps the same split. Pointwise and integrated `Γ₂ ≥ ρ Γ` for a
 potential with `∇∇U ≥ ρ` live in `BakryEmery/Curvature.lean` (`mul_gamma_le_gammaTwo`,
@@ -298,40 +279,36 @@ Tilted Haar laws (integrable density, Borell density, log-concavity from a conve
 support) live in `KLS/LogConcave/Density/Tilted.lean`. The kernel iff, ergodicity and the
 Corollary 4.8.2 statements extend `HeatSemigroup/Curvature.lean`.
 
-The completed family migration and candidate decisions are recorded in
-[the final cleanup](decisions/2026-09-20-final-cleanup.md), with the
-[48-name API map](api-migration/2026-09-20-final-cleanup-map.json). Generic resolvent, Yosida
+Generic resolvent, Yosida
 and weighted-operator helpers retain their own object identities. Name length or the absence of
 an external library consumer alone is not grounds for renaming or privatizing a mathematical lemma.
 
-The 2026-10-12 filename review registers `Analysis/Operator/{Coordinates,Positive,InverseSqrt}` and `KLS/BKL/Suspension/{Basic,Law,Density,Moments,Cumulant,Derivatives}` as actual object families. `LocalThirdCumulant` retains its positive-radius distinction. See the [complete map](api-migration/2026-10-12-analysis-bkl-filename-map.json).
+The 2026-10-12 filename review registers `Analysis/Operator/{Coordinates,Positive,InverseSqrt}` and `KLS/BKL/Suspension/{Basic,Law,Density,Moments,Cumulant,Derivatives}` as actual object families. `LocalThirdCumulant` retains its positive-radius distinction.
 
-The [2026-10-17 filename review](decisions/2026-10-17-functionalinequalities-filenames.md) groups
+The 2026-10-17 filename review groups
 `Analysis/Mollification/`, `KLS/LogConcave/Regular/` and
 `Analysis/BakryEmery/IntegrationByParts/InverseHessian/` without renaming declarations.
 The [complete filename directory](../formalization/MODULES.md) is generated from current sources.
 
-The [BKL responsibility review](decisions/2026-10-17-bkl-module-reorganization.md) separates
+The BKL responsibility review separates
 `CumulantEnergy/`, `Posterior/` and the localization `Process/`, `Energy/`, `CutoffEnergy/`
 and `Lyapunov/` families. `Theorem41.lean` retains the source-theorem entry and the conditional shared producers;
 `CumulantBound.lean` holds the closed cutoff and cumulant producers, and `Poincare.lean` owns the final assembly. The generic cumulant moment estimate and diffusion
 product rule live in their Analysis and Probability owners. Existing namespaces and public names
-remain unchanged; the [declaration map](api-migration/2026-10-17-bkl-module-map.json)
-records the one-to-many file splits.
+remain unchanged across the one-to-many file splits.
 
-The [cutoff and weak-derivative layout](decisions/2026-10-17-cutoff-weak-derivative-layout.md)
+The cutoff and weak-derivative layout
 places generic smooth/Lipschitz cutoffs in `Analysis/Cutoff/` and separates weak-derivative
 foundations, mollification, approximation and calculus. Shared private product/testing supports
-remain together. Existing public namespaces and names are preserved; the
-[complete owner map](api-migration/2026-10-17-cutoff-weak-derivative-map.json) records the split.
+remain together. Existing public namespaces and names are preserved.
 
-The [generic Hessian owner review](decisions/2026-10-18-hessian-owner-layout.md) places the
+The generic Hessian owner review places the
 existing matrix abbreviation in `Analysis/Operator/Coordinates.lean`, the coordinate Hessian
 and C2 identities in `Analysis/BakryEmery/HessianOperator.lean`, and weak/C1 identification in
 `Analysis/BakryEmery/WeakHessian.lean`. Qualified public names and exact definitions remain
 unchanged; genuine kernel and pushforward adapters stay in `Probability/Stein/HessianKernel.lean`.
 
-The [trace/proximal responsibility review](decisions/2026-10-18-trace-proximal-layout.md)
+The trace/proximal responsibility review
 separates `Analysis/Matrix/Trace/{Algebra,Power,Energy}.lean` and adds the substantive
 `Analysis/Convex/Proximal.lean` sibling. Existing declaration names and assumptions are preserved;
 the subgradient expansion stays with its actual Subgradient owner.

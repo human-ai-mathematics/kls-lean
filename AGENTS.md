@@ -12,8 +12,10 @@
 - Mark a paper covered only when its main theorem is faithfully stated in Lean, proved without
   nonstandard axioms, and registered with a certificate and verification evidence for that exact
   statement. Supporting lemmas and restricted or conditional counterparts do not cover a paper.
-- Keep `HANDOFF.md` limited to the current state; move superseded sections to dated files in
-  `research/decisions/` without changing their claims.
+- Keep `HANDOFF.md` limited to the current state. Preserve superseded sections and operational
+  records verbatim, with hashes, under the ignored local `build/history/` archive. Keep current
+  source reviews and validation inputs in their tracked owning directories so a fresh clone
+  needs no local history. Do not rewrite previously pushed Git history during archival cleanup.
 - When proof progress changes, review the source-paper mapping in `literature.json`, the complete
   diagram, its date, and the root current-status
   summary. After staging the intended proof/metadata changes, regenerate all progress views with

@@ -5,7 +5,8 @@ import FunctionalInequalities.Analysis.Semigroup.AdjointClosure
 /-!
 # The generator on smooth compactly supported tests: `T̄†T̄ f = -ℒ f`
 
-Properties weighted integration by parts and the smooth-test generator identity of `research/decisions/2026-09-20-bakry-emery-route.md`, for the
+Weighted integration by parts and the smooth-test generator identity of the Bakry–Émery route
+(`research/audits/BakryEmeryRouteStatements.lean`), for the
 smooth-potential model with unit weight. Let `ν` be a full-dimensional log-concave probability law
 on a finite-dimensional Euclidean space `V` whose measure is the tilted Haar measure
 `m.tilted (-U)` for a `C¹` potential `U`, and let

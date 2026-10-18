@@ -6,8 +6,7 @@ import FunctionalInequalities.Probability.Line.AffineProfile
 # The quantile-density profile of a log-concave law dominates `F (1 - F) / σ`
 
 Source: Blueprint `thm:one-dimensional-logconcave-poincare` (sharp form with constant `4`); the
-argument follows the collaborator audit recorded in
-`research/explorations/2026-09-11-poincare-constant-4-audit.md`, Section 5. Read
+argument follows Section 5 of the collaborator's constant-4 source audit (a locally kept record). Read
 `LogConcave.mean_mem_interior_support`, `LineDensity.variance_ge_of_affine_bound` and
 `LineDensity.cdf_mul_one_sub_cdf_le_sd_mul`.
 

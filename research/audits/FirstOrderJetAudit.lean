@@ -8,8 +8,9 @@ import Mathlib.MeasureTheory.Constructions.BorelSpace.Basic
 
 Independent client of `Analysis/Whitney/FirstOrderJet.lean`.
 
-**`L6` is NOT proved.**  The `#check` below records its statement text verbatim so that the open
-obligation stays pinned, and no theorem in this client proves it.  What is proved is the converse,
+**The `#check` below is not a proof of `L6`.** It pins the statement text, and no theorem in
+this client proves the sufficiency direction. That direction has source
+`Analysis/Whitney/Construction.lean`; this client concerns necessity.  What is proved is the converse,
 `necessity`: a globally `C¹` realization of the jet forces `L6`'s uniform first-order remainder
 estimate.  Together with `L6` that would make the estimate a characterization; on its own it
 establishes only that `L6`'s hypothesis is the right one and cannot be weakened to something the
@@ -26,10 +27,10 @@ open scoped ENNReal NNReal ContDiff RealInnerProductSpace
 
 namespace FirstOrderJetAudit
 
-/-! ### The obligation that remains open -/
+/-! ### The sufficiency contract, recorded without a proof in this client -/
 
--- The statement text of `L6` in `research/decisions/2026-09-15-weighted-coarea-route.md`.
--- This is a type check only: `L6` is NOT proved anywhere in this client or in the library.
+-- The statement text of obligation `L6` of the weighted coarea route.
+-- This is a type check only; it does not prove `L6`.
 #check (∀ {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V]
     [CompleteSpace V] [FiniteDimensional ℝ V] [MeasurableSpace V] [BorelSpace V]
     {S : Set V} {f : V → ℝ} {F : V → V →L[ℝ] ℝ},

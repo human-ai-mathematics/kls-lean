@@ -3,7 +3,7 @@ import FunctionalInequalities.Energy.Euclidean.Slope.Recovery
 /-!
 # Density of smooth tests in the local-slope energy
 
-Source: the route recorded in `research/decisions/2026-09-19-energy-slope-route.md`, part `C`.
+Source: part `C` of the energy-slope route (`research/audits/EnergySlopeRouteStatements.lean`).
 Read `SmoothGradient.relaxation_le_localSlope` (`C6`) for the main contract, then
 `LocalSlope.measurable_apply` (`C1`), `LocalSlope.exists_patch` (`C2`, the McShane patch),
 `SmoothGradient.relaxation_le_localSlope_of_lipschitzWith` (`C4`) and

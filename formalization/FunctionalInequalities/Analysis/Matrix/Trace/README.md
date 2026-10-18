@@ -11,6 +11,4 @@ exponent hypotheses. Elementary identities have no added symmetry premise. The t
 keeps its shared private supports with the spectral-energy arguments. The existing
 [TraceGram](../TraceGram.lean) owns the separate analytic/Gram integration boundary.
 
-Qualified declaration names are unchanged. See the
-[placement decision](../../../../../research/decisions/2026-10-18-trace-proximal-layout.md) and
-[complete map](../../../../../research/api-migration/2026-10-18-trace-proximal-map.json).
+Qualified declaration names are unchanged.

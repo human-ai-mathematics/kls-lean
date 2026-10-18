@@ -26,7 +26,7 @@ namespace EilenbergMajorantAudit
 
 /-! ### The obligation itself -/
 
--- The statement text of `L1` in `research/decisions/2026-09-15-weighted-coarea-route.md`.
+-- The statement text of obligation `L1` of the weighted coarea route.
 #check (∀ {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V]
     [CompleteSpace V] [FiniteDimensional ℝ V] [MeasurableSpace V] [BorelSpace V]
     [Nontrivial V], ∃ C : ℝ≥0, 0 < C ∧
@@ -35,7 +35,7 @@ namespace EilenbergMajorantAudit
       (∀ t, KLS.surfaceMeasure V (S ∩ {x | u x = t}) ≤ F t) ∧
       (∫⁻ t, F t ∂(volume : Measure ℝ)) ≤ (C : ℝ≥0∞) * (K : ℝ≥0∞) * volume S)
 
-/-- The round's target, proved. -/
+/-- The route target, restated and proved. -/
 theorem target : ∀ {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V]
     [CompleteSpace V] [FiniteDimensional ℝ V] [MeasurableSpace V] [BorelSpace V]
     [Nontrivial V], ∃ C : ℝ≥0, 0 < C ∧
@@ -112,9 +112,9 @@ theorem univ_without_finiteness {u : V → ℝ} {K : ℝ≥0} (hu : LipschitzWit
 
 end Consumers
 
-/-! ### The previous round's statements are preserved
+/-! ### Null-slicing contracts, restated verbatim
 
-Each declaration recorded in `research/decisions/2026-09-15-null-slicing.md` is restated verbatim
+Each null-slicing contract is restated verbatim
 and discharged by the library declaration applied with **named** arguments, so a renamed binder or
 a changed hypothesis order would fail to elaborate here. -/
 

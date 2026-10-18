@@ -6,8 +6,8 @@ import FunctionalInequalities.Analysis.Hausdorff.Measure
 
 /-! # From the globally Lipschitz coarea formula to the locally Lipschitz one
 
-closed-ball Lipschitz bounds, locality and the local-to-global assembly of the route recorded in
-`research/decisions/2026-09-19-locally-lipschitz-vector-coarea-route.md`.
+closed-ball Lipschitz bounds, locality and the local-to-global assembly of the locally Lipschitz
+vector-coarea route.
 
 closed-ball Lipschitz bounds is the compactness step: a locally Lipschitz map on a finite-dimensional space is Lipschitz on
 every closed ball.  locality is the locality step: two maps agreeing on an open set have the same

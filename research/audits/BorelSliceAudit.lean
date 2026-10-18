@@ -9,11 +9,9 @@ prove them; `target_L4_of_lipschitzOnWith` and `target_L5_of_lipschitzOnWith` pr
 conclusions with `[CompleteSpace V]` dropped and global Lipschitz weakened to continuity plus
 Lipschitz **on `S` only**, so the library statements are strictly stronger than the route asks.
 
-`target_T1` is verbatim the statement of the direct hole
-`FunctionalInequalities.Analysis.aemeasurable_lintegral_levelSet` in
-`KLS/WIP/AnalyticPrerequisites.lean`.  **That file is not touched by this round**: migrating the
-declaration out of `WIP` is a separate decision, so the direct-hole count is unchanged and the
-hole is still a hole.
+`target_T1` preserves the contract of
+`FunctionalInequalities.Analysis.aemeasurable_lintegral_levelSet`; the current implementation is in
+`Analysis/Hausdorff/SurfaceSlicing.lean`. This client checks the route signature and its consumers.
 
 The consumers are not repetitions of the proof.  `eilenberg_borel` packages `L1` with `L4` into the
 Eilenberg bound for a measurable set with an almost-everywhere measurable integrand.
@@ -31,7 +29,7 @@ namespace BorelSliceAudit
 
 /-! ### The obligations themselves -/
 
--- The statement text of `L4` in `research/decisions/2026-09-15-weighted-coarea-route.md`.
+-- The statement text of obligation `L4` of the weighted coarea route.
 #check (∀ {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V]
     [CompleteSpace V] [FiniteDimensional ℝ V] [MeasurableSpace V] [BorelSpace V]
     {u : V → ℝ} {K : ℝ≥0} {S : Set V}, LipschitzWith K u → MeasurableSet S →
@@ -46,7 +44,7 @@ namespace BorelSliceAudit
     AEMeasurable (fun t : ℝ ↦ ∫⁻ y in S ∩ {x | u x = t}, g y ∂(KLS.surfaceMeasure V))
       (volume : Measure ℝ))
 
--- The statement text of target `T1`, which is also the WIP hole's statement.
+-- The exact statement text of route target `T1`.
 #check (∀ {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V]
     [CompleteSpace V] [FiniteDimensional ℝ V] [MeasurableSpace V] [BorelSpace V]
     {u : V → ℝ} {K : ℝ≥0} (_ : LipschitzWith K u)
@@ -73,8 +71,8 @@ theorem target_L5 : ∀ {V : Type*} [NormedAddCommGroup V] [InnerProductSpace �
   intro V _ _ _ _ _ _ u K S g hu hS hg
   exact aemeasurable_setLIntegral_inter_levelSet hu.continuous hu.lipschitzOnWith hS hg
 
-/-- Target `T1`, proved: the statement of the direct hole
-`FunctionalInequalities.Analysis.aemeasurable_lintegral_levelSet`.  The WIP file is untouched. -/
+/-- Target `T1`: the contract of
+`FunctionalInequalities.Analysis.aemeasurable_lintegral_levelSet`. -/
 theorem target_T1 : ∀ {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V]
     [CompleteSpace V] [FiniteDimensional ℝ V] [MeasurableSpace V] [BorelSpace V]
     {u : V → ℝ} {K : ℝ≥0} (_ : LipschitzWith K u)
@@ -150,7 +148,7 @@ theorem top_weight :
   aemeasurable_setLIntegral_inter_levelSet continuous_id
     (LipschitzWith.id.lipschitzOnWith) measurableSet_Ici measurable_const
 
-/-! ### The earlier rounds' statements are preserved -/
+/-! ### Null-slicing contracts, restated verbatim -/
 
 theorem preserved_measurable_surfaceMeasure_inter_levelSet :
     ∀ {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [MeasurableSpace V]

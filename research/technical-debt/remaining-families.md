@@ -1,40 +1,31 @@
 # Remaining-family maintenance
 
-This is a live maintenance register. It tracks layout and documentation, without changing
-proof, hypothesis, normalization, dimensional or certificate status. Dated decisions and the
-older inventories retain their original claims and source paths.
+This is a live maintenance register for layout and documentation. It changes no proof,
+hypothesis, normalization, dimensional or certificate status.
 
-| Item | Responsibility and state | Record / acceptance requirement |
+## Unresolved debt
+
+| Item | State | Acceptance requirement |
 | --- | --- | --- |
-| D1–D3, C3 | Current-status, path and module-scope documentation corrected; scoped batch accepted | [Documentation correction](../decisions/2026-10-17-other-families-documentation.md); unchanged comment-free Lean code, links and private-index freshness |
-| S2 | Generic cutoffs and weak-derivative layers implemented; full batch accepted | [Cutoff/weak-derivative layout](../decisions/2026-10-17-cutoff-weak-derivative-layout.md); exact source/interface, full verifier and index/history checks |
-| S1 | Generic Hessian owners implemented; full batch accepted | [Hessian layout](../decisions/2026-10-18-hessian-owner-layout.md); exact matrix definition, C1/C2 scopes, no generic Stein-kernel dependency, full verification |
-| S3, S5 | Trace algebra/spectral responsibilities and proximal object boundary implemented; full batch accepted | [Trace/proximal layout](../decisions/2026-10-18-trace-proximal-layout.md); exact owner/interface checks, real clients and full verification |
-| S4, S6 | Stein identity and MetricBV responsibility boundaries implemented; full batch accepted | [Stein/MetricBV layout](../decisions/2026-10-18-stein-metricbv-layout.md); exact bounded-support scope, preserved identities and full verification |
-| C1 | CEK producer layers implemented after actual private-dependency review; full batch accepted | [Moment producer layout](../decisions/2026-10-18-moment-regularity-layout.md); same actual witness, retained private trace/Stein chain and exact interfaces |
-| C2 | Cross-top-level MetricBV relocation remains a candidate | Require actual independent reuse and dependency benefit; retain the existing family until justified |
+| C2 | Cross-top-level relocation of `KLS/Geometry/Perimeter/MetricBV` remains a candidate; the family stays with its actual KLS perimeter consumers | An actual independent reuse consumer and a dependency benefit; until then the existing owner is retained |
 
-The per-batch receipt index is
-`build/file-management/2026-10-17-other-families-optimization/STATE.json`.
-Each acceptance applies to its recorded snapshot. A proposed or implemented layout is not
-marked accepted solely because a targeted build passes. Existing qualified public names remain
-unchanged; module migrations and namespace/name changes are separate migration classes.
+## Accepted structural constraints
 
-## Completed sequential delivery (2026-10-18)
+- Existing qualified public names are unchanged; module moves and namespace or name changes are
+  separate migration classes with their own maps and validation.
+- The metric BV tests require bounded function support on arbitrary metric spaces; infinite
+  perimeter may reflect an empty approximation class, and recovery is asserted only under the
+  original finite-perimeter condition.
+- The shared private weak-derivative calculus helpers stay together, as do the CEK trace and
+  Stein chains; no further split is justified solely by file length.
+- Generic cutoffs, weak-derivative foundations, Hessian owners, trace algebra, the proximal object
+  boundary, the Stein identity boundary and the CEK producer layers are placed as described in the
+  current family READMEs; BKL's per-paper reorganization is likewise settled.
 
-Documentation was accepted before the five source-layout batches. Every source batch has a
-separate fresh full-verification receipt plus exact source/interface comparisons and unchanged
-mathematical/status/history/index checks. Current owner/import guides are generated or linked
-from the [source map](../../formalization/README.md) and the decisions above.
+## Source ownership and checks
 
-The accepted receipt chain is indexed in
-`build/file-management/2026-10-17-other-families-optimization/STATE.json`.
-The cumulative checks and final report are in that same ignored output directory. Final
-navigation-only updates have their own scoped acceptance and do not renew a full Lean receipt.
-
-The MetricBV tests require bounded function support on arbitrary metric spaces; the old review's
-compact-support shorthand is corrected in the new decision without editing the historical
-review. C2 remains deferred for lack of an independent reuse consumer; the existing owner is
-retained. The shared-private weak-derivative calculus and CEK trace/Stein chains remain together.
-No further split is justified solely by file length. BKL's prior accepted reorganization and
-all proof, certificate and paper-coverage states remain unchanged.
+Owners and imports are listed in the generated [module directory](../../formalization/MODULES.md)
+and described in the [source map](../../formalization/README.md) and the family READMEs. A
+proposed or implemented layout is accepted only with exact source and interface comparison, real
+clients and the change-appropriate checks of the [workflow](../workflow.md); a targeted build
+alone does not establish acceptance, and each acceptance applies to its recorded snapshot.

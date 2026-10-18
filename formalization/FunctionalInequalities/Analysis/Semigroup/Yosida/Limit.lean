@@ -4,7 +4,7 @@ import FunctionalInequalities.Analysis.Semigroup.Yosida.Laws
 /-!
 # the adjoint-product identification: the Yosida exponentials converge strongly
 
-`Y8` of the Yosida-limit route (`research/decisions/2026-09-19-yosida-limit-route.md`), which is
+`Y8` of the Yosida-limit route (`research/audits/YosidaLimitRouteStatements.lean`), which is
 the adjoint-product identification of the semigroup-generation route for the actual Yosida approximation
 `L_s = s⁻¹ (1 - J_s)` of `T†T`: for `T` closed and densely defined,
 `exp (-t • L_s) f` converges as `s ↓ 0`, for every `f : H₀` and every `t ≥ 0`.

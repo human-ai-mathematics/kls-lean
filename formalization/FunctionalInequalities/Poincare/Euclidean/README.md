@@ -19,7 +19,7 @@ and local-slope constants, hence equality with the selected constant. Intrinsic 
 continuity is proved in [AbsoluteContinuity.lean](../../KLS/LogConcave/Density/AbsoluteContinuity.lean),
 not imposed as an extra assumption. This covers ambient singularity and zero-dimensional support.
 The full Borell density representative, local bounds, and moment theorems were also completed by
-later certificates. See the [local proof record](../../../../research/decisions/2026-09-06-general-logconcave-comparison.md).
+later certificates.
 
 Public names reflect mathematical roles: `Poincare.SmoothGradient.Intrinsic.constant` is the
 selected constant, `Poincare.SmoothGradient.Ambient.constant` is the relaxation constant on the
@@ -140,7 +140,4 @@ lake build
 The default build in this recorded status checks 24 certificates, axiom guards, and usage examples.
 This comparison batch has no proof placeholders. The added variance-continuity theorem and
 relaxation comparisons for continuous test maps also have axiom guards. The two nodes' mathematical
-specifications are in the [ledger](../../../../research/a-series/ledger.yaml). The original draft
-design is retained in the [historical record](../../../../research/decisions/2026-09-06-poincare-comparison-statements.md);
-proofs, signature audits, and the batch's Blueprint corrections are in the
-[acceptance record](../../../../research/decisions/2026-09-06-poincare-comparison-proofs.md).
+specifications are in the [ledger](../../../../research/a-series/ledger.yaml).

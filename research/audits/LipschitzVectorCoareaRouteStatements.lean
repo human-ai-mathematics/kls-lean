@@ -6,21 +6,22 @@ import FunctionalInequalities.KLS.Geometry.Coarea.LocallyLipschitz
 /-!
 # Route statements for the codimension-`m` coarea formula of Lipschitz maps
 
-**This file contains only `#check`s.  A proposition that type-checks is not a proof.**  It declares
-nothing, proves nothing, and introduces no placeholder axiom.  Each proposition below is an
-obligation of the route recorded in `research/decisions/2026-09-19-lipschitz-vector-coarea-route.md`,
-and **at the time of this route snapshot none of `L0`, `V1`, `V3`–`V5` had been proved**.  Same
-convention as `SharpSardRouteStatements.lean` and `RankDeficientRouteStatements.lean`.
+**This file contains only `#check`s. A proposition that type-checks is not a proof.**
+It preserves the Lipschitz vector-coarea contracts `L0`, `V1`–`V5` and the boundary/follow-on items.
+Current sources are `Analysis/Lipschitz/VectorPieces.lean` and
+`Analysis/Lipschitz/VectorCoarea.lean`; the independent client is
+`research/audits/LipschitzVectorCoareaAudit.lean`.
+Same convention as `SharpSardRouteStatements.lean` and `RankDeficientRouteStatements.lean`.
 
-## The gap
+## The regularity distinction
 
 `Analysis/Vector/RankDeficient/Coarea.lean` proves the codimension-`m` coarea formula `coarea_of_contDiff`
 for **`C¹`** maps with no hypothesis on the critical set.  Federer's coarea formula holds for merely
 **Lipschitz** maps, and the scalar side already went the whole way `C¹ → Lipschitz → locally
-Lipschitz` (`KLS/Geometry/{SmoothCoarea,LipschitzCoarea,LocallyLipschitzCoarea}.lean`).  The vector
-side stops at `C¹`; the globally Lipschitz statement is `L0` below.
+Lipschitz` (`KLS/Geometry/Coarea/Smooth.lean`, `KLS/Geometry/Coarea/Lipschitz.lean`,
+`KLS/Geometry/Coarea/LocallyLipschitz.lean`). The vector globally Lipschitz contract is `L0` below.
 
-## How the scalar side did it, and which step is missing in codimension `m`
+## Scalar assembly and its vector counterpart
 
 The scalar `L12` (`KLS.coarea_of_lipschitz`) has three steps: `Analysis.exists_contDiff_pieces`
 (`L7`) cuts the domain into countably many disjoint measurable pieces carrying `C¹` functions that
@@ -28,11 +29,10 @@ agree with `u` **to first order** (value and derivative) and leave a Lebesgue-nu
 `C¹` formula applies on each piece, first-order agreement making density and slice agree; countable
 additivity sums the pieces and the null complement is removed from almost every level.
 
-In codimension `m` the last two steps exist — `coarea_of_contDiff` and the codimension-`m` null
-slicing `ae_hausdorffMeasure_inter_levelSet_eq_zero_vector` — and the first does not: the whole jet
+In codimension `m` the assembly uses `coarea_of_contDiff`, the codimension-`m` null slicing
+`ae_hausdorffMeasure_inter_levelSet_eq_zero_vector`, and vector `C¹` pieces. The scalar jet
 and Whitney chain behind `L7` (`LipschitzJet.exists_compact_jets`,
-`WhitneyJet.exists_contDiff_extension`, `exists_contDiff_pieces`) is stated for `u : V → ℝ`.  **`V1`,
-the vector `C¹` pieces, is the only genuinely new ingredient.**
+`WhitneyJet.exists_contDiff_extension`, `exists_contDiff_pieces`) is stated for `u : V → ℝ`. **`V1` is its componentwise vector counterpart.**
 
 ## The route for `V1`: componentwise, not a vector Whitney extension
 
@@ -47,9 +47,9 @@ closes by supplying `V1` alone.
 
 ## What Mathlib and this repository have
 
-Mathlib has Rademacher's theorem and no coarea formula.  This repository has `L7` for real-valued
-functions, the `C¹` codimension-`m` coarea formula, the codimension-`m` null slicing — already in
-the shape `V2` needs — and unconditional slice measurability.
+The route uses Rademacher's theorem, `L7` for real-valued
+functions, the `C¹` codimension-`m` coarea formula, codimension-`m` null slicing in the shape
+`V2` needs, and unconditional slice measurability.
 -/
 
 noncomputable section
@@ -105,10 +105,10 @@ derivative, which is what transfers density and slice to the piece. -/
 
 /-! ### V2 — the Lebesgue-null complement disappears from almost every level
 
-Available up to a ten-line derivation: `ae_hausdorffMeasure_inter_levelSet_eq_zero_vector` at
+The derivation uses `ae_hausdorffMeasure_inter_levelSet_eq_zero_vector` at
 `d = k`, whose hypothesis `μH[k + m] N = 0` is, under `k + m = n`, Lebesgue-nullity of `N` through
 `Analysis.hausdorffMeasure_finrank_eq_smul_volume`; the normalized fibre measure is a scalar
-multiple of `μH[k]`.  Not proved in this repository in this form. -/
+multiple of `μH[k]`. See `route_V2` in `research/audits/LipschitzVectorCoareaAudit.lean`. -/
 
 #check (∀ {V W : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [FiniteDimensional ℝ V]
     [MeasurableSpace V] [BorelSpace V]

@@ -5,15 +5,15 @@ import FunctionalInequalities.Analysis.Semigroup.Yosida.Laws
 # Scope audit for `Y0`–`Y5` of the Yosida-limit route
 
 The six obligations of Part A of `research/audits/YosidaLimitRouteStatements.lean` are restated
-here **verbatim** — each proposition is copied character for character from that route snapshot —
-and discharged from the new hole-free module `Analysis/Semigroup/Yosida/Laws.lean and Exponential/Counterexample.lean`. A renamed
+here **verbatim** — each proposition is copied character for character from that route contract —
+and discharged from `Analysis/Semigroup/Yosida/Laws.lean` and
+`Analysis/Semigroup/Exponential/Counterexample.lean`. A renamed
 binder, a reordered hypothesis or a weakened conclusion would fail to elaborate here.
 
 `Y0` is the negative item: it records that the abstract `S6` of
 `research/audits/SemigroupGenerationRouteStatements.lean` — strong convergence of
 `exp (-t • L s) f` for a family assumed only nonnegative and commuting — **is false**. The route
-file `SemigroupGenerationRouteStatements.lean` is left byte-unchanged; the correction lives in the
-module and in `research/decisions/2026-09-19-yosida-limit-route.md`.
+file records the abstract contract; `Y0` makes the need for the corrected Cauchy hypothesis explicit.
 
 Unlike `S2`, `S3`, `S5`, `V1` and `V2`, none of `Y0`–`Y5` is discharged from a strictly stronger
 module statement: no route hypothesis turned out to be superfluous. In particular the density
@@ -22,13 +22,12 @@ of Mathlib's `LinearPMap.adjoint`, which is junk on a non-dense domain.
 
 Out of scope, deliberately absent: Part B of the route (`Y6`, the mean-value bound for two
 commuting nonnegative exponentials; `Y7`, the corrected abstract `S6` with a Cauchy hypothesis on
-a dense set; `Y8`, `S6` for the Yosida approximation, composed by the integrator), `S7` and `S8`
-of the semigroup-generation route, and every later gap of
-`thm:logconcave-cheeger-poincare-comparison` — the Markov property, Bakry–Émery `Γ`-calculus,
+a dense set; `Y8`, `S6` for the Yosida approximation), `S7` and `S8`
+of the semigroup-generation route, and the Markov property, Bakry–Émery `Γ`-calculus,
 small-time heat estimates and localization. **Nothing here is Buser's inequality or any step of
 it**, and nothing here mentions a measure, log-concavity or any KLS quantity.
 
-The axiom reports at the end cover every public declaration of the new module and every theorem of
+The axiom reports at the end cover every public declaration of the source modules and every theorem of
 this client.
 -/
 

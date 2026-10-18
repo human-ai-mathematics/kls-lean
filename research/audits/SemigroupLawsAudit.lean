@@ -4,8 +4,8 @@ import FunctionalInequalities.Analysis.Semigroup.Generated.Laws
 # Scope audit for `S7` (`P1`–`P8`) of the generated-semigroup route
 
 The obligations `P1`–`P8` of `research/audits/GeneratedSemigroupRouteStatements.lean` — Part A of
-the route recorded in `research/decisions/2026-09-19-generated-semigroup-route.md` — are restated
-here **verbatim**, copied character for character from that route snapshot, and discharged from the
+the generated-semigroup route — are restated
+here **verbatim**, copied character for character from that route contract, and discharged from the
 hole-free module `Analysis/Semigroup/Generated/Laws.lean`. A renamed binder, a reordered hypothesis
 or a weakened conclusion would fail to elaborate here.
 
@@ -15,7 +15,7 @@ the typeclass parameters into one `∀`, the module takes them as section variab
 the `0 ≤ t` hypothesis.
 
 Out of scope, deliberately absent: `G1`–`G3` (`S8`, the identification of the generator as `-T†T`),
-which are Part B of the same route file and are owned by another session. Nothing here is the
+which are Part B of the same route file and have the client `research/audits/GeneratorAudit.lean`. Nothing here is the
 Markov property, Bakry–Émery `Γ`-calculus, a small-time heat estimate, localization or any step of
 Buser's inequality.
 
@@ -30,7 +30,7 @@ open scoped RealInnerProductSpace
 
 namespace SemigroupLawsAudit
 
-/-- **`P1`**, verbatim from the route snapshot (uniqueness of the limit defining `P_t`), discharged from
+/-- **`P1`**, verbatim from the route contract (uniqueness of the limit defining `P_t`), discharged from
 `Analysis/Semigroup/Generated/Laws.lean`. -/
 theorem route_P1 :
     ∀ {H₀ H₁ : Type*} [NormedAddCommGroup H₀] [InnerProductSpace ℝ H₀] [CompleteSpace H₀]
@@ -42,7 +42,7 @@ theorem route_P1 :
   intro H₀ H₁ _ _ _ _ _ _ T hT hd t ht f g hg
   exact FunctionalInequalities.Analysis.Semigroup.Generated.eq_apply_of_tendsto T hT hd ht f g hg
 
-/-- **`P2`**, verbatim from the route snapshot (`P_t` is linear), discharged from
+/-- **`P2`**, verbatim from the route contract (`P_t` is linear), discharged from
 `Analysis/Semigroup/Generated/Laws.lean`. -/
 theorem route_P2 :
     ∀ {H₀ H₁ : Type*} [NormedAddCommGroup H₀] [InnerProductSpace ℝ H₀] [CompleteSpace H₀]
@@ -54,7 +54,7 @@ theorem route_P2 :
   intro H₀ H₁ _ _ _ _ _ _ T hT hd t ht a f g
   exact FunctionalInequalities.Analysis.Semigroup.Generated.map_smul_add T hT hd ht a f g
 
-/-- **`P3`**, verbatim from the route snapshot (`P_t` is a contraction), discharged from
+/-- **`P3`**, verbatim from the route contract (`P_t` is a contraction), discharged from
 `Analysis/Semigroup/Generated/Laws.lean`. -/
 theorem route_P3 :
     ∀ {H₀ H₁ : Type*} [NormedAddCommGroup H₀] [InnerProductSpace ℝ H₀] [CompleteSpace H₀]
@@ -64,7 +64,7 @@ theorem route_P3 :
   intro H₀ H₁ _ _ _ _ _ _ T hT hd t ht f
   exact FunctionalInequalities.Analysis.Semigroup.Generated.norm_apply_le T hT hd ht f
 
-/-- **`P4`**, verbatim from the route snapshot (`P_t` is symmetric), discharged from
+/-- **`P4`**, verbatim from the route contract (`P_t` is symmetric), discharged from
 `Analysis/Semigroup/Generated/Laws.lean`. -/
 theorem route_P4 :
     ∀ {H₀ H₁ : Type*} [NormedAddCommGroup H₀] [InnerProductSpace ℝ H₀] [CompleteSpace H₀]
@@ -74,7 +74,7 @@ theorem route_P4 :
   intro H₀ H₁ _ _ _ _ _ _ T hT hd t ht f g
   exact FunctionalInequalities.Analysis.Semigroup.Generated.symmetric T hT hd ht f g
 
-/-- **`P5`**, verbatim from the route snapshot (`P_0 = 1`), discharged from
+/-- **`P5`**, verbatim from the route contract (`P_0 = 1`), discharged from
 `Analysis/Semigroup/Generated/Laws.lean`. -/
 theorem route_P5 :
     ∀ {H₀ H₁ : Type*} [NormedAddCommGroup H₀] [InnerProductSpace ℝ H₀] [CompleteSpace H₀]
@@ -84,7 +84,7 @@ theorem route_P5 :
   intro H₀ H₁ _ _ _ _ _ _ T hT hd f
   exact FunctionalInequalities.Analysis.Semigroup.Generated.zero_time T hT hd f
 
-/-- **`P6`**, verbatim from the route snapshot (the semigroup law `P_{t+u} = P_t P_u`), discharged from
+/-- **`P6`**, verbatim from the route contract (the semigroup law `P_{t+u} = P_t P_u`), discharged from
 `Analysis/Semigroup/Generated/Laws.lean`. -/
 theorem route_P6 :
     ∀ {H₀ H₁ : Type*} [NormedAddCommGroup H₀] [InnerProductSpace ℝ H₀] [CompleteSpace H₀]
@@ -95,7 +95,7 @@ theorem route_P6 :
   intro H₀ H₁ _ _ _ _ _ _ T hT hd t u ht hu f
   exact FunctionalInequalities.Analysis.Semigroup.Generated.add_time T hT hd ht hu f
 
-/-- **`P7`**, verbatim from the route snapshot (strong continuity at `0`), discharged from
+/-- **`P7`**, verbatim from the route contract (strong continuity at `0`), discharged from
 `Analysis/Semigroup/Generated/Laws.lean`. -/
 theorem route_P7 :
     ∀ {H₀ H₁ : Type*} [NormedAddCommGroup H₀] [InnerProductSpace ℝ H₀] [CompleteSpace H₀]
@@ -105,7 +105,7 @@ theorem route_P7 :
   intro H₀ H₁ _ _ _ _ _ _ T hT hd f ε hε
   exact FunctionalInequalities.Analysis.Semigroup.Generated.continuous_at_zero T hT hd f hε
 
-/-- **`P8`**, verbatim from the route snapshot (strong continuity on `[0, ∞)`), discharged from
+/-- **`P8`**, verbatim from the route contract (strong continuity on `[0, ∞)`), discharged from
 `Analysis/Semigroup/Generated/Laws.lean`. -/
 theorem route_P8 :
     ∀ {H₀ H₁ : Type*} [NormedAddCommGroup H₀] [InnerProductSpace ℝ H₀] [CompleteSpace H₀]

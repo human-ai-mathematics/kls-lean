@@ -18,7 +18,7 @@ so `z ∈ D(A)` with `A z = λ (2 y - z)`, and testing the weak equation against
 at `y / 2 - z = w - y / 2` gives `q(y, w) - q(w, w) ≤ q(y, y) / 4 ≤ λ η / 4`.
 
 This replaces a first eigenvector of `A` on `(ker T)ᗮ` in Bizeul–Klartag–Lehec
-(arXiv:2610.05474v1), Section 3; see `research/decisions/2026-10-07-bkl-operator-route.md`. No
+(arXiv:2610.05474v1), Section 3, in the operator route (`research/audits/BKL/OperatorRouteStatements.lean`). No
 compactness and no spectral theorem are used, and no exact eigenvector is claimed to exist.
 -/
 

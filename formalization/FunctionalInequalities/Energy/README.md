@@ -48,8 +48,8 @@ Library modules import the specific files they need. For complete downstream exa
 
 File paths and declaration namespaces are independent. This reorganization preserves all
 mathematical declarations. Closed quadraticity still does not automatically provide the Dirichlet
-property or agreement of raw test energy with relaxed energy. For individual replacements of old
-import paths, see the [migration record](../../../research/explorations/2026-09-07-energy-module-layout.md).
+property or agreement of raw test energy with relaxed energy. Old import paths have no
+forwarding modules; the [generated module directory](../../MODULES.md) lists current paths.
 
 `Euclidean/LipschitzApproximation/` is divided by responsibility into
 [gradient estimates](../Analysis/Lipschitz/Gradient.lean) and

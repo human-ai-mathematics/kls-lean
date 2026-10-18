@@ -129,6 +129,8 @@ def inventory_tree(root: Path, run: Path) -> dict:
 
 def list_runs(root: Path, area_name: str) -> list[dict]:
     area = root / area_name
+    if not area.exists() and not area.is_symlink():
+        return []
     if area.is_symlink() or not area.is_dir():
         fail(f'missing or invalid inventory area: {area}')
     runs = []
@@ -294,10 +296,11 @@ def chronological_files(directory: Path) -> list[Path]:
     return sorted(files, key=lambda path: (path.name[:10] if DATE_RE.match(path.name) else '9999-99-99', path.name))
 
 
-def make_index(root: Path, output: Path, directory_name: str, title: str) -> str:
-    directory = root / 'research' / directory_name
+def make_index(root: Path, output: Path, directory_name: str, title: str,
+               history_root: Path | None = None) -> str:
+    directory = (history_root if history_root is not None else root / 'research') / directory_name
     candidate_file = output / f'{directory_name}-index.md'
-    intended_destination = directory / 'README.md'
+    intended_destination = candidate_file
     lines = [
         f'# {title}',
         '',
@@ -407,6 +410,8 @@ def main() -> int:
     parser.add_argument('--root', default='.', help='repository root')
     parser.add_argument('--output', default='build/file-management', help='ignored output directory under build/')
     parser.add_argument('--retention-manifest', default=None, help='optional reviewed retention-role manifest')
+    parser.add_argument('--history-root', default=None,
+                        help='optional local archive research/ directory under build/history/; indexes stay local')
     args = parser.parse_args()
 
     root = Path(args.root).resolve()
@@ -446,6 +451,19 @@ def main() -> int:
     attach_retention(areas, retention_records)
 
     output.mkdir(parents=True, exist_ok=True)
+    index_candidates = []
+    if args.history_root is not None:
+        history_root = lexical_path(root, args.history_root)
+        try:
+            history_root.relative_to(root / 'build' / 'history')
+        except ValueError:
+            fail('history root must be under the ignored build/history/ archive')
+        reject_symlink_components(history_root, root)
+        for name, title in [('decisions', 'Local decision-record index'),
+                            ('handoffs', 'Local handoff index')]:
+            target = output / f'{name}-index.md'
+            target.write_text(make_index(root, output, name, title, history_root), encoding='utf-8')
+            index_candidates.append({'candidate_path': relative(root, target), 'local_only': True})
     payload = {
         'schema': 2,
         'logical_bytes_note': 'logical file sizes from stat; physical storage and savings are not measured',
@@ -465,24 +483,11 @@ def main() -> int:
             'tool_artifact_mode': 'read_only',
         },
         'retention_manifest_records': retention_records,
-        'index_candidates': [
-            {
-                'candidate_path': relative(root, output / 'decisions-index.md'),
-                'intended_destination': 'research/decisions/README.md',
-                'link_base': 'research/decisions/README.md',
-            },
-            {
-                'candidate_path': relative(root, output / 'handoffs-index.md'),
-                'intended_destination': 'research/handoffs/README.md',
-                'link_base': 'research/handoffs/README.md',
-            },
-        ],
+        'index_candidates': index_candidates,
         'areas': areas,
         'all_references': references,
     }
     (output / 'inventory.json').write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding='utf-8')
-    (output / 'decisions-index.md').write_text(make_index(root, output, 'decisions', 'Chronological decision-record index'), encoding='utf-8')
-    (output / 'handoffs-index.md').write_text(make_index(root, output, 'handoffs', 'Chronological handoff index'), encoding='utf-8')
     print(f'wrote ignored inventory candidates to {output}')
     return 0
 

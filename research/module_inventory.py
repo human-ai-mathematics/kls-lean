@@ -87,8 +87,7 @@ def render(data: dict) -> str:
            "Check freshness with `python3 research/module_inventory.py --check`.",
            "This is a filename/import directory; it does not assign proof or paper-coverage status.", "",
            "[Source guide](README.md) · [Interface guide](../LEAN_DESIGN.md) · [Public API](API.md) · "
-           "[Placement and naming](../research/naming.md) · "
-           "[Filename review](../research/decisions/2026-10-17-functionalinequalities-filenames.md)", "",
+           "[Placement and naming](../research/naming.md)", "",
            f"**{data['count']} Lean modules in {len(data['families'])} top-level families.** "
            "The library aggregate `FunctionalInequalities.lean` is outside this subtree.", "",
            "| Family | Modules |", "| --- | ---: |"]
