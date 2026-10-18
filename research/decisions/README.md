@@ -387,6 +387,7 @@ This chronological index is generated from the dated Markdown records. README fi
 - [2026-10-18-pre-final-certificate-guide](2026-10-18-pre-final-certificate-guide.md)
 - [2026-10-18-pre-final-documentation-handoff](2026-10-18-pre-final-documentation-handoff.md)
 - [2026-10-18-public-documentation](2026-10-18-public-documentation.md)
+- [2026-10-18-public-readiness-documentation-history](2026-10-18-public-readiness-documentation-history.md)
 - [2026-10-18-remaining-source-process-history](2026-10-18-remaining-source-process-history.md)
 - [2026-10-18-source-comment-process-history](2026-10-18-source-comment-process-history.md)
 - [2026-10-18-source-interface-history](2026-10-18-source-interface-history.md)

@@ -65,7 +65,8 @@ No essential self-adjointness is proved **in this module**, and no weak `Γ₂` 
 proved unconditionally here; both follow once the local hypothesis is supplied, which
 `HeatSemigroup/InteriorRegularity.lean` does. The statements above are implications; their
 hypotheses are visible in their types and are not packaged into a structure, an instance or a
-definition. The deliberate `KLS/Target.lean` hole is untouched.
+definition. The KLS target itself is proved in `KLS/Target.lean` (`KLS.kls`, through the BKL
+route); this module contributes only the operator-core criterion described above.
 -/
 
 noncomputable section

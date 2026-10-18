@@ -96,20 +96,25 @@ and import-boundary audits, not just a successful build.
 
 ## Recorded baseline
 
-Commit `5d41bd7dd379d0c0858f1b8416f61c82e0fe26eb` (2026-10-18) is the current baseline. Receipts
-and logs stay local under the ignored `build/` directory; this summary is the tracked record.
+Commit `904d1a5d36c1ba31996765f42cc3f4376af34a82` (2026-10-18) is the most recent recorded snapshot
+with completed full local acceptance. Receipts and logs stay local under the ignored `build/`
+directory; this summary is the tracked record and is dated evidence for the commits it names.
 
-| Scope | Recorded result for `5d41bd7` | Reproduce |
+| Scope | Recorded result | Reproduce |
 | --- | --- | --- |
-| Full local KLS verification | Passed: 297 gates, 9,856 local declaration audits, 867 module replays and `classical-kls`; no excluded open target | `python3 research/verify.py` |
-| Three independent Lake clients built from the exact commit (reusable interfaces only; KLS, solution and example imports are excluded) | Passed: 32 freshly built primary modules, 467 audited declarations, 35 module replays | `python3 research/downstream.py --rev 5d41bd7dd379d0c0858f1b8416f61c82e0fe26eb` |
-| Remote Lean certification | None for `5d41bd7`; the newest success is run 37516844384 for `36e7c78` | Manual dispatch or `milestone/**` tag, with authorization |
+| Full local KLS verification of `904d1a5` | Passed: 297 gates, 223 Python tests, 282 strictly compiled audit clients, 9,856 local declaration audits, 867 module replays, `classical-kls`; 34 certificate states and the statement baseline unchanged; no excluded open target | `python3 research/verify.py` |
+| Three independent Lake clients built from `5d41bd7` (reusable interfaces only; KLS, solution and example imports are excluded) | Passed: 32 freshly built primary modules, 467 audited declarations, 35 module replays | `python3 research/downstream.py --rev 5d41bd7dd379d0c0858f1b8416f61c82e0fe26eb` |
+| Remote Lean certification (historical, as recorded here) | Run 37516844384 passed for `36e7c78`; this page records no remote run for `5d41bd7` or `904d1a5`. Any later run is identified by its exact `head_sha` on GitHub Actions | Manual dispatch or `milestone/**` tag, with authorization |
 
-The full run recorded pre-commit HEAD `b9ebbc3`. A separate comparison matched all 1,851 committed
-blobs of `5d41bd7` to its frozen source hashes. `KLS.kls` uses only `Classical.choice`, `Quot.sound`
-and `propext`. These are recorded baseline results; subsequent prose edits do not renew that run.
-Both scopes trust pinned third-party compiled imports and use Lean's own kernel for replay;
-see [receipts and trust scope](#receipts-and-trust-scope).
+The full run recorded the pre-commit HEAD `5d41bd7` and a frozen source snapshot; a separate
+comparison matched all 1,854 committed blobs of `904d1a5` to that snapshot, so the receipt binds
+the committed source although it was produced before the commit existed. `KLS.kls` uses only
+`Classical.choice`, `Quot.sound` and `propext`. The downstream pin `5d41bd7` is interface evidence
+and not a second KLS proof. This section is a dated record: later prose commits do not renew these
+runs, the remote row is not kept current here, and a remote `--lean-only` success for a later SHA
+certifies the Lean scope only. Both scopes trust pinned third-party
+compiled imports and use Lean's own kernel for replay; see
+[receipts and trust scope](#receipts-and-trust-scope).
 
 ## Statement baseline
 

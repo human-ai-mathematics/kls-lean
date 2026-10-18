@@ -12,7 +12,7 @@ open FunctionalInequalities.Analysis.BakryEmery
 
 namespace FunctionalInequalities.KLS.BKL.Localization
 /-- **BKL Theorem 1.1 conditional on the compact Letwin bound**: the dimension-free KLS bound `KLS.Conjecture`
-follows from Theorem 4.1 through the certified reduction `conjecture_of_cumulantBound`. `KLS.kls` is not touched. -/
+follows from Theorem 4.1 through the certified reduction `conjecture_of_cumulantBound`. -/
 theorem conjecture_of_letwinCompact (hL : LogConcave.Suspension.LetwinCompactBound) : KLS.Conjecture := by
   exact FunctionalInequalities.KLS.conjecture_of_cumulantBound (hSource := theorem41 hL)
 

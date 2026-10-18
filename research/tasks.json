@@ -655,7 +655,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/LogConcave/HeatSemigroup/OperatorCore.lean",
-            "sha256": "71994e04433d1a1e9ba0e11185458f20470941caff9362d7b44e0b9966eade6a"
+            "sha256": "2c28406f6e1773f452ed8d28acd2802eaac72c506557e3ad683b88f9d9fc0c5b"
           },
           {
             "path": "research/audits/BakryEmeryOperatorCoreAudit.lean",
@@ -1119,7 +1119,7 @@
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/BKL/Poincare.lean",
-            "sha256": "e384027d41134449a765601480dbeedf7320e010c2c5979062c10fe227b3c1da"
+            "sha256": "6a5fdd0924b50cd0aeda4e57832b5b5d5142df76934d1f6181cfb78eb83a73d9"
           },
           {
             "path": "formalization/FunctionalInequalities/KLS/Statement.lean",
