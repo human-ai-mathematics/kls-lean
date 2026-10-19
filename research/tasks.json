@@ -3017,7 +3017,7 @@
           },
           {
             "path": "research/naming.md",
-            "sha256": "fe9fe385ea0d96962b4d3884cf5dd3a642a828e7d7884e307cec3ff11a3b6d9f"
+            "sha256": "77779cbe1321063abe05cbeae69f9064ffd170e8716ce203d824c24d66469aa9"
           },
           {
             "path": "formalization/FunctionalInequalities/Analysis/Sard/Chart.lean",

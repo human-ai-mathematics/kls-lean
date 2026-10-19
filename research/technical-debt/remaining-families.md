@@ -32,3 +32,6 @@ alone does not establish acceptance, and each acceptance applies to its recorded
 
 The [section-variable review](variable-scopes.md) records the shared-context pattern,
 the maintained mathematical boundaries and the required interface comparisons.
+
+The dated layout-decision history through 2026-10-17 is archived locally in
+`build/history/2026-10-19-naming-layout-history/naming.md`.
