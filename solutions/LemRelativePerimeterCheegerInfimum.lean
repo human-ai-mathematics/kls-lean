@@ -1,5 +1,5 @@
 import FunctionalInequalities.KLS.Geometry.Cheeger.Equality
-import FunctionalInequalities.KLS.Definitions
+import FunctionalInequalities.Probability.LogConcave
 
 /-!
 # Lean certificate: `lem:relative-perimeter-cheeger-infimum`

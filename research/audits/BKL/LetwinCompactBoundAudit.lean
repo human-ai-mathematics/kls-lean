@@ -1,6 +1,6 @@
 import FunctionalInequalities.KLS.Letwin.CompactBound
 import FunctionalInequalities.KLS.BKL.CompactReduction
-import FunctionalInequalities.KLS.Definitions
+import FunctionalInequalities.Probability.LogConcave
 import FunctionalInequalities.KLS.Isotropic
 
 /-!

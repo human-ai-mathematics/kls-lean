@@ -1,6 +1,6 @@
 import FunctionalInequalities.Analysis.Matrix.Sign
 import FunctionalInequalities.L2.MeanVariance
-import FunctionalInequalities.Poincare.Product.Variance
+import FunctionalInequalities.Probability.ProductVariance
 import FunctionalInequalities.Probability.Moments
 
 /-!

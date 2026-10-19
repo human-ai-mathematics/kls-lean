@@ -7,7 +7,7 @@ import FunctionalInequalities.Analysis.Vector.Slice.Measurable
 `Analysis/Vector/RankDeficient/Coarea.lean` proves the codimension-`m` coarea formula
 `coarea_of_contDiff` for **`C¹`** maps with no hypothesis on the critical set.  Federer's coarea
 formula holds for merely **Lipschitz** maps, and this module makes that step, exactly as
-`KLS/Geometry/Coarea/Lipschitz.lean` did in codimension one:
+`Analysis/Coarea/Lipschitz.lean` did in codimension one:
 
 * `ae_hausdorffNormalized_inter_levelSet_eq_zero_of_volume_eq_zero` — a Lebesgue-null set is
   `ℋ^k`-null in almost every level, the codimension-`m` null slicing in the form the assembly

@@ -1,5 +1,5 @@
 import FunctionalInequalities.Analysis.Lipschitz.C1Pieces
-import FunctionalInequalities.KLS.Geometry.Coarea.Smooth
+import FunctionalInequalities.Analysis.Coarea.Smooth
 
 /-! # Weighted coarea for Lipschitz functions
 

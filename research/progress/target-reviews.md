@@ -5,6 +5,8 @@ section states the pinned source, the Lean statement that is certified, the corr
 relation, and what is not covered. Full paper coverage lives in the
 [literature register](LITERATURE.md); source-step narratives live in the
 [proof path](PROOF-PATH.md).
+The [statement review](statement-review.md) records the contract checks across all registered
+certificates and distinguishes these from a review of every auxiliary proof.
 
 ## Bakry–Gentil–Ledoux, Corollary 4.8.2 (`thm:bakry-emery-poincare`, relation stronger)
 
@@ -19,11 +21,17 @@ Corollary 4.8.2 (printed p. 212), with P(C) from Definition 4.2.1: `Var_μ(f) �
 | `∇∇W ≥ ρ Id`, `ρ > 0` | `∀ x v, ρ * ‖v‖ ^ 2 ≤ bilinearIteratedFDerivTwo ℝ W x v v`, `0 < ρ` |
 | P(1/ρ) on `D(E)` | `Solutions.ThmBakryEmeryPoincare.certificate`: `Poincare.LocalSlope.Intrinsic.constant ν ≤ ρ⁻¹`, the literature constant over locally Lipschitz tests; `smoothTest` gives the smooth-test form |
 
-The hypotheses are weaker than the book's (`C²`, any normalization, any finite-dimensional inner
-product space) and the test class is larger, with the same inequality; log-concavity and full
+The reviewed extension allows `C²` potentials, automatic normalization and any finite-dimensional
+inner product space. Locally Lipschitz finite-energy tests include smooth finite-energy tests;
+this does not make them a larger class than the book's completed form domain `D(E)`, nor does
+the certificate identify that abstract domain with the local test class. Log-concavity and full
 support of `ν` are derived, not assumed. The proof follows the book's semigroup route (curvature
 bound, finite-time decay, ergodicity from `ker T̄ = constants`). `Solutions.ThmBakryEmeryPoincare.gaussian`
 instantiates the certificate on `volume.tilted (-(ρ/2)‖·‖²)` with every hypothesis discharged.
+The separate `norm_center_sq_le_inv_mul` proves the inequality on the actual closed-gradient
+domain; `closedWeightedOperator_id_constant_eq_literature` identifies its optimum with the
+literature constant. These supply the local form-domain bridge, without formalizing the book's
+general Markov-triple framework.
 Not covered: the general Markov-triple framework, Proposition 4.8.1, `CD(ρ, n)` and the
 log-Sobolev results.
 
@@ -35,8 +43,10 @@ finite on bounded Borel sets.
 `Solutions.ThmRelaxedMinkowskiContentPerimeter.certificate` states, for a metric space `V`, a
 Borel measure `ν` finite on bounded sets and every measurable `B` with `ν B < ∞`, that the relaxed
 lower Minkowski content equals the Definition 3.3 Lipschitz relaxation of the perimeter:
-`MetricBV.relaxedMinkowskiContent ν B = MetricBV.lipschitzRelaxation ν B`. Both sides are infima
-over globally Lipschitz approximants with global indicator `L¹` convergence; the statement
+`MetricBV.relaxedMinkowskiContent ν B = MetricBV.lipschitzRelaxation ν B`. The left side relaxes
+lower Minkowski content over measurable set sequences whose indicators converge to `1_B` in
+global `L¹(ν)`; the right side relaxes integrated local slope over globally Lipschitz function
+sequences converging to `1_B` in global `L¹(ν)`. The statement
 retains measurable finite-mass targets and the bounded-set finiteness premise, with no properness
 or finite-total-mass premise, and asserts no pointwise equality of content and perimeter. Not
 covered: the other results of Section 4 and nonproper locally Lipschitz variants.
@@ -54,9 +64,9 @@ One constant is chosen before every dimension and law; there is no compactness, 
 moment premise beyond isotropy; `C_P` is the literature local-slope constant, which agrees with
 `‖∇f‖` almost everywhere for log-concave laws.
 
-**Producer and condition.** The closed producer `KLS.BKL.Localization.theorem11`
+**Producer and condition.** The closed producer `KLS.BKL.Localization.exists_isotropicBound`
 (`KLS/BKL/Poincare.lean`) applies the Theorem 3.1 criterion and Proposition 7.1 with the regular
-reduction to `theorem41 letwinCompactBound`, giving `C = 2 C_{3.1} K`. The conditional
+reduction to `exists_cumulantBound_of_letwinCompact letwinCompactBound`, giving `C = 2 C_{3.1} K`. The conditional
 `conjecture_of_letwinCompact` keeps the compact Letwin bound as an explicit hypothesis; the closed
 `conjecture` discharges it with the proved `letwinCompactBound`, and `KLS.kls : KLS.Conjecture`
 (`KLS/Target.lean`) is that producer composed with the affine/isotropic reduction. `KLS.Conjecture`

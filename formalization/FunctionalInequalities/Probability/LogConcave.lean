@@ -1,0 +1,36 @@
+import Mathlib.Analysis.Normed.Module.Basic
+import Mathlib.Analysis.SpecialFunctions.Pow.Real
+import Mathlib.MeasureTheory.Measure.ProbabilityMeasure
+
+/-!
+# Compact-set log-concavity of probability laws
+
+`KLS.LogConcave` tests log-concavity on compact sets and admits laws on proper affine supports.
+The public property namespace is retained independently of this probability-theoretic owner.
+The affine combination of compact sets is compact in every real normed space. Equivalence with density
+representations belongs to the separate log-concave representation modules; no Poincaré energy,
+constant, approximation theorem or nondegeneracy premise is part of this definition.
+-/
+
+noncomputable section
+
+open MeasureTheory ProbabilityTheory
+
+namespace FunctionalInequalities.KLS
+
+section LogConcavity
+
+variable {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+  [MeasurableSpace E] [BorelSpace E]
+
+/-- Compact-set log-concavity, including measures on proper affine supports.
+The displayed combination of compact sets is compact in every real normed space. -/
+def LogConcave (μ : ProbabilityMeasure E) : Prop :=
+  ∀ (K₀ K₁ : Set E), IsCompact K₀ → IsCompact K₁ →
+    ∀ t : ℝ, 0 < t → t < 1 →
+      (μ : Measure E) K₀ ^ t * (μ : Measure E) K₁ ^ (1 - t) ≤
+        (μ : Measure E) {z | ∃ x ∈ K₀, ∃ y ∈ K₁, z = t • x + (1 - t) • y}
+
+end LogConcavity
+
+end FunctionalInequalities.KLS

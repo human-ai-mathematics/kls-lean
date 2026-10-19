@@ -1,5 +1,5 @@
-import FunctionalInequalities.KLS.Geometry.Perimeter.MetricBV.Basic
-import FunctionalInequalities.KLS.Geometry.Perimeter.MetricBV.Transport
+import FunctionalInequalities.Analysis.MetricBV.Basic
+import FunctionalInequalities.Analysis.MetricBV.Transport
 import Mathlib.Analysis.InnerProductSpace.Projection.Minimal
 
 /-!

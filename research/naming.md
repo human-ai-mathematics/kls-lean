@@ -115,7 +115,7 @@ Review file responsibilities separately from public API names (`Generated.preser
 For families, put the family name in the directory and only distinguishing terms in basenames:
 `Poincare/SmoothTest/`, `Energy/LocalSlope/Gradient.lean`, `Energy/CovarianceGradient/`,
 `KLS/LogConcave/Line/`, `Analysis/Semigroup/{Resolvent,Exponential,Yosida,Generated}/`,
-`KLS/{ConditionalFiber,Geometry/Cheeger,Geometry/Coarea}/`.
+`Analysis/{Coarea,MetricBV}/`, `KLS/{ConditionalFiber,Geometry/Cheeger}/`.
 Use `LogConcave/Covariance.lean`, not `LogConcave/AffineCovariance.lean`; new `Analysis/` modules
 follow the same rule. `Analysis/Convex/LegendreVariation/{Attainment,Perturbation,Derivative}`
 drops `Legendre*` basenames while `Convex/Legendre.lean` retains its separate object identity.
@@ -124,10 +124,10 @@ Exceptions to rule 5 remain: `Poincare/Euclidean/`, `Poincare/FiniteProduct/`, `
 
 **Per-paper folders (owner decision 2026-10-07, amendment to rule 5).** Paper-specific iterates,
 numbered lemmas for them, main-theorem assembly and witnesses live under `KLS/<Paper>/`
-(currently `KLS/BKL/`, `KLS/CEK/`); audit clients/route statements use `research/audits/<Paper>/`
+(currently `KLS/BKL/`, `KLS/CEK/`, `KLS/Letwin/`); audit clients/route statements use `research/audits/<Paper>/`
 (currently BKL and CEK), dropping the paper prefix from filenames. Generic Bochner, tilt, tensor,
 semigroup, summation and heat-model-generator tools stay in object families, which must never
-import per-paper modules. Create other paper folders (Letwin, Song–Zhang) only with their first module.
+import per-paper modules. Create additional paper folders (for example Song–Zhang) only with their first module.
 
 ## Migration checks
 

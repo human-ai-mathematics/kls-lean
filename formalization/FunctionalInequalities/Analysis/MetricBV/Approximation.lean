@@ -1,5 +1,5 @@
-import FunctionalInequalities.KLS.Geometry.Perimeter.MetricBV.Basic
-import FunctionalInequalities.KLS.Geometry.Perimeter.MetricBV.Complement
+import FunctionalInequalities.Analysis.MetricBV.Basic
+import FunctionalInequalities.Analysis.MetricBV.Complement
 
 /-!
 # Bounded-support reductions for globally Lipschitz approximations

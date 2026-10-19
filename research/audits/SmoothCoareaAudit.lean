@@ -1,15 +1,15 @@
-import FunctionalInequalities.KLS.Geometry.Coarea.Smooth
+import FunctionalInequalities.Analysis.Coarea.Smooth
 
 /-!
 # Strict audit client for the `C¹` weighted coarea formula (obligation `L11`, target `T3`)
 
-Independent client of `KLS/Geometry/Coarea/Smooth.lean`.  `target` states the route's `L11`
+Independent client of `Analysis/Coarea/Smooth.lean`.  `target` states the route's `L11`
 quantifier for quantifier and proves it; `target_of_not_completeSpace` drops the unused
 `[CompleteSpace V]`.
 
 `target_T3` preserves the route's third target, and `wip_isoperimetry_statement` preserves the
 contract of `KLS.Isoperimetry.lintegral_enorm_gradient_mul_eq_lintegral_levelSet` from
-`KLS/Geometry/Coarea/Isoperimetry.lean`. Both follow from `L11` at `S = univ`; their
+`Analysis/Coarea/Isoperimetry.lean`. Both follow from `L11` at `S = univ`; their
 `LipschitzWith` hypothesis is unused because they assume `ContDiff ℝ 1 u`.
 
 `constant_function` checks the `⊤ · 0` boundary independently of `L11`: for a constant function

@@ -1,4 +1,4 @@
-import FunctionalInequalities.KLS.Geometry.Perimeter.MetricBV.Finite
+import FunctionalInequalities.Analysis.MetricBV.Finite
 import FunctionalInequalities.KLS.Geometry.Cheeger.BVConstant
 
 /-! Independent clients for the proved metric BV interface. The general

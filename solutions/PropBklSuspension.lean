@@ -1,4 +1,4 @@
-import FunctionalInequalities.KLS.BKL.Proposition71
+import FunctionalInequalities.KLS.BKL.TaylorBound
 
 /-!
 # Lean certificate: `prop:bkl-suspension`

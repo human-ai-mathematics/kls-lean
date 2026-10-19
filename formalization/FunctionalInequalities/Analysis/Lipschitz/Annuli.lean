@@ -10,7 +10,7 @@ pairwise disjoint, cover the space, and each of them sits inside the **open** ba
 statement true near every point of the piece be used on the whole piece.
 
 This is the codimension-`m` copy of the decomposition used by
-`KLS/Geometry/Coarea/LocallyLipschitz.lean`, isolated here because the vector assembly needs the
+`Analysis/Coarea/LocallyLipschitz.lean`, isolated here because the vector assembly needs the
 same four facts.  Nothing about the dimension, the inner product or the measure is used: only the
 norm, and for measurability the Borel structure.
 -/

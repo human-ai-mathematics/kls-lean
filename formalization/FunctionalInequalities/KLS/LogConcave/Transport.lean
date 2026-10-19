@@ -1,4 +1,5 @@
-import FunctionalInequalities.KLS.Definitions
+import FunctionalInequalities.Probability.AffineSupport
+import FunctionalInequalities.Probability.LogConcave
 import Mathlib.Analysis.Convex.Measure
 import Mathlib.Topology.Maps.Proper.Basic
 import Mathlib.Probability.ConditionalProbability

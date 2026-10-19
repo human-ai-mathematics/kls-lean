@@ -1,5 +1,5 @@
 import FunctionalInequalities.KLS.ConditionalFiber.EnergyComparison
-import FunctionalInequalities.KLS.Definitions
+import FunctionalInequalities.Probability.LogConcave
 
 /-!
 # Lean certificate: `lem:conditional-fiber-energy-comparison`

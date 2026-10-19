@@ -1,4 +1,4 @@
-import FunctionalInequalities.KLS.Geometry.Perimeter.MetricBV.Basic
+import FunctionalInequalities.Analysis.MetricBV.Basic
 
 /-! Strict clients for finite test cost without finite total mass. The general client uses
 exactly finite mass on bounded Borel sets, with no properness assumption. On proper spaces

@@ -70,7 +70,7 @@ mollification radius.
 
 - **Infrastructure.** The recovery statement itself needs no coarea or Sard input. The wider
   perimeter program that this node anchors is proved: weighted coarea for `C¹`, globally
-  Lipschitz and locally Lipschitz maps (`KLS/Geometry/Coarea/`), Hausdorff slicing and surface
+  Lipschitz and locally Lipschitz maps (`Analysis/Coarea/`), Hausdorff slicing and surface
   slicing, smooth Sard and the sharp finite-regularity Sard theorem (`Analysis/Sard/Sharp.lean`),
   the compact Whitney extension (`Analysis/Whitney/`), the linear area formula, the codimension-`m`
   coarea formula for Lipschitz and locally Lipschitz maps (`Analysis/Lipschitz/`,
@@ -94,7 +94,7 @@ frontend identification; both infima are `⊤` when no admissible set exists, in
 dimension zero. Certified by `Solutions.LemRelativePerimeterCheegerInfimum.certificate`.
 
 - `h_M ≤ h_S`: smooth recovery of a smooth domain and the Minkowski coarea inequality
-  (`KLS/Geometry/Cheeger/Infimum.lean`, `KLS/Geometry/Coarea/Isoperimetry.lean`).
+  (`KLS/Geometry/Cheeger/Infimum.lean`, `Analysis/Coarea/Isoperimetry.lean`).
 - `h_S ≤ h_M`: distance cutoffs of a Borel set of finite content, their mollification, smooth
   Sard for almost every strict superlevel set and the weighted `C¹` coarea formula for the
   density, with the balance error subtracted rather than multiplied so that no finiteness of

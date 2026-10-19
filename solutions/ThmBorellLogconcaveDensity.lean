@@ -6,9 +6,12 @@ import Mathlib.Analysis.Normed.Lp.MeasurableSpace
 
 The intrinsic law of a compact-set log-concave probability on a finite-dimensional Euclidean
 space has, relative to every additive Haar measure on the direction of its affine support, an
-upper semicontinuous log-concave Borel density representative; every such representative is
-positive and continuous on the interior of the support and has positive two-sided bounds on its
-compact subsets; the support is its own closed convex hull; the law has no mass outside the interior of
+upper semicontinuous log-concave Borel density representative, with positivity on the interior of
+the support and positive two-sided bounds on its compact subsets. These properties are inside
+the certificate's existential quantifier. The separate `IsBorellDensity` theorems
+`pos_of_mem_interior_support`, `continuousOn_interior_support` and `exists_bounds_of_isCompact`
+establish positivity, continuity and compact bounds for every such representative.
+The certificate also states that the support is its own closed convex hull; the law has no mass outside the interior of
 its support; and it has an exponential moment, hence finite moments of every order. Singular
 ambient laws and zero-dimensional affine supports are included. No Poincaré, Cheeger, Dirichlet
 or KLS conclusion is packaged here.

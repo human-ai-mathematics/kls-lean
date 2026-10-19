@@ -1,4 +1,4 @@
-import FunctionalInequalities.KLS.Geometry.Perimeter.MetricBV.Scaling
+import FunctionalInequalities.Analysis.MetricBV.Scaling
 import FunctionalInequalities.KLS.Geometry.Perimeter.RelaxedMinkowski
 
 /-! Independent full-signature clients for phase 29 / Stage B of the finite-measure run: the lower

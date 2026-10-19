@@ -1,6 +1,6 @@
-import FunctionalInequalities.KLS.Geometry.Perimeter.MetricBV.Basic
-import FunctionalInequalities.KLS.Geometry.Perimeter.MetricBV.Complement
-import FunctionalInequalities.KLS.Geometry.Perimeter.MetricBV.Approximation
+import FunctionalInequalities.Analysis.MetricBV.Basic
+import FunctionalInequalities.Analysis.MetricBV.Complement
+import FunctionalInequalities.Analysis.MetricBV.Approximation
 import Mathlib.Topology.Algebra.MetricSpace.Lipschitz
 
 /-!

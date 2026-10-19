@@ -52,7 +52,7 @@ theorem kls_same_constant_every_dimension : ∃ C : NNReal,
   obtain ⟨C, h⟩ := FunctionalInequalities.KLS.kls
   exact ⟨C, h 0, h⟩
 
-#print axioms FunctionalInequalities.KLS.BKL.Localization.theorem11
+#print axioms FunctionalInequalities.KLS.BKL.Localization.exists_isotropicBound
 #print axioms FunctionalInequalities.KLS.BKL.Localization.conjecture
 #print axioms FunctionalInequalities.KLS.kls
 #print axioms expectedBkl

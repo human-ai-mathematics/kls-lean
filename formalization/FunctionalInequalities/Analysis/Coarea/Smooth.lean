@@ -1,5 +1,5 @@
-import FunctionalInequalities.KLS.Geometry.Coarea.Regular
-import FunctionalInequalities.KLS.Geometry.Slice.Critical
+import FunctionalInequalities.Analysis.Coarea.Regular
+import FunctionalInequalities.Analysis.Hausdorff.Slice.Critical
 
 /-! # Weighted coarea for an arbitrary `C¹` function
 

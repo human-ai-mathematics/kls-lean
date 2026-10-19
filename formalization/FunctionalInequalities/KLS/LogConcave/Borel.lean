@@ -1,4 +1,4 @@
-import FunctionalInequalities.KLS.Definitions
+import FunctionalInequalities.Probability.LogConcave
 import Mathlib.MeasureTheory.Measure.Regular
 
 /-!

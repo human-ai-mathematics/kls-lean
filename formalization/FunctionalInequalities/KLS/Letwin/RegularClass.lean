@@ -11,7 +11,7 @@ import FunctionalInequalities.Probability.Stein.Kernel
 import FunctionalInequalities.Analysis.BakryEmery.HessianOperator
 import FunctionalInequalities.Analysis.BakryEmery.WeakHessian
 import FunctionalInequalities.Analysis.WeakDerivative.Basic
-import FunctionalInequalities.KLS.Definitions
+import FunctionalInequalities.Probability.LogConcave
 import FunctionalInequalities.KLS.Isotropic
 import FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Basic
 import FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Moments

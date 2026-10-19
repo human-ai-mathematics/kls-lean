@@ -1353,7 +1353,7 @@ addressed.
   Section~6 of \cite{BizeulKlartagLehec2026}, pp.~26--27: with $b_m=K^{m-1}((m-1)!)^2$,
   identities~(105)--(106), the absorption $2Cm^2b_{m-1}+4(m-3)\sqrt{b_{m-1}b_m}\le b_m$ for
   $m\ge3$, $K\ge9C$, $K\ge64$, and the contraction~(101)--(102). These are the arithmetic steps
-  of the induction only; the cumulant process, the energy estimate and Theorem~4.1 are not proved.
+  of the induction only. The cutoff process and energy estimate are supplied by Lemma~\ref{lem:bkl-cutoff-energy}, and Theorem~\ref{thm:bkl-cumulant-bound} gives the all-order bound.
 \end{lemma}
 \begin{proof}
   \leanok
@@ -1697,8 +1697,8 @@ addressed.
   \leanok
   \uses{lem:bkl-regular-isotropic}
   Section~2 of \cite{BizeulKlartagLehec2026}, p.~5. Suppose every isotropic regular law with
-  positive upper curvature has literature Poincaré constant at most $K$ (an explicit hypothesis:
-  Theorem~1.1 for the isotropic regular class is not proved). Then every regular law $\mu$ has
+  positive upper curvature has literature Poincaré constant at most $K$ (an explicit hypothesis
+  of this transfer lemma, discharged separately in Theorem~\ref{thm:bkl-poincare}). Then every regular law $\mu$ has
   $C_P(\mu)\le K\|\operatorname{Cov}\mu\|$, and $C_P(\mu)\le K(1+\|\operatorname{Cov}\mu-\mathrm{Id}\|)$,
   a coefficient converging to $K$ along laws whose covariances converge to $\mathrm{Id}$.
 \end{lemma}
@@ -2230,7 +2230,7 @@ addressed.
   Equation~(2.12) (p.~10), finite form: for an array $T$ symmetric in its first two indices and
   arbitrary real weights $b$,
   $\sum b_i^2T_{ijk}^2-\sum b_ib_jT_{ijk}^2=\tfrac12\sum(b_i-b_j)^2T_{ijk}^2\ge0$.
-  The moment map, its regularity, the Hessian-metric generator and Theorem~2.5 are not formalized.
+  These identities alone do not construct the moment potential or prove Theorem~2.5. The weak $C^{1,1}$ moment-potential route, its generator identities and its trace bound are developed below and used by Theorem~\ref{thm:letwin-compact-quadratic-bound}; the full smooth moment-map statement of Lemma~2.2 remains outside that scope.
 \end{lemma}
 \begin{proof}
   \leanok
@@ -2567,7 +2567,7 @@ addressed.
   \chi_R(x)$ is monotone on $[1,\infty)$ with limit $1$, $L\chi_R\in L^1(\nu)$ and $\int|L\chi_R|\,d\nu\le C/R$; explicitly
   $\chi_R=\eta((\varphi-\min\varphi+1)/R)$.  The natural index $\chi_n=\chi_{n+1}$ gives cutoffs monotone in $n$ with
   $\int|L\chi_n|\,d\nu\le C/(n+1)\to0$.  The source-class properties are hypotheses: they are the properties the paper
-  uses for the moment map of a regular law, whose existence and regularity are not formalized.
+  uses for a smooth moment map of a regular law. That full smoothness conclusion is not proved; the actual-source weak $C^{1,1}$ construction and its $C^1$ cutoffs are developed separately below.
 \end{lemma}
 \begin{proof}
   \leanok
@@ -2708,7 +2708,7 @@ form taken by the variance estimate for isotropic $\mu$), then
   =\langle\mathrm{Cov}(\mu)u,v\rangle$.  For an isotropic log-concave law $\kappa_2(u,v)=\langle u,v\rangle$,
   so $\sum_j\kappa_2(u,e_j)^2=|u|^2$ in every orthonormal basis and the universal cumulant bound
   $\mathrm{CumulantBound}\,1\,1$ ($R_2=\mathrm{Id}$) holds unconditionally in every dimension, including
-  dimension zero.  The all-order Theorem~4.1 is not proved; no certificate is claimed.
+  dimension zero. This lemma supplies the base order only; Theorem~\ref{thm:bkl-cumulant-bound} supplies and certifies the all-order result.
 \end{lemma}
 \begin{proof}
   \leanok
@@ -5216,11 +5216,13 @@ form taken by the variance estimate for isotropic $\mu$), then
     E_{d+1}(0)+\frac12\int\!\!\int_0^T\gamma_R(p_s)^2\,E_{d+2}(p_s)\,ds\,dP\le(d!)^2\,153^d+\varepsilon,
   \]
   where $E_{r+1}(p)=|\kappa_{r+1}(\mu_p)(u)|^2_{A(p)}$ is the cumulant energy (75)--(76) of the posterior $\mu_p$.
-  The factor $\frac12$, the normalization $b_{d+1}=K^d(d!)^2$ of~(94) and a universal $K=153$ are those of the
-  source, and $d\ge1$ includes the base order $m=2$. This is a restricted, different-route counterpart of~(95), which
+  The factor $\frac12$ and the normalization $b_{d+1}=K^d(d!)^2$ of~(94) are those of the
+  source. The explicit choice $K=153$ is supplied by the local generator estimate $C=17$, rather
+  than stated numerically in the paper; $d\ge1$ includes the base order $m=2$.
+  This is a restricted, different-route counterpart of~(95), which
   the source states for the uncut Eldan process on the infinite horizon. The uncut process (strong solution,
   uniqueness, non-explosion) and the literal stochastic identities (68)--(73) are not constructed here. BKL
-  Theorem~4.1 (stage~3 of the main line) and KLS (stage~4) are not claimed.
+  Theorem~4.1 and KLS are certified separately in Theorems~\ref{thm:bkl-cumulant-bound} and~\ref{thm:bkl-poincare}; they are not conclusions of this cutoff-energy lemma.
 \end{lemma}
 \begin{proof}
   \leanok
@@ -5259,7 +5261,7 @@ form taken by the variance estimate for isotropic $\mu$), then
   compactness, Letwin, moment, energy or induction premise. The Lean statement uses $m=d+1$ with $d\ge1$, so the base
   order $m=2$ is included; it holds with $K=153$, and also for $n=0$, where it is trivial. The proof goes through the
   cutoff localization route chosen for the main line. The uncut Eldan process and the literal stochastic identities
-  (68)--(73) are not constructed, and BKL Theorem~1.1 and KLS are not claimed.
+  (68)--(73) are not constructed. BKL Theorem~1.1 and KLS are the separate conclusions of Theorem~\ref{thm:bkl-poincare}.
 \end{theorem}
 \begin{proof}
   \leanok
@@ -5276,7 +5278,7 @@ form taken by the variance estimate for isotropic $\mu$), then
   \label{thm:bkl-poincare}
   \lean{Solutions.ThmBklPoincare.certificate,
         Solutions.ThmBklPoincare.bound,
-        FunctionalInequalities.KLS.BKL.Localization.theorem11}
+        FunctionalInequalities.KLS.BKL.Localization.exists_isotropicBound}
   \leanok
   \uses{thm:bkl-cumulant-bound, prop:bkl-suspension, thm:bkl-taylor-criterion, lem:bkl-regular-reduction,
         lem:bkl-regular-approximation, lem:bkl-isotropic-reduction, thm:letwin-compact-quadratic-bound}
@@ -5298,7 +5300,7 @@ form taken by the variance estimate for isotropic $\mu$), then
   \leanok
   Proof on p.~30. Theorem~\ref{thm:bkl-cumulant-bound} gives a universal $K\ge1$ with
   $R^\nu_{d+1}\le(d!)^2K^d\,\mathrm{Id}$ for every isotropic log-concave $\nu$ in every dimension and every $d\ge2$; in
-  Lean this is \texttt{theorem41} applied to the proved compact Letwin bound
+  Lean this is \texttt{exists_cumulantBound_of_letwinCompact} applied to the proved compact Letwin bound
   (Theorem~\ref{thm:letwin-compact-quadratic-bound}). Lemma~\ref{lem:bkl-regular-reduction}
   (Proposition~\ref{prop:bkl-suspension} with $b=(d!)^2K^d$, isotropy for $d=1$, and
   Theorem~\ref{thm:bkl-taylor-criterion} with $R=\sqrt{2K}$) gives $\CPLit(\mu)\le2CK$ for every isotropic regular law,

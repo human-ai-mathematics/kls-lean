@@ -1304,7 +1304,7 @@
             "declarations": [
               {
                 "name": "FunctionalInequalities.KLS.LogConcave",
-                "source": "formalization/FunctionalInequalities/KLS/Definitions.lean"
+                "source": "formalization/FunctionalInequalities/Probability/LogConcave.lean"
               },
               {
                 "name": "FunctionalInequalities.KLS.IsBorellDensity.compactLogConcave",
@@ -3532,7 +3532,7 @@
         "source_url": "https://arxiv.org/abs/1304.0630v1",
         "reviewed_on": "2026-10-10",
         "standing_assumptions": "n ≥ 1. Convex functions ψ: R^n → R ∪ {+∞} are allowed to take the value +∞ (convexity is required where both values are finite; exp(−∞) = 0). For convex ψ with 0 < ∫ e^{−ψ} < ∞, μ_ψ is the measure with density e^{−ψ} on R^n and ∇ψ is defined almost everywhere in the interior of {ψ < +∞}. The Legendre transform is ψ*(y) = sup_{ψ(x)<∞} [x·y − ψ(x)]; ∂ψ is the subgradient; D²f is the Aleksandrov Hessian of a convex f; Supp(μ) is the closed support, conv its convex hull, H^{n−1} the (n−1)-dimensional Hausdorff measure, κ_n the volume of the Euclidean unit ball, S^{n−1} the unit sphere. Cited, unproved inputs: integrability of e^{−ψ} iff liminf_{|x|→∞} ψ(x)/|x| > 0 (display (7), from Klartag, Lemma 2.1), (13), Prékopa's inequality (17) and Dubuc's characterisation of its equality cases, the Brenier map and McCann's weak regularity (20), the Rogers–Shephard inequality, Fradelizi's inequality ψ(0) ≤ inf ψ + n at the barycenter, the functional Santaló inequality of Artstein–Klartag–Milman, Rockafellar's Theorem 10.9 and Berman–Berndtsson Lemma 2.7. Numbering: Theorem, Proposition, Lemma, Corollary, Remark, Notation, Fact and Conjecture share one global counter (theo); Definition has its own counter; no section-relative numbering and no appendix; no Corollary, Notation, Fact, Conjecture or Claim occurs. The printed numbers Definitions 1–2 and Theorem/Proposition/Lemma/Remark 1–17 were computed from the LaTeX counters and checked against the PDF text.",
-        "omitted": "All 19 numbered statements of v1 are listed except Remark 11, a purely expository heuristic (the measure in Theorem 8 might become a distribution acting through the asymptotic slope of φ when ψ0 is not essentially continuous). Unnumbered displayed claims are not listed: the integrability criterion (7) and (13), the Legendre identity (12), the support identity (16) (stated without proof), the Prékopa inequality (17) for Legendre transforms (deduced from Prékopa's theorem), the example moment measures (simplex, Gaussian, sphere, cube (5)), the Monge–Ampère equation (4), the one-dimensional formula, the end-of-Section-2 observations on conv(Supp μ), and the Section 5 discussion of cone-volume and surface-area variants. Reviewed Lean candidates with no item mapped: FunctionalInequalities.KLS.LogConcave (KLS/Definitions.lean), FunctionalInequalities.KLS.IsBorellDensity and its lemmas (KLS/LogConcave/Density/BorellRepresentation/Basic.lean, Density/Bounds.lean), FunctionalInequalities.Probability.Line.prekopaLeindler (Probability/Line/BrunnMinkowski.lean) and FunctionalInequalities.Analysis.prekopaLeindler (Probability/BrunnMinkowski.lean); the finite-dimensional Prékopa–Leindler inequality is an available ingredient for (17) (with f = e^{−u0*}, g = e^{−u1*}, h = e^{−[(1−λ)u0+λu1]*}) but states neither (17) nor any numbered item.",
+        "omitted": "All 19 numbered statements of v1 are listed except Remark 11, a purely expository heuristic (the measure in Theorem 8 might become a distribution acting through the asymptotic slope of φ when ψ0 is not essentially continuous). Unnumbered displayed claims are not listed: the integrability criterion (7) and (13), the Legendre identity (12), the support identity (16) (stated without proof), the Prékopa inequality (17) for Legendre transforms (deduced from Prékopa's theorem), the example moment measures (simplex, Gaussian, sphere, cube (5)), the Monge–Ampère equation (4), the one-dimensional formula, the end-of-Section-2 observations on conv(Supp μ), and the Section 5 discussion of cone-volume and surface-area variants. Reviewed Lean candidates with no item mapped: FunctionalInequalities.KLS.LogConcave (Probability/LogConcave.lean), FunctionalInequalities.KLS.IsBorellDensity and its lemmas (KLS/LogConcave/Density/BorellRepresentation/Basic.lean, Density/Bounds.lean), FunctionalInequalities.Probability.Line.prekopaLeindler (Probability/Line/BrunnMinkowski.lean) and FunctionalInequalities.Analysis.prekopaLeindler (Probability/BrunnMinkowski.lean); the finite-dimensional Prékopa–Leindler inequality is an available ingredient for (17) (with f = e^{−u0*}, g = e^{−u1*}, h = e^{−[(1−λ)u0+λu1]*}) but states neither (17) nor any numbered item.",
         "items": [
           {
             "id": "D1",
@@ -3981,7 +3981,7 @@
             "declarations": [
               {
                 "name": "FunctionalInequalities.KLS.MetricBV.exists_approximatingSequence_of_lipschitz_of_measure_lt_top",
-                "source": "formalization/FunctionalInequalities/KLS/Geometry/Perimeter/MetricBV/Approximation.lean"
+                "source": "formalization/FunctionalInequalities/Analysis/MetricBV/Approximation.lean"
               },
               {
                 "name": "FunctionalInequalities.KLS.MetricBV.lipschitzRelaxation_eq_perimeter_of_measure_lt_top",
@@ -5543,7 +5543,7 @@
             "declarations": [
               {
                 "name": "FunctionalInequalities.KLS.LogConcave",
-                "source": "formalization/FunctionalInequalities/KLS/Definitions.lean"
+                "source": "formalization/FunctionalInequalities/Probability/LogConcave.lean"
               },
               {
                 "name": "FunctionalInequalities.KLS.LogConcave.exists_isBorellDensity",
@@ -6613,7 +6613,7 @@
         "source_version": "arXiv:2412.09075v1",
         "source_url": "https://arxiv.org/abs/2412.09075v1",
         "reviewed_on": "2026-10-03",
-        "standing_assumptions": "Measures on R^n (Euclidean, n ≥ 1) are non-degenerate log-concave probability measures with density ρ; isotropic means barycenter 0 and identity covariance; L = Δ + ⟨∇log ρ, ∇⟩, C_p is the locally Lipschitz Poincaré constant, ψ_μ uses open sets with smooth boundary and the surface integral of ρ, σ_μ^2 = Var_μ(|x|^2)/n, μ_s = μ * γ_s with γ_s of covariance s·Id; (p_t) is the Lee–Vempala stochastic localization dp_t = p_t⟨x − a_t, dB_t⟩ with covariance A_t; C is a universal constant changing between lines. The printed definition of t-uniform log-concavity (density e^{-φ − t|x|^2}) is a factor 2 off from its uses (p_t ∝ e^{-t|x|^2/2} with C_p ≤ 1/t), so the operative convention is ∇^2(−log ρ) ≥ t. Lean hypotheses closest to these are the definitions FunctionalInequalities.KLS.LogConcave (KLS/Definitions.lean, compact-set Borell form admitting degenerate laws) and FunctionalInequalities.KLS.Isotropic (KLS/Isotropic.lean); as definitions they state no numbered item.",
+        "standing_assumptions": "Measures on R^n (Euclidean, n ≥ 1) are non-degenerate log-concave probability measures with density ρ; isotropic means barycenter 0 and identity covariance; L = Δ + ⟨∇log ρ, ∇⟩, C_p is the locally Lipschitz Poincaré constant, ψ_μ uses open sets with smooth boundary and the surface integral of ρ, σ_μ^2 = Var_μ(|x|^2)/n, μ_s = μ * γ_s with γ_s of covariance s·Id; (p_t) is the Lee–Vempala stochastic localization dp_t = p_t⟨x − a_t, dB_t⟩ with covariance A_t; C is a universal constant changing between lines. The printed definition of t-uniform log-concavity (density e^{-φ − t|x|^2}) is a factor 2 off from its uses (p_t ∝ e^{-t|x|^2/2} with C_p ≤ 1/t), so the operative convention is ∇^2(−log ρ) ≥ t. Lean hypotheses closest to these are the definitions FunctionalInequalities.KLS.LogConcave (Probability/LogConcave.lean, compact-set Borell form admitting degenerate laws) and FunctionalInequalities.KLS.Isotropic (KLS/Isotropic.lean); as definitions they state no numbered item.",
         "omitted": "Remark 4.4 is a purely expository comment on possibly removing |log λ| from (4.11) and is omitted; there are no Definition, Proposition, Fact, Claim or Conjecture environments, and the in-text references to Klartag's Theorem 1.3 and Klartag–Putterman Proposition 2.3 are citations, not statements of this paper.",
         "items": [
           {
@@ -6773,7 +6773,7 @@
         "source_version": "arXiv:2412.15044v1",
         "source_url": "https://arxiv.org/abs/2412.15044v1",
         "reviewed_on": "2026-10-03",
-        "standing_assumptions": "Isotropic means centered with identity covariance (probabilistic normalization), except that an isotropic convex body of volume one uses Bourgain's normalization Cov(K) = L_K^2 Id. L_K = (det Cov(K)/Vol_n(K)^2)^{1/(2n)}, L_n = sup_K L_K (2), and L_μ = e^{−Ent(μ)/n} det Cov(μ)^{1/(2n)} (3), taken on the affine hull of the support. Sections 2–3 fix an isotropic log-concave μ on R^n with stochastic localization θ_t (7), barycenter a_t and covariance A_t; Section 3 uses the Föllmer change of variables r = t/(t+1). c, C denote universal constants changing from line to line. Lean: FunctionalInequalities.KLS.Isotropic (KLS/Isotropic.lean: second moment, zero mean, identity covariance) and FunctionalInequalities.KLS.LogConcave (KLS/Definitions.lean: compact-set Borell log-concavity) match the paper's isotropy and log-concavity hypotheses but state no numbered item, so they are not mapped.",
+        "standing_assumptions": "Isotropic means centered with identity covariance (probabilistic normalization), except that an isotropic convex body of volume one uses Bourgain's normalization Cov(K) = L_K^2 Id. L_K = (det Cov(K)/Vol_n(K)^2)^{1/(2n)}, L_n = sup_K L_K (2), and L_μ = e^{−Ent(μ)/n} det Cov(μ)^{1/(2n)} (3), taken on the affine hull of the support. Sections 2–3 fix an isotropic log-concave μ on R^n with stochastic localization θ_t (7), barycenter a_t and covariance A_t; Section 3 uses the Föllmer change of variables r = t/(t+1). c, C denote universal constants changing from line to line. Lean: FunctionalInequalities.KLS.Isotropic (KLS/Isotropic.lean: second moment, zero mean, identity covariance) and FunctionalInequalities.KLS.LogConcave (Probability/LogConcave.lean: compact-set Borell log-concavity) match the paper's isotropy and log-concavity hypotheses but state no numbered item, so they are not mapped.",
         "omitted": "The source has no numbered definition, remark, claim or conjecture environment; all 13 numbered statements (Theorems 1.1–1.2, Lemmas 2.1–2.3, Proposition 2.4, Lemmas 2.5–2.6, Lemma 3.1, Corollary 3.2, Lemmas 3.3–3.5) are listed. Unnumbered or equation-numbered facts (Guan's bound (1), the bounds (4)–(6), the variance decomposition (9), d/dt EA_t = −EA_t^2 (10), A_t ≤ Id/t (11), the de Bruijn identity (45)–(46), the Bourgain–Klartag–Milman monotonicity L_m ≤ C L_n) are cited inputs, not listed. No item is mapped to Lean: the library has no stochastic localization, isotropic constant, entropy or Fisher information, and the Poincaré and Cheeger/Buser declarations (Poincare.LocalSlope.Intrinsic.constant, LogConcave.literatureConstant_le_four_mul_inverseScale_sq, LogConcave.inverseScale_sq_le_pi_literature) concern quantities the paper does not use.",
         "items": [
           {
@@ -9655,7 +9655,7 @@
                 "source": "solutions/ThmBklPoincare.lean"
               },
               {
-                "name": "FunctionalInequalities.KLS.BKL.Localization.theorem11",
+                "name": "FunctionalInequalities.KLS.BKL.Localization.exists_isotropicBound",
                 "source": "formalization/FunctionalInequalities/KLS/BKL/Poincare.lean"
               },
               {
@@ -9667,7 +9667,7 @@
                 "source": "formalization/FunctionalInequalities/KLS/Target.lean"
               }
             ],
-            "note": "Main theorem (title and abstract). Proof (p. 30): Theorem 4.1 with b = K^d (d!)² and Proposition 7.1 give |T_d f|² ≤ (2K)^d‖f‖² for d ≥ 2, d = 1 by isotropy, then Theorem 3.1 with R = √(2K) after the regular approximation of Section 2. Certified in the source form (2026-10-17, stage 4; thm:bkl-poincare, solutions/ThmBklPoincare.lean): one C > 0, chosen before every n ≥ 1 and every isotropic log-concave law on EuclideanSpace ℝ (Fin n), with Intrinsic.constant μ ≤ C and no compactness, regularity or moment premise; bound is IsotropicBound C on every finite-dimensional inner product space. Producer: KLS.BKL.Localization.theorem11 (KLS/BKL/Poincare.lean) applies localSlope_le_of_cumulantBound_all (the p. 30 reduction for isotropic regular laws with the Section 2 regular approximation and weak-limit passage; C_{3.1} fixed before K) to theorem41 letwinCompactBound, so C = 2·C_{3.1}·K. Relation alternative, as for T41: the same statement through the owner-selected cutoff localization route and the compact-to-general passage instead of the uncut Eldan process (whose identities (68)–(73) are not formalized), with the harmless extension of bound to every finite-dimensional inner product space; same is kept for statements proved along the source route. The right-hand inequality of (6) is the project target: FunctionalInequalities.KLS.kls : KLS.Conjecture (KLS/Target.lean, statement unchanged) is KLS.BKL.Localization.conjecture, through conjecture_of_cumulantBound and the affine/isotropic reduction with the same constant; the left inequality of (6) is lambdaMax_le_constant (linear tests). The conditional localSlope_le_of_cumulantBound_all, conjecture_of_cumulantBound and conjecture_of_letwinCompact are unchanged. The paper is covered in the exact main-theorem sense; intermediate statements keep their recorded scopes.",
+            "note": "Main theorem (title and abstract). Proof (p. 30): Theorem 4.1 with b = K^d (d!)² and Proposition 7.1 give |T_d f|² ≤ (2K)^d‖f‖² for d ≥ 2, d = 1 by isotropy, then Theorem 3.1 with R = √(2K) after the regular approximation of Section 2. Certified in the source form (2026-10-17, stage 4; thm:bkl-poincare, solutions/ThmBklPoincare.lean): one C > 0, chosen before every n ≥ 1 and every isotropic log-concave law on EuclideanSpace ℝ (Fin n), with Intrinsic.constant μ ≤ C and no compactness, regularity or moment premise; bound is IsotropicBound C on every finite-dimensional inner product space. Producer: KLS.BKL.Localization.exists_isotropicBound (KLS/BKL/Poincare.lean) applies localSlope_le_of_cumulantBound_all (the p. 30 reduction for isotropic regular laws with the Section 2 regular approximation and weak-limit passage; C_{3.1} fixed before K) to exists_cumulantBound_of_letwinCompact letwinCompactBound, so C = 2·C_{3.1}·K. Relation alternative, as for T41: the same statement through the owner-selected cutoff localization route and the compact-to-general passage instead of the uncut Eldan process (whose identities (68)–(73) are not formalized), with the harmless extension of bound to every finite-dimensional inner product space; same is kept for statements proved along the source route. The right-hand inequality of (6) is the project target: FunctionalInequalities.KLS.kls : KLS.Conjecture (KLS/Target.lean, statement unchanged) is KLS.BKL.Localization.conjecture, through conjecture_of_cumulantBound and the affine/isotropic reduction with the same constant; the left inequality of (6) is lambdaMax_le_constant (linear tests). The conditional localSlope_le_of_cumulantBound_all, conjecture_of_cumulantBound and conjecture_of_letwinCompact are unchanged. The paper is covered in the exact main-theorem sense; intermediate statements keep their recorded scopes.",
             "main": true
           },
           {
@@ -10149,16 +10149,16 @@
                 "source": "formalization/FunctionalInequalities/KLS/BKL/Localization/CutoffEnergy/Boundary.lean"
               },
               {
-                "name": "FunctionalInequalities.KLS.BKL.Localization.theorem41Compact",
-                "source": "formalization/FunctionalInequalities/KLS/BKL/Theorem41.lean"
+                "name": "FunctionalInequalities.KLS.BKL.Localization.exists_cumulantBoundCompact_of_letwinCompact",
+                "source": "formalization/FunctionalInequalities/KLS/BKL/CumulantInduction.lean"
               },
               {
-                "name": "FunctionalInequalities.KLS.BKL.Localization.theorem41",
-                "source": "formalization/FunctionalInequalities/KLS/BKL/Theorem41.lean"
+                "name": "FunctionalInequalities.KLS.BKL.Localization.exists_cumulantBound_of_letwinCompact",
+                "source": "formalization/FunctionalInequalities/KLS/BKL/CumulantInduction.lean"
               },
               {
                 "name": "FunctionalInequalities.KLS.BKL.Localization.lemma51Bound",
-                "source": "formalization/FunctionalInequalities/KLS/BKL/Theorem41.lean"
+                "source": "formalization/FunctionalInequalities/KLS/BKL/CumulantInduction.lean"
               },
               {
                 "name": "FunctionalInequalities.KLS.BKL.Localization.cutoffEnergyClaim_succ",
@@ -10173,7 +10173,7 @@
                 "source": "solutions/ThmBklCumulantBound.lean"
               }
             ],
-            "note": "Certified in the source form (thm:bkl-cumulant-bound, solutions/ThmBklCumulantBound.lean): one universal K ≥ 1, with witness 153, bounds every order m = d + 1 ≥ 2, every dimension including zero and every isotropic log-concave law by Σ_J κ_m(u,e_J)² ≤ K^{m−1}((m−1)!)²‖u‖². There is no extra compactness, Letwin, moment, energy or induction premise. The proof uses the certified finite-horizon cutoff (95), the actual compact Letwin constant-8 theorem and cumulantBound_of_compact. The cutoff induction closes its base case, the Lemma 5.1 generator bound (lemma51Bound), the Lyapunov/boundary estimates, the induction step cutoffEnergyClaim_succ and the claim-to-compact-cumulant passage; these are proved inputs, not outstanding obligations. Supporting deterministic results include the local cumulants and CGF jets, the partition expansion (74), its grouping with (72), and the Section 6 envelope/absorption arithmetic. The shared theorem41, theorem41Compact and cumulantBound_of_letwinCompact keep their explicit LetwinCompactBound premise; cumulantBound_153 discharges it with letwinCompactBound. Relation alternative: the conclusion is obtained through cutoff diffusion and compact-to-general approximation rather than the uncut Eldan process. The uncut process and literal stochastic identities (68)–(73) remain unformalized; the KLS/Poincaré endpoint is the separate T11 certificate."
+            "note": "Certified in the source form (thm:bkl-cumulant-bound, solutions/ThmBklCumulantBound.lean): one universal K ≥ 1, with witness 153, bounds every order m = d + 1 ≥ 2, every dimension including zero and every isotropic log-concave law by Σ_J κ_m(u,e_J)² ≤ K^{m−1}((m−1)!)²‖u‖². There is no extra compactness, Letwin, moment, energy or induction premise. The proof uses the certified finite-horizon cutoff (95), the actual compact Letwin constant-8 theorem and cumulantBound_of_compact. The cutoff induction closes its base case, the Lemma 5.1 generator bound (lemma51Bound), the Lyapunov/boundary estimates, the induction step cutoffEnergyClaim_succ and the claim-to-compact-cumulant passage; these are proved inputs, not outstanding obligations. Supporting deterministic results include the local cumulants and CGF jets, the partition expansion (74), its grouping with (72), and the Section 6 envelope/absorption arithmetic. The shared exists_cumulantBound_of_letwinCompact, exists_cumulantBoundCompact_of_letwinCompact and cumulantBound_of_letwinCompact keep their explicit LetwinCompactBound premise; cumulantBound_153 discharges it with letwinCompactBound. Relation alternative: the conclusion is obtained through cutoff diffusion and compact-to-general approximation rather than the uncut Eldan process. The uncut process and literal stochastic identities (68)–(73) remain unformalized; the KLS/Poincaré endpoint is the separate T11 certificate."
           },
           {
             "id": "L42",
@@ -10366,7 +10366,7 @@
               },
               {
                 "name": "FunctionalInequalities.KLS.LogConcave.Suspension.norm_coordTensor_taylorTensor_sq_le_two_mul",
-                "source": "formalization/FunctionalInequalities/KLS/BKL/Proposition71.lean"
+                "source": "formalization/FunctionalInequalities/KLS/BKL/TaylorBound.lean"
               },
               {
                 "name": "FunctionalInequalities.Analysis.BakryEmery.taylorTensor_inner_eq_cumulant",
@@ -10446,15 +10446,15 @@
               },
               {
                 "name": "FunctionalInequalities.KLS.LogConcave.Suspension.norm_coordTensor_taylorTensor_sq_le_of_cumulantBound",
-                "source": "formalization/FunctionalInequalities/KLS/BKL/Proposition71.lean"
+                "source": "formalization/FunctionalInequalities/KLS/BKL/TaylorBound.lean"
               },
               {
                 "name": "FunctionalInequalities.KLS.LogConcave.Suspension.norm_coordTensor_taylorTensor_sq_le_of_smooth",
-                "source": "formalization/FunctionalInequalities/KLS/BKL/Proposition71.lean"
+                "source": "formalization/FunctionalInequalities/KLS/BKL/TaylorBound.lean"
               },
               {
                 "name": "FunctionalInequalities.KLS.LogConcave.Suspension.norm_coordTensor_taylorTensor_sq_le_of_orthogonal",
-                "source": "formalization/FunctionalInequalities/KLS/BKL/Proposition71.lean"
+                "source": "formalization/FunctionalInequalities/KLS/BKL/TaylorBound.lean"
               }
             ],
             "note": "Formalized in the source form and certified (prop:bkl-suspension, solutions/PropBklSuspension.lean): d ≥ 2, b > 0 and the paper's universal hypothesis CumulantBound d b give |T_d f|² ≤ 2b/(d!)² ‖f‖² for every L² function of every isotropic regular log-concave law in every dimension. The assembly (107) is norm_coordTensor_taylorTensor_sq_le_two_mul. Its proof includes the Laplace noise, the suspension law with density (109), log-concavity under (110), exponential integrability, local log-Laplace smoothness, isotropy from (108), (111)–(112), the Hilbert–Schmidt step, β → ∞ and (113) for smooth normalized functions. Continuity and linearity of T_d on L², the density extension to the affine-orthogonal class, the linear-function cumulant identity and the affine decomposition complete (107) with the exact factor 2. The universal cumulant hypothesis is part of Proposition 7.1 itself, not a remaining proof gap; the separately certified Theorem 4.1 supplies it in the final KLS assembly."
@@ -10946,7 +10946,7 @@
       "target_review": "research/progress/target-reviews.md",
       "target_declarations": [
         {
-          "name": "FunctionalInequalities.KLS.BKL.Localization.theorem11",
+          "name": "FunctionalInequalities.KLS.BKL.Localization.exists_isotropicBound",
           "source": "formalization/FunctionalInequalities/KLS/BKL/Poincare.lean"
         },
         {
@@ -11143,7 +11143,7 @@
         "item": "T11",
         "entries": [
           "Solutions.ThmBklPoincare.certificate",
-          "FunctionalInequalities.KLS.BKL.Localization.theorem11",
+          "FunctionalInequalities.KLS.BKL.Localization.exists_isotropicBound",
           "FunctionalInequalities.KLS.kls"
         ],
         "boundary": "Source-form Theorem 1.1 certified: one C > 0, every n ≥ 1 and every isotropic log-concave law, through the cutoff route, Theorems 3.1 and 4.1, Proposition 7.1 and the regular approximation; KLS.kls follows through the affine/isotropic reduction. The conditional conjecture_of_letwinCompact interface is unchanged.",
@@ -11172,9 +11172,9 @@
         "item": "T41",
         "entries": [
           "Solutions.ThmBklCumulantBound.certificate",
-          "FunctionalInequalities.KLS.BKL.Localization.theorem41"
+          "FunctionalInequalities.KLS.BKL.Localization.exists_cumulantBound_of_letwinCompact"
         ],
-        "boundary": "Source-form Theorem 4.1 certified: one universal K ≥ 1 (153), every m ≥ 2, every dimension and every isotropic log-concave law, through the cutoff route and the compact-to-general passage; theorem41 stays the conditional interface. The uncut process and the literal (68)–(73) are not formalized.",
+        "boundary": "Source-form Theorem 4.1 certified: one universal K ≥ 1 (153), every m ≥ 2, every dimension and every isotropic log-concave law, through the cutoff route and the compact-to-general passage; exists_cumulantBound_of_letwinCompact stays the conditional interface. The uncut process and the literal (68)–(73) are not formalized.",
         "certificate": "thm:bkl-cumulant-bound"
       },
       {

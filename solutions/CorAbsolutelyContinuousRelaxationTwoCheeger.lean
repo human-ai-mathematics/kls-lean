@@ -1,5 +1,5 @@
 import FunctionalInequalities.KLS.LogConcave.Cheeger
-import FunctionalInequalities.KLS.Definitions
+import FunctionalInequalities.Probability.LogConcave
 
 /-!
 # Lean certificate: `cor:absolutely-continuous-relaxation-two-cheeger`

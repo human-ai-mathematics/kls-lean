@@ -9,11 +9,11 @@ arXiv:2610.05474v1. Exact theorem scope and certificates belong to the
 
 | Entry | Responsibility |
 | --- | --- |
-| [Theorem41.lean](Theorem41.lean) | Source Theorem 4.1 interfaces and the shared cutoff/cumulant producers, retaining the explicit compact Letwin hypothesis |
+| [CumulantInduction.lean](CumulantInduction.lean) | Source Theorem 4.1 interfaces and the shared cutoff/cumulant producers, retaining the explicit compact Letwin hypothesis |
 | [CumulantBound.lean](CumulantBound.lean) | Closed (95) cutoff and Theorem 4.1 producers from the proved compact Letwin input, consumed by the certificates and `Poincare` |
 | [Poincare.lean](Poincare.lean) | Closed Theorem 1.1 and KLS producers, from `CumulantBound` and the reduction |
 | [Reduction.lean](Reduction.lean) | Regular-law reduction from universal cumulant bounds to Poincaré |
-| [Proposition71.lean](Proposition71.lean) · [Suspension/](Suspension/) | Source Proposition 7.1 and suspension construction |
+| [TaylorBound.lean](TaylorBound.lean) · [Suspension/](Suspension/) | Source Proposition 7.1 and suspension construction |
 | [PoissonIterate/](PoissonIterate/) | Iterates, domains, symmetry, Taylor recursion and the cumulant criterion |
 
 ## Construction and dependency boundaries
@@ -32,6 +32,10 @@ and [diffusion-generator product rule](../../Probability/Diffusion/Generator.lea
 Process integration is below cutoff-energy induction. Theorem 4.1 does not import the final
 Poincaré reduction. These boundaries support narrower imports without changing any statement.
 
-Namespaces span modules: existing declarations retain their public names and argument interfaces.
+Namespaces span modules. Theorem 4.1 is exposed as
+`exists_cumulantBound_of_letwinCompact` (and its compact counterpart) for `d ≥ 2`, hence orders
+`m = d + 1 ≥ 3`. The explicit-153 endpoint `cumulantBound_of_letwinCompact` also includes
+`d = 1`, and the closed `cumulantBound_153` and source-form certificate include every `m ≥ 2`.
+Theorem 1.1 is `exists_isotropicBound`. Their exact arguments, hypotheses and paper correspondence are retained.
 The uncut process and literal source identities remain separate from the accepted cutoff route.
 The generated [filename directory](../../../MODULES.md) lists every current module.

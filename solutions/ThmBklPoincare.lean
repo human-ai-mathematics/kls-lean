@@ -8,7 +8,7 @@ satisfies `C_P(μ) ≤ C`. Here `C_P` is the literature local-slope constant `Po
 The constant is chosen before every dimension and law. There is no compactness, regularity or moment premise
 beyond isotropy.
 
-The proof is the closed producer `KLS.BKL.Localization.theorem11`. It runs through the compact Letwin bound,
+The proof is the closed producer `KLS.BKL.Localization.exists_isotropicBound`. It runs through the compact Letwin bound,
 the cutoff stochastic-localization Theorem 4.1, Theorem 3.1, Proposition 7.1 and the regular approximation.
 The uncut Eldan process is not constructed.
 -/
@@ -18,7 +18,7 @@ namespace Solutions.ThmBklPoincare
 
 /-- The named isotropic form: one `C > 0` with `KLS.IsotropicBound C` on every finite-dimensional space. -/
 theorem bound : ∃ C : NNReal, 0 < C ∧ FunctionalInequalities.KLS.IsotropicBound.{0} C :=
-  FunctionalInequalities.KLS.BKL.Localization.theorem11
+  FunctionalInequalities.KLS.BKL.Localization.exists_isotropicBound
 
 /-- **BKL Theorem 1.1** in the source form. -/
 theorem certificate :

@@ -1,7 +1,7 @@
 import FunctionalInequalities.KLS.LogConcave.Density.FromBorell
 import Mathlib.MeasureTheory.Measure.Tilted
 import FunctionalInequalities.KLS.LogConcave.Density.BorellRepresentation.Construction
-import FunctionalInequalities.KLS.Definitions
+import FunctionalInequalities.Probability.LogConcave
 import FunctionalInequalities.KLS.LogConcave.Density.BorellRepresentation.Basic
 
 /-!

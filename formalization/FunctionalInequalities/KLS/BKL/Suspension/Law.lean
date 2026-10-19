@@ -3,7 +3,7 @@ import FunctionalInequalities.Probability.Line.Laplace
 import Mathlib.MeasureTheory.Constructions.Pi
 import Mathlib.Analysis.InnerProductSpace.PiL2
 import FunctionalInequalities.KLS.Isotropic
-import FunctionalInequalities.KLS.Definitions
+import FunctionalInequalities.Probability.LogConcave
 import FunctionalInequalities.KLS.LogConcave.Density.Tilted
 import Mathlib.MeasureTheory.Measure.Tilted
 import FunctionalInequalities.Analysis.BakryEmery.Cumulant.Basic

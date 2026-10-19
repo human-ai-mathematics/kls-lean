@@ -4,7 +4,7 @@ import Mathlib.MeasureTheory.Function.Jacobian
 
 /-! # The vanishing-derivative part of a `C¹` map has null level slices
 
-The codimension-`m` analogue of `KLS/Geometry/Slice/Critical.lean`, for the part of the critical set
+The codimension-`m` analogue of `Analysis/Hausdorff/Slice/Critical.lean`, for the part of the critical set
 where the derivative **vanishes**.
 
 `KLS.ae_surfaceMeasure_critical_inter_levelSet_eq_zero` proves that for a real-valued `C¹` function

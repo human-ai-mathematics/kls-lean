@@ -1,6 +1,6 @@
 import FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Basic
 import FunctionalInequalities.KLS.LogConcave.Isotropic
-import FunctionalInequalities.KLS.Definitions
+import FunctionalInequalities.Probability.LogConcave
 import FunctionalInequalities.KLS.LogConcave.Density.AbsoluteContinuity
 import FunctionalInequalities.KLS.LogConcave.Density.BorellRepresentation.Basic
 import FunctionalInequalities.KLS.LogConcave.Density.BorellRepresentation.Construction

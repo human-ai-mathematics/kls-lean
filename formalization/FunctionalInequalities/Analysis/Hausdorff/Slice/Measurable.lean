@@ -10,7 +10,7 @@ and the Borel-slice version in `Analysis/Hausdorff/SurfaceSlicing.lean` and
 surface measure, which is not SFinite in positive ambient dimension.
 
 This module supplies measurability. The coarea equality is in
-`KLS/Geometry/Coarea/Lipschitz.lean`; `KLS/Geometry/Coarea/LocallyLipschitz.lean` extends
+`Analysis/Coarea/Lipschitz.lean`; `Analysis/Coarea/LocallyLipschitz.lean` extends
 both conclusions to locally Lipschitz functions. Sharp Sard is in `Analysis/Sard/Sharp.lean`. -/
 
 noncomputable section

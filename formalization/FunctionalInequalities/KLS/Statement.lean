@@ -1,4 +1,5 @@
-import FunctionalInequalities.KLS.Definitions
+import FunctionalInequalities.Probability.LogConcave
+import FunctionalInequalities.Poincare.LocalSlope.Basic
 import FunctionalInequalities.Probability.Covariance.Basic
 import Mathlib.Analysis.InnerProductSpace.PiL2
 

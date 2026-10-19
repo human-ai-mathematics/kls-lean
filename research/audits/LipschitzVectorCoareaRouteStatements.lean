@@ -1,7 +1,7 @@
 import FunctionalInequalities.Analysis.Vector.RankDeficient.Coarea
 import FunctionalInequalities.Analysis.Lipschitz.C1Pieces
 import FunctionalInequalities.Analysis.Vector.Slice.Hausdorff
-import FunctionalInequalities.KLS.Geometry.Coarea.LocallyLipschitz
+import FunctionalInequalities.Analysis.Coarea.LocallyLipschitz
 
 /-!
 # Route statements for the codimension-`m` coarea formula of Lipschitz maps
@@ -18,8 +18,8 @@ Same convention as `SharpSardRouteStatements.lean` and `RankDeficientRouteStatem
 `Analysis/Vector/RankDeficient/Coarea.lean` proves the codimension-`m` coarea formula `coarea_of_contDiff`
 for **`C¹`** maps with no hypothesis on the critical set.  Federer's coarea formula holds for merely
 **Lipschitz** maps, and the scalar side already went the whole way `C¹ → Lipschitz → locally
-Lipschitz` (`KLS/Geometry/Coarea/Smooth.lean`, `KLS/Geometry/Coarea/Lipschitz.lean`,
-`KLS/Geometry/Coarea/LocallyLipschitz.lean`). The vector globally Lipschitz contract is `L0` below.
+Lipschitz` (`Analysis/Coarea/Smooth.lean`, `Analysis/Coarea/Lipschitz.lean`,
+`Analysis/Coarea/LocallyLipschitz.lean`). The vector globally Lipschitz contract is `L0` below.
 
 ## Scalar assembly and its vector counterpart
 

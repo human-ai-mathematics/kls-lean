@@ -1,5 +1,5 @@
 import FunctionalInequalities.Energy.Cheeger.Identification
-import FunctionalInequalities.KLS.Definitions
+import FunctionalInequalities.Probability.LogConcave
 
 /-!
 # Lean certificate: `thm:smooth-gradient-relaxation-two-cheeger`

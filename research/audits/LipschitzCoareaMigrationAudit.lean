@@ -1,6 +1,6 @@
-import FunctionalInequalities.KLS.Geometry.Coarea.Lipschitz
-import FunctionalInequalities.KLS.Geometry.Slice.Measurable
-import FunctionalInequalities.KLS.Geometry.Coarea.Isoperimetry
+import FunctionalInequalities.Analysis.Coarea.Lipschitz
+import FunctionalInequalities.Analysis.Hausdorff.Slice.Measurable
+import FunctionalInequalities.Analysis.Coarea.Isoperimetry
 import FunctionalInequalities.Analysis.Sard.Sharp
 import FunctionalInequalities.KLS.Geometry.Cheeger.Equality
 import Mathlib.Analysis.Calculus.FDeriv.Norm
@@ -13,7 +13,7 @@ import Mathlib.Analysis.InnerProductSpace.PiL2
 
 `Analysis.lintegral_enorm_gradient_mul_eq_lintegral_levelSet` has moved out of
 `KLS/WIP/AnalyticPrerequisites.lean`, where it was a direct hole, into the hole-free
-`KLS/Geometry/Coarea/Lipschitz.lean`, beside the `L12` theorem `KLS.coarea_of_lipschitz` that
+`Analysis/Coarea/Lipschitz.lean`, beside the `L12` theorem `KLS.coarea_of_lipschitz` that
 proves it at `S = Set.univ`.  The migration is signature-preserving:
 
 * the `pp.all` type printed before the migration from an environment importing the

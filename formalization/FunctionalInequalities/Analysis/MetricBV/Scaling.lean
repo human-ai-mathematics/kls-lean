@@ -1,4 +1,4 @@
-import FunctionalInequalities.KLS.Geometry.Perimeter.MetricBV.Basic
+import FunctionalInequalities.Analysis.MetricBV.Basic
 
 /-!
 # Metric BV measure scaling and probability normalization

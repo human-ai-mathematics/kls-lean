@@ -14,7 +14,7 @@ formulations of the KLS conjecture. The formulations are written independently, 
 - `RawLogConcave ↔ KLS.LogConcave` holds by `Iff.rfl`;
 - isotropy is derived from the raw moment equations;
 - `KLS.kls` gives the covariance form;
-- `KLS.BKL.Localization.theorem11` gives the locally Lipschitz form;
+- `KLS.BKL.Localization.exists_isotropicBound` gives the locally Lipschitz form;
 - the uniform convex-body law is proved log-concave before use.
 
 Both templates are byte copies of the second independent review's sources. Their SHA-256 values are pinned in
@@ -57,3 +57,12 @@ The gate checks source compilation and the client's consumption of the library. 
 the pinned compiled Mathlib imports. It is not an independent kernel, not a rebuild of Mathlib or every dependency, and not
 an automatic certification that the Lean statements match the English formulations: that reading is the reviewed
 correspondence summarised in the statement table above and named in `config.json`.
+
+## Public entry review
+
+The isotropic client calls `KLS.BKL.Localization.exists_isotropicBound` for BKL Theorem 1.1.
+The client pin accepts precisely the replacement of the former source-numbered callee by
+that name. Its elaborated type, universal constant order, positivity, dimension range and
+client argument/proof text are retained. The Mathlib-only specification and its pin, expected
+axiom reports, mutation definitions and calibrated rejection kinds are unchanged. The checker
+must still compile and replay the specification/client and reject all three mutations.

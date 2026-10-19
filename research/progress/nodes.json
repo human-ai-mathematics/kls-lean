@@ -448,7 +448,7 @@
         "state": "formalized",
         "evidence": {
           "kind": "reviewed_progress",
-          "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Slice/Measurable.lean",
+          "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/Hausdorff/Slice/Measurable.lean",
           "baseline_commit": "b7b458c"
         },
         "kind": "auxiliary"
@@ -456,7 +456,7 @@
       "diagram": {
         "id": "MEAS",
         "label": "Slice measurability",
-        "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Slice/Measurable.lean",
+        "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/Hausdorff/Slice/Measurable.lean",
         "shape": "box"
       }
     },
@@ -484,7 +484,7 @@
         "state": "formalized",
         "evidence": {
           "kind": "reviewed_progress",
-          "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Coarea/Regular.lean",
+          "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/Coarea/Regular.lean",
           "baseline_commit": "b7b458c"
         },
         "kind": "auxiliary"
@@ -492,7 +492,7 @@
       "diagram": {
         "id": "REG",
         "label": "Regular-domain<br/>Coarea",
-        "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Coarea/Regular.lean",
+        "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/Coarea/Regular.lean",
         "shape": "box"
       }
     },
@@ -502,7 +502,7 @@
         "state": "formalized",
         "evidence": {
           "kind": "reviewed_progress",
-          "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Slice/Critical.lean",
+          "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/Hausdorff/Slice/Critical.lean",
           "baseline_commit": "b7b458c"
         },
         "kind": "auxiliary"
@@ -510,7 +510,7 @@
       "diagram": {
         "id": "CRIT",
         "label": "Critical-slice nullity",
-        "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Slice/Critical.lean",
+        "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/Hausdorff/Slice/Critical.lean",
         "shape": "box"
       }
     },
@@ -520,7 +520,7 @@
         "state": "formalized",
         "evidence": {
           "kind": "reviewed_progress",
-          "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Coarea/Smooth.lean",
+          "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/Coarea/Smooth.lean",
           "note": "L11 proved; strict source client research/audits/SmoothCoareaAudit.lean. Uncommitted source evidence at the 2026-09-16 FirstOrderJet closeout."
         },
         "kind": "auxiliary"
@@ -528,7 +528,7 @@
       "diagram": {
         "id": "C1",
         "label": "General C¹ coarea",
-        "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Coarea/Smooth.lean",
+        "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/Coarea/Smooth.lean",
         "shape": "box"
       }
     },
@@ -556,7 +556,7 @@
         "state": "formalized",
         "evidence": {
           "kind": "reviewed_progress",
-          "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Coarea/LocallyLipschitz.lean",
+          "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/Coarea/LocallyLipschitz.lean",
           "note": "L12 and the original T1/T2/T3 entry points are formally wired to hole-free modules, each by a migration with a machine-checked byte-identical pp.all signature. L13 KLS.coarea_of_locallyLipschitz then generalizes the formula to locally Lipschitz functions, subsuming L11 and L12; the audit proves the generalization is strict. The Cheeger infima and the Cheeger-Poincare comparison are a separate line owned by a collaborator. Audits: research/audits/LipschitzCoareaAudit.lean, LipschitzCoareaMigrationAudit.lean and LocallyLipschitzCoareaAudit.lean. Uncommitted local proof."
         },
         "kind": "auxiliary"
@@ -564,7 +564,7 @@
       "diagram": {
         "id": "LIP",
         "label": "Coarea: Lipschitz<br/>and locally Lipschitz",
-        "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Coarea/LocallyLipschitz.lean",
+        "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/Analysis/Coarea/LocallyLipschitz.lean",
         "shape": "box"
       }
     },
@@ -993,7 +993,7 @@
         "evidence": {
           "kind": "local_strict_client",
           "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/Basic.lean",
-          "source_sha256": "9199aaa957d191f45223c56230a98bec575ea52b4f3611f0205a11749c5525b1"
+          "source_sha256": "012b688f05ed2051f5df68b27272ab52fd3fdf5d24a33afa095dbaba4ff47fe8"
         },
         "kind": "auxiliary"
       },
@@ -1011,7 +1011,7 @@
         "evidence": {
           "kind": "local_strict_client",
           "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/Poincare.lean",
-          "source_sha256": "b320880143ac5c424f9d78bd96f9792c20f68df97f3c8520ae089fcee3f1ce09"
+          "source_sha256": "1fb505e79a90c6a9d1f7e135ddd0c9e8116bbbb4fd706ec5e5849732aa3b5acc"
         },
         "kind": "auxiliary"
       },

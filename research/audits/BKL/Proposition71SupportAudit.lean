@@ -3,7 +3,7 @@ import FunctionalInequalities.KLS.BKL.Suspension.Density
 import FunctionalInequalities.KLS.BKL.Suspension.Cumulant
 import FunctionalInequalities.KLS.BKL.Suspension.Moments
 import FunctionalInequalities.KLS.BKL.Suspension.Derivatives
-import FunctionalInequalities.KLS.BKL.Proposition71
+import FunctionalInequalities.KLS.BKL.TaylorBound
 import FunctionalInequalities.L2.AffineDecomposition
 import FunctionalInequalities.KLS.LogConcave.Regular.Basic
 import FunctionalInequalities.Analysis.Tensor.Coordinate

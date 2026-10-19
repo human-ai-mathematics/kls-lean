@@ -3,7 +3,7 @@ import FunctionalInequalities.KLS.LogConcave.Density.BorellRepresentation.Basic
 /-! # Quantitative bounds for Borell density representatives -/
 noncomputable section
 open MeasureTheory Filter Topology
-open scoped ENNReal NNReal ContDiff
+open scoped ENNReal NNReal
 namespace FunctionalInequalities.KLS
 universe u
 variable {V : Type u} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [CompleteSpace V]

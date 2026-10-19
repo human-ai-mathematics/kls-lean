@@ -2,7 +2,7 @@ import FunctionalInequalities.KLS.Geometry.Cheeger.Infimum
 import FunctionalInequalities.KLS.Geometry.Cheeger.DistanceCutoff
 import FunctionalInequalities.KLS.Isoperimetry
 import FunctionalInequalities.KLS.Geometry.SmoothDomain.RegularSuperlevel
-import FunctionalInequalities.KLS.Geometry.Coarea.Lipschitz
+import FunctionalInequalities.Analysis.Coarea.Lipschitz
 import FunctionalInequalities.Energy.Euclidean.LipschitzApproximation.Approximation
 
 /-!

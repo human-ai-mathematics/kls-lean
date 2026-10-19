@@ -1,5 +1,5 @@
 import FunctionalInequalities.KLS.ConditionalFiber.Closed
-import FunctionalInequalities.KLS.Definitions
+import FunctionalInequalities.Probability.LogConcave
 import Mathlib.Analysis.Normed.Lp.MeasurableSpace
 
 /-!

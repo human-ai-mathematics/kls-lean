@@ -1,6 +1,6 @@
-import FunctionalInequalities.KLS.Geometry.Perimeter.MetricBV.Basic
-import FunctionalInequalities.KLS.Geometry.Perimeter.MetricBV.Finite
-import FunctionalInequalities.KLS.Geometry.Perimeter.MetricBV.Approximation
+import FunctionalInequalities.Analysis.MetricBV.Basic
+import FunctionalInequalities.Analysis.MetricBV.Finite
+import FunctionalInequalities.Analysis.MetricBV.Approximation
 import Mathlib.Probability.Distributions.Gaussian.Real
 
 /-! Independent full-signature clients for the globally Lipschitz test-class bridge of the metric

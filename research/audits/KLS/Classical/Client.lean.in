@@ -43,7 +43,7 @@ theorem covarianceNormalizedSmoothKls : CovarianceNormalizedSmoothKls := by
   nlinarith [norm_nonneg A, mul_nonneg (norm_nonneg A) hnonneg]
 
 theorem isotropicLocallyLipschitzKls : IsotropicLocallyLipschitzKls := by
-  obtain ⟨C, hCpos, hC⟩ := KLS.BKL.Localization.theorem11.{0}
+  obtain ⟨C, hCpos, hC⟩ := KLS.BKL.Localization.exists_isotropicBound.{0}
   refine ⟨C, hCpos, ?_⟩
   intro n μ hLC hmean hcov f hflip hf2
   have hLC' : KLS.LogConcave μ := (rawLogConcave_iff μ).mp hLC

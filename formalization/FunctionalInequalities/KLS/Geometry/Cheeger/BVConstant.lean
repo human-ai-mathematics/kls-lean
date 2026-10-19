@@ -1,6 +1,6 @@
-import FunctionalInequalities.KLS.Geometry.Perimeter.MetricBV.Basic
-import FunctionalInequalities.KLS.Geometry.Perimeter.MetricBV.Complement
-import FunctionalInequalities.KLS.Geometry.Perimeter.MetricBV.Transport
+import FunctionalInequalities.Analysis.MetricBV.Basic
+import FunctionalInequalities.Analysis.MetricBV.Complement
+import FunctionalInequalities.Analysis.MetricBV.Transport
 import FunctionalInequalities.Probability.AffineSupport
 
 /-!

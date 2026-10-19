@@ -1,7 +1,7 @@
 # Log-concave tools and representation theorems
 
 This directory uses the compact-set definition of `KLS.LogConcave` from
-[Definitions.lean](../Definitions.lean). Log-concave measures may be singular in the ambient
+[compact-set log-concavity](../../Probability/LogConcave.lean). Log-concave measures may be singular in the ambient
 space. Intrinsic results use the direction space of the affine support and include dimension zero.
 Each module's declarations and documentation specify its exact assumptions and mathematical sources.
 

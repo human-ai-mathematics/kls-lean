@@ -10,12 +10,12 @@ This is a filename/import directory; it does not assign proof or paper-coverage 
 
 | Family | Modules |
 | --- | ---: |
-| [Analysis/](FunctionalInequalities/Analysis) | 218 |
+| [Analysis/](FunctionalInequalities/Analysis) | 233 |
 | [Energy/](FunctionalInequalities/Energy) | 46 |
-| [KLS/](FunctionalInequalities/KLS) | 218 |
+| [KLS/](FunctionalInequalities/KLS) | 202 |
 | [L2/](FunctionalInequalities/L2) | 9 |
-| [Poincare/](FunctionalInequalities/Poincare) | 34 |
-| [Probability/](FunctionalInequalities/Probability) | 60 |
+| [Poincare/](FunctionalInequalities/Poincare) | 33 |
+| [Probability/](FunctionalInequalities/Probability) | 62 |
 
 ## Complete expanded tree
 
@@ -71,7 +71,12 @@ FunctionalInequalities/
 │   │   └── WeakHessian.lean
 │   ├── Coarea/
 │   │   ├── FiberIntegral.lean
-│   │   └── RegularChart.lean
+│   │   ├── Isoperimetry.lean
+│   │   ├── Lipschitz.lean
+│   │   ├── LocallyLipschitz.lean
+│   │   ├── Regular.lean
+│   │   ├── RegularChart.lean
+│   │   └── Smooth.lean
 │   ├── Convex/
 │   │   ├── LegendreVariation/
 │   │   │   ├── Attainment.lean
@@ -111,6 +116,10 @@ FunctionalInequalities/
 │   │   ├── Jacobian.lean
 │   │   └── OpenIntegral.lean
 │   ├── Hausdorff/
+│   │   ├── Slice/
+│   │   │   ├── Critical.lean
+│   │   │   ├── Measurable.lean
+│   │   │   └── OpenMeasurable.lean
 │   │   ├── Content.lean
 │   │   ├── Isodiametric.lean
 │   │   ├── LevelSet.lean
@@ -150,6 +159,14 @@ FunctionalInequalities/
 │   │   ├── TraceGram.lean
 │   │   ├── WeakDerivative.lean
 │   │   └── WeakTrace.lean
+│   ├── MetricBV/
+│   │   ├── Approximation.lean
+│   │   ├── Basic.lean
+│   │   ├── Complement.lean
+│   │   ├── Counterexample.lean
+│   │   ├── Finite.lean
+│   │   ├── Scaling.lean
+│   │   └── Transport.lean
 │   ├── Mollification/
 │   │   ├── Basic.lean
 │   │   └── Hessian.lean
@@ -390,14 +407,14 @@ FunctionalInequalities/
 │   │   ├── CompactReduction.lean
 │   │   ├── CumulantBound.lean
 │   │   ├── CumulantEnvelope.lean
+│   │   ├── CumulantInduction.lean
 │   │   ├── GaussianTaylor.lean
 │   │   ├── LetwinApproximation.lean
 │   │   ├── LocalThirdCumulant.lean
 │   │   ├── Poincare.lean
-│   │   ├── Proposition71.lean
 │   │   ├── Reduction.lean
 │   │   ├── SecondCumulant.lean
-│   │   └── Theorem41.lean
+│   │   └── TaylorBound.lean
 │   ├── CEK/
 │   │   ├── MomentRegularity/
 │   │   │   ├── Cutoff.lean
@@ -430,21 +447,7 @@ FunctionalInequalities/
 │   │   │   ├── MinkowskiContent.lean
 │   │   │   ├── Stability.lean
 │   │   │   └── UpperMinkowskiContent.lean
-│   │   ├── Coarea/
-│   │   │   ├── Isoperimetry.lean
-│   │   │   ├── Lipschitz.lean
-│   │   │   ├── LocallyLipschitz.lean
-│   │   │   ├── Regular.lean
-│   │   │   └── Smooth.lean
 │   │   ├── Perimeter/
-│   │   │   ├── MetricBV/
-│   │   │   │   ├── Approximation.lean
-│   │   │   │   ├── Basic.lean
-│   │   │   │   ├── Complement.lean
-│   │   │   │   ├── Counterexample.lean
-│   │   │   │   ├── Finite.lean
-│   │   │   │   ├── Scaling.lean
-│   │   │   │   └── Transport.lean
 │   │   │   ├── ConvexSupport.lean
 │   │   │   ├── LocalLipschitzTests.lean
 │   │   │   ├── MetricBVMinkowski.lean
@@ -455,10 +458,6 @@ FunctionalInequalities/
 │   │   │   ├── RelaxedMinkowski.lean
 │   │   │   ├── TestClassRelaxation.lean
 │   │   │   └── UpperMinkowskiRecovery.lean
-│   │   ├── Slice/
-│   │   │   ├── Critical.lean
-│   │   │   ├── Measurable.lean
-│   │   │   └── OpenMeasurable.lean
 │   │   ├── SmoothDomain/
 │   │   │   ├── Basic.lean
 │   │   │   ├── BoundaryChart.lean
@@ -573,7 +572,6 @@ FunctionalInequalities/
 │   │   ├── Transport.lean
 │   │   ├── WeakBrascampLieb.lean
 │   │   └── WeakLimit.lean
-│   ├── Definitions.lean
 │   ├── Isoperimetry.lean
 │   ├── Isotropic.lean
 │   ├── IsotropicSupport.lean
@@ -617,8 +615,7 @@ FunctionalInequalities/
 │   │   ├── Admissible.lean
 │   │   ├── Geometry.lean
 │   │   ├── Reverse.lean
-│   │   ├── Tensorization.lean
-│   │   └── Variance.lean
+│   │   └── Tensorization.lean
 │   ├── SmoothGradient/
 │   │   ├── Ambient.lean
 │   │   ├── Comparison.lean
@@ -695,8 +692,10 @@ FunctionalInequalities/
     ├── ConvexSupport.lean
     ├── CoordinateThirdMoment.lean
     ├── IntrinsicTranslation.lean
+    ├── LogConcave.lean
     ├── Moments.lean
     ├── Product.lean
+    ├── ProductVariance.lean
     ├── QuadraticTilt.lean
     ├── QuadraticVariance.lean
     ├── Quantile.lean
@@ -755,7 +754,12 @@ Use a file's import path by replacing `/` with `.` and dropping `.lean`, after t
 | [Analysis/BakryEmery/WeakGamma.lean](FunctionalInequalities/Analysis/BakryEmery/WeakGamma.lean) | The weak carré du champ of square-integrable vector fields |
 | [Analysis/BakryEmery/WeakHessian.lean](FunctionalInequalities/Analysis/BakryEmery/WeakHessian.lean) | Generic weak Hessian coordinates and pointwise identification |
 | [Analysis/Coarea/FiberIntegral.lean](FunctionalInequalities/Analysis/Coarea/FiberIntegral.lean) | FiberIntegral |
+| [Analysis/Coarea/Isoperimetry.lean](FunctionalInequalities/Analysis/Coarea/Isoperimetry.lean) | Isoperimetry |
+| [Analysis/Coarea/Lipschitz.lean](FunctionalInequalities/Analysis/Coarea/Lipschitz.lean) | Lipschitz |
+| [Analysis/Coarea/LocallyLipschitz.lean](FunctionalInequalities/Analysis/Coarea/LocallyLipschitz.lean) | LocallyLipschitz |
+| [Analysis/Coarea/Regular.lean](FunctionalInequalities/Analysis/Coarea/Regular.lean) | Regular |
 | [Analysis/Coarea/RegularChart.lean](FunctionalInequalities/Analysis/Coarea/RegularChart.lean) | RegularChart |
+| [Analysis/Coarea/Smooth.lean](FunctionalInequalities/Analysis/Coarea/Smooth.lean) | Smooth |
 | [Analysis/Convex/Affine.lean](FunctionalInequalities/Analysis/Convex/Affine.lean) | Affine subtraction from extended-real potentials |
 | [Analysis/Convex/AffineMaximum.lean](FunctionalInequalities/Analysis/Convex/AffineMaximum.lean) | Finite affine maxima below a Legendre transform |
 | [Analysis/Convex/Alexandrov.lean](FunctionalInequalities/Analysis/Convex/Alexandrov.lean) | Alexandrov identity in push-forward form |
@@ -799,6 +803,9 @@ Use a file's import path by replacing `/` with `.` and dropping `.lean`, after t
 | [Analysis/Hausdorff/Isodiametric.lean](FunctionalInequalities/Analysis/Hausdorff/Isodiametric.lean) | The isodiametric inequality |
 | [Analysis/Hausdorff/LevelSet.lean](FunctionalInequalities/Analysis/Hausdorff/LevelSet.lean) | Regular level sets as local Lipschitz graphs |
 | [Analysis/Hausdorff/Measure.lean](FunctionalInequalities/Analysis/Hausdorff/Measure.lean) | Normalized Hausdorff and codimension-one measures |
+| [Analysis/Hausdorff/Slice/Critical.lean](FunctionalInequalities/Analysis/Hausdorff/Slice/Critical.lean) | Critical |
+| [Analysis/Hausdorff/Slice/Measurable.lean](FunctionalInequalities/Analysis/Hausdorff/Slice/Measurable.lean) | Measurable |
+| [Analysis/Hausdorff/Slice/OpenMeasurable.lean](FunctionalInequalities/Analysis/Hausdorff/Slice/OpenMeasurable.lean) | OpenMeasurable |
 | [Analysis/Hausdorff/Slicing.lean](FunctionalInequalities/Analysis/Hausdorff/Slicing.lean) | Eilenberg slicing bound for Hausdorff measures along a Lipschitz real function |
 | [Analysis/Hausdorff/SurfaceSlicing.lean](FunctionalInequalities/Analysis/Hausdorff/SurfaceSlicing.lean) | Eilenberg slicing bound and compact-slice measurability in the normalized surface measure |
 | [Analysis/Hausdorff/Volume.lean](FunctionalInequalities/Analysis/Hausdorff/Volume.lean) | Hausdorff normalization and volume |
@@ -832,6 +839,13 @@ Use a file's import path by replacing `/` with `.` and dropping `.lean`, after t
 | [Analysis/Matrix/TraceGram.lean](FunctionalInequalities/Analysis/Matrix/TraceGram.lean) | Trace-Gram coordinates for symmetric three-tensors |
 | [Analysis/Matrix/WeakDerivative.lean](FunctionalInequalities/Analysis/Matrix/WeakDerivative.lean) | Weak derivatives of finite matrix polynomials |
 | [Analysis/Matrix/WeakTrace.lean](FunctionalInequalities/Analysis/Matrix/WeakTrace.lean) | Weak trace contraction of rough matrix fields |
+| [Analysis/MetricBV/Approximation.lean](FunctionalInequalities/Analysis/MetricBV/Approximation.lean) | Bounded-support reductions for globally Lipschitz approximations |
+| [Analysis/MetricBV/Basic.lean](FunctionalInequalities/Analysis/MetricBV/Basic.lean) | Metric BV tests, relaxation, recovery and elementary bounds |
+| [Analysis/MetricBV/Complement.lean](FunctionalInequalities/Analysis/MetricBV/Complement.lean) | Metric BV complement symmetry for finite measures |
+| [Analysis/MetricBV/Counterexample.lean](FunctionalInequalities/Analysis/MetricBV/Counterexample.lean) | Infinite-volume counterexample to metric BV complement symmetry |
+| [Analysis/MetricBV/Finite.lean](FunctionalInequalities/Analysis/MetricBV/Finite.lean) | Metric BV on finite and singleton metric spaces |
+| [Analysis/MetricBV/Scaling.lean](FunctionalInequalities/Analysis/MetricBV/Scaling.lean) | Metric BV measure scaling and probability normalization |
+| [Analysis/MetricBV/Transport.lean](FunctionalInequalities/Analysis/MetricBV/Transport.lean) | Metric BV subset restriction and closed-support laws |
 | [Analysis/Mollification/Basic.lean](FunctionalInequalities/Analysis/Mollification/Basic.lean) | Mollification against a Haar measure |
 | [Analysis/Mollification/Hessian.lean](FunctionalInequalities/Analysis/Mollification/Hessian.lean) | Mollifying functions with Lipschitz gradient |
 | [Analysis/Operator/Coordinates.lean](FunctionalInequalities/Analysis/Operator/Coordinates.lean) | Orthonormal coordinates of operators |
@@ -993,6 +1007,7 @@ Use a file's import path by replacing `/` with `.` and dropping `.lean`, after t
 | [KLS/BKL/CumulantEnergy/Bound.lean](FunctionalInequalities/KLS/BKL/CumulantEnergy/Bound.lean) | A-priori cumulant bounds for isotropic log-concave laws |
 | [KLS/BKL/CumulantEnergy/Conjugation.lean](FunctionalInequalities/KLS/BKL/CumulantEnergy/Conjugation.lean) | Cumulant energies as energy forms |
 | [KLS/BKL/CumulantEnvelope.lean](FunctionalInequalities/KLS/BKL/CumulantEnvelope.lean) | The cumulant envelope of BKL Section 6 |
+| [KLS/BKL/CumulantInduction.lean](FunctionalInequalities/KLS/BKL/CumulantInduction.lean) | BKL Theorem 4.1: the universal cumulant bound |
 | [KLS/BKL/GaussianTaylor.lean](FunctionalInequalities/KLS/BKL/GaussianTaylor.lean) | Nonvacuity of BKL Theorem 3.1: the standard Gaussian on `ℝ¹` |
 | [KLS/BKL/LetwinApproximation.lean](FunctionalInequalities/KLS/BKL/LetwinApproximation.lean) | Reduction of the compact Letwin bound to the regular class |
 | [KLS/BKL/LocalThirdCumulant.lean](FunctionalInequalities/KLS/BKL/LocalThirdCumulant.lean) | BKL Lemma 4.2 in its source scope, conditional on the Letwin bound |
@@ -1033,7 +1048,6 @@ Use a file's import path by replacing `/` with `.` and dropping `.lean`, after t
 | [KLS/BKL/Posterior/Regularity.lean](FunctionalInequalities/KLS/BKL/Posterior/Regularity.lean) | Joint regularity of compact-posterior localization coefficients |
 | [KLS/BKL/Posterior/Response.lean](FunctionalInequalities/KLS/BKL/Posterior/Response.lean) | Initial parameter response of the BKL posterior for isotropic priors |
 | [KLS/BKL/Posterior/Standardization.lean](FunctionalInequalities/KLS/BKL/Posterior/Standardization.lean) | Canonical covariance standardization of compact posteriors |
-| [KLS/BKL/Proposition71.lean](FunctionalInequalities/KLS/BKL/Proposition71.lean) | BKL Proposition 7.1: the Taylor-coefficient bound from cumulant bounds |
 | [KLS/BKL/Reduction.lean](FunctionalInequalities/KLS/BKL/Reduction.lean) | BKL p. 30: reduction of Theorem 1.1 to Theorems 3.1, 4.1 and Proposition 7.1 |
 | [KLS/BKL/SecondCumulant.lean](FunctionalInequalities/KLS/BKL/SecondCumulant.lean) | BKL Theorem 4.1, the second-cumulant base case |
 | [KLS/BKL/Suspension/Basic.lean](FunctionalInequalities/KLS/BKL/Suspension/Basic.lean) | Convex potentials for finite-copy suspension |
@@ -1042,7 +1056,7 @@ Use a file's import path by replacing `/` with `.` and dropping `.lean`, after t
 | [KLS/BKL/Suspension/Derivatives.lean](FunctionalInequalities/KLS/BKL/Suspension/Derivatives.lean) | Derivatives of the logarithmic Laplace transform of the suspension (BKL (111), (112)) |
 | [KLS/BKL/Suspension/Law.lean](FunctionalInequalities/KLS/BKL/Suspension/Law.lean) | The joint law of the suspension (BKL Proposition 7.1) |
 | [KLS/BKL/Suspension/Moments.lean](FunctionalInequalities/KLS/BKL/Suspension/Moments.lean) | Second moments of the BKL suspension |
-| [KLS/BKL/Theorem41.lean](FunctionalInequalities/KLS/BKL/Theorem41.lean) | BKL Theorem 4.1: the universal cumulant bound |
+| [KLS/BKL/TaylorBound.lean](FunctionalInequalities/KLS/BKL/TaylorBound.lean) | BKL Proposition 7.1: the Taylor-coefficient bound from cumulant bounds |
 | [KLS/CEK/BoundedPrimal.lean](FunctionalInequalities/KLS/CEK/BoundedPrimal.lean) | A normalized Lipschitz primal for a bounded isotropic source law |
 | [KLS/CEK/Competitors.lean](FunctionalInequalities/KLS/CEK/Competitors.lean) | CEK Proposition 12: reduction of every admissible competitor |
 | [KLS/CEK/MomentMap.lean](FunctionalInequalities/KLS/CEK/MomentMap.lean) | The weak moment map of a bounded isotropic law |
@@ -1057,7 +1071,6 @@ Use a file's import path by replacing `/` with `.` and dropping `.lean`, after t
 | [KLS/ConditionalFiber/Closed.lean](FunctionalInequalities/KLS/ConditionalFiber/Closed.lean) | The conditional-fiber form is a Dirichlet energy |
 | [KLS/ConditionalFiber/EnergyComparison.lean](FunctionalInequalities/KLS/ConditionalFiber/EnergyComparison.lean) | Conditional-fiber comparison with an explicit input constant |
 | [KLS/ConditionalFiber/SliceKernel.lean](FunctionalInequalities/KLS/ConditionalFiber/SliceKernel.lean) | The explicit slice kernel of a law with a Haar density |
-| [KLS/Definitions.lean](FunctionalInequalities/KLS/Definitions.lean) | Definitions of the literature-facing KLS target |
 | [KLS/Geometry/Cheeger/BVConstant.lean](FunctionalInequalities/KLS/Geometry/Cheeger/BVConstant.lean) | Metric BV Cheeger constants on the closed intrinsic support |
 | [KLS/Geometry/Cheeger/BVIdentification.lean](FunctionalInequalities/KLS/Geometry/Cheeger/BVIdentification.lean) | Identification of the metric BV and Minkowski Cheeger constants |
 | [KLS/Geometry/Cheeger/BuserProfile.lean](FunctionalInequalities/KLS/Geometry/Cheeger/BuserProfile.lean) | Explicit Buser profiles of De Ponti–Mondino |
@@ -1071,21 +1084,9 @@ Use a file's import path by replacing `/` with `.` and dropping `.lean`, after t
 | [KLS/Geometry/Cheeger/MinkowskiContent.lean](FunctionalInequalities/KLS/Geometry/Cheeger/MinkowskiContent.lean) | Outer Minkowski content and the Minkowski coarea inequality |
 | [KLS/Geometry/Cheeger/Stability.lean](FunctionalInequalities/KLS/Geometry/Cheeger/Stability.lean) | Stability |
 | [KLS/Geometry/Cheeger/UpperMinkowskiContent.lean](FunctionalInequalities/KLS/Geometry/Cheeger/UpperMinkowskiContent.lean) | Upper Minkowski content of thickenings at differentiability radii |
-| [KLS/Geometry/Coarea/Isoperimetry.lean](FunctionalInequalities/KLS/Geometry/Coarea/Isoperimetry.lean) | Isoperimetry |
-| [KLS/Geometry/Coarea/Lipschitz.lean](FunctionalInequalities/KLS/Geometry/Coarea/Lipschitz.lean) | Lipschitz |
-| [KLS/Geometry/Coarea/LocallyLipschitz.lean](FunctionalInequalities/KLS/Geometry/Coarea/LocallyLipschitz.lean) | LocallyLipschitz |
-| [KLS/Geometry/Coarea/Regular.lean](FunctionalInequalities/KLS/Geometry/Coarea/Regular.lean) | Regular |
-| [KLS/Geometry/Coarea/Smooth.lean](FunctionalInequalities/KLS/Geometry/Coarea/Smooth.lean) | Smooth |
 | [KLS/Geometry/LinearAreaFormula.lean](FunctionalInequalities/KLS/Geometry/LinearAreaFormula.lean) | LinearAreaFormula |
 | [KLS/Geometry/Perimeter/ConvexSupport.lean](FunctionalInequalities/KLS/Geometry/Perimeter/ConvexSupport.lean) | Metric BV perimeter on a closed convex support |
 | [KLS/Geometry/Perimeter/LocalLipschitzTests.lean](FunctionalInequalities/KLS/Geometry/Perimeter/LocalLipschitzTests.lean) | Locally Lipschitz approximating sequences on proper spaces |
-| [KLS/Geometry/Perimeter/MetricBV/Approximation.lean](FunctionalInequalities/KLS/Geometry/Perimeter/MetricBV/Approximation.lean) | Bounded-support reductions for globally Lipschitz approximations |
-| [KLS/Geometry/Perimeter/MetricBV/Basic.lean](FunctionalInequalities/KLS/Geometry/Perimeter/MetricBV/Basic.lean) | Metric BV tests, relaxation, recovery and elementary bounds |
-| [KLS/Geometry/Perimeter/MetricBV/Complement.lean](FunctionalInequalities/KLS/Geometry/Perimeter/MetricBV/Complement.lean) | Metric BV complement symmetry for finite measures |
-| [KLS/Geometry/Perimeter/MetricBV/Counterexample.lean](FunctionalInequalities/KLS/Geometry/Perimeter/MetricBV/Counterexample.lean) | Infinite-volume counterexample to metric BV complement symmetry |
-| [KLS/Geometry/Perimeter/MetricBV/Finite.lean](FunctionalInequalities/KLS/Geometry/Perimeter/MetricBV/Finite.lean) | Metric BV on finite and singleton metric spaces |
-| [KLS/Geometry/Perimeter/MetricBV/Scaling.lean](FunctionalInequalities/KLS/Geometry/Perimeter/MetricBV/Scaling.lean) | Metric BV measure scaling and probability normalization |
-| [KLS/Geometry/Perimeter/MetricBV/Transport.lean](FunctionalInequalities/KLS/Geometry/Perimeter/MetricBV/Transport.lean) | Metric BV subset restriction and closed-support laws |
 | [KLS/Geometry/Perimeter/MetricBVMinkowski.lean](FunctionalInequalities/KLS/Geometry/Perimeter/MetricBVMinkowski.lean) | Metric BV perimeter below the outer Minkowski content |
 | [KLS/Geometry/Perimeter/Mollification.lean](FunctionalInequalities/KLS/Geometry/Perimeter/Mollification.lean) | Mollification |
 | [KLS/Geometry/Perimeter/MollifiedBoundary.lean](FunctionalInequalities/KLS/Geometry/Perimeter/MollifiedBoundary.lean) | MollifiedBoundary |
@@ -1094,9 +1095,6 @@ Use a file's import path by replacing `/` with `.` and dropping `.lean`, after t
 | [KLS/Geometry/Perimeter/RelaxedMinkowski.lean](FunctionalInequalities/KLS/Geometry/Perimeter/RelaxedMinkowski.lean) | The relaxed lower Minkowski content as a set infimum |
 | [KLS/Geometry/Perimeter/TestClassRelaxation.lean](FunctionalInequalities/KLS/Geometry/Perimeter/TestClassRelaxation.lean) | Relaxation infima over globally and locally Lipschitz approximants |
 | [KLS/Geometry/Perimeter/UpperMinkowskiRecovery.lean](FunctionalInequalities/KLS/Geometry/Perimeter/UpperMinkowskiRecovery.lean) | Upper Minkowski recovery of the metric BV perimeter |
-| [KLS/Geometry/Slice/Critical.lean](FunctionalInequalities/KLS/Geometry/Slice/Critical.lean) | Critical |
-| [KLS/Geometry/Slice/Measurable.lean](FunctionalInequalities/KLS/Geometry/Slice/Measurable.lean) | Measurable |
-| [KLS/Geometry/Slice/OpenMeasurable.lean](FunctionalInequalities/KLS/Geometry/Slice/OpenMeasurable.lean) | OpenMeasurable |
 | [KLS/Geometry/SmoothDomain/Basic.lean](FunctionalInequalities/KLS/Geometry/SmoothDomain/Basic.lean) | Basic |
 | [KLS/Geometry/SmoothDomain/BoundaryChart.lean](FunctionalInequalities/KLS/Geometry/SmoothDomain/BoundaryChart.lean) | The outward normal and the local boundary chart of a smooth domain |
 | [KLS/Geometry/SmoothDomain/GaussGreen.lean](FunctionalInequalities/KLS/Geometry/SmoothDomain/GaussGreen.lean) | The Gauss–Green theorem for a smooth domain |
@@ -1247,7 +1245,6 @@ Use a file's import path by replacing `/` with `.` and dropping `.lean`, after t
 | [Poincare/Product/Geometry.lean](FunctionalInequalities/Poincare/Product/Geometry.lean) | Geometry and admissible sections of a Hilbert product |
 | [Poincare/Product/Reverse.lean](FunctionalInequalities/Poincare/Product/Reverse.lean) | Binary reverse bounds and equality |
 | [Poincare/Product/Tensorization.lean](FunctionalInequalities/Poincare/Product/Tensorization.lean) | Poincaré tensorization on Hilbert products |
-| [Poincare/Product/Variance.lean](FunctionalInequalities/Poincare/Product/Variance.lean) | L2 sections and the two-factor variance bound |
 | [Poincare/Relaxation.lean](FunctionalInequalities/Poincare/Relaxation.lean) | Poincaré constants before and after relaxation |
 | [Poincare/SmoothGradient/Ambient.lean](FunctionalInequalities/Poincare/SmoothGradient/Ambient.lean) | Poincaré optimization for the smooth-gradient relaxation |
 | [Poincare/SmoothGradient/Comparison.lean](FunctionalInequalities/Poincare/SmoothGradient/Comparison.lean) | Ambient and intrinsic-affine Poincaré comparisons |
@@ -1293,6 +1290,7 @@ Use a file's import path by replacing `/` with `.` and dropping `.lean`, after t
 | [Probability/Line/GaussianProfile.lean](FunctionalInequalities/Probability/Line/GaussianProfile.lean) | The standard Gaussian density in quantile coordinates |
 | [Probability/Line/Haar.lean](FunctionalInequalities/Probability/Line/Haar.lean) | Fubini splitting of a Haar measure along a line |
 | [Probability/Line/Laplace.lean](FunctionalInequalities/Probability/Line/Laplace.lean) | The Laplace law |
+| [Probability/LogConcave.lean](FunctionalInequalities/Probability/LogConcave.lean) | Compact-set log-concavity of probability laws |
 | [Probability/MomentMeasure/Affine.lean](FunctionalInequalities/Probability/MomentMeasure/Affine.lean) | Exponential mass, integrals and the CEK functional under affine subtraction |
 | [Probability/MomentMeasure/Baseline.lean](FunctionalInequalities/Probability/MomentMeasure/Baseline.lean) | The norm potential as a baseline |
 | [Probability/MomentMeasure/Basic.lean](FunctionalInequalities/Probability/MomentMeasure/Basic.lean) | Exponential potential measures and the CEK functional |
@@ -1312,6 +1310,7 @@ Use a file's import path by replacing `/` with `.` and dropping `.lean`, after t
 | [Probability/Posterior/JointRegularity.lean](FunctionalInequalities/Probability/Posterior/JointRegularity.lean) | Joint regularity of the compact posterior in `(c, Q)` |
 | [Probability/Posterior/LogPartition.lean](FunctionalInequalities/Probability/Posterior/LogPartition.lean) | The log-partition function of the BKL posterior |
 | [Probability/Product.lean](FunctionalInequalities/Probability/Product.lean) | Independent coordinates of product measures |
+| [Probability/ProductVariance.lean](FunctionalInequalities/Probability/ProductVariance.lean) | L2 sections and the two-factor variance bound |
 | [Probability/QuadraticTilt.lean](FunctionalInequalities/Probability/QuadraticTilt.lean) | Small quadratic tilts of a probability measure |
 | [Probability/QuadraticVariance.lean](FunctionalInequalities/Probability/QuadraticVariance.lean) | Variance of quadratic matrix forms |
 | [Probability/Quantile.lean](FunctionalInequalities/Probability/Quantile.lean) | Quantiles and the Paley–Zygmund inequality |

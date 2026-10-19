@@ -1,4 +1,4 @@
-import FunctionalInequalities.KLS.Geometry.Perimeter.MetricBV.Finite
+import FunctionalInequalities.Analysis.MetricBV.Finite
 import FunctionalInequalities.KLS.Geometry.Perimeter.RelaxedMinkowski
 import Mathlib.Probability.Distributions.Gaussian.Real
 

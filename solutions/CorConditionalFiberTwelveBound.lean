@@ -1,5 +1,5 @@
 import FunctionalInequalities.KLS.LogConcave.ConditionalFiber
-import FunctionalInequalities.KLS.Definitions
+import FunctionalInequalities.Probability.LogConcave
 
 /-!
 # Lean certificate: `cor:conditional-fiber-twelve-bound`

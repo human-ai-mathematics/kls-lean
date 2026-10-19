@@ -30,16 +30,17 @@ The [generated API directory](API.md) provides compiler signatures and an offlin
 | `../research/audits/` | Independent proof clients and explicitly classified candidate statements |
 
 Focused family guides explain the maintained import boundaries:
+[coarea](FunctionalInequalities/Analysis/Coarea/README.md),
 [weak derivatives](FunctionalInequalities/Analysis/WeakDerivative/README.md),
 [matrix trace](FunctionalInequalities/Analysis/Matrix/Trace/README.md),
 [Stein identities](FunctionalInequalities/Probability/Stein/README.md),
-[metric BV](FunctionalInequalities/KLS/Geometry/Perimeter/MetricBV/README.md), and
+[metric BV](FunctionalInequalities/Analysis/MetricBV/README.md), and
 [regular moment producers](FunctionalInequalities/KLS/CEK/MomentRegularity/README.md).
 The [module directory](MODULES.md) lists current placements.
 
 The aggregate `FunctionalInequalities.lean` is a library import root, not a completion marker.
 The target is [KLS/Statement.lean](FunctionalInequalities/KLS/Statement.lean), with its definitions
-in [KLS/Definitions.lean](FunctionalInequalities/KLS/Definitions.lean) and the target theorem in
+in [Probability/LogConcave.lean](FunctionalInequalities/Probability/LogConcave.lean) and the target theorem in
 [KLS/Target.lean](FunctionalInequalities/KLS/Target.lean).
 
 ## Placement rules

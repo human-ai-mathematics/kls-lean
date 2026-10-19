@@ -69,7 +69,7 @@ class PinTests(unittest.TestCase):
     def test_templates_match_reviewed_pins(self):
         pins = check.check_pins(CONFIG)
         self.assertEqual(check.sha(pins["specification"]), "f52663e2398d7eb45433dbad4edd808ae02a03fb8167467f937a9e12205a8d0f")
-        self.assertEqual(check.sha(pins["client"]), "d7e762f9ddd616d37a98d5e80f8fea40b5972507b76989dad8b4a12055b8f864")
+        self.assertEqual(check.sha(pins["client"]), "b362d8977820d93502927a730502e05d3b9fa88216c2478ace9bc0ccd76d4a33")
 
     def test_drifted_template_is_rejected(self):
         with tempfile.TemporaryDirectory() as directory:

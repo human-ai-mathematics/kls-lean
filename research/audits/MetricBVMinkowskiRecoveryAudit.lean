@@ -1,4 +1,4 @@
-import FunctionalInequalities.KLS.Geometry.Perimeter.MetricBV.Finite
+import FunctionalInequalities.Analysis.MetricBV.Finite
 import FunctionalInequalities.KLS.Geometry.Perimeter.MetricBVMinkowski
 
 /-! Independent full-signature clients for Minkowski recovery of the metric BV perimeter: the

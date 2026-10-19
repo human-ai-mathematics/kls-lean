@@ -1,5 +1,5 @@
-import FunctionalInequalities.KLS.Geometry.Slice.Measurable
-import FunctionalInequalities.KLS.Geometry.Coarea.Lipschitz
+import FunctionalInequalities.Analysis.Hausdorff.Slice.Measurable
+import FunctionalInequalities.Analysis.Coarea.Lipschitz
 import FunctionalInequalities.Analysis.Sard.Sharp
 -- 2026-09-19: `Analysis.sard` is proved in `Analysis/Sard/Sharp.lean`; the former `KLS/WIP/AnalyticPrerequisites.lean` is deleted, and this client now imports the proved module.
 
@@ -7,7 +7,7 @@ import FunctionalInequalities.Analysis.Sard.Sharp
 # Scope audit for the migrated level-set measurability
 
 `Analysis.aemeasurable_lintegral_levelSet` has moved out of `KLS/WIP/AnalyticPrerequisites.lean`
-into the hole-free `KLS/Geometry/Slice/Measurable.lean` with a **byte-identical `pp.all`
+into the hole-free `Analysis/Hausdorff/Slice/Measurable.lean` with a **byte-identical `pp.all`
 signature** (recorded in `build/audit/migration-signature-before.log` and
 `build/audit/migration-signature-after.log`), and is now proved from obligation `L5`
 (`KLS.aemeasurable_setLIntegral_inter_levelSet`).  Its axiom report below therefore no longer
@@ -19,7 +19,7 @@ and the obligations that are still open there report `sorryAx` from the same env
 
 **Updated on 2026-09-16.** The **equality**
 `Analysis.lintegral_enorm_gradient_mul_eq_lintegral_levelSet` has since left the same
-work-in-progress file for `KLS/Geometry/Coarea/Lipschitz.lean`, again with a byte-identical
+work-in-progress file for `Analysis/Coarea/Lipschitz.lean`, again with a byte-identical
 `pp.all` signature, where it is proved from `L12` (`KLS.coarea_of_lipschitz`) at `S = Set.univ`.
 That import was added here and the two coarea reports below therefore no longer contain `sorryAx`;
 the clients and their statements are unchanged.

@@ -1,4 +1,4 @@
-import FunctionalInequalities.KLS.Geometry.Perimeter.MetricBV.Transport
+import FunctionalInequalities.Analysis.MetricBV.Transport
 import FunctionalInequalities.KLS.Geometry.Perimeter.MetricBVMinkowski
 
 /-! Independent full-signature clients for the restriction of metric BV tests, approximating

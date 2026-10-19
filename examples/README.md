@@ -5,6 +5,7 @@ The default `Examples` target checks every file below. Use [library design](../L
 
 | Client | Calls and scope |
 | --- | --- |
+| [MetricBV.lean](MetricBV.lean) | Generic metric-space perimeter: compose nonzero measure scaling and finite-measure complement symmetry; no KLS application import |
 | [MatrixIntegral.lean](MatrixIntegral.lean) | One matrix-integral import; arbitrary real coefficient, an indefinite symmetric matrix, and an identity field with the PSD premise discharged |
 | [GeneratedSemigroup.lean](GeneratedSemigroup.lean) | One semigroup-law import; bounded-operator norm and composition, plus a closed full-domain zero operator; real Hilbert spaces without a finite-dimension assumption |
 | [FiniteProductCovariance.lean](FiniteProductCovariance.lean) | Finite tensorization, Gaussian and probability transport imports; variances `1, 0, 4`, a Dirac factor, the empty product, and covariance under translation |

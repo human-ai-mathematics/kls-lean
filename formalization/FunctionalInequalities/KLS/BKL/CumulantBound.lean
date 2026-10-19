@@ -1,11 +1,11 @@
-import FunctionalInequalities.KLS.BKL.Theorem41
+import FunctionalInequalities.KLS.BKL.CumulantInduction
 import FunctionalInequalities.KLS.Letwin.CompactBound
 
 /-!
 # BKL Theorem 4.1 and the cutoff (95), closed
 
 The proved compact Letwin bound `LogConcave.Suspension.letwinCompactBound` discharges the explicit hypothesis of the shared
-producers `cutoffEnergyClaim_of_letwinCompact` and `cumulantBound_of_letwinCompact` (`Theorem41.lean`), at `K = 153` for every
+producers `cutoffEnergyClaim_of_letwinCompact` and `cumulantBound_of_letwinCompact` (`CumulantInduction.lean`), at `K = 153` for every
 order `d + 1 ≥ 2`. These closed endpoints are consumed by the certificates of `lem:bkl-cutoff-energy` and
 `thm:bkl-cumulant-bound` and by the final Poincaré assembly. The uncut Eldan process and the literal (68)–(73) are not
 constructed.

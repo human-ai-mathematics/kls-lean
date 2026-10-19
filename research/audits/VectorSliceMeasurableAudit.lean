@@ -1,5 +1,5 @@
 import FunctionalInequalities.Analysis.Vector.Slice.Measurable
-import FunctionalInequalities.KLS.Geometry.Slice.OpenMeasurable
+import FunctionalInequalities.Analysis.Hausdorff.Slice.OpenMeasurable
 import Mathlib.Analysis.InnerProductSpace.PiL2
 import FunctionalInequalities.KLS.BKL.Localization.Process.Basic
 /-!

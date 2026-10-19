@@ -2,7 +2,7 @@ import FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.ProductCo
 import FunctionalInequalities.KLS.LogConcave.HminusOne
 import FunctionalInequalities.Probability.QuadraticVariance
 import FunctionalInequalities.Analysis.BakryEmery.Calculus
-import FunctionalInequalities.KLS.Definitions
+import FunctionalInequalities.Probability.LogConcave
 import FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Basic
 import FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.LinearImage
 import FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.Moments

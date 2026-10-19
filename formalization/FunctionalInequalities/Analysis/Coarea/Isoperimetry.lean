@@ -1,4 +1,4 @@
-import FunctionalInequalities.KLS.Geometry.Coarea.Smooth
+import FunctionalInequalities.Analysis.Coarea.Smooth
 
 /-! # Weighted coarea for a `C¹` Lipschitz function
 
@@ -7,8 +7,8 @@ specialization of `KLS.coarea_of_contDiff`. The statement retains `CompleteSpace
 `SecondCountableTopology V` and its Lipschitz hypothesis, although the C¹ coarea proof
 needs no Lipschitz bound. Regular-domain coarea and critical-slice nullity give the formula.
 
-The globally Lipschitz formula is proved in `KLS/Geometry/Coarea/Lipschitz.lean` from exact
-C¹ pieces and Whitney extension; `KLS/Geometry/Coarea/LocallyLipschitz.lean` gives its local
+The globally Lipschitz formula is proved in `Analysis/Coarea/Lipschitz.lean` from exact
+C¹ pieces and Whitney extension; `Analysis/Coarea/LocallyLipschitz.lean` gives its local
 extension. The sharp finite-regularity Sard theorem is in `Analysis/Sard/Sharp.lean`.
 These coarea formulas concern almost-everywhere slice measures, not critical-value nullity. -/
 

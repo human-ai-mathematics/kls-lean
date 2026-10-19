@@ -10,12 +10,12 @@ This index records interfaces; it assigns no proof, paper-coverage or certificat
 
 | Mathematical family | Public declarations | Modules |
 | --- | ---: | ---: |
-| [Analysis](FunctionalInequalities/Analysis/) | 2,111 | 218 |
+| [Analysis](FunctionalInequalities/Analysis/) | 2,247 | 233 |
 | [Energy](FunctionalInequalities/Energy/) | 682 | 46 |
-| [KLS](FunctionalInequalities/KLS/) | 2,079 | 218 |
+| [KLS](FunctionalInequalities/KLS/) | 1,942 | 202 |
 | [L2](FunctionalInequalities/L2/) | 121 | 9 |
-| [Poincare](FunctionalInequalities/Poincare/) | 277 | 34 |
-| [Probability](FunctionalInequalities/Probability/) | 508 | 60 |
+| [Poincare](FunctionalInequalities/Poincare/) | 267 | 33 |
+| [Probability](FunctionalInequalities/Probability/) | 519 | 62 |
 
 ## Search the complete interface
 
@@ -37,4 +37,4 @@ Pinned compiled Mathlib dependencies are trusted. The index performs no axiom au
 
 Kinds: constructor: 31, definition: 764, inductive: 31, recursor: 31, theorem: 4,921.
 
-Source/tool input digest: `c5f7fea6565a720e0e829dcf1d78a087082d9cf0eebd1204963fd144cca079f8`.
+Source/tool input digest: `644cc0ac2d6bc9530210a7860eed37a98eab3ab8826347a1f5ced2c3e6510eb5`.

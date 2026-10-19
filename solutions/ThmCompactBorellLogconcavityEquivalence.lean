@@ -1,3 +1,4 @@
+import Mathlib.Analysis.InnerProductSpace.PiL2
 import FunctionalInequalities.KLS.LogConcave.Borel
 import Mathlib.Analysis.Normed.Lp.MeasurableSpace
 

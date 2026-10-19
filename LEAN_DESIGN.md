@@ -21,6 +21,10 @@ that the target yields the classical convex-body, locally Lipschitz and covarian
 | [KLS](formalization/FunctionalInequalities/KLS/README.md) | Log-concave models and source-specific BKL, Letwin and CEK applications | Preserve the pinned source hypotheses, constants and dimensions |
 | [Certificates](solutions/README.md) | Registered consumers of the mathematical owners | [Paper-coverage criteria](research/progress/LITERATURE.md#when-a-paper-is-covered) |
 
+General scalar coarea and metric BV foundations live in `Analysis/Coarea` and
+`Analysis/MetricBV`; product variance and compact-set log-concavity live in `Probability`.
+Their existing public namespaces are independent of their mathematical module owners.
+
 Dependency direction runs from applications to their prerequisites. Prefer the owning module as an import.
 The aggregate `FunctionalInequalities` is useful for exploration; [examples](examples/README.md) identify narrower entry points.
 

@@ -1,3 +1,4 @@
+import Mathlib.MeasureTheory.Measure.Support
 import Mathlib.MeasureTheory.Measure.Lebesgue.EqHaar
 import FunctionalInequalities.KLS.LogConcave.Borel
 import Mathlib.Topology.Semicontinuity.Basic

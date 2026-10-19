@@ -1,4 +1,4 @@
-import FunctionalInequalities.KLS.Geometry.Perimeter.MetricBV.Basic
+import FunctionalInequalities.Analysis.MetricBV.Basic
 
 /-!
 # Infinite-volume counterexample to metric BV complement symmetry

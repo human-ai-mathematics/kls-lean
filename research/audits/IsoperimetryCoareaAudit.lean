@@ -1,5 +1,5 @@
-import FunctionalInequalities.KLS.Geometry.Coarea.Isoperimetry
-import FunctionalInequalities.KLS.Geometry.Coarea.Lipschitz
+import FunctionalInequalities.Analysis.Coarea.Isoperimetry
+import FunctionalInequalities.Analysis.Coarea.Lipschitz
 import FunctionalInequalities.KLS.Geometry.Cheeger.Equality
 import FunctionalInequalities.Analysis.Sard.Sharp
 -- 2026-09-19: `Analysis.sard` is proved in `Analysis/Sard/Sharp.lean`; the former `KLS/WIP/AnalyticPrerequisites.lean` is deleted, and this client now imports the proved module.
@@ -9,7 +9,7 @@ import FunctionalInequalities.Analysis.Sard.Sharp
 # Scope audit for the migrated `C¹` weighted coarea formula
 
 `Isoperimetry.lintegral_enorm_gradient_mul_eq_lintegral_levelSet` has moved out of
-`KLS/WIP/CheegerInfimum.lean` into the hole-free `KLS/Geometry/Coarea/Isoperimetry.lean` with a
+`KLS/WIP/CheegerInfimum.lean` into the hole-free `Analysis/Coarea/Isoperimetry.lean` with a
 **byte-identical `pp.all` signature** (recorded in `build/audit/iso-signature-before.log` and
 `build/audit/iso-signature-after.log`), and is now proved from obligation `L11`
 (`KLS.coarea_of_contDiff`) at `S = Set.univ`.  Its axiom report below therefore no longer contains
@@ -22,7 +22,7 @@ obligation that is still open reports `sorryAx` from that same environment.
 **Updated on 2026-09-16.** The **Lipschitz** formula
 `Analysis.lintegral_enorm_gradient_mul_eq_lintegral_levelSet`, which assumes no `C¹` regularity,
 has since been proved through `L12` and migrated out of `KLS/WIP/AnalyticPrerequisites.lean` into
-`KLS/Geometry/Coarea/Lipschitz.lean` with a byte-identical `pp.all` signature.  That import was
+`Analysis/Coarea/Lipschitz.lean` with a byte-identical `pp.all` signature.  That import was
 added here, so the two reports naming it below no longer contain `sorryAx`; the clients and their
 statements are unchanged.  The `C¹` result audited above is still only its specialization and
 still does not imply it — it is `L12` that does.

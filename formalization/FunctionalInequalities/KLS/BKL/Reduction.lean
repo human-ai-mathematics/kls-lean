@@ -1,4 +1,4 @@
-import FunctionalInequalities.KLS.BKL.Proposition71
+import FunctionalInequalities.KLS.BKL.TaylorBound
 import FunctionalInequalities.KLS.BKL.PoissonIterate.Criterion
 import FunctionalInequalities.Analysis.BakryEmery.Tilt.LocalDerivatives
 import FunctionalInequalities.KLS.LogConcave.IsotropicReduction
@@ -11,7 +11,7 @@ bound of Theorem 4.1, `R^ν_{d+1} ≤ (d!)² K^d · Id` for all `d ≥ 2` (`Cumu
 `K ≥ 1`), Proposition 7.1 gives `|T_d f|² ≤ 2K^d ‖f‖² ≤ (2K)^d ‖f‖²` for every isotropic regular law,
 isotropy gives `|T_1 f| ≤ ‖f‖`, and Theorem 3.1 with `R = √(2K)` yields `C_P(μ) ≤ 2 C_{3.1} K`.
 This module contains the reduction only; its hypothesis is not discharged here. The closed producers
-are `BKL.Localization.theorem11` and `conjecture` (`KLS/BKL/Poincare.lean`); Section 2's regular approximation is separate.
+are `BKL.Localization.exists_isotropicBound` and `conjecture` (`KLS/BKL/Poincare.lean`); Section 2's regular approximation is separate.
 -/
 
 open MeasureTheory FunctionalInequalities.Analysis.BakryEmery FunctionalInequalities.Analysis.Tensor
@@ -177,7 +177,7 @@ and every `d ≥ 2` (`CumulantBound d ((d!)² K^d)`, `K ≥ 1`), then every isot
 has literature Poincaré constant at most `2 C K`, where `C` is the constant of Theorem 3.1
 (`poincare_le_of_taylor`): Proposition 7.1 gives `|T_d f|² ≤ 2K^d‖f‖² ≤ (2K)^d‖f‖²` for `d ≥ 2`,
 isotropy gives `|T_1 f| ≤ ‖f‖`, and Theorem 3.1 applies with `R = √(2K)`. The hypothesis is the
-source's Theorem 4.1, discharged in the closed producer `BKL.Localization.theorem11`. -/
+source's Theorem 4.1, discharged in the closed producer `BKL.Localization.exists_isotropicBound`. -/
 theorem poincare_le_of_cumulantBound :
     ∃ C : ℝ, 0 < C ∧ ∀ K : ℝ, 1 ≤ K →
       (∀ d : ℕ, 2 ≤ d → CumulantBound d ((d.factorial : ℝ) ^ 2 * K ^ d)) →
@@ -303,7 +303,7 @@ universe u
 `CumulantBound d ((d!)² K^d)` for all `d ≥ 2` (`K ≥ 1`), every isotropic log-concave law in every
 finite-dimensional inner product space has literature Poincaré constant at most `2·C_{3.1}·K`
 (the p. 30 reduction for regular laws plus the Section 2 regular approximation). The closed
-producer `BKL.Localization.theorem11` discharges the hypothesis and proves Theorem 1.1. -/
+producer `BKL.Localization.exists_isotropicBound` discharges the hypothesis and proves Theorem 1.1. -/
 theorem localSlope_le_of_cumulantBound_all :
     ∃ C : ℝ, 0 < C ∧ ∀ K : ℝ, 1 ≤ K →
       (∀ d : ℕ, 2 ≤ d → CumulantBound d ((d.factorial : ℝ) ^ 2 * K ^ d)) →

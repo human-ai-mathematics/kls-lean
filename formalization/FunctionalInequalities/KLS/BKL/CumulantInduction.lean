@@ -30,9 +30,9 @@ theorem cutoffEnergyClaim_of_letwinCompact (hL : LogConcave.Suspension.LetwinCom
     (fun _ hm ih ihb => cutoffEnergyClaim_succ hL lemma51Bound (le_refl 153) hm ih ihb)
     (fun _ h => cumulantBoundCompact_of_cutoffEnergyClaim (by norm_num : (0 : ℝ) ≤ 153) h)
 
-/-- **BKL Theorem 4.1 for compactly supported laws**, conditional only on the compact Letwin bound (Lemma 4.2):
+/-- **BKL Theorem 4.1 for compactly supported laws, orders `d + 1 ≥ 3`**, conditional only on the compact Letwin bound (Lemma 4.2):
 `∃ K ≥ 1, ∀ d ≥ 2, R^ν_{d+1} ≤ (d!)² K^d · Id` for all compactly supported isotropic log-concave `ν`. -/
-theorem theorem41Compact (hL : LogConcave.Suspension.LetwinCompactBound) :
+theorem exists_cumulantBoundCompact_of_letwinCompact (hL : LogConcave.Suspension.LetwinCompactBound) :
     ∃ K : ℝ, 1 ≤ K ∧ ∀ d : ℕ, 2 ≤ d →
       LogConcave.Suspension.CumulantBoundCompact d ((d.factorial : ℝ) ^ 2 * K ^ d) := by
   refine ⟨153, by norm_num, fun d hd => ?_⟩
@@ -40,12 +40,13 @@ theorem theorem41Compact (hL : LogConcave.Suspension.LetwinCompactBound) :
     (cutoffEnergyClaim_of_letwinCompact hL d (by omega))
   rwa [envelope_succ_eq] at h
 
-/-- **BKL Theorem 4.1** (all isotropic log-concave laws), conditional only on the compact Letwin bound:
-the compact bound extends by the truncation argument of p. 19. -/
-theorem theorem41 (hL : LogConcave.Suspension.LetwinCompactBound) :
+/-- **BKL Theorem 4.1, orders `d + 1 ≥ 3`** (all isotropic log-concave laws), conditional only on the compact Letwin bound:
+the compact bound extends by the truncation argument of p. 19. The separate
+`cumulantBound_of_letwinCompact` below also includes the base order `d + 1 = 2`. -/
+theorem exists_cumulantBound_of_letwinCompact (hL : LogConcave.Suspension.LetwinCompactBound) :
     ∃ K : ℝ, 1 ≤ K ∧ ∀ d : ℕ, 2 ≤ d →
       LogConcave.Suspension.CumulantBound d ((d.factorial : ℝ) ^ 2 * K ^ d) := by
-  obtain ⟨K, hK, hcompact⟩ := theorem41Compact hL
+  obtain ⟨K, hK, hcompact⟩ := exists_cumulantBoundCompact_of_letwinCompact hL
   refine ⟨K, hK, ?_⟩
   intro d hd
   exact LogConcave.Suspension.cumulantBound_of_compact

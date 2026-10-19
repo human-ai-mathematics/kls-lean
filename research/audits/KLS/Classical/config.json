@@ -10,7 +10,7 @@
     "client": {
       "path": "Client.lean.in",
       "module": "OriginalAnalyticClient",
-      "sha256": "d7e762f9ddd616d37a98d5e80f8fea40b5972507b76989dad8b4a12055b8f864"
+      "sha256": "b362d8977820d93502927a730502e05d3b9fa88216c2478ace9bc0ccd76d4a33"
     }
   },
   "expected_axiom_reports": [
@@ -22,23 +22,23 @@
   "mutations": [
     {
       "name": "drop-logconcavity",
-      "old": "    RawLogConcave μ →\n    (∫ x, x ∂",
-      "new": "    (∫ x, x ∂",
+      "old": "    RawLogConcave \u03bc \u2192\n    (\u222b x, x \u2202",
+      "new": "    (\u222b x, x \u2202",
       "expected_error": "application-type-mismatch"
     },
     {
       "name": "drop-gradient-energy",
-      "old": "      evariance f (μ : Measure (EuclideanSpace ℝ (Fin n))) ≤\n        ENNReal.ofReal C * ∫⁻ x, (ENNReal.ofReal ‖gradient f x‖)^2 ∂(μ : Measure (EuclideanSpace ℝ (Fin n)))\n\nend SecondIndependentReview",
-      "new": "      evariance f (μ : Measure (EuclideanSpace ℝ (Fin n))) ≤\n        ENNReal.ofReal C\n\nend SecondIndependentReview",
+      "old": "      evariance f (\u03bc : Measure (EuclideanSpace \u211d (Fin n))) \u2264\n        ENNReal.ofReal C * \u222b\u207b x, (ENNReal.ofReal \u2016gradient f x\u2016)^2 \u2202(\u03bc : Measure (EuclideanSpace \u211d (Fin n)))\n\nend SecondIndependentReview",
+      "new": "      evariance f (\u03bc : Measure (EuclideanSpace \u211d (Fin n))) \u2264\n        ENNReal.ofReal C\n\nend SecondIndependentReview",
       "expected_error": "type-mismatch"
     },
     {
       "name": "strict-inequality",
-      "old": "      variance f (μ : Measure (EuclideanSpace ℝ (Fin n))) ≤\n        C * ‖InnerProductSpace",
-      "new": "      variance f (μ : Measure (EuclideanSpace ℝ (Fin n))) <\n        C * ‖InnerProductSpace",
+      "old": "      variance f (\u03bc : Measure (EuclideanSpace \u211d (Fin n))) \u2264\n        C * \u2016InnerProductSpace",
+      "new": "      variance f (\u03bc : Measure (EuclideanSpace \u211d (Fin n))) <\n        C * \u2016InnerProductSpace",
       "expected_error": "change-not-defeq"
     }
   ],
   "provenance": "Byte copies of the second independent review sources (build/reviews/2026-10-17-kls-second-independent-review/OriginalAnalyticSpecification.lean and OriginalAnalyticClient.lean, REVIEW.json). The pins change only with a reviewed source change; the driver never refreshes them.",
-  "mutation_error_calibration": "Calibrated from the first preserved Lean run (build/reviews/2026-10-17-article-standard-optimization/audit-candidate/gate-run01): drop-logconcavity fails with introN (no binder for the dropped premise) and Application type mismatch at the convex-body consumer; drop-gradient-energy fails with Type mismatch; strict-inequality fails because the client's `change` to the ≤ form is not definitionally equal to the < target. Changing the kinds requires a reviewed config change."
+  "mutation_error_calibration": "Calibrated from the first preserved Lean run (build/reviews/2026-10-17-article-standard-optimization/audit-candidate/gate-run01): drop-logconcavity fails with introN (no binder for the dropped premise) and Application type mismatch at the convex-body consumer; drop-gradient-energy fails with Type mismatch; strict-inequality fails because the client's `change` to the \u2264 form is not definitionally equal to the < target. Changing the kinds requires a reviewed config change."
 }

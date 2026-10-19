@@ -1,4 +1,4 @@
-import FunctionalInequalities.KLS.Geometry.Coarea.LocallyLipschitz
+import FunctionalInequalities.Analysis.Coarea.LocallyLipschitz
 import Mathlib.Analysis.Calculus.FDeriv.Norm
 import Mathlib.Analysis.InnerProductSpace.PiL2
 

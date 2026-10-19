@@ -13,7 +13,7 @@ closed-ball Lipschitz bounds is the compactness step: a locally Lipschitz map on
 every closed ball.  locality is the locality step: two maps agreeing on an open set have the same
 differential and the same level sets on any piece inside it.  the local-to-global assembly is the assembly, and it is the
 codimension-`m` transcription of the scalar argument of
-`KLS/Geometry/Coarea/LocallyLipschitz.lean`, step for step: the annuli of
+`Analysis/Coarea/LocallyLipschitz.lean`, step for step: the annuli of
 `Analysis/Lipschitz/Annuli.lean` cut the ambient set into countably many disjoint measurable
 pieces, on the piece of index `n` the map is replaced by a **globally** Lipschitz extension
 supplied by `Analysis/Lipschitz/Extension.lean`, the hypothesis is applied to that extension, locality

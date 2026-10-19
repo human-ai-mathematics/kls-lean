@@ -1,6 +1,6 @@
 # Current KLS handoff
 
-Updated 2026-10-19 for public-revision preparation.
+Updated 2026-10-19 for module ownership and the text/statement review.
 
 ## Accepted result and open boundaries
 
@@ -15,7 +15,7 @@ The [paper register](research/progress/LITERATURE.md) owns exact scope and cover
 [proof path](research/progress/PROOF-PATH.md) maps the chain to Lean and its certificates.
 BKL's main theorem is covered. Letwin's noncompact Theorems 1.1/1.2, the uncut Eldan
 construction and literal identities (68)–(73), and the separate uncut intermediate statements
-remain open. The four exploratory routes retain their own statuses.
+remain unformalized locally. The four exploratory routes retain their own statuses.
 
 ## Evidence and library use
 
@@ -35,8 +35,16 @@ and explicit third-party compiled caches remain trusted. Known
 
 ## Current work and next step
 
-The current task prepares a frozen source snapshot for full local verification and an
-approved Git revision for downstream and remote certification. The
+The [statement review](research/progress/statement-review.md) checks the contracts of all 34
+registered certificates against the live text, with source checks for the main BKL/Letwin
+statements and the ADMG target. It corrects stale completion claims, quantifier attribution,
+test-class descriptions and the attribution of the local constant 153. Lean types, definitions,
+proofs and certificate/progress states are unchanged by those textual corrections.
+
+The module ownership and text corrections retain all mathematical statements and certificate
+states. Further proof work selects a pinned literature target under the repository workflow.
+Before an approved verification milestone, freeze the intended source snapshot, run full local
+verification and select the exact committed revision for downstream and remote certification. The
 [release procedure](research/release.md), [contribution guide](CONTRIBUTING.md) and
 [citation metadata](CITATION.cff) describe public use and the exact-revision requirements.
 Repository visibility and previously pushed history remain unchanged by this preparation.
@@ -58,7 +66,22 @@ Mathematical statements, proof bodies, hypotheses, parameter names/order, normal
 dimensional scope and all 34 certificate states are retained. New mathematical work selects
 a pinned literature target under the [workflow](research/workflow.md). The
 [module directory](formalization/MODULES.md) locates source owners.
-Relocating `KLS/Geometry/Perimeter/MetricBV` to a top-level family remains a candidate only if an
-independent reuse consumer and a dependency benefit are demonstrated; otherwise its existing KLS
-perimeter owner remains.
+General scalar coarea and slice helpers live in `Analysis/Coarea` and `Analysis/Hausdorff/Slice`;
+metric BV foundations live in `Analysis/MetricBV`. The arbitrary-metric finite-measure client
+[`examples/MetricBV.lean`](examples/MetricBV.lean) composes measure scaling with complement
+symmetry and asserts that no KLS conjecture or smooth-test Poincaré interface is imported.
+Perimeter/Minkowski identification and log-concave application modules retain their owners.
+Product variance identities live in `Probability/ProductVariance.lean`, removing the
+Probability-to-Poincare import; compact-set log-concavity lives in `Probability/LogConcave.lean`,
+with Poincaré and affine-support imports now stated by their actual consumers. The public
+namespaces of these moved modules are retained independently of file ownership.
+
+BKL source Theorem 4.1 is assembled in `BKL/CumulantInduction.lean`, with
+`exists_cumulantBoundCompact_of_letwinCompact` and `exists_cumulantBound_of_letwinCompact`;
+source Proposition 7.1 lives in `BKL/TaylorBound.lean`; the closed source Theorem 1.1 entry is
+`BKL.Localization.exists_isotropicBound`. These are explicit name/path migrations, with no
+old aliases or forwarding modules. Conditional inputs and closed producers remain distinct.
+The reviewed statement baselines permit only the log-concavity declaration's owning-module
+substitution; their types and definition closures remain unchanged. Full local verification,
+strict independent clients, axiom audits and local-module replay retain their distinct scopes.
 Fresh-clone instructions and validation inputs remain tracked.
