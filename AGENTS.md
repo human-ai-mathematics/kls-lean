@@ -9,9 +9,8 @@
   directly displays the literature priorities and the English Mermaid diagrams on the GitHub
   directory page; `STATUS.md` is the generated node register. The root README stays a one-page
   summary: statement, what is proved, what is not, where to look and how to verify.
-- Mark a paper covered only when its main theorem is faithfully stated in Lean, proved without
-  nonstandard axioms, and registered with a certificate and verification evidence for that exact
-  statement. Supporting lemmas and restricted or conditional counterparts do not cover a paper.
+- Apply the paper-coverage criteria in
+  [When a paper is covered](research/progress/LITERATURE.md#when-a-paper-is-covered).
 - Keep `HANDOFF.md` limited to the current state. Preserve superseded sections and operational
   records verbatim, with hashes, under the ignored local `build/history/` archive. Keep current
   source reviews and validation inputs in their tracked owning directories so a fresh clone
@@ -50,7 +49,8 @@
   formalization targets, and `○` for pending work
   or not-formalized results of superseded routes as labelled. In paper lemma maps (`lemma_map` in
   `literature.json`), `⇑` marks a reviewed stronger statement or a different proof route; list
-  every numbered statement of the pinned source version, and let ✓/◐/○ follow the declarations. Keep upstream mathematical or conditional-proof
+  every numbered statement of the pinned source version in the literature register (the hub
+  displays covered papers only), and let ✓/◐/○ follow the declarations. Keep upstream mathematical or conditional-proof
   provenance separate; it must not turn a pending local formalization into a completed result.
 - Run remote CI only at meaningful verification milestones: a new certificate, a faithfully
   formalized paper main theorem, or validation before sharing/release. Lean certification runs

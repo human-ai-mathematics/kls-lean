@@ -55,10 +55,8 @@ File moves and public-name migrations have separate maps and semantic checks.
 ## Lean Blueprint
 
 The Blueprint supplies statements, reading order and declared dependencies; the four route
-alternatives are exploratory records. `\lean{...}` maps declarations, while `\leanok` records
-checked local support. A rendered graph is not a certificate. The
-[paper register](../research/progress/LITERATURE.md) distinguishes supporting proofs, conditional
-results and faithfully certified paper targets.
+alternatives are exploratory records. See the [Blueprint marker rules](blueprint/README.md#markers-in-the-tex-sources)
+and the [paper-coverage criteria](../research/progress/LITERATURE.md#when-a-paper-is-covered).
 
 With Python, `xelatex`, `latexmk` and Graphviz available, run from the repository root:
 

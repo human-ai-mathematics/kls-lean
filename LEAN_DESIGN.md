@@ -19,7 +19,7 @@ that the target yields the classical convex-body, locally Lipschitz and covarian
 | [Energy](formalization/FunctionalInequalities/Energy/README.md) | Extended energies, finite domains, relaxation and gradient realizations | Closed quadratic, Markov and Dirichlet properties are separate statements |
 | [Poincare](formalization/FunctionalInequalities/Poincare/README.md) | Valid bounds, optimal constants, products and frontend comparisons | An optimal constant belongs to a specified test domain and energy |
 | [KLS](formalization/FunctionalInequalities/KLS/README.md) | Log-concave models and source-specific BKL, Letwin and CEK applications | Preserve the pinned source hypotheses, constants and dimensions |
-| [Certificates](solutions/README.md) | Registered consumers of the mathematical owners | Registration certifies the stated target; supporting results do not cover a paper |
+| [Certificates](solutions/README.md) | Registered consumers of the mathematical owners | [Paper-coverage criteria](research/progress/LITERATURE.md#when-a-paper-is-covered) |
 
 Dependency direction runs from applications to their prerequisites. Prefer the owning module as an import.
 The aggregate `FunctionalInequalities` is useful for exploration; [examples](examples/README.md) identify narrower entry points.

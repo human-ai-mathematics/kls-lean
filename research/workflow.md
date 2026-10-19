@@ -17,10 +17,8 @@ the verification scope. Record this in the current task or handoff. An infrastru
 the paper theorem it supports and the precise missing interface.
 
 The four routes in the [progress diagrams](progress/README.md#proof-progress-tree) are
-exploratory research records; their pending nodes are not by themselves the work queue. Paper
-coverage requires a faithfully matched main theorem, proof, registered certificate and
-exact-statement verification evidence; completed supporting declarations cannot supply a missing
-main-theorem statement or certificate.
+exploratory research records; their pending nodes are not by themselves the work queue. Apply the
+[paper-coverage criteria](progress/LITERATURE.md#when-a-paper-is-covered).
 
 ## 1. Classify by mathematical responsibility
 

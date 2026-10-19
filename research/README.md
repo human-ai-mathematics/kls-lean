@@ -1,19 +1,44 @@
-# Research navigation
+# Maintainer index
 
-Use the [current handoff](../HANDOFF.md) for present work and the [paper register](progress/LITERATURE.md) for exact theorem scope.
-The [Lean design](../LEAN_DESIGN.md) and [calling examples](../examples/README.md) provide the library entry points.
+Use this index for current work, repository operations and validation records.
+For the mathematics, start with the [proof path](progress/PROOF-PATH.md),
+[literature register](progress/LITERATURE.md), [Lean design](../LEAN_DESIGN.md)
+and [calling examples](../examples/README.md).
 
-## Reading paths
-
-| Need | Entry |
+| Entry | Responsibility |
 | --- | --- |
-| Follow the proved KLS chain | [Proof path](progress/PROOF-PATH.md) and [BKL main chain](progress/README.md#bkl-main-proof-chain) |
-| Check a paper version, theorem or certificate | [Literature register](progress/LITERATURE.md), [certificate directory](../solutions/README.md) and [ledger](a-series/ledger.yaml) |
-| Inspect all routes and recorded local statuses | [Progress overview](progress/README.md) and [generated node register](progress/STATUS.md) |
-| Reproduce verification or change a module | [Verification](verification.md), [workflow](workflow.md) and [naming](naming.md) |
-| Prepare an exact public revision | [Release procedure](release.md), [contribution guide](../CONTRIBUTING.md) and [citation metadata](../CITATION.cff) |
-| Read the current normative reviews | [Target-scope reviews](progress/target-reviews.md), [infrastructure review](progress/infrastructure-review.md), [statement-snapshot review](a-series/statement-snapshot/REVIEW.md), [BKL independent-target review](audits/BKL/IndependentTargets/REVIEW.md) and the [audit client guide](audits/README.md) |
-| Manage compiled artifacts and retention evidence | [Read-only inventory](inventory_artifacts.py) and [recoverable artifact storage](artifact_storage/README.md) |
+| [Current handoff](../HANDOFF.md) | Active work, accepted result, evidence pointers and next step. |
+| [Agent instructions](../AGENTS.md) | Repository documentation, classification and maintenance rules. |
+| [Contributing](../CONTRIBUTING.md) | Mathematical changes, review expectations and local checks. |
+| [Verification guide](verification.md) | Verification commands, receipt rules and trust scope. |
+| [Workflow](workflow.md) | Literature selection, placement, delivery checks and milestone CI. |
+| [Naming](naming.md) | Directory, module, declaration and public parameter conventions. |
+| [Release procedure](release.md) | Frozen snapshots, downstream checks and exact-revision remote evidence. |
+| [Citation metadata](../CITATION.cff) | Project credit and revision information for reuse. |
+| [Ledger schema](ledger-schema.md) | Certificate lifecycle, structural fields and interface changes. |
+| [Certificate ledger](a-series/ledger.yaml) | Registered node statements, certificate files and certification states. |
+| [Certificate directory](../solutions/README.md) | Packaged statements, imported mathematical owners and certification convention. |
+| [Technical debt](technical-debt/README.md) | Confirmed maintenance work, review candidates and accepted exceptions. |
+| [Family maintenance register](technical-debt/remaining-families.md) | Current placements, unresolved family work and migration maps. |
+| [Task atlas](verification.md#authorities-and-task-navigation) | Commands for task classification, declared dependencies and receipt-aware navigation. |
+| [Task records](tasks.json) | Node priorities, assumptions, classification and evidence. |
+| [Audit client guide](audits/README.md) | Independent proof clients and explicitly classified candidate statements. |
+| [Classical KLS gate](audits/KLS/Classical/README.md) | Mathlib-only formulations, clients, mutation checks and replay scope. |
+| [BKL independent-target pilot](audits/BKL/IndependentTargets/README.md) | Separately compiled specifications, definition bridges and baseline checks. |
+| [Target-scope reviews](progress/target-reviews.md) | Current source correspondence and exact paper-target scope. |
+| [Infrastructure review](progress/infrastructure-review.md) | Reviewed supporting interfaces and validation requirements. |
+| [Statement-snapshot review](a-series/statement-snapshot/REVIEW.md) | Normative review of target and definition-closure baseline inputs. |
+| [BKL independent-target review](audits/BKL/IndependentTargets/REVIEW.md) | Source correspondence and explicit foundation parameters for the pilot. |
+| [Progress hub](progress/README.md) | Literature priorities, covered-paper maps and complete exploratory-route diagram. |
+| [Node register](progress/STATUS.md) | Generated Blueprint node statuses, statements and certificates. |
+| [Progress generation](verification.md#progress-generation) | Canonical inputs, index isolation and regeneration commands. |
+| [Formalization guide](../formalization/README.md) | Library layout, pinned dependencies and build operations. |
+| [Module directory](../formalization/MODULES.md) | Complete source-family and filename inventory. |
+| [API directory](../formalization/API.md) | Compiler signatures and offline interface search. |
+| [Blueprint guide](../formalization/blueprint/README.md) | Mathematical dependencies, marker rules and local rendering. |
+| [Vendor guide](../formalization/vendor/README.md) | Pinned provenance, port changes and isolated upstream holes. |
+| [Artifact inventory](inventory_artifacts.py) | Read-only inventory of compiled artifacts and retention evidence. |
+| [Recoverable artifact storage](artifact_storage/README.md) | Storage, recovery and retention procedures. |
 
 ## Document ownership
 
@@ -23,4 +48,3 @@ archive outside the published tree; a fresh clone does not need them, and curren
 
 `research/progress/update.py` owns generated progress blocks, `STATUS.md`, `TREE.mmd` and the paper views.
 Edit their canonical records and regenerate them through the selected Git index; do not change generated text directly.
-This directory keeps navigation separate from the mathematical and verification records it points to.

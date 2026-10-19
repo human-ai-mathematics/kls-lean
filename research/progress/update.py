@@ -103,7 +103,7 @@ def generate():
     readme = views.replace_block(readme, 'BKL', literature.render_proof_path(bibliography, certificates, read_source))
     readme = views.replace_block(readme, 'LITERATURE', literature_overview)
     readme = views.replace_block(readme, 'PRIORITIES', literature.render_priorities(bibliography))
-    readme = views.replace_block(readme, 'LEMMAS', literature.render_lemma_hub(literature_outputs, bibliography, read_source))
+    readme = views.replace_block(readme, 'LEMMAS', literature.render_lemma_hub(bibliography, certificates, read_source))
     descriptions = {r['blueprint']: r['description'] for r in records.values() if 'blueprint' in r}
     if descriptions.keys() != nodes.keys():
         raise ValueError('Update nodes.json to match the Blueprint node inventory.')

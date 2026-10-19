@@ -93,6 +93,30 @@ class LemmaMapTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, message):
                 literature.validate_lemma_map(paper(items), self.read)
 
+    def test_hub_and_combined_diagram_require_main_theorem_certificate_but_register_keeps_all(self):
+        def paper(ident, certificate):
+            return {'id': ident, 'authors': ident, 'target_certificate': certificate,
+                    'lemma_map': {'source_version': 'v1', 'source_url': 'https://example.org',
+                                  'reviewed_on': '2026-10-19',
+                                  'items': [self.item('support', ['proved_one']),
+                                            self.item('main', ['proved_one'], main=True, uses=['support']),
+                                            self.item('open', ['open_one'])]}}
+        catalog = {'papers': [paper('Covered', 'thm:main'), paper('Supporting', 'thm:missing')]}
+        certificates = {'target': {'label': 'thm:main'}, 'fragment': {'label': 'lem:support'}}
+        hub = literature.render_lemma_hub(catalog, certificates, self.read)
+        self.assertIn('### Covered (v1)', hub)
+        self.assertNotIn('### Supporting', hub)
+        self.assertIn('LITERATURE.md#paper-lemma-maps', hub)
+        sections, diagram, papers = literature.render_lemma_maps(catalog, self.read, certificates)
+        self.assertIn('### Supporting lemma map', '\n'.join(sections))
+        self.assertIn('open_one', '\n'.join(sections))
+        self.assertIn('Covered_main', diagram)
+        self.assertNotIn('Supporting_', diagram)
+        self.assertEqual(len(papers), 2)
+        empty = literature.render_lemma_hub(catalog, {}, self.read)
+        self.assertIn('No covered paper', empty)
+        self.assertIn('LITERATURE.md#paper-lemma-maps', empty)
+
 
 class ProofPathTests(unittest.TestCase):
     def setUp(self):

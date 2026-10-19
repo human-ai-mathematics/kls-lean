@@ -16,8 +16,8 @@ privacy or security audit. Do not rewrite previously pushed history as a cleanup
 
 Archive superseded operational notes verbatim with hashes under ignored `build/history/`.
 Current instructions and acceptance inputs must remain in their tracked owning directories,
-so that a fresh clone needs no local archive. Keep the root README short and retain the
-distinction between mechanical verification, source-fidelity review and external peer review.
+so that a fresh clone needs no local archive. Keep the root README short and follow the
+[trust-scope rules](verification.md#receipts-and-trust-scope).
 
 ## Validate locally
 

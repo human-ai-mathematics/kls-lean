@@ -31,9 +31,8 @@ The four-stage main line to KLS is formalized:
    and regular approximation, and `KLS.kls` through the affine/isotropic reduction.
 
 The [proof path](research/progress/PROOF-PATH.md) maps each source step and proof device to its
-Lean entry. The [paper register](research/progress/LITERATURE.md) owns exact hypotheses,
-constants, dimensions, paper coverage and certificates. Supporting results and conditional
-reductions do not cover a paper.
+Lean entry. The [paper register](research/progress/LITERATURE.md#when-a-paper-is-covered) owns exact
+hypotheses, constants, dimensions, paper coverage and certificates.
 
 ## What is not proved
 
@@ -46,15 +45,17 @@ known upstream holes; no project-local proved declaration may depend on them.
 
 ## Where to look
 
-| Entry | Contents |
-| --- | --- |
-| [Proof path](research/progress/PROOF-PATH.md) · [Literature register](research/progress/LITERATURE.md) | Main chain, source statements and paper coverage |
-| [Progress hub](research/progress/README.md) · [Node register](research/progress/STATUS.md) | BKL navigation, complete diagrams and generated status |
-| [Current handoff](HANDOFF.md) · [Research navigation](research/README.md) | Current work, verification rules and current reviews |
-| [Lean design](LEAN_DESIGN.md) · [Calling examples](examples/README.md) | Current interfaces, mathematical layers and narrow imports |
-| [Formalization guide](formalization/README.md) · [Blueprint](formalization/blueprint/README.md) | Library layout, builds and mathematical reading order |
-| [Certificates](solutions/README.md) · [Ledger](research/a-series/ledger.yaml) | Lean certificate entry points and registrations |
-| [Workflow](research/workflow.md) · [Verification](research/verification.md) | Placement, recorded baseline, checks and CI policy |
+| Where to look | Entry | Contents |
+| --- | --- | --- |
+| **Read the mathematics** | [Proof path](research/progress/PROOF-PATH.md) | Main chain, source steps and Lean entries |
+| | [Literature register](research/progress/LITERATURE.md) | Exact source statements, full lemma maps and paper coverage |
+| | [Lean design](LEAN_DESIGN.md) | Mathematical layers and current interfaces |
+| | [Calling examples](examples/README.md) | Narrow imports and checked clients |
+| **Build, verify, contribute** | [Verification guide](research/verification.md) | Local checks, receipts and remote scope |
+| | [Contributing](CONTRIBUTING.md) | Changes, reviews and reuse |
+| | [Citation metadata](CITATION.cff) | Credit and revision information |
+
+For current work and repository operations, use the [maintainer index](research/README.md).
 
 ## Build and verify
 
@@ -86,7 +87,5 @@ passed for `36e7c78` and does not certify later commits.
 
 Project-owned code uses [Apache-2.0](LICENSE); [vendored libraries](formalization/vendor/README.md)
 retain their licenses and notices. The project builds on Mathlib and the other pinned packages.
-Development and review used AI coding agents; the [verification guide](research/verification.md)
-states what the mechanical checks cover. No external human peer review is claimed.
-See [Contributing](CONTRIBUTING.md), [citation metadata](CITATION.cff) and the
-[release procedure](research/release.md) for reuse and publication checks.
+Development and review used AI coding agents; no external human peer review is claimed
+(see [receipts and trust scope](research/verification.md#receipts-and-trust-scope)).

@@ -14,7 +14,7 @@ Bizeul–Klartag–Lehec's Theorem 1.1; the dimension-dependent frontier proofs 
 Publication status and local Lean status are separate columns. **◐ means named fragments or
 restricted counterparts, never an entire paper; ○ means the selected main result is not
 locally formalized.** A ✓ beside an individual local result is derived from the existing
-Blueprint/progress records. It is not a new certificate or a certification of the source paper.
+Blueprint/progress records; see the [Blueprint marker rules](../../formalization/blueprint/README.md#markers-in-the-tex-sources).
 
 ## When a paper is covered
 

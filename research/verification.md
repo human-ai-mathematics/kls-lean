@@ -84,6 +84,12 @@ verifier nor changes certificate status. Third-party compiled dependencies remai
 
 ## Receipts and trust scope
 
+Mechanical verification checks the recorded Lean statements and their proof dependencies.
+Source-fidelity review separately compares those statements with a pinned paper's hypotheses,
+constants, normalization and dimensional scope; a passing mechanical check does not supply that
+review. Development and review used AI coding agents. Agent review is not external human peer
+review, and no external human peer review is claimed.
+
 Each run retains its report, generated clients and logs under `build/verification/<UTC time>/`.
 `latest.json` identifies the latest full attempt; `latest-lean.json` identifies the latest
 Lean-only attempt. A failed latest attempt is not a success receipt.

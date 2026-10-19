@@ -161,8 +161,9 @@ def lemma_legend():
     return ' · '.join(f'{LEMMA_MARKS[s]} {LEMMA_LABELS[s]}' for s in LEMMA_MARKS)
 
 
-def render_lemma_maps(catalog, read_source):
-    """Return the per-paper register sections and the combined hub diagram."""
+def render_lemma_maps(catalog, read_source, certificates=None):
+    """Keep every register map. With a certificate mapping, limit the combined diagram to
+    certified paper targets; without one (the default) the diagram keeps every paper."""
     papers = [p for p in catalog['papers'] if p.get('lemma_map')]
     sections = ['## Paper lemma maps', '',
                 'Each map lists the numbered statements of one pinned source and the Lean declarations',
@@ -192,9 +193,11 @@ def render_lemma_maps(catalog, read_source):
         if lemma_map.get('omitted'):
             sections += ['', f'Not listed: {lemma_map["omitted"]}']
         sections.append('')
-        hub += [f'    subgraph P_{paper["id"]}["{paper["authors"]} · {lemma_map["source_version"]}"]', '    direction LR',
-                *render_lemma_graph(paper, states, keep=hub_items(paper, states)), '    end']
-        graphs.append((paper, states, hub_items(paper, states)))
+        if certificates is None or paper_certificate(paper, certificates):
+            keep = hub_items(paper, states)
+            hub += [f'    subgraph P_{paper["id"]}["{paper["authors"]} · {lemma_map["source_version"]}"]', '    direction LR',
+                    *render_lemma_graph(paper, states, keep=keep), '    end']
+            graphs.append((paper, states, keep))
     hub += render_lemma_styles(graphs)
     return sections, '\n'.join(hub) + '\n', papers
 
@@ -325,7 +328,7 @@ def render(catalog, records, blueprint, certificates=None, read_source=None):
         for paper in papers.values():
             if paper.get('lemma_map'):
                 validate_lemma_map(paper, read_source)
-        lemma_sections, lemma_hub, lemma_papers = render_lemma_maps(catalog, read_source)
+        lemma_sections, lemma_hub, lemma_papers = render_lemma_maps(catalog, read_source, certificates)
     else:
         lemma_sections, lemma_hub, lemma_papers = [], '', []
     tree = render_tree(catalog, papers)
@@ -342,7 +345,7 @@ def render(catalog, records, blueprint, certificates=None, read_source=None):
         'Publication status and local Lean status are separate columns. **◐ means named fragments or',
         'restricted counterparts, never an entire paper; ○ means the selected main result is not',
         'locally formalized.** A ✓ beside an individual local result is derived from the existing',
-        'Blueprint/progress records. It is not a new certificate or a certification of the source paper.', '',
+        'Blueprint/progress records; see the [Blueprint marker rules](../../formalization/blueprint/README.md#markers-in-the-tex-sources).', '',
         '## When a paper is covered', '',
         'A selected paper target is covered only after its main theorem has a faithful Lean statement',
         '(including hypotheses, constants, normalization and dimensional scope), a proof without',
@@ -476,14 +479,16 @@ def render(catalog, records, blueprint, certificates=None, read_source=None):
     return outputs, '\n'.join(readme)
 
 
-def render_lemma_hub(outputs, catalog, read_source):
-    """Hub block: one left-to-right diagram per reviewed paper, stacked vertically."""
-    papers = [p for p in catalog['papers'] if p.get('lemma_map')]
+def render_lemma_hub(catalog, certificates, read_source):
+    """Hub block: diagrams only for papers with a registered main-theorem certificate."""
+    papers = [p for p in catalog['papers'] if p.get('lemma_map') and paper_certificate(p, certificates)]
+    pointer = 'Full maps for every selected paper are in [LITERATURE.md](LITERATURE.md#paper-lemma-maps).'
     if not papers:
-        return 'No paper lemma map has been reviewed yet.'
-    lines = ['Each diagram shows a paper\'s main theorem (thick border, rightmost) with the statements its',
+        return 'No covered paper has a reviewed lemma map yet. ' + pointer
+    lines = [pointer, '',
+             'Each diagram below shows a covered paper\'s main theorem (thick border, rightmost) with the statements its',
              'proof uses, plus every statement with local Lean progress. Arrows run from a statement to',
-             'the results that use it. Full maps, statements and notes are in the paper register.', '',
+             'the results that use it.', '',
              lemma_legend(), '']
     for paper in papers:
         lemma_map = paper['lemma_map']

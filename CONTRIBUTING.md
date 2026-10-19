@@ -15,7 +15,7 @@ are part of that API. Keep generic tools in their existing mathematical owners.
 
 Explain what changed and why, cite the mathematical source, and report the checks actually
 run. AI-assisted development is welcome; review the resulting statements and proofs and
-describe verification accurately. Agent review is not external human peer review.
+describe verification using the [trust scope](research/verification.md#receipts-and-trust-scope).
 Keep third-party licenses, attribution and modification notices with reused code.
 
 ## Local checks
