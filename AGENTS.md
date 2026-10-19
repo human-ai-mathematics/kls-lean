@@ -11,9 +11,10 @@
   summary: statement, what is proved, what is not, where to look and how to verify.
 - Apply the paper-coverage criteria in
   [When a paper is covered](research/progress/LITERATURE.md#when-a-paper-is-covered).
-- Keep `HANDOFF.md` limited to the current state. Preserve superseded sections and operational
-  records verbatim, with hashes, under the ignored local `build/history/` archive. Keep current
-  source reviews and validation inputs in their tracked owning directories so a fresh clone
+- Keep `HANDOFF.md` limited to the current state. Keep internal maintenance records, agent-session
+  artifact tooling and operational history under the ignored local `build/history/` archive;
+  preserve superseded records verbatim, with hashes. Keep rules, current source reviews and
+  validation inputs in their tracked owning directories so a fresh clone
   needs no local history. Do not rewrite previously pushed Git history during archival cleanup.
 - When proof progress changes, review the source-paper mapping in `literature.json`, the complete
   diagram, its date, and the root current-status

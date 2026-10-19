@@ -3,9 +3,10 @@
 Use this workflow before adding a module, splitting an existing module, or changing a public API.
 It applies across the library. [Naming conventions](naming.md) define the detailed naming and
 parameter rules; [AGENTS.md](../AGENTS.md) makes the workflow part of normal project work.
-Record recurring layout and naming issues in the [technical-debt register](technical-debt/README.md),
-with evidence, affected consumers, and an acceptance check. Separate confirmed debt, review
-candidates, and accepted exceptions; close entries only after verification.
+Record recurring layout and naming issues in the ignored local `build/history/` archive,
+with evidence, affected consumers, and an acceptance check. Separate confirmed issues, review
+candidates, and accepted exceptions; close entries only after verification. Keep rules, current
+source reviews and validation inputs in their tracked owning directories.
 
 ## 0. Select a literature target
 

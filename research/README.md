@@ -18,8 +18,6 @@ and [calling examples](../examples/README.md).
 | [Ledger schema](ledger-schema.md) | Certificate lifecycle, structural fields and interface changes. |
 | [Certificate ledger](a-series/ledger.yaml) | Registered node statements, certificate files and certification states. |
 | [Certificate directory](../solutions/README.md) | Packaged statements, imported mathematical owners and certification convention. |
-| [Technical debt](technical-debt/README.md) | Confirmed maintenance work, review candidates and accepted exceptions. |
-| [Family maintenance register](technical-debt/remaining-families.md) | Current placements, unresolved family work and migration maps. |
 | [Task atlas](verification.md#authorities-and-task-navigation) | Commands for task classification, declared dependencies and receipt-aware navigation. |
 | [Task records](tasks.json) | Node priorities, assumptions, classification and evidence. |
 | [Audit client guide](audits/README.md) | Independent proof clients and explicitly classified candidate statements. |
@@ -37,8 +35,6 @@ and [calling examples](../examples/README.md).
 | [API directory](../formalization/API.md) | Compiler signatures and offline interface search. |
 | [Blueprint guide](../formalization/blueprint/README.md) | Mathematical dependencies, marker rules and local rendering. |
 | [Vendor guide](../formalization/vendor/README.md) | Pinned provenance, port changes and isolated upstream holes. |
-| [Artifact inventory](inventory_artifacts.py) | Read-only inventory of compiled artifacts and retention evidence. |
-| [Recoverable artifact storage](artifact_storage/README.md) | Storage, recovery and retention procedures. |
 
 ## Document ownership
 
