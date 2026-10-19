@@ -55,8 +55,8 @@ jobs:
           build: 'false'
       - name: Cache imported Mathlib modules
         run: python3 research/cache_mathlib.py
-      - name: Build Lean, audit proof axioms, and replay local modules
-        run: python3 research/verify.py --lean-only
+      - name: Build Lean and audit proof axioms
+        run: python3 research/verify.py --lean-only --no-kernel-replay
       - name: Upload verification evidence
         if: always()
         uses: actions/upload-artifact@v6

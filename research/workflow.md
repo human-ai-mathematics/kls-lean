@@ -195,10 +195,12 @@ when needed, following the [formalization guide](../formalization/README.md#lean
 There is no periodic CI schedule, and `[skip ci]` is not part of this policy. Local receipts,
 remote certification and Blueprint artifacts remain separate evidence.
 
-Remote certification runs `python3 research/verify.py --lean-only`: it builds all current
-library, solution and example modules, strictly compiles the independent Lean audit clients,
-audits transitive axioms of every local declaration with no exclusion (`KLS.kls` included),
-and replays the local modules in the kernel. A declaration depending on a hole is rejected.
+Remote certification runs `python3 research/verify.py --lean-only --no-kernel-replay`: it builds
+all current library, solution, example and vendored modules, strictly compiles the independent
+Lean audit clients, audits every local declaration's transitive axioms against only `propext`,
+`Classical.choice` and `Quot.sound` (`KLS.kls` included), and runs the vendor and classical KLS
+gates. A declaration depending on a hole is rejected. See
+[receipt scope](verification.md#receipts-and-trust-scope) for full local kernel replay evidence.
 The Lean receipt is bound to Lean sources, pinned dependencies and verification tooling;
 documentation, Blueprint/task metadata, statement-baseline records and Python tests are
 checked by the full local command, not remote CI. Remote success does not certify those

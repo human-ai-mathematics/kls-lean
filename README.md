@@ -79,7 +79,10 @@ python3 research/verify.py
 The verifier builds sources, strictly compiles audit clients, audits every local declaration,
 replays local modules and checks statements/metadata, including the
 [Mathlib-only classical KLS formulations](research/audits/KLS/Classical/README.md).
-Remote certification runs only the Lean scope, by manual dispatch or a `milestone/**` tag;
+Remote certification checks the Lean build, strict audit clients, every local declaration
+against only `propext`, `Classical.choice` and `Quot.sound`, and the vendor/classical KLS gates,
+by manual dispatch or a `milestone/**` tag. See [receipt scope](research/verification.md#receipts-and-trust-scope)
+for full local kernel replay evidence. The earlier
 [run 37516844384](https://github.com/human-ai-mathematics/kls-lean/actions/runs/37516844384)
 passed for `36e7c78` and does not certify later commits.
 

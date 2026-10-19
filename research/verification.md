@@ -73,8 +73,8 @@ This checks file presence, not third-party proof validity. Cache inputs remain p
 the trusted-third-party boundary is unchanged.
 
 The runner builds a filtered compiled-module view for the current source inventory, replacing
-the local entry in the Lean search path. Hidden production sources, missing artifacts, orphan
-module adoption and replay coverage mismatches fail. See the implementation in [verify.py](verify.py).
+the local entry in the Lean search path. Hidden production sources, missing artifacts and orphan
+module adoption fail, as do coverage mismatches when replay is enabled. See [verify.py](verify.py).
 
 For a separate Git consumer, use the [downstream runner](downstream.py) and its
 [command guide](../examples/README.md#reproduce-downstream-acceptance). It builds three narrow
@@ -107,6 +107,13 @@ Lean sources, pinned build inputs and verification tooling. Sources must remain 
 during a run. A receipt applies to its recorded snapshot, not automatically to a later tree
 or HEAD alone. Finish documentation before a full acceptance run; do not write its final hash
 back into source files and still call it current.
+
+The remote Lean-only receipt (`--lean-only --no-kernel-replay`) covers the complete current
+Lean build, strict independent audit clients, every local declaration audited for only
+`propext`, `Classical.choice` and `Quot.sound`, the vendor gate and the classical KLS gate.
+It records `"kernel_replay": "skipped"` and `"replayed_modules": []`: local-module kernel replay
+was not run remotely and its evidence is covered by the full local receipt. Without
+`--no-kernel-replay`, both full and Lean-only runs retain replay; the flag requires `--lean-only`.
 
 Pinned third-party compiled imports, including Mathlib and its dependencies, remain trusted.
 Local-module replay is not an independent second kernel, a fresh dependency replay or an
@@ -175,7 +182,7 @@ Documentation-only edits need link/rule review, scoped diff checks and generated
 not a Lean rebuild. Generator changes also need regressions for index isolation and status
 propagation. Proof/API/module changes retain their existing Lean acceptance requirements.
 
-Remote certification runs `python3 research/verify.py --lean-only` only on manual dispatch or
-an explicitly pushed `milestone/**` tag, with owner authorization. Metadata checks remain local;
+Remote certification runs `python3 research/verify.py --lean-only --no-kernel-replay` only on manual
+dispatch or an explicitly pushed `milestone/**` tag, with owner authorization. Metadata checks remain local;
 Blueprint rendering remains local. Record remote success only for the exact successful SHA.
 See the [CI procedure](workflow.md#remote-ci-at-verification-milestones).

@@ -1,15 +1,19 @@
 """Exercise the generated axiom audit against Lean, including its failure boundary."""
+from contextlib import redirect_stderr, redirect_stdout
+import io
+import json
 import os
 from pathlib import Path
 import subprocess
 import sys
 import tempfile
 import unittest
+from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from verify import (axiom_audit_code, build_replay_inputs, check_research_audits,
                     library_axiom_audit_code, parse_axioms, prepare_replay, replay_sources,
-                    reported_names,
+                    reported_names, run_verification,
                     undiscovered_lean_sources, vendor_axiom_audit_code, verification_snapshot)
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -288,6 +292,97 @@ class AxiomAuditTests(unittest.TestCase):
         reports, errors = parse_axioms(result.stdout, names, structured=True)
         self.assertEqual(reports, {})
         self.assertIn("missing axiom report: AuditMissing", errors)
+
+
+class KernelReplayFlagTests(unittest.TestCase):
+    def setUp(self):
+        (ROOT / "build").mkdir(exist_ok=True)
+
+    def run_fixture(self, *, no_kernel_replay=False, replayed=None, axioms=("propext",)):
+        # Exercise the real orchestration and receipt writer without building the repository.
+        with tempfile.TemporaryDirectory(prefix="verify-flag-", dir=ROOT / "build") as directory:
+            root = Path(directory)
+            modules = ["FunctionalInequalities", "LevyStochCalc.Probe", "solutions.Probe"]
+            snapshot = {"sha256": "fixture", "files": {
+                "formalization/FunctionalInequalities.lean": "local",
+                "formalization/vendor/LevyStochCalc/LevyStochCalc/Probe.lean": "vendor",
+                "solutions/Probe.lean": "solution",
+                "research/audits/Probe.lean": "audit"}}
+
+            def run_command(command, *, cwd, logfile, **kwargs):
+                output = ""
+                if logfile.stem == "lake-search-path":
+                    output = str(root / "formalization/.lake/build/lib/lean")
+                elif logfile.stem == "lean-toolchain":
+                    output = str(root / "toolchain")
+                elif logfile.stem == "classical-kls":
+                    out = Path(command[-1])
+                    out.mkdir()
+                    (out / "summary.json").write_text(json.dumps({"status": "passed"}))
+                elif logfile.stem == "local-declaration-audit":
+                    output = "AXIOM_REPORT " + json.dumps({
+                        "name": "FunctionalInequalities.kls", "axioms": list(axioms)}) + "\n"
+                elif logfile.stem == "research-audit-000":
+                    output = "'Audit.checked' depends on axioms: [propext]\n"
+                elif logfile.stem == "leanchecker":
+                    output = "".join(f"replaying {m}\n" for m in (modules if replayed is None else replayed))
+                logfile.write_text(output)
+                return subprocess.CompletedProcess(command, 0)
+
+            with (patch("verify.verification_snapshot", return_value=snapshot),
+                  patch("verify.prepare_replay", return_value={"modules": modules, "compiled_sha256": {}}),
+                  patch("verify.run_logged_command", side_effect=run_command),
+                  redirect_stdout(io.StringIO()), redirect_stderr(io.StringIO())):
+                result = run_verification(root, lean_only=True, no_kernel_replay=no_kernel_replay)
+            report = json.loads((root / "build/verification/latest-lean.json").read_text())
+            return result, report
+
+    def test_skip_replay_keeps_build_and_all_audits_and_records_scope(self):
+        result, report = self.run_fixture(no_kernel_replay=True)
+        self.assertEqual(result, 0, report["errors"])
+        self.assertEqual(report["status"], "passed")
+        self.assertEqual(report["kernel_replay"], "skipped")
+        self.assertEqual(report["replayed_modules"], [])
+        self.assertIn("local-module kernel replay was not run remotely", report["trust_scope"])
+        self.assertIn("covered by the full local receipt", report["trust_scope"])
+        gates = {gate["name"]: gate for gate in report["gates"]}
+        self.assertNotIn("leanchecker", gates)
+        for name in ["lake-build", "lake-build-replay-scope", "research-audit-000",
+                     "local-declaration-audit", "vendor-axiom-audit", "classical-kls"]:
+            self.assertIn(name, gates)
+        self.assertIn("-DwarningAsError=true", gates["research-audit-000"]["command"])
+        self.assertEqual(report["local_declarations_audited"], 1)
+        self.assertEqual(report["excluded_open_targets"], [])
+
+    def test_lean_only_without_flag_still_replays_and_checks_coverage(self):
+        result, report = self.run_fixture()
+        self.assertEqual(result, 0, report["errors"])
+        self.assertIn("leanchecker", [gate["name"] for gate in report["gates"]])
+        self.assertEqual(report["replayed_modules"],
+                         ["FunctionalInequalities", "LevyStochCalc.Probe", "solutions.Probe"])
+        self.assertIn("Local source build and local-module kernel replay", report["trust_scope"])
+        result, report = self.run_fixture(replayed=["FunctionalInequalities"])
+        self.assertEqual(result, 1)
+        self.assertIn("checker coverage differs from current sources", report["errors"][0])
+
+    def test_skip_replay_still_rejects_nonstandard_local_axioms(self):
+        result, report = self.run_fixture(no_kernel_replay=True, axioms=["sorryAx"])
+        self.assertEqual(result, 1)
+        self.assertEqual(report["status"], "failed")
+        self.assertIn("unexpected axioms ['sorryAx']", report["errors"][0])
+        self.assertEqual(report["kernel_replay"], "skipped")
+        self.assertEqual(report["replayed_modules"], [])
+
+    def test_flag_without_lean_only_is_a_parser_error_before_verification(self):
+        with tempfile.TemporaryDirectory(prefix="verify-args-", dir=ROOT / "build") as directory:
+            result = subprocess.run([sys.executable, str(ROOT / "research/verify.py"),
+                                     "--root", directory, "--no-kernel-replay"],
+                                    text=True, capture_output=True, timeout=30)
+            self.assertEqual(result.returncode, 2)
+            self.assertIn("error: --no-kernel-replay requires --lean-only", result.stderr)
+            self.assertFalse((Path(directory) / "build").exists())
+            with self.assertRaisesRegex(ValueError, "--no-kernel-replay requires --lean-only"):
+                run_verification(Path(directory), no_kernel_replay=True)
 
 
 class LeanOnlyBoundaryTests(unittest.TestCase):

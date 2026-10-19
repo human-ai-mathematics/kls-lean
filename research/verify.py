@@ -380,7 +380,9 @@ def run_logged_command(command: list[str], *, cwd: Path, logfile: Path, env: dic
     return subprocess.CompletedProcess(command, returncode)
 
 
-def run_verification(root: Path, *, lean_only: bool = False) -> int:
+def run_verification(root: Path, *, lean_only: bool = False, no_kernel_replay: bool = False) -> int:
+    if no_kernel_replay and not lean_only:
+        raise ValueError("--no-kernel-replay requires --lean-only")
     started = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S.%fZ")
     artifact = Path("build/verification") / started
     output_dir = root / artifact
@@ -390,6 +392,13 @@ def run_verification(root: Path, *, lean_only: bool = False) -> int:
               "snapshot": before, "scope": "lean-only" if lean_only else "full",
               "status": "failed", "gates": [], "errors": [],
               "trust_scope": "Local source build and local-module kernel replay, including the vendored libraries; pinned third-party compiled imports (Mathlib and its dependencies) are trusted. No fresh replay, external checker or isolated rebuild."}
+    if no_kernel_replay:
+        report.update(kernel_replay="skipped", replayed_modules=[])
+        report["trust_scope"] = (
+            "Lean source build and strict axiom audits, including the vendored libraries; "
+            "local-module kernel replay was not run remotely and is covered by the full local receipt. "
+            "Pinned third-party compiled imports (Mathlib and its dependencies) are trusted. "
+            "No fresh replay, external checker or isolated rebuild.")
     progress_lock = threading.Lock()
     active = {}
 
@@ -537,13 +546,14 @@ def run_verification(root: Path, *, lean_only: bool = False) -> int:
             report["axioms"] = reports
             if errors:
                 raise RuntimeError("\n".join(errors))
-        output = run("leanchecker", [str(Path(toolchain) / "bin/leanchecker"), "--verbose", "FunctionalInequalities", "solutions", "examples", *VENDOR_ROOTS],
-                     cwd=formalization, lean_path=os.pathsep.join(paths))
-        replayed = sorted(set(re.findall(r"(?m)^replaying (\S+)\s*$", output)))
-        expected_modules = set(replay["modules"])
-        if expected_modules != set(replayed):
-            raise RuntimeError(f"checker coverage differs from current sources; missing={sorted(expected_modules-set(replayed))}, extra={sorted(set(replayed)-expected_modules)}")
-        report["replayed_modules"] = replayed
+        if not no_kernel_replay:
+            output = run("leanchecker", [str(Path(toolchain) / "bin/leanchecker"), "--verbose", "FunctionalInequalities", "solutions", "examples", *VENDOR_ROOTS],
+                         cwd=formalization, lean_path=os.pathsep.join(paths))
+            replayed = sorted(set(re.findall(r"(?m)^replaying (\S+)\s*$", output)))
+            expected_modules = set(replay["modules"])
+            if expected_modules != set(replayed):
+                raise RuntimeError(f"checker coverage differs from current sources; missing={sorted(expected_modules-set(replayed))}, extra={sorted(set(replayed)-expected_modules)}")
+            report["replayed_modules"] = replayed
         report["status"] = "passed"
     except (OSError, ValueError, KeyError, RuntimeError, subprocess.SubprocessError) as exc:
         report["errors"].append(str(exc))
@@ -571,5 +581,10 @@ if __name__ == "__main__":
     parser.add_argument("--root", type=Path, default=atlas.ROOT)
     parser.add_argument("--lean-only", action="store_true",
                         help="build, strictly audit and replay Lean; leave documentation/metadata checks local")
+    parser.add_argument("--no-kernel-replay", action="store_true",
+                        help="skip local-module kernel replay for remote CI; requires --lean-only")
     args = parser.parse_args()
-    raise SystemExit(run_verification(args.root.resolve(), lean_only=args.lean_only))
+    if args.no_kernel_replay and not args.lean_only:
+        parser.error("--no-kernel-replay requires --lean-only")
+    raise SystemExit(run_verification(args.root.resolve(), lean_only=args.lean_only,
+                                     no_kernel_replay=args.no_kernel_replay))

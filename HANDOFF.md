@@ -44,8 +44,13 @@ Repository visibility and previously pushed history remain unchanged by this pre
 CI cache preparation recognizes both aggregate `Mathlib` and dotted imports, checks their
 pinned compiled closure, and rejects an incomplete cache before the build. The verifier
 prints live progress and retains incomplete-run state; disk exhaustion, cache misses,
-compiler failures and manual cancellation have distinct evidence. The strict declaration,
-audit and kernel-replay gates remain enabled. No old or cancelled run verifies a new revision.
+compiler failures and manual cancellation have distinct evidence. No old or cancelled run
+verifies a new revision.
+
+Remote CI keeps the strict build and declaration/vendor/classical audits, with the final
+local-module kernel replay assigned to the [full local receipt](research/verification.md#receipts-and-trust-scope).
+A single `leanchecker` process accumulates memory (14.4 GB after 40 modules locally), freezing
+the 16 GB hosted runner; remote certification therefore skips that replay gate.
 
 The section-variable maintenance is recorded in the
 [scope review](research/technical-debt/variable-scopes.md). Repeated property premises,

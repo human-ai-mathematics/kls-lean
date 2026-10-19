@@ -51,7 +51,10 @@ and revision; it is not evidence for a different eventual release SHA.
 Follow the [CI workflow](workflow.md#remote-ci-at-verification-milestones): after local
 acceptance, push the approved revision and use one manual dispatch or one `milestone/**`
 tag. Confirm the run's actual `head_sha`, successful conclusion and evidence artifact.
-Remote certification checks the Lean scope; it does not replace the full local gate.
+Remote certification checks the Lean build, strict audit clients, every local declaration
+against only `propext`, `Classical.choice` and `Quot.sound`, and the vendor and classical KLS
+gates. See [receipt scope](verification.md#receipts-and-trust-scope) for full local kernel replay
+evidence and the remaining local gates.
 Only then update publication claims for that revision and change visibility when authorized.
 Do not describe an older, cancelled, timed-out or incomplete run as current acceptance.
 
@@ -73,4 +76,4 @@ Cache completeness checks file presence; they are not a replay of third-party pr
 The hosted runner reserves disk before setup and bounds the job to 180 minutes. A disk error,
 missing cache, compiler error and manual cancellation are different outcomes. Preserve their
 logs and annotations, fix the identified cause, and retry at a meaningful milestone. Keep the
-strict audits and replay enabled; raising a timeout alone does not repair a cache or disk problem.
+strict build and axiom audits enabled; raising a timeout alone does not repair a cache or disk problem.

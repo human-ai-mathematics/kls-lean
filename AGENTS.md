@@ -57,8 +57,10 @@
   on explicit manual dispatch or a pushed `milestone/**` tag; ordinary branch pushes and PR
   updates do not trigger it. Lean certification is the only remote workflow; build Blueprint
   locally when its artifacts are needed.
-  Remote CI uses `research/verify.py --lean-only`; documentation/metadata and Python checks
-  remain in the full local verifier. Preserve strict Lean audits and local-module replay.
+  Remote CI uses `research/verify.py --lean-only --no-kernel-replay`; documentation/metadata
+  and Python checks remain in the full local verifier. Remote CI preserves the strict Lean
+  build and declaration/vendor axiom audits; the local-module kernel replay is part of full
+  local verification only. See [receipt scope](research/verification.md#receipts-and-trust-scope).
   Do not use `[skip ci]` to control this policy or add routine scheduled full builds.
   Keep change-appropriate local checks; report remote verification only for the exact SHA
   with a successful run. See `research/workflow.md` for the CI procedure.
