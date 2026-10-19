@@ -24,10 +24,15 @@
 - Base completion markers on the current theorem statements and verification evidence. Preserve
   assumptions, dimensional scope, and the distinction between a proved result, a completed route,
   and a ledger certificate. Do not mark a wrapper proved if it still depends on `sorryAx`.
-- Keep the literature priorities and the next-step highlight aligned with the current handoff. The dimension-free KLS bound
-  stays open until that exact statement is proved and verified.
-- Keep the exploratory route overview complete for the four active branches in
-  `formalization/blueprint/route-composition.yaml`. Draw arrows from prerequisites toward
+- Keep the literature priorities and the next-step highlight aligned with the current handoff.
+  The dimension-free KLS bound is proved through the accepted BKL main line.
+- Keep the exploratory route overview complete for the four branches in
+  `formalization/blueprint/route-composition.yaml`. The four exploratory routes are not current
+  formalization targets and are retained as historical records; their unproved hypotheses remain
+  open mathematically. KLS is proved through the accepted BKL main line.
+  Badge open hypotheses as such rather than as
+  pending formalization, and badge not-formalized results exclusive to superseded routes accordingly.
+  Draw arrows from prerequisites toward
   conclusions and ultimately KLS, with AND within each route and OR between sufficient routes.
   Distinguish upstream mathematical results, conditional implications, and local Lean proofs;
   keep refuted branches and restricted model calculations outside the active implication chain.
@@ -41,7 +46,9 @@
 - Keep the progress tree and its surrounding documentation in English. Preserve unrelated work
   when preparing documentation commits.
 - Use the established progress notation: `✓` for completed local Lean proofs, `◐` for partial
-  local formalization, and `○` for pending work. In paper lemma maps (`lemma_map` in
+  local formalization, `◇` for hypotheses that remain open mathematically and are not current
+  formalization targets, and `○` for pending work
+  or not-formalized results of superseded routes as labelled. In paper lemma maps (`lemma_map` in
   `literature.json`), `⇑` marks a reviewed stronger statement or a different proof route; list
   every numbered statement of the pinned source version, and let ✓/◐/○ follow the declarations. Keep upstream mathematical or conditional-proof
   provenance separate; it must not turn a pending local formalization into a completed result.

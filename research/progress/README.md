@@ -9,9 +9,9 @@
 | [Progress table](STATUS.md) | Local node IDs, mathematical provenance, recorded Lean status, certificates, dependencies, and gaps |
 
 The project goal is to formalize as much of the published KLS literature as possible. Work is
-selected by a named paper, pinned version and target theorem. The four routes in the diagram
-below are exploratory research records that share our analytic infrastructure; they are not
-formalization targets in their own right.
+selected by a named paper, pinned version and target theorem. The four exploratory routes in the diagram
+below share our analytic infrastructure. They are not current formalization targets and are retained
+as historical records; their unproved hypotheses remain open mathematically.
 
 A paper is **covered** only when its main theorem is stated faithfully in Lean (same hypotheses,
 constants, normalization and dimensional scope), proved without nonstandard axioms, and
@@ -1422,10 +1422,20 @@ See the [full tables and normalization](LITERATURE.md#constant-conventions).
 
 ## Proof progress tree
 
-<!-- BEGIN GENERATED DATE -->
-Last updated: **2026-10-17**.
+KLS is proved through the accepted BKL main line. The four exploratory routes are not current
+formalization targets and are retained as historical records; their unproved hypotheses remain
+open mathematically. `◇ Open hypothesis, not a target` marks mathematical assumptions and
+questions that remain open, including those outside these routes.
+`○ Not formalized, superseded route` marks not-formalized results and route junctions exclusive
+to those historical routes. Formalized results, refuted claims and shared analytic bridges
+retain their existing states; the neutral badges distinguish research records from pending work.
 
-![✓ Formalized in Lean](badges/formalized.svg) · ![○ Not yet formalized](badges/pending.svg) · ![◐ Partially formalized](badges/partial.svg) · ![— Excluded: refuted](badges/excluded.svg)
+<!-- BEGIN GENERATED DATE -->
+Last updated: **2026-10-19**.
+
+![✓ Formalized in Lean](badges/formalized.svg) · ![○ Not yet formalized](badges/pending.svg) · ![◐ Partially formalized](badges/partial.svg) · ![◇ Open hypothesis, not a target](badges/hypothesis.svg) · ![○ Not formalized, superseded route](badges/superseded.svg) · ![— Excluded: refuted](badges/excluded.svg)
+
+Open hypotheses remain open mathematically; they are assumptions or questions, not current formalization targets. Superseded results and route junctions belong to historical exploratory routes. KLS is proved through the accepted BKL main line. The four exploratory routes are not current formalization targets and are retained as historical records; their unproved hypotheses remain open mathematically.
 <!-- END GENERATED DATE -->
 Scalar sharp Sard, vector coarea through locally Lipschitz maps, the Cheeger infimum equality,
 heat-semigroup construction, and the full numerical Cheeger–Buser comparison are formalized
@@ -1449,7 +1459,9 @@ chain retains the actual right-radius liminf of integrated open-ball growth unde
 finite positive-support-neighborhood mass and nonnegativity. No new ledger
 certificate or remote CI is claimed. The locally Lipschitz classes on nonproper
 spaces, nonconvex support transfer and general RCD comparisons are
-outside this completed proof scope; the dimension-free KLS routes remain open.
+outside this completed proof scope. KLS is proved through the accepted BKL main line.
+The four exploratory routes are not current formalization targets and are retained as historical
+records; their unproved hypotheses remain open mathematically.
 The content chain proves lower content `≤` upper content, almost-everywhere differentiability of
 the monotone radius mass, the derivative and integrated bounds on the upper content of
 thickenings, the local-slope Minkowski coarea inequality, the recovery of every measurable set of
@@ -1459,8 +1471,10 @@ relaxed lower content, on arbitrary metric spaces with a finite Borel measure (p
 independently accepted; the generic coarea uses the lower semicontinuous open-ball supremum;
 scaling, the zero measure and normalization are explicit). The upper-content chain for measures finite on bounded sets
 with infinite total mass is proved at measurable finite-mass targets (above); pointwise
-equality of the upper content with the perimeter, general RCD comparisons and the
-dimension-free KLS routes are not proved locally.
+equality of the upper content with the perimeter and general RCD comparisons are not proved locally.
+KLS is proved through the accepted BKL main line. The four exploratory routes are not current
+formalization targets and are retained as historical records; their unproved hypotheses remain
+open mathematically.
 
 Complement symmetry for finite Borel
 measures, including the closed intrinsic support law, is formalized in Lean, and so is
@@ -1488,12 +1502,14 @@ approximants equals this perimeter for finite measures, and over locally Lipschi
 approximants on proper spaces (with global or compact-set `L¹` convergence), in particular on
 the closed intrinsic support, and the relaxed
 lower Minkowski set infimum equals it for probability laws on normed spaces; `L¹_loc`
-convergence beyond proper spaces with finite measures, and nonconvex supports remain open. The four dimension-free
-[KLS routes](#proof-progress-tree) remain open.
+convergence beyond proper spaces with finite measures, and nonconvex supports remain open.
+KLS is proved through the accepted BKL main line. The four exploratory [KLS routes](#proof-progress-tree)
+are not current formalization targets and are retained as historical records; their unproved
+hypotheses remain open mathematically.
 These statuses record local proofs and do not claim a remote CI receipt.
 Upstream mathematical proofs alone do not earn a ✓.
 
-One large diagram shows the four sufficient routes and their shared proof infrastructure.
+One large diagram shows the four historical sufficient-route plans and their shared proof infrastructure.
 Arrows point toward KLS: AND within each route, OR between routes. The completed BKL literature route enters KLS
 through its own AND junction with the affine/isotropic reduction; it is not a fifth exploratory route. Dotted arrows show context. The vector-coarea extension is shown separately and does not
 assert an additional implication to KLS.
@@ -1541,18 +1557,18 @@ flowchart LR
     HEAT["◐ Small-time heat bounds<br/>and pi Buser assembly"]
     end
     subgraph ELDAN["Eldan localization"]
-    EG["○ Tight-prefix<br/>Carleson estimate"]
+    EG["◇ Tight-prefix<br/>Carleson estimate"]
     EC["○ Tight-window<br/>Consumption"]
     EAND{"AND<br/>○ Eldan route"}
     end
     subgraph SPECTRAL["Moment-map spectral"]
-    SG["○ Full-damping<br/>Occupation bound"]
+    SG["◇ Full-damping<br/>Occupation bound"]
     SC["○ Spectral<br/>Sufficiency"]
     SAND{"AND<br/>○ Spectral route"}
     end
     subgraph CMH["Moment-map CMH"]
     MH["○ W₂ limit and<br/>CMH comparison"]
-    MG["○ Bounded CMH<br/>Recovery envelope"]
+    MG["◇ Bounded CMH<br/>Recovery envelope"]
     MT["✓ Affine constant<br/>Translation invariance"]
     MC["○ Recovery-sequence<br/>Sufficiency"]
     MAND{"AND<br/>○ CMH route"}
@@ -1563,7 +1579,7 @@ flowchart LR
     FP["✓ Fiber-bound<br/>Energy comparison"]
     F4["✓ Fiber energy<br/>≤ 4 × gradient energy"]
     FC["✓ Fiber Dirichlet form"]
-    FG["○ Universal<br/>Frame bound"]
+    FG["◇ Universal<br/>Frame bound"]
     FAND{"AND<br/>◐ Fiber route"}
     end
     subgraph VECTOR["Vector coarea extension — separate from the KLS implication routes"]
@@ -1919,8 +1935,10 @@ flowchart LR
     class KLS,ENERGY,F4,MT,FP,FC,EQ,NORM,DENS,FRONT,CB,ONE,CONST,FORMS,MEAS,GRAPH,REG,CRIT,C1,WHIT,LIP,GG,REC,FWD,SARD,SCI,CUT,REV,MINK,BV,FLOG,VREG,VZERO,VR123,VR4,VFULL,SEMI,MARKOV,DECAY,GAUSS,GSTAB,VLIP,BT31,BP71,BREG,WEAKHESS,CEKMAP,REGMOM,WEAKINVINT,WEAKGEN,HESSENT,CDIFF,WEAKGENINT,INCINT,INCENERGY,TRANSCUT,HESSL2,HESSDIFF,WEAKTHIRD,SRCDIFF,EXPLIP,REGTENSOR,WPRODG,WPRODL,WLIN,WFPROD,WDET,WTRACE,WJAC,EXPHALF,WAECONGR,AEEXP,WMA1,WEXPNEG,WPRODLB,WMATINV,WADJ,WINVH,WINV,WSMOOTH,WCURL,WEAKGENC1,MEANC11,WMEANH,WBAPPROX,WBTEST,WINVROW,WGRADCOMP,WMARHS,WFLUXLOC,WFLUX,WEVOL,WEVOLB,WEVOLSRC,WHTEST,WCUTR,WCUTN,WCUTSRC,WCFLUX,WBTRQ,WROUGH,WTRCON,TRPOS,TRGRAM,WCUTTEST,WLAP,C11COER,WBL,MPTRACE,MVAR,WT25,SYMAE,S1,WIBP,C1CHAIN,SRCSTEIN,DUALB,GAUSSID,WSTEINSRC,MNTRACE,SPECGEO,SYMINV,MTRMEAN,HSSYM,GRADAFF,ACTALG,HESSACT,QACTION,SIGNNOISE,NOISEINT,QFOURTH,FINVAR,QVARCONT,LA2EXT,NOISECONV,G4MOM,GTRANS,GLATENT,GPOT,SRCAFF,GPRODSTEIN,GPRODDUAL,NOISELIM,GSMVAR,GHMINUS,RESTEXP,OPMAT,REGCLASS8,LCOMPACT8,BCUT,BCUM,BKLMAIN done;
     classDef partial fill:#fff3df,stroke:#c88719,color:#66420d;
     class FAND,BE,HEAT partial;
-    classDef todo fill:#fee2e2,stroke:#dc2626,color:#991b1b;
-    class MG,EG,MC,EC,SC,FG,SG,MH,EAND,SAND,MAND todo;
+    classDef hypothesis fill:#f1f5f9,stroke:#64748b,color:#334155;
+    class MG,EG,FG,SG hypothesis;
+    classDef superseded fill:#f8fafc,stroke:#94a3b8,color:#475569,stroke-dasharray:5 4;
+    class MC,EC,SC,MH,EAND,SAND,MAND superseded;
     classDef logic fill:#fff,stroke:#555,color:#222;
     class ANY,BKLAND logic;
     click MG href "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/blueprint/src/chapters/50-kls-routes.tex" "Bounded CMH — Recovery envelope" _blank
@@ -2098,7 +2116,8 @@ flowchart LR
 
 - The energy identity uses local-slope Cheeger energy and is proved for every Borel probability law.
 - The one-dimensional Poincaré coefficient is 4; this does not prove dimension-free KLS.
-- The fiber route still needs one universal frame independent of the test function.
+- The historical fiber route assumes one universal frame independent of the test function;
+  this hypothesis remains open mathematically and is not a current formalization target.
 - Scalar Sard is proved at sharp finite regularity. Scalar and vector weighted coarea are proved
   for C¹, Lipschitz and locally Lipschitz maps; this is not a general vector-valued sharp Sard theorem.
 - The Cheeger superlevel integral bound, both infimum comparisons and their equality are proved.
@@ -2122,10 +2141,16 @@ flowchart LR
 - Registered certificates are listed in the [certification ledger](../a-series/ledger.yaml). `KLS.kls` is
   proved and audited like every other local declaration; the former WIP modules are removed.
 - CMH sufficiency requires a regular recovery sequence; it is not an equivalence.
-- Refuted packages and parked probes remain outside the active implication chain. The pinned
-  upstream portfolio and its four active route requirements are unchanged.
+- Refuted packages and parked probes remain outside the implication chain. The pinned
+  upstream portfolio and its four route requirements are unchanged; their upstream `active`
+  classification does not make these routes current formalization targets. They are retained
+  as historical records; their unproved hypotheses remain open mathematically.
 
 ## Nicolas’s route and approach register
+
+This pinned upstream research inventory is historical. Mapped hypotheses use the hypothesis
+badge; unmapped approach assessments retain their recorded formalization state and do not
+establish route membership or a current local work item.
 
 <!-- BEGIN GENERATED APPROACHES -->
 **19 approaches in the [pinned upstream portfolio](https://github.com/human-ai-mathematics/kls-conjecture-search/blob/34b5fcd57fef17089e781616005fe6d3641bd11e/research/program/portfolio.yaml)** (`34b5fcd`).
@@ -2133,22 +2158,22 @@ Upstream activity and local Lean formalization are separate. Supporting results 
 
 | Family | Approach | Upstream state | Our Lean formalization | Objective / remaining work |
 | --- | --- | --- | --- | --- |
-| Eldan | [`ap:eldan-trace-upgrade`](https://github.com/human-ai-mathematics/kls-conjecture-search/blob/34b5fcd57fef17089e781616005fe6d3641bd11e/research/program/portfolio.yaml) | active | ![○ Not yet formalized](badges/pending.svg) | Upgrade directional occupation control to trace scale for all balanced cuts, producing the tight-prefix absorptive trace estimate with every source and damping term matched to the scalar Riccati bound. |
+| Eldan | [`ap:eldan-trace-upgrade`](https://github.com/human-ai-mathematics/kls-conjecture-search/blob/34b5fcd57fef17089e781616005fe6d3641bd11e/research/program/portfolio.yaml) | active | ![◇ Open hypothesis, not a target](badges/hypothesis.svg) | Upgrade directional occupation control to trace scale for all balanced cuts, producing the tight-prefix absorptive trace estimate with every source and damping term matched to the scalar Riccati bound. |
 | Eldan | [`ap:eldan-weighted-excess`](https://github.com/human-ai-mathematics/kls-conjecture-search/blob/34b5fcd57fef17089e781616005fe6d3641bd11e/research/program/portfolio.yaml) | blocked; Original package refuted. | ![○ Not yet formalized](badges/pending.svg) | Propagate the perimeter excess with a global operator-norm covariance weight at the unit-rate scale. |
 | Eldan | [`ap:eldan-screened-supply`](https://github.com/human-ai-mathematics/kls-conjecture-search/blob/34b5fcd57fef17089e781616005fe6d3641bd11e/research/program/portfolio.yaml) | active | ![○ Not yet formalized](badges/pending.svg) | Charge the weighted excess only on the aligned screen where the trace term dominates, and return at most an absorbable fraction on its complement. |
 | Eldan | [`ap:eldan-stein-weighted`](https://github.com/human-ai-mathematics/kls-conjecture-search/blob/34b5fcd57fef17089e781616005fe6d3641bd11e/research/program/portfolio.yaml) | queued | ![○ Not yet formalized](badges/pending.svg) | Specify the tensor-stable replacement for the refuted weighted package and supply the matching localization-uniform almost-stability trace theorem modulo Jacobi zero modes. |
 | Eldan | [`ap:eldan-taming-splitting`](https://github.com/human-ai-mathematics/kls-conjecture-search/blob/34b5fcd57fef17089e781616005fe6d3641bd11e/research/program/portfolio.yaml) | queued | ![○ Not yet formalized](badges/pending.svg) | Define one bridge object carrying both the cut-free covariance index and the cut-indexed boundary geometry, and prove the covariance-taming or almost-splitting estimate from it. |
 | Eldan | [`ap:eldan-alignment`](https://github.com/human-ai-mathematics/kls-conjecture-search/blob/34b5fcd57fef17089e781616005fe6d3641bd11e/research/program/portfolio.yaml) | queued | ![○ Not yet formalized](badges/pending.svg) | Decide the incident-high product-cut model with a uniform analytic bound for fixed balanced product cuts, or a certified counterexample. |
-| Spectral | [`ap:spectral-occupation`](https://github.com/human-ai-mathematics/kls-conjecture-search/blob/34b5fcd57fef17089e781616005fe6d3641bd11e/research/program/portfolio.yaml) | active | ![○ Not yet formalized](badges/pending.svg) | Prove the universal-time full-damping source estimate uniformly on regular approximants, preserving tensor orientation under unwhitening. |
+| Spectral | [`ap:spectral-occupation`](https://github.com/human-ai-mathematics/kls-conjecture-search/blob/34b5fcd57fef17089e781616005fe6d3641bd11e/research/program/portfolio.yaml) | active | ![◇ Open hypothesis, not a target](badges/hypothesis.svg) | Prove the universal-time full-damping source estimate uniformly on regular approximants, preserving tensor orientation under unwhitening. |
 | Spectral | [`ap:spectral-window-chain`](https://github.com/human-ai-mathematics/kls-conjecture-search/blob/34b5fcd57fef17089e781616005fe6d3641bd11e/research/program/portfolio.yaml) | completed; Conditional on Letwin; short-time only. | ![○ Not yet formalized](badges/pending.svg) | Close the occupation estimate on the published polylogarithmic covariance window through the initial-layer window chain. |
-| CMH | [`ap:cmh-recovery-envelope`](https://github.com/human-ai-mathematics/kls-conjecture-search/blob/34b5fcd57fef17089e781616005fe6d3641bd11e/research/program/portfolio.yaml) | active | ![○ Not yet formalized](badges/pending.svg) | Construct, for every centered log-concave law, one regular compact-target moment-map recovery sequence with a universal bound on the CMH liminf. |
+| CMH | [`ap:cmh-recovery-envelope`](https://github.com/human-ai-mathematics/kls-conjecture-search/blob/34b5fcd57fef17089e781616005fe6d3641bd11e/research/program/portfolio.yaml) | active | ![◇ Open hypothesis, not a target](badges/hypothesis.svg) | Construct, for every centered log-concave law, one regular compact-target moment-map recovery sequence with a universal bound on the CMH liminf. |
 | CMH | [`ap:cmh-anisotropic-bootstrap`](https://github.com/human-ai-mathematics/kls-conjecture-search/blob/34b5fcd57fef17089e781616005fe6d3641bd11e/research/program/portfolio.yaml) | queued | ![○ Not yet formalized](badges/pending.svg) | Prove the anisotropic source-retention inequality that would bound the linear-test quotient through the exact isotropic-coordinate matrices, working from the weak column equation of the linear-sector gate-matrix spectral resolution without assuming its strong operator-domain form, and supplying the integrated corrector or nonlocal coercivity that matrix polarization alone cannot. |
 | CMH | [`ap:cmh-uniform-approximants`](https://github.com/human-ai-mathematics/kls-conjecture-search/blob/34b5fcd57fef17089e781616005fe6d3641bd11e/research/program/portfolio.yaml) | queued | ![○ Not yet formalized](badges/pending.svg) | Bound the CMH constant uniformly along the certified regular approximant families, a stronger premise than the recovery envelope and not needed if that one is discharged. |
 | CMH | [`ap:cmh-invariant-lift`](https://github.com/human-ai-mathematics/kls-conjecture-search/blob/34b5fcd57fef17089e781616005fe6d3641bd11e/research/program/portfolio.yaml) | queued | ![○ Not yet formalized](badges/pending.svg) | Derive the target-flat multiplier invariantly and reduce arbitrary split dimensions to controlled Codazzi components paired with named positive squares. |
 | CMH | [`ap:cmh-square-root-commutator`](https://github.com/human-ai-mathematics/kls-conjecture-search/blob/34b5fcd57fef17089e781616005fe6d3641bd11e/research/program/portfolio.yaml) | queued | ![○ Not yet formalized](badges/pending.svg) | Control the complete Haar sum of square-root commutators on a common core, accounting for every retained positive and error term without double spending. |
 | CMH | [`ap:cmh-solenoidal-perturbation`](https://github.com/human-ai-mathematics/kls-conjecture-search/blob/34b5fcd57fef17089e781616005fe6d3641bd11e/research/program/portfolio.yaml) | queued | ![○ Not yet formalized](badges/pending.svg) | Compute the exact second variation through the Hodge split at an admissible target-side perturbation of the saturating one-sided-exponential product, aimed at the radial Gamma factor rather than at the base of an exponential cone. |
 | CMH | [`ap:cmh-gate-zero`](https://github.com/human-ai-mathematics/kls-conjecture-search/blob/34b5fcd57fef17089e781616005fe6d3641bd11e/research/program/portfolio.yaml) | active | ![○ Not yet formalized](badges/pending.svg) | Decide the necessary linear moment-map inequality, first in the sharp form of gate zero and then at the CMH constant itself, by an independently checked analytic argument or a genuine moment-map counterexample, using the certified third-moment decomposition of the linear sector and the exact exponential-cone battery as the equality set any argument must be tight on. |
-| Conditional fibers | [`ap:fiber-frame-construction`](https://github.com/human-ai-mathematics/kls-conjecture-search/blob/34b5fcd57fef17089e781616005fe6d3641bd11e/research/program/portfolio.yaml) | active | ![○ Not yet formalized](badges/pending.svg) | Construct one test-independent isotropic frame with a universal L2 gap on the maximal closed form domain. |
+| Conditional fibers | [`ap:fiber-frame-construction`](https://github.com/human-ai-mathematics/kls-conjecture-search/blob/34b5fcd57fef17089e781616005fe6d3641bd11e/research/program/portfolio.yaml) | active | ![◇ Open hypothesis, not a target](badges/hypothesis.svg) | Construct one test-independent isotropic frame with a universal L2 gap on the maximal closed form domain. |
 | Conditional fibers | [`ap:fiber-simplex-dual`](https://github.com/human-ai-mathematics/kls-conjecture-search/blob/34b5fcd57fef17089e781616005fe6d3641bd11e/research/program/portfolio.yaml) | queued | ![○ Not yet formalized](badges/pending.svg) | Refute the all-frame gate with an exact uniform-simplex dual certificate of polynomial degree at least three whose objective tends to zero, the certified degree-two floors of the root-frame degree-two pencil identity having ruled out every degree-two refuter. |
 | Parked probes | [`ap:cone-boundary-gap`](https://github.com/human-ai-mathematics/kls-conjecture-search/blob/34b5fcd57fef17089e781616005fe6d3641bd11e/research/program/portfolio.yaml) | blocked | ![○ Not yet formalized](badges/pending.svg) | Establish a universal tangential Poincare gap for normalized cone measure, feeding the published Hardy boundary bridge. |
 | Parked probes | [`ap:laplace-brenier-simplex`](https://github.com/human-ai-mathematics/kls-conjecture-search/blob/34b5fcd57fef17089e781616005fe6d3641bd11e/research/program/portfolio.yaml) | blocked | ![○ Not yet formalized](badges/pending.svg) | Decide the rotation-optimized simplex transmission bound before registering a Laplace-Brenier route. |
@@ -2163,22 +2188,22 @@ The [full node register](STATUS.md) separately lists definitions and registered 
 <!-- BEGIN GENERATED RESULTS -->
 | Result / step | Our Lean formalization | Source |
 | --- | --- | --- |
-| Bounded CMH — Recovery envelope | ![○ Not yet formalized](badges/pending.svg) | [Source](https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/blueprint/src/chapters/50-kls-routes.tex) |
-| Tight-prefix — Carleson estimate | ![○ Not yet formalized](badges/pending.svg) | [Source](https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/blueprint/src/chapters/50-kls-routes.tex) |
+| Bounded CMH — Recovery envelope | ![◇ Open hypothesis, not a target](badges/hypothesis.svg) | [Source](https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/blueprint/src/chapters/50-kls-routes.tex) |
+| Tight-prefix — Carleson estimate | ![◇ Open hypothesis, not a target](badges/hypothesis.svg) | [Source](https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/blueprint/src/chapters/50-kls-routes.tex) |
 | Canonical energy — = 2 × Cheeger energy | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/Energy/Cheeger/Basic.lean) |
-| Recovery-sequence — Sufficiency | ![○ Not yet formalized](badges/pending.svg) | [Source](https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/blueprint/src/chapters/50-kls-routes.tex) |
+| Recovery-sequence — Sufficiency | ![○ Not formalized, superseded route](badges/superseded.svg) | [Source](https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/blueprint/src/chapters/50-kls-routes.tex) |
 | Fiber energy — ≤ 4 × gradient energy | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/ConditionalFiber.lean) |
-| Tight-window — Consumption | ![○ Not yet formalized](badges/pending.svg) | [Source](https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/blueprint/src/chapters/50-kls-routes.tex) |
+| Tight-window — Consumption | ![○ Not formalized, superseded route](badges/superseded.svg) | [Source](https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/blueprint/src/chapters/50-kls-routes.tex) |
 | Affine constant — Translation invariance | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/Poincare/CovarianceGradient/Translation.lean) |
 | Fiber-bound — Energy comparison | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/ConditionalFiber/EnergyComparison.lean) |
 | Fiber Dirichlet form | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/ConditionalFiber/Closed.lean) |
 | h_M = h_S | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Geometry/Cheeger/Equality.lean) |
-| Spectral — Sufficiency | ![○ Not yet formalized](badges/pending.svg) | [Source](https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/blueprint/src/chapters/50-kls-routes.tex) |
-| Universal — Frame bound | ![○ Not yet formalized](badges/pending.svg) | [Source](https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/blueprint/src/chapters/50-kls-routes.tex) |
-| Full-damping — Occupation bound | ![○ Not yet formalized](badges/pending.svg) | [Source](https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/blueprint/src/chapters/50-kls-routes.tex) |
+| Spectral — Sufficiency | ![○ Not formalized, superseded route](badges/superseded.svg) | [Source](https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/blueprint/src/chapters/50-kls-routes.tex) |
+| Universal — Frame bound | ![◇ Open hypothesis, not a target](badges/hypothesis.svg) | [Source](https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/blueprint/src/chapters/50-kls-routes.tex) |
+| Full-damping — Occupation bound | ![◇ Open hypothesis, not a target](badges/hypothesis.svg) | [Source](https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/blueprint/src/chapters/50-kls-routes.tex) |
 | Affine / isotropic — Reduction | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/Isotropic.lean) |
 | Log-concave density — Intrinsic support | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/Density/BorellRepresentation/Intrinsic.lean) |
-| W₂ limit and — CMH comparison | ![○ Not yet formalized](badges/pending.svg) | [Source](https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/blueprint/src/chapters/50-kls-routes.tex) |
+| W₂ limit and — CMH comparison | ![○ Not formalized, superseded route](badges/superseded.svg) | [Source](https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/blueprint/src/chapters/50-kls-routes.tex) |
 | Density Cheeger — Identification | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex) |
 | Cheeger–Buser — 4 and pi bounds | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/blueprint/src/chapters/45-shared-analytic-bridges.tex) |
 | One-dimensional — Poincaré ≤ 4 Var | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/LogConcave/Line/SharpPoincare.lean) |
@@ -2348,8 +2373,9 @@ routes to KLS, and no solid implication arrow from a model calculation to a univ
 
 Solid arrows point from inputs toward consumers; all inputs to an AND diamond are required.
 The OR junction joins the four exploratory alternatives; the separate BKL AND junction joins BKL
-Theorem 1.1 with the affine/isotropic reduction. Arrows through pending nodes describe the
-planned proof route, not an already established implication. Only selected dependencies are shown.
+Theorem 1.1 with the affine/isotropic reduction. Arrows through hypothesis and superseded nodes
+describe historical conditional proof plans, not established proofs of their open inputs.
+Only selected dependencies are shown.
 The [route composition](../../formalization/blueprint/route-composition.yaml) and Blueprint give
 precise statements. The upstream roadmap remains pinned to
 `34b5fcd57fef17089e781616005fe6d3641bd11e`; this is a route-level overview, not every upstream lemma.
@@ -2541,7 +2567,15 @@ Every node has a link. If diagram links are disabled in your viewer, use this di
   status is derived from the mapped node records; certificates are reported as supporting only.
 - [Node records](nodes.json) own English descriptions, diagram labels, source links, layout,
   and evidence-backed assessments for auxiliary results. Nodes with a `blueprint` mapping obtain
-  their proof status from the staged Blueprint; they cannot override it here.
+  their proof status from the staged Blueprint; they cannot override it here. `route_display`
+  identifies the accepted BKL junction and shared analytic groups. The accepted junction must be
+  the unique route branch whose recorded requirement closure is entirely formalized; exploratory
+  inputs come from route-composition records, and the separate literature AND junction uses its
+  recorded dependency edges. Shared groups must contain no route-branch records.
+  An explicit `display_state: hypothesis` annotation is allowed only on unmapped assessment
+  records, such as pinned portfolio approaches. Blueprint assumptions and questions receive the
+  hypothesis badge automatically; a manual annotation on any Blueprint-mapped record is rejected.
+  Neither rule replaces a formalized or refuted state.
 - [Blueprint](../../formalization/blueprint/src/chapters/), [ledger](../a-series/ledger.yaml),
   and [task metadata](../tasks.json) remain the canonical mathematical and certification records.
 - [Route composition](../../formalization/blueprint/route-composition.yaml) records the four sufficient
@@ -2553,7 +2587,8 @@ Every node has a link. If diagram links are disabled in your viewer, use this di
 `update.py` resolves these inputs once and generates the literature register and priorities, the README diagram, both progress tables,
 node links, `STATUS.md`, `TREE.mmd`, and local SVG status badges. Generated blocks and badges
 must not be edited by hand. Table badges use blue for formalized, red for pending, orange for
-partial, and gray for excluded results; text labels preserve the meaning without color.
+partial, and neutral slate for hypotheses, superseded routes and excluded results. Hypotheses
+use a diamond mark; superseded diagram nodes have dashed borders. Text labels preserve the meaning without color.
 The auxiliary assessments preserve the reviewed status at the cited baseline commit; they do not
 claim a new kernel audit. See the [verification guide](../verification.md) for proof verification.
 

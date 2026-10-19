@@ -92,7 +92,7 @@ def generate():
     catalog = json.loads(inputs['research/progress/nodes.json'])
     portfolio = json.loads(inputs['research/progress/portfolio.json'])
     bibliography = json.loads(inputs['research/progress/literature.json'])
-    records = views.resolve(catalog, nodes, claims)
+    records = views.resolve(catalog, nodes, claims, routes)
     views.validate_routes(catalog, records, routes)
     tree = views.render_tree(catalog, records)
     readme = views.render_readme(inputs['research/progress/README.md'].decode(), tree, catalog, records, portfolio)
@@ -109,7 +109,7 @@ def generate():
         raise ValueError('Update nodes.json to match the Blueprint node inventory.')
     if any(not isinstance(value, str) or not value.strip() for value in descriptions.values()):
         raise ValueError('Every local node needs a nonempty English description.')
-    pending = []
+    unformalized = []
     for name, node in sorted(nodes.items()):
         claim = claims.get(name, {})
         provenance = claim.get('provenance', {})
@@ -132,12 +132,18 @@ def generate():
             source += ' · ' + link(cert['lean_solution'], 'Lean certificate')
         out.append(f'| `{name}` | {cell(descriptions[name])} | {cell(math)} | {status} | {source} |')
         if not complete and not excluded:
-            pending.append((name, node, meta))
-    out += ['', '## Pending-node dependencies and infrastructure', '',
+            unformalized.append((name, node, meta))
+    out += ['', '## Not-formalized node dependencies and research records', '',
             'Dependencies below are statement dependencies, not a claim that each dependency is open.',
+            'Open hypotheses remain open mathematically and are not current formalization targets.',
+            'The four exploratory routes are not current formalization targets and are retained as',
+            'historical records; their unproved hypotheses remain open mathematically.',
+            'KLS is proved through the accepted BKL main line.',
+            'Superseded-route dependencies and gaps are retained for historical context.',
             'Infrastructure gaps are the recorded assessment and may cover a broader parent task.', '']
-    for name, node, meta in pending:
-        out += [f'### `{name}`', '']
+    for name, node, meta in unformalized:
+        state = records[name]['state']
+        out += [f'### `{name}`', '', views.status_cell(state), '']
         deps = node['dependencies']
         out.append('Dependencies: ' + (', '.join('`'+d+'`' for d in deps) if deps else 'none recorded') + '.')
         gaps = meta.get('infrastructure', {}).get('gaps', [])
@@ -146,6 +152,10 @@ def generate():
             out += ['', 'Retained assumptions: ' + ', '.join('`'+a+'`' for a in assumptions) + '.']
         if gaps:
             out += ['', 'Recorded gaps:', ''] + ['- '+cell(g) for g in gaps]
+        elif state == 'hypothesis':
+            out += ['', 'This hypothesis remains open mathematically and is retained as a research question, not a current formalization target.']
+        elif state == 'superseded':
+            out += ['', 'This not-formalized statement belongs to an exploratory route retained as a historical record, not a current formalization target. The route\'s unproved hypotheses remain open mathematically.']
         else:
             out += ['', 'See the linked statement and task record for the remaining proof obligation.']
         out += ['', link('research/tasks.json', 'Task record'), '']

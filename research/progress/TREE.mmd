@@ -38,18 +38,18 @@ flowchart LR
     HEAT["◐ Small-time heat bounds<br/>and pi Buser assembly"]
     end
     subgraph ELDAN["Eldan localization"]
-    EG["○ Tight-prefix<br/>Carleson estimate"]
+    EG["◇ Tight-prefix<br/>Carleson estimate"]
     EC["○ Tight-window<br/>Consumption"]
     EAND{"AND<br/>○ Eldan route"}
     end
     subgraph SPECTRAL["Moment-map spectral"]
-    SG["○ Full-damping<br/>Occupation bound"]
+    SG["◇ Full-damping<br/>Occupation bound"]
     SC["○ Spectral<br/>Sufficiency"]
     SAND{"AND<br/>○ Spectral route"}
     end
     subgraph CMH["Moment-map CMH"]
     MH["○ W₂ limit and<br/>CMH comparison"]
-    MG["○ Bounded CMH<br/>Recovery envelope"]
+    MG["◇ Bounded CMH<br/>Recovery envelope"]
     MT["✓ Affine constant<br/>Translation invariance"]
     MC["○ Recovery-sequence<br/>Sufficiency"]
     MAND{"AND<br/>○ CMH route"}
@@ -60,7 +60,7 @@ flowchart LR
     FP["✓ Fiber-bound<br/>Energy comparison"]
     F4["✓ Fiber energy<br/>≤ 4 × gradient energy"]
     FC["✓ Fiber Dirichlet form"]
-    FG["○ Universal<br/>Frame bound"]
+    FG["◇ Universal<br/>Frame bound"]
     FAND{"AND<br/>◐ Fiber route"}
     end
     subgraph VECTOR["Vector coarea extension — separate from the KLS implication routes"]
@@ -416,8 +416,10 @@ flowchart LR
     class KLS,ENERGY,F4,MT,FP,FC,EQ,NORM,DENS,FRONT,CB,ONE,CONST,FORMS,MEAS,GRAPH,REG,CRIT,C1,WHIT,LIP,GG,REC,FWD,SARD,SCI,CUT,REV,MINK,BV,FLOG,VREG,VZERO,VR123,VR4,VFULL,SEMI,MARKOV,DECAY,GAUSS,GSTAB,VLIP,BT31,BP71,BREG,WEAKHESS,CEKMAP,REGMOM,WEAKINVINT,WEAKGEN,HESSENT,CDIFF,WEAKGENINT,INCINT,INCENERGY,TRANSCUT,HESSL2,HESSDIFF,WEAKTHIRD,SRCDIFF,EXPLIP,REGTENSOR,WPRODG,WPRODL,WLIN,WFPROD,WDET,WTRACE,WJAC,EXPHALF,WAECONGR,AEEXP,WMA1,WEXPNEG,WPRODLB,WMATINV,WADJ,WINVH,WINV,WSMOOTH,WCURL,WEAKGENC1,MEANC11,WMEANH,WBAPPROX,WBTEST,WINVROW,WGRADCOMP,WMARHS,WFLUXLOC,WFLUX,WEVOL,WEVOLB,WEVOLSRC,WHTEST,WCUTR,WCUTN,WCUTSRC,WCFLUX,WBTRQ,WROUGH,WTRCON,TRPOS,TRGRAM,WCUTTEST,WLAP,C11COER,WBL,MPTRACE,MVAR,WT25,SYMAE,S1,WIBP,C1CHAIN,SRCSTEIN,DUALB,GAUSSID,WSTEINSRC,MNTRACE,SPECGEO,SYMINV,MTRMEAN,HSSYM,GRADAFF,ACTALG,HESSACT,QACTION,SIGNNOISE,NOISEINT,QFOURTH,FINVAR,QVARCONT,LA2EXT,NOISECONV,G4MOM,GTRANS,GLATENT,GPOT,SRCAFF,GPRODSTEIN,GPRODDUAL,NOISELIM,GSMVAR,GHMINUS,RESTEXP,OPMAT,REGCLASS8,LCOMPACT8,BCUT,BCUM,BKLMAIN done;
     classDef partial fill:#fff3df,stroke:#c88719,color:#66420d;
     class FAND,BE,HEAT partial;
-    classDef todo fill:#fee2e2,stroke:#dc2626,color:#991b1b;
-    class MG,EG,MC,EC,SC,FG,SG,MH,EAND,SAND,MAND todo;
+    classDef hypothesis fill:#f1f5f9,stroke:#64748b,color:#334155;
+    class MG,EG,FG,SG hypothesis;
+    classDef superseded fill:#f8fafc,stroke:#94a3b8,color:#475569,stroke-dasharray:5 4;
+    class MC,EC,SC,MH,EAND,SAND,MAND superseded;
     classDef logic fill:#fff,stroke:#555,color:#222;
     class ANY,BKLAND logic;
     click MG href "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/blueprint/src/chapters/50-kls-routes.tex" "Bounded CMH — Recovery envelope" _blank
