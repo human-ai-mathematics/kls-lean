@@ -19,9 +19,8 @@ remain open. The four exploratory routes retain their own statuses.
 
 ## Evidence and library use
 
-Use the [context MCP](research/context-mcp.md) for snapshot-bound registry and local-receipt
-queries. The [verification guide](research/verification.md#receipts-and-trust-scope) defines
-acceptance scopes. Receipts and execution logs stay local under ignored `build/`; remote Lean
+Use the [verification guide](research/verification.md#receipts-and-trust-scope) for receipt
+rules and acceptance scopes. Receipts and execution logs stay local under ignored `build/`; remote Lean
 evidence is the terminal GitHub Actions run for its exact `head_sha`. Neither a registry entry
 nor an old receipt verifies a later source tree.
 

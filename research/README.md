@@ -10,7 +10,6 @@ The [Lean design](../LEAN_DESIGN.md) and [calling examples](../examples/README.m
 | Follow the proved KLS chain | [Proof path](progress/PROOF-PATH.md) and [BKL main chain](progress/README.md#bkl-main-proof-chain) |
 | Check a paper version, theorem or certificate | [Literature register](progress/LITERATURE.md), [certificate directory](../solutions/README.md) and [ledger](a-series/ledger.yaml) |
 | Inspect all routes and recorded local statuses | [Progress overview](progress/README.md) and [generated node register](progress/STATUS.md) |
-| Query snapshot-bound project context | [Read-only MCP](context-mcp.md) |
 | Reproduce verification or change a module | [Verification](verification.md), [workflow](workflow.md) and [naming](naming.md) |
 | Prepare an exact public revision | [Release procedure](release.md), [contribution guide](../CONTRIBUTING.md) and [citation metadata](../CITATION.cff) |
 | Read the current normative reviews | [Target-scope reviews](progress/target-reviews.md), [infrastructure review](progress/infrastructure-review.md), [statement-snapshot review](a-series/statement-snapshot/REVIEW.md), [BKL independent-target review](audits/BKL/IndependentTargets/REVIEW.md) and the [audit client guide](audits/README.md) |
