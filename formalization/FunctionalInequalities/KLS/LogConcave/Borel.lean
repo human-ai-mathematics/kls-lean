@@ -36,32 +36,37 @@ def BorelLogConcave (μ : ProbabilityMeasure E) : Prop :=
         innerMeasure (μ : Measure E)
           {z | ∃ x ∈ B₀, ∃ y ∈ B₁, z = t • x + (1 - t) • y}
 
-omit [NormedSpace ℝ E] [BorelSpace E] in
+section InnerMeasureProperties
+
+omit [NormedSpace ℝ E] [BorelSpace E]
+
 /-- Inner measure is monotone in the set. -/
 theorem innerMeasure_mono (μ : Measure E) {S T : Set E} (h : S ⊆ T) :
     innerMeasure μ S ≤ innerMeasure μ T := by
   unfold innerMeasure
   exact iSup₂_le fun K hK ↦ iSup_le fun hc ↦ le_iSup₂_of_le K (hK.trans h) (le_iSup_of_le hc le_rfl)
 
-omit [NormedSpace ℝ E] [BorelSpace E] in
 /-- Inner measure never exceeds the outer-measure value of the set. -/
 theorem innerMeasure_le (μ : Measure E) (S : Set E) : innerMeasure μ S ≤ μ S := by
   unfold innerMeasure
   exact iSup₂_le fun K hK ↦ iSup_le fun _ ↦ measure_mono hK
 
-omit [NormedSpace ℝ E] [BorelSpace E] in
 /-- Every compact subset gives a lower bound for the inner measure. -/
 theorem le_innerMeasure_of_isCompact (μ : Measure E) {K S : Set E} (hK : IsCompact K)
     (hKS : K ⊆ S) : μ K ≤ innerMeasure μ S :=
   le_iSup₂_of_le K hKS (le_iSup_of_le hK le_rfl)
 
-omit [NormedSpace ℝ E] [BorelSpace E] in
 /-- On measurable sets the inner measure agrees with an inner regular measure. -/
 theorem innerMeasure_eq_of_measurableSet (μ : Measure E) [μ.InnerRegular] {S : Set E}
     (hS : MeasurableSet S) : innerMeasure μ S = μ S :=
   (hS.measure_eq_iSup_isCompact μ).symm
 
-omit [MeasurableSpace E] [BorelSpace E] in
+end InnerMeasureProperties
+
+section CompactCombinations
+
+omit [MeasurableSpace E] [BorelSpace E]
+
 /-- The Minkowski combination of two compact sets is compact: it is the continuous image of
 the compact product. Finite dimension is not needed for this step. -/
 theorem isCompact_combination {K₀ K₁ : Set E} (hK₀ : IsCompact K₀) (hK₁ : IsCompact K₁)
@@ -76,13 +81,14 @@ theorem isCompact_combination {K₀ K₁ : Set E} (hK₀ : IsCompact K₀) (hK�
   rw [he]
   exact (hK₀.prod hK₁).image (by fun_prop)
 
-omit [MeasurableSpace E] [BorelSpace E] in
 /-- The Minkowski combination is monotone in both sets. -/
 theorem combination_mono {A₀ A₁ B₀ B₁ : Set E} (h₀ : A₀ ⊆ B₀) (h₁ : A₁ ⊆ B₁) (t : ℝ) :
     {z : E | ∃ x ∈ A₀, ∃ y ∈ A₁, z = t • x + (1 - t) • y} ⊆
       {z : E | ∃ x ∈ B₀, ∃ y ∈ B₁, z = t • x + (1 - t) • y} := by
   rintro z ⟨x, hx, y, hy, rfl⟩
   exact ⟨x, h₀ hx, y, h₁ hy, rfl⟩
+
+end CompactCombinations
 
 private theorem rpow_iSup {ι : Sort*} (f : ι → ENNReal) {t : ℝ} (ht : 0 < t) :
     (⨆ i, f i) ^ t = ⨆ i, f i ^ t :=

@@ -18,7 +18,11 @@ the same `C` and the bound `C/(n+1)`; its conclusions are the cutoff premises of
 source-class properties are hypotheses.
 
 Private local supports: compact support through a compact sublevel set, the shifted tail primitive, the source-form
-pointwise defect bound and one scalar monotonicity step.
+pointwise defect bound and one scalar monotonicity step. Proof bodies: the fixed source construction (Codex) with the
+independently verified Codex API helper and unit proofs (`letwin-a4-support-compact/shifted/defect-astra-v1`,
+`letwin-a4-support-add-monotonicity-astra-v1` after scalar `add_comm` normalization) and, for the natural-index
+corollary, the independently verified Codex API proof (`letwin-a4-natural-from-actual-astra-v1`), verbatim; placement:
+Claude.
 -/
 set_option autoImplicit false
 set_option relaxedAutoImplicit false

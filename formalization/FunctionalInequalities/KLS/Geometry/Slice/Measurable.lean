@@ -26,16 +26,14 @@ namespace Analysis
 
 section Coarea
 
-variable {V : Type u} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [CompleteSpace V]
-  [FiniteDimensional ℝ V] [MeasurableSpace V] [BorelSpace V]
 
--- The section variables are kept so that the published interface is unchanged; the proof needs
--- neither completeness nor, through `KLS.surfaceMeasure`, finite-dimensionality at this point, so
--- the linter is silenced instead of the signature being narrowed by `omit`.
-set_option linter.unusedSectionVars false in
+-- The ambient premises are stated explicitly to retain the surface-measure interface.
 /-- The level-set integrals of a measurable weight against the normalized surface measure form a
 Lebesgue-measurable function of the level. -/
-theorem aemeasurable_lintegral_levelSet {u : V → ℝ} {K : ℝ≥0} (hu : LipschitzWith K u)
+theorem aemeasurable_lintegral_levelSet
+    {V : Type u} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [CompleteSpace V]
+    [FiniteDimensional ℝ V] [MeasurableSpace V] [BorelSpace V]
+    {u : V → ℝ} {K : ℝ≥0} (hu : LipschitzWith K u)
     {g : V → ℝ≥0∞} (hg : Measurable g) :
     AEMeasurable (fun t : ℝ ↦ ∫⁻ y in {x | u x = t}, g y ∂(KLS.surfaceMeasure V))
       (volume : Measure ℝ) := by

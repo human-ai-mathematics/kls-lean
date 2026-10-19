@@ -29,7 +29,10 @@ def weightedExpD {F : Type*} [NormedAddCommGroup F] [NormedSpace ℝ F]
     (g : E → F) (x : E) : E →L[ℝ] F :=
   (innerSL ℝ x).smulRight (g x)
 
-omit [CompleteSpace E] in
+section IntegralCalculus
+
+omit [CompleteSpace E]
+
 /-- Measurability of the derivative amplitude. -/
 theorem weightedExpD_meas {F : Type*} [NormedAddCommGroup F] [NormedSpace ℝ F]
     {μ : Measure E} {g : E → F} (hg : AEStronglyMeasurable g μ) :
@@ -37,7 +40,6 @@ theorem weightedExpD_meas {F : Type*} [NormedAddCommGroup F] [NormedSpace ℝ F]
   exact (ContinuousLinearMap.smulRightL ℝ E F).continuous₂.comp_aestronglyMeasurable
     ((innerSL ℝ : E →L[ℝ] E →L[ℝ] ℝ).continuous.aestronglyMeasurable.prodMk hg)
 
-omit [CompleteSpace E] in
 private theorem weightedExpD_integrable {F : Type*} [NormedAddCommGroup F]
     [NormedSpace ℝ F] {μ : Measure E} {g : E → F}
     (hg : AEStronglyMeasurable g μ)
@@ -60,7 +62,7 @@ private theorem weightedExpD_integrable {F : Type*} [NormedAddCommGroup F]
         rw [add_mul, one_mul, Real.exp_add]
         ring
 
-omit [CompleteSpace E] [FiniteDimensional ℝ E] in
+omit [FiniteDimensional ℝ E] in
 /-- Integrability of `e^{⟪z, x⟫} g(x)` under integrability against every exponential weight. -/
 theorem weightedExp_integrable {F : Type*} [NormedAddCommGroup F]
     [NormedSpace ℝ F] (μ : Measure E) {g : E → F}
@@ -74,7 +76,7 @@ theorem weightedExp_integrable {F : Type*} [NormedAddCommGroup F]
     gcongr
     exact real_inner_le_norm z x
 
-omit [CompleteSpace E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] in
+omit [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] in
 /-- The pointwise derivative of `w ↦ e^{⟪w, x⟫} g(x)`. -/
 theorem weightedExp_hasFDeriv {F : Type*} [NormedAddCommGroup F]
     [NormedSpace ℝ F] (g : E → F) (x z : E) :
@@ -88,7 +90,6 @@ theorem weightedExp_hasFDeriv {F : Type*} [NormedAddCommGroup F]
   ext y
   simp [weightedExpD, ContinuousLinearMap.smulRight_apply, mul_smul]
 
-omit [CompleteSpace E] in
 /-- Differentiation under the integral sign for exponential weights (first derivative): the
 derivative of `z ↦ ∫ e^{⟪z, x⟫} g(x) dμ` at `z` is `∫ e^{⟪z, x⟫} (⟪x, ·⟫ g(x)) dμ`. -/
 theorem weightedExp_integral_hasFDeriv {F : Type*} [NormedAddCommGroup F]
@@ -129,7 +130,6 @@ theorem weightedExp_integral_hasFDeriv {F : Type*} [NormedAddCommGroup F]
         ring
   · exact ae_of_all μ (fun x w _ => weightedExp_hasFDeriv g x w)
 
-omit [CompleteSpace E] in
 private theorem weightedExp_integral_contDiff_nat.{v} {F : Type (max u v)}
     [NormedAddCommGroup F] [NormedSpace ℝ F] [CompleteSpace F]
     (μ : Measure E) (n : ℕ) {g : E → F} (hg : AEStronglyMeasurable g μ)
@@ -145,7 +145,6 @@ private theorem weightedExp_integral_contDiff_nat.{v} {F : Type (max u v)}
     · exact IH (weightedExpD_meas hg) (weightedExpD_integrable hg hgi)
     · exact weightedExp_integral_hasFDeriv μ hg hgi
 
-omit [CompleteSpace E] in
 /-- Differentiation under the integral sign for exponential weights, for integrands integrable
 against every exponential weight. -/
 theorem contDiff_integral_exp_inner_smul_of_integrable {F : Type*} [NormedAddCommGroup F]
@@ -175,7 +174,6 @@ theorem contDiff_integral_exp_inner_smul_of_integrable {F : Type*} [NormedAddCom
     (fun z => L (∫ x, Real.exp ⟪z, x⟫ • L.symm (g x) ∂μ)) at hs
   rwa [heq] at hs
 
-omit [CompleteSpace E] in
 /-- The iterated derivatives of the Laplace-type integral are weighted moments. -/
 theorem iteratedFDeriv_integral_exp_inner_smul {F : Type*} [NormedAddCommGroup F]
     [NormedSpace ℝ F] [CompleteSpace F] (μ : Measure E) {g : E → F}
@@ -241,7 +239,7 @@ theorem iteratedFDeriv_integral_exp_inner_smul {F : Type*} [NormedAddCommGroup F
         rw [Fin.prod_univ_castSucc]
         simp only [a, Fin.init_def, mul_assoc]
 
-omit [InnerProductSpace ℝ E] [CompleteSpace E] [FiniteDimensional ℝ E] in
+omit [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] in
 /-- Square-integrable functions are integrable against every exponential weight when `μ` is
 finite with all exponential moments. -/
 theorem integrable_exp_mul_norm_of_memLp (μ : Measure E) [IsFiniteMeasure μ]
@@ -270,7 +268,7 @@ theorem integrable_exp_mul_norm_of_memLp (μ : Measure E) [IsFiniteMeasure μ]
       rfl
     exact heq ▸ hprod
 
-omit [CompleteSpace E] [FiniteDimensional ℝ E] in
+omit [FiniteDimensional ℝ E] in
 private lemma integrable_exp_inner_of_all_exp (μ : Measure E) [IsFiniteMeasure μ]
     (hexp : ∀ r : ℝ, Integrable (fun x => Real.exp (r * ‖x‖)) μ) (z : E) :
     Integrable (fun x => Real.exp ⟪z, x⟫) μ := by
@@ -283,7 +281,7 @@ private lemma integrable_exp_inner_of_all_exp (μ : Measure E) [IsFiniteMeasure 
     exact le_trans (le_abs_self _) (abs_real_inner_le_norm z x)
   exact (hexp ‖z‖).mono' hmeas hbound
 
-omit [CompleteSpace E] [FiniteDimensional ℝ E] [BorelSpace E] in
+omit [FiniteDimensional ℝ E] [BorelSpace E] in
 /-- `F_f(z) · ∫ e^{⟪z,x⟫} dμ = ∫ e^{⟪z,x⟫} f(x) dμ` whenever `∫ e^{⟪z,x⟫} dμ ≠ 0`. -/
 theorem tiltAverage_mul_integral_exp (μ : Measure E) (f : E → ℝ) (z : E)
     (hz : (∫ x, Real.exp ⟪z, x⟫ ∂μ) ≠ 0) :
@@ -294,7 +292,6 @@ theorem tiltAverage_mul_integral_exp (μ : Measure E) (f : E → ℝ) (z : E)
     rw [integral_div]
     exact div_mul_cancel₀ _ hz
 
-omit [CompleteSpace E] in
 /-- Tilt averages of square-integrable functions are smooth. -/
 theorem contDiff_tiltAverage_of_memLp (μ : Measure E) [IsFiniteMeasure μ] [NeZero μ]
     (hexp : ∀ r : ℝ, Integrable (fun x => Real.exp (r * ‖x‖)) μ) {f : E → ℝ} (hf : MemLp f 2 μ) :
@@ -351,7 +348,6 @@ theorem contDiff_tiltAverage_of_memLp (μ : Measure E) [IsFiniteMeasure μ] [NeZ
     rw [htilt]
     exact hmul
 
-omit [CompleteSpace E] in
 /-- `T_d` is additive on `L²(μ)`. -/
 theorem taylorTensor_add (μ : Measure E) [IsFiniteMeasure μ] [NeZero μ]
     (hexp : ∀ r : ℝ, Integrable (fun x => Real.exp (r * ‖x‖)) μ) {f g : E → ℝ} (hf : MemLp f 2 μ)
@@ -381,7 +377,7 @@ theorem taylorTensor_add (μ : Measure E) [IsFiniteMeasure μ] [NeZero μ]
     ((contDiff_tiltAverage_of_memLp μ hexp hg).contDiffAt.of_le (by exact_mod_cast le_top)),
     smul_add]
 
-omit [CompleteSpace E] [FiniteDimensional ℝ E] [BorelSpace E] in
+omit [FiniteDimensional ℝ E] [BorelSpace E] in
 /-- `T_d` is homogeneous. -/
 theorem taylorTensor_const_mul (μ : Measure E) (c : ℝ) (f : E → ℝ) (d : ℕ) :
     taylorTensor μ (fun x => c * f x) d = c • taylorTensor μ f d := by
@@ -408,7 +404,7 @@ theorem taylorTensor_const_mul (μ : Measure E) (c : ℝ) (f : E → ℝ) (d : �
     simp [ContinuousLinearEquiv.unitsEquivAut_apply, smul_eq_mul]
     ring
 
-omit [InnerProductSpace ℝ E] [CompleteSpace E] [FiniteDimensional ℝ E] in
+omit [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] in
 private theorem tiltExp_memLp_two (μ : Measure E)
     (hexp : ∀ r : ℝ, Integrable (fun x => Real.exp (r * ‖x‖)) μ) (r : ℝ) :
     MemLp (fun x => Real.exp (r * ‖x‖)) 2 μ := by
@@ -420,7 +416,7 @@ private theorem tiltExp_memLp_two (μ : Measure E)
   congr 1
   ring
 
-omit [InnerProductSpace ℝ E] [CompleteSpace E] [FiniteDimensional ℝ E] in
+omit [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] in
 private theorem tiltExp_cauchy_schwarz (μ : Measure E)
     (hexp : ∀ r : ℝ, Integrable (fun x => Real.exp (r * ‖x‖)) μ)
     {f : E → ℝ} (hf : MemLp f 2 μ) (r : ℝ) :
@@ -442,7 +438,7 @@ private theorem tiltExp_cauchy_schwarz (μ : Measure E)
           ‖hf.norm.toLp (fun x => ‖f x‖)‖ := real_inner_le_norm _ _
     _ = _ := by rw [Lp.norm_toLp, Lp.norm_toLp, eLpNorm_norm]
 
-omit [CompleteSpace E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] in
+omit [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] in
 private theorem tiltMoment_product_bound (d : ℕ) (h : Fin d → E) (x : E) :
     ‖∏ j, ⟪x, h j⟫‖ ≤ Real.exp ((d : ℝ) * ‖x‖) * ∏ j, ‖h j‖ := by
   classical
@@ -461,7 +457,6 @@ private theorem tiltMoment_product_bound (d : ℕ) (h : Fin d → E) (x : E) :
       rw [Finset.prod_mul_distrib, Finset.prod_const, Finset.card_univ, Fintype.card_fin,
         ← Real.exp_nat_mul]
 
-omit [CompleteSpace E] in
 private theorem tiltNumerator_deriv_bound (μ : Measure E) [IsFiniteMeasure μ]
     (hexp : ∀ r : ℝ, Integrable (fun x => Real.exp (r * ‖x‖)) μ)
     {f : E → ℝ} (hf : MemLp f 2 μ) (d : ℕ) :
@@ -492,7 +487,6 @@ private theorem tiltNumerator_deriv_bound (μ : Measure E) [IsFiniteMeasure μ]
       mul_le_mul_of_nonneg_right (tiltExp_cauchy_schwarz μ hexp hf d)
         (Finset.prod_nonneg fun _ _ => norm_nonneg _)
 
-omit [CompleteSpace E] in
 /-- **Continuity of `T_d` on `L²(μ)`**: for a probability measure with all exponential moments,
 `‖T_d f‖ ≤ C_d ‖f‖_{L²(μ)}` for every `f ∈ L²(μ)`. -/
 theorem exists_norm_taylorTensor_le (μ : Measure E) [IsProbabilityMeasure μ]
@@ -552,7 +546,6 @@ theorem exists_norm_taylorTensor_le (μ : Measure E) [IsProbabilityMeasure μ]
       simp_rw [← mul_assoc]
       rw [← Finset.sum_mul, mul_assoc]
 
-omit [CompleteSpace E] in
 /-- **Continuity of `T_d` on `L²(μ)` in the Hilbert–Schmidt norm** of the coefficient array (the
 norm of BKL (29)), for a probability measure with all exponential moments. -/
 theorem exists_norm_coordTensor_taylorTensor_le (μ : Measure E) [IsProbabilityMeasure μ]
@@ -572,13 +565,17 @@ theorem exists_norm_coordTensor_taylorTensor_le (μ : Measure E) [IsProbabilityM
       _ = ((Real.sqrt n) ^ d * C) * (eLpNorm f 2 μ).toReal := by
         rw [mul_assoc]
 
+end IntegralCalculus
+
 /-! ### Tilt averages of `L²` classes -/
 
 section Lp
 
+section ScalarLp
 
+omit [CompleteSpace E] [FiniteDimensional ℝ E]
 
-omit [CompleteSpace E] [FiniteDimensional ℝ E] [BorelSpace E] in
+omit [BorelSpace E] in
 /-- Tilt averages only see the `μ`-class of a function: every tilt `μ_z` is absolutely
 continuous with respect to `μ`. -/
 theorem tiltAverage_congr_ae {G : Type*} [NormedAddCommGroup G] [NormedSpace ℝ G]
@@ -587,7 +584,7 @@ theorem tiltAverage_congr_ae {G : Type*} [NormedAddCommGroup G] [NormedSpace ℝ
   unfold tiltAverage expTilt
   exact integral_congr_ae ((tilted_absolutelyContinuous μ _).ae_le hfg)
 
-omit [CompleteSpace E] [FiniteDimensional ℝ E] [BorelSpace E] in
+omit [BorelSpace E] in
 /-- Taylor tensors only see the `μ`-class of a function. -/
 theorem taylorTensor_congr_ae {G : Type*} [NormedAddCommGroup G] [NormedSpace ℝ G]
     [CompleteSpace G] (μ : Measure E) {f g : E → G} (hfg : f =ᵐ[μ] g) (d : ℕ) :
@@ -595,7 +592,6 @@ theorem taylorTensor_congr_ae {G : Type*} [NormedAddCommGroup G] [NormedSpace �
   unfold taylorTensor
   rw [show tiltAverage μ f = tiltAverage μ g from funext (tiltAverage_congr_ae μ hfg)]
 
-omit [CompleteSpace E] [FiniteDimensional ℝ E] in
 /-- With all exponential moments, `e^{⟪z, ·⟫} ∈ L²(μ)`. -/
 theorem memLp_exp_inner (μ : Measure E)
     (hexp : ∀ r : ℝ, Integrable (fun x => Real.exp (r * ‖x‖)) μ) (z : E) :
@@ -609,7 +605,6 @@ theorem memLp_exp_inner (μ : Measure E)
   push_cast
   nlinarith
 
-omit [CompleteSpace E] [FiniteDimensional ℝ E] in
 /-- Square-integrable functions are integrable against every exponential tilt of a finite measure
 with all exponential moments. -/
 theorem integrable_expTilt_of_memLp {G : Type*} [NormedAddCommGroup G] [NormedSpace ℝ G]
@@ -629,7 +624,6 @@ theorem integrable_expTilt_of_memLp {G : Type*} [NormedAddCommGroup G] [NormedSp
   gcongr
   exact real_inner_le_norm z x
 
-omit [CompleteSpace E] [FiniteDimensional ℝ E] in
 /-- The tilt average of a class `g ∈ L²(μ)` at `z` is `(∫ e^{⟪z, x⟫} dμ)⁻¹ ⟪e^{⟪z, ·⟫}, g⟫`. -/
 theorem tiltAverage_Lp_eq_inner (μ : Measure E)
     (hexp : ∀ r : ℝ, Integrable (fun x => Real.exp (r * ‖x‖)) μ) (g : Lp ℝ 2 μ) (z : E) :
@@ -641,13 +635,14 @@ theorem tiltAverage_Lp_eq_inner (μ : Measure E)
   rw [hx, smul_eq_mul, RCLike.inner_apply, conj_trivial, div_eq_mul_inv]
   ring
 
-omit [CompleteSpace E] [FiniteDimensional ℝ E] in
 /-- For fixed `z`, `g ↦ F_g(z)` is continuous on `L²(μ)`. -/
 theorem continuous_tiltAverage_Lp (μ : Measure E)
     (hexp : ∀ r : ℝ, Integrable (fun x => Real.exp (r * ‖x‖)) μ) (z : E) :
     Continuous fun g : Lp ℝ 2 μ => tiltAverage μ (⇑g) z := by
   simp_rw [tiltAverage_Lp_eq_inner μ hexp _ z]
   exact continuous_const.mul (continuous_const.inner continuous_id)
+
+end ScalarLp
 
 omit [FiniteDimensional ℝ E] in
 /-- Pairing the tilt average of a vector class `G ∈ L²(μ; E)` with `w` is the tilt average of the

@@ -13,6 +13,8 @@ import re
 import shutil
 import subprocess
 import sys
+import tempfile
+import threading
 import time
 
 import atlas
@@ -257,7 +259,8 @@ def verification_snapshot(root: Path, *, lean_only: bool = False) -> dict:
     if lean_only:
         # Bind Lean evidence to proof inputs and their tooling, not prose or ledger status.
         inputs = {"formalization/lean-toolchain", "formalization/lakefile.toml",
-                  "formalization/lake-manifest.json", "research/verify.py", "research/atlas.py"}
+                  "formalization/lake-manifest.json", "research/verify.py", "research/atlas.py",
+                  "research/cache_mathlib.py", "research/downstream.py"}
         files = {name: digest for name, digest in snapshot["files"].items()
                  if name in inputs or name.endswith(".lean") or name.startswith(CLASSICAL_KLS_DIR + "/")}
         snapshot = {**snapshot, "files": files, "sha256": atlas.digest(files)}
@@ -337,6 +340,46 @@ run_cmd do
 '''
 
 
+def run_logged_command(command: list[str], *, cwd: Path, logfile: Path, env: dict,
+                       code: str | None = None, interval: float = 30,
+                       progress=None) -> subprocess.CompletedProcess:
+    """Keep complete child logs on disk and report progress while the child is alive."""
+    started = time.monotonic()
+    with tempfile.TemporaryFile(mode="w+", encoding="utf-8") as source, \
+            logfile.open("w", encoding="utf-8") as log:
+        if code is not None:
+            source.write(code)
+            source.seek(0)
+        process = subprocess.Popen(command, cwd=cwd, stdin=source if code is not None else None,
+                                   text=True, stdout=log, stderr=subprocess.STDOUT, env=env)
+        try:
+            while True:
+                try:
+                    returncode = process.wait(timeout=interval)
+                    break
+                except subprocess.TimeoutExpired:
+                    if progress is not None:
+                        with logfile.open("rb") as stream:
+                            stream.seek(max(0, logfile.stat().st_size - 2048))
+                            lines = stream.read().decode("utf-8", errors="replace").splitlines()
+                        tail = lines[-1] if lines else "(no output yet)"
+                        tail = re.sub(r"\x1b\[[0-9;]*[A-Za-z]", "", tail)
+                        tail = "".join(c for c in tail if c.isprintable())[-500:]
+                        progress({"seconds": round(time.monotonic() - started, 1),
+                                  "log_bytes": logfile.stat().st_size,
+                                  "free_disk_bytes": shutil.disk_usage(cwd).free,
+                                  "last_output": tail})
+        finally:
+            if process.poll() is None:
+                process.terminate()
+                try:
+                    process.wait(timeout=10)
+                except subprocess.TimeoutExpired:
+                    process.kill()
+                    process.wait()
+    return subprocess.CompletedProcess(command, returncode)
+
+
 def run_verification(root: Path, *, lean_only: bool = False) -> int:
     started = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S.%fZ")
     artifact = Path("build/verification") / started
@@ -347,6 +390,18 @@ def run_verification(root: Path, *, lean_only: bool = False) -> int:
               "snapshot": before, "scope": "lean-only" if lean_only else "full",
               "status": "failed", "gates": [], "errors": [],
               "trust_scope": "Local source build and local-module kernel replay, including the vendored libraries; pinned third-party compiled imports (Mathlib and its dependencies) are trusted. No fresh replay, external checker or isolated rebuild."}
+    progress_lock = threading.Lock()
+    active = {}
+
+    def write_progress(status="running"):
+        # Called with progress_lock held: audit clients run concurrently.
+        state = {"version": 1, "status": status, "started_utc": started,
+                 "snapshot_sha256": before["sha256"], "scope": report["scope"],
+                 "active": active, "completed_gates": report["gates"],
+                 "errors": report["errors"]}
+        pending = output_dir / "progress.tmp"
+        pending.write_text(json.dumps(state, ensure_ascii=False, indent=2) + "\n")
+        pending.replace(output_dir / "progress.json")
 
     def run(name: str, command: list[str], *, cwd: Path = root, code: str | None = None,
             lean_path: str | None = None) -> str:
@@ -358,12 +413,29 @@ def run_verification(root: Path, *, lean_only: bool = False) -> int:
         if lean_path is not None:
             env["LEAN_PATH"] = lean_path
         logfile = output_dir / (name + ".log")
-        with logfile.open("w", encoding="utf-8") as log:
-            process = subprocess.run(command, cwd=cwd, input=code, text=True,
-                                     stdout=log, stderr=subprocess.STDOUT, env=env)
-        report["gates"].append({"name": name, "command": command, "cwd": str(cwd.relative_to(root)),
-                                "exit_code": process.returncode, "seconds": round(time.monotonic()-start, 3),
-                                "log": str(artifact / logfile.name)})
+        with progress_lock:
+            active[name] = {"seconds": 0, "log": str(artifact / logfile.name)}
+            write_progress()
+
+        def heartbeat(metrics):
+            with progress_lock:
+                active[name].update(metrics)
+                write_progress()
+            print(f"Checking {name}: {metrics['seconds']:.0f}s elapsed, "
+                  f"{metrics['log_bytes']} log bytes, "
+                  f"{metrics['free_disk_bytes'] / (1024 ** 3):.1f} GiB free. "
+                  f"Last output: {metrics['last_output']}", flush=True)
+
+        process = run_logged_command(command, cwd=cwd, logfile=logfile, env=env,
+                                     code=code, progress=heartbeat)
+        seconds = round(time.monotonic() - start, 3)
+        with progress_lock:
+            report["gates"].append({"name": name, "command": command, "cwd": str(cwd.relative_to(root)),
+                                    "exit_code": process.returncode, "seconds": seconds,
+                                    "log": str(artifact / logfile.name)})
+            active.pop(name)
+            write_progress()
+        print(f"Checked {name}: exit {process.returncode}, {seconds:.1f}s.", flush=True)
         if process.returncode:
             raise RuntimeError(f"{name} failed; see {artifact / logfile.name}")
         return logfile.read_text(encoding="utf-8")
@@ -371,7 +443,9 @@ def run_verification(root: Path, *, lean_only: bool = False) -> int:
     def internal_gate(name: str, errors: list[str], details: str) -> None:
         logfile = artifact / (name + ".log")
         (root / logfile).write_text(details + "\n" + "\n".join(errors))
-        report["gates"].append({"name": name, "exit_code": int(bool(errors)), "log": str(logfile)})
+        with progress_lock:
+            report["gates"].append({"name": name, "exit_code": int(bool(errors)), "log": str(logfile)})
+            write_progress()
         if errors:
             raise RuntimeError("\n".join(errors))
 
@@ -484,6 +558,8 @@ def run_verification(root: Path, *, lean_only: bool = False) -> int:
     pending = latest.with_suffix(".tmp")
     pending.write_text(serialized)
     pending.replace(latest)
+    with progress_lock:
+        write_progress(report["status"])
     print(f"Verification {report['status']}: {artifact / 'report.json'}", flush=True)
     for error in report["errors"]:
         print(error, file=sys.stderr)

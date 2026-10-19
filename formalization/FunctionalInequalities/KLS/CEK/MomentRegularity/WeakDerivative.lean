@@ -16,16 +16,15 @@ import FunctionalInequalities.KLS.CEK.MomentRegularity.Potential
 # Regular-source weak tensors and first Monge–Ampere derivatives
 -/
 
-noncomputable section
+section RegularSource
 
-open MeasureTheory Set Filter
-open scoped RealInnerProductSpace ContDiff Topology
-open FunctionalInequalities.Probability.Stein
+/-! Shared regular-source hypotheses for the moment-map and quadratic-variance results.
+Only the source-law theorems include these hypotheses; auxiliary lemmas retain their own scope. -/
 
-namespace FunctionalInequalities.Analysis
-/-- Actual source-law tensor: both original hw and hF inputs are produced;
-all original regular-class data and the weak/local-L2 tensor are retained. -/
-theorem exists_regular_moment_weak_tensor {n : ℕ} (hn : 0 < n)
+open MeasureTheory Set
+open scoped ContDiff
+
+variable {n : ℕ} (hn : 0 < n)
     {K : Set (EuclideanSpace ℝ (Fin n))} {W : EuclideanSpace ℝ (Fin n) → ℝ}
     {κ : ℝ} (hκ : 0 < κ) (hK : IsCompact K) (hKc : Convex ℝ K)
     (hKint : (interior K).Nonempty) (hW : ContDiff ℝ ∞ W)
@@ -34,7 +33,19 @@ theorem exists_regular_moment_weak_tensor {n : ℕ} (hn : 0 < n)
     (hμ : (μ : Measure (EuclideanSpace ℝ (Fin n))) =
       (volume : Measure (EuclideanSpace ℝ (Fin n))).withDensity
         (K.indicator fun p => ENNReal.ofReal (Real.exp (-W p))))
-    (hiso : KLS.Isotropic μ) :
+    (hiso : FunctionalInequalities.KLS.Isotropic μ)
+
+noncomputable section
+
+open MeasureTheory Set Filter
+open scoped RealInnerProductSpace ContDiff Topology
+open FunctionalInequalities.Probability.Stein
+
+namespace FunctionalInequalities.Analysis
+include hn hκ hK hKc hKint hW hstrong hμ hiso in
+/-- Actual source-law tensor: both original hw and hF inputs are produced;
+all original regular-class data and the weak/local-L2 tensor are retained. -/
+theorem exists_regular_moment_weak_tensor :
     ∃ (u : EuclideanSpace ℝ (Fin n) → ℝ) (L LF : NNReal)
         (T : EuclideanSpace ℝ (Fin n) → Fin n → Fin n → Fin n → ℝ),
       ConvexOn ℝ univ u ∧ LipschitzWith L u ∧
@@ -107,22 +118,14 @@ private theorem exponent_upper_of_normalized_convex {n : ℕ}
   linarith [hx₀ x]
 
 
+include hn hκ hK hKc hKint hW hstrong hμ hiso in
 /-- The same actual-source moment potential and weak tensor retain all original
 regularity data and satisfy the first weak Monge–Ampère identity (Letwin v1 (2.4)).
 The determinant derivative is locally L2; the logarithmic weak derivative is
 identified with the explicit source-law right-hand side. No C2 Hessian regularity
 or prescribed derivative tensor is assumed. This does not prove the second
 evolution identity, the integrated trace bound, or the constant-8 theorem. -/
-theorem exists_regular_moment_weak_first_derivative {n : ℕ} (hn : 0 < n)
-    {K : Set (EuclideanSpace ℝ (Fin n))} {W : EuclideanSpace ℝ (Fin n) → ℝ}
-    {κ : ℝ} (hκ : 0 < κ) (hK : IsCompact K) (hKc : Convex ℝ K)
-    (hKint : (interior K).Nonempty) (hW : ContDiff ℝ ∞ W)
-    (hstrong : ConvexOn ℝ univ (fun y => W y - (κ / 2) * ‖y‖ ^ 2))
-    (μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin n)))
-    (hμ : (μ : Measure (EuclideanSpace ℝ (Fin n))) =
-      (volume : Measure (EuclideanSpace ℝ (Fin n))).withDensity
-        (K.indicator fun p => ENNReal.ofReal (Real.exp (-W p))))
-    (hiso : KLS.Isotropic μ) :
+theorem exists_regular_moment_weak_first_derivative :
     ∃ (u : EuclideanSpace ℝ (Fin n) → ℝ) (L LF : NNReal)
         (T : EuclideanSpace ℝ (Fin n) → Fin n → Fin n → Fin n → ℝ),
       ConvexOn ℝ univ u ∧ LipschitzWith L u ∧
@@ -282,3 +285,7 @@ theorem exists_regular_moment_weak_first_derivative {n : ℕ} (hn : 0 < n)
     fun S hS => MemLp.ae_eq (ae_restrict_of_ae hJac) (hp.2 S hS), hLogWeak, hTrace, hRight⟩
 
 end FunctionalInequalities.Analysis
+
+end
+
+end RegularSource

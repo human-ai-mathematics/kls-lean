@@ -14,6 +14,25 @@ import FunctionalInequalities.KLS.CEK.MomentRegularity.WeakDerivative
 # Regular-source weak inverse, Hessian mean, evolution and testing
 -/
 
+section RegularSource
+
+/-! Shared regular-source hypotheses for the moment-map and quadratic-variance results.
+Only the source-law theorems include these hypotheses; auxiliary lemmas retain their own scope. -/
+
+open MeasureTheory Set
+open scoped ContDiff
+
+variable {n : ℕ} (hn : 0 < n)
+    {K : Set (EuclideanSpace ℝ (Fin n))} {W : EuclideanSpace ℝ (Fin n) → ℝ}
+    {κ : ℝ} (hκ : 0 < κ) (hK : IsCompact K) (hKc : Convex ℝ K)
+    (hKint : (interior K).Nonempty) (hW : ContDiff ℝ ∞ W)
+    (hstrong : ConvexOn ℝ univ (fun y => W y - (κ / 2) * ‖y‖ ^ 2))
+    (μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin n)))
+    (hμ : (μ : Measure (EuclideanSpace ℝ (Fin n))) =
+      (volume : Measure (EuclideanSpace ℝ (Fin n))).withDensity
+        (K.indicator fun p => ENNReal.ofReal (Real.exp (-W p))))
+    (hiso : FunctionalInequalities.KLS.Isotropic μ)
+
 noncomputable section
 
 open MeasureTheory Set Filter
@@ -24,17 +43,9 @@ section RegularMomentWeakInverse
 open scoped Matrix.Norms.Elementwise
 namespace FunctionalInequalities.Analysis
 
+include hn hκ hK hKc hKint hW hstrong hμ hiso in
 /-- Actual regular-source weak inverse formula (Letwin (2.5)), retaining all R0/EX fields. -/
-theorem exists_regular_moment_weak_inverse {n : ℕ} (hn : 0 < n)
-    {K : Set (EuclideanSpace ℝ (Fin n))} {W : EuclideanSpace ℝ (Fin n) → ℝ}
-    {κ : ℝ} (hκ : 0 < κ) (hK : IsCompact K) (hKc : Convex ℝ K)
-    (hKint : (interior K).Nonempty) (hW : ContDiff ℝ ∞ W)
-    (hstrong : ConvexOn ℝ univ (fun y => W y - (κ / 2) * ‖y‖ ^ 2))
-    (μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin n)))
-    (hμ : (μ : Measure (EuclideanSpace ℝ (Fin n))) =
-      (volume : Measure (EuclideanSpace ℝ (Fin n))).withDensity
-        (K.indicator fun p => ENNReal.ofReal (Real.exp (-W p))))
-    (hiso : KLS.Isotropic μ) :
+theorem exists_regular_moment_weak_inverse :
     ∃ (u : EuclideanSpace ℝ (Fin n) → ℝ) (L LF : NNReal)
         (T : EuclideanSpace ℝ (Fin n) → Fin n → Fin n → Fin n → ℝ),
       ConvexOn ℝ univ u ∧ LipschitzWith L u ∧
@@ -119,16 +130,8 @@ private lemma mean_hessian_basis_entry {n : ℕ}
   simp [Matrix.mulVec, dotProduct]
 
 
-theorem exists_regular_moment_weak_inverse_mean_hessian {n : ℕ} (hn : 0 < n)
-    {K : Set (EuclideanSpace ℝ (Fin n))} {W : EuclideanSpace ℝ (Fin n) → ℝ}
-    {κ : ℝ} (hκ : 0 < κ) (hK : IsCompact K) (hKc : Convex ℝ K)
-    (hKint : (interior K).Nonempty) (hW : ContDiff ℝ ∞ W)
-    (hstrong : ConvexOn ℝ univ (fun y => W y - (κ / 2) * ‖y‖ ^ 2))
-    (μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin n)))
-    (hμ : (μ : Measure (EuclideanSpace ℝ (Fin n))) =
-      (volume : Measure (EuclideanSpace ℝ (Fin n))).withDensity
-        (K.indicator fun p => ENNReal.ofReal (Real.exp (-W p))))
-    (hiso : KLS.Isotropic μ) :
+include hn hκ hK hKc hKint hW hstrong hμ hiso in
+theorem exists_regular_moment_weak_inverse_mean_hessian :
     ∃ (u : EuclideanSpace ℝ (Fin n) → ℝ) (L LF : NNReal)
         (T : EuclideanSpace ℝ (Fin n) → Fin n → Fin n → Fin n → ℝ),
       ConvexOn ℝ univ u ∧ LipschitzWith L u ∧
@@ -329,20 +332,12 @@ private theorem bounded_compact_hessian_test_data {n : ℕ}
     exact ⟨hdata.1, hdata.2.2.1, hdata.2.2.2⟩
 
 
+include hn hκ hK hKc hKint hW hstrong hμ hiso in
 /-- The regular-class moment potential with its weak weighted Hessian evolution: the same `u, L, LF, T`
 as `exists_regular_moment_weak_inverse_mean_hessian`, with every earlier field, plus the weak derivative of
 the first Monge–Ampère trace, the unweighted flux identity and the weighted evolution identity with
 curvature and Gram forcing (weak Letwin (2.6)). No analytic premise is added. -/
-theorem exists_regular_moment_weak_hessian_evolution {n : ℕ} (hn : 0 < n)
-    {K : Set (EuclideanSpace ℝ (Fin n))} {W : EuclideanSpace ℝ (Fin n) → ℝ}
-    {κ : ℝ} (hκ : 0 < κ) (hK : IsCompact K) (hKc : Convex ℝ K)
-    (hKint : (interior K).Nonempty) (hW : ContDiff ℝ ∞ W)
-    (hstrong : ConvexOn ℝ univ (fun y => W y - (κ / 2) * ‖y‖ ^ 2))
-    (μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin n)))
-    (hμ : (μ : Measure (EuclideanSpace ℝ (Fin n))) =
-      (volume : Measure (EuclideanSpace ℝ (Fin n))).withDensity
-        (K.indicator fun p => ENNReal.ofReal (Real.exp (-W p))))
-    (hiso : KLS.Isotropic μ) :
+theorem exists_regular_moment_weak_hessian_evolution :
     ∃ (u : EuclideanSpace ℝ (Fin n) → ℝ) (L LF : NNReal)
         (T : EuclideanSpace ℝ (Fin n) → Fin n → Fin n → Fin n → ℝ),
       ConvexOn ℝ univ u ∧ LipschitzWith L u ∧
@@ -503,19 +498,11 @@ theorem exists_regular_moment_weak_hessian_evolution {n : ℕ} (hn : 0 < n)
     (hW.of_le (WithTop.coe_le_coe.mpr le_top)) hF hdet T hT hInv
     (fun i => (hfirst i).2.2.2.2)
 
+include hn hκ hK hKc hKint hW hstrong hμ hiso in
 /-- The regular-class weighted Hessian evolution at the same witness, together with its bounded test
 extension to `ψ * H_lk` for every compactly supported C1 `ψ`: both sides are integrable and the weighted
 identity holds. No global L2 bound of `T` and no new source premise is used. -/
-theorem exists_regular_moment_bounded_weak_hessian_testing {n : ℕ} (hn : 0 < n)
-    {K : Set (EuclideanSpace ℝ (Fin n))} {W : EuclideanSpace ℝ (Fin n) → ℝ}
-    {κ : ℝ} (hκ : 0 < κ) (hK : IsCompact K) (hKc : Convex ℝ K)
-    (hKint : (interior K).Nonempty) (hW : ContDiff ℝ ∞ W)
-    (hstrong : ConvexOn ℝ univ (fun y => W y - (κ / 2) * ‖y‖ ^ 2))
-    (μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin n)))
-    (hμ : (μ : Measure (EuclideanSpace ℝ (Fin n))) =
-      (volume : Measure (EuclideanSpace ℝ (Fin n))).withDensity
-        (K.indicator fun p => ENNReal.ofReal (Real.exp (-W p))))
-    (hiso : KLS.Isotropic μ) :
+theorem exists_regular_moment_bounded_weak_hessian_testing :
     ∃ (u : EuclideanSpace ℝ (Fin n) → ℝ) (L LF : NNReal)
         (T : EuclideanSpace ℝ (Fin n) → Fin n → Fin n → Fin n → ℝ),
       ConvexOn ℝ univ u ∧ LipschitzWith L u ∧
@@ -673,3 +660,7 @@ theorem exists_regular_moment_bounded_weak_hessian_testing {n : ℕ} (hn : 0 < n
 
 end FunctionalInequalities.Analysis
 end RegularMomentWeakHessianEvolution
+
+end
+
+end RegularSource

@@ -42,19 +42,20 @@ index comes first and the norm is the Hilbert–Schmidt norm. -/
 def gradCoord (f : E → G) (x : E) : PiLp 2 (fun _ : Fin (Module.finrank ℝ E) => G) :=
   WithLp.toLp 2 fun i => fderiv ℝ f x (stdOrthonormalBasis ℝ E i)
 
-omit [CompleteSpace E] [MeasurableSpace E] [BorelSpace E] [FiniteDimensional ℝ G] in
+section CoordinateGradient
+
+omit [CompleteSpace E] [MeasurableSpace E] [BorelSpace E] [FiniteDimensional ℝ G]
+
 theorem norm_sq_gradCoord (f : E → G) (x : E) :
     ‖gradCoord f x‖ ^ 2 = ∑ i, ‖fderiv ℝ f x (stdOrthonormalBasis ℝ E i)‖ ^ 2 := by
     unfold gradCoord
     rw [PiLp.norm_sq_eq_of_L2]
 
-omit [CompleteSpace E] [MeasurableSpace E] [BorelSpace E] [FiniteDimensional ℝ G] in
 theorem inner_gradCoord (f g : E → G) (x : E) :
     ⟪gradCoord f x, gradCoord g x⟫ =
       ∑ i, ⟪fderiv ℝ f x (stdOrthonormalBasis ℝ E i), fderiv ℝ g x (stdOrthonormalBasis ℝ E i)⟫ := by
     simp [gradCoord, PiLp.inner_apply]
 
-omit [CompleteSpace E] [MeasurableSpace E] [BorelSpace E] [FiniteDimensional ℝ G] in
 theorem hasTemperateGrowth_gradCoord {f : E → G} (hf : f.HasTemperateGrowth) :
     (gradCoord f).HasTemperateGrowth := by
   let L : (E →L[ℝ] G) →L[ℝ] PiLp 2 (fun _ : Fin (Module.finrank ℝ E) => G) :=
@@ -63,7 +64,6 @@ theorem hasTemperateGrowth_gradCoord {f : E → G} (hf : f.HasTemperateGrowth) :
         ContinuousLinearMap.apply ℝ G (stdOrthonormalBasis ℝ E i))
   exact L.hasTemperateGrowth.comp (hasTemperateGrowth_fderiv hf)
 
-omit [CompleteSpace E] [MeasurableSpace E] [BorelSpace E] [FiniteDimensional ℝ G] in
 theorem norm_sq_gradCoord_gradCoord {f : E → G} (hf : ContDiff ℝ ∞ f) (x : E) :
     ‖gradCoord (gradCoord f) x‖ ^ 2 =
       ∑ i, ∑ j, ‖iteratedFDeriv ℝ 2 f x ![stdOrthonormalBasis ℝ E i, stdOrthonormalBasis ℝ E j]‖ ^ 2 := by
@@ -86,6 +86,8 @@ theorem norm_sq_gradCoord_gradCoord {f : E → G} (hf : ContDiff ℝ ∞ f) (x :
     (stdOrthonormalBasis ℝ E j)‖ ^ 2 = _
   rw [iteratedFDeriv_two_apply]
   rfl
+
+end CoordinateGradient
 
 variable (m : Measure E) [m.IsAddHaarMeasure]
 
@@ -541,7 +543,10 @@ private theorem integrable_and_integrable_norm_sq_of_hasTemperateGrowth {H : Typ
   calc ‖f x‖ ^ 2 ≤ (C * (1 + ‖x‖) ^ k) ^ 2 := hsq
     _ = C ^ 2 * (1 + ‖x‖) ^ (2 * k) := by ring
 
-omit [CompleteSpace E] [MeasurableSpace E] [BorelSpace E] [FiniteDimensional ℝ G] in
+section CoordinateSymmetry
+
+omit [CompleteSpace E] [MeasurableSpace E] [BorelSpace E] [FiniteDimensional ℝ G]
+
 /-- The coefficients of `∇²f` are the second derivatives `D²f(x)(e_i, e_j)`. -/
 theorem gradCoord_gradCoord_apply {f : E → G} (hf : ContDiff ℝ ∞ f) (x : E)
     (i j : Fin (Module.finrank ℝ E)) :
@@ -559,7 +564,6 @@ theorem gradCoord_gradCoord_apply {f : E → G} (hf : ContDiff ℝ ∞ f) (x : E
     iteratedFDeriv_two_apply]
   rfl
 
-omit [CompleteSpace E] [MeasurableSpace E] [BorelSpace E] [FiniteDimensional ℝ G] in
 /-- `∇²f` is symmetric in its first two indices. -/
 theorem gradCoord_gradCoord_symm {f : E → G} (hf : ContDiff ℝ ∞ f) (x : E)
     (i j : Fin (Module.finrank ℝ E)) :
@@ -571,6 +575,8 @@ theorem gradCoord_gradCoord_symm {f : E → G} (hf : ContDiff ℝ ∞ f) (x : E)
   congr 1
   ext k
   fin_cases k <;> rfl
+
+end CoordinateSymmetry
 
 omit [CompleteSpace E] [m.IsAddHaarMeasure] in
 /-- **BKL (35)**: under the normalization (33), the energy drop `v_i - v_{i+1}` is `‖∫ ∇h_i‖²`. -/
@@ -737,24 +743,26 @@ theorem exists_symm_integral_norm_sq_sub_le {V : E → ℝ} (hV : V.HasTemperate
         _ = (∫ x, ‖gradCoord (gradCoord g) x - α • gradCoord h x‖ ^ 2 ∂μ) / lam := by
           rw [div_eq_inv_mul]
 
+section TensorSymmetrization
+
+omit [CompleteSpace E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
+  [FiniteDimensional ℝ G]
+
 /-- Exchange of the first two indices of a tensor in `PiLp 2 (Fin n → PiLp 2 (Fin n → G))` (the
 source's transposition `τ₁`). -/
 def swapFirstTwo {n : ℕ} (A : PiLp 2 (fun _ : Fin n => PiLp 2 (fun _ : Fin n => G))) :
     PiLp 2 (fun _ : Fin n => PiLp 2 (fun _ : Fin n => G)) :=
   WithLp.toLp 2 fun i => WithLp.toLp 2 fun j => A j i
 
-omit [CompleteSpace E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
-  [NormedAddCommGroup G] [InnerProductSpace ℝ G] [FiniteDimensional ℝ G] in
+omit [NormedAddCommGroup G] [InnerProductSpace ℝ G] in
 theorem swapFirstTwo_apply {n : ℕ} (A : PiLp 2 (fun _ : Fin n => PiLp 2 (fun _ : Fin n => G)))
     (i j : Fin n) : swapFirstTwo A i j = A j i := rfl
 
-omit [CompleteSpace E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
-  [InnerProductSpace ℝ G] [FiniteDimensional ℝ G] in
+omit [InnerProductSpace ℝ G] in
 theorem swapFirstTwo_sub {n : ℕ} (A B : PiLp 2 (fun _ : Fin n => PiLp 2 (fun _ : Fin n => G))) :
     swapFirstTwo (A - B) = swapFirstTwo A - swapFirstTwo B := rfl
 
-omit [CompleteSpace E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
-  [InnerProductSpace ℝ G] [FiniteDimensional ℝ G] in
+omit [InnerProductSpace ℝ G] in
 theorem norm_swapFirstTwo {n : ℕ} (A : PiLp 2 (fun _ : Fin n => PiLp 2 (fun _ : Fin n => G))) :
     ‖swapFirstTwo A‖ = ‖A‖ := by
   have hsq : ‖swapFirstTwo A‖ ^ 2 = ‖A‖ ^ 2 := by
@@ -767,8 +775,6 @@ def symmetrizeFirstTwo {n : ℕ} (A : PiLp 2 (fun _ : Fin n => PiLp 2 (fun _ : F
     PiLp 2 (fun _ : Fin n => PiLp 2 (fun _ : Fin n => G)) :=
   (1 / 2 : ℝ) • (A + swapFirstTwo A)
 
-omit [CompleteSpace E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
-  [FiniteDimensional ℝ G] in
 /-- `S₂` is at least as close to `A` as any tensor symmetric in its first two indices. -/
 theorem norm_sub_symmetrizeFirstTwo_le {n : ℕ}
     (A T : PiLp 2 (fun _ : Fin n => PiLp 2 (fun _ : Fin n => G))) (hT : ∀ i j, T i j = T j i) :
@@ -787,6 +793,8 @@ theorem norm_sub_symmetrizeFirstTwo_le {n : ℕ}
         rw [norm_swapFirstTwo]
         norm_num
         ring
+
+end TensorSymmetrization
 
 /-- **BKL Lemma 3.3 in the case `q = 2`** for a supplied pair satisfying (30): with `S₂` the
 symmetrization of the first two indices, `‖∇₀h - S₂∇₀h‖² ≤ χ / λ` when `λ > 0` and `λ ≤ α²` for

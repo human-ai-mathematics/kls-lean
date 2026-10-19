@@ -152,8 +152,19 @@ the integral of the kernel's derivative norm normalized by its mass.
 
 1. Organize differential properties first, then introduce measure/L², Haar/absolute-continuity, and log-concavity assumptions. Group local sections by required structure; do not pile strong assumptions at the file top and disable `unusedSectionVars`.
 2. Measures and tests inferred from objects or property proofs should be implicit. Chosen measures, weight operators, and required reference measures stay explicit; use instances for structure and explicit proof parameters for key mathematical premises.
-3. `variable (hμ : LogConcave μ)` does not enter a theorem statement merely because its proof uses hμ. State it in the theorem header or use local `include hμ in`, then inspect elaborated parameters.
-4. Local `omit ... in` is allowed when mixing levels of generality; keep checks enabled. Record and verify redundant-instance removal, parameter explicitness/order changes, and lemma mergers separately: they are not pure renames.
+3. `variable (hμ : LogConcave μ)` does not enter a theorem statement merely because its proof uses hμ.
+   State it in the theorem header or use local `include hμ in`, then inspect elaborated parameters.
+   For a repeated block of mathematical premises, use a named section with `variable` in the
+   original parameter order and theorem-local `include`; keep result-specific arguments in the
+   header, and keep unrelated helpers outside the inclusion.
+4. Local `omit ... in` is allowed when mixing levels of generality; keep checks enabled.
+   Consecutive results with the same mathematical responsibility may share an `omit` context in
+   a named section; close it before stronger assumptions are needed. Record and verify
+   redundant-instance removal, parameter explicitness/order changes, and lemma mergers
+   separately: they are not pure renames. To retain an unused anonymous instance in an existing
+   interface, declare it directly in the theorem header and preserve the full telescope order.
+   `include` takes variable names; naming an anonymous instance solely to silence the linter
+   can change its parameter label.
 5. One-use proof helpers should be `private`. Keep `open`, notation, include, instances, and options local. Do not shorten variable lists by bundling all assumptions into a new structure or typeclass.
 6. Retain mathematically meaningful weighted, L¹/L², ae, compact-support, boundary, finiteness, and directional qualifiers. Borel sets and Borell representation are different concepts. Names locate results; types and documentation give their complete assumptions and conclusions, rather than spelling out the theorem in its name.
 

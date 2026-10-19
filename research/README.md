@@ -12,6 +12,7 @@ The [Lean design](../LEAN_DESIGN.md) and [calling examples](../examples/README.m
 | Inspect all routes and recorded local statuses | [Progress overview](progress/README.md) and [generated node register](progress/STATUS.md) |
 | Query snapshot-bound project context | [Read-only MCP](context-mcp.md) |
 | Reproduce verification or change a module | [Verification](verification.md), [workflow](workflow.md) and [naming](naming.md) |
+| Prepare an exact public revision | [Release procedure](release.md), [contribution guide](../CONTRIBUTING.md) and [citation metadata](../CITATION.cff) |
 | Read the current normative reviews | [Target-scope reviews](progress/target-reviews.md), [infrastructure review](progress/infrastructure-review.md), [statement-snapshot review](a-series/statement-snapshot/REVIEW.md), [BKL independent-target review](audits/BKL/IndependentTargets/REVIEW.md) and the [audit client guide](audits/README.md) |
 | Manage compiled artifacts and retention evidence | [Read-only inventory](inventory_artifacts.py) and [recoverable artifact storage](artifact_storage/README.md) |
 

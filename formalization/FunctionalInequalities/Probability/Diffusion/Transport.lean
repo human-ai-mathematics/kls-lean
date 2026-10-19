@@ -114,8 +114,10 @@ section LinearTransport
 
 variable {V : Type*} [NormedAddCommGroup V] [NormedSpace ℝ V] [FiniteDimensional ℝ V]
 
-set_option linter.unusedSectionVars false in
-theorem IsDiffusion.ae_linear_eq_integral_transport (Φ : V ≃L[ℝ] (Fin N → ℝ))
+omit [FiniteDimensional ℝ V] in
+theorem IsDiffusion.ae_linear_eq_integral_transport
+    [FiniteDimensional ℝ V]
+    (Φ : V ≃L[ℝ] (Fin N → ℝ))
     {b : V → V} {σ : V → Fin d → V} {x₀ : V}
     (hbc : Continuous b) {B : ℝ} (hbB : ∀ x, ‖b x‖ ≤ B)
     {Y : ℝ → Ω → V}

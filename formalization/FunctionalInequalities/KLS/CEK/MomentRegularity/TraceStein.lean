@@ -20,6 +20,25 @@ import FunctionalInequalities.KLS.CEK.MomentRegularity.Cutoff
 # Trace and weak Stein estimates at one regular moment witness
 -/
 
+section RegularSource
+
+/-! Shared regular-source hypotheses for the moment-map and quadratic-variance results.
+Only the source-law theorems include these hypotheses; auxiliary lemmas retain their own scope. -/
+
+open MeasureTheory Set
+open scoped ContDiff
+
+variable {n : ℕ} (hn : 0 < n)
+    {K : Set (EuclideanSpace ℝ (Fin n))} {W : EuclideanSpace ℝ (Fin n) → ℝ}
+    {κ : ℝ} (hκ : 0 < κ) (hK : IsCompact K) (hKc : Convex ℝ K)
+    (hKint : (interior K).Nonempty) (hW : ContDiff ℝ ∞ W)
+    (hstrong : ConvexOn ℝ univ (fun y => W y - (κ / 2) * ‖y‖ ^ 2))
+    (μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin n)))
+    (hμ : (μ : Measure (EuclideanSpace ℝ (Fin n))) =
+      (volume : Measure (EuclideanSpace ℝ (Fin n))).withDensity
+        (K.indicator fun p => ENNReal.ofReal (Real.exp (-W p))))
+    (hiso : FunctionalInequalities.KLS.Isotropic μ)
+
 noncomputable section
 
 open MeasureTheory Set Filter
@@ -34,16 +53,8 @@ open scoped ContDiff Topology
 
 namespace FunctionalInequalities.Analysis
 
-private theorem actual_source_cutoff_trace_quadratic_testing {n : ℕ} (hn : 0 < n)
-    {K : Set (EuclideanSpace ℝ (Fin n))} {W : EuclideanSpace ℝ (Fin n) → ℝ}
-    {κ : ℝ} (hκ : 0 < κ) (hK : IsCompact K) (hKc : Convex ℝ K)
-    (hKint : (interior K).Nonempty) (hW : ContDiff ℝ ∞ W)
-    (hstrong : ConvexOn ℝ univ (fun y => W y - (κ / 2) * ‖y‖ ^ 2))
-    (μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin n)))
-    (hμ : (μ : Measure (EuclideanSpace ℝ (Fin n))) =
-      (volume : Measure (EuclideanSpace ℝ (Fin n))).withDensity
-        (K.indicator fun p => ENNReal.ofReal (Real.exp (-W p))))
-    (hiso : KLS.Isotropic μ) :
+include hn hκ hK hKc hKint hW hstrong hμ hiso in
+private theorem actual_source_cutoff_trace_quadratic_testing :
     ∃ (u : EuclideanSpace ℝ (Fin n) → ℝ) (L LF : NNReal)
         (T : EuclideanSpace ℝ (Fin n) → Fin n → Fin n → Fin n → ℝ),
       (ConvexOn ℝ univ u ∧ LipschitzWith L u ∧
@@ -252,16 +263,8 @@ open scoped ContDiff Topology RealInnerProductSpace
 
 namespace FunctionalInequalities.Analysis
 
-private theorem actual_source_weak_trace_contraction_data {n : ℕ} (hn : 0 < n)
-    {K : Set (EuclideanSpace ℝ (Fin n))} {W : EuclideanSpace ℝ (Fin n) → ℝ}
-    {κ : ℝ} (hκ : 0 < κ) (hK : IsCompact K) (hKc : Convex ℝ K)
-    (hKint : (interior K).Nonempty) (hW : ContDiff ℝ ∞ W)
-    (hstrong : ConvexOn ℝ univ (fun y => W y - (κ / 2) * ‖y‖ ^ 2))
-    (μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin n)))
-    (hμ : (μ : Measure (EuclideanSpace ℝ (Fin n))) =
-      (volume : Measure (EuclideanSpace ℝ (Fin n))).withDensity
-        (K.indicator fun p => ENNReal.ofReal (Real.exp (-W p))))
-    (hiso : KLS.Isotropic μ) :
+include hn hκ hK hKc hKint hW hstrong hμ hiso in
+private theorem actual_source_weak_trace_contraction_data :
     ∃ (u : EuclideanSpace ℝ (Fin n) → ℝ) (L LF : NNReal)
         (T : EuclideanSpace ℝ (Fin n) → Fin n → Fin n → Fin n → ℝ),
       ((ConvexOn ℝ univ u ∧ LipschitzWith L u ∧
@@ -622,17 +625,9 @@ open scoped ContDiff Topology RealInnerProductSpace
 
 namespace FunctionalInequalities.Analysis
 
+include hn hκ hK hKc hKint hW hstrong hμ hiso in
 set_option maxHeartbeats 800000 in
-private theorem actual_source_weak_trace_conservativity_data {n : ℕ} (hn : 0 < n)
-    {K : Set (EuclideanSpace ℝ (Fin n))} {W : EuclideanSpace ℝ (Fin n) → ℝ}
-    {κ : ℝ} (hκ : 0 < κ) (hK : IsCompact K) (hKc : Convex ℝ K)
-    (hKint : (interior K).Nonempty) (hW : ContDiff ℝ ∞ W)
-    (hstrong : ConvexOn ℝ univ (fun y => W y - (κ / 2) * ‖y‖ ^ 2))
-    (μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin n)))
-    (hμ : (μ : Measure (EuclideanSpace ℝ (Fin n))) =
-      (volume : Measure (EuclideanSpace ℝ (Fin n))).withDensity
-        (K.indicator fun p => ENNReal.ofReal (Real.exp (-W p))))
-    (hiso : KLS.Isotropic μ) :
+private theorem actual_source_weak_trace_conservativity_data :
     ∃ (u : EuclideanSpace ℝ (Fin n) → ℝ) (L LF : NNReal)
         (T : EuclideanSpace ℝ (Fin n) → Fin n → Fin n → Fin n → ℝ),
       (      ((ConvexOn ℝ univ u ∧ LipschitzWith L u ∧
@@ -966,21 +961,13 @@ open scoped ContDiff Topology RealInnerProductSpace
 
 namespace FunctionalInequalities.Analysis
 
+include hn hκ hK hKc hKint hW hstrong hμ hiso in
 set_option maxHeartbeats 1000000 in
 /-- Weak half-trace tensor energy at one regular moment witness (Letwin arXiv:2607.24164v1 (2.14), weak form): with the
 whole payload of the bounded weak cutoff testing, trace-quadratic testing, weak trace contraction and conservativity
 retained at the same `u`, `L`, `LF`, `T`, for every positive semidefinite `B` the trace tensor energy
 `D = ∑ (∇²u)⁻¹ᵢⱼ tr(B Tᵢ B Tⱼ)` is integrable for `e^{-u} dx` and `∫ D ≤ (1/2) ∫ tr(B ∇²u B ∇²u)`. -/
-private theorem exists_regular_moment_weak_trace_energy {n : ℕ} (hn : 0 < n)
-    {K : Set (EuclideanSpace ℝ (Fin n))} {W : EuclideanSpace ℝ (Fin n) → ℝ}
-    {κ : ℝ} (hκ : 0 < κ) (hK : IsCompact K) (hKc : Convex ℝ K)
-    (hKint : (interior K).Nonempty) (hW : ContDiff ℝ ∞ W)
-    (hstrong : ConvexOn ℝ univ (fun y => W y - (κ / 2) * ‖y‖ ^ 2))
-    (μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin n)))
-    (hμ : (μ : Measure (EuclideanSpace ℝ (Fin n))) =
-      (volume : Measure (EuclideanSpace ℝ (Fin n))).withDensity
-        (K.indicator fun p => ENNReal.ofReal (Real.exp (-W p))))
-    (hiso : KLS.Isotropic μ) :
+private theorem exists_regular_moment_weak_trace_energy :
     ∃ (u : EuclideanSpace ℝ (Fin n) → ℝ) (L LF : NNReal)
         (T : EuclideanSpace ℝ (Fin n) → Fin n → Fin n → Fin n → ℝ),
       (      (      ((ConvexOn ℝ univ u ∧ LipschitzWith L u ∧
@@ -1310,17 +1297,9 @@ open scoped ContDiff Topology RealInnerProductSpace
 
 namespace FunctionalInequalities.Analysis
 
+include hn hκ hK hKc hKint hW hstrong hμ hiso in
 set_option maxHeartbeats 1000000 in
-private theorem actual_source_weak_theorem25_data {n : ℕ} (hn : 0 < n)
-    {K : Set (EuclideanSpace ℝ (Fin n))} {W : EuclideanSpace ℝ (Fin n) → ℝ}
-    {κ : ℝ} (hκ : 0 < κ) (hK : IsCompact K) (hKc : Convex ℝ K)
-    (hKint : (interior K).Nonempty) (hW : ContDiff ℝ ∞ W)
-    (hstrong : ConvexOn ℝ univ (fun y => W y - (κ / 2) * ‖y‖ ^ 2))
-    (μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin n)))
-    (hμ : (μ : Measure (EuclideanSpace ℝ (Fin n))) =
-      (volume : Measure (EuclideanSpace ℝ (Fin n))).withDensity
-        (K.indicator fun p => ENNReal.ofReal (Real.exp (-W p))))
-    (hiso : KLS.Isotropic μ) :
+private theorem actual_source_weak_theorem25_data :
     ∃ (u : EuclideanSpace ℝ (Fin n) → ℝ) (L LF : NNReal)
         (T : EuclideanSpace ℝ (Fin n) → Fin n → Fin n → Fin n → ℝ),
       ((      (      ((ConvexOn ℝ univ u ∧ LipschitzWith L u ∧
@@ -1576,17 +1555,9 @@ open scoped ContDiff Topology RealInnerProductSpace
 
 namespace FunctionalInequalities.Analysis
 
+include hn hκ hK hKc hKint hW hstrong hμ hiso in
 set_option maxHeartbeats 1000000 in
-private theorem actual_source_weak_symmetric_trace_bound_data {n : ℕ} (hn : 0 < n)
-    {K : Set (EuclideanSpace ℝ (Fin n))} {W : EuclideanSpace ℝ (Fin n) → ℝ}
-    {κ : ℝ} (hκ : 0 < κ) (hK : IsCompact K) (hKc : Convex ℝ K)
-    (hKint : (interior K).Nonempty) (hW : ContDiff ℝ ∞ W)
-    (hstrong : ConvexOn ℝ univ (fun y => W y - (κ / 2) * ‖y‖ ^ 2))
-    (μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin n)))
-    (hμ : (μ : Measure (EuclideanSpace ℝ (Fin n))) =
-      (volume : Measure (EuclideanSpace ℝ (Fin n))).withDensity
-        (K.indicator fun p => ENNReal.ofReal (Real.exp (-W p))))
-    (hiso : KLS.Isotropic μ) :
+private theorem actual_source_weak_symmetric_trace_bound_data :
     ∃ (u : EuclideanSpace ℝ (Fin n) → ℝ) (L LF : NNReal)
         (T : EuclideanSpace ℝ (Fin n) → Fin n → Fin n → Fin n → ℝ),
       ((      (      ((ConvexOn ℝ univ u ∧ LipschitzWith L u ∧
@@ -1841,17 +1812,9 @@ open scoped ContDiff Topology RealInnerProductSpace
 
 namespace FunctionalInequalities.Analysis
 
+include hn hκ hK hKc hKint hW hstrong hμ hiso in
 set_option maxHeartbeats 1000000 in
-private theorem actual_source_weighted_weak_pairing_data {n : ℕ} (hn : 0 < n)
-    {K : Set (EuclideanSpace ℝ (Fin n))} {W : EuclideanSpace ℝ (Fin n) → ℝ}
-    {κ : ℝ} (hκ : 0 < κ) (hK : IsCompact K) (hKc : Convex ℝ K)
-    (hKint : (interior K).Nonempty) (hW : ContDiff ℝ ∞ W)
-    (hstrong : ConvexOn ℝ univ (fun y => W y - (κ / 2) * ‖y‖ ^ 2))
-    (μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin n)))
-    (hμ : (μ : Measure (EuclideanSpace ℝ (Fin n))) =
-      (volume : Measure (EuclideanSpace ℝ (Fin n))).withDensity
-        (K.indicator fun p => ENNReal.ofReal (Real.exp (-W p))))
-    (hiso : KLS.Isotropic μ) :
+private theorem actual_source_weighted_weak_pairing_data :
     ∃ (u : EuclideanSpace ℝ (Fin n) → ℝ) (L LF : NNReal)
         (T : EuclideanSpace ℝ (Fin n) → Fin n → Fin n → Fin n → ℝ),
 (      ((      (      ((ConvexOn ℝ univ u ∧ LipschitzWith L u ∧
@@ -2107,20 +2070,12 @@ open scoped ContDiff Topology RealInnerProductSpace
 
 namespace FunctionalInequalities.Analysis
 
+include hn hκ hK hKc hKint hW hstrong hμ hiso in
 set_option maxHeartbeats 1000000 in
 /-- Weak source Stein coupling at one regular moment witness: at the same `u`, `L`, `LF`, `T` the whole payload (cutoff testing,
 trace contraction, conservativity, half energy, all-symmetric Theorem 2.5 trace bound and bounded-Lipschitz weighted
 pairing) is retained, and every C1 globally Lipschitz globally bounded test satisfies the coordinate source Stein identity. -/
-theorem exists_regular_moment_weak_stein_coupling {n : ℕ} (hn : 0 < n)
-    {K : Set (EuclideanSpace ℝ (Fin n))} {W : EuclideanSpace ℝ (Fin n) → ℝ}
-    {κ : ℝ} (hκ : 0 < κ) (hK : IsCompact K) (hKc : Convex ℝ K)
-    (hKint : (interior K).Nonempty) (hW : ContDiff ℝ ∞ W)
-    (hstrong : ConvexOn ℝ univ (fun y => W y - (κ / 2) * ‖y‖ ^ 2))
-    (μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin n)))
-    (hμ : (μ : Measure (EuclideanSpace ℝ (Fin n))) =
-      (volume : Measure (EuclideanSpace ℝ (Fin n))).withDensity
-        (K.indicator fun p => ENNReal.ofReal (Real.exp (-W p))))
-    (hiso : KLS.Isotropic μ) :
+theorem exists_regular_moment_weak_stein_coupling :
     ∃ (u : EuclideanSpace ℝ (Fin n) → ℝ) (L LF : NNReal)
         (T : EuclideanSpace ℝ (Fin n) → Fin n → Fin n → Fin n → ℝ),
 ((      ((      (      ((ConvexOn ℝ univ u ∧ LipschitzWith L u ∧
@@ -2385,22 +2340,14 @@ open scoped ContDiff
 
 namespace FunctionalInequalities.Analysis
 
+include hn hκ hK hKc hKint hW hstrong hμ hiso in
 set_option maxHeartbeats 1000000 in
 /-- The properties of one actual regular moment witness used by the Letwin regular-class assembly, as a flat conjunction at
 the same `u` and `L` produced by `exists_regular_moment_weak_stein_coupling`: convexity, Lipschitz bound, normalization,
 pushforward to `μ`, `C¹` with `16/κ`-Lipschitz gradient, the a.e. positive definite Hessian with log-det identity and
 `16/κ` cap, integrable Hessian entries with mean `Id`, and the weak Theorem 2.5 bound `E tr(B Hess u B Hess u) ≤ 2 tr(B²)`
 for every real symmetric `B`. The hypotheses are exactly those of the witness producer. -/
-theorem exists_regular_moment_hessian_trace_bound {n : ℕ} (hn : 0 < n)
-    {K : Set (EuclideanSpace ℝ (Fin n))} {W : EuclideanSpace ℝ (Fin n) → ℝ}
-    {κ : ℝ} (hκ : 0 < κ) (hK : IsCompact K) (hKc : Convex ℝ K)
-    (hKint : (interior K).Nonempty) (hW : ContDiff ℝ ∞ W)
-    (hstrong : ConvexOn ℝ univ (fun y => W y - (κ / 2) * ‖y‖ ^ 2))
-    (μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin n)))
-    (hμ : (μ : Measure (EuclideanSpace ℝ (Fin n))) =
-      (volume : Measure (EuclideanSpace ℝ (Fin n))).withDensity
-        (K.indicator fun p => ENNReal.ofReal (Real.exp (-W p))))
-    (hiso : KLS.Isotropic μ) :
+theorem exists_regular_moment_hessian_trace_bound :
     ∃ (u : EuclideanSpace ℝ (Fin n) → ℝ) (L : NNReal),
       ConvexOn ℝ univ u ∧ LipschitzWith L u ∧
       (∫ x, Real.exp (-u x) ∂(volume : Measure (EuclideanSpace ℝ (Fin n)))) = 1 ∧
@@ -2433,3 +2380,7 @@ theorem exists_regular_moment_hessian_trace_bound {n : ℕ} (hn : 0 < n)
 end FunctionalInequalities.Analysis
 
 end RegularMomentHessianTraceBound
+
+end
+
+end RegularSource

@@ -384,14 +384,14 @@ theorem limsup_ofReal_ballSup_le {u : V → ℝ} {x : V} (hx : DifferentiableAt 
 
 /-! ### The Minkowski coarea inequality -/
 
--- The type class assumptions are the ones fixed by the original statement; `FiniteDimensional ℝ V`
--- became unused only because the body is now a proof rather than a hole, so the linter is
--- silenced instead of the mathematical scope of the statement changed.
-set_option linter.unusedSectionVars false in
+-- Finite dimensionality is retained explicitly in this Minkowski coarea interface.
+omit [FiniteDimensional ℝ V] in
 /-- Minkowski coarea inequality (Ambrosio–Di Marino–Gigli 2017, Lemma 3.2) for a `C¹` Lipschitz
 function, with closed superlevel sets and the Euclidean gradient: `∫ ν⁺({u ≥ t}) dt ≤ ∫ ‖∇u‖ dν`.
 No density is assumed. -/
-theorem lintegral_minkowskiContent_superlevel_le (ν : Measure V) [IsFiniteMeasure ν] {u : V → ℝ}
+theorem lintegral_minkowskiContent_superlevel_le
+    [FiniteDimensional ℝ V]
+    (ν : Measure V) [IsFiniteMeasure ν] {u : V → ℝ}
     (hu : ContDiff ℝ 1 u) {K : ℝ≥0} (hK : LipschitzWith K u) :
     ∫⁻ t, minkowskiContent ν {x | t ≤ u x} ∂(volume : Measure ℝ) ≤
       ∫⁻ x, ‖gradient u x‖ₑ ∂(ν : Measure V) := by

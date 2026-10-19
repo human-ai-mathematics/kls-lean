@@ -86,16 +86,20 @@ private theorem isBorellDensity_sliceKernel {m : Measure E} [Measure.IsAddHaarMe
     rw [ENNReal.ofReal_mul hcpos.le, ENNReal.ofReal_inv_of_pos hZpos,
       ENNReal.ofReal_toReal hb.2.ne, ConditionalFiber.sliceDensity, ENNReal.div_eq_inv_mul]
 
--- The statement is the fixed entry point of the corollary block: `hρ` and the ambient
--- completeness are part of the uniform argument list shared with the five theorems below, so the
--- two unused-argument linters are silenced rather than the signature changed.
-set_option linter.unusedSectionVars false in
+-- The corollary block retains admissibility and ambient structure in its shared interface.
+-- The unused explicit `hρ` keeps its local unused-variable exception.
+omit [CompleteSpace E] [MeasurableSpace E] [BorelSpace E]
+  [SecondCountableTopology E] [FiniteDimensional ℝ E] μ ρ in
 set_option linter.unusedVariables false in
 /-- Blueprint: "Fubini disintegration of the log-concave density gives conditional densities
 proportional to `t ↦ ρ_μ(z + tθ)` wherever the normalizing slice integral is finite and positive.
 These densities are log-concave. The remaining fibers are null." The chosen disintegration kernel
 of the joint law is, base-law almost everywhere, a log-concave law on the line. -/
-theorem ae_conditionalFiber_logConcave (hμ : LogConcave μ) (hρ : Admissible μ ρ)
+theorem ae_conditionalFiber_logConcave
+    [CompleteSpace E] [MeasurableSpace E] [BorelSpace E]
+    [SecondCountableTopology E] [FiniteDimensional ℝ E]
+    {μ : ProbabilityMeasure E} {ρ : ProbabilityMeasure (Direction E)}
+    (hμ : LogConcave μ) (hρ : Admissible μ ρ)
     (m : Measure E) [Measure.IsAddHaarMeasure m] (hac : (μ : Measure E) ≪ m) :
     ∀ᵐ b ∂baseLaw μ ρ,
       LogConcave (⟨kernel μ ρ b, inferInstance⟩ : ProbabilityMeasure ℝ) := by

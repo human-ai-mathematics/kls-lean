@@ -43,7 +43,10 @@ def logLaplace (μ : Measure E) (z : E) : ℝ :=
 def cumulant (μ : Measure E) (n : ℕ) : ContinuousMultilinearMap ℝ (fun _ : Fin n => E) ℝ :=
   iteratedFDeriv ℝ n (logLaplace μ) 0
 
-omit [CompleteSpace E] in
+section LaplaceCalculus
+
+omit [CompleteSpace E]
+
 /-- The logarithmic Laplace transform is smooth for a nonzero finite measure with all exponential
 moments. -/
 theorem contDiff_logLaplace (μ : Measure E) [IsFiniteMeasure μ] [NeZero μ]
@@ -73,7 +76,7 @@ theorem contDiff_logLaplace (μ : Measure E) [IsFiniteMeasure μ] [NeZero μ]
       (fun z : E => Real.log (∫ x, Real.exp ⟪z, x⟫ ∂μ))
     exact hZ.log (fun z => (hpos z).ne')
 
-omit [CompleteSpace E] [FiniteDimensional ℝ E] in
+omit [FiniteDimensional ℝ E] in
 private lemma bkl_integrable_exp_inner (μ : Measure E) [IsFiniteMeasure μ]
     (hexp : ∀ r : ℝ, Integrable (fun x => Real.exp (r * ‖x‖)) μ) (z : E) :
     Integrable (fun x => Real.exp ⟪z, x⟫) μ := by
@@ -83,7 +86,6 @@ private lemma bkl_integrable_exp_inner (μ : Measure E) [IsFiniteMeasure μ]
     rw [Real.norm_eq_abs, abs_of_pos (Real.exp_pos _)]
     exact Real.exp_le_exp.mpr (real_inner_le_norm z x)
 
-omit [CompleteSpace E] in
 private lemma bkl_hasFDerivAt_laplace (μ : Measure E) [IsFiniteMeasure μ]
     (hexp : ∀ r : ℝ, Integrable (fun x => Real.exp (r * ‖x‖)) μ) (z : E) :
     HasFDerivAt (fun y => ∫ x, Real.exp ⟪y, x⟫ ∂μ)
@@ -128,7 +130,6 @@ private lemma bkl_hasFDerivAt_laplace (μ : Measure E) [IsFiniteMeasure μ]
       simpa only [innerSL_apply_apply, real_inner_comm] using
         (innerSL ℝ x).hasFDerivAt.exp
 
-omit [CompleteSpace E] in
 /-- The tilt average of a linear function is a derivative of `Λ_μ`: `F_ℓ(z) = ⟪v, ∇Λ_μ(z)⟫` for
 `ℓ = ⟪v, ·⟫` (proof of BKL Proposition 7.1). -/
 theorem tiltAverage_inner_eq_fderiv_logLaplace (μ : Measure E) [IsFiniteMeasure μ] [NeZero μ]
@@ -172,7 +173,6 @@ theorem tiltAverage_inner_eq_fderiv_logLaplace (μ : Measure E) [IsFiniteMeasure
   funext x
   ring
 
-omit [CompleteSpace E] in
 /-- **Local tilt-average/derivative identity**: `F_{⟪v,·⟫}(z) = ∂_v Λ_μ(z)` for `‖z‖ < r`, assuming
 only the single exponential moment `∫ e^{r‖x‖} dμ < ∞`. -/
 theorem tiltAverage_inner_eq_fderiv_logLaplace_of_lt (μ : Measure E) [IsFiniteMeasure μ] [NeZero μ]
@@ -257,7 +257,7 @@ theorem tiltAverage_inner_eq_fderiv_logLaplace_of_lt (μ : Measure E) [IsFiniteM
         smul_eq_mul, real_inner_comm]
       ring
 
-omit [CompleteSpace E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] in
+omit [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] in
 private lemma bkl_cumulant_swap_front {F : Type*} [NormedAddCommGroup F]
     [NormedSpace ℝ F] [CompleteSpace F] {g : E → F} (hg : ContDiff ℝ ∞ g)
     (n : ℕ) (x v w : E) (h : Fin n → E) :
@@ -294,7 +294,7 @@ private lemma bkl_cumulant_swap_front {F : Type*} [NormedAddCommGroup F]
     ((ha.of_le (by norm_cast : (2 : WithTop ℕ∞) ≤ ∞)).contDiffAt.isSymmSndFDerivAt
       (by simp)).eq v w
 
-omit [CompleteSpace E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] in
+omit [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] in
 private lemma bkl_cumulant_cons_snoc {F : Type*} [NormedAddCommGroup F]
     [NormedSpace ℝ F] [CompleteSpace F] {g : E → F} (hg : ContDiff ℝ ∞ g)
     (n : ℕ) (x v : E) (h : Fin n → E) :
@@ -322,7 +322,6 @@ private lemma bkl_cumulant_cons_snoc {F : Type*} [NormedAddCommGroup F]
       simpa only [Fin.tail_cons, Fin.cons_zero] using
         congrArg (fun a : E → F => fderiv ℝ a x (h 0)) heq
 
-omit [CompleteSpace E] in
 /-- **Taylor tensors of linear functions are cumulants** (proof of BKL Proposition 7.1):
 for `ℓ = ⟪v, ·⟫`, `T_d ℓ = κ_{d+1}(v, ·, …, ·) / d!`. -/
 theorem taylorTensor_inner_eq_cumulant (μ : Measure E) [IsFiniteMeasure μ] [NeZero μ]
@@ -349,6 +348,8 @@ theorem taylorTensor_inner_eq_cumulant (μ : Measure E) [IsFiniteMeasure μ] [Ne
   rw [ht] at hs
   exact congrArg (fun a : ℝ => (d.factorial : ℝ)⁻¹ * a) hs.symm
 
+end LaplaceCalculus
+
 section ThirdCumulant
 
 /-- The quadratic-form estimate of Letwin (2026, Theorem 1.2), stated as a property of the law `μ`:
@@ -362,7 +363,10 @@ def LetwinQuadraticBound (μ : Measure E) : Prop :=
 variable (μ : Measure E) [IsProbabilityMeasure μ]
   (hexp : ∀ r : ℝ, Integrable (fun x => Real.exp (r * ‖x‖)) μ)
 
-omit [CompleteSpace E] in
+section ThirdMomentIdentities
+
+omit [CompleteSpace E]
+
 include hexp in
 /-- The first derivative of the logarithmic Laplace transform at `0` is the mean. -/
 theorem fderiv_logLaplace_zero_apply (v : E) :
@@ -374,7 +378,7 @@ theorem fderiv_logLaplace_zero_apply (v : E) :
       _ = ∫ x, ⟪v, x⟫ ∂μ := by
         simp [tiltAverage, expTilt]
 
-omit [CompleteSpace E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] in
+omit [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] in
 private lemma third_second_apply {f : E → ℝ} (hf : ContDiff ℝ ∞ f)
     (x v w : E) :
     iteratedFDeriv ℝ 2 f x ![v, w] =
@@ -382,7 +386,7 @@ private lemma third_second_apply {f : E → ℝ} (hf : ContDiff ℝ ∞ f)
   rw [(hf.differentiable_iteratedFDeriv (m := 1) (by norm_num) x).iteratedFDeriv_succ_apply_left']
   simp only [iteratedFDeriv_one_apply, Fin.tail, Matrix.cons_val_zero, Matrix.cons_val_succ]
 
-omit [CompleteSpace E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] in
+omit [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] in
 private lemma third_second_mul {f g : E → ℝ} (hf : ContDiff ℝ ∞ f)
     (hg : ContDiff ℝ ∞ g) (x v w : E) (hf0 : f x = 0) (hg0 : g x = 1)
     (hg1 : fderiv ℝ g x = 0) :
@@ -408,7 +412,7 @@ private lemma third_second_mul {f g : E → ℝ} (hf : ContDiff ℝ ∞ f)
     fderiv_fun_mul (hg.differentiable (by simp) x) (hfw x)]
   simp [hf0, hg0, hg1]
 
-omit [CompleteSpace E] [FiniteDimensional ℝ E] [IsProbabilityMeasure μ] in
+omit [FiniteDimensional ℝ E] [IsProbabilityMeasure μ] in
 include hexp in
 private lemma third_exp_inner_integrable (u : E) (r : ℝ) :
     Integrable (fun x => Real.exp (r * ‖x‖) * ‖⟪u, x⟫‖) μ := by
@@ -427,7 +431,6 @@ private lemma third_exp_inner_integrable (u : E) (r : ℝ) :
       rw [add_mul, one_mul, Real.exp_add]
       ring
 
-omit [CompleteSpace E] in
 include hexp in
 /-- For a centered law, the second Taylor tensor of a linear function is half the third moment:
 `T_2⟪u, ·⟫(v, w) = ½ ∫ ⟪u, x⟫ ⟪v, x⟫ ⟪w, x⟫ dμ`. -/
@@ -487,7 +490,6 @@ theorem taylorTensor_two_inner_eq_of_centered (hc : ∀ v : E, ∫ x, ⟪v, x⟫
   rw [← hsecond, hm']
   norm_num
 
-omit [CompleteSpace E] in
 include hexp in
 /-- The third cumulant of a centered law is its third moment. -/
 theorem cumulant_three_eq_integral (hc : ∀ v : E, ∫ x, ⟪v, x⟫ ∂μ = 0) (u v w : E) :
@@ -502,7 +504,7 @@ theorem cumulant_three_eq_integral (hc : ∀ v : E, ∫ x, ⟪v, x⟫ ∂μ = 0)
     norm_num [Nat.factorial] at h
     linarith
 
-omit [CompleteSpace E] [FiniteDimensional ℝ E] [IsProbabilityMeasure μ] in
+omit [FiniteDimensional ℝ E] [IsProbabilityMeasure μ] in
 omit [InnerProductSpace ℝ E] in
 include hexp in
 private lemma third_memLp_poly {g : E → ℝ} (hg : Continuous g)
@@ -525,7 +527,7 @@ private lemma third_memLp_poly {g : E → ℝ} (hg : Continuous g)
       congr 2
       ring
 
-omit [CompleteSpace E] [FiniteDimensional ℝ E] [IsProbabilityMeasure μ] in
+omit [FiniteDimensional ℝ E] [IsProbabilityMeasure μ] in
 include hexp in
 private lemma third_memLp_inner (v : E) :
     MemLp (fun x => ⟪v, x⟫) 2 μ := by
@@ -535,7 +537,7 @@ private lemma third_memLp_inner (v : E) :
     (norm_inner_le_norm v x).trans
       (mul_le_mul_of_nonneg_left (by linarith : ‖x‖ ≤ 1 + ‖x‖) (norm_nonneg v))
 
-omit [CompleteSpace E] [FiniteDimensional ℝ E] [IsProbabilityMeasure μ] in
+omit [FiniteDimensional ℝ E] [IsProbabilityMeasure μ] in
 include hexp in
 private lemma third_memLp_inner_mul (v w : E) :
     MemLp (fun x => ⟪v, x⟫ * ⟪w, x⟫) 2 μ := by
@@ -549,6 +551,8 @@ private lemma third_memLp_inner_mul (v w : E) :
         (norm_nonneg _) (by positivity)
     _ = (‖v‖ * ‖w‖) * ‖x‖ ^ 2 := by ring
     _ ≤ (‖v‖ * ‖w‖) * (1 + ‖x‖) ^ 2 := by gcongr; linarith
+
+end ThirdMomentIdentities
 
 include hexp in
 /-- **BKL Lemma 4.2, conditional on the Letwin bound**: for a centered isotropic probability law
@@ -662,7 +666,10 @@ theorem sum_sq_cumulant_three_le_of_letwin (hc : ∀ v : E, ∫ x, ⟪v, x⟫ �
 end ThirdCumulant
 
 
-omit [CompleteSpace E] in
+section CumulantEstimates
+
+omit [CompleteSpace E]
+
 /-- **Linear step of BKL Proposition 7.1** (p. 30): under the cumulant bound `R^μ_{d+1} ≤ b Id` in
 coordinates, `Σ_J κ_{d+1}(u, e_J)² ≤ b |u|²`, the Taylor tensor of `ℓ = ⟪v, ·⟫` satisfies
 `|T_d ℓ|² ≤ b |v|² / (d!)²` in the Hilbert–Schmidt norm, by `T_d ℓ = κ_{d+1}(v, ·, …, ·) / d!`. -/
@@ -703,7 +710,6 @@ theorem norm_coordTensor_taylorTensor_inner_sq_le (μ : Measure E) [IsProbabilit
         ring
 
 
-omit [CompleteSpace E] in
 /-- **Linear-function step in an arbitrary orthonormal basis** (BKL p. 30): the special case
 `norm_coordTensor_taylorTensor_inner_sq_le` with `stdOrthonormalBasis ℝ E` replaced by any orthonormal
 basis `bE`. -/
@@ -744,7 +750,6 @@ theorem norm_coordTensor_taylorTensor_inner_sq_le_of_basis (μ : Measure E) [IsP
         ring
 
 open scoped ContDiff in
-omit [CompleteSpace E] in
 /-- **Local smoothness of `Λ_μ`** (BKL p. 29, "finite and smooth in a neighborhood of the origin"):
 one positive norm-exponential moment `∫ e^{r‖x‖} dμ < ∞` makes `Λ_μ` `C^∞` on the open ball of
 radius `r`. The local integral identities are in `Tilt/Local.lean`. -/
@@ -780,6 +785,7 @@ theorem contDiffOn_logLaplace_ball (μ : Measure E) [IsFiniteMeasure μ] [NeZero
       exact Real.exp_le_exp.mpr (real_inner_le_norm z x)
   exact (integral_exp_pos hzint).ne'
 
+end CumulantEstimates
 
 /-- Iterated derivatives of a composition with a continuous linear equivalence. -/
 private theorem equiv_iteratedFDeriv_univ {E F G : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]

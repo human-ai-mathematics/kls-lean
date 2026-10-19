@@ -12,12 +12,12 @@ open scoped RealInnerProductSpace ContDiff
 open FunctionalInequalities.Analysis
 namespace FunctionalInequalities.Analysis.BakryEmery
 
-variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
-  [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
 
-set_option linter.unusedSectionVars false in
 /-- Cumulants are bounded by moments. -/
-theorem norm_cumulant_le_of_moment_bounds (ν : Measure E) [IsProbabilityMeasure ν] {r : ℝ} (hr : 0 < r)
+theorem norm_cumulant_le_of_moment_bounds
+    {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
+    [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
+    (ν : Measure E) [IsProbabilityMeasure ν] {r : ℝ} (hr : 0 < r)
     (hexp : Integrable (fun x => Real.exp (r * ‖x‖)) ν) {m : ℕ} {D : ℝ}
     (hD : ∀ i : ℕ, 1 ≤ i → i ≤ m → (∫ x, ‖x‖ ^ i ∂ν) ≤ D ^ i) :
     ‖cumulant ν m‖ ≤ (m.factorial : ℝ) ^ 2 * D ^ m := by

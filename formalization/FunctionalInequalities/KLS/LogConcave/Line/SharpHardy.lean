@@ -160,19 +160,18 @@ section Clipped
 variable (hμ : LogConcave μ) (hi : (interior (μ : Measure ℝ).support).Nonempty)
   {a b : ℝ} (hab : a ≤ b) (haΩ : a ∈ interior (μ : Measure ℝ).support)
   (hbΩ : b ∈ interior (μ : Measure ℝ).support) {f : ℝ → ℝ} (hf : ContDiff ℝ ∞ f)
-include hμ hi hab haΩ hbΩ hf
 
-omit hμ hi hab haΩ hbΩ in
+include hf in
 theorem continuous_clipCentered : Continuous (clipCentered μ a b f) :=
   (clip.continuous hf.continuous).sub continuous_const
 
-omit hμ hi haΩ hbΩ in
+include hab hf in
 theorem exists_bound_clipCentered : ∃ C, ∀ x, ‖clipCentered μ a b f x‖ ≤ C := by
   obtain ⟨C, hC⟩ := clip.exists_bound hab hf.continuous
   refine ⟨C + ‖∫ y, clip a b f y ∂(μ : Measure ℝ)‖, fun x ↦ ?_⟩
   exact (norm_sub_le _ _).trans (add_le_add (hC x) le_rfl)
 
-omit hμ hi haΩ hbΩ in
+include hab hf in
 theorem integral_clipCentered : ∫ x, clipCentered μ a b f x ∂(μ : Measure ℝ) = 0 := by
   have hI : Integrable (clip a b f) (μ : Measure ℝ) :=
     integrable_of_bounded_continuous (clip.continuous hf.continuous) (clip.exists_bound hab hf.continuous)
@@ -180,25 +179,24 @@ theorem integral_clipCentered : ∫ x, clipCentered μ a b f x ∂(μ : Measure 
   rw [integral_sub hI (integrable_const _), MeasureTheory.integral_const]
   simp
 
-omit hμ hi haΩ hbΩ hf in
+include hab in
 theorem clipCentered_of_le {x : ℝ} (hx : x ≤ a) :
     clipCentered μ a b f x = clipCentered μ a b f a := by
   unfold clipCentered
   rw [clip.of_le hab hx, clip.of_le hab le_rfl]
 
-omit hμ hi haΩ hbΩ hf in
+include hab in
 theorem clipCentered_of_ge {x : ℝ} (hx : b ≤ x) :
     clipCentered μ a b f x = clipCentered μ a b f b := by
   unfold clipCentered
   rw [clip.of_ge hx hab, clip.of_ge le_rfl hab]
 
-omit hμ hi hab haΩ hbΩ hf in
 theorem clipCentered_of_mem {x : ℝ} (hx : x ∈ Icc a b) :
     clipCentered μ a b f x = f x - ∫ y, clip a b f y ∂(μ : Measure ℝ) := by
   unfold clipCentered
   rw [clip.of_mem hx]
 
-omit hμ hi haΩ hbΩ hf in
+include hab in
 /-- The running integral of the centered clipped test left of the clipping interval. -/
 theorem tailIntegral_clipCentered_of_le {x : ℝ} (hx : x ≤ a) :
     tailIntegral μ (clipCentered μ a b f) x = clipCentered μ a b f a * cdf μ x := by
@@ -207,12 +205,12 @@ theorem tailIntegral_clipCentered_of_le {x : ℝ} (hx : x ≤ a) :
     (fun y hy ↦ clipCentered_of_le hab (le_trans hy hx)), setIntegral_const, smul_eq_mul, mul_comm]
   rfl
 
-omit hμ hi haΩ hbΩ hf in
+include hab in
 theorem tailIntegral_clipCentered_left :
     tailIntegral μ (clipCentered μ a b f) a = clipCentered μ a b f a * cdf μ a :=
   tailIntegral_clipCentered_of_le hab le_rfl
 
-omit hμ hi haΩ hbΩ in
+include hab hf in
 /-- The running integral of the centered clipped test right of the clipping interval. -/
 theorem tailIntegral_clipCentered_of_ge {x : ℝ} (hx : b ≤ x) :
     tailIntegral μ (clipCentered μ a b f) x = -(clipCentered μ a b f b * (1 - cdf μ x)) := by
@@ -228,12 +226,12 @@ theorem tailIntegral_clipCentered_of_ge {x : ℝ} (hx : b ≤ x) :
   unfold tailIntegral
   linarith
 
-omit hμ hi haΩ hbΩ in
+include hab hf in
 theorem tailIntegral_clipCentered_right :
     tailIntegral μ (clipCentered μ a b f) b = -(clipCentered μ a b f b * (1 - cdf μ b)) :=
   tailIntegral_clipCentered_of_ge hab hf le_rfl
 
-omit hμ hi haΩ hbΩ hf in
+include hab in
 /-- The boundary term left of the clipping interval is small when `F` is small. -/
 theorem boundaryTerm_le_of_le {x : ℝ} (hx : x ≤ a) (hxΩ : x ∈ interior (μ : Measure ℝ).support)
     (hFx : cdf μ x ≤ 1 / 2) :
@@ -255,7 +253,7 @@ theorem boundaryTerm_le_of_le {x : ℝ} (hx : x ≤ a) (hxΩ : x ∈ interior (�
         mul_le_mul_of_nonneg_left this hF0.le
     _ = cdf μ x := mul_one _
 
-omit hμ hi haΩ hbΩ in
+include hab hf in
 /-- The boundary term right of the clipping interval is small when `1 - F` is small. -/
 theorem neg_boundaryTerm_le_of_ge {x : ℝ} (hx : b ≤ x) (hxΩ : x ∈ interior (μ : Measure ℝ).support)
     (hFx : 1 / 2 ≤ cdf μ x) :
@@ -278,8 +276,7 @@ theorem neg_boundaryTerm_le_of_ge {x : ℝ} (hx : b ≤ x) (hxΩ : x ∈ interio
         mul_le_mul_of_nonneg_left this (by linarith)
     _ = 1 - cdf μ x := mul_one _
 
-omit hi in
-include d in
+include d hμ hab haΩ hbΩ hf in
 /-- Claim B: the squared `L²` norm of the centered clipped test equals `-∫_a^b f' G`, with `G` its
 running integral. -/
 theorem integral_sq_clipCentered_eq :
@@ -340,7 +337,7 @@ theorem integral_sq_clipCentered_eq :
   rw [hfa, hfb, hGa, hGb] at hibp
   linarith
 
-omit hi haΩ hbΩ in
+include hμ hab hf in
 /-- The ground-state inequality on an interval `[c, e] ⊆ Ω`:
 `(1/4) ∫_c^e G² ρ / W² + (Ξ e - Ξ c) ≤ ∫_c^e h² ρ`. -/
 theorem groundState_inequality {c e : ℝ} (hce : c ≤ e) (hcΩ : c ∈ interior (μ : Measure ℝ).support)
@@ -431,6 +428,7 @@ theorem groundState_inequality {c e : ℝ} (hce : c ≤ e) (hcΩ : c ∈ interio
   rw [hquarter] at hmono
   exact hmono
 
+include hμ hi hab haΩ hbΩ hf in
 /-- Claim A: `∫_a^b G² ρ / W² ≤ 4 ∫ h² dμ` for the centered clipped test, when `F a ≤ 1/2 ≤ F b`:
 the ground-state inequality on larger intervals `[c, e] ⊆ Ω` has boundary terms controlled by
 `h(a)² F c + h(b)² (1 - F e)`, which can be made arbitrarily small. -/
@@ -535,7 +533,7 @@ theorem integral_sq_div_le (hFa : cdf μ a ≤ 1 / 2) (hFb : 1 / 2 ≤ cdf μ b)
   have := key _ hpos
   linarith
 
-include d in
+include d hμ hi hab haΩ hbΩ hf in
 /-- The sharp Hardy bound for the clipped test: `Var(f_{ab}) ≤ 4 · Var(μ) · ∫ f'² dμ` when
 `[a, b] ⊆ Ω` and `F a ≤ 1/2 ≤ F b`. -/
 theorem variance_clip_le (hFa : cdf μ a ≤ 1 / 2) (hFb : 1 / 2 ≤ cdf μ b)

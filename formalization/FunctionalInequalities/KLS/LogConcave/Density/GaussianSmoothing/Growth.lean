@@ -28,7 +28,10 @@ namespace FunctionalInequalities.KLS.LogConcave.GaussianSmoothing
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
   [CompleteSpace E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
 
-omit [CompleteSpace E] in
+section CenteredFactorization
+
+omit [CompleteSpace E]
+
 /-- The centered posterior has every exponential moment `∫ e^{t‖y‖} dQ_x < ∞` (completing the square
 under the Gaussian weight; no moment of `μ` is needed). -/
 theorem integrable_exp_norm_centeredPosteriorLaw (μ : Measure E) [IsProbabilityMeasure μ]
@@ -63,7 +66,6 @@ theorem integrable_exp_norm_centeredPosteriorLaw (μ : Measure E) [IsProbability
     rw [Real.norm_of_nonneg (Real.exp_pos _).le]
     exact Real.exp_le_one_iff.2 (mul_nonpos_of_nonpos_of_nonneg (le_of_not_ge ht) (norm_nonneg y))
 
-omit [CompleteSpace E] in
 /-- The MGF of the score under `P_x` at `1` is `e^{2s⟪m_x − x, u⟫}` times the Laplace transform of the
 centered posterior at `2s·u`. -/
 theorem mgf_score_eq_laplace_centeredPosteriorLaw (μ : Measure E) [IsProbabilityMeasure μ]
@@ -93,7 +95,6 @@ theorem mgf_score_eq_laplace_centeredPosteriorLaw (μ : Measure E) [IsProbabilit
       fun y => Real.exp (2 * s * ⟪m - x, u⟫) * Real.exp ⟪(2 * s) • u, y - m⟫ := funext heq
   rw [hfun, integral_const_mul]
 
-omit [CompleteSpace E] in
 /-- `F(x+u) = F(x) e^{−s‖u‖² + 2s⟪m_x − x, u⟫} L_{Q_x}(2s·u)` for the smoothed density. -/
 theorem normalizedDensity_centered_factorization {μ : Measure E} [IsProbabilityMeasure μ]
     {ρ : E → ℝ} (hρ : KLS.IsBorellDensity μ volume ρ) {s : ℝ} (hs : 0 < s) (x u : E) :
@@ -107,7 +108,6 @@ theorem normalizedDensity_centered_factorization {μ : Measure E} [IsProbability
   rw [Real.exp_add]
   exact h.trans (by ring)
 
-omit [CompleteSpace E] in
 /-- `V(x+u) = V(x) + s‖u‖² − 2s⟪m_x − x, u⟫ − Λ_{Q_x}(2s·u)` for the smoothed potential. -/
 theorem potential_centered_factorization {μ : Measure E} [IsProbabilityMeasure μ]
     {ρ : E → ℝ} (hρ : KLS.IsBorellDensity μ volume ρ) {s : ℝ} (hs : 0 < s) (x u : E) :
@@ -126,7 +126,7 @@ theorem potential_centered_factorization {μ : Measure E} [IsProbabilityMeasure 
     Real.log_mul (normalizedDensity_pos hρ hs x).ne' (Real.exp_pos _).ne', Real.log_exp]
   ring
 
-omit [CompleteSpace E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] in
+omit [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] in
 private theorem linear_iterated_ge_two {F : Type*} [NormedAddCommGroup F] [NormedSpace ℝ F]
     (L : E →L[ℝ] F) {n : ℕ} (hn : 2 ≤ n) (x : E) : iteratedFDeriv ℝ n L x = 0 := by
   obtain ⟨k, rfl⟩ := Nat.exists_eq_add_of_le hn
@@ -137,7 +137,7 @@ private theorem linear_iterated_ge_two {F : Type*} [NormedAddCommGroup F] [Norme
   rw [hfd, iteratedFDeriv_succ_const]
   rfl
 
-omit [CompleteSpace E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] in
+omit [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] in
 private theorem norm_sq_iterated_ge_three {n : ℕ} (hn : 3 ≤ n) (x : E) :
     iteratedFDeriv ℝ n (fun y : E => ‖y‖ ^ 2) x = 0 := by
   obtain ⟨k, rfl⟩ := Nat.exists_eq_add_of_le hn
@@ -152,14 +152,13 @@ private theorem norm_sq_iterated_ge_three {n : ℕ} (hn : 3 ≤ n) (x : E) :
   simp
 
 
-omit [CompleteSpace E] in
 /-- The cumulant generating function of the centered posterior is smooth on all of `E`. -/
 theorem contDiff_logLaplace_centeredPosteriorLaw (μ : Measure E) [IsProbabilityMeasure μ]
     {s : ℝ} (hs : 0 < s) (x : E) :
     ContDiff ℝ ∞ (logLaplace (centeredPosteriorLaw μ hs x : Measure E)) :=
   contDiff_logLaplace _ (integrable_exp_norm_centeredPosteriorLaw μ hs x)
 
-omit [CompleteSpace E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] in
+omit [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] in
 /-- The quadratic polynomial part has vanishing derivatives of order `≥ 3`. -/
 private theorem centered_polynomial_iterated_zero (a s : ℝ) (m : E) {n : ℕ} (hn : 3 ≤ n) :
     iteratedFDeriv ℝ n (fun u : E => a + s * ‖u‖ ^ 2 - 2 * s * ⟪m, u⟫) 0 = 0 := by
@@ -183,7 +182,6 @@ private theorem centered_polynomial_iterated_zero (a s : ℝ) (m : E) {n : ℕ} 
   rw [hc, hquad, hlin]
   simp
 
-omit [CompleteSpace E] in
 /-- **Higher derivatives of the smoothed potential**: `D^n V(x) = −(2s)^n D^n Λ_{Q_x}(0)` for `n ≥ 3`. -/
 theorem potential_iteratedFDeriv_ge_three {μ : Measure E} [IsProbabilityMeasure μ]
     {ρ : E → ℝ} (hρ : KLS.IsBorellDensity μ volume ρ) {s : ℝ} (hs : 0 < s)
@@ -213,6 +211,8 @@ theorem potential_iteratedFDeriv_ge_three {μ : Measure E} [IsProbabilityMeasure
   rw [hscale]
   simp only [smul_zero, zero_sub, neg_smul]
   rfl
+
+end CenteredFactorization
 
 /-- `‖D^d L_{Q_x}(0)‖ ≤ d!/q^d · C₀`, uniformly in the base point `x` (quantitative Borell moments). -/
 theorem norm_iteratedFDeriv_laplace_centeredPosteriorLaw_le {μ : Measure E} [IsProbabilityMeasure μ]
@@ -249,7 +249,10 @@ theorem exists_uniform_laplace_power_bound {μ : Measure E} [IsProbabilityMeasur
     simpa only [pow_one] using h
   exact (norm_iteratedFDeriv_laplace_centeredPosteriorLaw_le hρ hs x i).trans (hBD.trans hDpow)
 
-omit [CompleteSpace E] in
+section LaplaceRegularity
+
+omit [CompleteSpace E]
+
 /-- The Laplace transform of the centered posterior is smooth. -/
 theorem contDiff_laplace_centeredPosteriorLaw (μ : Measure E) [IsProbabilityMeasure μ]
     {s : ℝ} (hs : 0 < s) (x : E) :
@@ -261,7 +264,6 @@ theorem contDiff_laplace_centeredPosteriorLaw (μ : Measure E) [IsProbabilityMea
   simpa only [smul_eq_mul, mul_one] using contDiff_integral_exp_inner_smul_of_integrable
     (centeredPosteriorLaw μ hs x : Measure E) measurable_const.aestronglyMeasurable hgi
 
-omit [CompleteSpace E] in
 /-- The Laplace transform of the centered posterior is positive. -/
 theorem laplace_centeredPosteriorLaw_pos (μ : Measure E) [IsProbabilityMeasure μ]
     {s : ℝ} (hs : 0 < s) (x z : E) :
@@ -272,6 +274,8 @@ theorem laplace_centeredPosteriorLaw_pos (μ : Measure E) [IsProbabilityMeasure 
     rw [Real.norm_of_nonneg (Real.exp_pos _).le]
     exact Real.exp_le_exp.2 (real_inner_le_norm z y)
   exact integral_exp_pos hi
+
+end LaplaceRegularity
 
 /-- `‖D^n Λ_{Q_x}(0)‖ ≤ (n!)² D^n` uniformly in `x` (local log composition). -/
 theorem exists_uniform_centered_logLaplace_derivative_bound {μ : Measure E} [IsProbabilityMeasure μ]

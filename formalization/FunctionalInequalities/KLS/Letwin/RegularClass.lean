@@ -35,6 +35,25 @@ Exact original hypotheses; no desired-bound, `C²`, global-inverse or kernel pre
 paper's general theorem is not stated here.
 -/
 
+section RegularSource
+
+/-! Shared regular-source hypotheses for the moment-map and quadratic-variance results.
+Only the source-law theorems include these hypotheses; auxiliary lemmas retain their own scope. -/
+
+open MeasureTheory Set
+open scoped ContDiff
+
+variable {n : ℕ} (hn : 0 < n)
+    {K : Set (EuclideanSpace ℝ (Fin n))} {W : EuclideanSpace ℝ (Fin n) → ℝ}
+    {κ : ℝ} (hκ : 0 < κ) (hK : IsCompact K) (hKc : Convex ℝ K)
+    (hKint : (interior K).Nonempty) (hW : ContDiff ℝ ∞ W)
+    (hstrong : ConvexOn ℝ univ (fun y => W y - (κ / 2) * ‖y‖ ^ 2))
+    (μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin n)))
+    (hμ : (μ : Measure (EuclideanSpace ℝ (Fin n))) =
+      (volume : Measure (EuclideanSpace ℝ (Fin n))).withDensity
+        (K.indicator fun p => ENNReal.ofReal (Real.exp (-W p))))
+    (hiso : FunctionalInequalities.KLS.Isotropic μ)
+
 noncomputable section
 open MeasureTheory Set Filter ProbabilityTheory
 open FunctionalInequalities.Analysis.BakryEmery
@@ -44,17 +63,9 @@ open scoped ContDiff RealInnerProductSpace Topology MatrixOrder
 
 namespace FunctionalInequalities.KLS.LogConcave
 
+include hn hκ hK hKc hKint hW hstrong hμ hiso in
 set_option maxHeartbeats 1500000 in
-theorem regularClass_matrix_variance_le_eight {n : ℕ} (hn : 0 < n)
-    {K : Set (EuclideanSpace ℝ (Fin n))} {W : EuclideanSpace ℝ (Fin n) → ℝ}
-    {κ : ℝ} (hκ : 0 < κ) (hK : IsCompact K) (hKc : Convex ℝ K)
-    (hKint : (interior K).Nonempty) (hW : ContDiff ℝ ∞ W)
-    (hstrong : ConvexOn ℝ univ (fun y => W y - (κ / 2) * ‖y‖ ^ 2))
-    (μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin n)))
-    (hμ : (μ : Measure (EuclideanSpace ℝ (Fin n))) =
-      (volume : Measure (EuclideanSpace ℝ (Fin n))).withDensity
-        (K.indicator fun p => ENNReal.ofReal (Real.exp (-W p))))
-    (hiso : KLS.Isotropic μ) :
+theorem regularClass_matrix_variance_le_eight :
     ∀ M : Matrix (Fin n) (Fin n) ℝ, M.IsSymm →
       variance (fun x : EuclideanSpace ℝ (Fin n) => ∑ i, ∑ j, M i j*x i*x j)
         (μ : Measure _) ≤ 8 * Matrix.trace (M*M) := by
@@ -195,16 +206,8 @@ open scoped ContDiff RealInnerProductSpace
 
 namespace FunctionalInequalities.KLS.LogConcave
 
-theorem regularClass_letwinQuadraticBound {n : ℕ} (hn : 0 < n)
-    {K : Set (EuclideanSpace ℝ (Fin n))} {W : EuclideanSpace ℝ (Fin n) → ℝ}
-    {κ : ℝ} (hκ : 0 < κ) (hK : IsCompact K) (hKc : Convex ℝ K)
-    (hKint : (interior K).Nonempty) (hW : ContDiff ℝ ∞ W)
-    (hstrong : ConvexOn ℝ univ (fun y => W y - (κ / 2) * ‖y‖ ^ 2))
-    (μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin n)))
-    (hμ : (μ : Measure (EuclideanSpace ℝ (Fin n))) =
-      (volume : Measure (EuclideanSpace ℝ (Fin n))).withDensity
-        (K.indicator fun p => ENNReal.ofReal (Real.exp (-W p))))
-    (hiso : KLS.Isotropic μ) :
+include hn hκ hK hKc hKint hW hstrong hμ hiso in
+theorem regularClass_letwinQuadraticBound :
     LetwinQuadraticBound (μ : Measure (EuclideanSpace ℝ (Fin n))) := by
   apply letwinQuadraticBound_of_matrix_variance_bound
   exact regularClass_matrix_variance_le_eight hn hκ hK hKc hKint hW hstrong μ hμ hiso
@@ -212,3 +215,5 @@ theorem regularClass_letwinQuadraticBound {n : ℕ} (hn : 0 < n)
 end FunctionalInequalities.KLS.LogConcave
 
 end
+
+end RegularSource

@@ -21,13 +21,10 @@ namespace FunctionalInequalities.KLS
 
 universe u
 
-variable {V : Type u} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [CompleteSpace V]
-  [MeasurableSpace V] [BorelSpace V] [SecondCountableTopology V] [FiniteDimensional ℝ V]
+variable {V : Type u} [NormedAddCommGroup V]
 
 namespace SmoothDomain
 
-omit [InnerProductSpace ℝ V] [CompleteSpace V] [MeasurableSpace V] [BorelSpace V]
-  [SecondCountableTopology V] [FiniteDimensional ℝ V] in
 /-- The frontier of a strict superlevel set of a continuous function lies in the level set. -/
 theorem frontier_superlevel_subset {u : V → ℝ} (hu : Continuous u) (t : ℝ) :
     frontier {x | t < u x} ⊆ {x | u x = t} := by
@@ -41,10 +38,7 @@ theorem frontier_superlevel_subset {u : V → ℝ} (hu : Continuous u) (t : ℝ)
   simp only [Set.mem_ofPred_eq, not_lt] at h3
   exact le_antisymm h3 h2
 
--- The section variables are kept so that the published interface is unchanged; the geometric
--- construction `SmoothDomain.ofSuperlevel` needs neither a measure structure nor completeness,
--- so the linter is silenced instead of the signature being narrowed by `omit`.
-set_option linter.unusedSectionVars false in
+-- The superlevel interface explicitly retains its original geometric and measure premises.
 /-- Sard: for a `C^∞` real function, almost every strict superlevel set is a smooth domain, with
 defining function `t - u` at its regular value `t`.
 
@@ -54,7 +48,10 @@ proved smooth Sard theorem `Analysis.sard_smooth` — with the hole-free constru
 `{x | u x = t}` by `frontier_superlevel_subset`, so `fderiv ℝ u` does not vanish there and the
 construction applies.  The statement is unchanged from the work-in-progress version it replaces;
 only its proof is, and it no longer depends on `sorryAx`. -/
-theorem ae_exists_superlevel {u : V → ℝ} (hu : ContDiff ℝ ∞ u) :
+theorem ae_exists_superlevel
+    [InnerProductSpace ℝ V] [CompleteSpace V]
+    [MeasurableSpace V] [BorelSpace V] [SecondCountableTopology V] [FiniteDimensional ℝ V]
+    {u : V → ℝ} (hu : ContDiff ℝ ∞ u) :
     ∀ᵐ t ∂(volume : Measure ℝ), ∃ U : SmoothDomain V, U.carrier = {x | t < u x} := by
   filter_upwards [Analysis.ae_forall_fderiv_ne_zero_of_contDiff_top hu] with t ht
   exact ⟨ofSuperlevel hu fun x hx ↦ ht x (frontier_superlevel_subset hu.continuous t hx), rfl⟩

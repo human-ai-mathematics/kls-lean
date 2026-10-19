@@ -95,18 +95,17 @@ namespace SmoothGradient
 
 namespace Intrinsic
 
-variable {E : Type u} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
-  [MeasurableSpace E] [BorelSpace E] [SecondCountableTopology E] [FiniteDimensional ℝ E]
 
--- `CompleteSpace E` is retained in this theorem signature.
--- The unused-section-variable linter is locally disabled for this signature.
-set_option linter.unusedSectionVars false in
+-- The ambient premises are stated explicitly to retain the intrinsic-energy interface.
 /-- Blueprint `thm:smooth-gradient-relaxation-two-cheeger`: on ambient real `L²(μ)`, the selected
 canonical energy `𝓔^can_μ = SmoothGradient.Intrinsic.energy μ` equals twice the metric Cheeger
 energy of the intrinsic law on the affine support, transported along the intrinsic `L²`
 isometry.  Every finite-dimensional Borel probability law is included, with the value `⊤`
 allowed on both sides and a one-point affine support giving `0 = 2 * 0`. -/
-theorem energy_eq_two_mul_cheeger (μ : ProbabilityMeasure E) (f : Lp ℝ 2 (μ : Measure E)) :
+theorem energy_eq_two_mul_cheeger
+    {E : Type u} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
+    [MeasurableSpace E] [BorelSpace E] [SecondCountableTopology E] [FiniteDimensional ℝ E]
+    (μ : ProbabilityMeasure E) (f : Lp ℝ 2 (μ : Measure E)) :
     energy μ f = 2 * Cheeger.Intrinsic.energy μ f := by
   rw [SmoothGradient.Intrinsic.energy_apply, Cheeger.Intrinsic.energy_apply,
     relaxation_eq_localSlope (Probability.intrinsicMeasure μ)]

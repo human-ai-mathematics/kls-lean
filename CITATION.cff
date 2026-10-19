@@ -1,0 +1,9 @@
+cff-version: 1.2.0
+message: "Please cite this repository and record the exact Git commit used. Cite the original mathematical papers separately."
+type: software
+title: "kls-lean: Lean formalization of functional inequalities and KLS literature"
+authors:
+  - name: "kls-lean contributors"
+repository-code: "https://github.com/human-ai-mathematics/kls-lean"
+url: "https://github.com/human-ai-mathematics/kls-lean"
+license: Apache-2.0

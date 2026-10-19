@@ -23,20 +23,18 @@ universe u
 
 section Coarea
 
-variable {V : Type u} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [CompleteSpace V]
-  [MeasurableSpace V] [BorelSpace V] [SecondCountableTopology V] [FiniteDimensional ℝ V]
 
 namespace Isoperimetry
 
--- The section variables and the hypothesis name `hK` are kept so that the published interface is
--- unchanged: the proof needs neither completeness, nor second countability, nor the Lipschitz
--- bound, so the two linters are silenced instead of the signature being narrowed by `omit` or the
--- hypothesis being renamed to `_`.
-set_option linter.unusedSectionVars false in
+-- The ambient structure and the Lipschitz-bound name `hK` are retained in this interface.
+-- The unused explicit bound keeps its local unused-variable exception.
 set_option linter.unusedVariables false in
 /-- Weighted coarea formula for a `C¹` Lipschitz function on `V`, with Lebesgue measure on `V`
 and the normalized surface measure `ℋ^{n-1}` on the level sets. -/
-theorem lintegral_enorm_gradient_mul_eq_lintegral_levelSet {u : V → ℝ} (hu : ContDiff ℝ 1 u)
+theorem lintegral_enorm_gradient_mul_eq_lintegral_levelSet
+    {V : Type u} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [CompleteSpace V]
+    [MeasurableSpace V] [BorelSpace V] [SecondCountableTopology V] [FiniteDimensional ℝ V]
+    {u : V → ℝ} (hu : ContDiff ℝ 1 u)
     {K : ℝ≥0} (hK : LipschitzWith K u) {g : V → ℝ≥0∞} (hg : Measurable g) :
     ∫⁻ x, ‖gradient u x‖ₑ * g x ∂(volume : Measure V) =
       ∫⁻ t, ∫⁻ y in {x | u x = t}, g y ∂(surfaceMeasure V) ∂(volume : Measure ℝ) := by

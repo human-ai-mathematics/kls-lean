@@ -39,7 +39,8 @@ operator identity. Changing energy frontend requires the corresponding proved co
 
 Use the same [pinned Lean toolchain](../formalization/lean-toolchain). The package is in the
 repository's `formalization/` subdirectory. In an independent project's `lakefile.toml`, pin the
-reviewed commit:
+reviewed commit. The pin below is the recorded downstream baseline; it is not a claim
+of acceptance for a later release revision:
 
 ```toml
 [[require]]

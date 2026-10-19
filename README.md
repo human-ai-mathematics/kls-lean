@@ -64,7 +64,8 @@ pinned Lean. While the repository is private, cloning needs GitHub read access. 
 ```bash
 git clone https://github.com/human-ai-mathematics/kls-lean.git
 cd kls-lean
-(cd formalization && lake exe cache get && lake build)
+python3 research/cache_mathlib.py
+(cd formalization && lake build)
 ```
 
 For full verification, use these root commands in place of the plain build:
@@ -87,3 +88,5 @@ Project-owned code uses [Apache-2.0](LICENSE); [vendored libraries](formalizatio
 retain their licenses and notices. The project builds on Mathlib and the other pinned packages.
 Development and review used AI coding agents; the [verification guide](research/verification.md)
 states what the mechanical checks cover. No external human peer review is claimed.
+See [Contributing](CONTRIBUTING.md), [citation metadata](CITATION.cff) and the
+[release procedure](research/release.md) for reuse and publication checks.

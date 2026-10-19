@@ -21,7 +21,8 @@ continuous linear in `p`, so after a finite-dimensional chart it is the pairing 
 `ψ(x)`, and the joint expectation is the `c`-only expectation (`Generator.lean`) of the pushed-forward
 prior `ψ_*μ` at `Q' = 0`, composed with the chart; the chart is an implementation device and is private.
 Prior isotropy is not used here; the inverse covariance and the drift of (67) are in
-`KLS/BKL/PosteriorDomain.lean`. No stochastic process, SDE or Itô statement.
+`KLS/BKL/PosteriorDomain.lean`. No stochastic process, SDE or Itô statement. Proof bodies: Codex q_batch
+bundle `Posterior-Joint-Regularity` (independently accepted); statements and placement: Claude.
 -/
 
 noncomputable section

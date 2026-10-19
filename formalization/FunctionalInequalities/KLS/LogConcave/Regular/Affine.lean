@@ -31,15 +31,19 @@ def affineHomeomorph (L : E ≃L[ℝ] E) (c : E) : E ≃ₜ E :=
 def inverseAffineEquiv (L : E ≃L[ℝ] E) (c : E) : E ≃ᵐ E :=
   (affineHomeomorph L c).symm.toMeasurableEquiv
 
-omit [CompleteSpace E] [FiniteDimensional ℝ E] in
+section InverseAffineEvaluation
+
+omit [CompleteSpace E] [FiniteDimensional ℝ E]
+
 theorem inverseAffineEquiv_apply (L : E ≃L[ℝ] E) (c y : E) :
     inverseAffineEquiv L c y = L.symm (y - c) := by
   change L.symm (y + -c) = L.symm (y - c)
   rw [sub_eq_add_neg]
 
-omit [CompleteSpace E] [FiniteDimensional ℝ E] in
 theorem inverseAffineEquiv_symm_apply (L : E ≃L[ℝ] E) (c x : E) :
     (inverseAffineEquiv L c).symm x = L x + c := rfl
+
+end InverseAffineEvaluation
 
 omit [CompleteSpace E] in
 /-- Lebesgue measure under the inverse affine map scales by `|det L⁻¹|⁻¹`. -/
@@ -57,9 +61,14 @@ theorem inverseAffine_map_volume (L : E ≃L[ℝ] E) (c : E) :
   rw [heq, ← Measure.map_map L.symm.continuous.measurable (by fun_prop), ht]
   exact Measure.map_linearMap_addHaar_eq_smul_addHaar volume hdet
 
+section RegularAffineLaws
+
+variable {V : E → ℝ} {a b : ℝ} (hV : KLS.RegularPotential V a b)
+
+include hV in
 /-- **The law of `V ∘ (L · + c)` is the image of the law of `V` under `y ↦ L⁻¹(y − c)`** (the Jacobian
 constant cancels in the normalization). -/
-theorem RegularPotential.law_comp_affine {V : E → ℝ} {a b : ℝ} (hV : KLS.RegularPotential V a b)
+theorem RegularPotential.law_comp_affine
     (L : E ≃L[ℝ] E) (c : E) :
     ((RegularPotential.comp_affine hV L c).law : Measure E) =
       (hV.law : Measure E).map (fun y => L.symm (y - c)) := by
@@ -79,8 +88,9 @@ theorem RegularPotential.law_comp_affine {V : E → ℝ} {a b : ℝ} (hV : KLS.R
   exact ht.symm
 
 omit [CompleteSpace E] in
+include hV in
 /-- The normalizing constant of `V ∘ (L · + c)` is `|det L|⁻¹` times that of `V`. -/
-theorem RegularPotential.integral_exp_neg_comp_affine {V : E → ℝ} {a b : ℝ} (hV : KLS.RegularPotential V a b)
+theorem RegularPotential.integral_exp_neg_comp_affine
     (L : E ≃L[ℝ] E) (c : E) :
     (∫ x, Real.exp (-V (L x + c)) ∂(volume : Measure E)) =
       |(LinearMap.det (L : E →ₗ[ℝ] E))⁻¹| * ∫ y, Real.exp (-V y) ∂(volume : Measure E) := by
@@ -110,8 +120,9 @@ theorem RegularPotential.integral_exp_neg_comp_affine {V : E → ℝ} {a b : ℝ
   rw [heq, abs_inv]
   ring
 
+include hV in
 /-- The law of `V ∘ (L · + c)` as a translation followed by the continuous linear equivalence `L⁻¹`. -/
-theorem RegularPotential.law_comp_affine_eq_map {V : E → ℝ} {a b : ℝ} (hV : KLS.RegularPotential V a b)
+theorem RegularPotential.law_comp_affine_eq_map
     (L : E ≃L[ℝ] E) (c : E) :
     (RegularPotential.comp_affine hV L c).law =
       Probability.mapContinuousLinearEquiv (Probability.translateLaw hV.law (-c)) L.symm := by
@@ -124,6 +135,7 @@ theorem RegularPotential.law_comp_affine_eq_map {V : E → ℝ} {a b : ℝ} (hV 
   congr 1
   abel
 
+end RegularAffineLaws
 
 end FunctionalInequalities.KLS
 

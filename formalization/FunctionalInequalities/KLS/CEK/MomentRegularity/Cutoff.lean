@@ -9,6 +9,25 @@ import FunctionalInequalities.KLS.CEK.MomentRegularity.WeakHessian
 # Regular-source height cutoffs and bounded weak cutoff testing
 -/
 
+section RegularSource
+
+/-! Shared regular-source hypotheses for the moment-map and quadratic-variance results.
+Only the source-law theorems include these hypotheses; auxiliary lemmas retain their own scope. -/
+
+open MeasureTheory Set
+open scoped ContDiff
+
+variable {n : ℕ} (hn : 0 < n)
+    {K : Set (EuclideanSpace ℝ (Fin n))} {W : EuclideanSpace ℝ (Fin n) → ℝ}
+    {κ : ℝ} (hκ : 0 < κ) (hK : IsCompact K) (hKc : Convex ℝ K)
+    (hKint : (interior K).Nonempty) (hW : ContDiff ℝ ∞ W)
+    (hstrong : ConvexOn ℝ univ (fun y => W y - (κ / 2) * ‖y‖ ^ 2))
+    (μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin n)))
+    (hμ : (μ : Measure (EuclideanSpace ℝ (Fin n))) =
+      (volume : Measure (EuclideanSpace ℝ (Fin n))).withDensity
+        (K.indicator fun p => ENNReal.ofReal (Real.exp (-W p))))
+    (hiso : FunctionalInequalities.KLS.Isotropic μ)
+
 noncomputable section
 
 open MeasureTheory Set Filter
@@ -21,20 +40,12 @@ open FunctionalInequalities.Probability.Stein
 open scoped ContDiff Topology RealInnerProductSpace
 namespace FunctionalInequalities.Analysis
 
+include hn hκ hK hKc hKint hW hstrong hμ hiso in
 /-- The regular-class moment potential with weak inverse-Hessian height cutoffs: the same `u, L, LF, T` and the
 whole payload of `exists_regular_moment_bounded_weak_hessian_testing`, plus one shift `c` and one constant `C`
 with the real-parameter cutoff family of `exists_scaled_weak_inverse_hessian_cutoffs` for this `u` and `W`.
 No analytic premise is added. Not A.5, (2.14), Theorem 2.5 or constant 8. -/
-theorem exists_regular_moment_weak_cutoffs {n : ℕ} (hn : 0 < n)
-    {K : Set (EuclideanSpace ℝ (Fin n))} {W : EuclideanSpace ℝ (Fin n) → ℝ}
-    {κ : ℝ} (hκ : 0 < κ) (hK : IsCompact K) (hKc : Convex ℝ K)
-    (hKint : (interior K).Nonempty) (hW : ContDiff ℝ ∞ W)
-    (hstrong : ConvexOn ℝ univ (fun y => W y - (κ / 2) * ‖y‖ ^ 2))
-    (μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin n)))
-    (hμ : (μ : Measure (EuclideanSpace ℝ (Fin n))) =
-      (volume : Measure (EuclideanSpace ℝ (Fin n))).withDensity
-        (K.indicator fun p => ENNReal.ofReal (Real.exp (-W p))))
-    (hiso : KLS.Isotropic μ) :
+theorem exists_regular_moment_weak_cutoffs :
     ∃ (u : EuclideanSpace ℝ (Fin n) → ℝ) (L LF : NNReal)
         (T : EuclideanSpace ℝ (Fin n) → Fin n → Fin n → Fin n → ℝ),
       (ConvexOn ℝ univ u ∧ LipschitzWith L u ∧
@@ -214,19 +225,11 @@ open scoped ContDiff Topology RealInnerProductSpace
 
 namespace FunctionalInequalities.Analysis
 
+include hn hκ hK hKc hKint hW hstrong hμ hiso in
 /-- At the same regular moment witness `u`, `L`, `LF`, `T` and common cutoff family as
 `exists_regular_moment_weak_cutoffs` (whole payload retained), every globally bounded locally integrable weak `η`
 with compact-local L2 coordinate derivatives satisfies the rough inverse-Hessian cutoff-generator identity for all `r ≥ 1`. -/
-theorem exists_regular_moment_bounded_weak_cutoff_testing {n : ℕ} (hn : 0 < n)
-    {K : Set (EuclideanSpace ℝ (Fin n))} {W : EuclideanSpace ℝ (Fin n) → ℝ}
-    {κ : ℝ} (hκ : 0 < κ) (hK : IsCompact K) (hKc : Convex ℝ K)
-    (hKint : (interior K).Nonempty) (hW : ContDiff ℝ ∞ W)
-    (hstrong : ConvexOn ℝ univ (fun y => W y - (κ / 2) * ‖y‖ ^ 2))
-    (μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin n)))
-    (hμ : (μ : Measure (EuclideanSpace ℝ (Fin n))) =
-      (volume : Measure (EuclideanSpace ℝ (Fin n))).withDensity
-        (K.indicator fun p => ENNReal.ofReal (Real.exp (-W p))))
-    (hiso : KLS.Isotropic μ) :
+theorem exists_regular_moment_bounded_weak_cutoff_testing :
     ∃ (u : EuclideanSpace ℝ (Fin n) → ℝ) (L LF : NNReal)
         (T : EuclideanSpace ℝ (Fin n) → Fin n → Fin n → Fin n → ℝ),
       (ConvexOn ℝ univ u ∧ LipschitzWith L u ∧
@@ -423,3 +426,7 @@ theorem exists_regular_moment_bounded_weak_cutoff_testing {n : ℕ} (hn : 0 < n)
 end FunctionalInequalities.Analysis
 
 end RegularMomentBoundedWeakCutoffTesting
+
+end
+
+end RegularSource

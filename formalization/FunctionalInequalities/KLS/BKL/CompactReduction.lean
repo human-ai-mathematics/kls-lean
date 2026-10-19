@@ -105,12 +105,12 @@ open Filter Topology ProbabilityTheory FunctionalInequalities.Analysis
 
 section OperatorHelpers
 
-set_option linter.unusedSectionVars false
-
-variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
+variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
 
 /-- A positive square root is at least as close to `1` as its square: `‖S - 1‖ ≤ ‖S² - 1‖`. -/
-theorem norm_sub_one_le_of_isPositive_mul_self {S Q : E →L[ℝ] E} (hS : S.IsPositive)
+theorem norm_sub_one_le_of_isPositive_mul_self
+    [CompleteSpace E]
+    {S Q : E →L[ℝ] E} (hS : S.IsPositive)
     (hQ : S * S = Q) : ‖S - 1‖ ≤ ‖Q - 1‖ := by
   refine ContinuousLinearMap.opNorm_le_bound _ (norm_nonneg _) fun x => ?_
   set y := (S - 1) x with hy
@@ -139,7 +139,9 @@ theorem norm_sub_one_le_of_isPositive_mul_self {S Q : E →L[ℝ] E} (hS : S.IsP
     _ ≤ ‖Q - 1‖ * ‖x‖ := ContinuousLinearMap.le_opNorm _ _
 
 /-- An operator represented by a bilinear form is bounded by the form's norm. -/
-theorem opNorm_le_of_inner_eq {A : E →L[ℝ] E}
+theorem opNorm_le_of_inner_eq
+    [CompleteSpace E]
+    {A : E →L[ℝ] E}
     {κ : ContinuousMultilinearMap ℝ (fun _ : Fin 2 => E) ℝ}
     (h : ∀ u v : E, ⟪A u, v⟫ = κ ![u, v]) : ‖A‖ ≤ ‖κ‖ := by
   refine ContinuousLinearMap.opNorm_le_bound _ (norm_nonneg _) fun u => ?_
@@ -157,7 +159,9 @@ theorem opNorm_le_of_inner_eq {A : E →L[ℝ] E}
   · exact le_of_mul_le_mul_right h1 h0
 
 /-- An operator with `‖A - 1‖ < 1` is strictly positive, hence a unit, when self-adjoint. -/
-theorem inner_self_pos_of_norm_sub_one_lt {A : E →L[ℝ] E} (hA : ‖A - 1‖ < 1) {v : E} (hv : v ≠ 0) :
+theorem inner_self_pos_of_norm_sub_one_lt
+    [CompleteSpace E]
+    {A : E →L[ℝ] E} (hA : ‖A - 1‖ < 1) {v : E} (hv : v ≠ 0) :
     0 < ⟪A v, v⟫ := by
   have hv' : 0 < ‖v‖ := norm_pos_iff.mpr hv
   have h1 : ⟪A v, v⟫ = ‖v‖ * ‖v‖ + ⟪(A - 1) v, v⟫ := by
@@ -173,7 +177,9 @@ theorem inner_self_pos_of_norm_sub_one_lt {A : E →L[ℝ] E} (hA : ‖A - 1‖ 
   nlinarith [mul_pos hv' hv', norm_nonneg (A - 1)]
 
 /-- Inverse square roots of operators converging to `1` converge to `1`. -/
-theorem tendsto_inverseSqrt_one [FiniteDimensional ℝ E] {Sg : ℕ → E →L[ℝ] E}
+theorem tendsto_inverseSqrt_one
+    [CompleteSpace E]
+    [FiniteDimensional ℝ E] {Sg : ℕ → E →L[ℝ] E}
     (hSg : Tendsto Sg atTop (𝓝 1))
     (hpos : ∀ᶠ R in atTop, (Sg R).IsPositive) (hunit : ∀ᶠ R in atTop, IsUnit (Sg R)) :
     Tendsto (fun R => inverseSqrt (Sg R)) atTop (𝓝 1) := by
@@ -190,13 +196,13 @@ end OperatorHelpers
 
 section MeasureHelpers
 
-set_option linter.unusedSectionVars false
-
-variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
-  [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] [SecondCountableTopology E]
+variable {E : Type*} [NormedAddCommGroup E]
 
 /-- A ball truncation has exponential moments of every order. -/
-theorem integrable_exp_cond_closedBall (ν : Measure E) [IsFiniteMeasure ν] (R : ℕ)
+theorem integrable_exp_cond_closedBall
+    [InnerProductSpace ℝ E] [CompleteSpace E] [FiniteDimensional ℝ E]
+    [MeasurableSpace E] [BorelSpace E] [SecondCountableTopology E]
+    (ν : Measure E) [IsFiniteMeasure ν] (R : ℕ)
     (hR : ν (Metric.closedBall (0 : E) R) ≠ 0) (t : ℝ) :
     Integrable (fun x => Real.exp (t * ‖x‖)) (ν[|Metric.closedBall (0 : E) R]) := by
   have hres : Integrable (fun x => Real.exp (t * ‖x‖)) (ν.restrict (Metric.closedBall (0 : E) R)) := by
@@ -211,7 +217,10 @@ theorem integrable_exp_cond_closedBall (ν : Measure E) [IsFiniteMeasure ν] (R 
   exact hres.smul_measure (ENNReal.inv_ne_top.2 hR)
 
 /-- A ball truncation is compactly supported. -/
-theorem isCompact_support_cond_closedBall (ν : Measure E) (R : ℕ) :
+theorem isCompact_support_cond_closedBall
+    [InnerProductSpace ℝ E] [CompleteSpace E] [FiniteDimensional ℝ E]
+    [MeasurableSpace E] [BorelSpace E] [SecondCountableTopology E]
+    (ν : Measure E) (R : ℕ) :
     IsCompact (ν[|Metric.closedBall (0 : E) R]).support := by
   refine (isCompact_closedBall (0 : E) R).of_isClosed_subset Measure.isClosed_support
     (Measure.support_subset_of_isClosed Metric.isClosed_closedBall ?_)
@@ -221,7 +230,10 @@ theorem isCompact_support_cond_closedBall (ν : Measure E) (R : ℕ) :
 /-- **Standardisation of a compactly supported log-concave law** with positive invertible covariance: the
 law of `σ (x - a)`, with `σ = Cov^{-1/2}` and `a` the mean, is isotropic, log-concave and compactly
 supported. -/
-theorem exists_standardized (μ : ProbabilityMeasure E) (hLC : LogConcave μ)
+theorem exists_standardized
+    [InnerProductSpace ℝ E] [CompleteSpace E] [FiniteDimensional ℝ E]
+    [MeasurableSpace E] [BorelSpace E] [SecondCountableTopology E]
+    (μ : ProbabilityMeasure E) (hLC : LogConcave μ)
     (hc : IsCompact (μ : Measure E).support)
     (hpos : (Covariance.operator (μ : Measure E)).IsPositive)
     (hunit : IsUnit (Covariance.operator (μ : Measure E))) :

@@ -1,6 +1,6 @@
 # Current KLS handoff
 
-Updated 2026-10-19 for the local context-maintenance phase.
+Updated 2026-10-19 for public-revision preparation.
 
 ## Accepted result and open boundaries
 
@@ -36,17 +36,29 @@ and explicit third-party compiled caches remain trusted. Known
 
 ## Current work and next step
 
-The maintenance scope is the read-only context MCP, scoped section variables in
-`KLS/LogConcave/HessianStein.lean` and `HminusOne.lean`, and local retention of superseded
-operational history. Mathematical statements, proofs, hypotheses, normalization, dimensional
-scope and all 34 certificate states are retained. Current source reviews and validation inputs
-remain tracked, so a fresh clone does not need the local history archive.
+The current task prepares a frozen source snapshot for full local verification and an
+approved Git revision for downstream and remote certification. The
+[release procedure](research/release.md), [contribution guide](CONTRIBUTING.md) and
+[citation metadata](CITATION.cff) describe public use and the exact-revision requirements.
+Repository visibility and previously pushed history remain unchanged by this preparation.
 
-Each batch requires independent acceptance. Delivery requires full local verification of the
-frozen combined tree before one commit and push, followed by one remote Lean certification for
-the final pushed SHA after all local work. Read the outcome from that run; this file anticipates
-no result. No further proof construction is queued. A new mathematical task must select its
-pinned literature target under the [workflow](research/workflow.md). The repository stays private
-until the owner explicitly changes visibility. The [module directory](formalization/MODULES.md)
-locates source owners; the [maintenance register](research/technical-debt/remaining-families.md)
-lists unresolved debt.
+CI cache preparation recognizes both aggregate `Mathlib` and dotted imports, checks their
+pinned compiled closure, and rejects an incomplete cache before the build. The verifier
+prints live progress and retains incomplete-run state; disk exhaustion, cache misses,
+compiler failures and manual cancellation have distinct evidence. The strict declaration,
+audit and kernel-replay gates remain enabled. No old or cancelled run verifies a new revision.
+
+The section-variable maintenance is recorded in the
+[scope review](research/technical-debt/variable-scopes.md). Repeated property premises,
+instance exclusions and clipped-test hypotheses have local scopes with unchanged interfaces
+and proofs. Five theorem-local `unusedVariables` exceptions remain intentionally: `omit`
+would change their interfaces, while unused explicit `include` premises still warn in
+Lean 4.33.0. No further style cleanup is required before the release checks.
+
+Mathematical statements, proof bodies, hypotheses, parameter names/order, normalization,
+dimensional scope and all 34 certificate states are retained. New mathematical work selects
+a pinned literature target under the [workflow](research/workflow.md). The
+[module directory](formalization/MODULES.md) locates source owners; the
+[maintenance register](research/technical-debt/remaining-families.md) lists unresolved debt.
+Superseded operational handoff text is preserved verbatim with its hash under ignored
+local history. Fresh-clone instructions and validation inputs remain tracked.

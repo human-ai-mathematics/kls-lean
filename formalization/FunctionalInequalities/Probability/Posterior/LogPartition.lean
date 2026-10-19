@@ -37,7 +37,8 @@ private def partitionParameterScore (x : E) :
       ((ContinuousLinearMap.apply ℝ E x).comp
         (ContinuousLinearMap.snd ℝ E (E →L[ℝ] E))))
 
-omit [CompleteSpace E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] in
+omit [CompleteSpace E] [FiniteDimensional ℝ E]
+  [MeasurableSpace E] [BorelSpace E] in
 private theorem partitionParameterScore_apply (x : E)
     (p : E × (E →L[ℝ] E)) :
     partitionParameterScore x p = quadraticExponent p.1 p.2 x := by
@@ -46,7 +47,8 @@ private theorem partitionParameterScore_apply (x : E)
   simp only [quadraticExponent]
   rw [real_inner_comm x p.1, real_inner_comm x (p.2 x)]
 
-omit [CompleteSpace E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] in
+omit [CompleteSpace E] [FiniteDimensional ℝ E]
+  [MeasurableSpace E] [BorelSpace E] in
 private theorem partitionParameterScore_continuous :
     Continuous (partitionParameterScore (E := E)) := by
   have hi : Continuous (fun x : E => innerSL ℝ x) :=
@@ -115,7 +117,8 @@ private theorem partitionLaw_compact (μ : ProbabilityMeasure E)
     (partitionLaw μ : Measure (partitionParameterSpace (E := E))).isClosed_support
     (partitionLaw_support_subset μ hc)
 
-omit [CompleteSpace E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] in
+omit [CompleteSpace E] [FiniteDimensional ℝ E]
+  [MeasurableSpace E] [BorelSpace E] in
 private theorem line_hasDerivAt (c h : E) :
     HasDerivAt (fun t : ℝ => c + t • h) h 0 := by
   convert! ((hasDerivAt_id (0 : ℝ)).smul_const h).const_add c using 1
@@ -125,9 +128,13 @@ private theorem line_hasDerivAt (c h : E) :
 def logPartition (μ : ProbabilityMeasure E) (c : E) (Q : E →L[ℝ] E) : ℝ :=
   Real.log (∫ x, Real.exp (quadraticExponent c Q x) ∂(μ : Measure E))
 
-set_option linter.unusedSectionVars false in
+omit [CompleteSpace E] [FiniteDimensional ℝ E]
+  [MeasurableSpace E] [BorelSpace E] in
 /-- `ψ` is jointly `C^∞` in `(c, Q)` for a compactly supported prior. -/
-theorem contDiff_logPartition_joint (μ : ProbabilityMeasure E)
+theorem contDiff_logPartition_joint
+    [CompleteSpace E] [FiniteDimensional ℝ E]
+    [MeasurableSpace E] [BorelSpace E]
+    (μ : ProbabilityMeasure E)
     (hc : IsCompact (μ : Measure E).support) :
     ContDiff ℝ ∞ (fun p : E × (E →L[ℝ] E) => logPartition μ p.1 p.2) := by
   have hexp : ∀ r : ℝ,
@@ -194,8 +201,12 @@ theorem contDiff_logPartition_joint (μ : ProbabilityMeasure E)
   have hlog := hZ.log (fun p => (hpos p).ne')
   simpa only [logPartition] using hlog
 
-set_option linter.unusedSectionVars false in
-theorem logLaplace_compactPosterior (μ : ProbabilityMeasure E)
+omit [CompleteSpace E] [FiniteDimensional ℝ E]
+  [MeasurableSpace E] [BorelSpace E] in
+theorem logLaplace_compactPosterior
+    [CompleteSpace E] [FiniteDimensional ℝ E]
+    [MeasurableSpace E] [BorelSpace E]
+    (μ : ProbabilityMeasure E)
     (hc : IsCompact (μ : Measure E).support) (c : E) (Q : E →L[ℝ] E) (z : E) :
     Analysis.BakryEmery.logLaplace (compactPosterior μ hc c Q : Measure E) z =
       logPartition μ (c + z) Q - logPartition μ c Q := by
@@ -226,7 +237,6 @@ theorem logLaplace_compactPosterior (μ : ProbabilityMeasure E)
         unfold quadraticExponent
         fun_prop))).ne']
 
-set_option linter.unusedSectionVars false in
 /-- **Posterior cumulants are `c`-derivatives of `ψ`**: `κ_m(μ_{c,Q}) = D_c^m ψ(c, Q)` for `m ≥ 1`. -/
 theorem cumulant_compactPosterior (μ : ProbabilityMeasure E)
     (hc : IsCompact (μ : Measure E).support) (c : E) (Q : E →L[ℝ] E) {m : ℕ} (hm : 1 ≤ m) :

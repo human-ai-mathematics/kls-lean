@@ -194,17 +194,17 @@ theorem tendsto_distanceCutoff_indicator (ν : ProbabilityMeasure V) {B : Set V}
 
 /-! ### The gradient integral of the cutoff -/
 
--- `m`, its Haar instance and `hac` are part of the published interface of this estimate and are
--- kept verbatim; the pointwise route below needs no absolute continuity, so `hac` is unused, and
--- `FiniteDimensional`/`SecondCountableTopology` are unused section variables.  Both linters are
--- silenced for this declaration only, rather than the statement being changed.
-set_option linter.unusedSectionVars false in
+-- The reference Haar measure, absolute-continuity premise and ambient structure are retained.
+-- The unused explicit `hac` keeps its local unused-variable exception.
+omit [SecondCountableTopology V] [FiniteDimensional ℝ V] in
 set_option linter.unusedVariables false in
 /-- The gradient of the cutoff vanishes at every point of its two constant-value sets and is
 bounded by `1/r` on the open annulus `B^r ∖ closure B`, so
 `∫ ‖∇w_r‖ dν ≤ (ν(B^r) - ν(closure B)) / r`.  This sharpens the Blueprint's
 `(ν(B^r) - ν(B)) / r`. -/
-theorem lintegral_enorm_gradient_distanceCutoff_le (ν : ProbabilityMeasure V) (m : Measure V)
+theorem lintegral_enorm_gradient_distanceCutoff_le
+    [SecondCountableTopology V] [FiniteDimensional ℝ V]
+    (ν : ProbabilityMeasure V) (m : Measure V)
     [m.IsAddHaarMeasure] (hac : (ν : Measure V) ≪ m) (B : Set V) {r : ℝ} (hr : 0 < r) :
     ∫⁻ x, ‖gradient (distanceCutoff B r) x‖ₑ ∂(ν : Measure V) ≤
       ((ν : Measure V) (Metric.thickening r B) - (ν : Measure V) (closure B)) /

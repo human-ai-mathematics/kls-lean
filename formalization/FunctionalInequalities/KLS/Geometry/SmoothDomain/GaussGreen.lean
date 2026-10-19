@@ -83,10 +83,12 @@ section GaussGreen
 variable {V : Type u} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [CompleteSpace V]
   [MeasurableSpace V] [BorelSpace V] [FiniteDimensional ℝ V]
 
-set_option linter.unusedSectionVars false in
+omit [CompleteSpace V] [MeasurableSpace V] [BorelSpace V] [FiniteDimensional ℝ V] in
 /-- The normalized surface measure restricted to a smooth frontier is locally finite,
 including for unbounded domains and in dimension zero. -/
-theorem isLocallyFiniteMeasure_surfaceMeasure_frontier (U : SmoothDomain V) :
+theorem isLocallyFiniteMeasure_surfaceMeasure_frontier
+    [CompleteSpace V] [MeasurableSpace V] [BorelSpace V] [FiniteDimensional ℝ V]
+    (U : SmoothDomain V) :
     IsLocallyFiniteMeasure ((surfaceMeasure V).restrict (frontier U.carrier)) := by
   have hfrmeas : MeasurableSet (frontier U.carrier) := isClosed_frontier.measurableSet
   constructor

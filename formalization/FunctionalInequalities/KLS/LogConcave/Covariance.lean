@@ -30,32 +30,32 @@ open MeasureTheory Filter Topology
 
 namespace FunctionalInequalities.KLS.LogConcave
 
-variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
+variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
   [MeasurableSpace E] [BorelSpace E] [SecondCountableTopology E] [FiniteDimensional ℝ E]
+  {μ : ProbabilityMeasure E} (hμ : LogConcave μ)
 
-omit [CompleteSpace E] in
+include hμ in
 /-- The intrinsic law of a log-concave probability has a finite second moment, so its
 covariance operator is the genuine centered covariance. -/
-theorem intrinsic_memLp_id_two {μ : ProbabilityMeasure E} (hμ : LogConcave μ) :
+theorem intrinsic_memLp_id_two :
     MemLp id 2
       (Probability.intrinsicMeasure μ : Measure (Probability.affineSupport μ).direction) := by
   rw [memLp_two_iff_integrable_sq_norm aestronglyMeasurable_id]
   simpa using hμ.intrinsic_integrable_norm_pow 2
 
-omit [CompleteSpace E] in
+include hμ in
 /-- Rademacher on the intrinsic law: every affine covariance test is differentiable
 `ν`-almost everywhere, with the canonical gradient as its derivative. -/
-theorem intrinsic_ae_hasGradientAt {μ : ProbabilityMeasure E} (hμ : LogConcave μ)
+theorem intrinsic_ae_hasGradientAt
     (f : Energy.CovarianceGradient.Test (Probability.intrinsicMeasure μ)) :
     ∀ᵐ v ∂(Probability.intrinsicMeasure μ : Measure (Probability.affineSupport μ).direction),
       HasGradientAt f.toFun (gradient f.toFun v) v :=
   f.ae_hasGradientAt Measure.addHaar (hμ.intrinsic_absolutelyContinuous Measure.addHaar)
 
-omit [CompleteSpace E] in
+include hμ in
 /-- Continuous representatives of one intrinsic `L²` class have `ν`-almost everywhere equal
 canonical gradients: the frontier of the intrinsic support is `ν`-null. -/
-theorem intrinsic_gradient_ae_eq_of_ae_eq {μ : ProbabilityMeasure E}
-    (hμ : LogConcave μ) {g₁ g₂ : (Probability.affineSupport μ).direction → ℝ}
+theorem intrinsic_gradient_ae_eq_of_ae_eq {g₁ g₂ : (Probability.affineSupport μ).direction → ℝ}
     (h₁ : Continuous g₁) (h₂ : Continuous g₂)
     (h : g₁ =ᵐ[(Probability.intrinsicMeasure μ :
       Measure (Probability.affineSupport μ).direction)] g₂) :
@@ -63,10 +63,9 @@ theorem intrinsic_gradient_ae_eq_of_ae_eq {μ : ProbabilityMeasure E}
       Measure (Probability.affineSupport μ).direction)] gradient g₂ :=
   Energy.Euclidean.gradient_ae_eq_of_ae_eq hμ.intrinsic_frontier_support_eq_zero h₁ h₂ h
 
-omit [CompleteSpace E] in
+include hμ in
 /-- The affine covariance energy of a test depends only on its intrinsic `L²` class. -/
-theorem intrinsicCovariance_energy_eq_of_toL2_eq {μ : ProbabilityMeasure E}
-    (hμ : LogConcave μ)
+theorem intrinsicCovariance_energy_eq_of_toL2_eq
     {f g : Energy.CovarianceGradient.Test (Probability.intrinsicMeasure μ)}
     (hfg : f.toL2 = g.toL2) : f.energy = g.energy :=
   Energy.CovarianceGradient.Test.energy_eq_of_toL2_eq

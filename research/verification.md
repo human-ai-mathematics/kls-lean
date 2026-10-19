@@ -29,6 +29,7 @@ receipts request verification; they do not establish proof or certificate status
 From the repository root:
 
 ```bash
+python3 research/cache_mathlib.py
 python3 research/check_ledger.py
 python3 research/check_blueprint.py
 python3 research/verify.py
@@ -64,6 +65,13 @@ Audit clients use warnings-as-errors. Proposition type checks remain candidate s
 compiling them neither proves the proposition nor registers a certificate. Audit elaboration
 and local-module kernel replay are separately reported scopes.
 
+Before a cold build, `cache_mathlib.py` recognizes both `Mathlib` and `Mathlib.*`, requests
+their pinned precompiled closure, and checks all required Mathlib `.olean` files. The CI
+preflight fails on an incomplete cache instead of silently rebuilding Mathlib from source.
+Use `python3 research/cache_mathlib.py --check` to inspect existing caches without fetching.
+This checks file presence, not third-party proof validity. Cache inputs remain pinned;
+the trusted-third-party boundary is unchanged.
+
 The runner builds a filtered compiled-module view for the current source inventory, replacing
 the local entry in the Lean search path. Hidden production sources, missing artifacts, orphan
 module adoption and replay coverage mismatches fail. See the implementation in [verify.py](verify.py).
@@ -79,6 +87,13 @@ verifier nor changes certificate status. Third-party compiled dependencies remai
 Each run retains its report, generated clients and logs under `build/verification/<UTC time>/`.
 `latest.json` identifies the latest full attempt; `latest-lean.json` identifies the latest
 Lean-only attempt. A failed latest attempt is not a success receipt.
+
+Active commands print progress every 30 seconds: elapsed time, log size, free disk and the
+last log line. `progress.json` is updated as gates complete and while commands run, including
+parallel audit clients. It remains available after an interrupted run without a final report;
+`running` is incomplete evidence. The final report and terminal status determine acceptance.
+See the [release guide](release.md#diagnose-a-long-or-failed-run) for cache, disk and cancellation
+diagnosis. Lean-only snapshots also bind the cache-preparation script and its import parser.
 
 Receipts record HEAD separately from source hashes and scope. A full receipt includes tracked
 and nonignored untracked source content and documentation; the Lean-only snapshot includes

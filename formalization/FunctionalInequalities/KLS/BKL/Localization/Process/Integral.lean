@@ -122,10 +122,12 @@ theorem IsEldanCutoff.measurable_uncurry_path (h : IsEldanCutoff μ hc W ℱ hW 
   change Measurable (fun z : Ω × ℝ => Φ.symm (Φ (p z.2 z.1))) at h'
   simpa only [Φ.symm_apply_apply] using h'
 
-set_option linter.unusedSectionVars false in
+omit [IsProbabilityMeasure P] in
 /-- Almost-sure statements valid for all `s ≥ 0` transfer to the product measure
 `P ⊗ Leb|_{(0,T]}`. -/
-theorem ae_prod_restrict_Ioc_of_ae {Q : Ω → ℝ → Prop}
+theorem ae_prod_restrict_Ioc_of_ae
+    [IsProbabilityMeasure P]
+    {Q : Ω → ℝ → Prop}
     (hQ : ∀ᵐ w ∂P, ∀ s : ℝ, 0 ≤ s → Q w s) (T : ℝ) :
     ∀ᵐ z ∂(P.prod (volume.restrict (Set.Ioc (0 : ℝ) T))), Q z.1 z.2 := by
   rw [ae_iff] at hQ ⊢

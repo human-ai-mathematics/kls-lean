@@ -12,6 +12,7 @@ permissions:
 jobs:
   certify:
     runs-on: ubuntu-24.04
+    timeout-minutes: 180
     env:
       MATHLIB_NO_CACHE_ON_UPDATE: '1'
     steps:
@@ -53,27 +54,7 @@ jobs:
           use-mathlib-cache: 'false'
           build: 'false'
       - name: Cache imported Mathlib modules
-        working-directory: formalization
-        run: |
-          python3 - <<'PY'
-          import re
-          import subprocess
-          from pathlib import Path
-
-          sources = [Path('FunctionalInequalities.lean')]
-          sources += list(Path('FunctionalInequalities').rglob('*.lean'))
-          sources += list(Path('../solutions').rglob('*.lean'))
-          sources += list(Path('../examples').rglob('*.lean'))
-          sources += list(Path('../research/audits').rglob('*.lean'))
-          sources += list(Path('vendor').rglob('*.lean'))
-          modules = set()
-          for source in sources:
-              for imports in re.findall(r'(?m)^(?:public )?import ([\w. ]+)', source.read_text()):
-                  modules.update(name for name in imports.split() if name.startswith('Mathlib.'))
-          if not modules:
-              raise SystemExit('No Mathlib imports found; refusing an unbounded cache download')
-          subprocess.run(['lake', 'exe', 'cache', 'get', *sorted(modules)], check=True)
-          PY
+        run: python3 research/cache_mathlib.py
       - name: Build Lean, audit proof axioms, and replay local modules
         run: python3 research/verify.py --lean-only
       - name: Upload verification evidence

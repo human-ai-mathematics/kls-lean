@@ -29,3 +29,6 @@ and described in the [source map](../../formalization/README.md) and the family 
 proposed or implemented layout is accepted only with exact source and interface comparison, real
 clients and the change-appropriate checks of the [workflow](../workflow.md); a targeted build
 alone does not establish acceptance, and each acceptance applies to its recorded snapshot.
+
+The [section-variable review](variable-scopes.md) records the shared-context pattern,
+the maintained mathematical boundaries and the required interface comparisons.

@@ -27,14 +27,12 @@ open scoped RealInnerProductSpace Topology ContDiff
 
 namespace FunctionalInequalities.KLS.LogConcave.GaussianSmoothing
 
-variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
-  [CompleteSpace E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
+universe u_2
 
+variable {E : Type u_2} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+  [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
 
-variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
-  [CompleteSpace E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
-
-omit [CompleteSpace E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] in
+omit [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] in
 private theorem gaussian_shift_identity (s t : ℝ) (x y v : E) :
     Real.exp (-s * ‖x - y‖ ^ 2) * Real.exp (t * (2 * s * ⟪y - x, v⟫)) =
       Real.exp (s * t ^ 2 * ‖v‖ ^ 2) * Real.exp (-s * ‖x + t • v - y‖ ^ 2) := by
@@ -52,7 +50,10 @@ private theorem gaussian_shift_identity (s t : ℝ) (x y v : E) :
   rw [hn, hi]
   ring
 
-omit [InnerProductSpace ℝ E] [CompleteSpace E] [FiniteDimensional ℝ E] in
+section PosteriorProbability
+
+omit [InnerProductSpace ℝ E] [FiniteDimensional ℝ E]
+
 theorem integrable_shiftedKernel (μ : Measure E) [IsProbabilityMeasure μ]
     {s : ℝ} (hs : 0 < s) (x : E) :
     Integrable (fun y => Real.exp (-s * ‖x - y‖ ^ 2)) μ := by
@@ -62,13 +63,17 @@ theorem integrable_shiftedKernel (μ : Measure E) [IsProbabilityMeasure μ]
   rw [Real.norm_of_nonneg (Real.exp_pos _).le]
   exact Real.exp_le_one_iff.2 (mul_nonpos_of_nonpos_of_nonneg (neg_nonpos.2 hs.le) (sq_nonneg _))
 
-omit [InnerProductSpace ℝ E] [CompleteSpace E] [FiniteDimensional ℝ E] in
 theorem isProbabilityMeasure_posterior (μ : Measure E) [IsProbabilityMeasure μ]
     {s : ℝ} (hs : 0 < s) (x : E) :
     IsProbabilityMeasure (μ.tilted (fun y => -s * ‖x - y‖ ^ 2)) :=
   isProbabilityMeasure_tilted (integrable_shiftedKernel μ hs x)
 
-omit [CompleteSpace E] [FiniteDimensional ℝ E] in
+end PosteriorProbability
+
+section ScoreExponentialMoments
+
+omit [FiniteDimensional ℝ E]
+
 /-- Completing the square gives every signed exponential moment of the score `2s⟪y-x,v⟫` under the
 Gaussian posterior `μ.tilted (-s‖x-·‖²)`; no exponential moment of `μ` is needed. -/
 theorem integrable_exp_score_posterior (μ : Measure E) [IsProbabilityMeasure μ]
@@ -79,7 +84,6 @@ theorem integrable_exp_score_posterior (μ : Measure E) [IsProbabilityMeasure μ
   simpa only [smul_eq_mul, gaussian_shift_identity] using
     (integrable_shiftedKernel μ hs (x + t • v)).const_mul (Real.exp (s * t ^ 2 * ‖v‖ ^ 2))
 
-omit [CompleteSpace E] [FiniteDimensional ℝ E] in
 theorem integrableExpSet_score_posterior (μ : Measure E) [IsProbabilityMeasure μ]
     {s : ℝ} (hs : 0 < s) (x v : E) :
     integrableExpSet (fun y => 2 * s * ⟪y - x, v⟫)
@@ -88,7 +92,8 @@ theorem integrableExpSet_score_posterior (μ : Measure E) [IsProbabilityMeasure 
   intro t
   exact integrable_exp_score_posterior μ hs x v t
 
-omit [CompleteSpace E] in
+end ScoreExponentialMoments
+
 private theorem normalizedDensity_eq_gaussian_weight {μ : Measure E}
     [IsProbabilityMeasure μ] {ρ : E → ℝ}
     (hρ : FunctionalInequalities.KLS.IsBorellDensity μ volume ρ)
@@ -99,7 +104,6 @@ private theorem normalizedDensity_eq_gaussian_weight {μ : Measure E}
   change (∫ y, Real.exp (-s * ‖x - y‖ ^ 2) / mass (V := E) s ∂μ) = _
   exact integral_div _ _
 
-omit [CompleteSpace E] in
 /-- Along a line, the normalized smoothed density factors into its value at the base point, a
 scalar Gaussian factor and the moment generating function of the score under the posterior. -/
 theorem normalizedDensity_line_factorization {μ : Measure E} [IsProbabilityMeasure μ]
@@ -136,7 +140,6 @@ theorem normalizedDensity_line_factorization {μ : Measure E} [IsProbabilityMeas
   rw [show -s * t ^ 2 * ‖v‖ ^ 2 = -(s * t ^ 2 * ‖v‖ ^ 2) by ring, Real.exp_neg]
   field_simp [hZ.ne', hm.ne']
 
-omit [CompleteSpace E] in
 theorem potential_line_cgf {μ : Measure E} [IsProbabilityMeasure μ]
     {ρ : E → ℝ} (hρ : FunctionalInequalities.KLS.IsBorellDensity μ volume ρ)
     {s : ℝ} (hs : 0 < s) (x v : E) (t : ℝ) :
@@ -153,7 +156,7 @@ theorem potential_line_cgf {μ : Measure E} [IsProbabilityMeasure μ]
   simp only [potential, cgf]
   ring
 
-omit [CompleteSpace E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] in
+omit [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] in
 private theorem directional_second_eq_hessian {f : E → ℝ} (hf : ContDiff ℝ 2 f) (x v : E) :
     iteratedDeriv 2 (fun t : ℝ => f (x + t • v)) 0 =
       bilinearIteratedFDerivTwo ℝ f x v v := by
@@ -172,7 +175,6 @@ private theorem directional_second_eq_hessian {f : E → ℝ} (hf : ContDiff ℝ
   rw [iteratedDeriv_succ, iteratedDeriv_one, hderiv, hdline.deriv]
   exact (bilinearIteratedFDerivTwo_eq_fderiv_apply hf x v v).symm
 
-omit [CompleteSpace E] in
 theorem bilinearIteratedFDerivTwo_potential_eq_sub_variance_score {μ : Measure E} [IsProbabilityMeasure μ]
     {ρ : E → ℝ} (hρ : FunctionalInequalities.KLS.IsBorellDensity μ volume ρ)
     {s : ℝ} (hs : 0 < s) (x v : E) :
@@ -210,7 +212,6 @@ theorem bilinearIteratedFDerivTwo_potential_eq_sub_variance_score {μ : Measure 
   rw [← directional_second_eq_hessian (potential_contDiff_two hρ hs) x v, hfun, hsecond, hvar]
 
 
-omit [CompleteSpace E] in
 /-- Hessian of the smoothed potential as `2s‖v‖² − 4s² Var_P ⟪·,v⟫` for the posterior `P`. -/
 theorem bilinearIteratedFDerivTwo_potential_eq_sub_variance_inner {μ : Measure E} [IsProbabilityMeasure μ]
     {ρ : E → ℝ} (hρ : FunctionalInequalities.KLS.IsBorellDensity μ volume ρ)
@@ -226,7 +227,6 @@ theorem bilinearIteratedFDerivTwo_potential_eq_sub_variance_inner {μ : Measure 
   rw [bilinearIteratedFDerivTwo_potential_eq_sub_variance_score hρ hs, variance_const_mul, hshift]
   ring
 
-omit [CompleteSpace E] in
 /-- **Upper Hessian bound of the smoothed potential** (BKL Section 2, p. 5, regular approximation:
 `∇²V_ε ≤ ε⁻¹ Id` for the Gaussian convolution of variance `ε`; here the kernel `e^{-s‖x-y‖²}` has
 variance `ε = 1/(2s)`, so the bound is `2s`). Proved from the covariance identity by nonnegativity of
@@ -240,7 +240,6 @@ theorem bilinearIteratedFDerivTwo_potential_le {μ : Measure E} [IsProbabilityMe
   rw [bilinearIteratedFDerivTwo_potential_eq_sub_variance_inner hρ hs]
   exact sub_le_self _ (mul_nonneg (mul_nonneg (by norm_num) (sq_nonneg s)) (variance_nonneg _ _))
 
-omit [CompleteSpace E] in
 /-- Posterior variance bound `Var_P ⟪·,v⟫ ≤ ‖v‖²/(2s)`, from convexity of the smoothed potential and
 the Hessian identity. -/
 theorem variance_inner_posterior_le {μ : Measure E} [IsProbabilityMeasure μ]
@@ -256,7 +255,10 @@ theorem variance_inner_posterior_le {μ : Measure E} [IsProbabilityMeasure μ]
   apply le_of_mul_le_mul_left ?_ hpos
   nlinarith only [hlo]
 
-omit [CompleteSpace E] [FiniteDimensional ℝ E] in
+section PosteriorSecondMoments
+
+omit [FiniteDimensional ℝ E]
+
 /-- The score is square integrable under the posterior (from its full exponential domain). -/
 theorem memLp_two_score_posterior (μ : Measure E) [IsProbabilityMeasure μ]
     {s : ℝ} (hs : 0 < s) (x v : E) :
@@ -270,7 +272,6 @@ theorem memLp_two_score_posterior (μ : Measure E) [IsProbabilityMeasure μ]
   have h := memLp_tilted_mul h0 (2 : NNReal)
   simpa only [zero_mul, tilted_const, ENNReal.coe_ofNat] using h
 
-omit [CompleteSpace E] [FiniteDimensional ℝ E] in
 theorem memLp_two_inner_posterior (μ : Measure E) [IsProbabilityMeasure μ]
     {s : ℝ} (hs : 0 < s) (x v : E) :
     MemLp (fun y => ⟪y, v⟫) 2 (μ.tilted (fun y => -s * ‖x - y‖ ^ 2)) := by
@@ -285,7 +286,8 @@ theorem memLp_two_inner_posterior (μ : Measure E) [IsProbabilityMeasure μ]
   have h := hshift.add (memLp_const ⟪x, v⟫)
   simpa only [Pi.add_def, inner_sub_left, sub_add_cancel] using h
 
-omit [CompleteSpace E] in
+end PosteriorSecondMoments
+
 /-- The posterior has a finite second moment: sum the scalar projections over an orthonormal basis
 (including dimension zero). -/
 theorem memLp_two_id_posterior (μ : Measure E) [IsProbabilityMeasure μ]

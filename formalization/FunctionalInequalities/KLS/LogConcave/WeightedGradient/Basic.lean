@@ -168,23 +168,29 @@ abbrev intrinsicWeightedOperator (hμ : LogConcave μ) :
         (Probability.intrinsicMeasure μ : Measure (Probability.affineSupport μ).direction) :=
   hμ.intrinsicMeasure.weightedOperator m B hμ.interior_intrinsic_support_nonempty
 
-omit [CompleteSpace E] in
+section IntrinsicProperties
+
+variable (hμ : LogConcave μ)
+
+omit [CompleteSpace E]
+
+include hμ in
 /-- Closability of the intrinsic weighted gradient of any log-concave law. -/
-theorem intrinsicWeightedOperator_isClosable (hμ : LogConcave μ) :
+theorem intrinsicWeightedOperator_isClosable :
     (hμ.intrinsicWeightedOperator m B).IsClosable :=
   hμ.intrinsicMeasure.weightedOperator_isClosable m B hμ.interior_intrinsic_support_nonempty
 
-omit [CompleteSpace E] in
+include hμ in
 /-- Dense domain of the intrinsic weighted gradient of any log-concave law. -/
-theorem dense_domain_intrinsicWeightedOperator (hμ : LogConcave μ) :
+theorem dense_domain_intrinsicWeightedOperator :
     Dense ((hμ.intrinsicWeightedOperator m B).domain : Set (Lp ℝ 2
       (Probability.intrinsicMeasure μ : Measure (Probability.affineSupport μ).direction))) :=
   hμ.intrinsicMeasure.dense_domain_weightedOperator m B hμ.interior_intrinsic_support_nonempty
 
-omit [CompleteSpace E] in
+include hμ in
 /-- The intrinsic operator has the same closure as its restriction to any core containing the
 smooth compactly supported classes. -/
-theorem closure_domRestrict_intrinsicWeightedOperator (hμ : LogConcave μ)
+theorem closure_domRestrict_intrinsicWeightedOperator
     {S : Submodule ℝ (Lp ℝ 2
       (Probability.intrinsicMeasure μ : Measure (Probability.affineSupport μ).direction))}
     (hS : Energy.WeightedGradient.smoothCore (Probability.intrinsicMeasure μ) ≤ S)
@@ -194,16 +200,18 @@ theorem closure_domRestrict_intrinsicWeightedOperator (hμ : LogConcave μ)
   hμ.intrinsicMeasure.closure_domRestrict_eq_of_smoothCore_le m B
     hμ.interior_intrinsic_support_nonempty hS hS'
 
-omit [CompleteSpace E] in
+include hμ in
 /-- The affine covariance relaxation of the definition node is the operator relaxation for any
 `B` with `⟪Σ v, v⟫ = ‖B v‖²`, `Σ` the intrinsic covariance. -/
-theorem intrinsicCovariance_energy_eq_operator (hμ : LogConcave μ)
+theorem intrinsicCovariance_energy_eq_operator
     (hB : ∀ v, inner ℝ (Covariance.operator
       (Probability.intrinsicMeasure μ : Measure (Probability.affineSupport μ).direction) v) v =
         ‖B v‖ ^ 2) :
     Energy.CovarianceGradient.Intrinsic.energy μ =
       (PreEnergy.ofLinearPMap (hμ.intrinsicWeightedOperator m B)).sequentialRelaxation :=
   hμ.intrinsicMeasure.covariance_relaxation_eq_operator m B hμ.interior_intrinsic_support_nonempty hB
+
+end IntrinsicProperties
 
 end Intrinsic
 

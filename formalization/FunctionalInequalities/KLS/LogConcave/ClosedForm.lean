@@ -43,16 +43,20 @@ namespace FunctionalInequalities
 
 open KLS Energy Energy.Euclidean Probability
 
-variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
+variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
   [MeasurableSpace E] [BorelSpace E] [SecondCountableTopology E] [FiniteDimensional ℝ E]
   {μ : ProbabilityMeasure E}
 
 
 namespace KLS.LogConcave
 
-omit [CompleteSpace E] in
+section CovarianceRelaxation
+
+variable (hμ : LogConcave μ)
+
+include hμ in
 /-- The affine covariance pre-energy has dense realization in the intrinsic `L²` space. -/
-theorem intrinsicCovariance_denseRealization (hμ : LogConcave μ) :
+theorem intrinsicCovariance_denseRealization :
     (Energy.CovarianceGradient.preEnergy (Probability.intrinsicMeasure μ)).DenseRealization := by
   obtain ⟨B, hB⟩ := Covariance.exists_intrinsic_inner_eq_norm_sq μ
   refine (hμ.dense_domain_intrinsicWeightedOperator Measure.addHaar B).mono ?_
@@ -61,9 +65,9 @@ theorem intrinsicCovariance_denseRealization (hμ : LogConcave μ) :
   obtain ⟨c, rfl⟩ := (Energy.CovarianceGradient.weightedTest_iff_exists_test _ B hB g).mp h
   exact ⟨c, rfl⟩
 
-omit [CompleteSpace E] in
+include hμ in
 /-- The affine covariance relaxation is a densely defined closed quadratic form. -/
-theorem intrinsicCovariance_closedQuadratic (hμ : LogConcave μ) :
+theorem intrinsicCovariance_closedQuadratic :
     ClosedQuadratic (Energy.CovarianceGradient.Intrinsic.energy μ) := by
   obtain ⟨B, hB⟩ := Covariance.exists_intrinsic_inner_eq_norm_sq μ
   rw [hμ.intrinsicCovariance_energy_eq_operator Measure.addHaar B hB]
@@ -71,9 +75,9 @@ theorem intrinsicCovariance_closedQuadratic (hμ : LogConcave μ) :
     ((PreEnergy.ofLinearPMap_denseRealization_iff _).mpr
       (hμ.dense_domain_intrinsicWeightedOperator Measure.addHaar B))
 
-omit [CompleteSpace E] in
+include hμ in
 /-- The relaxation returns the raw covariance energy on every globally Lipschitz test. -/
-theorem intrinsicCovariance_agreesOnTests (hμ : LogConcave μ) :
+theorem intrinsicCovariance_agreesOnTests :
     (Energy.CovarianceGradient.preEnergy (Probability.intrinsicMeasure μ)).AgreesOnTests (Energy.CovarianceGradient.Intrinsic.energy μ) := by
   intro f
   obtain ⟨B, hB⟩ := Covariance.exists_intrinsic_inner_eq_norm_sq μ
@@ -95,17 +99,19 @@ theorem intrinsicCovariance_agreesOnTests (hμ : LogConcave μ) :
   push_cast
   rfl
 
-omit [CompleteSpace E] in
+include hμ in
 /-- The globally Lipschitz covariance tests form a sequential core of the affine relaxation. -/
-theorem intrinsicCovariance_isSequentialCoreFor (hμ : LogConcave μ) :
+theorem intrinsicCovariance_isSequentialCoreFor :
     (Energy.CovarianceGradient.preEnergy (Probability.intrinsicMeasure μ)).IsSequentialCoreFor (Energy.CovarianceGradient.Intrinsic.energy μ) :=
   ⟨hμ.intrinsicCovariance_agreesOnTests, rfl⟩
 
-omit [CompleteSpace E] in
+include hμ in
 /-- The covariance energy of a test depends only on its intrinsic `L²` class. -/
-theorem intrinsicCovariance_respectsAmbientFibers (hμ : LogConcave μ) :
+theorem intrinsicCovariance_respectsAmbientFibers :
     (Energy.CovarianceGradient.preEnergy (Probability.intrinsicMeasure μ)).RespectsAmbientFibers :=
   hμ.intrinsicCovariance_agreesOnTests.respectsAmbientFibers
+
+end CovarianceRelaxation
 
 end KLS.LogConcave
 
@@ -115,7 +121,6 @@ variable (μ) (c : (affineSupport μ).direction)
 
 namespace Energy.CovarianceGradient.Intrinsic
 
-omit [CompleteSpace E] in
 /-- Translating the intrinsic law: the covariance relaxation of the translated law is the affine
 relaxation pulled back along the translation isometry. No log-concavity is needed. -/
 theorem relaxation_translate_intrinsicMeasure
@@ -129,7 +134,6 @@ end Energy.CovarianceGradient.Intrinsic
 
 namespace Poincare.CovarianceGradient.Intrinsic
 
-omit [CompleteSpace E] in
 /-- The affine constant is the optimal constant of the covariance relaxation of every translate of
 the intrinsic law. No log-concavity is needed. -/
 theorem constant_eq_translate_intrinsicMeasure :
@@ -149,7 +153,6 @@ variable (hμ : LogConcave μ) (m : Measure (affineSupport μ).direction) [m.IsA
 
 namespace KLS.LogConcave
 
-omit [CompleteSpace E] in
 /-- The affine relaxation is the squared-norm energy of the closure of the weighted gradient
 restricted to the core `ℝ + C_c^∞(V)`: the closed covariance form of the pinned CMH source. -/
 theorem intrinsicCovariance_energy_eq_normSq
@@ -163,7 +166,6 @@ theorem intrinsicCovariance_energy_eq_normSq
     hμ.closure_domRestrict_intrinsicWeightedOperator m B
       (Energy.WeightedGradient.smoothCore_le_constantSmoothCore _) (Energy.WeightedGradient.constantSmoothCore_le_domain_operator _ B _)]
 
-omit [CompleteSpace E] in
 /-- The affine Poincaré constant is the optimal constant of the closed covariance form. -/
 theorem intrinsicCovariance_constant_eq_normSq
     (hB : ∀ v, inner ℝ (Covariance.operator (Probability.intrinsicMeasure μ : Measure _) v) v = ‖B v‖ ^ 2) :

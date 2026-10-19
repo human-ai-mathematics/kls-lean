@@ -466,15 +466,17 @@ private theorem measurePreserving_coordinateEquiv (μ : ProbabilityMeasure E) :
   funext x
   simp [Function.comp, Probability.intrinsicMap]
 
--- `CompleteSpace E` is retained although this proof does not require completeness.
--- The unused-section-variable linter is locally disabled for this signature.
--- This does not change the retained completeness premise.
-set_option linter.unusedSectionVars false in
+-- Completeness and the remaining ambient premises are retained explicitly in this interface.
+omit [CompleteSpace E] [MeasurableSpace E] [BorelSpace E]
+  [SecondCountableTopology E] [FiniteDimensional ℝ E] in
 /-- The affine-support isoperimetric constant of `def:isoperimetric-cheeger-scale` is the
 coordinate-space Minkowski constant of the intrinsic law: the map `x ↦ x - a` from the affine
 carrier to its direction space is an isometry carrying `carrierMeasure μ` to
 `Probability.intrinsicMeasure μ`; the zero-dimensional convention `⊤` agrees on both sides. -/
-theorem constant_eq_minkowskiConstant_intrinsic (μ : ProbabilityMeasure E) :
+theorem constant_eq_minkowskiConstant_intrinsic
+    [CompleteSpace E] [MeasurableSpace E] [BorelSpace E]
+    [SecondCountableTopology E] [FiniteDimensional ℝ E]
+    (μ : ProbabilityMeasure E) :
     constant μ = minkowskiConstant (Probability.intrinsicMeasure μ) := by
   classical
   have hmp := measurePreserving_coordinateEquiv μ
