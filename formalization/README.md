@@ -35,8 +35,7 @@ Focused family guides explain the maintained import boundaries:
 [Stein identities](FunctionalInequalities/Probability/Stein/README.md),
 [metric BV](FunctionalInequalities/KLS/Geometry/Perimeter/MetricBV/README.md), and
 [regular moment producers](FunctionalInequalities/KLS/CEK/MomentRegularity/README.md).
-The [module directory](MODULES.md) lists current placements; layout maintenance records and
-migration maps are archived locally under ignored `build/history/`.
+The [module directory](MODULES.md) lists current placements.
 
 The aggregate `FunctionalInequalities.lean` is a library import root, not a completion marker.
 The target is [KLS/Statement.lean](FunctionalInequalities/KLS/Statement.lean), with its definitions

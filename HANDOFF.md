@@ -52,9 +52,6 @@ local-module kernel replay assigned to the [full local receipt](research/verific
 A single `leanchecker` process accumulates memory (14.4 GB after 40 modules locally), freezing
 the 16 GB hosted runner; remote certification therefore skips that replay gate.
 
-The section-variable review and layout maintenance records are archived locally under ignored
-`build/history/`.
-
 Mathematical statements, proof bodies, hypotheses, parameter names/order, normalization,
 dimensional scope and all 34 certificate states are retained. New mathematical work selects
 a pinned literature target under the [workflow](research/workflow.md). The
@@ -62,5 +59,4 @@ a pinned literature target under the [workflow](research/workflow.md). The
 Relocating `KLS/Geometry/Perimeter/MetricBV` to a top-level family remains a candidate only if an
 independent reuse consumer and a dependency benefit are demonstrated; otherwise its existing KLS
 perimeter owner remains.
-Superseded operational handoff text is preserved verbatim with its hash under ignored
-local history. Fresh-clone instructions and validation inputs remain tracked.
+Fresh-clone instructions and validation inputs remain tracked.
