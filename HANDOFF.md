@@ -51,6 +51,8 @@ Remote CI keeps the strict build and declaration/vendor/classical audits, with t
 local-module kernel replay assigned to the [full local receipt](research/verification.md#receipts-and-trust-scope).
 A single `leanchecker` process accumulates memory (14.4 GB after 40 modules locally), freezing
 the 16 GB hosted runner; remote certification therefore skips that replay gate.
+Run 39228796618 certified `845e61b` under that scope (1h21m; 9,856 local declarations, standard
+axioms only; vendor gate 4,789 declarations with the 5 listed upstream holes isolated).
 
 Mathematical statements, proof bodies, hypotheses, parameter names/order, normalization,
 dimensional scope and all 34 certificate states are retained. New mathematical work selects

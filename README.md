@@ -82,9 +82,10 @@ replays local modules and checks statements/metadata, including the
 Remote certification checks the Lean build, strict audit clients, every local declaration
 against only `propext`, `Classical.choice` and `Quot.sound`, and the vendor/classical KLS gates,
 by manual dispatch or a `milestone/**` tag. See [receipt scope](research/verification.md#receipts-and-trust-scope)
-for full local kernel replay evidence. The earlier
-[run 37516844384](https://github.com/human-ai-mathematics/kls-lean/actions/runs/37516844384)
-passed for `36e7c78` and does not certify later commits.
+for full local kernel replay evidence. The latest
+[run 39228796618](https://github.com/human-ai-mathematics/kls-lean/actions/runs/39228796618)
+passed for `845e61b` (9,856 local declarations audited, `KLS.kls` included) and does not certify
+later commits.
 
 ## License and credit
 
