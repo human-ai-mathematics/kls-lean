@@ -7,7 +7,7 @@ the [verification guide](../verification.md#receipts-and-trust-scope) defines sn
 
 | Stage | Pinned target | Current boundary |
 | --- | --- | --- |
-| 1. Letwin constant 8 | arXiv:2607.24164v1, Theorem 1.2 via Theorem 2.5; BKL arXiv:2610.05474v1, Lemma 4.2 consumer | Compact constant 8 proved and certified (`letwinCompactBound`, `thm:letwin-compact-quadratic-bound`); the noncompact Theorem 1.2 is not formalized |
+| 1. Letwin constant 8 | arXiv:2607.24164v1, Theorem 1.2 via Theorem 2.5; BKL arXiv:2610.05474v1, Lemma 4.2 consumer | Compact constant 8 proved and certified (`letwinCompactBound`, `thm:letwin-compact-quadratic-bound`); the separate noncompact Theorem 1.2 is now formalized locally by `letwinQuadraticBound` |
 | 2. Stochastic localization | BKL arXiv:2610.05474v1, Sections 4–6 | Accepted on the finite-horizon cutoff route: the cutoff (95) for every order is certified (`lem:bkl-cutoff-energy`); the uncut process and the literal identities (68)–(73) are not proved |
 | 3. BKL Theorem 4.1 | BKL arXiv:2610.05474v1, Theorem 4.1 | Source form certified (`thm:bkl-cumulant-bound`): one universal K, every m ≥ 2, every dimension and isotropic log-concave law |
 | 4. BKL Theorem 1.1 and KLS | BKL arXiv:2610.05474v1, Theorem 1.1; `KLS.Conjecture` | Source form certified (`thm:bkl-poincare`); `KLS.kls` is proved through the closed producer `conjecture` and the affine/isotropic reduction; source-bound evidence follows the [verification rules](../verification.md#receipts-and-trust-scope) |
@@ -28,8 +28,9 @@ form as `thm:letwin-compact-quadratic-bound` ([certificate](../../solutions/ThmL
 reduces it to the regular class `1_K exp(−W) dx`, with compact convex K and smooth uniformly convex W.
 That class is handled by `regularClass_letwinQuadraticBound` in
 [KLS/Letwin/RegularClass.lean](../../formalization/FunctionalInequalities/KLS/Letwin/RegularClass.lean). The entries below are
-**Formalized in Lean** within their displayed hypotheses; together they prove the compact stage, but they do not cover
-Letwin's paper, whose Theorem 1.2 is stated for every isotropic log-concave law.
+**Formalized in Lean** within their displayed hypotheses; together they prove the compact stage. The separate noncompact endpoint below now covers
+Theorem 1.2 for every positive-dimensional isotropic log-concave law. Letwin's paper is not
+covered because Theorem 1.1 remains open locally.
 
 | Source step / support | Lean entry and owner | Exact boundary |
 | --- | --- | --- |
@@ -64,14 +65,16 @@ Letwin's paper, whose Theorem 1.2 is stated for every isotropic log-concave law.
 | Singular extension (Lemma A.2, ⇑) | `symmetric_matrix_variance_bound_of_isUnit`, `tendsto_variance_quadratic_matrix_forms` — [Probability/QuadraticVariance.lean](../../formalization/FunctionalInequalities/Probability/QuadraticVariance.lean); `exists_symmetric_isUnit_matrix_sequence` — [Analysis/Matrix/Sign.lean](../../formalization/FunctionalInequalities/Analysis/Matrix/Sign.lean) | Every finite-fourth-moment law, every n and real C; approximation by B − r_k Id outside the spectrum, not M + εP₀; does not establish the bound |
 | Gaussian product coupling, compact dual and H⁻¹ | `gaussian_product_latent_map`, `exists_convex_smooth_potential_smoothed_linearEquiv` — [GaussianSmoothing/LinearImage.lean](../../formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/LinearImage.lean); `gaussian_product_source_stein_identity`, `gaussian_product_compact_dual_bound` — [GaussianSmoothing/ProductCoupling.lean](../../formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/ProductCoupling.lean); `gaussian_smoothed_quadratic_variance_le_latent_energy` — [GaussianSmoothing/QuadraticVariance.lean](../../formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/QuadraticVariance.lean) | s > 0; C¹ globally Lipschitz u with Lipschitz gradient and ∫ e^{−u} = 1; log-concave μ with full affine support (`affineSupport μ = ⊤`; for the regular class, μ is the original input law, log-concave by `logConcave_of_eq_regularClass` and of full affine support by isotropy); the H⁻¹ inequality on the C² convex smoothed law; no target Stein kernel |
 | Regular-class constant 8 | `regularClass_matrix_variance_le_eight`, `regularClass_letwinQuadraticBound`, `letwinQuadraticBound_of_matrix_variance_bound` — [KLS/Letwin/RegularClass.lean](../../formalization/FunctionalInequalities/KLS/Letwin/RegularClass.lean) | Exact regular-source hypotheses (n > 0, isotropic 1_K e^{−W} dx, K compact convex with nonempty interior, W smooth and κ-uniformly convex); one weak Stein witness |
-| Compact constant 8 (certified) | `letwinCompactBound` — [KLS/Letwin/CompactBound.lean](../../formalization/FunctionalInequalities/KLS/Letwin/CompactBound.lean); `Solutions.ThmLetwinCompactQuadraticBound.certificate` — [solutions/ThmLetwinCompactQuadraticBound.lean](../../solutions/ThmLetwinCompactQuadraticBound.lean) | Every n > 0, compactly supported isotropic log-concave laws, every self-adjoint form, exact 8; the noncompact Theorem 1.2 is not covered |
+| Compact constant 8 (certified) | `letwinCompactBound` — [KLS/Letwin/CompactBound.lean](../../formalization/FunctionalInequalities/KLS/Letwin/CompactBound.lean); `Solutions.ThmLetwinCompactQuadraticBound.certificate` — [solutions/ThmLetwinCompactQuadraticBound.lean](../../solutions/ThmLetwinCompactQuadraticBound.lean) | Every n > 0, compactly supported isotropic log-concave laws, every self-adjoint form, exact 8; this certificate retains its compact scope |
+| Noncompact constant 8 (local theorem) | `letwinQuadraticBound`, `matrix_variance_le_eight` — [KLS/Letwin/QuadraticBound.lean](../../formalization/FunctionalInequalities/KLS/Letwin/QuadraticBound.lean); `tendsto_integral_prod_inner_affine_cond_closedBall` — [Probability/Conditioning.lean](../../formalization/FunctionalInequalities/Probability/Conditioning.lean) | Every n > 0, isotropic log-concave laws without compact support, every self-adjoint form; exact 8 and source matrix normalization 8 tr(M²). Centered, whitened growing-ball truncations and mixed-moment limits; no new certificate or full smooth Lemma A.1 producer |
 
 Here H is the actual Hessian and T_k its coordinate weak derivative. The linked declarations
 state the complete regularity and integrability hypotheses. Generic tools retain their own
 finite-dimensional scope; actual-source producers retain n > 0 and all regular-law hypotheses.
 
-Stage 1 has no remaining obligation for the BKL consumer. The noncompact Theorem 1.2 (full Lemma A.1), Theorem 1.1,
-the smooth Lemma 2.2/Theorem 2.5 and the target Stein kernel of Lemma 2.7 are not formalized; BKL needs only the compact
+Stage 1 has no remaining obligation for the BKL consumer. The noncompact Theorem 1.2 is also
+formalized locally. The full smooth approximation of Lemma A.1, Theorem 1.1, the smooth
+Lemma 2.2/Theorem 2.5 and the target Stein kernel of Lemma 2.7 are not formalized; BKL needs only the compact
 bound. The proof used the latent source identity and the Gaussian product coupling instead of a transported target
 kernel.
 

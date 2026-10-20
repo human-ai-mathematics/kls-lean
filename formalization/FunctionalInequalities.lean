@@ -372,6 +372,7 @@ import FunctionalInequalities.KLS.BKL.Localization.CutoffEnergy.Basic
 import FunctionalInequalities.KLS.BKL.Localization.Lyapunov.Basic
 import FunctionalInequalities.KLS.BKL.Localization.Energy.Generator
 import FunctionalInequalities.KLS.Letwin.CompactBound
+import FunctionalInequalities.KLS.Letwin.QuadraticBound
 import FunctionalInequalities.KLS.Letwin.RegularClass
 import FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.LinearImage
 import FunctionalInequalities.KLS.LogConcave.Density.GaussianSmoothing.ProductCoupling

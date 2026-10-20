@@ -1,6 +1,6 @@
 # Current KLS handoff
 
-Updated 2026-10-19 for module ownership and the text/statement review.
+Updated 2026-10-20 for noncompact Letwin Theorem 1.2.
 
 ## Accepted result and open boundaries
 
@@ -13,7 +13,10 @@ The accepted chain is compact Letwin Theorem 1.2 (constant 8) → finite-horizon
 → source-form BKL Theorem 4.1 → source-form BKL Theorem 1.1 → KLS.
 The [paper register](research/progress/LITERATURE.md) owns exact scope and coverage; the
 [proof path](research/progress/PROOF-PATH.md) maps the chain to Lean and its certificates.
-BKL's main theorem is covered. Letwin's noncompact Theorems 1.1/1.2, the uncut Eldan
+BKL's main theorem is covered. Letwin's noncompact Theorem 1.2 is now proved separately
+by `KLS.LogConcave.letwinQuadraticBound`, with the source matrix form
+`matrix_variance_le_eight`, for every n > 0 and exact constant 8. Theorem 1.1, the full
+smooth regular approximation of Lemma A.1, the uncut Eldan
 construction and literal identities (68)–(73), and the separate uncut intermediate statements
 remain unformalized locally. The four exploratory routes retain their own statuses.
 
@@ -34,6 +37,15 @@ and explicit third-party compiled caches remain trusted. Known
 [vendor holes](formalization/vendor/README.md#upstream-holes) remain isolated.
 
 ## Current work and next step
+
+The 2026-10-20 local formalization batch removes compactness from Letwin Theorem 1.2 by
+conditioning on growing balls, centering and covariance whitening, and passing mixed moments
+through degree four to the limit. Generic convergence tools extend `Probability/Conditioning`;
+the paper endpoint lives in `KLS/Letwin/QuadraticBound`. The existing compact certificate and
+BKL main chain retain their scope. Lean/Mathlib remain v4.33.0; the proposed upgrade was cancelled.
+The first four Product-Lp section/averaging helpers are independently accepted locally in
+the separate Mathlib checkout; no Mathlib submission or second package is implied.
+This batch adds no paper-target certificate and does not renew remote verification.
 
 The [statement review](research/progress/statement-review.md) checks the contracts of all 34
 registered certificates against the live text, with source checks for the main BKL/Letwin

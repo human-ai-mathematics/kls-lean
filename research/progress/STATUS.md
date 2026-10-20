@@ -608,15 +608,17 @@ retain their evidence source; generating this view does not run Lean.
 | `BCUM` | BKL Theorem 4.1 in the source form, certified (Solutions.ThmBklCumulantBound): one universal K >= 1 (witness 153) such that every isotropic log-concave law in every dimension and every order m >= 2 satisfy R_m <= K^{m-1} ((m-1)!)^2 Id, with no compactness or Letwin premise; through the cutoff energy endpoint and the compact-to-general passage. The uncut Eldan process and the literal (68)-(73) are not constructed; Theorem 1.1 and KLS are not claimed. | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../solutions/ThmBklCumulantBound.lean) |
 | `BKLMAIN` | BKL Theorem 1.1 in the source form, certified (Solutions.ThmBklPoincare): one C > 0 such that every n >= 1 and every isotropic log-concave law on R^n have C_P <= C, with no compactness, regularity or moment premise; from the certified Theorems 3.1 and 4.1, Proposition 7.1 and the Section 2 regular approximation, on the cutoff localization route. The uncut Eldan process and the literal (68)-(73) are not constructed; the intermediate source statements keep their own scopes. | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../solutions/ThmBklPoincare.lean) |
 | `BKLAND` | AND — BKL Theorem 1.1 with the affine/isotropic reduction gives KLS (completed literature route; not one of the four exploratory routes) | OR | [Source](https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Target.lean) |
+| `AFFMOM` | Growing closed-ball truncations have convergent mixed moments under linear maps tending to Id and centers tending to zero; only the finite moment of the stated degree is assumed. Dominated convergence also covers varying observables. | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/Probability/Conditioning.lean) |
+| `LGENERAL8` | Letwin arXiv:2607.24164v1, Theorem 1.2, for every n > 0 and every isotropic log-concave probability law, without compact support: Var(<MX,X>) <= 8 &#124;&#124;M&#124;&#124;_HS^2 for every self-adjoint operator, and Var(sum M_ij x_i x_j) <= 8 tr(M*M) for every symmetric matrix, singular and indefinite included. Local Lean proof through centered, whitened ball truncations and moment limits; no new certificate, full smooth Lemma A.1 or Theorem 1.1 claim. | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/KLS/Letwin/QuadraticBound.lean) |
 
 ## Provenance
 
 Upstream revision: `34b5fcd57fef17089e781616005fe6d3641bd11e`. The selected upstream snapshot contains
 20 records; this register is not an inventory of the entire upstream ledger.
 
-Canonical input digest: `bc17e4e4bf00cf6d291ff90c041e7a04fbd9b62fca6a1498c5a3184e13b9e30f`.
-Diagram digest: `048a72851b51ced2c4f3e0e13b3768475d50b2e7f33ebc48aec54e14c5561c21`.
-View input digest: `34ef4a20ac96f26f8abe4664c09b06808db5eae4d83b8489168bd201fe4dda4b`.
+Canonical input digest: `07ac413394592d757bc41a85c8cbb465fe9b827aa9ce3165c7dada9d286a5b51`.
+Diagram digest: `b61f07e21c3ad360019dc07b032ceb5c9ef0f84b5ac7af9810ac2369c6f6bfe6`.
+View input digest: `cd00bfa80be93e508749fdb55e2958e075f26e9e3100055542c48c60a53dccf2`.
 
 Regenerate with `python3 research/progress/update.py` after staging the intended source and
 metadata updates; unstaged unrelated metadata is then deliberately excluded. When the

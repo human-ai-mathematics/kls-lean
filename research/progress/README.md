@@ -61,7 +61,7 @@ with its hypotheses; it does not discharge an input or cover the whole paper.
 | [Bizeul–Klartag–Lehec: Equation (95), p. 25 (proof of Theorem 4.1, Section 6)](https://arxiv.org/abs/2610.05474v1) | [`Solutions.LemBklCutoffEnergy.certificate`](../../solutions/LemBklCutoffEnergy.lean) | ◐ Partial or statement only | Finite-horizon cutoff form of (95) for every order m = d + 1 ≥ 2, with the exact ½, b_m and a universal K = 153, for every actual cutoff Eldan process; the uncut infinite-horizon (95), the uncut process and the literal (68)–(73) are not formalized. | [Item map](LITERATURE.md#bkl2026-lemma-map)<br/>[Certificate](../../solutions/LemBklCutoffEnergy.lean) |
 | [Bizeul–Klartag–Lehec: Lemma 4.3, p. 20](https://arxiv.org/abs/2610.05474v1) | [`FunctionalInequalities.Analysis.BakryEmery.iteratedFDeriv_inner_centeredGradient_zero_grouped_of_compact`](../../formalization/FunctionalInequalities/Analysis/BakryEmery/Cumulant/Leibniz.lean) | ◐ Partial or statement only | Spatial grouping and the registered compact cutoff-localization supports are available. This row is partial and does not certify an unrestricted source-form stochastic identity; the conditional Theorem 4.1 assembly is linked above. | [Item map](LITERATURE.md#bkl2026-lemma-map) |
 | [Bizeul–Klartag–Lehec: Lemma 4.2, p. 18](https://arxiv.org/abs/2610.05474v1) | [`FunctionalInequalities.KLS.LogConcave.sum_sq_cumulant_three_le_of_letwin`](../../formalization/FunctionalInequalities/KLS/BKL/LocalThirdCumulant.lean) | ◐ Partial or statement only | Conditional source-scope counterpart retaining LetwinQuadraticBound; for compact laws that input is supplied by letwinCompactBound, but this item keeps its stated hypothesis. | [Item map](LITERATURE.md#bkl2026-lemma-map) |
-| [Letwin: Theorem 1.2](https://arxiv.org/abs/2607.24164v1) | [`FunctionalInequalities.KLS.LogConcave.Suspension.letwinCompactBound`](../../formalization/FunctionalInequalities/KLS/Letwin/CompactBound.lean) | ◐ Partial or statement only | Exact compact counterpart proved and certified: every n > 0, compactly supported isotropic log-concave laws, every self-adjoint form, constant 8. The noncompact theorem (full Lemma A.1) is not formalized. | [Item map](LITERATURE.md#letwin2026-lemma-map)<br/>[Certificate](../../solutions/ThmLetwinCompactQuadraticBound.lean) |
+| [Letwin: Theorem 1.2](https://arxiv.org/abs/2607.24164v1) | [`FunctionalInequalities.KLS.LogConcave.Suspension.letwinCompactBound`](../../formalization/FunctionalInequalities/KLS/Letwin/CompactBound.lean) | ✓ Formalized in Lean | Exact compact counterpart proved and certified: every n > 0, compactly supported isotropic log-concave laws, every self-adjoint form, constant 8. The noncompact theorem (full Lemma A.1) is not formalized. | [Item map](LITERATURE.md#letwin2026-lemma-map)<br/>[Certificate](../../solutions/ThmLetwinCompactQuadraticBound.lean) |
 | [Letwin: Theorem 2.5](https://arxiv.org/abs/2607.24164v1) | [`FunctionalInequalities.Analysis.symmetric_trace_integral_extension`](../../formalization/FunctionalInequalities/Analysis/Matrix/Integral.lean) | ◐ Partial or statement only | Matrix, cutoff, given-potential trace/BL and weak-symmetry/mollification supports are proved. The weak R0 regularity package, the weak C1,1 generator identities of (2.2), the integrated Hessian-increment energy estimate (N11b), the original weak third-derivative tensor (N11d) and its source-law application producing actual weak locally L2 derivatives of the Hessian entries (the potential's weak third-derivative tensor) from the exact R0 hypotheses are formalized, together with weak product and finite polynomial calculus (weak determinant, first weak derivative of tr(BHBH)) for bounded Hessian entries with compact-local L2 derivatives; the identification of the weak determinant density with the outer Jacobi differential; and the actual-source first weak Monge-Ampere identity (2.4) with weak log-det derivative tr(H^-1 T_k); and the actual-source weak inverse formula (2.5) with compact-local L2 derivatives and compact-local essential inverse bounds; the rough compact curl identity, the C1 unprimed generator identity and the actual-source mean Hessian Id; the actual-source weighted weak second evolution identity (2.6) and its bounded H1 testing against psi * H_lk; the actual C1 weak inverse-Hessian height cutoffs with C/R generator defect at the same source witness; and, at the same actual source witness, the weak trace contraction (2.8)/(2.10), A.5 consumption, the (2.14) comparison, the weak Brascamp-Lieb consumer and the all-symmetric trace bound E_nu tr(BHBH) <= 2 tr(B^2) (weak C^{1,1} form, exact constant 2). The smooth source theorem is not covered. | [Item map](LITERATURE.md#letwin2026-lemma-map) |
 | [Letwin: Lemma 2.1 (Cordero-Erausquin and Klartag [21, Theorem 2])](https://arxiv.org/abs/2607.24164v1) | [`FunctionalInequalities.KLS.CEK.exists_momentMap_of_isotropic_of_ae_norm_le`](../../formalization/FunctionalInequalities/KLS/CEK/MomentMap.lean) | ◐ Partial or statement only | Actual moment-map existence and pushforward for bounded isotropic probability laws. General finite-mass/unbounded existence and uniqueness, and source smooth regularity, remain open. | [Item map](LITERATURE.md#letwin2026-lemma-map) |
 
@@ -83,7 +83,7 @@ Every proof task must first pin its paper version, theorem, hypotheses and const
 | 3 | [Kannan–Lovász–Simonovits](https://link.springer.com/article/10.1007/BF02574061)<br/>Theorem 5.1, ψ(K) ≥ ln 2 / M₁(K) for convex bodies, through the needle reduction (Corollary 2.2, Lemma 2.6, Theorem 2.7). With the local Cheeger inequality it gives C_P ≲ E‖X − EX‖² for convex bodies. | Deferred as an independent paper target under the 2026-10-10 BKL-first scope. Resume only for a reviewed referenced result or necessary prerequisite with an explicit BKL proof consumer; existing formalization and certificates are retained. |
 | 4 | [E. Milman](https://arxiv.org/abs/0712.4092)<br/>Concentration implies a Cheeger bound under the source convexity hypotheses. | Deferred as an independent paper target under the 2026-10-10 BKL-first scope. Resume only for a reviewed referenced result or necessary prerequisite with an explicit BKL proof consumer; existing formalization and certificates are retained. |
 | 5 | [Eldan](https://arxiv.org/abs/1203.0893), [Lee–Vempala](https://annals.math.princeton.edu/2024/199-3/p02), [Chen](https://arxiv.org/abs/2011.13661), [Klartag–Lehec](https://arxiv.org/html/2203.15551v2), [Klartag](https://arxiv.org/html/2303.14938v2)<br/>Published stochastic-localization theorems and quantitative KLS bounds. | Deferred as an independent paper target under the 2026-10-10 BKL-first scope. Resume only for a reviewed referenced result or necessary prerequisite with an explicit BKL proof consumer; existing formalization and certificates are retained. |
-| 6 | [Klartag–Lehec](https://arxiv.org/abs/2507.15495v2), [Chen–Klartag](https://arxiv.org/html/2607.23307v1), [Letwin](https://arxiv.org/html/2607.24164v1)<br/>Selected 2025–2026 thin-shell and quadratic-form results. | Deferred as an independent paper target under the 2026-10-10 BKL-first scope. Resume only for a reviewed referenced result or necessary prerequisite with an explicit BKL proof consumer; existing formalization and certificates are retained. |
+| 6 | [Klartag–Lehec](https://arxiv.org/abs/2507.15495v2), [Chen–Klartag](https://arxiv.org/html/2607.23307v1), [Letwin](https://arxiv.org/html/2607.24164v1)<br/>Selected 2025–2026 thin-shell and quadratic-form results. Letwin Theorem 1.2 is now formalized locally without compact support, with exact constant 8; Theorem 1.1 and the full smooth regular approximation remain separate. | The 2026-10-20 maintenance scope completes and verifies the noncompact quadratic bound after the accepted BKL main line. Retain the compact certificate and the separate noncompact theorem; select a new pinned literature target before further proof construction. The other thin-shell sources remain deferred. |
 <!-- END GENERATED PRIORITIES -->
 
 ## Paper lemma map
@@ -337,7 +337,7 @@ to those historical routes. Formalized results, refuted claims and shared analyt
 retain their existing states; the neutral badges distinguish research records from pending work.
 
 <!-- BEGIN GENERATED DATE -->
-Last updated: **2026-10-19**.
+Last updated: **2026-10-20**.
 
 ![✓ Formalized in Lean](badges/formalized.svg) · ![○ Not yet formalized](badges/pending.svg) · ![◐ Partially formalized](badges/partial.svg) · ![◇ Open hypothesis, not a target](badges/hypothesis.svg) · ![○ Not formalized, superseded route](badges/superseded.svg) · ![— Excluded: refuted](badges/excluded.svg)
 
@@ -349,9 +349,14 @@ in Lean. The general π bound uses actual Gaussian smoothing and a Cheeger test 
 argument; no individual-domain perimeter limit is asserted.
 The scoped metric BV comparison includes closed-support identification for finite-dimensional
 log-concave laws, exact test-class relaxation infima, and relaxed lower Minkowski content.
-**Next step:** select a pinned target from the
-[literature priorities](#literature-priorities) before beginning further proof work, following
-the [placement and delivery workflow](../workflow.md).
+**Current task:** verify the noncompact Letwin Theorem 1.2 endpoint and its moment-limit tools,
+with the hypotheses and exact constant 8 retained. Theorem 1.1 and the full smooth
+approximation remain outside this batch.
+
+**Library use:** exercise the accepted KLS bound through the
+[calling examples](../../examples/README.md) and
+[separate-project walkthrough](../../examples/FIRST-USE.md). Select any further proof target
+from the [literature priorities](#literature-priorities) before beginning new mathematics.
 The following scope summary records earlier supporting work, rather than the active work queue.
 The ADMG Theorem 3.6 paper-target certificate is remotely certified
 (see the [paper lemma map](#paper-lemma-map)).
@@ -499,7 +504,7 @@ flowchart LR
     VFULL["✓ C¹ vector coarea<br/>Rank-deficient part closed"]
     VLIP["✓ Vector coarea<br/>Lipschitz and local"]
     end
-    subgraph LETWINWEAK["Letwin constant 8 — compact bound proved; weak regularity, Gaussian route and endpoint"]
+    subgraph LETWINWEAK["Letwin constant 8 — compact and noncompact bounds; weak regularity and Gaussian route"]
     CEKMAP["✓ Bounded CEK source<br/>Actual moment map"]
     WEAKHESS["✓ C1 Hessian<br/>Gradient derivative at a point"]
     REGMOM["✓ Regular-class R0<br/>C1,1 and a.e. Hessian package"]
@@ -604,6 +609,8 @@ flowchart LR
     OPMAT["✓ Operator and matrix<br/>forms of the bound"]
     REGCLASS8["✓ Regular class<br/>constant 8"]
     LCOMPACT8["✓ Compact Letwin bound<br/>constant 8 (certified)"]
+    AFFMOM["✓ Truncated affine laws<br/>mixed moments converge"]
+    LGENERAL8["✓ Letwin Theorem 1.2<br/>constant 8, no compactness"]
     end
     subgraph BKLCUTOFF["BKL cutoff localization — supporting endpoint; uncut process open"]
     BCUT["✓ BKL (95) cutoff<br/>energy induction (certified)"]
@@ -840,8 +847,10 @@ flowchart LR
     BKLMAIN --> BKLAND
     NORM --> BKLAND
     BKLAND --> KLS
+    LCOMPACT8 --> LGENERAL8
+    AFFMOM --> LGENERAL8
     classDef done fill:#dbeafe,stroke:#2563eb,color:#1e3a8a;
-    class KLS,ENERGY,F4,MT,FP,FC,EQ,NORM,DENS,FRONT,CB,ONE,CONST,FORMS,MEAS,GRAPH,REG,CRIT,C1,WHIT,LIP,GG,REC,FWD,SARD,SCI,CUT,REV,MINK,BV,FLOG,VREG,VZERO,VR123,VR4,VFULL,SEMI,MARKOV,DECAY,GAUSS,GSTAB,VLIP,BT31,BP71,BREG,WEAKHESS,CEKMAP,REGMOM,WEAKINVINT,WEAKGEN,HESSENT,CDIFF,WEAKGENINT,INCINT,INCENERGY,TRANSCUT,HESSL2,HESSDIFF,WEAKTHIRD,SRCDIFF,EXPLIP,REGTENSOR,WPRODG,WPRODL,WLIN,WFPROD,WDET,WTRACE,WJAC,EXPHALF,WAECONGR,AEEXP,WMA1,WEXPNEG,WPRODLB,WMATINV,WADJ,WINVH,WINV,WSMOOTH,WCURL,WEAKGENC1,MEANC11,WMEANH,WBAPPROX,WBTEST,WINVROW,WGRADCOMP,WMARHS,WFLUXLOC,WFLUX,WEVOL,WEVOLB,WEVOLSRC,WHTEST,WCUTR,WCUTN,WCUTSRC,WCFLUX,WBTRQ,WROUGH,WTRCON,TRPOS,TRGRAM,WCUTTEST,WLAP,C11COER,WBL,MPTRACE,MVAR,WT25,SYMAE,S1,WIBP,C1CHAIN,SRCSTEIN,DUALB,GAUSSID,WSTEINSRC,MNTRACE,SPECGEO,SYMINV,MTRMEAN,HSSYM,GRADAFF,ACTALG,HESSACT,QACTION,SIGNNOISE,NOISEINT,QFOURTH,FINVAR,QVARCONT,LA2EXT,NOISECONV,G4MOM,GTRANS,GLATENT,GPOT,SRCAFF,GPRODSTEIN,GPRODDUAL,NOISELIM,GSMVAR,GHMINUS,RESTEXP,OPMAT,REGCLASS8,LCOMPACT8,BCUT,BCUM,BKLMAIN done;
+    class KLS,ENERGY,F4,MT,FP,FC,EQ,NORM,DENS,FRONT,CB,ONE,CONST,FORMS,MEAS,GRAPH,REG,CRIT,C1,WHIT,LIP,GG,REC,FWD,SARD,SCI,CUT,REV,MINK,BV,FLOG,VREG,VZERO,VR123,VR4,VFULL,SEMI,MARKOV,DECAY,GAUSS,GSTAB,VLIP,BT31,BP71,BREG,WEAKHESS,CEKMAP,REGMOM,WEAKINVINT,WEAKGEN,HESSENT,CDIFF,WEAKGENINT,INCINT,INCENERGY,TRANSCUT,HESSL2,HESSDIFF,WEAKTHIRD,SRCDIFF,EXPLIP,REGTENSOR,WPRODG,WPRODL,WLIN,WFPROD,WDET,WTRACE,WJAC,EXPHALF,WAECONGR,AEEXP,WMA1,WEXPNEG,WPRODLB,WMATINV,WADJ,WINVH,WINV,WSMOOTH,WCURL,WEAKGENC1,MEANC11,WMEANH,WBAPPROX,WBTEST,WINVROW,WGRADCOMP,WMARHS,WFLUXLOC,WFLUX,WEVOL,WEVOLB,WEVOLSRC,WHTEST,WCUTR,WCUTN,WCUTSRC,WCFLUX,WBTRQ,WROUGH,WTRCON,TRPOS,TRGRAM,WCUTTEST,WLAP,C11COER,WBL,MPTRACE,MVAR,WT25,SYMAE,S1,WIBP,C1CHAIN,SRCSTEIN,DUALB,GAUSSID,WSTEINSRC,MNTRACE,SPECGEO,SYMINV,MTRMEAN,HSSYM,GRADAFF,ACTALG,HESSACT,QACTION,SIGNNOISE,NOISEINT,QFOURTH,FINVAR,QVARCONT,LA2EXT,NOISECONV,G4MOM,GTRANS,GLATENT,GPOT,SRCAFF,GPRODSTEIN,GPRODDUAL,NOISELIM,GSMVAR,GHMINUS,RESTEXP,OPMAT,REGCLASS8,LCOMPACT8,BCUT,BCUM,BKLMAIN,AFFMOM,LGENERAL8 done;
     classDef partial fill:#fff3df,stroke:#c88719,color:#66420d;
     class FAND,BE,HEAT partial;
     classDef hypothesis fill:#f1f5f9,stroke:#64748b,color:#334155;
@@ -1018,6 +1027,8 @@ flowchart LR
     click BCUM href "../../solutions/ThmBklCumulantBound.lean" "BKL Theorem 4.1 — cumulant bound (certified)" _blank
     click BKLMAIN href "../../solutions/ThmBklPoincare.lean" "BKL Theorem 1.1 — dimension-free Poincaré (certified)" _blank
     click BKLAND href "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Target.lean" "AND — BKL route" _blank
+    click AFFMOM href "../../formalization/FunctionalInequalities/Probability/Conditioning.lean" "Truncated affine laws — mixed moments converge" _blank
+    click LGENERAL8 href "../../formalization/FunctionalInequalities/KLS/Letwin/QuadraticBound.lean" "Letwin Theorem 1.2 — constant 8, no compactness" _blank
 ```
 <!-- END GENERATED TREE -->
 
@@ -1258,6 +1269,8 @@ The [full node register](STATUS.md) separately lists definitions and registered 
 | BKL (95) cutoff — energy induction (certified) | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../solutions/LemBklCutoffEnergy.lean) |
 | BKL Theorem 4.1 — cumulant bound (certified) | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../solutions/ThmBklCumulantBound.lean) |
 | BKL Theorem 1.1 — dimension-free Poincaré (certified) | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../solutions/ThmBklPoincare.lean) |
+| Truncated affine laws — mixed moments converge | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/Probability/Conditioning.lean) |
+| Letwin Theorem 1.2 — constant 8, no compactness | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/KLS/Letwin/QuadraticBound.lean) |
 <!-- END GENERATED RESULTS -->
 
 ### Benchmarks and upstream research beyond the four route gates
@@ -1465,6 +1478,8 @@ Every node has a link. If diagram links are disabled in your viewer, use this di
 | BKL Theorem 4.1 — cumulant bound (certified) | [Source](../../solutions/ThmBklCumulantBound.lean) |
 | BKL Theorem 1.1 — dimension-free Poincaré (certified) | [Source](../../solutions/ThmBklPoincare.lean) |
 | AND — BKL route | [Source](https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Target.lean) |
+| Truncated affine laws — mixed moments converge | [Source](../../formalization/FunctionalInequalities/Probability/Conditioning.lean) |
+| Letwin Theorem 1.2 — constant 8, no compactness | [Source](../../formalization/FunctionalInequalities/KLS/Letwin/QuadraticBound.lean) |
 <!-- END GENERATED LINKS -->
 
 </details>

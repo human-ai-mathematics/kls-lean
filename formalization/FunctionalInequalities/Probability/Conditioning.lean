@@ -1,5 +1,6 @@
 import FunctionalInequalities.Probability.Moments
 import Mathlib.Probability.ConditionalProbability
+import Mathlib.MeasureTheory.Integral.DominatedConvergence
 import Mathlib.MeasureTheory.Measure.ProbabilityMeasure
 import Mathlib.MeasureTheory.Measure.Portmanteau
 
@@ -11,6 +12,11 @@ import Mathlib.MeasureTheory.Measure.Portmanteau
 change of the integral of a measurable observable of at most degree-four growth under this conditioning by the
 eighth-moment tail, with all integrabilities derived (Letwin's conditioning step, as used for BKL arXiv:2610.05474v1;
 the moment tails are `Probability/Moments.lean`, section `MomentTails`).
+
+For expanding closed balls, `tendsto_integral_cond_closedBall_of_dominated` gives dominated
+convergence with varying observables. `tendsto_integral_prod_inner_affine_cond_closedBall`
+allows near-identity linear maps and vanishing centers, using only the stated finite moment;
+this supplies the noncompact approximation step for Letwin arXiv:2607.24164v1, Theorem 1.2.
 -/
 
 noncomputable section
@@ -231,6 +237,123 @@ theorem abs_integral_conditionOnBall_sub_le (ν : ProbabilityMeasure E) {R C : �
     refine ⟨hfν, hfcond, h4', ?_, ?_⟩
     · simpa [μ, B, p, I, K] using hmain
     · simpa [μ, B, p, I, A] using le_trans hmain hquant
+
+open ProbabilityTheory Filter Topology
+
+section GrowingBalls
+variable {E G : Type*} [NormedAddCommGroup E] [MeasurableSpace E] [BorelSpace E]
+  [NormedAddCommGroup G] [NormedSpace ℝ G]
+
+/-- Dominated convergence for varying observables under conditioning on expanding closed balls.
+The domination and measurability assumptions are needed only eventually. -/
+theorem tendsto_integral_cond_closedBall_of_dominated
+    (μ : Measure E) [IsProbabilityMeasure μ] {F : ℕ → E → G} {f : E → G}
+    (bound : E → ℝ) (hbound : Integrable bound μ)
+    (hF : ∀ᶠ R in atTop, AEStronglyMeasurable (F R) μ)
+    (hdom : ∀ᶠ R in atTop, ∀ᵐ x ∂μ, ‖F R x‖ ≤ bound x)
+    (hlim : ∀ᵐ x ∂μ, Tendsto (fun R => F R x) atTop (𝓝 (f x))) :
+    Tendsto (fun R : ℕ => ∫ x, F R x ∂(μ[|Metric.closedBall (0 : E) R]))
+      atTop (𝓝 (∫ x, f x ∂μ)) := by
+  classical
+  let B (R : ℕ) := Metric.closedBall (0 : E) (R : ℝ)
+  have hB (R : ℕ) : MeasurableSet (B R) := Metric.isClosed_closedBall.measurableSet
+  have hmono : Monotone B := fun m n hmn =>
+    Metric.closedBall_subset_closedBall (by exact_mod_cast hmn)
+  have hmass : Tendsto (fun R => μ (B R)) atTop (𝓝 1) := by
+    have h := tendsto_measure_iUnion_atTop (μ := μ) hmono
+    simpa [B, Metric.iUnion_closedBall_nat, Function.comp_def] using h
+  have hinv : Tendsto (fun R => ((μ (B R))⁻¹).toReal) atTop (𝓝 (1 : ℝ)) := by
+    have h := (ENNReal.tendsto_toReal ENNReal.one_ne_top).comp hmass
+    simpa only [Function.comp_def, ENNReal.toReal_one, ENNReal.toReal_inv, inv_one] using
+      h.inv₀ (by simp)
+  have hint : Tendsto (fun R => ∫ x in B R, F R x ∂μ) atTop (𝓝 (∫ x, f x ∂μ)) := by
+    simp only [← integral_indicator (hB _)]
+    apply tendsto_integral_filter_of_dominated_convergence bound
+    · exact hF.mono fun R h => h.indicator (hB R)
+    · filter_upwards [hdom] with R hR
+      filter_upwards [hR] with x hx
+      by_cases hxB : x ∈ B R
+      · simpa [Set.indicator_of_mem hxB] using hx
+      · simpa [Set.indicator_of_notMem hxB] using (norm_nonneg (F R x)).trans hx
+    · exact hbound
+    · filter_upwards [hlim] with x hx
+      apply hx.congr'
+      have hxB : ∀ᶠ R : ℕ in atTop, x ∈ B R := by
+        obtain ⟨N, hN⟩ := exists_nat_ge ‖x‖
+        filter_upwards [eventually_ge_atTop N] with R hR
+        exact mem_closedBall_zero_iff.mpr (hN.trans (by exact_mod_cast hR))
+      exact hxB.mono fun R hR => (Set.indicator_of_mem hR _).symm
+  have h := hinv.smul hint
+  simpa only [one_smul, ProbabilityTheory.cond, integral_smul_measure] using h
+
+/-- Every integrable observable has convergent expectations under growing ball truncations. -/
+theorem tendsto_integral_cond_closedBall
+    (μ : Measure E) [IsProbabilityMeasure μ] {f : E → G} (hf : Integrable f μ) :
+    Tendsto (fun R : ℕ => ∫ x, f x ∂(μ[|Metric.closedBall (0 : E) R]))
+      atTop (𝓝 (∫ x, f x ∂μ)) :=
+  tendsto_integral_cond_closedBall_of_dominated μ (fun x => ‖f x‖) hf.norm
+    (Eventually.of_forall fun _ => hf.aestronglyMeasurable)
+    (Eventually.of_forall fun _ => ae_of_all _ fun _ => le_rfl)
+    (ae_of_all _ fun _ => tendsto_const_nhds)
+
+end GrowingBalls
+
+section AffineMoments
+variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+  [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
+open scoped RealInnerProductSpace
+
+/-- Mixed moments of growing ball truncations are stable under linear maps tending to the
+identity and centers tending to zero. Only the moment of the stated degree is required. -/
+theorem tendsto_integral_prod_inner_affine_cond_closedBall
+    (μ : Measure E) [IsProbabilityMeasure μ] (d : ℕ)
+    (hpow : Integrable (fun x : E => ‖x‖ ^ d) μ)
+    (A : ℕ → E →L[ℝ] E) (c : ℕ → E)
+    (hA : Tendsto A atTop (𝓝 1)) (hc : Tendsto c atTop (𝓝 0)) (v : Fin d → E) :
+    Tendsto (fun R : ℕ => ∫ x, ∏ i, ⟪v i, A R (x - c R)⟫
+        ∂(μ[|Metric.closedBall (0 : E) R])) atTop (𝓝 (∫ x, ∏ i, ⟪v i, x⟫ ∂μ)) := by
+  let C : ℝ := ‖(1 : E →L[ℝ] E)‖ + 1
+  have hC : 0 ≤ C := by dsimp [C]; positivity
+  have hAp : ∀ᶠ R in atTop, ‖A R‖ ≤ C :=
+    (hA.norm.eventually (gt_mem_nhds (lt_add_one _))).mono fun _ h => h.le
+  have hcp : ∀ᶠ R in atTop, ‖c R‖ ≤ 1 := by
+    have h := hc.norm.eventually (gt_mem_nhds (show ‖(0 : E)‖ < 1 by simp))
+    exact h.mono fun _ h => h.le
+  have hint : Integrable (fun x : E => (‖x‖ + 1) ^ d) μ := by
+    refine ((hpow.add (integrable_const (1 : ℝ))).const_mul (2 ^ (d - 1))).mono'
+      (by fun_prop) (ae_of_all _ fun x => ?_)
+    rw [Real.norm_of_nonneg (by positivity)]
+    simpa using add_pow_le (norm_nonneg x) (zero_le_one' ℝ) d
+  apply tendsto_integral_cond_closedBall_of_dominated μ
+    (fun x => C ^ d * (‖x‖ + 1) ^ d * ∏ i, ‖v i‖)
+    ((hint.const_mul _).mul_const _)
+  · exact Eventually.of_forall fun _ => (by fun_prop : Continuous _).aestronglyMeasurable
+  · filter_upwards [hAp, hcp] with R hAR hcR
+    exact ae_of_all _ fun x => by
+      have hx : ‖A R (x - c R)‖ ≤ C * (‖x‖ + 1) := by
+        calc
+          _ ≤ ‖A R‖ * ‖x - c R‖ := (A R).le_opNorm _
+          _ ≤ C * (‖x‖ + 1) := mul_le_mul hAR
+            ((norm_sub_le _ _).trans (add_le_add_right hcR _)) (norm_nonneg _) hC
+      calc
+        ‖∏ i, ⟪v i, A R (x - c R)⟫‖ ≤ ∏ i, ‖v i‖ * (C * (‖x‖ + 1)) := by
+          rw [norm_prod]
+          apply Finset.prod_le_prod (fun _ _ => norm_nonneg _)
+          intro i _
+          exact (norm_inner_le_norm _ _).trans (mul_le_mul_of_nonneg_left hx (norm_nonneg _))
+        _ = C ^ d * (‖x‖ + 1) ^ d * ∏ i, ‖v i‖ := by
+          rw [Finset.prod_mul_distrib]; simp [mul_pow]; ring
+  · exact ae_of_all _ fun x => by
+      have hx : Tendsto (fun R => A R (x - c R)) atTop (𝓝 x) := by
+        have heval : Continuous (fun p : (E →L[ℝ] E) × E => p.1 p.2) :=
+          continuous_fst.clm_apply continuous_snd
+        have hsub : Tendsto (fun R => x - c R) atTop (𝓝 x) := by
+          simpa only [sub_zero] using (tendsto_const_nhds (x := x)).sub hc
+        simpa only [Function.comp_def, one_apply_eq_self] using (heval.tendsto (1, x)).comp
+          (hA.prodMk_nhds hsub)
+      exact tendsto_finsetProd _ fun i _ => tendsto_const_nhds.inner hx
+
+end AffineMoments
 
 end FunctionalInequalities.Probability
 

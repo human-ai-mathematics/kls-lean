@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "last_updated": "2026-10-19",
+  "last_updated": "2026-10-20",
   "route_display": {
     "accepted_main_line": "diagram:BKLAND",
     "shared_groups": [
@@ -2584,6 +2584,44 @@
         "source": "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Target.lean",
         "shape": "diamond"
       }
+    },
+    "diagram:AFFMOM": {
+      "description": "Growing closed-ball truncations have convergent mixed moments under linear maps tending to Id and centers tending to zero; only the finite moment of the stated degree is assumed. Dominated convergence also covers varying observables.",
+      "assessment": {
+        "state": "formalized",
+        "evidence": {
+          "kind": "reviewed_progress",
+          "source": "../../formalization/FunctionalInequalities/Probability/Conditioning.lean",
+          "sha256": "76543a9883cc7ae3c7fe7e29bf9d467675ef1f1210d6778faf632e07fb09b32a",
+          "note": "Strict source compilation and research/audits/Letwin/QuadraticBound.lean; current local source, not remote certification."
+        },
+        "kind": "auxiliary"
+      },
+      "diagram": {
+        "id": "AFFMOM",
+        "label": "Truncated affine laws<br/>mixed moments converge",
+        "source": "../../formalization/FunctionalInequalities/Probability/Conditioning.lean",
+        "shape": "box"
+      }
+    },
+    "diagram:LGENERAL8": {
+      "description": "Letwin arXiv:2607.24164v1, Theorem 1.2, for every n > 0 and every isotropic log-concave probability law, without compact support: Var(<MX,X>) <= 8 ||M||_HS^2 for every self-adjoint operator, and Var(sum M_ij x_i x_j) <= 8 tr(M*M) for every symmetric matrix, singular and indefinite included. Local Lean proof through centered, whitened ball truncations and moment limits; no new certificate, full smooth Lemma A.1 or Theorem 1.1 claim.",
+      "assessment": {
+        "state": "formalized",
+        "evidence": {
+          "kind": "reviewed_progress",
+          "source": "../../formalization/FunctionalInequalities/KLS/Letwin/QuadraticBound.lean",
+          "sha256": "3b67668ac3f15337fbbf54d836ac601fb206c56f2803d0ac4d5deb3d83d9812b",
+          "note": "Strict source compilation and research/audits/Letwin/QuadraticBound.lean; current local source, not remote certification."
+        },
+        "kind": "auxiliary"
+      },
+      "diagram": {
+        "id": "LGENERAL8",
+        "label": "Letwin Theorem 1.2<br/>constant 8, no compactness",
+        "source": "../../formalization/FunctionalInequalities/KLS/Letwin/QuadraticBound.lean",
+        "shape": "box"
+      }
     }
   },
   "diagram": {
@@ -2693,7 +2731,7 @@
       },
       {
         "id": "LETWINWEAK",
-        "title": "Letwin constant 8 — compact bound proved; weak regularity, Gaussian route and endpoint",
+        "title": "Letwin constant 8 — compact and noncompact bounds; weak regularity and Gaussian route",
         "nodes": [
           "CEKMAP",
           "WEAKHESS",
@@ -2798,7 +2836,9 @@
           "RESTEXP",
           "OPMAT",
           "REGCLASS8",
-          "LCOMPACT8"
+          "LCOMPACT8",
+          "AFFMOM",
+          "LGENERAL8"
         ]
       },
       {
@@ -3926,6 +3966,16 @@
       {
         "from": "BKLAND",
         "to": "KLS",
+        "kind": "dependency"
+      },
+      {
+        "from": "LCOMPACT8",
+        "to": "LGENERAL8",
+        "kind": "dependency"
+      },
+      {
+        "from": "AFFMOM",
+        "to": "LGENERAL8",
         "kind": "dependency"
       }
     ]

@@ -7832,7 +7832,7 @@
       "url": "https://arxiv.org/html/2607.24164v1",
       "locator": "Theorems 1.1 and 1.2",
       "result": "For isotropic log-concave X and symmetric M, Var(XᵀMX) ≤ 8‖M‖²_HS = 2 E‖∇(XᵀMX)‖². For n ≥ 2, ψₙ = O((log n)^(1/4)), hence C_P = O(√log n).",
-      "remaining": "Formalized: the compact counterpart of Theorem 1.2 with the exact constant 8. letwinCompactBound : LetwinCompactBound gives, for every n > 0, every compactly supported isotropic log-concave law and every self-adjoint quadratic form (singular and indefinite included), variance at most 8 times the squared Hilbert-Schmidt norm; it is the supporting certificate thm:letwin-compact-quadratic-bound. Its proof reduces the compact case to the regular class 1_K e^{-W} dx (the compact case of Lemma A.1) and works at one actual weak C^{1,1} moment witness of that class: bounded moment-map existence and pushforward (Lemma 2.1 for bounded laws), the weak Monge-Ampere identities (Lemma 2.4 in weak form), Lemma 2.3 for that potential, the weak trace contraction and Theorem 2.5's bound E tr(B Hess u B Hess u) <= 2 tr(B^2) for every real symmetric B in weak form, and the bounded-Lipschitz source Stein identity; then the Gaussian product coupling with the compact dual bound, the H^-1 step on the Gaussian-smoothed law (Proposition 2.8), the spectral noise energy and the singular extension (Lemma A.2, stronger form). Not formalized: Theorem 1.1; the noncompact Theorem 1.2 and the full Lemma A.1; Theorem 2.5 and Lemma 2.2 as stated for the smooth moment map; the target Stein kernel of Lemma 2.7; and general finite-mass or unbounded moment-map existence and uniqueness. The other supporting results keep their recorded scopes in the lemma map. No Letwin paper-target certificate is registered, so the paper is not covered.",
+      "remaining": "Formalized: Theorem 1.2 with the exact constant 8 for all positive-dimensional isotropic log-concave probability laws, including noncompact support. letwinQuadraticBound and matrix_variance_le_eight remove compactness using centered, covariance-whitened growing-ball truncations and moment convergence. The existing compact certificate is retained separately: letwinCompactBound : LetwinCompactBound gives, for every n > 0, every compactly supported isotropic log-concave law and every self-adjoint quadratic form (singular and indefinite included), variance at most 8 times the squared Hilbert-Schmidt norm; it is the supporting certificate thm:letwin-compact-quadratic-bound. Its proof reduces the compact case to the regular class 1_K e^{-W} dx (the compact case of Lemma A.1) and works at one actual weak C^{1,1} moment witness of that class: bounded moment-map existence and pushforward (Lemma 2.1 for bounded laws), the weak Monge-Ampere identities (Lemma 2.4 in weak form), Lemma 2.3 for that potential, the weak trace contraction and Theorem 2.5's bound E tr(B Hess u B Hess u) <= 2 tr(B^2) for every real symmetric B in weak form, and the bounded-Lipschitz source Stein identity; then the Gaussian product coupling with the compact dual bound, the H^-1 step on the Gaussian-smoothed law (Proposition 2.8), the spectral noise energy and the singular extension (Lemma A.2, stronger form). Not formalized: Theorem 1.1; the full smooth regular approximation of Lemma A.1; Theorem 2.5 and Lemma 2.2 as stated for the smooth moment map; the target Stein kernel of Lemma 2.7; and general finite-mass or unbounded moment-map existence and uniqueness. The other supporting results keep their recorded scopes in the lemma map. No Letwin paper-target certificate is registered, so the paper is not covered.",
       "local_results": [
         {
           "node": "lem:letwin-support-identities",
@@ -8324,14 +8324,18 @@
         },
         {
           "node": "thm:letwin-compact-quadratic-bound",
-          "scope": "letwinCompactBound : LetwinCompactBound: for every n > 0, every compactly supported isotropic log-concave law and every self-adjoint form (singular and indefinite included), variance at most 8 times the squared Hilbert-Schmidt norm in the standard orthonormal basis. Exact compact counterpart of Letwin Theorem 1.2, certified in source form; the noncompact theorem is not covered."
+          "scope": "letwinCompactBound : LetwinCompactBound: for every n > 0, every compactly supported isotropic log-concave law and every self-adjoint form (singular and indefinite included), variance at most 8 times the squared Hilbert-Schmidt norm in the standard orthonormal basis. Exact compact counterpart of Letwin Theorem 1.2, certified in source form; this certificate retains its compact scope; the separate noncompact endpoint is now formalized as letwinQuadraticBound."
+        },
+        {
+          "node": "diagram:LGENERAL8",
+          "scope": "Theorem 1.2 for every n > 0 and every isotropic log-concave probability law, without compact support: variance <= 8 times squared Hilbert-Schmidt norm for every self-adjoint operator; source matrix form <= 8 tr(M*M), singular and indefinite included. Local proof, no new certificate or Theorem 1.1 coverage."
         }
       ],
       "diagram": "27 July 2026 · Letwin<br/>ψₙ = O((log n)^(1/4))",
       "lemma_map": {
         "source_version": "arXiv:2607.24164v1",
         "source_url": "https://arxiv.org/abs/2607.24164v1",
-        "reviewed_on": "2026-10-03",
+        "reviewed_on": "2026-10-20",
         "standing_assumptions": "Probability measures on R^n, n >= 2; log-concave means a log-concave density on the affine hull of the support (Borell); isotropic means mean 0 and covariance Id. C_P is the optimal Poincare constant for locally Lipschitz tests, psi_mu the inverse isoperimetric (Cheeger) constant with min{mu(A), 1 - mu(A)} denominator over smooth-boundary open sets, psi_n = sup psi_mu over isotropic log-concave mu on R^n. Throughout Section 2 and Appendix A (except Lemmas A.1, A.2 and the general Stein-kernel statements Definition 2.6, Proposition 2.8, Lemmas 2.9 and A.7) mu is regular: dmu = e^{-V} 1_K dx with K bounded open convex and V smooth convex near the closure of K; phi is its moment map, nu = e^{-phi} dy, (phi^{ij}) = (Hess phi)^{-1}, L f = phi^{ij} d_ij f - (V_i o grad phi) d_i f, Einstein summation. C denotes absolute constants. All 18 numbered environments share one per-section counter (Theorem 1.1-1.2; Lemma 2.1-2.4, Theorem 2.5, Definition 2.6, Lemma 2.7, Proposition 2.8, Lemma 2.9; Lemma A.1-A.7) and are listed; the unnumbered definitions, the comparison display and the conjecture statement of Section 1 are listed because Lean declarations state them.",
         "omitted": "The paper has no Remark, Corollary, Fact, Claim or Conjecture environment. Omitted unnumbered material: the expository discussion after Theorem 1.2 (sharpness of the constant 2 for the isotropic exponential vector with M = Id, recorded in the note of T12, and the Bobkov-Chistyakov-Gotze second-order correlation consequence), Eldan's parameter kappa_n (defined inside the proof of Theorem 1.1, recorded in the note of T11), the Notation and AI Disclosure subsections, the footnote to Theorem 2.5, and the motivating remarks before Lemma 2.3 and before the proof of Theorem 1.2. Display (2.3) is now listed as E23. Numbered displays (1.2)-(2.22) are recorded with the statements they belong to: (1.2) in T12, (2.1) in LA3, (2.2)-(2.3) in the note of L22, (2.4)-(2.6) in L24, (2.7)-(2.17) in T25, (2.18) in D26, (2.19)-(2.20) in P28, (2.21)-(2.22) in T12 and LA2; the unnumbered covariance display preceding (2.21) on p. 14 is CZ14.",
         "items": [
@@ -8462,7 +8466,7 @@
               "LA2",
               "CZ14"
             ],
-            "relation": "partial",
+            "relation": "same",
             "declarations": [
               {
                 "name": "FunctionalInequalities.KLS.Isotropic.covarianceBilin_map_sqrt_abs_matrix",
@@ -8487,9 +8491,17 @@
               {
                 "name": "Solutions.ThmLetwinCompactQuadraticBound.certificate",
                 "source": "solutions/ThmLetwinCompactQuadraticBound.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.LogConcave.letwinQuadraticBound",
+                "source": "formalization/FunctionalInequalities/KLS/Letwin/QuadraticBound.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.LogConcave.matrix_variance_le_eight",
+                "source": "formalization/FunctionalInequalities/KLS/Letwin/QuadraticBound.lean"
               }
             ],
-            "note": "Proof (end of Section 2): reduce to the regular class (Lemma A.1) and invertible M (Lemma A.2); push mu forward by |M|^{1/2} to eta, whose Stein kernel |M|^{1/2} tau_mu |M|^{1/2} has E||tau_eta||_HS^2 <= 2 Tr(M^2) by Theorem 2.5 with B = |M|; apply Proposition 2.8 to F(z) = <sgn(M) z, z> - Tr M and Lemma 2.9 to each partial derivative. Sharpness of the constant 2 (isotropic exponential vector, M = Id) is asserted as an exercise. The paper calls it the KLS conjecture for quadratic forms. Local supports include the covariance step CZ14 (p. 14, ⇑) and the compact reduction to the smooth uniformly convex regular class by letwinCompactBound_of_regularClass. Exact compact counterpart (2026-10-16): letwinCompactBound : LetwinCompactBound is proved for every n > 0, every compactly supported isotropic log-concave law and every self-adjoint operator (singular and indefinite included) with the exact constant 8 and the standard-orthonormal-basis Hilbert-Schmidt normalization, and certified in source form (thm:letwin-compact-quadratic-bound, solutions/ThmLetwinCompactQuadraticBound.lean). It applies letwinCompactBound_of_regularClass to regularClass_letwinQuadraticBound, whose proof takes one weak C^{1,1} Stein witness of the actual regular-class moment potential with its exact-2 trace bound (weak form of Theorem 2.5, see T25), the Gaussian product coupling with the compact dual bound in place of the transported Stein kernel of Lemmas 2.7/2.9, the H^-1 inequality on the C2 convex Gaussian-smoothed law (see P28), the spectral sign/noise energy identity, noise removal and the singular extension (see LA2). Not formalized: the noncompact statement (every isotropic log-concave law, through the full Lemma A.1), the transported Stein kernel and trace identity (2.21), and the smooth source moment map. The item stays partial."
+            "note": "Formalized in Lean (2026-10-20): for every n > 0 and every isotropic log-concave probability law, with no compact-support or extra moment premise, letwinQuadraticBound gives Var(<MX,X>) <= 8 ||M||_HS^2 for every real self-adjoint operator. matrix_variance_le_eight gives the source matrix normalization Var(sum M_ij x_i x_j) <= 8 tr(M*M), including singular and indefinite symmetric matrices. The proof applies the accepted compact constant-eight bound to centered, covariance-whitened growing-ball truncations; means tend to zero, covariance and inverse square roots tend to Id, and mixed moments through degree four converge by dominated convergence. It then uses letwinQuadraticBound_of_tendsto_moments. The compact proof retains its weak C^{1,1} moment-potential/Gaussian route (see T25, P28 and LA2). The full smooth regular approximation in Lemma A.1, the transported Stein kernel and identity (2.21), source smooth moment-map regularity, and the sharpness example are not established by this endpoint. This is a local theorem and independent strict audit, not a newly registered paper-target certificate; Theorem 1.1 remains open locally."
           },
           {
             "id": "CZ14",
@@ -9167,9 +9179,13 @@
               {
                 "name": "FunctionalInequalities.KLS.LogConcave.Suspension.letwinCompactBound_of_regularClass",
                 "source": "formalization/FunctionalInequalities/KLS/BKL/LetwinApproximation.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Probability.tendsto_integral_prod_inner_affine_cond_closedBall",
+                "source": "formalization/FunctionalInequalities/Probability/Conditioning.lean"
               }
             ],
-            "note": "The passage of the quadratic bound through degree-at-most-four moment convergence is formalized. The compact source reduction is also formalized: if every positive-dimensional isotropic law 1_K exp(-W) dx, with K compact convex with nonempty interior and W globally smooth and uniformly kappa-convex for kappa > 0, satisfies LetwinQuadraticBound, then LetwinCompactBound holds. The proof uses Gaussian smoothing, ball conditioning and whitening with converging moments. The regular-class bound is an explicit retained premise; approximation of every noncompact isotropic log-concave law in the full source statement is not supplied by this compact reduction. Partial source coverage; not Theorem 1.2. (2026-10-16) For compact laws the retained regular-class premise is now discharged by regularClass_letwinQuadraticBound, giving letwinCompactBound (see T12); the noncompact approximation is still not formalized, so the entry stays partial."
+            "note": "The passage of the quadratic bound through degree-at-most-four moment convergence is formalized. The compact source reduction is also formalized: if every positive-dimensional isotropic law 1_K exp(-W) dx, with K compact convex with nonempty interior and W globally smooth and uniformly kappa-convex for kappa > 0, satisfies LetwinQuadraticBound, then LetwinCompactBound holds. The proof uses Gaussian smoothing, ball conditioning and whitening with converging moments. The regular-class bound is an explicit retained premise; approximation of every noncompact isotropic log-concave law in the full source statement is not supplied by this compact reduction. Partial source coverage; not Theorem 1.2. (2026-10-16) For compact laws the retained regular-class premise is now discharged by regularClass_letwinQuadraticBound, giving letwinCompactBound (see T12); the noncompact approximation is still not formalized, so the entry stays partial. (2026-10-20) Growing-ball truncations now have convergent mixed moments under near-identity linear maps and vanishing centers, assuming only the stated finite moment. This yields the noncompact Theorem 1.2 from the accepted compact bound after centering and whitening. It does not construct the full smooth regular approximants of Lemma A.1; this item remains partial."
           },
           {
             "id": "LA2",
@@ -11131,8 +11147,8 @@
         "ChenKlartag2026",
         "Letwin2026"
       ],
-      "target": "Selected 2025–2026 thin-shell and quadratic-form results.",
-      "next_step": "Deferred as an independent paper target under the 2026-10-10 BKL-first scope. Resume only for a reviewed referenced result or necessary prerequisite with an explicit BKL proof consumer; existing formalization and certificates are retained."
+      "target": "Selected 2025–2026 thin-shell and quadratic-form results. Letwin Theorem 1.2 is now formalized locally without compact support, with exact constant 8; Theorem 1.1 and the full smooth regular approximation remain separate.",
+      "next_step": "The 2026-10-20 maintenance scope completes and verifies the noncompact quadratic bound after the accepted BKL main line. Retain the compact certificate and the separate noncompact theorem; select a new pinned literature target before further proof construction. The other thin-shell sources remain deferred."
     }
   ],
   "proof_path": {

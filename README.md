@@ -31,12 +31,14 @@ The four-stage main line to KLS is formalized:
    and regular approximation, and `KLS.kls` through the affine/isotropic reduction.
 
 The [proof path](research/progress/PROOF-PATH.md) maps each source step and proof device to its
-Lean entry. The [paper register](research/progress/LITERATURE.md#when-a-paper-is-covered) owns exact
+Lean entry. The separate [noncompact Letwin bound](formalization/FunctionalInequalities/KLS/Letwin/QuadraticBound.lean)
+also proves Theorem 1.2 for every positive-dimensional isotropic log-concave law, with constant 8.
+The [paper register](research/progress/LITERATURE.md#when-a-paper-is-covered) owns exact
 hypotheses, constants, dimensions, paper coverage and certificates.
 
 ## What is not proved
 
-Letwin's noncompact Theorem 1.2 and Theorem 1.1, BKL's uncut Eldan process (strong solution,
+Letwin's Theorem 1.1 and full smooth regular approximation (Lemma A.1), BKL's uncut Eldan process (strong solution,
 uniqueness, non-explosion) with the literal stochastic identities (68)–(73), and the four
 exploratory KLS routes are not proved; the cutoff route does not need them. The declaration
 audit covers every project-local declaration, `KLS.kls` included. The separately audited

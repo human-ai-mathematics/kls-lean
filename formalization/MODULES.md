@@ -6,13 +6,13 @@ This is a filename/import directory; it does not assign proof or paper-coverage 
 
 [Source guide](README.md) · [Interface guide](../LEAN_DESIGN.md) · [Public API](API.md) · [Placement and naming](../research/naming.md)
 
-**585 Lean modules in 6 top-level families.** The library aggregate `FunctionalInequalities.lean` is outside this subtree.
+**586 Lean modules in 6 top-level families.** The library aggregate `FunctionalInequalities.lean` is outside this subtree.
 
 | Family | Modules |
 | --- | ---: |
 | [Analysis/](FunctionalInequalities/Analysis) | 233 |
 | [Energy/](FunctionalInequalities/Energy) | 46 |
-| [KLS/](FunctionalInequalities/KLS) | 202 |
+| [KLS/](FunctionalInequalities/KLS) | 203 |
 | [L2/](FunctionalInequalities/L2) | 9 |
 | [Poincare/](FunctionalInequalities/Poincare) | 33 |
 | [Probability/](FunctionalInequalities/Probability) | 62 |
@@ -468,6 +468,7 @@ FunctionalInequalities/
 │   │   └── LinearAreaFormula.lean
 │   ├── Letwin/
 │   │   ├── CompactBound.lean
+│   │   ├── QuadraticBound.lean
 │   │   └── RegularClass.lean
 │   ├── LogConcave/
 │   │   ├── Density/
@@ -1105,6 +1106,7 @@ Use a file's import path by replacing `/` with `.` and dropping `.lean`, after t
 | [KLS/Isotropic.lean](FunctionalInequalities/KLS/Isotropic.lean) | Isotropic probability laws |
 | [KLS/IsotropicSupport.lean](FunctionalInequalities/KLS/IsotropicSupport.lean) | Full affine support of isotropic laws |
 | [KLS/Letwin/CompactBound.lean](FunctionalInequalities/KLS/Letwin/CompactBound.lean) | The compact Letwin constant-eight bound |
+| [KLS/Letwin/QuadraticBound.lean](FunctionalInequalities/KLS/Letwin/QuadraticBound.lean) | Letwin's constant-eight bound without compact support |
 | [KLS/Letwin/RegularClass.lean](FunctionalInequalities/KLS/Letwin/RegularClass.lean) | Letwin's constant 8 for the regular class |
 | [KLS/LogConcave/BallConditioning.lean](FunctionalInequalities/KLS/LogConcave/BallConditioning.lean) | Log-concave laws conditioned on balls |
 | [KLS/LogConcave/Borel.lean](FunctionalInequalities/KLS/LogConcave/Borel.lean) | Compact-set and Borel-set log-concavity |
