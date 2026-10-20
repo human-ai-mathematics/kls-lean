@@ -1,0 +1,4 @@
+import FunctionalInequalities.KLS.Target
+
+-- Comparator checks the original declaration, without a new wrapper theorem.
+#print axioms FunctionalInequalities.KLS.kls

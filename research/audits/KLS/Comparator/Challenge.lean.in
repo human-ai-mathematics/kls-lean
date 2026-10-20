@@ -1,0 +1,13 @@
+import FunctionalInequalities.KLS.Statement
+
+/-!
+Trusted Comparator challenge for the existing covariance-normalized KLS target.
+Review this file together with KLS/Statement.lean and its definition closure.
+The single deliberate placeholder is a challenge, never a proof-development result.
+-/
+
+namespace FunctionalInequalities.KLS
+
+theorem kls : Conjecture := by sorry
+
+end FunctionalInequalities.KLS

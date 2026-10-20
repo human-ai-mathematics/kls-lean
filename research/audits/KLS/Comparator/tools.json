@@ -1,0 +1,17 @@
+{
+  "lean_toolchain": "leanprover/lean4:v4.33.0",
+  "comparator": {
+    "repository": "https://github.com/leanprover/comparator",
+    "revision": "3927ad383f208ae977c340a91c48ac9b497d2097",
+    "tag": "v4.33.0"
+  },
+  "lean4export": {
+    "repository": "https://github.com/leanprover/lean4export",
+    "revision": "15f6055e299ad5b89345e533cc2192f4cc00f659"
+  },
+  "metadata_schema": {
+    "repository": "https://github.com/mathlib-initiative/formalization.yaml",
+    "revision": "99c678e569c7c4c0772db297c5ddd5e4c9b6322e",
+    "path": "schema/v0.4.schema.json"
+  }
+}

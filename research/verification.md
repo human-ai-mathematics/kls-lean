@@ -84,10 +84,20 @@ verifier nor changes certificate status. Third-party compiled dependencies remai
 
 ## Receipts and trust scope
 
+The [Comparator setup](audits/KLS/Comparator/README.md) is a separate, opt-in check for the
+KLS endpoint and the adjacent OpenAI bridge, using tools pinned for Lean 4.33.0. Run
+`python3 research/comparator.py --target kls --mode compile` for a strict original-declaration
+client, or select the documented development/Linux sandbox mode for actual export, statement
+comparison, axiom validation and kernel replay. It is not silently added to remote CI or to
+the full verifier. Receipts under `build/comparator/` bind inputs and the current local source;
+development-mode success explicitly lacks sandboxing and no additional kernel is enabled.
+The challenge placeholder stays in a `.lean.in` template outside the proof-client inventory.
+
 Mechanical verification checks the recorded Lean statements and their proof dependencies.
 Source-fidelity review separately compares those statements with a pinned paper's hypotheses,
 constants, normalization and dimensional scope; a passing mechanical check does not supply that
-review. Development and review used AI coding agents. Agent review is not external human peer
+review. The maintainer reports reviewing key mathematical statements; the scope is recorded
+in [formalization.yaml](../formalization.yaml). Development and review used AI coding agents. Agent review is not external human peer
 review, and no external human peer review is claimed.
 
 Each run retains its report, generated clients and logs under `build/verification/<UTC time>/`.

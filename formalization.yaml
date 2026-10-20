@@ -1,0 +1,159 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/mathlib-initiative/formalization.yaml/99c678e569c7c4c0772db297c5ddd5e4c9b6322e/schema/formalization.schema.json
+version: v0.4
+
+project:
+  name: kls-lean
+  description: >-
+    A Lean library of log-concave functional inequalities, with a proof of the
+    covariance-normalized dimension-free KLS Poincare bound through the
+    Bizeul-Klartag-Lehec main line. Supporting results include the exact constant-8
+    Letwin quadratic variance bound and finite-horizon cutoff localization.
+  authors: [kls-lean contributors]
+  responsible_maintainers: [lyw-ops]
+  license: Apache-2.0
+
+sources:
+  - title: Presenting a proof of the Kannan-Lovasz-Simonovits conjecture
+    authors: [Bizeul, Klartag, Lehec]
+    id: https://arxiv.org/abs/2610.05474v1
+    type: article
+    location: Theorems 1.1, 3.1, 4.1 and Proposition 7.1
+    relationship: adapts
+    author_endorsement: other
+    note: >-
+      The source-form main theorem is proved through the locally constructed
+      finite-horizon cutoff localization and compact-to-general passage.
+      This is not a construction of the paper's uncut Eldan process or literal
+      identities (68)-(73). Source-author involvement is not established in the
+      current provenance records; no source-author endorsement is asserted.
+  - title: The KLS constant is O(log^(1/4) n)
+    authors: [Letwin]
+    id: https://arxiv.org/abs/2607.24164v1
+    type: article
+    location: Theorem 1.2; supporting statements mapped in the literature register
+    relationship: adapts
+    author_endorsement: other
+    note: >-
+      The exact constant 8 is proved for every positive-dimensional isotropic
+      log-concave probability law and every self-adjoint quadratic form,
+      including singular and indefinite forms, without compact support.
+      The noncompact passage uses centered, covariance-whitened ball truncations
+      and mixed-moment convergence. Theorem 1.1, the full smooth approximation
+      of Lemma A.1 and the full smooth moment-map theory remain separate targets.
+      Source-author involvement is not established in the current provenance
+      records; no source-author endorsement is asserted.
+  - title: Analysis and Geometry of Markov Diffusion Operators
+    authors: [Bakry, Gentil, Ledoux]
+    id: https://doi.org/10.1007/978-3-319-00227-9
+    type: book
+    location: Chapter 4, especially Corollary 4.8.2; selected supporting results
+    relationship: adapts
+    note: Selected finite-dimensional functional inequalities; not the whole book.
+
+related_formalizations:
+  - id: https://github.com/HongruZhao/KLS500
+    relationship: independent
+    note: >-
+      Parallel KLS formalization. Its c1a5099 stochastic-calculus import closure
+      informed our vendor selection. No KLS500 project source is included here;
+      shared third-party libraries and our toolchain port are credited separately.
+  - id: https://github.com/HongruZhao/KLS15
+    relationship: independent
+    note: Parallel KLS formalization; no originality or quantitative priority is claimed here.
+  - id: https://github.com/cgarryZA/LevyStochCalc/tree/984dbf0b790031eac05d56fe5a84b65e15e1e932
+    relationship: adapts
+    note: >-
+      External stochastic-calculus infrastructure, with the BrownianMotion,
+      KolmogorovExtension4 and MathFin dependencies pinned and credited in
+      formalization/vendor/README.md and vendor-lock.json. Apache-2.0 notices
+      are retained. Local toolchain adaptations are recorded in port.patch.
+
+classification:
+  arxiv: [math.PR, math.FA]
+  msc2020: [60E15, 46E35]
+
+status:
+  scope: >-
+    Principal results of the project-local proof development. Detailed paper,
+    theorem and hypothesis coverage is owned by research/progress/LITERATURE.md
+    and literature.json. Conditional and historical exploratory statements do
+    not supply assumptions to the closed KLS result. No explicit numerical
+    final KLS constant is claimed. This metadata is not a verification receipt.
+  sorry_count: 0
+  sorry_in_definitions: 0
+  axioms: [propext, Classical.choice, Quot.sound]
+  main_results:
+    - declaration: FunctionalInequalities.KLS.kls
+      file: formalization/FunctionalInequalities/KLS/Target.lean
+      sorry_count: 0
+      axioms: [propext, Classical.choice, Quot.sound]
+      comparator_config: research/audits/KLS/Comparator/config.json
+      literature_dependencies: []
+    - declaration: FunctionalInequalities.KLS.LogConcave.letwinQuadraticBound
+      file: formalization/FunctionalInequalities/KLS/Letwin/QuadraticBound.lean
+      sorry_count: 0
+      axioms: [propext, Classical.choice, Quot.sound]
+      literature_dependencies: []
+  upstream_holes:
+    scope: >-
+      The pinned external BrownianMotion sources contain four upstream proof
+      placeholders affecting five declarations, listed in vendor/README.md.
+      These are excluded from the project-local counts above. Every local
+      declaration is audited against the three standard axioms without an
+      exception, so the closed results cannot depend on those holes.
+    inventory: formalization/vendor/README.md#upstream-holes
+  comparator:
+    instructions: research/audits/KLS/Comparator/README.md
+    receipt_policy: >-
+      Generated source-bound receipts distinguish compiled clients, unsandboxed
+      development checks and Linux sandbox checks. A checked-in config alone
+      is not a successful Comparator run or external-kernel verification.
+
+automation:
+  methods:
+    - method: manual
+      tool_setup: >-
+        Human choice of literature targets, hypotheses, constants and proof
+        boundaries; maintainer review of key mathematical statements.
+    - method: agent
+      models: [OpenAI GPT models, Anthropic Claude models]
+      framework: Codex and Claude Code, with project-specific local verification scripts
+      tool_setup: >-
+        AI-assisted source inspection, Lean proof development, integration and
+        review, checked by the Lean compiler, axiom audits, strict clients and
+        kernel replay. Human-directed targets and bounded tasks are used.
+  notes: >-
+    AI involvement is substantial. Model versions varied across development;
+    this is a process summary, not a complete model or cost ledger. No total
+    cost or manual authorship of all proof terms is asserted.
+
+fidelity:
+  divergences: >-
+    KLS.Conjecture is a covariance-normalized Poincare statement using the
+    intrinsic local-slope constant, one finite nonnegative constant before all
+    dimensions and laws, finite second moment, dimension zero and singular
+    affine supports included. It is not a literal restatement of the original
+    convex-body isoperimetric conjecture. The BKL proof uses a cutoff route;
+    Letwin's noncompact theorem uses a different limiting argument. Exact
+    source mappings, stronger statements, conditional interfaces and unproved
+    source statements remain explicit in the literature register.
+
+review:
+  status: self-assessed
+  reviewers: [repository maintainer]
+  notes: >-
+    The maintainer reports personally reviewing the key mathematical statements.
+    This does not assert review of every proof term or API, independent peer
+    review, or approval by the authors of the informal sources. Automated and
+    agent-assisted checks have their separately documented evidence scopes.
+
+alignment:
+  register: research/progress/literature.json
+  human_readable_register: research/progress/LITERATURE.md
+  proof_path: research/progress/PROOF-PATH.md
+
+acknowledgements: >-
+  Credit the cited mathematical authors separately from this Lean implementation.
+  The stochastic-calculus foundation is the work of LevyStochCalc and its
+  dependencies, not original infrastructure authored by this project. Mathlib,
+  Lean and other imported libraries retain their original authorship and licenses.

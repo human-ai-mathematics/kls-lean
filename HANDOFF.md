@@ -1,6 +1,6 @@
 # Current KLS handoff
 
-Updated 2026-10-20 for noncompact Letwin Theorem 1.2.
+Updated 2026-10-20 for noncompact Letwin, Comparator inputs and formalization metadata.
 
 ## Accepted result and open boundaries
 
@@ -21,6 +21,13 @@ construction and literal identities (68)–(73), and the separate uncut intermed
 remain unformalized locally. The four exploratory routes retain their own statuses.
 
 ## Evidence and library use
+
+The [formalization metadata](formalization.yaml) records sources, AI involvement, external
+stochastic-calculus credit and the maintainer's self-review of key statements. The
+[Comparator inputs and runner](research/audits/KLS/Comparator/README.md) cover the unchanged
+KLS endpoint and the separate adjacent OpenAI bridge. Keep the distinction between compiled
+clients, unsandboxed macOS development runs and Linux sandbox runs in their generated receipts.
+This verification setup changes no mathematical statement, proof or certificate status.
 
 Use the [verification guide](research/verification.md#receipts-and-trust-scope) for receipt
 rules and acceptance scopes. Receipts and execution logs stay local under ignored `build/`; remote Lean

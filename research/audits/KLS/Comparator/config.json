@@ -1,0 +1,7 @@
+{
+  "challenge_module": "Challenge",
+  "solution_module": "Solution",
+  "theorem_names": ["FunctionalInequalities.KLS.kls"],
+  "permitted_axioms": ["propext", "Classical.choice", "Quot.sound"],
+  "enable_nanoda": false
+}

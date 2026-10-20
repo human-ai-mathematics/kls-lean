@@ -56,6 +56,7 @@ known upstream holes; no project-local proved declaration may depend on them.
 | **Build, verify, contribute** | [Verification guide](research/verification.md) | Local checks, receipts and remote scope |
 | | [Contributing](CONTRIBUTING.md) | Changes, reviews and reuse |
 | | [Citation metadata](CITATION.cff) | Credit and revision information |
+| | [Formalization metadata](formalization.yaml) | Sources, AI involvement, external dependencies and review scope |
 
 For current work and repository operations, use the [maintainer index](research/README.md).
 
@@ -89,9 +90,13 @@ for full local kernel replay evidence. The latest
 passed for `845e61b` (9,856 local declarations audited, `KLS.kls` included) and does not certify
 later commits.
 
+The separate [Comparator setup](research/audits/KLS/Comparator/README.md) checks the KLS
+statement and proof closure, with explicit modes for macOS development and Linux sandbox runs.
+
 ## License and credit
 
 Project-owned code uses [Apache-2.0](LICENSE); [vendored libraries](formalization/vendor/README.md)
 retain their licenses and notices. The project builds on Mathlib and the other pinned packages.
-Development and review used AI coding agents; no external human peer review is claimed
+Development and review used AI coding agents. The maintainer has reviewed key mathematical
+statements; no external human peer review is claimed
 (see [receipts and trust scope](research/verification.md#receipts-and-trust-scope)).
