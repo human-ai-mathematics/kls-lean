@@ -1,0 +1,4 @@
+import KLSOpenAI.Target
+
+#print axioms KLSOpenAI.kls
+#print axioms KLSOpenAI.of_conjecture

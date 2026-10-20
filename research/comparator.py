@@ -117,7 +117,7 @@ def main() -> int:
     parser.add_argument("--mode", choices=["compile", "development", "sandbox"],
                         default="compile")
     parser.add_argument("--tools", type=Path, help="pinned Comparator checkout (built)")
-    parser.add_argument("--bridge-root", type=Path, default=ROOT.parent / "KLS-OpenAI")
+    parser.add_argument("--bridge-root", type=Path, default=ROOT / "integrations/openai")
     args = parser.parse_args()
     pins = json.loads((INPUTS / "tools.json").read_text())
     env = {k: v for k, v in os.environ.items()

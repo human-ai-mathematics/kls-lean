@@ -25,7 +25,10 @@ remain unformalized locally. The four exploratory routes retain their own status
 The [formalization metadata](formalization.yaml) records sources, AI involvement, external
 stochastic-calculus credit and the maintainer's self-review of key statements. The
 [Comparator inputs and runner](research/audits/KLS/Comparator/README.md) cover the unchanged
-KLS endpoint and the separate adjacent OpenAI bridge. Keep the distinction between compiled
+KLS endpoint and the separate [OpenAI bridge package](integrations/openai/README.md).
+The bridge is an independent Lake project in this repository, using the same-revision
+KLS library; its conditional bridge and closed endpoint retain their original proofs.
+Keep the distinction between compiled
 clients, unsandboxed macOS development runs and Linux sandbox runs in their generated receipts.
 This verification setup changes no mathematical statement, proof or certificate status.
 

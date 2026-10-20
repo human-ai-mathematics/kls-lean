@@ -71,8 +71,8 @@ The OS, sandbox, pinned tool binaries and trusted prebuilt dependencies retain t
 trust assumptions in the [upstream documentation](https://github.com/leanprover/comparator/tree/3927ad383f208ae977c340a91c48ac9b497d2097).
 No extra proof kernel is enabled by these configs.
 
-For the separate OpenAI bridge, its directory must be present (default:
-adjacent `../KLS-OpenAI`). Its challenge imports the unmodified upstream OpenAI
+The separate [OpenAI bridge package](../../../../integrations/openai/README.md) is
+included at `integrations/openai`. Its challenge imports the unmodified upstream OpenAI
 model, and its solution imports `KLSOpenAI.Target`. The runner checks the model's
 hash against that project's `UPSTREAM.json`:
 
@@ -80,9 +80,10 @@ hash against that project's `UPSTREAM.json`:
 python3 research/comparator.py --target openai --mode development --tools build/comparator-tools
 ```
 
-Use `--bridge-root /absolute/path/to/KLS-OpenAI` to select another location, and
-`--mode sandbox` on the Linux setup above. This separate project remains a local
-path dependency until it has its own published source revision.
+Use `--bridge-root /absolute/path/to/bridge` to select another location, and
+`--mode sandbox` on the Linux setup above. This independent Lake project uses the
+substantive KLS library from the same repository revision through a relative path
+dependency. Build it as described in its README before running Comparator.
 
 Each invocation preserves a new fixture, logs and `receipt.json`, with source/input
 hashes and staging checks. Read the terminal status and full receipt. Failed runs

@@ -1,0 +1,17 @@
+name = "kls-openai-bridge"
+version = "0.1.0"
+defaultTargets = ["KLSOpenAI"]
+leanOptions = {warningAsError = true}
+
+[[require]]
+name = "functional-inequalities"
+path = "../../formalization"
+
+[[lean_lib]]
+name = "OAI"
+
+[[lean_lib]]
+name = "KLSOpenAI"
+
+[[lean_lib]]
+name = "Check"

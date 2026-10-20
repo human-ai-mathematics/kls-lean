@@ -129,6 +129,8 @@ automation:
     AI involvement is substantial. Model versions varied across development;
     this is a process summary, not a complete model or cost ledger. No total
     cost or manual authorship of all proof terms is asserted.
+    ChatGPT helped organize literature and proof approaches. Claude and GPT
+    participated in separate agent-assisted review passes during development.
 
 fidelity:
   divergences: >-
@@ -146,6 +148,8 @@ review:
   reviewers: [repository maintainer]
   notes: >-
     The maintainer reports personally reviewing the key mathematical statements.
+    Separate review passes using Claude and GPT were used during development,
+    with scopes varying by task. These are agent-assisted reviews.
     This does not assert review of every proof term or API, independent peer
     review, or approval by the authors of the informal sources. Automated and
     agent-assisted checks have their separately documented evidence scopes.
@@ -156,6 +160,9 @@ alignment:
   proof_path: research/progress/PROOF-PATH.md
 
 acknowledgements: >-
+  The project initially followed the roadmap organized by Nicolas (nbrosse).
+  Early foundational work and proof development started from that roadmap,
+  with subsequent literature and proof-approach organization assisted by ChatGPT.
   Credit the cited mathematical authors separately from this Lean implementation.
   The stochastic-calculus foundation is the work of LevyStochCalc and its
   dependencies, not original infrastructure authored by this project. Mathlib,

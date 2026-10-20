@@ -1,0 +1,15 @@
+{
+  "repository": "https://github.com/openai/math",
+  "revision": "adc7f1241b42e322a6451854ab7e4b4c146bf78a",
+  "source": "lean/OAI/Analysis/KLS/Model.lean",
+  "local": "OAI/Analysis/KLS/Model.lean",
+  "sha256": "28cddbf3c493afd43b3f7aba78f670952ea0c38909665c86bff883849e7f8dbc",
+  "changes": "none; byte-for-byte copy",
+  "license": "Apache-2.0",
+  "kls_dependency": {
+    "kind": "same-repository path",
+    "path": "../../formalization",
+    "revision": "same Git commit as this package",
+    "scope": "The substantive KLS proof remains in formalization; this package supplies the statement bridge."
+  }
+}

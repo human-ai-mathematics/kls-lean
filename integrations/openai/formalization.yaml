@@ -1,0 +1,86 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/mathlib-initiative/formalization.yaml/99c678e569c7c4c0772db297c5ddd5e4c9b6322e/schema/formalization.schema.json
+version: v0.4
+project:
+  name: kls-openai-bridge
+  description: >-
+    A separate Lean bridge from kls-lean's covariance-normalized KLS theorem
+    to the exact pinned OpenAI density-based KLSStatement.
+  authors: [kls-lean contributors]
+  responsible_maintainers: [lyw-ops]
+  license: Apache-2.0
+repository:
+  role: thin-wrapper
+  substantive_formalization:
+    id: https://github.com/human-ai-mathematics/kls-lean
+  revision_note: >-
+    This independent Lake project lives in integrations/openai and imports
+    ../../formalization from the same Git revision. A repository checkout
+    fixes the bridge and its substantive KLS source together.
+sources:
+  - title: OpenAI KLSStatement
+    authors: [OpenAI]
+    id: https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/lean/OAI/Analysis/KLS/Model.lean
+    type: Lean statement
+    location: OAI.LeanBlast.KLS.KLSStatement
+    relationship: formalizes
+    license: Apache-2.0
+    note: The statement file is copied byte for byte; UPSTREAM.json records its hash.
+related_formalizations:
+  - id: https://github.com/human-ai-mathematics/kls-lean
+    relationship: builds-on
+    note: >-
+      The substantive BKL/Letwin KLS proof is imported from this project.
+      Its source provenance, external stochastic-calculus dependencies and
+      proof boundaries are reported in its own formalization.yaml.
+status:
+  scope: >-
+    The exact OpenAI statement, with one positive real constant before all
+    dimensions n >= 1, all admitted measurable log-concave isotropic densities
+    and all smooth compactly supported test functions. No upper semicontinuity
+    or additional moment assumption is imposed. No numerical final bound.
+  sorry_count: 0
+  sorry_in_definitions: 0
+  axioms: [propext, Classical.choice, Quot.sound]
+  main_results:
+    - declaration: KLSOpenAI.kls
+      file: KLSOpenAI/Target.lean
+      sorry_count: 0
+      axioms: [propext, Classical.choice, Quot.sound]
+      comparator_config: research/comparator/config.json
+      literature_dependencies: []
+    - declaration: KLSOpenAI.of_conjecture
+      file: KLSOpenAI/Bridge.lean
+      sorry_count: 0
+      axioms: [propext, Classical.choice, Quot.sound]
+      comparator_config: research/comparator/config.json
+      literature_dependencies: []
+automation:
+  methods:
+    - method: agent
+      framework: Codex with local Lean compilation and audit clients
+      tool_setup: >-
+        Human-directed bridge target; AI-assisted Lean implementation and local
+        source, type, axiom and kernel checks. The underlying mathematical
+        KLS proof is credited to the substantive formalization.
+review:
+  status: self-assessed
+  notes: >-
+    Key mathematical statements have been reviewed by the repository maintainer
+    within the scope they reported. No independent peer review or OpenAI
+    endorsement is asserted. Compilation and unsandboxed Comparator development
+    checks are distinct from a Linux sandbox or independent-kernel result.
+fidelity:
+  divergences: >-
+    The upstream statement is unchanged. The proof converts densities to
+    compact-set log-concave laws, derives covariance isotropy from coordinate
+    moments, and enlarges the substantive theorem's nonnegative C to C+1.
+    The bridge theorem of_conjecture does not import the closed KLS proof;
+    Target.lean supplies it separately.
+acknowledgements: >-
+  The substantive KLS project initially followed the roadmap organized by
+  Nicolas (nbrosse); its early foundational work and proof development started
+  from that roadmap. ChatGPT helped organize literature and proof approaches.
+  The root formalization.yaml records the substantial AI involvement, the
+  maintainer's review of key statements and the separate Claude/GPT review
+  passes during the substantive development. The mathematical authors,
+  external libraries and unchanged OpenAI model retain their original credit.

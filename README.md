@@ -53,6 +53,7 @@ under the same three-standard-axiom policy, with no upstream-hole exception in t
 | | [Literature register](research/progress/LITERATURE.md) | Exact source statements, full lemma maps and paper coverage |
 | | [Lean design](LEAN_DESIGN.md) | Mathematical layers and current interfaces |
 | | [Calling examples](examples/README.md) | Narrow imports and checked clients |
+| | [OpenAI statement bridge](integrations/openai/README.md) | Independent Lean package proving the exact pinned OpenAI statement |
 | **Build, verify, contribute** | [Verification guide](research/verification.md) | Local checks, receipts and remote scope |
 | | [Contributing](CONTRIBUTING.md) | Changes, reviews and reuse |
 | | [Citation metadata](CITATION.cff) | Credit and revision information |
@@ -97,6 +98,9 @@ statement and proof closure, with explicit modes for macOS development and Linux
 
 Project-owned code uses [Apache-2.0](LICENSE); [vendored libraries](formalization/vendor/README.md)
 retain their licenses and notices. The project builds on Mathlib and the other pinned packages.
-Development and review used AI coding agents. The maintainer has reviewed key mathematical
-statements; no external human peer review is claimed
+The project initially followed the roadmap organized by Nicolas ([nbrosse](https://github.com/nbrosse));
+its early foundational work and proof development started from that roadmap.
+ChatGPT helped organize literature and proof approaches. AI involvement is substantial,
+and Claude and GPT participated in separate review passes. The maintainer has reviewed
+key mathematical statements; no external human peer review is claimed
 (see [receipts and trust scope](research/verification.md#receipts-and-trust-scope)).

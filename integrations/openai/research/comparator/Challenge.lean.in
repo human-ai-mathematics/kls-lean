@@ -1,0 +1,18 @@
+import OAI.Analysis.KLS.Model
+import FunctionalInequalities.KLS.Statement
+
+/-!
+Trusted challenge: the exact OpenAI statement at the pin in UPSTREAM.json.
+The conditional bridge also imports the KLS proposition. No import of the
+bridge implementation or of the KLS proof is allowed here.
+The deliberate placeholder belongs only to the comparison challenge.
+-/
+
+namespace KLSOpenAI
+
+theorem of_conjecture (hKLS : FunctionalInequalities.KLS.Conjecture) :
+    OAI.LeanBlast.KLS.KLSStatement := by sorry
+
+theorem kls : OAI.LeanBlast.KLS.KLSStatement := by sorry
+
+end KLSOpenAI
