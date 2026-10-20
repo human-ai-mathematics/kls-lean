@@ -506,21 +506,19 @@ class VendorTests(unittest.TestCase):
     @unittest.skipUnless((ROOT / "formalization/.lake/build/lib/lean/BrownianMotion/StochasticIntegral/"
                           "Quasimartingale/CadlagModification.olean").is_file(),
                          "vendored BrownianMotion is not built")
-    def test_wrapper_of_actual_vendored_hole_fails_local_audit(self):
+    def test_wrapper_of_actual_fixed_vendored_theorem_passes_local_audit(self):
         env = dict(os.environ)
         env.pop("LEAN_PATH", None)
         source = ("import BrownianMotion.StochasticIntegral.Quasimartingale.CadlagModification\n"
                   "import Lean\n"
                   "set_option linter.defProp false in\n"
                   "def FunctionalInequalities.unregisteredWrapper :=\n"
-                  "  @ProbabilityTheory.uniformIntegrable_of_countable\n")
+                  "  @MeasureTheory.Martingale.isRealQuasimartingale\n")
         result = subprocess.run(["lake", "env", "lean", "--stdin"], cwd=ROOT / "formalization",
                                 input=source + library_axiom_audit_code([]).removeprefix("import Lean"),
                                 text=True, capture_output=True, timeout=300, env=env)
-        self.assertNotEqual(result.returncode, 0)
-        self.assertIn("FunctionalInequalities.unregisteredWrapper: unexpected axioms",
-                      result.stdout + result.stderr)
-        self.assertIn("sorryAx", result.stdout + result.stderr)
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertNotIn("sorryAx", result.stdout + result.stderr)
 
 
 if __name__ == "__main__":

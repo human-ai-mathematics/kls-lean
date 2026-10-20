@@ -44,8 +44,8 @@ current local modules with Lean's kernel.
 The generated axiom audit checks every project-local declaration, including private and
 generated declarations and the target theorem `FunctionalInequalities.KLS.kls`; no local
 declaration is excluded. A local declaration or wrapper depending on `sorryAx` or another
-nonstandard axiom fails. The vendor gate uses an exact, separately reviewed list of five upstream
-`sorry` declarations; it does not permit project-local results to depend on those holes.
+nonstandard axiom fails. The vendor gate has an empty upstream-hole allowlist and checks every
+vendored declaration against the same three standard axioms.
 See the [vendor policy](../formalization/vendor/README.md#upstream-holes).
 
 The `classical-kls` gate (both modes, after the research-audit sweep) runs

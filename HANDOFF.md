@@ -1,6 +1,6 @@
 # Current KLS handoff
 
-Updated 2026-10-20 for noncompact Letwin, Comparator inputs and formalization metadata.
+Updated 2026-10-20 for noncompact Letwin, Comparator metadata and synchronized BrownianMotion.
 
 ## Accepted result and open boundaries
 
@@ -41,9 +41,16 @@ the [audit client guide](research/audits/README.md) and the
 clients in a fresh Lake project, audits their complete primary declaration closure and replays
 the local compiled modules; it does not accept a working-tree overlay or renew a certificate,
 and explicit third-party compiled caches remain trusted. Known
-[vendor holes](formalization/vendor/README.md#upstream-holes) remain isolated.
+[vendor closure](formalization/vendor/README.md#upstream-holes) has no accepted upstream holes.
 
 ## Current work and next step
+
+BrownianMotion is synchronized to `a7ad7af` on the unchanged Lean/Mathlib v4.33.0 toolchain.
+Its corrected regularization contracts replace the old placeholders; the LevyStochCalc consumer
+retains its public theorem types and right-continuity-in-measure hypotheses. The selected proved
+closure excludes the unrelated UniformIntegrable module, and both declaration audits permit
+only the three standard axioms. The provenance lock records upstream manifest pins separately
+from the tested dependency overrides; see the [vendor policy](formalization/vendor/README.md).
 
 The 2026-10-20 local formalization batch removes compactness from Letwin Theorem 1.2 by
 conditioning on growing balls, centering and covariance whitening, and passing mixed moments

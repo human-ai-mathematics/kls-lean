@@ -2,31 +2,39 @@
   "description": "Vendored Lean libraries with machine-checkable upstream provenance and port metadata.",
   "libraries": {
     "BrownianMotion": {
-      "commit": "4d52fa776130a29d4ad7d6eda2035a919c0b4696",
+      "commit": "a7ad7af662044313bc80a7c0756360fb3745f931",
       "files": {
         "BrownianMotion/BrownianMotion/Auxiliary/Algebra.lean": {
           "module": "BrownianMotion.BrownianMotion.Auxiliary.Algebra",
           "patched": true,
-          "upstream_git_blob": "6e3b14a309c4aa1d7c5641274545926b66074e65",
+          "upstream_git_blob": "475e2475d9e0fc31462fa8e12bb957faec14e7ac",
           "upstream_path": "BrownianMotion/Auxiliary/Algebra.lean",
-          "upstream_sha256": "0111c4b2b59fae49cd76ef1d604b0ef89b96fdec27080da2ef0c77bb8594fd6f",
-          "vendored_sha256": "fb1d36798896f0626baea67bbc037754a35c8d2d07b282cee8051072a9d55d01"
+          "upstream_sha256": "ff7a39360ac8213105b113f9c1dbd761b45e8ed3cad2f8d65af7c8c4f30a40da",
+          "vendored_sha256": "be98b92679f235185457ac94dd8a64391cd8bb783e3456c11a069b19eca8f7cc"
+        },
+        "BrownianMotion/BrownianMotion/Auxiliary/Analysis.lean": {
+          "module": "BrownianMotion.BrownianMotion.Auxiliary.Analysis",
+          "patched": false,
+          "upstream_git_blob": "220a99c8073482ffb8df0044e9ee447d33d8a742",
+          "upstream_path": "BrownianMotion/Auxiliary/Analysis.lean",
+          "upstream_sha256": "2e1cd784cd7502d3cb372d23c55c7ff110088b933d5a5b08a11d0b19896d7ffe",
+          "vendored_sha256": "2e1cd784cd7502d3cb372d23c55c7ff110088b933d5a5b08a11d0b19896d7ffe"
         },
         "BrownianMotion/BrownianMotion/Auxiliary/ContinuousBilinForm.lean": {
           "module": "BrownianMotion.BrownianMotion.Auxiliary.ContinuousBilinForm",
           "patched": false,
-          "upstream_git_blob": "e5bbae63978db378d19210062b0f8dbf00db701f",
+          "upstream_git_blob": "348730921f51a350bc86f577ccecfe4a4df91bec",
           "upstream_path": "BrownianMotion/Auxiliary/ContinuousBilinForm.lean",
-          "upstream_sha256": "0587669ba731f73c4a51d9e4f2c044d500e29a3bc98cd46c080982f4a7ec9619",
-          "vendored_sha256": "0587669ba731f73c4a51d9e4f2c044d500e29a3bc98cd46c080982f4a7ec9619"
+          "upstream_sha256": "6a2092c753f4236b1199eb1ac422c195ba053b18958e38ecd9677f49d4e5fd91",
+          "vendored_sha256": "6a2092c753f4236b1199eb1ac422c195ba053b18958e38ecd9677f49d4e5fd91"
         },
         "BrownianMotion/BrownianMotion/Auxiliary/ConvergenceInMeasure.lean": {
           "module": "BrownianMotion.BrownianMotion.Auxiliary.ConvergenceInMeasure",
           "patched": false,
-          "upstream_git_blob": "3ea16db4fb1478b7a8a238e644748f91290390c4",
+          "upstream_git_blob": "88b3aa64dbc023925fcb3ad05b27fb8971455bd2",
           "upstream_path": "BrownianMotion/Auxiliary/ConvergenceInMeasure.lean",
-          "upstream_sha256": "ffcd58b6a5cef8327f65158829c3a1ce9dcf28b190e0dbc67b785e7434e2270f",
-          "vendored_sha256": "ffcd58b6a5cef8327f65158829c3a1ce9dcf28b190e0dbc67b785e7434e2270f"
+          "upstream_sha256": "84e6bd78ee05fd6f806e154ece96d53d49301426bfbbe5c5c476f47b8290e4d0",
+          "vendored_sha256": "84e6bd78ee05fd6f806e154ece96d53d49301426bfbbe5c5c476f47b8290e4d0"
         },
         "BrownianMotion/BrownianMotion/Auxiliary/DenseCountable.lean": {
           "module": "BrownianMotion.BrownianMotion.Auxiliary.DenseCountable",
@@ -39,26 +47,26 @@
         "BrownianMotion/BrownianMotion/Auxiliary/ENNReal.lean": {
           "module": "BrownianMotion.BrownianMotion.Auxiliary.ENNReal",
           "patched": false,
-          "upstream_git_blob": "c99fac271f42b70168a5b8919660a65b613b4046",
+          "upstream_git_blob": "2758b4c11011acb164631e5ff2feb7a01c85f403",
           "upstream_path": "BrownianMotion/Auxiliary/ENNReal.lean",
-          "upstream_sha256": "108c7c5320e163d18e1c250d83a7170e1b80b5b631983f87298df5787c569af6",
-          "vendored_sha256": "108c7c5320e163d18e1c250d83a7170e1b80b5b631983f87298df5787c569af6"
+          "upstream_sha256": "45e32bb046b5e29dc428795644c1e24bdfb22f46d1b7a53d71a0db823caebd10",
+          "vendored_sha256": "45e32bb046b5e29dc428795644c1e24bdfb22f46d1b7a53d71a0db823caebd10"
         },
         "BrownianMotion/BrownianMotion/Auxiliary/Filtration.lean": {
           "module": "BrownianMotion.BrownianMotion.Auxiliary.Filtration",
           "patched": false,
-          "upstream_git_blob": "76ddeb52005ffe6387961ccf8b42902150e95e4e",
+          "upstream_git_blob": "7e839fb1003f56ee22b938eb94883a321f33a478",
           "upstream_path": "BrownianMotion/Auxiliary/Filtration.lean",
-          "upstream_sha256": "0f6a97d79c74eaf84cdce5b80423606803286d530fd326f94313ef70b9e8400a",
-          "vendored_sha256": "0f6a97d79c74eaf84cdce5b80423606803286d530fd326f94313ef70b9e8400a"
+          "upstream_sha256": "42fdbab526514d1b7cf81797f79c3ee3b3e41f4114047313eef30afb28075f13",
+          "vendored_sha256": "42fdbab526514d1b7cf81797f79c3ee3b3e41f4114047313eef30afb28075f13"
         },
         "BrownianMotion/BrownianMotion/Auxiliary/FiniteInf.lean": {
           "module": "BrownianMotion.BrownianMotion.Auxiliary.FiniteInf",
           "patched": false,
-          "upstream_git_blob": "afcf2b6d9fb3c4d992a5abee4dd4c0acd85546ad",
+          "upstream_git_blob": "1fd9ff0ac06d7451fc92171788cfab897daaaf4d",
           "upstream_path": "BrownianMotion/Auxiliary/FiniteInf.lean",
-          "upstream_sha256": "6991f6cd67c5c63e5fac895de93c11e99dcf922b25f9fd43afb4aec645e29289",
-          "vendored_sha256": "6991f6cd67c5c63e5fac895de93c11e99dcf922b25f9fd43afb4aec645e29289"
+          "upstream_sha256": "5731080f16cb712effaffa72739ff36d4a4835f9385e5bbb8e06d88c6617425d",
+          "vendored_sha256": "5731080f16cb712effaffa72739ff36d4a4835f9385e5bbb8e06d88c6617425d"
         },
         "BrownianMotion/BrownianMotion/Auxiliary/HasLaw.lean": {
           "module": "BrownianMotion.BrownianMotion.Auxiliary.HasLaw",
@@ -68,45 +76,61 @@
           "upstream_sha256": "8990633ee9f46231cad43abc0b9db39c45a30c53b7d6b27e4020badf160b6a3a",
           "vendored_sha256": "8990633ee9f46231cad43abc0b9db39c45a30c53b7d6b27e4020badf160b6a3a"
         },
+        "BrownianMotion/BrownianMotion/Auxiliary/Indistinguishable.lean": {
+          "module": "BrownianMotion.BrownianMotion.Auxiliary.Indistinguishable",
+          "patched": false,
+          "upstream_git_blob": "17cf654f9b8aa296a7627f27941003cdba0dd7cb",
+          "upstream_path": "BrownianMotion/Auxiliary/Indistinguishable.lean",
+          "upstream_sha256": "c9fd45be312983cd78cecc9739ee00030bf864e2915aa5c818dcdbf9e4e3b7b0",
+          "vendored_sha256": "c9fd45be312983cd78cecc9739ee00030bf864e2915aa5c818dcdbf9e4e3b7b0"
+        },
+        "BrownianMotion/BrownianMotion/Auxiliary/Jensen.lean": {
+          "module": "BrownianMotion.BrownianMotion.Auxiliary.Jensen",
+          "patched": false,
+          "upstream_git_blob": "c909e22efe99263a8c1fcc8a1c11430ea519b273",
+          "upstream_path": "BrownianMotion/Auxiliary/Jensen.lean",
+          "upstream_sha256": "db25e62e2300e0393773aa4fb8e5046ad1ba61b7b539da24aa9fd543fda4f106",
+          "vendored_sha256": "db25e62e2300e0393773aa4fb8e5046ad1ba61b7b539da24aa9fd543fda4f106"
+        },
         "BrownianMotion/BrownianMotion/Auxiliary/LeftLimWithin.lean": {
           "module": "BrownianMotion.BrownianMotion.Auxiliary.LeftLimWithin",
           "patched": false,
-          "upstream_git_blob": "18fd777273781245b3f41173268bd5a863f63ece",
+          "upstream_git_blob": "7770abc5f8373c9f9754e86cc34cac1ceee5c1bc",
           "upstream_path": "BrownianMotion/Auxiliary/LeftLimWithin.lean",
-          "upstream_sha256": "3ef488f1a42869a2f8c81bde07422f8ffe7b40ddf98c29e34361ef871f660976",
-          "vendored_sha256": "3ef488f1a42869a2f8c81bde07422f8ffe7b40ddf98c29e34361ef871f660976"
+          "upstream_sha256": "edeb8b8347b267a65c51790233d2071972c0d8114de9c20e08dae40131c25449",
+          "vendored_sha256": "edeb8b8347b267a65c51790233d2071972c0d8114de9c20e08dae40131c25449"
         },
         "BrownianMotion/BrownianMotion/Auxiliary/LinearAlgebra.lean": {
           "module": "BrownianMotion.BrownianMotion.Auxiliary.LinearAlgebra",
           "patched": false,
-          "upstream_git_blob": "4b89593c17f48e5619cee97b6b8b400d7db2648e",
+          "upstream_git_blob": "6c820f55b4bc20969b78e5320e2dfe75f183e324",
           "upstream_path": "BrownianMotion/Auxiliary/LinearAlgebra.lean",
-          "upstream_sha256": "3e2d3872b29f374aafe4706a914ec1073ca417deef2be6c463fe6af74c2aba2d",
-          "vendored_sha256": "3e2d3872b29f374aafe4706a914ec1073ca417deef2be6c463fe6af74c2aba2d"
+          "upstream_sha256": "9d01184f8cbf9b79e29a7fa28f0ddd73c2d5dc3cbda690a02a7fd90ea7594a64",
+          "vendored_sha256": "9d01184f8cbf9b79e29a7fa28f0ddd73c2d5dc3cbda690a02a7fd90ea7594a64"
         },
         "BrownianMotion/BrownianMotion/Auxiliary/Martingale.lean": {
           "module": "BrownianMotion.BrownianMotion.Auxiliary.Martingale",
           "patched": false,
-          "upstream_git_blob": "48fffc7f637e7d188de32cfb0b0360b6e8014783",
+          "upstream_git_blob": "e59291252e76d99a18fd3e81fcafda512d171b49",
           "upstream_path": "BrownianMotion/Auxiliary/Martingale.lean",
-          "upstream_sha256": "b507195fff982e5dfb83e2f9af24f60d2517e79d5f7687db5e0e653e114bdfed",
-          "vendored_sha256": "b507195fff982e5dfb83e2f9af24f60d2517e79d5f7687db5e0e653e114bdfed"
+          "upstream_sha256": "4a715788e100997e83430544ac18f351be688a7413d4bf15b25a5faf365c6a65",
+          "vendored_sha256": "4a715788e100997e83430544ac18f351be688a7413d4bf15b25a5faf365c6a65"
         },
         "BrownianMotion/BrownianMotion/Auxiliary/MeanInequalities.lean": {
           "module": "BrownianMotion.BrownianMotion.Auxiliary.MeanInequalities",
           "patched": false,
-          "upstream_git_blob": "b402cd40f0196e4180a74ee9e19fbd3fc23bffe2",
+          "upstream_git_blob": "b4e1b13bce78200b9d297e6f1e2898981169a822",
           "upstream_path": "BrownianMotion/Auxiliary/MeanInequalities.lean",
-          "upstream_sha256": "67995c387870e772e8882dea0c7a45168946489d6ffb30c2ba870a2c8b23c50d",
-          "vendored_sha256": "67995c387870e772e8882dea0c7a45168946489d6ffb30c2ba870a2c8b23c50d"
+          "upstream_sha256": "396701f3112dea060898d6e5c3e979786f0f541618e22f290118251b00b2106e",
+          "vendored_sha256": "396701f3112dea060898d6e5c3e979786f0f541618e22f290118251b00b2106e"
         },
         "BrownianMotion/BrownianMotion/Auxiliary/MeasureTheory.lean": {
           "module": "BrownianMotion.BrownianMotion.Auxiliary.MeasureTheory",
           "patched": false,
-          "upstream_git_blob": "19ee2544d72e25449c722b2b5a43d806f944c26b",
+          "upstream_git_blob": "244b28df733342d21ea1decff8d810b536b308dd",
           "upstream_path": "BrownianMotion/Auxiliary/MeasureTheory.lean",
-          "upstream_sha256": "f6780b26ed35b27da081d87353a846ff182580d3cec61b8f4284f39de306658d",
-          "vendored_sha256": "f6780b26ed35b27da081d87353a846ff182580d3cec61b8f4284f39de306658d"
+          "upstream_sha256": "6792d2d55e8d05aa83b0faadd256092129bf834c64c483c76d74af9b7ea46f94",
+          "vendored_sha256": "6792d2d55e8d05aa83b0faadd256092129bf834c64c483c76d74af9b7ea46f94"
         },
         "BrownianMotion/BrownianMotion/Auxiliary/Metric.lean": {
           "module": "BrownianMotion.BrownianMotion.Auxiliary.Metric",
@@ -119,10 +143,10 @@
         "BrownianMotion/BrownianMotion/Auxiliary/NNReal.lean": {
           "module": "BrownianMotion.BrownianMotion.Auxiliary.NNReal",
           "patched": false,
-          "upstream_git_blob": "9494348e3281abd1975fd062d4704283e66c6295",
+          "upstream_git_blob": "ca2b8dd3a60c767f296db1d1645c00576c9a53de",
           "upstream_path": "BrownianMotion/Auxiliary/NNReal.lean",
-          "upstream_sha256": "554c33c81f8f9dc12bfc8f883f14cef529cdfbc23ca5943860e96bbcb9935e9a",
-          "vendored_sha256": "554c33c81f8f9dc12bfc8f883f14cef529cdfbc23ca5943860e96bbcb9935e9a"
+          "upstream_sha256": "92dbb17acfc90d8544d9021074814bbba164de8c85b4796603a261237bd87336",
+          "vendored_sha256": "92dbb17acfc90d8544d9021074814bbba164de8c85b4796603a261237bd87336"
         },
         "BrownianMotion/BrownianMotion/Auxiliary/Nat.lean": {
           "module": "BrownianMotion.BrownianMotion.Auxiliary.Nat",
@@ -135,10 +159,10 @@
         "BrownianMotion/BrownianMotion/Auxiliary/StoppedProcess.lean": {
           "module": "BrownianMotion.BrownianMotion.Auxiliary.StoppedProcess",
           "patched": false,
-          "upstream_git_blob": "f1e7e2824fa85ae5e6e3d6b5a105690ddd8aef4b",
+          "upstream_git_blob": "a85b0fdc784a244569279c11d65d2e43e66803d8",
           "upstream_path": "BrownianMotion/Auxiliary/StoppedProcess.lean",
-          "upstream_sha256": "df492875c8c18d8f247738b0ccb32a7a8c627ff9aae4e0f0275b33453109c90e",
-          "vendored_sha256": "df492875c8c18d8f247738b0ccb32a7a8c627ff9aae4e0f0275b33453109c90e"
+          "upstream_sha256": "cccdc568cf2fead5fee824a877c1a2cb739d486331c3118d7350d5c64bf088fb",
+          "vendored_sha256": "cccdc568cf2fead5fee824a877c1a2cb739d486331c3118d7350d5c64bf088fb"
         },
         "BrownianMotion/BrownianMotion/Auxiliary/Topology.lean": {
           "module": "BrownianMotion.BrownianMotion.Auxiliary.Topology",
@@ -151,10 +175,10 @@
         "BrownianMotion/BrownianMotion/Auxiliary/Upcrossing.lean": {
           "module": "BrownianMotion.BrownianMotion.Auxiliary.Upcrossing",
           "patched": false,
-          "upstream_git_blob": "4acd5299183efba5f26271e121d20fa25ef4f931",
+          "upstream_git_blob": "322cc12e85d0f94dd315f26d2cb8d8f357939b57",
           "upstream_path": "BrownianMotion/Auxiliary/Upcrossing.lean",
-          "upstream_sha256": "e73d19d8949a2beec4ed34919d6d8a68332b61f2be172a6ddab3f0015c49a099",
-          "vendored_sha256": "e73d19d8949a2beec4ed34919d6d8a68332b61f2be172a6ddab3f0015c49a099"
+          "upstream_sha256": "e57bef654fd047e348f5b5e897bae097984eba55f8c429c4e6577c75eb4b8db5",
+          "vendored_sha256": "e57bef654fd047e348f5b5e897bae097984eba55f8c429c4e6577c75eb4b8db5"
         },
         "BrownianMotion/BrownianMotion/Continuity/Chaining.lean": {
           "module": "BrownianMotion.BrownianMotion.Continuity.Chaining",
@@ -167,58 +191,58 @@
         "BrownianMotion/BrownianMotion/Continuity/CoveringNumber.lean": {
           "module": "BrownianMotion.BrownianMotion.Continuity.CoveringNumber",
           "patched": false,
-          "upstream_git_blob": "761c41e2f05666ab7df2d71aeb5c819edac86d43",
+          "upstream_git_blob": "2a3f7d3d0a49c17cfc3c9c1a496fe2a5d45e5696",
           "upstream_path": "BrownianMotion/Continuity/CoveringNumber.lean",
-          "upstream_sha256": "89829da52abf33125f18c30f82f2b76d89516682483c1a5cc3caa65d3a649f9d",
-          "vendored_sha256": "89829da52abf33125f18c30f82f2b76d89516682483c1a5cc3caa65d3a649f9d"
+          "upstream_sha256": "0a066df0cd9ef5fd55f453578de9866672baea986d65ea86f2fdc4d18e4867ea",
+          "vendored_sha256": "0a066df0cd9ef5fd55f453578de9866672baea986d65ea86f2fdc4d18e4867ea"
         },
         "BrownianMotion/BrownianMotion/Continuity/HasBoundedInternalCoveringNumber.lean": {
           "module": "BrownianMotion.BrownianMotion.Continuity.HasBoundedInternalCoveringNumber",
           "patched": false,
-          "upstream_git_blob": "3d8564477e40f3e1c4027a3e4111c4390093486e",
+          "upstream_git_blob": "31fd8da68e131544b14e5fdc09af6fd88e8d4070",
           "upstream_path": "BrownianMotion/Continuity/HasBoundedInternalCoveringNumber.lean",
-          "upstream_sha256": "9ef856fc863cf9e55ff00b78e7bb78e19cd2b58fb8eb8b6ebb5b0b4e6ddbd621",
-          "vendored_sha256": "9ef856fc863cf9e55ff00b78e7bb78e19cd2b58fb8eb8b6ebb5b0b4e6ddbd621"
+          "upstream_sha256": "d169aba72155a5b7dfcb89cd13568082f9146da3f8ebdf83c72a2489d969e588",
+          "vendored_sha256": "d169aba72155a5b7dfcb89cd13568082f9146da3f8ebdf83c72a2489d969e588"
         },
         "BrownianMotion/BrownianMotion/Continuity/IsKolmogorovProcess.lean": {
           "module": "BrownianMotion.BrownianMotion.Continuity.IsKolmogorovProcess",
           "patched": false,
-          "upstream_git_blob": "c8bf6cc89722d7a9faf28ea7b1604e1cb7bbd533",
+          "upstream_git_blob": "7b72ec90c4f859d619de2325b13e404a2405de2b",
           "upstream_path": "BrownianMotion/Continuity/IsKolmogorovProcess.lean",
-          "upstream_sha256": "ccaf301535d27035bba97ea42f7a7be3a8d8c0d60fa65915d105b5b76c3836b6",
-          "vendored_sha256": "ccaf301535d27035bba97ea42f7a7be3a8d8c0d60fa65915d105b5b76c3836b6"
+          "upstream_sha256": "e2ab3360724b02661981dc8d46164ed943d52fbf96b85b5586481077bf90b02f",
+          "vendored_sha256": "e2ab3360724b02661981dc8d46164ed943d52fbf96b85b5586481077bf90b02f"
         },
         "BrownianMotion/BrownianMotion/Continuity/KolmogorovChentsov.lean": {
           "module": "BrownianMotion.BrownianMotion.Continuity.KolmogorovChentsov",
           "patched": false,
-          "upstream_git_blob": "f66616954c228807f5c62ceba5e28684d041e2d4",
+          "upstream_git_blob": "a61e857bb6a6f6135716499855870c6d4bb764ce",
           "upstream_path": "BrownianMotion/Continuity/KolmogorovChentsov.lean",
-          "upstream_sha256": "a3cf714a4b31d47c29d78f246f8690621f48a9c767d253b5f5973364178b09bb",
-          "vendored_sha256": "a3cf714a4b31d47c29d78f246f8690621f48a9c767d253b5f5973364178b09bb"
+          "upstream_sha256": "0814a0012d92a1c80ac8681247c106ef6604bffd747b26bb54010d4144283c5b",
+          "vendored_sha256": "0814a0012d92a1c80ac8681247c106ef6604bffd747b26bb54010d4144283c5b"
         },
         "BrownianMotion/BrownianMotion/Continuity/KolmogorovChentsovInequality.lean": {
           "module": "BrownianMotion.BrownianMotion.Continuity.KolmogorovChentsovInequality",
           "patched": false,
-          "upstream_git_blob": "ce893222c97b3eccb9f7c6d130656d3f7f14c1f0",
+          "upstream_git_blob": "265a91d561fbb5300cdfda369c9a67f04493484b",
           "upstream_path": "BrownianMotion/Continuity/KolmogorovChentsovInequality.lean",
-          "upstream_sha256": "56462926ea7a8c915bfeaf97774b411f36715cc443451403013f88d025f19dc9",
-          "vendored_sha256": "56462926ea7a8c915bfeaf97774b411f36715cc443451403013f88d025f19dc9"
+          "upstream_sha256": "0e3d9f8b665d5c3b215ad0c6ffdf88f9e7058dbb0ac28c8dc8bd1a30b979a56c",
+          "vendored_sha256": "0e3d9f8b665d5c3b215ad0c6ffdf88f9e7058dbb0ac28c8dc8bd1a30b979a56c"
         },
         "BrownianMotion/BrownianMotion/Continuity/LimitModification.lean": {
           "module": "BrownianMotion.BrownianMotion.Continuity.LimitModification",
           "patched": false,
-          "upstream_git_blob": "a762b84ebafb7a4bae62ce5ac1e9e6838cc1e7c3",
+          "upstream_git_blob": "c0fd32b5637562cac462f8a1de8500ab14aa42ac",
           "upstream_path": "BrownianMotion/Continuity/LimitModification.lean",
-          "upstream_sha256": "f0a9a0980aecb5ab251bb2db14c34f08c9ba3614caaabb6ce6e30937e8ae0302",
-          "vendored_sha256": "f0a9a0980aecb5ab251bb2db14c34f08c9ba3614caaabb6ce6e30937e8ae0302"
+          "upstream_sha256": "971828f61f311578c0a88233e82504ea7838cdc818bb50a00f26678c0c97868e",
+          "vendored_sha256": "971828f61f311578c0a88233e82504ea7838cdc818bb50a00f26678c0c97868e"
         },
         "BrownianMotion/BrownianMotion/Gaussian/BrownianMotion.lean": {
           "module": "BrownianMotion.BrownianMotion.Gaussian.BrownianMotion",
           "patched": false,
-          "upstream_git_blob": "7b152878eb7b2a35bf6566e69e5cad2e99ea2a33",
+          "upstream_git_blob": "d2b30c9ae3ef255555886e6ce74f191b78de287e",
           "upstream_path": "BrownianMotion/Gaussian/BrownianMotion.lean",
-          "upstream_sha256": "60418ac9f3e5e05c32d17b91e622e5b30cc203e666a0d1b722272feafae0aecc",
-          "vendored_sha256": "60418ac9f3e5e05c32d17b91e622e5b30cc203e666a0d1b722272feafae0aecc"
+          "upstream_sha256": "3dd0eb3d8e550d764a98506b6cd41bc18b376d3a2fbfbe013045463416b0ce58",
+          "vendored_sha256": "3dd0eb3d8e550d764a98506b6cd41bc18b376d3a2fbfbe013045463416b0ce58"
         },
         "BrownianMotion/BrownianMotion/Gaussian/CovMatrix.lean": {
           "module": "BrownianMotion.BrownianMotion.Gaussian.CovMatrix",
@@ -231,10 +255,10 @@
         "BrownianMotion/BrownianMotion/Gaussian/Gaussian.lean": {
           "module": "BrownianMotion.BrownianMotion.Gaussian.Gaussian",
           "patched": false,
-          "upstream_git_blob": "99b6b47c4307a9e900a9f2468635a8266e0ed430",
+          "upstream_git_blob": "cc461d9f91e87990e05e36d7cd72091df92b75a1",
           "upstream_path": "BrownianMotion/Gaussian/Gaussian.lean",
-          "upstream_sha256": "0b31a4cc32d44362533a03d3aec7ba4e124f49e69b2d9b38850b1d2f835e22c1",
-          "vendored_sha256": "0b31a4cc32d44362533a03d3aec7ba4e124f49e69b2d9b38850b1d2f835e22c1"
+          "upstream_sha256": "7970de8c7bceb385a286a4dc9b5ddbf377102fdd9943c68baf852a12b66f7a64",
+          "vendored_sha256": "7970de8c7bceb385a286a4dc9b5ddbf377102fdd9943c68baf852a12b66f7a64"
         },
         "BrownianMotion/BrownianMotion/Gaussian/GaussianProcess.lean": {
           "module": "BrownianMotion.BrownianMotion.Gaussian.GaussianProcess",
@@ -255,10 +279,10 @@
         "BrownianMotion/BrownianMotion/Gaussian/ProjectiveLimit.lean": {
           "module": "BrownianMotion.BrownianMotion.Gaussian.ProjectiveLimit",
           "patched": false,
-          "upstream_git_blob": "99f79437f18299f7b3587ee94ae8867149211097",
+          "upstream_git_blob": "65cda95de2aa6d6737b2c22112812a1960e62c13",
           "upstream_path": "BrownianMotion/Gaussian/ProjectiveLimit.lean",
-          "upstream_sha256": "9c3d83b71437173c2184b36278381f56aa337c650876b6161812d1a4a6273325",
-          "vendored_sha256": "9c3d83b71437173c2184b36278381f56aa337c650876b6161812d1a4a6273325"
+          "upstream_sha256": "0383e10ef62ec0f3aaff30cfd64ec9a90c1ab78fbb64f7f23668d693e8e97840",
+          "vendored_sha256": "0383e10ef62ec0f3aaff30cfd64ec9a90c1ab78fbb64f7f23668d693e8e97840"
         },
         "BrownianMotion/BrownianMotion/Gaussian/StochasticProcesses.lean": {
           "module": "BrownianMotion.BrownianMotion.Gaussian.StochasticProcesses",
@@ -271,50 +295,50 @@
         "BrownianMotion/BrownianMotion/StochasticIntegral/Cadlag.lean": {
           "module": "BrownianMotion.BrownianMotion.StochasticIntegral.Cadlag",
           "patched": false,
-          "upstream_git_blob": "5fb74fba657cfa0b91303baa7206986b74dc52d8",
+          "upstream_git_blob": "4be1ef2fd0862ca2570eb67331d1875d7b9ed1ca",
           "upstream_path": "BrownianMotion/StochasticIntegral/Cadlag.lean",
-          "upstream_sha256": "bf180c7e24270d45ca7de80ddf9c91e0633a08d38fcb3dd2001914654a72748b",
-          "vendored_sha256": "bf180c7e24270d45ca7de80ddf9c91e0633a08d38fcb3dd2001914654a72748b"
+          "upstream_sha256": "3ba787cbb9baab9f84e1179c93d3efbba2d075881835a5d4a4322ad2cbf26b6f",
+          "vendored_sha256": "3ba787cbb9baab9f84e1179c93d3efbba2d075881835a5d4a4322ad2cbf26b6f"
         },
         "BrownianMotion/BrownianMotion/StochasticIntegral/Predictable.lean": {
           "module": "BrownianMotion.BrownianMotion.StochasticIntegral.Predictable",
           "patched": false,
-          "upstream_git_blob": "08f7ff490f94acf45ace103a6c187a342b4bea62",
+          "upstream_git_blob": "82a16cb96ca0a08999a146a9dcc75245308cd2f4",
           "upstream_path": "BrownianMotion/StochasticIntegral/Predictable.lean",
-          "upstream_sha256": "23e72c169c211147e68c4fcda2781df6e75789eafd2611a224b9202fadb3a876",
-          "vendored_sha256": "23e72c169c211147e68c4fcda2781df6e75789eafd2611a224b9202fadb3a876"
+          "upstream_sha256": "f7343bf59842b18db0ffe03631e59c25c7ecac79dc3bd87e0c4147508b36b06c",
+          "vendored_sha256": "f7343bf59842b18db0ffe03631e59c25c7ecac79dc3bd87e0c4147508b36b06c"
         },
         "BrownianMotion/BrownianMotion/StochasticIntegral/Quasimartingale/Basic.lean": {
           "module": "BrownianMotion.BrownianMotion.StochasticIntegral.Quasimartingale.Basic",
           "patched": false,
-          "upstream_git_blob": "bc194d6b3bd6e67418441c072395d8f5208195da",
+          "upstream_git_blob": "9e20fcd26dee0d624ca08a44dac976b736c8300f",
           "upstream_path": "BrownianMotion/StochasticIntegral/Quasimartingale/Basic.lean",
-          "upstream_sha256": "512cf13268929df0c8c570437f4594a9123969448d3a4b9797da6ae50b595aee",
-          "vendored_sha256": "512cf13268929df0c8c570437f4594a9123969448d3a4b9797da6ae50b595aee"
+          "upstream_sha256": "5697dd9c87bd02d7927572c2ab37889085f1ebf68eee467e97fcf47cce2bd748",
+          "vendored_sha256": "5697dd9c87bd02d7927572c2ab37889085f1ebf68eee467e97fcf47cce2bd748"
         },
         "BrownianMotion/BrownianMotion/StochasticIntegral/Quasimartingale/CadlagModification.lean": {
           "module": "BrownianMotion.BrownianMotion.StochasticIntegral.Quasimartingale.CadlagModification",
-          "patched": false,
-          "upstream_git_blob": "fa4fde96947d5c3c933cd6a0f8b91a3664bcc69c",
+          "patched": true,
+          "upstream_git_blob": "754c9d2e4b13931fcad862be18eea44fabfd4f91",
           "upstream_path": "BrownianMotion/StochasticIntegral/Quasimartingale/CadlagModification.lean",
-          "upstream_sha256": "848cd15360d9ab55b18379457fb675d96b06518644b2799b84f05b8d6908d49c",
-          "vendored_sha256": "848cd15360d9ab55b18379457fb675d96b06518644b2799b84f05b8d6908d49c"
+          "upstream_sha256": "53707d086fcdda278b1d74af0839831395582272d7fea1fb2fb62c67238d0b4b",
+          "vendored_sha256": "ccb3147a754cb80cc5267867b741838ea66ea0d8c5e7104a63693f36f78b4018"
         },
         "BrownianMotion/BrownianMotion/StochasticIntegral/Quasimartingale/MaximalInequality.lean": {
           "module": "BrownianMotion.BrownianMotion.StochasticIntegral.Quasimartingale.MaximalInequality",
           "patched": false,
-          "upstream_git_blob": "aed9f446f64ef1d9d8998277848c642951983aab",
+          "upstream_git_blob": "fb707513056886409acb6449e4dbec332d942074",
           "upstream_path": "BrownianMotion/StochasticIntegral/Quasimartingale/MaximalInequality.lean",
-          "upstream_sha256": "919a5c4f86afbcdfc2d4099ba083a6593061984b6fa7416b80ecae24898a4417",
-          "vendored_sha256": "919a5c4f86afbcdfc2d4099ba083a6593061984b6fa7416b80ecae24898a4417"
+          "upstream_sha256": "26641626dddbc5270fb18f46ce2e5e889d7552d16cbf1f84a1aca3a65c747660",
+          "vendored_sha256": "26641626dddbc5270fb18f46ce2e5e889d7552d16cbf1f84a1aca3a65c747660"
         },
         "BrownianMotion/BrownianMotion/StochasticIntegral/SimpleProcess.lean": {
           "module": "BrownianMotion.BrownianMotion.StochasticIntegral.SimpleProcess",
-          "patched": true,
-          "upstream_git_blob": "6ceacbe8aa41e949a722207a20cedf13a82c0976",
+          "patched": false,
+          "upstream_git_blob": "24424759118788451fbc59f7e207231baf13a6fa",
           "upstream_path": "BrownianMotion/StochasticIntegral/SimpleProcess.lean",
-          "upstream_sha256": "3cf4893b143acce20804cd52aa1f0113e872485c199a0bdb800752d352dd95b8",
-          "vendored_sha256": "4258281fe32ab1bbe061ed0b45fd2ac3881c80e784143ee62d2d1bb1801a1c72"
+          "upstream_sha256": "d2051d8d794fcb397b30afa4baeddc629e4362ce17e5baef8840d1c7902ea0f4",
+          "vendored_sha256": "d2051d8d794fcb397b30afa4baeddc629e4362ce17e5baef8840d1c7902ea0f4"
         },
         "BrownianMotion/LICENSE": {
           "module": null,
@@ -326,10 +350,14 @@
         }
       },
       "license": "Apache-2.0",
-      "modules": 39,
+      "modules": 42,
       "repository": "https://github.com/RemyDegenne/brownian-motion",
-      "upstream_mathlib": "81a5d257c8e410db227a6665ed08f64fea08e997",
-      "upstream_toolchain": "leanprover/lean4:v4.32.0"
+      "upstream_dependencies": {
+        "kolmogorov_extension4": "7d76e184c3d2138a2741baf923b57e9a01b9cf25",
+        "mathlib": "0434c03386d3e7f7fd3ed95754543eabe4ab251b"
+      },
+      "upstream_mathlib": "0434c03386d3e7f7fd3ed95754543eabe4ab251b",
+      "upstream_toolchain": "leanprover/lean4:v4.33.0-rc1"
     },
     "KolmogorovExtension4": {
       "commit": "f33cbc388e5d444606dffa7eec507a26b62c15bb",
@@ -370,6 +398,7 @@
       "license": "Apache-2.0",
       "modules": 3,
       "repository": "https://github.com/RemyDegenne/kolmogorov_extension4",
+      "upstream_dependencies": {},
       "upstream_mathlib": "81a5d257c8e410db227a6665ed08f64fea08e997",
       "upstream_toolchain": "leanprover/lean4:v4.32.0"
     },
@@ -1474,11 +1503,11 @@
         },
         "LevyStochCalc/LevyStochCalc/Martingale/CadlagModification.lean": {
           "module": "LevyStochCalc.LevyStochCalc.Martingale.CadlagModification",
-          "patched": false,
+          "patched": true,
           "upstream_git_blob": "900ad94735fcf7a44b41ee9208b8fee21f1995fc",
           "upstream_path": "LevyStochCalc/Martingale/CadlagModification.lean",
           "upstream_sha256": "9d2309b42ae13c80802f46963122cc59aab44a494e88de6a1acac55c8d569b12",
-          "vendored_sha256": "9d2309b42ae13c80802f46963122cc59aab44a494e88de6a1acac55c8d569b12"
+          "vendored_sha256": "e4441df129078b4b11d6aa055db0a665b685ffa964a46f5a158f3343fe67ddc9"
         },
         "LevyStochCalc/LevyStochCalc/Martingale/RightCont.lean": {
           "module": "LevyStochCalc.LevyStochCalc.Martingale.RightCont",
@@ -1956,6 +1985,12 @@
       "license": "Apache-2.0",
       "modules": 196,
       "repository": "https://github.com/cgarryZA/LevyStochCalc",
+      "upstream_dependencies": {
+        "BrownianMotion": "4d52fa776130a29d4ad7d6eda2035a919c0b4696",
+        "MathFin": "784a8311f75a1519a23717856df9982bd6a9a370",
+        "kolmogorov_extension4": "f33cbc388e5d444606dffa7eec507a26b62c15bb",
+        "mathlib": "81a5d257c8e410db227a6665ed08f64fea08e997"
+      },
       "upstream_mathlib": "81a5d257c8e410db227a6665ed08f64fea08e997",
       "upstream_toolchain": "leanprover/lean4:v4.32.0"
     },
@@ -1982,6 +2017,7 @@
       "license": "Apache-2.0",
       "modules": 1,
       "repository": "https://github.com/raphaelrrcoelho/formal-mathfin",
+      "upstream_dependencies": {},
       "upstream_mathlib": "81a5d257c8e410db227a6665ed08f64fea08e997",
       "upstream_toolchain": "leanprover/lean4:v4.32.0"
     }
@@ -1989,7 +2025,7 @@
   "patch": {
     "files": [
       "BrownianMotion/BrownianMotion/Auxiliary/Algebra.lean",
-      "BrownianMotion/BrownianMotion/StochasticIntegral/SimpleProcess.lean",
+      "BrownianMotion/BrownianMotion/StochasticIntegral/Quasimartingale/CadlagModification.lean",
       "KolmogorovExtension4/KolmogorovExtension4/KolmogorovExtension.lean",
       "LevyStochCalc/LevyStochCalc/Brownian/CrossVariation.lean",
       "LevyStochCalc/LevyStochCalc/Brownian/ItoAlgebraAssociativity.lean",
@@ -1999,14 +2035,15 @@
       "LevyStochCalc/LevyStochCalc/Brownian/ItoSimpleMoments.lean",
       "LevyStochCalc/LevyStochCalc/Brownian/Martingale.lean",
       "LevyStochCalc/LevyStochCalc/Brownian/MartingaleCondExp.lean",
-      "LevyStochCalc/LevyStochCalc/Brownian/SimplePredictableRefineAppend.lean"
+      "LevyStochCalc/LevyStochCalc/Brownian/SimplePredictableRefineAppend.lean",
+      "LevyStochCalc/LevyStochCalc/Martingale/CadlagModification.lean"
     ],
     "path": "port.patch",
-    "sha256": "ec19b5d292cb45de0023940c9dc358a906307525c67a20471ff131e27adef284"
+    "sha256": "27a78c6a87e109f62351cf0178934df0dd4f7e091122f75b6d67917e8cd21e27"
   },
   "port": {
     "lean": "v4.33.0",
     "mathlib": "db584cd"
   },
-  "schema": 1
+  "schema": 2
 }

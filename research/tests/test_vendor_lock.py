@@ -195,6 +195,43 @@ class TestVendorLock(unittest.TestCase):
         path.write_bytes(path.read_bytes() + b"changed\n")
         self._assert_error("vendored_sha256 mismatch")
 
+    def test_declared_dependency_is_distinct_from_tested_vendor_override(self) -> None:
+        original = vendor_lock.PINS["BrownianMotion"]["commit"]
+        vendor_lock.PINS["LevyStochCalc"]["upstream_dependencies"] = {
+            "BrownianMotion": original,
+        }
+        path = self.clones["BrownianMotion"] / "BrownianMotion/Basic.lean"
+        path.write_bytes(path.read_bytes() + b"-- newer upstream revision\n")
+        current = self._commit_repo(self.clones["BrownianMotion"])
+        vendor_lock.PINS["BrownianMotion"]["commit"] = current
+        target = self.root / vendor_lock.VENDOR_DIR / "BrownianMotion/BrownianMotion/Basic.lean"
+        target.write_bytes(path.read_bytes())
+        lock = self._generate_and_write()
+        self.assertNotEqual(original, current)
+        self.assertEqual(lock["libraries"]["LevyStochCalc"]["upstream_dependencies"],
+                         {"BrownianMotion": original})
+        self.assertEqual(self._check(), [])
+        self.assertEqual(vendor_lock.check_upstream(self.root, self.clones), [])
+
+    def test_tampered_declared_dependency_is_rejected_offline(self) -> None:
+        vendor_lock.PINS["LevyStochCalc"]["upstream_dependencies"] = {
+            "BrownianMotion": vendor_lock.PINS["BrownianMotion"]["commit"],
+        }
+        lock = self._generate_and_write()
+        lock["libraries"]["LevyStochCalc"]["upstream_dependencies"]["BrownianMotion"] = "f" * 40
+        path = self.root / vendor_lock.VENDOR_DIR / vendor_lock.LOCK_NAME
+        path.write_text(json.dumps(lock))
+        self._assert_error("upstream_dependencies does not match PINS")
+
+    def test_incorrect_declared_upstream_dependency_is_rejected_online(self) -> None:
+        vendor_lock.PINS["LevyStochCalc"]["upstream_dependencies"] = {
+            "BrownianMotion": "f" * 40,
+        }
+        self._generate_and_write()
+        errors = vendor_lock.check_upstream(self.root, self.clones)
+        self.assertTrue(any("declared manifest pin mismatch: BrownianMotion" in e for e in errors),
+                        errors)
+
     def test_extra_file(self) -> None:
         self._generate_and_write()
         self._write(

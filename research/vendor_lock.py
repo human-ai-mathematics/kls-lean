@@ -21,20 +21,30 @@ VENDOR_DIR = "formalization/vendor"
 LOCK_NAME = "vendor-lock.json"
 PATCH_NAME = "port.patch"
 
-PINS: dict[str, dict[str, str]] = {
+PINS: dict[str, dict[str, Any]] = {
     "LevyStochCalc": {
         "repository": "https://github.com/cgarryZA/LevyStochCalc",
         "commit": "984dbf0b790031eac05d56fe5a84b65e15e1e932",
         "upstream_toolchain": "leanprover/lean4:v4.32.0",
         "upstream_mathlib": "81a5d257c8e410db227a6665ed08f64fea08e997",
         "license": "Apache-2.0",
+        "upstream_dependencies": {
+            "BrownianMotion": "4d52fa776130a29d4ad7d6eda2035a919c0b4696",
+            "MathFin": "784a8311f75a1519a23717856df9982bd6a9a370",
+            "kolmogorov_extension4": "f33cbc388e5d444606dffa7eec507a26b62c15bb",
+            "mathlib": "81a5d257c8e410db227a6665ed08f64fea08e997",
+        },
     },
     "BrownianMotion": {
         "repository": "https://github.com/RemyDegenne/brownian-motion",
-        "commit": "4d52fa776130a29d4ad7d6eda2035a919c0b4696",
-        "upstream_toolchain": "leanprover/lean4:v4.32.0",
-        "upstream_mathlib": "81a5d257c8e410db227a6665ed08f64fea08e997",
+        "commit": "a7ad7af662044313bc80a7c0756360fb3745f931",
+        "upstream_toolchain": "leanprover/lean4:v4.33.0-rc1",
+        "upstream_mathlib": "0434c03386d3e7f7fd3ed95754543eabe4ab251b",
         "license": "Apache-2.0",
+        "upstream_dependencies": {
+            "kolmogorov_extension4": "7d76e184c3d2138a2741baf923b57e9a01b9cf25",
+            "mathlib": "0434c03386d3e7f7fd3ed95754543eabe4ab251b",
+        },
     },
     "KolmogorovExtension4": {
         "repository": "https://github.com/RemyDegenne/kolmogorov_extension4",
@@ -297,8 +307,8 @@ def check_lock(root: Path, roots: set[str] | None = None) -> tuple[dict[str, Any
     if set(data) != top_keys:
         errors.append("lock top-level keys are incorrect")
 
-    if data.get("schema") != 1 or isinstance(data.get("schema"), bool):
-        errors.append("lock schema must be integer 1")
+    if data.get("schema") != 2 or isinstance(data.get("schema"), bool):
+        errors.append("lock schema must be integer 2")
     if not isinstance(data.get("description"), str) or not data["description"].endswith("."):
         errors.append("lock description must be a sentence")
     port = data.get("port")
@@ -381,6 +391,7 @@ def check_lock(root: Path, roots: set[str] | None = None) -> tuple[dict[str, Any
             "commit",
             "upstream_toolchain",
             "upstream_mathlib",
+            "upstream_dependencies",
             "license",
             "modules",
             "files",
@@ -400,6 +411,14 @@ def check_lock(root: Path, roots: set[str] | None = None) -> tuple[dict[str, Any
             ):
                 if library.get(field) != pin[field]:
                     errors.append(f"{name} {field} does not match PINS")
+            if library.get("upstream_dependencies") != pin.get("upstream_dependencies", {}):
+                errors.append(f"{name} upstream_dependencies does not match PINS")
+        dependencies = library.get("upstream_dependencies")
+        if not isinstance(dependencies, dict) or any(
+            not isinstance(package, str) or not _is_hex(revision, 40)
+            for package, revision in dependencies.items()
+        ):
+            errors.append(f"{name} upstream_dependencies must map package names to full commits")
         if not _is_hex(library.get("commit"), 40):
             errors.append(f"{name} commit is invalid")
         if not _is_hex(library.get("upstream_mathlib"), 40):
@@ -638,6 +657,18 @@ def check_upstream(root: Path, clones: dict[str, Path]) -> list[str]:
             if toolchain != library.get("upstream_toolchain"):
                 errors.append(f"lean-toolchain mismatch: {name}")
 
+        dependencies = library.get("upstream_dependencies", {})
+        if isinstance(dependencies, dict) and dependencies:
+            try:
+                manifest = json.loads(_git_text(clone, commit, "lake-manifest.json"))
+                packages = {p["name"]: p for p in manifest["packages"]}
+            except (ValueError, UnicodeDecodeError, json.JSONDecodeError, KeyError, TypeError) as exc:
+                errors.append(f"cannot read {name} lake-manifest.json: {exc}")
+            else:
+                for package, revision in dependencies.items():
+                    if packages.get(package, {}).get("rev") != revision:
+                        errors.append(f"{name} declared manifest pin mismatch: {package}")
+
     levy = libraries.get("LevyStochCalc")
     levy_clone = clones.get("LevyStochCalc")
     if isinstance(levy, dict) and levy_clone is not None:
@@ -667,6 +698,7 @@ def check_upstream(root: Path, clones: dict[str, Path]) -> list[str]:
                     if package_name != "mathlib"
                     else levy.get("upstream_mathlib")
                 )
+                expected = levy.get("upstream_dependencies", {}).get(package_name, expected)
                 if package is None:
                     errors.append(f"LevyStochCalc manifest lacks package: {package_name}")
                 elif package.get("rev") != expected:
@@ -779,6 +811,7 @@ def generate_lock(root: Path, clones: dict[str, Path]) -> dict[str, Any]:
             "commit": pin["commit"],
             "upstream_toolchain": pin["upstream_toolchain"],
             "upstream_mathlib": pin["upstream_mathlib"],
+            "upstream_dependencies": dict(pin.get("upstream_dependencies", {})),
             "license": pin["license"],
             "modules": sum(key.endswith(".lean") for key in entries),
             "files": entries,
@@ -791,7 +824,7 @@ def generate_lock(root: Path, clones: dict[str, Path]) -> dict[str, Any]:
         problems.append("patch file set does not match generated patched entries")
 
     lock = {
-        "schema": 1,
+        "schema": 2,
         "description": _DESCRIPTION,
         "port": {"lean": "v4.33.0", "mathlib": "db584cd"},
         "patch": {

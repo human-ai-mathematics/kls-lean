@@ -56,15 +56,9 @@ VENDOR_ROOTS = {
     "MathFin": "formalization/vendor/MathFin",
     "KolmogorovExtension4": "formalization/vendor/KolmogorovExtension4",
 }
-# Upstream BrownianMotion declarations that depend on `sorry` at the pinned revision. Each must
-# still depend on `sorryAx` and nothing else may: a new hole, a new user or an upstream fix fails.
-VENDOR_UPSTREAM_SORRY = {
-    "MeasureTheory.Martingale.cadlagModif_ae_eq",
-    "MeasureTheory.Martingale.isRealQuasimartingale",
-    "ProbabilityTheory.cadlagModif_ae_eq_of_continuousWithinAt_integral",
-    "ProbabilityTheory.rightContModif_ae_eq_of_integral_tendsto",
-    "ProbabilityTheory.uniformIntegrable_of_countable",
-}
+# The synchronized BrownianMotion sources have no accepted upstream holes. Keep the exact
+# allowlist mechanism so every new hole or dependent declaration fails the vendor audit.
+VENDOR_UPSTREAM_SORRY: set[str] = set()
 
 
 def vendor_module_path(name: str) -> Path | None:

@@ -42,8 +42,8 @@ Letwin's Theorem 1.1 and full smooth regular approximation (Lemma A.1), BKL's un
 uniqueness, non-explosion) with the literal stochastic identities (68)–(73), and the four
 exploratory KLS routes are not proved; the cutoff route does not need them. The declaration
 audit covers every project-local declaration, `KLS.kls` included. The separately audited
-[vendored stochastic calculus](formalization/vendor/README.md#upstream-holes) contains
-known upstream holes; no project-local proved declaration may depend on them.
+[vendored stochastic calculus](formalization/vendor/README.md#upstream-holes) is audited
+under the same three-standard-axiom policy, with no upstream-hole exception in the selected closure.
 
 ## Where to look
 

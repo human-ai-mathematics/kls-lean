@@ -1,69 +1,3 @@
---- a/BrownianMotion/BrownianMotion/Auxiliary/Algebra.lean
-+++ b/BrownianMotion/BrownianMotion/Auxiliary/Algebra.lean
-@@ -1,14 +1,13 @@
-+-- Modified 2026-10-12 by the KLS formalization project: ported to Lean v4.33.0 and
-+-- Mathlib db584cd. The changes are listed in vendor/README.md and vendor/port.patch.
- module
- 
- public import Mathlib.LinearAlgebra.Dimension.Finite
- 
- @[expose] public section
- 
---- TODO: remove if https://github.com/leanprover-community/mathlib4/pull/40909 has merged.
--lemma Set.indicator_apply_apply {ι Ω M : Type*} [Zero M] (s : Set ι) (f : ι → Ω → M) (i : ι)
--    (ω : Ω) :
--    s.indicator f i ω = s.indicator (fun j ↦ f j ω) i := by
--  by_cases h : i ∈ s <;> simp [h]
-+-- `Set.indicator_apply_apply` is now provided by Mathlib
-+-- (`Mathlib.Algebra.Notation.Indicator`), with `s` and `i` implicit.
- 
- /-- A finite sum of monotone functions is monotone. -/
- lemma Monotone.finset_sum {ι κ M : Type*} [Preorder ι] [AddCommMonoid M] [Preorder M]
---- a/BrownianMotion/BrownianMotion/StochasticIntegral/SimpleProcess.lean
-+++ b/BrownianMotion/BrownianMotion/StochasticIntegral/SimpleProcess.lean
-@@ -3,6 +3,8 @@
- Released under Apache 2.0 license as described in the file LICENSE.
- Authors: Rémy Degenne, Thomas Zhu
- -/
-+-- Modified 2026-10-12 by the KLS formalization project: ported to Lean v4.33.0 and
-+-- Mathlib db584cd. The changes are listed in vendor/README.md and vendor/port.patch.
- module
- 
- public import BrownianMotion.Auxiliary.StoppedProcess
-@@ -182,7 +184,7 @@
-     {C : ℝ} (hC : ∀ k ≤ n, ∀ ω, ‖W k ω‖ ≤ C) :
-     SimpleProcess E 𝓕 where
-   valueBot := W 0
--  value := Finsupp.onFinset ((Finset.range n).map ⟨fun k ↦ (k, k + 1), fun _ ↦ by grind⟩)
-+  value := Finsupp.onFinset ((Finset.range n).map ⟨fun k ↦ (k, k + 1), by intro _; grind⟩)
-       (fun p ↦ if p.1 < n ∧ p.2 = p.1 + 1 then W p.2 else 0)
-       (fun p ↦ by simp; grind)
-   le_of_mem_support_value p hp := by simp at hp; grind
---- a/KolmogorovExtension4/KolmogorovExtension4/KolmogorovExtension.lean
-+++ b/KolmogorovExtension4/KolmogorovExtension4/KolmogorovExtension.lean
-@@ -3,6 +3,8 @@
- Released under Apache 2.0 license as described in the file LICENSE.
- Authors: Rémy Degenne, Peter Pfaffelhuber
- -/
-+-- Modified 2026-10-12 by the KLS formalization project: ported to Lean v4.33.0 and
-+-- Mathlib db584cd. The changes are listed in vendor/README.md and vendor/port.patch.
- module
- 
- public import KolmogorovExtension4.RegularContent
-@@ -143,9 +145,10 @@
-   swap; · exact J.measurable_restrict
-   have h_mem : J.restrict ⁻¹' s ∈ measurableCylinders α :=
-     (mem_measurableCylinders _).mpr ⟨J, s, hs, rfl⟩
--  rw [projectiveLimit, AddContent.measure_eq _ _ _ _ h_mem,
--    projectiveFamilyContent_congr hP (_ ⁻¹' _) rfl hs]
--  exact generateFrom_measurableCylinders.symm
-+  rw [projectiveLimit]
-+  exact (AddContent.measure_eq _ isSetSemiring_measurableCylinders
-+    generateFrom_measurableCylinders.symm (projectiveFamilyContent_iUnion_le_sum hP) h_mem).trans
-+    (projectiveFamilyContent_congr hP (_ ⁻¹' _) rfl hs)
- 
- instance isFiniteMeasure_projectiveLimit (hP : IsProjectiveMeasureFamily P) :
-     IsFiniteMeasure (projectiveLimit P hP) :=
 --- a/LevyStochCalc/LevyStochCalc/Brownian/CrossVariation.lean
 +++ b/LevyStochCalc/LevyStochCalc/Brownian/CrossVariation.lean
 @@ -3,6 +3,8 @@
@@ -331,3 +265,154 @@
  
  lemma SimplePredictable.appendInterval_xi_castSucc
      {T : ℝ} (H : SimplePredictable Ω T) {T' : ℝ}
+--- a/LevyStochCalc/LevyStochCalc/Martingale/CadlagModification.lean
++++ b/LevyStochCalc/LevyStochCalc/Martingale/CadlagModification.lean
+@@ -1,3 +1,5 @@
++-- Modified by kls-lean for synchronized BrownianMotion interfaces; see formalization/vendor/port.patch.
++
+ /-
+ Copyright (c) 2026 Christian Garry. All rights reserved.
+ Released under Apache 2.0 license as described in the file LICENSE.
+@@ -13,7 +15,7 @@
+ A real martingale on a right-continuous filtration whose time slices are right-continuous
+ in measure admits an adapted modification whose paths are almost surely càdlàg. The
+ modification is the right-limit regularisation along a countable dense set of times
+-(`ProbabilityTheory.rightContModif`), available for real quasimartingales; a martingale is
++(`ProbabilityTheory.rightContModifReal`), available for real quasimartingales; a martingale is
+ a quasimartingale because the elementary integral of a predictable indicator against it has
+ zero mean.
+ 
+@@ -116,13 +118,13 @@
+     ∃ Y : ℝ≥0 → Ω → ℝ, Adapted 𝓕 Y ∧ (∀ t, Y t =ᵐ[μ] X t) ∧
+       ∀ᵐ ω ∂μ, IsCadlag (fun t => Y t ω) := by
+   have hq := isRealQuasimartingale hX
+-  refine ⟨rightContModif X, adapted_rightContModif hq, fun t =>
+-    rightContModif_ae_eq_of_tendstoInMeasure hq t (hrc t), ?_⟩
+-  filter_upwards [cadlagModif_ae_eq_rightContModif hq] with ω hω
+-  have h : (fun t => rightContModif X t ω) = fun t => cadlagModif X t ω :=
++  refine ⟨rightContModifReal X, adapted_rightContModifReal hq, fun t =>
++    rightContModifReal_ae_eq_of_tendstoInMeasure hq t (hrc t), ?_⟩
++  filter_upwards [cadlagModifReal_ae_eq_rightContModifReal hq] with ω hω
++  have h : (fun t => rightContModifReal X t ω) = fun t => cadlagModifReal X t ω :=
+     funext fun t => (hω t).symm
+   rw [h]
+-  exact isCadlag_cadlagModif ω
++  exact isCadlag_cadlagModifReal ω
+ 
+ end NNReal
+ 
+--- a/BrownianMotion/BrownianMotion/Auxiliary/Algebra.lean
++++ b/BrownianMotion/BrownianMotion/Auxiliary/Algebra.lean
+@@ -1,14 +1,10 @@
++-- Modified by kls-lean for Lean/Mathlib v4.33.0; see formalization/vendor/port.patch.
++
+ module
+ 
+ public import Mathlib.LinearAlgebra.Dimension.Finite
+ 
+ @[expose] public section
+-
+--- TODO: remove if https://github.com/leanprover-community/mathlib4/pull/40909 has merged.
+-lemma Set.indicator_apply_apply {ι Ω M : Type*} [Zero M] (s : Set ι) (f : ι → Ω → M) (i : ι)
+-    (ω : Ω) :
+-    s.indicator f i ω = s.indicator (fun j ↦ f j ω) i := by
+-  by_cases h : i ∈ s <;> simp [h]
+ 
+ /-- A finite sum of monotone functions is monotone. -/
+ lemma Monotone.finset_sum {ι κ M : Type*} [Preorder ι] [AddCommMonoid M] [Preorder M]
+--- a/BrownianMotion/BrownianMotion/StochasticIntegral/Quasimartingale/CadlagModification.lean
++++ b/BrownianMotion/BrownianMotion/StochasticIntegral/Quasimartingale/CadlagModification.lean
+@@ -1,3 +1,5 @@
++-- Modified by kls-lean for the selected proved dependency closure; see formalization/vendor/port.patch.
++
+ /-
+ Copyright (c) 2026 Kexing Ying. All rights reserved.
+ Released under Apache 2.0 license as described in the file LICENSE.
+@@ -12,7 +14,7 @@
+ public import BrownianMotion.StochasticIntegral.Cadlag
+ public import BrownianMotion.StochasticIntegral.Predictable
+ public import BrownianMotion.StochasticIntegral.Quasimartingale.MaximalInequality
+-public import BrownianMotion.StochasticIntegral.UniformIntegrable
++public import BrownianMotion.Auxiliary.Jensen
+ public import Mathlib.MeasureTheory.Integral.DominatedConvergence
+ 
+ /-! # Cadlag modification of quasimartingales
+@@ -58,6 +60,53 @@
+ lemma not_isMax_of_nhdsGT_neBot {α : Type*} [Preorder α] [TopologicalSpace α] {a : α}
+     [h : (𝓝[>] a).NeBot] : ¬ IsMax a :=
+   fun ha ↦ h.ne ha.nhdsGT_eq_bot
++
++/- The three stability helpers below use the proved upstream bodies from
++BrownianMotion/StochasticIntegral/UniformIntegrable.lean at a7ad7af. They are private
++to this consumer, so the unrelated optional-sampling and limit-process placeholders
++from that module are outside the selected dependency closure. -/
++section UniformIntegrableStability
++
++variable {ι κ Ω E F : Type*} {mΩ : MeasurableSpace Ω} {μ : Measure Ω}
++
++private lemma MeasureTheory.UniformIntegrable.add [NormedAddCommGroup E] {X Y : ι → Ω → E} {p : ℝ≥0∞} (hp : 1 ≤ p)
++    (hX : UniformIntegrable X p μ) (hY : UniformIntegrable Y p μ) :
++    UniformIntegrable (X + Y) p μ := by
++  refine ⟨fun _ ↦ (hX.1 _).add (hY.1 _), ?_, ?_⟩
++  · rcases hX with ⟨hX₁, hX₂, hX₃⟩
++    rcases hY with ⟨hY₁, hY₂, hY₃⟩
++    exact hX₂.add hY₂ hp hX₁ hY₁
++  · obtain ⟨C_X, hC_X⟩ := hX.2.2
++    obtain ⟨C_Y, hC_Y⟩ := hY.2.2
++    exact ⟨C_X + C_Y,
++      fun i ↦ le_trans (eLpNorm_add_le (hX.1 i) (hY.1 i) hp) (add_le_add (hC_X i) (hC_Y i))⟩
++
++private lemma MeasureTheory.uniformIntegrable_of_dominated [NormedAddCommGroup E] [NormedAddCommGroup F]
++    {X : ι → Ω → E} {Y : κ → Ω → F} {p : ℝ≥0∞}
++    (hY : UniformIntegrable Y p μ) (mX : ∀ i, AEStronglyMeasurable (X i) μ)
++    (hX : ∀ i, ∃ j, ∀ᵐ ω ∂μ, ‖X i ω‖ ≤ ‖Y j ω‖) :
++    UniformIntegrable X p μ := by
++  refine ⟨mX, fun ε hε ↦ ?_, ?_⟩
++  · obtain ⟨δ, hδ, h⟩ := hY.2.1 hε
++    refine ⟨δ, hδ, fun i s hs hμs ↦ let ⟨j, hj⟩ := hX i
++      le_trans (eLpNorm_mono_ae ?_) <| h j s hs hμs⟩
++    filter_upwards [hj] with ω hω
++    rw [Set.indicator]
++    split_ifs with hmem
++    · rw [Set.indicator_of_mem hmem]
++      exact hω
++    · simp [Set.indicator_of_notMem hmem]
++  · obtain ⟨C, hC⟩ := hY.2.2
++    exact ⟨C, fun i ↦ let ⟨j, hj⟩ := hX i
++      le_trans (eLpNorm_mono_ae hj) <| hC j⟩
++
++private lemma MeasureTheory.UniformIntegrable.norm [NormedAddCommGroup E] {X : ι → Ω → E} {p : ℝ≥0∞}
++    (hY : UniformIntegrable X p μ) :
++    UniformIntegrable (fun t ω ↦ ‖X t ω‖) p μ := by
++  refine uniformIntegrable_of_dominated hY ?_ (fun i ↦ ⟨i, by simp⟩)
++  exact fun i ↦ (UniformIntegrable.aestronglyMeasurable hY i).norm
++
++end UniformIntegrableStability
+ 
+ section UniformIntegrableAux
+ 
+--- a/KolmogorovExtension4/KolmogorovExtension4/KolmogorovExtension.lean
++++ b/KolmogorovExtension4/KolmogorovExtension4/KolmogorovExtension.lean
+@@ -3,6 +3,8 @@
+ Released under Apache 2.0 license as described in the file LICENSE.
+ Authors: Rémy Degenne, Peter Pfaffelhuber
+ -/
++-- Modified 2026-10-12 by the KLS formalization project: ported to Lean v4.33.0 and
++-- Mathlib db584cd. The changes are listed in vendor/README.md and vendor/port.patch.
+ module
+ 
+ public import KolmogorovExtension4.RegularContent
+@@ -143,9 +145,10 @@
+   swap; · exact J.measurable_restrict
+   have h_mem : J.restrict ⁻¹' s ∈ measurableCylinders α :=
+     (mem_measurableCylinders _).mpr ⟨J, s, hs, rfl⟩
+-  rw [projectiveLimit, AddContent.measure_eq _ _ _ _ h_mem,
+-    projectiveFamilyContent_congr hP (_ ⁻¹' _) rfl hs]
+-  exact generateFrom_measurableCylinders.symm
++  rw [projectiveLimit]
++  exact (AddContent.measure_eq _ isSetSemiring_measurableCylinders
++    generateFrom_measurableCylinders.symm (projectiveFamilyContent_iUnion_le_sum hP) h_mem).trans
++    (projectiveFamilyContent_congr hP (_ ⁻¹' _) rfl hs)
+ 
+ instance isFiniteMeasure_projectiveLimit (hP : IsProjectiveMeasureFamily P) :
+     IsFiniteMeasure (projectiveLimit P hP) :=

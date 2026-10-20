@@ -96,11 +96,14 @@ status:
       literature_dependencies: []
   upstream_holes:
     scope: >-
-      The pinned external BrownianMotion sources contain four upstream proof
-      placeholders affecting five declarations, listed in vendor/README.md.
-      These are excluded from the project-local counts above. Every local
-      declaration is audited against the three standard axioms without an
-      exception, so the closed results cannot depend on those holes.
+      The selected vendored dependency closure has no accepted upstream proof
+      placeholders. BrownianMotion's corrected regularization interfaces are
+      synchronized at a7ad7af662044313bc80a7c0756360fb3745f931; its unrelated
+      UniformIntegrable module is outside the selected closure. The vendor
+      and project-local declaration audits both require the three standard
+      axioms without a sorryAx exception. This is not a claim about every
+      file in the upstream repositories; selection and adaptations are recorded
+      in formalization/vendor/README.md and vendor-lock.json.
     inventory: formalization/vendor/README.md#upstream-holes
   comparator:
     instructions: research/audits/KLS/Comparator/README.md

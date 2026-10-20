@@ -1,13 +1,10 @@
--- Modified 2026-10-12 by the KLS formalization project: ported to Lean v4.33.0 and
--- Mathlib db584cd. The changes are listed in vendor/README.md and vendor/port.patch.
+-- Modified by kls-lean for Lean/Mathlib v4.33.0; see formalization/vendor/port.patch.
+
 module
 
 public import Mathlib.LinearAlgebra.Dimension.Finite
 
 @[expose] public section
-
--- `Set.indicator_apply_apply` is now provided by Mathlib
--- (`Mathlib.Algebra.Notation.Indicator`), with `s` and `i` implicit.
 
 /-- A finite sum of monotone functions is monotone. -/
 lemma Monotone.finset_sum {ι κ M : Type*} [Preorder ι] [AddCommMonoid M] [Preorder M]
@@ -21,7 +18,7 @@ lemma Monotone.const_smul_of_nonneg {ι α M : Type*} [Preorder ι] [Preorder α
     Monotone fun i ↦ c • f i :=
   fun _ _ hab ↦ smul_le_smul_of_nonneg_left (hf hab) hc
 
-theorem div_left_injective₀ {G₀ : Type*} [CommGroupWithZero G₀] {c : G₀} (hc : c ≠ 0) :
+lemma div_left_injective₀ {G₀ : Type*} [CommGroupWithZero G₀] {c : G₀} (hc : c ≠ 0) :
     Function.Injective fun x ↦ x / c := by
   intro x y hxy
   apply mul_eq_mul_of_div_eq_div x y hc hc at hxy

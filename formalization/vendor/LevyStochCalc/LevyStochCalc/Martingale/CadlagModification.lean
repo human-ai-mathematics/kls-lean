@@ -1,3 +1,5 @@
+-- Modified by kls-lean for synchronized BrownianMotion interfaces; see formalization/vendor/port.patch.
+
 /-
 Copyright (c) 2026 Christian Garry. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
@@ -13,7 +15,7 @@ import Mathlib.Probability.Martingale.Basic
 A real martingale on a right-continuous filtration whose time slices are right-continuous
 in measure admits an adapted modification whose paths are almost surely càdlàg. The
 modification is the right-limit regularisation along a countable dense set of times
-(`ProbabilityTheory.rightContModif`), available for real quasimartingales; a martingale is
+(`ProbabilityTheory.rightContModifReal`), available for real quasimartingales; a martingale is
 a quasimartingale because the elementary integral of a predictable indicator against it has
 zero mean.
 
@@ -116,13 +118,13 @@ theorem exists_adapted_ae_isCadlag_nnreal [𝓕.IsRightContinuous] (hX : Marting
     ∃ Y : ℝ≥0 → Ω → ℝ, Adapted 𝓕 Y ∧ (∀ t, Y t =ᵐ[μ] X t) ∧
       ∀ᵐ ω ∂μ, IsCadlag (fun t => Y t ω) := by
   have hq := isRealQuasimartingale hX
-  refine ⟨rightContModif X, adapted_rightContModif hq, fun t =>
-    rightContModif_ae_eq_of_tendstoInMeasure hq t (hrc t), ?_⟩
-  filter_upwards [cadlagModif_ae_eq_rightContModif hq] with ω hω
-  have h : (fun t => rightContModif X t ω) = fun t => cadlagModif X t ω :=
+  refine ⟨rightContModifReal X, adapted_rightContModifReal hq, fun t =>
+    rightContModifReal_ae_eq_of_tendstoInMeasure hq t (hrc t), ?_⟩
+  filter_upwards [cadlagModifReal_ae_eq_rightContModifReal hq] with ω hω
+  have h : (fun t => rightContModifReal X t ω) = fun t => cadlagModifReal X t ω :=
     funext fun t => (hω t).symm
   rw [h]
-  exact isCadlag_cadlagModif ω
+  exact isCadlag_cadlagModifReal ω
 
 end NNReal
 
