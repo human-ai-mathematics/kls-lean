@@ -5,6 +5,7 @@ import re
 import sys
 import tempfile
 import unittest
+from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 import api_index
@@ -92,6 +93,20 @@ class APIIndexTests(unittest.TestCase):
     def test_input_digest_changes_for_source_or_generator_change(self):
         self.assertNotEqual(api_index.digest({'module': 'a', 'generator': 'b'}),
                             api_index.digest({'module': 'a', 'generator': 'c'}))
+
+    def test_stale_inputs_name_the_changed_source_and_recovery_command(self):
+        output = self.root / 'build/api-index'
+        output.mkdir(parents=True)
+        source = 'formalization/FunctionalInequalities/Analysis/Test.lean'
+        (output / 'manifest.json').write_text(json.dumps({
+            'format': api_index.FORMAT, 'inputs': {source: 'before'}, 'input_digest': 'old'}))
+        with patch.object(api_index, 'source_inputs', return_value={source: 'after'}):
+            with self.assertRaises(ValueError) as raised:
+                api_index.check(self.root, output)
+        message = str(raised.exception)
+        self.assertIn(source, message)
+        self.assertIn('1 changed input;', message)
+        self.assertIn('python3 research/api_index.py', message)
 
     def test_output_cannot_overwrite_source_or_configuration(self):
         for value in ['formalization', '.cursor', 'build', 'build/../research']:

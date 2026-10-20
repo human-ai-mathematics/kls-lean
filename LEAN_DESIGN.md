@@ -7,6 +7,9 @@ and the [naming guide](research/naming.md) for public API conventions.
 
 The proved target is `FunctionalInequalities.KLS.kls : KLS.Conjecture`. The [paper register](research/progress/LITERATURE.md)
 owns theorem scope and coverage; the [current handoff](HANDOFF.md) owns current work and receipt pointers.
+The [KLS application client](examples/KlsApplications.lean) extracts its universal constant,
+obtains a smooth-test variance bound and composes it with Gaussian convolution; the
+[separate-project walkthrough](examples/FIRST-USE.md) shows the complete first call.
 The [classical KLS gate](research/audits/KLS/Classical/README.md) checks, with independently written Mathlib-only statements,
 that the target yields the classical convex-body, locally Lipschitz and covariance-normalized formulations.
 

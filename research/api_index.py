@@ -96,7 +96,8 @@ def render_entry(rows: list[dict], inventory: dict, input_digest: str, output_di
     lines += ['', '## Search the complete interface', '',
               'From the repository root, generate and validate the index:', '', '```bash',
               'python3 research/api_index.py' + suffix, 'python3 research/api_index.py --check' + suffix, '```', '',
-              f'Open `{output_dir}/index.html` locally. Search by declaration, module, type or docstring; filter by family.',
+              f'Open `{output_dir}/index.html` locally. Search by declaration, module, type or docstring; combine keywords in any order and filter by family.',
+              'Expand a result to copy its defining import and read the full type, source location and docstring.',
               f'The complete data is `{output_dir}/public-api.json`; `manifest.json` binds it to source hashes, the toolchain and generator.',
               'These large, reproducible outputs stay under ignored `build/`; this navigation page stays small.', '',
               'Generation builds the current library before extraction. The compiler import set must match every current library module.',
@@ -120,6 +121,7 @@ def render_html(rows: list[dict], input_digest: str, source_prefix: str = '../..
 <p>Current compiler interfaces, not proof or certificate status. Private/internal names are excluded; generated public support may appear.</p>
 <label>Search <input id="query" type="search" placeholder="Name, type, module or docstring"></label>
 <label>Family <select id="family"><option value="">All families</option></select></label>
+<p class="meta">Use several keywords in any order. Expand a result for its import line, full type and source documentation.</p>
 <p id="count" aria-live="polite"></p><main id="results"></main><button id="more">Show 100 more</button>
 <p class="meta">Source/tool input digest: <code>__DIGEST__</code>. Source and compiler types are authoritative. No axiom audit or kernel replay is performed by this index.</p>
 <script type="application/json" id="data">__DATA__</script>
@@ -129,8 +131,8 @@ const query=document.getElementById('query'),family=document.getElementById('fam
 for(const f of [...new Set(rows.map(r=>r.family))].sort()){const o=document.createElement('option');o.value=f;o.textContent=f;family.append(o)}
 const terms=rows.map(r=>[r.name,r.module,r.type,r.docstring||''].join(' ').toLowerCase());let limit=100;
 function element(tag,text){const e=document.createElement(tag);e.textContent=text;return e}
-function render(){const q=query.value.toLowerCase().trim();const selected=rows.filter((r,i)=>(!family.value||r.family===family.value)&&(!q||terms[i].includes(q)));results.replaceChildren();document.getElementById('count').textContent=`${selected.length} matches; showing ${Math.min(limit,selected.length)}.`;
-for(const r of selected.slice(0,limit)){const d=document.createElement('details');d.append(element('summary',r.name+'  ·  '+r.kind));const m=element('p',r.module+' · '+(r.source_line?'line '+r.source_line:'source range unavailable'));m.className='meta';d.append(m);const a=element('a','Open defining source');a.href=sourcePrefix+r.source_path;d.append(a);d.append(element('pre',r.kind+' '+r.name+' :\n'+r.type));d.append(element('p','Universe parameters: '+(r.universes.join(', ')||'none')));const doc=element('div',r.docstring||'No source docstring is attached.');doc.className='doc';d.append(doc);if(r.unsafe||r.partial)d.append(element('p','Compiler flags: '+(r.unsafe?'unsafe ':'')+(r.partial?'partial':'')));results.append(d)}more.hidden=limit>=selected.length}
+function render(){const keywords=query.value.toLowerCase().trim().split(/\s+/).filter(Boolean);const selected=rows.filter((r,i)=>(!family.value||r.family===family.value)&&keywords.every(word=>terms[i].includes(word)));results.replaceChildren();document.getElementById('count').textContent=`${selected.length} matches; showing ${Math.min(limit,selected.length)}.`;
+for(const r of selected.slice(0,limit)){const d=document.createElement('details');d.append(element('summary',r.name+'  ·  '+r.kind));const m=element('p',r.source_path+(r.source_line?':'+r.source_line:' · source range unavailable'));m.className='meta';d.append(m);d.append(element('pre','import '+r.module));const a=element('a','Open defining source');a.href=sourcePrefix+r.source_path;d.append(a);d.append(element('pre',r.kind+' '+r.name+' :\n'+r.type));d.append(element('p','Universe parameters: '+(r.universes.join(', ')||'none')));const doc=element('div',r.docstring||'No source docstring is attached.');doc.className='doc';d.append(doc);if(r.unsafe||r.partial)d.append(element('p','Compiler flags: '+(r.unsafe?'unsafe ':'')+(r.partial?'partial':'')));results.append(d)}more.hidden=limit>=selected.length}
 query.addEventListener('input',()=>{limit=100;render()});family.addEventListener('change',()=>{limit=100;render()});more.addEventListener('click',()=>{limit+=100;render()});render();
 </script></html>'''.replace('__DIGEST__', html.escape(input_digest)).replace('__PREFIX__', prefix).replace('__DATA__', payload)
 
@@ -146,7 +148,11 @@ def check(root: Path, output: Path) -> dict:
     manifest = json.loads((output / 'manifest.json').read_text())
     inputs = source_inputs(root)
     if manifest['format'] != FORMAT or manifest['inputs'] != inputs or manifest['input_digest'] != digest(inputs):
-        raise ValueError('API index inputs are stale; regenerate the current compiler index')
+        previous = manifest.get('inputs', {})
+        changed = sorted(name for name in set(previous) | set(inputs) if previous.get(name) != inputs.get(name))
+        detail = (f'{len(changed)} changed input' + ('s' if len(changed) != 1 else '') + '; '
+                  + ', '.join(changed[:3])) if changed else 'format or input digest changed'
+        raise ValueError(f'API index inputs are stale ({detail}); run python3 research/api_index.py')
     if set(manifest['outputs']) != {'index.html', 'public-api.json', 'compiler.json', 'Observe.lean'}:
         raise ValueError('Incomplete API output manifest')
     for name, checksum in manifest['outputs'].items():

@@ -63,6 +63,7 @@ roots = [
 name = "Examples"
 srcDir = ".."
 roots = [
+  "examples.KlsApplications",
   "examples.MetricBV",
   "examples.PoincareFoundation",
   "examples.ApiOrganization",

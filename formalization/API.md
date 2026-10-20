@@ -26,7 +26,8 @@ python3 research/api_index.py
 python3 research/api_index.py --check
 ```
 
-Open `build/api-index/index.html` locally. Search by declaration, module, type or docstring; filter by family.
+Open `build/api-index/index.html` locally. Search by declaration, module, type or docstring; combine keywords in any order and filter by family.
+Expand a result to copy its defining import and read the full type, source location and docstring.
 The complete data is `build/api-index/public-api.json`; `manifest.json` binds it to source hashes, the toolchain and generator.
 These large, reproducible outputs stay under ignored `build/`; this navigation page stays small.
 
@@ -37,4 +38,4 @@ Pinned compiled Mathlib dependencies are trusted. The index performs no axiom au
 
 Kinds: constructor: 31, definition: 764, inductive: 31, recursor: 31, theorem: 4,926.
 
-Source/tool input digest: `c5ab58b247066f807616775c4e4add217779853d823a32d85b90f2a105ed269a`.
+Source/tool input digest: `ca28baf4bc92f471690d0d517faa17276de5271587aa99e5d152ff470118388c`.

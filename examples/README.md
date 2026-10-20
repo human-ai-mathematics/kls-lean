@@ -5,6 +5,7 @@ The default `Examples` target checks every file below. Use [library design](../L
 
 | Client | Calls and scope |
 | --- | --- |
+| [KlsApplications.lean](KlsApplications.lean) | Directly calls `KLS.kls`: a universal covariance-normalized smooth-test bound, a variance inequality, isotropic specialization and Gaussian convolution with bound `C + t` |
 | [MetricBV.lean](MetricBV.lean) | Generic metric-space perimeter: compose nonzero measure scaling and finite-measure complement symmetry; no KLS application import |
 | [MatrixIntegral.lean](MatrixIntegral.lean) | One matrix-integral import; arbitrary real coefficient, an indefinite symmetric matrix, and an identity field with the PSD premise discharged |
 | [GeneratedSemigroup.lean](GeneratedSemigroup.lean) | One semigroup-law import; bounded-operator norm and composition, plus a closed full-domain zero operator; real Hilbert spaces without a finite-dimension assumption |
@@ -23,6 +24,7 @@ lake build Examples
 
 | Task | Import | Keep explicit |
 | --- | --- | --- |
+| Obtain the main KLS bound | `FunctionalInequalities.KLS.Target` | Choose the universal constant before the dimension and law; the statement uses the intrinsic local-slope constant |
 | Extend a PSD trace estimate to symmetric matrices | `FunctionalInequalities.Analysis.Matrix.Integral` | The PSD estimate is an input; arbitrary measure, finite index and real coefficient |
 | Compose generated bounded operators | `FunctionalInequalities.Analysis.Semigroup.Generated.Laws` | Closed operator, dense domain, nonnegative times; `Generated.operator_add_time` and `norm_operator_le_one` |
 | Combine finite factor laws | `FunctionalInequalities.Poincare.FiniteProduct.Tensorization` | Probability factors, smooth finite-energy frontend; empty families and infinite optimal constants are allowed |
@@ -36,7 +38,35 @@ so its generic integral import need not expose the bundled `ProbabilityMeasure` 
 The Gaussian product's value `4` belongs to `SmoothTest`; covariance translation is a separate
 operator identity. Changing energy frontend requires the corresponding proved comparison.
 
+## Apply KLS to another argument
+
+[KlsApplications.lean](KlsApplications.lean) starts with `obtain ⟨C, hC⟩ := KLS.kls`.
+Its `covariance_bound` converts the intrinsic local-slope conclusion into
+`Poincare.SmoothTest.Holds` through the proved log-concave comparisons. Then
+`variance_bound` applies `Holds.variance_le` to a smooth L² function with integrable squared
+gradient. `isotropic_bound` removes the covariance factor; `gaussian_convolution_bound`
+combines it with the Gaussian and convolution interfaces. Each bound chooses one constant
+before quantifying over dimensions and laws, including dimension zero.
+
+The last example supplies the Poincaré input of Kook–Vempala–Zhang,
+[*In-and-Out: Algorithmic Diffusion for Sampling Convex Bodies*, NeurIPS 2024](https://papers.nips.cc/paper_files/paper/2024/file/c4006ff54a7bbda74c09bad6f7586f5b-Paper-Conference.pdf),
+Definition 2 and the Poincaré part of Lemma 11: Gaussian convolution with covariance `t Id`
+adds `t` to the bound. The normalization is `Var f ≤ C ∫ ‖∇f‖²`, with no factor `1/2`.
+The Lean client uses smooth finite-energy tests. The sampler, divergence contraction and
+log-Sobolev assertions require their own formalization; this example adds no paper-coverage claim.
+
+Other uses of KLS include normal approximation in Fang–Koike,
+[*Sharp High-dimensional Central Limit Theorems for Log-concave Distributions*](https://arxiv.org/abs/2207.14536),
+and entropy estimates in Ball–Nguyen,
+[*Entropy jumps for isotropic log-concave random vectors and spectral gap*](https://arxiv.org/abs/1206.5098).
+These are potential application targets, with no local formalization status assigned here.
+
 ## Connect a separate Lake project
+
+For a first local call of the main theorem, follow the complete
+[KLS first-use walkthrough](FIRST-USE.md). It includes the pinned toolchain, package location,
+client target, cache preparation and strict compilation. The path dependency uses the current
+local source tree. The Git procedure below instead selects a committed revision.
 
 Use the same [pinned Lean toolchain](../formalization/lean-toolchain). The package is in the
 repository's `formalization/` subdirectory. In an independent project's `lakefile.toml`, pin the

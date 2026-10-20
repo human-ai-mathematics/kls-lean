@@ -60,8 +60,16 @@ statements and the ADMG target. It corrects stale completion claims, quantifier 
 test-class descriptions and the attribution of the local constant 153. Lean types, definitions,
 proofs and certificate/progress states are unchanged by those textual corrections.
 
-The module ownership and text corrections retain all mathematical statements and certificate
-states. Further proof work selects a pinned literature target under the repository workflow.
+The usability improvements refresh the compiler API directory, improve keyword search,
+add a [direct KLS application client](examples/KlsApplications.lean), and document
+[first use from a separate Lake project](examples/FIRST-USE.md). The client passes the KLS
+bound through existing smooth-test, Gaussian and convolution interfaces; its literature use
+is the Poincaré input of In-and-Out (NeurIPS 2024, Lemma 11), with no sampler or paper-coverage
+claim. The first-use client and documentation are maintained with the library interfaces.
+
+The module-ownership and text-correction migration is already committed at `88547fc`.
+The noncompact Letwin proof, Comparator/metadata and usability improvements are recorded
+as separate changes. The next contribution package is the four Product-Lp helpers in Mathlib.
 Before an approved verification milestone, freeze the intended source snapshot, run full local
 verification and select the exact committed revision for downstream and remote certification. The
 [release procedure](research/release.md), [contribution guide](CONTRIBUTING.md) and
