@@ -66,11 +66,15 @@ theorem route_Y7 :
   intro H₀ _ _ _ L hL hcomm D hD hC f t ht
   exact Analysis.Semigroup.route_Y7 L hL hcomm D hD hC f t ht
 
+section InnerProduct
+
+variable {H₀ : Type*}
+variable [NormedAddCommGroup H₀] [InnerProductSpace ℝ H₀] [CompleteSpace H₀]
+
 /-! ### Boundary cases -/
 
 /-- At `t = 0` both exponentials in `Y6` are the identity and the bound is `0 ≤ 0`. -/
-theorem boundary_Y6_t_zero {H₀ : Type*} [NormedAddCommGroup H₀] [InnerProductSpace ℝ H₀]
-    [CompleteSpace H₀] (A B : H₀ →L[ℝ] H₀) (hA : ∀ f, 0 ≤ ⟪A f, f⟫) (hB : ∀ f, 0 ≤ ⟪B f, f⟫)
+theorem boundary_Y6_t_zero (A B : H₀ →L[ℝ] H₀) (hA : ∀ f, 0 ≤ ⟪A f, f⟫) (hB : ∀ f, 0 ≤ ⟪B f, f⟫)
     (hAB : A.comp B = B.comp A) (f : H₀) :
     ‖NormedSpace.exp (-(0 : ℝ) • A) f - NormedSpace.exp (-(0 : ℝ) • B) f‖ = 0 := by
   have h := Analysis.Semigroup.norm_exp_neg_smul_sub_le A B hA hB hAB le_rfl f
@@ -78,10 +82,11 @@ theorem boundary_Y6_t_zero {H₀ : Type*} [NormedAddCommGroup H₀] [InnerProduc
   exact le_antisymm h (norm_nonneg _)
 
 /-- For `A = B` the `Y6` bound reads `0 ≤ 0` for every `t ≥ 0`. -/
-theorem boundary_Y6_eq {H₀ : Type*} [NormedAddCommGroup H₀] [InnerProductSpace ℝ H₀]
-    [CompleteSpace H₀] (A : H₀ →L[ℝ] H₀) (hA : ∀ f, 0 ≤ ⟪A f, f⟫) {t : ℝ} (ht : 0 ≤ t)
+theorem boundary_Y6_eq (A : H₀ →L[ℝ] H₀) (hA : ∀ f, 0 ≤ ⟪A f, f⟫) {t : ℝ} (ht : 0 ≤ t)
     (f : H₀) : ‖NormedSpace.exp (-t • A) f - NormedSpace.exp (-t • A) f‖ ≤ t * ‖A f - A f‖ :=
   Analysis.Semigroup.norm_exp_neg_smul_sub_le A A hA hA rfl ht f
+
+end InnerProduct
 
 end SemigroupLimitAudit
 

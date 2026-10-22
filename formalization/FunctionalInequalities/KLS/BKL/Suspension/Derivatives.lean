@@ -413,8 +413,13 @@ private theorem iteratedFDeriv_comp_clm_at {f : E → F} (L : G →L[ℝ] E)
     iteratedFDerivWithin_of_isOpen d hU hxU] at h
   exact h
 
+section FiniteIndex
+
+variable {ι : Type*}
+variable [Fintype ι] [DecidableEq ι]
+
 /-- Each summand sees only its own copy. -/
-private theorem iteratedFDeriv_copy_apply {ι : Type*} [Fintype ι] [DecidableEq ι]
+private theorem iteratedFDeriv_copy_apply
     (f : E → F) (i : ι) (x : ι → E) {d : ℕ}
     (hf : ContDiffAt ℝ d f (x i)) (labels : Fin d → ι) (v : Fin d → E) :
     iteratedFDeriv ℝ d (fun y : ι → E => f (y i)) x
@@ -437,7 +442,7 @@ private theorem iteratedFDeriv_copy_apply {ι : Type*} [Fintype ι] [DecidableEq
 
 /-- Positive-order derivatives select a single copy precisely when every label agrees.
 Repeated labels and repeated vector directions are retained in the multilinear evaluation. -/
-private theorem iteratedFDeriv_sum_copies_select {ι : Type*} [Fintype ι] [DecidableEq ι]
+private theorem iteratedFDeriv_sum_copies_select
     (f : ι → E → F) (x : ι → E) (d : ℕ) (k0 : Fin d)
     (hf : ∀ i, ContDiffAt ℝ d (f i) (x i))
     (labels : Fin d → ι) (v : Fin d → E) :
@@ -466,6 +471,8 @@ private theorem iteratedFDeriv_sum_copies_select {ι : Type*} [Fintype ι] [Deci
       intro hi
       exact hsame (fun k => (hi k).trans (hi k0).symm)
     simp [hnot]
+
+end FiniteIndex
 
 /-! Local symmetry and the mixed-derivative bridge in BKL (112).
 The function is smooth on an open neighborhood, not on the whole ambient space. -/
@@ -576,9 +583,14 @@ open Filter Set
 variable {E G : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
   [NormedAddCommGroup G] [NormedSpace ℝ G]
 
+section FiniteIndex
+
+variable {ι : Type*}
+variable [Fintype ι] [DecidableEq ι]
+
 /-- Smoothness of a separated copy sum at zero implies smoothness of each summand at zero.
 The other copies contribute only a constant after a single-copy linear restriction. -/
-private theorem contDiffAt_component_of_copy_sum {ι : Type*} [Fintype ι] [DecidableEq ι]
+private theorem contDiffAt_component_of_copy_sum
     (F : ι → E → ℝ) {d : ℕ}
     (hF : ContDiffAt ℝ d (fun y : ι → E => ∑ j, F j (y j)) 0) (i : ι) :
     ContDiffAt ℝ d (F i) 0 := by
@@ -604,7 +616,7 @@ private theorem contDiffAt_component_of_copy_sum {ι : Type*} [Fintype ι] [Deci
   ring
 
 /-- A nonzero scalar multiple of a separated sum can be peeled without any integrability input. -/
-private theorem contDiffAt_component_of_scaled_copy_sum {ι : Type*} [Fintype ι] [DecidableEq ι]
+private theorem contDiffAt_component_of_scaled_copy_sum
     (F : ι → E → ℝ) {d : ℕ} {c : ℝ} (hc : c ≠ 0)
     (hF : ContDiffAt ℝ d (fun y : ι → E => c * ∑ j, F j (y j)) 0) (i : ι) :
     ContDiffAt ℝ d (F i) 0 := by
@@ -614,7 +626,7 @@ private theorem contDiffAt_component_of_scaled_copy_sum {ι : Type*} [Fintype ι
   exact contDiffAt_component_of_copy_sum F hsum i
 
 /-- Local (111) on a linear spatial slice implies the finite-copy mixed derivative rule. -/
-private theorem mixed_copies_from_first_derivative_germ {ι : Type*} [Fintype ι] [DecidableEq ι]
+private theorem mixed_copies_from_first_derivative_germ
     (g : G → ℝ) (L : (ι → E) →L[ℝ] G) (e : G) (F : ι → E → ℝ)
     (c : ℝ) (x : ι → E) {U : Set G} (hU : IsOpen U) (hx : L x ∈ U)
     (hg : ContDiffOn ℝ ∞ g U) (d : ℕ) (k0 : Fin d)
@@ -657,6 +669,8 @@ private theorem mixed_copies_from_first_derivative_germ {ι : Type*} [Fintype ι
     _ = _ := by
       rw [iteratedFDeriv_sum_copies_select F x d k0 hF labels v]
       split_ifs <;> simp
+
+end FiniteIndex
 
 /-- Actual spatial slice in the source's joint space: auxiliary coordinate zero, copies intact. -/
 private noncomputable def jointSpatialSlice (N n : ℕ) :

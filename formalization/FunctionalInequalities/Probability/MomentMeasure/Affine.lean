@@ -60,10 +60,14 @@ open MeasureTheory
 open scoped ENNReal
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
   [MeasurableSpace E] [BorelSpace E] {μ : Measure E}
+
+section StructuredSpace
+
+variable [IsFiniteMeasure μ]
 omit [BorelSpace E] in
 /-- The actual affine perturbation is admissible under the input first moment.
 Neither output integrability nor a supporting affine plane is assumed. -/
-theorem affineSubtract_potentialIntegrable [IsFiniteMeasure μ]
+theorem affineSubtract_potentialIntegrable
     (f : E → EReal) (a : E) (b : ℝ) (hf : PotentialIntegrable f μ)
     (hfirst : Integrable (fun x : E => x) μ) :
     PotentialIntegrable (affineSubtract f a b) μ := by
@@ -88,7 +92,7 @@ theorem affineSubtract_potentialIntegrable [IsFiniteMeasure μ]
 omit [BorelSpace E] in
 /-- The actual integral formula retains total mass for a general finite measure.
 This is not asserted to be invariant under a constant shift at arbitrary mass. -/
-theorem integral_affineSubtract [IsFiniteMeasure μ]
+theorem integral_affineSubtract
     (f : E → EReal) (a : E) (b : ℝ) (hf : PotentialIntegrable f μ)
     (hfirst : Integrable (fun x : E => x) μ) :
     (∫ x, (affineSubtract f a b x).toReal ∂μ) =
@@ -106,6 +110,8 @@ theorem integral_affineSubtract [IsFiniteMeasure μ]
   rw [integral_congr_ae heq, hsub, hadd, integral_const]
   simp only [smul_eq_mul, measureReal_def]
   ring
+
+end StructuredSpace
 omit [BorelSpace E] in
 /-- On a centered probability measure, the linear integral vanishes and the
 constant contributes exactly its value, rather than total-mass times its value. -/

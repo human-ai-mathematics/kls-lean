@@ -2381,6 +2381,106 @@ end FunctionalInequalities.Analysis
 
 end RegularMomentHessianTraceBound
 
+section RegularMomentTargetSteinKernel
+
+open MeasureTheory Set Filter
+open FunctionalInequalities.Probability.Stein
+open scoped ContDiff RealInnerProductSpace Matrix.Norms.Frobenius
+
+namespace FunctionalInequalities.Analysis
+
+include hn hκ hK hKc hKint hW hstrong hμ hiso in
+/-- **Target Stein kernel of the strong regular class** (weak Hessian route to Letwin arXiv:2607.24164v1, Lemma 2.7 with the
+`Theorem 2.5` bound): at the same `u` and `L` as `exists_regular_moment_hessian_trace_bound`, with all of its fields, and a
+measurable everywhere left inverse `Ψ` of that `∇u`, the kernel `∇²u ∘ Ψ` is a Stein kernel of `μ` that is `μ`-a.e. positive
+definite and symmetric, has mean `Id`, Hilbert–Schmidt norm in `L²(μ)` and `∫ |∇²u ∘ Ψ|_HS² dμ ≤ 2n`. Not the smooth
+diffeomorphism of Lemma 2.2 nor everywhere positive definiteness. -/
+theorem exists_regular_moment_target_stein_kernel :
+    ∃ (u : EuclideanSpace ℝ (Fin n) → ℝ) (L : NNReal)
+      (Ψ : EuclideanSpace ℝ (Fin n) → EuclideanSpace ℝ (Fin n)),
+      (ConvexOn ℝ univ u ∧ LipschitzWith L u ∧
+      (∫ x, Real.exp (-u x) ∂(volume : Measure (EuclideanSpace ℝ (Fin n)))) = 1 ∧
+      ((volume : Measure (EuclideanSpace ℝ (Fin n))).tilted (-u)).map (gradient u) =
+        (μ : Measure (EuclideanSpace ℝ (Fin n))) ∧
+      ContDiff ℝ 1 u ∧ LipschitzWith (Real.toNNReal (16 / κ)) (gradient u) ∧
+      (∀ᵐ x ∂(volume : Measure (EuclideanSpace ℝ (Fin n))),
+        (hessianMatrix u x).PosDef ∧ Real.log (hessianMatrix u x).det = -u x + W (gradient u x) ∧
+        ((16 / κ) • (1 : Matrix (Fin n) (Fin n) ℝ) - hessianMatrix u x).PosSemidef) ∧
+      (∀ i j : Fin n, Integrable (fun x => hessianMatrix u x i j)
+        ((volume : Measure (EuclideanSpace ℝ (Fin n))).tilted (-u)) ∧
+        (∫ x, hessianMatrix u x i j ∂((volume : Measure (EuclideanSpace ℝ (Fin n))).tilted (-u))) =
+          (1 : Matrix (Fin n) (Fin n) ℝ) i j) ∧
+      (∀ B : Matrix (Fin n) (Fin n) ℝ, B.IsSymm →
+        Integrable (fun x => (B * hessianMatrix u x * B * hessianMatrix u x).trace)
+          ((volume : Measure (EuclideanSpace ℝ (Fin n))).tilted (-u)) ∧
+        (∫ x, (B * hessianMatrix u x * B * hessianMatrix u x).trace
+          ∂((volume : Measure (EuclideanSpace ℝ (Fin n))).tilted (-u))) ≤ 2 * (B * B).trace)) ∧
+      Measurable Ψ ∧ Function.LeftInverse Ψ (gradient u) ∧
+      IsSteinKernel μ (hessianKernel u Ψ) ∧
+      (∀ᵐ x ∂(μ : Measure (EuclideanSpace ℝ (Fin n))), (hessianKernel u Ψ x).PosDef) ∧
+      SymmetricAE μ (hessianKernel u Ψ) ∧
+      MemLp (fun x => hsNorm (hessianKernel u Ψ x)) 2 (μ : Measure (EuclideanSpace ℝ (Fin n))) ∧
+      (∫ x, hsNorm (hessianKernel u Ψ x) ^ 2 ∂(μ : Measure (EuclideanSpace ℝ (Fin n)))) ≤ 2 * n ∧
+      (∀ i j : Fin n, (∫ x, hessianKernel u Ψ x i j ∂(μ : Measure (EuclideanSpace ℝ (Fin n)))) =
+        (1 : Matrix (Fin n) (Fin n) ℝ) i j) := by
+  classical
+  obtain ⟨u,L,hc,hl,hnorm,hm,hC1,hG,hdata,hmean,hT25⟩ :=
+    exists_regular_moment_hessian_trace_bound hn hκ hK hKc hKint hW hstrong μ hμ hiso
+  obtain ⟨_,Ψ,hΨ,hInv⟩ := measurable_inverse_gradient_of_map_gradient hn hl hc hnorm hC1
+    hK hKc (hKint.mono interior_subset) hW.continuous (hm.trans hμ)
+  let ρ : Measure (EuclideanSpace ℝ (Fin n)) := volume.tilted (-u)
+  have hexp : Integrable (fun y => Real.exp (-u y))
+      (volume : Measure (EuclideanSpace ℝ (Fin n))) :=
+    Integrable.of_integral_ne_zero (by rw [hnorm]; norm_num)
+  let ν : ProbabilityMeasure (EuclideanSpace ℝ (Fin n)) := ⟨ρ, isProbabilityMeasure_tilted hexp⟩
+  have hiAE : ∀ᵐ y ∂ρ, Ψ (gradient u y) = y := ae_of_all _ hInv
+  have hPDρ : ∀ᵐ y ∂ρ, (hessianMatrix u y).PosDef := by
+    filter_upwards [(tilted_absolutelyContinuous
+      (volume : Measure (EuclideanSpace ℝ (Fin n))) (-u)).ae_le hdata] with y hy
+    exact hy.1
+  have hEq : (fun y => hsNorm (hessianMatrix u y) ^ 2) =ᵐ[ρ]
+      fun y => (hessianMatrix u y * hessianMatrix u y).trace := by
+    filter_upwards [hPDρ] with y hy
+    exact hsNorm_sq_eq_trace_mul_self _ (Matrix.isHermitian_iff_isSymm.mp hy.isHermitian)
+  have hTI := hT25 1 Matrix.isSymm_one
+  have hInt : Integrable (fun y => hsNorm (hessianMatrix u y) ^ 2) ρ := by
+    apply (show Integrable (fun y => (hessianMatrix u y * hessianMatrix u y).trace) ρ by
+      simpa only [one_mul, mul_one] using hTI.1).congr hEq.symm
+  have hHSρ : MemLp (fun y => hsNorm (hessianMatrix u y)) 2 ρ :=
+    (memLp_hsNorm_iff_integrable_sq (fun i j => measurable_hessianMatrix_entry u i j)).2 hInt
+  have hPD := hessianKernel_posDefAE_of_map hC1 ν μ hm hΨ hiAE hPDρ
+  have hSym : SymmetricAE μ (hessianKernel u Ψ) := by
+    filter_upwards [hPD] with x hx i j
+    exact congrArg (fun A => A j i) hx.isHermitian
+  have hHS := memLp_hsNorm_hessianKernel_of_map hC1 ν μ hm hΨ hiAE hHSρ
+  have hmeas (i j : Fin n) : Measurable (fun x => hessianKernel u Ψ x i j) :=
+    (measurable_hessianMatrix_entry u i j).comp hΨ
+  have hHSint : (∫ x, hsNorm (hessianKernel u Ψ x) ^ 2 ∂(μ : Measure _)) =
+      ∫ y, hsNorm (hessianMatrix u y) ^ 2 ∂ρ := by
+    rw [← hm, integral_map (continuous_gradient hC1).measurable.aemeasurable
+      ((hsNorm_measurable hmeas).pow_const 2).aestronglyMeasurable]
+    apply integral_congr_ae
+    filter_upwards [hiAE] with y hy
+    simp only [hessianKernel, hy]
+  refine ⟨u,L,Ψ,⟨hc,hl,hnorm,hm,hC1,hG,hdata,hmean,hT25⟩,hΨ,hInv,
+    KLS.LogConcave.weak_hessianKernel_isSteinKernel hC1 hl hG hnorm μ hm hiso hΨ hiAE,
+    hPD,hSym,hHS,?_,?_⟩
+  · rw [hHSint, integral_congr_ae hEq]
+    simpa only [one_mul, mul_one, Matrix.trace_one, Fintype.card_fin, Nat.cast_id] using hTI.2
+  · intro i j
+    rw [← hm, integral_map (continuous_gradient hC1).measurable.aemeasurable
+      (hmeas i j).aestronglyMeasurable]
+    calc
+      _ = ∫ y, hessianMatrix u y i j ∂ρ := by
+        apply integral_congr_ae
+        filter_upwards [hiAE] with y hy
+        simp only [hessianKernel, hy]
+      _ = _ := (hmean i j).2
+
+end FunctionalInequalities.Analysis
+
+end RegularMomentTargetSteinKernel
+
 end
 
 end RegularSource

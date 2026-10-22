@@ -88,8 +88,13 @@ private theorem length_selected_congr {E F : Type*} [NormedAddCommGroup E] [Norm
     simp only [selected]
     split_ifs <;> simp [length_selected_congr (Fin.tail h) (Fin.tail h') (Fin.tail q)]
 
+section NormedSpace
+
+variable {E : Type*}
+variable [NormedAddCommGroup E] [NormedSpace ℝ E]
+
 /-- At `m = 3` no allocation has at least two slots on both sides: (72) is empty. -/
-theorem middle_three_empty {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E] (h : Fin 3 → E) (i0 : Fin 3) :
+theorem middle_three_empty (h : Fin 3 → E) (i0 : Fin 3) :
     Finset.univ.filter (fun q : Fin 3 → Bool => q i0 = true ∧ 2 ≤ (selected h q).length ∧
       2 ≤ (selected h (fun i => !(q i))).length) = ∅ := by
   simp_rw [length_selected_congr h (fun _ : Fin 3 => (0 : ℝ))]
@@ -97,7 +102,7 @@ theorem middle_three_empty {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E
   decide
 
 /-- At `m = 4`, exactly three allocations contain `i0` and leave two slots on each side. -/
-theorem middle_four_card {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E] (h : Fin 4 → E) (i0 : Fin 4) :
+theorem middle_four_card (h : Fin 4 → E) (i0 : Fin 4) :
     (Finset.univ.filter (fun q : Fin 4 → Bool => q i0 = true ∧ 2 ≤ (selected h q).length ∧
       2 ≤ (selected h (fun i => !(q i))).length)).card = 3 := by
   simp_rw [length_selected_congr h (fun _ : Fin 4 => (0 : ℝ))]
@@ -105,12 +110,14 @@ theorem middle_four_card {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E] 
   decide
 
 /-- At `m = 4` and `i0 = 0` the three middle masks are the pairings `{0,1}`, `{0,2}`, `{0,3}` (repeated data allowed). -/
-theorem middle_four_masks {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E] (h : Fin 4 → E) :
+theorem middle_four_masks (h : Fin 4 → E) :
     Finset.univ.filter (fun q : Fin 4 → Bool => q 0 = true ∧ 2 ≤ (selected h q).length ∧
       2 ≤ (selected h (fun i => !(q i))).length) =
       {![true, true, false, false], ![true, false, true, false], ![true, false, false, true]} := by
   simp_rw [length_selected_congr h (fun _ : Fin 4 => (0 : ℝ))]
   decide
+
+end NormedSpace
 
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
   [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]

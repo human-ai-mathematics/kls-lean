@@ -51,13 +51,17 @@ theorem surjective_domRestrict_range_of_comp {L : V →L[ℝ] W} {P : W →L[ℝ
   obtain ⟨z, hz⟩ := h w₁
   exact ⟨⟨L z, LinearMap.mem_range_self _ z⟩, hz⟩
 
+section FiniteDimensional
+
+variable [FiniteDimensional ℝ V] [FiniteDimensional ℝ W₁]
+
 /-- **the kernel identity, kernel form.**  If `P ∘ L` is surjective onto a space whose dimension equals the rank of
 `L`, then `P` is injective on the range of `L` and the two kernels coincide.
 
 The dimension hypothesis is exactly what rules out the degenerate reading: without it `P` may
 collapse part of the range of `L` while `P ∘ L` stays surjective, and then `ker (P ∘ L)` is
 strictly larger. -/
-theorem ker_comp_eq_ker_of_finrank_range_eq [FiniteDimensional ℝ V] [FiniteDimensional ℝ W₁]
+theorem ker_comp_eq_ker_of_finrank_range_eq
     {L : V →L[ℝ] W} {P : W →L[ℝ] W₁} (hsurj : Function.Surjective (P.comp L))
     (hrank : finrank ℝ W₁ = finrank ℝ (LinearMap.range (L : V →ₗ[ℝ] W))) :
     LinearMap.ker ((P.comp L : V →L[ℝ] W₁) : V →ₗ[ℝ] W₁) = LinearMap.ker (L : V →ₗ[ℝ] W) := by
@@ -77,7 +81,7 @@ theorem ker_comp_eq_ker_of_finrank_range_eq [FiniteDimensional ℝ V] [FiniteDim
 
 /-- **the kernel identity, the form the route consumes**: on the stratum the differential vanishes wherever the
 regular component does, that is, along the fibre directions of `P ∘ u`. -/
-theorem apply_eq_zero_of_comp_apply_eq_zero [FiniteDimensional ℝ V] [FiniteDimensional ℝ W₁]
+theorem apply_eq_zero_of_comp_apply_eq_zero
     (L : V →L[ℝ] W) (P : W →L[ℝ] W₁) (hsurj : Function.Surjective (P.comp L))
     (hrank : finrank ℝ W₁ = finrank ℝ (LinearMap.range (L : V →ₗ[ℝ] W)))
     (z : V) (hz : P (L z) = 0) : L z = 0 := by
@@ -85,6 +89,8 @@ theorem apply_eq_zero_of_comp_apply_eq_zero [FiniteDimensional ℝ V] [FiniteDim
   have hmem : z ∈ LinearMap.ker ((P.comp L : V →L[ℝ] W₁) : V →ₗ[ℝ] W₁) := hz
   rw [hker] at hmem
   exact hmem
+
+end FiniteDimensional
 
 end Kernel
 

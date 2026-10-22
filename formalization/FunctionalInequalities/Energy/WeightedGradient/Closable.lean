@@ -89,10 +89,15 @@ theorem integrableOn_of_locallyDominates {Ω : Set V} (h : LocallyDominatesOn ν
   change ∫⁻ x in K, ‖u x‖ₑ ∂m < ⊤
   exact (hC u hu.aestronglyMeasurable).trans_lt (ENNReal.mul_lt_top ENNReal.coe_lt_top hu2.lt_top)
 
+section NormedSpace
+
+variable (W : Type v)
+variable [NormedAddCommGroup W] [NormedSpace ℝ W]
+
 omit [InnerProductSpace ℝ V] [CompleteSpace V] [SecondCountableTopology V] [FiniteDimensional ℝ V] in
 /-- The lower integral of a bounded test times a square-integrable function, when the test
 vanishes outside a compact subset of the interior. -/
-theorem lintegral_enorm_smul_le (W : Type v) [NormedAddCommGroup W] [NormedSpace ℝ W]
+theorem lintegral_enorm_smul_le
     {Ω : Set V} (h : LocallyDominatesOn ν m Ω) {K : Set V} (hK : IsCompact K)
     (hKΩ : K ⊆ Ω) :
     ∃ C : ℝ≥0, ∀ (ψ : V → ℝ) (M : ℝ≥0), (∀ x, ‖ψ x‖₊ ≤ M) → (∀ x, x ∉ K → ψ x = 0) →
@@ -119,7 +124,7 @@ theorem lintegral_enorm_smul_le (W : Type v) [NormedAddCommGroup W] [NormedSpace
 omit [InnerProductSpace ℝ V] [CompleteSpace V] [SecondCountableTopology V] [FiniteDimensional ℝ V] in
 /-- Integrability of a bounded test times a square-integrable function, and the resulting bound
 on the integral, in real form. -/
-theorem exists_norm_integral_smul_le (W : Type v) [NormedAddCommGroup W] [NormedSpace ℝ W]
+theorem exists_norm_integral_smul_le
     {Ω : Set V} (h : LocallyDominatesOn ν m Ω) {K : Set V} (hK : IsCompact K)
     (hKΩ : K ⊆ Ω) :
     ∃ C : ℝ≥0, ∀ (ψ : V → ℝ) (M : ℝ≥0), Measurable ψ → (∀ x, ‖ψ x‖₊ ≤ M) → (∀ x, x ∉ K → ψ x = 0) →
@@ -141,6 +146,8 @@ theorem exists_norm_integral_smul_le (W : Type v) [NormedAddCommGroup W] [Normed
         ENNReal.toReal_mono hfin hbound
     _ = (M : ℝ) * ((C : ℝ) * (eLpNorm u 2 (ν : Measure V)).toReal) := by
         rw [ENNReal.toReal_mul, ENNReal.toReal_mul, ENNReal.coe_toReal, ENNReal.coe_toReal]
+
+end NormedSpace
 
 omit [InnerProductSpace ℝ V] [CompleteSpace V] [SecondCountableTopology V] [FiniteDimensional ℝ V] in
 /-- Functions equal `ν`-almost everywhere give `m`-almost everywhere equal products with a test

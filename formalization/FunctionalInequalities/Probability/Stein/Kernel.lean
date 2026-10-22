@@ -220,3 +220,30 @@ theorem sum_norm_action_basis_sq_eq_trace_transpose_mul {n : ℕ} (A : KernelMat
 end FunctionalInequalities.Probability.Stein
 
 end
+
+/-! ### Hilbert–Schmidt norm and trace -/
+
+noncomputable section
+open scoped Matrix.Norms.Frobenius
+
+namespace FunctionalInequalities.Probability.Stein
+
+/-- The Frobenius norm square of a real symmetric matrix is the trace of its square. -/
+theorem hsNorm_sq_eq_trace_mul_self {n : ℕ} (A : Matrix (Fin n) (Fin n) ℝ) (hA : A.IsSymm) :
+    hsNorm A ^ 2 = (A * A).trace := by
+  classical
+  rw [hsNorm_eq_sqrt]
+  have hnonneg : 0 ≤ ∑ i : Fin n, ∑ j : Fin n, A i j ^ 2 :=
+    Finset.sum_nonneg fun _ _ => Finset.sum_nonneg fun _ _ => sq_nonneg _
+  rw [Real.sq_sqrt hnonneg]
+  change (∑ i, ∑ j, A i j ^ 2) = ∑ i, ∑ j, A i j * A j i
+  apply Finset.sum_congr rfl
+  intro i _
+  apply Finset.sum_congr rfl
+  intro j _
+  have hij : A j i = A i j := congrArg (fun M => M i j) hA
+  rw [hij, pow_two]
+
+end FunctionalInequalities.Probability.Stein
+
+end

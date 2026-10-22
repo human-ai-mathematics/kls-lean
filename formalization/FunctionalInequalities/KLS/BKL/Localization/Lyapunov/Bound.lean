@@ -46,8 +46,12 @@ private theorem ringInverse_isPositive (hiso : KLS.Isotropic μ) (p : Param n) :
     simp
   · exact (hs.2.2.2 v hv).le
 
-private theorem diffusionGenerator_add_local
-    {V : Type*} [NormedAddCommGroup V] [NormedSpace ℝ V] {d : ℕ}
+section NormedSpace
+
+variable {V : Type*}
+variable [NormedAddCommGroup V] [NormedSpace ℝ V]
+
+private theorem diffusionGenerator_add_local {d : ℕ}
     (b : V → V) (σ : V → Fin d → V) {u v : V → ℝ} {x : V}
     (hu : ContDiffAt ℝ 2 u x) (hv : ContDiffAt ℝ 2 v x) :
     diffusionGenerator b σ (fun y => u y + v y) x =
@@ -78,8 +82,7 @@ private theorem diffusionGenerator_add_local
   simp only [add_apply, Finset.sum_add_distrib]
   ring
 
-private theorem diffusionGenerator_const_local
-    {V : Type*} [NormedAddCommGroup V] [NormedSpace ℝ V] {d : ℕ}
+private theorem diffusionGenerator_const_local {d : ℕ}
     (b : V → V) (σ : V → Fin d → V) (c : ℝ) (x : V) :
     diffusionGenerator b σ (fun _ : V => c) x = 0 := by
   unfold diffusionGenerator
@@ -88,6 +91,8 @@ private theorem diffusionGenerator_const_local
         1 / 2 * ∑ k,
           ((fderiv ℝ (fderiv ℝ (Function.const V c)) x) (σ x k)) (σ x k) = 0
   simp
+
+end NormedSpace
 
 set_option maxHeartbeats 1000000 in
 theorem sum_hsNormSq_conjugatedNoiseOperator_le (hiso : KLS.Isotropic μ) (hLC : KLS.LogConcave μ)

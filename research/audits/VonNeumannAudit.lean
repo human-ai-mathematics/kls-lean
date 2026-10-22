@@ -107,6 +107,12 @@ theorem route_V5 :
   intro H₀ H₁ _ _ _ _ _ _ T hT hd s hs f
   exact sub_resolvent_eq_smul T hT hd hs f
 
+section InnerProduct
+
+variable {H₀ H₁ : Type*}
+variable [NormedAddCommGroup H₀] [InnerProductSpace ℝ H₀] [CompleteSpace H₀] [NormedAddCommGroup H₁]
+variable [InnerProductSpace ℝ H₁] [CompleteSpace H₁]
+
 /-! ### Consistency checks
 
 `V3` and `V4` are independently consistent with Mathlib: a self-adjoint `LinearPMap` has dense
@@ -114,18 +120,18 @@ domain, so `V3` re-derives `V4`, and a self-adjoint `LinearPMap` is closed, so `
 
 /-- `V4` re-derived from `V3` through Mathlib's `IsSelfAdjoint.dense_domain`, confirming that the
 two route items agree even though the module proves them in the opposite order. -/
-theorem dense_of_route_V3 {H₀ H₁ : Type*} [NormedAddCommGroup H₀] [InnerProductSpace ℝ H₀]
-    [CompleteSpace H₀] [NormedAddCommGroup H₁] [InnerProductSpace ℝ H₁] [CompleteSpace H₁]
+theorem dense_of_route_V3
     (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClosed) (hd : Dense (T.domain : Set H₀)) :
     Dense ((adjointComp T).domain : Set H₀) :=
   (isSelfAdjoint_adjointComp T hT hd).dense_domain
 
 /-- `T†T` is closed, by `V3` and Mathlib's `IsSelfAdjoint.isClosed`. -/
-theorem isClosed_of_route_V3 {H₀ H₁ : Type*} [NormedAddCommGroup H₀] [InnerProductSpace ℝ H₀]
-    [CompleteSpace H₀] [NormedAddCommGroup H₁] [InnerProductSpace ℝ H₁] [CompleteSpace H₁]
+theorem isClosed_of_route_V3
     (T : H₀ →ₗ.[ℝ] H₁) (hT : T.IsClosed) (hd : Dense (T.domain : Set H₀)) :
     (adjointComp T).IsClosed :=
   (isSelfAdjoint_adjointComp T hT hd).isClosed
+
+end InnerProduct
 
 end VonNeumannAudit
 

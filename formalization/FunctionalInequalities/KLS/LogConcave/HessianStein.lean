@@ -17,8 +17,12 @@ Then the entries of the Hessian matrix of `φ` are `ν`-integrable, and for a me
 of `∇φ` the Hessian kernel `τ = ∇²φ ∘ Ψ` is a Stein kernel of `μ` (Definition 2.6) with integrable entries, a.e. symmetry,
 positive semidefiniteness and mean `Id`; gradient injectivity (an explicit geometric prerequisite)
 produces such a `Ψ`. The existence of the moment-map potential for an arbitrary law, strict positive
-definiteness and the Hilbert–Schmidt `L²` bound (the rest of Lemma 2.7 and Theorem 2.5) remain
-open.
+definiteness and the Hilbert–Schmidt `L²` bound (the rest of Lemma 2.7 and Theorem 2.5) are not proved here.
+
+At `C^{1,1}` regularity (`weak_hessianKernel_isSteinKernel`) the same kernel is a Stein kernel for a `C¹` potential with
+Lipschitz gradient and an a.e. left inverse, through the weak source Stein identity; the strong regular-class producer with
+a.e. positive definiteness and the Hilbert–Schmidt bound is `Analysis.exists_regular_moment_target_stein_kernel`
+(`KLS/CEK/MomentRegularity/TraceStein.lean`).
 -/
 
 open MeasureTheory
@@ -379,6 +383,62 @@ theorem source_affine_stein_identity_of_bounded_lipschitz_test {n : ℕ}
   refine ⟨hp.1.congr (ae_of_all _ hleft), hp.2.1.congr (ae_of_all _ hright), ?_⟩
   exact (integral_congr_ae (ae_of_all _ hleft)).symm.trans (hp.2.2.trans
     (integral_congr_ae (ae_of_all _ hright)))
+
+end FunctionalInequalities.KLS.LogConcave
+
+end
+
+/-! ### Weak Hessian–Stein kernel at `C^{1,1}` regularity -/
+
+noncomputable section
+open MeasureTheory Filter
+open FunctionalInequalities.Analysis.BakryEmery
+open FunctionalInequalities.Probability.Stein
+open scoped ContDiff RealInnerProductSpace
+
+namespace FunctionalInequalities.KLS.LogConcave
+
+/-- **Weak Hessian–Stein kernel for a given `C^{1,1}` potential**: if `u` is `C¹`, Lipschitz, with Lipschitz gradient and
+`∫ e^{-u} = 1`, `(∇u)_*(e^{-u} dx) = μ` is isotropic and `Ψ` is a measurable `e^{-u} dx`-a.e. left inverse of `∇u`, then
+`∇²u ∘ Ψ` is a Stein kernel of `μ` (Definition 2.6), from the weak source identity
+`source_stein_identity_of_bounded_lipschitz_test`. No `C²` or convexity hypothesis. -/
+theorem weak_hessianKernel_isSteinKernel {n : ℕ}
+    {u : EuclideanSpace ℝ (Fin n) → ℝ} {L G : NNReal}
+    (hu : ContDiff ℝ 1 u) (hL : LipschitzWith L u)
+    (hG : LipschitzWith G (gradient u))
+    (hnorm : ∫ y, Real.exp (-u y) ∂(volume : Measure (EuclideanSpace ℝ (Fin n))) = 1)
+    (μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin n)))
+    (hmap : ((volume : Measure (EuclideanSpace ℝ (Fin n))).tilted (-u)).map (gradient u) =
+      (μ : Measure (EuclideanSpace ℝ (Fin n)))) (hiso : KLS.Isotropic μ)
+    {Ψ : EuclideanSpace ℝ (Fin n) → EuclideanSpace ℝ (Fin n)} (hΨ : Measurable Ψ)
+    (hInv : ∀ᵐ y ∂((volume : Measure (EuclideanSpace ℝ (Fin n))).tilted (-u)),
+      Ψ (gradient u y) = y) : IsSteinKernel μ (hessianKernel u Ψ) := by
+  have hmeas (i j : Fin n) : Measurable (fun x => hessianKernel u Ψ x i j) :=
+    (measurable_hessianMatrix_entry u i j).comp hΨ
+  refine ⟨hiso.memLp_two.integrable one_le_two, hiso.mean_zero, hmeas, ?_, ?_⟩
+  · intro i j
+    have hmem : MemLp (fun x => hessianKernel u Ψ x i j) 2 (μ : Measure _) :=
+      MemLp.of_bound (hmeas i j).aestronglyMeasurable (G : ℝ)
+        (ae_of_all _ fun x => norm_hessianMatrix_entry_le_of_lipschitz_gradient hG (Ψ x) i j)
+    exact (hmem.integrable one_le_two).locallyIntegrable
+  · intro f hf hfc i
+    have hf1 : ContDiff ℝ 1 f := hf.of_le (WithTop.coe_le_coe.mpr le_top)
+    obtain ⟨Lf, hfLip⟩ := ContDiff.lipschitzWith_of_hasCompactSupport hfc hf1 one_ne_zero
+    obtain ⟨C, hC⟩ := hf.continuous.bounded_above_of_compact_support hfc
+    have hid := source_stein_identity_of_bounded_lipschitz_test hu hL hG hnorm hf1 hfLip C hC i
+    have hg := (continuous_gradient hu).measurable
+    have hLm : Measurable (fun x : EuclideanSpace ℝ (Fin n) => x i * f x) :=
+      (PiLp.continuous_apply 2 (fun _ : Fin n => ℝ) i).measurable.mul hf.continuous.measurable
+    have hRm : Measurable (fun x => action (hessianKernel u Ψ x) (gradient f x) i) := by
+      change Measurable (fun x => ∑ j, hessianKernel u Ψ x i j * gradient f x j)
+      exact Finset.measurable_sum _ fun j _ => (hmeas i j).mul
+        ((PiLp.continuous_apply 2 (fun _ : Fin n => ℝ) j).comp (continuous_gradient hf1)).measurable
+    rw [← hmap, integral_map hg.aemeasurable hLm.aestronglyMeasurable,
+      integral_map hg.aemeasurable hRm.aestronglyMeasurable]
+    rw [hid.2.2]
+    apply integral_congr_ae
+    filter_upwards [hInv] with y hy
+    simp only [hessianKernel, hy, action, Matrix.mulVec, dotProduct]
 
 end FunctionalInequalities.KLS.LogConcave
 

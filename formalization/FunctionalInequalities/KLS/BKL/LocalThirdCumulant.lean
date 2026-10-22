@@ -13,9 +13,9 @@ with the Letwin quadratic-form bound
 If this holds for all isotropic log-concave laws in positive dimension, `CumulantBound 2 8` follows.
 The older statement in `Analysis/BakryEmery/Cumulant/Basic.lean` assumes all exponential moments, which
 general log-concave laws (e.g. Laplace) do not have; this module is the source-faithful version.
-The full noncompact Letwin hypothesis remains open. The separately proved Theorem 4.1 uses the
-compact Letwin theorem and cutoff induction; it does not discharge this module's full hypothesis
-or construct the uncut Eldan process.
+The noncompact input is proved separately by `KLS.LogConcave.letwinQuadraticBound` in
+`KLS/Letwin/QuadraticBound.lean`; the interfaces here remain conditional to avoid that import.
+The accepted Theorem 4.1 uses compact Letwin and cutoff induction; no uncut Eldan process is constructed.
 -/
 
 open MeasureTheory
@@ -29,8 +29,8 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
 
 /-- **BKL Lemma 4.2 (source scope), conditional on the Letwin quadratic bound**: for every isotropic
 log-concave law `μ` with `LetwinQuadraticBound μ`, `∑_{jk} κ₃(u, b_j, b_k)² ≤ 8‖u‖²` in any orthonormal
-basis; the exponential radius comes from Borell. Letwin Theorem 1.2 is not proved, so Lemma 4.2 is not
-complete. -/
+basis; the exponential radius comes from Borell. The noncompact input is supplied separately by
+`KLS.LogConcave.letwinQuadraticBound` in positive dimension; this interface remains conditional. -/
 theorem LogConcave.sum_sq_cumulant_three_le_of_letwin (μ : ProbabilityMeasure E) (hLC : KLS.LogConcave μ)
     (hiso : KLS.Isotropic μ) (hL : LetwinQuadraticBound (μ : Measure E))
     {m : ℕ} (b : OrthonormalBasis (Fin m) ℝ E) (u : E) :
@@ -43,8 +43,8 @@ theorem LogConcave.sum_sq_cumulant_three_le_of_letwin (μ : ProbabilityMeasure E
   simpa only [Function.comp_def, innerSL_apply_apply, id_eq, hiso.mean_zero, inner_zero_right] using h
 
 /-- **Base case of the Eldan induction**: if every isotropic log-concave law on `ℝⁿ` (`n > 0`) satisfies the
-Letwin quadratic bound, then `CumulantBound 2 8` holds (the `(d+1) = 3` cumulant bound with `b = 8`);
-in dimension zero the bound holds vacuously (`u = 0`). The hypothesis is Letwin Theorem 1.2, not proved. -/
+Letwin quadratic bound, then `CumulantBound 2 8` holds (order `(d+1) = 3`, `b = 8`); dimension zero is vacuous.
+The input is proved in `KLS/Letwin/QuadraticBound.lean`; this interface remains conditional. -/
 theorem LogConcave.Suspension.cumulantBound_two_of_letwin
     (hLetwin : ∀ (n : ℕ), 0 < n →
       ∀ μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin n)),

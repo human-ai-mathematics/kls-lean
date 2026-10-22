@@ -119,10 +119,14 @@ theorem sqrt_le_add_mul_of_hasDerivAt {f f' : ℝ → ℝ} {θ η : ℝ} (hθ : 
       _ = √(f 0) + ε := Real.sqrt_sq (by positivity)
   linarith
 
+section FiniteIndex
+
+variable [Fintype ι]
+
 /-! ## Supports -/
 
 omit [NormedSpace ℝ E] in
-theorem State.Supported.reactionGenerator [Fintype ι] {Y : State E ι} {R : ℝ}
+theorem State.Supported.reactionGenerator {Y : State E ι} {R : ℝ}
     (hY : Y.Supported R) (b : ι → E → ℝ) :
     (WaveSplitting.reactionGenerator b Y).Supported R := fun x hx => by
   obtain ⟨hu, hv, hp⟩ := hY x hx
@@ -130,7 +134,7 @@ theorem State.Supported.reactionGenerator [Fintype ι] {Y : State E ι} {R : ℝ
 
 /-- The actual residual is supported in the ball swept by the step in a unit time
 neighbourhood; its temporal derivative is local in time. -/
-theorem State.Supported.residual [Fintype ι] [DecidableEq ι] {Z : State E ι} {R : ℝ}
+theorem State.Supported.residual [DecidableEq ι] {Z : State E ι} {R : ℝ}
     (hZ : Z.Supported R) (a : ι → E) (b : ι → E → ℝ) (js : List ι) (θ : ℝ) :
     (WaveSplitting.residual a b js Z θ).Supported (R + (|θ| + 1) * travel a js) := by
   have htr := travel_nonneg a js
@@ -154,6 +158,8 @@ theorem State.Supported.residual [Fintype ι] [DecidableEq ι] {Z : State E ι} 
   · have hs := (hZ.sweep a θ js).reaction b θ
     have hle : R + |θ| * travel a js ≤ R + (|θ| + 1) * travel a js := by nlinarith
     exact ((hs.sweepGenerator a js).addState (hs.reactionGenerator b)).mono hle
+
+end FiniteIndex
 
 /-- Componentwise continuity, used for states that are only known to be continuous. -/
 private def ContinuousState (Y : State E ι) : Prop :=
@@ -224,15 +230,21 @@ def weightedEnergy [Fintype ι] (w : E → ℝ) (Y : State E ι) : ℝ :=
 def weightedPairing [Fintype ι] (w : E → ℝ) (X Z : State E ι) : ℝ :=
   ∫ x, w x * (X.u x * Z.u x + X.v x * Z.v x + ∑ j, X.p j x * Z.p j x) ∂m
 
+section FiniteIndex
+
+variable [Fintype ι]
+
 omit [NormedAddCommGroup E] [NormedSpace ℝ E] [BorelSpace E] [IsFiniteMeasureOnCompacts m] in
-theorem weightedEnergy_nonneg [Fintype ι] {w : E → ℝ} (hw0 : ∀ x, 0 ≤ w x) (Y : State E ι) :
+theorem weightedEnergy_nonneg {w : E → ℝ} (hw0 : ∀ x, 0 ≤ w x) (Y : State E ι) :
     0 ≤ weightedEnergy m w Y :=
   integral_nonneg fun x => mul_nonneg (hw0 x) (by positivity)
 
 omit [NormedAddCommGroup E] [NormedSpace ℝ E] [BorelSpace E] [IsFiniteMeasureOnCompacts m] in
-private theorem weightedPairing_self [Fintype ι] (w : E → ℝ) (X : State E ι) :
+private theorem weightedPairing_self (w : E → ℝ) (X : State E ι) :
     weightedPairing m w X X = weightedEnergy m w X := by
   simp only [weightedPairing, weightedEnergy, pow_two]
+
+end FiniteIndex
 
 variable [FiniteDimensional ℝ E]
 
@@ -242,7 +254,11 @@ private theorem integrable_of_supported [ProperSpace E] {f : E → ℝ} (hf : Co
   hf.integrable_of_hasCompactSupport (HasCompactSupport.intro (isCompact_closedBall 0 R)
     fun x hx => h x (by simpa [Metric.mem_closedBall, dist_zero_right, not_le] using hx))
 
-private theorem integrable_pairing [Fintype ι] {w : E → ℝ} (hw : Continuous w)
+section FiniteIndex
+
+variable [Fintype ι]
+
+private theorem integrable_pairing {w : E → ℝ} (hw : Continuous w)
     {X Z : State E ι} (hX : ContinuousState X) (hZ : ContinuousState Z) {R : ℝ}
     (hR : X.Supported R) :
     Integrable (fun x => w x * (X.u x * Z.u x + X.v x * Z.v x + ∑ j, X.p j x * Z.p j x)) m :=
@@ -250,7 +266,7 @@ private theorem integrable_pairing [Fintype ι] {w : E → ℝ} (hw : Continuous
     obtain ⟨hu, hv, hp⟩ := hR x hx
     simp [hu, hv, hp]
 
-private theorem weightedEnergy_add_smul' [Fintype ι] {w : E → ℝ} (hw : Continuous w)
+private theorem weightedEnergy_add_smul' {w : E → ℝ} (hw : Continuous w)
     {X Z : State E ι} (hX : ContinuousState X) (hZ : ContinuousState Z) {R : ℝ}
     (hXR : X.Supported R) (hZR : Z.Supported R) (t : ℝ) :
     ∫ x, w x * ((X.u x + t * Z.u x) ^ 2 + (X.v x + t * Z.v x) ^ 2 +
@@ -282,7 +298,7 @@ private theorem weightedEnergy_add_smul' [Fintype ι] {w : E → ℝ} (hw : Cont
     ← weightedPairing_self]
   rfl
 
-private theorem abs_weightedPairing_le' [Fintype ι] {w : E → ℝ} (hw : Continuous w)
+private theorem abs_weightedPairing_le' {w : E → ℝ} (hw : Continuous w)
     (hw0 : ∀ x, 0 ≤ w x) {X Z : State E ι} (hX : ContinuousState X) (hZ : ContinuousState Z)
     {R : ℝ} (hXR : X.Supported R) (hZR : Z.Supported R) :
     |weightedPairing m w X Z| ≤ √(weightedEnergy m w X) * √(weightedEnergy m w Z) :=
@@ -290,7 +306,7 @@ private theorem abs_weightedPairing_le' [Fintype ι] {w : E → ℝ} (hw : Conti
       rw [← weightedEnergy_add_smul' m hw hX hZ hXR hZR t]
       exact integral_nonneg fun x => mul_nonneg (hw0 x) (by positivity)
 
-private theorem weightedEnergy_addState_le' [Fintype ι] {w : E → ℝ} (hw : Continuous w)
+private theorem weightedEnergy_addState_le' {w : E → ℝ} (hw : Continuous w)
     (hw0 : ∀ x, 0 ≤ w x) {X Z : State E ι} (hX : ContinuousState X) (hZ : ContinuousState Z)
     {R : ℝ} (hXR : X.Supported R) (hZR : Z.Supported R) :
     weightedEnergy m w (addState X Z) ≤
@@ -303,7 +319,7 @@ private theorem weightedEnergy_addState_le' [Fintype ι] {w : E → ℝ} (hw : C
   rw [e, sq_sqrt_add (weightedEnergy_nonneg m hw0 X) (weightedEnergy_nonneg m hw0 Z)]
   linarith [le_abs_self (weightedPairing m w X Z)]
 
-private theorem weightedEnergy_subState_le' [Fintype ι] {w : E → ℝ} (hw : Continuous w)
+private theorem weightedEnergy_subState_le' {w : E → ℝ} (hw : Continuous w)
     (hw0 : ∀ x, 0 ≤ w x) {X Z : State E ι} (hX : ContinuousState X) (hZ : ContinuousState Z)
     {R : ℝ} (hXR : X.Supported R) (hZR : Z.Supported R) :
     weightedEnergy m w (subState X Z) ≤
@@ -318,14 +334,14 @@ private theorem weightedEnergy_subState_le' [Fintype ι] {w : E → ℝ} (hw : C
   linarith [neg_abs_le (weightedPairing m w X Z)]
 
 /-- Cauchy--Schwarz for the weighted pairing of supported smooth states. -/
-theorem abs_weightedPairing_le [Fintype ι] {w : E → ℝ} (hw : Continuous w)
+theorem abs_weightedPairing_le {w : E → ℝ} (hw : Continuous w)
     (hw0 : ∀ x, 0 ≤ w x) {X Z : State E ι} (hX : X.Smooth) (hZ : Z.Smooth) {R : ℝ}
     (hXR : X.Supported R) (hZR : Z.Supported R) :
     |weightedPairing m w X Z| ≤ √(weightedEnergy m w X) * √(weightedEnergy m w Z) :=
   abs_weightedPairing_le' m hw hw0 hX.continuousState hZ.continuousState hXR hZR
 
 /-- Minkowski's inequality for the weighted energy. -/
-theorem weightedEnergy_addState_le [Fintype ι] {w : E → ℝ} (hw : Continuous w)
+theorem weightedEnergy_addState_le {w : E → ℝ} (hw : Continuous w)
     (hw0 : ∀ x, 0 ≤ w x) {X Z : State E ι} (hX : X.Smooth) (hZ : Z.Smooth) {R : ℝ}
     (hXR : X.Supported R) (hZR : Z.Supported R) :
     weightedEnergy m w (addState X Z) ≤
@@ -333,14 +349,14 @@ theorem weightedEnergy_addState_le [Fintype ι] {w : E → ℝ} (hw : Continuous
   weightedEnergy_addState_le' m hw hw0 hX.continuousState hZ.continuousState hXR hZR
 
 /-- Minkowski's inequality for differences in the weighted energy. -/
-theorem weightedEnergy_subState_le [Fintype ι] {w : E → ℝ} (hw : Continuous w)
+theorem weightedEnergy_subState_le {w : E → ℝ} (hw : Continuous w)
     (hw0 : ∀ x, 0 ≤ w x) {X Z : State E ι} (hX : X.Smooth) (hZ : Z.Smooth) {R : ℝ}
     (hXR : X.Supported R) (hZR : Z.Supported R) :
     weightedEnergy m w (subState X Z) ≤
       (√(weightedEnergy m w X) + √(weightedEnergy m w Z)) ^ 2 :=
   weightedEnergy_subState_le' m hw hw0 hX.continuousState hZ.continuousState hXR hZR
 
-private theorem energy_eq_weightedEnergy_one [Fintype ι] {Y : State E ι}
+private theorem energy_eq_weightedEnergy_one {Y : State E ι}
     (hY : ContinuousState Y) {R : ℝ} (hR : Y.Supported R) :
     energy m Y = weightedEnergy m (fun _ => 1) Y := by
   have hi {f : E → ℝ} (hf : Continuous f) (hz : ∀ x, R < ‖x‖ → f x = 0) :
@@ -358,7 +374,7 @@ private theorem energy_eq_weightedEnergy_one [Fintype ι] {Y : State E ι}
 
 /-- Minkowski's inequality for the ordered-coordinate derivative energy: its square root is
 a seminorm on supported smooth states. -/
-theorem derivativeEnergy_addState_le_sq [Fintype ι] (a : ι → E) (k : ℕ) {X Z : State E ι}
+theorem derivativeEnergy_addState_le_sq (a : ι → E) (k : ℕ) {X Z : State E ι}
     (hX : X.Smooth) (hZ : Z.Smooth) {R : ℝ} (hXR : X.Supported R) (hZR : Z.Supported R) :
     derivativeEnergy m a k (addState X Z) ≤
       (√(derivativeEnergy m a k X) + √(derivativeEnergy m a k Z)) ^ 2 := by
@@ -381,6 +397,8 @@ theorem derivativeEnergy_addState_le_sq [Fintype ι] (a : ι → E) (k : ℕ) {X
       (hRX.addState hRZ),
     energy_eq_weightedEnergy_one m hdX hRX, energy_eq_weightedEnergy_one m hdZ hRZ]
   exact weightedEnergy_addState_le' m continuous_const (fun _ => zero_le_one) hdX hdZ hRX hRZ
+
+end FiniteIndex
 
 /-! ## The weighted skew identity -/
 
@@ -489,9 +507,13 @@ private theorem hasDerivAt_integral_of_supported {F F' : ℝ → E → ℝ}
     · rw [indicator_of_notMem hx, (hz s hs x (hout x hx)).2, norm_zero]
   · exact (integrableOn_const hK.measure_lt_top.ne).integrable_indicator hK.measurableSet
 
+section FiniteIndex
+
+variable [Fintype ι]
+
 /-- The weighted energy of a jointly smooth supported curve is differentiable, with the
 weighted pairing of the state and its temporal derivative as derivative. -/
-theorem hasDerivAt_weightedEnergy [Fintype ι] {w : E → ℝ} (hw : Continuous w)
+theorem hasDerivAt_weightedEnergy {w : E → ℝ} (hw : Continuous w)
     {Z : ℝ → State E ι} (hZ : JointSmooth Z) {R s₀ : ℝ}
     (hR : ∀ s ∈ Metric.ball s₀ 1, (Z s).Supported R) :
     HasDerivAt (fun s => weightedEnergy m w (Z s))
@@ -537,7 +559,7 @@ theorem hasDerivAt_weightedEnergy [Fintype ι] {w : E → ℝ} (hw : Continuous 
 
 /-! ## Forced energy along the actual cells -/
 
-private theorem weightedPairing_addState_right [Fintype ι] {w : E → ℝ} (hw : Continuous w)
+private theorem weightedPairing_addState_right {w : E → ℝ} (hw : Continuous w)
     {X A B : State E ι} (hX : ContinuousState X) (hA : ContinuousState A)
     (hB : ContinuousState B) {R : ℝ} (hR : X.Supported R) :
     weightedPairing m w X (addState A B) = weightedPairing m w X A + weightedPairing m w X B := by
@@ -548,11 +570,17 @@ private theorem weightedPairing_addState_right [Fintype ι] {w : E → ℝ} (hw 
   simp only [addState, mul_add, Finset.sum_add_distrib]
   ring
 
+end FiniteIndex
+
+section StructuredSpace
+
+variable [m.IsAddHaarMeasure]
+
 omit [IsFiniteMeasureOnCompacts m] in
 /-- **Forced weighted energy on one actual step.** If every residual on `[0,θ]` has weighted
 energy at most `η^2`, the weighted norm of the actual step grows by at most `θ η`. The
 initial norm enters with coefficient one. -/
-theorem sqrt_weightedEnergy_step_le [m.IsAddHaarMeasure] {d : ℕ} (a : Fin d → E)
+theorem sqrt_weightedEnergy_step_le {d : ℕ} (a : Fin d → E)
     {b : Fin d → E → ℝ} (hb : ∀ j, ContDiff ℝ ∞ (b j)) {w : E → ℝ} (hw : ContDiff ℝ 1 w)
     (hw0 : ∀ x, 0 ≤ w x) (hwb : ∀ j x, fderiv ℝ w x (a j) = -(b j x * w x))
     {Y : State E (Fin d)} (hY : Y.Smooth) {R : ℝ} (hR : Y.Supported R) {θ η : ℝ}
@@ -596,7 +624,7 @@ theorem sqrt_weightedEnergy_step_le [m.IsAddHaarMeasure] {d : ℕ} (a : Fin d �
 
 omit [IsFiniteMeasureOnCompacts m] in
 /-- Forced weighted energy at the actual grid nodes. -/
-theorem sqrt_weightedEnergy_nodes_le [m.IsAddHaarMeasure] {d : ℕ} (a : Fin d → E)
+theorem sqrt_weightedEnergy_nodes_le {d : ℕ} (a : Fin d → E)
     {b : Fin d → E → ℝ} (hb : ∀ j, ContDiff ℝ ∞ (b j)) {w : E → ℝ} (hw : ContDiff ℝ 1 w)
     (hw0 : ∀ x, 0 ≤ w x) (hwb : ∀ j x, fderiv ℝ w x (a j) = -(b j x * w x))
     {Y : State E (Fin d)} (hY : Y.Smooth) {R : ℝ} (hR : Y.Supported R) {δ η : ℝ}
@@ -617,7 +645,7 @@ theorem sqrt_weightedEnergy_nodes_le [m.IsAddHaarMeasure] {d : ℕ} (a : Fin d �
 
 omit [IsFiniteMeasureOnCompacts m] in
 /-- Forced weighted energy inside every actual cell. -/
-theorem sqrt_weightedEnergy_cell_le [m.IsAddHaarMeasure] {d : ℕ} (a : Fin d → E)
+theorem sqrt_weightedEnergy_cell_le {d : ℕ} (a : Fin d → E)
     {b : Fin d → E → ℝ} (hb : ∀ j, ContDiff ℝ ∞ (b j)) {w : E → ℝ} (hw : ContDiff ℝ 1 w)
     (hw0 : ∀ x, 0 ≤ w x) (hwb : ∀ j x, fderiv ℝ w x (a j) = -(b j x * w x))
     {Y : State E (Fin d)} (hY : Y.Smooth) {R : ℝ} (hR : Y.Supported R) {δ η θ : ℝ}
@@ -634,8 +662,14 @@ theorem sqrt_weightedEnergy_cell_le [m.IsAddHaarMeasure] {d : ℕ} (a : Fin d �
   change √(weightedEnergy m w (step a b _ θ (nodes a b _ δ Y k))) ≤ _
   nlinarith
 
+end StructuredSpace
+
+section FiniteIndex
+
+variable [Fintype ι]
+
 omit [NormedSpace ℝ E] [BorelSpace E] [IsFiniteMeasureOnCompacts m] [FiniteDimensional ℝ E] in
-private theorem weightedEnergy_le_mul [Fintype ι] {w : E → ℝ}
+private theorem weightedEnergy_le_mul {w : E → ℝ}
     {Y : State E ι} {T M : ℝ} (hT : Y.Supported T) (hM : ∀ x, ‖x‖ ≤ T → w x ≤ M)
     (hi : Integrable (fun x => Y.u x ^ 2 + Y.v x ^ 2 + ∑ j, Y.p j x ^ 2) m)
     (hiw : Integrable (fun x => w x * (Y.u x ^ 2 + Y.v x ^ 2 + ∑ j, Y.p j x ^ 2)) m) :
@@ -650,7 +684,7 @@ private theorem weightedEnergy_le_mul [Fintype ι] {w : E → ℝ}
     simp [hu, hv, hp]
 
 /-- A continuous weight is controlled on a support ball by the unweighted energy. -/
-theorem weightedEnergy_le_mul_energy [Fintype ι] {w : E → ℝ} (hw : Continuous w)
+theorem weightedEnergy_le_mul_energy {w : E → ℝ} (hw : Continuous w)
     {Y : State E ι} (hY : Y.Smooth) {T M : ℝ} (hT : Y.Supported T)
     (hM : ∀ x, ‖x‖ ≤ T → w x ≤ M) : weightedEnergy m w Y ≤ M * energy m Y := by
   have hc := hY.continuousState
@@ -662,6 +696,8 @@ theorem weightedEnergy_le_mul_energy [Fintype ι] {w : E → ℝ} (hw : Continuo
   rw [energy_eq_weightedEnergy_one m hc hT]
   exact weightedEnergy_le_mul m hT hM (integrable_of_supported m hq hz)
     (integrable_of_supported m (R := T) (hw.mul hq) fun x hx => by simp [hz x hx])
+
+end FiniteIndex
 
 omit [IsFiniteMeasureOnCompacts m] in
 /-- **Mesh-uniform forced weighted energy on the actual cells.** For a smooth coefficient `b`

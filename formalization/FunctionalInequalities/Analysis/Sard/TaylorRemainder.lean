@@ -19,9 +19,14 @@ universe u
 
 variable {V : Type*} [NormedAddCommGroup V] [NormedSpace ℝ V]
 
+section StructuredSpace
+
+variable {F : Type*}
+variable [NormedAddCommGroup F]
+
 omit [NormedSpace ℝ V] in
 /-- Order zero: uniform continuity on a compact set, with the nearby point outside it. -/
-private lemma exists_uniform_zero_remainder {F : Type*} [NormedAddCommGroup F]
+private lemma exists_uniform_zero_remainder
     [NormedSpace ℝ F] {f : V → F} {K : Set V} (hf : Continuous f) (hK : IsCompact K)
     {ε : ℝ} (hε : 0 < ε) :
     ∃ δ : ℝ, 0 < δ ∧ ∀ x ∈ K, ∀ y : V, ‖y - x‖ < δ → ‖f y - f x‖ ≤ ε := by
@@ -34,9 +39,12 @@ private lemma exists_uniform_zero_remainder {F : Type*} [NormedAddCommGroup F]
   rw [dist_eq_norm, norm_sub_rev] at h
   exact h.le
 
+section NormedSpace
+
+variable [NormedSpace ℝ F]
+
 /-- One mean-value step: a power bound on the derivative over a ball raises the power. -/
-private lemma norm_sub_le_of_norm_fderiv_pow_le {F : Type*} [NormedAddCommGroup F]
-    [NormedSpace ℝ F] {f : V → F} (hf : Differentiable ℝ f) {x : V} {δ C : ℝ} (hC : 0 ≤ C)
+private lemma norm_sub_le_of_norm_fderiv_pow_le {f : V → F} (hf : Differentiable ℝ f) {x : V} {δ C : ℝ} (hC : 0 ≤ C)
     {m : ℕ} (h : ∀ z ∈ ball x δ, ‖fderiv ℝ f z‖ ≤ C * ‖z - x‖ ^ m)
     {y : V} (hy : ‖y - x‖ < δ) :
     ‖f y - f x‖ ≤ C * ‖y - x‖ ^ (m + 1) := by
@@ -54,7 +62,7 @@ private lemma norm_sub_le_of_norm_fderiv_pow_le {F : Type*} [NormedAddCommGroup 
 
 /-- The inductive step: a uniform order-`m` bound for `fderiv f` gives the order-`m+1` bound
 for `f` at points where all derivatives of order `1` to `m+1` vanish. -/
-private lemma pow_remainder_step {F : Type*} [NormedAddCommGroup F] [NormedSpace ℝ F]
+private lemma pow_remainder_step
     {f : V → F} {K : Set V} {m : ℕ} {ε δ : ℝ} (hf : ContDiff ℝ (m + 1 : ℕ) f) (hε : 0 ≤ ε)
     (h : ∀ x ∈ K, (∀ k : ℕ, 1 ≤ k → k ≤ m → iteratedFDeriv ℝ k (fderiv ℝ f) x = 0) →
       ∀ z : V, ‖z - x‖ < δ → ‖fderiv ℝ f z - fderiv ℝ f x‖ ≤ ε * ‖z - x‖ ^ m) :
@@ -76,6 +84,10 @@ private lemma pow_remainder_step {F : Type*} [NormedAddCommGroup F] [NormedSpace
     simpa [hf1] using h x hx hflat' z hz'
   exact norm_sub_le_of_norm_fderiv_pow_le
     (hf.differentiable (by exact_mod_cast Nat.succ_ne_zero m)) hε hderiv hy
+
+end NormedSpace
+
+end StructuredSpace
 
 /-- The order-`n` uniform remainder for maps into an arbitrary normed space of the same
 universe as the domain. The public real-valued statement below removes that restriction. -/

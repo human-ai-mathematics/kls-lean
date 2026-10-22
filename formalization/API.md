@@ -6,16 +6,16 @@ This index records interfaces; it assigns no proof, paper-coverage or certificat
 
 [Library design](../LEAN_DESIGN.md) · [Calling examples](../examples/README.md) · [Module directory](MODULES.md) · [Review checklist](../research/workflow.md#review-after-mechanical-checks)
 
-**5,783 public compiler declarations across 586 source modules and the aggregate root.**
+**6,016 public compiler declarations across 624 source modules and the aggregate root.**
 
 | Mathematical family | Public declarations | Modules |
 | --- | ---: | ---: |
-| [Analysis](FunctionalInequalities/Analysis/) | 2,247 | 233 |
+| [Analysis](FunctionalInequalities/Analysis/) | 2,443 | 264 |
 | [Energy](FunctionalInequalities/Energy/) | 682 | 46 |
-| [KLS](FunctionalInequalities/KLS/) | 1,944 | 203 |
-| [L2](FunctionalInequalities/L2/) | 121 | 9 |
+| [KLS](FunctionalInequalities/KLS/) | 1,957 | 207 |
+| [L2](FunctionalInequalities/L2/) | 124 | 9 |
 | [Poincare](FunctionalInequalities/Poincare/) | 267 | 33 |
-| [Probability](FunctionalInequalities/Probability/) | 522 | 62 |
+| [Probability](FunctionalInequalities/Probability/) | 543 | 65 |
 
 ## Search the complete interface
 
@@ -36,6 +36,6 @@ Private and internal names are filtered; public compiler-generated support may r
 Displayed types use Lean notation with full names and universe information; the source and compiler remain authoritative.
 Pinned compiled Mathlib dependencies are trusted. The index performs no axiom audit or kernel replay and does not renew any verification receipt.
 
-Kinds: constructor: 31, definition: 764, inductive: 31, recursor: 31, theorem: 4,926.
+Kinds: constructor: 31, definition: 766, inductive: 31, recursor: 31, theorem: 5,157.
 
-Source/tool input digest: `ca28baf4bc92f471690d0d517faa17276de5271587aa99e5d152ff470118388c`.
+Source/tool input digest: `d42d6140262c3e0ccbf39ba654f3aacc7530272fa9ad5410977d57b144a4ef64`.

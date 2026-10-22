@@ -28,17 +28,20 @@ theorem diffusionGenerator_eq_vectorGenerator (b : V → V) (σ : V → Fin d �
     diffusionGenerator b σ F x = vectorGenerator b σ F x := by
   simp only [diffusionGenerator, vectorGenerator, smul_eq_mul]
 
+section NormedSpace
+
+variable {W W' : Type*}
+variable [NormedAddCommGroup W] [NormedSpace ℝ W] [NormedAddCommGroup W'] [NormedSpace ℝ W']
+
 /-- The derivative of a continuous linear map applied to a differentiable function. -/
-theorem fderiv_clm_comp_apply_vec {W W' : Type*} [NormedAddCommGroup W] [NormedSpace ℝ W]
-    [NormedAddCommGroup W'] [NormedSpace ℝ W'] (ℓ : W →L[ℝ] W') {G : V → W} {x : V}
+theorem fderiv_clm_comp_apply_vec (ℓ : W →L[ℝ] W') {G : V → W} {x : V}
     (hG : DifferentiableAt ℝ G x) (v : V) :
     fderiv ℝ (fun y => ℓ (G y)) x v = ℓ (fderiv ℝ G x v) := by
   exact congrArg (fun q : V →L[ℝ] W' => q v)
     (ℓ.hasFDerivAt.comp x hG.hasFDerivAt).fderiv
 
 /-- The vector generator commutes with continuous linear maps. -/
-theorem vectorGenerator_clm_comp {W W' : Type*} [NormedAddCommGroup W] [NormedSpace ℝ W]
-    [NormedAddCommGroup W'] [NormedSpace ℝ W'] (b : V → V) (σ : V → Fin d → V)
+theorem vectorGenerator_clm_comp (b : V → V) (σ : V → Fin d → V)
     (ℓ : W →L[ℝ] W') {G : V → W} {x : V} (hG : ContDiffAt ℝ 2 G x) :
     vectorGenerator b σ (fun y => ℓ (G y)) x = ℓ (vectorGenerator b σ G x) := by
   have hG' : DifferentiableAt ℝ G x := hG.differentiableAt (by norm_num)
@@ -93,9 +96,15 @@ theorem vectorGenerator_clm_comp {W W' : Type*} [NormedAddCommGroup W] [NormedSp
   simp_rw [hsecond]
   simp only [map_add, map_smul, map_sum]
 
+end NormedSpace
+
+section NormedSpace
+
+variable {W₁ W₂ : Type*}
+variable [NormedAddCommGroup W₁] [NormedSpace ℝ W₁] [NormedAddCommGroup W₂] [NormedSpace ℝ W₂]
+
 /-- The vector generator of a pair is the pair of vector generators. -/
-theorem vectorGenerator_prodMk {W₁ W₂ : Type*} [NormedAddCommGroup W₁] [NormedSpace ℝ W₁]
-    [NormedAddCommGroup W₂] [NormedSpace ℝ W₂] (b : V → V) (σ : V → Fin d → V)
+theorem vectorGenerator_prodMk (b : V → V) (σ : V → Fin d → V)
     {G₁ : V → W₁} {G₂ : V → W₂} {x : V} (h₁ : ContDiffAt ℝ 2 G₁ x) (h₂ : ContDiffAt ℝ 2 G₂ x) :
     vectorGenerator b σ (fun y => (G₁ y, G₂ y)) x =
       (vectorGenerator b σ G₁ x, vectorGenerator b σ G₂ x) := by
@@ -119,11 +128,12 @@ theorem vectorGenerator_pi {ι : Type*} [Fintype ι] {W : Type*} [NormedAddCommG
       (ContinuousLinearMap.proj i : (ι → W) →L[ℝ] W) h).symm
 
 /-- The derivative of a pair, applied to a vector. -/
-theorem fderiv_prodMk_apply_vec {W₁ W₂ : Type*} [NormedAddCommGroup W₁] [NormedSpace ℝ W₁]
-    [NormedAddCommGroup W₂] [NormedSpace ℝ W₂] {G₁ : V → W₁} {G₂ : V → W₂} {x : V}
+theorem fderiv_prodMk_apply_vec {G₁ : V → W₁} {G₂ : V → W₂} {x : V}
     (h₁ : DifferentiableAt ℝ G₁ x) (h₂ : DifferentiableAt ℝ G₂ x) (v : V) :
     fderiv ℝ (fun y => (G₁ y, G₂ y)) x v = (fderiv ℝ G₁ x v, fderiv ℝ G₂ x v) := by
   exact congrArg (fun q => q v) (h₁.fderiv_prodMk h₂)
+
+end NormedSpace
 
 /-- The derivative of a finite family, applied to a vector. -/
 theorem fderiv_pi_apply_vec {ι : Type*} [Fintype ι] {W : Type*} [NormedAddCommGroup W] [NormedSpace ℝ W]

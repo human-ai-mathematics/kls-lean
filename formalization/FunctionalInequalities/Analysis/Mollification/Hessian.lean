@@ -16,8 +16,16 @@ open scoped Topology ContDiff
 
 namespace FunctionalInequalities.Analysis
 
+section StructuredSpace
+
+variable {E : Type*}
+variable [NormedAddCommGroup E]
+
+section NormedSpace
+
+variable [NormedSpace ℝ E]
+
 private lemma integrable_mul_of_compact_support
-    {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
     [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
     {μ : Measure E} [IsFiniteMeasureOnCompacts μ] [OpensMeasurableSpace E]
     {f g : E → ℝ} (hf : Continuous f) (hg : Continuous g)
@@ -52,16 +60,19 @@ private lemma integrable_smul_of_compact_support
   exact hx hzero
 
 private lemma continuous_clm_apply
-    {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
     {f : E → E →L[ℝ] ℝ} (hf : Continuous f) (v : E) :
     Continuous (fun x => f x v) := by
   have hev : Continuous (fun L : E →L[ℝ] ℝ => L v) := by
     fun_prop
   exact hev.comp hf
 
+end NormedSpace
+
+section FiniteDimensional
+
+variable [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
+
 private lemma locallyIntegrable_fderiv_gradient
-    {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
-    [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
     {U : E → ℝ} {G : NNReal} (hG : LipschitzWith G (gradient U)) :
     LocallyIntegrable (fderiv ℝ (gradient U)) (volume : Measure E) := by
   refine
@@ -72,8 +83,6 @@ private lemma locallyIntegrable_fderiv_gradient
   simpa using norm_fderiv_le_of_lipschitz ℝ hG
 
 private lemma gradient_convolution_normed
-    {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
-    [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
     {U : E → ℝ} (hU : ContDiff ℝ 1 U)
     {G : NNReal} (hG : LipschitzWith G (gradient U))
     (φ : ContDiffBump (0 : E)) :
@@ -256,8 +265,7 @@ private lemma gradient_convolution_normed
             (φ.normed (volume : Measure E) t)) (gradient U (x - t))) ∂volume := by
       simp [f, ContinuousLinearMap.lsmul_apply]
 
-theorem exists_contDiff_approx_of_lipschitz_gradient {E : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
+theorem exists_contDiff_approx_of_lipschitz_gradient
     {U : E → ℝ} (hU : ContDiff ℝ 1 U) {G : NNReal} (hG : LipschitzWith G (gradient U)) :
     ∃ Uk : ℕ → E → ℝ, (∀ k, ContDiff ℝ ∞ (Uk k)) ∧
       (∀ k x, ‖gradient (Uk k) x - gradient U x‖ ≤ G / ((k : ℝ) + 1)) ∧
@@ -463,5 +471,9 @@ theorem exists_contDiff_approx_of_lipschitz_gradient {E : Type*} [NormedAddCommG
       ContDiffBump.ae_convolution_tendsto_right_of_locallyIntegrable
         (φ := φ) (l := atTop) (K := 2) hφ hφ' hgradloc] with x hx
     simpa [hconv] using hx
+
+end FiniteDimensional
+
+end StructuredSpace
 
 end FunctionalInequalities.Analysis

@@ -217,6 +217,39 @@ theorem HasWeakDerivAlong.mul_contDiff {f g : E → ℝ} {v : E} (h : HasWeakDer
       rw [hCD]
       ring
 
+/-- Affine weak chain rule: `c + d f` has weak derivative `d g`. No `L²` hypothesis. -/
+theorem HasWeakDerivAlong.const_add_mul {f g : E → ℝ} {v : E} (h : HasWeakDerivAlong f g v) (c d : ℝ) :
+    HasWeakDerivAlong (fun x => c + d * f x) (fun x => d * g x) v := by
+  have hc : HasWeakDerivAlong (fun _ : E => c) (fun _ => 0) v := by
+    simpa using hasWeakDerivAlong_of_contDiff (contDiff_const (c := c)) v
+  have hlocf : LocallyIntegrable (fun x => c + d * f x) (volume : Measure E) := by
+    exact (hc.1.add (h.1.smul d)).congr (ae_of_all _ fun x => rfl)
+  have hlocg : LocallyIntegrable (fun x => d * g x) (volume : Measure E) := by
+    exact (h.2.1.smul d).congr (ae_of_all _ fun x => rfl)
+  refine ⟨hlocf, hlocg, ?_⟩
+  intro ψ hψ hψc
+  have hD : Continuous (fun x => fderiv ℝ ψ x v) :=
+    (hψ.continuous_fderiv one_ne_zero).clm_apply continuous_const
+  have hDc : HasCompactSupport (fun x => fderiv ℝ ψ x v) := hψc.fderiv_apply ℝ v
+  have hci : Integrable (fun x => c * fderiv ℝ ψ x v) (volume : Measure E) :=
+    (hD.const_mul c).integrable_of_hasCompactSupport hDc.mul_left
+  have hfi : Integrable (fun x => f x * fderiv ℝ ψ x v) (volume : Measure E) := by
+    simpa only [smul_eq_mul, mul_comm] using h.1.integrable_smul_left_of_hasCompactSupport hD hDc
+  calc
+    (∫ x, (c + d * f x) * fderiv ℝ ψ x v) =
+        (∫ x, c * fderiv ℝ ψ x v) + d * (∫ x, f x * fderiv ℝ ψ x v) := by
+      rw [← integral_const_mul d]
+      rw [← integral_add hci (hfi.const_mul d)]
+      apply integral_congr_ae
+      filter_upwards with x
+      ring
+    _ = -(∫ x, 0 * ψ x) + d * (-(∫ x, g x * ψ x)) := by rw [hc.2.2 ψ hψ hψc, h.2.2 ψ hψ hψc]
+    _ = -(∫ x, (d * g x) * ψ x) := by
+      simp only [zero_mul, integral_zero, neg_zero, zero_add]
+      rw [show (fun x => (d * g x) * ψ x) = (fun x => d * (g x * ψ x)) from funext fun _ => by ring,
+        integral_const_mul]
+      ring
+
 end FunctionalInequalities.Analysis
 
 universe u

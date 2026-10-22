@@ -160,19 +160,28 @@ section Convergence
 variable {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E] [CompleteSpace E]
 
 omit [CompleteSpace E] in
+/-- The support of a mollification with `rOut ≤ ε` lies in the closed `ε`-thickening of the
+support of the function. -/
+theorem support_convolution_subset_cthickening_of_rOut_le (φ : ContDiffBump (0 : V)) {ε : ℝ}
+    (hφ : φ.rOut ≤ ε) (f : V → E) :
+    Function.support (φ.normed m ⋆[ContinuousLinearMap.lsmul ℝ ℝ, m] f) ⊆
+      cthickening ε (tsupport f) := by
+  refine (support_convolution_subset _).trans ?_
+  rintro x ⟨a, ha, b, hb, rfl⟩
+  rw [φ.support_normed_eq] at ha
+  refine mem_cthickening_of_dist_le (a + b) b ε _ (subset_tsupport _ hb) ?_
+  rw [dist_eq_norm, add_sub_cancel_right]
+  rw [mem_ball, dist_zero_right] at ha
+  exact ha.le.trans hφ
+
+omit [CompleteSpace E] in
 /-- The support of a mollification with `rOut ≤ 1` lies in the closed `1`-thickening of the
 support of the function. -/
 theorem support_convolution_subset_cthickening (φ : ContDiffBump (0 : V)) (hφ : φ.rOut ≤ 1)
     (f : V → E) :
     Function.support (φ.normed m ⋆[ContinuousLinearMap.lsmul ℝ ℝ, m] f) ⊆
-      cthickening 1 (tsupport f) := by
-  refine (support_convolution_subset _).trans ?_
-  rintro x ⟨a, ha, b, hb, rfl⟩
-  rw [φ.support_normed_eq] at ha
-  refine mem_cthickening_of_dist_le (a + b) b 1 _ (subset_tsupport _ hb) ?_
-  rw [dist_eq_norm, add_sub_cancel_right]
-  rw [mem_ball, dist_zero_right] at ha
-  exact ha.le.trans hφ
+      cthickening 1 (tsupport f) :=
+  support_convolution_subset_cthickening_of_rOut_le φ hφ f
 
 /-- **Mollifications of a continuous compactly supported function converge in `L²`** as the
 radius of the bump tends to zero. -/
@@ -436,12 +445,15 @@ section LipschitzConvolution
 open MeasureTheory
 open scoped Convolution
 
+section FiniteDimensional
+
+variable {E : Type*}
+variable [NormedAddCommGroup E] [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] [MeasurableSpace E]
+variable [BorelSpace E]
+
 /-! Derivative of a normalized-bump convolution with a Lipschitz function. -/
 
 private theorem integral_fderiv_kernel_eq
-    {E : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] [FiniteDimensional ℝ E]
-    [MeasurableSpace E] [BorelSpace E]
     {F : E → E} {G : NNReal} (hF : LipschitzWith G F)
     (k : E → ℝ) (hk : ContDiff ℝ 1 k) (hc : HasCompactSupport k)
     (x v : E) (ℓ : E →L[ℝ] ℝ) :
@@ -501,8 +513,7 @@ private theorem integral_fderiv_kernel_eq
 mollification identities): for a Lipschitz map `F : E → E` and a bump `φ`, the convolution
 `φ.normed ⋆ F` is differentiable with derivative `φ.normed ⋆ DF`, where `DF = fderiv ℝ F` is the
 almost-everywhere (Rademacher) derivative of `F` (a bounded measurable map). -/
-theorem hasFDerivAt_convolution_normed_of_lipschitz {E : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
+theorem hasFDerivAt_convolution_normed_of_lipschitz
     {F : E → E} {G : NNReal} (hF : LipschitzWith G F) (φ : ContDiffBump (0 : E)) (x : E) :
     HasFDerivAt (φ.normed (volume : Measure E) ⋆[ContinuousLinearMap.lsmul ℝ ℝ, (volume : Measure E)] F)
       ((φ.normed (volume : Measure E) ⋆[ContinuousLinearMap.lsmul ℝ ℝ, (volume : Measure E)]
@@ -544,6 +555,8 @@ theorem hasFDerivAt_convolution_normed_of_lipschitz {E : Type*} [NormedAddCommGr
     ContinuousLinearMap.apply_apply, ContinuousLinearMap.precompL_apply,
     ContinuousLinearMap.lsmul_apply, map_smul, smul_eq_mul] using
     integral_fderiv_kernel_eq hF k hk hc x v ℓ
+
+end FiniteDimensional
 
 end LipschitzConvolution
 

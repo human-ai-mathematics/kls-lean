@@ -105,8 +105,13 @@ private theorem isPL_real {t : ℝ} (ht0 : 0 < t) (ht1 : t < 1) :
   exact le_trans (mul_le_mul' (ENNReal.rpow_le_rpow (hmono f (le_max_left N M)) ht0.le)
     (ENNReal.rpow_le_rpow (hmono g (le_max_right N M)) ht1'.le)) (hstep (max N M))
 
-private theorem IsPL.comp {X Y : Type*} [AddCommGroup X] [Module ℝ X] [MeasurableSpace X]
-    [AddCommGroup Y] [Module ℝ Y] [MeasurableSpace Y] {μ : Measure X} {ν : Measure Y} {t : ℝ}
+section MeasurableSpace
+
+variable {X Y : Type*}
+variable [AddCommGroup X] [Module ℝ X] [MeasurableSpace X] [AddCommGroup Y] [Module ℝ Y]
+variable [MeasurableSpace Y]
+
+private theorem IsPL.comp {μ : Measure X} {ν : Measure Y} {t : ℝ}
     (hX : IsPL X μ t) {e : X → Y} (hmp : MeasurePreserving e μ ν)
     (hlin : ∀ (a b : ℝ) (x y : X), e (a • x + b • y) = a • e x + b • e y) : IsPL Y ν t := by
   intro f g h hf hg hh hfgh
@@ -120,8 +125,7 @@ private theorem IsPL.comp {X Y : Type*} [AddCommGroup X] [Module ℝ X] [Measura
   simp only [Function.comp_apply] at h1
   rwa [hmp.lintegral_comp hf, hmp.lintegral_comp hg, hmp.lintegral_comp hh] at h1
 
-private theorem IsPL.symm {X Y : Type*} [AddCommGroup X] [Module ℝ X] [MeasurableSpace X]
-    [AddCommGroup Y] [Module ℝ Y] [MeasurableSpace Y] {μ : Measure X} {ν : Measure Y} {t : ℝ}
+private theorem IsPL.symm {μ : Measure X} {ν : Measure Y} {t : ℝ}
     (hY : IsPL Y ν t) (e : X ≃ᵐ Y) (hmp : MeasurePreserving e μ ν)
     (hlin : ∀ (a b : ℝ) (x y : X), e (a • x + b • y) = a • e x + b • e y) : IsPL X μ t := by
   refine hY.comp (e := ⇑e.symm) (hmp.symm e) ?_
@@ -129,8 +133,7 @@ private theorem IsPL.symm {X Y : Type*} [AddCommGroup X] [Module ℝ X] [Measura
   refine e.injective ?_
   rw [hlin, e.apply_symm_apply, e.apply_symm_apply, e.apply_symm_apply]
 
-private theorem IsPL.prod {X Y : Type*} [AddCommGroup X] [Module ℝ X] [MeasurableSpace X]
-    [AddCommGroup Y] [Module ℝ Y] [MeasurableSpace Y] {μ : Measure X} {ν : Measure Y}
+private theorem IsPL.prod {μ : Measure X} {ν : Measure Y}
     [SFinite μ] [SFinite ν] {t : ℝ}
     (hX : IsPL X μ t) (hY : IsPL Y ν t) : IsPL (X × Y) (μ.prod ν) t := by
   intro f g h hf hg hh hfgh
@@ -151,6 +154,8 @@ private theorem IsPL.prod {X Y : Type*} [AddCommGroup X] [Module ℝ X] [Measura
     hh.lintegral_prod_right' hFGH
   rwa [← lintegral_prod _ hf.aemeasurable, ← lintegral_prod _ hg.aemeasurable,
     ← lintegral_prod _ hh.aemeasurable] at h1
+
+end MeasurableSpace
 
 private theorem isPL_pi {t : ℝ} (ht0 : 0 < t) (ht1 : t < 1) :
     ∀ n : ℕ, IsPL (Fin n → ℝ) (volume : Measure (Fin n → ℝ)) t

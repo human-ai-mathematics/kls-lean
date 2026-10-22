@@ -21,14 +21,19 @@ namespace MetricBVSupportRetractionAudit
 open FunctionalInequalities.KLS
 open FunctionalInequalities.KLS.MetricBV
 
-theorem slopeComposition {X Y : Type*} [MetricSpace X] [MetricSpace Y] {r : X → Y}
+section StructuredSpace
+
+variable {X Y : Type*}
+variable [MetricSpace X] [MetricSpace Y]
+
+theorem slopeComposition {r : X → Y}
     (hr : LipschitzWith 1 r) (g : Y → ℝ) (x : X) :
     FunctionalInequalities.Energy.LocalSlope.apply (g ∘ r) x ≤
       FunctionalInequalities.Energy.LocalSlope.apply g (r x) := by
   exact FunctionalInequalities.Energy.LocalSlope.apply_comp_le_of_lipschitzWith_one hr g x
 
 /-- A fully collapsing nonexpansive map: the bound holds, and the composed slope is zero. -/
-theorem collapsedSlope {X Y : Type*} [MetricSpace X] [MetricSpace Y] (y₀ : Y) (g : Y → ℝ)
+theorem collapsedSlope (y₀ : Y) (g : Y → ℝ)
     (x : X) :
     FunctionalInequalities.Energy.LocalSlope.apply (g ∘ fun _ : X => y₀) x ≤
         FunctionalInequalities.Energy.LocalSlope.apply g y₀ ∧
@@ -36,6 +41,8 @@ theorem collapsedSlope {X Y : Type*} [MetricSpace X] [MetricSpace Y] (y₀ : Y) 
   ⟨FunctionalInequalities.Energy.LocalSlope.apply_comp_le_of_lipschitzWith_one
       ((LipschitzWith.const y₀).weaken zero_le_one) g x,
     FunctionalInequalities.Energy.LocalSlope.apply_const (g y₀) x⟩
+
+end StructuredSpace
 
 variable {X : Type*} [MetricSpace X] [MeasurableSpace X] [BorelSpace X]
 

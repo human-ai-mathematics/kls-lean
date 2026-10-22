@@ -124,9 +124,12 @@ theorem norm_coordTensor_taylorTensor_sq_le_of_cumulantBound {d : ℕ} (hd : 2 �
 
 open scoped ContDiff
 
-private theorem compact_c2_hessian_bounded {E F : Type*}
-    [NormedAddCommGroup E] [NormedSpace ℝ E]
-    [NormedAddCommGroup F] [NormedSpace ℝ F]
+section NormedSpace
+
+variable {E F : Type*}
+variable [NormedAddCommGroup E] [NormedSpace ℝ E] [NormedAddCommGroup F] [NormedSpace ℝ F]
+
+private theorem compact_c2_hessian_bounded
     {g : E → F} (hg : ContDiff ℝ 2 g) (hc : HasCompactSupport g) :
     ∃ M : ℝ, ∀ x : E, ‖fderiv ℝ (fderiv ℝ g) x‖ ≤ M := by
   have hd : ContDiff ℝ 1 (fderiv ℝ g) := hg.fderiv_right (by norm_num)
@@ -146,13 +149,13 @@ private theorem compact_c2_hessian_bounded {E F : Type*}
     rw [fderiv_of_notMem_tsupport ℝ hx1, ContinuousLinearMap.opNorm_zero]
     exact le_max_right M 0
 
-private theorem smooth_compact_hessian_bounded {E F : Type*}
-    [NormedAddCommGroup E] [NormedSpace ℝ E]
-    [NormedAddCommGroup F] [NormedSpace ℝ F]
+private theorem smooth_compact_hessian_bounded
     {g : E → F} (hg : ContDiff ℝ ∞ g) (hc : HasCompactSupport g) :
     ∃ M : ℝ, ∀ x : E, ‖fderiv ℝ (fderiv ℝ g) x‖ ≤ M := by
   have hg2 : ContDiff ℝ 2 g := hg.of_le (WithTop.coe_le_coe.mpr le_top)
   exact compact_c2_hessian_bounded hg2 hc
+
+end NormedSpace
 
 /-! Smooth affine-orthogonal approximants for BKL p. 30. The approximation is derived
 from Mathlib smooth compact-support density, not assumed as a field. -/
@@ -270,7 +273,12 @@ private theorem normalize_smooth_test {n : ℕ}
 open FunctionalInequalities FunctionalInequalities.Analysis.BakryEmery
 open FunctionalInequalities.Analysis.Tensor
 
-private theorem integral_sq_eq_norm_sq {A : Type*} [MeasurableSpace A]
+section MeasurableSpace
+
+variable {A : Type*}
+variable [MeasurableSpace A]
+
+private theorem integral_sq_eq_norm_sq
     (μ : Measure A) {g : A → ℝ} (hg : MemLp g 2 μ) :
     (∫ x, g x ^ 2 ∂μ) = (eLpNorm g 2 μ).toReal ^ 2 := by
   let G : Lp ℝ 2 μ := hg.toLp g
@@ -288,7 +296,7 @@ private theorem integral_sq_eq_norm_sq {A : Type*} [MeasurableSpace A]
     _ = ‖G‖ ^ 2 := real_inner_self_eq_norm_sq G
     _ = (eLpNorm g 2 μ).toReal ^ 2 := by rw [Lp.norm_toLp]
 
-private theorem norm_error_le {A : Type*} [MeasurableSpace A] (μ : Measure A)
+private theorem norm_error_le (μ : Measure A)
     {f g : A → ℝ} (hf : MemLp f 2 μ) (hg : MemLp g 2 μ) {ε : ℝ} (hε : 0 ≤ ε)
     (happrox : eLpNorm (f - g) 2 μ ≤ ENNReal.ofReal ε) :
     (eLpNorm (f - g) 2 μ).toReal ≤ ε ∧
@@ -305,6 +313,8 @@ private theorem norm_error_le {A : Type*} [MeasurableSpace A] (μ : Measure A)
     (ENNReal.add_ne_top.mpr ⟨hf.eLpNorm_ne_top, hfg.eLpNorm_ne_top⟩)).2 htri
   rw [ENNReal.toReal_add hf.eLpNorm_ne_top hfg.eLpNorm_ne_top] at ht
   linarith
+
+end MeasurableSpace
 
 private theorem coeffs_const_mul {n d : ℕ}
     (μ : Measure (EuclideanSpace ℝ (Fin n))) (c : ℝ) (g : EuclideanSpace ℝ (Fin n) → ℝ) :

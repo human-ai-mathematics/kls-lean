@@ -3,13 +3,20 @@ import FunctionalInequalities.Analysis.BakryEmery.WeakHessian
 import FunctionalInequalities.Analysis.Convex.Alexandrov
 import FunctionalInequalities.Analysis.Convex.Caffarelli
 import FunctionalInequalities.Analysis.Convex.GradientLipschitz
+import FunctionalInequalities.Analysis.Convex.HessianRegularity
 import FunctionalInequalities.Analysis.Convex.Subgradient
 import FunctionalInequalities.Analysis.Convex.Viscosity
 import FunctionalInequalities.KLS.CEK.MomentMap
 import FunctionalInequalities.KLS.Isotropic
+import FunctionalInequalities.Probability.Stein.HessianKernel
 
 /-!
 # Actual regular-class C1 moment potentials
+
+The regular-class moment witness (`exists_regular_moment_potential`) and two extensions at the same `u` and `L`: a
+measurable everywhere left inverse of the injective gradient (`exists_regular_moment_potential_with_inverse`, via the
+given-witness adapter `measurable_inverse_gradient_of_map_gradient`) and compact-local uniform ellipticity
+(`exists_regular_moment_potential_locally_elliptic`).
 -/
 
 noncomputable section
@@ -212,3 +219,106 @@ theorem exists_regular_moment_potential {n : ℕ} (hn : 0 < n) {K : Set (Euclide
 
 
 end FunctionalInequalities.Analysis
+
+section RegularMomentInverseEllipticity
+
+open MeasureTheory Set
+open scoped RealInnerProductSpace ContDiff
+open FunctionalInequalities.Probability.Stein
+
+namespace FunctionalInequalities.Analysis
+
+/-- **Gradient inverse at a given moment witness**: if a normalized convex Lipschitz `C¹` potential `u` pushes `e^{-u} dx`
+forward by `∇u` onto `1_K e^{-W} dx` (`K` compact convex nonempty, `W` continuous, positive dimension), then `∇u` is
+injective and has a measurable everywhere left inverse. Applies to the given `u`; no new potential is chosen. -/
+theorem measurable_inverse_gradient_of_map_gradient
+    {n : ℕ} (hn : 0 < n) {u : EuclideanSpace ℝ (Fin n) → ℝ} {L : NNReal}
+    (hLip : LipschitzWith L u) (hc : ConvexOn ℝ univ u)
+    (hnorm : ∫ x, Real.exp (-u x) ∂(volume : Measure (EuclideanSpace ℝ (Fin n))) = 1)
+    (hC1 : ContDiff ℝ 1 u)
+    {K : Set (EuclideanSpace ℝ (Fin n))} (hK : IsCompact K) (hKc : Convex ℝ K)
+    (hKne : K.Nonempty) {W : EuclideanSpace ℝ (Fin n) → ℝ} (hW : Continuous W)
+    (hmap : ((volume : Measure (EuclideanSpace ℝ (Fin n))).tilted (-u)).map (gradient u) =
+      (volume : Measure (EuclideanSpace ℝ (Fin n))).withDensity
+        (K.indicator fun p => ENNReal.ofReal (Real.exp (-W p)))) :
+    Function.Injective (gradient u) ∧
+      ∃ Ψ : EuclideanSpace ℝ (Fin n) → EuclideanSpace ℝ (Fin n),
+        Measurable Ψ ∧ Function.LeftInverse Ψ (gradient u) := by
+  have : Nonempty (Fin n) := ⟨⟨0, hn⟩⟩
+  have hstrict := strictConvexOn_of_map_gradient hLip hc hnorm hK hKc hKne hW hmap
+  have hinj := injective_gradient_of_strictConvexOn
+    (hC1.differentiable (by norm_num)) hstrict
+  exact ⟨hinj,
+    Probability.Stein.exists_measurable_leftInverse_gradient_of_injective hC1 hinj⟩
+
+/-- The actual regular moment potential of `exists_regular_moment_potential`, with all of its fields at the same `u` and `L`,
+has an injective gradient with a measurable everywhere left inverse. No `C²`, surjectivity or smoothness claim. -/
+theorem exists_regular_moment_potential_with_inverse
+    {n : ℕ} (hn : 0 < n) {K : Set (EuclideanSpace ℝ (Fin n))}
+    {W : EuclideanSpace ℝ (Fin n) → ℝ} {κ : ℝ} (hκ : 0 < κ) (hK : IsCompact K)
+    (hKc : Convex ℝ K) (hKint : (interior K).Nonempty) (hW : ContDiff ℝ ∞ W)
+    (hstrong : ConvexOn ℝ univ (fun y => W y - (κ / 2) * ‖y‖ ^ 2))
+    (μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin n)))
+    (hμ : (μ : Measure (EuclideanSpace ℝ (Fin n))) =
+      (volume : Measure (EuclideanSpace ℝ (Fin n))).withDensity
+        (K.indicator fun p => ENNReal.ofReal (Real.exp (-W p)))) (hiso : KLS.Isotropic μ) :
+    ∃ (u : EuclideanSpace ℝ (Fin n) → ℝ) (L : NNReal),
+      ConvexOn ℝ univ u ∧ LipschitzWith L u ∧
+      (∫ x, Real.exp (-u x) ∂(volume : Measure (EuclideanSpace ℝ (Fin n)))) = 1 ∧
+      ((volume : Measure (EuclideanSpace ℝ (Fin n))).tilted (-u)).map (gradient u) =
+        (μ : Measure (EuclideanSpace ℝ (Fin n))) ∧
+      ContDiff ℝ 1 u ∧ LipschitzWith (Real.toNNReal (16 / κ)) (gradient u) ∧
+      (∀ᵐ x ∂(volume : Measure (EuclideanSpace ℝ (Fin n))),
+        (hessianMatrix u x).PosDef ∧
+        Real.log (hessianMatrix u x).det = -u x + W (gradient u x) ∧
+        ((16 / κ) • (1 : Matrix (Fin n) (Fin n) ℝ) - hessianMatrix u x).PosSemidef) ∧
+      Function.Injective (gradient u) ∧
+      ∃ Ψ : EuclideanSpace ℝ (Fin n) → EuclideanSpace ℝ (Fin n),
+        Measurable Ψ ∧ Function.LeftInverse Ψ (gradient u) := by
+  obtain ⟨u,L,hc,hl,hnorm,hm,hC1,hG,hdata⟩ :=
+    exists_regular_moment_potential hn hκ hK hKc hKint hW hstrong μ hμ hiso
+  have hInv := measurable_inverse_gradient_of_map_gradient hn hl hc hnorm hC1 hK hKc
+    (hKint.mono interior_subset) hW.continuous (hm.trans hμ)
+  exact ⟨u,L,hc,hl,hnorm,hm,hC1,hG,hdata,hInv⟩
+
+/-- The actual regular moment potential of `exists_regular_moment_potential`, with all of its fields at the same `u` and `L`,
+is compact-locally uniformly elliptic: on every compact `S` its Hessian is a.e. at least `δ·Id` for some `δ > 0` depending
+on `S` (the upper bound `16/κ` is already a field). Support for interior regularity; no `C²`, smoothness or everywhere
+positive definiteness claim. -/
+theorem exists_regular_moment_potential_locally_elliptic {n : ℕ} (hn : 0 < n)
+    {K : Set (EuclideanSpace ℝ (Fin n))}
+    {W : EuclideanSpace ℝ (Fin n) → ℝ} {κ : ℝ} (hκ : 0 < κ) (hK : IsCompact K) (hKc : Convex ℝ K)
+    (hKint : (interior K).Nonempty) (hW : ContDiff ℝ ∞ W)
+    (hstrong : ConvexOn ℝ univ (fun y => W y - (κ / 2) * ‖y‖ ^ 2))
+    (μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin n)))
+    (hμ : (μ : Measure (EuclideanSpace ℝ (Fin n))) =
+      (volume : Measure (EuclideanSpace ℝ (Fin n))).withDensity
+        (K.indicator fun p => ENNReal.ofReal (Real.exp (-W p))))
+    (hiso : KLS.Isotropic μ) :
+    ∃ (u : EuclideanSpace ℝ (Fin n) → ℝ) (L : NNReal), ConvexOn ℝ univ u ∧ LipschitzWith L u ∧
+      (∫ x, Real.exp (-u x) ∂(volume : Measure (EuclideanSpace ℝ (Fin n)))) = 1 ∧
+      ((volume : Measure (EuclideanSpace ℝ (Fin n))).tilted (-u)).map (gradient u) =
+        (μ : Measure (EuclideanSpace ℝ (Fin n))) ∧
+      ContDiff ℝ 1 u ∧ LipschitzWith (Real.toNNReal (16 / κ)) (gradient u) ∧
+      (∀ᵐ x ∂(volume : Measure (EuclideanSpace ℝ (Fin n))),
+        (hessianMatrix u x).PosDef ∧
+        Real.log (hessianMatrix u x).det = -u x + W (gradient u x) ∧
+        ((16 / κ) • (1 : Matrix (Fin n) (Fin n) ℝ) - hessianMatrix u x).PosSemidef) ∧
+      ∀ S : Set (EuclideanSpace ℝ (Fin n)), IsCompact S →
+        ∃ δ : ℝ, 0 < δ ∧ ∀ᵐ x ∂((volume : Measure (EuclideanSpace ℝ (Fin n))).restrict S),
+          (hessianMatrix u x - δ • (1 : Matrix (Fin n) (Fin n) ℝ)).PosSemidef := by
+  obtain ⟨u, L, hconv, hLip, hnorm, hmap, hC1, hgradLip, hdata⟩ :=
+    exists_regular_moment_potential hn hκ hK hKc hKint hW hstrong μ hμ hiso
+  refine ⟨u, L, hconv, hLip, hnorm, hmap, hC1, hgradLip, hdata, ?_⟩
+  have hgradc : Continuous (gradient u) :=
+    (InnerProductSpace.toDual ℝ (EuclideanSpace ℝ (Fin n))).symm.continuous.comp
+      (hC1.continuous_fderiv (by norm_num))
+  have hg : Continuous (fun x => -u x + W (gradient u x)) :=
+    hC1.continuous.neg.add (hW.continuous.comp hgradc)
+  intro S hS
+  exact ae_posSemidef_hessianMatrix_sub_of_log_det hn
+    (div_pos (by norm_num : (0 : ℝ) < 16) hκ) hg hdata hS
+
+end FunctionalInequalities.Analysis
+
+end RegularMomentInverseEllipticity

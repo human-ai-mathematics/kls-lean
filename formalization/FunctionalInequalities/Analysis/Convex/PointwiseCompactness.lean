@@ -20,7 +20,12 @@ noncomputable section
 
 namespace FunctionalInequalities.Analysis
 
-private theorem convexOn_pointwise_sup {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+section NormedSpace
+
+variable {E : Type*}
+variable [NormedAddCommGroup E] [NormedSpace ℝ E]
+
+private theorem convexOn_pointwise_sup
     {K : Set E} (f : ℕ → E → ℝ) (hf : ∀ n, ConvexOn ℝ K (f n))
     (hbdd : ∀ x ∈ K, BddAbove (Set.range fun n => f n x)) :
     ConvexOn ℝ K (fun x => sSup (Set.range fun n => f n x)) := by
@@ -35,8 +40,11 @@ private theorem convexOn_pointwise_sup {E : Type*} [NormedAddCommGroup E] [Norme
         (mul_le_mul_of_nonneg_left (le_csSup (hbdd x hx) (Set.mem_range_self n)) ha)
         (mul_le_mul_of_nonneg_left (le_csSup (hbdd y hy) (Set.mem_range_self n)) hb)
 
-private theorem exists_uniform_local_lipschitz {E : Type*} [NormedAddCommGroup E]
-    [NormedSpace ℝ E] [FiniteDimensional ℝ E] {K : Set E} (hK : IsOpen K)
+section FiniteDimensional
+
+variable [FiniteDimensional ℝ E]
+
+private theorem exists_uniform_local_lipschitz {K : Set E} (hK : IsOpen K)
     (f : ℕ → E → ℝ) (hf : ∀ n, ConvexOn ℝ K (f n))
     (hnn : ∀ n, ∀ x ∈ K, 0 ≤ f n x)
     (hbdd : ∀ x ∈ K, BddAbove (Set.range fun n => f n x)) {x : E} (hx : x ∈ K) :
@@ -121,8 +129,7 @@ private theorem cauchy_at_point_of_dense_local_lipschitz {E : Type*} [PseudoMetr
 
 /-- Nonnegative convex functions on an open set, bounded at every point, have a subsequence converging at every point of
 the set to a convex function. -/
-theorem exists_subseq_tendsto_of_convexOn_of_bddAbove {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
-    [FiniteDimensional ℝ E] {K : Set E} (hK : IsOpen K)
+theorem exists_subseq_tendsto_of_convexOn_of_bddAbove {K : Set E} (hK : IsOpen K)
     (f : ℕ → E → ℝ) (hf : ∀ ℓ, ConvexOn ℝ K (f ℓ)) (hnn : ∀ ℓ, ∀ x ∈ K, 0 ≤ f ℓ x)
     (hbdd : ∀ x ∈ K, BddAbove (Set.range fun ℓ => f ℓ x)) :
     ∃ (s : ℕ → ℕ) (g : E → ℝ), StrictMono s ∧ ConvexOn ℝ K g ∧
@@ -158,5 +165,9 @@ theorem exists_subseq_tendsto_of_convexOn_of_bddAbove {E : Type*} [NormedAddComm
     subst K
     refine ⟨id, fun _ => 0, strictMono_id, convexOn_const 0 convex_empty, ?_⟩
     simp
+
+end FiniteDimensional
+
+end NormedSpace
 
 end FunctionalInequalities.Analysis

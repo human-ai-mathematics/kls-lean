@@ -25,7 +25,9 @@ From the repository root, build the project normally and prepare the tools in an
 unused local directory (the following path is an example):
 
 ```sh
+python3 research/cache_mathlib.py --project all
 lake -d formalization build
+lake -d integrations/openai build
 git clone https://github.com/leanprover/comparator.git build/comparator-tools
 git -C build/comparator-tools checkout 3927ad383f208ae977c340a91c48ac9b497d2097
 lake -d build/comparator-tools build lean4export comparator
@@ -35,6 +37,19 @@ Keep its committed `lake-manifest.json`: it pins lean4export to
 `15f6055e299ad5b89345e533cc2192f4cc00f659`. The runner refuses another revision or
 modified source in either tool checkout. It uses the existing local dependency
 checkouts and their build caches, not a pristine Git downstream reconstruction.
+
+The library and OpenAI bridge are separate Lake packages. On a fresh checkout,
+the bridge can have its own `.lake/packages/mathlib`; preparing only the library's
+cache leaves that copy without compiled Mathlib modules. The `--project all`
+command above fetches the required Mathlib closure in each package and checks each
+package's own `.olean` files before a build. It includes both aggregate `Mathlib`
+imports and dotted imports, including the bridge's library dependency.
+This addresses the source rebuild reported in [Issue #10](https://github.com/human-ai-mathematics/kls-lean/issues/10#issuecomment-6290311466).
+
+Use `--project openai` to prepare only the bridge, or add `--check` to check the
+selected caches without fetching. The default remains `--project formalization`
+for the main-library build and CI. Dependency pins are unchanged; precompiled
+third-party imports remain trusted. Project and bridge sources still build normally.
 
 ## Run
 
@@ -56,7 +71,29 @@ so the receipt says `COMPARATOR_PASSED_WITHOUT_SANDBOX`. Use it only with the tr
 local project. It is not a Linux sandbox or independent-kernel result.
 
 On Linux, install real [Landrun](https://github.com/Zouuup/landrun) and ensure a
-working unprivileged systemd user session, then run:
+working unprivileged systemd user session. Before running the sandbox mode, address
+the two setup issues reported in [Issue #10](https://github.com/human-ai-mathematics/kls-lean/issues/10#issuecomment-6289895395):
+
+**Landrun version.** Use a source build from upstream `main`. The reported Linux
+setup used [`ec104f6`](https://github.com/Zouuup/landrun/commit/ec104f6edc1e14d7fec6d31146f1ec6f9c192c5a)
+(v0.1.18); the tagged v0.1.15 failed with `permission denied` in that setup.
+For reproducibility, check out that exact commit before building rather than
+following a moving `main`, and ensure the built `landrun` is on `PATH`.
+
+**Lean toolchain on PATH.** With a standard elan installation, `lake` may resolve
+to the proxy at `~/.elan/bin/lake`. Comparator grants execution access (`--rox`)
+to the Lean toolchain prefix, which does not include that proxy. This can make the
+sandboxed run fail immediately with `permission denied`. Put the pinned toolchain's
+`bin` first on `PATH` in the shell that launches the runner:
+
+```sh
+export PATH="$HOME/.elan/toolchains/leanprover--lean4---v4.33.0/bin:$PATH"
+command -v lake
+```
+
+The printed path should end in
+`leanprover--lean4---v4.33.0/bin/lake`, not `.elan/bin/lake`. Adjust the prefix if
+elan is installed elsewhere. Then run:
 
 ```sh
 python3 research/comparator.py --target kls --mode sandbox --tools build/comparator-tools

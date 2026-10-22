@@ -7832,7 +7832,7 @@
       "url": "https://arxiv.org/html/2607.24164v1",
       "locator": "Theorems 1.1 and 1.2",
       "result": "For isotropic log-concave X and symmetric M, Var(XᵀMX) ≤ 8‖M‖²_HS = 2 E‖∇(XᵀMX)‖². For n ≥ 2, ψₙ = O((log n)^(1/4)), hence C_P = O(√log n).",
-      "remaining": "Formalized: Theorem 1.2 with the exact constant 8 for all positive-dimensional isotropic log-concave probability laws, including noncompact support. letwinQuadraticBound and matrix_variance_le_eight remove compactness using centered, covariance-whitened growing-ball truncations and moment convergence. The existing compact certificate is retained separately: letwinCompactBound : LetwinCompactBound gives, for every n > 0, every compactly supported isotropic log-concave law and every self-adjoint quadratic form (singular and indefinite included), variance at most 8 times the squared Hilbert-Schmidt norm; it is the supporting certificate thm:letwin-compact-quadratic-bound. Its proof reduces the compact case to the regular class 1_K e^{-W} dx (the compact case of Lemma A.1) and works at one actual weak C^{1,1} moment witness of that class: bounded moment-map existence and pushforward (Lemma 2.1 for bounded laws), the weak Monge-Ampere identities (Lemma 2.4 in weak form), Lemma 2.3 for that potential, the weak trace contraction and Theorem 2.5's bound E tr(B Hess u B Hess u) <= 2 tr(B^2) for every real symmetric B in weak form, and the bounded-Lipschitz source Stein identity; then the Gaussian product coupling with the compact dual bound, the H^-1 step on the Gaussian-smoothed law (Proposition 2.8), the spectral noise energy and the singular extension (Lemma A.2, stronger form). Not formalized: Theorem 1.1; the full smooth regular approximation of Lemma A.1; Theorem 2.5 and Lemma 2.2 as stated for the smooth moment map; the target Stein kernel of Lemma 2.7; and general finite-mass or unbounded moment-map existence and uniqueness. The other supporting results keep their recorded scopes in the lemma map. No Letwin paper-target certificate is registered, so the paper is not covered.",
+      "remaining": "Formalized: Theorem 1.2 with the exact constant 8 for all positive-dimensional isotropic log-concave probability laws, including noncompact support. letwinQuadraticBound and matrix_variance_le_eight remove compactness using centered, covariance-whitened growing-ball truncations and moment convergence. The existing compact certificate is retained separately: letwinCompactBound : LetwinCompactBound gives, for every n > 0, every compactly supported isotropic log-concave law and every self-adjoint quadratic form (singular and indefinite included), variance at most 8 times the squared Hilbert-Schmidt norm; it is the supporting certificate thm:letwin-compact-quadratic-bound. Its proof reduces the compact case to the regular class 1_K e^{-W} dx (the compact case of Lemma A.1) and works at one actual weak C^{1,1} moment witness of that class: bounded moment-map existence and pushforward (Lemma 2.1 for bounded laws), the weak Monge-Ampere identities (Lemma 2.4 in weak form), Lemma 2.3 for that potential, the weak trace contraction and Theorem 2.5's bound E tr(B Hess u B Hess u) <= 2 tr(B^2) for every real symmetric B in weak form, and the bounded-Lipschitz source Stein identity; then the Gaussian product coupling with the compact dual bound, the H^-1 step on the Gaussian-smoothed law (Proposition 2.8), the spectral noise energy and the singular extension (Lemma A.2, stronger form). Lemma A.1 (regular approximation) is formalized in sequential and epsilon forms for all mixed linear moments of degree at most four (exists_regular_approximation). Not formalized: Theorem 1.1; Theorem 2.5 and Lemma 2.2 as stated for the smooth moment map, including smoothness, everywhere positive definite Hessian, gradient diffeomorphism and pointwise Monge-Ampere for the literal merely convex source class (research/progress/letwin-smooth-route.json); Lemma 2.7 beyond the strong regular class (a weak target Stein kernel with μ-a.e. positive definiteness and ∫|τ|²_HS ≤ 2n is formalized at the actual C^{1,1} witness, together with its gradient inverse and compact-local ellipticity); and general finite-mass or unbounded moment-map existence and uniqueness. The other supporting results keep their recorded scopes in the lemma map. No Letwin paper-target certificate is registered, so the paper is not covered.",
       "local_results": [
         {
           "node": "lem:letwin-support-identities",
@@ -8207,6 +8207,62 @@
           "scope": "For the actual source law, under the exact original R0 hypotheses (n > 0, isotropic 1_K exp(-W) dx with K compact and convex with nonempty interior, W smooth and kappa-uniformly convex), there is ONE weak normalized convex globally Lipschitz moment potential u, with constants L, LF and weak Hessian tensor T, that retains the whole earlier payload: R0 regularity (C1, 16/kappa-Lipschitz gradient, 4/kappa centered-difference bound, almost everywhere positive definite Hessian with log-det equation and 16/kappa cap), the weak tensor, first Monge-Ampere and inverse fields, mean Hessian Id under nu = e^{-u} dx, the weak evolution identities, bounded testing, the weak cutoffs and rough cutoff testing, the weak trace contraction, A.5 conservativity int g dnu = 0 and the half energy int D dnu <= (1/2) int tr(B H B H) dnu for every positive semidefinite B. It adds: for EVERY real symmetric B, tr(B H B H) is nu-integrable and int tr(B H B H) dnu <= 2 tr(B B) (Theorem 2.5 with the exact constant 2, weak C^{1,1} form for this witness); the weighted integration by parts int D_v eta dnu = int eta D_v u dnu for every bounded globally Lipschitz eta; and the coordinate source Stein identity for every C1, bounded and globally Lipschitz test. This is not the smooth moment map of Lemma 2.2, not a constructed Stein kernel, and not Theorem 1.2 or the constant-8 bound."
         },
         {
+          "node": "lem:letwin-regular-moment-inverse-ellipticity",
+          "scope": "Lemma 2.2 supports at the actual strong regular-class witness, same u and L: injective gradient with a measurable everywhere left inverse and compact-local uniform ellipticity (Hess u ≥ δ_S Id a.e. on each compact S); generic determinant floor and strict-convex gradient injectivity. Not C², smoothness, everywhere PD, surjectivity or a diffeomorphism."
+        },
+        {
+          "node": "thm:letwin-regular-moment-target-stein-kernel",
+          "scope": "Lemma 2.7 weak counterpart for the strong regular class: τ = Hess u ∘ Ψ is a Stein kernel of μ, μ-a.e. positive definite and symmetric, mean Id, HS in L²(μ) and ∫|τ|²_HS ≤ 2n, at the same u and L as the weak trace bound. Not the smooth moment map, everywhere PD or the merely convex source class."
+        },
+        {
+          "node": "lem:letwin-regular-moment-directional-subsolution",
+          "scope": "Lemma 2.2 support at the actual strong regular-class weak Hessian evolution witness (same u, L, LF, T): directional weak subsolution of h_v against nonnegative compact C¹ tests and compact-local two-sided bounds for e^{−u} (Hess u)⁻¹. Not Harnack, oscillation decay, C² or Schauder."
+        },
+        {
+          "node": "lem:letwin-rough-nonlinear-testing",
+          "scope": "Lemma 2.2 interior-regularity supports: compact bounded H¹ chain rule, normalized shifted log/real powers of bounded weak tests η ≥ 0 a.e., cutoff directional Hessian data, bounded weak directional testing and the rough square test, PSD Young. Not the positive outer-cutoff power test, Caccioppoli, Moser or Harnack."
+        },
+        {
+          "node": "lem:letwin-h1-energy-sobolev",
+          "scope": "Lemma 2.2 interior-regularity supports (GT (8.48)–(8.49) form): outer-cutoff energy variables χ (δ + max w 0)^r for every real r and the square test; the Caccioppoli inequality for bounded weak supersolutions with constants 4β/(p²α), 2F/(pα); weak Sobolev for n > 2 (critical GNS), n = 2 (one fixed L⁶ gain with volume(cthickening ε K)^(1/6)) and n = 1 (essential L^∞). Uniform actual audit: one witness, then each compact S (α, β, B), then every direction and cutoff in S. Not Moser, John–Nirenberg, GT 8.18, Harnack or every finite exponent for n = 2."
+        },
+        {
+          "node": "lem:letwin-moser-inputs",
+          "scope": "Lemma 2.2 interior-regularity supports (GT (8.48)–(8.49) Moser inputs): bounded noncompact weak chain and actual shifted log; logarithmic energy and power energy for r < 1/2; n = 2 weak Sobolev for every finite q ≥ 2; uniform concentric cutoffs; L^p → essential L^∞ limit; coordinate L² energy. Audited at ONE witness (one D; for each compact S one α, β, B for every cutoff incl. dyadic families; normalized closed-ball limit). Not the Moser recurrence, Morrey/John–Nirenberg, GT 8.18 or Harnack."
+        },
+        {
+          "node": "lem:letwin-morrey-potential-inputs",
+          "scope": "Lemma 2.2 interior-regularity supports: GT (8.49) -> all-ball Morrey hypothesis (7.51) and the critical potential of GT Lemma 7.20 at p = n ≥ 2 with explicit constants; ball-growth geometry; moment growth -> exponential integrability. Audited at ONE witness: actual log-gradient all-ball Morrey bound and the exponential integrability of its critical potential. Not GT 7.16, John–Nirenberg, full GT 7.20 (p > 1), Moser iteration or Harnack."
+        },
+        {
+          "node": "lem:letwin-local-moser-inputs",
+          "scope": "Lemma 2.2 interior-regularity supports in the locally nonnegative bounded class (GT 8.18 local form of (8.48)–(8.49), (7.51)): cutoff tests and Caccioppoli/power/log energies with nonnegativity only on the cutoff support (no global weak log derivative); one bounded weak log extension agreeing with log(δ + max w 0) where w ≥ 0; buffered all-ball Morrey on B_3R from energy on B_4R (K = ω_n 16^n (1 + E0 n D² + E1 R²)); small-ball + mass growth; n > 2 one-step gains from a given power energy. Audited: one global-class dyadic gain step, and at ONE public-producer witness the actual local deficit (cap only on B_4R, coefficients once per R) with local log energy, weak extension, B_3R Morrey and critical-potential exponential integrability. Also the fixed-compact joint inputs: coefficients once per compact S before every domain center and radius, all linear power data, the power and log energies, ONE weak extension, the centered Morrey bound and, under F R² ≤ αδ, JN and power moments at a uniform exponent inside the same extension. Not full GT 8.18; the Moser iteration and the bounded weak Harnack inequality are lem:letwin-bounded-weak-harnack."
+        },
+        {
+          "node": "lem:letwin-bounded-jn-inputs",
+          "scope": "Lemma 2.2 interior-regularity supports from GT 2001 Lemma 7.16 and Theorem 7.21 (critical p = n): exact C¹ convex Riesz representation for an arbitrary measurable S in mass form (D^n/n, zero |S| included); L¹ control of the critical potential; the same representation for GLOBAL bounded weak H¹_loc data on a bounded open convex domain (n ≥ 2); critical John–Nirenberg with σ = [2(n−1)e]⁻¹ n|Ω|/D^n and ∫ ≤ 2ω_n n/(n−1)(1+4(n−1)²)D^n; centered log moments → power-moment product. Audited per R at ONE witness (actual log s on B_3R, exponent σ/K16). Not the domain-only W^{1,1} class or n = 1 John–Nirenberg (n = 1 and the bounded weak Harnack inequality are lem:letwin-bounded-weak-harnack)."
+        },
+        {
+          "node": "lem:letwin-bounded-weak-harnack",
+          "scope": "Lemma 2.2 interior-regularity supports from GT 2001 Theorem 8.18 for bounded data (Moser iteration): geometric recurrences, the physical-exponent iteration N/κ + a = N, the moment-to-product bridge and the shift removal to the essential infimum; six weak-energy endpoints (n > 2 for 0 < p < n/(n−2); n = 2 with a = 2 − 2/g and n = 1 by kernel-1 direct bounds, every finite p > 0). Audited at ONE fixed-compact witness (constants per compact S before all centers, radii, directions and caps): the full-exponent products for n > 2, n = 2, n = 1 and, for every n > 0, R^{−n/p} ‖w‖_{p,B(x0,2R)} ≤ C(p)(essinf_{B(x0,R)} w + M B R²/α). Essential infimum (a.e.); not full GT 8.18 for unbounded data, a pointwise infimum, oscillation decay or Schauder regularity."
+        },
+        {
+          "node": "lem:gt-uniform-rank-one-frame",
+          "scope": "Lemma 2.2 Evans–Krylov support: GT 2001 Lemma 17.13 in its literal form — a fixed finite frame of unit directions (every e_i and every (e_i+e_j)/√2), lowerCoeff > 0 and the cap hi, chosen before every positive definite A with lo I ≤ A ≤ hi I; every coefficient in [lowerCoeff, hi]. With the SPD congruence (17.55). No oscillation claim."
+        },
+        {
+          "node": "lem:gt-scalar-modulus-iteration",
+          "scope": "Lemma 2.2 support: GT 2001 Lemma 8.23 scalar iteration with C = max(γ⁻¹, (1−γ)⁻¹) before μ and α = (1−μ) log γ/log τ before ω, σ, R₀. Scalar only."
+        },
+        {
+          "node": "lem:essential-deficit-identity",
+          "scope": "Lemma 2.2 support: essinf(M − f) = M − esssup f for 0 ≤ f ≤ M a.e. under a nonzero measure. Essential extrema only."
+        },
+        {
+          "node": "lem:given-data-weak-harnack",
+          "scope": "Lemma 2.2 support: GT 2001 Theorem 8.18 (bounded symmetric pure-divergence case) for GIVEN bounded weak H¹_loc data, C(p) before all data, essential infimum, every n > 0 (n ≤ 2 every p > 0, n > 2 p < n/(n−2)); applied in the audit at ONE regular moment potential with all its regular-class data (forcing M B). GT 8.18 stays partial; not oscillation decay."
+        },
+        {
           "node": "lem:matrix-noise-trace-identities",
           "scope": "Finite real-matrix trace identities over any finite index type: tr((A + tI)^T (A + tI)) = tr(A^T A) + 2t tr A + n t^2; invariance of tr((AQ)^T AQ) under a symmetric involution Q; tr(SHS) = tr(S^2 H); and tr((SHS)^T SHS) = tr(S^2 H S^2 H) for symmetric S, H."
         },
@@ -8329,6 +8385,38 @@
         {
           "node": "diagram:LGENERAL8",
           "scope": "Theorem 1.2 for every n > 0 and every isotropic log-concave probability law, without compact support: variance <= 8 times squared Hilbert-Schmidt norm for every self-adjoint operator; source matrix form <= 8 tr(M*M), singular and indefinite included. Local proof, no new certificate or Theorem 1.1 coverage."
+        },
+        {
+          "node": "lem:letwin-regular-approximation",
+          "scope": "Lemma A.1 (regular approximation): every isotropic log-concave law is the limit of isotropic laws e^{-V} 1_K dx (K bounded open convex, V smooth convex near closure K; exact density) in all mixed linear moments of degree <= 4, hence all finite-sum polynomial observables of degree <= 4; sequential and epsilon forms"
+        },
+        {
+          "node": "lem:frame-log-det-oscillation",
+          "scope": "Lemma 2.2 support: frame oscillation decay of a log-determinant matrix field (rough-divergence GT 17.14 with the GT 17.13 frame) and its GT 8.23 power decay; essential extrema; frame and Harnack law as premises."
+        },
+        {
+          "node": "lem:holder-hessian-regularity",
+          "scope": "Lemma 2.2 support: Hölder representatives, gluing, the continuous-a.e.-derivative bridge, C² from a continuous Hessian representative and the everywhere log-determinant equation; no convexity assumed."
+        },
+        {
+          "node": "lem:regular-moment-hessian-holder",
+          "scope": "Lemma 2.2 strong-class support: at the same regular moment potential, C², continuous and locally Hölder Hessian, everywhere positive definite log-determinant equation with cap; all regular-class fields retained; not Schauder/C^∞, the gradient diffeomorphism or the merely convex class."
+        },
+        {
+          "node": "lem:log-det-averaged-inverse",
+          "scope": "Lemma 2.2 / Schauder prerequisite: averaged-inverse coefficients of the log-determinant (GT (17.56), Lemma 17.16 coefficients) and Hölder averaged inverses of compact positive definite Hölder fields; no Schauder estimate."
+        },
+        {
+          "node": "lem:strict-convex-gradient-inverse",
+          "scope": "Lemma 2.2 support: open convex gradient range, open map and homeomorphism of a strictly convex gradient; C^k inverse from C^{k+1} and a positive definite Hessian; transpose convention explicit; no bootstrap."
+        },
+        {
+          "node": "lem:transport-gradient-range",
+          "scope": "Lemma 2.2 support for a given transporting potential: range ∇u = int K, homeomorphism onto int K and a regular inverse; the potential is a hypothesis."
+        },
+        {
+          "node": "lem:regular-moment-gradient-inverse",
+          "scope": "Lemma 2.2 strong-class support: at the same regular moment potential, all Hölder-Hessian fields plus a homeomorphism ∇u : ℝⁿ ≃ₜ int K and a C¹ inverse on int K; not Schauder/C^∞, a smooth diffeomorphism or the merely convex class."
         }
       ],
       "diagram": "27 July 2026 · Letwin<br/>ψₙ = O((log n)^(1/4))",
@@ -8501,7 +8589,7 @@
                 "source": "formalization/FunctionalInequalities/KLS/Letwin/QuadraticBound.lean"
               }
             ],
-            "note": "Formalized in Lean (2026-10-20): for every n > 0 and every isotropic log-concave probability law, with no compact-support or extra moment premise, letwinQuadraticBound gives Var(<MX,X>) <= 8 ||M||_HS^2 for every real self-adjoint operator. matrix_variance_le_eight gives the source matrix normalization Var(sum M_ij x_i x_j) <= 8 tr(M*M), including singular and indefinite symmetric matrices. The proof applies the accepted compact constant-eight bound to centered, covariance-whitened growing-ball truncations; means tend to zero, covariance and inverse square roots tend to Id, and mixed moments through degree four converge by dominated convergence. It then uses letwinQuadraticBound_of_tendsto_moments. The compact proof retains its weak C^{1,1} moment-potential/Gaussian route (see T25, P28 and LA2). The full smooth regular approximation in Lemma A.1, the transported Stein kernel and identity (2.21), source smooth moment-map regularity, and the sharpness example are not established by this endpoint. This is a local theorem and independent strict audit, not a newly registered paper-target certificate; Theorem 1.1 remains open locally."
+            "note": "Formalized in Lean (2026-10-20): for every n > 0 and every isotropic log-concave probability law, with no compact-support or extra moment premise, letwinQuadraticBound gives Var(<MX,X>) <= 8 ||M||_HS^2 for every real self-adjoint operator. matrix_variance_le_eight gives the source matrix normalization Var(sum M_ij x_i x_j) <= 8 tr(M*M), including singular and indefinite symmetric matrices. The proof applies the accepted compact constant-eight bound to centered, covariance-whitened growing-ball truncations; means tend to zero, covariance and inverse square roots tend to Id, and mixed moments through degree four converge by dominated convergence. It then uses letwinQuadraticBound_of_tendsto_moments. The compact proof retains its weak C^{1,1} moment-potential/Gaussian route (see T25, P28 and LA2). The regular approximation of Lemma A.1 is now formalized separately (LA1, exists_regular_approximation); the audit research/audits/Letwin/RegularApproximation.lean re-derives this endpoint through it. The transported Stein kernel and identity (2.21), source smooth moment-map regularity (Lemma 2.2), and the sharpness example are not established by this endpoint. This is a local theorem and independent strict audit, not a newly registered paper-target certificate; Theorem 1.1 remains open locally."
           },
           {
             "id": "CZ14",
@@ -8571,9 +8659,547 @@
               {
                 "name": "FunctionalInequalities.Analysis.exists_regular_moment_weak_tensor",
                 "source": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakDerivative.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.posSemidef_sub_scalar_of_det_lower",
+                "source": "formalization/FunctionalInequalities/Analysis/Matrix/Positivity.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.injective_gradient_of_strictConvexOn",
+                "source": "formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.ae_posSemidef_hessianMatrix_sub_of_log_det",
+                "source": "formalization/FunctionalInequalities/Analysis/Convex/HessianRegularity.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.measurable_inverse_gradient_of_map_gradient",
+                "source": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/Potential.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.exists_regular_moment_potential_with_inverse",
+                "source": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/Potential.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.exists_regular_moment_potential_locally_elliptic",
+                "source": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/Potential.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.integral_quadratic_flux_le_of_posSemidef",
+                "source": "formalization/FunctionalInequalities/Analysis/Matrix/Integral.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.inverse_posSemidef_bounds",
+                "source": "formalization/FunctionalInequalities/Analysis/Matrix/Positivity.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.exists_compact_inverse_hessian_coefficient_bounds",
+                "source": "formalization/FunctionalInequalities/Analysis/Convex/HessianRegularity.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.integral_directional_hessian_flux_le",
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessianEvolution.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.exists_regular_moment_directional_hessian_subsolution",
+                "source": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakHessian.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.exists_smooth_compact_extension_on_nonnegative_interval",
+                "source": "formalization/FunctionalInequalities/Analysis/Cutoff/Profile.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.exists_smooth_compact_log_shift_extension",
+                "source": "formalization/FunctionalInequalities/Analysis/Cutoff/Profile.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.exists_smooth_compact_rpow_shift_extension",
+                "source": "formalization/FunctionalInequalities/Analysis/Cutoff/Profile.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.hasWeakDerivAlong_comp_of_compact_bounded",
+                "source": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.hasWeakDerivAlong_log_shift_of_ae_nonneg_compact_bounded",
+                "source": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.hasWeakDerivAlong_rpow_shift_of_ae_nonneg_compact_bounded",
+                "source": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.directional_cutoff_data",
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/WeakHessian.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.integral_directional_hessian_flux_le_of_bounded_weak_test",
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessianEvolution.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.rough_square_test_of_weak_data",
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessianEvolution.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.posSemidef_quadratic_young",
+                "source": "formalization/FunctionalInequalities/Analysis/Matrix/Positivity.lean"              },
+              {
+                "name": "FunctionalInequalities.Analysis.Mollification.support_convolution_subset_cthickening_of_rOut_le",
+                "source": "formalization/FunctionalInequalities/Analysis/Mollification/Basic.lean"              },
+              {
+                "name": "FunctionalInequalities.Analysis.HasWeakDerivAlong.const_add_mul",
+                "source": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Basic.lean"              },
+              {
+                "name": "FunctionalInequalities.Analysis.exists_contDiff_compact_bounded_weak_deriv_approximation_of_support_subset",
+                "source": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Approximation.lean"              },
+              {
+                "name": "FunctionalInequalities.Analysis.bounded_rpow_cutoff_weak_data",
+                "source": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean"              },
+              {
+                "name": "FunctionalInequalities.Analysis.bounded_rpow_cutoff_weak_test",
+                "source": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean"              },
+              {
+                "name": "FunctionalInequalities.Analysis.rpow_cutoff_quadratic_young",
+                "source": "formalization/FunctionalInequalities/Analysis/Matrix/Positivity.lean"              },
+              {
+                "name": "FunctionalInequalities.Analysis.bounded_weak_supersolution_caccioppoli",
+                "source": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Caccioppoli.lean"              },
+              {
+                "name": "FunctionalInequalities.Analysis.eLpNorm_le_sum_eLpNorm_weak_deriv_of_compact_bounded",
+                "source": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Sobolev.lean"              },
+              {
+                "name": "FunctionalInequalities.Analysis.eLpNorm_six_le_sum_eLpNorm_weak_deriv_of_support_subset_two",
+                "source": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Sobolev.lean"              },
+              {
+                "name": "FunctionalInequalities.Analysis.eLpNorm_top_le_eLpNorm_weak_deriv_of_support_subset_one",
+                "source": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Sobolev.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.hasWeakDerivAlong_comp_of_bounded",
+                "source": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.hasWeakDerivAlong_log_max_shift_of_ae_nonneg_bounded",
+                "source": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.bounded_weak_supersolution_log_caccioppoli",
+                "source": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Caccioppoli.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.bounded_weak_supersolution_power_energy",
+                "source": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Caccioppoli.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.eLpNorm_finite_le_sum_eLpNorm_weak_deriv_of_support_subset_two",
+                "source": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Sobolev.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.exists_smooth_concentric_cutoff_norm_fderiv_le",
+                "source": "formalization/FunctionalInequalities/Analysis/Cutoff/SmoothBall.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.tendsto_eLpNorm_of_exponents_tendsto_atTop",
+                "source": "formalization/FunctionalInequalities/Analysis/LpExponent.lean"
+              },
+              {
+                "name": "FunctionalInequalities.L2.sq_sum_eLpNorm_le_dim_mul_integral_sum_sq",
+                "source": "formalization/FunctionalInequalities/L2/Components.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Probability.integrable_exp_abs_of_moment_growth",
+                "source": "formalization/FunctionalInequalities/Probability/ExponentialMoments.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Probability.integrable_exp_toReal_of_moment_growth",
+                "source": "formalization/FunctionalInequalities/Probability/ExponentialMoments.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Probability.integrable_exp_toReal_of_scaled_high_moment_growth",
+                "source": "formalization/FunctionalInequalities/Probability/ExponentialMoments.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.measure_univ_le_of_ae_closedBall_ball_growth",
+                "source": "formalization/FunctionalInequalities/Analysis/MeasureGrowth.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.restrict_ball_growth_of_local_ball_growth",
+                "source": "formalization/FunctionalInequalities/Analysis/MeasureGrowth.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.exists_morrey_bound_of_cutoff_energy",
+                "source": "formalization/FunctionalInequalities/Analysis/MorreyGrowth.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.lintegral_norm_sub_rpow_neg_le_of_ae_closedBall_ball_growth",
+                "source": "formalization/FunctionalInequalities/Analysis/RieszPotential/Growth.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.lintegral_critical_radial_potential_rpow_le",
+                "source": "formalization/FunctionalInequalities/Analysis/RieszPotential/Growth.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.lintegral_density_critical_potential_rpow_le",
+                "source": "formalization/FunctionalInequalities/Analysis/RieszPotential/Critical.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.lintegral_density_critical_morrey_potential_rpow_le",
+                "source": "formalization/FunctionalInequalities/Analysis/RieszPotential/Critical.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.integrable_exp_critical_morrey_potential",
+                "source": "formalization/FunctionalInequalities/Analysis/RieszPotential/Critical.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.local_rpow_cutoff_weak_data",
+                "source": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.local_rpow_cutoff_weak_test",
+                "source": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.exists_bounded_weak_log_extension",
+                "source": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.local_weak_supersolution_caccioppoli",
+                "source": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Caccioppoli.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.local_weak_supersolution_power_energy",
+                "source": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Caccioppoli.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.local_weak_supersolution_log_energy",
+                "source": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Caccioppoli.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.weak_cutoff_sobolev_gain_of_energy",
+                "source": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Sobolev.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.weak_cutoff_sobolev_gain_of_energy_of_bounded_log",
+                "source": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Sobolev.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.restrict_ball_growth_of_small_ball_growth_and_mass",
+                "source": "formalization/FunctionalInequalities/Analysis/MeasureGrowth.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.exists_buffered_morrey_bound_of_cutoff_energy",
+                "source": "formalization/FunctionalInequalities/Analysis/MorreyGrowth.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.map_restrict_convex_ray_le",
+                "source": "formalization/FunctionalInequalities/Analysis/RieszPotential/Representation.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.measure_mul_abs_sub_average_le_riesz_of_contDiffOn",
+                "source": "formalization/FunctionalInequalities/Analysis/RieszPotential/Representation.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.lintegral_riesz_potential_le_diameter_mul_lintegral",
+                "source": "formalization/FunctionalInequalities/Analysis/RieszPotential/Growth.lean"
+              },
+              {
+                "name": "FunctionalInequalities.L2.memLp_sqrt_sum_sq",
+                "source": "formalization/FunctionalInequalities/L2/Components.lean"
+              },
+              {
+                "name": "FunctionalInequalities.L2.gradient_density_l1_of_coordinate_l2",
+                "source": "formalization/FunctionalInequalities/L2/Components.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.measure_mul_abs_sub_average_le_riesz_of_bounded_weak_data",
+                "source": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Representation.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.integrable_exp_abs_sub_average_of_bounded_weak_morrey",
+                "source": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Representation.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Probability.integral_rpow_mul_integral_rpow_neg_le_of_log_exp",
+                "source": "formalization/FunctionalInequalities/Probability/ExponentialMoments.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.exists_centered_buffered_morrey_bound_of_cutoff_energy",
+                "source": "formalization/FunctionalInequalities/Analysis/MorreyGrowth.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.geometric_exponential_recurrence_bound",
+                "source": "formalization/FunctionalInequalities/Analysis/DyadicSummation.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.geometric_root_recurrence_bound",
+                "source": "formalization/FunctionalInequalities/Analysis/DyadicSummation.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.finite_geometric_root_recurrence_bound",
+                "source": "formalization/FunctionalInequalities/Analysis/DyadicSummation.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.le_rpow_one_div_mul_of_rpow_le",
+                "source": "formalization/FunctionalInequalities/Analysis/MoserIteration.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.eLpNorm_top_le_of_shrinking_norm_steps",
+                "source": "formalization/FunctionalInequalities/Analysis/MoserIteration.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.finite_normalized_eLpNorm_sequence_bound",
+                "source": "formalization/FunctionalInequalities/Analysis/MoserIteration.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.tendsto_eLpNorm_finite_measure",
+                "source": "formalization/FunctionalInequalities/Analysis/LpExponent.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.radius_normalized_norm_mono_exponent",
+                "source": "formalization/FunctionalInequalities/Analysis/LpExponent.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.inverse_power_eLpNorm_square",
+                "source": "formalization/FunctionalInequalities/Analysis/LpExponent.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.ofReal_integral_rpow_eq_eLpNorm_rpow",
+                "source": "formalization/FunctionalInequalities/Analysis/LpExponent.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.memLp_rpow_of_bounded_log",
+                "source": "formalization/FunctionalInequalities/Analysis/LpExponent.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.memLp_nonpos_power_of_log_measurable",
+                "source": "formalization/FunctionalInequalities/Analysis/LpExponent.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.inverse_norm_power_gain",
+                "source": "formalization/FunctionalInequalities/Analysis/LpExponent.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.positive_norm_power_gain",
+                "source": "formalization/FunctionalInequalities/Analysis/LpExponent.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.positive_power_eLpNorm_top_square",
+                "source": "formalization/FunctionalInequalities/Analysis/LpExponent.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.inverse_power_eLpNorm_top_square",
+                "source": "formalization/FunctionalInequalities/Analysis/LpExponent.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.eLpNorm_inverse_eq_inv_essInf",
+                "source": "formalization/FunctionalInequalities/Analysis/LpExponent.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.le_mul_essInf_of_inverse_norm_product",
+                "source": "formalization/FunctionalInequalities/Analysis/LpExponent.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.unshifted_bound_of_shifted_inverse_norm_products",
+                "source": "formalization/FunctionalInequalities/Analysis/LpExponent.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.mul_eLpNorm_inv_top_le_of_moment_product",
+                "source": "formalization/FunctionalInequalities/Analysis/LpExponent.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.weak_cutoff_sobolev_gain_of_energy_two_of_support",
+                "source": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Sobolev.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.weak_cutoff_sobolev_gain_of_energy_two_of_support_of_bounded_log",
+                "source": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Sobolev.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.volume_cthickening_le_of_subset_closedBall",
+                "source": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Sobolev.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.scaled_weak_cutoff_sobolev_gain_two_of_bounded_log",
+                "source": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Sobolev.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.weak_cutoff_sobolev_gain_of_energy_one_of_support",
+                "source": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Sobolev.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.weak_cutoff_sobolev_gain_of_energy_one_of_support_of_bounded_log",
+                "source": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Sobolev.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.measure_mul_abs_sub_average_le_of_bounded_weak_data_one",
+                "source": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Representation.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.integrable_exp_abs_sub_average_one_of_density_mass",
+                "source": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Representation.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.inverse_essential_bound_of_cutoff_power_energy",
+                "source": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Moser.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.positive_norm_bound_of_cutoff_power_energy",
+                "source": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Moser.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.inverse_essential_bound_two_of_cutoff_power_energy",
+                "source": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Moser.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.positive_norm_bound_two_of_cutoff_power_energy",
+                "source": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Moser.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.inverse_essential_bound_one_of_cutoff_power_energy",
+                "source": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Moser.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.positive_essential_bound_one_of_cutoff_power_energy",
+                "source": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Moser.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.exists_invertible_congruence_of_posDef",
+                "source": "formalization/FunctionalInequalities/Analysis/Matrix/Positivity.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.exists_uniform_positive_rank_one_frame",
+                "source": "formalization/FunctionalInequalities/Analysis/Matrix/RankOneFrame.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.coefficient_le_cap",
+                "source": "formalization/FunctionalInequalities/Analysis/Matrix/RankOneFrame.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.two_scale_modulus_bound",
+                "source": "formalization/FunctionalInequalities/Analysis/Modulus.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.modulus_bound_of_scale_contraction",
+                "source": "formalization/FunctionalInequalities/Analysis/Modulus.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.exists_modulus_bound_of_scale_contraction",
+                "source": "formalization/FunctionalInequalities/Analysis/Modulus.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.essInf_ofReal_deficit_eq_sub_essSup",
+                "source": "formalization/FunctionalInequalities/Analysis/EssentialExtrema.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.cutoff_power_data_of_weak_supersolution_on_set",
+                "source": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Caccioppoli.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.exists_weak_log_extension_with_energy_on_set",
+                "source": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Caccioppoli.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.bounded_weak_harnack_of_given_data",
+                "source": "formalization/FunctionalInequalities/Analysis/WeakDerivative/Harnack.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.exists_regular_moment_potential_holder_hessian",
+                "source": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/HessianHolder.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.oscillation_of_fixed_frame_and_essential_harnack",
+                "source": "formalization/FunctionalInequalities/Analysis/Matrix/LogDetOscillation.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.essential_width_power_of_quarter_contraction",
+                "source": "formalization/FunctionalInequalities/Analysis/EssentialOscillation.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.exists_local_holder_representative_of_essential_power",
+                "source": "formalization/FunctionalInequalities/Analysis/HolderRepresentative.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.exists_matrix_entry_holder_representatives",
+                "source": "formalization/FunctionalInequalities/Analysis/Matrix/Holder.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.hasFDerivAt_of_lipschitz_continuous_ae_fderiv",
+                "source": "formalization/FunctionalInequalities/Analysis/ContinuousDerivative.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.contDiff_two_of_continuous_ae_hessian",
+                "source": "formalization/FunctionalInequalities/Analysis/HessianRegularity.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.everywhere_posDef_logdet_of_continuous_hessian_ae",
+                "source": "formalization/FunctionalInequalities/Analysis/HessianRegularity.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.exists_regular_moment_potential_holder_hessian_inverse",
+                "source": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/Inverse.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Probability.MomentMeasure.range_gradient_eq_interior_of_map_gradient",
+                "source": "formalization/FunctionalInequalities/Probability/MomentMeasure/Gradient.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Probability.MomentMeasure.exists_gradient_homeomorph_interior_of_map_gradient",
+                "source": "formalization/FunctionalInequalities/Probability/MomentMeasure/Gradient.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Probability.MomentMeasure.exists_regular_inverse_of_map_gradient",
+                "source": "formalization/FunctionalInequalities/Probability/MomentMeasure/Gradient.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.exists_gradient_homeomorph_range",
+                "source": "formalization/FunctionalInequalities/Analysis/Convex/GradientImage.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.contDiffOn_invFun_gradient_of_posDef",
+                "source": "formalization/FunctionalInequalities/Analysis/Convex/GradientInverse.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.log_det_sub_eq_sum_averaged_inverse_of_posDef",
+                "source": "formalization/FunctionalInequalities/Analysis/Matrix/LogDetSegment.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.exists_holder_averaged_inverse_entries_of_posDef",
+                "source": "formalization/FunctionalInequalities/Analysis/Matrix/InverseHolder.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.logDet_quotient_eq_averagedInverse",
+                "source": "formalization/FunctionalInequalities/Analysis/Matrix/AveragedInverse.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.exists_uniform_averagedInverse_holder",
+                "source": "formalization/FunctionalInequalities/Analysis/Matrix/AveragedInverse.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.BakryEmery.exists_uniform_differenceQuotient_equations",
+                "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/DifferenceQuotient.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.exists_regular_moment_potential_difference_quotient_equations",
+                "source": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/DifferenceQuotient.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.exists_hessian_interpolation_constant",
+                "source": "formalization/FunctionalInequalities/Analysis/IteratedDerivative/Interpolation.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.derivative_cap_transfer",
+                "source": "formalization/FunctionalInequalities/Analysis/IteratedDerivative/Affine.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.laplacian_affine",
+                "source": "formalization/FunctionalInequalities/Analysis/IteratedDerivative/Affine.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.bump_mul_local",
+                "source": "formalization/FunctionalInequalities/Analysis/Cutoff/LocalRegularity.lean"
               }
             ],
-            "note": "Quoted from Klartag 2014. For an isotropic regular law 1_K exp(−W) dx in positive dimension, K compact convex with nonempty interior, W globally smooth and W − (κ/2)‖·‖² convex with κ > 0, exists_regular_moment_potential produces a finite convex Lipschitz normalized potential u with the actual gradient pushforward, u ∈ C¹, a 16/κ-Lipschitz gradient, a.e. positive definite Hessian, log det Hess u = −u + W(∇u) a.e. and Hess u ≤ (16/κ) Id a.e. secondDifference_le_of_map_gradient gives u(x+h) + u(x−h) − 2u(x) ≤ (4/κ)‖h‖²; exists_regular_moment_weak_tensor supplies compact-local L² weak derivatives of the Hessian entries at the same source witness. These are the weak regularity inputs used by the compact constant-8 proof. Global smoothness, everywhere positive definiteness, a gradient diffeomorphism and the full pointwise source Lemma 2.2 are not supplied, so the source item remains partial."
+            "note": "Quoted from Klartag 2014. For an isotropic regular law 1_K exp(−W) dx in positive dimension, K compact convex with nonempty interior, W globally smooth and W − (κ/2)‖·‖² convex with κ > 0, exists_regular_moment_potential produces a finite convex Lipschitz normalized potential u with the actual gradient pushforward, u ∈ C¹, a 16/κ-Lipschitz gradient, a.e. positive definite Hessian, log det Hess u = −u + W(∇u) a.e. and Hess u ≤ (16/κ) Id a.e. secondDifference_le_of_map_gradient gives u(x+h) + u(x−h) − 2u(x) ≤ (4/κ)‖h‖²; exists_regular_moment_weak_tensor supplies compact-local L² weak derivatives of the Hessian entries at the same source witness. These are the weak regularity inputs used by the compact constant-8 proof. At the same u and L, exists_regular_moment_potential_with_inverse adds an injective gradient with a measurable everywhere left inverse (strict convexity from the pushforward and injective_gradient_of_strictConvexOn), and exists_regular_moment_potential_locally_elliptic adds compact-local uniform ellipticity (for every compact S, Hess u ≥ δ_S Id a.e. on S, via the determinant floor A ≥ (δ/K^(n−1)) Id). At the weak Hessian evolution witness (same u, L, LF, T), exists_regular_moment_directional_hessian_subsolution adds the directional weak subsolution of h_v = vᵀ Hess u v against nonnegative compact C¹ tests and compact-local bounds c₀ Id ≤ e^{−u} (Hess u)⁻¹ ≤ c₁ Id; Nonlinear weak test tools (compact bounded H¹ chain rule, normalized shifted log and real powers, bounded weak directional testing, the rough square test and PSD Young) are formalized as supports. So are the outer-cutoff energy variables χ (δ + max w 0)^r, the Caccioppoli inequality for bounded weak supersolutions and weak Sobolev bounds: n > 2 critical GNS, n = 2 one fixed L⁶ gain, n = 1 essential L^∞. The audit checks them uniformly in the direction and the cutoff at one witness. The Moser inputs are formalized as supports as well: the actual shifted logarithm, the logarithmic and power energies, n = 2 weak Sobolev for every finite q ≥ 2, uniform concentric cutoffs, the L^p → L^∞ limit and the coordinate L² energy. The audit combines them at ONE witness. So are the Morrey and critical-potential inputs: the all-ball Morrey hypothesis (GT (7.51)) from the logarithmic energy, and the critical potential of GT Lemma 7.20 at p = n ≥ 2 with exponential integrability. At one witness the audit proves the actual log-gradient all-ball Morrey bound and the exponential integrability of its critical potential (not exp(log − mean) or John–Nirenberg). The local bounded inputs are formalized as supports too: cutoff tests and the Caccioppoli, power and log energies with nonnegativity only on the cutoff support (no global weak log derivative), one bounded weak log extension agreeing with log(δ + max w 0) where w ≥ 0, the buffered all-ball Morrey bound on B_3R from energy on B_4R, and n > 2 one-step critical gains from a given power energy. At one public-producer witness the audit treats the actual LOCAL deficit M − h_v with a cap only on B_4R (coefficients once per R): local log energy, one weak extension, the B_3R Morrey bound and the critical-potential exponential integrability, plus one global-class dyadic gain step. The bounded weak convex representation and critical John–Nirenberg (GT 7.16/7.21 for global bounded weak H¹_loc data, n ≥ 2; not the domain-only W^{1,1} class) are formalized as supports, and so are the fixed-compact joint local inputs (coefficients once per compact S before all domain centers and radii; all linear power data, energies, one weak extension, the centered Morrey bound and, under F R² ≤ αδ, JN and power moments at a uniform exponent inside the same extension), next to the per-R unconditional JN and moment clients. The bounded actual weak Harnack inequality is formalized as a support (GT 8.18 for bounded data via the Moser iteration; essential infimum a.e.): n > 2 for 0 < p < n/(n−2), n = 2 (physical exponent 2 − 2/g) and n = 1 (kernel-1 representation and a direct exponential bound, not the critical τ) for every finite p > 0, with the unshifted forcing M B R²/α and constants fixed per compact S before all centers, radii, directions and caps at one witness. The given-data form (GT 8.18 bounded symmetric pure-divergence case for given global bounded weak H¹_loc data, constants before all data) and its application at ONE regular moment potential retaining all regular-class data are formalized as supports, together with GT 17.13 (a uniformly positive fixed finite frame with the literal cap hi), the GT 8.23 scalar iteration and the essential deficit identity. At the same regular moment potential, exists_regular_moment_potential_holder_hessian proves u ∈ C² with continuous Hessian, every Hessian entry locally Hölder (one exponent and constant per ball, before all entries and points), and Hess u positive definite with log det Hess u = −u + W(∇u) and Hess u ≤ (16/κ) Id at EVERY point, retaining all regular-class fields (strong class; rough-divergence route via the frame oscillation decay of GT 17.14 with the GT 17.13 frame, GT 8.23, Hölder representatives and the continuous-a.e.-derivative bridge; not the classical C⁴ GT 17.14). For the same u, L, LF and T, exists_regular_moment_potential_holder_hessian_inverse keeps every one of these fields and adds a homeomorphism ∇u : ℝⁿ ≃ₜ int K and a C¹ left inverse of ∇u on int K (range identification from coercive tilts and the support of the transported law; inverse function theorem with the positive definite Hessian). The averaged-inverse coefficients of GT (17.56)/Lemma 17.16 and their Hölder moduli are formalized as generic supports. Three further supports for the Schauder step are formalized: affine change of variables for actual total derivatives (all-order scaling, the Laplacian R² factor, R^{−k} derivative-cap transport, the nested Hessian and its differences) with local cutoff regularity (GT Theorem 4.6 support); pointwise Hessian operator-norm interpolation on a closed ball with the constant chosen from α and ε before the radius and the data (core of GT (6.8)); and, at the same regular moment potential (one call of exists_regular_moment_potential_holder_hessian_inverse), uniform-in-step log-determinant equations for the Hessians of its scalar-step finite differences with the same averaged-inverse coefficients, whose cap and Hölder constant precede the direction and the step (exists_regular_moment_potential_difference_quotient_equations; GT Lemma 17.16 precursor). A harmonic derivative-cap producer, lower ellipticity of these coefficients, the W(∇u) linearization, the Schauder estimates of GT 4.6 and 6.2 and the quotient limit are not supplied. Full GT 8.18 for unbounded data (q > n, rough coefficients), the domain-only W^{1,1} GT 7.16, n = 1 John–Nirenberg, a pointwise infimum, and Schauder/C^∞ regularity are not supplied. Global smoothness, a smooth gradient diffeomorphism, the merely convex source class and the full source Lemma 2.2 are not supplied, so the source item remains partial."
           },
           {
             "id": "L23",
@@ -9105,9 +9731,29 @@
               {
                 "name": "FunctionalInequalities.Analysis.exists_regular_moment_weak_stein_coupling",
                 "source": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/TraceStein.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Probability.Stein.hsNorm_sq_eq_trace_mul_self",
+                "source": "formalization/FunctionalInequalities/Probability/Stein/Kernel.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Probability.Stein.hessianKernel_posDefAE_of_map",
+                "source": "formalization/FunctionalInequalities/Probability/Stein/HessianKernel.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Probability.Stein.memLp_hsNorm_hessianKernel_of_map",
+                "source": "formalization/FunctionalInequalities/Probability/Stein/HessianKernel.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.LogConcave.weak_hessianKernel_isSteinKernel",
+                "source": "formalization/FunctionalInequalities/KLS/LogConcave/HessianStein.lean"
+              },
+              {
+                "name": "FunctionalInequalities.Analysis.exists_regular_moment_target_stein_kernel",
+                "source": "formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/TraceStein.lean"
               }
             ],
-            "note": "Quoted from Fathi 2019. For a given smooth convex normalized potential φ with isotropic gradient pushforward and injective ∇φ, the mapped construction gives a target Stein kernel via a measurable left inverse, symmetric PSD integrable entries, mean Id and τ(∇φ(y)) = Hess φ(y); the Gaussian instance is τ = Id. This construction does not supply the arbitrary-law moment map, strict positive definiteness or the HS-L² bound of the full source route. At the actual weak regular-source witness, exists_regular_moment_weak_stein_coupling instead proves the source identity ∫ ∂_i u f(∇u) dν = ∫ Σ_j (Hess u)_ij ∂_j f(∇u) dν for C¹ bounded globally Lipschitz f, with u ∈ C¹ globally Lipschitz and ∇u Lipschitz. The compact constant-8 endpoint uses that latent identity and a Gaussian product coupling; it does not construct τ = Hess u ∘ (∇u)⁻¹ on the target law. The source Lemma 2.7 therefore remains partial."
+            "note": "Quoted from Fathi 2019. For a given smooth convex normalized potential φ with isotropic gradient pushforward and injective ∇φ, the mapped construction gives a target Stein kernel via a measurable left inverse, symmetric PSD integrable entries, mean Id and τ(∇φ(y)) = Hess φ(y); the Gaussian instance is τ = Id. This construction does not supply the arbitrary-law moment map, strict positive definiteness or the HS-L² bound of the full source route. At the actual weak regular-source witness, exists_regular_moment_weak_stein_coupling instead proves the source identity ∫ ∂_i u f(∇u) dν = ∫ Σ_j (Hess u)_ij ∂_j f(∇u) dν for C¹ bounded globally Lipschitz f, with u ∈ C¹ globally Lipschitz and ∇u Lipschitz. The compact constant-8 endpoint uses that latent identity and a Gaussian product coupling and does not consume a target kernel. Separately, for the strong regular class (n > 0, isotropic 1_K e^{−W} dx, K compact convex with nonempty interior, W smooth and κ-uniformly convex), exists_regular_moment_target_stein_kernel constructs τ = Hess u ∘ Ψ at the same u and L as the weak trace bound (all of its fields retained), with Ψ a measurable everywhere left inverse of that ∇u: τ is a Stein kernel of μ that is μ-a.e. positive definite and symmetric, has mean Id, |τ|_HS ∈ L²(μ) and ∫|τ|²_HS dμ ≤ 2n; the C^{1,1} adapter weak_hessianKernel_isSteinKernel needs no C² hypothesis. The source statement is for the moment map of Lemma 2.2 under the Lemma A.1 regularity assumptions (V merely convex near the closure of K), and the coupling identity τ(X) = Hess φ(Y) is not stated, so the source Lemma 2.7 remains partial."
           },
           {
             "id": "P28",
@@ -9170,8 +9816,24 @@
             "uses": [
               "DISO"
             ],
-            "relation": "partial",
+            "relation": "same",
             "declarations": [
+              {
+                "name": "FunctionalInequalities.KLS.LogConcave.exists_regular_approximation",
+                "source": "formalization/FunctionalInequalities/KLS/Letwin/Approximation.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.LogConcave.exists_regular_approximation_eps",
+                "source": "formalization/FunctionalInequalities/KLS/Letwin/Approximation.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.LogConcave.exists_regularClass_seq_of_compact",
+                "source": "formalization/FunctionalInequalities/KLS/Letwin/Approximation.lean"
+              },
+              {
+                "name": "FunctionalInequalities.KLS.LogConcave.Suspension.exists_compact_moment_approximation",
+                "source": "formalization/FunctionalInequalities/KLS/BKL/CompactReduction.lean"
+              },
               {
                 "name": "FunctionalInequalities.Analysis.BakryEmery.letwinQuadraticBound_of_tendsto_moments",
                 "source": "formalization/FunctionalInequalities/Analysis/BakryEmery/Cumulant/Basic.lean"
@@ -9179,13 +9841,9 @@
               {
                 "name": "FunctionalInequalities.KLS.LogConcave.Suspension.letwinCompactBound_of_regularClass",
                 "source": "formalization/FunctionalInequalities/KLS/BKL/LetwinApproximation.lean"
-              },
-              {
-                "name": "FunctionalInequalities.Probability.tendsto_integral_prod_inner_affine_cond_closedBall",
-                "source": "formalization/FunctionalInequalities/Probability/Conditioning.lean"
               }
             ],
-            "note": "The passage of the quadratic bound through degree-at-most-four moment convergence is formalized. The compact source reduction is also formalized: if every positive-dimensional isotropic law 1_K exp(-W) dx, with K compact convex with nonempty interior and W globally smooth and uniformly kappa-convex for kappa > 0, satisfies LetwinQuadraticBound, then LetwinCompactBound holds. The proof uses Gaussian smoothing, ball conditioning and whitening with converging moments. The regular-class bound is an explicit retained premise; approximation of every noncompact isotropic log-concave law in the full source statement is not supplied by this compact reduction. Partial source coverage; not Theorem 1.2. (2026-10-16) For compact laws the retained regular-class premise is now discharged by regularClass_letwinQuadraticBound, giving letwinCompactBound (see T12); the noncompact approximation is still not formalized, so the entry stays partial. (2026-10-20) Growing-ball truncations now have convergent mixed moments under near-identity linear maps and vanishing centers, assuming only the stated finite moment. This yields the noncompact Theorem 1.2 from the accepted compact bound after centering and whitening. It does not construct the full smooth regular approximants of Lemma A.1; this item remains partial."
+            "note": "Formalized (2026-10-20). exists_regular_approximation: for every isotropic log-concave probability law mu on EuclideanSpace R (Fin n) (the source assumes n > 0; the proof does not use it) there is a sequence of isotropic log-concave laws eta_j = e^{-V_j} 1_{K_j} dx with exactly this density, K_j bounded open convex nonempty and V_j smooth and convex on an open neighbourhood of closure K_j (indeed smooth and uniformly convex on R^n), such that every mixed linear moment E prod_{i<d} <v_i, X> with d <= 4 converges. Polynomials of degree at most four are finite sums of such monomials, so E_{eta_j} p -> E_mu p for every such polynomial written as a finite sum; no MvPolynomial interface is stated. exists_regular_approximation_eps gives the epsilon-form for all coordinate monomials of degree <= 4. Construction: centered whitened growing-ball truncations (Suspension.exists_compact_moment_approximation), then whitened fixed-ball-conditioned Gaussian smoothings of each compact law (exists_regularClass_seq_of_compact; every term isotropic after a cofinal shift), a diagonal over the finitely many coordinate monomials and the interior of the convex body (null frontier); the source proof conditions the Gaussian-smoothed law on growing balls directly. The first statement of Lemma A.1, that Theorem 1.2 reduces to this class, is realized by letwinQuadraticBound_of_tendsto_moments, and the compact reduction letwinCompactBound_of_regularClass now consumes exists_regularClass_seq_of_compact. Lemma 2.2 (smooth moment map) for this class remains partial (see L22)."
           },
           {
             "id": "LA2",

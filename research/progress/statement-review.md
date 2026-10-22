@@ -1,6 +1,7 @@
 # Statement and text scope review
 
-Reviewed 2026-10-19. This is a contract review of the 34 registered certificates, their owning
+Certificate contracts reviewed 2026-10-19; current endpoint notes updated 2026-10-20.
+This is a contract review of the 34 registered certificates, their owning
 definitions, and the live README, handoff, solution guide, ledger and Blueprint descriptions.
 The [target reviews](target-reviews.md) retain the detailed paper correspondence; the
 [proof path](PROOF-PATH.md) separates the cutoff proof from the uncut source construction.
@@ -39,7 +40,10 @@ replay are separate checks with the snapshot scopes in the [verification guide](
 - Letwin [arXiv:2607.24164v1](https://arxiv.org/abs/2607.24164v1), Theorem 1.2, p. 3:
   for isotropic laws, `2 E‖∇⟨Mx,x⟩‖² = 8‖M‖²_HS`. The local certificate retains compact support,
   `n > 0` and every self-adjoint `M`, including singular and indefinite operators. It does not
-  certify the noncompact source theorem. The inspected BKL and Letwin PDF hashes match the
+  certify the noncompact source theorem. The separate
+  [`letwinQuadraticBound`](../../formalization/FunctionalInequalities/KLS/Letwin/QuadraticBound.lean)
+  now proves that theorem, with the same constant and no compact-support premise; no new
+  registered certificate is claimed. The inspected BKL and Letwin PDF hashes match the
   pins in the [literature register](LITERATURE.md).
 - ADMG [arXiv:1603.08412v1](https://arxiv.org/html/1603.08412v1), Definition 3.3 and Theorem 3.6:
   the left relaxation uses measurable set sequences; the right uses globally Lipschitz function
@@ -110,10 +114,15 @@ of the conditional cumulant helpers, and retired module labels. Supporting Bluep
 now point to the completed results rather than making obsolete repository-wide non-claims.
 
 No hypothesis, quantifier, constant, normalization, dimension range, Lean definition, theorem
-type or proof is changed. The noncompact Letwin target, uncut Eldan construction and literal
-stochastic identities remain outside the certified scope. The four exploratory routes keep
+type or proof is changed by these reviews. The compact Letwin certificate retains its compact
+scope; the separate noncompact theorem is now proved. The uncut Eldan construction and literal
+stochastic identities remain unformalized locally. The four exploratory routes keep
 their mathematically open hypotheses and their existing status. A source-form conclusion
 obtained by the cutoff route does not establish each intermediate statement of the uncut route.
+
+The [public-interface review](public-interface-review.md) adds the exact OpenAI model and bridge,
+the synchronized upstream regularization contracts and the maintainer's current review scope.
+It separates reported personal review, Nicolas's limited inspection and agent/compiler checks.
 
 ## Module ownership and public-name migration
 

@@ -24,8 +24,13 @@ noncomputable section
 open Set Filter
 namespace FunctionalInequalities.Analysis
 
+section NormedSpace
 
-private lemma smul_mem_of_mem_closure {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+variable {E : Type*}
+variable [NormedAddCommGroup E] [NormedSpace ℝ E]
+
+
+private lemma smul_mem_of_mem_closure
     {K : Set E} (hK : IsOpen K) (hconv : Convex ℝ K) (h0K : (0 : E) ∈ K)
     {x : E} (hx : x ∈ closure K) {t : ℝ} (ht0 : 0 ≤ t) (ht1 : t < 1) : t • x ∈ K := by
   have hz : (0 : E) ∈ interior K := by rwa [hK.interior_eq]
@@ -33,7 +38,7 @@ private lemma smul_mem_of_mem_closure {E : Type*} [NormedAddCommGroup E] [Normed
     (show 0 < 1 - t by linarith) ht0 (by ring)
   simpa only [smul_zero, zero_add, hK.interior_eq] using h
 
-private lemma radial_mono {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+private lemma radial_mono
     {K : Set E} (h0K : (0 : E) ∈ K) {g : E → ℝ} (hg : ConvexOn ℝ K g)
     (hnn : ∀ y ∈ K, 0 ≤ g y) (hg0 : g 0 = 0) {x : E} {s t : ℝ}
     (hs : 0 ≤ s) (hst : s ≤ t) (ht : 0 < t) (htK : t • x ∈ K) :
@@ -51,8 +56,7 @@ private def radialCut {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
   classical
   exact if a • x ∈ K then (g (a • x) : EReal) else ⊤
 
-private lemma radialCut_convex_epigraph {E : Type*} [NormedAddCommGroup E]
-    [NormedSpace ℝ E] {K : Set E} {g : E → ℝ} (hg : ConvexOn ℝ K g) (a : ℝ) :
+private lemma radialCut_convex_epigraph {K : Set E} {g : E → ℝ} (hg : ConvexOn ℝ K g) (a : ℝ) :
     Convex ℝ {p : E × ℝ | radialCut K g a p.1 ≤ (p.2 : EReal)} := by
   classical
   let L : E × ℝ →ₗ[ℝ] E × ℝ :=
@@ -66,8 +70,11 @@ private lemma radialCut_convex_epigraph {E : Type*} [NormedAddCommGroup E]
   rw [he]
   exact hg.convex_epigraph.linear_preimage L
 
-private lemma measurable_radialCut {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
-    [MeasurableSpace E] [BorelSpace E] {K : Set E} (hK : IsOpen K)
+section MeasurableSpace
+
+variable [MeasurableSpace E] [BorelSpace E]
+
+private lemma measurable_radialCut {K : Set E} (hK : IsOpen K)
     {g : E → ℝ} (hcont : ContinuousOn g K) (a : ℝ) : Measurable (radialCut K g a) := by
   classical
   let S : Set E := {x | a • x ∈ K}
@@ -86,11 +93,12 @@ private lemma measurable_radialCut {E : Type*} [NormedAddCommGroup E] [NormedSpa
   rw [he]
   exact hm
 
-private lemma measurable_radialCut_toENNReal {E : Type*} [NormedAddCommGroup E]
-    [NormedSpace ℝ E] [MeasurableSpace E] [BorelSpace E] {K : Set E} (hK : IsOpen K)
+private lemma measurable_radialCut_toENNReal {K : Set E} (hK : IsOpen K)
     {g : E → ℝ} (hcont : ContinuousOn g K) (a : ℝ) :
     Measurable (fun x => (radialCut K g a x).toENNReal) :=
   (measurable_radialCut hK hcont a).ereal_toENNReal
+
+end MeasurableSpace
 
 
 private def radialScale (n : ℕ) : ℝ := 1 - 1 / ((n : ℝ) + 2)
@@ -131,7 +139,7 @@ private def radialExtension {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ 
     (K : Set E) (g : E → ℝ) (x : E) : EReal :=
   ⨆ n, radialCut K g (radialScale n) x
 
-private lemma radialExtension_nonneg {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+private lemma radialExtension_nonneg
     {K : Set E} {g : E → ℝ} (hnn : ∀ x ∈ K, 0 ≤ g x) (x : E) :
     0 ≤ radialExtension K g x := by
   classical
@@ -141,8 +149,7 @@ private lemma radialExtension_nonneg {E : Type*} [NormedAddCommGroup E] [NormedS
     exact EReal.coe_nonneg.mpr (hnn _ hx)
   · simp [radialCut, hx]
 
-private lemma radialExtension_convex_epigraph {E : Type*} [NormedAddCommGroup E]
-    [NormedSpace ℝ E] {K : Set E} {g : E → ℝ} (hg : ConvexOn ℝ K g) :
+private lemma radialExtension_convex_epigraph {K : Set E} {g : E → ℝ} (hg : ConvexOn ℝ K g) :
     Convex ℝ {p : E × ℝ | radialExtension K g p.1 ≤ (p.2 : EReal)} := by
   have he : {p : E × ℝ | radialExtension K g p.1 ≤ (p.2 : EReal)} =
       ⋂ n, {p : E × ℝ | radialCut K g (radialScale n) p.1 ≤ (p.2 : EReal)} := by
@@ -151,13 +158,13 @@ private lemma radialExtension_convex_epigraph {E : Type*} [NormedAddCommGroup E]
   rw [he]
   exact convex_iInter fun n => radialCut_convex_epigraph hg (radialScale n)
 
-private lemma measurable_radialExtension {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+private lemma measurable_radialExtension
     [MeasurableSpace E] [BorelSpace E] {K : Set E} (hK : IsOpen K)
     {g : E → ℝ} (hcont : ContinuousOn g K) :
     Measurable (radialExtension K g) := by
   exact Measurable.iSup fun n => measurable_radialCut hK hcont (radialScale n)
 
-private lemma radialExtension_eq_on {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+private lemma radialExtension_eq_on
     [FiniteDimensional ℝ E] {K : Set E} (hK : IsOpen K) (h0K : (0 : E) ∈ K)
     {g : E → ℝ} (hg : ConvexOn ℝ K g) (hnn : ∀ x ∈ K, 0 ≤ g x) (hg0 : g 0 = 0)
     {x : E} (hx : x ∈ K) : radialExtension K g x = (g x : EReal) := by
@@ -179,7 +186,7 @@ private lemma radialExtension_eq_on {E : Type*} [NormedAddCommGroup E] [NormedSp
   rw [he]
   exact iSup_eq_of_tendsto hmono hlim
 
-private lemma radialExtension_eq_top_off {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+private lemma radialExtension_eq_top_off
     {K : Set E} {g : E → ℝ} {x : E} (hx : x ∉ closure K) :
     radialExtension K g x = ⊤ := by
   classical
@@ -193,9 +200,12 @@ private lemma radialExtension_eq_top_off {E : Type*} [NormedAddCommGroup E] [Nor
   have h : radialCut K g (radialScale n) x ≤ radialExtension K g x := le_iSup (fun n => radialCut K g (radialScale n) x) n
   simpa [radialCut, hnot] using h
 
+section FiniteDimensional
 
-private lemma radialExtension_radial_limit {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
-    [FiniteDimensional ℝ E] {K : Set E} (hK : IsOpen K) (h0K : (0 : E) ∈ K)
+variable [FiniteDimensional ℝ E]
+
+
+private lemma radialExtension_radial_limit {K : Set E} (hK : IsOpen K) (h0K : (0 : E) ∈ K)
     {g : E → ℝ} (hg : ConvexOn ℝ K g) (hnn : ∀ x ∈ K, 0 ≤ g x) (hg0 : g 0 = 0) (x : E) :
     Tendsto (fun t : ℝ => radialExtension K g (t • x)) (nhdsWithin 1 (Set.Iio 1))
       (nhds (radialExtension K g x)) := by
@@ -255,8 +265,7 @@ private lemma radialExtension_radial_limit {E : Type*} [NormedAddCommGroup E] [N
 /-- **Radial extension of a convex function.** A nonnegative real convex function on an open convex set `K ∋ 0` vanishing at
 `0` extends to a nonnegative extended-real function with convex real epigraph and Borel `toENNReal`, equal to it on `K`,
 `⊤` off `closure K`, and equal at every point to its radial limit from below. -/
-theorem exists_radial_extension_of_convexOn {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
-    [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] {K : Set E} (hK : IsOpen K) (h0K : (0 : E) ∈ K)
+theorem exists_radial_extension_of_convexOn [MeasurableSpace E] [BorelSpace E] {K : Set E} (hK : IsOpen K) (h0K : (0 : E) ∈ K)
     {g : E → ℝ} (hg : ConvexOn ℝ K g) (hnn : ∀ x ∈ K, 0 ≤ g x) (hg0 : g 0 = 0) :
     ∃ ψ : E → EReal, (∀ x, 0 ≤ ψ x) ∧ ψ 0 = 0 ∧
       Convex ℝ {p : E × ℝ | ψ p.1 ≤ (p.2 : EReal)} ∧
@@ -274,5 +283,9 @@ theorem exists_radial_extension_of_convexOn {E : Type*} [NormedAddCommGroup E] [
     exact radialExtension_eq_top_off hx
   · intro x
     exact radialExtension_radial_limit hK h0K hg hnn hg0 x
+
+end FiniteDimensional
+
+end NormedSpace
 
 end FunctionalInequalities.Analysis

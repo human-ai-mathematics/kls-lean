@@ -175,6 +175,15 @@ theorem route_D1 :
 #print axioms route_M6
 #print axioms route_D1
 
+section NormedSpace
+
+variable {V : Type*}
+variable [NormedAddCommGroup V] [NormedSpace ℝ V]
+
+section FiniteDimensional
+
+variable [FiniteDimensional ℝ V]
+
 /-! ### Consistency: `M6` recovers the Sard statements already in the repository
 
 The three statements are restated here and derived from `M6` (or from `M5`); no proof below names
@@ -182,8 +191,7 @@ The three statements are restated here and derived from `M6` (or from `M5`); no 
 
 /-- The statement of the `C^∞` Sard theorem of `Analysis/Sard/Smooth.lean`, recovered from the
 sharp statement: `C^∞` implies `C^(finrank ℝ V)`. -/
-theorem sard_smooth_recovered {V : Type*} [NormedAddCommGroup V] [NormedSpace ℝ V]
-    [FiniteDimensional ℝ V] {u : V → ℝ} (hu : ContDiff ℝ ∞ u) :
+theorem sard_smooth_recovered {u : V → ℝ} (hu : ContDiff ℝ ∞ u) :
     (volume : Measure ℝ) (u '' {x | fderiv ℝ u x = 0}) = 0 :=
   sard (hu.of_le (by norm_cast; exact le_top))
 
@@ -195,8 +203,7 @@ theorem sard_plane_recovered {u : (Fin 2 → ℝ) → ℝ} (hu : ContDiff ℝ 2 
 
 /-- The statement of the low-dimensional Sard theorem of `Analysis/Sard/Basic.lean`, recovered from
 the sharp statement: the dimension hypothesis is no longer needed. -/
-theorem sard_finrank_le_one_recovered {V : Type*} [NormedAddCommGroup V] [NormedSpace ℝ V]
-    [FiniteDimensional ℝ V] {u : V → ℝ} (_hdim : Module.finrank ℝ V ≤ 1)
+theorem sard_finrank_le_one_recovered {u : V → ℝ} (_hdim : Module.finrank ℝ V ≤ 1)
     (hu : ContDiff ℝ (Module.finrank ℝ V) u) :
     (volume : Measure ℝ) (u '' {x | fderiv ℝ u x = 0}) = 0 :=
   sard hu
@@ -205,15 +212,16 @@ theorem sard_finrank_le_one_recovered {V : Type*} [NormedAddCommGroup V] [Normed
 
 /-- Dimension zero: the domain is a single point, so the image of the critical set is a single
 point and no regularity is needed. -/
-theorem dimension_zero {V : Type*} [NormedAddCommGroup V] [NormedSpace ℝ V]
-    [FiniteDimensional ℝ V] (hV : Module.finrank ℝ V = 0) (u : V → ℝ) :
+theorem dimension_zero (hV : Module.finrank ℝ V = 0) (u : V → ℝ) :
     (volume : Measure ℝ) (u '' {x | fderiv ℝ u x = 0}) = 0 := by
   have : Subsingleton V := Module.finrank_zero_iff.mp hV
   exact Set.Subsingleton.measure_zero
     (Set.Subsingleton.image (fun a _ b _ => Subsingleton.elim a b) u) _
 
+end FiniteDimensional
+
 /-- A constant function: every point is critical and the whole image is one value. -/
-theorem constant_function {V : Type*} [NormedAddCommGroup V] [NormedSpace ℝ V]
+theorem constant_function
     [FiniteDimensional ℝ V] (c : ℝ) :
     (volume : Measure ℝ)
       ((fun _ : V => c) '' {x | fderiv ℝ (fun _ : V => c) x = 0}) = 0 := by
@@ -223,7 +231,7 @@ theorem constant_function {V : Type*} [NormedAddCommGroup V] [NormedSpace ℝ V]
 
 /-- The critical set of a constant function is everything, so the boundary case above is not
 vacuous. -/
-theorem constant_function_critical_set {V : Type*} [NormedAddCommGroup V] [NormedSpace ℝ V]
+theorem constant_function_critical_set
     (c : ℝ) : {x : V | fderiv ℝ (fun _ : V => c) x = 0} = Set.univ := by
   ext x
   simp
@@ -234,5 +242,7 @@ theorem constant_function_critical_set {V : Type*} [NormedAddCommGroup V] [Norme
 #print axioms dimension_zero
 #print axioms constant_function
 #print axioms constant_function_critical_set
+
+end NormedSpace
 
 end SharpSardAudit

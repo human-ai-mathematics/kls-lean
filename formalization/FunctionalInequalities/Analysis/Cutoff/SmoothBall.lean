@@ -7,11 +7,18 @@ import Mathlib.MeasureTheory.Measure.Haar.Basic
 import Mathlib.MeasureTheory.Measure.Haar.NormedSpace
 import Mathlib.Topology.MetricSpace.Lipschitz
 import FunctionalInequalities.Analysis.Lipschitz.Gradient
+import FunctionalInequalities.Analysis.Cutoff.Profile
+import Mathlib.Analysis.Calculus.FDeriv.Norm
 
 /-!
 # Smooth norm-ball cutoffs and compact localization
 
 Existing names, statements and proof payloads are preserved.
+
+`exists_smooth_concentric_cutoff_norm_fderiv_le` (namespace `FunctionalInequalities.Analysis`) adds generic concentric
+cutoffs in a finite-dimensional real inner product space: one constant `D > 0` serves every center and every pair of
+radii `0 ≤ r < R`, with `‖Dχ‖ ≤ D/(R − r)`. These are the cutoffs of a Moser-type iteration
+(Gilbarg–Trudinger (2001) (8.48)–(8.49)); they are not the iteration itself.
 -/
 
 noncomputable section
@@ -177,3 +184,93 @@ end FiniteDimensional
 
 
 end FunctionalInequalities.Energy.Euclidean.LipschitzApproximation
+
+section ConcentricCutoff
+
+open Set Metric
+
+namespace FunctionalInequalities.Analysis
+
+/-- **Uniform concentric cutoffs.** In a finite-dimensional real inner product space (dimension zero included) there is ONE
+`D > 0` such that for every center `c` and radii `0 ≤ r < R` some `C^∞` cutoff `χ` with values in `[0, 1]` equals one on
+`closedBall c r`, vanishes for `‖x − c‖ ≥ R`, has `tsupport χ ⊆ closedBall c R` and `‖Dχ‖ ≤ D / (R − r)`. The profile is
+composed with the normalized squared distance, so it is smooth at the center. `D` depends on the space only. -/
+theorem exists_smooth_concentric_cutoff_norm_fderiv_le
+    {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] :
+    ∃ D : ℝ, 0 < D ∧ ∀ (c : E) (r R : ℝ), 0 ≤ r → r < R →
+      ∃ χ : E → ℝ, ContDiff ℝ ∞ χ ∧ HasCompactSupport χ ∧
+        tsupport χ ⊆ closedBall c R ∧ (∀ x, 0 ≤ χ x ∧ χ x ≤ 1) ∧
+        (∀ x ∈ closedBall c r, χ x = 1) ∧
+        (∀ x, R ≤ ‖x - c‖ → χ x = 0) ∧
+        ∀ x, ‖fderiv ℝ χ x‖ ≤ D / (R - r) := by
+  classical
+  obtain ⟨hf,-,h01,hone,hzero,-,-,-,B,hB,hBd⟩ := smoothTransition_two_sub_cutoff
+  let f := fun t : ℝ => Real.smoothTransition (2 - t)
+  refine ⟨2 * B + 1, by positivity, ?_⟩
+  intro c r R hr hR
+  have hRp : 0 < R := lt_of_le_of_lt hr hR
+  have hgap : 0 < R - r := sub_pos.mpr hR
+  let d := R ^ 2 - r ^ 2
+  have hd : 0 < d := by dsimp only [d]; nlinarith
+  let g := fun x : E => d⁻¹ * (‖x - c‖ ^ 2 - r ^ 2) + 1
+  let χ := fun x : E => f (g x)
+  have hg : ContDiff ℝ ∞ g :=
+    ((contDiff_const.mul (((contDiff_norm_sq ℝ).comp (contDiff_id.sub contDiff_const)).sub contDiff_const)).add contDiff_const)
+  have hc : ContDiff ℝ ∞ χ := hf.comp hg
+  have hzeroχ (x : E) (hx : R ≤ ‖x - c‖) : χ x = 0 := by
+    apply hzero
+    change 2 ≤ d⁻¹ * (‖x - c‖ ^ 2 - r ^ 2) + 1
+    have hs : d ≤ ‖x - c‖ ^ 2 - r ^ 2 := by dsimp only [d]; nlinarith [norm_nonneg (x - c)]
+    have hi : 1 ≤ d⁻¹ * (‖x - c‖ ^ 2 - r ^ 2) := by
+      rw [le_inv_mul_iff₀ hd, mul_one]
+      exact hs
+    linarith
+  have hχc : HasCompactSupport χ := by
+    apply HasCompactSupport.intro (isCompact_closedBall c R)
+    intro x hx
+    apply hzeroχ
+    have hn : R < ‖x - c‖ := by simpa only [mem_closedBall, dist_eq_norm, not_le] using hx
+    exact hn.le
+  have hχS : tsupport χ ⊆ closedBall c R := by
+    apply closure_minimal _ isClosed_closedBall
+    intro x hx
+    apply mem_closedBall.mpr
+    rw [dist_eq_norm]
+    by_contra h
+    exact hx (hzeroχ x (le_of_lt (lt_of_not_ge h)))
+  refine ⟨χ,hc,hχc,hχS, fun x => h01 (g x), ?_, hzeroχ, ?_⟩
+  · intro x hx
+    apply hone
+    change d⁻¹ * (‖x - c‖ ^ 2 - r ^ 2) + 1 ≤ 1
+    have hn : ‖x - c‖ ≤ r := by simpa only [mem_closedBall, dist_eq_norm] using hx
+    have hs : ‖x - c‖ ^ 2 - r ^ 2 ≤ 0 := by nlinarith [norm_nonneg (x - c)]
+    have hi := mul_nonpos_of_nonneg_of_nonpos (inv_nonneg.mpr hd.le) hs
+    linarith
+  · intro x
+    by_cases hx : x ∈ closedBall c R
+    · have hn : ‖x - c‖ ≤ R := by simpa only [mem_closedBall, dist_eq_norm] using hx
+      have hg' := ((((hasFDerivAt_id x).sub_const c).norm_sq.sub_const (r ^ 2)).const_mul d⁻¹).add_const 1
+      have hf' := (hf.differentiable (by simp) (g x)).hasDerivAt
+      have hcomp := hf'.comp_hasFDerivAt x hg'
+      have he : fderiv ℝ χ x = deriv f (g x) • (d⁻¹ • ((2 : ℝ) • innerSL ℝ (x - c))) := by
+        simpa only [χ, f, Function.comp_def, id_eq, ContinuousLinearMap.comp_id, two_smul] using hcomp.fderiv
+      rw [he, norm_smul, norm_smul, norm_smul, innerSL_apply_norm]
+      simp only [Real.norm_eq_abs, abs_inv, abs_of_pos hd, abs_of_pos (by norm_num : (0 : ℝ) < 2)]
+      have hb : |deriv f (g x)| ≤ B := (hBd (g x)).1
+      calc
+        |deriv f (g x)| * (d⁻¹ * (2 * ‖x - c‖)) ≤ B * (d⁻¹ * (2 * R)) := by gcongr
+        _ = (2 * B * R) / d := by ring
+        _ ≤ (2 * B + 1) / (R - r) := by
+          apply (div_le_div_iff₀ hd hgap).mpr
+          have hpos : 0 ≤ 2 * B * r * (R - r) :=
+            mul_nonneg (mul_nonneg (mul_nonneg (by norm_num) hB) hr) hgap.le
+          dsimp only [d] at hd ⊢
+          nlinarith [hpos]
+
+    · have hxt : x ∉ tsupport χ := fun h => hx (hχS h)
+      rw [fderiv_of_notMem_tsupport ℝ hxt, norm_zero]
+      positivity
+
+end FunctionalInequalities.Analysis
+
+end ConcentricCutoff

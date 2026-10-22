@@ -396,9 +396,14 @@ def normSqEnergy {H' : Type*} [NormedAddCommGroup H'] [NormedSpace ℝ H'] (S : 
     Functional X where
   toFun x := if h : x ∈ S.domain then ((‖S ⟨x, h⟩‖₊ ^ 2 : NNReal) : ENNReal) else ⊤
 
+section NormedSpace
+
+variable {H' : Type*}
+variable [NormedAddCommGroup H'] [NormedSpace ℝ H']
+
 open Classical in
 omit [CompleteSpace H] in
-theorem normSqEnergy_of_mem {H' : Type*} [NormedAddCommGroup H'] [NormedSpace ℝ H']
+theorem normSqEnergy_of_mem
     (S : X →ₗ.[ℝ] H') (x : S.domain) :
     normSqEnergy S x = ((‖S x‖₊ ^ 2 : NNReal) : ENNReal) := by
   change (if h : (x : X) ∈ S.domain then ((‖S ⟨x, h⟩‖₊ ^ 2 : NNReal) : ENNReal) else ⊤) = _
@@ -406,10 +411,12 @@ theorem normSqEnergy_of_mem {H' : Type*} [NormedAddCommGroup H'] [NormedSpace �
 
 open Classical in
 omit [CompleteSpace H] in
-theorem normSqEnergy_of_notMem {H' : Type*} [NormedAddCommGroup H'] [NormedSpace ℝ H']
+theorem normSqEnergy_of_notMem
     (S : X →ₗ.[ℝ] H') {x : X} (hx : x ∉ S.domain) : normSqEnergy S x = ⊤ := by
   change (if h : x ∈ S.domain then ((‖S ⟨x, h⟩‖₊ ^ 2 : NNReal) : ENNReal) else ⊤) = _
   rw [dif_neg hx]
+
+end NormedSpace
 
 /-- The sequential relaxation of `‖T f‖²` is the squared-norm energy of the closure of `T`:
 the graph-closed form, in the language of the pinned CMH source. -/

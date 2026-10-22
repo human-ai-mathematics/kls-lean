@@ -413,11 +413,15 @@ theorem sard_smooth_pi : ∀ (n : ℕ) (u : (Fin n → ℝ) → ℝ), ContDiff �
     obtain ⟨q, hq, hxq⟩ := mem_iUnion₂.mp hxcov
     exact mem_iUnion₂.mpr ⟨q, hq, ⟨x, ⟨hx, hxq⟩, rfl⟩⟩
 
+section FiniteDimensional
+
+variable {V : Type*}
+variable [NormedAddCommGroup V] [NormedSpace ℝ V] [FiniteDimensional ℝ V]
+
 /-- **Sard's theorem for `C^∞` real-valued functions** on an arbitrary finite-dimensional real
 normed space. The critical set is not assumed measurable. This is the smooth category: the sharp
 `C^(finrank)` statement `Analysis.sard` is a different, still unproved, obligation. -/
-theorem sard_smooth {V : Type*} [NormedAddCommGroup V] [NormedSpace ℝ V]
-    [FiniteDimensional ℝ V] {u : V → ℝ} (hu : ContDiff ℝ ∞ u) :
+theorem sard_smooth {u : V → ℝ} (hu : ContDiff ℝ ∞ u) :
     (volume : Measure ℝ) (u '' {x | fderiv ℝ u x = 0}) = 0 := by
   have hdim : Module.finrank ℝ (Fin (Module.finrank ℝ V) → ℝ) = Module.finrank ℝ V := by
     simp
@@ -448,13 +452,14 @@ theorem sard_smooth {V : Type*} [NormedAddCommGroup V] [NormedSpace ℝ V]
 
 /-- Almost every value of a `C^∞` real-valued function on a finite-dimensional real normed space
 is a regular value. `C^∞` variant of the still unproved `Analysis.ae_forall_fderiv_ne_zero`. -/
-theorem ae_forall_fderiv_ne_zero_of_contDiff_top {V : Type*} [NormedAddCommGroup V]
-    [NormedSpace ℝ V] [FiniteDimensional ℝ V] {u : V → ℝ} (hu : ContDiff ℝ ∞ u) :
+theorem ae_forall_fderiv_ne_zero_of_contDiff_top {u : V → ℝ} (hu : ContDiff ℝ ∞ u) :
     ∀ᵐ t ∂(volume : Measure ℝ), ∀ x, u x = t → fderiv ℝ u x ≠ 0 := by
   rw [ae_iff]
   refine measure_mono_null (fun t ht => ?_) (sard_smooth hu)
   by_contra hcon
   exact ht fun x hxt hx0 => hcon ⟨x, hx0, hxt⟩
+
+end FiniteDimensional
 
 end Induction
 

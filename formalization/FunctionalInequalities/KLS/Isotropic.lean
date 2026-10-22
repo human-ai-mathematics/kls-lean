@@ -23,8 +23,9 @@ open scoped RealInnerProductSpace
 
 namespace FunctionalInequalities.KLS
 
-variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
-  [MeasurableSpace E] [BorelSpace E]
+variable {E : Type*}
+variable [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
+variable [MeasurableSpace E] [BorelSpace E]
 
 /-- A probability law with finite second moment, mean zero, and identity centered covariance.
 The moment field prevents the totalized integral/covariance from encoding integrability. -/
@@ -33,10 +34,14 @@ structure Isotropic (μ : ProbabilityMeasure E) : Prop where
   mean_zero : ∫ x, x ∂(μ : Measure E) = 0
   covariance_identity : Covariance.operator (μ : Measure E) = ContinuousLinearMap.id ℝ E
 
+section Moments
+
+variable {E : Type*}
+variable [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
 
 /-- **Isotropy from moments**: finite second moment, mean zero and `∫ ⟪u, x⟫⟪v, x⟫ = ⟪u, v⟫`. -/
-theorem isotropic_of_moments {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
-    [CompleteSpace E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
+theorem isotropic_of_moments
+    [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
     (ν : ProbabilityMeasure E) (h2 : MemLp id 2 (ν : Measure E))
     (h0 : ∫ x, x ∂(ν : Measure E) = 0)
     (hcov : ∀ u v : E, ∫ x, ⟪u, x⟫ * ⟪v, x⟫ ∂(ν : Measure E) = ⟪u, v⟫) :
@@ -51,9 +56,8 @@ theorem isotropic_of_moments {E : Type*} [NormedAddCommGroup E] [InnerProductSpa
     simpa [h0] using hcov u v
 
 /-- For an isotropic law the raw second moments are `∫ ⟪u, x⟫ ⟪v, x⟫ = ⟪u, v⟫`. -/
-theorem Isotropic.integral_inner_mul_inner {E : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] [CompleteSpace E] [FiniteDimensional ℝ E]
-    [MeasurableSpace E] [BorelSpace E] {ν : ProbabilityMeasure E}
+theorem Isotropic.integral_inner_mul_inner
+    [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] {ν : ProbabilityMeasure E}
     (hν : Isotropic ν) (u v : E) :
     (∫ x, ⟪u, x⟫ * ⟪v, x⟫ ∂(ν : Measure E)) = ⟪u, v⟫ := by
   calc
@@ -67,12 +71,19 @@ theorem Isotropic.integral_inner_mul_inner {E : Type*} [NormedAddCommGroup E]
       rw [← Covariance.operator_inner, hν.covariance_identity]
       simp
 
+end Moments
+
+section LinearIsometry
+
+variable {E F : Type*}
+variable [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
+variable [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
+variable [NormedAddCommGroup F] [InnerProductSpace ℝ F] [CompleteSpace F]
+variable [FiniteDimensional ℝ F] [MeasurableSpace F] [BorelSpace F]
+
 /-- **Isotropy along a linear isometry**.
 The `MemLp` step uses `ContinuousLinearMap.comp_memLp'`. -/
-theorem Isotropic.map_linearIsometryEquiv {E F : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] [CompleteSpace E] [FiniteDimensional ℝ E] [MeasurableSpace E]
-    [BorelSpace E] [NormedAddCommGroup F] [InnerProductSpace ℝ F] [CompleteSpace F]
-    [FiniteDimensional ℝ F] [MeasurableSpace F] [BorelSpace F] {ν : ProbabilityMeasure E}
+theorem Isotropic.map_linearIsometryEquiv {ν : ProbabilityMeasure E}
     (hν : Isotropic ν) (φ : E ≃ₗᵢ[ℝ] F) :
     Isotropic (ν.map φ.continuous.measurable.aemeasurable) := by
     let μ : Measure F := Measure.map φ (ν : Measure E)
@@ -121,11 +132,18 @@ theorem Isotropic.map_linearIsometryEquiv {E F : Type*} [NormedAddCommGroup E]
         simpa only [φ.apply_symm_apply] using
           (φ.inner_map_map (φ.symm u) (φ.symm v)).symm
 
+end LinearIsometry
+
+section FiniteDimensional
+
+variable {E : Type*}
+variable [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
+variable [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
+
 /-- **Gradient second moments of an isotropic pushforward** (Letwin Lemma 2.3, step 2): if `(∇φ)_* ν` is isotropic then
 `∫ (∂_u φ)(∂_v φ) dν = ⟪u, v⟫`. -/
-theorem integral_fderiv_mul_fderiv_eq_inner_of_isotropic_map {E : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] [CompleteSpace E] [FiniteDimensional ℝ E] [MeasurableSpace E]
-    [BorelSpace E] (ν : ProbabilityMeasure E) {φ : E → ℝ} (hφ : Measurable (gradient φ))
+theorem integral_fderiv_mul_fderiv_eq_inner_of_isotropic_map
+    (ν : ProbabilityMeasure E) {φ : E → ℝ} (hφ : Measurable (gradient φ))
     (hiso : Isotropic (ν.map hφ.aemeasurable)) (u v : E) :
     ∫ x, fderiv ℝ φ x u * fderiv ℝ φ x v ∂(ν : Measure E) = ⟪u, v⟫ := by
     have hderiv (x w : E) :
@@ -157,9 +175,8 @@ theorem integral_fderiv_mul_fderiv_eq_inner_of_isotropic_map {E : Type*} [Normed
 open scoped ContDiff in
 /-- **Letwin Lemma 2.3 (mean Hessian of the moment-map potential is the identity)**, for any smooth
 normalized `φ` with isotropic gradient law and the stated integrability (the moment map itself is not constructed). -/
-theorem integral_fderiv_fderiv_tilted_eq_inner_of_isotropic_map {E : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] [CompleteSpace E] [FiniteDimensional ℝ E]
-    [MeasurableSpace E] [BorelSpace E] (m : Measure E) [m.IsAddHaarMeasure]
+theorem integral_fderiv_fderiv_tilted_eq_inner_of_isotropic_map
+    (m : Measure E) [m.IsAddHaarMeasure]
     (φ : E → ℝ) (u v : E) (hφ : ContDiff ℝ ∞ φ)
     (hφexp : Integrable (fun x => Real.exp (-φ x)) m)
     (hφnorm : ∫ x, Real.exp (-φ x) ∂m = 1)
@@ -209,9 +226,8 @@ open FunctionalInequalities.Analysis.BakryEmery in
 /-- **Letwin Lemma 2.3 for a given potential**: if `φ` is smooth and convex with `e^{-φ}` a probability
 density, `ν = e^{-φ} dx`, and `(∇φ)_* ν` is isotropic, then `∫ ∂_u∂_v φ dν = ⟪u, v⟫`; every integrability
 input is derived. The moment map producing such a `φ` for a given law is not constructed. -/
-theorem integral_hessian_eq_inner_of_isotropic_map {E : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] [CompleteSpace E] [FiniteDimensional ℝ E] [MeasurableSpace E]
-    [BorelSpace E] (φ : E → ℝ) (hφ : ContDiff ℝ ∞ φ)
+theorem integral_hessian_eq_inner_of_isotropic_map
+    (φ : E → ℝ) (hφ : ContDiff ℝ ∞ φ)
     (hc : ConvexOn ℝ Set.univ φ)
     (hnorm : ∫ x, Real.exp (-φ x) ∂(volume : Measure E) = 1)
     (ν : ProbabilityMeasure E) (hν : (ν : Measure E) = (volume : Measure E).tilted (-φ))
@@ -233,6 +249,8 @@ theorem integral_hessian_eq_inner_of_isotropic_map {E : Type*} [NormedAddCommGro
   rw [hν, Analysis.BakryEmery.integral_hessian_tilted_eq_integral_fderiv_mul_of_convexOn φ hφ hc hexp hnorm hgrad]
   rw [← hν]
   exact integral_fderiv_mul_fderiv_eq_inner_of_isotropic_map ν hgm hiso u v
+
+end FiniteDimensional
 
 end FunctionalInequalities.KLS
 

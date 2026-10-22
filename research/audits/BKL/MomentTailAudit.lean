@@ -94,15 +94,20 @@ end IndependentMomentTailModels
 namespace IndependentMomentTailClients
 open IndependentMomentTailModels
 
+section MeasurableSpace
+
+variable {E : Type*}
+variable [NormedAddCommGroup E] [MeasurableSpace E] [BorelSpace E]
+
 /-- The original universal context has no LC/IP/FD/centering/isotropy/ball-mass premise. -/
-theorem exact_cb2 {E : Type*} [NormedAddCommGroup E] [MeasurableSpace E] [BorelSpace E]
+theorem exact_cb2
     (ν : ProbabilityMeasure E) {R : ℝ} (hR : 0 < R)
     (h8 : Integrable (fun x : E => ‖x‖ ^ 8) (ν : Measure E)) :
     ((ν : Measure E) (Metric.ball (0 : E) R)ᶜ).toReal ≤
       (∫ x, ‖x‖ ^ 8 ∂(ν : Measure E)) / R ^ 8 := by
   exact measure_ball_compl_toReal_le_integral_norm_pow_eight_div ν hR h8
 
-theorem exact_cb3 {E : Type*} [NormedAddCommGroup E] [MeasurableSpace E] [BorelSpace E]
+theorem exact_cb3
     (ν : ProbabilityMeasure E) {R : ℝ} (hR : 0 < R)
     (h8 : Integrable (fun x : E => ‖x‖ ^ 8) (ν : Measure E)) :
     Integrable (fun x : E => ‖x‖ ^ 4) (ν : Measure E) ∧
@@ -110,6 +115,8 @@ theorem exact_cb3 {E : Type*} [NormedAddCommGroup E] [MeasurableSpace E] [BorelS
     (∫ x, (Metric.ball (0 : E) R)ᶜ.indicator (fun y : E => ‖y‖ ^ 4) x ∂(ν : Measure E)) ≤
       (∫ x, ‖x‖ ^ 8 ∂(ν : Measure E)) / R ^ 4 := by
   exact integrable_norm_pow_four_and_tail_le_of_integrable_pow_eight ν hR h8
+
+end MeasurableSpace
 
 /-- Each result consumes actual derived eighth integrability. -/
 theorem real_atoms (a : ℝ) (R : ℝ) (hR : 0 < R) :

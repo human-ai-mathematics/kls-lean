@@ -20,6 +20,9 @@ The section `MomentTails` holds the eighth-moment tail bounds on a normed group 
 probability law with integrable `‖x‖⁸` and `R > 0`, `ν(ball(0,R)ᶜ) ≤ M₈/R⁸` (Markov) and `‖x‖⁴` together with its
 tail restriction are integrable with `∫ 1_{ball(0,R)ᶜ} ‖x‖⁴ ≤ M₈/R⁴`, `M₈` the actual eighth moment. They are the first
 supports of the ball-conditioning stage of the moment-potential producer.
+The section `MixedLinearMoments` expands mixed linear moments `∫ ∏ᵢ ⟪vᵢ, x⟫` on `EuclideanSpace ℝ (Fin n)` into
+coordinate monomials and passes convergence of all coordinate monomials of one degree to every mixed linear moment
+of that degree (`tendsto_integral_prod_inner_of_coord`).
 -/
 
 open MeasureTheory
@@ -530,3 +533,53 @@ theorem memLp_quadratic_of_memLp_four {alpha E : Type*} [MeasurableSpace alpha]
 end FunctionalInequalities.Probability
 
 end
+
+section MixedLinearMoments
+
+open MeasureTheory Filter Topology
+open scoped RealInnerProductSpace
+
+namespace FunctionalInequalities.Probability
+
+variable {n : ℕ}
+
+/-- Coordinate expansion of a mixed linear moment integrand on `EuclideanSpace ℝ (Fin n)`. -/
+theorem prod_inner_eq_sum_prod_coord {d : ℕ} (v : Fin d → EuclideanSpace ℝ (Fin n))
+    (x : EuclideanSpace ℝ (Fin n)) :
+    ∏ i, ⟪v i, x⟫ = ∑ c : Fin d → Fin n, (∏ i, v i (c i)) * ∏ i, x (c i) := by
+  have h (i : Fin d) : ⟪v i, x⟫ = ∑ a, v i a * x a := by
+    simp [PiLp.inner_apply, mul_comm]
+  simp_rw [h, Finset.prod_univ_sum, ← Finset.prod_mul_distrib]
+  rfl
+
+/-- Coordinate expansion of a mixed linear moment, given integrability of each coordinate monomial. -/
+theorem integral_prod_inner_eq_sum (ρ : Measure (EuclideanSpace ℝ (Fin n))) {d : ℕ}
+    (hint : ∀ c : Fin d → Fin n, Integrable (fun x : EuclideanSpace ℝ (Fin n) => ∏ i, x (c i)) ρ)
+    (v : Fin d → EuclideanSpace ℝ (Fin n)) :
+    ∫ x, ∏ i, ⟪v i, x⟫ ∂ρ = ∑ c : Fin d → Fin n, (∏ i, v i (c i)) * ∫ x, ∏ i, x (c i) ∂ρ := by
+  simp_rw [prod_inner_eq_sum_prod_coord v]
+  rw [integral_finsetSum _ fun c _ => (hint c).const_mul _]
+  simp_rw [integral_const_mul]
+
+/-- Convergence of all coordinate monomials of degree `d` gives convergence of every mixed linear moment of
+degree `d`. -/
+theorem tendsto_integral_prod_inner_of_coord (ρ : ℕ → Measure (EuclideanSpace ℝ (Fin n)))
+    (σ : Measure (EuclideanSpace ℝ (Fin n))) {d : ℕ}
+    (hint : ∀ k (c : Fin d → Fin n),
+      Integrable (fun x : EuclideanSpace ℝ (Fin n) => ∏ i, x (c i)) (ρ k))
+    (hintσ : ∀ c : Fin d → Fin n, Integrable (fun x : EuclideanSpace ℝ (Fin n) => ∏ i, x (c i)) σ)
+    (hcoord : ∀ c : Fin d → Fin n, Tendsto (fun k => ∫ x, ∏ i, x (c i) ∂(ρ k)) atTop
+      (𝓝 (∫ x, ∏ i, x (c i) ∂σ)))
+    (v : Fin d → EuclideanSpace ℝ (Fin n)) :
+    Tendsto (fun k => ∫ x, ∏ i, ⟪v i, x⟫ ∂(ρ k)) atTop (𝓝 (∫ x, ∏ i, ⟪v i, x⟫ ∂σ)) := by
+  simp_rw [integral_prod_inner_eq_sum _ (hint _) v, integral_prod_inner_eq_sum σ hintσ v]
+  exact tendsto_finsetSum _ fun c _ => (hcoord c).const_mul _
+
+/-- Coordinate monomials are mixed linear moments of standard basis vectors. -/
+theorem prod_coord_eq_prod_inner_single {d : ℕ} (c : Fin d → Fin n) (x : EuclideanSpace ℝ (Fin n)) :
+    ∏ i, x (c i) = ∏ i, ⟪EuclideanSpace.single (c i) (1 : ℝ), x⟫ := by
+  simp [EuclideanSpace.inner_single_left]
+
+end FunctionalInequalities.Probability
+
+end MixedLinearMoments

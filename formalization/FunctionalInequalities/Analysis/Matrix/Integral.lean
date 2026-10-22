@@ -13,6 +13,9 @@ source coefficient `C = 2` is `symmetric_trace_integral_extension`). The integra
 `Matrix/Sign.lean` and `Matrix/Trace/Energy.lean`); no finiteness of `ν`, nonemptiness or commutation is assumed. The positive
 semidefinite bound is a named hypothesis: it is not constructed here, nor is the moment map, Brascamp–Lieb or Theorem
 2.5 itself.
+Finite flux contraction (`integral_quadratic_flux_le_of_posSemidef`): entrywise integrable matrix fields with
+`∫ Fᵢⱼ = -∫ Eᵢⱼ` and `E + H` a.e. positive semidefinite satisfy `∫ v ⬝ Fv ≤ ∫ v ⬝ Hv`, under an arbitrary measure and finite index
+type (the empty one included).
 -/
 
 noncomputable section
@@ -214,6 +217,64 @@ theorem integral_trace_mul_of_mean_one {Ω ι : Type*} [MeasurableSpace Ω]
       _ = B i i := by rw [Matrix.mul_one]
   simp_rw [he]
   rfl
+
+end FunctionalInequalities.Analysis
+
+end
+
+/-! ### Finite contraction of matrix flux identities -/
+
+noncomputable section
+open Matrix MeasureTheory
+
+namespace FunctionalInequalities.Analysis
+
+/-- Finite contraction of matrix-valued weak flux identities with PSD forcing.
+The entries may already include a fixed nonnegative compact test function and weight. -/
+theorem integral_quadratic_flux_le_of_posSemidef
+    {X ι : Type*} [MeasurableSpace X] [Fintype ι]
+    (ν : Measure X) (F E H : X → Matrix ι ι ℝ) (v : ι → ℝ)
+    (hF : ∀ i j, Integrable (fun x => F x i j) ν)
+    (hE : ∀ i j, Integrable (fun x => E x i j) ν)
+    (hH : ∀ i j, Integrable (fun x => H x i j) ν)
+    (hflux : ∀ i j, (∫ x, F x i j ∂ν) = -(∫ x, E x i j ∂ν))
+    (hpos : ∀ᵐ x ∂ν, (E x + H x).PosSemidef) :
+    (∫ x, dotProduct v ((F x).mulVec v) ∂ν) ≤
+      ∫ x, dotProduct v ((H x).mulVec v) ∂ν := by
+  classical
+  have hint (A : X → Matrix ι ι ℝ)
+      (hA : ∀ i j, Integrable (fun x => A x i j) ν) :
+      Integrable (fun x => dotProduct v ((A x).mulVec v)) ν := by
+    change Integrable (fun x => ∑ i, v i * ∑ j, A x i j * v j) ν
+    apply integrable_finsetSum Finset.univ
+    intro i _
+    apply Integrable.const_mul
+    exact integrable_finsetSum Finset.univ fun j _ => (hA i j).mul_const (v j)
+  have hrep (A : X → Matrix ι ι ℝ)
+      (hA : ∀ i j, Integrable (fun x => A x i j) ν) :
+      (∫ x, dotProduct v ((A x).mulVec v) ∂ν) =
+        ∑ i, v i * ∑ j, (∫ x, A x i j ∂ν) * v j := by
+    change (∫ x, ∑ i, v i * ∑ j, A x i j * v j ∂ν) = _
+    rw [integral_finsetSum Finset.univ (fun i _ =>
+      (integrable_finsetSum Finset.univ fun j _ => (hA i j).mul_const (v j)).const_mul (v i))]
+    apply Finset.sum_congr rfl
+    intro i _
+    rw [integral_const_mul, integral_finsetSum Finset.univ (fun j _ => (hA i j).mul_const (v j))]
+    simp only [integral_mul_const]
+  have heq : (∫ x, dotProduct v ((F x).mulVec v) ∂ν) =
+      -(∫ x, dotProduct v ((E x).mulVec v) ∂ν) := by
+    rw [hrep F hF, hrep E hE]
+    simp only [hflux, neg_mul, Finset.sum_neg_distrib, mul_neg]
+  have hpoint : ∀ᵐ x ∂ν, -dotProduct v ((E x).mulVec v) ≤
+      dotProduct v ((H x).mulVec v) := by
+    filter_upwards [hpos] with x hx
+    have h := hx.dotProduct_mulVec_nonneg v
+    rw [Matrix.add_mulVec, dotProduct_add] at h
+    simp only [star_trivial] at h
+    linarith
+  calc
+    _ = ∫ x, -dotProduct v ((E x).mulVec v) ∂ν := by rw [integral_neg, heq]
+    _ ≤ _ := integral_mono_ae (hint E hE).neg (hint H hH) hpoint
 
 end FunctionalInequalities.Analysis
 

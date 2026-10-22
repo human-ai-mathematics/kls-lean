@@ -1,6 +1,9 @@
 import Mathlib.Analysis.SpecialFunctions.SmoothTransition
 import Mathlib.Analysis.Calculus.ContDiff.Deriv
 import Mathlib.MeasureTheory.Integral.IntervalIntegral.FundThmCalculus
+import Mathlib.Analysis.Calculus.BumpFunction.InnerProduct
+import Mathlib.Analysis.SpecialFunctions.Pow.Deriv
+import Mathlib.Analysis.SpecialFunctions.Log.Deriv
 
 /-!
 # Scalar cutoff profile for the noncompact integration by parts
@@ -16,6 +19,10 @@ smooth nonnegative `w` vanishing off `(0, 3)` with `q_R′ t = −R⁻² w(t/R)`
 exhaustion: `R ↦ η(a/R)` is monotone on `(0, ∞)` and tends to `1` (`monotoneOn_and_tendsto_smoothTransition_two_sub_div`).
 Generic real-variable tools; the cutoffs `η(W/R)` and the
 quantitative generator defect of Lemma A.4 are not provided here.
+
+Smooth bounded-range profiles (`exists_smooth_compact_extension_on_nonnegative_interval` and its shifted logarithm and
+real-power cases): a function smooth on `(-δ, ∞)` and vanishing at `0` agrees, with its derivative, on `[0, B]` with a
+smooth compactly supported Lipschitz `Φ`, `Φ 0 = 0`; used for weak chain rules of bounded nonnegative test functions.
 -/
 
 open scoped ContDiff
@@ -459,5 +466,101 @@ theorem monotoneOn_and_tendsto_smoothTransition_two_sub_div (a : ℝ) :
         (tendsto_const_nhds :
           Filter.Tendsto (fun _ : ℝ => (1 : ℝ)) Filter.atTop (nhds 1)).congr'
           heq.symm
+
+section BoundedRangeProfiles
+
+open Set Filter Metric
+open scoped Topology
+
+/-- **Smooth compact extension from a bounded nonnegative range**: if `F` is smooth on `(-δ, ∞)` with `F 0 = 0` (`δ > 0`,
+`B ≥ 0`), then `Φ = χ F` with a bump `χ` centred at `B/2` (support the closed interval `[-δ/2, B + δ/2]`, equal to `1` near
+`[0, B]`) is smooth, compactly supported, Lipschitz, `Φ 0 = 0`, and `Φ = F`, `Φ' = F'` on the closed interval `[0, B]`. -/
+theorem exists_smooth_compact_extension_on_nonnegative_interval
+    {δ B : ℝ} (hδ : 0 < δ) (hB : 0 ≤ B) {F : ℝ → ℝ}
+    (hF : ContDiffOn ℝ ∞ F (Ioi (-δ))) (hFzero : F 0 = 0) :
+    ∃ (Φ : ℝ → ℝ) (D : NNReal),
+      ContDiff ℝ ∞ Φ ∧ HasCompactSupport Φ ∧ LipschitzWith D Φ ∧ Φ 0 = 0 ∧
+      ∀ t ∈ Icc (0 : ℝ) B, Φ t = F t ∧ deriv Φ t = deriv F t := by
+  classical
+  let χ : ContDiffBump (B / 2 : ℝ) :=
+    ⟨B / 2 + δ / 4, B / 2 + δ / 2, by positivity, by linarith⟩
+  let Φ : ℝ → ℝ := fun t => χ t * F t
+  have hΦ : ContDiff ℝ ∞ Φ := by
+    apply contDiff_iff_contDiffAt.mpr
+    intro x
+    by_cases hx : x ∈ tsupport χ
+    · have hd : dist x (B / 2) ≤ B / 2 + δ / 2 := by
+        simpa only [χ.tsupport_eq, mem_closedBall] using hx
+      rw [Real.dist_eq] at hd
+      have hxδ : -δ < x := by linarith [(abs_le.mp hd).1]
+      exact χ.contDiff.contDiffAt.mul (hF.contDiffAt (isOpen_Ioi.mem_nhds hxδ))
+    · have heχ : χ =ᶠ[𝓝 x] (fun _ : ℝ => 0) := notMem_tsupport_iff_eventuallyEq.mp hx
+      have he : Φ =ᶠ[𝓝 x] (fun _ : ℝ => 0) := by
+        filter_upwards [heχ] with t ht
+        change χ t * F t = 0
+        rw [ht, zero_mul]
+      exact (contDiffAt_const : ContDiffAt ℝ ∞ (fun _ : ℝ => (0 : ℝ)) x).congr_of_eventuallyEq he
+  have hΦc : HasCompactSupport Φ := χ.hasCompactSupport.mul_right
+  obtain ⟨D,hDLip⟩ := ContDiff.lipschitzWith_of_hasCompactSupport hΦc hΦ (by simp)
+  refine ⟨Φ,D,hΦ,hΦc,hDLip,?_,?_⟩
+  · simp only [Φ, hFzero, mul_zero]
+  · intro t ht
+    have htBall : t ∈ ball (B / 2) χ.rIn := by
+      change dist t (B / 2) < B / 2 + δ / 4
+      rw [Real.dist_eq, abs_lt]
+      constructor <;> linarith [ht.1,ht.2]
+    have heχ := χ.eventuallyEq_one_of_mem_ball htBall
+    have he : Φ =ᶠ[𝓝 t] F := by
+      filter_upwards [heχ] with s hs
+      change χ s = 1 at hs
+      change χ s * F s = F s
+      rw [hs, one_mul]
+    exact ⟨he.eq_of_nhds,he.deriv_eq⟩
+
+/-- Smooth compact extension of the shifted logarithm `log(δ + t) - log δ` from `[0, B]` (`δ > 0`), with derivative
+`(δ + t)⁻¹` there. -/
+theorem exists_smooth_compact_log_shift_extension {δ B : ℝ} (hδ : 0 < δ) (hB : 0 ≤ B) :
+    ∃ (Φ : ℝ → ℝ) (D : NNReal),
+      ContDiff ℝ ∞ Φ ∧ HasCompactSupport Φ ∧ LipschitzWith D Φ ∧ Φ 0 = 0 ∧
+      ∀ t ∈ Icc (0 : ℝ) B,
+        Φ t = Real.log (δ + t) - Real.log δ ∧ deriv Φ t = (δ + t)⁻¹ := by
+  have hc : ContDiffOn ℝ ∞ (fun t : ℝ => δ + t) (Ioi (-δ)) :=
+    contDiffOn_const.add contDiffOn_id
+  have hne : ∀ t ∈ Ioi (-δ), δ + t ≠ 0 := by
+    intro t ht
+    exact ne_of_gt (by simpa only [mem_Ioi, neg_lt_iff_pos_add'] using ht)
+  obtain ⟨Φ,D,hΦ,hΦc,hLip,hzero,he⟩ :=
+    exists_smooth_compact_extension_on_nonnegative_interval hδ hB
+      ((hc.log hne).sub contDiffOn_const)
+      (show Real.log (δ + 0) - Real.log δ = 0 by simp)
+  refine ⟨Φ,D,hΦ,hΦc,hLip,hzero,?_⟩
+  intro t ht
+  refine ⟨(he t ht).1, (he t ht).2.trans ?_⟩
+  have hp : δ + t ≠ 0 := ne_of_gt (lt_of_lt_of_le hδ (le_add_of_nonneg_right ht.1))
+  simpa only [one_div, id_eq] using (((hasDerivAt_id t).const_add δ).log hp).sub_const (Real.log δ) |>.deriv
+
+/-- Smooth compact extension of the shifted real power `(δ + t)^q - δ^q` from `[0, B]` (`δ > 0`, every real `q`), with
+derivative `q (δ + t)^(q - 1)` there. -/
+theorem exists_smooth_compact_rpow_shift_extension {δ B : ℝ} (hδ : 0 < δ) (hB : 0 ≤ B) (q : ℝ) :
+    ∃ (Φ : ℝ → ℝ) (D : NNReal),
+      ContDiff ℝ ∞ Φ ∧ HasCompactSupport Φ ∧ LipschitzWith D Φ ∧ Φ 0 = 0 ∧
+      ∀ t ∈ Icc (0 : ℝ) B,
+        Φ t = (δ + t) ^ q - δ ^ q ∧ deriv Φ t = q * (δ + t) ^ (q - 1) := by
+  have hc : ContDiffOn ℝ ∞ (fun t : ℝ => δ + t) (Ioi (-δ)) :=
+    contDiffOn_const.add contDiffOn_id
+  have hne : ∀ t ∈ Ioi (-δ), δ + t ≠ 0 := by
+    intro t ht
+    exact ne_of_gt (by simpa only [mem_Ioi, neg_lt_iff_pos_add'] using ht)
+  obtain ⟨Φ,D,hΦ,hΦc,hLip,hzero,he⟩ :=
+    exists_smooth_compact_extension_on_nonnegative_interval hδ hB
+      ((hc.rpow_const_of_ne hne).sub contDiffOn_const)
+      (show (δ + 0) ^ q - δ ^ q = 0 by simp)
+  refine ⟨Φ,D,hΦ,hΦc,hLip,hzero,?_⟩
+  intro t ht
+  refine ⟨(he t ht).1, (he t ht).2.trans ?_⟩
+  have hp : δ + t ≠ 0 := ne_of_gt (lt_of_lt_of_le hδ (le_add_of_nonneg_right ht.1))
+  simpa only [one_mul, id_eq] using (((hasDerivAt_id t).const_add δ).rpow_const (Or.inl hp)).sub_const (δ ^ q) |>.deriv
+
+end BoundedRangeProfiles
 
 end FunctionalInequalities.Analysis

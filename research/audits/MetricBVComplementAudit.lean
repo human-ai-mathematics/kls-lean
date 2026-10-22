@@ -14,7 +14,12 @@ open scoped ENNReal
 
 namespace MetricBVComplementAudit
 
-theorem slopeComparison {X : Type*} [MetricSpace X] {g a b : X → ℝ} {x : X} {r₀ : ℝ}
+section StructuredSpace
+
+variable {X : Type*}
+variable [MetricSpace X]
+
+theorem slopeComparison {g a b : X → ℝ} {x : X} {r₀ : ℝ}
     (hr₀ : 0 < r₀)
     (h : ∀ y, dist y x < r₀ → dist (g y) (g x) ≤ dist (a y) (a x) + dist (b y) (b x)) :
     FunctionalInequalities.Energy.LocalSlope.apply g x ≤
@@ -22,18 +27,22 @@ theorem slopeComparison {X : Type*} [MetricSpace X] {g a b : X → ℝ} {x : X} 
         FunctionalInequalities.Energy.LocalSlope.apply b x := by
   exact FunctionalInequalities.Energy.LocalSlope.apply_le_add hr₀ h
 
-theorem emptyPerimeter {X : Type*} [MetricSpace X] [MeasurableSpace X] [BorelSpace X]
+section MeasurableSpace
+
+variable [MeasurableSpace X] [BorelSpace X]
+
+theorem emptyPerimeter
     (ν : Measure X) :
     FunctionalInequalities.KLS.MetricBV.perimeter ν (∅ : Set X) = 0 := by
   exact FunctionalInequalities.KLS.MetricBV.perimeter_empty ν
 
-theorem finiteMeasureComplement {X : Type*} [MetricSpace X] [MeasurableSpace X] [BorelSpace X]
+theorem finiteMeasureComplement
     (ν : Measure X) [IsFiniteMeasure ν] (B : Set X) :
     FunctionalInequalities.KLS.MetricBV.perimeter ν Bᶜ =
       FunctionalInequalities.KLS.MetricBV.perimeter ν B := by
   exact FunctionalInequalities.KLS.MetricBV.perimeter_compl_of_isFiniteMeasure ν B
 
-theorem closedSupportComplement {X : Type*} [MetricSpace X] [MeasurableSpace X] [BorelSpace X]
+theorem closedSupportComplement
     [SecondCountableTopology X] (ν : ProbabilityMeasure X) (B : Set (ν : Measure X).support) :
     FunctionalInequalities.KLS.MetricBV.perimeter
         (FunctionalInequalities.KLS.MetricBV.closedSupportLaw ν :
@@ -60,10 +69,14 @@ theorem gaussianRealComplement (B : Set ℝ) :
       FunctionalInequalities.KLS.MetricBV.perimeter (ProbabilityTheory.gaussianReal 0 1) B := by
   exact FunctionalInequalities.KLS.MetricBV.perimeter_compl_of_isFiniteMeasure _ B
 
-theorem infiniteMassObstruction {X : Type*} [MetricSpace X] [MeasurableSpace X] [BorelSpace X]
+theorem infiniteMassObstruction
     (ν : Measure X) (h : ∀ S : Set X, Bornology.IsBounded S → ν Sᶜ = ⊤) :
     FunctionalInequalities.KLS.MetricBV.perimeter ν Set.univ = ⊤ := by
   exact FunctionalInequalities.KLS.MetricBV.perimeter_univ_eq_top_of_forall_isBounded ν h
+
+end MeasurableSpace
+
+end StructuredSpace
 
 /-- Finiteness of the measure cannot be dropped. -/
 theorem lebesgueCounterexample :

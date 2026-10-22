@@ -81,10 +81,15 @@ theorem sard_pi : ∀ (n : ℕ) (u : (Fin n → ℝ) → ℝ), ContDiff ℝ n u 
     refine (measure_biUnion_null_iff hP).mpr fun S hS => ?_
     exact volume_image_eq_zero_of_oscillation_pow (hmod S hS).1 (hmod S hS).2
 
+section FiniteDimensional
+
+variable {V : Type*}
+variable [NormedAddCommGroup V] [NormedSpace ℝ V] [FiniteDimensional ℝ V]
+
 /-- **Sard's theorem at the sharp regularity.**  The set of critical values of a
 `C^(finrank ℝ V)` real-valued function on a finite-dimensional real normed space is
 Lebesgue-null.  The critical set is not assumed measurable. -/
-theorem sard {V : Type*} [NormedAddCommGroup V] [NormedSpace ℝ V] [FiniteDimensional ℝ V]
+theorem sard
     {u : V → ℝ} (hu : ContDiff ℝ (Module.finrank ℝ V) u) :
     (volume : Measure ℝ) (u '' {x | fderiv ℝ u x = 0}) = 0 := by
   have hdim : Module.finrank ℝ (Fin (Module.finrank ℝ V) → ℝ) = Module.finrank ℝ V := by
@@ -125,12 +130,13 @@ theorem sard {V : Type*} [NormedAddCommGroup V] [NormedSpace ℝ V] [FiniteDimen
 /-- Almost every level is a regular value of a `C^n` function on an `n`-dimensional space.
 Migrated unchanged from the former `KLS/WIP/AnalyticPrerequisites.lean`; it now depends on the
 proved `sard` instead of a hole. -/
-theorem ae_forall_fderiv_ne_zero {V : Type*} [NormedAddCommGroup V] [NormedSpace ℝ V]
-    [FiniteDimensional ℝ V] {u : V → ℝ} (hu : ContDiff ℝ (Module.finrank ℝ V) u) :
+theorem ae_forall_fderiv_ne_zero {u : V → ℝ} (hu : ContDiff ℝ (Module.finrank ℝ V) u) :
     ∀ᵐ t ∂(volume : Measure ℝ), ∀ x, u x = t → fderiv ℝ u x ≠ 0 := by
   rw [ae_iff]
   refine measure_mono_null (fun t ht => ?_) (sard hu)
   by_contra hcon
   exact ht fun x hxt hx0 => hcon ⟨x, hx0, hxt⟩
+
+end FiniteDimensional
 
 end FunctionalInequalities.Analysis

@@ -69,6 +69,11 @@ Before a cold build, `cache_mathlib.py` recognizes both `Mathlib` and `Mathlib.*
 their pinned precompiled closure, and checks all required Mathlib `.olean` files. The CI
 preflight fails on an incomplete cache instead of silently rebuilding Mathlib from source.
 Use `python3 research/cache_mathlib.py --check` to inspect existing caches without fetching.
+The default covers `formalization/`, matching the main-library CI scope. Before building
+the separate OpenAI package, use `--project openai` for its cache or `--project all`
+for both packages. Each selected package's own Mathlib checkout and compiled closure are
+checked; a complete main-library cache does not substitute for a separate bridge cache.
+These selections also support `--check`.
 This checks file presence, not third-party proof validity. Cache inputs remain pinned;
 the trusted-third-party boundary is unchanged.
 

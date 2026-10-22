@@ -20,8 +20,8 @@ convention as the selected one:
 L²(ν) tests of finite slope energy)`,
 
 that is, one half of `LocalSlope.relaxation ν` (`Energy/LocalSlope/Relaxation.lean`).  The
-alternative `Cheeger.ofAsymptoticLipschitz ν` is defined alongside; their equality is an explicit
-obligation, never a definitional identification, and is not proved here.
+alternative `Cheeger.ofAsymptoticLipschitz ν` is defined alongside; their equality is proved in
+`Energy/Cheeger/Identification.lean`, rather than being a definitional identification.
 
 ## Affine-support transport
 
@@ -39,10 +39,10 @@ reverse inequality, hence `𝓔^can_μ = 2 Ch_μ`, **under absolute continuity**
 with respect to a Haar measure; and therefore for every compact-set log-concave law, whose
 intrinsic law is absolutely continuous (`lem:logconcave-intrinsic-absolute-continuity`).
 
-Not claimed: the singular case (`thm:smooth-gradient-relaxation-two-cheeger` remains open and
-uncertified), any Poincaré inequality, finiteness of any constant, a Cheeger--Buser comparison,
-agreement of raw slope energy with the relaxed energy on individual tests, or that
-`Cheeger.energy` is defined through the asymptotic Lipschitz constant.  The isoperimetric number
+Beyond this module: `Energy/Cheeger/Identification.lean` proves the identity for all Borel probability
+laws, including singular laws. Neither module claims any Poincaré inequality, finiteness of any constant,
+a Cheeger--Buser comparison, agreement of raw slope energy with the relaxation on individual tests, or a
+Cheeger definition via asymptotic Lipschitz constants. The isoperimetric number
 `h_μ` of `def:isoperimetric-cheeger-scale` is a different object.
 
 Dimension zero: on a subsingleton coordinate space every slope is zero and both relaxations

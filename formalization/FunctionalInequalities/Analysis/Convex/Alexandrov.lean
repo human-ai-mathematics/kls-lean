@@ -16,8 +16,12 @@ open scoped RealInnerProductSpace ENNReal
 
 namespace FunctionalInequalities.Analysis
 
-private lemma alexandrov_gradient_support {E : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] [CompleteSpace E]
+section InnerProduct
+
+variable {E : Type*}
+variable [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+
+private lemma alexandrov_gradient_support [CompleteSpace E]
     {u : E → ℝ} (hc : ConvexOn ℝ univ u)
     {x : E} (hx : DifferentiableAt ℝ u x) (y : E) :
     u x + ⟪gradient u x, y - x⟫ ≤ u y := by
@@ -42,8 +46,7 @@ private lemma alexandrov_gradient_support {E : Type*} [NormedAddCommGroup E]
         (zero_lt_one : (0 : ℝ) < 1) hl
   linarith
 
-private lemma alexandrov_isClosed_subgradientImage {E : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] {u : E → ℝ} (hu : Continuous u)
+private lemma alexandrov_isClosed_subgradientImage {u : E → ℝ} (hu : Continuous u)
     {S : Set E} (hS : IsCompact S) :
     IsClosed (subgradientImage u S) := by
   let : CompactSpace S := isCompact_iff_compactSpace.mp hS
@@ -72,8 +75,7 @@ private lemma alexandrov_isClosed_subgradientImage {E : Type*} [NormedAddCommGro
 `u` with `ν ≪ volume`, `ν.map (gradient u) = μ ≪ volume`, integrals of nonnegative functions over the subgradient
 image `∂u(S)` of a compact `S` against `μ` equal integrals over `S` of the composition with `∇u`
 against `ν`. -/
-theorem lintegral_subgradientImage_eq_of_map_gradient {E : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
+theorem lintegral_subgradientImage_eq_of_map_gradient [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
     {u : E → ℝ} {L : NNReal} (hu : LipschitzWith L u) (hconv : ConvexOn ℝ univ u)
     {ν μ : Measure E} (hν : ν ≪ (volume : Measure E)) (hmap : ν.map (gradient u) = μ)
     (hac : μ ≪ (volume : Measure E))
@@ -128,6 +130,8 @@ theorem lintegral_subgradientImage_eq_of_map_gradient {E : Type*} [NormedAddComm
       setLIntegral_map hT hg hgrad
     _ = ∫⁻ x in S, g (gradient u x) ∂ν :=
       setLIntegral_congr hsets
+
+end InnerProduct
 
 end FunctionalInequalities.Analysis
 
@@ -192,8 +196,12 @@ open scoped RealInnerProductSpace ENNReal
 
 namespace FunctionalInequalities.Analysis
 
-private lemma isCompact_subgradientImage_local {E : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
+section FiniteDimensional
+
+variable {E : Type*}
+variable [NormedAddCommGroup E] [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] [MeasurableSpace E]
+
+private lemma isCompact_subgradientImage_local [BorelSpace E]
     {u : E → ℝ} {L : NNReal} (hu : LipschitzWith L u) {S : Set E}
     (hS : IsCompact S) :
     IsCompact (subgradientImage u S) := by
@@ -251,8 +259,7 @@ argument): if `u` is convex and Lipschitz, `ν = e^{-u} dx` (normalized), `ν.ma
 density `ρ` bounded above and below on a closed convex `K` containing `∇u` a.e., then on every compact
 `Q` the volume of the subgradient image is comparable to the volume of the set:
 `a · vol S ≤ vol (∂u(S)) ≤ b · vol S` for all compact `S ⊆ Q`, with `0 < a`. -/
-theorem exists_local_subgradientImage_volume_bounds {E : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
+theorem exists_local_subgradientImage_volume_bounds [BorelSpace E]
     {u : E → ℝ} {L : NNReal} (hu : LipschitzWith L u) (hconv : ConvexOn ℝ univ u)
     (hnorm : ∫ x, Real.exp (-u x) ∂(volume : Measure E) = 1)
     {μ : Measure E} (hmap : ((volume : Measure E).tilted (-u)).map (gradient u) = μ)
@@ -424,6 +431,8 @@ theorem exists_local_subgradientImage_volume_bounds {E : Type*} [NormedAddCommGr
       Set.Subset.antisymm hSsub (Set.empty_subset S)
     rw [hSempty]
     simp [subgradientImage]
+
+end FiniteDimensional
 
 end FunctionalInequalities.Analysis
 
@@ -1057,8 +1066,12 @@ open scoped RealInnerProductSpace ENNReal
 
 namespace FunctionalInequalities.Analysis
 
-private lemma alexandrov_frontier_nonempty {E : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] [Nontrivial E]
+section InnerProduct
+
+variable {E : Type*}
+variable [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+
+private lemma alexandrov_frontier_nonempty [FiniteDimensional ℝ E] [Nontrivial E]
     {Ω : Set E} (hb : Bornology.IsBounded Ω) {x₀ : E} (hx₀ : x₀ ∈ Ω) :
     (frontier Ω).Nonempty := by
   by_contra hne
@@ -1097,8 +1110,7 @@ private lemma alexandrov_frontier_nonempty {E : Type*} [NormedAddCommGroup E]
     rw [dist_eq_norm, hnorm] at hydist
     linarith
 
-private lemma alexandrov_diam_pos {E : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] [Nontrivial E]
+private lemma alexandrov_diam_pos [FiniteDimensional ℝ E] [Nontrivial E]
     {Ω : Set E} (hΩ : IsOpen Ω) (hb : Bornology.IsBounded Ω)
     {x₀ : E} (hx₀ : x₀ ∈ Ω) :
     0 < diam Ω := by
@@ -1128,8 +1140,11 @@ private lemma alexandrov_diam_pos {E : Type*} [NormedAddCommGroup E]
   rw [hdist'] at hdist
   linarith
 
-private lemma alexandrov_infDist_frontier_pos {E : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] [Nontrivial E]
+section FiniteDimensional
+
+variable [FiniteDimensional ℝ E] [Nontrivial E]
+
+private lemma alexandrov_infDist_frontier_pos
     {Ω : Set E} (hΩ : IsOpen Ω) (hb : Bornology.IsBounded Ω)
     {x₀ : E} (hx₀ : x₀ ∈ Ω) :
     0 < infDist x₀ (frontier Ω) := by
@@ -1149,8 +1164,7 @@ private lemma alexandrov_infDist_frontier_pos {E : Type*} [NormedAddCommGroup E]
     exact hyn (hball (mem_ball.mpr hdist))
   simpa [dist_comm] using (le_of_not_gt hnot)
 
-private lemma alexandrov_frontier_distance_le_diam {E : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] [Nontrivial E]
+private lemma alexandrov_frontier_distance_le_diam
     {_Ω : Set E} (_hΩ : IsOpen _Ω) (hb : Bornology.IsBounded _Ω)
     {x₀ : E} (hx₀ : x₀ ∈ _Ω) :
     infDist x₀ (frontier _Ω) ≤ diam _Ω := by
@@ -1170,8 +1184,9 @@ private lemma alexandrov_frontier_distance_le_diam {E : Type*} [NormedAddCommGro
     simpa only [Metric.diam_closure] using hdist'
   exact hyeq.trans_le hdist
 
-private lemma alexandrov_affine_set_convex {E : Type*}
-    [NormedAddCommGroup E] [InnerProductSpace ℝ E] {u : E → ℝ} {x₀ : E}
+end FiniteDimensional
+
+private lemma alexandrov_affine_set_convex {u : E → ℝ} {x₀ : E}
     {Ω : Set E} :
     Convex ℝ {p : E | ∀ x ∈ closure Ω,
       u x₀ + ⟪p, x - x₀⟫ ≤ 0} := by
@@ -1202,8 +1217,7 @@ private lemma alexandrov_affine_set_convex {E : Type*}
 Letwin route, Caffarelli's argument): there is `c > 0` depending only on `E` such that for every
 convex `u`, bounded open convex `Ω`, `u ≥ 0` on `∂Ω` and `x₀ ∈ Ω` with `u x₀ < 0`,
 `c · (−u x₀)^n ≤ vol (∂u(Ω)) · diam(Ω)^(n−1) · dist(x₀, ∂Ω)`, `n = dim E`. -/
-theorem exists_pos_alexandrov_maximum_principle {E : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] [Nontrivial E] [MeasurableSpace E]
+theorem exists_pos_alexandrov_maximum_principle [FiniteDimensional ℝ E] [Nontrivial E] [MeasurableSpace E]
     [BorelSpace E] :
     ∃ c : ℝ, 0 < c ∧ ∀ (u : E → ℝ), ConvexOn ℝ univ u → ∀ (Ω : Set E), IsOpen Ω → Convex ℝ Ω →
       Bornology.IsBounded Ω → (∀ x ∈ frontier Ω, 0 ≤ u x) → ∀ x₀ ∈ Ω, u x₀ < 0 →
@@ -1381,6 +1395,8 @@ theorem exists_pos_alexandrov_maximum_principle {E : Type*} [NormedAddCommGroup 
           ENNReal.ofReal (diam Ω ^ (Module.finrank ℝ E - 1) *
             infDist x₀ (frontier Ω)) := by
       rfl
+
+end InnerProduct
 
 end FunctionalInequalities.Analysis
 
@@ -1736,18 +1752,26 @@ open scoped RealInnerProductSpace ENNReal
 
 namespace FunctionalInequalities.Analysis
 
-private lemma affineEquiv_linear_sub {E : Type*} [NormedAddCommGroup E]
+section StructuredSpace
+
+variable {E : Type*}
+variable [NormedAddCommGroup E]
+
+private lemma affineEquiv_linear_sub
     [Module ℝ E] (e : E ≃ᵃ[ℝ] E) (a b : E) :
     (e.linear : E →ₗ[ℝ] E) (a - b) = e a - e b := by
   change (AffineEquiv.toAffineMap e).linear (a - b) =
     (AffineEquiv.toAffineMap e) a - (AffineEquiv.toAffineMap e) b
   exact (AffineEquiv.toAffineMap e).linearMap_vsub a b
 
+section FiniteDimensional
+
+variable [InnerProductSpace ℝ E] [FiniteDimensional ℝ E]
+
 /-- **Affine transport of subgradient images** (weak Letwin route, Caffarelli's argument):
 under an affine equivalence `e` with linear part `T`, the subgradient image of `u ∘ e.symm` over
 `e '' G` is the image of `∂u(G)` under the adjoint of `T⁻¹`. -/
-theorem subgradientImage_comp_affineEquiv_symm {E : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] (u : E → ℝ) (e : E ≃ᵃ[ℝ] E) (G : Set E) :
+theorem subgradientImage_comp_affineEquiv_symm (u : E → ℝ) (e : E ≃ᵃ[ℝ] E) (G : Set E) :
     subgradientImage (u ∘ e.symm) (e '' G) =
       (LinearMap.adjoint (e.linear.symm : E →ₗ[ℝ] E)) '' subgradientImage u G := by
   ext q
@@ -1832,8 +1856,7 @@ theorem subgradientImage_comp_affineEquiv_symm {E : Type*} [NormedAddCommGroup E
     simpa only [Function.comp_apply, e.symm_apply_apply, hi] using hpx (e.symm z)
 
 /-- The volume of the transported subgradient image is `vol (∂u(G)) / |det T|`. -/
-theorem volume_subgradientImage_comp_affineEquiv_symm {E : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
+theorem volume_subgradientImage_comp_affineEquiv_symm [MeasurableSpace E] [BorelSpace E]
     (u : E → ℝ) (e : E ≃ᵃ[ℝ] E) (G : Set E) :
     (volume : Measure E) (subgradientImage (u ∘ e.symm) (e '' G)) =
       ENNReal.ofReal |LinearMap.det (e.linear : E →ₗ[ℝ] E)|⁻¹ *
@@ -1914,6 +1937,10 @@ theorem volume_subgradientImage_comp_affineEquiv_symm {E : Type*} [NormedAddComm
   rw [subgradientImage_comp_affineEquiv_symm]
   rw [MeasureTheory.Measure.addHaar_image_linearMap]
   rw [hdetabs]
+
+end FiniteDimensional
+
+end StructuredSpace
 
 end FunctionalInequalities.Analysis
 
@@ -2082,9 +2109,13 @@ open scoped RealInnerProductSpace
 
 namespace FunctionalInequalities.Analysis
 
+section InnerProduct
+
+variable {E : Type*}
+variable [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+
 /-- **Subtracting an affine function translates subgradient images** (weak Letwin route, Caffarelli's argument, bookkeeping): `∂(u − ⟪p, ·⟫ − c)(G) = ∂u(G) − p`, hence the volumes agree. -/
-theorem subgradientImage_sub_inner_add_const {E : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] (u : E → ℝ) (p : E) (c : ℝ) (G : Set E) :
+theorem subgradientImage_sub_inner_add_const (u : E → ℝ) (p : E) (c : ℝ) (G : Set E) :
     subgradientImage (fun x => u x - (⟪p, x⟫ + c)) G = (fun q => q - p) '' subgradientImage u G := by
   ext q
   constructor
@@ -2104,14 +2135,15 @@ theorem subgradientImage_sub_inner_add_const {E : Type*} [NormedAddCommGroup E]
     simp only [inner_sub_left, inner_sub_right]
     linarith
 
-theorem volume_subgradientImage_sub_inner_add_const {E : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
+theorem volume_subgradientImage_sub_inner_add_const [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
     (u : E → ℝ) (p : E) (c : ℝ) (G : Set E) :
     (volume : Measure E) (subgradientImage (fun x => u x - (⟪p, x⟫ + c)) G) =
       (volume : Measure E) (subgradientImage u G) := by
   rw [subgradientImage_sub_inner_add_const]
   simp only [sub_eq_add_neg, Set.image_add_right, neg_neg]
   exact measure_preimage_add_right (volume : Measure E) p (subgradientImage u G)
+
+end InnerProduct
 
 end FunctionalInequalities.Analysis
 
@@ -2126,8 +2158,12 @@ open scoped RealInnerProductSpace ENNReal
 
 namespace FunctionalInequalities.Analysis
 
-private lemma t14d_isClosed_subgradientImage {E : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] {u : E → ℝ} (hu : Continuous u)
+section InnerProduct
+
+variable {E : Type*}
+variable [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+
+private lemma t14d_isClosed_subgradientImage {u : E → ℝ} (hu : Continuous u)
     {S : Set E} (hS : IsCompact S) :
     IsClosed (subgradientImage u S) := by
   let : CompactSpace S := isCompact_iff_compactSpace.mp hS
@@ -2155,8 +2191,7 @@ private lemma t14d_isClosed_subgradientImage {E : Type*} [NormedAddCommGroup E]
 /-- **Alexandrov identity on open sets for the moment potential** (weak Letwin route):
 if `u` is convex, Lipschitz, `ν = e^{-u} dx` is normalised and `ν.map ∇u = μ = 1_K e^{-V} dx` for a closed convex
 `K` and a measurable `V`, then the subgradient image of every open `G` has volume `∫_G e^{-u + V(∇u)}`. -/
-theorem volume_subgradientImage_eq_lintegral_of_isOpen {E : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
+theorem volume_subgradientImage_eq_lintegral_of_isOpen [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
     {u : E → ℝ} {L : NNReal} (hu : LipschitzWith L u) (hconv : ConvexOn ℝ univ u)
     (hnorm : ∫ x, Real.exp (-u x) ∂(volume : Measure E) = 1)
     {K : Set E} (hK : IsClosed K) (hKc : Convex ℝ K) {V : E → ℝ} (hV : Measurable V)
@@ -2293,6 +2328,8 @@ theorem volume_subgradientImage_eq_lintegral_of_isOpen {E : Type*} [NormedAddCom
         ∂(volume : Measure E) :=
       withDensity_apply F hG.measurableSet
 
+end InnerProduct
+
 end FunctionalInequalities.Analysis
 
 end LT14DAlexandrovIdentityOpen
@@ -2306,8 +2343,16 @@ open scoped RealInnerProductSpace ENNReal
 
 namespace FunctionalInequalities.Analysis
 
-private lemma inverse_subgradient_gradient_support {E : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] [CompleteSpace E]
+section InnerProduct
+
+variable {E : Type*}
+variable [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+
+section CompleteSpace
+
+variable [CompleteSpace E]
+
+private lemma inverse_subgradient_gradient_support
     {u : E → ℝ} (hc : ConvexOn ℝ univ u)
     {x : E} (hx : DifferentiableAt ℝ u x) (y : E) :
     u x + ⟪gradient u x, y - x⟫ ≤ u y := by
@@ -2332,8 +2377,7 @@ private lemma inverse_subgradient_gradient_support {E : Type*} [NormedAddCommGro
         (zero_lt_one : (0 : ℝ) < 1) hl
   linarith
 
-private lemma inverse_subgradient_eq_gradient {E : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] [CompleteSpace E]
+private lemma inverse_subgradient_eq_gradient
     {u : E → ℝ} {x p : E} (hx : DifferentiableAt ℝ u x)
     (hp : ∀ y, u x + ⟪p, y - x⟫ ≤ u y) :
     p = gradient u x := by
@@ -2351,8 +2395,9 @@ private lemma inverse_subgradient_eq_gradient {E : Type*} [NormedAddCommGroup E]
     (hx.hasGradientAt.hasFDerivAt.sub (InnerProductSpace.toDual ℝ E p).hasFDerivAt)
   exact ((InnerProductSpace.toDual ℝ E).injective (sub_eq_zero.mp hz)).symm
 
-private lemma inverse_subgradient_isClosed {E : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] {u : E → ℝ} (hu : Continuous u)
+end CompleteSpace
+
+private lemma inverse_subgradient_isClosed {u : E → ℝ} (hu : Continuous u)
     {S : Set E} (hS : IsCompact S) :
     IsClosed {x | ∃ p ∈ S, ∀ y, u x + ⟪p, y - x⟫ ≤ u y} := by
   let : CompactSpace S := isCompact_iff_compactSpace.mp hS
@@ -2376,9 +2421,11 @@ private lemma inverse_subgradient_isClosed {E : Type*} [NormedAddCommGroup E]
   rw [← himage]
   exact isClosedMap_snd_of_compactSpace A hA
 
-private lemma inverse_subgradient_measurableSet {E : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] [FiniteDimensional ℝ E]
-    [MeasurableSpace E] [BorelSpace E]
+section FiniteDimensional
+
+variable [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
+
+private lemma inverse_subgradient_measurableSet
     {u : E → ℝ} (hu : Continuous u) {G : Set E} (hG : IsOpen G) :
     MeasurableSet {x | ∃ p ∈ G, ∀ y, u x + ⟪p, y - x⟫ ≤ u y} := by
   let : LocallyCompactSpace G := hG.locallyCompactSpace
@@ -2409,8 +2456,7 @@ private lemma inverse_subgradient_measurableSet {E : Type*} [NormedAddCommGroup 
 `ν = e^{-u} dx` normalised, `ν.map ∇u = μ = ρ dx` with `c ≤ ρ ≤ C` on a closed convex `K`) and a radius `M`,
 the set `(∂u)⁻¹(G) = {x | ∃ p ∈ G, p ∈ ∂u(x)}` of an open `G ⊆ K` that lies in `closedBall 0 M` has volume
 comparable to `vol G`. -/
-theorem exists_inverse_subgradient_volume_bounds {E : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
+theorem exists_inverse_subgradient_volume_bounds
     {u : E → ℝ} {L : NNReal} (hu : LipschitzWith L u) (hconv : ConvexOn ℝ univ u)
     (hnorm : ∫ x, Real.exp (-u x) ∂(volume : Measure E) = 1)
     {μ : Measure E} (hmap : ((volume : Measure E).tilted (-u)).map (gradient u) = μ)
@@ -2558,6 +2604,10 @@ theorem exists_inverse_subgradient_volume_bounds {E : Type*} [NormedAddCommGroup
       ENNReal.ofReal (C / Real.exp (-m)) * (volume : Measure E) G
     rw [ENNReal.ofReal_div_of_pos (Real.exp_pos (-m))]
     exact (ENNReal.mul_div_right_comm ▸ hdiv)
+
+end FiniteDimensional
+
+end InnerProduct
 
 end FunctionalInequalities.Analysis
 

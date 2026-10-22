@@ -4,6 +4,7 @@ import FunctionalInequalities.KLS.LogConcave.Transport
 import FunctionalInequalities.KLS.LogConcave.Isotropic
 import FunctionalInequalities.Analysis.Operator.InverseSqrt
 import FunctionalInequalities.Probability.Transport
+import FunctionalInequalities.Probability.Conditioning
 
 /-!
 # Reduction of BKL Theorem 4.1 to compactly supported laws
@@ -14,6 +15,9 @@ bounded. `LetwinCompactBound` is Letwin's quadratic-form bound (arXiv:2607.24164
 compactly supported laws: the interface between the Letwin stream and the Theorem 4.1 stream. It gives
 the base case `CumulantBoundCompact 2 8` (BKL Lemma 4.2). Both names are hypotheses; neither Letwin's
 theorem nor Theorem 4.1 is proved here.
+`exists_compact_moment_approximation` approximates every isotropic log-concave law, in all mixed linear moments of
+degree at most four, by centered and covariance-whitened growing-ball truncations: compactly supported isotropic
+log-concave laws.
 -/
 
 noncomputable section
@@ -198,9 +202,12 @@ section MeasureHelpers
 
 variable {E : Type*} [NormedAddCommGroup E]
 
+section InnerProduct
+
+variable [InnerProductSpace ℝ E]
+
 /-- A ball truncation has exponential moments of every order. -/
-theorem integrable_exp_cond_closedBall
-    [InnerProductSpace ℝ E] [CompleteSpace E] [FiniteDimensional ℝ E]
+theorem integrable_exp_cond_closedBall [CompleteSpace E] [FiniteDimensional ℝ E]
     [MeasurableSpace E] [BorelSpace E] [SecondCountableTopology E]
     (ν : Measure E) [IsFiniteMeasure ν] (R : ℕ)
     (hR : ν (Metric.closedBall (0 : E) R) ≠ 0) (t : ℝ) :
@@ -217,8 +224,7 @@ theorem integrable_exp_cond_closedBall
   exact hres.smul_measure (ENNReal.inv_ne_top.2 hR)
 
 /-- A ball truncation is compactly supported. -/
-theorem isCompact_support_cond_closedBall
-    [InnerProductSpace ℝ E] [CompleteSpace E] [FiniteDimensional ℝ E]
+theorem isCompact_support_cond_closedBall [CompleteSpace E] [FiniteDimensional ℝ E]
     [MeasurableSpace E] [BorelSpace E] [SecondCountableTopology E]
     (ν : Measure E) (R : ℕ) :
     IsCompact (ν[|Metric.closedBall (0 : E) R]).support := by
@@ -230,8 +236,7 @@ theorem isCompact_support_cond_closedBall
 /-- **Standardisation of a compactly supported log-concave law** with positive invertible covariance: the
 law of `σ (x - a)`, with `σ = Cov^{-1/2}` and `a` the mean, is isotropic, log-concave and compactly
 supported. -/
-theorem exists_standardized
-    [InnerProductSpace ℝ E] [CompleteSpace E] [FiniteDimensional ℝ E]
+theorem exists_standardized [CompleteSpace E] [FiniteDimensional ℝ E]
     [MeasurableSpace E] [BorelSpace E] [SecondCountableTopology E]
     (μ : ProbabilityMeasure E) (hLC : LogConcave μ)
     (hc : IsCompact (μ : Measure E).support)
@@ -300,6 +305,8 @@ theorem exists_standardized
       Set.preimage_compl, Set.preimage_image_eq _ hinj]
     exact Measure.measure_compl_support
   exact ⟨η, W, hW, hiso, hLCη, hcη, hmap⟩
+
+end InnerProduct
 
 end MeasureHelpers
 
@@ -391,3 +398,91 @@ theorem cumulantBound_of_compact {d : ℕ} (hd : 1 ≤ d) {b : ℝ} (h : Cumulan
 end S8CCompactToGeneral
 
 end FunctionalInequalities.KLS.LogConcave.Suspension
+
+section CompactMomentApproximation
+
+open MeasureTheory ProbabilityTheory Filter Topology Metric
+open FunctionalInequalities.Analysis FunctionalInequalities.Analysis.BakryEmery
+open scoped RealInnerProductSpace
+
+namespace FunctionalInequalities.KLS.LogConcave.Suspension
+
+/-- **Compact moment approximation**: an isotropic log-concave law is the limit, in all mixed linear moments of degree
+`≤ 4`, of compactly supported isotropic log-concave laws, namely its growing-ball truncations, centered and whitened by
+the inverse square root of their covariance (the tail beyond the radius where the covariance is invertible). -/
+theorem exists_compact_moment_approximation {n : ℕ} {ν : ProbabilityMeasure (EuclideanSpace ℝ (Fin n))}
+    (hLC : KLS.LogConcave ν) (hiso : KLS.Isotropic ν) :
+    ∃ η : ℕ → ProbabilityMeasure (EuclideanSpace ℝ (Fin n)),
+      (∀ k, KLS.LogConcave (η k) ∧ KLS.Isotropic (η k) ∧
+        IsCompact (η k : Measure (EuclideanSpace ℝ (Fin n))).support) ∧
+      ∀ d ≤ 4, ∀ v : Fin d → EuclideanSpace ℝ (Fin n),
+        Tendsto (fun k => ∫ x, ∏ i, ⟪v i, x⟫ ∂(η k : Measure (EuclideanSpace ℝ (Fin n)))) atTop
+          (𝓝 (∫ x, ∏ i, ⟪v i, x⟫ ∂(ν : Measure (EuclideanSpace ℝ (Fin n))))) := by
+  classical
+  let E := EuclideanSpace ℝ (Fin n)
+  obtain ⟨r, hr, hexp⟩ := ((KLS.LogConcave.borel_iff ν).1 hLC).exists_integrable_exp_norm
+  let νR : ℕ → Measure E := fun R => (ν : Measure E)[|Metric.closedBall (0 : E) R]
+  let Sg : ℕ → E →L[ℝ] E := fun R => Covariance.operator (νR R)
+  let T : ℕ → E →L[ℝ] E := fun R => inverseSqrt (Sg R)
+  let a : ℕ → E := fun R => ∫ x, x ∂(νR R)
+  have ha : Tendsto a atTop (𝓝 0) := by
+    simpa only [a, νR, id_eq, hiso.mean_zero] using
+      Probability.tendsto_integral_cond_closedBall (ν : Measure E)
+        (hiso.memLp_two.integrable (by norm_num))
+  have hmass : ∀ᶠ R : ℕ in atTop, (ν : Measure E) (Metric.closedBall (0 : E) R) ≠ 0 :=
+    eventually_measure_closedBall_ne_zero_cond (ν : Measure E)
+  have hcum2 := tendsto_cumulant_cond_closedBall (ν : Measure E) hr hexp 2
+  have hSg : Tendsto Sg atTop (𝓝 1) := by
+    rw [tendsto_iff_norm_sub_tendsto_zero]
+    rw [tendsto_iff_norm_sub_tendsto_zero] at hcum2
+    refine squeeze_zero' (Eventually.of_forall fun R => norm_nonneg _) ?_ hcum2
+    filter_upwards [hmass] with R hR
+    have : IsProbabilityMeasure (νR R) := cond_isProbabilityMeasure hR
+    have hexpR : Integrable (fun x => Real.exp (r * ‖x‖)) (νR R) :=
+      (hexp.restrict (s := Metric.closedBall (0 : E) R)).smul_measure (ENNReal.inv_ne_top.2 hR)
+    refine opNorm_le_of_inner_eq fun v w => ?_
+    simp only [sub_apply]
+    rw [cumulant_two_eq_covariance_of_integrable_exp
+        ((ν : Measure E)[|Metric.closedBall (0 : E) R]) hr hexpR v w,
+      cumulant_two_eq_covariance_of_integrable_exp (ν : Measure E) hr hexp v w,
+      hiso.covariance_identity]
+    simp [Sg, νR, inner_sub_left]
+  have hpos : ∀ R, (Sg R).IsPositive := fun R =>
+    (ContinuousLinearMap.isPositive_iff' _).mpr
+      ⟨Covariance.operator_isSelfAdjoint _, fun v => by
+        rw [Covariance.operator_inner]; exact covarianceBilin_self_nonneg v⟩
+  have hlt : ∀ᶠ R in atTop, ‖Sg R - 1‖ < 1 :=
+    (tendsto_iff_norm_sub_tendsto_zero.1 hSg).eventually (gt_mem_nhds one_pos)
+  have hunit : ∀ᶠ R in atTop, IsUnit (Sg R) := hlt.mono fun R hR =>
+    isUnit_of_inner_self_pos _ fun v hv => inner_self_pos_of_norm_sub_one_lt hR hv
+  have hT : Tendsto T atTop (𝓝 1) := tendsto_inverseSqrt_one hSg (Eventually.of_forall hpos) hunit
+  obtain ⟨N, hN⟩ := eventually_atTop.1 (hmass.and hunit)
+  have happrox (k : ℕ) : ∃ η : ProbabilityMeasure E,
+      KLS.LogConcave η ∧ KLS.Isotropic η ∧ IsCompact (η : Measure E).support ∧
+      (η : Measure E) = (νR (k + N)).map (fun x => T (k + N) (x - a (k + N))) := by
+    obtain ⟨hm, hu⟩ := hN (k + N) (by omega)
+    have : IsProbabilityMeasure (νR (k + N)) := cond_isProbabilityMeasure hm
+    let μR : ProbabilityMeasure E := ⟨νR (k + N), inferInstance⟩
+    have hLCR : KLS.LogConcave μR := hLC.cond (convex_closedBall _ _) Metric.isClosed_closedBall hm
+    have hcR : IsCompact (μR : Measure E).support :=
+      isCompact_support_cond_closedBall (ν : Measure E) (k + N)
+    obtain ⟨η, W, hW, hiso', hLC', hc', hmap⟩ := exists_standardized μR hLCR hcR (hpos _) hu
+    refine ⟨η, hLC', hiso', hc', ?_⟩
+    change (η : Measure E) = (νR (k + N)).map
+      (fun x => (W : E →L[ℝ] E) (x - a (k + N))) at hmap
+    rwa [hW] at hmap
+  choose η hηLC hηiso hηcompact hηmap using happrox
+  refine ⟨η, fun k => ⟨hηLC k, hηiso k, hηcompact k⟩, ?_⟩
+  intro d _hd v
+  have h := Probability.tendsto_integral_prod_inner_affine_cond_closedBall
+    (ν : Measure E) d (integrable_norm_pow_of_exp_cond _ hr hexp d) T a hT ha v
+  have htail : Tendsto (fun k : ℕ => k + N) atTop atTop :=
+    tendsto_add_atTop_nat N
+  apply (h.comp htail).congr'
+  exact Eventually.of_forall fun k => by
+    dsimp only [Function.comp_def]
+    rw [hηmap k, integral_map (by fun_prop) (by fun_prop)]
+
+end FunctionalInequalities.KLS.LogConcave.Suspension
+
+end CompactMomentApproximation

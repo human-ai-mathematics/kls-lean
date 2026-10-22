@@ -18,8 +18,12 @@ open scoped MatrixOrder
 
 namespace FunctionalInequalities.Analysis
 
+section FiniteIndex
+
+variable {ι : Type*}
+variable [Fintype ι] [DecidableEq ι]
+
 private lemma matrix_sqrt_eq_real_cfc_of_nonneg
-    {ι : Type*} [Fintype ι] [DecidableEq ι]
     (A : Matrix ι ι ℝ) (hA : 0 ≤ A) :
     CFC.sqrt A = cfc (fun x : ℝ => Real.sqrt x) A := by
   rw [CFC.sqrt_eq_cfc, cfc_nnreal_eq_real NNReal.sqrt A hA]
@@ -37,7 +41,6 @@ private lemma matrix_sqrt_eq_real_cfc_of_nonneg
 unital CFC, specialized exactly to the two matrices used by the sign factorization.
 No positivity hypothesis on `M` is added. -/
 theorem symmetric_matrix_sqrt_real_cfc_bridge
-    {ι : Type*} [Fintype ι] [DecidableEq ι]
     (M : Matrix ι ι ℝ) (hM : M.IsSymm) :
     0 ≤ M * M ∧
       CFC.sqrt (M * M) = cfc (fun x : ℝ => Real.sqrt x) (M * M) ∧
@@ -103,7 +106,6 @@ private lemma sqrt_sqrt_sq_mul_sign_sqrt_sqrt (x : ℝ) :
 vector. No PSD, basis, commutation, factorization, or sign-square identity is
 supplied as an assumption. -/
 theorem symmetric_matrix_sign_factorization
-    {ι : Type*} [Fintype ι] [DecidableEq ι]
     (M : Matrix ι ι ℝ) (hM : M.IsSymm) :
     let AbsM : Matrix ι ι ℝ := CFC.sqrt (M * M)
     let S : Matrix ι ι ℝ := CFC.sqrt AbsM
@@ -228,6 +230,8 @@ theorem symmetric_matrix_sign_factorization
           (fun x : ℝ => (SignType.sign x : ℝ))
       _ = cfc (fun _ : ℝ => (1 : ℝ)) M := hsignsq
       _ = 1 := hone
+
+end FiniteIndex
 
 section Jordan
 

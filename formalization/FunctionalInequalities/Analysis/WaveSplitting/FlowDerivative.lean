@@ -39,9 +39,13 @@ theorem residual_eq_subState [Fintype ι] [DecidableEq ι] (a : ι → E) (b : �
     residual a b js Y t = subState (timeDerivative (fun s => step a b js s Y) t)
       (splitGenerator a b js (step a b js t Y)) := rfl
 
+section FiniteIndex
+
+variable [DecidableEq ι]
+
 /-! ## Linearity of the explicit flows -/
 
-theorem transport_addState [DecidableEq ι] (a : E) (j : ι) (t : ℝ) (X Y : State E ι) :
+theorem transport_addState (a : E) (j : ι) (t : ℝ) (X Y : State E ι) :
     transport a j t (addState X Y) = addState (transport a j t X) (transport a j t Y) := by
   apply state_ext
   · rfl
@@ -51,7 +55,7 @@ theorem transport_addState [DecidableEq ι] (a : E) (j : ι) (t : ℝ) (X Y : St
     · subst hi; simp only [transport, addState, ↓reduceIte]; ring
     · simp only [transport, addState, hi, ↓reduceIte]
 
-theorem transport_zeroState [DecidableEq ι] (a : E) (j : ι) (t : ℝ) :
+theorem transport_zeroState (a : E) (j : ι) (t : ℝ) :
     transport a j t (zeroState : State E ι) = zeroState := by
   apply state_ext
   · rfl
@@ -59,25 +63,31 @@ theorem transport_zeroState [DecidableEq ι] (a : E) (j : ι) (t : ℝ) :
   · funext i x
     by_cases hi : i = j <;> simp [transport, zeroState, hi]
 
-theorem sweep_addState [DecidableEq ι] (a : ι → E) (t : ℝ) (js : List ι) (X Y : State E ι) :
+theorem sweep_addState (a : ι → E) (t : ℝ) (js : List ι) (X Y : State E ι) :
     sweep a t js (addState X Y) = addState (sweep a t js X) (sweep a t js Y) := by
   induction js generalizing X Y with
   | nil => rfl
   | cons j js ih => simp only [sweep, transport_addState, ih]
 
-theorem sweep_zeroState [DecidableEq ι] (a : ι → E) (t : ℝ) (js : List ι) :
+theorem sweep_zeroState (a : ι → E) (t : ℝ) (js : List ι) :
     sweep a t js (zeroState : State E ι) = zeroState := by
   induction js with
   | nil => rfl
   | cons j js ih => simp only [sweep, transport_zeroState, ih]
 
+end FiniteIndex
+
+section FiniteIndex
+
+variable [Fintype ι]
+
 omit [NormedAddCommGroup E] [NormedSpace ℝ E] in
-private theorem coupling_subState [Fintype ι] (b : ι → E → ℝ) (X Y : State E ι) (x : E) :
+private theorem coupling_subState (b : ι → E → ℝ) (X Y : State E ι) (x : E) :
     coupling b (subState X Y) x = coupling b X x - coupling b Y x := by
   simp only [coupling, subState, mul_sub, Finset.sum_sub_distrib]
 
 omit [NormedAddCommGroup E] [NormedSpace ℝ E] in
-theorem reaction_subState [Fintype ι] (b : ι → E → ℝ) (t : ℝ) (X Y : State E ι) :
+theorem reaction_subState (b : ι → E → ℝ) (t : ℝ) (X Y : State E ι) :
     reaction b t (subState X Y) = subState (reaction b t X) (reaction b t Y) := by
   apply state_ext
   · funext x; simp only [reaction, coupling_subState]; simp only [subState]; ring
@@ -85,9 +95,11 @@ theorem reaction_subState [Fintype ι] (b : ι → E → ℝ) (t : ℝ) (X Y : S
   · rfl
 
 omit [NormedAddCommGroup E] [NormedSpace ℝ E] in
-theorem reaction_zeroState [Fintype ι] (b : ι → E → ℝ) (t : ℝ) :
+theorem reaction_zeroState (b : ι → E → ℝ) (t : ℝ) :
     reaction b t (zeroState : State E ι) = zeroState := by
   apply state_ext <;> funext <;> simp [reaction, zeroState, coupling]
+
+end FiniteIndex
 
 /-! ## Group laws of the explicit flows -/
 
@@ -191,7 +203,11 @@ theorem JointSmooth.shift {Z : ℝ → State E ι} (hZ : JointSmooth Z) (t : ℝ
     (contDiff_const.add contDiff_fst).prodMk contDiff_snd
   exact ⟨hZ.1.comp hs, hZ.2.1.comp hs, fun j => (hZ.2.2 j).comp hs⟩
 
-theorem JointSmooth.transport_fixed [DecidableEq ι] {Z : ℝ → State E ι}
+section FiniteIndex
+
+variable [DecidableEq ι]
+
+theorem JointSmooth.transport_fixed {Z : ℝ → State E ι}
     (hZ : JointSmooth Z) (a : E) (j : ι) (τ : ℝ) :
     JointSmooth (fun s => WaveSplitting.transport a j τ (Z s)) := by
   have hp : ContDiff ℝ ∞ (fun z : ℝ × E => (z.1, z.2 + τ • a)) :=
@@ -211,7 +227,7 @@ theorem JointSmooth.transport_fixed [DecidableEq ι] {Z : ℝ → State E ι}
 /-! ## All-time chain rules -/
 
 /-- Coordinate transport with a time-dependent input, differentiated at an arbitrary time. -/
-theorem HasTimeDerivative.transport [DecidableEq ι] {Z : ℝ → State E ι} {D : State E ι}
+theorem HasTimeDerivative.transport {Z : ℝ → State E ι} {D : State E ι}
     {t : ℝ} (hD : HasTimeDerivative Z D t) (hZ : JointSmooth Z) (a : E) (j : ι) :
     HasTimeDerivative (fun s => WaveSplitting.transport a j s (Z s))
       (WaveSplitting.addState (WaveSplitting.transport a j t D) (WaveSplitting.coordinateGenerator a j (WaveSplitting.transport a j t (Z t)))) t := by
@@ -219,6 +235,8 @@ theorem HasTimeDerivative.transport [DecidableEq ι] {Z : ℝ → State E ι} {D
     ((hZ.shift t).transport_fixed a j t) a j
   apply HasTimeDerivative.of_shift
   simpa only [transport_transport, add_zero] using hV
+
+end FiniteIndex
 
 omit [NormedAddCommGroup E] [NormedSpace ℝ E] in
 /-- The zero-order flow with a time-dependent input, differentiated at an arbitrary time. -/
@@ -249,8 +267,12 @@ theorem HasTimeDerivative.sweep [DecidableEq ι] {Z : ℝ → State E ι} {D : S
     have h := ih (hD.transport hZ (a j) j) (hZ.transport (a j) j)
     simpa only [WaveSplitting.sweep, sweepDerivative, sweep_addState, addState_assoc] using h
 
+section FiniteIndex
+
+variable [Fintype ι] [DecidableEq ι]
+
 /-- The actual complete split step, differentiated at an arbitrary time. -/
-theorem step_hasTimeDerivative [Fintype ι] [DecidableEq ι] (a : ι → E) (b : ι → E → ℝ)
+theorem step_hasTimeDerivative (a : ι → E) (b : ι → E → ℝ)
     (js : List ι) {Y : State E ι} (hY : Y.Smooth) (t : ℝ) :
     HasTimeDerivative (fun s => step a b js s Y)
       (addState (reaction b t (sweepDerivative a t js Y))
@@ -260,7 +282,7 @@ theorem step_hasTimeDerivative [Fintype ι] [DecidableEq ι] (a : ι → E) (b :
 
 /-- Exact ordered form of the actual residual: the reaction generator cancels, while every
 coordinate generator remains between its true flow factors. -/
-theorem residual_eq [Fintype ι] [DecidableEq ι] (a : ι → E) (b : ι → E → ℝ)
+theorem residual_eq (a : ι → E) (b : ι → E → ℝ)
     (js : List ι) {Y : State E ι} (hY : Y.Smooth) (t : ℝ) :
     residual a b js Y t = subState (reaction b t (sweepDerivative a t js Y))
       (sweepGenerator a js (step a b js t Y)) := by
@@ -269,6 +291,8 @@ theorem residual_eq [Fintype ι] [DecidableEq ι] (a : ι → E) (b : ι → E �
   · funext x; simp only [subState, addState, splitGenerator]; ring
   · funext x; simp only [subState, addState, splitGenerator]; ring
   · funext j x; simp only [subState, addState, splitGenerator]; ring
+
+end FiniteIndex
 
 /-! ## Exchange of temporal and spatial derivatives -/
 
@@ -331,8 +355,12 @@ theorem contDiff_deriv_slice {F : ℝ × E → ℝ} (hF : ContDiff ℝ ∞ F) :
     hF.comp (contDiff_snd.prodMk (contDiff_snd.comp contDiff_fst))
   exact (h.fderiv contDiff_fst (by simp)).clm_apply contDiff_const
 
+section FiniteIndex
+
+variable [DecidableEq ι]
+
 /-- A coordinate generator of a jointly smooth curve is jointly smooth. -/
-theorem JointSmooth.coordinateGenerator [DecidableEq ι] {Z : ℝ → State E ι}
+theorem JointSmooth.coordinateGenerator {Z : ℝ → State E ι}
     (hZ : JointSmooth Z) (v : E) (j : ι) :
     JointSmooth (fun r => WaveSplitting.coordinateGenerator v j (Z r)) := by
   refine ⟨contDiff_const, contDiff_fderiv_slice (hZ.2.2 j) v, fun i => ?_⟩
@@ -343,7 +371,7 @@ theorem JointSmooth.coordinateGenerator [DecidableEq ι] {Z : ℝ → State E ι
       (contDiff_const : ContDiff ℝ ∞ (fun _ : ℝ × E => (0 : ℝ)))
 
 /-- The time derivative commutes with a coordinate generator on jointly smooth curves. -/
-theorem JointSmooth.hasTimeDerivative_coordinateGenerator [DecidableEq ι]
+theorem JointSmooth.hasTimeDerivative_coordinateGenerator
     {Z : ℝ → State E ι} (hZ : JointSmooth Z) (v : E) (j : ι) (s : ℝ) :
     HasTimeDerivative (fun r => WaveSplitting.coordinateGenerator v j (Z r))
       (WaveSplitting.coordinateGenerator v j (WaveSplitting.timeDerivative Z s)) s := by
@@ -356,6 +384,8 @@ theorem JointSmooth.hasTimeDerivative_coordinateGenerator [DecidableEq ι]
     · simpa only [WaveSplitting.coordinateGenerator, hi, ↓reduceIte] using
         hasDerivAt_const s (0 : ℝ)
 
+end FiniteIndex
+
 theorem JointSmooth.addState {Y Z : ℝ → State E ι} (hY : JointSmooth Y) (hZ : JointSmooth Z) :
     JointSmooth (fun t => WaveSplitting.addState (Y t) (Z t)) :=
   ⟨hY.1.add hZ.1, hY.2.1.add hZ.2.1, fun j => (hY.2.2 j).add (hZ.2.2 j)⟩
@@ -364,8 +394,12 @@ theorem JointSmooth.subState {Y Z : ℝ → State E ι} (hY : JointSmooth Y) (hZ
     JointSmooth (fun t => WaveSplitting.subState (Y t) (Z t)) :=
   ⟨hY.1.sub hZ.1, hY.2.1.sub hZ.2.1, fun j => (hY.2.2 j).sub (hZ.2.2 j)⟩
 
+section FiniteIndex
+
+variable [DecidableEq ι]
+
 /-- The generator of a finite list, applied along a jointly smooth curve. -/
-theorem JointSmooth.listGenerator [DecidableEq ι] {Z : ℝ → State E ι}
+theorem JointSmooth.listGenerator {Z : ℝ → State E ι}
     (hZ : JointSmooth Z) (a : ι → E) (js : List ι) :
     JointSmooth (fun r => WaveSplitting.sweepGenerator a js (Z r)) := by
   induction js with
@@ -373,7 +407,7 @@ theorem JointSmooth.listGenerator [DecidableEq ι] {Z : ℝ → State E ι}
   | cons j js ih => exact (hZ.coordinateGenerator (a j) j).addState ih
 
 /-- The time derivative commutes with the generator of a finite coordinate list. -/
-theorem JointSmooth.hasTimeDerivative_sweepGenerator [DecidableEq ι]
+theorem JointSmooth.hasTimeDerivative_sweepGenerator
     {Z : ℝ → State E ι} (hZ : JointSmooth Z) (a : ι → E) (js : List ι) (s : ℝ) :
     HasTimeDerivative (fun r => WaveSplitting.sweepGenerator a js (Z r))
       (WaveSplitting.sweepGenerator a js (WaveSplitting.timeDerivative Z s)) s := by
@@ -381,7 +415,7 @@ theorem JointSmooth.hasTimeDerivative_sweepGenerator [DecidableEq ι]
   | nil => exact hasTimeDerivative_const zeroState s
   | cons j js ih => exact (hZ.hasTimeDerivative_coordinateGenerator (a j) j s).addState ih
 
-theorem JointSmooth.sweepDerivative [DecidableEq ι] {Z : ℝ → State E ι}
+theorem JointSmooth.sweepDerivative {Z : ℝ → State E ι}
     (hZ : JointSmooth Z) (a : ι → E) (js : List ι) :
     JointSmooth (fun r => WaveSplitting.sweepDerivative a r js (Z r)) := by
   induction js generalizing Z with
@@ -389,6 +423,8 @@ theorem JointSmooth.sweepDerivative [DecidableEq ι] {Z : ℝ → State E ι}
   | cons j js ih =>
     exact ((hZ.transport (a j) j).coordinateGenerator (a j) j |>.sweep a js).addState
       (ih (hZ.transport (a j) j))
+
+end FiniteIndex
 
 theorem JointSmooth.slice {Z : ℝ → State E ι} (hZ : JointSmooth Z) (s : ℝ) : (Z s).Smooth :=
   ⟨hZ.1.comp (contDiff_const.prodMk contDiff_id),

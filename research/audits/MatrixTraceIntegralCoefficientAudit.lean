@@ -18,14 +18,19 @@ open Matrix MeasureTheory FunctionalInequalities.Analysis
 
 namespace MatrixTraceIntegralCoefficientAudit
 
+section FiniteIndex
+
+variable {ι : Type*}
+variable [Fintype ι] [DecidableEq ι]
+
 /-- `tr(A (c • 1) A (c • 1)) = c² tr(A²)`. -/
-theorem scalar_field_trace {ι : Type*} [Fintype ι] [DecidableEq ι] (c : ℝ) (A : Matrix ι ι ℝ) :
+theorem scalar_field_trace (c : ℝ) (A : Matrix ι ι ℝ) :
     (A * (c • (1 : Matrix ι ι ℝ)) * A * (c • (1 : Matrix ι ι ℝ))).trace = c ^ 2 * (A * A).trace := by
   simp only [Matrix.mul_smul, Matrix.smul_mul, Matrix.mul_one, Matrix.trace_smul, smul_eq_mul]
   ring
 
 /-- The constant field `c • 1` under the Dirac mass on `Unit`: coefficient `c²` for every symmetric `B`. -/
-theorem scalar_field {ι : Type*} [Fintype ι] [DecidableEq ι] (c : ℝ) (hc : 0 ≤ c)
+theorem scalar_field (c : ℝ) (hc : 0 ≤ c)
     {B : Matrix ι ι ℝ} (hB : B.IsSymm) :
     Integrable (fun _ : Unit => (B * (c • (1 : Matrix ι ι ℝ)) * B * (c • (1 : Matrix ι ι ℝ))).trace)
         (Measure.dirac ()) ∧
@@ -36,6 +41,8 @@ theorem scalar_field {ι : Type*} [Fintype ι] [DecidableEq ι] (c : ℝ) (hc : 
     (fun A _ => ⟨integrable_const _, ?_⟩) hB
   rw [integral_dirac]
   exact (scalar_field_trace c A).le
+
+end FiniteIndex
 
 /-- The indefinite `B = diag(1, −2)` with the field `3 • 1`: coefficient `9`. -/
 theorem indefinite_diag_three :

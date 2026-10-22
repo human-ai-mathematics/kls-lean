@@ -32,8 +32,12 @@ private theorem letwin_cond_map_equiv
   rw [ProbabilityTheory.cond, Measure.map_smul, ProbabilityTheory.cond, hm,
     e.measurableEmbedding.restrict_map, hpre]
 
+section InnerProduct
+
+variable {E : Type*}
+variable [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+
 private theorem letwin_cond_density
-    {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
     [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
     {V : E → ℝ} {a b : ℝ} (hV : RegularPotential V a b)
     (S : Set E) (hS : MeasurableSet S) (h0 : (hV.law : Measure E) S ≠ 0) :
@@ -76,7 +80,6 @@ private theorem letwin_cond_density
   rw [he, ENNReal.ofReal_mul (inv_nonneg.mpr hm.le), hi]
 
 private theorem letwin_convex_sub_quadratic
-    {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
     {f : E → ℝ} {a : ℝ} (hf : ContDiff ℝ 2 f)
     (h : ∀ x v, a * ‖v‖ ^ 2 ≤ bilinearIteratedFDerivTwo ℝ f x v v) :
     ConvexOn ℝ univ (fun y => f y - (a / 2) * ‖y‖ ^ 2) := by
@@ -93,8 +96,7 @@ private theorem letwin_convex_sub_quadratic
 conditioning the law of a regular potential `V` on `closedBall 0 R` (`R > 0`) and pushing forward by
 `x ↦ L (x − c)` gives `1_K e^{−W} dx` with `K` compact convex with nonempty interior and `W` smooth and uniformly
 convex. -/
-theorem exists_regularClass_of_cond_closedBall_map {E : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
+theorem exists_regularClass_of_cond_closedBall_map [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
     {V : E → ℝ} {a b : ℝ} (hV : RegularPotential V a b) {R : ℝ} (hR : 0 < R) (L : E ≃L[ℝ] E)
     (c : E) :
     ∃ (K : Set E) (W : E → ℝ) (κ : ℝ), 0 < κ ∧ IsCompact K ∧ Convex ℝ K ∧ (interior K).Nonempty ∧
@@ -180,6 +182,8 @@ theorem exists_regularClass_of_cond_closedBall_map {E : Type*} [NormedAddCommGro
         (K.indicator fun p => ENNReal.ofReal (Real.exp (-W p))) :=
       letwin_cond_density hU K hKmeas hK0
 
+end InnerProduct
+
 end FunctionalInequalities.KLS
 
 section LT10BWhiteningMoments
@@ -204,9 +208,16 @@ private lemma integrable_of_ball_support
     (μ := (ν : Measure E)) (isCompact_closedBall (0 : E) R)
   rwa [IntegrableOn, Measure.restrict_eq_self_of_ae_mem ha] at hi
 
+section FiniteDimensional
+
+variable {E : Type*}
+variable [NormedAddCommGroup E] [InnerProductSpace ℝ E] [FiniteDimensional ℝ E]
+
+section MeasurableSpace
+
+variable [MeasurableSpace E] [BorelSpace E]
+
 private lemma memLp_two_of_ball_support
-    {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
-    [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
     (ν : ProbabilityMeasure E) {R : ℝ}
     (hs : (ν : Measure E) (closedBall (0 : E) R)ᶜ = 0) :
     MemLp id 2 (ν : Measure E) := by
@@ -216,8 +227,6 @@ private lemma memLp_two_of_ball_support
 
 /-- Uniform convergence on the supporting ball gives a bound independent of the law. -/
 private lemma affine_integral_perturbation
-    {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
-    [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
     {lam : ℕ → ProbabilityMeasure E} {R : ℝ}
     (hsupp : ∀ k, (lam k : Measure E) (closedBall (0 : E) R)ᶜ = 0)
     {A : ℕ → E →L[ℝ] E} {c : ℕ → E}
@@ -260,8 +269,6 @@ private lemma affine_integral_perturbation
   exact hb'.trans_lt (half_lt_self hε)
 
 private lemma mean_tendsto_zero
-    {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
-    [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
     {lam : ℕ → ProbabilityMeasure E} {μ : ProbabilityMeasure E}
     (hiso : Isotropic μ) {R : ℝ}
     (hsupp : ∀ k, (lam k : Measure E) (closedBall (0 : E) R)ᶜ = 0)
@@ -292,8 +299,6 @@ private lemma mean_tendsto_zero
   simpa only [b.sum_repr', zero_smul, Finset.sum_const_zero] using h
 
 private lemma covariance_positive
-    {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
-    [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
     (ν : ProbabilityMeasure E) :
     (Covariance.operator (ν : Measure E)).IsPositive := by
   apply (ContinuousLinearMap.isPositive_iff _).2
@@ -314,8 +319,6 @@ private lemma covariance_positive
     exact ProbabilityTheory.covarianceBilin_self_nonneg x
 
 private lemma covariance_tendsto_one
-    {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
-    [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
     {lam : ℕ → ProbabilityMeasure E} {μ : ProbabilityMeasure E}
     (hiso : Isotropic μ) {R : ℝ}
     (hsupp : ∀ k, (lam k : Measure E) (closedBall (0 : E) R)ᶜ = 0)
@@ -365,9 +368,9 @@ private lemma covariance_tendsto_one
   simpa only [Function.comp_def, Analysis.operatorOfMatrixL_matrixEntries,
     Analysis.operatorOfMatrix_operatorMatrix] using hh
 
-private lemma whitening_sequence
-    {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
-    [FiniteDimensional ℝ E] (C : ℕ → E →L[ℝ] E)
+end MeasurableSpace
+
+private lemma whitening_sequence (C : ℕ → E →L[ℝ] E)
     (hpos : ∀ k, (C k).IsPositive) (hC : Tendsto C atTop (𝓝 1)) :
     ∃ L : ℕ → E ≃L[ℝ] E,
       Tendsto (fun k => (L k).toContinuousLinearMap) atTop (𝓝 1) ∧
@@ -455,8 +458,7 @@ private lemma whitening_sequence
 `λ k`, all carried by a fixed ball, have mixed moments of degree `≤ 4` converging to those of an isotropic `μ`, then
 there are affine maps `x ↦ L k (x − c k)` that make `λ k` isotropic for large `k` (mean zero, identity second
 moments) and keep the convergence of the moments of degree `≤ 4`. -/
-theorem exists_whitening_tendsto_moments {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
-    [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] {lam : ℕ → ProbabilityMeasure E}
+theorem exists_whitening_tendsto_moments [MeasurableSpace E] [BorelSpace E] {lam : ℕ → ProbabilityMeasure E}
     {μ : ProbabilityMeasure E} (hiso : Isotropic μ) {R : ℝ}
     (hsupp : ∀ k, (lam k : Measure E) (closedBall (0 : E) R)ᶜ = 0)
     (hμsupp : (μ : Measure E) (closedBall (0 : E) R)ᶜ = 0)
@@ -520,6 +522,8 @@ theorem exists_whitening_tendsto_moments {E : Type*} [NormedAddCommGroup E] [Inn
       (f := fun x => ∏ i, ⟪v i, x⟫) (by fun_prop)
     have hr := hmom d hd v
     simpa only [sub_add_cancel, zero_add, ContinuousLinearEquiv.coe_coe] using hp.add hr
+
+end FiniteDimensional
 
 end FunctionalInequalities.KLS
 

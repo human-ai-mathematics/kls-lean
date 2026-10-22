@@ -38,8 +38,12 @@ theorem jetSquare_coordinate_le [Fintype ι] (a : ι → E) (k : ℕ) (j : ι)
       Finset.sum_le_sum fun n hn => Finset.sum_le_sum fun w _ => h n hn w
     _ = _ := by simp [jetCount, Nat.cast_sum, ← Finset.sum_mul]
 
+section FiniteIndex
+
+variable [DecidableEq ι]
+
 /-- A coordinate generator preserves spatial smoothness. -/
-theorem State.Smooth.coordinateGenerator [DecidableEq ι] {Y : State E ι}
+theorem State.Smooth.coordinateGenerator {Y : State E ι}
     (hY : Y.Smooth) (v : E) (j : ι) : (coordinateGenerator v j Y).Smooth := by
   refine ⟨contDiff_const, (hY.2.2 j).fderiv_right (by simp) |>.clm_apply contDiff_const, ?_⟩
   intro i
@@ -50,7 +54,7 @@ theorem State.Smooth.coordinateGenerator [DecidableEq ι] {Y : State E ι}
       (contDiff_const : ContDiff ℝ ∞ (fun _ : E => (0 : ℝ)))
 
 /-- A coordinate generator preserves componentwise compact support. -/
-theorem State.CompactSupport.coordinateGenerator [DecidableEq ι] {Y : State E ι}
+theorem State.CompactSupport.coordinateGenerator {Y : State E ι}
     (hc : Y.CompactSupport) (v : E) (j : ι) : (coordinateGenerator v j Y).CompactSupport := by
   have hv : HasCompactSupport (fun x => fderiv ℝ Y.v x v) :=
     (hc.2.1.fderiv ℝ).comp_left (g := fun L : E →L[ℝ] ℝ => L v) (by simp)
@@ -63,27 +67,35 @@ theorem State.CompactSupport.coordinateGenerator [DecidableEq ι] {Y : State E �
   · simp only [WaveSplitting.coordinateGenerator, hi, ↓reduceIte]
     exact HasCompactSupport.zero
 
+end FiniteIndex
+
 private theorem smooth_coupling {b : ι → E → ℝ} [Fintype ι]
     (hb : ∀ j, ContDiff ℝ ∞ (b j)) {Y : State E ι} (hY : Y.Smooth) :
     ContDiff ℝ ∞ (coupling b Y) := ContDiff.sum fun j _ => (hb j).mul (hY.2.2 j)
 
+section FiniteIndex
+
+variable [Fintype ι]
+
 omit [NormedSpace ℝ E] in
-private theorem compact_coupling [Fintype ι] (b : ι → E → ℝ) {Y : State E ι}
+private theorem compact_coupling (b : ι → E → ℝ) {Y : State E ι}
     (hc : Y.CompactSupport) : HasCompactSupport (coupling b Y) := by
   have he : coupling b Y = ∑ j, fun x => b j x * Y.p j x := by funext x; simp [coupling]
   rw [he]
   exact HasCompactSupport.finset_sum fun j _ => (hc.2.2 j).mul_left
 
 /-- The reaction generator preserves smooth compact classical states. -/
-theorem State.Smooth.reactionGenerator [Fintype ι] {b : ι → E → ℝ}
+theorem State.Smooth.reactionGenerator {b : ι → E → ℝ}
     (hb : ∀ j, ContDiff ℝ ∞ (b j)) {Y : State E ι} (hY : Y.Smooth) :
     (reactionGenerator b Y).Smooth :=
   ⟨hY.2.1, hY.1.neg.sub (smooth_coupling hb hY), fun _ => contDiff_const⟩
 
 omit [NormedSpace ℝ E] in
-theorem State.CompactSupport.reactionGenerator [Fintype ι] (b : ι → E → ℝ)
+theorem State.CompactSupport.reactionGenerator (b : ι → E → ℝ)
     {Y : State E ι} (hc : Y.CompactSupport) : (reactionGenerator b Y).CompactSupport :=
   ⟨hc.2.1, hc.1.neg.sub (compact_coupling b hc), fun _ => HasCompactSupport.zero⟩
+
+end FiniteIndex
 
 theorem State.Smooth.addState {X Y : State E ι} (hX : X.Smooth) (hY : Y.Smooth) :
     (addState X Y).Smooth := ⟨hX.1.add hY.1, hX.2.1.add hY.2.1, fun j => (hX.2.2 j).add (hY.2.2 j)⟩
@@ -92,23 +104,33 @@ omit [NormedSpace ℝ E] in
 theorem State.CompactSupport.addState {X Y : State E ι} (hX : X.CompactSupport) (hY : Y.CompactSupport) :
     (addState X Y).CompactSupport := ⟨hX.1.add hY.1, hX.2.1.add hY.2.1, fun j => (hX.2.2 j).add (hY.2.2 j)⟩
 
-theorem State.Smooth.sweepGenerator [DecidableEq ι] {Y : State E ι} (hY : Y.Smooth)
+section FiniteIndex
+
+variable [DecidableEq ι]
+
+theorem State.Smooth.sweepGenerator {Y : State E ι} (hY : Y.Smooth)
     (a : ι → E) (js : List ι) : (sweepGenerator a js Y).Smooth := by
   induction js with
   | nil => exact ⟨contDiff_const, contDiff_const, fun _ => contDiff_const⟩
   | cons j js ih => exact (hY.coordinateGenerator (a j) j).addState ih
 
-theorem State.CompactSupport.sweepGenerator [DecidableEq ι] {Y : State E ι}
+theorem State.CompactSupport.sweepGenerator {Y : State E ι}
     (hc : Y.CompactSupport) (a : ι → E) (js : List ι) : (sweepGenerator a js Y).CompactSupport := by
   induction js with
   | nil => exact ⟨HasCompactSupport.zero, HasCompactSupport.zero, fun _ => HasCompactSupport.zero⟩
   | cons j js ih => exact (hc.coordinateGenerator (a j) j).addState ih
 
+end FiniteIndex
+
 section Integration
 variable [MeasurableSpace E] [BorelSpace E] (m : Measure E) [IsFiniteMeasureOnCompacts m]
 
+section FiniteIndex
+
+variable [Fintype ι]
+
 /-- Integrated coordinate differentiation bound, with one derivative loss. -/
-theorem scalarEnergy_coordinate_le [Fintype ι] (a : ι → E) (k : ℕ) (j : ι)
+theorem scalarEnergy_coordinate_le (a : ι → E) (k : ℕ) (j : ι)
     {f : E → ℝ} (hf : ContDiff ℝ ∞ f) (hc : HasCompactSupport f) :
     scalarEnergy m a k (fun x => fderiv ℝ f x (a j)) ≤
       (jetCount (ι := ι) k : ℝ) * scalarEnergy m a (k + 1) f := by
@@ -123,16 +145,20 @@ theorem scalarEnergy_coordinate_le [Fintype ι] (a : ι → E) (k : ℕ) (j : ι
 
 omit [BorelSpace E] [IsFiniteMeasureOnCompacts m] in
 /-- Nonnegativity of the integrated scalar jet. -/
-theorem scalarEnergy_nonneg [Fintype ι] (a : ι → E) (k : ℕ) (f : E → ℝ) :
+theorem scalarEnergy_nonneg (a : ι → E) (k : ℕ) (f : E → ℝ) :
     0 ≤ scalarEnergy m a k f := integral_nonneg (jetSquare_nonneg a k f)
 
 omit [BorelSpace E] [IsFiniteMeasureOnCompacts m] in
-@[simp] theorem scalarEnergy_zero [Fintype ι] (a : ι → E) (k : ℕ) :
+@[simp] theorem scalarEnergy_zero (a : ι → E) (k : ℕ) :
     scalarEnergy m a k (fun _ : E => (0 : ℝ)) = 0 := by
   simp [scalarEnergy, jetSquare, derivative]
 
+section FiniteIndex
+
+variable [DecidableEq ι]
+
 /-- The actual coordinate generator has an explicit one-order energy bound. -/
-theorem derivativeEnergy_coordinateGenerator_le [Fintype ι] [DecidableEq ι]
+theorem derivativeEnergy_coordinateGenerator_le
     (a : ι → E) (k : ℕ) (j : ι) {Y : State E ι} (hY : Y.Smooth) (hc : Y.CompactSupport) :
     derivativeEnergy m a k (coordinateGenerator (a j) j Y) ≤
       (jetCount (ι := ι) k : ℝ) * derivativeEnergy m a (k + 1) Y := by
@@ -159,7 +185,7 @@ theorem derivativeEnergy_coordinateGenerator_le [Fintype ι] [DecidableEq ι]
   nlinarith
 
 /-- Two actual coordinate generators cost at most two spatial derivative orders. -/
-theorem derivativeEnergy_two_coordinates_le [Fintype ι] [DecidableEq ι]
+theorem derivativeEnergy_two_coordinates_le
     (a : ι → E) (k : ℕ) (i j : ι) {Y : State E ι} (hY : Y.Smooth) (hc : Y.CompactSupport) :
     derivativeEnergy m a k (coordinateGenerator (a i) i (coordinateGenerator (a j) j Y)) ≤
       (jetCount (ι := ι) k : ℝ) * (jetCount (ι := ι) (k + 1) : ℝ) *
@@ -173,8 +199,10 @@ theorem derivativeEnergy_two_coordinates_le [Fintype ι] [DecidableEq ι]
         derivativeEnergy m a (k + 2) Y) := mul_le_mul_of_nonneg_left h₂ (Nat.cast_nonneg _)
     _ = _ := by ring
 
+end FiniteIndex
+
 /-- Scalar subtraction in the finite derivative energy. -/
-theorem scalarEnergy_sub_le [Fintype ι] (a : ι → E) (k : ℕ) {f g : E → ℝ}
+theorem scalarEnergy_sub_le (a : ι → E) (k : ℕ) {f g : E → ℝ}
     (hf : ContDiff ℝ ∞ f) (hg : ContDiff ℝ ∞ g)
     (hfc : HasCompactSupport f) (hgc : HasCompactSupport g) :
     scalarEnergy m a k (fun x => f x - g x) ≤
@@ -199,7 +227,7 @@ theorem scalarEnergy_sub_le [Fintype ι] (a : ι → E) (k : ℕ) {f g : E → �
     integral_add (integrable_jetSquare m a k hf hfc) (integrable_jetSquare m a k hg hgc)] using h
 
 /-- Sign reversal preserves the scalar squared energy. -/
-theorem scalarEnergy_neg [Fintype ι] (a : ι → E) (k : ℕ) {f : E → ℝ}
+theorem scalarEnergy_neg (a : ι → E) (k : ℕ) {f : E → ℝ}
     (hf : ContDiff ℝ ∞ f) (hc : HasCompactSupport f) :
     scalarEnergy m a k (fun x => -f x) = scalarEnergy m a k f := by
   have he : (fun x => -f x) = fun x => (-1 : ℝ) * f x := by funext x; ring
@@ -208,7 +236,7 @@ theorem scalarEnergy_neg [Fintype ι] (a : ι → E) (k : ℕ) {f : E → ℝ}
   simp only [derivative_const_mul _ _ hf, squareIntegral_const_mul, neg_one_sq, one_mul]
 
 /-- The integrated actual coefficient pairing is controlled at the same derivative order. -/
-theorem scalarEnergy_coupling_le [Fintype ι] (a : ι → E) (k : ℕ)
+theorem scalarEnergy_coupling_le (a : ι → E) (k : ℕ)
     {b : ι → E → ℝ} (hb : ∀ j, ContDiff ℝ ∞ (b j))
     {Y : State E ι} (hY : Y.Smooth) (hc : Y.CompactSupport) {B : ℝ} (hB : 0 ≤ B)
     (hbB : ∀ j r, r.length ≤ k → ∀ x, wordDerivative a r (b j) x ^ 2 ≤ B) :
@@ -222,7 +250,7 @@ theorem scalarEnergy_coupling_le [Fintype ι] (a : ι → E) (k : ℕ)
     (fun j _ => integrable_jetSquare m a k (hY.2.2 j) (hc.2.2 j))] using h
 
 /-- The actual reaction generator costs no spatial derivative order. -/
-theorem derivativeEnergy_reactionGenerator_le [Fintype ι] (a : ι → E) (k : ℕ)
+theorem derivativeEnergy_reactionGenerator_le (a : ι → E) (k : ℕ)
     {b : ι → E → ℝ} (hb : ∀ j, ContDiff ℝ ∞ (b j))
     {Y : State E ι} (hY : Y.Smooth) (hc : Y.CompactSupport) {B : ℝ} (hB : 0 ≤ B)
     (hbB : ∀ j r, r.length ≤ k → ∀ x, wordDerivative a r (b j) x ^ 2 ≤ B) :
@@ -244,7 +272,7 @@ theorem derivativeEnergy_reactionGenerator_le [Fintype ι] (a : ι → E) (k : �
   have hCv := mul_nonneg hC hv
   nlinarith
 
-theorem scalarEnergy_add_le [Fintype ι] (a : ι → E) (k : ℕ) {f g : E → ℝ}
+theorem scalarEnergy_add_le (a : ι → E) (k : ℕ) {f g : E → ℝ}
     (hf : ContDiff ℝ ∞ f) (hg : ContDiff ℝ ∞ g)
     (hfc : HasCompactSupport f) (hgc : HasCompactSupport g) :
     scalarEnergy m a k (fun x => f x + g x) ≤
@@ -252,7 +280,7 @@ theorem scalarEnergy_add_le [Fintype ι] (a : ι → E) (k : ℕ) {f g : E → �
   simpa only [sub_neg_eq_add, scalarEnergy_neg m a k hg hgc] using
     scalarEnergy_sub_le m a k hf hg.neg hfc hgc.neg
 
-theorem derivativeEnergy_addState_le [Fintype ι] (a : ι → E) (k : ℕ)
+theorem derivativeEnergy_addState_le (a : ι → E) (k : ℕ)
     {X Y : State E ι} (hX : X.Smooth) (hY : Y.Smooth) (hcX : X.CompactSupport) (hcY : Y.CompactSupport) :
     derivativeEnergy m a k (addState X Y) ≤ 2 * (derivativeEnergy m a k X + derivativeEnergy m a k Y) := by
   rw [derivativeEnergy_eq_scalarEnergy m a k (hX.addState hY) (hcX.addState hcY),
@@ -266,13 +294,13 @@ theorem derivativeEnergy_addState_le [Fintype ι] (a : ι → E) (k : ℕ)
   nlinarith
 
 omit [BorelSpace E] [IsFiniteMeasureOnCompacts m] in
-theorem derivativeEnergy_mono [Fintype ι] (a : ι → E) {k l : ℕ} (hkl : k ≤ l) (Y : State E ι) :
+theorem derivativeEnergy_mono (a : ι → E) {k l : ℕ} (hkl : k ≤ l) (Y : State E ι) :
     derivativeEnergy m a k Y ≤ derivativeEnergy m a l Y :=
   Finset.sum_le_sum_of_subset_of_nonneg (Finset.range_mono (by omega))
     (fun _ _ _ => Finset.sum_nonneg fun _ _ => energy_nonneg m _)
 
 /-- A finite list of actual coordinate generators has a one-order energy bound. -/
-theorem derivativeEnergy_sweepGenerator_le [Fintype ι] [DecidableEq ι]
+theorem derivativeEnergy_sweepGenerator_le [DecidableEq ι]
     (a : ι → E) (k : ℕ) (js : List ι) {Y : State E ι} (hY : Y.Smooth) (hc : Y.CompactSupport) :
     derivativeEnergy m a k (sweepGenerator a js Y) ≤
       (4 : ℝ) ^ (js.length + 1) * (jetCount (ι := ι) k : ℝ) * derivativeEnergy m a (k + 1) Y := by
@@ -295,12 +323,18 @@ theorem derivativeEnergy_sweepGenerator_le [Fintype ι] [DecidableEq ι]
     rw [pow_succ]
     nlinarith [mul_le_mul_of_nonneg_right hp hq]
 
+end FiniteIndex
+
 /-- An explicit, non-sharp constant for the generator of a finite splitting list. -/
 def generatorConstant [Fintype ι] (js : List ι) (k : ℕ) (B : ℝ) : ℝ :=
   2 * (4 ^ (js.length + 1) * (jetCount (ι := ι) k : ℝ) + 2 + 2 * couplingConstant (ι := ι) k B)
 
+section FiniteIndex
+
+variable [Fintype ι] [DecidableEq ι]
+
 /-- The actual split generator costs one spatial derivative order. -/
-theorem derivativeEnergy_splitGenerator_le [Fintype ι] [DecidableEq ι]
+theorem derivativeEnergy_splitGenerator_le
     (a : ι → E) (js : List ι) (k : ℕ) {b : ι → E → ℝ}
     (hb : ∀ j, ContDiff ℝ ∞ (b j)) {Y : State E ι} (hY : Y.Smooth) (hc : Y.CompactSupport)
     {B : ℝ} (hB : 0 ≤ B)
@@ -319,7 +353,7 @@ theorem derivativeEnergy_splitGenerator_le [Fintype ι] [DecidableEq ι]
   nlinarith
 
 /-- Applying the actual split generator twice costs two spatial derivative orders. -/
-theorem derivativeEnergy_splitGenerator_sq_le [Fintype ι] [DecidableEq ι]
+theorem derivativeEnergy_splitGenerator_sq_le
     (a : ι → E) (js : List ι) (k : ℕ) {b : ι → E → ℝ}
     (hb : ∀ j, ContDiff ℝ ∞ (b j)) {Y : State E ι} (hY : Y.Smooth) (hc : Y.CompactSupport)
     {B : ℝ} (hB : 0 ≤ B)
@@ -337,6 +371,8 @@ theorem derivativeEnergy_splitGenerator_sq_le [Fintype ι] [DecidableEq ι]
     positivity
   exact h₁.trans (by simpa only [mul_assoc] using mul_le_mul_of_nonneg_left h₂ hC)
 
+end FiniteIndex
+
 /-- Either the reaction generator (`none`) or one coordinate generator (`some j`). -/
 def elementaryGenerator [Fintype ι] [DecidableEq ι] (a : ι → E) (b : ι → E → ℝ)
     (i : Option ι) (Y : State E ι) : State E ι :=
@@ -348,7 +384,11 @@ def elementaryGenerator [Fintype ι] [DecidableEq ι] (a : ι → E) (b : ι →
 def elementaryConstant [Fintype ι] (k : ℕ) (B : ℝ) : ℝ :=
   (jetCount (ι := ι) k : ℝ) + 2 + 2 * couplingConstant (ι := ι) k B
 
-theorem derivativeEnergy_elementaryGenerator_le [Fintype ι] [DecidableEq ι]
+section FiniteIndex
+
+variable [Fintype ι] [DecidableEq ι]
+
+theorem derivativeEnergy_elementaryGenerator_le
     (a : ι → E) (k : ℕ) (i : Option ι) {b : ι → E → ℝ}
     (hb : ∀ j, ContDiff ℝ ∞ (b j)) {Y : State E ι} (hY : Y.Smooth) (hc : Y.CompactSupport)
     {B : ℝ} (hB : 0 ≤ B)
@@ -376,7 +416,7 @@ theorem derivativeEnergy_elementaryGenerator_le [Fintype ι] [DecidableEq ι]
 
 /-- Every ordered pair of actual elementary generators, including mixed reaction/transport
 pairs, obeys a two-order bound. No commutation of the two generators is assumed. -/
-theorem derivativeEnergy_two_elementary_le [Fintype ι] [DecidableEq ι]
+theorem derivativeEnergy_two_elementary_le
     (a : ι → E) (k : ℕ) (i j : Option ι) {b : ι → E → ℝ}
     (hb : ∀ j, ContDiff ℝ ∞ (b j)) {Y : State E ι} (hY : Y.Smooth) (hc : Y.CompactSupport)
     {B : ℝ} (hB : 0 ≤ B)
@@ -397,6 +437,8 @@ theorem derivativeEnergy_two_elementary_le [Fintype ι] [DecidableEq ι]
   have h₂ := derivativeEnergy_elementaryGenerator_le m a (k + 1) j hb hY hc hB hbB
   have hC : 0 ≤ elementaryConstant (ι := ι) k B := by unfold elementaryConstant couplingConstant; positivity
   exact h₁.trans (by simpa only [mul_assoc] using mul_le_mul_of_nonneg_left h₂ hC)
+
+end FiniteIndex
 
 end Integration
 end FunctionalInequalities.Analysis.WaveSplitting

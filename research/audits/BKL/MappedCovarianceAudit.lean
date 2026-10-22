@@ -18,8 +18,13 @@ open FunctionalInequalities
 
 namespace BKLMappedCovarianceClients
 
+section FiniteIndex
+
+variable {n : Type*}
+variable [Fintype n] [DecidableEq n]
+
 /-- The API through its named arguments, for every isotropic law and every real symmetric matrix. -/
-theorem general {n : Type*} [Fintype n] [DecidableEq n] (μ : ProbabilityMeasure (EuclideanSpace ℝ n))
+theorem general (μ : ProbabilityMeasure (EuclideanSpace ℝ n))
     (hμ : KLS.Isotropic μ) (M : Matrix n n ℝ) (hM : M.IsSymm) (a b : EuclideanSpace ℝ n) :
     ProbabilityTheory.covarianceBilin ((μ : Measure (EuclideanSpace ℝ n)).map
         (Matrix.toEuclideanCLM (n := n) (𝕜 := ℝ) (CFC.sqrt (CFC.sqrt (M * M))))) a b =
@@ -27,7 +32,7 @@ theorem general {n : Type*} [Fintype n] [DecidableEq n] (μ : ProbabilityMeasure
   KLS.Isotropic.covarianceBilin_map_sqrt_abs_matrix (μ := μ) (hμ := hμ) (M := M) (hM := hM) a b
 
 /-- The spectral prerequisites for an arbitrary symmetric matrix, with no positivity or invertibility. -/
-theorem spectral {n : Type*} [Fintype n] [DecidableEq n] (M : Matrix n n ℝ) (hM : M.IsSymm) :
+theorem spectral (M : Matrix n n ℝ) (hM : M.IsSymm) :
     CFC.sqrt (CFC.sqrt (M * M)) * CFC.sqrt (CFC.sqrt (M * M)) = CFC.sqrt (M * M) ∧
       CFC.sqrt (CFC.sqrt (M * M)) * cfc (fun x : ℝ => (SignType.sign x : ℝ)) M *
         CFC.sqrt (CFC.sqrt (M * M)) = M := by
@@ -60,13 +65,15 @@ theorem indefinite (μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin 2))) (hμ :
   simpa using h
 
 /-- Singular case `M = 0`: the mapped law has zero covariance. -/
-theorem singular_zero {n : Type*} [Fintype n] [DecidableEq n] (μ : ProbabilityMeasure (EuclideanSpace ℝ n))
+theorem singular_zero (μ : ProbabilityMeasure (EuclideanSpace ℝ n))
     (hμ : KLS.Isotropic μ) (a b : EuclideanSpace ℝ n) :
     ProbabilityTheory.covarianceBilin ((μ : Measure (EuclideanSpace ℝ n)).map
         (Matrix.toEuclideanCLM (n := n) (𝕜 := ℝ) (0 : Matrix n n ℝ))) a b = 0 := by
   have h := KLS.Isotropic.covarianceBilin_map_sqrt_abs_matrix μ hμ 0 (Matrix.isSymm_zero) a b
   simp only [mul_zero, CFC.sqrt_zero, map_zero] at h
   simpa using h
+
+end FiniteIndex
 
 /-- An actual isotropic law in dimension zero. -/
 def zeroLaw : ProbabilityMeasure (EuclideanSpace ℝ (Fin 0)) := ⟨Measure.dirac 0, inferInstance⟩

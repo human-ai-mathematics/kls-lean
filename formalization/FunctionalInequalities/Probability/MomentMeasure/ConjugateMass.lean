@@ -108,11 +108,14 @@ private theorem density_le_exp_of_lower (ψ : E → EReal) (y : E) (c M : ℝ)
   have h := EReal.exp_monotone (EReal.neg_le_neg_iff.mpr hlower)
   simpa only [density, ← EReal.coe_neg, EReal.exp_coe, neg_sub] using h
 
+section FiniteDimensional
+
+variable [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
+
 /-- The original open-neighborhood geometry and vertex convergence produce the
 actual common exponential dominator. Finiteness is proved rather than supplied.
 No condition on initial dual masses is used, and zero-dimensional Haar is included. -/
 theorem exists_integrable_exponential_domination
-    [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
     (dx : Measure E) [dx.IsAddHaarMeasure]
     (φ : ℕ → E → EReal) (ψ : E → EReal) {K : Set E}
     (hK : IsOpen K) (h0 : (0 : E) ∈ K)
@@ -151,7 +154,6 @@ theorem exists_integrable_exponential_domination
 Only the original interior convergence and actual radial extension are inputs;
 the finite affine comparison, domination and mass finiteness are all proved. -/
 theorem limsup_mass_legendre_le
-    [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
     (dx : Measure E) [dx.IsAddHaarMeasure]
     (φ : ℕ → E → EReal) (ψ : E → EReal) {K : Set E}
     (hK : IsOpen K) (hKconv : Convex ℝ K) (h0 : (0 : E) ∈ K)
@@ -181,6 +183,8 @@ theorem limsup_mass_legendre_le
       intro y
       exact limsup_nat_add (fun j => density (legendre (φ j)) y) N
     _ ≤ mass dx (legendre ψ) := lintegral_mono hpoint
+
+end FiniteDimensional
 
 end MomentMeasure
 

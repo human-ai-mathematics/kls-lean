@@ -54,10 +54,14 @@ private theorem memLp_two_of_hasTemperateGrowth' {F : Type*} [NormedAddCommGroup
 open scoped ContDiff
 open Filter Topology Energy Energy.WeightedGradient
 
+section StructuredSpace
+
+variable {F : Type*}
+variable [NormedAddCommGroup F]
+
 omit [InnerProductSpace ℝ V] [CompleteSpace V] [BorelSpace V]
     [SecondCountableTopology V] [FiniteDimensional ℝ V] in
-private theorem q_memLp_of_polynomial_bound
-    {F : Type*} [NormedAddCommGroup F] {g : V → F}
+private theorem q_memLp_of_polynomial_bound {g : V → F}
     (hexp : ∀ r : ℝ, Integrable (fun x => Real.exp (r * ‖x‖)) (ν : Measure V))
     (hg : AEStronglyMeasurable g (ν : Measure V))
     {C : ℝ} {k : ℕ}
@@ -73,8 +77,7 @@ private theorem q_memLp_of_polynomial_bound
 
 omit [NormedAddCommGroup V] [InnerProductSpace ℝ V] [CompleteSpace V]
     [BorelSpace V] [SecondCountableTopology V] [FiniteDimensional ℝ V] in
-private theorem q_tendsto_toLp
-    {F : Type*} [NormedAddCommGroup F] [InnerProductSpace ℝ F]
+private theorem q_tendsto_toLp [InnerProductSpace ℝ F]
     {a : ℕ → V → F} {b : V → F}
     (ha : ∀ n, MemLp (a n) 2 (ν : Measure V))
     (hb : MemLp b 2 (ν : Measure V))
@@ -105,13 +108,15 @@ private theorem q_tendsto_toLp
   simpa only [Function.comp_def, ← heq, Real.sqrt_sq (norm_nonneg _),
     Real.sqrt_zero] using hs
 
-private theorem q_sq_sub_le {F : Type*} [NormedAddCommGroup F] {u v : F} {B : ℝ}
+private theorem q_sq_sub_le {u v : F} {B : ℝ}
     (hu : ‖u‖ ≤ B) (hv : ‖v‖ ≤ B) : ‖u - v‖ ^ 2 ≤ (2 * B) ^ 2 := by
   apply pow_le_pow_left₀ (norm_nonneg _) _ 2
   calc
     ‖u - v‖ ≤ ‖u‖ + ‖v‖ := norm_sub_le _ _
     _ ≤ B + B := add_le_add hu hv
     _ = 2 * B := by ring
+
+end StructuredSpace
 
 include hexp in
 /-- A function of temperate growth has its `L²(ν)` class in the domain of the closed unit gradient,
@@ -338,16 +343,24 @@ section Spectral
 
 variable {C : NNReal} (hC : Poincare.LocalSlope.Intrinsic.constant ν ≤ (C : ENNReal))
 
+section InnerProduct
+
+variable {F : Type*}
+variable [NormedAddCommGroup F] [InnerProductSpace ℝ F]
+
 omit [NormedAddCommGroup V] [InnerProductSpace ℝ V] [CompleteSpace V] [BorelSpace V] [SecondCountableTopology V]
   [FiniteDimensional ℝ V] in
-private theorem norm_sq_Lp_eq_integral {F : Type*} [NormedAddCommGroup F] [InnerProductSpace ℝ F]
+private theorem norm_sq_Lp_eq_integral
     {μ : Measure V} (u : Lp F 2 μ) : ‖u‖ ^ 2 = ∫ x, ‖u x‖ ^ 2 ∂μ := by
   rw [← real_inner_self_eq_norm_sq, MeasureTheory.L2.inner_def]
   simp only [real_inner_self_eq_norm_sq]
 
+section FiniteDimensional
+
+variable [FiniteDimensional ℝ F]
+
 omit [SecondCountableTopology V] in
-private theorem integrable_norm_sq_weightedLaplacianVec {F : Type*} [NormedAddCommGroup F]
-    [InnerProductSpace ℝ F] [FiniteDimensional ℝ F] (μ : Measure V)
+private theorem integrable_norm_sq_weightedLaplacianVec (μ : Measure V)
     (hexp : ∀ r : ℝ, Integrable (fun x => Real.exp (r * ‖x‖)) μ) {U : V → ℝ}
     (hU : U.HasTemperateGrowth) {h : V → F} (hh : h.HasTemperateGrowth) :
     Integrable (fun x => ‖weightedLaplacianVec U h x‖ ^ 2) μ := by
@@ -393,8 +406,7 @@ theorem integral_sq_sub_integral_le_of_hasTemperateGrowth {f : V → ℝ} (hf : 
 
 include m hν hi hexp hC in
 /-- **Poincaré for tensor fields on `𝒜`**: `∫ ‖h - ∫ h‖² ≤ C ∫ ‖∇h‖²` (Hilbert–Schmidt norms). -/
-theorem integral_norm_sq_sub_integral_le_of_hasTemperateGrowth {F : Type*} [NormedAddCommGroup F]
-    [InnerProductSpace ℝ F] [FiniteDimensional ℝ F] {h : V → F} (hh : h.HasTemperateGrowth) :
+theorem integral_norm_sq_sub_integral_le_of_hasTemperateGrowth {h : V → F} (hh : h.HasTemperateGrowth) :
     ∫ x, ‖h x - ∫ y, h y ∂(ν : Measure V)‖ ^ 2 ∂(ν : Measure V) ≤
       (C : ℝ) * ∫ x, ‖gradCoord h x‖ ^ 2 ∂(ν : Measure V) := by
   classical
@@ -454,8 +466,7 @@ theorem integral_norm_sq_sub_integral_le_of_hasTemperateGrowth {F : Type*} [Norm
 include hν hi hνU hU hexp hC in
 /-- **The energy bound corresponding to BKL (20)**, on `𝒜`: `∫ ‖∇h‖² ≤ C ∫ ‖ℒh‖²` for tensor fields `h`
 of temperate growth (the gradient-energy part of (20) with `g = -ℒ(h - ∫ h)`). -/
-theorem integral_norm_sq_gradCoord_le_of_hasTemperateGrowth {F : Type*} [NormedAddCommGroup F]
-    [InnerProductSpace ℝ F] [FiniteDimensional ℝ F] {h : V → F} (hh : h.HasTemperateGrowth) :
+theorem integral_norm_sq_gradCoord_le_of_hasTemperateGrowth {h : V → F} (hh : h.HasTemperateGrowth) :
     ∫ x, ‖gradCoord h x‖ ^ 2 ∂(ν : Measure V) ≤
       (C : ℝ) * ∫ x, ‖weightedLaplacianVec U h x‖ ^ 2 ∂(ν : Measure V) := by
   set c := ∫ y, h y ∂(ν : Measure V) with hc
@@ -541,11 +552,19 @@ theorem integral_norm_sq_gradCoord_le_of_hasTemperateGrowth {F : Type*} [NormedA
         _ = X / 2 := by field_simp
     linarith
 
+end FiniteDimensional
+
+end InnerProduct
+
+section FiniteDimensional
+
+variable {G : Type*}
+variable [NormedAddCommGroup G] [InnerProductSpace ℝ G] [FiniteDimensional ℝ G]
+
 include hν hi hνU hU hexp hC in
 /-- **BKL (32)** for a supplied pair: if `-ℒh = α ∇₀g`, `‖∇h‖² = ‖∇₀g‖²` (33) and `∇h ≠ 0` in `L²`,
 then `1 ≤ C α²` (that is, `α² ≥ λ₁` when `C = 1/λ₁`). -/
-theorem one_le_mul_sq_of_poisson {G : Type*} [NormedAddCommGroup G] [InnerProductSpace ℝ G]
-    [FiniteDimensional ℝ G] {g : V → G}
+theorem one_le_mul_sq_of_poisson {g : V → G}
     {h : V → PiLp 2 (fun _ : Fin (Module.finrank ℝ V) => G)} {α : ℝ}
     (hh : h.HasTemperateGrowth)
     (h30 : ∀ x, -weightedLaplacianVec U h x =
@@ -570,8 +589,7 @@ include hν hi hνU hU hexp hC in
 /-- **BKL Lemma 3.2** in the heat model, in squared form with the bound `C χ` (that is `χ / λ` with
 `λ = 1/C ≤ λ₁` when `C > 0`, equality for `C = C_P`): for a pair satisfying (30) and (33), `∇₀h` lies
 within squared `L²` distance `C χ` of a tensor field symmetric in its first two indices. -/
-theorem exists_symm_integral_norm_sq_sub_le_mul {G : Type*} [NormedAddCommGroup G]
-    [InnerProductSpace ℝ G] [FiniteDimensional ℝ G] {g : V → G}
+theorem exists_symm_integral_norm_sq_sub_le_mul {g : V → G}
     {h : V → PiLp 2 (fun _ : Fin (Module.finrank ℝ V) => G)} {α : ℝ}
     (hg : g.HasTemperateGrowth) (hh : h.HasTemperateGrowth)
     (h30 : ∀ x, -weightedLaplacianVec U h x =
@@ -630,8 +648,7 @@ theorem exists_symm_integral_norm_sq_sub_le_mul {G : Type*} [NormedAddCommGroup 
 include hν hi hνU hU hexp hC in
 /-- **BKL Lemma 3.3 in the case `q = 2`** in the heat model: for a pair satisfying (30) and (33),
 `‖∇₀h - S₂∇₀h‖² ≤ C χ`. -/
-theorem integral_norm_sq_sub_symmetrizeFirstTwo_le_mul {G : Type*} [NormedAddCommGroup G]
-    [InnerProductSpace ℝ G] [FiniteDimensional ℝ G] {g : V → G}
+theorem integral_norm_sq_sub_symmetrizeFirstTwo_le_mul {g : V → G}
     {h : V → PiLp 2 (fun _ : Fin (Module.finrank ℝ V) => G)} {α : ℝ}
     (hg : g.HasTemperateGrowth) (hh : h.HasTemperateGrowth)
     (h30 : ∀ x, -weightedLaplacianVec U h x =
@@ -653,6 +670,8 @@ theorem integral_norm_sq_sub_symmetrizeFirstTwo_le_mul {G : Type*} [NormedAddCom
   · exact (integral_mono hI hT2 hpt).trans hT3
   · rw [integral_undef hI]
     exact mul_nonneg C.2 (integral_nonneg fun x => by positivity)
+
+end FiniteDimensional
 
 end Spectral
 

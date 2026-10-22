@@ -18,8 +18,13 @@ open MeasureTheory ProbabilityTheory Filter
 
 namespace FunctionalInequalities.Probability
 
+section MeasurableSpace
+
+variable {E : Type*}
+variable [MeasurableSpace E]
+
 /-- `∫⁻ Π_i g_i(x_i) d(⊗_i μ) = Π_i ∫⁻ g_i dμ` over `Fin N`. -/
-theorem lintegral_pi_prod_fin {E : Type*} [MeasurableSpace E]
+theorem lintegral_pi_prod_fin
     (μ : Measure E) [SigmaFinite μ] (k : ℕ) (g : Fin k → E → ENNReal)
     (hg : ∀ i, Measurable (g i)) :
     (∫⁻ x, ∏ i : Fin k, g i (x i) ∂(Measure.pi fun _ : Fin k => μ)) =
@@ -69,7 +74,7 @@ theorem lintegral_pi_prod_fin {E : Type*} [MeasurableSpace E]
 
 /-- **Normalized sums of independent copies.** If `f ∈ L²(μ)` has mean `0` and second moment `1`,
 then `(Σ_i f(x_i))/√N` has mean `0` and second moment `1` under `μ^N` (`N > 0`). -/
-theorem pi_normalizedSum_moments {E : Type*} [MeasurableSpace E]
+theorem pi_normalizedSum_moments
     (μ : Measure E) [IsProbabilityMeasure μ] (f : E → ℝ) (hf2 : MemLp f 2 μ)
     (hf0 : ∫ x, f x ∂μ = 0) (hf1 : ∫ x, f x ^ 2 ∂μ = 1)
     (N : ℕ) (hN : 0 < N) :
@@ -127,7 +132,7 @@ theorem pi_normalizedSum_moments {E : Type*} [MeasurableSpace E]
     exact div_self (by exact_mod_cast hN.ne')
 
 /-- A coordinate of `μ^N` has law `μ`. -/
-theorem integral_comp_eval_pi {E : Type*} [MeasurableSpace E]
+theorem integral_comp_eval_pi
     (μ : Measure E) [IsProbabilityMeasure μ] (a : E → ℝ)
     (ha : AEStronglyMeasurable a μ) (N : ℕ) (i : Fin N) :
     (∫ x : Fin N → E, a (x i) ∂(Measure.pi (fun _ : Fin N => μ))) = ∫ x, a x ∂μ := by
@@ -143,7 +148,7 @@ theorem integral_comp_eval_pi {E : Type*} [MeasurableSpace E]
 
 /-- **Products of coordinates.** For `f, g ∈ L²(μ)`, `∫ f(x_i) g(x_j) dμ^N` is `∫ f g dμ` when
 `i = j` and `(∫ f dμ)(∫ g dμ)` otherwise. -/
-theorem integral_mul_comp_eval_pi {E : Type*} [MeasurableSpace E]
+theorem integral_mul_comp_eval_pi
     (μ : Measure E) [IsProbabilityMeasure μ] (f g : E → ℝ)
     (hf2 : MemLp f 2 μ) (hg2 : MemLp g 2 μ) (N : ℕ) (i j : Fin N) :
     Integrable (fun x : Fin N → E => f (x i) * g (x j))
@@ -187,7 +192,7 @@ theorem integral_mul_comp_eval_pi {E : Type*} [MeasurableSpace E]
 
 /-- The normalized sum of `f` is orthogonal to every coordinate `g(x_i)` when `f` and `g` are
 centered and `∫ f g dμ = 0`. -/
-theorem integral_normalizedSum_mul_comp_eval_pi {E : Type*} [MeasurableSpace E]
+theorem integral_normalizedSum_mul_comp_eval_pi
     (μ : Measure E) [IsProbabilityMeasure μ] (f g : E → ℝ)
     (hf2 : MemLp f 2 μ) (hg2 : MemLp g 2 μ)
     (hf0 : ∫ x, f x ∂μ = 0) (hg0 : ∫ x, g x ∂μ = 0)
@@ -228,9 +233,16 @@ theorem integral_normalizedSum_mul_comp_eval_pi {E : Type*} [MeasurableSpace E]
   rw [integral_div, hR0]
   simp
 
+end MeasurableSpace
+
+section MeasurableSpace
+
+variable {A B : Type*}
+variable [MeasurableSpace A] [MeasurableSpace B]
+
 /-- **Independent sums.** Under `μ ⊗ ν`, centered `X ∈ L²(μ)` and `Y ∈ L²(ν)` give a centered
 sum `X + Y` with second moment `∫ X² dμ + ∫ Y² dν`. -/
-theorem prod_add_moments {A B : Type*} [MeasurableSpace A] [MeasurableSpace B]
+theorem prod_add_moments
     (μ : Measure A) (ν : Measure B) [IsProbabilityMeasure μ] [IsProbabilityMeasure ν]
     (X : A → ℝ) (Y : B → ℝ) (hX2 : MemLp X 2 μ) (hY2 : MemLp Y 2 ν)
     (hX0 : ∫ x, X x ∂μ = 0) (hY0 : ∫ y, Y y ∂ν = 0) :
@@ -253,7 +265,7 @@ theorem prod_add_moments {A B : Type*} [MeasurableSpace A] [MeasurableSpace B]
   simpa only [Pi.pow_apply, zero_pow (by norm_num : 2 ≠ 0), sub_zero] using hv
 
 /-- Under `μ ⊗ ν`, `∫ (X + Y) Z = 0` when `∫ X Z dμ = 0` and `Y` is centered. -/
-theorem integral_prod_add_mul_eq_zero {A B : Type*} [MeasurableSpace A] [MeasurableSpace B]
+theorem integral_prod_add_mul_eq_zero
     (μ : Measure A) (ν : Measure B) [IsProbabilityMeasure μ] [IsProbabilityMeasure ν]
     (X Z : A → ℝ) (Y : B → ℝ)
     (hX2 : MemLp X 2 μ) (hZ2 : MemLp Z 2 μ) (hY2 : MemLp Y 2 ν)
@@ -277,5 +289,7 @@ theorem integral_prod_add_mul_eq_zero {A B : Type*} [MeasurableSpace A] [Measura
   rw [heq, integral_add (hXZ.integrable le_rfl) (hZY.integrable le_rfl),
     integral_fun_fst (fun x => X x * Z x), integral_prod_mul Z Y, hXZ0, hY0]
   simp
+
+end MeasurableSpace
 
 end FunctionalInequalities.Probability

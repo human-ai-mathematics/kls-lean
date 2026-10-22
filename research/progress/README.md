@@ -337,7 +337,7 @@ to those historical routes. Formalized results, refuted claims and shared analyt
 retain their existing states; the neutral badges distinguish research records from pending work.
 
 <!-- BEGIN GENERATED DATE -->
-Last updated: **2026-10-20**.
+Last updated: **2026-10-22**.
 
 ![✓ Formalized in Lean](badges/formalized.svg) · ![○ Not yet formalized](badges/pending.svg) · ![◐ Partially formalized](badges/partial.svg) · ![◇ Open hypothesis, not a target](badges/hypothesis.svg) · ![○ Not formalized, superseded route](badges/superseded.svg) · ![— Excluded: refuted](badges/excluded.svg)
 
@@ -579,6 +579,27 @@ flowchart LR
     DUALB["✓ Compact source<br/>dual bound"]
     GAUSSID["✓ Gaussian directional<br/>identity (C1 tests)"]
     WSTEINSRC["✓ Regular source law<br/>T2.5 exact 2 + source Stein"]
+    REGINV["✓ Regular source law<br/>gradient inverse, local ellipticity"]
+    TGTSTEIN["✓ Regular source law<br/>target Stein kernel (a.e. PD, HS² ≤ 2n)"]
+    DIRSUB["✓ Regular source law<br/>directional weak subsolution, local coefficient bounds"]
+    ROUGHTEST["✓ Weak H1 tools<br/>chain rule, log/power, rough tests"]
+    H1ENERGY["✓ H1 energy tools<br/>Caccioppoli, weak Sobolev"]
+    MOSERIN["✓ Moser inputs<br/>log/power energy, cutoffs, Lp limit"]
+    MORREYPOT["✓ Morrey and potential inputs<br/>all-ball Morrey, critical potential exp"]
+    BOUNDEDJN["✓ Bounded weak JN<br/>convex representation, John-Nirenberg"]
+    LOCALMOSER["✓ Local Moser inputs<br/>local energies, fixed-S joint inputs, one-step gain"]
+    WEAKHARNACK["✓ Bounded weak Harnack<br/>Moser iteration, essential infimum, n = 1, 2, > 2"]
+    GIVENHARNACK["✓ Given-data weak Harnack<br/>GT 8.18 bounded, joint regular potential"]
+    FRAME1713["✓ Fixed rank-one frame<br/>GT 17.13, coefficients in [lower, hi]"]
+    MODULUS823["✓ Scalar iteration lemma<br/>GT 8.23"]
+    ESSDEFICIT["✓ Essential deficit identity<br/>essinf(M - f) = M - esssup f"]
+    FRAMEOSC["✓ Frame oscillation decay<br/>log-det matrix field, GT 17.14 rough form"]
+    HOLDERREG["✓ Hölder representatives and C2<br/>continuous Hessian, everywhere equation"]
+    HESSHOLDER["✓ C2 Hölder Hessian at the regular moment potential<br/>everywhere log-det equation, strong class"]
+    LOGDETAVG["✓ Averaged-inverse log-det coefficients<br/>GT (17.56), Hölder averaged inverse"]
+    CONVGRADINV["✓ Strictly convex gradient<br/>open map, homeomorphism, C^k inverse"]
+    MAPGRADRANGE["✓ Transport gradient range = int K<br/>homeomorphism and inverse, given potential"]
+    MOMENTGRADINV["✓ Gradient homeomorphism onto int K, C1 inverse<br/>regular moment potential, strong class"]
     MNTRACE["✓ Trace identities<br/>noise shift, involution"]
     SPECGEO["✓ Spectral geometry<br/>B, S, sign Q"]
     SYMINV["✓ Invertible symmetric<br/>approximation"]
@@ -608,6 +629,7 @@ flowchart LR
     RESTEXP["✓ Restricted exponential<br/>log-concavity"]
     OPMAT["✓ Operator and matrix<br/>forms of the bound"]
     REGCLASS8["✓ Regular class<br/>constant 8"]
+    LA1REG["✓ Letwin Lemma A.1<br/>regular approximation"]
     LCOMPACT8["✓ Compact Letwin bound<br/>constant 8 (certified)"]
     AFFMOM["✓ Truncated affine laws<br/>mixed moments converge"]
     LGENERAL8["✓ Letwin Theorem 1.2<br/>constant 8, no compactness"]
@@ -828,6 +850,24 @@ flowchart LR
     HSSYM --> OPMAT
     QACTION --> OPMAT
     WSTEINSRC --> REGCLASS8
+    REGMOM --> REGINV
+    WSTEINSRC --> TGTSTEIN
+    REGINV --> TGTSTEIN
+    SRCSTEIN --> TGTSTEIN
+    WEVOLSRC --> DIRSUB
+    REGINV --> DIRSUB
+    DIRSUB --> ROUGHTEST
+    ROUGHTEST --> H1ENERGY
+    H1ENERGY --> MOSERIN
+    MOSERIN --> MORREYPOT
+    MORREYPOT --> LOCALMOSER
+    MORREYPOT --> BOUNDEDJN
+    BOUNDEDJN --> LOCALMOSER
+    LOCALMOSER --> WEAKHARNACK
+    BOUNDEDJN --> WEAKHARNACK
+    WEAKHARNACK --> GIVENHARNACK
+    LOCALMOSER --> GIVENHARNACK
+    BOUNDEDJN --> GIVENHARNACK
     RESTEXP --> REGCLASS8
     GHMINUS --> REGCLASS8
     NOISEINT --> REGCLASS8
@@ -849,8 +889,20 @@ flowchart LR
     BKLAND --> KLS
     LCOMPACT8 --> LGENERAL8
     AFFMOM --> LGENERAL8
+    AFFMOM --> LA1REG
+    LA1REG --> LCOMPACT8
+    FRAME1713 --> FRAMEOSC
+    ESSDEFICIT --> FRAMEOSC
+    MODULUS823 --> FRAMEOSC
+    FRAMEOSC --> HOLDERREG
+    GIVENHARNACK --> HESSHOLDER
+    FRAMEOSC --> HESSHOLDER
+    HOLDERREG --> HESSHOLDER
+    CONVGRADINV --> MAPGRADRANGE
+    MAPGRADRANGE --> MOMENTGRADINV
+    HESSHOLDER --> MOMENTGRADINV
     classDef done fill:#dbeafe,stroke:#2563eb,color:#1e3a8a;
-    class KLS,ENERGY,F4,MT,FP,FC,EQ,NORM,DENS,FRONT,CB,ONE,CONST,FORMS,MEAS,GRAPH,REG,CRIT,C1,WHIT,LIP,GG,REC,FWD,SARD,SCI,CUT,REV,MINK,BV,FLOG,VREG,VZERO,VR123,VR4,VFULL,SEMI,MARKOV,DECAY,GAUSS,GSTAB,VLIP,BT31,BP71,BREG,WEAKHESS,CEKMAP,REGMOM,WEAKINVINT,WEAKGEN,HESSENT,CDIFF,WEAKGENINT,INCINT,INCENERGY,TRANSCUT,HESSL2,HESSDIFF,WEAKTHIRD,SRCDIFF,EXPLIP,REGTENSOR,WPRODG,WPRODL,WLIN,WFPROD,WDET,WTRACE,WJAC,EXPHALF,WAECONGR,AEEXP,WMA1,WEXPNEG,WPRODLB,WMATINV,WADJ,WINVH,WINV,WSMOOTH,WCURL,WEAKGENC1,MEANC11,WMEANH,WBAPPROX,WBTEST,WINVROW,WGRADCOMP,WMARHS,WFLUXLOC,WFLUX,WEVOL,WEVOLB,WEVOLSRC,WHTEST,WCUTR,WCUTN,WCUTSRC,WCFLUX,WBTRQ,WROUGH,WTRCON,TRPOS,TRGRAM,WCUTTEST,WLAP,C11COER,WBL,MPTRACE,MVAR,WT25,SYMAE,S1,WIBP,C1CHAIN,SRCSTEIN,DUALB,GAUSSID,WSTEINSRC,MNTRACE,SPECGEO,SYMINV,MTRMEAN,HSSYM,GRADAFF,ACTALG,HESSACT,QACTION,SIGNNOISE,NOISEINT,QFOURTH,FINVAR,QVARCONT,LA2EXT,NOISECONV,G4MOM,GTRANS,GLATENT,GPOT,SRCAFF,GPRODSTEIN,GPRODDUAL,NOISELIM,GSMVAR,GHMINUS,RESTEXP,OPMAT,REGCLASS8,LCOMPACT8,BCUT,BCUM,BKLMAIN,AFFMOM,LGENERAL8 done;
+    class KLS,ENERGY,F4,MT,FP,FC,EQ,NORM,DENS,FRONT,CB,ONE,CONST,FORMS,MEAS,GRAPH,REG,CRIT,C1,WHIT,LIP,GG,REC,FWD,SARD,SCI,CUT,REV,MINK,BV,FLOG,VREG,VZERO,VR123,VR4,VFULL,SEMI,MARKOV,DECAY,GAUSS,GSTAB,VLIP,BT31,BP71,BREG,WEAKHESS,CEKMAP,REGMOM,WEAKINVINT,WEAKGEN,HESSENT,CDIFF,WEAKGENINT,INCINT,INCENERGY,TRANSCUT,HESSL2,HESSDIFF,WEAKTHIRD,SRCDIFF,EXPLIP,REGTENSOR,WPRODG,WPRODL,WLIN,WFPROD,WDET,WTRACE,WJAC,EXPHALF,WAECONGR,AEEXP,WMA1,WEXPNEG,WPRODLB,WMATINV,WADJ,WINVH,WINV,WSMOOTH,WCURL,WEAKGENC1,MEANC11,WMEANH,WBAPPROX,WBTEST,WINVROW,WGRADCOMP,WMARHS,WFLUXLOC,WFLUX,WEVOL,WEVOLB,WEVOLSRC,WHTEST,WCUTR,WCUTN,WCUTSRC,WCFLUX,WBTRQ,WROUGH,WTRCON,TRPOS,TRGRAM,WCUTTEST,WLAP,C11COER,WBL,MPTRACE,MVAR,WT25,SYMAE,S1,WIBP,C1CHAIN,SRCSTEIN,DUALB,GAUSSID,WSTEINSRC,REGINV,TGTSTEIN,DIRSUB,ROUGHTEST,H1ENERGY,MOSERIN,MORREYPOT,BOUNDEDJN,LOCALMOSER,WEAKHARNACK,FRAME1713,MODULUS823,ESSDEFICIT,GIVENHARNACK,MNTRACE,SPECGEO,SYMINV,MTRMEAN,HSSYM,GRADAFF,ACTALG,HESSACT,QACTION,SIGNNOISE,NOISEINT,QFOURTH,FINVAR,QVARCONT,LA2EXT,NOISECONV,G4MOM,GTRANS,GLATENT,GPOT,SRCAFF,GPRODSTEIN,GPRODDUAL,NOISELIM,GSMVAR,GHMINUS,RESTEXP,OPMAT,REGCLASS8,LCOMPACT8,BCUT,BCUM,BKLMAIN,AFFMOM,LGENERAL8,LA1REG,FRAMEOSC,HOLDERREG,HESSHOLDER,LOGDETAVG,CONVGRADINV,MAPGRADRANGE,MOMENTGRADINV done;
     classDef partial fill:#fff3df,stroke:#c88719,color:#66420d;
     class FAND,BE,HEAT partial;
     classDef hypothesis fill:#f1f5f9,stroke:#64748b,color:#334155;
@@ -993,6 +1045,20 @@ flowchart LR
     click DUALB href "../../formalization/FunctionalInequalities/Probability/Stein/SourceDualBound.lean" "Compact source — dual bound" _blank
     click GAUSSID href "../../formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/Moments.lean" "Gaussian directional — identity (C1 tests)" _blank
     click WSTEINSRC href "../../formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/TraceStein.lean" "Regular source law — T2.5 exact 2 + source Stein" _blank
+    click REGINV href "../../formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/Potential.lean" "Regular source law — gradient inverse, local ellipticity" _blank
+    click TGTSTEIN href "../../formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/TraceStein.lean" "Regular source law — target Stein kernel (a.e. PD, HS² ≤ 2n)" _blank
+    click DIRSUB href "../../formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakHessian.lean" "Regular source law — directional weak subsolution, local coefficient bounds" _blank
+    click ROUGHTEST href "../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean" "Weak H1 tools — chain rule, log/power, rough tests" _blank
+    click H1ENERGY href "../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Caccioppoli.lean" "H1 energy tools — Caccioppoli, weak Sobolev" _blank
+    click MOSERIN href "../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Caccioppoli.lean" "Moser inputs — log/power energy, cutoffs, Lp limit" _blank
+    click MORREYPOT href "../../formalization/FunctionalInequalities/Analysis/MorreyGrowth.lean" "Morrey and potential inputs — all-ball Morrey, critical potential exp" _blank
+    click BOUNDEDJN href "../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Representation.lean" "Bounded weak JN — convex representation, John-Nirenberg" _blank
+    click LOCALMOSER href "../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Caccioppoli.lean" "Local Moser inputs — local energies, fixed-S joint inputs, one-step gain" _blank
+    click WEAKHARNACK href "../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Moser.lean" "Bounded weak Harnack — Moser iteration, essential infimum, n = 1, 2, > 2" _blank
+    click FRAME1713 href "../../formalization/FunctionalInequalities/Analysis/Matrix/RankOneFrame.lean" "Fixed rank-one frame — GT 17.13, coefficients in [lower, hi]" _blank
+    click MODULUS823 href "../../formalization/FunctionalInequalities/Analysis/Modulus.lean" "Scalar iteration lemma — GT 8.23" _blank
+    click ESSDEFICIT href "../../formalization/FunctionalInequalities/Analysis/EssentialExtrema.lean" "Essential deficit identity — essinf(M - f) = M - esssup f" _blank
+    click GIVENHARNACK href "../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Harnack.lean" "Given-data weak Harnack — GT 8.18 bounded, joint regular potential" _blank
     click MNTRACE href "../../formalization/FunctionalInequalities/Analysis/Matrix/Trace/Algebra.lean" "Trace identities — noise shift, involution" _blank
     click SPECGEO href "../../formalization/FunctionalInequalities/Analysis/Matrix/Sign.lean" "Spectral geometry — B, S, sign Q" _blank
     click SYMINV href "../../formalization/FunctionalInequalities/Analysis/Matrix/Sign.lean" "Invertible symmetric — approximation" _blank
@@ -1029,6 +1095,14 @@ flowchart LR
     click BKLAND href "https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Target.lean" "AND — BKL route" _blank
     click AFFMOM href "../../formalization/FunctionalInequalities/Probability/Conditioning.lean" "Truncated affine laws — mixed moments converge" _blank
     click LGENERAL8 href "../../formalization/FunctionalInequalities/KLS/Letwin/QuadraticBound.lean" "Letwin Theorem 1.2 — constant 8, no compactness" _blank
+    click LA1REG href "../../formalization/FunctionalInequalities/KLS/Letwin/Approximation.lean" "Letwin Lemma A.1 — regular approximation" _blank
+    click FRAMEOSC href "../../formalization/FunctionalInequalities/Analysis/Matrix/LogDetOscillation.lean" "Frame oscillation decay — log-det matrix field, GT 17.14 rough form" _blank
+    click HOLDERREG href "../../formalization/FunctionalInequalities/Analysis/HessianRegularity.lean" "Hölder representatives and C2 — continuous Hessian, everywhere equation" _blank
+    click HESSHOLDER href "../../formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/HessianHolder.lean" "C2 Hölder Hessian at the regular moment potential — everywhere log-det equation, strong class" _blank
+    click LOGDETAVG href "../../formalization/FunctionalInequalities/Analysis/Matrix/LogDetSegment.lean" "Averaged-inverse log-det coefficients — GT (17.56), Hölder averaged inverse" _blank
+    click CONVGRADINV href "../../formalization/FunctionalInequalities/Analysis/Convex/GradientInverse.lean" "Strictly convex gradient — open map, homeomorphism, C^k inverse" _blank
+    click MAPGRADRANGE href "../../formalization/FunctionalInequalities/Probability/MomentMeasure/Gradient.lean" "Transport gradient range = int K — homeomorphism and inverse, given potential" _blank
+    click MOMENTGRADINV href "../../formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/Inverse.lean" "Gradient homeomorphism onto int K, C1 inverse — regular moment potential, strong class" _blank
 ```
 <!-- END GENERATED TREE -->
 
@@ -1236,6 +1310,20 @@ The [full node register](STATUS.md) separately lists definitions and registered 
 | Compact source — dual bound | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/Probability/Stein/SourceDualBound.lean) |
 | Gaussian directional — identity (C1 tests) | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/Moments.lean) |
 | Regular source law — T2.5 exact 2 + source Stein | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/TraceStein.lean) |
+| Regular source law — gradient inverse, local ellipticity | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/Potential.lean) |
+| Regular source law — target Stein kernel (a.e. PD, HS² ≤ 2n) | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/TraceStein.lean) |
+| Regular source law — directional weak subsolution, local coefficient bounds | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakHessian.lean) |
+| Weak H1 tools — chain rule, log/power, rough tests | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean) |
+| H1 energy tools — Caccioppoli, weak Sobolev | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Caccioppoli.lean) |
+| Moser inputs — log/power energy, cutoffs, Lp limit | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Caccioppoli.lean) |
+| Morrey and potential inputs — all-ball Morrey, critical potential exp | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/Analysis/MorreyGrowth.lean) |
+| Bounded weak JN — convex representation, John-Nirenberg | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Representation.lean) |
+| Local Moser inputs — local energies, fixed-S joint inputs, one-step gain | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Caccioppoli.lean) |
+| Bounded weak Harnack — Moser iteration, essential infimum, n = 1, 2, > 2 | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Moser.lean) |
+| Fixed rank-one frame — GT 17.13, coefficients in [lower, hi] | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/Analysis/Matrix/RankOneFrame.lean) |
+| Scalar iteration lemma — GT 8.23 | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/Analysis/Modulus.lean) |
+| Essential deficit identity — essinf(M - f) = M - esssup f | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/Analysis/EssentialExtrema.lean) |
+| Given-data weak Harnack — GT 8.18 bounded, joint regular potential | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Harnack.lean) |
 | Trace identities — noise shift, involution | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/Analysis/Matrix/Trace/Algebra.lean) |
 | Spectral geometry — B, S, sign Q | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/Analysis/Matrix/Sign.lean) |
 | Invertible symmetric — approximation | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/Analysis/Matrix/Sign.lean) |
@@ -1271,6 +1359,14 @@ The [full node register](STATUS.md) separately lists definitions and registered 
 | BKL Theorem 1.1 — dimension-free Poincaré (certified) | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../solutions/ThmBklPoincare.lean) |
 | Truncated affine laws — mixed moments converge | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/Probability/Conditioning.lean) |
 | Letwin Theorem 1.2 — constant 8, no compactness | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/KLS/Letwin/QuadraticBound.lean) |
+| Letwin Lemma A.1 — regular approximation | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/KLS/Letwin/Approximation.lean) |
+| Frame oscillation decay — log-det matrix field, GT 17.14 rough form | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/Analysis/Matrix/LogDetOscillation.lean) |
+| Hölder representatives and C2 — continuous Hessian, everywhere equation | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/Analysis/HessianRegularity.lean) |
+| C2 Hölder Hessian at the regular moment potential — everywhere log-det equation, strong class | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/HessianHolder.lean) |
+| Averaged-inverse log-det coefficients — GT (17.56), Hölder averaged inverse | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/Analysis/Matrix/LogDetSegment.lean) |
+| Strictly convex gradient — open map, homeomorphism, C^k inverse | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/Analysis/Convex/GradientInverse.lean) |
+| Transport gradient range = int K — homeomorphism and inverse, given potential | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/Probability/MomentMeasure/Gradient.lean) |
+| Gradient homeomorphism onto int K, C1 inverse — regular moment potential, strong class | ![✓ Formalized in Lean](badges/formalized.svg) | [Source](../../formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/Inverse.lean) |
 <!-- END GENERATED RESULTS -->
 
 ### Benchmarks and upstream research beyond the four route gates
@@ -1444,6 +1540,20 @@ Every node has a link. If diagram links are disabled in your viewer, use this di
 | Compact source — dual bound | [Source](../../formalization/FunctionalInequalities/Probability/Stein/SourceDualBound.lean) |
 | Gaussian directional — identity (C1 tests) | [Source](../../formalization/FunctionalInequalities/KLS/LogConcave/Density/GaussianSmoothing/Moments.lean) |
 | Regular source law — T2.5 exact 2 + source Stein | [Source](../../formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/TraceStein.lean) |
+| Regular source law — gradient inverse, local ellipticity | [Source](../../formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/Potential.lean) |
+| Regular source law — target Stein kernel (a.e. PD, HS² ≤ 2n) | [Source](../../formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/TraceStein.lean) |
+| Regular source law — directional weak subsolution, local coefficient bounds | [Source](../../formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakHessian.lean) |
+| Weak H1 tools — chain rule, log/power, rough tests | [Source](../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean) |
+| H1 energy tools — Caccioppoli, weak Sobolev | [Source](../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Caccioppoli.lean) |
+| Moser inputs — log/power energy, cutoffs, Lp limit | [Source](../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Caccioppoli.lean) |
+| Morrey and potential inputs — all-ball Morrey, critical potential exp | [Source](../../formalization/FunctionalInequalities/Analysis/MorreyGrowth.lean) |
+| Bounded weak JN — convex representation, John-Nirenberg | [Source](../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Representation.lean) |
+| Local Moser inputs — local energies, fixed-S joint inputs, one-step gain | [Source](../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Caccioppoli.lean) |
+| Bounded weak Harnack — Moser iteration, essential infimum, n = 1, 2, > 2 | [Source](../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Moser.lean) |
+| Fixed rank-one frame — GT 17.13, coefficients in [lower, hi] | [Source](../../formalization/FunctionalInequalities/Analysis/Matrix/RankOneFrame.lean) |
+| Scalar iteration lemma — GT 8.23 | [Source](../../formalization/FunctionalInequalities/Analysis/Modulus.lean) |
+| Essential deficit identity — essinf(M - f) = M - esssup f | [Source](../../formalization/FunctionalInequalities/Analysis/EssentialExtrema.lean) |
+| Given-data weak Harnack — GT 8.18 bounded, joint regular potential | [Source](../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Harnack.lean) |
 | Trace identities — noise shift, involution | [Source](../../formalization/FunctionalInequalities/Analysis/Matrix/Trace/Algebra.lean) |
 | Spectral geometry — B, S, sign Q | [Source](../../formalization/FunctionalInequalities/Analysis/Matrix/Sign.lean) |
 | Invertible symmetric — approximation | [Source](../../formalization/FunctionalInequalities/Analysis/Matrix/Sign.lean) |
@@ -1480,6 +1590,14 @@ Every node has a link. If diagram links are disabled in your viewer, use this di
 | AND — BKL route | [Source](https://github.com/human-ai-mathematics/kls-lean/blob/main/formalization/FunctionalInequalities/KLS/Target.lean) |
 | Truncated affine laws — mixed moments converge | [Source](../../formalization/FunctionalInequalities/Probability/Conditioning.lean) |
 | Letwin Theorem 1.2 — constant 8, no compactness | [Source](../../formalization/FunctionalInequalities/KLS/Letwin/QuadraticBound.lean) |
+| Letwin Lemma A.1 — regular approximation | [Source](../../formalization/FunctionalInequalities/KLS/Letwin/Approximation.lean) |
+| Frame oscillation decay — log-det matrix field, GT 17.14 rough form | [Source](../../formalization/FunctionalInequalities/Analysis/Matrix/LogDetOscillation.lean) |
+| Hölder representatives and C2 — continuous Hessian, everywhere equation | [Source](../../formalization/FunctionalInequalities/Analysis/HessianRegularity.lean) |
+| C2 Hölder Hessian at the regular moment potential — everywhere log-det equation, strong class | [Source](../../formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/HessianHolder.lean) |
+| Averaged-inverse log-det coefficients — GT (17.56), Hölder averaged inverse | [Source](../../formalization/FunctionalInequalities/Analysis/Matrix/LogDetSegment.lean) |
+| Strictly convex gradient — open map, homeomorphism, C^k inverse | [Source](../../formalization/FunctionalInequalities/Analysis/Convex/GradientInverse.lean) |
+| Transport gradient range = int K — homeomorphism and inverse, given potential | [Source](../../formalization/FunctionalInequalities/Probability/MomentMeasure/Gradient.lean) |
+| Gradient homeomorphism onto int K, C1 inverse — regular moment potential, strong class | [Source](../../formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/Inverse.lean) |
 <!-- END GENERATED LINKS -->
 
 </details>

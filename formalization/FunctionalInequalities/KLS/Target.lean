@@ -13,7 +13,7 @@ The proof is the Bizeul–Klartag–Lehec route (arXiv:2610.05474v1):
 - the regular approximation and the affine/isotropic reduction.
 
 These are assembled in `KLS.BKL.Localization.conjecture` (`KLS/BKL/Poincare.lean`). The statement of
-`KLS.Conjecture` is unchanged. This file stays the final leaf: no library module imports it.
+`KLS.Conjecture` is unchanged. Proof modules do not import this endpoint; the aggregate root exports it.
 -/
 
 namespace FunctionalInequalities.KLS

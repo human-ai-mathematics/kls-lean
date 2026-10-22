@@ -135,8 +135,12 @@ theorem derivativeEnergy_reaction_le (a : ι → E) (k : ℕ) {b : ι → E → 
   simpa only [integral_const_mul, integral_stateJet m a k hY hc,
     integral_stateJet m a k (hY.reaction hb t) (hc.reaction b t)] using h
 
+section InvariantMeasure
+
+variable [m.IsAddRightInvariant] [DecidableEq ι]
+
 /-- A full split step has the same finite-order stability factor as its reaction. -/
-theorem derivativeEnergy_step_le [m.IsAddRightInvariant] [DecidableEq ι]
+theorem derivativeEnergy_step_le
     (a : ι → E) (order : ℕ) (js : List ι) {b : ι → E → ℝ} (hb : ∀ j, ContDiff ℝ ∞ (b j))
     {Y : State E ι} (hY : Y.Smooth) (hc : Y.CompactSupport) {B t : ℝ}
     (hB0 : 0 ≤ B) (hB : ∀ j r, r.length ≤ order → ∀ x, wordDerivative a r (b j) x ^ 2 ≤ B) (ht : 0 ≤ t) (ht1 : t ≤ 1) :
@@ -145,7 +149,7 @@ theorem derivativeEnergy_step_le [m.IsAddRightInvariant] [DecidableEq ι]
   rwa [derivativeEnergy_sweep m a a order js t hY hc] at h
 
 /-- Iterating actual split steps gives a quantitative bound, without assuming stability. -/
-theorem derivativeEnergy_nodes_le [m.IsAddRightInvariant] [DecidableEq ι]
+theorem derivativeEnergy_nodes_le
     (a : ι → E) (order : ℕ) (js : List ι) {b : ι → E → ℝ} (hb : ∀ j, ContDiff ℝ ∞ (b j))
     {Y : State E ι} (hY : Y.Smooth) (hc : Y.CompactSupport) {B δ : ℝ}
     (hB0 : 0 ≤ B) (hB : ∀ j r, r.length ≤ order → ∀ x, wordDerivative a r (b j) x ^ 2 ≤ B) (hδ : 0 ≤ δ) (hδ1 : δ ≤ 1) (k : ℕ) :
@@ -163,7 +167,7 @@ theorem derivativeEnergy_nodes_le [m.IsAddRightInvariant] [DecidableEq ι]
       _ = _ := by rw [pow_succ]; ring
 
 /-- The finite-order grid bound depends on elapsed time `k*δ`, not separately on the mesh size. -/
-theorem derivativeEnergy_nodes_le_exp [m.IsAddRightInvariant] [DecidableEq ι]
+theorem derivativeEnergy_nodes_le_exp
     (a : ι → E) (order : ℕ) (js : List ι) {b : ι → E → ℝ} (hb : ∀ j, ContDiff ℝ ∞ (b j))
     {Y : State E ι} (hY : Y.Smooth) (hc : Y.CompactSupport) {B δ : ℝ}
     (hB0 : 0 ≤ B) (hB : ∀ j r, r.length ≤ order → ∀ x, wordDerivative a r (b j) x ^ 2 ≤ B) (hδ : 0 ≤ δ) (hδ1 : δ ≤ 1) (k : ℕ) :
@@ -180,7 +184,7 @@ theorem derivativeEnergy_nodes_le_exp [m.IsAddRightInvariant] [DecidableEq ι]
   ring
 
 /-- The same mesh-independent estimate holds inside each actual smooth cell. -/
-theorem derivativeEnergy_cell_le_exp [m.IsAddRightInvariant] [DecidableEq ι]
+theorem derivativeEnergy_cell_le_exp
     (a : ι → E) (order : ℕ) (js : List ι) {b : ι → E → ℝ}
     (hb : ∀ j, ContDiff ℝ ∞ (b j)) {Y : State E ι} (hY : Y.Smooth)
     (hc : Y.CompactSupport) {B δ θ : ℝ} (hB0 : 0 ≤ B)
@@ -204,6 +208,8 @@ theorem derivativeEnergy_cell_le_exp [m.IsAddRightInvariant] [DecidableEq ι]
       mul_le_mul_of_nonneg_right (by simpa [add_comm] using Real.add_one_le_exp (C * θ))
         (mul_nonneg (Real.exp_pos _).le hE)
     _ = _ := by rw [← mul_assoc, ← Real.exp_add]; congr 2; ring
+
+end InvariantMeasure
 
 end Integration
 end FunctionalInequalities.Analysis.WaveSplitting

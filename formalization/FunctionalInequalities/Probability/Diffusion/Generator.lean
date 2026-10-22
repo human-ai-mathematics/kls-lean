@@ -187,9 +187,12 @@ private theorem contDiffAt_fderiv_of_contDiffAt_two {E F : Type*}
     exact (hfu y hy).fderiv.symm
   exact hf'cd.congr_of_eventuallyEq heq.symm
 
+section NormedSpace
+
+variable {V W : Type*}
+variable [NormedAddCommGroup V] [NormedSpace ℝ V] [NormedAddCommGroup W] [NormedSpace ℝ W]
+
 private theorem diffusionGenerator_comp_local_second_derivative
-    {V W : Type*} [NormedAddCommGroup V] [NormedSpace ℝ V]
-    [NormedAddCommGroup W] [NormedSpace ℝ W]
     (Φ : W → ℝ) (G : V → W) (x : V)
     (hΦ : ContDiffAt ℝ 2 Φ (G x)) (hG : ContDiffAt ℝ 2 G x) (u : V) :
     fderiv ℝ (fderiv ℝ (Φ ∘ G)) x u u =
@@ -237,8 +240,7 @@ private theorem diffusionGenerator_comp_local_second_derivative
 /-- **Chain rule for the generator, local form** (Itô's formula for a composite, step (82) of BKL
 arXiv:2610.05474v1, at one point): if `Φ` is `C²` near `G x` and `G` is `C²` near `x`, then
 `𝓛(Φ ∘ G)(x) = DΦ(G x)[DG·b + ½ Σ_k D²G[σ_k, σ_k]] + ½ Σ_k D²Φ(G x)[DG·σ_k, DG·σ_k]`. -/
-theorem diffusionGenerator_comp_of_contDiffAt {V W : Type*} [NormedAddCommGroup V] [NormedSpace ℝ V]
-    [NormedAddCommGroup W] [NormedSpace ℝ W] {d : ℕ} (b : V → V) (σ : V → Fin d → V)
+theorem diffusionGenerator_comp_of_contDiffAt {d : ℕ} (b : V → V) (σ : V → Fin d → V)
     (Φ : W → ℝ) (G : V → W) (x : V) (hΦ : ContDiffAt ℝ 2 Φ (G x)) (hG : ContDiffAt ℝ 2 G x) :
     diffusionGenerator b σ (Φ ∘ G) x =
       fderiv ℝ Φ (G x) (fderiv ℝ G x (b x) +
@@ -294,6 +296,8 @@ theorem diffusionGenerator_comp_of_contDiffAt {V W : Type*} [NormedAddCommGroup 
       rw [map_add, map_smul, map_sum, Finset.sum_add_distrib]
       simp only [smul_eq_mul]
       ring
+
+end NormedSpace
 
 end S3B1LLocalChainRule
 

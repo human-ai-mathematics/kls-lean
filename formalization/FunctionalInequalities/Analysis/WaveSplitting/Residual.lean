@@ -67,7 +67,11 @@ private theorem wordDerivative_zero_fun [NormedAddCommGroup E] [NormedSpace ℝ 
   | nil => rfl
   | cons j w ih => funext x; simp [wordDerivative, ih]
 
-private theorem jetSquare_eq_word [Fintype ι] (a : ι → E) (k : ℕ) {f : E → ℝ}
+section FiniteIndex
+
+variable [Fintype ι]
+
+private theorem jetSquare_eq_word (a : ι → E) (k : ℕ) {f : E → ℝ}
     (hf : ContDiff ℝ ∞ f) (x : E) :
     jetSquare a k f x = ∑ n ∈ Finset.range (k + 1), ∑ w : Fin n → ι,
       wordDerivative a (List.ofFn w) f x ^ 2 := by
@@ -75,7 +79,7 @@ private theorem jetSquare_eq_word [Fintype ι] (a : ι → E) (k : ℕ) {f : E �
   refine Finset.sum_congr rfl fun n _ => Finset.sum_congr rfl fun w _ => ?_
   rw [wordDerivative_ofFn a w hf]
 
-private theorem continuous_jetSquare_slice [Fintype ι] (a : ι → E) (k : ℕ)
+private theorem continuous_jetSquare_slice (a : ι → E) (k : ℕ)
     {G : ℝ × E → ℝ} (hG : ContDiff ℝ ∞ G) :
     Continuous (fun z : ℝ × E => jetSquare a k (fun y => G (z.1, y)) z.2) := by
   have he : (fun z : ℝ × E => jetSquare a k (fun y => G (z.1, y)) z.2) = fun z =>
@@ -85,6 +89,8 @@ private theorem continuous_jetSquare_slice [Fintype ι] (a : ι → E) (k : ℕ)
   rw [he]
   exact continuous_finsetSum _ fun n _ => continuous_finsetSum _ fun w _ =>
     (contDiff_wordDerivative_slice a (List.ofFn w) hG).continuous.pow 2
+
+end FiniteIndex
 
 /-! ## Scalar time-integral estimates -/
 
@@ -170,12 +176,16 @@ private theorem jetSquare_slice_le [Fintype ι] (a : ι → E) (k : ℕ) {F : �
 private def stateJet [Fintype ι] (a : ι → E) (k : ℕ) (Y : State E ι) (x : E) : ℝ :=
   jetSquare a k Y.u x + jetSquare a k Y.v x + ∑ j, jetSquare a k (Y.p j) x
 
-private theorem stateJet_nonneg [Fintype ι] (a : ι → E) (k : ℕ) (Y : State E ι) (x : E) :
+section FiniteIndex
+
+variable [Fintype ι]
+
+private theorem stateJet_nonneg (a : ι → E) (k : ℕ) (Y : State E ι) (x : E) :
     0 ≤ stateJet a k Y x :=
   add_nonneg (add_nonneg (jetSquare_nonneg a k _ x) (jetSquare_nonneg a k _ x))
     (Finset.sum_nonneg fun _ _ => jetSquare_nonneg a k _ x)
 
-private theorem continuous_stateJet [Fintype ι] (a : ι → E) (k : ℕ) {Z : ℝ → State E ι}
+private theorem continuous_stateJet (a : ι → E) (k : ℕ) {Z : ℝ → State E ι}
     (hZ : JointSmooth Z) : Continuous (fun z : ℝ × E => stateJet a k (Z z.1) z.2) := by
   have hu : Continuous (fun z : ℝ × E => jetSquare a k (Z z.1).u z.2) :=
     continuous_jetSquare_slice a k (G := fun z => (Z z.1).u z.2) hZ.1
@@ -186,7 +196,7 @@ private theorem continuous_stateJet [Fintype ι] (a : ι → E) (k : ℕ) {Z : �
   unfold stateJet
   exact (hu.add hv).add (continuous_finsetSum _ fun j _ => hp j)
 
-private theorem stateJet_le [Fintype ι] (a : ι → E) (k : ℕ) {g : ℝ → State E ι}
+private theorem stateJet_le (a : ι → E) (k : ℕ) {g : ℝ → State E ι}
     (hg : JointSmooth g) (h0 : g 0 = zeroState) {t : ℝ} (ht : 0 ≤ t) (x : E) :
     stateJet a k (g t) x ≤ t * ∫ s in (0 : ℝ)..t, stateJet a k (timeDerivative g s) x := by
   have hD := hg.timeDerivative
@@ -221,6 +231,8 @@ private theorem stateJet_le [Fintype ι] (a : ι → E) (k : ℕ) {g : ℝ → S
   rw [intervalIntegral.integral_add (hiu.add hiv) hip, intervalIntegral.integral_add hiu hiv]
   linarith
 
+end FiniteIndex
+
 /-! ## Supports of derivatives and of temporal derivatives -/
 
 omit [NormedSpace ℝ E] in
@@ -243,17 +255,23 @@ private theorem derivative_eq_zero_of_supported {f : E → ℝ} {R : ℝ}
     iteratedFDeriv_fun_zero]
   rfl
 
-private theorem jetSquare_eq_zero_of_supported [Fintype ι] (a : ι → E) (k : ℕ) {f : E → ℝ}
+section FiniteIndex
+
+variable [Fintype ι]
+
+private theorem jetSquare_eq_zero_of_supported (a : ι → E) (k : ℕ) {f : E → ℝ}
     {R : ℝ} (hf : ∀ y, R < ‖y‖ → f y = 0) {x : E} (hx : R < ‖x‖) : jetSquare a k f x = 0 := by
   simp [jetSquare, derivative_eq_zero_of_supported hf _ hx]
 
-private theorem stateJet_eq_zero_of_supported [Fintype ι] (a : ι → E) (k : ℕ)
+private theorem stateJet_eq_zero_of_supported (a : ι → E) (k : ℕ)
     {Y : State E ι} {R : ℝ} (hY : Y.Supported R) {x : E} (hx : R < ‖x‖) :
     stateJet a k Y x = 0 := by
   unfold stateJet
   rw [jetSquare_eq_zero_of_supported a k (fun y hy => (hY y hy).1) hx,
     jetSquare_eq_zero_of_supported a k (fun y hy => (hY y hy).2.1) hx]
   simp [jetSquare_eq_zero_of_supported a k (fun y hy => (hY y hy).2.2 _) hx]
+
+end FiniteIndex
 
 private theorem deriv_eq_zero_of_eqOn_Icc {f : ℝ → ℝ} {t σ : ℝ} (ht : 0 < t)
     (hσ : σ ∈ Icc 0 t) (hf : DifferentiableAt ℝ f σ) (h0 : ∀ r ∈ Icc 0 t, f r = 0) :
@@ -321,14 +339,18 @@ theorem State.Supported.subState {X Y : State E ι} {R : ℝ} (hX : X.Supported 
   exact ⟨by simp [WaveSplitting.subState, h₁, h₄], by simp [WaveSplitting.subState, h₂, h₅],
     fun j => by simp [WaveSplitting.subState, h₃ j, h₆ j]⟩
 
-theorem State.Supported.sweepGenerator [DecidableEq ι] {Y : State E ι} {R : ℝ}
+section FiniteIndex
+
+variable [DecidableEq ι]
+
+theorem State.Supported.sweepGenerator {Y : State E ι} {R : ℝ}
     (hY : Y.Supported R) (a : ι → E) (js : List ι) :
     (WaveSplitting.sweepGenerator a js Y).Supported R := by
   induction js with
   | nil => intro x _; simp [WaveSplitting.sweepGenerator, zeroState]
   | cons j js ih => exact (hY.coordinateGenerator (a j) j).addState ih
 
-theorem State.Supported.sweepDerivative [DecidableEq ι] {Y : State E ι} {R : ℝ}
+theorem State.Supported.sweepDerivative {Y : State E ι} {R : ℝ}
     (hY : Y.Supported R) (a : ι → E) (t : ℝ) (js : List ι) :
     (WaveSplitting.sweepDerivative a t js Y).Supported (R + |t| * travel a js) := by
   induction js generalizing Y R with
@@ -343,6 +365,8 @@ theorem State.Supported.sweepDerivative [DecidableEq ι] {Y : State E ι} {R : �
     rw [he] at h₁ h₂
     exact h₁.addState h₂
 
+end FiniteIndex
+
 theorem State.Smooth.subState {X Y : State E ι} (hX : X.Smooth) (hY : Y.Smooth) :
     (WaveSplitting.subState X Y).Smooth :=
   ⟨hX.1.sub hY.1, hX.2.1.sub hY.2.1, fun j => (hX.2.2 j).sub (hY.2.2 j)⟩
@@ -352,7 +376,11 @@ theorem State.CompactSupport.subState {X Y : State E ι} (hX : X.CompactSupport)
     (hY : Y.CompactSupport) : (WaveSplitting.subState X Y).CompactSupport :=
   ⟨hX.1.sub hY.1, hX.2.1.sub hY.2.1, fun j => (hX.2.2 j).sub (hY.2.2 j)⟩
 
-theorem State.Smooth.sweepDerivative [DecidableEq ι] {Y : State E ι} (hY : Y.Smooth)
+section FiniteIndex
+
+variable [DecidableEq ι]
+
+theorem State.Smooth.sweepDerivative {Y : State E ι} (hY : Y.Smooth)
     (a : ι → E) (t : ℝ) (js : List ι) : (WaveSplitting.sweepDerivative a t js Y).Smooth := by
   induction js generalizing Y with
   | nil => exact ⟨contDiff_const, contDiff_const, fun _ => contDiff_const⟩
@@ -360,7 +388,7 @@ theorem State.Smooth.sweepDerivative [DecidableEq ι] {Y : State E ι} (hY : Y.S
     exact (((hY.transport (a j) j t).coordinateGenerator (a j) j).sweep a t js).addState
       (ih (hY.transport (a j) j t))
 
-theorem State.CompactSupport.sweepDerivative [DecidableEq ι] {Y : State E ι}
+theorem State.CompactSupport.sweepDerivative {Y : State E ι}
     (hc : Y.CompactSupport) (a : ι → E) (t : ℝ) (js : List ι) :
     (WaveSplitting.sweepDerivative a t js Y).CompactSupport := by
   induction js generalizing Y with
@@ -369,17 +397,23 @@ theorem State.CompactSupport.sweepDerivative [DecidableEq ι] {Y : State E ι}
     exact (((hc.transport (a j) j t).coordinateGenerator (a j) j).sweep a t js).addState
       (ih (hc.transport (a j) j t))
 
+end FiniteIndex
+
 /-! ## The quantitative time-integral lemma -/
 
 section Integration
 variable [MeasurableSpace E] [BorelSpace E] (m : Measure E) [IsFiniteMeasureOnCompacts m]
 
-private theorem integrable_stateJet [Fintype ι] (a : ι → E) (k : ℕ) {Y : State E ι}
+section FiniteIndex
+
+variable [Fintype ι]
+
+private theorem integrable_stateJet (a : ι → E) (k : ℕ) {Y : State E ι}
     (hY : Y.Smooth) (hc : Y.CompactSupport) : Integrable (stateJet a k Y) m :=
   ((integrable_jetSquare m a k hY.1 hc.1).add (integrable_jetSquare m a k hY.2.1 hc.2.1)).add
     (integrable_finsetSum Finset.univ fun j _ => integrable_jetSquare m a k (hY.2.2 j) (hc.2.2 j))
 
-private theorem integral_stateJet [Fintype ι] (a : ι → E) (k : ℕ) {Y : State E ι}
+private theorem integral_stateJet (a : ι → E) (k : ℕ) {Y : State E ι}
     (hY : Y.Smooth) (hc : Y.CompactSupport) :
     ∫ x, stateJet a k Y x ∂m = derivativeEnergy m a k Y := by
   have huv : Integrable (fun x => jetSquare a k Y.u x + jetSquare a k Y.v x) m :=
@@ -394,22 +428,28 @@ private theorem integral_stateJet [Fintype ι] (a : ι → E) (k : ℕ) {Y : Sta
   exact (derivativeEnergy_eq_scalarEnergy m a k hY hc).symm
 
 omit [BorelSpace E] [IsFiniteMeasureOnCompacts m] in
-theorem derivativeEnergy_zeroState [Fintype ι] (a : ι → E) (k : ℕ) :
+theorem derivativeEnergy_zeroState (a : ι → E) (k : ℕ) :
     derivativeEnergy m a k (zeroState : State E ι) = 0 := by
   simp [derivativeEnergy, energy, differentiate, derivative, zeroState, squareIntegral]
 
 omit [BorelSpace E] [IsFiniteMeasureOnCompacts m] in
-theorem derivativeEnergy_nonneg [Fintype ι] (a : ι → E) (k : ℕ) (Y : State E ι) :
+theorem derivativeEnergy_nonneg (a : ι → E) (k : ℕ) (Y : State E ι) :
     0 ≤ derivativeEnergy m a k Y :=
   Finset.sum_nonneg fun _ _ => Finset.sum_nonneg fun _ _ => energy_nonneg m _
 
+end FiniteIndex
+
 variable [FiniteDimensional ℝ E]
+
+section FiniteIndex
+
+variable [Fintype ι]
 
 /-- Quantitative time-integral bound in the squared ordered-coordinate energy. If a jointly
 smooth state curve starts at zero and stays in one ball on `[0,t]`, then its energy at time
 `t` is at most `t^2` times any bound for the energies of its temporal derivatives on `[0,t]`.
 This is proved from the exact integral, Cauchy--Schwarz in time and Fubini. -/
-theorem derivativeEnergy_le_of_timeDerivative [Fintype ι] (a : ι → E) (k : ℕ)
+theorem derivativeEnergy_le_of_timeDerivative (a : ι → E) (k : ℕ)
     {g : ℝ → State E ι} (hg : JointSmooth g) (h0 : g 0 = zeroState) {R t M : ℝ}
     (ht : 0 ≤ t) (hR : ∀ s ∈ Icc 0 t, (g s).Supported R)
     (hM : ∀ s ∈ Icc 0 t, derivativeEnergy m a k (timeDerivative g s) ≤ M) :
@@ -492,7 +532,7 @@ theorem derivativeEnergy_le_of_timeDerivative [Fintype ι] (a : ι → E) (k : �
     _ = t ^ 2 * M := by ring
 
 omit [FiniteDimensional ℝ E] in
-theorem derivativeEnergy_subState_le [Fintype ι] (a : ι → E) (k : ℕ) {X Y : State E ι}
+theorem derivativeEnergy_subState_le (a : ι → E) (k : ℕ) {X Y : State E ι}
     (hX : X.Smooth) (hY : Y.Smooth) (hcX : X.CompactSupport) (hcY : Y.CompactSupport) :
     derivativeEnergy m a k (subState X Y) ≤
       2 * (derivativeEnergy m a k X + derivativeEnergy m a k Y) := by
@@ -506,9 +546,15 @@ theorem derivativeEnergy_subState_le [Fintype ι] (a : ι → E) (k : ℕ) {X Y 
   dsimp only [subState]
   nlinarith
 
+end FiniteIndex
+
+section InvariantMeasure
+
+variable [m.IsAddRightInvariant] [Fintype ι] [DecidableEq ι]
+
 omit [FiniteDimensional ℝ E] in
 /-- The derivative of a finite sweep, with its flow factors, costs one derivative order. -/
-theorem derivativeEnergy_sweepDerivative_le [m.IsAddRightInvariant] [Fintype ι] [DecidableEq ι]
+theorem derivativeEnergy_sweepDerivative_le
     (a : ι → E) (k : ℕ) (t : ℝ) (js : List ι) {Y : State E ι} (hY : Y.Smooth)
     (hc : Y.CompactSupport) :
     derivativeEnergy m a k (sweepDerivative a t js Y) ≤
@@ -542,8 +588,7 @@ theorem derivativeEnergy_sweepDerivative_le [m.IsAddRightInvariant] [Fintype ι]
 /-- Ordered commutator of a finite coordinate sweep with one coordinate generator. The
 sweep flow factors are kept; the estimate costs two derivative orders and is quadratic in
 time. -/
-theorem derivativeEnergy_sweep_commutator_le [m.IsAddRightInvariant] [Fintype ι]
-    [DecidableEq ι] (a : ι → E) (k : ℕ) (js : List ι) (j : ι) {X : State E ι}
+theorem derivativeEnergy_sweep_commutator_le (a : ι → E) (k : ℕ) (js : List ι) (j : ι) {X : State E ι}
     (hX : X.Smooth) (hc : X.CompactSupport) {t : ℝ} (ht : 0 ≤ t) :
     derivativeEnergy m a k (subState (sweep a t js (coordinateGenerator (a j) j X))
         (coordinateGenerator (a j) j (sweep a t js X))) ≤
@@ -595,8 +640,7 @@ theorem derivativeEnergy_sweep_commutator_le [m.IsAddRightInvariant] [Fintype ι
 
 /-- Residual of a coordinate sweep against its own list generator: every coordinate is
 commuted through the later flow factors, with an explicit two-order quadratic bound. -/
-theorem derivativeEnergy_sweepResidual_le [m.IsAddRightInvariant] [Fintype ι]
-    [DecidableEq ι] (a : ι → E) (k : ℕ) (js : List ι) {Y : State E ι} (hY : Y.Smooth)
+theorem derivativeEnergy_sweepResidual_le (a : ι → E) (k : ℕ) (js : List ι) {Y : State E ι} (hY : Y.Smooth)
     (hc : Y.CompactSupport) {t : ℝ} (ht : 0 ≤ t) :
     derivativeEnergy m a k (subState (sweepDerivative a t js Y)
         (sweepGenerator a js (sweep a t js Y))) ≤
@@ -654,6 +698,8 @@ theorem derivativeEnergy_sweepResidual_le [m.IsAddRightInvariant] [Fintype ι]
     rw [hgoal]
     have hn : (0 : ℝ) ≤ js.length := Nat.cast_nonneg _
     nlinarith [hadd, hcomm, hres', mul_nonneg hn hP0]
+
+end InvariantMeasure
 
 omit [FiniteDimensional ℝ E] in
 private theorem couplingConstant_nonneg [Fintype ι] (k : ℕ) {B : ℝ} (hB : 0 ≤ B) :
@@ -839,11 +885,15 @@ theorem derivativeEnergy_residual_le [m.IsAddRightInvariant] [Fintype ι] [Decid
   unfold residualConstant
   nlinarith [hadd, hA, hB₂, mul_nonneg ht2 (mul_nonneg hr hE₂)]
 
+section FiniteIndex
+
+variable [Fintype ι]
+
 /-! ## Actual grid cells for the original smooth coefficient -/
 
 omit [NormedSpace ℝ E] [MeasurableSpace E] [BorelSpace E] [IsFiniteMeasureOnCompacts m]
   [FiniteDimensional ℝ E] in
-private theorem coupling_eq_of_supported [Fintype ι] {W : State E ι} {T : ℝ}
+private theorem coupling_eq_of_supported {W : State E ι} {T : ℝ}
     (hW : W.Supported T) {b c : ι → E → ℝ} (hbc : ∀ j x, ‖x‖ ≤ T → b j x = c j x) :
     coupling b W = coupling c W := by
   funext x
@@ -856,7 +906,7 @@ private theorem coupling_eq_of_supported [Fintype ι] {W : State E ι} {T : ℝ}
 omit [MeasurableSpace E] [BorelSpace E] [IsFiniteMeasureOnCompacts m] [FiniteDimensional ℝ E] in
 /-- The actual residual only sees the coefficient on the propagated support ball. The
 temporal derivative is local in time, so agreement of the steps near `θ` is used. -/
-theorem residual_eq_of_supported [Fintype ι] [DecidableEq ι] {Z : State E ι} {R T θ : ℝ}
+theorem residual_eq_of_supported [DecidableEq ι] {Z : State E ι} {R T θ : ℝ}
     (hZ : Z.Supported R) (a : ι → E) (js : List ι) {b c : ι → E → ℝ}
     (hbc : ∀ j x, ‖x‖ ≤ T → b j x = c j x) (hT : R + (|θ| + 1) * travel a js ≤ T) :
     residual a b js Z θ = residual a c js Z θ := by
@@ -884,6 +934,8 @@ theorem residual_eq_of_supported [Fintype ι] [DecidableEq ι] {Z : State E ι} 
   rw [residual_eq_subState, residual_eq_subState, hθ]
   simp only [timeDerivative, hu, hv, hp, splitGenerator, reactionGenerator,
     coupling_eq_of_supported hWs hbc]
+
+end FiniteIndex
 
 /-- **Mesh-uniform residual bound on the actual grid cells.** For an original smooth
 coefficient without global bounds, smooth initial data supported in a ball, any derivative

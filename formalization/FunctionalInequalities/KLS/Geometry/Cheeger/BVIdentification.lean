@@ -117,8 +117,13 @@ end Intrinsic
 
 section ClosedSupport
 
+section MeasurableSpace
+
+variable {X : Type*}
+variable [MetricSpace X] [MeasurableSpace X] [BorelSpace X]
+
 /-- An admissible set bounds the symmetric BV constant by its quotient. -/
-theorem symmetricConstant_le_div {X : Type*} [MetricSpace X] [MeasurableSpace X] [BorelSpace X]
+theorem symmetricConstant_le_div
     (ν : ProbabilityMeasure X) {A : Set X} (hA : MeasurableSet A) (h0 : 0 < (ν : Measure X) A)
     (h1 : (ν : Measure X) A < 1) :
     symmetricConstant ν ≤
@@ -127,12 +132,14 @@ theorem symmetricConstant_le_div {X : Type*} [MetricSpace X] [MeasurableSpace X]
   exact iInf_le_of_le A (iInf_le_of_le hA (iInf_le_of_le h0 (iInf_le _ h1)))
 
 /-- An admissible set bounds the half-mass BV constant by its quotient. -/
-theorem halfConstant_le_div {X : Type*} [MetricSpace X] [MeasurableSpace X] [BorelSpace X]
+theorem halfConstant_le_div
     (ν : ProbabilityMeasure X) {A : Set X} (hA : MeasurableSet A) (h0 : 0 < (ν : Measure X) A)
     (h1 : (ν : Measure X) A ≤ 1 / 2) :
     halfConstant ν ≤ perimeter (ν : Measure X) A / (ν : Measure X) A := by
   unfold halfConstant
   exact iInf_le_of_le A (iInf_le_of_le hA (iInf_le_of_le h0 (iInf_le _ h1)))
+
+end MeasurableSpace
 
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
   [MeasurableSpace E] [BorelSpace E] [SecondCountableTopology E]

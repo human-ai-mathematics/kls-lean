@@ -53,20 +53,27 @@ theorem route_S5_of_nonneg :
   intro H₀ _ _ _ L hL t ht f
   exact Analysis.Semigroup.norm_exp_neg_smul_apply_le L hL ht f
 
+section InnerProduct
+
+variable {H₀ : Type*}
+variable [NormedAddCommGroup H₀] [InnerProductSpace ℝ H₀]
+
 /-! ### Boundary cases -/
 
 /-- At `t = 0` the exponential is the identity, so the contraction bound is an equality. -/
-theorem boundary_t_zero {H₀ : Type*} [NormedAddCommGroup H₀] [InnerProductSpace ℝ H₀]
+theorem boundary_t_zero
     [CompleteSpace H₀] (L : H₀ →L[ℝ] H₀) (f : H₀) :
     ‖NormedSpace.exp (-(0 : ℝ) • L) f‖ = ‖f‖ := by
   simp
 
 /-- For `L = 0` every exponential is the identity, and the hypothesis of the module lemma holds
 trivially, so both routes give the same equality. -/
-theorem boundary_L_zero {H₀ : Type*} [NormedAddCommGroup H₀] [InnerProductSpace ℝ H₀]
+theorem boundary_L_zero
     [CompleteSpace H₀] (t : ℝ) (ht : 0 ≤ t) (f : H₀) :
     ‖NormedSpace.exp (-t • (0 : H₀ →L[ℝ] H₀)) f‖ ≤ ‖f‖ :=
   Analysis.Semigroup.norm_exp_neg_smul_apply_le 0 (fun f => by simp) ht f
+
+end InnerProduct
 
 end SemigroupYosidaAudit
 

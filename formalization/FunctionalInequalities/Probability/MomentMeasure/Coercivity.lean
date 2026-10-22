@@ -234,12 +234,16 @@ theorem exists_bound_of_log_lower (A : ℝ) (n : ℕ) (b : ℝ) :
   rw [max_eq_left (le_of_not_ge hsmall)] at hb
   have hB : M ≤ 2 * (Real.log A + (n : ℝ) * Real.log d - b) := by nlinarith
   exact hB.trans (le_max_right _ _)
+
+section FiniteDimensional
+
+variable {E : Type*}
+variable [NormedAddCommGroup E] [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] [MeasurableSpace E]
+variable [BorelSpace E]
 /-- Actual normalized-sequence integral control from a finite eventual
 functional lower bound, as in CEK (62). The finite prefix is handled by the
 proved bounded-range theorem; no desired sequence bound is supplied. -/
 theorem exists_integral_bound_of_eventual_functional_lower
-    {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [FiniteDimensional ℝ E]
-    [MeasurableSpace E] [BorelSpace E]
     (dx μ : Measure E) [dx.IsAddHaarMeasure] [IsProbabilityMeasure μ]
     (hsub : ∀ V : Submodule ℝ E, μ (V : Set E)ᶜ = 0 → V = ⊤)
     (hint : Integrable (fun x : E => x) μ) (hbar : ∫ x, x ∂μ = 0)
@@ -267,8 +271,6 @@ theorem exists_integral_bound_of_eventual_functional_lower
 /-- A normalized maximizing sequence whose extended functional limit lies
 above a known finite level supplies (62). An infinite candidate limit is allowed. -/
 theorem exists_integral_bound_of_tendsto_functional_above
-    {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [FiniteDimensional ℝ E]
-    [MeasurableSpace E] [BorelSpace E]
     (dx μ : Measure E) [dx.IsAddHaarMeasure] [IsProbabilityMeasure μ]
     (hsub : ∀ V : Submodule ℝ E, μ (V : Set E)ᶜ = 0 → V = ⊤)
     (hint : Integrable (fun x : E => x) μ) (hbar : ∫ x, x ∂μ = 0)
@@ -280,6 +282,8 @@ theorem exists_integral_bound_of_tendsto_functional_above
       (⨆ j, ∫⁻ x, (φ j x).toENNReal ∂μ) ≠ ⊤ := by
   apply exists_integral_bound_of_eventual_functional_lower dx μ hsub hint hbar φ hnn hφ0 hconv hφ b
   exact (hlim.eventually (Ioi_mem_nhds hb)).mono fun _ h => h.le
+
+end FiniteDimensional
 
 end
 

@@ -58,20 +58,27 @@ namespace A4PositivityClient
 abbrev E2 := EuclideanSpace ℝ (Fin 2)
 abbrev E0 := EuclideanSpace ℝ (Fin 0)
 
-theorem hessian_zero_fun {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E] (x v : E) :
+section InnerProduct
+
+variable {E : Type*}
+variable [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+
+theorem hessian_zero_fun (x v : E) :
     bilinearIteratedFDerivTwo ℝ (fun _ : E => (0 : ℝ)) x v v = 0 := by
   rw [bilinearIteratedFDerivTwo_eq_fderiv_apply contDiff_const x v v]
   simp
 
 /-- The scaled Gaussian potential `δ/2 ‖y‖²` has positive definite Hessian `δ ‖v‖²` for `δ > 0`. -/
-theorem gaussian_posDef {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E] {δ : ℝ} (hδ : 0 < δ) (x v : E)
+theorem gaussian_posDef {δ : ℝ} (hδ : 0 < δ) (x v : E)
     (hv : v ≠ 0) : 0 < bilinearIteratedFDerivTwo ℝ (fun y : E => (0 : ℝ) + δ / 2 * ‖y‖ ^ 2) x v v := by
   rw [bilinearIteratedFDerivTwo_add_quadratic contDiff_const δ x v, hessian_zero_fun, zero_add]
   exact mul_pos hδ (pow_pos (norm_pos_iff.mpr hv) 2)
 
-theorem gaussian_contDiff {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E] (δ : ℝ) :
+theorem gaussian_contDiff (δ : ℝ) :
     ContDiff ℝ 2 (fun y : E => (0 : ℝ) + δ / 2 * ‖y‖ ^ 2) :=
   contDiff_const.add (contDiff_const.mul (contDiff_norm_sq ℝ))
+
+end InnerProduct
 
 /-- Genuine positive-dimensional case, any positive scale: on `ℝ²` with the standard basis (rank 2). -/
 theorem plane_quadratic_nonneg {δ : ℝ} (hδ : 0 < δ) (x : E2) (a : Fin (Module.finrank ℝ E2) → ℝ) :

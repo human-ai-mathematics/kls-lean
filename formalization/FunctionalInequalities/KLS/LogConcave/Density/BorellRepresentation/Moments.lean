@@ -6,6 +6,7 @@ import FunctionalInequalities.Analysis.BakryEmery.Cumulant.Basic
 # BorellRepresentation: Moments
 
 Exponential and polynomial moment bounds for Borell log-concave probability laws.
+`KLS.LogConcave.integrable_norm_pow` gives integrability of `‖x‖ ^ d` for every `d` and every log-concave law.
 -/
 
 noncomputable section
@@ -408,18 +409,31 @@ end KLS.BorelLogConcave
 
 end Moments
 
+section FiniteDimensional
+
+variable {E : Type*}
+variable [NormedAddCommGroup E] [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] [MeasurableSpace E]
+variable [BorelSpace E]
+
 
 
 open scoped ContDiff in
 /-- **A log-concave law has a smooth logarithmic Laplace transform near `0`**: for some `r > 0`,
 `∫ e^{r‖x‖} dν < ∞` and `Λ_ν` is `C^∞` on the ball of radius `r` (BKL p. 29, through the Borell
 exponential moment and `contDiffOn_logLaplace_ball`). -/
-theorem KLS.LogConcave.exists_integrable_exp_norm_contDiffOn_logLaplace {E : Type*}
-    [NormedAddCommGroup E] [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] [MeasurableSpace E]
-    [BorelSpace E] {ν : ProbabilityMeasure E} (hν : KLS.LogConcave ν) :
+theorem KLS.LogConcave.exists_integrable_exp_norm_contDiffOn_logLaplace {ν : ProbabilityMeasure E} (hν : KLS.LogConcave ν) :
     ∃ r : ℝ, 0 < r ∧ Integrable (fun x => Real.exp (r * ‖x‖)) (ν : Measure E) ∧
       ContDiffOn ℝ ∞ (Analysis.BakryEmery.logLaplace (ν : Measure E)) (Metric.ball 0 r) := by
   obtain ⟨r, hr, hi⟩ := ((KLS.LogConcave.borel_iff ν).1 hν).exists_integrable_exp_norm
   exact ⟨r, hr, hi, Analysis.BakryEmery.contDiffOn_logLaplace_ball (ν : Measure E) hr hi⟩
+
+/-- **A log-concave law has norm moments of every order**: `‖x‖ ^ d` is integrable for every `d`, from the Borell
+exponential moment. -/
+theorem KLS.LogConcave.integrable_norm_pow {ν : ProbabilityMeasure E}
+    (hν : KLS.LogConcave ν) (d : ℕ) : Integrable (fun x : E => ‖x‖ ^ d) (ν : Measure E) := by
+  obtain ⟨r, hr, hi⟩ := ((KLS.LogConcave.borel_iff ν).1 hν).exists_integrable_exp_norm
+  exact Probability.integrable_norm_pow_of_integrable_exp_norm hr hi d
+
+end FiniteDimensional
 
 end FunctionalInequalities

@@ -250,8 +250,12 @@ private theorem timeDerivative_step_eq [Fintype ι] [DecidableEq ι] (a : ι →
 section Parametric
 variable [FiniteDimensional ℝ E]
 
+section FiniteIndex
+
+variable [Fintype ι] [DecidableEq ι]
+
 omit [FiniteDimensional ℝ E] in
-private theorem contDiff_cell_integrand [Fintype ι] [DecidableEq ι] (a : ι → E)
+private theorem contDiff_cell_integrand (a : ι → E)
     {b : ι → E → ℝ} (hb : ∀ j, ContDiff ℝ ∞ (b j)) (js : List ι) {Y : State E ι}
     (hY : Y.Smooth) (δ : ℝ) (N k : ℕ) :
     ContDiff ℝ ∞ (fun z : ℝ × E =>
@@ -260,7 +264,7 @@ private theorem contDiff_cell_integrand [Fintype ι] [DecidableEq ι] (a : ι �
     (hY.joint_cell a hb js δ k).1)
 
 /-- The finite time average of smooth data is smooth. -/
-theorem contDiff_timeAverage [Fintype ι] [DecidableEq ι] (a : ι → E) {b : ι → E → ℝ}
+theorem contDiff_timeAverage (a : ι → E) {b : ι → E → ℝ}
     (hb : ∀ j, ContDiff ℝ ∞ (b j)) (js : List ι) {Y : State E ι} (hY : Y.Smooth) (δ : ℝ)
     (N : ℕ) : ContDiff ℝ ∞ (timeAverage a b js δ Y N) := by
   unfold timeAverage
@@ -269,7 +273,7 @@ theorem contDiff_timeAverage [Fintype ι] [DecidableEq ι] (a : ι → E) {b : �
 
 omit [FiniteDimensional ℝ E] in
 /-- The finite time average is supported in the common support ball of all cells. -/
-theorem timeAverage_eq_zero_of_supported [Fintype ι] [DecidableEq ι] (a : ι → E)
+theorem timeAverage_eq_zero_of_supported (a : ι → E)
     (b : ι → E → ℝ) (js : List ι) {Y : State E ι} {R : ℝ} (hR : Y.Supported R) {δ : ℝ}
     (hδ : 0 ≤ δ) (N : ℕ) {x : E} (hx : R + N * (δ * travel a js) < ‖x‖) :
     timeAverage a b js δ Y N x = 0 := by
@@ -281,12 +285,14 @@ theorem timeAverage_eq_zero_of_supported [Fintype ι] [DecidableEq ι] (a : ι �
   rw [(hR.cell a b js hδ hθ.1.le hθ.2 hkN x hx).1, mul_zero]
 
 /-- The finite time average of compactly supported smooth data is compactly supported. -/
-theorem hasCompactSupport_timeAverage [Fintype ι] [DecidableEq ι] (a : ι → E)
+theorem hasCompactSupport_timeAverage (a : ι → E)
     (b : ι → E → ℝ) (js : List ι) {Y : State E ι} {R : ℝ} (hR : Y.Supported R) {δ : ℝ}
     (hδ : 0 ≤ δ) (N : ℕ) : HasCompactSupport (timeAverage a b js δ Y N) :=
   HasCompactSupport.intro (isCompact_closedBall 0 (R + N * (δ * travel a js))) fun x hx =>
     timeAverage_eq_zero_of_supported a b js hR hδ N
       (by simpa [Metric.mem_closedBall, dist_zero_right, not_le] using hx)
+
+end FiniteIndex
 
 /-! ## Cellwise integration by parts and the exact identity -/
 

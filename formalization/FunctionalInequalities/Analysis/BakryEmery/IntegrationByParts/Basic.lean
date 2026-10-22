@@ -247,13 +247,17 @@ end Tilted
 
 section Directional
 
+section InnerProduct
+
+variable {E : Type*}
+variable [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+
 /-- **Weighted directional integration by parts** (Letwin arXiv:2607.24164v1, Lemma A.3, pp. 16–17):
 for smooth `φ, f, g` with `∫ e^{-φ} dm = 1` and the four integrands `(∂_v f) g`, `f ∂_v g`, `f g ∂_v φ`,
 `f g` integrable under `ν = e^{-φ} m`,
 `∫ (∂_v f) g dν = ∫ f ((∂_v φ) g − ∂_v g) dν`.
 -/
-theorem integral_fderiv_mul_tilted_eq {E : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] [CompleteSpace E] [FiniteDimensional ℝ E]
+theorem integral_fderiv_mul_tilted_eq [CompleteSpace E] [FiniteDimensional ℝ E]
     [MeasurableSpace E] [BorelSpace E] (m : Measure E) [m.IsAddHaarMeasure]
     (φ f g : E → ℝ) (v : E) (hφ : ContDiff ℝ ∞ φ)
     (hf : ContDiff ℝ ∞ f) (hg : ContDiff ℝ ∞ g)
@@ -328,8 +332,7 @@ theorem integral_fderiv_mul_tilted_eq {E : Type*} [NormedAddCommGroup E]
 
 /-- **Mean Hessian equals the gradient second moment** under `e^{-φ}m` (Letwin Lemma 2.3, step 1): the directional integration by parts applied to `∂_u φ` and
 `g = 1`. -/
-theorem integral_fderiv_fderiv_tilted_eq_integral_mul {E : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] [CompleteSpace E] [FiniteDimensional ℝ E]
+theorem integral_fderiv_fderiv_tilted_eq_integral_mul [CompleteSpace E] [FiniteDimensional ℝ E]
     [MeasurableSpace E] [BorelSpace E] (m : Measure E) [m.IsAddHaarMeasure]
     (φ : E → ℝ) (u v : E) (hφ : ContDiff ℝ ∞ φ)
     (hφexp : Integrable (fun x => Real.exp (-φ x)) m)
@@ -388,6 +391,8 @@ theorem integral_fderiv_fderiv_tilted_eq_integral_mul {E : Type*} [NormedAddComm
     congr 1
     funext x
     simp
+
+end InnerProduct
 
 end Directional
 

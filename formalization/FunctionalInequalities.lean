@@ -149,12 +149,15 @@ import FunctionalInequalities.Analysis.TemperateGrowth
 import FunctionalInequalities.Analysis.Cutoff.Integrability
 import FunctionalInequalities.Analysis.Cutoff.Conservativity
 import FunctionalInequalities.Analysis.Cutoff.Profile
+import FunctionalInequalities.Analysis.Cutoff.LocalRegularity
 import FunctionalInequalities.Analysis.DiagonalSelector
 import FunctionalInequalities.Analysis.IteratedDerivative.Log
 import FunctionalInequalities.Analysis.IteratedDerivative.GradientJet
 import FunctionalInequalities.Analysis.IteratedDerivative.Symmetry
 import FunctionalInequalities.Analysis.IteratedDerivative.Bilinear
 import FunctionalInequalities.Analysis.IteratedDerivative.InnerProduct
+import FunctionalInequalities.Analysis.IteratedDerivative.Affine
+import FunctionalInequalities.Analysis.IteratedDerivative.Interpolation
 import FunctionalInequalities.Analysis.Matrix.Trace.Algebra
 import FunctionalInequalities.Analysis.Matrix.Trace.Power
 import FunctionalInequalities.Analysis.Matrix.Trace.Energy
@@ -293,6 +296,7 @@ import FunctionalInequalities.Analysis.Operator.Positive
 import FunctionalInequalities.Analysis.Operator.InverseSqrt
 import FunctionalInequalities.KLS.LogConcave.Density.ConcaveTilt
 import FunctionalInequalities.Analysis.Matrix.Positivity
+import FunctionalInequalities.Analysis.Matrix.RankOneFrame
 import FunctionalInequalities.Analysis.Matrix.Sign
 import FunctionalInequalities.Analysis.Matrix.Integral
 import FunctionalInequalities.Analysis.Matrix.DeterminantDerivative
@@ -311,6 +315,21 @@ import FunctionalInequalities.Analysis.WeakDerivative.Basic
 import FunctionalInequalities.Analysis.WeakDerivative.Mollification
 import FunctionalInequalities.Analysis.WeakDerivative.Approximation
 import FunctionalInequalities.Analysis.WeakDerivative.Calculus
+import FunctionalInequalities.Analysis.WeakDerivative.Sobolev
+import FunctionalInequalities.Analysis.WeakDerivative.Moser
+import FunctionalInequalities.Analysis.WeakDerivative.Caccioppoli
+import FunctionalInequalities.Analysis.WeakDerivative.Harnack
+import FunctionalInequalities.Analysis.Modulus
+import FunctionalInequalities.Analysis.EssentialExtrema
+import FunctionalInequalities.Analysis.LpExponent
+import FunctionalInequalities.Analysis.MoserIteration
+import FunctionalInequalities.Analysis.MeasureGrowth
+import FunctionalInequalities.Analysis.MorreyGrowth
+import FunctionalInequalities.Analysis.RieszPotential.Growth
+import FunctionalInequalities.Analysis.RieszPotential.Critical
+import FunctionalInequalities.Probability.ExponentialMoments
+import FunctionalInequalities.Analysis.RieszPotential.Representation
+import FunctionalInequalities.Analysis.WeakDerivative.Representation
 import FunctionalInequalities.Probability.Diffusion.Setup
 import FunctionalInequalities.Probability.Diffusion.Dynkin
 import FunctionalInequalities.Probability.Posterior.LogPartition
@@ -371,6 +390,7 @@ import FunctionalInequalities.Analysis.Tensor.EnergyForm
 import FunctionalInequalities.KLS.BKL.Localization.CutoffEnergy.Basic
 import FunctionalInequalities.KLS.BKL.Localization.Lyapunov.Basic
 import FunctionalInequalities.KLS.BKL.Localization.Energy.Generator
+import FunctionalInequalities.KLS.Letwin.Approximation
 import FunctionalInequalities.KLS.Letwin.CompactBound
 import FunctionalInequalities.KLS.Letwin.QuadraticBound
 import FunctionalInequalities.KLS.Letwin.RegularClass
@@ -393,6 +413,24 @@ import FunctionalInequalities.KLS.BKL.Posterior.Standardization
 import FunctionalInequalities.KLS.BKL.Posterior.Noise
 import FunctionalInequalities.KLS.BKL.Posterior.Moments
 import FunctionalInequalities.KLS.BKL.Poincare
+import FunctionalInequalities.Analysis.MeasureAverage
+import FunctionalInequalities.Analysis.EssentialOscillation
+import FunctionalInequalities.Analysis.Matrix.LogDetOscillation
+import FunctionalInequalities.Analysis.HolderRepresentative
+import FunctionalInequalities.Analysis.Matrix.Holder
+import FunctionalInequalities.Analysis.ContinuousDerivative
+import FunctionalInequalities.Analysis.HessianRegularity
+import FunctionalInequalities.KLS.CEK.MomentRegularity.HessianHolder
+import FunctionalInequalities.Analysis.Matrix.LogDetSegment
+import FunctionalInequalities.Analysis.Matrix.InverseHolder
+import FunctionalInequalities.Analysis.Matrix.AveragedInverse
+import FunctionalInequalities.Probability.Support
+import FunctionalInequalities.Analysis.Convex.GradientImage
+import FunctionalInequalities.Analysis.Convex.GradientInverse
+import FunctionalInequalities.Probability.MomentMeasure.Gradient
+import FunctionalInequalities.KLS.CEK.MomentRegularity.Inverse
+import FunctionalInequalities.Analysis.BakryEmery.DifferenceQuotient
+import FunctionalInequalities.KLS.CEK.MomentRegularity.DifferenceQuotient
 /-!
 # Functional inequalities
 

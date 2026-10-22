@@ -20,9 +20,14 @@ universe u v
 
 section TiltTransport
 
+section MeasurableSpace
+
+variable {A B : Type*}
+variable [MeasurableSpace A] [MeasurableSpace B]
+
 /-- Pushing a density through a measurable equivalence: the new density is the old one composed with
 the inverse. -/
-theorem Probability.map_withDensity_measurableEquiv {A B : Type*} [MeasurableSpace A] [MeasurableSpace B]
+theorem Probability.map_withDensity_measurableEquiv
     (e : A ≃ᵐ B) (μ : Measure A) (w : A → ENNReal) (hw : Measurable w) :
     (μ.withDensity w).map e = (μ.map e).withDensity (fun y => w (e.symm y)) := by
   apply Measure.ext_of_lintegral
@@ -36,7 +41,7 @@ theorem Probability.map_withDensity_measurableEquiv {A B : Type*} [MeasurableSpa
 
 /-- The tilted measure transported through a measurable equivalence is the tilt of the image measure by
 the composed weight. -/
-theorem Probability.map_tilted_measurableEquiv {A B : Type*} [MeasurableSpace A] [MeasurableSpace B]
+theorem Probability.map_tilted_measurableEquiv
     (e : A ≃ᵐ B) (μ : Measure A) (f : A → ℝ) (hf : Measurable f) :
     (μ.tilted f).map e = (μ.map e).tilted (fun y => f (e.symm y)) := by
   have hZ : (∫ y, Real.exp (f (e.symm y)) ∂(μ.map e)) = ∫ x, Real.exp (f x) ∂μ := by
@@ -66,7 +71,7 @@ theorem Probability.tilted_smul_pos {A : Type*} [MeasurableSpace A] (μ : Measur
 
 
 /-- A measurable pushforward commutes with a pulled-back density. -/
-theorem Probability.map_withDensity_comp {A B : Type*} [MeasurableSpace A] [MeasurableSpace B]
+theorem Probability.map_withDensity_comp
     (μ : Measure A) (f : A → B) (hf : Measurable f) (g : B → ENNReal) (hg : Measurable g) :
     (μ.withDensity (g ∘ f)).map f = (μ.map f).withDensity g := by
   ext s hs
@@ -75,7 +80,7 @@ theorem Probability.map_withDensity_comp {A B : Type*} [MeasurableSpace A] [Meas
   congr 1
 
 /-- Pushforward of a tilt by a pulled-back exponent is the tilt of the pushforward. -/
-theorem Probability.map_tilted_comp {A B : Type*} [MeasurableSpace A] [MeasurableSpace B]
+theorem Probability.map_tilted_comp
     (μ : Measure A) (f : A → B) (hf : Measurable f) (φ : B → ℝ) (hφ : Measurable φ) :
     (μ.tilted (φ ∘ f)).map f = (μ.map f).tilted φ := by
   have hZ : (∫ y, Real.exp (φ y) ∂μ.map f) = ∫ x, Real.exp ((φ ∘ f) x) ∂μ := by
@@ -85,6 +90,8 @@ theorem Probability.map_tilted_comp {A B : Type*} [MeasurableSpace A] [Measurabl
   simpa only [Function.comp_def] using Probability.map_withDensity_comp μ f hf
     (fun y => ENNReal.ofReal (Real.exp (φ y) / ∫ x, Real.exp ((φ ∘ f) x) ∂μ))
     (hφ.exp.div_const _).ennreal_ofReal
+
+end MeasurableSpace
 
 end TiltTransport
 

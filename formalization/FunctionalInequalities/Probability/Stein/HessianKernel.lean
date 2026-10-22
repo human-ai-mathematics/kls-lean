@@ -138,3 +138,66 @@ theorem memLp_hessian_action_of_lipschitz_gradient {n : ℕ}
 end FunctionalInequalities.Probability.Stein
 
 end
+
+/-! ### Transport of source Hessian properties to the target kernel
+
+For a measurable `Ψ` inverting `∇u` `ν`-a.e. with `(∇u)_# ν = μ`, the pushforward `Ψ_# μ = ν` carries `ν`-a.e. positive
+definiteness and the `L²(ν)` Hilbert–Schmidt bound of `∇²u` to `∇²u ∘ Ψ` under `μ`; `C¹` suffices. -/
+
+noncomputable section
+open MeasureTheory
+open FunctionalInequalities.Analysis.BakryEmery
+open scoped ContDiff Matrix.Norms.Frobenius
+namespace FunctionalInequalities.Probability.Stein
+
+/-- If `Ψ` inverts `∇u` `ν`-a.e. and `(∇u)_# ν = μ`, then `Ψ_# μ = ν`. -/
+private theorem map_eq_of_ae_leftInverse_gradient {n : ℕ}
+    {u : EuclideanSpace ℝ (Fin n) → ℝ} (hu : ContDiff ℝ 1 u)
+    (ν μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin n)))
+    (hmap : (ν : Measure (EuclideanSpace ℝ (Fin n))).map (gradient u) =
+      (μ : Measure (EuclideanSpace ℝ (Fin n))))
+    {Ψ : EuclideanSpace ℝ (Fin n) → EuclideanSpace ℝ (Fin n)} (hΨ : Measurable Ψ)
+    (hInv : ∀ᵐ y ∂(ν : Measure (EuclideanSpace ℝ (Fin n))), Ψ (gradient u y) = y) :
+    (μ : Measure (EuclideanSpace ℝ (Fin n))).map Ψ = (ν : Measure (EuclideanSpace ℝ (Fin n))) := by
+  rw [← hmap, Measure.map_map hΨ (continuous_gradient hu).measurable]
+  calc
+    Measure.map (Ψ ∘ gradient u) (ν : Measure (EuclideanSpace ℝ (Fin n))) =
+        Measure.map id (ν : Measure (EuclideanSpace ℝ (Fin n))) :=
+      Measure.map_congr hInv
+    _ = _ := Measure.map_id
+
+/-- Source a.e. positive definiteness passes to the target Hessian kernel. -/
+theorem hessianKernel_posDefAE_of_map {n : ℕ}
+    {u : EuclideanSpace ℝ (Fin n) → ℝ} (hu : ContDiff ℝ 1 u)
+    (ν μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin n)))
+    (hmap : (ν : Measure (EuclideanSpace ℝ (Fin n))).map (gradient u) =
+      (μ : Measure (EuclideanSpace ℝ (Fin n))))
+    {Ψ : EuclideanSpace ℝ (Fin n) → EuclideanSpace ℝ (Fin n)} (hΨ : Measurable Ψ)
+    (hInv : ∀ᵐ y ∂(ν : Measure (EuclideanSpace ℝ (Fin n))), Ψ (gradient u y) = y)
+    (hPD : ∀ᵐ y ∂(ν : Measure (EuclideanSpace ℝ (Fin n))), (hessianMatrix u y).PosDef) :
+    ∀ᵐ x ∂(μ : Measure (EuclideanSpace ℝ (Fin n))), (hessianKernel u Ψ x).PosDef := by
+  have hpush := map_eq_of_ae_leftInverse_gradient hu ν μ hmap hΨ hInv
+  rw [← hpush] at hPD
+  exact ae_of_ae_map hΨ.aemeasurable hPD
+
+/-- The source Hilbert-Schmidt L2 estimate passes to the target kernel at C1 regularity. -/
+theorem memLp_hsNorm_hessianKernel_of_map {n : ℕ}
+    {u : EuclideanSpace ℝ (Fin n) → ℝ} (hu : ContDiff ℝ 1 u)
+    (ν μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin n)))
+    (hmap : (ν : Measure (EuclideanSpace ℝ (Fin n))).map (gradient u) =
+      (μ : Measure (EuclideanSpace ℝ (Fin n))))
+    {Ψ : EuclideanSpace ℝ (Fin n) → EuclideanSpace ℝ (Fin n)} (hΨ : Measurable Ψ)
+    (hInv : ∀ᵐ y ∂(ν : Measure (EuclideanSpace ℝ (Fin n))), Ψ (gradient u y) = y)
+    (hHS : MemLp (fun y => hsNorm (hessianMatrix u y)) 2
+      (ν : Measure (EuclideanSpace ℝ (Fin n)))) :
+    MemLp (fun x => hsNorm (hessianKernel u Ψ x)) 2
+      (μ : Measure (EuclideanSpace ℝ (Fin n))) := by
+  have hpush := map_eq_of_ae_leftInverse_gradient hu ν μ hmap hΨ hInv
+  simpa only [Function.comp_def, hessianKernel] using
+    hHS.comp_measurePreserving (show MeasurePreserving Ψ
+      (μ : Measure (EuclideanSpace ℝ (Fin n)))
+      (ν : Measure (EuclideanSpace ℝ (Fin n))) from ⟨hΨ, hpush⟩)
+
+end FunctionalInequalities.Probability.Stein
+
+end

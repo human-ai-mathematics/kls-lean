@@ -84,10 +84,18 @@ theorem client_L12 : ∀ {V : Type*} [NormedAddCommGroup V] [InnerProductSpace �
   intro V _ _ _ _ _ _ S u K g hu hS hg
   exact KLS.coarea_of_lipschitz (S := S) (u := u) (K := K) (g := g) hu hS hg
 
+section InnerProduct
+
+variable {V : Type*}
+variable [NormedAddCommGroup V] [InnerProductSpace ℝ V] [CompleteSpace V]
+
+section FiniteDimensional
+
+variable [FiniteDimensional ℝ V] [MeasurableSpace V] [BorelSpace V]
+
 /-- The migrated equality and the previously migrated measurability half now combine into the
 original two-part coarea conclusion without naming `L5` or `L12`. -/
-theorem client_both_halves {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V]
-    [CompleteSpace V] [FiniteDimensional ℝ V] [MeasurableSpace V] [BorelSpace V]
+theorem client_both_halves
     {u : V → ℝ} {K : ℝ≥0} (hu : LipschitzWith K u) {g : V → ℝ≥0∞} (hg : Measurable g) :
     AEMeasurable (fun t : ℝ ↦ ∫⁻ y in {x | u x = t}, g y ∂(KLS.surfaceMeasure V))
       (volume : Measure ℝ) ∧
@@ -106,12 +114,13 @@ theorem norm_not_contDiff (g : ℝ → ℝ≥0∞) (hg : Measurable g) :
     Analysis.lintegral_enorm_gradient_mul_eq_lintegral_levelSet lipschitzWith_one_norm hg⟩
 
 /-- An identically infinite weight is inside the migrated statement's range. -/
-theorem infinite_weight {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V]
-    [CompleteSpace V] [FiniteDimensional ℝ V] [MeasurableSpace V] [BorelSpace V]
+theorem infinite_weight
     {u : V → ℝ} {K : ℝ≥0} (hu : LipschitzWith K u) :
     ∫⁻ x, ‖gradient u x‖ₑ * (∞ : ℝ≥0∞) ∂(volume : Measure V) =
       ∫⁻ t, ∫⁻ _y in {x | u x = t}, (∞ : ℝ≥0∞) ∂(KLS.surfaceMeasure V) ∂(volume : Measure ℝ) :=
   Analysis.lintegral_enorm_gradient_mul_eq_lintegral_levelSet (g := fun _ ↦ ∞) hu measurable_const
+
+end FiniteDimensional
 
 /-- No positive-dimension hypothesis is hidden in the migrated entry point. -/
 theorem zero_dimension {u : EuclideanSpace ℝ (Fin 0) → ℝ} {K : ℝ≥0} (hu : LipschitzWith K u)
@@ -122,14 +131,15 @@ theorem zero_dimension {u : EuclideanSpace ℝ (Fin 0) → ℝ} {K : ℝ≥0} (h
 
 /-- The `C¹` specialization that was migrated in the previous round still type-checks against the
 same environment, and is unchanged by this migration. -/
-theorem client_contDiff_specialization {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V]
-    [CompleteSpace V] [MeasurableSpace V] [BorelSpace V] [SecondCountableTopology V]
+theorem client_contDiff_specialization [MeasurableSpace V] [BorelSpace V] [SecondCountableTopology V]
     [FiniteDimensional ℝ V] {u : V → ℝ} (hu : ContDiff ℝ 1 u) {K : ℝ≥0} (hK : LipschitzWith K u)
     {g : V → ℝ≥0∞} (hg : Measurable g) :
     ∫⁻ x, ‖gradient u x‖ₑ * g x ∂(volume : Measure V) =
       ∫⁻ t, ∫⁻ y in {x | u x = t}, g y ∂(surfaceMeasure V) ∂(volume : Measure ℝ) :=
   Isoperimetry.lintegral_enorm_gradient_mul_eq_lintegral_levelSet (u := u) (K := K) (g := g)
     hu hK hg
+
+end InnerProduct
 
 end LipschitzCoareaMigrationAudit
 

@@ -247,8 +247,13 @@ private def expD {F : Type*} [NormedAddCommGroup F] [NormedSpace ℝ F]
     (g : E → F) (x : E) : E →L[ℝ] F :=
   (innerSL ℝ x).smulRight (g x)
 
+section NormedSpace
+
+variable {F : Type*}
+variable [NormedAddCommGroup F] [NormedSpace ℝ F]
+
 omit [CompleteSpace E] in
-private theorem expD_meas {F : Type*} [NormedAddCommGroup F] [NormedSpace ℝ F]
+private theorem expD_meas
     {μ : Measure E} {g : E → F} (hg : AEStronglyMeasurable g μ) :
     AEStronglyMeasurable (expD g) μ := by
   exact
@@ -256,7 +261,7 @@ private theorem expD_meas {F : Type*} [NormedAddCommGroup F] [NormedSpace ℝ F]
       ((innerSL ℝ : E →L[ℝ] E →L[ℝ] ℝ).continuous.aestronglyMeasurable.prodMk hg)
 
 omit [CompleteSpace E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] in
-private theorem expD_bound {F : Type*} [NormedAddCommGroup F] [NormedSpace ℝ F]
+private theorem expD_bound
     {g : E → F} {M a : ℝ} (_hM : 0 ≤ M)
     (hb : ∀ x, ‖g x‖ ≤ M * Real.exp (a * ‖x‖)) :
     ∀ x, ‖expD g x‖ ≤ M * Real.exp ((a + 1) * ‖x‖) := by
@@ -275,8 +280,7 @@ private theorem expD_bound {F : Type*} [NormedAddCommGroup F] [NormedSpace ℝ F
       ring
 
 omit [CompleteSpace E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] in
-private theorem exp_smul_bound {F : Type*}
-    [NormedAddCommGroup F] [NormedSpace ℝ F]
+private theorem exp_smul_bound
     {g : E → F} {M a : ℝ} (_hM : 0 ≤ M)
     (hb : ∀ x, ‖g x‖ ≤ M * Real.exp (a * ‖x‖))
     (z x : E) {R : ℝ} (hz : ‖z‖ ≤ R) :
@@ -297,8 +301,7 @@ private theorem exp_smul_bound {F : Type*}
       ring
 
 omit [CompleteSpace E] [FiniteDimensional ℝ E] in
-private theorem exp_smul_int {F : Type*}
-    [NormedAddCommGroup F] [NormedSpace ℝ F]
+private theorem exp_smul_int
     (μ : Measure E)
     (hexp : ∀ r : ℝ,
       Integrable (fun x => Real.exp (r * ‖x‖)) μ)
@@ -312,8 +315,7 @@ private theorem exp_smul_int {F : Type*}
   · exact ae_of_all μ (fun x => exp_smul_bound hM hb z x le_rfl)
 
 omit [CompleteSpace E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] in
-private theorem exp_smul_hasFDeriv {F : Type*}
-    [NormedAddCommGroup F] [NormedSpace ℝ F]
+private theorem exp_smul_hasFDeriv
     (g : E → F) (x z : E) :
     HasFDerivAt (fun w => Real.exp ⟪w, x⟫ • g x)
       (Real.exp ⟪z, x⟫ • expD g x) z := by
@@ -326,8 +328,7 @@ private theorem exp_smul_hasFDeriv {F : Type*}
   simp [expD, ContinuousLinearMap.smulRight_apply, mul_smul]
 
 omit [CompleteSpace E] in
-private theorem exp_integral_hasFDeriv {F : Type*}
-    [NormedAddCommGroup F] [NormedSpace ℝ F] [CompleteSpace F]
+private theorem exp_integral_hasFDeriv [CompleteSpace F]
     (μ : Measure E)
     (hexp : ∀ r : ℝ,
       Integrable (fun x => Real.exp (r * ‖x‖)) μ)
@@ -380,11 +381,14 @@ private theorem exp_integral_contDiff_nat
       · exact IH (expD_meas hg) hM (expD_bound hM hb)
       · exact exp_integral_hasFDeriv μ hexp hg hM hb
 
+section CompleteSpace
+
+variable [CompleteSpace F]
+
 omit [CompleteSpace E] in
 /-- Differentiation under the integral sign for exponential weights: if `μ` is finite with all
 exponential moments and `g` grows at most polynomially, `z ↦ ∫ e^{⟪z, x⟫} g(x) dμ(x)` is smooth. -/
-theorem contDiff_integral_exp_inner_smul {F : Type*} [NormedAddCommGroup F] [NormedSpace ℝ F]
-    [CompleteSpace F] (μ : Measure E) [IsFiniteMeasure μ]
+theorem contDiff_integral_exp_inner_smul (μ : Measure E) [IsFiniteMeasure μ]
     (hexp : ∀ r : ℝ, Integrable (fun x => Real.exp (r * ‖x‖)) μ) {g : E → F}
     (hg : AEStronglyMeasurable g μ) {M : ℝ} {k : ℕ} (hgb : ∀ x, ‖g x‖ ≤ M * (1 + ‖x‖) ^ k) :
     ContDiff ℝ ∞ (fun z => ∫ x, Real.exp ⟪z, x⟫ • g x ∂μ) := by
@@ -429,8 +433,7 @@ theorem contDiff_integral_exp_inner_smul {F : Type*} [NormedAddCommGroup F] [Nor
 omit [CompleteSpace E] in
 /-- Tilt averages of bounded measurable functions are smooth for a nonzero finite measure with all
 exponential moments (BKL: "The function `F_f` is smooth"). -/
-theorem contDiff_tiltAverage {F : Type*} [NormedAddCommGroup F] [NormedSpace ℝ F]
-    [CompleteSpace F] (μ : Measure E) [IsFiniteMeasure μ] [NeZero μ]
+theorem contDiff_tiltAverage (μ : Measure E) [IsFiniteMeasure μ] [NeZero μ]
     (hexp : ∀ r : ℝ, Integrable (fun x => Real.exp (r * ‖x‖)) μ) {f : E → F}
     (hf : AEStronglyMeasurable f μ) {M : ℝ} (hfb : ∀ x, ‖f x‖ ≤ M) :
     ContDiff ℝ ∞ (tiltAverage μ f) := by
@@ -649,8 +652,7 @@ theorem taylorTensor_one_neg_weightedLaplacian {V f : E → ℝ} (hV : ContDiff 
 
 omit [CompleteSpace E] [FiniteDimensional ℝ E] [BorelSpace E] in
 /-- Taylor tensors of a function with smooth tilt average are symmetric multilinear maps. -/
-theorem taylorTensor_domDomCongr {F : Type*} [NormedAddCommGroup F] [NormedSpace ℝ F]
-    [CompleteSpace F] (μ : Measure E) (f : E → F) (hF : ContDiff ℝ ∞ (tiltAverage μ f)) (d : ℕ)
+theorem taylorTensor_domDomCongr (μ : Measure E) (f : E → F) (hF : ContDiff ℝ ∞ (tiltAverage μ f)) (d : ℕ)
     (σ : Equiv.Perm (Fin d)) : (taylorTensor μ f d).domDomCongr σ = taylorTensor μ f d := by
     ext v
     simp only [taylorTensor, ContinuousMultilinearMap.domDomCongr_apply,
@@ -661,6 +663,10 @@ theorem taylorTensor_domDomCongr {F : Type*} [NormedAddCommGroup F] [NormedSpace
         (d.factorial : ℝ)⁻¹ •
           (iteratedFDeriv ℝ d (tiltAverage μ f) 0) v
     rw [iteratedFDeriv_comp_perm_of_contDiff hF d 0 v σ]
+
+end CompleteSpace
+
+end NormedSpace
 
 omit [CompleteSpace E] [FiniteDimensional ℝ E] [BorelSpace E] in
 /-- In coordinates, the Taylor tensors of a real function are symmetric tensors: invariant under

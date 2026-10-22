@@ -89,11 +89,15 @@ theorem gradient_clm_comp {f : E → F} {x : E} (hf : DifferentiableAt ℝ f x) 
 
 variable (m : Measure E) [m.IsAddHaarMeasure]
 
+section NormedSpace
+
+variable {G : Type*}
+variable [NormedAddCommGroup G] [NormedSpace ℝ G]
+
 omit [CompleteSpace E] [m.IsAddHaarMeasure] in
 /-- Functions of temperate growth are integrable for every exponential tilt of a law with all
 exponential moments. -/
-theorem integrable_expTilt_of_hasTemperateGrowth {G : Type*} [NormedAddCommGroup G]
-    [NormedSpace ℝ G] {V : E → ℝ}
+theorem integrable_expTilt_of_hasTemperateGrowth {V : E → ℝ}
     (hexp : ∀ r : ℝ, Integrable (fun x => Real.exp (r * ‖x‖)) (m.tilted (-V)))
     {g : E → G} (hg : g.HasTemperateGrowth) (z : E) :
     Integrable g (expTilt (m.tilted (-V)) z) := by
@@ -104,10 +108,15 @@ theorem integrable_expTilt_of_hasTemperateGrowth {G : Type*} [NormedAddCommGroup
     · exact hg.1.continuous.aestronglyMeasurable
     · simpa only [norm_iteratedFDeriv_zero] using hC
 
+section NormedSpace
+
+variable {G H : Type*}
+variable [NormedAddCommGroup G] [NormedSpace ℝ G] [CompleteSpace G] [NormedAddCommGroup H]
+variable [NormedSpace ℝ H] [CompleteSpace H]
+
 omit [CompleteSpace E] [FiniteDimensional ℝ E] [BorelSpace E] in
 /-- Tilt averages commute with continuous linear maps (for integrable functions). -/
-theorem clm_apply_tiltAverage {G H : Type*} [NormedAddCommGroup G] [NormedSpace ℝ G]
-    [CompleteSpace G] [NormedAddCommGroup H] [NormedSpace ℝ H] [CompleteSpace H] (μ : Measure E)
+theorem clm_apply_tiltAverage (μ : Measure E)
     {g : E → G} (hg : ∀ z, Integrable g (expTilt μ z)) (L : G →L[ℝ] H) :
     (fun z => L (tiltAverage μ g z)) = tiltAverage μ (fun x => L (g x)) := by
     funext z
@@ -116,8 +125,7 @@ theorem clm_apply_tiltAverage {G H : Type*} [NormedAddCommGroup G] [NormedSpace 
 
 omit [CompleteSpace E] [FiniteDimensional ℝ E] [BorelSpace E] in
 /-- Taylor tensors commute with continuous linear maps. -/
-theorem clm_comp_taylorTensor {G H : Type*} [NormedAddCommGroup G] [NormedSpace ℝ G]
-    [CompleteSpace G] [NormedAddCommGroup H] [NormedSpace ℝ H] [CompleteSpace H] (μ : Measure E)
+theorem clm_comp_taylorTensor (μ : Measure E)
     {g : E → G} (hg : ∀ z, Integrable g (expTilt μ z)) (hF : ContDiff ℝ ∞ (tiltAverage μ g))
     (L : G →L[ℝ] H) (d : ℕ) :
     L.compContinuousMultilinearMap (taylorTensor μ g d) = taylorTensor μ (fun x => L (g x)) d := by
@@ -129,6 +137,8 @@ theorem clm_comp_taylorTensor {G H : Type*} [NormedAddCommGroup G] [NormedSpace 
   rw [heq] at hd
   ext v
   simp [taylorTensor, hd]
+
+end NormedSpace
 
 omit [CompleteSpace E] [FiniteDimensional ℝ F] [m.IsAddHaarMeasure] in
 private theorem tensorTilt_integrable_laplacian {V : E → ℝ}
@@ -216,8 +226,7 @@ theorem tiltAverage_neg_weightedLaplacianVec {V : E → ℝ} (hV : ContDiff ℝ 
       exact InnerProductSpace.toDual_symm_apply (𝕜 := ℝ) (E := E)
 
 omit [CompleteSpace E] in
-private theorem tensorTaylor_smooth_average {G : Type*} [NormedAddCommGroup G]
-    [NormedSpace ℝ G] [CompleteSpace G] {V : E → ℝ}
+private theorem tensorTaylor_smooth_average [CompleteSpace G] {V : E → ℝ}
     (hexp : ∀ r : ℝ, Integrable (fun x => Real.exp (r * ‖x‖)) (m.tilted (-V)))
     {g : E → G} (hg : g.HasTemperateGrowth) :
     ContDiff ℝ ∞ (tiltAverage (m.tilted (-V)) g) := by
@@ -234,6 +243,8 @@ private theorem tensorTaylor_smooth_average {G : Type*} [NormedAddCommGroup G]
       simp [tiltAverage, expTilt, hzero]
     rw [heq]
     exact contDiff_const
+
+end NormedSpace
 
 /-- **BKL Lemma 3.6, (50)**, for `F`-valued `u ∈ 𝒜`: `T_{d+1}(−ℒu) = S_{d+1} T_d(Du)`, with the
 derivative index of `T_d(Du)` placed after its `d` Taylor indices. -/
@@ -324,19 +335,26 @@ variable {G : Type*} [NormedAddCommGroup G] [NormedSpace ℝ G] [FiniteDimension
 def centeredFDeriv (μ : Measure E) (f : E → G) (x : E) : E →L[ℝ] G :=
   fderiv ℝ f x - ∫ y, fderiv ℝ f y ∂μ
 
+section NormedSpace
+
+variable {H : Type*}
+variable [NormedAddCommGroup H] [NormedSpace ℝ H]
+
 omit [CompleteSpace E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] in
-private theorem cor37_iteratedFDeriv_sub_const {H : Type*} [NormedAddCommGroup H]
-    [NormedSpace ℝ H] (F : E → H) (c : H) {d : ℕ} (hd : 1 ≤ d) :
+private theorem cor37_iteratedFDeriv_sub_const (F : E → H) (c : H) {d : ℕ} (hd : 1 ≤ d) :
     iteratedFDeriv ℝ d (fun x => F x - c) = iteratedFDeriv ℝ d F := by
   obtain ⟨n, rfl⟩ := Nat.exists_eq_succ_of_ne_zero (by omega : d ≠ 0)
   funext x
   rw [iteratedFDeriv_succ_eq_comp_right, iteratedFDeriv_succ_eq_comp_right]
   simp only [fderiv_sub_const]
 
+section CompleteSpace
+
+variable [CompleteSpace H]
+
 omit [CompleteSpace E] in
 /-- Taylor tensors of degree `d ≥ 1` do not see constants: `T_d(f - c) = T_d f`. -/
-theorem taylorTensor_sub_const {H : Type*} [NormedAddCommGroup H] [NormedSpace ℝ H]
-    [CompleteSpace H] {V : E → ℝ}
+theorem taylorTensor_sub_const {V : E → ℝ}
     (hexp : ∀ r : ℝ, Integrable (fun x => Real.exp (r * ‖x‖)) (m.tilted (-V)))
     {f : E → H} (hf : f.HasTemperateGrowth) (c : H) {d : ℕ} (hd : 1 ≤ d) :
     taylorTensor (m.tilted (-V)) (fun x => f x - c) d = taylorTensor (m.tilted (-V)) f d := by
@@ -368,8 +386,7 @@ theorem taylorTensor_sub_const {H : Type*} [NormedAddCommGroup H] [NormedSpace �
 
 omit [CompleteSpace E] [FiniteDimensional ℝ E] [BorelSpace E] in
 /-- Taylor tensors are homogeneous for vector-valued functions. -/
-theorem taylorTensor_const_smul {H : Type*} [NormedAddCommGroup H] [NormedSpace ℝ H]
-    [CompleteSpace H] (μ : Measure E) (a : ℝ) (f : E → H) (d : ℕ) :
+theorem taylorTensor_const_smul (μ : Measure E) (a : ℝ) (f : E → H) (d : ℕ) :
     taylorTensor μ (fun x => a • f x) d = a • taylorTensor μ f d := by
     have havg :
         tiltAverage μ (fun x => a • f x) =
@@ -419,6 +436,10 @@ theorem taylorTensor_const_smul {H : Type*} [NormedAddCommGroup H] [NormedSpace 
       rw [hmap]
       simp only [smul_smul]
       rw [mul_comm]
+
+end CompleteSpace
+
+end NormedSpace
 
 /-- **BKL Corollary 3.7.** If `h` is a tensor field of temperate growth and `g` a tensor field with
 `-ℒh = α ∇₀g` (the relation (30) defining `h = h_{i+1}` from `g = h_i`), then for `d ≥ 1`

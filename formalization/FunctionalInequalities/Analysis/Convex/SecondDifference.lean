@@ -15,8 +15,12 @@ open scoped RealInnerProductSpace
 
 namespace FunctionalInequalities.Analysis
 
-private lemma gradient_le_increment {E : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] [CompleteSpace E]
+section InnerProduct
+
+variable {E : Type*}
+variable [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
+
+private lemma gradient_le_increment
     {u : E → ℝ} (hc : ConvexOn ℝ Set.univ u)
     (z v : E) (hz : DifferentiableAt ℝ u z) :
     ⟪gradient u z, v⟫ ≤ u (z + v) - u z := by
@@ -41,8 +45,7 @@ private lemma gradient_le_increment {E : Type*} [NormedAddCommGroup E]
 
 /-- **Quadratic upper bound from a second-difference bound** (weak Letwin route, C^{1,1} estimate): a differentiable convex `u` with `u(x+h) + u(x−h) − 2u(x) ≤ C‖h‖²` satisfies
 `u y ≤ u x + ⟪∇u x, y − x⟫ + C ‖y − x‖²`. -/
-theorem le_add_inner_gradient_add_mul_sq_of_second_difference_le {E : Type*}
-    [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E] {u : E → ℝ} {C : ℝ}
+theorem le_add_inner_gradient_add_mul_sq_of_second_difference_le {u : E → ℝ} {C : ℝ}
     (hconv : ConvexOn ℝ Set.univ u) (hdiff : Differentiable ℝ u)
     (hsd : ∀ x h : E, u (x + h) + u (x - h) - 2 * u x ≤ C * ‖h‖ ^ 2) (x y : E) :
     u y ≤ u x + ⟪gradient u x, y - x⟫ + C * ‖y - x‖ ^ 2 := by
@@ -57,6 +60,8 @@ theorem le_add_inner_gradient_add_mul_sq_of_second_difference_le {E : Type*}
       u (x + h) ≤ u x + ⟪gradient u x, h⟫ + C * ‖h‖ ^ 2 := by
     linarith
   simpa only [h, add_sub_cancel] using hmain
+
+end InnerProduct
 
 end FunctionalInequalities.Analysis
 
@@ -487,8 +492,12 @@ open scoped RealInnerProductSpace
 
 namespace FunctionalInequalities.Analysis
 
-private lemma sd_support {E : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] {f : E → ℝ}
+section InnerProduct
+
+variable {E : Type*}
+variable [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+
+private lemma sd_support [FiniteDimensional ℝ E] {f : E → ℝ}
     (hc : ConvexOn ℝ univ f) (hf : Differentiable ℝ f) (x y : E) :
     fderiv ℝ f x (y - x) ≤ f y - f x := by
   have hp : HasDerivAt (fun t : ℝ => x + t • (y - x)) (y - x) 0 := by
@@ -505,8 +514,7 @@ private lemma sd_support {E : Type*} [NormedAddCommGroup E]
     add_sub_cancel, sub_zero, div_one] using
     hc'.le_slope_of_hasDerivAt (mem_univ 0) (mem_univ 1) zero_lt_one hl
 
-private lemma sd_stationary {E : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] {u : E → ℝ}
+private lemma sd_stationary [FiniteDimensional ℝ E] {u : E → ℝ}
     (hu : Differentiable ℝ u) (x h : E) (η : ℝ)
     (hm : ∀ y, u (y + h) + u (y - h) - 2 * u y - η * u y ≤
       u (x + h) + u (x - h) - 2 * u x - η * u x) :
@@ -538,8 +546,7 @@ private lemma sd_stationary {E : Type*} [NormedAddCommGroup E]
   simpa only [inner_sub_left, inner_add_left, real_inner_smul_left] using
     (sub_eq_zero.mp he)
 
-private lemma sd_midpoint {E : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] {V : E → ℝ} {κ : ℝ}
+private lemma sd_midpoint {V : E → ℝ} {κ : ℝ}
     (hs : ConvexOn ℝ univ (fun y => V y - (κ / 2) * ‖y‖ ^ 2))
     (p w : E) :
     κ * ‖w‖ ^ 2 ≤ V (p + w) + V (p - w) - 2 * V p := by
@@ -572,9 +579,12 @@ private lemma sd_quadratic (κ q H B : ℝ) (hk : 0 < κ)
     nlinarith
   nlinarith [mul_nonneg hd (show 0 ≤ q - 2 * H / κ by linarith)]
 
+section FiniteDimensional
+
+variable [FiniteDimensional ℝ E]
+
 set_option maxHeartbeats 800000 in
-private lemma sd_penalized_estimate {E : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] {u V : E → ℝ}
+private lemma sd_penalized_estimate {u V : E → ℝ}
     (hconv : ConvexOn ℝ univ u) (hu : Differentiable ℝ u)
     (hV : Differentiable ℝ V) {κ : ℝ} (hκ : 0 < κ)
     (hstrong : ConvexOn ℝ univ (fun y => V y - (κ / 2) * ‖y‖ ^ 2))
@@ -680,8 +690,7 @@ differentiable, bounded below, and `V` differentiable with `V − (κ/2)‖·‖
 `η > 0` the penalised second difference `Δ²ₕu − η u` has a maximiser `x₀` at which the log-density
 `F := V ∘ ∇u − u` satisfies the comparison `F(x₀ + h) + F(x₀ − h) − 2 F(x₀) ≤ η n`. Then
 `u(x + h) + u(x − h) − 2 u(x) ≤ 4 ‖h‖² / κ` everywhere. -/
-theorem secondDifference_le_of_penalized_maxima {E : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] {u V : E → ℝ} (hconv : ConvexOn ℝ univ u)
+theorem secondDifference_le_of_penalized_maxima {u V : E → ℝ} (hconv : ConvexOn ℝ univ u)
     (hu : Differentiable ℝ u) (hV : Differentiable ℝ V) {κ : ℝ} (hκ : 0 < κ)
     (hstrong : ConvexOn ℝ univ (fun y => V y - (κ / 2) * ‖y‖ ^ 2)) {C : ℝ}
     (hC : ∀ x, |fderiv ℝ V (gradient u x) (gradient u x)| ≤ C) {m : ℝ} (hm : ∀ x, m ≤ u x)
@@ -721,6 +730,10 @@ theorem secondDifference_le_of_penalized_maxima {E : Type*} [NormedAddCommGroup 
         (nhdsWithin_le_nhds (s := Ioi 0))
   apply ge_of_tendsto hl
   exact Filter.Eventually.mono self_mem_nhdsWithin (fun η hη => hb η hη)
+
+end FiniteDimensional
+
+end InnerProduct
 
 end FunctionalInequalities.Analysis
 

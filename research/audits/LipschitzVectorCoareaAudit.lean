@@ -190,6 +190,13 @@ theorem route_M1 : ¬ ∀ {V : Type*} [NormedAddCommGroup V] [InnerProductSpace 
 #print axioms LipschitzVectorCoareaAudit.route_V5
 #print axioms LipschitzVectorCoareaAudit.route_M1
 
+section FiniteDimensional
+
+variable {V W : Type*}
+variable [NormedAddCommGroup V] [InnerProductSpace ℝ V] [FiniteDimensional ℝ V] [MeasurableSpace V]
+variable [BorelSpace V] [NormedAddCommGroup W] [InnerProductSpace ℝ W] [FiniteDimensional ℝ W]
+variable [MeasurableSpace W] [BorelSpace W]
+
 /-! ### Boundary cases
 
 `coarea_of_contDiff` is **not** recoverable from `L0`: a `C¹` map on a non-compact domain need not
@@ -197,10 +204,7 @@ be Lipschitz, so the hypotheses are incomparable.  These four checks stand in it
 
 /-- A zero-dimensional target is allowed: the codimension is the full dimension and the statement
 is not vacuous. -/
-theorem zero_dimensional_target {V W : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V]
-    [FiniteDimensional ℝ V] [MeasurableSpace V] [BorelSpace V]
-    [NormedAddCommGroup W] [InnerProductSpace ℝ W] [FiniteDimensional ℝ W]
-    [MeasurableSpace W] [BorelSpace W] (hW : finrank ℝ W = 0)
+theorem zero_dimensional_target (hW : finrank ℝ W = 0)
     {S : Set V} {u : V → W} {K : ℝ≥0} {g : V → ℝ≥0∞}
     (hu : LipschitzWith K u) (hS : MeasurableSet S) (hg : Measurable g) :
     (∫⁻ x in S, ENNReal.ofReal (coareaJacobian (fderiv ℝ u x)) * g x ∂(volume : Measure V)
@@ -210,10 +214,7 @@ theorem zero_dimensional_target {V W : Type*} [NormedAddCommGroup V] [InnerProdu
 
 /-- The equidimensional case `k = 0`: the fibre measure is the zero-dimensional one and no
 positivity of the codimension is hidden in the statement. -/
-theorem equidimensional {V W : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V]
-    [FiniteDimensional ℝ V] [MeasurableSpace V] [BorelSpace V]
-    [NormedAddCommGroup W] [InnerProductSpace ℝ W] [FiniteDimensional ℝ W]
-    [MeasurableSpace W] [BorelSpace W] (hVW : finrank ℝ W = finrank ℝ V)
+theorem equidimensional (hVW : finrank ℝ W = finrank ℝ V)
     {S : Set V} {u : V → W} {K : ℝ≥0} {g : V → ℝ≥0∞}
     (hu : LipschitzWith K u) (hS : MeasurableSet S) (hg : Measurable g) :
     (∫⁻ x in S, ENNReal.ofReal (coareaJacobian (fderiv ℝ u x)) * g x ∂(volume : Measure V)
@@ -223,10 +224,7 @@ theorem equidimensional {V W : Type*} [NormedAddCommGroup V] [InnerProductSpace 
 
 /-- A constant map into a target of positive dimension: the coarea Jacobian vanishes identically,
 so the left-hand side is `0` and the formula forces the whole iterated slice integral to vanish. -/
-theorem constant_map {V W : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V]
-    [FiniteDimensional ℝ V] [MeasurableSpace V] [BorelSpace V]
-    [NormedAddCommGroup W] [InnerProductSpace ℝ W] [FiniteDimensional ℝ W]
-    [MeasurableSpace W] [BorelSpace W] {k : ℕ} (hW : 0 < finrank ℝ W)
+theorem constant_map {k : ℕ} (hW : 0 < finrank ℝ W)
     (hk : k + finrank ℝ W = finrank ℝ V) {S : Set V} {c : W} {g : V → ℝ≥0∞}
     (hS : MeasurableSet S) (hg : Measurable g) :
     (∫⁻ t, ∫⁻ y in S ∩ {x : V | (fun _ => c) x = t}, g y ∂(KLS.hausdorffNormalized V k)
@@ -242,6 +240,8 @@ theorem constant_map {V W : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ
     exact hw (by simpa using hv.symm)
   rw [hzero, ENNReal.ofReal_zero, zero_mul]
   rfl
+
+end FiniteDimensional
 
 /-- **The codimension-one specialization returns the scalar theory.**  At `W = ℝ` the density
 `coareaJacobian (fderiv ℝ u x)` is `‖gradient u x‖ₑ` and `KLS.hausdorffNormalized V k` is

@@ -51,18 +51,25 @@ example (μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin 0))) :
 
 namespace Solutions.StatementChecks
 
+section InnerProduct
+
+variable {E : Type*}
+variable [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+
 /-- Normalization: every constant has zero literature energy in every allowed coordinate space. -/
-theorem constant_energy {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+theorem constant_energy
     [CompleteSpace E] [MeasurableSpace E] [BorelSpace E] [SecondCountableTopology E]
     [FiniteDimensional ℝ E] (c : ℝ) (μ : ProbabilityMeasure E) :
     FunctionalInequalities.Energy.LocalSlope.energy μ (fun _ ↦ c) = 0 := by simp [FunctionalInequalities.Energy.LocalSlope.energy]
 
 /-- Test domain: finite-energy tests include constants, even when their energy is zero. -/
-theorem constant_admissible {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+theorem constant_admissible
     [CompleteSpace E] [MeasurableSpace E] [BorelSpace E] [SecondCountableTopology E]
     [FiniteDimensional ℝ E] (c : ℝ) (μ : ProbabilityMeasure E) :
     FunctionalInequalities.Energy.LocalSlope.Admissible μ (fun _ ↦ c) :=
   ⟨LocallyLipschitz.const c, memLp_const c, by simp [FunctionalInequalities.Energy.LocalSlope.energy]⟩
+
+end InnerProduct
 
 /-- Dimension convention: the covariance operator on the zero-dimensional space has norm zero. -/
 theorem zero_dimension_covariance (μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin 0))) :

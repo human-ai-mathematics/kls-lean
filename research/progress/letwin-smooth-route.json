@@ -1,0 +1,254 @@
+{
+  "title": "Letwin smooth moment-map route: source targets and remaining gaps",
+  "reviewed_on": "2026-10-22",
+  "scope": "Letwin arXiv:2607.24164v1 Lemma 2.2 (smooth moment map) and the regularity it imports from Berman-Berndtsson arXiv:1207.6128v1 Theorem 2.24; state of the local library. Lemma A.1 (regular approximation) is formalized: ../../formalization/FunctionalInequalities/KLS/Letwin/Approximation.lean (exists_regular_approximation).",
+  "sources": {
+    "Letwin2026": {
+      "url": "https://arxiv.org/abs/2607.24164v1",
+      "locators": {
+        "Lemma 2.1": "PDF p.5",
+        "Lemma 2.2 (Klartag [41])": "PDF p.5",
+        "Lemma 2.7 (Fathi [29])": "PDF p.13",
+        "Lemma A.1": "PDF p.16"
+      },
+      "lemma_2_2": "Under the regularity assumptions of Lemma A.1 (dmu = e^{-V} 1_K dx, K bounded open convex, V smooth convex on an open neighbourhood of closure K, mu isotropic), the moment map phi of Lemma 2.1 is finite and smooth on R^n, Hess phi is positive definite at every point, grad phi: R^n -> K is a diffeomorphism, and rho(grad phi) det Hess phi = e^{-phi} pointwise, equivalently log det Hess phi = -phi + V(grad phi)."
+    },
+    "BermanBerndtsson2013": {
+      "url": "https://arxiv.org/abs/1207.6128v1",
+      "locators": {
+        "Theorem 1.1": "PDF p.2",
+        "Section 2.9 Step 3 (local regularity)": "PDF p.21",
+        "Theorem 2.24 (Caffarelli interior regularity)": "PDF p.26"
+      },
+      "theorem_2_24": "Omega bounded open convex, MA(phi) = f dx in Omega, phi = 0 on boundary, f > 0: (i) 1/C <= f <= C => strictly convex and C^{1,alpha}_loc some alpha > 0; (ii) f continuous => W^{2,p}_loc every p > 1; (iii) f smooth => smooth (Evans-Krylov + linear bootstrap).",
+      "caveats": [
+        "Step 3 (p.21) writes C^{1,alpha}_loc for some alpha > 1; Theorem 2.24 (p.26) says alpha > 0. Use alpha > 0.",
+        "Step 3 applies Theorem 2.24 on sublevel sets {phi < R} after subtracting R (Dirichlet normalisation).",
+        "Point (iii) and Step 3 compress Evans-Krylov and Schauder bootstrapping into one sentence; smoothness is NOT a consequence of W^{2,p} or continuity of the right side alone."
+      ]
+    }
+  },
+  "status_vocabulary": {
+    "PROVED_IN_LIBRARY": "declaration exists in the current root tree with the stated scope (checked by reading its type)",
+    "DERIVABLE_BRIDGE": "follows from existing declarations by a short argument; not yet stated in Lean",
+    "MISSING_TOOL": "small genuine prerequisite, not a PDE theorem",
+    "MISSING_DEEP": "deep PDE/analysis theorem absent from the library and Mathlib",
+    "NOT_NEEDED_FOR_ROUTE": "needed only for the literal source class, not for the strong regular class produced by A.1",
+    "DERIVABLE_INTERFACE": "an explicit interface statement derivable from fields already proved at the same witness; no new analytic theorem"
+  },
+  "route_scope": {
+    "literal_lemma_2_2_class": "K bounded open convex, V smooth convex near closure K (no uniform convexity).",
+    "library_strong_class": "K compact convex with nonempty interior, W globally C^infinity and W - (kappa/2)||.||^2 convex, kappa > 0 (KLS/CEK/MomentRegularity).",
+    "bridge": "Lemma A.1 (exists_regular_approximation) yields every approximant in BOTH classes: open K = interior of a compact convex body, and V globally smooth and kappa-uniformly convex. The existing Theorem 1.2 endpoint therefore only needs the strong class. The literal merely convex class of Lemma 2.2 remains a formalization target in its own right."
+  },
+  "stages": [
+    {
+      "id": "R0",
+      "what": "moment potential exists for the strong class (restricted Lemma 2.1)",
+      "status": "PROVED_IN_LIBRARY",
+      "declarations": [
+        "../../formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/Potential.lean: Analysis.exists_regular_moment_potential"
+      ],
+      "scope": "n > 0, strong class, isotropic; u convex, Lipschitz, normalised, (grad u)_# e^{-u} dx = mu."
+    },
+    {
+      "id": "R1",
+      "what": "strict convexity (Caffarelli, moment-specific)",
+      "status": "PROVED_IN_LIBRARY",
+      "declarations": [
+        "../../formalization/FunctionalInequalities/Analysis/Convex/Caffarelli.lean: Analysis.strictConvexOn_of_map_gradient"
+      ],
+      "scope": "K compact convex nonempty, V continuous (no uniform convexity); this is the moment-map form of BB Thm 2.24(i) strictness, proved via Alexandrov two-sided local bounds and exposed contact sets."
+    },
+    {
+      "id": "R2",
+      "what": "C^1 of the moment potential",
+      "status": "PROVED_IN_LIBRARY",
+      "declarations": [
+        "../../formalization/FunctionalInequalities/Analysis/Convex/Caffarelli.lean: Analysis.contDiff_one_of_map_gradient"
+      ],
+      "scope": "interior K nonempty, V continuous."
+    },
+    {
+      "id": "R3",
+      "what": "C^{1,1}: grad u is (16/kappa)-Lipschitz; centered second differences <= (4/kappa)|h|^2",
+      "status": "PROVED_IN_LIBRARY",
+      "declarations": [
+        "../../formalization/FunctionalInequalities/Analysis/Convex/GradientLipschitz.lean: Analysis.lipschitzWith_gradient_of_map_gradient, Analysis.secondDifference_le_of_map_gradient"
+      ],
+      "scope": "strong class (V C^1 kappa-uniformly convex). Subsumes C^{1,alpha} for the strong class. C^{1,1} is NOT smoothness."
+    },
+    {
+      "id": "R3L",
+      "what": "Caffarelli C^{1,alpha}_loc for the literal class (BB Thm 2.24(i))",
+      "status": "NOT_NEEDED_FOR_ROUTE",
+      "missing_kind": "MISSING_DEEP"
+    },
+    {
+      "id": "R4",
+      "what": "a.e. Hessian data: PD, log det Hess u = -u + W(grad u), Hess u <= (16/kappa) Id",
+      "status": "PROVED_IN_LIBRARY",
+      "declarations": [
+        "../../formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/Potential.lean: exists_regular_moment_potential (a.e. fields)",
+        "../../formalization/FunctionalInequalities/Analysis/Convex/Viscosity.lean: Analysis.ae_exists_posDef_det_eq (generic a.e. second-order expansion with PD B, det B = f)",
+        "../../formalization/FunctionalInequalities/Analysis/Convex/SecondOrder.lean: Analysis.ae_exists_secondOrder_expansion (Alexandrov theorem)"
+      ]
+    },
+    {
+      "id": "R5",
+      "what": "Alexandrov Monge-Ampere measure identity at the actual witness: vol(subgradientImage u G) = int_G exp(-u + W(grad u)) for open G",
+      "status": "PROVED_IN_LIBRARY",
+      "declarations": [
+        "../../formalization/FunctionalInequalities/Analysis/Convex/Alexandrov.lean: Analysis.volume_subgradientImage_eq_lintegral_of_isOpen"
+      ],
+      "scope": "K closed convex, V measurable; u convex Lipschitz normalised with the pushforward."
+    },
+    {
+      "id": "R6",
+      "what": "viscosity (touching-test) inequalities at EVERY point of the actual witness, with continuous f = exp(-u + W(grad u))",
+      "status": "DERIVABLE_BRIDGE",
+      "declarations_used": [
+        "../../formalization/FunctionalInequalities/Analysis/Convex/Viscosity.lean: le_det_hessianMatrix_of_upper_touch, det_hessianMatrix_le_of_lower_touch, posDef_and_det_eq_of_quadratic_expansion",
+        "R5",
+        "R2 (continuity of u and grad u)"
+      ],
+      "note": "hMA of the touch tests is exactly R5 with f = exp(-u + W(grad u)); continuity of f from R2 and W continuous."
+    },
+    {
+      "id": "R7",
+      "what": "Hessian in L^infty_loc and in H^1_loc (u in W^{3,2}_loc); weak first derivatives of the MA equation at the same witness",
+      "status": "PROVED_IN_LIBRARY",
+      "declarations": [
+        "../../formalization/FunctionalInequalities/Analysis/Convex/HessianRegularity.lean: Analysis.exists_weak_third_derivative",
+        "../../formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakDerivative.lean: exists_regular_moment_weak_tensor, exists_regular_moment_weak_first_derivative",
+        "../../formalization/FunctionalInequalities/Analysis/Convex/HessianIncrement.lean: integral_mul_hessian_increment_le",
+        "../../formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakHessian.lean: exists_regular_moment_weak_inverse_mean_hessian, exists_regular_moment_weak_hessian_evolution (compact-local L^infty inverse-Hessian entries; weak second Hessian evolution)",
+        "../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessianEvolution.lean: Analysis.integral_exp_neg_hessian_flux_eq_curvature_gram (and _of_bounded_weak_test)"
+      ],
+      "note": "Stronger than BB Thm 2.24(ii) W^{2,p}_loc for the strong class (C^{1,1} gives Hessian entries in L^infty_loc). The weak second Hessian evolution is closed at the same witness: with J_ij = H^{-1} grad H_ij and E_ij = -H_ij + (H Hess W(grad u) H)_ij + tr(H^{-1} T_i H^{-1} T_j), int e^{-u} J_ij . grad psi = -int e^{-u} E_ij psi for compact C^1 psi. No Sobolev-space W^{2,p} predicate is stated; not needed."
+    },
+    {
+      "id": "R7L",
+      "what": "Caffarelli W^{2,p}_loc for continuous f (BB Thm 2.24(ii)) in the literal class",
+      "status": "NOT_NEEDED_FOR_ROUTE",
+      "missing_kind": "MISSING_DEEP"
+    },
+    {
+      "id": "R8",
+      "what": "explicit compact-local positive scalar Hessian floor at the SAME witness: for compact S, delta_S Id <= Hess u a.e. on S (upper cap 16/kappa already a field)",
+      "status": "PROVED_IN_LIBRARY",
+      "declarations": [
+        "../../formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/Potential.lean: Analysis.exists_regular_moment_potential_locally_elliptic (same u, L as R0; every R0 field retained)",
+        "../../formalization/FunctionalInequalities/Analysis/Convex/HessianRegularity.lean: Analysis.ae_posSemidef_hessianMatrix_sub_of_log_det (generic: continuous log-det right side and upper cap give a compact-local floor)",
+        "../../formalization/FunctionalInequalities/Analysis/Matrix/Positivity.lean: Analysis.posSemidef_sub_scalar_of_det_lower (n > 0, A PSD, A <= K Id, det A >= delta > 0 => A >= (delta/K^(n-1)) Id)"
+      ],
+      "scope": "strong class, n > 0; the theorem quantifies every compact S and delta_S depends on S: for nonempty S the proof takes delta_S = exp(min_S g) / (16/kappa)^(n-1) with g = -u + W(grad u) (the minimum exists by continuity of g on the compact S); for empty S the statement is vacuous and any positive delta works (the proof returns 1); a.e. with respect to volume restricted to S. Not a PDE result; no C^2 or everywhere positive definiteness."
+    },
+    {
+      "id": "R9",
+      "what": "interior C^{2,alpha}: Evans-Krylov for the concave uniformly elliptic equation log det D^2 u = g with g = -u + W(grad u) Lipschitz, u in C^{1,1}",
+      "status": "PROVED_IN_LIBRARY",
+      "subtools": [
+        "R9a weak Harnack / oscillation estimate for the weighted divergence-form linearized operator (De Giorgi-Nash-Moser route), using R7, R8 (now proved: compact-local ellipticity at the same witness) and the Gagliardo-Nirenberg-Sobolev inequality already in Mathlib (Mathlib/Analysis/FunctionalSpaces/SobolevInequality.lean: MeasureTheory.eLpNorm_le_eLpNorm_fderiv_of_eq for compactly supported C^1 functions; its H^1 test-class clients are proved as supports in ../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Sobolev.lean: n > 2 critical GNS, n = 2 every finite q >= 2, n = 1 essential L-infinity): MISSING_DEEP: the all-ball Morrey bounds and the critical-potential exponential estimates are proved supports (R9a-pre Morrey and critical-potential inputs below), and so are the local bounded testing/energy inputs and, at the actual local deficit, the buffered Morrey bound and the critical-potential exponential (R9a-pre local bounded Moser inputs below), and the bounded weak GT 7.16 representation / critical John-Nirenberg bridge with the fixed-compact joint local inputs and uniform JN moments (R9a-pre bounded weak JN and fixed-compact joint inputs below), and the bounded actual Moser iteration and weak Harnack inequality (n > 2, n = 2 and n = 1 separately; R9a bounded actual weak Harnack below); full GT 8.18 for the general unbounded class, the domain-only W^{1,1} GT 7.16 and the oscillation estimate are not formalized; R9 as a whole remains MISSING_DEEP. Alternative nondivergence route (Krylov-Safonov) would start from zero.",
+        "R9b directional weak subsolution at the actual strong-class weak data: PROVED_IN_LIBRARY. ../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessianEvolution.lean: Analysis.integral_directional_hessian_flux_le (generic: for convex C^2 W and a.e. PD Hess u, every v and every nonnegative compact C^1 psi, int e^{-u} sum_a (sum_b (Hess u)^{-1}_{ba} d_b h_v) d_a psi <= int e^{-u} h_v psi with h_v = v^T Hess u v and d_b h_v = sum_ij v_i v_j T_bij; finite contraction ../../formalization/FunctionalInequalities/Analysis/Matrix/Integral.lean: Analysis.integral_quadratic_flux_le_of_posSemidef of the weighted evolution with PSD curvature/Gram forcing); ../../formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakHessian.lean: Analysis.exists_regular_moment_directional_hessian_subsolution (same u, L, LF, T as exists_regular_moment_weak_hessian_evolution with every old field, plus the directional inequality and the coefficient bounds below). Coefficient A = e^{-u} (Hess u)^{-1}: for every compact S there are c0, c1 > 0 with c0 Id <= A <= c1 Id a.e. on S; for nonempty S, c0 = min_S e^{-u} / K and c1 = max_S e^{-u} / delta_S (K = 16/kappa the cap, delta_S the R8 floor), for empty S the constants are 1 (../../formalization/FunctionalInequalities/Analysis/Convex/HessianRegularity.lean: Analysis.exists_compact_inverse_hessian_coefficient_bounds; ../../formalization/FunctionalInequalities/Analysis/Matrix/Positivity.lean: Analysis.inverse_posSemidef_bounds). Strong class, n > 0; not Harnack, oscillation or C^2.",
+        "R9a-pre nonlinear weak test tools: PROVED_IN_LIBRARY (supports only). ../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean: Analysis.hasWeakDerivAlong_comp_of_compact_bounded (C^1, Lipschitz Phi with Phi 0 = 0 of bounded compactly supported weak H^1 data), Analysis.hasWeakDerivAlong_log_shift_of_ae_nonneg_compact_bounded and Analysis.hasWeakDerivAlong_rpow_shift_of_ae_nonneg_compact_bounded (normalized log(delta + eta) - log delta and (delta + eta)^q - delta^q, delta > 0, every real q, eta >= 0 a.e.), from the smooth bounded-range profiles in ../../formalization/FunctionalInequalities/Analysis/Cutoff/Profile.lean; ../../formalization/FunctionalInequalities/Analysis/BakryEmery/WeakHessian.lean: Analysis.directional_cutoff_data (b = chi v^T Hess u v, Lipschitz gradient and weak tensor only); ../../formalization/FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/WeakHessianEvolution.lean: Analysis.integral_directional_hessian_flux_le_of_bounded_weak_test and Analysis.rough_square_test_of_weak_data; ../../formalization/FunctionalInequalities/Analysis/Matrix/Positivity.lean: Analysis.posSemidef_quadratic_young (Caccioppoli cross term). Actual same-witness square, log, power and sin examples: ../../research/audits/Letwin/RoughTesting.lean. The positive power test under an outer cutoff and the Caccioppoli inequality are supplied later by the R9a-pre H^1 energy/Sobolev tools; the Moser iteration and weak Harnack are not supplied here (the bounded weak GT 7.16 / John-Nirenberg bridge is supplied later, R9a-pre bounded weak JN and fixed-compact joint inputs; the bounded Moser iteration and weak Harnack later still, R9a bounded actual weak Harnack).",
+        "R9a-pre H^1 energy/Sobolev tools: PROVED_IN_LIBRARY (supports only; GT (8.48)-(8.49) form). ../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean: Analysis.bounded_rpow_cutoff_weak_data (chi (delta + max w 0)^r, every real r, exact weak data) and Analysis.bounded_rpow_cutoff_weak_test (square test); ../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Caccioppoli.lean: Analysis.bounded_weak_supersolution_caccioppoli (bounded weak supersolutions, a.e. alpha <= A <= beta on tsupport chi, constants 4 beta/(p^2 alpha) and 2F/(p alpha)); ../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Sobolev.lean: n > 2 critical GNS, n = 2 every finite q >= 2 with C_GNS(2q/(q+2)) volume(cthickening eps K)^(1/q) (L6 is the case q = 6), n = 1 essential L-infinity only; Analysis.rpow_cutoff_quadratic_young, Analysis.HasWeakDerivAlong.const_add_mul and the radius/enclosure-controlled approximation as supports. Uniform actual audit ../../research/audits/Letwin/Caccioppoli.lean: u, T chosen once; for each compact S one alpha, beta and density bound B; then every direction v and cutoff chi with tsupport chi in S, F_v = (16/kappa)|v|^2 B. Ball corollaries bound the thickening measure only (no full radius-normalized Moser scaling). The logarithmic energy is proved later (R9a-pre Moser inputs); not supplied here: the Moser iteration and weak Harnack (the local bounded testing and energies are supplied later, R9a-pre local bounded Moser inputs; the bounded weak GT 7.16 / John-Nirenberg bridge later still, R9a-pre bounded weak JN and fixed-compact joint inputs; the bounded Moser iteration and weak Harnack last, R9a bounded actual weak Harnack).",
+        "R9a-pre Moser inputs: PROVED_IN_LIBRARY (supports only; GT (8.48)-(8.49) inputs). ../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean: Analysis.hasWeakDerivAlong_comp_of_bounded and Analysis.hasWeakDerivAlong_log_max_shift_of_ae_nonneg_bounded (noncompact weak chain, actual log(delta + max w 0)); ../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Caccioppoli.lean: logarithmic energy (p = 1) and power energy (r < 1/2); ../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Sobolev.lean: n = 2 every finite q >= 2; ../../formalization/FunctionalInequalities/Analysis/Cutoff/SmoothBall.lean: uniform concentric cutoffs; ../../formalization/FunctionalInequalities/Analysis/LpExponent.lean: L^p -> essential L-infinity; ../../formalization/FunctionalInequalities/L2/Components.lean: coordinate L2 energy. ONE-witness audit ../../research/audits/Letwin/Caccioppoli.lean (moser_inputs_unified_same_witness, moser_inputs_unified_two_same_witness). The all-ball Morrey and critical-potential inputs are supplied later (R9a-pre Morrey and critical-potential inputs); not supplied here: the Moser recurrence/iteration and weak Harnack (the local bounded testing and energies are supplied later, R9a-pre local bounded Moser inputs; the bounded weak GT 7.16 / John-Nirenberg bridge later still, R9a-pre bounded weak JN and fixed-compact joint inputs; the bounded Moser iteration and weak Harnack last, R9a bounded actual weak Harnack).",
+        "R9a-pre Morrey and critical-potential inputs: PROVED_IN_LIBRARY (supports only). ../../formalization/FunctionalInequalities/Analysis/MeasureGrowth.lean (ball-growth geometry), ../../formalization/FunctionalInequalities/Analysis/MorreyGrowth.lean (all-ball Morrey from cutoff energy, GT (8.49) -> (7.51)), ../../formalization/FunctionalInequalities/Analysis/RieszPotential/Growth.lean and ../../formalization/FunctionalInequalities/Analysis/RieszPotential/Critical.lean (radial/critical potentials; GT 7.20 at p = n >= 2 with explicit constants), ../../formalization/FunctionalInequalities/Probability/ExponentialMoments.lean (moments -> exponential integrability). Audit ../../research/audits/Letwin/Caccioppoli.lean: actual log-gradient all-ball Morrey bound and the exponential integrability of its critical potential at ONE witness. Not supplied here: the GT 7.16 / John-Nirenberg (GT 7.21) bridge (supplied later for bounded weak data, R9a-pre bounded weak JN and fixed-compact joint inputs), the Moser recurrence/iteration and weak Harnack (supplied later for bounded data, R9a bounded actual weak Harnack); the local bounded inputs are supplied later (R9a-pre local bounded Moser inputs).",
+        "R9a-pre local bounded Moser inputs: PROVED_IN_LIBRARY (supports only; GT 8.18 locally nonnegative bounded class, (8.48)-(8.49), (7.51)). ../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean: Analysis.local_rpow_cutoff_weak_data, Analysis.local_rpow_cutoff_weak_test (w >= 0 only a.e. on tsupport chi; pointwise nonnegative square test) and Analysis.exists_bounded_weak_log_extension (ONE bounded weak H, dH chosen before all domains, equal to log(delta + max w 0), s^-1 a a.e. where w >= 0; no global weak log max); ../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Caccioppoli.lean: Analysis.local_weak_supersolution_caccioppoli, Analysis.local_weak_supersolution_power_energy and Analysis.local_weak_supersolution_log_energy (the old global versions are their consumers with unchanged types); ../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Sobolev.lean: Analysis.weak_cutoff_sobolev_gain_of_energy and Analysis.weak_cutoff_sobolev_gain_of_energy_of_bounded_log (n > 2, ONE critical gain step from a given power energy); ../../formalization/FunctionalInequalities/Analysis/MeasureGrowth.lean: Analysis.restrict_ball_growth_of_small_ball_growth_and_mass; ../../formalization/FunctionalInequalities/Analysis/MorreyGrowth.lean: Analysis.exists_buffered_morrey_bound_of_cutoff_energy (energy on B_4R -> all-ball Morrey on B_3R, K = omega_n 16^n (1 + E0 n D^2 + E1 R^2)). Audit ../../research/audits/Letwin/Caccioppoli.lean: actual_dyadic_power_gain_same_witness (global deficit, n > 2, one step), actual_local_deficit_log_morrey_same_witness and actual_local_deficit_potential_exp_same_witness (local deficit M - h_v with the cap only on B_4R, ONE public-producer witness, D_M before R, coefficients once per R: local log energy, one weak extension identified on B_4R, all-ball Morrey on B_3R, n >= 2 critical-potential exponential integrability on B_3R). Not supplied here: fixed-compact uniformity, the joint local power/JN producer and the GT 7.16/JN bridge (supplied later, R9a-pre bounded weak JN and fixed-compact joint inputs); the Moser recurrence/iteration and weak Harnack (supplied later for bounded data, R9a bounded actual weak Harnack); full GT 8.18 for the general unbounded class.",
+        "R9a-pre bounded weak JN and fixed-compact joint inputs: PROVED_IN_LIBRARY (supports only; GT 2001 Lemma 7.16, Theorem 7.21 at critical p = n, bounded actual GT 8.18 inputs). ../../formalization/FunctionalInequalities/Analysis/RieszPotential/Representation.lean: Analysis.map_restrict_convex_ray_le and Analysis.measure_mul_abs_sub_average_le_riesz_of_contDiffOn (C1 on an open convex Omega, arbitrary measurable S, mass form D^n/n, zero |S| included); ../../formalization/FunctionalInequalities/Analysis/RieszPotential/Growth.lean: Analysis.lintegral_riesz_potential_le_diameter_mul_lintegral; ../../formalization/FunctionalInequalities/L2/Components.lean: L2.memLp_sqrt_sum_sq and L2.gradient_density_l1_of_coordinate_l2; ../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Representation.lean: Analysis.measure_mul_abs_sub_average_le_riesz_of_bounded_weak_data (GLOBAL bounded weak H1_loc data, bounded open convex domain, n >= 2) and Analysis.integrable_exp_abs_sub_average_of_bounded_weak_morrey (critical JN, sigma = [2(n-1)e]^-1 n |Omega|/D^n, integral <= 2 omega_n n/(n-1) (1 + 4(n-1)^2) D^n); ../../formalization/FunctionalInequalities/Probability/ExponentialMoments.lean: Probability.integral_rpow_mul_integral_rpow_neg_le_of_log_exp; ../../formalization/FunctionalInequalities/Analysis/MorreyGrowth.lean: Analysis.exists_centered_buffered_morrey_bound_of_cutoff_energy (every domain center). Audit ../../research/audits/Letwin/Caccioppoli.lean: actual_local_deficit_john_nirenberg_same_witness and actual_local_deficit_log_moment_product_same_witness (per-R coefficients, unconditional, exponent sigma/K16); actual_local_inputs_fixed_compact_same_witness and actual_joint_jn_moments_fixed_compact_same_witness (coefficients once per compact S before ALL domain centers and radii; all linear power data, power and log energies, ONE H, dH, centered B(x0,3R) Morrey; under F R^2 <= alpha delta JN and power moments at the uniform p0 = tau n/(32^n U) inside the SAME H). Not supplied here: the Moser recurrence/iteration and weak Harnack (supplied next for bounded data, R9a bounded actual weak Harnack, where n = 1 uses a separate kernel-1 exponential bound instead of JN). Not supplied: the domain-only W^{1,1} GT 7.16 and n = 1 JN.",
+        "R9a bounded actual weak Harnack: PROVED_IN_LIBRARY (supports only; GT 2001 Theorem 8.18 for bounded data, Moser iteration, essential infimum). ../../formalization/FunctionalInequalities/Analysis/DyadicSummation.lean: Analysis.geometric_exponential_recurrence_bound, Analysis.geometric_root_recurrence_bound, Analysis.finite_geometric_root_recurrence_bound; ../../formalization/FunctionalInequalities/Analysis/MoserIteration.lean: Analysis.eLpNorm_top_le_of_shrinking_norm_steps and Analysis.finite_normalized_eLpNorm_sequence_bound (general physical exponent, N/kappa + a = N), Analysis.le_rpow_one_div_mul_of_rpow_le; ../../formalization/FunctionalInequalities/Analysis/LpExponent.lean: Analysis.mul_eLpNorm_inv_top_le_of_moment_product (moment product to the radius-free small-exponent product), Analysis.eLpNorm_inverse_eq_inv_essInf, Analysis.le_mul_essInf_of_inverse_norm_product and Analysis.unshifted_bound_of_shifted_inverse_norm_products (every shift delta > k removed, essential infimum, explicit finite C), with the L^p / essential-supremum exponent tools; ../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Sobolev.lean: n = 2 and n = 1 cutoff Sobolev gains; ../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Representation.lean: Analysis.measure_mul_abs_sub_average_le_of_bounded_weak_data_one and Analysis.integrable_exp_abs_sub_average_one_of_density_mass (n = 1, kernel 1, density mass); ../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Moser.lean: Analysis.inverse_essential_bound_of_cutoff_power_energy and Analysis.positive_norm_bound_of_cutoff_power_energy (n > 2, 0 < p < n/(n-2)), Analysis.inverse_essential_bound_two_of_cutoff_power_energy and Analysis.positive_norm_bound_two_of_cutoff_power_energy (n = 2, physical exponent a = 2 - 2/g, every finite p > 0), Analysis.inverse_essential_bound_one_of_cutoff_power_energy and Analysis.positive_essential_bound_one_of_cutoff_power_energy (n = 1 direct, not the critical tau). Audit ../../research/audits/Letwin/Caccioppoli.lean, final LetwinHarnackAudit section consuming the producers above it in the same standalone audit: actual_full_exponent_harnack_product_fixed_compact_same_witness, actual_full_exponent_harnack_product_two_fixed_compact_same_witness, actual_full_exponent_harnack_product_one_fixed_compact_same_witness (one producer call each, SAME u, T, H, dH and all fields; constants per compact S before every center, radius, cap and shift) and actual_essential_harnack_fixed_compact_same_witness (every n > 0: R^(-n/p) ||w||_{p,B(x0,2R)} <= C(p) (essinf_{B(x0,R)} w + M B R^2/alpha), 0 < p < n/(n-2) for n > 2, every finite p > 0 for n <= 2). Not supplied: full GT 8.18 for unbounded data (q > n, rough general coefficients), the domain-only W^{1,1} GT 7.16, n = 1 John-Nirenberg, a pointwise infimum or regular representative, and the oscillation estimate.",
+        "R9a given-data weak Harnack and joint regular application: PROVED_IN_LIBRARY (supports only; GT 2001 Theorem 8.18, bounded symmetric pure-divergence case, for GIVEN data). ../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Harnack.lean: Analysis.bounded_weak_harnack_of_given_data (C(p) before every ball, coefficient matrix, function, derivative, bound and forcing; essential infimum; n > 0, n <= 2 every p > 0, n > 2 p < n/(n-2)); ../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Caccioppoli.lean: Analysis.cutoff_power_data_of_weak_supersolution_on_set and Analysis.exists_weak_log_extension_with_energy_on_set (given-data producers; logarithm identified only a.e. on the set). Audit ../../research/audits/Letwin/Caccioppoli.lean (final section): LetwinHarnackAudit.harnack_joint_regular_potential, ONE upstream regular witness call retaining all regular-class data; per compact S alpha, beta, B, C(p) before every center, radius, direction and cap M; forcing M B. Not the unbounded/nonsymmetric/lower-order/domain-only GT 8.18.",
+        "R9c-pre oscillation tools: PROVED_IN_LIBRARY (supports only). ../../formalization/FunctionalInequalities/Analysis/Matrix/RankOneFrame.lean: Analysis.exists_uniform_positive_rank_one_frame (GT 2001 Lemma 17.13 literal form: fixed unit frame incl. every e_i and (e_i+e_j)/sqrt 2, lowerCoeff > 0, every coefficient in [lowerCoeff, hi]) and Analysis.coefficient_le_cap; ../../formalization/FunctionalInequalities/Analysis/Matrix/Positivity.lean: Analysis.exists_invertible_congruence_of_posDef (Eq 17.55); ../../formalization/FunctionalInequalities/Analysis/Modulus.lean: GT 2001 Lemma 8.23 scalar iteration (two_scale_modulus_bound, modulus_bound_of_scale_contraction, exists_modulus_bound_of_scale_contraction); ../../formalization/FunctionalInequalities/Analysis/EssentialExtrema.lean: Analysis.essInf_ofReal_deficit_eq_sub_essSup. Not supplied: the actual finite-direction oscillation contraction, the GT 8.23 PDE application, a common representative, C^{2,alpha}.",
+        "R9c Evans-Krylov oscillation decay of D^2 u from R9a, R9b and R8: PROVED_IN_LIBRARY (strong class, at the regular moment potential; rough-divergence form of GT 2001 Lemma 17.14 with the Lemma 17.13 frame, not the classical C4 Lemma 17.14). ../../formalization/FunctionalInequalities/Analysis/Matrix/LogDetOscillation.lean: Analysis.oscillation_of_fixed_frame_and_essential_harnack (theta < 1 and C before every ball; summed essential frame widths on B(x0,R) <= theta x those on B(x0,4R) + C(R+R^2)); ../../formalization/FunctionalInequalities/Analysis/EssentialOscillation.lean: Analysis.essential_width_power_of_quarter_contraction (GT 8.23 power decay Q r^eta, eta and Q before every center and radius); ../../formalization/FunctionalInequalities/Analysis/HolderRepresentative.lean, Analysis/Matrix/Holder.lean, Analysis/ContinuousDerivative.lean, Analysis/HessianRegularity.lean: Hölder representatives, gluing, the continuous-a.e.-derivative bridge, C2 and the everywhere equation; ../../formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/HessianHolder.lean: Analysis.exists_regular_moment_potential_holder_hessian (the same u: C2, locally Hölder Hessian entries, everywhere PD/log det/cap; all regular-class fields retained; the given-data Harnack application is reconstructed privately there from the R9a joint application). Audit ../../research/audits/Letwin/HessianHolder.lean."
+      ],
+      "note": "R9 (interior C^{2,alpha}) is proved for the strong class AT THE REGULAR MOMENT POTENTIAL through the rough-divergence route (R9a given-data weak Harnack at p = 1, R9b directional subsolution, R8 ellipticity, GT 17.13 frame, R9c frame oscillation decay, GT 8.23 power decay, Hölder representatives and C2 identification): exists_regular_moment_potential_holder_hessian gives u in C2 with every Hessian entry locally Hölder (one exponent and constant per ball). This is not the classical Evans-Krylov theorem for arbitrary C^{1,1} solutions, not the unbounded/nonsymmetric GT 8.18, not the domain-only W^{1,1} GT 7.16 and not the classical C4 GT 17.14. The bounded-data and given-data weak Harnack sub-tools and all R9a-pre supports listed above are retained. Next: the linear Schauder bootstrap R10 (C^{2,alpha} => C^infinity) for the strong class, then R12/R13S and the merely convex source class; first the Letwin smooth route, then uncut Eldan.",
+      "primary_source_leads": [
+        "J. Moser, On Harnack's theorem for elliptic differential equations, Comm. Pure Appl. Math. 14(3) (1961) 577-591, https://doi.org/10.1002/cpa.3160140329",
+        "D. Gilbarg, N. S. Trudinger, Elliptic Partial Differential Equations of Second Order, Springer 2001, https://doi.org/10.1007/978-3-642-61798-0, Theorem 8.18 (weak Harnack)"
+      ],
+      "primary_source_leads_status": "Gilbarg-Trudinger (2001) Theorem 8.18 (weak Harnack) has been read from the printed pages. Its bounded-data form is formalized for the Letwin deficit (R9a bounded actual weak Harnack): the R^(-n/p) ||w||_{L^p(B_2R)} bound with the essential infimum over B_R, w >= 0 a.e. on B_4R, the forcing term k = M B R^2/alpha (lambda^(-1) enters through alpha), a.e. coefficient representatives, the range 0 < p < n/(n-2) for n > 2 and every finite p > 0 for n = 1, 2. The full contract (unbounded W^{1,2} data, q > n and rough general coefficients, a pointwise infimum) is not formalized. Moser (1961) is a lead only."
+    },
+    {
+      "id": "R10",
+      "what": "linear Schauder bootstrap: C^{2,alpha} => C^infinity (differentiate the equation; interior Schauder estimates for nondivergence linear equations with C^alpha coefficients)",
+      "status": "MISSING_DEEP"
+    },
+    {
+      "id": "R11",
+      "what": "everywhere PD Hessian and pointwise Monge-Ampere (log det Hess u = -u + W(grad u) at every point)",
+      "status": "PROVED_IN_LIBRARY",
+      "conditional_on": [
+        "R9 (u in C^2)"
+      ],
+      "declarations_used": [
+        "R6",
+        "../../formalization/FunctionalInequalities/Analysis/Convex/Viscosity.lean: posDef_and_det_eq_of_quadratic_expansion"
+      ],
+      "note": "Proved at the regular moment potential of the strong class: Analysis.everywhere_posDef_logdet_of_continuous_hessian_ae (../../formalization/FunctionalInequalities/Analysis/HessianRegularity.lean; quantitative determinant floor, closed PSD cone, Lebesgue support) applied in Analysis.exists_regular_moment_potential_holder_hessian: Hess u positive definite with log det Hess u = -u + W(grad u) and cap 16/kappa at every point. Earlier derivation sketch: at a C^2 point the second-order expansion holds with B = Hess u(x); R6 gives B PD and det B = f(x).",
+      "alternative_plan": "PLAN ONLY, not proved; requires the actual C^2 upgrade of the witness (R9), unavailable at the current C^{1,1} witness. Once u is C^2, convexity gives Hess u positive semidefinite at every point. The a.e. data (Hess u PD, log det Hess u = g with g = -u + W(grad u)) give det Hess u = exp g a.e.; both sides are continuous and Lebesgue measure has full support, so the equality holds everywhere. A positive determinant upgrades PSD to PD, and then log det Hess u = g pointwise. This continuity/determinant bridge is an alternative to the viscosity route of the note above; it does not give smoothness, Harnack or the literal source class."
+    },
+    {
+      "id": "R12",
+      "what": "grad u: R^n -> interior K is a (smooth) diffeomorphism",
+      "status": "DERIVABLE_BRIDGE",
+      "conditional_on": [
+        "R10 for smoothness of the inverse beyond C^1 (the generic C^k inverse tool needs u in C^{k+1})"
+      ],
+      "subtools": [
+        "R12a injectivity of grad u with a measurable everywhere left inverse at the same witness: PROVED_IN_LIBRARY (../../formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/Potential.lean: Analysis.exists_regular_moment_potential_with_inverse, Analysis.measurable_inverse_gradient_of_map_gradient; ../../formalization/FunctionalInequalities/Analysis/Convex/Subgradient.lean: Analysis.injective_gradient_of_strictConvexOn)",
+        "R12b C^1 inverse from C^2 and PD Hessian at the same witness: PROVED_IN_LIBRARY (strong class). ../../formalization/FunctionalInequalities/Analysis/Convex/GradientInverse.lean: Analysis.exists_gradient_deriv_equiv_of_posDef (derivative isomorphism, standard-basis matrix Hess^T), Analysis.contDiffOn_invFun_gradient_of_posDef (C^k inverse on the range from C^{k+1}, k != 0), Analysis.fderiv_invFun_gradient_comp_fderiv; ../../formalization/FunctionalInequalities/Analysis/LocalInverse.lean: Analysis.contDiffOn_invFun_of_injective_of_hasFDerivAt_equiv, Analysis.hasFDerivAt_invFun_of_injective.",
+        "R12c range grad u = interior K and homeomorphism onto interior K: PROVED_IN_LIBRARY (strong class; the C^1 transport hypotheses suffice). ../../formalization/FunctionalInequalities/Analysis/Convex/GradientImage.lean: tilt minima, convex open range, open map and homeomorphism onto the range of a strictly convex gradient (coercive tilts and compactness; no invariance of domain); ../../formalization/FunctionalInequalities/Probability/Support.lean: supports of pushforwards, convex restrictions and positive densities; ../../formalization/FunctionalInequalities/Probability/MomentMeasure/Gradient.lean: MomentMeasure.range_gradient_eq_interior_of_map_gradient, MomentMeasure.exists_gradient_homeomorph_interior_of_map_gradient, MomentMeasure.exists_regular_inverse_of_map_gradient."
+      ],
+      "note": "R12a, R12b and R12c are proved. At the regular moment potential of the strong class, ../../formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/Inverse.lean: Analysis.exists_regular_moment_potential_holder_hessian_inverse keeps every field of Analysis.exists_regular_moment_potential_holder_hessian for the same u and adds a homeomorphism grad u : R^n -> interior K and a C^1 left inverse on interior K (a C^1 diffeomorphism onto interior K). Audit ../../research/audits/Letwin/GradientInverse.lean. Smoothness of the inverse beyond C^1 follows from the same generic C^k tool once R10 gives u in C^infinity; R10 is open. The generic injectivity theorem injective_gradient_of_strictConvexOn holds in every finite dimension, dimension zero included; the moment-map adapters require n > 0."
+    },
+    {
+      "id": "R13",
+      "what": "target Stein kernel tau = Hess u o Psi for mu at the C^{1,1} witness (weak form): Stein kernel, mu-a.e. PD and symmetric, mean Id, HS in L^2(mu) with int |tau|_HS^2 <= 2n",
+      "status": "PROVED_IN_LIBRARY",
+      "declarations": [
+        "../../formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/TraceStein.lean: Analysis.exists_regular_moment_target_stein_kernel (same u, L as exists_regular_moment_hessian_trace_bound; all flat fields retained)",
+        "../../formalization/FunctionalInequalities/KLS/LogConcave/HessianStein.lean: KLS.LogConcave.weak_hessianKernel_isSteinKernel (C^1 potential with Lipschitz gradient and an a.e. left inverse; no C^2)",
+        "../../formalization/FunctionalInequalities/Probability/Stein/HessianKernel.lean: Stein.hessianKernel_posDefAE_of_map, Stein.memLp_hsNorm_hessianKernel_of_map",
+        "../../formalization/FunctionalInequalities/Probability/Stein/Kernel.lean: Stein.hsNorm_sq_eq_trace_mul_self"
+      ],
+      "scope": "strong class, n > 0; Psi is a measurable everywhere left inverse of grad u (R12a), not the inverse of a diffeomorphism; positive definiteness is mu-a.e., not everywhere; the HS bound is Theorem 2.5 at B = Id."
+    },
+    {
+      "id": "R13S",
+      "what": "Lemma 2.7 in source form: tau_mu = Hess phi o (grad phi)^{-1} for the smooth moment map, positive definite, coupling tau(X) = Hess phi(Y)",
+      "status": "DERIVABLE_BRIDGE",
+      "conditional_on": [
+        "R10",
+        "R11",
+        "R12"
+      ],
+      "note": "the weak form R13 supplies the kernel and its a.e. bounds; the smooth source statement and the merely convex class remain open."
+    },
+    {
+      "id": "R14",
+      "what": "full smooth consumer statements (Lemma 2.4 pointwise, Theorem 2.5 smooth form, Lemma 2.7 source form)",
+      "status": "DERIVABLE_BRIDGE",
+      "conditional_on": [
+        "R10",
+        "R11",
+        "R12",
+        "R13S"
+      ],
+      "note": "pointwise identities (2.4)-(2.10) are proved for a given smooth potential with PD Hessian satisfying the zero-order MA equation (register L24/T25 notes)."
+    }
+  ],
+  "open_targets": [
+    "full Lemma 2.2 for the literal source class (V merely convex near closure K): Caffarelli C^{1,alpha} and W^{2,p} (R3L, R7L), then R9-R12",
+    "Schauder bootstrap (R10, C^{2,alpha} => C^infinity) for the strong class; R9 (C^{2,alpha} by the rough-divergence route) and R11 (everywhere PD Hessian and pointwise Monge-Ampere) are proved at the regular moment potential",
+    "smooth gradient diffeomorphism onto interior K (R12: R12a injectivity, R12b C^1 inverse and R12c range = interior K with a homeomorphism are proved at the regular moment potential; smoothness beyond C^1 needs R10) and the smooth source form of Lemma 2.7 (R13S; the weak target kernel R13 is proved)",
+    "uncut Eldan stochastic localization (Bizeul-Klartag-Lehec), queued after this route"
+  ],
+  "nonclaims": [
+    "C^{1,1} and a.e. Monge-Ampere data are not smoothness",
+    "no MvPolynomial interface for Lemma A.1",
+    "Lemma 2.2 and Theorem 2.5 remain partial for the smooth moment map",
+    "the weak target Stein kernel is mu-a.e. positive definite with a left-inverse transport; it is not the smooth Lemma 2.7 kernel"
+  ],
+  "route_preference": "assess first the weighted divergence-form De Giorgi/Moser route (existing weak evolution R7 + local ellipticity R8 + Mathlib Sobolev) before a nondivergence Krylov-Safonov route; select only after reading the pinned primary theorem"
+}

@@ -6,6 +6,7 @@ import Mathlib.Analysis.Calculus.Deriv.Inv
 import Mathlib.Analysis.Convex.Deriv
 import Mathlib.Analysis.SpecialFunctions.Pow.Real
 import Mathlib.Analysis.Matrix.Spectrum
+import Mathlib.LinearAlgebra.Matrix.Trace
 
 /-!
 # Inequalities for the log-determinant
@@ -485,3 +486,73 @@ theorem log_det_add_frobenius_sq_le {n : ℕ} {A B : Matrix (Fin n) (Fin n) ℝ}
 end LogDetConcavity
 
 end FunctionalInequalities.Analysis
+
+/-! ## Directional deficits in a fixed rank-one frame -/
+
+noncomputable section FrameDeficit
+
+open Matrix Finset
+
+namespace FunctionalInequalities.Analysis
+
+/-- A finite weighted comparison `∑ b_j d_j ≤ ∑ b_j c_j + E` with coefficients `lc ≤ b_j ≤ uc` (`0 ≤ lc`) and nonnegative
+deficits bounds every single deficit: `lc · d_k ≤ uc · ∑ c_j + E`. -/
+theorem deficit_le_sum_of_weighted_comparison {N : ℕ} (b dx dy : Fin N → ℝ)
+    {lc uc E : ℝ} (hlc : 0 ≤ lc) (hb : ∀ j, lc ≤ b j ∧ b j ≤ uc)
+    (hdx : ∀ j, 0 ≤ dx j) (hdy : ∀ j, 0 ≤ dy j)
+    (hcomp : ∑ j, b j * dy j ≤ (∑ j, b j * dx j) + E) (k : Fin N) :
+    lc * dy k ≤ uc * (∑ j, dx j) + E := by
+  calc
+    _ ≤ b k * dy k := mul_le_mul_of_nonneg_right (hb k).1 (hdy k)
+    _ ≤ ∑ j, b j * dy j := Finset.single_le_sum
+      (fun j _ => mul_nonneg (hlc.trans (hb j).1) (hdy j)) (mem_univ k)
+    _ ≤ (∑ j, b j * dx j) + E := hcomp
+    _ ≤ (∑ j, uc * dx j) + E := add_le_add
+      (Finset.sum_le_sum fun j _ => mul_le_mul_of_nonneg_right (hb j).2 (hdx j)) le_rfl
+    _ = _ := by rw [Finset.mul_sum]
+
+private theorem trace_rank_one_mul {n : ℕ} (v : Fin n → ℝ) (H : Matrix (Fin n) (Fin n) ℝ) :
+    (vecMulVec v v * H).trace = ∑ i, ∑ j, v i * v j * H i j := by
+  simp only [Matrix.trace,Matrix.diag,Matrix.mul_apply,Matrix.vecMulVec_apply]
+  rw [Finset.sum_comm]
+  exact Finset.sum_congr rfl fun i _ => Finset.sum_congr rfl fun j _ => by ring
+
+/-- Directional deficits of two positive definite matrices `X, Y ≤ K·I` in a fixed rank-one frame. If
+`ρ X⁻¹ = ∑ b_j γ_j γ_jᵀ` with `lc ≤ b_j ≤ uc` (`ρ, lc ≥ 0`), the directional quadratic forms are capped by `M_j`, and
+`ρ (log det X − log det Y) ≤ E`, then `lc (M_k − γ_kᵀ Y γ_k) ≤ uc ∑_j (M_j − γ_jᵀ X γ_j) + E`. The proof is the
+log-determinant supporting plane `log_det_add_frobenius_sq_le` (the comparison step of Gilbarg–Trudinger (2001), §17.4). -/
+theorem directional_deficit_le_sum_of_logdet {n N : ℕ}
+    (X Y : Matrix (Fin n) (Fin n) ℝ) (γ : Fin N → Fin n → ℝ) (b M : Fin N → ℝ)
+    {K ρ lc uc E : ℝ} (hX : X.PosDef) (hY : Y.PosDef)
+    (hXK : (K • (1 : Matrix (Fin n) (Fin n) ℝ) - X).PosSemidef)
+    (hYK : (K • (1 : Matrix (Fin n) (Fin n) ℝ) - Y).PosSemidef)
+    (hρ : 0 ≤ ρ) (hlc : 0 ≤ lc) (hb : ∀ j, lc ≤ b j ∧ b j ≤ uc)
+    (hframe : ρ • X⁻¹ = ∑ j, b j • vecMulVec (γ j) (γ j))
+    (hMX : ∀ j, (∑ i, ∑ a, γ j i * γ j a * X i a) ≤ M j)
+    (hMY : ∀ j, (∑ i, ∑ a, γ j i * γ j a * Y i a) ≤ M j)
+    (hE : ρ * (Real.log X.det - Real.log Y.det) ≤ E) (k : Fin N) :
+    lc * (M k - ∑ i, ∑ a, γ k i * γ k a * Y i a) ≤
+      uc * (∑ j, (M j - ∑ i, ∑ a, γ j i * γ j a * X i a)) + E := by
+  let dx := fun j => M j - ∑ i, ∑ a, γ j i * γ j a * X i a
+  let dy := fun j => M j - ∑ i, ∑ a, γ j i * γ j a * Y i a
+  have hq : 0 ≤ (∑ i, ∑ j, (Y-X) i j ^ 2) / (2*K^2) := by positivity
+  have hconc := log_det_add_frobenius_sq_le hX hY hXK hYK
+  have hplane : ρ * (Real.log Y.det - Real.log X.det) ≤ ((ρ • X⁻¹) * (Y-X)).trace := by
+    rw [Matrix.smul_mul, Matrix.trace_smul,smul_eq_mul]
+    exact mul_le_mul_of_nonneg_left (by linarith [hconc]) hρ
+  have htr : ((ρ • X⁻¹) * (Y-X)).trace = (∑ j, b j * dx j) - ∑ j, b j * dy j := by
+    rw [hframe, Finset.sum_mul, Matrix.trace_sum]
+    rw [← Finset.sum_sub_distrib]
+    refine Finset.sum_congr rfl fun j _ => ?_
+    rw [Matrix.smul_mul,Matrix.trace_smul,smul_eq_mul,trace_rank_one_mul]
+    dsimp only [dx,dy]
+    simp only [Matrix.sub_apply,mul_sub,Finset.sum_sub_distrib]
+    ring
+  rw [htr] at hplane
+  have hcomp : (∑ j, b j * dy j) ≤ (∑ j, b j * dx j) + E := by nlinarith
+  exact deficit_le_sum_of_weighted_comparison b dx dy hlc hb
+    (fun j => sub_nonneg.mpr (hMX j)) (fun j => sub_nonneg.mpr (hMY j)) hcomp k
+
+end FunctionalInequalities.Analysis
+
+end FrameDeficit

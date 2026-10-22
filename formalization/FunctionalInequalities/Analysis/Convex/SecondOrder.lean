@@ -26,8 +26,12 @@ open scoped RealInnerProductSpace Topology
 
 namespace FunctionalInequalities.Analysis
 
-private lemma resolvent_subgradient_monotone {E : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] {f : E → ℝ} {u v p q : E}
+section InnerProduct
+
+variable {E : Type*}
+variable [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+
+private lemma resolvent_subgradient_monotone {f : E → ℝ} {u v p q : E}
     (hp : ∀ w, f u + ⟪p, w - u⟫ ≤ f w)
     (hq : ∀ w, f v + ⟪q, w - v⟫ ≤ f w) :
     0 ≤ ⟪p - q, u - v⟫ := by
@@ -38,8 +42,7 @@ private lemma resolvent_subgradient_monotone {E : Type*} [NormedAddCommGroup E]
     ring
   linarith
 
-private lemma resolvent_firm_monotone {E : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] {f : E → ℝ} {P : E → E}
+private lemma resolvent_firm_monotone {f : E → ℝ} {P : E → E}
     (hP : ∀ z y, f (P z) + ⟪z - P z, y - P z⟫ ≤ f y) (a b : E) :
     ‖P a - P b‖ ^ 2 ≤ ⟪P a - P b, a - b⟫ := by
   have h := resolvent_subgradient_monotone (hP a) (hP b)
@@ -54,8 +57,7 @@ private lemma resolvent_firm_monotone {E : Type*} [NormedAddCommGroup E]
   rw [he] at h
   linarith
 
-private lemma resolvent_subgradient_inverse {E : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] {f : E → ℝ} {P : E → E}
+private lemma resolvent_subgradient_inverse {f : E → ℝ} {P : E → E}
     (hP : ∀ z y, f (P z) + ⟪z - P z, y - P z⟫ ≤ f y)
     {y q : E} (hq : ∀ w, f y + ⟪q, w - y⟫ ≤ f w) :
     P (y + q) = y := by
@@ -69,8 +71,7 @@ private lemma resolvent_subgradient_inverse {E : Type*} [NormedAddCommGroup E]
 
 -- A local lower bound, together with firm monotonicity, controls every preimage.
 set_option maxHeartbeats 800000 in
-private lemma resolvent_preimage_near {E : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] {P : E → E} {z : E}
+private lemma resolvent_preimage_near {P : E → E} {z : E}
     (hm : ∀ a b, ‖P a - P b‖ ^ 2 ≤ ⟪P a - P b, a - b⟫)
     {c δ : ℝ} (hc : 0 < c) (hδ : 0 < δ)
     (hl : ∀ w, ‖w - z‖ < δ → c * ‖w - z‖ ≤ ‖P w - P z‖)
@@ -122,8 +123,7 @@ private lemma resolvent_preimage_near {E : Type*} [NormedAddCommGroup E]
   rw [hsN] at hcancel
   nlinarith only [hcancel, ha]
 
-private lemma resolvent_absorb_remainder {E : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] (T : E ≃L[ℝ] E) {K c : ℝ}
+private lemma resolvent_absorb_remainder (T : E ≃L[ℝ] E) {K c : ℝ}
     (hK : 0 < K) (hnorm : ‖(T.symm : E →L[ℝ] E)‖ ≤ K)
     (hc : K * c = 1 / 2) (d u : E)
     (hr : ‖u - T d‖ ≤ c * ‖d‖) :
@@ -150,8 +150,7 @@ Alexandrov's theorem): let `P` be the resolvent of `f` (`z − P z` is a subgrad
 `P z` for every `z`). If `P` is differentiable at `z` with invertible derivative `T`, then `p₀ := z − P z` is
 the only subgradient of `f` at `x := P z`, and every subgradient `q` of `f` at `y` near `x` satisfies
 `‖q − p₀ − (T⁻¹ (y − x) − (y − x))‖ ≤ ε ‖y − x‖`. -/
-theorem subgradient_expansion_of_hasFDerivAt_resolvent {E : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] {f : E → ℝ} {P : E → E}
+theorem subgradient_expansion_of_hasFDerivAt_resolvent {f : E → ℝ} {P : E → E}
     (hP : ∀ z y, f (P z) + ⟪z - P z, y - P z⟫ ≤ f y) {z : E} {T : E ≃L[ℝ] E}
     (hT : HasFDerivAt P (T : E →L[ℝ] E) z) :
     (∀ q : E, (∀ y, f (P z) + ⟪q, y - P z⟫ ≤ f y) → q = z - P z) ∧
@@ -246,6 +245,8 @@ theorem subgradient_expansion_of_hasFDerivAt_resolvent {E : Type*} [NormedAddCom
   simp only [sub_self, map_zero, sub_zero, norm_zero, mul_zero] at hh
   exact sub_eq_zero.mp (norm_eq_zero.mp (le_antisymm hh (norm_nonneg _)))
 
+end InnerProduct
+
 end FunctionalInequalities.Analysis
 
 section LT12D7FatouSecondDifference
@@ -276,8 +277,16 @@ private lemma secondDifference_tendsto {f : ℝ → ℝ} (hf : ContDiff ℝ 2 f)
   field_simp
   ring
 
-private lemma directional_second_derivative {E : Type*} [NormedAddCommGroup E]
-    [NormedSpace ℝ E] {ψ : E → ℝ} (hψ : ContDiff ℝ 2 ψ) (v x : E) :
+section StructuredSpace
+
+variable {E : Type*}
+variable [NormedAddCommGroup E]
+
+section NormedSpace
+
+variable [NormedSpace ℝ E]
+
+private lemma directional_second_derivative {ψ : E → ℝ} (hψ : ContDiff ℝ 2 ψ) (v x : E) :
     fderiv ℝ (fun y => fderiv ℝ ψ y v) x v =
       iteratedFDeriv ℝ 2 ψ x (fun _ => v) := by
   rw [fderiv_clm_apply
@@ -285,8 +294,7 @@ private lemma directional_second_derivative {E : Type*} [NormedAddCommGroup E]
     (differentiableAt_const v)]
   simp [iteratedFDeriv_two_apply]
 
-private lemma second_derivative_continuous_compact {E : Type*}
-    [NormedAddCommGroup E] [NormedSpace ℝ E] {χ : E → ℝ}
+private lemma second_derivative_continuous_compact {χ : E → ℝ}
     (hχ : ContDiff ℝ 2 χ) (hχc : HasCompactSupport χ) (v : E) :
     Continuous (fun x => iteratedFDeriv ℝ 2 χ x (fun _ => v)) ∧
       HasCompactSupport (fun x => iteratedFDeriv ℝ 2 χ x (fun _ => v)) := by
@@ -297,9 +305,17 @@ private lemma second_derivative_continuous_compact {E : Type*}
   · exact ((hχc.fderiv ℝ).fderiv_apply ℝ v).comp_left
       (g := fun L : E →L[ℝ] ℝ => L v) (by simp)
 
-private lemma reflected_convolution_eq {E : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] [FiniteDimensional ℝ E]
-    [MeasurableSpace E] [BorelSpace E] (u ψ : E → ℝ) (z : E) :
+end NormedSpace
+
+section InnerProduct
+
+variable [InnerProductSpace ℝ E]
+
+section FiniteDimensional
+
+variable [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
+
+private lemma reflected_convolution_eq (u ψ : E → ℝ) (z : E) :
     convolution (fun y => u (-y)) ψ (ContinuousLinearMap.mul ℝ ℝ) volume z =
       ∫ x, u (x - z) * ψ x := by
   have h := integral_sub_left_eq_self
@@ -307,9 +323,7 @@ private lemma reflected_convolution_eq {E : Type*} [NormedAddCommGroup E]
   simpa only [convolution_def, ContinuousLinearMap.mul_apply',
     neg_sub, sub_sub_cancel] using h.symm
 
-private lemma reflected_convolution_hasDerivAt {E : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] [FiniteDimensional ℝ E]
-    [MeasurableSpace E] [BorelSpace E] {u ψ : E → ℝ}
+private lemma reflected_convolution_hasDerivAt {u ψ : E → ℝ}
     (hu : Continuous u) (hψ : ContDiff ℝ 1 ψ) (hψc : HasCompactSupport ψ)
     (v : E) (t : ℝ) :
     HasDerivAt
@@ -327,9 +341,7 @@ private lemma reflected_convolution_hasDerivAt {E : Type*} [NormedAddCommGroup E
     (convolution_precompR_apply (ContinuousLinearMap.mul ℝ ℝ) hi
       (hψc.fderiv ℝ) (hψ.continuous_fderiv one_ne_zero) (t • v) v)
 
-private lemma secondDifference_integrable {E : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] [FiniteDimensional ℝ E]
-    [MeasurableSpace E] [BorelSpace E] {u χ : E → ℝ}
+private lemma secondDifference_integrable {u χ : E → ℝ}
     (hu : Continuous u) (hχ : Continuous χ) (hχc : HasCompactSupport χ)
     (v : E) (t : ℝ) :
     Integrable
@@ -343,9 +355,7 @@ private lemma secondDifference_integrable {E : Type*} [NormedAddCommGroup E]
         (continuous_const.mul hu)).div_const (t ^ 2)).mul hχ
   exact hcont.integrable_of_hasCompactSupport hχc.mul_left
 
-private lemma integral_secondDifference_eq {E : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] [FiniteDimensional ℝ E]
-    [MeasurableSpace E] [BorelSpace E] {u χ : E → ℝ}
+private lemma integral_secondDifference_eq {u χ : E → ℝ}
     (hu : Continuous u) (hχ : Continuous χ) (hχc : HasCompactSupport χ)
     (v : E) (t : ℝ) :
     (∫ x, (u (x + t • v) + u (x - t • v) - 2 * u x) / t ^ 2 * χ x) =
@@ -377,8 +387,7 @@ private lemma integral_secondDifference_eq {E : Type*} [NormedAddCommGroup E]
 
 /-- **Second difference quotients converge to the distributional second derivative** (weak Letwin route): for continuous `u` and `χ ∈ C²` with compact support,
 `∫ (u(x + t v) + u(x − t v) − 2 u(x)) / t² · χ(x) dx → ∫ u(x) ∂²_v χ(x) dx` as `t → 0⁺`. -/
-theorem tendsto_integral_secondDifference_mul {E : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
+theorem tendsto_integral_secondDifference_mul
     {u : E → ℝ} (hu : Continuous u) {χ : E → ℝ} (hχ : ContDiff ℝ 2 χ) (hχc : HasCompactSupport χ)
     (v : E) :
     Tendsto (fun t : ℝ => ∫ x, (u (x + t • v) + u (x - t • v) - 2 * u x) / t ^ 2 * χ x)
@@ -420,8 +429,9 @@ theorem tendsto_integral_secondDifference_mul {E : Type*} [NormedAddCommGroup E]
   rw [hdd] at H
   exact H.congr' (.of_forall fun t => (heq t).symm)
 
-private lemma convex_secondDifference_nonneg {E : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] {u : E → ℝ} (hconv : ConvexOn ℝ univ u)
+end FiniteDimensional
+
+private lemma convex_secondDifference_nonneg {u : E → ℝ} (hconv : ConvexOn ℝ univ u)
     (x w : E) :
     0 ≤ u (x + w) + u (x - w) - 2 * u x := by
   have hm : (1 / 2 : ℝ) • (x + w) + (1 / 2 : ℝ) • (x - w) = x := by
@@ -449,8 +459,7 @@ private lemma ofReal_mul_le_of_sub (a k : ℝ) (B : ENNReal)
 /-- **Fatou bound for the distributional second derivatives of a convex function** (weak Letwin route, input of the distributional log-det inequality): if `g` is below the lower limit of a
 nonnegative combination of second difference quotients of the convex `u` almost everywhere, then
 `∫ g χ ≤ ∫ u ∑ᵢ cᵢ ∂²_{vᵢ} χ` for every nonnegative `χ ∈ C²` with compact support. -/
-theorem integral_mul_le_integral_mul_sum_iteratedFDeriv {E : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
+theorem integral_mul_le_integral_mul_sum_iteratedFDeriv [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
     {u : E → ℝ} (hconv : ConvexOn ℝ univ u) {ι : Type*} [Fintype ι] (v : ι → E) {c : ι → ℝ}
     (hc : ∀ i, 0 ≤ c i) {χ : E → ℝ} (hχ : ContDiff ℝ 2 χ) (hχc : HasCompactSupport χ)
     (hχ0 : ∀ x, 0 ≤ χ x) {g : E → ℝ} (hgm : AEStronglyMeasurable g (volume : Measure E))
@@ -566,6 +575,10 @@ theorem integral_mul_le_integral_mul_sum_iteratedFDeriv {E : Type*} [NormedAddCo
         ((ENNReal.ofReal_le_ofReal_iff hR0).mp hp)
   · rw [integral_undef hgi]
     exact hR0
+
+end InnerProduct
+
+end StructuredSpace
 
 end FunctionalInequalities.Analysis
 

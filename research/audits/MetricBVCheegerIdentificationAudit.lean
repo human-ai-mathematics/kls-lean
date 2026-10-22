@@ -42,17 +42,21 @@ theorem threeConstants (ν : ProbabilityMeasure V) :
       symmetricConstant ν = Isoperimetry.minkowskiConstant ν :=
   ⟨halfConstant_eq_symmetricConstant ν, symmetricConstant_eq_minkowskiConstant ν⟩
 
-theorem frontendSymmetric {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
-    [CompleteSpace E] [MeasurableSpace E] [BorelSpace E] [SecondCountableTopology E]
-    [FiniteDimensional ℝ E] (μ : ProbabilityMeasure E) :
+section FiniteDimensional
+
+variable {E : Type*}
+variable [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E] [MeasurableSpace E]
+variable [BorelSpace E] [SecondCountableTopology E] [FiniteDimensional ℝ E]
+
+theorem frontendSymmetric (μ : ProbabilityMeasure E) :
     symmetricConstant (FunctionalInequalities.Probability.intrinsicMeasure μ) = Isoperimetry.constant μ := by
   exact symmetricConstant_intrinsicMeasure_eq_constant μ
 
-theorem frontendHalf {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
-    [CompleteSpace E] [MeasurableSpace E] [BorelSpace E] [SecondCountableTopology E]
-    [FiniteDimensional ℝ E] (μ : ProbabilityMeasure E) :
+theorem frontendHalf (μ : ProbabilityMeasure E) :
     halfConstant (FunctionalInequalities.Probability.intrinsicMeasure μ) = Isoperimetry.constant μ := by
   exact halfConstant_intrinsicMeasure_eq_constant μ
+
+end FiniteDimensional
 
 /-- Empty admissible family: in dimension zero both constants are `⊤`, consistently. -/
 theorem emptyFamilyTop (ν : ProbabilityMeasure (Fin 0 → ℝ)) :

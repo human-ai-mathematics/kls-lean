@@ -46,10 +46,14 @@ def intrinsicClosedSupportLaw {E : Type*} [NormedAddCommGroup E]
       Measure (Probability.affineSupport μ).direction).support :=
   closedSupportLaw (Probability.intrinsicMeasure μ)
 
+section FiniteDimensional
+
+variable {E : Type*}
+variable [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E] [MeasurableSpace E]
+variable [BorelSpace E] [SecondCountableTopology E] [FiniteDimensional ℝ E]
+
 /-- Complement symmetry of the metric BV perimeter on the closed intrinsic support. -/
-theorem perimeter_compl_intrinsicClosedSupportLaw {E : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] [CompleteSpace E] [MeasurableSpace E]
-    [BorelSpace E] [SecondCountableTopology E] [FiniteDimensional ℝ E]
+theorem perimeter_compl_intrinsicClosedSupportLaw
     (μ : ProbabilityMeasure E)
     (B : Set (Probability.intrinsicMeasure μ :
       Measure (Probability.affineSupport μ).direction).support) :
@@ -84,15 +88,14 @@ theorem halfConstant_eq_top_of_subsingleton [Subsingleton X]
 
 set_option linter.style.haveILetI false in
 /-- Zero-dimensional affine support yields the empty BV Cheeger test family. -/
-theorem intrinsicHalfConstant_eq_top_of_finrank_zero {E : Type*}
-    [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
-    [MeasurableSpace E] [BorelSpace E] [SecondCountableTopology E]
-    [FiniteDimensional ℝ E] (μ : ProbabilityMeasure E)
+theorem intrinsicHalfConstant_eq_top_of_finrank_zero (μ : ProbabilityMeasure E)
     (h : Module.finrank ℝ (Probability.affineSupport μ).direction = 0) :
     intrinsicHalfConstant μ = ⊤ := by
   haveI : Subsingleton (Probability.affineSupport μ).direction :=
     Module.finrank_zero_iff.mp h
   exact halfConstant_eq_top_of_subsingleton _
+
+end FiniteDimensional
 
 section HalfSymmetric
 

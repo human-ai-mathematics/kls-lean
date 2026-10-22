@@ -20,9 +20,17 @@ theorem target :
   intro V _ _ _ _ _ _ O S u g hO hu hreg hS hSO hg
   exact KLS.coarea_of_contDiffOn_of_fderiv_ne_zero hO hu hreg hS hSO hg
 
+section FiniteDimensional
+
+variable {V : Type*}
+variable [NormedAddCommGroup V] [InnerProductSpace ℝ V] [FiniteDimensional ℝ V]
+
+section MeasurableSpace
+
+variable [MeasurableSpace V] [BorelSpace V]
+
 /-- The infinite weight remains inside both components of the target. -/
-theorem top_weight {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V]
-    [FiniteDimensional ℝ V] [MeasurableSpace V] [BorelSpace V]
+theorem top_weight
     {O S : Set V} {u : V → ℝ} (hO : IsOpen O) (hu : ContDiffOn ℝ 1 u O)
     (hreg : ∀ x ∈ O, fderiv ℝ u x ≠ 0) (hS : MeasurableSet S) (hSO : S ⊆ O) :
     AEMeasurable (fun t : ℝ => ∫⁻ _y in S ∩ {x | u x = t}, (⊤ : ℝ≥0∞)
@@ -32,17 +40,17 @@ theorem top_weight {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V]
   KLS.coarea_of_contDiffOn_of_fderiv_ne_zero hO hu hreg hS hSO measurable_const
 
 /-- Empty set with an infinite weight: both integrals are zero. -/
-theorem empty_set {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V]
-    [FiniteDimensional ℝ V] [MeasurableSpace V] [BorelSpace V] (u : V → ℝ) :
+theorem empty_set (u : V → ℝ) :
     AEMeasurable (fun t : ℝ => ∫⁻ _y in (∅ : Set V) ∩ {x | u x = t}, (⊤ : ℝ≥0∞)
       ∂(KLS.surfaceMeasure V)) volume ∧
     (∫⁻ x in (∅ : Set V), ‖gradient u x‖ₑ * (⊤ : ℝ≥0∞) ∂(volume : Measure V)) = 0 ∧
     (∫⁻ t, ∫⁻ _y in (∅ : Set V) ∩ {x | u x = t}, (⊤ : ℝ≥0∞)
       ∂(KLS.surfaceMeasure V)) = 0 := by simp
 
+end MeasurableSpace
+
 /-- In zero dimension every derivative is zero, so a regular domain must be empty. -/
-theorem zero_dimension {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V]
-    [FiniteDimensional ℝ V] (hdim : Module.finrank ℝ V = 0)
+theorem zero_dimension (hdim : Module.finrank ℝ V = 0)
     {O S : Set V} {u : V → ℝ} (hreg : ∀ x ∈ O, fderiv ℝ u x ≠ 0) (hSO : S ⊆ O) :
     O = ∅ ∧ S = ∅ := by
   let : Subsingleton V := Module.finrank_zero_iff.mp hdim
@@ -104,9 +112,12 @@ theorem jump_not_continuous : ¬ Continuous jump := by
   have hlim := tendsto_nhds_unique (hc.continuousAt.tendsto.mono_left nhdsWithin_le_nhds) ht
   norm_num [jump] at hlim
 
+section MeasurableSpace
+
+variable [MeasurableSpace V] [BorelSpace V]
+
 /-- A whole affine line is an infinite-measure slice, at every level. -/
-theorem infinite_surface_slices {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V]
-    [FiniteDimensional ℝ V] [MeasurableSpace V] [BorelSpace V]
+theorem infinite_surface_slices
     (ι : ℝ →ₗᵢ[ℝ] V) {e : V} (hsp : Analysis.IsGraphSplitting ι e)
     (hdim : Module.finrank ℝ V = 2) :
     (∀ t : ℝ, KLS.surfaceMeasure V {x | (⟪e, x⟫ : ℝ) = t} = ⊤) ∧
@@ -146,8 +157,7 @@ theorem infinite_surface_slices {V : Type*} [NormedAddCommGroup V] [InnerProduct
   exact ⟨hinf, by simpa using h⟩
 
 /-- The exact L9 call in dimension zero also returns both components. -/
-theorem zero_dimension_target {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V]
-    [FiniteDimensional ℝ V] [MeasurableSpace V] [BorelSpace V]
+theorem zero_dimension_target
     (hdim : Module.finrank ℝ V = 0) {O S : Set V} {u : V → ℝ} {g : V → ℝ≥0∞}
     (hO : IsOpen O) (hu : ContDiffOn ℝ 1 u O) (hreg : ∀ x ∈ O, fderiv ℝ u x ≠ 0)
     (hS : MeasurableSet S) (hSO : S ⊆ O) (hg : Measurable g) :
@@ -156,6 +166,10 @@ theorem zero_dimension_target {V : Type*} [NormedAddCommGroup V] [InnerProductSp
     (∫⁻ x in S, ‖gradient u x‖ₑ * g x ∂(volume : Measure V)) =
       ∫⁻ t, ∫⁻ y in S ∩ {x | u x = t}, g y ∂(KLS.surfaceMeasure V) :=
   ⟨(zero_dimension hdim hreg hSO).2, target hO hu hreg hS hSO hg⟩
+
+end MeasurableSpace
+
+end FiniteDimensional
 
 end RegularCoareaAudit
 

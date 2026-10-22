@@ -941,8 +941,16 @@ private theorem one_add_pow_mul_exp_neg_sq_bounded (b : ℝ) (hb : 0 < b) (n : �
       · simpa using h0 r hr
       · exact hn r hr
 
-private theorem gaussian_deriv_poly_bound {V : Type*} [NormedAddCommGroup V]
-    [InnerProductSpace ℝ V] (s : ℝ) (n : ℕ) :
+section StructuredSpace
+
+variable {V : Type*}
+variable [NormedAddCommGroup V]
+
+section InnerProduct
+
+variable [InnerProductSpace ℝ V]
+
+private theorem gaussian_deriv_poly_bound (s : ℝ) (n : ℕ) :
     ∃ (k : ℕ) (C : ℝ), 0 ≤ C ∧ ∀ z : V,
       ‖iteratedFDeriv ℝ n (fun z : V => Real.exp (-s * ‖z‖ ^ 2)) z‖ ≤
         C * (1 + ‖z‖) ^ k * Real.exp (-s * ‖z‖ ^ 2) := by
@@ -975,8 +983,7 @@ private theorem gaussian_deriv_poly_bound {V : Type*} [NormedAddCommGroup V]
   · simp only [mul_pow, pow_mul, mul_assoc]
     ring
 
-private theorem gaussian_deriv_bound {V : Type*} [NormedAddCommGroup V]
-    [InnerProductSpace ℝ V] (s : ℝ) (hs : 0 < s) (n : ℕ) :
+private theorem gaussian_deriv_bound (s : ℝ) (hs : 0 < s) (n : ℕ) :
     ∃ B : ℝ, ∀ z : V,
       ‖iteratedFDeriv ℝ n (fun z : V => Real.exp (-s * ‖z‖ ^ 2)) z‖ ≤ B := by
   obtain ⟨k, C, hC, hpoly⟩ := gaussian_deriv_poly_bound (V := V) s n
@@ -985,8 +992,9 @@ private theorem gaussian_deriv_bound {V : Type*} [NormedAddCommGroup V]
   simpa only [mul_assoc] using
     (mul_le_mul_of_nonneg_left (hB ‖z‖ (norm_nonneg z)) hC)
 
-private theorem smooth_integral_of_uniform_derivatives
-    {V : Type*} [NormedAddCommGroup V] [NormedSpace ℝ V]
+end InnerProduct
+
+private theorem smooth_integral_of_uniform_derivatives [NormedSpace ℝ V]
     [FiniteDimensional ℝ V]
     [MeasurableSpace V] [BorelSpace V]
     (ν : Measure V) [IsProbabilityMeasure ν] (g : V → ℝ)
@@ -1094,6 +1102,8 @@ private theorem smooth_integral_of_uniform_derivatives
     simp only [iteratedFDeriv_zero_apply]
   rw [← heq]
   exact hc
+
+end StructuredSpace
 
 
 omit [FiniteDimensional ℝ V] [MeasurableSpace V] [BorelSpace V] in

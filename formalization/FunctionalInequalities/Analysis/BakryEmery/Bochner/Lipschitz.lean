@@ -118,13 +118,17 @@ private lemma mixed_integral_identity {U V f : E → ℝ}
 
 end Helpers
 
+section FiniteDimensional
+
+variable {E : Type*}
+variable [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E] [FiniteDimensional ℝ E]
+variable [MeasurableSpace E] [BorelSpace E]
+
 /-- **Bochner identity for a Lipschitz potential with Lipschitz gradient** (weak Letwin route,
 Brascamp–Lieb at `C^{1,1}`): for `U ∈ C¹` Lipschitz with `G`-Lipschitz gradient and integrable
 `e^{-U}`, and `f ∈ C_c^∞`, `∫ (ℒf)² dν = ∫ (‖∇²f‖² + ⟪D(∇U) ∇f, ∇f⟫) dν` with `ν = e^{-U} dx`
 normalized, `ℒf = Δf − ⟪∇U, ∇f⟫`, and `D(∇U)` the a.e. derivative of the Lipschitz map `∇U`. -/
-theorem integral_weightedLaplacian_sq_eq_of_lipschitz_gradient {E : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] [CompleteSpace E] [FiniteDimensional ℝ E] [MeasurableSpace E]
-    [BorelSpace E] {U : E → ℝ} (hU : ContDiff ℝ 1 U) {G : NNReal}
+theorem integral_weightedLaplacian_sq_eq_of_lipschitz_gradient {U : E → ℝ} (hU : ContDiff ℝ 1 U) {G : NNReal}
     (hG : LipschitzWith G (gradient U)) {L : NNReal} (hL : LipschitzWith L U)
     (hexp : Integrable (fun x => Real.exp (-U x)) (volume : Measure E))
     {f : E → ℝ} (hf : ContDiff ℝ ∞ f) (hfc : HasCompactSupport f) :
@@ -283,8 +287,6 @@ set_option maxHeartbeats 2000000 in
 integrable `e^{-U}`, and `f ∈ C_c^∞`, the Hessian pairing `⟪D(∇U) ∇f, ∇f⟫` and `(ℒf)²` are integrable for the tilted
 measure and `∫ ⟪D(∇U) ∇f, ∇f⟫ ≤ ∫ (ℒf)²`. Lipschitz-gradient sibling of `compact_ordinary_diffusion_coercivity`. -/
 theorem compact_ordinary_diffusion_coercivity_of_lipschitz_gradient
-    {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
-    [CompleteSpace E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
     {U : E → ℝ} (hU : ContDiff ℝ 1 U) {G : NNReal}
     (hG : LipschitzWith G (gradient U)) {L : NNReal} (hL : LipschitzWith L U)
     (hexp : Integrable (fun x => Real.exp (-U x)) (volume : Measure E))
@@ -339,5 +341,7 @@ theorem compact_ordinary_diffusion_coercivity_of_lipschitz_gradient
   have hnonneg : 0 ≤ ∫ x, hessianSqStdBasis f x ∂mu :=
     integral_nonneg fun x => hessianSqStdBasis_nonneg f x
   exact ⟨hQ, hLap, by linarith⟩
+
+end FiniteDimensional
 
 end FunctionalInequalities.Analysis.BakryEmery

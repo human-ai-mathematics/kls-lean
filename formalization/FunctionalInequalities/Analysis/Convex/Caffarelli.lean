@@ -147,8 +147,12 @@ open scoped RealInnerProductSpace Topology
 
 namespace FunctionalInequalities.Analysis
 
-private lemma caffarelli_gap_segment {E : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] {u : E → ℝ} (hc : ConvexOn ℝ univ u)
+section InnerProduct
+
+variable {E : Type*}
+variable [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+
+private lemma caffarelli_gap_segment {u : E → ℝ} (hc : ConvexOn ℝ univ u)
     (p a b c : E) (ha : u a = u c + ⟪p, a - c⟫)
     (t : ℝ) (ht : 0 ≤ t) (ht₁ : t ≤ 1) :
     u (a + t • (b - a)) - (u c + ⟪p, a + t • (b - a) - c⟫) ≤
@@ -174,8 +178,7 @@ of the contact set** (weak Letwin route, Caffarelli's argument): with `w := u �
 `xe ∈ C` in the unit direction `θ`, and `h > 0`, the sections
 `S ε := {x | w x < ε (⟪x − xe, θ⟫ + h)}` lie in a fixed compact set for small `ε`, and for every `δ > 0`
 they lie in the `δ`-thickening of `C ∩ {⟪· − xe, θ⟫ ≥ −h}` for `ε` small enough. -/
-theorem exists_compact_sections_subset_and_shrink {E : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] {u : E → ℝ} (hconv : ConvexOn ℝ univ u)
+theorem exists_compact_sections_subset_and_shrink [FiniteDimensional ℝ E] {u : E → ℝ} (hconv : ConvexOn ℝ univ u)
     {x₀ p : E} (hp : ∀ y, u x₀ + ⟪p, y - x₀⟫ ≤ u y)
     (hC : IsCompact {x | u x = u x₀ + ⟪p, x - x₀⟫}) {xe θ : E}
     (hxe : u xe = u x₀ + ⟪p, xe - x₀⟫) (hθ : ‖θ‖ = 1)
@@ -340,6 +343,8 @@ theorem exists_compact_sections_subset_and_shrink {E : Type*} [NormedAddCommGrou
       (lt_div_iff₀ hRh).mp hεltη
     exact (not_lt_of_ge hxlower) (hxupper.trans hεupper)
 
+end InnerProduct
+
 end FunctionalInequalities.Analysis
 
 end LT11E3SectionsShrink
@@ -353,8 +358,12 @@ open scoped RealInnerProductSpace ENNReal
 
 namespace FunctionalInequalities.Analysis
 
-private lemma contact_sub_affine_convex {E : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] {u : E → ℝ} (hu : ConvexOn ℝ univ u)
+section InnerProduct
+
+variable {E : Type*}
+variable [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+
+private lemma contact_sub_affine_convex {u : E → ℝ} (hu : ConvexOn ℝ univ u)
     (c : ℝ) (p : E) :
     ConvexOn ℝ univ (fun x => u x - (c + ⟪p, x⟫)) := by
   refine ⟨convex_univ, ?_⟩
@@ -367,8 +376,7 @@ private lemma contact_sub_affine_convex {E : Type*} [NormedAddCommGroup E]
   simp only [inner_add_right, real_inner_smul_right, smul_eq_mul] at h ⊢
   nlinarith only [h, hconst]
 
-private lemma contact_subgradientImage_sub_affine {E : Type*}
-    [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+private lemma contact_subgradientImage_sub_affine
     (u : E → ℝ) (c : ℝ) (p : E) (G : Set E) :
     subgradientImage (fun x => u x - (c + ⟪p, x⟫)) G =
       (fun q => q + -p) '' subgradientImage u G := by
@@ -387,9 +395,15 @@ private lemma contact_subgradientImage_sub_affine {E : Type*}
     simp only [inner_add_left, inner_neg_left, inner_sub_right] at h ⊢
     linarith
 
-private lemma contact_volume_sub_affine {E : Type*}
-    [NormedAddCommGroup E] [InnerProductSpace ℝ E] [FiniteDimensional ℝ E]
-    [MeasurableSpace E] [BorelSpace E]
+section FiniteDimensional
+
+variable [FiniteDimensional ℝ E]
+
+section MeasurableSpace
+
+variable [MeasurableSpace E] [BorelSpace E]
+
+private lemma contact_volume_sub_affine
     (u : E → ℝ) (c : ℝ) (p : E) (G : Set E) :
     (volume : Measure E)
         (subgradientImage (fun x => u x - (c + ⟪p, x⟫)) G) =
@@ -397,9 +411,7 @@ private lemma contact_volume_sub_affine {E : Type*}
   rw [contact_subgradientImage_sub_affine, Set.image_add_right,
     measure_preimage_add_right]
 
-private lemma contact_affine_volume {E : Type*}
-    [NormedAddCommGroup E] [InnerProductSpace ℝ E] [FiniteDimensional ℝ E]
-    [MeasurableSpace E] [BorelSpace E] (e : E ≃ᵃ[ℝ] E) (G : Set E) :
+private lemma contact_affine_volume (e : E ≃ᵃ[ℝ] E) (G : Set E) :
     (volume : Measure E) (e '' G) =
       ENNReal.ofReal |LinearMap.det (e.linear : E →ₗ[ℝ] E)| * volume G := by
   have he (x : E) : e x = e.linear x + e 0 := by
@@ -413,8 +425,9 @@ private lemma contact_affine_volume {E : Type*}
   rw [himage, Set.image_add_right, measure_preimage_add_right,
     Measure.addHaar_image_linearMap]
 
-private lemma contact_det_pos {E : Type*}
-    [NormedAddCommGroup E] [InnerProductSpace ℝ E] [FiniteDimensional ℝ E]
+end MeasurableSpace
+
+private lemma contact_det_pos
     (e : E ≃ᵃ[ℝ] E) :
     0 < |LinearMap.det (e.linear : E →ₗ[ℝ] E)| := by
   classical
@@ -440,8 +453,7 @@ private lemma contact_real_bounds {E : Type*} [MeasurableSpace E]
   · have h := ENNReal.toReal_mono hprod hhi
     simpa only [ENNReal.toReal_mul, ENNReal.toReal_ofReal hb] using h
 
-private lemma contact_transport_real_bounds {E : Type*}
-    [NormedAddCommGroup E] [InnerProductSpace ℝ E] [FiniteDimensional ℝ E]
+private lemma contact_transport_real_bounds
     [MeasurableSpace E] [BorelSpace E]
     (u : E → ℝ) (e : E ≃ᵃ[ℝ] E) (G : Set E) (a b : ℝ)
     (hfin : (volume : Measure E) (subgradientImage u G) ≠ ∞)
@@ -486,8 +498,7 @@ private lemma contact_transport_real_bounds {E : Type*}
 
 /- Step A bounds subgradients on the half unit ball. The resulting
    dimensional constant is 8 rather than the quadratic comparison's 4. -/
-private lemma contact_stepA {E : Type*}
-    [NormedAddCommGroup E] [InnerProductSpace ℝ E] [FiniteDimensional ℝ E]
+private lemma contact_stepA
     [Nontrivial E] [MeasurableSpace E] [BorelSpace E]
     {v : E → ℝ} {S : Set E} {A t : ℝ} (ht : 0 < t)
     (hball : ball (0 : E) 1 ⊆ S)
@@ -569,8 +580,7 @@ private lemma contact_stepA {E : Type*}
   rw [hpow]
   exact hcancel
 
-private lemma contact_stepB {E : Type*}
-    [NormedAddCommGroup E] [InnerProductSpace ℝ E] [FiniteDimensional ℝ E]
+private lemma contact_stepB
     [MeasurableSpace E] [BorelSpace E]
     {v : E → ℝ} {S : Set E} {x : E} {c t C A B R : ℝ}
     (hc : 0 < c) (ht : 0 < t) (hC : 0 < C) (hR : 0 ≤ R)
@@ -653,14 +663,16 @@ private lemma contact_stepC_choose {c C h K : ℝ}
   rw [hid]
   nlinarith
 
+section MeasurableSpace
+
+variable [Nontrivial E] [MeasurableSpace E] [BorelSpace E]
+
 set_option maxHeartbeats 4000000 in
 /-- **Caffarelli's contact-set lemma, localised form** (weak Letwin route): let `C` be the
 compact contact set of a supporting affine function of the convex `u`, `z ∈ C` strictly exposed in the unit
 direction `θ`, `h > 0`, and suppose the two-sided Alexandrov bounds hold only on compact subsets of an open `U`
 containing the slab piece `C ∩ {⟪· − z, θ⟫ ≥ −h}`. Then `C = {z}`. -/
-theorem contactSet_eq_singleton_of_exposed_of_local_bounds {E : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] [Nontrivial E] [MeasurableSpace E]
-    [BorelSpace E] {u : E → ℝ} (hconv : ConvexOn ℝ univ u) {x₀ p : E}
+theorem contactSet_eq_singleton_of_exposed_of_local_bounds {u : E → ℝ} (hconv : ConvexOn ℝ univ u) {x₀ p : E}
     (hp : ∀ y, u x₀ + ⟪p, y - x₀⟫ ≤ u y) (hC : IsCompact {x | u x = u x₀ + ⟪p, x - x₀⟫})
     {z θ : E} (hz : u z = u x₀ + ⟪p, z - x₀⟫) (hθ : ‖θ‖ = 1)
     (hexp : ∀ x, u x = u x₀ + ⟪p, x - x₀⟫ → x ≠ z → ⟪x - z, θ⟫ < 0) {h : ℝ} (hh : 0 < h)
@@ -999,9 +1011,7 @@ theorem contactSet_eq_singleton_of_exposed_of_local_bounds {E : Type*} [NormedAd
   exact (not_lt_of_ge haway) hstrict
 
 /-- **Caffarelli's contact-set lemma** (global bounds, compact contact set), derived from the localised form. -/
-theorem contactSet_eq_singleton_of_local_bounds {E : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] [Nontrivial E] [MeasurableSpace E]
-    [BorelSpace E] {u : E → ℝ} (hconv : ConvexOn ℝ univ u)
+theorem contactSet_eq_singleton_of_local_bounds {u : E → ℝ} (hconv : ConvexOn ℝ univ u)
     (hB : ∀ Q : Set E, IsCompact Q → ∃ a b : ℝ, 0 < a ∧ ∀ G : Set E, IsOpen G → closure G ⊆ Q →
       ENNReal.ofReal a * (volume : Measure E) G ≤ (volume : Measure E) (subgradientImage u G) ∧
       (volume : Measure E) (subgradientImage u G) ≤ ENNReal.ofReal b * (volume : Measure E) G)
@@ -1050,6 +1060,12 @@ theorem contactSet_eq_singleton_of_local_bounds {E : Type*} [NormedAddCommGroup 
   have he : x₀ = xe := Set.mem_singleton_iff.mp (hsing ▸ hx₀)
   exact hxe_ne he.symm
 
+end MeasurableSpace
+
+end FiniteDimensional
+
+end InnerProduct
+
 end FunctionalInequalities.Analysis
 
 end LT11E7LocalizedContactLemma
@@ -1063,8 +1079,12 @@ open scoped RealInnerProductSpace
 
 namespace FunctionalInequalities.Analysis
 
-private theorem strict_supporting_inequality {E : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] {u : E → ℝ} (hstrict : StrictConvexOn ℝ univ u)
+section InnerProduct
+
+variable {E : Type*}
+variable [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+
+private theorem strict_supporting_inequality {u : E → ℝ} (hstrict : StrictConvexOn ℝ univ u)
     {x p y : E} (hp : ∀ t, u x + ⟪p, t - x⟫ ≤ u t) (hy : y ≠ x) :
     u x + ⟪p, y - x⟫ < u y := by
   by_contra hn
@@ -1080,11 +1100,14 @@ private theorem strict_supporting_inequality {E : Type*} [NormedAddCommGroup E]
   simp only [inner_sub_right, inner_add_right, real_inner_smul_right] at hs heq
   linarith
 
+section FiniteDimensional
+
+variable [FiniteDimensional ℝ E]
+
 /-- **Singleton contact sets give strict convexity** (weak Letwin route): if every
 supporting affine function of the convex `u` touches its graph at exactly one point, `u` is strictly
 convex. -/
-theorem strictConvexOn_of_contact_eq {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
-    [FiniteDimensional ℝ E] {u : E → ℝ} (hconv : ConvexOn ℝ univ u)
+theorem strictConvexOn_of_contact_eq {u : E → ℝ} (hconv : ConvexOn ℝ univ u)
     (hcontact : ∀ x p : E, (∀ y, u x + ⟪p, y - x⟫ ≤ u y) →
       ∀ y, u y = u x + ⟪p, y - x⟫ → y = x) :
     StrictConvexOn ℝ univ u := by
@@ -1136,8 +1159,7 @@ theorem strictConvexOn_of_contact_eq {E : Type*} [NormedAddCommGroup E] [InnerPr
 /-- **Slopes of a strictly convex function lie in the interior of a convex slope range** (weak Letwin
 route): if all subgradients of the strictly convex `u` lie in a convex `K` with nonempty
 interior, they lie in `interior K`. -/
-theorem subgradient_mem_interior_of_strictConvexOn {E : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] {u : E → ℝ}
+theorem subgradient_mem_interior_of_strictConvexOn {u : E → ℝ}
     (hstrict : StrictConvexOn ℝ univ u) {K : Set E} (hKc : Convex ℝ K)
     (hKint : (interior K).Nonempty)
     (hK : ∀ x p : E, (∀ y, u x + ⟪p, y - x⟫ ≤ u y) → p ∈ K)
@@ -1181,8 +1203,7 @@ theorem subgradient_mem_interior_of_strictConvexOn {E : Type*} [NormedAddCommGro
 `exists_strict_exposed_contact_in_sublevel`): if `{u ≤ R}` is compact and `u x < R`, the contact set of a
 supporting affine function at `x` has a point `z` with `u z < R` that is strictly exposed in the direction
 `θ` among the contact points with `u ≤ R`. -/
-theorem exists_exposed_contact_of_lt {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
-    [FiniteDimensional ℝ E] {u : E → ℝ} (hconv : ConvexOn ℝ univ u) {x p : E}
+theorem exists_exposed_contact_of_lt {u : E → ℝ} (hconv : ConvexOn ℝ univ u) {x p : E}
     (hp : ∀ y, u x + ⟪p, y - x⟫ ≤ u y) {R : ℝ} (hR : u x < R) (hK : IsCompact {y | u y ≤ R}) :
     ∃ z θ : E, u z = u x + ⟪p, z - x⟫ ∧ u z < R ∧
       ∀ y, u y = u x + ⟪p, y - x⟫ → u y ≤ R → y ≠ z → ⟪y - z, θ⟫ < 0 := by
@@ -1238,6 +1259,10 @@ theorem exists_exposed_contact_of_lt {E : Type*} [NormedAddCommGroup E] [InnerPr
   rw [hid]
   linarith
 
+end FiniteDimensional
+
+end InnerProduct
+
 end FunctionalInequalities.Analysis
 
 end LT11F1StrictConvexityElementary
@@ -1258,9 +1283,13 @@ def truncatedConjugate {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ
     (M : ℝ) (p : E) : ℝ :=
   sSup ((fun x => ⟪p, x⟫ - u x) '' closedBall (0 : E) M)
 
+section FiniteDimensional
+
+variable {E : Type*}
+variable [NormedAddCommGroup E] [InnerProductSpace ℝ E] [FiniteDimensional ℝ E]
+
 /-- The supremum is attained and dominates every value on the ball. -/
-theorem exists_truncatedConjugate_eq {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
-    [FiniteDimensional ℝ E] {u : E → ℝ} (hu : Continuous u) {M : ℝ} (hM : 0 ≤ M) (p : E) :
+theorem exists_truncatedConjugate_eq {u : E → ℝ} (hu : Continuous u) {M : ℝ} (hM : 0 ≤ M) (p : E) :
     (∃ x ∈ closedBall (0 : E) M, truncatedConjugate u M p = ⟪p, x⟫ - u x) ∧
       ∀ x ∈ closedBall (0 : E) M, ⟪p, x⟫ - u x ≤ truncatedConjugate u M p := by
   have hc :
@@ -1277,8 +1306,7 @@ theorem exists_truncatedConjugate_eq {E : Type*} [NormedAddCommGroup E] [InnerPr
     exact le_csSup hc.bddAbove ⟨x, hx, rfl⟩
 
 /-- The truncated conjugate is convex. -/
-theorem convexOn_truncatedConjugate {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
-    [FiniteDimensional ℝ E] {u : E → ℝ} (hu : Continuous u) {M : ℝ} (hM : 0 ≤ M) :
+theorem convexOn_truncatedConjugate {u : E → ℝ} (hu : Continuous u) {M : ℝ} (hM : 0 ≤ M) :
     ConvexOn ℝ univ (truncatedConjugate u M) := by
   refine ⟨convex_univ, ?_⟩
   intro p hp q hq a b ha hb hab
@@ -1301,8 +1329,7 @@ theorem convexOn_truncatedConjugate {E : Type*} [NormedAddCommGroup E] [InnerPro
 /-- **Zeros of the centred truncated conjugate are the subgradients**: for convex `u` and
 `‖xc‖ < M`, `f p := truncatedConjugate u M p − ⟪p, xc⟫ + u xc` is nonnegative, vanishes exactly at the
 subgradients of `u` at `xc`, and has compact sublevel sets. -/
-theorem truncatedConjugate_centered_spec {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
-    [FiniteDimensional ℝ E] {u : E → ℝ} (hconv : ConvexOn ℝ univ u) {M : ℝ} {xc : E}
+theorem truncatedConjugate_centered_spec {u : E → ℝ} (hconv : ConvexOn ℝ univ u) {M : ℝ} {xc : E}
     (hxc : ‖xc‖ < M) :
     (∀ p, 0 ≤ truncatedConjugate u M p - ⟪p, xc⟫ + u xc) ∧
     (∀ p, truncatedConjugate u M p - ⟪p, xc⟫ + u xc = 0 ↔ ∀ y, u xc + ⟪p, y - xc⟫ ≤ u y) ∧
@@ -1398,6 +1425,8 @@ theorem truncatedConjugate_centered_spec {E : Type*} [NormedAddCommGroup E] [Inn
           nlinarith
         _ ≤ max 0 ((R + C - u xc) / (M - ‖xc‖)) := le_max_right _ _
 
+end FiniteDimensional
+
 end FunctionalInequalities.Analysis
 
 end LT11F2TruncatedConjugate
@@ -1411,8 +1440,12 @@ open scoped RealInnerProductSpace Topology
 
 namespace FunctionalInequalities.Analysis
 
-private lemma n7_isClosed_bad_maximizers {E : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] {u : E → ℝ}
+section InnerProduct
+
+variable {E : Type*}
+variable [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+
+private lemma n7_isClosed_bad_maximizers [FiniteDimensional ℝ E] {u : E → ℝ}
     (hu : Continuous u) {M : ℝ} (hM : 0 ≤ M) {C : Set E} (hC : IsClosed C) :
     IsClosed {p : E | ∃ x ∈ closedBall (0 : E) M,
       x ∈ C ∧ truncatedConjugate u M p = ⟪p, x⟫ - u x} := by
@@ -1439,8 +1472,7 @@ private lemma n7_isClosed_bad_maximizers {E : Type*} [NormedAddCommGroup E]
   rw [← he]
   exact isClosedMap_snd_of_compactSpace D hD
 
-private lemma n7_support_min {E : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] {u : E → ℝ} {x p : E}
+private lemma n7_support_min {u : E → ℝ} {x p : E}
     (hp : ∀ y, u x + ⟪p, y - x⟫ ≤ u y) :
     IsMinOn (fun y => u y - ⟪p, y⟫) univ x := by
   intro y _
@@ -1449,16 +1481,14 @@ private lemma n7_support_min {E : Type*} [NormedAddCommGroup E]
   dsimp
   linarith
 
-private lemma n7_support_unique {E : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] {u : E → ℝ}
+private lemma n7_support_unique {u : E → ℝ}
     (hstrict : StrictConvexOn ℝ univ u) {x z p : E}
     (hx : ∀ y, u x + ⟪p, y - x⟫ ≤ u y)
     (hz : ∀ y, u z + ⟪p, y - z⟫ ≤ u y) : x = z := by
   exact (hstrict.sub_concaveOn ((innerₗ E p).concaveOn convex_univ)).eq_of_isMinOn
     (n7_support_min hx) (n7_support_min hz) (mem_univ x) (mem_univ z)
 
-private lemma n7_conjugate_eq_of_support {E : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] {u : E → ℝ} {M : ℝ} {x p : E}
+private lemma n7_conjugate_eq_of_support {u : E → ℝ} {M : ℝ} {x p : E}
     (hx : x ∈ closedBall (0 : E) M)
     (hp : ∀ y, u x + ⟪p, y - x⟫ ≤ u y) :
     truncatedConjugate u M p = ⟪p, x⟫ - u x := by
@@ -1475,8 +1505,11 @@ private lemma n7_conjugate_eq_of_support {E : Type*} [NormedAddCommGroup E]
       rintro _ ⟨y, _, rfl⟩
       exact hb y⟩ ⟨x, hx, rfl⟩
 
-private lemma n7_support_of_interior_max {E : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] {u : E → ℝ}
+section FiniteDimensional
+
+variable [FiniteDimensional ℝ E]
+
+private lemma n7_support_of_interior_max {u : E → ℝ}
     (hu : Continuous u) (hconv : ConvexOn ℝ univ u) {M : ℝ} (hM : 0 ≤ M)
     {x p : E} (hx : ‖x‖ < M)
     (heq : truncatedConjugate u M p = ⟪p, x⟫ - u x) :
@@ -1516,8 +1549,7 @@ private lemma n7_support_of_interior_max {E : Type*} [NormedAddCommGroup E]
   linarith
 
 /-- The set of slopes whose ball maximisers all lie in the open ball is open (weak Letwin route). -/
-theorem isOpen_setOf_truncatedConjugate_maximizer_lt {E : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] {u : E → ℝ} (hu : Continuous u) {M : ℝ}
+theorem isOpen_setOf_truncatedConjugate_maximizer_lt {u : E → ℝ} (hu : Continuous u) {M : ℝ}
     (hM : 0 ≤ M) :
     IsOpen {p : E | ∀ x ∈ closedBall (0 : E) M,
       truncatedConjugate u M p = ⟪p, x⟫ - u x → ‖x‖ < M} := by
@@ -1541,10 +1573,11 @@ theorem isOpen_setOf_truncatedConjugate_maximizer_lt {E : Type*} [NormedAddCommG
   rw [he]
   exact (n7_isClosed_bad_maximizers hu hM hc).isOpen_compl
 
+end FiniteDimensional
+
 /-- For strictly convex `u`, a subgradient `p` at a point `x` of the open ball has `x` as its only ball
 maximiser. -/
-theorem eq_of_truncatedConjugate_eq_of_subgradient {E : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] {u : E → ℝ}
+theorem eq_of_truncatedConjugate_eq_of_subgradient [FiniteDimensional ℝ E] {u : E → ℝ}
     (hstrict : StrictConvexOn ℝ univ u) {M : ℝ} {x p : E} (hx : ‖x‖ < M)
     (hp : ∀ y, u x + ⟪p, y - x⟫ ≤ u y) {x' : E} (hx' : x' ∈ closedBall (0 : E) M)
     (heq : truncatedConjugate u M p = ⟪p, x'⟫ - u x') : x' = x := by
@@ -1558,8 +1591,11 @@ theorem eq_of_truncatedConjugate_eq_of_subgradient {E : Type*} [NormedAddCommGro
     (n7_support_min hp') (n7_support_min hp)
     ((subset_univ (closedBall (0 : E) M)) hx') (mem_univ x)
 
-private lemma n7_subgradient_eq_maximizer {E : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] {u : E → ℝ}
+section FiniteDimensional
+
+variable [FiniteDimensional ℝ E]
+
+private lemma n7_subgradient_eq_maximizer {u : E → ℝ}
     (hu : Continuous u) (hstrict : StrictConvexOn ℝ univ u)
     {M : ℝ} (hM : 0 ≤ M) {p x g : E} (hx : ‖x‖ < M)
     (hp : ∀ y, u x + ⟪p, y - x⟫ ≤ u y)
@@ -1622,8 +1658,7 @@ private lemma n7_subgradient_eq_maximizer {E : Type*} [NormedAddCommGroup E]
 `convexSubgradientImage_truncatedLegendrePotential_eq_relative`): for strictly convex continuous `u`, on a set
 `S` of slopes whose ball maximisers lie in the open ball, the subgradient image of the truncated conjugate is the
 inverse subgradient image `{x | ∃ p ∈ S, p ∈ ∂u(x)}`. -/
-theorem subgradientImage_truncatedConjugate_eq {E : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] {u : E → ℝ} (hu : Continuous u)
+theorem subgradientImage_truncatedConjugate_eq {u : E → ℝ} (hu : Continuous u)
     (hstrict : StrictConvexOn ℝ univ u) {M : ℝ} (hM : 0 ≤ M) {S : Set E}
     (hS : ∀ p ∈ S, ∀ x ∈ closedBall (0 : E) M, truncatedConjugate u M p = ⟪p, x⟫ - u x → ‖x‖ < M) :
     subgradientImage (truncatedConjugate u M) S = {x | ∃ p ∈ S, ∀ y, u x + ⟪p, y - x⟫ ≤ u y} := by
@@ -1651,6 +1686,10 @@ theorem subgradientImage_truncatedConjugate_eq {E : Type*} [NormedAddCommGroup E
     rw [hcomm, hcomm']
     linarith
 
+end FiniteDimensional
+
+end InnerProduct
+
 end FunctionalInequalities.Analysis
 
 end LT11F3TruncatedConjugateSubgradients
@@ -1664,8 +1703,12 @@ open scoped RealInnerProductSpace ENNReal Topology
 
 namespace FunctionalInequalities.Analysis
 
-private lemma supporting_affine_convex {E : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] (c : ℝ) (p x : E) :
+section InnerProduct
+
+variable {E : Type*}
+variable [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+
+private lemma supporting_affine_convex (c : ℝ) (p x : E) :
     ConvexOn ℝ univ (fun w => c + ⟪p, w - x⟫) := by
   refine (((innerSL ℝ p).toLinearMap.convexOn
     (convex_univ : Convex ℝ (univ : Set E))).add_const (c - ⟪p, x⟫)).congr ?_
@@ -1674,8 +1717,7 @@ private lemma supporting_affine_convex {E : Type*} [NormedAddCommGroup E]
   rw [inner_sub_right]
   ring
 
-private lemma subgradient_of_local_agreement {E : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] {u v : E → ℝ} (hconv : ConvexOn ℝ univ u)
+private lemma subgradient_of_local_agreement {u v : E → ℝ} (hconv : ConvexOn ℝ univ u)
     {U : Set E} (hU : IsOpen U) {x q : E} (hx : x ∈ U)
     (heq : ∀ ⦃w⦄, w ∈ U → v w = u w)
     (hq : ∀ w, v x + ⟪q, w - x⟫ ≤ v w) :
@@ -1694,8 +1736,7 @@ private lemma subgradient_of_local_agreement {E : Type*} [NormedAddCommGroup E]
   rw [inner_sub_right]
   linarith
 
-private lemma subgradientImage_of_local_agreement {E : Type*}
-    [NormedAddCommGroup E] [InnerProductSpace ℝ E] {u v : E → ℝ}
+private lemma subgradientImage_of_local_agreement {u v : E → ℝ}
     (hconv : ConvexOn ℝ univ u) (huv : ∀ x, u x ≤ v x)
     {U : Set E} (hU : IsOpen U) (heq : ∀ ⦃x⦄, x ∈ U → v x = u x)
     {G : Set E} (hGU : G ⊆ U) :
@@ -1710,9 +1751,11 @@ private lemma subgradientImage_of_local_agreement {E : Type*}
     rw [heq (hGU hx)]
     exact (hq w).trans (huv w)
 
-private lemma eq_of_two_contacts_below {E : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] [Nontrivial E]
-    [MeasurableSpace E] [BorelSpace E] {u : E → ℝ}
+section FiniteDimensional
+
+variable [FiniteDimensional ℝ E] [Nontrivial E] [MeasurableSpace E] [BorelSpace E]
+
+private lemma eq_of_two_contacts_below {u : E → ℝ}
     (hconv : ConvexOn ℝ univ u) {x₀ p : E}
     (hp : ∀ x, u x₀ + ⟪p, x - x₀⟫ ≤ u x) {R : ℝ}
     (hK : IsCompact {x | u x ≤ R})
@@ -1872,9 +1915,7 @@ private lemma eq_of_two_contacts_below {E : Type*} [NormedAddCommGroup E]
 two-sided Alexandrov bounds on compact subsets of `{u < R}`, then a supporting affine function at `x₀`
 (`u x₀ < R`) touches the graph of `u` at no other point of `{u < R}`. No compactness of the full contact set
 is assumed. -/
-theorem eq_of_contact_of_sublevel_bounds {E : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] [Nontrivial E] [MeasurableSpace E]
-    [BorelSpace E] {u : E → ℝ} (hconv : ConvexOn ℝ univ u) {x₀ p : E}
+theorem eq_of_contact_of_sublevel_bounds {u : E → ℝ} (hconv : ConvexOn ℝ univ u) {x₀ p : E}
     (hp : ∀ y, u x₀ + ⟪p, y - x₀⟫ ≤ u y) {R : ℝ} (hK : IsCompact {y | u y ≤ R})
     (hB : ∀ Q : Set E, IsCompact Q → Q ⊆ {y | u y < R} → ∃ a b : ℝ, 0 < a ∧ ∀ G : Set E,
       IsOpen G → closure G ⊆ Q →
@@ -1922,6 +1963,10 @@ theorem eq_of_contact_of_sublevel_bounds {E : Type*} [NormedAddCommGroup E]
   have htzero : t = 0 :=
     (AffineMap.lineMap_injective ℝ hne) (he.trans hf0.symm)
   exact (ne_of_gt ht) htzero
+
+end FiniteDimensional
+
+end InnerProduct
 
 end FunctionalInequalities.Analysis
 
@@ -2080,8 +2125,12 @@ private lemma t11f7_small_sublevel {X : Type*} [TopologicalSpace X]
     by_contra hxA
     exact hne ⟨x, hx, hxA⟩
 
-private lemma t11f7_support_unique {E : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] {u : E → ℝ}
+section InnerProduct
+
+variable {E : Type*}
+variable [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+
+private lemma t11f7_support_unique {u : E → ℝ}
     (hstrict : StrictConvexOn ℝ univ u) {x z p : E}
     (hx : ∀ y, u x + ⟪p, y - x⟫ ≤ u y)
     (hz : ∀ y, u z + ⟪p, y - z⟫ ≤ u y) :
@@ -2104,7 +2153,7 @@ set_option maxHeartbeats 800000 in
 `moment_contDiff_one_closedTarget`): a convex Lipschitz `u` with `∫ e^{-u} = 1` whose gradient pushes
 `e^{-u} dx` forward to `1_K e^{-V} dx` (`K` compact convex with nonempty interior, `V` continuous) has exactly
 one subgradient at every point, hence is continuously differentiable. -/
-theorem contDiff_one_of_map_gradient {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+theorem contDiff_one_of_map_gradient
     [FiniteDimensional ℝ E] [Nontrivial E] [MeasurableSpace E] [BorelSpace E]
     {u : E → ℝ} {L : NNReal} (hu : LipschitzWith L u) (hconv : ConvexOn ℝ univ u)
     (hnorm : ∫ x, Real.exp (-u x) ∂(volume : Measure E) = 1)
@@ -2262,6 +2311,8 @@ theorem contDiff_one_of_map_gradient {E : Type*} [NormedAddCommGroup E] [InnerPr
   apply eq_of_contact_of_sublevel_bounds hfconv hp₀f (hfcompact R) hB
   · simpa only [hpzero] using hR
   · simp only [hpzero, hp₀zero, inner_zero_left, add_zero]
+
+end InnerProduct
 
 end FunctionalInequalities.Analysis
 

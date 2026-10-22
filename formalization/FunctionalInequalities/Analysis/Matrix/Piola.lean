@@ -500,23 +500,29 @@ open FunctionalInequalities.Probability.Stein
 
 namespace FunctionalInequalities.Analysis
 
-private lemma n10_measurable_deriv {E : Type*}
-    [NormedAddCommGroup E] [NormedSpace ℝ E]
+section StructuredSpace
+
+variable {E : Type*}
+variable [NormedAddCommGroup E]
+
+section NormedSpace
+
+variable [NormedSpace ℝ E]
+
+private lemma n10_measurable_deriv
     [MeasurableSpace E] [BorelSpace E]
     (f : E → ℝ) (v : E) :
     Measurable (fun x => fderiv ℝ f x v) :=
   (ContinuousLinearMap.apply ℝ ℝ v).measurable.comp (measurable_fderiv ℝ f)
 
-private lemma n10_deriv_bound {E : Type*}
-    [NormedAddCommGroup E] [NormedSpace ℝ E]
+private lemma n10_deriv_bound
     {f : E → ℝ} {L : NNReal} (hf : LipschitzWith L f) (v x : E) :
     ‖fderiv ℝ f x v‖ ≤ (L : ℝ) * ‖v‖ :=
   (fderiv ℝ f x).le_opNorm v |>.trans
     (mul_le_mul_of_nonneg_right
       (norm_fderiv_le_of_lipschitz ℝ hf) (norm_nonneg v))
 
-private lemma n10_deriv_zero {E : Type*}
-    [NormedAddCommGroup E] [NormedSpace ℝ E]
+private lemma n10_deriv_zero
     {f : E → ℝ} {x : E} (hx : x ∉ tsupport f) (v : E) :
     fderiv ℝ f x v = 0 := by
   have hz : fderiv ℝ f x = 0 :=
@@ -525,9 +531,17 @@ private lemma n10_deriv_zero {E : Type*}
   rw [hz]
   rfl
 
-private lemma n10_integrable_bounded_compact {E : Type*}
-    [NormedAddCommGroup E] [InnerProductSpace ℝ E] [FiniteDimensional ℝ E]
-    [MeasurableSpace E] [BorelSpace E]
+end NormedSpace
+
+section FiniteDimensional
+
+variable [InnerProductSpace ℝ E] [FiniteDimensional ℝ E]
+
+section MeasurableSpace
+
+variable [MeasurableSpace E] [BorelSpace E]
+
+private lemma n10_integrable_bounded_compact
     {f : E → ℝ} (hm : Measurable f) (hc : HasCompactSupport f)
     {C : ℝ} (hb : ∀ x, ‖f x‖ ≤ C) :
     Integrable f (volume : Measure E) := by
@@ -537,18 +551,14 @@ private lemma n10_integrable_bounded_compact {E : Type*}
   exact (hl.integrableOn_isCompact hc.isCompact).integrable_of_forall_notMem_eq_zero
     (fun _ hx => image_eq_zero_of_notMem_tsupport hx)
 
-private lemma n10_integrable_deriv {E : Type*}
-    [NormedAddCommGroup E] [InnerProductSpace ℝ E] [FiniteDimensional ℝ E]
-    [MeasurableSpace E] [BorelSpace E]
+private lemma n10_integrable_deriv
     {f : E → ℝ} {L : NNReal} (hf : LipschitzWith L f)
     (hc : HasCompactSupport f) (v : E) :
     Integrable (fun x => fderiv ℝ f x v) (volume : Measure E) :=
   n10_integrable_bounded_compact (n10_measurable_deriv f v)
     (hc.fderiv_apply ℝ v) (n10_deriv_bound hf v)
 
-private lemma n10_integrable_weighted_deriv {E : Type*}
-    [NormedAddCommGroup E] [InnerProductSpace ℝ E] [FiniteDimensional ℝ E]
-    [MeasurableSpace E] [BorelSpace E]
+private lemma n10_integrable_weighted_deriv
     {f w : E → ℝ} {L : NNReal} (hf : LipschitzWith L f)
     (hc : HasCompactSupport f) (hw : Continuous w) (v : E) :
     Integrable (fun x => w x * fderiv ℝ f x v) (volume : Measure E) := by
@@ -561,8 +571,9 @@ private lemma n10_integrable_weighted_deriv {E : Type*}
   intro x hx
   rw [n10_deriv_zero hx v, mul_zero]
 
-private lemma n10_cutoff {E : Type*}
-    [NormedAddCommGroup E] [InnerProductSpace ℝ E] [FiniteDimensional ℝ E]
+end MeasurableSpace
+
+private lemma n10_cutoff
     {K : Set E} (hK : IsCompact K) :
     ∃ χ : E → ℝ, ContDiff ℝ 1 χ ∧ HasCompactSupport χ ∧
       ∀ x ∈ K, χ =ᶠ[𝓝 x] (fun _ => 1) := by
@@ -576,6 +587,8 @@ private lemma n10_cutoff {E : Type*}
   change dist x 0 ≤ r at h
   change dist x 0 < max r 0 + 1
   linarith [le_max_left r 0]
+
+end FiniteDimensional
 
 /-- Localization lets Lipschitz integration by parts act on a smooth coefficient. -/
 private lemma n10_integration_by_parts {n : ℕ}
@@ -832,8 +845,7 @@ theorem sum_integral_adjugate_hessianMatrix_mul_fderiv_eq_zero_of_lipschitz {n :
     exact tendsto_const_nhds
   exact tendsto_nhds_unique hsum hsumzero
 
-private lemma n10_lipschitz_product {E : Type*}
-    [NormedAddCommGroup E]
+private lemma n10_lipschitz_product
     {f g : E → ℝ} {Lf Lg : NNReal}
     (hf : LipschitzWith Lf f) (hg : LipschitzWith Lg g)
     (hfb : ∃ C : ℝ, ∀ x, ‖f x‖ ≤ C)
@@ -865,6 +877,8 @@ private lemma n10_lipschitz_product {E : Type*}
         ((Lf : ℝ) * ‖x - y‖) * max D 0 =
           (max C 0 * (Lg : ℝ) + max D 0 * (Lf : ℝ)) * ‖x - y‖
       ring
+
+end StructuredSpace
 
 private lemma n10_exp_test_lipschitz {n : ℕ}
     {F ψ : EuclideanSpace ℝ (Fin n) → ℝ} {LF Lψ : NNReal}

@@ -17,8 +17,12 @@ open scoped RealInnerProductSpace
 
 namespace FunctionalInequalities.Analysis
 
+section InnerProduct
+
+variable {E : Type*}
+variable [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+
 private theorem proximal_subgradient_monotonicity
-    {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
     {f : E → ℝ} {x x' z w : E}
     (hx : ∀ y, f x + ⟪z - x, y - x⟫ ≤ f y)
     (hx' : ∀ y, f x' + ⟪w - x', y - x'⟫ ≤ f y) :
@@ -37,7 +41,6 @@ private theorem proximal_subgradient_monotonicity
 
 set_option maxHeartbeats 800000 in
 private theorem exists_proximal_minimizer
-    {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
     [FiniteDimensional ℝ E] {f : E → ℝ}
     (hconv : ConvexOn ℝ univ f) (z : E) :
     ∃ x, ∀ y,
@@ -76,7 +79,6 @@ private theorem exists_proximal_minimizer
 
 set_option maxHeartbeats 800000 in
 private theorem subgradient_of_proximal_minimizer
-    {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
     {f : E → ℝ} (hconv : ConvexOn ℝ univ f) {x z : E}
     (hx : ∀ y,
       f x + (1 / 2 : ℝ) * ‖x - z‖ ^ 2 ≤
@@ -127,9 +129,12 @@ Alexandrov's theorem). For convex `f` on a finite-dimensional space it exists an
 def proximalPoint {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E] (f : E → ℝ) (z : E) : E :=
   Classical.epsilon fun x => ∀ y, f x + ⟪z - x, y - x⟫ ≤ f y
 
+section FiniteDimensional
+
+variable [FiniteDimensional ℝ E]
+
 /-- `z − proximalPoint f z` is a subgradient of the convex `f` at `proximalPoint f z`. -/
-theorem proximalPoint_spec {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
-    [FiniteDimensional ℝ E] {f : E → ℝ} (hconv : ConvexOn ℝ univ f) (z : E) :
+theorem proximalPoint_spec {f : E → ℝ} (hconv : ConvexOn ℝ univ f) (z : E) :
     ∀ y, f (proximalPoint f z) + ⟪z - proximalPoint f z, y - proximalPoint f z⟫ ≤ f y := by
   obtain ⟨x, hx⟩ := exists_proximal_minimizer hconv z
   exact Classical.epsilon_spec
@@ -137,8 +142,7 @@ theorem proximalPoint_spec {E : Type*} [NormedAddCommGroup E] [InnerProductSpace
     ⟨x, subgradient_of_proximal_minimizer hconv hx⟩
 
 /-- Uniqueness: if `z − x` is a subgradient of `f` at `x`, then `x` is the proximal point of `z`. -/
-theorem proximalPoint_eq_of_subgradient {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
-    [FiniteDimensional ℝ E] {f : E → ℝ} (hconv : ConvexOn ℝ univ f) {x z : E}
+theorem proximalPoint_eq_of_subgradient {f : E → ℝ} (hconv : ConvexOn ℝ univ f) {x z : E}
     (hx : ∀ y, f x + ⟪z - x, y - x⟫ ≤ f y) : proximalPoint f z = x := by
   have h := proximal_subgradient_monotonicity (proximalPoint_spec hconv z) hx
   simp only [sub_self, inner_zero_right] at h
@@ -147,8 +151,7 @@ theorem proximalPoint_eq_of_subgradient {E : Type*} [NormedAddCommGroup E] [Inne
   exact sub_eq_zero.mp (norm_eq_zero.mp hn)
 
 /-- Firm nonexpansiveness of the proximal map. -/
-theorem sq_norm_proximalPoint_sub_le_inner {E : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] {f : E → ℝ} (hconv : ConvexOn ℝ univ f)
+theorem sq_norm_proximalPoint_sub_le_inner {f : E → ℝ} (hconv : ConvexOn ℝ univ f)
     (z w : E) :
     ‖proximalPoint f z - proximalPoint f w‖ ^ 2 ≤
       ⟪proximalPoint f z - proximalPoint f w, z - w⟫ := by
@@ -156,8 +159,7 @@ theorem sq_norm_proximalPoint_sub_le_inner {E : Type*} [NormedAddCommGroup E]
     (proximalPoint_spec hconv z) (proximalPoint_spec hconv w)
 
 /-- The proximal map is `1`-Lipschitz. -/
-theorem lipschitzWith_proximalPoint {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
-    [FiniteDimensional ℝ E] {f : E → ℝ} (hconv : ConvexOn ℝ univ f) :
+theorem lipschitzWith_proximalPoint {f : E → ℝ} (hconv : ConvexOn ℝ univ f) :
     LipschitzWith 1 (proximalPoint f) := by
   apply LipschitzWith.of_dist_le_mul
   intro z w
@@ -175,6 +177,10 @@ theorem lipschitzWith_proximalPoint {E : Type*} [NormedAddCommGroup E] [InnerPro
   have hm := mul_pos hp (sub_pos.mpr hlt)
   nlinarith
 
+end FiniteDimensional
+
+end InnerProduct
+
 end FunctionalInequalities.Analysis
 
 end LT12D2ProximalPoint
@@ -188,9 +194,14 @@ open scoped RealInnerProductSpace Topology
 
 namespace FunctionalInequalities.Analysis
 
+section InnerProduct
+
+variable {E : Type*}
+variable [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+
 /-- **The resolvent of a convex function is a gradient** (weak Letwin route, Alexandrov's theorem): if `P z` is a point at which `z − P z` is a subgradient of the convex `f` (the proximal map), then
 `w ↦ ½‖w‖² − (f (P w) + ½‖P w − w‖²)` (½‖·‖² minus the Moreau envelope) has derivative `⟪P z, ·⟫` at every `z`. -/
-theorem hasFDerivAt_half_sq_sub_moreau {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+theorem hasFDerivAt_half_sq_sub_moreau
     {f : E → ℝ} {P : E → E} (hP : ∀ z y, f (P z) + ⟪z - P z, y - P z⟫ ≤ f y) (z : E) :
     HasFDerivAt (fun w => (1 / 2) * ‖w‖ ^ 2 - (f (P w) + (1 / 2) * ‖P w - w‖ ^ 2))
       (innerSL ℝ (P z)) z := by
@@ -230,7 +241,7 @@ theorem hasFDerivAt_half_sq_sub_moreau {E : Type*} [NormedAddCommGroup E] [Inner
 /-- **The derivative of the resolvent is symmetric and firmly nonexpansive**: at a point
 where the proximal map `P` is differentiable with derivative `T`, `⟪T v, w⟫ = ⟪v, T w⟫` and
 `‖T v‖² ≤ ⟪T v, v⟫`. -/
-theorem inner_hasFDerivAt_resolvent_symm {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+theorem inner_hasFDerivAt_resolvent_symm
     {f : E → ℝ} {P : E → E} (hP : ∀ z y, f (P z) + ⟪z - P z, y - P z⟫ ≤ f y) {z : E}
     {T : E →L[ℝ] E} (hT : HasFDerivAt P T z) (v w : E) :
     ⟪T v, w⟫ = ⟪v, T w⟫ ∧ ‖T v‖ ^ 2 ≤ ⟪T v, v⟫ := by
@@ -275,6 +286,8 @@ theorem inner_hasFDerivAt_resolvent_symm {E : Type*} [NormedAddCommGroup E] [Inn
             field_simp [ht]
     exact le_of_tendsto_of_tendsto (hlim.norm.pow 2)
       (hlim.inner tendsto_const_nhds) (Filter.Eventually.of_forall hquot)
+
+end InnerProduct
 
 end FunctionalInequalities.Analysis
 

@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "last_updated": "2026-10-20",
+  "last_updated": "2026-10-22",
   "route_display": {
     "accepted_main_line": "diagram:BKLAND",
     "shared_groups": [
@@ -2238,6 +2238,146 @@
         "shape": "box"
       }
     },
+    "lem:letwin-regular-moment-inverse-ellipticity": {
+      "blueprint": "lem:letwin-regular-moment-inverse-ellipticity",
+      "description": "At the actual R0 regular-class moment potential (n > 0, isotropic 1_K exp(-W) dx, K compact convex with nonempty interior, W smooth and kappa-uniformly convex), with every R0 field at the same u and L: grad u is injective with a measurable everywhere left inverse, and on every compact S the Hessian is a.e. at least delta_S Id for some delta_S > 0. Generic supports: the determinant floor A >= (delta/K^(n-1)) Id, strict-convex gradient injectivity in every dimension, and the compact-local floor from continuous log-det data. No C2, smoothness, everywhere positive definiteness, surjectivity or diffeomorphism.",
+      "diagram": {
+        "id": "REGINV",
+        "label": "Regular source law<br/>gradient inverse, local ellipticity",
+        "source": "../../formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/Potential.lean",
+        "shape": "box"
+      }
+    },
+    "thm:letwin-regular-moment-target-stein-kernel": {
+      "blueprint": "thm:letwin-regular-moment-target-stein-kernel",
+      "description": "Weak counterpart of Letwin Lemma 2.7 for the strong regular class: at the same u and L as the weak Stein coupling (whole flat trace-bound conjunction retained) and a measurable left inverse Psi of grad u, tau = Hess u o Psi is a Stein kernel of mu that is mu-a.e. positive definite and symmetric, with mean Id, |tau|_HS in L2(mu) and int |tau|_HS^2 dmu <= 2n. Not the smooth moment map of Lemma 2.2, not everywhere positive definiteness, not the merely convex source class; not used by the constant-8 endpoint.",
+      "diagram": {
+        "id": "TGTSTEIN",
+        "label": "Regular source law<br/>target Stein kernel (a.e. PD, HS² ≤ 2n)",
+        "source": "../../formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/TraceStein.lean",
+        "shape": "box"
+      }
+    },
+    "lem:letwin-regular-moment-directional-subsolution": {
+      "blueprint": "lem:letwin-regular-moment-directional-subsolution",
+      "description": "At the actual weak Hessian evolution witness of the strong regular class (same u, L, LF, T, every old field retained): for every direction v and every nonnegative compactly supported C1 psi, the directional weak subsolution int e^{-u} sum_a (sum_b (Hess u)^{-1}_{ba} d_b h_v) d_a psi <= int e^{-u} h_v psi with h_v = v^T Hess u v; and for every compact S, c0 Id <= e^{-u} (Hess u)^{-1} <= c1 Id a.e. on S (c0 = min_S e^{-u}/(16/kappa), c1 = max_S e^{-u}/delta_S for nonempty S; 1 for empty S). Generic supports: finite flux contraction, reciprocal matrix bounds, given-u coefficient bounds. Not Harnack, oscillation, C2 or Schauder.",
+      "diagram": {
+        "id": "DIRSUB",
+        "label": "Regular source law<br/>directional weak subsolution, local coefficient bounds",
+        "source": "../../formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/WeakHessian.lean",
+        "shape": "box"
+      }
+    },
+    "lem:letwin-rough-nonlinear-testing": {
+      "blueprint": "lem:letwin-rough-nonlinear-testing",
+      "description": "Nonlinear weak test tools: compact bounded H1 chain rule for C1 Lipschitz Phi with Phi 0 = 0; normalized shifted log and real powers (every real q) of bounded compact weak tests eta >= 0 a.e.; smooth bounded-range scalar profiles; the cutoff directional Hessian data b = chi v^T Hess u v; the directional weak subsolution against bounded weak tests and the rough square test b^2; PSD quadratic Young. Actual same-witness square/log/power/sin examples in research/audits/Letwin/RoughTesting.lean. Not the outer-cutoff positive power test, Caccioppoli, Moser or Harnack.",
+      "diagram": {
+        "id": "ROUGHTEST",
+        "label": "Weak H1 tools<br/>chain rule, log/power, rough tests",
+        "source": "../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Calculus.lean",
+        "shape": "box"
+      }
+    },
+    "lem:letwin-h1-energy-sobolev": {
+      "blueprint": "lem:letwin-h1-energy-sobolev",
+      "description": "H1 energy and Sobolev tools (GT (8.48)-(8.49) supports): outer-cutoff energy variables chi (delta + max w 0)^r for every real r with exact weak data, and the square test chi^2 s^q; the Caccioppoli inequality for bounded weak supersolutions (a.e. coefficients alpha <= A <= beta on tsupport chi, constants 4 beta/(p^2 alpha) and 2F/(p alpha), all three integrabilities concluded); weak Sobolev: critical GNS for n > 2, one FIXED L6 gain for n = 2 with volume(cthickening eps K)^(1/6), essential L-infinity for n = 1. Uniform actual audit research/audits/Letwin/Caccioppoli.lean: one witness u, T; for each compact S one alpha, beta, density bound B; then every direction v and cutoff chi with tsupport chi in S, F_v = (16/kappa)|v|^2 B. Not Moser, John-Nirenberg, GT 8.18, Harnack, oscillation, C2alpha or Schauder; not every finite exponent in n = 2; ball corollaries are not full radius scaling.",
+      "diagram": {
+        "id": "H1ENERGY",
+        "label": "H1 energy tools<br/>Caccioppoli, weak Sobolev",
+        "source": "../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Caccioppoli.lean",
+        "shape": "box"
+      }
+    },
+    "lem:letwin-moser-inputs": {
+      "blueprint": "lem:letwin-moser-inputs",
+      "description": "Moser inputs (GT (8.48)-(8.49) supports): bounded noncompact weak chain and the actual shifted log log(delta + max w 0); logarithmic energy (p = 1) and power energy of chi s^r for r < 1/2 with explicit constants; n = 2 weak Sobolev for every finite q >= 2 with C_GNS(2q/(q+2)) volume(cthickening eps K)^(1/q); uniform concentric cutoffs (one D for all centers/radii); probability-space L^p -> essential L-infinity limit; coordinate L2 energy with factor n. Audit research/audits/Letwin/Caccioppoli.lean combines them at ONE witness u, T (one D, then for each compact S one alpha, beta, B for every cutoff in S incl. dyadic families, normalized closed-ball limit; n = 2 finite-q Sobolev of the same g, dg). Not the Moser recurrence/iteration, Morrey over all balls, John-Nirenberg, GT 8.18 or Harnack.",
+      "diagram": {
+        "id": "MOSERIN",
+        "label": "Moser inputs<br/>log/power energy, cutoffs, Lp limit",
+        "source": "../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Caccioppoli.lean",
+        "shape": "box"
+      }
+    },
+    "lem:letwin-morrey-potential-inputs": {
+      "blueprint": "lem:letwin-morrey-potential-inputs",
+      "description": "Morrey and critical-potential inputs (GT (8.49) -> (7.51); GT 7.20 at p = n >= 2): ball-growth geometry (mass from support; all-ball growth of restrictions); all-ball Morrey bounds from cutoff energy with K = omega_n 2^n (1 + E0 n D^2 + E1 R^2); radial potentials and critical moments of ball-growth measures; critical potential of a density with an all-ball Morrey bound: AE finite, exp(P/(2e(n-1)K)) integrable with integral <= 2 omega_n n/(n-1)(1+4(n-1)^2) D^n; moment growth -> exponential integrability. Audit research/audits/Letwin/Caccioppoli.lean: at ONE witness the actual log-gradient all-ball Morrey bound and (n >= 2) the exponential integrability of its critical potential. Not GT 7.16, John-Nirenberg, full GT 7.20 (p > 1), Moser iteration or Harnack.",
+      "diagram": {
+        "id": "MORREYPOT",
+        "label": "Morrey and potential inputs<br/>all-ball Morrey, critical potential exp",
+        "source": "../../formalization/FunctionalInequalities/Analysis/MorreyGrowth.lean",
+        "shape": "box"
+      }
+    },
+    "lem:letwin-bounded-jn-inputs": {
+      "blueprint": "lem:letwin-bounded-jn-inputs",
+      "description": "Bounded weak convex representation and critical John-Nirenberg (GT 2001 Lemma 7.16 pp162-163, Theorem 7.21 p166, critical p = n): exact C1 Riesz representation on an open convex Omega for an arbitrary measurable S in mass form |S| |u(x) - u_S| <= (D^n/n) int_Omega |x - z|^(1-n) |Du| (zero |S| included); L1 control of the critical Riesz potential (omega_n n D); Euclidean density L^p and L2 -> L1 convergence; the same representation for GLOBAL bounded weak H1_loc data on a bounded open convex domain (n >= 2) by cutoff, smooth approximation and an L1-controlled subsequence; critical JN with sigma = [2(n-1)e]^-1 n |Omega|/D^n and integral <= 2 omega_n n/(n-1) (1 + 4(n-1)^2) D^n under the all-ball Morrey bound; centered log moments give int s^p * int s^-p <= A^2. Audit research/audits/Letwin/Caccioppoli.lean: per-R actual local JN of log s on B_3R and the power-moment product at ONE witness (unconditional, exponent sigma/K16). Not the domain-only W^{1,1} class or n = 1 JN (n = 1 uses the separate kernel-1 exponential bound of lem:letwin-bounded-weak-harnack, which also supplies the bounded Moser iteration and weak Harnack).",
+      "diagram": {
+        "id": "BOUNDEDJN",
+        "label": "Bounded weak JN<br/>convex representation, John-Nirenberg",
+        "source": "../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Representation.lean",
+        "shape": "box"
+      }
+    },
+    "lem:letwin-local-moser-inputs": {
+      "blueprint": "lem:letwin-local-moser-inputs",
+      "description": "Local bounded Moser inputs (GT 8.18 locally nonnegative bounded class; (8.48)-(8.49), (7.51) supports): global bounded/weak/local-L2 data with w >= 0 only a.e. on tsupport chi. Cutoff power data and pointwise nonnegative square test; local Caccioppoli (4 beta/(p^2 alpha), 2F/(p alpha)), power energy (r < 1/2) and log energy (4 beta/alpha, 2F/(alpha delta)) with NO global weak derivative of log max w; ONE bounded weak extension H, dH equal to log(delta + max w 0), s^-1 a on every domain where w >= 0; small-ball + total-mass ball growth; buffered all-ball Morrey on B_3R from energy on B_4R with K = omega_n 16^n (1 + E0 n D^2 + E1 R^2); n > 2 one-step critical gains from a GIVEN power energy. Audit research/audits/Letwin/Caccioppoli.lean: one global-class dyadic gain step (n > 2); at ONE public-producer witness the LOCAL deficit M - h_v (cap only on B_4R, coefficients once per R): local log energy, one weak extension, all-ball Morrey on B_3R and (n >= 2) critical-potential exponential integrability on B_3R. Centered buffered Morrey at every domain center x0 (D before all x0, R). Fixed-compact joint audit: ONE witness; alpha, beta, B once per compact S before ALL domain centers and radii with closedBall x0 (4R) in S, then every v, local cap M (only B(x0,4R)) and delta: the globally bounded measurable log s, linear power data for every cutoff and every real r, power energies for r < 1/2, local log energy, ONE weak H, dH, centered B(x0,3R) Morrey and, inside the SAME H under F R^2 <= alpha delta, JN and power moments at the uniform p0 = tau n/(32^n (3 + 4 beta n D^2/alpha)). Not full GT 8.18 for unbounded data; the Moser recurrence/iteration and the bounded weak Harnack inequality are lem:letwin-bounded-weak-harnack.",
+      "diagram": {
+        "id": "LOCALMOSER",
+        "label": "Local Moser inputs<br/>local energies, fixed-S joint inputs, one-step gain",
+        "source": "../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Caccioppoli.lean",
+        "shape": "box"
+      }
+    },
+    "lem:letwin-bounded-weak-harnack": {
+      "blueprint": "lem:letwin-bounded-weak-harnack",
+      "description": "Bounded actual weak Harnack inequality (GT 2001 Theorem 8.18 for bounded data, Moser iteration; supports Letwin Lemma 2.2). Library: geometric recurrences in DyadicSummation; the general physical-exponent Moser iteration (N/kappa + a = N) in MoserIteration; Lp/essential-supremum exponent tools, the moment-to-product bridge and the shift removal to the essential infimum (explicit finite C) in LpExponent; n = 2 and n = 1 cutoff Sobolev gains; the n = 1 kernel-1 weak representation and density-mass exponential integrability; six weak-energy endpoints in WeakDerivative/Moser (n > 2 inverse essential bound and positive boost for 0 < p < n/(n-2); n = 2 with physical exponent a = 2 - 2/g, every finite p > 0; n = 1 direct inverse/positive essential bounds, not the critical tau). Audit research/audits/Letwin/Caccioppoli.lean (final LetwinHarnackAudit section, after its producers) at ONE fixed-compact witness (constants per compact S before all centers, radii, directions and caps): full-exponent same-witness products for n > 2, n = 2, n = 1 and, for every n > 0, R^(-n/p) ||w||_{p,B(x0,2R)} <= C(p) (essinf_{B(x0,R)} w + M B R^2/alpha) for 0 < p < n/(n-2) (n > 2) or every finite p > 0 (n <= 2). Essential infimum (a.e.) only. Not full GT 8.18 for unbounded data (q > n, rough coefficients), the domain-only W^{1,1} GT 7.16, a pointwise infimum or regular representative, oscillation decay, C2alpha, Schauder or the merely convex class.",
+      "diagram": {
+        "id": "WEAKHARNACK",
+        "label": "Bounded weak Harnack<br/>Moser iteration, essential infimum, n = 1, 2, > 2",
+        "source": "../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Moser.lean",
+        "shape": "box"
+      }
+    },
+    "lem:gt-uniform-rank-one-frame": {
+      "blueprint": "lem:gt-uniform-rank-one-frame",
+      "description": "GT 2001 Lemma 17.13 (statement pp454-455, proof pp462-463), literal source form: for n > 0 and 0 < lo < hi, finitely many unit directions including every e_i and every normalized pair (e_i+e_j)/sqrt 2, and lowerCoeff > 0 with lowerCoeff < hi, all fixed BEFORE every matrix; every positive definite A with lo I <= A <= hi I is sum beta_k gamma_k gamma_k^T with lowerCoeff <= beta_k <= hi for EVERY k. Supports: SPD congruence A = S B S^T (Eq 17.55, Matrix/Positivity) and the unit-vector coefficient cap. Ordinary entrywise topology; no uniqueness. Not an oscillation estimate.",
+      "diagram": {
+        "id": "FRAME1713",
+        "label": "Fixed rank-one frame<br/>GT 17.13, coefficients in [lower, hi]",
+        "source": "../../formalization/FunctionalInequalities/Analysis/Matrix/RankOneFrame.lean",
+        "shape": "box"
+      }
+    },
+    "lem:gt-scalar-modulus-iteration": {
+      "blueprint": "lem:gt-scalar-modulus-iteration",
+      "description": "GT 2001 Lemma 8.23 (pp201-202): for 0 < gamma, tau < 1, C = max(1/gamma, 1/(1-gamma)) before mu in (0,1), alpha = (1-mu) log gamma / log tau before omega, sigma, R0; nondecreasing nonnegative omega, sigma with omega(tau r) <= gamma omega(r) + sigma(r) give omega(R) <= C((R/R0)^alpha omega(R0) + sigma(R^mu R0^(1-mu))). Scalar lemma only; no PDE oscillation claim.",
+      "diagram": {
+        "id": "MODULUS823",
+        "label": "Scalar iteration lemma<br/>GT 8.23",
+        "source": "../../formalization/FunctionalInequalities/Analysis/Modulus.lean",
+        "shape": "box"
+      }
+    },
+    "lem:essential-deficit-identity": {
+      "blueprint": "lem:essential-deficit-identity",
+      "description": "Essential deficit identity: for a nonzero measure and 0 <= f <= M a.e., essinf ofReal(M - f) = ofReal(M - real esssup f). Essential extrema only; no pointwise infimum or representative.",
+      "diagram": {
+        "id": "ESSDEFICIT",
+        "label": "Essential deficit identity<br/>essinf(M - f) = M - esssup f",
+        "source": "../../formalization/FunctionalInequalities/Analysis/EssentialExtrema.lean",
+        "shape": "box"
+      }
+    },
+    "lem:given-data-weak-harnack": {
+      "blueprint": "lem:given-data-weak-harnack",
+      "description": "GT 2001 Theorem 8.18 with (8.47)-(8.49), pp194-196, bounded symmetric pure-divergence case at GIVEN data: C(p) chosen before every ball, coefficient matrix, function, derivative, global bound and forcing; global bounded weak H1_loc w, a.e. measurable A with alpha <= A <= beta and w >= 0 only a.e. on closedBall x0 4R, the weak supersolution inequality against bounded nonnegative compact weak tests with function and derivative support in closedBall x0 4R; R^(-n/p) ||w||_{p,B(x0,2R)} <= C(p)(essinf_{B(x0,R)} w + F R^2/alpha) for n > 0 and every p > 0 with n <= 2 or p < n/(n-2). Given-data producers in WeakDerivative/Caccioppoli (cutoff power data with derivative support; one weak logarithm identified a.e. on the set). Audit research/audits/Letwin/Caccioppoli.lean (final section): harnack_joint_regular_potential at ONE regular moment potential retaining all its regular-class data, per compact S alpha, beta, B, C(p) before every center/R/direction/cap, forcing M B. Not the unbounded/nonsymmetric/lower-order/domain-only GT 8.18 and not oscillation decay.",
+      "diagram": {
+        "id": "GIVENHARNACK",
+        "label": "Given-data weak Harnack<br/>GT 8.18 bounded, joint regular potential",
+        "source": "../../formalization/FunctionalInequalities/Analysis/WeakDerivative/Harnack.lean",
+        "shape": "box"
+      }
+    },
     "lem:matrix-noise-trace-identities": {
       "blueprint": "lem:matrix-noise-trace-identities",
       "description": "Finite real-matrix trace identities over any finite index type: tr((A + tI)^T (A + tI)) = tr(A^T A) + 2t tr A + n t^2; invariance of tr((AQ)^T AQ) under a symmetric involution Q; tr(SHS) = tr(S^2 H); and tr((SHS)^T SHS) = tr(S^2 H S^2 H) for symmetric S, H.",
@@ -2605,13 +2745,13 @@
       }
     },
     "diagram:LGENERAL8": {
-      "description": "Letwin arXiv:2607.24164v1, Theorem 1.2, for every n > 0 and every isotropic log-concave probability law, without compact support: Var(<MX,X>) <= 8 ||M||_HS^2 for every self-adjoint operator, and Var(sum M_ij x_i x_j) <= 8 tr(M*M) for every symmetric matrix, singular and indefinite included. Local Lean proof through centered, whitened ball truncations and moment limits; no new certificate, full smooth Lemma A.1 or Theorem 1.1 claim.",
+      "description": "Letwin arXiv:2607.24164v1, Theorem 1.2, for every n > 0 and every isotropic log-concave probability law, without compact support: Var(<MX,X>) <= 8 ||M||_HS^2 for every self-adjoint operator, and Var(sum M_ij x_i x_j) <= 8 tr(M*M) for every symmetric matrix, singular and indefinite included. Local Lean proof through centered, whitened ball truncations (Suspension.exists_compact_moment_approximation) and moment limits; no new certificate or Theorem 1.1 claim. Lemma A.1 itself is node LA1REG.",
       "assessment": {
         "state": "formalized",
         "evidence": {
           "kind": "reviewed_progress",
           "source": "../../formalization/FunctionalInequalities/KLS/Letwin/QuadraticBound.lean",
-          "sha256": "3b67668ac3f15337fbbf54d836ac601fb206c56f2803d0ac4d5deb3d83d9812b",
+          "sha256": "d53d9853d313b4c343a74397aa967f8c7cb7761a261fc20e1fd588a11d497ce6",
           "note": "Strict source compilation and research/audits/Letwin/QuadraticBound.lean; current local source, not remote certification."
         },
         "kind": "auxiliary"
@@ -2620,6 +2760,86 @@
         "id": "LGENERAL8",
         "label": "Letwin Theorem 1.2<br/>constant 8, no compactness",
         "source": "../../formalization/FunctionalInequalities/KLS/Letwin/QuadraticBound.lean",
+        "shape": "box"
+      }
+    },
+    "lem:letwin-regular-approximation": {
+      "blueprint": "lem:letwin-regular-approximation",
+      "description": "Letwin arXiv:2607.24164v1, Lemma A.1: every isotropic log-concave law is the limit of isotropic log-concave laws e^{-V} 1_K dx (exact density; K bounded open convex nonempty; V smooth convex on a neighbourhood of closure K, indeed smooth and uniformly convex) in every mixed linear moment of degree <= 4, hence every finite-sum polynomial observable of degree <= 4; sequential and epsilon forms. No MvPolynomial interface; full smooth Lemma 2.2 remains partial.",
+      "diagram": {
+        "id": "LA1REG",
+        "label": "Letwin Lemma A.1<br/>regular approximation",
+        "source": "../../formalization/FunctionalInequalities/KLS/Letwin/Approximation.lean",
+        "shape": "box"
+      }
+    },
+    "lem:frame-log-det-oscillation": {
+      "blueprint": "lem:frame-log-det-oscillation",
+      "description": "Rough-divergence form of GT 2001 Lemma 17.14 with the Lemma 17.13 frame: for a matrix field P > 0, P <= K I, log det P = V a.e. (V Lipschitz) and rho P^{-1} in [alpha, beta] decomposing in one fixed unit frame, an essential p = 1 weak Harnack law for the directional deficits gives 0 < theta < 1 and C > 0 before every ball with summed essential widths on B(x0,R) <= theta x those on B(x0,4R) + C (R + R^2); with GT 8.23 at tau = 1/4, mu = 1/2 a power decay Q r^eta with eta, Q before every center and radius. Essential extrema only; frame and Harnack law are explicit premises; not the classical C4 Lemma 17.14.",
+      "diagram": {
+        "id": "FRAMEOSC",
+        "label": "Frame oscillation decay<br/>log-det matrix field, GT 17.14 rough form",
+        "source": "../../formalization/FunctionalInequalities/Analysis/Matrix/LogDetOscillation.lean",
+        "shape": "box"
+      }
+    },
+    "lem:holder-hessian-regularity": {
+      "blueprint": "lem:holder-hessian-regularity",
+      "description": "Without convexity: continuous Hölder representatives on open sets from power decay of essential widths (common good set over a countable basis, dense extension), entrywise matrix representatives from coordinate and normalized-pair quadratic forms, gluing of continuous a.e. representatives on the balls B(0, m+1), C1 of a Lipschitz map with a continuous a.e. derivative (shrinking mollifiers), C2 of a C1 function with Lipschitz gradient and a continuous a.e. Hessian representative, and the everywhere positive definite log-determinant equation with cap from a continuous Hessian (quantitative determinant floor, closed PSD cone, Lebesgue support).",
+      "diagram": {
+        "id": "HOLDERREG",
+        "label": "Hölder representatives and C2<br/>continuous Hessian, everywhere equation",
+        "source": "../../formalization/FunctionalInequalities/Analysis/HessianRegularity.lean",
+        "shape": "box"
+      }
+    },
+    "lem:regular-moment-hessian-holder": {
+      "blueprint": "lem:regular-moment-hessian-holder",
+      "description": "Letwin arXiv:2607.24164v1 Lemma 2.2 support, strong class (n > 0, smooth kappa-uniformly convex W, compact convex K with nonempty interior, normalized isotropic 1_K e^{-W}): ONE regular moment potential u retaining convexity, Lipschitz, normalization, gradient pushforward, C1 with 16/kappa-Lipschitz gradient, Lipschitz right side, a.e. PD Hessian with log det = -u + W(grad u) and cap, and the weak third derivative, is C2 with continuous Hessian, PD with the log-determinant equation and cap at EVERY point, and locally Hölder in every Hessian entry (one exponent and constant per ball before all entries). Rough-divergence route (GT 17.13/17.14/8.23); not Schauder/C-infinity, the gradient diffeomorphism or the merely convex source class.",
+      "diagram": {
+        "id": "HESSHOLDER",
+        "label": "C2 Hölder Hessian at the regular moment potential<br/>everywhere log-det equation, strong class",
+        "source": "../../formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/HessianHolder.lean",
+        "shape": "box"
+      }
+    },
+    "lem:log-det-averaged-inverse": {
+      "blueprint": "lem:log-det-averaged-inverse",
+      "description": "GT 2001 (17.56) and the Lemma 17.16 coefficients: log det B - log det A = int_0^1 tr((A + t(B-A))^{-1}(B-A)) dt = sum_ij (int_0^1 (A + t(B-A))^{-1}_ij dt)(B-A)_ji on a nonsingular segment (derived for PD endpoints), C^k of log det at nonsingular matrices, the inverse-entry modulus n^2 L^2 d, Hölder averages, and Hölder averaged inverses of compact PD Hölder fields with a derived uniform cap. Prerequisites for linear Schauder only.",
+      "diagram": {
+        "id": "LOGDETAVG",
+        "label": "Averaged-inverse log-det coefficients<br/>GT (17.56), Hölder averaged inverse",
+        "source": "../../formalization/FunctionalInequalities/Analysis/Matrix/LogDetSegment.lean",
+        "shape": "box"
+      }
+    },
+    "lem:strict-convex-gradient-inverse": {
+      "blueprint": "lem:strict-convex-gradient-inverse",
+      "description": "For differentiable strictly convex u: p in range grad u iff the tilt u - <p, .> attains its minimum; on a proper space the range is convex and open (linear growth of tilts); in finite dimension grad u is an open map and a homeomorphism onto its range (no invariance of domain, no invertible Hessian). A PD Hessian gives a derivative isomorphism with matrix Hess^T; C^{k+1} strictly convex u with PD Hessian everywhere has a C^k inverse gradient on the range (k != 0) with D(grad u)^{-1} o D grad u = id. No bootstrap.",
+      "diagram": {
+        "id": "CONVGRADINV",
+        "label": "Strictly convex gradient<br/>open map, homeomorphism, C^k inverse",
+        "source": "../../formalization/FunctionalInequalities/Analysis/Convex/GradientInverse.lean",
+        "shape": "box"
+      }
+    },
+    "lem:transport-gradient-range": {
+      "blueprint": "lem:transport-gradient-range",
+      "description": "Given a C1 convex Lipschitz u on R^n, n > 0, with int e^{-u} = 1 whose gradient transports e^{-u} dx to 1_K e^{-W} dx (K compact convex with nonempty interior, W continuous): range grad u = int K (support of the transported law, open convex range), grad u is a homeomorphism R^n -> int K, and with C^{k+1} regularity and PD Hessian it has a C^k inverse on int K. The potential is a hypothesis.",
+      "diagram": {
+        "id": "MAPGRADRANGE",
+        "label": "Transport gradient range = int K<br/>homeomorphism and inverse, given potential",
+        "source": "../../formalization/FunctionalInequalities/Probability/MomentMeasure/Gradient.lean",
+        "shape": "box"
+      }
+    },
+    "lem:regular-moment-gradient-inverse": {
+      "blueprint": "lem:regular-moment-gradient-inverse",
+      "description": "Letwin arXiv:2607.24164v1 Lemma 2.2 support, strong class (n > 0, smooth kappa-uniformly convex W, compact convex K with nonempty interior, normalized isotropic 1_K e^{-W}): ONE call of exists_regular_moment_potential_holder_hessian keeps u, L, LF, T and every field in order (transport, 16/kappa cap, C2, locally Hölder Hessian, everywhere PD log-det equation, weak third derivative) and adds a homeomorphism grad u : R^n -> int K and a C1 left inverse on int K for the same u. Not Schauder/C-infinity, a smooth diffeomorphism or the merely convex source class.",
+      "diagram": {
+        "id": "MOMENTGRADINV",
+        "label": "Gradient homeomorphism onto int K, C1 inverse<br/>regular moment potential, strong class",
+        "source": "../../formalization/FunctionalInequalities/KLS/CEK/MomentRegularity/Inverse.lean",
         "shape": "box"
       }
     }
@@ -2807,6 +3027,27 @@
           "DUALB",
           "GAUSSID",
           "WSTEINSRC",
+          "REGINV",
+          "TGTSTEIN",
+          "DIRSUB",
+          "ROUGHTEST",
+          "H1ENERGY",
+          "MOSERIN",
+          "MORREYPOT",
+          "BOUNDEDJN",
+          "LOCALMOSER",
+          "WEAKHARNACK",
+          "GIVENHARNACK",
+          "FRAME1713",
+          "MODULUS823",
+          "ESSDEFICIT",
+          "FRAMEOSC",
+          "HOLDERREG",
+          "HESSHOLDER",
+          "LOGDETAVG",
+          "CONVGRADINV",
+          "MAPGRADRANGE",
+          "MOMENTGRADINV",
           "MNTRACE",
           "SPECGEO",
           "SYMINV",
@@ -2836,6 +3077,7 @@
           "RESTEXP",
           "OPMAT",
           "REGCLASS8",
+          "LA1REG",
           "LCOMPACT8",
           "AFFMOM",
           "LGENERAL8"
@@ -3874,6 +4116,96 @@
         "kind": "dependency"
       },
       {
+        "from": "REGMOM",
+        "to": "REGINV",
+        "kind": "dependency"
+      },
+      {
+        "from": "WSTEINSRC",
+        "to": "TGTSTEIN",
+        "kind": "dependency"
+      },
+      {
+        "from": "REGINV",
+        "to": "TGTSTEIN",
+        "kind": "dependency"
+      },
+      {
+        "from": "SRCSTEIN",
+        "to": "TGTSTEIN",
+        "kind": "dependency"
+      },
+      {
+        "from": "WEVOLSRC",
+        "to": "DIRSUB",
+        "kind": "dependency"
+      },
+      {
+        "from": "REGINV",
+        "to": "DIRSUB",
+        "kind": "dependency"
+      },
+      {
+        "from": "DIRSUB",
+        "to": "ROUGHTEST",
+        "kind": "dependency"
+      },
+      {
+        "from": "ROUGHTEST",
+        "to": "H1ENERGY",
+        "kind": "dependency"
+      },
+      {
+        "from": "H1ENERGY",
+        "to": "MOSERIN",
+        "kind": "dependency"
+      },
+      {
+        "from": "MOSERIN",
+        "to": "MORREYPOT",
+        "kind": "dependency"
+      },
+      {
+        "from": "MORREYPOT",
+        "to": "LOCALMOSER",
+        "kind": "dependency"
+      },
+      {
+        "from": "MORREYPOT",
+        "to": "BOUNDEDJN",
+        "kind": "dependency"
+      },
+      {
+        "from": "BOUNDEDJN",
+        "to": "LOCALMOSER",
+        "kind": "dependency"
+      },
+      {
+        "from": "LOCALMOSER",
+        "to": "WEAKHARNACK",
+        "kind": "dependency"
+      },
+      {
+        "from": "BOUNDEDJN",
+        "to": "WEAKHARNACK",
+        "kind": "dependency"
+      },
+      {
+        "from": "WEAKHARNACK",
+        "to": "GIVENHARNACK",
+        "kind": "dependency"
+      },
+      {
+        "from": "LOCALMOSER",
+        "to": "GIVENHARNACK",
+        "kind": "dependency"
+      },
+      {
+        "from": "BOUNDEDJN",
+        "to": "GIVENHARNACK",
+        "kind": "dependency"
+      },
+      {
         "from": "RESTEXP",
         "to": "REGCLASS8",
         "kind": "dependency"
@@ -3976,6 +4308,66 @@
       {
         "from": "AFFMOM",
         "to": "LGENERAL8",
+        "kind": "dependency"
+      },
+      {
+        "from": "AFFMOM",
+        "to": "LA1REG",
+        "kind": "dependency"
+      },
+      {
+        "from": "LA1REG",
+        "to": "LCOMPACT8",
+        "kind": "dependency"
+      },
+      {
+        "from": "FRAME1713",
+        "to": "FRAMEOSC",
+        "kind": "dependency"
+      },
+      {
+        "from": "ESSDEFICIT",
+        "to": "FRAMEOSC",
+        "kind": "dependency"
+      },
+      {
+        "from": "MODULUS823",
+        "to": "FRAMEOSC",
+        "kind": "dependency"
+      },
+      {
+        "from": "FRAMEOSC",
+        "to": "HOLDERREG",
+        "kind": "dependency"
+      },
+      {
+        "from": "GIVENHARNACK",
+        "to": "HESSHOLDER",
+        "kind": "dependency"
+      },
+      {
+        "from": "FRAMEOSC",
+        "to": "HESSHOLDER",
+        "kind": "dependency"
+      },
+      {
+        "from": "HOLDERREG",
+        "to": "HESSHOLDER",
+        "kind": "dependency"
+      },
+      {
+        "from": "CONVGRADINV",
+        "to": "MAPGRADRANGE",
+        "kind": "dependency"
+      },
+      {
+        "from": "MAPGRADRANGE",
+        "to": "MOMENTGRADINV",
+        "kind": "dependency"
+      },
+      {
+        "from": "HESSHOLDER",
+        "to": "MOMENTGRADINV",
         "kind": "dependency"
       }
     ]

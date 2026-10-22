@@ -1,6 +1,8 @@
 import Mathlib.MeasureTheory.Function.L1Space.Integrable
 import Mathlib.Analysis.Convex.Continuous
 import Mathlib.Analysis.InnerProductSpace.Basic
+import Mathlib.Topology.Order.Compact
+import Mathlib.Analysis.Normed.Module.Convex
 
 /-!
 # Minimum and compact sublevels of a convex potential with integrable `e^{-φ}`
@@ -258,3 +260,83 @@ theorem exists_forall_le_and_isCompact_sublevel_of_convexOn_integrable_exp_neg
       (le_of_lt (lt_of_not_ge hy))
 
 end FunctionalInequalities.Analysis
+
+/-! ## Linear growth from a strict minimum and attained minima -/
+
+noncomputable section StrictMinimumGrowth
+
+namespace FunctionalInequalities.Analysis
+
+section LinearGrowth
+
+open Set Metric Filter
+open scoped Topology
+
+variable {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E] [ProperSpace E]
+
+/-- **Linear growth from a strict minimum.** A continuous convex `f` on a proper normed space with a strict global minimum
+at `a` satisfies `c ‖x‖ + b ≤ f x` for some `c > 0` and `b` (convexity along the rays through the unit sphere around `a`). -/
+theorem exists_linear_lower_bound_of_strict_min {f : E → ℝ} (hf : ConvexOn ℝ univ f)
+    (hc : Continuous f) (a : E) (hm : ∀ x, x ≠ a → f a < f x) :
+    ∃ c : ℝ, 0 < c ∧ ∃ b : ℝ, ∀ x, c*‖x‖+b ≤ f x := by
+  have hmin (x : E) : f a ≤ f x := by
+    by_cases h : x = a
+    · subst x; exact le_rfl
+    · exact (hm x h).le
+  obtain ⟨m, ham, hms⟩ := (isCompact_sphere a (1 : ℝ)).exists_forall_le'
+    hc.continuousOn (fun x hx => hm x (by intro h; subst x; simp at hx))
+  let c := m-f a
+  have hcp : 0 < c := sub_pos.mpr ham
+  have hg (x : E) : f a+c*(‖x-a‖-1) ≤ f x := by
+    by_cases hlarge : 1 ≤ ‖x-a‖
+    · have hd : 0 < ‖x-a‖ := lt_of_lt_of_le zero_lt_one hlarge
+      let t := ‖x-a‖⁻¹
+      have ht : 0 < t := inv_pos.mpr hd
+      have ht1 : t ≤ 1 := by
+        dsimp only [t]
+        exact inv_le_one_of_one_le₀ hlarge
+      have hy : (1-t) • a+t • x ∈ sphere a 1 := by
+        rw [mem_sphere, dist_eq_norm]
+        have heq : ((1-t) • a+t • x)-a = t • (x-a) := by module
+        rw [heq, norm_smul, Real.norm_eq_abs, abs_of_pos ht]
+        exact inv_mul_cancel₀ hd.ne'
+      have hj : f ((1-t) • a+t • x) ≤ (1-t)*f a+t*f x := by
+        simpa only [smul_eq_mul] using
+          hf.2 (mem_univ a) (mem_univ x) (sub_nonneg.mpr ht1) ht.le (by ring)
+      have hp : c ≤ t*(f x-f a) := by
+        have h := hms ((1-t) • a+t • x) hy
+        dsimp only [c]
+        nlinarith
+      have hprod := mul_le_mul_of_nonneg_left hp hd.le
+      dsimp only [t] at hprod
+      rw [← mul_assoc, mul_inv_cancel₀ hd.ne', one_mul] at hprod
+      nlinarith
+    · have hd : ‖x-a‖ < 1 := lt_of_not_ge hlarge
+      calc
+        _ ≤ f a := by nlinarith
+        _ ≤ f x := hmin x
+  refine ⟨c, hcp, f a-c*(‖a‖+1), fun x => ?_⟩
+  have hn : ‖x‖ ≤ ‖x-a‖+‖a‖ := by
+    simpa only [sub_add_cancel] using norm_add_le (x-a) a
+  have hmul := mul_le_mul_of_nonneg_left hn hcp.le
+  have h := hg x
+  nlinarith
+
+omit [NormedSpace ℝ E] in
+/-- A continuous `f` on a proper space with `c ‖x‖ + b ≤ f x` for some `c > 0` attains its global minimum. -/
+theorem exists_min_of_linear_lower_bound {f : E → ℝ} (hf : Continuous f)
+    {c b : ℝ} (hc : 0 < c) (hb : ∀ x, c*‖x‖+b ≤ f x) :
+    ∃ a, ∀ x, f a ≤ f x := by
+  apply hf.exists_forall_le' (0 : E)
+  filter_upwards [(isCompact_closedBall (0 : E) ((f 0-b)/c)).compl_mem_cocompact] with x hx
+  have hn : (f 0-b)/c < ‖x‖ := by
+    simpa only [mem_compl_iff, mem_closedBall, dist_zero_right, not_le] using hx
+  have h := (div_lt_iff₀ hc).mp hn
+  have hbound := hb x
+  nlinarith
+
+end LinearGrowth
+
+end FunctionalInequalities.Analysis
+
+end StrictMinimumGrowth

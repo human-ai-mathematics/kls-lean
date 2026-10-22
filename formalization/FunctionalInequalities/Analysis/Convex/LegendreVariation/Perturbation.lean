@@ -17,8 +17,12 @@ namespace FunctionalInequalities.Analysis
 
 section BoundedPerturbation
 
+section InnerProduct
+
+variable {E : Type*}
+variable [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+
 private theorem legendre_bounded_perturbation_terms
-    {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
     (φ : E → EReal) (hφ : ProperPotential φ) (b : E → ℝ)
     (t c : ℝ) (z q : E) (hc : |t * b z| ≤ c) :
     (inner ℝ z q : EReal) - (φ z + ((t * b z : ℝ) : EReal)) ≤
@@ -58,7 +62,6 @@ private theorem legendre_bounded_perturbation_terms
 /-- An actual uniformly bounded real perturbation shifts the actual entire
 Legendre sup by at most |t|M, without primal convexity or global finiteness. -/
 theorem legendre_bounded_perturbation
-    {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
     (φ : E → EReal) (hφ : ProperPotential φ)
     (b : E → ℝ) (M : ℝ) (hM : 0 ≤ M) (hb : ∀ z : E, |b z| ≤ M) :
     ∀ (t : ℝ) (q : E),
@@ -108,6 +111,8 @@ theorem legendre_bounded_perturbation
       exact (hterm z).1 |>.trans <|
         add_le_add (le_iSup (fun w : E =>
           (inner ℝ w q : EReal) - φ w) z) le_rfl
+
+end InnerProduct
 
 end BoundedPerturbation
 

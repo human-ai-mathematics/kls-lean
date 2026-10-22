@@ -73,8 +73,12 @@ theorem hasCompactSupport_derivative {n : ℕ} (v : Fin n → E) {f : E → ℝ}
   funext x
   simp only [derivative, iteratedFDeriv_comp_sub]
 
+section FiniteIndex
+
+variable [DecidableEq ι]
+
 /-- All directional derivatives commute with the actual characteristic flow. -/
-theorem differentiate_transport [DecidableEq ι] {n : ℕ} (v : Fin n → E)
+theorem differentiate_transport {n : ℕ} (v : Fin n → E)
     (a : E) (j : ι) (t : ℝ) {Y : State E ι} (hY : Y.Smooth) :
     differentiate v (transport a j t Y) = transport a j t (differentiate v Y) := by
   have hp := contDiff_id.add (contDiff_const : ContDiff ℝ ∞ (fun _ : E => t • a))
@@ -105,7 +109,7 @@ theorem differentiate_transport [DecidableEq ι] {n : ℕ} (v : Fin n → E)
     · simp only [hi, ↓reduceIte]
 
 /-- Compact support is preserved by an actual coordinate flow. -/
-theorem State.CompactSupport.transport [DecidableEq ι] {Y : State E ι}
+theorem State.CompactSupport.transport {Y : State E ι}
     (hY : Y.CompactSupport) (a : E) (j : ι) (t : ℝ) :
     (transport a j t Y).CompactSupport := by
   have hvp : HasCompactSupport (fun x => Y.v (x + t • a)) :=
@@ -129,8 +133,14 @@ theorem State.CompactSupport.transport [DecidableEq ι] {Y : State E ι}
       divrule ((hvp.add hpp).sub (hvm.sub hpm))
   · simpa only [WaveSplitting.transport, hi, ↓reduceIte] using hY.2.2 i
 
+end FiniteIndex
+
+section FiniteIndex
+
+variable [Fintype ι]
+
 omit [NormedSpace ℝ E] in
-private theorem compact_coupling [Fintype ι] (b : ι → E → ℝ) (Y : State E ι)
+private theorem compact_coupling (b : ι → E → ℝ) (Y : State E ι)
     (hp : ∀ j, HasCompactSupport (Y.p j)) : HasCompactSupport (coupling b Y) := by
   have heq : coupling b Y = ∑ j, fun x => b j x * Y.p j x := by
     funext x
@@ -140,7 +150,7 @@ private theorem compact_coupling [Fintype ι] (b : ι → E → ℝ) (Y : State 
 
 omit [NormedSpace ℝ E] in
 /-- The coefficient multiplication in the reaction does not enlarge support. -/
-theorem State.CompactSupport.reaction [Fintype ι] {Y : State E ι}
+theorem State.CompactSupport.reaction {Y : State E ι}
     (hY : Y.CompactSupport) (b : ι → E → ℝ) (t : ℝ) :
     (reaction b t Y).CompactSupport := by
   have hc : HasCompactSupport (coupling b Y) :=
@@ -150,6 +160,8 @@ theorem State.CompactSupport.reaction [Fintype ι] {Y : State E ι}
     hf.comp_left (g := fun z : ℝ => c * z) (by simp)
   exact ⟨((mulrule hY.1 _).add (mulrule hY.2.1 _)).add (mulrule hc _),
     ((mulrule hY.1 _).add (mulrule hY.2.1 _)).sub (mulrule hc _), hY.2.2⟩
+
+end FiniteIndex
 
 /-- Elementary perturbation estimate used by the zero-order reaction flow. -/
 private theorem perturbed_pair_bound (u v e f c t : ℝ) (ht : 0 < t) (ht1 : t ≤ 1)
@@ -251,8 +263,12 @@ theorem squareIntegral_const_mul (c : ℝ) (f : E → ℝ) :
     squareIntegral m (fun x => c * f x) = c ^ 2 * squareIntegral m f := by
   simp only [squareIntegral, mul_pow, integral_const_mul]
 
+section InvariantMeasure
+
+variable [m.IsAddRightInvariant]
+
 /-- Haar energy preservation for the active pair of an actual characteristic flow. -/
-theorem transport_pair_energy [m.IsAddRightInvariant] [DecidableEq ι]
+theorem transport_pair_energy [DecidableEq ι]
     (a : E) (j : ι) (t : ℝ) (Y : State E ι)
     (hv : Continuous Y.v) (hp : Continuous (Y.p j))
     (hvc : HasCompactSupport Y.v) (hpc : HasCompactSupport (Y.p j)) :
@@ -282,8 +298,12 @@ theorem transport_pair_energy [m.IsAddRightInvariant] [DecidableEq ι]
   rw [htplus, htminus] at hpar
   linarith
 
+section FiniteIndex
+
+variable [Fintype ι] [DecidableEq ι]
+
 /-- The other coordinates and displacement are fixed, hence the whole energy is preserved. -/
-theorem energy_transport [m.IsAddRightInvariant] [Fintype ι] [DecidableEq ι]
+theorem energy_transport
     (a : E) (j : ι) (t : ℝ) (Y : State E ι)
     (hv : Continuous Y.v) (hp : Continuous (Y.p j))
     (hvc : HasCompactSupport Y.v) (hpc : HasCompactSupport (Y.p j)) :
@@ -301,7 +321,7 @@ theorem energy_transport [m.IsAddRightInvariant] [Fintype ι] [DecidableEq ι]
   linarith
 
 /-- Exact preservation of every finite ordered-coordinate derivative energy. -/
-theorem derivativeEnergy_transport [m.IsAddRightInvariant] [Fintype ι] [DecidableEq ι]
+theorem derivativeEnergy_transport
     (directions : ι → E) (k : ℕ) (a : E) (j : ι) (t : ℝ)
     {Y : State E ι} (hY : Y.Smooth) (hc : Y.CompactSupport) :
     derivativeEnergy m directions k (transport a j t Y) = derivativeEnergy m directions k Y := by
@@ -315,7 +335,7 @@ theorem derivativeEnergy_transport [m.IsAddRightInvariant] [Fintype ι] [Decidab
     (hasCompactSupport_derivative _ (hc.2.2 j))
 
 /-- Any finite coordinate sweep preserves the same energy, including an empty sweep. -/
-theorem derivativeEnergy_sweep [m.IsAddRightInvariant] [Fintype ι] [DecidableEq ι]
+theorem derivativeEnergy_sweep
     (directions a : ι → E) (k : ℕ) (js : List ι) (t : ℝ)
     {Y : State E ι} (hY : Y.Smooth) (hc : Y.CompactSupport) :
     derivativeEnergy m directions k (sweep a t js Y) = derivativeEnergy m directions k Y := by
@@ -325,17 +345,25 @@ theorem derivativeEnergy_sweep [m.IsAddRightInvariant] [Fintype ι] [DecidableEq
     rw [sweep, ih (hY.transport (a j) j t) (hc.transport (a j) j t),
       derivativeEnergy_transport m directions k (a j) j t hY hc]
 
+end FiniteIndex
+
+end InvariantMeasure
+
 omit [NormedAddCommGroup E] [NormedSpace ℝ E] [IsFiniteMeasureOnCompacts m] [BorelSpace E] in
 theorem squareIntegral_nonneg (f : E → ℝ) : 0 ≤ squareIntegral m f :=
   integral_nonneg fun _ => sq_nonneg _
 
+section FiniteIndex
+
+variable [Fintype ι]
+
 omit [NormedAddCommGroup E] [NormedSpace ℝ E] [IsFiniteMeasureOnCompacts m] [BorelSpace E] in
-theorem energy_nonneg [Fintype ι] (Y : State E ι) : 0 ≤ energy m Y :=
+theorem energy_nonneg (Y : State E ι) : 0 ≤ energy m Y :=
   add_nonneg (add_nonneg (squareIntegral_nonneg m _) (squareIntegral_nonneg m _))
     (Finset.sum_nonneg fun _ _ => squareIntegral_nonneg m _)
 
 /-- The actual reaction has an integrated first-order bound with its coefficient pairing. -/
-theorem energy_reaction_pair [Fintype ι] {b : ι → E → ℝ}
+theorem energy_reaction_pair {b : ι → E → ℝ}
     (hb : ∀ j, ContDiff ℝ ∞ (b j)) {Y : State E ι} (hY : Y.Smooth)
     (hc : Y.CompactSupport) {t : ℝ} (ht : 0 ≤ t) (ht1 : t ≤ 1) :
     squareIntegral m (reaction b t Y).u + squareIntegral m (reaction b t Y).v ≤
@@ -365,7 +393,7 @@ theorem energy_reaction_pair [Fintype ι] {b : ι → E → ℝ}
 
 /-- A bounded coefficient vector controls the actual pairing. The bound is an explicit
 coefficient assumption of this stability lemma, not an assumption added to a heat frontend. -/
-theorem squareIntegral_coupling_le [Fintype ι] {b : ι → E → ℝ}
+theorem squareIntegral_coupling_le {b : ι → E → ℝ}
     (hb : ∀ j, ContDiff ℝ ∞ (b j)) {Y : State E ι} (hY : Y.Smooth)
     (hc : Y.CompactSupport) {B : ℝ} (hB : ∀ x, ∑ j, b j x ^ 2 ≤ B) :
     squareIntegral m (coupling b Y) ≤ B * ∑ j, squareIntegral m (Y.p j) := by
@@ -382,7 +410,7 @@ theorem squareIntegral_coupling_le [Fintype ι] {b : ι → E → ℝ}
     using hint
 
 /-- Zero-order stability of the actual reaction, with a linear-in-time factor. -/
-theorem energy_reaction_le [Fintype ι] {b : ι → E → ℝ}
+theorem energy_reaction_le {b : ι → E → ℝ}
     (hb : ∀ j, ContDiff ℝ ∞ (b j)) {Y : State E ι} (hY : Y.Smooth)
     (hc : Y.CompactSupport) {B t : ℝ} (hB0 : 0 ≤ B) (hB : ∀ x, ∑ j, b j x ^ 2 ≤ B)
     (ht : 0 ≤ t) (ht1 : t ≤ 1) :
@@ -403,18 +431,24 @@ theorem energy_reaction_le [Fintype ι] {b : ι → E → ℝ}
 
 omit [BorelSpace E] [IsFiniteMeasureOnCompacts m] in
 /-- Order zero is precisely the original three-component energy. -/
-theorem derivativeEnergy_zero [Fintype ι] (a : ι → E) (Y : State E ι) :
+theorem derivativeEnergy_zero (a : ι → E) (Y : State E ι) :
     derivativeEnergy m a 0 Y = energy m Y := by
   simp [derivativeEnergy, differentiate]
 
+end FiniteIndex
+
+section InvariantMeasure
+
+variable [m.IsAddRightInvariant] [Fintype ι] [DecidableEq ι]
+
 /-- Haar energy is preserved by an entire coordinate sweep. -/
-theorem energy_sweep [m.IsAddRightInvariant] [Fintype ι] [DecidableEq ι]
+theorem energy_sweep
     (a : ι → E) (js : List ι) (t : ℝ) {Y : State E ι} (hY : Y.Smooth)
     (hc : Y.CompactSupport) : energy m (sweep a t js Y) = energy m Y := by
   simpa only [derivativeEnergy_zero] using derivativeEnergy_sweep m a a 0 js t hY hc
 
 /-- A full split step has the same zero-order stability factor as its reaction. -/
-theorem energy_step_le [m.IsAddRightInvariant] [Fintype ι] [DecidableEq ι]
+theorem energy_step_le
     (a : ι → E) (js : List ι) {b : ι → E → ℝ} (hb : ∀ j, ContDiff ℝ ∞ (b j))
     {Y : State E ι} (hY : Y.Smooth) (hc : Y.CompactSupport) {B t : ℝ}
     (hB0 : 0 ≤ B) (hB : ∀ x, ∑ j, b j x ^ 2 ≤ B) (ht : 0 ≤ t) (ht1 : t ≤ 1) :
@@ -423,7 +457,7 @@ theorem energy_step_le [m.IsAddRightInvariant] [Fintype ι] [DecidableEq ι]
   rwa [energy_sweep m a js t hY hc] at h
 
 /-- Iterating actual split steps gives a quantitative bound, without assuming stability. -/
-theorem energy_nodes_le [m.IsAddRightInvariant] [Fintype ι] [DecidableEq ι]
+theorem energy_nodes_le
     (a : ι → E) (js : List ι) {b : ι → E → ℝ} (hb : ∀ j, ContDiff ℝ ∞ (b j))
     {Y : State E ι} (hY : Y.Smooth) (hc : Y.CompactSupport) {B δ : ℝ}
     (hB0 : 0 ≤ B) (hB : ∀ x, ∑ j, b j x ^ 2 ≤ B) (hδ : 0 ≤ δ) (hδ1 : δ ≤ 1) (k : ℕ) :
@@ -440,7 +474,7 @@ theorem energy_nodes_le [m.IsAddRightInvariant] [Fintype ι] [DecidableEq ι]
       _ = _ := by rw [pow_succ]; ring
 
 /-- The zero-order grid bound depends on elapsed time `k*δ`, not separately on the mesh size. -/
-theorem energy_nodes_le_exp [m.IsAddRightInvariant] [Fintype ι] [DecidableEq ι]
+theorem energy_nodes_le_exp
     (a : ι → E) (js : List ι) {b : ι → E → ℝ} (hb : ∀ j, ContDiff ℝ ∞ (b j))
     {Y : State E ι} (hY : Y.Smooth) (hc : Y.CompactSupport) {B δ : ℝ}
     (hB0 : 0 ≤ B) (hB : ∀ x, ∑ j, b j x ^ 2 ≤ B) (hδ : 0 ≤ δ) (hδ1 : δ ≤ 1) (k : ℕ) :
@@ -454,6 +488,8 @@ theorem energy_nodes_le_exp [m.IsAddRightInvariant] [Fintype ι] [DecidableEq ι
   convert hpow using 1
   congr 1
   ring
+
+end InvariantMeasure
 
 end Integration
 end FunctionalInequalities.Analysis.WaveSplitting

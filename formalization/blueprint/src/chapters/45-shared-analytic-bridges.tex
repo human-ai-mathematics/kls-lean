@@ -4747,6 +4747,701 @@ form taken by the variance estimate for isotropic $\mu$), then
   parts and the source Stein identity are Lemmas~\ref{lem:tilted-ibp-bounded-lipschitz} and~\ref{lem:weak-source-stein-identity} at $u$.
 \end{proof}
 
+\begin{lemma}[Gradient inverse and compact-local ellipticity at the regular-class moment witness]
+  \label{lem:letwin-regular-moment-inverse-ellipticity}
+  \lean{FunctionalInequalities.Analysis.posSemidef_sub_scalar_of_det_lower,
+        FunctionalInequalities.Analysis.injective_gradient_of_strictConvexOn,
+        FunctionalInequalities.Analysis.ae_posSemidef_hessianMatrix_sub_of_log_det,
+        FunctionalInequalities.Analysis.measurable_inverse_gradient_of_map_gradient,
+        FunctionalInequalities.Analysis.exists_regular_moment_potential_with_inverse,
+        FunctionalInequalities.Analysis.exists_regular_moment_potential_locally_elliptic}
+  \leanok
+  \uses{lem:letwin-weak-regular-moment-potential}
+  Supports for Letwin \cite{Letwin2026QuadraticKLS}, Lemma~2.2, in the strong regular class.
+  (i) For $n>0$, a real positive semidefinite $A$ with $A\le K\,\mathrm{Id}$ and $\delta\le\det A$ ($K,\delta>0$) satisfies
+  $A\ge(\delta/K^{n-1})\,\mathrm{Id}$.
+  (ii) On a finite-dimensional real inner product space, a differentiable strictly convex function has an injective gradient (every
+  dimension, zero included).
+  (iii) If a.e. $\nabla^2u$ is positive definite with $\log\det\nabla^2u=g$ for continuous $g$ and $\nabla^2u\le K\,\mathrm{Id}$, then on every
+  compact $S$ there is $\delta_S>0$ with $\nabla^2u\ge\delta_S\,\mathrm{Id}$ a.e. on $S$.
+  (iv) At the potential $u$ of Lemma~\ref{lem:letwin-weak-regular-moment-potential}, with all of its fields at the same $u$ and $L$:
+  $\nabla u$ is injective with a measurable everywhere left inverse, and $u$ is compact-locally uniformly elliptic in the sense of (iii).
+  The given-witness adapter applies to any normalized convex Lipschitz $C^1$ potential pushing $e^{-u}dx$ onto $1_Ke^{-W}dx$.
+  No $C^2$, smoothness, everywhere positive definiteness, surjectivity onto $\operatorname{int}K$ or diffeomorphism is asserted.
+\end{lemma}
+\begin{proof}
+  \leanok
+  (i) The eigenvalues lie in $[0,K]$ and their product is at least $\delta$, so each is at least $\delta/K^{n-1}$. (ii) Restrict to the
+  injective affine line through two points with equal gradients; strict convexity separates the endpoint derivatives. (iii) $g$ attains its
+  minimum on $S$; apply (i) with $\delta=e^{\min_S g}$. (iv) The pushforward gives strict convexity
+  (Caffarelli's argument, \texttt{strictConvexOn\_of\_map\_gradient}); (ii) and the measurable embedding of a continuous injective gradient give
+  the inverse; (iii) with $g=-u+W(\nabla u)$ and $K=16/\kappa$ gives ellipticity.
+\end{proof}
+
+\begin{theorem}[Target Stein kernel of the strong regular class]
+  \label{thm:letwin-regular-moment-target-stein-kernel}
+  \lean{FunctionalInequalities.Probability.Stein.hsNorm_sq_eq_trace_mul_self,
+        FunctionalInequalities.Probability.Stein.hessianKernel_posDefAE_of_map,
+        FunctionalInequalities.Probability.Stein.memLp_hsNorm_hessianKernel_of_map,
+        FunctionalInequalities.KLS.LogConcave.weak_hessianKernel_isSteinKernel,
+        FunctionalInequalities.Analysis.exists_regular_moment_target_stein_kernel}
+  \leanok
+  \uses{thm:letwin-regular-moment-weak-stein-coupling, lem:letwin-regular-moment-inverse-ellipticity, lem:letwin-hessian-kernel, lem:weak-source-stein-identity}
+  Weak counterpart of Letwin \cite{Letwin2026QuadraticKLS}, Lemma~2.7, with the Hilbert--Schmidt bound from Theorem~2.5. Under the R0
+  hypotheses ($n>0$, isotropic $\mu=1_Ke^{-W}dx$, $K$ compact convex with nonempty interior, $W$ smooth and $\kappa$-uniformly convex), at the
+  same $u$ and $L$ as Theorem~\ref{thm:letwin-regular-moment-weak-stein-coupling} (its whole flat trace-bound conjunction retained) and a
+  measurable everywhere left inverse $\Psi$ of that $\nabla u$, the kernel $\tau=\nabla^2u\circ\Psi$ is a Stein kernel of $\mu$
+  (Definition~2.6) that is $\mu$-a.e. positive definite and symmetric, has mean $\mathrm{Id}$, $|\tau|_{HS}\in L^2(\mu)$ and
+  $\int|\tau|_{HS}^2\,d\mu\le2n$. Generic adapters: a.e. positive definiteness and the Hilbert--Schmidt $L^2$ bound pass from $\nu$ to $\mu$ along
+  $\Psi_\#\mu=\nu$ for $C^1$ $u$; the kernel is a Stein kernel for every $C^1$ potential with Lipschitz gradient and an a.e. left inverse. This is
+  not the smooth moment map of Lemma~2.2, not everywhere positive definiteness, and not the merely convex source class.
+\end{theorem}
+\begin{proof}
+  \leanok
+  From $(\nabla u)_\#\nu=\mu$ and $\Psi\circ\nabla u=\mathrm{id}$, $\Psi_\#\mu=\nu$, which transports the a.e. statements and the $L^2$ bound. The
+  Stein identity is the bounded-Lipschitz source identity tested with $f\circ\nabla u$ and pushed forward. Since $|H|_{HS}^2=\operatorname{tr}(HH)$
+  for symmetric $H$, Theorem~2.5 at $B=\mathrm{Id}$ gives $\int|\tau|_{HS}^2\,d\mu=\int\operatorname{tr}(HH)\,d\nu\le2n$; the mean and symmetry
+  transport the same way.
+\end{proof}
+
+\begin{lemma}[Directional weak subsolution and local coefficient bounds at the regular-class witness]
+  \label{lem:letwin-regular-moment-directional-subsolution}
+  \lean{FunctionalInequalities.Analysis.integral_quadratic_flux_le_of_posSemidef,
+        FunctionalInequalities.Analysis.inverse_posSemidef_bounds,
+        FunctionalInequalities.Analysis.exists_compact_inverse_hessian_coefficient_bounds,
+        FunctionalInequalities.Analysis.integral_directional_hessian_flux_le,
+        FunctionalInequalities.Analysis.exists_regular_moment_directional_hessian_subsolution}
+  \leanok
+  \uses{lem:letwin-regular-moment-weak-hessian-evolution, lem:letwin-weak-hessian-evolution, lem:letwin-regular-moment-inverse-ellipticity}
+  Supporting step toward Letwin \cite{Letwin2026QuadraticKLS}, Lemma~2.2 (interior regularity of the moment map).
+  (i) Under an arbitrary measure and finite index type, entrywise integrable matrix fields with $\int F_{ij}=-\int E_{ij}$ and $E+H$ a.e.
+  positive semidefinite satisfy $\int v^{\top}Fv\le\int v^{\top}Hv$.
+  (ii) For positive definite $A$ with $\alpha\,\mathrm{Id}\le A\le\beta\,\mathrm{Id}$ ($\alpha,\beta>0$, every dimension):
+  $\beta^{-1}\mathrm{Id}\le A^{-1}\le\alpha^{-1}\mathrm{Id}$.
+  (iii) For a continuous $u$ with a.e.\ positive definite Hessian, continuous $\log\det\nabla^2u=g$ and $\nabla^2u\le K\,\mathrm{Id}$, every compact
+  $S$ has $c_0,c_1>0$ with $c_0\mathrm{Id}\le e^{-u}(\nabla^2u)^{-1}\le c_1\mathrm{Id}$ a.e.\ on $S$. For nonempty $S$:
+  $c_0=\min_Se^{-u}/K$, $c_1=\max_Se^{-u}/\delta_S$; for empty $S$ the constants are $1$.
+  (iv) Under the hypotheses of Lemma~\ref{lem:letwin-weak-hessian-evolution}, with $W$ convex and $\nabla^2u$ positive definite a.e., every
+  direction $v$ and every nonnegative compactly supported $C^1$ test $\psi$ satisfy
+  \[\int e^{-u}\sum_a\Big(\sum_b(\nabla^2u)^{-1}_{ba}\,\partial_bh_v\Big)\partial_a\psi\le\int e^{-u}h_v\psi,
+    \qquad h_v=v^{\top}\nabla^2u\,v,\quad \partial_bh_v=\sum_{ij}v_iv_jT_{bij}.\]
+  (v) At the same $u,L,L_F,T$ as Lemma~\ref{lem:letwin-regular-moment-weak-hessian-evolution}, all of its fields retained, (iv) holds, and so do
+  the coefficient bounds of (iii) with $g=-u+W(\nabla u)$ and $K=16/\kappa$. Strong regular class, $n>0$. Not weak Harnack, oscillation
+  decay, $C^{2}$ or Schauder regularity, nor the merely convex source class.
+\end{lemma}
+\begin{proof}
+  \leanok
+  (i) Contract each entry identity with $v$ and integrate the pointwise bound $-v^{\top}Ev\le v^{\top}Hv$. (ii) Conjugate by $A^{-1}$ and read off
+  the eigenvalues. (iii) Combine the compact-local floor of Lemma~\ref{lem:letwin-regular-moment-inverse-ellipticity} with (ii) and the extrema
+  of the continuous weight on $S$. (iv) In the weighted weak (2.6), $E+\nabla^2u=\nabla^2u\,\nabla^2W(\nabla u)\,\nabla^2u+\mathrm{traceGram}$ is
+  positive semidefinite a.e. (convex $W$; a.e.\ symmetric weak third derivatives); absorb $e^{-u}\psi\ge0$ and apply (i). (v) The source fields
+  supply all hypotheses; $\det=\exp g$ follows from the log-det field and convexity of $W$ from strong convexity.
+\end{proof}
+
+\begin{lemma}[Nonlinear weak test tools at the regular-class weak data]
+  \label{lem:letwin-rough-nonlinear-testing}
+  \lean{FunctionalInequalities.Analysis.exists_smooth_compact_extension_on_nonnegative_interval,
+        FunctionalInequalities.Analysis.exists_smooth_compact_log_shift_extension,
+        FunctionalInequalities.Analysis.exists_smooth_compact_rpow_shift_extension,
+        FunctionalInequalities.Analysis.compact_bounded_test_domination,
+        FunctionalInequalities.Analysis.hasWeakDerivAlong_comp_of_compact_bounded,
+        FunctionalInequalities.Analysis.hasWeakDerivAlong_log_shift_of_ae_nonneg_compact_bounded,
+        FunctionalInequalities.Analysis.hasWeakDerivAlong_rpow_shift_of_ae_nonneg_compact_bounded,
+        FunctionalInequalities.Analysis.directional_cutoff_data,
+        FunctionalInequalities.Analysis.integral_directional_hessian_flux_le_of_bounded_weak_test,
+        FunctionalInequalities.Analysis.rough_square_test_of_weak_data,
+        FunctionalInequalities.Analysis.posSemidef_quadratic_young}
+  \leanok
+  \uses{lem:letwin-regular-moment-directional-subsolution}
+  Supporting tools toward the interior regularity step of Letwin \cite{Letwin2026QuadraticKLS}, Lemma~2.2.
+  (i) A function smooth on $(-\delta,\infty)$ with $F(0)=0$ agrees, with its derivative, on $[0,B]$ with a smooth compactly supported
+  Lipschitz $\Phi$, $\Phi(0)=0$; in particular for $\log(\delta+t)-\log\delta$ and $(\delta+t)^q-\delta^q$, every real $q$.
+  (ii) For bounded compactly supported weak $H^1$ data $\eta$ (compactly supported, globally $L^2$ weak derivatives $a_i$) and $\Phi$ of class
+  $C^1$, Lipschitz, $\Phi(0)=0$: $\Phi\circ\eta$ has weak derivatives $\Phi'(\eta)a_i$, compactly supported and in $L^2$; if $\eta\ge0$ a.e. and
+  $\delta>0$, so do the normalized shifted logarithm and real powers with their physical derivatives.
+  (iii) For $\nabla u$ Lipschitz with weak Hessian tensor $T$, $b=\chi\,v^{\top}\nabla^2u\,v$ ($\chi$ a compactly supported $C^1$ cutoff) is bounded,
+  compactly supported, with weak derivatives $\chi\sum_{ij}v_iv_jT_{kij}+\partial_k\chi\,v^{\top}\nabla^2u\,v$.
+  (iv) The directional weak subsolution of Lemma~\ref{lem:letwin-regular-moment-directional-subsolution} holds against bounded compactly supported
+  weak $H^1$ tests $\eta\ge0$ a.e., with both pairings integrable; in particular for the rough square $\eta=b^2$.
+  (v) $2x^{\top}Ay\le\varepsilon\,x^{\top}Ax+\varepsilon^{-1}y^{\top}Ay$ for real positive semidefinite $A$, $\varepsilon>0$.
+  Not the positive unnormalized power test under an outer cutoff, a Caccioppoli or Moser estimate, or weak Harnack.
+\end{lemma}
+\begin{proof}
+  \leanok
+  (i) Multiply by a bump function equal to $1$ near $[0,B]$ whose support, the closed interval $[-\delta/2,B+\delta/2]$, lies in $(-\delta,\infty)$.
+  (ii) Approximate $\eta$ by smooth compactly supported functions with a common support and bound, a.e.\ convergence and $L^2$ convergence of the
+  gradients. Apply the classical chain rule, and pass both sides of the testing identity to the limit by dominated convergence and an $L^2$
+  pairing bound. The shifted logarithm and powers follow from (i) on the a.e.\ range $[0,\max(C,0)]$. (iii) Finite linearity and the compact
+  cutoff product rule. (iv) The bounded weak-test weighted identity contracted with positive semidefinite forcing at $\eta\ge0$; the square by the
+  bounded weak product rule. (v) Positive semidefiniteness at $\varepsilon x-y$.
+\end{proof}
+
+\begin{lemma}[$H^1$ energy and weak Sobolev tools for bounded weak supersolutions]
+  \label{lem:letwin-h1-energy-sobolev}
+  \lean{FunctionalInequalities.Analysis.Mollification.support_convolution_subset_cthickening_of_rOut_le,
+        FunctionalInequalities.Analysis.HasWeakDerivAlong.const_add_mul,
+        FunctionalInequalities.Analysis.exists_contDiff_compact_bounded_weak_deriv_approximation_of_support_subset,
+        FunctionalInequalities.Analysis.bounded_rpow_cutoff_weak_data,
+        FunctionalInequalities.Analysis.bounded_rpow_cutoff_weak_test,
+        FunctionalInequalities.Analysis.rpow_cutoff_quadratic_young,
+        FunctionalInequalities.Analysis.bounded_weak_supersolution_caccioppoli,
+        FunctionalInequalities.Analysis.eLpNorm_le_sum_eLpNorm_weak_deriv_of_compact_bounded,
+        FunctionalInequalities.Analysis.eLpNorm_six_le_sum_eLpNorm_weak_deriv_of_support_subset_two,
+        FunctionalInequalities.Analysis.eLpNorm_top_le_eLpNorm_weak_deriv_of_support_subset_one}
+  \leanok
+  \uses{lem:letwin-rough-nonlinear-testing}
+  Supporting $H^1$ tools toward Letwin \cite{Letwin2026QuadraticKLS}, Lemma~2.2, and Berman--Berndtsson
+  \cite{BermanBerndtsson2013RealMA}, Theorem~2.24(iii), in the form of Gilbarg--Trudinger (2001), (8.48)--(8.49).
+  Let $w$ be bounded with $w\ge0$ a.e., have coordinate weak derivatives $a_k$ in $L^2_{\mathrm{loc}}$ on
+  $\mathbb R^n$ (every $n$), and set $s=\delta+\max(w,0)$ with $\delta>0$. Let $\chi$ be a compactly supported $C^1$ cutoff.
+  (i) For every real $r$, $\chi s^r$ is bounded and compactly supported in $\operatorname{tsupport}\chi$, with weak
+  derivatives $\partial_k\chi\,s^r+\chi\,r s^{r-1}a_k$ in $L^2$. The square test $\chi^2 s^q$ is the case of the cutoff
+  $\chi^2$.
+  (ii) Caccioppoli. Let $A$ be a.e.\ measurable with $\alpha\le A\le\beta$ a.e.\ on $\operatorname{tsupport}\chi$, and let
+  $-F\int\eta\le\int a^{\top}A\nabla\eta$ hold for every bounded nonnegative weak test supported in
+  $\operatorname{tsupport}\chi$. Then for $p>0$ the three integrands below are integrable and
+  $\int\chi^2 s^{-p-1}|a|^2\le\frac{4\beta}{p^2\alpha}\int s^{1-p}|\nabla\chi|^2+\frac{2F}{p\alpha}\int\chi^2 s^{-p}$.
+  (iii) Weak Sobolev for bounded compactly supported $\eta$ with compactly supported, globally $L^2$ coordinate weak
+  derivatives $a_i$:
+  \begin{itemize}
+    \item for $n>2$, $\|\eta\|_q\le C_{\mathrm{GNS}}(2)\sum_i\|a_i\|_2$ with $1/q=1/2-1/n$;
+    \item for $n=2$, with supports in a compact $K$ and $\varepsilon>0$, the single exponent
+      $\|\eta\|_6\le C_{\mathrm{GNS}}(3/2)\,|K_\varepsilon|^{1/6}\sum_i\|a_i\|_2$, where $K_\varepsilon$ is the closed
+      $\varepsilon$-thickening;
+    \item for $n=1$, the essential bound $\|\eta\|_\infty\le|K_\varepsilon|^{1/2}\|a_0\|_2$.
+  \end{itemize}
+  At the strong regular-class witness the audit fixes one potential first. For each compact $S$ it fixes $\alpha,\beta$
+  and a density bound $B$. It then takes every direction $v$ and every cutoff with $\operatorname{tsupport}\chi\subseteq S$,
+  with $w=(16/\kappa)|v|^2-v^{\top}\nabla^2u\,v$ and $F_v=(16/\kappa)|v|^2B$.
+  None of this is Moser iteration, John--Nirenberg or weak Harnack (Gilbarg--Trudinger Theorem~8.18). It does not give
+  every finite exponent for $n=2$, or full radius scaling.
+\end{lemma}
+\begin{proof}
+  \leanok
+  (i) Truncate $w$ by an outer bump equal to $1$ near $\operatorname{tsupport}\chi$, apply the shifted real-power chain
+  rule of Lemma~\ref{lem:letwin-rough-nonlinear-testing} and the affine rule, then the compact $C^1$ product rule.
+  (ii) Test the supersolution inequality with $\chi^2 s^{-p}$. Absorb the cross term by the weighted Young inequality
+  $2\chi s^{-p}a^{\top}Ab\le\frac p2\chi^2 s^{-p-1}a^{\top}Aa+\frac2p s^{1-p}b^{\top}Ab$, and use the ellipticity bounds.
+  (iii) Mollify with bump radii at most $\varepsilon$, so all approximants are supported in one compact set inside
+  $K_\varepsilon$. Apply Mathlib's Gagliardo--Nirenberg--Sobolev inequality, H\"older on $K_\varepsilon$ for $n=2$, or the
+  compact fundamental theorem of calculus through the singleton-basis isometry for $n=1$. Pass to the limit by lower
+  semicontinuity along the a.e.\ convergent sequence.
+\end{proof}
+
+\begin{lemma}[Moser inputs at one regular-class witness]
+  \label{lem:letwin-moser-inputs}
+  \lean{FunctionalInequalities.Analysis.hasWeakDerivAlong_comp_of_bounded,
+        FunctionalInequalities.Analysis.hasWeakDerivAlong_log_max_shift_of_ae_nonneg_bounded,
+        FunctionalInequalities.Analysis.bounded_weak_supersolution_log_caccioppoli,
+        FunctionalInequalities.Analysis.bounded_weak_supersolution_power_energy,
+        FunctionalInequalities.Analysis.eLpNorm_finite_le_sum_eLpNorm_weak_deriv_of_support_subset_two,
+        FunctionalInequalities.Analysis.exists_smooth_concentric_cutoff_norm_fderiv_le,
+        FunctionalInequalities.Analysis.tendsto_eLpNorm_of_exponents_tendsto_atTop,
+        FunctionalInequalities.L2.sq_sum_eLpNorm_le_dim_mul_integral_sum_sq}
+  \leanok
+  \uses{lem:letwin-h1-energy-sobolev}
+  Inputs of a Moser iteration in the form of Gilbarg--Trudinger (2001), (8.48)--(8.49), supporting Letwin
+  \cite{Letwin2026QuadraticKLS}, Lemma~2.2.
+  (i) For bounded $\eta$ with coordinate weak derivatives in $L^2_{\mathrm{loc}}$ (no compact support) and $\Phi$ of class
+  $C^1$ and Lipschitz, $\Phi\circ\eta$ has weak derivatives $\Phi'(\eta)a_i$; in particular $\log(\delta+\max(w,0))$ for
+  $w\ge0$ a.e.
+  (ii) With the hypotheses of Lemma~\ref{lem:letwin-h1-energy-sobolev}(ii) and $s=\delta+\max(w,0)$:
+  \begin{itemize}
+    \item $\int\chi^2|\nabla\log s|^2\le\frac{4\beta}{\alpha}\int|\nabla\chi|^2+\frac{2F}{\alpha\delta}\int\chi^2$;
+    \item for $r<1/2$ and $p=1-2r$, $\int|\nabla(\chi s^r)|^2\le\bigl(2+\frac{8r^2\beta}{p^2\alpha}\bigr)\int s^{2r}|\nabla\chi|^2
+      +\frac{4r^2F}{p\alpha}\int\chi^2s^{2r-1}$.
+  \end{itemize}
+  (iii) For $n=2$ and every finite $q\ge2$,
+  $\|\eta\|_q\le C_{\mathrm{GNS}}(\tfrac{2q}{q+2})\,|K_\varepsilon|^{1/q}\sum_i\|a_i\|_2$.
+  (iv) In a finite-dimensional real inner product space one $D>0$ gives, for every center and radii $0\le r<R$, a smooth cutoff
+  that equals $1$ on the inner ball, is supported in the outer ball and satisfies $|\nabla\chi|\le D/(R-r)$.
+  (v) On a probability space, $\|f\|_{p_k}\to\|f\|_\infty$ (essential supremum) for essentially bounded $f$ and any exponents
+  $p_k\to\infty$.
+  (vi) $(\sum_i\|a_i\|_2)^2\le n\int\sum_ia_i^2$ for any measure.
+  At the strong regular-class witness the audit uses ONE potential and ONE $D$. For each compact $S$ it uses one
+  $\alpha,\beta,B$, for every direction and every cutoff in $S$, including dyadic families with radii $R(1+2^{-m})$.
+  At the same potential it gives the normalized closed-ball limit of $(\delta+\max(w,0))^{-1}$.
+  These are inputs, not the Moser recurrence, Morrey over all balls, John--Nirenberg or weak Harnack.
+\end{lemma}
+\begin{proof}
+  \leanok
+  (i) Test by test with an outer bump, the compact chain rule for $\Phi-\Phi(0)$ and the affine rule; the logarithm through
+  a smooth profile on the a.e.\ range.
+  (ii) Lemma~\ref{lem:letwin-h1-energy-sobolev}(ii) at $p=1$ and at $p=1-2r$, with $(x+y)^2\le2x^2+2y^2$.
+  (iii) The controlled approximation, the Gagliardo--Nirenberg--Sobolev inequality at $p=2q/(q+2)$, and H\"older on the
+  support.
+  (iv) A scalar profile composed with the normalized squared distance.
+  (v) Exponent monotonicity, and Chebyshev at an intermediate level of positive mass.
+  (vi) Finite Cauchy--Schwarz and $\|a_i\|_2^2=\int a_i^2$.
+\end{proof}
+
+\begin{lemma}[Morrey and critical-potential inputs]
+  \label{lem:letwin-morrey-potential-inputs}
+  \lean{FunctionalInequalities.Probability.integrable_exp_abs_of_moment_growth,
+        FunctionalInequalities.Probability.integrable_exp_toReal_of_moment_growth,
+        FunctionalInequalities.Probability.integrable_exp_toReal_of_scaled_high_moment_growth,
+        FunctionalInequalities.Analysis.measure_univ_le_of_ae_closedBall_ball_growth,
+        FunctionalInequalities.Analysis.restrict_ball_growth_of_local_ball_growth,
+        FunctionalInequalities.Analysis.exists_morrey_bound_of_cutoff_energy,
+        FunctionalInequalities.Analysis.lintegral_norm_sub_rpow_neg_le_of_ae_closedBall_ball_growth,
+        FunctionalInequalities.Analysis.lintegral_critical_radial_potential_rpow_le,
+        FunctionalInequalities.Analysis.lintegral_density_critical_potential_rpow_le,
+        FunctionalInequalities.Analysis.lintegral_density_critical_morrey_potential_rpow_le,
+        FunctionalInequalities.Analysis.integrable_exp_critical_morrey_potential}
+  \leanok
+  \uses{lem:letwin-moser-inputs}
+  Supporting inputs for Letwin \cite{Letwin2026QuadraticKLS}, Lemma~2.2: the Morrey hypothesis (7.51) of
+  Gilbarg--Trudinger (2001), Theorem~7.21, from the logarithmic energy (8.49), and the critical potential of Lemma~7.20 at
+  $p=n\ge2$. Explicit constants below are legitimate choices, not the printed numerical values.
+  (i) Ball growth. If $\nu$ is supported in $\overline B(x,D)$ with $\nu(B(x,r))\le Kr^d$, then $\nu(X)\le KD^d$. Local
+  growth for centres within $2R$ and radii $\le R$ gives growth of $\nu\llcorner B_R$ for every ball.
+  (ii) Morrey from cutoff energy. If $\int\chi^2|b|^2\le E_0\int|\nabla\chi|^2+E_1\int\chi^2$ for every $C^1$ cutoff in
+  $[0,1]$ supported in $\overline B_{4R}$, then $\int_{B_R\cap B_r(c)}|b|\le\omega_n2^n(1+E_0nD^2+E_1R^2)\,r^{n-1}$ for every
+  ball, where $D$ is the uniform concentric-cutoff constant.
+  (iii) Potentials. Measures with ball growth have radial potentials $\le Kd/(d-a)\,D^{d-a}$. The critical moments are
+  $\le A/(1-\mu)[((1-\mu)/\mu)Kq]^qD^N$ for $\mu\le1/2$, $q\ge2$. For a density with
+  $\int_{S\cap B_r(x)}|f|\le Kr^{n-1}$ and $K>0$, the potential $P=\int_S|x-y|^{1-n}|f(y)|\,dy$ is finite a.e., and
+  $\int_S\exp(P/(2e(n-1)K))\le2\omega_n\frac n{n-1}(1+4(n-1)^2)D^n$.
+  (iv) Moment growth $\int|f|^k\le A(Ck)^k$ gives $\int\exp(\sigma|f|)\le2A$ for $\sigma Ce\le1/2$.
+  At the strong regular-class witness the audit gives, at ONE potential, the all-ball Morrey bound of the logarithmic
+  gradient and, for $n\ge2$, the exponential integrability of its critical potential.
+  These are not Lemma~7.16, John--Nirenberg, the full Lemma~7.20 for $p>1$, or Moser iteration.
+\end{lemma}
+\begin{proof}
+  \leanok
+  (i) A right limit of radii, and the triangle inequality.
+  (ii) Concentric cutoffs from $r$ to $2r$, Haar volumes, and the pointwise Young inequality $\sqrt Q\le rQ+1/(4r)$; then (i).
+  (iii) A layer-cake tail bound, H\"older interpolation of radial kernels and Tonelli, then (iv).
+  (iv) The exponential series with $k^k/k!\le e^k$.
+\end{proof}
+
+\begin{lemma}[Bounded weak convex representation and critical John--Nirenberg]
+  \label{lem:letwin-bounded-jn-inputs}
+  \lean{FunctionalInequalities.Analysis.map_restrict_convex_ray_le,
+        FunctionalInequalities.Analysis.measure_mul_abs_sub_average_le_riesz_of_contDiffOn,
+        FunctionalInequalities.Analysis.lintegral_riesz_potential_le_diameter_mul_lintegral,
+        FunctionalInequalities.L2.memLp_sqrt_sum_sq,
+        FunctionalInequalities.L2.gradient_density_l1_of_coordinate_l2,
+        FunctionalInequalities.Analysis.measure_mul_abs_sub_average_le_riesz_of_bounded_weak_data,
+        FunctionalInequalities.Analysis.integrable_exp_abs_sub_average_of_bounded_weak_morrey,
+        FunctionalInequalities.Probability.integral_rpow_mul_integral_rpow_neg_le_of_log_exp}
+  \leanok
+  \uses{lem:letwin-morrey-potential-inputs}
+  Supporting inputs for Letwin \cite{Letwin2026QuadraticKLS}, Lemma~2.2, from Gilbarg--Trudinger (2001), Lemma~7.16 and
+  Theorem~7.21 at the critical exponent $p=n$.
+  (i) Convex representation. For $u\in C^1$ on an open convex $\Omega$, a measurable $S\subseteq\Omega$ and $x\in\Omega$ with $S$
+  within distance $D$ of $x$: $|S|\,|u(x)-u_S|\le\frac{D^n}{n}\int_\Omega|x-z|^{1-n}|Du(z)|\,dz$ (mass form, $|S|=0$ included).
+  (ii) $L^1$ potential. On a set of diameter at most $D$ ($n\ge2$), the critical Riesz potential of $f\in L^1$ is finite a.e.\
+  and its integral is at most $\omega_nnD\|f\|_1$; coordinate $L^2$ convergence gives $L^1$ convergence of Euclidean densities.
+  (iii) Weak representation. The inequality of (i) holds a.e.\ for GLOBALLY bounded weak $H^1_{\mathrm{loc}}$ data on a bounded
+  open convex domain ($n\ge2$), with $|Du|$ replaced by $\sqrt{\sum_i a_i^2}$.
+  (iv) John--Nirenberg. Under $\int_{\Omega\cap B(x,r)}\sqrt{\sum a_i^2}\le Kr^{n-1}$ for all balls and
+  $\sigma=[2(n-1)e]^{-1}n|\Omega|/D^n$, $\int_\Omega\exp(\frac{\sigma}{K}|u-u_\Omega|)\le2\omega_n\frac n{n-1}(1+4(n-1)^2)D^n$.
+  (v) Moments. $\int\exp(p|\log s-m|)\le A$ gives $\int s^p\int s^{-p}\le A^2$.
+  The audit proves, at one witness and for the local deficit, the actual John--Nirenberg estimate of $\log s$ on $B_{3R}$
+  with the radius-dependent exponent $\sigma/K$ and the power-moment product. These are not Lemma~7.16 for the domain-only
+  $W^{1,1}(\Omega)$ class or John--Nirenberg for $n=1$; the bounded weak Harnack inequality is Lemma~\ref{lem:letwin-bounded-weak-harnack}.
+\end{lemma}
+\begin{proof}
+  \leanok
+  (i) Segment integration, the homothety $y\mapsto x+t(y-x)$ with Jacobian $t^{-n}$ and the exact tail $\frac{D^N}{N}d^{1-N}$.
+  (ii) Tonelli and the subcritical radial bound; H\"older on a finite measure. (iii) A cutoff, the smooth approximation of
+  bounded compact weak data and an $L^1$-controlled subsequence of potential errors. (iv) (iii) at $S=\Omega$ and the critical
+  potential of Lemma~\ref{lem:letwin-morrey-potential-inputs}. (v) $s^{\pm p}\le e^{\pm pm}e^{p|\log s-m|}$.
+\end{proof}
+
+\begin{lemma}[Local bounded Moser inputs]
+  \label{lem:letwin-local-moser-inputs}
+  \lean{FunctionalInequalities.Analysis.local_rpow_cutoff_weak_data,
+        FunctionalInequalities.Analysis.local_rpow_cutoff_weak_test,
+        FunctionalInequalities.Analysis.exists_bounded_weak_log_extension,
+        FunctionalInequalities.Analysis.local_weak_supersolution_caccioppoli,
+        FunctionalInequalities.Analysis.local_weak_supersolution_power_energy,
+        FunctionalInequalities.Analysis.local_weak_supersolution_log_energy,
+        FunctionalInequalities.Analysis.weak_cutoff_sobolev_gain_of_energy,
+        FunctionalInequalities.Analysis.weak_cutoff_sobolev_gain_of_energy_of_bounded_log,
+        FunctionalInequalities.Analysis.restrict_ball_growth_of_small_ball_growth_and_mass,
+        FunctionalInequalities.Analysis.exists_buffered_morrey_bound_of_cutoff_energy,
+        FunctionalInequalities.Analysis.exists_centered_buffered_morrey_bound_of_cutoff_energy}
+  \leanok
+  \uses{lem:letwin-morrey-potential-inputs, lem:letwin-bounded-jn-inputs}
+  Supporting inputs for Letwin \cite{Letwin2026QuadraticKLS}, Lemma~2.2, in the locally nonnegative bounded class of
+  Gilbarg--Trudinger (2001), Theorem~8.18: $w$ bounded with weak derivatives $a$ in $L^2_{\mathrm{loc}}$, but $w\ge0$ only
+  a.e.\ on the support of the cutoff $\chi$; $s=\delta+\max(w,0)$, $\delta>0$.
+  (i) Local tests. $\chi s^q$ and $\chi^2s^q$ (every real $q$) carry the exact weak derivatives, are compactly supported in
+  $\operatorname{supp}\chi$, and $\chi^2s^q\ge0$ pointwise.
+  (ii) Local energies. The Caccioppoli inequality with constants $4\beta/(p^2\alpha)$, $2F/(p\alpha)$, the power energy of
+  $\chi s^r$ for $r<1/2$, and the logarithmic energy $\int\chi^2|s^{-1}a|^2\le(4\beta/\alpha)\int|\nabla\chi|^2+
+  (2F/(\alpha\delta))\int\chi^2$, with no weak derivative of $\log s$ asserted.
+  (iii) Weak extension. One bounded $H$ with weak derivatives $dH$ in $L^2_{\mathrm{loc}}$, chosen before every domain,
+  equals $\log s$ with $dH=s^{-1}a$ a.e.\ on every measurable set where $w\ge0$ a.e.
+  (iv) Buffered Morrey. Cutoff energy on $\overline B_{4R}$ gives $\int_{B_{3R}\cap B_r(c)}|b|\le\omega_n16^n
+  (1+E_0nD^2+E_1R^2)\,r^{n-1}$ for every ball; the ball growth uses small balls and a separate mass bound.
+  (v) One-step gain. For $n>2$ and $1/q=1/2-1/n$, a given power energy of $\chi s^r$ gives
+  $\|s^r\|_{L^q(V)}^2\le C_{\mathrm{GNS}}^2n(\gamma nL^2+f/\delta)\int_Us^{2r}$.
+  The audit proves, at one public-producer witness and for the local deficit $M-h_v$ with the cap $h_v\le M$ only on
+  $\overline B_{4R}$, the local logarithmic energy, one weak extension, the all-ball Morrey bound on $B_{3R}$ and, for
+  $n\ge2$, the exponential integrability of the critical potential on $B_{3R}$; and one global-class dyadic gain step for
+  $n>2$; there the coefficients are chosen once per radius and the Morrey domain is centred at the origin.
+  (vi) Centred and fixed-compact form. The bound (iv) holds at every domain centre $x_0$ with $D$ fixed first. The audit also
+  chooses the coefficients ONCE per compact $S$ before all centres and radii with $\overline B(x_0,4R)\subseteq S$, and keeps
+  all linear power data, the power and logarithmic energies, one weak extension and the centred Morrey bound; under
+  $FR^2\le\alpha\delta$ it adds, inside the same extension, John--Nirenberg and the power moments at the uniform exponent
+  $p_0=\tau n/(32^n(3+4\beta nD^2/\alpha))$. These are not the full Theorem~8.18 for unbounded $W^{1,2}$ data; the Moser iteration
+  for bounded data is Lemma~\ref{lem:letwin-bounded-weak-harnack}.
+\end{lemma}
+\begin{proof}
+  \leanok
+  (i) The compact smooth power profile on $[0,C]$ and the bounded noncompact chain rule applied to $w$ itself, identified
+  with $\max(w,0)$ only on $\operatorname{supp}\chi$. (ii) Test with $\chi^2s^{-p}$ and absorb the cross term; $p=1$ and
+  $s^{-1}\le\delta^{-1}$ for the logarithm. (iii) $H=\log\delta+\Phi\circ w$ for the compact log profile $\Phi$. (iv) Cutoffs
+  from $r$ to $2r$ inside $B_{15R/4}$, the cutoff $3R\to4R$ for the mass, Young's inequality, then (i) of
+  Lemma~\ref{lem:letwin-morrey-potential-inputs} in its small-ball form. (v) Domination and the critical Gagliardo--Nirenberg--Sobolev inequality.
+\end{proof}
+
+\begin{lemma}[Bounded actual weak Harnack inequality]
+  \label{lem:letwin-bounded-weak-harnack}
+  \lean{FunctionalInequalities.Analysis.geometric_exponential_recurrence_bound,
+        FunctionalInequalities.Analysis.geometric_root_recurrence_bound,
+        FunctionalInequalities.Analysis.finite_geometric_root_recurrence_bound,
+        FunctionalInequalities.Analysis.le_rpow_one_div_mul_of_rpow_le,
+        FunctionalInequalities.Analysis.eLpNorm_top_le_of_shrinking_norm_steps,
+        FunctionalInequalities.Analysis.finite_normalized_eLpNorm_sequence_bound,
+        FunctionalInequalities.Analysis.tendsto_eLpNorm_finite_measure,
+        FunctionalInequalities.Analysis.radius_normalized_norm_mono_exponent,
+        FunctionalInequalities.Analysis.inverse_power_eLpNorm_square,
+        FunctionalInequalities.Analysis.ofReal_integral_rpow_eq_eLpNorm_rpow,
+        FunctionalInequalities.Analysis.memLp_rpow_of_bounded_log,
+        FunctionalInequalities.Analysis.memLp_nonpos_power_of_log_measurable,
+        FunctionalInequalities.Analysis.inverse_norm_power_gain,
+        FunctionalInequalities.Analysis.positive_norm_power_gain,
+        FunctionalInequalities.Analysis.positive_power_eLpNorm_top_square,
+        FunctionalInequalities.Analysis.inverse_power_eLpNorm_top_square,
+        FunctionalInequalities.Analysis.eLpNorm_inverse_eq_inv_essInf,
+        FunctionalInequalities.Analysis.le_mul_essInf_of_inverse_norm_product,
+        FunctionalInequalities.Analysis.unshifted_bound_of_shifted_inverse_norm_products,
+        FunctionalInequalities.Analysis.mul_eLpNorm_inv_top_le_of_moment_product,
+        FunctionalInequalities.Analysis.weak_cutoff_sobolev_gain_of_energy_two_of_support,
+        FunctionalInequalities.Analysis.weak_cutoff_sobolev_gain_of_energy_two_of_support_of_bounded_log,
+        FunctionalInequalities.Analysis.volume_cthickening_le_of_subset_closedBall,
+        FunctionalInequalities.Analysis.scaled_weak_cutoff_sobolev_gain_two_of_bounded_log,
+        FunctionalInequalities.Analysis.weak_cutoff_sobolev_gain_of_energy_one_of_support,
+        FunctionalInequalities.Analysis.weak_cutoff_sobolev_gain_of_energy_one_of_support_of_bounded_log,
+        FunctionalInequalities.Analysis.measure_mul_abs_sub_average_le_of_bounded_weak_data_one,
+        FunctionalInequalities.Analysis.integrable_exp_abs_sub_average_one_of_density_mass,
+        FunctionalInequalities.Analysis.inverse_essential_bound_of_cutoff_power_energy,
+        FunctionalInequalities.Analysis.positive_norm_bound_of_cutoff_power_energy,
+        FunctionalInequalities.Analysis.inverse_essential_bound_two_of_cutoff_power_energy,
+        FunctionalInequalities.Analysis.positive_norm_bound_two_of_cutoff_power_energy,
+        FunctionalInequalities.Analysis.inverse_essential_bound_one_of_cutoff_power_energy,
+        FunctionalInequalities.Analysis.positive_essential_bound_one_of_cutoff_power_energy}
+  \leanok
+  \uses{lem:letwin-local-moser-inputs, lem:letwin-bounded-jn-inputs}
+  Supporting results for Letwin \cite{Letwin2026QuadraticKLS}, Lemma~2.2, from Gilbarg--Trudinger (2001), Theorem~8.18 for
+  bounded data, by the Moser iteration.
+  (i) Recurrences. If $x_{k+1}\le\exp(\frac{a^k}{p}(A+Bk))\,x_k$ with $0\le a<1$, then
+  $x_k\le\exp((\frac{A}{1-a}+\frac{Ba}{(1-a)^2})/p)\,x_0$; the root form with multipliers $(C4^m)^{1/(p_0\kappa^m)}$ follows.
+  (ii) Moser iteration. For measures $\mu_m$ dominating $\nu$, exponents $p_0\kappa^m$ ($\kappa>1$) and a physical radius
+  exponent $a$ with $N/\kappa+a=N$, the one-step bounds
+  $\|f\|_{p_0\kappa^{m+1},\mu_{m+1}}^{p_0\kappa^m}\le C4^mR^{-a}\|f\|_{p_0\kappa^m,\mu_m}^{p_0\kappa^m}$ give
+  $\|f\|_{\infty,\nu}\le C'R^{-N/p_0}\|f\|_{p_0,\mu_0}$, and the same at every finite horizon.
+  (iii) Endpoints. Given the cutoff power energies of $s\ge\delta$ on $\overline B(x_0,4R)$ under $FR^2\le\alpha\delta$, with $C$
+  chosen before all centres, radii and data: $\|s^{-1}\|_{\infty,B(x_0,R)}\le C R^{-n/p_0}\|s^{-1}\|_{p_0,\overline B(x_0,2R)}$,
+  and the positive bound $R^{-n/p}\|s\|_{p,B(x_0,2R)}\le CR^{-n/p_0}\|s\|_{p_0,B(x_0,3R)}$, for $n>2$ and $0<p<n/(n-2)$, and
+  for $n=2$ and every finite $p>0$ with the physical exponent $a=2-2/g$; for $n=1$ direct one-step essential bounds.
+  (iv) Products and shifts. Moment products $\int s^{p_0}\int s^{-p_0}\le(c(aR)^N)^2$ give the radius-free product
+  $R^{-N/p_0}\|s\|_{p_0}\|s^{-1}\|_\infty\le C(ca^N)^{2/p_0}$; $\|s^{-1}\|_\infty=(\operatorname{ess\,inf}s)^{-1}$, and
+  bounds for every shift $\delta>k$ give $A\|w\|_p\le C(\operatorname{ess\,inf}w+k)$ with $C<\infty$.
+  (v) The case $n=1$. The kernel-one representation of bounded weak data and the density-mass bound give exponential
+  integrability of $|u-u_\Omega|$ directly, without John--Nirenberg or the critical exponent.
+  The audit \texttt{research/audits/Letwin/Caccioppoli.lean} proves in its final section, at ONE fixed-compact witness with all constants chosen per
+  compact $S$ before every centre, radius, direction and cap, the full-exponent same-witness products for $n>2$, $n=2$ and $n=1$, and
+  for every $n>0$ the weak Harnack inequality for the deficit $w=M-v^{\top}\nabla^2u\,v\ge0$ a.e.\ on
+  $\overline B(x_0,4R)\subseteq S$:
+  $R^{-n/p}\|w\|_{p,B(x_0,2R)}\le C(p)\,(\operatorname{ess\,inf}_{B(x_0,R)}w+MBR^2/\alpha)$ for $0<p<n/(n-2)$ ($n>2$) and
+  every finite $p>0$ ($n\le2$). These are not the full Theorem~8.18 for unbounded $W^{1,2}$ data or rough coefficients
+  ($q>n$), a pointwise infimum or regular representative, oscillation decay, H\"older or $C^{2,\alpha}$ regularity, or the
+  merely convex source class.
+\end{lemma}
+\begin{proof}
+  \leanok
+  (i) Summation of the exponents, $\sum_ka^k=\frac1{1-a}$ and $\sum_kka^k=\frac{a}{(1-a)^2}$. (ii) Radius normalisation by
+  $N/\kappa+a=N$, then (i), finite-measure exponent monotonicity and the $L^p\to L^\infty$ limit. (iii) Dyadic cutoffs from
+  $2R$ to $R$ (inverse) and $5R/2$ to $2R$ (positive), the weak Sobolev gains of
+  Lemma~\ref{lem:letwin-local-moser-inputs} and their $n=2$, $n=1$ forms, a backward geometric chain of exponents below $1$
+  for the positive boost, then (ii). (iv) H\"older between the moment integrals and the inverse endpoint, an exact radius
+  cancellation, and the limit $\delta\downarrow k$ by continuity of $C\cdot$ for finite $C$. (v) Segment integration with
+  kernel $|z-x|^0=1$. The audit uses Lemma~\ref{lem:letwin-bounded-jn-inputs} for $n\ge2$, (v) for $n=1$, and a case
+  analysis on $n$ for the essential-infimum form.
+\end{proof}
+
+\begin{lemma}[Uniformly positive fixed finite rank-one frame]
+  \label{lem:gt-uniform-rank-one-frame}
+  \lean{FunctionalInequalities.Analysis.exists_uniform_positive_rank_one_frame,
+        FunctionalInequalities.Analysis.coefficient_le_cap,
+        FunctionalInequalities.Analysis.exists_invertible_congruence_of_posDef}
+  \leanok
+  Gilbarg--Trudinger (2001), Lemma~17.13 (statement pp.~454--455, proof pp.~462--463), supporting Letwin
+  \cite{Letwin2026QuadraticKLS}, Lemma~2.2. For $n>0$ and $0<\lambda<\Lambda$ there are finitely many unit vectors
+  $\gamma_1,\dots,\gamma_N\in\mathbb R^n$, including every $e_i$ and every $(e_i+e_j)/\sqrt2$ ($i\ne j$), and $\lambda_*>0$
+  with $\lambda_*<\Lambda$, all chosen before any matrix, such that every positive definite $A$ with
+  $\lambda I\le A\le\Lambda I$ is $A=\sum_k\beta_k\gamma_k\gamma_k^{\top}$ with $\lambda_*\le\beta_k\le\Lambda$ for EVERY $k$.
+  Positive definite matrices of the same size are congruent, $A=SBS^{\top}$ with $S$ invertible (Eq.~(17.55)); a nonnegative
+  combination of unit rank-one matrices with $A\le\Lambda I$ has every coefficient at most $\Lambda$.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Transport the ordered-pair chart of a fixed positive definite center by the congruence to each $A$; its coefficients are
+  positive on an open neighbourhood. Finitely many neighbourhoods cover the compact interval $[\lambda/2\,I,\Lambda I]$ in the
+  ordinary entrywise topology; concatenate their normalized directions with the prescribed ones, represent
+  $A-\varepsilon\sum_k\gamma_k\gamma_k^{\top}$ ($\varepsilon=\lambda/(2N)$) in one neighbourhood and add $\varepsilon$ to every
+  coefficient. Testing $\Lambda I-A\succeq0$ against $\gamma_k$ bounds $\beta_k$ by $\Lambda$; representing $\lambda I$ gives
+  $\lambda_*\le\lambda<\Lambda$.
+\end{proof}
+
+\begin{lemma}[Scalar iteration lemma]
+  \label{lem:gt-scalar-modulus-iteration}
+  \lean{FunctionalInequalities.Analysis.two_scale_modulus_bound,
+        FunctionalInequalities.Analysis.modulus_bound_of_scale_contraction,
+        FunctionalInequalities.Analysis.exists_modulus_bound_of_scale_contraction}
+  \leanok
+  Gilbarg--Trudinger (2001), Lemma~8.23 (pp.~201--202). Let $0<\gamma,\tau<1$. There is $C=\max(\gamma^{-1},(1-\gamma)^{-1})$
+  such that for every $\mu\in(0,1)$, with $\alpha=(1-\mu)\log\gamma/\log\tau>0$, all nondecreasing nonnegative $\omega,\sigma$ on
+  $(0,R_0]$ with $\omega(\tau r)\le\gamma\,\omega(r)+\sigma(r)$ satisfy
+  $\omega(R)\le C\bigl((R/R_0)^{\alpha}\omega(R_0)+\sigma(R^{\mu}R_0^{1-\mu})\bigr)$ for $0<R\le R_0$. A scalar lemma only; it is
+  not an oscillation estimate for any equation.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Iterate the recurrence $k$ times with $\tau^{k+1}\le R/R_1<\tau^k$ and $R_1=R^{\mu}R_0^{1-\mu}$, then use monotonicity.
+\end{proof}
+
+\begin{lemma}[Essential infimum of a bounded deficit]
+  \label{lem:essential-deficit-identity}
+  \lean{FunctionalInequalities.Analysis.essInf_ofReal_deficit_eq_sub_essSup}
+  \leanok
+  For a nonzero measure and a real function with $0\le f\le M$ a.e.,
+  $\operatorname{ess\,inf}(M-f)=M-\operatorname{ess\,sup}f$ (as extended nonnegative values). Used for directional deficits as
+  in Gilbarg--Trudinger (2001), \S17.4. No pointwise extremum or regular representative is asserted.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Monotone continuous image of the a.e.\ liminf and $\liminf(M-f)=M-\limsup f$ for bounded, cobounded $f$.
+\end{proof}
+
+\begin{lemma}[Weak Harnack inequality for given bounded weak supersolutions]
+  \label{lem:given-data-weak-harnack}
+  \lean{FunctionalInequalities.Analysis.bounded_weak_harnack_of_given_data,
+        FunctionalInequalities.Analysis.cutoff_power_data_of_weak_supersolution_on_set,
+        FunctionalInequalities.Analysis.exists_weak_log_extension_with_energy_on_set}
+  \leanok
+  \uses{lem:letwin-bounded-weak-harnack, lem:letwin-local-moser-inputs, lem:letwin-bounded-jn-inputs}
+  Gilbarg--Trudinger (2001), Theorem~8.18 with (8.47)--(8.49), pp.~194--196, in the bounded symmetric pure-divergence case, for
+  GIVEN data. For $n>0$ and $\alpha,\beta>0$ there is $C(p)>0$, chosen before every ball, coefficient matrix, function,
+  derivative, bound and forcing, such that: if $w$ is globally bounded with weak derivatives $a$ in $L^2_{\mathrm{loc}}$, $A$ is
+  a.e.\ measurable with $\alpha I\le A\le\beta I$ and $w\ge0$ a.e.\ on $\overline B(x_0,4R)$, $F\ge0$, and
+  $-F\int\eta\le\int a^{\top}A\nabla\eta$ for every bounded nonnegative compactly supported weak test with function and
+  derivative supported in $\overline B(x_0,4R)$, then
+  $R^{-n/p}\|w\|_{L^p(B(x_0,2R))}\le C(p)\bigl(\operatorname{ess\,inf}_{B(x_0,R)}w+FR^2/\alpha\bigr)$ for every $p>0$ with
+  $n\le2$ or $p<n/(n-2)$. The audit proves, at ONE regular moment potential $u$ with all its regular-class data (convexity,
+  normalization and pushforward, $C^1$ with Lipschitz gradient, Lipschitz right side, a.e.\ positive definite Hessian with the
+  log-determinant identity and cap, weak Hessian tensor), and for each compact $S$ coefficients $\alpha,\beta,B$ and $C(p)$
+  before every center, radius, direction and cap, this inequality for every deficit $M-v^{\top}\nabla^2u\,v$ capped a.e.\ on
+  $\overline B(x_0,4R)$, with forcing $MB$. Not the unbounded, nonsymmetric, lower-order or domain-only Theorem~8.18, and not an
+  oscillation estimate.
+\end{lemma}
+\begin{proof}
+  \leanok
+  The given-data cutoff power energies and one weak logarithm identified a.e.\ on the ball, the Morrey bound and
+  John--Nirenberg ($n\ge2$) or the kernel-one representation ($n=1$), the Moser endpoints of
+  Lemma~\ref{lem:letwin-bounded-weak-harnack}, the moment-to-product bridge and the finite-constant shift removal.
+\end{proof}
+
+\begin{lemma}[Frame oscillation decay of a log-determinant matrix field]
+  \label{lem:frame-log-det-oscillation}
+  \lean{FunctionalInequalities.Analysis.oscillation_of_fixed_frame_and_essential_harnack,
+        FunctionalInequalities.Analysis.pairwise_essential_deficit_comparison_of_fixed_frame,
+        FunctionalInequalities.Analysis.averaged_deficit_bound_of_essential_harnack,
+        FunctionalInequalities.Analysis.directional_deficit_le_sum_of_logdet,
+        FunctionalInequalities.Analysis.finite_essential_width_contraction,
+        FunctionalInequalities.Analysis.essential_width_power_of_quarter_contraction,
+        FunctionalInequalities.Analysis.power_modulus_of_quarter_scale_contraction}
+  \leanok
+  \uses{lem:gt-uniform-rank-one-frame, lem:gt-scalar-modulus-iteration, lem:essential-deficit-identity}
+  Rough-divergence form of Gilbarg--Trudinger (2001), Lemma~17.14 with the frame of Lemma~17.13. Let $P$ be a matrix field with
+  $P\succ0$, $P\le K I$ and $\log\det P=V$ a.e.\ ($V$ Lipschitz), and let $\rho P^{-1}\in[\alpha,\beta]$ a.e.\ on $S$
+  ($0\le\rho\le B$ on $S$) decompose in one fixed unit frame with coefficients in $[l_c,u_c]$. Assume an essential weak Harnack
+  law at $p=1$ for the directional deficits $M-\gamma_k^{\top}P\gamma_k$. Then there are $0<\theta<1$ and $C>0$, chosen before
+  every ball, such that the summed essential widths of the frame quadratic forms on $B(x_0,R)$ are at most $\theta$ times
+  those on $B(x_0,4R)$ plus $C(R+R^2)$ whenever $\overline B(x_0,4R)\subseteq S$. A quarter-scale contraction then gives,
+  through the scalar Lemma~8.23 at $\tau=1/4$, $\mu=1/2$, a power decay $Qr^{\eta}$ with $\eta,Q$ before every center and
+  radius. Essential extrema only. The frame and the Harnack law are explicit premises; this is not the classical $C^4$
+  Lemma~17.14.
+\end{lemma}
+\begin{proof}
+  \leanok
+  The log-determinant supporting plane gives the pairwise deficit comparison; the $p=1$ Harnack law normalized by the ball
+  mass bounds the averaged deficits; the finite width absorption contracts the summed widths.
+\end{proof}
+
+\begin{lemma}[Hölder representatives and $C^2$ from a continuous Hessian]
+  \label{lem:holder-hessian-regularity}
+  \lean{FunctionalInequalities.Analysis.exists_local_holder_representative_of_essential_power,
+        FunctionalInequalities.Analysis.ae_forall_open_real_essential_bounds,
+        FunctionalInequalities.Analysis.holderWith_dense_extension,
+        FunctionalInequalities.Analysis.glue_continuous_ae_representatives_on_balls,
+        FunctionalInequalities.Analysis.exists_matrix_entry_holder_representatives,
+        FunctionalInequalities.Analysis.hasFDerivAt_of_lipschitz_continuous_ae_fderiv,
+        FunctionalInequalities.Analysis.contDiff_two_of_continuous_ae_hessian,
+        FunctionalInequalities.Analysis.everywhere_posDef_logdet_of_continuous_hessian_ae}
+  \leanok
+  \uses{lem:frame-log-det-oscillation}
+  The following holds without convexity assumptions.
+  An a.e.\ bounded function whose essential widths on $B(x,r)$ are at most $Qr^{\eta}$ for every center of an open set $U$
+  has a continuous Hölder representative on $U$. The proof uses a common good set built over a countable basis and a dense
+  extension. Entrywise representatives of a matrix field follow from coordinate and normalized-pair quadratic forms.
+  Continuous a.e.\ representatives on the balls $B(0,m+1)$ glue to one continuous function. A Lipschitz map whose derivative
+  agrees a.e.\ with a continuous field is $C^1$ with that derivative (by shrinking mollifiers). A $C^1$ function with
+  Lipschitz gradient and a continuous a.e.\ Hessian representative is $C^2$. If its Hessian is continuous, an a.e.\ positive
+  definite log-determinant equation with cap holds at every point, by the quantitative determinant floor, the closed
+  positive semidefinite cone and the support of Lebesgue measure.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Dense Hölder extension, open-overlap compatibility of continuous a.e.\ representatives, the locally uniform derivative
+  limit theorem, and and the quantitative determinant floor
+  \texttt{ae\_posSemidef\_hessianMatrix\_sub\_of\_log\_det}.
+\end{proof}
+
+\begin{lemma}[Regular moment potential with Hölder Hessian]
+  \label{lem:regular-moment-hessian-holder}
+  \lean{FunctionalInequalities.Analysis.exists_regular_moment_potential_holder_hessian}
+  \leanok
+  \uses{lem:given-data-weak-harnack, lem:frame-log-det-oscillation, lem:holder-hessian-regularity}
+  Letwin, arXiv:2607.24164v1, Lemma~2.2, support in the strong class. Setting: $n>0$, smooth $\kappa$-uniformly convex $W$
+  ($\kappa>0$), compact convex $K$ with nonempty interior, and the normalized isotropic law $1_K e^{-W}$. One convex potential
+  $u$ keeps all of its regular-class data: Lipschitz bound, $\int e^{-u}=1$, $(\nabla u)_{\#}e^{-u}=\mu$, $C^1$ with a
+  $16/\kappa$-Lipschitz gradient, Lipschitz right side, the a.e.\ positive definite Hessian with
+  $\log\det\nabla^2u=-u+W(\nabla u)$ and cap $16/\kappa$, and the weak third derivative. The same $u$ is $C^2$ with continuous
+  Hessian. Its Hessian is positive definite with the log-determinant equation and cap at every point. On every ball
+  $B(0,s)$ all Hessian entries are Hölder with one exponent and constant chosen before the entries. Not Schauder/$C^\infty$
+  regularity, the gradient diffeomorphism or the merely convex source class, so Lemma~2.2 remains partial.
+\end{lemma}
+\begin{proof}
+  \leanok
+  At the regular moment potential of the weak Hessian producer, the given-data weak Harnack law gives, per compact set, the
+  frame oscillation decay of Lemma~\ref{lem:frame-log-det-oscillation} with the fixed frame of Gilbarg--Trudinger,
+  Lemma~17.13. The resulting power decay yields Hölder representatives of every Hessian entry, which glue to one continuous
+  representative. Lemma~\ref{lem:holder-hessian-regularity} then gives $C^2$ and the everywhere equation.
+\end{proof}
+
+\begin{lemma}[Averaged-inverse coefficients of the log-determinant]
+  \label{lem:log-det-averaged-inverse}
+  \lean{FunctionalInequalities.Analysis.log_det_sub_eq_integral_trace,
+        FunctionalInequalities.Analysis.log_det_sub_eq_integral_trace_of_posDef,
+        FunctionalInequalities.Analysis.log_det_sub_eq_sum_averaged_inverse,
+        FunctionalInequalities.Analysis.log_det_sub_eq_sum_averaged_inverse_of_posDef,
+        FunctionalInequalities.Analysis.contDiffAt_log_det,
+        FunctionalInequalities.Analysis.contDiffAt_log_det_of_posDef,
+        FunctionalInequalities.Analysis.abs_inv_sub_inv_entry_le,
+        FunctionalInequalities.Analysis.holderWith_inverse_entries,
+        FunctionalInequalities.Analysis.holderWith_averaged_inverse_entries,
+        FunctionalInequalities.Analysis.exists_uniform_inverse_entry_bound_on_compact,
+        FunctionalInequalities.Analysis.exists_holder_averaged_inverse_entries_of_posDef,
+        FunctionalInequalities.Analysis.holderWith_probability_mean,
+        FunctionalInequalities.Analysis.holderWith_unit_interval_mean}
+  \leanok
+  Gilbarg--Trudinger (2001), (17.56) and the coefficients of Lemma~17.16. For real square matrices with
+  $\det(A+t(B-A))\ne0$ on $[0,1]$,
+  $\log\det B-\log\det A=\int_0^1\operatorname{tr}((A+t(B-A))^{-1}(B-A))\,dt
+  =\sum_{i,j}\bigl(\int_0^1(A+t(B-A))^{-1}_{ij}\,dt\bigr)(B-A)_{ji}$; for positive definite endpoints the nonsingularity of
+  the segment is derived, and $M\mapsto\log\det M$ is $C^k$ at every nonsingular matrix. Inverse entries satisfy
+  $|A^{-1}_{ij}-B^{-1}_{ij}|\le n^2L^2d$. On a compact space, positive definite fields $P,Q$ with $(C,r)$-Hölder entries,
+  $r>0$, have a uniform inverse cap $L>0$ (derived), and every averaged inverse entry
+  $x\mapsto\int_0^1((1-t)P(x)+tQ(x))^{-1}_{ij}\,dt$ is $(n^2L^2C,r)$-Hölder; Hölder moduli survive probability and unit-interval
+  averages. Prerequisites for the linear Schauder estimates only; no Schauder estimate is claimed.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Fundamental theorem of calculus with Jacobi's formula, continuity of the matrix inverse at nonsingular matrices, the
+  resolvent identity $A^{-1}-B^{-1}=A^{-1}(B-A)B^{-1}$, and compactness of $X\times[0,1]$.
+\end{proof}
+
+\begin{lemma}[Gradient image and inverse of a strictly convex function]
+  \label{lem:strict-convex-gradient-inverse}
+  \lean{FunctionalInequalities.Analysis.mem_range_gradient_iff_tilt_min,
+        FunctionalInequalities.Analysis.convex_range_gradient,
+        FunctionalInequalities.Analysis.isOpen_range_gradient,
+        FunctionalInequalities.Analysis.exists_linear_lower_bound_of_strict_min,
+        FunctionalInequalities.Analysis.exists_min_of_linear_lower_bound,
+        FunctionalInequalities.Analysis.isOpenMap_gradient_of_strictConvexOn,
+        FunctionalInequalities.Analysis.exists_gradient_homeomorph_range,
+        FunctionalInequalities.Analysis.contDiffOn_invFun_of_injective_of_hasFDerivAt_equiv,
+        FunctionalInequalities.Analysis.hasFDerivAt_invFun_of_injective,
+        FunctionalInequalities.Analysis.exists_gradient_deriv_equiv_of_posDef,
+        FunctionalInequalities.Analysis.contDiffOn_invFun_gradient_of_posDef,
+        FunctionalInequalities.Analysis.fderiv_invFun_gradient_comp_fderiv}
+  \leanok
+  For a differentiable convex $u$, $p\in\operatorname{range}\nabla u$ if and only if $u-\langle p,\cdot\rangle$ attains its
+  minimum. If $u$ is strictly convex on a proper space, such tilts grow linearly, so the range of $\nabla u$ is convex and open;
+  in finite dimension $\nabla u$ is an open map and a homeomorphism onto its range (compactness and coercive tilts; no invariance
+  of domain and no invertible Hessian). If $\nabla^2u(x)$ is positive definite, $D\nabla u(x)$ is an isomorphism whose
+  standard-basis matrix is $\nabla^2u(x)^{\top}$. For $C^{k+1}$ strictly convex $u$, $k\ne0$, with positive definite Hessian
+  everywhere, the inverse of $\nabla u$ is $C^k$ on the range (inverse function theorem), and
+  $D(\nabla u)^{-1}(\nabla u(x))\circ D\nabla u(x)=\mathrm{id}$. No regularity of $u$ is bootstrapped.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Supporting planes and Fermat's rule; linear growth from a strict minimum on the unit sphere; coercive minimization; the
+  closed image of a compact set; the local inverse of the inverse function theorem agrees with \texttt{invFun} near each image
+  point.
+\end{proof}
+
+\begin{lemma}[Gradient range of a transporting potential]
+  \label{lem:transport-gradient-range}
+  \lean{FunctionalInequalities.Probability.support_map_eq_closure_range,
+        FunctionalInequalities.Probability.support_restrict_eq_of_convex,
+        FunctionalInequalities.Probability.support_withDensity_eq_of_ae_ne_zero,
+        FunctionalInequalities.Probability.support_indicator_exp_neg_eq,
+        FunctionalInequalities.Probability.MomentMeasure.range_gradient_eq_interior_of_map_support,
+        FunctionalInequalities.Probability.MomentMeasure.range_gradient_eq_interior_of_tilted_map,
+        FunctionalInequalities.Probability.MomentMeasure.range_gradient_eq_interior_of_map_gradient,
+        FunctionalInequalities.Probability.MomentMeasure.exists_gradient_homeomorph_interior_of_map_gradient,
+        FunctionalInequalities.Probability.MomentMeasure.exists_regular_inverse_of_map_gradient}
+  \leanok
+  \uses{lem:strict-convex-gradient-inverse}
+  For an open-positive measure, the support of a continuous pushforward is the closure of the range, and $1_Ke^{-W}\mu$ has
+  support $K$ for closed convex $K$ with nonempty interior. Let $u$ on $\mathbb R^n$, $n>0$, be $C^1$, convex and Lipschitz with
+  $\int e^{-u}=1$, and let $\nabla u$ transport $e^{-u}dx$ to $1_Ke^{-W}dx$ ($K$ compact convex with nonempty interior, $W$
+  continuous). Then $u$ is strictly convex (Caffarelli's argument, \texttt{strictConvexOn\_of\_map\_gradient}),
+  $\operatorname{range}\nabla u=\operatorname{int}K$, $\nabla u$ is a homeomorphism $\mathbb R^n\to\operatorname{int}K$, and
+  under $C^{k+1}$ regularity with positive definite Hessian it has a $C^k$ inverse on $\operatorname{int}K$. The potential is
+  a hypothesis here.
+\end{lemma}
+\begin{proof}
+  \leanok
+  The range is open and convex with closure equal to the support $K$ of the transported law, so it equals
+  $\operatorname{int}K$; Lemma~\ref{lem:strict-convex-gradient-inverse} gives the homeomorphism and the inverse.
+\end{proof}
+
+\begin{lemma}[Regular moment potential with a gradient inverse]
+  \label{lem:regular-moment-gradient-inverse}
+  \lean{FunctionalInequalities.Analysis.exists_regular_moment_potential_holder_hessian_inverse}
+  \leanok
+  \uses{lem:regular-moment-hessian-holder, lem:transport-gradient-range}
+  Letwin, arXiv:2607.24164v1, Lemma~2.2, support in the strong class: $n>0$, smooth $\kappa$-uniformly convex $W$ ($\kappa>0$),
+  compact convex $K$ with nonempty interior and the normalized isotropic law $1_Ke^{-W}$. For the same $u$, $L$, $LF$ and $T$,
+  every field of Lemma~\ref{lem:regular-moment-hessian-holder} in the same order, followed by a homeomorphism
+  $\nabla u:\mathbb R^n\to\operatorname{int}K$ and a $C^1$ left inverse $\Psi$ of $\nabla u$ with $\nabla u(\Psi(y))=y$ on
+  $\operatorname{int}K$. Not Schauder/$C^\infty$ regularity, a smooth diffeomorphism or the merely convex source class, so
+  Lemma~2.2 remains partial.
+\end{lemma}
+\begin{proof}
+  \leanok
+  One call of the producer of Lemma~\ref{lem:regular-moment-hessian-holder}; its transport composed with the law equation,
+  its $C^2$ field and its everywhere positive definite Hessian feed Lemma~\ref{lem:transport-gradient-range} at $k=1$.
+\end{proof}
+
 \begin{lemma}[Trace identities for noise shifts, involutions and conjugations]
   \label{lem:matrix-noise-trace-identities}
   \lean{FunctionalInequalities.Analysis.trace_transpose_mul_shift_one,
@@ -5173,13 +5868,41 @@ form taken by the variance estimate for isotropic $\mu$), then
   and the trace bound of the witness, and let the noise parameter tend to infinity.
 \end{proof}
 
+\begin{lemma}[Letwin: regular approximation]
+  \label{lem:letwin-regular-approximation}
+  \lean{FunctionalInequalities.KLS.LogConcave.exists_regular_approximation,
+        FunctionalInequalities.KLS.LogConcave.exists_regular_approximation_eps,
+        FunctionalInequalities.KLS.LogConcave.exists_regularClass_seq_of_compact,
+        FunctionalInequalities.KLS.LogConcave.Suspension.exists_compact_moment_approximation}
+  \leanok
+  \uses{lem:bkl-regular-approximation, lem:bkl-isotropic-reduction, lem:restricted-exp-logconcave}
+  Letwin \cite{Letwin2026QuadraticKLS}, Lemma~A.1. Let $\mu$ be an isotropic log-concave probability measure on
+  $\mathbb R^n$. There are isotropic log-concave probability measures $\eta_j=e^{-V_j}1_{K_j}\,dx$, with exactly this
+  density, $K_j$ bounded open convex and nonempty, and $V_j$ smooth and convex on an open neighbourhood of
+  $\overline{K_j}$ (indeed smooth and uniformly convex on $\mathbb R^n$), such that
+  $\int\prod_{i<d}\langle v_i,x\rangle\,d\eta_j\to\int\prod_{i<d}\langle v_i,x\rangle\,d\mu$ for every $d\le4$ and all
+  $v_1,\dots,v_d$. Hence $\mathbb E_{\eta_j}p\to\mathbb E_\mu p$ for every polynomial $p$ of degree at most four, written
+  as a finite sum of such mixed linear monomials; no multivariate-polynomial interface is stated. The $\varepsilon$-form
+  gives, for each $\varepsilon>0$, one such law whose coordinate monomials of degree at most four are within
+  $\varepsilon$. The source assumes $n>0$; the proof does not use it.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Centered, covariance-whitened growing-ball truncations of $\mu$ are compactly supported isotropic log-concave laws
+  with converging mixed moments of degree at most four. Each of them is approximated by whitened, fixed-ball-conditioned
+  Gaussian smoothings, which are isotropic laws $1_Ke^{-W}dx$ with $K$ compact convex with nonempty interior and $W$
+  smooth and uniformly convex; every term is isotropic after a cofinal shift. A diagonal choice over the finitely many
+  coordinate monomials of degree at most four, extended to all mixed linear moments by multilinearity, gives the
+  sequence, and the convex body is replaced by its interior because its frontier is null.
+\end{proof}
+
 \begin{theorem}[Letwin: compact quadratic-form bound]
   \label{thm:letwin-compact-quadratic-bound}
   \lean{FunctionalInequalities.KLS.LogConcave.Suspension.letwinCompactBound,
         Solutions.ThmLetwinCompactQuadraticBound.certificate,
         Solutions.ThmLetwinCompactQuadraticBound.bound}
   \leanok
-  \uses{thm:letwin-regular-class-constant-eight}
+  \uses{thm:letwin-regular-class-constant-eight, lem:letwin-regular-approximation}
   For every $n>0$, every compactly supported isotropic log-concave probability measure $\mu$ on $\mathbb R^n$ and every
   self-adjoint operator $M$ (singular and indefinite included),
   \[
@@ -5191,8 +5914,9 @@ form taken by the variance estimate for isotropic $\mu$), then
 \end{theorem}
 \begin{proof}
   \leanok
-  The existing compact reduction \texttt{letwinCompactBound\_of\_regularClass} reduces the bound to the regular class, which
-  is Theorem~\ref{thm:letwin-regular-class-constant-eight}.
+  The compact reduction \texttt{letwinCompactBound\_of\_regularClass} approximates the law by the compact regular
+  approximants of Lemma~\ref{lem:letwin-regular-approximation} and passes the bound of
+  Theorem~\ref{thm:letwin-regular-class-constant-eight} to the limit through moments of degree at most four.
 \end{proof}
 
 \begin{lemma}[BKL equation (95), finite-horizon cutoff form]

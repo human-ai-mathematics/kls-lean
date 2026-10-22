@@ -148,6 +148,11 @@ review:
   reviewers: [repository maintainer]
   notes: >-
     The maintainer reports personally reviewing the key mathematical statements.
+    The original important definitions and APIs have also received that review.
+    The OpenAI statement/bridge and external upstream interfaces have not yet
+    received the maintainer's personal review. The current itemized scope,
+    including Nicolas's reported inspection, is recorded in
+    research/progress/public-interface-review.md.
     Separate review passes using Claude and GPT were used during development,
     with scopes varying by task. These are agent-assisted reviews.
     This does not assert review of every proof term or API, independent peer

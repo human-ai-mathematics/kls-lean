@@ -36,10 +36,12 @@ noncomputable section
 open MeasureTheory ProbabilityTheory
 open scoped InnerProductSpace
 
-namespace FunctionalInequalities.Probability
+variable {E : Type*}
+variable [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
+variable [MeasurableSpace E] [BorelSpace E]
+variable [SecondCountableTopology E] [FiniteDimensional ℝ E]
 
-variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
-  [MeasurableSpace E] [BorelSpace E] [SecondCountableTopology E] [FiniteDimensional ℝ E]
+namespace FunctionalInequalities.Probability
 
 omit [CompleteSpace E] [BorelSpace E] in
 /-- Intrinsic coordinates are, almost everywhere, the orthogonal projection of the displacement
@@ -82,9 +84,6 @@ end FunctionalInequalities.Probability
 namespace FunctionalInequalities.Covariance
 
 open Probability
-
-variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
-  [MeasurableSpace E] [BorelSpace E] [SecondCountableTopology E] [FiniteDimensional ℝ E]
 
 /-- The ambient covariance operator annihilates the orthogonal complement of the direction of the
 affine support. -/

@@ -95,7 +95,12 @@ open scoped Topology
 
 namespace FunctionalInequalities.Analysis
 
-private lemma l2_pairing_toLp {X : Type*} [MeasurableSpace X]
+section MeasurableSpace
+
+variable {X : Type*}
+variable [MeasurableSpace X]
+
+private lemma l2_pairing_toLp
     {μ : Measure X} (A : Lp ℝ 2 μ) {b : X → ℝ} (hb : MemLp b 2 μ) :
     inner ℝ A (hb.toLp b) = ∫ x, A x * b x ∂μ := by
   rw [L2.inner_def]
@@ -104,7 +109,7 @@ private lemma l2_pairing_toLp {X : Type*} [MeasurableSpace X]
   simp only [RCLike.inner_apply, starRingEnd_apply, star_trivial, hx]
   exact mul_comm _ _
 
-private lemma l2_toLp_norm_sq {X : Type*} [MeasurableSpace X]
+private lemma l2_toLp_norm_sq
     {μ : Measure X} {a : X → ℝ} (ha : MemLp a 2 μ) :
     ‖ha.toLp a‖ ^ 2 = ∫ x, a x ^ 2 ∂μ := by
   rw [← real_inner_self_eq_norm_sq, l2_pairing_toLp]
@@ -112,17 +117,21 @@ private lemma l2_toLp_norm_sq {X : Type*} [MeasurableSpace X]
   filter_upwards [ha.coeFn_toLp] with x hx
   rw [hx, pow_two]
 
-private lemma translated_memLp {E : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] [FiniteDimensional ℝ E]
-    [MeasurableSpace E] [BorelSpace E] {f : E → ℝ}
+end MeasurableSpace
+
+section FiniteDimensional
+
+variable {E : Type*}
+variable [NormedAddCommGroup E] [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] [MeasurableSpace E]
+variable [BorelSpace E]
+
+private lemma translated_memLp {f : E → ℝ}
     (hf : MemLp f 2 (volume : Measure E)) (w : E) :
     MemLp (fun x => f (x - w)) 2 (volume : Measure E) := by
   simpa only [Function.comp_def, sub_eq_add_neg] using
     hf.comp_measurePreserving (measurePreserving_add_right volume (-w))
 
-private lemma quotient_pairing_tendsto {E : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] [FiniteDimensional ℝ E]
-    [MeasurableSpace E] [BorelSpace E] {f : E → ℝ}
+private lemma quotient_pairing_tendsto {f : E → ℝ}
     (hf : MemLp f 2 (volume : Measure E)) (v : E)
     {ψ : E → ℝ} (hψ : ContDiff ℝ 1 ψ) (hψc : HasCompactSupport ψ) :
     Tendsto
@@ -177,8 +186,7 @@ private lemma quotient_pairing_tendsto {E : Type*} [NormedAddCommGroup E]
 /-- **Difference-quotient criterion for a weak derivative in `L²`** (Nirenberg; Evans PDE §5.8.2 Thm 3(ii); weak Letwin
 route): if `f ∈ L²` and `∫ (f(x + t v) − f(x))² ≤ C t²` for all small `t ≠ 0`, then `f` has a weak
 derivative along `v` that lies in `L²`. -/
-theorem exists_hasWeakDerivAlong_of_sq_difference_le {E : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
+theorem exists_hasWeakDerivAlong_of_sq_difference_le
     {f : E → ℝ} (hf : MemLp f 2 (volume : Measure E)) (v : E) {C : ℝ}
     (hdiff : ∀ t : ℝ, t ≠ 0 → |t| ≤ 1 →
       ∫ x, (f (x + t • v) - f x) ^ 2 ∂(volume : Measure E) ≤ C * t ^ 2) :
@@ -259,6 +267,8 @@ theorem exists_hasWeakDerivAlong_of_sq_difference_le {E : Type*} [NormedAddCommG
       hvalue.symm.trans hrepr.symm
     _ = -(∫ x, (-(G x)) * ψ x) := by
       simp only [neg_mul, integral_neg, neg_neg]
+
+end FiniteDimensional
 
 end FunctionalInequalities.Analysis
 

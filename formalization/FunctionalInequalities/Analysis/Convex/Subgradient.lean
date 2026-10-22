@@ -14,7 +14,8 @@ import FunctionalInequalities.Analysis.Convex.LegendreVariation.Attainment
 Pointwise subgradients are written inline, `∀ y, u x + ⟪p, y - x⟫ ≤ u y`. A differentiable convex function on a
 finite-dimensional space is `C¹` (`contDiff_one_of_convexOn_of_differentiable`), and the subgradients of a convex
 Lipschitz function lie in every closed convex set containing its a.e. gradient
-(`subgradient_mem_of_ae_gradient_mem`). Weak moment-map route to Letwin arXiv:2607.24164v1, Theorem 1.2.
+(`subgradient_mem_of_ae_gradient_mem`). A differentiable strictly convex function has an injective gradient
+(`injective_gradient_of_strictConvexOn`, every finite dimension). Weak moment-map route to Letwin arXiv:2607.24164v1, Theorem 1.2.
 -/
 
 noncomputable section
@@ -113,8 +114,12 @@ end ConvexC1
 
 section SubgradientRange
 
-private lemma gradient_le_increment {E : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] [CompleteSpace E]
+section InnerProduct
+
+variable {E : Type*}
+variable [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+
+private lemma gradient_le_increment [CompleteSpace E]
     {u : E → ℝ} (hc : ConvexOn ℝ univ u)
     (z v : E) (hz : DifferentiableAt ℝ u z) :
     ⟪gradient u z, v⟫ ≤ u (z + v) - u z := by
@@ -142,8 +147,7 @@ gradient** (weak Letwin route: `∂u(x) ⊆ K̄` for the weak moment map, whose 
 a.e. in the target `K`): if `u` is convex and Lipschitz on a finite-dimensional inner product space,
 `K` is closed and convex and `∇u(x) ∈ K` for a.e. `x`, then every subgradient `p` of `u` at every
 point `x` (`u(x) + ⟪p, y − x⟫ ≤ u(y)` for all `y`) lies in `K`. -/
-theorem subgradient_mem_of_ae_gradient_mem {E : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
+theorem subgradient_mem_of_ae_gradient_mem [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
     {u : E → ℝ} {L : NNReal} (hu : LipschitzWith L u) (hconv : ConvexOn ℝ univ u)
     {K : Set E} (hK : IsClosed K) (hKc : Convex ℝ K)
     (hae : ∀ᵐ x ∂(volume : Measure E), gradient u x ∈ K)
@@ -180,6 +184,8 @@ theorem subgradient_mem_of_ae_gradient_mem {E : Type*} [NormedAddCommGroup E]
   have hp' := hp (x - θ)
   simp only [sub_sub_cancel_left, inner_neg_right, hθ] at hp'
   linarith
+
+end InnerProduct
 
 end SubgradientRange
 
@@ -623,8 +629,12 @@ open scoped RealInnerProductSpace
 
 namespace FunctionalInequalities.Analysis
 
-private lemma convex_line_slope_mono {E : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] {u : E → ℝ}
+section InnerProduct
+
+variable {E : Type*}
+variable [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+
+private lemma convex_line_slope_mono [FiniteDimensional ℝ E] {u : E → ℝ}
     (hconv : ConvexOn ℝ Set.univ u) (x v : E) {a b : ℝ}
     (ha : 0 < a) (hab : a ≤ b) :
     (u (x + a • v) - u x) / a ≤ (u (x + b • v) - u x) / b := by
@@ -639,9 +649,11 @@ private lemma convex_line_slope_mono {E : Type*} [NormedAddCommGroup E]
       (show b ∈ Set.univ \ {0} by simp [ne_of_gt hb]) hab
   simpa only [slope_def_field, zero_smul, add_zero, sub_zero, add_comm] using h
 
-private lemma hasFDerivAt_of_convexOn_of_unique_subgradient
-    {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
-    [FiniteDimensional ℝ E] {u : E → ℝ}
+section FiniteDimensional
+
+variable [FiniteDimensional ℝ E]
+
+private lemma hasFDerivAt_of_convexOn_of_unique_subgradient {u : E → ℝ}
     (hconv : ConvexOn ℝ Set.univ u) (x g : E)
     (hg : ∀ y, u x + ⟪g, y - x⟫ ≤ u y)
     (huniq : ∀ q, (∀ y, u x + ⟪q, y - x⟫ ≤ u y) → q = g) :
@@ -825,13 +837,16 @@ route: "singleton subdifferential ⇒ C¹", differentiability half): on a finite
 inner product space, if the subgradient inequality `u x + ⟪g, y - x⟫ ≤ u y` (all `y`) is satisfied by
 exactly one `g` at every `x`, then `u` is differentiable (with that `g` as gradient; `C¹` then follows
 from `contDiff_one_of_convexOn_of_differentiable`). -/
-theorem differentiable_of_convexOn_of_unique_subgradient {E : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] {u : E → ℝ}
+theorem differentiable_of_convexOn_of_unique_subgradient {u : E → ℝ}
     (hconv : ConvexOn ℝ Set.univ u) (hsub : ∀ x, ∃! g : E, ∀ y, u x + ⟪g, y - x⟫ ≤ u y) :
     Differentiable ℝ u := by
   intro x
   obtain ⟨g, hg, huniq⟩ := hsub x
   exact (hasFDerivAt_of_convexOn_of_unique_subgradient hconv x g hg huniq).differentiableAt
+
+end FiniteDimensional
+
+end InnerProduct
 
 end FunctionalInequalities.Analysis
 
@@ -847,8 +862,12 @@ open scoped Topology
 
 namespace FunctionalInequalities.Analysis
 
+section InnerProduct
+
+variable {E : Type*}
+variable [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+
 private lemma support_of_max
-    {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
     {u : E → ℝ} {Ω : Set E} (hu : ConvexOn ℝ univ u) (hΩ : IsOpen Ω)
     (x₀ x₁ p : E) (c : ℝ) (hx₁ : x₁ ∈ Ω)
     (hmax :
@@ -970,7 +989,7 @@ def subgradientImage {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E
 /-- **Monotonicity of subgradient images under comparison** (Gutiérrez, *The Monge–Ampère
 equation*, Lemma 1.4.1; weak Letwin route, comparison principle): if `u ≤ v` on a
 bounded open `Ω` and `u = v` on its frontier, then `∂v(Ω) ⊆ ∂u(Ω)`. -/
-theorem subgradientImage_subset_of_le {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+theorem subgradientImage_subset_of_le
     [FiniteDimensional ℝ E] {u v : E → ℝ} (hu : ConvexOn ℝ univ u) (hv : ConvexOn ℝ univ v)
     {Ω : Set E} (hΩ : IsOpen Ω) (hb : Bornology.IsBounded Ω) (hle : ∀ x ∈ Ω, u x ≤ v x)
     (heq : ∀ x ∈ frontier Ω, u x = v x) : subgradientImage v Ω ⊆ subgradientImage u Ω := by
@@ -1025,6 +1044,8 @@ theorem subgradientImage_subset_of_le {E : Type*} [NormedAddCommGroup E] [InnerP
     exact support_of_max hu hΩ x₀ x₀ p (v x₀) hx₀ (by
       simpa [w] using hmax₀)
 
+end InnerProduct
+
 end FunctionalInequalities.Analysis
 
 end LT12ASubgradientImageMonotone
@@ -1038,8 +1059,12 @@ open scoped RealInnerProductSpace
 
 namespace FunctionalInequalities.Analysis
 
-private theorem legendre_eq_of_subgradient {E : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] (u : E → ℝ) (x p : E)
+section InnerProduct
+
+variable {E : Type*}
+variable [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+
+private theorem legendre_eq_of_subgradient (u : E → ℝ) (x p : E)
     (hsub : ∀ z, u x + ⟪p, z - x⟫ ≤ u z) :
     (⟪x, p⟫ : EReal) - (u x : EReal) =
       legendre (fun z => (u z : EReal)) p := by
@@ -1059,8 +1084,7 @@ private theorem legendre_eq_of_subgradient {E : Type*} [NormedAddCommGroup E]
     simpa only [EReal.coe_sub] using
       (EReal.coe_le_coe_iff.mpr hz')
 
-private theorem convex_legendre_finite_domain {E : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] (φ : E → EReal) (hφ : ProperPotential φ) :
+private theorem convex_legendre_finite_domain (φ : E → EReal) (hφ : ProperPotential φ) :
     Convex ℝ {q : E | legendre φ q ≠ ⊤} := by
   intro q₁ hq₁ q₂ hq₂ a b ha hb hab
   have hq₁bot : legendre φ q₁ ≠ ⊥ := legendre_ne_bot φ hφ q₁
@@ -1086,8 +1110,7 @@ private theorem convex_legendre_finite_domain {E : Type*} [NormedAddCommGroup E]
 Alexandrov identity): for a convex Lipschitz `u` on a finite-dimensional inner product space, the
 set of `p` that are subgradients of `u` at two distinct points is Lebesgue-null (such `p` are
 non-differentiability points of the conjugate `u*`, or frontier points of its domain). -/
-theorem volume_subgradient_two_points_eq_zero {E : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
+theorem volume_subgradient_two_points_eq_zero [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
     {u : E → ℝ} {L : NNReal} (hu : LipschitzWith L u) (hconv : ConvexOn ℝ univ u) :
     (volume : Measure E) {p : E | ∃ x y : E, x ≠ y ∧ (∀ z, u x + ⟪p, z - x⟫ ≤ u z) ∧
       (∀ z, u y + ⟪p, z - y⟫ ≤ u z)} = 0 := by
@@ -1193,6 +1216,8 @@ theorem volume_subgradient_two_points_eq_zero {E : Type*} [NormedAddCommGroup E]
       exact hpF
   exact measure_mono_null hsubset (measure_union_null hfrontier hB)
 
+end InnerProduct
+
 end FunctionalInequalities.Analysis
 
 end LT14ASubgradientAeInjective
@@ -1206,10 +1231,14 @@ open scoped RealInnerProductSpace
 
 namespace FunctionalInequalities.Analysis
 
+section InnerProduct
+
+variable {E : Type*}
+variable [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+
 /-- **A function affine along a full line pins every subgradient** (weak Letwin route, Caffarelli's argument): if `u (x₀ + t θ) = u x₀ + t c` for all real `t`, then every subgradient `p` of `u` at
 any point satisfies `⟪p, θ⟫ = c`. -/
-theorem inner_subgradient_eq_of_affine_on_line {E : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] {u : E → ℝ} {x₀ θ : E} {c : ℝ}
+theorem inner_subgradient_eq_of_affine_on_line {u : E → ℝ} {x₀ θ : E} {c : ℝ}
     (hline : ∀ t : ℝ, u (x₀ + t • θ) = u x₀ + t * c) {x p : E}
     (hp : ∀ y, u x + ⟪p, y - x⟫ ≤ u y) : ⟪p, θ⟫ = c := by
   have hineq (t : ℝ) :
@@ -1237,8 +1266,7 @@ theorem inner_subgradient_eq_of_affine_on_line {E : Type*} [NormedAddCommGroup E
 
 /-- The set of subgradients of a function affine along a line in a nonzero direction is
 Lebesgue-null (it lies in an affine hyperplane). -/
-theorem volume_setOf_subgradient_eq_zero_of_affine_on_line {E : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
+theorem volume_setOf_subgradient_eq_zero_of_affine_on_line [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
     {u : E → ℝ} {x₀ θ : E} (hθ : θ ≠ 0) {c : ℝ}
     (hline : ∀ t : ℝ, u (x₀ + t • θ) = u x₀ + t * c) :
     (volume : Measure E) {p | ∃ x, ∀ y, u x + ⟪p, y - x⟫ ≤ u y} = 0 := by
@@ -1288,6 +1316,8 @@ theorem volume_setOf_subgradient_eq_zero_of_affine_on_line {E : Type*} [NormedAd
     L (p - p₀) = L p - L p₀ := L.map_sub p p₀
     _ = c - c := by rw [hpL, hp₀]
     _ = 0 := sub_self c
+
+end InnerProduct
 
 end FunctionalInequalities.Analysis
 
@@ -1382,8 +1412,12 @@ private lemma riemann_sum_sandwich (F s : ℕ → ℝ) (N : ℕ)
     exact (hstep k hkN).2.trans
       (mul_le_mul_of_nonneg_left hb' (le_of_lt (one_div_pos.mpr hN)))
 
-private lemma inner_slope_error {E : Type*}
-    [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+section InnerProduct
+
+variable {E : Type*}
+variable [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+
+private lemma inner_slope_error
     (p q h : E) (B : E →L[ℝ] E) (t e : ℝ)
     (ht : 0 ≤ t) (ht1 : t ≤ 1) (he : 0 ≤ e)
     (hex : ‖q - p - B (t • h)‖ ≤ e * ‖t • h‖) :
@@ -1402,8 +1436,7 @@ set_option maxHeartbeats 800000 in
 route, Alexandrov's theorem): if every subgradient `q` of the convex `f` at points `y` near `x`
 satisfies `‖q − p − B (y − x)‖ ≤ ε ‖y − x‖`, then
 `|f y − f x − ⟪p, y − x⟫ − ½ ⟪B (y − x), y − x⟫| ≤ ε' ‖y − x‖²` near `x`. -/
-theorem eventually_abs_sub_quadratic_le_of_subgradient_expansion {E : Type*}
-    [NormedAddCommGroup E] [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] {f : E → ℝ}
+theorem eventually_abs_sub_quadratic_le_of_subgradient_expansion [FiniteDimensional ℝ E] {f : E → ℝ}
     (hconv : ConvexOn ℝ univ f) {x p : E} {B : E →L[ℝ] E}
     (hexp : ∀ ε > 0, ∀ᶠ y in 𝓝 x, ∀ q : E, (∀ w, f y + ⟪q, w - y⟫ ≤ f w) →
       ‖q - p - B (y - x)‖ ≤ ε * ‖y - x‖) :
@@ -1509,6 +1542,54 @@ theorem eventually_abs_sub_quadratic_le_of_subgradient_expansion {E : Type*}
   apply abs_le.mpr
   constructor <;> nlinarith only [hl, hu, hdisc]
 
+end InnerProduct
+
 end FunctionalInequalities.Analysis
 
 end LT12D5SubgradientExpansionTaylor
+
+section StrictConvexGradient
+
+open Set
+open scoped RealInnerProductSpace
+
+namespace FunctionalInequalities.Analysis
+
+/-- A differentiable strictly convex function has an injective gradient. This is
+an elementary prerequisite for the moment-map inverse in Letwin Lemma 2.2. -/
+theorem injective_gradient_of_strictConvexOn
+    {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [FiniteDimensional ℝ E]
+    {u : E → ℝ} (hu : Differentiable ℝ u) (hstrict : StrictConvexOn ℝ univ u) :
+    Function.Injective (gradient u) := by
+  intro x y hxy
+  by_contra hne
+  let l : ℝ →ᵃ[ℝ] E := AffineMap.lineMap x y
+  have hinj : Function.Injective l := AffineMap.lineMap_injective ℝ hne
+  have hc : StrictConvexOn ℝ univ (u ∘ l) := by
+    refine ⟨convex_univ, ?_⟩
+    intro r _ s _ hrs a b ha hb hab
+    change u (l (a • r + b • s)) < a • u (l r) + b • u (l s)
+    rw [Convex.combo_affine_apply hab]
+    exact hstrict.2 (mem_univ _) (mem_univ _) (fun he => hrs (hinj he)) ha hb hab
+  have hlineConv : StrictConvexOn ℝ univ (fun t : ℝ => u (x + t • (y - x))) := by
+    simpa only [Function.comp_def, l, AffineMap.lineMap_apply_module', add_comm] using hc
+  have hline (t : ℝ) : HasDerivAt (fun s : ℝ => u (x + s • (y - x)))
+      (fderiv ℝ u (x + t • (y - x)) (y - x)) t := by
+    have hp : HasDerivAt (fun s : ℝ => x + s • (y - x)) (y - x) t := by
+      simpa only [id_eq, one_smul] using
+        ((hasDerivAt_id t).smul_const (y - x)).const_add x
+    exact (hu (x + t • (y - x))).hasFDerivAt.comp_hasDerivAt t hp
+  have hfd : fderiv ℝ u x = fderiv ℝ u y := by
+    simpa only [toDual_gradient] using
+      congrArg (InnerProductSpace.toDual ℝ E) hxy
+  have hlt :=
+    (hlineConv.lt_slope_of_hasDerivAt (mem_univ 0) (mem_univ 1) zero_lt_one (hline 0)).trans
+      (hlineConv.slope_lt_of_hasDerivAt (mem_univ 0) (mem_univ 1) zero_lt_one (hline 1))
+  have hlt' : fderiv ℝ u x (y - x) < fderiv ℝ u y (y - x) := by
+    simpa only [zero_smul, one_smul, add_zero, add_sub_cancel] using hlt
+  rw [hfd] at hlt'
+  exact (lt_irrefl _) hlt'
+
+end FunctionalInequalities.Analysis
+
+end StrictConvexGradient

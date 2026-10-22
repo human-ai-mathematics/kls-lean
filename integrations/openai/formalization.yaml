@@ -65,10 +65,16 @@ automation:
 review:
   status: self-assessed
   notes: >-
-    Key mathematical statements have been reviewed by the repository maintainer
-    within the scope they reported. No independent peer review or OpenAI
-    endorsement is asserted. Compilation and unsandboxed Comparator development
-    checks are distinct from a Linux sandbox or independent-kernel result.
+    The maintainer reports reviewing the substantive KLS project's original
+    important definitions and APIs, but has not yet personally reviewed this
+    OpenAI statement or its bridge. Nicolas reports checking the bridge,
+    including the upstream model hash, and the metadata in Issue 10 comment
+    https://github.com/human-ai-mathematics/kls-lean/issues/10#issuecomment-6288377384.
+    This is not a full public-API or independent peer-review signoff, and no
+    OpenAI endorsement is asserted. The current itemized scope is recorded in
+    ../../research/progress/public-interface-review.md. Compilation and
+    unsandboxed Comparator development checks are distinct from a Linux sandbox
+    or independent-kernel result.
 fidelity:
   divergences: >-
     The upstream statement is unchanged. The proof converts densities to

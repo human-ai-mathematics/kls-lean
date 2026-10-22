@@ -5,6 +5,7 @@ import Mathlib.LinearAlgebra.Matrix.Trace
 import Mathlib.Analysis.Matrix.Normed
 import Mathlib.Analysis.SpecialFunctions.Log.Deriv
 import Mathlib.Analysis.Calculus.TaylorIntegral
+import Mathlib.Analysis.Matrix.PosDef
 
 /-!
 # Derivative of the determinant and of the log-determinant (Jacobi's formula)
@@ -101,10 +102,14 @@ open scoped BigOperators Matrix.Norms.Elementwise
 
 namespace FunctionalInequalities.Analysis
 
+section FiniteIndex
+
+variable {ι : Type*}
+variable [instFintype : Fintype ι] [instDecidableEq : DecidableEq ι]
+
 /-- Derivative of the finite determinant polynomial along a scalar affine path.
 No outer matrix chain rule, invertibility, or nonempty-index assumption. -/
-private theorem deriv_det_add_smul_zero {ι : Type*}
-    [instFintype : Fintype ι] [instDecidableEq : DecidableEq ι]
+private theorem deriv_det_add_smul_zero
     (A N : Matrix ι ι ℝ) :
     deriv (fun t : ℝ => Matrix.det (A + t • N)) 0 =
       ∑ σ : Equiv.Perm ι, ((Equiv.Perm.sign σ : ℤ) : ℝ) *
@@ -138,8 +143,7 @@ private theorem deriv_det_add_smul_zero {ι : Type*}
 
 /-- The signed permutation-polynomial determinant density is its existing
 outer matrix derivative, including singular and empty matrices. -/
-theorem fderiv_det_eq_sum_permutation {ι : Type*}
-    [instFintype : Fintype ι] [instDecidableEq : DecidableEq ι]
+theorem fderiv_det_eq_sum_permutation
     (A N : Matrix ι ι ℝ) :
     fderiv ℝ Matrix.det A N =
       ∑ σ : Equiv.Perm ι, ((Equiv.Perm.sign σ : ℤ) : ℝ) *
@@ -153,7 +157,47 @@ theorem fderiv_det_eq_sum_permutation {ι : Type*}
       simpa only [zero_smul, add_zero] using! hd.deriv_comp_add_smul.symm
     _ = _ := deriv_det_add_smul_zero A N
 
+end FiniteIndex
+
 
 end FunctionalInequalities.Analysis
 
 end DeterminantPolynomialIdentification
+
+/-! ## Smoothness of the log-determinant -/
+
+noncomputable section LogDetSmoothness
+
+namespace FunctionalInequalities.Analysis
+
+section LogDetContDiff
+
+open scoped Matrix.Norms.Elementwise ContDiff
+
+variable {ι : Type*} [Fintype ι] [DecidableEq ι]
+
+/-- The determinant is a polynomial in the entries, hence `C^k` for every `k`. -/
+private theorem contDiff_det {k : ℕ∞ω} :
+    ContDiff ℝ k (Matrix.det : Matrix ι ι ℝ → ℝ) := by
+  classical
+  change ContDiff ℝ k (fun M : Matrix ι ι ℝ => M.det)
+  simp only [Matrix.det_apply]
+  fun_prop
+
+/-- `M ↦ log det M` is `C^k` (every `k`, including `ω`) at each matrix with nonzero determinant. This is smoothness of the
+matrix function only; nothing is claimed about a matrix field. -/
+theorem contDiffAt_log_det {k : ℕ∞ω} {A : Matrix ι ι ℝ} (hA : A.det ≠ 0) :
+    ContDiffAt ℝ k (fun M : Matrix ι ι ℝ => Real.log M.det) A :=
+  contDiff_det.contDiffAt.log hA
+
+/-- `M ↦ log det M` is `C^k` at each positive definite matrix. -/
+theorem contDiffAt_log_det_of_posDef {k : ℕ∞ω} {A : Matrix ι ι ℝ}
+    (hA : A.PosDef) :
+    ContDiffAt ℝ k (fun M : Matrix ι ι ℝ => Real.log M.det) A :=
+  contDiffAt_log_det hA.det_pos.ne'
+
+end LogDetContDiff
+
+end FunctionalInequalities.Analysis
+
+end LogDetSmoothness

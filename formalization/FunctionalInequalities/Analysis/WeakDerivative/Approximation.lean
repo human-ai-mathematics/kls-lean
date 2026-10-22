@@ -393,22 +393,24 @@ private theorem norm_normed_convolution_le_three_mul {n : ℕ}
     _ = 3 * C := by ring
 
 set_option maxHeartbeats 1200000 in
-/-- A bounded compact rough test whose weak derivatives along every coordinate are compactly supported
-and globally L2 admits ONE smooth compactly supported sequence with supports in one compact set, the
-uniform bound `3 * C`, global L2 coordinate derivatives converging in L2 to the given weak derivatives,
-and full-sequence almost-everywhere convergence. Every finite dimension, zero included; no continuity of
-`η` is assumed. Support for Letwin arXiv:2607.24164v1 (2.6). -/
-theorem exists_contDiff_compact_bounded_all_weak_deriv_approximation {n : ℕ}
+/-- Support- and radius-controlled form of the bounded all-coordinate approximation: when the supports of `η`
+and of every `a i` lie in a compact `K`, then for every `ε > 0` the smooth approximants, their coordinate
+derivatives and the original data all live in ONE compact `S ⊆ cthickening ε K` (bump radii at most `ε`), with
+the uniform bound `3 * C`, global L2 coordinate derivatives converging in L2, and full-sequence almost-everywhere
+convergence. Every finite dimension, zero included. Support for Letwin arXiv:2607.24164v1 (2.6). -/
+theorem exists_contDiff_compact_bounded_weak_deriv_approximation_of_support_subset {n : ℕ}
     {η : EuclideanSpace ℝ (Fin n) → ℝ}
     {a : Fin n → EuclideanSpace ℝ (Fin n) → ℝ} {C : ℝ}
     (hη : LocallyIntegrable η (volume : Measure (EuclideanSpace ℝ (Fin n))))
-    (hbound : ∀ x, ‖η x‖ ≤ C) (hηc : HasCompactSupport η)
+    (hbound : ∀ x, ‖η x‖ ≤ C)
+    {K : Set (EuclideanSpace ℝ (Fin n))} (hK : IsCompact K)
+    (hηK : Function.support η ⊆ K) (haK : ∀ i : Fin n, Function.support (a i) ⊆ K)
+    {ε : ℝ} (hε : 0 < ε)
     (hweak : ∀ i : Fin n, HasWeakDerivAlong η (a i)
       (EuclideanSpace.basisFun (Fin n) ℝ i))
-    (hac : ∀ i : Fin n, HasCompactSupport (a i))
     (ha2 : ∀ i : Fin n, MemLp (a i) 2
       (volume : Measure (EuclideanSpace ℝ (Fin n)))) :
-    ∃ S : Set (EuclideanSpace ℝ (Fin n)), IsCompact S ∧
+    ∃ S : Set (EuclideanSpace ℝ (Fin n)), IsCompact S ∧ S ⊆ cthickening ε K ∧
       Function.support η ⊆ S ∧ (∀ i : Fin n, Function.support (a i) ⊆ S) ∧
       ∃ θ : ℕ → EuclideanSpace ℝ (Fin n) → ℝ,
         (∀ m : ℕ, ContDiff ℝ ∞ (θ m) ∧ HasCompactSupport (θ m) ∧
@@ -425,34 +427,37 @@ theorem exists_contDiff_compact_bounded_all_weak_deriv_approximation {n : ℕ}
             2 (volume : Measure (EuclideanSpace ℝ (Fin n)))) atTop (𝓝 0)) ∧
         ∀ᵐ x ∂(volume : Measure (EuclideanSpace ℝ (Fin n))),
           Tendsto (fun m => θ m x) atTop (𝓝 (η x)) := by
+  have hηc : HasCompactSupport η := HasCompactSupport.of_support_subset_isCompact hK hηK
+  have hac (i : Fin n) : HasCompactSupport (a i) := HasCompactSupport.of_support_subset_isCompact hK (haK i)
   let φ : ℕ → ContDiffBump (0 : EuclideanSpace ℝ (Fin n)) := fun m =>
-    { rIn := (1 / ((m : ℝ) + 1)) / 2
-      rOut := 1 / ((m : ℝ) + 1)
+    { rIn := (ε / ((m : ℝ) + 1)) / 2
+      rOut := ε / ((m : ℝ) + 1)
       rIn_pos := by positivity
       rIn_lt_rOut := by
-        have hm : 0 < 1 / ((m : ℝ) + 1) := by positivity
+        have hm : 0 < ε / ((m : ℝ) + 1) := by positivity
         linarith }
   have hφlim : Tendsto (fun m => (φ m).rOut) atTop (𝓝 0) := by
-    change Tendsto (fun m : ℕ => 1 / ((m : ℝ) + 1)) atTop (𝓝 0)
-    exact tendsto_one_div_add_atTop_nhds_zero_nat
-  have hφle (m : ℕ) : (φ m).rOut ≤ 1 := by
+    change Tendsto (fun m : ℕ => ε / ((m : ℝ) + 1)) atTop (𝓝 0)
+    simpa only [div_eq_mul_inv, mul_zero, one_mul] using
+      tendsto_one_div_add_atTop_nhds_zero_nat.const_mul ε
+  have hφle (m : ℕ) : (φ m).rOut ≤ ε := by
     dsimp [φ]
     have hm : 0 ≤ (m : ℝ) := by positivity
     have hm' : 0 < (m : ℝ) + 1 := by linarith
     apply (div_le_iff₀ hm').2
-    nlinarith
+    nlinarith [hε]
   have hφratio : ∀ᶠ m : ℕ in (atTop : Filter ℕ), (φ m).rOut ≤ 2 * (φ m).rIn :=
     Filter.Eventually.of_forall (fun m : ℕ => by
-      change (1 / ((m : ℝ) + 1)) ≤
-        2 * ((1 / ((m : ℝ) + 1)) / 2)
+      change (ε / ((m : ℝ) + 1)) ≤
+        2 * ((ε / ((m : ℝ) + 1)) / 2)
       have h :
-          (2 : ℝ) * ((1 / ((m : ℝ) + 1)) / 2) =
-            1 / ((m : ℝ) + 1) := by
+          (2 : ℝ) * ((ε / ((m : ℝ) + 1)) / 2) =
+            ε / ((m : ℝ) + 1) := by
         ring
       rw [h])
-  let Kη : Set (EuclideanSpace ℝ (Fin n)) := cthickening 1 (tsupport η)
+  let Kη : Set (EuclideanSpace ℝ (Fin n)) := cthickening ε (tsupport η)
   let Ki : Fin n → Set (EuclideanSpace ℝ (Fin n)) :=
-    fun i => cthickening 1 (tsupport (a i))
+    fun i => cthickening ε (tsupport (a i))
   have hKη : IsCompact Kη := by
     dsimp [Kη]
     exact hηc.isCompact.cthickening
@@ -484,14 +489,14 @@ theorem exists_contDiff_compact_bounded_all_weak_deriv_approximation {n : ℕ}
       Function.support
           ((φ m).normed volume ⋆[ContinuousLinearMap.lsmul ℝ ℝ, volume] η) ⊆ Kη
     simpa [Kη] using
-      (Mollification.support_convolution_subset_cthickening (φ m) (hφle m) η)
+      (Mollification.support_convolution_subset_cthickening_of_rOut_le (φ m) (hφle m) η)
   have hdisupport (i : Fin n) (m : ℕ) :
       Function.support (dvm i m) ⊆ Ki i := by
     change
       Function.support
           ((φ m).normed volume ⋆[ContinuousLinearMap.lsmul ℝ ℝ, volume] (a i)) ⊆ Ki i
     simpa [Ki] using
-      (Mollification.support_convolution_subset_cthickening (φ m) (hφle m) (a i))
+      (Mollification.support_convolution_subset_cthickening_of_rOut_le (φ m) (hφle m) (a i))
   have hderiv (i : Fin n) (m : ℕ) (x : EuclideanSpace ℝ (Fin n)) :
       fderiv ℝ (θ m) x (EuclideanSpace.basisFun (Fin n) ℝ i) = dvm i m x := by
     simpa [θ, dvm] using
@@ -563,7 +568,15 @@ theorem exists_contDiff_compact_bounded_all_weak_deriv_approximation {n : ℕ}
     simpa [θ] using
       (ContDiffBump.ae_convolution_tendsto_right_of_locallyIntegrable
         (φ := φ) hφlim hφratio hη)
-  refine ⟨S, hS, ?_, ?_, ?_⟩
+  have hηKs : tsupport η ⊆ K := closure_minimal hηK hK.isClosed
+  have haKs (i : Fin n) : tsupport (a i) ⊆ K := closure_minimal (haK i) hK.isClosed
+  have hSK : S ⊆ cthickening ε K := by
+    intro x hx
+    rcases hx with hx | hx
+    · exact (Metric.cthickening_subset_of_subset ε hηKs) hx
+    · obtain ⟨i, hi⟩ := Set.mem_iUnion.mp hx
+      exact (Metric.cthickening_subset_of_subset ε (haKs i)) hi
+  refine ⟨S, hS, hSK, ?_, ?_, ?_⟩
   · exact hηsupport.trans (by
       intro x hx
       exact Or.inl hx)
@@ -585,6 +598,48 @@ theorem exists_contDiff_compact_bounded_all_weak_deriv_approximation {n : ℕ}
           hdmem i m⟩
     · intro i
       exact hdlim' i
+
+/-- A bounded compact rough test whose weak derivatives along every coordinate are compactly supported
+and globally L2 admits ONE smooth compactly supported sequence with supports in one compact set, the
+uniform bound `3 * C`, global L2 coordinate derivatives converging in L2 to the given weak derivatives,
+and full-sequence almost-everywhere convergence. Every finite dimension, zero included; no continuity of
+`η` is assumed. Support for Letwin arXiv:2607.24164v1 (2.6). -/
+theorem exists_contDiff_compact_bounded_all_weak_deriv_approximation {n : ℕ}
+    {η : EuclideanSpace ℝ (Fin n) → ℝ}
+    {a : Fin n → EuclideanSpace ℝ (Fin n) → ℝ} {C : ℝ}
+    (hη : LocallyIntegrable η (volume : Measure (EuclideanSpace ℝ (Fin n))))
+    (hbound : ∀ x, ‖η x‖ ≤ C) (hηc : HasCompactSupport η)
+    (hweak : ∀ i : Fin n, HasWeakDerivAlong η (a i)
+      (EuclideanSpace.basisFun (Fin n) ℝ i))
+    (hac : ∀ i : Fin n, HasCompactSupport (a i))
+    (ha2 : ∀ i : Fin n, MemLp (a i) 2
+      (volume : Measure (EuclideanSpace ℝ (Fin n)))) :
+    ∃ S : Set (EuclideanSpace ℝ (Fin n)), IsCompact S ∧
+      Function.support η ⊆ S ∧ (∀ i : Fin n, Function.support (a i) ⊆ S) ∧
+      ∃ θ : ℕ → EuclideanSpace ℝ (Fin n) → ℝ,
+        (∀ m : ℕ, ContDiff ℝ ∞ (θ m) ∧ HasCompactSupport (θ m) ∧
+          Function.support (θ m) ⊆ S ∧ (∀ x, ‖θ m x‖ ≤ 3 * C) ∧
+          ∀ i : Fin n,
+            Function.support (fun x => fderiv ℝ (θ m) x
+              (EuclideanSpace.basisFun (Fin n) ℝ i)) ⊆ S ∧
+            MemLp (fun x => fderiv ℝ (θ m) x
+              (EuclideanSpace.basisFun (Fin n) ℝ i)) 2
+              (volume : Measure (EuclideanSpace ℝ (Fin n)))) ∧
+        (∀ i : Fin n,
+          Tendsto (fun m => eLpNorm
+            (fun x => fderiv ℝ (θ m) x (EuclideanSpace.basisFun (Fin n) ℝ i) - a i x)
+            2 (volume : Measure (EuclideanSpace ℝ (Fin n)))) atTop (𝓝 0)) ∧
+        ∀ᵐ x ∂(volume : Measure (EuclideanSpace ℝ (Fin n))),
+          Tendsto (fun m => θ m x) atTop (𝓝 (η x)) := by
+  have hK : IsCompact (tsupport η ∪ ⋃ i, tsupport (a i)) :=
+    hηc.isCompact.union (isCompact_iUnion fun i => (hac i).isCompact)
+  obtain ⟨S, hS, -, hηS, haS, hθ⟩ :=
+    exists_contDiff_compact_bounded_weak_deriv_approximation_of_support_subset hη hbound hK
+      ((subset_tsupport η).trans subset_union_left)
+      (fun i => (subset_tsupport (a i)).trans
+        ((subset_iUnion (fun i => tsupport (a i)) i).trans subset_union_right))
+      one_pos hweak ha2
+  exact ⟨S, hS, hηS, haS, hθ⟩
 
 end FunctionalInequalities.Analysis
 end BoundedWeakDerivativeApproximation

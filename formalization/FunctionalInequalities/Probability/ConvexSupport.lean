@@ -41,10 +41,18 @@ open scoped RealInnerProductSpace
 
 namespace FunctionalInequalities.Probability
 
+section InnerProduct
+
+variable {E : Type*}
+variable [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+
+section MeasurableSpace
+
+variable [MeasurableSpace E]
+
 /-- A nonzero direction has a support point strictly on its positive side of an interior point of the convex hull of
 the support. -/
-theorem exists_mem_support_inner_sub_pos_of_mem_interior_convexHull {E : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] [MeasurableSpace E] (μ : ProbabilityMeasure E) {x₀ : E}
+theorem exists_mem_support_inner_sub_pos_of_mem_interior_convexHull (μ : ProbabilityMeasure E) {x₀ : E}
     (hx₀ : x₀ ∈ interior (convexHull ℝ (μ : Measure E).support)) {u : E} (hu : u ≠ 0) :
     ∃ y ∈ (μ : Measure E).support, 0 < ⟪u, y - x₀⟫ := by
     by_contra hneg
@@ -101,8 +109,7 @@ theorem exists_mem_support_inner_sub_pos_of_mem_interior_convexHull {E : Type*} 
 
 /-- Around a support point strictly on the positive side of `u`: a ball of positive mass inside every open halfspace
 `{x | 0 < ⟪v, x - x₀⟫}` with `v` near `u`. -/
-theorem exists_pos_ball_inner_sub_pos_of_mem_support {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
-    [MeasurableSpace E] (μ : ProbabilityMeasure E) {x₀ u y : E}
+theorem exists_pos_ball_inner_sub_pos_of_mem_support (μ : ProbabilityMeasure E) {x₀ u y : E}
     (hy : y ∈ (μ : Measure E).support) (hpos : 0 < ⟪u, y - x₀⟫) :
     ∃ δ > 0, ∃ r > 0, 0 < (μ : Measure E) (Metric.ball y r) ∧
       ∀ v : E, ‖v - u‖ < δ → ∀ x ∈ Metric.ball y r, 0 < ⟪v, x - x₀⟫ := by
@@ -211,7 +218,14 @@ theorem exists_pos_ball_inner_sub_pos_of_mem_support {E : Type*} [NormedAddCommG
       rw [hid]
       linarith
 
-private lemma product_pos_of_pos {α : Type*} [DecidableEq α]
+end MeasurableSpace
+
+section FiniteIndex
+
+variable {α : Type*}
+variable [DecidableEq α]
+
+private lemma product_pos_of_pos
     (s : Finset α) (f : α → ℝ) (hf : ∀ a ∈ s, 0 < f a) :
     0 < ∏ a ∈ s, f a := by
   induction s using Finset.induction_on with
@@ -222,7 +236,7 @@ private lemma product_pos_of_pos {α : Type*} [DecidableEq α]
       exact mul_pos (hf a (Finset.mem_insert_self a s))
         (ih fun b hb => hf b (Finset.mem_insert_of_mem hb))
 
-private lemma product_le_one_of_nonneg_of_le_one {α : Type*} [DecidableEq α]
+private lemma product_le_one_of_nonneg_of_le_one
     (s : Finset α) (f : α → ℝ)
     (h₀ : ∀ a ∈ s, 0 ≤ f a) (h₁ : ∀ a ∈ s, f a ≤ 1) :
     (∏ a ∈ s, f a) ≤ 1 := by
@@ -247,7 +261,7 @@ private lemma product_le_one_of_nonneg_of_le_one {α : Type*} [DecidableEq α]
         _ = ∏ b ∈ s, f b := one_mul _
         _ ≤ 1 := hprod'
 
-private lemma product_le_factor_of_nonneg_of_le_one {α : Type*} [DecidableEq α]
+private lemma product_le_factor_of_nonneg_of_le_one
     (s : Finset α) (f : α → ℝ) {a : α} (ha : a ∈ s)
     (h₀ : ∀ b ∈ s, 0 ≤ f b) (h₁ : ∀ b ∈ s, f b ≤ 1) :
     (∏ b ∈ s, f b) ≤ f a := by
@@ -285,9 +299,10 @@ private lemma product_le_factor_of_nonneg_of_le_one {α : Type*} [DecidableEq α
           _ = ∏ c ∈ s, f c := one_mul _
           _ ≤ f a := hi
 
+end FiniteIndex
+
 /-- Uniform positive mass of the strict open halfspaces through an interior point of the convex hull of the support. -/
-theorem exists_pos_le_measure_halfspace_of_mem_interior_convexHull_support {E : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
+theorem exists_pos_le_measure_halfspace_of_mem_interior_convexHull_support [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
     (μ : ProbabilityMeasure E) {x₀ : E} (hx₀ : x₀ ∈ interior (convexHull ℝ (μ : Measure E).support)) :
     ∃ m : ℝ, 0 < m ∧ m ≤ 1 ∧
       ∀ u : E, ‖u‖ = 1 → m ≤ ((μ : Measure E) {x | 0 < ⟪u, x - x₀⟫}).toReal := by
@@ -383,6 +398,8 @@ theorem exists_pos_le_measure_halfspace_of_mem_interior_convexHull_support {E : 
       dsimp [f]
       exact ENNReal.toReal_mono (measure_ne_top _ _) hmeasure
     exact hmlefv.trans hreal
+
+end InnerProduct
 
 
 section EffectiveDomain
@@ -514,10 +531,14 @@ private lemma finite_value_coe {E : Type*} {φ : E → EReal}
     ((φ x).toReal : EReal) = φ x := by
   exact EReal.coe_toReal hx (ne_of_gt (EReal.bot_lt_zero.trans_le (h0 x)))
 
+section InnerProduct
+
+variable {E : Type*}
+variable [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+
 /-- For a nonnegative extended-real function with convex real epigraph, its real part is convex on the effective domain
 `{φ ≠ ⊤}`. -/
-lemma real_convexOn_effective_domain {E : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] {φ : E → EReal} (h0 : ∀ x, 0 ≤ φ x)
+lemma real_convexOn_effective_domain {φ : E → EReal} (h0 : ∀ x, 0 ≤ φ x)
     (hφ : Convex ℝ {p : E × ℝ | φ p.1 ≤ (p.2 : EReal)}) :
     ConvexOn ℝ {x | φ x ≠ ⊤} (fun x => (φ x).toReal) := by
   have hepi : {p : E × ℝ | φ p.1 ≤ (p.2 : EReal)} =
@@ -537,8 +558,11 @@ lemma real_convexOn_effective_domain {E : Type*} [NormedAddCommGroup E]
   rw [hepi] at hφ
   exact convexOn_of_convex_epigraph hφ
 
-private lemma strict_sublevel_convex_and_interior {E : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] {φ : E → EReal}
+section FiniteDimensional
+
+variable [FiniteDimensional ℝ E]
+
+private lemma strict_sublevel_convex_and_interior {φ : E → EReal}
     (h0 : ∀ x, 0 ≤ φ x) (hφ : Convex ℝ {p : E × ℝ | φ p.1 ≤ (p.2 : EReal)})
     {x₀ y : E} (hx₀ : x₀ ∈ interior {x | φ x ≠ ⊤}) (hy : φ y < φ x₀) :
     Convex ℝ {x | φ x < φ x₀} ∧ (interior {x | φ x < φ x₀}).Nonempty := by
@@ -586,8 +610,7 @@ private lemma strict_sublevel_convex_and_interior {E : Type*} [NormedAddCommGrou
     exact ⟨hzD, hzlt⟩
   exact ⟨hconv, ⟨z, (interior_mono hsubset) hzU⟩⟩
 
-private theorem exists_unit_halfspace_le_or_isMin_of_convex_epigraph {E : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] {φ : E → EReal} (h0 : ∀ x, 0 ≤ φ x)
+private theorem exists_unit_halfspace_le_or_isMin_of_convex_epigraph {φ : E → EReal} (h0 : ∀ x, 0 ≤ φ x)
     (hφ : Convex ℝ {p : E × ℝ | φ p.1 ≤ (p.2 : EReal)}) {x₀ : E} (hx₀ : x₀ ∈ interior {x | φ x ≠ ⊤}) :
     (∃ u : E, ‖u‖ = 1 ∧ ∀ x, 0 < ⟪u, x - x₀⟫ → φ x₀ ≤ φ x) ∨ ∀ x, φ x₀ ≤ φ x := by
   classical
@@ -623,11 +646,12 @@ private theorem exists_unit_halfspace_le_or_isMin_of_convex_epigraph {E : Type*}
     exact (not_lt_of_ge (mul_nonpos_of_nonneg_of_nonpos
       (inv_nonneg.mpr (norm_nonneg w)) (sub_nonpos.mpr hle))) hx
 
+end FiniteDimensional
+
 /-- **CEK Lemma 16, pointwise bound.** For a finite Borel measure and an interior point of the convex hull of its support
 there is `C > 0`, chosen before `φ`, with `φ x₀ ≤ C · (∫⁻ φ dμ).toReal` for every nonnegative extended-real `φ` with convex
 real epigraph, a.e.-measurable `toENNReal` and finite lintegral. -/
-theorem exists_pos_le_mul_lintegral_toReal_of_convex_epigraph {E : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] [MeasurableSpace E] [FiniteDimensional ℝ E] [BorelSpace E]
+theorem exists_pos_le_mul_lintegral_toReal_of_convex_epigraph [MeasurableSpace E] [FiniteDimensional ℝ E] [BorelSpace E]
     (μ : Measure E) [IsFiniteMeasure μ] (x₀ : E) :
     x₀ ∈ interior (convexHull ℝ μ.support) →
       ∃ C : ℝ, 0 < C ∧ ∀ φ : E → EReal,
@@ -664,6 +688,8 @@ theorem exists_pos_le_mul_lintegral_toReal_of_convex_epigraph {E : Type*} [Norme
   rw [← finite_value_coe h_nonneg (interior_subset hxD)]
   apply EReal.coe_le_coe_iff.mpr
   simpa only [div_eq_mul_inv, mul_comm] using (le_div_iff₀' hmpos).mpr hmq
+
+end InnerProduct
 
 end PointControl
 

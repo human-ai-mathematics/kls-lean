@@ -257,9 +257,13 @@ theorem tiltAverage_inner_eq_fderiv_logLaplace_of_lt (μ : Measure E) [IsFiniteM
         smul_eq_mul, real_inner_comm]
       ring
 
+section NormedSpace
+
+variable {F : Type*}
+variable [NormedAddCommGroup F] [NormedSpace ℝ F]
+
 omit [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] in
-private lemma bkl_cumulant_swap_front {F : Type*} [NormedAddCommGroup F]
-    [NormedSpace ℝ F] [CompleteSpace F] {g : E → F} (hg : ContDiff ℝ ∞ g)
+private lemma bkl_cumulant_swap_front [CompleteSpace F] {g : E → F} (hg : ContDiff ℝ ∞ g)
     (n : ℕ) (x v w : E) (h : Fin n → E) :
     iteratedFDeriv ℝ (n + 2) g x (Fin.cons v (Fin.cons w h)) =
       iteratedFDeriv ℝ (n + 2) g x (Fin.cons w (Fin.cons v h)) := by
@@ -295,8 +299,7 @@ private lemma bkl_cumulant_swap_front {F : Type*} [NormedAddCommGroup F]
       (by simp)).eq v w
 
 omit [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] in
-private lemma bkl_cumulant_cons_snoc {F : Type*} [NormedAddCommGroup F]
-    [NormedSpace ℝ F] [CompleteSpace F] {g : E → F} (hg : ContDiff ℝ ∞ g)
+private lemma bkl_cumulant_cons_snoc [CompleteSpace F] {g : E → F} (hg : ContDiff ℝ ∞ g)
     (n : ℕ) (x v : E) (h : Fin n → E) :
     iteratedFDeriv ℝ (n + 1) g x (Fin.cons v h) =
       iteratedFDeriv ℝ (n + 1) g x (Fin.snoc h v) := by
@@ -321,6 +324,8 @@ private lemma bkl_cumulant_cons_snoc {F : Type*} [NormedAddCommGroup F]
           (by norm_cast; simp) x).iteratedFDeriv_succ_apply_left']
       simpa only [Fin.tail_cons, Fin.cons_zero] using
         congrArg (fun a : E → F => fderiv ℝ a x (h 0)) heq
+
+end NormedSpace
 
 /-- **Taylor tensors of linear functions are cumulants** (proof of BKL Proposition 7.1):
 for `ℓ = ⟪v, ·⟫`, `T_d ℓ = κ_{d+1}(v, ·, …, ·) / d!`. -/
@@ -798,10 +803,14 @@ private theorem equiv_iteratedFDeriv_univ {E F G : Type*} [NormedAddCommGroup E]
     g.iteratedFDerivWithin_comp_right f uniqueDiffOn_univ
       (Set.mem_univ (g x)) i
 
+section InnerProduct
+
+variable {E F : Type*}
+variable [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+
 /-- **Cumulants along a linear isometry**: `κ^{φ_*ν}_k(φ u₁, …, φ u_k) = κ^ν_k(u₁, …, u_k)` for
 every measure `ν`, since `Λ_{φ_*ν} = Λ_ν ∘ φ⁻¹` pointwise. -/
-theorem cumulant_map_linearIsometryEquiv {E F : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] [CompleteSpace E] [FiniteDimensional ℝ E] [MeasurableSpace E]
+theorem cumulant_map_linearIsometryEquiv [CompleteSpace E] [FiniteDimensional ℝ E] [MeasurableSpace E]
     [BorelSpace E] [NormedAddCommGroup F] [InnerProductSpace ℝ F] [CompleteSpace F]
     [FiniteDimensional ℝ F] [MeasurableSpace F] [BorelSpace F]
     (φ : E ≃ₗᵢ[ℝ] F) (ν : Measure E) (k : ℕ) (u : Fin k → E) :
@@ -876,8 +885,7 @@ private lemma affine_iteratedFDeriv_linear_eq_zero
 /-- **Cumulants along an affine map** (BKL (77)): for `k ≥ 2`, the cumulants of the push-forward of
 `μ` under `x ↦ T (x - a)` are those of `μ` evaluated on the adjoint directions,
 `κ^{(T(· - a))_*μ}_k(u₁, …, u_k) = κ^μ_k(T† u₁, …, T† u_k)`. -/
-theorem cumulant_map_affine {E F : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] [CompleteSpace E] [FiniteDimensional ℝ E] [MeasurableSpace E]
+theorem cumulant_map_affine [CompleteSpace E] [FiniteDimensional ℝ E] [MeasurableSpace E]
     [BorelSpace E] [NormedAddCommGroup F] [InnerProductSpace ℝ F] [CompleteSpace F]
     [FiniteDimensional ℝ F] [MeasurableSpace F] [BorelSpace F]
     (T : E ≃L[ℝ] F) (a : E) (μ : Measure E) [IsFiniteMeasure μ] [NeZero μ]
@@ -966,12 +974,18 @@ theorem cumulant_map_affine {E F : Type*} [NormedAddCommGroup E]
   rw [hlog, hsub, affine_iteratedFDeriv_linear_eq_zero L hk, sub_zero, hchain]
   simp only [map_zero, ContinuousMultilinearMap.compContinuousLinearMap_apply]
 
+end InnerProduct
+
 section MomentLimit
 
 open ProbabilityTheory Filter Topology
 
+section InnerProduct
+
+variable {E : Type*}
+variable [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+
 private lemma quadratic_basis_expansion
-    {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
     {ι : Type*} [Fintype ι] (b : OrthonormalBasis ι ℝ E)
     (M : E →L[ℝ] E) (x : E) :
     ⟪M x, x⟫ =
@@ -991,7 +1005,6 @@ private lemma quadratic_basis_expansion
       ring
 
 private lemma quadratic_coordinate_memLp
-    {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
     [MeasurableSpace E] {ρ : Measure E} (hρ : MemLp id 4 ρ) (u v : E) :
     MemLp (fun x => ⟪u, x⟫ * ⟪v, x⟫) 2 ρ := by
   have ht : ENNReal.HolderTriple (4 : ENNReal) 4 2 := by
@@ -1044,8 +1057,7 @@ arXiv:2607.24164v1, Lemma A.1, last sentence: "both sides of (1.2) pass to the l
 probability laws `μ k` with finite fourth moments satisfy `LetwinQuadraticBound` and all mixed
 moments `∫ ∏ᵢ ⟪vᵢ, x⟫` of degree `d ≤ 4` converge to those of a law `ν` with finite fourth
 moment, then `ν` satisfies `LetwinQuadraticBound`. -/
-theorem letwinQuadraticBound_of_tendsto_moments {E : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℝ E] [CompleteSpace E] [FiniteDimensional ℝ E] [MeasurableSpace E]
+theorem letwinQuadraticBound_of_tendsto_moments [CompleteSpace E] [FiniteDimensional ℝ E] [MeasurableSpace E]
     [BorelSpace E] (μ : ℕ → Measure E) (ν : Measure E) [∀ k, IsProbabilityMeasure (μ k)]
     [IsProbabilityMeasure ν] (hμ : ∀ k, MemLp id 4 (μ k)) (hν : MemLp id 4 ν)
     (hmom : ∀ d : ℕ, d ≤ 4 → ∀ v : Fin d → E,
@@ -1117,6 +1129,8 @@ theorem letwinQuadraticBound_of_tendsto_moments {E : Type*} [NormedAddCommGroup 
     rw [heq, hv ν hν]
     exact hsecond.sub (hfirst.pow 2)
   exact le_of_tendsto' hcenter (fun k => hL k M hM)
+
+end InnerProduct
 
 end MomentLimit
 
