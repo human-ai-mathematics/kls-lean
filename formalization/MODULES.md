@@ -6,13 +6,13 @@ This is a filename/import directory; it does not assign proof or paper-coverage 
 
 [Source guide](README.md) · [Interface guide](../LEAN_DESIGN.md) · [Public API](API.md) · [Placement and naming](../research/naming.md)
 
-**624 Lean modules in 6 top-level families.** The library aggregate `FunctionalInequalities.lean` is outside this subtree.
+**706 Lean modules in 6 top-level families.** The library aggregate `FunctionalInequalities.lean` is outside this subtree.
 
 | Family | Modules |
 | --- | ---: |
-| [Analysis/](FunctionalInequalities/Analysis) | 264 |
+| [Analysis/](FunctionalInequalities/Analysis) | 345 |
 | [Energy/](FunctionalInequalities/Energy) | 46 |
-| [KLS/](FunctionalInequalities/KLS) | 207 |
+| [KLS/](FunctionalInequalities/KLS) | 208 |
 | [L2/](FunctionalInequalities/L2) | 9 |
 | [Poincare/](FunctionalInequalities/Poincare) | 33 |
 | [Probability/](FunctionalInequalities/Probability) | 65 |
@@ -58,7 +58,10 @@ FunctionalInequalities/
 │   │   ├── Calculus.lean
 │   │   ├── Curvature.lean
 │   │   ├── DifferenceQuotient.lean
+│   │   ├── EllipticGradientForcing.lean
 │   │   ├── Gamma.lean
+│   │   ├── GradientForcing.lean
+│   │   ├── HessianEllipticity.lean
 │   │   ├── HessianOperator.lean
 │   │   ├── HessianTrace.lean
 │   │   ├── InverseHessianEnergy.lean
@@ -67,6 +70,7 @@ FunctionalInequalities/
 │   │   ├── MongeAmpere.lean
 │   │   ├── RegularizedNorm.lean
 │   │   ├── TensorEnergy.lean
+│   │   ├── UniformGradientForcing.lean
 │   │   ├── UniformIntervalPotential.lean
 │   │   ├── WeakGamma.lean
 │   │   └── WeakHessian.lean
@@ -104,6 +108,9 @@ FunctionalInequalities/
 │   │   ├── Subgradient.lean
 │   │   ├── SupportingPlane.lean
 │   │   └── Viscosity.lean
+│   ├── Convolution/
+│   │   ├── DerivativeCaps.lean
+│   │   └── UniformBound.lean
 │   ├── Cutoff/
 │   │   ├── Conservativity.lean
 │   │   ├── Integrability.lean
@@ -119,6 +126,13 @@ FunctionalInequalities/
 │   │   ├── Integral.lean
 │   │   ├── Jacobian.lean
 │   │   └── OpenIntegral.lean
+│   ├── Harmonic/
+│   │   ├── AnnularKernel.lean
+│   │   ├── BallHolder.lean
+│   │   ├── CompactReproduction.lean
+│   │   ├── LocalCaps.lean
+│   │   ├── LocalHolder.lean
+│   │   └── LocalReproduction.lean
 │   ├── Hausdorff/
 │   │   ├── Slice/
 │   │   │   ├── Critical.lean
@@ -131,14 +145,29 @@ FunctionalInequalities/
 │   │   ├── Slicing.lean
 │   │   ├── SurfaceSlicing.lean
 │   │   └── Volume.lean
+│   ├── Holder/
+│   │   ├── Closure.lean
+│   │   ├── Cutoff.lean
+│   │   ├── RadicalCounterexample.lean
+│   │   └── ZeroExtension.lean
 │   ├── IteratedDerivative/
 │   │   ├── Affine.lean
 │   │   ├── Bilinear.lean
+│   │   ├── CoefficientCoordinates.lean
+│   │   ├── CoefficientFreezing.lean
+│   │   ├── ConstantCoefficientSchauder.lean
 │   │   ├── GradientJet.lean
+│   │   ├── HolderTransport.lean
 │   │   ├── InnerProduct.lean
 │   │   ├── Interpolation.lean
+│   │   ├── LinearPullback.lean
 │   │   ├── Log.lean
+│   │   ├── QuotientLimit.lean
 │   │   └── Symmetry.lean
+│   ├── Laplacian/
+│   │   ├── Convolution.lean
+│   │   ├── GreenSymmetry.lean
+│   │   └── TestIdentity.lean
 │   ├── Lipschitz/
 │   │   ├── Annuli.lean
 │   │   ├── C1Pieces.lean
@@ -157,6 +186,8 @@ FunctionalInequalities/
 │   │   │   ├── Energy.lean
 │   │   │   └── Power.lean
 │   │   ├── AveragedInverse.lean
+│   │   ├── AveragedInverseEllipticity.lean
+│   │   ├── CompactEllipticity.lean
 │   │   ├── DeterminantDerivative.lean
 │   │   ├── Holder.lean
 │   │   ├── Integral.lean
@@ -182,6 +213,59 @@ FunctionalInequalities/
 │   ├── Mollification/
 │   │   ├── Basic.lean
 │   │   └── Hessian.lean
+│   ├── Newtonian/
+│   │   ├── AbsLogNear.lean
+│   │   ├── Annulus.lean
+│   │   ├── BoundaryFormula.lean
+│   │   ├── BoxCorrection.lean
+│   │   ├── BoxFlux.lean
+│   │   ├── CancelledHessian.lean
+│   │   ├── CancelledNearIntegral.lean
+│   │   ├── CancelledNearKernel.lean
+│   │   ├── CompactPoisson.lean
+│   │   ├── CriticalDomain.lean
+│   │   ├── CutoffMajorant.lean
+│   │   ├── Difference.lean
+│   │   ├── Far.lean
+│   │   ├── FarCancelledAE.lean
+│   │   ├── FarDifference.lean
+│   │   ├── FarKernel.lean
+│   │   ├── First.lean
+│   │   ├── GradientApprox.lean
+│   │   ├── GradientBound.lean
+│   │   ├── GradientCutoff.lean
+│   │   ├── GradientCutoffBounds.lean
+│   │   ├── Harmonic.lean
+│   │   ├── InteriorSchauder.lean
+│   │   ├── Kernel.lean
+│   │   ├── KernelBounds.lean
+│   │   ├── KernelEntryBound.lean
+│   │   ├── KernelError.lean
+│   │   ├── L1.lean
+│   │   ├── Layercake.lean
+│   │   ├── LocalHolder.lean
+│   │   ├── LogL1.lean
+│   │   ├── LogNear.lean
+│   │   ├── Measurable.lean
+│   │   ├── Near.lean
+│   │   ├── NearExponent.lean
+│   │   ├── NearKernel.lean
+│   │   ├── PoissonFreezing.lean
+│   │   ├── Potential.lean
+│   │   ├── PotentialC2.lean
+│   │   ├── RadialCutoffLipschitz.lean
+│   │   ├── RadialCutoffMass.lean
+│   │   ├── RadialDerivative.lean
+│   │   ├── RadialKernel.lean
+│   │   ├── RadialLogDerivative.lean
+│   │   ├── Representation.lean
+│   │   ├── Schauder.lean
+│   │   ├── Third.lean
+│   │   ├── ThirdBound.lean
+│   │   ├── Trace.lean
+│   │   ├── Truncation.lean
+│   │   ├── TruncationDerivative.lean
+│   │   └── TruncationL1.lean
 │   ├── Operator/
 │   │   ├── Coordinates.lean
 │   │   ├── HilbertSchmidt.lean
@@ -300,6 +384,7 @@ FunctionalInequalities/
 │   │   ├── Extension.lean
 │   │   ├── FirstOrderJet.lean
 │   │   └── Partition.lean
+│   ├── AbsorptionIteration.lean
 │   ├── ContinuousDerivative.lean
 │   ├── DiagonalSelector.lean
 │   ├── Divergence.lean
@@ -307,6 +392,7 @@ FunctionalInequalities/
 │   ├── EssentialExtrema.lean
 │   ├── EssentialOscillation.lean
 │   ├── Extremum.lean
+│   ├── GradientSegment.lean
 │   ├── Gronwall.lean
 │   ├── HessianRegularity.lean
 │   ├── HolderRepresentative.lean
@@ -451,6 +537,7 @@ FunctionalInequalities/
 │   │   ├── MomentRegularity/
 │   │   │   ├── Cutoff.lean
 │   │   │   ├── DifferenceQuotient.lean
+│   │   │   ├── Ellipticity.lean
 │   │   │   ├── HessianHolder.lean
 │   │   │   ├── Inverse.lean
 │   │   │   ├── Potential.lean
@@ -752,6 +839,7 @@ Use a file's import path by replacing `/` with `.` and dropping `.lean`, after t
 
 | File | Source title |
 | --- | --- |
+| [Analysis/AbsorptionIteration.lean](FunctionalInequalities/Analysis/AbsorptionIteration.lean) | Radius absorption iteration |
 | [Analysis/BakryEmery/Bochner/Basic.lean](FunctionalInequalities/Analysis/BakryEmery/Bochner/Basic.lean) | Convex Hessians and the local Bochner identity |
 | [Analysis/BakryEmery/Bochner/Integrated.lean](FunctionalInequalities/Analysis/BakryEmery/Bochner/Integrated.lean) | The integrated Bochner inequality on smooth compactly supported tests |
 | [Analysis/BakryEmery/Bochner/Lipschitz.lean](FunctionalInequalities/Analysis/BakryEmery/Bochner/Lipschitz.lean) | Bochner's identity at `C^{1,1}` |
@@ -765,7 +853,10 @@ Use a file's import path by replacing `/` with `.` and dropping `.lean`, after t
 | [Analysis/BakryEmery/Cumulant/Truncation.lean](FunctionalInequalities/Analysis/BakryEmery/Cumulant/Truncation.lean) | Cumulants of ball truncations converge |
 | [Analysis/BakryEmery/Curvature.lean](FunctionalInequalities/Analysis/BakryEmery/Curvature.lean) | The curvature condition `CD(ρ, ∞)` for a potential with Hessian bounded below |
 | [Analysis/BakryEmery/DifferenceQuotient.lean](FunctionalInequalities/Analysis/BakryEmery/DifferenceQuotient.lean) | Finite differences of a `C²` function and their log-determinant equations |
+| [Analysis/BakryEmery/EllipticGradientForcing.lean](FunctionalInequalities/Analysis/BakryEmery/EllipticGradientForcing.lean) | Linearized uniformly elliptic finite-difference equations |
 | [Analysis/BakryEmery/Gamma.lean](FunctionalInequalities/Analysis/BakryEmery/Gamma.lean) | The carre du champ and its iteration |
+| [Analysis/BakryEmery/GradientForcing.lean](FunctionalInequalities/Analysis/BakryEmery/GradientForcing.lean) | First-order linearization of the `W (∇u)` finite difference |
+| [Analysis/BakryEmery/HessianEllipticity.lean](FunctionalInequalities/Analysis/BakryEmery/HessianEllipticity.lean) | Uniformly elliptic finite-difference equations of a `C²` function |
 | [Analysis/BakryEmery/HessianOperator.lean](FunctionalInequalities/Analysis/BakryEmery/HessianOperator.lean) | The Hessian operator, its inverse and the inverse-Hessian diffusion operator |
 | [Analysis/BakryEmery/HessianTrace.lean](FunctionalInequalities/Analysis/BakryEmery/HessianTrace.lean) | Trace evolution of the Hessian under the inverse-Hessian operator |
 | [Analysis/BakryEmery/IntegrationByParts/Basic.lean](FunctionalInequalities/Analysis/BakryEmery/IntegrationByParts/Basic.lean) | Weighted integration by parts |
@@ -791,6 +882,7 @@ Use a file's import path by replacing `/` with `.` and dropping `.lean`, after t
 | [Analysis/BakryEmery/Tilt/SquareIntegrable.lean](FunctionalInequalities/Analysis/BakryEmery/Tilt/SquareIntegrable.lean) | Tilt averages of square-integrable functions |
 | [Analysis/BakryEmery/Tilt/Temperate.lean](FunctionalInequalities/Analysis/BakryEmery/Tilt/Temperate.lean) | The tilt identities for tests of temperate growth |
 | [Analysis/BakryEmery/Tilt/Tensor.lean](FunctionalInequalities/Analysis/BakryEmery/Tilt/Tensor.lean) | Lemma 3.6 for tensor-valued functions, and Corollary 3.7 |
+| [Analysis/BakryEmery/UniformGradientForcing.lean](FunctionalInequalities/Analysis/BakryEmery/UniformGradientForcing.lean) | Uniform bounds for segment forcing coefficients |
 | [Analysis/BakryEmery/UniformIntervalPotential.lean](FunctionalInequalities/Analysis/BakryEmery/UniformIntervalPotential.lean) | The uniform-interval moment potential |
 | [Analysis/BakryEmery/WeakGamma.lean](FunctionalInequalities/Analysis/BakryEmery/WeakGamma.lean) | The weak carré du champ of square-integrable vector fields |
 | [Analysis/BakryEmery/WeakHessian.lean](FunctionalInequalities/Analysis/BakryEmery/WeakHessian.lean) | Generic weak Hessian coordinates and pointwise identification |
@@ -826,6 +918,8 @@ Use a file's import path by replacing `/` with `.` and dropping `.lean`, after t
 | [Analysis/Convex/Subgradient.lean](FunctionalInequalities/Analysis/Convex/Subgradient.lean) | Subgradients of convex functions |
 | [Analysis/Convex/SupportingPlane.lean](FunctionalInequalities/Analysis/Convex/SupportingPlane.lean) | Supporting affine plane at an interior point of the effective domain |
 | [Analysis/Convex/Viscosity.lean](FunctionalInequalities/Analysis/Convex/Viscosity.lean) | Touching-test (viscosity) inequalities for convex functions |
+| [Analysis/Convolution/DerivativeCaps.lean](FunctionalInequalities/Analysis/Convolution/DerivativeCaps.lean) | Derivative caps for convolution with a compact C⁴ kernel |
+| [Analysis/Convolution/UniformBound.lean](FunctionalInequalities/Analysis/Convolution/UniformBound.lean) | Uniform bound for convolution with an integrable kernel |
 | [Analysis/Cutoff/Conservativity.lean](FunctionalInequalities/Analysis/Cutoff/Conservativity.lean) | Conservativity from cutoffs with a vanishing defect |
 | [Analysis/Cutoff/Integrability.lean](FunctionalInequalities/Analysis/Cutoff/Integrability.lean) | Integrability from uniformly bounded cutoff integrals |
 | [Analysis/Cutoff/LipschitzBall.lean](FunctionalInequalities/Analysis/Cutoff/LipschitzBall.lean) | Lipschitz norm-ball cutoffs and compact localization |
@@ -839,6 +933,7 @@ Use a file's import path by replacing `/` with `.` and dropping `.lean`, after t
 | [Analysis/EssentialExtrema.lean](FunctionalInequalities/Analysis/EssentialExtrema.lean) | Essential extrema of bounded functions |
 | [Analysis/EssentialOscillation.lean](FunctionalInequalities/Analysis/EssentialOscillation.lean) | Essential oscillation of finite families |
 | [Analysis/Extremum.lean](FunctionalInequalities/Analysis/Extremum.lean) | Finite maxima of upper semicontinuous extended-real functions |
+| [Analysis/GradientSegment.lean](FunctionalInequalities/Analysis/GradientSegment.lean) | Segment mean coefficients for a `C¹` function on Euclidean space |
 | [Analysis/Graph/Area.lean](FunctionalInequalities/Analysis/Graph/Area.lean) | The codimension-one area formula for `C¹` graphs |
 | [Analysis/Graph/Divergence.lean](FunctionalInequalities/Analysis/Graph/Divergence.lean) | The divergence formula on a smooth subgraph |
 | [Analysis/Graph/Implicit.lean](FunctionalInequalities/Analysis/Graph/Implicit.lean) | Local `C^∞` graph representation of a regular level set |
@@ -846,6 +941,12 @@ Use a file's import path by replacing `/` with `.` and dropping `.lean`, after t
 | [Analysis/Graph/Jacobian.lean](FunctionalInequalities/Analysis/Graph/Jacobian.lean) | Jacobian |
 | [Analysis/Graph/OpenIntegral.lean](FunctionalInequalities/Analysis/Graph/OpenIntegral.lean) | OpenIntegral |
 | [Analysis/Gronwall.lean](FunctionalInequalities/Analysis/Gronwall.lean) | Integral Grönwall inequality |
+| [Analysis/Harmonic/AnnularKernel.lean](FunctionalInequalities/Analysis/Harmonic/AnnularKernel.lean) | The smooth annular reproducing kernel |
+| [Analysis/Harmonic/BallHolder.lean](FunctionalInequalities/Analysis/Harmonic/BallHolder.lean) | Scaled Hessian Hölder bounds for harmonic functions on balls |
+| [Analysis/Harmonic/CompactReproduction.lean](FunctionalInequalities/Analysis/Harmonic/CompactReproduction.lean) | Annular reproduction of compactly supported functions harmonic near a point |
+| [Analysis/Harmonic/LocalCaps.lean](FunctionalInequalities/Analysis/Harmonic/LocalCaps.lean) | Interior derivative bounds for harmonic functions on the unit ball |
+| [Analysis/Harmonic/LocalHolder.lean](FunctionalInequalities/Analysis/Harmonic/LocalHolder.lean) | Hessian Lipschitz and Hölder bounds for harmonic functions on the unit ball |
+| [Analysis/Harmonic/LocalReproduction.lean](FunctionalInequalities/Analysis/Harmonic/LocalReproduction.lean) | Local reproduction and smoothness of harmonic functions on the unit ball |
 | [Analysis/Hausdorff/Content.lean](FunctionalInequalities/Analysis/Hausdorff/Content.lean) | Scalewise Hausdorff cover costs and measurability of compact slices |
 | [Analysis/Hausdorff/Isodiametric.lean](FunctionalInequalities/Analysis/Hausdorff/Isodiametric.lean) | The isodiametric inequality |
 | [Analysis/Hausdorff/LevelSet.lean](FunctionalInequalities/Analysis/Hausdorff/LevelSet.lean) | Regular level sets as local Lipschitz graphs |
@@ -857,14 +958,27 @@ Use a file's import path by replacing `/` with `.` and dropping `.lean`, after t
 | [Analysis/Hausdorff/SurfaceSlicing.lean](FunctionalInequalities/Analysis/Hausdorff/SurfaceSlicing.lean) | Eilenberg slicing bound and compact-slice measurability in the normalized surface measure |
 | [Analysis/Hausdorff/Volume.lean](FunctionalInequalities/Analysis/Hausdorff/Volume.lean) | Hausdorff normalization and volume |
 | [Analysis/HessianRegularity.lean](FunctionalInequalities/Analysis/HessianRegularity.lean) | C² from a continuous Hessian representative |
+| [Analysis/Holder/Closure.lean](FunctionalInequalities/Analysis/Holder/Closure.lean) | Hölder caps pass to the closure |
+| [Analysis/Holder/Cutoff.lean](FunctionalInequalities/Analysis/Holder/Cutoff.lean) | Hölder bounds from Lipschitz bounds and Lipschitz cutoffs |
+| [Analysis/Holder/RadicalCounterexample.lean](FunctionalInequalities/Analysis/Holder/RadicalCounterexample.lean) | A continuous radial source without a uniform `3/4`-Hölder cap |
+| [Analysis/Holder/ZeroExtension.lean](FunctionalInequalities/Analysis/Holder/ZeroExtension.lean) | Hölder caps of functions vanishing off a ball |
 | [Analysis/HolderRepresentative.lean](FunctionalInequalities/Analysis/HolderRepresentative.lean) | Hölder and continuous a.e. representatives |
 | [Analysis/IteratedDerivative/Affine.lean](FunctionalInequalities/Analysis/IteratedDerivative/Affine.lean) | Affine changes of variables for actual derivatives |
 | [Analysis/IteratedDerivative/Bilinear.lean](FunctionalInequalities/Analysis/IteratedDerivative/Bilinear.lean) | Raw Leibniz expansion of a bilinear image of two `C^∞` maps |
+| [Analysis/IteratedDerivative/CoefficientCoordinates.lean](FunctionalInequalities/Analysis/IteratedDerivative/CoefficientCoordinates.lean) | Coordinate form of the coefficient-freezing error |
+| [Analysis/IteratedDerivative/CoefficientFreezing.lean](FunctionalInequalities/Analysis/IteratedDerivative/CoefficientFreezing.lean) | Freezing the principal coefficients of a second-order operator |
+| [Analysis/IteratedDerivative/ConstantCoefficientSchauder.lean](FunctionalInequalities/Analysis/IteratedDerivative/ConstantCoefficientSchauder.lean) | Interior Schauder estimate for constant-coefficient elliptic operators (GT Lemma 6.1) |
 | [Analysis/IteratedDerivative/GradientJet.lean](FunctionalInequalities/Analysis/IteratedDerivative/GradientJet.lean) | Iterated derivatives of a shifted map and of a gradient |
+| [Analysis/IteratedDerivative/HolderTransport.lean](FunctionalInequalities/Analysis/IteratedDerivative/HolderTransport.lean) | Hölder transport of bilinear fields under a linear map |
 | [Analysis/IteratedDerivative/InnerProduct.lean](FunctionalInequalities/Analysis/IteratedDerivative/InnerProduct.lean) | Leibniz rule for an inner product with an operator |
 | [Analysis/IteratedDerivative/Interpolation.lean](FunctionalInequalities/Analysis/IteratedDerivative/Interpolation.lean) | Second central differences and local Hessian interpolation |
+| [Analysis/IteratedDerivative/LinearPullback.lean](FunctionalInequalities/Analysis/IteratedDerivative/LinearPullback.lean) | Second derivatives under a linear change of variables |
 | [Analysis/IteratedDerivative/Log.lean](FunctionalInequalities/Analysis/IteratedDerivative/Log.lean) | Iterated derivatives of `log ∘ f` at a normalized point |
+| [Analysis/IteratedDerivative/QuotientLimit.lean](FunctionalInequalities/Analysis/IteratedDerivative/QuotientLimit.lean) | C² regularity of limits with uniformly Hölder Hessians |
 | [Analysis/IteratedDerivative/Symmetry.lean](FunctionalInequalities/Analysis/IteratedDerivative/Symmetry.lean) | Permutation symmetry of raw iterated derivatives of real `C^∞` maps |
+| [Analysis/Laplacian/Convolution.lean](FunctionalInequalities/Analysis/Laplacian/Convolution.lean) | The Laplacian commutes with convolution against a locally integrable kernel |
+| [Analysis/Laplacian/GreenSymmetry.lean](FunctionalInequalities/Analysis/Laplacian/GreenSymmetry.lean) | Symmetry of the Laplacian against one compactly supported function |
+| [Analysis/Laplacian/TestIdentity.lean](FunctionalInequalities/Analysis/Laplacian/TestIdentity.lean) | Green's first identity against compactly supported tests |
 | [Analysis/Lipschitz/Annuli.lean](FunctionalInequalities/Analysis/Lipschitz/Annuli.lean) | Annuli |
 | [Analysis/Lipschitz/C1Pieces.lean](FunctionalInequalities/Analysis/Lipschitz/C1Pieces.lean) | C1Pieces |
 | [Analysis/Lipschitz/Componentwise.lean](FunctionalInequalities/Analysis/Lipschitz/Componentwise.lean) | Componentwise |
@@ -880,6 +994,8 @@ Use a file's import path by replacing `/` with `.` and dropping `.lean`, after t
 | [Analysis/LpExponent.lean](FunctionalInequalities/Analysis/LpExponent.lean) | The `L^p` norms of an essentially bounded function converge to its essential supremum |
 | [Analysis/Majorization.lean](FunctionalInequalities/Analysis/Majorization.lean) | A majorization Gronwall comparison |
 | [Analysis/Matrix/AveragedInverse.lean](FunctionalInequalities/Analysis/Matrix/AveragedInverse.lean) | Segment-averaged inverses and log-determinant finite differences |
+| [Analysis/Matrix/AveragedInverseEllipticity.lean](FunctionalInequalities/Analysis/Matrix/AveragedInverseEllipticity.lean) | Ellipticity of segment-averaged inverse coefficients |
+| [Analysis/Matrix/CompactEllipticity.lean](FunctionalInequalities/Analysis/Matrix/CompactEllipticity.lean) | Uniform quadratic ellipticity of compact matrix families |
 | [Analysis/Matrix/DeterminantDerivative.lean](FunctionalInequalities/Analysis/Matrix/DeterminantDerivative.lean) | Derivative of the determinant and of the log-determinant (Jacobi's formula) |
 | [Analysis/Matrix/Holder.lean](FunctionalInequalities/Analysis/Matrix/Holder.lean) | Hölder representatives of matrix entries |
 | [Analysis/Matrix/Integral.lean](FunctionalInequalities/Analysis/Matrix/Integral.lean) | Trace energies of symmetric matrix fields under a measure |
@@ -911,6 +1027,58 @@ Use a file's import path by replacing `/` with `.` and dropping `.lean`, after t
 | [Analysis/Mollification/Hessian.lean](FunctionalInequalities/Analysis/Mollification/Hessian.lean) | Mollifying functions with Lipschitz gradient |
 | [Analysis/MorreyGrowth.lean](FunctionalInequalities/Analysis/MorreyGrowth.lean) | All-ball Morrey bounds from cutoff energy |
 | [Analysis/MoserIteration.lean](FunctionalInequalities/Analysis/MoserIteration.lean) | Radius-normalized Moser iterations of `L^p` norms |
+| [Analysis/Newtonian/AbsLogNear.lean](FunctionalInequalities/Analysis/Newtonian/AbsLogNear.lean) | Absolute logarithmic near-field integrals |
+| [Analysis/Newtonian/Annulus.lean](FunctionalInequalities/Analysis/Newtonian/Annulus.lean) | Annular cancellation of the Newtonian kernel Hessian |
+| [Analysis/Newtonian/BoundaryFormula.lean](FunctionalInequalities/Analysis/Newtonian/BoundaryFormula.lean) | The boundary form of the Newtonian Hessian (GT (4.9)) and the full Lemma 4.2 |
+| [Analysis/Newtonian/BoxCorrection.lean](FunctionalInequalities/Analysis/Newtonian/BoxCorrection.lean) | The box correction in the Newtonian Hessian |
+| [Analysis/Newtonian/BoxFlux.lean](FunctionalInequalities/Analysis/Newtonian/BoxFlux.lean) | Divergence theorem on Euclidean coordinate boxes |
+| [Analysis/Newtonian/CancelledHessian.lean](FunctionalInequalities/Analysis/Newtonian/CancelledHessian.lean) | The cancelled Newtonian Hessian volume term |
+| [Analysis/Newtonian/CancelledNearIntegral.lean](FunctionalInequalities/Analysis/Newtonian/CancelledNearIntegral.lean) | Integrability of a cancelled singular kernel near its centre |
+| [Analysis/Newtonian/CancelledNearKernel.lean](FunctionalInequalities/Analysis/Newtonian/CancelledNearKernel.lean) | Near-field integral of a cancelled singular kernel |
+| [Analysis/Newtonian/CompactPoisson.lean](FunctionalInequalities/Analysis/Newtonian/CompactPoisson.lean) | Compactly supported solutions of Poisson's equation (GT Theorem 4.5) |
+| [Analysis/Newtonian/CriticalDomain.lean](FunctionalInequalities/Analysis/Newtonian/CriticalDomain.lean) | The residual Newtonian Hessian integral on critical domains |
+| [Analysis/Newtonian/CutoffMajorant.lean](FunctionalInequalities/Analysis/Newtonian/CutoffMajorant.lean) | The integrated cutoff majorant in dimensions `n ≥ 3` |
+| [Analysis/Newtonian/Difference.lean](FunctionalInequalities/Analysis/Newtonian/Difference.lean) | Differences of Newtonian kernel Hessian entries |
+| [Analysis/Newtonian/Far.lean](FunctionalInequalities/Analysis/Newtonian/Far.lean) | The far-field Newtonian Hessian difference integral |
+| [Analysis/Newtonian/FarCancelledAE.lean](FunctionalInequalities/Analysis/Newtonian/FarCancelledAE.lean) | Far-field integral of a cancelled kernel difference |
+| [Analysis/Newtonian/FarDifference.lean](FunctionalInequalities/Analysis/Newtonian/FarDifference.lean) | Far-field differences of the Newtonian kernel Hessian |
+| [Analysis/Newtonian/FarKernel.lean](FunctionalInequalities/Analysis/Newtonian/FarKernel.lean) | Far-field integrals of radial powers under ball growth |
+| [Analysis/Newtonian/First.lean](FunctionalInequalities/Analysis/Newtonian/First.lean) | First derivatives, smoothness and measurability of the Newtonian kernel |
+| [Analysis/Newtonian/GradientApprox.lean](FunctionalInequalities/Analysis/Newtonian/GradientApprox.lean) | Approximation of the Newtonian gradient by cut-off kernels (GT Lemma 4.2, first step) |
+| [Analysis/Newtonian/GradientBound.lean](FunctionalInequalities/Analysis/Newtonian/GradientBound.lean) | First-derivative estimate of the Newtonian potential on a ball |
+| [Analysis/Newtonian/GradientCutoff.lean](FunctionalInequalities/Analysis/Newtonian/GradientCutoff.lean) | The truncated Newtonian gradient and its divergence |
+| [Analysis/Newtonian/GradientCutoffBounds.lean](FunctionalInequalities/Analysis/Newtonian/GradientCutoffBounds.lean) | Bounds for the truncated Newtonian gradient |
+| [Analysis/Newtonian/Harmonic.lean](FunctionalInequalities/Analysis/Newtonian/Harmonic.lean) | Harmonicity of the Newtonian kernel off the origin |
+| [Analysis/Newtonian/InteriorSchauder.lean](FunctionalInequalities/Analysis/Newtonian/InteriorSchauder.lean) | Interior Hessian Hölder estimate for the Poisson equation on a ball (GT Theorem 4.6) |
+| [Analysis/Newtonian/Kernel.lean](FunctionalInequalities/Analysis/Newtonian/Kernel.lean) | The Newtonian kernel |
+| [Analysis/Newtonian/KernelBounds.lean](FunctionalInequalities/Analysis/Newtonian/KernelBounds.lean) | Kernel estimates for the Newtonian Hölder estimate |
+| [Analysis/Newtonian/KernelEntryBound.lean](FunctionalInequalities/Analysis/Newtonian/KernelEntryBound.lean) | Entrywise Hessian bounds for the radial Newtonian kernel expressions |
+| [Analysis/Newtonian/KernelError.lean](FunctionalInequalities/Analysis/Newtonian/KernelError.lean) | Scalar truncation error of the Newtonian kernel and vanishing majorants |
+| [Analysis/Newtonian/L1.lean](FunctionalInequalities/Analysis/Newtonian/L1.lean) | Local integrability of the Newtonian kernel and its gradient |
+| [Analysis/Newtonian/Layercake.lean](FunctionalInequalities/Analysis/Newtonian/Layercake.lean) | Layer-cake bound for bounded functions with power-tail superlevel sets |
+| [Analysis/Newtonian/LocalHolder.lean](FunctionalInequalities/Analysis/Newtonian/LocalHolder.lean) | Lemma 4.4 for locally Hölder sources (qualitative form) |
+| [Analysis/Newtonian/LogL1.lean](FunctionalInequalities/Analysis/Newtonian/LogL1.lean) | Local integrability of the planar Newtonian kernel |
+| [Analysis/Newtonian/LogNear.lean](FunctionalInequalities/Analysis/Newtonian/LogNear.lean) | Logarithmic near-field integrals under ball growth |
+| [Analysis/Newtonian/Measurable.lean](FunctionalInequalities/Analysis/Newtonian/Measurable.lean) | Measurability of the Newtonian kernel Hessian |
+| [Analysis/Newtonian/Near.lean](FunctionalInequalities/Analysis/Newtonian/Near.lean) | The near-field Newtonian Hessian integral for `0 < α < 1` |
+| [Analysis/Newtonian/NearExponent.lean](FunctionalInequalities/Analysis/Newtonian/NearExponent.lean) | The near-field Newtonian Hessian integral |
+| [Analysis/Newtonian/NearKernel.lean](FunctionalInequalities/Analysis/Newtonian/NearKernel.lean) | Near-field integrals of radial powers under ball growth |
+| [Analysis/Newtonian/PoissonFreezing.lean](FunctionalInequalities/Analysis/Newtonian/PoissonFreezing.lean) | Coefficient freezing fed by the compact Poisson estimates |
+| [Analysis/Newtonian/Potential.lean](FunctionalInequalities/Analysis/Newtonian/Potential.lean) | The Newtonian potential and its first derivatives (GT Lemma 4.1) |
+| [Analysis/Newtonian/PotentialC2.lean](FunctionalInequalities/Analysis/Newtonian/PotentialC2.lean) | The Newtonian potential is C² and solves Poisson's equation (GT Lemma 4.2) |
+| [Analysis/Newtonian/RadialCutoffLipschitz.lean](FunctionalInequalities/Analysis/Newtonian/RadialCutoffLipschitz.lean) | A Lipschitz bound for the radial cutoff |
+| [Analysis/Newtonian/RadialCutoffMass.lean](FunctionalInequalities/Analysis/Newtonian/RadialCutoffMass.lean) | The radial cutoff profile and its unit mass |
+| [Analysis/Newtonian/RadialDerivative.lean](FunctionalInequalities/Analysis/Newtonian/RadialDerivative.lean) | Off-origin derivatives of radial powers |
+| [Analysis/Newtonian/RadialKernel.lean](FunctionalInequalities/Analysis/Newtonian/RadialKernel.lean) | Hessians of the radial Newtonian kernel expressions |
+| [Analysis/Newtonian/RadialLogDerivative.lean](FunctionalInequalities/Analysis/Newtonian/RadialLogDerivative.lean) | Off-origin derivatives of the logarithm of the norm |
+| [Analysis/Newtonian/Representation.lean](FunctionalInequalities/Analysis/Newtonian/Representation.lean) | Newtonian representation of compactly supported C² functions |
+| [Analysis/Newtonian/Schauder.lean](FunctionalInequalities/Analysis/Newtonian/Schauder.lean) | Interior Hölder estimates for the Newtonian potential on balls (GT Lemma 4.4) |
+| [Analysis/Newtonian/Third.lean](FunctionalInequalities/Analysis/Newtonian/Third.lean) | Third derivatives of the Newtonian kernel |
+| [Analysis/Newtonian/ThirdBound.lean](FunctionalInequalities/Analysis/Newtonian/ThirdBound.lean) | An explicit third-derivative bound for the Newtonian kernel |
+| [Analysis/Newtonian/Trace.lean](FunctionalInequalities/Analysis/Newtonian/Trace.lean) | Trace of the Newtonian kernel Hessian |
+| [Analysis/Newtonian/Truncation.lean](FunctionalInequalities/Analysis/Newtonian/Truncation.lean) | Smooth truncation of the Newtonian kernel |
+| [Analysis/Newtonian/TruncationDerivative.lean](FunctionalInequalities/Analysis/Newtonian/TruncationDerivative.lean) | Derivative error of the truncated Newtonian kernel |
+| [Analysis/Newtonian/TruncationL1.lean](FunctionalInequalities/Analysis/Newtonian/TruncationL1.lean) | Global L¹ derivative error of the truncated Newtonian kernel |
 | [Analysis/Operator/Coordinates.lean](FunctionalInequalities/Analysis/Operator/Coordinates.lean) | Orthonormal coordinates of operators |
 | [Analysis/Operator/HilbertSchmidt.lean](FunctionalInequalities/Analysis/Operator/HilbertSchmidt.lean) | Standard trace and Hilbert–Schmidt norm |
 | [Analysis/Operator/InverseSqrt.lean](FunctionalInequalities/Analysis/Operator/InverseSqrt.lean) | The principal inverse square root of a positive operator |
@@ -1133,6 +1301,7 @@ Use a file's import path by replacing `/` with `.` and dropping `.lean`, after t
 | [KLS/CEK/MomentMap.lean](FunctionalInequalities/KLS/CEK/MomentMap.lean) | The weak moment map of a bounded isotropic law |
 | [KLS/CEK/MomentRegularity/Cutoff.lean](FunctionalInequalities/KLS/CEK/MomentRegularity/Cutoff.lean) | Regular-source height cutoffs and bounded weak cutoff testing |
 | [KLS/CEK/MomentRegularity/DifferenceQuotient.lean](FunctionalInequalities/KLS/CEK/MomentRegularity/DifferenceQuotient.lean) | Difference quotients of the regular moment potential |
+| [KLS/CEK/MomentRegularity/Ellipticity.lean](FunctionalInequalities/KLS/CEK/MomentRegularity/Ellipticity.lean) | Uniformly elliptic difference-quotient equations of the regular moment potential |
 | [KLS/CEK/MomentRegularity/HessianHolder.lean](FunctionalInequalities/KLS/CEK/MomentRegularity/HessianHolder.lean) | Regular moment potentials with Hölder Hessian |
 | [KLS/CEK/MomentRegularity/Inverse.lean](FunctionalInequalities/KLS/CEK/MomentRegularity/Inverse.lean) | Regular moment potentials with a gradient inverse |
 | [KLS/CEK/MomentRegularity/Potential.lean](FunctionalInequalities/KLS/CEK/MomentRegularity/Potential.lean) | Actual regular-class C1 moment potentials |

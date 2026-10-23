@@ -6,13 +6,13 @@ This index records interfaces; it assigns no proof, paper-coverage or certificat
 
 [Library design](../LEAN_DESIGN.md) · [Calling examples](../examples/README.md) · [Module directory](MODULES.md) · [Review checklist](../research/workflow.md#review-after-mechanical-checks)
 
-**6,016 public compiler declarations across 624 source modules and the aggregate root.**
+**6,320 public compiler declarations across 706 source modules and the aggregate root.**
 
 | Mathematical family | Public declarations | Modules |
 | --- | ---: | ---: |
-| [Analysis](FunctionalInequalities/Analysis/) | 2,443 | 264 |
+| [Analysis](FunctionalInequalities/Analysis/) | 2,746 | 345 |
 | [Energy](FunctionalInequalities/Energy/) | 682 | 46 |
-| [KLS](FunctionalInequalities/KLS/) | 1,957 | 207 |
+| [KLS](FunctionalInequalities/KLS/) | 1,958 | 208 |
 | [L2](FunctionalInequalities/L2/) | 124 | 9 |
 | [Poincare](FunctionalInequalities/Poincare/) | 267 | 33 |
 | [Probability](FunctionalInequalities/Probability/) | 543 | 65 |
@@ -36,6 +36,6 @@ Private and internal names are filtered; public compiler-generated support may r
 Displayed types use Lean notation with full names and universe information; the source and compiler remain authoritative.
 Pinned compiled Mathlib dependencies are trusted. The index performs no axiom audit or kernel replay and does not renew any verification receipt.
 
-Kinds: constructor: 31, definition: 766, inductive: 31, recursor: 31, theorem: 5,157.
+Kinds: constructor: 32, definition: 819, inductive: 32, recursor: 32, theorem: 5,405.
 
-Source/tool input digest: `d42d6140262c3e0ccbf39ba654f3aacc7530272fa9ad5410977d57b144a4ef64`.
+Source/tool input digest: `04fcab3795fbdb832deed81e570947b4e684de451ef6227efd9ad1b9b8c69cdb`.

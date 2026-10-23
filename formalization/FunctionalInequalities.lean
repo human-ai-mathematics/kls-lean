@@ -431,6 +431,21 @@ import FunctionalInequalities.Probability.MomentMeasure.Gradient
 import FunctionalInequalities.KLS.CEK.MomentRegularity.Inverse
 import FunctionalInequalities.Analysis.BakryEmery.DifferenceQuotient
 import FunctionalInequalities.KLS.CEK.MomentRegularity.DifferenceQuotient
+import FunctionalInequalities.Analysis.AbsorptionIteration
+import FunctionalInequalities.Analysis.BakryEmery.EllipticGradientForcing
+import FunctionalInequalities.Analysis.Holder.RadicalCounterexample
+import FunctionalInequalities.Analysis.IteratedDerivative.LinearPullback
+import FunctionalInequalities.Analysis.IteratedDerivative.QuotientLimit
+import FunctionalInequalities.Analysis.Laplacian.TestIdentity
+import FunctionalInequalities.Analysis.Newtonian.Harmonic
+import FunctionalInequalities.Analysis.Newtonian.LocalHolder
+import FunctionalInequalities.Analysis.Newtonian.Near
+import FunctionalInequalities.Analysis.Newtonian.PoissonFreezing
+import FunctionalInequalities.KLS.CEK.MomentRegularity.Ellipticity
+import FunctionalInequalities.Analysis.Harmonic.BallHolder
+import FunctionalInequalities.Analysis.Newtonian.InteriorSchauder
+import FunctionalInequalities.Analysis.IteratedDerivative.ConstantCoefficientSchauder
+
 /-!
 # Functional inequalities
 

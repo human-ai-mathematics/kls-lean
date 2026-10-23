@@ -1,6 +1,6 @@
 {
   "title": "Letwin smooth moment-map route: source targets and remaining gaps",
-  "reviewed_on": "2026-10-22",
+  "reviewed_on": "2026-10-23",
   "scope": "Letwin arXiv:2607.24164v1 Lemma 2.2 (smooth moment map) and the regularity it imports from Berman-Berndtsson arXiv:1207.6128v1 Theorem 2.24; state of the local library. Lemma A.1 (regular approximation) is formalized: ../../formalization/FunctionalInequalities/KLS/Letwin/Approximation.lean (exists_regular_approximation).",
   "sources": {
     "Letwin2026": {
@@ -172,7 +172,18 @@
     {
       "id": "R10",
       "what": "linear Schauder bootstrap: C^{2,alpha} => C^infinity (differentiate the equation; interior Schauder estimates for nondivergence linear equations with C^alpha coefficients)",
-      "status": "MISSING_DEEP"
+      "status": "MISSING_DEEP",
+      "subtools": [
+        "R10a GT Chapter 4 potential theory, n >= 2 including n = 2, 0 < alpha < 1: PROVED_IN_LIBRARY. Lemma 4.2 (../../formalization/FunctionalInequalities/Analysis/Newtonian/PotentialC2.lean: newtonianPotential_contDiffOn_two), Lemma 4.4 (Analysis/Newtonian/Schauder.lean: newtonianPotential_schauder; Analysis/Newtonian/LocalHolder.lean: newtonianPotential_localHolder), (4.15) (Analysis/Newtonian/Representation.lean: compact_C2_newtonian_representation), Theorem 4.5 (Analysis/Newtonian/CompactPoisson.lean: compactPoisson_estimates, compactPoisson_GT4_5). Audits research/audits/Newtonian/{CompactPoissonAudit,RepresentationAudit}.lean.",
+        "R10b harmonic half of GT Theorem 4.6: PROVED_IN_LIBRARY. Fixed annular reproducing kernel Delta(truncated Gamma), eps = 1/8 (Analysis/Harmonic/{AnnularKernel,CompactReproduction,LocalReproduction}.lean), local C-infinity with derivative caps through order 3 (Analysis/Harmonic/LocalCaps.lean: local_harmonic_derivative_caps), Hessian Holder estimate on ball c R from |h| <= M on ball c (2R) with R^-2 and R^-(2+alpha) (Analysis/Harmonic/BallHolder.lean: ball_harmonic_hessian_holder). Audit research/audits/Newtonian/HarmonicKernelAudit.lean.",
+        "R10c GT Theorem 4.6, Hessian form (Newtonian + harmonic halves combined on balls, n >= 2 including n = 2, 0 < alpha < 1, C(n, alpha) before c, R, u, f, U, M, H): PROVED_IN_LIBRARY (../../formalization/FunctionalInequalities/Analysis/Newtonian/InteriorSchauder.lean: poisson_interior_hessian_holder). Audit research/audits/Newtonian/InteriorSchauderAudit.lean.",
+        "R10d uniformly elliptic difference-quotient equations (Lemma 17.16 completed to a linear equation): PROVED_IN_LIBRARY. Quantitative lambda, Lambda for the averaged-inverse coefficients before direction and step (Analysis/Matrix/{CompactEllipticity,AveragedInverseEllipticity}.lean, Analysis/BakryEmery/HessianEllipticity.lean), W(grad u) forcing as sum b_i partial_i of the quotient with bounded Holder b_i (Analysis/GradientSegment.lean, Analysis/BakryEmery/{GradientForcing,UniformGradientForcing,EllipticGradientForcing}.lean), same-witness application (KLS/CEK/MomentRegularity/Ellipticity.lean: exists_regular_moment_potential_elliptic_quotient_equations). Audit research/audits/CEK/EllipticityAudit.lean.",
+        "R10e GT Lemma 6.1 constant-coefficient interior estimate (symmetric A with lambda, Lambda, C(n, alpha, lambda, Lambda) before A and all data): PROVED_IN_LIBRARY (../../formalization/FunctionalInequalities/Analysis/IteratedDerivative/ConstantCoefficientSchauder.lean: constant_coefficient_interior_hessian_holder; T = CFC square root of A, Hessian pullback, Theorem 4.6 on transported balls). Audit research/audits/Newtonian/ConstantCoefficientAudit.lean. Hessian pullback and Holder transport: Analysis/IteratedDerivative/{LinearPullback,HolderTransport}.lean.",
+        "R10f GT Theorem 6.2 a priori interior estimate with variable Holder coefficients: MISSING_DEEP; proved supports: coefficient freezing (6.17)-(6.19) residual bounds and absorption constants (Analysis/IteratedDerivative/{CoefficientFreezing,CoefficientCoordinates}.lean, Analysis/Newtonian/PoissonFreezing.lean), Hessian interpolation (Analysis/IteratedDerivative/Interpolation.lean), radius absorption lemma (Analysis/AbsorptionIteration.lean: exists_absorption_constant).",
+        "R10g quotient limit (equi-bounded, equi-Holder Hessians of C^2 approximants give a C^2 limit with the same bounds): PROVED_IN_LIBRARY (Analysis/IteratedDerivative/QuotientLimit.lean: contDiffOn_two_of_hessian_limit). Audit research/audits/SchauderToolsAudit.lean.",
+        "R10h bootstrap induction C^{k,alpha} => C^{k+1,alpha} at the regular moment potential and ContDiff infinity: MISSING (needs R10c, R10e, R10f)."
+      ],
+      "note": "Plan and status in build/history/2026-10-23-letwin-schauder-integration/PLAN-R10.md (local record). R10 as a whole remains MISSING_DEEP until R10f and R10h close."
     },
     {
       "id": "R11",

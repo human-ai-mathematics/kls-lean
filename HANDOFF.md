@@ -1,6 +1,6 @@
 # Current KLS handoff
 
-Updated 2026-10-22 for three integrated Schauder support packets (affine derivative scaling with local cutoffs, local Hessian interpolation, same-witness difference-quotient equations); earlier the same day for the gradient homeomorphism onto int K with a C¹ inverse at the regular moment potential (strong class) and the averaged-inverse log-determinant coefficients; earlier the same day for the regular moment potential with C² Hölder Hessian and the everywhere log-determinant equation (strong class: frame oscillation decay, Hölder representatives, continuous-a.e.-derivative bridge); 2026-10-21 for Letwin smooth-route support tools, the directional weak subsolution, nonlinear weak test tools,
+Updated 2026-10-23 for the canonical integration of the Gilbarg–Trudinger linear theory (Newtonian potential chain, harmonic kernel, quantitative ellipticity, coefficient freezing, quotient limit, absorption) and the interior Theorem 4.6 in Hessian form; 2026-10-22 for three integrated Schauder support packets (affine derivative scaling with local cutoffs, local Hessian interpolation, same-witness difference-quotient equations); earlier the same day for the gradient homeomorphism onto int K with a C¹ inverse at the regular moment potential (strong class) and the averaged-inverse log-determinant coefficients; earlier the same day for the regular moment potential with C² Hölder Hessian and the everywhere log-determinant equation (strong class: frame oscillation decay, Hölder representatives, continuous-a.e.-derivative bridge); 2026-10-21 for Letwin smooth-route support tools, the directional weak subsolution, nonlinear weak test tools,
 H¹ energy/Sobolev tools, the Moser inputs, the Morrey/critical-potential inputs, the local bounded Moser inputs, the bounded weak John–Nirenberg / fixed-compact joint inputs, the bounded actual weak Harnack inequality, the given-data weak Harnack with its joint regular-potential application, the GT 17.13 fixed frame, the GT 8.23 scalar iteration and the essential deficit identity; 2026-10-20 for noncompact Letwin, Letwin Lemma A.1, Comparator
 metadata and synchronized BrownianMotion.
 
@@ -52,23 +52,57 @@ and explicit third-party compiled caches remain trusted. Known
 
 ## Current work and next step
 
-The current proof priority is the authorized Letwin smooth toolchain, then the uncut Eldan
-construction. Lemma A.1 is formalized in `KLS/Letwin/Approximation.lean`; the compact
-reduction and the noncompact endpoint consume its producers with unchanged public types. The
-[smooth-route gap map](research/progress/letwin-smooth-route.json) lists what Lemma 2.2 still
-needs: Caffarelli C^{1,α} and W^{2,p} for the literal source class, Schauder regularity (C^{2,α} by the rough-divergence route and the
-everywhere positive definite equation are proved for the strong class at the regular moment potential), a smooth gradient
-diffeomorphism (a homeomorphism onto int K with a C¹ inverse is proved there) and the smooth source form of Lemma 2.7. The weak second Hessian evolution, compact-local inverse-Hessian bounds
-at the same witness and Mathlib's Sobolev inequality are already available inputs.
+The current proof priority is the authorized Letwin smooth toolchain (the linear Schauder bootstrap
+R10 of the [smooth-route gap map](research/progress/letwin-smooth-route.json)), then the uncut Eldan
+construction. Lemma A.1 is formalized in `KLS/Letwin/Approximation.lean`; the compact reduction and
+the noncompact endpoint consume its producers with unchanged public types. For Lemma 2.2 the strong
+class has, at the regular moment potential, C² with locally Hölder Hessian, the everywhere positive
+definite log-determinant equation and a gradient homeomorphism onto int K with a C¹ inverse; the
+literal merely convex class (Caffarelli C^{1,α}, W^{2,p}) and the smooth source form of Lemma 2.7
+remain open.
 
-Three Schauder support packets are integrated as generic tools, with audit clients `research/audits/{AffineDerivativeScaleAudit,HessianInterpolationAudit,CEK/DifferenceQuotientAudit}.lean`:
-affine changes of variables for actual total derivatives and local cutoff regularity (`Analysis/IteratedDerivative/Affine`,
-`Analysis/Cutoff/LocalRegularity`; GT 4.6 support), pointwise Hessian interpolation with the constant chosen first
-(`Analysis/IteratedDerivative/Interpolation`; core of GT (6.8)), and averaged-inverse finite-difference equations
-(`Analysis/Matrix/AveragedInverse`, `Analysis/BakryEmery/DifferenceQuotient`) with their same-witness application
-`exists_regular_moment_potential_difference_quotient_equations` (GT 17.16 precursor). The harmonic derivative-cap producer, lower
-ellipticity of the averaged coefficients, the GT 4.6 Poisson interior Schauder estimate, the GT 6.2 variable-coefficient Schauder
-estimate and the quotient limit remain open.
+Updated 2026-10-23: the Gilbarg–Trudinger linear theory that R10 needs is now in the canonical tree
+(previously only independently accepted scratch under `build/history/`), in new generic families with
+GT locators in every header and audit clients under `research/audits/Newtonian/`, `CEK/` and the root:
+
+- `Analysis/Newtonian/` (52 modules; n ≥ 2 including n = 2, 0 < α < 1): the source-normalized kernel,
+  Lemma 4.2 `newtonianPotential_contDiffOn_two`, Lemma 4.4 `newtonianPotential_schauder` and
+  `newtonianPotential_localHolder`, the representation (4.15) `compact_C2_newtonian_representation`,
+  Theorem 4.5 `compactPoisson_estimates`/`compactPoisson_GT4_5`, the interior **Theorem 4.6 in
+  Hessian form** `poisson_interior_hessian_holder` (`Newtonian/InteriorSchauder.lean`: for Δu = f on
+  B_{2R}(c), ‖D²u‖ ≤ C(U R⁻² + M + R^α H) and the Hessian Hölder bound with C(U R^{−2−α} + M R^{−α} + H)
+  on B_R(c), C(n, α) before all data), and the constant-coefficient **Lemma 6.1** interior form
+  `constant_coefficient_interior_hessian_holder` (`IteratedDerivative/ConstantCoefficientSchauder.lean`: symmetric A
+  with λ|ξ|² ≤ ξᵀAξ ≤ Λ|ξ|², the same two bounds with C(n, α, λ, Λ), via T = A^{1/2} and the Hessian pullback).
+- `Analysis/Harmonic/`, `Analysis/Laplacian/`, `Analysis/Convolution/`, `Analysis/Holder/`: the harmonic
+  half of Theorem 4.6 (fixed annular reproducing kernel Δ(truncated Γ), ε = 1/8; local C^∞ with
+  derivative caps through order 3; `ball_harmonic_hessian_holder`), Green symmetry, the compact
+  convolution derivative caps and generic Hölder tools.
+- Lemma 17.16 completed to uniformly elliptic linear equations: λ, Λ for the averaged-inverse
+  coefficients before direction and step (`Analysis/Matrix/{CompactEllipticity,AveragedInverseEllipticity}`,
+  `Analysis/BakryEmery/HessianEllipticity`), the W(∇u) forcing as Σ b_i ∂_i of the quotient with bounded
+  Hölder b_i (`Analysis/GradientSegment`, `Analysis/BakryEmery/{GradientForcing,UniformGradientForcing,
+  EllipticGradientForcing}`), and the same-witness application
+  `exists_regular_moment_potential_elliptic_quotient_equations` (`KLS/CEK/MomentRegularity/Ellipticity`).
+- Supports for Theorem 6.2: coefficient freezing (6.17)–(6.19) with small-radius absorption constants
+  (`Analysis/IteratedDerivative/{CoefficientFreezing,CoefficientCoordinates}`, `Newtonian/PoissonFreezing`),
+  Hessian pullback and Hölder transport under a linear equivalence
+  (`IteratedDerivative/{LinearPullback,HolderTransport}`), the quotient-limit theorem
+  `contDiffOn_two_of_hessian_limit` (`IteratedDerivative/QuotientLimit`: equi-bounded, equi-Hölder Hessians
+  of C² approximants pass to a C² limit with the same bounds) and the radius absorption lemma
+  `exists_absorption_constant` (`Analysis/AbsorptionIteration`).
+
+What R10 still needs, in order (plan in the local record `build/history/2026-10-23-letwin-schauder-integration/PLAN-R10.md`):
+the a priori interior estimate of Theorem 6.2 for variable Hölder coefficients (freezing + Lemma 6.1 on small balls +
+interpolation + the absorption lemma), and the C^{k,α} ⇒ C^{k+1,α} bootstrap at the regular moment potential
+(quotient equations + Theorem 6.2 + quotient limit), giving u ∈ C^∞ and a smooth gradient diffeomorphism. These are
+supporting results; Lemma 2.2 stays partial and no certificate changes.
+
+The first-wave Schauder supports (affine derivative scaling with local cutoffs `Analysis/IteratedDerivative/Affine`,
+`Analysis/Cutoff/LocalRegularity`; Hessian interpolation `Analysis/IteratedDerivative/Interpolation`; averaged-inverse
+difference quotients `Analysis/Matrix/AveragedInverse`, `Analysis/BakryEmery/DifferenceQuotient` with
+`exists_regular_moment_potential_difference_quotient_equations`) keep their audit clients
+`research/audits/{AffineDerivativeScaleAudit,HessianInterpolationAudit,CEK/DifferenceQuotientAudit}.lean`.
 
 The 2026-10-21 support batch works at the same strong regular-class witness (unchanged old types):
 `exists_regular_moment_potential_with_inverse` (injective gradient, measurable left inverse),
@@ -213,9 +247,9 @@ GT (17.56) with Hölder averaged inverses (`Analysis/Matrix/LogDetSegment`, `Ana
 `Analysis/MeasureAverage`, `Analysis/Matrix/DeterminantDerivative`) are prerequisites for linear Schauder only. The audit
 `research/audits/Letwin/GradientInverse.lean` checks transport, C², the homeomorphism and the C¹ inverse from the original inputs.
 
-The next step is the linear Schauder bootstrap R10 (C^{2,α} ⇒ C^∞) for the strong class: first the Letwin smooth route, then
-uncut Eldan. Full GT 8.18 for unbounded data (q > n, rough general coefficients), the domain-only W^{1,1} GT 7.16, Schauder
-and the merely convex class stay open. Gilbarg–Trudinger is not covered as a paper; Letwin Lemmas 2.2 and
+The next step is the rest of the linear Schauder bootstrap R10 (C^{2,α} ⇒ C^∞) for the strong class (Lemma 6.1,
+Theorem 6.2, bootstrap; see the 2026-10-23 update above): first the Letwin smooth route, then uncut Eldan. Full GT 8.18 for unbounded data (q > n, rough general coefficients), the domain-only W^{1,1} GT 7.16, the Schauder bootstrap
+and the merely convex class stay open. Gilbarg–Trudinger is not covered as a paper (its Chapter 4 results are supports); Letwin Lemmas 2.2 and
 2.7 stay partial and Theorem 1.1 unformalized; the 34 certificates are unchanged.
 
 BrownianMotion is synchronized to `a7ad7af` on the unchanged Lean/Mathlib v4.33.0 toolchain.
