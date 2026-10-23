@@ -98,10 +98,17 @@ GT locators in every header and audit clients under `research/audits/Newtonian/`
   of C² approximants pass to a C² limit with the same bounds) and the radius absorption lemma
   `exists_absorption_constant` (`Analysis/AbsorptionIteration`).
 
-What R10 still needs, in order (plan in the local record `build/history/2026-10-23-letwin-schauder-integration/PLAN-R10.md`):
-the C^{k,α} ⇒ C^{k+1,α} bootstrap at the regular moment potential
-(quotient equations + Theorem 6.2 + quotient limit), giving u ∈ C^∞ and a smooth gradient diffeomorphism. These are
-supporting results; Lemma 2.2 stays partial and no certificate changes.
+- The first bootstrap step: `contDiffOn_three_of_quotient_equations` (`IteratedDerivative/HolderBootstrapStep.lean`; a C²
+  function with locally Hölder Hessian whose unit-direction difference quotients satisfy the Theorem 6.2 equation with caps
+  before direction and step is C³ with bounded Hölder third derivative on the inner ball) and, at the same regular moment
+  potential with every producer field retained, `exists_regular_moment_potential_contDiff_three`
+  (`KLS/CEK/MomentRegularity/BootstrapThree.lean`: u ∈ C³ on ℝⁿ, bounded Hölder third derivative on every ball, C² inverse
+  of ∇u on int K); audit `research/audits/Letwin/BootstrapThree.lean`.
+
+What R10 still needs (plan in the local record `build/history/2026-10-23-letwin-schauder-integration/PLAN-R10.md`): the
+difference-quotient equations of order k ≥ 3 (differentiate the log-determinant equation; coefficients and forcing Hölder from
+the C^{k,α} data), the induction to every k with the same one-step gain, hence u ∈ C^∞ and a smooth gradient diffeomorphism.
+These are supporting results; Lemma 2.2 stays partial and no certificate changes.
 
 The first-wave Schauder supports (affine derivative scaling with local cutoffs `Analysis/IteratedDerivative/Affine`,
 `Analysis/Cutoff/LocalRegularity`; Hessian interpolation `Analysis/IteratedDerivative/Interpolation`; averaged-inverse

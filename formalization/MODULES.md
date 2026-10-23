@@ -6,13 +6,13 @@ This is a filename/import directory; it does not assign proof or paper-coverage 
 
 [Source guide](README.md) · [Interface guide](../LEAN_DESIGN.md) · [Public API](API.md) · [Placement and naming](../research/naming.md)
 
-**707 Lean modules in 6 top-level families.** The library aggregate `FunctionalInequalities.lean` is outside this subtree.
+**709 Lean modules in 6 top-level families.** The library aggregate `FunctionalInequalities.lean` is outside this subtree.
 
 | Family | Modules |
 | --- | ---: |
-| [Analysis/](FunctionalInequalities/Analysis) | 346 |
+| [Analysis/](FunctionalInequalities/Analysis) | 347 |
 | [Energy/](FunctionalInequalities/Energy) | 46 |
-| [KLS/](FunctionalInequalities/KLS) | 208 |
+| [KLS/](FunctionalInequalities/KLS) | 209 |
 | [L2/](FunctionalInequalities/L2) | 9 |
 | [Poincare/](FunctionalInequalities/Poincare) | 33 |
 | [Probability/](FunctionalInequalities/Probability) | 65 |
@@ -157,6 +157,7 @@ FunctionalInequalities/
 │   │   ├── CoefficientFreezing.lean
 │   │   ├── ConstantCoefficientSchauder.lean
 │   │   ├── GradientJet.lean
+│   │   ├── HolderBootstrapStep.lean
 │   │   ├── HolderTransport.lean
 │   │   ├── InnerProduct.lean
 │   │   ├── Interpolation.lean
@@ -536,6 +537,7 @@ FunctionalInequalities/
 │   │   └── TaylorBound.lean
 │   ├── CEK/
 │   │   ├── MomentRegularity/
+│   │   │   ├── BootstrapThree.lean
 │   │   │   ├── Cutoff.lean
 │   │   │   ├── DifferenceQuotient.lean
 │   │   │   ├── Ellipticity.lean
@@ -970,6 +972,7 @@ Use a file's import path by replacing `/` with `.` and dropping `.lean`, after t
 | [Analysis/IteratedDerivative/CoefficientFreezing.lean](FunctionalInequalities/Analysis/IteratedDerivative/CoefficientFreezing.lean) | Freezing the principal coefficients of a second-order operator |
 | [Analysis/IteratedDerivative/ConstantCoefficientSchauder.lean](FunctionalInequalities/Analysis/IteratedDerivative/ConstantCoefficientSchauder.lean) | Interior Schauder estimate for constant-coefficient elliptic operators (GT Lemma 6.1) |
 | [Analysis/IteratedDerivative/GradientJet.lean](FunctionalInequalities/Analysis/IteratedDerivative/GradientJet.lean) | Iterated derivatives of a shifted map and of a gradient |
+| [Analysis/IteratedDerivative/HolderBootstrapStep.lean](FunctionalInequalities/Analysis/IteratedDerivative/HolderBootstrapStep.lean) | One Schauder bootstrap step: `C^{2,α}` difference-quotient equations give `C^{3,α}` |
 | [Analysis/IteratedDerivative/HolderTransport.lean](FunctionalInequalities/Analysis/IteratedDerivative/HolderTransport.lean) | Hölder transport of bilinear fields under a linear map |
 | [Analysis/IteratedDerivative/InnerProduct.lean](FunctionalInequalities/Analysis/IteratedDerivative/InnerProduct.lean) | Leibniz rule for an inner product with an operator |
 | [Analysis/IteratedDerivative/Interpolation.lean](FunctionalInequalities/Analysis/IteratedDerivative/Interpolation.lean) | Second central differences and local Hessian interpolation |
@@ -1301,6 +1304,7 @@ Use a file's import path by replacing `/` with `.` and dropping `.lean`, after t
 | [KLS/CEK/BoundedPrimal.lean](FunctionalInequalities/KLS/CEK/BoundedPrimal.lean) | A normalized Lipschitz primal for a bounded isotropic source law |
 | [KLS/CEK/Competitors.lean](FunctionalInequalities/KLS/CEK/Competitors.lean) | CEK Proposition 12: reduction of every admissible competitor |
 | [KLS/CEK/MomentMap.lean](FunctionalInequalities/KLS/CEK/MomentMap.lean) | The weak moment map of a bounded isotropic law |
+| [KLS/CEK/MomentRegularity/BootstrapThree.lean](FunctionalInequalities/KLS/CEK/MomentRegularity/BootstrapThree.lean) | The regular moment potential is `C³` with locally Hölder third derivative |
 | [KLS/CEK/MomentRegularity/Cutoff.lean](FunctionalInequalities/KLS/CEK/MomentRegularity/Cutoff.lean) | Regular-source height cutoffs and bounded weak cutoff testing |
 | [KLS/CEK/MomentRegularity/DifferenceQuotient.lean](FunctionalInequalities/KLS/CEK/MomentRegularity/DifferenceQuotient.lean) | Difference quotients of the regular moment potential |
 | [KLS/CEK/MomentRegularity/Ellipticity.lean](FunctionalInequalities/KLS/CEK/MomentRegularity/Ellipticity.lean) | Uniformly elliptic difference-quotient equations of the regular moment potential |

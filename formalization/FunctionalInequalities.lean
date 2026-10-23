@@ -446,6 +446,7 @@ import FunctionalInequalities.Analysis.Harmonic.BallHolder
 import FunctionalInequalities.Analysis.Newtonian.InteriorSchauder
 import FunctionalInequalities.Analysis.IteratedDerivative.ConstantCoefficientSchauder
 import FunctionalInequalities.Analysis.IteratedDerivative.VariableCoefficientSchauder
+import FunctionalInequalities.KLS.CEK.MomentRegularity.BootstrapThree
 
 /-!
 # Functional inequalities
