@@ -74,6 +74,12 @@ GT locators in every header and audit clients under `research/audits/Newtonian/`
   on B_R(c), C(n, α) before all data), and the constant-coefficient **Lemma 6.1** interior form
   `constant_coefficient_interior_hessian_holder` (`IteratedDerivative/ConstantCoefficientSchauder.lean`: symmetric A
   with λ|ξ|² ≤ ξᵀAξ ≤ Λ|ξ|², the same two bounds with C(n, α, λ, Λ), via T = A^{1/2} and the Hessian pullback).
+- The a priori interior **Theorem 6.2** estimate in ball form `variable_coefficient_interior_hessian_holder`
+  (`IteratedDerivative/VariableCoefficientSchauder.lean`): symmetric (λ, Λ)-elliptic α-Hölder coefficients, bounded Hölder
+  first-order coefficients and zero-order coefficient 1, v ∈ C² with finite a priori Hessian bounds on closedBall c (2R),
+  0 < R ≤ 1; on B_R(c), ‖D²v‖ ≤ C(V R⁻² + M + H) and the Hessian Hölder bound with C(V R^{−2−α} + M R^{−α} + H),
+  C(n, α, λ, Λ, K, K_b) independent of the a priori bounds (coefficient freezing, Lemma 6.1 on small balls, Hessian
+  interpolation, the radius absorption lemma).
 - `Analysis/Harmonic/`, `Analysis/Laplacian/`, `Analysis/Convolution/`, `Analysis/Holder/`: the harmonic
   half of Theorem 4.6 (fixed annular reproducing kernel Δ(truncated Γ), ε = 1/8; local C^∞ with
   derivative caps through order 3; `ball_harmonic_hessian_holder`), Green symmetry, the compact
@@ -93,8 +99,7 @@ GT locators in every header and audit clients under `research/audits/Newtonian/`
   `exists_absorption_constant` (`Analysis/AbsorptionIteration`).
 
 What R10 still needs, in order (plan in the local record `build/history/2026-10-23-letwin-schauder-integration/PLAN-R10.md`):
-the a priori interior estimate of Theorem 6.2 for variable Hölder coefficients (freezing + Lemma 6.1 on small balls +
-interpolation + the absorption lemma), and the C^{k,α} ⇒ C^{k+1,α} bootstrap at the regular moment potential
+the C^{k,α} ⇒ C^{k+1,α} bootstrap at the regular moment potential
 (quotient equations + Theorem 6.2 + quotient limit), giving u ∈ C^∞ and a smooth gradient diffeomorphism. These are
 supporting results; Lemma 2.2 stays partial and no certificate changes.
 

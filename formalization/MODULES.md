@@ -6,11 +6,11 @@ This is a filename/import directory; it does not assign proof or paper-coverage 
 
 [Source guide](README.md) · [Interface guide](../LEAN_DESIGN.md) · [Public API](API.md) · [Placement and naming](../research/naming.md)
 
-**706 Lean modules in 6 top-level families.** The library aggregate `FunctionalInequalities.lean` is outside this subtree.
+**707 Lean modules in 6 top-level families.** The library aggregate `FunctionalInequalities.lean` is outside this subtree.
 
 | Family | Modules |
 | --- | ---: |
-| [Analysis/](FunctionalInequalities/Analysis) | 345 |
+| [Analysis/](FunctionalInequalities/Analysis) | 346 |
 | [Energy/](FunctionalInequalities/Energy) | 46 |
 | [KLS/](FunctionalInequalities/KLS) | 208 |
 | [L2/](FunctionalInequalities/L2) | 9 |
@@ -163,7 +163,8 @@ FunctionalInequalities/
 │   │   ├── LinearPullback.lean
 │   │   ├── Log.lean
 │   │   ├── QuotientLimit.lean
-│   │   └── Symmetry.lean
+│   │   ├── Symmetry.lean
+│   │   └── VariableCoefficientSchauder.lean
 │   ├── Laplacian/
 │   │   ├── Convolution.lean
 │   │   ├── GreenSymmetry.lean
@@ -976,6 +977,7 @@ Use a file's import path by replacing `/` with `.` and dropping `.lean`, after t
 | [Analysis/IteratedDerivative/Log.lean](FunctionalInequalities/Analysis/IteratedDerivative/Log.lean) | Iterated derivatives of `log ∘ f` at a normalized point |
 | [Analysis/IteratedDerivative/QuotientLimit.lean](FunctionalInequalities/Analysis/IteratedDerivative/QuotientLimit.lean) | C² regularity of limits with uniformly Hölder Hessians |
 | [Analysis/IteratedDerivative/Symmetry.lean](FunctionalInequalities/Analysis/IteratedDerivative/Symmetry.lean) | Permutation symmetry of raw iterated derivatives of real `C^∞` maps |
+| [Analysis/IteratedDerivative/VariableCoefficientSchauder.lean](FunctionalInequalities/Analysis/IteratedDerivative/VariableCoefficientSchauder.lean) | Interior a priori Schauder estimate for variable Hölder coefficients (GT Theorem 6.2) |
 | [Analysis/Laplacian/Convolution.lean](FunctionalInequalities/Analysis/Laplacian/Convolution.lean) | The Laplacian commutes with convolution against a locally integrable kernel |
 | [Analysis/Laplacian/GreenSymmetry.lean](FunctionalInequalities/Analysis/Laplacian/GreenSymmetry.lean) | Symmetry of the Laplacian against one compactly supported function |
 | [Analysis/Laplacian/TestIdentity.lean](FunctionalInequalities/Analysis/Laplacian/TestIdentity.lean) | Green's first identity against compactly supported tests |
