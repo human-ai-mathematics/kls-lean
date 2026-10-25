@@ -7,7 +7,7 @@ open MeasureTheory
 open scoped ContDiff
 namespace FunctionalInequalities.Analysis.WaveSplitting
 variable {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
-variable {ι : Type*}
+  {ι : Type*}
 
 /-- Appending a word differentiates the inner function first, retaining the actual order. -/
 theorem wordDerivative_append (a : ι → E) (w r : List ι) (f : E → ℝ) :

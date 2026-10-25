@@ -30,7 +30,9 @@ section Helpers
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
     [CompleteSpace E] [FiniteDimensional ℝ E]
 
-omit [CompleteSpace E] in
+section HessianSquares
+
+omit [CompleteSpace E]
 private lemma continuous_hessian_square {f : E → ℝ} (hf : ContDiff ℝ ∞ f) :
     Continuous (hessianSqStdBasis f) := by
   classical
@@ -39,13 +41,14 @@ private lemma continuous_hessian_square {f : E → ℝ} (hf : ContDiff ℝ ∞ f
       (((hf.fderiv_right (m := 1) (by decide)).continuous_fderiv one_ne_zero).clm_apply
         continuous_const |>.clm_apply continuous_const).pow 2
 
-omit [CompleteSpace E] in
 private lemma compact_hessian_square {f : E → ℝ} (hc : HasCompactSupport f) :
     HasCompactSupport (hessianSqStdBasis f) := by
   classical
   refine ((hc.fderiv ℝ).fderiv ℝ).mono ?_
   intro x hx hz
   exact hx (by simp [hessianSqStdBasis, bilinearIteratedFDerivTwo, hz])
+
+end HessianSquares
 
 private lemma laplacian_perturbation_bound (U V g : E → ℝ) (x : E) {C : ℝ}
     (hC : ‖gradient V x - gradient U x‖ ≤ C) :
@@ -121,8 +124,8 @@ end Helpers
 section FiniteDimensional
 
 variable {E : Type*}
-variable [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E] [FiniteDimensional ℝ E]
-variable [MeasurableSpace E] [BorelSpace E]
+  [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E] [FiniteDimensional ℝ E]
+  [MeasurableSpace E] [BorelSpace E]
 
 /-- **Bochner identity for a Lipschitz potential with Lipschitz gradient** (weak Letwin route,
 Brascamp–Lieb at `C^{1,1}`): for `U ∈ C¹` Lipschitz with `G`-Lipschitz gradient and integrable

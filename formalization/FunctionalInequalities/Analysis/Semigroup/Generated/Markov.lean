@@ -64,7 +64,9 @@ theorem upperOne_compL2 (f : Lp ℝ 2 (μ : Measure α)) :
 
 variable {μ : ProbabilityMeasure α} {T : Lp ℝ 2 (μ : Measure α) →ₗ.[ℝ] H}
 
-omit [CompleteSpace H] in
+section ResolventMinimization
+
+omit [CompleteSpace H]
 /-- A Markovian squared-norm form is stable on the operator domain under every normal
 contraction, with nonincreasing operator norm. -/
 theorem compL2_mem_domain_and_norm_le
@@ -86,7 +88,6 @@ theorem compL2_mem_domain_and_norm_le
     (show (0 : NNReal) ≤ _ from bot_le)).mp hsquare
   exact_mod_cast hnn
 
-omit [CompleteSpace H] in
 /-- The weak resolvent solution uniquely minimizes
 `v ↦ ‖v-f‖² + s‖Tv‖²` on the form domain. -/
 theorem eq_resolventDomain_of_objective_le {s : ℝ} (hs : 0 < s) {f : Lp ℝ 2 (μ : Measure α)}
@@ -113,6 +114,8 @@ theorem eq_resolventDomain_of_objective_le {s : ℝ} (hs : 0 < s) {f : Lp ℝ 2 
     nlinarith [sq_nonneg ‖(v : Lp ℝ 2 (μ : Measure α)) - u‖,
       sq_nonneg ‖T (v - u)‖]
   exact Subtype.ext (sub_eq_zero.mp (norm_eq_zero.mp hz))
+
+end ResolventMinimization
 
 /-- A Markovian closed form has a positivity-preserving resolvent. -/
 theorem resolventCLM_positive (hT : T.IsClosed)
@@ -189,7 +192,9 @@ theorem resolventCLM_one (hT : T.IsClosed) {s : ℝ} (hs : 0 < s)
 def IsPositive (A : Lp ℝ 2 (μ : Measure α) →L[ℝ] Lp ℝ 2 (μ : Measure α)) : Prop :=
   ∀ ⦃f⦄, 0 ≤ f → 0 ≤ A f
 
-omit [CompleteSpace H] in
+section PositiveOperators
+
+omit [CompleteSpace H]
 /-- Nonnegative real scalar multiplication preserves the positive cone of real `L²`. -/
 theorem smul_nonneg_Lp {c : ℝ} (hc : 0 ≤ c) {f : Lp ℝ 2 (μ : Measure α)} (hf : 0 ≤ f) :
     0 ≤ c • f := by
@@ -198,7 +203,6 @@ theorem smul_nonneg_Lp {c : ℝ} (hc : 0 ≤ c) {f : Lp ℝ 2 (μ : Measure α)}
   rw [hsmul, Pi.smul_apply, smul_eq_mul]
   exact mul_nonneg hc hfx
 
-omit [CompleteSpace H] in
 /-- Positive operators are closed under nonnegative scalar multiplication. -/
 theorem IsPositive.smul {A : Lp ℝ 2 (μ : Measure α) →L[ℝ] Lp ℝ 2 (μ : Measure α)}
     (hA : IsPositive A) {c : ℝ} (hc : 0 ≤ c) : IsPositive (c • A) := by
@@ -206,7 +210,6 @@ theorem IsPositive.smul {A : Lp ℝ 2 (μ : Measure α) →L[ℝ] Lp ℝ 2 (μ :
   change 0 ≤ c • A f
   exact smul_nonneg_Lp hc (hA hf)
 
-omit [CompleteSpace H] in
 /-- Positive operators are closed under composition. -/
 theorem IsPositive.comp
     {A B : Lp ℝ 2 (μ : Measure α) →L[ℝ] Lp ℝ 2 (μ : Measure α)}
@@ -214,7 +217,6 @@ theorem IsPositive.comp
   intro f hf
   exact hA (hB hf)
 
-omit [CompleteSpace H] in
 /-- Every power of a positive operator is positive. -/
 theorem IsPositive.pow {A : Lp ℝ 2 (μ : Measure α) →L[ℝ] Lp ℝ 2 (μ : Measure α)}
     (hA : IsPositive A) : ∀ n : ℕ, IsPositive (A ^ n)
@@ -222,6 +224,8 @@ theorem IsPositive.pow {A : Lp ℝ 2 (μ : Measure α) →L[ℝ] Lp ℝ 2 (μ : 
   | n + 1 => by
       rw [pow_succ]
       exact (hA.pow n).comp hA
+
+end PositiveOperators
 
 /-- The exponential of a positive bounded operator is positive. The proof takes the exponential
 series through evaluation at `f`; every finite partial sum lies in the closed positive cone. -/
@@ -238,7 +242,9 @@ theorem isPositive_exp
     change 0 ≤ (k.factorial : ℝ)⁻¹ • (A ^ k) f
     exact smul_nonneg_Lp (inv_nonneg.mpr (Nat.cast_nonneg _)) ((hA.pow k) hf)
 
-omit [CompleteSpace H] in
+section ExponentialFixedVectors
+
+omit [CompleteSpace H]
 /-- Exponentiating an operator that kills `f` fixes `f`. -/
 theorem exp_apply_of_apply_eq_zero
     (A : Lp ℝ 2 (μ : Measure α) →L[ℝ] Lp ℝ 2 (μ : Measure α))
@@ -252,7 +258,6 @@ theorem exp_apply_of_apply_eq_zero
   · simp
   · simp [pow_succ, hAf]
 
-omit [CompleteSpace H] in
 /-- The exponential of a scalar multiple of the identity is scalar multiplication by the real
 exponential. -/
 theorem exp_smul_one_apply (a : ℝ) (f : Lp ℝ 2 (μ : Measure α)) :
@@ -271,6 +276,8 @@ theorem exp_smul_one_apply (a : ℝ) (f : Lp ℝ 2 (μ : Measure α)) :
         Lp ℝ 2 (μ : Measure α))) a).symm
   rw [halg, hmap, ← Real.exp_eq_exp_ℝ, Algebra.algebraMap_eq_smul_one]
   simp
+
+end ExponentialFixedVectors
 
 /-- The Yosida exponential factors into a positive scalar exponential and the exponential of a
 nonnegative scalar multiple of the resolvent. -/

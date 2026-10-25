@@ -91,7 +91,9 @@ private theorem eventually_zero_lt_of_hasDerivAt {g : ℝ → ℝ} {c : ℝ} (hg
   filter_upwards [this] with t ht
   simpa using ht
 
-omit [CompleteSpace V] in
+section BoundaryLines
+
+omit [CompleteSpace V]
 /-- The derivative of a `C¹` function along the ray `t ↦ x + t v`. -/
 private theorem hasDerivAt_line {ψ : V → ℝ} {x : V} (hψ : DifferentiableAt ℝ ψ x) (v : V) :
     HasDerivAt (fun t : ℝ => ψ (x + t • v)) (fderiv ℝ ψ x v) 0 := by
@@ -99,7 +101,6 @@ private theorem hasDerivAt_line {ψ : V → ℝ} {x : V} (hψ : DifferentiableAt
     simpa using ((hasDerivAt_id' (0 : ℝ)).smul_const v).const_add x
   exact hψ.hasFDerivAt.comp_hasDerivAt_of_eq 0 hpath (by simp)
 
-omit [CompleteSpace V] in
 /-- Two nonzero real linear functionals one of whose negative half-spaces is contained in the
 other's nonpositive half-space are positive multiples of each other. -/
 private theorem eq_smul_of_forall_lt_imp_le {A B : V →L[ℝ] ℝ} (hB : B ≠ 0)
@@ -143,6 +144,8 @@ private theorem eq_smul_of_forall_lt_imp_le {A B : V →L[ℝ] ℝ} (hB : B ≠ 
   exact ⟨lam, lt_of_le_of_ne hlam0 (Ne.symm hlamne),
     ContinuousLinearMap.ext fun w => by
       rw [hBeq w, smul_apply, smul_eq_mul, mul_comm]⟩
+
+end BoundaryLines
 
 /-- The outward normal does not depend on the local defining function: for every defining pair
 `(W, φ)` at a frontier point `x`, it is `∇φ x / ‖∇φ x‖`. -/

@@ -19,7 +19,7 @@ namespace FunctionalInequalities.Analysis
 section InnerProduct
 
 variable {E : Type*}
-variable [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+  [NormedAddCommGroup E] [InnerProductSpace ℝ E]
 
 private lemma alexandrov_gradient_support [CompleteSpace E]
     {u : E → ℝ} (hc : ConvexOn ℝ univ u)
@@ -199,7 +199,7 @@ namespace FunctionalInequalities.Analysis
 section FiniteDimensional
 
 variable {E : Type*}
-variable [NormedAddCommGroup E] [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] [MeasurableSpace E]
+  [NormedAddCommGroup E] [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] [MeasurableSpace E]
 
 private lemma isCompact_subgradientImage_local [BorelSpace E]
     {u : E → ℝ} {L : NNReal} (hu : LipschitzWith L u) {S : Set E}
@@ -1069,7 +1069,7 @@ namespace FunctionalInequalities.Analysis
 section InnerProduct
 
 variable {E : Type*}
-variable [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+  [NormedAddCommGroup E] [InnerProductSpace ℝ E]
 
 private lemma alexandrov_frontier_nonempty [FiniteDimensional ℝ E] [Nontrivial E]
     {Ω : Set E} (hb : Bornology.IsBounded Ω) {x₀ : E} (hx₀ : x₀ ∈ Ω) :
@@ -1755,7 +1755,7 @@ namespace FunctionalInequalities.Analysis
 section StructuredSpace
 
 variable {E : Type*}
-variable [NormedAddCommGroup E]
+  [NormedAddCommGroup E]
 
 private lemma affineEquiv_linear_sub
     [Module ℝ E] (e : E ≃ᵃ[ℝ] E) (a b : E) :
@@ -2112,7 +2112,7 @@ namespace FunctionalInequalities.Analysis
 section InnerProduct
 
 variable {E : Type*}
-variable [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+  [NormedAddCommGroup E] [InnerProductSpace ℝ E]
 
 /-- **Subtracting an affine function translates subgradient images** (weak Letwin route, Caffarelli's argument, bookkeeping): `∂(u − ⟪p, ·⟫ − c)(G) = ∂u(G) − p`, hence the volumes agree. -/
 theorem subgradientImage_sub_inner_add_const (u : E → ℝ) (p : E) (c : ℝ) (G : Set E) :
@@ -2161,7 +2161,7 @@ namespace FunctionalInequalities.Analysis
 section InnerProduct
 
 variable {E : Type*}
-variable [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+  [NormedAddCommGroup E] [InnerProductSpace ℝ E]
 
 private lemma t14d_isClosed_subgradientImage {u : E → ℝ} (hu : Continuous u)
     {S : Set E} (hS : IsCompact S) :
@@ -2346,7 +2346,7 @@ namespace FunctionalInequalities.Analysis
 section InnerProduct
 
 variable {E : Type*}
-variable [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+  [NormedAddCommGroup E] [InnerProductSpace ℝ E]
 
 section CompleteSpace
 

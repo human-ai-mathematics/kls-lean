@@ -16,7 +16,7 @@ open scoped ContDiff
 namespace FunctionalInequalities.Analysis.WaveSplitting
 
 variable {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
-variable {ι : Type*}
+  {ι : Type*}
 
 /-- Compact support of each classical component. -/
 def State.CompactSupport (Y : State E ι) : Prop :=
@@ -139,7 +139,9 @@ section FiniteIndex
 
 variable [Fintype ι]
 
-omit [NormedSpace ℝ E] in
+section CompactCoupling
+
+omit [NormedSpace ℝ E]
 private theorem compact_coupling (b : ι → E → ℝ) (Y : State E ι)
     (hp : ∀ j, HasCompactSupport (Y.p j)) : HasCompactSupport (coupling b Y) := by
   have heq : coupling b Y = ∑ j, fun x => b j x * Y.p j x := by
@@ -148,7 +150,6 @@ private theorem compact_coupling (b : ι → E → ℝ) (Y : State E ι)
   rw [heq]
   exact HasCompactSupport.finset_sum fun j _ => (hp j).mul_left
 
-omit [NormedSpace ℝ E] in
 /-- The coefficient multiplication in the reaction does not enlarge support. -/
 theorem State.CompactSupport.reaction {Y : State E ι}
     (hY : Y.CompactSupport) (b : ι → E → ℝ) (t : ℝ) :
@@ -160,6 +161,8 @@ theorem State.CompactSupport.reaction {Y : State E ι}
     hf.comp_left (g := fun z : ℝ => c * z) (by simp)
   exact ⟨((mulrule hY.1 _).add (mulrule hY.2.1 _)).add (mulrule hc _),
     ((mulrule hY.1 _).add (mulrule hY.2.1 _)).sub (mulrule hc _), hY.2.2⟩
+
+end CompactCoupling
 
 end FiniteIndex
 
@@ -217,7 +220,7 @@ theorem State.CompactSupport.nodes [Fintype ι] [DecidableEq ι] {Y : State E ι
 
 section Integration
 variable [MeasurableSpace E] [BorelSpace E]
-variable (m : Measure E) [IsFiniteMeasureOnCompacts m]
+  (m : Measure E) [IsFiniteMeasureOnCompacts m]
 
 /-- The integral of the square of a classical scalar function. -/
 def squareIntegral (f : E → ℝ) : ℝ := ∫ x, f x ^ 2 ∂m
@@ -231,14 +234,15 @@ def derivativeEnergy [Fintype ι] (a : ι → E) (k : ℕ) (Y : State E ι) : �
   ∑ n ∈ Finset.range (k + 1), ∑ w : Fin n → ι,
     energy m (differentiate (fun i => a (w i)) Y)
 
-omit [NormedSpace ℝ E] in
+section SquareIntegrals
+
+omit [NormedSpace ℝ E]
 private theorem integrable_sq {f : E → ℝ} (hf : Continuous f) (hc : HasCompactSupport f) :
     Integrable (fun x => f x ^ 2) m :=
   by
     have hp : HasCompactSupport (fun x => f x * f x) := hc.mul_left
     simpa only [pow_two, Pi.mul_def] using (hf.mul hf).integrable_of_hasCompactSupport hp
 
-omit [NormedSpace ℝ E] in
 /-- The scalar parallelogram identity under the integral, with actual integrability. -/
 theorem squareIntegral_add_sub {f g : E → ℝ} (hf : Continuous f) (hg : Continuous g)
     (hfc : HasCompactSupport f) (hgc : HasCompactSupport g) :
@@ -250,6 +254,8 @@ theorem squareIntegral_add_sub {f g : E → ℝ} (hf : Continuous f) (hg : Conti
   have heq : (fun x => (f x + g x) ^ 2 + (f x - g x) ^ 2) =
       fun x => (2 : ℝ) * (f x ^ 2 + g x ^ 2) := by funext x; ring
   rw [heq, integral_const_mul, integral_add (integrable_sq m hf hfc) (integrable_sq m hg hgc)]
+
+end SquareIntegrals
 
 omit [NormedSpace ℝ E] [IsFiniteMeasureOnCompacts m] in
 /-- Translating a scalar square leaves its integral unchanged for a Haar-type measure. -/

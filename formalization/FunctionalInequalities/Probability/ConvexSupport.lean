@@ -44,7 +44,7 @@ namespace FunctionalInequalities.Probability
 section InnerProduct
 
 variable {E : Type*}
-variable [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+  [NormedAddCommGroup E] [InnerProductSpace ℝ E]
 
 section MeasurableSpace
 
@@ -223,7 +223,7 @@ end MeasurableSpace
 section FiniteIndex
 
 variable {α : Type*}
-variable [DecidableEq α]
+  [DecidableEq α]
 
 private lemma product_pos_of_pos
     (s : Finset α) (f : α → ℝ) (hf : ∀ a ∈ s, 0 < f a) :
@@ -534,7 +534,7 @@ private lemma finite_value_coe {E : Type*} {φ : E → EReal}
 section InnerProduct
 
 variable {E : Type*}
-variable [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+  [NormedAddCommGroup E] [InnerProductSpace ℝ E]
 
 /-- For a nonnegative extended-real function with convex real epigraph, its real part is convex on the effective domain
 `{φ ≠ ⊤}`. -/

@@ -57,7 +57,7 @@ open Filter Topology Energy Energy.WeightedGradient
 section StructuredSpace
 
 variable {F : Type*}
-variable [NormedAddCommGroup F]
+  [NormedAddCommGroup F]
 
 omit [InnerProductSpace ℝ V] [CompleteSpace V] [BorelSpace V]
     [SecondCountableTopology V] [FiniteDimensional ℝ V] in
@@ -346,7 +346,7 @@ variable {C : NNReal} (hC : Poincare.LocalSlope.Intrinsic.constant ν ≤ (C : E
 section InnerProduct
 
 variable {F : Type*}
-variable [NormedAddCommGroup F] [InnerProductSpace ℝ F]
+  [NormedAddCommGroup F] [InnerProductSpace ℝ F]
 
 omit [NormedAddCommGroup V] [InnerProductSpace ℝ V] [CompleteSpace V] [BorelSpace V] [SecondCountableTopology V]
   [FiniteDimensional ℝ V] in
@@ -559,7 +559,7 @@ end InnerProduct
 section FiniteDimensional
 
 variable {G : Type*}
-variable [NormedAddCommGroup G] [InnerProductSpace ℝ G] [FiniteDimensional ℝ G]
+  [NormedAddCommGroup G] [InnerProductSpace ℝ G] [FiniteDimensional ℝ G]
 
 include hν hi hνU hU hexp hC in
 /-- **BKL (32)** for a supplied pair: if `-ℒh = α ∇₀g`, `‖∇h‖² = ‖∇₀g‖²` (33) and `∇h ≠ 0` in `L²`,

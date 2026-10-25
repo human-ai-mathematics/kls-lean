@@ -127,8 +127,7 @@ theorem norm_le_four_pow_mul_norm_symmetrize {n k d : ℕ} (hk : 3 * d ≤ k) (A
 
 /-! ### Disjoint copy blocks -/
 
-private theorem blocks_injective {ι κ : Type*} [Fintype ι] [Fintype κ]
-    [DecidableEq ι] [DecidableEq κ] {d : ℕ} (hd : 0 < d) :
+private theorem blocks_injective {ι κ : Type*} {d : ℕ} (hd : 0 < d) :
     Function.Injective
       (fun p : κ × (Fin d → ι) => fun k => some (p.1, p.2 k)) := by
   rintro ⟨i, j⟩ ⟨i', j'⟩ h
@@ -146,7 +145,7 @@ private theorem blocks_injective {ι κ : Type*} [Fintype ι] [Fintype κ]
 section FiniteIndex
 
 variable {ι κ : Type*}
-variable [Fintype ι] [Fintype κ] [DecidableEq ι] [DecidableEq κ]
+  [Fintype ι] [Fintype κ] [DecidableEq ι] [DecidableEq κ]
 
 /-- **Disjoint copy blocks** (BKL Proposition 7.1, the Hilbert–Schmidt estimate after (112)). For `d > 0` the map `(i, j) ↦ (fun k => some (i, j k))` is injective,
 so the block entries of `A` are a subfamily of all entries. -/

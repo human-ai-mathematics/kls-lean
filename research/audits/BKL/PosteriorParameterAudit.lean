@@ -282,7 +282,7 @@ end ActualGeneratorClients
 namespace IndependentPosteriorGenerator
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
   [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
-variable {ι κ : Type*} [Fintype ι] [Fintype κ]
+  {ι κ : Type*} [Fintype ι] [Fintype κ]
 
 /-- The Hessian trace is independent of the orthonormal basis (Codex root reviewer). -/
 theorem trace_independent (μ : ProbabilityMeasure E)

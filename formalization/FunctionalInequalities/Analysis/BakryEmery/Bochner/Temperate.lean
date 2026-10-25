@@ -27,7 +27,9 @@ variable {E : Type u} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [Complete
 
 /-! ### Closure of the class `𝒜` -/
 
-omit [CompleteSpace E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] in
+section TemperateTransport
+
+omit [CompleteSpace E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
 theorem hasTemperateGrowth_iteratedFDeriv {f : E → ℝ} (hf : f.HasTemperateGrowth) (n : ℕ) :
     (iteratedFDeriv ℝ n f).HasTemperateGrowth := by
   induction n with
@@ -39,7 +41,6 @@ theorem hasTemperateGrowth_iteratedFDeriv {f : E → ℝ} (hf : f.HasTemperateGr
       exact (continuousMultilinearCurryLeftEquiv ℝ (fun _ : Fin (n + 1) => E) ℝ).symm.toContinuousLinearEquiv.hasTemperateGrowth.comp
         (hasTemperateGrowth_fderiv ih)
 
-omit [CompleteSpace E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] in
 private theorem hasTemperateGrowth_comp_linearIsometryEquiv
     (L : (E →L[ℝ] ℝ) ≃ₗᵢ[ℝ] E) {g : E → (E →L[ℝ] ℝ)}
     (hg : g.HasTemperateGrowth) : (L ∘ g).HasTemperateGrowth := by
@@ -50,6 +51,8 @@ private theorem hasTemperateGrowth_comp_linearIsometryEquiv
     refine ⟨k, C, fun x => ?_⟩
     rw [LinearIsometryEquiv.norm_iteratedFDeriv_comp_left]
     exact hC x
+
+end TemperateTransport
 
 omit [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] in
 theorem hasTemperateGrowth_gradient {f : E → ℝ} (hf : f.HasTemperateGrowth) :

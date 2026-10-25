@@ -32,7 +32,9 @@ variable {H K V : Type*}
   [NormedAddCommGroup V] [InnerProductSpace ℝ V] [FiniteDimensional ℝ V]
   [MeasurableSpace V] [BorelSpace V]
 
-omit [MeasurableSpace H] [BorelSpace H] [MeasurableSpace V] [BorelSpace V] in
+section GraphVolumeFactors
+
+omit [MeasurableSpace H] [BorelSpace H] [MeasurableSpace V] [BorelSpace V]
 /-- The Gram operator of a graph map lives on the parameter space and is `1 + Aᵀ A`. -/
 theorem gram_operator (ι : H →ₗᵢ[ℝ] V) (κ : K →ₗᵢ[ℝ] V)
     (hperp : ∀ (y : H) (z : K), ⟪ι y, κ z⟫ = (0 : ℝ)) (A : H →L[ℝ] K) :
@@ -40,7 +42,6 @@ theorem gram_operator (ι : H →ₗᵢ[ℝ] V) (κ : K →ₗᵢ[ℝ] V)
       = LinearMap.id + LinearMap.adjoint (A : H →ₗ[ℝ] K) ∘ₗ (A : H →ₗ[ℝ] K) :=
   adjoint_comp_graphMapLinear ι κ hperp A
 
-omit [MeasurableSpace H] [BorelSpace H] [MeasurableSpace V] [BorelSpace V] in
 /-- **The volume factor in arbitrary codimension**, a determinant on the parameter space and
 therefore independent of the ambient embedding. -/
 theorem volume_factor (ι : H →ₗᵢ[ℝ] V) (κ : K →ₗᵢ[ℝ] V)
@@ -49,6 +50,8 @@ theorem volume_factor (ι : H →ₗᵢ[ℝ] V) (κ : K →ₗᵢ[ℝ] V)
       = Real.sqrt (LinearMap.det
           (LinearMap.id + LinearMap.adjoint (A : H →ₗ[ℝ] K) ∘ₗ (A : H →ₗ[ℝ] K))) :=
   normDet_graphMapLinear ι κ hperp A
+
+end GraphVolumeFactors
 
 omit [FiniteDimensional ℝ V] in
 /-- **The codimension-one case agrees with the already proved area formula.**  The repository's
@@ -61,7 +64,9 @@ theorem codimension_one_agrees (ι : H →ₗᵢ[ℝ] V) {e : V} (he : ‖e‖ =
 
 /-! ### Boundary cases -/
 
-omit [MeasurableSpace H] [BorelSpace H] [MeasurableSpace V] [BorelSpace V] in
+section DegenerateGraphs
+
+omit [MeasurableSpace H] [BorelSpace H] [MeasurableSpace V] [BorelSpace V]
 /-- A flat graph has unit factor. -/
 theorem flat_graph (ι : H →ₗᵢ[ℝ] V) (κ : K →ₗᵢ[ℝ] V)
     (hperp : ∀ (y : H) (z : K), ⟪ι y, κ z⟫ = (0 : ℝ)) :
@@ -69,7 +74,6 @@ theorem flat_graph (ι : H →ₗᵢ[ℝ] V) (κ : K →ₗᵢ[ℝ] V)
   rw [normDet_graphMapLinear ι κ hperp]
   simp
 
-omit [MeasurableSpace H] [BorelSpace H] [MeasurableSpace V] [BorelSpace V] in
 /-- Codimension zero: a subsingleton target leaves the factor at one, and the statement does not
 exclude it. -/
 theorem codimension_zero [Subsingleton K] (ι : H →ₗᵢ[ℝ] V) (κ : K →ₗᵢ[ℝ] V)
@@ -81,7 +85,6 @@ theorem codimension_zero [Subsingleton K] (ι : H →ₗᵢ[ℝ] V) (κ : K →�
   rw [hA]
   exact flat_graph ι κ hperp
 
-omit [MeasurableSpace H] [BorelSpace H] [MeasurableSpace V] [BorelSpace V] in
 /-- A zero-dimensional parameter space is inside the statement too. -/
 theorem zero_dimensional_parameter (ι : EuclideanSpace ℝ (Fin 0) →ₗᵢ[ℝ] V) (κ : K →ₗᵢ[ℝ] V)
     (hperp : ∀ (y : EuclideanSpace ℝ (Fin 0)) (z : K), ⟪ι y, κ z⟫ = (0 : ℝ))
@@ -91,6 +94,8 @@ theorem zero_dimensional_parameter (ι : EuclideanSpace ℝ (Fin 0) →ₗᵢ[�
           (LinearMap.id + LinearMap.adjoint (A : EuclideanSpace ℝ (Fin 0) →ₗ[ℝ] K)
             ∘ₗ (A : EuclideanSpace ℝ (Fin 0) →ₗ[ℝ] K))) :=
   normDet_graphMapLinear ι κ hperp A
+
+end DegenerateGraphs
 
 end GraphJacobianAudit
 

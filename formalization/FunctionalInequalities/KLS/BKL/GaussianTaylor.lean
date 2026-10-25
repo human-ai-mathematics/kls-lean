@@ -70,7 +70,9 @@ section General
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
   [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
 
-omit [CompleteSpace E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] in
+section GaussianPotential
+
+omit [CompleteSpace E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
 private theorem hasFDerivAt_half_norm_sq (y : E) :
     HasFDerivAt (fun x : E => ‖x‖ ^ 2 / 2) (innerSL ℝ y) y := by
   have h : HasFDerivAt (fun x : E => ‖x‖ ^ 2) (2 • innerSL ℝ y) y := by
@@ -84,7 +86,6 @@ private theorem hasFDerivAt_half_norm_sq (y : E) :
   rw [hf, hL]
   exact h.const_mul (1 / 2 : ℝ)
 
-omit [CompleteSpace E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] in
 /-- The Hessian form of `‖x‖² / 2` is `‖v‖²`. -/
 theorem bilinearIteratedFDerivTwo_half_norm_sq (x v : E) :
     bilinearIteratedFDerivTwo ℝ (fun x : E => ‖x‖ ^ 2 / 2) x v v = ‖v‖ ^ 2 := by
@@ -99,7 +100,6 @@ theorem bilinearIteratedFDerivTwo_half_norm_sq (x v : E) :
   rw [((innerSL ℝ v).hasFDerivAt (x := x)).fderiv, innerSL_apply_apply,
     real_inner_self_eq_norm_sq]
 
-omit [CompleteSpace E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] in
 /-- **The standard Gaussian potential is regular** (BKL (12)) with `a = b = 1`. -/
 theorem regularPotential_half_norm_sq : RegularPotential (fun x : E => ‖x‖ ^ 2 / 2) 1 1 where
   temperate := by
@@ -114,7 +114,11 @@ theorem regularPotential_half_norm_sq : RegularPotential (fun x : E => ‖x‖ ^
   lower x v := by rw [bilinearIteratedFDerivTwo_half_norm_sq, one_mul]
   upper x v := by rw [bilinearIteratedFDerivTwo_half_norm_sq, one_mul]
 
-omit [CompleteSpace E] in
+end GaussianPotential
+
+section GaussianLaplace
+
+omit [CompleteSpace E]
 /-- The Gaussian integral `∫ e^{-‖x‖²/2 + ⟪z, x⟫} dx` as a complex number. -/
 private theorem ofReal_integral_exp_gaussian (z : E) :
     ((∫ x, Real.exp (-(‖x‖ ^ 2 / 2) + ⟪z, x⟫) : ℝ) : ℂ) =
@@ -133,7 +137,6 @@ private theorem ofReal_integral_exp_gaussian (z : E) :
       rw [h]
       ring_nf
 
-omit [CompleteSpace E] in
 /-- **Moment generating function of the standard Gaussian**:
 `∫ e^{⟪z, x⟫} dγ = e^{‖z‖²/2}` for `γ = volume.tilted (-‖·‖²/2)`. -/
 theorem integral_exp_inner_tilted_half_norm_sq (z : E) :
@@ -164,16 +167,21 @@ theorem integral_exp_inner_tilted_half_norm_sq (z : E) :
   field_simp
   simp
 
-omit [CompleteSpace E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] in
+end GaussianLaplace
+
+section GaussianDerivatives
+
+omit [CompleteSpace E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
 private theorem hasFDerivAt_exp_half_norm_sq (y : E) :
     HasFDerivAt (fun z : E => Real.exp (‖z‖ ^ 2 / 2))
       (Real.exp (‖y‖ ^ 2 / 2) • innerSL ℝ y) y :=
   (hasFDerivAt_half_norm_sq y).exp
 
-omit [CompleteSpace E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] in
 private theorem contDiff_exp_half_norm_sq :
     ContDiff ℝ ∞ (fun z : E => Real.exp (‖z‖ ^ 2 / 2)) :=
   ContDiff.exp ((contDiff_norm_sq ℝ).div_const 2)
+
+end GaussianDerivatives
 
 omit [CompleteSpace E] in
 /-- The moment generating function in the form of the Laplace integrals of

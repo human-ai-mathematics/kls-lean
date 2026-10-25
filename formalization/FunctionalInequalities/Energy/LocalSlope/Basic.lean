@@ -146,11 +146,14 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteS
   [MeasurableSpace E] [BorelSpace E] [SecondCountableTopology E]
   [FiniteDimensional ℝ E]
 
-/-- The unnormalized squared local-slope integral in an intrinsic coordinate space. -/
+/-- The squared local-slope integral for the displayed coordinate law `ν`, with no factor `1/2`.
+It takes values in `ENNReal` and may be infinite. No change to intrinsic coordinates is made here. -/
 def energy (ν : ProbabilityMeasure E) (f : E → ℝ) : ENNReal :=
   ∫⁻ x, apply f x ^ 2 ∂(ν : Measure E)
 
-/-- The literature test domain, independent of the candidate Poincaré constant. -/
+/-- Locally Lipschitz tests with finite second moment and finite squared local-slope energy.
+The domain is independent of the candidate Poincaré constant; smoothness and compact support are
+not required. -/
 structure Admissible (ν : ProbabilityMeasure E) (f : E → ℝ) : Prop where
   locallyLipschitz : LocallyLipschitz f
   memLp_two : MemLp f 2 (ν : Measure E)

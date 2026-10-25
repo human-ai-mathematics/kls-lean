@@ -126,7 +126,9 @@ theorem potential_centered_factorization {μ : Measure E} [IsProbabilityMeasure 
     Real.log_mul (normalizedDensity_pos hρ hs x).ne' (Real.exp_pos _).ne', Real.log_exp]
   ring
 
-omit [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] in
+section PolynomialDerivatives
+
+omit [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
 private theorem linear_iterated_ge_two {F : Type*} [NormedAddCommGroup F] [NormedSpace ℝ F]
     (L : E →L[ℝ] F) {n : ℕ} (hn : 2 ≤ n) (x : E) : iteratedFDeriv ℝ n L x = 0 := by
   obtain ⟨k, rfl⟩ := Nat.exists_eq_add_of_le hn
@@ -137,7 +139,6 @@ private theorem linear_iterated_ge_two {F : Type*} [NormedAddCommGroup F] [Norme
   rw [hfd, iteratedFDeriv_succ_const]
   rfl
 
-omit [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] in
 private theorem norm_sq_iterated_ge_three {n : ℕ} (hn : 3 ≤ n) (x : E) :
     iteratedFDeriv ℝ n (fun y : E => ‖y‖ ^ 2) x = 0 := by
   obtain ⟨k, rfl⟩ := Nat.exists_eq_add_of_le hn
@@ -150,6 +151,8 @@ private theorem norm_sq_iterated_ge_three {n : ℕ} (hn : 3 ≤ n) (x : E) :
   ext h
   rw [iteratedFDeriv_succ_apply_right, hfd, linear_iterated_ge_two L (by omega)]
   simp
+
+end PolynomialDerivatives
 
 
 /-- The cumulant generating function of the centered posterior is smooth on all of `E`. -/

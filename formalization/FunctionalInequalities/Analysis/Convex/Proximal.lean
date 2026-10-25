@@ -20,7 +20,7 @@ namespace FunctionalInequalities.Analysis
 section InnerProduct
 
 variable {E : Type*}
-variable [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+  [NormedAddCommGroup E] [InnerProductSpace ℝ E]
 
 private theorem proximal_subgradient_monotonicity
     {f : E → ℝ} {x x' z w : E}
@@ -197,7 +197,7 @@ namespace FunctionalInequalities.Analysis
 section InnerProduct
 
 variable {E : Type*}
-variable [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+  [NormedAddCommGroup E] [InnerProductSpace ℝ E]
 
 /-- **The resolvent of a convex function is a gradient** (weak Letwin route, Alexandrov's theorem): if `P z` is a point at which `z − P z` is a subgradient of the convex `f` (the proximal map), then
 `w ↦ ½‖w‖² − (f (P w) + ½‖P w − w‖²)` (½‖·‖² minus the Moreau envelope) has derivative `⟪P z, ·⟫` at every `z`. -/

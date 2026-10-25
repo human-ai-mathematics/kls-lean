@@ -24,7 +24,9 @@ section Local
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
   [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
 
-omit [CompleteSpace E] in
+section LocalIntegralCalculus
+
+omit [CompleteSpace E]
 /-- **Local amplitude integrability.** -/
 theorem weightedExpD_integrable_lt {F : Type*} [NormedAddCommGroup F] [NormedSpace ℝ F]
     {μ : Measure E} {g : E → F} (hg : AEStronglyMeasurable g μ) {r : ℝ}
@@ -82,7 +84,6 @@ theorem weightedExpD_integrable_lt {F : Type*} [NormedAddCommGroup F] [NormedSpa
 
 
 
-omit [CompleteSpace E] in
 /-- **Local differentiation under the integral.** -/
 theorem weightedExp_integral_hasFDerivAt_of_lt {F : Type*} [NormedAddCommGroup F]
     [NormedSpace ℝ F] [CompleteSpace F] (μ : Measure E) {g : E → F}
@@ -174,6 +175,8 @@ theorem weightedExp_integral_hasFDerivAt_of_lt {F : Type*} [NormedAddCommGroup F
       hInt (hmeas' z) hbound hB ?_
     filter_upwards [] with x w hw
     exact weightedExp_hasFDeriv g x w
+
+end LocalIntegralCalculus
 
 
 end Local

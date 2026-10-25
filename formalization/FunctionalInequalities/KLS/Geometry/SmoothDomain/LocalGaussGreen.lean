@@ -70,7 +70,9 @@ namespace BoundaryChart
 
 variable {U : SmoothDomain V} {x₀ : V}
 
-omit [MeasurableSpace V] [BorelSpace V] in
+section CylinderSupport
+
+omit [MeasurableSpace V] [BorelSpace V]
 /-- Outside the chart cylinder a field supported in the cylinder, and its divergence, vanish. -/
 theorem eq_zero_of_notMem_cylinder (C : U.BoundaryChart x₀) {F : V → V}
     (hsupp : tsupport F ⊆ C.cylinder) {x : V} (hx : x ∉ C.cylinder) :
@@ -80,12 +82,13 @@ theorem eq_zero_of_notMem_cylinder (C : U.BoundaryChart x₀) {F : V → V}
   rw [Analysis.divergence, Analysis.fderiv_eq_zero_of_notMem_tsupport hx']
   simp
 
-omit [MeasurableSpace V] [BorelSpace V] in
 /-- A parameter outside the chart's parameter set maps out of the cylinder. -/
 theorem map_notMem_cylinder (hx₀ : x₀ ∈ frontier U.carrier) (C : U.BoundaryChart x₀)
     {y : U.tangentSpace x₀} (hy : y ∉ C.param) : C.map y ∉ C.cylinder := by
   intro hmem
   exact hy (by rw [← C.tangentCoord_map hx₀ y]; exact hmem.1)
+
+end CylinderSupport
 
 /-- **Localization of the volume integral.**  For a field supported in the chart cylinder the
 integral of the divergence over the domain is the integral over the *global* subgraph of the

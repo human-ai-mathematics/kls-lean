@@ -10,10 +10,10 @@ import Mathlib.Topology.Algebra.Module.FiniteDimension
 /-!
 # Small quadratic tilts of a probability measure
 
-For a probability measure `μ` on a normed space, the normalized tilts `e^{-δ‖x‖²/2} μ / Z_δ`
-converge to `μ` as `δ → 0⁺`: integrals of integrable observables, the laws (weakly), means and
-second moments. Only probability and integrability are assumed. This is the second step of the
-regular approximation in Bizeul–Klartag–Lehec (arXiv:2610.05474v1, Section 2, p. 5); the
+For a probability measure `μ` on a normed additive group, the normalized tilts `e^{-δ‖x‖²/2} μ / Z_δ`
+converge to `μ` as `δ → 0⁺`, weakly and against integrable Banach-valued observables.
+Moment and covariance corollaries retain their stated additional structure. This is the second
+regular approximation step in Bizeul–Klartag–Lehec (arXiv:2610.05474v1, Section 2, p. 5); the
 Gaussian smoothing step and the joint limit are separate.
 -/
 
@@ -26,7 +26,7 @@ namespace FunctionalInequalities.Probability
 /-- **Normalized small quadratic tilts converge**: for a probability measure `μ` and an integrable
 `f`, `∫ f d(μ tilted by e^{-δ‖x‖²/2}) → ∫ f dμ` as `δ → 0⁺`. -/
 theorem integral_quadraticTilt_tendsto {E F : Type*} [NormedAddCommGroup E]
-    [NormedSpace ℝ E] [MeasurableSpace E] [BorelSpace E]
+    [MeasurableSpace E] [BorelSpace E]
     [NormedAddCommGroup F] [NormedSpace ℝ F] [CompleteSpace F]
     (μ : Measure E) [IsProbabilityMeasure μ] (f : E → F) (hf : Integrable f μ) :
     Tendsto
@@ -94,7 +94,9 @@ section Laws
 variable {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
   [MeasurableSpace E] [BorelSpace E]
 
-omit [NormedSpace ℝ E] in
+section QuadraticTiltLaws
+
+omit [NormedSpace ℝ E]
 /-- The quadratic tilt of a probability measure is a probability measure for `δ ≥ 0`. -/
 theorem isProbabilityMeasure_quadraticTilt (μ : Measure E) [IsProbabilityMeasure μ]
     (δ : ℝ) (hδ : 0 ≤ δ) :
@@ -108,7 +110,6 @@ theorem isProbabilityMeasure_quadraticTilt (μ : Measure E) [IsProbabilityMeasur
       exact Real.exp_le_one_iff.mpr (mul_nonpos_of_nonpos_of_nonneg
         (neg_nonpos.mpr (div_nonneg hδ (by norm_num))) (sq_nonneg _))
 
-omit [NormedSpace ℝ E] in
 /-- The normalized quadratic tilt `e^{-δ‖x‖²/2} μ / Z_δ` as a probability law. -/
 def quadraticTiltLaw (μ : ProbabilityMeasure E) (δ : ℝ) (hδ : 0 ≤ δ) :
     ProbabilityMeasure E :=
@@ -128,6 +129,8 @@ theorem quadraticTiltLaw_tendsto (μ : ProbabilityMeasure E) (δseq : ℕ → �
       (Filter.Eventually.of_forall g.norm_coe_le_norm)
   exact (integral_quadraticTilt_tendsto (μ : Measure E) (fun x => g x) hg).comp hwithin
 
+end QuadraticTiltLaws
+
 /-- Means converge when `μ` has a first moment. -/
 theorem integral_id_quadraticTilt_tendsto [CompleteSpace E] (μ : Measure E) [IsProbabilityMeasure μ]
     (hint : Integrable (fun x : E => x) μ) :
@@ -135,6 +138,7 @@ theorem integral_id_quadraticTilt_tendsto [CompleteSpace E] (μ : Measure E) [Is
       (𝓝[>] (0 : ℝ)) (𝓝 (∫ x : E, x ∂μ)) :=
   integral_quadraticTilt_tendsto μ (fun x => x) hint
 
+omit [NormedSpace ℝ E] in
 /-- Second moments converge when `μ` has a second moment. -/
 theorem integral_norm_sq_quadraticTilt_tendsto (μ : Measure E) [IsProbabilityMeasure μ]
     (hint : Integrable (fun x : E => ‖x‖ ^ 2) μ) :
@@ -162,14 +166,15 @@ private theorem weight_le_one {δ : ℝ} (hδ : 0 ≤ δ) (x : E) :
   exact mul_nonpos_of_nonpos_of_nonneg
     (neg_nonpos.mpr (div_nonneg hδ (by norm_num))) (sq_nonneg _)
 
-omit [CompleteSpace E] in
+section QuadraticTiltMoments
+
+omit [CompleteSpace E]
 private theorem weight_integrable (μ : ProbabilityMeasure E) {δ : ℝ} (hδ : 0 ≤ δ) :
     Integrable (fun x : E => Real.exp (-(δ / 2) * ‖x‖ ^ 2)) (μ : Measure E) := by
   refine (integrable_const (1 : ℝ)).mono' (by fun_prop) (Filter.Eventually.of_forall fun x => ?_)
   rw [Real.norm_eq_abs, abs_of_pos (Real.exp_pos _)]
   exact weight_le_one hδ x
 
-omit [CompleteSpace E] in
 /-- The quadratic tilt of a law with finite second moment has finite second moment. -/
 theorem memLp_id_two_quadraticTilt (μ : ProbabilityMeasure E)
     (hμ2 : MemLp (id : E → E) 2 (μ : Measure E)) {δ : ℝ} (hδ : 0 ≤ δ) :
@@ -183,6 +188,8 @@ theorem memLp_id_two_quadraticTilt (μ : ProbabilityMeasure E)
   · change ‖Real.exp (-(δ / 2) * ‖x‖ ^ 2) * ‖x‖ ^ 2‖ ≤ ‖x‖ ^ 2
     rw [Real.norm_eq_abs, abs_of_nonneg (mul_nonneg (Real.exp_pos _).le (sq_nonneg _))]
     exact (mul_le_mul_of_nonneg_right (weight_le_one hδ x) (sq_nonneg _)).trans_eq (one_mul _)
+
+end QuadraticTiltMoments
 
 /-- `⟪Cov(μ_δ) u, v⟫ → ⟪Cov(μ) u, v⟫` as `δ → 0⁺` for the quadratic tilts `μ_δ = μ.tilted (−δ‖·‖²/2)`. -/
 theorem inner_covariance_quadraticTilt_tendsto (μ : ProbabilityMeasure E)

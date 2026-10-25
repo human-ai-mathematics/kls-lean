@@ -418,7 +418,7 @@ variable {n r : ℕ}
 section StructuredSpace
 
 variable {R : Type*}
-variable [NormedRing R] [NormedAlgebra ℝ R] [HasSummableGeomSeries R]
+  [NormedRing R] [NormedAlgebra ℝ R] [HasSummableGeomSeries R]
 
 private lemma inverse_line_at_unit
     (H : R) (t : ℝ) (ht : IsUnit (1 + t • H)) :
@@ -445,7 +445,7 @@ end StructuredSpace
 section NormedSpace
 
 variable {E : Type*}
-variable [NormedAddCommGroup E] [NormedSpace ℝ E] [CompleteSpace E]
+  [NormedAddCommGroup E] [NormedSpace ℝ E] [CompleteSpace E]
 
 private lemma inverse_entry_at_unit
     (H : E →L[ℝ] E) (L : E →L[ℝ] ℝ) (v : E) (t : ℝ)

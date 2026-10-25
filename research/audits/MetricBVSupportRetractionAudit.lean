@@ -24,7 +24,7 @@ open FunctionalInequalities.KLS.MetricBV
 section StructuredSpace
 
 variable {X Y : Type*}
-variable [MetricSpace X] [MetricSpace Y]
+  [MetricSpace X] [MetricSpace Y]
 
 theorem slopeComposition {r : X → Y}
     (hr : LipschitzWith 1 r) (g : Y → ℝ) (x : X) :

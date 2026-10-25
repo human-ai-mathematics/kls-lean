@@ -193,9 +193,9 @@ theorem route_M1 : ¬ ∀ {V : Type*} [NormedAddCommGroup V] [InnerProductSpace 
 section FiniteDimensional
 
 variable {V W : Type*}
-variable [NormedAddCommGroup V] [InnerProductSpace ℝ V] [FiniteDimensional ℝ V] [MeasurableSpace V]
-variable [BorelSpace V] [NormedAddCommGroup W] [InnerProductSpace ℝ W] [FiniteDimensional ℝ W]
-variable [MeasurableSpace W] [BorelSpace W]
+  [NormedAddCommGroup V] [InnerProductSpace ℝ V] [FiniteDimensional ℝ V] [MeasurableSpace V]
+  [BorelSpace V] [NormedAddCommGroup W] [InnerProductSpace ℝ W] [FiniteDimensional ℝ W]
+  [MeasurableSpace W] [BorelSpace W]
 
 /-! ### Boundary cases
 

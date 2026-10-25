@@ -33,7 +33,9 @@ namespace FunctionalInequalities.Analysis.BakryEmery
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
   [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
 
-omit [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] in
+section SecondCumulants
+
+omit [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
 private theorem second_apply {f : E → ℝ} {x : E} (hf : ContDiffAt ℝ ∞ f x) (v w : E) :
     iteratedFDeriv ℝ 2 f x ![v, w] = fderiv ℝ (fun y => fderiv ℝ f y w) x v := by
   rw [(hf.differentiableAt_iteratedFDeriv (m := 1) (by norm_num)).iteratedFDeriv_succ_apply_left']
@@ -41,7 +43,6 @@ private theorem second_apply {f : E → ℝ} {x : E} (hf : ContDiffAt ℝ ∞ f 
 
 /- Second derivative of a product at a point where one factor vanishes and the other has value one and
 zero derivative (localized version of the argument in `Cumulant`). -/
-omit [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] in
 private theorem second_mul {f g : E → ℝ} {x : E} (hf : ContDiffAt ℝ ∞ f x)
     (hg : ContDiffAt ℝ ∞ g x) (v w : E) (hf0 : f x = 0) (hg0 : g x = 1)
     (hg1 : fderiv ℝ g x = 0) :
@@ -68,6 +69,8 @@ private theorem second_mul {f g : E → ℝ} {x : E} (hf : ContDiffAt ℝ ∞ f 
   rw [fderiv_fun_mul (hf.differentiableAt (by simp)) hgw,
     fderiv_fun_mul (hg.differentiableAt (by simp)) hfw]
   simp [hf0, hg0, hg1]
+
+end SecondCumulants
 
 theorem norm_exp_weights {μ : Measure E} {r : ℝ}
     (hexp : Integrable (fun x => Real.exp (r * ‖x‖)) μ) :
@@ -169,7 +172,9 @@ theorem cumulant_three_eq_integral_of_integrable_exp (μ : Measure E) [IsProbabi
   change iteratedFDeriv ℝ 2 (fderiv ℝ (logLaplace μ)) 0 ![u, v] w = _
   rw [← hcomm, ← hNF, hm']
 
-omit [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] in
+section PolynomialMoments
+
+omit [InnerProductSpace ℝ E] [FiniteDimensional ℝ E]
 private theorem norm_pow_integrable (μ : Measure E) [IsProbabilityMeasure μ]
     {r : ℝ} (hr : 0 < r) (hexp : Integrable (fun x => Real.exp (r * ‖x‖)) μ) (k : ℕ) :
     Integrable (fun x => ‖x‖ ^ k) μ := by
@@ -181,7 +186,6 @@ private theorem norm_pow_integrable (μ : Measure E) [IsProbabilityMeasure μ]
   have h := ProbabilityTheory.integrable_pow_abs_of_integrable_exp_mul hr.ne' hexp hneg k
   simpa only [abs_norm] using h
 
-omit [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] in
 /-- A continuous function with a polynomial bound is in `L²(μ)` when `μ` has one exponential moment. -/
 theorem memLp_of_polynomial_bound_of_integrable_exp (μ : Measure E) [IsProbabilityMeasure μ]
     {r : ℝ} (hr : 0 < r) (hexp : Integrable (fun x => Real.exp (r * ‖x‖)) μ)
@@ -201,7 +205,11 @@ theorem memLp_of_polynomial_bound_of_integrable_exp (μ : Measure E) [IsProbabil
       simpa only [one_pow] using add_pow_le (by norm_num : (0 : ℝ) ≤ 1) (norm_nonneg x) (k * 2)
     _ = (C ^ 2 * 2 ^ (k * 2 - 1)) * (1 + ‖x‖ ^ (k * 2)) := by ring
 
-omit [FiniteDimensional ℝ E] in
+end PolynomialMoments
+
+section ProjectionMoments
+
+omit [FiniteDimensional ℝ E]
 private theorem memLp_inner_of_local (μ : Measure E) [IsProbabilityMeasure μ]
     {r : ℝ} (hr : 0 < r) (hexp : Integrable (fun x => Real.exp (r * ‖x‖)) μ) (v : E) :
     MemLp (fun x => ⟪v, x⟫) 2 μ := by
@@ -211,7 +219,6 @@ private theorem memLp_inner_of_local (μ : Measure E) [IsProbabilityMeasure μ]
     (norm_inner_le_norm v x).trans
       (mul_le_mul_of_nonneg_left (by linarith : ‖x‖ ≤ 1 + ‖x‖) (norm_nonneg v))
 
-omit [FiniteDimensional ℝ E] in
 private theorem memLp_inner_mul_of_local (μ : Measure E) [IsProbabilityMeasure μ]
     {r : ℝ} (hr : 0 < r) (hexp : Integrable (fun x => Real.exp (r * ‖x‖)) μ) (v w : E) :
     MemLp (fun x => ⟪v, x⟫ * ⟪w, x⟫) 2 μ := by
@@ -225,6 +232,8 @@ private theorem memLp_inner_mul_of_local (μ : Measure E) [IsProbabilityMeasure 
         (norm_nonneg _) (by positivity)
     _ = (‖v‖ * ‖w‖) * ‖x‖ ^ 2 := by ring
     _ ≤ (‖v‖ * ‖w‖) * (1 + ‖x‖) ^ 2 := by gcongr; linarith
+
+end ProjectionMoments
 
 /-- **BKL Lemma 4.2, local-moment form**: for a centered isotropic law with one exponential moment and
 the Letwin quadratic bound, `∑_{jk} κ₃(u, e_j, e_k)² ≤ 8‖u‖²` (the contraction argument of `Cumulant`,

@@ -236,7 +236,9 @@ section Intrinsic
 variable {F : Type*} [NormedAddCommGroup F] [InnerProductSpace ℝ F] [CompleteSpace F]
   [MeasurableSpace F] [BorelSpace F] [SecondCountableTopology F] [FiniteDimensional ℝ F]
 
-omit [CompleteSpace F] in
+section IntrinsicAbsoluteContinuity
+
+omit [CompleteSpace F]
 /-- Every compact-set log-concave probability law is absolutely continuous in its own affine
 support coordinates. Singular ambient measures and the zero-dimensional support are included. -/
 theorem intrinsic_absolutelyContinuous {μ : ProbabilityMeasure F}
@@ -246,7 +248,6 @@ theorem intrinsic_absolutelyContinuous {μ : ProbabilityMeasure F}
   hμ.intrinsicMeasure.absolutelyContinuous_of_interior_support_nonempty m
     hμ.interior_intrinsic_support_nonempty
 
-omit [CompleteSpace F] in
 /-- The intrinsic probability law, as well as Haar measure, assigns zero mass to the boundary
 of its support. This is a consequence of the proved absolute-continuity theorem. -/
 theorem intrinsic_frontier_support_eq_zero {μ : ProbabilityMeasure F}
@@ -256,6 +257,8 @@ theorem intrinsic_frontier_support_eq_zero {μ : ProbabilityMeasure F}
         Measure (Probability.affineSupport μ).direction).support) = 0 := by
   exact hμ.intrinsic_absolutelyContinuous (Measure.addHaar)
     (hμ.haar_frontier_intrinsic_support Measure.addHaar)
+
+end IntrinsicAbsoluteContinuity
 
 end Intrinsic
 

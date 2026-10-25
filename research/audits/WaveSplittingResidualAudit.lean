@@ -26,7 +26,7 @@ theorem zero_dimension_exact (Y : State E (Fin 0)) (hY : Y.Smooth) (θ : ℝ) :
   simp [List.finRange, sweepDerivative, sweepGenerator, reaction_zeroState]
 
 variable [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
-variable (m : Measure E) [IsFiniteMeasureOnCompacts m] [m.IsAddRightInvariant]
+  (m : Measure E) [IsFiniteMeasureOnCompacts m] [m.IsAddRightInvariant]
 
 /-- The third-order residual of the complete split step is controlled by the fifth-order
 energy. The constant is chosen before the state and the time. -/

@@ -96,8 +96,9 @@ section Disintegration
 
 variable [FiniteDimensional ℝ E]
 
-omit [MeasurableSpace E] [BorelSpace E] [SecondCountableTopology E] [FiniteDimensional ℝ E] in
-omit [MeasurableSpace E] [BorelSpace E] [SecondCountableTopology E] [FiniteDimensional ℝ E] in
+section OrthogonalCoordinates
+
+omit [MeasurableSpace E] [BorelSpace E] [SecondCountableTopology E] [FiniteDimensional ℝ E]
 /-- Along a unit direction, the scalar coordinate of an orthogonal point plus a multiple of the
 direction is that multiple. -/
 theorem inner_add_smul_orthogonal {θ : Direction E} (z : (ℝ ∙ θ.1)ᗮ) (t : ℝ) :
@@ -110,7 +111,6 @@ theorem inner_add_smul_orthogonal {θ : Direction E} (z : (ℝ ∙ θ.1)ᗮ) (t 
   rw [inner_add_left, real_inner_smul_left, real_inner_comm θ.1 (z : E), hzθ, hθθ]
   ring
 
-omit [MeasurableSpace E] [BorelSpace E] [SecondCountableTopology E] [FiniteDimensional ℝ E] in
 /-- Joint coordinates of a point written in the orthogonal splitting along `θ`. -/
 theorem coordinates_add_smul_orthogonal {θ : Direction E} (z : (ℝ ∙ θ.1)ᗮ) (t : ℝ) :
     coordinates (θ, (z : E) + t • θ.1) = ((θ, (z : E)), t) := by
@@ -118,12 +118,13 @@ theorem coordinates_add_smul_orthogonal {θ : Direction E} (z : (ℝ ∙ θ.1)�
   simp only [coordinates, h]
   simp
 
-omit [MeasurableSpace E] [BorelSpace E] [SecondCountableTopology E] [FiniteDimensional ℝ E] in
 /-- The base projection of a point written in the orthogonal splitting along `θ`. -/
 theorem baseMap_add_smul_orthogonal {θ : Direction E} (z : (ℝ ∙ θ.1)ᗮ) (t : ℝ) :
     (z : E) + t • θ.1 - inner ℝ ((z : E) + t • θ.1) θ.1 • θ.1 = (z : E) := by
   rw [inner_add_smul_orthogonal]
   abel
+
+end OrthogonalCoordinates
 
 omit [FiniteDimensional ℝ E] in
 /-- Multiplying the fiber law by the slice mass undoes the normalization; this also covers the

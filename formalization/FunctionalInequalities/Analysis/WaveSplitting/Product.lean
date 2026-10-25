@@ -10,7 +10,7 @@ noncomputable section
 open scoped ContDiff
 namespace FunctionalInequalities.Analysis.WaveSplitting
 variable {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
-variable {ι : Type*}
+  {ι : Type*}
 
 /-- Repeated differentiation along a finite word of directions. -/
 def wordDerivative (a : ι → E) : List ι → (E → ℝ) → E → ℝ

@@ -21,7 +21,7 @@ namespace Translation
 variable {V : Type u} [NormedAddCommGroup V] [InnerProductSpace ℝ V]
   [MeasurableSpace V] [BorelSpace V]
 
-variable (ν : ProbabilityMeasure V) (c : V)
+  (ν : ProbabilityMeasure V) (c : V)
 
 /-- Pullback of `L²` classes along the translation. -/
 def pullback : Lp ℝ 2 (Probability.translateLaw ν c : Measure V) →ₗᵢ[ℝ] Lp ℝ 2 (ν : Measure V) :=
@@ -31,12 +31,13 @@ def pullback : Lp ℝ 2 (Probability.translateLaw ν c : Measure V) →ₗᵢ[�
 def pullbackInv : Lp ℝ 2 (ν : Measure V) →ₗᵢ[ℝ] Lp ℝ 2 (Probability.translateLaw ν c : Measure V) :=
   Lp.compMeasurePreservingₗᵢ ℝ (fun x ↦ -c + x) (Probability.measurePreserving_translate_symm ν c)
 
-omit [InnerProductSpace ℝ V] in
+section TranslationPullbacks
+
+omit [InnerProductSpace ℝ V]
 theorem pullback_coeFn (f : Lp ℝ 2 (Probability.translateLaw ν c : Measure V)) :
     pullback ν c f =ᵐ[(ν : Measure V)] fun x ↦ f (c + x) :=
   Lp.coeFn_compMeasurePreserving f (Probability.measurePreserving_translate ν c)
 
-omit [InnerProductSpace ℝ V] in
 theorem pullbackInv_pullback (f : Lp ℝ 2 (Probability.translateLaw ν c : Measure V)) :
     pullbackInv ν c (pullback ν c f) = f := by
   change Lp.compMeasurePreserving (fun x ↦ -c + x) (Probability.measurePreserving_translate_symm ν c)
@@ -51,7 +52,6 @@ theorem pullbackInv_pullback (f : Lp ℝ 2 (Probability.translateLaw ν c : Meas
   rw [AEEqFun.compMeasurePreserving_congr f.1 _ measurable_id hae]
   exact AEEqFun.compMeasurePreserving_id f.1
 
-omit [InnerProductSpace ℝ V] in
 theorem pullback_pullbackInv (f : Lp ℝ 2 (ν : Measure V)) :
     pullback ν c (pullbackInv ν c f) = f := by
   change Lp.compMeasurePreserving (fun x ↦ c + x) (Probability.measurePreserving_translate ν c)
@@ -65,6 +65,8 @@ theorem pullback_pullbackInv (f : Lp ℝ 2 (ν : Measure V)) :
     Eventually.of_forall fun x ↦ by simp
   rw [AEEqFun.compMeasurePreserving_congr f.1 _ measurable_id hae]
   exact AEEqFun.compMeasurePreserving_id f.1
+
+end TranslationPullbacks
 
 /-- Pullback along the translation as a linear isometric equivalence of real `L²` spaces. -/
 def pullbackEquiv : Lp ℝ 2 (Probability.translateLaw ν c : Measure V) ≃ₗᵢ[ℝ] Lp ℝ 2 (ν : Measure V) where
@@ -103,10 +105,10 @@ namespace LinearIsometry
 
 variable {V₁ : Type u} [NormedAddCommGroup V₁] [InnerProductSpace ℝ V₁]
   [MeasurableSpace V₁] [BorelSpace V₁]
-variable {V₂ : Type v} [NormedAddCommGroup V₂] [InnerProductSpace ℝ V₂]
+  {V₂ : Type v} [NormedAddCommGroup V₂] [InnerProductSpace ℝ V₂]
   [MeasurableSpace V₂] [BorelSpace V₂]
 
-variable (ν : ProbabilityMeasure V₁) (L : V₁ ≃ₗᵢ[ℝ] V₂)
+  (ν : ProbabilityMeasure V₁) (L : V₁ ≃ₗᵢ[ℝ] V₂)
 
 /-- Pullback of `L²` classes along `L`. -/
 def pullback : Lp ℝ 2 (Probability.mapLinearIsometryEquiv ν L : Measure V₂) →ₗᵢ[ℝ] Lp ℝ 2 (ν : Measure V₁) :=
@@ -180,10 +182,10 @@ namespace ContinuousLinearEquiv
 
 variable {V₁ : Type u} [NormedAddCommGroup V₁] [InnerProductSpace ℝ V₁]
   [MeasurableSpace V₁] [BorelSpace V₁]
-variable {V₂ : Type v} [NormedAddCommGroup V₂] [InnerProductSpace ℝ V₂]
+  {V₂ : Type v} [NormedAddCommGroup V₂] [InnerProductSpace ℝ V₂]
   [MeasurableSpace V₂] [BorelSpace V₂]
 
-variable (ν : ProbabilityMeasure V₁) (T : V₁ ≃L[ℝ] V₂)
+  (ν : ProbabilityMeasure V₁) (T : V₁ ≃L[ℝ] V₂)
 
 /-- Pullback of `L²` classes along `T`. -/
 def pullback : Lp ℝ 2 (Probability.mapContinuousLinearEquiv ν T : Measure V₂) →ₗᵢ[ℝ] Lp ℝ 2 (ν : Measure V₁) :=

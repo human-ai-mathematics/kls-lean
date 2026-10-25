@@ -385,15 +385,18 @@ variable {H : Type u} {V : Type v} [NormedAddCommGroup H] [InnerProductSpace ℝ
 def graphChartMap (ι : H →ₗᵢ[ℝ] V) (e : V) (x₀ : V) (g : H → ℝ) : H → V :=
   fun y => x₀ + graphMap ι e g y
 
-omit [FiniteDimensional ℝ H] [FiniteDimensional ℝ V] in
+section GraphChartIdentities
+
+omit [FiniteDimensional ℝ H] [FiniteDimensional ℝ V]
 theorem graphChartMap_apply (ι : H →ₗᵢ[ℝ] V) (e : V) (x₀ : V) (g : H → ℝ) (y : H) :
     graphChartMap ι e x₀ g y = x₀ + ι y + g y • e := by
   rw [graphChartMap, graphMap, add_assoc]
 
-omit [FiniteDimensional ℝ H] [FiniteDimensional ℝ V] in
 theorem graphChartMap_sub (ι : H →ₗᵢ[ℝ] V) (e : V) (x₀ : V) (g : H → ℝ) (y : H) :
     graphChartMap ι e x₀ g y - x₀ = ι y + g y • e := by
   rw [graphChartMap_apply, add_assoc]; abel
+
+end GraphChartIdentities
 
 /-- The tangential parameter of a point, the inverse of the graph parametrization. -/
 def graphCoord (ι : H →ₗᵢ[ℝ] V) (x₀ : V) (x : V) : H := graphProj ι (x - x₀)
@@ -461,7 +464,7 @@ section GradientAlongGraph
 
 variable {H : Type u} {V : Type v} [NormedAddCommGroup H] [InnerProductSpace ℝ H]
   [FiniteDimensional ℝ H] [NormedAddCommGroup V] [InnerProductSpace ℝ V] [FiniteDimensional ℝ V]
-variable {ι : H →ₗᵢ[ℝ] V} {e : V}
+  {ι : H →ₗᵢ[ℝ] V} {e : V}
 
 /-- If a `C¹` graph lies in the zero set of a differentiable `φ`, then at every graph point the
 gradient of `φ` is the normal vector `ι (-∇g y) + e` scaled by its own `e`-component. -/

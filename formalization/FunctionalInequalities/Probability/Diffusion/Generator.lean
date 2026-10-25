@@ -190,7 +190,7 @@ private theorem contDiffAt_fderiv_of_contDiffAt_two {E F : Type*}
 section NormedSpace
 
 variable {V W : Type*}
-variable [NormedAddCommGroup V] [NormedSpace ℝ V] [NormedAddCommGroup W] [NormedSpace ℝ W]
+  [NormedAddCommGroup V] [NormedSpace ℝ V] [NormedAddCommGroup W] [NormedSpace ℝ W]
 
 private theorem diffusionGenerator_comp_local_second_derivative
     (Φ : W → ℝ) (G : V → W) (x : V)

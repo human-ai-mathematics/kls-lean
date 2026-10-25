@@ -319,7 +319,9 @@ section Normalized
 variable {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [FiniteDimensional ℝ V]
   [MeasurableSpace V] [BorelSpace V]
 
-omit [InnerProductSpace ℝ V] [FiniteDimensional ℝ V] in
+section NormalizedSlices
+
+omit [InnerProductSpace ℝ V] [FiniteDimensional ℝ V]
 /-- The normalization constant of `KLS.hausdorffNormalized` is positive and finite, so a set is
 null for the normalized measure exactly when it is null for the raw one. -/
 theorem hausdorffNormalized_eq_zero_iff (k : ℕ) (A : Set V) :
@@ -333,7 +335,6 @@ theorem hausdorffNormalized_eq_zero_iff (k : ℕ) (A : Set V) :
     · exact h
   · exact fun h => Or.inr h
 
-omit [InnerProductSpace ℝ V] [FiniteDimensional ℝ V] in
 /-- **Null slicing in the normalized convention.**  The form the codimension-`m` coarea layer
 consumes: a set with no `(d + m)`-dimensional normalized measure has null slices at almost every
 level. -/
@@ -349,6 +350,8 @@ theorem ae_hausdorffNormalized_inter_levelSet_eq_zero_vector {W : Type*}
   filter_upwards [ae_hausdorffMeasure_inter_levelSet_eq_zero_vector
     (Nat.cast_nonneg k) hu hraw] with t ht
   exact (hausdorffNormalized_eq_zero_iff (V := V) k _).2 ht
+
+end NormalizedSlices
 
 end Normalized
 

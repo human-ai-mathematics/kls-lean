@@ -110,7 +110,9 @@ theorem integrable_mul {φ : α → ℝ} (hφ : AEStronglyMeasurable φ μ) {C :
 
 /-! ### `L¹` stability -/
 
-omit [InnerProductSpace ℝ H] in
+section GammaIntegrability
+
+omit [InnerProductSpace ℝ H]
 /-- The pointwise product of the norms of two `L²` fields is integrable. The two fields may take
 values in different normed spaces; this is what lets a scalar `L²` class be paired with a vector
 `L²` field. -/
@@ -122,7 +124,6 @@ theorem integrable_norm_mul_norm {H' : Type*} [NormedAddCommGroup H'] (u : Lp H 
   filter_upwards [hu.coeFn_toLp, hv.coeFn_toLp] with x hx hy
   rw [hx, hy, Real.inner_apply]
 
-omit [InnerProductSpace ℝ H] in
 /-- Cauchy–Schwarz in `L²` for the pointwise norms, for fields with values in two possibly
 different normed spaces. -/
 theorem integral_norm_mul_norm_le {H' : Type*} [NormedAddCommGroup H'] (u : Lp H 2 μ)
@@ -140,6 +141,8 @@ theorem integral_norm_mul_norm_le {H' : Type*} [NormedAddCommGroup H'] (u : Lp H
     rw [hx, hy, Real.inner_apply]
   rw [hint, ← hnu, ← hnv]
   exact real_inner_le_norm _ _
+
+end GammaIntegrability
 
 /-- **`L¹` stability of the weak `Γ`**: the `L¹` distance of two weak carrés du champ is
 controlled by the `L²` distances of the fields. -/

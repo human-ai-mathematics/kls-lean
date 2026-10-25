@@ -416,7 +416,7 @@ theorem sard_smooth_pi : ∀ (n : ℕ) (u : (Fin n → ℝ) → ℝ), ContDiff �
 section FiniteDimensional
 
 variable {V : Type*}
-variable [NormedAddCommGroup V] [NormedSpace ℝ V] [FiniteDimensional ℝ V]
+  [NormedAddCommGroup V] [NormedSpace ℝ V] [FiniteDimensional ℝ V]
 
 /-- **Sard's theorem for `C^∞` real-valued functions** on an arbitrary finite-dimensional real
 normed space. The critical set is not assumed measurable. This is the smooth category: the sharp

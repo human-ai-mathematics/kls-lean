@@ -25,7 +25,7 @@ open scoped MatrixOrder RealInnerProductSpace
 namespace FunctionalInequalities.Analysis
 
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [FiniteDimensional ℝ E]
-variable {ι : Type*} [Fintype ι] [DecidableEq ι]
+  {ι : Type*} [Fintype ι] [DecidableEq ι]
 
 /-- The principal (positive) inverse square root of `A` computed in the orthonormal basis `b`: the canonical
 matrix `CFC.sqrt` of `(operatorMatrix b A)⁻¹`, pulled back to an operator. -/

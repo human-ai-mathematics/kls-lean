@@ -47,17 +47,20 @@ variable (κ : Kernel (Direction E × E) ℝ) [IsMarkovKernel κ] (b : Direction
 /-- The two-point measure of a conditional fiber: the product of the fiber law with itself. -/
 abbrev twoPointMeasure : Measure (ℝ × ℝ) := (κ b).prod (κ b)
 
-omit [InnerProductSpace ℝ E] [BorelSpace E] [SecondCountableTopology E] in
+section TwoPointSymmetry
+
+omit [InnerProductSpace ℝ E] [BorelSpace E] [SecondCountableTopology E]
 /-- Reversibility: the two-point measure is invariant under exchanging its two coordinates. -/
 theorem twoPointMeasure_swap :
     (twoPointMeasure κ b).map Prod.swap = twoPointMeasure κ b :=
   Measure.prod_swap
 
-omit [InnerProductSpace ℝ E] [BorelSpace E] [SecondCountableTopology E] in
 /-- Every two-point functional integrates equally in the two orders of its arguments. -/
 theorem lintegral_twoPointMeasure_swap (F : ℝ × ℝ → ENNReal) :
     ∫⁻ p, F p.swap ∂twoPointMeasure κ b = ∫⁻ p, F p ∂twoPointMeasure κ b :=
   lintegral_prod_swap F
+
+end TwoPointSymmetry
 
 /-- The squared jump integral of a test along a conditional fiber. -/
 def jump (f : E → ℝ) : ENNReal :=
@@ -134,7 +137,9 @@ theorem energyAt_le_of_lipschitzWith {g : E → ℝ} {L : NNReal} (hg : Lipschit
   · rw [energyAt_of_not_nondegenerate κ b hb]
     exact zero_le
 
-omit [BorelSpace E] [SecondCountableTopology E] [IsMarkovKernel κ] in
+section FiberQuadraticEnergy
+
+omit [BorelSpace E] [SecondCountableTopology E] [IsMarkovKernel κ]
 /-- The zero test has zero fiber energy. -/
 theorem energyAt_zero : energyAt κ b (0 : E → ℝ) = 0 := by
   unfold energyAt
@@ -143,7 +148,6 @@ theorem energyAt_zero : energyAt κ b (0 : E → ℝ) = 0 := by
     rw [h, evariance_zero, ENNReal.zero_div]
   · rfl
 
-omit [BorelSpace E] [SecondCountableTopology E] [IsMarkovKernel κ] in
 /-- Fiber energy is homogeneous of degree two, including the zero scalar. -/
 theorem energyAt_mul (c : ℝ) (f : E → ℝ) :
     energyAt κ b (fun x ↦ c * f x) = ENNReal.ofReal (c ^ 2) * energyAt κ b f := by
@@ -154,7 +158,6 @@ theorem energyAt_mul (c : ℝ) (f : E → ℝ) :
     rw [h, evariance_mul, mul_div_assoc]
   · rw [mul_zero]
 
-omit [BorelSpace E] [SecondCountableTopology E] [IsMarkovKernel κ] in
 private theorem enorm_sq_parallelogram (a c : ℝ) :
     ‖a + c‖ₑ ^ 2 + ‖a - c‖ₑ ^ 2 = 2 * ‖a‖ₑ ^ 2 + 2 * ‖c‖ₑ ^ 2 := by
   have h : ∀ x : ℝ, ‖x‖ₑ ^ 2 = ENNReal.ofReal (x ^ 2) := fun x ↦ by
@@ -166,7 +169,11 @@ private theorem enorm_sq_parallelogram (a c : ℝ) :
   congr 1
   ring
 
-omit [SecondCountableTopology E] in
+end FiberQuadraticEnergy
+
+section FiberContractions
+
+omit [SecondCountableTopology E]
 /-- The parallelogram identity of the fiber energy, in `[0, ∞]`. -/
 theorem energyAt_add_sub {f g : E → ℝ} (hf : Measurable f) (hg : Measurable g) :
     energyAt κ b (fun x ↦ f x + g x) + energyAt κ b (fun x ↦ f x - g x) =
@@ -196,7 +203,6 @@ theorem energyAt_add_sub {f g : E → ℝ} (hf : Measurable f) (hg : Measurable 
     exact enorm_sq_parallelogram _ _
   · simp only [energyAt_of_not_nondegenerate κ b hb, add_zero, mul_zero]
 
-omit [SecondCountableTopology E] in
 /-- Normal contractions do not increase the fiber energy: every squared difference decreases. -/
 theorem energyAt_comp_le (φ : Energy.NormalContraction) {f : E → ℝ} (hf : Measurable f) :
     energyAt κ b (fun x ↦ φ (f x)) ≤ energyAt κ b f := by
@@ -210,7 +216,6 @@ theorem energyAt_comp_le (φ : Energy.NormalContraction) {f : E → ℝ} (hf : M
   · rw [energyAt_of_not_nondegenerate κ b hb]
     exact zero_le
 
-omit [SecondCountableTopology E] in
 /-- Fatou along a fiber: almost-everywhere convergence of Borel tests along the fiber gives lower
 semicontinuity of the fiber energy. -/
 theorem energyAt_le_liminf {fs : ℕ → E → ℝ} {f : E → ℝ} (hfs : ∀ n, Measurable (fs n))
@@ -244,6 +249,8 @@ theorem energyAt_le_liminf {fs : ℕ → E → ℝ} {f : E → ℝ} (hfs : ∀ n
           rwa [liminf_const] at this
   · simp only [energyAt_of_not_nondegenerate κ b hb]
     exact zero_le
+
+end FiberContractions
 
 end Fiber
 

@@ -20,7 +20,7 @@ universe u
 variable {E : Type u} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
   [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
 
-variable (m : Measure E) [m.IsAddHaarMeasure]
+  (m : Measure E) [m.IsAddHaarMeasure]
 
 /-- Integration by parts against a compactly supported test: `∫ (ℒu) w dμ = -∫ ⟪∇u, ∇w⟫ dμ` for
 `u ∈ C²` (no growth condition) and `w ∈ C²` with compact support. -/

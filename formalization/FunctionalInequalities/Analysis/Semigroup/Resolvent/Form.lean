@@ -68,7 +68,9 @@ theorem min_one_mul_graphNormSq_le (T : H₀ →ₗ.[ℝ] H₁) (s : ℝ) (u : T
 def WeakResolvent (T : H₀ →ₗ.[ℝ] H₁) (s : ℝ) (f : H₀) (u : T.domain) : Prop :=
   ∀ v : T.domain, ⟪(u : H₀), (v : H₀)⟫ + s * ⟪T u, T v⟫ = ⟪f, (v : H₀)⟫
 
-omit [CompleteSpace H₀] [CompleteSpace H₁] in
+section WeakResolventEstimates
+
+omit [CompleteSpace H₀] [CompleteSpace H₁]
 /-- Testing the weak resolvent equation against the solution itself. -/
 theorem graphNormSq_eq_inner_of_weakResolvent {T : H₀ →ₗ.[ℝ] H₁} {s : ℝ} {f : H₀} {u : T.domain}
     (hu : WeakResolvent T s f u) :
@@ -76,7 +78,6 @@ theorem graphNormSq_eq_inner_of_weakResolvent {T : H₀ →ₗ.[ℝ] H₁} {s : 
   have := hu u
   rwa [real_inner_self_eq_norm_sq, real_inner_self_eq_norm_sq] at this
 
-omit [CompleteSpace H₀] [CompleteSpace H₁] in
 /-- the resolvent operator, first half: a solution of the weak resolvent equation is a contraction of its datum,
 so the resolvent is norm-nonexpansive. Test against `u` and apply Cauchy–Schwarz. -/
 theorem norm_le_of_weakResolvent {T : H₀ →ₗ.[ℝ] H₁} {s : ℝ} (hs : 0 < s) {f : H₀} {u : T.domain}
@@ -90,7 +91,6 @@ theorem norm_le_of_weakResolvent {T : H₀ →ₗ.[ℝ] H₁} {s : ℝ} (hs : 0 
   · have hmul : ‖(u : H₀)‖ * ‖(u : H₀)‖ ≤ ‖f‖ * ‖(u : H₀)‖ := by nlinarith
     exact le_of_mul_le_mul_right hmul h0
 
-omit [CompleteSpace H₀] [CompleteSpace H₁] in
 /-- the resolvent operator, second half: a solution pairs nonnegatively with its datum, so the resolvent is a
 nonnegative operator. The pairing equals the squared graph norm. -/
 theorem inner_nonneg_of_weakResolvent {T : H₀ →ₗ.[ℝ] H₁} {s : ℝ} (hs : 0 < s) {f : H₀}
@@ -100,5 +100,7 @@ theorem inner_nonneg_of_weakResolvent {T : H₀ →ₗ.[ℝ] H₁} {s : ℝ} (hs
   have hb : (0 : ℝ) ≤ s * ‖T u‖ ^ 2 := mul_nonneg hs.le (sq_nonneg _)
   rw [real_inner_comm]
   nlinarith [sq_nonneg ‖(u : H₀)‖]
+
+end WeakResolventEstimates
 
 end FunctionalInequalities.Analysis.Semigroup

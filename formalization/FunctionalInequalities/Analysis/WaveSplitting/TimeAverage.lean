@@ -20,7 +20,7 @@ open MeasureTheory Set
 open scoped ContDiff
 namespace FunctionalInequalities.Analysis.WaveSplitting
 variable {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
-variable {ι : Type*}
+  {ι : Type*}
 
 omit [NormedAddCommGroup E] [NormedSpace ℝ E] in
 private theorem state_ext {X Y : State E ι} (hu : X.u = Y.u) (hv : X.v = Y.v)
@@ -37,17 +37,20 @@ private theorem state_ext {X Y : State E ι} (hu : X.u = Y.u) (hv : X.v = Y.v)
 section Parametric
 variable [FiniteDimensional ℝ E]
 
-omit [FiniteDimensional ℝ E] in
+section TimeSlices
+
+omit [FiniteDimensional ℝ E]
 private theorem continuous_time_slice {F : ℝ × E → ℝ} (hF : ContDiff ℝ ∞ F) (y : E) :
     Continuous (fun θ => F (θ, y)) := by
   have h := hF.continuous.comp (continuous_id.prodMk (continuous_const : Continuous fun _ : ℝ => y))
   exact h
 
-omit [FiniteDimensional ℝ E] in
 private theorem contDiff_space_slice {F : ℝ × E → ℝ} (hF : ContDiff ℝ ∞ F) (θ : ℝ) :
     ContDiff ℝ ∞ (fun y => F (θ, y)) := by
   have h := hF.comp (contDiff_const.prodMk contDiff_id : ContDiff ℝ ∞ fun y : E => (θ, y))
   exact h
+
+end TimeSlices
 
 /-- Differentiation under a finite interval integral of a jointly smooth function. -/
 theorem hasFDerivAt_intervalIntegral_slice {F : ℝ × E → ℝ} (hF : ContDiff ℝ ∞ F) (a b : ℝ)
@@ -296,13 +299,14 @@ end FiniteIndex
 
 /-! ## Cellwise integration by parts and the exact identity -/
 
-omit [FiniteDimensional ℝ E] in
+section TimeComponents
+
+omit [FiniteDimensional ℝ E]
 private theorem hasDerivAt_time_component {F : ℝ × E → ℝ} (hF : ContDiff ℝ ∞ F) (θ : ℝ)
     (x : E) : HasDerivAt (fun r => F (r, x)) (deriv (fun r => F (r, x)) θ) θ :=
   (((hF.differentiable (by simp)).comp
     (differentiable_id.prodMk (differentiable_const x))) θ).hasDerivAt
 
-omit [FiniteDimensional ℝ E] in
 /-- The exact identity on one actual step: `J_cl` of the weighted time integral of the
 displacement is expressed through the endpoint values, the residual displacement and the
 weighted divergence of the defect together with the residual velocity. -/
@@ -397,6 +401,8 @@ theorem integral_formOperator_step {d : ℕ} (a : Fin d → E) {b : Fin d → E 
   rw [hv]
   field_simp
   ring
+
+end TimeComponents
 
 private theorem sum_range_telescope (N : ℕ) (A B I W : ℕ → ℝ) (L : ℝ) :
     ∑ k ∈ Finset.range N, (-(A (k + 1) - A k) - (B (k + 1) - B k - I k) / L + W k) =

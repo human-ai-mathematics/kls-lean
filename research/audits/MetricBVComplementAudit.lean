@@ -17,7 +17,7 @@ namespace MetricBVComplementAudit
 section StructuredSpace
 
 variable {X : Type*}
-variable [MetricSpace X]
+  [MetricSpace X]
 
 theorem slopeComparison {g a b : X → ℝ} {x : X} {r₀ : ℝ}
     (hr₀ : 0 < r₀)

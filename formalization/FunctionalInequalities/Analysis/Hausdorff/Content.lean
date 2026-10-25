@@ -67,18 +67,18 @@ theorem hausdorffMeasure_eq_iSup_coverCost (d : ℝ) (A : Set X) :
     μH[d] A = ⨆ (r : ℝ≥0∞) (_ : 0 < r), coverCost d r A :=
   Measure.hausdorffMeasure_apply d A
 
-omit [MeasurableSpace X] [BorelSpace X] in
+section CoverCosts
+
+omit [MeasurableSpace X] [BorelSpace X]
 theorem coverCost_le {d : ℝ} {r : ℝ≥0∞} {A : Set X} {T : ℕ → Set X} (hcov : A ⊆ ⋃ i, T i)
     (hdiam : ∀ i, Metric.ediam (T i) ≤ r) : coverCost d r A ≤ familyCost d T :=
   iInf_le_of_le T (iInf_le_of_le hcov (iInf_le_of_le hdiam le_rfl))
 
-omit [MeasurableSpace X] [BorelSpace X] in
 theorem openCoverCost_le {d : ℝ} {r : ℝ≥0∞} {A : Set X} {T : ℕ → Set X}
     (hopen : ∀ i, IsOpen (T i)) (hcov : A ⊆ ⋃ i, T i) (hdiam : ∀ i, Metric.ediam (T i) ≤ r) :
     openCoverCost d r A ≤ familyCost d T :=
   iInf_le_of_le T (iInf_le_of_le hopen (iInf_le_of_le hcov (iInf_le_of_le hdiam le_rfl)))
 
-omit [MeasurableSpace X] [BorelSpace X] in
 theorem openCoverCost_lt_iff {d : ℝ} {r c : ℝ≥0∞} {A : Set X} :
     openCoverCost d r A < c ↔ ∃ T : ℕ → Set X, (∀ i, IsOpen (T i)) ∧ A ⊆ ⋃ i, T i ∧
       (∀ i, Metric.ediam (T i) ≤ r) ∧ familyCost d T < c := by
@@ -92,18 +92,18 @@ theorem openCoverCost_lt_iff {d : ℝ} {r c : ℝ≥0∞} {A : Set X} :
   · rintro ⟨T, hopen, hcov, hdiam, hcost⟩
     exact (openCoverCost_le hopen hcov hdiam).trans_lt hcost
 
-omit [MeasurableSpace X] [BorelSpace X] in
 /-- Smaller scales allow fewer covers, so the cover cost is antitone in the scale. -/
 theorem coverCost_mono_scale {d : ℝ} {r r' : ℝ≥0∞} (h : r' ≤ r) (A : Set X) :
     coverCost d r A ≤ coverCost d r' A :=
   le_iInf fun _T => le_iInf fun hcov => le_iInf fun hdiam =>
     coverCost_le hcov fun i => (hdiam i).trans h
 
-omit [MeasurableSpace X] [BorelSpace X] in
 theorem coverCost_le_openCoverCost {d : ℝ} {r : ℝ≥0∞} (A : Set X) :
     coverCost d r A ≤ openCoverCost d r A :=
   le_iInf fun _T => le_iInf fun _ => le_iInf fun hcov => le_iInf fun hdiam =>
     coverCost_le hcov hdiam
+
+end CoverCosts
 
 /-- Every scalewise cover cost is at most `μH[d]`, since `μH[d]` is their supremum. -/
 theorem coverCost_le_hausdorffMeasure {d : ℝ} {r : ℝ≥0∞} (hr : 0 < r) (A : Set X) :
@@ -205,7 +205,9 @@ section Slice
 
 variable {X : Type*} [EMetricSpace X] [MeasurableSpace X] [BorelSpace X]
 
-omit [MeasurableSpace X] [BorelSpace X] in
+section SliceSemicontinuity
+
+omit [MeasurableSpace X] [BorelSpace X]
 /-- An open set containing one level slice of a compact set contains all nearby level slices: the
 compact remainder outside it keeps the function at a positive distance from the level. -/
 theorem isOpen_setOf_slice_subset {S U : Set X} {u : X → ℝ} (hS : IsCompact S) (hU : IsOpen U)
@@ -228,7 +230,6 @@ theorem isOpen_setOf_slice_subset {S U : Set X} {u : X → ℝ} (hS : IsCompact 
     rw [hx.2] at hle
     exact absurd (Real.dist_eq s t ▸ Metric.mem_ball.1 hs) (not_lt.2 hle)
 
-omit [MeasurableSpace X] [BorelSpace X] in
 /-- At a fixed scale, the open-cover cost of the level slices of a compact set is upper
 semicontinuous in the level.  Restricting to open covers is what makes this true: the same cover
 serves all nearby slices. -/
@@ -242,6 +243,8 @@ theorem upperSemicontinuous_openCoverCost_slice (d : ℝ) (r : ℝ≥0∞) {S : 
   refine Filter.mem_of_superset
     ((isOpen_setOf_slice_subset hS (isOpen_iUnion hopen) hu).mem_nhds hcov) fun s hs => ?_
   exact (openCoverCost_le hopen hs hdiam).trans_lt hcost
+
+end SliceSemicontinuity
 
 /-- **Compact slices are measurable.**  For `S` compact and `u` continuous, the `d`-dimensional
 Hausdorff measure of the level slices of `S` is a Borel measurable function of the level.

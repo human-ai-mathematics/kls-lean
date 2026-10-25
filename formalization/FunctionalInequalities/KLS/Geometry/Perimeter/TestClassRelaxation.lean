@@ -61,19 +61,22 @@ def locallyLipschitzRelaxation (ν : Measure X) (B : Set X) : ENNReal :=
   ⨅ f : LocallyLipschitzApproximatingSequence ν B,
     liminf (fun n => ∫⁻ x, Energy.LocalSlope.apply (f.1 n) x ∂ν) atTop
 
-omit [BorelSpace X] in
+section TestRelaxationSemicontinuity
+
+omit [BorelSpace X]
 theorem lipschitzRelaxation_le_liminf (ν : Measure X) (B : Set X)
     (f : LipschitzApproximatingSequence ν B) :
     lipschitzRelaxation ν B ≤
       liminf (fun n => ∫⁻ x, Energy.LocalSlope.apply (f.1 n) x ∂ν) atTop :=
   iInf_le _ f
 
-omit [BorelSpace X] in
 theorem locallyLipschitzRelaxation_le_liminf (ν : Measure X) (B : Set X)
     (f : LocallyLipschitzApproximatingSequence ν B) :
     locallyLipschitzRelaxation ν B ≤
       liminf (fun n => ∫⁻ x, Energy.LocalSlope.apply (f.1 n) x ∂ν) atTop :=
   iInf_le _ f
+
+end TestRelaxationSemicontinuity
 
 /-- A test sequence is a globally Lipschitz sequence. -/
 def ApproximatingSequence.toLipschitz {ν : Measure X} {B : Set X}

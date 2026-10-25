@@ -10,7 +10,7 @@ open scoped ContDiff
 namespace WaveSplittingEnergyAudit
 variable {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
   [MeasurableSpace E] [BorelSpace E]
-variable (m : Measure E) [IsFiniteMeasureOnCompacts m] [m.IsAddRightInvariant]
+  (m : Measure E) [IsFiniteMeasureOnCompacts m] [m.IsAddRightInvariant]
 
 /-- A full coordinate sweep preserves every finite derivative energy, for arbitrary order
 and arbitrary dimension including zero. No orthonormality is needed for preservation. -/
@@ -35,17 +35,20 @@ theorem fixed_horizon (d : ℕ) (a : Fin d → E) (b : Fin d → E → ℝ)
     rw [mul_comm, div_mul_cancel₀ _ (Nat.cast_ne_zero.mpr hN.ne')]
   simpa [htime, energy, initial, squareIntegral] using he
 
-omit [BorelSpace E] [IsFiniteMeasureOnCompacts m] [m.IsAddRightInvariant] in
+section DegenerateEnergy
+
+omit [BorelSpace E] [IsFiniteMeasureOnCompacts m] [m.IsAddRightInvariant]
 /-- The zero-time boundary is the unchanged state, at every derivative order. -/
 theorem time_zero (d k : ℕ) (a : Fin d → E) (Y : State E (Fin d)) :
     derivativeEnergy m a k (sweep a 0 (List.finRange d) Y) = derivativeEnergy m a k Y := by
   rw [sweep_zero]
 
-omit [BorelSpace E] [IsFiniteMeasureOnCompacts m] [m.IsAddRightInvariant] in
 /-- The empty-coordinate case does not demand a nonempty basis or a division by dimension. -/
 theorem empty_coordinates (k : ℕ) (t : ℝ) (Y : State E (Fin 0)) :
     derivativeEnergy m Fin.elim0 k (sweep Fin.elim0 t [] Y) =
       derivativeEnergy m Fin.elim0 k Y := rfl
+
+end DegenerateEnergy
 
 #print axioms all_orders
 #print axioms fixed_horizon

@@ -90,7 +90,9 @@ theorem hausdorffMeasure_finrank_sub_eq_top {S : Set V} {r : ℕ}
 
 /-! ### One scale of the small-Lipschitz method -/
 
-omit [FiniteDimensional ℝ V] [FiniteDimensional ℝ W] in
+section LipschitzSliceMajorants
+
+omit [FiniteDimensional ℝ V] [FiniteDimensional ℝ W]
 /-- **One scale of the small-Lipschitz method.**  Given a countable measurable partition of `S` on
 whose pieces `Q ∘ u` is `ε`-Lipschitz, the slice function at the exponent
 `n − dim W₂` is dominated by a **measurable** majorant whose integral is at most
@@ -141,7 +143,6 @@ theorem exists_measurable_majorant_of_lipschitz_pieces {u : V → W} {S : Set V}
           rw [hddef]
           exact hausdorffMeasure_truncated_add_le S _
 
-omit [FiniteDimensional ℝ V] [FiniteDimensional ℝ W] in
 /-- **the weaker-exponent diagnostic: the obstruction, stated.**  Projecting away the range of the differential and running
 the proved Eilenberg bound gives a null slicing statement at the exponent `n − dim W₂`, which in
 the route's notation is `k + r`, **not** `k`.  For `r ≥ 1` this is strictly weaker than critical-fibre nullity in the
@@ -208,6 +209,8 @@ theorem ae_hausdorffMeasure_inter_levelSet_eq_zero_of_lipschitz_pieces {u : V �
     le_antisymm (ge_of_tendsto' htend hHint) (by simp)
   filter_upwards [(lintegral_eq_zero_iff hHmeas).1 hzero] with τ hτ
   exact le_antisymm (le_of_le_of_eq (hHdom τ) hτ) (by simp)
+
+end LipschitzSliceMajorants
 
 end ExponentObstruction
 

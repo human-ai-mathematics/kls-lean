@@ -74,7 +74,9 @@ theorem gradient_pairing_eq_fderiv (f : E → ℝ) (x v : E) :
     ((InnerProductSpace.toDual ℝ E).symm (fderiv ℝ f x))) v = _
   simp
 
-omit [MeasurableSpace E] [BorelSpace E] [SecondCountableTopology E] in
+section InverseHessianIdentities
+
+omit [MeasurableSpace E] [BorelSpace E] [SecondCountableTopology E]
 /-- Coordinate expansion of the actual inverse-Hessian energy. The coordinates
 are those of the actual Fréchet derivative, not an auxiliary measurable field. -/
 theorem inverse_hessian_energy_eq_coordinate_sum
@@ -116,7 +118,6 @@ theorem inverse_hessian_energy_eq_coordinate_sum
       rw [inverseHessianEntry_symm b hU2 x j i]
       ring
 
-omit [MeasurableSpace E] [BorelSpace E] [SecondCountableTopology E] in
 /-- Smoothness and pointwise positive definiteness of the potential, together
 with `C¹` regularity of the test, make the actual energy continuous. -/
 theorem continuous_inverse_hessian_gradient_energy
@@ -149,7 +150,6 @@ theorem continuous_inverse_hessian_gradient_energy
   exact (((contDiff_inverseHessianEntry b hU hPD i j).continuous).mul
     (hc i)).mul (hc j)
 
-omit [MeasurableSpace E] [BorelSpace E] [SecondCountableTopology E] in
 /-- Positivity of the actual inverse-Hessian energy, without a uniform
 Hessian lower bound. This also covers the zero-dimensional space. -/
 theorem inverse_hessian_gradient_energy_nonneg
@@ -159,6 +159,8 @@ theorem inverse_hessian_gradient_energy_nonneg
     0 ≤ inner ℝ (gradient f x)
       (Ring.inverse (hessianOperator U x) (gradient f x)) := by
   simpa using hessian_inverse_young hU x (hPD x) (gradient f x) 0
+
+end InverseHessianIdentities
 
 end FiniteDimensional
 

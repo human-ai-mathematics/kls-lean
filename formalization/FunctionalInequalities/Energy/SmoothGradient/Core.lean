@@ -88,7 +88,9 @@ theorem absolutelyContinuous : (ν : Measure V) ≪ m := by
 
 variable [m.IsAddHaarMeasure]
 
-omit [InnerProductSpace ℝ V] [CompleteSpace V] [SecondCountableTopology V] [FiniteDimensional ℝ V] in
+section TestSupport
+
+omit [InnerProductSpace ℝ V] [CompleteSpace V] [SecondCountableTopology V] [FiniteDimensional ℝ V]
 /-- Every point of `Ω` lies in the support of the law. -/
 theorem subset_support : D.Ω ⊆ (ν : Measure V).support := by
   intro x hx
@@ -109,10 +111,11 @@ theorem subset_support : D.Ω ⊆ (ν : Measure V).support := by
     exact (ENNReal.ofReal_pos.mpr (hy (hWΩ hyW))).ne'
   exact hpos.trans_le (measure_mono (Set.inter_subset_left.trans hU'U))
 
-omit [InnerProductSpace ℝ V] [CompleteSpace V] [SecondCountableTopology V] [FiniteDimensional ℝ V] in
 /-- `Ω` lies in the interior of the support. -/
 theorem subset_interior_support : D.Ω ⊆ interior (ν : Measure V).support :=
   interior_maximal D.subset_support D.isOpen
+
+end TestSupport
 
 omit [InnerProductSpace ℝ V] [CompleteSpace V] [SecondCountableTopology V] [FiniteDimensional ℝ V] in
 include D in
@@ -243,13 +246,14 @@ theorem Test.toL2_mem_closure_domain (f : Test ν) :
   rw [← hz]
   exact hz2'
 
-omit [FiniteDimensional ℝ V] in
+section TestEnergy
+
+omit [FiniteDimensional ℝ V]
 /-- The raw energy of a smooth test is the squared `L²` norm of its gradient class. -/
 theorem Test.coe_energy_eq_norm_toLp_sq (f : Test ν) :
     (f.energy : ℝ) = ‖(Test.memLp_gradient ν f).toLp (gradient f.toFun)‖ ^ 2 := by
   rw [Test.coe_energy, L2.norm_toLp_sq]
 
-omit [FiniteDimensional ℝ V] in
 /-- The raw energy of a smooth test, in `ENNReal`, is the squared `NNReal` norm of its gradient
 class. -/
 theorem Test.energy_eq_nnnorm_sq (f : Test ν) :
@@ -259,6 +263,8 @@ theorem Test.energy_eq_nnnorm_sq (f : Test ν) :
   apply NNReal.eq
   push_cast
   exact Test.coe_energy_eq_norm_toLp_sq ν f
+
+end TestEnergy
 
 /-- The Lipschitz-gradient relaxation is at most the smooth-gradient relaxation: smooth cutoffs are
 recovery sequences for smooth tests. -/

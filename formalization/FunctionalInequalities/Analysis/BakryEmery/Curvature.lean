@@ -109,7 +109,9 @@ theorem mul_gamma_le_gammaTwo {U f : E → ℝ} (hU : ContDiff ℝ 2 U) (hf : Co
 
 variable [MeasurableSpace E] [BorelSpace E] (m : Measure E) [m.IsAddHaarMeasure]
 
-omit [m.IsAddHaarMeasure] in
+section CurvatureIntegrability
+
+omit [m.IsAddHaarMeasure]
 /-- `ℒ Γ(f)` is integrable against `m.tilted (-U)` for compactly supported `C³` functions `f`. -/
 theorem integrable_weightedLaplacian_gamma {U f : E → ℝ} (hU : ContDiff ℝ 2 U)
     (hf : ContDiff ℝ 3 f) (hfc : HasCompactSupport f) :
@@ -130,7 +132,6 @@ theorem integrable_weightedLaplacian_gamma {U f : E → ℝ} (hU : ContDiff ℝ 
         (hasCompactSupport_gamma_left f hfc))
   exact hcont.integrable_of_hasCompactSupport hcompact
 
-omit [m.IsAddHaarMeasure] in
 /-- `Γ(f, ℒf)` is integrable against `m.tilted (-U)` for compactly supported `C³` functions `f`. -/
 theorem integrable_gamma_weightedLaplacian {U f : E → ℝ} (hU : ContDiff ℝ 2 U)
     (hf : ContDiff ℝ 3 f) (hfc : HasCompactSupport f) :
@@ -149,6 +150,8 @@ theorem integrable_gamma_weightedLaplacian {U f : E → ℝ} (hU : ContDiff ℝ 
     simpa using
       (hasCompactSupport_gamma_left (weightedLaplacian U f) hfc)
   exact hcont.integrable_of_hasCompactSupport hcompact
+
+end CurvatureIntegrability
 
 /-- The invariance `∫ ℒ Γ(f) dμ = 0` for `μ = m.tilted (-U)`. -/
 theorem integral_weightedLaplacian_gamma_eq_zero {U f : E → ℝ} (hU : ContDiff ℝ 2 U)

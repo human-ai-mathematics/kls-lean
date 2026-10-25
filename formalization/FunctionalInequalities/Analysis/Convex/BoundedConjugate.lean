@@ -101,7 +101,9 @@ theorem exists_real_global_minimum_of_bounded_domain
     exact le_top
   · exact haMin y (hdom y hy)
 
-omit [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] in
+section BoundedDomainConjugates
+
+omit [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
 /-- A real floor and bounded effective domain give a finite upper bound for the
 actual extended-real Legendre transform, at every primal point. -/
 theorem legendre_le_of_real_lower_bound
@@ -135,7 +137,6 @@ theorem legendre_le_of_real_lower_bound
       _ ≤ (((L : ℝ) * ‖x‖ - m : ℝ) : EReal) := by
         exact_mod_cast (sub_le_sub hinner hm)
 
-omit [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] in
 /-- Properness excludes bottom for the actual conjugate, and the bounded-slope
 upper bound excludes top. No conversion of an infinite value is used. -/
 theorem legendre_finite_of_bounded_domain
@@ -152,7 +153,6 @@ theorem legendre_finite_of_bounded_domain
   rw [htop] at hu
   exact (not_le_of_gt (EReal.coe_lt_top ((L : ℝ) * ‖x‖ - m))) hu
 
-omit [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] in
 /-- Transfer the actual conjugate's convex epigraph to a real representative.
 The finite equality, rather than any global algebraic rule for `toReal`, is used. -/
 theorem real_convexOn_legendre
@@ -172,7 +172,6 @@ theorem real_convexOn_legendre
   rw [hψ (a • x + b • y)] at h
   simpa only [smul_eq_mul] using (EReal.coe_le_coe_iff.mp h)
 
-omit [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] in
 /-- Bounded effective-domain slopes control the EReal supremum itself.
 Only finite intercepts are converted to real numbers. -/
 theorem lipschitzWith_real_legendre
@@ -217,7 +216,6 @@ theorem lipschitzWith_real_legendre
         apply EReal.coe_le_coe_iff.mpr
         linarith only [hz, hinner]
 
-omit [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] in
 /-- Real Fenchel inequality at any genuinely finite dual point, retaining the
 actual extended-real conjugate rather than replacing it by an unrelated primal. -/
 theorem real_legendre_fenchel
@@ -229,5 +227,7 @@ theorem real_legendre_fenchel
     le_iSup (fun z : E => (inner ℝ z x : EReal) - q z) y
   rw [hy, hψ x, ← EReal.coe_sub] at h
   exact EReal.coe_le_coe_iff.mp h
+
+end BoundedDomainConjugates
 
 end FunctionalInequalities.Analysis

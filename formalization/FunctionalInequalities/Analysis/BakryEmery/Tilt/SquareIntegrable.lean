@@ -36,7 +36,7 @@ omit [CompleteSpace E]
 section NormedSpace
 
 variable {F : Type*}
-variable [NormedAddCommGroup F] [NormedSpace ℝ F]
+  [NormedAddCommGroup F] [NormedSpace ℝ F]
 
 /-- Measurability of the derivative amplitude. -/
 theorem weightedExpD_meas
@@ -151,7 +151,7 @@ private theorem weightedExp_integral_contDiff_nat.{v} {F : Type (max u v)}
 section NormedSpace
 
 variable {F : Type*}
-variable [NormedAddCommGroup F] [NormedSpace ℝ F] [CompleteSpace F]
+  [NormedAddCommGroup F] [NormedSpace ℝ F] [CompleteSpace F]
 
 /-- Differentiation under the integral sign for exponential weights, for integrands integrable
 against every exponential weight. -/
@@ -248,9 +248,9 @@ theorem iteratedFDeriv_integral_exp_inner_smul (μ : Measure E) {g : E → F}
 end NormedSpace
 
 omit [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] in
-/-- Square-integrable functions are integrable against every exponential weight when `μ` is
-finite with all exponential moments. -/
-theorem integrable_exp_mul_norm_of_memLp (μ : Measure E) [IsFiniteMeasure μ]
+/-- Square-integrable functions are integrable against every exponential weight when `μ` has
+all exponential moments. The moment at rate `0` already implies that `μ` is finite. -/
+theorem integrable_exp_mul_norm_of_memLp (μ : Measure E)
     (hexp : ∀ r : ℝ, Integrable (fun x => Real.exp (r * ‖x‖)) μ) {f : E → ℝ} (hf : MemLp f 2 μ)
     (r : ℝ) : Integrable (fun x => Real.exp (r * ‖x‖) * ‖f x‖) μ := by
     have hmeas : AEStronglyMeasurable (fun x : E => Real.exp (r * ‖x‖)) μ :=
@@ -277,7 +277,7 @@ theorem integrable_exp_mul_norm_of_memLp (μ : Measure E) [IsFiniteMeasure μ]
     exact heq ▸ hprod
 
 omit [FiniteDimensional ℝ E] in
-private lemma integrable_exp_inner_of_all_exp (μ : Measure E) [IsFiniteMeasure μ]
+private lemma integrable_exp_inner_of_all_exp (μ : Measure E)
     (hexp : ∀ r : ℝ, Integrable (fun x => Real.exp (r * ‖x‖)) μ) (z : E) :
     Integrable (fun x => Real.exp ⟪z, x⟫) μ := by
   have hmeas : AEStronglyMeasurable (fun x : E => Real.exp ⟪z, x⟫) μ :=
@@ -412,7 +412,10 @@ theorem taylorTensor_const_mul (μ : Measure E) (c : ℝ) (f : E → ℝ) (d : �
     simp [ContinuousLinearEquiv.unitsEquivAut_apply, smul_eq_mul]
     ring
 
-omit [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] in
+section NormWeights
+
+omit [InnerProductSpace ℝ E] [FiniteDimensional ℝ E]
+
 private theorem tiltExp_memLp_two (μ : Measure E)
     (hexp : ∀ r : ℝ, Integrable (fun x => Real.exp (r * ‖x‖)) μ) (r : ℝ) :
     MemLp (fun x => Real.exp (r * ‖x‖)) 2 μ := by
@@ -424,7 +427,6 @@ private theorem tiltExp_memLp_two (μ : Measure E)
   congr 1
   ring
 
-omit [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] in
 private theorem tiltExp_cauchy_schwarz (μ : Measure E)
     (hexp : ∀ r : ℝ, Integrable (fun x => Real.exp (r * ‖x‖)) μ)
     {f : E → ℝ} (hf : MemLp f 2 μ) (r : ℝ) :
@@ -445,6 +447,8 @@ private theorem tiltExp_cauchy_schwarz (μ : Measure E)
         ‖hw.toLp (fun x => Real.exp (r * ‖x‖))‖ *
           ‖hf.norm.toLp (fun x => ‖f x‖)‖ := real_inner_le_norm _ _
     _ = _ := by rw [Lp.norm_toLp, Lp.norm_toLp, eLpNorm_norm]
+
+end NormWeights
 
 omit [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] in
 private theorem tiltMoment_product_bound (d : ℕ) (h : Fin d → E) (x : E) :
@@ -586,13 +590,13 @@ omit [CompleteSpace E] [FiniteDimensional ℝ E]
 section NormedSpace
 
 variable {G : Type*}
-variable [NormedAddCommGroup G] [NormedSpace ℝ G]
+  [NormedAddCommGroup G] [NormedSpace ℝ G]
 
 section CompleteSpace
 
 variable [CompleteSpace G]
 
-omit [BorelSpace E] in
+omit [BorelSpace E]
 /-- Tilt averages only see the `μ`-class of a function: every tilt `μ_z` is absolutely
 continuous with respect to `μ`. -/
 theorem tiltAverage_congr_ae (μ : Measure E) {f g : E → G} (hfg : f =ᵐ[μ] g) (z : E) :
@@ -600,7 +604,6 @@ theorem tiltAverage_congr_ae (μ : Measure E) {f g : E → G} (hfg : f =ᵐ[μ] 
   unfold tiltAverage expTilt
   exact integral_congr_ae ((tilted_absolutelyContinuous μ _).ae_le hfg)
 
-omit [BorelSpace E] in
 /-- Taylor tensors only see the `μ`-class of a function. -/
 theorem taylorTensor_congr_ae (μ : Measure E) {f g : E → G} (hfg : f =ᵐ[μ] g) (d : ℕ) :
     taylorTensor μ f d = taylorTensor μ g d := by

@@ -117,7 +117,7 @@ section SubgradientRange
 section InnerProduct
 
 variable {E : Type*}
-variable [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+  [NormedAddCommGroup E] [InnerProductSpace ℝ E]
 
 private lemma gradient_le_increment [CompleteSpace E]
     {u : E → ℝ} (hc : ConvexOn ℝ univ u)
@@ -632,7 +632,7 @@ namespace FunctionalInequalities.Analysis
 section InnerProduct
 
 variable {E : Type*}
-variable [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+  [NormedAddCommGroup E] [InnerProductSpace ℝ E]
 
 private lemma convex_line_slope_mono [FiniteDimensional ℝ E] {u : E → ℝ}
     (hconv : ConvexOn ℝ Set.univ u) (x v : E) {a b : ℝ}
@@ -865,7 +865,7 @@ namespace FunctionalInequalities.Analysis
 section InnerProduct
 
 variable {E : Type*}
-variable [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+  [NormedAddCommGroup E] [InnerProductSpace ℝ E]
 
 private lemma support_of_max
     {u : E → ℝ} {Ω : Set E} (hu : ConvexOn ℝ univ u) (hΩ : IsOpen Ω)
@@ -1062,7 +1062,7 @@ namespace FunctionalInequalities.Analysis
 section InnerProduct
 
 variable {E : Type*}
-variable [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+  [NormedAddCommGroup E] [InnerProductSpace ℝ E]
 
 private theorem legendre_eq_of_subgradient (u : E → ℝ) (x p : E)
     (hsub : ∀ z, u x + ⟪p, z - x⟫ ≤ u z) :
@@ -1234,7 +1234,7 @@ namespace FunctionalInequalities.Analysis
 section InnerProduct
 
 variable {E : Type*}
-variable [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+  [NormedAddCommGroup E] [InnerProductSpace ℝ E]
 
 /-- **A function affine along a full line pins every subgradient** (weak Letwin route, Caffarelli's argument): if `u (x₀ + t θ) = u x₀ + t c` for all real `t`, then every subgradient `p` of `u` at
 any point satisfies `⟪p, θ⟫ = c`. -/
@@ -1415,7 +1415,7 @@ private lemma riemann_sum_sandwich (F s : ℕ → ℝ) (N : ℕ)
 section InnerProduct
 
 variable {E : Type*}
-variable [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+  [NormedAddCommGroup E] [InnerProductSpace ℝ E]
 
 private lemma inner_slope_error
     (p q h : E) (B : E →L[ℝ] E) (t e : ℝ)

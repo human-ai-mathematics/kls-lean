@@ -63,7 +63,9 @@ theorem lintegral_enorm_restrict_le_eLpNorm {W : Type*} [NormedAddCommGroup W]
         eLpNorm_le_eLpNorm_mul_rpow_measure_univ (by norm_num) hu
     _ = eLpNorm u 2 (ν : Measure V) := by simp
 
-omit [InnerProductSpace ℝ V] [CompleteSpace V] [BorelSpace V] [SecondCountableTopology V] [FiniteDimensional ℝ V] in
+section LocalIntegrability
+
+omit [InnerProductSpace ℝ V] [CompleteSpace V] [BorelSpace V] [SecondCountableTopology V] [FiniteDimensional ℝ V]
 /-- Local domination bounds the `L¹(m)` norm over a compact subset of the interior by the
 `L²(ν)` norm. -/
 theorem exists_lintegral_enorm_restrict_le (W : Type v) [NormedAddCommGroup W]
@@ -77,7 +79,6 @@ theorem exists_lintegral_enorm_restrict_le (W : Type v) [NormedAddCommGroup W]
   exact (hC fun x ↦ ‖u x‖ₑ).trans
     (mul_le_mul' le_rfl (lintegral_enorm_restrict_le_eLpNorm hu K))
 
-omit [InnerProductSpace ℝ V] [CompleteSpace V] [BorelSpace V] [SecondCountableTopology V] [FiniteDimensional ℝ V] in
 /-- A square-integrable function for `ν` is integrable for `m` on compact subsets of the
 interior of the support. -/
 theorem integrableOn_of_locallyDominates {Ω : Set V} (h : LocallyDominatesOn ν m Ω) {K : Set V}
@@ -89,12 +90,16 @@ theorem integrableOn_of_locallyDominates {Ω : Set V} (h : LocallyDominatesOn ν
   change ∫⁻ x in K, ‖u x‖ₑ ∂m < ⊤
   exact (hC u hu.aestronglyMeasurable).trans_lt (ENNReal.mul_lt_top ENNReal.coe_lt_top hu2.lt_top)
 
+end LocalIntegrability
+
 section NormedSpace
 
 variable (W : Type v)
-variable [NormedAddCommGroup W] [NormedSpace ℝ W]
+  [NormedAddCommGroup W] [NormedSpace ℝ W]
 
-omit [InnerProductSpace ℝ V] [CompleteSpace V] [SecondCountableTopology V] [FiniteDimensional ℝ V] in
+section LocalIntegralBounds
+
+omit [InnerProductSpace ℝ V] [CompleteSpace V] [SecondCountableTopology V] [FiniteDimensional ℝ V]
 /-- The lower integral of a bounded test times a square-integrable function, when the test
 vanishes outside a compact subset of the interior. -/
 theorem lintegral_enorm_smul_le
@@ -121,7 +126,6 @@ theorem lintegral_enorm_smul_le
         gcongr
         exact hC u hu
 
-omit [InnerProductSpace ℝ V] [CompleteSpace V] [SecondCountableTopology V] [FiniteDimensional ℝ V] in
 /-- Integrability of a bounded test times a square-integrable function, and the resulting bound
 on the integral, in real form. -/
 theorem exists_norm_integral_smul_le
@@ -146,6 +150,8 @@ theorem exists_norm_integral_smul_le
         ENNReal.toReal_mono hfin hbound
     _ = (M : ℝ) * ((C : ℝ) * (eLpNorm u 2 (ν : Measure V)).toReal) := by
         rw [ENNReal.toReal_mul, ENNReal.toReal_mul, ENNReal.coe_toReal, ENNReal.coe_toReal]
+
+end LocalIntegralBounds
 
 end NormedSpace
 

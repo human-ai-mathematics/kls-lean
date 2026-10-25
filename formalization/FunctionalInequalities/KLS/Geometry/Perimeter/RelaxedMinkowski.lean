@@ -66,18 +66,21 @@ def relaxedMinkowskiContent (ν : Measure V) (B : Set V) : ENNReal :=
   ⨅ A : MinkowskiApproximatingSequence ν B,
     liminf (fun n => Isoperimetry.minkowskiContent ν (A.1 n)) atTop
 
-omit [BorelSpace V] in
+section RelaxedLowerContent
+
+omit [BorelSpace V]
 theorem relaxedMinkowskiContent_le_liminf (ν : Measure V) [IsFiniteMeasure ν] (B : Set V)
     (A : MinkowskiApproximatingSequence ν B) :
     relaxedMinkowskiContent ν B ≤
       liminf (fun n => Isoperimetry.minkowskiContent ν (A.1 n)) atTop :=
   iInf_le _ A
 
-omit [BorelSpace V] in
 /-- An empty class gives `⊤`. -/
 theorem relaxedMinkowskiContent_eq_top_of_isEmpty (ν : Measure V) [IsFiniteMeasure ν] (B : Set V)
     [IsEmpty (MinkowskiApproximatingSequence ν B)] : relaxedMinkowskiContent ν B = ⊤ :=
   iInf_of_empty _
+
+end RelaxedLowerContent
 
 /-- The perimeter is at most every liminf of contents along the class, hence at most the
 relaxed content (no measurability of `B` is needed). -/
@@ -171,20 +174,20 @@ def relaxedUpperMinkowskiContent (ν : Measure V) (B : Set V) : ENNReal :=
   ⨅ A : MinkowskiApproximatingSequence ν B,
     liminf (fun n => Isoperimetry.upperMinkowskiContent ν (A.1 n)) atTop
 
-omit [BorelSpace V] in
+section RelaxedUpperContent
+
+omit [BorelSpace V]
 theorem relaxedUpperMinkowskiContent_le_liminf (ν : Measure V) [IsFiniteMeasure ν] (B : Set V)
     (A : MinkowskiApproximatingSequence ν B) :
     relaxedUpperMinkowskiContent ν B ≤
       liminf (fun n => Isoperimetry.upperMinkowskiContent ν (A.1 n)) atTop :=
   iInf_le _ A
 
-omit [BorelSpace V] in
 /-- An empty class gives `⊤`. -/
 theorem relaxedUpperMinkowskiContent_eq_top_of_isEmpty (ν : Measure V) [IsFiniteMeasure ν] (B : Set V)
     [IsEmpty (MinkowskiApproximatingSequence ν B)] : relaxedUpperMinkowskiContent ν B = ⊤ :=
   iInf_of_empty _
 
-omit [BorelSpace V] in
 /-- Termwise, the lower content is at most the upper content, so the relaxed lower content is at
 most the relaxed upper content. -/
 theorem relaxedMinkowskiContent_le_relaxedUpperMinkowskiContent (ν : Measure V) [IsFiniteMeasure ν]
@@ -192,6 +195,8 @@ theorem relaxedMinkowskiContent_le_relaxedUpperMinkowskiContent (ν : Measure V)
   le_iInf fun A => (relaxedMinkowskiContent_le_liminf ν B A).trans
     (liminf_le_liminf (Eventually.of_forall fun n =>
       Isoperimetry.minkowskiContent_le_upperMinkowskiContent ν (A.1 n)))
+
+end RelaxedUpperContent
 
 /-- The perimeter is at most every liminf of upper contents along the class (BV lower
 semicontinuity below the upper content), hence at most the relaxed upper content. -/
@@ -235,7 +240,9 @@ theorem relaxedUpperMinkowskiContent_eq_zero_iff (ν : Measure V) [IsFiniteMeasu
     relaxedUpperMinkowskiContent ν B = 0 ↔ perimeter (ν : Measure V) B = 0 := by
   rw [relaxedUpperMinkowskiContent_eq_perimeter]
 
-omit [BorelSpace V] in
+section UpperContentBounds
+
+omit [BorelSpace V]
 /-- The relaxed upper content of a measurable set is at most its upper Minkowski content, through
 the constant sequence; this recovers `perimeter ≤ upperMinkowskiContent`. -/
 theorem relaxedUpperMinkowskiContent_le_upperMinkowskiContent (ν : Measure V) [IsFiniteMeasure ν]
@@ -246,7 +253,6 @@ theorem relaxedUpperMinkowskiContent_le_upperMinkowskiContent (ν : Measure V) [
     liminf (fun _ : ℕ => Isoperimetry.upperMinkowskiContent ν B) atTop at h
   rwa [liminf_const] at h
 
-omit [BorelSpace V] in
 /-- Any sequence of the class whose upper contents converge bounds the relaxed upper content, and
 hence the perimeter, by the limit. -/
 theorem relaxedUpperMinkowskiContent_le_of_tendsto (ν : Measure V) [IsFiniteMeasure ν] {B : Set V}
@@ -256,6 +262,8 @@ theorem relaxedUpperMinkowskiContent_le_of_tendsto (ν : Measure V) [IsFiniteMea
     (hlim : Tendsto (fun n => Isoperimetry.upperMinkowskiContent ν (A n)) atTop (𝓝 c)) :
     relaxedUpperMinkowskiContent ν B ≤ c :=
   (relaxedUpperMinkowskiContent_le_liminf ν B ⟨A, hA, hconv⟩).trans hlim.liminf_eq.le
+
+end UpperContentBounds
 
 /-- ADMG Lemma 2.1 at measurable finite-mass targets: the genuine relaxed upper
 content is at most the lower content under any Borel measure. The finite-content
@@ -319,7 +327,9 @@ two relaxations holds at measurable finite-mass targets. They do not identify ei
 relaxation with the perimeter, which is proved above only for finite measures or for
 measures finite on bounded Borel sets. -/
 
-omit [BorelSpace V] in
+section UpperApproximations
+
+omit [BorelSpace V]
 /-- Near-minimum selection for the relaxed upper content: below any threshold above it there are
 measurable sets arbitrarily close to the target in global indicator `L¹(ν)` whose upper content
 is below the threshold. No finiteness of the measure, target mass or measurability is assumed. -/
@@ -339,7 +349,6 @@ theorem exists_upperApproximation_lt (ν : Measure V) (B : Set V) {a ε : ENNRea
   obtain ⟨n, hn⟩ := (hfreq.and_eventually hev).exists
   exact ⟨s.1 n, s.2.1 n, hn.2, hn.1⟩
 
-omit [BorelSpace V] in
 /-- Sequential lower semicontinuity of the relaxed upper content under global indicator `L¹(ν)`
 convergence of measurable sets, for every measure: diagonal selection of near-minimal sets and
 the indicator triangle inequality. The limit set need not be measurable or of finite mass. -/
@@ -389,6 +398,8 @@ theorem relaxedUpperMinkowskiContent_le_liminf_of_tendsto (ν : Measure V) {B : 
         liminf (fun k => Isoperimetry.upperMinkowskiContent ν (s.1 k)) atTop :=
       iInf_le _ s
     _ ≤ a := liminf_le_of_frequently_le' (Frequently.of_forall fun k => (hC k).2.2.le)
+
+end UpperApproximations
 
 /-- ADMG Lemma 2.1, second clause, for every Borel measure at measurable finite-mass targets:
 the relaxed upper and lower Minkowski contents coincide. Lower semicontinuity of the relaxed
@@ -446,7 +457,9 @@ def MinkowskiApproximatingSequence.smulInv {c : ℝ≥0} (hc : c ≠ 0) {ν : Me
       ENNReal.inv_mul_cancel hc' ENNReal.coe_ne_top, one_mul, mul_zero] at h
     exact h⟩
 
-omit [BorelSpace V] in
+section RelaxedContentScaling
+
+omit [BorelSpace V]
 theorem relaxedMinkowskiContent_smul_le (c : ℝ≥0) (hc : c ≠ 0) (ν : Measure V) (B : Set V) :
     relaxedMinkowskiContent (c • ν) B ≤ c * relaxedMinkowskiContent ν B := by
   unfold relaxedMinkowskiContent
@@ -456,7 +469,6 @@ theorem relaxedMinkowskiContent_smul_le (c : ℝ≥0) (hc : c ≠ 0) (ν : Measu
   simp only [MinkowskiApproximatingSequence.smul, Isoperimetry.minkowskiContent_smul]
   exact Isoperimetry.liminf_coe_mul c _
 
-omit [BorelSpace V] in
 /-- **Relaxed lower content scaling** for every nonzero `c : ℝ≥0`. -/
 theorem relaxedMinkowskiContent_smul (c : ℝ≥0) (hc : c ≠ 0) (ν : Measure V) (B : Set V) :
     relaxedMinkowskiContent (c • ν) B = c * relaxedMinkowskiContent ν B := by
@@ -469,7 +481,6 @@ theorem relaxedMinkowskiContent_smul (c : ℝ≥0) (hc : c ≠ 0) (ν : Measure 
     _ = relaxedMinkowskiContent (c • ν) B := by
         rw [← mul_assoc, ENNReal.coe_inv hc, ENNReal.mul_inv_cancel hc' ENNReal.coe_ne_top, one_mul]
 
-omit [BorelSpace V] in
 theorem relaxedUpperMinkowskiContent_smul_le (c : ℝ≥0) (hc : c ≠ 0) (ν : Measure V) (B : Set V) :
     relaxedUpperMinkowskiContent (c • ν) B ≤ c * relaxedUpperMinkowskiContent ν B := by
   unfold relaxedUpperMinkowskiContent
@@ -479,7 +490,6 @@ theorem relaxedUpperMinkowskiContent_smul_le (c : ℝ≥0) (hc : c ≠ 0) (ν : 
   simp only [MinkowskiApproximatingSequence.smul, Isoperimetry.upperMinkowskiContent_smul]
   exact Isoperimetry.liminf_coe_mul c _
 
-omit [BorelSpace V] in
 /-- **Relaxed upper content scaling** for every nonzero `c : ℝ≥0`. -/
 theorem relaxedUpperMinkowskiContent_smul (c : ℝ≥0) (hc : c ≠ 0) (ν : Measure V) (B : Set V) :
     relaxedUpperMinkowskiContent (c • ν) B = c * relaxedUpperMinkowskiContent ν B := by
@@ -492,7 +502,6 @@ theorem relaxedUpperMinkowskiContent_smul (c : ℝ≥0) (hc : c ≠ 0) (ν : Mea
     _ = relaxedUpperMinkowskiContent (c • ν) B := by
         rw [← mul_assoc, ENNReal.coe_inv hc, ENNReal.mul_inv_cancel hc' ENNReal.coe_ne_top, one_mul]
 
-omit [BorelSpace V] in
 /-- The zero measure: both relaxed contents vanish for every set (the constant empty sequence is
 in the class and has zero content). -/
 theorem relaxedMinkowskiContent_zero_measure (B : Set V) :
@@ -502,13 +511,14 @@ theorem relaxedMinkowskiContent_zero_measure (B : Set V) :
     ⟨fun _ => ∅, fun _ => MeasurableSet.empty, by simp⟩
   simpa [Isoperimetry.minkowskiContent_zero_measure] using h
 
-omit [BorelSpace V] in
 theorem relaxedUpperMinkowskiContent_zero_measure (B : Set V) :
     relaxedUpperMinkowskiContent (0 : Measure V) B = 0 := by
   refine le_antisymm ?_ bot_le
   have h := relaxedUpperMinkowskiContent_le_liminf (0 : Measure V) B
     ⟨fun _ => ∅, fun _ => MeasurableSet.empty, by simp⟩
   simpa [Isoperimetry.upperMinkowskiContent_zero_measure] using h
+
+end RelaxedContentScaling
 
 end Scaling
 

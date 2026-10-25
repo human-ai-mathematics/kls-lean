@@ -547,7 +547,9 @@ theorem locallyLipschitz_clampUnit_comp {f : X → ℝ} (hf : LocallyLipschitz f
     LocallyLipschitz (fun y => clampUnit (f y)) :=
   lipschitzWith_clampUnit.locallyLipschitz.comp hf
 
-omit [MetricSpace X] in
+section ClampErrors
+
+omit [MetricSpace X]
 /-- Clamping contracts the pointwise error to an indicator. -/
 theorem enorm_clampUnit_sub_indicator_le (f : X → ℝ) (B : Set X) (x : X) :
     ‖clampUnit (f x) - B.indicator (1 : X → ℝ) x‖ₑ ≤ ‖f x - B.indicator (1 : X → ℝ) x‖ₑ := by
@@ -560,7 +562,6 @@ theorem enorm_clampUnit_sub_indicator_le (f : X → ℝ) (B : Set X) (x : X) :
         rw [clampUnit_of_mem hi01.1 hi01.2]
     _ ≤ |f x - i| := abs_clampUnit_sub_le _ _
 
-omit [MetricSpace X] in
 /-- The clamped error to an indicator is at most one. -/
 theorem enorm_clampUnit_sub_indicator_le_one (f : X → ℝ) (B : Set X) (x : X) :
     ‖clampUnit (f x) - B.indicator (1 : X → ℝ) x‖ₑ ≤ 1 := by
@@ -571,6 +572,8 @@ theorem enorm_clampUnit_sub_indicator_le_one (f : X → ℝ) (B : Set X) (x : X)
   have hc1 := clampUnit_le_one (f x)
   rw [Real.enorm_eq_ofReal_abs]
   exact ENNReal.ofReal_le_one.2 (abs_le.2 ⟨by linarith, by linarith⟩)
+
+end ClampErrors
 
 variable [MeasurableSpace X]
 

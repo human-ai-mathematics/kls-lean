@@ -121,16 +121,19 @@ variable {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [CompleteS
 
 open Solutions.ThmBakryEmeryPoincare
 
-omit [CompleteSpace V] [SecondCountableTopology V] in
+section GaussianLaw
+
+omit [CompleteSpace V] [SecondCountableTopology V]
 theorem gaussian_logConcave {ρ : ℝ} (hρ : 0 < ρ) : LogConcave (gaussianLaw (V := V) hρ) :=
   logConcave_of_eq_tilted rfl (contDiff_potential ρ).continuous
     (Analysis.BakryEmery.convexOn_of_hessian_ge (contDiff_potential ρ) hρ.le
       fun x v => (bilinearIteratedFDerivTwo_potential ρ x v).ge)
 
-omit [CompleteSpace V] [SecondCountableTopology V] in
 theorem gaussian_interior {ρ : ℝ} (hρ : 0 < ρ) :
     (interior ((gaussianLaw (V := V) hρ : ProbabilityMeasure V) : Measure V).support).Nonempty :=
   interior_support_nonempty_of_eq_tilted (volume : Measure V) rfl
+
+end GaussianLaw
 
 /-- **Nonvacuity of the restricted Lemma 2.1.** For the constructed Gaussian, every centered
 `g ∈ L²` has a unique centered preimage under the closed generator `A = T̄†T̄`, with
@@ -281,7 +284,9 @@ omit [CompleteSpace V] [MeasurableSpace V] [BorelSpace V] [SecondCountableTopolo
 theorem bump_zero : (bump : ContDiffBump (0 : V)) 0 = 1 :=
   ContDiffBump.one_of_mem_closedBall _ (Metric.mem_closedBall_self zero_le_one)
 
-omit [SecondCountableTopology V] in
+section GaussianBumps
+
+omit [SecondCountableTopology V]
 /-- (50) for the nonzero bump test, every `d`. -/
 theorem gaussian_taylorTensor_bump {ρ : ℝ} (hρ : 0 < ρ) (d : ℕ) :
     Analysis.BakryEmery.taylorTensor ((volume : Measure V).tilted (-potential ρ))
@@ -291,7 +296,6 @@ theorem gaussian_taylorTensor_bump {ρ : ℝ} (hρ : 0 < ρ) (d : ℕ) :
         ((volume : Measure V).tilted (-potential ρ)) (gradient (bump : ContDiffBump (0 : V))) d)) :=
   gaussian_taylorTensor hρ (ContDiffBump.contDiff _) (ContDiffBump.hasCompactSupport _) d
 
-omit [SecondCountableTopology V] in
 /-- (49) for the bump test. -/
 theorem gaussian_taylorTensor_one_bump {ρ : ℝ} (hρ : 0 < ρ) (h : Fin 1 → V) :
     Analysis.BakryEmery.taylorTensor ((volume : Measure V).tilted (-potential ρ))
@@ -302,6 +306,8 @@ theorem gaussian_taylorTensor_one_bump {ρ : ℝ} (hρ : 0 < ρ) (h : Fin 1 → 
   Analysis.BakryEmery.taylorTensor_one_neg_weightedLaplacian (volume : Measure V)
     ((contDiff_potential ρ).of_le (by norm_num)) (ContDiffBump.contDiff _)
     (ContDiffBump.hasCompactSupport _) (integrable_exp_mul_norm_gaussianLaw hρ) h
+
+end GaussianBumps
 
 omit [CompleteSpace V] [SecondCountableTopology V] in
 /-- The cumulant identity for linear functions under the Gaussian. -/
@@ -326,7 +332,9 @@ theorem norm_gradient_potential_le (ρ : ℝ) (x : V) :
   gcongr
   linarith
 
-omit [SecondCountableTopology V] in
+section GaussianLinearTests
+
+omit [SecondCountableTopology V]
 /-- **Nonvacuity of Lemma 3.6 beyond compact support.** For the scaled Gaussian and the linear test
 `u = ⟪v, ·⟫` (temperate growth, not compactly supported), (50) holds for every `d`. -/
 theorem gaussian_taylorTensor_linear {ρ : ℝ} (hρ : 0 < ρ) (v : V) (d : ℕ) :
@@ -338,7 +346,6 @@ theorem gaussian_taylorTensor_linear {ρ : ℝ} (hρ : 0 < ρ) (v : V) (d : ℕ)
     ((contDiff_potential ρ).of_le (by norm_num)) (norm_gradient_potential_le ρ)
     (integrable_exp_mul_norm_gaussianLaw hρ) (Function.hasTemperateGrowth_inner_right v) d
 
-omit [SecondCountableTopology V] in
 /-- (49) for the linear test: `T_1(-ℒ⟪v, ·⟫)(h) = ⟪∫ ∇⟪v, ·⟫ dμ, h₀⟫`. -/
 theorem gaussian_taylorTensor_one_linear {ρ : ℝ} (hρ : 0 < ρ) (v : V) (h : Fin 1 → V) :
     Analysis.BakryEmery.taylorTensor ((volume : Measure V).tilted (-potential ρ))
@@ -348,8 +355,12 @@ theorem gaussian_taylorTensor_one_linear {ρ : ℝ} (hρ : 0 < ρ) (v : V) (h : 
     ((contDiff_potential ρ).of_le (by norm_num)) (norm_gradient_potential_le ρ)
     (integrable_exp_mul_norm_gaussianLaw hρ) (Function.hasTemperateGrowth_inner_right v) h
 
+end GaussianLinearTests
 
-omit [CompleteSpace V] [SecondCountableTopology V] in
+
+section GaussianTaylorSymmetry
+
+omit [CompleteSpace V] [SecondCountableTopology V]
 /-- **Coordinate bridge.** In the standard orthonormal basis, the Taylor coefficient arrays of the
 bump under the Gaussian are symmetric tensors in the sense of Lemma 2.2 (invariant under every
 permutation of index positions). -/
@@ -369,7 +380,6 @@ theorem gaussian_coordTensor_taylorTensor_symmetric {ρ : ℝ} (hρ : 0 < ρ) (d
         ContDiffBump.le_one (bump : ContDiffBump (0 : V)) (x := x)))
     d σ
 
-omit [CompleteSpace V] [SecondCountableTopology V] in
 /-- **Continuity of `T_d` on `L²`** for the Gaussian: `‖T_d f‖ ≤ C_d ‖f‖₂`. -/
 theorem gaussian_taylorTensor_continuous {ρ : ℝ} (hρ : 0 < ρ) (d : ℕ) :
     ∃ C : ℝ, ∀ f : V → ℝ, MemLp f 2 ((gaussianLaw (V := V) hρ : ProbabilityMeasure V) : Measure V) →
@@ -377,6 +387,8 @@ theorem gaussian_taylorTensor_continuous {ρ : ℝ} (hρ : 0 < ρ) (d : ℕ) :
           ((gaussianLaw (V := V) hρ : ProbabilityMeasure V) : Measure V) f d‖ ≤
         C * (eLpNorm f 2 ((gaussianLaw (V := V) hρ : ProbabilityMeasure V) : Measure V)).toReal :=
   Analysis.BakryEmery.exists_norm_taylorTensor_le _ (integrable_exp_mul_norm_gaussianLaw hρ) d
+
+end GaussianTaylorSymmetry
 
 
 omit [SecondCountableTopology V] in
@@ -397,7 +409,9 @@ omit [CompleteSpace V] [MeasurableSpace V] [BorelSpace V] [SecondCountableTopolo
 theorem hasTemperateGrowth_potential (ρ : ℝ) : (potential (V := V) ρ).HasTemperateGrowth :=
   (Function.HasTemperateGrowth.const (ρ / 2)).mul (Function.hasTemperateGrowth_norm_sq V)
 
-omit [SecondCountableTopology V] in
+section GaussianLinearIdentities
+
+omit [SecondCountableTopology V]
 /-- **BKL (16) on `𝒜`** for the Gaussian (`V = (ρ/2)‖·‖²` of temperate growth) and the linear test
 `⟪v, ·⟫`, with the curvature form `∫ ‖∇²u‖²_HS + ρ ∫ ‖∇u‖² ≤ ∫ (ℒu)²` of Lemma 3.4. -/
 theorem gaussian_bochner_linear {ρ : ℝ} (hρ : 0 < ρ) (v : V) :
@@ -421,7 +435,6 @@ theorem gaussian_bochner_linear {ρ : ℝ} (hρ : 0 < ρ) (v : V) :
       (fun x w => (bilinearIteratedFDerivTwo_potential ρ x w).ge)⟩
 
 
-omit [SecondCountableTopology V] in
 /-- **Tensor-valued Lemma 3.6.** For the Gaussian and the vector-valued test `u = id : V → V`
 (temperate growth, values in the tensor space `V`), (49) and (50) hold for every `d`. -/
 theorem gaussian_taylorTensor_vec_id {ρ : ℝ} (hρ : 0 < ρ) (d : ℕ) :
@@ -433,7 +446,6 @@ theorem gaussian_taylorTensor_vec_id {ρ : ℝ} (hρ : 0 < ρ) (d : ℕ) :
     ((contDiff_potential ρ).of_le (by norm_num)) (norm_gradient_potential_le ρ)
     (integrable_exp_mul_norm_gaussianLaw hρ) Function.HasTemperateGrowth.id' d
 
-omit [SecondCountableTopology V] in
 theorem gaussian_taylorTensor_one_vec_id {ρ : ℝ} (hρ : 0 < ρ) (h : Fin 1 → V) :
     Analysis.BakryEmery.taylorTensor ((volume : Measure V).tilted (-potential ρ))
         (fun x => -Analysis.BakryEmery.weightedLaplacianVec (potential ρ) (fun y : V => y) x) 1 h =
@@ -441,6 +453,8 @@ theorem gaussian_taylorTensor_one_vec_id {ρ : ℝ} (hρ : 0 < ρ) (h : Fin 1 �
   Analysis.BakryEmery.taylorTensor_one_neg_weightedLaplacianVec (volume : Measure V)
     ((contDiff_potential ρ).of_le (by norm_num)) (norm_gradient_potential_le ρ)
     (integrable_exp_mul_norm_gaussianLaw hρ) Function.HasTemperateGrowth.id' h
+
+end GaussianLinearIdentities
 
 omit [CompleteSpace V] [SecondCountableTopology V] in
 /-- **Continuity of `T_d` on `L²` in the Hilbert–Schmidt norm** (the norm of BKL (29)) for the
@@ -454,7 +468,9 @@ theorem gaussian_coordTensor_taylorTensor_continuous {ρ : ℝ} (hρ : 0 < ρ) (
     (integrable_exp_mul_norm_gaussianLaw hρ) _ d
 
 
-omit [SecondCountableTopology V] in
+section GaussianQuadraticIdentities
+
+omit [SecondCountableTopology V]
 /-- **Stress test for (16)**: the quadratic test `u = ⟪v, ·⟫²`, whose Hessian `2 v ⊗ v` does not
 vanish. -/
 theorem gaussian_bochner_quadratic {ρ : ℝ} (hρ : 0 < ρ) (v : V) :
@@ -468,7 +484,6 @@ theorem gaussian_bochner_quadratic {ρ : ℝ} (hρ : 0 < ρ) (v : V) :
     (hasTemperateGrowth_potential ρ) (integrable_exp_mul_norm_gaussianLaw hρ)
     ((Function.hasTemperateGrowth_inner_right v).pow 2)
 
-omit [SecondCountableTopology V] in
 /-- **Stress test for tensor-valued Lemma 3.6**: the quadratic field
 `u(x) = ⟪c, x⟫² • (a ⊗ b)` with values in `V →L[ℝ] V` (two trailing indices, not symmetric when `a`
 and `b` are linearly independent; for `c ≠ 0` and `a, b ≠ 0` its second derivative does not
@@ -486,7 +501,6 @@ theorem gaussian_taylorTensor_vec_quadratic {ρ : ℝ} (hρ : 0 < ρ) (a b c : V
       (Function.HasTemperateGrowth.const ((innerSL ℝ a).smulRight b))) d
 
 
-omit [SecondCountableTopology V] in
 /-- **Tensor-valued (16)** for the Gaussian and the quadratic vector field `u(x) = ⟪c, x⟫² • a` with
 values in `V`, with the curvature form of Lemma 3.4. -/
 theorem gaussian_tensor_bochner_quadratic {ρ : ℝ} (hρ : 0 < ρ) (a c : V) :
@@ -516,7 +530,6 @@ theorem gaussian_tensor_bochner_quadratic {ρ : ℝ} (hρ : 0 < ρ) (a c : V) :
       (fun x w => (bilinearIteratedFDerivTwo_potential ρ x w).ge)⟩
 
 
-omit [SecondCountableTopology V] in
 /-- **Tensor-valued (15)** for the Gaussian and two quadratic vector fields. -/
 theorem gaussian_tensor_ibp_quadratic {ρ : ℝ} (hρ : 0 < ρ) (a b c e : V) :
     ∫ x, ⟪Analysis.BakryEmery.weightedLaplacianVec (potential ρ) (fun y : V => ⟪c, y⟫ ^ 2 • a) x,
@@ -531,7 +544,6 @@ theorem gaussian_tensor_ibp_quadratic {ρ : ℝ} (hρ : 0 < ρ) (a b c e : V) :
     (((Function.hasTemperateGrowth_inner_right e).pow 2).smul (Function.HasTemperateGrowth.const b))
 
 
-omit [SecondCountableTopology V] in
 /-- **Corollary 3.7, consumer instance.** For the Gaussian, the zero field `h = 0` and the linear
 `g = ⟪c, ·⟫` satisfy the relation (30) (`∇₀g = 0`), so (52) holds for every `α` and `d ≥ 1`. -/
 theorem gaussian_corollary_3_7_trivial {ρ : ℝ} (hρ : 0 < ρ) (c : V) (α : ℝ) {d : ℕ} (hd : 1 ≤ d) :
@@ -555,6 +567,8 @@ theorem gaussian_corollary_3_7_trivial {ρ : ℝ} (hρ : 0 < ρ) (c : V) (α : �
   have hD : ∀ y : V, fderiv ℝ (fun x : V => ⟪c, x⟫) y = innerSL ℝ c := fun y =>
     ((innerSL ℝ c).hasFDerivAt (x := y)).fderiv
   simp [Analysis.BakryEmery.weightedLaplacianVec, Analysis.BakryEmery.centeredFDeriv, hD]
+
+end GaussianQuadraticIdentities
 
 end Gaussian
 

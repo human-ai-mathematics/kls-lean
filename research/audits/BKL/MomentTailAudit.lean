@@ -97,7 +97,7 @@ open IndependentMomentTailModels
 section MeasurableSpace
 
 variable {E : Type*}
-variable [NormedAddCommGroup E] [MeasurableSpace E] [BorelSpace E]
+  [NormedAddCommGroup E] [MeasurableSpace E] [BorelSpace E]
 
 /-- The original universal context has no LC/IP/FD/centering/isotropy/ball-mass premise. -/
 theorem exact_cb2

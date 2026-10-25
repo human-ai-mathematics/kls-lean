@@ -18,7 +18,7 @@ namespace FunctionalInequalities.Analysis
 section InnerProduct
 
 variable {E : Type*}
-variable [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
+  [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
 
 private lemma gradient_le_increment
     {u : E → ℝ} (hc : ConvexOn ℝ Set.univ u)
@@ -495,7 +495,7 @@ namespace FunctionalInequalities.Analysis
 section InnerProduct
 
 variable {E : Type*}
-variable [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+  [NormedAddCommGroup E] [InnerProductSpace ℝ E]
 
 private lemma sd_support [FiniteDimensional ℝ E] {f : E → ℝ}
     (hc : ConvexOn ℝ univ f) (hf : Differentiable ℝ f) (x y : E) :

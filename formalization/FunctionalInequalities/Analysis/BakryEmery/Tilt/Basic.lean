@@ -116,7 +116,9 @@ theorem integral_weightedLaplacian_eq_zero {W f : E → ℝ} (hW : ContDiff ℝ 
       simpa only [integral_neg] using h.symm
     exact neg_eq_zero.mp h'
 
-omit [m.IsAddHaarMeasure] in
+section TiltIntegrability
+
+omit [m.IsAddHaarMeasure]
 /-- The gradient of a compactly supported `C²` function is integrable for every exponential tilt of
 `m.tilted (-V)`. -/
 theorem integrable_gradient_expTilt {V f : E → ℝ} (hf : ContDiff ℝ 2 f) (hfc : HasCompactSupport f)
@@ -136,7 +138,6 @@ theorem integrable_gradient_expTilt {V f : E → ℝ} (hf : ContDiff ℝ 2 f) (h
     unfold expTilt
     exact hgrad.integrable_of_hasCompactSupport hgrad_cs
 
-omit [m.IsAddHaarMeasure] in
 /-- For a `C¹` potential and a compactly supported `C²` function, `ℒ_V f` is integrable for every
 exponential tilt of `m.tilted (-W)`. -/
 theorem integrable_weightedLaplacian_expTilt {V W f : E → ℝ} (hV : ContDiff ℝ 1 V)
@@ -150,6 +151,8 @@ theorem integrable_weightedLaplacian_expTilt {V W f : E → ℝ} (hV : ContDiff 
     exact hx (weightedLaplacian_eq_zero_of_notMem_tsupport V hnot)
   unfold expTilt
   exact hc.integrable_of_hasCompactSupport hcs
+
+end TiltIntegrability
 
 /-- **BKL (48)** for compactly supported `C²` functions: with `μ = m.tilted (-V)`, `V ∈ C¹`,
 `F_{-ℒu}(z) = ⟪z, F_{∇u}(z)⟫` for every `z ∈ E`, where `ℒu = Δu - ⟪∇V, ∇u⟫`. -/
@@ -250,7 +253,7 @@ private def expD {F : Type*} [NormedAddCommGroup F] [NormedSpace ℝ F]
 section NormedSpace
 
 variable {F : Type*}
-variable [NormedAddCommGroup F] [NormedSpace ℝ F]
+  [NormedAddCommGroup F] [NormedSpace ℝ F]
 
 omit [CompleteSpace E] in
 private theorem expD_meas
@@ -260,7 +263,9 @@ private theorem expD_meas
     (ContinuousLinearMap.smulRightL ℝ E F).continuous₂.comp_aestronglyMeasurable
       ((innerSL ℝ : E →L[ℝ] E →L[ℝ] ℝ).continuous.aestronglyMeasurable.prodMk hg)
 
-omit [CompleteSpace E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] in
+section ExponentialBounds
+
+omit [CompleteSpace E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
 private theorem expD_bound
     {g : E → F} {M a : ℝ} (_hM : 0 ≤ M)
     (hb : ∀ x, ‖g x‖ ≤ M * Real.exp (a * ‖x‖)) :
@@ -279,7 +284,6 @@ private theorem expD_bound
       rw [add_mul, Real.exp_add, one_mul]
       ring
 
-omit [CompleteSpace E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] in
 private theorem exp_smul_bound
     {g : E → F} {M a : ℝ} (_hM : 0 ≤ M)
     (hb : ∀ x, ‖g x‖ ≤ M * Real.exp (a * ‖x‖))
@@ -299,6 +303,8 @@ private theorem exp_smul_bound
     _ = M * Real.exp ((R + a) * ‖x‖) := by
       rw [add_mul, Real.exp_add]
       ring
+
+end ExponentialBounds
 
 omit [CompleteSpace E] [FiniteDimensional ℝ E] in
 private theorem exp_smul_int
@@ -327,7 +333,9 @@ private theorem exp_smul_hasFDeriv
   ext y
   simp [expD, ContinuousLinearMap.smulRight_apply, mul_smul]
 
-omit [CompleteSpace E] in
+section ExponentialDifferentiation
+
+omit [CompleteSpace E]
 private theorem exp_integral_hasFDeriv [CompleteSpace F]
     (μ : Measure E)
     (hexp : ∀ r : ℝ,
@@ -359,7 +367,6 @@ private theorem exp_integral_hasFDeriv [CompleteSpace F]
   · exact (hexp _).const_mul M
   · exact ae_of_all μ (fun x w _ => exp_smul_hasFDeriv g x w)
 
-omit [CompleteSpace E] in
 private theorem exp_integral_contDiff_nat
     {F : Type (max u v)}
     [NormedAddCommGroup F] [NormedSpace ℝ F] [CompleteSpace F]
@@ -381,14 +388,18 @@ private theorem exp_integral_contDiff_nat
       · exact IH (expD_meas hg) hM (expD_bound hM hb)
       · exact exp_integral_hasFDeriv μ hexp hg hM hb
 
+end ExponentialDifferentiation
+
 section CompleteSpace
 
 variable [CompleteSpace F]
 
-omit [CompleteSpace E] in
-/-- Differentiation under the integral sign for exponential weights: if `μ` is finite with all
-exponential moments and `g` grows at most polynomially, `z ↦ ∫ e^{⟪z, x⟫} g(x) dμ(x)` is smooth. -/
-theorem contDiff_integral_exp_inner_smul (μ : Measure E) [IsFiniteMeasure μ]
+section SmoothTiltIntegrals
+
+omit [CompleteSpace E]
+/-- Differentiation under the integral sign for exponential weights: if `μ` has all exponential
+moments and `g` grows at most polynomially, `z ↦ ∫ e^{⟪z, x⟫} g(x) dμ(x)` is smooth. -/
+theorem contDiff_integral_exp_inner_smul (μ : Measure E)
     (hexp : ∀ r : ℝ, Integrable (fun x => Real.exp (r * ‖x‖)) μ) {g : E → F}
     (hg : AEStronglyMeasurable g μ) {M : ℝ} {k : ℕ} (hgb : ∀ x, ‖g x‖ ≤ M * (1 + ‖x‖) ^ k) :
     ContDiff ℝ ∞ (fun z => ∫ x, Real.exp ⟪z, x⟫ • g x ∂μ) := by
@@ -430,7 +441,6 @@ theorem contDiff_integral_exp_inner_smul (μ : Measure E) [IsFiniteMeasure μ]
     (fun z => L (∫ x, Real.exp ⟪z, x⟫ • L.symm (g x) ∂μ)) at hs
   rwa [heq] at hs
 
-omit [CompleteSpace E] in
 /-- Tilt averages of bounded measurable functions are smooth for a nonzero finite measure with all
 exponential moments (BKL: "The function `F_f` is smooth"). -/
 theorem contDiff_tiltAverage (μ : Measure E) [IsFiniteMeasure μ] [NeZero μ]
@@ -495,6 +505,8 @@ theorem contDiff_tiltAverage (μ : Measure E) [IsFiniteMeasure μ] [NeZero μ]
         fun z => (∫ x, Real.exp ⟪z, x⟫ ∂μ)⁻¹ •
           (∫ x, Real.exp ⟪z, x⟫ • f x ∂μ) from funext hformula]
     exact (hD.inv (fun z => (hpos z).ne')).smul hN
+
+end SmoothTiltIntegrals
 
 /-- **BKL Lemma 3.6** for compactly supported `C²` functions, for `μ = m.tilted (-V)` with
 `V ∈ C¹` and all exponential moments: `T_{d+1}(-ℒu) = S_{d+1} T_d(∇u)` for every `d`, where the
@@ -614,7 +626,9 @@ private lemma expTilt_tilted_zero (V : E → ℝ) :
   · rw [tilted_of_not_integrable hV]
     simp
 
-omit [CompleteSpace E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] in
+section TensorEvaluation
+
+omit [CompleteSpace E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
 private lemma symmetrizeML_fin_one_apply
     (Φ : ContinuousMultilinearMap ℝ (fun _ : Fin 1 => E) ℝ) (h : Fin 1 → E) :
     symmetrizeML Φ h = Φ h := by
@@ -622,12 +636,13 @@ private lemma symmetrizeML_fin_one_apply
   have hp : ∀ σ : Equiv.Perm (Fin 1), σ = 1 := fun σ => Subsingleton.elim _ _
   simp [symmetrizeML, hp]
 
-omit [CompleteSpace E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] in
 private lemma inner_comp_apply
     (Ψ : ContinuousMultilinearMap ℝ (fun _ : Fin 0 => E) E)
     (a : Fin 0 → E) (x : E) :
     (((innerSL ℝ).compContinuousMultilinearMap Ψ) a) x = ⟪Ψ a, x⟫ := by
   rfl
+
+end TensorEvaluation
 
 omit [FiniteDimensional ℝ E] [BorelSpace E] in
 private lemma taylorTensor_zero_apply

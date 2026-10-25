@@ -12,7 +12,7 @@ open scoped Topology NNReal ENNReal
 namespace FunctionalInequalities.KLS.MetricBV
 
 variable {X : Type*} [MetricSpace X] [MeasurableSpace X]
-variable [BorelSpace X]
+  [BorelSpace X]
 
 /-! ### Scaling by a nonnegative real scalar, the zero measure and normalization
 

@@ -360,7 +360,7 @@ theorem exists_f_abs_exponential_moment {n N : ℕ} (μ : Measure (EuclideanSpac
 /-- **Exponential moment of the graph law** `x ↦ (f x, x)` from exponential moments of `|f|` and
 `‖x‖` (Cauchy–Schwarz in `L²`, at rate `min a s / 2`). -/
 theorem exists_graph_norm_moment_of_local_moments {n : ℕ}
-    (μ : Measure (EuclideanSpace ℝ (Fin n))) [IsProbabilityMeasure μ]
+    (μ : Measure (EuclideanSpace ℝ (Fin n)))
     {f : EuclideanSpace ℝ (Fin n) → ℝ} (hf : Measurable f)
     {a s : ℝ} (ha : 0 < a) (hs : 0 < s)
     (hfa : Integrable (fun x => Real.exp (a * |f x|)) μ)

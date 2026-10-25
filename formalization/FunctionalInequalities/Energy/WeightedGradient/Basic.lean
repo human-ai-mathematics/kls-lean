@@ -261,7 +261,9 @@ theorem graph_operator (hac : (ν : Measure V) ≪ m)
     (operator ν B hac).graph = graph ν B hac :=
   Submodule.toLinearPMap_graph_eq _ (graph_snd_eq_zero ν B hac hfr)
 
-omit [SecondCountableTopology V] in
+section OperatorDomain
+
+omit [SecondCountableTopology V]
 /-- The domain consists exactly of the classes of globally Lipschitz `L²` functions with
 square-integrable weighted gradient. -/
 theorem mem_domain_operator_iff (hac : (ν : Measure V) ≪ m) (f : Lp ℝ 2 (ν : Measure V)) :
@@ -275,11 +277,12 @@ theorem mem_domain_operator_iff (hac : (ν : Measure V) ≪ m) (f : Lp ℝ 2 (ν
   · rintro ⟨g, h, rfl⟩
     exact ⟨_, ⟨g, h, rfl⟩, rfl⟩
 
-omit [SecondCountableTopology V] in
 /-- Every test class lies in the domain. -/
 theorem toLp_mem_domain_operator (hac : (ν : Measure V) ≪ m) {g : V → ℝ}
     (h : IsTest ν B g) : h.memLp.toLp g ∈ (operator ν B hac).domain :=
   (mem_domain_operator_iff ν B hac _).mpr ⟨g, h, rfl⟩
+
+end OperatorDomain
 
 /-- The operator sends the class of a test to the class of its weighted gradient. -/
 theorem operator_apply (hac : (ν : Measure V) ≪ m)
@@ -394,7 +397,9 @@ variable [MeasurableSpace V] [BorelSpace V] [SecondCountableTopology V] [FiniteD
 
 namespace WeightedGradient
 
-omit [SecondCountableTopology V] in
+section SubsingletonOperator
+
+omit [SecondCountableTopology V]
 /-- In dimension zero the weighted gradient operator vanishes identically. -/
 theorem operator_apply_eq_zero_of_subsingleton [Subsingleton V]
     (hac : (ν : Measure V) ≪ m) (f : (operator ν B hac).domain) :
@@ -402,7 +407,6 @@ theorem operator_apply_eq_zero_of_subsingleton [Subsingleton V]
   rw [Lp.eq_zero_iff_ae_eq_zero]
   exact Eventually.of_forall fun x ↦ Subsingleton.elim _ _
 
-omit [SecondCountableTopology V] in
 /-- In dimension zero every `L²` class is constant, hence a test: the domain is everything. -/
 theorem domain_operator_eq_top_of_subsingleton [Subsingleton V]
     (hac : (ν : Measure V) ≪ m) : (operator ν B hac).domain = ⊤ := by
@@ -415,6 +419,8 @@ theorem domain_operator_eq_top_of_subsingleton [Subsingleton V]
     with x hx
   rw [hx]
   exact congrArg f (Subsingleton.elim x x₀)
+
+end SubsingletonOperator
 
 end WeightedGradient
 

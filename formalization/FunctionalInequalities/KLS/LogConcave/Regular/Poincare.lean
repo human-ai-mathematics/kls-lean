@@ -104,7 +104,9 @@ theorem localSlope_le_covariance_envelope {K : NNReal}
   gcongr
   exact covariance_norm_le_envelope _
 
-omit [CompleteSpace E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] in
+section EnvelopeCoefficients
+
+omit [CompleteSpace E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
 /-- The envelope coefficient converges to `K` when the covariances converge to `Id`. -/
 theorem envelope_coefficient_tendsto {ι : Type*} {l : Filter ι} {A : ι → E →L[ℝ] E}
     (K : NNReal) (hA : Filter.Tendsto A l (𝓝 (ContinuousLinearMap.id ℝ E))) :
@@ -116,11 +118,12 @@ theorem envelope_coefficient_tendsto {ι : Type*} {l : Filter ι} {A : ι → E 
     simpa only [add_zero] using (tendsto_const_nhds (x := (1 : ℝ))).add hnorm
   simpa only [mul_one] using (tendsto_const_nhds (x := (K : ℝ))).mul hplus
 
-omit [CompleteSpace E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] in
 /-- The envelope coefficient is positive for `K > 0`. -/
 theorem envelope_coefficient_pos (K : NNReal) (hK : 0 < K) (A : E →L[ℝ] E) :
     0 < (K : ℝ) * (1 + ‖A - ContinuousLinearMap.id ℝ E‖) := by
   exact mul_pos (NNReal.coe_pos.mpr hK) (by positivity)
+
+end EnvelopeCoefficients
 
 end FunctionalInequalities.KLS.RegularPotential
 

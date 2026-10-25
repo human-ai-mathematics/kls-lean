@@ -15,7 +15,7 @@ open scoped ContDiff RealInnerProductSpace
 namespace WaveSplittingFormRangeAudit
 variable {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [CompleteSpace V]
   [MeasurableSpace V] [BorelSpace V] [SecondCountableTopology V] [FiniteDimensional ℝ V]
-variable {ν : ProbabilityMeasure V} (m : Measure V) [m.IsAddHaarMeasure] (hν : LogConcave ν)
+  {ν : ProbabilityMeasure V} (m : Measure V) [m.IsAddHaarMeasure] (hν : LogConcave ν)
   (hi : (interior (ν : Measure V).support).Nonempty) {U : V → ℝ}
 
 /-- **Arbitrary target.** For every `z ∈ D(T̄)` there are `qₙ ∈ C_c^∞` with `J[qₙ] ∈ D(T̄)`

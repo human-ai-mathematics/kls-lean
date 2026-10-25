@@ -56,7 +56,9 @@ def lowerDensity (x : V) : ENNReal := liminf (fun n ↦ ballRatio ν m n x) atTo
 def envelope (x : V) : ENNReal :=
   ⨅ n : ℕ, ⨆ y ∈ Metric.ball x (radius n), lowerDensity ν m y
 
-omit [NormedSpace ℝ V] [FiniteDimensional ℝ V] in
+section LocalDensityMeasurability
+
+omit [NormedSpace ℝ V] [FiniteDimensional ℝ V]
 /-- The mass of the closed ball of fixed radius depends measurably on the center. -/
 theorem measurable_measure_closedBall [SFinite ν] (r : ℝ) :
     Measurable fun x : V ↦ ν (Metric.closedBall x r) := by
@@ -64,15 +66,15 @@ theorem measurable_measure_closedBall [SFinite ν] (r : ℝ) :
     measurableSet_le (measurable_snd.dist measurable_fst) measurable_const
   exact measurable_measure_prodMk_left hs
 
-omit [NormedSpace ℝ V] [FiniteDimensional ℝ V] in
 /-- Ball ratios are measurable in the center. -/
 theorem measurable_ballRatio [SFinite ν] (n : ℕ) : Measurable (ballRatio ν m n) :=
   (measurable_measure_closedBall ν _).div_const _
 
-omit [NormedSpace ℝ V] [FiniteDimensional ℝ V] in
 /-- The lower density is measurable, as a countable `liminf` of measurable functions. -/
 theorem measurable_lowerDensity [SFinite ν] : Measurable (lowerDensity ν m) :=
   Measurable.liminf (measurable_ballRatio ν m)
+
+end LocalDensityMeasurability
 
 /-- Positive real powers commute with suprema in `ENNReal`. -/
 private theorem rpow_iSup {I : Sort*} (f : I → ENNReal) {t : ℝ} (ht : 0 < t) :
@@ -99,7 +101,9 @@ theorem lowerDensity_ae_eq [IsFiniteMeasure ν] [m.IsAddHaarMeasure] :
     simp only [Function.comp, ballRatio, Measure.addHaar_closedBall_center m x]
   exact hx'.liminf_eq
 
-omit [BorelSpace V] [SecondCountableTopology V] in
+section LocalDensityConcavity
+
+omit [BorelSpace V] [SecondCountableTopology V]
 /-- Equal-radius ball ratios inherit the log-concavity inequality of the law. -/
 theorem ballRatio_logConcave {ν : ProbabilityMeasure V} (hlc : LogConcave ν) [m.IsAddHaarMeasure]
     (n : ℕ) (x y : V) {t : ℝ} (ht : 0 < t) (ht1 : t < 1) :
@@ -133,7 +137,6 @@ theorem ballRatio_logConcave {ν : ProbabilityMeasure V} (hlc : LogConcave ν) [
     _ ≤ (ν : Measure V) (Metric.closedBall (t • x + (1 - t) • y) (radius n)) * D⁻¹ :=
         mul_le_mul' key le_rfl
 
-omit [BorelSpace V] [SecondCountableTopology V] in
 /-- The lower density of a log-concave law is log-concave. -/
 theorem lowerDensity_logConcave {ν : ProbabilityMeasure V} (hlc : LogConcave ν)
     [m.IsAddHaarMeasure] (x y : V) {t : ℝ} (ht : 0 < t) (ht1 : t < 1) :
@@ -155,19 +158,21 @@ theorem lowerDensity_logConcave {ν : ProbabilityMeasure V} (hlc : LogConcave ν
           (ENNReal.rpow_le_rpow (iInf₂_le k (le_trans (le_max_right i j) hk)) ht1'.le)
     _ ≤ _ := ballRatio_logConcave m hlc k x y ht ht1
 
-omit [NormedSpace ℝ V] [FiniteDimensional ℝ V] [BorelSpace V] [SecondCountableTopology V] in
+end LocalDensityConcavity
+
+section EnvelopeBounds
+
+omit [NormedSpace ℝ V] [FiniteDimensional ℝ V] [BorelSpace V] [SecondCountableTopology V]
 /-- The envelope dominates the lower density. -/
 theorem le_envelope (x : V) : lowerDensity ν m x ≤ envelope ν m x :=
   le_iInf fun n ↦ le_iSup₂ (f := fun y (_ : y ∈ Metric.ball x (radius n)) ↦ lowerDensity ν m y)
     x (Metric.mem_ball_self (radius_pos n))
 
-omit [NormedSpace ℝ V] [FiniteDimensional ℝ V] [BorelSpace V] [SecondCountableTopology V] in
 /-- A uniform bound on the lower density bounds the envelope. -/
 theorem envelope_le {C : ENNReal} (h : ∀ y, lowerDensity ν m y ≤ C) (x : V) :
     envelope ν m x ≤ C :=
   (iInf_le _ 0).trans (iSup₂_le fun y _ ↦ h y)
 
-omit [NormedSpace ℝ V] [FiniteDimensional ℝ V] [BorelSpace V] [SecondCountableTopology V] in
 /-- The envelope is upper semicontinuous. -/
 theorem upperSemicontinuous_envelope : UpperSemicontinuous (envelope ν m) := by
   intro x c hc
@@ -185,6 +190,8 @@ theorem upperSemicontinuous_envelope : UpperSemicontinuous (envelope ν m) := by
           _ < radius n / 2 + radius n / 2 := add_lt_add hy hx'
           _ = radius n := by ring
     _ < c := hn
+
+end EnvelopeBounds
 
 omit [FiniteDimensional ℝ V] [BorelSpace V] [SecondCountableTopology V] in
 /-- The envelope of a log-concave lower density is log-concave. -/
@@ -219,7 +226,9 @@ theorem envelope_logConcave
               add_lt_add (mul_lt_mul_of_pos_left hx' ht) (mul_lt_mul_of_pos_left hy' ht1')
           _ = radius n := by ring
 
-omit [MeasurableSpace V] [BorelSpace V] [SecondCountableTopology V] [FiniteDimensional ℝ V] in
+section PositiveDensityConcavity
+
+omit [MeasurableSpace V] [BorelSpace V] [SecondCountableTopology V] [FiniteDimensional ℝ V]
 /-- The positivity set of a finite log-concave `ENNReal` function is convex. -/
 theorem convex_pos_of_logConcave {ψ : V → ENNReal} (hfin : ∀ x, ψ x ≠ ⊤)
     (hψ : ∀ x y : V, ∀ t : ℝ, 0 < t → t < 1 → ψ x ^ t * ψ y ^ (1 - t) ≤ ψ (t • x + (1 - t) • y)) :
@@ -243,7 +252,6 @@ theorem convex_pos_of_logConcave {ψ : V → ENNReal} (hfin : ∀ x, ψ x ≠ �
   exact lt_of_lt_of_le
     (ENNReal.mul_pos (ENNReal.rpow_pos ha' (hfin a)).ne' (ENNReal.rpow_pos hb' (hfin b)).ne') key
 
-omit [MeasurableSpace V] [BorelSpace V] [SecondCountableTopology V] [FiniteDimensional ℝ V] in
 /-- On the positivity set, the logarithm of the real part of a finite log-concave `ENNReal`
 function is concave. -/
 theorem concaveOn_log_toReal_of_logConcave {ψ : V → ENNReal} (hfin : ∀ x, ψ x ≠ ⊤)
@@ -275,6 +283,8 @@ theorem concaveOn_log_toReal_of_logConcave {ψ : V → ENNReal} (hfin : ∀ x, �
           Real.log_rpow ha', Real.log_rpow hb']
     _ ≤ Real.log (ψ (s • a + u • b)).toReal :=
         Real.log_le_log (mul_pos (Real.rpow_pos_of_pos ha' s) (Real.rpow_pos_of_pos hb' u)) key'
+
+end PositiveDensityConcavity
 
 omit [SecondCountableTopology V] in
 /-- The envelope agrees with a bounded log-concave lower density off the Haar-null frontier of

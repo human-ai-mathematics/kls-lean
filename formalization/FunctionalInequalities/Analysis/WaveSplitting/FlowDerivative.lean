@@ -13,7 +13,7 @@ noncomputable section
 open scoped ContDiff
 namespace FunctionalInequalities.Analysis.WaveSplitting
 variable {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
-variable {ι : Type*}
+  {ι : Type*}
 
 omit [NormedAddCommGroup E] [NormedSpace ℝ E] in
 private theorem state_ext {X Y : State E ι} (hu : X.u = Y.u) (hv : X.v = Y.v)
@@ -81,12 +81,13 @@ section FiniteIndex
 
 variable [Fintype ι]
 
-omit [NormedAddCommGroup E] [NormedSpace ℝ E] in
+section SubStateIdentities
+
+omit [NormedAddCommGroup E] [NormedSpace ℝ E]
 private theorem coupling_subState (b : ι → E → ℝ) (X Y : State E ι) (x : E) :
     coupling b (subState X Y) x = coupling b X x - coupling b Y x := by
   simp only [coupling, subState, mul_sub, Finset.sum_sub_distrib]
 
-omit [NormedAddCommGroup E] [NormedSpace ℝ E] in
 theorem reaction_subState (b : ι → E → ℝ) (t : ℝ) (X Y : State E ι) :
     reaction b t (subState X Y) = subState (reaction b t X) (reaction b t Y) := by
   apply state_ext
@@ -94,10 +95,11 @@ theorem reaction_subState (b : ι → E → ℝ) (t : ℝ) (X Y : State E ι) :
   · funext x; simp only [reaction, coupling_subState]; simp only [subState]; ring
   · rfl
 
-omit [NormedAddCommGroup E] [NormedSpace ℝ E] in
 theorem reaction_zeroState (b : ι → E → ℝ) (t : ℝ) :
     reaction b t (zeroState : State E ι) = zeroState := by
   apply state_ext <;> funext <;> simp [reaction, zeroState, coupling]
+
+end SubStateIdentities
 
 end FiniteIndex
 
@@ -139,37 +141,37 @@ private theorem hasDerivAt_shift {f : ℝ → ℝ} {d t : ℝ}
   have h₂ : HasDerivAt f d ((fun r : ℝ => t + r) 0) := by simpa using h
   simpa [Function.comp_def] using HasDerivAt.comp (h := fun r : ℝ => t + r) 0 h₂ h₁
 
-omit [NormedAddCommGroup E] [NormedSpace ℝ E] in
+section TimeDerivativeAlgebra
+
+omit [NormedAddCommGroup E] [NormedSpace ℝ E]
 theorem HasTimeDerivative.of_shift {Y : ℝ → State E ι} {D : State E ι} {t : ℝ}
     (h : HasTimeDerivative (fun r => Y (t + r)) D 0) : HasTimeDerivative Y D t :=
   ⟨fun x => hasDerivAt_of_shift (h.1 x), fun x => hasDerivAt_of_shift (h.2.1 x),
     fun j x => hasDerivAt_of_shift (h.2.2 j x)⟩
 
-omit [NormedAddCommGroup E] [NormedSpace ℝ E] in
 theorem HasTimeDerivative.shift {Y : ℝ → State E ι} {D : State E ι} {t : ℝ}
     (h : HasTimeDerivative Y D t) : HasTimeDerivative (fun r => Y (t + r)) D 0 :=
   ⟨fun x => hasDerivAt_shift (h.1 x), fun x => hasDerivAt_shift (h.2.1 x),
     fun j x => hasDerivAt_shift (h.2.2 j x)⟩
 
-omit [NormedAddCommGroup E] [NormedSpace ℝ E] in
 theorem HasTimeDerivative.addState {X Y : ℝ → State E ι} {D F : State E ι} {t : ℝ}
     (hX : HasTimeDerivative X D t) (hY : HasTimeDerivative Y F t) :
     HasTimeDerivative (fun s => WaveSplitting.addState (X s) (Y s)) (WaveSplitting.addState D F) t :=
   ⟨fun x => (hX.1 x).add (hY.1 x), fun x => (hX.2.1 x).add (hY.2.1 x),
     fun j x => (hX.2.2 j x).add (hY.2.2 j x)⟩
 
-omit [NormedAddCommGroup E] [NormedSpace ℝ E] in
 theorem HasTimeDerivative.subState {X Y : ℝ → State E ι} {D F : State E ι} {t : ℝ}
     (hX : HasTimeDerivative X D t) (hY : HasTimeDerivative Y F t) :
     HasTimeDerivative (fun s => WaveSplitting.subState (X s) (Y s)) (WaveSplitting.subState D F) t :=
   ⟨fun x => (hX.1 x).sub (hY.1 x), fun x => (hX.2.1 x).sub (hY.2.1 x),
     fun j x => (hX.2.2 j x).sub (hY.2.2 j x)⟩
 
-omit [NormedAddCommGroup E] [NormedSpace ℝ E] in
 theorem hasTimeDerivative_const (Y : State E ι) (t : ℝ) :
     HasTimeDerivative (fun _ : ℝ => Y) zeroState t :=
   ⟨fun x => hasDerivAt_const t (Y.u x), fun x => hasDerivAt_const t (Y.v x),
     fun j x => hasDerivAt_const t (Y.p j x)⟩
+
+end TimeDerivativeAlgebra
 
 /-- A flow with a frozen parameter acts linearly on the temporal derivative. -/
 theorem HasTimeDerivative.transport_fixed [DecidableEq ι] {Z : ℝ → State E ι}

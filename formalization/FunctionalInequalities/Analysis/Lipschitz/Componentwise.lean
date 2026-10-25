@@ -43,7 +43,9 @@ theorem lipschitzWith_coord (e : W ≃ₗᵢ[ℝ] EuclideanSpace ℝ (Fin (finra
     _ = edist (u a) (u b) := e.edist_map _ _
     _ ≤ K * edist a b := hu a b
 
-omit [FiniteDimensional ℝ V] [FiniteDimensional ℝ W] in
+section CoordinateDerivatives
+
+omit [FiniteDimensional ℝ V] [FiniteDimensional ℝ W]
 /-- **`V4''`: differentiability is detected coordinatewise.**  The map factors as `e.symm` after the
 Euclidean tuple of its coordinates, and both outer maps are continuous linear. -/
 theorem differentiableAt_of_coord (e : W ≃ₗᵢ[ℝ] EuclideanSpace ℝ (Fin (finrank ℝ W)))
@@ -59,7 +61,6 @@ theorem differentiableAt_of_coord (e : W ≃ₗᵢ[ℝ] EuclideanSpace ℝ (Fin 
     (e.symm.toLinearIsometry.toContinuousLinearMap.differentiableAt (x := e (u x))).comp x h2
   simpa only [LinearIsometryEquiv.symm_apply_apply] using h3
 
-omit [FiniteDimensional ℝ V] [FiniteDimensional ℝ W] in
 /-- The differential of a coordinate is the coordinate of the differential. -/
 theorem fderiv_coord_apply (e : W ≃ₗᵢ[ℝ] EuclideanSpace ℝ (Fin (finrank ℝ W)))
     {u : V → W} {x : V} (hu : DifferentiableAt ℝ u x) (i : Fin (finrank ℝ W)) (w : V) :
@@ -72,7 +73,6 @@ theorem fderiv_coord_apply (e : W ≃ₗᵢ[ℝ] EuclideanSpace ℝ (Fin (finran
   rw [hd.fderiv]
   rfl
 
-omit [FiniteDimensional ℝ V] [FiniteDimensional ℝ W] in
 /-- **`V4`: componentwise first-order agreement is first-order agreement.**  If `u` and `v` are
 differentiable at `x` and every coordinate of `v` matches the corresponding coordinate of `u` there
 in value and in differential, then `v` matches `u` at `x` in value and in differential. -/
@@ -84,5 +84,7 @@ theorem eq_and_fderiv_eq_of_coord (e : W ≃ₗᵢ[ℝ] EuclideanSpace ℝ (Fin 
   refine ⟨e.injective (PiLp.ext hval),
     ContinuousLinearMap.ext fun w => e.injective (PiLp.ext fun i => ?_)⟩
   rw [← fderiv_coord_apply e hv i w, ← fderiv_coord_apply e hu i w, hder i]
+
+end CoordinateDerivatives
 
 end FunctionalInequalities.Analysis

@@ -150,7 +150,7 @@ namespace FunctionalInequalities.Analysis
 section InnerProduct
 
 variable {E : Type*}
-variable [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+  [NormedAddCommGroup E] [InnerProductSpace ℝ E]
 
 private lemma caffarelli_gap_segment {u : E → ℝ} (hc : ConvexOn ℝ univ u)
     (p a b c : E) (ha : u a = u c + ⟪p, a - c⟫)
@@ -361,7 +361,7 @@ namespace FunctionalInequalities.Analysis
 section InnerProduct
 
 variable {E : Type*}
-variable [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+  [NormedAddCommGroup E] [InnerProductSpace ℝ E]
 
 private lemma contact_sub_affine_convex {u : E → ℝ} (hu : ConvexOn ℝ univ u)
     (c : ℝ) (p : E) :
@@ -1082,7 +1082,7 @@ namespace FunctionalInequalities.Analysis
 section InnerProduct
 
 variable {E : Type*}
-variable [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+  [NormedAddCommGroup E] [InnerProductSpace ℝ E]
 
 private theorem strict_supporting_inequality {u : E → ℝ} (hstrict : StrictConvexOn ℝ univ u)
     {x p y : E} (hp : ∀ t, u x + ⟪p, t - x⟫ ≤ u t) (hy : y ≠ x) :
@@ -1286,7 +1286,7 @@ def truncatedConjugate {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ
 section FiniteDimensional
 
 variable {E : Type*}
-variable [NormedAddCommGroup E] [InnerProductSpace ℝ E] [FiniteDimensional ℝ E]
+  [NormedAddCommGroup E] [InnerProductSpace ℝ E] [FiniteDimensional ℝ E]
 
 /-- The supremum is attained and dominates every value on the ball. -/
 theorem exists_truncatedConjugate_eq {u : E → ℝ} (hu : Continuous u) {M : ℝ} (hM : 0 ≤ M) (p : E) :
@@ -1443,7 +1443,7 @@ namespace FunctionalInequalities.Analysis
 section InnerProduct
 
 variable {E : Type*}
-variable [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+  [NormedAddCommGroup E] [InnerProductSpace ℝ E]
 
 private lemma n7_isClosed_bad_maximizers [FiniteDimensional ℝ E] {u : E → ℝ}
     (hu : Continuous u) {M : ℝ} (hM : 0 ≤ M) {C : Set E} (hC : IsClosed C) :
@@ -1706,7 +1706,7 @@ namespace FunctionalInequalities.Analysis
 section InnerProduct
 
 variable {E : Type*}
-variable [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+  [NormedAddCommGroup E] [InnerProductSpace ℝ E]
 
 private lemma supporting_affine_convex (c : ℝ) (p x : E) :
     ConvexOn ℝ univ (fun w => c + ⟪p, w - x⟫) := by
@@ -2128,7 +2128,7 @@ private lemma t11f7_small_sublevel {X : Type*} [TopologicalSpace X]
 section InnerProduct
 
 variable {E : Type*}
-variable [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+  [NormedAddCommGroup E] [InnerProductSpace ℝ E]
 
 private lemma t11f7_support_unique {u : E → ℝ}
     (hstrict : StrictConvexOn ℝ univ u) {x z p : E}

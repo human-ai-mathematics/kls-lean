@@ -39,7 +39,8 @@ structure Admissible (μ : Measure E) (f : E → ℝ) : Prop where
   energy_integrable : Integrable (fun x ↦ ‖gradient f x‖ ^ 2) μ
 
 /-- Source: the energy formula in Definition 2.1, realized as a real Bochner integral.
-Its finite-energy use is controlled by `Admissible.energy_integrable`. -/
+There is no factor `1/2`. Its finite-energy use is controlled by
+`Admissible.energy_integrable`, since a nonintegrable real Bochner integral is totalized to zero. -/
 def energy (μ : Measure E) (f : E → ℝ) : ℝ :=
   ∫ x, ‖gradient f x‖ ^ 2 ∂μ
 
@@ -76,8 +77,8 @@ structure Holds (μ : Measure E) (C : ℝ) : Prop where
 
 namespace Holds
 
-/-- Source: local consequence of `Holds.le` and `energy_nonneg`.
-Increasing a valid constant preserves the inequality. -/
+/-- Increasing a valid constant preserves the inequality, since `energy_nonneg` makes
+multiplication by the energy monotone. The probability and nonnegativity fields are preserved. -/
 theorem mono {μ : Measure E} {C C' : ℝ} (h : Holds μ C) (hCC' : C ≤ C') :
     Holds μ C' := by
   refine ⟨h.probability, h.constant_nonneg.trans hCC', ?_⟩

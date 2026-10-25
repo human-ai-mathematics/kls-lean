@@ -6,7 +6,7 @@ open MeasureTheory
 open scoped ContDiff
 namespace FunctionalInequalities.Analysis.WaveSplitting
 variable {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
-variable {ι : Type*} [Fintype ι]
+  {ι : Type*} [Fintype ι]
 
 /-- Explicit coupling constant for bounded squared coefficient derivatives through order `k`. -/
 def couplingConstant (k : ℕ) (B : ℝ) : ℝ :=

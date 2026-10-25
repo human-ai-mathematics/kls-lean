@@ -66,14 +66,15 @@ private def partitionParameterFeature (x : E) :
     ((partitionParameterScore x).comp
       (partitionParameterChart (E := E)).symm.toContinuousLinearMap)
 
-omit [CompleteSpace E] [MeasurableSpace E] [BorelSpace E] in
+section ParameterFeatures
+
+omit [CompleteSpace E] [MeasurableSpace E] [BorelSpace E]
 private theorem partitionParameterFeature_continuous :
     Continuous (partitionParameterFeature (E := E)) :=
   (InnerProductSpace.toDual ℝ _).symm.continuous.comp
     ((partitionParameterScore_continuous (E := E)).clm_comp_const
       (partitionParameterChart (E := E)).symm.toContinuousLinearMap)
 
-omit [CompleteSpace E] [MeasurableSpace E] [BorelSpace E] in
 private theorem partitionParameterFeature_pairing
     (p : E × (E →L[ℝ] E)) (x : E) :
     ⟪partitionParameterChart p, partitionParameterFeature x⟫ =
@@ -84,11 +85,15 @@ private theorem partitionParameterFeature_pairing
     ContinuousLinearEquiv.coe_coe, ContinuousLinearEquiv.symm_apply_apply,
     partitionParameterScore_apply]
 
+end ParameterFeatures
+
 private def partitionLaw (μ : ProbabilityMeasure E) :
     ProbabilityMeasure (partitionParameterSpace (E := E)) :=
   μ.map (partitionParameterFeature_continuous (E := E)).measurable.aemeasurable
 
-omit [CompleteSpace E] in
+section PosteriorSupport
+
+omit [CompleteSpace E]
 private theorem partitionLaw_support_subset (μ : ProbabilityMeasure E)
     (hc : IsCompact (μ : Measure E).support) :
     (partitionLaw μ : Measure (partitionParameterSpace (E := E))).support ⊆
@@ -108,7 +113,6 @@ private theorem partitionLaw_support_subset (μ : ProbabilityMeasure E)
     exact hx ⟨x, hxS, rfl⟩
   exact Measure.support_subset_of_isClosed hk.isClosed ha
 
-omit [CompleteSpace E] in
 private theorem partitionLaw_compact (μ : ProbabilityMeasure E)
     (hc : IsCompact (μ : Measure E).support) :
     IsCompact
@@ -116,6 +120,8 @@ private theorem partitionLaw_compact (μ : ProbabilityMeasure E)
   (hc.image (partitionParameterFeature_continuous (E := E))).of_isClosed_subset
     (partitionLaw μ : Measure (partitionParameterSpace (E := E))).isClosed_support
     (partitionLaw_support_subset μ hc)
+
+end PosteriorSupport
 
 omit [CompleteSpace E] [FiniteDimensional ℝ E]
   [MeasurableSpace E] [BorelSpace E] in

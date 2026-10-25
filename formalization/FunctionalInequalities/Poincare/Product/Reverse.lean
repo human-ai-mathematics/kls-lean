@@ -87,7 +87,9 @@ theorem measurePreserving_prod_snd :
     (WithLp.measurable_toLp 2 (E × F))]
   exact measurePreserving_snd.map_eq
 
-omit [SecondCountableTopology E] in
+section ProductMarginals
+
+omit [SecondCountableTopology E]
 /-- Recover the first factor at the same finite real constant.
 Source: local coordinate-test deduction using `Admissible.comp_projection` and the first
 marginal law; both factor probabilities are retained. -/
@@ -99,7 +101,6 @@ theorem Holds.of_prod_left {C : ℝ} (h : Holds (prodMeasure μ ν) C) : Holds �
   rwa [variance_comp_projection _ measurePreserving_prod_fst hf.memLp_two,
     energy_comp_projection _ isometry_adjoint_fstL measurePreserving_prod_fst hf] at hv
 
-omit [SecondCountableTopology E] in
 /-- Recover the second factor at the same finite real constant.
 Source: local coordinate-test deduction using `Admissible.comp_projection` and the second
 marginal law; both factor probabilities are retained. -/
@@ -111,17 +112,17 @@ theorem Holds.of_prod_right {C : ℝ} (h : Holds (prodMeasure μ ν) C) : Holds 
   rwa [variance_comp_projection _ measurePreserving_prod_snd hf.memLp_two,
     energy_comp_projection _ isometry_adjoint_sndL measurePreserving_prod_snd hf] at hv
 
-omit [SecondCountableTopology E] in
 /-- Source: local infimum consequence of `Holds.of_prod_left`.
 This is the first-factor lower bound needed for the manuscript's product identity. -/
 theorem constant_left_le_prod : constant μ ≤ constant (prodMeasure μ ν) :=
   le_constant fun _ hC ↦ constant_le hC.of_prod_left
 
-omit [SecondCountableTopology E] in
 /-- Source: local infimum consequence of `Holds.of_prod_right`.
 This is the second-factor lower bound needed for the manuscript's product identity. -/
 theorem constant_right_le_prod : constant ν ≤ constant (prodMeasure μ ν) :=
   le_constant fun _ hC ↦ constant_le hC.of_prod_right
+
+end ProductMarginals
 
 /-- Source: the binary case of the manuscript's Theorem 3.4, linked above.
 For the local `Admissible` domain, coordinate lifting gives the reverse bounds and

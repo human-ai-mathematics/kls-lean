@@ -227,7 +227,9 @@ theorem aestronglyMeasurable_regularizedNorm (u : Lp H 2 μ) :
     AEStronglyMeasurable (fun x => regularizedNorm ε (u x)) μ :=
   (continuous_regularizedNorm ε).comp_aestronglyMeasurable (Lp.aestronglyMeasurable u)
 
-omit [InnerProductSpace ℝ H] in
+section RegularizedNormIntegrability
+
+omit [InnerProductSpace ℝ H]
 /-- `regularizedNorm ε (u x)` is dominated by `‖u x‖`, hence integrable. -/
 theorem integrable_regularizedNorm (hε : 0 < ε) (u : Lp H 2 μ) :
     Integrable (fun x => regularizedNorm ε (u x)) μ :=
@@ -236,13 +238,14 @@ theorem integrable_regularizedNorm (hε : 0 < ε) (u : Lp H 2 μ) :
       rw [Real.norm_of_nonneg (regularizedNorm_nonneg ε _)]
       exact regularizedNorm_le_norm hε _)
 
-omit [InnerProductSpace ℝ H] in
 /-- Bounded multipliers test `regularizedNorm ε (u x)`. -/
 theorem integrable_mul_regularizedNorm (hε : 0 < ε) {q : α → ℝ}
     (hq : AEStronglyMeasurable q μ) {D : ℝ} (hD : ∀ᵐ x ∂μ, |q x| ≤ D) (u : Lp H 2 μ) :
     Integrable (fun x => q x * regularizedNorm ε (u x)) μ :=
   (integrable_regularizedNorm hε u).bdd_mul hq
     (by filter_upwards [hD] with x hx; rwa [Real.norm_eq_abs])
+
+end RegularizedNormIntegrability
 
 omit [IsFiniteMeasure μ] in
 theorem aestronglyMeasurable_inner_regularizedUnit (hε : 0 < ε) (u w : Lp H 2 μ) :

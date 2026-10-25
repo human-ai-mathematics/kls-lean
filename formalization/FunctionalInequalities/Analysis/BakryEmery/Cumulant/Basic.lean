@@ -260,10 +260,12 @@ theorem tiltAverage_inner_eq_fderiv_logLaplace_of_lt (μ : Measure E) [IsFiniteM
 section NormedSpace
 
 variable {F : Type*}
-variable [NormedAddCommGroup F] [NormedSpace ℝ F]
+  [NormedAddCommGroup F] [NormedSpace ℝ F]
 
-omit [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] in
-private lemma bkl_cumulant_swap_front [CompleteSpace F] {g : E → F} (hg : ContDiff ℝ ∞ g)
+section DerivativeSymmetry
+
+omit [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
+private lemma bkl_cumulant_swap_front {g : E → F} (hg : ContDiff ℝ ∞ g)
     (n : ℕ) (x v w : E) (h : Fin n → E) :
     iteratedFDeriv ℝ (n + 2) g x (Fin.cons v (Fin.cons w h)) =
       iteratedFDeriv ℝ (n + 2) g x (Fin.cons w (Fin.cons v h)) := by
@@ -298,7 +300,6 @@ private lemma bkl_cumulant_swap_front [CompleteSpace F] {g : E → F} (hg : Cont
     ((ha.of_le (by norm_cast : (2 : WithTop ℕ∞) ≤ ∞)).contDiffAt.isSymmSndFDerivAt
       (by simp)).eq v w
 
-omit [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] in
 private lemma bkl_cumulant_cons_snoc [CompleteSpace F] {g : E → F} (hg : ContDiff ℝ ∞ g)
     (n : ℕ) (x v : E) (h : Fin n → E) :
     iteratedFDeriv ℝ (n + 1) g x (Fin.cons v h) =
@@ -324,6 +325,8 @@ private lemma bkl_cumulant_cons_snoc [CompleteSpace F] {g : E → F} (hg : ContD
           (by norm_cast; simp) x).iteratedFDeriv_succ_apply_left']
       simpa only [Fin.tail_cons, Fin.cons_zero] using
         congrArg (fun a : E → F => fderiv ℝ a x (h 0)) heq
+
+end DerivativeSymmetry
 
 end NormedSpace
 
@@ -383,7 +386,9 @@ theorem fderiv_logLaplace_zero_apply (v : E) :
       _ = ∫ x, ⟪v, x⟫ ∂μ := by
         simp [tiltAverage, expTilt]
 
-omit [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] in
+section ThirdSecondCumulants
+
+omit [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
 private lemma third_second_apply {f : E → ℝ} (hf : ContDiff ℝ ∞ f)
     (x v w : E) :
     iteratedFDeriv ℝ 2 f x ![v, w] =
@@ -391,7 +396,6 @@ private lemma third_second_apply {f : E → ℝ} (hf : ContDiff ℝ ∞ f)
   rw [(hf.differentiable_iteratedFDeriv (m := 1) (by norm_num) x).iteratedFDeriv_succ_apply_left']
   simp only [iteratedFDeriv_one_apply, Fin.tail, Matrix.cons_val_zero, Matrix.cons_val_succ]
 
-omit [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] in
 private lemma third_second_mul {f g : E → ℝ} (hf : ContDiff ℝ ∞ f)
     (hg : ContDiff ℝ ∞ g) (x v w : E) (hf0 : f x = 0) (hg0 : g x = 1)
     (hg1 : fderiv ℝ g x = 0) :
@@ -416,6 +420,8 @@ private lemma third_second_mul {f g : E → ℝ} (hf : ContDiff ℝ ∞ f)
   rw [fderiv_fun_mul (hf.differentiable (by simp) x) (hgw x),
     fderiv_fun_mul (hg.differentiable (by simp) x) (hfw x)]
   simp [hf0, hg0, hg1]
+
+end ThirdSecondCumulants
 
 omit [FiniteDimensional ℝ E] [IsProbabilityMeasure μ] in
 include hexp in
@@ -806,13 +812,13 @@ private theorem equiv_iteratedFDeriv_univ {E F G : Type*} [NormedAddCommGroup E]
 section InnerProduct
 
 variable {E F : Type*}
-variable [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+  [NormedAddCommGroup E] [InnerProductSpace ℝ E]
 
 /-- **Cumulants along a linear isometry**: `κ^{φ_*ν}_k(φ u₁, …, φ u_k) = κ^ν_k(u₁, …, u_k)` for
-every measure `ν`, since `Λ_{φ_*ν} = Λ_ν ∘ φ⁻¹` pointwise. -/
-theorem cumulant_map_linearIsometryEquiv [CompleteSpace E] [FiniteDimensional ℝ E] [MeasurableSpace E]
-    [BorelSpace E] [NormedAddCommGroup F] [InnerProductSpace ℝ F] [CompleteSpace F]
-    [FiniteDimensional ℝ F] [MeasurableSpace F] [BorelSpace F]
+every measure `ν` on a real inner-product space, since `Λ_{φ_*ν} = Λ_ν ∘ φ⁻¹` pointwise. -/
+theorem cumulant_map_linearIsometryEquiv [MeasurableSpace E]
+    [BorelSpace E] [NormedAddCommGroup F] [InnerProductSpace ℝ F]
+    [MeasurableSpace F] [BorelSpace F]
     (φ : E ≃ₗᵢ[ℝ] F) (ν : Measure E) (k : ℕ) (u : Fin k → E) :
     cumulant (ν.map φ) k (fun i => φ (u i)) = cumulant ν k u := by
     have hlog :
@@ -887,7 +893,7 @@ private lemma affine_iteratedFDeriv_linear_eq_zero
 `κ^{(T(· - a))_*μ}_k(u₁, …, u_k) = κ^μ_k(T† u₁, …, T† u_k)`. -/
 theorem cumulant_map_affine [CompleteSpace E] [FiniteDimensional ℝ E] [MeasurableSpace E]
     [BorelSpace E] [NormedAddCommGroup F] [InnerProductSpace ℝ F] [CompleteSpace F]
-    [FiniteDimensional ℝ F] [MeasurableSpace F] [BorelSpace F]
+    [MeasurableSpace F] [BorelSpace F]
     (T : E ≃L[ℝ] F) (a : E) (μ : Measure E) [IsFiniteMeasure μ] [NeZero μ]
     (hexp : ∀ r : ℝ, Integrable (fun x => Real.exp (r * ‖x‖)) μ)
     {k : ℕ} (hk : 2 ≤ k) (u : Fin k → F) :
@@ -983,7 +989,7 @@ open ProbabilityTheory Filter Topology
 section InnerProduct
 
 variable {E : Type*}
-variable [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+  [NormedAddCommGroup E] [InnerProductSpace ℝ E]
 
 private lemma quadratic_basis_expansion
     {ι : Type*} [Fintype ι] (b : OrthonormalBasis ι ℝ E)

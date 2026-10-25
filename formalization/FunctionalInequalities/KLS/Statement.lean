@@ -24,7 +24,10 @@ open MeasureTheory
 
 namespace FunctionalInequalities.KLS
 
-/-- A dimension-independent covariance-normalized bound for log-concave probability laws. -/
+/-- One finite nonnegative constant bounds the intrinsic local-slope Poincaré constant by
+`C * ‖Covariance.operator μ‖` for every dimension and every log-concave probability law with
+finite second moment. The covariance is centered. Dimension zero and singular affine supports
+are included; no isotropic normalization is imposed on the input law. -/
 def Conjecture : Prop :=
   ∃ C : NNReal, ∀ (n : ℕ) (μ : ProbabilityMeasure (EuclideanSpace ℝ (Fin n))),
     LogConcave μ → MemLp id 2 (μ : Measure (EuclideanSpace ℝ (Fin n))) →

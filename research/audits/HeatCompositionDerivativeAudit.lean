@@ -29,7 +29,7 @@ theorem curve {Φ : ℝ → ℝ} {C : ℝ≥0}
 end Generic
 variable {V : Type*} [NormedAddCommGroup V] [InnerProductSpace ℝ V] [CompleteSpace V]
   [MeasurableSpace V] [BorelSpace V] [SecondCountableTopology V] [FiniteDimensional ℝ V]
-variable {ν : ProbabilityMeasure V} (m : Measure V) [m.IsAddHaarMeasure]
+  {ν : ProbabilityMeasure V} (m : Measure V) [m.IsAddHaarMeasure]
   (hν : LogConcave ν) (hi : (interior (ν : Measure V).support).Nonempty) {U : V → ℝ}
 theorem interpolation (hνU : (ν : Measure V) = m.tilted (-U))
     (hU : ContDiff ℝ 1 U) {Φ : ℝ → ℝ} (hΦ : ContDiff ℝ ∞ Φ) (hΦ0 : Φ 0 = 0)

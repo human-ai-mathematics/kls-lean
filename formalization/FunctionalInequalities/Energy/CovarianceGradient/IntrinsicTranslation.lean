@@ -16,7 +16,7 @@ variable {E : Type u} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [Complete
   [MeasurableSpace E] [BorelSpace E] [SecondCountableTopology E] [FiniteDimensional ℝ E]
 
 
-variable (μ : ProbabilityMeasure E) (b : E)
+  (μ : ProbabilityMeasure E) (b : E)
 
 omit [CompleteSpace E] in
 /-- Translating `μ` in the ambient space: there is a linear isometric equivalence between the two

@@ -182,7 +182,9 @@ namespace Intrinsic
 
 open FunctionalInequalities.Energy.Euclidean
 
-omit [CompleteSpace E] in
+section IntrinsicContractions
+
+omit [CompleteSpace E]
 /-- Passing to intrinsic coordinates commutes with normal contractions. -/
 theorem toIntrinsicL2_compL2 (φ : NormalContraction) (f : Lp ℝ 2 (μ : Measure E)) :
     toIntrinsicL2 μ (φ.compL2 (μ : Measure E) f) =
@@ -203,17 +205,17 @@ theorem toIntrinsicL2_compL2 (φ : NormalContraction) (f : Lp ℝ 2 (μ : Measur
   rw [e1, e2, e3, e4]
   rfl
 
-omit [CompleteSpace E] in
 /-- The intrinsic-affine smooth-gradient relaxation is Markovian on the ambient `L²(μ)`. -/
 theorem markovian : Markovian (μ : Measure E) (energy μ) := by
   intro φ f
   rw [energy_apply, energy_apply, toIntrinsicL2_compL2]
   exact SmoothGradient.markovian (Probability.intrinsicMeasure μ) φ (toIntrinsicL2 μ f)
 
-omit [CompleteSpace E] in
 /-- The intrinsic-affine smooth-gradient relaxation is a Dirichlet energy on `L²(μ)`. -/
 theorem dirichlet : Dirichlet (μ : Measure E) (energy μ) :=
   ⟨closedQuadratic μ, markovian μ⟩
+
+end IntrinsicContractions
 
 end Intrinsic
 

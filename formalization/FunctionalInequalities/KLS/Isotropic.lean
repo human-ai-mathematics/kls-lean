@@ -12,8 +12,10 @@ import Mathlib.Analysis.CStarAlgebra.Matrix
 # Isotropic probability laws
 
 Source: Blueprint `def:isotropic-law`. The three fields state finite second moment,
-zero barycenter, and identity centered covariance. This is a definition, with no whitening
-or equivalence theorem. On a zero-dimensional space the identity operator is itself zero.
+zero barycenter, and identity centered covariance. The module also gives moment identities,
+preservation under linear isometric equivalences, and mean-Hessian identities for a given potential.
+It does not construct a whitening map or a moment-map potential. On a zero-dimensional space
+the identity operator is itself zero.
 -/
 
 noncomputable section
@@ -24,11 +26,12 @@ open scoped RealInnerProductSpace
 namespace FunctionalInequalities.KLS
 
 variable {E : Type*}
-variable [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
-variable [MeasurableSpace E] [BorelSpace E]
+  [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
+  [MeasurableSpace E] [BorelSpace E]
 
 /-- A probability law with finite second moment, mean zero, and identity centered covariance.
-The moment field prevents the totalized integral/covariance from encoding integrability. -/
+Finite second moment is an explicit field: the totalized mean and covariance expressions alone
+do not assert integrability. No finite-dimensional instance is required by this definition. -/
 structure Isotropic (μ : ProbabilityMeasure E) : Prop where
   memLp_two : MemLp id 2 (μ : Measure E)
   mean_zero : ∫ x, x ∂(μ : Measure E) = 0
@@ -36,12 +39,8 @@ structure Isotropic (μ : ProbabilityMeasure E) : Prop where
 
 section Moments
 
-variable {E : Type*}
-variable [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
-
 /-- **Isotropy from moments**: finite second moment, mean zero and `∫ ⟪u, x⟫⟪v, x⟫ = ⟪u, v⟫`. -/
 theorem isotropic_of_moments
-    [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
     (ν : ProbabilityMeasure E) (h2 : MemLp id 2 (ν : Measure E))
     (h0 : ∫ x, x ∂(ν : Measure E) = 0)
     (hcov : ∀ u v : E, ∫ x, ⟪u, x⟫ * ⟪v, x⟫ ∂(ν : Measure E) = ⟪u, v⟫) :
@@ -57,7 +56,7 @@ theorem isotropic_of_moments
 
 /-- For an isotropic law the raw second moments are `∫ ⟪u, x⟫ ⟪v, x⟫ = ⟪u, v⟫`. -/
 theorem Isotropic.integral_inner_mul_inner
-    [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] {ν : ProbabilityMeasure E}
+    {ν : ProbabilityMeasure E}
     (hν : Isotropic ν) (u v : E) :
     (∫ x, ⟪u, x⟫ * ⟪v, x⟫ ∂(ν : Measure E)) = ⟪u, v⟫ := by
   calc
@@ -71,18 +70,56 @@ theorem Isotropic.integral_inner_mul_inner
       rw [← Covariance.operator_inner, hν.covariance_identity]
       simp
 
+/-- **Gradient second moments of an isotropic pushforward** (Letwin Lemma 2.3, step 2).
+If `gradient φ` is measurable and its pushforward law `(∇φ)_* ν` is isotropic, then
+`∫ Dφ(x)[u] Dφ(x)[v] dν(x) = ⟪u, v⟫`.
+
+No differentiability assumption on `φ` is required: `fderiv` and `gradient` use Mathlib's zero
+convention at points where `φ` is not differentiable. At differentiability points,
+`fderiv ℝ φ x u` is the directional derivative of `φ` along `u`. -/
+theorem integral_fderiv_mul_fderiv_eq_inner_of_isotropic_map
+    (ν : ProbabilityMeasure E) {φ : E → ℝ} (hφ : Measurable (gradient φ))
+    (hiso : Isotropic (ν.map hφ.aemeasurable)) (u v : E) :
+    ∫ x, fderiv ℝ φ x u * fderiv ℝ φ x v ∂(ν : Measure E) = ⟪u, v⟫ := by
+    have hderiv (x w : E) :
+        fderiv ℝ φ x w = ⟪w, gradient φ x⟫ := by
+      rw [← toDual_gradient, InnerProductSpace.toDual_apply_apply, real_inner_comm]
+
+    have hmeas :
+        AEStronglyMeasurable
+          (fun y : E => ⟪u, y⟫ * ⟪v, y⟫)
+          ((ν : Measure E).map (gradient φ)) := by
+      exact
+        ((continuous_const.inner continuous_id).mul
+          (continuous_const.inner continuous_id)).aestronglyMeasurable
+
+    calc
+      ∫ x, fderiv ℝ φ x u * fderiv ℝ φ x v ∂(ν : Measure E) =
+          ∫ x, ⟪u, gradient φ x⟫ * ⟪v, gradient φ x⟫ ∂(ν : Measure E) := by
+        apply integral_congr_ae
+        filter_upwards [] with x
+        rw [hderiv x u, hderiv x v]
+      _ = ∫ y, ⟪u, y⟫ * ⟪v, y⟫
+            ∂((ν : Measure E).map (gradient φ)) := by
+        exact (integral_map hφ.aemeasurable hmeas).symm
+      _ = ⟪u, v⟫ := by
+        have h := hiso.integral_inner_mul_inner u v
+        simp only [ProbabilityMeasure.toMeasure_map] at h
+        exact h
+
 end Moments
 
 section LinearIsometry
 
 variable {E F : Type*}
-variable [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
-variable [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
-variable [NormedAddCommGroup F] [InnerProductSpace ℝ F] [CompleteSpace F]
-variable [FiniteDimensional ℝ F] [MeasurableSpace F] [BorelSpace F]
+  [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
+  [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
+  [NormedAddCommGroup F] [InnerProductSpace ℝ F] [CompleteSpace F]
+  [FiniteDimensional ℝ F] [MeasurableSpace F] [BorelSpace F]
 
-/-- **Isotropy along a linear isometry**.
-The `MemLp` step uses `ContinuousLinearMap.comp_memLp'`. -/
+/-- **Isotropy along a linear isometric equivalence**: pushing an isotropic probability law
+forward along `φ : E ≃ₗᵢ[ℝ] F` preserves finite second moment, zero mean, and identity centered
+covariance on `F`. -/
 theorem Isotropic.map_linearIsometryEquiv {ν : ProbabilityMeasure E}
     (hν : Isotropic ν) (φ : E ≃ₗᵢ[ℝ] F) :
     Isotropic (ν.map φ.continuous.measurable.aemeasurable) := by
@@ -137,56 +174,48 @@ end LinearIsometry
 section FiniteDimensional
 
 variable {E : Type*}
-variable [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
-variable [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
-
-/-- **Gradient second moments of an isotropic pushforward** (Letwin Lemma 2.3, step 2): if `(∇φ)_* ν` is isotropic then
-`∫ (∂_u φ)(∂_v φ) dν = ⟪u, v⟫`. -/
-theorem integral_fderiv_mul_fderiv_eq_inner_of_isotropic_map
-    (ν : ProbabilityMeasure E) {φ : E → ℝ} (hφ : Measurable (gradient φ))
-    (hiso : Isotropic (ν.map hφ.aemeasurable)) (u v : E) :
-    ∫ x, fderiv ℝ φ x u * fderiv ℝ φ x v ∂(ν : Measure E) = ⟪u, v⟫ := by
-    have hderiv (x w : E) :
-        fderiv ℝ φ x w = ⟪w, gradient φ x⟫ := by
-      rw [← toDual_gradient, InnerProductSpace.toDual_apply_apply, real_inner_comm]
-
-    have hmeas :
-        AEStronglyMeasurable
-          (fun y : E => ⟪u, y⟫ * ⟪v, y⟫)
-          ((ν : Measure E).map (gradient φ)) := by
-      exact
-        ((continuous_const.inner continuous_id).mul
-          (continuous_const.inner continuous_id)).aestronglyMeasurable
-
-    calc
-      ∫ x, fderiv ℝ φ x u * fderiv ℝ φ x v ∂(ν : Measure E) =
-          ∫ x, ⟪u, gradient φ x⟫ * ⟪v, gradient φ x⟫ ∂(ν : Measure E) := by
-        apply integral_congr_ae
-        filter_upwards [] with x
-        rw [hderiv x u, hderiv x v]
-      _ = ∫ y, ⟪u, y⟫ * ⟪v, y⟫
-            ∂((ν : Measure E).map (gradient φ)) := by
-        exact (integral_map hφ.aemeasurable hmeas).symm
-      _ = ⟪u, v⟫ := by
-        have h := hiso.integral_inner_mul_inner u v
-        simp only [ProbabilityMeasure.toMeasure_map] at h
-        exact h
+  [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
+  [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
 
 open scoped ContDiff in
-/-- **Letwin Lemma 2.3 (mean Hessian of the moment-map potential is the identity)**, for any smooth
-normalized `φ` with isotropic gradient law and the stated integrability (the moment map itself is not constructed). -/
+/-- **Letwin Lemma 2.3 for a given potential**, with explicit Hessian integrability.
+For a smooth `φ` with `∫ exp (-φ) dm = 1`, write `ν = m.tilted (-φ)`. If the gradient law
+`(∇φ)_* ν` is isotropic and `D(Dφ[ u ])[ v ]` is integrable, then its mean is `⟪u, v⟫`.
+
+Normalization implies integrability of `exp (-φ)`. Isotropy gives an `L²(ν)` gradient, hence
+integrable directional derivatives and their products. Only Hessian integrability remains an
+explicit integrability hypothesis; convexity is not assumed. This is an averaged bilinear identity,
+not a pointwise Hessian identity, and it does not construct the potential. -/
 theorem integral_fderiv_fderiv_tilted_eq_inner_of_isotropic_map
     (m : Measure E) [m.IsAddHaarMeasure]
     (φ : E → ℝ) (u v : E) (hφ : ContDiff ℝ ∞ φ)
-    (hφexp : Integrable (fun x => Real.exp (-φ x)) m)
     (hφnorm : ∫ x, Real.exp (-φ x) ∂m = 1)
     (ν : ProbabilityMeasure E) (hν : (ν : Measure E) = m.tilted (-φ))
     (hiso : KLS.Isotropic (ν.map (Analysis.BakryEmery.continuous_gradient
       (hφ.of_le (WithTop.coe_le_coe.mpr le_top))).measurable.aemeasurable))
-    (hdd : Integrable (fun x => fderiv ℝ (fun y => fderiv ℝ φ y u) x v) (m.tilted (-φ)))
-    (hdd' : Integrable (fun x => fderiv ℝ φ x u * fderiv ℝ φ x v) (m.tilted (-φ)))
-    (hd : Integrable (fun x => fderiv ℝ φ x u) (m.tilted (-φ))) :
+    (hdd : Integrable (fun x => fderiv ℝ (fun y => fderiv ℝ φ y u) x v) (m.tilted (-φ))) :
     (∫ x, fderiv ℝ (fun y => fderiv ℝ φ y u) x v ∂(m.tilted (-φ))) = ⟪u, v⟫ := by
+    have hφexp : Integrable (fun x => Real.exp (-φ x)) m :=
+      Integrable.of_integral_ne_zero (by rw [hφnorm]; norm_num)
+    have hgm : Measurable (gradient φ) :=
+      (Analysis.BakryEmery.continuous_gradient (hφ.of_le (WithTop.coe_le_coe.mpr le_top))).measurable
+    have hgradν : MemLp (gradient φ) 2 (ν : Measure E) := by
+      have hh := hiso.memLp_two
+      simp only [ProbabilityMeasure.toMeasure_map] at hh
+      simpa only [Function.comp_def, id_eq] using
+        (memLp_map_measure_iff continuous_id.aestronglyMeasurable hgm.aemeasurable).mp hh
+    have hderiv (x w : E) : fderiv ℝ φ x w = ⟪w, gradient φ x⟫ := by
+      rw [← toDual_gradient, InnerProductSpace.toDual_apply_apply, real_inner_comm]
+    have hderivLp (w : E) : MemLp (fun x => fderiv ℝ φ x w) 2 (ν : Measure E) := by
+      simp_rw [hderiv]
+      simpa only [Function.comp_def, innerSL_apply_apply] using
+        (innerSL ℝ w).comp_memLp' hgradν
+    have hdd' : Integrable (fun x => fderiv ℝ φ x u * fderiv ℝ φ x v) (m.tilted (-φ)) := by
+      rw [← hν]
+      exact (hderivLp u).integrable_mul (hderivLp v)
+    have hd : Integrable (fun x => fderiv ℝ φ x u) (m.tilted (-φ)) := by
+      rw [← hν]
+      exact (hderivLp u).integrable (by norm_num)
     have hgrad : Measurable (gradient φ) :=
       (Analysis.BakryEmery.continuous_gradient (hφ.of_le (WithTop.coe_le_coe.mpr le_top))).measurable
     rw [Analysis.BakryEmery.integral_fderiv_fderiv_tilted_eq_integral_mul m φ u v hφ hφexp hφnorm hdd hdd' hd]
@@ -195,7 +224,9 @@ theorem integral_fderiv_fderiv_tilted_eq_inner_of_isotropic_map
 
 
 open scoped RealInnerProductSpace in
-/-- An isotropic law on `ℝⁿ` has `∫‖x‖² = n` (sum of the unit coordinate variances). -/
+/-- An isotropic law on `ℝⁿ` has `∫ ‖x‖² dν = n`: the sum of its unit coordinate variances.
+The integral is finite by the second-moment field of `Isotropic`; there is no division by the
+dimension. The statement includes `n = 0`, when both sides vanish. -/
 theorem Isotropic.integral_norm_sq {n : ℕ}
     {ν : ProbabilityMeasure (EuclideanSpace ℝ (Fin n))} (hiso : KLS.Isotropic ν) :
     (∫ x, ‖x‖ ^ 2 ∂(ν : Measure (EuclideanSpace ℝ (Fin n)))) = (n : ℝ) := by
@@ -224,8 +255,11 @@ theorem Isotropic.integral_norm_sq {n : ℕ}
 open scoped ContDiff in
 open FunctionalInequalities.Analysis.BakryEmery in
 /-- **Letwin Lemma 2.3 for a given potential**: if `φ` is smooth and convex with `e^{-φ}` a probability
-density, `ν = e^{-φ} dx`, and `(∇φ)_* ν` is isotropic, then `∫ ∂_u∂_v φ dν = ⟪u, v⟫`; every integrability
-input is derived. The moment map producing such a `φ` for a given law is not constructed. -/
+density, `ν = e^{-φ} dx`, and `(∇φ)_* ν` is isotropic, then
+`∫ bilinearIteratedFDerivTwo ℝ φ x u v dν(x) = ⟪u, v⟫`.
+Convexity and the `L²(ν)` gradient supplied by isotropy allow the integration-by-parts theorem
+to derive Hessian integrability. Thus no separate integrability hypotheses are needed here.
+The identity concerns the averaged Hessian; the potential for a given law is not constructed. -/
 theorem integral_hessian_eq_inner_of_isotropic_map
     (φ : E → ℝ) (hφ : ContDiff ℝ ∞ φ)
     (hc : ConvexOn ℝ Set.univ φ)

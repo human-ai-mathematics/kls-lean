@@ -159,7 +159,9 @@ family and infinite values. The exact test class and Hilbert encoding are local 
 theorem constant_pi_eq : constant (piMeasure μ) = ⨆ i, constant (μ i) :=
   le_antisymm constant_pi_le (iSup_le fun i ↦ constant_le_pi i)
 
-omit [∀ (i : ι), BorelSpace (E i)] [∀ (i : ι), SecondCountableTopology (E i)] in
+section EmptyProducts
+
+omit [∀ (i : ι), BorelSpace (E i)] [∀ (i : ι), SecondCountableTopology (E i)]
 /-- Source: local empty-family consequence of `holds_zero_of_subsingleton`.
 The manuscript does not separately state an empty-product fixed constant. -/
 theorem holds_pi_empty [IsEmpty ι] : Holds (piMeasure μ) 0 := by
@@ -167,13 +169,14 @@ theorem holds_pi_empty [IsEmpty ι] : Holds (piMeasure μ) 0 := by
     (WithLp.linearEquiv 2 ℝ (∀ i, E i)).toEquiv.subsingleton
   exact holds_zero_of_subsingleton (piMeasure μ)
 
-omit [∀ (i : ι), BorelSpace (E i)] [∀ (i : ι), SecondCountableTopology (E i)] in
 /-- Source: local empty-family consequence of `constant_eq_zero_of_subsingleton`.
 This makes the empty-product boundary of the indexed-supremum formula explicit. -/
 theorem constant_pi_empty [IsEmpty ι] : constant (piMeasure μ) = 0 := by
   have : Subsingleton (PiLp 2 E) :=
     (WithLp.linearEquiv 2 ℝ (∀ i, E i)).toEquiv.subsingleton
   exact constant_eq_zero_of_subsingleton (piMeasure μ)
+
+end EmptyProducts
 
 /-- A one-coordinate dependent family needs no chosen identification of its ambient space.
 Source: local specialization of `constant_pi_eq` using `iSup_unique`. -/

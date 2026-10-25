@@ -263,7 +263,9 @@ omit [CompleteSpace H] in
 @[simp]
 theorem ofLinearPMap_energy (f : T.domain) : (ofLinearPMap T).energy f = ‖T f‖₊ ^ 2 := rfl
 
-omit [CompleteSpace H] in
+section OperatorRelaxation
+
+omit [CompleteSpace H]
 /-- The squared-norm pre-energy of a linear operator is quadratic. -/
 theorem ofLinearPMap_quadratic : (ofLinearPMap T).Quadratic := by
   have hsmul : ∀ (c : ℝ) (f : T.domain), ‖T (c • f)‖₊ ^ 2 = ‖c‖₊ ^ 2 * ‖T f‖₊ ^ 2 := by
@@ -286,14 +288,12 @@ theorem ofLinearPMap_quadratic : (ofLinearPMap T).Quadratic := by
       energy_smul := fun c f ↦ hsmul c f
       parallelogram := fun f g ↦ hpar f g }
 
-omit [CompleteSpace H] in
 /-- The realization is dense exactly when the domain is dense. -/
 theorem ofLinearPMap_denseRealization_iff :
     (ofLinearPMap T).DenseRealization ↔ Dense (T.domain : Set X) := by
   change Dense (Set.range (Subtype.val : T.domain → X)) ↔ _
   rw [Subtype.range_coe]
 
-omit [CompleteSpace H] in
 /-- The relaxed energy is at most `‖T̄ x‖²` on the domain of the closure. -/
 theorem sequentialRelaxation_ofLinearPMap_le (hT : T.IsClosable) (x : T.closure.domain) :
     (ofLinearPMap T).sequentialRelaxation x ≤ (‖T.closure x‖₊ ^ 2 : NNReal) := by
@@ -312,6 +312,8 @@ theorem sequentialRelaxation_ofLinearPMap_le (hT : T.IsClosable) (x : T.closure.
     exact (ENNReal.tendsto_coe.mpr h4)
   refine ((ofLinearPMap T).sequentialRelaxation_le_sequenceEnergy ⟨f, h1⟩).trans_eq ?_
   exact h2.liminf_eq
+
+end OperatorRelaxation
 
 /-- Any approximating sequence with frequently bounded energies forces membership in the domain
 of the closure, with the corresponding norm bound. -/
@@ -399,7 +401,7 @@ def normSqEnergy {H' : Type*} [NormedAddCommGroup H'] [NormedSpace ℝ H'] (S : 
 section NormedSpace
 
 variable {H' : Type*}
-variable [NormedAddCommGroup H'] [NormedSpace ℝ H']
+  [NormedAddCommGroup H'] [NormedSpace ℝ H']
 
 open Classical in
 omit [CompleteSpace H] in

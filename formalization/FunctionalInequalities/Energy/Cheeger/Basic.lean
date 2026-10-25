@@ -139,7 +139,9 @@ namespace Test
 
 variable {ν : ProbabilityMeasure V}
 
-omit [BorelSpace V] [SecondCountableTopology V] [FiniteDimensional ℝ V] in
+section CheegerEnergy
+
+omit [BorelSpace V] [SecondCountableTopology V] [FiniteDimensional ℝ V]
 /-- The pointwise local slope of a smooth test is the gradient norm, everywhere: no measure or
 absolute-continuity hypothesis is needed since `ContDiff` gives differentiability at every
 point. -/
@@ -147,7 +149,6 @@ private theorem apply_toFun_eq_norm_gradient (f : Test ν) (x : V) :
     LocalSlope.apply f.toFun x = ENNReal.ofReal ‖gradient f.toFun x‖ :=
   LocalSlope.apply_eq_norm_gradient f.toFun x (f.contDiff.differentiable (by simp) x)
 
-omit [BorelSpace V] [SecondCountableTopology V] [FiniteDimensional ℝ V] in
 /-- The squared local-slope energy of a smooth test equals its smooth-gradient energy. -/
 private theorem localSlope_energy_eq_coe_energy (f : Test ν) :
     LocalSlope.energy ν f.toFun = (f.energy : ℝ≥0∞) := by
@@ -159,19 +160,19 @@ private theorem localSlope_energy_eq_coe_energy (f : Test ν) :
   rw [step1, ← ofReal_integral_eq_lintegral_ofReal f.gradient_sq_integrable
     (ae_of_all _ fun x ↦ sq_nonneg _), ← Test.coe_energy, ENNReal.ofReal_coe_nnreal]
 
-omit [BorelSpace V] [SecondCountableTopology V] [FiniteDimensional ℝ V] in
 /-- A smooth-gradient test is a local-slope test: it is locally Lipschitz, in `L²(ν)`, and its
 local slope is the gradient norm at every point, with square-integrable gradient. -/
 theorem localSlope_admissible (f : Test ν) : LocalSlope.Admissible ν f :=
   ⟨(f.contDiff.of_le (by exact_mod_cast le_top)).locallyLipschitz, f.memLp_two, by
     rw [localSlope_energy_eq_coe_energy f]; exact ENNReal.coe_ne_top⟩
 
-omit [BorelSpace V] [SecondCountableTopology V] [FiniteDimensional ℝ V] in
 /-- The squared local-slope energy of a smooth test is its smooth-gradient energy.  No
 absolute-continuity hypothesis: the slope equals the gradient norm at every point. -/
 theorem localSlope_energy (f : Test ν) :
     LocalSlope.energy ν f = (f.energy : ℝ≥0∞) :=
   localSlope_energy_eq_coe_energy f
+
+end CheegerEnergy
 
 end Test
 

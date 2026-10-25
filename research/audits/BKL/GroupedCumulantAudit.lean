@@ -91,7 +91,7 @@ private theorem length_selected_congr {E F : Type*} [NormedAddCommGroup E] [Norm
 section NormedSpace
 
 variable {E : Type*}
-variable [NormedAddCommGroup E] [NormedSpace ℝ E]
+  [NormedAddCommGroup E] [NormedSpace ℝ E]
 
 /-- At `m = 3` no allocation has at least two slots on both sides: (72) is empty. -/
 theorem middle_three_empty (h : Fin 3 → E) (i0 : Fin 3) :

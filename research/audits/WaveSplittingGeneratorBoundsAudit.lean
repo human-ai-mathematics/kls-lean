@@ -9,7 +9,7 @@ open scoped ContDiff
 namespace WaveSplittingGeneratorBoundsAudit
 variable {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
   [MeasurableSpace E] [BorelSpace E]
-variable (m : Measure E) [IsFiniteMeasureOnCompacts m]
+  (m : Measure E) [IsFiniteMeasureOnCompacts m]
 
 /-- The full wave generator squared is controlled from order five to order three. -/
 theorem wave_five_to_three (d : ℕ) (a : Fin d → E) (b : Fin d → E → ℝ)

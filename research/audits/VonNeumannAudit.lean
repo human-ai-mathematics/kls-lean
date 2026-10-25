@@ -110,8 +110,8 @@ theorem route_V5 :
 section InnerProduct
 
 variable {H₀ H₁ : Type*}
-variable [NormedAddCommGroup H₀] [InnerProductSpace ℝ H₀] [CompleteSpace H₀] [NormedAddCommGroup H₁]
-variable [InnerProductSpace ℝ H₁] [CompleteSpace H₁]
+  [NormedAddCommGroup H₀] [InnerProductSpace ℝ H₀] [CompleteSpace H₀] [NormedAddCommGroup H₁]
+  [InnerProductSpace ℝ H₁] [CompleteSpace H₁]
 
 /-! ### Consistency checks
 

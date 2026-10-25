@@ -416,7 +416,7 @@ private theorem iteratedFDeriv_comp_clm_at {f : E → F} (L : G →L[ℝ] E)
 section FiniteIndex
 
 variable {ι : Type*}
-variable [Fintype ι] [DecidableEq ι]
+  [Fintype ι] [DecidableEq ι]
 
 /-- Each summand sees only its own copy. -/
 private theorem iteratedFDeriv_copy_apply
@@ -586,7 +586,7 @@ variable {E G : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
 section FiniteIndex
 
 variable {ι : Type*}
-variable [Fintype ι] [DecidableEq ι]
+  [Fintype ι] [DecidableEq ι]
 
 /-- Smoothness of a separated copy sum at zero implies smoothness of each summand at zero.
 The other copies contribute only a constant after a single-copy linear restriction. -/

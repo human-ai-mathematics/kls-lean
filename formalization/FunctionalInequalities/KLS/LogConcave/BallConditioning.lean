@@ -35,7 +35,7 @@ private theorem letwin_cond_map_equiv
 section InnerProduct
 
 variable {E : Type*}
-variable [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+  [NormedAddCommGroup E] [InnerProductSpace ℝ E]
 
 private theorem letwin_cond_density
     [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
@@ -211,7 +211,7 @@ private lemma integrable_of_ball_support
 section FiniteDimensional
 
 variable {E : Type*}
-variable [NormedAddCommGroup E] [InnerProductSpace ℝ E] [FiniteDimensional ℝ E]
+  [NormedAddCommGroup E] [InnerProductSpace ℝ E] [FiniteDimensional ℝ E]
 
 section MeasurableSpace
 

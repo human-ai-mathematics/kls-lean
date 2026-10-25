@@ -54,7 +54,7 @@ namespace Solutions.StatementChecks
 section InnerProduct
 
 variable {E : Type*}
-variable [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+  [NormedAddCommGroup E] [InnerProductSpace ℝ E]
 
 /-- Normalization: every constant has zero literature energy in every allowed coordinate space. -/
 theorem constant_energy

@@ -49,7 +49,7 @@ private theorem ringInverse_isPositive (hiso : KLS.Isotropic μ) (p : Param n) :
 section NormedSpace
 
 variable {V : Type*}
-variable [NormedAddCommGroup V] [NormedSpace ℝ V]
+  [NormedAddCommGroup V] [NormedSpace ℝ V]
 
 private theorem diffusionGenerator_add_local {d : ℕ}
     (b : V → V) (σ : V → Fin d → V) {u v : V → ℝ} {x : V}

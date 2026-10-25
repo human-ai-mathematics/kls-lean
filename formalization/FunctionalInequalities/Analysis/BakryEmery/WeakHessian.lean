@@ -22,7 +22,7 @@ namespace FunctionalInequalities.Analysis
 section StructuredSpace
 
 variable {E : Type*}
-variable [NormedAddCommGroup E]
+  [NormedAddCommGroup E]
 
 section InnerProduct
 
@@ -109,7 +109,7 @@ private lemma hessian_symm_of_gradient_diff
       (EuclideanSpace.basisFun (Fin n) ℝ j)
   simpa [hessianMatrix, bilinearIteratedFDerivTwo] using hs
 
-private lemma fderiv_apply_apply_symm [CompleteSpace E]
+private lemma fderiv_apply_apply_symm
     {φ : E → ℝ} (hφ : ContDiff ℝ ∞ φ) (x v w : E) :
     fderiv ℝ (fun y => fderiv ℝ φ y v) x w =
       fderiv ℝ (fun y => fderiv ℝ φ y w) x v := by

@@ -41,7 +41,9 @@ end KLS
 
 namespace KLS.IsBorellDensity
 
-omit [BorelSpace V] in
+section DensitySupport
+
+omit [BorelSpace V]
 /-- The positivity set of a Borell density representative is convex. -/
 theorem convex_pos {ν m : Measure V} {ρ : V → ℝ} (h : IsBorellDensity ν m ρ) :
     Convex ℝ {y | 0 < ρ y} := by
@@ -63,7 +65,6 @@ theorem convex_pos {ν m : Measure V} {ρ : V → ℝ} (h : IsBorellDensity ν m
   show 0 < ρ (s • a + u • b)
   exact lt_of_lt_of_le (mul_pos (Real.rpow_pos_of_pos ha' s) (Real.rpow_pos_of_pos hb' u)) key
 
-omit [BorelSpace V] in
 /-- The logarithm of a Borell density representative is concave on the positivity set. -/
 theorem concaveOn_log {ν m : Measure V} {ρ : V → ℝ} (h : IsBorellDensity ν m ρ) :
     ConcaveOn ℝ {y | 0 < ρ y} fun y ↦ Real.log (ρ y) := by
@@ -91,7 +92,6 @@ theorem concaveOn_log {ν m : Measure V} {ρ : V → ℝ} (h : IsBorellDensity �
     _ ≤ Real.log (ρ (s • a + u • b)) :=
         Real.log_le_log (mul_pos (Real.rpow_pos_of_pos ha' s) (Real.rpow_pos_of_pos hb' u)) key
 
-omit [BorelSpace V] in
 /-- The measure of the complement of the positivity set vanishes. -/
 theorem measure_compl_pos {ν m : Measure V} {ρ : V → ℝ}
     (h : IsBorellDensity ν m ρ) : ν {y | 0 < ρ y}ᶜ = 0 := by
@@ -102,6 +102,8 @@ theorem measure_compl_pos {ν m : Measure V} {ρ : V → ℝ}
   · intro x hx
     have : ¬ 0 < ρ x := hx
     exact ENNReal.ofReal_eq_zero.mpr (not_lt.mp this)
+
+end DensitySupport
 
 end KLS.IsBorellDensity
 

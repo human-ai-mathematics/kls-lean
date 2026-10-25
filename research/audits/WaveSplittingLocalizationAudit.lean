@@ -18,7 +18,7 @@ theorem all_orders (d : ℕ) (b : Fin d → E → ℝ) (hb : ∀ j, ContDiff ℝ
   exists_localized_coefficient b hb R
 
 variable [MeasurableSpace E] [BorelSpace E]
-variable (m : Measure E) [IsFiniteMeasureOnCompacts m] [m.IsAddRightInvariant]
+  (m : Measure E) [IsFiniteMeasureOnCompacts m] [m.IsAddRightInvariant]
 
 /-- Smooth potential directional coefficients need no global bound in the fifth-order estimate. -/
 theorem potential_fifth_order (d : ℕ) (a : Fin d → E) (U h : E → ℝ)

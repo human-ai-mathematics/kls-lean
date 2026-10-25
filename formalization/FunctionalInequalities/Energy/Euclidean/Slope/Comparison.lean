@@ -149,7 +149,9 @@ namespace Test
 
 variable {ν : ProbabilityMeasure V}
 
-omit [BorelSpace V] [SecondCountableTopology V] [FiniteDimensional ℝ V] in
+section AsymptoticSlope
+
+omit [BorelSpace V] [SecondCountableTopology V] [FiniteDimensional ℝ V]
 /-- `A1` at a smooth test: its asymptotic Lipschitz constant is the gradient norm at every point.
 `ContDiff ℝ ∞` supplies both differentiability everywhere and continuity of `fderiv`. -/
 theorem asymptoticLipschitz_apply (f : Test ν) (x : V) :
@@ -157,7 +159,6 @@ theorem asymptoticLipschitz_apply (f : Test ν) (x : V) :
   AsymptoticLipschitz.apply_eq_norm_gradient (f.contDiff.differentiable (by simp))
     (f.contDiff.continuous_fderiv (by simp)) x
 
-omit [BorelSpace V] [SecondCountableTopology V] [FiniteDimensional ℝ V] in
 /-- The squared asymptotic-Lipschitz energy of a smooth test is its smooth-gradient energy; no
 absolute-continuity hypothesis, since the pointwise identity holds everywhere. -/
 theorem asymptoticLipschitz_energy (f : Test ν) :
@@ -170,13 +171,14 @@ theorem asymptoticLipschitz_energy (f : Test ν) :
   rw [step1, ← ofReal_integral_eq_lintegral_ofReal f.gradient_sq_integrable
     (ae_of_all _ fun x ↦ sq_nonneg _), ← Test.coe_energy, ENNReal.ofReal_coe_nnreal]
 
-omit [BorelSpace V] [SecondCountableTopology V] [FiniteDimensional ℝ V] in
 /-- A smooth-gradient test is an asymptotic-Lipschitz test: it is locally Lipschitz, in `L²(ν)`,
 and its asymptotic-Lipschitz energy is the finite smooth-gradient energy. -/
 theorem asymptoticLipschitz_admissible (f : Test ν) :
     AsymptoticLipschitz.Admissible ν f.toFun :=
   ⟨(f.contDiff.of_le (by exact_mod_cast le_top)).locallyLipschitz, f.memLp_two, by
     rw [asymptoticLipschitz_energy f]; exact ENNReal.coe_ne_top⟩
+
+end AsymptoticSlope
 
 end Test
 

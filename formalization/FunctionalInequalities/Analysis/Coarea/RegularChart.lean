@@ -45,18 +45,21 @@ def levelChartDomain : Set (H × ℝ) := {p | ι p.1 + p.2 • e ∈ D.target}
 /-- Height of the inverse chart, as a function of both the tangential coordinate and the level. -/
 def levelChartHeight (p : H × ℝ) : ℝ := ⟪e, D.symm (ι p.1 + p.2 • e)⟫
 
-omit [FiniteDimensional ℝ H] [FiniteDimensional ℝ V] in
+section LevelCharts
+
+omit [FiniteDimensional ℝ H] [FiniteDimensional ℝ V]
 theorem isOpen_levelChartDomain : IsOpen (levelChartDomain ι e D) :=
   D.open_target.preimage ((ι.continuous.comp continuous_fst).add
     (continuous_snd.smul continuous_const))
 
-omit [FiniteDimensional ℝ H] [FiniteDimensional ℝ V] in
 theorem contDiffOn_levelChartHeight (hD : ContDiffOn ℝ 1 D.symm D.target) :
     ContDiffOn ℝ 1 (levelChartHeight ι e D) (levelChartDomain ι e D) := by
   exact (innerSL ℝ e).contDiff.contDiffOn.comp
     (hD.comp ((ι.toContinuousLinearMap.contDiff.comp contDiff_fst).add
       (contDiff_snd.smul contDiff_const)).contDiffOn (fun _ hp => hp))
     (fun _ _ => mem_univ _)
+
+end LevelCharts
 
 variable {ι e D}
 

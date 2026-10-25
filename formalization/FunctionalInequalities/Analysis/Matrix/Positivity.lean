@@ -89,17 +89,20 @@ theorem matrixEntries_inner (A B : Matrix ι ι ℝ) :
   simp only [matrixEntries, PiLp.toLp_apply, Real.inner_apply]
   exact Fintype.sum_prod_type _
 
-omit [Fintype ι] in
+section MatrixEntries
+
+omit [Fintype ι]
 theorem matrixEntries_sub (A B : Matrix ι ι ℝ) :
     matrixEntries (A - B) = matrixEntries A - matrixEntries B := by
   ext ij
   rfl
 
-omit [Fintype ι] in
 theorem continuous_matrixEntries :
     Continuous (matrixEntries : Matrix ι ι ℝ → EuclideanSpace ℝ (ι × ι)) :=
   (PiLp.continuous_toLp 2 (fun _ : ι × ι => ℝ)).comp
     (continuous_pi fun ij => (continuous_apply ij.2).comp (continuous_apply ij.1))
+
+end MatrixEntries
 
 end Frobenius
 
@@ -146,7 +149,9 @@ theorem exists_quadraticFloor_of_posDef {S : Matrix ι ι ℝ} (hS : S.PosDef) :
 
 private def outer (v : ι → ℝ) : Matrix ι ι ℝ := fun i j => v i * v j
 
-omit [DecidableEq ι] in
+section RankOneBounds
+
+omit [DecidableEq ι]
 private theorem outer_norm (v : ι → ℝ) : ‖matrixEntries (outer v)‖ = ∑ i, (v i) ^ 2 := by
   have he : ‖matrixEntries (outer v)‖ ^ 2 = (∑ i, (v i) ^ 2) ^ 2 := by
     rw [matrixEntries_norm_sq]
@@ -155,7 +160,6 @@ private theorem outer_norm (v : ι → ℝ) : ‖matrixEntries (outer v)‖ = �
   have hp : 0 ≤ ∑ i, (v i) ^ 2 := Finset.sum_nonneg fun i _hi => sq_nonneg _
   nlinarith [norm_nonneg (matrixEntries (outer v))]
 
-omit [DecidableEq ι] in
 private theorem outer_inner (D : Matrix ι ι ℝ) (v : ι → ℝ) :
     ⟪matrixEntries D, matrixEntries (outer v)⟫ = v ⬝ᵥ (D *ᵥ v) := by
   rw [matrixEntries_inner]
@@ -166,7 +170,6 @@ private theorem outer_inner (D : Matrix ι ι ℝ) (v : ι → ℝ) :
   intro j _hj
   ring
 
-omit [DecidableEq ι] in
 /-- The quadratic form is controlled by the Frobenius norm. -/
 theorem abs_dotProduct_mulVec_le (D : Matrix ι ι ℝ) (v : ι → ℝ) :
     |v ⬝ᵥ (D *ᵥ v)| ≤ ‖matrixEntries D‖ * (∑ i, (v i) ^ 2) := by
@@ -174,7 +177,6 @@ theorem abs_dotProduct_mulVec_le (D : Matrix ι ι ℝ) (v : ι → ℝ) :
   simpa only [Real.norm_eq_abs] using
     norm_inner_le_norm (𝕜 := ℝ) (matrixEntries D) (matrixEntries (outer v))
 
-omit [DecidableEq ι] in
 /-- A floor persists, halved, under a Frobenius perturbation of size at most `a / 2`. -/
 theorem quadraticFloor_of_close {S S0 : Matrix ι ι ℝ} {a : ℝ} (hfloor : QuadraticFloor S0 a)
     (hclose : ‖matrixEntries (S - S0)‖ ≤ a / 2) : QuadraticFloor S (a / 2) := by
@@ -189,6 +191,8 @@ theorem quadraticFloor_of_close {S S0 : Matrix ι ι ℝ} {a : ℝ} (hfloor : Qu
   have hneg := neg_abs_le (v ⬝ᵥ S *ᵥ v - v ⬝ᵥ S0 *ᵥ v)
   nlinarith [hdiff, hmul, hneg]
 
+end RankOneBounds
+
 end Floor
 
 section Sylvester
@@ -198,7 +202,9 @@ open scoped RealInnerProductSpace
 
 variable [DecidableEq ι]
 
-omit [DecidableEq ι] in
+section SylvesterCoercivity
+
+omit [DecidableEq ι]
 private theorem left_floor (S D : Matrix ι ι ℝ) {a : ℝ} (hS : QuadraticFloor S a) :
     a * (∑ i, ∑ j, (D i j) ^ 2) ≤ ∑ i, ∑ j, D i j * (S * D) i j := by
   calc
@@ -210,7 +216,6 @@ private theorem left_floor (S D : Matrix ι ι ℝ) {a : ℝ} (hS : QuadraticFlo
       simpa only [QuadraticFloor, dotProduct, mulVec, Matrix.mul_apply] using hS (fun i => D i j)
     _ = ∑ i, ∑ j, D i j * (S * D) i j := Finset.sum_comm
 
-omit [DecidableEq ι] in
 private theorem right_floor (T D : Matrix ι ι ℝ) {b : ℝ} (hT : QuadraticFloor T b)
     (hSym : ∀ i j, T i j = T j i) :
     b * (∑ i, ∑ j, (D i j) ^ 2) ≤ ∑ i, ∑ j, D i j * (D * T) i j := by
@@ -226,7 +231,6 @@ private theorem right_floor (T D : Matrix ι ι ℝ) {b : ℝ} (hT : QuadraticFl
   simp_rw [he]
   exact hT (fun j => D i j)
 
-omit [DecidableEq ι] in
 /-- **Sylvester coercivity**: `(a + b)‖D‖_F² ≤ ⟪D, SD + DT⟫_F` for floors `a`, `b` and symmetric `T`; no
 commutation assumption. -/
 theorem sylvester_coercivity (S T D : Matrix ι ι ℝ) {a b : ℝ}
@@ -241,6 +245,8 @@ theorem sylvester_coercivity (S T D : Matrix ι ι ℝ) {a b : ℝ}
     _ ≤ (∑ i, ∑ j, D i j * (S * D) i j) + (∑ i, ∑ j, D i j * (D * T) i j) := add_le_add hl hr
     _ = ∑ i, ∑ j, D i j * (S * D + D * T) i j := by
       simp only [Matrix.add_apply, mul_add, Finset.sum_add_distrib]
+
+end SylvesterCoercivity
 
 /-- **Root difference bound**: `(a + b)‖S − T‖_F ≤ ‖S² − T²‖_F` from the identity
 `S(S − T) + (S − T)T = S² − T²`, which holds without commutation. -/

@@ -29,7 +29,9 @@ namespace FunctionalInequalities.KLS.LogConcave.GaussianSmoothing
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
   [CompleteSpace E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
 
-omit [CompleteSpace E] in
+section GaussianMoments
+
+omit [CompleteSpace E]
 /-- The Gaussian noise law `γ_s` is the tilt of Lebesgue measure by `e^{-s‖y‖²}`. -/
 theorem gaussianLaw_eq_tilted {s : ℝ} (hs : 0 < s) :
     gaussianLaw (V := E) s = (volume : Measure E).tilted (fun y => -s * ‖y‖ ^ 2) := by
@@ -37,7 +39,6 @@ theorem gaussianLaw_eq_tilted {s : ℝ} (hs : 0 < s) :
   unfold gaussianLaw Measure.tilted normalizedKernel kernel
   rw [hmass]
 
-omit [CompleteSpace E] in
 /-- `∫ e^{‖y‖} dγ_s < ∞`. -/
 theorem gaussianLaw_exp_norm_integrable {s : ℝ} (hs : 0 < s) :
     Integrable (fun y : E => Real.exp ‖y‖) (gaussianLaw s) := by
@@ -56,7 +57,6 @@ theorem gaussianLaw_exp_norm_integrable {s : ℝ} (hs : 0 < s) :
     nlinarith [sq_nonneg (s * ‖y‖ - 1)]
   nlinarith
 
-omit [CompleteSpace E] in
 private theorem ofReal_integral_exp_gaussian {s : ℝ} (hs : 0 < s) (z : E) :
     ((∫ y : E, Real.exp (-s * ‖y‖ ^ 2 + ⟪z, y⟫) : ℝ) : ℂ) =
       (Real.pi / (s : ℂ)) ^ (Module.finrank ℝ E / 2 : ℂ) *
@@ -74,7 +74,6 @@ private theorem ofReal_integral_exp_gaussian {s : ℝ} (hs : 0 < s) (z : E) :
       ring_nf
     _ = _ := by rw [h]; simp
 
-omit [CompleteSpace E] in
 /-- Laplace transform of `γ_s`: `∫ e^{⟪z,y⟫} dγ_s = e^{‖z‖²/(4s)}` (variance `ε = 1/(2s)`). -/
 theorem gaussianLaw_laplace {s : ℝ} (hs : 0 < s) (z : E) :
     (∫ y, Real.exp ⟪z, y⟫ ∂(gaussianLaw (V := E) s)) = Real.exp (‖z‖ ^ 2 / (4 * s)) := by
@@ -105,7 +104,6 @@ theorem gaussianLaw_laplace {s : ℝ} (hs : 0 < s) (z : E) :
   field_simp
 
 
-omit [CompleteSpace E] in
 /-- `γ_s` has a finite second moment. -/
 theorem gaussianLaw_memLp_two {s : ℝ} (hs : 0 < s) : MemLp id 2 (gaussianLaw (V := E) s) := by
   let _ : IsProbabilityMeasure (gaussianLaw (V := E) s) := gaussianLaw_probability hs
@@ -113,6 +111,8 @@ theorem gaussianLaw_memLp_two {s : ℝ} (hs : 0 < s) : MemLp id 2 (gaussianLaw (
     simpa only [one_mul] using gaussianLaw_exp_norm_integrable (E := E) hs
   exact (memLp_two_iff_integrable_sq_norm continuous_id.aestronglyMeasurable).2
     (Probability.integrable_norm_pow_of_integrable_exp_norm (by norm_num : (0 : ℝ) < 1) he 2)
+
+end GaussianMoments
 
 omit [CompleteSpace E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] in
 private theorem hasFDerivAt_exp_norm_sq_div {s : ℝ} (hs : 0 < s) (z : E) :
@@ -161,7 +161,9 @@ theorem gaussianLaw_mean_zero {s : ℝ} (hs : 0 < s) :
         exact ae_of_all _ fun y => (real_inner_comm v y).symm
     _ = 0 := hm.symm
 
-omit [CompleteSpace E] in
+section SmoothedMoments
+
+omit [CompleteSpace E]
 /-- `∫ ⟪v,y⟫² dγ_s = ‖v‖²/(2s)`. -/
 theorem gaussianLaw_inner_sq {s : ℝ} (hs : 0 < s) (v : E) :
     (∫ y : E, ⟪v, y⟫ ^ 2 ∂(gaussianLaw s)) = ‖v‖ ^ 2 / (2 * s) := by
@@ -207,7 +209,6 @@ theorem gaussianLaw_inner_sq {s : ℝ} (hs : 0 < s) (v : E) :
     mul_zero, zero_smul, zero_add, add_zero, real_inner_self_eq_norm_sq,
     one_div, one_mul, div_eq_mul_inv, mul_comm] using hm.symm
 
-omit [CompleteSpace E] in
 /-- The smoothed law `μ * γ_s` has a finite second moment when `μ` does. -/
 theorem smoothedLaw_memLp_two (μ : Measure E) [IsProbabilityMeasure μ]
     (hμ2 : MemLp id 2 μ) {s : ℝ} (hs : 0 < s) : MemLp id 2 (smoothedLaw μ s) := by
@@ -216,6 +217,8 @@ theorem smoothedLaw_memLp_two (μ : Measure E) [IsProbabilityMeasure μ]
   apply (memLp_map_measure_iff continuous_id.aestronglyMeasurable
     (by fun_prop : AEMeasurable (fun p : E × E => p.1 + p.2) _)).2
   exact (hμ2.comp_fst (gaussianLaw s)).add ((gaussianLaw_memLp_two hs).comp_snd μ)
+
+end SmoothedMoments
 
 /-- Gaussian smoothing preserves the mean. -/
 theorem smoothedLaw_mean (μ : Measure E) [IsProbabilityMeasure μ]

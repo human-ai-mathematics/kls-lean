@@ -62,12 +62,13 @@ theorem mass_pos {s : ℝ} (hs : 0 < s) : 0 < mass (V := V) s := by
 /-- The explicit nonnegative Gaussian probability density. -/
 def normalizedKernel (s : ℝ) (x : V) : ℝ := kernel s x / mass (V := V) s
 
-omit [FiniteDimensional ℝ V] [MeasurableSpace V] [BorelSpace V] in
+section GaussianKernelBounds
+
+omit [FiniteDimensional ℝ V] [MeasurableSpace V] [BorelSpace V]
 theorem normalizedKernel_pos {s : ℝ} (hs : 0 < s) (x : V) :
     0 < normalizedKernel s x :=
   div_pos (Real.exp_pos _) (mass_pos hs)
 
-omit [FiniteDimensional ℝ V] [MeasurableSpace V] [BorelSpace V] in
 theorem normalizedKernel_le_inv_mass {s : ℝ} (hs : 0 < s) (x : V) :
     normalizedKernel s x ≤ (mass (V := V) s)⁻¹ := by
   have hk : kernel s x ≤ 1 := by
@@ -78,6 +79,8 @@ theorem normalizedKernel_le_inv_mass {s : ℝ} (hs : 0 < s) (x : V) :
     normalizedKernel s x = kernel s x / mass (V := V) s := rfl
     _ ≤ 1 / mass (V := V) s := div_le_div_of_nonneg_right hk (mass_pos hs).le
     _ = _ := one_div _
+
+end GaussianKernelBounds
 
 theorem integrable_normalizedKernel {s : ℝ} (hs : 0 < s) :
     Integrable (normalizedKernel (V := V) s) :=
@@ -144,7 +147,9 @@ theorem kernel_measurable (s : ℝ) : Measurable (kernel (V := V) s) := by
   unfold kernel
   fun_prop
 
-omit [FiniteDimensional ℝ V] [MeasurableSpace V] [BorelSpace V] in
+section KernelConcavity
+
+omit [FiniteDimensional ℝ V] [MeasurableSpace V] [BorelSpace V]
 /-- The Gaussian factor is log-concave for every nonnegative inverse variance. -/
 theorem kernel_logConcave {s : ℝ} (hs : 0 ≤ s) (x y : V)
     {t : ℝ} (ht0 : 0 < t) (ht1 : t < 1) :
@@ -168,7 +173,6 @@ theorem kernel_logConcave {s : ℝ} (hs : 0 ≤ s) (x y : V)
   rw [← Real.exp_mul, ← Real.exp_mul, ← Real.exp_add]
   exact Real.exp_le_exp.mpr harg
 
-omit [FiniteDimensional ℝ V] [MeasurableSpace V] [BorelSpace V] in
 theorem normalizedKernel_logConcave {s : ℝ} (hs : 0 < s) (x y : V)
     {t : ℝ} (ht0 : 0 < t) (ht1 : t < 1) :
     normalizedKernel s x ^ t * normalizedKernel s y ^ (1 - t) ≤
@@ -189,6 +193,8 @@ theorem normalizedKernel_logConcave {s : ℝ} (hs : 0 < s) (x y : V)
     _ ≤ kernel s (t • x + (1 - t) • y) / m :=
       div_le_div_of_nonneg_right (kernel_logConcave hs.le x y ht0 ht1) hm.le
 
+end KernelConcavity
+
 /-- The extended-real Gaussian factor, in the convention of the convolution integral. -/
 def ekernel (s : ℝ) (x : V) : ENNReal := ENNReal.ofReal (kernel s x)
 
@@ -196,15 +202,18 @@ def ekernel (s : ℝ) (x : V) : ENNReal := ENNReal.ofReal (kernel s x)
 def normalizedEkernel (s : ℝ) (x : V) : ENNReal :=
   ENNReal.ofReal (normalizedKernel s x)
 
-omit [InnerProductSpace ℝ V] [FiniteDimensional ℝ V] [MeasurableSpace V] [BorelSpace V] in
+section ExtendedKernelBounds
+
+omit [InnerProductSpace ℝ V] [FiniteDimensional ℝ V] [MeasurableSpace V] [BorelSpace V]
 theorem ekernel_pos (s : ℝ) (x : V) : 0 < ekernel s x :=
   ENNReal.ofReal_pos.mpr (kernel_pos s x)
 
-omit [InnerProductSpace ℝ V] [FiniteDimensional ℝ V] [MeasurableSpace V] [BorelSpace V] in
 theorem ekernel_le_one {s : ℝ} (hs : 0 ≤ s) (x : V) : ekernel s x ≤ 1 := by
   rw [ekernel, ENNReal.ofReal_le_one]
   apply Real.exp_le_one_iff.mpr
   exact mul_nonpos_of_nonpos_of_nonneg (neg_nonpos.mpr hs) (sq_nonneg _)
+
+end ExtendedKernelBounds
 
 omit [InnerProductSpace ℝ V] [FiniteDimensional ℝ V] in
 theorem ekernel_measurable (s : ℝ) : Measurable (ekernel (V := V) s) :=
@@ -215,7 +224,9 @@ theorem normalizedEkernel_measurable (s : ℝ) :
     Measurable (normalizedEkernel (V := V) s) :=
   (normalizedKernel_measurable s).ennreal_ofReal
 
-omit [FiniteDimensional ℝ V] [MeasurableSpace V] [BorelSpace V] in
+section ExtendedKernelConcavity
+
+omit [FiniteDimensional ℝ V] [MeasurableSpace V] [BorelSpace V]
 theorem ekernel_logConcave {s : ℝ} (hs : 0 ≤ s) (x y : V)
     {t : ℝ} (ht0 : 0 < t) (ht1 : t < 1) :
     ekernel s x ^ t * ekernel s y ^ (1 - t) ≤
@@ -227,7 +238,6 @@ theorem ekernel_logConcave {s : ℝ} (hs : 0 ≤ s) (x y : V)
     ← ENNReal.ofReal_mul (Real.rpow_nonneg (kernel_pos s x).le t)]
   exact ENNReal.ofReal_le_ofReal (kernel_logConcave hs x y ht0 ht1)
 
-omit [FiniteDimensional ℝ V] [MeasurableSpace V] [BorelSpace V] in
 theorem normalizedEkernel_logConcave {s : ℝ} (hs : 0 < s) (x y : V)
     {t : ℝ} (ht0 : 0 < t) (ht1 : t < 1) :
     normalizedEkernel s x ^ t * normalizedEkernel s y ^ (1 - t) ≤
@@ -238,6 +248,8 @@ theorem normalizedEkernel_logConcave {s : ℝ} (hs : 0 < s) (x y : V)
     ENNReal.ofReal_rpow_of_nonneg (normalizedKernel_pos hs y).le ht1',
     ← ENNReal.ofReal_mul (Real.rpow_nonneg (normalizedKernel_pos hs x).le t)]
   exact ENNReal.ofReal_le_ofReal (normalizedKernel_logConcave hs x y ht0 ht1)
+
+end ExtendedKernelConcavity
 
 /-- The raw Gaussian convolution of a Borell density. It is kept extended-valued
 until pointwise finite mass has been separately proved. -/
@@ -595,7 +607,9 @@ theorem smoothedLaw_eq_tilted_potential {ν : Measure V}
 
 /-! ### First-order regularity of the actual Gaussian convolution -/
 
-omit [FiniteDimensional ℝ V] [MeasurableSpace V] [BorelSpace V] in
+section KernelDerivatives
+
+omit [FiniteDimensional ℝ V] [MeasurableSpace V] [BorelSpace V]
 private theorem kernel_hasFDerivAt (s : ℝ) (z : V) :
     HasFDerivAt (normalizedKernel (V := V) s)
       ((-2 * s * normalizedKernel s z) • innerSL ℝ z) z := by
@@ -620,7 +634,6 @@ private theorem kernel_hasFDerivAt (s : ℝ) (z : V) :
   exact h3
 
 
-omit [FiniteDimensional ℝ V] [MeasurableSpace V] [BorelSpace V] in
 private theorem kernel_fderiv_norm_le (s : ℝ) (hs : 0 < s) (z : V) :
     ‖fderiv ℝ (normalizedKernel (V := V) s) z‖ ≤
       2 * s / mass (V := V) s * (Real.sqrt s)⁻¹ := by
@@ -639,6 +652,8 @@ private theorem kernel_fderiv_norm_le (s : ℝ) (hs : 0 < s) (z : V) :
             simp [normalizedKernel, kernel]; ring_nf
     _ ≤ (2 * s / mass (V := V) s) * (Real.sqrt s)⁻¹ :=
       mul_le_mul_of_nonneg_left hb' (div_nonneg (by positivity) (mass_pos hs).le)
+
+end KernelDerivatives
 
 private def kernelDerivative (s : ℝ) (z : V) : V →L[ℝ] ℝ :=
   (-2 * s * normalizedKernel s z) • innerSL ℝ z
@@ -736,7 +751,9 @@ theorem potential_contDiff_one {ν : Measure V} [IsProbabilityMeasure ν]
 
 /-! ### Second-order regularity of the actual Gaussian convolution -/
 
-omit [FiniteDimensional ℝ V] [MeasurableSpace V] [BorelSpace V] in
+section KernelDerivativeRegularity
+
+omit [FiniteDimensional ℝ V] [MeasurableSpace V] [BorelSpace V]
 private theorem kernelDerivative_fderiv_norm_le (s : ℝ) (hs : 0 < s) (z : V) :
     ‖fderiv ℝ (kernelDerivative s) z‖ ≤ 6 * s / mass (V := V) s := by
   have hc := (kernel_hasFDerivAt s z).const_mul (-2 * s)
@@ -799,7 +816,6 @@ private theorem kernelDerivative_fderiv_norm_le (s : ℝ) (hs : 0 < s) (z : V) :
     _ = 6 * s / mass (V := V) s := by ring
 
 
-omit [FiniteDimensional ℝ V] [MeasurableSpace V] [BorelSpace V] in
 private theorem kernelDerivative_contDiff (s : ℝ) :
     ContDiff ℝ 2 (kernelDerivative (V := V) s) := by
   have hn : ContDiff ℝ 2 (fun z : V => ‖z‖ ^ 2) := contDiff_norm_sq ℝ
@@ -817,6 +833,8 @@ private theorem kernelDerivative_contDiff (s : ℝ) :
     exact h
   unfold kernelDerivative
   exact ((ContDiff.const_smul (-2 * s) hk).smul (innerSL ℝ).contDiff)
+
+end KernelDerivativeRegularity
 
 private theorem derivativeIntegral_contDiff_one {ν : Measure V} [IsProbabilityMeasure ν]
     {s : ℝ} (hs : 0 < s) :
@@ -944,7 +962,7 @@ private theorem one_add_pow_mul_exp_neg_sq_bounded (b : ℝ) (hb : 0 < b) (n : �
 section StructuredSpace
 
 variable {V : Type*}
-variable [NormedAddCommGroup V]
+  [NormedAddCommGroup V]
 
 section InnerProduct
 

@@ -177,7 +177,9 @@ section Boundary
 variable {V W₁ : Type*} [NormedAddCommGroup V] [NormedSpace ℝ V]
   [NormedAddCommGroup W₁] [NormedSpace ℝ W₁] [FiniteDimensional ℝ W₁]
 
-omit [FiniteDimensional ℝ W₁] in
+section DegenerateRightInverses
+
+omit [FiniteDimensional ℝ W₁]
 /-- **A zero-dimensional target**: every map is surjective, every vector is already in the kernel
 and the constant `0` works. -/
 theorem zero_dimensional_target [Subsingleton W₁] (L : V →L[ℝ] W₁) (z : V) :
@@ -185,13 +187,14 @@ theorem zero_dimensional_target [Subsingleton W₁] (L : V →L[ℝ] W₁) (z : 
   refine ⟨Subsingleton.elim _ _, ?_⟩
   simp
 
-omit [FiniteDimensional ℝ W₁] in
 /-- **A linear isomorphism**: the inverse is a right inverse, so the constant is its norm. -/
 theorem linear_equiv (e : V ≃L[ℝ] W₁) (z : V) :
     ∃ w : V, (e : V →L[ℝ] W₁) w = 0 ∧
       ‖z - w‖ ≤ ‖(e.symm : W₁ →L[ℝ] V)‖ * ‖(e : V →L[ℝ] W₁) z‖ :=
   exists_mem_ker_norm_sub_le (L := (e : V →L[ℝ] W₁)) (R := (e.symm : W₁ →L[ℝ] V))
     (fun y => by simp) le_rfl z
+
+end DegenerateRightInverses
 
 /-- **A constant map on an open set**: the differential vanishes identically, so the surjectivity-based
 theorem applies when the target is zero-dimensional. The kernel-estimate conclusion itself also

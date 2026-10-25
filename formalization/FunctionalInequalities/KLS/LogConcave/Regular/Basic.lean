@@ -42,7 +42,9 @@ namespace RegularPotential
 
 variable {V : E → ℝ} {a b : ℝ}
 
-omit [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] in
+section QuadraticGrowth
+
+omit [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
 /-- Strong convexity, as the tangent bound at the base point `0`:
 `V x ≥ V 0 + ⟪∇V(0), x⟫ + (a/2) ‖x‖²`. -/
 theorem quadratic_lower (hV : RegularPotential V a b) (x : E) :
@@ -83,7 +85,6 @@ theorem quadratic_lower (hV : RegularPotential V a b) (x : E) :
   rw [inner_gradient_left]
   linarith
 
-omit [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] in
 /-- Gaussian domination of the density: `e^{-V(x)} ≤ C e^{-(a/4)‖x‖²}`. -/
 theorem exp_neg_le_gaussian (hV : RegularPotential V a b) :
     ∃ C : ℝ, 0 ≤ C ∧ ∀ x, Real.exp ((-V) x) ≤ C * Real.exp (-(a / 4) * ‖x‖ ^ 2) := by
@@ -125,6 +126,8 @@ theorem exp_neg_le_gaussian (hV : RegularPotential V a b) :
             (-V 0 + ‖gradient V 0‖ ^ 2 / a) +
               (-(a / 4) * ‖x‖ ^ 2) by ring]
         rw [Real.exp_add]
+
+end QuadraticGrowth
 
 /-- `e^{-V}` is Lebesgue integrable. -/
 theorem integrable_exp_neg (hV : RegularPotential V a b) :
@@ -405,18 +408,18 @@ noncomputable def affineLowerConstant (a : ℝ) (L : E ≃L[ℝ] E) : ℝ :=
 noncomputable def affineUpperConstant (b : ℝ) (L : E ≃L[ℝ] E) : ℝ :=
   max b 1 * (1 + ‖(L : E →L[ℝ] E)‖) ^ 2
 
-omit [CompleteSpace E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] in
+section AffineBounds
+
+omit [CompleteSpace E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]
 theorem affineLowerConstant_pos {a : ℝ} (ha : 0 < a) (L : E ≃L[ℝ] E) :
     0 < affineLowerConstant a L := by
   unfold affineLowerConstant
   exact div_pos ha (sq_pos_of_pos (by positivity))
 
-omit [CompleteSpace E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] in
 theorem affineUpperConstant_pos (b : ℝ) (L : E ≃L[ℝ] E) : 0 < affineUpperConstant b L := by
   unfold affineUpperConstant
   exact mul_pos (lt_of_lt_of_le zero_lt_one (le_max_right b 1)) (sq_pos_of_pos (by positivity))
 
-omit [CompleteSpace E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] in
 /-- **Regular potentials are preserved by affine changes of variables**: `V ∘ (L · + c)` is regular with
 constants `affineLowerConstant a L`, `affineUpperConstant b L` (positive also in dimension zero). -/
 theorem comp_affine {V : E → ℝ} {a b : ℝ} (hV : KLS.RegularPotential V a b)
@@ -455,6 +458,8 @@ theorem comp_affine {V : E → ℝ} {a b : ℝ} (hV : KLS.RegularPotential V a b
       _ ≤ max b 1 * ((1 + ‖(L : E →L[ℝ] E)‖) ^ 2 * ‖v‖ ^ 2) :=
         mul_le_mul_of_nonneg_left hsq (le_trans zero_le_one (le_max_right b 1))
       _ = affineUpperConstant b L * ‖v‖ ^ 2 := by unfold affineUpperConstant; ring
+
+end AffineBounds
 
 
 end RegularPotential

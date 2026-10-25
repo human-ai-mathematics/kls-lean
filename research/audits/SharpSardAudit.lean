@@ -178,7 +178,7 @@ theorem route_D1 :
 section NormedSpace
 
 variable {V : Type*}
-variable [NormedAddCommGroup V] [NormedSpace ℝ V]
+  [NormedAddCommGroup V] [NormedSpace ℝ V]
 
 section FiniteDimensional
 
